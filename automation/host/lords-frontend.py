@@ -851,25 +851,29 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 #: (TEMPLATES-ZONA-ANIMEDIA-VISUAL-PARITY-006). Lords остаётся на 1.1.0 и
 #: поэтому отдаёт прежние байты: его ветка кода не меняется вовсе.
 ОФОРМЛЕНИЕ_1_2 = "1.2.0"
+ОФОРМЛЕНИЕ_1_2_1 = "1.2.1"
 
 #: Версии, несущие оформление 1.1+. Набор, а не одно значение: витрина
 #: включает оформление СВОИМ манифестом, и добавление следующей версии не
 #: должно переводить на неё соседей. Свойство «переход по одной витрине»
 #: сохраняется — меняется только то, сколько версий код умеет исполнять.
-ОФОРМЛЕНИЕ_ВЕРСИИ = {ОФОРМЛЕНИЕ_1_1, ОФОРМЛЕНИЕ_1_2}
+ОФОРМЛЕНИЕ_ВЕРСИИ = {ОФОРМЛЕНИЕ_1_1, ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1}
 
-#: Семейства, переработанные по измеренным эталонам, и версия, с которой
-#: переработка включается. Ниже этой версии витрина исполняет прежние ветки.
+#: Семейства, переработанные по измеренным эталонам, и версии, с которых
+#: переработка включается. Ниже этого набора витрина исполняет прежние ветки.
 #:
 #: Проверка нужна потому, что артефакт ОДИН на шесть витрин. Без неё выкладка
 #: артефакта ради Animedia сменила бы оформление боевой Zona, которая стоит на
 #: 1.1.0 и о смене не просила, — то есть ровно то, что запрещает принцип
-#: «переход делается по одной витрине». Здесь оформление 1.2.0 достаётся
+#: «переход делается по одной витрине». Здесь оформление 1.2.x достаётся
 #: только той витрине, чей манифест его объявил.
-ПЕРЕРАБОТАНО_С = {"zona": ОФОРМЛЕНИЕ_1_2, "animedia": ОФОРМЛЕНИЕ_1_2}
+ПЕРЕРАБОТАНО_С = {
+    "zona": frozenset({ОФОРМЛЕНИЕ_1_2}),
+    "animedia": frozenset({ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1}),
+}
 
 #: Исполняет ли ЭТА витрина переработанное оформление своего семейства.
-ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ = (ВЕРСИЯ == ПЕРЕРАБОТАНО_С.get(СЕМЕЙСТВО))
+ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ = ВЕРСИЯ in ПЕРЕРАБОТАНО_С.get(СЕМЕЙСТВО, ())
 
 #: Включено ли новое оформление на ЭТОЙ витрине. Решает манифест витрины, а не
 #: наличие кода: один артефакт обслуживает шесть витрин, и переход делается по
@@ -1829,8 +1833,9 @@ body{background:@PAGE@;color:@INK@;
 font:14px/1.45 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif}
 .zs{min-height:100vh;display:block}
 .zmain{min-width:0}
-.zwrap{max-width:100%;margin:0 auto;padding:0 6px}
-@media(min-width:768px){.zwrap{padding:0 1px}}
+.zwrap{max-width:1440px;margin:0 auto;padding:0 12px;box-sizing:border-box}
+@media(min-width:768px){.zwrap{padding:0 16px}}
+@media(min-width:1440px){.zwrap{padding:0 20px}}
 
 /* Шапка: обычная, не закреплённая. На узком — кнопка меню вместо
    обрезанной горизонтальной ленты пунктов (эталон amd.online: hamburger). */
@@ -1907,8 +1912,8 @@ gap:10px;margin:0 0 9px;border-bottom:1px solid @LINE@;padding-bottom:6px}
 .zrl__vp{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;
 scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:2px 0 8px}
 .zrl__track{display:flex;gap:10px;min-width:min-content;align-items:flex-start}
-.zrl__track>*{flex:0 0 132px;scroll-snap-align:start}
-@media(min-width:1440px){.zrl__track>*{flex-basis:150px}}
+.zrl__track>*{flex:0 0 190px;scroll-snap-align:start;max-width:230px}
+@media(min-width:1440px){.zrl__track>*{flex-basis:210px}}
 .zrl__btn{position:absolute;top:34%;transform:translateY(-50%);z-index:5;
 width:30px;height:48px;border:1px solid @LINE@;border-radius:4px;cursor:pointer;
 background:rgba(255,255,255,.94);color:@ACC@;font-size:17px;line-height:1;
@@ -1917,17 +1922,19 @@ display:none;align-items:center;justify-content:center}
 .zrl__btn--p{left:-4px}
 .zrl__btn--n{right:-4px}
 
-/* Плотная сетка: 3 колонки до 1024, 4 от 1440, зазор 10. */
-.zg{display:grid;gap:10px;grid-template-columns:repeat(2,1fr);align-items:start}
-@media(min-width:560px){.zg{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:1440px){.zg{grid-template-columns:repeat(4,1fr)}}
-@media(min-width:1800px){.zg{grid-template-columns:repeat(6,1fr)}}
+/* Компактная сетка: 2→3→5→6→7→8 колонок; карточка ~190–230px. */
+.zg{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr));
+align-items:stretch}
+@media(min-width:560px){.zg{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:900px){.zg{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(min-width:1200px){.zg{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(min-width:1440px){.zg{grid-template-columns:repeat(7,minmax(0,1fr))}}
+@media(min-width:1800px){.zg{grid-template-columns:repeat(8,minmax(0,1fr))}}
 .zt{display:flex;flex-direction:column;background:@PAGE@;
-border:1px solid @LINE@;border-radius:4px;overflow:hidden;
-transition:border-color .14s,box-shadow .14s}
+border:1px solid @LINE@;border-radius:4px;overflow:hidden;min-width:0;
+height:100%;transition:border-color .14s,box-shadow .14s}
 .zt:hover{border-color:@ACC@;box-shadow:0 4px 14px rgba(0,0,0,.09)}
-/* Пропорция постера 0.86 — измерена на эталоне. */
-.zt__p{display:block;aspect-ratio:86/100;background:@SURF@;position:relative;flex:0 0 auto}
+.zt__p{display:block;aspect-ratio:2/3;background:@SURF@;position:relative;flex:0 0 auto}
 .zt__p img,.zt__img{position:absolute;inset:0;z-index:1;width:100%;height:100%;
 object-fit:cover;display:block}
 .zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:10px;
@@ -1947,7 +1954,7 @@ padding-top:3px;flex-wrap:wrap}
 background:@PAGE@;border:1px solid @LINE@;border-radius:4px;align-items:start}
 @media(min-width:768px){.zr{grid-template-columns:74px 1fr}}
 .zr:hover{border-color:@ACC@}
-.zr__p{aspect-ratio:86/100;background:@SURF@;border-radius:3px;overflow:hidden;
+.zr__p{aspect-ratio:2/3;background:@SURF@;border-radius:3px;overflow:hidden;
 position:relative}
 .zr__p img,.zr__img{position:absolute;inset:0;width:100%;height:100%;
 object-fit:cover;display:block;z-index:1}
@@ -2008,81 +2015,145 @@ background:@ACC@;color:#fff;overflow:hidden}
 @media(min-width:1440px){.ahero .zrl__track>*{flex-basis:156px}}
 .ahero .zt{background:transparent;border:0;border-radius:0;box-shadow:none;color:#fff}
 .ahero .zt:hover{border:0;box-shadow:none;opacity:.92}
-.ahero .zt__p{border-radius:2px;aspect-ratio:86/100;background:rgba(0,0,0,.18)}
+.ahero .zt__p{border-radius:2px;aspect-ratio:2/3;background:rgba(0,0,0,.18)}
 .ahero .zt__b{padding:6px 2px 0}
 .ahero .zt__t{color:#fff;font-size:12.5px;-webkit-line-clamp:2}
 .ahero .zt__m,.ahero .zt__r{display:none}
 .ahero .zrl__btn{background:rgba(255,255,255,.95);color:@ACC@;border-color:transparent}
 .ahero__cap{display:none}
 
-/* «Новые серии» — список строк как у эталона (без выдуманного времени). */
-.zsec--eps .zl{display:grid;gap:0;grid-template-columns:1fr;
-border:1px solid @LINE@;border-radius:4px;overflow:hidden;background:@PAGE@}
-@media(min-width:900px){.zsec--eps .zl{grid-template-columns:1fr 1fr}}
-.zsec--eps .zr{border:0;border-bottom:1px solid @LINE@;border-radius:0;
-padding:10px 12px;align-items:center}
+/* «Новые серии» — компактные list-items 3–4 колонки, без растяжки. */
+.zsec--eps .zl{display:grid;gap:10px;grid-template-columns:1fr;
+border:0;background:transparent;overflow:visible}
+@media(min-width:700px){.zsec--eps .zl{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1100px){.zsec--eps .zl{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1440px){.zsec--eps .zl{grid-template-columns:repeat(4,minmax(0,440px))}}
+.zsec--eps .zr{border:1px solid @LINE@;border-radius:4px;border-bottom:1px solid @LINE@;
+padding:8px 10px;align-items:center;grid-template-columns:72px minmax(0,1fr);
+max-width:440px;width:100%;box-sizing:border-box}
 .zsec--eps .zr:nth-child(odd){border-right:1px solid @LINE@}
-@media(max-width:899px){.zsec--eps .zr:nth-child(odd){border-right:0}}
-.zsec--eps .zr:last-child{border-bottom:0}
-.zsec--eps .zr__p{aspect-ratio:1/1;border-radius:3px}
-.zsec--eps .zr__t{font-size:14px}
+.zsec--eps .zr__p{aspect-ratio:2/3;border-radius:3px;max-width:72px}
+.zsec--eps .zr__t{font-size:13.5px;line-height:1.25;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+min-height:calc(1.25em * 2)}
 .zsec--eps .zr__m{font-size:12px}
-.zsec--eps .zr__d{display:none}
+.zsec--eps .zr__d{display:block;font-size:11.5px;color:@MUTE@;-webkit-line-clamp:1}
 
-.zhead{display:grid;grid-template-columns:1fr;gap:14px;margin:14px 0 6px}
-@media(min-width:768px){.zhead{grid-template-columns:190px 1fr}}
-.zhead__ps{aspect-ratio:86/100;border-radius:4px;overflow:hidden;background:@SURF@;
-position:relative;max-width:190px}
-.zhead__ps img,.zhead__img{position:relative;z-index:1;width:100%;height:100%;
-object-fit:cover;display:block}
-.zhead__x{min-width:0}
-.zhead__o{font-size:13.5px;color:@DIM@;margin:0 0 9px}
-.zbody{font-size:14px;line-height:1.6;color:@INK@;max-width:72ch}
-.zaside{background:@ALT@;border:1px solid @LINE@;border-radius:4px;
-padding:12px 14px;font-size:13px;color:@DIM@}
-.zaside a{color:@ACC@;font-weight:700}
+/* Title hub: poster + main + rail; player starts in first viewport. */
+.zban{display:none}
+.zhead{display:contents}
+.zhead__ps,.zhead__x,.zhead__o{display:contents}
+.ztitle{display:grid;grid-template-columns:1fr;gap:16px;margin:12px 0 8px;
+align-items:start}
+@media(min-width:768px){.ztitle{grid-template-columns:220px minmax(0,1fr);gap:20px}}
+@media(min-width:1100px){.ztitle{grid-template-columns:240px minmax(0,1fr) 300px;gap:22px}}
+@media(min-width:1280px){.ztitle{grid-template-columns:250px minmax(0,1fr) 320px;gap:24px}}
+.ztitle__poster{aspect-ratio:2/3;border-radius:6px;overflow:hidden;background:@SURF@;
+position:relative;width:100%;max-width:260px;margin:0 auto}
+@media(min-width:768px){.ztitle__poster{margin:0;max-width:none}}
+.ztitle__poster img,.ztitle__poster .zhead__img{position:absolute;inset:0;z-index:1;
+width:100%;height:100%;object-fit:cover;display:block}
+.ztitle__main{min-width:0}
+.ztitle__main h1{font-size:24px;line-height:1.2;margin:0 0 8px;letter-spacing:-.3px}
+@media(min-width:1100px){.ztitle__main h1{font-size:28px}}
+.ztitle__o{font-size:13.5px;color:@DIM@;margin:0 0 8px}
+.ztitle__desc{font-size:14px;line-height:1.55;color:@INK@;max-width:68ch;margin:0 0 12px;
+display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.ztitle__desc--empty{display:none}
+.ztitle__cta{display:inline-flex;align-items:center;justify-content:center;
+min-height:40px;padding:8px 16px;border-radius:4px;background:@ACC@;color:#fff;
+font-weight:700;font-size:14px;text-decoration:none}
+.ztitle__cta:hover{filter:brightness(1.05)}
+.ztitle__rail{min-width:0;display:flex;flex-direction:column;gap:12px}
+@media(max-width:1099px){.ztitle__rail{order:3}}
+.ztitle__dl{margin:0;background:@ALT@;border:1px solid @LINE@;border-radius:4px;
+padding:10px 12px;display:grid;gap:8px}
+.ztitle__dl div{display:grid;grid-template-columns:92px minmax(0,1fr);gap:6px 10px;
+align-items:baseline}
+.ztitle__dl dt{font-size:11px;letter-spacing:.04em;text-transform:uppercase;
+color:@DIM@;font-weight:700;margin:0}
+.ztitle__dl dd{margin:0;font-size:13px;color:@INK@;line-height:1.35;
+overflow-wrap:anywhere}
+.ztitle__dl a{color:@ACC@;font-weight:700}
+.zad{display:none}
+.zad[data-ad-enabled="1"]{display:block;width:100%;max-width:300px;min-height:250px;
+border:1px dashed @LINE@;border-radius:4px;background:@ALT@;margin:0 auto}
+.zbody{font-size:14px;line-height:1.55;color:@INK@;max-width:70ch;margin:14px 0 0}
+.zaside{display:none}
 /* Хаб подборок: карточка коллекции, а не ещё одна сетка тайтлов. */
 .zhub{display:grid;gap:12px;margin:14px 0;grid-template-columns:1fr}
 @media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1000px){.zhub{grid-template-columns:repeat(3,1fr)}}
 .zhub__c{display:block;padding:12px;border:1px solid @LINE@;border-radius:6px;
 background:@SURF@;color:inherit;text-decoration:none}
-.zhub__c:hover{border-color:@ACC@}
+.zhub__c:hover,.zhub__c:focus-visible{border-color:@ACC@;outline:none}
 .zhub__g{display:flex;gap:4px;margin-bottom:9px}
 .zhub__p{flex:1 1 0;aspect-ratio:2/3;overflow:hidden;border-radius:4px;background:@ALT@}
 .zhub__img{width:100%;height:100%;object-fit:cover;display:block}
 .zhub__t{display:block;font-weight:700;font-size:15px}
-.zhub__m{display:block;font-size:12.5px;color:@ACC@;font-weight:600;margin:2px 0 4px}
+.zhub__m{display:block;font-size:12px;color:@DIM@;font-weight:600;margin:2px 0 4px}
 .zhub__d{display:block;font-size:13px;color:@DIM@;line-height:1.45}
 
-/* Список серий: высота ограничена, прокрутка своя. У «Детектива Конана»
-   1212 кнопок, и без предела страница вырастала до десятков тысяч пикселей —
-   всё, что ниже списка, становилось недостижимым. Ни одна серия при этом не
-   убирается из разметки: ограничивается окно просмотра, а не список. */
-.zeps{display:grid;gap:5px;margin:12px 0;max-height:70vh;overflow-y:auto;
-overscroll-behavior:contain}
-@media(min-width:768px){.zeps{grid-template-columns:repeat(2,1fr);max-height:520px}}
-.zeps a,.zeps span{display:block;padding:8px 11px;border-radius:4px;
-border:1px solid @LINE@;background:@PAGE@;font-size:13px}
+/* Компактные номерные кнопки серий: CSS Grid auto-fill, без скрытых колонок. */
+.zeps{display:grid;gap:6px;margin:12px 0;max-height:70vh;overflow-x:hidden;
+overflow-y:auto;overscroll-behavior:contain;align-content:flex-start;
+grid-template-columns:repeat(auto-fill,minmax(44px,1fr));width:100%;
+max-width:100%;min-width:0;box-sizing:border-box}
+@media(min-width:768px){.zeps{max-height:520px;
+grid-template-columns:repeat(auto-fill,minmax(48px,1fr))}}
+.zeps a,.zeps span{display:inline-flex;align-items:center;justify-content:center;
+min-width:44px;min-height:44px;width:100%;height:44px;padding:0;
+border-radius:6px;border:1px solid @LINE@;background:@PAGE@;font-size:13px;
+font-weight:700;font-variant-numeric:tabular-nums;box-sizing:border-box}
+@media(min-width:768px){.zeps a,.zeps span{min-height:48px;height:48px}}
 .zeps span{opacity:.5}
 .zeps a[aria-current]{background:@ACC@;color:#fff;border-color:@ACC@}
+.zeps a[data-off]{opacity:.45;pointer-events:none}
+.zsea__h{display:flex;justify-content:space-between;align-items:baseline;
+gap:10px;flex-wrap:wrap;margin:0 0 10px}
+.zsea__h b{font-size:15px;font-weight:700}
+.zsea__h span{font-size:13px;color:@DIM@}
 .zepnav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
 .zepnav a{background:@ALT@;border:1px solid @LINE@;border-radius:4px;
 padding:8px 12px;font-size:13px;color:@ACC@;font-weight:700}
 
 .zpl{margin:14px 0}
-.zpl__f{aspect-ratio:16/9;background:#101010;border:1px solid @LINE@;
-border-radius:4px;overflow:hidden;position:relative}
-.zpl__h{font-size:16px;font-weight:700;margin:18px 0 9px}
-.zpl__s{position:absolute;inset:0;display:grid;place-items:center;padding:20px;
-text-align:center;color:#d8d8d8;font-size:13px;line-height:1.5}
+.zpl__f{aspect-ratio:16/9;background:#f3f3f3;border:1px solid @LINE@;
+border-radius:4px;overflow:hidden;position:relative;max-height:min(56vw,420px)}
+.zpl__f[data-state=playable]{background:#101010;max-height:none}
+.zpl__h{font-size:16px;font-weight:700;margin:18px 0 9px;display:flex;
+align-items:baseline;justify-content:space-between;gap:10px}
+.zpl__h span{font-size:12.5px;font-weight:600;color:@DIM@}
+.zpl__s,.zpl [data-player-state]{position:absolute;inset:0;display:grid;
+place-items:center;padding:16px;text-align:center;color:@INK@;font-size:13px;
+line-height:1.45;background:#f7f7f7}
+.zpl [data-player-state] b{display:block;font-size:15px;margin-bottom:6px}
+.zpl [data-player-state] p{margin:0;max-width:36ch;color:@DIM@}
 
-.zft{border-top:2px solid @ACC@;margin:28px 0 0;padding:16px 0 26px;
-font-size:12.5px;color:@DIM@;display:flex;gap:12px;flex-wrap:wrap;
-justify-content:space-between;align-items:center}
-.zvb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;
-border:1px solid @LINE@;border-radius:4px;padding:4px 8px;background:@ALT@;
-color:@MUTE@}
+.zft{border-top:2px solid @ACC@;margin:28px 0 0;padding:18px 0 10px;
+font-size:13px;color:@DIM@}
+.zft__grid{display:grid;gap:14px;grid-template-columns:1fr;
+margin-bottom:14px}
+@media(min-width:768px){.zft__grid{grid-template-columns:repeat(4,1fr)}}
+.zft__col b{display:block;font-size:12.5px;font-weight:700;color:@INK@;
+margin-bottom:6px;text-transform:uppercase;letter-spacing:.03em}
+.zft__col a{display:block;padding:3px 0;color:@DIM@;font-size:13px}
+.zft__col a:hover{color:@ACC@}
+.zft__about{margin:0;font-size:12.5px;line-height:1.45;color:@DIM@}
+.zft__bar{display:flex;justify-content:space-between;align-items:center;
+gap:10px;flex-wrap:wrap;border-top:1px solid @LINE@;padding-top:10px}
+.zvb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;
+color:@MUTE@;letter-spacing:0}
+.zseo{margin:22px 0 8px;padding:12px 0 0;border-top:1px solid @LINE@;
+color:@DIM@;font-size:13px;line-height:1.55;max-width:72ch}
+.zseo h2{font-size:14px;font-weight:700;color:@INK@;margin:0 0 6px}
+.zseo p{margin:0 0 8px}
+@media(max-width:767px){.zseo{font-size:12.5px}
+.zseo details{border:1px solid @LINE@;border-radius:4px;padding:8px 10px}
+.zseo summary{cursor:pointer;font-weight:700;color:@INK@}}
+.zseo .zseo__full{display:none}
+@media(min-width:768px){.zseo details{display:none}
+.zseo .zseo__full{display:block}}
 
 img[hidden]{display:none}
 
@@ -2368,6 +2439,7 @@ def выбрать_доступную_серию(деталь: dict) -> tuple[in
         for н in range(1, int(с.get("avail") or 0) + 1):
             доступные.append((с["n"], н))
     if доступные:
+        # Hub picks the first playable episode; direct episode URLs stay exact.
         return доступные[0]
     return сезоны[0]["n"], None
 
@@ -2668,17 +2740,87 @@ def разметка_плеера(вид, запись: dict, деталь: dict
 
 
 #: Отдавать ли постеры своим адресом вместо прямой ссылки на внешний CDN.
-#: Механизм в проекте уже есть: путь `/poster/` и снимок кэша
-#: `yummyani-poster-cache.conf`, — но включён он `sub_filter`-ом только в
-#: vhost lords-01. Пока владелец не включит тот же снимок для zona-01 и
-#: animedia-01, переписывать адрес нельзя: страница ссылалась бы на путь,
-#: которого на этих доменах нет, и постеры отказали бы все разом. Поэтому
-#: переключатель, а не молчаливая смена поведения; значение по умолчанию
-#: сохраняет нынешний адрес.
-ПОСТЕРЫ_СВОИМ_АДРЕСОМ = os.environ.get("LORDS_POSTER_SAME_ORIGIN", "") == "1"
+#: Animedia включает first-party `/poster/` по умолчанию: live измерение
+#: показало массовый отказ hotlink с cdnvideohub. Lords/Zona сохраняют
+#: прежний default (прямая ссылка), пока явно не зададут env=1.
+_ПОСТЕР_ENV = os.environ.get("LORDS_POSTER_SAME_ORIGIN", "").strip().lower()
+ПОСТЕРЫ_СВОИМ_АДРЕСОМ = (
+    _ПОСТЕР_ENV in ("1", "true", "yes")
+    or (_ПОСТЕР_ENV not in ("0", "false", "no") and СЕМЕЙСТВО == "animedia")
+)
 ВНЕШНИЙ_ПОСТЕР = "https://poster.cdnvideohub.com/"
 ПОСТЕР_HOSTS = frozenset({"poster.cdnvideohub.com"})
 ПОСТЕР_MAX_BYTES = 2_500_000
+_ПОСТЕР_КЭШ: dict[str, tuple[float, bytes, str]] = {}
+_ПОСТЕР_НЕГАТИВ: dict[str, float] = {}
+
+
+def _адрес_постера(адрес: str | None) -> str | None:
+    """Адрес постера: свой путь либо адрес источника, без третьего варианта."""
+    if not адрес:
+        return адрес
+    if ПОСТЕРЫ_СВОИМ_АДРЕСОМ and адрес.startswith(ВНЕШНИЙ_ПОСТЕР):
+        return "/poster/" + адрес[len(ВНЕШНИЙ_ПОСТЕР):]
+    return адрес
+
+
+def _постер_безопасный_ключ(хвост: str) -> str | None:
+    """Только uuid-like имя файла у allowlist host — без path traversal."""
+    хвост = (хвост or "").lstrip("/")
+    if not хвост or ".." in хвост or "/" in хвост or "\\" in хвост:
+        return None
+    if not re.fullmatch(r"[0-9a-fA-F-]{8,64}\.(?:webp|jpg|jpeg|png|gif)", хвост):
+        return None
+    return хвост
+
+
+def отдать_постер(хвост: str) -> tuple[int, bytes, str]:
+    """First-party proxy: allowlist host, timeouts, size/MIME limits, caches."""
+    import http.client
+    import time
+
+    ключ = _постер_безопасный_ключ(хвост)
+    if not ключ:
+        return 404, b"", "text/plain"
+    сейчас = time.time()
+    if ключ in _ПОСТЕР_НЕГАТИВ and сейчас - _ПОСТЕР_НЕГАТИВ[ключ] < 300:
+        return 404, b"", "text/plain"
+    кэш = _ПОСТЕР_КЭШ.get(ключ)
+    if кэш and сейчас - кэш[0] < 86_400:
+        return 200, кэш[1], кэш[2]
+    try:
+        соед = http.client.HTTPSConnection("poster.cdnvideohub.com", timeout=4)
+        соед.request("GET", "/" + ключ, headers={
+            "User-Agent": "site-factory-nova-poster/1.2",
+            "Accept": "image/webp,image/*,*/*;q=0.8",
+        })
+        отв = соед.getresponse()
+        if отв.status != 200:
+            _ПОСТЕР_НЕГАТИВ[ключ] = сейчас
+            соед.close()
+            return 404, b"", "text/plain"
+        тип = (отв.getheader("Content-Type") or "").split(";")[0].strip().lower()
+        if not тип.startswith("image/"):
+            _ПОСТЕР_НЕГАТИВ[ключ] = сейчас
+            соед.close()
+            return 415, b"", "text/plain"
+        данные = отв.read(ПОСТЕР_MAX_BYTES + 1)
+        соед.close()
+        if len(данные) > ПОСТЕР_MAX_BYTES:
+            _ПОСТЕР_НЕГАТИВ[ключ] = сейчас
+            return 413, b"", "text/plain"
+        _ПОСТЕР_КЭШ[ключ] = (сейчас, данные, тип)
+        if len(_ПОСТЕР_КЭШ) > 512:
+            # Простой LRU-суррогат: выкинуть самые старые четверть.
+            устаревшие = sorted(_ПОСТЕР_КЭШ.items(), key=lambda п: п[1][0])[:128]
+            for у in устаревшие:
+                _ПОСТЕР_КЭШ.pop(у[0], None)
+        return 200, данные, тип
+    except OSError:
+        _ПОСТЕР_НЕГАТИВ[ключ] = сейчас
+        return 504, b"", "text/plain"
+
+
 _ПОСТЕР_КЭШ: dict[str, tuple[float, bytes, str]] = {}
 _ПОСТЕР_НЕГАТИВ: dict[str, float] = {}
 
@@ -2696,26 +2838,21 @@ def заглушка_постера(запись: dict, класс_заглуш�
                      ширина: int = 300, высота: int = 450) -> str:
     """Постер с заглушкой ПОД ним, а не вместо него.
 
-    Заглушка рисуется всегда и лежит слоем ниже изображения. Так закрываются
-    сразу два случая, и по-разному:
-
-    * постера нет в снимке — заглушка сразу видна и говорит «не передан»;
-    * постер объявлен, но провайдер его не отдал — изображение снимается
-      обработчиком ошибки, и из-под него открывается заглушка «не открылся».
-
-    Разница в словах не косметическая: «не передан» — это состояние наших
-    данных, «не открылся» — состояние чужого хранилища. Измерено: из 48 постеров
-    страницы каталога семь адресов отвечают ошибкой у самого провайдера, и без
-    заглушки на их месте оставался бы значок сломанной картинки.
+    Заглушка рисуется всегда и лежит слоем ниже изображения. Alt у значимого
+    постера — название тайтла; декоративная заглушка без изображения не
+    объявляет зрителю внутреннюю диагностику («постер не открылся»).
     """
-    первая = html.escape((запись.get("title") or "?")[:1].upper())
+    название = (запись.get("title") or "").strip() or "Без названия"
+    первая = html.escape(название[:1].upper())
     постер = _адрес_постера(запись.get("poster"))
-    подпись = "постер не открылся" if постер else "постер не передан"
-    заглушка = f'<span class="{класс_заглушки}"><b>{первая}</b>{подпись}</span>'
+    заглушка = (f'<span class="{класс_заглушки}" aria-hidden="true">'
+                f"<b>{первая}</b></span>")
     if not постер:
         return заглушка
-    картинка = (f'<img class="{класс_картинки}" src="{html.escape(постер)}" alt="" '
-                f'loading="lazy" width="{ширина}" height="{высота}" data-poster>')
+    картинка = (
+        f'<img class="{класс_картинки}" src="{html.escape(постер)}" '
+        f'alt="{html.escape(название)}" loading="lazy" width="{ширина}" '
+        f'height="{высота}" data-poster>')
     return заглушка + картинка
 
 
@@ -2741,15 +2878,30 @@ def заглушка_постера(запись: dict, класс_заглуш�
     "});"
 )
 
-#: Только Animedia: на узком экране пункты меню больше не режутся горизонтальным
-#: скроллом шапки — открываются кнопкой, как у эталона amd.online.
+#: Только Animedia: на узком экране пункты меню открываются кнопкой.
+#: Escape и повторный клик закрывают; focus возвращается на кнопку;
+#: body scroll блокируется, пока меню открыто.
 СКРИПТ_АНИМЕДИА_ШАПКА = (
+    "(function(){"
+    "function close(nav,btn){if(!nav||!btn)return;nav.classList.remove('is-open');"
+    "btn.setAttribute('aria-expanded','false');document.body.style.overflow='';"
+    "try{btn.focus()}catch(e){}}"
     "document.addEventListener('click',function(e){"
-    "var b=e.target.closest('[data-nav-toggle]');if(!b)return;"
+    "var b=e.target.closest('[data-nav-toggle]');"
     "var n=document.getElementById('zhd-nav');if(!n)return;"
-    "var open=n.classList.toggle('is-open');"
+    "if(b){var open=n.classList.toggle('is-open');"
     "b.setAttribute('aria-expanded',open?'true':'false');"
+    "document.body.style.overflow=open?'hidden':'';return}"
+    "if(n.classList.contains('is-open')&&!e.target.closest('.zhd')){"
+    "close(n,document.querySelector('[data-nav-toggle]'));}"
     "});"
+    "document.addEventListener('keydown',function(e){"
+    "if(e.key!=='Escape')return;"
+    "var n=document.getElementById('zhd-nav');"
+    "if(n&&n.classList.contains('is-open'))"
+    "close(n,document.querySelector('[data-nav-toggle]'));"
+    "});"
+    "})();"
 )
 
 #: Lords mobile drawer: focus return + Escape + body scroll lock.
@@ -2780,14 +2932,12 @@ def _склеить(части) -> str:
 
 
 def _число(значение) -> str:
-    """Оценка с одним знаком после запятой (5.1), без ложной точности."""
+    """Оценка печатается как пришла, без округления и без выдумки."""
     try:
         ч = float(значение)
     except (TypeError, ValueError):
         return ""
-    if ч <= 0:
-        return ""
-    return f"{ч:.1f}".rstrip("0").rstrip(".") if ч % 1 else f"{int(ч)}"
+    return (f"{ч:.3f}".rstrip("0").rstrip(".")) if ч else ""
 
 
 def _длительность(минут) -> str:
@@ -3035,7 +3185,14 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
             неизвестный_фильтр = True
             набор = []
     if жанр:
-        разрешённые = индекс["genre"].get(жанр)
+        ключи = [жанр, нормализовать(жанр), нормализовать(транслит(жанр))]
+        разрешённые = None
+        for ключ in ключи:
+            if not ключ:
+                continue
+            разрешённые = индекс["genre"].get(ключ)
+            if разрешённые is not None:
+                break
         if разрешённые is None:
             неизвестный_фильтр = True
             набор = []
@@ -4143,23 +4300,52 @@ class ВидЗона(Вид):
             return ('<div class="zempty"><b>Подборки недоступны</b>'
                     "<p>Контракт коллекций витрине не передан.</p></div>")
         карточки = []
+        занятые_постеры: set[str] = set()
+        сигнатуры: list[tuple[str, ...]] = []
         for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО):
             if not спец.доступна:
                 continue
             коллекция = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО,
-                                            предел=4)
+                                            предел=48)
             if коллекция is None or not коллекция.items:
                 continue
+            выбранные = []
+            for к in коллекция.items:
+                постер = к.poster or ""
+                if not постер:
+                    continue
+                if постер in занятые_постеры and len(выбранные) < 4:
+                    # Prefer unique collage posters across hub tiles.
+                    continue
+                выбранные.append(к)
+                if len(выбранные) >= 4:
+                    break
+            if len(выбранные) < 4:
+                for к in коллекция.items:
+                    if к in выбранные or not к.poster:
+                        continue
+                    выбранные.append(к)
+                    if len(выбранные) >= 4:
+                        break
+            sig = tuple(к.poster for к in выбранные[:4])
+            if sig and sig in сигнатуры:
+                # Exact duplicate collage — skip tile; full page still exists.
+                continue
+            if sig:
+                сигнатуры.append(sig)
+            for к in выбранные[:4]:
+                if к.poster:
+                    занятые_постеры.add(к.poster)
             обложки = "".join(
                 f'<span class="zhub__p">'
                 f'<img class="zhub__img" src="{html.escape(_адрес_постера(к.poster) or "")}"'
                 f' alt="" loading="lazy" width="120" height="180"></span>'
-                for к in коллекция.items[:4] if к.poster)
+                for к in выбранные[:4] if к.poster)
             карточки.append(
                 f'<a class="zhub__c" href="{html.escape(спец.canonical_path)}">'
                 f'<span class="zhub__g">{обложки}</span>'
                 f'<span class="zhub__t">{html.escape(коллекция.title)}</span>'
-                f'<span class="zhub__m">{коллекция.total} записей</span>'
+                f'<span class="zhub__m">{коллекция.total}</span>'
                 f'<span class="zhub__d">{html.escape(коллекция.description)}</span>'
                 f'</a>')
         if not карточки:
@@ -4181,8 +4367,7 @@ class ВидЗона(Вид):
         титул = имена.get(разд, "Каталог")
         if разд == "/collections":
             тело = (f'<div class="zwrap"><h1 class="zh">{html.escape(титул)}</h1>'
-                    f'<p class="zsub">Коллекции собираются одним контрактом: '
-                    f'состав и порядок здесь те же, что в лентах на главной.</p>'
+                    f'<p class="zsub">Тематические подборки по данным текущего снимка.</p>'
                     + self.хаб_коллекций() + "</div>")
             return self.оболочка(тело, f"{титул} — {self.имя}", "/collections/",
                                  актив="/collections/",
@@ -4253,7 +4438,8 @@ class ВидЗона(Вид):
             тело = ('<h1 class="zh">Поиск</h1><p class="zsub">Введите название — '
                     "поиск идёт по русскому и оригинальному написанию.</p>"
                     '<div class="zempty"><b>Запрос пуст</b>'
-                    "<p>Наберите название в строке сверху. "
+                    "<p>Наберите название в строке сверху. Слова «сезон» и «серия» "
+                    "в запросе поиску не мешают. "
                     '<a href="/catalog/">Открыть каталог целиком</a></p></div>')
         elif найдено:
             тело = (f'<h1 class="zh">Результаты поиска: «{html.escape(q)}»</h1>'
@@ -4264,16 +4450,17 @@ class ВидЗона(Вид):
                     f"<p>По запросу «{html.escape(q)}» ничего не нашлось. "
                     "Проверьте написание. "
                     '<a href="/catalog/">Открыть весь каталог</a></p></div>')
-        html_page = self.оболочка(f'<div class="zwrap">{тело}</div>',
-                             f"Поиск — {self.имя}", f"/search/?q={q_attr}" if q.strip() else "/search/",
-                             актив="")
+        html_page = self.оболочка(
+            f'<div class="zwrap">{тело}</div>',
+            f"Поиск — {self.имя}",
+            f"/search/?q={q_attr}" if q.strip() else "/search/",
+            актив="")
         if q.strip():
             html_page = html_page.replace(
                 'id="q" name="q" placeholder=',
                 f'id="q" name="q" value="{q_attr}" placeholder=',
                 1)
         return html_page
-
 
     def тайтл(self, запись: dict, деталь: dict) -> str:
         путь = f"/title/{запись['slug']}/"
@@ -4307,8 +4494,6 @@ class ВидЗона(Вид):
             "Оригинальное название", "Год", "Тип", "Страна", "Жанр",
             "Серии",
         }
-        # Duration/date already as chips — avoid duplicate year-like noise when
-        # premiere year equals catalog year: keep Год once in rail.
         пары = [(м, з) for м, з in факты(self, запись, деталь) if м in rail_keys]
         for метка, ключ in (("Возраст", "age_rating"), ("Статус", "status")):
             знач = деталь.get(ключ)
@@ -4361,6 +4546,7 @@ class ВидЗона(Вид):
                 титул=имя, описание=краткое, путь=путь,
                 изображение=запись.get("poster") or ""))
 
+
     def _серии(self, запись: dict, сезоны: list, текущий=None) -> str:
         if not сезоны:
             return ('<h2 class="zh zh--sm">Серии</h2>'
@@ -4382,7 +4568,7 @@ class ВидЗона(Вид):
                      else f" · доступно {сезон['avail']}")
             блоки.append(
                 f'<section class="zsea"><div class="zsea__h">'
-                f'<b>Сезон {сезон["n"]}</b><span>{сезон["eps"]} серий{хвост}</span></div>'
+                f'<b>Сезон {сезон["n"]}</b><span>· {сезон["eps"]} серий{хвост}</span></div>'
                 f'<div class="zeps">{"".join(ссылки)}</div></section>')
         return f'<h2 class="zh zh--sm">Серии</h2>{_склеить(блоки)}'
 
@@ -4465,20 +4651,34 @@ def _скрипты_плеера(код: str) -> str:
 
 
 def _подпись_плеера(код: str) -> str:
+    if СЕМЕЙСТВО == "animedia":
+        return {
+            "playable": "смотреть",
+            "resolving": "подключение источника",
+            "awaiting": "выберите серию",
+            "unavailable": "серия недоступна",
+            "loading": "загрузка",
+            "nosource": "видео пока недоступно",
+            "noaccess": "видео пока недоступно",
+            "provider": "видео временно недоступно",
+            "error": "видео временно недоступно",
+            "slow": "видео временно недоступно",
+            "ready": "источник готов",
+            "playing": "воспроизведение",
+        }.get(код, "")
     return {
         "playable": "подключение источника",
         "resolving": "подключение источника",
         "ready": "источник готов",
-        "ok": "источник готов",
         "playing": "воспроизведение",
         "awaiting": "выберите серию",
-        "unavailable": "видео недоступно",
+        "unavailable": "серия без дорожки",
         "loading": "подключение источника",
-        "nosource": "видео недоступно",
-        "noaccess": "видео недоступно",
-        "provider": "видео недоступно",
-        "error": "видео недоступно",
-        "slow": "видео недоступно",
+        "nosource": "видео временно недоступно",
+        "noaccess": "видео временно недоступно",
+        "provider": "видео временно недоступно",
+        "error": "видео временно недоступно",
+        "slow": "видео временно недоступно",
     }.get(код, "состояние неизвестно")
 
 
@@ -4524,6 +4724,70 @@ def _мета_версии() -> str:
 #: витрина аниме, показывающая обычные фильмы, — это не «широкий каталог», а
 #: подмешанный чужой профиль.
 АНИМЕ_ВИДЫ = ("Аниме", "ТВ", "OVA", "ONA", "Аниме-фильм", "Онгоинг", "Донхуа")
+
+АНИМЕДИА_ДОМЕНЫ = {
+    "animedia.space": {
+        "profile": "animedia-space",
+        "og_site_name": "Animedia Space",
+        "title_home": "Animedia Space — каталог аниме онлайн",
+        "h1": "Каталог аниме онлайн",
+        "description": (
+            "Animedia Space собирает аниме из утверждённого снимка каталога: "
+            "новые серии, оценки и подборки без выдуманных полок."),
+        "lead": (
+            "Свежие серии и тайтлы из каталога Animedia Space — только то, "
+            "что реально есть в снимке."),
+        "footer_about": (
+            "Animedia Space — аниме-портал с каталогом, поиском и подборками "
+            "из утверждённого снимка. Юридические реквизиты и партнёры здесь "
+            "не публикуются: их нет во входных данных."),
+        "seo_home_title": "О каталоге Animedia Space",
+        "seo_home": (
+            "На Animedia Space главная собирается из непустых полок снимка: "
+            "новые серии, недавно добавленные тайтлы, высокие оценки и записи "
+            "с подтверждённой дорожкой. Пустые разделы без исходных полей "
+            "скрываются, а не заполняются выдумкой. Каталог и поиск открывают "
+            "весь доступный набор через серверную пагинацию."),
+        "seo_catalog_title": "Как устроен каталог",
+        "seo_catalog": (
+            "Фильтры жанра, года и типа сужают реальный снимок Animedia Space. "
+            "Адрес страницы отражает выбранные условия; пустая выдача честно "
+            "сообщает об отсутствии совпадений."),
+    },
+    "animedia.icu": {
+        "profile": "animedia-icu",
+        "og_site_name": "Animedia ICU",
+        "title_home": "Animedia ICU — аниме, серии и подборки",
+        "h1": "Аниме, серии и подборки",
+        "description": (
+            "Animedia ICU показывает аниме-каталог с упором на серии, "
+            "подборки и расписание: данные только из утверждённого снимка."),
+        "lead": (
+            "Серии, подборки и расписание на Animedia ICU — по фактам снимка, "
+            "без обещаний сверх источника."),
+        "footer_about": (
+            "Animedia ICU — витрина аниме с акцентом на серии и тематические "
+            "подборки. Контакты, лицензии и юрлицо не выдуманы и потому не "
+            "указаны."),
+        "seo_home_title": "Чем полезен Animedia ICU",
+        "seo_home": (
+            "Animedia ICU начинается с серий и подборок: если в снимке есть "
+            "сериалы с датой, они выходят на первый план. Расписание дней "
+            "недели остаётся каркасом без выдуманного времени выхода. "
+            "Оценки и описания берутся только из sidecar подробностей."),
+        "seo_catalog_title": "Навигация по каталогу ICU",
+        "seo_catalog": (
+            "Каталог Animedia ICU сочетает жанровые и годовые срезы с поиском "
+            "по кириллице, латинице и slug. Пагинация сохраняет фильтры в URL, "
+            "чтобы можно было вернуться назад без потери состояния."),
+    },
+}
+
+
+def _аниме_домен(хост: str) -> dict:
+    хост = (хост or "").split(":")[0].lower().removeprefix("www.")
+    return АНИМЕДИА_ДОМЕНЫ.get(хост) or АНИМЕДИА_ДОМЕНЫ["animedia.space"]
+
 
 
 class ВидАнимедиа(ВидЗона):
@@ -4620,28 +4884,85 @@ class ВидАнимедиа(ВидЗона):
     def секция(self, ключ: str, титул: str, ссылка: str, набор, пусто: str) -> str:
         """Секция аниме-портала — плотная сетка, а не горизонтальная лента.
 
-        На эталоне измерено: сетка в 3 колонки до 1024 и в 4 от 1440 с зазором
-        10, и за первый экран видно объём каталога. Лента Zona здесь была бы
-        чужим ритмом. Исключение: «Новые серии аниме» — двухколоночный список
-        строк (как список серий на amd), без выдуманного времени выхода.
+        Пустые полки скрываются целиком: эталон показывает только наполненные
+        секции. При появлении данных в снимке секция вернётся сама.
         """
-        # «Онгоинги» / «Сегодня выйдет» источником не наполняются никогда
-        # (нет признака ongoing и нет времени выхода). Честный пустой блок
-        # на главной отдаляет витрину от amd.online сильнее, чем скрытие:
-        # эталон показывает только наполненные секции. При появлении данных
-        # в снимке секция снова появится — набор станет непустым.
-        if not набор and ключ in {"ongoing", "today-schedule", "today_schedule"}:
+        if not набор:
             return ""
         ссылка_html = (f'<a href="{закодировать_запрос(ссылка)}">Весь раздел</a>'
                        if ссылка else "")
         шапка = f'<div class="zsec__h"><h2>{html.escape(титул)}</h2>{ссылка_html}</div>'
-        if набор and ключ in {"new_episodes", "new-episodes"}:
+        if ключ in {"new_episodes", "new-episodes", "series_with_episodes",
+                    "series-with-episodes"}:
             тело = self.лента(набор)
             return f'<section class="zsec zsec--eps">{шапка}{тело}</section>'
-        тело = (self.плитки(набор) if набор
-                else f'<div class="zempty"><b>{html.escape(титул)}</b>'
-                     f'<p>{html.escape(пусто)}</p></div>')
-        return f'<section class="zsec">{шапка}{тело}</section>'
+        return f'<section class="zsec">{шапка}{self.плитки(набор)}</section>'
+
+    def _серии(self, запись: dict, сезоны: list, текущий=None) -> str:
+        """Компактные номерные кнопки 40–52px; Zona сохраняет «Серия N»."""
+        if not сезоны:
+            return ('<h2 class="zh zh--sm">Серии</h2>'
+                    '<div class="zempty"><b>Состав сезонов не передан</b>'
+                    "<p>Источник по этой записи ещё не отдал список серий. "
+                    "Как только отдаст, он появится здесь.</p></div>")
+        блоки = []
+        for сезон in сезоны:
+            ссылки = []
+            for н in сезон["номера"]:
+                доступна = н <= сезон["avail"]
+                текущая = (текущий == (сезон["n"], н))
+                атрибуты = ' aria-current="page"' if текущая else (
+                    "" if доступна else
+                    ' data-off aria-disabled="true" title="Серия пока недоступна"')
+                ссылки.append(
+                    f'<a href="{self.адрес_эпизода(запись["slug"], сезон["n"], н)}"'
+                    f"{атрибуты}>{н}</a>")
+            хвост = ("" if сезон["avail"] >= сезон["eps"]
+                     else f" · доступно {сезон['avail']}")
+            блоки.append(
+                f'<section class="zsea"><div class="zsea__h">'
+                f'<b>Сезон {сезон["n"]}</b>'
+                f'<span>· {сезон["eps"]} серий{хвост}</span></div>'
+                f'<div class="zeps">{"".join(ссылки)}</div></section>')
+        return f'<h2 class="zh zh--sm">Серии</h2>{_склеить(блоки)}'
+
+    def seo_блок(self, *, заголовок: str, текст: str) -> str:
+        """Нижний SEO-текст перед footer: на mobile — details."""
+        if not текст:
+            return ""
+        return (
+            f'<aside class="zseo" aria-label="{html.escape(заголовок)}">'
+            f'<div class="zseo__full"><h2>{html.escape(заголовок)}</h2>'
+            f"<p>{html.escape(текст)}</p></div>"
+            f"<details><summary>{html.escape(заголовок)}</summary>"
+            f"<p>{html.escape(текст)}</p></details></aside>")
+
+    def подвал(self) -> str:
+        домен = _аниме_домен(self.хост)
+        жанры = "".join(
+            f'<a href="/genre/{html.escape(код)}/">{html.escape(имя)}</a>'
+            for код, имя in (self.индекс.get("genre_names") or [])[:8])
+        runtime = (МАНИФЕСТ.get("runtime_commit") or МАНИФЕСТ.get("source_commit") or "")[:7]
+        tip = (f"source={МАНИФЕСТ.get('source_commit', '')[:12]} "
+               f"runtime={(МАНИФЕСТ.get('runtime_commit') or '')[:12]} "
+               f"build={СБОРКА}")
+        return (
+            '<footer class="zft">'
+            '<div class="zft__grid">'
+            '<div class="zft__col"><b>Разделы</b>'
+            '<a href="/">Главная</a><a href="/catalog/">Каталог</a>'
+            '<a href="/new/">Новые эпизоды</a><a href="/collections/">Подборки</a>'
+            '<a href="/schedule/">Расписание</a></div>'
+            f'<div class="zft__col"><b>Жанры</b>{жанры or "<span>появятся из снимка</span>"}</div>'
+            '<div class="zft__col"><b>Подборки</b>'
+            '<a href="/collections/">Все подборки</a></div>'
+            f'<div class="zft__col"><b>О витрине</b>'
+            f'<p class="zft__about">{html.escape(домен["footer_about"])}</p></div>'
+            "</div>"
+            f'<div class="zft__bar"><span>© {html.escape(self.имя)}</span>'
+            f'<span class="zvb" title="{html.escape(tip)}">'
+            f"Animedia {html.escape(ВЕРСИЯ)} · {html.escape(runtime)}</span></div>"
+            "</footer>")
 
     # --- честное состояние данных -------------------------------------
     def полоса_готовности(self) -> str:
@@ -4664,6 +4985,7 @@ class ВидАнимедиа(ВидЗона):
     def оболочка(self, тело: str, титул: str, путь: str, *, актив: str = "",
                  описание: str = "", разметка: str = "", код: int = 200,
                  сверху: str = "", крошки: str = "", og: dict | None = None) -> str:
+        домен = _аниме_домен(self.хост)
         нав = "".join(
             f'<a href="{закодировать_запрос(u)}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
             for u, t in self.се["нав"])
@@ -4673,13 +4995,19 @@ class ВидАнимедиа(ВидЗона):
                          if описание else "")
         канон = (f'<link rel="canonical" href="{html.escape(self.канон(путь))}">'
                  if путь and код == 200 else "")
-        return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="animedia-portal">
+        og_данные = dict(og or {})
+        og_данные.setdefault("site_name", домен["og_site_name"])
+        if путь and код == 200 and self.хост:
+            og_данные.setdefault("url", self.канон(путь))
+        # Profile в meta отражает доменный SEO-профиль, а не общий animedia-general.
+        профиль_meta = домен["profile"]
+        return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="animedia-portal" data-seo-profile="{профиль_meta}">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(титул)}</title>{описание_мета}{канон}
 <meta name="robots" content="noindex, nofollow">
-{_открытый_граф(og or {})}
+{_открытый_граф(og_данные)}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-{_мета_версии()}
+{_мета_версии().replace(f'content="{ПРОФИЛЬ}"', f'content="{профиль_meta}"', 1)}
 <style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}
 {СКРИПТ_ЛЕНТ}
 {СКРИПТ_АНИМЕДИА_ШАПКА}</script></head>
@@ -4700,10 +5028,8 @@ class ВидАнимедиа(ВидЗона):
 <div class="zmain">
 <div class="zwrap">{_склеить([f'<div class="ztop"><div class="ztop__b">{сверху}</div></div>' if сверху else ""])}{крошки}
 <main id="main">{тело}</main>
-<footer class="zft">
-<span>{html.escape(self.имя)} · тестовая витрина, закрыта от индексации</span>
-<span class="zvb">Template: {СЕМЕЙСТВО} {ВЕРСИЯ} · {МАНИФЕСТ["source_commit"][:8]}</span>
-</footer></div></div></div>{схемы}</body></html>"""
+{self.подвал()}
+</div></div></div>{схемы}</body></html>"""
 
     # --- главная -------------------------------------------------------
     def главная(self) -> str:
@@ -4756,29 +5082,42 @@ class ВидАнимедиа(ВидЗона):
                         "Источник не передал признака «сейчас выходит», "
                         "поэтому определить выходящие сейчас нечем."),
             "new_episodes": ("Новые серии аниме",
-                             "В снимке нет сериальных записей с датой добавления."),
+                             "В снимке нет дат выхода отдельных серий."),
+            "series_with_episodes": ("Сериалы с сериями",
+                                     "В снимке нет сериалов с доступными сериями."),
             "today_schedule": ("Сегодня выйдет",
                                "Время выхода серий источником не передаётся ни одним "
-                               "полем, поэтому сегодняшний день собрать не из чего. "
-                               "Выдумывать время и номер серии нельзя."),
+                               "полем, поэтому сегодняшний день собрать не из чего."),
             "recently_added": ("Новые аниме на сайте",
                                "В снимке нет аниме с датой добавления."),
             "top_rated": ("Топ по оценкам", "Источник не передал оценок ни одному тайтлу."),
+            "anime_movies": ("Аниме-фильмы", "В снимке нет полнометражных аниме."),
+            "donghua": ("Дунхуа", "В снимке нет записей со страной Китай."),
             "video_available": ("С видео", "Ни у одной записи не подтверждена дорожка."),
         }
-        ПОРЯДОК = ("ongoing", "new_episodes", "today_schedule",
-                   "recently_added", "top_rated", "video_available")
+        ПОРЯДОК = ("series_with_episodes", "recently_added", "top_rated",
+                   "anime_movies", "donghua", "video_available")
         снимок = Снимок.получить(self.д, self.п) if КОЛЛЕКЦИИ else None
         ленты = []
+        занятые_полки: set[str] = set()
         if снимок is not None:
             for ключ in ПОРЯДОК:
-                коллекция = КОЛЛЕКЦИИ.разрешить(ключ, снимок, СЕМЕЙСТВО, предел=24)
+                коллекция = КОЛЛЕКЦИИ.разрешить(ключ, снимок, СЕМЕЙСТВО, предел=48)
                 if коллекция is None:
                     continue
                 титул, причина = ПРИЧИНЫ.get(ключ, (коллекция.title, ""))
+                набор = []
+                for к in коллекция.items:
+                    if к.raw.get("slug") in занятые_полки:
+                        continue
+                    набор.append(к.raw)
+                    if len(набор) >= 24:
+                        break
+                for з in набор:
+                    занятые_полки.add(з["slug"])
                 ленты.append((ключ.replace("_", "-"), титул,
-                              коллекция.view_all_path if коллекция.items else "",
-                              [к.raw for к in коллекция.items], причина))
+                              коллекция.view_all_path if набор else "",
+                              набор, причина))
         else:
             ленты = [
                 ("new-anime", "Новые аниме", "/new/", выбрать(свежесть),
@@ -4787,8 +5126,8 @@ class ВидАнимедиа(ВидЗона):
                  "Источник не передал оценок ни одному тайтлу."),
             ]
         куски = [self.полоса_готовности(),
-                 f'<h1 class="zh">{html.escape(self.се["лид"])}</h1>',
-                 f'<p class="zsub">В снимке каталога {len(self.д.items)} записей аниме.</p>']
+                 f'<h1 class="zh">{html.escape(_аниме_домен(self.хост)["h1"])}</h1>',
+                 f'<p class="zsub">{html.escape(_аниме_домен(self.хост)["lead"])}</p>']
         # Верхняя карусель — первые постеры из уже собранных лент (без
         # отдельной выдуманной выборки). Источник = снимок; если лент нет —
         # полосы нет.
@@ -4807,11 +5146,17 @@ class ВидАнимедиа(ВидЗона):
         if герой:
             куски.append(self.верхняя_карусель(герой))
         куски += [self.секция(*л) for л in ленты]
+        домен = _аниме_домен(self.хост)
+        куски.append(self.seo_блок(заголовок=домен["seo_home_title"],
+                                   текст=домен["seo_home"]))
         return self.оболочка(
             _склеить(куски),
-            f"{self.имя} — аниме-портал", "/", актив="/",
-            описание=f"{self.имя}: аниме, онгоинги и расписание выхода серий.",
-            сверху="")
+            домен["title_home"], "/", актив="/",
+            описание=домен["description"],
+            сверху="",
+            og={"type": "website", "title": домен["title_home"],
+                "description": домен["description"],
+                "site_name": домен["og_site_name"]})
 
     # --- списки и поиск: причина пустоты называется на КАЖДОЙ странице ---
     def список(self, разд: str, зпр: dict) -> str:
@@ -4896,11 +5241,21 @@ def построить_индекс(данные: "Данные", подробн
         if рейтинги:
             запись["_rating"] = max(рейтинги)
         жанры = деталь.get("genres") or []
-        коды = деталь.get("genre_codes") or []
+        коды = list(деталь.get("genre_codes") or [])
+        # Animedia sidecar часто отдаёт только русские имена без genre_codes.
+        # Без кодов индекс жанров пуст, и любой ?genre= даёт «Найдено 0».
+        # Код — латиница (как /genre/<code>/), имя остаётся русским для UI.
+        if not коды and жанры:
+            коды = [нормализовать(транслит(г)) for г in жанры]
+            коды = [к for к in коды if к]
         for i, код in enumerate(коды):
+            if not код:
+                continue
             по_жанру.setdefault(код, []).append(slug)
             if i < len(жанры):
                 имена.setdefault(код, жанры[i])
+            else:
+                имена.setdefault(код, код)
         for страна in (деталь.get("countries") or []):
             код = нормализовать(страна)
             if not код:
@@ -4997,6 +5352,18 @@ class Обработчик(BaseHTTPRequestHandler):
             except OSError:
                 return self._отдать(b"", "text/plain; charset=utf-8", код=404)
             return self._отдать(данные, "application/xml; charset=utf-8")
+        if путь.startswith("/poster/"):
+            код, тело, тип = отдать_постер(путь[len("/poster/"):])
+            if код != 200:
+                return self._отдать(тело or b"", тип or "text/plain", код=код)
+            self.send_response(200)
+            self.send_header("Content-Type", тип)
+            self.send_header("Content-Length", str(len(тело)))
+            self.send_header("Cache-Control", "public, max-age=86400")
+            self.send_header("X-Robots-Tag", "noindex, nofollow")
+            self.end_headers()
+            self.wfile.write(тело)
+            return
         if путь == "/robots.txt":
             return self._отдать(b"User-agent: *\nDisallow: /\n", "text/plain; charset=utf-8")
         if путь in ("/favicon.svg", "/favicon.ico"):
