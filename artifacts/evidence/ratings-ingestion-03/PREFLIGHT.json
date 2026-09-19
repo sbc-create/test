@@ -1,0 +1,25 @@
+{
+  "stage": 3,
+  "worktree": "/home/claude/wt-ratings-ingestion-01",
+  "branch": "cursor/ratings-ingestion-01",
+  "FEATURE_HEAD": "c199300828c72f0b91b546e3248346cdb7c8729e",
+  "REPORT_HEAD": "9b3957d6c7145b70a9496502ba846887126717c4",
+  "FINAL_WORKTREE_HEAD_AT_PREFLIGHT": "942497b0afbd5b18b50601d101d1c3ef29a7a98e",
+  "REPORTED_FINAL_HEAD_OPERATOR_NOTE": "942497b0afbd5b1b850601d101d1c3ef29a7a98e",
+  "REPORTED_FINAL_HEAD_TYPO": "middle nibble 1b vs actual 18; prefix 942497b matches tip",
+  "feature_is_ancestor": true,
+  "untracked_prev_snapshots": [
+    "artifacts/evidence/ratings-ingestion-02/closed-noindex/animedia.icu/ratings_snapshot_v1.candidate.json.prev",
+    "artifacts/evidence/ratings-ingestion-02/closed-noindex/animedia.space/ratings_snapshot_v1.candidate.json.prev"
+  ],
+  "prev_origin": "atomic_publish_candidate side-file from Stage2 component backfill; not committed",
+  "canonical_ratings_db": "/srv/site-factory/repo/var/ratings/ratings.sqlite",
+  "canonical_db_resolution": "systemd ratings-ingestion.service ReadWritePaths",
+  "amd_permission_status": "NOT_PROVIDED",
+  "amd_closed_noindex_usage": "ALLOWED_BY_OWNER",
+  "amd_public_indexed_publication": "BLOCKED",
+  "max_request_rate_rps": 0.1,
+  "max_concurrency": 1,
+  "stage2_verdict": "PASS_CLOSED_CANARY",
+  "stage3_started": true
+}
