@@ -41,9 +41,56 @@ import unicodedata
 from difflib import SequenceMatcher
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from datetime import datetime, timezone
 from urllib.parse import parse_qs, parse_qsl, quote, unquote, urlencode, urlparse
 
 РЕВИЗИЯ = os.environ.get("LORDS_TEMPLATE_REVISION", "unknown")
+
+
+def текущий_год_часов() -> int:
+    """Calendar year from injectable clock (tests) or UTC now — never MAX(catalog year)."""
+    сырьё = (os.environ.get("LORDS_CLOCK_ISO") or "").strip()
+    if сырьё:
+        try:
+            return datetime.fromisoformat(сырьё.replace("Z", "+00:00")).year
+        except ValueError:
+            pass
+    return datetime.now(timezone.utc).year
+
+
+#: kind path ↔ catalog kind (Zona/Lords clean routes).
+ВИД_ПО_МАРШРУТУ = {
+    "/movies": "Фильм",
+    "/series": "Сериал",
+    "/animation": "Мультфильм",
+}
+МАРШРУТ_ПО_ВИДУ = {v: k for k, v in ВИД_ПО_МАРШРУТУ.items()}
+
+
+def _формат_даты_карточки(значение: str) -> str:
+    """UTC/ISO or YYYY-MM-DD → DD.MM.YYYY; empty if unusable."""
+    s = (значение or "").strip()
+    if not s:
+        return ""
+    if len(s) >= 10 and s[4] == "-" and s[7] == "-":
+        y, m, d = s[:10].split("-")
+        if y.isdigit() and m.isdigit() and d.isdigit():
+            return f"{d}.{m}.{y}"
+    return ""
+
+
+def _подпись_свежести(запись: dict) -> str:
+    """Source-backed freshness line for /new/ cards — never invents episode air dates."""
+    prem = (запись.get("_premiere_date") or "").strip()
+    if prem:
+        показан = _формат_даты_карточки(prem)
+        return f"Премьера · {показан}" if показан else ""
+    pub = (запись.get("published_at") or "").strip()
+    if pub:
+        показан = _формат_даты_карточки(pub)
+        return f"Обновлено · {показан}" if показан else ""
+    return ""
+
 МАНИФЕСТ_ФАЙЛ = os.environ.get("LORDS_TEMPLATE_MANIFEST",
                                "/srv/lords/.frontend/template-manifest.json")
 
@@ -1509,9 +1556,10 @@ padding-top:117px}
 @media(min-width:1280px){body{padding-top:69px}}
 .zs{min-height:100vh;display:block}
 .zmain{min-width:0}
-.zwrap{max-width:1400px;margin:0 auto;padding:0 16px}
-@media(min-width:1280px){.zwrap{padding:0 20px}}
-@media(min-width:1920px){.zwrap{max-width:1680px}}
+.zwrap{max-width:1760px;margin:0 auto;padding:0 12px}
+@media(min-width:768px){.zwrap{padding:0 24px}}
+@media(min-width:1440px){.zwrap{padding:0 32px}}
+@media(min-width:1920px){.zwrap{padding:0 64px}}
 
 /* Шапка: горизонтальная, закреплённая. Постоянной левой колонки нет ни на
    одной ширине — это и было главным расхождением с эталоном. */
@@ -1596,12 +1644,16 @@ display:none;align-items:center;justify-content:center}
 .zrl__btn[disabled]{opacity:.32;cursor:default}
 
 /* Сетка каталога и карточка. Пропорция постера 2:3, высота ряда ровная. */
-.zg{display:grid;gap:14px;grid-template-columns:repeat(2,minmax(0,1fr));
+.zg{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr));
 align-items:stretch}
-@media(min-width:640px){.zg{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(min-width:900px){.zg{grid-template-columns:repeat(5,minmax(0,1fr))}}
-@media(min-width:1200px){.zg{grid-template-columns:repeat(6,minmax(0,1fr))}}
-@media(min-width:1440px){.zg{grid-template-columns:repeat(7,minmax(0,1fr))}}
+@media(min-width:768px){.zg{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}}
+@media(min-width:1280px){.zg{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(min-width:1440px){.zg{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(min-width:1920px){.zg{grid-template-columns:repeat(7,minmax(0,1fr))}}
+.zg--related{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr));
+overflow:visible}
+@media(min-width:768px){.zg--related{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}}
+@media(min-width:1440px){.zg--related{grid-template-columns:repeat(6,minmax(0,1fr))}}
 .zt{display:flex;flex-direction:column;height:100%;min-width:0;background:@SURF@;
 border:1px solid @LINE@;border-radius:8px;overflow:hidden;
 transition:border-color .16s,transform .16s;color:inherit;text-decoration:none}
@@ -1670,9 +1722,20 @@ scrollbar-width:none;padding-bottom:4px}
 .zgenres__nav a{flex:0 0 auto}
 }
 .zpg{display:flex;gap:7px;justify-content:center;margin:26px 0;flex-wrap:wrap}
-.zpg a,.zpg span{padding:8px 13px;border-radius:6px;border:1px solid @LINE@;
-background:@SURF@;font-size:13.5px;min-width:40px;text-align:center}
-.zpg span{background:@ACCDK@;color:#fff;border-color:@ACCDK@}
+.zpg a,.zpg span{display:inline-flex;align-items:center;justify-content:center;
+min-width:44px;min-height:44px;padding:8px 13px;border-radius:6px;border:1px solid @LINE@;
+background:@SURF@;font-size:13.5px;text-align:center;box-sizing:border-box}
+.zpg span[aria-current]{background:@ACCDK@;color:#fff;border-color:@ACCDK@}
+.zpg__gap{border:0;background:transparent;min-width:24px;pointer-events:none}
+.zpg__nav{font-weight:600}
+.zsort{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.zsort a{display:inline-flex;align-items:center;min-height:36px;padding:6px 12px;
+border-radius:6px;border:1px solid @LINE@;background:@SURF@;font-size:13px;color:@DIM@}
+.zsort a[aria-current]{border-color:@ACC@;color:@ACC@;font-weight:600}
+.zfilt-wrap{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px;align-items:center}
+.zfilt-wrap a{display:inline-flex;align-items:center;min-height:36px;padding:6px 12px;
+border-radius:6px;border:1px solid @LINE@;background:@SURF@;font-size:13px}
+.zfilt-wrap a[aria-current]{background:@ACCDK@;color:#fff;border-color:@ACCDK@}
 .zempty,.znf{padding:52px 18px;text-align:center;color:@DIM@}
 .znf b{display:block;font-size:44px;font-weight:700;color:@ACC@;margin-bottom:6px}
 .znf h1{font-size:24px;margin:0 0 8px;color:@INK@;font-weight:600}
@@ -1683,8 +1746,12 @@ padding:11px 22px;border-radius:6px;font-weight:600}
 
 /* Страница произведения: компактная трёхзональная шапка. */
 .zban{display:none}
-.zmain{padding-top:88px}
-@media(min-width:1280px){.zmain{padding-top:93px}}
+.zmain{padding-top:24px;scroll-padding-top:88px}
+@media(min-width:768px){.zmain{padding-top:36px}}
+@media(min-width:1280px){.zmain{padding-top:40px}}
+/* Detail title pages keep a slightly tighter top rhythm via .ztitle margin. */
+.ztitle{scroll-margin-top:88px}
+#catalog-h1{scroll-margin-top:88px}
 .ztitle{display:grid;grid-template-columns:1fr;gap:16px;margin:4px 0 8px;
 align-items:start;max-height:none}
 @media(min-width:900px){.ztitle{grid-template-columns:240px minmax(0,1fr);gap:20px;
@@ -3083,29 +3150,35 @@ class Вид:
         return self.п.get(slug)
 
     def похожие(self, запись: dict, деталь: dict, сколько: int = 12) -> list:
-        """Похожее выбирается по жанру, затем по виду и году. Порядок
-        детерминирован: одна и та же запись всегда даёт один и тот же ряд."""
+        """Same kind required; then genre overlap, country, year proximity, rating."""
         текущий = запись["slug"]
-        собрано, видели = [], {текущий}
-        for код in (деталь.get("genre_codes") or [])[:3]:
-            for slug in self.индекс["genre"].get(код, ()):
-                if slug in видели:
-                    continue
-                сосед = self.индекс["slug"].get(slug)
-                if not сосед:
-                    continue
-                видели.add(slug)
-                собрано.append(сосед)
-                if len(собрано) >= сколько:
-                    return собрано
+        kind = запись.get("kind")
+        жанры = set(деталь.get("genre_codes") or [])
+        if not жанры:
+            жанры = {нормализовать(транслит(g)) for g in (деталь.get("genres") or []) if g}
+        страны = set(деталь.get("countries") or [])
+        year = запись.get("year") or 0
+        rating = float(запись.get("_rating") or 0.0)
+        scored = []
         for сосед in self.д.items:
-            if len(собрано) >= сколько:
-                break
-            if сосед["slug"] in видели or сосед.get("kind") != запись.get("kind"):
+            if сосед["slug"] == текущий:
                 continue
-            видели.add(сосед["slug"])
-            собрано.append(сосед)
-        return собрано
+            if сосед.get("kind") != kind:
+                continue
+            д = self.п.get(сосед["slug"]) or {}
+            g2 = set(д.get("genre_codes") or [])
+            if not g2:
+                g2 = {нормализовать(транслит(g)) for g in (д.get("genres") or []) if g}
+            overlap = len(жанры & g2)
+            c2 = set(д.get("countries") or [])
+            country_hit = 1 if (страны & c2) else 0
+            y2 = сосед.get("year") or 0
+            year_prox = -abs(int(year) - int(y2)) if year and y2 else -9999
+            r2 = float(сосед.get("_rating") or 0.0)
+            scored.append((overlap, country_hit, year_prox, r2, сосед.get("_n") or "",
+                           сосед["slug"], сосед))
+        scored.sort(key=lambda t: (t[0], t[1], t[2], t[3], t[4], t[5]), reverse=True)
+        return [t[6] for t in scored[:сколько]]
 
     # --- разметка ----------------------------------------------------
     def schema_тайтла(self, запись: dict, деталь: dict, путь: str) -> str:
@@ -3245,21 +3318,24 @@ def страницы(текущая: int, всего: int, окно: int = 2) ->
 def отбор(данные: "Данные", индекс: dict, зпр: dict, раздел: str) -> tuple[list, dict]:
     """Выборка каталога по параметрам запроса. Возвращает (набор, выбранное).
 
-    Неизвестные country/genre/sort не игнорируются молча: пустая выдача или
-    явная сортировка по умолчанию. `/new` ограничен свежим хвостом снимка —
-    весь каталог в другом порядке «новинками» не выдаём.
+    year = release year only. /new/ uses activity_at (premiere_date else
+    published_at) without a hard 240 cap. Default kind-routes sort by release
+    freshness, not title alphabet.
     """
     набор = list(данные.items)
     вид = (зпр.get("kind") or [None])[0]
     год = (зпр.get("year") or [None])[0]
     жанр = (зпр.get("genre") or [None])[0]
     страна = (зпр.get("country") or [None])[0]
-    сорт = (зпр.get("sort") or [None])[0]
+    сырой_сорт = (зпр.get("sort") or [None])[0]
+    # Aliases: date → newest (legacy).
+    сорт = {"date": "newest", "new": "newest"}.get(сырой_сорт or "", сырой_сорт)
     неизвестный_фильтр = False
+
     if вид:
         набор = [з for з in набор if з.get("kind") == вид]
     if год:
-        if str(год).isdigit():
+        if str(год).isdigit() and 1870 <= int(год) <= 2100:
             набор = [з for з in набор if з.get("year") == int(год)]
         else:
             неизвестный_фильтр = True
@@ -3287,32 +3363,71 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
         else:
             членство = set(разрешённые)
             набор = [з for з in набор if з["slug"] in членство]
-    # «Новинки» / недавно добавленное: только хвост по published_at, не весь каталог.
-    НОВИНКИ_ПРЕДЕЛ = 240
-    if раздел == "/new":
-        набор = sorted(набор, key=lambda з: з.get("published_at") or "", reverse=True)
-        набор = [з for з in набор if з.get("published_at")][:НОВИНКИ_ПРЕДЕЛ]
-    elif сорт == "rating":
-        def _рейтинг(з):
-            return float(з.get("_rating") or 0.0)
-        набор = sorted(набор, key=lambda з: (_рейтинг(з), з.get("_n") or "", з["slug"]),
+
+    def _title_key(з: dict) -> tuple:
+        return (з.get("_n") or нормализовать(з["title"]), з["slug"])
+
+    def _activity_key(з: dict) -> tuple:
+        # Prefer premiere_date; else catalog published_at. Missing sorts last.
+        prem = з.get("_premiere_date") or ""
+        pub = з.get("published_at") or ""
+        has = 1 if (prem or pub) else 0
+        return (has, prem or pub, _title_key(з)[0], з["slug"])
+
+    def _release_key(з: dict) -> tuple:
+        prem = з.get("_premiere_date") or ""
+        year = з.get("year") or 0
+        has_prem = 1 if prem else 0
+        has_year = 1 if year else 0
+        return (has_prem, prem, has_year, int(year) if year else 0,
+                _title_key(з)[0], з["slug"])
+
+    def _rating_key(з: dict) -> tuple:
+        rating = float(з.get("_rating") or 0.0)
+        votes = int(з.get("_votes") or 0)
+        # Min votes soft preference: 0 still allowed but sorts after voted.
+        has_votes = 1 if votes > 0 else 0
+        return (1 if rating > 0 else 0, has_votes, rating, votes,
+                _title_key(з)[0], з["slug"])
+
+    # Default sort by route when sort omitted.
+    if not сорт:
+        if раздел == "/new":
+            сорт = "newest"
+        elif раздел in ("/movies", "/series", "/animation", "/catalog"):
+            сорт = "newest"
+        elif раздел == "/collections":
+            сорт = "title"
+        else:
+            сорт = "newest"
+
+    if раздел == "/new" or сорт == "newest":
+        # /new/ activity = premiere_date else published_at (labels differ in UI).
+        набор = sorted(набор, key=_activity_key if раздел == "/new" else _release_key,
                        reverse=True)
+    elif сорт == "recently_added":
+        набор = sorted(
+            набор,
+            key=lambda з: (1 if з.get("published_at") else 0,
+                           з.get("published_at") or "",
+                           _title_key(з)[0], з["slug"]),
+            reverse=True)
+    elif сорт == "rating":
+        набор = sorted(набор, key=_rating_key, reverse=True)
+    elif сорт == "title":
+        набор = sorted(набор, key=_title_key)
     elif сорт == "year":
-        набор = sorted(набор, key=lambda з: (з.get("year") or 0, з["slug"]), reverse=True)
-    elif сорт == "title" or раздел in (
-            "/catalog", "/movies", "/series", "/animation"):
-        набор = sorted(набор, key=lambda з: (з.get("_n") or нормализовать(з["title"]),
-                                             з["slug"]))
-    elif сорт == "date":
-        набор = sorted(набор, key=lambda з: з.get("published_at") or "", reverse=True)
+        набор = sorted(
+            набор,
+            key=lambda з: (1 if з.get("year") else 0, з.get("year") or 0,
+                           _title_key(з)[0], з["slug"]),
+            reverse=True)
     elif сорт:
         неизвестный_фильтр = True
         набор = []
-    elif раздел == "/collections":
-        # Hub handled separately; keep stable title order if ever reused.
-        набор = sorted(набор, key=lambda з: (з.get("_n") or нормализовать(з["title"]),
-                                             з["slug"]))
-    выбрано = {"kind": вид, "year": год, "genre": жанр, "country": страна, "sort": сорт}
+
+    выбрано = {"kind": вид, "year": год, "genre": жанр, "country": страна,
+               "sort": сорт if сорт not in (None, "") else None}
     if неизвестный_фильтр:
         выбрано["_unknown"] = "1"
     return набор, выбрано
@@ -3322,6 +3437,9 @@ def запрос_строкой(выбрано: dict, **замена) -> str:
     """Собрать `?k=v` с percent-encoding значений (kind=Фильм → %D0%A4…)."""
     поля = dict(выбрано)
     поля.update(замена)
+    omit_kind = bool(поля.pop("_omit_kind", False))
+    if omit_kind:
+        поля.pop("kind", None)
     пары = [(к, з) for к, з in поля.items()
             if з and not str(к).startswith("_")]
     return ("?" + urlencode(пары, quote_via=quote)) if пары else ""
@@ -4079,12 +4197,14 @@ class ВидЗона(Вид):
             cfg.get(k) for k in (
                 "about_url", "contacts_url", "feedback_url",
                 "rights_url", "privacy_url", "terms_url", "contact_email"))
-        help_col = (f'<div class="zft__col"><b>Помощь</b>{помощь or "<span>Разделы появятся после настройки профиля</span>"}</div>')
-        docs_col = (f'<div class="zft__col"><b>Документы</b>{документы or "<span>Документы не опубликованы</span>"}</div>')
-        marker = (f'<span class="zvb" data-contact-config-missing="{1 if contact_missing else 0}">'
+        # No public placeholders — omit empty help/docs columns entirely.
+        help_col = (f'<div class="zft__col"><b>Помощь</b>{помощь}</div>' if помощь else "")
+        docs_col = (f'<div class="zft__col"><b>Документы</b>{документы}</div>' if документы else "")
+        marker = (f'<span class="zvb" data-contact-config-missing="{1 if contact_missing else 0}" '
+                  f'data-footer-contact-gate="{0 if contact_missing else 1}">'
                   f'Zona · {html.escape(ВЕРСИЯ)} · {html.escape(source)}</span>')
         return (
-            '<footer class="zft">'
+            '<footer class="zft" data-testid="site-footer">'
             '<div class="zft__cols">'
             f'<div class="zft__col"><b>{html.escape(self.имя)}</b>'
             f'<p class="zft__about">{html.escape(self.имя)} — витрина фильмов, '
@@ -4096,10 +4216,14 @@ class ВидЗона(Вид):
             f"{marker}</div></footer>")
 
     # --- составные части ---------------------------------------------
-    def плитка(self, запись: dict) -> str:
+    def плитка(self, запись: dict, *, freshness: bool = False) -> str:
         деталь = self.деталь(запись["slug"])
         изо = заглушка_постера(запись, "zt__none", "zt__img")
         мета = " · ".join(str(ч) for ч in (запись.get("kind"), запись.get("year")) if ч)
+        if freshness:
+            reason = _подпись_свежести(запись)
+            if reason:
+                мета = f"{мета} · {reason}" if мета else reason
         кп = _число(деталь.get("kinopoisk_rating"))
         им = _число(деталь.get("imdb_rating"))
         части = []
@@ -4107,11 +4231,13 @@ class ВидЗона(Вид):
             части.append(f"<span>КП <b>{кп}</b></span>")
         if им:
             части.append(f"<span>IMDb <i>{им}</i></span>")
+        # Missing rating keeps line height without dominating copy.
         if not части:
-            части.append("<span><em>оценки нет</em></span>")
+            части.append("<span class=\"zt__r-empty\" aria-hidden=\"true\">&nbsp;</span>")
         оценка = f'<span class="zt__r">{"".join(части)}</span>'
         заголовок = запись["title"] or ""
-        return (f'<a class="zt" href="{запись["url"]}" title="{html.escape(заголовок)}">'
+        return (f'<a class="zt" data-testid="title-card" href="{запись["url"]}" '
+                f'title="{html.escape(заголовок)}">'
                 f'<span class="zt__p">{изо}</span>'
                 f'<span class="zt__b"><span class="zt__t">{html.escape(заголовок)}</span>'
                 f'<span class="zt__m">{html.escape(мета)}</span></span>{оценка}</a>')
@@ -4175,22 +4301,36 @@ class ВидЗона(Вид):
         шапка = (f'<div class="zsec__h"><h2>{html.escape(титул)}</h2>{ссылка_html}</div>')
         return f'<section class="zsec">{шапка}{self.карусель(ключ, набор)}</section>'
 
-    def плитки(self, набор) -> str:
-        return '<div class="zg">' + "".join(self.плитка(з) for з in набор) + "</div>"
+    def плитки(self, набор, *, freshness: bool = False) -> str:
+        return ('<div class="zg">'
+                + "".join(self.плитка(з, freshness=freshness) for з in набор)
+                + "</div>")
 
     def листалка(self, разд: str, выбрано: dict, стр: int, всего: int) -> str:
         пункты = страницы(стр, всего)
         if not пункты:
             return ""
         куски = []
+        if стр > 1:
+            куски.append(
+                f'<a class="zpg__nav" href="{разд}/'
+                f'{запрос_строкой(выбрано, page=(стр - 1 if стр - 1 > 1 else None))}"'
+                f' rel="prev">Назад</a>')
         for н in пункты:
             if н is None:
-                куски.append("<em>…</em>")
+                куски.append('<span class="zpg__gap" aria-hidden="true">…</span>')
             elif н == стр:
                 куски.append(f'<span aria-current="page">{н}</span>')
             else:
-                куски.append(f'<a href="{разд}/{запрос_строкой(выбрано, page=(н if н > 1 else None))}">{н}</a>')
-        return f'<nav class="zpg" aria-label="Страницы">{"".join(куски)}</nav>'
+                куски.append(
+                    f'<a href="{разд}/'
+                    f'{запрос_строкой(выбрано, page=(н if н > 1 else None))}">{н}</a>')
+        if стр < всего:
+            куски.append(
+                f'<a class="zpg__nav" href="{разд}/'
+                f'{запрос_строкой(выбрано, page=стр + 1)}" rel="next">Далее</a>')
+        return (f'<nav class="zpg" data-testid="pagination" aria-label="Страницы">'
+                f'{"".join(куски)}</nav>')
 
     def крошки(self, звенья) -> str:
         куски = []
@@ -4294,12 +4434,24 @@ class ВидЗона(Вид):
         if КОЛЛЕКЦИИ is not None and снимок is not None:
             кол_карточки = []
             подписи = {
+                "recently_added": "Недавно добавленные",
                 "recent": "Недавно добавленные",
+                "recently_added_movies": "Недавно добавленные фильмы",
                 "new-movies": "Новые фильмы",
+                "new_movie_releases": "Премьеры фильмов",
+                "new_series_releases": "Новые сериалы",
+                "new_episodes": "Новые эпизоды",
                 "top-rated": "С высокими оценками",
+                "top_rated": "С высокими оценками",
+                "current_season": "Этого года",
+                "video_available": "С видео",
+                "genre_comedy": "Комедии",
+                "genre_drama": "Драмы",
+                "genre_thriller": "Триллеры",
+                "genre_animation": "Анимация",
                 "popular": "Популярное в каталоге",
             }
-            for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО)[:4]:
+            for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО)[:12]:
                 if not спец.доступна:
                     continue
                 данные = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО,
@@ -4464,17 +4616,26 @@ class ВидЗона(Вид):
                 for к in выбранные[:4] if к.poster)
             ключ_кол = getattr(спец, "collection_key", "") or ""
             подписи_хаб = {
-                "recent": "Недавно добавленные",
-                "new-movies": "Новые фильмы",
-                "top-rated": "Фильмы и сериалы с высокими оценками",
-                "popular": "Популярное в каталоге",
+                "recently_added": "Недавно добавленные",
+                "recently_added_movies": "Недавно добавленные фильмы",
+                "new_movie_releases": "Премьеры фильмов",
+                "new_series_releases": "Новые сериалы",
+                "new_episodes": "Новые эпизоды",
+                "top_rated": "Фильмы и сериалы с высокими оценками",
+                "current_season": "Этого года",
+                "video_available": "С подтверждённым видео",
+                "genre_comedy": "Комедии",
+                "genre_drama": "Драмы",
+                "genre_thriller": "Триллеры",
+                "genre_animation": "Анимация",
             }
             подпись_хаб = подписи_хаб.get(ключ_кол) or html.escape(
                 (коллекция.description or "").split(".")[0][:80]
                 or "Подборка")
             # Never expose internal snapshot totals (e.g. "53524 записей").
             карточки.append(
-                f'<a class="zhub__c" href="{html.escape(спец.canonical_path)}">'
+                f'<a class="zhub__c" data-testid="collection-card" '
+                f'href="{html.escape(спец.canonical_path)}">'
                 f'<span class="zhub__g">{обложки}</span>'
                 f'<span class="zhub__t">{html.escape(коллекция.title)}</span>'
                 f'<span class="zhub__m">{подпись_хаб}</span>'
@@ -4484,7 +4645,7 @@ class ВидЗона(Вид):
                     "<p>Ни одна коллекция контура не набрала записей в текущем снимке. "
                     "Наполнять их похожими тайтлами нельзя: подборка без источника — "
                     "это выдумка.</p></div>")
-        return f'<div class="zhub">{"".join(карточки)}</div>'
+        return f'<div class="zhub" data-testid="collection-grid">{"".join(карточки)}</div>'
 
     def список(self, разд: str, зпр: dict) -> str:
         имена = {
@@ -4497,17 +4658,35 @@ class ВидЗона(Вид):
         }
         титул = имена.get(разд, "Каталог")
         if разд == "/collections":
-            тело = (f'<div class="zwrap"><h1 class="zh">{html.escape(титул)}</h1>'
-                    f'<p class="zsub">Тематические подборки по данным текущего снимка.</p>'
+            тело = (f'<div class="zwrap" data-testid="page-container">'
+                    f'<h1 class="zh" data-testid="catalog-heading" id="catalog-h1">'
+                    f'{html.escape(титул)}</h1>'
+                    f'<p class="zsub">Тематические подборки.</p>'
                     + self.хаб_коллекций() + "</div>")
             return self.оболочка(тело, f"{титул} — {self.имя}", "/collections/",
                                  актив="/collections/",
                                  описание=f"Подборки витрины {self.имя}.")
         набор, выбрано = отбор(self.д, self.индекс, зпр, разд)
-        стр = max(1, int((зпр.get("page") or ["1"])[0] or 1))
-        всего = max(1, (len(набор) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1)
-        стр = min(стр, всего)
+        if выбрано.get("_unknown"):
+            тело = (f'<div class="zwrap" data-testid="page-container">'
+                    f'<h1 class="zh" id="catalog-h1">Некорректный фильтр</h1>'
+                    f'<p class="zsub">Параметр не распознан. '
+                    f'<a href="{разд}/">Открыть раздел без фильтра</a></p></div>')
+            return self.оболочка(тело, f"Некорректный фильтр — {self.имя}",
+                                 разд + "/", код=400)
+        raw_page = (зпр.get("page") or ["1"])[0]
+        try:
+            стр = max(1, int(raw_page or 1))
+        except (TypeError, ValueError):
+            стр = 1
+        всего_страниц = max(1, (len(набор) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1) if набор else 1
+        if набор and стр > всего_страниц:
+            # Router should 404 first; belt-and-suspenders.
+            return self.не_найдено(f"{разд}/?page={стр}")
+        стр = min(стр, всего_страниц)
         кусок = набор[(стр - 1) * НА_СТРАНИЦЕ_1_1: стр * НА_СТРАНИЦЕ_1_1]
+
+        год = выбрано.get("year")
         жанр_код = выбрано.get("genre")
         жанр_имя = None
         if жанр_код:
@@ -4520,20 +4699,84 @@ class ВидЗона(Вид):
                     if код == жанр_код:
                         жанр_имя = имя
                         break
-            if жанр_имя:
-                титул = жанр_имя
-        фильтры = "".join(
-            f'<a href="{разд}/{запрос_строкой(выбрано, kind=к, page=None)}"'
-            f'{ТЕКУЩАЯ_СТРАНИЦА if выбрано["kind"] == к else ""}>{html.escape(к)}</a>'
-            for к in self.д.kinds)
-        if any(v for k, v in выбрано.items() if k != "_unknown" and v):
+        # H1 reflects active year / genre.
+        if разд == "/series" and год:
+            титул = f"Сериалы {год} года"
+        elif разд == "/movies" and год:
+            титул = f"Фильмы {год} года"
+        elif разд == "/animation" and год:
+            титул = f"Анимация {год} года"
+        elif разд == "/catalog" and год and жанр_имя:
+            титул = f"{жанр_имя.capitalize()} {год} года"
+        elif разд == "/catalog" and год:
+            титул = f"Каталог {год} года"
+        elif жанр_имя:
+            титул = жанр_имя.capitalize() if жанр_имя[:1].islower() else жанр_имя
+
+        kind_route = разд in ВИД_ПО_МАРШРУТУ
+        omit = {"_omit_kind": True} if kind_route else {}
+
+        # Kind chips → real section routes (never /movies/?kind=Сериал).
+        kind_chips = []
+        for к, путь_к in (("Фильм", "/movies"), ("Сериал", "/series"),
+                          ("Мультфильм", "/animation")):
+            q = запрос_строкой({**выбрано, **omit, "kind": None},
+                               year=выбрано.get("year"),
+                               genre=выбрано.get("genre"),
+                               country=выбрано.get("country"),
+                               sort=выбрано.get("sort"),
+                               page=None, _omit_kind=True)
+            cur = ' aria-current="page"' if выбрано.get("kind") == к else ""
+            kind_chips.append(f'<a href="{путь_к}/{q}"{cur}>{html.escape(к)}</a>')
+        if разд == "/catalog":
+            kind_chips = [
+                f'<a href="/catalog/{запрос_строкой(выбрано, kind=к, page=None, _omit_kind=False)}"'
+                f'{ТЕКУЩАЯ_СТРАНИЦА if выбрано.get("kind") == к else ""}>{html.escape(к)}</a>'
+                for к in self.д.kinds
+            ]
+        фильтры = "".join(kind_chips)
+        if any(v for k, v in выбрано.items() if k not in ("_unknown", "sort") and v):
             фильтры += f'<a href="{разд}/">Сбросить</a>'
+
         годы = "".join(
-            f'<a href="{разд}/{запрос_строкой(выбрано, year=г, page=None)}"'
+            f'<a href="{разд}/{запрос_строкой({**выбрано, **omit}, year=г, page=None)}"'
             f'{ТЕКУЩАЯ_СТРАНИЦА if str(выбрано.get("year")) == str(г) else ""}>{г}</a>'
-            for г in (self.д.years or [])[:12])
+            for г in (self.д.years or [])[:24])
         if годы:
+            фильтры += ('<a href="' + разд + '/' + запрос_строкой({**выбрано, **omit}, year=None, page=None)
+                        + '">Все годы</a>')
             фильтры += f'<span class="zfilt__y">{годы}</span>'
+
+        # Visible sort selector (URL-backed).
+        sort_opts = (
+            ("newest", "Сначала новые"),
+            ("recently_added", "Недавно добавленные"),
+            ("rating", "По рейтингу"),
+            ("title", "По названию"),
+        )
+        active_sort = выбрано.get("sort") or "newest"
+        сорт_html = '<nav class="zsort" data-testid="catalog-sort" aria-label="Сортировка">'
+        for ключ, лейбл in sort_opts:
+            cur = ' aria-current="true"' if active_sort == ключ else ""
+            href = разд + "/" + запрос_строкой({**выбрано, **omit}, sort=ключ, page=None)
+            сорт_html += f'<a href="{href}"{cur}>{лейбл}</a>'
+        сорт_html += "</nav>"
+
+        активные = []
+        if выбрано.get("kind"):
+            активные.append(html.escape(str(выбрано["kind"])))
+        if год:
+            активные.append(html.escape(str(год)))
+        if жанр_имя:
+            активные.append(html.escape(жанр_имя))
+        сорт_лейбл = dict(sort_opts).get(active_sort, active_sort)
+        meta_bits = []
+        if активные:
+            meta_bits.append("Активные фильтры: " + " · ".join(активные))
+        meta_bits.append(f"Сортировка: {сорт_лейбл}")
+        meta_bits.append(f"Результаты: {len(набор)}")
+        zsub = " · ".join(meta_bits)
+
         жанр_навигация = "".join(
             f'<a href="/catalog/{запрос_строкой({"genre": код})}"'
             f'{ТЕКУЩИЙ_ПУНКТ if жанр_код == код else ""}>{html.escape(имя)}</a>'
@@ -4541,25 +4784,29 @@ class ВидЗона(Вид):
         блок_жанров = (
             f'<nav class="zgenres__nav" aria-label="Смотреть по жанрам">'
             f"{жанр_навигация}</nav>") if разд == "/catalog" else ""
-        канон = разд + "/" + (запрос_строкой(выбрано, page=None) if жанр_код else "")
-        тело = (f'<div class="zwrap"><h1 class="zh">{html.escape(титул)}</h1>'
-                f'<p class="zsub">Найдено {len(набор)} · страница {стр} из {всего}</p>'
-                + блок_жанров
-                + (self.плитки(кусок) if кусок else
-                   '<div class="zempty"><b>Ничего не подошло</b>'
-                   "<p>Под выбранные условия не попала ни одна запись.</p></div>")
-                + self.листалка(разд, выбрано, стр, всего) + "</div>")
+
+        канон_q = запрос_строкой({**выбрано, **omit}, page=None)
+        канон = разд + "/" + канон_q
+        show_fresh = разд == "/new"
+        сетка = (self.плитки(кусок, freshness=show_fresh) if кусок else
+                 '<div class="zempty"><b>Ничего не подошло</b>'
+                 "<p>Под выбранные условия не попала ни одна запись.</p></div>")
+        тело = (
+            f'<div class="zwrap" data-testid="page-container">'
+            f'<h1 class="zh" data-testid="catalog-heading" id="catalog-h1">'
+            f'{html.escape(титул)}</h1>'
+            f'<p class="zsub">{zsub}</p>'
+            f'{сорт_html}'
+            f'<div data-testid="catalog-filters" class="zfilt-wrap">{фильтры}</div>'
+            + блок_жанров
+            + f'<div data-testid="catalog-grid">{сетка}</div>'
+            + self.листалка(разд, {**выбрано, **omit}, стр, всего_страниц)
+            + "</div>")
         актив = разд + "/"
-        if разд == "/catalog" and выбрано.get("kind") == "Фильм":
-            актив = "/movies/"
-        elif разд == "/catalog" and выбрано.get("kind") == "Сериал":
-            актив = "/series/"
-        elif разд == "/catalog" and выбрано.get("kind") == "Мультфильм":
-            актив = "/animation/"
         return self.оболочка(тело, f"{титул} — {self.имя}", канон or (разд + "/"),
                              актив=актив,
                              описание=f"{титул} на витрине {self.имя}.",
-                             сверху=фильтры)
+                             сверху="")
 
     def поиск(self, зпр: dict) -> str:
         q = (зпр.get("q") or [""])[0]
@@ -4690,9 +4937,10 @@ class ВидЗона(Вид):
         похожие = self.похожие(запись, деталь, сколько=12)
         if похожие:
             блок_похожих = (
-                f'<div class="zwrap"><section class="zsec">'
+                f'<div class="zwrap"><section class="zsec" data-testid="related-grid">'
                 f'<div class="zsec__h"><h2>Смотрите также</h2></div>'
-                f'{self.карусель("related", похожие)}</section></div>')
+                f'<div class="zg zg--related">'
+                f'{"".join(self.плитка(з) for з in похожие)}</div></section></div>')
         else:
             блок_похожих = ""
         expand_js = (
@@ -5426,6 +5674,21 @@ def построить_индекс(данные: "Данные", подробн
                 pass
         if рейтинги:
             запись["_rating"] = max(рейтинги)
+        # Votes from ratings_by_source when present (for rating sort soft floor).
+        голоса = 0
+        by_src = деталь.get("ratings_by_source") or {}
+        if isinstance(by_src, dict):
+            for блок in by_src.values():
+                if isinstance(блок, dict):
+                    try:
+                        голоса = max(голоса, int(блок.get("votes") or 0))
+                    except (TypeError, ValueError):
+                        pass
+        if голоса:
+            запись["_votes"] = голоса
+        prem = (деталь.get("premiere_date") or "").strip()
+        if prem:
+            запись["_premiere_date"] = prem[:10]
         жанры = деталь.get("genres") or []
         коды = list(деталь.get("genre_codes") or [])
         # Animedia sidecar часто отдаёт только русские имена без genre_codes.
@@ -5618,12 +5881,8 @@ class Обработчик(BaseHTTPRequestHandler):
     #: которые уже кем-то сохранены.
     ПРЕЖНИЕ_АДРЕСА = {"/schedule/": "/new/", "/genres/": "/catalog/"}
 
-    #: Чистые kind-маршруты (Lords). Query остаётся каноном для комбинаций.
-    МАРШРУТЫ_ВИДА = {
-        "/movies": "Фильм",
-        "/series": "Сериал",
-        "/animation": "Мультфильм",
-    }
+    #: Чистые kind-маршруты. Query kind must redirect — never silently ignore.
+    МАРШРУТЫ_ВИДА = dict(ВИД_ПО_МАРШРУТУ)
 
     #: Исторические slug → канонический. 301 с сохранением season/episode.
     #: Измерено: …domokhozyaykoy 404, live slug …domohozyaykoy.
@@ -5648,6 +5907,40 @@ class Обработчик(BaseHTTPRequestHandler):
         self.send_header("Location", цель)
         self.send_header("Content-Length", "0")
         self.end_headers()
+        return True
+
+    def _page_gate(self, в: "Вид", путь: str, разд: str, зпр: dict,
+                   path_kind: str | None):
+        """Validate ?page= before render. Returns truthy if response already sent."""
+        raw = (зпр.get("page") or [None])[0]
+        if raw is None:
+            return None
+        if not str(raw).isdigit() or int(raw) < 1:
+            тело = ('<!doctype html><html lang="ru"><meta charset="utf-8">'
+                    "<title>400</title><h1>Некорректный номер страницы</h1></html>")
+            self._отдать(тело.encode("utf-8"), код=400)
+            return True
+        page = int(raw)
+        # Strip ?page=1 → canonical without page.
+        if page == 1:
+            keep = {к: (зпр.get(к) or [None])[0]
+                    for к in ("kind", "year", "genre", "country", "sort")
+                    if (зпр.get(к) or [None])[0]}
+            if path_kind:
+                keep.pop("kind", None)
+            qs = запрос_строкой(keep)
+            return self._переход(f"{разд}/{qs}")
+        зпр2 = dict(зпр)
+        if path_kind:
+            зпр2["kind"] = [path_kind]
+        набор, _ = отбор(self.данные, self.индекс, зпр2, разд)
+        всего = max(1, (len(набор) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1) if набор else 1
+        if not набор:
+            всего = 1
+        if page > всего:
+            self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
+            return True
+        return None
 
     def маршрут_1_1(self, путь: str, зпр: dict):
         в = self.вид()
@@ -5662,14 +5955,36 @@ class Обработчик(BaseHTTPRequestHandler):
         обрезанный = путь.rstrip("/") or "/"
         if обрезанный == "/":
             return self._отдать(в.главная().encode("utf-8"))
-        # Clean kind routes (Lords profile surfaces). Canonical = own path
-        # (/movies/, /series/, /animation/), not a silent rewrite to /catalog/.
+        # Clean kind routes. Conflicting/redundant ?kind= → one 308 redirect.
         if обрезанный in self.МАРШРУТЫ_ВИДА:
-            kind = self.МАРШРУТЫ_ВИДА[обрезанный]
+            path_kind = self.МАРШРУТЫ_ВИДА[обрезанный]
+            q_kind = (зпр.get("kind") or [None])[0]
+            # Preserve non-kind params; drop kind from canonical query.
+            keep = {к: (зпр.get(к) or [None])[0]
+                    for к in ("year", "genre", "country", "sort", "page")
+                    if (зпр.get(к) or [None])[0]}
+            if q_kind and q_kind != path_kind:
+                цель_путь = МАРШРУТ_ПО_ВИДУ.get(q_kind)
+                if not цель_путь:
+                    return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
+                # Reset page on kind change.
+                keep.pop("page", None)
+                qs = запрос_строкой(keep)
+                return self._переход(f"{цель_путь}/{qs}")
+            if q_kind == path_kind:
+                qs = запрос_строкой(keep)
+                return self._переход(f"{обрезанный}/{qs}")
+            # page gates before render
+            gated = self._page_gate(в, путь, обрезанный, зпр, path_kind)
+            if gated is not None:
+                return gated
             зпр = dict(зпр)
-            зпр["kind"] = [kind]
+            зпр["kind"] = [path_kind]
             return self._отдать(в.список(обрезанный, зпр).encode("utf-8"))
         if обрезанный in ("/catalog", "/new"):
+            gated = self._page_gate(в, путь, обрезанный, зпр, None)
+            if gated is not None:
+                return gated
             return self._отдать(в.список(обрезанный, зпр).encode("utf-8"))
         if обрезанный == "/collections":
             if СЕМЕЙСТВО == "lords" and hasattr(в, "хаб_подборок"):

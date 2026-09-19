@@ -205,6 +205,42 @@ class Снимок:
                 готово.append(з)
         return готово
 
+    def по_жанру(self, код: str) -> list[dict]:
+        if not код:
+            return []
+        out = []
+        for з in self._по_дате:
+            д = self.подробности.get(str(з.get("slug") or "")) or {}
+            codes = list(д.get("genre_codes") or [])
+            names = [str(g).lower() for g in (д.get("genres") or [])]
+            if код in codes or код.lower() in names:
+                out.append(з)
+        return out
+
+    def новинки_релиза(self, вид: str) -> list[dict]:
+        """Titles with premiere_date in clock year, or year==clock year.
+
+        Not the same as catalog ingest order (recently_added).
+        """
+        y = _clock_year()
+        out = []
+        for з in self.items:
+            if вид and з.get("kind") != вид:
+                continue
+            д = self.подробности.get(str(з.get("slug") or "")) or {}
+            prem = str(д.get("premiere_date") or "")[:10]
+            if prem.startswith(str(y)):
+                out.append(з)
+                continue
+            if з.get("year") == y:
+                out.append(з)
+        # Sort by premiere_date DESC then published_at.
+        def key(з: dict) -> tuple:
+            д = self.подробности.get(str(з.get("slug") or "")) or {}
+            prem = str(д.get("premiere_date") or "")
+            return (1 if prem else 0, prem, str(з.get("published_at") or ""))
+        return sorted(out, key=key, reverse=True)
+
 
 def _карточка(снимок: Снимок, з: dict) -> Карточка:
     слаг = str(з.get("slug") or "")
@@ -238,10 +274,23 @@ def _карточка(снимок: Снимок, з: dict) -> Карточка:
     "recent": lambda с, ф: с.по_дате(),
     "recent_of_kind": lambda с, ф: с.по_виду(str(ф.get("kind") or "")),
     "top_rated": lambda с, ф: с.по_оценке(),
-    "current_year": lambda с, ф: (с.года(с.максимальный_год)
-                                  if с.максимальный_год else []),
+    # Clock year — never MAX(catalog year).
+    "current_year": lambda с, ф: с.года(_clock_year()),
     "playable": lambda с, ф: с.играющие(),
+    "genre": lambda с, ф: с.по_жанру(str(ф.get("genre") or "")),
+    "new_releases_kind": lambda с, ф: с.новинки_релиза(str(ф.get("kind") or "")),
 }
+
+
+def _clock_year() -> int:
+    import os
+    raw = (os.environ.get("LORDS_CLOCK_ISO") or "").strip()
+    if raw:
+        try:
+            return datetime.fromisoformat(raw.replace("Z", "+00:00")).year
+        except ValueError:
+            pass
+    return datetime.now(timezone.utc).year
 
 
 def _спец(ключ: str, семейство: str, титул: str, описание: str, источник: str,
@@ -276,8 +325,8 @@ def _общие(семейство: str, кино: str, сериал: str) -> li
               "ratings", {"has_rating": True}, {"field": "rating", "order": "desc"},
               "rating", "/collection/top_rated/"),
         _спец("current_season", семейство, "Этого года",
-              "Записи самого свежего года, представленного в каталоге.",
-              "catalog", {"year": "max"}, {"field": "published_at", "order": "desc"},
+              "Записи текущего календарного года.",
+              "catalog", {"year": "current"}, {"field": "published_at", "order": "desc"},
               "year", "/collection/current_season/"),
         _спец("video_available", семейство, "С видео",
               "Записи, у которых поставщик подтвердил дорожку.",
@@ -313,8 +362,61 @@ def _недоступные(семейство: str, ключи: tuple[str, ...]
 
 РЕЕСТР: dict[str, list[Спецификация]] = {
     "lords": _общие("lords", "Фильм", "Сериал"),
-    "zona": _общие("zona", "Фильм", "Сериал")
-    + _недоступные("zona", ("popular_new_movies", "popular_series", "new_trailers")),
+    "zona": (
+        [
+            _спец("recently_added", "zona", "Недавно добавленные",
+                  "Записи в порядке появления в каталоге.",
+                  "catalog", {}, {"field": "published_at", "order": "desc"},
+                  "published_at", "/collection/recently_added/"),
+            _спец("recently_added_movies", "zona", "Недавно добавленные фильмы",
+                  "Фильмы в порядке появления в каталоге.",
+                  "catalog", {"kind": "Фильм"}, {"field": "published_at", "order": "desc"},
+                  "published_at", "/collection/recently_added_movies/"),
+            _спец("new_movie_releases", "zona", "Премьеры фильмов",
+                  "Фильмы с датой премьеры или годом текущего календарного года.",
+                  "catalog", {"kind": "Фильм", "release_mode": "premiere"},
+                  {"field": "premiere_date", "order": "desc"},
+                  "premiere_date", "/collection/new_movie_releases/"),
+            _спец("new_series_releases", "zona", "Новые сериалы",
+                  "Сериалы текущего календарного года.",
+                  "catalog", {"kind": "Сериал", "release_mode": "premiere"},
+                  {"field": "premiere_date", "order": "desc"},
+                  "premiere_date", "/collection/new_series_releases/"),
+            _спец("new_episodes", "zona", "Новые эпизоды",
+                  "Сериалы в порядке появления в каталоге.",
+                  "catalog", {"kind": "Сериал"}, {"field": "published_at", "order": "desc"},
+                  "published_at", "/collection/new_episodes/"),
+            _спец("top_rated", "zona", "Высокие оценки",
+                  "Записи с подтверждённой оценкой источника.",
+                  "ratings", {"has_rating": True}, {"field": "rating", "order": "desc"},
+                  "rating", "/collection/top_rated/"),
+            _спец("current_season", "zona", "Этого года",
+                  "Записи текущего календарного года.",
+                  "catalog", {"year": "current"}, {"field": "published_at", "order": "desc"},
+                  "year", "/collection/current_season/"),
+            _спец("video_available", "zona", "С видео",
+                  "Записи с подтверждённой playable-дорожкой.",
+                  "catalog", {"playable": True}, {"field": "published_at", "order": "desc"},
+                  "published_at", "/collection/video_available/"),
+            _спец("genre_comedy", "zona", "Комедии",
+                  "Комедии из каталога.",
+                  "catalog", {"genre": "comedy"}, {"field": "published_at", "order": "desc"},
+                  "genre", "/collection/genre_comedy/"),
+            _спец("genre_drama", "zona", "Драмы",
+                  "Драмы из каталога.",
+                  "catalog", {"genre": "drama"}, {"field": "published_at", "order": "desc"},
+                  "genre", "/collection/genre_drama/"),
+            _спец("genre_thriller", "zona", "Триллеры",
+                  "Триллеры из каталога.",
+                  "catalog", {"genre": "triller"}, {"field": "published_at", "order": "desc"},
+                  "genre", "/collection/genre_thriller/"),
+            _спец("genre_animation", "zona", "Анимация",
+                  "Анимация и мультфильмы.",
+                  "catalog", {"kind": "Мультфильм"}, {"field": "published_at", "order": "desc"},
+                  "published_at", "/collection/genre_animation/"),
+        ]
+        + _недоступные("zona", ("popular_new_movies", "popular_series", "new_trailers"))
+    ),
     "animedia": _общие("animedia", "Фильм", "Аниме")
     + _недоступные("animedia", ("ongoing", "today_schedule")),
     "yummy": _общие("yummy", "Фильм", "Аниме")
@@ -348,10 +450,14 @@ def разрешить(ключ: str, снимок: Снимок, семейст
         набор: list[dict] = []
     else:
         имя_выборки = (
-            "recent_of_kind" if спец.filter_spec.get("kind") else
+            "recent_of_kind" if спец.filter_spec.get("kind") and not спец.filter_spec.get("genre")
+            and спец.filter_spec.get("release_mode") != "premiere"
+            else
+            "new_releases_kind" if спец.filter_spec.get("release_mode") == "premiere" else
             "top_rated" if спец.filter_spec.get("has_rating") else
-            "current_year" if спец.filter_spec.get("year") == "max" else
+            "current_year" if спец.filter_spec.get("year") in ("max", "current") else
             "playable" if спец.filter_spec.get("playable") else
+            "genre" if спец.filter_spec.get("genre") else
             "recent")
         набор = ВЫБОРКИ[имя_выборки](снимок, спец.filter_spec)
 
