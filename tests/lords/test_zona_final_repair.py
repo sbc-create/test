@@ -150,6 +150,6 @@ class TestZonaProvenanceSeparation:
 class TestZonaCardConsistency:
     def test_card_is_single_link(self, зона):
         о = запросить(зона, "/movies/")
-        # Each row card is one <a class="zr"> wrapping poster+title.
-        assert 'class="zr"' in о.тело
+        # Catalog uses poster tiles (.zt), same anatomy as home rails.
+        assert 'class="zt"' in о.тело
         assert "/title/film-prostoy/" in о.тело
