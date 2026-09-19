@@ -198,11 +198,24 @@ class Снимок:
         return [з for з in self._по_дате if з.get("year") == год]
 
     def играющие(self) -> list[dict]:
+        """Playable titles ordered by best source rating, then published_at.
+
+        Must diverge from ``по_дате`` / recently_added: when most titles are
+        playable, date order alone produced exact first-12 duplicates.
+        """
         готово = []
         for з in self._по_дате:
             д = self.подробности.get(str(з.get("slug") or "")) or {}
             if д.get("playable") is True:
                 готово.append(з)
+        готово.sort(
+            key=lambda з: (
+                self._оценка(self.подробности.get(str(з.get("slug") or "")) or {}),
+                з.get("published_at") or "",
+                з.get("slug") or "",
+            ),
+            reverse=True,
+        )
         return готово
 
     def с_эпизодами(self) -> list[dict]:
