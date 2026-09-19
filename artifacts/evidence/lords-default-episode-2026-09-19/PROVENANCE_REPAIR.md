@@ -43,3 +43,11 @@ See `GIT_DIFF_SCOPE.txt`. Deploy scope: lordfilm47.space files+manifest only.
 ## Owner next step
 
 `OWNER_RESTART_COMMAND.md` — single restart command; then checklist.
+
+
+## Viewport P0 follow-up
+
+- FEATURE_HEAD updated to `63216915c75ab75fe579363ef40d318774053350` (includes default-episode + full-size player)
+- New clean build `20260919T201932Z-63216915-nova` sha `4b541137ff4df012eb189e4ed5ce2125d47af7d205188e5e7554170954abb120`
+- FULL_SIZE_PLAYER_GATE_PASS=YES (playwright 5/5)
+- RESTART_PERFORMED=0

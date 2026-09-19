@@ -3,10 +3,22 @@
  "site": "lords-01",
  "unit": "lords-nova-01.service",
  "domain": "lordfilm47.space",
- "rollback_point": "/srv/lords/.frontend/.rollback/20260919T201039Z-lords-01",
- "artifact_sha256": "36ce7eada5691b7ed949c0c301c45e1123dd6ddbf9c667701566ea37e883d1a6",
- "previous_artifact_sha256": "36ce7eada5691b7ed949c0c301c45e1123dd6ddbf9c667701566ea37e883d1a6",
+ "rollback_point": "/srv/lords/.frontend/.rollback/20260919T201940Z-lords-01",
+ "artifact_sha256": "4b541137ff4df012eb189e4ed5ce2125d47af7d205188e5e7554170954abb120",
+ "previous_artifact_sha256": "a6871995ba0882e744532e7cb61d61913857b5137ba6cbfc4f204492cc01b33d",
  "manifest": {
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "source_commit": "63216915c75ab75fe579363ef40d318774053350",
+  "build_id": "20260919T201932Z-63216915-nova",
+  "artifact_sha256": "4b541137ff4df012eb189e4ed5ce2125d47af7d205188e5e7554170954abb120",
+  "profile": "lords-general",
+  "built_at": "2026-09-19T20:19:40Z",
+  "source_dirty": false,
+  "domain": "lordfilm47.space"
+ },
+ "previous_manifest": {
   "schema_version": 1,
   "template_family": "lords",
   "design_version": "1.1.0",
@@ -17,17 +29,6 @@
   "built_at": "2026-09-19T20:10:39Z",
   "source_dirty": false,
   "domain": "lordfilm47.space"
- },
- "previous_manifest": {
-  "schema_version": 1,
-  "template_family": "lords",
-  "design_version": "1.1.0",
-  "source_commit": "7dc251d66d65c9b041a1c7cb706e7b3070dbd6e0",
-  "build_id": "20260919T194500Z-36ce7ead-nova",
-  "artifact_sha256": "36ce7eada5691b7ed949c0c301c45e1123dd6ddbf9c667701566ea37e883d1a6",
-  "profile": "lords-general",
-  "built_at": "2026-09-19T19:49:36Z",
-  "deploy_note": "files written; unit restart BLOCKED_ACCESS (systemctl auth); awaiting owner restart"
  },
  "restart_ok": null,
  "restart_deferred": true,
@@ -44,6 +45,6 @@
   "manifest_path": "/srv/lords/.frontend/template-manifest.json",
   "verdict": "MISMATCH"
  },
- "at_utc": "20260919T201039Z",
+ "at_utc": "20260919T201940Z",
  "verdict": "STAGED_AWAITING_OWNER_RESTART"
 }

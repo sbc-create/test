@@ -2,11 +2,11 @@
   "schema_version": 1,
   "template_family": "lords",
   "design_version": "1.1.0",
-  "source_commit": "ef17a7094ad7f7663ecff29fb5338998d3defe03",
-  "build_id": "20260919T201028Z-ef17a709-nova",
-  "artifact_sha256": "36ce7eada5691b7ed949c0c301c45e1123dd6ddbf9c667701566ea37e883d1a6",
+  "source_commit": "63216915c75ab75fe579363ef40d318774053350",
+  "build_id": "20260919T201932Z-63216915-nova",
+  "artifact_sha256": "4b541137ff4df012eb189e4ed5ce2125d47af7d205188e5e7554170954abb120",
   "profile": "lords-general",
-  "built_at": "2026-09-19T20:10:39Z",
+  "built_at": "2026-09-19T20:19:40Z",
   "source_dirty": false,
   "domain": "lordfilm47.space"
 }

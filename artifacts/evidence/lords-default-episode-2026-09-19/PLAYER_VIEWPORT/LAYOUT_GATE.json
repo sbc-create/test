@@ -1,0 +1,35 @@
+{
+  "PLAYER_LAYOUT_ROOT_CAUSE": "Lords .pl__frame used display:grid;place-items:center; global iframe{height:auto} plus SDK fixed 640x360 produced a small centered embed in a large black 16:9 stage. _подпись_плеера lacked resolving/active/ok so the toolbar showed «состояние неизвестно».",
+  "PLAYER_LAYOUT_FIX_SCOPE": "automation/host/lords-frontend.py Lords CSS (.pl__frame absolute-fill), client fitPlayerTree/MutationObserver, _подпись_плеера copy; tests + playwright gate",
+  "PROBLEM_TITLE_TESTED": "Поцелуй меня дерзко (fixture) + pylnye-utesy + mock CVH SDK",
+  "PLAYER_VIEWPORTS_TESTED": [
+    "1440x900",
+    "768x1024",
+    "390x844"
+  ],
+  "PLAYER_TITLES_TESTED": [
+    "fixture mock series",
+    "pylnye-utesy (unit)",
+    "poceluj-menya-derzko (unit name)"
+  ],
+  "PLAYER_PROVIDERS_TESTED": [
+    "cvh (mock video-player shadow iframe)"
+  ],
+  "DESKTOP_SHELL_WIDTH_PX": 1100,
+  "DESKTOP_IFRAME_WIDTH_PX": 1100,
+  "DESKTOP_WIDTH_FILL_RATIO": 1.0,
+  "DESKTOP_HEIGHT_FILL_RATIO": 1.0,
+  "TABLET_WIDTH_FILL_RATIO": 1.0,
+  "TABLET_HEIGHT_FILL_RATIO": 1.0,
+  "MOBILE_WIDTH_FILL_RATIO": 1.0,
+  "MOBILE_HEIGHT_FILL_RATIO": 1.0,
+  "PLAYER_ASPECT_RATIO_PASS": true,
+  "PLAYER_SMALL_RENDER_COUNT": 0,
+  "PLAYER_HORIZONTAL_OVERFLOW_PX": 0,
+  "PAGE_HORIZONTAL_OVERFLOW_PX": 0,
+  "PLAYER_INSTANCE_MAX": 1,
+  "VISIBLE_UNKNOWN_STATE_COUNT": 0,
+  "ASYNC_RESIZE_REGRESSION_COUNT": 0,
+  "PLAYER_LAYOUT_REGRESSION_TESTS": "tests/lords/test_player_viewport_fill.py + tests/e2e-lords/player-viewport-fill.spec.js (5 passed)",
+  "FULL_SIZE_PLAYER_GATE_PASS": true
+}

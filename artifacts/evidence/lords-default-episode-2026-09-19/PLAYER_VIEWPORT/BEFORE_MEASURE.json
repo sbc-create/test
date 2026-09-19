@@ -1,0 +1,7 @@
+{
+  "PLAYER_LAYOUT_ROOT_CAUSE": "Lords .pl__frame used display:grid;place-items:center while global iframe{height:auto} + SDK fixed 640x360 left a small centered embed in a large black 16:9 stage. _подпись_плеера lacked resolving/active/ok → user saw «состояние неизвестно».",
+  "DESKTOP_SHELL_WIDTH_PX_BEFORE": 1170,
+  "DESKTOP_IFRAME_WIDTH_PX_BEFORE": 640,
+  "DESKTOP_WIDTH_FILL_RATIO_BEFORE": 0.547,
+  "DESKTOP_HEIGHT_FILL_RATIO_BEFORE": 0.5471
+}
