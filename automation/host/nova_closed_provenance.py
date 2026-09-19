@@ -26,8 +26,8 @@ class ClosedSiteProvenance(TypedDict):
     runtime_repo: str
 
 
-# Runtime tip: player avail-gate (a67bf79) on top of overnight + Animedia nav.
-LORDS_COMMIT = "a67bf79d64eb30480e224a9a30c4bbe6288221b7"
+# Runtime tip: Animedia hero/list parity (cc83fd7) on player avail-gate.
+LORDS_COMMIT = "cc83fd7cb326f5c67906face1d6fa0d137afdeaa"
 ANIMEDIA_COMMIT = "b023bd50cced8d281cb3814a75bf72b429afee0b"
 ZONA_COMMIT = "a10e68b2350a020a2f7d5efe28cd98ef2fc89edd"
 
