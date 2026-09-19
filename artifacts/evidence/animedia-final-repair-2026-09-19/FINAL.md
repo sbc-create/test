@@ -10,7 +10,8 @@
 | --- | --- |
 | Branch | `claude/animedia-template-finalization-01` |
 | Base HEAD | `b023bd50cced8d281cb3814a75bf72b429afee0b` |
-| Final HEAD | `43dc842` (provenance tip); runtime bytes from `289a459f0e9359777b988f61cc0d66084fc94cd3` |
+| Final HEAD | `5e9e816ee924cd1d61a874f884bad3ec5b76b778` |
+| Runtime commit (frontend bytes) | `289a459f0e9359777b988f61cc0d66084fc94cd3` |
 | Runtime artifact sha256 | `0940212f9cbd317400bf11eae1c7da44e98dc30ef4be357bb7ddfd6dffde8afb` |
 
 Commits on this window (after base):
