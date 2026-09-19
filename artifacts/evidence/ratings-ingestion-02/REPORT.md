@@ -4,6 +4,8 @@
 
 - START_HEAD (Stage 1): `174f03f50b00889dbe740a12d11527c9aa97e315`
 - PREV_IMPL_HEAD: `ada31202581984c2de16e8365355ce982fd1ed86`
+- FINAL_HEAD: `c199300828c72f0b91b546e3248346cdb7c8729e`
+- COMMIT: `c199300 feat(ratings): complete AMD closed canary ingestion stage`
 - BRANCH: `cursor/ratings-ingestion-01`
 - WORKTREE: `/home/claude/wt-ratings-ingestion-01`
 

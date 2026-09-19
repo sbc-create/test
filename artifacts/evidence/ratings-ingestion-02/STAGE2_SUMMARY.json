@@ -22,9 +22,17 @@
   "SHIKIMORI_CANARY_ATTEMPTED": 100,
   "SHIKIMORI_CANARY_MATCHED": 93,
   "SHIKIMORI_CANARY_INSERTED": 93,
-  "CLOSED_NOINDEX_DOMAINS": ["animedia.icu", "animedia.space"],
+  "CLOSED_NOINDEX_DOMAINS": [
+    "animedia.icu",
+    "animedia.space"
+  ],
   "SNAPSHOT_DIGEST": "c0764799926f2e082112a95cbfbf90ad024def6fa0ffc98aab819e8f98808704",
   "RATE_LIMIT_RPS": 0.1,
   "CONCURRENCY": 1,
-  "note": "Stage 3 not started. Written AMD permission remains gate only for public indexed publication."
+  "note": "Stage 3 not started. Written AMD permission remains gate only for public indexed publication.",
+  "FINAL_HEAD": "c199300828c72f0b91b546e3248346cdb7c8729e",
+  "COMMIT": "c199300828c72f0b91b546e3248346cdb7c8729e",
+  "STAGE2_COMMITTED": "YES",
+  "START_HEAD": "174f03f50b00889dbe740a12d11527c9aa97e315",
+  "PREV_IMPL_HEAD": "ada31202581984c2de16e8365355ce982fd1ed86"
 }
