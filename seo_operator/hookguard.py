@@ -73,7 +73,18 @@ def record_denial(tool: str, reason: str, command: str = "") -> None:
 
 
 # Инструменты, которые только читают. Безопасны независимо от аргументов.
-READ_ONLY_TOOLS = frozenset({"Read", "Glob", "Grep", "NotebookRead", "TodoWrite", "Task"})
+READ_ONLY_TOOLS = frozenset(
+    {
+        "Read",
+        "Glob",
+        "Grep",
+        "NotebookRead",
+        "TodoWrite",
+        "Task",
+        "ReadLints",
+        "AwaitShell",
+    }
+)
 
 # Инструменты самой оболочки: они не касаются ни файловой системы, ни сети, ни
 # внешних сервисов — планирование, поиск описаний инструментов, список агентов,
@@ -100,8 +111,15 @@ HARNESS_LOCAL_TOOLS = frozenset(
         "TaskOutput",
         "TaskStop",
         "CronList",
+        # Cursor harness aliases (same local scope as Claude Code tools above).
+        "GetDynamicTools",
+        "SwitchMode",
     }
 )
+
+#: Cursor CLI names the shell tool ``Shell``; Claude Code uses ``Bash``.
+#: Both carry a command string and must share the same classification path.
+SHELL_TOOLS = frozenset({"Bash", "Shell"})
 
 #: Инструменты, которые в неинтерактивном профиле не имеют смысла: они
 #: существуют ровно затем, чтобы спросить человека. Отказ здесь — не потеря
@@ -117,7 +135,18 @@ WEB_SEARCH_TOOLS = frozenset({"WebSearch"})
 
 # Tools that write inside the working tree. Safe under UNATTENDED_SAFE because
 # the session works in its own branch and cannot push without authorization.
-BRANCH_LOCAL_WRITE_TOOLS = frozenset({"Write", "Edit", "MultiEdit", "NotebookEdit"})
+BRANCH_LOCAL_WRITE_TOOLS = frozenset(
+    {
+        "Write",
+        "Edit",
+        "MultiEdit",
+        "NotebookEdit",
+        # Cursor aliases for the same local-edit surface.
+        "StrReplace",
+        "Delete",
+        "EditNotebook",
+    }
+)
 
 # GitHub через штатные инструменты. Чтение и работа с pull request — обычная
 # часть цикла; всё, что удаляет или переносит владение, остаётся за человеком.
@@ -193,7 +222,12 @@ def decide(payload: dict) -> dict:
         return _deny(tool, f"{tool}: хост «{host or 'не определён'}» не внесён в inventory", url)
 
     if tool in BRANCH_LOCAL_WRITE_TOOLS:
-        path = str(tool_input.get("file_path", ""))
+        path = str(
+            tool_input.get("file_path")
+            or tool_input.get("path")
+            or tool_input.get("target_notebook")
+            or ""
+        )
         if "/.claude/hooks/" in path or path.endswith("settings.json"):
             # Правка защитной машинерии тем же агентом, которого она ограничивает,
             # снимает защиту её собственным механизмом. Это запрет, а не вопрос:
@@ -208,7 +242,7 @@ def decide(payload: dict) -> dict:
     if tool in GITHUB_WRITE_TOOLS:
         return _out("allow", f"{tool}: работа с pull request в собственной ветке")
 
-    if tool == "Bash":
+    if tool in SHELL_TOOLS:
         command = str(tool_input.get("command", ""))
         environment = payload.get("environment", "sandbox")
         verdict = classify(ActionContext(command=command, environment=environment))

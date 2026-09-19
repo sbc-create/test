@@ -41,7 +41,7 @@ class Rule:
             return False
         if self.pattern is None:
             return True
-        if tool == "Bash":
+        if tool in {"Bash", "Shell"}:
             return _bash_matches(self.pattern, argument)
         return _path_matches(self.pattern, argument)
 
@@ -119,10 +119,15 @@ def _bash_units(command: str) -> list[str]:
 
 
 def settings_decision(groups: dict[str, list[Rule]], tool: str, argument: str) -> str | None:
-    units = _bash_units(argument) if tool == "Bash" else [argument]
+    # Cursor uses Shell; settings rules are authored as Bash(...). Match both.
+    effective_tool = "Bash" if tool == "Shell" else tool
+    units = _bash_units(argument) if effective_tool == "Bash" else [argument]
     for group in (DENY, ASK, ALLOW):
         for rule in groups.get(group, []):
-            if any(rule.matches(tool, unit) for unit in units):
+            if any(rule.matches(effective_tool, unit) for unit in units):
+                return group
+            # Also accept rules written explicitly as Shell(...) if present.
+            if tool == "Shell" and any(rule.matches("Shell", unit) for unit in units):
                 return group
     return None
 
