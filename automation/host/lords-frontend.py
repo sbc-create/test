@@ -1511,6 +1511,7 @@ padding-top:117px}
 .zmain{min-width:0}
 .zwrap{max-width:1400px;margin:0 auto;padding:0 16px}
 @media(min-width:1280px){.zwrap{padding:0 20px}}
+@media(min-width:1920px){.zwrap{max-width:1680px}}
 
 /* Шапка: горизонтальная, закреплённая. Постоянной левой колонки нет ни на
    одной ширине — это и было главным расхождением с эталоном. */
@@ -1577,15 +1578,14 @@ gap:12px;margin:0 0 10px}
 .zrl{position:relative}
 .zrl__vp{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;
 scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
-scrollbar-width:none;padding:2px 0 4px}
+scrollbar-width:none;padding:2px 0 4px;container-type:inline-size;container-name:zrl}
 .zrl__vp::-webkit-scrollbar{display:none;width:0;height:0}
-.zrl__track{display:flex;gap:12px;min-width:min-content;align-items:stretch}
-/* Fully visible cards: 2@390, 4@768-1439, 6@1440-1919, 7@>=1920.
-   2px safety on basis so the next card does not peek (subpixel). */
-.zrl__track>*{flex:0 0 calc((100% - 12px) / 2 - 2px);scroll-snap-align:start;min-width:0;height:auto;max-width:220px}
-@media(min-width:768px){.zrl__track>*{flex-basis:calc((100% - 36px) / 4 - 2px);max-width:none}}
-@media(min-width:1440px){.zrl__track>*{flex-basis:calc((100% - 60px) / 6 - 2px)}}
-@media(min-width:1920px){.zrl__track>*{flex-basis:calc((100% - 72px) / 7 - 2px)}}
+.zrl__track{display:flex;gap:12px;width:max-content;align-items:stretch}
+/* Viewport decides count; 100cqw sizes against the shelf viewport (not track). */
+.zrl__track>*{flex:0 0 calc((100cqw - 12px) / 2 - 1px);scroll-snap-align:start;min-width:0;height:auto;max-width:220px;box-sizing:border-box}
+@media(min-width:768px){.zrl__track>*{flex:0 0 calc((100cqw - 36px) / 4 - 1px);max-width:none}}
+@media(min-width:1440px){.zrl__track>*{flex:0 0 calc((100cqw - 60px) / 6 - 1px)}}
+@media(min-width:1920px){.zrl__track>*{flex:0 0 calc((100cqw - 72px) / 7 - 1px)}}
 .zrl__btn{position:absolute;top:28%;transform:translateY(-50%);z-index:5;
 width:34px;height:52px;border:0;border-radius:5px;cursor:pointer;
 background:rgba(16,21,26,.82);color:#fff;font-size:18px;line-height:1;
