@@ -155,7 +155,7 @@ class TestVisualContracts:
         css = mod.СЕМЕЙСТВА_1_1["animedia"]["стиль"]()
         assert "--a-content-max:1760px" in css
         assert "aspect-ratio:16/9" in css
-        assert "clamp(240px,15.8vw,280px)" in css
+        assert "clamp(180px,13vw,220px)" in css
         assert "[data-player-state][hidden]" in css
         assert "height:100% !important" in css
         assert "grid-template-columns:repeat(10" in css

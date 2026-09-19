@@ -1924,44 +1924,52 @@ justify-content:center;border-radius:10px;border:1px solid var(--a-line);backgro
 .asch{display:none}
 .asch-empty{padding:20px;border-radius:var(--a-radius-card);background:var(--a-alt);color:var(--a-dim);line-height:1.5}
 .zban,.zhead,.zhead__ps,.zhead__x,.zhead__o{display:contents}
-.ztitle{display:grid;grid-template-columns:1fr;gap:18px;margin:14px 0 8px;
-padding:clamp(18px,2vw,28px);background:var(--a-page);border-radius:var(--a-radius-shell);
-box-shadow:var(--a-shadow);align-items:start;max-height:none}
-@media(min-width:900px){.ztitle{grid-template-columns:clamp(240px,15.8vw,280px) minmax(0,1fr);
-column-gap:clamp(24px,2.2vw,40px)}}
-.ztitle__poster{aspect-ratio:2/3;border-radius:clamp(14px,1.2vw,20px);overflow:hidden;
-background:var(--a-surf);position:relative;width:100%;max-width:280px;margin:0 auto}
+.ztitle{display:grid;grid-template-columns:1fr;gap:16px;margin:12px 0 8px;
+padding:clamp(12px,1.4vw,20px);background:var(--a-page);border-radius:var(--a-radius-shell);
+box-shadow:var(--a-shadow-soft);align-items:start;max-height:none}
+@media(min-width:900px){.ztitle{grid-template-columns:clamp(180px,13vw,220px) minmax(0,1fr);
+column-gap:clamp(20px,2vw,32px)}}
+.ztitle__poster{aspect-ratio:2/3;border-radius:12px;overflow:hidden;
+background:var(--a-surf);position:relative;width:100%;max-width:220px;margin:0 auto}
 @media(min-width:900px){.ztitle__poster{margin:0;max-width:none}}
-@media(max-width:599px){.ztitle__poster{max-width:180px}}
+@media(max-width:599px){.ztitle__poster{max-width:160px}}
 .ztitle__poster img,.ztitle__poster .zhead__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;max-width:none}
 .ztitle__main{min-width:0;display:flex;flex-direction:column;gap:10px}
-.ztitle__head{display:flex;gap:16px;align-items:flex-start;justify-content:space-between}
+.ztitle__head{display:flex;gap:14px;align-items:flex-start;justify-content:space-between}
 .ztitle__head-text{min-width:0;flex:1}
-.ztitle__main h1{font-size:clamp(26px,2.4vw,34px);line-height:1.2;margin:0;
+.ztitle__main h1{font-size:clamp(24px,2.2vw,32px);line-height:1.2;margin:0;
 display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.ztitle__o{font-size:clamp(14px,1.2vw,17px);color:var(--a-dim);margin:0}
-.ztitle__meta{font-size:14px;color:var(--a-dim);margin:0;line-height:1.45}
+.ztitle__o{font-size:clamp(13px,1.1vw,16px);color:var(--a-dim);margin:0}
+.ztitle__meta{display:none}
+.ztitle__facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));
+gap:10px 14px;margin:0;padding:0;list-style:none}
+.ztitle__facts > div{min-width:0}
+.ztitle__facts dt{margin:0;font-size:11px;letter-spacing:.04em;text-transform:uppercase;
+color:var(--a-dim);font-weight:700}
+.ztitle__facts dd{margin:3px 0 0;font-size:14px;color:var(--a-ink);line-height:1.35;
+overflow-wrap:anywhere;word-break:normal}
+@media(max-width:599px){.ztitle__facts{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px}}
 .ztitle__pills{display:flex;flex-wrap:wrap;gap:8px;margin:0}
 .ztitle__pills a,.ztitle__pills span{display:inline-flex;align-items:center;min-height:30px;
 padding:0 12px;border-radius:var(--a-radius-chip);border:1px solid var(--a-line);background:var(--a-alt);
 font-size:13px;color:var(--a-ink)}
-.ztitle__desc-panel{background:var(--a-alt);border-radius:12px;padding:12px 14px;margin:4px 0 0}
-.ztitle__desc{font-size:clamp(15px,1.15vw,17px);line-height:1.45;color:var(--a-ink);margin:0;
-display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.ztitle__desc-panel{background:transparent;border-radius:0;padding:0;margin:2px 0 0}
+.ztitle__desc{font-size:clamp(15px,1.15vw,17px);line-height:1.5;color:var(--a-ink);margin:0;
+max-width:70ch;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
 @media(max-width:767px){.ztitle__desc{-webkit-line-clamp:6}}
 .ztitle__desc.is-open{-webkit-line-clamp:unset;display:block}
 .ztitle__more{border:0;background:transparent;color:var(--a-acc);font-weight:700;font-size:14px;
 cursor:pointer;padding:0;margin-top:8px;min-height:44px}
-.ztitle__cta{display:inline-flex;align-items:center;justify-content:center;min-height:48px;
-padding:0 18px;border-radius:12px;background:var(--a-acc);color:#fff;font-weight:700;font-size:15px;
+.ztitle__cta{display:inline-flex;align-items:center;justify-content:center;min-height:44px;
+padding:0 16px;border-radius:10px;background:var(--a-acc);color:#fff;font-weight:700;font-size:15px;
 text-decoration:none;width:fit-content}
 .ztitle__cta:hover{filter:brightness(1.05)}
-.ztitle__actions{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.ztitle__actions{display:flex;flex-direction:column;gap:10px;margin-top:4px}
 @media(max-width:599px){.ztitle__cta,.ztitle__actions .ztitle__cta{width:100%}}
 .ztitle__rail{display:none}
-.ztitle__score{flex:0 0 auto;text-align:right;min-width:4.5em}
-.ztitle__score b{display:block;font-size:clamp(42px,3vw,52px);line-height:1;font-weight:800;color:var(--a-acc)}
-.ztitle__score span{display:block;font-size:12px;color:var(--a-dim);margin-top:4px}
+.ztitle__score{flex:0 0 auto;text-align:right;min-width:3.5em}
+.ztitle__score b{display:block;font-size:clamp(28px,2.2vw,36px);line-height:1;font-weight:800;color:var(--a-acc)}
+.ztitle__score span{display:block;font-size:11px;color:var(--a-dim);margin-top:4px;max-width:9em}
 .ztitle__dl{display:none}
 .ztitle__rels{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 0}
 .ztitle__rels a{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;
@@ -4861,7 +4869,7 @@ class ВидАнимедиа(ВидЗона):
         звенья = [("/", self.имя),
                   ("/series/", "Сериалы") if сериал else ("/movies/", "Фильмы"),
                   ("", имя)]
-        изо = заглушка_постера(запись, "zt__none", "zhead__img", 306, 459)
+        изо = заглушка_постера(запись, "zt__none", "zhead__img", 220, 330)
         описание = (деталь.get("description") or деталь.get("short_description") or "").strip()
         описание_html = ""
         if описание:
@@ -4889,19 +4897,42 @@ class ВидАнимедиа(ВидЗона):
         if жанры:
             pills = ('<div class="ztitle__pills">' + "".join(
                 f"<span>{html.escape(str(г))}</span>" for г in жанры[:10]) + "</div>")
-        meta_bits = [str(x) for x in (
-            запись.get("year"), запись.get("kind") or деталь.get("type"),
-            ", ".join((деталь.get("countries") or [])[:2]) or None,
-            ", ".join((деталь.get("studios") or деталь.get("voice_studios") or [])[:2]) or None,
-        ) if x]
-        if сезоны:
-            last = сезоны[-1]
-            avail = sum(int(с.get("avail") or 0) for с in сезоны)
-            total = sum(int(с.get("eps") or 0) for с in сезоны)
-            if total:
-                meta_bits.append(f"Вышло {avail} из {total}")
-        meta_html = (f'<p class="ztitle__meta">{html.escape(" · ".join(meta_bits))}</p>'
-                     if meta_bits else "")
+        факты = []
+        год = запись.get("year") or деталь.get("year")
+        if год:
+            факты.append(("Год", str(год)))
+        тип = запись.get("kind") or деталь.get("type")
+        if тип:
+            факты.append(("Тип", str(тип)))
+        страны = деталь.get("countries") or []
+        if страны:
+            факты.append(("Страна", ", ".join(str(с) for с in страны[:3])))
+        статус = деталь.get("status") or деталь.get("release_status")
+        avail = sum(int(с.get("avail") or 0) for с in сезоны) if сезоны else 0
+        total = sum(int(с.get("eps") or 0) for с in сезоны) if сезоны else 0
+        if not статус and сезоны:
+            if total and avail >= total:
+                статус = "Вышел"
+            elif avail:
+                статус = "Онгоинг"
+        if статус:
+            факты.append(("Статус", str(статус)))
+        if total:
+            факты.append(("Количество серий", f"{avail} из {total}" if avail else str(total)))
+        длит = деталь.get("duration") or деталь.get("episode_duration") or деталь.get("runtime")
+        if длит:
+            факты.append(("Продолжительность", str(длит)))
+        студии = деталь.get("studios") or деталь.get("studio") or деталь.get("voice_studios") or []
+        if isinstance(студии, str):
+            студии = [студии]
+        if студии:
+            факты.append(("Студия", ", ".join(str(с) for с in студии[:2])))
+        meta_html = ""
+        if факты:
+            rows = "".join(
+                f"<div><dt>{html.escape(k)}</dt><dd>{html.escape(v)}</dd></div>"
+                for k, v in факты)
+            meta_html = f'<dl class="ztitle__facts">{rows}</dl>' 
         сезон_старт, эпизод_старт = выбрать_доступную_серию(деталь) if сезоны else (1, None)
         код, внутри = разметка_плеера(self, запись, деталь, сезон_старт, эпизод_старт)
         плеер = (f'<div class="ztitle-gap"></div><section class="zpl" id="watch">'

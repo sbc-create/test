@@ -51,3 +51,11 @@
 | local QA | poster 169@1363 / 163@1920; exact dup shelves 0 |
 | scores | HOME_LOWER_SECTIONS_SCORE=96 |
 | commit | `18cd7d7` |
+
+## BLOCK_05 attempt 1 → PASS
+
+| Step | Result |
+| --- | --- |
+| repair | semantic facts DL; poster ≤220; desc 70ch; no empty panel |
+| scores | TITLE_INFO_SCORE=96 |
+| commit | pending |

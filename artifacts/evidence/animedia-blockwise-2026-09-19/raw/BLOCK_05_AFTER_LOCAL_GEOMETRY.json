@@ -1,0 +1,85 @@
+{
+  "local": {
+    "1363": {
+      "posterW": 180,
+      "posterH": 270,
+      "boxH": 308.2,
+      "facts": [
+        "Год",
+        "Тип",
+        "Страна",
+        "Статус",
+        "Количество серий"
+      ],
+      "hasMeta": false,
+      "hasFacts": true,
+      "descMaxCh": "",
+      "descLines": 0,
+      "emptyPanel": false,
+      "overflow": false,
+      "factWrapBad": false
+    },
+    "390": {
+      "posterW": 160,
+      "posterH": 240,
+      "boxH": 679.3,
+      "facts": [
+        "Год",
+        "Тип",
+        "Страна",
+        "Статус",
+        "Количество серий"
+      ],
+      "hasMeta": false,
+      "hasFacts": true,
+      "descMaxCh": "",
+      "descLines": 0,
+      "emptyPanel": false,
+      "overflow": false,
+      "factWrapBad": false
+    }
+  },
+  "no_desc": {
+    "posterW": 180,
+    "posterH": 270,
+    "boxH": 308.2,
+    "facts": [
+      "Год",
+      "Тип",
+      "Страна",
+      "Статус",
+      "Количество серий"
+    ],
+    "hasMeta": false,
+    "hasFacts": true,
+    "descMaxCh": "",
+    "descLines": 0,
+    "emptyPanel": false,
+    "overflow": false,
+    "factWrapBad": false
+  },
+  "live_icu": {
+    "posterW": 240,
+    "posterH": 360,
+    "boxH": 414.5,
+    "facts": [],
+    "hasMeta": true,
+    "hasFacts": false,
+    "descMaxCh": "",
+    "descLines": 0,
+    "emptyPanel": false,
+    "overflow": false,
+    "factWrapBad": false
+  },
+  "gates": {
+    "has_facts": true,
+    "no_raw_meta": true,
+    "poster_le_230": true,
+    "facts_labels": true,
+    "no_overflow": true,
+    "no_break_all": true,
+    "no_empty_desc_panel": true,
+    "mobile_ok": true
+  },
+  "TITLE_INFO_SCORE": 100
+}
