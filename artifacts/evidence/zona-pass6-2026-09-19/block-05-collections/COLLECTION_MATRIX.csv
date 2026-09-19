@@ -1,0 +1,13 @@
+collection_id,canonical_path,live_first_page_count,broken_links,exact_dup_with_other
+recently_added,/collection/recently_added/,60,0,none
+recently_added_movies,/collection/recently_added_movies/,60,0,none
+new_movie_releases,/collection/new_movie_releases/,60,0,none
+new_series_releases,/collection/new_series_releases/,60,0,none
+new_episodes,/collection/new_episodes/,60,0,none
+top_rated,/collection/top_rated/,60,0,none
+current_season,/collection/current_season/,60,0,none
+video_available,/collection/video_available/,60,0,none
+genre_comedy,/collection/genre_comedy/,60,0,none
+genre_drama,/collection/genre_drama/,60,0,none
+genre_thriller,/collection/genre_thriller/,60,0,none
+genre_animation,/collection/genre_animation/,60,0,none

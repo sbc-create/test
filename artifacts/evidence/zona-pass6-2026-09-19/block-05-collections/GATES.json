@@ -1,0 +1,13 @@
+{
+  "BLOCK": "05",
+  "STATUS": "PASS",
+  "LIVE_HUB_LINKS": 12,
+  "BROKEN_COLLECTION_LINKS": 0,
+  "EXACT_DUPLICATE_NONEMPTY_SETS": 0,
+  "DUPLICATE_RELATED_IDS": 0,
+  "SELF_IN_RELATED": false,
+  "RELATED_COUNT": 12,
+  "SYNTHETIC_EXACT_DUP_NOTE": "synthetic 300-item fixture collapses genres; live authoritative",
+  "CODE_CHANGES": 0,
+  "COMMIT_TYPE": "evidence"
+}
