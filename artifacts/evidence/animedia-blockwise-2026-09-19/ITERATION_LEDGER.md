@@ -50,4 +50,4 @@
 | repair | 7/10-col denser cards; hero refill; drop SPACE video_available |
 | local QA | poster 169@1363 / 163@1920; exact dup shelves 0 |
 | scores | HOME_LOWER_SECTIONS_SCORE=96 |
-| commit | pending |
+| commit | `18cd7d7` |
