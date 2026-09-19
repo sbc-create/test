@@ -1,0 +1,9 @@
+field,source,meaning,timezone,nullable,trusted,used_by_routes,fallback
+year,catalog+details,release/production year,n/a,yes,yes when int,/movies /series /animation /catalog ?year= /collection/current_season,exclude from year facet if missing
+premiere_date,details sidecar,premiere calendar day,date-only,yes (~2.3%),yes when present,/new activity primary; title chips,fall back to published_at for activity only with different label
+published_at,catalog,supplier catalog appearance UTC,UTC,no in live snapshot,yes as ingest time,recently_added; /new secondary activity; sort=recently_added,empty string sorts last
+published_at_estimated,catalog,ingest date estimated flag,n/a,no,informational,none,ignore for ordering
+builtAt / catalog_built_at,snapshot envelope,snapshot build time,UTC,no,ops only,health/manifest,n/a
+air_date / episode_published_at,NOT IN SIDE CAR,episode air,n/a,n/a,unavailable,none — handoff,do not invent
+video_verified_at,NOT IN SIDE CAR,playback verification TTL,n/a,n/a,unavailable,video_available uses playable bool only,document gap
+catalog_added_at distinct,NOT IN SIDE CAR,first seen in our DB,n/a,n/a,unavailable,use published_at as closest ingest proxy,label as catalog appearance
