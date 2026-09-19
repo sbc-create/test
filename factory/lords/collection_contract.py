@@ -382,8 +382,8 @@ def _общие(семейство: str, кино: str, сериал: str) -> li
               "year", "/collection/current_season/"),
         _спец("video_available", семейство, "С видео",
               "Тайтлы, которые можно смотреть прямо сейчас.",
-              "catalog", {"playable": True}, {"field": "published_at", "order": "desc"},
-              "published_at", "/collection/video_available/"),
+              "catalog", {"playable": True}, {"field": "rating", "order": "desc"},
+              "rating", "/collection/video_available/"),
     ]
 
 
