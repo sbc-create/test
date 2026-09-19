@@ -1,0 +1,9 @@
+[apply-nova] release_gate RUNTIME_DOWNGRADE=0 RUNTIME_COMPATIBLE=1 CONTENT_SNAPSHOT_DIGEST_MATCH=1 CATALOG_DETAILS_SKEW=0
+[apply-nova] artifact_sha256=6cae6d38890447730bd2460a499d1f4603fa9d164eda3fb538b2ff09e0ef4a46
+[apply-nova] runtime_commit=1cc115824ce684fc47f005edfaa393bd61037f94
+[apply-nova] live_before=4b541137ff4df012eb189e4ed5ce2125d47af7d205188e5e7554170954abb120
+[apply-nova] plan animedia-01 source=1cc115824ce6 runtime=1cc115824ce6 profile=animedia-icu repo=/home/claude/wt-animedia-finalization-01
+[apply-nova] plan animedia-02 source=1cc115824ce6 runtime=1cc115824ce6 profile=animedia-space repo=/home/claude/wt-animedia-finalization-01
+[apply-nova] dry-manifest animedia-01: source=1cc115824ce6 runtime=1cc115824ce6
+[apply-nova] dry-manifest animedia-02: source=1cc115824ce6 runtime=1cc115824ce6
+[apply-nova] DRY_RUN=1 — мутаций нет

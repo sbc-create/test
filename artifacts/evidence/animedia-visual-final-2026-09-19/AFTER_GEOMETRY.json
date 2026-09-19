@@ -1,0 +1,1172 @@
+{
+  "at": "2026-09-19T20:53:26Z",
+  "headers": {
+    "animedia.icu": {
+      "http": 200,
+      "build": "20260919T205122Z-1cc11582-nova",
+      "artifact": "6cae6d38890447730bd2460a499d1f4603fa9d164eda3fb538b2ff09e0ef4a46",
+      "version": "1.2.4",
+      "revision": "1cc115824ce684fc47f005edfaa393bd61037f94",
+      "marker": "Animedia 1.2.4 \u00b7 1cc1158",
+      "cache": "no-store",
+      "profile": "animedia-icu",
+      "source": null,
+      "runtime": null
+    },
+    "animedia.space": {
+      "http": 200,
+      "build": "20260919T205122Z-1cc11582-nova",
+      "artifact": "6cae6d38890447730bd2460a499d1f4603fa9d164eda3fb538b2ff09e0ef4a46",
+      "version": "1.2.4",
+      "revision": "1cc115824ce684fc47f005edfaa393bd61037f94",
+      "marker": "Animedia 1.2.4 \u00b7 1cc1158",
+      "cache": "no-store",
+      "profile": "animedia-space",
+      "source": null,
+      "runtime": null
+    }
+  },
+  "geom": {
+    "animedia.icu": {
+      "1363": {
+        "bodyH": 6306,
+        "overflow": 0,
+        "wrapW": 1267,
+        "headerH": 68,
+        "topPoster": {
+          "w": 152,
+          "h": 214
+        },
+        "epThumb": {
+          "w": 60,
+          "h": 72
+        },
+        "epRowH": 72,
+        "epsSectionH": 503.6,
+        "shelves": [
+          {
+            "title": "\u0410\u043d\u0438\u043c\u0435-\u0444\u0438\u043b\u044c\u043c\u044b",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 197.8,
+              "h": 296.7
+            },
+            "card": {
+              "w": 197.8,
+              "h": 370
+            },
+            "shelfH": 799.6
+          },
+          {
+            "title": "\u0414\u0443\u043d\u0445\u0443\u0430",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 197.8,
+              "h": 296.7
+            },
+            "card": {
+              "w": 197.8,
+              "h": 370
+            },
+            "shelfH": 799.6
+          },
+          {
+            "title": "\u041a\u043e\u0440\u043e\u0442\u043a\u0438\u0435 \u0441\u0435\u0440\u0438\u0430\u043b\u044b",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 197.8,
+              "h": 296.7
+            },
+            "card": {
+              "w": 197.8,
+              "h": 370
+            },
+            "shelfH": 799.6
+          },
+          {
+            "title": "\u0422\u043e\u043f \u043f\u043e \u043e\u0446\u0435\u043d\u043a\u0430\u043c",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 197.8,
+              "h": 296.7
+            },
+            "card": {
+              "w": 197.8,
+              "h": 370
+            },
+            "shelfH": 799.6
+          },
+          {
+            "title": "\u041a\u043b\u0430\u0441\u0441\u0438\u043a\u0430",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 197.8,
+              "h": 296.7
+            },
+            "card": {
+              "w": 197.8,
+              "h": 370
+            },
+            "shelfH": 799.6
+          },
+          {
+            "title": "\u0420\u043e\u043c\u0430\u043d\u0442\u0438\u043a\u0430",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 197.8,
+              "h": 296.7
+            },
+            "card": {
+              "w": 197.8,
+              "h": 370
+            },
+            "shelfH": 799.6
+          }
+        ],
+        "maxShelfH": 799.6,
+        "footerH": 92.8,
+        "adH": 0,
+        "adDisplay": "none"
+      },
+      "1920": {
+        "bodyH": 6361,
+        "overflow": 0,
+        "wrapW": 1760,
+        "headerH": 68,
+        "topPoster": {
+          "w": 152,
+          "h": 214
+        },
+        "epThumb": {
+          "w": 60,
+          "h": 72
+        },
+        "epRowH": 72,
+        "epsSectionH": 509.7,
+        "shelves": [
+          {
+            "title": "\u0410\u043d\u0438\u043c\u0435-\u0444\u0438\u043b\u044c\u043c\u044b",
+            "cols": 8,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 204.3,
+              "h": 306.4
+            },
+            "card": {
+              "w": 204.3,
+              "h": 370
+            },
+            "shelfH": 807.7
+          },
+          {
+            "title": "\u0414\u0443\u043d\u0445\u0443\u0430",
+            "cols": 8,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 204.3,
+              "h": 306.4
+            },
+            "card": {
+              "w": 204.3,
+              "h": 370
+            },
+            "shelfH": 807.7
+          },
+          {
+            "title": "\u041a\u043e\u0440\u043e\u0442\u043a\u0438\u0435 \u0441\u0435\u0440\u0438\u0430\u043b\u044b",
+            "cols": 8,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 204.3,
+              "h": 306.4
+            },
+            "card": {
+              "w": 204.3,
+              "h": 370
+            },
+            "shelfH": 807.7
+          },
+          {
+            "title": "\u0422\u043e\u043f \u043f\u043e \u043e\u0446\u0435\u043d\u043a\u0430\u043c",
+            "cols": 8,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 204.3,
+              "h": 306.4
+            },
+            "card": {
+              "w": 204.3,
+              "h": 370
+            },
+            "shelfH": 807.7
+          },
+          {
+            "title": "\u041a\u043b\u0430\u0441\u0441\u0438\u043a\u0430",
+            "cols": 8,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 204.3,
+              "h": 306.4
+            },
+            "card": {
+              "w": 204.3,
+              "h": 370
+            },
+            "shelfH": 807.7
+          },
+          {
+            "title": "\u0420\u043e\u043c\u0430\u043d\u0442\u0438\u043a\u0430",
+            "cols": 8,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 204.3,
+              "h": 306.4
+            },
+            "card": {
+              "w": 204.3,
+              "h": 370
+            },
+            "shelfH": 807.7
+          }
+        ],
+        "maxShelfH": 807.7,
+        "footerH": 92.8,
+        "adH": 0,
+        "adDisplay": "none"
+      },
+      "1440": {
+        "bodyH": 6319,
+        "overflow": 0,
+        "wrapW": 1344,
+        "headerH": 68,
+        "topPoster": {
+          "w": 152,
+          "h": 214
+        },
+        "epThumb": {
+          "w": 60,
+          "h": 72
+        },
+        "epRowH": 72,
+        "epsSectionH": 505.4,
+        "shelves": [
+          {
+            "title": "\u0410\u043d\u0438\u043c\u0435-\u0444\u0438\u043b\u044c\u043c\u044b",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 210.7,
+              "h": 316
+            },
+            "card": {
+              "w": 210.7,
+              "h": 370
+            },
+            "shelfH": 801.4
+          },
+          {
+            "title": "\u0414\u0443\u043d\u0445\u0443\u0430",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 210.7,
+              "h": 316
+            },
+            "card": {
+              "w": 210.7,
+              "h": 370
+            },
+            "shelfH": 801.4
+          },
+          {
+            "title": "\u041a\u043e\u0440\u043e\u0442\u043a\u0438\u0435 \u0441\u0435\u0440\u0438\u0430\u043b\u044b",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 210.7,
+              "h": 316
+            },
+            "card": {
+              "w": 210.7,
+              "h": 370
+            },
+            "shelfH": 801.4
+          },
+          {
+            "title": "\u0422\u043e\u043f \u043f\u043e \u043e\u0446\u0435\u043d\u043a\u0430\u043c",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 210.7,
+              "h": 316
+            },
+            "card": {
+              "w": 210.7,
+              "h": 370
+            },
+            "shelfH": 801.4
+          },
+          {
+            "title": "\u041a\u043b\u0430\u0441\u0441\u0438\u043a\u0430",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 210.7,
+              "h": 316
+            },
+            "card": {
+              "w": 210.7,
+              "h": 370
+            },
+            "shelfH": 801.4
+          },
+          {
+            "title": "\u0420\u043e\u043c\u0430\u043d\u0442\u0438\u043a\u0430",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 210.7,
+              "h": 316
+            },
+            "card": {
+              "w": 210.7,
+              "h": 370
+            },
+            "shelfH": 801.4
+          }
+        ],
+        "maxShelfH": 801.4,
+        "footerH": 92.8,
+        "adH": 0,
+        "adDisplay": "none"
+      },
+      "390": {
+        "bodyH": 15331,
+        "overflow": 0,
+        "wrapW": 366,
+        "headerH": 56,
+        "topPoster": {
+          "w": 112,
+          "h": 158
+        },
+        "epThumb": {
+          "w": 54,
+          "h": 68
+        },
+        "epRowH": 68,
+        "epsSectionH": 863,
+        "shelves": [
+          {
+            "title": "\u0410\u043d\u0438\u043c\u0435-\u0444\u0438\u043b\u044c\u043c\u044b",
+            "cols": 2,
+            "rows": 6,
+            "cardCount": 12,
+            "poster": {
+              "w": 175,
+              "h": 262.5
+            },
+            "card": {
+              "w": 175,
+              "h": 355.3
+            },
+            "shelfH": 2252.7
+          },
+          {
+            "title": "\u0414\u0443\u043d\u0445\u0443\u0430",
+            "cols": 2,
+            "rows": 6,
+            "cardCount": 12,
+            "poster": {
+              "w": 175,
+              "h": 262.5
+            },
+            "card": {
+              "w": 175,
+              "h": 355.3
+            },
+            "shelfH": 2252.7
+          },
+          {
+            "title": "\u041a\u043e\u0440\u043e\u0442\u043a\u0438\u0435 \u0441\u0435\u0440\u0438\u0430\u043b\u044b",
+            "cols": 2,
+            "rows": 6,
+            "cardCount": 12,
+            "poster": {
+              "w": 175,
+              "h": 262.5
+            },
+            "card": {
+              "w": 175,
+              "h": 355.3
+            },
+            "shelfH": 2252.7
+          },
+          {
+            "title": "\u0422\u043e\u043f \u043f\u043e \u043e\u0446\u0435\u043d\u043a\u0430\u043c",
+            "cols": 2,
+            "rows": 6,
+            "cardCount": 12,
+            "poster": {
+              "w": 175,
+              "h": 262.5
+            },
+            "card": {
+              "w": 175,
+              "h": 355.3
+            },
+            "shelfH": 2252.7
+          },
+          {
+            "title": "\u041a\u043b\u0430\u0441\u0441\u0438\u043a\u0430",
+            "cols": 2,
+            "rows": 6,
+            "cardCount": 12,
+            "poster": {
+              "w": 175,
+              "h": 262.5
+            },
+            "card": {
+              "w": 175,
+              "h": 355.3
+            },
+            "shelfH": 2252.7
+          },
+          {
+            "title": "\u0420\u043e\u043c\u0430\u043d\u0442\u0438\u043a\u0430",
+            "cols": 2,
+            "rows": 6,
+            "cardCount": 12,
+            "poster": {
+              "w": 175,
+              "h": 262.5
+            },
+            "card": {
+              "w": 175,
+              "h": 355.3
+            },
+            "shelfH": 2252.7
+          }
+        ],
+        "maxShelfH": 2252.7,
+        "footerH": 197,
+        "adH": 0,
+        "adDisplay": "none"
+      },
+      "768": {
+        "bodyH": 11342,
+        "overflow": 0,
+        "wrapW": 724,
+        "headerH": 68,
+        "topPoster": {
+          "w": 152,
+          "h": 214
+        },
+        "epThumb": {
+          "w": 54,
+          "h": 68
+        },
+        "epRowH": 68,
+        "epsSectionH": 863,
+        "shelves": [
+          {
+            "title": "\u0410\u043d\u0438\u043c\u0435-\u0444\u0438\u043b\u044c\u043c\u044b",
+            "cols": 3,
+            "rows": 4,
+            "cardCount": 12,
+            "poster": {
+              "w": 230.7,
+              "h": 346
+            },
+            "card": {
+              "w": 230.7,
+              "h": 370
+            },
+            "shelfH": 1569
+          },
+          {
+            "title": "\u0414\u0443\u043d\u0445\u0443\u0430",
+            "cols": 3,
+            "rows": 4,
+            "cardCount": 12,
+            "poster": {
+              "w": 230.7,
+              "h": 346
+            },
+            "card": {
+              "w": 230.7,
+              "h": 370
+            },
+            "shelfH": 1569
+          },
+          {
+            "title": "\u041a\u043e\u0440\u043e\u0442\u043a\u0438\u0435 \u0441\u0435\u0440\u0438\u0430\u043b\u044b",
+            "cols": 3,
+            "rows": 4,
+            "cardCount": 12,
+            "poster": {
+              "w": 230.7,
+              "h": 346
+            },
+            "card": {
+              "w": 230.7,
+              "h": 370
+            },
+            "shelfH": 1569
+          },
+          {
+            "title": "\u0422\u043e\u043f \u043f\u043e \u043e\u0446\u0435\u043d\u043a\u0430\u043c",
+            "cols": 3,
+            "rows": 4,
+            "cardCount": 12,
+            "poster": {
+              "w": 230.7,
+              "h": 346
+            },
+            "card": {
+              "w": 230.7,
+              "h": 370
+            },
+            "shelfH": 1569
+          },
+          {
+            "title": "\u041a\u043b\u0430\u0441\u0441\u0438\u043a\u0430",
+            "cols": 3,
+            "rows": 4,
+            "cardCount": 12,
+            "poster": {
+              "w": 230.7,
+              "h": 346
+            },
+            "card": {
+              "w": 230.7,
+              "h": 370
+            },
+            "shelfH": 1569
+          },
+          {
+            "title": "\u0420\u043e\u043c\u0430\u043d\u0442\u0438\u043a\u0430",
+            "cols": 3,
+            "rows": 4,
+            "cardCount": 12,
+            "poster": {
+              "w": 230.7,
+              "h": 346
+            },
+            "card": {
+              "w": 230.7,
+              "h": 370
+            },
+            "shelfH": 1569
+          }
+        ],
+        "maxShelfH": 1569,
+        "footerH": 138.8,
+        "adH": 0,
+        "adDisplay": "none"
+      },
+      "catalog_1440": {
+        "cols": 6,
+        "overflow": 0
+      },
+      "catalog_390": {
+        "cols": 2,
+        "cardWidths": [
+          163,
+          163
+        ],
+        "overflow": 0
+      },
+      "catalog_768": {
+        "cols": 4
+      },
+      "title": {
+        "related": {
+          "cols": 6,
+          "rows": 1,
+          "count": 6,
+          "poster": {
+            "w": 196.3,
+            "h": 294.5
+          },
+          "sectionH": 412.4
+        },
+        "player": {
+          "w": 1200,
+          "h": 675,
+          "ratio": 1.778
+        },
+        "titlePoster": {
+          "w": 240,
+          "h": 360
+        }
+      },
+      "player_play": {
+        "instances": 1,
+        "overlays": 0,
+        "state": "active",
+        "player": {
+          "w": 1200,
+          "h": 675
+        },
+        "progress": 0
+      }
+    },
+    "animedia.space": {
+      "1363": {
+        "bodyH": 5466,
+        "overflow": 0,
+        "wrapW": 1267,
+        "headerH": 68,
+        "topPoster": {
+          "w": 152,
+          "h": 214
+        },
+        "epThumb": {
+          "w": 60,
+          "h": 72
+        },
+        "epRowH": 72,
+        "epsSectionH": 503.6,
+        "shelves": [
+          {
+            "title": "\u0422\u043e\u043f \u043f\u043e \u043e\u0446\u0435\u043d\u043a\u0430\u043c",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 197.8,
+              "h": 296.7
+            },
+            "card": {
+              "w": 197.8,
+              "h": 370
+            },
+            "shelfH": 799.6
+          },
+          {
+            "title": "\u0421 \u0432\u0438\u0434\u0435\u043e",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 197.8,
+              "h": 296.7
+            },
+            "card": {
+              "w": 197.8,
+              "h": 370
+            },
+            "shelfH": 799.6
+          },
+          {
+            "title": "\u042d\u043a\u0448\u0435\u043d",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 197.8,
+              "h": 296.7
+            },
+            "card": {
+              "w": 197.8,
+              "h": 370
+            },
+            "shelfH": 799.6
+          },
+          {
+            "title": "\u041a\u043b\u0430\u0441\u0441\u0438\u043a\u0430",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 197.8,
+              "h": 296.7
+            },
+            "card": {
+              "w": 197.8,
+              "h": 370
+            },
+            "shelfH": 799.6
+          },
+          {
+            "title": "\u0410\u043d\u0438\u043c\u0435-\u0444\u0438\u043b\u044c\u043c\u044b",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 197.8,
+              "h": 296.7
+            },
+            "card": {
+              "w": 197.8,
+              "h": 370
+            },
+            "shelfH": 799.6
+          }
+        ],
+        "maxShelfH": 799.6,
+        "footerH": 92.8,
+        "adH": 0,
+        "adDisplay": "none"
+      },
+      "1920": {
+        "bodyH": 5492,
+        "overflow": 0,
+        "wrapW": 1760,
+        "headerH": 68,
+        "topPoster": {
+          "w": 152,
+          "h": 214
+        },
+        "epThumb": {
+          "w": 60,
+          "h": 72
+        },
+        "epRowH": 72,
+        "epsSectionH": 509.7,
+        "shelves": [
+          {
+            "title": "\u0422\u043e\u043f \u043f\u043e \u043e\u0446\u0435\u043d\u043a\u0430\u043c",
+            "cols": 8,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 204.3,
+              "h": 306.4
+            },
+            "card": {
+              "w": 204.3,
+              "h": 370
+            },
+            "shelfH": 807.7
+          },
+          {
+            "title": "\u0421 \u0432\u0438\u0434\u0435\u043e",
+            "cols": 8,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 204.3,
+              "h": 306.4
+            },
+            "card": {
+              "w": 204.3,
+              "h": 370
+            },
+            "shelfH": 807.7
+          },
+          {
+            "title": "\u042d\u043a\u0448\u0435\u043d",
+            "cols": 8,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 204.3,
+              "h": 306.4
+            },
+            "card": {
+              "w": 204.3,
+              "h": 370
+            },
+            "shelfH": 807.7
+          },
+          {
+            "title": "\u041a\u043b\u0430\u0441\u0441\u0438\u043a\u0430",
+            "cols": 8,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 204.3,
+              "h": 306.4
+            },
+            "card": {
+              "w": 204.3,
+              "h": 370
+            },
+            "shelfH": 807.7
+          },
+          {
+            "title": "\u0410\u043d\u0438\u043c\u0435-\u0444\u0438\u043b\u044c\u043c\u044b",
+            "cols": 8,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 204.3,
+              "h": 306.4
+            },
+            "card": {
+              "w": 204.3,
+              "h": 370
+            },
+            "shelfH": 807.7
+          }
+        ],
+        "maxShelfH": 807.7,
+        "footerH": 92.8,
+        "adH": 0,
+        "adDisplay": "none"
+      },
+      "1440": {
+        "bodyH": 5478,
+        "overflow": 0,
+        "wrapW": 1344,
+        "headerH": 68,
+        "topPoster": {
+          "w": 152,
+          "h": 214
+        },
+        "epThumb": {
+          "w": 60,
+          "h": 72
+        },
+        "epRowH": 72,
+        "epsSectionH": 505.4,
+        "shelves": [
+          {
+            "title": "\u0422\u043e\u043f \u043f\u043e \u043e\u0446\u0435\u043d\u043a\u0430\u043c",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 210.7,
+              "h": 316
+            },
+            "card": {
+              "w": 210.7,
+              "h": 370
+            },
+            "shelfH": 801.4
+          },
+          {
+            "title": "\u0421 \u0432\u0438\u0434\u0435\u043e",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 210.7,
+              "h": 316
+            },
+            "card": {
+              "w": 210.7,
+              "h": 370
+            },
+            "shelfH": 801.4
+          },
+          {
+            "title": "\u042d\u043a\u0448\u0435\u043d",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 210.7,
+              "h": 316
+            },
+            "card": {
+              "w": 210.7,
+              "h": 370
+            },
+            "shelfH": 801.4
+          },
+          {
+            "title": "\u041a\u043b\u0430\u0441\u0441\u0438\u043a\u0430",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 210.7,
+              "h": 316
+            },
+            "card": {
+              "w": 210.7,
+              "h": 370
+            },
+            "shelfH": 801.4
+          },
+          {
+            "title": "\u0410\u043d\u0438\u043c\u0435-\u0444\u0438\u043b\u044c\u043c\u044b",
+            "cols": 6,
+            "rows": 2,
+            "cardCount": 12,
+            "poster": {
+              "w": 210.7,
+              "h": 316
+            },
+            "card": {
+              "w": 210.7,
+              "h": 370
+            },
+            "shelfH": 801.4
+          }
+        ],
+        "maxShelfH": 801.4,
+        "footerH": 92.8,
+        "adH": 0,
+        "adDisplay": "none"
+      },
+      "390": {
+        "bodyH": 13065,
+        "overflow": 0,
+        "wrapW": 366,
+        "headerH": 56,
+        "topPoster": {
+          "w": 112,
+          "h": 158
+        },
+        "epThumb": {
+          "w": 54,
+          "h": 68
+        },
+        "epRowH": 68,
+        "epsSectionH": 863,
+        "shelves": [
+          {
+            "title": "\u0422\u043e\u043f \u043f\u043e \u043e\u0446\u0435\u043d\u043a\u0430\u043c",
+            "cols": 2,
+            "rows": 6,
+            "cardCount": 12,
+            "poster": {
+              "w": 175,
+              "h": 262.5
+            },
+            "card": {
+              "w": 175,
+              "h": 355.3
+            },
+            "shelfH": 2252.7
+          },
+          {
+            "title": "\u0421 \u0432\u0438\u0434\u0435\u043e",
+            "cols": 2,
+            "rows": 6,
+            "cardCount": 12,
+            "poster": {
+              "w": 175,
+              "h": 262.5
+            },
+            "card": {
+              "w": 175,
+              "h": 355.3
+            },
+            "shelfH": 2252.7
+          },
+          {
+            "title": "\u042d\u043a\u0448\u0435\u043d",
+            "cols": 2,
+            "rows": 6,
+            "cardCount": 12,
+            "poster": {
+              "w": 175,
+              "h": 262.5
+            },
+            "card": {
+              "w": 175,
+              "h": 355.3
+            },
+            "shelfH": 2252.7
+          },
+          {
+            "title": "\u041a\u043b\u0430\u0441\u0441\u0438\u043a\u0430",
+            "cols": 2,
+            "rows": 6,
+            "cardCount": 12,
+            "poster": {
+              "w": 175,
+              "h": 262.5
+            },
+            "card": {
+              "w": 175,
+              "h": 355.3
+            },
+            "shelfH": 2252.7
+          },
+          {
+            "title": "\u0410\u043d\u0438\u043c\u0435-\u0444\u0438\u043b\u044c\u043c\u044b",
+            "cols": 2,
+            "rows": 6,
+            "cardCount": 12,
+            "poster": {
+              "w": 175,
+              "h": 262.5
+            },
+            "card": {
+              "w": 175,
+              "h": 355.3
+            },
+            "shelfH": 2252.7
+          }
+        ],
+        "maxShelfH": 2252.7,
+        "footerH": 197,
+        "adH": 0,
+        "adDisplay": "none"
+      },
+      "768": {
+        "bodyH": 9733,
+        "overflow": 0,
+        "wrapW": 724,
+        "headerH": 68,
+        "topPoster": {
+          "w": 152,
+          "h": 214
+        },
+        "epThumb": {
+          "w": 54,
+          "h": 68
+        },
+        "epRowH": 68,
+        "epsSectionH": 863,
+        "shelves": [
+          {
+            "title": "\u0422\u043e\u043f \u043f\u043e \u043e\u0446\u0435\u043d\u043a\u0430\u043c",
+            "cols": 3,
+            "rows": 4,
+            "cardCount": 12,
+            "poster": {
+              "w": 230.7,
+              "h": 346
+            },
+            "card": {
+              "w": 230.7,
+              "h": 370
+            },
+            "shelfH": 1569
+          },
+          {
+            "title": "\u0421 \u0432\u0438\u0434\u0435\u043e",
+            "cols": 3,
+            "rows": 4,
+            "cardCount": 12,
+            "poster": {
+              "w": 230.7,
+              "h": 346
+            },
+            "card": {
+              "w": 230.7,
+              "h": 370
+            },
+            "shelfH": 1569
+          },
+          {
+            "title": "\u042d\u043a\u0448\u0435\u043d",
+            "cols": 3,
+            "rows": 4,
+            "cardCount": 12,
+            "poster": {
+              "w": 230.7,
+              "h": 346
+            },
+            "card": {
+              "w": 230.7,
+              "h": 370
+            },
+            "shelfH": 1569
+          },
+          {
+            "title": "\u041a\u043b\u0430\u0441\u0441\u0438\u043a\u0430",
+            "cols": 3,
+            "rows": 4,
+            "cardCount": 12,
+            "poster": {
+              "w": 230.7,
+              "h": 346
+            },
+            "card": {
+              "w": 230.7,
+              "h": 370
+            },
+            "shelfH": 1569
+          },
+          {
+            "title": "\u0410\u043d\u0438\u043c\u0435-\u0444\u0438\u043b\u044c\u043c\u044b",
+            "cols": 3,
+            "rows": 4,
+            "cardCount": 12,
+            "poster": {
+              "w": 230.7,
+              "h": 346
+            },
+            "card": {
+              "w": 230.7,
+              "h": 370
+            },
+            "shelfH": 1569
+          }
+        ],
+        "maxShelfH": 1569,
+        "footerH": 138.8,
+        "adH": 0,
+        "adDisplay": "none"
+      },
+      "catalog_1440": {
+        "cols": 6,
+        "overflow": 0
+      },
+      "catalog_390": {
+        "cols": 2,
+        "cardWidths": [
+          163,
+          163
+        ],
+        "overflow": 0
+      },
+      "catalog_768": {
+        "cols": 4
+      },
+      "title": {
+        "related": {
+          "cols": 6,
+          "rows": 1,
+          "count": 6,
+          "poster": {
+            "w": 196.3,
+            "h": 294.5
+          },
+          "sectionH": 412.4
+        },
+        "player": {
+          "w": 1200,
+          "h": 675,
+          "ratio": 1.778
+        },
+        "titlePoster": {
+          "w": 240,
+          "h": 360
+        }
+      },
+      "player_play": {
+        "instances": 1,
+        "overlays": 0,
+        "state": "active",
+        "player": {
+          "w": 1200,
+          "h": 675
+        },
+        "progress": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "amd": 0,
+  "shikimori": 0,
+  "kp": 0,
+  "imdb": 0,
+  "rendered_zero": 0,
+  "invented": 0,
+  "animedia.icu": {
+    "has_rbs": true,
+    "has_zero_score": false,
+    "sources_shown": [
+      "shikimori"
+    ]
+  },
+  "animedia.space": {
+    "has_rbs": true,
+    "has_zero_score": false,
+    "sources_shown": [
+      "shikimori"
+    ]
+  }
+}

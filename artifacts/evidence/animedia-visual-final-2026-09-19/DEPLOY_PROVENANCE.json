@@ -1,0 +1,14 @@
+{
+  "deployed_at": "2026-09-19T20:53:26Z",
+  "build": "20260919T205122Z-1cc11582-nova",
+  "artifact_sha256": "6cae6d38890447730bd2460a499d1f4603fa9d164eda3fb538b2ff09e0ef4a46",
+  "design_version": "1.2.4",
+  "source_commit": "1cc115824ce684fc47f005edfaa393bd61037f94",
+  "runtime_commit": "1cc115824ce684fc47f005edfaa393bd61037f94",
+  "scope": [
+    "animedia.icu",
+    "animedia.space"
+  ],
+  "rollback_path": "/srv/lords/.frontend/.rollback/pre-closed-update-20260919T205122Z",
+  "previous_build": "20260919T201809Z-7cb7c901-nova"
+}

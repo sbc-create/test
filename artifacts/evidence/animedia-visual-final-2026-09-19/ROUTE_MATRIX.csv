@@ -1,0 +1,15 @@
+domain,path,status,build
+animedia.icu,/,200,20260919T205122Z-1cc11582-nova
+animedia.icu,/new/,200,20260919T205122Z-1cc11582-nova
+animedia.icu,/new/?page=2,200,20260919T205122Z-1cc11582-nova
+animedia.icu,/catalog/,200,20260919T205122Z-1cc11582-nova
+animedia.icu,/collections/,200,20260919T205122Z-1cc11582-nova
+animedia.icu,/title/master-lda-i-plameni-2/,200,20260919T205122Z-1cc11582-nova
+animedia.icu,/new/?page=99999,404,None
+animedia.space,/,200,20260919T205122Z-1cc11582-nova
+animedia.space,/new/,200,20260919T205122Z-1cc11582-nova
+animedia.space,/new/?page=2,200,20260919T205122Z-1cc11582-nova
+animedia.space,/catalog/,200,20260919T205122Z-1cc11582-nova
+animedia.space,/collections/,200,20260919T205122Z-1cc11582-nova
+animedia.space,/title/master-lda-i-plameni-2/,200,20260919T205122Z-1cc11582-nova
+animedia.space,/new/?page=99999,404,None

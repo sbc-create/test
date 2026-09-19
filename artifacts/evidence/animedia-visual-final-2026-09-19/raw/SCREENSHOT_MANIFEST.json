@@ -1,0 +1,470 @@
+[
+  {
+    "file": "animedia.icu-catalog-1440.png",
+    "domain": "animedia.icu",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-catalog-390.png",
+    "domain": "animedia.icu",
+    "viewport": "390",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-collections-1440.png",
+    "domain": "animedia.icu",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-collections-390.png",
+    "domain": "animedia.icu",
+    "viewport": "390",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-episodes-pagination-1440.png",
+    "domain": "animedia.icu",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-episodes-pagination-390.png",
+    "domain": "animedia.icu",
+    "viewport": "390",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-home-footer-1363.png",
+    "domain": "animedia.icu",
+    "viewport": "1363",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-home-footer-1440.png",
+    "domain": "animedia.icu",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-home-footer-390.png",
+    "domain": "animedia.icu",
+    "viewport": "390",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-home-top-1363.png",
+    "domain": "animedia.icu",
+    "viewport": "1363",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-home-top-1440.png",
+    "domain": "animedia.icu",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-home-top-1920.png",
+    "domain": "animedia.icu",
+    "viewport": "1920",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-home-top-390.png",
+    "domain": "animedia.icu",
+    "viewport": "390",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-home-top-768.png",
+    "domain": "animedia.icu",
+    "viewport": "768",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-new-page2-1440.png",
+    "domain": "animedia.icu",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-one-complete-lower-shelf-1363.png",
+    "domain": "animedia.icu",
+    "viewport": "1363",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-one-complete-lower-shelf-1440.png",
+    "domain": "animedia.icu",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-one-complete-lower-shelf-390.png",
+    "domain": "animedia.icu",
+    "viewport": "390",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-player-before-click-1440.png",
+    "domain": "animedia.icu",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-player-playing-1440.png",
+    "domain": "animedia.icu",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-player-playing-390.png",
+    "domain": "animedia.icu",
+    "viewport": "390",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-title-ratings-relations-1440.png",
+    "domain": "animedia.icu",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-title-related-1440.png",
+    "domain": "animedia.icu",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-title-top-1440.png",
+    "domain": "animedia.icu",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.icu-title-top-390.png",
+    "domain": "animedia.icu",
+    "viewport": "390",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-catalog-1440.png",
+    "domain": "animedia.space",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-catalog-390.png",
+    "domain": "animedia.space",
+    "viewport": "390",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-collections-1440.png",
+    "domain": "animedia.space",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-collections-390.png",
+    "domain": "animedia.space",
+    "viewport": "390",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-episodes-pagination-1440.png",
+    "domain": "animedia.space",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-episodes-pagination-390.png",
+    "domain": "animedia.space",
+    "viewport": "390",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-home-footer-1363.png",
+    "domain": "animedia.space",
+    "viewport": "1363",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-home-footer-1440.png",
+    "domain": "animedia.space",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-home-footer-390.png",
+    "domain": "animedia.space",
+    "viewport": "390",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-home-top-1363.png",
+    "domain": "animedia.space",
+    "viewport": "1363",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-home-top-1440.png",
+    "domain": "animedia.space",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-home-top-1920.png",
+    "domain": "animedia.space",
+    "viewport": "1920",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-home-top-390.png",
+    "domain": "animedia.space",
+    "viewport": "390",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-home-top-768.png",
+    "domain": "animedia.space",
+    "viewport": "768",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-new-page2-1440.png",
+    "domain": "animedia.space",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-one-complete-lower-shelf-1363.png",
+    "domain": "animedia.space",
+    "viewport": "1363",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-one-complete-lower-shelf-1440.png",
+    "domain": "animedia.space",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-one-complete-lower-shelf-390.png",
+    "domain": "animedia.space",
+    "viewport": "390",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-player-before-click-1440.png",
+    "domain": "animedia.space",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-player-playing-1440.png",
+    "domain": "animedia.space",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-player-playing-390.png",
+    "domain": "animedia.space",
+    "viewport": "390",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-title-ratings-relations-1440.png",
+    "domain": "animedia.space",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-title-related-1440.png",
+    "domain": "animedia.space",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-title-top-1440.png",
+    "domain": "animedia.space",
+    "viewport": "1440",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "animedia.space-title-top-390.png",
+    "domain": "animedia.space",
+    "viewport": "390",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "before-animedia.icu-home-1363.png",
+    "domain": "animedia.icu",
+    "viewport": "1363",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  },
+  {
+    "file": "before-animedia.space-home-1363.png",
+    "domain": "animedia.space",
+    "viewport": "1363",
+    "runtime_build": "20260919T205122Z-1cc11582-nova",
+    "source_head": "1cc115824ce684fc47f005edfaa393bd61037f94",
+    "content_digest": "unchanged-snapshot",
+    "captured_at": "2026-09-19T20:53:26Z"
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "animedia.icu": {
+    "http": 200,
+    "build": "20260919T201809Z-7cb7c901-nova",
+    "artifact": "a6871995ba0882e744532e7cb61d61913857b5137ba6cbfc4f204492cc01b33d",
+    "version": "1.2.3",
+    "revision": "7cb7c90177f823a6629ea563c6bda45dc07f2489",
+    "marker": "Animedia 1.2.3 \u00b7 7cb7c90",
+    "cache": "no-store",
+    "profile": "animedia-icu"
+  },
+  "animedia.space": {
+    "http": 200,
+    "build": "20260919T201809Z-7cb7c901-nova",
+    "artifact": "a6871995ba0882e744532e7cb61d61913857b5137ba6cbfc4f204492cc01b33d",
+    "version": "1.2.3",
+    "revision": "7cb7c90177f823a6629ea563c6bda45dc07f2489",
+    "marker": "Animedia 1.2.3 \u00b7 7cb7c90",
+    "cache": "no-store",
+    "profile": "animedia-space"
+  }
+}

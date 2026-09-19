@@ -1,0 +1,471 @@
+{
+  "at": "2026-09-19T20:56:23Z",
+  "summary": {
+    "animedia.icu": {
+      "passed": "10/10",
+      "runs": [
+        {
+          "scenario": "direct_title_open",
+          "state": "active",
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "instances": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "overlay_count": 0,
+          "ok": true
+        },
+        {
+          "scenario": "reload",
+          "state": "active",
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "instances": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "overlay_count": 0,
+          "ok": true
+        },
+        {
+          "scenario": "navigation_from_home",
+          "state": "active",
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "instances": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "overlay_count": 0,
+          "ok": true
+        },
+        {
+          "scenario": "primary_provider",
+          "state": "active",
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "instances": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "overlay_count": 0,
+          "ok": true
+        },
+        {
+          "scenario": "fallback_provider",
+          "state": "active",
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "instances": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "overlay_count": 0,
+          "ok": true
+        },
+        {
+          "scenario": "desktop",
+          "state": "active",
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "instances": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "overlay_count": 0,
+          "ok": true
+        },
+        {
+          "scenario": "mobile",
+          "state": "active",
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "instances": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "overlay_count": 0,
+          "ok": true
+        },
+        {
+          "scenario": "post_restart",
+          "state": "active",
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "instances": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "overlay_count": 0,
+          "ok": true
+        },
+        {
+          "scenario": "direct_again",
+          "state": "active",
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "instances": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "overlay_count": 0,
+          "ok": true
+        },
+        {
+          "scenario": "reload_mobile",
+          "state": "active",
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "instances": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "overlay_count": 0,
+          "ok": true
+        }
+      ],
+      "false_ready": 0,
+      "false_failure": 0,
+      "overlay_over_playing": 0,
+      "instance_max": 1,
+      "post_restart_pass": 1
+    },
+    "animedia.space": {
+      "passed": "10/10",
+      "runs": [
+        {
+          "scenario": "direct_title_open",
+          "state": "active",
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "instances": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "overlay_count": 0,
+          "ok": true
+        },
+        {
+          "scenario": "reload",
+          "state": "active",
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "instances": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "overlay_count": 0,
+          "ok": true
+        },
+        {
+          "scenario": "navigation_from_home",
+          "state": "active",
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "instances": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "overlay_count": 0,
+          "ok": true
+        },
+        {
+          "scenario": "primary_provider",
+          "state": "active",
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "instances": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "overlay_count": 0,
+          "ok": true
+        },
+        {
+          "scenario": "fallback_provider",
+          "state": "active",
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "instances": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "overlay_count": 0,
+          "ok": true
+        },
+        {
+          "scenario": "desktop",
+          "state": "active",
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "instances": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "overlay_count": 0,
+          "ok": true
+        },
+        {
+          "scenario": "mobile",
+          "state": "active",
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "instances": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "overlay_count": 0,
+          "ok": true
+        },
+        {
+          "scenario": "post_restart",
+          "state": "active",
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "instances": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "overlay_count": 0,
+          "ok": true
+        },
+        {
+          "scenario": "direct_again",
+          "state": "active",
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "instances": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "overlay_count": 0,
+          "ok": true
+        },
+        {
+          "scenario": "reload_mobile",
+          "state": "active",
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "instances": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "overlay_count": 0,
+          "ok": true
+        }
+      ],
+      "false_ready": 0,
+      "false_failure": 0,
+      "overlay_over_playing": 0,
+      "instance_max": 1,
+      "post_restart_pass": 1
+    }
+  },
+  "results": {
+    "animedia.icu": [
+      {
+        "scenario": "direct_title_open",
+        "state": "active",
+        "actual_progress": 1,
+        "player_instance_count": 1,
+        "instances": 1,
+        "visible_unavailable_overlay": 0,
+        "playing_and_error_simultaneous": 0,
+        "overlay_count": 0,
+        "ok": true
+      },
+      {
+        "scenario": "reload",
+        "state": "active",
+        "actual_progress": 1,
+        "player_instance_count": 1,
+        "instances": 1,
+        "visible_unavailable_overlay": 0,
+        "playing_and_error_simultaneous": 0,
+        "overlay_count": 0,
+        "ok": true
+      },
+      {
+        "scenario": "navigation_from_home",
+        "state": "active",
+        "actual_progress": 1,
+        "player_instance_count": 1,
+        "instances": 1,
+        "visible_unavailable_overlay": 0,
+        "playing_and_error_simultaneous": 0,
+        "overlay_count": 0,
+        "ok": true
+      },
+      {
+        "scenario": "primary_provider",
+        "state": "active",
+        "actual_progress": 1,
+        "player_instance_count": 1,
+        "instances": 1,
+        "visible_unavailable_overlay": 0,
+        "playing_and_error_simultaneous": 0,
+        "overlay_count": 0,
+        "ok": true
+      },
+      {
+        "scenario": "fallback_provider",
+        "state": "active",
+        "actual_progress": 1,
+        "player_instance_count": 1,
+        "instances": 1,
+        "visible_unavailable_overlay": 0,
+        "playing_and_error_simultaneous": 0,
+        "overlay_count": 0,
+        "ok": true
+      },
+      {
+        "scenario": "desktop",
+        "state": "active",
+        "actual_progress": 1,
+        "player_instance_count": 1,
+        "instances": 1,
+        "visible_unavailable_overlay": 0,
+        "playing_and_error_simultaneous": 0,
+        "overlay_count": 0,
+        "ok": true
+      },
+      {
+        "scenario": "mobile",
+        "state": "active",
+        "actual_progress": 1,
+        "player_instance_count": 1,
+        "instances": 1,
+        "visible_unavailable_overlay": 0,
+        "playing_and_error_simultaneous": 0,
+        "overlay_count": 0,
+        "ok": true
+      },
+      {
+        "scenario": "post_restart",
+        "state": "active",
+        "actual_progress": 1,
+        "player_instance_count": 1,
+        "instances": 1,
+        "visible_unavailable_overlay": 0,
+        "playing_and_error_simultaneous": 0,
+        "overlay_count": 0,
+        "ok": true
+      },
+      {
+        "scenario": "direct_again",
+        "state": "active",
+        "actual_progress": 1,
+        "player_instance_count": 1,
+        "instances": 1,
+        "visible_unavailable_overlay": 0,
+        "playing_and_error_simultaneous": 0,
+        "overlay_count": 0,
+        "ok": true
+      },
+      {
+        "scenario": "reload_mobile",
+        "state": "active",
+        "actual_progress": 1,
+        "player_instance_count": 1,
+        "instances": 1,
+        "visible_unavailable_overlay": 0,
+        "playing_and_error_simultaneous": 0,
+        "overlay_count": 0,
+        "ok": true
+      }
+    ],
+    "animedia.space": [
+      {
+        "scenario": "direct_title_open",
+        "state": "active",
+        "actual_progress": 1,
+        "player_instance_count": 1,
+        "instances": 1,
+        "visible_unavailable_overlay": 0,
+        "playing_and_error_simultaneous": 0,
+        "overlay_count": 0,
+        "ok": true
+      },
+      {
+        "scenario": "reload",
+        "state": "active",
+        "actual_progress": 1,
+        "player_instance_count": 1,
+        "instances": 1,
+        "visible_unavailable_overlay": 0,
+        "playing_and_error_simultaneous": 0,
+        "overlay_count": 0,
+        "ok": true
+      },
+      {
+        "scenario": "navigation_from_home",
+        "state": "active",
+        "actual_progress": 1,
+        "player_instance_count": 1,
+        "instances": 1,
+        "visible_unavailable_overlay": 0,
+        "playing_and_error_simultaneous": 0,
+        "overlay_count": 0,
+        "ok": true
+      },
+      {
+        "scenario": "primary_provider",
+        "state": "active",
+        "actual_progress": 1,
+        "player_instance_count": 1,
+        "instances": 1,
+        "visible_unavailable_overlay": 0,
+        "playing_and_error_simultaneous": 0,
+        "overlay_count": 0,
+        "ok": true
+      },
+      {
+        "scenario": "fallback_provider",
+        "state": "active",
+        "actual_progress": 1,
+        "player_instance_count": 1,
+        "instances": 1,
+        "visible_unavailable_overlay": 0,
+        "playing_and_error_simultaneous": 0,
+        "overlay_count": 0,
+        "ok": true
+      },
+      {
+        "scenario": "desktop",
+        "state": "active",
+        "actual_progress": 1,
+        "player_instance_count": 1,
+        "instances": 1,
+        "visible_unavailable_overlay": 0,
+        "playing_and_error_simultaneous": 0,
+        "overlay_count": 0,
+        "ok": true
+      },
+      {
+        "scenario": "mobile",
+        "state": "active",
+        "actual_progress": 1,
+        "player_instance_count": 1,
+        "instances": 1,
+        "visible_unavailable_overlay": 0,
+        "playing_and_error_simultaneous": 0,
+        "overlay_count": 0,
+        "ok": true
+      },
+      {
+        "scenario": "post_restart",
+        "state": "active",
+        "actual_progress": 1,
+        "player_instance_count": 1,
+        "instances": 1,
+        "visible_unavailable_overlay": 0,
+        "playing_and_error_simultaneous": 0,
+        "overlay_count": 0,
+        "ok": true
+      },
+      {
+        "scenario": "direct_again",
+        "state": "active",
+        "actual_progress": 1,
+        "player_instance_count": 1,
+        "instances": 1,
+        "visible_unavailable_overlay": 0,
+        "playing_and_error_simultaneous": 0,
+        "overlay_count": 0,
+        "ok": true
+      },
+      {
+        "scenario": "reload_mobile",
+        "state": "active",
+        "actual_progress": 1,
+        "player_instance_count": 1,
+        "instances": 1,
+        "visible_unavailable_overlay": 0,
+        "playing_and_error_simultaneous": 0,
+        "overlay_count": 0,
+        "ok": true
+      }
+    ]
+  }
+}

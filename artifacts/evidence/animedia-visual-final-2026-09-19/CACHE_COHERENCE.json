@@ -1,0 +1,21 @@
+{
+  "domains": {
+    "animedia.icu": {
+      "cache_control": "no-store",
+      "build": "20260919T205122Z-1cc11582-nova",
+      "artifact": "6cae6d38890447730bd2460a499d1f4603fa9d164eda3fb538b2ff09e0ef4a46",
+      "version": "1.2.4",
+      "marker_matches_version": true,
+      "differs_from_previous": true
+    },
+    "animedia.space": {
+      "cache_control": "no-store",
+      "build": "20260919T205122Z-1cc11582-nova",
+      "artifact": "6cae6d38890447730bd2460a499d1f4603fa9d164eda3fb538b2ff09e0ef4a46",
+      "version": "1.2.4",
+      "marker_matches_version": true,
+      "differs_from_previous": true
+    }
+  },
+  "pass": true
+}

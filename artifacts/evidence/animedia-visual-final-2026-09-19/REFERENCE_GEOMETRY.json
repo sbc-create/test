@@ -1,0 +1,11 @@
+{
+  "reference": "https://amd.online/",
+  "viewport": "1363x936",
+  "observed_owner_audit": {
+    "REFERENCE_BODY_HEIGHT": 7441,
+    "REFERENCE_TOP_POSTER": "153x214",
+    "REFERENCE_EPISODE_THUMB": "60x70",
+    "REFERENCE_FOOTER_HEIGHT": 101
+  },
+  "note": "Used as density/geometry reference only; assets/brand not copied."
+}

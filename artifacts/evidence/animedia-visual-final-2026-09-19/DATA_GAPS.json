@@ -1,0 +1,81 @@
+{
+  "published_at": {
+    "present_in_catalog": 7425,
+    "total": 7425
+  },
+  "episode_number": {
+    "titles_with_seasons": 5504,
+    "note": "episode air times absent"
+  },
+  "status": {
+    "missing": 7425,
+    "sample_ids": [
+      "009-1",
+      "1-2-ray",
+      "10-zhizney-2024",
+      "12-let-bienie-malenkogo-serdca",
+      "1999-otdel-protivodeystviya-okkultizmu"
+    ],
+    "total": 7425
+  },
+  "total_episodes": {
+    "missing_or_zero": 1923,
+    "sample_ids": [
+      "10-zhizney-2024",
+      "5-santimetrov-v-sekundu-2",
+      "663114",
+      "91-den-den-13",
+      "91-den-korotkaya-svecha"
+    ],
+    "total": 7425
+  },
+  "next_episode_at": {
+    "missing": 7425,
+    "sample_ids": [
+      "009-1",
+      "1-2-ray",
+      "10-zhizney-2024"
+    ],
+    "total": 7425,
+    "SCHEDULE_DATA_GAP": 1
+  },
+  "source_ratings": {
+    "missing_all_sources": 358,
+    "sample_ids": [
+      "1999-otdel-protivodeystviya-okkultizmu",
+      "a-vot-i-bessmertnyy-mechnik-2",
+      "absolyutnaya-vershina-boga-voyny",
+      "akademiya-vozdushnyh-magov",
+      "alternativnyy-mir-el-hazard"
+    ],
+    "with_ratings_by_source": 6686
+  },
+  "vote_count": {
+    "sources_with_votes_titles": 2259,
+    "titles_with_ratings_missing_votes": 4427,
+    "sample_ids": [
+      "22-7",
+      "3000-mil-v-poiskah-materi",
+      "663114"
+    ]
+  },
+  "relations": {
+    "missing": 7425,
+    "sample_ids": [
+      "009-1",
+      "1-2-ray",
+      "10-zhizney-2024"
+    ],
+    "total": 7425
+  },
+  "contact_config": {
+    "CONTACT_DATA_GAP": 1,
+    "path": "config/animedia-owner.example.json",
+    "live_file_present": false
+  },
+  "legal_documents": {
+    "CONTACT_DATA_GAP": 1,
+    "privacy_url": "",
+    "terms_url": ""
+  }
+}
