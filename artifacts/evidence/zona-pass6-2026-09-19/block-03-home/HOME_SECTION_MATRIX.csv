@@ -1,0 +1,10 @@
+section,position,selection_rule,item_count_target,link_target,duplicate_intersection,reference_analogue,status
+Популярные новинки фильмов,1,kind=Фильм; score desc within freshness pool 400; exclude занято,12,/movies/,none with later (занято),ref row 1,kept
+Популярные сериалы,2,kind=Сериал; score desc within pool 400; exclude занято,12,/series/,none,ref row 2,kept
+Добавленные недавно фильмы,3,kind=Фильм; published_at desc; playable; exclude занято,12,/movies/,distinct from pop-films via занято,ref row 3,kept
+Новые серии,4,kind=Сериал; has seasons; playable; published_at desc,12,/series/,distinct,ref row 4,kept
+Популярная анимация,5,kind=Мультфильм; score desc pool 400,12,/animation/,replaces ref trailers,animation shelf,kept
+Недавно в каталоге,6-REMOVED,was freshness+playable → /new/ (premiere-only mismatch),18,/new/,overlapped new-films algorithm,extra vs reference,REMOVED
+Смотреть по жанрам,after shelves,ZONA_GENRE_NAV chips,n/a,/catalog/?genre=,n/a,extra OK,kept
+Подборки,after genres,contract specs with ≥1 item,≤12 tiles,/collections/,n/a,extra,kept
+SEO prose,last,static approved copy,0 cards,n/a,n/a,extra,kept

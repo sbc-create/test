@@ -1,0 +1,20 @@
+{
+  "BLOCK": "03",
+  "STATUS": "PASS_LOCAL",
+  "SHELF_COUNT": 5,
+  "NEW_CATALOG_DUPLICATE_REMOVED": true,
+  "CARD_PLOT_SNIPPETS": 0,
+  "HOME_CAROUSEL_BREAKPOINTS": "2/4/7/8",
+  "CARD_BODY_HEIGHT_PX": 96,
+  "GRID_CATALOG_LOCKED": "8/7/4/2 + --z-card-max:180px",
+  "TESTS": "test_zona_pass6_block03 + block02 + pass5 = 16 passed",
+  "ROOT_CAUSE": [
+    "home cards rendered short_description/description as zt__x (plot in tiny cards)",
+    "sixth shelf reused freshness+playable and linked to premiere-only /new/",
+    "home carousel breakpoints were 2/4/6/7 instead of locked 2/4/7/8"
+  ],
+  "CHANGED_FILES": [
+    "automation/host/lords-frontend.py",
+    "tests/lords/test_zona_pass6_block03.py"
+  ]
+}

@@ -1632,12 +1632,16 @@ gap:12px;margin:0 0 10px}
 scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
 scrollbar-width:none;padding:2px 0 4px;container-type:inline-size;container-name:zrl}
 .zrl__vp::-webkit-scrollbar{display:none;width:0;height:0}
-.zrl__track{display:flex;gap:12px;width:max-content;align-items:stretch}
-/* Viewport decides count; 100cqw sizes against the shelf viewport (not track). */
-.zrl__track>*{flex:0 0 calc((100cqw - 12px) / 2 - 1px);scroll-snap-align:start;min-width:0;height:auto;max-width:220px;box-sizing:border-box}
-@media(min-width:768px){.zrl__track>*{flex:0 0 calc((100cqw - 36px) / 4 - 1px);max-width:none}}
-@media(min-width:1440px){.zrl__track>*{flex:0 0 calc((100cqw - 60px) / 6 - 1px)}}
-@media(min-width:1920px){.zrl__track>*{flex:0 0 calc((100cqw - 72px) / 7 - 1px)}}
+.zrl__track{display:flex;gap:var(--z-gap,14px);width:max-content;align-items:stretch}
+/* Home shelves match locked catalog density: 2 / 4 / 7 / 8. */
+.zrl__track>*{flex:0 0 calc((100cqw - var(--z-gap,14px)) / 2);scroll-snap-align:start;
+min-width:0;height:auto;max-width:var(--z-card-max,180px);box-sizing:border-box}
+@media(min-width:768px){.zrl__track>*{flex:0 0 calc((100cqw - 3 * var(--z-gap,14px)) / 4);
+max-width:var(--z-card-max,180px)}}
+@media(min-width:1440px){.zrl__track>*{flex:0 0 calc((100cqw - 6 * var(--z-gap,14px)) / 7);
+max-width:var(--z-card-max,180px)}}
+@media(min-width:1920px){.zrl__track>*{flex:0 0 calc((100cqw - 7 * var(--z-gap,14px)) / 8);
+max-width:var(--z-card-max,180px)}}
 .zrl__btn{position:absolute;top:28%;transform:translateY(-50%);z-index:5;
 width:34px;height:52px;border:0;border-radius:5px;cursor:pointer;
 background:rgba(16,21,26,.82);color:#fff;font-size:18px;line-height:1;
@@ -1669,16 +1673,16 @@ object-fit:cover;display:block}
 .zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:10px;
 text-align:center;color:@MUTE@;font-size:11px;line-height:1.3;aspect-ratio:auto}
 .zt__none b{display:block;font-size:20px;font-weight:700;color:@DIM@;margin-bottom:3px}
+/* Card body: title (≤2 lines) + up to 2 compact meta lines + sourced rating.
+   Plot snippets stay off cards (Pass6 Block 03). */
 .zt__b{padding:7px 8px 8px;display:flex;flex-direction:column;gap:2px;flex:0 0 auto;
-height:132px;min-height:132px;max-height:132px;box-sizing:border-box;overflow:hidden}
+height:96px;min-height:96px;max-height:96px;box-sizing:border-box;overflow:hidden}
 .zt__t{font-size:12.5px;font-weight:600;line-height:1.25;min-height:calc(1.25em * 2);
 max-height:calc(1.25em * 2);display:-webkit-box;-webkit-line-clamp:2;
 -webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
-.zt__m{font-size:11px;color:@DIM@;line-height:1.25;min-height:1.25em;
+.zt__m{font-size:11px;color:@DIM@;line-height:1.25;min-height:0;
 max-height:1.25em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.zt__x{font-size:10.5px;color:@MUTE@;line-height:1.25;min-height:calc(1.25em * 2);
-max-height:calc(1.25em * 2);display:-webkit-box;-webkit-line-clamp:2;
--webkit-box-orient:vertical;overflow:hidden}
+.zt__x{display:none}
 .zt__r{display:flex;gap:8px;font-size:11px;color:@DIM@;margin-top:auto;
 padding-top:2px;flex-wrap:nowrap;min-height:1.25em;max-height:1.25em;align-items:center;
 overflow:hidden}
@@ -4267,10 +4271,7 @@ class ВидЗона(Вид):
                 meta2_parts.append(reason)
         мета1 = " · ".join(meta1_parts)
         мета2 = " · ".join(meta2_parts)
-        # Optional 2-line description — never invent.
-        опис = (деталь.get("short_description") or деталь.get("description") or "").strip()
-        if len(опис) > 140:
-            опис = опис[:137].rstrip() + "…"
+        # Card bodies stay metadata-only: plot text belongs on the title page.
         кп = _число(деталь.get("kinopoisk_rating"))
         им = _число(деталь.get("imdb_rating"))
         части = []
@@ -4289,15 +4290,11 @@ class ВидЗона(Вид):
             meta_html += f'<span class="zt__m">{html.escape(мета1)}</span>'
         if мета2:
             meta_html += f'<span class="zt__m">{html.escape(мета2)}</span>'
-        if not meta_html:
-            meta_html = '<span class="zt__m">&nbsp;</span>'
-        desc_html = (f'<span class="zt__x">{html.escape(опис)}</span>' if опис else
-                     '<span class="zt__x" aria-hidden="true">&nbsp;</span>')
         return (f'<a class="zt" data-testid="title-card" href="{запись["url"]}" '
                 f'title="{html.escape(заголовок)}">'
                 f'<span class="zt__p">{изо}</span>'
                 f'<span class="zt__b"><span class="zt__t">{html.escape(заголовок)}</span>'
-                f'{meta_html}{desc_html}</span>{оценка}</a>')
+                f'{meta_html}</span>{оценка}</a>')
 
     def строка(self, запись: dict) -> str:
         деталь = self.деталь(запись["slug"])
@@ -4465,6 +4462,9 @@ class ВидЗона(Вид):
         def есть_источник(з: dict) -> bool:
             return состояние_плеера(self.деталь(з["slug"]))[0] == "playable"
 
+        # Five distinct shelves. No sixth «Недавно в каталоге» row: it reused
+        # freshness+playable after new-films/new-eps and linked to /new/, which
+        # is premiere-only — duplicate algorithm + wrong «Весь раздел» target.
         ленты = [
             ("pop-films", "Популярные новинки фильмов", "/movies/",
              выбрать("Фильм", оценка, пул=ПУЛ),
@@ -4481,9 +4481,6 @@ class ВидЗона(Вид):
              ""),
             ("pop-anim", "Популярная анимация", "/animation/",
              выбрать("Мультфильм", оценка, пул=ПУЛ),
-             ""),
-            ("new-all", "Недавно в каталоге", "/new/",
-             выбрать(None, свежесть, условие=есть_источник, сколько=18),
              ""),
         ]
         коллекции_html = ""
