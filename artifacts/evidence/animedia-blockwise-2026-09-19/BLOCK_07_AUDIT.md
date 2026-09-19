@@ -1,0 +1,18 @@
+# BLOCK_07 — player
+
+## Status
+`NO_CHANGE_REGRESSION_PASS` / `BLOCK_07_PASS`
+
+No player contract code change. Live golden after home deploy tip `18cd7d7`:
+
+```text
+PLAYER_GOLDEN_RUNS_ICU=10/10
+PLAYER_GOLDEN_RUNS_SPACE=10/10
+PLAYER_FALSE_READY=0
+PLAYER_FALSE_FAILURE=0
+PLAYER_OVERLAY_OVER_PLAYING=0
+PLAYER_INSTANCE_MAX=1
+PLAYER_SCORE=96
+```
+
+Evidence: `PLAYER_GOLDEN.json`, `screenshots/block-07/`.

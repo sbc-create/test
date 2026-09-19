@@ -30,8 +30,8 @@ Unrelated dirty (left untouched): `artifacts/evidence/animedia-final-repair-…/
 | BLOCK_03 | `/`, `/new/` | `.ahome-eps`, episode events | **PASS** | 1 | `f5ac02e` |
 | BLOCK_04 | `/` lower | `.zsec` shelves | **PASS** | 1 | `18cd7d7` |
 | BLOCK_05 | `/title/*` info | `.ztitle` (no player) | **PASS** | 1 | `3209a8e` |
-| BLOCK_06 | `/title/*` ratings | `.rbs`, ratings contract | **PASS** | 1 | _(pending)_ |
-| BLOCK_07 | `/title/*` player | `.zpl` | PENDING | 0 | — |
+| BLOCK_06 | `/title/*` ratings | `.rbs`, ratings contract | **PASS** | 1 | `139e9e7` |
+| BLOCK_07 | `/title/*` player | `.zpl` | **PASS** | 1 | _(pending)_ |
 | BLOCK_08 | `/catalog/` | filters + cards | PENDING | 0 | — |
 | BLOCK_09 | `/search/` | ranking | PENDING | 0 | — |
 | BLOCK_10 | collections/related | `.zhub`, `.zsec--rel` | PENDING | 0 | — |

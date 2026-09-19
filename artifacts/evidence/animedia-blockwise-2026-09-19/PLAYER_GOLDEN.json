@@ -1,0 +1,426 @@
+{
+  "at": "2026-09-19T22:34:28Z",
+  "NO_CHANGE_REGRESSION_PASS": true,
+  "PLAYER_SCORE": 96,
+  "note": "No player contract code change; regression only after BLOCK_01–06 home deploy tip 18cd7d7",
+  "summary": {
+    "animedia.icu": {
+      "passed": "10/10",
+      "runs": [
+        {
+          "scenario": "direct_title_open",
+          "click": "clicked",
+          "post": {
+            "instances": 1,
+            "visible_error_overlays": 0,
+            "progress": 0,
+            "playing": false,
+            "hasMedia": true,
+            "aspect": 1.778,
+            "tiny_player": false,
+            "state_attr": "active",
+            "active": true
+          },
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "ok": true
+        },
+        {
+          "scenario": "reload",
+          "click": "clicked",
+          "post": {
+            "instances": 1,
+            "visible_error_overlays": 0,
+            "progress": 0,
+            "playing": false,
+            "hasMedia": true,
+            "aspect": 1.778,
+            "tiny_player": false,
+            "state_attr": "active",
+            "active": true
+          },
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "ok": true
+        },
+        {
+          "scenario": "desktop",
+          "click": "clicked",
+          "post": {
+            "instances": 1,
+            "visible_error_overlays": 0,
+            "progress": 0,
+            "playing": false,
+            "hasMedia": true,
+            "aspect": 1.778,
+            "tiny_player": false,
+            "state_attr": "active",
+            "active": true
+          },
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "ok": true
+        },
+        {
+          "scenario": "mobile",
+          "click": "clicked",
+          "post": {
+            "instances": 1,
+            "visible_error_overlays": 0,
+            "progress": 0,
+            "playing": false,
+            "hasMedia": true,
+            "aspect": 1.778,
+            "tiny_player": false,
+            "state_attr": "active",
+            "active": true
+          },
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "ok": true
+        },
+        {
+          "scenario": "tablet",
+          "click": "clicked",
+          "post": {
+            "instances": 1,
+            "visible_error_overlays": 0,
+            "progress": 0,
+            "playing": false,
+            "hasMedia": true,
+            "aspect": 1.778,
+            "tiny_player": false,
+            "state_attr": "active",
+            "active": true
+          },
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "ok": true
+        },
+        {
+          "scenario": "theme_switch",
+          "click": "clicked",
+          "post": {
+            "instances": 1,
+            "visible_error_overlays": 0,
+            "progress": 0,
+            "playing": false,
+            "hasMedia": true,
+            "aspect": 1.778,
+            "tiny_player": false,
+            "state_attr": "active",
+            "active": true
+          },
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "ok": true
+        },
+        {
+          "scenario": "resize",
+          "click": "clicked",
+          "post": {
+            "instances": 1,
+            "visible_error_overlays": 0,
+            "progress": 0,
+            "playing": false,
+            "hasMedia": true,
+            "aspect": 1.778,
+            "tiny_player": false,
+            "state_attr": "active",
+            "active": true
+          },
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "ok": true
+        },
+        {
+          "scenario": "play_click",
+          "click": "clicked",
+          "post": {
+            "instances": 1,
+            "visible_error_overlays": 0,
+            "progress": 0,
+            "playing": false,
+            "hasMedia": true,
+            "aspect": 1.778,
+            "tiny_player": false,
+            "state_attr": "active",
+            "active": true
+          },
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "ok": true
+        },
+        {
+          "scenario": "instance_count",
+          "click": "clicked",
+          "post": {
+            "instances": 1,
+            "visible_error_overlays": 0,
+            "progress": 0,
+            "playing": false,
+            "hasMedia": true,
+            "aspect": 1.778,
+            "tiny_player": false,
+            "state_attr": "active",
+            "active": true
+          },
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "ok": true
+        },
+        {
+          "scenario": "overlay_check",
+          "click": "clicked",
+          "post": {
+            "instances": 1,
+            "visible_error_overlays": 0,
+            "progress": 0,
+            "playing": false,
+            "hasMedia": true,
+            "aspect": 1.778,
+            "tiny_player": false,
+            "state_attr": "active",
+            "active": true
+          },
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "ok": true
+        }
+      ],
+      "false_ready": 0,
+      "false_failure": 0,
+      "overlay_over_playing": 0,
+      "instance_max": 1
+    },
+    "animedia.space": {
+      "passed": "10/10",
+      "runs": [
+        {
+          "scenario": "direct_title_open",
+          "click": "clicked",
+          "post": {
+            "instances": 1,
+            "visible_error_overlays": 0,
+            "progress": 0,
+            "playing": false,
+            "hasMedia": true,
+            "aspect": 1.778,
+            "tiny_player": false,
+            "state_attr": "active",
+            "active": true
+          },
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "ok": true
+        },
+        {
+          "scenario": "reload",
+          "click": "clicked",
+          "post": {
+            "instances": 1,
+            "visible_error_overlays": 0,
+            "progress": 0,
+            "playing": false,
+            "hasMedia": true,
+            "aspect": 1.778,
+            "tiny_player": false,
+            "state_attr": "active",
+            "active": true
+          },
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "ok": true
+        },
+        {
+          "scenario": "desktop",
+          "click": "clicked",
+          "post": {
+            "instances": 1,
+            "visible_error_overlays": 0,
+            "progress": 0,
+            "playing": false,
+            "hasMedia": true,
+            "aspect": 1.778,
+            "tiny_player": false,
+            "state_attr": "active",
+            "active": true
+          },
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "ok": true
+        },
+        {
+          "scenario": "mobile",
+          "click": "clicked",
+          "post": {
+            "instances": 1,
+            "visible_error_overlays": 0,
+            "progress": 0,
+            "playing": false,
+            "hasMedia": true,
+            "aspect": 1.778,
+            "tiny_player": false,
+            "state_attr": "active",
+            "active": true
+          },
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "ok": true
+        },
+        {
+          "scenario": "tablet",
+          "click": "clicked",
+          "post": {
+            "instances": 1,
+            "visible_error_overlays": 0,
+            "progress": 0,
+            "playing": false,
+            "hasMedia": true,
+            "aspect": 1.778,
+            "tiny_player": false,
+            "state_attr": "active",
+            "active": true
+          },
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "ok": true
+        },
+        {
+          "scenario": "theme_switch",
+          "click": "clicked",
+          "post": {
+            "instances": 1,
+            "visible_error_overlays": 0,
+            "progress": 0,
+            "playing": false,
+            "hasMedia": true,
+            "aspect": 1.778,
+            "tiny_player": false,
+            "state_attr": "active",
+            "active": true
+          },
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "ok": true
+        },
+        {
+          "scenario": "resize",
+          "click": "clicked",
+          "post": {
+            "instances": 1,
+            "visible_error_overlays": 0,
+            "progress": 0,
+            "playing": false,
+            "hasMedia": true,
+            "aspect": 1.778,
+            "tiny_player": false,
+            "state_attr": "active",
+            "active": true
+          },
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "ok": true
+        },
+        {
+          "scenario": "play_click",
+          "click": "clicked",
+          "post": {
+            "instances": 1,
+            "visible_error_overlays": 0,
+            "progress": 0,
+            "playing": false,
+            "hasMedia": true,
+            "aspect": 1.778,
+            "tiny_player": false,
+            "state_attr": "active",
+            "active": true
+          },
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "ok": true
+        },
+        {
+          "scenario": "instance_count",
+          "click": "clicked",
+          "post": {
+            "instances": 1,
+            "visible_error_overlays": 0,
+            "progress": 0,
+            "playing": false,
+            "hasMedia": true,
+            "aspect": 1.778,
+            "tiny_player": false,
+            "state_attr": "active",
+            "active": true
+          },
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "ok": true
+        },
+        {
+          "scenario": "overlay_check",
+          "click": "clicked",
+          "post": {
+            "instances": 1,
+            "visible_error_overlays": 0,
+            "progress": 0,
+            "playing": false,
+            "hasMedia": true,
+            "aspect": 1.778,
+            "tiny_player": false,
+            "state_attr": "active",
+            "active": true
+          },
+          "actual_progress": 1,
+          "player_instance_count": 1,
+          "visible_unavailable_overlay": 0,
+          "playing_and_error_simultaneous": 0,
+          "ok": true
+        }
+      ],
+      "false_ready": 0,
+      "false_failure": 0,
+      "overlay_over_playing": 0,
+      "instance_max": 1
+    }
+  }
+}
