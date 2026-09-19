@@ -30,6 +30,8 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timedelta, timezone
+
 import argparse
 import html
 import copy
@@ -747,12 +749,13 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 ОФОРМЛЕНИЕ_1_2 = "1.2.0"
 ОФОРМЛЕНИЕ_1_2_1 = "1.2.1"
 ОФОРМЛЕНИЕ_1_2_2 = "1.2.2"
+ОФОРМЛЕНИЕ_1_2_3 = "1.2.3"
 
 #: Версии, несущие оформление 1.1+. Набор, а не одно значение: витрина
 #: включает оформление СВОИМ манифестом, и добавление следующей версии не
 #: должно переводить на неё соседей. Свойство «переход по одной витрине»
 #: сохраняется — меняется только то, сколько версий код умеет исполнять.
-ОФОРМЛЕНИЕ_ВЕРСИИ = {ОФОРМЛЕНИЕ_1_1, ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1, ОФОРМЛЕНИЕ_1_2_2}
+ОФОРМЛЕНИЕ_ВЕРСИИ = {ОФОРМЛЕНИЕ_1_1, ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1, ОФОРМЛЕНИЕ_1_2_2, ОФОРМЛЕНИЕ_1_2_3}
 
 #: Семейства, переработанные по измеренным эталонам, и версии, с которых
 #: переработка включается. Ниже этого набора витрина исполняет прежние ветки.
@@ -764,7 +767,7 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 #: только той витрине, чей манифест его объявил.
 ПЕРЕРАБОТАНО_С = {
     "zona": frozenset({ОФОРМЛЕНИЕ_1_2}),
-    "animedia": frozenset({ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1, ОФОРМЛЕНИЕ_1_2_2}),
+    "animedia": frozenset({ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1, ОФОРМЛЕНИЕ_1_2_2, ОФОРМЛЕНИЕ_1_2_3}),
 }
 
 #: Исполняет ли ЭТА витрина переработанное оформление своего семейства.
@@ -1694,7 +1697,7 @@ white-space:nowrap}
 
 
 АНИМЕДИА_СТИЛЬ = """
-/* Animedia 1.2.2 — reference-density visual system (amd.online geometry, own assets). */
+/* Animedia 1.2.3 — home feed density + real episode pagination (amd.online geometry, own assets). */
 :root{
   --a-space-1:8px;--a-space-2:12px;--a-space-3:16px;--a-space-4:24px;
   --a-space-5:32px;--a-space-6:40px;--a-space-7:48px;--a-space-8:64px;
@@ -1752,13 +1755,18 @@ display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hi
 .zsec__h a{font-size:14px;color:@ACC@;font-weight:700;white-space:nowrap}
 
 /* Compact hero rail */
-.ahero{margin:12px 0 20px;padding:16px 12px;border-radius:var(--a-radius-shell);
-background:@ACC@;color:#fff;overflow:hidden;max-height:min(330px,36vh);box-sizing:border-box}
+.ahero{margin:12px 0 24px;padding:14px 12px;border-radius:var(--a-radius-shell);
+background:@ACC@;color:#fff;overflow:hidden;max-height:min(300px,34vh);box-sizing:border-box}
 .ahero .zrl__vp{padding-bottom:2px;scrollbar-width:none}
 .ahero .zrl__vp::-webkit-scrollbar{display:none}
-.ahero .zrl__track{gap:14px}
-.ahero .zrl__track>*{flex:0 0 clamp(148px,9vw,180px);width:clamp(148px,9vw,180px);
-max-width:180px;scroll-snap-align:start}
+.ahero .zrl__track{gap:15px}
+.ahero .zrl__track>*{flex:0 0 clamp(148px,8.2vw,168px);width:clamp(148px,8.2vw,168px);
+max-width:168px;scroll-snap-align:start}
+@media(max-width:767px){
+  .ahero{margin-bottom:20px;max-height:min(260px,32vh);padding:12px 10px}
+  .ahero .zrl__track{gap:12px}
+  .ahero .zrl__track>*{flex:0 0 clamp(112px,30vw,128px);width:clamp(112px,30vw,128px);max-width:128px}
+}
 .ahero .zt{background:transparent;border:0;box-shadow:none;color:#fff;max-height:280px}
 .ahero .zt:hover{opacity:.92;box-shadow:none;border:0}
 .ahero .zt__p{border-radius:10px;aspect-ratio:2/3;background:rgba(0,0,0,.18)}
@@ -1807,34 +1815,58 @@ display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hi
 .zt__r b,.zt__r i{color:@ACC@;font-weight:700;font-style:normal}
 .zt__r em{color:@MUTE@;font-style:italic}
 
-/* Episode feed rows */
-.zsec--eps .zl,.aeps{display:grid;gap:16px;grid-template-columns:1fr}
-@media(min-width:900px){.zsec--eps .zl,.aeps{grid-template-columns:1fr 1fr;gap:clamp(24px,2vw,36px)  clamp(24px,2vw,36px)}}
-.aeps__row,.zsec--eps .zr{display:grid;grid-template-columns:auto minmax(0,1fr) auto;
-align-items:center;gap:12px;height:clamp(70px,5vw,96px);padding:0 14px 0 0;
-background:@ALT@;border:0;border-radius:var(--a-radius-card);text-decoration:none;color:inherit;
+/* Episode feed — denser geometry, namespaced under .ahome-eps */
+.ahome-eps{max-width:min(1760px,100%);margin-inline:auto}
+.ahome-eps .aeps,.zsec--eps.ahome-eps .zl{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:900px){
+  .ahome-eps .aeps,.zsec--eps.ahome-eps .zl{
+    grid-template-columns:1fr 1fr;column-gap:clamp(28px,2vw,36px);row-gap:16px}
+  .ahome-eps .aeps__row{height:82px;gap:12px;padding:0 14px 0 0;
+    border-radius:12px}
+  .ahome-eps .aeps__thumb{width:64px;border-radius:10px 0 0 10px}
+  .ahome-eps .aeps__body{padding:10px 0}
+  .ahome-eps .aeps__title{font-size:21px;font-weight:600;line-height:1.2}
+  .ahome-eps .aeps__meta{font-size:14px}
+  .ahome-eps .aeps__num{font-size:34px}
+  .ahome-eps .aeps__lab{font-size:13px}
+  .ahome-eps .aeps__ep{min-width:44px;padding-right:2px}
+}
+.ahome-eps .aeps__row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;
+align-items:center;gap:12px;height:82px;padding:0 14px 0 0;
+background:@ALT@;border:0;border-radius:12px;text-decoration:none;color:inherit;
 box-shadow:none;max-height:none;min-height:0;width:100%;box-sizing:border-box}
-.aeps__row:hover,.zsec--eps .zr:hover{background:#fff;box-shadow:var(--a-shadow-soft)}
-.aeps__row:focus-visible,.zsec--eps .zr:focus-visible{outline:2px solid @ACC@;outline-offset:2px}
-.aeps__thumb,.zsec--eps .zr__p{width:clamp(60px,4vw,80px);height:100%;max-width:none;
-aspect-ratio:auto;border-radius:var(--a-radius-card) 0 0 var(--a-radius-card);overflow:hidden;
-position:relative;background:@SURF@}
-.aeps__thumb img,.zsec--eps .zr__p img,.zsec--eps .zr__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.aeps__body,.zsec--eps .zr__body{min-width:0;display:flex;flex-direction:column;gap:2px;padding:8px 0}
-.aeps__title,.zsec--eps .zr__t{font-size:clamp(16px,1.2vw,20px);font-weight:700;line-height:1.25;
-display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
-white-space:normal;text-overflow:unset}
-.aeps__meta,.zsec--eps .zr__m{font-size:clamp(13px,1vw,15px);color:@DIM@}
-.aeps__ep,.zsec--eps .zr__badge{display:flex;flex-direction:column;align-items:flex-end;
-justify-content:center;padding-right:4px;min-width:3.2em}
-.aeps__num,.zsec--eps .zr__badge{font-size:clamp(26px,2vw,38px);font-weight:800;color:@ACC@;
-line-height:1;font-variant-numeric:tabular-nums}
-.aeps__lab{font-size:clamp(12px,1vw,15px);color:@DIM@}
-.zsec--eps .zr__d{display:none}
-.zsec--eps .zr:nth-child(odd){border-right:0}
-@media(max-width:899px){.aeps__row,.zsec--eps .zr{height:clamp(82px,14vw,96px)}
-.aeps__thumb,.zsec--eps .zr__p{width:clamp(60px,16vw,68px)}
-.aeps__num,.zsec--eps .zr__badge{font-size:clamp(26px,7vw,30px)}}
+.ahome-eps .aeps__row:hover{background:#fff;box-shadow:var(--a-shadow-soft)}
+.ahome-eps .aeps__row:focus-visible{outline:2px solid @ACC@;outline-offset:2px}
+.ahome-eps .aeps__thumb{width:64px;height:100%;max-width:none;aspect-ratio:auto;
+border-radius:10px 0 0 10px;overflow:hidden;position:relative;background:@SURF@}
+.ahome-eps .aeps__thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ahome-eps .aeps__body{min-width:0;display:flex;flex-direction:column;gap:2px;padding:10px 0}
+.ahome-eps .aeps__title{font-size:21px;font-weight:600;line-height:1.2;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ahome-eps .aeps__meta{font-size:14px;color:@DIM@}
+.ahome-eps .aeps__ep{display:flex;flex-direction:column;align-items:flex-end;
+justify-content:center;padding-right:2px;min-width:44px}
+.ahome-eps .aeps__num{font-size:34px;font-weight:800;color:@ACC@;line-height:1;
+font-variant-numeric:tabular-nums}
+.ahome-eps .aeps__lab{font-size:13px;color:@DIM@}
+.ahome-eps .zpg{margin-top:16px;margin-bottom:8px}
+.ahome-eps .zpg a,.ahome-eps .zpg span{min-width:40px;min-height:40px}
+@media(max-width:899px){
+  .ahome-eps .aeps{gap:12px}
+  .ahome-eps .aeps__row{height:76px;gap:10px;
+    grid-template-columns:56px minmax(0,1fr) 48px;padding:0 10px 0 0}
+  .ahome-eps .aeps__thumb{width:56px;border-radius:9px 0 0 9px}
+  .ahome-eps .aeps__title{font-size:15px}
+  .ahome-eps .aeps__meta{font-size:12px}
+  .ahome-eps .aeps__num{font-size:27px}
+  .ahome-eps .aeps__lab{font-size:11px}
+  .ahome-eps .aeps__body{padding:8px 0}
+}
+@media(max-width:389px){
+  .ahome-eps .aeps__row{height:72px}
+}
+/* legacy non-home episode rows keep compact defaults without widening globals */
+.aeps:not(.ahome-eps .aeps){display:grid;gap:16px;grid-template-columns:1fr}
 
 /* Filters */
 .zfilt,.zgenres__nav,.zstrip{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;align-items:center}
@@ -4507,6 +4539,42 @@ def _мета_версии() -> str:
 #: подмешанный чужой профиль.
 АНИМЕ_ВИДЫ = ("Аниме", "ТВ", "OVA", "ONA", "Аниме-фильм", "Онгоинг", "Донхуа")
 
+
+#: Europe/Moscow — documented site timezone for Animedia human timestamps.
+АНИМЕДИА_TZ = timezone(timedelta(hours=3))
+АНИМЕДИА_ЭПИЗОД_НА_СТРАНИЦЕ = 10
+
+
+def _аниме_формат_времени_анонса(published_at: str, precision: str) -> str:
+    """Human-readable catalog publish time. Never invents missing clocks.
+
+    precision=datetime → may use Сегодня/Вчера with HH:MM in АНИМЕДИА_TZ.
+    precision=date → localized date only (no 00:00, no «Сегодня»).
+    precision=none/empty → empty string.
+    """
+    raw = (published_at or "").strip()
+    if not raw or precision in {"", "none", None}:
+        return ""
+    try:
+        if raw.endswith("Z"):
+            dt = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+        else:
+            dt = datetime.fromisoformat(raw)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+    except ValueError:
+        return raw[:10] if len(raw) >= 10 else raw
+    local = dt.astimezone(АНИМЕДИА_TZ)
+    if precision == "date" or ("T" not in raw and " " not in raw):
+        return local.strftime("%d.%m.%Y")
+    today = datetime.now(АНИМЕДИА_TZ).date()
+    if local.date() == today:
+        return f"Сегодня, {local.strftime('%H:%M')}"
+    if local.date() == today - timedelta(days=1):
+        return f"Вчера, {local.strftime('%H:%M')}"
+    return local.strftime("%d.%m.%Y, %H:%M")
+
+
 АНИМЕДИА_ДОМЕНЫ = {
     "animedia.space": {
         "profile": "animedia-space",
@@ -5026,16 +5094,20 @@ class ВидАнимедиа(ВидЗона):
         if герой:
             куски.append(self.верхняя_карусель(герой))
         куски.append('<div class="zad-home" data-ad-slot="home-after-hero" data-ad-enabled="0"></div>')
-        # First major content after compact rail: episode feed (not poster grid).
-        ep_rows = self._эпизод_ряды(предел=12)
+        # First major content after compact rail: episode feed page 1 (size 10).
+        all_eps = self._эпизод_события()
+        per = АНИМЕДИА_ЭПИЗОД_НА_СТРАНИЦЕ
+        pages = max(1, (len(all_eps) + per - 1) // per) if all_eps else 0
+        ep_rows = all_eps[:per]
         if ep_rows:
             feed = '<div class="aeps">' + "".join(
                 self._разметка_эпизод_ряда(r) for r in ep_rows) + "</div>"
+            pager = self._листалка_эпизодов(1, pages) if pages > 1 else ""
             куски.append(
-                '<section class="zsec zsec--eps"><div class="zsec__h">'
+                '<section class="zsec zsec--eps ahome-eps"><div class="zsec__h">'
                 '<h2>Новые серии аниме</h2>'
                 '<a href="/new/">Все эпизоды</a></div>'
-                f'{feed}</section>')
+                f'{feed}{pager}</section>')
         # Drop first-shelf items already shown in hero to avoid viewport duplicates.
         очищенные = []
         for i, (ключ, титул, ссылка, набор, причина) in enumerate(ленты):
@@ -5143,71 +5215,165 @@ class ВидАнимедиа(ВидЗона):
                 + (f'<nav class="zfilt zfilt__y" aria-label="Годы">{years}</nav>' if years else "")
                 + (f'<nav class="zgenres__nav" aria-label="Жанры">{genres}</nav>' if genres else ""))
 
-    def _эпизод_ряды(self, предел: int = 48) -> list[dict]:
-        """Episode rows from season.avail — no invented timestamps."""
-        rows = []
+    def _эпизод_события(self) -> list[dict]:
+        """Eligible episode announcement events — one per title (latest avail).
+
+        Timestamp = catalog ``published_at`` (source-backed). Episode air times
+        are absent from the snapshot; they are never invented.
+        """
+        events = []
+        seen = set()
         for з in self.д.items:
-            det = self.деталь(з["slug"])
+            slug = з.get("slug") or ""
+            if not slug:
+                continue
+            det = self.деталь(slug)
             seasons = список_серий(det)
             if not seasons:
                 continue
-            last = seasons[-1]
-            avail = int(last.get("avail") or 0)
-            if avail < 1:
+            last = None
+            for s in seasons:
+                if int(s.get("avail") or 0) >= 1:
+                    last = s
+            if last is None:
                 continue
-            n = int(last.get("n") or 1)
-            rows.append({
-                "slug": з["slug"],
-                "title": з["title"],
-                "url": self.адрес_эпизода(з["slug"], n, avail),
+            season_n = int(last.get("n") or 1)
+            episode_n = int(last.get("avail") or 0)
+            if episode_n < 1:
+                continue
+            title_id = str(з.get("id") or det.get("id") or slug)
+            source_episode_id = f"{title_id}:s{season_n}e{episode_n}"
+            dedupe = (title_id, season_n, episode_n, source_episode_id)
+            if dedupe in seen:
+                continue
+            seen.add(dedupe)
+            published = str(з.get("published_at") or "").strip()
+            if published and "T" in published:
+                precision = "datetime"
+            elif published:
+                precision = "date"
+            else:
+                precision = "none"
+            url = self.адрес_эпизода(slug, season_n, episode_n)
+            events.append({
+                "event_id": source_episode_id,
+                "title_id": title_id,
+                "title_slug": slug,
+                "slug": slug,
+                "title": з.get("title") or slug,
+                "season_number": season_n,
+                "episode_number": episode_n,
+                "episode": episode_n,
+                "season": season_n,
+                "source_episode_id": source_episode_id,
+                "published_at": published,
+                "published_at_precision": precision,
+                "source_updated_at": str(з.get("updated_at") or ""),
                 "poster": з.get("poster") or "",
-                "season": n,
-                "episode": avail,
+                "playable_state": "playable" if det.get("playable") is True else "unknown",
+                "source_provenance": "catalog.published_at+details.seasons.avail",
+                "url": url,
                 "kind": з.get("kind"),
                 "year": з.get("year"),
-                "published_at": з.get("published_at") or "",
             })
-        rows.sort(key=lambda r: (r.get("published_at") or "", r["slug"]), reverse=True)
-        return rows[:предел]
+        events.sort(
+            key=lambda e: (
+                e.get("published_at") or "",
+                e.get("source_episode_id") or "",
+                e.get("event_id") or "",
+            ),
+            reverse=True,
+        )
+        return events
+
+    def _эпизод_ряды(self, предел: int | None = None) -> list[dict]:
+        """Backward-compatible alias over ``_эпизод_события``."""
+        rows = self._эпизод_события()
+        if предел is None:
+            return rows
+        return rows[: max(0, int(предел))]
+
+    def _разобрать_страницу_эпизодов(self, зпр: dict, всего_страниц: int):
+        """Return (page, error). error set → caller must 404 (no silent clamp)."""
+        raw = (зпр.get("page") or ["1"])[0]
+        if raw is None or str(raw).strip() == "":
+            return 1, None
+        try:
+            стр = int(str(raw).strip())
+        except (TypeError, ValueError):
+            return None, "invalid"
+        if стр < 1 or (всего_страниц >= 1 and стр > всего_страниц):
+            return None, "out_of_range"
+        return стр, None
+
+    def _листалка_эпизодов(self, стр: int, всего: int) -> str:
+        """Pagination for episode archive — always targets /new/."""
+        if всего <= 1:
+            return ""
+        пункты = страницы(стр, всего)
+        куски = []
+        # Prev
+        if стр <= 1:
+            куски.append('<span aria-disabled="true">←</span>')
+        else:
+            prev = "/new/" if стр - 1 <= 1 else f"/new/?page={стр - 1}"
+            куски.append(f'<a href="{prev}" rel="prev">←</a>')
+        for н in пункты:
+            if н is None:
+                куски.append("<em>…</em>")
+            elif н == стр:
+                куски.append(f'<span aria-current="page">{н}</span>')
+            else:
+                href = "/new/" if н <= 1 else f"/new/?page={н}"
+                куски.append(f'<a href="{href}">{н}</a>')
+        if стр >= всего:
+            куски.append('<span aria-disabled="true">→</span>')
+        else:
+            куски.append(f'<a href="/new/?page={стр + 1}" rel="next">→</a>')
+        return f'<nav class="zpg" aria-label="Страницы эпизодов">{"".join(куски)}</nav>'
 
     def _разметка_эпизод_ряда(self, row: dict) -> str:
         изо = заглушка_постера(
             {"title": row["title"], "poster": row.get("poster"), "url": row["url"]},
-            "zr__none", "zr__img", 80, 92)
-        meta_bits = [str(x) for x in (row.get("kind"), row.get("year")) if x]
-        ts = row.get("published_at") or ""
-        # Show date only when source provides it — never invent "сегодня".
-        if ts and "T" in ts:
-            meta_bits.append(ts[:10])
-        meta = " · ".join(meta_bits)
+            "zr__none", "zr__img", 64, 80)
+        ts = _аниме_формат_времени_анонса(
+            row.get("published_at") or "",
+            row.get("published_at_precision") or "none")
+        meta = ts  # do not mix title year into episode-time slot
         return (
-            f'<a class="aeps__row" href="{html.escape(row["url"])}">'
+            f'<a class="aeps__row" href="{html.escape(row["url"])}" '
+            f'data-event-id="{html.escape(row.get("event_id") or "")}">'
             f'<span class="aeps__thumb">{изо}</span>'
             f'<span class="aeps__body"><span class="aeps__title">{html.escape(row["title"])}</span>'
             f'<span class="aeps__meta">{html.escape(meta)}</span></span>'
-            f'<span class="aeps__ep"><span class="aeps__num">{row["episode"]}</span>'
+            f'<span class="aeps__ep"><span class="aeps__num">{int(row["episode_number"])}</span>'
             f'<span class="aeps__lab">серия</span></span></a>')
 
     def _страница_новых_эпизодов(self, зпр: dict) -> str:
-        rows = self._эпизод_ряды(предел=240)
-        стр = max(1, int((зпр.get("page") or ["1"])[0] or 1))
-        per = 24
-        всего = max(1, (len(rows) + per - 1) // per)
-        стр = min(стр, всего)
-        кусок = rows[(стр - 1) * per: стр * per]
+        events = self._эпизод_события()
+        per = АНИМЕДИА_ЭПИЗОД_НА_СТРАНИЦЕ
+        всего = max(1, (len(events) + per - 1) // per) if events else 1
+        стр, err = self._разобрать_страницу_эпизодов(зпр, всего if events else 0)
+        if err or стр is None:
+            return self.не_найдено("/new/")
+        if not events:
+            тело = ('<div class="zwrap ahome-eps"><h1 class="zh">Новые серии аниме</h1>'
+                    '<div class="zempty"><b>Новых серий пока нет</b>'
+                    "<p>В каталоге нет сериалов с доступными сериями.</p></div></div>")
+            return self.оболочка(тело, f"Новые серии — {self.имя}", "/new/",
+                                 актив="/new/",
+                                 описание="Новые серии аниме с доступным просмотром.")
+        кусок = events[(стр - 1) * per: стр * per]
         сетка = '<div class="aeps">' + "".join(self._разметка_эпизод_ряда(r) for r in кусок) + "</div>"
-        if not кусок:
-            сетка = ('<div class="zempty"><b>Новых серий пока нет</b>'
-                     "<p>В каталоге нет сериалов с доступными сериями.</p></div>")
-        листалка = self.листалка("/new", {"page": None}, стр, всего) if всего > 1 else ""
+        листалка = self._листалка_эпизодов(стр, всего)
         канон = "/new/" if стр == 1 else f"/new/?page={стр}"
-        тело = (f'<div class="zwrap"><h1 class="zh">Новые серии аниме</h1>'
-                f'<p class="zsub">Серии с доступным просмотром · страница {стр} из {всего}</p>'
+        тело = (f'<div class="zwrap ahome-eps"><h1 class="zh">Новые серии аниме</h1>'
+                f'<p class="zsub">Анонсы доступных серий · страница {стр} из {всего}'
+                f' · всего {len(events)}</p>'
                 + сетка + листалка + "</div>")
         return self.оболочка(тело, f"Новые серии — {self.имя}", канон,
                              актив="/new/",
                              описание="Новые серии аниме с доступным просмотром.")
-
 
     def поиск(self, зпр: dict) -> str:
         """Поиск. Пустая выдача объясняется тем же и теми же словами."""

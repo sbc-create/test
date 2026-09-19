@@ -17,7 +17,7 @@ sys.path.insert(0, str(ROOT))
 
 
 def _load(tmp: Path, *, family: str = "animedia", profile: str = "animedia-space",
-          version: str = "1.2.2"):
+          version: str = "1.2.3"):
     manifest = {
         "schema_version": 1,
         "template_family": family,
@@ -150,8 +150,8 @@ def fe(tmp_path):
 class TestVisualContracts:
     def test_design_122_and_css_tokens(self, fe):
         mod, _, _ = fe
-        assert mod.ВЕРСИЯ == "1.2.2"
-        assert "1.2.2" in mod.ОФОРМЛЕНИЕ_ВЕРСИИ
+        assert mod.ВЕРСИЯ == "1.2.3"
+        assert "1.2.3" in mod.ОФОРМЛЕНИЕ_ВЕРСИИ
         css = mod.СЕМЕЙСТВА_1_1["animedia"]["стиль"]()
         assert "min(1704px" in css
         assert "aspect-ratio:16/9" in css
@@ -238,7 +238,7 @@ class TestVisualContracts:
         assert "снимке каталога" not in html
         assert "sidecar" not in html.lower()
         assert "поставщик" not in html.lower()
-        assert "Animedia 1.2.2 ·" in html
+        assert "Animedia 1.2.3 ·" in html
         assert "/schedule/" not in html
 
     def test_nav_hides_schedule(self, fe):

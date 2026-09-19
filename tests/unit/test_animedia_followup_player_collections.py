@@ -298,8 +298,8 @@ def test_hub_selects_latest_available_episode(monkeypatch, tmp_path):
 def test_home_css_locks_hero_card_width():
     text = (HOST / "lords-frontend.py").read_text(encoding="utf-8")
     assert "min(1704px,calc(100vw - 80px))" in text
-    assert "clamp(148px,9vw,180px)" in text
-    assert ".ahero" in text and "max-height:min(330px,36vh)" in text
+    assert "clamp(148px,8.2vw,168px)" in text
+    assert ".ahero" in text and "max-height:min(300px,34vh)" in text
     assert "clamp(240px,15.8vw,306px) minmax(0,1fr)" in text
     assert "aspect-ratio:16/9" in text
 
