@@ -105,8 +105,6 @@ def build_global_inventory(
             shiki_covered_nova += 1
 
     shiki_uncovered = len(shiki_eligible_ids) - shiki_covered_nova
-    # AMD uncovered cannot be estimated from catalog without mapping — use eligible - covered
-    amd_uncovered = max(0, len(amd_eligible) - amd_covered)
 
     # Global source-target pairs: every title × {shikimori if eligible} + amd only when mapped
     global_source_target = len(shiki_eligible_ids) + len(amd_eligible)
