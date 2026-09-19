@@ -210,7 +210,7 @@ class Снимок:
                 готово.append(з)
         готово.sort(
             key=lambda з: (
-                self._оценка(self.подробности.get(str(з.get("slug") or "")) or {}),
+                self._оценка(з),
                 з.get("published_at") or "",
                 з.get("slug") or "",
             ),
