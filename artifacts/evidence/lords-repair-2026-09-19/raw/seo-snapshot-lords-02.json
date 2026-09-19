@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "source_commit": "5fc22310fdfb8f0c8748f69e5603e4de3267f27e",
+  "runtime_commit": "5fc22310fdfb8f0c8748f69e5603e4de3267f27e",
+  "build_id": "20260919T135218Z-5fc22310-nova",
+  "artifact_sha256": "b08519b2f023329ccf1cde6c0d0b3f758b764ffe0ca47eba3a9587a5f29d5493",
+  "profile": "lords-new",
+  "built_at": "2026-09-19T13:52:18Z",
+  "content_snapshot_id": "0394d6411fb76ce03f778795e3bb09feae2cf374b136d5d30f65b713c102be94",
+  "content_count": 52793,
+  "tenant_id": "lords-02",
+  "domain": "lordserial33.biz",
+  "indexing_expected": "closed",
+  "pages": [
+    {
+      "path": "/",
+      "page_type": "home",
+      "title": "Lordserial — фильмы и сериалы онлайн",
+      "description": "Lordserial: смотреть фильмы, сериалы и мультфильмы онлайн. Каталог, новинки и подборки из утверждённого снимка.",
+      "h1": "Фильмы и сериалы онлайн",
+      "canonical": "https://lordserial33.biz/",
+      "indexable": false
+    },
+    {
+      "path": "/catalog/",
+      "page_type": "catalog_index",
+      "title": "Каталог — Lordserial",
+      "description": "Каталог витрины Lordserial: выборка из утверждённого снимка.",
+      "h1": "Каталог",
+      "canonical": "https://lordserial33.biz/catalog/",
+      "indexable": false
+    },
+    {
+      "path": "/movies/",
+      "page_type": "movies_index",
+      "title": "Фильмы — Lordserial",
+      "description": "Фильмы витрины Lordserial: выборка из утверждённого снимка.",
+      "h1": "Фильмы",
+      "canonical": "https://lordserial33.biz/movies/",
+      "indexable": false
+    },
+    {
+      "path": "/series/",
+      "page_type": "series_index",
+      "title": "Сериалы — Lordserial",
+      "description": "Сериалы витрины Lordserial: выборка из утверждённого снимка.",
+      "h1": "Сериалы",
+      "canonical": "https://lordserial33.biz/series/",
+      "indexable": false
+    },
+    {
+      "path": "/animation/",
+      "page_type": "animation_index",
+      "title": "Мультфильмы — Lordserial",
+      "description": "Мультфильмы витрины Lordserial: выборка из утверждённого снимка.",
+      "h1": "Мультфильмы",
+      "canonical": "https://lordserial33.biz/animation/",
+      "indexable": false
+    },
+    {
+      "path": "/collections/",
+      "page_type": "collections_index",
+      "title": "Подборки — Lordserial",
+      "description": "Подборки витрины Lordserial.",
+      "h1": "Подборки",
+      "canonical": "https://lordserial33.biz/collections/",
+      "indexable": false
+    },
+    {
+      "path": "/search/",
+      "page_type": "search",
+      "title": "Поиск — Lordserial",
+      "description": "Поиск по каталогу витрины Lordserial.",
+      "h1": "Поиск по каталогу",
+      "canonical": "https://lordserial33.biz/search/",
+      "indexable": false
+    },
+    {
+      "path": "/title/pylnye-utesy/",
+      "page_type": "title",
+      "title": "Пыльные утёсы — смотреть онлайн — Lordserial",
+      "description": "Когда редактор «Газеты Пыльных Утёсов» сбегает из города, МП и Джер, всю жизнь разносившие газеты, отказываются бросать единственную работу, о которой они когда-либо мечтали. Переп",
+      "h1": "Пыльные утёсы",
+      "canonical": "https://lordserial33.biz/title/pylnye-utesy/",
+      "indexable": false
+    },
+    {
+      "path": "/title/pylnye-utesy/season-1/",
+      "page_type": "season",
+      "title": "Пыльные утёсы — 1 сезон — Lordserial",
+      "description": "Пыльные утёсы — 1 сезон: список серий на витрине Lordserial.",
+      "h1": "Пыльные утёсы — 1 сезон",
+      "canonical": "https://lordserial33.biz/title/pylnye-utesy/season-1/",
+      "indexable": false
+    },
+    {
+      "path": "/title/pylnye-utesy/season-1/episode-1/",
+      "page_type": "episode",
+      "title": "Пыльные утёсы — 1 сезон, 1 серия — Lordserial",
+      "description": "Пыльные утёсы — 1 сезон, 1 серия: смотреть онлайн на витрине Lordserial.",
+      "h1": "Пыльные утёсы — 1 сезон, 1 серия",
+      "canonical": "https://lordserial33.biz/title/pylnye-utesy/season-1/episode-1/",
+      "indexable": false
+    },
+    {
+      "path": "/collection/recently_added/",
+      "page_type": "collection",
+      "title": "Недавно добавленные",
+      "description": "Записи в порядке появления в каталоге поставщика.",
+      "h1": "Недавно добавленные",
+      "canonical": "https://lordserial33.biz/collection/recently_added/",
+      "indexable": false
+    }
+  ]
+}

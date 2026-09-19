@@ -1,0 +1,15 @@
+[apply-nova] artifact_sha256=b08519b2f023329ccf1cde6c0d0b3f758b764ffe0ca47eba3a9587a5f29d5493
+[apply-nova] runtime_commit=5fc22310fdfb8f0c8748f69e5603e4de3267f27e
+[apply-nova] live_before=252e2f09145406c12943e11dcf0ef2dad2a72d2fe78b1d8ed37929d3b07954ed
+[apply-nova] plan lords-02 source=5fc22310fdfb runtime=5fc22310fdfb profile=lords-new repo=/home/claude/wt-lords-integration-canary-01
+[apply-nova] rollback snapshot: /srv/lords/.frontend/.rollback/pre-closed-update-20260919T135135Z
+[apply-nova] $ sudo -n env REPO=/home/claude/wt-lords-integration-canary-01 SOURCE_COMMIT=5fc22310fdfb8f0c8748f69e5603e4de3267f27e RUNTIME_COMMIT=5fc22310fdfb8f0c8748f69e5603e4de3267f27e NOVA_INSTALL_FRONTEND=1 RUNTIME_REPO=/home/claude/wt-lords-integration-canary-01 FACTORY_OWNER_ROOT_MANDATE=SITE_FACTORY_ROOT_20260909 DESIGN_VERSION=1.1.0 bash /home/claude/wt-lords-integration-canary-01/automation/host/deploy-nova-lords.sh lords-02 lordserial33.biz 9111 lords-new Lordserial 20260919T135135Z-5fc22310-nova b08519b2f023329ccf1cde6c0d0b3f758b764ffe0ca47eba3a9587a5f29d5493
+[nova] lords-02 → lordserial33.biz:9111 профиль lords-new source 5fc22310fdfb runtime 5fc22310fdfb from /home/claude/wt-lords-integration-canary-01
+[nova] установлен frontend runtime из /home/claude/wt-lords-integration-canary-01 (5fc22310fdfb)
+[nova] манифест lords-02: 1.1.0 source=5fc22310fdfb runtime=5fc22310fdfb 20260919T135135Z-5fc22310-nova
+[nova] lords-02: /healthz ready after 9 attempt(s)
+active
+[seo-snapshot] lords-02: pages=11 build=20260919T135135Z-5fc22310-nova content_snapshot_id=0394d6411fb76ce0… → /srv/lords/.frontend/seo-snapshot-lords-02.json
+[nova] lordserial33.biz: nginx 9111 → 9111
+[apply-nova] ОТКАЗ после ['lords-02']: cannot import name 'seo_snapshot' from 'factory.lords' (/srv/site-factory/repo/factory/lords/__init__.py)
+[apply-nova] откат: манифесты и frontend в /srv/lords/.frontend/.rollback/pre-closed-update-20260919T135135Z

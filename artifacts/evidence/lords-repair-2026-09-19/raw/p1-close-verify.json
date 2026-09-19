@@ -1,0 +1,149 @@
+{
+  "build_id": "20260919T135218Z-5fc22310-nova",
+  "artifact_sha256": "b08519b2f023329ccf1cde6c0d0b3f758b764ffe0ca47eba3a9587a5f29d5493",
+  "source_commit": "5fc22310fdfb8f0c8748f69e5603e4de3267f27e",
+  "runtime_commit": "5fc22310fdfb8f0c8748f69e5603e4de3267f27e",
+  "content_snapshot_id": "0394d6411fb76ce03f778795e3bb09feae2cf374b136d5d30f65b713c102be94",
+  "routes": [
+    {
+      "path": "/",
+      "status": 200,
+      "title": "Lordserial — фильмы и сериалы онлайн",
+      "has_desc": true,
+      "h1": "Фильмы и сериалы онлайн",
+      "canonical": "https://lordserial33.biz/",
+      "robots": "noindex, nofollow",
+      "xrobots": "noindex, nofollow"
+    },
+    {
+      "path": "/catalog/",
+      "status": 200,
+      "title": "Каталог — Lordserial",
+      "has_desc": true,
+      "h1": "Каталог",
+      "canonical": "https://lordserial33.biz/catalog/",
+      "robots": "noindex, nofollow",
+      "xrobots": "noindex, nofollow"
+    },
+    {
+      "path": "/movies/",
+      "status": 200,
+      "title": "Фильмы — Lordserial",
+      "has_desc": true,
+      "h1": "Фильмы",
+      "canonical": "https://lordserial33.biz/movies/",
+      "robots": "noindex, nofollow",
+      "xrobots": "noindex, nofollow"
+    },
+    {
+      "path": "/series/",
+      "status": 200,
+      "title": "Сериалы — Lordserial",
+      "has_desc": true,
+      "h1": "Сериалы",
+      "canonical": "https://lordserial33.biz/series/",
+      "robots": "noindex, nofollow",
+      "xrobots": "noindex, nofollow"
+    },
+    {
+      "path": "/animation/",
+      "status": 200,
+      "title": "Мультфильмы — Lordserial",
+      "has_desc": true,
+      "h1": "Мультфильмы",
+      "canonical": "https://lordserial33.biz/animation/",
+      "robots": "noindex, nofollow",
+      "xrobots": "noindex, nofollow"
+    },
+    {
+      "path": "/collections/",
+      "status": 200,
+      "title": "Подборки — Lordserial",
+      "has_desc": true,
+      "h1": "Подборки",
+      "canonical": "https://lordserial33.biz/collections/",
+      "robots": "noindex, nofollow",
+      "xrobots": "noindex, nofollow"
+    },
+    {
+      "path": "/search/",
+      "status": 200,
+      "title": "Поиск — Lordserial",
+      "has_desc": true,
+      "h1": "Поиск по каталогу",
+      "canonical": "https://lordserial33.biz/search/",
+      "robots": "noindex, nofollow",
+      "xrobots": "noindex, nofollow"
+    },
+    {
+      "path": "/title/pylnye-utesy/",
+      "status": 200,
+      "title": "Пыльные утёсы — смотреть онлайн — Lordserial",
+      "has_desc": true,
+      "h1": "Пыльные утёсы",
+      "canonical": "https://lordserial33.biz/title/pylnye-utesy/",
+      "robots": "noindex, nofollow",
+      "xrobots": "noindex, nofollow"
+    },
+    {
+      "path": "/title/pylnye-utesy/season-1/",
+      "status": 200,
+      "title": "Пыльные утёсы — 1 сезон — Lordserial",
+      "has_desc": true,
+      "h1": "Пыльные утёсы — 1 сезон",
+      "canonical": "https://lordserial33.biz/title/pylnye-utesy/season-1/",
+      "robots": "noindex, nofollow",
+      "xrobots": "noindex, nofollow"
+    },
+    {
+      "path": "/title/pylnye-utesy/season-1/episode-1/",
+      "status": 200,
+      "title": "Пыльные утёсы — 1 сезон, 1 серия — Lordserial",
+      "has_desc": true,
+      "h1": "Пыльные утёсы — 1 сезон, 1 серия",
+      "canonical": "https://lordserial33.biz/title/pylnye-utesy/season-1/episode-1/",
+      "robots": "noindex, nofollow",
+      "xrobots": "noindex, nofollow"
+    },
+    {
+      "path": "/collection/recently_added/",
+      "status": 200,
+      "title": "Недавно добавленные",
+      "has_desc": true,
+      "h1": "Недавно добавленные",
+      "canonical": "https://lordserial33.biz/collection/recently_added/",
+      "robots": "noindex, nofollow",
+      "xrobots": "noindex, nofollow"
+    }
+  ],
+  "load": {
+    "seq_100": {
+      "n": 100,
+      "codes": [
+        200
+      ],
+      "five_xx": 0,
+      "elapsed_s": 22.837,
+      "ok": true
+    },
+    "par_20": {
+      "n": 20,
+      "codes": [
+        200
+      ],
+      "five_xx": 0,
+      "elapsed_s": 5.608,
+      "ok": true
+    }
+  },
+  "seo_pages": 11,
+  "indexing_expected": "closed",
+  "ep7": {
+    "path": "/title/pylnye-utesy/season-1/episode-7/",
+    "status": 404,
+    "unavailable": true,
+    "video_player": false
+  },
+  "healthz_gate_evidence": "apply log: /healthz ready after 14 attempt(s) (~7s) > previous sleep 3",
+  "rollback": "/srv/lords/.frontend/.rollback/pre-closed-update-20260919T135218Z"
+}

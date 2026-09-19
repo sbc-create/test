@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "source_commit": "5fc22310fdfb8f0c8748f69e5603e4de3267f27e",
+  "runtime_commit": "5fc22310fdfb8f0c8748f69e5603e4de3267f27e",
+  "build_id": "20260919T135218Z-5fc22310-nova",
+  "artifact_sha256": "b08519b2f023329ccf1cde6c0d0b3f758b764ffe0ca47eba3a9587a5f29d5493",
+  "profile": "lords-new",
+  "built_at": "2026-09-19T13:52:18Z"
+}
