@@ -2416,15 +2416,36 @@ def разметка_плеера(вид, запись: dict, деталь: dict
    state('error','Ошибка плеера','Провайдер вернул ошибку на выбранной дорожке.');
   });
   clearTimers();
-  seen=setInterval(function(){
+  function markReady(evName){
    if(my!==token) return;
-   if(node.shadowRoot||node.children.length){ clearInterval(seen); seen=null; state('ok'); }
-  },250);
+   window.__zonaPlayerReady = {token:my, event:evName||'ready', at:Date.now()};
+   state('ok');
+  }
+  ['playing','play','loadeddata','canplay','canplaythrough'].forEach(function(ev){
+   node.addEventListener(ev, function(){ markReady(ev); }, {once:true});
+  });
+  // Shadow/iframe mount is NOT playback proof — only media events set READY.
+  // Still observe nested video for cross-origin-incapable hosts that re-target events.
+  seen=setInterval(function(){
+   if(my!==token || поднялся) return;
+   var root=node.shadowRoot; if(!root) return;
+   var v=root.querySelector('video');
+   if(v && !v.__zonaBound){
+    v.__zonaBound=true;
+    ['playing','play','timeupdate'].forEach(function(ev){
+     v.addEventListener(ev, function(){
+      if(ev==='timeupdate' && !(v.currentTime>0.05)) return;
+      markReady('video.'+ev);
+     }, {once:true});
+    });
+   }
+   if(v && !v.paused && v.currentTime>0.05) markReady('video.playing');
+  },400);
   timers.push(setTimeout(function(){
    if(my!==token) return;
    if(seen){clearInterval(seen);seen=null;}
    if(!поднялся) state('slow','Плеер не поднялся',
-    'Скрипт провайдера загрузился, но проигрыватель не запустился за пятнадцать секунд. Обновите страницу; описание и серии доступны и сейчас.');
+    'Скрипт провайдера загрузился, но воспроизведение не подтвердилось за пятнадцать секунд. Обновите страницу; описание и серии доступны и сейчас.');
   },15000));
  }
  var first=el();
