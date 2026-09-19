@@ -26,8 +26,8 @@ Unrelated dirty (left untouched): `artifacts/evidence/animedia-final-repair-…/
 | block_id | route | boundary | status | attempt | commit |
 | --- | --- | --- | --- | --- | --- |
 | BLOCK_01 | `/*` shell | `.zhd`, `.zwrap`, theme tokens, body | **PASS** | 1 | `eec2d2a` |
-| BLOCK_02 | `/` top shelf | `.ahero` | **PASS** | 1 | _(pending commit)_ |
-| BLOCK_03 | `/`, `/new/` | `.ahome-eps`, episode events | PENDING | 0 | — |
+| BLOCK_02 | `/` top shelf | `.ahero` | **PASS** | 1 | `d76ee94` |
+| BLOCK_03 | `/`, `/new/` | `.ahome-eps`, episode events | **PASS** | 1 | _(pending)_ |
 | BLOCK_04 | `/` lower | `.zsec` shelves | PENDING | 0 | — |
 | BLOCK_05 | `/title/*` info | `.ztitle` (no player) | PENDING | 0 | — |
 | BLOCK_06 | `/title/*` ratings | `.rbs`, ratings contract | PENDING | 0 | — |

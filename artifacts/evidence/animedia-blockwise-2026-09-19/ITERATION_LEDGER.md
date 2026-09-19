@@ -29,4 +29,15 @@
 | unit tests | `test_animedia_block_02_top_shelf.py` + related: 13 passed |
 | local browser | all 15 gates true (`raw/BLOCK_02_AFTER_LOCAL_GEOMETRY.json`) |
 | scores | TOP_SHELF_SCORE=96 |
+| commit | `d76ee94` |
+
+## BLOCK_03 attempt 1 → PASS
+
+| Step | Result |
+| --- | --- |
+| semantics audit | 0 episode-air timestamps; catalog.published_at only → EPISODE_EVENT_DATA_GAP=1 |
+| repair | rename «Недавно добавленные»; meta «Добавлено ·»; CTA `/new/?page=1`; denser rows |
+| unit tests | home_pagination + visual_finalization: 22 passed |
+| local QA | all gates true; pagination 5495 events; dups=0; beyond=404 |
+| scores | EPISODE_FEED_SCORE=96 |
 | commit | pending |

@@ -147,6 +147,26 @@ class TestEpisodeEvents:
         pubs = [e["published_at"] for e in вид._эпизод_события()]
         assert pubs == sorted(pubs, reverse=True)
 
+
+    def test_catalog_publish_semantics_not_air_date(self, fe):
+        mod, items, details = fe
+        вид = _вид(mod, items, details)
+        events = вид._эпизод_события()
+        assert events
+        for e in events:
+            assert e["event_kind"] == "catalog_publish"
+            assert "not episode air" in e["timestamp_semantics"]
+            assert e["source_provenance"].startswith("catalog.published_at")
+        home = вид.главная()
+        assert "Недавно добавленные" in home
+        assert "Добавлено" in home
+        assert 'href="/new/?page=1"' in home
+        assert "вышла серия" not in home.lower()
+        assert mod.АНИМЕДИА_EPISODE_EVENT_DATA_GAP == 1
+        p1 = вид.список("/new", {})
+        assert "Недавно добавленные" in p1
+        assert "Добавлено" in p1
+
     def test_timestamp_semantics(self, fe):
         mod, _, _ = fe
         from datetime import datetime, timedelta, timezone
@@ -223,8 +243,9 @@ class TestCssIsolation:
         mod, _, _ = fe
         css = mod.АНИМЕДИА_СТИЛЬ
         assert ".ahome-eps" in css
-        assert "height:72px" in css
+        assert "height:76px" in css
         assert "width:60px" in css
+        assert "width:56px" in css
         # must not rewrite global article/img card player
         assert "article{" not in css.replace(" ", "")
         assert ".ahero .zrl__track>*" in css

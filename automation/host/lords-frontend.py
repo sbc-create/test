@@ -1860,21 +1860,21 @@ flex-wrap:nowrap;min-height:1.25em;align-items:center}
 .zsec--rel .zg{gap:14px}
 @media(min-width:1200px){.zsec--rel .zg{grid-template-columns:repeat(6,minmax(0,1fr))}}
 .ahome-eps{max-width:min(1760px,100%);margin-inline:auto}
-.ahome-eps .aeps,.zsec--eps.ahome-eps .zl{display:grid;gap:12px;grid-template-columns:1fr}
+.ahome-eps .aeps,.zsec--eps.ahome-eps .zl{display:grid;gap:14px;grid-template-columns:1fr}
 @media(min-width:900px){
   .ahome-eps .aeps,.zsec--eps.ahome-eps .zl{
-    grid-template-columns:1fr 1fr;column-gap:clamp(24px,2vw,32px);row-gap:12px}
-  .ahome-eps .aeps__row{height:72px;gap:10px;padding:0 12px 0 0;border-radius:10px}
+    grid-template-columns:1fr 1fr;column-gap:clamp(24px,2vw,32px);row-gap:14px}
+  .ahome-eps .aeps__row{height:76px;gap:10px;padding:0 12px 0 0;border-radius:10px}
   .ahome-eps .aeps__thumb{width:60px;border-radius:8px 0 0 8px}
   .ahome-eps .aeps__body{padding:8px 0}
-  .ahome-eps .aeps__title{font-size:19px;font-weight:600;line-height:1.2}
-  .ahome-eps .aeps__meta{font-size:13px}
-  .ahome-eps .aeps__num{font-size:32px}
-  .ahome-eps .aeps__lab{font-size:12px}
+  .ahome-eps .aeps__title{font-size:15px;font-weight:600;line-height:1.25}
+  .ahome-eps .aeps__meta{font-size:12px}
+  .ahome-eps .aeps__num{font-size:28px}
+  .ahome-eps .aeps__lab{font-size:11px}
   .ahome-eps .aeps__ep{min-width:44px;padding-right:2px}
 }
 .ahome-eps .aeps__row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;
-align-items:center;gap:10px;height:72px;padding:0 12px 0 0;
+align-items:center;gap:10px;height:76px;padding:0 12px 0 0;
 background:var(--a-alt);border:0;border-radius:10px;text-decoration:none;color:inherit;
 box-shadow:none;max-height:none;min-height:0;width:100%;box-sizing:border-box}
 .ahome-eps .aeps__row:hover{background:var(--a-page);box-shadow:var(--a-shadow-soft);filter:none}
@@ -1883,28 +1883,28 @@ box-shadow:none;max-height:none;min-height:0;width:100%;box-sizing:border-box}
 border-radius:8px 0 0 8px;overflow:hidden;position:relative;background:var(--a-surf)}
 .ahome-eps .aeps__thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;max-width:none}
 .ahome-eps .aeps__body{min-width:0;display:flex;flex-direction:column;gap:2px;padding:8px 0}
-.ahome-eps .aeps__title{font-size:19px;font-weight:600;line-height:1.2;
+.ahome-eps .aeps__title{font-size:15px;font-weight:600;line-height:1.25;
 display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.ahome-eps .aeps__meta{font-size:13px;color:var(--a-dim)}
+.ahome-eps .aeps__meta{font-size:12px;color:var(--a-dim)}
 .ahome-eps .aeps__ep{display:flex;flex-direction:column;align-items:flex-end;
 justify-content:center;padding-right:2px;min-width:44px}
-.ahome-eps .aeps__num{font-size:32px;font-weight:800;color:var(--a-acc);line-height:1;
+.ahome-eps .aeps__num{font-size:28px;font-weight:800;color:var(--a-acc);line-height:1;
 font-variant-numeric:tabular-nums}
-.ahome-eps .aeps__lab{font-size:12px;color:var(--a-dim)}
+.ahome-eps .aeps__lab{font-size:11px;color:var(--a-dim)}
 .ahome-eps .zpg{margin-top:12px;margin-bottom:4px}
 .ahome-eps .zpg a,.ahome-eps .zpg span{min-width:40px;min-height:40px}
 @media(max-width:899px){
-  .ahome-eps .aeps{gap:10px}
-  .ahome-eps .aeps__row{height:68px;gap:8px;
-    grid-template-columns:54px minmax(0,1fr) 44px;padding:0 8px 0 0}
-  .ahome-eps .aeps__thumb{width:54px;border-radius:8px 0 0 8px}
-  .ahome-eps .aeps__title{font-size:15px}
-  .ahome-eps .aeps__meta{font-size:12px}
-  .ahome-eps .aeps__num{font-size:26px}
-  .ahome-eps .aeps__lab{font-size:11px}
+  .ahome-eps .aeps{gap:12px}
+  .ahome-eps .aeps__row{height:72px;gap:8px;
+    grid-template-columns:56px minmax(0,1fr) 44px;padding:0 8px 0 0}
+  .ahome-eps .aeps__thumb{width:56px;border-radius:8px 0 0 8px}
+  .ahome-eps .aeps__title{font-size:14px}
+  .ahome-eps .aeps__meta{font-size:11px}
+  .ahome-eps .aeps__num{font-size:24px}
+  .ahome-eps .aeps__lab{font-size:10px}
   .ahome-eps .aeps__body{padding:6px 0}
 }
-@media(max-width:389px){.ahome-eps .aeps__row{height:66px}}
+@media(max-width:389px){.ahome-eps .aeps__row{height:70px}}
 .aeps:not(.ahome-eps .aeps){display:grid;gap:12px;grid-template-columns:1fr}
 .zfilt,.zgenres__nav,.zstrip{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;align-items:center}
 .zfilt a,.zgenres__nav a,.zstrip a,.zfilt__y a{display:inline-flex;align-items:center;
@@ -4601,6 +4601,13 @@ def _мета_версии() -> str:
 #: Europe/Moscow — documented site timezone for Animedia human timestamps.
 АНИМЕДИА_TZ = timezone(timedelta(hours=3))
 АНИМЕДИА_ЭПИЗОД_НА_СТРАНИЦЕ = 10
+# Snapshot has no episode air timestamps — feed is catalog-publish + latest avail.
+АНИМЕДИА_EPISODE_EVENT_DATA_GAP = 1
+АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК = "Недавно добавленные"
+АНИМЕДИА_ЭПИЗОД_ПОДПИСЬ = (
+    "Время — дата добавления тайтла в каталог; номер — последняя доступная серия. "
+    "Отдельной ленты выходов серий в снимке нет."
+)
 
 
 def _аниме_формат_времени_анонса(published_at: str, precision: str) -> str:
@@ -5233,8 +5240,8 @@ class ВидАнимедиа(ВидЗона):
             pager = self._листалка_эпизодов(1, pages) if pages > 1 else ""
             куски.append(
                 '<section class="zsec zsec--eps ahome-eps"><div class="zsec__h">'
-                '<h2>Новые серии аниме</h2>'
-                '<a href="/new/">Все эпизоды</a></div>'
+                f'<h2>{АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК}</h2>'
+                '<a href="/new/?page=1">Все добавленные</a></div>'
                 f'{feed}{pager}</section>')
         куски.append('<div class="zad-mid" data-ad-slot="home-mid-content" data-ad-enabled="0"></div>')
         # Drop first-shelf items already shown in hero to avoid viewport duplicates.
@@ -5345,10 +5352,11 @@ class ВидАнимедиа(ВидЗона):
                 + (f'<nav class="zgenres__nav" aria-label="Жанры">{genres}</nav>' if genres else ""))
 
     def _эпизод_события(self) -> list[dict]:
-        """Eligible episode announcement events — one per title (latest avail).
+        """Catalog-publish rows with latest available episode — not air dates.
 
-        Timestamp = catalog ``published_at`` (source-backed). Episode air times
-        are absent from the snapshot; they are never invented.
+        Each row is one title with ``details.seasons[].avail`` ≥ 1. Timestamp is
+        catalog ``published_at`` (title add/update). True episode-air events are
+        absent (``АНИМЕДИА_EPISODE_EVENT_DATA_GAP=1``); never invent air times.
         """
         events = []
         seen = set()
@@ -5397,6 +5405,8 @@ class ВидАнимедиа(ВидЗона):
                 "source_episode_id": source_episode_id,
                 "published_at": published,
                 "published_at_precision": precision,
+                "event_kind": "catalog_publish",
+                "timestamp_semantics": "catalog.items[].published_at (title add/update; not episode air)",
                 "source_updated_at": str(з.get("updated_at") or ""),
                 "poster": з.get("poster") or "",
                 "playable_state": "playable" if det.get("playable") is True else "unknown",
@@ -5468,10 +5478,15 @@ class ВидАнимедиа(ВидЗона):
         ts = _аниме_формат_времени_анонса(
             row.get("published_at") or "",
             row.get("published_at_precision") or "none")
-        meta = ts  # do not mix title year into episode-time slot
+        # Honest label: catalog publish time is not an episode air clock.
+        if ts:
+            meta = f"Добавлено · {ts}"
+        else:
+            meta = "Добавлено"
         return (
             f'<a class="aeps__row" href="{html.escape(row["url"])}" '
-            f'data-event-id="{html.escape(row.get("event_id") or "")}">'
+            f'data-event-id="{html.escape(row.get("event_id") or "")}" '
+            f'data-event-kind="{html.escape(row.get("event_kind") or "catalog_publish")}">'
             f'<span class="aeps__thumb">{изо}</span>'
             f'<span class="aeps__body"><span class="aeps__title">{html.escape(row["title"])}</span>'
             f'<span class="aeps__meta">{html.escape(meta)}</span></span>'
@@ -5488,24 +5503,24 @@ class ВидАнимедиа(ВидЗона):
             return self.не_найдено("/new/")
         self._http_status = 200
         if not events:
-            тело = ('<div class="zwrap ahome-eps"><h1 class="zh">Новые серии аниме</h1>'
-                    '<div class="zempty"><b>Новых серий пока нет</b>'
+            тело = (f'<div class="zwrap ahome-eps"><h1 class="zh">{АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК}</h1>'
+                    '<div class="zempty"><b>Пока пусто</b>'
                     "<p>В каталоге нет сериалов с доступными сериями.</p></div></div>")
             self._http_status = 200
-            return self.оболочка(тело, f"Новые серии — {self.имя}", "/new/",
+            return self.оболочка(тело, f"{АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК} — {self.имя}", "/new/",
                                  актив="/new/",
-                                 описание="Новые серии аниме с доступным просмотром.")
+                                 описание=АНИМЕДИА_ЭПИЗОД_ПОДПИСЬ)
         кусок = events[(стр - 1) * per: стр * per]
         сетка = '<div class="aeps">' + "".join(self._разметка_эпизод_ряда(r) for r in кусок) + "</div>"
         листалка = self._листалка_эпизодов(стр, всего)
         канон = "/new/" if стр == 1 else f"/new/?page={стр}"
-        тело = (f'<div class="zwrap ahome-eps"><h1 class="zh">Новые серии аниме</h1>'
-                f'<p class="zsub">Анонсы доступных серий · страница {стр} из {всего}'
-                f' · всего {len(events)}</p>'
+        тело = (f'<div class="zwrap ahome-eps"><h1 class="zh">{АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК}</h1>'
+                f'<p class="zsub">{html.escape(АНИМЕДИА_ЭПИЗОД_ПОДПИСЬ)} '
+                f'Страница {стр} из {всего} · всего {len(events)}.</p>'
                 + сетка + листалка + "</div>")
-        return self.оболочка(тело, f"Новые серии — {self.имя}", канон,
+        return self.оболочка(тело, f"{АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК} — {self.имя}", канон,
                              актив="/new/",
-                             описание="Новые серии аниме с доступным просмотром.")
+                             описание=АНИМЕДИА_ЭПИЗОД_ПОДПИСЬ)
 
     def поиск(self, зпр: dict) -> str:
         """Поиск. Пустая выдача объясняется тем же и теми же словами."""
