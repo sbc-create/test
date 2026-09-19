@@ -57,17 +57,24 @@ def _probe_state(page) -> dict:
       const shell = vp && vp.shadowRoot && vp.shadowRoot.querySelector('iframe,video');
       const overlayText = st && !st.hidden ? (st.innerText||'') : '';
       const falseFailure = !!(st && !st.hidden &&
-        /Плеер не поднялся|Ошибка плеера/.test(overlayText));
+        /Плеер не поднялся|Ошибка плеера|Провайдер не отдал/.test(overlayText));
+      let overlayPainted=false;
+      if(st){
+        const cs=getComputedStyle(st);
+        overlayPainted = cs.display!=='none' && cs.visibility!=='hidden' && cs.opacity!=='0'
+          && !!(st.innerText||'').trim();
+      }
       return {
         state: f && f.getAttribute('data-state'),
         overlayVisible: !!(st && !st.hidden),
+        overlayPainted: overlayPainted,
         overlayText: overlayText.slice(0,200),
         vpHidden: !!(vp && vp.hidden),
         hasShell: !!shell,
         iframeSrc: shell && shell.tagName==='IFRAME' ? (shell.src||'').slice(0,120) : '',
         currentTime: ct,
         paused: paused,
-        falseFailure: falseFailure,
+        falseFailure: falseFailure || (overlayPainted && /Плеер не|Ошибка плеера|Провайдер не/.test(overlayText)),
         playback: window.__animediaPlayback || window.__zonaPlayerReady || null
       };
     }"""
