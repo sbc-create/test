@@ -1,0 +1,18 @@
+{
+  "build": "20260919T172526Z-ac925674-nova",
+  "state": "playing",
+  "label": "воспроизведение",
+  "stHidden": true,
+  "stDisplay": "none",
+  "ACTUAL_PROGRESS": true,
+  "VISIBLE_UNAVAILABLE_OVERLAY": false,
+  "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+  "ACTIVE_PLAYER_COUNT": 1,
+  "zp": {
+    "generation": 1,
+    "attempt": 1,
+    "event": "pm.timeupdate3",
+    "pos": 34.066103,
+    "at": 1789838971837
+  }
+}

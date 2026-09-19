@@ -1,0 +1,4 @@
+8ebfdca925fcece60a3c321c305cb97142dff595ebb08f6e47bb504c2a6c6e63
+ac925674fb47aa9124ae7ef2a727e7af6d13e0f7
+20260919T172526Z-ac925674-nova
+/srv/lords/.frontend/.rollback/20260919T172526Z-zona-01-pass3

@@ -1,0 +1,23 @@
+{
+  "hrefs": [
+    "/",
+    "/new/",
+    "/movies/",
+    "/series/",
+    "/animation/",
+    "/collections/",
+    "/catalog/",
+    "/search/"
+  ],
+  "results": {
+    "/": 200,
+    "/new/": 200,
+    "/movies/": 200,
+    "/series/": 200,
+    "/animation/": 200,
+    "/collections/": 200,
+    "/catalog/": 200,
+    "/search/": 200
+  },
+  "CONTACT_CONFIG_MISSING": 1
+}

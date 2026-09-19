@@ -1,0 +1,27 @@
+{
+  "box": {
+    "x": 720,
+    "y": 749.734375,
+    "w": 1200,
+    "h": 675,
+    "state": "ready"
+  },
+  "info": {
+    "build": "20260919T160708Z-06a8250d-nova",
+    "state": "playing",
+    "label": "воспроизведение",
+    "stHidden": true,
+    "stAttr": "",
+    "stDisplay": "grid",
+    "stVisibility": "visible",
+    "stText": "Видео временно недоступно\n\nПопробуйте другую озвучку или вернитесь позже.",
+    "stClass": "zpl__s",
+    "zonaPlaying": {
+      "token": 1,
+      "event": "pm.timeupdate3",
+      "pos": 6.594776,
+      "at": 1789836854416
+    },
+    "iframeCount": 0
+  }
+}

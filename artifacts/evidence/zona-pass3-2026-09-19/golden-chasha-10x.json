@@ -1,0 +1,447 @@
+{
+  "runs": 10,
+  "passed": 10,
+  "failed": 0,
+  "results": [
+    {
+      "run": 1,
+      "href": "/title/chasha-vesny/season-1/episode-1/",
+      "switch_ok": true,
+      "info": {
+        "build": "20260919T170323Z-1b179263-nova",
+        "state": "playing",
+        "label": "воспроизведение",
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 38.099914,
+          "at": 1789837513196
+        },
+        "stHidden": true,
+        "stDisplay": "none",
+        "stVisibility": "hidden",
+        "stOpacity": "0",
+        "stText": "Видео временно недоступноПопробуйте другую озвучку или вернитесь позже.",
+        "overlayVisible": false,
+        "unavailText": true,
+        "players": 1,
+        "iframes": 0,
+        "ACTUAL_PROGRESS": true,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+        "ACTIVE_PLAYER_COUNT": 1
+      },
+      "after_reload": {
+        "ACTUAL_PROGRESS": true,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "stDisplay": "none",
+        "stHidden": true,
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 10.922472,
+          "at": 1789837531446
+        }
+      },
+      "PASS": true
+    },
+    {
+      "run": 2,
+      "href": "/title/chasha-vesny/season-1/episode-1/",
+      "switch_ok": true,
+      "info": {
+        "build": "20260919T170323Z-1b179263-nova",
+        "state": "playing",
+        "label": "воспроизведение",
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 38.048717,
+          "at": 1789837573322
+        },
+        "stHidden": true,
+        "stDisplay": "none",
+        "stVisibility": "hidden",
+        "stOpacity": "0",
+        "stText": "Видео временно недоступноПопробуйте другую озвучку или вернитесь позже.",
+        "overlayVisible": false,
+        "unavailText": true,
+        "players": 1,
+        "iframes": 0,
+        "ACTUAL_PROGRESS": true,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+        "ACTIVE_PLAYER_COUNT": 1
+      },
+      "after_reload": {
+        "ACTUAL_PROGRESS": true,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "stDisplay": "none",
+        "stHidden": true,
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 10.764263,
+          "at": 1789837591462
+        }
+      },
+      "PASS": true
+    },
+    {
+      "run": 3,
+      "href": "/title/chasha-vesny/season-1/episode-1/",
+      "switch_ok": true,
+      "info": {
+        "build": "20260919T170323Z-1b179263-nova",
+        "state": "playing",
+        "label": "воспроизведение",
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 38.066806,
+          "at": 1789837633774
+        },
+        "stHidden": true,
+        "stDisplay": "none",
+        "stVisibility": "hidden",
+        "stOpacity": "0",
+        "stText": "Видео временно недоступноПопробуйте другую озвучку или вернитесь позже.",
+        "overlayVisible": false,
+        "unavailText": true,
+        "players": 1,
+        "iframes": 0,
+        "ACTUAL_PROGRESS": true,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+        "ACTIVE_PLAYER_COUNT": 1
+      },
+      "after_reload": {
+        "ACTUAL_PROGRESS": true,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "stDisplay": "none",
+        "stHidden": true,
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 10.401213,
+          "at": 1789837651889
+        }
+      },
+      "PASS": true
+    },
+    {
+      "run": 4,
+      "href": "/title/chasha-vesny/season-1/episode-1/",
+      "switch_ok": true,
+      "info": {
+        "build": "20260919T170323Z-1b179263-nova",
+        "state": "playing",
+        "label": "воспроизведение",
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 37.863696,
+          "at": 1789837694244
+        },
+        "stHidden": true,
+        "stDisplay": "none",
+        "stVisibility": "hidden",
+        "stOpacity": "0",
+        "stText": "Видео временно недоступноПопробуйте другую озвучку или вернитесь позже.",
+        "overlayVisible": false,
+        "unavailText": true,
+        "players": 1,
+        "iframes": 0,
+        "ACTUAL_PROGRESS": true,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+        "ACTIVE_PLAYER_COUNT": 1
+      },
+      "after_reload": {
+        "ACTUAL_PROGRESS": true,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "stDisplay": "none",
+        "stHidden": true,
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 10.959449,
+          "at": 1789837712759
+        }
+      },
+      "PASS": true
+    },
+    {
+      "run": 5,
+      "href": "/title/chasha-vesny/season-1/episode-1/",
+      "switch_ok": true,
+      "info": {
+        "build": "20260919T170323Z-1b179263-nova",
+        "state": "playing",
+        "label": "воспроизведение",
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 38.07762,
+          "at": 1789837754696
+        },
+        "stHidden": true,
+        "stDisplay": "none",
+        "stVisibility": "hidden",
+        "stOpacity": "0",
+        "stText": "Видео временно недоступноПопробуйте другую озвучку или вернитесь позже.",
+        "overlayVisible": false,
+        "unavailText": true,
+        "players": 1,
+        "iframes": 0,
+        "ACTUAL_PROGRESS": true,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+        "ACTIVE_PLAYER_COUNT": 1
+      },
+      "after_reload": {
+        "ACTUAL_PROGRESS": true,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "stDisplay": "none",
+        "stHidden": true,
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 10.954205,
+          "at": 1789837773386
+        }
+      },
+      "PASS": true
+    },
+    {
+      "run": 6,
+      "href": "/title/chasha-vesny/season-1/episode-1/",
+      "switch_ok": true,
+      "info": {
+        "build": "20260919T170323Z-1b179263-nova",
+        "state": "playing",
+        "label": "воспроизведение",
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 38.089743,
+          "at": 1789837815352
+        },
+        "stHidden": true,
+        "stDisplay": "none",
+        "stVisibility": "hidden",
+        "stOpacity": "0",
+        "stText": "Видео временно недоступноПопробуйте другую озвучку или вернитесь позже.",
+        "overlayVisible": false,
+        "unavailText": true,
+        "players": 1,
+        "iframes": 0,
+        "ACTUAL_PROGRESS": true,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+        "ACTIVE_PLAYER_COUNT": 1
+      },
+      "after_reload": {
+        "ACTUAL_PROGRESS": true,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "stDisplay": "none",
+        "stHidden": true,
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 10.94061,
+          "at": 1789837834227
+        }
+      },
+      "PASS": true
+    },
+    {
+      "run": 7,
+      "href": "/title/chasha-vesny/season-1/episode-1/",
+      "switch_ok": true,
+      "info": {
+        "build": "20260919T170323Z-1b179263-nova",
+        "state": "playing",
+        "label": "воспроизведение",
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 38.086289,
+          "at": 1789837876166
+        },
+        "stHidden": true,
+        "stDisplay": "none",
+        "stVisibility": "hidden",
+        "stOpacity": "0",
+        "stText": "Видео временно недоступноПопробуйте другую озвучку или вернитесь позже.",
+        "overlayVisible": false,
+        "unavailText": true,
+        "players": 1,
+        "iframes": 0,
+        "ACTUAL_PROGRESS": true,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+        "ACTIVE_PLAYER_COUNT": 1
+      },
+      "after_reload": {
+        "ACTUAL_PROGRESS": true,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "stDisplay": "none",
+        "stHidden": true,
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 10.875232,
+          "at": 1789837894727
+        }
+      },
+      "PASS": true
+    },
+    {
+      "run": 8,
+      "href": "/title/chasha-vesny/season-1/episode-1/",
+      "switch_ok": true,
+      "info": {
+        "build": "20260919T170323Z-1b179263-nova",
+        "state": "playing",
+        "label": "воспроизведение",
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 37.932471,
+          "at": 1789837936571
+        },
+        "stHidden": true,
+        "stDisplay": "none",
+        "stVisibility": "hidden",
+        "stOpacity": "0",
+        "stText": "Видео временно недоступноПопробуйте другую озвучку или вернитесь позже.",
+        "overlayVisible": false,
+        "unavailText": true,
+        "players": 1,
+        "iframes": 0,
+        "ACTUAL_PROGRESS": true,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+        "ACTIVE_PLAYER_COUNT": 1
+      },
+      "after_reload": {
+        "ACTUAL_PROGRESS": true,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "stDisplay": "none",
+        "stHidden": true,
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 10.964705,
+          "at": 1789837955243
+        }
+      },
+      "PASS": true
+    },
+    {
+      "run": 9,
+      "href": "/title/chasha-vesny/season-1/episode-1/",
+      "switch_ok": true,
+      "info": {
+        "build": "20260919T170323Z-1b179263-nova",
+        "state": "playing",
+        "label": "воспроизведение",
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 38.142182,
+          "at": 1789837997197
+        },
+        "stHidden": true,
+        "stDisplay": "none",
+        "stVisibility": "hidden",
+        "stOpacity": "0",
+        "stText": "Видео временно недоступноПопробуйте другую озвучку или вернитесь позже.",
+        "overlayVisible": false,
+        "unavailText": true,
+        "players": 1,
+        "iframes": 0,
+        "ACTUAL_PROGRESS": true,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+        "ACTIVE_PLAYER_COUNT": 1
+      },
+      "after_reload": {
+        "ACTUAL_PROGRESS": true,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "stDisplay": "none",
+        "stHidden": true,
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 10.874023,
+          "at": 1789838015258
+        }
+      },
+      "PASS": true
+    },
+    {
+      "run": 10,
+      "href": "/title/chasha-vesny/season-1/episode-1/",
+      "switch_ok": true,
+      "info": {
+        "build": "20260919T170323Z-1b179263-nova",
+        "state": "playing",
+        "label": "воспроизведение",
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 37.937164,
+          "at": 1789838057059
+        },
+        "stHidden": true,
+        "stDisplay": "none",
+        "stVisibility": "hidden",
+        "stOpacity": "0",
+        "stText": "Видео временно недоступноПопробуйте другую озвучку или вернитесь позже.",
+        "overlayVisible": false,
+        "unavailText": true,
+        "players": 1,
+        "iframes": 0,
+        "ACTUAL_PROGRESS": true,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+        "ACTIVE_PLAYER_COUNT": 1
+      },
+      "after_reload": {
+        "ACTUAL_PROGRESS": true,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "stDisplay": "none",
+        "stHidden": true,
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 10.915138,
+          "at": 1789838075165
+        }
+      },
+      "PASS": true
+    }
+  ]
+}
