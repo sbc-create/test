@@ -4,7 +4,7 @@
 - WORKTREE `/home/claude/wt-animedia-finalization-01`
 - BRANCH `claude/animedia-template-finalization-01`
 - START_HEAD `f7b40e046a7d659f4b8c3131ca919307442cf7d2` (exact match)
-- FINAL_HEAD `9d6df298e1930c519ad6a28d7b19fa1ee0456ad9`
+- FINAL_HEAD `66a13e4b69f9de88677f1356eb04d9f47f5655d0`
 
 ## Root cause
 Hard `предел=12` on home and `предел=240` / `per=24` on `/new/`, with no home pager.
@@ -44,7 +44,7 @@ Timestamp was raw catalog `published_at` date slice. See `ROOT_CAUSE.md`.
 VERDICT=PASS
 BRANCH=claude/animedia-template-finalization-01
 START_HEAD=f7b40e046a7d659f4b8c3131ca919307442cf7d2
-FINAL_HEAD=9d6df298e1930c519ad6a28d7b19fa1ee0456ad9
+FINAL_HEAD=66a13e4b69f9de88677f1356eb04d9f47f5655d0
 COMMITS=4
 TESTS=54+ unit (home pagination + prior animedia gates)
 LIVE_BUILD_ICU=20260919T201809Z-7cb7c901-nova
