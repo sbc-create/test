@@ -2027,6 +2027,7 @@ align-items:baseline;justify-content:space-between;gap:10px}
 .zpl__s,.zpl [data-player-state]{position:absolute;inset:0;display:grid;
 place-items:center;padding:16px;text-align:center;color:@INK@;font-size:13px;
 line-height:1.45;background:#f7f7f7}
+.zpl [data-player-state][hidden],.zpl__s[hidden]{display:none !important}
 .zpl [data-player-state] b{display:block;font-size:15px;margin-bottom:6px}
 .zpl [data-player-state] p{margin:0;max-width:36ch;color:@DIM@}
 
@@ -2469,14 +2470,22 @@ def разметка_плеера(вид, запись: dict, деталь: dict
   var root=node && node.shadowRoot; if(!root) return null;
   return root.querySelector('video');
  }
+ function hideOverlay(){
+  if(!st) return;
+  st.hidden=true;
+  st.setAttribute('hidden','');
+  st.style.display='none';
+  st.innerHTML='';
+ }
  function showOverlay(t,p){
   if(!st) return;
   st.hidden=false;
+  st.removeAttribute('hidden');
+  st.style.display='';
   st.innerHTML='<b></b><p></p>';
   st.firstChild.textContent=t;
   st.lastChild.textContent=p;
  }
- function hideOverlay(){ if(st) st.hidden=true; }
  function state(k,t,p){
   if(отказ&&k==='ok') return;
   /* Hard failures hide the component. Soft/active states never cover a live iframe. */

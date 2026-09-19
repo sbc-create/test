@@ -301,3 +301,10 @@ def test_home_css_locks_hero_card_width():
     assert "flex:0 0 154px" in text
     assert ".ahero" in text and "max-height:300px" in text
     assert "grid-template-columns:250px minmax(0,1fr) 150px" in text
+
+
+def test_player_overlay_hidden_css_not_overridden():
+    text = (HOST / "lords-frontend.py").read_text(encoding="utf-8")
+    assert "[data-player-state][hidden]" in text
+    assert "display:none !important" in text
+    assert "st.style.display='none'" in text
