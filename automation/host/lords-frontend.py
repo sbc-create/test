@@ -1796,12 +1796,14 @@ display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hi
 background:var(--a-acc);color:#fff;overflow:hidden;max-height:300px;box-sizing:border-box}
 .ahero .zrl__vp{padding-bottom:2px;scrollbar-width:none}
 .ahero .zrl__vp::-webkit-scrollbar{display:none}
-.ahero .zrl__track{gap:13px}
-.ahero .zrl__track>*{flex:0 0 152px;width:152px;max-width:152px;scroll-snap-align:start}
+.ahero .zrl__track{gap:13px;align-items:flex-start}
+.ahero .zrl__track>*{flex:0 0 152px;width:152px;min-width:152px;max-width:152px;scroll-snap-align:start}
+.ahero .zt{width:152px;max-width:152px;flex:0 0 auto}
 @media(max-width:767px){
   .ahero{margin-bottom:16px;max-height:260px;padding:10px}
   .ahero .zrl__track{gap:12px}
-  .ahero .zrl__track>*{flex:0 0 112px;width:112px;max-width:112px}
+  .ahero .zrl__track>*{flex:0 0 112px;width:112px;min-width:112px;max-width:112px}
+  .ahero .zt{width:112px;max-width:112px}
 }
 .ahero .zt{background:transparent;border:0;box-shadow:none;color:#fff;height:auto;max-height:280px}
 .ahero .zt:hover{opacity:.92;box-shadow:none;border:0;transform:none}

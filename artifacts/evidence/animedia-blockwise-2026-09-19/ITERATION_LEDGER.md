@@ -17,3 +17,16 @@
 
 - HEADER: desktop 69px in 64–72; mobile 57 in 52–58; overlap 0; overflow 0; touch 44×44; menu overlay keeps bar ≤58 → 94
 - THEME: early theme=dark before paint; persistence light across reload; prefers-color-scheme boot; no invert filters; distinct dark palette → 93
+
+## BLOCK_02 attempt 1 → PASS
+
+| Step | Result |
+| --- | --- |
+| reference audit | amd.online top carousel ~153×214; compact band |
+| before geometry | `raw/BLOCK_02_BEFORE_GEOMETRY.json` + live/local/reference crops |
+| defects | theoretical flex stretch; need min-width lock |
+| repair | `.ahero` track `align-items:flex-start`; card `min-width:152px`; `.zt` fixed width desktop/mobile |
+| unit tests | `test_animedia_block_02_top_shelf.py` + related: 13 passed |
+| local browser | all 15 gates true (`raw/BLOCK_02_AFTER_LOCAL_GEOMETRY.json`) |
+| scores | TOP_SHELF_SCORE=96 |
+| commit | pending |

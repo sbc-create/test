@@ -1,0 +1,886 @@
+{
+  "local": {
+    "1363_light": {
+      "shelfH": 280.5,
+      "shelfW": 1267,
+      "cardCount": 12,
+      "visibleApprox": 8,
+      "posters": [
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        }
+      ],
+      "uniquePosterW": [
+        152
+      ],
+      "gaps": [
+        13,
+        13,
+        13,
+        13,
+        13
+      ],
+      "titles": [
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 1,
+          "h": 16.3
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 1,
+          "h": 16.3
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 1,
+          "h": 16.3
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        }
+      ],
+      "lastCardStretched": false,
+      "scrollbarWidth": "none",
+      "overflowX": "auto",
+      "pageOverflowX": false,
+      "maxTitleLines": 2,
+      "visibleEmptyMeta": 0,
+      "trackScrollable": true
+    },
+    "1363_dark": {
+      "shelfH": 280.5,
+      "shelfW": 1267,
+      "cardCount": 12,
+      "visibleApprox": 8,
+      "posters": [
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        }
+      ],
+      "uniquePosterW": [
+        152
+      ],
+      "gaps": [
+        13,
+        13,
+        13,
+        13,
+        13
+      ],
+      "titles": [
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 1,
+          "h": 16.3
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 1,
+          "h": 16.3
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 1,
+          "h": 16.3
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        }
+      ],
+      "lastCardStretched": false,
+      "scrollbarWidth": "none",
+      "overflowX": "auto",
+      "pageOverflowX": false,
+      "maxTitleLines": 2,
+      "visibleEmptyMeta": 0,
+      "trackScrollable": true
+    },
+    "1440_light": {
+      "shelfH": 280.5,
+      "shelfW": 1344,
+      "cardCount": 12,
+      "visibleApprox": 9,
+      "posters": [
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        }
+      ],
+      "uniquePosterW": [
+        152
+      ],
+      "gaps": [
+        13,
+        13,
+        13,
+        13,
+        13
+      ],
+      "titles": [
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 1,
+          "h": 16.3
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 1,
+          "h": 16.3
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 1,
+          "h": 16.3
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        }
+      ],
+      "lastCardStretched": false,
+      "scrollbarWidth": "none",
+      "overflowX": "auto",
+      "pageOverflowX": false,
+      "maxTitleLines": 2,
+      "visibleEmptyMeta": 0,
+      "trackScrollable": true
+    },
+    "1440_dark": {
+      "shelfH": 280.5,
+      "shelfW": 1344,
+      "cardCount": 12,
+      "visibleApprox": 9,
+      "posters": [
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        }
+      ],
+      "uniquePosterW": [
+        152
+      ],
+      "gaps": [
+        13,
+        13,
+        13,
+        13,
+        13
+      ],
+      "titles": [
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 1,
+          "h": 16.3
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 1,
+          "h": 16.3
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 1,
+          "h": 16.3
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        }
+      ],
+      "lastCardStretched": false,
+      "scrollbarWidth": "none",
+      "overflowX": "auto",
+      "pageOverflowX": false,
+      "maxTitleLines": 2,
+      "visibleEmptyMeta": 0,
+      "trackScrollable": true
+    },
+    "390_light": {
+      "shelfH": 220.5,
+      "shelfW": 366,
+      "cardCount": 12,
+      "visibleApprox": 3,
+      "posters": [
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        }
+      ],
+      "uniquePosterW": [
+        112
+      ],
+      "gaps": [
+        12,
+        12,
+        12,
+        12,
+        12
+      ],
+      "titles": [
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        }
+      ],
+      "lastCardStretched": false,
+      "scrollbarWidth": "none",
+      "overflowX": "auto",
+      "pageOverflowX": false,
+      "maxTitleLines": 2,
+      "visibleEmptyMeta": 0,
+      "trackScrollable": true
+    },
+    "390_dark": {
+      "shelfH": 220.5,
+      "shelfW": 366,
+      "cardCount": 12,
+      "visibleApprox": 3,
+      "posters": [
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        },
+        {
+          "w": 112,
+          "h": 158
+        }
+      ],
+      "uniquePosterW": [
+        112
+      ],
+      "gaps": [
+        12,
+        12,
+        12,
+        12,
+        12
+      ],
+      "titles": [
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        }
+      ],
+      "lastCardStretched": false,
+      "scrollbarWidth": "none",
+      "overflowX": "auto",
+      "pageOverflowX": false,
+      "maxTitleLines": 2,
+      "visibleEmptyMeta": 0,
+      "trackScrollable": true
+    },
+    "768_light": {
+      "shelfH": 280.5,
+      "shelfW": 724,
+      "cardCount": 12,
+      "visibleApprox": 5,
+      "posters": [
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        }
+      ],
+      "uniquePosterW": [
+        152
+      ],
+      "gaps": [
+        13,
+        13,
+        13,
+        13,
+        13
+      ],
+      "titles": [
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 1,
+          "h": 16.3
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 1,
+          "h": 16.3
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 1,
+          "h": 16.3
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        }
+      ],
+      "lastCardStretched": false,
+      "scrollbarWidth": "none",
+      "overflowX": "auto",
+      "pageOverflowX": false,
+      "maxTitleLines": 2,
+      "visibleEmptyMeta": 0,
+      "trackScrollable": true
+    },
+    "768_dark": {
+      "shelfH": 280.5,
+      "shelfW": 724,
+      "cardCount": 12,
+      "visibleApprox": 5,
+      "posters": [
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        },
+        {
+          "w": 152,
+          "h": 214
+        }
+      ],
+      "uniquePosterW": [
+        152
+      ],
+      "gaps": [
+        13,
+        13,
+        13,
+        13,
+        13
+      ],
+      "titles": [
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 1,
+          "h": 16.3
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 1,
+          "h": 16.3
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 1,
+          "h": 16.3
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        },
+        {
+          "lines": 2,
+          "h": 32.5
+        }
+      ],
+      "lastCardStretched": false,
+      "scrollbarWidth": "none",
+      "overflowX": "auto",
+      "pageOverflowX": false,
+      "maxTitleLines": 2,
+      "visibleEmptyMeta": 0,
+      "trackScrollable": true
+    }
+  },
+  "controls": {
+    "btn_before": 0,
+    "btn_after": 724,
+    "btn_moved": true,
+    "kbd_after": 724,
+    "kbd_moved": true,
+    "native_scroll": true
+  },
+  "gates": {
+    "poster_w_in_140_152": true,
+    "uniform_widths": true,
+    "shelf_h_le_300": true,
+    "shelf_not_half_viewport": true,
+    "max_title_lines_le_2": true,
+    "no_last_stretch": true,
+    "no_page_overflow_x": true,
+    "scrollbar_none": true,
+    "btn_scroll_works": true,
+    "kbd_or_native_scroll": true,
+    "visible_ge_6_desktop": true,
+    "empty_meta_hidden": true,
+    "track_scrollable": true,
+    "mobile_uniform": true,
+    "mobile_shelf_compact": true
+  },
+  "TOP_SHELF_SCORE": 100
+}
