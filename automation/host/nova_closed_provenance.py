@@ -26,18 +26,17 @@ class ClosedSiteProvenance(TypedDict):
     runtime_repo: str
 
 
-# Runtime tip is filled by the applying worktree after commit (see apply script).
-# Placeholder values are overwritten by apply-nova-closed-update when REPO is set.
+# source_commit per family; RUNTIME_COMMIT filled after Animedia frontend commit.
 LORDS_COMMIT = "5fc22310fdfb8f0c8748f69e5603e4de3267f27e"
-ANIMEDIA_COMMIT = "b023bd50cced8d281cb3814a75bf72b429afee0b"
-ZONA_COMMIT = "a10e68b2350a020a2f7d5efe28cd98ef2fc89edd"
+ANIMEDIA_COMMIT = "PLACEHOLDER_ANIMEDIA_HEAD"
+ZONA_COMMIT = "bcbea00877708c7f930f1fe931a17f66decafed5"
 
 REPO_LORDS = "/home/claude/wt-lords-integration-canary-01"
 REPO_ANIMEDIA = "/home/claude/wt-animedia-finalization-01"
 REPO_ZONA = "/home/claude/wt-zona-finalization-01"
 
-# После Animedia final repair общий рантайм принадлежит этому worktree
-# (superset live 5fc2231 + Animedia profile-gated fixes).
+# Shared lords-frontend.py tip lives in this worktree (superset of live
+# zona runtime 2d6d1695 / artifact 14ce882d + Animedia profile-gated repair).
 RUNTIME_COMMIT = ANIMEDIA_COMMIT
 RUNTIME_REPO = REPO_ANIMEDIA
 

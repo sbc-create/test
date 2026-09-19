@@ -90,6 +90,18 @@ def main() -> int:
     art = sha256(frontend_src)
     when = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
 
+    # Штатный factory lock: сериализация shared-frontend closed-update.
+    from factory.locks import LockBusy, site_lock
+
+    try:
+        with site_lock("nova-closed-frontend", "production", timeout=0.0):
+            return _apply_body(dry, sites, frontend_src, art, when)
+    except LockBusy as busy:
+        say(f"WAITING_FOR_DEPLOY_LOCK: {busy}")
+        return 75
+
+
+def _apply_body(dry, sites, frontend_src, art, when) -> int:
     # Frontend ставится один раз и только из runtime-repo. Профильный Zona
     # worktree не перезаписывает общий рантайм.
     install_on = None
