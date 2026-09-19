@@ -3821,7 +3821,7 @@ class ВидЗона(Вид):
             фильтры += f'<span class="zfilt__y">{годы}</span>'
         тело = (f'<div class="zwrap"><h1 class="zh">{html.escape(титул)}</h1>'
                 f'<p class="zsub">Найдено {len(набор)} · страница {стр} из {всего}</p>'
-                + (self.лента(кусок) if кусок else
+                + (self.плитки(кусок) if кусок else
                    '<div class="zempty"><b>Ничего не подошло</b>'
                    "<p>Под выбранные условия не попала ни одна запись.</p></div>")
                 + self.листалка(разд, выбрано, стр, всего) + "</div>")
@@ -3848,7 +3848,7 @@ class ВидЗона(Вид):
                     '<a href="/catalog/">Открыть каталог целиком</a></p></div>')
         elif найдено:
             тело = (f'<h1 class="zh">«{html.escape(q)}»</h1>'
-                    f'<p class="zsub">Совпадений: {len(найдено)}</p>' + self.лента(найдено))
+                    f'<p class="zsub">Совпадений: {len(найдено)}</p>' + self.плитки(найдено))
         else:
             тело = (f'<h1 class="zh">«{html.escape(q)}»</h1>'
                     '<div class="zempty"><b>Совпадений нет</b>'
