@@ -1562,8 +1562,9 @@ border-bottom:2px solid @ACC@}
 .zhd__in{max-width:100%;margin:0 auto;padding:10px 6px;display:flex;
 align-items:center;gap:8px;flex-wrap:wrap;min-height:0}
 @media(min-width:768px){.zhd__in{padding:10px 1px;min-height:90px;flex-wrap:nowrap;gap:10px}}
-.zhd__logo{font-size:22px;font-weight:800;letter-spacing:-.4px;color:@ACC@;
+.zhd__logo{font-size:22px;font-weight:800;letter-spacing:-.4px;color:@INK@;
 white-space:nowrap;flex:0 0 auto}
+.zhd__logo b{color:@ACC@;font-weight:800}
 .zhd__menu{display:inline-flex;align-items:center;justify-content:center;
 width:40px;height:40px;border:1px solid @LINE@;border-radius:4px;
 background:@PAGE@;color:@INK@;font-size:20px;line-height:1;cursor:pointer;
@@ -1717,6 +1718,40 @@ border-bottom:1px solid @LINE@;font-size:12.5px}
 margin:14px 0 0;min-height:170px;max-height:240px}
 .zban__img{position:absolute;inset:0;opacity:.5}
 .zban__img img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* Верхняя карусель главной (amd.online: акцентная лента постеров). Только
+   реальные карточки снимка — без выдуманных тайтлов и без чужих CTA. */
+.ahero{margin:10px 0 16px;padding:14px 8px 10px;border-radius:4px;
+background:@ACC@;color:#fff;overflow:hidden}
+.ahero .zrl__vp{padding-bottom:4px}
+.ahero .zrl__track{gap:12px}
+.ahero .zrl__track>*{flex:0 0 118px}
+@media(min-width:768px){.ahero{padding:18px 12px 14px}
+.ahero .zrl__track>*{flex-basis:140px}}
+@media(min-width:1440px){.ahero .zrl__track>*{flex-basis:156px}}
+.ahero .zt{background:transparent;border:0;border-radius:0;box-shadow:none;color:#fff}
+.ahero .zt:hover{border:0;box-shadow:none;opacity:.92}
+.ahero .zt__p{border-radius:2px;aspect-ratio:86/100;background:rgba(0,0,0,.18)}
+.ahero .zt__b{padding:6px 2px 0}
+.ahero .zt__t{color:#fff;font-size:12.5px;-webkit-line-clamp:2}
+.ahero .zt__m,.ahero .zt__r{display:none}
+.ahero .zrl__btn{background:rgba(255,255,255,.95);color:@ACC@;border-color:transparent}
+.ahero__cap{display:none}
+
+/* «Новые серии» — список строк как у эталона (без выдуманного времени). */
+.zsec--eps .zl{display:grid;gap:0;grid-template-columns:1fr;
+border:1px solid @LINE@;border-radius:4px;overflow:hidden;background:@PAGE@}
+@media(min-width:900px){.zsec--eps .zl{grid-template-columns:1fr 1fr}}
+.zsec--eps .zr{border:0;border-bottom:1px solid @LINE@;border-radius:0;
+padding:10px 12px;align-items:center}
+.zsec--eps .zr:nth-child(odd){border-right:1px solid @LINE@}
+@media(max-width:899px){.zsec--eps .zr:nth-child(odd){border-right:0}}
+.zsec--eps .zr:last-child{border-bottom:0}
+.zsec--eps .zr__p{aspect-ratio:1/1;border-radius:3px}
+.zsec--eps .zr__t{font-size:14px}
+.zsec--eps .zr__m{font-size:12px}
+.zsec--eps .zr__d{display:none}
+
 .zhead{display:grid;grid-template-columns:1fr;gap:14px;margin:14px 0 6px}
 @media(min-width:768px){.zhead{grid-template-columns:190px 1fr}}
 .zhead__ps{aspect-ratio:86/100;border-radius:4px;overflow:hidden;background:@SURF@;
@@ -3676,12 +3711,32 @@ class ВидАнимедиа(ВидЗона):
                 f'<span class="zt__b"><span class="zt__t">{html.escape(запись["title"])}</span>'
                 f'<span class="zt__m">{html.escape(мета)}</span>{оценка}</span></a>')
 
+    def логотип(self) -> str:
+        """Логотип: хвост «dia» акцентом, как у эталона (без чужой иконки)."""
+        имя = self.имя or "Animedia"
+        if имя.lower().endswith("dia") and len(имя) > 3:
+            база, хвост = имя[:-3], имя[-3:]
+            return (f'<a class="zhd__logo" href="/">{html.escape(база)}'
+                    f"<b>{html.escape(хвост)}</b></a>")
+        return f'<a class="zhd__logo" href="/">{html.escape(имя)}</a>'
+
+    def верхняя_карусель(self, набор) -> str:
+        """Горизонтальная витрина постеров над сетками — ритм amd.online.
+
+        Набор только из снимка каталога. Пустой набор не рисует полосу:
+        красный пустой блок выглядел бы как сломанный герой.
+        """
+        if not набор:
+            return ""
+        return f'<div class="ahero" aria-label="Избранные тайтлы">{self.карусель("hero", набор)}</div>'
+
     def секция(self, ключ: str, титул: str, ссылка: str, набор, пусто: str) -> str:
         """Секция аниме-портала — плотная сетка, а не горизонтальная лента.
 
         На эталоне измерено: сетка в 3 колонки до 1024 и в 4 от 1440 с зазором
         10, и за первый экран видно объём каталога. Лента Zona здесь была бы
-        чужим ритмом.
+        чужим ритмом. Исключение: «Новые серии аниме» — двухколоночный список
+        строк (как список серий на amd), без выдуманного времени выхода.
         """
         # «Онгоинги» / «Сегодня выйдет» источником не наполняются никогда
         # (нет признака ongoing и нет времени выхода). Честный пустой блок
@@ -3693,6 +3748,9 @@ class ВидАнимедиа(ВидЗона):
         ссылка_html = (f'<a href="{закодировать_запрос(ссылка)}">Весь раздел</a>'
                        if ссылка else "")
         шапка = f'<div class="zsec__h"><h2>{html.escape(титул)}</h2>{ссылка_html}</div>'
+        if набор and ключ in {"new_episodes", "new-episodes"}:
+            тело = self.лента(набор)
+            return f'<section class="zsec zsec--eps">{шапка}{тело}</section>'
         тело = (self.плитки(набор) if набор
                 else f'<div class="zempty"><b>{html.escape(титул)}</b>'
                      f'<p>{html.escape(пусто)}</p></div>')
@@ -3742,7 +3800,7 @@ class ВидАнимедиа(ВидЗона):
 <div class="zs">
 <header class="zhd">
 <div class="zhd__in">
-<a class="zhd__logo" href="/">{html.escape(self.имя)}</a>
+{self.логотип()}
 <form class="zhd__s" action="/search/" method="get" role="search">
 <label class="vh" for="q">Поиск по каталогу аниме</label>
 <input id="q" name="q" placeholder="{html.escape(self.се["поиск"])}">
@@ -3844,6 +3902,23 @@ class ВидАнимедиа(ВидЗона):
         куски = [self.полоса_готовности(),
                  f'<h1 class="zh">{html.escape(self.се["лид"])}</h1>',
                  f'<p class="zsub">В снимке каталога {len(self.д.items)} записей аниме.</p>']
+        # Верхняя карусель — первые постеры из уже собранных лент (без
+        # отдельной выдуманной выборки). Источник = снимок; если лент нет —
+        # полосы нет.
+        герой = []
+        for ключ, _титул, _ссылка, набор, _причина in ленты:
+            for з in набор:
+                if not з.get("poster"):
+                    continue
+                if з["slug"] in {г["slug"] for г in герой}:
+                    continue
+                герой.append(з)
+                if len(герой) >= 12:
+                    break
+            if len(герой) >= 12:
+                break
+        if герой:
+            куски.append(self.верхняя_карусель(герой))
         куски += [self.секция(*л) for л in ленты]
         return self.оболочка(
             _склеить(куски),
