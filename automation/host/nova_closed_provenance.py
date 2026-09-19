@@ -26,8 +26,8 @@ class ClosedSiteProvenance(TypedDict):
     runtime_repo: str
 
 
-# Runtime tip: Lords repair routes/search/home (a0db875).
-LORDS_COMMIT = "a0db875fe420b51a2751758d1ac90aa266a04a73"
+# Runtime tip: Lords repair + matrix year-suffix (ed8effd).
+LORDS_COMMIT = "ed8effd6b137cde1dd17e42838f1729b92b0bb48"
 ANIMEDIA_COMMIT = "b023bd50cced8d281cb3814a75bf72b429afee0b"
 ZONA_COMMIT = "a10e68b2350a020a2f7d5efe28cd98ef2fc89edd"
 
