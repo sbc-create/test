@@ -1,0 +1,55 @@
+{
+  "LIVE_BUILD": "20260919T224255Z-88cd272f-nova",
+  "ARTIFACT": "128c3f6e439b5b4428716d281696ad70835ecc7858444c2790653fb058b88839",
+  "SOURCE": "88cd272f30b86f9adc97d6fd33f8250e2dfb06f4",
+  "NOINDEX": true,
+  "GRID": {
+    "1920": {
+      "cols": 8,
+      "cw": 176,
+      "posterH": 261,
+      "overflow": false
+    },
+    "1440": {
+      "cols": 7,
+      "cw": 175,
+      "posterH": 260,
+      "overflow": false
+    },
+    "768": {
+      "cols": 4,
+      "cw": 158,
+      "posterH": 233,
+      "overflow": false
+    },
+    "390": {
+      "cols": 2,
+      "cw": 164,
+      "posterH": 243,
+      "overflow": false
+    }
+  },
+  "SHELL_MOBILE": {
+    "headerH": 72,
+    "bodyPadTop": 72,
+    "unused": 0,
+    "noRecentCatalog": true,
+    "noRail": true
+  },
+  "TITLE": {
+    "rail": false,
+    "facts": true,
+    "descOnce": 1,
+    "cols": "342px"
+  },
+  "PLAYER_GOLDEN": "10/10",
+  "ORACLE": {
+    "RAW_CATALOG_COUNT": 53524,
+    "YEAR_2019_COUNT": 2144,
+    "MOVIE_YEAR_FACETS": 92,
+    "YEAR_UI_HINT": 2144,
+    "YEAR_MATCH": true
+  },
+  "CARD_WIDTH_1440": 175,
+  "GRID_OK": true
+}

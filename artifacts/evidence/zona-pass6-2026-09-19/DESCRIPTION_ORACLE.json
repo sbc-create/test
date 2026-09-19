@@ -1,0 +1,235 @@
+{
+  "summary": {
+    "TOTAL_TITLES": 53524,
+    "DESCRIPTION_PRESENT_RAW": 0,
+    "DESCRIPTION_PRESENT_DETAILS": 40210,
+    "DESCRIPTION_PRESENT_AFTER_JOIN": 40210,
+    "DESCRIPTION_RENDERED": 40210,
+    "DESCRIPTION_COVERAGE_PCT": 75.13,
+    "SOURCE_AVAILABLE_NOT_JOINED": 0,
+    "SOURCE_AVAILABLE_NOT_PROJECTED": 0,
+    "SOURCE_AVAILABLE_NOT_RENDERED": 0,
+    "SOURCE_EMPTY": 0,
+    "MALFORMED_DESCRIPTIONS": 0,
+    "TRULY_MISSING": 13314,
+    "EXACT_DUPLICATE_GROUPS": 39,
+    "NEAR_DUPLICATE_GROUPS": 12,
+    "REASON_COUNTS": {
+      "SOURCE_AVAILABLE_PROJECTED": 40210,
+      "TRULY_MISSING": 13314
+    },
+    "SNAPSHOT": {
+      "catalog": "/srv/lords/.frontend/zona-01-catalog.json",
+      "details": "/srv/lords/.frontend/zona-01-details.json",
+      "catalog_count": 53524,
+      "details_total": 53524,
+      "catalog_revision": "fe5e1331eb39f75852a5aa6f2bca132d",
+      "details_revision": "fe5e1331eb39f75852a5aa6f2bca132d"
+    },
+    "GATE_SOURCE_AVAILABLE_NOT_RENDERED": 0,
+    "EXACT_DUPLICATE_GROUPS_LEGITIMATE": 39,
+    "UNEXPLAINED_EXACT_DUPLICATE_GROUPS": 0
+  },
+  "samples": {
+    "truly_missing": [
+      "master-lda-i-plameni-2",
+      "eho-kamera",
+      "vpered-anpanman-davayte-pobedim-korabl-s-privideniyami",
+      "prishedshiy-iz-drevnosti-2",
+      "dikie-yasli-prirody-vospityvaya-novoe-pokolenie",
+      "tikava-tayna-ostrova-rusalok",
+      "istoriya-epohi-seva-film",
+      "proekt-kirameki",
+      "ubiyca-bogov-final",
+      "spisok-nano",
+      "poketun-2025",
+      "poketun-2024",
+      "bog-bogatstva-chzhanlun-dou",
+      "asy-i-malenkaya-lindan",
+      "mificheskie-zveri-6",
+      "zadniy-pereulok-ulicy-guyuy",
+      "absolyutnaya-vershina-boga-voyny",
+      "master-budte-skromnee",
+      "malenkoe-lekarstvo-fei-horoshenkogo-lekarstva",
+      "malenkoe-lekarstvo-fei-horoshenkogo-lekarstva-2",
+      "malenkoe-lekarstvo-fei-horoshenkogo-lekarstva-3",
+      "syunmao-li",
+      "rassekaya-nebosvod",
+      "gintama-istoriya-micuby",
+      "vosem-nebozhiteley",
+      "eto-korol-6",
+      "voennaya-hronika-milenkoy-devochki-2-ona",
+      "kiborg-009-vozmezdie",
+      "silneyshiy-istoriya-yunsyao-li",
+      "den-moego-vozneseniya"
+    ],
+    "not_projected": [],
+    "exact_dup_largest": [
+      [
+        "c6f68260a67a8d196fc5c9dc9b4467e203d3588447b8b68171e99a19160eb58b",
+        [
+          "yami-shibai-yaponskie-rasskazy-o-privideniyah-11",
+          "yami-shibai-yaponskie-rasskazy-o-privideniyah-14",
+          "yami-shibai-yaponskie-rasskazy-o-privideniyah-13",
+          "yami-shibai-yaponskie-rasskazy-o-privideniyah-12"
+        ]
+      ],
+      [
+        "29370114e94ffead23ce1bc1a0d6a88b9228174489d0e93748c1bcfa201fe215",
+        [
+          "sletet-s-katushek-2",
+          "sletet-s-katushek"
+        ]
+      ],
+      [
+        "6d9294647b4b274565e0f0f0f0ceb8c437139e20e617e7e4fda80a19fe5d5975",
+        [
+          "komnata-vozvraschaetsya",
+          "komnata"
+        ]
+      ],
+      [
+        "0598dcad993287dade150c21595408674924807558741f53e39686c344cc514d",
+        [
+          "chernyy-klever-2",
+          "chernyy-klever"
+        ]
+      ],
+      [
+        "5b206cf5c317d9d5e01ae0acecedf18a4943708181aa1aca47936fff01089abe",
+        [
+          "istinnye-chudotvornye-rycari-chast-2",
+          "istinnye-chudotvornye-rycari"
+        ]
+      ],
+      [
+        "a7633b286c277c3d2fac1b589e30226f9bf14ae3016e4bb90a52e5c92236c396",
+        [
+          "blich-tysyacheletnyaya-krovavaya-voyna-bedstvie-2",
+          "blich-tysyacheletnyaya-krovavaya-voyna"
+        ]
+      ],
+      [
+        "5b1e2279476ef9af5f7610905581e555d72a7ebbfe2e6de2167493b828219c78",
+        [
+          "voennaya-hronika-malenkoy-devochki-2",
+          "voennaya-hronika-malenkoy-devochki"
+        ]
+      ],
+      [
+        "76dc3fde070d98fda8499fa0cd48b1793e25d4450fac418a7f25772168d3ae00",
+        [
+          "koroleva-stavshaya-prichinoy-tragedii-sdelaet-dlya-naroda-vse-chto-v-ee-silah-2",
+          "koroleva-stavshaya-prichinoy-tragedii-sdelaet-dlya-naroda-vse-chto-v-ee-silah"
+        ]
+      ],
+      [
+        "8bb09700745c4761f184def10af418c5113a3ed65e6d7253214ffb043c97754d",
+        [
+          "mech-i-zhezl-vistorii-rekap",
+          "za-predelom-proshloe"
+        ]
+      ],
+      [
+        "4c39253e955b35bffe3f6a097f527a583064320a49ccb83a442e838676038237",
+        [
+          "priklyucheniya-vinni-puha",
+          "novye-priklyucheniya-medvezhonka-vinni-i-ego-druzey"
+        ]
+      ]
+    ],
+    "near_dup_largest": [
+      {
+        "near_hash": "b3c9e5ebf0c8f35456f168680ea6590926de8080dffb884f74e0c649b3e54453",
+        "size": 2,
+        "slugs": [
+          "legenda-o-geroe-kondore-iii",
+          "legenda-o-geroe-kondore-ii"
+        ],
+        "exact_hash_count": 2
+      },
+      {
+        "near_hash": "9931f9fd36c8aa2864ce3c7748ca92a7231544886559c7f5f0c1db6c80e4fdba",
+        "size": 2,
+        "slugs": [
+          "plod-pandory-2",
+          "plod-pandory"
+        ],
+        "exact_hash_count": 2
+      },
+      {
+        "near_hash": "c26499cb6d57b9b2c85cc29c68c27eef4525b02ff88354fc9dc2931cabc14ac5",
+        "size": 2,
+        "slugs": [
+          "povelitel-ple-ple-pleyady-3",
+          "povelitel-ple-ple-pleyady-2"
+        ],
+        "exact_hash_count": 2
+      },
+      {
+        "near_hash": "4596a2ce588df7713503911b8b985063b9cff116342fe1d4332d59c9bda4a3f2",
+        "size": 2,
+        "slugs": [
+          "doma-postroennye-v-oktyabre",
+          "doma-postroennye-v-oktyabre-2"
+        ],
+        "exact_hash_count": 2
+      },
+      {
+        "near_hash": "7c4785cb9ae0a69d24e9a01fd5c231d7c93a86b3fe27be6ac4ee381e16b8e38d",
+        "size": 2,
+        "slugs": [
+          "csi-bessmertie",
+          "csi-mesto-prestupleniya"
+        ],
+        "exact_hash_count": 2
+      },
+      {
+        "near_hash": "52703ef6527f36885acd337198ebd97e662eb2bbb6813d3b70a801cdf1aa1c3e",
+        "size": 2,
+        "slugs": [
+          "re-zero-zhizn-s-nulya-v-alternativnom-mire",
+          "re-zero-zhizn-s-nulya-v-drugom-mire-3"
+        ],
+        "exact_hash_count": 2
+      },
+      {
+        "near_hash": "0ef3dbbf0a3181b1038208e97440d566d76b71f4645716e14db8e4a32bd066aa",
+        "size": 2,
+        "slugs": [
+          "zhguchiy-vzor-shany-speshl",
+          "zhguchiy-vzor-shany"
+        ],
+        "exact_hash_count": 2
+      },
+      {
+        "near_hash": "ed07e29b31c15db04def4d155e7ed86f5f073b20a2b586b34f80bc17c3382ff0",
+        "size": 2,
+        "slugs": [
+          "vrata-tam-byutsya-nashi-voiny-ognedyshaschie-drakony",
+          "vrata-tam-byutsya-nashi-voiny"
+        ],
+        "exact_hash_count": 2
+      },
+      {
+        "near_hash": "3ec5b650380227bf45be09de9f4c5e2540d6c5a52026b2079bf9bb1a157bc152",
+        "size": 2,
+        "slugs": [
+          "neuderzhimaya-yunost-2",
+          "doroga-yunosti"
+        ],
+        "exact_hash_count": 2
+      },
+      {
+        "near_hash": "3a23e92e14c626c2f8a9503827425a0224e197d164f36768bfca80f2aeaa7be0",
+        "size": 2,
+        "slugs": [
+          "konstantin-gorod-demonov-2018",
+          "konstantin-gorod-demonov"
+        ],
+        "exact_hash_count": 2
+      }
+    ]
+  },
+  "note": "Full per-title rows omitted from git; MISSING_BY_REASON / EXACT / NEAR CSVs carry inventories. Counts are exhaustive over 53524 titles."
+}
