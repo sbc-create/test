@@ -4103,18 +4103,47 @@ class ВидЗона(Вид):
             return ('<div class="zempty"><b>Подборки недоступны</b>'
                     "<p>Контракт коллекций витрине не передан.</p></div>")
         карточки = []
+        занятые_постеры: set[str] = set()
+        сигнатуры: list[tuple[str, ...]] = []
         for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО):
             if not спец.доступна:
                 continue
             коллекция = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО,
-                                            предел=4)
+                                            предел=48)
             if коллекция is None or not коллекция.items:
                 continue
+            выбранные = []
+            for к in коллекция.items:
+                постер = к.poster or ""
+                if not постер:
+                    continue
+                if постер in занятые_постеры and len(выбранные) < 4:
+                    # Prefer unique collage posters across hub tiles.
+                    continue
+                выбранные.append(к)
+                if len(выбранные) >= 4:
+                    break
+            if len(выбранные) < 4:
+                for к in коллекция.items:
+                    if к in выбранные or not к.poster:
+                        continue
+                    выбранные.append(к)
+                    if len(выбранные) >= 4:
+                        break
+            sig = tuple(к.poster for к in выбранные[:4])
+            if sig and sig in сигнатуры:
+                # Exact duplicate collage — skip tile; full page still exists.
+                continue
+            if sig:
+                сигнатуры.append(sig)
+            for к in выбранные[:4]:
+                if к.poster:
+                    занятые_постеры.add(к.poster)
             обложки = "".join(
                 f'<span class="zhub__p">'
                 f'<img class="zhub__img" src="{html.escape(_адрес_постера(к.poster) or "")}"'
                 f' alt="" loading="lazy" width="120" height="180"></span>'
-                for к in коллекция.items[:4] if к.poster)
+                for к in выбранные[:4] if к.poster)
             карточки.append(
                 f'<a class="zhub__c" href="{html.escape(спец.canonical_path)}">'
                 f'<span class="zhub__g">{обложки}</span>'
