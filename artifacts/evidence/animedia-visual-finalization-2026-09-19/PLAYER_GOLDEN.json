@@ -1,0 +1,488 @@
+{
+  "movies": [
+    "blich-tysyacheletnyaya-krovavaya-voyna-bedstvie",
+    "put-k-serdcu-2",
+    "master-musi-sleduyuschaya-glava-kapli-kolokolchikov",
+    "podnyatie-urovnya-v-odinochku-povtornoe-probuzhdenie",
+    "gintama-final-2021"
+  ],
+  "series": [
+    "graciya-duha",
+    "puteshestvie-k-bessmertiyu-mchas-v-sinhay-prolog",
+    "neyro-nogami-detektiv-iz-ada",
+    "ohotnik-h-ohotnik-2011",
+    "van-pis"
+  ],
+  "false_ready": 0,
+  "false_fail": 2,
+  "overlay_over": 0,
+  "post_restart": {
+    "state": "active",
+    "overlay": 0,
+    "ratio": 1.7777777777777777,
+    "fillW": 1,
+    "fillH": 1
+  },
+  "rows": [
+    {
+      "domain": "animedia.icu",
+      "kind": "movie",
+      "slug": "blich-tysyacheletnyaya-krovavaya-voyna-bedstvie",
+      "pre": {
+        "state": "active",
+        "overlay": 0,
+        "hasHost": true,
+        "hasIframe": true,
+        "hasVideo": false,
+        "ratio": 1.7777777777777777,
+        "fillHint": 1
+      },
+      "post": {
+        "state": "active",
+        "overlay": 0,
+        "playing": false,
+        "ct": 0
+      },
+      "false_ready": 0,
+      "false_fail": 0,
+      "overlay_over": 0
+    },
+    {
+      "domain": "animedia.icu",
+      "kind": "movie",
+      "slug": "put-k-serdcu-2",
+      "pre": {
+        "state": "active",
+        "overlay": 0,
+        "hasHost": true,
+        "hasIframe": true,
+        "hasVideo": false,
+        "ratio": 1.7777777777777777,
+        "fillHint": 1
+      },
+      "post": {
+        "state": "active",
+        "overlay": 0,
+        "playing": false,
+        "ct": 0
+      },
+      "false_ready": 0,
+      "false_fail": 0,
+      "overlay_over": 0
+    },
+    {
+      "domain": "animedia.icu",
+      "kind": "movie",
+      "slug": "master-musi-sleduyuschaya-glava-kapli-kolokolchikov",
+      "pre": {
+        "state": "active",
+        "overlay": 0,
+        "hasHost": true,
+        "hasIframe": true,
+        "hasVideo": false,
+        "ratio": 1.7777777777777777,
+        "fillHint": 1
+      },
+      "post": {
+        "state": "active",
+        "overlay": 0,
+        "playing": false,
+        "ct": 0
+      },
+      "false_ready": 0,
+      "false_fail": 0,
+      "overlay_over": 0
+    },
+    {
+      "domain": "animedia.icu",
+      "kind": "movie",
+      "slug": "podnyatie-urovnya-v-odinochku-povtornoe-probuzhdenie",
+      "pre": {
+        "state": "active",
+        "overlay": 0,
+        "hasHost": true,
+        "hasIframe": true,
+        "hasVideo": false,
+        "ratio": 1.7777777777777777,
+        "fillHint": 1
+      },
+      "post": {
+        "state": "active",
+        "overlay": 0,
+        "playing": false,
+        "ct": 0
+      },
+      "false_ready": 0,
+      "false_fail": 0,
+      "overlay_over": 0
+    },
+    {
+      "domain": "animedia.icu",
+      "kind": "movie",
+      "slug": "gintama-final-2021",
+      "pre": {
+        "state": "active",
+        "overlay": 0,
+        "hasHost": true,
+        "hasIframe": true,
+        "hasVideo": false,
+        "ratio": 1.7777777777777777,
+        "fillHint": 1
+      },
+      "post": {
+        "state": "active",
+        "overlay": 0,
+        "playing": false,
+        "ct": 0
+      },
+      "false_ready": 0,
+      "false_fail": 0,
+      "overlay_over": 0
+    },
+    {
+      "domain": "animedia.icu",
+      "kind": "series",
+      "slug": "graciya-duha",
+      "pre": {
+        "state": "active",
+        "overlay": 0,
+        "hasHost": true,
+        "hasIframe": true,
+        "hasVideo": false,
+        "ratio": 1.7777777777777777,
+        "fillHint": 1
+      },
+      "post": {
+        "state": "active",
+        "overlay": 0,
+        "playing": false,
+        "ct": 0
+      },
+      "false_ready": 0,
+      "false_fail": 0,
+      "overlay_over": 0
+    },
+    {
+      "domain": "animedia.icu",
+      "kind": "series",
+      "slug": "puteshestvie-k-bessmertiyu-mchas-v-sinhay-prolog",
+      "pre": {
+        "state": "active",
+        "overlay": 0,
+        "hasHost": true,
+        "hasIframe": true,
+        "hasVideo": false,
+        "ratio": 1.7777777777777777,
+        "fillHint": 1
+      },
+      "post": {
+        "state": "active",
+        "overlay": 0,
+        "playing": false,
+        "ct": 0
+      },
+      "false_ready": 0,
+      "false_fail": 0,
+      "overlay_over": 0
+    },
+    {
+      "domain": "animedia.icu",
+      "kind": "series",
+      "slug": "neyro-nogami-detektiv-iz-ada",
+      "pre": {
+        "state": "active",
+        "overlay": 0,
+        "hasHost": true,
+        "hasIframe": true,
+        "hasVideo": false,
+        "ratio": 1.7777777777777777,
+        "fillHint": 1
+      },
+      "post": {
+        "state": "active",
+        "overlay": 0,
+        "playing": false,
+        "ct": 0
+      },
+      "false_ready": 0,
+      "false_fail": 0,
+      "overlay_over": 0
+    },
+    {
+      "domain": "animedia.icu",
+      "kind": "series",
+      "slug": "ohotnik-h-ohotnik-2011",
+      "pre": {
+        "state": "active",
+        "overlay": 0,
+        "hasHost": true,
+        "hasIframe": true,
+        "hasVideo": false,
+        "ratio": 1.7777777777777777,
+        "fillHint": 1
+      },
+      "post": {
+        "state": "active",
+        "overlay": 0,
+        "playing": false,
+        "ct": 0
+      },
+      "false_ready": 0,
+      "false_fail": 0,
+      "overlay_over": 0
+    },
+    {
+      "domain": "animedia.icu",
+      "kind": "series",
+      "slug": "van-pis",
+      "pre": {
+        "state": "provider",
+        "overlay": 1,
+        "hasHost": true,
+        "hasIframe": true,
+        "hasVideo": false,
+        "ratio": 1.7777777777777777,
+        "fillHint": 1
+      },
+      "post": {
+        "state": "provider",
+        "overlay": 1,
+        "playing": false,
+        "ct": 0
+      },
+      "false_ready": 0,
+      "false_fail": 1,
+      "overlay_over": 0
+    },
+    {
+      "domain": "animedia.space",
+      "kind": "movie",
+      "slug": "blich-tysyacheletnyaya-krovavaya-voyna-bedstvie",
+      "pre": {
+        "state": "active",
+        "overlay": 0,
+        "hasHost": true,
+        "hasIframe": true,
+        "hasVideo": false,
+        "ratio": 1.7777777777777777,
+        "fillHint": 1
+      },
+      "post": {
+        "state": "active",
+        "overlay": 0,
+        "playing": false,
+        "ct": 0
+      },
+      "false_ready": 0,
+      "false_fail": 0,
+      "overlay_over": 0
+    },
+    {
+      "domain": "animedia.space",
+      "kind": "movie",
+      "slug": "put-k-serdcu-2",
+      "pre": {
+        "state": "active",
+        "overlay": 0,
+        "hasHost": true,
+        "hasIframe": true,
+        "hasVideo": false,
+        "ratio": 1.7777777777777777,
+        "fillHint": 1
+      },
+      "post": {
+        "state": "active",
+        "overlay": 0,
+        "playing": false,
+        "ct": 0
+      },
+      "false_ready": 0,
+      "false_fail": 0,
+      "overlay_over": 0
+    },
+    {
+      "domain": "animedia.space",
+      "kind": "movie",
+      "slug": "master-musi-sleduyuschaya-glava-kapli-kolokolchikov",
+      "pre": {
+        "state": "active",
+        "overlay": 0,
+        "hasHost": true,
+        "hasIframe": true,
+        "hasVideo": false,
+        "ratio": 1.7777777777777777,
+        "fillHint": 1
+      },
+      "post": {
+        "state": "active",
+        "overlay": 0,
+        "playing": false,
+        "ct": 0
+      },
+      "false_ready": 0,
+      "false_fail": 0,
+      "overlay_over": 0
+    },
+    {
+      "domain": "animedia.space",
+      "kind": "movie",
+      "slug": "podnyatie-urovnya-v-odinochku-povtornoe-probuzhdenie",
+      "pre": {
+        "state": "active",
+        "overlay": 0,
+        "hasHost": true,
+        "hasIframe": true,
+        "hasVideo": false,
+        "ratio": 1.7777777777777777,
+        "fillHint": 1
+      },
+      "post": {
+        "state": "active",
+        "overlay": 0,
+        "playing": false,
+        "ct": 0
+      },
+      "false_ready": 0,
+      "false_fail": 0,
+      "overlay_over": 0
+    },
+    {
+      "domain": "animedia.space",
+      "kind": "movie",
+      "slug": "gintama-final-2021",
+      "pre": {
+        "state": "active",
+        "overlay": 0,
+        "hasHost": true,
+        "hasIframe": true,
+        "hasVideo": false,
+        "ratio": 1.7777777777777777,
+        "fillHint": 1
+      },
+      "post": {
+        "state": "active",
+        "overlay": 0,
+        "playing": false,
+        "ct": 0
+      },
+      "false_ready": 0,
+      "false_fail": 0,
+      "overlay_over": 0
+    },
+    {
+      "domain": "animedia.space",
+      "kind": "series",
+      "slug": "graciya-duha",
+      "pre": {
+        "state": "active",
+        "overlay": 0,
+        "hasHost": true,
+        "hasIframe": true,
+        "hasVideo": false,
+        "ratio": 1.7777777777777777,
+        "fillHint": 1
+      },
+      "post": {
+        "state": "active",
+        "overlay": 0,
+        "playing": false,
+        "ct": 0
+      },
+      "false_ready": 0,
+      "false_fail": 0,
+      "overlay_over": 0
+    },
+    {
+      "domain": "animedia.space",
+      "kind": "series",
+      "slug": "puteshestvie-k-bessmertiyu-mchas-v-sinhay-prolog",
+      "pre": {
+        "state": "active",
+        "overlay": 0,
+        "hasHost": true,
+        "hasIframe": true,
+        "hasVideo": false,
+        "ratio": 1.7777777777777777,
+        "fillHint": 1
+      },
+      "post": {
+        "state": "active",
+        "overlay": 0,
+        "playing": false,
+        "ct": 0
+      },
+      "false_ready": 0,
+      "false_fail": 0,
+      "overlay_over": 0
+    },
+    {
+      "domain": "animedia.space",
+      "kind": "series",
+      "slug": "neyro-nogami-detektiv-iz-ada",
+      "pre": {
+        "state": "active",
+        "overlay": 0,
+        "hasHost": true,
+        "hasIframe": true,
+        "hasVideo": false,
+        "ratio": 1.7777777777777777,
+        "fillHint": 1
+      },
+      "post": {
+        "state": "active",
+        "overlay": 0,
+        "playing": false,
+        "ct": 0
+      },
+      "false_ready": 0,
+      "false_fail": 0,
+      "overlay_over": 0
+    },
+    {
+      "domain": "animedia.space",
+      "kind": "series",
+      "slug": "ohotnik-h-ohotnik-2011",
+      "pre": {
+        "state": "active",
+        "overlay": 0,
+        "hasHost": true,
+        "hasIframe": true,
+        "hasVideo": false,
+        "ratio": 1.7777777777777777,
+        "fillHint": 1
+      },
+      "post": {
+        "state": "active",
+        "overlay": 0,
+        "playing": false,
+        "ct": 0
+      },
+      "false_ready": 0,
+      "false_fail": 0,
+      "overlay_over": 0
+    },
+    {
+      "domain": "animedia.space",
+      "kind": "series",
+      "slug": "van-pis",
+      "pre": {
+        "state": "provider",
+        "overlay": 1,
+        "hasHost": true,
+        "hasIframe": true,
+        "hasVideo": false,
+        "ratio": 1.7777777777777777,
+        "fillHint": 1
+      },
+      "post": {
+        "state": "provider",
+        "overlay": 1,
+        "playing": false,
+        "ct": 0
+      },
+      "false_ready": 0,
+      "false_fail": 1,
+      "overlay_over": 0
+    }
+  ]
+}

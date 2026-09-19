@@ -1,0 +1,214 @@
+{
+  "generated_at": "2026-09-19T19:33:02Z",
+  "phase": "AFTER_LIVE",
+  "rows": [
+    {
+      "domain": "animedia.icu",
+      "kind": "home_af",
+      "viewport": "1440x1100",
+      "overflow": 0,
+      "pageH": 7338,
+      "wrapW": 1360,
+      "title": null,
+      "poster": null,
+      "player": null,
+      "episodeCols": 2,
+      "cardDelta": 0
+    },
+    {
+      "domain": "animedia.icu",
+      "kind": "new",
+      "viewport": "1440x1100",
+      "overflow": 0,
+      "pageH": 1753,
+      "wrapW": 1360,
+      "title": null,
+      "poster": null,
+      "player": null,
+      "episodeCols": 2,
+      "cardDelta": 0
+    },
+    {
+      "domain": "animedia.icu",
+      "kind": "catalog",
+      "viewport": "1440x1100",
+      "overflow": 0,
+      "pageH": 4376,
+      "wrapW": 1360,
+      "title": null,
+      "poster": null,
+      "player": null,
+      "episodeCols": 0,
+      "cardDelta": 0
+    },
+    {
+      "domain": "animedia.icu",
+      "kind": "movie_summary",
+      "viewport": "1440x1100",
+      "overflow": 0,
+      "pageH": 2468,
+      "wrapW": 1360,
+      "title": {
+        "w": 1360,
+        "h": 507.171875
+      },
+      "poster": {
+        "w": 240,
+        "h": 360,
+        "ratio": 0.6666666666666666
+      },
+      "player": {
+        "w": 1200,
+        "h": 675,
+        "ratio": 1.7777777777777777
+      },
+      "episodeCols": 0,
+      "cardDelta": 0
+    },
+    {
+      "domain": "animedia.icu",
+      "kind": "episodic_summary",
+      "viewport": "1440x1100",
+      "overflow": 0,
+      "pageH": 2546,
+      "wrapW": 1360,
+      "title": {
+        "w": 1360,
+        "h": 417.59375
+      },
+      "poster": {
+        "w": 240,
+        "h": 360,
+        "ratio": 0.6666666666666666
+      },
+      "player": {
+        "w": 1200,
+        "h": 675,
+        "ratio": 1.7777777777777777
+      },
+      "episodeCols": 0,
+      "cardDelta": 0
+    },
+    {
+      "domain": "animedia.icu",
+      "kind": "player_ep",
+      "viewport": "1440x1100",
+      "overflow": 0,
+      "pageH": 1726,
+      "wrapW": 1360,
+      "title": null,
+      "poster": null,
+      "player": {
+        "w": 1200,
+        "h": 675,
+        "ratio": 1.7777777777777777
+      },
+      "episodeCols": 0,
+      "cardDelta": 0
+    },
+    {
+      "domain": "animedia.space",
+      "kind": "home_af",
+      "viewport": "1440x1100",
+      "overflow": 0,
+      "pageH": 6387,
+      "wrapW": 1360,
+      "title": null,
+      "poster": null,
+      "player": null,
+      "episodeCols": 2,
+      "cardDelta": 0
+    },
+    {
+      "domain": "animedia.space",
+      "kind": "new",
+      "viewport": "1440x1100",
+      "overflow": 0,
+      "pageH": 1753,
+      "wrapW": 1360,
+      "title": null,
+      "poster": null,
+      "player": null,
+      "episodeCols": 2,
+      "cardDelta": 0
+    },
+    {
+      "domain": "animedia.space",
+      "kind": "catalog",
+      "viewport": "1440x1100",
+      "overflow": 0,
+      "pageH": 4376,
+      "wrapW": 1360,
+      "title": null,
+      "poster": null,
+      "player": null,
+      "episodeCols": 0,
+      "cardDelta": 0
+    },
+    {
+      "domain": "animedia.space",
+      "kind": "movie_summary",
+      "viewport": "1440x1100",
+      "overflow": 0,
+      "pageH": 2468,
+      "wrapW": 1360,
+      "title": {
+        "w": 1360,
+        "h": 507.171875
+      },
+      "poster": {
+        "w": 240,
+        "h": 360,
+        "ratio": 0.6666666666666666
+      },
+      "player": {
+        "w": 1200,
+        "h": 675,
+        "ratio": 1.7777777777777777
+      },
+      "episodeCols": 0,
+      "cardDelta": 0
+    },
+    {
+      "domain": "animedia.space",
+      "kind": "episodic_summary",
+      "viewport": "1440x1100",
+      "overflow": 0,
+      "pageH": 2546,
+      "wrapW": 1360,
+      "title": {
+        "w": 1360,
+        "h": 417.59375
+      },
+      "poster": {
+        "w": 240,
+        "h": 360,
+        "ratio": 0.6666666666666666
+      },
+      "player": {
+        "w": 1200,
+        "h": 675,
+        "ratio": 1.7777777777777777
+      },
+      "episodeCols": 0,
+      "cardDelta": 0
+    },
+    {
+      "domain": "animedia.space",
+      "kind": "player_ep",
+      "viewport": "1440x1100",
+      "overflow": 0,
+      "pageH": 1726,
+      "wrapW": 1360,
+      "title": null,
+      "poster": null,
+      "player": {
+        "w": 1200,
+        "h": 675,
+        "ratio": 1.7777777777777777
+      },
+      "episodeCols": 0,
+      "cardDelta": 0
+    }
+  ]
+}

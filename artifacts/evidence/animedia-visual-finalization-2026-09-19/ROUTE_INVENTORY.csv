@@ -1,0 +1,27 @@
+build,design,domain,h1,h1_count,has_aeps,has_jargon,has_ztitle,http,marker,path,profile,robots,route
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.icu,"Сериалы, фильмы и дунхуа",1,True,False,False,200,Animedia 1.2.2 · e29a56f,/,animedia-icu,noindex,home
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.icu,Новые серии аниме,1,True,False,False,200,Animedia 1.2.2 · e29a56f,/new/,animedia-icu,noindex,new
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.icu,Новые серии аниме,1,True,False,False,200,Animedia 1.2.2 · e29a56f,/new/?page=2,animedia-icu,noindex,new_p2
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.icu,Расписание,1,True,False,False,200,Animedia 1.2.2 · e29a56f,/schedule/,animedia-icu,noindex,schedule
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.icu,Весь каталог,1,True,False,False,200,Animedia 1.2.2 · e29a56f,/catalog/,animedia-icu,noindex,catalog
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.icu,Аниме 2026 года,1,True,False,False,200,Animedia 1.2.2 · e29a56f,/catalog/?year=2026,animedia-icu,noindex,catalog_year
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.icu,Весь каталог,1,True,False,False,200,Animedia 1.2.2 · e29a56f,/catalog/?page=2,animedia-icu,noindex,catalog_p2
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.icu,Подборки аниме,1,True,False,False,200,Animedia 1.2.2 · e29a56f,/collections/,animedia-icu,noindex,collections
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.icu,«мастер»,1,True,False,False,200,Animedia 1.2.2 · e29a56f,/search/?q=%D0%BC%D0%B0%D1%81%D1%82%D0%B5%D1%80,animedia-icu,noindex,search_cyr
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.icu,«naruto»,1,True,False,False,200,Animedia 1.2.2 · e29a56f,/search/?q=naruto,animedia-icu,noindex,search_lat
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.icu,Нелюдь. Часть 2,1,True,False,True,200,Animedia 1.2.2 · e29a56f,/title/nelyud-chast-2/,animedia-icu,noindex,movie
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.icu,Мастер льда и пламени 2,1,True,False,True,200,Animedia 1.2.2 · e29a56f,/title/master-lda-i-plameni-2/,animedia-icu,noindex,episodic
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.icu,"Мастер льда и пламени 2 — 2 сезон, 104 серия",1,True,False,False,200,Animedia 1.2.2 · e29a56f,/title/master-lda-i-plameni-2/season-2/episode-104/,animedia-icu,noindex,episode
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.space,Новые серии и популярное аниме,1,True,False,False,200,Animedia 1.2.2 · e29a56f,/,animedia-space,noindex,home
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.space,Новые серии аниме,1,True,False,False,200,Animedia 1.2.2 · e29a56f,/new/,animedia-space,noindex,new
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.space,Новые серии аниме,1,True,False,False,200,Animedia 1.2.2 · e29a56f,/new/?page=2,animedia-space,noindex,new_p2
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.space,Расписание,1,True,False,False,200,Animedia 1.2.2 · e29a56f,/schedule/,animedia-space,noindex,schedule
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.space,Весь каталог,1,True,False,False,200,Animedia 1.2.2 · e29a56f,/catalog/,animedia-space,noindex,catalog
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.space,Аниме 2026 года,1,True,False,False,200,Animedia 1.2.2 · e29a56f,/catalog/?year=2026,animedia-space,noindex,catalog_year
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.space,Весь каталог,1,True,False,False,200,Animedia 1.2.2 · e29a56f,/catalog/?page=2,animedia-space,noindex,catalog_p2
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.space,Подборки аниме,1,True,False,False,200,Animedia 1.2.2 · e29a56f,/collections/,animedia-space,noindex,collections
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.space,«мастер»,1,True,False,False,200,Animedia 1.2.2 · e29a56f,/search/?q=%D0%BC%D0%B0%D1%81%D1%82%D0%B5%D1%80,animedia-space,noindex,search_cyr
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.space,«naruto»,1,True,False,False,200,Animedia 1.2.2 · e29a56f,/search/?q=naruto,animedia-space,noindex,search_lat
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.space,Нелюдь. Часть 2,1,True,False,True,200,Animedia 1.2.2 · e29a56f,/title/nelyud-chast-2/,animedia-space,noindex,movie
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.space,Мастер льда и пламени 2,1,True,False,True,200,Animedia 1.2.2 · e29a56f,/title/master-lda-i-plameni-2/,animedia-space,noindex,episodic
+20260919T193154Z-e29a56f4-nova,1.2.2,animedia.space,"Мастер льда и пламени 2 — 2 сезон, 104 серия",1,True,False,False,200,Animedia 1.2.2 · e29a56f,/title/master-lda-i-plameni-2/season-2/episode-104/,animedia-space,noindex,episode

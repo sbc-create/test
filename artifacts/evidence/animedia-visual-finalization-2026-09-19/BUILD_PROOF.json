@@ -1,0 +1,20 @@
+{
+  "animedia.icu": {
+    "HTML_BUILD_ID": "20260919T194140Z-d01c1370-nova",
+    "TEMPLATE_VERSION": "1.2.2",
+    "TEMPLATE_MARKER": "Animedia 1.2.2 · d01c137",
+    "RUNTIME_SHA": "d01c137",
+    "PROFILE": "animedia-icu",
+    "CACHE_CONTROL": "no-store",
+    "ARTIFACT": "06e991c3e558621c"
+  },
+  "animedia.space": {
+    "HTML_BUILD_ID": "20260919T194140Z-d01c1370-nova",
+    "TEMPLATE_VERSION": "1.2.2",
+    "TEMPLATE_MARKER": "Animedia 1.2.2 · d01c137",
+    "RUNTIME_SHA": "d01c137",
+    "PROFILE": "animedia-space",
+    "CACHE_CONTROL": "no-store",
+    "ARTIFACT": "06e991c3e558621c"
+  }
+}
