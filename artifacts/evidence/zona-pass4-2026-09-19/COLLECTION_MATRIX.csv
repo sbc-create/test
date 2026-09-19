@@ -1,0 +1,13 @@
+collection_id,title,selection_rule,sort_rule,source_fields,minimum_items,actual_items,first_20_digest,overlap,destination,status
+recently_added,,see collection_contract.py,see collection_contract.py,projection,6,60,57f320dc08998323,,/collection/recently_added/,ok
+recently_added_movies,,see collection_contract.py,see collection_contract.py,projection,6,60,203e1bd73747ace3,,/collection/recently_added_movies/,ok
+new_movie_releases,,see collection_contract.py,see collection_contract.py,projection,6,60,555afec00bc94167,,/collection/new_movie_releases/,ok
+new_series_releases,,see collection_contract.py,see collection_contract.py,projection,6,60,20211747930ac1ec,,/collection/new_series_releases/,ok
+new_episodes,,see collection_contract.py,see collection_contract.py,projection,6,60,9310ce55f13530ca,,/collection/new_episodes/,ok
+top_rated,,see collection_contract.py,see collection_contract.py,projection,6,60,6331343ae3a95f77,,/collection/top_rated/,ok
+current_season,,see collection_contract.py,see collection_contract.py,projection,6,60,6661b359f36bcf43,,/collection/current_season/,ok
+video_available,,see collection_contract.py,see collection_contract.py,projection,6,60,026d46360c9501a6,,/collection/video_available/,ok
+genre_comedy,,see collection_contract.py,see collection_contract.py,projection,6,60,2879b4dcd2d28ff8,,/collection/genre_comedy/,ok
+genre_drama,,see collection_contract.py,see collection_contract.py,projection,6,60,9dbdc601eee41a14,,/collection/genre_drama/,ok
+genre_thriller,,see collection_contract.py,see collection_contract.py,projection,6,60,3e1a581b46f11921,,/collection/genre_thriller/,ok
+genre_animation,,see collection_contract.py,see collection_contract.py,projection,6,60,e2f779c4c4f71bd0,,/collection/genre_animation/,ok

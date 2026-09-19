@@ -1,0 +1,17 @@
+{
+  "DESCRIPTION_COVERAGE_BEFORE": 75.13,
+  "DESCRIPTION_COVERAGE_AFTER": 75.12,
+  "MISSING_DESCRIPTION_BEFORE": 13314,
+  "MISSING_DESCRIPTION_AFTER": 13316,
+  "EXACT_DUPLICATE_GROUPS_BEFORE": 39,
+  "NEAR_DUPLICATE_GROUPS_BEFORE": 3,
+  "INVENTED_DESCRIPTIONS": 0,
+  "AVAILABLE_SOURCE_PROPAGATION": "not_fully_audited_pass4",
+  "UNEXPLAINED_EXACT_DUPLICATE_GROUPS_AFTER": "pending_backfill_queue",
+  "UNEXPLAINED_NEAR_DUPLICATE_GROUPS_AFTER": "pending_backfill_queue",
+  "note": "Pass4 did not invent descriptions. Details expose description_source; missing remain source-absent or need projection backfill.",
+  "description_source_counts": {
+    "detail": 40208,
+    "none": 13316
+  }
+}

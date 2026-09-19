@@ -1,0 +1,33 @@
+{
+  "build_id": "20260919T211402Z-c624bebc-nova",
+  "artifact_sha256": "bed22ece4ae0b2313e9f3adbad501165b9fab3a668531f23044956840e9cc5a1",
+  "source_commit": "c624bebce3f6fac6eb05a5ee01907e02e813456b",
+  "rollback": "/srv/lords/.frontend/.rollback/20260919T211402Z-zona-01-pass4",
+  "deploy_scope": "zona-01-only",
+  "neighbors_unchanged": true,
+  "dns_mutations": 0,
+  "indexing_opened": 0,
+  "other_domains_mutated": 0,
+  "paid_operations": 0,
+  "push_performed": 0,
+  "merge_performed": 0,
+  "at": "2026-09-19T21:19:26.139991+00:00",
+  "new_total": 1218,
+  "collections_live": 12,
+  "finalize": {
+    "rollback": "/srv/lords/.frontend/.rollback/20260919T211402Z-zona-01-pass4",
+    "artifact_sha": "bed22ece4ae0b2313e9f3adbad501165b9fab3a668531f23044956840e9cc5a1",
+    "neighbors_unchanged": true,
+    "manifest": {
+      "schema_version": 1,
+      "template_family": "zona",
+      "design_version": "1.2.0",
+      "source_commit": "c624bebce3f6fac6eb05a5ee01907e02e813456b",
+      "runtime_commit": "c624bebce3f6fac6eb05a5ee01907e02e813456b",
+      "build_id": "20260919T211402Z-c624bebc-nova",
+      "artifact_sha256": "bed22ece4ae0b2313e9f3adbad501165b9fab3a668531f23044956840e9cc5a1",
+      "profile": "zona-general",
+      "built_at": "2026-09-19T21:14:02Z"
+    }
+  }
+}

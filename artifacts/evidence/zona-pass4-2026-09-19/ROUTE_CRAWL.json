@@ -1,0 +1,363 @@
+[
+  {
+    "route": "/",
+    "status": 200,
+    "final_url": "https://zonafilm.space/",
+    "headers": {
+      "X-Site-Factory-Build-Id": "20260919T211402Z-c624bebc-nova",
+      "X-Robots-Tag": "noindex, nofollow"
+    },
+    "parsed": {
+      "h1": "Кинопортал: что смотреть и где это найти",
+      "total_count": 78,
+      "card_count": 78,
+      "canonical": "https://zonafilm.space/",
+      "content_digest": "9029cdbd78e2b8ba",
+      "freshness": false,
+      "sort_ui": false,
+      "placeholder": false
+    }
+  },
+  {
+    "route": "/new/",
+    "status": 200,
+    "final_url": "https://zonafilm.space/new/",
+    "headers": {
+      "X-Site-Factory-Build-Id": "20260919T211402Z-c624bebc-nova",
+      "X-Robots-Tag": "noindex, nofollow"
+    },
+    "parsed": {
+      "h1": "Что нового",
+      "total_count": 48,
+      "card_count": 48,
+      "canonical": "https://zonafilm.space/new/?sort=newest",
+      "content_digest": "e14974dac55bc6ef",
+      "freshness": true,
+      "sort_ui": true,
+      "placeholder": false
+    }
+  },
+  {
+    "route": "/movies/",
+    "status": 200,
+    "final_url": "https://zonafilm.space/movies/",
+    "headers": {
+      "X-Site-Factory-Build-Id": "20260919T211402Z-c624bebc-nova",
+      "X-Robots-Tag": "noindex, nofollow"
+    },
+    "parsed": {
+      "h1": "Кино",
+      "total_count": 48,
+      "card_count": 48,
+      "canonical": "https://zonafilm.space/movies/?sort=newest",
+      "content_digest": "2bf647c15e03e024",
+      "freshness": false,
+      "sort_ui": true,
+      "placeholder": false
+    }
+  },
+  {
+    "route": "/series/",
+    "status": 200,
+    "final_url": "https://zonafilm.space/series/",
+    "headers": {
+      "X-Site-Factory-Build-Id": "20260919T211402Z-c624bebc-nova",
+      "X-Robots-Tag": "noindex, nofollow"
+    },
+    "parsed": {
+      "h1": "Сериалы",
+      "total_count": 48,
+      "card_count": 48,
+      "canonical": "https://zonafilm.space/series/?sort=newest",
+      "content_digest": "1c1e0adba10ced57",
+      "freshness": false,
+      "sort_ui": true,
+      "placeholder": false
+    }
+  },
+  {
+    "route": "/animation/",
+    "status": 200,
+    "final_url": "https://zonafilm.space/animation/",
+    "headers": {
+      "X-Site-Factory-Build-Id": "20260919T211402Z-c624bebc-nova",
+      "X-Robots-Tag": "noindex, nofollow"
+    },
+    "parsed": {
+      "h1": "Анимация",
+      "total_count": 48,
+      "card_count": 48,
+      "canonical": "https://zonafilm.space/animation/?sort=newest",
+      "content_digest": "b3d5a2326c876368",
+      "freshness": false,
+      "sort_ui": true,
+      "placeholder": false
+    }
+  },
+  {
+    "route": "/catalog/",
+    "status": 200,
+    "final_url": "https://zonafilm.space/catalog/",
+    "headers": {
+      "X-Site-Factory-Build-Id": "20260919T211402Z-c624bebc-nova",
+      "X-Robots-Tag": "noindex, nofollow"
+    },
+    "parsed": {
+      "h1": "Весь каталог",
+      "total_count": 48,
+      "card_count": 48,
+      "canonical": "https://zonafilm.space/catalog/?sort=newest",
+      "content_digest": "e14974dac55bc6ef",
+      "freshness": false,
+      "sort_ui": true,
+      "placeholder": false
+    }
+  },
+  {
+    "route": "/collections/",
+    "status": 200,
+    "final_url": "https://zonafilm.space/collections/",
+    "headers": {
+      "X-Site-Factory-Build-Id": "20260919T211402Z-c624bebc-nova",
+      "X-Robots-Tag": "noindex, nofollow"
+    },
+    "parsed": {
+      "h1": "Подборки",
+      "total_count": 0,
+      "card_count": 0,
+      "canonical": "https://zonafilm.space/collections/",
+      "content_digest": "e3b0c44298fc1c14",
+      "freshness": false,
+      "sort_ui": false,
+      "placeholder": false
+    }
+  },
+  {
+    "route": "/search/?q=%D1%87%D0%B0%D1%88%D0%B0",
+    "status": 200,
+    "final_url": "https://zonafilm.space/search/?q=%D1%87%D0%B0%D1%88%D0%B0",
+    "headers": {
+      "X-Site-Factory-Build-Id": "20260919T211402Z-c624bebc-nova",
+      "X-Robots-Tag": "noindex, nofollow"
+    },
+    "parsed": {
+      "h1": "Результаты поиска: «чаша»",
+      "total_count": 4,
+      "card_count": 4,
+      "canonical": "https://zonafilm.space/search/?q=чаша",
+      "content_digest": "b0340106db66a3dd",
+      "freshness": false,
+      "sort_ui": false,
+      "placeholder": false
+    }
+  },
+  {
+    "route": "/series/?year=2026",
+    "status": 200,
+    "final_url": "https://zonafilm.space/series/?year=2026",
+    "headers": {
+      "X-Site-Factory-Build-Id": "20260919T211402Z-c624bebc-nova",
+      "X-Robots-Tag": "noindex, nofollow"
+    },
+    "parsed": {
+      "h1": "Сериалы 2026 года",
+      "total_count": 48,
+      "card_count": 48,
+      "canonical": "https://zonafilm.space/series/?year=2026&amp;sort=newest",
+      "content_digest": "1c1e0adba10ced57",
+      "freshness": false,
+      "sort_ui": true,
+      "placeholder": false
+    }
+  },
+  {
+    "route": "/series/?year=2026&page=2",
+    "status": 200,
+    "final_url": "https://zonafilm.space/series/?year=2026&page=2",
+    "headers": {
+      "X-Site-Factory-Build-Id": "20260919T211402Z-c624bebc-nova",
+      "X-Robots-Tag": "noindex, nofollow"
+    },
+    "parsed": {
+      "h1": "Сериалы 2026 года",
+      "total_count": 48,
+      "card_count": 48,
+      "canonical": "https://zonafilm.space/series/?year=2026&amp;sort=newest",
+      "content_digest": "8af1851f421b9165",
+      "freshness": false,
+      "sort_ui": true,
+      "placeholder": false
+    }
+  },
+  {
+    "route": "/movies/?year=2025",
+    "status": 200,
+    "final_url": "https://zonafilm.space/movies/?year=2025",
+    "headers": {
+      "X-Site-Factory-Build-Id": "20260919T211402Z-c624bebc-nova",
+      "X-Robots-Tag": "noindex, nofollow"
+    },
+    "parsed": {
+      "h1": "Фильмы 2025 года",
+      "total_count": 48,
+      "card_count": 48,
+      "canonical": "https://zonafilm.space/movies/?year=2025&amp;sort=newest",
+      "content_digest": "b350c84e0ed3ffb1",
+      "freshness": false,
+      "sort_ui": true,
+      "placeholder": false
+    }
+  },
+  {
+    "route": "/movies/?sort=title",
+    "status": 200,
+    "final_url": "https://zonafilm.space/movies/?sort=title",
+    "headers": {
+      "X-Site-Factory-Build-Id": "20260919T211402Z-c624bebc-nova",
+      "X-Robots-Tag": "noindex, nofollow"
+    },
+    "parsed": {
+      "h1": "Кино",
+      "total_count": 48,
+      "card_count": 48,
+      "canonical": "https://zonafilm.space/movies/?sort=title",
+      "content_digest": "249fa354686b30a1",
+      "freshness": false,
+      "sort_ui": true,
+      "placeholder": false
+    }
+  },
+  {
+    "route": "/movies/?sort=rating",
+    "status": 200,
+    "final_url": "https://zonafilm.space/movies/?sort=rating",
+    "headers": {
+      "X-Site-Factory-Build-Id": "20260919T211402Z-c624bebc-nova",
+      "X-Robots-Tag": "noindex, nofollow"
+    },
+    "parsed": {
+      "h1": "Кино",
+      "total_count": 48,
+      "card_count": 48,
+      "canonical": "https://zonafilm.space/movies/?sort=rating",
+      "content_digest": "91eb36e66ba5d476",
+      "freshness": false,
+      "sort_ui": true,
+      "placeholder": false
+    }
+  },
+  {
+    "route": "/movies/?sort=recently_added",
+    "status": 200,
+    "final_url": "https://zonafilm.space/movies/?sort=recently_added",
+    "headers": {
+      "X-Site-Factory-Build-Id": "20260919T211402Z-c624bebc-nova",
+      "X-Robots-Tag": "noindex, nofollow"
+    },
+    "parsed": {
+      "h1": "Кино",
+      "total_count": 48,
+      "card_count": 48,
+      "canonical": "https://zonafilm.space/movies/?sort=recently_added",
+      "content_digest": "58b90360217f8dc3",
+      "freshness": false,
+      "sort_ui": true,
+      "placeholder": false
+    }
+  },
+  {
+    "route": "/new/?page=2",
+    "status": 200,
+    "final_url": "https://zonafilm.space/new/?page=2",
+    "headers": {
+      "X-Site-Factory-Build-Id": "20260919T211402Z-c624bebc-nova",
+      "X-Robots-Tag": "noindex, nofollow"
+    },
+    "parsed": {
+      "h1": "Что нового",
+      "total_count": 48,
+      "card_count": 48,
+      "canonical": "https://zonafilm.space/new/?sort=newest",
+      "content_digest": "e0f68d02ffc47d68",
+      "freshness": true,
+      "sort_ui": true,
+      "placeholder": false
+    }
+  },
+  {
+    "route": "/movies/?page=0",
+    "status": 400,
+    "final_url": "https://zonafilm.space/movies/?page=0",
+    "headers": {
+      "X-Site-Factory-Build-Id": "20260919T211402Z-c624bebc-nova",
+      "X-Robots-Tag": "noindex, nofollow"
+    },
+    "parsed": {
+      "h1": "",
+      "total_count": 0,
+      "card_count": 0,
+      "canonical": "",
+      "content_digest": "",
+      "freshness": null,
+      "sort_ui": null,
+      "placeholder": null
+    }
+  },
+  {
+    "route": "/movies/?year=abcd",
+    "status": 200,
+    "final_url": "https://zonafilm.space/movies/?year=abcd",
+    "headers": {
+      "X-Site-Factory-Build-Id": "20260919T211402Z-c624bebc-nova",
+      "X-Robots-Tag": "noindex, nofollow"
+    },
+    "parsed": {
+      "h1": "Некорректный фильтр",
+      "total_count": 0,
+      "card_count": 0,
+      "canonical": "https://zonafilm.space/movies/?year=abcd",
+      "content_digest": "e3b0c44298fc1c14",
+      "freshness": false,
+      "sort_ui": false,
+      "placeholder": false
+    }
+  },
+  {
+    "route": "/movies/?kind=%D0%A1%D0%B5%D1%80%D0%B8%D0%B0%D0%BB",
+    "status": 308,
+    "final_url": "https://zonafilm.space/movies/?kind=%D0%A1%D0%B5%D1%80%D0%B8%D0%B0%D0%BB",
+    "headers": {
+      "Location": "/series/",
+      "X-Robots-Tag": "noindex, nofollow"
+    },
+    "parsed": {
+      "h1": "",
+      "total_count": 0,
+      "card_count": 0,
+      "canonical": "",
+      "content_digest": "",
+      "freshness": null,
+      "sort_ui": null,
+      "placeholder": null
+    }
+  },
+  {
+    "route": "/series/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC&year=2026",
+    "status": 308,
+    "final_url": "https://zonafilm.space/series/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC&year=2026",
+    "headers": {
+      "Location": "/movies/?year=2026",
+      "X-Robots-Tag": "noindex, nofollow"
+    },
+    "parsed": {
+      "h1": "",
+      "total_count": 0,
+      "card_count": 0,
+      "canonical": "",
+      "content_digest": "",
+      "freshness": null,
+      "sort_ui": null,
+      "placeholder": null
+    }
+  }
+]

@@ -1,0 +1,20 @@
+route,route_type,source_link,kind,genre,country,year,date_mode,sort,page,expected_status,actual_status,expected_h1,actual_h1,total_count,card_count,content_digest,canonical,indexability,desktop_pass,tablet_pass,mobile_pass,notes
+/,home,nav,,,,,,,1,200,200,,Кинопортал: что смотреть и где это найти,78,78,9029cdbd78e2b8ba,https://zonafilm.space/,"noindex, nofollow",,,,ok
+/new/,new,nav,,,,,activity,newest,1,200,200,Что нового,Что нового,48,48,e14974dac55bc6ef,https://zonafilm.space/new/?sort=newest,"noindex, nofollow",,,,ok
+/movies/,kind,nav,Фильм,,,,release,newest,1,200,200,Кино,Кино,48,48,2bf647c15e03e024,https://zonafilm.space/movies/?sort=newest,"noindex, nofollow",,,,ok
+/series/,kind,nav,Сериал,,,,release,newest,1,200,200,Сериалы,Сериалы,48,48,1c1e0adba10ced57,https://zonafilm.space/series/?sort=newest,"noindex, nofollow",,,,ok
+/animation/,kind,nav,Мультфильм,,,,release,newest,1,200,200,Анимация,Анимация,48,48,b3d5a2326c876368,https://zonafilm.space/animation/?sort=newest,"noindex, nofollow",,,,ok
+/catalog/,catalog,nav,,,,,release,newest,1,200,200,,Весь каталог,48,48,e14974dac55bc6ef,https://zonafilm.space/catalog/?sort=newest,"noindex, nofollow",,,,ok
+/collections/,collections,nav,,,,,,,1,200,200,Подборки,Подборки,0,0,e3b0c44298fc1c14,https://zonafilm.space/collections/,"noindex, nofollow",,,,ok
+/search/?q=%D1%87%D0%B0%D1%88%D0%B0,search,form,,,,,,,1,200,200,,Результаты поиска: «чаша»,4,4,b0340106db66a3dd,https://zonafilm.space/search/?q=чаша,"noindex, nofollow",,,,ok
+/series/?year=2026,filter,facet,Сериал,,,2026,release,newest,1,200,200,Сериалы 2026 года,Сериалы 2026 года,48,48,1c1e0adba10ced57,https://zonafilm.space/series/?year=2026&amp;sort=newest,"noindex, nofollow",,,,ok
+/series/?year=2026&page=2,filter,pager,Сериал,,,2026,release,newest,2,200,200,Сериалы 2026 года,Сериалы 2026 года,48,48,8af1851f421b9165,https://zonafilm.space/series/?year=2026&amp;sort=newest,"noindex, nofollow",,,,ok
+/movies/?year=2025,filter,facet,Фильм,,,2025,release,newest,1,200,200,,Фильмы 2025 года,48,48,b350c84e0ed3ffb1,https://zonafilm.space/movies/?year=2025&amp;sort=newest,"noindex, nofollow",,,,ok
+/movies/?sort=title,sort,ui,Фильм,,,,title,title,1,200,200,Кино,Кино,48,48,249fa354686b30a1,https://zonafilm.space/movies/?sort=title,"noindex, nofollow",,,,ok
+/movies/?sort=rating,sort,ui,Фильм,,,,rating,rating,1,200,200,Кино,Кино,48,48,91eb36e66ba5d476,https://zonafilm.space/movies/?sort=rating,"noindex, nofollow",,,,ok
+/movies/?sort=recently_added,sort,ui,Фильм,,,,added,recently_added,1,200,200,Кино,Кино,48,48,58b90360217f8dc3,https://zonafilm.space/movies/?sort=recently_added,"noindex, nofollow",,,,ok
+/new/?page=2,new,pager,,,,,activity,newest,2,200,200,Что нового,Что нового,48,48,e0f68d02ffc47d68,https://zonafilm.space/new/?sort=newest,"noindex, nofollow",,,,ok
+/movies/?page=0,error,probe,,,,,,,0,400,400,,,0,0,,,,,,,ok
+/movies/?year=abcd,error,probe,,,,abcd,,,1,400,200,,Некорректный фильтр,0,0,e3b0c44298fc1c14,https://zonafilm.space/movies/?year=abcd,"noindex, nofollow",,,,status_mismatch
+/movies/?kind=%D0%A1%D0%B5%D1%80%D0%B8%D0%B0%D0%BB,redirect,probe,Сериал,,,,,,1,308,308,,,0,0,,,,,,,location=/series/
+/series/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC&year=2026,redirect,probe,Фильм,,,2026,,,1,308,308,,,0,0,,,,,,,location=/movies/?year=2026

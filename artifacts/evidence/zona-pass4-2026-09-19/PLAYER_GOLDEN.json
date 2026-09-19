@@ -1,0 +1,206 @@
+{
+  "passed": 10,
+  "runs": 10,
+  "results": [
+    {
+      "run": 1,
+      "url": "https://zonafilm.space/title/chasha-vesny/season-1/episode-1/",
+      "PASS": true,
+      "build": "20260919T211402Z-c624bebc-nova",
+      "state": "playing",
+      "ACTUAL_PROGRESS": true,
+      "VISIBLE_UNAVAILABLE_OVERLAY": false,
+      "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+      "ACTIVE_PLAYER_COUNT": 1,
+      "zp": {
+        "generation": 1,
+        "attempt": 1,
+        "event": "pm.timeupdate3",
+        "pos": 12.086221,
+        "at": 1789852658399
+      },
+      "stDisplay": "none",
+      "stHidden": true
+    },
+    {
+      "run": 2,
+      "url": "https://zonafilm.space/title/v-lovushke/",
+      "PASS": true,
+      "build": "20260919T211402Z-c624bebc-nova",
+      "state": "playing",
+      "ACTUAL_PROGRESS": true,
+      "VISIBLE_UNAVAILABLE_OVERLAY": false,
+      "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+      "ACTIVE_PLAYER_COUNT": 1,
+      "zp": {
+        "generation": 1,
+        "attempt": 1,
+        "event": "pm.timeupdate3",
+        "pos": 10.468209,
+        "at": 1789852674024
+      },
+      "stDisplay": "none",
+      "stHidden": true
+    },
+    {
+      "run": 3,
+      "url": "https://zonafilm.space/title/voy-2/",
+      "PASS": true,
+      "build": "20260919T211402Z-c624bebc-nova",
+      "state": "playing",
+      "ACTUAL_PROGRESS": true,
+      "VISIBLE_UNAVAILABLE_OVERLAY": false,
+      "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+      "ACTIVE_PLAYER_COUNT": 1,
+      "zp": {
+        "generation": 1,
+        "attempt": 1,
+        "event": "pm.timeupdate3",
+        "pos": 11.141729,
+        "at": 1789852689415
+      },
+      "stDisplay": "none",
+      "stHidden": true
+    },
+    {
+      "run": 4,
+      "url": "https://zonafilm.space/title/chasha-vesny/season-1/episode-1/",
+      "PASS": true,
+      "build": "20260919T211402Z-c624bebc-nova",
+      "state": "playing",
+      "ACTUAL_PROGRESS": true,
+      "VISIBLE_UNAVAILABLE_OVERLAY": false,
+      "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+      "ACTIVE_PLAYER_COUNT": 1,
+      "zp": {
+        "generation": 1,
+        "attempt": 1,
+        "event": "pm.timeupdate3",
+        "pos": 12.109057,
+        "at": 1789852704274
+      },
+      "stDisplay": "none",
+      "stHidden": true
+    },
+    {
+      "run": 5,
+      "url": "https://zonafilm.space/title/v-lovushke/",
+      "PASS": true,
+      "build": "20260919T211402Z-c624bebc-nova",
+      "state": "playing",
+      "ACTUAL_PROGRESS": true,
+      "VISIBLE_UNAVAILABLE_OVERLAY": false,
+      "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+      "ACTIVE_PLAYER_COUNT": 1,
+      "zp": {
+        "generation": 1,
+        "attempt": 1,
+        "event": "pm.timeupdate3",
+        "pos": 10.894707,
+        "at": 1789852720026
+      },
+      "stDisplay": "none",
+      "stHidden": true
+    },
+    {
+      "run": 6,
+      "url": "https://zonafilm.space/title/voy-2/",
+      "PASS": true,
+      "build": "20260919T211402Z-c624bebc-nova",
+      "state": "playing",
+      "ACTUAL_PROGRESS": true,
+      "VISIBLE_UNAVAILABLE_OVERLAY": false,
+      "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+      "ACTIVE_PLAYER_COUNT": 1,
+      "zp": {
+        "generation": 1,
+        "attempt": 1,
+        "event": "pm.timeupdate3",
+        "pos": 10.120598,
+        "at": 1789852735055
+      },
+      "stDisplay": "none",
+      "stHidden": true
+    },
+    {
+      "run": 7,
+      "url": "https://zonafilm.space/title/chasha-vesny/season-1/episode-1/",
+      "PASS": true,
+      "build": "20260919T211402Z-c624bebc-nova",
+      "state": "playing",
+      "ACTUAL_PROGRESS": true,
+      "VISIBLE_UNAVAILABLE_OVERLAY": false,
+      "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+      "ACTIVE_PLAYER_COUNT": 1,
+      "zp": {
+        "generation": 1,
+        "attempt": 1,
+        "event": "pm.timeupdate3",
+        "pos": 11.998457,
+        "at": 1789852749308
+      },
+      "stDisplay": "none",
+      "stHidden": true
+    },
+    {
+      "run": 8,
+      "url": "https://zonafilm.space/title/v-lovushke/",
+      "PASS": true,
+      "build": "20260919T211402Z-c624bebc-nova",
+      "state": "playing",
+      "ACTUAL_PROGRESS": true,
+      "VISIBLE_UNAVAILABLE_OVERLAY": false,
+      "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+      "ACTIVE_PLAYER_COUNT": 1,
+      "zp": {
+        "generation": 1,
+        "attempt": 1,
+        "event": "pm.timeupdate3",
+        "pos": 10.640069,
+        "at": 1789852764947
+      },
+      "stDisplay": "none",
+      "stHidden": true
+    },
+    {
+      "run": 9,
+      "url": "https://zonafilm.space/title/voy-2/",
+      "PASS": true,
+      "build": "20260919T211402Z-c624bebc-nova",
+      "state": "playing",
+      "ACTUAL_PROGRESS": true,
+      "VISIBLE_UNAVAILABLE_OVERLAY": false,
+      "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+      "ACTIVE_PLAYER_COUNT": 1,
+      "zp": {
+        "generation": 1,
+        "attempt": 1,
+        "event": "pm.timeupdate3",
+        "pos": 11.022737,
+        "at": 1789852780072
+      },
+      "stDisplay": "none",
+      "stHidden": true
+    },
+    {
+      "run": 10,
+      "url": "https://zonafilm.space/title/chasha-vesny/season-1/episode-1/",
+      "PASS": true,
+      "build": "20260919T211402Z-c624bebc-nova",
+      "state": "playing",
+      "ACTUAL_PROGRESS": true,
+      "VISIBLE_UNAVAILABLE_OVERLAY": false,
+      "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+      "ACTIVE_PLAYER_COUNT": 1,
+      "zp": {
+        "generation": 1,
+        "attempt": 1,
+        "event": "pm.timeupdate3",
+        "pos": 12.129117,
+        "at": 1789852794180
+      },
+      "stDisplay": "none",
+      "stHidden": true
+    }
+  ]
+}

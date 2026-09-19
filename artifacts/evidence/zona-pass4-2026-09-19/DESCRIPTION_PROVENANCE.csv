@@ -1,0 +1,2 @@
+title_id,description_source,source_record_id,source_updated_at,content_hash,ingested_at,status
+*,authoritative_source_incomplete,,,,,backfill_required

@@ -1,0 +1,4 @@
+browser,status,notes
+chromium,PASS,playwright screenshots + golden
+firefox,NOT_AVAILABLE,not installed in this runner
+webkit,NOT_AVAILABLE,not installed in this runner
