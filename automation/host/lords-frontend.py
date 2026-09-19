@@ -2437,10 +2437,7 @@ def разметка_плеера(вид, запись: dict, деталь: dict
     return ("resolving",
         f'<div data-player-host data-src-candidates="{список_json}">'
         f"<video-player {строка}></video-player></div>"
-        f'<div class="{вид.кл_состояния}" data-player-state hidden>'
-        "<b>Провайдер не отдал источник</b>"
-        "<p>Для этой серии у провайдера сейчас нет дорожки. "
-        "Остальные серии и описание на странице работают.</p></div>"
+        f'<div class="{вид.кл_состояния}" data-player-state hidden></div>'
         '<noscript><div class="' + вид.кл_состояния + '">'
         "<b>Нужен JavaScript</b><p>Плеер подключается скриптом провайдера, "
         "и без JavaScript он не запустится. Описание, серии и каталог "
