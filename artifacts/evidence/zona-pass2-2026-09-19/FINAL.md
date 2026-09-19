@@ -160,6 +160,6 @@ SECRETS_EXPOSED=0
 
 - 13314 titles still `MISSING_DESCRIPTION` — need approved content pipeline backfill (not invented).
 - 39 exact cross-title description duplicate groups — editorial cleanup.
-- Near-duplicate Jaccard over full 53k catalog deferred (exact digests reported).
+- 3 near-duplicate description groups (Jaccard ≥ 0.92) — editorial cleanup.
 
 ZONA_PASS2_CAN_BE_CLOSED=YES
