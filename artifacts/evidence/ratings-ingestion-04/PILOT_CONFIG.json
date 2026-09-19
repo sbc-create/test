@@ -1,0 +1,32 @@
+{
+  "scope": "closed noindex ratings ingestion",
+  "daily_accepted_target": 100,
+  "daily_candidate_cap": 750,
+  "max_cycles": 7,
+  "paid_operations": 0,
+  "public_indexed_publication": 0,
+  "scheduler_enabled": false,
+  "cycles_completed": 0,
+  "automatic_stop_configured": true,
+  "request_rate_max_rps": 0.1,
+  "source_concurrency": 1,
+  "kill_switch": "enabled",
+  "authorized_sources": [
+    "shikimori"
+  ],
+  "gates_for_enable": [
+    "SOURCE_POLICY_GATE",
+    "GLOBAL_INVENTORY_GATE",
+    "MAPPING_GATE",
+    "DB_RESTORE_GATE",
+    "SNAPSHOT_LIVE_GATE",
+    "USER_VOTE_CONTRACT_GATE",
+    "QWEN_DELIVERY_GATE",
+    "SCHEDULER_SAFETY_GATE"
+  ],
+  "QWEN_DELIVERY_GATE": false,
+  "timer_enabled": false,
+  "PILOT_CYCLES_COMPLETED": 0,
+  "FIRST_SUPERVISED_CYCLE_PASS": false,
+  "reason_not_started": "QWEN_DELIVERY_CONFIGURED=NO; AMD new fetches disabled; no supervised cycle executed"
+}

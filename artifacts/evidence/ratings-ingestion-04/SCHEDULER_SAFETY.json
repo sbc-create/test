@@ -1,0 +1,15 @@
+{
+  "SCHEDULER_INSTALLED": true,
+  "SCHEDULER_ENABLED": false,
+  "unit": "automation/host/systemd/ratings-ingestion.service",
+  "timer": "automation/host/systemd/ratings-ingestion.timer",
+  "host_enabled": false,
+  "REQUEST_RATE_MAX": 0.1,
+  "SOURCE_CONCURRENCY": 1,
+  "PAID_OPERATIONS": 0,
+  "KILL_SWITCH": "enabled",
+  "AUTOMATIC_STOP_AFTER_CYCLES": 7,
+  "overlap_policy": "SKIP",
+  "SCHEDULER_SAFETY_PASS": true,
+  "note": "Timer not enabled; Stage4 first launch does not start pilot without Qwen config"
+}
