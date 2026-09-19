@@ -1,0 +1,127 @@
+{
+  "rollback": "/srv/lords/.frontend/.rollback/20260919T160721Z-zona-01-pass2",
+  "artifact_sha": "42d247622f4d492da382820c23b7231e9ee0df44504ac15291fb726f6797cd9a",
+  "manifest": {
+    "schema_version": 1,
+    "template_family": "zona",
+    "design_version": "1.2.0",
+    "source_commit": "06a8250daf0230d8f69245a6bc73695303009141",
+    "runtime_commit": "06a8250daf0230d8f69245a6bc73695303009141",
+    "build_id": "20260919T160708Z-06a8250d-nova",
+    "artifact_sha256": "42d247622f4d492da382820c23b7231e9ee0df44504ac15291fb726f6797cd9a",
+    "profile": "zona-general",
+    "built_at": "2026-09-19T16:07:21Z"
+  },
+  "checks": {
+    "/healthz": {
+      "status": 200,
+      "build": "20260919T160708Z-06a8250d-nova",
+      "artifact": "42d247622f4d492da382820c23b7231e9ee0df44504ac15291fb726f6797cd9a",
+      "source": "06a8250daf0230d8f69245a6bc73695303009141",
+      "robots": "noindex, nofollow",
+      "postMessage_client": false,
+      "banner_false": false,
+      "results_heading": false,
+      "footer_zones": false,
+      "jargon": false,
+      "marker": false
+    },
+    "/": {
+      "status": 200,
+      "build": "20260919T160708Z-06a8250d-nova",
+      "artifact": "42d247622f4d492da382820c23b7231e9ee0df44504ac15291fb726f6797cd9a",
+      "source": "06a8250daf0230d8f69245a6bc73695303009141",
+      "robots": "noindex, nofollow",
+      "postMessage_client": false,
+      "banner_false": false,
+      "results_heading": false,
+      "footer_zones": true,
+      "jargon": false,
+      "marker": true
+    },
+    "/search/?q=%D0%B7%D0%B2%D0%B5%D0%B7%D0%B4%D0%BD%D1%8B%D0%B5%20%D0%B2%D0%BE%D0%B9%D0%BD%D1%8B": {
+      "status": 200,
+      "build": "20260919T160708Z-06a8250d-nova",
+      "artifact": "42d247622f4d492da382820c23b7231e9ee0df44504ac15291fb726f6797cd9a",
+      "source": "06a8250daf0230d8f69245a6bc73695303009141",
+      "robots": "noindex, nofollow",
+      "postMessage_client": false,
+      "banner_false": false,
+      "results_heading": true,
+      "footer_zones": true,
+      "jargon": false,
+      "marker": true
+    },
+    "/title/aida-vozvraschaetsya/": {
+      "status": 200,
+      "build": "20260919T160708Z-06a8250d-nova",
+      "artifact": "42d247622f4d492da382820c23b7231e9ee0df44504ac15291fb726f6797cd9a",
+      "source": "06a8250daf0230d8f69245a6bc73695303009141",
+      "robots": "noindex, nofollow",
+      "postMessage_client": true,
+      "banner_false": true,
+      "results_heading": false,
+      "footer_zones": true,
+      "jargon": false,
+      "marker": true
+    },
+    "/title/v-lovushke/": {
+      "status": 200,
+      "build": "20260919T160708Z-06a8250d-nova",
+      "artifact": "42d247622f4d492da382820c23b7231e9ee0df44504ac15291fb726f6797cd9a",
+      "source": "06a8250daf0230d8f69245a6bc73695303009141",
+      "robots": "noindex, nofollow",
+      "postMessage_client": true,
+      "banner_false": true,
+      "results_heading": false,
+      "footer_zones": true,
+      "jargon": false,
+      "marker": true
+    },
+    "/title/voy-2/": {
+      "status": 200,
+      "build": "20260919T160708Z-06a8250d-nova",
+      "artifact": "42d247622f4d492da382820c23b7231e9ee0df44504ac15291fb726f6797cd9a",
+      "source": "06a8250daf0230d8f69245a6bc73695303009141",
+      "robots": "noindex, nofollow",
+      "postMessage_client": true,
+      "banner_false": true,
+      "results_heading": false,
+      "footer_zones": true,
+      "jargon": false,
+      "marker": true
+    },
+    "/movies/": {
+      "status": 200,
+      "build": "20260919T160708Z-06a8250d-nova",
+      "artifact": "42d247622f4d492da382820c23b7231e9ee0df44504ac15291fb726f6797cd9a",
+      "source": "06a8250daf0230d8f69245a6bc73695303009141",
+      "robots": "noindex, nofollow",
+      "postMessage_client": false,
+      "banner_false": false,
+      "results_heading": false,
+      "footer_zones": true,
+      "jargon": false,
+      "marker": true
+    }
+  },
+  "neighbors_unchanged": true,
+  "before_neighbors": {
+    "template-manifest-animedia-01.json": "58e955ebf4f446747e82e8082d3fc6fd3510c727be9b421be0a1be2cae8ad6a1",
+    "template-manifest-animedia-02.json": "d1304df50db9ffd84add831571fca07c6bceeff96588ae92f0d576af699e3db1",
+    "template-manifest-lords-02.json": "faf2e2d1b4cdaa46d42ede69b9ef4a540557f8c19b1601f98906bc8ad8f3482b",
+    "template-manifest-lords-03.json": "39a380e419967a41cc641a5eeb3abc67f6ed7f7ca3b9b14b87d3b76cbf0ca65f",
+    "template-manifest-yummy-biz.json": "659233110dda336b2e099c67d3d3b298189c952024d9dd9f699f2f7a76edc201",
+    "template-manifest-yummy-org.json": "d98582fc48186bec31526a4572fc12a2d10c5b1a922e90e1f3fa116c86158501",
+    "template-manifest-yummy-site.json": "826a0aee22574867d67617fe4c69722a4108c265d03ad65f81adc9163db4302c"
+  },
+  "after_neighbors": {
+    "template-manifest-animedia-01.json": "58e955ebf4f446747e82e8082d3fc6fd3510c727be9b421be0a1be2cae8ad6a1",
+    "template-manifest-animedia-02.json": "d1304df50db9ffd84add831571fca07c6bceeff96588ae92f0d576af699e3db1",
+    "template-manifest-lords-02.json": "faf2e2d1b4cdaa46d42ede69b9ef4a540557f8c19b1601f98906bc8ad8f3482b",
+    "template-manifest-lords-03.json": "39a380e419967a41cc641a5eeb3abc67f6ed7f7ca3b9b14b87d3b76cbf0ca65f",
+    "template-manifest-yummy-biz.json": "659233110dda336b2e099c67d3d3b298189c952024d9dd9f699f2f7a76edc201",
+    "template-manifest-yummy-org.json": "d98582fc48186bec31526a4572fc12a2d10c5b1a922e90e1f3fa116c86158501",
+    "template-manifest-yummy-site.json": "826a0aee22574867d67617fe4c69722a4108c265d03ad65f81adc9163db4302c"
+  }
+}

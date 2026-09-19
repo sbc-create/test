@@ -1,0 +1,651 @@
+{
+  "STICKY_HEADER_OVERLAP_PX": 0,
+  "METADATA_LABEL_VALUE_OVERLAPS": 0,
+  "HORIZONTAL_OVERFLOW_PX": 0,
+  "CARD_ROW_MAX_HEIGHT_DELTA_PX": 0,
+  "PLAYER_STAGE_RATIO": 1.778,
+  "PLAYER_CHILD_COVERAGE": 100,
+  "SEARCH_TOP_1440": [
+    "Звёздные войны: Видения представляют — Девятый джедай",
+    "Звёздные войны: Сказания о преступном мире",
+    "Звездные войны: Опорная команда",
+    "Звёздные войны: Сказания об Империи",
+    "Звездные войны: Приключения юных джедаев",
+    "Звёздные войны: Сказания о джедаях",
+    "Звёздные войны: Бракованная партия",
+    "Звёздные войны: Видения",
+    "Звёздные войны: Скайуокер. Восход",
+    "Звездные войны: Сопротивление",
+    "Звездные войны: Последние джедаи",
+    "Звёздные войны: Силы судьбы (сериал 2017 – 2018)"
+  ],
+  "items": [
+    {
+      "page": "home",
+      "viewport": "1440",
+      "path": "/",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/home-1440.png",
+      "overflowX": 0,
+      "stickyOverlap": 0,
+      "metadataOverlaps": 0,
+      "player": null,
+      "host": null,
+      "coverage": null,
+      "ratio": null,
+      "footer": {
+        "t": 6648,
+        "l": 40,
+        "w": 1360,
+        "h": 376
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 0,
+      "state": null,
+      "search_top": null
+    },
+    {
+      "page": "search",
+      "viewport": "1440",
+      "path": "/search/?q=%D0%B7%D0%B2%D0%B5%D0%B7%D0%B4%D0%BD%D1%8B%D0%B5%20%D0%B2%D0%BE%D0%B9%D0%BD%D1%8B",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/search-1440.png",
+      "overflowX": 0,
+      "stickyOverlap": 0,
+      "metadataOverlaps": 0,
+      "player": null,
+      "host": null,
+      "coverage": null,
+      "ratio": null,
+      "footer": {
+        "t": 2651,
+        "l": 40,
+        "w": 1360,
+        "h": 376
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 0,
+      "state": null,
+      "search_top": [
+        "Звёздные войны: Видения представляют — Девятый джедай",
+        "Звёздные войны: Сказания о преступном мире",
+        "Звездные войны: Опорная команда",
+        "Звёздные войны: Сказания об Империи",
+        "Звездные войны: Приключения юных джедаев",
+        "Звёздные войны: Сказания о джедаях",
+        "Звёздные войны: Бракованная партия",
+        "Звёздные войны: Видения",
+        "Звёздные войны: Скайуокер. Восход",
+        "Звездные войны: Сопротивление",
+        "Звездные войны: Последние джедаи",
+        "Звёздные войны: Силы судьбы (сериал 2017 – 2018)"
+      ]
+    },
+    {
+      "page": "vl",
+      "viewport": "1440",
+      "path": "/title/v-lovushke/",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/vl-1440.png",
+      "overflowX": 0,
+      "stickyOverlap": NaN,
+      "metadataOverlaps": 0,
+      "player": {
+        "t": 718,
+        "l": 120,
+        "w": 1200,
+        "h": 675
+      },
+      "host": {
+        "t": 719,
+        "l": 121,
+        "w": 1198,
+        "h": 673
+      },
+      "coverage": 100,
+      "ratio": 1.778,
+      "footer": {
+        "t": 1860,
+        "l": 40,
+        "w": 1360,
+        "h": 376
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 0,
+      "state": "ready",
+      "search_top": null
+    },
+    {
+      "page": "voy",
+      "viewport": "1440",
+      "path": "/title/voy-2/",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/voy-1440.png",
+      "overflowX": 0,
+      "stickyOverlap": NaN,
+      "metadataOverlaps": 0,
+      "player": {
+        "t": 718,
+        "l": 120,
+        "w": 1200,
+        "h": 675
+      },
+      "host": {
+        "t": 719,
+        "l": 121,
+        "w": 1198,
+        "h": 673
+      },
+      "coverage": 100,
+      "ratio": 1.778,
+      "footer": {
+        "t": 2091,
+        "l": 40,
+        "w": 1360,
+        "h": 376
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 1,
+      "state": "ready",
+      "search_top": null
+    },
+    {
+      "page": "aida",
+      "viewport": "1440",
+      "path": "/title/aida-vozvraschaetsya/",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/aida-1440.png",
+      "overflowX": 0,
+      "stickyOverlap": NaN,
+      "metadataOverlaps": 0,
+      "player": {
+        "t": 718,
+        "l": 120,
+        "w": 1200,
+        "h": 675
+      },
+      "host": {
+        "t": 719,
+        "l": 121,
+        "w": 1198,
+        "h": 673
+      },
+      "coverage": 100,
+      "ratio": 1.778,
+      "footer": {
+        "t": 1860,
+        "l": 40,
+        "w": 1360,
+        "h": 376
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 0,
+      "state": "ready",
+      "search_top": null
+    },
+    {
+      "page": "unavail",
+      "viewport": "1440",
+      "path": "/title/1999-otdel-protivodeystviya-okkultizmu/season-1/episode-12/",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/unavail-1440.png",
+      "overflowX": 0,
+      "stickyOverlap": 0,
+      "metadataOverlaps": 0,
+      "player": {
+        "t": 412,
+        "l": 120,
+        "w": 1200,
+        "h": 120
+      },
+      "host": null,
+      "coverage": null,
+      "ratio": null,
+      "footer": {
+        "t": 1240,
+        "l": 40,
+        "w": 1360,
+        "h": 376
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 0,
+      "state": "unavailable",
+      "search_top": null
+    },
+    {
+      "page": "catalog",
+      "viewport": "1440",
+      "path": "/catalog/",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/catalog-1440.png",
+      "overflowX": 0,
+      "stickyOverlap": 0,
+      "metadataOverlaps": 0,
+      "player": null,
+      "host": null,
+      "coverage": null,
+      "ratio": null,
+      "footer": {
+        "t": 3188,
+        "l": 40,
+        "w": 1360,
+        "h": 376
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 0,
+      "state": null,
+      "search_top": null
+    },
+    {
+      "page": "home",
+      "viewport": "768",
+      "path": "/",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/home-768.png",
+      "overflowX": 0,
+      "stickyOverlap": 0,
+      "metadataOverlaps": 0,
+      "player": null,
+      "host": null,
+      "coverage": null,
+      "ratio": null,
+      "footer": {
+        "t": 6397,
+        "l": 16,
+        "w": 736,
+        "h": 582
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 0,
+      "state": null,
+      "search_top": null
+    },
+    {
+      "page": "search",
+      "viewport": "768",
+      "path": "/search/?q=%D0%B7%D0%B2%D0%B5%D0%B7%D0%B4%D0%BD%D1%8B%D0%B5%20%D0%B2%D0%BE%D0%B9%D0%BD%D1%8B",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/search-768.png",
+      "overflowX": 0,
+      "stickyOverlap": 0,
+      "metadataOverlaps": 0,
+      "player": null,
+      "host": null,
+      "coverage": null,
+      "ratio": null,
+      "footer": {
+        "t": 5953,
+        "l": 16,
+        "w": 736,
+        "h": 582
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 0,
+      "state": null,
+      "search_top": [
+        "Звёздные войны: Видения представляют — Девятый джедай",
+        "Звёздные войны: Сказания о преступном мире",
+        "Звездные войны: Опорная команда",
+        "Звёздные войны: Сказания об Империи",
+        "Звездные войны: Приключения юных джедаев",
+        "Звёздные войны: Сказания о джедаях",
+        "Звёздные войны: Бракованная партия",
+        "Звёздные войны: Видения",
+        "Звёздные войны: Скайуокер. Восход",
+        "Звездные войны: Сопротивление",
+        "Звездные войны: Последние джедаи",
+        "Звёздные войны: Силы судьбы (сериал 2017 – 2018)"
+      ]
+    },
+    {
+      "page": "vl",
+      "viewport": "768",
+      "path": "/title/v-lovushke/",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/vl-768.png",
+      "overflowX": 0,
+      "stickyOverlap": NaN,
+      "metadataOverlaps": 0,
+      "player": {
+        "t": 1189,
+        "l": 32,
+        "w": 704,
+        "h": 396
+      },
+      "host": {
+        "t": 1190,
+        "l": 33,
+        "w": 702,
+        "h": 394
+      },
+      "coverage": 99,
+      "ratio": 1.778,
+      "footer": {
+        "t": 2569,
+        "l": 16,
+        "w": 736,
+        "h": 582
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 0,
+      "state": "resolving",
+      "search_top": null
+    },
+    {
+      "page": "voy",
+      "viewport": "768",
+      "path": "/title/voy-2/",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/voy-768.png",
+      "overflowX": 0,
+      "stickyOverlap": NaN,
+      "metadataOverlaps": 0,
+      "player": {
+        "t": 1164,
+        "l": 32,
+        "w": 704,
+        "h": 396
+      },
+      "host": {
+        "t": 1165,
+        "l": 33,
+        "w": 702,
+        "h": 394
+      },
+      "coverage": 99,
+      "ratio": 1.778,
+      "footer": {
+        "t": 2776,
+        "l": 16,
+        "w": 736,
+        "h": 582
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 1,
+      "state": "resolving",
+      "search_top": null
+    },
+    {
+      "page": "aida",
+      "viewport": "768",
+      "path": "/title/aida-vozvraschaetsya/",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/aida-768.png",
+      "overflowX": 0,
+      "stickyOverlap": NaN,
+      "metadataOverlaps": 0,
+      "player": {
+        "t": 1206,
+        "l": 32,
+        "w": 704,
+        "h": 396
+      },
+      "host": {
+        "t": 1207,
+        "l": 33,
+        "w": 702,
+        "h": 394
+      },
+      "coverage": 99,
+      "ratio": 1.778,
+      "footer": {
+        "t": 2586,
+        "l": 16,
+        "w": 736,
+        "h": 582
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 0,
+      "state": "resolving",
+      "search_top": null
+    },
+    {
+      "page": "unavail",
+      "viewport": "768",
+      "path": "/title/1999-otdel-protivodeystviya-okkultizmu/season-1/episode-12/",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/unavail-768.png",
+      "overflowX": 0,
+      "stickyOverlap": 0,
+      "metadataOverlaps": 0,
+      "player": {
+        "t": 503,
+        "l": 16,
+        "w": 736,
+        "h": 120
+      },
+      "host": null,
+      "coverage": null,
+      "ratio": null,
+      "footer": {
+        "t": 1330,
+        "l": 16,
+        "w": 736,
+        "h": 582
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 0,
+      "state": "unavailable",
+      "search_top": null
+    },
+    {
+      "page": "catalog",
+      "viewport": "768",
+      "path": "/catalog/",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/catalog-768.png",
+      "overflowX": 0,
+      "stickyOverlap": 0,
+      "metadataOverlaps": 0,
+      "player": null,
+      "host": null,
+      "coverage": null,
+      "ratio": null,
+      "footer": {
+        "t": 8011,
+        "l": 16,
+        "w": 736,
+        "h": 582
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 0,
+      "state": null,
+      "search_top": null
+    },
+    {
+      "page": "home",
+      "viewport": "390",
+      "path": "/",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/home-390.png",
+      "overflowX": 0,
+      "stickyOverlap": 0,
+      "metadataOverlaps": 0,
+      "player": null,
+      "host": null,
+      "coverage": null,
+      "ratio": null,
+      "footer": {
+        "t": 6101,
+        "l": 16,
+        "w": 358,
+        "h": 852
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 0,
+      "state": null,
+      "search_top": null
+    },
+    {
+      "page": "search",
+      "viewport": "390",
+      "path": "/search/?q=%D0%B7%D0%B2%D0%B5%D0%B7%D0%B4%D0%BD%D1%8B%D0%B5%20%D0%B2%D0%BE%D0%B9%D0%BD%D1%8B",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/search-390.png",
+      "overflowX": 0,
+      "stickyOverlap": 0,
+      "metadataOverlaps": 0,
+      "player": null,
+      "host": null,
+      "coverage": null,
+      "ratio": null,
+      "footer": {
+        "t": 6897,
+        "l": 16,
+        "w": 358,
+        "h": 852
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 0,
+      "state": null,
+      "search_top": [
+        "Звёздные войны: Видения представляют — Девятый джедай",
+        "Звёздные войны: Сказания о преступном мире",
+        "Звездные войны: Опорная команда",
+        "Звёздные войны: Сказания об Империи",
+        "Звездные войны: Приключения юных джедаев",
+        "Звёздные войны: Сказания о джедаях",
+        "Звёздные войны: Бракованная партия",
+        "Звёздные войны: Видения",
+        "Звёздные войны: Скайуокер. Восход",
+        "Звездные войны: Сопротивление",
+        "Звездные войны: Последние джедаи",
+        "Звёздные войны: Силы судьбы (сериал 2017 – 2018)"
+      ]
+    },
+    {
+      "page": "vl",
+      "viewport": "390",
+      "path": "/title/v-lovushke/",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/vl-390.png",
+      "overflowX": 0,
+      "stickyOverlap": NaN,
+      "metadataOverlaps": 0,
+      "player": {
+        "t": 1191,
+        "l": 32,
+        "w": 326,
+        "h": 200
+      },
+      "host": {
+        "t": 1192,
+        "l": 33,
+        "w": 324,
+        "h": 198
+      },
+      "coverage": 98,
+      "ratio": 1.63,
+      "footer": {
+        "t": 2491,
+        "l": 16,
+        "w": 358,
+        "h": 852
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 0,
+      "state": "resolving",
+      "search_top": null
+    },
+    {
+      "page": "voy",
+      "viewport": "390",
+      "path": "/title/voy-2/",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/voy-390.png",
+      "overflowX": 0,
+      "stickyOverlap": NaN,
+      "metadataOverlaps": 0,
+      "player": {
+        "t": 1196,
+        "l": 32,
+        "w": 326,
+        "h": 200
+      },
+      "host": {
+        "t": 1197,
+        "l": 33,
+        "w": 324,
+        "h": 198
+      },
+      "coverage": 98,
+      "ratio": 1.63,
+      "footer": {
+        "t": 2892,
+        "l": 16,
+        "w": 358,
+        "h": 852
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 1,
+      "state": "resolving",
+      "search_top": null
+    },
+    {
+      "page": "aida",
+      "viewport": "390",
+      "path": "/title/aida-vozvraschaetsya/",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/aida-390.png",
+      "overflowX": 0,
+      "stickyOverlap": NaN,
+      "metadataOverlaps": 0,
+      "player": {
+        "t": 1205,
+        "l": 32,
+        "w": 326,
+        "h": 200
+      },
+      "host": {
+        "t": 1206,
+        "l": 33,
+        "w": 324,
+        "h": 198
+      },
+      "coverage": 98,
+      "ratio": 1.63,
+      "footer": {
+        "t": 2504,
+        "l": 16,
+        "w": 358,
+        "h": 852
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 0,
+      "state": "resolving",
+      "search_top": null
+    },
+    {
+      "page": "unavail",
+      "viewport": "390",
+      "path": "/title/1999-otdel-protivodeystviya-okkultizmu/season-1/episode-12/",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/unavail-390.png",
+      "overflowX": 0,
+      "stickyOverlap": 0,
+      "metadataOverlaps": 0,
+      "player": {
+        "t": 626,
+        "l": 16,
+        "w": 358,
+        "h": 120
+      },
+      "host": null,
+      "coverage": null,
+      "ratio": null,
+      "footer": {
+        "t": 1501,
+        "l": 16,
+        "w": 358,
+        "h": 852
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 0,
+      "state": "unavailable",
+      "search_top": null
+    },
+    {
+      "page": "catalog",
+      "viewport": "390",
+      "path": "/catalog/",
+      "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-pass2-2026-09-19/screenshots/catalog-390.png",
+      "overflowX": 0,
+      "stickyOverlap": 0,
+      "metadataOverlaps": 0,
+      "player": null,
+      "host": null,
+      "coverage": null,
+      "ratio": null,
+      "footer": {
+        "t": 9272,
+        "l": 16,
+        "w": 358,
+        "h": 852
+      },
+      "cardDelta": 0,
+      "samePageDescSections": 0,
+      "state": null,
+      "search_top": null
+    }
+  ]
+}

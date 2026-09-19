@@ -1,0 +1,136 @@
+{
+  "generated_at": "2026-09-19T16:15:38.497676+00:00",
+  "titles_total": 53524,
+  "with_description": 40210,
+  "missing_description": 13314,
+  "description_coverage_percent": 75.13,
+  "exact_cross_title_duplicate_groups": 39,
+  "exact_duplicate_title_count": 80,
+  "exact_duplicate_examples": [
+    {
+      "digest": "b169e70d007a21a8",
+      "count": 4,
+      "slugs": [
+        "yami-shibai-yaponskie-rasskazy-o-privideniyah-11",
+        "yami-shibai-yaponskie-rasskazy-o-privideniyah-12",
+        "yami-shibai-yaponskie-rasskazy-o-privideniyah-13",
+        "yami-shibai-yaponskie-rasskazy-o-privideniyah-14"
+      ]
+    },
+    {
+      "digest": "59dd4f20319ae043",
+      "count": 2,
+      "slugs": [
+        "ariya",
+        "ariya-priroda"
+      ]
+    },
+    {
+      "digest": "de284e9a8e7d5b4c",
+      "count": 2,
+      "slugs": [
+        "barmen-bokal-boga",
+        "barmen-bokal-boga-2"
+      ]
+    },
+    {
+      "digest": "62510d905dc0cdbc",
+      "count": 2,
+      "slugs": [
+        "blich-tysyacheletnyaya-krovavaya-voyna",
+        "blich-tysyacheletnyaya-krovavaya-voyna-bedstvie-2"
+      ]
+    },
+    {
+      "digest": "18855d185ebe4a7d",
+      "count": 2,
+      "slugs": [
+        "chelovek-pauk-3",
+        "grandioznyy-chelovek-pauk"
+      ]
+    },
+    {
+      "digest": "138ebb7a11eea2a8",
+      "count": 2,
+      "slugs": [
+        "chernyy-klever",
+        "chernyy-klever-2"
+      ]
+    },
+    {
+      "digest": "3796ad109ac9734b",
+      "count": 2,
+      "slugs": [
+        "devochka-iz-chuzhezemya",
+        "devochka-iz-chuzhezemya-ova"
+      ]
+    },
+    {
+      "digest": "5c7217bfa24fb5a5",
+      "count": 2,
+      "slugs": [
+        "dlya-tebya-vo-vsem-cvetu-2",
+        "dlya-tebya-vo-vsem-cvetu-3"
+      ]
+    },
+    {
+      "digest": "e395e5bf527f7360",
+      "count": 2,
+      "slugs": [
+        "dnevnik-vospominaniy",
+        "vremya-vospominaniy"
+      ]
+    },
+    {
+      "digest": "e8c0feebaa54b134",
+      "count": 2,
+      "slugs": [
+        "flag-nastoyaschego-prestupleniya",
+        "flag-nastoyaschego-prestupleniya-2"
+      ]
+    },
+    {
+      "digest": "4c469a0234b150f1",
+      "count": 2,
+      "slugs": [
+        "forma-golosa",
+        "forma-golosa-2016"
+      ]
+    },
+    {
+      "digest": "71164735622759f3",
+      "count": 2,
+      "slugs": [
+        "istinnye-chudotvornye-rycari",
+        "istinnye-chudotvornye-rycari-chast-2"
+      ]
+    },
+    {
+      "digest": "8710b428a379edf7",
+      "count": 2,
+      "slugs": [
+        "komnata",
+        "komnata-vozvraschaetsya"
+      ]
+    },
+    {
+      "digest": "c240c1567bc77098",
+      "count": 2,
+      "slugs": [
+        "koroleva-stavshaya-prichinoy-tragedii-sdelaet-dlya-naroda-vse-chto-v-ee-silah",
+        "koroleva-stavshaya-prichinoy-tragedii-sdelaet-dlya-naroda-vse-chto-v-ee-silah-2"
+      ]
+    },
+    {
+      "digest": "ef7918e6fbe1ca04",
+      "count": 2,
+      "slugs": [
+        "legenda-o-bryuse-li-3",
+        "legenda-o-bryuse-li-4"
+      ]
+    }
+  ],
+  "near_duplicate_description_groups": 0,
+  "backfilled": 0,
+  "note": "Near-duplicate Jaccard deferred for 53k catalog; exact digests reported. No invented backfill."
+}

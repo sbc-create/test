@@ -1,0 +1,343 @@
+{
+  "early_dims": {
+    "state": "resolving",
+    "frame": {
+      "w": 1320,
+      "h": 743
+    },
+    "host": {
+      "w": 1318,
+      "h": 155
+    },
+    "vp": {
+      "w": 1318,
+      "h": 155
+    },
+    "iframe": {
+      "w": 1318,
+      "h": 150,
+      "src": "https://player.cdnvideohub.com/s2/v2.19.2/frame/"
+    },
+    "cs": ""
+  },
+  "final": {
+    "state": "slow",
+    "frame": {
+      "w": 1320,
+      "h": 157,
+      "ratio": 8.414
+    },
+    "iframe": {
+      "w": 1318,
+      "h": 150
+    },
+    "dialogOpen": false,
+    "st": "Плеер не поднялся\n\nСкрипт провайдера загрузился, но воспроизведение не подтвердилось за пятнадцать секунд. Обновите страницу; описание и серии доступны и сейчас."
+  },
+  "postMessages": [
+    {
+      "origin": "https://zonafilm.space",
+      "data": "__ym__promise_23261146_192458931"
+    },
+    {
+      "origin": "https://zonafilm.space",
+      "data": "__ym__promise_866148383_830212757"
+    },
+    {
+      "origin": "https://zonafilm.space",
+      "data": "__ym__promise_517681597_942248258"
+    },
+    {
+      "origin": "https://zonafilm.space",
+      "data": "__ym__promise_935784505_510580510"
+    },
+    {
+      "origin": "https://zonafilm.space",
+      "data": "__ym__promise_286239944_54321934"
+    },
+    {
+      "origin": "https://zonafilm.space",
+      "data": "__ym__promise_194227343_256549988"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"init\",\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://zonafilm.space",
+      "data": "__ym__promise_1028122631_1072603957"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"volumechange\",\"data\":{\"volume\":1},\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"unmute\",\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"currentQuality\",\"data\":{\"quality\":{\"height\":0,\"quality\":\"auto\",\"isAutoQuality\":false}},\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"qualityList\",\"data\":{\"list\":[]},\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"qualityList\",\"data\":{\"list\":[]},\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"qualityList\",\"data\":{\"list\":[]},\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"qualityList\",\"data\":{\"list\":[]},\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"qualityList\",\"data\":{\"list\":[]},\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"qualityList\",\"data\":{\"list\":[]},\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"statechange\",\"data\":\"ready\",\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"vueInited\",\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://zonafilm.space",
+      "data": "__ym__promise_1050369352_569440189"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"qualityList\",\"data\":{\"list\":[\"1080p\",\"720p\",\"480p\",\"360p\",\"240p\",\"144p\"]},\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"qualityList\",\"data\":{\"list\":[\"1080p\",\"720p\",\"480p\",\"360p\",\"240p\",\"144p\"]},\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"currentQuality\",\"data\":{\"quality\":{\"height\":\"240p\",\"quality\":\"240p\",\"isAutoQuality\":false}},\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"qualityList\",\"data\":{\"list\":[\"1080p\",\"720p\",\"480p\",\"360p\",\"240p\",\"144p\"]},\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"qualityList\",\"data\":{\"list\":[\"1080p\",\"720p\",\"480p\",\"360p\",\"240p\",\"144p\"]},\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"timeupdate\",\"data\":{\"duration\":5894.460979166667,\"position\":0.093322},\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"statechange\",\"data\":\"playing\",\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"play\",\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"started\",\"key\":\"cvh_player_2.19.2\"}"
+    },
+    {
+      "origin": "https://player.cdnvideohub.com",
+      "data": "{\"eventType\":\"statechange\",\"data\":\"paused\",\"key\":\"cvh_player_2.19.2\"}"
+    }
+  ],
+  "media_reqs": [
+    {
+      "status": 200,
+      "url": "https://iv.okcdn.ru/videoPreview?id=16021958429290&type=32&idx=2&tkn=c-JZ9i6k4F2uFjNFvblBMaKPoq8",
+      "ct": "image/jpeg"
+    },
+    {
+      "status": 200,
+      "url": "https://vd445.okcdn.ru/?expires=1789919439481&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ch=-1610167797&ms=95.163.35.119&type=1&sig=aLErhI-P-6s&ct=6&urls=185.226.55.14&clientType=46&zs=43&id=16021958429290",
+      "ct": "application/dash+xml"
+    },
+    {
+      "status": 200,
+      "url": "https://vd445.okcdn.ru/?expires=1789919439481&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=0&sig=1x4vJGv3KBo&ct=11&urls=185.226.55.14&clientType=46&zs=43&id=16021958429290&bytes=0-12723",
+      "ct": "video/mp4"
+    },
+    {
+      "status": 200,
+      "url": "https://vd445.okcdn.ru/?expires=1789919439481&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=3&sig=MWp-2TmESko&ct=12&urls=185.226.55.14&clientType=46&zs=43&id=16021958429290&bytes=0-11608",
+      "ct": "audio/mp4"
+    },
+    {
+      "status": 200,
+      "url": "https://vd445.okcdn.ru/?expires=1789919439481&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=0&sig=1x4vJGv3KBo&ct=11&urls=185.226.55.14&clientType=46&zs=43&id=16021958429290&bytes=12724-71779",
+      "ct": "video/mp4"
+    },
+    {
+      "status": 200,
+      "url": "https://vd445.okcdn.ru/?expires=1789919439481&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=3&sig=MWp-2TmESko&ct=12&urls=185.226.55.14&clientType=46&zs=43&id=16021958429290&bytes=11609-227688",
+      "ct": "audio/mp4"
+    },
+    {
+      "status": 200,
+      "url": "https://vd445.okcdn.ru/?expires=1789919439481&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=0&sig=1x4vJGv3KBo&ct=11&urls=185.226.55.14&clientType=46&zs=43&id=16021958429290&bytes=71780-142645",
+      "ct": "video/mp4"
+    },
+    {
+      "status": 200,
+      "url": "https://iv.okcdn.ru/videoPreview?id=16021958429290&type=32&idx=2&tkn=c-JZ9i6k4F2uFjNFvblBMaKPoq8",
+      "ct": "image/jpeg"
+    },
+    {
+      "status": 200,
+      "url": "https://vd445.okcdn.ru/?expires=1789919439481&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=0&sig=1x4vJGv3KBo&ct=11&urls=185.226.55.14&clientType=46&zs=43&id=16021958429290&bytes=142646-1123563",
+      "ct": "video/mp4"
+    },
+    {
+      "status": 200,
+      "url": "https://vd445.okcdn.ru/?expires=1789919439481&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=3&sig=MWp-2TmESko&ct=12&urls=185.226.55.14&clientType=46&zs=43&id=16021958429290&bytes=227689-1321092",
+      "ct": "audio/mp4"
+    },
+    {
+      "status": 200,
+      "url": "https://vd445.okcdn.ru/?expires=1789919439481&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=5&sig=I4tzH8wX4ig&ct=11&urls=185.226.55.14&clientType=46&zs=43&id=16021958429290&bytes=0-12738",
+      "ct": "video/mp4"
+    },
+    {
+      "status": 200,
+      "url": "https://vd445.okcdn.ru/?expires=1789919439481&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=2&sig=vX0Sy6tV9y0&ct=12&urls=185.226.55.14&clientType=46&zs=43&id=16021958429290&bytes=0-11608",
+      "ct": "audio/mp4"
+    },
+    {
+      "status": 200,
+      "url": "https://vd445.okcdn.ru/?expires=1789919439481&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=3&sig=MWp-2TmESko&ct=11&urls=185.226.55.14&clientType=46&zs=43&id=16021958429290&bytes=0-12738",
+      "ct": "video/mp4"
+    },
+    {
+      "status": 200,
+      "url": "https://vd445.okcdn.ru/?expires=1789919439481&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=1&sig=MBCxTC8rNOc&ct=12&urls=185.226.55.14&clientType=46&zs=43&id=16021958429290&bytes=0-11608",
+      "ct": "audio/mp4"
+    },
+    {
+      "status": 200,
+      "url": "https://vd445.okcdn.ru/?expires=1789919439481&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=3&sig=MWp-2TmESko&ct=12&urls=185.226.55.14&clientType=46&zs=43&id=16021958429290&bytes=1321093-2195967",
+      "ct": "audio/mp4"
+    },
+    {
+      "status": 200,
+      "url": "https://vd445.okcdn.ru/?expires=1789919439481&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=2&sig=vX0Sy6tV9y0&ct=11&urls=185.226.55.14&clientType=46&zs=43&id=16021958429290&bytes=0-12735",
+      "ct": "video/mp4"
+    },
+    {
+      "status": 200,
+      "url": "https://vd445.okcdn.ru/?expires=1789919439481&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=0&sig=1x4vJGv3KBo&ct=12&urls=185.226.55.14&clientType=46&zs=43&id=16021958429290&bytes=0-11608",
+      "ct": "audio/mp4"
+    },
+    {
+      "status": 200,
+      "url": "https://vd445.okcdn.ru/?expires=1789919439481&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=1&sig=MBCxTC8rNOc&ct=11&urls=185.226.55.14&clientType=46&zs=43&id=16021958429290&bytes=0-12722",
+      "ct": "video/mp4"
+    },
+    {
+      "status": 200,
+      "url": "https://vd445.okcdn.ru/?expires=1789919439481&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=4&sig=jIbP7EcF5SY&ct=12&urls=185.226.55.14&clientType=46&zs=43&id=16021958429290&bytes=0-11608",
+      "ct": "audio/mp4"
+    },
+    {
+      "status": 200,
+      "url": "https://vd445.okcdn.ru/?expires=1789919439481&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=4&sig=jIbP7EcF5SY&ct=11&urls=185.226.55.14&clientType=46&zs=43&id=16021958429290&bytes=0-12722",
+      "ct": "video/mp4"
+    }
+  ],
+  "notes": [
+    {
+      "type": "console",
+      "text": "Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+      "type": "console",
+      "text": "HTTP error: 404  {url: https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqc&p2=juhq&puid10=, headers: Object}"
+    },
+    {
+      "type": "console",
+      "text": "VAST parsing error: HTTP error: 404  {url: https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqc&p2=juhq&puid10=}"
+    },
+    {
+      "type": "console",
+      "text": "Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+      "type": "console",
+      "text": "HTTP error: 404  {url: https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqd&p2=juhq&puid10=, headers: Object}"
+    },
+    {
+      "type": "console",
+      "text": "VAST parsing error: HTTP error: 404  {url: https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqd&p2=juhq&puid10=}"
+    },
+    {
+      "type": "console",
+      "text": "Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+      "type": "console",
+      "text": "HTTP error: 404  {url: https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqc&p2=juhq&puid10=, headers: Object}"
+    },
+    {
+      "type": "console",
+      "text": "VAST parsing error: HTTP error: 404  {url: https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqc&p2=juhq&puid10=}"
+    },
+    {
+      "type": "console",
+      "text": "Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+      "type": "console",
+      "text": "HTTP error: 404  {url: https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqd&p2=juhq&puid10=, headers: Object}"
+    },
+    {
+      "type": "console",
+      "text": "VAST parsing error: HTTP error: 404  {url: https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqd&p2=juhq&puid10=}"
+    },
+    {
+      "type": "console",
+      "text": "Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+      "type": "console",
+      "text": "HTTP error: 404  {url: https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqc&p2=juhq&puid10=, headers: Object}"
+    },
+    {
+      "type": "console",
+      "text": "VAST parsing error: HTTP error: 404  {url: https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqc&p2=juhq&puid10=}"
+    },
+    {
+      "type": "console",
+      "text": "Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+      "type": "console",
+      "text": "HTTP error: 404  {url: https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqd&p2=juhq&puid10=, headers: Object}"
+    },
+    {
+      "type": "console",
+      "text": "VAST parsing error: HTTP error: 404  {url: https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqd&p2=juhq&puid10=}"
+    },
+    {
+      "type": "console",
+      "text": "Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+      "type": "console",
+      "text": "HTTP error: 404  {url: https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqc&p2=juhq&puid10=, headers: Object}"
+    }
+  ]
+}

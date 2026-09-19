@@ -1,0 +1,116 @@
+{
+  "payloads": [
+    {
+      "status": 200,
+      "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10238&aggr=kp&id=11922371",
+      "ct": "application/json; charset=utf-8",
+      "body_head": "{\"titleName\":\"Аида возвращается\",\"isSerial\":false,\"items\":[{\"cvhId\":\"019e874a-7155-72d3-9df1-16a7a1f7afc5\",\"vkId\":\"14628861336170\",\"voiceStudio\":\"@MUZOBOZ@\",\"voiceType\":\"Многоголосый\"}],\"trailers\":null,\"ads\":{\"vast\":{\"preroll\":[\"https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqc\\u0026p2=juhq\\u0026puid10=\",\"https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqd\\u0026p2=juhq\\u0026puid10=\"],\"prerolls\":[{\"url\":\"https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqc\\u0026p2=juhq\\u0026puid10=\",\"priority\":0},{\"url\":\"https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqd\\u0026p2=juhq\\u0026puid10=\",\"priority\":1}],\"pauseroll\":[\"https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqe\\u0026p2=juhq\\u0026puid10=\"],\"pauserolls\":[{\"url\":\"https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqe\\u0026p2=juhq\\u0026puid10=\",\"priority\":0}],\"midroll\":null}},\"vast\":{\"preroll\":[\"https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqc\\u0026p2=juhq\\u0026puid10=\",\"https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqd\\u0026p2=juhq\\u0026puid10=\"],\"prerolls\":[{\"url\":\"https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqc\\u0026p2=juhq\\u0026puid10=\",\"priority\":0},{\"url\":\"https://yandex.ru/ads/adfox/14677041/getCode?p1=dr",
+      "body_len": 1476
+    },
+    {
+      "status": 200,
+      "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/14628861336170",
+      "ct": "application/json; charset=utf-8",
+      "body_head": "{\"unitedVideoId\":14628861336170,\"duration\":5894,\"failoverHost\":\"vd504.okcdn.ru\",\"thumbUrl\":\"https://iv.okcdn.ru/videoPreview?id=16021958429290\\u0026type=32\\u0026idx=2\\u0026tkn=c-JZ9i6k4F2uFjNFvblBMaKPoq8\",\"sources\":{\"hlsUrl\":\"https://vd445.okcdn.ru/video.m3u8?cmd=videoPlayerCdn\\u0026expires=1789919439481\\u0026srcIp=45.131.182.225\\u0026pr=90\\u0026srcAg=CHROME\\u0026ch=-536166974\\u0026ms=95.163.35.119\\u0026type=2\\u0026sig=ICuT0U2yXpk\\u0026ct=8\\u0026urls=185.226.55.14\\u0026clientType=46\\u0026zs=43\\u0026id=16021958429290\",\"dashUrl\":\"https://vd445.okcdn.ru/?expires=1789919439481\\u0026srcIp=45.131.182.225\\u0026pr=90\\u0026srcAg=CHROME\\u0026ch=-1610167797\\u0026ms=95.163.35.119\\u0026type=1\\u0026sig=aLErhI-P-6s\\u0026ct=6\\u0026urls=185.226.55.14\\u0026clientType=46\\u0026zs=43\\u0026id=16021958429290\",\"mpegQhdUrl\":\"\",\"mpeg2kUrl\":\"\",\"mpeg4kUrl\":\"\",\"mpegHighUrl\":\"https://vd445.okcdn.ru/?expires=1789919439481\\u0026srcIp=45.131.182.225\\u0026pr=90\\u0026srcAg=CHROME\\u0026ms=95.163.35.119\\u0026type=3\\u0026sig=MWp-2TmESko\\u0026ct=0\\u0026urls=185.226.55.14\\u0026clientType=46\\u0026zs=43\\u0026id=16021958429290\",\"mpegFullHdUrl\":\"https://vd445.okcdn.ru/?expires=1789919439481\\u0026srcIp=45.131.182.225\\u0026pr=",
+      "body_len": 2404
+    }
+  ],
+  "deep": {
+    "state": "resolving",
+    "frame": {
+      "w": 1320,
+      "h": 743
+    },
+    "nodes": [
+      {
+        "tag": "BUTTON",
+        "cls": "zhd__menu",
+        "w": 0,
+        "h": 0,
+        "src": "",
+        "text": "☰"
+      },
+      {
+        "tag": "BUTTON",
+        "cls": "",
+        "w": 81,
+        "h": 34,
+        "src": "",
+        "text": "Найти"
+      },
+      {
+        "tag": "IMG",
+        "cls": "zhead__img",
+        "w": 260,
+        "h": 390,
+        "src": "https://poster.cdnvideohub.com/019e7ce8-fd9d-7b5e-83ed-734c6a5c5437.webp",
+        "text": ""
+      },
+      {
+        "tag": "VIDEO-PLAYER",
+        "cls": "",
+        "w": 1318,
+        "h": 155,
+        "src": "",
+        "text": ""
+      },
+      {
+        "tag": "IFRAME",
+        "cls": "vk-player-iframe",
+        "w": 1318,
+        "h": 150,
+        "src": "https://player.cdnvideohub.com/s2/v2.19.2/frame/",
+        "text": ""
+      },
+      {
+        "tag": "IMG",
+        "cls": "zt__img",
+        "w": 169,
+        "h": 253,
+        "src": "https://poster.cdnvideohub.com/019ebaf5-a1c5-7248-b043-41605dcef54f.webp",
+        "text": ""
+      },
+      {
+        "tag": "IMG",
+        "cls": "zt__img",
+        "w": 169,
+        "h": 253,
+        "src": "https://poster.cdnvideohub.com/019e8d88-86e6-72b4-8c3f-904ea69ffadc.webp",
+        "text": ""
+      },
+      {
+        "tag": "IMG",
+        "cls": "zt__img",
+        "w": 169,
+        "h": 253,
+        "src": "https://poster.cdnvideohub.com/019e9cd1-ba36-753a-8457-98414a3b4073.webp",
+        "text": ""
+      },
+      {
+        "tag": "IMG",
+        "cls": "zt__img",
+        "w": 169,
+        "h": 253,
+        "src": "https://poster.cdnvideohub.com/019ea1d2-2287-7987-b49c-f079bc6b6487.webp",
+        "text": ""
+      },
+      {
+        "tag": "IMG",
+        "cls": "zt__img",
+        "w": 169,
+        "h": 253,
+        "src": "https://poster.cdnvideohub.com/019d72c1-e7a8-7142-b1e1-9e0a6a002ddf.webp",
+        "text": ""
+      },
+      {
+        "tag": "IMG",
+        "cls": "zt__img",
+        "w": 169,
+        "h": 253,
+        "src": "https://poster.cdnvideohub.com/019d7680-442c-79a8-8d6f-2e6ad0136760.webp",
+        "text": ""
+      }
+    ],
+    "shadowHTML": "<style>\n      :host {\n        display: block;\n        width: 100%;\n        height: 100%;\n      }\n      .vk-player-dialog {\n        width: 100%;\n        height: 100%;\n        max-width: none;\n        max-height: none;\n        margin: 0;\n        padding: 0;\n        border: 0;\n        background: transparent;\n      }\n      .vk-player-dialog:not([open]) {\n        display: block;\n        position: static;\n      }\n      .vk-player-dialog[open] {\n        position: fixed;\n        inset: 0;\n      }\n      .vk-player-iframe {\n        width: 100%;\n        height: 100%;\n        border: none;\n      }\n    </style><dialog class=\"vk-player-dialog\"><iframe class=\"vk-player-iframe\" src=\"https://player.cdnvideohub.com/s2/v2.19.2/frame/\" title=\"Video Player\" allow=\"fullscreen; autoplay; screen-wake-lock; encrypted-media\"></iframe></dialog>"
+  }
+}

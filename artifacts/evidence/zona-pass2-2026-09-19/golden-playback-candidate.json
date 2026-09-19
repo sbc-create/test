@@ -1,0 +1,925 @@
+{
+  "base": "http://127.0.0.1:19120",
+  "tag": "candidate",
+  "PLAYER_EXPECTED_PLAYABLE_TOTAL": 12,
+  "PLAYER_ACTUAL_PLAYING_PASS": 11,
+  "PLAYER_EXPECTED_UNAVAILABLE_TOTAL": 1,
+  "PLAYER_HONEST_UNAVAILABLE_PASS": 1,
+  "PLAYER_FALSE_READY": 0,
+  "PLAYER_HTTP_200_ONLY_NOT_COUNTED": 1,
+  "PLAYER_FAILURES": 1,
+  "results": [
+    {
+      "label": "aida",
+      "path": "/title/aida-vozvraschaetsya/",
+      "ssr_box": {
+        "x": 720,
+        "y": 1055.265625,
+        "w": 1200,
+        "h": 675,
+        "state": "ready"
+      },
+      "info": {
+        "state": "playing",
+        "label": "воспроизведение",
+        "frame": {
+          "w": 1200,
+          "h": 675,
+          "ratio": 1.778
+        },
+        "stText": "",
+        "zonaPlaying": {
+          "token": 1,
+          "event": "pm.timeupdate3",
+          "pos": 12.864531,
+          "at": 1789833756978
+        },
+        "banner": "false",
+        "jargon": false
+      },
+      "pm_sample": [
+        "init:",
+        "volumechange:[object Object]",
+        "unmute:",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "statechange:ready",
+        "vueInited:",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "timeupdate:[object Object]",
+        "statechange:playing",
+        "play:"
+      ],
+      "media_n": 22,
+      "media_sample": [
+        {
+          "status": 200,
+          "url": "https://vd445.okcdn.ru/?expires=1789920141058&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ch=-1610167797&ms=95.163.35.119&type=1&sig=EzmkPQKcpGw&ct=6&urls=185.226.55.14&clientType=46&z",
+          "ct": "application/dash+xml"
+        },
+        {
+          "status": 200,
+          "url": "https://vd445.okcdn.ru/?expires=1789920141058&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=3&sig=-2qb1Ei5GWk&ct=11&urls=185.226.55.14&clientType=46&zs=43&id=160219",
+          "ct": "video/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd445.okcdn.ru/?expires=1789920141058&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=3&sig=-2qb1Ei5GWk&ct=12&urls=185.226.55.14&clientType=46&zs=43&id=160219",
+          "ct": "audio/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd445.okcdn.ru/?expires=1789920141058&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=3&sig=-2qb1Ei5GWk&ct=11&urls=185.226.55.14&clientType=46&zs=43&id=160219",
+          "ct": "video/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd445.okcdn.ru/?expires=1789920141058&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=3&sig=-2qb1Ei5GWk&ct=12&urls=185.226.55.14&clientType=46&zs=43&id=160219",
+          "ct": "audio/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd445.okcdn.ru/?expires=1789920141058&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=95.163.35.119&type=3&sig=-2qb1Ei5GWk&ct=11&urls=185.226.55.14&clientType=46&zs=43&id=160219",
+          "ct": "video/mp4"
+        }
+      ],
+      "ACTUAL_PLAYING": true,
+      "HTTP_200_ONLY": false,
+      "PLAYER_HTTP_200_ONLY_NOT_COUNTED": 1
+    },
+    {
+      "label": "vl",
+      "path": "/title/v-lovushke/",
+      "ssr_box": {
+        "x": 720,
+        "y": 1055.265625,
+        "w": 1200,
+        "h": 675,
+        "state": "ready"
+      },
+      "info": {
+        "state": "playing",
+        "label": "воспроизведение",
+        "frame": {
+          "w": 1200,
+          "h": 675,
+          "ratio": 1.778
+        },
+        "stText": "",
+        "zonaPlaying": {
+          "token": 1,
+          "event": "pm.timeupdate3",
+          "pos": 13.124555,
+          "at": 1789833774164
+        },
+        "banner": "false",
+        "jargon": false
+      },
+      "pm_sample": [
+        "init:",
+        "volumechange:[object Object]",
+        "unmute:",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "statechange:ready",
+        "vueInited:",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "timeupdate:[object Object]",
+        "statechange:playing",
+        "play:"
+      ],
+      "media_n": 22,
+      "media_sample": [
+        {
+          "status": 200,
+          "url": "https://vd440.okcdn.ru/?expires=1789920158326&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ch=-1610167797&ms=178.237.23.42&type=1&sig=XVcrpYITC6E&ct=6&urls=176.112.172.36&clientType=46&",
+          "ct": "application/dash+xml"
+        },
+        {
+          "status": 200,
+          "url": "https://vd440.okcdn.ru/?expires=1789920158326&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=178.237.23.42&type=2&sig=3HDL9flILok&ct=11&urls=176.112.172.36&clientType=46&zs=43&id=15503",
+          "ct": "video/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd440.okcdn.ru/?expires=1789920158326&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=178.237.23.42&type=3&sig=_a7fXHj0-ng&ct=12&urls=176.112.172.36&clientType=46&zs=43&id=15503",
+          "ct": "audio/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd440.okcdn.ru/?expires=1789920158326&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=178.237.23.42&type=2&sig=3HDL9flILok&ct=11&urls=176.112.172.36&clientType=46&zs=43&id=15503",
+          "ct": "video/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd440.okcdn.ru/?expires=1789920158326&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=178.237.23.42&type=3&sig=_a7fXHj0-ng&ct=12&urls=176.112.172.36&clientType=46&zs=43&id=15503",
+          "ct": "audio/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd440.okcdn.ru/?expires=1789920158326&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=178.237.23.42&type=2&sig=3HDL9flILok&ct=11&urls=176.112.172.36&clientType=46&zs=43&id=15503",
+          "ct": "video/mp4"
+        }
+      ],
+      "ACTUAL_PLAYING": true,
+      "HTTP_200_ONLY": false,
+      "PLAYER_HTTP_200_ONLY_NOT_COUNTED": 1
+    },
+    {
+      "label": "voy",
+      "path": "/title/voy-2/",
+      "ssr_box": {
+        "x": 720,
+        "y": 1055.265625,
+        "w": 1200,
+        "h": 675,
+        "state": "ready"
+      },
+      "info": {
+        "state": "playing",
+        "label": "воспроизведение",
+        "frame": {
+          "w": 1200,
+          "h": 675,
+          "ratio": 1.778
+        },
+        "stText": "",
+        "zonaPlaying": {
+          "token": 1,
+          "event": "pm.timeupdate3",
+          "pos": 12.147039,
+          "at": 1789833791336
+        },
+        "banner": "false",
+        "jargon": false
+      },
+      "pm_sample": [
+        "init:",
+        "volumechange:[object Object]",
+        "unmute:",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "statechange:ready",
+        "vueInited:",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "timeupdate:[object Object]",
+        "statechange:playing",
+        "play:"
+      ],
+      "media_n": 18,
+      "media_sample": [
+        {
+          "status": 200,
+          "url": "https://vd340.okcdn.ru/?expires=1789920175613&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ch=-1610167797&ms=176.112.172.79&type=1&sig=n4nTbil7zj0&ct=6&urls=185.226.55.109&clientType=46",
+          "ct": "application/dash+xml"
+        },
+        {
+          "status": 200,
+          "url": "https://vd340.okcdn.ru/?expires=1789920175613&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.79&type=3&sig=nB6YzmxVvNM&ct=11&urls=185.226.55.109&clientType=46&zs=43&id=8884",
+          "ct": "video/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd340.okcdn.ru/?expires=1789920175613&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.79&type=3&sig=nB6YzmxVvNM&ct=12&urls=185.226.55.109&clientType=46&zs=43&id=8884",
+          "ct": "audio/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd340.okcdn.ru/?expires=1789920175613&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.79&type=3&sig=nB6YzmxVvNM&ct=11&urls=185.226.55.109&clientType=46&zs=43&id=8884",
+          "ct": "video/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd340.okcdn.ru/?expires=1789920175613&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.79&type=3&sig=nB6YzmxVvNM&ct=12&urls=185.226.55.109&clientType=46&zs=43&id=8884",
+          "ct": "audio/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd340.okcdn.ru/?expires=1789920175613&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.79&type=3&sig=nB6YzmxVvNM&ct=12&urls=185.226.55.109&clientType=46&zs=43&id=8884",
+          "ct": "audio/mp4"
+        }
+      ],
+      "ACTUAL_PLAYING": true,
+      "HTTP_200_ONLY": false,
+      "PLAYER_HTTP_200_ONLY_NOT_COUNTED": 1
+    },
+    {
+      "label": "skyfall",
+      "path": "/title/007-koordinaty-skayfoll/",
+      "ssr_box": {
+        "x": 720,
+        "y": 1055.265625,
+        "w": 1200,
+        "h": 675,
+        "state": "ready"
+      },
+      "info": {
+        "state": "playing",
+        "label": "воспроизведение",
+        "frame": {
+          "w": 1200,
+          "h": 675,
+          "ratio": 1.778
+        },
+        "stText": "",
+        "zonaPlaying": {
+          "token": 1,
+          "event": "pm.timeupdate3",
+          "pos": 12.696673,
+          "at": 1789833808486
+        },
+        "banner": "false",
+        "jargon": false
+      },
+      "pm_sample": [
+        "init:",
+        "volumechange:[object Object]",
+        "unmute:",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "statechange:ready",
+        "vueInited:",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "timeupdate:[object Object]",
+        "statechange:playing",
+        "play:"
+      ],
+      "media_n": 0,
+      "media_sample": [],
+      "ACTUAL_PLAYING": true,
+      "HTTP_200_ONLY": false,
+      "PLAYER_HTTP_200_ONLY_NOT_COUNTED": 1
+    },
+    {
+      "label": "imperiya",
+      "path": "/title/imperiya-artura/",
+      "ssr_box": {
+        "x": 720,
+        "y": 1055.265625,
+        "w": 1200,
+        "h": 675,
+        "state": "ready"
+      },
+      "info": {
+        "state": "playing",
+        "label": "воспроизведение",
+        "frame": {
+          "w": 1200,
+          "h": 675,
+          "ratio": 1.778
+        },
+        "stText": "",
+        "zonaPlaying": {
+          "token": 1,
+          "event": "pm.timeupdate3",
+          "pos": 9.161334,
+          "at": 1789833825513
+        },
+        "banner": "false",
+        "jargon": false
+      },
+      "pm_sample": [
+        "init:",
+        "volumechange:[object Object]",
+        "unmute:",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "statechange:ready",
+        "vueInited:",
+        "statechange:playing",
+        "play:",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "timeupdate:[object Object]"
+      ],
+      "media_n": 18,
+      "media_sample": [
+        {
+          "status": 200,
+          "url": "https://vd343.okcdn.ru/?expires=1789920210524&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ch=-1534561081&ms=185.180.203.96&type=1&sig=1KhOi0463b0&ct=6&urls=95.163.35.3&clientType=46&zs",
+          "ct": "application/dash+xml"
+        },
+        {
+          "status": 200,
+          "url": "https://vd343.okcdn.ru/?expires=1789920210524&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=185.180.203.96&type=3&sig=2FHWdMWktOY&ct=11&urls=95.163.35.3&clientType=46&zs=43&id=1786286",
+          "ct": "video/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd343.okcdn.ru/?expires=1789920210524&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=185.180.203.96&type=3&sig=2FHWdMWktOY&ct=12&urls=95.163.35.3&clientType=46&zs=43&id=1786286",
+          "ct": "audio/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd343.okcdn.ru/?expires=1789920210524&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=185.180.203.96&type=3&sig=2FHWdMWktOY&ct=11&urls=95.163.35.3&clientType=46&zs=43&id=1786286",
+          "ct": "video/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd343.okcdn.ru/?expires=1789920210524&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=185.180.203.96&type=3&sig=2FHWdMWktOY&ct=12&urls=95.163.35.3&clientType=46&zs=43&id=1786286",
+          "ct": "audio/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd343.okcdn.ru/?expires=1789920210524&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=185.180.203.96&type=2&sig=iPIT6bveopA&ct=12&urls=95.163.35.3&clientType=46&zs=43&id=1786286",
+          "ct": "audio/mp4"
+        }
+      ],
+      "ACTUAL_PLAYING": true,
+      "HTTP_200_ONLY": false,
+      "PLAYER_HTTP_200_ONLY_NOT_COUNTED": 1
+    },
+    {
+      "label": "mira",
+      "path": "/title/0-1-mira/",
+      "ssr_box": {
+        "x": 720,
+        "y": 1055.265625,
+        "w": 1200,
+        "h": 675,
+        "state": "ready"
+      },
+      "info": {
+        "state": "playing",
+        "label": "воспроизведение",
+        "frame": {
+          "w": 1200,
+          "h": 675,
+          "ratio": 1.778
+        },
+        "stText": "",
+        "zonaPlaying": {
+          "token": 1,
+          "event": "pm.timeupdate3",
+          "pos": 12.809276,
+          "at": 1789833843305
+        },
+        "banner": "false",
+        "jargon": false
+      },
+      "pm_sample": [
+        "init:",
+        "volumechange:[object Object]",
+        "unmute:",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "statechange:ready",
+        "vueInited:",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "timeupdate:[object Object]",
+        "statechange:playing",
+        "play:"
+      ],
+      "media_n": 17,
+      "media_sample": [
+        {
+          "status": 200,
+          "url": "https://vd560.okcdn.ru/?expires=1789920227781&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ch=-1610167797&ms=185.226.55.94&type=1&sig=UJHlzkUiu18&ct=6&urls=95.163.35.7&clientType=46&zs=",
+          "ct": "application/dash+xml"
+        },
+        {
+          "status": 200,
+          "url": "https://vd560.okcdn.ru/?expires=1789920227781&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=185.226.55.94&type=3&sig=kXQrzssjV0g&ct=11&urls=95.163.35.7&clientType=46&zs=43&id=81693172",
+          "ct": "video/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd560.okcdn.ru/?expires=1789920227781&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=185.226.55.94&type=3&sig=kXQrzssjV0g&ct=12&urls=95.163.35.7&clientType=46&zs=43&id=81693172",
+          "ct": "audio/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd560.okcdn.ru/?expires=1789920227781&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=185.226.55.94&type=3&sig=kXQrzssjV0g&ct=11&urls=95.163.35.7&clientType=46&zs=43&id=81693172",
+          "ct": "video/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd560.okcdn.ru/?expires=1789920227781&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=185.226.55.94&type=3&sig=kXQrzssjV0g&ct=12&urls=95.163.35.7&clientType=46&zs=43&id=81693172",
+          "ct": "audio/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd560.okcdn.ru/?expires=1789920227781&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=185.226.55.94&type=3&sig=kXQrzssjV0g&ct=12&urls=95.163.35.7&clientType=46&zs=43&id=81693172",
+          "ct": "audio/mp4"
+        }
+      ],
+      "ACTUAL_PLAYING": true,
+      "HTTP_200_ONLY": false,
+      "PLAYER_HTTP_200_ONLY_NOT_COUNTED": 1
+    },
+    {
+      "label": "chile",
+      "path": "/title/03-34-zemletryasenie-v-chili/",
+      "ssr_box": {
+        "x": 720,
+        "y": 1055.265625,
+        "w": 1200,
+        "h": 675,
+        "state": "resolving"
+      },
+      "info": {
+        "state": "ready",
+        "label": "источник готов",
+        "frame": {
+          "w": 1200,
+          "h": 675,
+          "ratio": 1.778
+        },
+        "stText": "",
+        "zonaPlaying": null,
+        "banner": "false",
+        "jargon": false
+      },
+      "pm_sample": [
+        "init:",
+        "volumechange:[object Object]",
+        "unmute:",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "statechange:ready",
+        "vueInited:",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]"
+      ],
+      "media_n": 7,
+      "media_sample": [
+        {
+          "status": 200,
+          "url": "https://vd582.okcdn.ru/?expires=1789920247093&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ch=1336333768&ms=185.226.55.103&type=1&sig=G3_HUTGjVVk&ct=6&urls=178.237.29.66&clientType=46&z",
+          "ct": "application/dash+xml"
+        },
+        {
+          "status": 200,
+          "url": "https://vd582.okcdn.ru/?expires=1789920247093&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=185.226.55.103&type=2&sig=ShRKdMhOSf4&ct=11&urls=178.237.29.66&clientType=46&zs=43&id=85209",
+          "ct": "video/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd582.okcdn.ru/?expires=1789920247093&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=185.226.55.103&type=3&sig=qkxZE8y9UEA&ct=12&urls=178.237.29.66&clientType=46&zs=43&id=85209",
+          "ct": "audio/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd582.okcdn.ru/?expires=1789920247093&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=185.226.55.103&type=2&sig=ShRKdMhOSf4&ct=11&urls=178.237.29.66&clientType=46&zs=43&id=85209",
+          "ct": "video/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd582.okcdn.ru/?expires=1789920247093&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=185.226.55.103&type=1&sig=0GIj25RkGVM&ct=11&urls=178.237.29.66&clientType=46&zs=43&id=85209",
+          "ct": "video/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd582.okcdn.ru/?expires=1789920247093&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=185.226.55.103&type=3&sig=qkxZE8y9UEA&ct=12&urls=178.237.29.66&clientType=46&zs=43&id=85209",
+          "ct": "audio/mp4"
+        }
+      ],
+      "ACTUAL_PLAYING": true,
+      "HTTP_200_ONLY": false,
+      "PLAYER_HTTP_200_ONLY_NOT_COUNTED": 1
+    },
+    {
+      "label": "mgc",
+      "path": "/title/0-0-mgc/",
+      "ssr_box": {
+        "x": 720,
+        "y": 1055.265625,
+        "w": 1200,
+        "h": 675,
+        "state": "ready"
+      },
+      "info": {
+        "state": "playing",
+        "label": "воспроизведение",
+        "frame": {
+          "w": 1200,
+          "h": 675,
+          "ratio": 1.778
+        },
+        "stText": "",
+        "zonaPlaying": {
+          "token": 1,
+          "event": "pm.timeupdate3",
+          "pos": 12.141629,
+          "at": 1789833877947
+        },
+        "banner": "false",
+        "jargon": false
+      },
+      "pm_sample": [
+        "init:",
+        "volumechange:[object Object]",
+        "unmute:",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "statechange:ready",
+        "vueInited:",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]"
+      ],
+      "media_n": 19,
+      "media_sample": [
+        {
+          "status": 200,
+          "url": "https://vd513.okcdn.ru/?expires=1789920262646&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ch=-1610167797&ms=185.226.55.23&type=1&sig=hJsk0p7orXw&ct=6&urls=176.112.172.54&clientType=46&",
+          "ct": "application/dash+xml"
+        },
+        {
+          "status": 200,
+          "url": "https://vd513.okcdn.ru/?expires=1789920262646&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=185.226.55.23&type=2&sig=XFRpc10QcZI&ct=11&urls=176.112.172.54&clientType=46&zs=43&id=83092",
+          "ct": "video/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd513.okcdn.ru/?expires=1789920262646&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=185.226.55.23&type=3&sig=TIgnkSSrwBg&ct=12&urls=176.112.172.54&clientType=46&zs=43&id=83092",
+          "ct": "audio/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd513.okcdn.ru/?expires=1789920262646&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=185.226.55.23&type=2&sig=XFRpc10QcZI&ct=11&urls=176.112.172.54&clientType=46&zs=43&id=83092",
+          "ct": "video/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd513.okcdn.ru/?expires=1789920262646&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=185.226.55.23&type=1&sig=BfNkYKVTgRI&ct=11&urls=176.112.172.54&clientType=46&zs=43&id=83092",
+          "ct": "video/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd513.okcdn.ru/?expires=1789920262646&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=185.226.55.23&type=3&sig=TIgnkSSrwBg&ct=12&urls=176.112.172.54&clientType=46&zs=43&id=83092",
+          "ct": "audio/mp4"
+        }
+      ],
+      "ACTUAL_PLAYING": true,
+      "HTTP_200_ONLY": false,
+      "PLAYER_HTTP_200_ONLY_NOT_COUNTED": 1
+    },
+    {
+      "label": "anna_ep1",
+      "path": "/title/anna-pidzhen/season-1/episode-1/",
+      "ssr_box": {
+        "x": 720,
+        "y": 749.734375,
+        "w": 1200,
+        "h": 675,
+        "state": "ready"
+      },
+      "info": {
+        "state": "playing",
+        "label": "воспроизведение",
+        "frame": {
+          "w": 1200,
+          "h": 675,
+          "ratio": 1.778
+        },
+        "stText": "",
+        "zonaPlaying": {
+          "token": 1,
+          "event": "pm.timeupdate3",
+          "pos": 13.156801,
+          "at": 1789833896868
+        },
+        "banner": "false",
+        "jargon": false
+      },
+      "pm_sample": [
+        "init:",
+        "volumechange:[object Object]",
+        "unmute:",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "statechange:ready",
+        "vueInited:",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "statechange:playing",
+        "play:",
+        "timeupdate:[object Object]"
+      ],
+      "media_n": 0,
+      "media_sample": [],
+      "ACTUAL_PLAYING": true,
+      "HTTP_200_ONLY": false,
+      "PLAYER_HTTP_200_ONLY_NOT_COUNTED": 1
+    },
+    {
+      "label": "occ_ep1",
+      "path": "/title/1999-otdel-protivodeystviya-okkultizmu/season-1/episode-1/",
+      "ssr_box": {
+        "x": 720,
+        "y": 749.734375,
+        "w": 1200,
+        "h": 675,
+        "state": "ready"
+      },
+      "info": {
+        "state": "playing",
+        "label": "воспроизведение",
+        "frame": {
+          "w": 1200,
+          "h": 675,
+          "ratio": 1.778
+        },
+        "stText": "",
+        "zonaPlaying": {
+          "token": 1,
+          "event": "pm.timeupdate3",
+          "pos": 13.908901,
+          "at": 1789833913931
+        },
+        "banner": "false",
+        "jargon": false
+      },
+      "pm_sample": [
+        "init:",
+        "volumechange:[object Object]",
+        "unmute:",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "statechange:ready",
+        "vueInited:",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "timeupdate:[object Object]",
+        "statechange:playing",
+        "play:"
+      ],
+      "media_n": 25,
+      "media_sample": [
+        {
+          "status": 200,
+          "url": "https://vd718.okcdn.ru/?expires=1789920298218&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ch=1365729381&ms=176.112.172.34&type=1&sig=8cpmX6GoxVQ&ct=6&urls=95.163.35.67&clientType=46&zs",
+          "ct": "application/dash+xml"
+        },
+        {
+          "status": 200,
+          "url": "https://vd718.okcdn.ru/?expires=1789920298218&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.34&type=2&sig=6zIg1Qpjzuc&ct=11&urls=95.163.35.67&clientType=46&zs=43&id=167988",
+          "ct": "video/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd718.okcdn.ru/?expires=1789920298218&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.34&type=3&sig=OUvfAm-sPJQ&ct=12&urls=95.163.35.67&clientType=46&zs=43&id=167988",
+          "ct": "audio/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd718.okcdn.ru/?expires=1789920298218&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.34&type=2&sig=6zIg1Qpjzuc&ct=11&urls=95.163.35.67&clientType=46&zs=43&id=167988",
+          "ct": "video/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd718.okcdn.ru/?expires=1789920298218&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.34&type=3&sig=OUvfAm-sPJQ&ct=12&urls=95.163.35.67&clientType=46&zs=43&id=167988",
+          "ct": "audio/mp4"
+        },
+        {
+          "status": 200,
+          "url": "https://vd718.okcdn.ru/?expires=1789920298218&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.34&type=3&sig=OUvfAm-sPJQ&ct=12&urls=95.163.35.67&clientType=46&zs=43&id=167988",
+          "ct": "audio/mp4"
+        }
+      ],
+      "ACTUAL_PLAYING": true,
+      "HTTP_200_ONLY": false,
+      "PLAYER_HTTP_200_ONLY_NOT_COUNTED": 1
+    },
+    {
+      "label": "spectrum",
+      "path": "/title/spektrometr/",
+      "ssr_box": null,
+      "info": {
+        "state": null,
+        "label": "",
+        "frame": null,
+        "stText": "",
+        "zonaPlaying": null,
+        "banner": null,
+        "jargon": false
+      },
+      "pm_sample": [],
+      "media_n": 0,
+      "media_sample": [],
+      "ACTUAL_PLAYING": false,
+      "HTTP_200_ONLY": false,
+      "PLAYER_HTTP_200_ONLY_NOT_COUNTED": 1
+    },
+    {
+      "label": "anna_hub",
+      "path": "/title/anna-pidzhen/",
+      "ssr_box": {
+        "x": 720,
+        "y": 1055.265625,
+        "w": 1200,
+        "h": 675,
+        "state": "ready"
+      },
+      "info": {
+        "state": "playing",
+        "label": "воспроизведение",
+        "frame": {
+          "w": 1200,
+          "h": 675,
+          "ratio": 1.778
+        },
+        "stText": "",
+        "zonaPlaying": {
+          "token": 1,
+          "event": "pm.timeupdate3",
+          "pos": 11.879244,
+          "at": 1789833949086
+        },
+        "banner": "false",
+        "jargon": false
+      },
+      "pm_sample": [
+        "init:",
+        "volumechange:[object Object]",
+        "unmute:",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "statechange:ready",
+        "vueInited:",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "currentQuality:[object Object]",
+        "qualityList:[object Object]",
+        "qualityList:[object Object]",
+        "statechange:playing",
+        "play:",
+        "currentQuality:[object Object]"
+      ],
+      "media_n": 0,
+      "media_sample": [],
+      "ACTUAL_PLAYING": true,
+      "HTTP_200_ONLY": false,
+      "PLAYER_HTTP_200_ONLY_NOT_COUNTED": 1
+    }
+  ],
+  "unavailable": [
+    {
+      "label": "occ_ep12",
+      "path": "/title/1999-otdel-protivodeystviya-okkultizmu/season-1/episode-12/",
+      "ssr_box": {
+        "x": 720,
+        "y": 472.234375,
+        "w": 1200,
+        "h": 120,
+        "state": "unavailable"
+      },
+      "info": {
+        "state": "unavailable",
+        "label": "серия без дорожки",
+        "frame": {
+          "w": 1200,
+          "h": 120,
+          "ratio": 10
+        },
+        "stText": "Дорожки этой серии ещё нет\n\nСерия 12 заявлена в сезоне 1 (в снимке серий 12, с дорожкой 6), но источник ещё не отдал плейлист на этот номер. Плеер не подключается: иначе провайдер показал бы чужой эпи",
+        "zonaPlaying": null,
+        "banner": null,
+        "jargon": false
+      },
+      "pm_sample": [],
+      "media_n": 0,
+      "media_sample": [],
+      "ACTUAL_PLAYING": false,
+      "HTTP_200_ONLY": false,
+      "PLAYER_HTTP_200_ONLY_NOT_COUNTED": 1,
+      "HONEST_UNAVAILABLE": true
+    }
+  ]
+}

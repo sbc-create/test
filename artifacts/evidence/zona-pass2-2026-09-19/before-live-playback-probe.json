@@ -1,0 +1,140 @@
+[
+  {
+    "label": "vl",
+    "info": {
+      "state": "slow",
+      "label": "подключение источника",
+      "frame": {
+        "w": 1320,
+        "h": 157,
+        "ratio": 8.414
+      },
+      "agg": "kp",
+      "tid": "12733648",
+      "banner": "true",
+      "stText": "Плеер не поднялся\n\nСкрипт провайдера загрузился, но воспроизведение не подтвердилось за пятнадцать секунд. Обновите страницу; описание и серии доступны и сейчас.",
+      "shadow": {
+        "hasVideo": false,
+        "hasImg": false,
+        "video": null,
+        "img": null
+      },
+      "zonaPlaying": null
+    },
+    "vid_reqs": [
+      {
+        "status": 200,
+        "url": "https://player.cdnvideohub.com/s2/stable/video-player.umd.js",
+        "ct": "application/javascript"
+      },
+      {
+        "status": 200,
+        "url": "https://plapi.cdnvideohub.com/",
+        "ct": ""
+      },
+      {
+        "status": 200,
+        "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10238&aggr=kp&id=12733648",
+        "ct": "application/json; charset=utf-8"
+      },
+      {
+        "status": 200,
+        "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/15435752364748",
+        "ct": "application/json; charset=utf-8"
+      }
+    ],
+    "errs": []
+  },
+  {
+    "label": "voy",
+    "info": {
+      "state": "slow",
+      "label": "подключение источника",
+      "frame": {
+        "w": 1320,
+        "h": 157,
+        "ratio": 8.414
+      },
+      "agg": "kp",
+      "tid": "681547",
+      "banner": "true",
+      "stText": "Плеер не поднялся\n\nСкрипт провайдера загрузился, но воспроизведение не подтвердилось за пятнадцать секунд. Обновите страницу; описание и серии доступны и сейчас.",
+      "shadow": {
+        "hasVideo": false,
+        "hasImg": false,
+        "video": null,
+        "img": null
+      },
+      "zonaPlaying": null
+    },
+    "vid_reqs": [
+      {
+        "status": 200,
+        "url": "https://player.cdnvideohub.com/s2/stable/video-player.umd.js",
+        "ct": "application/javascript"
+      },
+      {
+        "status": 200,
+        "url": "https://plapi.cdnvideohub.com/",
+        "ct": ""
+      },
+      {
+        "status": 200,
+        "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10238&aggr=kp&id=681547",
+        "ct": "application/json; charset=utf-8"
+      },
+      {
+        "status": 200,
+        "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/10226783443509",
+        "ct": "application/json; charset=utf-8"
+      }
+    ],
+    "errs": []
+  },
+  {
+    "label": "aida",
+    "info": {
+      "state": "slow",
+      "label": "подключение источника",
+      "frame": {
+        "w": 1320,
+        "h": 157,
+        "ratio": 8.414
+      },
+      "agg": "kp",
+      "tid": "11922371",
+      "banner": "true",
+      "stText": "Плеер не поднялся\n\nСкрипт провайдера загрузился, но воспроизведение не подтвердилось за пятнадцать секунд. Обновите страницу; описание и серии доступны и сейчас.",
+      "shadow": {
+        "hasVideo": false,
+        "hasImg": false,
+        "video": null,
+        "img": null
+      },
+      "zonaPlaying": null
+    },
+    "vid_reqs": [
+      {
+        "status": 200,
+        "url": "https://player.cdnvideohub.com/s2/stable/video-player.umd.js",
+        "ct": "application/javascript"
+      },
+      {
+        "status": 200,
+        "url": "https://plapi.cdnvideohub.com/",
+        "ct": ""
+      },
+      {
+        "status": 200,
+        "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10238&aggr=kp&id=11922371",
+        "ct": "application/json; charset=utf-8"
+      },
+      {
+        "status": 200,
+        "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/14628861336170",
+        "ct": "application/json; charset=utf-8"
+      }
+    ],
+    "errs": []
+  }
+]
