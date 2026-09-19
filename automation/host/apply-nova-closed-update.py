@@ -109,6 +109,32 @@ def _apply_body(dry, sites, frontend_src, art, when) -> int:
         install_on = sites[0]["site"]
     elif len(sites) == len(CLOSED_SITES):
         install_on = "lords-02"
+    elif any(s["site"].startswith("animedia") for s in sites):
+        # Animedia-only closed update must still refresh shared runtime.
+        install_on = sites[0]["site"]
+
+    # Fail-closed release gates before any mutation.
+    sys.path.insert(0, str(ROOT / "automation" / "host"))
+    import nova_release_gate as gate  # noqa: WPS433
+
+    gate_report = gate.evaluate_candidate(
+        frontend_src, [s["site"] for s in sites if s["site"].startswith("animedia")]
+        or [s["site"] for s in sites],
+    )
+    say(
+        "release_gate "
+        f"RUNTIME_DOWNGRADE={gate_report['flags']['RUNTIME_DOWNGRADE']} "
+        f"RUNTIME_COMPATIBLE={gate_report['flags']['RUNTIME_COMPATIBLE']} "
+        f"CONTENT_SNAPSHOT_DIGEST_MATCH={gate_report['flags']['CONTENT_SNAPSHOT_DIGEST_MATCH']} "
+        f"CATALOG_DETAILS_SKEW={gate_report['flags']['CATALOG_DETAILS_SKEW']}"
+    )
+    if not gate_report["ok"]:
+        say(json.dumps(gate_report, ensure_ascii=False))
+        if gate_report["flags"]["RUNTIME_DOWNGRADE"]:
+            say("BLOCKED_SHARED_RUNTIME_CONFLICT: candidate would drop live runtime markers")
+            return 3
+        say("BLOCKED_RELEASE_GATE")
+        return 2
 
     say(f"artifact_sha256={art}")
     say(f"runtime_commit={RUNTIME_COMMIT}")
@@ -279,6 +305,25 @@ def _apply_body(dry, sites, frontend_src, art, when) -> int:
                     if hz.returncode != 0:
                         raise RuntimeError(f"{s['site']}: /healthz failed after apply")
                     say(f"{s['site']}: /healthz ok")
+            if s["family"] == "animedia":
+                port = {"animedia-01": "9121", "animedia-02": "9122"}[s["site"]]
+                probe = run(
+                    ["curl", "-fsS", "--max-time", "8",
+                     f"http://127.0.0.1:{port}/title/master-lda-i-plameni-2/"],
+                    check=False,
+                )
+                if probe.returncode != 0:
+                    raise RuntimeError(f"{s['site']}: title probe failed")
+                body = probe.stdout or ""
+                bind = gate.provider_binding_match(body)
+                say(
+                    f"{s['site']}: PROVIDER_BINDING_MATCH={bind['PROVIDER_BINDING_MATCH']} "
+                    f"agg={bind['aggregator']} mali_first={bind['mali_first']}"
+                )
+                if bind["PROVIDER_BINDING_MATCH"] != 1:
+                    raise RuntimeError(
+                        f"{s['site']}: provider binding gate failed: {bind}"
+                    )
     except Exception as exc:
         say(f"ОТКАЗ после {applied}: {exc}")
         say(f"откат: манифесты и frontend в {rb}")
