@@ -28,7 +28,7 @@ class ClosedSiteProvenance(TypedDict):
 
 # source_commit per family; RUNTIME_COMMIT filled after Animedia frontend commit.
 LORDS_COMMIT = "5fc22310fdfb8f0c8748f69e5603e4de3267f27e"
-ANIMEDIA_COMMIT = "d01c13704adfe945eb8d2efde540a7114c27db71"
+ANIMEDIA_COMMIT = "3e66dfd1501a6f063836753e6962010680216a0a"
 ZONA_COMMIT = "bcbea00877708c7f930f1fe931a17f66decafed5"
 
 REPO_LORDS = "/home/claude/wt-lords-integration-canary-01"
@@ -59,7 +59,7 @@ CLOSED_SITES: tuple[ClosedSiteProvenance, ...] = (
         "profile": "animedia-icu",
         "source_commit": ANIMEDIA_COMMIT,
         "runtime_commit": RUNTIME_COMMIT,
-        "design_version": "1.2.2",
+        "design_version": "1.2.3",
         "source_repo": REPO_ANIMEDIA,
         "runtime_repo": RUNTIME_REPO,
     },
@@ -70,7 +70,7 @@ CLOSED_SITES: tuple[ClosedSiteProvenance, ...] = (
         "profile": "animedia-space",
         "source_commit": ANIMEDIA_COMMIT,
         "runtime_commit": RUNTIME_COMMIT,
-        "design_version": "1.2.2",
+        "design_version": "1.2.3",
         "source_repo": REPO_ANIMEDIA,
         "runtime_repo": RUNTIME_REPO,
     },
