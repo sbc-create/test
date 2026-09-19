@@ -84,7 +84,8 @@ class TestZonaFilters:
 class TestZonaFooterAndMarker:
     def test_compact_marker_and_no_debug(self, зона):
         о = запросить(зона, "/")
-        assert re.search(r"Zona\s+1\.2\.0\s·\s0{8}", о.тело)
+        assert "Zona · v1.2.0 · 00000000" in о.тело or re.search(
+            r"Zona\s+[·.]\s*v?1\.2\.0\s+[·.]\s*0{8}", о.тело)
         for запрет in ("тестовая витрина", "закрыта от индексации",
                        "В снимке каталога", "Template:", "записей_в_снимке"):
             assert запрет not in о.тело

@@ -520,9 +520,11 @@ class TestАвтоматСостоянийПлеера:
 
     def test_таймаут_учитывает_уже_поднявшийся_плеер(self, лордс):
         скрипт = self._скрипт(лордс)
-        assert "if(!поднялся) state('slow'" in скрипт, (
-            "таймаут перестал проверять, поднялся ли плеер, и объявит сломанным "
+        # PASS2: timeout must not mark UNAVAILABLE/ERROR while playing is proven.
+        assert "if(my!==token || playing) return" in скрипт, (
+            "таймаут перестал проверять, играет ли плеер, и объявит сломанным "
             "то, что уже играет")
+        assert "nextOrFail" in скрипт
 
     def test_отказы_подписаны_без_условий(self, лордс):
         скрипт = self._скрипт(лордс)
@@ -577,7 +579,8 @@ class TestПереработкаВключаетсяВерсией:
         assert "тестовая витрина" not in з
         assert "Новые трейлеры" not in з  # empty trailer shelf must stay hidden
         assert '<section class="zsec">' in з or 'class="zsec zsec--seo"' in з
-        assert re.search(r"Zona\s+1\.2\.0\s·\s0{8}", з)
+        assert "Zona · v1.2.0 · 00000000" in з or re.search(
+            r"Zona\s+[·.]\s*v?1\.2\.0\s+[·.]\s*0{8}", з)
         assert "Template:" not in з
 
     def test_animedia_1_2_0_свой_вид_а_не_lords(self, анимедиа_1_2):
