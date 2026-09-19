@@ -1,0 +1,10 @@
+{
+  "eligible_total": 150,
+  "covered_valid": 0,
+  "eligible_uncovered": 150,
+  "coverage_percent": 0.0,
+  "daily_accepted_target": 100,
+  "daily_candidate_cap": 150,
+  "full_coverage": false,
+  "note": "require 100 newly covered"
+}

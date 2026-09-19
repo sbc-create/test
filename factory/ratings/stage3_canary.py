@@ -111,7 +111,7 @@ def shadow_plan(urls: list[str], *, cap: int) -> list[dict[str, Any]]:
     """Deterministic candidate list: stable order, canonical dedupe by amd id."""
     seen: set[str] = set()
     plan: list[dict[str, Any]] = []
-    for idx, url in enumerate(urls):
+    for url in urls:
         # extract id
         parts = url.rstrip("/").split("/")[-1]
         ext = parts.split("-", 1)[0]

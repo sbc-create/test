@@ -1,0 +1,49 @@
+{
+  "domains": {
+    "animedia.icu": {
+      "domain": "animedia.icu",
+      "indexing": "noindex",
+      "publication_mode": "CLOSED_NOINDEX",
+      "public_indexed": false,
+      "live_path": "/srv/site-factory/repo/var/ratings/snapshots/animedia.icu/ratings_snapshot_v1.json",
+      "evidence_path": "artifacts/evidence/ratings-ingestion-03/closed-noindex/animedia.icu/ratings_snapshot_v1.json",
+      "live": {
+        "path": "/srv/site-factory/repo/var/ratings/snapshots/animedia.icu/ratings_snapshot_v1.json",
+        "digest": "f6000fb1a8aa53b724320aa155a1b040c3b8008e8fb75b4a1dcd5f8eb09872b2",
+        "previous": null,
+        "title_count": 100
+      },
+      "evidence": {
+        "path": "artifacts/evidence/ratings-ingestion-03/closed-noindex/animedia.icu/ratings_snapshot_v1.json",
+        "digest": "f6000fb1a8aa53b724320aa155a1b040c3b8008e8fb75b4a1dcd5f8eb09872b2",
+        "previous": null,
+        "title_count": 100
+      },
+      "attribution_required": "Источник: AMD.online",
+      "robots_policy": "noindex, nofollow (closed nova)"
+    },
+    "animedia.space": {
+      "domain": "animedia.space",
+      "indexing": "noindex",
+      "publication_mode": "CLOSED_NOINDEX",
+      "public_indexed": false,
+      "live_path": "/srv/site-factory/repo/var/ratings/snapshots/animedia.space/ratings_snapshot_v1.json",
+      "evidence_path": "artifacts/evidence/ratings-ingestion-03/closed-noindex/animedia.space/ratings_snapshot_v1.json",
+      "live": {
+        "path": "/srv/site-factory/repo/var/ratings/snapshots/animedia.space/ratings_snapshot_v1.json",
+        "digest": "f6000fb1a8aa53b724320aa155a1b040c3b8008e8fb75b4a1dcd5f8eb09872b2",
+        "previous": null,
+        "title_count": 100
+      },
+      "evidence": {
+        "path": "artifacts/evidence/ratings-ingestion-03/closed-noindex/animedia.space/ratings_snapshot_v1.json",
+        "digest": "f6000fb1a8aa53b724320aa155a1b040c3b8008e8fb75b4a1dcd5f8eb09872b2",
+        "previous": null,
+        "title_count": 100
+      },
+      "attribution_required": "Источник: AMD.online",
+      "robots_policy": "noindex, nofollow (closed nova)"
+    }
+  },
+  "public_indexed": false
+}

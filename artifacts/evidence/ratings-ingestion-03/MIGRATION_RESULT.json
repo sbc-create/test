@@ -1,8 +1,67 @@
 {
   "before": {
-    "exists": false,
-    "tables": [],
-    "migrations": []
+    "exists": true,
+    "path": "/srv/site-factory/repo/var/ratings/ratings.sqlite",
+    "tables": [
+      "rating_backfill_cursor",
+      "rating_backfill_queue",
+      "rating_combined_projection",
+      "rating_conflicts",
+      "rating_current",
+      "rating_dead_letter",
+      "rating_idempotency",
+      "rating_ingestion_runs",
+      "rating_local_aggregate",
+      "rating_observations",
+      "rating_review_queue",
+      "rating_source_absence",
+      "rating_sources",
+      "rating_vote_current",
+      "rating_vote_event",
+      "ratings_daily_outcome",
+      "ratings_daily_run",
+      "schema_migrations",
+      "sqlite_sequence",
+      "title_source_mappings"
+    ],
+    "migrations": [
+      {
+        "version": "0002",
+        "description": "ratings ingestion: registry, mappings, observations, queue, runs",
+        "applied_at": "2026-09-19T20:04:26Z"
+      },
+      {
+        "version": "0003",
+        "description": "amd local votes combined daily ratings",
+        "applied_at": "2026-09-19T20:04:26Z"
+      },
+      {
+        "version": "0004",
+        "description": "rating_source_absence for zero-score/no-vote deferred retry",
+        "applied_at": "2026-09-19T20:04:26Z"
+      }
+    ],
+    "counts": {
+      "rating_backfill_cursor": 0,
+      "rating_backfill_queue": 0,
+      "rating_combined_projection": 0,
+      "rating_conflicts": 0,
+      "rating_current": 0,
+      "rating_dead_letter": 0,
+      "rating_idempotency": 0,
+      "rating_ingestion_runs": 0,
+      "rating_local_aggregate": 0,
+      "rating_observations": 0,
+      "rating_review_queue": 0,
+      "rating_source_absence": 0,
+      "rating_sources": 0,
+      "rating_vote_current": 0,
+      "rating_vote_event": 0,
+      "ratings_daily_outcome": 0,
+      "ratings_daily_run": 0,
+      "schema_migrations": 3,
+      "title_source_mappings": 0
+    }
   },
   "after": {
     "exists": true,

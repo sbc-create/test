@@ -1,0 +1,142 @@
+{
+  "report_version": "ratings_run_report_v1",
+  "run_id": "s3-fd328bbbbb92",
+  "run_started_at": "2026-09-19T20:04:35Z",
+  "run_finished_at": "2026-09-19T20:22:47Z",
+  "code_head": "",
+  "config_digest": "400667f4d58783048dbb916d280dc71ec390b6111176b679dad522dc7f3f6362",
+  "queue_digest": "2551ffdf89d039175d2875534cf444289cc6994db68542d0cd544bff4b2ae99c",
+  "snapshot_digest_before": "",
+  "snapshot_digest_after": "f6000fb1a8aa53b724320aa155a1b040c3b8008e8fb75b4a1dcd5f8eb09872b2",
+  "eligible_total": 150,
+  "covered_total": 100,
+  "coverage_percent": 66.67,
+  "eligible_uncovered_before": 150,
+  "eligible_uncovered_after": 50,
+  "newly_covered": 100,
+  "refreshed": 0,
+  "attempted": 110,
+  "accepted": 100,
+  "rejected": 10,
+  "rejection_reasons": {
+    "ZERO_SCORE_NO_VOTE": 10
+  },
+  "ongoing_attempted": 0,
+  "new_catalog_attempted": 0,
+  "backlog_attempted": 110,
+  "unresolved_mappings": 0,
+  "zero_score_no_vote": 10,
+  "network_failures": 0,
+  "challenge_failures": 0,
+  "parser_failures": 0,
+  "rate_limit_events": 0,
+  "retries": 0,
+  "publication_status": {
+    "domains": {
+      "animedia.icu": {
+        "domain": "animedia.icu",
+        "indexing": "noindex",
+        "publication_mode": "CLOSED_NOINDEX",
+        "public_indexed": false,
+        "live_path": "/srv/site-factory/repo/var/ratings/snapshots/animedia.icu/ratings_snapshot_v1.json",
+        "evidence_path": "artifacts/evidence/ratings-ingestion-03/closed-noindex/animedia.icu/ratings_snapshot_v1.json",
+        "live": {
+          "path": "/srv/site-factory/repo/var/ratings/snapshots/animedia.icu/ratings_snapshot_v1.json",
+          "digest": "f6000fb1a8aa53b724320aa155a1b040c3b8008e8fb75b4a1dcd5f8eb09872b2",
+          "previous": null,
+          "title_count": 100
+        },
+        "evidence": {
+          "path": "artifacts/evidence/ratings-ingestion-03/closed-noindex/animedia.icu/ratings_snapshot_v1.json",
+          "digest": "f6000fb1a8aa53b724320aa155a1b040c3b8008e8fb75b4a1dcd5f8eb09872b2",
+          "previous": null,
+          "title_count": 100
+        },
+        "attribution_required": "Источник: AMD.online",
+        "robots_policy": "noindex, nofollow (closed nova)"
+      },
+      "animedia.space": {
+        "domain": "animedia.space",
+        "indexing": "noindex",
+        "publication_mode": "CLOSED_NOINDEX",
+        "public_indexed": false,
+        "live_path": "/srv/site-factory/repo/var/ratings/snapshots/animedia.space/ratings_snapshot_v1.json",
+        "evidence_path": "artifacts/evidence/ratings-ingestion-03/closed-noindex/animedia.space/ratings_snapshot_v1.json",
+        "live": {
+          "path": "/srv/site-factory/repo/var/ratings/snapshots/animedia.space/ratings_snapshot_v1.json",
+          "digest": "f6000fb1a8aa53b724320aa155a1b040c3b8008e8fb75b4a1dcd5f8eb09872b2",
+          "previous": null,
+          "title_count": 100
+        },
+        "evidence": {
+          "path": "artifacts/evidence/ratings-ingestion-03/closed-noindex/animedia.space/ratings_snapshot_v1.json",
+          "digest": "f6000fb1a8aa53b724320aa155a1b040c3b8008e8fb75b4a1dcd5f8eb09872b2",
+          "previous": null,
+          "title_count": 100
+        },
+        "attribution_required": "Источник: AMD.online",
+        "robots_policy": "noindex, nofollow (closed nova)"
+      }
+    },
+    "public_indexed": false
+  },
+  "noindex_checks": {
+    "animedia.icu": {
+      "ok": true,
+      "http_status": 200,
+      "x_robots_tag": "noindex, nofollow",
+      "robots_disallow_all": true,
+      "robots_excerpt": "User-agent: *\nDisallow: /\n",
+      "sitemap_new_urls_from_ratings": 0
+    },
+    "animedia.space": {
+      "ok": true,
+      "http_status": 200,
+      "x_robots_tag": "noindex, nofollow",
+      "robots_disallow_all": true,
+      "robots_excerpt": "User-agent: *\nDisallow: /\n",
+      "sitemap_new_urls_from_ratings": 0
+    }
+  },
+  "scheduler_status": {
+    "SCHEDULER_INSTALLED": "YES",
+    "SCHEDULER_ENABLED": "NO",
+    "CURRENT_DAILY_LIMIT": 0,
+    "DEFAULT_STATE": "DISABLED",
+    "AUTO_RAMP": false,
+    "KILL_SWITCH": "enabled",
+    "EXIT_SHORTFALL": 3
+  },
+  "rollback_status": {
+    "status": "RESTORED_OK",
+    "scratch": "/srv/site-factory/repo/var/ratings/backups/rollback_scratch.sqlite",
+    "tables": 20
+  },
+  "idempotency_replay": {
+    "new_observations": 0,
+    "duplicate_prevented": 100
+  },
+  "adapter_stats": {
+    "attempted": 110,
+    "matched": 110,
+    "accepted": 100,
+    "rejected": 10,
+    "quarantined": 0,
+    "http_403": 0,
+    "http_429": 0,
+    "challenges": 0,
+    "robots_digest_changed": 0,
+    "last_good_retained": 0,
+    "auto_stop_triggered": 0
+  },
+  "auto_stopped": false,
+  "stop_reason": "",
+  "shortfall": 0,
+  "db_path": "/srv/site-factory/repo/var/ratings/ratings.sqlite",
+  "permission": {
+    "AMD_PERMISSION_STATUS": "NOT_PROVIDED",
+    "AMD_CLOSED_NOINDEX_USAGE": "ALLOWED_BY_OWNER",
+    "AMD_PUBLIC_INDEXED_PUBLICATION": "BLOCKED"
+  },
+  "formula_version": "animedia_blend_v1"
+}

@@ -1,0 +1,54 @@
+{
+  "canonical_title_id": "amd_online:1200",
+  "ratingSources": [
+    {
+      "source": "amd_online",
+      "score": 9.52,
+      "voteCount": 21742,
+      "fetchedAt": "2026-09-19T20:04:36Z",
+      "freshness": "FRESH",
+      "provenance": {
+        "url": "https://amd.online/1200-raskolotaja-bitvoj-sineva-nebes-5.html"
+      },
+      "components": {
+        "story": "9.6",
+        "characters": "9.6",
+        "art": "9.6",
+        "voice": "9.4"
+      },
+      "attribution": "Источник: AMD.online",
+      "canonicalSourceUrl": "https://amd.online/1200-raskolotaja-bitvoj-sineva-nebes-5.html"
+    }
+  ],
+  "localRating": null,
+  "combinedRating": {
+    "score": 9.52,
+    "formulaVersion": "animedia_blend_v1",
+    "baselineWeight": 100,
+    "localVoteCount": 0,
+    "state": "AMD_ONLY"
+  },
+  "rotation": {
+    "score": 9.52,
+    "algorithmVersion": "animedia_rotation_v1"
+  },
+  "scores": {
+    "amd_online": {
+      "score": 9.52,
+      "vote_count": 21742,
+      "freshness": "FRESH",
+      "provenance_url": "https://amd.online/1200-raskolotaja-bitvoj-sineva-nebes-5.html",
+      "observed_at": "2026-09-19T20:04:36Z",
+      "external_id": "1200",
+      "adapter_version": "amd_online_html/1.0.0",
+      "components": {
+        "story": "9.6",
+        "characters": "9.6",
+        "art": "9.6",
+        "voice": "9.4"
+      },
+      "attribution": "Источник: AMD.online",
+      "canonical_source_url": "https://amd.online/1200-raskolotaja-bitvoj-sineva-nebes-5.html"
+    }
+  }
+}

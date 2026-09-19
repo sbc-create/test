@@ -1,0 +1,18 @@
+{
+  "animedia.icu": {
+    "ok": true,
+    "http_status": 200,
+    "x_robots_tag": "noindex, nofollow",
+    "robots_disallow_all": true,
+    "robots_excerpt": "User-agent: *\nDisallow: /\n",
+    "sitemap_new_urls_from_ratings": 0
+  },
+  "animedia.space": {
+    "ok": true,
+    "http_status": 200,
+    "x_robots_tag": "noindex, nofollow",
+    "robots_disallow_all": true,
+    "robots_excerpt": "User-agent: *\nDisallow: /\n",
+    "sitemap_new_urls_from_ratings": 0
+  }
+}

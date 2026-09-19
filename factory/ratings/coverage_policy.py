@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from contextlib import suppress
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from typing import Any
@@ -85,10 +86,8 @@ def stage3_gates() -> dict[str, int]:
 def zero_score_retry_after(observed_at: str | None = None) -> str:
     base = datetime.now(timezone.utc)
     if observed_at:
-        try:
+        with suppress(ValueError):
             base = datetime.fromisoformat(observed_at.replace("Z", "+00:00"))
-        except ValueError:
-            pass
     return (base + timedelta(days=ZERO_SCORE_RETRY_DAYS)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 

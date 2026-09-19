@@ -1,0 +1,23 @@
+{
+  "schema": "ratings_scheduler_v1",
+  "final_accepted_target": 500,
+  "final_candidate_cap": 750,
+  "max_rate_rps": 0.1,
+  "max_concurrency": 1,
+  "timeout_hours": 3.0,
+  "overlap_policy": "SKIP",
+  "lock": "single-flight",
+  "crash_resume": "checkpoint",
+  "kill_switch": "enabled",
+  "default_state": "DISABLED",
+  "state": "DISABLED",
+  "current_daily_limit": 0,
+  "ramp_allowed": [
+    100,
+    250,
+    500
+  ],
+  "auto_ramp": false,
+  "source_key": "amd_online",
+  "note": "Stage 3: installed but DISABLED; ramp requires explicit confirmed stage"
+}
