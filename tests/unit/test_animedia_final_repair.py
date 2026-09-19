@@ -245,3 +245,38 @@ class TestAnimediaFinalRepair:
         assert mod.ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ is True
         assert "animedia" in mod.ВИДЫ_1_1
         assert mod.ВИДЫ_1_1["animedia"] is mod.ВидАнимедиа
+
+    def test_genre_index_from_russian_names_without_codes(self, fe):
+        mod, catalog, details = fe
+        # Simulate Animedia sidecar: names only, no genre_codes.
+        bare = {
+            "alpha-anime": {
+                "genres": ["драма", "боевик"],
+                "seasons": [],
+                "external_ids": {"kp": "1"},
+            },
+            "beta-anime": {
+                "genres": ["комедия"],
+                "seasons": [],
+                "external_ids": {"kp": "2"},
+            },
+        }
+        данные = mod.Данные.__new__(mod.Данные)
+        данные.items = [dict(з) for з in catalog["items"][:2]]
+        подроб = mod.Подробности.__new__(mod.Подробности)
+        подроб.записи = bare
+        индекс = mod.построить_индекс(данные, подроб)
+        assert "drama" in индекс["genre"] or "drama" in {
+            mod.нормализовать(mod.транслит("драма"))
+        }
+        drama = mod.нормализовать(mod.транслит("драма"))
+        comedy = mod.нормализовать(mod.транслит("комедия"))
+        assert drama in индекс["genre"]
+        assert comedy in индекс["genre"]
+        assert set(индекс["genre"][drama]) != set(индекс["genre"][comedy])
+        a, _ = mod.отбор(данные, индекс, {"genre": [drama]}, "/catalog")
+        b, _ = mod.отбор(данные, индекс, {"genre": [comedy]}, "/catalog")
+        c, _ = mod.отбор(данные, индекс, {"genre": ["драма"]}, "/catalog")
+        assert {з["slug"] for з in a} == {"alpha-anime"}
+        assert {з["slug"] for з in b} == {"beta-anime"}
+        assert {з["slug"] for з in c} == {"alpha-anime"}
