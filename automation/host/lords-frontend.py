@@ -1894,11 +1894,16 @@ font-size:13px;color:@DIM@;display:block;width:100%;max-width:1760px;margin-left
 @media(min-width:700px){.zft__cols{grid-template-columns:minmax(0,1.3fr) repeat(2,minmax(0,1fr));gap:24px}}
 @media(min-width:1100px){.zft__cols{grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr));gap:28px}}
 .zft__cols--fallback{@media(min-width:700px){grid-template-columns:minmax(0,1.3fr) repeat(2,minmax(0,1fr))}}
+/* Mobile: brand full width, then two compact link columns side-by-side. */
+@media(max-width:699px){
+.zft__cols,.zft__cols--fallback{grid-template-columns:1fr 1fr;gap:12px 18px}
+.zft__cols > .zft__col:first-child,.zft__cols--fallback > .zft__col:first-child{grid-column:1/-1}
+.zft__col--links{display:flex;flex-direction:column;gap:6px}
+}
 .zft__col{display:flex;flex-direction:column;gap:6px;min-width:0}
 .zft__col b{color:@INK@;font-size:13px;margin:0 0 4px;font-weight:700}
-.zft__col a{color:@ACC@;font-weight:500;line-height:1.35}
-@media(max-width:699px){.zft__col--links{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
-.zft__col--links b{grid-column:1/-1}}
+.zft__col a{color:@ACC@;font-weight:500;line-height:1.35;min-height:44px;
+display:inline-flex;align-items:center}
 .zft__col a:hover,.zft__col a:focus-visible{text-decoration:underline}
 .zft__about{font-size:13px;line-height:1.5;color:@DIM@;margin:0 0 4px;max-width:36ch}
 .zft__bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;
