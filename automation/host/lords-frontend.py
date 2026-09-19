@@ -1057,20 +1057,31 @@ background:#fff}
 .rate--imdb{border-color:#9a7b00;color:#6f5900}
 .rate small{display:block;font-weight:600;font-size:11px;color:@DIM@;margin-top:2px}
 .claim{text-align:center;font-weight:700;font-size:15px;color:#3a4149;margin:18px 0 0}
-/* Плеер: полоса вкладок и поле 16:9. */
+/* Плеер: полоса вкладок и поле 16:9. Кадр — контейнер media viewport;
+   iframe/SDK обязаны заполнять его целиком, а не центрироваться мелким
+   прямоугольником в чёрном поле (см. zona .zpl__f geometry). */
 .pl{margin:14px 0}
 .pl__bar{display:flex;align-items:center;gap:4px;background:@BAR@;padding:0 8px;
 flex-wrap:wrap;border-radius:4px 4px 0 0}
 .pl__tab{padding:12px 18px;font-size:13px;font-weight:700;color:#b9c2cc}
 .pl__tab[aria-current]{background:@ACC@;color:#fff;border-radius:3px 3px 0 0}
 .pl__note{margin-left:auto;color:#8d97a2;font-size:12px;padding:12px 4px}
-.pl__frame{position:relative;aspect-ratio:16/9;background:#05070a;display:grid;
-place-items:center;border-radius:0 0 4px 4px;overflow:hidden}
+.pl__note:empty{display:none}
+.pl__frame{position:relative;width:100%;aspect-ratio:16/9;background:#05070a;
+border-radius:0 0 4px 4px;overflow:hidden;max-height:none}
 .pl__frame[data-state="awaiting"],
 .pl__frame[data-state="unavailable"],
 .pl__frame[data-state="nosource"],
 .pl__frame[data-state="idle"]{aspect-ratio:auto;min-height:140px;max-height:180px}
-.pl__frame video-player{display:block;width:100%;height:100%}
+.pl__frame [data-player-host]{position:absolute;inset:0;width:100%;height:100%;display:block}
+.pl__frame video-player{position:absolute;inset:0;display:block;width:100% !important;
+height:100% !important;min-width:100%;min-height:100%;max-width:none;max-height:none}
+.pl__frame iframe,.pl__frame video,.pl__frame embed,.pl__frame object{
+position:absolute !important;inset:0 !important;width:100% !important;height:100% !important;
+max-width:none !important;max-height:none !important;border:0;display:block}
+.pl__frame [data-player-state]{position:absolute;inset:0;display:grid;place-items:center;
+padding:26px 20px;text-align:center;color:#d6dde5;z-index:2;background:rgba(5,7,10,.92)}
+.pl__frame [data-player-state][hidden]{display:none !important}
 .pl__state{max-width:520px;text-align:center;padding:26px 20px;color:#d6dde5}
 .pl__state b{display:block;font-size:16px;margin-bottom:8px;color:#fff}
 .pl__state p{margin:0;font-size:13.5px;line-height:1.6;color:#aeb8c3}
@@ -2350,6 +2361,7 @@ def разметка_плеера(вид, запись: dict, деталь: dict
  var host=f.querySelector('[data-player-host]');
  if(!host) return;
  var st=f.querySelector('[data-player-state]');
+ var note=document.querySelector('.pl__note, .zpl__h span');
  var cands=[];
  try{ cands=JSON.parse(host.getAttribute('data-src-candidates')||'[]')||[]; }catch(e){ cands=[]; }
  var idx=0, token=0, поднялся=false, отказ=false, seen, timers=[], maxFallback=3;
@@ -2365,6 +2377,55 @@ def разметка_плеера(вид, запись: dict, деталь: dict
  function nestedVideo(node){
   var root=node && node.shadowRoot; if(!root) return null;
   return root.querySelector('video');
+ }
+ /* SDK часто ставит fixed 640x360; CSS снаружи shadowRoot не дотягивается —
+    поэтому размеры дожимаем на самом элементе media. */
+ function fitMedia(node){
+  if(!node) return;
+  try{
+   node.removeAttribute('width');
+   node.removeAttribute('height');
+   node.style.setProperty('position','absolute','important');
+   node.style.setProperty('inset','0','important');
+   node.style.setProperty('left','0','important');
+   node.style.setProperty('top','0','important');
+   node.style.setProperty('right','0','important');
+   node.style.setProperty('bottom','0','important');
+   node.style.setProperty('width','100%','important');
+   node.style.setProperty('height','100%','important');
+   node.style.setProperty('max-width','none','important');
+   node.style.setProperty('max-height','none','important');
+   node.style.setProperty('border','0','important');
+   node.style.setProperty('display','block','important');
+  }catch(e){}
+ }
+ function fitPlayerTree(node){
+  if(!node) return;
+  fitMedia(node);
+  try{
+   var root=node.shadowRoot;
+   if(root){
+    root.querySelectorAll('iframe,video,embed,object').forEach(fitMedia);
+    var wrap=root.querySelector('div,section,main');
+    if(wrap){
+     wrap.style.setProperty('width','100%','important');
+     wrap.style.setProperty('height','100%','important');
+     wrap.style.setProperty('position','relative','important');
+    }
+   }
+  }catch(e){}
+  host.querySelectorAll('iframe,video,embed,object').forEach(fitMedia);
+ }
+ function syncNote(k){
+  if(!note) return;
+  var map={resolving:'Загрузка плеера…',loading:'Загрузка плеера…',playable:'Загрузка плеера…',
+   active:'',ok:'',awaiting:'выберите серию',unavailable:'серия без дорожки',
+   nosource:'источник не передан',provider:'провайдер не отдал дорожку',
+   error:'скрипт провайдера не загрузился',slow:'таймаут поднятия плеера',
+   noaccess:'витрина без доступа к провайдеру'};
+  var t=(k in map)?map[k]:'';
+  note.textContent=t;
+  if(!t) note.setAttribute('hidden',''); else note.removeAttribute('hidden');
  }
  function hideOverlay(){
   if(!st) return;
@@ -2388,10 +2449,11 @@ def разметка_плеера(вид, запись: dict, деталь: dict
   var hard=(k==='provider'||k==='error'||k==='nosource'||k==='noaccess'||k==='unavailable');
   if(hard){ отказ=true; clearTimers(); }
   f.setAttribute('data-state',k);
+  syncNote(k);
   var node=el();
   if(k==='ok'||k==='resolving'||k==='active'){
    hideOverlay();
-   if(node) node.hidden=false;
+   if(node){ node.hidden=false; fitPlayerTree(node); }
    if(k==='ok') поднялся=true;
    return;
   }
@@ -2399,8 +2461,9 @@ def разметка_плеера(вид, запись: dict, деталь: dict
    /* False-negative guard: provider chrome already mounted → keep it visible. */
    if(providerShell(node)){
     f.setAttribute('data-state','active');
+    syncNote('active');
     hideOverlay();
-    if(node) node.hidden=false;
+    if(node){ node.hidden=false; fitPlayerTree(node); }
     return;
    }
    if(node) node.hidden=true;
@@ -2473,6 +2536,7 @@ def разметка_плеера(вид, запись: dict, деталь: dict
   if(!node) return;
   snapshot(node);
   state('resolving');
+  fitPlayerTree(node);
   /* Contract documents only noData as a provider failure signal. */
   node.addEventListener('noData', function(){
    if(my!==token) return;
@@ -2489,6 +2553,7 @@ def разметка_плеера(вид, запись: dict, деталь: dict
    if(my!==token || отказ) return;
    var shell=providerShell(node);
    var v=nestedVideo(node);
+   fitPlayerTree(node);
    if(v) observeProgress(v, my);
    if(shell && !поднялся){
     /* Provider chrome mounted — keep resolving/active, never false-fail over it. */
@@ -2506,6 +2571,11 @@ def разметка_плеера(вид, запись: dict, деталь: dict
    state('slow','Плеер не поднялся',
     'Скрипт провайдера загрузился, но окно воспроизведения не появилось. Обновите страницу; описание и серии доступны и сейчас.');
   },15000));
+  try{
+   var mo=new MutationObserver(function(){ if(my===token) fitPlayerTree(node); });
+   mo.observe(node,{attributes:true,childList:true,subtree:true});
+   if(node.shadowRoot) mo.observe(node.shadowRoot,{attributes:true,childList:true,subtree:true});
+  }catch(e){}
  }
  var first=el();
  if(first){
@@ -4448,7 +4518,7 @@ def _подпись_плеера(код: str) -> str:
             "awaiting": "выберите серию",
             "unavailable": "серия недоступна",
             "loading": "загрузка",
-            "resolving": "подключение",
+            "resolving": "Загрузка плеера…",
             "active": "",
             "ok": "",
             "nosource": "видео пока недоступно",
@@ -4458,16 +4528,19 @@ def _подпись_плеера(код: str) -> str:
             "slow": "",
         }.get(код, "")
     return {
-        "playable": "источник подключён",
+        "playable": "Загрузка плеера…",
+        "resolving": "Загрузка плеера…",
+        "loading": "Загрузка плеера…",
+        "active": "",
+        "ok": "",
         "awaiting": "выберите серию",
         "unavailable": "серия без дорожки",
-        "loading": "подключение источника",
         "nosource": "источник не передан",
         "noaccess": "витрина без доступа к провайдеру",
         "provider": "провайдер не отдал дорожку",
         "error": "скрипт провайдера не загрузился",
         "slow": "таймаут поднятия плеера",
-    }.get(код, "состояние неизвестно")
+    }.get(код, "")
 
 
 def _открытый_граф(данные: dict) -> str:
