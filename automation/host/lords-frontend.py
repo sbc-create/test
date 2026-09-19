@@ -469,14 +469,27 @@ def _мягкое_совпадение(цель: str, форма: str) -> bool:
     Прежний критерий (длина ±допуск + Hamming по zip) принимал «matrix»≈«maori».
     Теперь: длина ≥5, общий префикс ≥4, SequenceMatcher.ratio ≥ 0.75.
     «matrix»↔«matrica» проходит; «matrix»↔«maori» — нет.
+
+    У форм с годом в хвосте (`matrica1999` из «Матрица (1999)») дополнительно
+    сравниваем обрезанный вариант без четырёх цифр на конце, иначе латиница
+    не находила живые тайтлы Матрицы на боевом снимке.
     """
-    if len(цель) < 5 or len(форма) < 5:
+    if len(цель) < 5:
         return False
-    if abs(len(цель) - len(форма)) > 2:
-        return False
-    if цель[:4] != форма[:4]:
-        return False
-    return SequenceMatcher(None, цель, форма).ratio() >= 0.75
+    кандидаты = [форма]
+    без_года = re.sub(r"\d{4}$", "", форма)
+    if без_года and без_года != форма:
+        кандидаты.append(без_года)
+    for ф in кандидаты:
+        if len(ф) < 5:
+            continue
+        if abs(len(цель) - len(ф)) > 2:
+            continue
+        if цель[:4] != ф[:4]:
+            continue
+        if SequenceMatcher(None, цель, ф).ratio() >= 0.75:
+            return True
+    return False
 
 
 def из_раскладки(с: str) -> str:

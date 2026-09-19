@@ -134,6 +134,7 @@ class TestSearchRanking:
         модуль = frontend[0]
         assert модуль._мягкое_совпадение("matrix", "maori") is False
         assert модуль._мягкое_совпадение("matrix", "matrica") is True
+        assert модуль._мягкое_совпадение("matrix", "matrica1999") is True
 
 
 class TestRoutesAndFilters:
