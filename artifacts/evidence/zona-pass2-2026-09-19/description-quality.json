@@ -1,136 +1,439 @@
 {
-  "generated_at": "2026-09-19T16:15:38.497676+00:00",
+  "generated_at": "2026-09-19T16:23:24.157992+00:00",
   "titles_total": 53524,
   "with_description": 40210,
   "missing_description": 13314,
   "description_coverage_percent": 75.13,
   "exact_cross_title_duplicate_groups": 39,
-  "exact_duplicate_title_count": 80,
   "exact_duplicate_examples": [
     {
-      "digest": "b169e70d007a21a8",
-      "count": 4,
-      "slugs": [
-        "yami-shibai-yaponskie-rasskazy-o-privideniyah-11",
-        "yami-shibai-yaponskie-rasskazy-o-privideniyah-12",
-        "yami-shibai-yaponskie-rasskazy-o-privideniyah-13",
-        "yami-shibai-yaponskie-rasskazy-o-privideniyah-14"
-      ]
-    },
-    {
       "digest": "59dd4f20319ae043",
-      "count": 2,
       "slugs": [
         "ariya",
         "ariya-priroda"
-      ]
+      ],
+      "count": 2
     },
     {
       "digest": "de284e9a8e7d5b4c",
-      "count": 2,
       "slugs": [
         "barmen-bokal-boga",
         "barmen-bokal-boga-2"
-      ]
+      ],
+      "count": 2
     },
     {
       "digest": "62510d905dc0cdbc",
-      "count": 2,
       "slugs": [
         "blich-tysyacheletnyaya-krovavaya-voyna",
         "blich-tysyacheletnyaya-krovavaya-voyna-bedstvie-2"
-      ]
+      ],
+      "count": 2
     },
     {
       "digest": "18855d185ebe4a7d",
-      "count": 2,
       "slugs": [
         "chelovek-pauk-3",
         "grandioznyy-chelovek-pauk"
-      ]
+      ],
+      "count": 2
     },
     {
       "digest": "138ebb7a11eea2a8",
-      "count": 2,
       "slugs": [
         "chernyy-klever",
         "chernyy-klever-2"
-      ]
+      ],
+      "count": 2
     },
     {
       "digest": "3796ad109ac9734b",
-      "count": 2,
       "slugs": [
         "devochka-iz-chuzhezemya",
         "devochka-iz-chuzhezemya-ova"
-      ]
+      ],
+      "count": 2
     },
     {
       "digest": "5c7217bfa24fb5a5",
-      "count": 2,
       "slugs": [
         "dlya-tebya-vo-vsem-cvetu-2",
         "dlya-tebya-vo-vsem-cvetu-3"
-      ]
+      ],
+      "count": 2
     },
     {
       "digest": "e395e5bf527f7360",
-      "count": 2,
       "slugs": [
         "dnevnik-vospominaniy",
         "vremya-vospominaniy"
-      ]
+      ],
+      "count": 2
     },
     {
       "digest": "e8c0feebaa54b134",
-      "count": 2,
       "slugs": [
         "flag-nastoyaschego-prestupleniya",
         "flag-nastoyaschego-prestupleniya-2"
-      ]
+      ],
+      "count": 2
     },
     {
       "digest": "4c469a0234b150f1",
-      "count": 2,
       "slugs": [
         "forma-golosa",
         "forma-golosa-2016"
-      ]
+      ],
+      "count": 2
     },
     {
       "digest": "71164735622759f3",
-      "count": 2,
       "slugs": [
         "istinnye-chudotvornye-rycari",
         "istinnye-chudotvornye-rycari-chast-2"
-      ]
+      ],
+      "count": 2
     },
     {
       "digest": "8710b428a379edf7",
-      "count": 2,
       "slugs": [
         "komnata",
         "komnata-vozvraschaetsya"
-      ]
+      ],
+      "count": 2
     },
     {
       "digest": "c240c1567bc77098",
-      "count": 2,
       "slugs": [
         "koroleva-stavshaya-prichinoy-tragedii-sdelaet-dlya-naroda-vse-chto-v-ee-silah",
         "koroleva-stavshaya-prichinoy-tragedii-sdelaet-dlya-naroda-vse-chto-v-ee-silah-2"
-      ]
+      ],
+      "count": 2
     },
     {
       "digest": "ef7918e6fbe1ca04",
-      "count": 2,
       "slugs": [
         "legenda-o-bryuse-li-3",
         "legenda-o-bryuse-li-4"
-      ]
+      ],
+      "count": 2
+    },
+    {
+      "digest": "8254242ea0631eb5",
+      "slugs": [
+        "liga-spravedlivosti-zaka-snaydera",
+        "liga-spravedlivosti-zaka-snaydera-cherno-belaya-versiya"
+      ],
+      "count": 2
+    },
+    {
+      "digest": "7a14f7db8ba98902",
+      "slugs": [
+        "lyubov-i-iskuplenie",
+        "steklyannaya-dusha-krasavicy"
+      ],
+      "count": 2
+    },
+    {
+      "digest": "b3c24340e2ca98df",
+      "slugs": [
+        "lyubov-tak-prekrasna-2",
+        "lyubov-tak-prekrasna-serial-2020-2021"
+      ],
+      "count": 2
+    },
+    {
+      "digest": "d4a19673e5bb1b61",
+      "slugs": [
+        "mech-i-zhezl-vistorii-rekap",
+        "za-predelom-proshloe"
+      ],
+      "count": 2
+    },
+    {
+      "digest": "7378d594c8754e5d",
+      "slugs": [
+        "nanoyadro",
+        "nanoyadro-2"
+      ],
+      "count": 2
+    },
+    {
+      "digest": "f481656ebd680c40",
+      "slugs": [
+        "nebolshoy-les-leto-i-osen",
+        "nebolshoy-les-zima-i-vesna"
+      ],
+      "count": 2
     }
   ],
-  "near_duplicate_description_groups": 0,
+  "near_duplicate_description_groups": 3,
+  "near_duplicate_examples": [
+    [
+      "doma-postroennye-v-oktyabre",
+      "doma-postroennye-v-oktyabre-2"
+    ],
+    [
+      "drakoniy-zhemchug-kay-2014",
+      "drakoniy-zhemchug-zet-vozvraschaysya-moy-gohan"
+    ],
+    [
+      "dvulichnaya-sestrenka-umaru",
+      "dvulichnaya-sestrenka-umaru-2"
+    ]
+  ],
+  "missing_sample": [
+    {
+      "slug": "007-doroga-k-millionu",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "01915254-4513-7657-ad4b-d75fae15b061"
+    },
+    {
+      "slug": "1-11",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "01985e50-c942-7c10-a975-58d066780a82"
+    },
+    {
+      "slug": "1-11-vremya-dlya-vstrechi-s-toboy",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019d2028-88e3-79a4-9021-17173e4324a1"
+    },
+    {
+      "slug": "1-800-hot-nayt",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "01980fcd-dfd6-724c-837a-06bd0e6311c7"
+    },
+    {
+      "slug": "10-dney-lyubopytnogo-cheloveka",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "01948551-a7b6-76e2-bf8b-c398478324bc"
+    },
+    {
+      "slug": "10-kilo",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019bf42c-7660-7f38-bfea-3984c817528f"
+    },
+    {
+      "slug": "10-let-spustya",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019ab633-f099-74e0-8919-688964c9b053"
+    },
+    {
+      "slug": "10-mgnoveniy-sudby",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "0198ebb5-6b79-75c8-888f-ce6e3f0a41cc"
+    },
+    {
+      "slug": "10-shagov-k-lyubvi",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019897e0-6b0c-72d3-aecf-79f99587f986"
+    },
+    {
+      "slug": "10-tysyach-shagov",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019b6f19-0a97-733c-b578-4aa593a3a7c3"
+    },
+    {
+      "slug": "100-atletov-2",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019d0568-f2f2-7df8-aedc-fad495da1c9d"
+    },
+    {
+      "slug": "100-dney-do-indikara",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "01915162-d2d9-7a24-b1c8-c558b8266a17"
+    },
+    {
+      "slug": "100-dney-do-proschaniya-dorogoy",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019e1d03-24ff-7013-92d0-f29037f52f32"
+    },
+    {
+      "slug": "100-litrov-zolota",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019ae85f-372f-7c09-8d6c-a06fa1a0926e"
+    },
+    {
+      "slug": "100-prichin-ne-byt-imperatorom",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019e8296-d36d-78bb-9d15-59e87de2d5bc"
+    },
+    {
+      "slug": "1000-funtovye-cestry",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019c9a50-f16c-7855-8d12-8f2692ea8e33"
+    },
+    {
+      "slug": "102-predlozhenie-ruki-i-serdca",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019eb078-938b-7766-be44-482fda5c2266"
+    },
+    {
+      "slug": "109-strannyh-veschey",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019152a6-329a-716a-9951-509aa06413ac"
+    },
+    {
+      "slug": "11-11-2",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "0196fd5f-97ab-7842-8ca1-4affffdcc34a"
+    },
+    {
+      "slug": "1122-za-schastlivyy-brak",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "01970cee-2355-7eb6-91f6-22b56c2da86a"
+    },
+    {
+      "slug": "119-zvonok-v-sluzhbu-spaseniya",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019be037-8698-71c2-9516-ac7267ded62a"
+    },
+    {
+      "slug": "12-istoriy-glena-anggara",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "01971166-9371-7d7e-a181-85657d2d4a3c"
+    },
+    {
+      "slug": "1242-vrata-na-zapad",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019b9248-ee28-7c9f-a04a-8460c22b1a0a"
+    },
+    {
+      "slug": "13",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019abf16-8566-7f8d-8587-ebf7488c88fa"
+    },
+    {
+      "slug": "13-dush",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019ebaf5-a1c5-7248-b043-41605dcef54f"
+    },
+    {
+      "slug": "17",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "01984332-d22b-7cbd-ad46-8f0fc9dd76fb"
+    },
+    {
+      "slug": "17-3-o-sekse",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019afea2-15d2-7aaa-ad7c-c00e3589344e"
+    },
+    {
+      "slug": "17-dney",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "0197eb5a-f55f-709b-9cc8-5e490aa0cfb6"
+    },
+    {
+      "slug": "18-letnyaya-prababushka-navodit-poryadok-v-seme-2",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019a4b1c-aa8c-7e38-99b8-a0f3258734dc"
+    },
+    {
+      "slug": "18-letnyaya-prababushka-navodit-poryadok-v-seme-3",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019be9eb-a875-7a00-9fd3-00eeaebfae03"
+    },
+    {
+      "slug": "1864",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "01923f19-f887-7405-a894-a90030819df2"
+    },
+    {
+      "slug": "19-vydr",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019888a9-537a-7752-b176-30d1f4242c33"
+    },
+    {
+      "slug": "1915-legenda-o-gurkhah",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "0196c8a3-ebf8-730d-97ca-06ad1102a7bd"
+    },
+    {
+      "slug": "1942",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019b0739-8d83-707f-b9f7-c3fe33b59ed2"
+    },
+    {
+      "slug": "1972-svetlyachki-na-plyazhe",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019ac998-bed0-7c44-9c7f-61d9c7b84166"
+    },
+    {
+      "slug": "1975-god-izmenivshiy-ameriku",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019e8d88-86e6-72b4-8c3f-904ea69ffadc"
+    },
+    {
+      "slug": "1985",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "0197325e-27a0-7038-8097-46577c8077f6"
+    },
+    {
+      "slug": "1993",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "0197d616-81a7-7201-966b-9da14db95248"
+    },
+    {
+      "slug": "1994",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "01992930-2785-7060-ac1d-bcdeb9cbdc98"
+    },
+    {
+      "slug": "2-dnya",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019932f3-440b-7345-be9c-bfcc759f9300"
+    },
+    {
+      "slug": "200-funtov-krasoty",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019aa54c-37a6-7fb1-80db-525cd21901e0"
+    },
+    {
+      "slug": "200-funtov-krasoty-2",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "0196d4b1-423c-7ca9-a48a-ad94b7cce7b3"
+    },
+    {
+      "slug": "2009-stertaya-pamyat",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019bb197-ea84-7f4d-be78-0ff7f925a3a2"
+    },
+    {
+      "slug": "2012-gibel-imperii",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019ac479-ff4c-703b-a2e7-9d8005d99f1e"
+    },
+    {
+      "slug": "2018",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "01978803-f0a3-77bc-b822-ccb40d309ee1"
+    },
+    {
+      "slug": "2020",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "01997b65-d804-7634-a88f-1b3efc38db6a"
+    },
+    {
+      "slug": "2025-krovavyy-belyy-i-siniy",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019735df-632b-7f99-9878-99122d5f4995"
+    },
+    {
+      "slug": "2073",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019961c3-dd40-712f-ace7-2b15852c93f2"
+    },
+    {
+      "slug": "21-den",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "019d14a9-826e-75df-9c39-a2e63890d3bd"
+    },
+    {
+      "slug": "22-nezabytyy-soldat",
+      "quality_state": "MISSING_DESCRIPTION",
+      "canonical_title_id": "01971307-2993-7a28-92f5-c19172c1cba5"
+    }
+  ],
   "backfilled": 0,
-  "note": "Near-duplicate Jaccard deferred for 53k catalog; exact digests reported. No invented backfill."
+  "note": "Backfill only via approved content pipeline; no invented synopsis."
 }

@@ -73,9 +73,10 @@ Heading: `Результаты поиска: «звездные войны»`.
 | missing_description | 13314 |
 | DESCRIPTION_COVERAGE_PERCENT | 75.13 |
 | exact_cross_title_duplicate_groups | 39 |
+| near_duplicate_description_groups | 3 |
 | backfilled | 0 (no invented text) |
 
-Pipeline: `automation/host/zona_description_quality.py` (+ fast evidence run).
+Pipeline: `automation/host/zona_description_quality.py` (full 53k scan finished).
 Missing → editorial queue / `MISSING_DESCRIPTION`, not SEO-ready claim.
 
 `SAME_PAGE_FULL_DESCRIPTION_DUPLICATES=0` on voy-2 (synopsis once).
