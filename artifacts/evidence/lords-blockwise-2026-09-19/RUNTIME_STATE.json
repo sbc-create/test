@@ -1,0 +1,11 @@
+{
+  "MainPID": 3690779,
+  "started_at": "2026-09-19T03:43:05Z",
+  "active": "active",
+  "NRestarts": "0",
+  "runtime_build": "20260913T2300Z-8ececc6c-nova",
+  "runtime_artifact": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+  "STALE_PROCESS": true,
+  "ARTIFACT_RUNTIME_DIGEST_MATCH": 0,
+  "SERVICE_ACTIVE_MEANS": "old process still serving"
+}

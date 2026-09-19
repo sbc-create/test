@@ -1,0 +1,50 @@
+{
+ "action": "install",
+ "site": "lords-01",
+ "unit": "lords-nova-01.service",
+ "domain": "lordfilm47.space",
+ "rollback_point": "/srv/lords/.frontend/.rollback/20260919T221016Z-lords-01",
+ "artifact_sha256": "4b541137ff4df012eb189e4ed5ce2125d47af7d205188e5e7554170954abb120",
+ "previous_artifact_sha256": "dec738733737754afb47afd42c5ebd10be39e7c07408285035d426aef4e611b0",
+ "manifest": {
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "source_commit": "63216915c75ab75fe579363ef40d318774053350",
+  "build_id": "20260919T201932Z-63216915-nova",
+  "artifact_sha256": "4b541137ff4df012eb189e4ed5ce2125d47af7d205188e5e7554170954abb120",
+  "profile": "lords-general",
+  "built_at": "2026-09-19T22:10:16Z",
+  "source_dirty": false,
+  "domain": "lordfilm47.space"
+ },
+ "previous_manifest": {
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "source_commit": "63216915c75ab75fe579363ef40d318774053350",
+  "build_id": "20260919T201932Z-63216915-nova",
+  "artifact_sha256": "4b541137ff4df012eb189e4ed5ce2125d47af7d205188e5e7554170954abb120",
+  "profile": "lords-general",
+  "built_at": "2026-09-19T20:19:40Z",
+  "source_dirty": false,
+  "domain": "lordfilm47.space"
+ },
+ "restart_ok": null,
+ "restart_deferred": true,
+ "restart_output": "deferred: --no-restart; owner must restart unit",
+ "health": {
+  "ok": null,
+  "note": "not probed; process still stale until restart"
+ },
+ "proven_chain": {
+  "nginx_config": "/etc/nginx/lords/lords-01.conf",
+  "upstream_port": 9110,
+  "unit": "lords-nova-01.service",
+  "executable": "/srv/lords/.frontend/lords-frontend.py",
+  "manifest_path": "/srv/lords/.frontend/template-manifest.json",
+  "verdict": "MISMATCH"
+ },
+ "at_utc": "20260919T221016Z",
+ "verdict": "STAGED_AWAITING_OWNER_RESTART"
+}

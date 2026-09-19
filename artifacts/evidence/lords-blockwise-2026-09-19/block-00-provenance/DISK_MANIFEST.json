@@ -1,0 +1,16 @@
+{
+  "disk_sha256": "4b541137ff4df012eb189e4ed5ce2125d47af7d205188e5e7554170954abb120",
+  "manifest": {
+    "schema_version": 1,
+    "template_family": "lords",
+    "design_version": "1.1.0",
+    "source_commit": "63216915c75ab75fe579363ef40d318774053350",
+    "build_id": "20260919T201932Z-63216915-nova",
+    "artifact_sha256": "4b541137ff4df012eb189e4ed5ce2125d47af7d205188e5e7554170954abb120",
+    "profile": "lords-general",
+    "built_at": "2026-09-19T22:10:16Z",
+    "source_dirty": false,
+    "domain": "lordfilm47.space"
+  },
+  "match": true
+}
