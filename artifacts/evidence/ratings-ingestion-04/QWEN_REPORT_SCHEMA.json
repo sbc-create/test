@@ -1,0 +1,20 @@
+{
+  "required_fields": [
+    "report_id",
+    "cycle_id",
+    "date",
+    "source",
+    "planned",
+    "attempted",
+    "accepted",
+    "rejected",
+    "newly_covered",
+    "refreshed",
+    "uncovered_remaining",
+    "coverage_percent",
+    "snapshot_digest",
+    "db_counts",
+    "blockers"
+  ],
+  "schema": "ratings_run_report_v1"
+}

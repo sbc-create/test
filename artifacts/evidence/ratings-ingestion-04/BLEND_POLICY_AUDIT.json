@@ -1,0 +1,17 @@
+{
+  "BLEND_POLICY_VERSION": "animedia_blend_v1",
+  "recomputable": true,
+  "example": {
+    "combined_raw": "8.960784313725490196078431373",
+    "combined_ui": "8.96",
+    "baseline_weight": 50,
+    "amd_score": "9.0",
+    "amd_vote_count": 50,
+    "local_vote_count": 1,
+    "local_vote_sum": 7,
+    "state": "AMD_PLUS_LOCAL",
+    "formula_version": "animedia_blend_v1",
+    "quality_flags": []
+  },
+  "shikimori_in_formula": false
+}

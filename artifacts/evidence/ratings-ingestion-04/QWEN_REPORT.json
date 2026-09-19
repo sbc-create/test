@@ -1,0 +1,61 @@
+{
+  "report_id": "s4-b75ee55e27c0ff642d09670a",
+  "cycle_id": "b75ee55e27c0ff642d09670a",
+  "date": "2026-09-19",
+  "source": "none_fetches_stage4_hardening",
+  "planned": 0,
+  "attempted": 0,
+  "accepted": 0,
+  "rejected": 0,
+  "newly_covered": 0,
+  "refreshed": 0,
+  "uncovered_remaining": 7043,
+  "coverage_percent": null,
+  "blockers": [
+    "AMD_SOURCE_DISABLED_PERMISSION_MISSING",
+    "QWEN_DELIVERY_NOT_CONFIGURED"
+  ],
+  "snapshot_digest": "f6000fb1a8aa53b724320aa155a1b040c3b8008e8fb75b4a1dcd5f8eb09872b2",
+  "db_counts": {
+    "rating_observations": 100,
+    "rating_current": 100,
+    "title_source_mappings": 100,
+    "rating_source_absence": 10,
+    "rating_combined_projection": 100,
+    "schema_migrations": 3
+  },
+  "report_version": "ratings_run_report_v1",
+  "qwen_permissions": {
+    "may_read_report": true,
+    "may_analyze": true,
+    "may_propose_changeset": true,
+    "may_write_db": false,
+    "may_start_ingestion": false,
+    "may_change_limits": false,
+    "may_enable_scheduler": false,
+    "may_publish_snapshot": false,
+    "may_deploy": false,
+    "may_delete_data": false,
+    "may_open_indexing": false
+  },
+  "QWEN_WRITE_PERMISSIONS": 0,
+  "delivery": {
+    "REPORT_READY_FOR_QWEN": true,
+    "QWEN_DELIVERY": "BLOCKED_NO_CONFIG",
+    "reason": "No configured read-only Qwen delivery channel in this environment",
+    "integration_contract": {
+      "input": "QWEN_REPORT.json + QWEN_REPORT.md",
+      "mode": "read_only",
+      "forbidden": [
+        "may_write_db",
+        "may_start_ingestion",
+        "may_change_limits",
+        "may_enable_scheduler",
+        "may_publish_snapshot",
+        "may_deploy",
+        "may_delete_data",
+        "may_open_indexing"
+      ]
+    }
+  }
+}

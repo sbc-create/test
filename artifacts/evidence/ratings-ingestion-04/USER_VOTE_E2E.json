@@ -1,0 +1,9 @@
+{
+  "USER_VOTE_CAST_PASS": true,
+  "USER_VOTE_IDEMPOTENT_RETRY": true,
+  "USER_VOTE_UPDATE_PASS": true,
+  "USER_VOTE_RETRACT_PASS": true,
+  "USER_VOTE_CONCURRENCY_PASS": true,
+  "FAKE_USER_VOTES_INSERTED": 0,
+  "note": "E2E on isolated fixture DB only; production DB untouched"
+}
