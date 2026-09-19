@@ -1075,6 +1075,21 @@ border-radius:0 0 4px 4px;overflow:hidden;max-height:none}
 .pl__frame[data-state="unavailable"],
 .pl__frame[data-state="nosource"],
 .pl__frame[data-state="idle"]{aspect-ratio:auto;min-height:140px;max-height:180px}
+/* full-bleed-v1: beat global iframe{height:auto} and SDK fixed 640x360 */
+[data-player-layout-contract="full-bleed-v1"]{
+position:relative;inset:auto;width:100%;height:auto;max-width:none;box-sizing:border-box}
+[data-player-layout-contract="full-bleed-v1"] [data-player-host],
+[data-player-layout-contract="full-bleed-v1"] video-player{
+position:absolute;inset:0;display:block;width:100% !important;height:100% !important;
+min-width:100%;min-height:100%;max-width:none !important;max-height:none !important;box-sizing:border-box}
+[data-player-layout-contract="full-bleed-v1"] iframe,
+[data-player-layout-contract="full-bleed-v1"] video,
+[data-player-layout-contract="full-bleed-v1"] embed,
+[data-player-layout-contract="full-bleed-v1"] object{
+position:absolute !important;inset:0 !important;left:0 !important;top:0 !important;
+right:0 !important;bottom:0 !important;width:100% !important;height:100% !important;
+min-width:100% !important;min-height:100% !important;max-width:none !important;
+max-height:none !important;border:0 !important;display:block !important;margin:0 !important}
 .pl__frame [data-player-host]{position:absolute;inset:0;width:100%;height:100%;display:block}
 .pl__frame video-player{position:absolute;inset:0;display:block;width:100% !important;
 height:100% !important;min-width:100%;min-height:100%;max-width:none;max-height:none}
@@ -2360,6 +2375,7 @@ def разметка_плеера(вид, запись: dict, деталь: dict
 СКРИПТ_ПЛЕЕРА_КЛИЕНТ = """
 (function(){
  var f=document.querySelector('[data-player]'); if(!f) return;
+ f.setAttribute('data-player-layout-contract','full-bleed-v1');
  var host=f.querySelector('[data-player-host]');
  if(!host) return;
  var st=f.querySelector('[data-player-state]');
@@ -2381,9 +2397,9 @@ def разметка_плеера(вид, запись: dict, деталь: dict
   return root.querySelector('video');
  }
  /* SDK часто ставит fixed 640x360; CSS снаружи shadowRoot не дотягивается —
-    поэтому размеры дожимаем на самом элементе media. */
+    поэтому размеры дожимаем на самом элементе media. full-bleed-v1. */
  function fitMedia(node){
-  if(!node) return;
+  if(!node || node.nodeType!==1) return;
   try{
    node.removeAttribute('width');
    node.removeAttribute('height');
@@ -2395,28 +2411,82 @@ def разметка_плеера(вид, запись: dict, деталь: dict
    node.style.setProperty('bottom','0','important');
    node.style.setProperty('width','100%','important');
    node.style.setProperty('height','100%','important');
+   node.style.setProperty('min-width','100%','important');
+   node.style.setProperty('min-height','100%','important');
    node.style.setProperty('max-width','none','important');
    node.style.setProperty('max-height','none','important');
    node.style.setProperty('border','0','important');
    node.style.setProperty('display','block','important');
+   node.style.setProperty('margin','0','important');
   }catch(e){}
+ }
+ function fitWrappers(root){
+  if(!root) return;
+  var list=(root.querySelectorAll?root.querySelectorAll('div,section,main,aside'):[]);
+  for(var i=0;i<list.length;i++){
+   var el=list[i];
+   /* Only wrappers that contain media — avoid reshaping UI chrome. */
+   if(el.querySelector && el.querySelector('iframe,video,embed,object,video-player')){
+    el.style.setProperty('position','absolute','important');
+    el.style.setProperty('inset','0','important');
+    el.style.setProperty('left','0','important');
+    el.style.setProperty('top','0','important');
+    el.style.setProperty('width','100%','important');
+    el.style.setProperty('height','100%','important');
+    el.style.setProperty('max-width','none','important');
+    el.style.setProperty('max-height','none','important');
+    el.style.setProperty('margin','0','important');
+    el.style.setProperty('display','block','important');
+   }
+  }
  }
  function fitPlayerTree(node){
   if(!node) return;
   fitMedia(node);
+  fitWrappers(host);
+  host.querySelectorAll('iframe,video,embed,object').forEach(fitMedia);
   try{
    var root=node.shadowRoot;
    if(root){
+    fitWrappers(root);
     root.querySelectorAll('iframe,video,embed,object').forEach(fitMedia);
-    var wrap=root.querySelector('div,section,main');
-    if(wrap){
-     wrap.style.setProperty('width','100%','important');
-     wrap.style.setProperty('height','100%','important');
-     wrap.style.setProperty('position','relative','important');
-    }
    }
   }catch(e){}
-  host.querySelectorAll('iframe,video,embed,object').forEach(fitMedia);
+  /* Idempotent: already-full shells stay unchanged. */
+ }
+ function ensureLayoutObserver(node, my){
+  if(f.__fullBleedBound) return;
+  f.__fullBleedBound=true;
+  var busy=false, mo=null;
+  var watchShadow=function(n){
+   try{
+    if(!mo || !n || !n.shadowRoot || n.shadowRoot.__fullBleedMo) return;
+    n.shadowRoot.__fullBleedMo=true;
+    /* childList only — style writes must not re-enter the observer. */
+    mo.observe(n.shadowRoot,{childList:true,subtree:true});
+   }catch(e){}
+  };
+  var run=function(){
+   if(my!==token || busy) return;
+   busy=true;
+   try{
+    var n=el()||node;
+    fitPlayerTree(n);
+    watchShadow(n);
+   }finally{ busy=false; }
+  };
+  try{
+   mo=new MutationObserver(function(){ run(); });
+   mo.observe(f,{childList:true,subtree:true});
+   mo.observe(host,{childList:true,subtree:true});
+   watchShadow(node);
+  }catch(e){}
+  try{
+   if(typeof ResizeObserver==='function'){
+    var ro=new ResizeObserver(function(){ run(); });
+    ro.observe(f);
+   }
+  }catch(e){}
  }
  function syncNote(k){
   if(!note) return;
@@ -2573,11 +2643,7 @@ def разметка_плеера(вид, запись: dict, деталь: dict
    state('slow','Плеер не поднялся',
     'Скрипт провайдера загрузился, но окно воспроизведения не появилось. Обновите страницу; описание и серии доступны и сейчас.');
   },15000));
-  try{
-   var mo=new MutationObserver(function(){ if(my===token) fitPlayerTree(node); });
-   mo.observe(node,{attributes:true,childList:true,subtree:true});
-   if(node.shadowRoot) mo.observe(node.shadowRoot,{attributes:true,childList:true,subtree:true});
-  }catch(e){}
+  ensureLayoutObserver(node, my);
  }
  var first=el();
  if(first){
@@ -3615,7 +3681,7 @@ class ВидЛордс(Вид):
             '<section class="pl" aria-labelledby="pl-h"><h2 class="vh" id="pl-h">Просмотр</h2>'
             '<div class="pl__bar"><span class="pl__tab" aria-current="true">Смотреть онлайн</span>'
             f'<span class="pl__note">{html.escape(_подпись_плеера(код))}</span></div>'
-            f'<div class="pl__frame" data-player data-state="{код}">{внутри}</div>'
+            f'<div class="pl__frame" data-player data-player-layout-contract="full-bleed-v1" data-state="{код}">{внутри}</div>'
             f"{_скрипты_плеера(код)}</section>")
 
         текущий = (сезон_старт, эпизод_старт) if эпизод_старт is not None else None
@@ -3698,7 +3764,7 @@ class ВидЛордс(Вид):
             '<section class="pl" aria-labelledby="pl-h"><h2 class="vh" id="pl-h">Просмотр серии</h2>'
             '<div class="pl__bar"><span class="pl__tab" aria-current="true">Смотреть онлайн</span>'
             f'<span class="pl__note">{html.escape(_подпись_плеера(код))}</span></div>'
-            f'<div class="pl__frame" data-player data-state="{код}">{внутри}</div>'
+            f'<div class="pl__frame" data-player data-player-layout-contract="full-bleed-v1" data-state="{код}">{внутри}</div>'
             f"{_скрипты_плеера(код)}</section>")
         пред, след = границы_серии(деталь, сезон, эпизод)
         переход = (
@@ -4378,7 +4444,7 @@ class ВидЗона(Вид):
         код, внутри = разметка_плеера(self, запись, деталь, сезон_старт, эпизод_старт)
         плеер = (f'<section class="zpl" id="watch"><div class="zpl__h"><h2>Смотреть</h2>'
                  f"<span>{html.escape(_подпись_плеера(код))}</span></div>"
-                 f'<div class="zpl__f" data-player data-state="{код}">{внутри}</div>'
+                 f'<div class="zpl__f" data-player data-player-layout-contract="full-bleed-v1" data-state="{код}">{внутри}</div>'
                  f"{_скрипты_плеера(код)}</section>")
         текущий = (сезон_старт, эпизод_старт) if эпизод_старт is not None else None
         блок_серий = (f'<div class="zwrap zwrap--title">{self._серии(запись, сезоны, текущий=текущий)}</div>'
@@ -4461,7 +4527,7 @@ class ВидЗона(Вид):
         код, внутри = разметка_плеера(self, запись, деталь, сезон, эпизод)
         плеер = (f'<section class="zpl"><div class="zpl__h"><h2>Смотреть серию</h2>'
                  f"<span>{html.escape(_подпись_плеера(код))}</span></div>"
-                 f'<div class="zpl__f" data-player data-state="{код}">{внутри}</div>'
+                 f'<div class="zpl__f" data-player data-player-layout-contract="full-bleed-v1" data-state="{код}">{внутри}</div>'
                  f"{_скрипты_плеера(код)}</section>")
         пред, след = границы_серии(деталь, сезон, эпизод)
         переход = ('<div class="zwrap"><nav class="zepnav" aria-label="Соседние серии">'
@@ -4808,7 +4874,7 @@ class ВидАнимедиа(ВидЗона):
         плеер = (f'<div class="ztitle-gap"></div><section class="zpl" id="watch">'
                  f'<div class="zpl__h"><h2>Смотреть</h2>'
                  f"<span>{html.escape(_подпись_плеера(код))}</span></div>"
-                 f'<div class="zpl__f" data-player data-state="{код}">{внутри}</div>'
+                 f'<div class="zpl__f" data-player data-player-layout-contract="full-bleed-v1" data-state="{код}">{внутри}</div>'
                  f"{_скрипты_плеера(код)}</section>")
         текущий = (сезон_старт, эпизод_старт) if эпизод_старт is not None else None
         блок_серий = (self._серии(запись, сезоны, текущий=текущий) if сериал else "")
