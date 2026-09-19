@@ -1,0 +1,13 @@
+route,ref_section_order,cur_section_order,ref_geometry_notes,cur_geometry_notes,typography,spacing,card_dims,metadata_placement,empty_space,mobile_behavior,visual_severity,owner_complaint_mapping,class
+home,novinki>series>recent_films>new_eps>trailers,novinki>series>recent_films>new_eps>anim>recent_catalog>genres>collections>seo,legacy ~10 cards/row; poster+title+star+year,1440 shelves ~180px/upto8; catalog grid 7x175 locked,H1 portal title large,header-content gap mobile 49px,home 180; catalog 175x poster260,year·country + type·genre (+verify no plot),SEO block + collections tiles,2-col cards OK; footer stack,P1/P2,empty strip; duplicate shelves; dense cards,P1 structural / P2 visual
+movies,kind grid,kind grid 7@1440,dense posters,175px card / 260 poster,OK,OK,LOCKED 8/7/4/2,compact meta,none,2-col,locked,—,locked
+series,kind grid,kind grid 7@1440,dense posters,175px,OK,OK,LOCKED,compact,none,2-col,locked,—,locked
+animation,kind grid,kind grid 7@1440,dense posters,175px,OK,OK,LOCKED,compact,none,2-col,locked,—,locked
+catalog,filter+grid,filter+grid + year facets 92,facets truncated historically,facets full counts,OK,OK,LOCKED,OK,none,OK,locked,year counts closed Pass5,locked
+year,year filter,year=2019 count 2144,owner thought ~7,oracle+UI 2144,OK,OK,LOCKED,OK,none,OK,locked,do not reopen,locked
+collections,collection list,text tiles 12,poster-ish legacy optional,link tiles,OK,OK,n/a tiles,n/a,none,2-col tiles,P2,collection visual polish,P2 visual
+collection_detail,grid,grid 7@1440,OK,175px,OK,OK,LOCKED,OK,none,OK,P2,related/last row,P2 visual
+title,poster|meta|desc|play|player,poster|h1|rating|genres|facts|desc|cta|series-rail|player,compact facts,facts OK; series rail tall; dual rating,H1 28-32px,gap to player TBD,poster 260x390,facts grid; genres chips,rail whitespace,stacks,P1,vertical rail; ratings,P1 structural
+search,results grid,results,OK,4 cols measured@1440 search,OK,OK,175,OK,none,OK,P2,—,P2 visual
+player,player chrome,locked SM,golden,do not mutate,—,—,—,—,—,OK,LOCKED,player closed Pass5,locked
+footer,brand+contacts+social,brand+2 link cols; no contacts,legacy email shown,data-contact-config-missing=1,OK,mobile 3 stacks,n/a,n/a,no empty help/docs cols,needs 2-col links,P2+OWNER,contacts/legal,OWNER_DATA_BLOCKER

@@ -1,0 +1,526 @@
+{
+  "home_1440": {
+    "secs": [
+      {
+        "i": 0,
+        "h": "Популярные новинки фильмов",
+        "more": "/movies/",
+        "n": 12,
+        "ids": [
+          "/title/tancuy-chtoby-zhit/",
+          "/title/svinorez/",
+          "/title/kadaknath/",
+          "/title/sheri-lyubov-moya/",
+          "/title/vne-uchebnoy-programmy-novaya-glava/",
+          "/title/na-kryuchke/",
+          "/title/rok-vo-imya-iisusa/",
+          "/title/bez-prava-na-strah/"
+        ],
+        "cw": 180,
+        "ch": 415,
+        "gap": "",
+        "meta": "2026 · Австралия",
+        "title": "Танцуй, чтобы жить",
+        "rowW": null,
+        "overflowX": false
+      },
+      {
+        "i": 1,
+        "h": "Популярные сериалы",
+        "more": "/series/",
+        "n": 12,
+        "ids": [
+          "/title/bezdna/",
+          "/title/ng-morskie-odissei-otkryvaya-tihiy-okean/",
+          "/title/nascar-amerika/",
+          "/title/plasticheskaya-krasota/",
+          "/title/operaciya-beloe-more-missiya-nad-gimalayami/",
+          "/title/rassledovanie-prestupleniy/",
+          "/title/evolyuciya/",
+          "/title/v-chetyre-ruki/"
+        ],
+        "cw": 180,
+        "ch": 415,
+        "gap": "",
+        "meta": "2026 · Китай",
+        "title": "Бездна",
+        "rowW": null,
+        "overflowX": false
+      },
+      {
+        "i": 2,
+        "h": "Добавленные недавно фильмы",
+        "more": "/movies/",
+        "n": 12,
+        "ids": [
+          "/title/operaciya-fortitude/",
+          "/title/v-poiskah-dzheka-charltona/",
+          "/title/le-man-55-taynaya-katastrofa/",
+          "/title/lyubov-i-remont/",
+          "/title/obitel-zla-2/",
+          "/title/udivitelnyy-mir-ieronima-bosha/",
+          "/title/sidni-lyumet-o-sebe/",
+          "/title/nerazryvnye-uzy/"
+        ],
+        "cw": 180,
+        "ch": 415,
+        "gap": "",
+        "meta": "Великобритания",
+        "title": "Операция Fortitude",
+        "rowW": null,
+        "overflowX": false
+      },
+      {
+        "i": 3,
+        "h": "Новые серии",
+        "more": "/series/",
+        "n": 12,
+        "ids": [
+          "/title/pylnye-utesy/",
+          "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+          "/title/chti-svoyu-mat/",
+          "/title/master-lda-i-plameni-2/",
+          "/title/tihookeanskie-rassledovaniya/",
+          "/title/sryv/",
+          "/title/skandal-4/",
+          "/title/moy-sekret/"
+        ],
+        "cw": 180,
+        "ch": 415,
+        "gap": "",
+        "meta": "2026 · США",
+        "title": "Пыльные утёсы",
+        "rowW": null,
+        "overflowX": false
+      },
+      {
+        "i": 4,
+        "h": "Популярная анимация",
+        "more": "/animation/",
+        "n": 12,
+        "ids": [
+          "/title/hot-wheels-za-granyu-voobrazheniya/",
+          "/title/ormilda/",
+          "/title/blich-tysyacheletnyaya-krovavaya-voyna-bedstvie/",
+          "/title/blich-tysyacheletnyaya-krovavaya-voyna-bedstvie-2/",
+          "/title/malenkiy-gorod-enotov-vnutri-mobilnogo-telefona/",
+          "/title/atele-koldovskih-kolpakov/",
+          "/title/raskolotaya-bitvoy-sineva-nebes-2/",
+          "/title/obychnyy-multik-uteryannye-plenki/"
+        ],
+        "cw": 180,
+        "ch": 415,
+        "gap": "",
+        "meta": "2015 · США",
+        "title": "Hot Wheels. За гранью воображения",
+        "rowW": null,
+        "overflowX": false
+      },
+      {
+        "i": 5,
+        "h": "Недавно в каталоге",
+        "more": "/new/",
+        "n": 18,
+        "ids": [
+          "/title/nochnoy-reys-nochnaya-nemezida-chast-1/",
+          "/title/halatnost-2/",
+          "/title/chernila-i-voda/",
+          "/title/semeynyy-kodeks/",
+          "/title/sletet-s-katushek-2/",
+          "/title/posle-udara/",
+          "/title/dikie-malenkie-koshki/",
+          "/title/eho-kamera/"
+        ],
+        "cw": 180,
+        "ch": 415,
+        "gap": "",
+        "meta": "2024 · США",
+        "title": "Ночной рейс: Ночная Немезида - Часть 1",
+        "rowW": null,
+        "overflowX": false
+      },
+      {
+        "i": 6,
+        "h": "Подборки",
+        "more": "/collections/",
+        "n": 0,
+        "ids": [],
+        "cw": null,
+        "ch": null,
+        "gap": "",
+        "meta": "",
+        "title": "",
+        "rowW": null,
+        "overflowX": false
+      },
+      {
+        "i": 7,
+        "h": "Смотреть кино и сериалы на Zona",
+        "more": "/movies/",
+        "n": 0,
+        "ids": [],
+        "cw": null,
+        "ch": null,
+        "gap": "",
+        "meta": "",
+        "title": "",
+        "rowW": null,
+        "overflowX": false
+      }
+    ],
+    "gapHeaderMain": 62,
+    "nav": [
+      {
+        "t": "Zona",
+        "href": "/"
+      },
+      {
+        "t": "Обзор",
+        "href": "/"
+      },
+      {
+        "t": "Что нового",
+        "href": "/new/"
+      },
+      {
+        "t": "Кино",
+        "href": "/movies/"
+      },
+      {
+        "t": "Сериалы",
+        "href": "/series/"
+      },
+      {
+        "t": "Анимация",
+        "href": "/animation/"
+      },
+      {
+        "t": "Подборки",
+        "href": "/collections/"
+      },
+      {
+        "t": "Весь каталог",
+        "href": "/catalog/"
+      }
+    ],
+    "searchW": 291,
+    "wrapW": 1440,
+    "bodyOverflow": false
+  },
+  "title_1440": {
+    "poster": {
+      "w": 260,
+      "h": 390,
+      "t": 142
+    },
+    "h1": "Чаша весны",
+    "h1box": {
+      "w": 728,
+      "h": 38,
+      "t": 142
+    },
+    "facts": {
+      "w": 430,
+      "h": 79,
+      "t": 308
+    },
+    "factItems": [
+      "ГОД",
+      "ТИП",
+      "СТРАНА",
+      "ЖАНРЫ"
+    ],
+    "desc": {
+      "w": 646,
+      "h": 141,
+      "t": 399
+    },
+    "descText": "Се Цин Юань (Чжоу Е), осиротев в юном возрасте, жила на улице, пока не встретила Шэнь Жуна (Сюй Кай), которого после сем",
+    "play": null,
+    "player": null,
+    "ratings": [],
+    "gapPlayPlayer": null
+  },
+  "footer_1440": {
+    "colCount": 3,
+    "cols": [
+      {
+        "h": "",
+        "links": [],
+        "text": "Zona\n\nZona — витрина фильмов, сериалов и анимации с каталогом, поиском и подборками.",
+        "w": 520,
+        "empty": false
+      },
+      {
+        "h": "",
+        "links": [
+          "Обзор -> /",
+          "Что нового -> /new/",
+          "Кино -> /movies/",
+          "Сериалы -> /series/"
+        ],
+        "text": "Разделы\nОбзор\nЧто нового\nКино\nСериалы",
+        "w": 400,
+        "empty": false
+      },
+      {
+        "h": "",
+        "links": [
+          "Анимация -> /animation/",
+          "Подборки -> /collections/",
+          "Каталог -> /catalog/",
+          "Поиск -> /search/"
+        ],
+        "text": "Каталог\nАнимация\nПодборки\nКаталог\nПоиск",
+        "w": 400,
+        "empty": false
+      }
+    ],
+    "ftW": 1376
+  },
+  "home_390": {
+    "secs": [
+      {
+        "i": 0,
+        "h": "Популярные новинки фильмов",
+        "more": "/movies/",
+        "n": 12,
+        "ids": [
+          "/title/tancuy-chtoby-zhit/",
+          "/title/svinorez/",
+          "/title/kadaknath/",
+          "/title/sheri-lyubov-moya/",
+          "/title/vne-uchebnoy-programmy-novaya-glava/",
+          "/title/na-kryuchke/",
+          "/title/rok-vo-imya-iisusa/",
+          "/title/bez-prava-na-strah/"
+        ],
+        "cw": 176,
+        "ch": 409,
+        "gap": "",
+        "meta": "2026 · Австралия",
+        "title": "Танцуй, чтобы жить",
+        "rowW": null,
+        "overflowX": false
+      },
+      {
+        "i": 1,
+        "h": "Популярные сериалы",
+        "more": "/series/",
+        "n": 12,
+        "ids": [
+          "/title/bezdna/",
+          "/title/ng-morskie-odissei-otkryvaya-tihiy-okean/",
+          "/title/nascar-amerika/",
+          "/title/plasticheskaya-krasota/",
+          "/title/operaciya-beloe-more-missiya-nad-gimalayami/",
+          "/title/rassledovanie-prestupleniy/",
+          "/title/evolyuciya/",
+          "/title/v-chetyre-ruki/"
+        ],
+        "cw": 176,
+        "ch": 409,
+        "gap": "",
+        "meta": "2026 · Китай",
+        "title": "Бездна",
+        "rowW": null,
+        "overflowX": false
+      },
+      {
+        "i": 2,
+        "h": "Добавленные недавно фильмы",
+        "more": "/movies/",
+        "n": 12,
+        "ids": [
+          "/title/operaciya-fortitude/",
+          "/title/v-poiskah-dzheka-charltona/",
+          "/title/le-man-55-taynaya-katastrofa/",
+          "/title/lyubov-i-remont/",
+          "/title/obitel-zla-2/",
+          "/title/udivitelnyy-mir-ieronima-bosha/",
+          "/title/sidni-lyumet-o-sebe/",
+          "/title/nerazryvnye-uzy/"
+        ],
+        "cw": 176,
+        "ch": 409,
+        "gap": "",
+        "meta": "Великобритания",
+        "title": "Операция Fortitude",
+        "rowW": null,
+        "overflowX": false
+      },
+      {
+        "i": 3,
+        "h": "Новые серии",
+        "more": "/series/",
+        "n": 12,
+        "ids": [
+          "/title/pylnye-utesy/",
+          "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+          "/title/chti-svoyu-mat/",
+          "/title/master-lda-i-plameni-2/",
+          "/title/tihookeanskie-rassledovaniya/",
+          "/title/sryv/",
+          "/title/skandal-4/",
+          "/title/moy-sekret/"
+        ],
+        "cw": 176,
+        "ch": 409,
+        "gap": "",
+        "meta": "2026 · США",
+        "title": "Пыльные утёсы",
+        "rowW": null,
+        "overflowX": false
+      },
+      {
+        "i": 4,
+        "h": "Популярная анимация",
+        "more": "/animation/",
+        "n": 12,
+        "ids": [
+          "/title/hot-wheels-za-granyu-voobrazheniya/",
+          "/title/ormilda/",
+          "/title/blich-tysyacheletnyaya-krovavaya-voyna-bedstvie/",
+          "/title/blich-tysyacheletnyaya-krovavaya-voyna-bedstvie-2/",
+          "/title/malenkiy-gorod-enotov-vnutri-mobilnogo-telefona/",
+          "/title/atele-koldovskih-kolpakov/",
+          "/title/raskolotaya-bitvoy-sineva-nebes-2/",
+          "/title/obychnyy-multik-uteryannye-plenki/"
+        ],
+        "cw": 176,
+        "ch": 409,
+        "gap": "",
+        "meta": "2015 · США",
+        "title": "Hot Wheels. За гранью воображения",
+        "rowW": null,
+        "overflowX": false
+      },
+      {
+        "i": 5,
+        "h": "Недавно в каталоге",
+        "more": "/new/",
+        "n": 18,
+        "ids": [
+          "/title/nochnoy-reys-nochnaya-nemezida-chast-1/",
+          "/title/halatnost-2/",
+          "/title/chernila-i-voda/",
+          "/title/semeynyy-kodeks/",
+          "/title/sletet-s-katushek-2/",
+          "/title/posle-udara/",
+          "/title/dikie-malenkie-koshki/",
+          "/title/eho-kamera/"
+        ],
+        "cw": 176,
+        "ch": 409,
+        "gap": "",
+        "meta": "2024 · США",
+        "title": "Ночной рейс: Ночная Немезида - Часть 1",
+        "rowW": null,
+        "overflowX": false
+      },
+      {
+        "i": 6,
+        "h": "Подборки",
+        "more": "/collections/",
+        "n": 0,
+        "ids": [],
+        "cw": null,
+        "ch": null,
+        "gap": "",
+        "meta": "",
+        "title": "",
+        "rowW": null,
+        "overflowX": false
+      },
+      {
+        "i": 7,
+        "h": "Смотреть кино и сериалы на Zona",
+        "more": "/movies/",
+        "n": 0,
+        "ids": [],
+        "cw": null,
+        "ch": null,
+        "gap": "",
+        "meta": "",
+        "title": "",
+        "rowW": null,
+        "overflowX": false
+      }
+    ],
+    "gapHeaderMain": 95,
+    "nav": [
+      {
+        "t": "Zona",
+        "href": "/"
+      },
+      {
+        "t": "Обзор",
+        "href": "/"
+      },
+      {
+        "t": "Что нового",
+        "href": "/new/"
+      },
+      {
+        "t": "Кино",
+        "href": "/movies/"
+      },
+      {
+        "t": "Сериалы",
+        "href": "/series/"
+      },
+      {
+        "t": "Анимация",
+        "href": "/animation/"
+      },
+      {
+        "t": "Подборки",
+        "href": "/collections/"
+      },
+      {
+        "t": "Весь каталог",
+        "href": "/catalog/"
+      }
+    ],
+    "searchW": 161,
+    "wrapW": 390,
+    "bodyOverflow": false
+  },
+  "footer_390": {
+    "colCount": 3,
+    "cols": [
+      {
+        "h": "",
+        "links": [],
+        "text": "Zona\n\nZona — витрина фильмов, сериалов и анимации с каталогом, поиском и подборками.",
+        "w": 366,
+        "empty": false
+      },
+      {
+        "h": "",
+        "links": [
+          "Обзор -> /",
+          "Что нового -> /new/",
+          "Кино -> /movies/",
+          "Сериалы -> /series/"
+        ],
+        "text": "Разделы\nОбзор\nЧто нового\nКино\nСериалы",
+        "w": 366,
+        "empty": false
+      },
+      {
+        "h": "",
+        "links": [
+          "Анимация -> /animation/",
+          "Подборки -> /collections/",
+          "Каталог -> /catalog/",
+          "Поиск -> /search/"
+        ],
+        "text": "Каталог\nАнимация\nПодборки\nКаталог\nПоиск",
+        "w": 366,
+        "empty": false
+      }
+    ],
+    "ftW": 366
+  }
+}
