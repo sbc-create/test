@@ -71,6 +71,8 @@ from pathlib import Path
 #: произвольные байты в файл, который исполняет каждая витрина парка.
 РАЗРЕШЁННЫЕ_ИСТОЧНИКИ = (
     Path("/home/claude/wt-lords-r2/automation/host"),
+    Path("/home/claude/wt-zona-finalization-01/automation/host"),
+    Path("/home/claude/wt-lords-integration-canary-01/automation/host"),
     Path("/srv/site-factory/repo/automation/host"),
     ФРОНТ / ".rollback",
 )
@@ -427,7 +429,10 @@ def установить(арг) -> int:
         "schema_version": 1,
         "template_family": витрина["family"],
         "design_version": арг.design_version,
+        # Profile/source commit of this storefront vs shared runtime file commit.
         "source_commit": арг.commit,
+        "runtime_commit": (getattr(арг, "runtime_commit", None) or "").strip()
+                          or арг.commit,
         "build_id": арг.build_id,
         "artifact_sha256": отпечаток,
         "profile": витрина["profile"],
@@ -600,7 +605,11 @@ def main(argv=None) -> int:
     у.add_argument("--expect-sha256", required=True,
                    help="ожидаемый sha256 артефакта; без него установка не начинается")
     у.add_argument("--design-version", required=True)
-    у.add_argument("--commit", required=True)
+    у.add_argument("--commit", required=True,
+                   help="source_commit: профиль/работа витрины (Zona branch HEAD)")
+    у.add_argument("--runtime-commit", default="",
+                   help="runtime_commit: общий frontend artifact commit; "
+                        "по умолчанию равен --commit")
     у.add_argument("--build-id", required=True)
     у.add_argument("--record")
     у.set_defaults(функция=установить)

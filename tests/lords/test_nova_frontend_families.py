@@ -570,9 +570,14 @@ class TestПереработкаВключаетсяВерсией:
         assert "font:13px/1.375 ui-sans-serif" in з.split("</style>")[0]
         assert "'PT Serif'" not in з
 
-    def test_zona_1_2_0_пять_секций_главной(self, зона_1_2):
+    def test_zona_1_2_0_главная_без_пустых_полок_и_счётчика(self, зона_1_2):
         з = запросить(зона_1_2, "/").тело
-        assert з.count('<section class="zsec">') == 5
+        assert "В снимке каталога" not in з
+        assert "тестовая витрина" not in з
+        assert "Новые трейлеры" not in з  # empty trailer shelf must stay hidden
+        assert '<section class="zsec">' in з or 'class="zsec zsec--seo"' in з
+        assert re.search(r"Zona\s+1\.2\.0\s·\s0{8}", з)
+        assert "Template:" not in з
 
     def test_animedia_1_2_0_свой_вид_а_не_lords(self, анимедиа_1_2):
         а = запросить(анимедиа_1_2, "/").тело
