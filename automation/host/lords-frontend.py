@@ -1453,11 +1453,11 @@ scrollbar-width:thin;padding:2px 0 10px}
 /* align-items:flex-start обязателен: по умолчанию флекс растягивает все
    карточки до высоты самой высокой, и постер с заданной пропорцией
    перерастает её — измерено 0.56 вместо 0.67 в лентах с длинными названиями. */
-.zrl__track{display:flex;gap:12px;min-width:min-content;align-items:flex-start}
-.zrl__track>*{flex:0 0 132px;scroll-snap-align:start}
-@media(min-width:768px){.zrl__track>*{flex-basis:150px}}
-@media(min-width:1280px){.zrl__track>*{flex-basis:168px}}
-.zrl__btn{position:absolute;top:34%;transform:translateY(-50%);z-index:5;
+.zrl__track{display:flex;gap:12px;min-width:min-content;align-items:stretch}
+.zrl__track>*{flex:0 0 148px;scroll-snap-align:start;min-width:0;height:auto}
+@media(min-width:768px){.zrl__track>*{flex-basis:180px}}
+@media(min-width:1280px){.zrl__track>*{flex-basis:216px}}
+.zrl__btn{position:absolute;top:28%;transform:translateY(-50%);z-index:5;
 width:34px;height:52px;border:0;border-radius:5px;cursor:pointer;
 background:rgba(16,21,26,.82);color:#fff;font-size:18px;line-height:1;
 display:none;align-items:center;justify-content:center}
@@ -1466,30 +1466,33 @@ display:none;align-items:center;justify-content:center}
 .zrl__btn--n{right:-6px}
 .zrl__btn[disabled]{opacity:.32;cursor:default}
 
-/* Сетка каталога и карточка. Пропорция постера 2:3. */
-.zg{display:grid;gap:14px;grid-template-columns:repeat(2,1fr);align-items:start}
-@media(min-width:560px){.zg{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:900px){.zg{grid-template-columns:repeat(4,1fr)}}
-@media(min-width:1280px){.zg{grid-template-columns:repeat(6,1fr)}}
-.zt{display:flex;flex-direction:column;background:@SURF@;
+/* Сетка каталога и карточка. Пропорция постера 2:3, высота ряда ровная. */
+.zg{display:grid;gap:14px;grid-template-columns:repeat(2,minmax(0,1fr));
+align-items:stretch}
+@media(min-width:640px){.zg{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:900px){.zg{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(min-width:1200px){.zg{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(min-width:1440px){.zg{grid-template-columns:repeat(7,minmax(0,1fr))}}
+.zt{display:flex;flex-direction:column;height:100%;min-width:0;background:@SURF@;
 border:1px solid @LINE@;border-radius:8px;overflow:hidden;
-transition:border-color .16s,transform .16s}
+transition:border-color .16s,transform .16s;color:inherit;text-decoration:none}
 .zt:hover{border-color:@ACC@;transform:translateY(-2px)}
-.zt__p{display:block;aspect-ratio:2/3;background:@ALT@;position:relative;flex:0 0 auto}
-/* Изображение выводится из потока: часть «постеров» каталога на деле
-   широкоформатные кадры, и картинка в потоке задавала контейнеру свою
-   высоту, перебивая пропорцию — измерено 0.56 (16:9) вместо 0.67. */
+.zt__p{display:block;aspect-ratio:2/3;background:@ALT@;position:relative;flex:0 0 auto;
+overflow:hidden}
 .zt__p img,.zt__img{position:absolute;inset:0;z-index:1;width:100%;height:100%;
 object-fit:cover;display:block}
 .zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:12px;
-text-align:center;color:@MUTE@;font-size:12px;line-height:1.3}
+text-align:center;color:@MUTE@;font-size:12px;line-height:1.3;aspect-ratio:auto}
 .zt__none b{display:block;font-size:24px;font-weight:700;color:@DIM@;margin-bottom:4px}
-.zt__b{padding:8px 9px 10px;display:flex;flex-direction:column;gap:4px;flex:1}
-.zt__t{font-size:13.5px;font-weight:600;line-height:1.28;
-display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.zt__m{display:block;font-size:12px;color:@DIM@}
+.zt__b{padding:8px 9px 10px;display:flex;flex-direction:column;gap:4px;flex:1 1 auto;
+min-height:108px;box-sizing:border-box}
+.zt__t{font-size:13.5px;font-weight:600;line-height:1.28;min-height:calc(1.28em * 2);
+max-height:calc(1.28em * 2);display:-webkit-box;-webkit-line-clamp:2;
+-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.zt__m{display:block;font-size:12px;color:@DIM@;line-height:1.3;min-height:1.3em;
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .zt__r{display:flex;gap:9px;font-size:12px;color:@DIM@;margin-top:auto;
-padding-top:4px;flex-wrap:wrap}
+padding-top:4px;flex-wrap:nowrap;min-height:1.3em;align-items:center}
 .zt__r b{color:@WARM@;font-weight:700}
 .zt__r i{color:@WARM@;font-style:normal;font-weight:700}
 .zt__r em{color:@MUTE@;font-style:italic}
@@ -1512,13 +1515,29 @@ text-align:center;color:@MUTE@;font-size:11px;padding:6px}
 display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .zr__r{display:flex;gap:10px;font-size:12px;color:@DIM@;margin-top:6px;flex-wrap:wrap}
 
-/* Фильтры, пагинация, служебные состояния. */
+/* Фильтры каталога (служебные) и жанровая навигация главной. */
 .zstrip{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px;max-width:100%;min-width:0}
 .zstrip a{background:@SURF@;border:1px solid @LINE@;border-radius:6px;
 padding:7px 12px;font-size:13px;color:@DIM@;font-weight:600;
 max-width:100%;overflow-wrap:anywhere}
 .zstrip a:hover{border-color:@ACC@;color:@INK@}
 .zstrip a[aria-current]{background:@ACCDK@;color:#fff;border-color:@ACCDK@}
+.zgenres{margin:8px 0 28px;max-width:100%;min-width:0}
+.zgenres__h{font-size:22.1px;font-weight:400;margin:0 0 12px;letter-spacing:0}
+.zgenres__nav{display:flex;flex-wrap:wrap;gap:10px;max-width:100%}
+.zgenres__nav a{display:inline-flex;align-items:center;justify-content:center;
+min-height:42px;padding:10px 16px;border-radius:9px;border:1px solid @LINE@;
+background:@SURF@;color:@INK@;font-size:14px;font-weight:600;line-height:1.2;
+text-decoration:none;box-sizing:border-box}
+.zgenres__nav a:hover{border-color:@ACC@;color:@ACC@;background:#f3f7fc}
+.zgenres__nav a:focus-visible{outline:2px solid @ACC@;outline-offset:2px}
+.zgenres__nav a[aria-current],.zgenres__nav a.is-active{
+background:@ACCDK@;border-color:@ACCDK@;color:#fff}
+@media(max-width:639px){
+.zgenres__nav{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
+scrollbar-width:thin;padding-bottom:4px}
+.zgenres__nav a{flex:0 0 auto}
+}
 .zpg{display:flex;gap:7px;justify-content:center;margin:26px 0;flex-wrap:wrap}
 .zpg a,.zpg span{padding:8px 13px;border-radius:6px;border:1px solid @LINE@;
 background:@SURF@;font-size:13.5px;min-width:40px;text-align:center}
@@ -1531,23 +1550,46 @@ padding:11px 22px;border-radius:6px;font-weight:600}
 .zsea__h{font-size:13px;color:@DIM@;margin:0 0 14px}
 .zsea{margin:0 0 20px}
 
-/* Страница произведения. */
-.zban{position:relative;border-radius:10px;overflow:hidden;background:@ALT@;
-margin:18px 0 0;min-height:200px;max-height:280px}
-.zban__img{position:absolute;inset:0;opacity:.42}
-.zban__img img{width:100%;height:100%;object-fit:cover;display:block}
-.zhead{display:grid;grid-template-columns:1fr;gap:18px;margin:18px 0 8px}
-@media(min-width:768px){.zhead{grid-template-columns:208px 1fr}}
-.zhead__ps{aspect-ratio:2/3;border-radius:8px;overflow:hidden;background:@ALT@;
-position:relative;max-width:208px}
-.zhead__ps img,.zhead__img{position:relative;z-index:1;width:100%;height:100%;
-object-fit:cover;display:block}
-.zhead__x{min-width:0}
-.zhead__o{font-size:14px;color:@DIM@;margin:0 0 10px}
-.zbody{font-size:14.5px;line-height:1.62;color:@INK@;max-width:70ch}
-.zaside{background:@SURF@;border:1px solid @LINE@;border-radius:8px;
-padding:14px 16px;font-size:13px;color:@DIM@}
-.zaside a{color:@ACC@;font-weight:600}
+/* Страница произведения: компактная трёхзональная шапка. */
+.zban{display:none}
+.ztitle{display:grid;grid-template-columns:1fr;gap:20px;margin:16px 0 8px;
+align-items:start}
+@media(min-width:900px){.ztitle{grid-template-columns:220px minmax(0,1fr);gap:22px}}
+@media(min-width:1280px){.ztitle{grid-template-columns:260px minmax(0,1fr) 300px;gap:24px}}
+.ztitle__poster{aspect-ratio:2/3;border-radius:8px;overflow:hidden;background:@ALT@;
+position:relative;width:100%;max-width:280px;margin:0 auto}
+@media(min-width:900px){.ztitle__poster{margin:0;max-width:none}}
+.ztitle__poster img,.ztitle__poster .zhead__img{position:absolute;inset:0;z-index:1;
+width:100%;height:100%;object-fit:cover;display:block}
+.ztitle__main{min-width:0}
+.ztitle__main h1{font-size:28px;line-height:1.18;margin:0 0 8px;letter-spacing:-.4px}
+@media(min-width:1280px){.ztitle__main h1{font-size:32px}}
+.ztitle__o{font-size:14px;color:@DIM@;margin:0 0 10px}
+.ztitle__desc{font-size:14.5px;line-height:1.62;color:@INK@;max-width:70ch;margin:0 0 14px;
+display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.ztitle__cta{display:inline-flex;align-items:center;justify-content:center;
+min-height:42px;padding:10px 18px;border-radius:8px;background:@ACCDK@;color:#fff;
+font-weight:700;font-size:14px;text-decoration:none}
+.ztitle__cta:hover{filter:brightness(1.05)}
+.ztitle__rail{min-width:0;display:flex;flex-direction:column;gap:16px}
+@media(max-width:899px){.ztitle__rail{order:3}}
+.ztitle__dl{margin:0;background:@SURF@;border:1px solid @LINE@;border-radius:8px;
+padding:12px 14px;display:grid;gap:10px}
+.ztitle__dl div{display:grid;grid-template-columns:96px minmax(0,1fr);gap:8px 12px;
+align-items:baseline}
+.ztitle__dl dt{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
+color:@DIM@;font-weight:700;margin:0}
+.ztitle__dl dd{margin:0;font-size:13.5px;color:@INK@;line-height:1.4;
+overflow-wrap:anywhere}
+.ztitle__dl a{color:@ACC@;font-weight:600}
+.zad{display:none}
+.zad[data-ad-enabled="1"]{display:block;width:100%;max-width:300px;min-height:250px;
+border:1px dashed @LINE@;border-radius:8px;background:@ALT@;margin:0 auto}
+/* legacy hooks kept for older markup paths */
+.zhead{display:contents}
+.zhead__ps,.zhead__x,.zhead__o{display:contents}
+.zbody{font-size:14.5px;line-height:1.62;color:@INK@;max-width:70ch;margin:18px 0 0}
+.zaside{display:none}
 /* Хаб подборок: карточка коллекции, а не ещё одна сетка тайтлов. */
 .zhub{display:grid;gap:12px;margin:14px 0;grid-template-columns:1fr}
 @media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
@@ -1574,13 +1616,26 @@ border:1px solid @LINE@;background:@SURF@;font-size:13.5px}
 .zepnav a{background:@SURF@;border:1px solid @LINE@;border-radius:6px;
 padding:9px 14px;font-size:13.5px;color:@ACC@;font-weight:600}
 
-/* Плеер: кадр зарезервирован заранее, состояние объявляется словами. */
+/* Плеер: кадр 16:9 только при resolving/ok; честные состояния — компактны. */
 .zpl{margin:18px 0}
 .zpl__f{aspect-ratio:16/9;background:#0d1217;border:1px solid @LINE@;
 border-radius:8px;overflow:hidden;position:relative}
-.zpl__h{font-size:22.1px;font-weight:400;margin:22px 0 10px}
+.zpl__f[data-state="awaiting"],
+.zpl__f[data-state="unavailable"],
+.zpl__f[data-state="nosource"],
+.zpl__f[data-state="noaccess"],
+.zpl__f[data-state="provider"],
+.zpl__f[data-state="error"],
+.zpl__f[data-state="slow"]{aspect-ratio:auto;min-height:120px;max-height:180px}
+.zpl__f video-player{display:block;width:100%;height:100%}
+.zpl__h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+font-size:22.1px;font-weight:400;margin:22px 0 10px}
+.zpl__h span{font-size:13px;color:@DIM@;font-weight:600}
 .zpl__s{position:absolute;inset:0;display:grid;place-items:center;padding:22px;
 text-align:center;color:@DIM@;font-size:13.5px;line-height:1.5}
+.zpl__f [data-player-state]{padding:18px 16px;text-align:center;color:@DIM@;
+font-size:13.5px;line-height:1.5;max-width:520px;margin:0 auto}
+.zpl__f [data-player-state] b{display:block;color:@INK@;margin:0 0 6px;font-size:15px}
 
 .zft{border-top:1px solid @LINE@;margin:36px 0 0;padding:20px 0 30px;
 font-size:12.5px;color:@DIM@;display:block}
@@ -1642,8 +1697,9 @@ body{background:@PAGE@;color:@INK@;
 font:14px/1.45 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif}
 .zs{min-height:100vh;display:block}
 .zmain{min-width:0}
-.zwrap{max-width:100%;margin:0 auto;padding:0 6px}
-@media(min-width:768px){.zwrap{padding:0 1px}}
+.zwrap{max-width:1440px;margin:0 auto;padding:0 12px;box-sizing:border-box}
+@media(min-width:768px){.zwrap{padding:0 16px}}
+@media(min-width:1440px){.zwrap{padding:0 20px}}
 
 /* Шапка: обычная, не закреплённая. На узком — кнопка меню вместо
    обрезанной горизонтальной ленты пунктов (эталон amd.online: hamburger). */
@@ -1720,8 +1776,8 @@ gap:10px;margin:0 0 9px;border-bottom:1px solid @LINE@;padding-bottom:6px}
 .zrl__vp{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;
 scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:2px 0 8px}
 .zrl__track{display:flex;gap:10px;min-width:min-content;align-items:flex-start}
-.zrl__track>*{flex:0 0 132px;scroll-snap-align:start}
-@media(min-width:1440px){.zrl__track>*{flex-basis:150px}}
+.zrl__track>*{flex:0 0 190px;scroll-snap-align:start;max-width:230px}
+@media(min-width:1440px){.zrl__track>*{flex-basis:210px}}
 .zrl__btn{position:absolute;top:34%;transform:translateY(-50%);z-index:5;
 width:30px;height:48px;border:1px solid @LINE@;border-radius:4px;cursor:pointer;
 background:rgba(255,255,255,.94);color:@ACC@;font-size:17px;line-height:1;
@@ -1730,17 +1786,19 @@ display:none;align-items:center;justify-content:center}
 .zrl__btn--p{left:-4px}
 .zrl__btn--n{right:-4px}
 
-/* Плотная сетка: 3 колонки до 1024, 4 от 1440, зазор 10. */
-.zg{display:grid;gap:10px;grid-template-columns:repeat(2,1fr);align-items:start}
-@media(min-width:560px){.zg{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:1440px){.zg{grid-template-columns:repeat(4,1fr)}}
-@media(min-width:1800px){.zg{grid-template-columns:repeat(6,1fr)}}
+/* Компактная сетка: 2→3→5→6→7→8 колонок; карточка ~190–230px. */
+.zg{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr));
+align-items:stretch}
+@media(min-width:560px){.zg{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:900px){.zg{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(min-width:1200px){.zg{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(min-width:1440px){.zg{grid-template-columns:repeat(7,minmax(0,1fr))}}
+@media(min-width:1800px){.zg{grid-template-columns:repeat(8,minmax(0,1fr))}}
 .zt{display:flex;flex-direction:column;background:@PAGE@;
-border:1px solid @LINE@;border-radius:4px;overflow:hidden;
-transition:border-color .14s,box-shadow .14s}
+border:1px solid @LINE@;border-radius:4px;overflow:hidden;min-width:0;
+height:100%;transition:border-color .14s,box-shadow .14s}
 .zt:hover{border-color:@ACC@;box-shadow:0 4px 14px rgba(0,0,0,.09)}
-/* Пропорция постера 0.86 — измерена на эталоне. */
-.zt__p{display:block;aspect-ratio:86/100;background:@SURF@;position:relative;flex:0 0 auto}
+.zt__p{display:block;aspect-ratio:2/3;background:@SURF@;position:relative;flex:0 0 auto}
 .zt__p img,.zt__img{position:absolute;inset:0;z-index:1;width:100%;height:100%;
 object-fit:cover;display:block}
 .zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:10px;
@@ -1760,7 +1818,7 @@ padding-top:3px;flex-wrap:wrap}
 background:@PAGE@;border:1px solid @LINE@;border-radius:4px;align-items:start}
 @media(min-width:768px){.zr{grid-template-columns:74px 1fr}}
 .zr:hover{border-color:@ACC@}
-.zr__p{aspect-ratio:86/100;background:@SURF@;border-radius:3px;overflow:hidden;
+.zr__p{aspect-ratio:2/3;background:@SURF@;border-radius:3px;overflow:hidden;
 position:relative}
 .zr__p img,.zr__img{position:absolute;inset:0;width:100%;height:100%;
 object-fit:cover;display:block;z-index:1}
@@ -1821,66 +1879,104 @@ background:@ACC@;color:#fff;overflow:hidden}
 @media(min-width:1440px){.ahero .zrl__track>*{flex-basis:156px}}
 .ahero .zt{background:transparent;border:0;border-radius:0;box-shadow:none;color:#fff}
 .ahero .zt:hover{border:0;box-shadow:none;opacity:.92}
-.ahero .zt__p{border-radius:2px;aspect-ratio:86/100;background:rgba(0,0,0,.18)}
+.ahero .zt__p{border-radius:2px;aspect-ratio:2/3;background:rgba(0,0,0,.18)}
 .ahero .zt__b{padding:6px 2px 0}
 .ahero .zt__t{color:#fff;font-size:12.5px;-webkit-line-clamp:2}
 .ahero .zt__m,.ahero .zt__r{display:none}
 .ahero .zrl__btn{background:rgba(255,255,255,.95);color:@ACC@;border-color:transparent}
 .ahero__cap{display:none}
 
-/* «Новые серии» — список строк как у эталона (без выдуманного времени). */
-.zsec--eps .zl{display:grid;gap:0;grid-template-columns:1fr;
-border:1px solid @LINE@;border-radius:4px;overflow:hidden;background:@PAGE@}
-@media(min-width:900px){.zsec--eps .zl{grid-template-columns:1fr 1fr}}
-.zsec--eps .zr{border:0;border-bottom:1px solid @LINE@;border-radius:0;
-padding:10px 12px;align-items:center}
+/* «Новые серии» — компактные list-items 3–4 колонки, без растяжки. */
+.zsec--eps .zl{display:grid;gap:10px;grid-template-columns:1fr;
+border:0;background:transparent;overflow:visible}
+@media(min-width:700px){.zsec--eps .zl{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1100px){.zsec--eps .zl{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1440px){.zsec--eps .zl{grid-template-columns:repeat(4,minmax(0,440px))}}
+.zsec--eps .zr{border:1px solid @LINE@;border-radius:4px;border-bottom:1px solid @LINE@;
+padding:8px 10px;align-items:center;grid-template-columns:72px minmax(0,1fr);
+max-width:440px;width:100%;box-sizing:border-box}
 .zsec--eps .zr:nth-child(odd){border-right:1px solid @LINE@}
-@media(max-width:899px){.zsec--eps .zr:nth-child(odd){border-right:0}}
-.zsec--eps .zr:last-child{border-bottom:0}
-.zsec--eps .zr__p{aspect-ratio:1/1;border-radius:3px}
-.zsec--eps .zr__t{font-size:14px}
+.zsec--eps .zr__p{aspect-ratio:2/3;border-radius:3px;max-width:72px}
+.zsec--eps .zr__t{font-size:13.5px;line-height:1.25;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+min-height:calc(1.25em * 2)}
 .zsec--eps .zr__m{font-size:12px}
-.zsec--eps .zr__d{display:none}
+.zsec--eps .zr__d{display:block;font-size:11.5px;color:@MUTE@;-webkit-line-clamp:1}
 
-.zhead{display:grid;grid-template-columns:1fr;gap:14px;margin:14px 0 6px}
-@media(min-width:768px){.zhead{grid-template-columns:190px 1fr}}
-.zhead__ps{aspect-ratio:86/100;border-radius:4px;overflow:hidden;background:@SURF@;
-position:relative;max-width:190px}
-.zhead__ps img,.zhead__img{position:relative;z-index:1;width:100%;height:100%;
-object-fit:cover;display:block}
-.zhead__x{min-width:0}
-.zhead__o{font-size:13.5px;color:@DIM@;margin:0 0 9px}
-.zbody{font-size:14px;line-height:1.6;color:@INK@;max-width:72ch}
-.zaside{background:@ALT@;border:1px solid @LINE@;border-radius:4px;
-padding:12px 14px;font-size:13px;color:@DIM@}
-.zaside a{color:@ACC@;font-weight:700}
+/* Title hub: poster + main + rail; player starts in first viewport. */
+.zban{display:none}
+.zhead{display:contents}
+.zhead__ps,.zhead__x,.zhead__o{display:contents}
+.ztitle{display:grid;grid-template-columns:1fr;gap:16px;margin:12px 0 8px;
+align-items:start}
+@media(min-width:768px){.ztitle{grid-template-columns:220px minmax(0,1fr);gap:20px}}
+@media(min-width:1100px){.ztitle{grid-template-columns:240px minmax(0,1fr) 300px;gap:22px}}
+@media(min-width:1280px){.ztitle{grid-template-columns:250px minmax(0,1fr) 320px;gap:24px}}
+.ztitle__poster{aspect-ratio:2/3;border-radius:6px;overflow:hidden;background:@SURF@;
+position:relative;width:100%;max-width:260px;margin:0 auto}
+@media(min-width:768px){.ztitle__poster{margin:0;max-width:none}}
+.ztitle__poster img,.ztitle__poster .zhead__img{position:absolute;inset:0;z-index:1;
+width:100%;height:100%;object-fit:cover;display:block}
+.ztitle__main{min-width:0}
+.ztitle__main h1{font-size:24px;line-height:1.2;margin:0 0 8px;letter-spacing:-.3px}
+@media(min-width:1100px){.ztitle__main h1{font-size:28px}}
+.ztitle__o{font-size:13.5px;color:@DIM@;margin:0 0 8px}
+.ztitle__desc{font-size:14px;line-height:1.55;color:@INK@;max-width:68ch;margin:0 0 12px;
+display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.ztitle__desc--empty{display:none}
+.ztitle__cta{display:inline-flex;align-items:center;justify-content:center;
+min-height:40px;padding:8px 16px;border-radius:4px;background:@ACC@;color:#fff;
+font-weight:700;font-size:14px;text-decoration:none}
+.ztitle__cta:hover{filter:brightness(1.05)}
+.ztitle__rail{min-width:0;display:flex;flex-direction:column;gap:12px}
+@media(max-width:1099px){.ztitle__rail{order:3}}
+.ztitle__dl{margin:0;background:@ALT@;border:1px solid @LINE@;border-radius:4px;
+padding:10px 12px;display:grid;gap:8px}
+.ztitle__dl div{display:grid;grid-template-columns:92px minmax(0,1fr);gap:6px 10px;
+align-items:baseline}
+.ztitle__dl dt{font-size:11px;letter-spacing:.04em;text-transform:uppercase;
+color:@DIM@;font-weight:700;margin:0}
+.ztitle__dl dd{margin:0;font-size:13px;color:@INK@;line-height:1.35;
+overflow-wrap:anywhere}
+.ztitle__dl a{color:@ACC@;font-weight:700}
+.zad{display:none}
+.zad[data-ad-enabled="1"]{display:block;width:100%;max-width:300px;min-height:250px;
+border:1px dashed @LINE@;border-radius:4px;background:@ALT@;margin:0 auto}
+.zbody{font-size:14px;line-height:1.55;color:@INK@;max-width:70ch;margin:14px 0 0}
+.zaside{display:none}
 /* Хаб подборок: карточка коллекции, а не ещё одна сетка тайтлов. */
 .zhub{display:grid;gap:12px;margin:14px 0;grid-template-columns:1fr}
 @media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1000px){.zhub{grid-template-columns:repeat(3,1fr)}}
 .zhub__c{display:block;padding:12px;border:1px solid @LINE@;border-radius:6px;
 background:@SURF@;color:inherit;text-decoration:none}
-.zhub__c:hover{border-color:@ACC@}
+.zhub__c:hover,.zhub__c:focus-visible{border-color:@ACC@;outline:none}
 .zhub__g{display:flex;gap:4px;margin-bottom:9px}
 .zhub__p{flex:1 1 0;aspect-ratio:2/3;overflow:hidden;border-radius:4px;background:@ALT@}
 .zhub__img{width:100%;height:100%;object-fit:cover;display:block}
 .zhub__t{display:block;font-weight:700;font-size:15px}
-.zhub__m{display:block;font-size:12.5px;color:@ACC@;font-weight:600;margin:2px 0 4px}
+.zhub__m{display:block;font-size:12px;color:@DIM@;font-weight:600;margin:2px 0 4px}
 .zhub__d{display:block;font-size:13px;color:@DIM@;line-height:1.45}
 
-/* Компактные номерные кнопки серий: 40–52px, перенос рядами. */
-.zeps{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;max-height:70vh;
-overflow-y:auto;overscroll-behavior:contain;align-content:flex-start}
-@media(min-width:768px){.zeps{max-height:520px}}
+/* Компактные номерные кнопки серий: CSS Grid auto-fill, без скрытых колонок. */
+.zeps{display:grid;gap:6px;margin:12px 0;max-height:70vh;overflow-x:hidden;
+overflow-y:auto;overscroll-behavior:contain;align-content:flex-start;
+grid-template-columns:repeat(auto-fill,minmax(44px,1fr));width:100%;
+max-width:100%;min-width:0;box-sizing:border-box}
+@media(min-width:768px){.zeps{max-height:520px;
+grid-template-columns:repeat(auto-fill,minmax(48px,1fr))}}
 .zeps a,.zeps span{display:inline-flex;align-items:center;justify-content:center;
-min-width:44px;min-height:44px;width:44px;height:44px;padding:0;
+min-width:44px;min-height:44px;width:100%;height:44px;padding:0;
 border-radius:6px;border:1px solid @LINE@;background:@PAGE@;font-size:13px;
-font-weight:700;font-variant-numeric:tabular-nums;flex:0 0 auto}
-@media(min-width:768px){.zeps a,.zeps span{min-width:48px;min-height:48px;
-width:48px;height:48px}}
+font-weight:700;font-variant-numeric:tabular-nums;box-sizing:border-box}
+@media(min-width:768px){.zeps a,.zeps span{min-height:48px;height:48px}}
 .zeps span{opacity:.5}
 .zeps a[aria-current]{background:@ACC@;color:#fff;border-color:@ACC@}
 .zeps a[data-off]{opacity:.45;pointer-events:none}
+.zsea__h{display:flex;justify-content:space-between;align-items:baseline;
+gap:10px;flex-wrap:wrap;margin:0 0 10px}
+.zsea__h b{font-size:15px;font-weight:700}
+.zsea__h span{font-size:13px;color:@DIM@}
 .zepnav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
 .zepnav a{background:@ALT@;border:1px solid @LINE@;border-radius:4px;
 padding:8px 12px;font-size:13px;color:@ACC@;font-weight:700}
@@ -2085,32 +2181,61 @@ def _конфиг_плеера() -> dict:
 ПЛЕЕР = _конфиг_плеера()
 
 
-def источник_по_провайдеру(деталь: dict) -> tuple[str, str]:
-    """Источник записи в режиме `provider-id`.
+#: Навигация «Смотреть по жанрам» на главной Zona. Коды — из sidecar genre_codes
+#: (`triller` — фактический код снимка, не `thriller`). дорама ≠ драма.
+ZONA_GENRE_NAV = (
+    ("west_content", "западный контент"),
+    ("dorama", "дорама"),
+    ("drama", "драма"),
+    ("comedy", "комедия"),
+    ("triller", "триллер"),
+)
 
-    Первым берётся собственный идентификатор записи в каталоге провайдера:
-    запись пришла оттуда же, поэтому сопоставление тождественное и перепутать
-    сущность, часть франшизы или год нечем. Затем — привязка, посчитанная
-    конвейером в поле `sources`, и лишь потом внешние идентификаторы: чем ближе
-    ключ к провайдеру, тем меньше на пути чужих баз, в которых можно разойтись.
+
+
+def кандидаты_источника(деталь: dict) -> list[tuple[str, str]]:
+    """Упорядоченные кандидаты (агрегатор, id) для режима provider-id.
+
+    Live на /title/aida-vozvraschaetsya/: UUID→cvh давал noData при наличии
+    available kp; UI показывал Play + «нет дорожки». Available sources раньше UUID.
     """
+    увидели: set[tuple[str, str]] = set()
+    итог: list[tuple[str, str]] = []
+
+    def добавить(агрегатор: str, значение: str) -> None:
+        агрегатор = (агрегатор or "").strip()
+        значение = (значение or "").strip()
+        if not значение or агрегатор not in АГРЕГАТОРЫ:
+            return
+        ключ = (агрегатор, значение)
+        if ключ in увидели:
+            return
+        увидели.add(ключ)
+        итог.append(ключ)
+
+    источники = [с for с in (деталь.get("sources") or ()) if isinstance(с, dict)]
+    for с in источники:
+        if str(с.get("availability_status") or "").strip().lower() == "available":
+            добавить(str(с.get("provider") or ""), str(с.get("source_id") or ""))
     свой = str(деталь.get("id") or "").strip().lower()
     if ИДЕНТИФИКАТОР_ПРОВАЙДЕРА.match(свой):
-        return "cvh", свой
-    for запись in деталь.get("sources") or ():
-        if not isinstance(запись, dict):
+        добавить("cvh", свой)
+    for с in источники:
+        статус = str(с.get("availability_status") or "").strip().lower()
+        if статус in {"unavailable", "missing", "none"}:
             continue
-        агрегатор = str(запись.get("provider") or "").strip()
-        значение = str(запись.get("source_id") or "").strip()
-        if значение and агрегатор in АГРЕГАТОРЫ:
-            return агрегатор, значение
+        добавить(str(с.get("provider") or ""), str(с.get("source_id") or ""))
     внешние = деталь.get("external_ids")
     if isinstance(внешние, dict):
         for ключ, агрегатор in ЗАПАСНЫЕ_КЛЮЧИ:
-            значение = str(внешние.get(ключ) or "").strip()
-            if значение and агрегатор in АГРЕГАТОРЫ:
-                return агрегатор, значение
-    return "", ""
+            добавить(агрегатор, str(внешние.get(ключ) or ""))
+    return итог
+
+
+def источник_по_провайдеру(деталь: dict) -> tuple[str, str]:
+    """Первый кандидат; пусто — источника нет."""
+    кандидаты = кандидаты_источника(деталь)
+    return кандидаты[0] if кандидаты else ("", "")
 
 
 def источник_плеера(деталь: dict) -> tuple[str, str]:
@@ -2134,7 +2259,10 @@ def источник_плеера(деталь: dict) -> tuple[str, str]:
 
 
 def состояние_плеера(деталь: dict) -> tuple[str, str, str]:
-    """Состояние до отрисовки: (код, заголовок, объяснение)."""
+    """Серверное состояние: provider_configured ≠ playable_source.
+
+    `playable` = publisher + кандидат источника; SDK ещё подтверждает дорожку.
+    """
     агрегатор, ид = источник_плеера(деталь)
     if not ПЛЕЕР.get("publisher_id"):
         return ("noaccess", "Просмотр на витрине не подключён",
@@ -2142,8 +2270,6 @@ def состояние_плеера(деталь: dict) -> tuple[str, str, str]:
                 "ей нечем. Это настройка витрины, а не состояние записи: каталог, "
                 "описание и список серий на странице доступны полностью.")
     if not (агрегатор and ид):
-        # Пустой словарь подробностей — отдельный диагноз: снимок каталога
-        # опередил sidecar, а не «у провайдера нет агрегатора».
         if not деталь:
             return ("nosource", "Подробности записи ещё не в снимке",
                     "Карточка уже есть в каталоге, но боковой файл подробностей "
@@ -2159,8 +2285,9 @@ def состояние_плеера(деталь: dict) -> tuple[str, str, str]:
 def выбрать_доступную_серию(деталь: dict) -> tuple[int, int | None]:
     """Детерминированный выбор серии для хаба сериала.
 
-    Приоритет: последняя реально доступная (avail) → первая доступная →
-    номер сезона без эпизода (честный unavailable/awaiting без SDK).
+    Приоритет: первая реально доступная (avail) → номер сезона без эпизода
+    (честный unavailable/awaiting без SDK). Прямой URL недоступного эпизода
+    не подменяется молча — только хаб выбирает первую playable.
     """
     сезоны = список_серий(деталь)
     if not сезоны:
@@ -2170,6 +2297,9 @@ def выбрать_доступную_серию(деталь: dict) -> tuple[in
         for н in range(1, int(с.get("avail") or 0) + 1):
             доступные.append((с["n"], н))
     if доступные:
+        # Latest declared-available episode for the hub; direct episode URLs
+        # keep the requested number (no silent swap). Client source fallback
+        # still walks mali→cvh if the provider rejects the first binding.
         return доступные[-1]
     return сезоны[0]["n"], None
 
@@ -2208,32 +2338,22 @@ def новинки_с_источником(данные: "Данные", под�
 
 def разметка_плеера(вид, запись: dict, деталь: dict, сезон: int,
                     эпизод: int | None) -> tuple[str, str]:
-    """Возвращает (код состояния, HTML внутренности рамки плеера)."""
+    """Возвращает (код состояния, HTML внутренности рамки плеера).
+
+    Серверный `playable`/`resolving` = publisher + кандидат. Подпись
+    «источник подключён» и READY выставляет только клиент после подтверждения.
+    """
     код, заголовок, текст = состояние_плеера(деталь)
     if код != "playable":
         return код, (f'<div class="{вид.кл_состояния}" data-player-state>'
                      f"<b>{html.escape(заголовок)}</b><p>{html.escape(текст)}</p></div>")
     if ждёт_выбора_серии(запись, деталь, эпизод):
-        # 16:9-shell остаётся; Animedia — компактный текст без внутренней механики.
-        if СЕМЕЙСТВО == "animedia":
-            return ("awaiting",
-                    f'<div class="{вид.кл_состояния}" data-player-state>'
-                    "<b>Выберите серию</b>"
-                    "<p>Откройте доступную серию в списке ниже.</p></div>")
         return ("awaiting",
                 f'<div class="{вид.кл_состояния}" data-player-state>'
                 "<b>Выберите серию</b>"
-                "<p>Источник подключён. Откройте серию в списке ниже — "
-                "тогда загрузится плеер и появится дорожка. "
+                "<p>Откройте серию в списке ниже — тогда загрузится плеер. "
                 "До выбора серии запросов к провайдеру нет.</p></div>")
     if эпизод is not None and not серия_с_дорожкой(деталь, сезон, эпизод):
-        if СЕМЕЙСТВО == "animedia":
-            return ("unavailable",
-                    f'<div class="{вид.кл_состояния}" data-player-state>'
-                    "<b>Серия пока недоступна</b>"
-                    f"<p>Серия {html.escape(str(эпизод))} сезона "
-                    f"{html.escape(str(сезон))} ещё без дорожки. "
-                    "Выберите доступную серию ниже.</p></div>")
         доступно = 0
         всего = 0
         for с in список_серий(деталь):
@@ -2250,10 +2370,20 @@ def разметка_плеера(вид, запись: dict, деталь: dict
                 "плейлист на этот номер. Плеер не подключается: иначе "
                 "провайдер показал бы чужой эпизод или завис бы в таймауте. "
                 "Откройте серию из доступных в списке ниже.</p></div>")
-    агрегатор, ид = источник_плеера(деталь)
-    # На хабе без списка сезонов (фильм) конкретную серию навязывать нельзя:
-    # нумерация у провайдера не обязана начинаться с первой. Без атрибута
-    # episode провайдер сам берёт первый элемент плейлиста.
+    if ПЛЕЕР.get("source_mode") == "provider-id":
+        кандидаты = кандидаты_источника(деталь)
+    else:
+        а, и = источник_плеера(деталь)
+        кандидаты = [(а, и)] if а and и else []
+    if not кандидаты:
+        return ("nosource",
+                f'<div class="{вид.кл_состояния}" data-player-state>'
+                "<b>Источник для этой записи не передан</b>"
+                "<p>Запрашивать у провайдера нечего.</p></div>")
+    агрегатор, ид = кандидаты[0]
+    список_json = html.escape(json.dumps(
+        [{"aggregator": а, "id": i} for а, i in кандидаты],
+        ensure_ascii=False, separators=(",", ":")))
     атрибуты = {
         "ident": f"player-{запись['slug']}-s{сезон}"
                  + (f"e{эпизод}" if эпизод is not None else ""),
@@ -2266,8 +2396,10 @@ def разметка_плеера(вид, запись: dict, деталь: dict
     if эпизод is not None:
         атрибуты["episode"] = str(эпизод)
     строка = " ".join(f'{к}="{html.escape(str(з))}"' for к, з in атрибуты.items())
-    return код, (
-        f"<video-player {строка}></video-player>"
+    # SSR: resolving — кандидат есть, playable_source ещё не подтверждён.
+    return ("resolving",
+        f'<div data-player-host data-src-candidates="{список_json}">'
+        f"<video-player {строка}></video-player></div>"
         f'<div class="{вид.кл_состояния}" data-player-state hidden>'
         "<b>Провайдер не отдал источник</b>"
         "<p>Для этой серии у провайдера сейчас нет дорожки. "
@@ -2282,50 +2414,125 @@ def разметка_плеера(вид, запись: dict, деталь: dict
 СКРИПТ_ПЛЕЕРА_КЛИЕНТ = """
 (function(){
  var f=document.querySelector('[data-player]'); if(!f) return;
- var el=f.querySelector('video-player'), st=f.querySelector('[data-player-state]');
- if(!el){return}
- // `поднялся` означает только одно: элемент провайдера появился на экране.
- // Раньше этот же флаг ГЛУШИЛ все последующие состояния, и отказ, пришедший
- // после подъёма, до зрителя не доходил вовсе.
- //
- // А приходит он именно так. Обычная последовательность у провайдера —
- // сначала элемент поднимается, и только потом выясняется, что дорожки для
- // этой серии нет: событие `noData` прилетает ПОСЛЕ `ok`. Со старым флагом
- // зритель получал поднявшийся плеер, который молча ничего не играет, —
- // то есть ровно тот чёрный прямоугольник, ради которого состояния и заводили.
- //
- // Поэтому отказ провайдера и отказ его скрипта перебивают успех всегда, а
- // флаг гасит только запоздавший таймаут: пятнадцать секунд не повод объявлять
- // сломанным то, что уже играет.
- var поднялся=false;
- var seen;
- // Отказ обязан перебивать успех НАВСЕГДА, а не до следующего тика таймера.
- // Обычный порядок у провайдера — сначала элемент поднимается, потом приходит
- // `noData`; таймер `seen` продолжал работать и следующим тиком возвращал
- // состояние `ok`, пряча уже показанное объяснение. Зритель получал пустую
- // рамку вместо ответа — ровно то, против чего эти состояния и заведены.
- var отказ=false;
+ var host=f.querySelector('[data-player-host]');
+ if(!host) return;
+ var st=f.querySelector('[data-player-state]');
+ var cands=[];
+ try{ cands=JSON.parse(host.getAttribute('data-src-candidates')||'[]')||[]; }catch(e){ cands=[]; }
+ var idx=0, token=0, поднялся=false, отказ=false, seen, timers=[], maxFallback=3;
+ var baseAttrs={};
+ function el(){ return host.querySelector('video-player'); }
+ function clearTimers(){ timers.forEach(clearTimeout); timers=[]; if(seen){clearInterval(seen);seen=null;} }
  function state(k,t,p){
   if(отказ&&k==='ok') return;
-  if(k!=='ok'&&k!=='loading'){ отказ=true; if(typeof seen!=='undefined') clearInterval(seen); }
+  if(k!=='ok'&&k!=='loading'&&k!=='resolving'){ отказ=true; clearTimers(); }
   f.setAttribute('data-state',k);
-  if(k==='ok'){ if(st)st.hidden=true; el.hidden=false; поднялся=true; return }
-  el.hidden=true; if(!st)return; st.hidden=false;
-  st.innerHTML='<b></b><p></p>'; st.firstChild.textContent=t;
-  st.lastChild.textContent=p; }
- f.setAttribute('data-state','loading');
- el.addEventListener('noData',function(){
-  state('provider','Провайдер не отдал источник',
-   'Для этой серии у провайдера сейчас нет дорожки. Остальные серии и описание на странице работают.');});
+  var node=el();
+  if(k==='ok'||k==='resolving'){
+   if(st) st.hidden=true;
+   if(node) node.hidden=false;
+   if(k==='ok') поднялся=true;
+   return;
+  }
+  if(node) node.hidden=true;
+  if(!st) return;
+  st.hidden=false;
+  st.innerHTML='<b></b><p></p>';
+  st.firstChild.textContent=t;
+  st.lastChild.textContent=p;
+ }
+ function snapshot(node){
+  baseAttrs={};
+  if(!node) return;
+  ['ident','season','episode','is-show-voice-only','is-show-banner','disable-licensed','data-publisher-id'].forEach(function(a){
+   var v=node.getAttribute(a); if(v!=null) baseAttrs[a]=v;
+  });
+ }
+ function destroy(){
+  clearTimers();
+  var node=el();
+  if(!node) return;
+  try{ node.remove(); }catch(e){}
+ }
+ function mountAt(i){
+  idx=i;
+  var c=cands[i]; if(!c) return;
+  var prev=el();
+  if(prev) snapshot(prev);
+  destroy();
+  поднялся=false; отказ=false;
+  var n=document.createElement('video-player');
+  Object.keys(baseAttrs).forEach(function(a){ n.setAttribute(a, baseAttrs[a]); });
+  n.setAttribute('data-title-id', c.id||'');
+  n.setAttribute('data-aggregator', c.aggregator||'');
+  host.appendChild(n);
+  bind(n, ++token);
+ }
+ function bind(node, my){
+  if(!node) return;
+  snapshot(node);
+  f.setAttribute('data-state','resolving');
+  if(st) st.hidden=true;
+  node.hidden=false;
+  node.addEventListener('noData', function(){
+   if(my!==token) return;
+   if(idx+1<cands.length && (idx+1)<=maxFallback){
+    state('resolving','Подключаем другой источник',
+     'Первая дорожка недоступна, пробуем следующую.');
+    mountAt(idx+1);
+    return;
+   }
+   state('provider','Провайдер не отдал источник',
+    'Для этой серии у провайдера сейчас нет дорожки. Остальные серии и описание на странице работают.');
+  });
+  node.addEventListener('error', function(){
+   if(my!==token) return;
+   state('error','Ошибка плеера','Провайдер вернул ошибку на выбранной дорожке.');
+  });
+  clearTimers();
+  function markReady(evName){
+   if(my!==token) return;
+   window.__zonaPlayerReady = {token:my, event:evName||'ready', at:Date.now()};
+   state('ok');
+  }
+  ['playing','play','loadeddata','canplay','canplaythrough'].forEach(function(ev){
+   node.addEventListener(ev, function(){ markReady(ev); }, {once:true});
+  });
+  // Shadow/iframe mount is NOT playback proof — only media events set READY.
+  // Still observe nested video for cross-origin-incapable hosts that re-target events.
+  seen=setInterval(function(){
+   if(my!==token || поднялся) return;
+   var root=node.shadowRoot; if(!root) return;
+   var v=root.querySelector('video');
+   if(v && !v.__zonaBound){
+    v.__zonaBound=true;
+    ['playing','play','timeupdate'].forEach(function(ev){
+     v.addEventListener(ev, function(){
+      if(ev==='timeupdate' && !(v.currentTime>0.05)) return;
+      markReady('video.'+ev);
+     }, {once:true});
+    });
+   }
+   if(v && !v.paused && v.currentTime>0.05) markReady('video.playing');
+  },400);
+  timers.push(setTimeout(function(){
+   if(my!==token) return;
+   if(seen){clearInterval(seen);seen=null;}
+   if(!поднялся) state('slow','Плеер не поднялся',
+    'Скрипт провайдера загрузился, но воспроизведение не подтвердилось за пятнадцать секунд. Обновите страницу; описание и серии доступны и сейчас.');
+  },15000));
+ }
+ var first=el();
+ if(first){
+  if(!cands.length){
+   cands=[{aggregator:first.getAttribute('data-aggregator')||'', id:first.getAttribute('data-title-id')||''}];
+  }
+  bind(first, ++token);
+ }
  var s=document.querySelector('[data-player-script]');
  if(s){ s.addEventListener('error',function(){
   state('error','Скрипт плеера не загрузился',
    'Браузер не смог получить скрипт провайдера: его мог заблокировать расширение или сеть. Страница и список серий продолжают работать.');}); }
- seen=setInterval(function(){
-  if(el.shadowRoot||el.children.length){clearInterval(seen);state('ok');}},250);
- setTimeout(function(){ clearInterval(seen);
-  if(!поднялся) state('slow','Плеер не поднялся',
-   'Скрипт провайдера загрузился, но проигрыватель не запустился за пятнадцать секунд. Обновите страницу; описание и серии доступны и сейчас.');},15000);
 })();
 """
 
@@ -3596,9 +3803,10 @@ class ВидЗона(Вид):
         if not части:
             части.append("<span><em>оценки нет</em></span>")
         оценка = f'<span class="zt__r">{"".join(части)}</span>'
-        return (f'<a class="zt" href="{запись["url"]}">'
+        заголовок = запись["title"] or ""
+        return (f'<a class="zt" href="{запись["url"]}" title="{html.escape(заголовок)}">'
                 f'<span class="zt__p">{изо}</span>'
-                f'<span class="zt__b"><span class="zt__t">{html.escape(запись["title"])}</span>'
+                f'<span class="zt__b"><span class="zt__t">{html.escape(заголовок)}</span>'
                 f'<span class="zt__m">{html.escape(мета)}</span></span>{оценка}</a>')
 
     def строка(self, запись: dict) -> str:
@@ -3787,9 +3995,6 @@ class ВидЗона(Вид):
             if карточки:
                 жанры_лента.append(
                     (f"genre-{код}", имя, f"/catalog/?genre={код}", карточки, ""))
-        жанры = "".join(
-            f'<a href="/catalog/{запрос_строкой({"genre": код})}">{html.escape(имя)}</a>'
-            for код, имя in self.индекс["genre_names"][:14])
         коллекции_html = ""
         снимок = Снимок.получить(self.д, self.п)
         if КОЛЛЕКЦИИ is not None and снимок is not None:
@@ -3812,14 +4017,27 @@ class ВидЗона(Вид):
                     '<a href="/collections/">Весь раздел</a></div>'
                     f'<div class="zhub zhub--home">{"".join(кол_карточки)}</div>'
                     "</section>")
+        жанр_навигация = "".join(
+            f'<a href="/catalog/{запрос_строкой({"genre": код})}">{html.escape(имя)}</a>'
+            for код, имя in ZONA_GENRE_NAV)
+        блок_жанров = (
+            f'<section class="zgenres" aria-labelledby="zgenres-h">'
+            f'<h2 class="zgenres__h" id="zgenres-h">Смотреть по жанрам</h2>'
+            f'<nav class="zgenres__nav" aria-label="Смотреть по жанрам">{жанр_навигация}</nav>'
+            f'</section>') if жанр_навигация else ""
         куски = [f'<h1 class="zh">{html.escape(self.се["лид"])}</h1>'
                  '<p class="zsub">Фильмы, сериалы и анимация из каталога витрины. '
                  '<a href="/catalog/">Открыть весь каталог</a> · '
                  '<a href="/movies/">Кино</a> · '
                  '<a href="/series/">Сериалы</a> · '
-                 '<a href="/new/">Что нового</a></p>'
-                 + (f'<nav class="zstrip" aria-label="Жанры">{жанры}</nav>' if жанры else "")]
-        куски += [self.секция(*л) for л in ленты]
+                 '<a href="/new/">Что нового</a></p>']
+        остальные = list(ленты)
+        первая = остальные.pop(0) if остальные else None
+        if первая:
+            куски.append(self.секция(*первая))
+        if блок_жанров:
+            куски.append(блок_жанров)
+        куски += [self.секция(*л) for л in остальные]
         куски += [self.секция(*л) for л in жанры_лента]
         if коллекции_html:
             куски.append(коллекции_html)
@@ -3901,7 +4119,7 @@ class ВидЗона(Вид):
                 f'<a class="zhub__c" href="{html.escape(спец.canonical_path)}">'
                 f'<span class="zhub__g">{обложки}</span>'
                 f'<span class="zhub__t">{html.escape(коллекция.title)}</span>'
-                f'<span class="zhub__m">{коллекция.total} записей</span>'
+                f'<span class="zhub__m">{коллекция.total}</span>'
                 f'<span class="zhub__d">{html.escape(коллекция.description)}</span>'
                 f'</a>')
         if not карточки:
@@ -3923,8 +4141,7 @@ class ВидЗона(Вид):
         титул = имена.get(разд, "Каталог")
         if разд == "/collections":
             тело = (f'<div class="zwrap"><h1 class="zh">{html.escape(титул)}</h1>'
-                    f'<p class="zsub">Коллекции собираются одним контрактом: '
-                    f'состав и порядок здесь те же, что в лентах на главной.</p>'
+                    f'<p class="zsub">Тематические подборки по данным текущего снимка.</p>'
                     + self.хаб_коллекций() + "</div>")
             return self.оболочка(тело, f"{титул} — {self.имя}", "/collections/",
                                  актив="/collections/",
@@ -3934,21 +4151,43 @@ class ВидЗона(Вид):
         всего = max(1, (len(набор) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1)
         стр = min(стр, всего)
         кусок = набор[(стр - 1) * НА_СТРАНИЦЕ_1_1: стр * НА_СТРАНИЦЕ_1_1]
+        жанр_код = выбрано.get("genre")
+        жанр_имя = None
+        if жанр_код:
+            for код, имя in (self.индекс.get("genre_names") or []):
+                if код == жанр_код:
+                    жанр_имя = имя
+                    break
+            if not жанр_имя:
+                for код, имя in ZONA_GENRE_NAV:
+                    if код == жанр_код:
+                        жанр_имя = имя
+                        break
+            if жанр_имя:
+                титул = жанр_имя
         фильтры = "".join(
             f'<a href="{разд}/{запрос_строкой(выбрано, kind=к, page=None)}"'
             f'{ТЕКУЩАЯ_СТРАНИЦА if выбрано["kind"] == к else ""}>{html.escape(к)}</a>'
             for к in self.д.kinds)
         if any(v for k, v in выбрано.items() if k != "_unknown" and v):
             фильтры += f'<a href="{разд}/">Сбросить</a>'
-        # Genre/year chips stay inside container; wrap on tablet via CSS.
         годы = "".join(
             f'<a href="{разд}/{запрос_строкой(выбрано, year=г, page=None)}"'
             f'{ТЕКУЩАЯ_СТРАНИЦА if str(выбрано.get("year")) == str(г) else ""}>{г}</a>'
             for г in (self.д.years or [])[:12])
         if годы:
             фильтры += f'<span class="zfilt__y">{годы}</span>'
+        жанр_навигация = "".join(
+            f'<a href="/catalog/{запрос_строкой({"genre": код})}"'
+            f'{ТЕКУЩИЙ_ПУНКТ if жанр_код == код else ""}>{html.escape(имя)}</a>'
+            for код, имя in ZONA_GENRE_NAV)
+        блок_жанров = (
+            f'<nav class="zgenres__nav" aria-label="Смотреть по жанрам">'
+            f"{жанр_навигация}</nav>") if разд == "/catalog" else ""
+        канон = разд + "/" + (запрос_строкой(выбрано, page=None) if жанр_код else "")
         тело = (f'<div class="zwrap"><h1 class="zh">{html.escape(титул)}</h1>'
                 f'<p class="zsub">Найдено {len(набор)} · страница {стр} из {всего}</p>'
+                + блок_жанров
                 + (self.плитки(кусок) if кусок else
                    '<div class="zempty"><b>Ничего не подошло</b>'
                    "<p>Под выбранные условия не попала ни одна запись.</p></div>")
@@ -3960,7 +4199,8 @@ class ВидЗона(Вид):
             актив = "/series/"
         elif разд == "/catalog" and выбрано.get("kind") == "Мультфильм":
             актив = "/animation/"
-        return self.оболочка(тело, f"{титул} — {self.имя}", разд + "/", актив=актив,
+        return self.оболочка(тело, f"{титул} — {self.имя}", канон or (разд + "/"),
+                             актив=актив,
                              описание=f"{титул} на витрине {self.имя}.",
                              сверху=фильтры)
 
@@ -3994,61 +4234,63 @@ class ВидЗона(Вид):
         звенья = [("/", self.имя),
                   ("/series/", "Сериалы") if сериал else ("/movies/", "Кино"),
                   ("", имя)]
-        постер = запись.get("poster")
-        фон = (f'<div class="zban__img"><img src="{html.escape(деталь.get("backdrop_url") or постер or "")}" alt=""></div>'
-               if (деталь.get("backdrop_url") or постер) else "")
         изо = заглушка_постера(запись, "zt__none", "zhead__img", 372, 558)
-        ориг = (f'<p class="zhead__o">{html.escape(деталь["original_name"])}</p>'
-                if деталь.get("original_name") else "")
-
-        полоса = []
-        if запись.get("year"):
-            полоса.append(f'<div><dt>Год</dt><dd>{запись["year"]}</dd></div>')
-        if сезоны:
-            полоса.append(f'<div><dt>Серий</dt><dd>{всего_серий(деталь)}</dd></div>')
-        длит = _длительность(деталь.get("duration"))
-        if длит:
-            полоса.append(f'<div><dt>Хронометраж</dt><dd>{html.escape(длит)}</dd></div>')
-        полоса_html = (f'<dl class="zstrip">{"".join(полоса)}</dl>' if полоса else "")
-        # Оценки вынесены в общий компонент: подпись источника принадлежит
-        # источнику. Прежняя полоса красила КП и IMDb цветом, но не называла
-        # шкалу и не умела показать больше двух источников.
-        полоса_html += разметка_оценок(деталь, "rbs")
-
         описание = деталь.get("description") or деталь.get("short_description") or ""
-        сюжет = (f'<section class="zsec"><h2>О чём это</h2><p>{html.escape(описание)}</p></section>'
-                 if описание else
-                 '<section class="zsec"><h2>О чём это</h2>'
-                 '<p class="none">Описание источник по этой записи пока не передал. '
-                 "Известные факты собраны в колонке справа.</p></section>")
-
-        пары = факты(self, запись, деталь)
-        аside = ("".join(f"<div><dt>{html.escape(м)}</dt><dd>{з}</dd></div>" for м, з in пары))
-        колонка = (f'<aside class="zaside"><dl>{аside}</dl></aside>' if пары else
-                   '<aside class="zaside"><dl><div><dt>Сведения</dt>'
-                   "<dd>Источник передал по этой записи только название, вид, год и постер.</dd>"
-                   "</div></dl></aside>")
-
+        краткий = описание.strip()
+        if len(краткий) > 420:
+            краткий = краткий[:417].rstrip() + "…"
+        описание_html = (f'<p class="ztitle__desc">{html.escape(краткий)}</p>'
+                         if краткий else "")
+        оценки_html = разметка_оценок(деталь, "rbs")
+        # Rail metadata only — no year/type repeat in the hero strip.
+        rail_keys = {
+            "Оригинальное название", "Год", "Тип", "Страна", "Жанр",
+            "Время", "Дата выхода", "Серии",
+        }
+        пары = [(м, з) for м, з in факты(self, запись, деталь) if м in rail_keys]
+        # Age/status if present in sidecar (optional).
+        for метка, ключ in (("Возраст", "age_rating"), ("Статус", "status")):
+            знач = деталь.get(ключ)
+            if знач:
+                пары.append((метка, html.escape(str(знач))))
+        rail_rows = "".join(
+            f"<div><dt>{html.escape(м)}</dt><dd>{з}</dd></div>" for м, з in пары)
+        rail_dl = (f'<dl class="ztitle__dl">{rail_rows}</dl>' if rail_rows else
+                   '<dl class="ztitle__dl"><div><dt>Сведения</dt>'
+                   "<dd>Источник передал только название и постер.</dd></div></dl>")
+        ads_on = os.environ.get("ZONA_AD_SLOTS", "") == "1"
+        ad_slot = (f'<div class="zad" data-ad-slot="title-rail-300x250" '
+                   f'data-ad-enabled="{1 if ads_on else 0}" '
+                   f'aria-hidden="{"false" if ads_on else "true"}"></div>')
         сезон_старт, эпизод_старт = выбрать_доступную_серию(деталь) if сезоны else (1, None)
         код, внутри = разметка_плеера(self, запись, деталь, сезон_старт, эпизод_старт)
-        плеер = (f'<section class="zpl"><div class="zpl__h"><h2>Смотреть</h2>'
+        плеер = (f'<section class="zpl" id="watch"><div class="zpl__h"><h2>Смотреть</h2>'
                  f"<span>{html.escape(_подпись_плеера(код))}</span></div>"
                  f'<div class="zpl__f" data-player data-state="{код}">{внутри}</div>'
                  f"{_скрипты_плеера(код)}</section>")
-
         текущий = (сезон_старт, эпизод_старт) if эпизод_старт is not None else None
         блок_серий = (f'<div class="zwrap">{self._серии(запись, сезоны, текущий=текущий)}</div>'
                       if сериал else "")
         похожие = self.похожие(запись, деталь)
         блок_похожих = (f'<div class="zwrap"><h2 class="zh zh--sm">Смотрите также</h2>'
                         f"{self.плитки(похожие)}</div>" if похожие else "")
-
-        тело = (f'<div class="zban">{фон}</div>'
-                f'<div class="zhead"><div class="zhead__ps">{изо}</div>'
-                f'<div class="zhead__x"><h1>{html.escape(имя)}</h1>{ориг}</div></div>'
-                f"{полоса_html}"
-                f'<div class="zbody"><div>{сюжет}</div>{колонка}</div>'
-                f"{плеер}{блок_серий}{блок_похожих}")
+        полный_сюжет = ""
+        if описание and len(описание.strip()) > 420:
+            полный_сюжет = (f'<section class="zbody"><h2 class="zh zh--sm">О чём это</h2>'
+                            f'<p>{html.escape(описание)}</p></section>')
+        elif not краткий:
+            полный_сюжет = ""
+        else:
+            # short already shown in main; skip duplicate block
+            полный_сюжет = ""
+        тело = (
+            f'<div class="zwrap"><div class="ztitle">'
+            f'<div class="ztitle__poster">{изо}</div>'
+            f'<div class="ztitle__main"><h1>{html.escape(имя)}</h1>'
+            f'{оценки_html}{описание_html}'
+            f'<a class="ztitle__cta" href="#watch">Смотреть</a></div>'
+            f'<aside class="ztitle__rail">{rail_dl}{ad_slot}</aside>'
+            f'</div>{плеер}{полный_сюжет}{блок_серий}{блок_похожих}</div>')
         разметка = self.schema_тайтла(запись, деталь, путь)
         краткое = (описание[:180] if описание else
                    f"{имя}: {запись.get('kind') or ''} {запись.get('year') or ''}".strip())
@@ -4059,6 +4301,7 @@ class ВидЗона(Вид):
                 тип="video.tv_show" if сериал else "video.movie",
                 титул=имя, описание=краткое, путь=путь,
                 изображение=запись.get("poster") or ""))
+
 
     def _серии(self, запись: dict, сезоны: list, текущий=None) -> str:
         if not сезоны:
@@ -4081,7 +4324,7 @@ class ВидЗона(Вид):
                      else f" · доступно {сезон['avail']}")
             блоки.append(
                 f'<section class="zsea"><div class="zsea__h">'
-                f'<b>Сезон {сезон["n"]}</b><span>{сезон["eps"]} серий{хвост}</span></div>'
+                f'<b>Сезон {сезон["n"]}</b><span>· {сезон["eps"]} серий{хвост}</span></div>'
                 f'<div class="zeps">{"".join(ссылки)}</div></section>')
         return f'<h2 class="zh zh--sm">Серии</h2>{_склеить(блоки)}'
 
@@ -4157,7 +4400,7 @@ def _скрипты_плеера(код: str) -> str:
     ничего не нашёл, — это лишний запрос и лишняя точка отказа на странице,
     которая и так честно объяснила, чего не хватает.
     """
-    if код != "playable":
+    if код not in {"playable", "resolving"}:
         return ""
     return (f'<script src="{СКРИПТ_ПЛЕЕРА}" async data-player-script></script>'
             f"<script>{СКРИПТ_ПЛЕЕРА_КЛИЕНТ}</script>")
@@ -4399,7 +4642,8 @@ class ВидАнимедиа(ВидЗона):
         ссылка_html = (f'<a href="{закодировать_запрос(ссылка)}">Весь раздел</a>'
                        if ссылка else "")
         шапка = f'<div class="zsec__h"><h2>{html.escape(титул)}</h2>{ссылка_html}</div>'
-        if ключ in {"new_episodes", "new-episodes"}:
+        if ключ in {"new_episodes", "new-episodes", "series_with_episodes",
+                    "series-with-episodes"}:
             тело = self.лента(набор)
             return f'<section class="zsec zsec--eps">{шапка}{тело}</section>'
         return f'<section class="zsec">{шапка}{self.плитки(набор)}</section>'
@@ -4427,7 +4671,8 @@ class ВидАнимедиа(ВидЗона):
                      else f" · доступно {сезон['avail']}")
             блоки.append(
                 f'<section class="zsea"><div class="zsea__h">'
-                f'<b>Сезон {сезон["n"]}</b><span>{сезон["eps"]} серий{хвост}</span></div>'
+                f'<b>Сезон {сезон["n"]}</b>'
+                f'<span>· {сезон["eps"]} серий{хвост}</span></div>'
                 f'<div class="zeps">{"".join(ссылки)}</div></section>')
         return f'<h2 class="zh zh--sm">Серии</h2>{_склеить(блоки)}'
 
@@ -4587,29 +4832,42 @@ class ВидАнимедиа(ВидЗона):
                         "Источник не передал признака «сейчас выходит», "
                         "поэтому определить выходящие сейчас нечем."),
             "new_episodes": ("Новые серии аниме",
-                             "В снимке нет сериальных записей с датой добавления."),
+                             "В снимке нет дат выхода отдельных серий."),
+            "series_with_episodes": ("Сериалы с сериями",
+                                     "В снимке нет сериалов с доступными сериями."),
             "today_schedule": ("Сегодня выйдет",
                                "Время выхода серий источником не передаётся ни одним "
-                               "полем, поэтому сегодняшний день собрать не из чего. "
-                               "Выдумывать время и номер серии нельзя."),
+                               "полем, поэтому сегодняшний день собрать не из чего."),
             "recently_added": ("Новые аниме на сайте",
                                "В снимке нет аниме с датой добавления."),
             "top_rated": ("Топ по оценкам", "Источник не передал оценок ни одному тайтлу."),
+            "anime_movies": ("Аниме-фильмы", "В снимке нет полнометражных аниме."),
+            "donghua": ("Дунхуа", "В снимке нет записей со страной Китай."),
             "video_available": ("С видео", "Ни у одной записи не подтверждена дорожка."),
         }
-        ПОРЯДОК = ("ongoing", "new_episodes", "today_schedule",
-                   "recently_added", "top_rated", "video_available")
+        ПОРЯДОК = ("series_with_episodes", "recently_added", "top_rated",
+                   "anime_movies", "donghua", "video_available")
         снимок = Снимок.получить(self.д, self.п) if КОЛЛЕКЦИИ else None
         ленты = []
+        занятые_полки: set[str] = set()
         if снимок is not None:
             for ключ in ПОРЯДОК:
-                коллекция = КОЛЛЕКЦИИ.разрешить(ключ, снимок, СЕМЕЙСТВО, предел=24)
+                коллекция = КОЛЛЕКЦИИ.разрешить(ключ, снимок, СЕМЕЙСТВО, предел=48)
                 if коллекция is None:
                     continue
                 титул, причина = ПРИЧИНЫ.get(ключ, (коллекция.title, ""))
+                набор = []
+                for к in коллекция.items:
+                    if к.raw.get("slug") in занятые_полки:
+                        continue
+                    набор.append(к.raw)
+                    if len(набор) >= 24:
+                        break
+                for з in набор:
+                    занятые_полки.add(з["slug"])
                 ленты.append((ключ.replace("_", "-"), титул,
-                              коллекция.view_all_path if коллекция.items else "",
-                              [к.raw for к in коллекция.items], причина))
+                              коллекция.view_all_path if набор else "",
+                              набор, причина))
         else:
             ленты = [
                 ("new-anime", "Новые аниме", "/new/", выбрать(свежесть),
