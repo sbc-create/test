@@ -1,26 +1,19 @@
 {
   "rollback_path": "/srv/lords/.frontend/.rollback/20260919T194936Z-lords-01-deferred",
-  "rollback_source_commit": "7dc251d",
-  "rollback_build_id": "20260913T2300Z-8ececc6c-nova",
+  "exists": true,
+  "has_frontend": true,
+  "has_manifest_file": true,
   "rollback_artifact_sha256": "06e991c3e558621c494e1150483b98eca67f2fcdc62ccaf0b165adf3e5b33432",
-  "rollback_manifest_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
-  "rollback_manifest_claims_artifact": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
-  "rollback_bytes_match_manifest_claim": false,
-  "rollback_matches_old_running_build": false,
-  "rollback_is_complete": true,
-  "rollback_is_bootable": true,
-  "ROLLBACK_VERIFIED": "NO",
-  "reason": "deferred candidate frontend sha 06e991c3 does not match manifest claim a51dade (build 20260913T2300Z-8ececc6c-nova); also does not match currently running process HTML build marker",
-  "point_json": {
-    "rollback_point": "/srv/lords/.frontend/.rollback/20260919T194936Z-lords-01-deferred",
-    "new_artifact": "36ce7eada5691b7ed949c0c301c45e1123dd6ddbf9c667701566ea37e883d1a6"
-  },
-  "exact_old_runtime_artifact_a51dade_locations": [
-    "/srv/lords/.frontend/.rollback/20260914T074300Z-zona-01/lords-frontend.py",
-    "/srv/lords/.frontend/.rollback/20260914T094638Z-zona-01/lords-frontend.py",
-    "/srv/lords/.frontend/.rollback/20260914T094657Z-zona-01/lords-frontend.py"
-  ],
-  "exact_old_runtime_artifact_available": true,
-  "exact_old_runtime_artifact_note": "a51dade bytes exist only under zona-named rollback dirs; no lords-named rollback dir contains exact 8ececc6c/a51dade pair with matching bytes",
-  "new_pre_install_rollback": "/srv/lords/.frontend/.rollback/20260919T201039Z-lords-01"
+  "rollback_digest_match": true,
+  "rollback_source_commit": "7dc251d",
+  "rollback_source_head_matches_7dc251d": true,
+  "rollback_build_id": "20260913T2300Z-8ececc6c-nova",
+  "syntax_ok": true,
+  "import_compile_ok": true,
+  "canary_point_json_complete": false,
+  "canary_point_json_note": "deferred point.json lacks artifact_sha256/manifest_content; restore uses directory files",
+  "restore_command": "# Restore artifact+manifest from verified rollback directory, then restart.\n# Note: point.json is incomplete for lords-nova-canary rollback (no artifact_sha256/manifest_content).\npython3 - <<'RESTORE'\nfrom pathlib import Path\nimport json, os, tempfile\nRB = Path(\"/srv/lords/.frontend/.rollback/20260919T194936Z-lords-01-deferred\")\nFRONT = Path(\"/srv/lords/.frontend\")\nartifact = (RB / \"lords-frontend.py\").read_bytes()\nmanifest = (RB / \"template-manifest.json\").read_bytes()\nassert __import__(\"hashlib\").sha256(artifact).hexdigest() == \"06e991c3e558621c494e1150483b98eca67f2fcdc62ccaf0b165adf3e5b33432\"\nfor target, data, mode in [\n    (FRONT / \"template-manifest.json\", manifest, 0o644),\n    (FRONT / \"lords-frontend.py\", artifact, 0o755),\n]:\n    fd, tmp = tempfile.mkstemp(dir=str(FRONT), prefix=\".restore-\")\n    os.write(fd, data); os.close(fd)\n    os.chmod(tmp, mode)\n    os.replace(tmp, target)\nprint(\"restored\", \"06e991c3e558621c494e1150483b98eca67f2fcdc62ccaf0b165adf3e5b33432\")\nRESTORE\nsudo -n systemctl restart lords-nova-01.service\n# then: sleep 4; curl -fsS -H 'Host: lordfilm47.space' http://127.0.0.1:9110/healthz\n",
+  "restore_restores_artifact_and_manifest": true,
+  "restore_includes_restart_and_health": true,
+  "ROLLBACK_VERIFIED": "YES"
 }

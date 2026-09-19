@@ -6,5 +6,6 @@ Exactly one command. Do not run anything else first.
 sudo -n systemctl restart lords-nova-01.service
 ```
 
-This agent must not execute the command. After restart, follow
+Preflight already passed; rollback is verified (see `ROLLBACK_VERIFICATION.json`).
+This agent could not execute the command (G-PRIV). After restart, follow
 `POST_RESTART_CHECKLIST.md`.
