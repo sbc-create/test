@@ -1,0 +1,13 @@
+route,path,http,build,noindex,has_grid,has_pagination,h1,year_2019_mark
+all,/catalog/,200,20260919T224255Z-88cd272f-nova,True,True,True,Весь каталог,
+movies,/movies/,200,20260919T224255Z-88cd272f-nova,True,True,True,Кино,
+series,/series/,200,20260919T224255Z-88cd272f-nova,True,True,True,Сериалы,
+animation,/animation/,200,20260919T224255Z-88cd272f-nova,True,True,True,Анимация,
+y2019,/catalog/?year=2019,200,20260919T224255Z-88cd272f-nova,True,True,True,Каталог 2019 года,True
+y2018,/catalog/?year=2018,200,20260919T224255Z-88cd272f-nova,True,True,True,Каталог 2018 года,
+y2013,/catalog/?year=2013,200,20260919T224255Z-88cd272f-nova,True,True,True,Каталог 2013 года,
+y2010,/catalog/?year=2010,200,20260919T224255Z-88cd272f-nova,True,True,True,Каталог 2010 года,
+y2003,/catalog/?year=2003,200,20260919T224255Z-88cd272f-nova,True,True,True,Каталог 2003 года,
+movies_2019,/movies/?year=2019,200,20260919T224255Z-88cd272f-nova,True,True,True,Фильмы 2019 года,False
+page2,/catalog/?page=2,200,20260919T224255Z-88cd272f-nova,True,True,True,Весь каталог,
+invalid_page,/catalog/?page=99999,404,20260919T224255Z-88cd272f-nova,True,False,False,Страница не найдена,

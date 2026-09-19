@@ -1,0 +1,322 @@
+{
+  "exact_groups": 39,
+  "LEGITIMATE_DUPLICATE": 39,
+  "SOURCE_DUPLICATE_REQUIRES_EDITOR": 0,
+  "TECHNICAL_DUPLICATE_FIXED": 0,
+  "GENERIC_FALLBACK_REMOVED": 0,
+  "UNCLASSIFIED_DUPLICATE_GROUPS": 0,
+  "groups": [
+    {
+      "exact_hash": "c6f68260a67a8d196fc5c9dc9b4467e203d3588447b8b68171e99a19160eb58b",
+      "size": 4,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "ями шибаи",
+      "slugs": "yami-shibai-yaponskie-rasskazy-o-privideniyah-11,yami-shibai-yaponskie-rasskazy-o-privideniyah-12,yami-shibai-yaponskie-rasskazy-o-privideniyah-13,yami-shibai-yaponskie-rasskazy-o-privideniyah-14",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "f199486115adeabb3467c657fab5e29277634da26c6ad23ab5b9d98391205ed1",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "ария",
+      "slugs": "ariya,ariya-priroda",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "2aa779024f56f526ad65588e7b25096d8ff8b36af5a5543253ab8563db3c6be3",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "бармен",
+      "slugs": "barmen-bokal-boga,barmen-bokal-boga-2",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "a7633b286c277c3d2fac1b589e30226f9bf14ae3016e4bb90a52e5c92236c396",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "блич",
+      "slugs": "blich-tysyacheletnyaya-krovavaya-voyna,blich-tysyacheletnyaya-krovavaya-voyna-bedstvie-2",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "740fe07740bb597e4e717eb5eb090373be3f58f7271c53aec8886a6224f39b1b",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "грандиозный человек | человек",
+      "slugs": "chelovek-pauk-3,grandioznyy-chelovek-pauk",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "0598dcad993287dade150c21595408674924807558741f53e39686c344cc514d",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "чёрный клевер",
+      "slugs": "chernyy-klever,chernyy-klever-2",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "213cf6b505e20b3aaffbdcf4f44447328833fe9b384e0aca6536757fb5b131c2",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "девочка из чужеземья | девочка из чужеземья ova",
+      "slugs": "devochka-iz-chuzhezemya,devochka-iz-chuzhezemya-ova",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "cb29637e3e68041ffe937edb6148d48d86d14f197cea8dc0d757b3f8b7afec37",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "для тебя во всем цвету | для тебя во всём цвету",
+      "slugs": "dlya-tebya-vo-vsem-cvetu-2,dlya-tebya-vo-vsem-cvetu-3",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "31acbd0bb8b96d819dc380bd53f3be6bfa9ab6c1aa5cda5dd0b1ad86fc61da0f",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "время воспоминаний | дневник воспоминаний",
+      "slugs": "dnevnik-vospominaniy,vremya-vospominaniy",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "c7e1d2a2a257099ea9f6bb3db9b5de34b36a8b18bc34ea62dcc1a0dd2a2c8709",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "флаг настоящего преступления",
+      "slugs": "flag-nastoyaschego-prestupleniya,flag-nastoyaschego-prestupleniya-2",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "800c561837090ecfc2284a6b3717d973524ad9ad9677426f8199dbfa2321376f",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "форма голоса | форма голоса (2016)",
+      "slugs": "forma-golosa,forma-golosa-2016",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "5b206cf5c317d9d5e01ae0acecedf18a4943708181aa1aca47936fff01089abe",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "истинные чудотворные рыцари | истинные чудотворные рыцари. часть",
+      "slugs": "istinnye-chudotvornye-rycari,istinnye-chudotvornye-rycari-chast-2",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "6d9294647b4b274565e0f0f0f0ceb8c437139e20e617e7e4fda80a19fe5d5975",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "комната | комната возвращается!",
+      "slugs": "komnata,komnata-vozvraschaetsya",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "76dc3fde070d98fda8499fa0cd48b1793e25d4450fac418a7f25772168d3ae00",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "королева, ставшая причиной трагедии, сделает для народа всё, что в её силах",
+      "slugs": "koroleva-stavshaya-prichinoy-tragedii-sdelaet-dlya-naroda-vse-chto-v-ee-silah,koroleva-stavshaya-prichinoy-tragedii-sdelaet-dlya-naroda-vse-chto-v-ee-silah-2",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "fa7996eb30b01b8ce144b02d420903659d026724a20753a0a106b85a60d17fb3",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "легенда о брюсе ли",
+      "slugs": "legenda-o-bryuse-li-3,legenda-o-bryuse-li-4",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "f5d8c4d3bad128a4e61ac41e10c376018ee4c71ce208250eeabb4c46e05660e3",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "лига справедливости зака снайдера",
+      "slugs": "liga-spravedlivosti-zaka-snaydera,liga-spravedlivosti-zaka-snaydera-cherno-belaya-versiya",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "aafbdd92ddb7173bace5589aa5a34b1c2260c5e7694299e27d82b8c647a047e7",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "любовь и искупление | стеклянная душа красавицы",
+      "slugs": "lyubov-i-iskuplenie,steklyannaya-dusha-krasavicy",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "89934ca176df659479b0c03cd39418a7ed811cbd2f5b3ed2faa44f88d10b94c6",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "любовь так прекрасна | любовь так прекрасна (сериал 2020 – 2021)",
+      "slugs": "lyubov-tak-prekrasna-2,lyubov-tak-prekrasna-serial-2020-2021",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "8bb09700745c4761f184def10af418c5113a3ed65e6d7253214ffb043c97754d",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "за пределом | меч и жезл вистории",
+      "slugs": "mech-i-zhezl-vistorii-rekap,za-predelom-proshloe",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "cf73557af674eb6be735c0a5f82fb291cfba8ef389435a86f1ed4d0af8a35144",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "наноядро",
+      "slugs": "nanoyadro,nanoyadro-2",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "f5c041e663fea6239a1e976e2a1eac7130857796ab2cb57aef787fd9be9060b5",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "небольшой лес",
+      "slugs": "nebolshoy-les-leto-i-osen,nebolshoy-les-zima-i-vesna",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "4c39253e955b35bffe3f6a097f527a583064320a49ccb83a442e838676038237",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "новые приключения медвежонка винни и его друзей | приключения винни пуха",
+      "slugs": "novye-priklyucheniya-medvezhonka-vinni-i-ego-druzey,priklyucheniya-vinni-puha",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "379ebe5710d93c007f06fa68c32bf6904f8a440766575c69128d2b5716468de5",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "объединяйтесь!",
+      "slugs": "obedinyaytes,obedinyaytes-2",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "5fe037c98653d806003364077fb482a1e35efa42c7a16a2b49acc9afb36708a2",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "оммёдзи",
+      "slugs": "ommedzi-istoriya-heyan,ommedzi-istoriya-heyan-2",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "bdb7a95b089bde2adea0d5a825ac436c19f0e9550d622a5312d6479e67b05644",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "поднятие уровня в одиночку",
+      "slugs": "podnyatie-urovnya-v-odinochku,podnyatie-urovnya-v-odinochku-povtornoe-probuzhdenie",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "dbf4ea1c3b06e5b2b9309443b82c6cefb420f5881586c313c7ee5a93f074495a",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "повседневная жизнь бессмертного короля",
+      "slugs": "povsednevnaya-zhizn-bessmertnogo-korolya-3,povsednevnaya-zhizn-bessmertnogo-korolya-4",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "dee644dde587dc28f5344752d202ad6b007ef136184c27a064273225469255d9",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "путешествие пак ха",
+      "slugs": "puteshestvie-pak-ha-gen,puteshestvie-pak-ha-gen-2",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "26a62b0bedce642718ecd411d2023aa9b0ae9805c4ff28284fcba2f40b2d3301",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "скрытые вещи | скрытые вещи. фильм",
+      "slugs": "skrytye-veschi,skrytye-veschi-film",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "29370114e94ffead23ce1bc1a0d6a88b9228174489d0e93748c1bcfa201fe215",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "слететь с катушек",
+      "slugs": "sletet-s-katushek,sletet-s-katushek-2",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "f572c9a97731a008173601edf757a855402135003311fe212994ef104923e3e4",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "спасатели малибу",
+      "slugs": "spasateli-malibu,spasateli-malibu-3",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "12ef3ab93aec095edfdd8bba12e82a59a431337cd52f0db23d7368ce0d2a003e",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "сумеречная зона",
+      "slugs": "sumerechnaya-zona-5,sumerechnaya-zona-6",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "240931549eabc7f1d149e2ec0079c041e200947b88ac234e7da76c4189ec514c",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "токийские мстители",
+      "slugs": "tokiyskie-mstiteli-2,tokiyskie-mstiteli-rozhdestvenskaya-bitva",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "81254033f39281fec36c2e47b441eb7c191b73068455fde5202baa0602beaf10",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "траст",
+      "slugs": "trast,trast-2",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "bcc0bb63e5f6b25a28f4cf37bb260544f7dcb43b15c781929be81bcf79ca2957",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "туалетный мальчик ханако | туалетный мальчик ханако 2. часть",
+      "slugs": "tualetnyy-malchik-hanako-2,tualetnyy-malchik-hanako-2-chast-2",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "29ce3258976861d137349dc4cbd1bf1397b33a4bfb05a3a2878213d716034772",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "убить билла | убить билла (2003)",
+      "slugs": "ubit-billa-2003,ubit-billa-krovavoe-delo-celikom",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "16cb17d8a2cfd72f0f166407dea1b78c2a834f4f8c645e98be54386fca48070e",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "усио и тора | усио и тора [тв",
+      "slugs": "usio-i-tora,usio-i-tora-tv-2",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "78a71adeda50f3e97dcc728ad52be96e60ecd78c9b0ecc10563db916f442dc6e",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "утиные истории | утиные истории. короткие истории",
+      "slugs": "utinye-istorii,utinye-istorii-korotkie-istorii",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "75466ec971da4e644441459e45fc1c87c85513a34cbbfb133e4bd502351508f7",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "ваша милость | ваше высочество",
+      "slugs": "vasha-milost,vashe-vysochestvo",
+      "suggested_owner_editor_action": "none"
+    },
+    {
+      "exact_hash": "5b1e2279476ef9af5f7610905581e555d72a7ebbfe2e6de2167493b828219c78",
+      "size": 2,
+      "result": "LEGITIMATE_DUPLICATE",
+      "title_bases": "военная хроника маленькой девочки",
+      "slugs": "voennaya-hronika-malenkoy-devochki,voennaya-hronika-malenkoy-devochki-2",
+      "suggested_owner_editor_action": "none"
+    }
+  ]
+}
