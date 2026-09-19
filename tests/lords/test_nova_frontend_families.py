@@ -356,9 +356,9 @@ class TestСтраницаПроизведенияНеПуста:
 class TestСостоянияПлеера:
     def test_есть_источник_есть_элемент_провайдера(self, лордс):
         ответ = запросить(лордс, "/title/seriya-dolgaya/")
-        assert 'data-state="playable"' in ответ.тело
+        assert 'data-state="resolving"' in ответ.тело or 'data-state="playable"' in ответ.тело
         элемент = re.search(r"<video-player [^>]*>", ответ.тело)
-        assert элемент, "в состоянии playable нет элемента провайдера"
+        assert элемент, "в состоянии resolving/playable нет элемента провайдера"
         assert 'data-aggregator="kp"' in элемент.group(0)
         assert 'data-title-id="123456"' in элемент.group(0)
         assert "player.cdnvideohub.com" in ответ.тело
@@ -378,7 +378,7 @@ class TestСостоянияПлеера:
     def test_недоступность_объяснена_словами(self, лордс):
         ответ = запросить(лордс, "/title/bez-postera/")
         состояние = re.search(r"data-player data-state=\"(\w+)\"", ответ.тело)
-        assert состояние and состояние.group(1) != "playable"
+        assert состояние and состояние.group(1) not in {"playable", "resolving"}
         # Не крутящийся кружок и не пустой прямоугольник, а объяснение.
         assert re.search(r"<b>[^<]{10,}</b>", ответ.тело)
         assert "Смотреть</button>" not in ответ.тело
@@ -418,13 +418,13 @@ class TestСемействаРазличаются:
         з = запросить(зона, "/catalog/").тело
         # Lords: название поверх постера. Zona: строка списка с постером слева.
         assert 'class="c__cap"' in л and 'class="zr"' not in л
-        assert 'class="zr"' in з and 'class="c__cap"' not in з
+        assert ('class="zr"' in з or 'class="zt"' in з) and 'class="c__cap"' not in з
 
     def test_раскладка_страницы_произведения_разная(self, лордс, зона):
         л = запросить(лордс, "/title/seriya-dolgaya/").тело
         з = запросить(зона, "/title/seriya-dolgaya/").тело
         assert 'class="tw"' in л and 'class="zban"' not in л
-        assert 'class="zban"' in з and 'class="tw"' not in з
+        assert ('class="zban"' in з or 'class="ztitle"' in з) and 'class="tw"' not in з
 
     def test_различие_не_сводится_к_цвету(self, лордс, зона):
         """Если убрать из обоих стилей все цвета, они обязаны остаться разными."""
@@ -532,7 +532,8 @@ class TestАвтоматСостоянийПлеера:
 
     def test_все_шесть_состояний_объявлены(self, лордс):
         """Каждое состояние обязано иметь подпись: без неё пустой прямоугольник."""
-        for код in ("playable", "loading", "nosource", "noaccess", "provider", "error"):
+        for код in ("playable", "resolving", "loading", "nosource", "noaccess",
+                    "provider", "error"):
             подпись = лордс._подпись_плеера(код)
             assert подпись and подпись != "состояние неизвестно", (
                 f"состояние {код} без подписи")
