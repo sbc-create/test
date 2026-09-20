@@ -1,0 +1,45 @@
+{# Community comments partial — dark mode.
+   Public mount requires COMMENTS_PUBLIC_READ_ENABLED=1.
+   Admin preview: pass admin_preview=true / data-admin-preview="1".
+   Never enable SEO rendering from this partial.
+#}
+<section
+  id="community-comments-root"
+  class="community-comments-root"
+  data-site-space="{{ site_space|default('yummy') }}"
+  data-title-id="{{ title_id|default('') }}"
+  data-admin-preview="{{ '1' if admin_preview else '0' }}"
+  data-public-read="{{ '1' if public_read else '0' }}"
+  data-comments-publication="0"
+  data-comments-seo="0"
+  hidden
+  aria-hidden="true"
+>
+  <noscript>
+    <p>Комментарии требуют JavaScript. Публичный режим отключён.</p>
+  </noscript>
+</section>
+<link rel="stylesheet" href="/static/community/community_comments.css" />
+<script defer src="/static/community/community_comments.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var root = document.getElementById("community-comments-root");
+    if (!root || typeof CommunityCommentsBlock === "undefined") return;
+    var publicRead = root.getAttribute("data-public-read") === "1";
+    var adminPreview = root.getAttribute("data-admin-preview") === "1";
+    if (!publicRead && !adminPreview) {
+      root.hidden = true;
+      root.setAttribute("aria-hidden", "true");
+      return;
+    }
+    root.hidden = false;
+    root.setAttribute("aria-hidden", "false");
+    var block = new CommunityCommentsBlock(root, {
+      siteSpace: root.getAttribute("data-site-space"),
+      titleId: root.getAttribute("data-title-id"),
+      publicRead: publicRead,
+      adminPreview: adminPreview,
+    });
+    block.mount();
+  });
+</script>
