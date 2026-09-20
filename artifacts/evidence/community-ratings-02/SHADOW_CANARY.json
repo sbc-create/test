@@ -1,0 +1,61 @@
+{
+  "cases": [
+    {
+      "case": "shikimori_only_animedia",
+      "subject": "nova:019e820c-1c30-7466-9e8f-801577489ce1",
+      "score": "6.72",
+      "native_absent": true
+    },
+    {
+      "case": "yummy_derived_prior",
+      "subject": "nova:019e820c-1c30-7466-9e8f-801577489ce1",
+      "brand": {
+        "label": "Предварительная оценка Yummy",
+        "score": "6.72",
+        "vote_count": 0,
+        "tooltip": "Расчётная оценка: голоса пользователей Yummy и версионируемая база Animedia/Shikimori. Число голосов — только реальные голоса Yummy.",
+        "lineage": {
+          "formula": "yummy_bayes_prior_v1",
+          "prior_components": {
+            "animedia_embeds_shikimori": false,
+            "components_used": [
+              "shikimori"
+            ],
+            "double_counted_source_count": 0,
+            "renormalized_weights": {
+              "shikimori": "1"
+            }
+          },
+          "prior_strength_m": 10,
+          "native_vote_count": 0,
+          "m_not_user_votes": true,
+          "double_counted_source_count": 0
+        }
+      },
+      "native_votes": 0
+    },
+    {
+      "case": "absent_rating",
+      "subject": "01927e18-0e9e-7319-91b5-b8dd8be5a6a9",
+      "html_empty": true,
+      "view_external": []
+    },
+    {
+      "case": "rounding_edge",
+      "public": "7.125"
+    },
+    {
+      "case": "amd_not_in_active_projection",
+      "active_amd_rows": 0
+    },
+    {
+      "case": "independent_rebuild",
+      "AGGREGATE_REBUILD_MISMATCHES": 0
+    }
+  ],
+  "SHADOW_CANARY_MISMATCHES": 0,
+  "PRODUCTION_TEST_VOTES": 0,
+  "ANIMEDIA_NATIVE_VOTE_COUNT": 0,
+  "YUMMY_NATIVE_VOTE_COUNT": 0,
+  "DOUBLE_COUNTED_SOURCE_COUNT": 0
+}
