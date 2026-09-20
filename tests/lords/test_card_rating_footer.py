@@ -118,7 +118,7 @@ class TestMissingRatingFooter:
         assert '/title/unrated/' in html
         assert '/title/rated/' in html
         start = html.index('href="/title/unrated/"')
-        open_at = html.rfind('<a class="c"', 0, start)
+        open_at = html.rfind('<a class="c', 0, start)
         end = html.find('</a>', start) + 4
         card = html[open_at:end]
         assert 'class="c__r"' not in card
