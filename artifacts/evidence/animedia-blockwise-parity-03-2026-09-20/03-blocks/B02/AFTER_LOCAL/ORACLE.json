@@ -1,0 +1,127 @@
+{
+  "captured_at": "2026-09-20T11:33:44Z",
+  "POPULAR_DATA_GAP_default": 1,
+  "failures": [],
+  "entries": [
+    {
+      "overflowX": 0,
+      "hero": null,
+      "gap": {
+        "w": 0,
+        "h": 0,
+        "display": "none"
+      },
+      "tg": null,
+      "ad": {
+        "w": 0,
+        "h": 0,
+        "display": "none"
+      },
+      "hasGapAttr": true,
+      "hasHero": false,
+      "state": "gap",
+      "viewport": "d1440",
+      "captured_at": "2026-09-20T11:33:44Z"
+    },
+    {
+      "overflowX": 0,
+      "hero": null,
+      "gap": {
+        "w": 0,
+        "h": 0,
+        "display": "none"
+      },
+      "tg": null,
+      "ad": {
+        "w": 0,
+        "h": 0,
+        "display": "none"
+      },
+      "hasGapAttr": true,
+      "hasHero": false,
+      "state": "gap",
+      "viewport": "t768",
+      "captured_at": "2026-09-20T11:33:44Z"
+    },
+    {
+      "overflowX": 0,
+      "hero": null,
+      "gap": {
+        "w": 0,
+        "h": 0,
+        "display": "none"
+      },
+      "tg": null,
+      "ad": {
+        "w": 0,
+        "h": 0,
+        "display": "none"
+      },
+      "hasGapAttr": true,
+      "hasHero": false,
+      "state": "gap",
+      "viewport": "m390",
+      "captured_at": "2026-09-20T11:33:44Z"
+    },
+    {
+      "overflowX": 0,
+      "hero": {
+        "w": 1344,
+        "h": 323,
+        "display": "block"
+      },
+      "gap": null,
+      "tg": null,
+      "ad": {
+        "w": 0,
+        "h": 0,
+        "display": "none"
+      },
+      "hasGapAttr": false,
+      "hasHero": true,
+      "state": "populated",
+      "viewport": "d1440",
+      "captured_at": "2026-09-20T11:33:44Z"
+    },
+    {
+      "overflowX": 0,
+      "hero": {
+        "w": 724,
+        "h": 341,
+        "display": "block"
+      },
+      "gap": null,
+      "tg": null,
+      "ad": {
+        "w": 0,
+        "h": 0,
+        "display": "none"
+      },
+      "hasGapAttr": false,
+      "hasHero": true,
+      "state": "populated",
+      "viewport": "t768",
+      "captured_at": "2026-09-20T11:33:44Z"
+    },
+    {
+      "overflowX": 0,
+      "hero": {
+        "w": 366,
+        "h": 260,
+        "display": "block"
+      },
+      "gap": null,
+      "tg": null,
+      "ad": {
+        "w": 0,
+        "h": 0,
+        "display": "none"
+      },
+      "hasGapAttr": false,
+      "hasHero": true,
+      "state": "populated",
+      "viewport": "m390",
+      "captured_at": "2026-09-20T11:33:44Z"
+    }
+  ]
+}

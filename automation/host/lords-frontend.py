@@ -1862,29 +1862,49 @@ display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hi
 .zsec__h h2{font-size:clamp(20px,1.6vw,26px);font-weight:700;margin:0}
 .zsec__h a{font-size:14px;color:var(--a-acc);font-weight:700;white-space:nowrap}
 .ahero{margin:8px 0 14px;padding:12px;border-radius:var(--a-radius-shell);
-background:var(--a-acc);color:#fff;overflow:hidden;max-height:300px;box-sizing:border-box}
+background:var(--a-acc);color:#fff;overflow:hidden;box-sizing:border-box;
+min-height:0;height:auto;max-height:none}
+.ahero[hidden],.ahero--gap{display:none !important;height:0 !important;min-height:0 !important;
+max-height:0 !important;margin:0 !important;padding:0 !important;border:0 !important;overflow:hidden}
 .zh--home{font-size:clamp(18px,1.5vw,22px);margin:8px 0 4px;font-weight:700}
 .zsub--home{margin:0 0 16px;font-size:14px;-webkit-line-clamp:2}
+.ahero__inner{padding-block:12px}
 .ahero .zrl__vp{padding-bottom:2px;scrollbar-width:none}
 .ahero .zrl__vp::-webkit-scrollbar{display:none}
-.ahero .zrl__track{gap:13px;align-items:flex-start}
-.ahero .zrl__track>*{flex:0 0 152px;width:152px;min-width:152px;max-width:152px;scroll-snap-align:start}
-.ahero .zt{width:152px;max-width:152px;flex:0 0 auto}
+.ahero .zrl__track{gap:16px;align-items:flex-start}
+/* B02 exact poster grid (desktop/tablet); mobile = rail 112px */
+.ahero .zrl__track>*{flex:0 0 calc((100% - 144px)/10);width:calc((100% - 144px)/10);
+min-width:0;max-width:none;scroll-snap-align:start}
+.ahero .zt{width:100%;max-width:none;flex:0 0 auto}
+@media(max-width:1599px){
+  .ahero .zrl__track{gap:16px}
+  .ahero .zrl__track>*{flex:0 0 calc((100% - 112px)/8);width:calc((100% - 112px)/8)}
+}
+@media(max-width:1279px){
+  .ahero .zrl__track>*{flex:0 0 calc((100% - 80px)/6);width:calc((100% - 80px)/6)}
+}
+@media(max-width:1023px){
+  .ahero .zrl__track>*{flex:0 0 calc((100% - 48px)/4);width:calc((100% - 48px)/4)}
+}
 @media(max-width:767px){
-  .ahero{margin-bottom:16px;max-height:260px;padding:10px}
+  .ahero{margin-bottom:16px;padding:10px}
   .ahero .zrl__track{gap:12px}
   .ahero .zrl__track>*{flex:0 0 112px;width:112px;min-width:112px;max-width:112px}
   .ahero .zt{width:112px;max-width:112px}
 }
-.ahero .zt{background:transparent;border:0;box-shadow:none;color:#fff;height:auto;max-height:280px}
+.ahero .zt{background:transparent;border:0;box-shadow:none;color:#fff;height:auto;max-height:none}
 .ahero .zt:hover{opacity:.92;box-shadow:none;border:0;transform:none}
-.ahero .zt__p{border-radius:10px;width:152px;height:214px;aspect-ratio:auto;background:rgba(0,0,0,.18);flex:0 0 auto}
-@media(max-width:767px){.ahero .zt__p{width:112px;height:158px}}
-.ahero .zt__b{padding:6px 2px 0;min-height:0}
+.ahero .zt__p{border-radius:10px;width:100%;aspect-ratio:2/3;height:auto;background:rgba(0,0,0,.18);flex:0 0 auto}
+@media(max-width:767px){.ahero .zt__p{width:112px;height:168px;aspect-ratio:auto}}
+.ahero .zt__b{padding:6px 2px 0;min-height:44px;max-height:52px}
 .ahero .zt__t{color:#fff;font-size:13px;-webkit-line-clamp:2;min-height:0;line-height:1.25}
 .ahero .zt__m,.ahero .zt__r{display:none}
 .ahero .zrl__btn{background:rgba(255,255,255,.96);color:var(--a-acc);border:0;border-radius:10px}
 .ahero__cap{display:none}
+.atg{display:flex;align-items:center;min-height:46px;max-height:56px;margin:0 0 12px;padding:0 14px;
+border-radius:10px;background:var(--a-alt);border:1px solid var(--a-line)}
+.atg a{font-weight:700;color:var(--a-acc);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+.atg:empty{display:none;height:0;margin:0;padding:0;border:0}
 .zad,.zad-home,.zad-mid,.zad-title{display:none;height:0;min-height:0;max-height:0;margin:0;padding:0;border:0;overflow:hidden}
 .zad[data-ad-enabled="1"],.zad-home[data-ad-enabled="1"],.zad-mid[data-ad-enabled="1"],
 .zad-title[data-ad-enabled="1"]{display:block;height:auto;max-height:120px;max-width:100%;margin:12px 0;
@@ -4787,10 +4807,22 @@ def _мета_версии() -> str:
     "Время — дата добавления тайтла в каталог; номер — последняя доступная серия. "
     "Отдельной ленты выходов серий в снимке нет."
 )
-# Popular shelf: weekly frozen order (not re-sorted on every HTTP request).
+# Popular shelf: ONLY an owner/Core-approved WeeklyPopularSnapshot (§5.6).
+# Template must not rank catalog ratings into a public «Популярное за неделю».
 АНИМЕДИА_POPULAR_WINDOW = "weekly"
 АНИМЕДИА_POPULAR_REFRESH_ON_EVERY_REQUEST = 0
+АНИМЕДИА_WEEKLY_POPULAR_PATH = os.environ.get(
+    "ANIMEDIA_WEEKLY_POPULAR_SNAPSHOT",
+    str(Path(__file__).resolve().parents[2] / "config" / "animedia-weekly-popular.json"),
+)
 _АНИМЕДИА_POPULAR_CACHE: dict[str, dict] = {}
+АНИМЕДИА_WEEKLY_REQUIRED_FIELDS = (
+    "schema_version", "site_id", "week_id", "timezone",
+    "window_start", "window_end", "valid_from", "valid_to",
+    "algorithm_version", "algorithm_parameters_digest", "input_revision",
+    "cutoff_at", "ordered_title_ids", "eligibility_policy", "playable_policy",
+    "tie_breaker", "snapshot_revision", "generated_at", "digest",
+)
 
 
 def _аниме_popular_week_key(now: datetime | None = None) -> str:
@@ -4817,10 +4849,9 @@ def аниме_popular_snapshot(
     limit: int = 48,
     now: datetime | None = None,
 ) -> dict:
-    """Deterministic weekly top-rated slug order for Animedia home.
+    """Legacy deterministic score order — NOT an approved display snapshot.
 
-    Within the same ISO week and catalog revision the slug order is identical
-    across requests. Recompute only when the week rolls or revision changes.
+    Kept for unit immutability checks only. Home B02 must not render from this.
     """
     week = _аниме_popular_week_key(now)
     rev = str(revision or "")
@@ -4850,9 +4881,9 @@ def аниме_popular_snapshot(
         "snapshot_version": version,
         "slugs": slugs,
         "refresh_on_every_request": АНИМЕДИА_POPULAR_REFRESH_ON_EVERY_REQUEST,
+        "display_approved": False,
     }
     _АНИМЕДИА_POPULAR_CACHE[cache_key] = snap
-    # Keep at most two weeks per revision to bound memory.
     stale = [k for k in _АНИМЕДИА_POPULAR_CACHE
              if k.startswith(f"{rev}|") and k != cache_key]
     for k in stale[1:]:
@@ -4864,11 +4895,71 @@ def аниме_popular_apply(набор: list, snapshot: dict) -> list:
     """Reorder/filter a candidate shelf by weekly popular snapshot slugs."""
     by_slug = {з.get("slug"): з for з in набор if з.get("slug")}
     out = []
-    for slug in snapshot.get("slugs") or []:
+    for slug in snapshot.get("slugs") or snapshot.get("ordered_title_ids") or []:
         з = by_slug.get(slug)
         if з is not None:
             out.append(з)
     return out
+
+
+def аниме_load_approved_weekly_popular(
+    *,
+    site_id: str = "",
+    path: str | Path | None = None,
+) -> dict | None:
+    """Load schema-shaped WeeklyPopularSnapshot or return None (POPULAR_DATA_GAP)."""
+    путь = Path(path or АНИМЕДИА_WEEKLY_POPULAR_PATH)
+    if not путь.is_file():
+        return None
+    try:
+        raw = json.loads(путь.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    if not isinstance(raw, dict):
+        return None
+    for key in АНИМЕДИА_WEEKLY_REQUIRED_FIELDS:
+        if key not in raw or raw[key] in (None, "", []):
+            return None
+    ids = raw.get("ordered_title_ids")
+    if not isinstance(ids, list) or len(ids) < 4:
+        return None
+    if site_id and str(raw.get("site_id") or "") not in {"", site_id, "animedia", "*"}:
+        # Allow shared animedia snapshot across .icu/.space when site_id matches family.
+        sid = str(raw.get("site_id") or "")
+        if site_id not in sid and sid not in site_id and not sid.startswith("animedia"):
+            return None
+    out = dict(raw)
+    out["slugs"] = [str(x) for x in ids if x]
+    out["display_approved"] = True
+    out["window"] = out.get("window") or АНИМЕДИА_POPULAR_WINDOW
+    out["week_key"] = out.get("week_id") or out.get("week_key")
+    out["snapshot_version"] = out.get("digest") or out.get("snapshot_revision")
+    out["updated_at"] = out.get("generated_at") or out.get("updated_at") or ""
+    return out
+
+
+def аниме_weekly_shelf_from_approved(
+    items: list,
+    approved: dict | None,
+    *,
+    min_items: int = 4,
+    limit: int = 48,
+) -> tuple[list, dict | None]:
+    """Resolve approved ordered IDs against catalog; enforce ≥ min_items."""
+    if not approved or not approved.get("display_approved"):
+        return [], None
+    by_slug = {з.get("slug"): з for з in items if з.get("slug")}
+    out = []
+    for slug in approved.get("slugs") or []:
+        з = by_slug.get(slug)
+        if з is None:
+            continue
+        out.append(з)
+        if len(out) >= limit:
+            break
+    if len(out) < min_items:
+        return [], None
+    return out, approved
 
 
 
@@ -4942,6 +5033,19 @@ def _аниме_legal_html() -> str:
         if url.startswith("/") or url.startswith("https://"):
             parts.append(f'<a href="{html.escape(url)}">{label}</a>')
     return "".join(parts)
+
+
+def _аниме_telegram_promo_html() -> str:
+    """B02.1: compact Telegram strip only when owner provides a real URL."""
+    conf = _аниме_owner_config()
+    tg = str(conf.get("telegram_url") or "").strip()
+    if not (tg.startswith("https://t.me/") or tg.startswith("https://telegram.me/")):
+        return ""
+    return (
+        f'<aside class="atg" data-telegram-promo="1">'
+        f'<a href="{html.escape(tg)}" rel="noopener noreferrer">'
+        f'Telegram-канал Animedia</a></aside>'
+    )
 
 
 АНИМЕДИА_ДОМЕНЫ = {
@@ -5410,15 +5514,25 @@ class ВидАнимедиа(ВидЗона):
         return ('<nav class="ztitle__rels" aria-label="Связанные тайтлы">'
                 + "".join(ссылки) + "</nav>")
 
-    def верхняя_карусель(self, набор) -> str:
-        """Горизонтальная витрина постеров над сетками — ритм amd.online.
+    def верхняя_карусель(self, набор, *, snapshot: dict | None = None) -> str:
+        """B02 weekly popular poster shelf — approved snapshot only.
 
-        Набор только из снимка каталога. Пустой набор не рисует полосу:
-        красный пустой блок выглядел бы как сломанный герой.
+        Empty / missing / <4 valid → 0 px (caller must omit). When rendered,
+        exposes weekly digest attrs for oracle stability checks.
         """
         if not набор:
             return ""
-        return f'<div class="ahero" aria-label="Избранные тайтлы">{self.карусель("hero", набор)}</div>'
+        extra = ' data-weekly-popular="1"'
+        if snapshot:
+            extra += (
+                f' data-popular-window="{html.escape(str(snapshot.get("window") or "weekly"))}"'
+                f' data-popular-week="{html.escape(str(snapshot.get("week_key") or snapshot.get("week_id") or ""))}"'
+                f' data-popular-snapshot="{html.escape(str(snapshot.get("snapshot_version") or snapshot.get("digest") or ""))}"'
+                f' data-popular-updated="{html.escape(str(snapshot.get("updated_at") or snapshot.get("generated_at") or ""))}"'
+                f' data-popular-algo="{html.escape(str(snapshot.get("algorithm_version") or ""))}"'
+            )
+        return (f'<section class="ahero" aria-label="Популярное за неделю"{extra}>'
+                f'<div class="ahero__inner">{self.карусель("hero", набор)}</div></section>')
 
     def секция(self, ключ: str, титул: str, ссылка: str, набор, пусто: str) -> str:
         """Секция аниме-портала — плотная сетка, а не горизонтальная лента.
@@ -5727,55 +5841,45 @@ class ВидАнимедиа(ВидЗона):
             "series_with_episodes", "recently_added", "top_rated",
             "anime_movies", "donghua"))
         снимок = Снимок.получить(self.д, self.п) if КОЛЛЕКЦИИ else None
-        popular_meta = None
+        approved_weekly = аниме_load_approved_weekly_popular(
+            site_id=str(self.хост or "animedia"))
+        weekly_items, weekly_meta = аниме_weekly_shelf_from_approved(
+            self.д.items, approved_weekly, min_items=4, limit=48)
+        self._popular_snapshot = weekly_meta
+        self._popular_data_gap = 0 if weekly_meta else 1
         ленты = []
         if снимок is not None:
             for ключ in ПОРЯДОК:
+                if ключ == "top_rated" and not weekly_meta:
+                    # B02: no approved weekly → do not invent «Популярное за неделю».
+                    continue
                 коллекция = КОЛЛЕКЦИИ.разрешить(ключ, снимок, СЕМЕЙСТВО, предел=48)
                 if коллекция is None or not коллекция.items:
                     continue
                 титул, причина = ПРИЧИНЫ.get(ключ, (коллекция.title, ""))
-                # Keep full pool (≤48); hero + cross-shelf trim happens at render.
                 набор = [к.raw for к in коллекция.items[:48]]
-                if ключ == "top_rated":
-                    popular_meta = аниме_popular_snapshot(
-                        self.д.items, self.деталь,
-                        revision=getattr(self.д, "revision", "") or "",
-                        limit=48)
-                    self._popular_snapshot = popular_meta
-                    набор = аниме_popular_apply(набор, popular_meta) or набор
+                if ключ == "top_rated" and weekly_meta:
+                    набор = аниме_popular_apply(набор, weekly_meta) or аниме_popular_apply(
+                        self.д.items, weekly_meta)
                 ленты.append((ключ.replace("_", "-"), титул,
                               коллекция.view_all_path,
                               набор, причина))
         else:
-            popular_meta = аниме_popular_snapshot(
-                self.д.items, self.деталь,
-                revision=getattr(self.д, "revision", "") or "",
-                limit=48)
-            self._popular_snapshot = popular_meta
-            by_slug = {з["slug"]: з for з in self.д.items if з.get("slug")}
-            top = [by_slug[s] for s in popular_meta["slugs"] if s in by_slug][:48]
-            ленты = [
-                ("new-anime", "Новые аниме", "/new/", выбрать(свежесть)[:48], ""),
-                ("top", "Популярное за неделю", "/catalog/", top, ""),
-            ]
+            if weekly_meta:
+                ленты = [
+                    ("top", "Популярное за неделю", "/catalog/", weekly_items[:48], ""),
+                ]
+            # Catalog-addition shelves are B05 — not invented here without collections.
         куски = [self.полоса_готовности()]
 
-        герой = []
-        герой_slug: set[str] = set()
-        for ключ, _титул, _ссылка, набор, _причина in ленты:
-            for з in набор:
-                if not з.get("poster") or з["slug"] in герой_slug:
-                    continue
-                герой.append(з)
-                герой_slug.add(з["slug"])
-                if len(герой) >= 12:
-                    break
-            if len(герой) >= 12:
-                break
-        # Reference ATF: header → poster shelf first; H1/lead after shelf (SEO kept).
-        if герой:
-            куски.append(self.верхняя_карусель(герой))
+        # B02: upper poster shelf = approved weekly only (≥4). Else 0 px + gap flag.
+        if weekly_items and weekly_meta:
+            куски.append(self.верхняя_карусель(weekly_items[:24], snapshot=weekly_meta))
+        else:
+            куски.append(
+                '<div class="ahero ahero--gap" data-weekly-popular="0" '
+                'data-popular-gap="1" hidden aria-hidden="true"></div>')
+        куски.append(_аниме_telegram_promo_html())
         куски.append(f'<h1 class="zh zh--home">{html.escape(домен["h1"])}</h1>')
         куски.append(f'<p class="zsub zsub--home">{html.escape(домен["lead"])}</p>')
         # Empty ad slots must collapse to 0px (no Telegram/premium invent).
@@ -5795,21 +5899,18 @@ class ВидАнимедиа(ВидЗона):
                 '<a href="/new/?page=1">Все добавленные</a></div>'
                 f'{feed}{pager}</section>')
         куски.append('<div class="zad-mid" data-ad-slot="home-mid-content" data-ad-enabled="0"></div>')
-        # Cross-shelf dedup. Popular (weekly) may re-use hero carousel slugs —
-        # carousel ≠ grid shelf — but must not clone another lower shelf set.
+        # Cross-shelf dedup. Weekly shelf slugs may reappear in lower grids only
+        # when the lower shelf is not also the weekly popular block.
         очищенные = []
+        герой_slug = {з["slug"] for з in weekly_items}
         занятые: set[str] = set(герой_slug)
         for ключ, титул, ссылка, кандидаты, причина in ленты:
             набор = []
             pool = кандидаты
             skip = занятые
-            if ключ in {"top-rated", "top", "top_rated"} and getattr(
-                    self, "_popular_snapshot", None):
-                by_slug = {з.get("slug"): з for з in self.д.items if з.get("slug")}
-                pool = [by_slug[s] for s in self._popular_snapshot["slugs"]
-                        if s in by_slug]
-                # Only exclude titles already placed in other grid shelves.
-                skip = занятые - герой_slug
+            if ключ in {"top-rated", "top", "top_rated"} and weekly_meta:
+                pool = weekly_items
+                skip = set()  # weekly grid may mirror hero order; still one section
             for з in pool:
                 slug = з.get("slug") or ""
                 if not slug or slug in skip:

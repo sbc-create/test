@@ -1,0 +1,20 @@
+{
+  "overflowX": 0,
+  "hero": null,
+  "gap": {
+    "w": 0,
+    "h": 0,
+    "display": "none"
+  },
+  "tg": null,
+  "ad": {
+    "w": 0,
+    "h": 0,
+    "display": "none"
+  },
+  "hasGapAttr": true,
+  "hasHero": false,
+  "state": "gap",
+  "viewport": "m390",
+  "captured_at": "2026-09-20T11:33:44Z"
+}

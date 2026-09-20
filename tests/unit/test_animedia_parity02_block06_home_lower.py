@@ -54,17 +54,14 @@ def test_popular_order_stable_within_week(fe):
     assert c["week_key"] == a["week_key"]
 
 
-def test_home_exposes_popular_snapshot_attrs(fe):
+def test_home_exposes_popular_gap_without_approved(fe, monkeypatch, tmp_path):
     mod, catalog, details = fe
-    # Ensure ratings exist so popular shelf can form.
-    for slug, det in list(details["details"].items())[:8]:
-        det["kinopoisk_rating"] = 7.5 + (hash(slug) % 20) / 10.0
+    missing = tmp_path / "missing-weekly.json"
+    monkeypatch.setenv("ANIMEDIA_WEEKLY_POPULAR_SNAPSHOT", str(missing))
+    mod.АНИМЕДИА_WEEKLY_POPULAR_PATH = str(missing)
     html = _вид(mod, catalog, details, host="animedia.space").главная()
-    assert "Популярное за неделю" in html or "data-popular-window" in html
-    if "data-popular-window" in html:
-        assert 'data-popular-window="weekly"' in html
-        assert "data-popular-snapshot=" in html
-        assert "data-popular-week=" in html
+    assert 'data-popular-gap="1"' in html
+    assert 'data-weekly-popular="1"' not in html
 
 
 def test_no_duplicate_shelf_titles_same_slugs(fe):

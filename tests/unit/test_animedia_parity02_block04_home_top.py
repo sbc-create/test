@@ -18,10 +18,30 @@ def fe(tmp_path):
     return _load(tmp_path, version="1.2.4")
 
 
-def test_hero_before_h1(fe):
+def test_hero_before_h1_when_approved(fe, monkeypatch, tmp_path):
     mod, catalog, details = fe
+    import json
+    slugs = [i["slug"] for i in catalog["items"]]
+    path = tmp_path / "weekly.json"
+    path.write_text(json.dumps({
+        "schema_version": 1, "site_id": "animedia.space", "week_id": "2026-W38",
+        "timezone": "Europe/Moscow",
+        "window_start": "2026-09-14T00:00:00+03:00",
+        "window_end": "2026-09-21T00:00:00+03:00",
+        "valid_from": "2026-09-14T00:00:00+03:00",
+        "valid_to": "2026-09-21T00:00:00+03:00",
+        "algorithm_version": "weekly-v1",
+        "algorithm_parameters_digest": "x",
+        "input_revision": "vis-1", "cutoff_at": "2026-09-14T00:00:00Z",
+        "ordered_title_ids": slugs, "scores": {},
+        "eligibility_policy": "p", "playable_policy": "p",
+        "tie_breaker": "slug", "snapshot_revision": "1",
+        "generated_at": "2026-09-14T01:00:00Z", "digest": "d1",
+    }), encoding="utf-8")
+    monkeypatch.setenv("ANIMEDIA_WEEKLY_POPULAR_SNAPSHOT", str(path))
+    mod.АНИМЕДИА_WEEKLY_POPULAR_PATH = str(path)
     html = _вид(mod, catalog, details).главная()
-    ahero = html.find('class="ahero"')
+    ahero = html.find('data-weekly-popular="1"')
     h1 = html.find('class="zh zh--home"')
     assert ahero > 0 and h1 > ahero
 
