@@ -128,3 +128,37 @@ hosts:
     host: animedia.space
     purpose: "приёмка animedia.space: домен, TLS, health, версия шаблона"
     methods: [GET]
+
+  # --- COMMUNITY-COMMENTS-01 research-derived-analysis (owner goal 2026-09-20) -
+  # Owner goal COMMUNITY-COMMENTS-01 explicitly authorizes researching allowed
+  # public sources for language/structure analysis (DERIVED_ONLY). No republication,
+  # no production comment inserts. Prefer official public APIs; scrapers for
+  # Letterboxd/Kinopoisk/IMDb stay BLOCKED (not listed here).
+  #
+  # Default method is GET. graphql.anilist.co is an exception: owner named this
+  # host; probe 2026-09-20 showed GET ?query= → 404 while POST GraphQL read-only
+  # query succeeds. POST here is query-only (no mutations).
+  - ref: community-comments-anilist-graphql
+    host: graphql.anilist.co
+    purpose: "COMMUNITY-COMMENTS-01 research-derived-analysis: AniList reviews GraphQL read-only"
+    methods: [POST]
+  - ref: community-comments-tvmaze-api
+    host: api.tvmaze.com
+    purpose: "COMMUNITY-COMMENTS-01 research-derived-analysis: TVMaze show metadata (not user comments)"
+    methods: [GET]
+  - ref: community-comments-openlibrary
+    host: openlibrary.org
+    purpose: "COMMUNITY-COMMENTS-01 research-derived-analysis: Open Library public metadata/ratings"
+    methods: [GET]
+  - ref: community-comments-wikipedia-en
+    host: en.wikipedia.org
+    purpose: "COMMUNITY-COMMENTS-01 research-derived-analysis: MediaWiki API (article/talk NOT film comments; prefer skip)"
+    methods: [GET]
+  - ref: community-comments-wikipedia-ru
+    host: ru.wikipedia.org
+    purpose: "COMMUNITY-COMMENTS-01 research-derived-analysis: MediaWiki API (article/talk NOT film comments; prefer skip)"
+    methods: [GET]
+  - ref: community-comments-wikidata
+    host: www.wikidata.org
+    purpose: "COMMUNITY-COMMENTS-01 research-derived-analysis: Wikidata entity search (titles only)"
+    methods: [GET]
