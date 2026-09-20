@@ -1,0 +1,49 @@
+# site-factory-comments-qwen-staging.service
+# Isolated staging canary worker — NOT enabled in production.
+# Owner authorization: COMMUNITY-COMMENTS-QWEN-STAGING-CANARY-20260920-01
+#
+# Secret: LoadCredential only. Never put token in Environment= value,
+# unit drop-in plaintext, Git, evidence, or journal.
+
+[Unit]
+Description=Community comments Qwen postmod worker (STAGING ONLY)
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/etc/site-factory/secrets/qwen_comments_token
+
+[Service]
+Type=oneshot
+User=site-factory
+Group=site-factory
+WorkingDirectory=/srv/site-factory/repo
+
+# Credential name MUST match EXPECTED_CREDENTIAL_NAME=qwen_comments_token
+LoadCredential=qwen_comments_token:/etc/site-factory/secrets/qwen_comments_token
+Environment=QWEN_COMMENTS_TOKEN_FILE=%d/qwen_comments_token
+# Owner fills HTTPS endpoint (no query, no secret):
+# Environment=QWEN_COMMENTS_ENDPOINT=https://example-host.invalid/v1/chat/completions
+Environment=QWEN_COMMENTS_MODE=http_post
+Environment=QWEN_COMMENTS_MODEL=
+Environment=QWEN_COMMENTS_TIMEOUT_SEC=20
+Environment=REAL_QWEN_REQUEST_CAP=50
+Environment=REAL_QWEN_INPUT_TOKEN_CAP=100000
+Environment=REAL_QWEN_SPEND_CAP_RUB=100
+# Hard-lock public publication even if someone exports other envs
+Environment=COMMENTS_PUBLICATION_ENABLED=0
+Environment=COMMENTS_SEO_RENDERING_ENABLED=0
+Environment=COMMENTS_QWEN_POSTMOD_ENABLED=0
+Environment=COMMENTS_API_WRITE_ENABLED=0
+
+# Cap ledger lives outside Git; no secrets inside
+Environment=COMMUNITY_COMMENTS_QWEN_CAP_LEDGER=/srv/site-factory/repo/var/community_comments/qwen_cap_ledger.json
+
+ExecStart=/usr/bin/python3 -m factory.community.comments.staging_canary
+Nice=10
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/srv/site-factory/repo/var/community_comments /srv/site-factory/repo/artifacts/evidence/community-comments-03
+
+[Install]
+WantedBy=multi-user.target
