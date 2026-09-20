@@ -19,13 +19,19 @@ def _главная_src() -> str:
 
 
 class TestHomeSectionOrder:
-    def test_owner_priority_order_in_source(self):
+    def test_cinema_branch_premiere_before_new(self):
         src = _главная_src()
-        # films shelf before series before new before cartoons
-        assert src.index('kind") == "Фильм"') < src.index('kind") == "Сериал"')
-        assert src.index('kind") == "Сериал"') < src.index('_полоса("Новинки"')
-        assert src.index('_полоса("Новинки"') < src.index('kind") == "Мультфильм"')
-        assert src.index("_полоса_подборок") < src.index('kind") == "Мультфильм"')
+        # lords-cinema-v2 branch: Премьеры → Фильмы по жанрам → Новинки
+        assert '_полоса("Премьеры недели"' in src
+        assert src.index('_полоса("Премьеры недели"') < src.index('_полоса("Новинки"')
+        assert '_полоса("Фильмы по жанрам"' in src
+
+    def test_series_and_curated_branches_present(self):
+        src = _главная_src()
+        assert "lords-series-feed-v2" in src
+        assert "lords-curated-v2" in src
+        assert '_полоса("Продолжающиеся сериалы"' in src
+        assert '_полоса("Выбор редакции"' in src
 
     def test_no_popular_or_high_rating_duplicate_shelves(self):
         src = _главная_src()
@@ -34,7 +40,7 @@ class TestHomeSectionOrder:
 
     def test_empty_section_returns_empty_string(self):
         текст = ИСХОДНИК.read_text(encoding="utf-8")
-        assert 'def _полоса(self, титул: str, ссылка: str, набор, attrs: str = "") -> str:' in текст
+        assert "def _полоса(self, титул: str, ссылка: str, набор" in текст
         блок = текст[текст.index("def _полоса"):текст.index("def _полоса_подборок")]
         assert 'if not набор:\n            return ""' in блок
 

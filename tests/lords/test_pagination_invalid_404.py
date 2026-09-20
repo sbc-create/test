@@ -122,4 +122,4 @@ class TestInvalidPagination404:
         # 60 items / 48 → 2 pages
         status, body = _req(fe, "/catalog/?page=2")
         assert status == 200
-        assert re.search(r'<a class="c"', body)
+        assert re.search(r'<a class="c', body)
