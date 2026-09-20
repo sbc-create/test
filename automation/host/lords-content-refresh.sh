@@ -16,6 +16,14 @@
 # сертификаты, не удаляет предыдущие релизы и не публикует пустой каталог.
 set -Eeuo pipefail
 
+
+if [[ "${RELEASE_ORCHESTRATOR_REQUIRED:-0}" == "1" ]]; then
+  echo "[RELEASE_ORCHESTRATOR_REQUIRED] lords-content-refresh.sh is not a supported automation path. Use bin/site-factory-release." >&2
+  exit 78
+fi
+echo "[deprecated] lords-content-refresh.sh: prefer site-factory-release (set RELEASE_ORCHESTRATOR_REQUIRED=1 to refuse)." >&2
+
+
 REPO="${FACTORY_REPO:-/srv/site-factory/repo}"
 PYTHON="${FACTORY_PYTHON:-${REPO}/.venv/bin/python}"
 SITES=(lords-01 lords-02 lords-03)

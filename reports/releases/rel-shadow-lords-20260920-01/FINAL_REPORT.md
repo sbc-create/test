@@ -1,0 +1,9 @@
+# FINAL REPORT — rel-shadow-lords-20260920-01
+
+VERDICT=`BATCH_PASS`
+GLOBAL=`BATCH_PASS`
+
+## Sites
+- `lords-01`: `POST_DEPLOY_PASS`
+- `lords-02`: `POST_DEPLOY_PASS`
+- `lords-03`: `POST_DEPLOY_PASS`

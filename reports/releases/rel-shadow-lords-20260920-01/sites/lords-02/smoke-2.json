@@ -1,0 +1,18 @@
+{
+  "build_id": "shadow-build-lords-02",
+  "artifact_sha256": "658eb04606cf80eea6fcf974e4b1cee06b5a17e9927814d8a578e80980f39e7f",
+  "design_id": "lords-new",
+  "route_statuses": {
+    "/": 200,
+    "/catalog": 200,
+    "/search": 200,
+    "/series/2024": 200,
+    "/title/sample": 200,
+    "/definitely-missing-404": 404
+  },
+  "indexability": "CLOSED",
+  "catalog_revision": "shadow-cat-1",
+  "http_5xx": 0,
+  "soft404": 0,
+  "redirect_loops": 0
+}

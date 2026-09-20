@@ -20,6 +20,14 @@
 # шагом, а какой именно timer уместно поднять, знает тот, кто ставит.
 set -euo pipefail
 
+
+if [[ "${RELEASE_ORCHESTRATOR_REQUIRED:-0}" == "1" ]]; then
+  echo "[RELEASE_ORCHESTRATOR_REQUIRED] install-units.sh is not a supported automation path. Use bin/site-factory-release." >&2
+  exit 78
+fi
+echo "[deprecated] install-units.sh: prefer site-factory-release (set RELEASE_ORCHESTRATOR_REQUIRED=1 to refuse)." >&2
+
+
 SRC="$(cd "$(dirname "$0")/systemd" && pwd)"
 DEST=/etc/systemd/system
 

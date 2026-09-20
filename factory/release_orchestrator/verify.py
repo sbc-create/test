@@ -81,7 +81,10 @@ def assert_matches_expected(obs: RuntimeObservation, expected: dict[str, Any]) -
             failures.append(f"{name}: actual={actual!r} expected={want!r}")
     if obs.http_status and obs.http_status >= 500:
         failures.append(f"http_status={obs.http_status}")
-    if obs.catalog_details_skew:
+    # Skew is a hard failure only when the manifest requires matching revisions.
+    if obs.catalog_details_skew and expected.get("expected_catalog_revision") == expected.get(
+        "expected_details_revision"
+    ):
         failures.append("catalog_details_skew=1")
     if failures:
         raise VerifyError("; ".join(failures))

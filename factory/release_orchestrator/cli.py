@@ -208,6 +208,46 @@ def cmd_runner_check(args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
+def cmd_shadow(args: argparse.Namespace) -> int:
+    """Explicit shadow alias — never mutates live."""
+    args.mutate = False
+    args.shadow = True
+    return cmd_run(args)
+
+
+def cmd_stage(args: argparse.Namespace) -> int:
+    """Plan + validate + record readiness (no mutate)."""
+    code = cmd_validate(args)
+    if code != EXIT_OK:
+        return code
+    payload = {
+        "stage": "STAGED_PLAN_READY",
+        "release_id": getattr(args, "release_id", ""),
+        "manifest": args.manifest,
+        "next_allowed_step": "record-approval then shadow|canary",
+    }
+    print(json.dumps(payload, ensure_ascii=False, indent=2))
+    return EXIT_OK
+
+
+def cmd_canary(args: argparse.Namespace) -> int:
+    """Run batch but operator-facing canary label (shadow unless --mutate)."""
+    return cmd_run(args)
+
+
+def cmd_report(args: argparse.Namespace) -> int:
+    report_dir = _reports_dir(args.release_id)
+    final_json = report_dir / "FINAL_REPORT.json"
+    if not final_json.exists():
+        print(f"[BLOCKED_INPUT] no FINAL_REPORT.json for {args.release_id}", file=sys.stderr)
+        return EXIT_BLOCKED
+    print(final_json.read_text(encoding="utf-8"))
+    md = report_dir / "FINAL_REPORT.md"
+    if md.exists() and not args.json_only:
+        print(md.read_text(encoding="utf-8"))
+    return EXIT_OK
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="site-factory-release", description="Site Factory Release Orchestrator")
     sub = p.add_subparsers(dest="command", required=True)
@@ -273,6 +313,32 @@ def build_parser() -> argparse.ArgumentParser:
     rb.add_argument("--release-id", required=True)
     rb.add_argument("--site-id", required=True)
     rb.set_defaults(func=cmd_rollback)
+
+    shadow = sub.add_parser("shadow", help="shadow batch (zero live mutations)")
+    shadow.add_argument("--release-id", required=True)
+    shadow.add_argument("--manifest", required=True)
+    shadow.add_argument("--manifest-digest", default="")
+    shadow.add_argument("--approval", required=True)
+    shadow.set_defaults(func=cmd_shadow)
+
+    stage = sub.add_parser("stage", help="validate manifest readiness for staging")
+    stage.add_argument("--manifest", required=True)
+    stage.add_argument("--release-id", default="")
+    stage.set_defaults(func=cmd_stage)
+
+    canary = sub.add_parser("canary", help="run canary-first batch (shadow by default)")
+    canary.add_argument("--release-id", required=True)
+    canary.add_argument("--manifest", required=True)
+    canary.add_argument("--manifest-digest", default="")
+    canary.add_argument("--approval", required=True)
+    canary.add_argument("--mutate", action="store_true")
+    canary.add_argument("--shadow", action=argparse.BooleanOptionalAction, default=True)
+    canary.set_defaults(func=cmd_canary)
+
+    report = sub.add_parser("report", help="print FINAL_REPORT json/md")
+    report.add_argument("--release-id", required=True)
+    report.add_argument("--json-only", action="store_true")
+    report.set_defaults(func=cmd_report)
 
     sub.add_parser("inotify-diagnose", help="read-only inotify diagnosis").set_defaults(func=cmd_inotify)
     sub.add_parser("bootstrap-print", help="print one-time owner bootstrap checklist").set_defaults(

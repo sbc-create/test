@@ -56,14 +56,21 @@ def prepare_rollback(
     if target.exists():
         shutil.rmtree(target)
     shutil.copytree(live_root, target)
-    digest = _sha256_tree(target)
-    (target / "ROLLBACK_DIGEST").write_text(digest + "\n", encoding="utf-8")
+    for name in required_files:
+        if not (target / name).exists():
+            raise RollbackError(f"rollback backup missing required files: {[name]}")
+
+    # Digest after required files are present; write marker afterward without
+    # including it in the compared tree hash.
+    content_digest = _sha256_tree(target)
+    (target / "ROLLBACK_DIGEST").write_text(content_digest + "\n", encoding="utf-8")
 
     missing = [name for name in required_files if not (target / name).exists()]
     if missing:
         raise RollbackError(f"rollback backup missing required files: {missing}")
 
-    # Rehearsal: restore into a temp sibling and compare digest.
+    # Rehearsal: restore into a temp sibling and compare content digest
+    # (excluding the marker file written after hashing).
     rehearsal = backup_root / f"{site_id}.rehearsal"
     if rehearsal.exists():
         shutil.rmtree(rehearsal)
@@ -71,16 +78,17 @@ def prepare_rollback(
     for name in required_files:
         if not (rehearsal / name).exists():
             raise RollbackError(f"rehearsal missing {name}")
+    marker = rehearsal / "ROLLBACK_DIGEST"
+    if marker.exists():
+        marker.unlink()
     rehearsal_digest = _sha256_tree(rehearsal)
-    # Ignore ROLLBACK_DIGEST file difference by hashing content excluding that marker for match check:
-    # Both trees include it identically after copytree, so digests must match.
-    match = 1 if rehearsal_digest == digest else 0
+    match = 1 if rehearsal_digest == content_digest else 0
     if not match:
         raise RollbackError("ROLLBACK_DIGEST_MATCH failed")
     meta = {
         "site_id": site_id,
         "backup_path": str(target),
-        "digest": digest,
+        "digest": content_digest,
         "ROLLBACK_PREPARED": 1,
         "ROLLBACK_DIGEST_MATCH": 1,
         "ROLLBACK_REHEARSAL_PASS": 1,
@@ -89,7 +97,7 @@ def prepare_rollback(
     return RollbackPrep(
         site_id=site_id,
         backup_path=str(target),
-        digest=digest,
+        digest=content_digest,
         rollback_prepared=1,
         rollback_digest_match=1,
         rollback_rehearsal_pass=1,

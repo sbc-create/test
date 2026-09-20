@@ -1,0 +1,6 @@
+{
+  "site_id": "lords-03",
+  "artifact_path": "/home/claude/wt-site-factory-release-orchestrator-01/var/release-orchestrator/rel-shadow-lords-20260920-01/artifacts/lords-03/artifact.bin",
+  "artifact_sha256": "58a3fbc5a497db77fa1a279ce31160b1ea1acaf1c1cff715778622ff5363e10b",
+  "source_head": "020ad31ccf9c9d19ed48aae74d52af9e35bf3e29"
+}
