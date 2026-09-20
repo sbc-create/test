@@ -24,15 +24,9 @@ from factory.ratings.prod_db import resolve_canonical_db
 
 
 @pytest.fixture()
-def store():
-    s = CommunityStore(resolve_canonical_db())
+def store(tmp_path):
+    s = CommunityStore(tmp_path / "cr05.sqlite")
     yield s
-    # cleanup test actors
-    s.conn.execute("DELETE FROM community_votes WHERE actor_id LIKE 'canary-cr05-test-%'")
-    s.conn.execute(
-        "DELETE FROM community_aggregates WHERE subject_id LIKE 'nova:00000000-cr05-%'"
-    )
-    s.conn.commit()
     s.close()
 
 

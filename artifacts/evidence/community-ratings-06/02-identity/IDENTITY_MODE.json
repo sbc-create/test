@@ -1,0 +1,7 @@
+{
+  "IDENTITY_MODE": "SIGNED_PSEUDONYMOUS_DEVICE_V1",
+  "COOKIE": "yummy_cr_vid Secure HttpOnly SameSite=Lax Path=/ Max-Age=31536000",
+  "BOUND_RATING_SPACE": "yummy",
+  "CLIENT_USER_ID_REJECTED": 1,
+  "SECRET_IN_GIT": 0
+}
