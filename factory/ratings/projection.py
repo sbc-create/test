@@ -51,17 +51,17 @@ def apply_observation(
     *,
     dry_run: bool = True,
     accepted_target: int | None = None,
+    quota_window: str | None = None,
 ) -> dict[str, Any]:
     """Применить наблюдение к current. Невалидное/пустое не затирает last-good.
 
     When ``accepted_target`` is set, insertion is gated by an atomic per-run
-    accepted count so writers cannot overshoot the daily/pilot cap.
+    and per-quota-window accepted count so writers cannot overshoot the cap.
     """
     existing = store.get_current(obs.canonical_title_id, obs.source_key)
     last_good = existing[0] if existing else None
 
     if obs.validation_state != ValidationState.VALID or obs.normalized_score is None:
-        # Preserve last-good
         return {
             "action": "preserved_last_good",
             "inserted": False,
@@ -81,7 +81,11 @@ def apply_observation(
         }
 
     if accepted_target is not None:
-        obs_id, status = store.insert_observation_capped(obs, accepted_target=accepted_target)
+        obs_id, status = store.insert_observation_capped(
+            obs,
+            accepted_target=accepted_target,
+            quota_window=quota_window,
+        )
         if status == "accepted_cap_reached":
             return {
                 "action": "accepted_cap_reached",
@@ -124,6 +128,7 @@ def apply_observation(
         "observation_id": obs_id,
         "score": obs.normalized_score,
         "vote_count": obs.vote_count,
+        "refreshed": last_good is not None,
     }
 
 

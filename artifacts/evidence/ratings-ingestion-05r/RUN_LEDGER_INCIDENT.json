@@ -1,0 +1,45 @@
+{
+  "run_id": "stage5-supervised-20260919T224456Z-9bc222",
+  "source": "shikimori",
+  "quota_window": "2026-09-19",
+  "cycle_status": "FAILED_ACCEPTED_CAP_OVERAGE",
+  "lease_idempotency_key": "",
+  "planned": 150,
+  "claimed": 150,
+  "attempted": 150,
+  "accepted": 125,
+  "newly_covered": 125,
+  "refreshed": 0,
+  "rejected": 25,
+  "deferred_capacity": 0,
+  "unprocessed": 0,
+  "reserved": 0,
+  "committed": 125,
+  "failed": 0,
+  "shortfall": 0,
+  "overage": 25,
+  "candidate_attempt_cap": 150,
+  "accepted_hard_cap": 100,
+  "accepted_target": 100,
+  "rejection_breakdown": {
+    "NOT_FOUND_OR_NO_VALID_SCORE": 25
+  },
+  "notes": [
+    "Historical failed cycle before atomic dual-cap fix",
+    "OVERAGE=25 valid rows retained; not credited to pilot success"
+  ],
+  "formulas": {
+    "ACCEPTED": "NEWLY_COVERED+REFRESHED",
+    "ACCEPTED_CAP": "ACCEPTED<=ACCEPTED_HARD_CAP",
+    "SHORTFALL": "max(0,TARGET-ACCEPTED)",
+    "OVERAGE": "max(0,ACCEPTED-TARGET_HARD_CAP)",
+    "ATTEMPTED": "ACCEPTED+REJECTED+DEFERRED_OR_UNPROCESSED",
+    "DB_DELTA": "COMMITTED_ACCEPTED"
+  },
+  "validation_errors": [
+    "ACCEPTED>100"
+  ],
+  "historical_accepted_before_cap_fix": 125,
+  "historical_overage": 25,
+  "validation_note": "Ledger formulas apply to post-fix cycles; historical row shows OVERAGE=25"
+}

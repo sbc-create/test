@@ -61,6 +61,9 @@ class RunMetrics:
     last_good_preserved: int = 0
     accepted_cap_skipped: int = 0
     accepted_target: int = 0
+    deferred_capacity: int = 0
+    newly_covered: int = 0
+    quota_window: str = ""
     checkpoint: dict[str, Any] = field(default_factory=dict)
 
     def as_dict(self) -> dict[str, Any]:
@@ -98,11 +101,14 @@ class IngestionEngine:
         resume: bool = False,
         use_lock: bool = True,
         accepted_target: int | None = None,
+        quota_window: str | None = None,
     ) -> RunMetrics:
-        """Ingest up to ``limit`` claimed items. Mutations require apply=True.
+        """Ingest up to ``limit`` claimed candidates (CANDIDATE_ATTEMPT_CAP).
 
-        ``accepted_target`` hard-caps VALID inserts/refreshes for this run
-        (atomic SQLite gate). Defaults to ``config.daily_success_target``.
+        ``accepted_target`` is the independent ACCEPTED_HARD_CAP. Claim limit
+        and accepted cap must not be collapsed into one number.
+        ``quota_window`` (UTC YYYY-MM-DD) shares the accepted budget across
+        restart/retry/second worker in the same window.
         """
         if apply and dry_run:
             dry_run = False
@@ -116,6 +122,7 @@ class IngestionEngine:
             if accepted_target is not None
             else int(self.config.daily_success_target)
         )
+        window = quota_window or utc_now_iso()[:10]
         metrics = RunMetrics(
             source=source_key,
             run_id=run_id,
@@ -123,6 +130,7 @@ class IngestionEngine:
             dry_run=dry_run,
             planned_candidates=limit,
             accepted_target=target,
+            quota_window=window,
         )
 
         def _body() -> RunMetrics:
@@ -135,6 +143,7 @@ class IngestionEngine:
                 idem=idem,
                 resume=resume,
                 accepted_target=target,
+                quota_window=window,
             )
 
         if use_lock:
@@ -159,6 +168,7 @@ class IngestionEngine:
         idem: str,
         resume: bool,
         accepted_target: int,
+        quota_window: str,
     ) -> RunMetrics:
         existing = self.store.get_run_by_idempotency(idem)
         if existing and not resume:
@@ -230,15 +240,15 @@ class IngestionEngine:
         cap_reached = False
         for start in range(0, len(ext_ids), self.config.batch_size):
             if cap_reached:
-                # Release remaining claimed items without network fetch
                 for eid in ext_ids[start:]:
                     for item, _ in by_ext.get(eid, []):
+                        metrics.deferred_capacity += 1
                         metrics.accepted_cap_skipped += 1
                         metrics.attempted += 1
                         self.store.complete_item(
                             item["id"],
-                            QueueItemState.PENDING,
-                            error="ACCEPTED_CAP_REACHED",
+                            QueueItemState.DEFERRED_CAPACITY,
+                            error="DEFERRED_CAPACITY",
                         )
                 break
             chunk = ext_ids[start : start + self.config.batch_size]
@@ -277,7 +287,6 @@ class IngestionEngine:
                             self.store.complete_item(item["id"], QueueItemState.PENDING, error=str(exc))
                 continue
 
-            # Process chunk results
             for eid in chunk:
                 result = results.get(eid) or FetchResult(external_id=eid, found=False, error="NOT_FOUND")
                 for item, _ in by_ext.get(eid, []):
@@ -291,16 +300,17 @@ class IngestionEngine:
                         result=result,
                         worker_id=worker_id,
                         accepted_target=accepted_target,
+                        quota_window=quota_window,
                     )
-                    if metrics.inserted >= accepted_target:
+                    if (metrics.inserted) >= accepted_target:
                         cap_reached = True
 
-            # Crash-safe checkpoint
             metrics.checkpoint = {
                 "last_external_ids": chunk,
                 "attempted": metrics.attempted,
                 "inserted": metrics.inserted,
                 "accepted_cap_reached": cap_reached,
+                "quota_window": quota_window,
             }
             self.store.save_checkpoint(run_id, metrics.checkpoint)
 
@@ -330,14 +340,16 @@ class IngestionEngine:
         result: FetchResult,
         worker_id: str,
         accepted_target: int,
+        quota_window: str,
     ) -> None:
         self.store.heartbeat(item["id"], worker_id, self.config.lease_seconds)
         mapping = self.store.get_mapping(item["canonical_title_id"], source_key) or {}
         method = MappingMethod(mapping.get("mapping_method") or MappingMethod.NONE.value)
+        # Pin observed_at into the quota window so cumulative day budget is exact.
+        observed_at = f"{quota_window}T12:00:00Z" if quota_window else utc_now_iso()
 
         if not result.found or result.raw_score is None:
             metrics.not_found += 1
-            # Invalid/empty must not wipe last-good
             obs = RatingObservation(
                 canonical_title_id=item["canonical_title_id"],
                 source_key=source_key,
@@ -348,7 +360,7 @@ class IngestionEngine:
                 vote_count=None,
                 score_distribution=None,
                 source_updated_at=result.source_updated_at,
-                observed_at=utc_now_iso(),
+                observed_at=observed_at,
                 payload_sha256=payload_sha256(result.payload or {"not_found": True}),
                 adapter_version=getattr(self.adapter, "adapter_version", ""),
                 provenance_url=result.provenance_url,
@@ -369,17 +381,17 @@ class IngestionEngine:
             )
             return
 
-        # Already at accepted hard cap — do not insert further VALID rows.
+        # Already at accepted hard cap — valid remaining → DEFERRED_CAPACITY (not REJECTED).
         if metrics.inserted >= accepted_target:
             metrics.accepted_cap_skipped += 1
+            metrics.deferred_capacity += 1
             self.store.complete_item(
                 item["id"],
-                QueueItemState.PENDING,
-                error="ACCEPTED_CAP_REACHED",
+                QueueItemState.DEFERRED_CAPACITY,
+                error="DEFERRED_CAPACITY",
             )
             return
 
-        # Score is Shikimori's — never relabel as MAL
         ph = payload_sha256(result.payload)
         existing = self.store.get_current(item["canonical_title_id"], source_key)
         if existing and existing[0].get("payload_sha256") == ph:
@@ -396,11 +408,11 @@ class IngestionEngine:
             external_id=result.external_id,
             raw_score=result.raw_score,
             source_scale=10.0,
-            normalized_score=result.raw_score,  # already 10-point
+            normalized_score=result.raw_score,
             vote_count=result.vote_count,
             score_distribution=result.score_distribution,
             source_updated_at=result.source_updated_at,
-            observed_at=utc_now_iso(),
+            observed_at=observed_at,
             payload_sha256=ph,
             adapter_version=getattr(self.adapter, "adapter_version", ""),
             provenance_url=result.provenance_url,
@@ -417,21 +429,24 @@ class IngestionEngine:
             obs,
             dry_run=dry_run,
             accepted_target=accepted_target,
+            quota_window=quota_window,
         )
         if outcome.get("action") == "accepted_cap_reached":
             metrics.accepted_cap_skipped += 1
+            metrics.deferred_capacity += 1
             self.store.complete_item(
                 item["id"],
-                QueueItemState.PENDING,
-                error="ACCEPTED_CAP_REACHED",
+                QueueItemState.DEFERRED_CAPACITY,
+                error="DEFERRED_CAPACITY",
             )
             return
         if outcome.get("inserted"):
             metrics.inserted += 1
-            if existing:
+            if existing or outcome.get("refreshed"):
                 metrics.refreshed += 1
+            else:
+                metrics.newly_covered += 1
         elif outcome.get("action") == "dry_run_would_insert":
-            # Count as matched planning success, inserted stays 0
             pass
         elif outcome.get("action") == "idempotent_skip":
             metrics.unchanged += 1

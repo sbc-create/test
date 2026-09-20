@@ -1,0 +1,9 @@
+{
+  "BLOCK_04_QWEN_LABEL": "REPORT_AND_OUTBOX_ONLY",
+  "QWEN_REPORT_BUILD_PASS": 1,
+  "QWEN_OUTBOX_PASS": 1,
+  "QWEN_DELIVERY_PASS": 0,
+  "QWEN_ACK_PASS": 0,
+  "QWEN_DELIVERY_CONFIGURED": "NO",
+  "note": "BLOCK_04_QWEN=PASS means report+outbox only; not delivery/ACK"
+}

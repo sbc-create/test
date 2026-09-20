@@ -12,7 +12,7 @@ from factory.ratings.ingestion import IngestionEngine
 from factory.ratings.models import MappingMethod, MappingState, TitleSourceMapping
 from factory.ratings.rate_limit import RateLimiter
 from factory.ratings.source_registry import seed_registry
-from factory.ratings.stage5_constants import ACCEPTED_TARGET, CANDIDATE_CAP, EVIDENCE_DIR
+from factory.ratings.stage5_constants import ACCEPTED_HARD_CAP, CANDIDATE_ATTEMPT_CAP, EVIDENCE_DIR
 from factory.ratings.store import RatingsStore
 
 
@@ -38,7 +38,7 @@ class _CapProofAdapter:
         return out
 
 
-def run_cap_proof(*, db_path: Path, n_candidates: int = CANDIDATE_CAP) -> dict[str, Any]:
+def run_cap_proof(*, db_path: Path, n_candidates: int = CANDIDATE_ATTEMPT_CAP) -> dict[str, Any]:
     """Enqueue n_candidates and ingest with accepted_target=100; assert no overshoot."""
     if db_path.exists():
         db_path.unlink()
@@ -67,8 +67,8 @@ def run_cap_proof(*, db_path: Path, n_candidates: int = CANDIDATE_CAP) -> dict[s
         )
 
     cfg = RatingsConfig(
-        daily_success_target=ACCEPTED_TARGET,
-        daily_candidate_cap=CANDIDATE_CAP,
+        daily_success_target=ACCEPTED_HARD_CAP,
+        daily_candidate_cap=CANDIDATE_ATTEMPT_CAP,
         batch_size=50,
         max_rps=1000,
         db_path=db_path,
@@ -84,28 +84,32 @@ def run_cap_proof(*, db_path: Path, n_candidates: int = CANDIDATE_CAP) -> dict[s
         run_id="stage5-cap-proof-offline",
         idempotency_key="stage5:cap-proof-offline",
         use_lock=False,
-        accepted_target=ACCEPTED_TARGET,
+        accepted_target=ACCEPTED_HARD_CAP,
+        quota_window="2099-12-31",
     )
     accepted = store.count_accepted_for_run("stage5-cap-proof-offline")
     total_obs = store.observation_count()
     store.close()
     ok = (
-        metrics.inserted <= ACCEPTED_TARGET
-        and accepted <= ACCEPTED_TARGET
+        metrics.inserted <= ACCEPTED_HARD_CAP
+        and accepted <= ACCEPTED_HARD_CAP
         and accepted == metrics.inserted
-        and metrics.accepted_cap_skipped > 0
+        and metrics.deferred_capacity > 0
     )
     return {
         "ok": ok,
         "LIVE_NETWORK": 0,
         "candidates_enqueued": n_candidates,
-        "accepted_target": ACCEPTED_TARGET,
+        "accepted_target": ACCEPTED_HARD_CAP,
+        "CANDIDATE_ATTEMPT_CAP": CANDIDATE_ATTEMPT_CAP,
+        "ACCEPTED_HARD_CAP": ACCEPTED_HARD_CAP,
         "inserted": metrics.inserted,
         "accepted_db_count": accepted,
         "accepted_cap_skipped": metrics.accepted_cap_skipped,
+        "deferred_capacity": metrics.deferred_capacity,
         "fetch_calls": adapter.fetch_calls,
         "total_observations": total_obs,
-        "DAILY_ACCEPTED_ABOVE_100": 0 if accepted <= ACCEPTED_TARGET else 1,
+        "DAILY_ACCEPTED_ABOVE_100": 0 if accepted <= ACCEPTED_HARD_CAP else 1,
         "SECOND_LIVE_CYCLE_ATTEMPT": 0,
         "metrics": metrics.as_dict(),
     }

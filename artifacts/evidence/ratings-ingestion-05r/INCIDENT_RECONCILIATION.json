@@ -1,0 +1,44 @@
+{
+  "as_of": "2026-09-20T10:45:47Z",
+  "run_id": "stage5-supervised-20260919T224456Z-9bc222",
+  "db_path": "/srv/site-factory/repo/var/ratings/ratings.sqlite",
+  "TOTAL_ROWS": 125,
+  "ALL_ROWS_PROVENANCE_PASS": 1,
+  "FAILED_ROW_COUNT": 0,
+  "failures_head": [],
+  "DUPLICATE_TITLE_IDS": 0,
+  "DUPLICATE_IDEMPOTENCY_KEYS": 0,
+  "AMBIGUOUS_OR_FUZZY_MAPPINGS": 0,
+  "WRONG_SOURCE_COUNT": 0,
+  "SNAPSHOT_DIGEST": "9b48f173f9d9b116a9406d719c8653e9d6873489fecef4405cb8ee5ec7221c03",
+  "SNAPSHOT_PATH": "/srv/site-factory/repo/var/ratings/snapshots/animedia.icu/ratings_snapshot_v1.json",
+  "AMD_OBSERVATIONS": 100,
+  "AMD_CURRENT": 100,
+  "AMD_UNCHANGED": true,
+  "USER_VOTE_CURRENT": 0,
+  "USER_VOTE_EVENTS": 0,
+  "USER_VOTES_UNCHANGED": true,
+  "INCIDENT_TYPE": "ACCEPTED_CAP_OVERAGE",
+  "VALID_OVER_CAP_ROWS": 25,
+  "WITHIN_CAP_ROWS": 100,
+  "DATA_CORRUPTION": 0,
+  "ROLLBACK_REQUIRED": "NO",
+  "FAILED_CYCLE_NOT_COUNTED": "YES",
+  "OVERSHOOT_NOT_CREDITED_TO_NEXT_CYCLE": 1,
+  "OVERSHOOT_NOT_USED_FOR_PILOT_PASS": 1,
+  "OVERSHOOT_DELETED": 0,
+  "raw_response_note": "Full HTTP JSON bodies are not persisted; retained evidence per row is payload_sha256 of the adapter payload, score_distribution, provenance_url, adapter_version, and observed_at.",
+  "within_cap_id_range": [
+    101,
+    200
+  ],
+  "overshoot_id_range": [
+    201,
+    225
+  ],
+  "proofs_digest": "ca3ff0b8a95680ad61a7b0d469128828e43cca6d04686d9b710adb38e93967b8",
+  "rejection_breakdown_incident": {
+    "NOT_FOUND_OR_NO_SCORE": 25,
+    "note": "From SUPERVISED_RUN_MANIFEST metrics.not_found=25; sum==25"
+  }
+}

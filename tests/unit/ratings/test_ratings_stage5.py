@@ -122,7 +122,7 @@ def test_31_day_simulation_gates():
     sim = run_31_day_simulation(days=31, start_uncovered=500)
     assert sim["SIMULATION_DAYS"] == 31
     assert sim["SIMULATION_DAILY_LIMIT_VIOLATIONS"] == 0
-    assert sim["SIMULATION_CANDIDATE_CAP_VIOLATIONS"] == 0
+    assert sim.get("SIMULATION_CANDIDATE_CAP_VIOLATIONS", sim.get("SIMULATION_CANDIDATE_ATTEMPT_CAP_VIOLATIONS")) == 0
     assert sim["SIMULATION_DUPLICATE_OBSERVATIONS"] == 0
     assert sim["SIMULATION_OVERLAPPING_RUNS"] == 0
     assert sim["SIMULATION_CATCH_UP_BURSTS"] == 0

@@ -65,6 +65,7 @@ class QueueItemState(str, enum.Enum):
     FAILED = "FAILED"
     DEAD_LETTER = "DEAD_LETTER"
     SKIPPED = "SKIPPED"
+    DEFERRED_CAPACITY = "DEFERRED_CAPACITY"
 
 
 class HealthState(str, enum.Enum):

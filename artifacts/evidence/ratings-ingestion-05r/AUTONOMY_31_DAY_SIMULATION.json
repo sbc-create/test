@@ -1,0 +1,125 @@
+{
+  "ok": true,
+  "SIMULATION_DAYS": 31,
+  "SIMULATION_DAILY_LIMIT_VIOLATIONS": 0,
+  "SIMULATION_CANDIDATE_CAP_VIOLATIONS": 0,
+  "SIMULATION_CANDIDATE_ATTEMPT_CAP_VIOLATIONS": 0,
+  "SIMULATION_DUPLICATE_OBSERVATIONS": 0,
+  "SIMULATION_OVERLAPPING_RUNS": 0,
+  "SIMULATION_CATCH_UP_BURSTS": 0,
+  "SIMULATION_CRASH_RESUME_PASS": 1,
+  "SIMULATION_SATURATION_PASS": 1,
+  "SIMULATION_KILL_SWITCH_PASS": 1,
+  "AMD_CALLS": 0,
+  "accepted_total": 1280,
+  "uncovered_end": 5758,
+  "day_log_head": [
+    {
+      "day": 1,
+      "scenario": "normal_100",
+      "planned": 150,
+      "accepted": 100,
+      "uncovered_after": 6933,
+      "notes": [],
+      "amd_calls": 0
+    },
+    {
+      "day": 2,
+      "scenario": "queue_lt_100",
+      "planned": 40,
+      "accepted": 40,
+      "uncovered_after": 6893,
+      "notes": [
+        "shortfall_queue_lt_100"
+      ],
+      "amd_calls": 0
+    },
+    {
+      "day": 3,
+      "scenario": "coverage_saturation",
+      "planned": 150,
+      "accepted": 100,
+      "uncovered_after": 6793,
+      "notes": [],
+      "amd_calls": 0
+    },
+    {
+      "day": 4,
+      "scenario": "no_exact_mappings",
+      "planned": 150,
+      "accepted": 0,
+      "uncovered_after": 6793,
+      "notes": [
+        "shortfall_no_exact"
+      ],
+      "amd_calls": 0
+    },
+    {
+      "day": 5,
+      "scenario": "http_429",
+      "planned": 150,
+      "accepted": 0,
+      "uncovered_after": 6793,
+      "notes": [
+        "stop_persistent_429"
+      ],
+      "amd_calls": 0
+    }
+  ],
+  "day_log_tail": [
+    {
+      "day": 29,
+      "scenario": "crash_before_commit",
+      "planned": 150,
+      "accepted": 0,
+      "uncovered_after": 5958,
+      "notes": [
+        "no_partial_commit"
+      ],
+      "amd_calls": 0
+    },
+    {
+      "day": 30,
+      "scenario": "crash_after_commit_before_snapshot",
+      "planned": 150,
+      "accepted": 100,
+      "uncovered_after": 5858,
+      "notes": [
+        "observations_kept_gateway_last_good"
+      ],
+      "amd_calls": 0
+    },
+    {
+      "day": 31,
+      "scenario": "snapshot_rename_failure",
+      "planned": 150,
+      "accepted": 100,
+      "uncovered_after": 5758,
+      "notes": [
+        "last_good_gateway"
+      ],
+      "amd_calls": 0
+    }
+  ],
+  "scenarios_covered": [
+    "normal_100",
+    "queue_lt_100",
+    "coverage_saturation",
+    "no_exact_mappings",
+    "http_429",
+    "timeout",
+    "malformed_source",
+    "schema_drift",
+    "db_locked",
+    "crash_before_commit",
+    "crash_after_commit_before_snapshot",
+    "snapshot_rename_failure",
+    "gateway_reload_failure",
+    "qwen_delivery_failure",
+    "overlapping_timer",
+    "restart_resume",
+    "kill_switch",
+    "duplicate_run_replay",
+    "new_titles_added"
+  ]
+}

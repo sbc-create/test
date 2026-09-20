@@ -5,8 +5,8 @@ from __future__ import annotations
 from typing import Any
 
 from factory.ratings.stage5_constants import (
-    ACCEPTED_TARGET,
-    CANDIDATE_CAP,
+    ACCEPTED_HARD_CAP,
+    CANDIDATE_ATTEMPT_CAP,
     MAX_LIVE_CYCLES,
 )
 
@@ -53,7 +53,7 @@ def run_31_day_simulation(*, days: int = 31, start_uncovered: int = 7033) -> dic
     for day in range(1, days + 1):
         scenario = scenarios[(day - 1) % len(scenarios)]
         live_cycles_today = 0
-        planned = min(CANDIDATE_CAP, max(0, uncovered))
+        planned = min(CANDIDATE_ATTEMPT_CAP, max(0, uncovered))
         accepted = 0
         notes: list[str] = []
 
@@ -90,17 +90,17 @@ def run_31_day_simulation(*, days: int = 31, start_uncovered: int = 7033) -> dic
             accepted = 0
             crash_resume_pass = 1
         elif scenario == "crash_after_commit_before_snapshot":
-            accepted = min(ACCEPTED_TARGET, planned, uncovered)
+            accepted = min(ACCEPTED_HARD_CAP, planned, uncovered)
             notes.append("observations_kept_gateway_last_good")
             crash_resume_pass = 1
         elif scenario == "snapshot_rename_failure":
-            accepted = min(ACCEPTED_TARGET, planned, uncovered)
+            accepted = min(ACCEPTED_HARD_CAP, planned, uncovered)
             notes.append("last_good_gateway")
         elif scenario == "gateway_reload_failure":
-            accepted = min(ACCEPTED_TARGET, planned, uncovered)
+            accepted = min(ACCEPTED_HARD_CAP, planned, uncovered)
             notes.append("runtime_fallback_last_good")
         elif scenario == "qwen_delivery_failure":
-            accepted = min(ACCEPTED_TARGET, planned, uncovered)
+            accepted = min(ACCEPTED_HARD_CAP, planned, uncovered)
             notes.append("outbox_retained_timer_paused")
         elif scenario == "duplicate_run_replay":
             accepted = 0
@@ -111,26 +111,26 @@ def run_31_day_simulation(*, days: int = 31, start_uncovered: int = 7033) -> dic
                 accepted = 0
                 notes.append("saturated_required_daily_0")
             else:
-                accepted = min(ACCEPTED_TARGET, uncovered)
+                accepted = min(ACCEPTED_HARD_CAP, uncovered)
         elif scenario == "queue_lt_100":
             planned = min(40, uncovered)
             accepted = planned
             notes.append("shortfall_queue_lt_100")
         elif scenario == "new_titles_added":
             uncovered += 5
-            accepted = min(ACCEPTED_TARGET, uncovered)
+            accepted = min(ACCEPTED_HARD_CAP, uncovered)
             notes.append("new_titles_enqueued")
         else:  # normal_100
-            accepted = min(ACCEPTED_TARGET, planned, uncovered)
+            accepted = min(ACCEPTED_HARD_CAP, planned, uncovered)
 
         # Catch-up forbidden: never accept > daily target even after shortfall days
-        if accepted > ACCEPTED_TARGET:
+        if accepted > ACCEPTED_HARD_CAP:
             daily_limit_violations += 1
-            accepted = ACCEPTED_TARGET
+            accepted = ACCEPTED_HARD_CAP
             catch_up_bursts += 1
-        if planned > CANDIDATE_CAP:
+        if planned > CANDIDATE_ATTEMPT_CAP:
             candidate_cap_violations += 1
-            planned = CANDIDATE_CAP
+            planned = CANDIDATE_ATTEMPT_CAP
 
         uncovered = max(0, uncovered - accepted)
         accepted_total += accepted
@@ -166,6 +166,7 @@ def run_31_day_simulation(*, days: int = 31, start_uncovered: int = 7033) -> dic
         "SIMULATION_DAYS": days,
         "SIMULATION_DAILY_LIMIT_VIOLATIONS": daily_limit_violations,
         "SIMULATION_CANDIDATE_CAP_VIOLATIONS": candidate_cap_violations,
+        "SIMULATION_CANDIDATE_ATTEMPT_CAP_VIOLATIONS": candidate_cap_violations,
         "SIMULATION_DUPLICATE_OBSERVATIONS": duplicate_observations,
         "SIMULATION_OVERLAPPING_RUNS": overlapping_runs,
         "SIMULATION_CATCH_UP_BURSTS": catch_up_bursts,

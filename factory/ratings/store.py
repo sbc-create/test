@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import importlib.util
 import json
 import sqlite3
@@ -276,24 +277,53 @@ class RatingsStore:
         ).fetchone()
         return int(row["c"])
 
+    def count_accepted_for_quota_window(self, *, source_key: str, quota_window: str) -> int:
+        """Cumulative accepted for a quota window (UTC date prefix on observed_at or run_id tag).
+
+        ``quota_window`` is typically ``YYYY-MM-DD`` (UTC). Matching uses
+        ``substr(observed_at,1,10)=quota_window`` so restart/retry/second worker
+        share one budget.
+        """
+        row = self.conn.execute(
+            """SELECT COUNT(*) AS c FROM rating_observations
+               WHERE source_key=? AND validation_state=?
+                 AND normalized_score IS NOT NULL AND vote_count IS NOT NULL
+                 AND vote_count > 0
+                 AND substr(observed_at, 1, 10)=?""",
+            (source_key, ValidationState.VALID.value, quota_window),
+        ).fetchone()
+        return int(row["c"])
+
     def insert_observation_capped(
         self,
         obs: RatingObservation,
         *,
         accepted_target: int,
+        quota_window: str | None = None,
     ) -> tuple[int | None, str]:
-        """Atomically insert if run accepted count is still below target.
+        """Atomically reserve+insert one accepted slot or refuse.
 
-        Uses BEGIN IMMEDIATE so concurrent writers cannot overshoot the cap.
-        Returns (observation_id|None, status) where status is one of:
+        Physical DB boundary: BEGIN IMMEDIATE + count(run and/or quota window)
+        before INSERT. The 101st accepted write cannot commit.
+
+        Returns (observation_id|None, status):
         inserted | idempotent_skip | accepted_cap_reached
         """
         if accepted_target <= 0:
             return None, "accepted_cap_reached"
+        window = quota_window or (obs.observed_at[:10] if obs.observed_at else "")
         self.conn.execute("BEGIN IMMEDIATE")
         try:
-            current = self.count_accepted_for_run(obs.run_id)
-            if current >= accepted_target:
+            by_run = self.count_accepted_for_run(obs.run_id)
+            by_window = (
+                self.count_accepted_for_quota_window(
+                    source_key=obs.source_key, quota_window=window
+                )
+                if window
+                else 0
+            )
+            # Shared budget: neither run nor window may exceed the hard cap.
+            if by_run >= accepted_target or by_window >= accepted_target:
                 self.conn.execute("COMMIT")
                 return None, "accepted_cap_reached"
             try:
@@ -329,10 +359,12 @@ class RatingsStore:
                 self.conn.execute("COMMIT")
                 return obs_id, "inserted"
             except sqlite3.IntegrityError:
+                # Duplicate/replay: slot not consumed (no new row).
                 self.conn.execute("COMMIT")
                 return None, "idempotent_skip"
         except Exception:
-            self.conn.execute("ROLLBACK")
+            with contextlib.suppress(sqlite3.Error):
+                self.conn.execute("ROLLBACK")
             raise
 
     # ---- current projection ----------------------------------------------

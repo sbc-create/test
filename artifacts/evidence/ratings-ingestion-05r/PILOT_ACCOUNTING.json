@@ -1,0 +1,9 @@
+{
+  "PILOT_ATTEMPTED_CYCLES": 1,
+  "PILOT_FAILED_CYCLES": 1,
+  "PILOT_SUCCESSFUL_CYCLES": 0,
+  "REQUIRED_SUCCESSFUL_CYCLES": 7,
+  "PILOT_SUCCESSFUL_CYCLES_REMAINING": 7,
+  "note": "PILOT_SUCCESSFUL_CYCLES_REMAINING counts successful cycles still needed toward the 7-cycle pilot — not remaining attempts.",
+  "FAILED_CYCLE_NOT_COUNTED_AS_SUCCESS": 1
+}

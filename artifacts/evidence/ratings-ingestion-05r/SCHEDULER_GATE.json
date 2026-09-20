@@ -1,0 +1,8 @@
+{
+  "SCHEDULER_ENABLED": "NO",
+  "READY_FOR_DAILY_100_PILOT": "NO",
+  "READY_FOR_DAILY_250": "NO",
+  "READY_FOR_DAILY_500": "NO",
+  "READY_FOR_AUTONOMOUS_PRODUCTION": "NO",
+  "reason": "repair pass only; needs successful supervised cycle + Qwen ACK"
+}
