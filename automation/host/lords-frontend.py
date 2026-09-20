@@ -3133,7 +3133,15 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
             членство = set(разрешённые)
             набор = [з for з in набор if з["slug"] in членство]
     if страна:
-        разрешённые = (индекс.get("country") or {}).get(страна)
+        # Same alias ladder as genre: raw, normalized, transliterated.
+        ключи = [страна, нормализовать(страна), нормализовать(транслит(страна))]
+        разрешённые = None
+        for ключ in ключи:
+            if not ключ:
+                continue
+            разрешённые = (индекс.get("country") or {}).get(ключ)
+            if разрешённые is not None:
+                break
         if разрешённые is None:
             неизвестный_фильтр = True
             набор = []
@@ -5424,7 +5432,10 @@ def построить_индекс(данные: "Данные", подробн
             else:
                 имена.setdefault(код, код)
         for страна in (деталь.get("countries") or []):
-            код = нормализовать(страна)
+            # Latin slug, same contract as /genre/<code>/ — Cyrillic labels stay
+            # in country_names for UI. Cyrillic path codes never matched
+            # МАРШРУТ_СТРАНЫ ([a-z0-9_-]) and produced INTERNAL_LINK_404.
+            код = нормализовать(транслит(страна))
             if not код:
                 continue
             по_стране.setdefault(код, []).append(slug)
@@ -5673,7 +5684,8 @@ class Обработчик(BaseHTTPRequestHandler):
         r"(?:/season-(?P<s>\d{1,3})(?:/episode-(?P<e>\d{1,5}))?)?/$")
     МАРШРУТ_ЖАНРА = re.compile(r"^/genre/(?P<code>[a-z0-9_-]{1,40})/$")
     МАРШРУТ_ГОДА = re.compile(r"^/year/(?P<year>\d{4})/$")
-    МАРШРУТ_СТРАНЫ = re.compile(r"^/country/(?P<code>[a-z0-9_-]{1,40})/$")
+    # Accept latin OR legacy Cyrillic segment; handler canonicalizes to latin.
+    МАРШРУТ_СТРАНЫ = re.compile(r"^/country/(?P<code>[^/]{1,80})/$")
     #: Полная страница коллекции. Тот же ключ, что и у ленты на главной, —
     #: именно поэтому первые карточки страницы совпадают с лентой.
     МАРШРУТ_КОЛЛЕКЦИИ = re.compile(r"^/collection/(?P<key>[a-z0-9_]{1,40})/$")
@@ -5681,7 +5693,12 @@ class Обработчик(BaseHTTPRequestHandler):
     #: Адреса, существовавшие до 1.1.0. Каждый уводит РОВНО одним переходом на
     #: действующий раздел: молча отдавать по ним 404 значило бы терять ссылки,
     #: которые уже кем-то сохранены.
-    ПРЕЖНИЕ_АДРЕСА = {"/schedule/": "/new/", "/genres/": "/catalog/"}
+    ПРЕЖНИЕ_АДРЕСА = {
+        "/schedule/": "/new/",
+        "/genres/": "/catalog/",
+        "/films/": "/movies/",
+        "/cartoons/": "/animation/",
+    }
 
     #: Чистые kind-маршруты (Lords). Query остаётся каноном для комбинаций.
     МАРШРУТЫ_ВИДА = {
@@ -5753,11 +5770,21 @@ class Обработчик(BaseHTTPRequestHandler):
             return self._отдать(в.список("/catalog", зпр).encode("utf-8"))
         страна = self.МАРШРУТ_СТРАНЫ.match(путь)
         if страна:
-            код = страна.group("code")
-            if код not in (self.индекс.get("country") or {}):
+            сырой = unquote(страна.group("code"))
+            # Canonical country key = latin translit (matches index builder).
+            канон = нормализовать(транслит(сырой)) or нормализовать(сырой)
+            if not канон or канон not in (self.индекс.get("country") or {}):
                 return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
+            if сырой != канон:
+                # One predictable redirect: Cyrillic /country/великобритания/
+                # → /country/velikobritaniya/ without dropping query filters.
+                хвост = ""
+                if зпр:
+                    пары = [(к, з) for к, зн in зпр.items() for з in зн]
+                    хвост = "?" + urlencode(пары)
+                return self._переход(f"/country/{канон}/{хвост}")
             зпр = dict(зпр)
-            зпр["country"] = [код]
+            зпр["country"] = [канон]
             return self._отдать(в.список("/catalog", зпр).encode("utf-8"))
 
         жанр = self.МАРШРУТ_ЖАНРА.match(путь)
