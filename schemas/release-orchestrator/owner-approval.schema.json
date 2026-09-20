@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-factory.local/schemas/release-orchestrator/owner-approval.schema.json",
+  "title": "OwnerApproval",
+  "description": "Owner approval bound to one release_id + manifest_digest. Not reusable for another manifest.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "approval_id",
+    "release_id",
+    "manifest_digest",
+    "exact_site_ids",
+    "exact_artifact_digests",
+    "allowed_indexability_changes",
+    "allowed_dns_changes",
+    "allowed_paid_operations",
+    "expires_at",
+    "approved_by",
+    "approved_at",
+    "state"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "1.0.0" },
+    "approval_id": {
+      "type": "string",
+      "pattern": "^apr-[a-z0-9-]{8,64}$"
+    },
+    "release_id": {
+      "type": "string",
+      "pattern": "^rel-[a-z0-9-]{8,64}$"
+    },
+    "manifest_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "exact_site_ids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]{1,40}$"
+      }
+    },
+    "exact_artifact_digests": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    },
+    "allowed_indexability_changes": { "type": "boolean" },
+    "allowed_dns_changes": { "type": "boolean" },
+    "allowed_paid_operations": { "type": "boolean" },
+    "expires_at": { "type": "string", "format": "date-time" },
+    "approved_by": { "type": "string", "minLength": 1 },
+    "approved_at": { "type": "string", "format": "date-time" },
+    "state": {
+      "type": "string",
+      "enum": ["ACTIVE", "CONSUMED", "EXPIRED", "REVOKED"]
+    }
+  }
+}
