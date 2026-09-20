@@ -1,0 +1,111 @@
+{
+  "subject": "nova:019e820c-1c30-7466-9e8f-801577489ce1",
+  "summary": {
+    "no_cookie_denied": true,
+    "tampered_denied": true,
+    "client_user_denied": true,
+    "cohort_denied": true,
+    "csrf_denied": true,
+    "bad_origin_denied": true,
+    "rating0_denied": true,
+    "rating11_denied": true,
+    "fraction_denied": true,
+    "string_denied": true,
+    "cross_space_denied": true,
+    "eligible_cast_ok": true,
+    "eligible_update_ok": true,
+    "eligible_retract_ok": true,
+    "get_ok": true,
+    "LIVE_WRITE_PATH_RERUN": true
+  },
+  "results": {
+    "no_cookie": {
+      "status": 403,
+      "code": "CohortDenied",
+      "error": "not in public-write cohort"
+    },
+    "tampered_sig": {
+      "status": 401,
+      "code": "IdentityForgery",
+      "error": "identity signature mismatch"
+    },
+    "client_user_id": {
+      "status": 401,
+      "code": "IdentityForgery",
+      "error": "client-supplied user_id rejected"
+    },
+    "cohort_denied": {
+      "status": 403,
+      "code": "CohortDenied",
+      "error": "not in public-write cohort"
+    },
+    "csrf": {
+      "status": 403,
+      "code": "OriginRejected",
+      "error": "CSRF token mismatch"
+    },
+    "bad_origin": {
+      "status": 403,
+      "code": "OriginRejected",
+      "error": "origin not allowed: https://evil.example"
+    },
+    "rating0": {
+      "status": 400,
+      "code": "CommunityValidationError",
+      "error": "score must be integer 1..10"
+    },
+    "rating11": {
+      "status": 400,
+      "code": "CommunityValidationError",
+      "error": "score must be integer 1..10"
+    },
+    "fraction": {
+      "status": 400,
+      "code": "CommunityValidationError",
+      "error": "score must be integer 1..10"
+    },
+    "string": {
+      "status": 400,
+      "code": "CommunityValidationError",
+      "error": "score must be integer 1..10"
+    },
+    "cross_space": {
+      "status": 403,
+      "code": "CohortDenied",
+      "error": "body rating_space_id rejected"
+    },
+    "get_ok": {
+      "status": 200,
+      "code": null,
+      "error": null
+    },
+    "eligible_cast": {
+      "status": 200,
+      "action": "CREATE",
+      "after": "7.0",
+      "my_vote": 7,
+      "error": null,
+      "code": null
+    },
+    "eligible_update": {
+      "status": 429,
+      "action": null,
+      "after": null,
+      "vote_count": null,
+      "error": "rate limit exceeded for idtitle"
+    },
+    "eligible_retract": {
+      "status": 429,
+      "my_vote": null,
+      "absent": null,
+      "count": null,
+      "error": "rate limit exceeded for idtitle"
+    }
+  },
+  "PUBLIC_WRITE_STARTED_AT": "2026-09-20T20:39:20Z",
+  "residue_after_retract": {
+    "yummy_accepted": 0,
+    "supervised_actor_accepted": 0,
+    "mismatches": 0
+  }
+}

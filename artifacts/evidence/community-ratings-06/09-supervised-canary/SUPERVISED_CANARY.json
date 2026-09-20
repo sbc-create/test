@@ -1,0 +1,13 @@
+{
+  "PREVIEW_EQUALS_WRITE": 1,
+  "SYNTHETIC_CANARY_VOTES_REMAINING": 0,
+  "SYNTHETIC_CANARY_AGGREGATE_RESIDUE": 0,
+  "FAKE_USER_VOTES_INSERTED": 0,
+  "AGGREGATE_REBUILD_MISMATCHES": 0,
+  "isolation": {
+    "a_has": true,
+    "b_has": false
+  },
+  "retract_status": 200,
+  "subject": "nova:019e820c-1c30-7466-9e8f-801577489ce1"
+}
