@@ -1,0 +1,19 @@
+{
+  "block": "B15",
+  "title": "Breadcrumb + passport schemas",
+  "status": "PASS_LOCAL",
+  "contract_digest": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+  "gates": {
+    "BREADCRUMB_LIST_ON_TITLE": 1,
+    "FILMS_CRUMB_LABEL": 1,
+    "FILMS_CRUMB_HREF_MOVIES": 1,
+    "SERIES_CRUMB_HREF_SERIES": 1,
+    "LD_JSON_LIST_SUPPORT": 1
+  },
+  "assumptions": [
+    "оболочка accepts str | list[str] for разметка (Zona/Lords/Animedia)"
+  ],
+  "tests": "tests/lords/test_zona_blockwise_b14_b21.py (PASS, suite 46)",
+  "residual": [],
+  "updated_at": "2026-09-20T14:00:00Z"
+}

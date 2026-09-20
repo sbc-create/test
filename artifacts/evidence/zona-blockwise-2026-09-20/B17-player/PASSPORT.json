@@ -1,0 +1,16 @@
+{
+  "block": "B17",
+  "title": "Player contract attribute",
+  "status": "PASS_LOCAL",
+  "contract_digest": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+  "gates": {
+    "DATA_PLAYER_CONTRACT_PRESENT": 1,
+    "DEFAULT_CONTRACT_ID": "cdnvideohub-player-v1"
+  },
+  "assumptions": [
+    "PLAYER_CONTRACT_ID env overrides default; selection policy unchanged"
+  ],
+  "tests": "tests/lords/test_zona_blockwise_b14_b21.py (PASS, suite 46)",
+  "residual": [],
+  "updated_at": "2026-09-20T14:00:00Z"
+}

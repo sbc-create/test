@@ -1,0 +1,17 @@
+{
+  "block": "B16",
+  "title": "Description expand heuristic",
+  "status": "PASS_LOCAL",
+  "contract_digest": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+  "gates": {
+    "EXPAND_ONLY_WHEN_FULL_GT_320": 1,
+    "SHORT_FULL_NO_EXPAND": 1,
+    "VERY_SHORT_NO_CLAMP": 1
+  },
+  "assumptions": [
+    "320-char heuristic approximates CSS -webkit-line-clamp:6 overflow"
+  ],
+  "tests": "tests/lords/test_zona_blockwise_b14_b21.py (PASS, suite 46)",
+  "residual": [],
+  "updated_at": "2026-09-20T14:00:00Z"
+}

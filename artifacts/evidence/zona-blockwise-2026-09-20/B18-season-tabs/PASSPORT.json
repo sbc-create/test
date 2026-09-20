@@ -1,0 +1,18 @@
+{
+  "block": "B18",
+  "title": "Season tabs",
+  "status": "PASS_LOCAL",
+  "contract_digest": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+  "gates": {
+    "MULTI_SEASON_TABS": 1,
+    "SINGLE_SEASON_NO_TABS": 1,
+    "DEFAULT_PANEL_CURRENT_OR_FIRST": 1,
+    "PLAYABLE_UNAVAILABLE_SEMANTICS_UNCHANGED": 1
+  },
+  "assumptions": [
+    "inline JS mirrors weekly-tab show/hide pattern"
+  ],
+  "tests": "tests/lords/test_zona_blockwise_b14_b21.py (PASS, suite 46)",
+  "residual": [],
+  "updated_at": "2026-09-20T14:00:00Z"
+}

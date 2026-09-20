@@ -1,0 +1,19 @@
+{
+  "block": "B20",
+  "title": "Exact episode page",
+  "status": "PASS_LOCAL",
+  "contract_digest": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+  "gates": {
+    "PLAYER_BEFORE_EPISODE_LIST": 1,
+    "LIST_NAV_PRESENT": 1,
+    "SERIES_CRUMB": 1,
+    "BREADCRUMB_LIST_WITH_EPISODE_SCHEMA": 1,
+    "FACTS_ONLY_IF_SOURCE_BACKED": 1
+  },
+  "assumptions": [
+    "episode facts omit invented plot; minimal TVEpisode schema always emitted"
+  ],
+  "tests": "tests/lords/test_zona_blockwise_b14_b21.py (PASS, suite 46)",
+  "residual": [],
+  "updated_at": "2026-09-20T14:00:00Z"
+}

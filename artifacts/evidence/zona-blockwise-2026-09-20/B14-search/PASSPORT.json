@@ -1,0 +1,20 @@
+{
+  "block": "B14",
+  "title": "Search clamp and pagination",
+  "status": "PASS_LOCAL",
+  "contract_digest": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+  "gates": {
+    "EMPTY_Q_NO_CATALOG_DUMP": 1,
+    "QUERY_CLAMP_MAX": 120,
+    "PAGE_SIZE": 28,
+    "INVALID_PAGE_HTTP": 404,
+    "PAGE1_CANONICAL_NO_PAGE_PARAM": 1
+  },
+  "assumptions": [
+    "ranker self.д.искать unchanged; only clamped q is passed",
+    "search HTTP 404 detected via znf shell from не_найдено"
+  ],
+  "tests": "tests/lords/test_zona_blockwise_b14_b21.py (PASS, suite 46)",
+  "residual": [],
+  "updated_at": "2026-09-20T14:00:00Z"
+}

@@ -1,0 +1,19 @@
+{
+  "block": "B19",
+  "title": "Recommendations playable-preferred",
+  "status": "PASS_LOCAL",
+  "contract_digest": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+  "gates": {
+    "EXCLUDES_CURRENT": 1,
+    "PLAYABLE_BEFORE_NONPLAYABLE": 1,
+    "DATA_REC_POLICY": "playable_preferred_with_explicit_nonplayable_state_v1",
+    "RELATED_NO_PLAY_BADGE": 1,
+    "ZG_RELATED_FIXED_COLUMNS": 1
+  },
+  "assumptions": [
+    "stable-sort after score order; плитка show_play=False on related tiles"
+  ],
+  "tests": "tests/lords/test_zona_blockwise_b14_b21.py (PASS, suite 46)",
+  "residual": [],
+  "updated_at": "2026-09-20T14:00:00Z"
+}

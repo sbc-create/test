@@ -1,0 +1,19 @@
+{
+  "block": "B21",
+  "title": "Collections hub counts and grid",
+  "status": "PASS_LOCAL",
+  "contract_digest": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+  "gates": {
+    "HUB_CARD_EXACT_COUNT_NAZVANIY": 1,
+    "HUB_SUBLINE_PODBOROK": 1,
+    "ZHUB_4COL_AT_1000": 1,
+    "DETAIL_BREADCRUMBS": 1,
+    "DETAIL_COUNT_SUBLINE": 1
+  },
+  "assumptions": [
+    "collection detail page size remains 60 (collection_contract.разрешить default); densify 28 not applied to avoid pager desync"
+  ],
+  "tests": "tests/lords/test_zona_blockwise_b14_b21.py (PASS, suite 46)",
+  "residual": [],
+  "updated_at": "2026-09-20T14:00:00Z"
+}
