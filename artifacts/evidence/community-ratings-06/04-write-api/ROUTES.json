@@ -1,0 +1,13 @@
+{
+  "base": "/api/community/ratings",
+  "routes": [
+    "GET /session",
+    "GET /flags",
+    "GET /health",
+    "GET /titles/{id}",
+    "POST /titles/{id}/preview",
+    "PUT/DELETE /titles/{id}/vote"
+  ],
+  "gateway": "127.0.0.1:9145",
+  "nginx_snippet": "/etc/nginx/snippets/yummyani-community-ratings.conf"
+}

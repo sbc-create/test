@@ -142,8 +142,8 @@ CREATE TABLE IF NOT EXISTS community_sanctions (
 class CommunityStore:
     """Dedicated community DB file — never the production ratings.sqlite unless owner-approved."""
 
-    def __init__(self, path: Path) -> None:
-        self.path = path
+    def __init__(self, path: Path | str) -> None:
+        self.path = Path(path)
         self._lock = threading.RLock()
         path.parent.mkdir(parents=True, exist_ok=True)
         self.conn = sqlite3.connect(

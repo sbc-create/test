@@ -1,0 +1,32 @@
+[Unit]
+Description=Community ratings public API gateway (Yummy 1%% canary)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=lords
+Group=lords
+WorkingDirectory=/home/claude/wt-ratings-ingestion-01
+Environment=PYTHONPATH=/home/claude/wt-ratings-ingestion-01
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=COMMUNITY_RATINGS_HTTP_PORT=9145
+Environment=COMMUNITY_ROLLOUT_FLAGS_PATH=/srv/site-factory/repo/var/ratings/community_rollout_flags.json
+Environment=COMMUNITY_IDENTITY_HMAC_SECRET_FILE=/etc/site-factory/secrets/community_identity_hmac
+Environment=COMMUNITY_ROLLOUT_SALT_FILE=/etc/site-factory/secrets/community_rollout_salt
+Environment=COMMUNITY_IP_HMAC_SECRET_FILE=/etc/site-factory/secrets/community_ip_hmac
+LoadCredential=community_identity_hmac:/etc/site-factory/secrets/community_identity_hmac
+LoadCredential=community_rollout_salt:/etc/site-factory/secrets/community_rollout_salt
+LoadCredential=community_ip_hmac:/etc/site-factory/secrets/community_ip_hmac
+# Prefer credential files via explicit path env (Ubuntu 22.04 LoadCredential path).
+ExecStart=/usr/bin/python3 -c "from factory.community.http_gateway import main; raise SystemExit(main())" --host 127.0.0.1 --port 9145
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/srv/site-factory/repo/var/ratings
+
+[Install]
+WantedBy=multi-user.target

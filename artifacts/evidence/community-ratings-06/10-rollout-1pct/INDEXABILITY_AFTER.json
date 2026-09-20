@@ -1,0 +1,20 @@
+{
+  "yummyani.site": {
+    "x_robots": null,
+    "allow_root": true,
+    "disallow_all": false,
+    "meta_index": true
+  },
+  "animedia.icu": {
+    "x_robots": "noindex, nofollow",
+    "allow_root": false,
+    "disallow_all": true,
+    "meta_index": false
+  },
+  "animedia.space": {
+    "x_robots": "noindex, nofollow",
+    "allow_root": false,
+    "disallow_all": true,
+    "meta_index": false
+  }
+}
