@@ -28,9 +28,9 @@ def test_episode_has_title_context(fe):
     assert 'data-episode-context="1"' in html
     assert "aep-ctx__poster" in html
     assert item["title"] in html
-    assert "Сезон 1 · серия 3" in html
+    assert "1 сезон, 3 серия" in html
     assert f'/title/{item["slug"]}/' in html
-    assert "К странице тайтла" in html
+    assert 'data-b09="exact"' in html
 
 
 def test_episode_keeps_poster_and_description_from_title(fe):
@@ -56,7 +56,9 @@ def test_episode_selects_route_before_provider(fe):
     assert 'data-season="1"' in html
     assert 'data-episode="4"' in html
     assert 'data-player' in html
-    assert html.find("aep-ctx") < html.find('data-player')
+    # B09: player before parent context.
+    assert html.find('data-b09="player"') < html.find('data-b09="parent"')
+    assert html.find("zh--ep") < html.find('data-player')
 
 
 def test_episode_prev_next_from_manifest(fe):
@@ -73,4 +75,4 @@ def test_css_limits_empty_gap(fe):
     mod, _, _ = fe
     css = mod.АНИМЕДИА_СТИЛЬ
     assert ".aep-ctx" in css
-    assert ".aep-ctx + .zpl" in css or ".aep-ctx+.zpl" in css.replace(" ", "")
+    assert ".zh--ep" in css

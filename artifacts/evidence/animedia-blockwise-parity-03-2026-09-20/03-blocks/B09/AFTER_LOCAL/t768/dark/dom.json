@@ -1,0 +1,11 @@
+{
+  "viewport": "t768",
+  "theme": "dark",
+  "orderOk": true,
+  "h1Top": 102,
+  "plTop": 139,
+  "abstractTotal": false,
+  "failures": [],
+  "captured_at": "2026-09-20T12:25:00Z",
+  "screenshot_sha256": "07810ad5a1ce95aa94e2422a0a625fd056e7246693d3ea6c752922006000bec9"
+}

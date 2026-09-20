@@ -2190,6 +2190,10 @@ display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hi
 .aep-ctx__back{font-size:13px;font-weight:700;color:var(--a-acc);width:fit-content}
 .aep-ctx .rbs{margin:2px 0 0}
 .aep-ctx + .zpl{margin-top:8px}
+.aep-page .zh--ep{font-size:clamp(20px,1.8vw,28px);line-height:1.25;margin:8px 0 12px;font-weight:800}
+.aep-page .zpl{margin-top:0}
+.aep-page .zepnav{margin:12px 0 16px}
+.aep-page .aep-ctx{margin-top:20px}
 @media(max-width:599px){.aep-ctx{grid-template-columns:72px minmax(0,1fr);gap:10px 12px;padding:10px}}
 .zpl{margin:0 auto;width:min(100%,1200px);max-width:1200px}
 .zpl__h{font-size:clamp(22px,2vw,30px);font-weight:700;margin:0 0 16px;
@@ -5647,58 +5651,68 @@ class ВидАнимедиа(ВидЗона):
                 изображение=запись.get("poster") or ""))
 
     def серия(self, запись: dict, деталь: dict, сезон: int, эпизод: int) -> str:
-        """Compact title-derived episode page — not a player-only shell."""
+        """B09 exact episode page: compact H1 → player → nav → seasons → parent."""
         имя = запись["title"]
         путь = self.адрес_эпизода(запись["slug"], сезон, эпизод)
         title_path = f"/title/{запись['slug']}/"
-        заголовок = f"{имя} — сезон {сезон}, серия {эпизод}"
+        заголовок = f"{имя} — {сезон} сезон, {эпизод} серия"
         звенья = [("/", self.имя), ("/catalog/", "Каталог"),
                   (title_path, имя), ("", f"S{сезон}E{эпизод}")]
-        изо = заглушка_постера(запись, "zt__none", "zhead__img", 120, 180)
+        изо = заглушка_постера(запись, "zt__none", "zhead__img", 96, 144)
         orig = str(деталь.get("original_name") or деталь.get("original_title") or "").strip()
         orig_html = f'<p class="aep-ctx__o">{html.escape(orig)}</p>' if orig else ""
-        meta_bits = [str(x) for x in (
-            запись.get("year"),
-            запись.get("kind") or деталь.get("type"),
-            ", ".join(деталь.get("countries") or [])[:40] or None,
-        ) if x]
-        genres = деталь.get("genres") or []
-        if genres:
-            meta_bits.append(", ".join(str(г) for г in genres[:4]))
-        meta_html = (f'<p class="aep-ctx__meta">{html.escape(" · ".join(meta_bits))}</p>'
-                     if meta_bits else "")
         описание = (деталь.get("description") or деталь.get("short_description") or "").strip()
         desc_html = ""
         if описание:
-            short = описание if len(описание) <= 320 else описание[:317].rstrip() + "…"
+            short = описание if len(описание) <= 220 else описание[:217].rstrip() + "…"
             desc_html = f'<p class="aep-ctx__desc">{html.escape(short)}</p>'
-        оценки_html = разметка_оценок(деталь, "rbs", пусто=False)
         код, внутри = разметка_плеера(self, запись, деталь, сезон, эпизод)
         плеер = (
-            f'<section class="zpl" id="watch"><div class="zpl__h"><h2>Смотреть</h2>'
-            f"<span>{html.escape(_подпись_плеера(код))}</span></div>"
+            f'<section class="zpl" id="watch" data-b08="player" data-b09="player">'
+            f'<div class="zpl__h"><h2>Смотреть</h2>'
+            f'<span data-player-status="{html.escape(код)}">'
+            f'{html.escape(_подпись_плеера(код))}</span></div>'
             f'<div class="zpl__f" data-player data-state="{код}" '
             f'data-season="{int(сезон)}" data-episode="{int(эпизод)}">{внутри}</div>'
             f"{_скрипты_плеера(код)}</section>")
         пред, след = границы_серии(деталь, сезон, эпизод)
-        переход = ('<div class="zwrap"><nav class="zepnav" aria-label="Соседние серии">'
+        переход = ('<nav class="zepnav" aria-label="Соседние серии">'
                    + (f'<a href="{self.адрес_эпизода(запись["slug"], *пред)}" rel="prev">'
                       f'← S{пред[0]}E{пред[1]}</a>' if пред else "<span></span>")
                    + (f'<a href="{self.адрес_эпизода(запись["slug"], *след)}" rel="next">'
                       f'S{след[0]}E{след[1]} →</a>' if след else "<span></span>")
-                   + "</nav></div>")
+                   + "</nav>")
+        сезоны = список_серий(деталь)
+        avail = sum(int(с.get("avail") or 0) for с in сезоны) if сезоны else 0
+        total = sum(int(с.get("eps") or 0) for с in сезоны) if сезоны else 0
+        counts = []
+        if avail > 0:
+            counts.append(f"Доступно {avail} серий")
+        if total > 0:
+            counts.append(f"Вышло {total} серий")
+        counts_html = (f'<p class="aep-ctx__meta">{html.escape(" · ".join(counts))}</p>'
+                       if counts else "")
+        # Compact parent context AFTER player/nav/seasons — not a second hero.
         ctx = (
-            f'<div class="zwrap"><div class="aep-ctx" data-episode-context="1">'
+            f'<aside class="aep-ctx" data-episode-context="1" data-b09="parent">'
             f'<div class="aep-ctx__poster">{изо}</div>'
             f'<div class="aep-ctx__main">'
-            f'<h1>{html.escape(имя)}</h1>{orig_html}'
-            f'<p class="aep-ctx__ep">Сезон {int(сезон)} · серия {int(эпизод)}</p>'
-            f'{meta_html}{оценки_html}{desc_html}'
-            f'<a class="aep-ctx__back" href="{title_path}">К странице тайтла</a>'
-            f'</div></div></div>')
-        сезоны = список_серий(деталь)
-        тело = (ctx + плеер + переход
-                + f'<div class="zwrap">{self._серии(запись, сезоны, текущий=(сезон, эпизод))}</div>')
+            f'<p class="aep-ctx__ep">Контекст тайтла</p>'
+            f'<a class="aep-ctx__back" href="{title_path}">{html.escape(имя)}</a>'
+            f'{orig_html}{counts_html}{desc_html}'
+            f'</div></aside>')
+        похожие = self.похожие(запись, деталь)
+        блок_похожих = (
+            f'<section class="zsec zsec--rel" data-b09="recs">'
+            f'<h2 class="zh zh--sm">Смотрите также</h2>'
+            f'{self.плитки(похожие, вариант="recommendation")}</section>'
+            if похожие else "")
+        тело = (
+            f'<div class="zwrap aep-page" data-b09="exact">'
+            f'<h1 class="zh zh--ep">{html.escape(заголовок)}</h1>'
+            f'{плеер}{переход}'
+            f'{self._серии(запись, сезоны, текущий=(сезон, эпизод))}'
+            f'{ctx}{блок_похожих}</div>')
         разметка = self.schema_эпизода(запись, деталь, сезон, эпизод, путь)
         return self.оболочка(
             тело, f"{заголовок} — {self.имя}", путь,
