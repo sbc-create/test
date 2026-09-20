@@ -1,0 +1,18 @@
+{
+  "site": "lords-01",
+  "domain": "lordfilm47.space",
+  "service": "lords-nova-01.service",
+  "expected_design": "lords-cinema-v2",
+  "LORDS01_POST_DEPLOY_PASS": true,
+  "smoke_x2_both_pass": true,
+  "stable_same_build": true,
+  "build_after": "20260920T193847Z-3c90aab-nova",
+  "artifact_after": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+  "data_design_after": "lords-cinema-v2",
+  "pid_after": 1167566,
+  "indexability_after": "noindex, nofollow",
+  "indexability_mutations": 0,
+  "owner_restart": "PASS",
+  "neighbor_lords02_intact": true,
+  "evidence": "05-lords-01/SMOKE_X2.json"
+}
