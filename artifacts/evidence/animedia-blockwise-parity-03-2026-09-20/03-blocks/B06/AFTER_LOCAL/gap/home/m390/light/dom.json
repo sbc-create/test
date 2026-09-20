@@ -1,0 +1,38 @@
+{
+  "viewport": "m390",
+  "theme": "light",
+  "mode": "gap",
+  "route": "/",
+  "geom": {
+    "filters": {
+      "present": true,
+      "hidden": false,
+      "h": 48,
+      "w": 366,
+      "text": "Весь каталог Сериалы Фильмы 2026 2025 2024 2001 драма комедия боевик фэнтези"
+    },
+    "top100": {
+      "present": true,
+      "hidden": true,
+      "h": 0,
+      "w": 0,
+      "text": ""
+    },
+    "seo": {
+      "present": true,
+      "hidden": false,
+      "h": 50,
+      "w": 366,
+      "text": "Зачем Animedia Space"
+    },
+    "meta": {
+      "hasNews": false,
+      "hasComments": false,
+      "seoAfterFilters": true,
+      "catalogShelfCount": 2
+    }
+  },
+  "screenshot_sha256": "2d9602c3ca6bb624afdd42fb207bd6fe624a40f5939ff78f143918082d06349c",
+  "failures": [],
+  "captured_at": "2026-09-20T12:14:29Z"
+}

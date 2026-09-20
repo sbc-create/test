@@ -1,0 +1,24 @@
+{
+  "viewport": "m390",
+  "theme": "dark",
+  "mode": "gap",
+  "route": "/catalog/",
+  "geom": {
+    "afilt": {
+      "present": true,
+      "hidden": false,
+      "h": 52,
+      "w": 342,
+      "text": "Фильтры"
+    },
+    "meta": {
+      "hasNews": false,
+      "hasComments": false,
+      "seoAfterFilters": false,
+      "catalogShelfCount": 0
+    }
+  },
+  "screenshot_sha256": "81742da83ff2d3952ea8800faa4c5853472487f619587ce231f3e24b3946650b",
+  "failures": [],
+  "captured_at": "2026-09-20T12:14:29Z"
+}

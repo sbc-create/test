@@ -1,0 +1,24 @@
+{
+  "viewport": "t768",
+  "theme": "dark",
+  "mode": "gap",
+  "route": "/catalog/",
+  "geom": {
+    "afilt": {
+      "present": true,
+      "hidden": false,
+      "h": 40,
+      "w": 680,
+      "text": "Тип Формат Год Жанр Страна Сортировка"
+    },
+    "meta": {
+      "hasNews": false,
+      "hasComments": false,
+      "seoAfterFilters": false,
+      "catalogShelfCount": 0
+    }
+  },
+  "screenshot_sha256": "c3d1e9501fbf93815deb299cdb08f74024321fe76d016476fea152bc42869dbd",
+  "failures": [],
+  "captured_at": "2026-09-20T12:14:29Z"
+}

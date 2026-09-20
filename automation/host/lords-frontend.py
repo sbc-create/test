@@ -1980,7 +1980,19 @@ grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(min-width:1024px){.anew-page .zg--catalog-added{grid-template-columns:repeat(5,minmax(0,1fr))}}
 @media(min-width:1280px){.anew-page .zg--catalog-added{grid-template-columns:repeat(6,minmax(0,1fr))}}
 @media(min-width:1600px){.anew-page .zg--catalog-added{grid-template-columns:repeat(8,minmax(0,1fr))}}
-.ahome-eps__empty{margin:0;padding:10px 12px;border-radius:8px;background:var(--a-alt);
+/* B06 compact home filters + top100 gap + catalog shelf cap */
+.ahome-filt{margin:0 0 14px;max-height:56px;overflow:hidden}
+.ahome-filt .zstrip{margin:0;max-height:56px;overflow:hidden}
+@media(max-width:767px){.ahome-filt{max-height:48px}}
+.afilt--closed{max-height:112px;overflow:hidden}
+.zsec--top100[hidden],.zsec--top100-gap{display:none !important;height:0 !important;min-height:0 !important;
+margin:0 !important;padding:0 !important;border:0 !important;overflow:hidden !important}
+.zsec--home-cols .zhub--home{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:900px){.zsec--home-cols .zhub--home{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.zseo{margin:28px 0 8px;max-width:1000px}
+.zseo h2{font-size:18px;margin:0 0 8px}
+.zseo p{font-size:14px;line-height:1.5;color:var(--a-dim);margin:0}
+.ahome-editorial,.ahome-comments{display:none;height:0;margin:0;padding:0;overflow:hidden}.ahome-eps__empty{margin:0;padding:10px 12px;border-radius:8px;background:var(--a-alt);
 border:1px solid var(--a-line);color:var(--a-dim);font-size:13px;line-height:1.35;
 max-height:56px;overflow:hidden}
 .ahome-eps .aeps,.zsec--eps.ahome-eps .zl{display:grid;gap:14px;grid-template-columns:1fr}
@@ -4859,6 +4871,19 @@ TRUE_PROVIDER_PLAYABLE_EVENT_COUNT = 0
 # Ambiguous catalog.items[].published_at is NOT catalog_added_at (§5.5 / B05).
 CATALOG_FRESHNESS_DATA_GAP = 1
 АНИМЕДИА_CATALOG_ADDED_HOME_LIMIT = 16
+
+# B06: Top-100 home shelf — approved TopSnapshot only (no frontend ranking).
+АНИМЕДИА_TOP100_PATH = os.environ.get(
+    "ANIMEDIA_TOP100_SNAPSHOT",
+    str(Path(__file__).resolve().parents[2] / "config" / "animedia-top100.json"),
+)
+TOP100_DATA_GAP = 1
+АНИМЕДИА_HOME_MAX_CATALOG_SHELVES = 2
+АНИМЕДИА_TOP100_HOME_LIMIT = 12
+АНИМЕДИА_TOP100_REQUIRED_FIELDS = (
+    "schema_version", "site_id", "ordered_title_ids", "snapshot_revision",
+    "digest", "generated_at",
+)
 # Popular shelf: ONLY an owner/Core-approved WeeklyPopularSnapshot (§5.6).
 # Template must not rank catalog ratings into a public «Популярное за неделю».
 АНИМЕДИА_POPULAR_WINDOW = "weekly"
@@ -5013,6 +5038,70 @@ def аниме_weekly_shelf_from_approved(
         return [], None
     return out, approved
 
+
+def аниме_load_approved_top100(
+    *,
+    site_id: str = "",
+    path: str | Path | None = None,
+) -> dict | None:
+    """Load approved TopSnapshot or return None (TOP100_DATA_GAP)."""
+    путь = Path(path or АНИМЕДИА_TOP100_PATH)
+    if not путь.is_file():
+        return None
+    try:
+        raw = json.loads(путь.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    if not isinstance(raw, dict):
+        return None
+    for key in АНИМЕДИА_TOP100_REQUIRED_FIELDS:
+        if key not in raw or raw[key] in (None, "", []):
+            return None
+    ids = raw.get("ordered_title_ids")
+    if not isinstance(ids, list) or len(ids) < 4:
+        return None
+    # Dedup while preserving order — ranks must stay dense when rendered.
+    seen = set()
+    slugs = []
+    for x in ids:
+        s = str(x or "")
+        if not s or s in seen:
+            continue
+        seen.add(s)
+        slugs.append(s)
+    if len(slugs) < 4:
+        return None
+    if site_id and str(raw.get("site_id") or "") not in {"", site_id, "animedia", "*"}:
+        sid = str(raw.get("site_id") or "")
+        if site_id not in sid and sid not in site_id and not sid.startswith("animedia"):
+            return None
+    out = dict(raw)
+    out["slugs"] = slugs
+    out["display_approved"] = True
+    return out
+
+
+def аниме_top100_shelf_from_approved(
+    items: list,
+    approved: dict | None,
+    *,
+    min_items: int = 4,
+    limit: int = 12,
+) -> tuple[list, dict | None]:
+    if not approved or not approved.get("display_approved"):
+        return [], None
+    by_slug = {з.get("slug"): з for з in items if з.get("slug")}
+    out = []
+    for slug in approved.get("slugs") or []:
+        з = by_slug.get(slug)
+        if з is None:
+            continue
+        out.append(з)
+        if len(out) >= limit:
+            break
+    if len(out) < min_items:
+        return [], None
+    return out, approved
 
 
 def _аниме_формат_времени_анонса(published_at: str, precision: str) -> str:
@@ -5941,26 +6030,29 @@ class ВидАнимедиа(ВидЗона):
         # B05: verified catalog_added ledger only — never published_at shelf.
         куски.append(self._блок_нового_в_каталоге_b05())
         куски.append('<div class="zad-mid" data-ad-slot="home-mid-content" data-ad-enabled="0"></div>')
+        # B06.1 compact filters (before remaining shelves).
+        куски.append(self._блок_компактных_фильтров_b06())
+        # B06.2 Top-100 — approved snapshot only.
+        куски.append(self._блок_top100_b06())
         # Cross-shelf dedup. Weekly shelf slugs may reappear in lower grids only
         # when the lower shelf is not also the weekly popular block.
         очищенные = []
         герой_slug = {з["slug"] for з in weekly_items}
         занятые: set[str] = set(герой_slug)
-        # B05 owns catalog freshness; collections recently_added/new_episodes
-        # still sort by ambiguous published_at and must not render as that shelf.
-        b05_skip = {"recently-added", "recently_added", "new-episodes", "new_episodes"}
+        # B05 owns catalog freshness; B02 owns weekly; top_rated must not
+        # reappear as a second ranked shelf without TopSnapshot.
+        skip_keys = {
+            "recently-added", "recently_added", "new-episodes", "new_episodes",
+            "top-rated", "top_rated", "top",
+        }
         for ключ, титул, ссылка, кандидаты, причина in ленты:
-            if ключ in b05_skip or ключ.replace("_", "-") in b05_skip:
+            norm = ключ.replace("_", "-")
+            if ключ in skip_keys or norm in skip_keys:
                 continue
             набор = []
-            pool = кандидаты
-            skip = занятые
-            if ключ in {"top-rated", "top", "top_rated"} and weekly_meta:
-                pool = weekly_items
-                skip = set()  # weekly grid may mirror hero order; still one section
-            for з in pool:
+            for з in кандидаты:
                 slug = з.get("slug") or ""
-                if not slug or slug in skip:
+                if not slug or slug in занятые:
                     continue
                 набор.append(з)
                 if len(набор) >= 12:
@@ -5969,7 +6061,19 @@ class ВидАнимедиа(ВидЗона):
                 занятые.add(з["slug"])
             if набор:
                 очищенные.append((ключ, титул, ссылка, набор, причина))
+            if len(очищенные) >= АНИМЕДИА_HOME_MAX_CATALOG_SHELVES:
+                break
         куски += [self.секция(*л) for л in очищенные]
+        # B06.4 collections home shelf (real specs only).
+        куски.append(self._блок_подборок_home_b06())
+        # B06.5/6: news/reviews/comments absent from registry → 0 px placeholders.
+        куски.append(
+            '<div class="ahome-editorial" data-b06="editorial" data-editorial="0" '
+            'hidden aria-hidden="true"></div>')
+        куски.append(
+            '<div class="ahome-comments" data-b06="comments" data-comments="0" '
+            'hidden aria-hidden="true"></div>')
+        # B06.7 SEO/about after functional modules, before footer.
         куски.append(self.seo_блок(заголовок=домен["seo_home_title"],
                                    текст=домен["seo_home"]))
         return self.оболочка(
@@ -6138,7 +6242,7 @@ class ВидАнимедиа(ВидЗона):
             + opts("Сортировка", sort_pairs, "sort")
         )
         return (
-            '<div class="afilt" data-afilt>'
+            '<div class="afilt afilt--closed" data-afilt>'
             '<button type="button" class="afilt__open" data-afilt-open '
             'aria-expanded="false" aria-controls="afilt-panel">Фильтры</button>'
             f'<div class="afilt__panel" id="afilt-panel">{chips_html}'
@@ -6370,6 +6474,78 @@ class ВидАнимедиа(ВидЗона):
             f'<div class="zsec__h"><h2>{АНИМЕДИА_CATALOG_ADDED_H1}</h2>'
             f'<a href="/new/">Весь раздел</a></div>'
             f'{grid}</section>'
+        )
+
+    def _блок_компактных_фильтров_b06(self) -> str:
+        """Home compact facet strip → catalog routes (no invented facets)."""
+        links = [
+            ('/catalog/', 'Весь каталог'),
+            ('/catalog/?kind=Аниме', 'Сериалы'),
+            ('/catalog/?kind=Аниме-фильм', 'Фильмы'),
+        ]
+        years = list(self.д.years or [])[:4]
+        for г in years:
+            links.append((f'/catalog/?year={г}', str(г)))
+        genres = list(self.индекс.get("genre_names") or [])[:4]
+        for код, имя in genres:
+            links.append((f'/catalog/?genre={код}', имя))
+        chips = "".join(
+            f'<a href="{html.escape(href, quote=True)}">{html.escape(label)}</a>'
+            for href, label in links)
+        return (
+            f'<nav class="ahome-filt" data-b06="filters" aria-label="Быстрые фильтры">'
+            f'<div class="zstrip">{chips}</div></nav>'
+        )
+
+    def _блок_top100_b06(self) -> str:
+        """Home Top-100 shelf from approved TopSnapshot only."""
+        approved = аниме_load_approved_top100(site_id=str(self.хост or "animedia"))
+        items, meta = аниме_top100_shelf_from_approved(
+            self.д.items, approved, min_items=4, limit=АНИМЕДИА_TOP100_HOME_LIMIT)
+        self._top100_data_gap = 0 if meta else 1
+        if not items or not meta:
+            return (
+                '<div class="zsec zsec--top100 zsec--top100-gap" data-b06-top100="gap" '
+                'data-top100-gap="1" hidden aria-hidden="true"></div>'
+            )
+        grid = self.плитки(items, вариант="top100-shelf")
+        digest = html.escape(str(meta.get("digest") or ""))
+        rev = html.escape(str(meta.get("snapshot_revision") or ""))
+        return (
+            f'<section class="zsec zsec--top100" data-b06-top100="populated" '
+            f'data-top100-gap="0" data-top100-digest="{digest}" '
+            f'data-top100-revision="{rev}">'
+            f'<div class="zsec__h"><h2>Топ‑100</h2></div>'
+            f'{grid}</section>'
+        )
+
+    def _блок_подборок_home_b06(self) -> str:
+        """Home collections shelf — real collection specs only."""
+        if КОЛЛЕКЦИИ is None:
+            return ""
+        снимок = Снимок.получить(self.д, self.п)
+        if снимок is None:
+            return ""
+        карточки = []
+        for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО)[:4]:
+            if not спец.доступна:
+                continue
+            данные = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО,
+                                         предел=1)
+            if данные is None or not данные.items:
+                continue
+            карточки.append(
+                f'<a class="zhub__c" data-card-variant="collection-card" '
+                f'href="{html.escape(спец.canonical_path)}">'
+                f'<span class="zhub__t">{html.escape(данные.title)}</span>'
+                f'<span class="zhub__m">{данные.total} записей</span></a>')
+        if not карточки:
+            return ""
+        return (
+            '<section class="zsec zsec--home-cols" data-b06="collections">'
+            '<div class="zsec__h"><h2>Подборки</h2>'
+            '<a href="/collections/">Весь раздел</a></div>'
+            f'<div class="zhub zhub--home">{"".join(карточки)}</div></section>'
         )
 
     def _эпизод_события(self) -> list[dict]:

@@ -1,0 +1,607 @@
+{
+  "captured_at": "2026-09-20T12:14:29Z",
+  "contract_sha256": "5f2112e25ef974333c388bad405abfae3c3d460a713b028afa3c0e549b8eaeb3",
+  "failures": [],
+  "entries": [
+    {
+      "viewport": "d1440",
+      "theme": "light",
+      "mode": "gap",
+      "route": "/",
+      "geom": {
+        "filters": {
+          "present": true,
+          "hidden": false,
+          "h": 40,
+          "w": 1344,
+          "text": "Весь каталог Сериалы Фильмы 2026 2025 2024 2001 драма комедия боевик фэнтези"
+        },
+        "top100": {
+          "present": true,
+          "hidden": true,
+          "h": 0,
+          "w": 0,
+          "text": ""
+        },
+        "seo": {
+          "present": true,
+          "hidden": false,
+          "h": 103,
+          "w": 1000,
+          "text": "Зачем Animedia Space Animedia Space собирает недавно добавленные тайтлы и популярные записи в одном месте: сначала лента каталога, затем топ и тематические подб"
+        },
+        "meta": {
+          "hasNews": false,
+          "hasComments": false,
+          "seoAfterFilters": true,
+          "catalogShelfCount": 2
+        }
+      },
+      "screenshot_sha256": "bcd8e5a009b159e41d27c65f14938acb682a5ca3f40ca138541fde6b684e2e1a",
+      "failures": [],
+      "captured_at": "2026-09-20T12:14:29Z"
+    },
+    {
+      "viewport": "d1440",
+      "theme": "dark",
+      "mode": "gap",
+      "route": "/",
+      "geom": {
+        "filters": {
+          "present": true,
+          "hidden": false,
+          "h": 40,
+          "w": 1344,
+          "text": "Весь каталог Сериалы Фильмы 2026 2025 2024 2001 драма комедия боевик фэнтези"
+        },
+        "top100": {
+          "present": true,
+          "hidden": true,
+          "h": 0,
+          "w": 0,
+          "text": ""
+        },
+        "seo": {
+          "present": true,
+          "hidden": false,
+          "h": 103,
+          "w": 1000,
+          "text": "Зачем Animedia Space Animedia Space собирает недавно добавленные тайтлы и популярные записи в одном месте: сначала лента каталога, затем топ и тематические подб"
+        },
+        "meta": {
+          "hasNews": false,
+          "hasComments": false,
+          "seoAfterFilters": true,
+          "catalogShelfCount": 2
+        }
+      },
+      "screenshot_sha256": "db9d950863a1af306c31558d570a460118d7910fcec59a2eef8b344dff1b6350",
+      "failures": [],
+      "captured_at": "2026-09-20T12:14:29Z"
+    },
+    {
+      "viewport": "t768",
+      "theme": "light",
+      "mode": "gap",
+      "route": "/",
+      "geom": {
+        "filters": {
+          "present": true,
+          "hidden": false,
+          "h": 56,
+          "w": 724,
+          "text": "Весь каталог Сериалы Фильмы 2026 2025 2024 2001 драма комедия боевик фэнтези"
+        },
+        "top100": {
+          "present": true,
+          "hidden": true,
+          "h": 0,
+          "w": 0,
+          "text": ""
+        },
+        "seo": {
+          "present": true,
+          "hidden": false,
+          "h": 124,
+          "w": 724,
+          "text": "Зачем Animedia Space Animedia Space собирает недавно добавленные тайтлы и популярные записи в одном месте: сначала лента каталога, затем топ и тематические подб"
+        },
+        "meta": {
+          "hasNews": false,
+          "hasComments": false,
+          "seoAfterFilters": true,
+          "catalogShelfCount": 2
+        }
+      },
+      "screenshot_sha256": "1f601d1b4c42f5d2cf980bba5f0728a26c6c92081139429ebb73eca3b09315e7",
+      "failures": [],
+      "captured_at": "2026-09-20T12:14:29Z"
+    },
+    {
+      "viewport": "t768",
+      "theme": "dark",
+      "mode": "gap",
+      "route": "/",
+      "geom": {
+        "filters": {
+          "present": true,
+          "hidden": false,
+          "h": 56,
+          "w": 724,
+          "text": "Весь каталог Сериалы Фильмы 2026 2025 2024 2001 драма комедия боевик фэнтези"
+        },
+        "top100": {
+          "present": true,
+          "hidden": true,
+          "h": 0,
+          "w": 0,
+          "text": ""
+        },
+        "seo": {
+          "present": true,
+          "hidden": false,
+          "h": 124,
+          "w": 724,
+          "text": "Зачем Animedia Space Animedia Space собирает недавно добавленные тайтлы и популярные записи в одном месте: сначала лента каталога, затем топ и тематические подб"
+        },
+        "meta": {
+          "hasNews": false,
+          "hasComments": false,
+          "seoAfterFilters": true,
+          "catalogShelfCount": 2
+        }
+      },
+      "screenshot_sha256": "4c1551a0f5dd399644de6032df8a2b7c029bab31459e0bc0e5716d6a712bb1d5",
+      "failures": [],
+      "captured_at": "2026-09-20T12:14:29Z"
+    },
+    {
+      "viewport": "m390",
+      "theme": "light",
+      "mode": "gap",
+      "route": "/",
+      "geom": {
+        "filters": {
+          "present": true,
+          "hidden": false,
+          "h": 48,
+          "w": 366,
+          "text": "Весь каталог Сериалы Фильмы 2026 2025 2024 2001 драма комедия боевик фэнтези"
+        },
+        "top100": {
+          "present": true,
+          "hidden": true,
+          "h": 0,
+          "w": 0,
+          "text": ""
+        },
+        "seo": {
+          "present": true,
+          "hidden": false,
+          "h": 50,
+          "w": 366,
+          "text": "Зачем Animedia Space"
+        },
+        "meta": {
+          "hasNews": false,
+          "hasComments": false,
+          "seoAfterFilters": true,
+          "catalogShelfCount": 2
+        }
+      },
+      "screenshot_sha256": "2d9602c3ca6bb624afdd42fb207bd6fe624a40f5939ff78f143918082d06349c",
+      "failures": [],
+      "captured_at": "2026-09-20T12:14:29Z"
+    },
+    {
+      "viewport": "m390",
+      "theme": "dark",
+      "mode": "gap",
+      "route": "/",
+      "geom": {
+        "filters": {
+          "present": true,
+          "hidden": false,
+          "h": 48,
+          "w": 366,
+          "text": "Весь каталог Сериалы Фильмы 2026 2025 2024 2001 драма комедия боевик фэнтези"
+        },
+        "top100": {
+          "present": true,
+          "hidden": true,
+          "h": 0,
+          "w": 0,
+          "text": ""
+        },
+        "seo": {
+          "present": true,
+          "hidden": false,
+          "h": 50,
+          "w": 366,
+          "text": "Зачем Animedia Space"
+        },
+        "meta": {
+          "hasNews": false,
+          "hasComments": false,
+          "seoAfterFilters": true,
+          "catalogShelfCount": 2
+        }
+      },
+      "screenshot_sha256": "ca7772fb43446dbdc61272bc858cbfaee86d0dedf75301949efd288d158bb381",
+      "failures": [],
+      "captured_at": "2026-09-20T12:14:29Z"
+    },
+    {
+      "viewport": "d1440",
+      "theme": "light",
+      "mode": "populated",
+      "route": "/",
+      "geom": {
+        "filters": {
+          "present": true,
+          "hidden": false,
+          "h": 40,
+          "w": 1344,
+          "text": "Весь каталог Сериалы Фильмы 2026 2025 2024 2001 драма комедия боевик фэнтези"
+        },
+        "top100": {
+          "present": true,
+          "hidden": false,
+          "h": 365,
+          "w": 1344,
+          "text": "Топ‑100 А Альфа Аниме · 2026 КП 8.2 Б Бета Аниме · 2025 Д Дельта Аниме · 2001 Г Гамма Аниме · 2024"
+        },
+        ".seo": {
+          "present": true,
+          "hidden": false,
+          "h": 103,
+          "w": 1000,
+          "text": "Зачем Animedia Space Animedia Space собирает недавно добавленные тайтлы и популярные записи в одном месте: сначала лента каталога, затем топ и тематические подб"
+        },
+        "meta": {
+          "hasNews": false,
+          "hasComments": false,
+          "seoAfterFilters": true,
+          "catalogShelfCount": 2
+        }
+      },
+      "screenshot_sha256": "236a3b143aedec5a7f40276006174015165b9f9eafdb7cf9d01474f083b4387f",
+      "failures": [],
+      "captured_at": "2026-09-20T12:14:29Z"
+    },
+    {
+      "viewport": "d1440",
+      "theme": "dark",
+      "mode": "populated",
+      "route": "/",
+      "geom": {
+        "filters": {
+          "present": true,
+          "hidden": false,
+          "h": 40,
+          "w": 1344,
+          "text": "Весь каталог Сериалы Фильмы 2026 2025 2024 2001 драма комедия боевик фэнтези"
+        },
+        "top100": {
+          "present": true,
+          "hidden": false,
+          "h": 365,
+          "w": 1344,
+          "text": "Топ‑100 А Альфа Аниме · 2026 КП 8.2 Б Бета Аниме · 2025 Д Дельта Аниме · 2001 Г Гамма Аниме · 2024"
+        },
+        ".seo": {
+          "present": true,
+          "hidden": false,
+          "h": 103,
+          "w": 1000,
+          "text": "Зачем Animedia Space Animedia Space собирает недавно добавленные тайтлы и популярные записи в одном месте: сначала лента каталога, затем топ и тематические подб"
+        },
+        "meta": {
+          "hasNews": false,
+          "hasComments": false,
+          "seoAfterFilters": true,
+          "catalogShelfCount": 2
+        }
+      },
+      "screenshot_sha256": "106e10857323876fa50bee87b1e6ce43be4de5631b22375869684a8b1a6f0ead",
+      "failures": [],
+      "captured_at": "2026-09-20T12:14:29Z"
+    },
+    {
+      "viewport": "t768",
+      "theme": "light",
+      "mode": "populated",
+      "route": "/",
+      "geom": {
+        "filters": {
+          "present": true,
+          "hidden": false,
+          "h": 56,
+          "w": 724,
+          "text": "Весь каталог Сериалы Фильмы 2026 2025 2024 2001 драма комедия боевик фэнтези"
+        },
+        "top100": {
+          "present": true,
+          "hidden": false,
+          "h": 361,
+          "w": 724,
+          "text": "Топ‑100 А Альфа Аниме · 2026 КП 8.2 Б Бета Аниме · 2025 Д Дельта Аниме · 2001 Г Гамма Аниме · 2024"
+        },
+        ".seo": {
+          "present": true,
+          "hidden": false,
+          "h": 124,
+          "w": 724,
+          "text": "Зачем Animedia Space Animedia Space собирает недавно добавленные тайтлы и популярные записи в одном месте: сначала лента каталога, затем топ и тематические подб"
+        },
+        "meta": {
+          "hasNews": false,
+          "hasComments": false,
+          "seoAfterFilters": true,
+          "catalogShelfCount": 2
+        }
+      },
+      "screenshot_sha256": "420b656ca82433c8f2f21885dfae150540671139c1f920e5b12e737bb3654dcc",
+      "failures": [],
+      "captured_at": "2026-09-20T12:14:29Z"
+    },
+    {
+      "viewport": "t768",
+      "theme": "dark",
+      "mode": "populated",
+      "route": "/",
+      "geom": {
+        "filters": {
+          "present": true,
+          "hidden": false,
+          "h": 56,
+          "w": 724,
+          "text": "Весь каталог Сериалы Фильмы 2026 2025 2024 2001 драма комедия боевик фэнтези"
+        },
+        "top100": {
+          "present": true,
+          "hidden": false,
+          "h": 361,
+          "w": 724,
+          "text": "Топ‑100 А Альфа Аниме · 2026 КП 8.2 Б Бета Аниме · 2025 Д Дельта Аниме · 2001 Г Гамма Аниме · 2024"
+        },
+        ".seo": {
+          "present": true,
+          "hidden": false,
+          "h": 124,
+          "w": 724,
+          "text": "Зачем Animedia Space Animedia Space собирает недавно добавленные тайтлы и популярные записи в одном месте: сначала лента каталога, затем топ и тематические подб"
+        },
+        "meta": {
+          "hasNews": false,
+          "hasComments": false,
+          "seoAfterFilters": true,
+          "catalogShelfCount": 2
+        }
+      },
+      "screenshot_sha256": "9ca61d0401620ccca7b4859ebe8f94afedbe719cedfc69f129e738048e1baaf4",
+      "failures": [],
+      "captured_at": "2026-09-20T12:14:29Z"
+    },
+    {
+      "viewport": "m390",
+      "theme": "light",
+      "mode": "populated",
+      "route": "/",
+      "geom": {
+        "filters": {
+          "present": true,
+          "hidden": false,
+          "h": 48,
+          "w": 366,
+          "text": "Весь каталог Сериалы Фильмы 2026 2025 2024 2001 драма комедия боевик фэнтези"
+        },
+        "top100": {
+          "present": true,
+          "hidden": false,
+          "h": 697,
+          "w": 366,
+          "text": "Топ‑100 А Альфа Аниме · 2026 КП 8.2 Б Бета Аниме · 2025 Д Дельта Аниме · 2001 Г Гамма Аниме · 2024"
+        },
+        ".seo": {
+          "present": true,
+          "hidden": false,
+          "h": 50,
+          "w": 366,
+          "text": "Зачем Animedia Space"
+        },
+        "meta": {
+          "hasNews": false,
+          "hasComments": false,
+          "seoAfterFilters": true,
+          "catalogShelfCount": 2
+        }
+      },
+      "screenshot_sha256": "32ca4be6f851e40dea5c54f562a93386d3468eaa63413f5138c17d58c4705818",
+      "failures": [],
+      "captured_at": "2026-09-20T12:14:29Z"
+    },
+    {
+      "viewport": "m390",
+      "theme": "dark",
+      "mode": "populated",
+      "route": "/",
+      "geom": {
+        "filters": {
+          "present": true,
+          "hidden": false,
+          "h": 48,
+          "w": 366,
+          "text": "Весь каталог Сериалы Фильмы 2026 2025 2024 2001 драма комедия боевик фэнтези"
+        },
+        "top100": {
+          "present": true,
+          "hidden": false,
+          "h": 697,
+          "w": 366,
+          "text": "Топ‑100 А Альфа Аниме · 2026 КП 8.2 Б Бета Аниме · 2025 Д Дельта Аниме · 2001 Г Гамма Аниме · 2024"
+        },
+        ".seo": {
+          "present": true,
+          "hidden": false,
+          "h": 50,
+          "w": 366,
+          "text": "Зачем Animedia Space"
+        },
+        "meta": {
+          "hasNews": false,
+          "hasComments": false,
+          "seoAfterFilters": true,
+          "catalogShelfCount": 2
+        }
+      },
+      "screenshot_sha256": "31711ae16561fb89e9abe3f0c12a90265a5f56fb6d05e7ba9143d78b917abbd6",
+      "failures": [],
+      "captured_at": "2026-09-20T12:14:29Z"
+    },
+    {
+      "viewport": "d1440",
+      "theme": "light",
+      "mode": "gap",
+      "route": "/catalog/",
+      "geom": {
+        "afilt": {
+          "present": true,
+          "hidden": false,
+          "h": 40,
+          "w": 1248,
+          "text": "Тип Формат Год Жанр Страна Сортировка"
+        },
+        "meta": {
+          "hasNews": false,
+          "hasComments": false,
+          "seoAfterFilters": false,
+          "catalogShelfCount": 0
+        }
+      },
+      "screenshot_sha256": "7906fc0ecdc71e2f8a5b99432688e1f0e533f6b8b9ba5a6b9798f5f735aab649",
+      "failures": [],
+      "captured_at": "2026-09-20T12:14:29Z"
+    },
+    {
+      "viewport": "d1440",
+      "theme": "dark",
+      "mode": "gap",
+      "route": "/catalog/",
+      "geom": {
+        "afilt": {
+          "present": true,
+          "hidden": false,
+          "h": 40,
+          "w": 1248,
+          "text": "Тип Формат Год Жанр Страна Сортировка"
+        },
+        "meta": {
+          "hasNews": false,
+          "hasComments": false,
+          "seoAfterFilters": false,
+          "catalogShelfCount": 0
+        }
+      },
+      "screenshot_sha256": "533e9e4e5ba29a7c337bc67cfa68bbb511bd863ed2e008878bbf1b3329e77451",
+      "failures": [],
+      "captured_at": "2026-09-20T12:14:29Z"
+    },
+    {
+      "viewport": "t768",
+      "theme": "light",
+      "mode": "gap",
+      "route": "/catalog/",
+      "geom": {
+        "afilt": {
+          "present": true,
+          "hidden": false,
+          "h": 40,
+          "w": 680,
+          "text": "Тип Формат Год Жанр Страна Сортировка"
+        },
+        "meta": {
+          "hasNews": false,
+          "hasComments": false,
+          "seoAfterFilters": false,
+          "catalogShelfCount": 0
+        }
+      },
+      "screenshot_sha256": "d0a32173cca025cf9b7e8575557f7799f6a940257876203d6deb263cfbb07f9a",
+      "failures": [],
+      "captured_at": "2026-09-20T12:14:29Z"
+    },
+    {
+      "viewport": "t768",
+      "theme": "dark",
+      "mode": "gap",
+      "route": "/catalog/",
+      "geom": {
+        "afilt": {
+          "present": true,
+          "hidden": false,
+          "h": 40,
+          "w": 680,
+          "text": "Тип Формат Год Жанр Страна Сортировка"
+        },
+        "meta": {
+          "hasNews": false,
+          "hasComments": false,
+          "seoAfterFilters": false,
+          "catalogShelfCount": 0
+        }
+      },
+      "screenshot_sha256": "c3d1e9501fbf93815deb299cdb08f74024321fe76d016476fea152bc42869dbd",
+      "failures": [],
+      "captured_at": "2026-09-20T12:14:29Z"
+    },
+    {
+      "viewport": "m390",
+      "theme": "light",
+      "mode": "gap",
+      "route": "/catalog/",
+      "geom": {
+        "afilt": {
+          "present": true,
+          "hidden": false,
+          "h": 52,
+          "w": 342,
+          "text": "Фильтры"
+        },
+        "meta": {
+          "hasNews": false,
+          "hasComments": false,
+          "seoAfterFilters": false,
+          "catalogShelfCount": 0
+        }
+      },
+      "screenshot_sha256": "403010738ee145010c3019b4f7ddbabf916f3863f7f26717ec324ecb15e60125",
+      "failures": [],
+      "captured_at": "2026-09-20T12:14:29Z"
+    },
+    {
+      "viewport": "m390",
+      "theme": "dark",
+      "mode": "gap",
+      "route": "/catalog/",
+      "geom": {
+        "afilt": {
+          "present": true,
+          "hidden": false,
+          "h": 52,
+          "w": 342,
+          "text": "Фильтры"
+        },
+        "meta": {
+          "hasNews": false,
+          "hasComments": false,
+          "seoAfterFilters": false,
+          "catalogShelfCount": 0
+        }
+      },
+      "screenshot_sha256": "81742da83ff2d3952ea8800faa4c5853472487f619587ce231f3e24b3946650b",
+      "failures": [],
+      "captured_at": "2026-09-20T12:14:29Z"
+    }
+  ]
+}

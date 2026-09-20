@@ -1,0 +1,38 @@
+{
+  "viewport": "d1440",
+  "theme": "light",
+  "mode": "populated",
+  "route": "/",
+  "geom": {
+    "filters": {
+      "present": true,
+      "hidden": false,
+      "h": 40,
+      "w": 1344,
+      "text": "Весь каталог Сериалы Фильмы 2026 2025 2024 2001 драма комедия боевик фэнтези"
+    },
+    "top100": {
+      "present": true,
+      "hidden": false,
+      "h": 365,
+      "w": 1344,
+      "text": "Топ‑100 А Альфа Аниме · 2026 КП 8.2 Б Бета Аниме · 2025 Д Дельта Аниме · 2001 Г Гамма Аниме · 2024"
+    },
+    ".seo": {
+      "present": true,
+      "hidden": false,
+      "h": 103,
+      "w": 1000,
+      "text": "Зачем Animedia Space Animedia Space собирает недавно добавленные тайтлы и популярные записи в одном месте: сначала лента каталога, затем топ и тематические подб"
+    },
+    "meta": {
+      "hasNews": false,
+      "hasComments": false,
+      "seoAfterFilters": true,
+      "catalogShelfCount": 2
+    }
+  },
+  "screenshot_sha256": "236a3b143aedec5a7f40276006174015165b9f9eafdb7cf9d01474f083b4387f",
+  "failures": [],
+  "captured_at": "2026-09-20T12:14:29Z"
+}
