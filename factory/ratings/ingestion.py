@@ -59,6 +59,8 @@ class RunMetrics:
     wrong_automatic_mappings: int = 0
     ambiguous_auto_published: int = 0
     last_good_preserved: int = 0
+    accepted_cap_skipped: int = 0
+    accepted_target: int = 0
     checkpoint: dict[str, Any] = field(default_factory=dict)
 
     def as_dict(self) -> dict[str, Any]:
@@ -95,8 +97,13 @@ class IngestionEngine:
         idempotency_key: str | None = None,
         resume: bool = False,
         use_lock: bool = True,
+        accepted_target: int | None = None,
     ) -> RunMetrics:
-        """Ingest up to ``limit`` claimed items. Mutations require apply=True."""
+        """Ingest up to ``limit`` claimed items. Mutations require apply=True.
+
+        ``accepted_target`` hard-caps VALID inserts/refreshes for this run
+        (atomic SQLite gate). Defaults to ``config.daily_success_target``.
+        """
         if apply and dry_run:
             dry_run = False
         if not apply:
@@ -104,12 +111,18 @@ class IngestionEngine:
 
         run_id = run_id or f"run-{uuid.uuid4().hex[:12]}"
         idem = idempotency_key or f"{source_key}:{run_id}"
+        target = (
+            int(accepted_target)
+            if accepted_target is not None
+            else int(self.config.daily_success_target)
+        )
         metrics = RunMetrics(
             source=source_key,
             run_id=run_id,
             started_at=utc_now_iso(),
             dry_run=dry_run,
             planned_candidates=limit,
+            accepted_target=target,
         )
 
         def _body() -> RunMetrics:
@@ -121,6 +134,7 @@ class IngestionEngine:
                 run_id=run_id,
                 idem=idem,
                 resume=resume,
+                accepted_target=target,
             )
 
         if use_lock:
@@ -144,6 +158,7 @@ class IngestionEngine:
         run_id: str,
         idem: str,
         resume: bool,
+        accepted_target: int,
     ) -> RunMetrics:
         existing = self.store.get_run_by_idempotency(idem)
         if existing and not resume:
@@ -168,7 +183,7 @@ class IngestionEngine:
                 idempotency_key=idem,
                 dry_run=dry_run,
                 candidate_cap=self.config.daily_candidate_cap,
-                success_target=self.config.daily_success_target,
+                success_target=accepted_target,
             )
             if not created and not resume:
                 prior = self.store.get_run_by_idempotency(idem)
@@ -212,7 +227,20 @@ class IngestionEngine:
 
         ext_ids = list(by_ext.keys())
         results: dict[str, FetchResult] = {}
+        cap_reached = False
         for start in range(0, len(ext_ids), self.config.batch_size):
+            if cap_reached:
+                # Release remaining claimed items without network fetch
+                for eid in ext_ids[start:]:
+                    for item, _ in by_ext.get(eid, []):
+                        metrics.accepted_cap_skipped += 1
+                        metrics.attempted += 1
+                        self.store.complete_item(
+                            item["id"],
+                            QueueItemState.PENDING,
+                            error="ACCEPTED_CAP_REACHED",
+                        )
+                break
             chunk = ext_ids[start : start + self.config.batch_size]
             try:
                 part = self.adapter.fetch_by_ids(chunk)
@@ -262,13 +290,17 @@ class IngestionEngine:
                         dry_run=dry_run,
                         result=result,
                         worker_id=worker_id,
+                        accepted_target=accepted_target,
                     )
+                    if metrics.inserted >= accepted_target:
+                        cap_reached = True
 
             # Crash-safe checkpoint
             metrics.checkpoint = {
                 "last_external_ids": chunk,
                 "attempted": metrics.attempted,
                 "inserted": metrics.inserted,
+                "accepted_cap_reached": cap_reached,
             }
             self.store.save_checkpoint(run_id, metrics.checkpoint)
 
@@ -297,6 +329,7 @@ class IngestionEngine:
         dry_run: bool,
         result: FetchResult,
         worker_id: str,
+        accepted_target: int,
     ) -> None:
         self.store.heartbeat(item["id"], worker_id, self.config.lease_seconds)
         mapping = self.store.get_mapping(item["canonical_title_id"], source_key) or {}
@@ -336,6 +369,16 @@ class IngestionEngine:
             )
             return
 
+        # Already at accepted hard cap — do not insert further VALID rows.
+        if metrics.inserted >= accepted_target:
+            metrics.accepted_cap_skipped += 1
+            self.store.complete_item(
+                item["id"],
+                QueueItemState.PENDING,
+                error="ACCEPTED_CAP_REACHED",
+            )
+            return
+
         # Score is Shikimori's — never relabel as MAL
         ph = payload_sha256(result.payload)
         existing = self.store.get_current(item["canonical_title_id"], source_key)
@@ -369,7 +412,20 @@ class IngestionEngine:
             ),
         )
         metrics.matched += 1
-        outcome = apply_observation(self.store, obs, dry_run=dry_run)
+        outcome = apply_observation(
+            self.store,
+            obs,
+            dry_run=dry_run,
+            accepted_target=accepted_target,
+        )
+        if outcome.get("action") == "accepted_cap_reached":
+            metrics.accepted_cap_skipped += 1
+            self.store.complete_item(
+                item["id"],
+                QueueItemState.PENDING,
+                error="ACCEPTED_CAP_REACHED",
+            )
+            return
         if outcome.get("inserted"):
             metrics.inserted += 1
             if existing:

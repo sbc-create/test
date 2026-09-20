@@ -50,8 +50,13 @@ def apply_observation(
     obs: RatingObservation,
     *,
     dry_run: bool = True,
+    accepted_target: int | None = None,
 ) -> dict[str, Any]:
-    """Применить наблюдение к current. Невалидное/пустое не затирает last-good."""
+    """Применить наблюдение к current. Невалидное/пустое не затирает last-good.
+
+    When ``accepted_target`` is set, insertion is gated by an atomic per-run
+    accepted count so writers cannot overshoot the daily/pilot cap.
+    """
     existing = store.get_current(obs.canonical_title_id, obs.source_key)
     last_good = existing[0] if existing else None
 
@@ -66,6 +71,8 @@ def apply_observation(
         }
 
     if dry_run:
+        if accepted_target is not None and accepted_target <= 0:
+            return {"action": "accepted_cap_reached", "inserted": False}
         return {
             "action": "dry_run_would_insert",
             "inserted": False,
@@ -73,13 +80,28 @@ def apply_observation(
             "vote_count": obs.vote_count,
         }
 
-    obs_id = store.insert_observation(obs)
-    if obs_id is None:
-        return {
-            "action": "idempotent_skip",
-            "inserted": False,
-            "reason": "duplicate_idempotency_key",
-        }
+    if accepted_target is not None:
+        obs_id, status = store.insert_observation_capped(obs, accepted_target=accepted_target)
+        if status == "accepted_cap_reached":
+            return {
+                "action": "accepted_cap_reached",
+                "inserted": False,
+                "accepted_target": accepted_target,
+            }
+        if status == "idempotent_skip" or obs_id is None:
+            return {
+                "action": "idempotent_skip",
+                "inserted": False,
+                "reason": "duplicate_idempotency_key",
+            }
+    else:
+        obs_id = store.insert_observation(obs)
+        if obs_id is None:
+            return {
+                "action": "idempotent_skip",
+                "inserted": False,
+                "reason": "duplicate_idempotency_key",
+            }
 
     current = RatingCurrent(
         canonical_title_id=obs.canonical_title_id,

@@ -130,13 +130,92 @@ def test_31_day_simulation_gates():
     assert sim["ok"] is True
 
 
-def test_supervised_claim_limit_is_accepted_target():
-    """Regression: Stage5 must claim ≤100, not the full 150 candidate cap."""
+def test_supervised_passes_accepted_target():
+    """Regression: Stage5 must pass accepted_target=100 into ingest."""
     import inspect
 
     from factory.ratings import stage5_supervised as mod
     from factory.ratings.stage5_constants import ACCEPTED_TARGET
 
     src = inspect.getsource(mod.block_06_supervised_cycle)
-    assert "limit=ACCEPTED_TARGET" in src
+    assert "accepted_target=ACCEPTED_TARGET" in src
     assert ACCEPTED_TARGET == 100
+
+
+def test_atomic_accepted_hard_cap(tmp_path: Path):
+    from factory.ratings.adapters.base import FetchResult
+    from factory.ratings.config import RatingsConfig
+    from factory.ratings.ingestion import IngestionEngine
+    from factory.ratings.models import MappingMethod, MappingState, TitleSourceMapping
+    from factory.ratings.rate_limit import RateLimiter
+    from factory.ratings.source_registry import seed_registry
+    from factory.ratings.stage5_constants import ACCEPTED_TARGET
+
+    class Adapter:
+        source_key = "shikimori"
+        adapter_version = "t"
+        rate_limiter = RateLimiter(max_rps=1000, max_per_minute=10000, sleeper=lambda s: None)
+
+        def fetch_by_ids(self, ids):
+            return {
+                eid: FetchResult(
+                    external_id=eid,
+                    found=True,
+                    raw_score=8.0,
+                    vote_count=5,
+                    payload={"id": eid, "score": 8.0},
+                    provenance_url="u",
+                )
+                for eid in ids
+            }
+
+    db = tmp_path / "cap.sqlite"
+    store = RatingsStore(db)
+    seed_registry(store)
+    for i in range(150):
+        store.upsert_mapping(
+            TitleSourceMapping(
+                canonical_title_id=f"nova:{i}",
+                source_key="shikimori",
+                external_title_id=str(i),
+                mapping_method=MappingMethod.SHIKIMORI_ID,
+                confidence=1.0,
+                state=MappingState.VERIFIED,
+                verified_at="2026-09-20T00:00:00Z",
+            )
+        )
+        store.enqueue(
+            canonical_title_id=f"nova:{i}",
+            source_key="shikimori",
+            priority=10,
+            priority_label="t",
+        )
+    cfg = RatingsConfig(
+        daily_success_target=ACCEPTED_TARGET,
+        daily_candidate_cap=150,
+        batch_size=50,
+        db_path=db,
+    )
+    m = IngestionEngine(store, Adapter(), cfg).ingest(
+        source_key="shikimori",
+        limit=150,
+        dry_run=False,
+        apply=True,
+        run_id="cap-test",
+        idempotency_key="cap-test",
+        use_lock=False,
+        accepted_target=ACCEPTED_TARGET,
+    )
+    assert m.inserted == ACCEPTED_TARGET
+    assert store.count_accepted_for_run("cap-test") == ACCEPTED_TARGET
+    assert m.accepted_cap_skipped > 0
+    store.close()
+
+
+def test_cli_rejects_amd_source():
+    from factory.ratings.cli import _adapter
+    from factory.ratings.config import RatingsConfig
+
+    cfg = RatingsConfig(db_path=Path("/tmp/x.sqlite"))
+    with pytest.raises(SystemExit):
+        _adapter("amd_online", cfg)

@@ -1,0 +1,230 @@
+{
+  "as_of": "2026-09-20T10:32:42Z",
+  "run_id": "stage5-supervised-20260919T224456Z-9bc222",
+  "source": "shikimori",
+  "ACCEPTED_TARGET": 100,
+  "TOTAL_OBSERVATIONS_FOR_RUN": 125,
+  "WITHIN_CAP_COUNT": 100,
+  "OVERSHOOT_COUNT": 25,
+  "OVERSHOOT_RETAINED": 1,
+  "OVERSHOOT_DELETED": 0,
+  "DELETE_POLICY": "retain_valid_observations_no_blind_delete",
+  "AMD_ROWS_UNCHANGED": true,
+  "AMD_OBSERVATION_COUNT": 100,
+  "USER_VOTE_ROWS_UNCHANGED": true,
+  "USER_VOTE_COUNT": 0,
+  "within_cap_id_range": [
+    101,
+    200
+  ],
+  "overshoot_id_range": [
+    201,
+    225
+  ],
+  "within_cap_head": [
+    {
+      "id": 101,
+      "canonical_title_id": "nova:01a0b507-3280-7b2a-8af4-674dd73cff72",
+      "external_id": "53477"
+    },
+    {
+      "id": 102,
+      "canonical_title_id": "nova:01a0af3f-a972-76be-a845-326a4a565a93",
+      "external_id": "33253"
+    },
+    {
+      "id": 103,
+      "canonical_title_id": "nova:01a09cfb-640a-7909-be9f-a03fb2178c42",
+      "external_id": "10338"
+    },
+    {
+      "id": 104,
+      "canonical_title_id": "nova:01a09cf5-02a7-7909-b8f3-4ee5e72de92e",
+      "external_id": "10209"
+    },
+    {
+      "id": 105,
+      "canonical_title_id": "nova:01a09ced-2b8c-7909-94c8-b6714f1d8109",
+      "external_id": "1002"
+    }
+  ],
+  "overshoot_all": [
+    {
+      "id": 201,
+      "canonical_title_id": "nova:019ef9d6-0eea-7ed4-8899-2390be34735f",
+      "external_id": "56735",
+      "normalized_score": 6.85,
+      "observed_at": "2026-09-19T22:45:38Z"
+    },
+    {
+      "id": 202,
+      "canonical_title_id": "nova:019ef4a6-c901-7348-8351-114efd236bba",
+      "external_id": "776",
+      "normalized_score": 6.6,
+      "observed_at": "2026-09-19T22:45:38Z"
+    },
+    {
+      "id": 203,
+      "canonical_title_id": "nova:019ee4ec-9250-7081-a023-c16e0830e030",
+      "external_id": "62276",
+      "normalized_score": 8.7,
+      "observed_at": "2026-09-19T22:45:38Z"
+    },
+    {
+      "id": 204,
+      "canonical_title_id": "nova:019ee040-7d44-7445-86d2-6c573c439560",
+      "external_id": "62241",
+      "normalized_score": 7.59,
+      "observed_at": "2026-09-19T22:45:38Z"
+    },
+    {
+      "id": 205,
+      "canonical_title_id": "nova:019edb89-5337-74d7-ad25-c5e325240fdb",
+      "external_id": "34742",
+      "normalized_score": 6.71,
+      "observed_at": "2026-09-19T22:45:38Z"
+    },
+    {
+      "id": 206,
+      "canonical_title_id": "nova:019edadb-4a5a-74b1-a37a-71ecab32e8a7",
+      "external_id": "63833",
+      "normalized_score": 7.26,
+      "observed_at": "2026-09-19T22:45:38Z"
+    },
+    {
+      "id": 207,
+      "canonical_title_id": "nova:019ecc6f-f6dd-7bca-98dd-496e63967526",
+      "external_id": "8767",
+      "normalized_score": 6.7,
+      "observed_at": "2026-09-19T22:45:38Z"
+    },
+    {
+      "id": 208,
+      "canonical_title_id": "nova:019ec6da-bf82-73e9-a3de-505997c5454e",
+      "external_id": "63316",
+      "normalized_score": 6.62,
+      "observed_at": "2026-09-19T22:45:38Z"
+    },
+    {
+      "id": 209,
+      "canonical_title_id": "nova:019eae9c-b60d-7100-aaaf-53a1a76ca3ab",
+      "external_id": "61642",
+      "normalized_score": 7.08,
+      "observed_at": "2026-09-19T22:45:38Z"
+    },
+    {
+      "id": 210,
+      "canonical_title_id": "nova:019e8dfc-6ee8-74f3-bd05-b92ba9f86f81",
+      "external_id": "62076",
+      "normalized_score": 8.31,
+      "observed_at": "2026-09-19T22:45:38Z"
+    },
+    {
+      "id": 211,
+      "canonical_title_id": "nova:019e820c-1c30-7466-9e8f-801577489ce1",
+      "external_id": "51291",
+      "normalized_score": 6.72,
+      "observed_at": "2026-09-19T22:45:38Z"
+    },
+    {
+      "id": 212,
+      "canonical_title_id": "nova:01a0aa6e-2008-70d0-89d1-1af7b85336b1",
+      "external_id": "30869",
+      "normalized_score": 7.2,
+      "observed_at": "2026-09-19T22:45:38Z"
+    },
+    {
+      "id": 213,
+      "canonical_title_id": "nova:01a09d0c-f740-7909-b36f-3689522bf61e",
+      "external_id": "10500",
+      "normalized_score": 7.48,
+      "observed_at": "2026-09-19T22:45:38Z"
+    },
+    {
+      "id": 214,
+      "canonical_title_id": "nova:01a09d0b-9513-7909-a38f-900e1d9f8b62",
+      "external_id": "10501",
+      "normalized_score": 5.99,
+      "observed_at": "2026-09-19T22:45:38Z"
+    },
+    {
+      "id": 215,
+      "canonical_title_id": "nova:01a09d0a-504b-7909-ac34-43a702b6d3c9",
+      "external_id": "1049",
+      "normalized_score": 6.91,
+      "observed_at": "2026-09-19T22:45:38Z"
+    },
+    {
+      "id": 216,
+      "canonical_title_id": "nova:01a09d05-ab74-7909-b087-1ffc479aec8b",
+      "external_id": "10448",
+      "normalized_score": 7.08,
+      "observed_at": "2026-09-19T22:45:38Z"
+    },
+    {
+      "id": 217,
+      "canonical_title_id": "nova:01a09d02-7e49-7909-9c6c-961b9d115d27",
+      "external_id": "10417",
+      "normalized_score": 5.32,
+      "observed_at": "2026-09-19T22:45:38Z"
+    },
+    {
+      "id": 218,
+      "canonical_title_id": "nova:01a09cf8-2fc0-7909-b31d-82452b65a3f4",
+      "external_id": "15437",
+      "normalized_score": 7.41,
+      "observed_at": "2026-09-19T22:45:38Z"
+    },
+    {
+      "id": 219,
+      "canonical_title_id": "nova:01a09ceb-cf13-7909-9f0d-55cc4ff59423",
+      "external_id": "1911",
+      "normalized_score": 7.39,
+      "observed_at": "2026-09-19T22:45:38Z"
+    },
+    {
+      "id": 220,
+      "canonical_title_id": "nova:01a09ce3-bf37-7909-820d-c8ac3b116f28",
+      "external_id": "10017",
+      "normalized_score": 6.58,
+      "observed_at": "2026-09-19T22:45:38Z"
+    },
+    {
+      "id": 221,
+      "canonical_title_id": "nova:01a09ce0-7b41-7909-9970-51bdb3121042",
+      "external_id": "30868",
+      "normalized_score": 7.41,
+      "observed_at": "2026-09-19T22:45:39Z"
+    },
+    {
+      "id": 222,
+      "canonical_title_id": "nova:01a09cdd-5599-7909-be3d-76237d08c43a",
+      "external_id": "10405",
+      "normalized_score": 6.14,
+      "observed_at": "2026-09-19T22:45:39Z"
+    },
+    {
+      "id": 223,
+      "canonical_title_id": "nova:01a09cd8-d08c-7909-afa9-b988ca6c3fdf",
+      "external_id": "1034",
+      "normalized_score": 7.47,
+      "observed_at": "2026-09-19T22:45:39Z"
+    },
+    {
+      "id": 224,
+      "canonical_title_id": "nova:01a09ccc-73b1-7909-9932-01bae7df7da1",
+      "external_id": "10074",
+      "normalized_score": 6.69,
+      "observed_at": "2026-09-19T22:45:39Z"
+    },
+    {
+      "id": 225,
+      "canonical_title_id": "nova:01a09ccb-32a4-7909-a634-56dc6065f830",
+      "external_id": "1006",
+      "normalized_score": 7.44,
+      "observed_at": "2026-09-19T22:45:39Z"
+    }
+  ],
+  "reconciliation_digest": "2f192c58407fd06292a4947030cea6a21c86168b34d0bca696731e56c51be0cc",
+  "note": "First ACCEPTED_TARGET rows by ascending observation id are the authorized Stage5 cohort. Remaining rows are overshoot retained as valid last-good data; no production DELETE performed."
+}

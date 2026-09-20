@@ -265,6 +265,76 @@ class RatingsStore:
         row = self.conn.execute("SELECT COUNT(*) AS c FROM rating_observations").fetchone()
         return int(row["c"])
 
+    def count_accepted_for_run(self, run_id: str) -> int:
+        """Count VALID scored observations attributed to a run (accepted toward daily cap)."""
+        row = self.conn.execute(
+            """SELECT COUNT(*) AS c FROM rating_observations
+               WHERE run_id=? AND validation_state=?
+                 AND normalized_score IS NOT NULL AND vote_count IS NOT NULL
+                 AND vote_count > 0""",
+            (run_id, ValidationState.VALID.value),
+        ).fetchone()
+        return int(row["c"])
+
+    def insert_observation_capped(
+        self,
+        obs: RatingObservation,
+        *,
+        accepted_target: int,
+    ) -> tuple[int | None, str]:
+        """Atomically insert if run accepted count is still below target.
+
+        Uses BEGIN IMMEDIATE so concurrent writers cannot overshoot the cap.
+        Returns (observation_id|None, status) where status is one of:
+        inserted | idempotent_skip | accepted_cap_reached
+        """
+        if accepted_target <= 0:
+            return None, "accepted_cap_reached"
+        self.conn.execute("BEGIN IMMEDIATE")
+        try:
+            current = self.count_accepted_for_run(obs.run_id)
+            if current >= accepted_target:
+                self.conn.execute("COMMIT")
+                return None, "accepted_cap_reached"
+            try:
+                cur = self.conn.execute(
+                    """INSERT INTO rating_observations (
+                        canonical_title_id, source_key, external_id, raw_score,
+                        source_scale, normalized_score, vote_count, score_distribution,
+                        source_updated_at, observed_at, payload_sha256, adapter_version,
+                        provenance_url, mapping_method, validation_state, run_id,
+                        idempotency_key)
+                       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                    (
+                        obs.canonical_title_id,
+                        obs.source_key,
+                        obs.external_id,
+                        obs.raw_score,
+                        obs.source_scale,
+                        obs.normalized_score,
+                        obs.vote_count,
+                        json.dumps(obs.score_distribution) if obs.score_distribution else None,
+                        obs.source_updated_at,
+                        obs.observed_at,
+                        obs.payload_sha256,
+                        obs.adapter_version,
+                        obs.provenance_url,
+                        obs.mapping_method.value,
+                        obs.validation_state.value,
+                        obs.run_id,
+                        obs.idempotency_key,
+                    ),
+                )
+                obs_id = int(cur.lastrowid)
+                self.conn.execute("COMMIT")
+                return obs_id, "inserted"
+            except sqlite3.IntegrityError:
+                self.conn.execute("COMMIT")
+                return None, "idempotent_skip"
+        except Exception:
+            self.conn.execute("ROLLBACK")
+            raise
+
     # ---- current projection ----------------------------------------------
     def upsert_current(self, current: RatingCurrent) -> None:
         self.conn.execute(

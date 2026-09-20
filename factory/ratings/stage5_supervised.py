@@ -370,14 +370,15 @@ def block_06_supervised_cycle(
 
     metrics = engine.ingest(
         source_key=SOURCE_ALLOWED,
-        # Claim at most ACCEPTED_TARGET so we cannot insert above the daily cap.
-        # Candidate queue may still hold up to CANDIDATE_CAP for planning/evidence.
-        limit=ACCEPTED_TARGET,
+        # Claim may exceed target so mapping misses can still fill the day,
+        # but accepted_target hard-caps inserts atomically at ACCEPTED_TARGET.
+        limit=CANDIDATE_CAP,
         dry_run=False,
         apply=True,
         run_id=run_id,
         idempotency_key=f"stage5:{run_id}",
         use_lock=False,  # outer lease held
+        accepted_target=ACCEPTED_TARGET,
     )
     m = metrics.as_dict()
     newly = int(m.get("inserted") or 0)
