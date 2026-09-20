@@ -2068,6 +2068,19 @@ background:@SURF@;color:@INK@;font:inherit;font-size:13px;max-width:100%}
 .zfilt__y a[data-count]::after{content:attr(data-count);margin-left:4px;color:@MUTE@;font-size:11px}
 .zhub--home{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(min-width:768px){.zhub--home{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* B06 genre chips */
+.zgenres__nav{display:flex;flex-wrap:wrap;gap:8px}
+.zgenres__nav a{display:inline-flex;align-items:center;min-height:36px;max-height:40px;
+padding:0 12px;border-radius:8px;border:1px solid @LINE@;background:@SURF@;font-size:13px;font-weight:600}
+/* B08 about collapse on mobile */
+@media(max-width:767px){
+.zsec--seo p:nth-of-type(n+2){display:none}
+.zsec--seo.is-open p{display:block}
+.zsec--seo__more{display:inline-flex;min-height:44px;align-items:center;margin-top:4px;
+background:none;border:0;color:@ACC@;font:inherit;font-weight:700;cursor:pointer;padding:0}
+}
+@media(min-width:768px){.zsec--seo__more{display:none}}
 .zsec--seo{margin:28px 0 8px}
 .ztop__b{max-width:100%;overflow-wrap:anywhere}
 
@@ -4424,9 +4437,10 @@ class ВидЗона(Вид):
         help_col = (f'<div class="zft__col"><b>Помощь</b>{помощь}</div>' if помощь else "")
         docs_col = (f'<div class="zft__col"><b>Документы</b>{документы}</div>' if документы else "")
         cols_mod = ' zft__cols--fallback' if contact_missing else ""
-        marker = (f'<span class="zvb" data-contact-config-missing="{1 if contact_missing else 0}" '
-                  f'data-footer-contact-gate="{0 if contact_missing else 1}">'
-                  f'Zona · {html.escape(ВЕРСИЯ)} · {html.escape(source)}</span>')
+        # B22: never show version/commit/build in public footer.
+        marker = (f'<span class="zvb vh" data-contact-config-missing="{1 if contact_missing else 0}" '
+                  f'data-footer-contact-gate="{0 if contact_missing else 1}" '
+                  f'data-footer-technical-marker="0"></span>')
         return (
             '<footer class="zft" data-testid="site-footer">'
             f'<div class="zft__cols{cols_mod}">'
@@ -4879,7 +4893,11 @@ class ВидЗона(Вид):
             "<p>Страница названия показывает описание (если оно передано источником), "
             "оценки, список серий и плеер. Если дорожки серии ещё нет, она отмечена "
             "как недоступная и не открывает пустой плеер.</p>"
-            "</section>")
+            '<button type="button" class="zsec--seo__more" data-seo-more>Читать далее</button>'
+            "</section>"
+            '<script>(function(){var b=document.querySelector("[data-seo-more]");if(!b)return;'
+            'b.addEventListener("click",function(){var s=b.closest(".zsec--seo");if(!s)return;'
+            's.classList.add("is-open");b.hidden=true;});})();</script>')
         return self.оболочка(
             _склеить(куски),
             f"{self.имя} — кинопортал", "/", актив="/",
