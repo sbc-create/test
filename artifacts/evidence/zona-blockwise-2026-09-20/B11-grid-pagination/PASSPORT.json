@@ -1,0 +1,26 @@
+{
+  "block": "B11",
+  "title": "Catalog grid and pagination",
+  "status": "PASS_LOCAL",
+  "head_before": "7f3743dc7a3b656a207ffd8e68886bbfa3342d56",
+  "contract_digest": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+  "gates": {
+    "CATALOG_PAGE_SIZE": 28,
+    "PAGINATION_DUPLICATES": 0,
+    "PAGINATION_MISSING_ITEMS": 0,
+    "INVALID_PAGE_HTTP_404": 1,
+    "PAGE1_CANONICAL_PASS": 1,
+    "PAGINATION_SORT_VIOLATIONS": 0,
+    "PAGINATION_QUERY_LOSSES": 0
+  },
+  "oracle_scope": "deterministic synthetic catalog n=120 covering pages 1-3 + invalid page + page1 canonical; full production catalog oracle deferred to B23 matrix against pinned snapshot",
+  "tests": "tests/lords/test_zona_blockwise_b10_b11.py::test_b11_* (PASS)",
+  "residual": [
+    {
+      "item": "full_catalog_oracle_53524",
+      "owner": "qa",
+      "next_step": "B23 local matrix against pinned catalog digest"
+    }
+  ],
+  "updated_at": "2026-09-20T13:35:00Z"
+}
