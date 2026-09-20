@@ -112,12 +112,14 @@ def зона(tmp_path_factory):
 def test_home_has_five_distinct_shelves_not_new_duplicate(зона):
     о = запросить(зона, "/")
     assert о.статус == 200
-    assert "Популярные новинки фильмов" in о.тело
-    assert "Популярные сериалы" in о.тело
+    assert "Высокий рейтинг среди недавних фильмов" in о.тело
+    assert "Высокий рейтинг среди недавних сериалов" in о.тело
     assert "Добавленные недавно фильмы" in о.тело
-    assert "Новые серии" in о.тело
-    assert "Популярная анимация" in о.тело
+    assert "Недавно добавленные сериалы" in о.тело
+    assert "Высокий рейтинг среди недавней анимации" in о.тело
     assert "Недавно в каталоге" not in о.тело
+    assert "Популярные новинки" not in о.тело
+    assert "Новые серии" not in о.тело or "Недавно добавленные сериалы" in о.тело
     # Shelf «Весь раздел» must not point the removed duplicate at /new/.
     assert 'data-shelf="new-all"' not in о.тело
 

@@ -518,8 +518,9 @@ def _недоступные(семейство: str, ключи: tuple[str, ...]
                   "catalog", {"kind": "Сериал", "release_mode": "premiere"},
                   {"field": "premiere_date", "order": "desc"},
                   "premiere_date", "/collection/new_series_releases/"),
-            _спец("new_episodes", "zona", "Новые эпизоды",
-                  "Сериалы в порядке появления в каталоге.",
+            _спец("new_episodes", "zona", "Недавно добавленные сериалы",
+                  "Сериалы в порядке появления в каталоге. "
+                  "Отдельных дат эпизодов в авторизованном снимке нет.",
                   "catalog", {"kind": "Сериал"}, {"field": "published_at", "order": "desc"},
                   "published_at", "/collection/new_episodes/"),
             _спец("top_rated", "zona", "Высокие оценки",

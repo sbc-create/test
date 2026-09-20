@@ -37,6 +37,7 @@ import json
 import os
 import re
 import sys
+import threading
 import unicodedata
 from difflib import SequenceMatcher
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -588,24 +589,38 @@ def закодировать_запрос(url: str) -> str:
 class Снимок:
     """Ленивый неизменяемый снимок для контракта коллекций.
 
-    Строится один раз на процесс. Раньше каждый блок главной отдельно обходил
-    весь каталог на каждом запросе; теперь порядок и разрезы считаются однажды.
+    Пересобирается при смене revision каталога. Раньше строился один раз на
+    процесс и после atomic publish без restart полки коллекций застывали.
     """
 
     _снимок = None
 
     @classmethod
     def получить(cls, данные, подробности):
-        if cls._снимок is None and КОЛЛЕКЦИИ is not None:
+        if КОЛЛЕКЦИИ is None:
+            return None
+        ревизия = getattr(данные, "revision", "") or ""
+        текущая = getattr(cls._снимок, "data_revision", None) if cls._снимок else None
+        if cls._снимок is None or текущая != ревизия:
             cls._снимок = КОЛЛЕКЦИИ.Снимок(
                 данные.items, getattr(подробности, "записи", None) or {},
-                revision=getattr(данные, "revision", "") or "")
+                revision=ревизия)
         return cls._снимок
+
+    @classmethod
+    def сбросить(cls) -> None:
+        cls._снимок = None
 
 
 class Данные:
     def __init__(self, путь: str):
-        сырое = json.loads(Path(путь).read_text(encoding="utf-8"))
+        путь_п = Path(путь)
+        сырое = json.loads(путь_п.read_text(encoding="utf-8"))
+        self.path = str(путь_п)
+        try:
+            self.mtime = путь_п.stat().st_mtime
+        except OSError:
+            self.mtime = 0.0
         self.items = сырое["items"]
         self.absent = сырое.get("fields_absent", [])
         self.revision = str(сырое.get("revision") or "")
@@ -963,10 +978,14 @@ class Подробности:
         self.покрытие = 0
         self.catalog_revision = ""
         self.catalog_built_at = ""
+        self.path = str(путь or "")
+        self.mtime = 0.0
         if not путь:
             return
         try:
-            сырое = json.loads(Path(путь).read_text(encoding="utf-8"))
+            путь_п = Path(путь)
+            self.mtime = путь_п.stat().st_mtime
+            сырое = json.loads(путь_п.read_text(encoding="utf-8"))
         except (OSError, ValueError):
             return
         записи = сырое.get("details")
@@ -4430,9 +4449,9 @@ class ВидЗона(Вид):
         def свежесть(з: dict) -> str:
             return з.get("published_at") or ""
 
-        #: Пул для «популярного» ограничен намеренно: сортировать 50 тысяч
-        #: записей по оценке на каждый запрос незачем, а «популярное среди
-        #: недавнего» — честная формулировка того, что здесь считается.
+        #: Пул для рейтинга среди недавних ограничен намеренно: сортировать
+        #: 50 тысяч записей по оценке на каждый запрос незачем. Это НЕ сигнал
+        #: популярности (просмотры/активность) — таких полей в снимке нет.
         ПУЛ = 400
 
         def выбрать(вид: str | None, ключ, сколько: int = 12,
@@ -4461,21 +4480,23 @@ class ВидЗона(Вид):
         # Five distinct shelves. No sixth «Недавно в каталоге» row: it reused
         # freshness+playable after new-films/new-eps and linked to /new/, which
         # is premiere-only — duplicate algorithm + wrong «Весь раздел» target.
+        # Rating shelves are labeled as rating, not «популярное»: popularity
+        # signal is absent. «Новые серии» renamed — episode timestamps absent.
         ленты = [
-            ("pop-films", "Популярные новинки фильмов", "/movies/",
+            ("pop-films", "Высокий рейтинг среди недавних фильмов", "/movies/",
              выбрать("Фильм", оценка, пул=ПУЛ),
              ""),
-            ("pop-series", "Популярные сериалы", "/series/",
+            ("pop-series", "Высокий рейтинг среди недавних сериалов", "/series/",
              выбрать("Сериал", оценка, пул=ПУЛ),
              ""),
             ("new-films", "Добавленные недавно фильмы", "/movies/",
              выбрать("Фильм", свежесть, условие=есть_источник),
              ""),
-            ("new-eps", "Новые серии", "/series/",
+            ("new-eps", "Недавно добавленные сериалы", "/series/",
              выбрать("Сериал", свежесть,
                      условие=lambda з: есть_серии(з) and есть_источник(з)),
              ""),
-            ("pop-anim", "Популярная анимация", "/animation/",
+            ("pop-anim", "Высокий рейтинг среди недавней анимации", "/animation/",
              выбрать("Мультфильм", оценка, пул=ПУЛ),
              ""),
         ]
@@ -4490,7 +4511,7 @@ class ВидЗона(Вид):
                 "new-movies": "Новые фильмы",
                 "new_movie_releases": "Премьеры фильмов",
                 "new_series_releases": "Новые сериалы",
-                "new_episodes": "Новые эпизоды",
+                "new_episodes": "Недавно добавленные сериалы",
                 "top-rated": "С высокими оценками",
                 "top_rated": "С высокими оценками",
                 "current_season": "Этого года",
@@ -4499,7 +4520,7 @@ class ВидЗона(Вид):
                 "genre_drama": "Драмы",
                 "genre_thriller": "Триллеры",
                 "genre_animation": "Анимация",
-                "popular": "Популярное в каталоге",
+                "popular": "С высокими оценками",
             }
             for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО)[:12]:
                 if not спец.доступна:
@@ -4550,7 +4571,8 @@ class ВидЗона(Вид):
             '<section class="zsec zsec--seo" aria-labelledby="zona-seo-h">'
             '<h2 id="zona-seo-h">Смотреть кино и сериалы на Zona</h2>'
             f'<p>{html.escape(self.имя)} — витрина фильмов, сериалов и анимации. '
-            "На главной собраны популярные новинки, свежие поступления и анимация; "
+            "На главной собраны высокие оценки среди недавних поступлений, "
+            "свежие фильмы и сериалы и анимация; "
             "полный список открывается в каталоге с фильтрами по виду, жанру, году "
             "и стране.</p>"
             "<p>Разделы "
@@ -5816,9 +5838,61 @@ class Обработчик(BaseHTTPRequestHandler):
     данные: Данные = None  # проставляется при запуске
     подробности: Подробности = None  # то же: боковой файл подробностей
     индекс: dict = None  # индексы по slug и жанру
+    _snapshot_lock = threading.Lock()
 
     def log_message(self, *a):
         pass
+
+    @classmethod
+    def _ensure_fresh_snapshots(cls) -> bool:
+        """Reload catalog/details when authorized snapshot files change.
+
+        Atomic publish updates zona-01-*.json without a frontend deploy. Without
+        this check the process kept last-good membership until restart, so a
+        successful daily publish that skipped restart would leave shelves stale.
+        Empty/unreadable updates keep the previous in-memory snapshot.
+
+        Always mutates the base ``Обработчик`` class attributes: test stubs
+        subclass the handler, and assigning on the subclass would shadow the
+        process-wide snapshot the next request still reads from the base.
+        """
+        target = Обработчик
+        cat_path = Path(КАТАЛОГ_ФАЙЛ)
+        det_path = Path(ПОДРОБНОСТИ_ФАЙЛ) if ПОДРОБНОСТИ_ФАЙЛ else None
+        try:
+            cat_mtime = cat_path.stat().st_mtime
+        except OSError:
+            return False
+        det_mtime = 0.0
+        if det_path is not None:
+            try:
+                det_mtime = det_path.stat().st_mtime
+            except OSError:
+                det_mtime = getattr(target.подробности, "mtime", 0.0) or 0.0
+        cur_cat = getattr(target.данные, "mtime", 0.0) or 0.0
+        cur_det = getattr(target.подробности, "mtime", 0.0) or 0.0
+        if cat_mtime <= cur_cat and det_mtime <= cur_det:
+            return False
+        with target._snapshot_lock:
+            cur_cat = getattr(target.данные, "mtime", 0.0) or 0.0
+            cur_det = getattr(target.подробности, "mtime", 0.0) or 0.0
+            if cat_mtime <= cur_cat and det_mtime <= cur_det:
+                return False
+            try:
+                новые_данные = Данные(КАТАЛОГ_ФАЙЛ)
+            except (OSError, ValueError, KeyError, json.JSONDecodeError):
+                return False
+            if not новые_данные.items:
+                return False
+            try:
+                новые_подробности = Подробности(ПОДРОБНОСТИ_ФАЙЛ)
+            except (OSError, ValueError, KeyError, json.JSONDecodeError):
+                новые_подробности = target.подробности
+            target.данные = новые_данные
+            target.подробности = новые_подробности
+            target.индекс = построить_индекс(target.данные, target.подробности)
+            Снимок.сбросить()
+            return True
 
     def _отдать(self, тело: bytes, тип="text/html; charset=utf-8", код=200):
         # SEO-слой применяется здесь и только здесь: через эту точку уходит
@@ -5843,6 +5917,16 @@ class Обработчик(BaseHTTPRequestHandler):
         self.send_header("X-Site-Factory-Template-Version", ВЕРСИЯ)
         self.send_header("X-Site-Factory-Build-Id", СБОРКА)
         self.send_header("X-Site-Factory-Artifact-Sha256", МАНИФЕСТ["artifact_sha256"])
+        рев = getattr(self.данные, "revision", "") or ""
+        built = getattr(self.данные, "built_at", "") or ""
+        if рев:
+            self.send_header("X-Catalog-Revision", рев)
+        if built:
+            self.send_header("X-Catalog-Built-At", built)
+        # Digest participates in cache identity for any intermediary that
+        # ignores no-store; browser/CDN must not reuse across revisions.
+        if рев:
+            self.send_header("ETag", f'W/"cat-{рев}"')
         self.send_header("Cache-Control", "no-store")
         self.end_headers()
         if self.command != "HEAD":
@@ -5852,6 +5936,7 @@ class Обработчик(BaseHTTPRequestHandler):
         self.do_GET()
 
     def do_GET(self):
+        self._ensure_fresh_snapshots()
         д = self.данные
         разбор = urlparse(self.path)
         путь = unquote(разбор.path)

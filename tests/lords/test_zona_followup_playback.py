@@ -289,7 +289,7 @@ class TestGenres:
         assert "Смотреть по жанрам" in о.тело
         assert 'class="zgenres"' in о.тело
         pos_genres = о.тело.find("Смотреть по жанрам")
-        pos_first = о.тело.find("Популярные новинки фильмов")
+        pos_first = о.тело.find("Высокий рейтинг среди недавних фильмов")
         assert pos_first != -1 and pos_genres != -1
         assert pos_first < pos_genres
 
