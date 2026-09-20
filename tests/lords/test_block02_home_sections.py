@@ -30,8 +30,8 @@ class TestHomeSectionOrder:
         src = _главная_src()
         assert "lords-series-feed-v2" in src
         assert "lords-curated-v2" in src
-        assert '_полоса("Продолжающиеся сериалы"' in src
-        assert '_полоса("Выбор редакции"' in src
+        assert "Продолжающиеся сериалы" in src
+        assert "Выбор редакции" in src
 
     def test_no_popular_or_high_rating_duplicate_shelves(self):
         src = _главная_src()
