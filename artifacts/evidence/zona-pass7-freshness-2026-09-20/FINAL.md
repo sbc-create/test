@@ -7,9 +7,9 @@ VERDICT=PASS_FRESHNESS_CONTRACT_AND_LIVE_SYNC
 BRANCH=claude/zona-template-finalization-01
 START_HEAD=22ee5ab90ff6b4a8209b735858495a7691efb25c
 FEATURE_HEAD=d35e6349b2fd2ed64a3adb700cf3971963694489
-REPORT_HEAD=d35e6349b2fd2ed64a3adb700cf3971963694489
-FINAL_HEAD=d35e6349b2fd2ed64a3adb700cf3971963694489
-COMMITS=d35e634 (contracts+tests); evidence commit follows
+REPORT_HEAD=9c695b008ba63ec828d3e03f8924cddf213ca152
+FINAL_HEAD=9c695b008ba63ec828d3e03f8924cddf213ca152
+COMMITS=d35e634 (contracts+tests); 9c695b0 (evidence+deploy provenance)
 TESTS=37 passed targeted (pass7 freshness + pass5/6 regression subset)
 
 LIVE_BUILD_BEFORE=20260919T224255Z-88cd272f-nova
