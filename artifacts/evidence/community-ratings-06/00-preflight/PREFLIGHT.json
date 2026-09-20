@@ -1,0 +1,64 @@
+{
+  "STAGE": "COMMUNITY-RATINGS-06",
+  "START_HEAD": "4f2c234d1662ee1c55bfabd2bbac8557875a6cb5",
+  "BRANCH": "cursor/ratings-ingestion-01",
+  "OWNER_APPROVAL_ID": "COMMUNITY-RATINGS-YUMMY-PUBLIC-WRITE-1PCT-20260920-01",
+  "CANONICAL_DB": "/srv/site-factory/repo/var/ratings/ratings.sqlite",
+  "DB_DIGEST": "3e94aade6d7e160ac23d40200c1e39770817e4d96ef57b61dc4cb84bbd9c3b60",
+  "BACKUP_PATH": "/srv/site-factory/repo/var/ratings/backups/ratings.sqlite.community06.20260920T202553Z.bak",
+  "BACKUP_DIGEST": "3e94aade6d7e160ac23d40200c1e39770817e4d96ef57b61dc4cb84bbd9c3b60",
+  "BACKUP_DIGEST_MATCH": true,
+  "RESTORE_REHEARSAL_PASS": 1,
+  "SQLITE_INTEGRITY_CHECK": "ok",
+  "FOREIGN_KEY_FAILURES": 0,
+  "WAL_MODE": "wal",
+  "BUSY_TIMEOUT": 5000,
+  "RATING_POLICY_DIGEST": "a2daf212d92ea40dc3de658806fb6f5f5cf7ae77890ff0c25f81bd89088c17d5",
+  "SCHEMA_MIGRATIONS_COUNT": 4,
+  "AGGREGATE_REBUILD_MISMATCHES": 0,
+  "CANARY_VOTES_REMAINING": 0,
+  "ACCEPTED_VOTES": 0,
+  "YUMMY_NATIVE_VOTE_COUNT_BEFORE": 0,
+  "ANIMEDIA_NATIVE_VOTE_COUNT_BEFORE": 0,
+  "YUMMY_AGGREGATE_ROWS": 1,
+  "COMMENTS_ROWS": 0,
+  "FLAGS": {
+    "RATINGS_PUBLIC_READ_ANIMEDIA": 1,
+    "RATINGS_PUBLIC_READ_YUMMY": 1,
+    "RATINGS_NATIVE_WRITE_ANIMEDIA": 0,
+    "RATINGS_NATIVE_WRITE_YUMMY": 0,
+    "RATINGS_ADMIN_READ_ENABLED": 1,
+    "RATINGS_ADMIN_MODERATION_WRITE_ENABLED": 0,
+    "COMMENTS_ENABLED": 0,
+    "COMMENTS_PUBLICATION_ENABLED": 0,
+    "COMMENTS_SEO_RENDERING_ENABLED": 0,
+    "COMMENTS_PUBLIC_ROUTES_ENABLED": 0,
+    "COMMENTS_ADMIN_ENABLED": 0
+  },
+  "INDEXABILITY_BEFORE": {
+    "yummyani.site": {
+      "status": 200,
+      "x_robots": null,
+      "allow_root": true,
+      "disallow_all": false,
+      "meta_index": true
+    },
+    "animedia.icu": {
+      "status": 200,
+      "x_robots": "noindex, nofollow",
+      "allow_root": false,
+      "disallow_all": true,
+      "meta_index": false
+    },
+    "animedia.space": {
+      "status": 200,
+      "x_robots": "noindex, nofollow",
+      "allow_root": false,
+      "disallow_all": true,
+      "meta_index": false
+    }
+  },
+  "RUNTIME_REVISION": "97c88d2b549dd38766e1fdaa49197ef8180641ac-cr05",
+  "DB_SIZE_BYTES": 1515520,
+  "created_at": "2026-09-20T20:25:56Z"
+}

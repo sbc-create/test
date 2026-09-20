@@ -1,0 +1,6 @@
+{
+  "BACKUP_PATH": "/srv/site-factory/repo/var/ratings/backups/ratings.sqlite.community06.20260920T202553Z.bak",
+  "BACKUP_DIGEST": "3e94aade6d7e160ac23d40200c1e39770817e4d96ef57b61dc4cb84bbd9c3b60",
+  "RESTORE_REHEARSAL_PASS": 1,
+  "SCRATCH": "/srv/site-factory/repo/var/ratings/backups/rollback_scratch_cr06.sqlite"
+}
