@@ -5,7 +5,7 @@
 | Field | Value |
 | --- | --- |
 | START_HEAD | `a867c80c5312356d88cbc771275b1039b9509637` |
-| FINAL_HEAD | `f9fb1f77b42365ea981bb2ac613de309c650dac3` |
+| FINAL_HEAD | `e3e7c5db55a22174aaef6447f729827efbfee6d5` |
 | Branch | `cursor/community-comments-01` |
 | Commits (stage02) | 8+ |
 | Identity | SIGNED_PSEUDONYMOUS_DEVICE_V1 / Гость |
