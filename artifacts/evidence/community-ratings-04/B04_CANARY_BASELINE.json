@@ -1,0 +1,45 @@
+{
+  "plan": {
+    "space": "yummy",
+    "subject_id": "nova:019e820c-1c30-7466-9e8f-801577489ce1",
+    "actor_id": "canary-cr04-yummy-29fbf2b8697e",
+    "live_path": "/anime/padshiy-master"
+  },
+  "baseline": {
+    "native_sum": 0,
+    "native_count": 0,
+    "html_sha": "656c8ed65697c5ec4ca53681533486ece8bb6d5ce617577ab5e1abb788450929",
+    "html_has_score7": false,
+    "shadow": true,
+    "status": 200,
+    "indexability": {
+      "status": 200,
+      "x_robots": null,
+      "robots_allow_root": true,
+      "disallow_all": false,
+      "meta_robots": [
+        "<meta name=\"robots\" content=\"index, follow\"/>"
+      ]
+    }
+  },
+  "idx_before": {
+    "yummyani.site": {
+      "status": 200,
+      "x_robots": null,
+      "robots_allow_root": true,
+      "disallow_all": false,
+      "meta_robots": [
+        "<meta name=\"robots\" content=\"index, follow\"/>"
+      ]
+    },
+    "animedia.icu": {
+      "status": 200,
+      "x_robots": "noindex, nofollow",
+      "robots_allow_root": false,
+      "disallow_all": true,
+      "meta_robots": [
+        "<meta name=\"robots\" content=\"noindex, nofollow\">"
+      ]
+    }
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "OWNER_CANARY_AUTHORIZATION_ID": "COMMUNITY-RATINGS-04-YUMMY-NATIVE-CANARY-20260920",
+  "OWNER_CANARY_AUTHORIZATION_CONSUMED": 1,
+  "plan": {
+    "space": "yummy",
+    "subject_id": "nova:019e820c-1c30-7466-9e8f-801577489ce1",
+    "actor_id": "canary-cr04-yummy-29fbf2b8697e",
+    "live_path": "/anime/padshiy-master"
+  },
+  "steps": [
+    {
+      "name": "preview_7",
+      "preview": {
+        "action": "create",
+        "score": 7,
+        "before": null,
+        "after": "7.000",
+        "delta": "+7.000",
+        "delta_raw": "7"
+      }
+    },
+    {
+      "name": "cast_7_concurrent",
+      "results": [
+        {
+          "status": 200,
+          "action": "CREATE",
+          "before": null,
+          "after": "7.000",
+          "delta": null,
+          "my_vote": 7,
+          "native_vote_count": 1,
+          "aggregate_version": 1,
+          "policy_version": "rating_policy_v1",
+          "noop": false
+        },
+        {
+          "status": 200,
+          "action": "CREATE",
+          "before": null,
+          "after": "7.000",
+          "delta": null,
+          "my_vote": 7,
+          "native_vote_count": 1,
+          "aggregate_version": 1,
+          "policy_version": "rating_policy_v1",
+          "noop": false
+        }
+      ],
+      "active_votes": 1
+    },
+    {
+      "name": "idempotency_replay_cast",
+      "replay": {
+        "status": 200,
+        "action": "CREATE",
+        "before": null,
+        "after": "7.000",
+        "delta": null,
+        "my_vote": 7,
+        "native_vote_count": 1,
+        "aggregate_version": 1,
+        "policy_version": "rating_policy_v1",
+        "noop": false
+      },
+      "events_delta": 0
+    },
+    {
+      "name": "preview_update_9",
+      "preview": {
+        "action": "replace",
+        "score": 9,
+        "before": "7.000",
+        "after": "9.000",
+        "delta": "+2.000",
+        "delta_raw": "2"
+      }
+    },
+    {
+      "name": "update_9",
+      "result": {
+        "status": 200,
+        "action": "UPDATE",
+        "before": "7.000",
+        "after": "9.000",
+        "delta": "+2.000",
+        "my_vote": 9,
+        "native_vote_count": 1,
+        "aggregate_version": 2,
+        "policy_version": "rating_policy_v1",
+        "noop": false
+      },
+      "vote_count": 1
+    },
+    {
+      "name": "retract",
+      "result": {
+        "status": 200,
+        "action": "DELETE",
+        "before": "9.000",
+        "after": null,
+        "my_vote": null,
+        "native_vote_count": 0,
+        "native_absent": true,
+        "aggregate_version": 3
+      }
+    },
+    {
+      "name": "retract_repeat",
+      "result": {
+        "status": 200,
+        "action": "NOOP",
+        "my_vote": null
+      }
+    }
+  ],
+  "YUMMY_CANARY_PREVIEW_PASS": 1,
+  "YUMMY_CANARY_CAST_PASS": 1,
+  "YUMMY_CANARY_UPDATE_PASS": 1,
+  "YUMMY_CANARY_RETRACT_PASS": 1,
+  "PREVIEW_EQUALS_WRITE": 1,
+  "IDEMPOTENCY_REPLAY_DUPLICATES": 0,
+  "CONCURRENT_DUPLICATE_VOTES": 0,
+  "CANARY_VOTES_REMAINING": 0,
+  "POST_CANARY_NATIVE_COUNT_EQUALS_BASELINE": 1,
+  "POST_CANARY_NATIVE_SUM_EQUALS_BASELINE": 1,
+  "POST_CANARY_HTML_SHA_BASELINE": "656c8ed65697c5ec4ca53681533486ece8bb6d5ce617577ab5e1abb788450929",
+  "POST_CANARY_HTML_SHA_AFTER": "656c8ed65697c5ec4ca53681533486ece8bb6d5ce617577ab5e1abb788450929",
+  "POST_CANARY_HTML_EQUALS_BASELINE": 1,
+  "formula_max_delta": 0.0,
+  "purge": {
+    "purged_actors": [
+      "canary-cr04-yummy-29fbf2b8697e"
+    ],
+    "subjects": [
+      "nova:019e820c-1c30-7466-9e8f-801577489ce1"
+    ],
+    "hard_deleted_rows": 1,
+    "votes_remaining": 0,
+    "accepted_remaining": 0
+  },
+  "animedia_accepted_votes": 0,
+  "canary_vote_rows_left": 0,
+  "idx_after": {
+    "status": 200,
+    "x_robots": null,
+    "robots_allow_root": true,
+    "disallow_all": false,
+    "meta_robots": [
+      "<meta name=\"robots\" content=\"index, follow\"/>"
+    ]
+  },
+  "INDEXABILITY_INVARIANT_PASS": 1,
+  "POST_CANARY_AGGREGATE_EQUALS_BASELINE": 1,
+  "POST_CANARY_SHADOW_STILL": true,
+  "POST_CANARY_NO_PUBLIC_BADGE": true,
+  "POST_CANARY_API_EQUALS_BASELINE": 1,
+  "POST_CANARY_CACHE_EQUALS_BASELINE": true
+}
