@@ -1874,7 +1874,11 @@ font-size:18px;display:none;align-items:center;justify-content:center;box-shadow
 @media(min-width:1024px){.zrl:hover .zrl__btn,.zrl__btn:focus-visible{display:flex}}
 .zrl__btn--p{left:2px}.zrl__btn--n{right:2px}
 .zrl__btn:disabled{opacity:.35;cursor:default}
-.zg{display:grid;gap:var(--a-grid-gap);grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+.zg{display:grid;gap:var(--a-grid-gap);grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;
+justify-items:stretch}
+.zg .zt{height:100%;align-self:start;width:100%;max-width:100%}
+/* CARD_VARIANT_REGISTRY: last incomplete row must not stretch cards */
+.zrl__track{align-items:flex-start}
 @media(min-width:640px){.zg{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(min-width:768px){.zg{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(min-width:1024px){.zg{grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}}
@@ -4166,7 +4170,7 @@ class ВидЗона(Вид):
                 if данные is None or not данные.items:
                     continue
                 кол_карточки.append(
-                    f'<a class="zhub__c" href="{html.escape(спец.canonical_path)}">'
+                    f'<a class="zhub__c" data-card-variant="collection-card" href="{html.escape(спец.canonical_path)}">'
                     f'<span class="zhub__t">{html.escape(данные.title)}</span>'
                     f'<span class="zhub__m">{данные.total} записей</span></a>')
             if кол_карточки:
@@ -4304,7 +4308,7 @@ class ВидЗона(Вид):
                 f' alt="" loading="lazy" width="120" height="180"></span>'
                 for к in выбранные[:4] if к.poster)
             карточки.append(
-                f'<a class="zhub__c" href="{html.escape(спец.canonical_path)}">'
+                f'<a class="zhub__c" data-card-variant="collection-card" href="{html.escape(спец.canonical_path)}">'
                 f'<span class="zhub__g">{обложки}</span>'
                 f'<span class="zhub__t">{html.escape(коллекция.title)}</span>'
                 f'<span class="zhub__m">{коллекция.total}</span>'
@@ -4883,11 +4887,12 @@ class ВидАнимедиа(ВидЗона):
             свой_срез.kinds = sorted({з["kind"] for з in свои if з.get("kind")})
             self.д = свой_срез
 
-    def плитка(self, запись: dict) -> str:
+    def плитка(self, запись: dict, *, вариант: str = "catalog-title") -> str:
         """Карточка с пропорцией постера 0.86 — измеренной на эталоне.
 
         Размеры проставляются в разметке, а не только в CSS: браузер обязан
         зарезервировать место до загрузки изображения, иначе сетка прыгает.
+        `вариант` — ключ CARD_VARIANT_REGISTRY (parity-02 BLOCK_03).
         """
         деталь = self.деталь(запись["slug"])
         изо = заглушка_постера(запись, "zt__none", "zt__img", 190, 285)
@@ -4899,10 +4904,29 @@ class ВидАнимедиа(ВидЗона):
                       f'<b>{html.escape(о["значение"])}</b></span></span>')
         else:
             оценка = '<span class="zt__r"><em aria-hidden="true">·</em></span>'
-        return (f'<a class="zt" href="{запись["url"]}">'
+        return (f'<a class="zt" data-card-variant="{html.escape(вариант)}" href="{запись["url"]}">'
                 f'<span class="zt__p">{изо}</span>'
                 f'<span class="zt__b"><span class="zt__t">{html.escape(запись["title"])}</span>'
                 f'<span class="zt__m">{html.escape(мета)}</span>{оценка}</span></a>')
+
+    def карусель(self, ключ: str, набор) -> str:
+        """Hero uses top-shelf card variant; other rails stay catalog-title."""
+        вариант = "top-shelf" if ключ == "hero" else "catalog-title"
+        плитки = "".join(self.плитка(з, вариант=вариант) for з in набор)
+        ид = f"rl-{ключ}"
+        return (f'<div class="zrl">'
+                f'<button class="zrl__btn zrl__btn--p" type="button" data-rl="prev"'
+                f' aria-controls="{ид}" aria-label="Пролистать назад">&#8249;</button>'
+                f'<div class="zrl__vp" id="{ид}" tabindex="0" role="group"'
+                f' aria-label="Лента произведений">'
+                f'<div class="zrl__track">{плитки}</div></div>'
+                f'<button class="zrl__btn zrl__btn--n" type="button" data-rl="next"'
+                f' aria-controls="{ид}" aria-label="Пролистать вперёд">&#8250;</button>'
+                f'</div>')
+
+    def плитки(self, набор, *, вариант: str = "catalog-title") -> str:
+        return ('<div class="zg" data-card-grid="' + html.escape(вариант) + '">'
+                + "".join(self.плитка(з, вариант=вариант) for з in набор) + "</div>")
 
     def логотип(self) -> str:
         """Логотип: «Ani» акцентом + «media», без чужой иконки/Premium."""
@@ -5076,7 +5100,7 @@ class ВидАнимедиа(ВидЗона):
         похожие = self.похожие(запись, деталь)
         блок_похожих = (
             f'<section class="zsec zsec--rel"><h2 class="zh zh--sm">Смотрите также</h2>'
-            f"{self.плитки(похожие)}</section>" if похожие else "")
+            f'{self.плитки(похожие, вариант="recommendation")}</section>' if похожие else "")
         блок_связей = self._франшиза(деталь)
         ad_title = ('<div class="zad-title" data-ad-slot="title-before-player" '
                     'data-ad-enabled="0"></div>')
@@ -5656,7 +5680,7 @@ class ВидАнимедиа(ВидЗона):
         else:
             meta = "Добавлено"
         return (
-            f'<a class="aeps__row" href="{html.escape(row["url"])}" '
+            f'<a class="aeps__row" data-card-variant="episode-row" href="{html.escape(row["url"])}" '
             f'data-event-id="{html.escape(row.get("event_id") or "")}" '
             f'data-event-kind="{html.escape(row.get("event_kind") or "catalog_publish")}">'
             f'<span class="aeps__thumb">{изо}</span>'

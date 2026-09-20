@@ -1,0 +1,84 @@
+{
+  "stage": "ANIMEDIA-REFERENCE-PARITY-02",
+  "block": "BLOCK_03",
+  "CARD_VARIANTS_DECLARED": 5,
+  "variants": {
+    "top-shelf": {
+      "selector": ".ahero [data-card-variant=top-shelf]",
+      "routes": ["home"],
+      "required_fields": ["poster", "title"],
+      "aspect_ratio": "152/214",
+      "poster_px": {"desktop": [152, 214], "mobile": [112, 158]},
+      "title_clamp": 2,
+      "metadata": false,
+      "rating_position": "hidden",
+      "empty_image_state": ".zt__none",
+      "notes": "Hero carousel only; fixed width; no last-item stretch"
+    },
+    "episode-row": {
+      "selector": "[data-card-variant=episode-row]",
+      "routes": ["home", "/new/"],
+      "required_fields": ["thumb", "title", "added_label", "episode_number"],
+      "aspect_ratio": "64/80",
+      "poster_px": {"desktop": [56, 72], "mobile": [52, 68]},
+      "title_clamp": 2,
+      "metadata": true,
+      "rating_position": "none",
+      "empty_image_state": ".zr__none",
+      "notes": "Catalog-publish events; honest Добавлено label"
+    },
+    "catalog-title": {
+      "selector": "[data-card-variant=catalog-title]",
+      "routes": ["home shelves", "/catalog/", "/search/", "collection detail membership"],
+      "required_fields": ["poster", "title", "kind_year"],
+      "aspect_ratio": "2/3",
+      "poster_px": {"desktop": [140, 210], "mobile": [120, 180]},
+      "title_clamp": 2,
+      "metadata": true,
+      "rating_position": ".zt__r first labeled source",
+      "empty_image_state": ".zt__none",
+      "notes": "Grid .zg with align-items:start; no last-row stretch"
+    },
+    "recommendation": {
+      "selector": "[data-card-variant=recommendation]",
+      "routes": ["title detail related"],
+      "required_fields": ["poster", "title"],
+      "aspect_ratio": "2/3",
+      "poster_px": {"desktop": [140, 210], "mobile": [120, 180]},
+      "title_clamp": 2,
+      "metadata": true,
+      "rating_position": ".zt__r",
+      "empty_image_state": ".zt__none",
+      "notes": "Same shell as catalog-title; distinct variant for audit"
+    },
+    "collection-card": {
+      "selector": "[data-card-variant=collection-card]",
+      "routes": ["/collections/", "home collections hub"],
+      "required_fields": ["collage_or_cover", "title", "count"],
+      "aspect_ratio": "collage",
+      "poster_px": {"desktop": [120, 180], "mobile": [90, 135]},
+      "title_clamp": 2,
+      "metadata": true,
+      "rating_position": "none",
+      "empty_image_state": "omit empty collage cells",
+      "notes": "Own posters only; no invented authors/views"
+    }
+  },
+  "route_mapping": {
+    "home.ahero": "top-shelf",
+    "home.ahome-eps": "episode-row",
+    "home.zsec.zg": "catalog-title",
+    "home.zhub": "collection-card",
+    "catalog.zg": "catalog-title",
+    "search.zg": "catalog-title",
+    "new.aeps": "episode-row",
+    "title.zsec--rel": "recommendation",
+    "collections.zhub": "collection-card"
+  },
+  "gates": {
+    "CARD_VARIANT_ROUTE_MAPPING_COMPLETE": 1,
+    "UNDECLARED_CARD_VARIANTS_MAX": 0,
+    "CARD_HEIGHT_VARIANCE_UNEXPLAINED_MAX": 0,
+    "LAST_ROW_STRETCH_COUNT_MAX": 0
+  }
+}
