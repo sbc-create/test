@@ -1,0 +1,13 @@
+{
+  "block": "B10",
+  "status": "PASS_LOCAL_PARTIAL",
+  "summary": "Grid column matrix set to 2/4/5/6/7/8 at 768/1024/1280/1440/1920; nested page zwrap removed (zpage) so only shell zwrap owns horizontal padding.",
+  "tests": "tests/lords/test_zona_blockwise_b10_b11.py + P0 suite green",
+  "pytest_exit": 0,
+  "residuals": [
+    "headed browser geometry matrix not executed (B15)",
+    "header/main overlap and touch-target proofs require headed QA",
+    "drawer backdrop/focus-trap pending"
+  ],
+  "updated_at": "2026-09-20T17:05:00Z"
+}

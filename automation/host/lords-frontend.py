@@ -228,6 +228,45 @@ except ImportError:
     КОЛЛЕКЦИИ = None
 
 try:
+    import genre_aliases as ЖАНРЫ_АЛИАСЫ  # noqa: E402
+except ImportError:  # pragma: no cover
+    ЖАНРЫ_АЛИАСЫ = None
+
+#: Country path aliases → canonical translit code used in the index.
+#: Independent audit: /country/velikobritaniya/ must resolve when UK titles exist.
+СТРАНЫ_АЛИАСЫ: dict[str, tuple[str, ...]] = {
+    "velikobritaniya": (
+        "velikobritaniya", "velikobritania", "uk", "gb",
+        "united-kingdom", "united_kingdom", "great-britain", "great_britain",
+        "england", "angliya",
+    ),
+    "ssha": ("ssha", "usa", "us", "united-states", "united_states", "amerika"),
+    "rossiya": ("rossiya", "russia", "rf", "ru"),
+    "franciya": ("franciya", "france", "fr"),
+    "germaniya": ("germaniya", "germany", "de", "deutschland"),
+    "yaponiya": ("yaponiya", "japan", "jp"),
+    "kitay": ("kitay", "china", "cn", "prc"),
+    "koreya": ("koreya", "south-korea", "korea", "kr", "yuzhnaya-koreya"),
+}
+
+
+def _канон_страны(код: str, страны: dict) -> str | None:
+    """Map country path/query alias to a key that exists in the index."""
+    if not код:
+        return None
+    if код in страны:
+        return код
+    for канон, aliases in СТРАНЫ_АЛИАСЫ.items():
+        if код == канон or код in aliases:
+            if канон in страны:
+                return канон
+            for a in aliases:
+                if a in страны:
+                    return a
+    return None
+
+
+try:
     import popular_weekly as ПОПУЛЯРНОЕ_НЕДЕЛЯ  # noqa: E402
 except ImportError:
     ПОПУЛЯРНОЕ_НЕДЕЛЯ = None
@@ -756,7 +795,7 @@ class Данные:
                 формы.append(нормализовать(з["slug"]))
             if з.get("title"):
                 формы.append(нормализовать(транслит(з["title"])))
-            for поле in ("original_title", "original_name"):
+            for поле in ("original_title", "original_name", "english_name", "alt_title"):
                 if з.get(поле):
                     формы.append(нормализовать(з[поле]))
                     формы.append(нормализовать(транслит(з[поле])))
@@ -782,20 +821,24 @@ class Данные:
         сырой = (q or "").strip()
         if not сырой:
             return []
-        варианты = [сырой, из_раскладки(сырой)]
-        значимые: list[str] = []
-        for v in варианты:
+        # Keyboard layouts are alternative queries, not AND-merged token bags.
+        # Merging flipped Latin→Cyrillic tokens into one AND list broke original-
+        # title searches («Dusty Bluffs» required mangled «dгыен» tokens too).
+        варианты_значимых: list[list[str]] = []
+        for v in (сырой, из_раскладки(сырой)):
+            значимые_v: list[str] = []
             for т in токены(v):
                 if т in СЛУЖЕБНЫЕ or т.isdigit():
                     continue
-                if т not in значимые:
-                    значимые.append(т)
-        if not значимые:
+                if т not in значимые_v:
+                    значимые_v.append(т)
+            if значимые_v and значимые_v not in варианты_значимых:
+                варианты_значимых.append(значимые_v)
+        if not варианты_значимых:
             return []
-        фраза = " ".join(значимые)
-        фраза_слитно = "".join(значимые)
-        # Primary form per item: normalized title with spaces for phrase checks.
+
         корзины = {i: [] for i in range(1, 11)}
+        видели_slug: set[str] = set()
 
         def primary_phrase(з: dict) -> str:
             return нормализовать_фразу(з.get("title") or "")
@@ -806,13 +849,13 @@ class Данные:
         def forms_phrase(з: dict) -> list[str]:
             """Spaced phrases from title / original / aliases."""
             out = [primary_phrase(з)]
-            for поле in ("original_title", "original_name", "alt_title"):
+            for поле in ("original_title", "original_name", "english_name", "alt_title"):
                 val = з.get(поле)
                 if val:
                     out.append(нормализовать_фразу(str(val)))
+                    out.append(нормализовать_фразу(транслит(str(val))))
             for доп in з.get("aliases") or ():
                 out.append(нормализовать_фразу(str(доп)))
-            # spaced translit of title
             out.append(нормализовать_фразу(транслит(з.get("title") or "")))
             uniq, seen = [], set()
             for p in out:
@@ -821,128 +864,105 @@ class Данные:
                     uniq.append(p)
             return uniq
 
-        def all_tokens_in(phrase: str) -> bool:
-            return all(т in phrase.split() or т in phrase.replace(" ", "")
-                       for т in значимые)
+        for значимые in варианты_значимых:
+            фраза = " ".join(значимые)
+            фраза_слитно = "".join(значимые)
 
-        def all_tokens_ordered(phrase: str) -> bool:
-            parts = phrase.split()
-            if not parts:
-                return False
-            i = 0
-            for part in parts:
-                if i < len(значимые) and (part == значимые[i] or part.startswith(значимые[i])):
-                    i += 1
-            return i == len(значимые)
-
-        def strict_prefix_all(phrase: str) -> bool:
-            parts = phrase.split()
-            if len(parts) < len(значимые):
-                # also allow compact
-                compact = phrase.replace(" ", "")
-                pos = 0
-                for т in значимые:
-                    j = compact.find(т, pos)
-                    if j < 0:
-                        return False
-                    pos = j + len(т)
-                return True
-            used = [False] * len(parts)
-            for т in значимые:
-                ok = False
-                for i, p in enumerate(parts):
-                    if used[i]:
-                        continue
-                    if p.startswith(т) or т.startswith(p):
-                        used[i] = True
-                        ok = True
-                        break
-                if not ok:
+            def all_tokens_ordered(phrase: str, значимые=значимые) -> bool:
+                parts = phrase.split()
+                if not parts:
                     return False
-            return True
+                i = 0
+                for part in parts:
+                    if i < len(значимые) and (part == значимые[i] or part.startswith(значимые[i])):
+                        i += 1
+                return i == len(значимые)
 
-        for з in self.items:
-            forms = forms_compact(з)
-            phrases = forms_phrase(з)
-            if not forms and not phrases:
-                continue
-            primary = phrases[0] if phrases else ""
-            tier = None
-            # 1 exact primary title (compact or spaced)
-            if primary == фраза or нормализовать(з.get("title") or "") == фраза_слитно:
-                tier = 1
-            # 2 exact original/alias
-            elif any(p == фраза for p in phrases[1:]) or фраза_слитно in forms:
-                # exact compact form match that is NOT a single-token false friend
-                if фраза_слитно in forms and len(значимые) == 1:
-                    tier = 2
-                elif any(p == фраза for p in phrases[1:]):
-                    tier = 2
-                elif фраза_слитно in forms and len(значимые) > 1:
-                    tier = 2
-            # 3 primary starts with full phrase
-            if tier is None and (primary.startswith(фраза + " ") or primary.startswith(фраза)
-                                 or нормализовать(з.get("title") or "").startswith(фраза_слитно)):
-                if len(значимые) > 1 or primary.startswith(фраза):
-                    tier = 3
-            # 4 primary contains full phrase
-            if tier is None and len(значимые) > 1 and (
-                    f" {фраза} " in f" {primary} "
-                    or фраза_слитно in нормализовать(з.get("title") or "")):
-                tier = 4
-            # 5 original/alias starts or contains phrase
-            if tier is None and len(значимые) > 1:
-                for p in phrases[1:]:
-                    if p.startswith(фраза) or f" {фраза} " in f" {p} ":
-                        tier = 5
-                        break
-            # 6 all tokens in primary in order
-            if tier is None and len(значимые) > 1 and all_tokens_ordered(primary):
-                tier = 6
-            # 7 all tokens present any order (AND)
-            if tier is None and len(значимые) > 1:
-                blob = " ".join(phrases) + " " + " ".join(forms)
-                if all(т in blob for т in значимые):
-                    tier = 7
-            # 8 strict token-prefix for all query tokens
-            if tier is None and len(значимые) > 1 and strict_prefix_all(primary):
-                tier = 8
-            # Single-token query: exact / prefix / contains on word boundaries
-            if tier is None and len(значимые) == 1:
-                т = значимые[0]
-                if т in forms or primary == т:
+            def strict_prefix_all(phrase: str, значимые=значимые) -> bool:
+                parts = phrase.split()
+                if len(parts) < len(значимые):
+                    compact = phrase.replace(" ", "")
+                    pos = 0
+                    for т in значимые:
+                        j = compact.find(т, pos)
+                        if j < 0:
+                            return False
+                        pos = j + len(т)
+                    return True
+                used = [False] * len(parts)
+                for т in значимые:
+                    ok = False
+                    for i, p in enumerate(parts):
+                        if used[i]:
+                            continue
+                        if p.startswith(т) or т.startswith(p):
+                            used[i] = True
+                            ok = True
+                            break
+                    if not ok:
+                        return False
+                return True
+
+            for з in self.items:
+                forms = forms_compact(з)
+                phrases = forms_phrase(з)
+                if not forms and not phrases:
+                    continue
+                primary = phrases[0] if phrases else ""
+                tier = None
+                if primary == фраза or нормализовать(з.get("title") or "") == фраза_слитно:
                     tier = 1
-                elif primary.startswith(т) or any(f.startswith(т) for f in forms):
-                    tier = 3
-                elif any(f" {т} " in f" {p} " for p in phrases) or any(
-                        f.startswith(т) or т == f for f in forms):
-                    # word-ish contains; reject if query is only a short stem of unrelated
+                elif any(p == фраза for p in phrases[1:]) or фраза_слитно in forms:
+                    tier = 2
+                if tier is None and (primary.startswith(фраза + " ") or primary.startswith(фраза)
+                                     or нормализовать(з.get("title") or "").startswith(фраза_слитно)):
+                    if len(значимые) > 1 or primary.startswith(фраза):
+                        tier = 3
+                if tier is None and len(значимые) > 1 and (
+                        f" {фраза} " in f" {primary} "
+                        or фраза_слитно in нормализовать(з.get("title") or "")):
                     tier = 4
-            # 9 transliteration already covered via forms; keep soft as 10
-            if tier is None and len(значимые) == 1 and len(значимые[0]) >= 5:
-                т = значимые[0]
-                for f in forms:
-                    if _мягкое_совпадение(т, f):
-                        tier = 10
-                        break
-            if tier is None and len(значимые) > 1:
-                # do not let single-token soft/partial of one word into results
-                # for multi-word queries (blocks «Вой» for «звездные войны»)
-                continue
-            if tier is None:
-                continue
-            year = з.get("year") or 0
-            try:
-                year = int(year)
-            except (TypeError, ValueError):
-                year = 0
-            # Stable within tier: newer year, then title, then slug
-            корзины[tier].append((
-                -year,
-                primary or нормализовать(з.get("title") or ""),
-                з.get("slug") or "",
-                з,
-            ))
+                if tier is None and len(значимые) > 1:
+                    for p in phrases[1:]:
+                        if p.startswith(фраза) or f" {фраза} " in f" {p} ":
+                            tier = 5
+                            break
+                if tier is None and len(значимые) > 1 and all_tokens_ordered(primary):
+                    tier = 6
+                if tier is None and len(значимые) > 1:
+                    blob = " ".join(phrases) + " " + " ".join(forms)
+                    if all(т in blob for т in значимые):
+                        tier = 7
+                if tier is None and len(значимые) > 1 and strict_prefix_all(primary):
+                    tier = 8
+                if tier is None and len(значимые) == 1:
+                    т = значимые[0]
+                    if т in forms or primary == т:
+                        tier = 1
+                    elif primary.startswith(т) or any(f.startswith(т) for f in forms):
+                        tier = 3
+                    elif any(f" {т} " in f" {p} " for p in phrases) or any(
+                            f.startswith(т) or т == f for f in forms):
+                        tier = 4
+                if tier is None and len(значимые) == 1 and len(значимые[0]) >= 5:
+                    т = значимые[0]
+                    for f in forms:
+                        if _мягкое_совпадение(т, f):
+                            tier = 10
+                            break
+                if tier is None:
+                    continue
+                year = з.get("year") or 0
+                try:
+                    year = int(year)
+                except (TypeError, ValueError):
+                    year = 0
+                корзины[tier].append((
+                    -year,
+                    primary or нормализовать(з.get("title") or ""),
+                    з.get("slug") or "",
+                    з,
+                ))
 
         итог, видели = [], set()
         for t in range(1, 11):
@@ -2317,14 +2337,15 @@ display:none;align-items:center;justify-content:center}
 .zrl__btn--p{left:-4px}
 .zrl__btn--n{right:-4px}
 
-/* Компактная сетка: 2→3→5→6→7→8 колонок; карточка ~190–230px. */
+/* Компактная сетка: 2→4→5→6→7→8; без прыжка 4→7 и без пустой зоны >1 карточки. */
 .zg{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr));
-align-items:stretch}
-@media(min-width:560px){.zg{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(min-width:900px){.zg{grid-template-columns:repeat(5,minmax(0,1fr))}}
-@media(min-width:1200px){.zg{grid-template-columns:repeat(6,minmax(0,1fr))}}
+align-items:stretch;justify-content:center;width:100%;box-sizing:border-box}
+@media(min-width:768px){.zg{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1024px){.zg{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(min-width:1280px){.zg{grid-template-columns:repeat(6,minmax(0,1fr))}}
 @media(min-width:1440px){.zg{grid-template-columns:repeat(7,minmax(0,1fr))}}
-@media(min-width:1800px){.zg{grid-template-columns:repeat(8,minmax(0,1fr))}}
+@media(min-width:1920px){.zg{grid-template-columns:repeat(8,minmax(0,1fr))}}
+.zpage{min-width:0;width:100%;box-sizing:border-box}
 .zt{display:flex;flex-direction:column;background:@PAGE@;
 border:1px solid @LINE@;border-radius:4px;overflow:hidden;min-width:0;
 height:100%;transition:border-color .14s,box-shadow .14s}
@@ -3680,6 +3701,9 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
     if раздел == "/new":
         доступные = _доступные_режимы_new(данные)
         сырой_mode = (зпр.get("mode") or [None])[0]
+        # Legacy sort aliases must not silently equal premiere ledger.
+        if not сырой_mode and сорт == "recently_added":
+            сырой_mode = NEW_MODE_ADDED
         # Explicit unsupported mode with no ledger → honest empty (not 400),
         # so omitted tabs stay unreachable without inventing a feed.
         if сырой_mode in ("available", "episodes", "provider", "episode"):
@@ -3701,28 +3725,37 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
             неизвестный_фильтр = True
             набор = []
     if жанр:
-        ключи = [жанр, нормализовать(жанр), нормализовать(транслит(жанр))]
-        разрешённые = None
+        ключи = {жанр, нормализовать(жанр), нормализовать(транслит(жанр))}
+        if ЖАНРЫ_АЛИАСЫ is not None:
+            расширенные = set()
+            for ключ in list(ключи):
+                if ключ:
+                    расширенные |= set(ЖАНРЫ_АЛИАСЫ.алиасы_жанра(ключ))
+                    расширенные.add(ключ)
+            ключи = расширенные
+        членство: set = set()
         for ключ in ключи:
             if not ключ:
                 continue
-            разрешённые = индекс["genre"].get(ключ)
-            if разрешённые is not None:
-                break
-        if разрешённые is None:
+            часть = индекс["genre"].get(ключ)
+            if часть:
+                членство.update(часть)
+        if not членство:
             неизвестный_фильтр = True
             набор = []
         else:
-            членство = set(разрешённые)
             набор = [з for з in набор if з["slug"] in членство]
     if страна:
-        разрешённые = (индекс.get("country") or {}).get(страна)
+        страны = индекс.get("country") or {}
+        ключ = _канон_страны(страна, страны) or страна
+        разрешённые = страны.get(ключ)
         if разрешённые is None:
             неизвестный_фильтр = True
             набор = []
         else:
             членство = set(разрешённые)
             набор = [з for з in набор if з["slug"] in членство]
+            страна = ключ
 
     def _title_key(з: dict) -> tuple:
         return (з.get("_n") or нормализовать(з["title"]), з["slug"])
@@ -4457,8 +4490,11 @@ class ВидЗона(Вид):
         нав = "".join(
             f'<a href="{закодировать_запрос(u)}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
             for u, t in self.се["нав"])
+        # P0-05: rail genre links preserve active kind/year/country/sort when set.
+        _ф = getattr(self, "_активные_фильтры", None) or {}
         жанры = "".join(
-            f'<a href="/catalog/?genre={html.escape(код_жанра)}">{html.escape(имя)}</a>'
+            f'<a href="/catalog/{html.escape(запрос_строкой(_ф, genre=код_жанра, page=None))}">'
+            f'{html.escape(имя)}</a>'
             for код_жанра, имя in self.индекс["genre_names"][:14])
         схемы = _ld_json_scripts(разметка)
         описание_мета = (f'<meta name="description" content="{html.escape(описание)}">'
@@ -4900,7 +4936,7 @@ class ВидЗона(Вид):
                                  f'<p class="zsub"><a href="{ссылка}">Открыть весь раздел</a></p>'
                                  + self.лента(набор))
             return self.оболочка(
-                f'<div class="zwrap">{_склеить(куски)}</div>',
+                f'<div class="zpage">{_склеить(куски)}</div>',
                 f"{self.имя} — кинопортал", "/", актив="/",
                 описание=f"{self.имя}: фильмы, сериалы и анимация.",
                 сверху="<span>Обзор каталога</span>")
@@ -5084,7 +5120,7 @@ class ВидЗона(Вид):
             листалка = f'<nav class="zpg" aria-label="Страницы">{пункты}</nav>'
         count_line = _склонение(int(данные.total or 0), "название", "названия", "названий")
         звенья = [("/", self.имя), ("/collections/", "Подборки"), ("", данные.title)]
-        тело = (f'<div class="zwrap"><h1 class="zh">{html.escape(данные.title)}</h1>'
+        тело = (f'<div class="zpage"><h1 class="zh">{html.escape(данные.title)}</h1>'
                 f'<p class="zsub">{html.escape(данные.description)} · '
                 f'{html.escape(count_line)} · '
                 f'страница {данные.page} из {всего_страниц}</p>'
@@ -5163,7 +5199,7 @@ class ВидЗона(Вид):
                 "recently_added_movies": "Недавно добавленные фильмы",
                 "new_movie_releases": "Премьеры фильмов",
                 "new_series_releases": "Новые сериалы",
-                "new_episodes": "Новые эпизоды",
+                "new_episodes": "Сериалы, недавно добавленные в каталог",
                 "top_rated": "Фильмы и сериалы с высокими оценками",
                 "current_season": "Этого года",
                 "video_available": "С подтверждённым видео",
@@ -5215,7 +5251,7 @@ class ВидЗона(Вид):
                        f'.</p>')
             else:
                 sub = '<p class="zsub">Тематические подборки.</p>'
-            тело = (f'<div class="zwrap" data-testid="page-container">'
+            тело = (f'<div class="zpage" data-testid="page-container">'
                     f'<h1 class="zh" data-testid="catalog-heading" id="catalog-h1">'
                     f'{html.escape(титул)}</h1>'
                     f'{sub}'
@@ -5224,8 +5260,13 @@ class ВидЗона(Вид):
                                  актив="/collections/",
                                  описание=f"Подборки витрины {self.имя}.")
         набор, выбрано = отбор(self.д, self.индекс, зпр, разд)
+        # Expose active filters to оболочка so rail genre links preserve state.
+        self._активные_фильтры = {
+            k: v for k, v in выбрано.items()
+            if v and not str(k).startswith("_")
+        }
         if выбрано.get("_unknown"):
-            тело = (f'<div class="zwrap" data-testid="page-container">'
+            тело = (f'<div class="zpage" data-testid="page-container">'
                     f'<h1 class="zh" id="catalog-h1">Некорректный фильтр</h1>'
                     f'<p class="zsub">Параметр не распознан. '
                     f'<a href="{разд}/">Открыть раздел без фильтра</a></p></div>')
@@ -5328,8 +5369,15 @@ class ВидЗона(Вид):
             int(з["year"]) for з in facet_набор
             if isinstance(з.get("year"), int) and 1870 <= int(з["year"]) <= 2100)
         year_list = sorted(year_counts.keys(), reverse=True)
+        # P0-05: keep active year visible/removable even when the combo is empty.
+        active_year = выбрано.get("year")
+        if active_year and str(active_year).isdigit():
+            ay = int(active_year)
+            if ay not in year_counts:
+                year_counts[ay] = 0
+                year_list = sorted(year_counts.keys(), reverse=True)
         year_html = ""
-        if year_list:
+        if year_list or active_year:
             all_years_href = разд + "/" + запрос_строкой(
                 {**выбрано, **omit}, year=None, page=None)
             opts = [f'<option value="{html.escape(all_years_href)}">Все годы</option>']
@@ -5486,7 +5534,7 @@ class ВидЗона(Вид):
                  f'<a href="{разд}/">Сбросить фильтры</a></p></div>')
 
         тело = (
-            f'<div class="zwrap" data-testid="page-container">'
+            f'<div class="zpage" data-testid="page-container">'
             f'<h1 class="zh" data-testid="catalog-heading" id="catalog-h1">'
             f'{html.escape(титул)}</h1>'
             f'<p class="zsub">{html.escape(zsub)}</p>'
@@ -5516,7 +5564,7 @@ class ВидЗона(Вид):
                     "в запросе поиску не мешают. "
                     '<a href="/catalog/">Открыть каталог целиком</a></p></div>')
             html_page = self.оболочка(
-                f'<div class="zwrap">{тело}</div>',
+                f'<div class="zpage">{тело}</div>',
                 f"Поиск — {self.имя}", "/search/", актив="")
             return html_page
 
@@ -5553,7 +5601,7 @@ class ВидЗона(Вид):
                      else f"/search/?q={q_attr}&page={стр}")
 
         html_page = self.оболочка(
-            f'<div class="zwrap">{тело}</div>',
+            f'<div class="zpage">{тело}</div>',
             f"Поиск — {self.имя}", канон, актив="")
         html_page = html_page.replace(
             'id="q" name="q" placeholder=',
@@ -5685,13 +5733,13 @@ class ВидЗона(Вид):
                  f'<div class="zpl__f" data-player data-state="{код}">{внутри}</div>'
                  f"{_скрипты_плеера(код)}</section>")
         текущий = (сезон_старт, эпизод_старт) if эпизод_старт is not None else None
-        блок_серий = (f'<div class="zwrap">{self._серии(запись, сезоны, текущий=текущий)}</div>'
+        блок_серий = (f'<div class="zpage">{self._серии(запись, сезоны, текущий=текущий)}</div>'
                       if сериал else "")
         похожие = self.похожие(запись, деталь, сколько=12)
         if похожие:
             compact = " zg--related-compact" if len(похожие) < 4 else ""
             блок_похожих = (
-                f'<div class="zwrap"><section class="zsec" data-testid="related-grid" '
+                f'<div class="zpage"><section class="zsec" data-testid="related-grid" '
                 f'data-rec-policy="playable_preferred_with_explicit_nonplayable_state_v1">'
                 f'<div class="zsec__h"><h2>Смотрите также</h2></div>'
                 f'<div class="zg zg--related{compact}">'
@@ -5708,7 +5756,7 @@ class ВидЗона(Вид):
                 "p.hidden=false;b.setAttribute('aria-expanded',open?'true':'false');"
                 "b.textContent=open?'Свернуть':'Развернуть';});})();</script>")
         тело = (
-            f'<div class="zwrap"><div class="ztitle">'
+            f'<div class="zpage"><div class="ztitle">'
             f'<div class="ztitle__poster">{изо}</div>'
             f'<div class="ztitle__main"><h1>{html.escape(имя)}</h1>'
             f'{оригинал_html}{оценки_html}{genres_html}{chips_html}{core_dl}'
@@ -5808,7 +5856,7 @@ class ВидЗона(Вид):
         звенья = [("/", self.имя), ("/series/", "Сериалы"),
                   (f"/title/{запись['slug']}/", имя), ("", f"Сезон {номер}")]
         серий = только[0]["eps"] if только else 0
-        тело = (f'<div class="zwrap"><h1 class="zh">{html.escape(заголовок)}</h1>'
+        тело = (f'<div class="zpage"><h1 class="zh">{html.escape(заголовок)}</h1>'
                 f'<p class="zsub">В сезоне {серий} серий · '
                 f'<a href="/title/{запись["slug"]}/">вернуться к описанию</a></p>'
                 + self._серии(запись, только) + "</div>")
@@ -5839,7 +5887,7 @@ class ВидЗона(Вид):
                  f"{_скрипты_плеера(код)}</section>")
         пред, след = границы_серии(деталь, сезон, эпизод)
         list_href = self.адрес_сезона(запись["slug"], сезон)
-        переход = ('<div class="zwrap"><nav class="zepnav" aria-label="Соседние серии">'
+        переход = ('<div class="zpage"><nav class="zepnav" aria-label="Соседние серии">'
                    + (f'<a href="{self.адрес_эпизода(запись["slug"], *пред)}" rel="prev">'
                       f'← Предыдущая</a>' if пред else
                       "<span>Это первая серия</span>")
@@ -5881,26 +5929,26 @@ class ВидЗона(Вид):
                     rows.append(("Длительность", html.escape(dlabel)))
             if rows:
                 facts_html = (
-                    '<div class="zwrap"><dl class="ztitle__facts" '
+                    '<div class="zpage"><dl class="ztitle__facts" '
                     'data-testid="episode-facts">'
                     + "".join(f"<div><dt>{html.escape(м)}</dt><dd>{з}</dd></div>"
                               for м, з in rows)
                     + "</dl></div>")
         parent = (
-            f'<div class="zwrap"><a class="zr" href="/title/{запись["slug"]}/">'
+            f'<div class="zpage"><a class="zr" href="/title/{запись["slug"]}/">'
             f'<span class="zr__t">{html.escape(имя)}</span>'
             f'<span class="zr__m">Сезон {сезон}</span></a></div>')
         сезоны = список_серий(деталь)
-        шапка = (f'<div class="zwrap"><h1 class="zh zh--sm">{html.escape(заголовок)}</h1>'
+        шапка = (f'<div class="zpage"><h1 class="zh zh--sm">{html.escape(заголовок)}</h1>'
                  f'<p class="zsub">Сезон {сезон}, серия {эпизод} · '
                  f'<a href="/title/{запись["slug"]}/">к описанию</a></p></div>')
-        блок_серий = (f'<div class="zwrap">'
+        блок_серий = (f'<div class="zpage">'
                       f'{self._серии(запись, сезоны, текущий=(сезон, эпизод))}</div>')
         похожие = self.похожие(запись, деталь, сколько=12)
         if похожие:
             compact = " zg--related-compact" if len(похожие) < 4 else ""
             блок_похожих = (
-                f'<div class="zwrap"><section class="zsec" data-testid="related-grid" '
+                f'<div class="zpage"><section class="zsec" data-testid="related-grid" '
                 f'data-rec-policy="playable_preferred_with_explicit_nonplayable_state_v1">'
                 f'<div class="zsec__h"><h2>Смотрите также</h2></div>'
                 f'<div class="zg zg--related{compact}">'
@@ -6245,7 +6293,7 @@ class ВидАнимедиа(ВидЗона):
             '<div class="zft__grid">'
             '<div class="zft__col"><b>Разделы</b>'
             '<a href="/">Главная</a><a href="/catalog/">Каталог</a>'
-            '<a href="/new/">Новые эпизоды</a><a href="/collections/">Подборки</a>'
+            '<a href="/new/">Новинки</a><a href="/collections/">Подборки</a>'
             '<a href="/schedule/">Расписание</a></div>'
             f'<div class="zft__col"><b>Жанры</b>{жанры or "<span>появятся из снимка</span>"}</div>'
             '<div class="zft__col"><b>Подборки</b>'
@@ -6509,11 +6557,35 @@ if ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ:
     ВИДЫ_1_1["animedia"] = ВидАнимедиа
 
 
+def _дополнить_формы_поиска(запись: dict) -> None:
+    """Rebuild `_формы` after sidecar fields are copied onto the catalog item."""
+    формы = [запись.get("_n") or нормализовать(запись.get("title") or "")]
+    if запись.get("slug"):
+        формы.append(нормализовать(запись["slug"]))
+    if запись.get("title"):
+        формы.append(нормализовать(транслит(запись["title"])))
+    for поле in ("original_title", "original_name", "english_name", "alt_title"):
+        if запись.get(поле):
+            формы.append(нормализовать(запись[поле]))
+            формы.append(нормализовать(транслит(запись[поле])))
+    for доп in (запись.get("aliases") or []):
+        формы.append(нормализовать(доп))
+        формы.append(нормализовать(транслит(доп)))
+    увидели: list[str] = []
+    for ф in формы:
+        if ф and ф not in увидели:
+            увидели.append(ф)
+    запись["_формы"] = увидели
+
+
 def построить_индекс(данные: "Данные", подробности: Подробности) -> dict:
     """Индексы, которые дешевле построить один раз при старте.
 
     По slug — чтобы страница тайтла не искала запись перебором; по жанру и
     стране — чтобы filter query не перечитывал sidecar на каждый запрос.
+
+    Also copies sidecar original/english names onto catalog items and rebuilds
+    search forms so original-title queries resolve (P0-02).
     """
     по_slug = {з["slug"]: з for з in данные.items}
     по_жанру: dict[str, list] = {}
@@ -6548,6 +6620,15 @@ def построить_индекс(данные: "Данные", подробн
         prem = (деталь.get("premiere_date") or "").strip()
         if prem:
             запись["_premiere_date"] = prem[:10]
+        # P0-02: join sidecar original names into search forms.
+        names_changed = False
+        for поле in ("original_name", "english_name", "original_title"):
+            знач = (деталь.get(поле) or "").strip()
+            if знач and not запись.get(поле):
+                запись[поле] = знач
+                names_changed = True
+        if names_changed or not запись.get("_формы"):
+            _дополнить_формы_поиска(запись)
         жанры = деталь.get("genres") or []
         коды = list(деталь.get("genre_codes") or [])
         # Animedia sidecar часто отдаёт только русские имена без genre_codes.
@@ -6556,27 +6637,60 @@ def построить_индекс(данные: "Данные", подробн
         if not коды and жанры:
             коды = [нормализовать(транслит(г)) for г in жанры]
             коды = [к for к in коды if к]
+        # P0-01: register every alias of each genre under one membership set.
+        ключи_регистрации: set[str] = set()
         for i, код in enumerate(коды):
             if not код:
                 continue
-            по_жанру.setdefault(код, []).append(slug)
-            if i < len(жанры):
-                имена.setdefault(код, жанры[i])
+            ключи_регистрации.add(код)
+            if ЖАНРЫ_АЛИАСЫ is not None:
+                ключи_регистрации |= set(ЖАНРЫ_АЛИАСЫ.алиасы_жанра(код))
+            if i < len(жанры) and жанры[i]:
+                ключи_регистрации.add(нормализовать(жанры[i]))
+                ключи_регистрации.add(нормализовать(транслит(жанры[i])))
+                if ЖАНРЫ_АЛИАСЫ is not None:
+                    ключи_регистрации |= set(ЖАНРЫ_АЛИАСЫ.алиасы_жанра(жанры[i]))
+            # Prefer Russian label for UI when available.
+            канон = (ЖАНРЫ_АЛИАСЫ.канон_жанра(код) if ЖАНРЫ_АЛИАСЫ else None) or код
+            if i < len(жанры) and жанры[i]:
+                имена.setdefault(канон, жанры[i])
             else:
-                имена.setdefault(код, код)
+                имена.setdefault(канон, код)
+        for ключ in ключи_регистрации:
+            if not ключ:
+                continue
+            бакет = по_жанру.setdefault(ключ, [])
+            if slug not in бакет:
+                бакет.append(slug)
         for страна in (деталь.get("countries") or []):
             # ASCII slug for /country/<code>/ (regex is [a-z0-9_-]); Cyrillic
             # labels stay in country_names for UI.
             код = нормализовать(транслит(страна))
             if not код:
                 continue
-            по_стране.setdefault(код, []).append(slug)
+            # Register common aliases onto the same membership bucket.
+            ключи_страны = {код}
+            for alias in СТРАНЫ_АЛИАСЫ.get(код, ()):
+                ключи_страны.add(alias)
+            # Reverse: if label translit is itself an alias of a known canon.
+            for канон_с, aliases in СТРАНЫ_АЛИАСЫ.items():
+                if код in aliases or код == канон_с:
+                    ключи_страны.add(канон_с)
+                    ключи_страны.update(aliases)
+            for ключ_с in ключи_страны:
+                if not ключ_с:
+                    continue
+                бакет = по_стране.setdefault(ключ_с, [])
+                if slug not in бакет:
+                    бакет.append(slug)
             имена_стран.setdefault(код, страна)
+    # Prefer canonical codes in genre_names ordering when aliases collapsed.
     порядок = sorted(имена.items(), key=lambda п: -len(по_жанру.get(п[0], ())))
     порядок_стран = sorted(имена_стран.items(),
                            key=lambda п: -len(по_стране.get(п[0], ())))
     return {"slug": по_slug, "genre": по_жанру, "genre_names": порядок,
-            "country": по_стране, "country_names": порядок_стран}
+            "country": по_стране, "country_names": порядок_стран,
+            "country_aliases": dict(СТРАНЫ_АЛИАСЫ)}
 
 
 class Обработчик(BaseHTTPRequestHandler):
@@ -6942,8 +7056,16 @@ class Обработчик(BaseHTTPRequestHandler):
         страна = self.МАРШРУТ_СТРАНЫ.match(путь)
         if страна:
             код = страна.group("code")
-            if код not in (self.индекс.get("country") or {}):
-                return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
+            страны = self.индекс.get("country") or {}
+            if код not in страны:
+                resolved = _канон_страны(код, страны)
+                if resolved is None:
+                    return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
+                keep = {к: (зпр.get(к) or [None])[0]
+                        for к in ("kind", "year", "genre", "sort", "page")
+                        if (зпр.get(к) or [None])[0]}
+                keep["country"] = resolved
+                return self._переход("/catalog/" + запрос_строкой(keep))
             зпр = dict(зпр)
             зпр["country"] = [код]
             return self._отдать(в.список("/catalog", зпр).encode("utf-8"))
@@ -6958,7 +7080,12 @@ class Обработчик(BaseHTTPRequestHandler):
                 зпр = dict(зпр)
                 зпр["genre"] = [код]
                 return self._отдать(в.список("/catalog", зпр).encode("utf-8"))
-            return self._переход(f"/catalog/?genre={код}")
+            # Zona: redirect to catalog query, preserving other active filters.
+            keep = {к: (зпр.get(к) or [None])[0]
+                    for к in ("kind", "year", "country", "sort", "page")
+                    if (зпр.get(к) or [None])[0]}
+            keep["genre"] = код
+            return self._переход("/catalog/" + запрос_строкой(keep))
         совпало = self.МАРШРУТ_ТАЙТЛА.match(путь)
         if совпало:
             return self.маршрут_тайтла(в, совпало, путь)

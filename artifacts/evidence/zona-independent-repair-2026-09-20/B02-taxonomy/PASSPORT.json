@@ -1,0 +1,12 @@
+{
+  "block": "B02",
+  "status": "PASS_LOCAL",
+  "summary": "Canonical genre_aliases registry; catalog facet and genre_comedy collection share alias-aware membership; kind/region still pending UI separation.",
+  "tests": "tests/lords/test_zona_independent_p0_taxonomy_search.py::test_genre_aliases_unify_comedy_keys + test_p0_comedy_catalog_equals_collection",
+  "pytest_exit": 0,
+  "residuals": [
+    "west_content still listed in ZONA_GENRE_NAV as genre until B07 home composition separates region",
+    "full live genre oracle table deferred to B16 against real snapshot"
+  ],
+  "updated_at": "2026-09-20T16:45:00Z"
+}

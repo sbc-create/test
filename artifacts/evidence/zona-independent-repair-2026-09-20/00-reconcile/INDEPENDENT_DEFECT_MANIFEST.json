@@ -1,0 +1,86 @@
+{
+  "OWNER_DECISION_ID": "ZONA-INDEPENDENT-REPAIR-ACCEPTANCE-20260920-01",
+  "AUDIT_DATE_UTC": "2026-09-20",
+  "LIVE_DOMAIN": "zonafilm.space",
+  "LIVE_BUILD": "20260920T092117Z-dbaf9a4d-nova",
+  "EVIDENCE_SCOPE": "confirmed_live_defects_and_predeploy_regression_gates_for_candidate",
+  "NOTE": "Defects observed on live dbaf9a4d. Candidate artifact 0b8b254 may already fix some; each item is a mandatory predeploy gate, not a claim that the uninspected artifact still contains every bug.",
+  "P0": [
+    {
+      "id": "P0-01",
+      "title": "comedy taxonomy catalog vs collection discrepancy",
+      "live": {"catalog_genre_comedy": 172, "collection_genre_comedy": 14913, "delta": 14741},
+      "owner_module_hypothesis": "catalog/taxonomy + collection_contract",
+      "release_class": "FUNCTIONAL_RELEASE_BLOCKER"
+    },
+    {
+      "id": "P0-02",
+      "title": "original title search FAIL",
+      "live": {"ru_exact": "PASS", "absent": "PASS", "original_due_spicci_dusty_bluffs": "FAIL"},
+      "owner_module_hypothesis": "search/ranker",
+      "release_class": "FUNCTIONAL_RELEASE_BLOCKER"
+    },
+    {
+      "id": "P0-03",
+      "title": "/new/ mode collapse newest==recently_added; future premiere unlabeled",
+      "owner_module_hypothesis": "event ledger + zona presentation",
+      "release_class": "FUNCTIONAL_RELEASE_BLOCKER"
+    },
+    {
+      "id": "P0-04",
+      "title": "recently_added equals full catalog 53548",
+      "owner_module_hypothesis": "collection_contract",
+      "release_class": "FUNCTIONAL_RELEASE_BLOCKER"
+    },
+    {
+      "id": "P0-05",
+      "title": "combined filters lose state; country control absent; velikobritaniya 404 on live",
+      "owner_module_hypothesis": "zona filters + route/SEO country",
+      "release_class": "FUNCTIONAL_RELEASE_BLOCKER"
+    },
+    {
+      "id": "P0-06",
+      "title": "candidate provenance vs live lineage unreconciled",
+      "owner_module_hypothesis": "zona worktree evidence",
+      "release_class": "SAFETY_RELEASE_BLOCKER"
+    },
+    {
+      "id": "P0-07",
+      "title": "responsive headed matrix missing; nested wrap; grid/header/player CSS defects",
+      "owner_module_hypothesis": "zona template",
+      "release_class": "FUNCTIONAL_RELEASE_BLOCKER"
+    },
+    {
+      "id": "P0-08",
+      "title": "live TTFB 6.8–9.3s; no-store + unused ETag",
+      "owner_module_hypothesis": "runtime/cache/SSR path",
+      "release_class": "FUNCTIONAL_RELEASE_BLOCKER"
+    },
+    {
+      "id": "P0-09",
+      "title": "empty/degraded state matrix missing",
+      "owner_module_hypothesis": "zona template",
+      "release_class": "FUNCTIONAL_RELEASE_BLOCKER"
+    }
+  ],
+  "P1_GROUPS": [
+    "home_composition_rails_cards",
+    "catalog_geometry_filters_pagination_seo",
+    "new_collections_semantics",
+    "title_player_episodes_recommendations_schema",
+    "visual_system_a11y_footer"
+  ],
+  "MUST_PRESERVE_REGRESSIONS": [
+    "home_catalog_new_collections_title_episode_open",
+    "ru_exact_search_Пыльные_утёсы",
+    "absent_search_empty",
+    "year_1902_exists",
+    "sampled_pagination_no_dup_neighbors",
+    "page_beyond_last_404",
+    "player_16x9_one_instance_autoplay0_sampled",
+    "valid_title_series_episode_200_invalid_404",
+    "desktop_1363_no_page_horizontal_overflow_sampled",
+    "weekly_popular_not_request_time",
+    "indexability_noindex_nofollow"
+  ]
+}

@@ -1,0 +1,9 @@
+..F.                                                                     [100%]
+=================================== FAILURES ===================================
+________________________ test_p0_original_title_search _________________________
+tests/lords/test_zona_independent_p0_taxonomy_search.py:156: in test_p0_original_title_search
+    assert hits and hits[0]["slug"] == "dusty"
+E   assert ([])
+=========================== short test summary info ============================
+FAILED tests/lords/test_zona_independent_p0_taxonomy_search.py::test_p0_original_title_search
+1 failed, 3 passed in 0.38s

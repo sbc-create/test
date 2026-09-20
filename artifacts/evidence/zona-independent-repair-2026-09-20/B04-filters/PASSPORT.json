@@ -1,0 +1,8 @@
+{
+  "block": "B04",
+  "status": "PASS_LOCAL",
+  "summary": "Filter facet links preserve year/kind/sort; active zero-result year stays selected; country facet present; /country/velikobritaniya/ and uk alias resolve; genre path redirect preserves query.",
+  "tests": "tests/lords/test_zona_independent_p0_filters.py",
+  "pytest_exit": 0,
+  "updated_at": "2026-09-20T16:55:00Z"
+}

@@ -1,0 +1,12 @@
+{
+  "block": "B05",
+  "status": "PASS_LOCAL_PARTIAL",
+  "summary": "/new/ modes premiere vs added already gated (B13); sort=recently_added on /new/ now maps to added ledger so it cannot silently equal premiere; future premiere labeled Ожидается; footer/nav false «Новые эпизоды» → Новинки on Zona.",
+  "tests": "tests/lords/test_zona_blockwise_b13.py",
+  "pytest_exit": 0,
+  "residuals": [
+    "episode mode remains hidden until episode ledger exists",
+    "visible <time datetime> coverage to expand in card system B09"
+  ],
+  "updated_at": "2026-09-20T17:05:00Z"
+}

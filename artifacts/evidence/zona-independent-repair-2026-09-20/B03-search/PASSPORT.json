@@ -1,0 +1,14 @@
+{
+  "block": "B03",
+  "status": "PASS_LOCAL",
+  "summary": "Original-title search: sidecar original_name joined into _формы; keyboard-layout variants are OR alternative queries (not AND-merged).",
+  "tests": "test_p0_original_title_search + TestSearchRanking",
+  "pytest_exit": 0,
+  "corpus_local": {
+    "exact_ru": "PASS",
+    "exact_original": "PASS (Dusty Bluffs)",
+    "absent": "covered by prior pass2",
+    "translit_typo_alias": "partial via existing TestSearchRanking"
+  },
+  "updated_at": "2026-09-20T16:45:00Z"
+}

@@ -1,0 +1,15 @@
+{
+  "block": "B00",
+  "status": "PASS_LOCAL",
+  "title": "Reconcile checkpoint and independent acceptance gates",
+  "pinned_head": "db8a54fd72f18532aca1c4be5793dd24f6cd8129",
+  "contract_digest": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+  "contract_weakened": 0,
+  "independent_manifest": "INDEPENDENT_DEFECT_MANIFEST.json",
+  "corrected_status": {
+    "READY_FOR_OWNER_DEPLOY": "NO",
+    "READY_FOR_OWNER_VISUAL_REVIEW": "NO",
+    "ZONA_TEMPLATE_TECHNICAL_CAN_BE_CLOSED": "NO"
+  },
+  "updated_at": "2026-09-20T16:30:00Z"
+}

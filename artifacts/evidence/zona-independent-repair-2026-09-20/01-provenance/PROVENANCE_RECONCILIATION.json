@@ -1,0 +1,20 @@
+{
+  "block": "B01",
+  "status": "PASS_LOCAL",
+  "ARTIFACT_SOURCE_HEAD": "0b8b254d394215091dec523f069721debe92569f",
+  "REPORT_FINAL_HEAD": "db8a54fd72f18532aca1c4be5793dd24f6cd8129",
+  "DIFF_RANGE": "0b8b254d394215091dec523f069721debe92569f..db8a54fd72f18532aca1c4be5793dd24f6cd8129",
+  "CODE_TREE_CHANGED": false,
+  "FILES_CHANGED": [
+    "artifacts/evidence/zona-blockwise-2026-09-20/B23-matrix/*",
+    "artifacts/evidence/zona-blockwise-2026-09-20/B24-live/*",
+    "artifacts/evidence/zona-blockwise-2026-09-20/RUN_CHECKPOINT.json"
+  ],
+  "POST_ARTIFACT_CHANGES_DOCS_EVIDENCE_ONLY": true,
+  "REBUILD_ARTIFACT_REQUIRED_FOR_DOCS_DRIFT": false,
+  "REBUILD_ARTIFACT_REQUIRED_BEFORE_DEPLOY": true,
+  "REBUILD_REASON": "Final deploy artifact must be cut from FINAL_CODE_HEAD after repair commits; prior artifact remains valid provenance for pre-repair code blob.",
+  "LORDS_FRONTEND_BLOB_AT_ARTIFACT_SOURCE": true,
+  "LORDS_FRONTEND_BLOB_UNCHANGED_THROUGH_DB8A54F": true,
+  "updated_at": "2026-09-20T16:30:00Z"
+}

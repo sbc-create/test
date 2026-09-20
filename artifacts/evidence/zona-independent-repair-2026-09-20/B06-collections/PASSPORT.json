@@ -1,0 +1,13 @@
+{
+  "block": "B06",
+  "status": "PASS_LOCAL_PARTIAL",
+  "summary": "recently_added bounded to recent_days=90 via недавно_в_окне; genre_comedy uses exact alias predicate.",
+  "tests": "test_p0_recently_added_bounded + comedy collection equality",
+  "pytest_exit": 0,
+  "residuals": [
+    "new_episodes hub/footer labels still need rename/hide until episode ledger (B05/B14)",
+    "collection hub unique subtitles and selection_policy_id surface incomplete",
+    "top_rated min-votes policy documentation pending"
+  ],
+  "updated_at": "2026-09-20T16:45:00Z"
+}

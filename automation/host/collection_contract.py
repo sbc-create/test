@@ -272,14 +272,60 @@ class Снимок:
         return готово
 
     def по_жанру(self, жанр: str) -> list[dict]:
-        жанр = (жанр or "").strip().lower()
+        """Exact alias-aware genre membership — same predicate as catalog facets.
+
+        Substring matching (``жанр in label``) was the root of the live
+        comedy facet 172 vs collection 14913 discrepancy: collection recalled
+        every label containing «комедия» while catalog ``?genre=comedy`` only
+        hit ``genre_codes==comedy``.
+        """
+        try:
+            from genre_aliases import жанр_совпадает
+        except ImportError:  # pragma: no cover
+            from automation.host.genre_aliases import жанр_совпадает  # type: ignore
+        жанр = (жанр or "").strip()
         if not жанр:
             return []
         готово = []
         for з in self._по_дате:
             д = self.подробности.get(str(з.get("slug") or "")) or {}
-            жанры = [str(г).strip().lower() for г in (д.get("genres") or [])]
-            if any(жанр in г for г in жанры):
+            коды = list(д.get("genre_codes") or [])
+            имена = list(д.get("genres") or [])
+            if жанр_совпадает(жанр, коды, имена):
+                готово.append(з)
+        return готово
+
+    def недавно_в_окне(self, дней: int = 90) -> list[dict]:
+        """catalog_added_at within the last N days (UTC), newest first.
+
+        Unbounded ``по_дате`` made /collection/recently_added/ equal the full
+        catalog (53548). Missing published_at rows are excluded — never filled
+        from release year.
+        """
+        from datetime import datetime, timedelta, timezone
+        дней = max(1, int(дней or 90))
+        сейчас = datetime.now(timezone.utc)
+        # Injectable clock via env for tests (LORDS_CLOCK_ISO).
+        import os
+        сырьё = (os.environ.get("LORDS_CLOCK_ISO") or "").strip()
+        if сырьё:
+            try:
+                сейчас = datetime.fromisoformat(сырьё.replace("Z", "+00:00"))
+            except ValueError:
+                pass
+        порог = сейчас - timedelta(days=дней)
+        готово = []
+        for з in self._по_дате:
+            raw = (з.get("published_at") or "").strip()
+            if not raw:
+                continue
+            try:
+                when = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+            except ValueError:
+                continue
+            if when.tzinfo is None:
+                when = when.replace(tzinfo=timezone.utc)
+            if when >= порог:
                 готово.append(з)
         return готово
 
@@ -372,8 +418,15 @@ def _карточка(снимок: Снимок, з: dict) -> Карточка:
 #: Как получить набор записей коллекции. Каждая функция работает с готовыми
 #: срезами снимка и не обходит каталог заново.
 ВЫБОРКИ: dict[str, Callable[[Снимок, dict], list[dict]]] = {
-    "recent": lambda с, ф: с.по_дате(),
-    "recent_of_kind": lambda с, ф: с.по_виду(str(ф.get("kind") or "")),
+    "recent": lambda с, ф: (
+        с.недавно_в_окне(int(ф.get("recent_days") or 90))
+        if ф.get("recent_days") else с.по_дате()
+    ),
+    "recent_of_kind": lambda с, ф: (
+        [з for з in с.недавно_в_окне(int(ф.get("recent_days") or 90))
+         if з.get("kind") == ф.get("kind")]
+        if ф.get("recent_days") else с.по_виду(str(ф.get("kind") or ""))
+    ),
     "top_rated": lambda с, ф: с.по_оценке(),
     "current_year": lambda с, ф: с.года(_clock_year()),
     "new_releases_kind": lambda с, ф: с.новинки_релиза(str(ф.get("kind") or "")),
@@ -501,12 +554,15 @@ def _недоступные(семейство: str, ключи: tuple[str, ...]
     "zona": (
         [
             _спец("recently_added", "zona", "Недавно добавленные",
-                  "Записи в порядке появления в каталоге.",
-                  "catalog", {}, {"field": "published_at", "order": "desc"},
+                  "Поступления в каталог за последние 90 дней "
+                  "(по catalog_added_at / published_at).",
+                  "catalog", {"recent_days": 90},
+                  {"field": "published_at", "order": "desc"},
                   "published_at", "/collection/recently_added/"),
             _спец("recently_added_movies", "zona", "Недавно добавленные фильмы",
-                  "Фильмы в порядке появления в каталоге.",
-                  "catalog", {"kind": "Фильм"}, {"field": "published_at", "order": "desc"},
+                  "Фильмы, добавленные в каталог за последние 90 дней.",
+                  "catalog", {"kind": "Фильм", "recent_days": 90},
+                  {"field": "published_at", "order": "desc"},
                   "published_at", "/collection/recently_added_movies/"),
             _спец("new_movie_releases", "zona", "Премьеры фильмов",
                   "Фильмы текущего календарного года.",
@@ -518,10 +574,12 @@ def _недоступные(семейство: str, ключи: tuple[str, ...]
                   "catalog", {"kind": "Сериал", "release_mode": "premiere"},
                   {"field": "premiere_date", "order": "desc"},
                   "premiere_date", "/collection/new_series_releases/"),
+            # Honest rename: no episode ledger in authorized snapshot.
             _спец("new_episodes", "zona", "Недавно добавленные сериалы",
-                  "Сериалы в порядке появления в каталоге. "
+                  "Сериалы, добавленные в каталог за последние 90 дней. "
                   "Отдельных дат эпизодов в авторизованном снимке нет.",
-                  "catalog", {"kind": "Сериал"}, {"field": "published_at", "order": "desc"},
+                  "catalog", {"kind": "Сериал", "recent_days": 90},
+                  {"field": "published_at", "order": "desc"},
                   "published_at", "/collection/new_episodes/"),
             _спец("top_rated", "zona", "Высокие оценки",
                   "Записи с подтверждённой оценкой источника.",
@@ -536,16 +594,16 @@ def _недоступные(семейство: str, ключи: tuple[str, ...]
                   "catalog", {"playable": True}, {"field": "published_at", "order": "desc"},
                   "published_at", "/collection/video_available/"),
             _спец("genre_comedy", "zona", "Комедии",
-                  "Комедии из каталога.",
-                  "catalog", {"genre": "комедия"}, {"field": "published_at", "order": "desc"},
+                  "Комедии из каталога (canonical genre=comedy / комедия / komediya).",
+                  "catalog", {"genre": "comedy"}, {"field": "published_at", "order": "desc"},
                   "genre", "/collection/genre_comedy/"),
             _спец("genre_drama", "zona", "Драмы",
                   "Драмы из каталога.",
-                  "catalog", {"genre": "драма"}, {"field": "published_at", "order": "desc"},
+                  "catalog", {"genre": "drama"}, {"field": "published_at", "order": "desc"},
                   "genre", "/collection/genre_drama/"),
             _спец("genre_thriller", "zona", "Триллеры",
                   "Триллеры из каталога.",
-                  "catalog", {"genre": "триллер"}, {"field": "published_at", "order": "desc"},
+                  "catalog", {"genre": "triller"}, {"field": "published_at", "order": "desc"},
                   "genre", "/collection/genre_thriller/"),
             _спец("genre_animation", "zona", "Анимация",
                   "Анимация и мультфильмы.",
