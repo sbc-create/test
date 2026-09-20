@@ -1,0 +1,762 @@
+{
+  "gates": {
+    "SOURCE_AVAILABLE_NOT_RENDERED": 0,
+    "SOURCE_POSTER_AVAILABLE_BUT_NOT_RENDERED": 0,
+    "SOURCE_DESCRIPTION_AVAILABLE_BUT_NOT_RENDERED": 0,
+    "WRONG_TITLE_ID_MAPPINGS": 0,
+    "AMBIGUOUS_AUTO_MAPPINGS": 0
+  },
+  "rows": [
+    {
+      "domain": "animedia.icu",
+      "title_id": "01a0aa6e-2008-70d0-89d1-1af7b85336b1",
+      "slug": "nelyud-film-2-stolknovenie",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/01a0aa6e-09d6-7526-b228-8df81f8dc726.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 654,
+      "rendered_description_length": 664,
+      "source_rating_fields": {
+        "kp": 7.011,
+        "imdb": 7.8
+      },
+      "rendered_rating_fields": [
+        "КП",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb",
+        "Shikimori",
+        "КП",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Нелюдь. Фильм 2: Столкновение"
+    },
+    {
+      "domain": "animedia.icu",
+      "title_id": "01a0b507-3280-7b2a-8af4-674dd73cff72",
+      "slug": "master-lda-i-plameni-2",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/01a0b507-0813-7526-a2e6-5edf75180827.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 0,
+      "rendered_description_length": 0,
+      "source_rating_fields": {
+        "shiki": {
+          "canonical_title_id": "01a0b507-3280-7b2a-8af4-674dd73cff72",
+          "external_id": "53477",
+          "match_state": "external_id_exact+title_verified",
+          "provider": "shikimori",
+          "retrieved_at": "2026-09-19T03:38:48Z",
+          "scale": 10.0,
+          "source": "shikimori",
+          "source_title": "Мастер льда и пламени 2",
+          "value": 7.12,
+          "value_on_ten": 7.12
+        }
+      },
+      "rendered_rating_fields": [
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Мастер льда и пламени 2"
+    },
+    {
+      "domain": "animedia.icu",
+      "title_id": "01923bf9-d18b-71c0-a92f-857685e45fbc",
+      "slug": "pervyy-shag-novyy-vyzov",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/01923bf9-d18b-71c0-a92f-857685e45fbc.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 287,
+      "rendered_description_length": 297,
+      "source_rating_fields": {
+        "shiki": {
+          "canonical_title_id": "01923bf9-d18b-71c0-a92f-857685e45fbc",
+          "external_id": "5258",
+          "match_state": "external_id_exact+title_verified",
+          "provider": "shikimori",
+          "retrieved_at": "2026-09-14T17:55:47Z",
+          "scale": 10.0,
+          "source": "shikimori",
+          "source_title": "Первый шаг: Новый вызов",
+          "value": 8.67,
+          "value_on_ten": 8.67
+        }
+      },
+      "rendered_rating_fields": [
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Первый шаг: Новый вызов"
+    },
+    {
+      "domain": "animedia.icu",
+      "title_id": "019bd226-ccda-7d41-b061-63738ccde0f9",
+      "slug": "legenda-o-mechnike-3",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/019bd226-ccda-7d41-b061-63738ccde0f9.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 0,
+      "rendered_description_length": 0,
+      "source_rating_fields": {
+        "shiki": {
+          "canonical_title_id": "019bd226-ccda-7d41-b061-63738ccde0f9",
+          "external_id": "11835",
+          "match_state": "external_id_exact+title_verified",
+          "provider": "shikimori",
+          "retrieved_at": "2026-09-14T17:54:33Z",
+          "scale": 10.0,
+          "source": "shikimori",
+          "source_title": "Легенда о мечнике 3",
+          "value": 6.92,
+          "value_on_ten": 6.92
+        }
+      },
+      "rendered_rating_fields": [
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Легенда о мечнике 3"
+    },
+    {
+      "domain": "animedia.icu",
+      "title_id": "0199c3ac-efeb-7f13-895e-3e0e962a841b",
+      "slug": "blich-tysyacheletnyaya-krovavaya-voyna-proschanie-rekap",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/0199c3ac-efeb-7f13-895e-3e0e962a841b.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 0,
+      "rendered_description_length": 0,
+      "source_rating_fields": {
+        "shiki": {
+          "canonical_title_id": "0199c3ac-efeb-7f13-895e-3e0e962a841b",
+          "external_id": "56442",
+          "match_state": "external_id_exact+title_verified",
+          "provider": "shikimori",
+          "retrieved_at": "2026-09-14T17:55:54Z",
+          "scale": 10.0,
+          "source": "shikimori",
+          "source_title": "Блич: Тысячелетняя кровавая война — Прощание. Рекап",
+          "value": 7.53,
+          "value_on_ten": 7.53
+        }
+      },
+      "rendered_rating_fields": [
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Блич: Тысячелетняя кровавая война — Прощание. Рекап"
+    },
+    {
+      "domain": "animedia.icu",
+      "title_id": "01927846-dfa1-763e-ae43-01ddc3f59d3e",
+      "slug": "narutaru",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/01927846-dfa1-763e-ae43-01ddc3f59d3e.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 289,
+      "rendered_description_length": 299,
+      "source_rating_fields": {
+        "imdb": 6.2
+      },
+      "rendered_rating_fields": [
+        "IMDb",
+        "IMDb",
+        "IMDb",
+        "Shikimori",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Нарутару"
+    },
+    {
+      "domain": "animedia.icu",
+      "title_id": "01992e0a-2ebe-71ee-afb9-76390b2d54d8",
+      "slug": "orient-chast-2",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/01992e0a-2ebe-71ee-afb9-76390b2d54d8.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 1359,
+      "rendered_description_length": 1369,
+      "source_rating_fields": {
+        "shiki": {
+          "canonical_title_id": "01992e0a-2ebe-71ee-afb9-76390b2d54d8",
+          "external_id": "51368",
+          "match_state": "external_id_exact+title_verified",
+          "provider": "shikimori",
+          "retrieved_at": "2026-09-14T17:55:44Z",
+          "scale": 10.0,
+          "source": "shikimori",
+          "source_title": "Ориент. Часть 2",
+          "value": 7.04,
+          "value_on_ten": 7.04
+        }
+      },
+      "rendered_rating_fields": [
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Ориент. Часть 2"
+    },
+    {
+      "domain": "animedia.icu",
+      "title_id": "0199ab17-b818-71b0-8870-b6093eabe3d0",
+      "slug": "pokemon-stremlenie-stat-masterom-pokemonov",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/0199ab17-b818-71b0-8870-b6093eabe3d0.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 0,
+      "rendered_description_length": 0,
+      "source_rating_fields": {
+        "shiki": {
+          "canonical_title_id": "0199ab17-b818-71b0-8870-b6093eabe3d0",
+          "external_id": "53874",
+          "match_state": "external_id_exact+title_verified",
+          "provider": "shikimori",
+          "retrieved_at": "2026-09-14T17:55:49Z",
+          "scale": 10.0,
+          "source": "shikimori",
+          "source_title": "Покемон: Стремление стать мастером покемонов",
+          "value": 7.61,
+          "value_on_ten": 7.61
+        }
+      },
+      "rendered_rating_fields": [
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Покемон: Стремление стать мастером покемонов"
+    },
+    {
+      "domain": "animedia.icu",
+      "title_id": "019451d2-05ab-7d4c-a36e-cc2862983fc8",
+      "slug": "klinok-zla",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/019451d2-05ab-7d4c-a36e-cc2862983fc8.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 791,
+      "rendered_description_length": 801,
+      "source_rating_fields": {
+        "shiki": {
+          "canonical_title_id": "019451d2-05ab-7d4c-a36e-cc2862983fc8",
+          "external_id": "58216",
+          "match_state": "external_id_exact+title_verified",
+          "provider": "shikimori",
+          "retrieved_at": "2026-09-14T17:55:59Z",
+          "scale": 10.0,
+          "source": "shikimori",
+          "source_title": "Клинок зла",
+          "value": 6.33,
+          "value_on_ten": 6.33
+        }
+      },
+      "rendered_rating_fields": [
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Клинок зла"
+    },
+    {
+      "domain": "animedia.icu",
+      "title_id": "01996d12-4b66-7c19-ad21-74293a314af8",
+      "slug": "organ-genocida",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/01996d12-4b66-7c19-ad21-74293a314af8.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 486,
+      "rendered_description_length": 496,
+      "source_rating_fields": {
+        "shiki": {
+          "canonical_title_id": "01996d12-4b66-7c19-ad21-74293a314af8",
+          "external_id": "23279",
+          "match_state": "external_id_exact+title_verified",
+          "provider": "shikimori",
+          "retrieved_at": "2026-09-14T17:54:49Z",
+          "scale": 10.0,
+          "source": "shikimori",
+          "source_title": "Орган геноцида",
+          "value": 7.13,
+          "value_on_ten": 7.13
+        }
+      },
+      "rendered_rating_fields": [
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Орган геноцида"
+    },
+    {
+      "domain": "animedia.icu",
+      "title_id": "0191f111-e253-7d40-a2c4-191292929284",
+      "slug": "schastlivaya-zvezda-ova",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/0191f111-e253-7d40-a2c4-191292929284.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 302,
+      "rendered_description_length": 322,
+      "source_rating_fields": {
+        "shiki": {
+          "canonical_title_id": "0191f111-e253-7d40-a2c4-191292929284",
+          "external_id": "4472",
+          "match_state": "external_id_exact+title_verified",
+          "provider": "shikimori",
+          "retrieved_at": "2026-09-14T17:55:33Z",
+          "scale": 10.0,
+          "source": "shikimori",
+          "source_title": "Счастливая звезда: Оригинальные визуал и анимация",
+          "value": 7.8,
+          "value_on_ten": 7.8
+        }
+      },
+      "rendered_rating_fields": [
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Счастливая звезда OVA"
+    },
+    {
+      "domain": "animedia.icu",
+      "title_id": "01949b10-0906-7478-bae0-7ded2b0e698d",
+      "slug": "ty-umeesh-hranit-sekrety-3",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/01949b10-0906-7478-bae0-7ded2b0e698d.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 834,
+      "rendered_description_length": 844,
+      "source_rating_fields": {
+        "shiki": {
+          "canonical_title_id": "01949b10-0906-7478-bae0-7ded2b0e698d",
+          "external_id": "59361",
+          "match_state": "external_id_exact+title_verified",
+          "provider": "shikimori",
+          "retrieved_at": "2026-09-14T17:56:02Z",
+          "scale": 10.0,
+          "source": "shikimori",
+          "source_title": "Ты умеешь хранить секреты?",
+          "value": 7.49,
+          "value_on_ten": 7.49
+        }
+      },
+      "rendered_rating_fields": [
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Ты умеешь хранить секреты?"
+    },
+    {
+      "domain": "animedia.icu",
+      "title_id": "01915137-08cf-70dc-a6da-8112a299c879",
+      "slug": "skazaniya-o-demonah-i-bogah-8",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/01915137-08cf-70dc-a6da-8112a299c879.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 584,
+      "rendered_description_length": 594,
+      "source_rating_fields": {
+        "imdb": 7.6
+      },
+      "rendered_rating_fields": [
+        "IMDb",
+        "IMDb",
+        "IMDb",
+        "Shikimori",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Сказания о демонах и богах 8"
+    },
+    {
+      "domain": "animedia.icu",
+      "title_id": "01964817-5074-789a-a46c-f979947c5543",
+      "slug": "etot-uzhasnyy-i-prekrasnyy-mir",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/01964817-5074-789a-a46c-f979947c5543.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 565,
+      "rendered_description_length": 575,
+      "source_rating_fields": {
+        "shiki": {
+          "canonical_title_id": "01964817-5074-789a-a46c-f979947c5543",
+          "external_id": "146",
+          "match_state": "external_id_exact+title_verified",
+          "provider": "shikimori",
+          "retrieved_at": "2026-09-14T17:54:36Z",
+          "scale": 10.0,
+          "source": "shikimori",
+          "source_title": "Этот ужасный и прекрасный мир",
+          "value": 6.75,
+          "value_on_ten": 6.75
+        }
+      },
+      "rendered_rating_fields": [
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Этот ужасный и прекрасный мир"
+    },
+    {
+      "domain": "animedia.icu",
+      "title_id": "01925ae1-7720-7084-9fe2-ec83b169e519",
+      "slug": "grobnica-imperatora",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/01925ae1-7720-7084-9fe2-ec83b169e519.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 437,
+      "rendered_description_length": 447,
+      "source_rating_fields": {
+        "imdb": 8.2
+      },
+      "rendered_rating_fields": [
+        "IMDb",
+        "IMDb",
+        "IMDb",
+        "Shikimori",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Гробница императора"
+    },
+    {
+      "domain": "animedia.icu",
+      "title_id": "0191d257-2bf7-79ec-9a4b-f14ac28c30d4",
+      "slug": "akusticheskiy-voin-borgmen",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/0191d257-2bf7-79ec-9a4b-f14ac28c30d4.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 594,
+      "rendered_description_length": 604,
+      "source_rating_fields": {
+        "shiki": {
+          "canonical_title_id": "0191d257-2bf7-79ec-9a4b-f14ac28c30d4",
+          "external_id": "3035",
+          "match_state": "external_id_exact+title_verified",
+          "provider": "shikimori",
+          "retrieved_at": "2026-09-14T17:54:58Z",
+          "scale": 10.0,
+          "source": "shikimori",
+          "source_title": "Акустический воин Боргмен",
+          "value": 6.64,
+          "value_on_ten": 6.64
+        }
+      },
+      "rendered_rating_fields": [
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Акустический воин Боргмен"
+    },
+    {
+      "domain": "animedia.icu",
+      "title_id": "019b9d32-ed16-754c-81f2-4492ee7b8bdb",
+      "slug": "pogruzis",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/019b9d32-ed16-754c-81f2-4492ee7b8bdb.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 0,
+      "rendered_description_length": 0,
+      "source_rating_fields": {},
+      "rendered_rating_fields": [
+        "Shikimori",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Погрузись!"
+    },
+    {
+      "domain": "animedia.icu",
+      "title_id": "01985ae1-c1b3-7fef-b6a5-0b680d9ae478",
+      "slug": "kasanie",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/01985ae1-c1b3-7fef-b6a5-0b680d9ae478.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 909,
+      "rendered_description_length": 919,
+      "source_rating_fields": {
+        "shiki": {
+          "canonical_title_id": "01985ae1-c1b3-7fef-b6a5-0b680d9ae478",
+          "external_id": "1065",
+          "match_state": "external_id_exact+title_verified",
+          "provider": "shikimori",
+          "retrieved_at": "2026-09-14T17:54:30Z",
+          "scale": 10.0,
+          "source": "shikimori",
+          "source_title": "Касание",
+          "value": 8.02,
+          "value_on_ten": 8.02
+        }
+      },
+      "rendered_rating_fields": [
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Касание"
+    },
+    {
+      "domain": "animedia.icu",
+      "title_id": "01927431-99e9-7c28-94a6-66656b935575",
+      "slug": "sem-listev",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/01927431-99e9-7c28-94a6-66656b935575.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 600,
+      "rendered_description_length": 610,
+      "source_rating_fields": {
+        "imdb": 6.0
+      },
+      "rendered_rating_fields": [
+        "IMDb",
+        "IMDb",
+        "IMDb",
+        "Shikimori",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Семь листьев"
+    },
+    {
+      "domain": "animedia.icu",
+      "title_id": "01916821-fb8f-7dd4-b948-91c326de9870",
+      "slug": "klannad",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/01916821-fb8f-7dd4-b948-91c326de9870.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 1025,
+      "rendered_description_length": 1035,
+      "source_rating_fields": {
+        "imdb": 8.2
+      },
+      "rendered_rating_fields": [
+        "IMDb",
+        "IMDb",
+        "IMDb",
+        "Shikimori",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Кланнад"
+    },
+    {
+      "domain": "animedia.space",
+      "title_id": "01a0aa6e-2008-70d0-89d1-1af7b85336b1",
+      "slug": "nelyud-film-2-stolknovenie",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/01a0aa6e-09d6-7526-b228-8df81f8dc726.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 654,
+      "rendered_description_length": 664,
+      "source_rating_fields": {
+        "kp": 7.011,
+        "imdb": 7.8
+      },
+      "rendered_rating_fields": [
+        "КП",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb",
+        "Shikimori",
+        "КП",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Нелюдь. Фильм 2: Столкновение"
+    },
+    {
+      "domain": "animedia.space",
+      "title_id": "01a0b507-3280-7b2a-8af4-674dd73cff72",
+      "slug": "master-lda-i-plameni-2",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/01a0b507-0813-7526-a2e6-5edf75180827.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 0,
+      "rendered_description_length": 0,
+      "source_rating_fields": {
+        "shiki": {
+          "canonical_title_id": "01a0b507-3280-7b2a-8af4-674dd73cff72",
+          "external_id": "53477",
+          "match_state": "external_id_exact+title_verified",
+          "provider": "shikimori",
+          "retrieved_at": "2026-09-19T03:38:48Z",
+          "scale": 10.0,
+          "source": "shikimori",
+          "source_title": "Мастер льда и пламени 2",
+          "value": 7.12,
+          "value_on_ten": 7.12
+        }
+      },
+      "rendered_rating_fields": [
+        "Shikimori",
+        "Shikimori",
+        "Shikimori",
+        "КП",
+        "КП",
+        "IMDb",
+        "IMDb",
+        "IMDb"
+      ],
+      "mapping_id_match": true,
+      "name": "Мастер льда и пламени 2"
+    },
+    {
+      "domain": "animedia.icu",
+      "title_id": "01a0b507-3280-7b2a-8af4-674dd73cff72",
+      "slug": "master-lda-i-plameni-2",
+      "route": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/01a0b507-0813-7526-a2e6-5edf75180827.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 0,
+      "rendered_description_length": 0,
+      "mapping_id_match": true,
+      "episode_context_present": true
+    },
+    {
+      "domain": "animedia.space",
+      "title_id": "01a0b507-3280-7b2a-8af4-674dd73cff72",
+      "slug": "master-lda-i-plameni-2",
+      "route": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "http_status": 200,
+      "source_poster_url": "https://poster.cdnvideohub.com/01a0b507-0813-7526-a2e6-5edf75180827.webp",
+      "source_poster_available": true,
+      "rendered_poster_visible": true,
+      "source_description_length": 0,
+      "rendered_description_length": 0,
+      "mapping_id_match": true,
+      "episode_context_present": true
+    }
+  ]
+}

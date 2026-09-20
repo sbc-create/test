@@ -1,0 +1,171 @@
+{
+  "url": "https://amd.online/",
+  "http_status": 200,
+  "timestamp": "2026-09-20T09:41:51.966252+00:00",
+  "loading_overlay": false,
+  "sha256_atf": "205e5101d867baac897ca78615fa5da0bcedf6310b2dba3f83cdb6b2ab684d71",
+  "metrics": {
+    "url": "https://amd.online/",
+    "title": "Animedia Online - Смотреть аниме онлайн!",
+    "bodyH": 12287,
+    "bodyW": 390,
+    "scrollW": 390,
+    "overflowX": false,
+    "header": {
+      "h": 126,
+      "w": 390
+    },
+    "poster_sample": [
+      {
+        "w": 60,
+        "h": 70,
+        "alt": "постер к аниме Некромант: Я катастрофа",
+        "src": "https://amd.online/uploads/posts/2026-08/thumbs/necromancer_i_am_the_calamity_tv_1_422304035desctop.webp"
+      },
+      {
+        "w": 60,
+        "h": 70,
+        "alt": "постер к аниме Древний бог",
+        "src": "https://amd.online/uploads/posts/2026-08/thumbs/ab4c43eb3af6c4cb21e12667ca4bf8f5.webp"
+      },
+      {
+        "w": 60,
+        "h": 70,
+        "alt": "постер к аниме Боевой мастер",
+        "src": "https://amd.online/uploads/posts/2023-11/thumbs/1699870413_povelitel-besstrashnogo-duha.webp"
+      },
+      {
+        "w": 60,
+        "h": 70,
+        "alt": "постер к аниме Компания «Маги-Люмьер» 2",
+        "src": "https://amd.online/uploads/posts/2026-07/thumbs/16bb70a999e7f6dad3ded28d1eadbae4.webp"
+      },
+      {
+        "w": 60,
+        "h": 70,
+        "alt": "постер к аниме Бог богатства Чжаньлун Доу",
+        "src": "https://amd.online/uploads/posts/2026-08/thumbs/caishen-dou-zhanlong-rus.webp"
+      },
+      {
+        "w": 60,
+        "h": 70,
+        "alt": "постер к аниме Забота об одарённой девушке: В престижной школе, полной высококла",
+        "src": "https://amd.online/uploads/posts/2026-07/thumbs/3a8e2d0b58a08f10de699183cbf5f634.webp"
+      },
+      {
+        "w": 60,
+        "h": 70,
+        "alt": "постер к аниме Невеста демона",
+        "src": "https://amd.online/uploads/posts/2026-07/thumbs/67d692ad188f649095107a4e34aabd7a.webp"
+      },
+      {
+        "w": 60,
+        "h": 70,
+        "alt": "постер к аниме Ханаори хочет драться даже после перерождения",
+        "src": "https://amd.online/uploads/posts/2026-07/thumbs/40e956bd2225459d1946901c1730fbce.webp"
+      },
+      {
+        "w": 60,
+        "h": 70,
+        "alt": "постер к аниме Цугаи загробного мира",
+        "src": "https://amd.online/uploads/posts/2026-04/thumbs/bead26bec38d1f4305f6242cd5f459dd.webp"
+      },
+      {
+        "w": 60,
+        "h": 70,
+        "alt": "постер к аниме Мао",
+        "src": "https://amd.online/uploads/posts/2026-04/thumbs/01546b2d61e2647632e79035392286b8.webp"
+      },
+      {
+        "w": 60,
+        "h": 70,
+        "alt": "постер к аниме Ты и я — полные противоположности 2",
+        "src": "https://amd.online/uploads/posts/2026-07/thumbs/47ae177f92ce9f7bdc760c10d4710777.webp"
+      },
+      {
+        "w": 60,
+        "h": 70,
+        "alt": "постер к аниме Реинкарнация безработного: История о приключениях в другом мире 3",
+        "src": "https://amd.online/uploads/posts/2026-07/thumbs/22f02167e562e703fef2cbed82b93d06.webp"
+      }
+    ],
+    "section_count": 4,
+    "sections": [
+      {
+        "idx": 0,
+        "tag": "SECTION",
+        "class": "sectcomm home-diary-widget",
+        "h": 824,
+        "y": 4825,
+        "title": "Дневники[Создать свой]"
+      },
+      {
+        "idx": 1,
+        "tag": "SECTION",
+        "class": "ac-home-coll sectcomm",
+        "h": 1364,
+        "y": 5709,
+        "title": "Подборки аниме"
+      },
+      {
+        "idx": 2,
+        "tag": "SECTION",
+        "class": "sectcomm last-reviews-sect lb-block",
+        "h": 1609,
+        "y": 7799,
+        "title": "Топ 10 за неделю"
+      },
+      {
+        "idx": 3,
+        "tag": "SECTION",
+        "class": "descr",
+        "h": 1161,
+        "y": 10818,
+        "title": "Animedia Online - Смотреть аниме онлайн"
+      }
+    ],
+    "nav_href_count": 406,
+    "nav_href_sample": [
+      "/?do=register",
+      "https://amd.online/index.php?do=lostpassword",
+      "https://oauth.vk.com/authorize?client_id=51784897&redirect_uri=https%3A%2F%2Famd.online%2Findex.php%3Fdo%3Dauth-social%26provider%3Dvk&scope=offline%2Cemail&state=b93e4cfe2f2a9eaceecfb0305d2d14fb&response_type=code&v=5.90",
+      "https://oauth.yandex.ru/authorize?client_id=2e31281a5dd842dabbe30deb03cebd0e&redirect_uri=https%3A%2F%2Famd.online%2Findex.php%3Fdo%3Dauth-social%26provider%3Dyandex&state=b93e4cfe2f2a9eaceecfb0305d2d14fb&response_type=code",
+      "/",
+      "/premium.html",
+      "/daily/",
+      "/anime/ghanr/китайское/",
+      "/anime/ghanr/3d/",
+      "/anime/ghanr/Безумие/",
+      "/anime/ghanr/Боевые искусства/",
+      "/anime/ghanr/Вампиры/",
+      "/anime/ghanr/Военное/",
+      "/anime/ghanr/Гарем/",
+      "/anime/ghanr/Гурман/",
+      "/anime/ghanr/Дзёсей/",
+      "/anime/ghanr/Демоны/",
+      "/anime/ghanr/Детектив/",
+      "/anime/ghanr/Детское/",
+      "/anime/ghanr/Драма/",
+      "/anime/ghanr/Игры/",
+      "/anime/ghanr/Исторический/",
+      "/anime/ghanr/Комедия/",
+      "/anime/ghanr/Космос/",
+      "/anime/ghanr/Машины/",
+      "/anime/ghanr/Меха/",
+      "/anime/ghanr/Музыка/",
+      "/anime/ghanr/Пародия/",
+      "/anime/ghanr/Повседневность/",
+      "/anime/ghanr/Полиция/",
+      "/anime/ghanr/Приключения/",
+      "/anime/ghanr/Психологическое/",
+      "/anime/ghanr/Романтика/",
+      "/anime/ghanr/Работа/",
+      "/anime/ghanr/сёнен/",
+      "/anime/ghanr/сэйнэн/",
+      "/anime/ghanr/Сёдзё/",
+      "/anime/ghanr/Самураи/",
+      "/anime/ghanr/Сверхъестественное/",
+      "/anime/ghanr/Спорт/"
+    ]
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "url": "https://amd.online/anime-collections/",
+  "http_status": 200,
+  "timestamp": "2026-09-20T09:42:43.995943+00:00",
+  "loading_overlay": false,
+  "sha256_atf": "0902c956c9da1d119dec2de82e878642169c3a3e761b233522252e09abb35467",
+  "metrics": {
+    "url": "https://amd.online/anime-collections/",
+    "title": "Подборки аниме",
+    "bodyH": 3308,
+    "bodyW": 1440,
+    "scrollW": 1440,
+    "overflowX": false,
+    "header": {
+      "h": 90,
+      "w": 1420
+    },
+    "poster_sample": [
+      {
+        "w": 18,
+        "h": 14,
+        "alt": "",
+        "src": "https://amd.online/grupa/pre.png"
+      },
+      {
+        "w": 163,
+        "h": 228,
+        "alt": "постер к аниме Расколотая битвой синева небес 5",
+        "src": "https://amd.online/uploads/posts/2025-02/battle-through-the-heavens-season-5-btth-season-5-5-dou-po-cangqiong-season-5.w"
+      },
+      {
+        "w": 163,
+        "h": 228,
+        "alt": "постер к аниме Некромант: Я катастрофа",
+        "src": "https://amd.online/uploads/posts/2026-08/necromancer_i_am_the_calamity_tv_1_422304035desctop.webp"
+      },
+      {
+        "w": 163,
+        "h": 228,
+        "alt": "постер к аниме Противостояние святого",
+        "src": "https://amd.online/uploads/posts/2024-12/original.webp"
+      },
+      {
+        "w": 163,
+        "h": 228,
+        "alt": "постер к аниме Поглощенная звезда",
+        "src": "https://amd.online/uploads/posts/2024-09/photo_2024-10-01_00-15-22.webp"
+      },
+      {
+        "w": 163,
+        "h": 228,
+        "alt": "постер к аниме За гранью времени",
+        "src": "https://amd.online/uploads/posts/2025-12/734c5dd37297821df79d5e1dcef2aefa.webp"
+      },
+      {
+        "w": 163,
+        "h": 228,
+        "alt": "постер к аниме Путешествие к бессмертию",
+        "src": "https://amd.online/uploads/posts/2023-11/1699884777_puteshestvie-k-bessmertiju.webp"
+      },
+      {
+        "w": 163,
+        "h": 228,
+        "alt": "постер к аниме Боевой континент 2: Непревзойдённый клан Тан",
+        "src": "https://amd.online/uploads/posts/2025-08/1755887568.webp"
+      },
+      {
+        "w": 163,
+        "h": 228,
+        "alt": "постер к аниме О моём перерождении в слизь 4",
+        "src": "https://amd.online/uploads/posts/2026-04/main-6f406c4d493d1d6a95eab0f6d8dc8d10.webp"
+      },
+      {
+        "w": 163,
+        "h": 228,
+        "alt": "постер к аниме Изгнанный реинкарнированный тяжёлый рыцарь не имеет себе равных в",
+        "src": "https://amd.online/uploads/posts/2026-07/caf42cffb8cddce77d292f196e33ac71.webp"
+      },
+      {
+        "w": 163,
+        "h": 228,
+        "alt": "постер к аниме Сказание о пастухе богов",
+        "src": "https://amd.online/uploads/posts/2024-10/9f4efa89eb4725a5ad7f7b1591ff717e.webp"
+      },
+      {
+        "w": 163,
+        "h": 228,
+        "alt": "постер к аниме Безупречный мир",
+        "src": "https://amd.online/uploads/posts/2023-11/bezuprechnyj-mir.webp"
+      }
+    ],
+    "section_count": 0,
+    "sections": [],
+    "nav_href_count": 226,
+    "nav_href_sample": [
+      "/?do=register",
+      "https://amd.online/index.php?do=lostpassword",
+      "https://oauth.vk.com/authorize?client_id=51784897&redirect_uri=https%3A%2F%2Famd.online%2Findex.php%3Fdo%3Dauth-social%26provider%3Dvk&scope=offline%2Cemail&state=3524f4398c3a765b5401da7369617200&response_type=code&v=5.90",
+      "https://oauth.yandex.ru/authorize?client_id=2e31281a5dd842dabbe30deb03cebd0e&redirect_uri=https%3A%2F%2Famd.online%2Findex.php%3Fdo%3Dauth-social%26provider%3Dyandex&state=3524f4398c3a765b5401da7369617200&response_type=code",
+      "/",
+      "/premium.html",
+      "/daily/",
+      "/anime/ghanr/китайское/",
+      "/anime/ghanr/3d/",
+      "/anime/ghanr/Безумие/",
+      "/anime/ghanr/Боевые искусства/",
+      "/anime/ghanr/Вампиры/",
+      "/anime/ghanr/Военное/",
+      "/anime/ghanr/Гарем/",
+      "/anime/ghanr/Гурман/",
+      "/anime/ghanr/Дзёсей/",
+      "/anime/ghanr/Демоны/",
+      "/anime/ghanr/Детектив/",
+      "/anime/ghanr/Детское/",
+      "/anime/ghanr/Драма/",
+      "/anime/ghanr/Игры/",
+      "/anime/ghanr/Исторический/",
+      "/anime/ghanr/Комедия/",
+      "/anime/ghanr/Космос/",
+      "/anime/ghanr/Машины/",
+      "/anime/ghanr/Меха/",
+      "/anime/ghanr/Музыка/",
+      "/anime/ghanr/Пародия/",
+      "/anime/ghanr/Повседневность/",
+      "/anime/ghanr/Полиция/",
+      "/anime/ghanr/Приключения/",
+      "/anime/ghanr/Психологическое/",
+      "/anime/ghanr/Романтика/",
+      "/anime/ghanr/Работа/",
+      "/anime/ghanr/сёнен/",
+      "/anime/ghanr/сэйнэн/",
+      "/anime/ghanr/Сёдзё/",
+      "/anime/ghanr/Самураи/",
+      "/anime/ghanr/Сверхъестественное/",
+      "/anime/ghanr/Спорт/"
+    ]
+  }
+}

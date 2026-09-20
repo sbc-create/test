@@ -1,0 +1,120 @@
+{
+  "url": "https://animedia.icu/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+  "http_status": 200,
+  "timestamp": "2026-09-20T09:44:45.415339+00:00",
+  "loading_overlay": false,
+  "build_metas": {
+    "metas": [
+      {
+        "name": "site-factory-template-revision",
+        "content": "ca1696796b4f95e0e474664497cf2866ca0d343f"
+      },
+      {
+        "name": "site-factory-design-version",
+        "content": "1.2.4"
+      },
+      {
+        "name": "site-factory-template-family",
+        "content": "animedia"
+      },
+      {
+        "name": "site-factory-build-id",
+        "content": "20260919T224052Z-ca169679-nova"
+      },
+      {
+        "name": "site-factory-artifact-sha256",
+        "content": "f89b9d8257f20b5170333bbdac372eebf1be6f2aa934b49be5b27487c4cbc680"
+      },
+      {
+        "name": "site-factory-template",
+        "content": "animedia-nova"
+      },
+      {
+        "name": "site-factory-core",
+        "content": "site-factory-nova"
+      },
+      {
+        "name": "site-factory-profile",
+        "content": "animedia-icu"
+      }
+    ]
+  },
+  "metrics": {
+    "url": "https://animedia.icu/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+    "title": "Поиск — Animedia",
+    "bodyH": 1678,
+    "bodyW": 390,
+    "scrollW": 390,
+    "overflowX": false,
+    "header": {
+      "h": 57,
+      "w": 390
+    },
+    "poster_sample": [
+      {
+        "w": 163,
+        "h": 245,
+        "alt": "Кланнад",
+        "src": "https://animedia.icu/poster/0191ebee-1309-773b-928c-9c314503324f.webp"
+      },
+      {
+        "w": 163,
+        "h": 245,
+        "alt": "Кланнад",
+        "src": "https://animedia.icu/poster/01916821-fb8f-7dd4-b948-91c326de9870.webp"
+      },
+      {
+        "w": 163,
+        "h": 245,
+        "alt": "Кланнад: Другой мир, глава Томоё",
+        "src": "https://animedia.icu/poster/0191ebee-5068-7243-90b9-e3becf1fcc89.webp"
+      },
+      {
+        "w": 163,
+        "h": 245,
+        "alt": "Кланнад: Продолжение истории",
+        "src": "https://animedia.icu/poster/0191ebee-3402-7798-8fc6-fd1ca6af35d7.webp"
+      },
+      {
+        "w": 163,
+        "h": 245,
+        "alt": "Кланнад: Продолжение истории",
+        "src": "https://animedia.icu/poster/01916821-5fe5-7457-acfb-8d8a4f9c9321.webp"
+      },
+      {
+        "w": 163,
+        "h": 245,
+        "alt": "Кланнад: Продолжение истории — Другой мир, глава Кё",
+        "src": "https://animedia.icu/poster/0191ebee-5078-76da-bb1d-5a7bb1a99c44.webp"
+      },
+      {
+        "w": 163,
+        "h": 245,
+        "alt": "Кланнад: Фильм",
+        "src": "https://animedia.icu/poster/0191ebee-4c0b-7407-afe9-a53f34cb19fb.webp"
+      }
+    ],
+    "section_count": 0,
+    "sections": [],
+    "nav_href_count": 17,
+    "nav_href_sample": [
+      "#main",
+      "/",
+      "/",
+      "/catalog/",
+      "/new/",
+      "/collections/",
+      "/title/klannad-2/",
+      "/title/klannad/",
+      "/title/klannad-drugoy-mir-glava-tomoe/",
+      "/title/klannad-prodolzhenie-istorii-2/",
+      "/title/klannad-prodolzhenie-istorii/",
+      "/title/klannad-prodolzhenie-istorii-drugoy-mir-glava-ke/",
+      "/title/klannad-film/",
+      "/",
+      "/catalog/",
+      "/new/",
+      "/collections/"
+    ]
+  }
+}

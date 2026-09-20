@@ -1,0 +1,238 @@
+{
+  "url": "https://animedia.icu/",
+  "http_status": 200,
+  "timestamp": "2026-09-20T09:43:20.464266+00:00",
+  "loading_overlay": false,
+  "build_metas": {
+    "metas": [
+      {
+        "name": "site-factory-template-revision",
+        "content": "ca1696796b4f95e0e474664497cf2866ca0d343f"
+      },
+      {
+        "name": "site-factory-design-version",
+        "content": "1.2.4"
+      },
+      {
+        "name": "site-factory-template-family",
+        "content": "animedia"
+      },
+      {
+        "name": "site-factory-build-id",
+        "content": "20260919T224052Z-ca169679-nova"
+      },
+      {
+        "name": "site-factory-artifact-sha256",
+        "content": "f89b9d8257f20b5170333bbdac372eebf1be6f2aa934b49be5b27487c4cbc680"
+      },
+      {
+        "name": "site-factory-template",
+        "content": "animedia-nova"
+      },
+      {
+        "name": "site-factory-core",
+        "content": "site-factory-nova"
+      },
+      {
+        "name": "site-factory-profile",
+        "content": "animedia-icu"
+      }
+    ]
+  },
+  "metrics": {
+    "url": "https://animedia.icu/",
+    "title": "Animedia ICU — сериалы, фильмы и дунхуа",
+    "bodyH": 9257,
+    "bodyW": 768,
+    "scrollW": 768,
+    "overflowX": false,
+    "header": {
+      "h": 69,
+      "w": 768
+    },
+    "poster_sample": [
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Мастер льда и пламени 2",
+        "src": "https://animedia.icu/poster/01a0b507-0813-7526-a2e6-5edf75180827.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Нелюдь. Часть 2",
+        "src": "https://animedia.icu/poster/01a0af3f-984f-7526-ae39-e7d8395b775a.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Золотая секира",
+        "src": "https://animedia.icu/poster/01a0a9d3-4334-7526-b204-dcde14db60e9.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Во всеоружии: Сила артефактов",
+        "src": "https://animedia.icu/poster/01a09eec-82de-7526-a4af-cd5a9e3d1e22.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Учитель-медиум",
+        "src": "https://animedia.icu/poster/01a09cfb-6293-7526-97ce-3409aa378da8.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Уж не зомби ли это? OVA",
+        "src": "https://animedia.icu/poster/01a09cf5-009b-7526-90d0-f270263def04.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Дайбастер: Дотянись до неба! 2",
+        "src": "https://animedia.icu/poster/01a09ced-2432-7526-a0b9-e205c59fff14.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Генератор Гаул",
+        "src": "https://animedia.icu/poster/01a09cd5-609f-7526-bcb1-8fa9b9c8fcef.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Киберэгоист Кайдзо",
+        "src": "https://animedia.icu/poster/01a09cd2-d9ee-7526-9e50-58db106bbf38.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Легенда боевых лентяев Северной звезды",
+        "src": "https://animedia.icu/poster/01a09ccf-57f9-7526-aa5f-fa31741a0632.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Пришедший из древности 2",
+        "src": "https://animedia.icu/poster/01a09ca4-5152-7526-95f5-c84895903c1e.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Дни Сакамото. Часть 2",
+        "src": "https://animedia.icu/poster/01a09bba-5c8f-7526-a699-69070f6114b6.webp"
+      }
+    ],
+    "section_count": 8,
+    "sections": [
+      {
+        "idx": 0,
+        "tag": "SECTION",
+        "class": "zsec zsec--eps ahome-eps",
+        "h": 921,
+        "y": 481,
+        "title": "Недавно добавленные"
+      },
+      {
+        "idx": 1,
+        "tag": "SECTION",
+        "class": "zsec",
+        "h": 1033,
+        "y": 1442,
+        "title": "Сериалы с сериями"
+      },
+      {
+        "idx": 2,
+        "tag": "SECTION",
+        "class": "zsec",
+        "h": 1033,
+        "y": 2515,
+        "title": "Аниме-фильмы"
+      },
+      {
+        "idx": 3,
+        "tag": "SECTION",
+        "class": "zsec",
+        "h": 1033,
+        "y": 3588,
+        "title": "Дунхуа"
+      },
+      {
+        "idx": 4,
+        "tag": "SECTION",
+        "class": "zsec",
+        "h": 1033,
+        "y": 4661,
+        "title": "Короткие сериалы"
+      },
+      {
+        "idx": 5,
+        "tag": "SECTION",
+        "class": "zsec",
+        "h": 1033,
+        "y": 5734,
+        "title": "Топ по оценкам"
+      },
+      {
+        "idx": 6,
+        "tag": "SECTION",
+        "class": "zsec",
+        "h": 1033,
+        "y": 6807,
+        "title": "Классика"
+      },
+      {
+        "idx": 7,
+        "tag": "SECTION",
+        "class": "zsec",
+        "h": 1033,
+        "y": 7880,
+        "title": "Романтика"
+      }
+    ],
+    "nav_href_count": 128,
+    "nav_href_sample": [
+      "#main",
+      "/",
+      "/",
+      "/catalog/",
+      "/new/",
+      "/collections/",
+      "/title/master-lda-i-plameni-2/",
+      "/title/nelyud-chast-2/",
+      "/title/zolotaya-sekira/",
+      "/title/vo-vseoruzhii-sila-artefaktov/",
+      "/title/uchitel-medium/",
+      "/title/uzh-ne-zombi-li-eto-ova/",
+      "/title/daybaster-dotyanis-do-neba-2/",
+      "/title/generator-gaul/",
+      "/title/kiberegoist-kaydzo/",
+      "/title/legenda-boevyh-lentyaev-severnoy-zvezdy/",
+      "/title/prishedshiy-iz-drevnosti-2/",
+      "/title/dni-sakamoto-chast-2/",
+      "/new/?page=1",
+      "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "/title/nelyud-chast-2/season-2/episode-13/",
+      "/title/zolotaya-sekira/season-1/episode-10/",
+      "/title/vo-vseoruzhii-sila-artefaktov/season-1/episode-2/",
+      "/title/uchitel-medium/season-1/episode-22/",
+      "/title/uzh-ne-zombi-li-eto-ova/season-1/episode-2/",
+      "/title/daybaster-dotyanis-do-neba-2/season-2/episode-6/",
+      "/title/generator-gaul/season-1/episode-12/",
+      "/title/kiberegoist-kaydzo/season-1/episode-6/",
+      "/title/legenda-boevyh-lentyaev-severnoy-zvezdy/season-1/episode-12/",
+      "/new/?page=2",
+      "/new/?page=3",
+      "/new/?page=550",
+      "/new/?page=2",
+      "/collection/series_with_episodes/",
+      "/title/svyaschennye-zveri-tysyachi-dney-i-nochey/",
+      "/title/svyaschennye-zveri/",
+      "/title/kaydzyu-nomer-vosem-rabochiy-den-narumi/",
+      "/title/chuvstvennye-slova/",
+      "/title/stranniki-duhovnogo-mira/",
+      "/title/proekt-kirameki/"
+    ]
+  }
+}

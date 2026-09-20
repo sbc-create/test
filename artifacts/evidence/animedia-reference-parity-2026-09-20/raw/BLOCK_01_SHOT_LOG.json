@@ -1,0 +1,332 @@
+[
+  {
+    "phase": "reference",
+    "route": "home",
+    "viewport": "1440x900",
+    "ok": true
+  },
+  {
+    "phase": "reference",
+    "route": "home",
+    "viewport": "768x1024",
+    "ok": true
+  },
+  {
+    "phase": "reference",
+    "route": "home",
+    "viewport": "390x844",
+    "ok": true
+  },
+  {
+    "phase": "reference",
+    "route": "home",
+    "viewport": "1920x1080",
+    "ok": true
+  },
+  {
+    "phase": "reference",
+    "route": "title",
+    "viewport": "1440x900",
+    "ok": true
+  },
+  {
+    "phase": "reference",
+    "route": "title",
+    "viewport": "768x1024",
+    "ok": true
+  },
+  {
+    "phase": "reference",
+    "route": "title",
+    "viewport": "390x844",
+    "ok": true
+  },
+  {
+    "phase": "reference",
+    "route": "title",
+    "viewport": "1920x1080",
+    "ok": true
+  },
+  {
+    "phase": "reference",
+    "route": "collections",
+    "viewport": "1440x900",
+    "ok": true
+  },
+  {
+    "phase": "reference",
+    "route": "collections",
+    "viewport": "768x1024",
+    "ok": true
+  },
+  {
+    "phase": "reference",
+    "route": "collections",
+    "viewport": "390x844",
+    "ok": true
+  },
+  {
+    "phase": "reference",
+    "route": "collections",
+    "viewport": "1920x1080",
+    "ok": true
+  },
+  {
+    "phase": "reference",
+    "route": "collection_detail",
+    "viewport": "1440x900",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "home",
+    "viewport": "1440x900",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "home",
+    "viewport": "768x1024",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "home",
+    "viewport": "390x844",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "home",
+    "viewport": "1920x1080",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "title_problem",
+    "viewport": "1440x900",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "title_problem",
+    "viewport": "768x1024",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "title_problem",
+    "viewport": "390x844",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "title_problem",
+    "viewport": "1920x1080",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "episode_problem",
+    "viewport": "1440x900",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "episode_problem",
+    "viewport": "768x1024",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "episode_problem",
+    "viewport": "390x844",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "episode_problem",
+    "viewport": "1920x1080",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "catalog",
+    "viewport": "1440x900",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "catalog",
+    "viewport": "768x1024",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "catalog",
+    "viewport": "390x844",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "collections",
+    "viewport": "1440x900",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "collections",
+    "viewport": "768x1024",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "collections",
+    "viewport": "390x844",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "new",
+    "viewport": "1440x900",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "new",
+    "viewport": "768x1024",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "new",
+    "viewport": "390x844",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "search",
+    "viewport": "1440x900",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "search",
+    "viewport": "768x1024",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "icu",
+    "route": "search",
+    "viewport": "390x844",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "space",
+    "route": "home",
+    "viewport": "1440x900",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "space",
+    "route": "home",
+    "viewport": "768x1024",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "space",
+    "route": "home",
+    "viewport": "390x844",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "space",
+    "route": "home",
+    "viewport": "1920x1080",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "space",
+    "route": "title_problem",
+    "viewport": "1440x900",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "space",
+    "route": "title_problem",
+    "viewport": "768x1024",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "space",
+    "route": "title_problem",
+    "viewport": "390x844",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "space",
+    "route": "title_problem",
+    "viewport": "1920x1080",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "space",
+    "route": "episode_problem",
+    "viewport": "1440x900",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "space",
+    "route": "episode_problem",
+    "viewport": "768x1024",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "space",
+    "route": "episode_problem",
+    "viewport": "390x844",
+    "ok": true
+  },
+  {
+    "phase": "ours-before",
+    "domain": "space",
+    "route": "episode_problem",
+    "viewport": "1920x1080",
+    "ok": true
+  }
+]

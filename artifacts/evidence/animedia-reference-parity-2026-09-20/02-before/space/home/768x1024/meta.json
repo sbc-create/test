@@ -1,0 +1,230 @@
+{
+  "url": "https://animedia.space/",
+  "http_status": 200,
+  "timestamp": "2026-09-20T09:45:06.420314+00:00",
+  "loading_overlay": false,
+  "build_metas": {
+    "metas": [
+      {
+        "name": "site-factory-template-revision",
+        "content": "ca1696796b4f95e0e474664497cf2866ca0d343f"
+      },
+      {
+        "name": "site-factory-design-version",
+        "content": "1.2.4"
+      },
+      {
+        "name": "site-factory-template-family",
+        "content": "animedia"
+      },
+      {
+        "name": "site-factory-build-id",
+        "content": "20260919T224052Z-ca169679-nova"
+      },
+      {
+        "name": "site-factory-artifact-sha256",
+        "content": "f89b9d8257f20b5170333bbdac372eebf1be6f2aa934b49be5b27487c4cbc680"
+      },
+      {
+        "name": "site-factory-template",
+        "content": "animedia-nova"
+      },
+      {
+        "name": "site-factory-core",
+        "content": "site-factory-nova"
+      },
+      {
+        "name": "site-factory-profile",
+        "content": "animedia-space"
+      }
+    ]
+  },
+  "metrics": {
+    "url": "https://animedia.space/",
+    "title": "Animedia Space — новые серии и популярное аниме",
+    "bodyH": 8184,
+    "bodyW": 768,
+    "scrollW": 768,
+    "overflowX": false,
+    "header": {
+      "h": 69,
+      "w": 768
+    },
+    "poster_sample": [
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Мастер льда и пламени 2",
+        "src": "https://animedia.space/poster/01a0b507-0813-7526-a2e6-5edf75180827.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Нелюдь. Часть 2",
+        "src": "https://animedia.space/poster/01a0af3f-984f-7526-ae39-e7d8395b775a.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Нелюдь. Фильм 2: Столкновение",
+        "src": "https://animedia.space/poster/01a0aa6e-09d6-7526-b228-8df81f8dc726.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Золотая секира",
+        "src": "https://animedia.space/poster/01a0a9d3-4334-7526-b204-dcde14db60e9.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Во всеоружии: Сила артефактов",
+        "src": "https://animedia.space/poster/01a09eec-82de-7526-a4af-cd5a9e3d1e22.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Дедушкина лампа",
+        "src": "https://animedia.space/poster/01a09d0c-f4d8-7526-b5ac-63f565a06c10.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Овощ-супергерой Морккорм",
+        "src": "https://animedia.space/poster/01a09d0b-94b9-7526-be2a-9876f8388f12.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Виолончелист Госю (1982)",
+        "src": "https://animedia.space/poster/01a09d0a-4f8c-7526-a15b-36911d54d144.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Город дождя",
+        "src": "https://animedia.space/poster/01a09d05-a746-7526-ab1f-b1ba858758da.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Рыба",
+        "src": "https://animedia.space/poster/01a09d02-7de5-7526-969d-45e4b2f8250f.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Учитель-медиум",
+        "src": "https://animedia.space/poster/01a09cfb-6293-7526-97ce-3409aa378da8.webp"
+      },
+      {
+        "w": 152,
+        "h": 214,
+        "alt": "Уж не зомби ли это? Среди мертвецов OVA",
+        "src": "https://animedia.space/poster/01a09cf8-2e13-7526-8f7d-23a55c389358.webp"
+      }
+    ],
+    "section_count": 7,
+    "sections": [
+      {
+        "idx": 0,
+        "tag": "SECTION",
+        "class": "zsec zsec--eps ahome-eps",
+        "h": 921,
+        "y": 481,
+        "title": "Недавно добавленные"
+      },
+      {
+        "idx": 1,
+        "tag": "SECTION",
+        "class": "zsec",
+        "h": 1033,
+        "y": 1442,
+        "title": "Новые аниме на сайте"
+      },
+      {
+        "idx": 2,
+        "tag": "SECTION",
+        "class": "zsec",
+        "h": 1033,
+        "y": 2515,
+        "title": "Топ по оценкам"
+      },
+      {
+        "idx": 3,
+        "tag": "SECTION",
+        "class": "zsec",
+        "h": 1033,
+        "y": 3588,
+        "title": "Экшен"
+      },
+      {
+        "idx": 4,
+        "tag": "SECTION",
+        "class": "zsec",
+        "h": 1033,
+        "y": 4661,
+        "title": "Классика"
+      },
+      {
+        "idx": 5,
+        "tag": "SECTION",
+        "class": "zsec",
+        "h": 1033,
+        "y": 5734,
+        "title": "Аниме-фильмы"
+      },
+      {
+        "idx": 6,
+        "tag": "SECTION",
+        "class": "zsec",
+        "h": 1033,
+        "y": 6807,
+        "title": "Дунхуа"
+      }
+    ],
+    "nav_href_count": 115,
+    "nav_href_sample": [
+      "#main",
+      "/",
+      "/",
+      "/catalog/",
+      "/new/",
+      "/collections/",
+      "/title/master-lda-i-plameni-2/",
+      "/title/nelyud-chast-2/",
+      "/title/nelyud-film-2-stolknovenie/",
+      "/title/zolotaya-sekira/",
+      "/title/vo-vseoruzhii-sila-artefaktov/",
+      "/title/dedushkina-lampa/",
+      "/title/ovosch-supergeroy-morkkorm/",
+      "/title/violonchelist-gosyu-1982/",
+      "/title/gorod-dozhdya/",
+      "/title/ryba/",
+      "/title/uchitel-medium/",
+      "/title/uzh-ne-zombi-li-eto-sredi-mertvecov-ova/",
+      "/new/?page=1",
+      "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "/title/nelyud-chast-2/season-2/episode-13/",
+      "/title/zolotaya-sekira/season-1/episode-10/",
+      "/title/vo-vseoruzhii-sila-artefaktov/season-1/episode-2/",
+      "/title/uchitel-medium/season-1/episode-22/",
+      "/title/uzh-ne-zombi-li-eto-ova/season-1/episode-2/",
+      "/title/daybaster-dotyanis-do-neba-2/season-2/episode-6/",
+      "/title/generator-gaul/season-1/episode-12/",
+      "/title/kiberegoist-kaydzo/season-1/episode-6/",
+      "/title/legenda-boevyh-lentyaev-severnoy-zvezdy/season-1/episode-12/",
+      "/new/?page=2",
+      "/new/?page=3",
+      "/new/?page=550",
+      "/new/?page=2",
+      "/collection/recently_added/",
+      "/title/uzh-ne-zombi-li-eto-ova/",
+      "/title/daybaster-dotyanis-do-neba-2/",
+      "/title/daybaster-dotyanis-do-neba/",
+      "/title/drakoniy-zhemchug-zet-plan-po-unichtozheniyu-sayyanov-2/",
+      "/title/nelyud-film-1-impuls/",
+      "/title/ksi-avant/"
+    ]
+  }
+}

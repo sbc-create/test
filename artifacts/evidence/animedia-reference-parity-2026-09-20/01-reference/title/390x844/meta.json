@@ -1,0 +1,155 @@
+{
+  "url": "https://amd.online/2346-chernyj-fakel.html",
+  "http_status": 200,
+  "timestamp": "2026-09-20T09:42:30.175701+00:00",
+  "loading_overlay": false,
+  "sha256_atf": "0958c340b40a5ac95419e7828e8e62a1e3197755d18d5a12b0e9e454f443375d",
+  "metrics": {
+    "url": "https://amd.online/2346-chernyj-fakel.html",
+    "title": "«Чёрный факел» аниме смотреть онлайн",
+    "bodyH": 8565,
+    "bodyW": 390,
+    "scrollW": 390,
+    "overflowX": false,
+    "header": {
+      "h": 126,
+      "w": 390
+    },
+    "poster_sample": [
+      {
+        "w": 35,
+        "h": 35,
+        "alt": "",
+        "src": "https://amd.online/uploads/clans/lavatars/14_1780028947.gif"
+      },
+      {
+        "w": 240,
+        "h": 351,
+        "alt": "постер к аниме Чёрный факел",
+        "src": "https://amd.online/uploads/posts/2026-07/093d9bc3abcbc118a213368d37f558fc.webp"
+      },
+      {
+        "w": 19,
+        "h": 15,
+        "alt": "",
+        "src": "https://amd.online/grupa/pre.png"
+      },
+      {
+        "w": 70,
+        "h": 90,
+        "alt": "Неспешная жизнь уволенного тёмного солдата (тридцати лет)",
+        "src": "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+      },
+      {
+        "w": 70,
+        "h": 90,
+        "alt": "Я злой лорд межгалактической империи!",
+        "src": "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+      },
+      {
+        "w": 70,
+        "h": 90,
+        "alt": "Авантюристы, которые не верят в человечество, спасут мир",
+        "src": "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+      },
+      {
+        "w": 70,
+        "h": 90,
+        "alt": "Мститель",
+        "src": "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+      },
+      {
+        "w": 70,
+        "h": 90,
+        "alt": "Похороны Короля Роз",
+        "src": "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+      },
+      {
+        "w": 70,
+        "h": 90,
+        "alt": "Ремейк нашей жизни",
+        "src": "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+      },
+      {
+        "w": 25,
+        "h": 25,
+        "alt": "",
+        "src": "https://amd.online/grupa/gur.svg"
+      },
+      {
+        "w": 25,
+        "h": 25,
+        "alt": "",
+        "src": "https://amd.online/uploads/status/emoji_u1f32a.png"
+      },
+      {
+        "w": 25,
+        "h": 25,
+        "alt": "",
+        "src": "https://amd.online/grupa/gur.svg"
+      }
+    ],
+    "section_count": 2,
+    "sections": [
+      {
+        "idx": 0,
+        "tag": "SECTION",
+        "class": "buttttons",
+        "h": 136,
+        "y": 3223,
+        "title": ""
+      },
+      {
+        "idx": 1,
+        "tag": "SECTION",
+        "class": "sect",
+        "h": 811,
+        "y": 3949,
+        "title": "Рекомендуем посмотреть:"
+      }
+    ],
+    "nav_href_count": 509,
+    "nav_href_sample": [
+      "/?do=register",
+      "https://amd.online/index.php?do=lostpassword",
+      "https://oauth.vk.com/authorize?client_id=51784897&redirect_uri=https%3A%2F%2Famd.online%2Findex.php%3Fdo%3Dauth-social%26provider%3Dvk&scope=offline%2Cemail&state=a895c069cbf34b165288d3443e08f710&response_type=code&v=5.90",
+      "https://oauth.yandex.ru/authorize?client_id=2e31281a5dd842dabbe30deb03cebd0e&redirect_uri=https%3A%2F%2Famd.online%2Findex.php%3Fdo%3Dauth-social%26provider%3Dyandex&state=a895c069cbf34b165288d3443e08f710&response_type=code",
+      "/",
+      "/premium.html",
+      "/daily/",
+      "/anime/ghanr/китайское/",
+      "/anime/ghanr/3d/",
+      "/anime/ghanr/Безумие/",
+      "/anime/ghanr/Боевые искусства/",
+      "/anime/ghanr/Вампиры/",
+      "/anime/ghanr/Военное/",
+      "/anime/ghanr/Гарем/",
+      "/anime/ghanr/Гурман/",
+      "/anime/ghanr/Дзёсей/",
+      "/anime/ghanr/Демоны/",
+      "/anime/ghanr/Детектив/",
+      "/anime/ghanr/Детское/",
+      "/anime/ghanr/Драма/",
+      "/anime/ghanr/Игры/",
+      "/anime/ghanr/Исторический/",
+      "/anime/ghanr/Комедия/",
+      "/anime/ghanr/Космос/",
+      "/anime/ghanr/Машины/",
+      "/anime/ghanr/Меха/",
+      "/anime/ghanr/Музыка/",
+      "/anime/ghanr/Пародия/",
+      "/anime/ghanr/Повседневность/",
+      "/anime/ghanr/Полиция/",
+      "/anime/ghanr/Приключения/",
+      "/anime/ghanr/Психологическое/",
+      "/anime/ghanr/Романтика/",
+      "/anime/ghanr/Работа/",
+      "/anime/ghanr/сёнен/",
+      "/anime/ghanr/сэйнэн/",
+      "/anime/ghanr/Сёдзё/",
+      "/anime/ghanr/Самураи/",
+      "/anime/ghanr/Сверхъестественное/",
+      "/anime/ghanr/Спорт/"
+    ]
+  }
+}

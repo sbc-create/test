@@ -1,0 +1,11 @@
+{
+  "baseline_route_matrix": "ROUTE_MATRIX.json",
+  "CONTRACT_MUTATED_AFTER_BASELINE": 0,
+  "resolved_at": "2026-09-20T09:46:30.997478+00:00",
+  "collection_detail_path_ours_note": "resolve first live collection slug in later block from /collections/ hrefs; reference detail locked to overlord via discovered href",
+  "reference_collection_detail": "https://amd.online/anime-collections/overlord/",
+  "problem_routes_unchanged": [
+    "/title/nelyud-film-2-stolknovenie/",
+    "/title/master-lda-i-plameni-2/season-2/episode-104/"
+  ]
+}
