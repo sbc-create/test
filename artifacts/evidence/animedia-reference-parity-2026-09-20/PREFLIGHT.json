@@ -1,0 +1,31 @@
+{
+  "at_utc": "2026-09-20T09:39:49Z",
+  "branch": "claude/animedia-template-finalization-01",
+  "head": "25d3ad3deb801e5d6d3370e0da1e1358994ab2d7",
+  "head_match": true,
+  "live_build_icu": "20260919T224052Z-ca169679-nova",
+  "live_build_space": "20260919T224052Z-ca169679-nova",
+  "live_build_match": true,
+  "artifact_sha256_worktree": "f89b9d8257f20b5170333bbdac372eebf1be6f2aa934b49be5b27487c4cbc680",
+  "artifact_sha256_healthz_icu": "f89b9d8257f20b5170333bbdac372eebf1be6f2aa934b49be5b27487c4cbc680",
+  "artifact_sha256_healthz_space": "f89b9d8257f20b5170333bbdac372eebf1be6f2aa934b49be5b27487c4cbc680",
+  "runtime_sha256_disk": "e1fefd2ce2427e60fbe6252ed464c08ff7004de3f9edba8fc45fb6b6f4b631b8",
+  "runtime_digest_match_icu": false,
+  "runtime_digest_match_space": false,
+  "note": "Process still reports artifact_sha256=f89b9d82\u2026 and build ca169679-nova; disk lords-frontend.py differs (foreign overwrite). Treat healthz artifact+build as live proof until next Animedia deploy.",
+  "deploy_lock": {
+    "exists": true,
+    "site": "zona-01",
+    "animedia_parallel": false
+  },
+  "noindex_icu": true,
+  "noindex_space": true,
+  "dirty_left_untouched": [
+    "artifacts/evidence/animedia-blockwise-2026-09-19/*",
+    "artifacts/evidence/animedia-final-repair-2026-09-19/FINAL.md",
+    "artifacts/evidence/animedia-followup-2026-09-19/player-probe/",
+    "automation/host/lords-frontend.animedia-prev.py"
+  ],
+  "ACCEPTANCE_CONTRACT_SHA256": "e6aad06dc3f0d633e22bda18eac6b700a321c84e5742e7efffdaedab160ae94c",
+  "CONTRACT_MUTATED_AFTER_BASELINE": 0
+}

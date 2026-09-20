@@ -1,0 +1,2461 @@
+{
+  "stage": "ANIMEDIA-REFERENCE-PARITY-02",
+  "capture_rules": {
+    "fresh_browser_context": true,
+    "cache_disabled": true,
+    "wait_fonts_ready": true,
+    "visible_images_complete_natural_width_gt_0": true,
+    "no_skeleton_or_loading_overlay": true,
+    "record": [
+      "url",
+      "http_status",
+      "timestamp",
+      "build_marker",
+      "sha256"
+    ]
+  },
+  "loading_state_screenshot_counts_as_evidence": false,
+  "expected_shots": [
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "1920x1080",
+      "theme": "light",
+      "phase": "reference",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "1920x1080",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "1920x1080",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "1920x1080",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "1920x1080",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "1920x1080",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "1920x1080",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "1920x1080",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "1920x1080",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "reference",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "reference",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "reference",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "1920x1080",
+      "theme": "light",
+      "phase": "reference",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "1920x1080",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "1920x1080",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "1920x1080",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "1920x1080",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "1920x1080",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "1920x1080",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "1920x1080",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "1920x1080",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "reference",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "reference",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "reference",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "1920x1080",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "1920x1080",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "1920x1080",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "1920x1080",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "1920x1080",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "1920x1080",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "1920x1080",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "1920x1080",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold",
+        "full-page"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "search",
+      "path": "/search/?q=%D0%9A%D0%BB%D0%B0%D0%BD%D0%BD%D0%B0%D0%B4",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "reference",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "reference",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "reference",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "collections",
+      "path": "/collections/",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "1440x900",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "768x1024",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-before",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-local",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-live-icu",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "new",
+      "path": "/new/?page=1",
+      "viewport": "390x844",
+      "theme": "dark",
+      "phase": "ours-after-live-space",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "interaction": "menu_closed",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "interaction": "menu_closed",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "interaction": "menu_open",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "home",
+      "path": "/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "interaction": "menu_open",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "interaction": "menu_closed",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "interaction": "menu_closed",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "1440x900",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "interaction": "menu_open",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    },
+    {
+      "route_id": "catalog",
+      "path": "/catalog/",
+      "viewport": "390x844",
+      "theme": "light",
+      "phase": "ours-after-local",
+      "interaction": "menu_open",
+      "kinds": [
+        "above-the-fold"
+      ],
+      "required": true
+    }
+  ],
+  "expected_count": 211,
+  "contact_sheets_required": [
+    "home_1440_ORIGINAL_BEFORE_AFTER_LIVE",
+    "title_problem_1440_ORIGINAL_BEFORE_AFTER_LIVE",
+    "episode_problem_1440_BEFORE_AFTER_LIVE",
+    "collections_1440_ORIGINAL_BEFORE_AFTER_LIVE"
+  ],
+  "do_not_overwrite_between_iterations": true
+}

@@ -1,0 +1,39 @@
+{
+  "scores": {
+    "OVERALL_REFERENCE_SCORE_MIN": 85,
+    "MIN_ROUTE_SCORE": 80,
+    "HOME_SCORE_MIN": 85,
+    "TITLE_SCORE_MIN": 85,
+    "EPISODE_SCORE_MIN": 85,
+    "HEADER_SCORE_MIN": 85
+  },
+  "geometry": {
+    "MAX_EMPTY_GAP_DESKTOP_PX": 120,
+    "MAX_EMPTY_GAP_MOBILE_PX": 72,
+    "HEADER_HEIGHT_DESKTOP_MAX_PX": 88,
+    "HEADER_HEIGHT_MOBILE_MAX_PX": 72,
+    "TOP_SHELF_POSTER_WIDTH_PX": [
+      140,
+      160
+    ],
+    "CATALOG_CARD_POSTER_WIDTH_DESKTOP_PX": [
+      140,
+      190
+    ],
+    "PLAYER_ASPECT_RATIO": 1.777,
+    "PLAYER_SMALL_RENDER_MAX_WIDTH_PX": 320,
+    "HORIZONTAL_OVERFLOW_COUNT_MAX": 0,
+    "OVERLAP_COUNT_MAX": 0,
+    "LAST_ROW_STRETCH_COUNT_MAX": 0,
+    "EMPTY_OPTIONAL_BLOCK_HEIGHT_MAX_PX": 0
+  },
+  "oracle_weights": {
+    "structure": 35,
+    "geometry_and_density": 25,
+    "component_hierarchy": 20,
+    "responsive": 10,
+    "behavior": 10
+  },
+  "self_reported_visual_score_allowed": false,
+  "average_does_not_override_hard_fail": true
+}

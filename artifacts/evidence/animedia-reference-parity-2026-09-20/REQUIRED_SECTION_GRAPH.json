@@ -1,0 +1,91 @@
+{
+  "home": {
+    "required_order_tokens": [
+      "header",
+      "top_shelf_or_carousel",
+      "event_or_catalog_feed",
+      "lower_shelves",
+      "footer"
+    ],
+    "optional_collapsible_when_no_data": [
+      "schedule",
+      "ads",
+      "telegram",
+      "community",
+      "reviews"
+    ],
+    "forbidden_when_empty_px_gt_0": [
+      "ads",
+      "telegram",
+      "owner_contacts"
+    ]
+  },
+  "title": {
+    "required": [
+      "breadcrumbs",
+      "poster",
+      "h1_ru",
+      "original_title_if_source",
+      "genres_if_source",
+      "facts_year_type_country_status",
+      "description_if_source",
+      "ratings_labeled",
+      "player_region",
+      "recommendations_if_available"
+    ],
+    "problem_slug": "nelyud-film-2-stolknovenie"
+  },
+  "episode": {
+    "required": [
+      "breadcrumbs",
+      "compact_poster_if_source",
+      "title_and_original_if_source",
+      "season_episode_label",
+      "key_metadata",
+      "short_description_if_source",
+      "ratings_honest",
+      "link_to_title",
+      "player_after_context",
+      "prev_next_only_if_manifest"
+    ],
+    "problem_path": "/title/master-lda-i-plameni-2/season-2/episode-104/"
+  },
+  "catalog": {
+    "required": [
+      "h1",
+      "compact_filters",
+      "active_chips",
+      "card_grid",
+      "pagination"
+    ]
+  },
+  "collections_list": {
+    "required": [
+      "h1",
+      "count",
+      "cards",
+      "pagination_or_progressive"
+    ]
+  },
+  "collection_detail": {
+    "required": [
+      "breadcrumbs",
+      "h1",
+      "membership_cards",
+      "working_links"
+    ]
+  },
+  "footer": {
+    "required_visual": [
+      "brand_or_about",
+      "section_links",
+      "catalog_or_genre_links"
+    ],
+    "owner_dependent": [
+      "contact_email",
+      "telegram_url",
+      "privacy_url",
+      "terms_url"
+    ]
+  }
+}

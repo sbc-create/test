@@ -1,0 +1,388 @@
+{
+  "stage": "ANIMEDIA-REFERENCE-PARITY-02",
+  "frozen_at_utc": "2026-09-20T09:39:49Z",
+  "worktree": "/home/claude/wt-animedia-finalization-01",
+  "branch": "claude/animedia-template-finalization-01",
+  "expected_start_head": "25d3ad3deb801e5d6d3370e0da1e1358994ab2d7",
+  "previous_feature_head": "ca1696796b4f95e0e474664497cf2866ca0d343f",
+  "expected_live_build": "20260919T224052Z-ca169679-nova",
+  "expected_artifact_sha256": "f89b9d8257f20b5170333bbdac372eebf1be6f2aa934b49be5b27487c4cbc680",
+  "deploy_scope": [
+    "animedia.icu",
+    "animedia.space"
+  ],
+  "reference": {
+    "home": "https://amd.online/",
+    "title": "https://amd.online/2346-chernyj-fakel.html",
+    "collections": "https://amd.online/anime-collections/",
+    "collection_detail": "https://amd.online/anime-collections/overlord/"
+  },
+  "problem_routes": {
+    "title": "/title/nelyud-film-2-stolknovenie/",
+    "episode": "/title/master-lda-i-plameni-2/season-2/episode-104/"
+  },
+  "domains": [
+    "animedia.icu",
+    "animedia.space"
+  ],
+  "immutable_preserved_contracts": {
+    "PLAYER_GOLDEN_RUNS_ICU": "10/10",
+    "PLAYER_GOLDEN_RUNS_SPACE": "10/10",
+    "PLAYER_INSTANCE_MAX": 1,
+    "PLAYER_FALSE_READY": 0,
+    "PLAYER_FALSE_FAILURE": 0,
+    "PLAYER_OVERLAY_OVER_PLAYING": 0,
+    "MISSING_RATINGS_RENDERED_AS_ZERO": 0,
+    "CROSS_SOURCE_VOTE_SUMMING": 0,
+    "INVENTED_RATINGS": 0,
+    "LIGHT_THEME_PASS": 1,
+    "DARK_THEME_PASS": 1,
+    "THEME_PERSISTENCE_PASS": 1,
+    "HORIZONTAL_OVERFLOW_COUNT": 0,
+    "BROKEN_INTERNAL_LINKS": 0,
+    "NOINDEX_PRESERVED": 1
+  },
+  "oracle_weights": {
+    "structure": 35,
+    "geometry_and_density": 25,
+    "component_hierarchy": 20,
+    "responsive": 10,
+    "behavior": 10
+  },
+  "score_thresholds": {
+    "OVERALL_REFERENCE_SCORE": 85,
+    "MIN_ROUTE_SCORE": 80,
+    "HOME_SCORE": 85,
+    "TITLE_SCORE": 85,
+    "EPISODE_SCORE": 85,
+    "HEADER_SCORE": 85,
+    "CRITICAL_MISSING_BLOCKS": 0,
+    "HARD_GATE_FAILURES": 0
+  },
+  "self_reported_visual_score_allowed": false,
+  "contract_mutation_policy": {
+    "forbidden_after_baseline": [
+      "remove_failing_urls_from_route_matrix",
+      "replace_problem_url_with_convenient",
+      "lower_thresholds",
+      "remove_required_page_blocks",
+      "rename_failing_gate_to_warning",
+      "change_reference_after_implementation_results",
+      "exclude_failed_or_timeout_route_from_denominator"
+    ],
+    "violation_flags": {
+      "CONTRACT_MUTATED_AFTER_BASELINE": 1,
+      "VERDICT": "NEEDS_REPAIR",
+      "READY_FOR_OWNER_VISUAL_REVIEW": "NO"
+    }
+  },
+  "allowed_verdicts": [
+    "NEEDS_REPAIR",
+    "BLOCKED_SOURCE_DATA",
+    "BLOCKED_OWNER_DATA",
+    "READY_FOR_OWNER_RESTART",
+    "READY_FOR_OWNER_VISUAL_REVIEW"
+  ],
+  "forbidden_verdicts": [
+    "PASS",
+    "PASS_READY_*"
+  ],
+  "close_flags_until_owner": {
+    "OWNER_VISUAL_REVIEW_REQUIRED": "YES",
+    "ANIMEDIA_VISUAL_FINALIZATION_CAN_BE_CLOSED": "NO",
+    "ANIMEDIA_TEMPLATE_CAN_BE_CLOSED": "NO",
+    "ANIMEDIA_OVERALL_CAN_BE_CLOSED": "NO"
+  },
+  "control_title_selection": {
+    "seed": "ANIMEDIA-REFERENCE-PARITY-02",
+    "catalog_path": "/srv/lords/.frontend/animedia-01-catalog.json",
+    "catalog_digest": "f8d4fcaa062d8b4793c11f7bc2bb98af0d35d5952fbb1bc9bbe75669cec011ec",
+    "method": "HMAC-SHA256(seed, catalog_digest:slug) ascending; forced problem slugs first; n=20",
+    "titles": [
+      {
+        "slug": "nelyud-film-2-stolknovenie",
+        "title_id": "nelyud-film-2-stolknovenie",
+        "type": "Аниме",
+        "forced": true,
+        "details_type": "movie",
+        "has_poster": true,
+        "has_description": true,
+        "has_kp": true,
+        "has_imdb": true
+      },
+      {
+        "slug": "master-lda-i-plameni-2",
+        "title_id": "master-lda-i-plameni-2",
+        "type": "Аниме",
+        "forced": true,
+        "details_type": "tv",
+        "has_poster": true,
+        "has_description": false,
+        "has_kp": false,
+        "has_imdb": false
+      },
+      {
+        "slug": "pervyy-shag-novyy-vyzov",
+        "title_id": "pervyy-shag-novyy-vyzov",
+        "type": "Аниме",
+        "forced": false,
+        "rank": "0003e4b58893",
+        "details_type": "tv",
+        "has_poster": true,
+        "has_description": true,
+        "has_kp": false,
+        "has_imdb": false
+      },
+      {
+        "slug": "legenda-o-mechnike-3",
+        "title_id": "legenda-o-mechnike-3",
+        "type": "Аниме",
+        "forced": false,
+        "rank": "000d06b085aa",
+        "details_type": "tv",
+        "has_poster": true,
+        "has_description": false,
+        "has_kp": false,
+        "has_imdb": false
+      },
+      {
+        "slug": "blich-tysyacheletnyaya-krovavaya-voyna-proschanie-rekap",
+        "title_id": "blich-tysyacheletnyaya-krovavaya-voyna-proschanie-rekap",
+        "type": "Аниме",
+        "forced": false,
+        "rank": "001c43f3b3f5",
+        "details_type": "movie",
+        "has_poster": true,
+        "has_description": false,
+        "has_kp": false,
+        "has_imdb": false
+      },
+      {
+        "slug": "narutaru",
+        "title_id": "narutaru",
+        "type": "Аниме",
+        "forced": false,
+        "rank": "0023d0d2fb1f",
+        "details_type": "tv",
+        "has_poster": true,
+        "has_description": true,
+        "has_kp": false,
+        "has_imdb": true
+      },
+      {
+        "slug": "orient-chast-2",
+        "title_id": "orient-chast-2",
+        "type": "Аниме",
+        "forced": false,
+        "rank": "00255232e5b0",
+        "details_type": "tv",
+        "has_poster": true,
+        "has_description": true,
+        "has_kp": false,
+        "has_imdb": false
+      },
+      {
+        "slug": "pokemon-stremlenie-stat-masterom-pokemonov",
+        "title_id": "pokemon-stremlenie-stat-masterom-pokemonov",
+        "type": "Аниме",
+        "forced": false,
+        "rank": "0033e4831590",
+        "details_type": "tv",
+        "has_poster": true,
+        "has_description": false,
+        "has_kp": false,
+        "has_imdb": false
+      },
+      {
+        "slug": "klinok-zla",
+        "title_id": "klinok-zla",
+        "type": "Аниме",
+        "forced": false,
+        "rank": "004311ec3747",
+        "details_type": "tv",
+        "has_poster": true,
+        "has_description": true,
+        "has_kp": false,
+        "has_imdb": false
+      },
+      {
+        "slug": "organ-genocida",
+        "title_id": "organ-genocida",
+        "type": "Аниме",
+        "forced": false,
+        "rank": "005afb991ff2",
+        "details_type": "movie",
+        "has_poster": true,
+        "has_description": true,
+        "has_kp": false,
+        "has_imdb": false
+      },
+      {
+        "slug": "schastlivaya-zvezda-ova",
+        "title_id": "schastlivaya-zvezda-ova",
+        "type": "Аниме",
+        "forced": false,
+        "rank": "0062669b8f64",
+        "details_type": "movie",
+        "has_poster": true,
+        "has_description": true,
+        "has_kp": false,
+        "has_imdb": false
+      },
+      {
+        "slug": "ty-umeesh-hranit-sekrety-3",
+        "title_id": "ty-umeesh-hranit-sekrety-3",
+        "type": "Аниме",
+        "forced": false,
+        "rank": "0066967364fc",
+        "details_type": "tv",
+        "has_poster": true,
+        "has_description": true,
+        "has_kp": false,
+        "has_imdb": false
+      },
+      {
+        "slug": "skazaniya-o-demonah-i-bogah-8",
+        "title_id": "skazaniya-o-demonah-i-bogah-8",
+        "type": "Аниме",
+        "forced": false,
+        "rank": "006a12576a55",
+        "details_type": "tv",
+        "has_poster": true,
+        "has_description": true,
+        "has_kp": false,
+        "has_imdb": true
+      },
+      {
+        "slug": "etot-uzhasnyy-i-prekrasnyy-mir",
+        "title_id": "etot-uzhasnyy-i-prekrasnyy-mir",
+        "type": "Аниме",
+        "forced": false,
+        "rank": "006da2c845b4",
+        "details_type": "tv",
+        "has_poster": true,
+        "has_description": true,
+        "has_kp": false,
+        "has_imdb": false
+      },
+      {
+        "slug": "grobnica-imperatora",
+        "title_id": "grobnica-imperatora",
+        "type": "Аниме",
+        "forced": false,
+        "rank": "0073bf9dd8c3",
+        "details_type": "tv",
+        "has_poster": true,
+        "has_description": true,
+        "has_kp": false,
+        "has_imdb": true
+      },
+      {
+        "slug": "akusticheskiy-voin-borgmen",
+        "title_id": "akusticheskiy-voin-borgmen",
+        "type": "Аниме",
+        "forced": false,
+        "rank": "008800ec7f69",
+        "details_type": "tv",
+        "has_poster": true,
+        "has_description": true,
+        "has_kp": false,
+        "has_imdb": false
+      },
+      {
+        "slug": "pogruzis",
+        "title_id": "pogruzis",
+        "type": "Аниме",
+        "forced": false,
+        "rank": "009c339082bc",
+        "details_type": "movie",
+        "has_poster": true,
+        "has_description": false,
+        "has_kp": false,
+        "has_imdb": false
+      },
+      {
+        "slug": "kasanie",
+        "title_id": "kasanie",
+        "type": "Аниме",
+        "forced": false,
+        "rank": "009e88b7ff35",
+        "details_type": "tv",
+        "has_poster": true,
+        "has_description": true,
+        "has_kp": false,
+        "has_imdb": false
+      },
+      {
+        "slug": "sem-listev",
+        "title_id": "sem-listev",
+        "type": "Аниме",
+        "forced": false,
+        "rank": "00a1f735604c",
+        "details_type": "tv",
+        "has_poster": true,
+        "has_description": true,
+        "has_kp": false,
+        "has_imdb": true
+      },
+      {
+        "slug": "klannad",
+        "title_id": "klannad",
+        "type": "Аниме",
+        "forced": false,
+        "rank": "00a222a08d10",
+        "details_type": "tv",
+        "has_poster": true,
+        "has_description": true,
+        "has_kp": false,
+        "has_imdb": true
+      }
+    ]
+  },
+  "blocks": [
+    "BLOCK_00_CONTRACT",
+    "BLOCK_01_REFERENCE_DATA",
+    "BLOCK_02_HEADER_DRAWER",
+    "BLOCK_03_CARD_SYSTEM",
+    "BLOCK_04_HOME_TOP",
+    "BLOCK_05_EVENT_FEED_SCHEDULE",
+    "BLOCK_06_HOME_LOWER_SECTIONS",
+    "BLOCK_07_CATALOG_SEARCH",
+    "BLOCK_08_TITLE",
+    "BLOCK_09_RATINGS",
+    "BLOCK_10_EPISODE_CONTEXT",
+    "BLOCK_11_PLAYER",
+    "BLOCK_12_RECOMMENDATIONS",
+    "BLOCK_13_COLLECTIONS",
+    "BLOCK_14_FOOTER",
+    "BLOCK_15_RESPONSIVE",
+    "BLOCK_16_ROUTE_HTTP_CACHE"
+  ],
+  "hard_fail_conditions": [
+    "REFERENCE_ACCESS_FAILURES>0",
+    "ROUTES_MISSING_FROM_EVIDENCE>0",
+    "SCREENSHOT_MATRIX_MISSING>0",
+    "UNEXPECTED_HTTP_4XX>0",
+    "HTTP_5XX>0",
+    "BROKEN_INTERNAL_LINKS>0",
+    "VISIBLE_IMAGE_LOAD_FAILURES>0",
+    "SOURCE_POSTER_AVAILABLE_BUT_NOT_RENDERED>0",
+    "SOURCE_DESCRIPTION_AVAILABLE_BUT_NOT_RENDERED>0",
+    "WRONG_TITLE_MAPPING_COUNT>0",
+    "EPISODE_CONTEXT_MISSING_COUNT>0",
+    "OVERSIZED_EMPTY_GAP_COUNT>0",
+    "EMPTY_VISIBLE_PANEL_COUNT>0",
+    "FLOATING_OR_ORPHAN_STATUS_LABEL_COUNT>0",
+    "HORIZONTAL_OVERFLOW_COUNT>0",
+    "OVERLAP_COUNT>0",
+    "LOADING_STATE_SCREENSHOT_COUNT>0",
+    "STALE_RUNTIME_RESPONSE_COUNT>0",
+    "SEMANTICALLY_FALSE_SECTION_LABEL_COUNT>0",
+    "INVENTED_TIMESTAMPS>0",
+    "INVENTED_RATINGS>0",
+    "CROSS_SOURCE_VOTE_SUMMING>0",
+    "UNCLASSIFIED_SKIPPED_TESTS>0",
+    "CONTRACT_MUTATED_AFTER_BASELINE>0",
+    "UNDECLARED_CARD_VARIANTS>0"
+  ]
+}

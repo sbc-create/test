@@ -1,0 +1,270 @@
+{
+  "stage": "ANIMEDIA-REFERENCE-PARITY-02",
+  "viewports": [
+    {
+      "id": "1920",
+      "w": 1920,
+      "h": 1080,
+      "required_for": [
+        "home",
+        "title",
+        "episode"
+      ]
+    },
+    {
+      "id": "1440",
+      "w": 1440,
+      "h": 900,
+      "required_for": [
+        "*"
+      ]
+    },
+    {
+      "id": "768",
+      "w": 768,
+      "h": 1024,
+      "required_for": [
+        "*"
+      ]
+    },
+    {
+      "id": "390",
+      "w": 390,
+      "h": 844,
+      "required_for": [
+        "*"
+      ]
+    }
+  ],
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "domains": [
+    "animedia.icu",
+    "animedia.space"
+  ],
+  "routes": [
+    {
+      "id": "home",
+      "path": "/",
+      "reference": "https://amd.online/",
+      "required": true
+    },
+    {
+      "id": "catalog",
+      "path": "/catalog/",
+      "required": true
+    },
+    {
+      "id": "catalog_filtered",
+      "path": "/catalog/?kind=%D0%90%D0%BD%D0%B8%D0%BC%D0%B5",
+      "required": true
+    },
+    {
+      "id": "new",
+      "path": "/new/?page=1",
+      "required": true
+    },
+    {
+      "id": "new_page2",
+      "path": "/new/?page=2",
+      "required": true
+    },
+    {
+      "id": "search",
+      "path": "/search/?q=%D0%97%D0%B2%D1%91%D0%B7%D0%B4%D0%BD%D1%8B%D0%B5%20%D0%B2%D0%BE%D0%B9%D0%BD%D1%8B",
+      "required": true
+    },
+    {
+      "id": "search_zero",
+      "path": "/search/?q=zzzxnonexistent999",
+      "required": true
+    },
+    {
+      "id": "collections",
+      "path": "/collections/",
+      "reference": "https://amd.online/anime-collections/",
+      "required": true
+    },
+    {
+      "id": "collection_detail",
+      "path": "/collections/",
+      "note": "first real collection slug resolved in BLOCK_01 from live hrefs; placeholder filled then frozen in ROUTE_MATRIX_RESOLVED.json without removing this entry",
+      "required": true,
+      "resolve": "first_collection_slug"
+    },
+    {
+      "id": "title_problem",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "required": true,
+      "problem": true,
+      "domains": [
+        "animedia.icu",
+        "animedia.space"
+      ]
+    },
+    {
+      "id": "title_reference_like",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "reference": "https://amd.online/2346-chernyj-fakel.html",
+      "required": true
+    },
+    {
+      "id": "episode_problem",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "required": true,
+      "problem": true,
+      "domains": [
+        "animedia.icu",
+        "animedia.space"
+      ]
+    },
+    {
+      "id": "schedule",
+      "path": "/schedule/",
+      "required": true
+    },
+    {
+      "id": "invalid_title",
+      "path": "/title/__parity02_invalid_title__/",
+      "required": true,
+      "expect_http": 404
+    },
+    {
+      "id": "invalid_episode",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-99999/",
+      "required": true,
+      "expect_http": 404
+    },
+    {
+      "id": "invalid_page",
+      "path": "/new/?page=999999",
+      "required": true,
+      "expect_http": 404
+    }
+  ],
+  "control_titles": [
+    {
+      "id": "title_1",
+      "path": "/title/nelyud-film-2-stolknovenie/",
+      "slug": "nelyud-film-2-stolknovenie",
+      "forced": true
+    },
+    {
+      "id": "title_2",
+      "path": "/title/master-lda-i-plameni-2/",
+      "slug": "master-lda-i-plameni-2",
+      "forced": true
+    },
+    {
+      "id": "title_3",
+      "path": "/title/pervyy-shag-novyy-vyzov/",
+      "slug": "pervyy-shag-novyy-vyzov",
+      "forced": false
+    },
+    {
+      "id": "title_4",
+      "path": "/title/legenda-o-mechnike-3/",
+      "slug": "legenda-o-mechnike-3",
+      "forced": false
+    },
+    {
+      "id": "title_5",
+      "path": "/title/blich-tysyacheletnyaya-krovavaya-voyna-proschanie-rekap/",
+      "slug": "blich-tysyacheletnyaya-krovavaya-voyna-proschanie-rekap",
+      "forced": false
+    },
+    {
+      "id": "title_6",
+      "path": "/title/narutaru/",
+      "slug": "narutaru",
+      "forced": false
+    },
+    {
+      "id": "title_7",
+      "path": "/title/orient-chast-2/",
+      "slug": "orient-chast-2",
+      "forced": false
+    },
+    {
+      "id": "title_8",
+      "path": "/title/pokemon-stremlenie-stat-masterom-pokemonov/",
+      "slug": "pokemon-stremlenie-stat-masterom-pokemonov",
+      "forced": false
+    },
+    {
+      "id": "title_9",
+      "path": "/title/klinok-zla/",
+      "slug": "klinok-zla",
+      "forced": false
+    },
+    {
+      "id": "title_10",
+      "path": "/title/organ-genocida/",
+      "slug": "organ-genocida",
+      "forced": false
+    },
+    {
+      "id": "title_11",
+      "path": "/title/schastlivaya-zvezda-ova/",
+      "slug": "schastlivaya-zvezda-ova",
+      "forced": false
+    },
+    {
+      "id": "title_12",
+      "path": "/title/ty-umeesh-hranit-sekrety-3/",
+      "slug": "ty-umeesh-hranit-sekrety-3",
+      "forced": false
+    },
+    {
+      "id": "title_13",
+      "path": "/title/skazaniya-o-demonah-i-bogah-8/",
+      "slug": "skazaniya-o-demonah-i-bogah-8",
+      "forced": false
+    },
+    {
+      "id": "title_14",
+      "path": "/title/etot-uzhasnyy-i-prekrasnyy-mir/",
+      "slug": "etot-uzhasnyy-i-prekrasnyy-mir",
+      "forced": false
+    },
+    {
+      "id": "title_15",
+      "path": "/title/grobnica-imperatora/",
+      "slug": "grobnica-imperatora",
+      "forced": false
+    },
+    {
+      "id": "title_16",
+      "path": "/title/akusticheskiy-voin-borgmen/",
+      "slug": "akusticheskiy-voin-borgmen",
+      "forced": false
+    },
+    {
+      "id": "title_17",
+      "path": "/title/pogruzis/",
+      "slug": "pogruzis",
+      "forced": false
+    },
+    {
+      "id": "title_18",
+      "path": "/title/kasanie/",
+      "slug": "kasanie",
+      "forced": false
+    },
+    {
+      "id": "title_19",
+      "path": "/title/sem-listev/",
+      "slug": "sem-listev",
+      "forced": false
+    },
+    {
+      "id": "title_20",
+      "path": "/title/klannad/",
+      "slug": "klannad",
+      "forced": false
+    }
+  ],
+  "exclusion_policy": "Routes in this matrix MUST remain in denominator even if fail/timeout. Removing or swapping problem URLs sets CONTRACT_MUTATED_AFTER_BASELINE=1."
+}
