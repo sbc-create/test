@@ -1,0 +1,15 @@
+{
+  "RATINGS_PUBLIC_READ_ANIMEDIA": 1,
+  "RATINGS_PUBLIC_READ_YUMMY": 0,
+  "RATINGS_NATIVE_WRITE_ANIMEDIA": 0,
+  "RATINGS_NATIVE_WRITE_YUMMY": 0,
+  "allowlist": {
+    "animedia": [
+      "*"
+    ],
+    "yummy": []
+  },
+  "YUMMY_LIVE_BLOCKER": "NEXTJS_TEMPLATE_WIRING_REQUIRED",
+  "expanded_after_two_stable_animedia_runs": true,
+  "animedia_projected_subjects": 125
+}
