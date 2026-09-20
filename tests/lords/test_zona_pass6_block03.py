@@ -62,13 +62,23 @@ def _поднять(tmp_path):
     корень = tmp_path / "zona-01"
     корень.mkdir(parents=True, exist_ok=True)
     cat = _каталог()
+    details = _подробности(cat)
     (корень / "zona-01-catalog.json").write_text(
         json.dumps(cat, ensure_ascii=False), encoding="utf-8")
     (корень / "zona-01-details.json").write_text(
-        json.dumps(_подробности(cat), ensure_ascii=False), encoding="utf-8")
+        json.dumps(details, ensure_ascii=False), encoding="utf-8")
     (корень / "player-zona-01.json").write_text(
         json.dumps({"publisher_id": "10238", "source_mode": "provider-id"}),
         encoding="utf-8")
+    pw_spec = importlib.util.spec_from_file_location(
+        "pw_pass6_b03",
+        Path(__file__).resolve().parents[2] / "automation" / "host" / "popular_weekly.py")
+    pw = importlib.util.module_from_spec(pw_spec)
+    assert pw_spec.loader is not None
+    pw_spec.loader.exec_module(pw)
+    snap = pw.build_snapshot(
+        cat["items"], details["details"], clock="2026-09-19T12:00:00Z", limit=12)
+    pw.publish_snapshot(snap, корень / "zona-01-popular-weekly.json")
     манифест = корень / "manifest.json"
     манифест.write_text(json.dumps({
         "schema_version": 1, "template_family": "zona",

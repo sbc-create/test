@@ -132,6 +132,15 @@ def _поднять(tmp_path):
     (корень / "player-zona-01.json").write_text(
         json.dumps({"publisher_id": "10238", "source_mode": "provider-id"}),
         encoding="utf-8")
+    pw_spec = importlib.util.spec_from_file_location(
+        f"pw_pass7_{int(time.time() * 1000)}",
+        Path(__file__).resolve().parents[2] / "automation" / "host" / "popular_weekly.py")
+    pw = importlib.util.module_from_spec(pw_spec)
+    assert pw_spec.loader is not None
+    pw_spec.loader.exec_module(pw)
+    snap = pw.build_snapshot(
+        items, details["details"], clock="2026-09-20T12:00:00Z", limit=12)
+    pw.publish_snapshot(snap, корень / "zona-01-popular-weekly.json")
     манифест = корень / "manifest.json"
     манифест.write_text(json.dumps({
         "schema_version": 1, "template_family": "zona",
@@ -236,8 +245,9 @@ def test_backfill_old_film_classified_by_published_at(зона):
     assert нов_slugs.index("new-film") < нов_slugs.index("backfill")
 
 
-def test_rating_signal_recomputes_high_rating_shelf(зона):
+def test_weekly_snapshot_includes_high_rating_at_build(зона):
     о = запросить(зона, "/")
+    assert "Высокий рейтинг среди недавних фильмов" in о.тело
     sec = о.тело.split("Высокий рейтинг среди недавних фильмов", 1)[1].split("<section", 1)[0]
     assert "/title/rated-film/" in sec
 

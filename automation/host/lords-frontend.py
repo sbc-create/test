@@ -167,6 +167,52 @@ try:
 except ImportError:
     КОЛЛЕКЦИИ = None
 
+try:
+    import popular_weekly as ПОПУЛЯРНОЕ_НЕДЕЛЯ  # noqa: E402
+except ImportError:
+    ПОПУЛЯРНОЕ_НЕДЕЛЯ = None
+
+#: Недельный снимок «популярного» (WEEKLY_SNAPSHOT). Не пересчитывается
+#: на HTTP-запросе. Путь: LORDS_POPULAR_WEEKLY или рядом с каталогом.
+ПОПУЛЯРНОЕ_НЕДЕЛЯ_ФАЙЛ = (
+    os.environ.get("LORDS_POPULAR_WEEKLY")
+    or _рядом_с_каталогом("{site}-popular-weekly.json")
+)
+_popular_weekly_cache: dict = {"mtime": None, "data": None}
+
+
+def сбросить_popular_cache() -> None:
+    _popular_weekly_cache["mtime"] = None
+    _popular_weekly_cache["data"] = None
+
+
+def _popular_weekly_snapshot() -> dict | None:
+    """Read-only weekly Popular membership. Never builds on the request path."""
+    if not ПОПУЛЯРНОЕ_НЕДЕЛЯ or not ПОПУЛЯРНОЕ_НЕДЕЛЯ_ФАЙЛ:
+        return _popular_weekly_cache.get("data")
+    путь = Path(ПОПУЛЯРНОЕ_НЕДЕЛЯ_ФАЙЛ)
+    try:
+        mtime = путь.stat().st_mtime
+    except OSError:
+        return _popular_weekly_cache.get("data")
+    if (_popular_weekly_cache.get("data") is not None
+            and _popular_weekly_cache.get("mtime") == mtime):
+        return _popular_weekly_cache["data"]
+    data = ПОПУЛЯРНОЕ_НЕДЕЛЯ.load_snapshot(путь)
+    if data is not None:
+        _popular_weekly_cache["mtime"] = mtime
+        _popular_weekly_cache["data"] = data
+    return _popular_weekly_cache.get("data")
+
+
+def _из_weekly_полки(данные: "Данные", weekly: dict | None, ключ: str) -> list:
+    """Resolve weekly slug list to catalog records; skip missing slugs only."""
+    if not weekly:
+        return []
+    slugs = list(((weekly.get("shelves") or {}).get(ключ)) or [])
+    by_slug = {з["slug"]: з for з in данные.items}
+    return [by_slug[s] for s in slugs if s in by_slug]
+
 #: Каталог готовых файлов карты сайта. Пусто — карта не отдаётся.
 SITEMAP_DIR = os.environ.get("LORDS_SITEMAP_DIR", "").strip()
 #: Счётчик Яндекс Метрики этой витрины. Публичное число, не секрет: оно и так
@@ -4438,21 +4484,8 @@ class ВидЗона(Вид):
 
         занято: set = set()
 
-        def оценка(з: dict) -> float:
-            д = self.деталь(з["slug"])
-            значения = [д.get("kinopoisk_rating"), д.get("imdb_rating")]
-            числа = [float(v) for v in значения
-                     if isinstance(v, (int, float)) or
-                     (isinstance(v, str) and v.replace(".", "", 1).isdigit())]
-            return max(числа) if числа else 0.0
-
         def свежесть(з: dict) -> str:
             return з.get("published_at") or ""
-
-        #: Пул для рейтинга среди недавних ограничен намеренно: сортировать
-        #: 50 тысяч записей по оценке на каждый запрос незачем. Это НЕ сигнал
-        #: популярности (просмотры/активность) — таких полей в снимке нет.
-        ПУЛ = 400
 
         def выбрать(вид: str | None, ключ, сколько: int = 12,
                     пул: int | None = None, условие=None) -> list:
@@ -4477,18 +4510,20 @@ class ВидЗона(Вид):
         def есть_источник(з: dict) -> bool:
             return состояние_плеера(self.деталь(з["slug"]))[0] == "playable"
 
-        # Five distinct shelves. No sixth «Недавно в каталоге» row: it reused
-        # freshness+playable after new-films/new-eps and linked to /new/, which
-        # is premiere-only — duplicate algorithm + wrong «Весь раздел» target.
-        # Rating shelves are labeled as rating, not «популярное»: popularity
-        # signal is absent. «Новые серии» renamed — episode timestamps absent.
+        # Popular shelves: WEEKLY_SNAPSHOT only — never request-time recompute.
+        # New-films / new-eps keep their own freshness contracts (published_at).
+        weekly = _popular_weekly_snapshot()
+        pop_films = _из_weekly_полки(self.д, weekly, "pop-films")
+        pop_series = _из_weekly_полки(self.д, weekly, "pop-series")
+        pop_anim = _из_weekly_полки(self.д, weekly, "pop-anim")
+        for з in pop_films + pop_series + pop_anim:
+            занято.add(з["slug"])
+
         ленты = [
             ("pop-films", "Высокий рейтинг среди недавних фильмов", "/movies/",
-             выбрать("Фильм", оценка, пул=ПУЛ),
-             ""),
+             pop_films, ""),
             ("pop-series", "Высокий рейтинг среди недавних сериалов", "/series/",
-             выбрать("Сериал", оценка, пул=ПУЛ),
-             ""),
+             pop_series, ""),
             ("new-films", "Добавленные недавно фильмы", "/movies/",
              выбрать("Фильм", свежесть, условие=есть_источник),
              ""),
@@ -4497,8 +4532,7 @@ class ВидЗона(Вид):
                      условие=lambda з: есть_серии(з) and есть_источник(з)),
              ""),
             ("pop-anim", "Высокий рейтинг среди недавней анимации", "/animation/",
-             выбрать("Мультфильм", оценка, пул=ПУЛ),
-             ""),
+             pop_anim, ""),
         ]
         коллекции_html = ""
         снимок = Снимок.получить(self.д, self.п)
@@ -5923,10 +5957,22 @@ class Обработчик(BaseHTTPRequestHandler):
             self.send_header("X-Catalog-Revision", рев)
         if built:
             self.send_header("X-Catalog-Built-At", built)
+        weekly = _popular_weekly_snapshot()
+        week_id = (weekly or {}).get("week_id") or ""
+        week_digest = (weekly or {}).get("digest") or ""
+        if week_id:
+            self.send_header("X-Popular-Week-Id", week_id)
+        if week_digest:
+            self.send_header("X-Popular-Weekly-Digest", week_digest[:32])
         # Digest participates in cache identity for any intermediary that
         # ignores no-store; browser/CDN must not reuse across revisions.
+        etag_parts = []
         if рев:
-            self.send_header("ETag", f'W/"cat-{рев}"')
+            etag_parts.append(f"cat-{рев}")
+        if week_id and week_digest:
+            etag_parts.append(f"pop-{week_id}-{week_digest[:16]}")
+        if etag_parts:
+            self.send_header("ETag", f'W/"{"|".join(etag_parts)}"')
         self.send_header("Cache-Control", "no-store")
         self.end_headers()
         if self.command != "HEAD":

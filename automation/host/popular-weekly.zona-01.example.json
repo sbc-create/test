@@ -1,0 +1,36 @@
+{
+  "schema": "zona.popular-weekly-owner-config/1.0.0",
+  "site": "zona-01",
+  "POPULAR_REFRESH_MODE": "WEEKLY_SNAPSHOT",
+  "POPULAR_REQUEST_TIME_RECOMPUTES": 0,
+  "POPULAR_MAX_PUBLICATIONS_PER_WEEK": 1,
+  "POPULAR_MEMBERSHIP_STABLE_WITHIN_WEEK": true,
+  "POPULAR_RANDOM_ROTATION": false,
+  "POPULAR_RECOMPUTE_CADENCE": "7d",
+  "ranking_signal": "source_rating_in_recent_pool",
+  "ranking_window": "top_400_by_published_at_then_rating",
+  "pool": 400,
+  "limit": 12,
+  "reserve": 24,
+  "snapshot_path": "/srv/lords/.frontend/zona-01-popular-weekly.json",
+  "builder_command": "/usr/bin/python3 /srv/lords/.frontend/popular_weekly.py --catalog /srv/lords/.frontend/zona-01-catalog.json --details /srv/lords/.frontend/zona-01-details.json --out /srv/lords/.frontend/zona-01-popular-weekly.json",
+  "proposed_schedule": {
+    "status": "OWNER_GATE_REQUIRED",
+    "timer_enabled": false,
+    "reason": "No approved weekly timer in inventory; do not enable a hidden daily job",
+    "proposed_off_peak_utc": "Mon 04:10",
+    "proposed_oncalendar": "Mon *-*-* 04:10:00 UTC",
+    "proposed_unit_name": "zona-popular-weekly.timer",
+    "notes": "Enable only after owner approval. One publication per ISO week; same-week rebuilds are rejected unless --force (forbidden for routine runs)."
+  },
+  "emergency_repair": {
+    "allowed_reasons": [
+      "title_unavailable",
+      "broken_link",
+      "record_removed",
+      "forbidden",
+      "critical_mapping_error"
+    ],
+    "full_rotation_on_emergency": false
+  }
+}

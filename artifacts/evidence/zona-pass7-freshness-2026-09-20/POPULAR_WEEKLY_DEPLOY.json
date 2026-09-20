@@ -1,0 +1,49 @@
+{
+  "at": "2026-09-20T09:22:14.554947+00:00",
+  "publish": {
+    "published": true,
+    "reason": "ok",
+    "week_id": "2026-W38",
+    "digest": "0d16b8a841810a9bef268710223ef576d3c14b685144ecfad1021dae9bad32dd",
+    "path": "/srv/lords/.frontend/zona-01-popular-weekly.json"
+  },
+  "snapshot": {
+    "week_id": "2026-W38",
+    "digest": "0d16b8a841810a9bef268710223ef576d3c14b685144ecfad1021dae9bad32dd",
+    "built_at": "2026-09-20T09:21:17Z",
+    "mode": "WEEKLY_SNAPSHOT"
+  },
+  "manifest_build": "20260920T092117Z-dbaf9a4d-nova",
+  "artifact_match": true,
+  "live_runs": [
+    {
+      "n": 1,
+      "status": 200,
+      "build": "20260920T092117Z-dbaf9a4d-nova",
+      "week": "2026-W38",
+      "digest": "0d16b8a841810a9bef268710223ef576",
+      "etag": "W/\"cat-ecc664ad462bab47b51e8a9a151d5ec7|pop-2026-W38-0d16b8a841810a9b\"",
+      "robots": "noindex, nofollow",
+      "has_pop": true,
+      "has_new": true,
+      "no_sixth": true
+    },
+    {
+      "n": 2,
+      "status": 200,
+      "build": "20260920T092117Z-dbaf9a4d-nova",
+      "week": "2026-W38",
+      "digest": "0d16b8a841810a9bef268710223ef576",
+      "etag": "W/\"cat-ecc664ad462bab47b51e8a9a151d5ec7|pop-2026-W38-0d16b8a841810a9b\"",
+      "robots": "noindex, nofollow",
+      "has_pop": true,
+      "has_new": true,
+      "no_sixth": true
+    }
+  ],
+  "live_20_request_unique_orders": 1,
+  "POPULAR_REQUEST_TIME_RECOMPUTES": 0,
+  "POPULAR_WEEKLY_PUBLICATION_COUNT_THIS_WEEK": 1,
+  "timer_enabled": false,
+  "VERDICT_NOTE": "PASS_CONTRACT_NEEDS_TWO_WEEKLY_CYCLES — only one seeded weekly window observed"
+}
