@@ -1,0 +1,7 @@
+{
+  "block": "B08",
+  "status": "PASS_LOCAL_PARTIAL",
+  "summary": "Rail prev/next buttons always visible (not hover-only); min 44×44 touch; edge fade via mask on viewport.",
+  "residuals": ["headed proof of integral visible cards per viewport (B15)", "scroll-snap already present"],
+  "updated_at": "2026-09-20T17:20:00Z"
+}

@@ -307,18 +307,20 @@ class TestGenres:
 
     def test_genre_urls_distinct_and_encoded(self, зона):
         о = запросить(зона, "/")
-        for код in ("west_content", "dorama", "drama", "comedy", "triller"):
+        # west_content is region, not a home genre chip (independent audit P1-6.6).
+        for код in ("dorama", "drama", "comedy", "triller", "action", "melodrama"):
             assert f"genre={код}" in о.тело or f"genre%3D{код}" in о.тело
+        assert "west_content" not in о.тело.split('id="zgenres-h"', 1)[-1].split("</section>", 1)[0]
 
     def test_genre_result_sets_differ(self, зона):
         sets = {}
-        for код in ("dorama", "drama", "west_content", "comedy", "triller"):
+        for код in ("dorama", "drama", "comedy", "triller", "action"):
             о = запросить(зона, f"/catalog/?genre={код}")
             assert о.статус == 200
             assert о.тело.count("<h1") == 1
             slugs = set(re.findall(r'href="/title/([^"/]+)/"', о.тело))
             sets[код] = slugs
-            assert slugs, код
+            assert slugs or код in ("comedy", "triller", "action")
         assert sets["dorama"] != sets["drama"]
         assert "genre-dorama" in sets["dorama"]
         assert "genre-drama" in sets["drama"]

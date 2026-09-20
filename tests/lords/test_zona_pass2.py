@@ -258,7 +258,10 @@ class TestPlayerContract:
     def test_footer_four_zones(self, зона):
         о = запросить(зона, "/")
         assert "Разделы" in о.тело
-        assert "Zona ·" in о.тело
+        assert 'data-testid="site-footer"' in о.тело
+        # Public footer must not expose version/commit/build markers.
+        assert "Zona ·" not in о.тело
+        assert "dbaf9a4d" not in о.тело
         # Empty contact/docs config → columns omitted (no placeholders).
         assert "Разделы появятся после настройки профиля" not in о.тело
         assert "Документы не опубликованы" not in о.тело

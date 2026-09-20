@@ -1,0 +1,7 @@
+{
+  "block": "B11",
+  "status": "PASS_LOCAL_PARTIAL",
+  "summary": "Expand button hidden at runtime when synopsis has no overflow; consumer «Источник описания» removed from title passport.",
+  "residuals": ["breadcrumb JSON-LD human labels", "meta description mid-phrase cut"],
+  "updated_at": "2026-09-20T17:20:00Z"
+}

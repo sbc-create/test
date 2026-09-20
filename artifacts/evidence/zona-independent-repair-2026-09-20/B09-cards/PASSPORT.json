@@ -1,0 +1,7 @@
+{
+  "block": "B09",
+  "status": "PASS_LOCAL_PARTIAL",
+  "summary": "Card title 14.5px 2-line clamp; metadata 12.5px ellipsis; rating visual 1 decimal with raw title tip; empty rating row collapsed; kind/region tags deduped from card meta; west_content removed from home genre nav.",
+  "residuals": ["near-duplicate title gate", "poster aspect suitability gate", "headed overflow=0 proof"],
+  "updated_at": "2026-09-20T17:20:00Z"
+}
