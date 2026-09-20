@@ -1,0 +1,142 @@
+{
+  "PROJECTION_ROWS_BEFORE": 1000,
+  "PROJECTION_ROWS_AFTER": 1000,
+  "PROJECTION_ROWS_EXPLAINED": 1000,
+  "PROJECTION_ROWS_UNEXPLAINED": 0,
+  "ORPHAN_PROJECTION_ROWS": 0,
+  "WRONG_RATING_SPACE_ROWS": 0,
+  "quarantined_rows": 0,
+  "breakdown": [
+    {
+      "rating_space": "animedia",
+      "surface": "external_badge",
+      "source": "shikimori",
+      "unique_title_ids": 225,
+      "row_count": 225
+    },
+    {
+      "rating_space": "animedia",
+      "surface": "native_user_average",
+      "source": "animedia_native",
+      "unique_title_ids": 225,
+      "row_count": 225
+    },
+    {
+      "rating_space": "yummy",
+      "surface": "external_badge",
+      "source": "shikimori",
+      "unique_title_ids": 225,
+      "row_count": 225
+    },
+    {
+      "rating_space": "yummy",
+      "surface": "native_user_average",
+      "source": "yummy_native",
+      "unique_title_ids": 100,
+      "row_count": 100
+    },
+    {
+      "rating_space": "yummy",
+      "surface": "public_brand_score",
+      "source": "yummy_derived",
+      "unique_title_ids": 225,
+      "row_count": 225
+    }
+  ],
+  "sample_explained": [
+    {
+      "projection_id": 1,
+      "rating_space": "animedia",
+      "canonical_title_id": "nova:01a0b507-3280-7b2a-8af4-674dd73cff72",
+      "display_kind": "external_badge",
+      "source_key": "shikimori",
+      "source_components": [
+        "shikimori_observation"
+      ],
+      "source_observation_ids": [
+        "101"
+      ],
+      "policy_version": "rating_policy_v1",
+      "policy_digest": "a2daf212d92ea40dc3de658806fb6f5f5cf7ae77890ff0c25f81bd89088c17d5",
+      "created_reason": "Stage02/05 exact MAL_ID_CROSSWALK public badge on CLOSED Animedia",
+      "permission_status": "AUTHORIZED_PUBLIC_READ_ONLY",
+      "mapping_status": "EXACT_MAPPED",
+      "explained": true
+    },
+    {
+      "projection_id": 2,
+      "rating_space": "yummy",
+      "canonical_title_id": "nova:01a0b507-3280-7b2a-8af4-674dd73cff72",
+      "display_kind": "external_badge",
+      "source_key": "shikimori",
+      "source_components": [
+        "shikimori_observation"
+      ],
+      "source_observation_ids": [
+        "101"
+      ],
+      "policy_version": "rating_policy_v1",
+      "policy_digest": "a2daf212d92ea40dc3de658806fb6f5f5cf7ae77890ff0c25f81bd89088c17d5",
+      "created_reason": "shadow/closed-only storage of shikimori for Yummy space (open public blocked)",
+      "permission_status": "ALLOWED_PUBLIC_CLOSED_ONLY_SHADOW",
+      "mapping_status": "EXACT_MAPPED",
+      "explained": true
+    },
+    {
+      "projection_id": 3,
+      "rating_space": "yummy",
+      "canonical_title_id": "nova:01a0b507-3280-7b2a-8af4-674dd73cff72",
+      "display_kind": "public_brand_score",
+      "source_key": "yummy_derived",
+      "source_components": [
+        "animedia_native",
+        "shikimori"
+      ],
+      "source_observation_ids": [],
+      "policy_version": "rating_policy_v1",
+      "policy_digest": "a2daf212d92ea40dc3de658806fb6f5f5cf7ae77890ff0c25f81bd89088c17d5",
+      "created_reason": "derived brand score row; open-site emission gated by source-policy",
+      "permission_status": "SHADOW_PRIOR_BLOCKED_SOURCE_POLICY",
+      "mapping_status": "EXACT_MAPPED",
+      "explained": true
+    },
+    {
+      "projection_id": 4,
+      "rating_space": "animedia",
+      "canonical_title_id": "nova:01a0b507-3280-7b2a-8af4-674dd73cff72",
+      "display_kind": "native_user_average",
+      "source_key": "animedia_native",
+      "source_components": [
+        "animedia_native_ledger"
+      ],
+      "source_observation_ids": [],
+      "policy_version": "rating_policy_v1",
+      "policy_digest": "a2daf212d92ea40dc3de658806fb6f5f5cf7ae77890ff0c25f81bd89088c17d5",
+      "created_reason": "empty or live animedia native average projection",
+      "permission_status": "NATIVE_LEDGER_EMPTY",
+      "mapping_status": "N/A",
+      "explained": true
+    },
+    {
+      "projection_id": 5,
+      "rating_space": "animedia",
+      "canonical_title_id": "nova:01a0af3f-a972-76be-a845-326a4a565a93",
+      "display_kind": "external_badge",
+      "source_key": "shikimori",
+      "source_components": [
+        "shikimori_observation"
+      ],
+      "source_observation_ids": [
+        "102"
+      ],
+      "policy_version": "rating_policy_v1",
+      "policy_digest": "a2daf212d92ea40dc3de658806fb6f5f5cf7ae77890ff0c25f81bd89088c17d5",
+      "created_reason": "Stage02/05 exact MAL_ID_CROSSWALK public badge on CLOSED Animedia",
+      "permission_status": "AUTHORIZED_PUBLIC_READ_ONLY",
+      "mapping_status": "EXACT_MAPPED",
+      "explained": true
+    }
+  ],
+  "unexplained_sample": [],
+  "orphans_sample": []
+}
