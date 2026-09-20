@@ -26,12 +26,15 @@ class OriginRejected(RuntimeError):
 @dataclass
 class AntifraudConfig:
     kill_switch: bool = False
+    read_only: bool = False
     hmac_secret: bytes = field(default_factory=lambda: os.environ.get("COMMUNITY_IP_HMAC_SECRET", "dev-only-rotate").encode())
     hmac_ttl_seconds: int = 86400
     rate_limit_window_s: float = 60.0
     rate_limit_max: int = 30
     burst_window_s: float = 10.0
     burst_max: int = 8
+    title_rate_limit_max: int = 20
+    global_rate_limit_max: int = 200
     allowed_origins: tuple[str, ...] = (
         "https://animedia.icu",
         "https://animedia.space",
@@ -41,6 +44,10 @@ class AntifraudConfig:
         "http://localhost",
         "http://127.0.0.1",
     )
+
+
+class ReadOnlyMode(RuntimeError):
+    status = 503
 
 
 class AntifraudGuard:
@@ -53,6 +60,14 @@ class AntifraudGuard:
     def assert_writable(self) -> None:
         if self.config.kill_switch:
             raise KillSwitchActive("community ratings kill switch active")
+        if self.config.read_only:
+            raise ReadOnlyMode("community ratings read-only emergency mode")
+
+    def set_kill_switch(self, enabled: bool) -> None:
+        self.config.kill_switch = bool(enabled)
+
+    def set_read_only(self, enabled: bool) -> None:
+        self.config.read_only = bool(enabled)
 
     def check_origin(self, origin: str | None, *, csrf_token: str | None, session_csrf: str | None) -> None:
         if not origin:
@@ -77,21 +92,29 @@ class AntifraudGuard:
         account_id: str,
         token_id: str,
         ip_hmac_prefix: str,
+        subject_id: str = "",
         now: float | None = None,
     ) -> None:
         t = now if now is not None else time.time()
-        for key in (f"acct:{account_id}", f"tok:{token_id}", f"ip:{ip_hmac_prefix}"):
+        keys = [f"acct:{account_id}", f"tok:{token_id}", f"ip:{ip_hmac_prefix}", "global:writes"]
+        if subject_id:
+            keys.append(f"title:{subject_id}")
+        for key in keys:
             if not key.split(":", 1)[1]:
                 continue
             q = self._hits[key]
             while q and t - q[0] > self.config.rate_limit_window_s:
                 q.popleft()
-            if len(q) >= self.config.rate_limit_max:
+            limit = self.config.rate_limit_max
+            if key.startswith("title:"):
+                limit = self.config.title_rate_limit_max
+            elif key.startswith("global:"):
+                limit = self.config.global_rate_limit_max
+            if len(q) >= limit:
                 raise RateLimited(f"rate limit exceeded for {key.split(':', 1)[0]}")
             q.append(t)
-            # burst
             burst = [x for x in q if t - x <= self.config.burst_window_s]
-            if len(burst) >= self.config.burst_max:
+            if len(burst) >= self.config.burst_max and not key.startswith("global:"):
                 self.alerts.append(
                     {
                         "type": "velocity_burst",

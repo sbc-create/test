@@ -4,15 +4,21 @@ from __future__ import annotations
 
 from typing import Any
 
-from factory.community.antifraud import AntifraudGuard, KillSwitchActive, OriginRejected, RateLimited
+from factory.community.antifraud import (
+    AntifraudGuard,
+    KillSwitchActive,
+    OriginRejected,
+    RateLimited,
+    ReadOnlyMode,
+)
 from factory.community.service import CommunityConflict, CommunityValidationError, CommunityVotesService
 from factory.community.spaces import merge_guest_into_account, rating_space_for_domain
 
 
 class CommunityRatingsAPI:
-    """Thin adapter: GET rating/preview, PUT/DELETE vote, history.
+    """Thin adapter: GET rating/preview/my vote, PUT/DELETE vote, history.
 
-    Not registered on production routes in this stage.
+    Not registered on production routes until owner public-write approval.
     """
 
     def __init__(self, service: CommunityVotesService, guard: AntifraudGuard | None = None) -> None:
@@ -21,6 +27,34 @@ class CommunityRatingsAPI:
 
     def get_rating(self, **kwargs: Any) -> dict[str, Any]:
         return self.service.get_rating(**kwargs)
+
+    def get_my_vote(
+        self,
+        *,
+        rating_space_id: str,
+        subject_id: str,
+        actor_id: str,
+        dimension: str = "overall",
+    ) -> dict[str, Any]:
+        row = self.service.store.conn.execute(
+            """SELECT score, status, updated_at FROM community_votes
+               WHERE rating_space_id=? AND subject_id=? AND actor_id=? AND dimension=?""",
+            (rating_space_id, subject_id, actor_id, dimension),
+        ).fetchone()
+        if not row or str(row[1]).upper() != "ACCEPTED":
+            return {
+                "status": 200,
+                "my_vote": None,
+                "rating_space_id": rating_space_id,
+                "subject_id": subject_id,
+            }
+        return {
+            "status": 200,
+            "my_vote": int(row[0]),
+            "updated_at": row[2],
+            "rating_space_id": rating_space_id,
+            "subject_id": subject_id,
+        }
 
     def get_preview(self, **kwargs: Any) -> dict[str, Any]:
         return self.service.preview_one(**kwargs)
@@ -43,13 +77,26 @@ class CommunityRatingsAPI:
             if origin is not None or csrf_token is not None:
                 self.guard.check_origin(origin, csrf_token=csrf_token, session_csrf=session_csrf)
             ip_hmac = self.guard.ip_prefix_hmac(ip) if ip else ""
-            if account_id or token_id or ip_hmac:
-                self.guard.check_rate(account_id=account_id, token_id=token_id, ip_hmac_prefix=ip_hmac)
+            subject_id = str(kwargs.get("subject_id") or "")
+            if account_id or token_id or ip_hmac or subject_id:
+                self.guard.check_rate(
+                    account_id=account_id,
+                    token_id=token_id,
+                    ip_hmac_prefix=ip_hmac,
+                    subject_id=subject_id,
+                )
             if replay_id:
                 self.guard.check_replay(replay_id)
             return self.service.put_vote(idempotency_key=idempotency_key, **kwargs)
-        except (KillSwitchActive, OriginRejected, RateLimited, CommunityConflict, CommunityValidationError) as exc:
-            return {"status": getattr(exc, "status", 400), "error": str(exc)}
+        except (
+            KillSwitchActive,
+            ReadOnlyMode,
+            OriginRejected,
+            RateLimited,
+            CommunityConflict,
+            CommunityValidationError,
+        ) as exc:
+            return {"status": getattr(exc, "status", 400), "error": str(exc), "code": type(exc).__name__}
 
     def delete_vote(
         self,
@@ -68,11 +115,24 @@ class CommunityRatingsAPI:
             if origin is not None or csrf_token is not None:
                 self.guard.check_origin(origin, csrf_token=csrf_token, session_csrf=session_csrf)
             ip_hmac = self.guard.ip_prefix_hmac(ip) if ip else ""
-            if account_id or token_id or ip_hmac:
-                self.guard.check_rate(account_id=account_id, token_id=token_id, ip_hmac_prefix=ip_hmac)
+            subject_id = str(kwargs.get("subject_id") or "")
+            if account_id or token_id or ip_hmac or subject_id:
+                self.guard.check_rate(
+                    account_id=account_id,
+                    token_id=token_id,
+                    ip_hmac_prefix=ip_hmac,
+                    subject_id=subject_id,
+                )
             return self.service.delete_vote(idempotency_key=idempotency_key, **kwargs)
-        except (KillSwitchActive, OriginRejected, RateLimited, CommunityConflict, CommunityValidationError) as exc:
-            return {"status": getattr(exc, "status", 400), "error": str(exc)}
+        except (
+            KillSwitchActive,
+            ReadOnlyMode,
+            OriginRejected,
+            RateLimited,
+            CommunityConflict,
+            CommunityValidationError,
+        ) as exc:
+            return {"status": getattr(exc, "status", 400), "error": str(exc), "code": type(exc).__name__}
 
     def get_own_history(self, *, actor_id: str, rating_space_id: str | None = None) -> list[dict[str, Any]]:
         q = "SELECT * FROM community_vote_events WHERE actor_id=? ORDER BY created_at DESC LIMIT 100"
