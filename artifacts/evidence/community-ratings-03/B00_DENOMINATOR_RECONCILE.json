@@ -1,0 +1,13 @@
+{
+  "PREVIOUS_GLOBAL_TARGETS_TOTAL": 7143,
+  "CURRENT_GLOBAL_TARGETS_TOTAL": 7425,
+  "DELTA": 282,
+  "SNAPSHOT_PATH": "/srv/lords/.frontend/animedia-01-details.json",
+  "SNAPSHOT_DIGEST": "c07f22b10ffc177fbe2fc75b27ef2d9bf7ebf19d1f2a473b5fb7a07c4638af11",
+  "CATALOG_REVISION": "ecc664ad462bab47b51e8a9a151d5ec7",
+  "BUILT_AT": "2026-09-20T03:16:30Z",
+  "SOURCE": "canonical-snapshot/1.0.0",
+  "SITE": "animedia-01",
+  "DETAIL_ID_DUPLICATES": 0,
+  "NOTE": "Stage02 used live animedia-01-details.json count=7425; prior 7143 was an earlier catalog snapshot from Stage5/earlier stages. Delta=282 is catalog growth between snapshots, not duplicate IDs."
+}

@@ -1,0 +1,12 @@
+{
+  "hard_deleted_rows": 1,
+  "actors": [
+    "canary-cr03-animedia-b6362847b84e"
+  ],
+  "subjects": [
+    "nova:019e820c-1c30-7466-9e8f-801577489ce1"
+  ],
+  "votes_remaining": 0,
+  "accepted_any": 0,
+  "audit_events_retained": 7
+}

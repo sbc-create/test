@@ -1,0 +1,12 @@
+{
+  "quarantined": [
+    {
+      "rating_space_id": "yummy",
+      "subject_id": "nova:019e820c-1c30-7466-9e8f-801577489ce1",
+      "display_kind": "native_user_average",
+      "reason": "orphan row created during Animedia canary refresh_subject; no accepted yummy votes; deactivated"
+    }
+  ],
+  "active_after": 500,
+  "multiplicity_restored": true
+}

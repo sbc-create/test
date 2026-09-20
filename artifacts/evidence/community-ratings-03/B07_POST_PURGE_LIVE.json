@@ -1,0 +1,13 @@
+{
+  "accepted_votes": 0,
+  "canary_vote_rows": 0,
+  "comments": 0,
+  "active_projections": 501,
+  "distinct_subjects": 125,
+  "integrity": "ok",
+  "fk_violations": 0,
+  "animedia_live_absent": true,
+  "animedia_live_score7": false,
+  "space_absent": true,
+  "plan_path": "/title/padshiy-master/"
+}

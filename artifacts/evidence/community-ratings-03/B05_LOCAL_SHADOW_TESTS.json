@@ -1,0 +1,368 @@
+[
+  {
+    "run": 1,
+    "formula": [
+      {
+        "name": "animedia_N0_absent",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "animedia_first_vote",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "animedia_update_N_stable",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "animedia_retract_N0",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "yummy_prior_both",
+        "pass": true,
+        "detail": "7.70"
+      },
+      {
+        "name": "yummy_prior_animedia_only",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "yummy_prior_shiki_only",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "yummy_prior_neither",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "yummy_N0_shows_prior",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "m_not_as_votes",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "yummy_first_native",
+        "pass": true,
+        "detail": "7.636363636363636363636363636"
+      },
+      {
+        "name": "yummy_update_N1",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "yummy_retract_to_prior",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "round_display",
+        "pass": true,
+        "detail": null
+      }
+    ],
+    "integrity": [
+      {
+        "name": "preview_equals_commit",
+        "pass": true,
+        "detail": {
+          "prev": {
+            "action": "create",
+            "score": 7,
+            "before": null,
+            "after": "7.000",
+            "delta": "+7.000",
+            "delta_raw": "7"
+          },
+          "cast": {
+            "status": 200,
+            "action": "CREATE",
+            "before": null,
+            "after": "7.000",
+            "delta": null,
+            "my_vote": 7,
+            "native_vote_count": 1,
+            "aggregate_version": 1,
+            "policy_version": "rating_policy_v1",
+            "noop": false
+          }
+        }
+      },
+      {
+        "name": "idempotency_replay_no_mutation",
+        "pass": true,
+        "detail": {
+          "delta": 0
+        }
+      },
+      {
+        "name": "concurrent_one_row",
+        "pass": true,
+        "detail": {
+          "n": 1,
+          "outs": [
+            {
+              "status": 200,
+              "action": "CREATE",
+              "before": null,
+              "after": "6.000",
+              "delta": null,
+              "my_vote": 6,
+              "native_vote_count": 1,
+              "aggregate_version": 5,
+              "policy_version": "rating_policy_v1",
+              "noop": false
+            },
+            {
+              "status": 200,
+              "action": "CREATE",
+              "before": null,
+              "after": "6.000",
+              "delta": null,
+              "my_vote": 6,
+              "native_vote_count": 1,
+              "aggregate_version": 5,
+              "policy_version": "rating_policy_v1",
+              "noop": false
+            }
+          ]
+        }
+      },
+      {
+        "name": "diff_idem_same_user_update",
+        "pass": true,
+        "detail": {
+          "status": 200,
+          "action": "UPDATE",
+          "before": "6.000",
+          "after": "9.000",
+          "delta": "+3.000",
+          "my_vote": 9,
+          "native_vote_count": 1,
+          "aggregate_version": 6,
+          "policy_version": "rating_policy_v1",
+          "noop": false
+        }
+      },
+      {
+        "name": "cross_space_no_leak",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "external_obs_unchanged",
+        "pass": true,
+        "detail": {
+          "before": 225,
+          "after": 225
+        }
+      },
+      {
+        "name": "comments_unchanged_zero",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "fuzzy_public_zero",
+        "pass": true,
+        "detail": 0
+      }
+    ],
+    "PASS": true
+  },
+  {
+    "run": 2,
+    "formula": [
+      {
+        "name": "animedia_N0_absent",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "animedia_first_vote",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "animedia_update_N_stable",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "animedia_retract_N0",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "yummy_prior_both",
+        "pass": true,
+        "detail": "7.70"
+      },
+      {
+        "name": "yummy_prior_animedia_only",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "yummy_prior_shiki_only",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "yummy_prior_neither",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "yummy_N0_shows_prior",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "m_not_as_votes",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "yummy_first_native",
+        "pass": true,
+        "detail": "7.636363636363636363636363636"
+      },
+      {
+        "name": "yummy_update_N1",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "yummy_retract_to_prior",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "round_display",
+        "pass": true,
+        "detail": null
+      }
+    ],
+    "integrity": [
+      {
+        "name": "preview_equals_commit",
+        "pass": true,
+        "detail": {
+          "prev": {
+            "action": "create",
+            "score": 7,
+            "before": null,
+            "after": "7.000",
+            "delta": "+7.000",
+            "delta_raw": "7"
+          },
+          "cast": {
+            "status": 200,
+            "action": "CREATE",
+            "before": null,
+            "after": "7.000",
+            "delta": null,
+            "my_vote": 7,
+            "native_vote_count": 1,
+            "aggregate_version": 1,
+            "policy_version": "rating_policy_v1",
+            "noop": false
+          }
+        }
+      },
+      {
+        "name": "idempotency_replay_no_mutation",
+        "pass": true,
+        "detail": {
+          "delta": 0
+        }
+      },
+      {
+        "name": "concurrent_one_row",
+        "pass": true,
+        "detail": {
+          "n": 1,
+          "outs": [
+            {
+              "status": 200,
+              "action": "CREATE",
+              "before": null,
+              "after": "6.000",
+              "delta": null,
+              "my_vote": 6,
+              "native_vote_count": 1,
+              "aggregate_version": 5,
+              "policy_version": "rating_policy_v1",
+              "noop": false
+            },
+            {
+              "status": 200,
+              "action": "CREATE",
+              "before": null,
+              "after": "6.000",
+              "delta": null,
+              "my_vote": 6,
+              "native_vote_count": 1,
+              "aggregate_version": 5,
+              "policy_version": "rating_policy_v1",
+              "noop": false
+            }
+          ]
+        }
+      },
+      {
+        "name": "diff_idem_same_user_update",
+        "pass": true,
+        "detail": {
+          "status": 200,
+          "action": "UPDATE",
+          "before": "6.000",
+          "after": "9.000",
+          "delta": "+3.000",
+          "my_vote": 9,
+          "native_vote_count": 1,
+          "aggregate_version": 6,
+          "policy_version": "rating_policy_v1",
+          "noop": false
+        }
+      },
+      {
+        "name": "cross_space_no_leak",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "external_obs_unchanged",
+        "pass": true,
+        "detail": {
+          "before": 225,
+          "after": 225
+        }
+      },
+      {
+        "name": "comments_unchanged_zero",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "fuzzy_public_zero",
+        "pass": true,
+        "detail": 0
+      }
+    ],
+    "PASS": true
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "PROJECTION_ROWS": 500,
+  "EXACT_MAPPED_RECORDS": 125,
+  "EXPLANATION": "125 unique Shikimori-mapped titles \u00d7 4 projection surfaces = 500 rows",
+  "SURFACES": [
+    "animedia/external_badge/shikimori",
+    "animedia/native_user_average/animedia_native",
+    "yummy/external_badge/shikimori",
+    "yummy/public_brand_score/yummy_derived"
+  ],
+  "NOT_500_COVERED_TITLES": true
+}

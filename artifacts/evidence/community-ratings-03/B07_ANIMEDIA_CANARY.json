@@ -1,0 +1,123 @@
+{
+  "plan": {
+    "space": "animedia",
+    "subject_id": "nova:019e820c-1c30-7466-9e8f-801577489ce1",
+    "actor_id": "canary-cr03-animedia-b6362847b84e",
+    "live_path": "/title/padshiy-master/"
+  },
+  "steps": [
+    {
+      "name": "preview_7",
+      "preview": {
+        "action": "create",
+        "score": 7,
+        "before": null,
+        "after": "7.000",
+        "delta": "+7.000",
+        "delta_raw": "7"
+      }
+    },
+    {
+      "name": "cast_7_concurrent",
+      "results": [
+        {
+          "status": 200,
+          "action": "CREATE",
+          "before": null,
+          "after": "7.000",
+          "delta": null,
+          "my_vote": 7,
+          "native_vote_count": 1,
+          "aggregate_version": 1,
+          "policy_version": "rating_policy_v1",
+          "noop": false
+        },
+        {
+          "status": 200,
+          "action": "CREATE",
+          "before": null,
+          "after": "7.000",
+          "delta": null,
+          "my_vote": 7,
+          "native_vote_count": 1,
+          "aggregate_version": 1,
+          "policy_version": "rating_policy_v1",
+          "noop": false
+        }
+      ],
+      "active_votes": 1
+    },
+    {
+      "name": "idempotency_replay_cast",
+      "replay": {
+        "status": 200,
+        "action": "CREATE",
+        "before": null,
+        "after": "7.000",
+        "delta": null,
+        "my_vote": 7,
+        "native_vote_count": 1,
+        "aggregate_version": 1,
+        "policy_version": "rating_policy_v1",
+        "noop": false
+      },
+      "events_delta": 0
+    },
+    {
+      "name": "preview_update_9",
+      "preview": {
+        "action": "replace",
+        "score": 9,
+        "before": "7.000",
+        "after": "9.000",
+        "delta": "+2.000",
+        "delta_raw": "2"
+      }
+    },
+    {
+      "name": "update_9",
+      "result": {
+        "status": 200,
+        "action": "UPDATE",
+        "before": "7.000",
+        "after": "9.000",
+        "delta": "+2.000",
+        "my_vote": 9,
+        "native_vote_count": 1,
+        "aggregate_version": 2,
+        "policy_version": "rating_policy_v1",
+        "noop": false
+      },
+      "vote_count": 1
+    },
+    {
+      "name": "retract",
+      "result": {
+        "status": 200,
+        "action": "DELETE",
+        "before": "9.000",
+        "after": null,
+        "my_vote": null,
+        "native_vote_count": 0,
+        "native_absent": true,
+        "aggregate_version": 3
+      }
+    },
+    {
+      "name": "retract_repeat",
+      "result": {
+        "status": 200,
+        "action": "NOOP",
+        "my_vote": null
+      }
+    }
+  ],
+  "cast_count": 1,
+  "update_count": 1,
+  "retract_count": 1,
+  "concurrent_duplicate_votes": 0,
+  "idempotency_replay_mutations": 0,
+  "preview_equals_write": true,
+  "formula_max_delta": 0.0,
+  "votes_remaining": 0
+}

@@ -1,0 +1,15 @@
+{
+  "YUMMY_NATIVE_CANARY_PASS": 0,
+  "STATUS": "BLOCKED_SOURCE_POLICY",
+  "gates": {
+    "ANIMEDIA_NATIVE_CANARY_PASS": 1,
+    "ANIMEDIA_CANARY_VOTES_REMAINING": 0,
+    "YUMMY_READ_DISPLAY_PASS": 1,
+    "YUMMY_SOURCE_POLICY_PASS": 0,
+    "YUMMY_ARTIFACT_RUNTIME_MATCH": 1
+  },
+  "reason": "Open-index Yummy lacks owner grant for Shikimori/derived prior public display; Stage03 canary auth does not expand source-policy. Native write canary skipped.",
+  "YUMMY_CANARY_WRITE_ENABLED": 0,
+  "CANARY_ALLOWLIST_ACTIVE": 0,
+  "CANARY_VOTES_REMAINING": 0
+}

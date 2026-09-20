@@ -1,0 +1,18 @@
+{
+  "icu_snippet": "<div class=\"cr-native\" role=\"group\" aria-label=\"Оценка Animedia\"><span class=\"cr-label\">Оценка Animedia</span> <span class=\"cr-score\">7</span> <span class=\"cr-count\">(1)</span></div>",
+  "space_snippet": "<div class=\"cr-native\" role=\"group\" aria-label=\"Оценка Animedia\"><span class=\"cr-label\">Оценка Animedia</span> <span class=\"cr-score\">7</span> <span class=\"cr-count\">(1)</span></div>",
+  "shikimori_icu": true,
+  "AggregateRating": false,
+  "vote": {
+    "status": 200,
+    "action": "CREATE",
+    "before": null,
+    "after": "7.000",
+    "delta": null,
+    "my_vote": 7,
+    "native_vote_count": 1,
+    "aggregate_version": 8,
+    "policy_version": "rating_policy_v1",
+    "noop": false
+  }
+}

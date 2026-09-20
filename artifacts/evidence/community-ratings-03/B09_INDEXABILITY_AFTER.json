@@ -1,0 +1,117 @@
+{
+  "before_ref": {
+    "animedia.icu": {
+      "status": 200,
+      "x-robots": "noindex, nofollow",
+      "artifact": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+      "build": "20260920T102102Z-89666321-nova",
+      "robots_head": [
+        "User-agent: *",
+        "Disallow: /"
+      ]
+    },
+    "animedia.space": {
+      "status": 200,
+      "x-robots": "noindex, nofollow",
+      "artifact": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+      "build": "20260920T102102Z-89666321-nova",
+      "robots_head": [
+        "User-agent: *",
+        "Disallow: /"
+      ]
+    },
+    "yummyani.site": {
+      "status": 200,
+      "x-robots": null,
+      "artifact": "98c6e704b17deb62f385cd4b2f612a859215348da68b73c678e4c4aed5383fe8",
+      "build": "20260911T151617Z-b8d02371-yummy",
+      "robots_head": [
+        "User-agent: *",
+        "Allow: /",
+        "Disallow: /dev/",
+        "Disallow: /api/",
+        "Disallow: /login",
+        "Disallow: /register",
+        "Disallow: /search",
+        "Disallow: /catalog/random"
+      ]
+    }
+  },
+  "after": {
+    "animedia.icu": {
+      "host": "animedia.icu",
+      "status": 200,
+      "x_robots": "noindex, nofollow",
+      "meta_robots": [
+        "<meta name=\"robots\" content=\"noindex, nofollow\">"
+      ],
+      "canonical": [
+        "rel=\"canonical\" href=\"https://animedia.icu/\">"
+      ],
+      "robots_status": 200,
+      "robots_head": "User-agent: *\nDisallow: /\n"
+    },
+    "animedia.space": {
+      "host": "animedia.space",
+      "status": 200,
+      "x_robots": "noindex, nofollow",
+      "meta_robots": [
+        "<meta name=\"robots\" content=\"noindex, nofollow\">"
+      ],
+      "canonical": [
+        "rel=\"canonical\" href=\"https://animedia.space/\">"
+      ],
+      "robots_status": 200,
+      "robots_head": "User-agent: *\nDisallow: /\n"
+    },
+    "yummyani.site": {
+      "host": "yummyani.site",
+      "status": 200,
+      "x_robots": null,
+      "meta_robots": [
+        "<meta name=\"robots\" content=\"index, follow\"/>"
+      ],
+      "canonical": [
+        "rel=\"canonical\" href=\"https://yummyani.site\"/>"
+      ],
+      "robots_status": 200,
+      "robots_head": "User-agent: *\nAllow: /\nDisallow: /dev/\nDisallow: /api/\nDisallow: /login\nDisallow: /register\nDisallow: /search\nDisallow: /catalog/random\nDisallow: /admin/\n\nSitemap: https://yummyani.site/sitemap.xml\n"
+    }
+  },
+  "earlier_b09": {
+    "before": {
+      "icu": [
+        200,
+        "noindex, nofollow",
+        "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908"
+      ],
+      "space": [
+        200,
+        "noindex, nofollow",
+        "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908"
+      ],
+      "yummy": [
+        200,
+        null,
+        "98c6e704b17deb62f385cd4b2f612a859215348da68b73c678e4c4aed5383fe8"
+      ]
+    },
+    "after": {
+      "icu": [
+        200,
+        "noindex, nofollow",
+        "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908"
+      ],
+      "space": [
+        200,
+        "noindex, nofollow",
+        "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908"
+      ],
+      "yummy": [
+        200,
+        null,
+        "98c6e704b17deb62f385cd4b2f612a859215348da68b73c678e4c4aed5383fe8"
+      ]
+    }
+  }
+}

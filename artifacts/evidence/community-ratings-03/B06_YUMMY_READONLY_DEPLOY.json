@@ -1,0 +1,40 @@
+{
+  "DEPLOY_SCOPE": "yummyani.site",
+  "NATIVE_WRITES_ENABLED": 0,
+  "image_id": "sha256:669dd5f1441d86341a3834f912b04d060faa24f29011aad4a190808e4af7c170",
+  "runtime_revision_label": "7f1a5a348ccf45e3d23db958cda3432e2cd46b69-cr03",
+  "YUMMY_ARTIFACT_RUNTIME_MATCH": 1,
+  "projection_digest": "699e83897076fb6d6f733b66e963de5a1f2c492e1e4c5a4bf7bd73880c6d7d26",
+  "flags": {
+    "YUMMY_SOURCE_POLICY_PASS": 0,
+    "YUMMY_PUBLIC_DISPLAY_ALLOWED": 0,
+    "RATINGS_PUBLIC_READ_YUMMY": 0,
+    "YUMMY_DISPLAY_MODE": "SHADOW_LOADER_ONLY",
+    "NOTE": "Open-index Yummy: Shikimori/derived public display blocked until owner grant"
+  },
+  "live_reads": [
+    {
+      "run": 1,
+      "status": 200,
+      "shadow_loaded": true,
+      "public_community_badge": false,
+      "has_0_0": false,
+      "x_robots": null,
+      "content_len": 65520,
+      "title_ok": true
+    },
+    {
+      "run": 2,
+      "status": 200,
+      "shadow_loaded": true,
+      "public_community_badge": false,
+      "has_0_0": false,
+      "x_robots": null,
+      "content_len": 65520,
+      "title_ok": true
+    }
+  ],
+  "YUMMY_READ_DISPLAY_PASS": 1,
+  "YUMMY_SOURCE_POLICY_PASS": 0,
+  "public_display_hidden": true
+}
