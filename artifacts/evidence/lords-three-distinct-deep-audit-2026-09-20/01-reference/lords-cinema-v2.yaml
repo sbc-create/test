@@ -1,0 +1,13 @@
+# Design passport — lordfilm47.space / lords-general
+design_id: lords-cinema-v2
+audience: mass cinema catalog viewers
+hero: featured/premiere film strip (Премьеры недели)
+first_three_blocks:
+  - Премьеры недели
+  - Фильмы по жанрам
+  - Новинки
+primary_card: vertical poster grid (.c)
+palette: graphite sheet + warm green/amber accent (profile tokens)
+title_page: synopsis and facts before player (shared title shell for now)
+footer: sections / genres / years / about
+responsive: drawer nav until 1024px

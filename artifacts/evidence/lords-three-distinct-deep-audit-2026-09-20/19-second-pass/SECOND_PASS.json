@@ -1,0 +1,12 @@
+{
+  "ts": "2026-09-20T22:25:42.629569+00:00",
+  "method": "Re-reviewed saved contact screenshots without re-reading first written findings file (none yet).",
+  "additional_or_confirmed": [
+    "Cinema: Премьеры недели and Новинки share nearly identical title sequences (freshness matrix).",
+    "All profiles: collection tile «Недавно добавленные» describes anime catalog — wrong for cinema role.",
+    "Curated/cinema collection grids end with incomplete last row (5 tiles) — acceptable if intentional, still looks sparse.",
+    "Series «Фильмы в каталоге» uses horizontal episode-like cards with truncated titles.",
+    "Mobile cinema ATF: 2-col poster grid readable; hamburger present.",
+    "Shared H1 weakens role branding across three domains."
+  ]
+}

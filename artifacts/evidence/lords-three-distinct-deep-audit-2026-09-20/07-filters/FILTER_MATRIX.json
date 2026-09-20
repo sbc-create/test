@@ -1,0 +1,299 @@
+{
+  "ts": "2026-09-20T21:57:25.260196+00:00",
+  "sites": {
+    "lords-01": {
+      "domain": "lordfilm47.space",
+      "rows": [
+        {
+          "key": "genre",
+          "path": "/genre/anime/",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 39622,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "year",
+          "path": "/year/2021/",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 39607,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "country_legacy",
+          "path": "/country/usa/",
+          "status": 404,
+          "cards": 0,
+          "bytes_before_first_card": null,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": "HTTP:404"
+        },
+        {
+          "key": "country_query",
+          "path": "/catalog/?country=usa",
+          "status": 200,
+          "cards": 0,
+          "bytes_before_first_card": null,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "combined_filter",
+          "path": "/genre/anime/?year=2024",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 39711,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "catalog",
+          "path": "/catalog/",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 39344,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "new",
+          "path": "/new/",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 24355,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "movies_section",
+          "path": "/movies/",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 39337,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "series_section",
+          "path": "/series/",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 39340,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        }
+      ],
+      "page2_status": 200,
+      "year_page2_status": 200,
+      "year_page2_keeps_year": true
+    },
+    "lords-02": {
+      "domain": "lordserial33.biz",
+      "rows": [
+        {
+          "key": "genre",
+          "path": "/genre/anime/",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 39646,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "year",
+          "path": "/year/2021/",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 39631,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "country_legacy",
+          "path": "/country/usa/",
+          "status": 404,
+          "cards": 0,
+          "bytes_before_first_card": null,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": "HTTP:404"
+        },
+        {
+          "key": "country_query",
+          "path": "/catalog/?country=usa",
+          "status": 200,
+          "cards": 0,
+          "bytes_before_first_card": null,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "combined_filter",
+          "path": "/genre/anime/?year=2024",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 39735,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "catalog",
+          "path": "/catalog/",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 39368,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "new",
+          "path": "/new/",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 24360,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "movies_section",
+          "path": "/movies/",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 39361,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "series_section",
+          "path": "/series/",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 39364,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        }
+      ],
+      "page2_status": 200,
+      "year_page2_status": 200,
+      "year_page2_keeps_year": true
+    },
+    "lords-03": {
+      "domain": "1lordserials1.online",
+      "rows": [
+        {
+          "key": "genre",
+          "path": "/genre/anime/",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 39678,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "year",
+          "path": "/year/2021/",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 39663,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "country_legacy",
+          "path": "/country/usa/",
+          "status": 404,
+          "cards": 0,
+          "bytes_before_first_card": null,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": "HTTP:404"
+        },
+        {
+          "key": "country_query",
+          "path": "/catalog/?country=usa",
+          "status": 200,
+          "cards": 0,
+          "bytes_before_first_card": null,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "combined_filter",
+          "path": "/genre/anime/?year=2024",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 39767,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "catalog",
+          "path": "/catalog/",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 39396,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "new",
+          "path": "/new/",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 24388,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "movies_section",
+          "path": "/movies/",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 39389,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        },
+        {
+          "key": "series_section",
+          "path": "/series/",
+          "status": 200,
+          "cards": 48,
+          "bytes_before_first_card": 39392,
+          "has_active_filter_marker": true,
+          "soft404": false,
+          "err": null
+        }
+      ],
+      "page2_status": 200,
+      "year_page2_status": 200,
+      "year_page2_keeps_year": true
+    }
+  }
+}

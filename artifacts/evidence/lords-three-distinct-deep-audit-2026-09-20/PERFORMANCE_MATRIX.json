@@ -1,0 +1,23 @@
+{
+  "ts": "2026-09-20T22:25:42.625679+00:00",
+  "status": "LIMITED",
+  "note": "No dedicated live LCP/CLS lab run in this resume pass. Capture used Playwright domcontentloaded waits only.",
+  "from_capture": {
+    "console_errors_recorded": {
+      "lords-01": 1,
+      "lords-02": 1,
+      "lords-03": 1
+    },
+    "failed_resources_recorded": {
+      "lords-01": 1,
+      "lords-02": 1,
+      "lords-03": 1
+    }
+  },
+  "http_crawl_resilience": {
+    "lords-01_5xx_during_crawl": 0,
+    "lords-02_5xx_during_crawl": 291,
+    "lords-03_5xx_during_crawl": 254,
+    "interpretation": "Mass 502 on lords-02/03 during ~320-link sequential crawl; later home recovered to 200 without declaring permanent outage P0."
+  }
+}

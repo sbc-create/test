@@ -1,0 +1,32 @@
+{
+  "ts": "2026-09-20T22:12:56.273869+00:00",
+  "sites": {
+    "lords-01": {
+      "domain": "lordfilm47.space",
+      "home_h1_count": 1,
+      "img_count": 59,
+      "img_missing_alt": 0,
+      "img_empty_alt": 1,
+      "html_lang": "ru",
+      "input_like_count": 1
+    },
+    "lords-02": {
+      "domain": "lordserial33.biz",
+      "home_h1_count": 1,
+      "img_count": 44,
+      "img_missing_alt": 0,
+      "img_empty_alt": 1,
+      "html_lang": "ru",
+      "input_like_count": 1
+    },
+    "lords-03": {
+      "domain": "1lordserials1.online",
+      "home_h1_count": 1,
+      "img_count": 31,
+      "img_missing_alt": 0,
+      "img_empty_alt": 1,
+      "html_lang": "ru",
+      "input_like_count": 1
+    }
+  }
+}

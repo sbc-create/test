@@ -1,0 +1,2242 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/"
+  },
+  {
+    "path": "/catalog/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/catalog/"
+  },
+  {
+    "path": "/new/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/new/"
+  },
+  {
+    "path": "/movies/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/movies/"
+  },
+  {
+    "path": "/series/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/series/"
+  },
+  {
+    "path": "/collections/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/collections/"
+  },
+  {
+    "path": "/search/?q=тест",
+    "status": null,
+    "err": "UnicodeEncodeError:'ascii' codec can't encode characters in position 15-18: ordinal not in range(128)",
+    "soft404": false,
+    "final": null
+  },
+  {
+    "path": "/title/9-11-ataka-na-pentagon/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/9-11-ataka-na-pentagon/"
+  },
+  {
+    "path": "/title/amerikanskaya-amazonka/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/amerikanskaya-amazonka/"
+  },
+  {
+    "path": "/title/amerikanskaya-amazonka/season-1/episode-1/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/amerikanskaya-amazonka/season-1/episode-1/"
+  },
+  {
+    "path": "/genre/anime/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/genre/anime/"
+  },
+  {
+    "path": "/year/2021/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/year/2021/"
+  },
+  {
+    "path": "/country/usa/",
+    "status": 404,
+    "err": "HTTP:404",
+    "soft404": false,
+    "final": "https://1lordserials1.online/country/usa/"
+  },
+  {
+    "path": "/animation/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/animation/"
+  },
+  {
+    "path": "/collection/top_rated/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/collection/top_rated/"
+  },
+  {
+    "path": "/title/chya-eto-sobaka/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/chya-eto-sobaka/"
+  },
+  {
+    "path": "/title/svinorez/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/svinorez/"
+  },
+  {
+    "path": "/title/kadaknath/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/kadaknath/"
+  },
+  {
+    "path": "/title/bezdna/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bezdna/"
+  },
+  {
+    "path": "/title/sheri-lyubov-moya/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/sheri-lyubov-moya/"
+  },
+  {
+    "path": "/title/bez-prava-na-strah/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bez-prava-na-strah/"
+  },
+  {
+    "path": "/title/plasticheskaya-krasota/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/plasticheskaya-krasota/"
+  },
+  {
+    "path": "/title/imperiya-artura/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/imperiya-artura/"
+  },
+  {
+    "path": "/title/delo-ob-ubiystve-lakshmikantana/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/delo-ob-ubiystve-lakshmikantana/"
+  },
+  {
+    "path": "/title/littl-lorreyn/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/littl-lorreyn/"
+  },
+  {
+    "path": "/collection/recently_added/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/collection/recently_added/"
+  },
+  {
+    "path": "/collection/recently_added_movies/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/collection/recently_added_movies/"
+  },
+  {
+    "path": "/collection/current_season/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/collection/current_season/"
+  },
+  {
+    "path": "/collection/video_available/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/collection/video_available/"
+  },
+  {
+    "path": "/title/moi-dva-centa/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/moi-dva-centa/"
+  },
+  {
+    "path": "/title/plennica-6/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/plennica-6/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/nash-vcherashniy-pobeg/"
+  },
+  {
+    "path": "/title/nedetskie-igry-2/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/nedetskie-igry-2/"
+  },
+  {
+    "path": "/title/pravda-ili-zagovor/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/pravda-ili-zagovor/"
+  },
+  {
+    "path": "/title/reznya-v-norton-krik/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/reznya-v-norton-krik/"
+  },
+  {
+    "path": "/title/pervenec-2/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/pervenec-2/"
+  },
+  {
+    "path": "/title/princessa-i-drakon/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/princessa-i-drakon/"
+  },
+  {
+    "path": "/title/kurinyy-gorodok/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/kurinyy-gorodok/"
+  },
+  {
+    "path": "/title/do-kraya-sveta/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/do-kraya-sveta/"
+  },
+  {
+    "path": "/title/elaydzha-pil/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/elaydzha-pil/"
+  },
+  {
+    "path": "/title/otgoloski-iz-pustoty/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/otgoloski-iz-pustoty/"
+  },
+  {
+    "path": "/title/bratya-po-oruzhiyu-nasledie/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bratya-po-oruzhiyu-nasledie/"
+  },
+  {
+    "path": "/title/materinskaya-lihoradka/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/materinskaya-lihoradka/"
+  },
+  {
+    "path": "/title/ty-ya-protiv-vsego-mira/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/ty-ya-protiv-vsego-mira/"
+  },
+  {
+    "path": "/title/parshivye-ovcy-2/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/parshivye-ovcy-2/"
+  },
+  {
+    "path": "/title/posledniy-prokat/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/posledniy-prokat/"
+  },
+  {
+    "path": "/title/umnica-gudi/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/umnica-gudi/"
+  },
+  {
+    "path": "/title/luchshie-iz-luchshih-2/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/luchshie-iz-luchshih-2/"
+  },
+  {
+    "path": "/title/ya-kris-farli/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/ya-kris-farli/"
+  },
+  {
+    "path": "/title/pylnye-utesy/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/pylnye-utesy/"
+  },
+  {
+    "path": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/ohota-za-brakom-v-37-eto-pole-bitvy/"
+  },
+  {
+    "path": "/title/chti-svoyu-mat/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/chti-svoyu-mat/"
+  },
+  {
+    "path": "/title/operaciya-fortitude/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/operaciya-fortitude/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/master-lda-i-plameni-2/"
+  },
+  {
+    "path": "/title/v-poiskah-dzheka-charltona/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/v-poiskah-dzheka-charltona/"
+  },
+  {
+    "path": "/title/magiya-zatonuvshih-korabley/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/magiya-zatonuvshih-korabley/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/tihookeanskie-rassledovaniya/"
+  },
+  {
+    "path": "/title/le-man-55-taynaya-katastrofa/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/le-man-55-taynaya-katastrofa/"
+  },
+  {
+    "path": "/title/lyubov-i-remont/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/lyubov-i-remont/"
+  },
+  {
+    "path": "/title/obitel-zla-2/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/obitel-zla-2/"
+  },
+  {
+    "path": "/title/udivitelnyy-mir-ieronima-bosha/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/udivitelnyy-mir-ieronima-bosha/"
+  },
+  {
+    "path": "/title/sidni-lyumet-o-sebe/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/sidni-lyumet-o-sebe/"
+  },
+  {
+    "path": "/title/nerazryvnye-uzy/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/nerazryvnye-uzy/"
+  },
+  {
+    "path": "/title/isstuplenie-2/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/isstuplenie-2/"
+  },
+  {
+    "path": "/title/uvyadanie/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/uvyadanie/"
+  },
+  {
+    "path": "/title/sryv/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/sryv/"
+  },
+  {
+    "path": "/title/skandal-4/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/skandal-4/"
+  },
+  {
+    "path": "/title/moy-sekret/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/moy-sekret/"
+  },
+  {
+    "path": "/title/sestry-obschaya-lyubov/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/sestry-obschaya-lyubov/"
+  },
+  {
+    "path": "/title/gorod-zhun/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/gorod-zhun/"
+  },
+  {
+    "path": "/title/vo-imya-lyubvi-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/vo-imya-lyubvi-2/"
+  },
+  {
+    "path": "/title/poceluy-menya-derzko/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/poceluy-menya-derzko/"
+  },
+  {
+    "path": "/title/ya-vsego-lish-travinka/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/ya-vsego-lish-travinka/"
+  },
+  {
+    "path": "/title/chistilschiki-3/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/chistilschiki-3/"
+  },
+  {
+    "path": "/title/ya-tebya-znayu/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/ya-tebya-znayu/"
+  },
+  {
+    "path": "/title/epoha-lda/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/epoha-lda/"
+  },
+  {
+    "path": "/title/dobro-pozhalovat-v-platvil/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/dobro-pozhalovat-v-platvil/"
+  },
+  {
+    "path": "/title/sudmedekspert-stavshaya-domohozyaykoy/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/sudmedekspert-stavshaya-domohozyaykoy/"
+  },
+  {
+    "path": "/title/zvezdnaya-zolotaya-moneta/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/zvezdnaya-zolotaya-moneta/"
+  },
+  {
+    "path": "/title/troe-papash/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/troe-papash/"
+  },
+  {
+    "path": "/title/ostrov-krasnyh-pauchih-liliy/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/ostrov-krasnyh-pauchih-liliy/"
+  },
+  {
+    "path": "/title/lego-city-gorod-bez-granic/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/lego-city-gorod-bez-granic/"
+  },
+  {
+    "path": "/title/chasha-vesny/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/chasha-vesny/"
+  },
+  {
+    "path": "/genre/zapadnyykontent/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/genre/zapadnyykontent/"
+  },
+  {
+    "path": "/genre/drama/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/genre/drama/"
+  },
+  {
+    "path": "/genre/komediya/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/genre/komediya/"
+  },
+  {
+    "path": "/genre/triller/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/genre/triller/"
+  },
+  {
+    "path": "/genre/dorama/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/genre/dorama/"
+  },
+  {
+    "path": "/genre/boevik/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/genre/boevik/"
+  },
+  {
+    "path": "/genre/melodrama/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/genre/melodrama/"
+  },
+  {
+    "path": "/year/2026/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/year/2026/"
+  },
+  {
+    "path": "/year/2025/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/year/2025/"
+  },
+  {
+    "path": "/year/2024/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/year/2024/"
+  },
+  {
+    "path": "/year/2023/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/year/2023/"
+  },
+  {
+    "path": "/year/2022/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/year/2022/"
+  },
+  {
+    "path": "/catalog/?kind=Фильм",
+    "status": null,
+    "err": "UnicodeEncodeError:'ascii' codec can't encode characters in position 19-23: ordinal not in range(128)",
+    "soft404": false,
+    "final": null
+  },
+  {
+    "path": "/title/abort-zhenschiny-rasskazyvayut/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/abort-zhenschiny-rasskazyvayut/"
+  },
+  {
+    "path": "/title/animirovannaya-zhizn/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/animirovannaya-zhizn/"
+  },
+  {
+    "path": "/title/bal/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bal/"
+  },
+  {
+    "path": "/title/bez-uma-ot-tiffani/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bez-uma-ot-tiffani/"
+  },
+  {
+    "path": "/title/chetvertaya-faza/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/chetvertaya-faza/"
+  },
+  {
+    "path": "/title/devid-linch-zhizn-v-iskusstve/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/devid-linch-zhizn-v-iskusstve/"
+  },
+  {
+    "path": "/catalog/?kind=Сериал",
+    "status": null,
+    "err": "UnicodeEncodeError:'ascii' codec can't encode characters in position 19-24: ordinal not in range(128)",
+    "soft404": false,
+    "final": null
+  },
+  {
+    "path": "/title/amerikanskaya-amazonka/season-1/episode-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/amerikanskaya-amazonka/season-1/episode-2/"
+  },
+  {
+    "path": "/title/aleks-protiv-eyroda/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/aleks-protiv-eyroda/"
+  },
+  {
+    "path": "/title/autsaydery/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/autsaydery/"
+  },
+  {
+    "path": "/title/demony-gollivuda/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/demony-gollivuda/"
+  },
+  {
+    "path": "/title/durnoe-vliyanie-kto-stoit-za-detmi-inflyuenserami/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/durnoe-vliyanie-kto-stoit-za-detmi-inflyuenserami/"
+  },
+  {
+    "path": "/title/dzherri-springer-svet-kamera-boy/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/dzherri-springer-svet-kamera-boy/"
+  },
+  {
+    "path": "/title/morskie-pehotincy/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/morskie-pehotincy/"
+  },
+  {
+    "path": "/catalog/?genre=anime",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/catalog/?genre=anime"
+  },
+  {
+    "path": "/movies/?genre=anime",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/movies/?genre=anime"
+  },
+  {
+    "path": "/series/?genre=anime",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/series/?genre=anime"
+  },
+  {
+    "path": "/animation/?genre=anime",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/animation/?genre=anime"
+  },
+  {
+    "path": "/title/nelyud-chast-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/nelyud-chast-2/"
+  },
+  {
+    "path": "/title/nelyud-film-2-stolknovenie/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/nelyud-film-2-stolknovenie/"
+  },
+  {
+    "path": "/title/vo-vseoruzhii-sila-artefaktov/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/vo-vseoruzhii-sila-artefaktov/"
+  },
+  {
+    "path": "/title/dedushkina-lampa/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/dedushkina-lampa/"
+  },
+  {
+    "path": "/title/ovosch-supergeroy-morkkorm/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/ovosch-supergeroy-morkkorm/"
+  },
+  {
+    "path": "/title/violonchelist-gosyu-1982/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/violonchelist-gosyu-1982/"
+  },
+  {
+    "path": "/title/gorod-dozhdya/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/gorod-dozhdya/"
+  },
+  {
+    "path": "/title/ryba/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/ryba/"
+  },
+  {
+    "path": "/title/uchitel-medium/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/uchitel-medium/"
+  },
+  {
+    "path": "/title/uzh-ne-zombi-li-eto-sredi-mertvecov-ova/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/uzh-ne-zombi-li-eto-sredi-mertvecov-ova/"
+  },
+  {
+    "path": "/title/uzh-ne-zombi-li-eto-ova/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/uzh-ne-zombi-li-eto-ova/"
+  },
+  {
+    "path": "/title/daybaster-dotyanis-do-neba-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/daybaster-dotyanis-do-neba-2/"
+  },
+  {
+    "path": "/title/daybaster-dotyanis-do-neba/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/daybaster-dotyanis-do-neba/"
+  },
+  {
+    "path": "/title/drakoniy-zhemchug-zet-plan-po-unichtozheniyu-sayyanov-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/drakoniy-zhemchug-zet-plan-po-unichtozheniyu-sayyanov-2/"
+  },
+  {
+    "path": "/title/nelyud-film-1-impuls/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/nelyud-film-1-impuls/"
+  },
+  {
+    "path": "/title/ksi-avant/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/ksi-avant/"
+  },
+  {
+    "path": "/title/korolevskie-kosmicheskie-sily-krylya-honneamiz/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/korolevskie-kosmicheskie-sily-krylya-honneamiz/"
+  },
+  {
+    "path": "/title/generator-gaul/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/generator-gaul/"
+  },
+  {
+    "path": "/title/kiberegoist-kaydzo/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/kiberegoist-kaydzo/"
+  },
+  {
+    "path": "/title/legenda-boevyh-lentyaev-severnoy-zvezdy/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/legenda-boevyh-lentyaev-severnoy-zvezdy/"
+  },
+  {
+    "path": "/title/toriko-3d-appetitnoe-priklyuchenie/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/toriko-3d-appetitnoe-priklyuchenie/"
+  },
+  {
+    "path": "/title/tenti-lishniy-v-lyubvi/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/tenti-lishniy-v-lyubvi/"
+  },
+  {
+    "path": "/title/vpered-anpanman-davayte-pobedim-korabl-s-privideniyami/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/vpered-anpanman-davayte-pobedim-korabl-s-privideniyami/"
+  },
+  {
+    "path": "/title/prishedshiy-iz-drevnosti-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/prishedshiy-iz-drevnosti-2/"
+  },
+  {
+    "path": "/title/dni-sakamoto-chast-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/dni-sakamoto-chast-2/"
+  },
+  {
+    "path": "/title/tikava-tayna-ostrova-rusalok/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/tikava-tayna-ostrova-rusalok/"
+  },
+  {
+    "path": "/catalog/?year=2021",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/catalog/?year=2021"
+  },
+  {
+    "path": "/movies/?year=2021",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/movies/?year=2021"
+  },
+  {
+    "path": "/series/?year=2021",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/series/?year=2021"
+  },
+  {
+    "path": "/animation/?year=2021",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/animation/?year=2021"
+  },
+  {
+    "path": "/title/dikie-malenkie-koshki/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/dikie-malenkie-koshki/"
+  },
+  {
+    "path": "/title/albatros/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/albatros/"
+  },
+  {
+    "path": "/title/voshozhdenie/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/voshozhdenie/"
+  },
+  {
+    "path": "/title/chudaki-i-akuly/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/chudaki-i-akuly/"
+  },
+  {
+    "path": "/title/avariya-lyubvi/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/avariya-lyubvi/"
+  },
+  {
+    "path": "/title/priklyucheniya-molodogo-voltera/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/priklyucheniya-molodogo-voltera/"
+  },
+  {
+    "path": "/title/razvedennye-v-rio/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/razvedennye-v-rio/"
+  },
+  {
+    "path": "/title/beneficiar/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/beneficiar/"
+  },
+  {
+    "path": "/title/belye-peski/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/belye-peski/"
+  },
+  {
+    "path": "/title/prah-moey-ploti-slovno-ogromnaya-galaktika/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/prah-moey-ploti-slovno-ogromnaya-galaktika/"
+  },
+  {
+    "path": "/title/slepoy-kop-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/slepoy-kop-2/"
+  },
+  {
+    "path": "/title/klass-yutuberov-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/klass-yutuberov-2/"
+  },
+  {
+    "path": "/title/lyubov-v-pryamom-efire/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/lyubov-v-pryamom-efire/"
+  },
+  {
+    "path": "/title/radiologicheskoe-otdelenie-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/radiologicheskoe-otdelenie-2/"
+  },
+  {
+    "path": "/title/hochu-romantiki/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/hochu-romantiki/"
+  },
+  {
+    "path": "/title/davay-srazhatsya-prizrak/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/davay-srazhatsya-prizrak/"
+  },
+  {
+    "path": "/title/bogachi/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bogachi/"
+  },
+  {
+    "path": "/title/spasatelnyy-krug-bolshe-chem-druzya-menshe-chem-lyubovniki/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/spasatelnyy-krug-bolshe-chem-druzya-menshe-chem-lyubovniki/"
+  },
+  {
+    "path": "/title/na-pomosch-prizrak/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/na-pomosch-prizrak/"
+  },
+  {
+    "path": "/title/povtor-moment-kogda-vse-nachalos-zanovo/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/povtor-moment-kogda-vse-nachalos-zanovo/"
+  },
+  {
+    "path": "/title/on-vlyublen-v-nee/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/on-vlyublen-v-nee/"
+  },
+  {
+    "path": "/title/po-tu-storonu-detstva/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/po-tu-storonu-detstva/"
+  },
+  {
+    "path": "/title/rozhdestvenskaya-istoriya/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/rozhdestvenskaya-istoriya/"
+  },
+  {
+    "path": "/title/konec-drugoy-storony/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/konec-drugoy-storony/"
+  },
+  {
+    "path": "/title/mudraya-zhizn-v-derevne/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/mudraya-zhizn-v-derevne/"
+  },
+  {
+    "path": "/title/dengi-na-bochku-10/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/dengi-na-bochku-10/"
+  },
+  {
+    "path": "/title/oh-uzh-eti-detki/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/oh-uzh-eti-detki/"
+  },
+  {
+    "path": "/title/zolotaya-sekira/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/zolotaya-sekira/"
+  },
+  {
+    "path": "/title/schenyachiy-patrul-dinofilm/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/schenyachiy-patrul-dinofilm/"
+  },
+  {
+    "path": "/title/vpered/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/vpered/"
+  },
+  {
+    "path": "/title/svyaschennye-zveri/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/svyaschennye-zveri/"
+  },
+  {
+    "path": "/title/multachki-bayki-iz-radiator-springs/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/multachki-bayki-iz-radiator-springs/"
+  },
+  {
+    "path": "/title/neprimetnyy/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/neprimetnyy/"
+  },
+  {
+    "path": "/title/tam-gde-tancuyut-svetlyachki/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/tam-gde-tancuyut-svetlyachki/"
+  },
+  {
+    "path": "/title/40-dney-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/40-dney-2/"
+  },
+  {
+    "path": "/title/prekrasnyy-shum/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/prekrasnyy-shum/"
+  },
+  {
+    "path": "/title/svyatoy-paisiy-iz-farasy-na-nebesa/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/svyatoy-paisiy-iz-farasy-na-nebesa/"
+  },
+  {
+    "path": "/title/tancuy-chtoby-zhit/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/tancuy-chtoby-zhit/"
+  },
+  {
+    "path": "/title/malandriny/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/malandriny/"
+  },
+  {
+    "path": "/title/dzhudzhi/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/dzhudzhi/"
+  },
+  {
+    "path": "/title/zemlya-mpondo/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/zemlya-mpondo/"
+  },
+  {
+    "path": "/title/v-lovushke-4/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/v-lovushke-4/"
+  },
+  {
+    "path": "/title/bratya-po-oruzhiyu-3/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bratya-po-oruzhiyu-3/"
+  },
+  {
+    "path": "/title/mne-nuzhen-tolko-ty-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/mne-nuzhen-tolko-ty-2/"
+  },
+  {
+    "path": "/title/planet-earth-ii/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/planet-earth-ii/"
+  },
+  {
+    "path": "/title/bbc-planeta-zemlya/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bbc-planeta-zemlya/"
+  },
+  {
+    "path": "/title/hot-wheels-za-granyu-voobrazheniya/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/hot-wheels-za-granyu-voobrazheniya/"
+  },
+  {
+    "path": "/title/aynali/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/aynali/"
+  },
+  {
+    "path": "/title/twenty-one-pilots-bolshe-chem-my-kogda-libo-predstavlyali/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/twenty-one-pilots-bolshe-chem-my-kogda-libo-predstavlyali/"
+  },
+  {
+    "path": "/title/zolotye-peyzazhi-zavtrashnego-dnya/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/zolotye-peyzazhi-zavtrashnego-dnya/"
+  },
+  {
+    "path": "/title/golubaya-planeta-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/golubaya-planeta-2/"
+  },
+  {
+    "path": "/title/avatar-legenda-ob-aange/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/avatar-legenda-ob-aange/"
+  },
+  {
+    "path": "/title/sanni-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/sanni-2/"
+  },
+  {
+    "path": "/title/pochtovyy-yaschik-braytvinov/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/pochtovyy-yaschik-braytvinov/"
+  },
+  {
+    "path": "/title/sem-mirov-odna-planeta/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/sem-mirov-odna-planeta/"
+  },
+  {
+    "path": "/title/pobeg-iz-shoushenka-1994/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/pobeg-iz-shoushenka-1994/"
+  },
+  {
+    "path": "/title/graciya-duha/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/graciya-duha/"
+  },
+  {
+    "path": "/title/den-doktora/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/den-doktora/"
+  },
+  {
+    "path": "/title/bts-bon-voyage/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bts-bon-voyage/"
+  },
+  {
+    "path": "/title/avenged-sevenfold-live-in-the-l-b-c-diamonds-in-the-rough/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/avenged-sevenfold-live-in-the-l-b-c-diamonds-in-the-rough/"
+  },
+  {
+    "path": "/title/flaviya-yunyy-detektiv/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/flaviya-yunyy-detektiv/"
+  },
+  {
+    "path": "/title/kemp-rok-3/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/kemp-rok-3/"
+  },
+  {
+    "path": "/title/kormilec/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/kormilec/"
+  },
+  {
+    "path": "/title/letnie-iskry/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/letnie-iskry/"
+  },
+  {
+    "path": "/title/mandalorec-i-grogu/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/mandalorec-i-grogu/"
+  },
+  {
+    "path": "/title/mappet-shou/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/mappet-shou/"
+  },
+  {
+    "path": "/title/angelskaya-vera/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/angelskaya-vera/"
+  },
+  {
+    "path": "/title/bolshe-nikakih-proschaniy/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bolshe-nikakih-proschaniy/"
+  },
+  {
+    "path": "/title/glubina-rezkosti/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/glubina-rezkosti/"
+  },
+  {
+    "path": "/title/komanda-ralli-keps/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/komanda-ralli-keps/"
+  },
+  {
+    "path": "/title/kuznica/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/kuznica/"
+  },
+  {
+    "path": "/title/luchshee-rozhdestvenskoe-predstavlenie-na-svete/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/luchshee-rozhdestvenskoe-predstavlenie-na-svete/"
+  },
+  {
+    "path": "/title/bebi-ubey-ili-umri/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bebi-ubey-ili-umri/"
+  },
+  {
+    "path": "/title/proklyatie-zabytoy-derevni/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/proklyatie-zabytoy-derevni/"
+  },
+  {
+    "path": "/title/sandigdham/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/sandigdham/"
+  },
+  {
+    "path": "/title/skazhi-mne-pravdu/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/skazhi-mne-pravdu/"
+  },
+  {
+    "path": "/title/tavvai/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/tavvai/"
+  },
+  {
+    "path": "/title/zrimoe-i-nezrimoe/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/zrimoe-i-nezrimoe/"
+  },
+  {
+    "path": "/title/bezdna/season-1/episode-1/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bezdna/season-1/episode-1/"
+  },
+  {
+    "path": "/title/bezdna/season-1/episode-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bezdna/season-1/episode-2/"
+  },
+  {
+    "path": "/title/bezdna/season-1/episode-3/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bezdna/season-1/episode-3/"
+  },
+  {
+    "path": "/title/bezdna/season-1/episode-4/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bezdna/season-1/episode-4/"
+  },
+  {
+    "path": "/title/bezdna/season-1/episode-5/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bezdna/season-1/episode-5/"
+  },
+  {
+    "path": "/title/bezdna/season-1/episode-6/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bezdna/season-1/episode-6/"
+  },
+  {
+    "path": "/title/bezdna/season-1/episode-7/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bezdna/season-1/episode-7/"
+  },
+  {
+    "path": "/title/bezdna/season-1/episode-8/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bezdna/season-1/episode-8/"
+  },
+  {
+    "path": "/title/bezdna/season-1/episode-9/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bezdna/season-1/episode-9/"
+  },
+  {
+    "path": "/title/bezdna/season-1/episode-10/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bezdna/season-1/episode-10/"
+  },
+  {
+    "path": "/title/bezdna/season-1/episode-11/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bezdna/season-1/episode-11/"
+  },
+  {
+    "path": "/title/bezdna/season-1/episode-12/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bezdna/season-1/episode-12/"
+  },
+  {
+    "path": "/title/bezdna/season-1/episode-13/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bezdna/season-1/episode-13/"
+  },
+  {
+    "path": "/title/bezdna/season-1/episode-14/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bezdna/season-1/episode-14/"
+  },
+  {
+    "path": "/title/bezdna/season-1/episode-15/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bezdna/season-1/episode-15/"
+  },
+  {
+    "path": "/title/bezdna/season-1/episode-16/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bezdna/season-1/episode-16/"
+  },
+  {
+    "path": "/title/kamen-rayder-drayv-serial-2014-2015/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/kamen-rayder-drayv-serial-2014-2015/"
+  },
+  {
+    "path": "/title/temnyy-dvoreckiy/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/temnyy-dvoreckiy/"
+  },
+  {
+    "path": "/title/fonari/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/fonari/"
+  },
+  {
+    "path": "/title/1992/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/1992/"
+  },
+  {
+    "path": "/title/banda-v-poiskah-sokrovisch/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/banda-v-poiskah-sokrovisch/"
+  },
+  {
+    "path": "/title/detektivy-s-togo-sveta/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/detektivy-s-togo-sveta/"
+  },
+  {
+    "path": "/title/28-let-spustya/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/28-let-spustya/"
+  },
+  {
+    "path": "/title/adskoe-plamya/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/adskoe-plamya/"
+  },
+  {
+    "path": "/title/advokat-po-semeynym-delam/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/advokat-po-semeynym-delam/"
+  },
+  {
+    "path": "/title/akter-3/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/akter-3/"
+  },
+  {
+    "path": "/title/aktivy/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/aktivy/"
+  },
+  {
+    "path": "/title/amerikanskaya-kabala/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/amerikanskaya-kabala/"
+  },
+  {
+    "path": "/title/bar-nevermaynd/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/bar-nevermaynd/"
+  },
+  {
+    "path": "/title/britva/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/britva/"
+  },
+  {
+    "path": "/title/chikati-lo/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/chikati-lo/"
+  },
+  {
+    "path": "/title/fayly-maharashtry/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/fayly-maharashtry/"
+  },
+  {
+    "path": "/title/gandhari/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/gandhari/"
+  },
+  {
+    "path": "/title/hrabryy-princ/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/hrabryy-princ/"
+  },
+  {
+    "path": "/title/plasticheskaya-krasota/season-1/episode-1/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/plasticheskaya-krasota/season-1/episode-1/"
+  },
+  {
+    "path": "/title/plasticheskaya-krasota/season-1/episode-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/plasticheskaya-krasota/season-1/episode-2/"
+  },
+  {
+    "path": "/title/plasticheskaya-krasota/season-1/episode-3/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/plasticheskaya-krasota/season-1/episode-3/"
+  },
+  {
+    "path": "/title/plasticheskaya-krasota/season-1/episode-4/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/plasticheskaya-krasota/season-1/episode-4/"
+  },
+  {
+    "path": "/title/plasticheskaya-krasota/season-1/episode-5/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/plasticheskaya-krasota/season-1/episode-5/"
+  },
+  {
+    "path": "/title/plasticheskaya-krasota/season-1/episode-6/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/plasticheskaya-krasota/season-1/episode-6/"
+  },
+  {
+    "path": "/title/plasticheskaya-krasota/season-1/episode-7/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/plasticheskaya-krasota/season-1/episode-7/"
+  },
+  {
+    "path": "/title/plasticheskaya-krasota/season-1/episode-8/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/plasticheskaya-krasota/season-1/episode-8/"
+  },
+  {
+    "path": "/title/iz-huliganki-vo-vrachi/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/iz-huliganki-vo-vrachi/"
+  },
+  {
+    "path": "/title/tokio-za-30/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/tokio-za-30/"
+  },
+  {
+    "path": "/title/kogda-nastupit-vesna/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/kogda-nastupit-vesna/"
+  },
+  {
+    "path": "/title/pomoschnica-medsestry-k-vashim-uslugam/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/pomoschnica-medsestry-k-vashim-uslugam/"
+  },
+  {
+    "path": "/title/mechtayu-o-tebe/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/mechtayu-o-tebe/"
+  },
+  {
+    "path": "/title/davay-lyubit/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/davay-lyubit/"
+  },
+  {
+    "path": "/title/dom-sevidzh/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/dom-sevidzh/"
+  },
+  {
+    "path": "/title/esche-49-mil/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/esche-49-mil/"
+  },
+  {
+    "path": "/title/gruboe-probuzhdenie/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/gruboe-probuzhdenie/"
+  },
+  {
+    "path": "/title/podrostkovyy-seks-i-smert-v-lagere-miazma/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/podrostkovyy-seks-i-smert-v-lagere-miazma/"
+  },
+  {
+    "path": "/title/solnechnaya-tancovschica/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/solnechnaya-tancovschica/"
+  },
+  {
+    "path": "/title/mladshiy-inspektor-babita-singh-dokladyvaet/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/mladshiy-inspektor-babita-singh-dokladyvaet/"
+  },
+  {
+    "path": "/title/mundram-kan/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/mundram-kan/"
+  },
+  {
+    "path": "/title/navya-chakra/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/navya-chakra/"
+  },
+  {
+    "path": "/title/o-romeo/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/o-romeo/"
+  },
+  {
+    "path": "/title/yad-skazka-dlya-vzroslyh/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/yad-skazka-dlya-vzroslyh/"
+  },
+  {
+    "path": "/title/devushka-kotoraya-vyzhila-istoriya-aliny-tompson/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/devushka-kotoraya-vyzhila-istoriya-aliny-tompson/"
+  },
+  {
+    "path": "/title/gromoverzhcy/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/gromoverzhcy/"
+  },
+  {
+    "path": "/title/muzh-za-kotorogo-mozhno-umeret-istoriya-lizy-agilar/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/muzh-za-kotorogo-mozhno-umeret-istoriya-lizy-agilar/"
+  },
+  {
+    "path": "/title/nastroyschik/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/nastroyschik/"
+  },
+  {
+    "path": "/title/ohota-na-vorov-2-pantera/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/ohota-na-vorov-2-pantera/"
+  },
+  {
+    "path": "/title/v-holodnom-svete/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/v-holodnom-svete/"
+  },
+  {
+    "path": "/title/skay-king/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/skay-king/"
+  },
+  {
+    "path": "/title/begi-pryachsya-bey-nevernye/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/begi-pryachsya-bey-nevernye/"
+  },
+  {
+    "path": "/title/nochnoy-reys-nochnaya-nemezida-chast-1/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/nochnoy-reys-nochnaya-nemezida-chast-1/"
+  },
+  {
+    "path": "/title/posle-udara/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/posle-udara/"
+  },
+  {
+    "path": "/title/eho-kamera/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/eho-kamera/"
+  },
+  {
+    "path": "/title/moi-dva-centa/season-1/episode-1/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/moi-dva-centa/season-1/episode-1/"
+  },
+  {
+    "path": "/title/moi-dva-centa/season-1/episode-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/moi-dva-centa/season-1/episode-2/"
+  },
+  {
+    "path": "/title/moi-dva-centa/season-1/episode-3/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/moi-dva-centa/season-1/episode-3/"
+  },
+  {
+    "path": "/title/moi-dva-centa/season-1/episode-4/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/moi-dva-centa/season-1/episode-4/"
+  },
+  {
+    "path": "/title/luka/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/luka/"
+  },
+  {
+    "path": "/title/drakoniy-strayker/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/drakoniy-strayker/"
+  },
+  {
+    "path": "/title/geymovers/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/geymovers/"
+  },
+  {
+    "path": "/title/istoriya-igrushek-5/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/istoriya-igrushek-5/"
+  },
+  {
+    "path": "/title/obychnyy-multik-uteryannye-plenki/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/obychnyy-multik-uteryannye-plenki/"
+  },
+  {
+    "path": "/title/udivitelnyy-cifrovoy-cirk-posledniy-akt/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/udivitelnyy-cifrovoy-cirk-posledniy-akt/"
+  },
+  {
+    "path": "/title/plennica-6/season-1/episode-1/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/plennica-6/season-1/episode-1/"
+  },
+  {
+    "path": "/title/plennica-6/season-1/episode-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/plennica-6/season-1/episode-2/"
+  },
+  {
+    "path": "/title/plennica-6/season-1/episode-3/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/plennica-6/season-1/episode-3/"
+  },
+  {
+    "path": "/title/plennica-6/season-1/episode-4/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/plennica-6/season-1/episode-4/"
+  },
+  {
+    "path": "/title/plennica-6/season-1/episode-5/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/plennica-6/season-1/episode-5/"
+  },
+  {
+    "path": "/title/plennica-6/season-1/episode-6/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/plennica-6/season-1/episode-6/"
+  },
+  {
+    "path": "/title/doch-ognya-mest-bastardy/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/doch-ognya-mest-bastardy/"
+  },
+  {
+    "path": "/title/nichego/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/nichego/"
+  },
+  {
+    "path": "/title/otsutstvuyuschiy-golos/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/otsutstvuyuschiy-golos/"
+  },
+  {
+    "path": "/title/proklyatiya/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/proklyatiya/"
+  },
+  {
+    "path": "/title/selenkay/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/selenkay/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-1/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/nash-vcherashniy-pobeg/season-1/episode-1/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/nash-vcherashniy-pobeg/season-1/episode-2/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-3/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/nash-vcherashniy-pobeg/season-1/episode-3/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-4/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/nash-vcherashniy-pobeg/season-1/episode-4/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-5/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/nash-vcherashniy-pobeg/season-1/episode-5/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-6/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/nash-vcherashniy-pobeg/season-1/episode-6/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-7/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/nash-vcherashniy-pobeg/season-1/episode-7/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-8/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://1lordserials1.online/title/nash-vcherashniy-pobeg/season-1/episode-8/"
+  }
+]

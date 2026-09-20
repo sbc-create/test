@@ -1,0 +1,1092 @@
+{
+  "ts": "2026-09-20T21:53:51.629629+00:00",
+  "sites": {
+    "lords-01": {
+      "domain": "lordfilm47.space",
+      "design": "lords-cinema-v2",
+      "nav_hrefs_sample": [
+        "/",
+        "/animation/",
+        "/catalog/",
+        "/collection/current_season/",
+        "/collection/recently_added/",
+        "/collection/recently_added_movies/",
+        "/collection/top_rated/",
+        "/collection/video_available/",
+        "/collections/",
+        "/favicon.svg",
+        "/genre/anime/",
+        "/genre/boevik/",
+        "/genre/dorama/",
+        "/genre/drama/",
+        "/genre/komediya/",
+        "/genre/kriminal/",
+        "/genre/melodrama/",
+        "/genre/triller/",
+        "/genre/west_content/",
+        "/genre/zapadnyykontent/",
+        "/movies/",
+        "/new/",
+        "/series/",
+        "/title/9-11-ataka-na-pentagon/",
+        "/title/amerikanskaya-amazonka/",
+        "/title/bez-prava-na-strah/",
+        "/title/bezdna/",
+        "/title/bratya-po-oruzhiyu-nasledie/",
+        "/title/chistilschiki-3/",
+        "/title/chti-svoyu-mat/",
+        "/title/chya-eto-sobaka/",
+        "/title/delo-ob-ubiystve-lakshmikantana/",
+        "/title/do-kraya-sveta/",
+        "/title/dobro-pozhalovat-v-platvil/",
+        "/title/elaydzha-pil/",
+        "/title/epoha-lda/",
+        "/title/gorod-zhun/",
+        "/title/imperiya-artura/",
+        "/title/kadaknath/",
+        "/title/kurinyy-gorodok/"
+      ],
+      "discovered_counts": {
+        "genres": 10,
+        "years": 6,
+        "countries": 0,
+        "titles_sampled": 40
+      },
+      "popular_meta": {
+        "week": "2026-W38",
+        "digest": "05400b9712dbb632303af1a43e0ebd8d",
+        "mode": "WEEKLY_SNAPSHOT"
+      },
+      "routes": {
+        "home": {
+          "path": "/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/",
+            "error": null,
+            "soft404": false,
+            "body_len": 63782
+          }
+        },
+        "catalog": {
+          "path": "/catalog/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/catalog/",
+            "error": null,
+            "soft404": false,
+            "body_len": 71677
+          }
+        },
+        "new": {
+          "path": "/new/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/new/",
+            "error": null,
+            "soft404": false,
+            "body_len": 58841
+          }
+        },
+        "popular_or_top": {
+          "path": null,
+          "probe": {
+            "status": 404,
+            "final": "https://lordfilm47.space/popular/",
+            "error": "HTTP:404",
+            "soft404": false,
+            "body_len": 25799
+          }
+        },
+        "genre": {
+          "path": "/genre/anime/",
+          "candidates": [
+            "/genre/anime/",
+            "/genre/boevik/",
+            "/genre/dorama/",
+            "/genre/drama/",
+            "/genre/komediya/",
+            "/genre/kriminal/",
+            "/genre/melodrama/",
+            "/genre/triller/"
+          ],
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/genre/anime/",
+            "error": null,
+            "soft404": false,
+            "body_len": 73572
+          }
+        },
+        "year": {
+          "path": "/year/2021/",
+          "candidates": [
+            "/year/2021/",
+            "/year/2022/",
+            "/year/2023/",
+            "/year/2024/",
+            "/year/2025/",
+            "/year/2026/"
+          ],
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/year/2021/",
+            "error": null,
+            "soft404": false,
+            "body_len": 71942
+          }
+        },
+        "country_legacy": {
+          "path": "/country/usa/",
+          "candidates": [],
+          "probe": {
+            "status": 404,
+            "final": "https://lordfilm47.space/country/usa/",
+            "error": "HTTP:404",
+            "soft404": false,
+            "body_len": 25803
+          }
+        },
+        "country_query": {
+          "path": "/catalog/?country=usa",
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/catalog/?country=usa",
+            "error": null,
+            "soft404": false,
+            "body_len": 44172
+          }
+        },
+        "combined_filter": {
+          "path": "/genre/anime/?year=2024",
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/genre/anime/?year=2024",
+            "error": null,
+            "soft404": false,
+            "body_len": 72216
+          }
+        },
+        "search_exact_ru": {
+          "path": "/search/?q=%D0%9D%D0%B5%D0%B4%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%B5%20%D0%B8%D0%B3%D1%80%D1%8B",
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/search/?q=%D0%9D%D0%B5%D0%B4%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%B5%20%D0%B8%D0%B3%D1%80%D1%8B",
+            "error": null,
+            "soft404": false,
+            "body_len": 27543
+          }
+        },
+        "search_original": {
+          "path": "/search/?q=The%20Batman",
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/search/?q=The%20Batman",
+            "error": null,
+            "soft404": true,
+            "body_len": 26559
+          }
+        },
+        "search_translit": {
+          "path": "/search/?q=nedetskie",
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/search/?q=nedetskie",
+            "error": null,
+            "soft404": false,
+            "body_len": 28118
+          }
+        },
+        "search_nonsense": {
+          "path": "/search/?q=zzzxqwxqwxqw",
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/search/?q=zzzxqwxqwxqw",
+            "error": null,
+            "soft404": true,
+            "body_len": 26565
+          }
+        },
+        "pagination_first": {
+          "path": "/catalog/?page=1",
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/catalog/?page=1",
+            "error": null,
+            "soft404": false,
+            "body_len": 71677
+          }
+        },
+        "pagination_second": {
+          "path": "/catalog/?page=2",
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/catalog/?page=2",
+            "error": null,
+            "soft404": false,
+            "body_len": 71850
+          }
+        },
+        "pagination_last_ok": {
+          "path": "/catalog/?page=1116",
+          "last_ok": 1116,
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/catalog/?page=1116",
+            "error": null,
+            "soft404": false,
+            "body_len": 60662
+          }
+        },
+        "pagination_invalid": {
+          "path": "/catalog/?page=999999",
+          "probe": {
+            "status": 404,
+            "final": "https://lordfilm47.space/catalog/?page=999999",
+            "error": "HTTP:404",
+            "soft404": false,
+            "body_len": 25799
+          }
+        },
+        "title_film": {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/title/9-11-ataka-na-pentagon/",
+            "error": null,
+            "soft404": false,
+            "body_len": 47765
+          }
+        },
+        "title_series": {
+          "path": "/title/amerikanskaya-amazonka/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/title/amerikanskaya-amazonka/",
+            "error": null,
+            "soft404": false,
+            "body_len": 47923
+          }
+        },
+        "title_episode": {
+          "path": "/title/amerikanskaya-amazonka/season-1/episode-1/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/title/amerikanskaya-amazonka/season-1/episode-1/",
+            "error": null,
+            "soft404": false,
+            "body_len": 41078
+          }
+        },
+        "collection": {
+          "path": "/collection/recently_added/",
+          "collections_index_status": 200,
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/collection/recently_added/",
+            "error": null,
+            "soft404": false,
+            "body_len": 46497
+          }
+        },
+        "http_404": {
+          "path": "/title/this-title-does-not-exist-zzz-999999/",
+          "probe": {
+            "status": 404,
+            "final": "https://lordfilm47.space/title/this-title-does-not-exist-zzz-999999/",
+            "error": "HTTP:404",
+            "soft404": false,
+            "body_len": 25834
+          }
+        },
+        "title_long_name": {
+          "path": null
+        },
+        "title_no_rating": {
+          "path": null
+        },
+        "title_thin_desc": {
+          "path": null
+        },
+        "title_poster_fallback": {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/title/9-11-ataka-na-pentagon/",
+            "error": null,
+            "soft404": false,
+            "body_len": 47765
+          }
+        },
+        "title_full": {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/title/9-11-ataka-na-pentagon/",
+            "error": null,
+            "soft404": false,
+            "body_len": 47765
+          }
+        },
+        "movies_section": {
+          "path": "/movies/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/movies/",
+            "error": null,
+            "soft404": false,
+            "body_len": 71688
+          }
+        },
+        "series_section": {
+          "path": "/series/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/series/",
+            "error": null,
+            "soft404": false,
+            "body_len": 72545
+          }
+        },
+        "animation_section": {
+          "path": "/animation/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordfilm47.space/animation/",
+            "error": null,
+            "soft404": false,
+            "body_len": 74393
+          }
+        }
+      }
+    },
+    "lords-02": {
+      "domain": "lordserial33.biz",
+      "design": "lords-series-feed-v2",
+      "nav_hrefs_sample": [
+        "/",
+        "/animation/",
+        "/catalog/",
+        "/collection/current_season/",
+        "/collection/recently_added/",
+        "/collection/recently_added_movies/",
+        "/collection/top_rated/",
+        "/collection/video_available/",
+        "/collections/",
+        "/favicon.svg",
+        "/genre/anime/",
+        "/genre/boevik/",
+        "/genre/dorama/",
+        "/genre/drama/",
+        "/genre/komediya/",
+        "/genre/melodrama/",
+        "/genre/triller/",
+        "/genre/zapadnyykontent/",
+        "/movies/",
+        "/new/",
+        "/series/",
+        "/title/amerikanskaya-amazonka/",
+        "/title/bezdna/",
+        "/title/chistilschiki-3/",
+        "/title/chti-svoyu-mat/",
+        "/title/chya-eto-sobaka/",
+        "/title/do-kraya-sveta/",
+        "/title/dobro-pozhalovat-v-platvil/",
+        "/title/drugaya-lyubov-no-ne-ty/",
+        "/title/elaydzha-pil/",
+        "/title/epoha-lda/",
+        "/title/evolyuciya/",
+        "/title/gorod-zhun/",
+        "/title/krutoy-uchitel-onidzuka-7/",
+        "/title/magiya-zatonuvshih-korabley/",
+        "/title/master-lda-i-plameni-2/",
+        "/title/moy-sekret/",
+        "/title/nascar-amerika/",
+        "/title/nash-vcherashniy-pobeg/",
+        "/title/nedetskie-igry-2/"
+      ],
+      "discovered_counts": {
+        "genres": 8,
+        "years": 6,
+        "countries": 0,
+        "titles_sampled": 40
+      },
+      "popular_meta": {
+        "week": "2026-W38",
+        "digest": "58b4ad8eb8463ff029e96cdb332037b0",
+        "mode": "WEEKLY_SNAPSHOT"
+      },
+      "routes": {
+        "home": {
+          "path": "/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/",
+            "error": null,
+            "soft404": false,
+            "body_len": 55781
+          }
+        },
+        "catalog": {
+          "path": "/catalog/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/catalog/",
+            "error": null,
+            "soft404": false,
+            "body_len": 71751
+          }
+        },
+        "new": {
+          "path": "/new/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/new/",
+            "error": null,
+            "soft404": false,
+            "body_len": 58896
+          }
+        },
+        "popular_or_top": {
+          "path": null,
+          "probe": {
+            "status": 404,
+            "final": "https://lordserial33.biz/popular/",
+            "error": "HTTP:404",
+            "soft404": false,
+            "body_len": 25802
+          }
+        },
+        "genre": {
+          "path": "/genre/anime/",
+          "candidates": [
+            "/genre/anime/",
+            "/genre/boevik/",
+            "/genre/dorama/",
+            "/genre/drama/",
+            "/genre/komediya/",
+            "/genre/melodrama/",
+            "/genre/triller/",
+            "/genre/zapadnyykontent/"
+          ],
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/genre/anime/",
+            "error": null,
+            "soft404": false,
+            "body_len": 73646
+          }
+        },
+        "year": {
+          "path": "/year/2021/",
+          "candidates": [
+            "/year/2021/",
+            "/year/2022/",
+            "/year/2023/",
+            "/year/2024/",
+            "/year/2025/",
+            "/year/2026/"
+          ],
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/year/2021/",
+            "error": null,
+            "soft404": false,
+            "body_len": 72016
+          }
+        },
+        "country_legacy": {
+          "path": "/country/usa/",
+          "candidates": [],
+          "probe": {
+            "status": 404,
+            "final": "https://lordserial33.biz/country/usa/",
+            "error": "HTTP:404",
+            "soft404": false,
+            "body_len": 25806
+          }
+        },
+        "country_query": {
+          "path": "/catalog/?country=usa",
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/catalog/?country=usa",
+            "error": null,
+            "soft404": false,
+            "body_len": 44198
+          }
+        },
+        "combined_filter": {
+          "path": "/genre/anime/?year=2024",
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/genre/anime/?year=2024",
+            "error": null,
+            "soft404": false,
+            "body_len": 72290
+          }
+        },
+        "search_exact_ru": {
+          "path": "/search/?q=%D0%9D%D0%B5%D0%B4%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%B5%20%D0%B8%D0%B3%D1%80%D1%8B",
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/search/?q=%D0%9D%D0%B5%D0%B4%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%B5%20%D0%B8%D0%B3%D1%80%D1%8B",
+            "error": null,
+            "soft404": false,
+            "body_len": 27552
+          }
+        },
+        "search_original": {
+          "path": "/search/?q=The%20Batman",
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/search/?q=The%20Batman",
+            "error": null,
+            "soft404": true,
+            "body_len": 26566
+          }
+        },
+        "search_translit": {
+          "path": "/search/?q=nedetskie",
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/search/?q=nedetskie",
+            "error": null,
+            "soft404": false,
+            "body_len": 28128
+          }
+        },
+        "search_nonsense": {
+          "path": "/search/?q=zzzxqwxqwxqw",
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/search/?q=zzzxqwxqwxqw",
+            "error": null,
+            "soft404": true,
+            "body_len": 26572
+          }
+        },
+        "pagination_first": {
+          "path": "/catalog/?page=1",
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/catalog/?page=1",
+            "error": null,
+            "soft404": false,
+            "body_len": 71751
+          }
+        },
+        "pagination_second": {
+          "path": "/catalog/?page=2",
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/catalog/?page=2",
+            "error": null,
+            "soft404": false,
+            "body_len": 71924
+          }
+        },
+        "pagination_last_ok": {
+          "path": "/catalog/?page=1116",
+          "last_ok": 1116,
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/catalog/?page=1116",
+            "error": null,
+            "soft404": false,
+            "body_len": 60716
+          }
+        },
+        "pagination_invalid": {
+          "path": "/catalog/?page=999999",
+          "probe": {
+            "status": 404,
+            "final": "https://lordserial33.biz/catalog/?page=999999",
+            "error": "HTTP:404",
+            "soft404": false,
+            "body_len": 25802
+          }
+        },
+        "title_film": {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/title/9-11-ataka-na-pentagon/",
+            "error": null,
+            "soft404": false,
+            "body_len": 47780
+          }
+        },
+        "title_series": {
+          "path": "/title/amerikanskaya-amazonka/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/title/amerikanskaya-amazonka/",
+            "error": null,
+            "soft404": false,
+            "body_len": 47938
+          }
+        },
+        "title_episode": {
+          "path": "/title/amerikanskaya-amazonka/season-1/episode-1/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/title/amerikanskaya-amazonka/season-1/episode-1/",
+            "error": null,
+            "soft404": false,
+            "body_len": 41091
+          }
+        },
+        "collection": {
+          "path": "/collection/recently_added/",
+          "collections_index_status": 200,
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/collection/recently_added/",
+            "error": null,
+            "soft404": false,
+            "body_len": 46500
+          }
+        },
+        "http_404": {
+          "path": "/title/this-title-does-not-exist-zzz-999999/",
+          "probe": {
+            "status": 404,
+            "final": "https://lordserial33.biz/title/this-title-does-not-exist-zzz-999999/",
+            "error": "HTTP:404",
+            "soft404": false,
+            "body_len": 25837
+          }
+        },
+        "title_long_name": {
+          "path": null
+        },
+        "title_no_rating": {
+          "path": "/title/master-lda-i-plameni-2/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/",
+            "error": null,
+            "soft404": false,
+            "body_len": 51690
+          }
+        },
+        "title_thin_desc": {
+          "path": null
+        },
+        "title_poster_fallback": {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/title/9-11-ataka-na-pentagon/",
+            "error": null,
+            "soft404": false,
+            "body_len": 47780
+          }
+        },
+        "title_full": {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/title/9-11-ataka-na-pentagon/",
+            "error": null,
+            "soft404": false,
+            "body_len": 47780
+          }
+        },
+        "movies_section": {
+          "path": "/movies/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/movies/",
+            "error": null,
+            "soft404": false,
+            "body_len": 71762
+          }
+        },
+        "series_section": {
+          "path": "/series/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/series/",
+            "error": null,
+            "soft404": false,
+            "body_len": 72619
+          }
+        },
+        "animation_section": {
+          "path": "/animation/",
+          "probe": {
+            "status": 200,
+            "final": "https://lordserial33.biz/animation/",
+            "error": null,
+            "soft404": false,
+            "body_len": 74467
+          }
+        }
+      }
+    },
+    "lords-03": {
+      "domain": "1lordserials1.online",
+      "design": "lords-curated-v2",
+      "nav_hrefs_sample": [
+        "/",
+        "/animation/",
+        "/catalog/",
+        "/collection/current_season/",
+        "/collection/recently_added/",
+        "/collection/recently_added_movies/",
+        "/collection/top_rated/",
+        "/collection/video_available/",
+        "/collections/",
+        "/favicon.svg",
+        "/genre/anime/",
+        "/genre/boevik/",
+        "/genre/dorama/",
+        "/genre/drama/",
+        "/genre/fentezi/",
+        "/genre/komediya/",
+        "/genre/kriminal/",
+        "/genre/melodrama/",
+        "/genre/triller/",
+        "/genre/zapadnyykontent/",
+        "/movies/",
+        "/new/",
+        "/series/",
+        "/title/bez-prava-na-strah/",
+        "/title/bezdna/",
+        "/title/bratya-po-oruzhiyu-nasledie/",
+        "/title/chya-eto-sobaka/",
+        "/title/delo-ob-ubiystve-lakshmikantana/",
+        "/title/do-kraya-sveta/",
+        "/title/elaydzha-pil/",
+        "/title/imperiya-artura/",
+        "/title/kadaknath/",
+        "/title/kurinyy-gorodok/",
+        "/title/littl-lorreyn/",
+        "/title/luchshie-iz-luchshih-2/",
+        "/title/materinskaya-lihoradka/",
+        "/title/moi-dva-centa/",
+        "/title/nash-vcherashniy-pobeg/",
+        "/title/nedetskie-igry-2/",
+        "/title/otgoloski-iz-pustoty/"
+      ],
+      "discovered_counts": {
+        "genres": 10,
+        "years": 6,
+        "countries": 0,
+        "titles_sampled": 40
+      },
+      "popular_meta": null,
+      "routes": {
+        "home": {
+          "path": "/",
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/",
+            "error": null,
+            "soft404": false,
+            "body_len": 48074
+          }
+        },
+        "catalog": {
+          "path": "/catalog/",
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/catalog/",
+            "error": null,
+            "soft404": false,
+            "body_len": 71876
+          }
+        },
+        "new": {
+          "path": "/new/",
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/new/",
+            "error": null,
+            "soft404": false,
+            "body_len": 59021
+          }
+        },
+        "popular_or_top": {
+          "path": null,
+          "probe": {
+            "status": 404,
+            "final": "https://1lordserials1.online/popular/",
+            "error": "HTTP:404",
+            "soft404": false,
+            "body_len": 25809
+          }
+        },
+        "genre": {
+          "path": "/genre/anime/",
+          "candidates": [
+            "/genre/anime/",
+            "/genre/boevik/",
+            "/genre/dorama/",
+            "/genre/drama/",
+            "/genre/fentezi/",
+            "/genre/komediya/",
+            "/genre/kriminal/",
+            "/genre/melodrama/"
+          ],
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/genre/anime/",
+            "error": null,
+            "soft404": false,
+            "body_len": 73775
+          }
+        },
+        "year": {
+          "path": "/year/2021/",
+          "candidates": [
+            "/year/2021/",
+            "/year/2022/",
+            "/year/2023/",
+            "/year/2024/",
+            "/year/2025/",
+            "/year/2026/"
+          ],
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/year/2021/",
+            "error": null,
+            "soft404": false,
+            "body_len": 72145
+          }
+        },
+        "country_legacy": {
+          "path": "/country/usa/",
+          "candidates": [],
+          "probe": {
+            "status": 404,
+            "final": "https://1lordserials1.online/country/usa/",
+            "error": "HTTP:404",
+            "soft404": false,
+            "body_len": 25813
+          }
+        },
+        "country_query": {
+          "path": "/catalog/?country=usa",
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/catalog/?country=usa",
+            "error": null,
+            "soft404": false,
+            "body_len": 44227
+          }
+        },
+        "combined_filter": {
+          "path": "/genre/anime/?year=2024",
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/genre/anime/?year=2024",
+            "error": null,
+            "soft404": false,
+            "body_len": 72419
+          }
+        },
+        "search_exact_ru": {
+          "path": "/search/?q=%D0%9D%D0%B5%D0%B4%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%B5%20%D0%B8%D0%B3%D1%80%D1%8B",
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/search/?q=%D0%9D%D0%B5%D0%B4%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%B5%20%D0%B8%D0%B3%D1%80%D1%8B",
+            "error": null,
+            "soft404": false,
+            "body_len": 27585
+          }
+        },
+        "search_original": {
+          "path": "/search/?q=The%20Batman",
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/search/?q=The%20Batman",
+            "error": null,
+            "soft404": true,
+            "body_len": 26595
+          }
+        },
+        "search_translit": {
+          "path": "/search/?q=nedetskie",
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/search/?q=nedetskie",
+            "error": null,
+            "soft404": false,
+            "body_len": 28163
+          }
+        },
+        "search_nonsense": {
+          "path": "/search/?q=zzzxqwxqwxqw",
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/search/?q=zzzxqwxqwxqw",
+            "error": null,
+            "soft404": true,
+            "body_len": 26601
+          }
+        },
+        "pagination_first": {
+          "path": "/catalog/?page=1",
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/catalog/?page=1",
+            "error": null,
+            "soft404": false,
+            "body_len": 71876
+          }
+        },
+        "pagination_second": {
+          "path": "/catalog/?page=2",
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/catalog/?page=2",
+            "error": null,
+            "soft404": false,
+            "body_len": 72049
+          }
+        },
+        "pagination_last_ok": {
+          "path": "/catalog/?page=1116",
+          "last_ok": 1116,
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/catalog/?page=1116",
+            "error": null,
+            "soft404": false,
+            "body_len": 60801
+          }
+        },
+        "pagination_invalid": {
+          "path": "/catalog/?page=999999",
+          "probe": {
+            "status": 404,
+            "final": "https://1lordserials1.online/catalog/?page=999999",
+            "error": "HTTP:404",
+            "soft404": false,
+            "body_len": 25809
+          }
+        },
+        "title_film": {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/title/9-11-ataka-na-pentagon/",
+            "error": null,
+            "soft404": false,
+            "body_len": 47834
+          }
+        },
+        "title_series": {
+          "path": "/title/amerikanskaya-amazonka/",
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/title/amerikanskaya-amazonka/",
+            "error": null,
+            "soft404": false,
+            "body_len": 47992
+          }
+        },
+        "title_episode": {
+          "path": "/title/amerikanskaya-amazonka/season-1/episode-1/",
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/title/amerikanskaya-amazonka/season-1/episode-1/",
+            "error": null,
+            "soft404": false,
+            "body_len": 41147
+          }
+        },
+        "collection": {
+          "path": "/collection/recently_added/",
+          "collections_index_status": 200,
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/collection/recently_added/",
+            "error": null,
+            "soft404": false,
+            "body_len": 46531
+          }
+        },
+        "http_404": {
+          "path": "/title/this-title-does-not-exist-zzz-999999/",
+          "probe": {
+            "status": 404,
+            "final": "https://1lordserials1.online/title/this-title-does-not-exist-zzz-999999/",
+            "error": "HTTP:404",
+            "soft404": false,
+            "body_len": 25844
+          }
+        },
+        "title_long_name": {
+          "path": null
+        },
+        "title_no_rating": {
+          "path": "/title/master-lda-i-plameni-2/",
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/title/master-lda-i-plameni-2/",
+            "error": null,
+            "soft404": false,
+            "body_len": 51744
+          }
+        },
+        "title_thin_desc": {
+          "path": null
+        },
+        "title_poster_fallback": {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/title/9-11-ataka-na-pentagon/",
+            "error": null,
+            "soft404": false,
+            "body_len": 47834
+          }
+        },
+        "title_full": {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/title/9-11-ataka-na-pentagon/",
+            "error": null,
+            "soft404": false,
+            "body_len": 47834
+          }
+        },
+        "movies_section": {
+          "path": "/movies/",
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/movies/",
+            "error": null,
+            "soft404": false,
+            "body_len": 71887
+          }
+        },
+        "series_section": {
+          "path": "/series/",
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/series/",
+            "error": null,
+            "soft404": false,
+            "body_len": 72744
+          }
+        },
+        "animation_section": {
+          "path": "/animation/",
+          "probe": {
+            "status": 200,
+            "final": "https://1lordserials1.online/animation/",
+            "error": null,
+            "soft404": false,
+            "body_len": 74592
+          }
+        }
+      }
+    }
+  }
+}
