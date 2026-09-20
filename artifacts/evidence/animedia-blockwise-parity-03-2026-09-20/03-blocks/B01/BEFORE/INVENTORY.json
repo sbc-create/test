@@ -1,0 +1,257 @@
+{
+  "captured_at": "2026-09-20T11:25:18Z",
+  "entries": [
+    {
+      "route": "home",
+      "viewport": "d1440",
+      "overflowX": 0,
+      "headerIn": {
+        "x": 48,
+        "y": 0,
+        "w": 1344,
+        "h": 72
+      },
+      "search": {
+        "x": 1116,
+        "y": 13,
+        "w": 220,
+        "h": 46
+      },
+      "logo": {
+        "x": 48,
+        "y": 14,
+        "w": 113,
+        "h": 44
+      },
+      "hasSchedule": false,
+      "hasTop100": false,
+      "taxVisible": true,
+      "menuVisible": false,
+      "touchOk": false
+    },
+    {
+      "route": "home",
+      "viewport": "t768",
+      "overflowX": 0,
+      "headerIn": {
+        "x": 22,
+        "y": 0,
+        "w": 724,
+        "h": 72
+      },
+      "search": {
+        "x": 147,
+        "y": 13,
+        "w": 491,
+        "h": 46
+      },
+      "logo": {
+        "x": 22,
+        "y": 14,
+        "w": 113,
+        "h": 44
+      },
+      "hasSchedule": false,
+      "hasTop100": false,
+      "taxVisible": false,
+      "menuVisible": true,
+      "touchOk": true
+    },
+    {
+      "route": "home",
+      "viewport": "m390",
+      "overflowX": 0,
+      "headerIn": {
+        "x": 12,
+        "y": 0,
+        "w": 366,
+        "h": 56
+      },
+      "search": {
+        "x": 133,
+        "y": 5,
+        "w": 141,
+        "h": 46
+      },
+      "logo": {
+        "x": 12,
+        "y": 6,
+        "w": 113,
+        "h": 44
+      },
+      "hasSchedule": false,
+      "hasTop100": false,
+      "taxVisible": false,
+      "menuVisible": true,
+      "touchOk": true
+    },
+    {
+      "route": "title",
+      "viewport": "d1440",
+      "overflowX": 0,
+      "headerIn": {
+        "x": 48,
+        "y": 0,
+        "w": 1344,
+        "h": 72
+      },
+      "search": {
+        "x": 1116,
+        "y": 13,
+        "w": 220,
+        "h": 46
+      },
+      "logo": {
+        "x": 48,
+        "y": 14,
+        "w": 113,
+        "h": 44
+      },
+      "hasSchedule": false,
+      "hasTop100": false,
+      "taxVisible": true,
+      "menuVisible": false,
+      "touchOk": false
+    },
+    {
+      "route": "title",
+      "viewport": "t768",
+      "overflowX": 0,
+      "headerIn": {
+        "x": 22,
+        "y": 0,
+        "w": 724,
+        "h": 72
+      },
+      "search": {
+        "x": 147,
+        "y": 13,
+        "w": 491,
+        "h": 46
+      },
+      "logo": {
+        "x": 22,
+        "y": 14,
+        "w": 113,
+        "h": 44
+      },
+      "hasSchedule": false,
+      "hasTop100": false,
+      "taxVisible": false,
+      "menuVisible": true,
+      "touchOk": true
+    },
+    {
+      "route": "title",
+      "viewport": "m390",
+      "overflowX": 0,
+      "headerIn": {
+        "x": 12,
+        "y": 0,
+        "w": 366,
+        "h": 56
+      },
+      "search": {
+        "x": 133,
+        "y": 5,
+        "w": 141,
+        "h": 46
+      },
+      "logo": {
+        "x": 12,
+        "y": 6,
+        "w": 113,
+        "h": 44
+      },
+      "hasSchedule": false,
+      "hasTop100": false,
+      "taxVisible": false,
+      "menuVisible": true,
+      "touchOk": true
+    },
+    {
+      "route": "catalog",
+      "viewport": "d1440",
+      "overflowX": 0,
+      "headerIn": {
+        "x": 48,
+        "y": 0,
+        "w": 1344,
+        "h": 72
+      },
+      "search": {
+        "x": 1116,
+        "y": 13,
+        "w": 220,
+        "h": 46
+      },
+      "logo": {
+        "x": 48,
+        "y": 14,
+        "w": 113,
+        "h": 44
+      },
+      "hasSchedule": false,
+      "hasTop100": false,
+      "taxVisible": true,
+      "menuVisible": false,
+      "touchOk": false
+    },
+    {
+      "route": "catalog",
+      "viewport": "t768",
+      "overflowX": 0,
+      "headerIn": {
+        "x": 22,
+        "y": 0,
+        "w": 724,
+        "h": 72
+      },
+      "search": {
+        "x": 147,
+        "y": 13,
+        "w": 491,
+        "h": 46
+      },
+      "logo": {
+        "x": 22,
+        "y": 14,
+        "w": 113,
+        "h": 44
+      },
+      "hasSchedule": false,
+      "hasTop100": false,
+      "taxVisible": false,
+      "menuVisible": true,
+      "touchOk": true
+    },
+    {
+      "route": "catalog",
+      "viewport": "m390",
+      "overflowX": 0,
+      "headerIn": {
+        "x": 12,
+        "y": 0,
+        "w": 366,
+        "h": 56
+      },
+      "search": {
+        "x": 133,
+        "y": 5,
+        "w": 141,
+        "h": 46
+      },
+      "logo": {
+        "x": 12,
+        "y": 6,
+        "w": 113,
+        "h": 44
+      },
+      "hasSchedule": false,
+      "hasTop100": false,
+      "taxVisible": false,
+      "menuVisible": true,
+      "touchOk": true
+    }
+  ]
+}

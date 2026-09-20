@@ -1,0 +1,80 @@
+{
+  "overflowX": 0,
+  "headerIn": {
+    "x": 12,
+    "y": 0,
+    "w": 366,
+    "h": 56
+  },
+  "logo": {
+    "x": 12,
+    "y": 6,
+    "w": 120,
+    "h": 44
+  },
+  "search": {
+    "x": 140,
+    "y": 6,
+    "w": 134,
+    "h": 44
+  },
+  "theme": {
+    "x": 282,
+    "y": 6,
+    "w": 44,
+    "h": 44
+  },
+  "menu": {
+    "x": 334,
+    "y": 6,
+    "w": 44,
+    "h": 44
+  },
+  "nav": {
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0
+  },
+  "tax": {
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0
+  },
+  "crumbs": null,
+  "navDisplay": "none",
+  "taxDisplay": "none",
+  "menuDisplay": "flex",
+  "navLinks": [
+    {
+      "href": "/",
+      "text": "Главная"
+    },
+    {
+      "href": "/catalog/",
+      "text": "Каталог"
+    },
+    {
+      "href": "/new/",
+      "text": "Новое в каталоге"
+    },
+    {
+      "href": "/collections/",
+      "text": "Подборки"
+    },
+    {
+      "href": "/schedule/",
+      "text": "Расписание"
+    }
+  ],
+  "hasSchedule": true,
+  "hasTop100": false,
+  "touchOk": true,
+  "route": "home",
+  "viewport": "m390",
+  "w": 390,
+  "h": 844,
+  "captured_at": "2026-09-20T11:28:28Z",
+  "phase": "AFTER_LOCAL"
+}

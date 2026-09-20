@@ -1,0 +1,88 @@
+{
+  "overflowX": 0,
+  "header": {
+    "x": 0,
+    "y": 0,
+    "w": 1440,
+    "h": 73
+  },
+  "headerIn": {
+    "x": 48,
+    "y": 0,
+    "w": 1344,
+    "h": 72
+  },
+  "logo": {
+    "x": 48,
+    "y": 14,
+    "w": 113,
+    "h": 44
+  },
+  "search": {
+    "x": 1116,
+    "y": 13,
+    "w": 220,
+    "h": 46
+  },
+  "theme": {
+    "x": 1348,
+    "y": 14,
+    "w": 44,
+    "h": 44
+  },
+  "menu": {
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0
+  },
+  "tax": {
+    "x": 173,
+    "y": 14,
+    "w": 931,
+    "h": 44
+  },
+  "drawer": {
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0
+  },
+  "crumbs": {
+    "x": 48,
+    "y": 73,
+    "w": 1344,
+    "h": 23
+  },
+  "logoText": "Animedia",
+  "searchVisible": true,
+  "taxVisible": true,
+  "menuVisible": false,
+  "navLinks": [
+    {
+      "href": "/",
+      "text": "Главная"
+    },
+    {
+      "href": "/catalog/",
+      "text": "Каталог аниме"
+    },
+    {
+      "href": "/new/",
+      "text": "Новое в каталоге"
+    },
+    {
+      "href": "/collections/",
+      "text": "Подборки"
+    }
+  ],
+  "hasTop100": false,
+  "hasSchedule": false,
+  "touchOk": false,
+  "route": "title",
+  "viewport": "d1440",
+  "w": 1440,
+  "h": 900,
+  "captured_at": "2026-09-20T11:25:18Z",
+  "phase": "BEFORE"
+}

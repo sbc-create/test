@@ -1769,52 +1769,65 @@ font:16px/1.45 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif}
   margin-inline:auto;padding-inline:0;box-sizing:border-box}
 .zwrap{padding-block:0}
 .zhd{position:relative;background:var(--a-rail);border-bottom:1px solid var(--a-line);z-index:30}
-.zhd__in{display:flex;align-items:center;gap:12px;flex-wrap:nowrap;height:72px;min-height:64px;
-max-height:88px;padding-block:0}
+.zhd__in{display:flex;align-items:center;gap:12px;flex-wrap:nowrap;height:68px;min-height:64px;
+max-height:72px;padding-block:0}
+@media(max-width:1023px){
+  .zhd__in{height:60px;min-height:56px;max-height:64px;flex-wrap:nowrap;gap:8px;padding-block:0}
+}
 @media(max-width:767px){
-  .zhd__in{height:56px;min-height:52px;max-height:58px;flex-wrap:nowrap;gap:8px;padding-block:0}
+  .zhd__in{height:56px;min-height:56px;max-height:64px;gap:8px}
 }
 .zhd__logo{font-size:22px;font-weight:800;letter-spacing:-.4px;color:var(--a-ink);flex:0 0 auto;
-line-height:1;min-height:44px;display:inline-flex;align-items:center}
+line-height:1;min-height:44px;min-width:120px;max-width:155px;width:max-content;
+display:inline-flex;align-items:center}
 .zhd__logo b{color:var(--a-acc)}
+.zhd__n{display:none;align-items:center;gap:2px;flex:0 1 auto;min-width:0}
+@media(min-width:1100px){.zhd__n{display:flex}}
+.zhd__n a{padding:8px 10px;border-radius:8px;font-size:13px;font-weight:700;color:var(--a-ink);
+text-decoration:none;min-height:44px;display:inline-flex;align-items:center;white-space:nowrap}
+.zhd__n a:hover{color:var(--a-acc);background:var(--a-alt)}
+.zhd__n a[aria-current]{color:var(--a-acc);box-shadow:inset 0 -2px 0 var(--a-acc)}
 .zhd__tax{display:none;align-items:center;gap:2px;flex:1 1 auto;min-width:0}
-@media(min-width:900px){.zhd__tax{display:flex}}
+@media(min-width:1100px){.zhd__tax{display:flex}}
 .zhd__dd{position:relative}
 .zhd__dd-btn{appearance:none;border:0;background:transparent;color:var(--a-ink);font:inherit;
-font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:8px 10px;
+font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:8px 10px;
 min-height:44px;cursor:pointer;border-radius:8px}
 .zhd__dd-btn:hover,.zhd__dd-btn[aria-expanded=true]{color:var(--a-acc);background:var(--a-alt)}
 .zhd__dd-btn:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
-.zhd__dd-panel{position:absolute;top:calc(100% + 6px);left:0;min-width:220px;max-width:min(420px,70vw);
-max-height:70vh;overflow:auto;display:flex;flex-wrap:wrap;gap:6px;padding:12px;background:var(--a-page);
+.zhd__dd-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(920px,calc(100vw - 48px));
+min-width:min(720px,calc(100vw - 48px));max-width:960px;max-height:70vh;overflow:auto;
+display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:14px;background:var(--a-page);
 border:1px solid var(--a-line);border-radius:12px;box-shadow:var(--a-shadow);z-index:50}
+@media(min-width:1280px){.zhd__dd-panel{grid-template-columns:repeat(5,minmax(0,1fr))}}
 .zhd__dd-panel[hidden]{display:none !important}
-.zhd__dd-panel a{display:inline-flex;align-items:center;padding:8px 10px;border-radius:8px;
-border:1px solid var(--a-line);color:var(--a-ink);font-size:13px;text-decoration:none;min-height:40px}
+.zhd__dd-panel a{display:inline-flex;align-items:center;justify-content:space-between;gap:8px;
+padding:8px 10px;border-radius:8px;border:1px solid var(--a-line);color:var(--a-ink);font-size:13px;
+text-decoration:none;min-height:44px}
 .zhd__dd-panel a:hover{border-color:var(--a-acc);color:var(--a-acc)}
+.zhd__dd-panel a .zhd__cnt{color:var(--a-mute);font-size:12px;font-weight:600}
 .zhd__actions{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;margin-left:auto}
 .zhd__menu{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;
 min-width:44px;min-height:44px;flex:0 0 44px;border:1px solid var(--a-line);border-radius:8px;
 background:var(--a-page);color:var(--a-ink);font-size:20px;cursor:pointer;margin-left:0}
-@media(min-width:900px){.zhd__menu{display:none}}
+@media(min-width:1100px){.zhd__menu{display:none}}
 .zhd__theme{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;
 min-width:44px;min-height:44px;flex:0 0 44px;border:1px solid var(--a-line);border-radius:8px;
 background:var(--a-page);color:var(--a-ink);font-size:16px;cursor:pointer}
 .zhd__theme:focus-visible,.zhd__menu:focus-visible,.zhd__s button:focus-visible,.zhd__drawer a:focus-visible,
-.zhd__drawer-x:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
-.zhd__n{display:none}
-.zhd__s{display:flex;flex:0 1 220px;min-width:0;max-width:260px;border:1px solid var(--a-line);
-border-radius:999px;overflow:hidden;background:var(--a-page)}
-@media(max-width:899px){
-  .zhd__s{flex:1 1 calc(100% - 108px);max-width:none;order:0;min-width:120px;border-radius:10px}
+.zhd__drawer-x:focus-visible,.zhd__n a:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
+.zhd__s{display:flex;flex:0 1 320px;min-width:280px;max-width:360px;height:44px;border:1px solid var(--a-line);
+border-radius:999px;overflow:hidden;background:var(--a-page);align-items:stretch}
+@media(max-width:1099px){
+  .zhd__s{flex:1 1 calc(100% - 108px);min-width:120px;max-width:none;order:0;border-radius:10px;height:44px}
   .zhd__actions{order:0}
 }
-.zhd__s input{flex:1;min-width:0;border:0;padding:9px 12px;font-size:14px;background:transparent;color:var(--a-ink)}
+.zhd__s input{flex:1;min-width:0;border:0;padding:0 12px;font-size:14px;background:transparent;color:var(--a-ink);height:100%}
 .zhd__s button{border:0;background:var(--a-acc);color:#fff;padding:0 14px;font-weight:700;cursor:pointer;
-min-width:44px;min-height:44px;flex:0 0 auto}
+min-width:44px;min-height:44px;height:100%;flex:0 0 auto}
 .zhd__backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:60}
 .zhd__backdrop[hidden]{display:none !important;pointer-events:none !important}
-.zhd__drawer{position:fixed;top:0;left:0;bottom:0;width:min(320px,88vw);z-index:70;background:var(--a-page);
+.zhd__drawer{position:fixed;top:0;left:0;bottom:0;width:min(360px,calc(100vw - 24px));z-index:70;background:var(--a-page);
 border-right:1px solid var(--a-line);box-shadow:var(--a-shadow);padding:12px 14px 24px;overflow:auto;
 flex-direction:column;gap:12px}
 .zhd__drawer:not([hidden]){display:flex}
@@ -1827,8 +1840,17 @@ font-size:22px;cursor:pointer;color:var(--a-ink)}
 display:flex;align-items:center;text-decoration:none}
 .zhd__drawer-nav a[aria-current]{color:var(--a-acc);font-weight:700;background:var(--a-alt)}
 .zhd__drawer .zhd__tax{display:flex;flex-direction:column;align-items:stretch;gap:8px}
-.zhd__drawer .zhd__dd-panel{position:static;max-width:none;box-shadow:none;margin-top:6px}
+.zhd__drawer .zhd__n{display:none}
+.zhd__drawer .zhd__dd-panel{position:static;width:auto;min-width:0;max-width:none;box-shadow:none;margin-top:6px;
+grid-template-columns:1fr}
 body.zhd-lock{overflow:hidden}
+/* B01.2 breadcrumb */
+.zcr{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-height:32px;max-height:40px;
+padding:6px 0;margin:0 0 8px;font-size:13px;color:var(--a-dim);line-height:1.3;overflow:hidden}
+@media(max-width:767px){.zcr{max-height:none;min-height:0;height:auto;max-height:2.8em}}
+.zcr a{color:var(--a-acc);font-weight:600;text-decoration:none;padding:2px 0}
+.zcr a:hover{text-decoration:underline}
+.zcr [aria-current=page]{color:var(--a-ink);font-weight:600}
 .ast{display:none}
 .zrail,.zrail__logo,.zrail__sub,.zrail__t,.zrail__n,.zrail__g,.ztop{display:none}
 .zh{font-size:clamp(22px,2vw,28px);line-height:1.25;font-weight:700;margin:16px 0 8px}
@@ -2209,9 +2231,12 @@ def _подставить(шаблон: str, токены: dict) -> str:
         "вид": "animedia",
         "токены": АНИМЕДИА_ТОКЕНЫ,
         "стиль": lambda: _общее(АНИМЕДИА_ТОКЕНЫ) + _подставить(АНИМЕДИА_СТИЛЬ, АНИМЕДИА_ТОКЕНЫ),
-        "нав": [("/", "Главная"), ("/catalog/", "Каталог аниме"),
+        # B01: registry routes only. Top-100 omitted until standalone route exists.
+        # /new/ = catalog additions (not episode events). /schedule/ exists → shown.
+        "нав": [("/", "Главная"), ("/catalog/", "Каталог"),
                 ("/new/", "Новое в каталоге"),
-                ("/collections/", "Подборки")],
+                ("/collections/", "Подборки"),
+                ("/schedule/", "Расписание")],
         "поиск": "Поиск аниме",
         "полосы": [],
         "лид": "Аниме онлайн",
@@ -5091,28 +5116,57 @@ class ВидАнимедиа(ВидЗона):
                     f"<b>{html.escape(хвост)}</b></a>")
         return f'<a class="zhd__logo" href="/">{html.escape(имя)}</a>'
 
+    def крошки(self, звенья) -> str:
+        """B01.2 breadcrumb: registry-safe intermediates, 32–40 px band."""
+        куски = []
+        for адрес, имя in звенья:
+            if адрес:
+                куски.append(f'<a href="{адрес}">{html.escape(имя)}</a>')
+            else:
+                куски.append(f'<span aria-current="page">{html.escape(имя)}</span>')
+        return f'<nav class="zcr" aria-label="Хлебные крошки">{" / ".join(куски)}</nav>'
+
     def таксономия(self, *, префикс: str = "") -> str:
         """Жанр / Тип / Списки / Ещё — только из реального индекса и маршрутов.
 
-        Статус выпуска в снимке отсутствует → панель не рисуем (не выдумываем).
-        Premium / Telegram / account не добавляем без owner URL.
-        `префикс` различает id панелей в шапке и в drawer (без дублирующих id).
+        Counts from catalog oracle; empty facets omitted. Status absent in
+        snapshot → panel not invented. Premium / Telegram / account omitted
+        without owner URL. `префикс` disambiguates header vs drawer panel ids.
         """
         p = префикс
         индекс = getattr(self, "индекс", None) or {}
-        жанры = list(индекс.get("genre_names") or [])[:14]
-        жанр_ссылки = "".join(
-            f'<a href="/catalog/?genre={html.escape(код)}">{html.escape(имя)}</a>'
-            for код, имя in жанры)
+        genre_idx = индекс.get("genre") or {}
+        жанры = []
+        for код, имя in list(индекс.get("genre_names") or [])[:14]:
+            n = len(genre_idx.get(код) or [])
+            if n <= 0:
+                continue
+            жанры.append(
+                f'<a href="/catalog/?genre={html.escape(код)}">'
+                f'<span>{html.escape(имя)}</span>'
+                f'<span class="zhd__cnt">{n}</span></a>')
+        жанр_ссылки = "".join(жанры)
         типы = []
         for код, имя in (("tv", "Сериалы"), ("movie", "Фильмы")):
-            if индекс.get("type", {}).get(код):
-                типы.append(
-                    f'<a href="/catalog/?type={код}">{html.escape(имя)}</a>')
+            slugs = индекс.get("type", {}).get(код) or []
+            n = len(slugs)
+            if n <= 0:
+                continue
+            типы.append(
+                f'<a href="/catalog/?type={код}">'
+                f'<span>{html.escape(имя)}</span>'
+                f'<span class="zhd__cnt">{n}</span></a>')
         тип_блок = "".join(типы)
+        years_idx = {str(г): 0 for г in (getattr(self.д, "years", []) or [])}
+        for з in getattr(self.д, "items", []) or []:
+            y = з.get("year")
+            if y is not None and str(y) in years_idx:
+                years_idx[str(y)] += 1
         годы = "".join(
-            f'<a href="/catalog/?year={г}">{г}</a>'
-            for г in list(getattr(self.д, "years", []) or [])[:10])
+            f'<a href="/catalog/?year={г}"><span>{г}</span>'
+            f'<span class="zhd__cnt">{years_idx[str(г)]}</span></a>'
+            for г in list(getattr(self.д, "years", []) or [])[:10]
+            if years_idx.get(str(г), 0) > 0)
         панели = []
         if жанр_ссылки:
             панели.append(
@@ -5132,7 +5186,7 @@ class ВидАнимедиа(ВидЗона):
             f'aria-expanded="false" aria-controls="{p}tax-lists">Списки</button>'
             f'<div id="{p}tax-lists" class="zhd__dd-panel" hidden>'
             f'<a href="/collections/">Подборки</a>'
-            f'<a href="/new/?page=1">Новое в каталоге</a>'
+            f'<a href="/new/">Новое в каталоге</a>'
             f'</div></div>')
         ещё = '<a href="/catalog/">Весь каталог</a><a href="/search/">Поиск</a>'
         if годы:
@@ -5171,9 +5225,7 @@ class ВидАнимедиа(ВидЗона):
         имя = запись["title"]
         сезоны = список_серий(деталь)
         сериал = bool(сезоны) or запись.get("kind") == "Сериал"
-        звенья = [("/", self.имя),
-                  ("/series/", "Сериалы") if сериал else ("/movies/", "Фильмы"),
-                  ("", имя)]
+        звенья = [("/", self.имя), ("/catalog/", "Каталог"), ("", имя)]
         изо = заглушка_постера(запись, "zt__none", "zhead__img", 220, 330)
         описание = (деталь.get("description") or деталь.get("short_description") or "").strip()
         описание_html = ""
@@ -5279,7 +5331,7 @@ class ВидАнимедиа(ВидЗона):
         путь = self.адрес_эпизода(запись["slug"], сезон, эпизод)
         title_path = f"/title/{запись['slug']}/"
         заголовок = f"{имя} — сезон {сезон}, серия {эпизод}"
-        звенья = [("/", self.имя), ("/series/", "Сериалы"),
+        звенья = [("/", self.имя), ("/catalog/", "Каталог"),
                   (title_path, имя), ("", f"S{сезон}E{эпизод}")]
         изо = заглушка_постера(запись, "zt__none", "zhead__img", 120, 180)
         orig = str(деталь.get("original_name") or деталь.get("original_title") or "").strip()
@@ -5580,6 +5632,7 @@ class ВидАнимедиа(ВидЗона):
 <header class="zhd">
 <div class="zhd__in">
 {self.логотип()}
+<nav id="zhd-nav" class="zhd__n" aria-label="Разделы">{нав}</nav>
 {self.таксономия()}
 <form class="zhd__s" action="/search/" method="get" role="search">
 <label class="vh" for="q">Поиск по каталогу аниме</label>

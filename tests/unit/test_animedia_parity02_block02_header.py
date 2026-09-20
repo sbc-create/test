@@ -61,4 +61,7 @@ class TestBlock02HeaderDrawer:
         assert ".zhd__drawer" in css
         assert ".zhd__tax" in css
         assert "body.zhd-lock" in css
-        assert "max-height:88px" in css
+        assert "max-height:72px" in css
+        assert "min(360px,calc(100vw - 24px))" in css
+        assert ".zhd__n{" in css
+        assert ".zcr{" in css

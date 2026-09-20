@@ -1,0 +1,273 @@
+{
+  "captured_at": "2026-09-20T11:28:28Z",
+  "failures": [],
+  "entries": [
+    {
+      "route": "home",
+      "viewport": "d1440",
+      "overflowX": 0,
+      "headerIn": {
+        "x": 48,
+        "y": 0,
+        "w": 1344,
+        "h": 68
+      },
+      "search": {
+        "x": 1016,
+        "y": 12,
+        "w": 320,
+        "h": 44
+      },
+      "logo": {
+        "x": 48,
+        "y": 12,
+        "w": 120,
+        "h": 44
+      },
+      "hasSchedule": true,
+      "navDisplay": "flex",
+      "menuDisplay": "none",
+      "touchOk": true,
+      "crumbs": null
+    },
+    {
+      "route": "home",
+      "viewport": "t768",
+      "overflowX": 0,
+      "headerIn": {
+        "x": 22,
+        "y": 0,
+        "w": 724,
+        "h": 60
+      },
+      "search": {
+        "x": 150,
+        "y": 8,
+        "w": 492,
+        "h": 44
+      },
+      "logo": {
+        "x": 22,
+        "y": 8,
+        "w": 120,
+        "h": 44
+      },
+      "hasSchedule": true,
+      "navDisplay": "none",
+      "menuDisplay": "flex",
+      "touchOk": true,
+      "crumbs": null
+    },
+    {
+      "route": "home",
+      "viewport": "m390",
+      "overflowX": 0,
+      "headerIn": {
+        "x": 12,
+        "y": 0,
+        "w": 366,
+        "h": 56
+      },
+      "search": {
+        "x": 140,
+        "y": 6,
+        "w": 134,
+        "h": 44
+      },
+      "logo": {
+        "x": 12,
+        "y": 6,
+        "w": 120,
+        "h": 44
+      },
+      "hasSchedule": true,
+      "navDisplay": "none",
+      "menuDisplay": "flex",
+      "touchOk": true,
+      "crumbs": null
+    },
+    {
+      "route": "title",
+      "viewport": "d1440",
+      "overflowX": 0,
+      "headerIn": {
+        "x": 48,
+        "y": 0,
+        "w": 1344,
+        "h": 68
+      },
+      "search": {
+        "x": 1016,
+        "y": 12,
+        "w": 320,
+        "h": 44
+      },
+      "logo": {
+        "x": 48,
+        "y": 12,
+        "w": 120,
+        "h": 44
+      },
+      "hasSchedule": true,
+      "navDisplay": "flex",
+      "menuDisplay": "none",
+      "touchOk": true,
+      "crumbs": {
+        "x": 48,
+        "y": 69,
+        "w": 1344,
+        "h": 33
+      }
+    },
+    {
+      "route": "title",
+      "viewport": "t768",
+      "overflowX": 0,
+      "headerIn": {
+        "x": 22,
+        "y": 0,
+        "w": 724,
+        "h": 60
+      },
+      "search": {
+        "x": 150,
+        "y": 8,
+        "w": 492,
+        "h": 44
+      },
+      "logo": {
+        "x": 22,
+        "y": 8,
+        "w": 120,
+        "h": 44
+      },
+      "hasSchedule": true,
+      "navDisplay": "none",
+      "menuDisplay": "flex",
+      "touchOk": true,
+      "crumbs": {
+        "x": 22,
+        "y": 61,
+        "w": 724,
+        "h": 33
+      }
+    },
+    {
+      "route": "title",
+      "viewport": "m390",
+      "overflowX": 0,
+      "headerIn": {
+        "x": 12,
+        "y": 0,
+        "w": 366,
+        "h": 56
+      },
+      "search": {
+        "x": 140,
+        "y": 6,
+        "w": 134,
+        "h": 44
+      },
+      "logo": {
+        "x": 12,
+        "y": 6,
+        "w": 120,
+        "h": 44
+      },
+      "hasSchedule": true,
+      "navDisplay": "none",
+      "menuDisplay": "flex",
+      "touchOk": true,
+      "crumbs": {
+        "x": 12,
+        "y": 57,
+        "w": 366,
+        "h": 33
+      }
+    },
+    {
+      "route": "catalog",
+      "viewport": "d1440",
+      "overflowX": 0,
+      "headerIn": {
+        "x": 48,
+        "y": 0,
+        "w": 1344,
+        "h": 68
+      },
+      "search": {
+        "x": 1016,
+        "y": 12,
+        "w": 320,
+        "h": 44
+      },
+      "logo": {
+        "x": 48,
+        "y": 12,
+        "w": 120,
+        "h": 44
+      },
+      "hasSchedule": true,
+      "navDisplay": "flex",
+      "menuDisplay": "none",
+      "touchOk": true,
+      "crumbs": null
+    },
+    {
+      "route": "catalog",
+      "viewport": "t768",
+      "overflowX": 0,
+      "headerIn": {
+        "x": 22,
+        "y": 0,
+        "w": 724,
+        "h": 60
+      },
+      "search": {
+        "x": 150,
+        "y": 8,
+        "w": 492,
+        "h": 44
+      },
+      "logo": {
+        "x": 22,
+        "y": 8,
+        "w": 120,
+        "h": 44
+      },
+      "hasSchedule": true,
+      "navDisplay": "none",
+      "menuDisplay": "flex",
+      "touchOk": true,
+      "crumbs": null
+    },
+    {
+      "route": "catalog",
+      "viewport": "m390",
+      "overflowX": 0,
+      "headerIn": {
+        "x": 12,
+        "y": 0,
+        "w": 366,
+        "h": 56
+      },
+      "search": {
+        "x": 140,
+        "y": 6,
+        "w": 134,
+        "h": 44
+      },
+      "logo": {
+        "x": 12,
+        "y": 6,
+        "w": 120,
+        "h": 44
+      },
+      "hasSchedule": true,
+      "navDisplay": "none",
+      "menuDisplay": "flex",
+      "touchOk": true,
+      "crumbs": null
+    }
+  ]
+}
