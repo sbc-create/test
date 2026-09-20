@@ -2087,7 +2087,10 @@ border-radius:14px;overflow:hidden;max-height:none}
 .zpl__f[data-player-host],.zpl__f [data-player-host]{position:absolute;inset:0;width:100%;height:100%;display:block}
 .zpl__f video-player{position:absolute;inset:0;display:block;width:100% !important;height:100% !important;min-height:100%}
 .zpl__f iframe,.zpl__f video{position:absolute !important;inset:0 !important;width:100% !important;height:100% !important;
-max-width:none !important;max-height:none !important;border:0;display:block;object-fit:contain}
+max-width:none !important;max-height:none !important;border:0 !important;display:block !important;
+object-fit:contain;background:#000}
+/* Neutralize global iframe{height:auto} that shrinks the 16:9 shell. */
+.zs .zpl__f iframe{height:100% !important;max-width:none !important}
 .zpl__f[data-state=active],.zpl__f[data-state=ok],.zpl__f[data-state=resolving],
 .zpl__f[data-state=playable]{background:#101010}
 .zpl__s,.zpl [data-player-state]{position:absolute;inset:0;display:grid;place-items:center;
@@ -2124,16 +2127,24 @@ box-shadow:var(--a-shadow-soft);color:inherit;text-decoration:none}
 @media(max-width:767px){.zseo__full{display:none}.zseo details{display:block}}
 @media(min-width:768px){.zseo details{display:none}}
 .zft{border-top:2px solid var(--a-acc);margin:20px 0 0;padding:12px 0 10px}
-.zft__inner{display:flex;flex-direction:column;gap:8px}
+.zft__inner{display:flex;flex-direction:column;gap:12px}
+.zft__cols{display:grid;gap:18px;grid-template-columns:1fr;
+align-items:start}
+@media(min-width:768px){.zft__cols{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1100px){.zft__cols{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.zft__col{display:flex;flex-direction:column;gap:6px;min-width:0}
+.zft__col b{color:var(--a-ink);font-size:13px;margin:0 0 4px}
+.zft__col a{color:var(--a-acc);font-weight:500;font-size:13px;min-height:32px;
+display:inline-flex;align-items:center;width:fit-content}
 .zft__row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 18px}
 .zft__about{font-size:13px;color:var(--a-dim);line-height:1.4;margin:0;max-width:62ch;
-display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
 .zft__nav{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
 .zft__nav a{font-size:13px;color:var(--a-dim);font-weight:600;min-height:36px;display:inline-flex;align-items:center}
 .zft__nav a:hover{color:var(--a-acc)}
 .zft__contact:empty,.zft__legal:empty{display:none}
-@media(max-width:767px){.zft__nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 16px;width:100%}
-.zft__about{width:100%}}
+@media(max-width:767px){.zft__cols{grid-template-columns:1fr 1fr}.zft__about{width:100%;-webkit-line-clamp:3}}
+@media(max-width:479px){.zft__cols{grid-template-columns:1fr}}
 .zft__bar{display:flex;justify-content:space-between;gap:12px;align-items:center;
 padding-top:6px;border-top:1px solid var(--a-line);font-size:12px;color:var(--a-mute);flex-wrap:wrap}
 .zvb{font-size:11px;color:var(--a-mute);opacity:.85;white-space:nowrap}
@@ -5422,7 +5433,62 @@ class ВидАнимедиа(ВидЗона):
             f"<details><summary>{html.escape(заголовок)}</summary>"
             f"<p>{html.escape(текст)}</p></details></aside>")
 
+    def похожие(self, запись: dict, деталь: dict, сколько: int = 6) -> list:
+        """Deterministic recommendations: exclude current, no dups, real genres.
+
+        Prefer playable titles when available; fall back by kind/year. Same
+        input always yields the same ordered list.
+        """
+        текущий = запись["slug"]
+        собрано, видели = [], {текущий}
+        коды = list(деталь.get("genre_codes") or [])
+        if not коды:
+            for г in (деталь.get("genres") or [])[:4]:
+                код = нормализовать(транслит(str(г)))
+                if код:
+                    коды.append(код)
+
+        def добавить(slug: str) -> bool:
+            if slug in видели:
+                return False
+            сосед = self.индекс.get("slug", {}).get(slug)
+            if not сосед:
+                return False
+            видели.add(slug)
+            собрано.append(сосед)
+            return len(собрано) >= сколько
+
+        # Pass 1: playable genre matches (stable slug order).
+        for код in коды[:4]:
+            кандидаты = sorted(self.индекс.get("genre", {}).get(код, ()))
+            for slug in кандидаты:
+                det = self.деталь(slug)
+                if not (det.get("playable") or состояние_плеера(det)[0] == "playable"):
+                    continue
+                if добавить(slug):
+                    return собрано
+        # Pass 2: any genre match.
+        for код in коды[:4]:
+            for slug in sorted(self.индекс.get("genre", {}).get(код, ())):
+                if добавить(slug):
+                    return собрано
+        # Pass 3: same kind, then any remaining — deterministic by slug.
+        kind = запись.get("kind")
+        остаток = sorted(
+            (з for з in self.д.items if з["slug"] not in видели),
+            key=lambda з: (
+                0 if з.get("kind") == kind else 1,
+                abs(int(з.get("year") or 0) - int(запись.get("year") or 0)),
+                з["slug"],
+            ),
+        )
+        for з in остаток:
+            if добавить(з["slug"]):
+                break
+        return собрано
+
     def подвал(self) -> str:
+        """Multi-column footer from real inventory; no invented contacts."""
         домен = _аниме_домен(self.хост)
         runtime = (МАНИФЕСТ.get("runtime_commit") or МАНИФЕСТ.get("source_commit") or "")[:7]
         tip = (f"source={МАНИФЕСТ.get('source_commit', '')[:12]} "
@@ -5430,16 +5496,32 @@ class ВидАнимедиа(ВидЗона):
                f"build={СБОРКА}")
         contact = _аниме_контакты_html()
         legal = _аниме_legal_html()
-        contact_html = (f'<span class="zft__contact">{contact}</span>' if contact else "")
-        legal_html = (f'<span class="zft__legal">{legal}</span>' if legal else "")
+        genres = "".join(
+            f'<a href="/catalog/?genre={html.escape(код)}">{html.escape(имя)}</a>'
+            for код, имя in (self.индекс.get("genre_names") or [])[:8])
+        years = "".join(
+            f'<a href="/catalog/?year={г}">{г}</a>'
+            for г in (self.д.years or [])[:8])
+        types = "".join(
+            f'<a href="/catalog/?type={html.escape(t)}">{html.escape(t.upper())}</a>'
+            for t in sorted((self.индекс.get("type") or {}).keys())[:6])
+        contact_col = ""
+        if contact or legal:
+            contact_col = (
+                f'<div class="zft__col"><b>Контакты и правовое</b>'
+                f'{contact}{legal}</div>')
         return (
             '<footer class="zft"><div class="zft__inner">'
-            '<div class="zft__row">'
+            '<div class="zft__cols">'
+            f'<div class="zft__col"><b>{html.escape(self.имя)}</b>'
             f'<p class="zft__about">{html.escape(домен["footer_about"])}</p>'
-            '<nav class="zft__nav" aria-label="Подвал">'
             '<a href="/">Главная</a><a href="/catalog/">Каталог</a>'
-            '<a href="/new/">Новое в каталоге</a><a href="/collections/">Подборки</a>'
-            f'{contact_html}{legal_html}</nav></div>'
+            '<a href="/new/">Новое в каталоге</a>'
+            '<a href="/collections/">Подборки</a></div>'
+            f'<div class="zft__col"><b>Жанры</b>{genres or "<span>—</span>"}</div>'
+            f'<div class="zft__col"><b>Годы и тип</b>{years}{types}</div>'
+            f'{contact_col}'
+            '</div>'
             f'<div class="zft__bar"><span>© {html.escape(self.имя)}</span>'
             f'<span class="zvb" title="{html.escape(tip)}">'
             f"Animedia {html.escape(ВЕРСИЯ)} · {html.escape(runtime)}</span></div>"
@@ -5704,9 +5786,12 @@ class ВидАнимедиа(ВидЗона):
         if разд == "/new":
             return self._страница_новых_эпизодов(зпр)
         if разд == "/collections":
-            тело = ('<div class="zwrap"><h1 class="zh">Подборки аниме</h1>'
-                    '<p class="zsub">Тематические подборки по данным каталога.</p>'
-                    + self.хаб_коллекций() + "</div>")
+            hub = self.хаб_коллекций()
+            count = hub.count('class="zhub__c"')
+            тело = (f'<div class="zwrap"><h1 class="zh">Подборки аниме</h1>'
+                    f'<p class="zsub">Доступно подборок: {count}. '
+                    'Карточки собраны из собственных постеров каталога.</p>'
+                    + hub + "</div>")
             return self.оболочка(тело, f"Подборки — {self.имя}", "/collections/",
                                  актив="/collections/",
                                  описание=f"Подборки витрины {self.имя}.")
