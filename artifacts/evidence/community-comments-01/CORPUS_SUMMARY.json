@@ -121,13 +121,14 @@
     "Film/series/Turkish/RU-CIS/Documentary category quotas redistributed toward AniList ANIME/DORAMA signals",
     "DORAMA_OBSERVATIONS inflated by early Drama-genre mapping; classifier tightened for future collects"
   ],
-  "FINAL_HEAD": "5d8293726f6a1df579a8da22b99416bbcba2457e",
-  "COMMITS": 9,
+  "FINAL_HEAD": "8672eec1e42a74fbc31656768acce0ba82f17887",
+  "COMMITS": 13,
   "COMMITS_RESEARCH": [
     "B01",
     "B02",
     "B03"
   ],
   "TESTS": "PASS 10/10 research unit tests",
-  "TEST_RUNS_CONSECUTIVE": 2
+  "TEST_RUNS_CONSECUTIVE": 2,
+  "finished_at": "2026-09-20T21:28:58Z"
 }
