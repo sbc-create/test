@@ -177,12 +177,19 @@ class CommentsService:
         new_status: str,
         detail: str = "",
         actor_role: str = "moderator",
+        decision_json: dict[str, Any] | None = None,
+        policy_version: str = "",
+        model: str = "",
+        prompt_digest: str = "",
     ) -> None:
+        import json
+
         self.store.conn.execute(
             """INSERT INTO community_comment_moderation_events
                (event_id, comment_id, action, actor_role, actor_identity_id,
-                reason_code, detail, prior_status, new_status, created_at)
-               VALUES (?,?,?,?,?,?,?,?,?,?)""",
+                reason_code, detail, prior_status, new_status, created_at,
+                policy_version, model, prompt_digest, decision_json)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
             (
                 _new_id("cmod"),
                 comment_id,
@@ -194,6 +201,10 @@ class CommentsService:
                 prior_status,
                 new_status,
                 _utc(),
+                policy_version,
+                model,
+                prompt_digest,
+                json.dumps(decision_json or {}, ensure_ascii=False),
             ),
         )
 
@@ -278,6 +289,17 @@ class CommentsService:
             comment_flags.assert_comments_dark()
         if not site_space or not title_id or not identity_id:
             raise CommentsValidationError("site_space, title_id, identity_id required")
+
+        # Opaque device ban (admin sanction) — no PII; identity_id is HMAC opaque.
+        banned = self.store.conn.execute(
+            """SELECT 1 FROM community_sanctions
+               WHERE actor_id=? AND kind='DEVICE_BAN'
+                 AND (expires_at='' OR expires_at > ?)
+               LIMIT 1""",
+            (identity_id, _utc()),
+        ).fetchone()
+        if banned:
+            raise CommentsForbidden("device sanctioned")
 
         def _dup_check(digest: str) -> bool:
             row = self.store.conn.execute(
@@ -520,22 +542,64 @@ class CommentsService:
                LIMIT ? OFFSET ?""",
             (site_space, title_id, limit, offset),
         ).fetchall()
+        peer_ids = [dict(r)["identity_id"] for r in rows]
         out: list[dict[str, Any]] = []
         for raw in rows:
             row = dict(raw)
             status = row["status"]
-            is_author = viewer_identity_id and row["identity_id"] == viewer_identity_id
+            try:
+                canon = states.normalize_status(status)
+            except Exception:
+                canon = status
+            is_author = bool(viewer_identity_id and row["identity_id"] == viewer_identity_id)
             if admin_on:
-                out.append(self._public_view(row, include_body=True))
+                out.append(
+                    self._public_view(
+                        row,
+                        include_body=True,
+                        viewer_identity_id=viewer_identity_id,
+                        thread_identity_ids=peer_ids,
+                    )
+                )
                 continue
-            if status == comment_flags.STATUS_PUBLISHED and public_on:
-                out.append(self._public_view(row, include_body=True))
-            elif is_author and status in comment_flags.AUTHOR_VISIBLE_EXTRA:
-                out.append(self._public_view(row, include_body=True))
+            if public_on and states.is_public_visible(canon):
+                out.append(
+                    self._public_view(
+                        row,
+                        include_body=True,
+                        viewer_identity_id=viewer_identity_id,
+                        thread_identity_ids=peer_ids,
+                    )
+                )
+            elif is_author and (
+                canon in states.AUTHOR_VISIBLE_EXTRA
+                or status in comment_flags.AUTHOR_VISIBLE_EXTRA
+            ):
+                out.append(
+                    self._public_view(
+                        row,
+                        include_body=True,
+                        viewer_identity_id=viewer_identity_id,
+                        thread_identity_ids=peer_ids,
+                    )
+                )
             # others hidden
         return {"comments": out, "status": 200, "dark": not public_on, "count": len(out)}
 
-    def _public_view(self, row: dict[str, Any], *, include_body: bool) -> dict[str, Any]:
+    def _public_view(
+        self,
+        row: dict[str, Any],
+        *,
+        include_body: bool,
+        viewer_identity_id: str = "",
+        thread_identity_ids: list[str] | None = None,
+    ) -> dict[str, Any]:
+        author = public_author_dto(
+            identity_id=row.get("identity_id") or "",
+            site_space=row.get("site_space") or "",
+            title_id=row.get("title_id") or "",
+            thread_identity_ids=thread_identity_ids,
+        )
         return {
             "comment_id": row["comment_id"],
             "site_space": row["site_space"],
@@ -543,13 +607,18 @@ class CommentsService:
             "parent_comment_id": row["parent_comment_id"],
             "body": row["body"] if include_body else "",
             "spoiler": bool(row["spoiler"]),
+            "spoiler_collapsed": bool(row.get("spoiler_collapsed") or 0)
+            or (row.get("status") == states.VISIBLE_SPOILER_COLLAPSED),
             "status": row["status"],
             "created_at": row["created_at"],
             "edited_at": row["edited_at"],
             "version": row["version"],
-            "identity_redacted": (row["identity_id"][:4] + "…" + row["identity_id"][-2:])
-            if row.get("identity_id")
-            else "",
+            "author": author,
+            "display_name": author["display_name"],
+            "is_own": bool(
+                viewer_identity_id and row.get("identity_id") == viewer_identity_id
+            ),
+            # Never expose identity_id / qwen_decision / device fields.
         }
 
     def report(

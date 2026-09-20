@@ -32,7 +32,7 @@ def test_forbidden_capabilities_locked():
 def test_rbac_required(admin_svc):
     admin, _ = admin_svc
     with pytest.raises(PermissionError):
-        admin.queue(scopes={"read"}, status="PENDING")
+        admin.queue(scopes={"read"}, status="HELD_FOR_REVIEW")
 
 
 def test_approve_stays_dark(admin_svc):
@@ -55,15 +55,10 @@ def test_approve_stays_dark(admin_svc):
     assert out["status"] == 200
     # Ledger may set published_at for PUBLISHED_UNREVIEWED; public flag stays off.
     assert comments_dark_flags()["COMMENTS_PUBLICATION_ENABLED"] == 0
-    assert out["comment"]["status"] in (
-        "PENDING",
-        "PUBLISHED_UNREVIEWED",
-        "VISIBLE_QWEN_APPROVED",
-        "HELD_FOR_REVIEW",
-    )
+    assert out["comment"]["status"] == "VISIBLE_QWEN_APPROVED"
 
 
-def test_quarantine_reject_remove_restore(admin_svc):
+def test_hide_unhide_delete_restore_spoiler(admin_svc):
     admin, svc = admin_svc
     cid = svc.create(
         site_space="yummy",
@@ -73,33 +68,56 @@ def test_quarantine_reject_remove_restore(admin_svc):
         bypass_write_flag_for_tests=True,
     )["comment"]["comment_id"]
     mod = mint_identity_id()
+    # Stage01 quarantine/reject aliases → HIDDEN_BY_ADMIN
     assert (
         admin.apply(
             scopes={"moderation"}, comment_id=cid, action="quarantine", moderator_identity_id=mod
         )["comment"]["status"]
-        == "QUARANTINED"
+        == "HIDDEN_BY_ADMIN"
     )
     assert (
         admin.apply(
-            scopes={"moderation"}, comment_id=cid, action="reject", moderator_identity_id=mod
+            scopes={"moderation"}, comment_id=cid, action="unhide", moderator_identity_id=mod
         )["comment"]["status"]
-        == "REJECTED"
+        == "VISIBLE_QWEN_APPROVED"
+    )
+    assert (
+        admin.apply(
+            scopes={"moderation"}, comment_id=cid, action="hide", moderator_identity_id=mod
+        )["comment"]["status"]
+        == "HIDDEN_BY_ADMIN"
     )
     assert (
         admin.apply(
             scopes={"moderation"}, comment_id=cid, action="restore", moderator_identity_id=mod
         )["comment"]["status"]
-        == "PENDING"
+        == "HELD_FOR_REVIEW"
     )
     assert (
         admin.apply(
             scopes={"moderation"}, comment_id=cid, action="remove", moderator_identity_id=mod
         )["comment"]["status"]
-        == "REMOVED_BY_MODERATOR"
+        == "DELETED_BY_ADMIN"
     )
-    assert admin.apply(
-        scopes={"moderation"}, comment_id=cid, action="mark_spoiler", moderator_identity_id=mod
-    )["comment"]["spoiler"] in (1, True)
+    # Recreate for spoiler path on a visible comment
+    cid2 = svc.create(
+        site_space="yummy",
+        title_id="t1",
+        identity_id=mint_identity_id(),
+        body="Спойлерный комментарий для админской пометки.",
+        bypass_write_flag_for_tests=True,
+    )["comment"]["comment_id"]
+    admin.apply(
+        scopes={"moderation"}, comment_id=cid2, action="approve", moderator_identity_id=mod
+    )
+    spoilered = admin.apply(
+        scopes={"moderation"}, comment_id=cid2, action="mark_spoiler", moderator_identity_id=mod
+    )["comment"]
+    assert spoilered["spoiler"] in (1, True)
+    cleared = admin.apply(
+        scopes={"moderation"}, comment_id=cid2, action="clear_spoiler", moderator_identity_id=mod
+    )["comment"]
+    assert cleared["spoiler"] in (0, False)
 
 
 def test_report_and_dismiss(admin_svc):
@@ -192,3 +210,70 @@ def test_fake_insert_action_forbidden(admin_svc):
             action="fake_insert",
             moderator_identity_id=mint_identity_id(),
         )
+
+
+def test_admin_queue_exposes_qwen_fields_not_identity(admin_svc):
+    admin, svc = admin_svc
+    cid = svc.create(
+        site_space="yummy",
+        title_id="t1",
+        identity_id=mint_identity_id(),
+        body="Комментарий для очереди с полями qwen.",
+        bypass_write_flag_for_tests=True,
+    )["comment"]["comment_id"]
+    svc.store.conn.execute(
+        """UPDATE community_comments
+           SET qwen_decision_json=?, status='HELD_FOR_REVIEW', moderation_status='HELD_FOR_REVIEW'
+           WHERE comment_id=?""",
+        (
+            '{"action":"HOLD_FOR_REVIEW","labels":["UNKNOWN"],"confidence":0.4,'
+            '"reason_codes":["LOW_CONFIDENCE"]}',
+            cid,
+        ),
+    )
+    rows = admin.queue(scopes={"moderation"}, status="HELD_FOR_REVIEW")
+    assert rows
+    hit = next(r for r in rows if r["comment_id"] == cid)
+    assert hit["qwen_action"] == "HOLD_FOR_REVIEW"
+    assert "UNKNOWN" in hit["qwen_labels"]
+    assert "identity_id" not in hit
+    assert hit["identity_redacted"]
+
+
+def test_ban_and_unban_opaque_device(admin_svc):
+    admin, svc = admin_svc
+    target = mint_identity_id()
+    cid = svc.create(
+        site_space="yummy",
+        title_id="t1",
+        identity_id=target,
+        body="Комментарий автора которого забанят по opaque device.",
+        bypass_write_flag_for_tests=True,
+    )["comment"]["comment_id"]
+    mod = mint_identity_id()
+    out = admin.apply(
+        scopes={"moderation"},
+        comment_id=cid,
+        action="ban_device",
+        moderator_identity_id=mod,
+        reason_code="ABUSE",
+    )
+    assert out["status"] == 200
+    row = svc.store.conn.execute(
+        "SELECT kind FROM community_sanctions WHERE actor_id=? AND kind='DEVICE_BAN'",
+        (target,),
+    ).fetchone()
+    assert row is not None
+    admin.apply(
+        scopes={"moderation"},
+        comment_id=cid,
+        action="unban_device",
+        moderator_identity_id=mod,
+        target_identity_id=target,
+    )
+    expired = svc.store.conn.execute(
+        "SELECT expires_at FROM community_sanctions WHERE actor_id=? AND kind='DEVICE_BAN'",
+        (target,),
+    ).fetchone()
+    assert expired["expires_at"]
+
