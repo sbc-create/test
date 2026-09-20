@@ -48,15 +48,25 @@ from urllib.parse import parse_qs, parse_qsl, quote, unquote, urlencode, urlpars
 РЕВИЗИЯ = os.environ.get("LORDS_TEMPLATE_REVISION", "unknown")
 
 
-def текущий_год_часов() -> int:
-    """Calendar year from injectable clock (tests) or UTC now — never MAX(catalog year)."""
+def _часы_datetime() -> datetime:
+    """Injectable clock (tests) or UTC now."""
     сырьё = (os.environ.get("LORDS_CLOCK_ISO") or "").strip()
     if сырьё:
         try:
-            return datetime.fromisoformat(сырьё.replace("Z", "+00:00")).year
+            return datetime.fromisoformat(сырьё.replace("Z", "+00:00"))
         except ValueError:
             pass
-    return datetime.now(timezone.utc).year
+    return datetime.now(timezone.utc)
+
+
+def текущий_год_часов() -> int:
+    """Calendar year from injectable clock (tests) or UTC now — never MAX(catalog year)."""
+    return _часы_datetime().year
+
+
+def текущая_дата_часов() -> str:
+    """YYYY-MM-DD from injectable clock or UTC now."""
+    return _часы_datetime().strftime("%Y-%m-%d")
 
 
 #: kind path ↔ catalog kind (Zona/Lords clean routes).
@@ -66,6 +76,19 @@ def текущий_год_часов() -> int:
     "/animation": "Мультфильм",
 }
 МАРШРУТ_ПО_ВИДУ = {v: k for k, v in ВИД_ПО_МАРШРУТУ.items()}
+
+#: B13 /new/ temporal modes. Tabs without a real ledger are omitted (not filled
+#: from a neighbour date). provider/episode feeds are absent in current sidecars.
+NEW_MODE_PREMIERE = "premiere"
+NEW_MODE_ADDED = "added"
+NEW_MODE_LABELS = {
+    NEW_MODE_PREMIERE: "Премьеры",
+    NEW_MODE_ADDED: "Добавлено на сайт",
+}
+NEW_MODE_DEFS = {
+    NEW_MODE_PREMIERE: "По дате премьеры из источника — не по дате попадания в каталог.",
+    NEW_MODE_ADDED: "По дате добавления записи в каталог витрины.",
+}
 
 
 def _формат_даты_карточки(значение: str) -> str:
@@ -80,13 +103,50 @@ def _формат_даты_карточки(значение: str) -> str:
     return ""
 
 
-def _подпись_свежести(запись: dict) -> str:
+def _подпись_свежести(запись: dict, mode: str = NEW_MODE_PREMIERE) -> str:
     """Source-backed freshness line for /new/ cards — never invents dates."""
+    if mode == NEW_MODE_ADDED:
+        raw = (запись.get("published_at") or "").strip()
+        показан = _формат_даты_карточки(raw)
+        return f"Добавлено · {показан}" if показан else ""
     prem = (запись.get("_premiere_date") or "").strip()
-    if prem:
-        показан = _формат_даты_карточки(prem)
-        return f"Премьера · {показан}" if показан else ""
-    return ""
+    if not prem:
+        return ""
+    показан = _формат_даты_карточки(prem)
+    if not показан:
+        return ""
+    if prem[:10] > текущая_дата_часов():
+        return f"Ожидается · {показан}"
+    return f"Премьера · {показан}"
+
+
+def _доступные_режимы_new(данные: "Данные") -> list:
+    """Modes whose ledger has ≥1 verified row in the current snapshot."""
+    modes = []
+    if any(з.get("_premiere_date") for з in данные.items):
+        modes.append(NEW_MODE_PREMIERE)
+    if any(з.get("published_at") for з in данные.items):
+        modes.append(NEW_MODE_ADDED)
+    # provider_available_at / episode_released_at: no ledger in sidecars → omit.
+    return modes
+
+
+def _нормализовать_режим_new(сырой, доступные: list) -> str:
+    """Map query mode to a ledger that exists; default = premiere if present."""
+    aliases = {
+        None: NEW_MODE_PREMIERE,
+        "": NEW_MODE_PREMIERE,
+        "premiere": NEW_MODE_PREMIERE,
+        "premieres": NEW_MODE_PREMIERE,
+        "added": NEW_MODE_ADDED,
+        "catalog_added": NEW_MODE_ADDED,
+    }
+    mode = aliases.get(сырой, сырой)
+    if mode in доступные:
+        return mode
+    if доступные:
+        return доступные[0]
+    return NEW_MODE_PREMIERE
 
 МАНИФЕСТ_ФАЙЛ = os.environ.get("LORDS_TEMPLATE_MANIFEST",
                                "/srv/lords/.frontend/template-manifest.json")
@@ -3570,9 +3630,10 @@ def страницы(текущая: int, всего: int, окно: int = 2) ->
 def отбор(данные: "Данные", индекс: dict, зпр: dict, раздел: str) -> tuple[list, dict]:
     """Выборка каталога по параметрам запроса. Возвращает (набор, выбранное).
 
-    year = release year only. /new/ uses source-backed activity_at
-    (premiere_date only — catalog published_at is not activity) without a
-    hard 240 cap. Default kind-routes sort by release freshness, not title.
+    year = release year only. /new/ uses B13 temporal modes with distinct
+    ledgers (premiere vs catalog_added). Modes without a ledger are empty,
+    never filled from a neighbour date. Default kind-routes sort by release
+    freshness, not title.
     """
     набор = list(данные.items)
     вид = (зпр.get("kind") or [None])[0]
@@ -3583,10 +3644,23 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
     # Aliases: date → newest (legacy).
     сорт = {"date": "newest", "new": "newest"}.get(сырой_сорт or "", сырой_сорт)
     неизвестный_фильтр = False
+    new_mode = None
 
-    # /new/ is not recently_added: require a confirmed premiere/activity date.
+    # B13: /new/ temporal modes — ledger per mode, no neighbour-date fill.
     if раздел == "/new":
-        набор = [з for з in набор if з.get("_premiere_date")]
+        доступные = _доступные_режимы_new(данные)
+        сырой_mode = (зпр.get("mode") or [None])[0]
+        # Explicit unsupported mode with no ledger → honest empty (not 400),
+        # so omitted tabs stay unreachable without inventing a feed.
+        if сырой_mode in ("available", "episodes", "provider", "episode"):
+            new_mode = сырой_mode
+            набор = []
+        else:
+            new_mode = _нормализовать_режим_new(сырой_mode, доступные)
+            if new_mode == NEW_MODE_ADDED:
+                набор = [з for з in набор if з.get("published_at")]
+            else:
+                набор = [з for з in набор if з.get("_premiere_date")]
 
     if вид:
         набор = [з for з in набор if з.get("kind") == вид]
@@ -3656,10 +3730,18 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
         else:
             сорт = "newest"
 
-    if раздел == "/new" or сорт == "newest":
-        # /new/ activity = premiere_date DESC; kind-routes use release freshness.
-        набор = sorted(набор, key=_activity_key if раздел == "/new" else _release_key,
-                       reverse=True)
+    if раздел == "/new":
+        if new_mode == NEW_MODE_ADDED:
+            набор = sorted(
+                набор,
+                key=lambda з: (1 if з.get("published_at") else 0,
+                               з.get("published_at") or "",
+                               _title_key(з)[0], з["slug"]),
+                reverse=True)
+        else:
+            набор = sorted(набор, key=_activity_key, reverse=True)
+    elif сорт == "newest":
+        набор = sorted(набор, key=_release_key, reverse=True)
     elif сорт == "recently_added":
         набор = sorted(
             набор,
@@ -3683,6 +3765,8 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
 
     выбрано = {"kind": вид, "year": год, "genre": жанр, "country": страна,
                "sort": сорт if сорт not in (None, "") else None}
+    if раздел == "/new" and new_mode:
+        выбрано["mode"] = new_mode
     if неизвестный_фильтр:
         выбрано["_unknown"] = "1"
     return набор, выбрано
@@ -3695,6 +3779,9 @@ def запрос_строкой(выбрано: dict, **замена) -> str:
     omit_kind = bool(поля.pop("_omit_kind", False))
     if omit_kind:
         поля.pop("kind", None)
+    # Default /new/ premiere mode stays on clean /new/ (no ?mode=premiere).
+    if поля.get("mode") == NEW_MODE_PREMIERE:
+        поля.pop("mode", None)
     пары = [(к, з) for к, з in поля.items()
             if з and not str(к).startswith("_")]
     return ("?" + urlencode(пары, quote_via=quote)) if пары else ""
@@ -4483,7 +4570,8 @@ class ВидЗона(Вид):
             f"{marker}</div></footer>")
 
     # --- составные части ---------------------------------------------
-    def плитка(self, запись: dict, *, freshness: bool = False) -> str:
+    def плитка(self, запись: dict, *, freshness: bool = False,
+               fresh_mode: str = NEW_MODE_PREMIERE) -> str:
         деталь = self.деталь(запись["slug"]) or {}
         изо = заглушка_постера(запись, "zt__none", "zt__img")
         # Line 1: year · country (source-backed only).
@@ -4496,7 +4584,7 @@ class ВидЗона(Вид):
         жанры = [str(g) for g in (деталь.get("genres") or [])[:2] if g]
         meta2_parts = [str(ч) for ч in (запись.get("kind"), *жанры) if ч]
         if freshness:
-            reason = _подпись_свежести(запись)
+            reason = _подпись_свежести(запись, fresh_mode)
             if reason:
                 meta2_parts.append(reason)
         мета1 = " · ".join(meta1_parts)
@@ -4585,9 +4673,11 @@ class ВидЗона(Вид):
         шапка = (f'<div class="zsec__h"><h2>{html.escape(титул)}</h2>{ссылка_html}</div>')
         return f'<section class="zsec">{шапка}{self.карусель(ключ, набор)}</section>'
 
-    def плитки(self, набор, *, freshness: bool = False) -> str:
+    def плитки(self, набор, *, freshness: bool = False,
+               fresh_mode: str = NEW_MODE_PREMIERE) -> str:
         return ('<div class="zg">'
-                + "".join(self.плитка(з, freshness=freshness) for з in набор)
+                + "".join(self.плитка(з, freshness=freshness, fresh_mode=fresh_mode)
+                          for з in набор)
                 + "</div>")
 
     def листалка(self, разд: str, выбрано: dict, стр: int, всего: int) -> str:
@@ -5083,6 +5173,28 @@ class ВидЗона(Вид):
                     f'<a href="{разд}/">Открыть раздел без фильтра</a></p></div>')
             return self.оболочка(тело, f"Некорректный фильтр — {self.имя}",
                                  разд + "/", код=400)
+        # B13: mode-specific H1 / definition for /new/.
+        new_mode = выбрано.get("mode") if разд == "/new" else None
+        mode_tabs_html = ""
+        mode_def = ""
+        if разд == "/new":
+            доступные = _доступные_режимы_new(self.д)
+            if new_mode in NEW_MODE_LABELS:
+                титул = NEW_MODE_LABELS[new_mode]
+            mode_def = NEW_MODE_DEFS.get(new_mode or "", "")
+            if len(доступные) > 1:
+                tabs = []
+                for m in доступные:
+                    href = "/new/" + запрос_строкой(
+                        {k: v for k, v in выбрано.items() if k != "mode"},
+                        mode=m, page=None)
+                    cur = ' aria-current="page"' if m == new_mode else ""
+                    tabs.append(
+                        f'<a class="zfilt-chip" href="{href}"{cur} '
+                        f'data-new-mode="{m}">{html.escape(NEW_MODE_LABELS[m])}</a>')
+                mode_tabs_html = (
+                    f'<nav class="zfilt-bar__group" data-testid="new-mode-tabs" '
+                    f'aria-label="Режимы новинок">{"".join(tabs)}</nav>')
         raw_page = (зпр.get("page") or ["1"])[0]
         try:
             стр = max(1, int(raw_page or 1))
@@ -5292,13 +5404,25 @@ class ВидЗона(Вид):
                 for c in активные_чипы) + "</div>"
 
         сорт_лейбл = dict(sort_opts).get(active_sort, active_sort)
-        scope = "в этой выборке" if has_active or разд != "/catalog" else "в каталоге"
-        zsub = f"Результаты {scope}: {len(набор)} · Сортировка: {сорт_лейбл}"
+        if разд == "/new":
+            scope = "в этой ленте"
+        elif has_active or разд != "/catalog":
+            scope = "в этой выборке"
+        else:
+            scope = "в каталоге"
+        zsub_bits = [f"Результаты {scope}: {len(набор)}"]
+        if mode_def:
+            zsub_bits.insert(0, mode_def)
+        if разд != "/new":
+            zsub_bits.append(f"Сортировка: {сорт_лейбл}")
+        zsub = " · ".join(zsub_bits)
 
         канон_q = запрос_строкой({**выбрано, **omit}, page=None)
         канон = разд + "/" + канон_q
         show_fresh = разд == "/new"
-        сетка = (self.плитки(кусок, freshness=show_fresh) if кусок else
+        fresh_mode = new_mode or NEW_MODE_PREMIERE
+        сетка = (self.плитки(кусок, freshness=show_fresh, fresh_mode=fresh_mode)
+                 if кусок else
                  '<div class="zempty"><b>Ничего не подошло</b>'
                  "<p>Под выбранные условия не попала ни одна запись. "
                  f'<a href="{разд}/">Сбросить фильтры</a></p></div>')
@@ -5307,7 +5431,8 @@ class ВидЗона(Вид):
             f'<div class="zwrap" data-testid="page-container">'
             f'<h1 class="zh" data-testid="catalog-heading" id="catalog-h1">'
             f'{html.escape(титул)}</h1>'
-            f'<p class="zsub">{zsub}</p>'
+            f'<p class="zsub">{html.escape(zsub)}</p>'
+            f'{mode_tabs_html}'
             f'{chips_html}'
             f'{фильтры}'
             + f'<div data-testid="catalog-grid">{сетка}</div>'
