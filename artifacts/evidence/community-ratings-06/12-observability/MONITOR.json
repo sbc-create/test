@@ -1,0 +1,14 @@
+{
+  "gateway_service": "community-ratings-gateway.service",
+  "monitor_timer": "community-ratings-monitor.timer",
+  "monitor_interval": "15m",
+  "report_dir": "/srv/site-factory/repo/var/ratings/monitor",
+  "auto_kill_gates": [
+    "AGGREGATE_REBUILD_MISMATCHES",
+    "DB_CORRUPTION",
+    "FOREIGN_KEY_FAILURES",
+    "PUBLIC_WRITE_PERCENT>1",
+    "WRITE_5XX>=3",
+    "WRITE_5XX_RATE>2%@50+"
+  ]
+}

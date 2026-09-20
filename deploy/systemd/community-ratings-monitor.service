@@ -1,0 +1,15 @@
+[Unit]
+Description=Community ratings read-only health monitor (15m)
+Requires=community-ratings-gateway.service
+
+[Service]
+Type=oneshot
+User=lords
+Group=lords
+WorkingDirectory=/home/claude/wt-ratings-ingestion-01
+Environment=PYTHONPATH=/home/claude/wt-ratings-ingestion-01
+Environment=COMMUNITY_ROLLOUT_FLAGS_PATH=/srv/site-factory/repo/var/ratings/community_rollout_flags.json
+Environment=COMMUNITY_IDENTITY_HMAC_SECRET_FILE=/etc/site-factory/secrets/community_identity_hmac
+Environment=COMMUNITY_ROLLOUT_SALT_FILE=/etc/site-factory/secrets/community_rollout_salt
+Environment=COMMUNITY_IP_HMAC_SECRET_FILE=/etc/site-factory/secrets/community_ip_hmac
+ExecStart=/usr/bin/python3 -m factory.community.monitor_once
