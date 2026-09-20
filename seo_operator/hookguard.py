@@ -208,7 +208,9 @@ def decide(payload: dict) -> dict:
     if tool in GITHUB_WRITE_TOOLS:
         return _out("allow", f"{tool}: работа с pull request в собственной ветке")
 
-    if tool == "Bash":
+    if tool in ("Bash", "Shell"):
+        # Cursor harness exposes `Shell`; Claude Code historically used `Bash`.
+        # Same argv contract (`tool_input.command`); evaluate identically.
         command = str(tool_input.get("command", ""))
         environment = payload.get("environment", "sandbox")
         verdict = classify(ActionContext(command=command, environment=environment))

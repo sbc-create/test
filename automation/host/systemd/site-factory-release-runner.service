@@ -1,0 +1,18 @@
+[Unit]
+Description=Site Factory Release Orchestrator root runner (oneshot)
+Documentation=file:///srv/site-factory/repo/docs/release-orchestrator/PRIVILEGE_BOUNDARY.md
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+# Arguments MUST be provided via a drop-in or systemd-run and may only include:
+# --release-id --manifest --manifest-digest --approval
+ExecStart=/srv/site-factory/repo/automation/host/site-factory-release-runner.py
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/site-factory /srv/site-factory/repo/reports /srv/site-factory/repo/var
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
