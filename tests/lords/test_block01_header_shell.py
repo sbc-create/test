@@ -44,8 +44,9 @@ class TestBlock01Header:
     def test_desktop_nav_nowrap(self):
         css = _lords_css()
         assert "flex-wrap:nowrap" in css
-        # desktop nav must not wrap into a second header row
-        assert re.search(r"@media\(min-width:768px\)\{\.hd__nav\{[^}]*flex-wrap:nowrap", css)
+        # Desktop row starts at the fit-breakpoint (~1024), not the old 768.
+        assert re.search(
+            r"@media\(min-width:1024px\)\{\.hd__nav\{[^}]*flex-wrap:nowrap", css)
 
     def test_touch_targets_44(self):
         css = _lords_css()
@@ -54,4 +55,5 @@ class TestBlock01Header:
 
     def test_search_capped_on_desktop(self):
         css = _lords_css()
-        assert re.search(r"@media\(min-width:768px\)\{\.hd__s\{[^}]*max-width:200px", css)
+        assert re.search(
+            r"@media\(min-width:1024px\)\{\.hd__s\{[^}]*max-width:200px", css)
