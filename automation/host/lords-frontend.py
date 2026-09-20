@@ -1967,6 +1967,36 @@ background:var(--a-page);font-size:13px;font-weight:600;color:var(--a-ink);white
 .zfilt a[aria-current],.zgenres__nav a[aria-current],.zgenres__nav a[aria-current=true],
 .zstrip a[aria-current],.zfilt__y a[aria-current]{background:var(--a-acc);color:#fff;border-color:var(--a-acc)}
 .zfilt__y{display:inline-flex;flex-wrap:wrap;gap:8px}
+.afilt{margin:0 0 16px}
+.afilt__open{display:none;min-height:44px;padding:0 14px;border-radius:10px;border:1px solid var(--a-line);
+background:var(--a-page);font-weight:700;font-size:14px;color:var(--a-ink);cursor:pointer}
+.afilt__panel{display:block}
+.afilt__chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px;align-items:center}
+.afilt__chip{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;
+border-radius:999px;border:1px solid var(--a-acc);background:var(--a-alt);color:var(--a-acc);font-size:13px;font-weight:700}
+.afilt__reset{min-height:36px;display:inline-flex;align-items:center;padding:0 10px;font-size:13px;font-weight:700;color:var(--a-dim)}
+.afilt__rows{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start}
+.afilt__dd{position:relative;min-width:0}
+.afilt__dd>summary{list-style:none;cursor:pointer;min-height:40px;padding:0 12px;border-radius:var(--a-radius-chip);
+border:1px solid var(--a-line);background:var(--a-page);font-size:13px;font-weight:700;color:var(--a-ink);
+display:inline-flex;align-items:center;gap:6px}
+.afilt__dd>summary::-webkit-details-marker{display:none}
+.afilt__dd[open]>summary{border-color:var(--a-acc);color:var(--a-acc)}
+.afilt__opts{position:absolute;z-index:40;top:calc(100% + 4px);left:0;min-width:220px;max-height:280px;overflow:auto;
+padding:8px;border-radius:12px;border:1px solid var(--a-line);background:var(--a-page);box-shadow:var(--a-shadow-soft);
+display:flex;flex-direction:column;gap:2px}
+.afilt__opts a{display:flex;justify-content:space-between;gap:12px;min-height:40px;padding:8px 10px;border-radius:8px;
+color:var(--a-ink);font-size:13px;text-decoration:none}
+.afilt__opts a:hover,.afilt__opts a[aria-current]{background:var(--a-alt);color:var(--a-acc)}
+.afilt__opts small{color:var(--a-dim);font-variant-numeric:tabular-nums}
+@media(max-width:767px){
+  .afilt__open{display:inline-flex;align-items:center;margin-bottom:8px}
+  .afilt__panel{display:none;padding:12px;border:1px solid var(--a-line);border-radius:12px;background:var(--a-page)}
+  .afilt.is-open .afilt__panel{display:block}
+  .afilt__opts{position:static;max-height:none;box-shadow:none;border:0;padding:6px 0 0}
+  .afilt__dd{width:100%}
+  .afilt__dd>summary{width:100%;justify-content:space-between}
+}
 .zpg{display:flex;gap:8px;justify-content:center;margin:24px 0;flex-wrap:wrap}
 .zpg a,.zpg span{min-width:44px;min-height:44px;display:inline-flex;align-items:center;
 justify-content:center;border-radius:10px;border:1px solid var(--a-line);background:var(--a-page);font-size:14px}
@@ -2854,6 +2884,10 @@ def заглушка_постера(запись: dict, класс_заглуш�
     "if(db){var e2=drawerEls();if(e2.d&&!e2.d.hidden)closeDrawer();else openDrawer(db);return;}"
     "if(e.target.closest('[data-drawer-close]')||e.target.closest('[data-drawer-backdrop]')){"
     "closeDrawer();return;}"
+    "var af=e.target.closest('[data-afilt-open]');"
+    "if(af){var box=af.closest('[data-afilt]');if(box){"
+    "var on=!box.classList.contains('is-open');box.classList.toggle('is-open',on);"
+    "af.setAttribute('aria-expanded',on?'true':'false');}return;}"
     "if(!e.target.closest('.zhd__dd'))closeTax();"
     "});"
     "document.addEventListener('keydown',function(e){"
@@ -3205,7 +3239,8 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
         # Hub handled separately; keep stable title order if ever reused.
         набор = sorted(набор, key=lambda з: (з.get("_n") or нормализовать(з["title"]),
                                              з["slug"]))
-    выбрано = {"kind": вид, "year": год, "genre": жанр, "country": страна, "sort": сорт}
+    выбрано = {"kind": вид, "year": год, "genre": жанр, "country": страна,
+               "type": тип, "sort": сорт}
     if неизвестный_фильтр:
         выбрано["_unknown"] = "1"
     return набор, выбрано
@@ -5595,21 +5630,31 @@ class ВидАнимедиа(ВидЗона):
                                  актив="/collections/",
                                  описание=f"Подборки витрины {self.имя}.")
         набор, выбрано = отбор(self.д, self.индекс, зпр, разд)
-        стр = max(1, int((зпр.get("page") or ["1"])[0] or 1))
-        всего = max(1, (len(набор) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1)
-        стр = min(стр, всего)
-        кусок = набор[(стр - 1) * НА_СТРАНИЦЕ_1_1: стр * НА_СТРАНИЦЕ_1_1]
+        raw_page = (зпр.get("page") or ["1"])[0]
+        try:
+            стр = int(raw_page or 1)
+        except (TypeError, ValueError):
+            стр = 0
+        per = НА_СТРАНИЦЕ_1_1
+        всего = (len(набор) + per - 1) // per if набор else 0
+        if стр < 1 or (всего == 0 and стр > 1) or (всего > 0 and стр > всего):
+            self._http_status = 404
+            return self.не_найдено(разд + "/")
+        self._http_status = 200
+        кусок = набор[(стр - 1) * per: стр * per] if набор else []
         титул = self._заголовок_раздела(разд, выбрано)
-        фильтры = self._фильтры_каталога(разд, выбрано)
+        фильтры = self._фильтры_каталога(разд, выбрано, total=len(набор))
+        pages_label = f"страница {стр} из {max(всего, 1)}" if всего else "совпадений нет"
         тело = (f'<div class="zwrap zwrap--catalog"><h1 class="zh">{html.escape(титул)}</h1>'
-                f'<p class="zsub">Найдено {len(набор)} · страница {стр} из {всего}</p>'
+                f'<p class="zsub">Найдено {len(набор)} · {pages_label}</p>'
                 + фильтры
                 + (self.плитки(кусок) if кусок else
                    '<div class="zempty"><b>Ничего не подошло</b>'
                    "<p>Под выбранные условия не попала ни одна запись.</p></div>")
-                + self.листалка(разд, выбрано, стр, всего) + "</div>")
+                + (self.листалка(разд, выбрано, стр, всего) if всего > 1 else "")
+                + "</div>")
         канон = разд + "/" + (запрос_строкой(выбрано, page=None) if any(
-            выбрано.get(k) for k in ("genre", "year", "kind", "country", "sort")) else "")
+            выбрано.get(k) for k in ("genre", "year", "kind", "country", "type", "sort")) else "")
         return self.оболочка(тело, f"{титул} — {self.имя}", канон or (разд + "/"),
                              актив=разд + "/",
                              описание=f"{титул} на витрине {self.имя}.",
@@ -5641,34 +5686,97 @@ class ВидАнимедиа(ВидЗона):
             return f"Сериалы{(' ' + str(год) + ' года') if год else ''}"
         return "Каталог"
 
-    def _фильтры_каталога(self, разд: str, выбрано: dict) -> str:
+    def _фильтры_каталога(self, разд: str, выбрано: dict, total: int | None = None) -> str:
+        """Compact disclosure filters + chips (no year/genre button wall)."""
+        idx = self.индекс or {}
         chips = []
-        for к in self.д.kinds:
-            chips.append(
-                f'<a href="{разд}/{запрос_строкой(выбрано, kind=к, page=None)}"'
-                f'{ТЕКУЩАЯ_СТРАНИЦА if выбрано.get("kind") == к else ""}>{html.escape(к)}</a>')
-        years = "".join(
-            f'<a href="{разд}/{запрос_строкой(выбрано, year=г, page=None)}"'
-            f'{ТЕКУЩАЯ_СТРАНИЦА if str(выбрано.get("year")) == str(г) else ""}>{г}</a>'
-            for г in (self.д.years or [])[:14])
-        genres = "".join(
-            f'<a href="/catalog/{запрос_строкой({"genre": код})}"'
-            f'{ТЕКУЩИЙ_ПУНКТ if выбрано.get("genre") == код else ""}>{html.escape(имя)}</a>'
-            for код, имя in (self.индекс.get("genre_names") or [])[:16])
+        active_keys = ("kind", "type", "year", "genre", "country", "sort")
+
+        def chip(label: str, clear_key: str) -> str:
+            cleared = dict(выбрано)
+            cleared[clear_key] = None
+            href = разд + "/" + запрос_строкой(cleared, page=None)
+            return (f'<a class="afilt__chip" href="{закодировать_запрос(href)}">'
+                    f'{html.escape(label)} <span aria-hidden="true">×</span></a>')
+
+        if выбрано.get("kind"):
+            chips.append(chip(str(выбрано["kind"]), "kind"))
+        if выбрано.get("type"):
+            chips.append(chip(f"type:{выбрано['type']}", "type"))
+        if выбрано.get("year"):
+            chips.append(chip(str(выбрано["year"]), "year"))
+        if выбрано.get("genre"):
+            gname = выбрано["genre"]
+            for код, имя in (idx.get("genre_names") or []):
+                if код == выбрано["genre"]:
+                    gname = имя
+                    break
+            chips.append(chip(str(gname), "genre"))
+        if выбрано.get("country"):
+            cname = выбрано["country"]
+            for код, имя in (idx.get("country_names") or []):
+                if код == выбрано["country"]:
+                    cname = имя
+                    break
+            chips.append(chip(str(cname), "country"))
+        if выбрано.get("sort"):
+            sort_labels = {"title": "По названию", "rating": "По оценке",
+                           "year": "По году", "date": "По свежести"}
+            chips.append(chip(sort_labels.get(выбрано["sort"], str(выбрано["sort"])),
+                              "sort"))
+
+        def opts(title: str, pairs: list[tuple[str, str, int]], param: str) -> str:
+            if not pairs:
+                return ""
+            links = []
+            for value, label, count in pairs:
+                href = разд + "/" + запрос_строкой(выбрано, **{param: value, "page": None})
+                cur = ТЕКУЩАЯ_СТРАНИЦА if str(выбрано.get(param) or "") == str(value) else ""
+                links.append(
+                    f'<a href="{закодировать_запрос(href)}"{cur}>{html.escape(label)}'
+                    f' <small>{count}</small></a>')
+            return (f'<details class="afilt__dd"><summary>{html.escape(title)}</summary>'
+                    f'<div class="afilt__opts">{"".join(links)}</div></details>')
+
+        kind_pairs = [(к, к, sum(1 for з in self.д.items if з.get("kind") == к))
+                      for к in (self.д.kinds or [])]
+        type_pairs = []
+        for tcode, slugs in sorted((idx.get("type") or {}).items()):
+            type_pairs.append((tcode, tcode.upper(), len(slugs)))
+        year_pairs = [(str(г), str(г),
+                       sum(1 for з in self.д.items if з.get("year") == г))
+                      for г in (self.д.years or [])]  # no hard cap
+        genre_pairs = [(код, имя, len((idx.get("genre") or {}).get(код) or []))
+                       for код, имя in (idx.get("genre_names") or [])]
+        country_pairs = [(код, имя, len((idx.get("country") or {}).get(код) or []))
+                         for код, имя in (idx.get("country_names") or [])]
+        sort_pairs = [
+            ("", "По свежести", total if total is not None else len(self.д.items)),
+            ("title", "По названию", total if total is not None else len(self.д.items)),
+            ("rating", "По оценке", total if total is not None else len(self.д.items)),
+            ("year", "По году", total if total is not None else len(self.д.items)),
+        ]
+
         reset = ""
-        if any(выбрано.get(k) for k in ("kind", "year", "genre", "country", "sort")):
-            reset = f'<a href="{разд}/">Сбросить</a>'
-        sort_links = (
-            f'<a href="{разд}/{запрос_строкой(выбрано, sort=None, page=None)}"'
-            f'{ТЕКУЩАЯ_СТРАНИЦА if not выбрано.get("sort") else ""}>По свежести</a>'
-            f'<a href="{разд}/{запрос_строкой(выбрано, sort="title", page=None)}"'
-            f'{ТЕКУЩАЯ_СТРАНИЦА if выбрано.get("sort") == "title" else ""}>По названию</a>'
-            f'<a href="{разд}/{запрос_строкой(выбрано, sort="rating", page=None)}"'
-            f'{ТЕКУЩАЯ_СТРАНИЦА if выбрано.get("sort") == "rating" else ""}>По оценке</a>')
-        return (f'<nav class="zfilt" aria-label="Фильтры">{"".join(chips)}{reset}</nav>'
-                + (f'<nav class="zfilt" aria-label="Сортировка">{sort_links}</nav>')
-                + (f'<nav class="zfilt zfilt__y" aria-label="Годы">{years}</nav>' if years else "")
-                + (f'<nav class="zgenres__nav" aria-label="Жанры">{genres}</nav>' if genres else ""))
+        if any(выбрано.get(k) for k in active_keys):
+            reset = f'<a class="afilt__reset" href="{разд}/">Сбросить фильтры</a>'
+        chips_html = (f'<div class="afilt__chips" aria-label="Активные фильтры">'
+                      f'{"".join(chips)}{reset}</div>' if (chips or reset) else "")
+        body = (
+            opts("Тип", kind_pairs, "kind")
+            + opts("Формат", type_pairs, "type")
+            + opts("Год", year_pairs, "year")
+            + opts("Жанр", genre_pairs, "genre")
+            + opts("Страна", country_pairs, "country")
+            + opts("Сортировка", sort_pairs, "sort")
+        )
+        return (
+            '<div class="afilt" data-afilt>'
+            '<button type="button" class="afilt__open" data-afilt-open '
+            'aria-expanded="false" aria-controls="afilt-panel">Фильтры</button>'
+            f'<div class="afilt__panel" id="afilt-panel">{chips_html}'
+            f'<div class="afilt__rows">{body}</div></div></div>'
+        )
 
     def _эпизод_события(self) -> list[dict]:
         """Catalog-publish rows with latest available episode — not air dates.
@@ -5923,6 +6031,17 @@ def построить_индекс(данные: "Данные", подробн
                 continue
             по_стране.setdefault(код, []).append(slug)
             имена_стран.setdefault(код, страна)
+        # Enrich search forms with sidecar original titles (catalog row may omit them).
+        формы = list(запись.get("_формы") or [])
+        for поле in ("original_title", "original_name"):
+            сырье = деталь.get(поле)
+            if not сырье:
+                continue
+            for кандидат in (нормализовать(сырье), нормализовать(транслит(сырье))):
+                if кандидат and кандидат not in формы:
+                    формы.append(кандидат)
+        if формы:
+            запись["_формы"] = формы
     порядок = sorted(имена.items(), key=lambda п: -len(по_жанру.get(п[0], ())))
     порядок_стран = sorted(имена_стран.items(),
                            key=lambda п: -len(по_стране.get(п[0], ())))
