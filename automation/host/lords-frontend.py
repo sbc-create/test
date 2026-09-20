@@ -2161,6 +2161,16 @@ border-radius:10px;border:1px solid var(--a-line);background:var(--a-alt);font-s
 .zaside{display:none}
 .ztitle-gap{height:16px;max-height:24px;min-height:16px;margin:0;padding:0}
 @media(min-width:900px){.ztitle-gap{height:20px}}
+/* B08 player shell: status beside heading; 16:9 media only; no fixed 640×360 */
+.zpl[data-b08="player"]{margin:0 auto;width:min(100%,1200px);max-width:1200px}
+.zpl[data-b08="player"] .zpl__h{margin:0 0 16px;max-height:40px}
+@media(min-width:900px){.zpl[data-b08="player"] .zpl__h{margin:0 0 20px}}
+.zpl[data-b08="player"] .zpl__f{aspect-ratio:16/9;width:100%;max-width:100%;
+min-height:0;height:auto}
+.zpl[data-b08="player"] .zpl__f video-player,
+.zpl[data-b08="player"] .zpl__f iframe,
+.zpl[data-b08="player"] .zpl__f video{width:100% !important;height:100% !important;
+max-width:none !important;min-width:0 !important}
 .zpl__h{display:flex;align-items:baseline;justify-content:flex-start;gap:12px;flex-wrap:wrap;
 margin:0 0 16px;font-size:clamp(22px,2vw,30px);font-weight:700}
 .zpl__h span{font-size:13px;font-weight:600;color:var(--a-dim)}
@@ -2615,6 +2625,7 @@ def разметка_плеера(вид, запись: dict, деталь: dict
         "data-title-id": ид, "data-aggregator": агрегатор,
         "is-show-voice-only": "false", "is-show-banner": "true",
         "disable-licensed": "false",
+        "autoplay": "0",
     }
     if эпизод is not None:
         атрибуты["episode"] = str(эпизод)
@@ -4901,6 +4912,12 @@ TOP100_DATA_GAP = 1
     "schema_version", "site_id", "ordered_title_ids", "snapshot_revision",
     "digest", "generated_at",
 )
+# B08: versioned default-episode policy is owned by player/core — not invented here.
+АНИМЕДИА_DEFAULT_EPISODE_POLICY_PATH = os.environ.get(
+    "ANIMEDIA_DEFAULT_EPISODE_POLICY",
+    str(Path(__file__).resolve().parents[2] / "config" / "animedia-default-episode-policy.json"),
+)
+DEFAULT_EPISODE_POLICY_DATA_GAP = 1
 # Popular shelf: ONLY an owner/Core-approved WeeklyPopularSnapshot (§5.6).
 # Template must not rank catalog ratings into a public «Популярное за неделю».
 АНИМЕДИА_POPULAR_WINDOW = "weekly"
@@ -5591,7 +5608,9 @@ class ВидАнимедиа(ВидЗона):
         # Status lives in the player heading — never a detached right column.
         плеер = (
             f'<div class="ztitle-gap" aria-hidden="true"></div>'
-            f'<section class="zpl" id="watch" data-b07-player="1">'
+            f'<section class="zpl" id="watch" data-b07-player="1" data-b08="player" '
+            f'data-default-episode-policy="'
+            f'{"present" if Path(АНИМЕДИА_DEFAULT_EPISODE_POLICY_PATH).is_file() else "absent"}">'
             f'<div class="zpl__h"><h2>Смотреть</h2>'
             f'<span data-player-status="{html.escape(код)}">'
             f'{html.escape(_подпись_плеера(код))}</span></div>'

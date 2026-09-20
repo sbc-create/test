@@ -1,0 +1,18 @@
+{
+  "viewport": "m390",
+  "theme": "dark",
+  "heroToPlayer": 80,
+  "headingToShell": 16,
+  "shellW": 342,
+  "shellH": 192,
+  "aspect": 1.778,
+  "players": 1,
+  "videoPlayers": 0,
+  "fillRatio": 0,
+  "statusNear": true,
+  "policy": "absent",
+  "limit": 80,
+  "failures": [],
+  "screenshot_sha256": "716d4a3b3d282d783d3ddde7a36958c0e990f7c195a810c174099eec5a6f4a0b",
+  "captured_at": "2026-09-20T12:20:01Z"
+}

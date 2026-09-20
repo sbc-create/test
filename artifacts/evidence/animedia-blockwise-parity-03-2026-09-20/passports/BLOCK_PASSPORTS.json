@@ -678,9 +678,11 @@
         "tests/unit/test_animedia_parity03_b07.py"
       ],
       "evidence_paths": [
-        "03-blocks/BLOCK_B07.md"
+        "03-blocks/BLOCK_B07.md",
+        "03-blocks/B07/BEFORE/INVENTORY.json",
+        "03-blocks/B07/AFTER_LOCAL/ORACLE.json"
       ],
-      "remaining_data_gap": ""
+      "remaining_data_gap": "PASS_LOCAL_PENDING_LIVE"
     },
     {
       "block_id": "B08",
@@ -755,9 +757,11 @@
         "tests/unit/test_animedia_parity03_b08.py"
       ],
       "evidence_paths": [
-        "03-blocks/BLOCK_B08.md"
+        "03-blocks/BLOCK_B08.md",
+        "03-blocks/B08/BEFORE/INVENTORY.json",
+        "03-blocks/B08/AFTER_LOCAL/ORACLE.json"
       ],
-      "remaining_data_gap": "BLOCKED_CORE_DATA if default-episode policy absent"
+      "remaining_data_gap": "BLOCKED_DEPENDENCY(owner=player) default-episode policy absent; PASS_LOCAL_PENDING_LIVE"
     },
     {
       "block_id": "B09",

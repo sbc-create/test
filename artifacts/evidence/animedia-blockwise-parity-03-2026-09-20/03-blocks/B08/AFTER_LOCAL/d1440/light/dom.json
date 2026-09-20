@@ -1,0 +1,18 @@
+{
+  "viewport": "d1440",
+  "theme": "light",
+  "heroToPlayer": 88,
+  "headingToShell": 20,
+  "shellW": 1200,
+  "shellH": 675,
+  "aspect": 1.778,
+  "players": 1,
+  "videoPlayers": 0,
+  "fillRatio": 0,
+  "statusNear": true,
+  "policy": "absent",
+  "limit": 120,
+  "failures": [],
+  "screenshot_sha256": "751e39e45ef3d4379346dd2216df76e5f9322fbaf2a2fb0dcb5f63df6154532c",
+  "captured_at": "2026-09-20T12:20:01Z"
+}
