@@ -1,0 +1,44 @@
+[
+  {
+    "animedia.icu": {
+      "build": "20260920T102102Z-89666321-nova",
+      "artifact": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+      "noindex": true,
+      "feed": true
+    },
+    "animedia.space": {
+      "build": "20260920T102102Z-89666321-nova",
+      "artifact": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+      "noindex": true,
+      "feed": true
+    }
+  },
+  {
+    "animedia.icu": {
+      "build": "20260920T102102Z-89666321-nova",
+      "artifact": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+      "noindex": true,
+      "feed": true
+    },
+    "animedia.space": {
+      "build": "20260920T102102Z-89666321-nova",
+      "artifact": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+      "noindex": true,
+      "feed": true
+    }
+  },
+  {
+    "animedia.icu": {
+      "build": "20260920T102102Z-89666321-nova",
+      "artifact": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+      "noindex": true,
+      "feed": true
+    },
+    "animedia.space": {
+      "build": "20260920T102102Z-89666321-nova",
+      "artifact": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+      "noindex": true,
+      "feed": true
+    }
+  }
+]

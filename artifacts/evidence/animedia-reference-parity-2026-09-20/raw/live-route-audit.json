@@ -1,0 +1,114 @@
+{
+  "animedia.icu": {
+    "home": {
+      "http": 200,
+      "build": "20260920T102102Z-89666321-nova",
+      "aep_ctx": false,
+      "feed_honest": true,
+      "noindex": true,
+      "poster_region": true,
+      "bytes": 104415
+    },
+    "title": {
+      "http": 200,
+      "build": "20260920T102102Z-89666321-nova",
+      "aep_ctx": false,
+      "feed_honest": null,
+      "noindex": true,
+      "poster_region": true,
+      "bytes": 58823
+    },
+    "episode": {
+      "http": 200,
+      "build": "20260920T102102Z-89666321-nova",
+      "aep_ctx": true,
+      "feed_honest": null,
+      "noindex": true,
+      "poster_region": true,
+      "bytes": 60833
+    },
+    "collections": {
+      "http": 200,
+      "build": "20260920T102102Z-89666321-nova",
+      "aep_ctx": false,
+      "feed_honest": null,
+      "noindex": true,
+      "poster_region": true,
+      "bytes": 54925
+    },
+    "new": {
+      "http": 200,
+      "build": "20260920T102102Z-89666321-nova",
+      "aep_ctx": false,
+      "feed_honest": true,
+      "noindex": true,
+      "poster_region": true,
+      "bytes": 51770
+    },
+    "invalid": {
+      "http": 404,
+      "build": "20260920T102102Z-89666321-nova",
+      "aep_ctx": false,
+      "feed_honest": null,
+      "noindex": true,
+      "poster_region": true,
+      "bytes": 43579
+    }
+  },
+  "animedia.space": {
+    "home": {
+      "http": 200,
+      "build": "20260920T102102Z-89666321-nova",
+      "aep_ctx": false,
+      "feed_honest": true,
+      "noindex": true,
+      "poster_region": true,
+      "bytes": 97575
+    },
+    "title": {
+      "http": 200,
+      "build": "20260920T102102Z-89666321-nova",
+      "aep_ctx": false,
+      "feed_honest": null,
+      "noindex": true,
+      "poster_region": true,
+      "bytes": 58854
+    },
+    "episode": {
+      "http": 200,
+      "build": "20260920T102102Z-89666321-nova",
+      "aep_ctx": true,
+      "feed_honest": null,
+      "noindex": true,
+      "poster_region": true,
+      "bytes": 60870
+    },
+    "collections": {
+      "http": 200,
+      "build": "20260920T102102Z-89666321-nova",
+      "aep_ctx": false,
+      "feed_honest": null,
+      "noindex": true,
+      "poster_region": true,
+      "bytes": 54954
+    },
+    "new": {
+      "http": 200,
+      "build": "20260920T102102Z-89666321-nova",
+      "aep_ctx": false,
+      "feed_honest": true,
+      "noindex": true,
+      "poster_region": true,
+      "bytes": 51799
+    },
+    "invalid": {
+      "http": 404,
+      "build": "20260920T102102Z-89666321-nova",
+      "aep_ctx": false,
+      "feed_honest": null,
+      "noindex": true,
+      "poster_region": true,
+      "bytes": 43596
+    }
+  }
+}
