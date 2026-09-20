@@ -1,0 +1,5 @@
+1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017  docs/ZONA_BLOCK_SPEC_V1.md
+# sections_1_24_digest via: sed '/^## 25\. Команда для Cursor$/,$d' docs/ZONA_BLOCK_SPEC_V1.md | sha256sum
+# owner_decision_id=ZONA-B00-OVERRIDE-20260920-01
+# revoked_digest=01e9db7b27eb6c4bc41160ca6270f25aa7e6352b743dac2b9f09a0493b7b58fb
+# contract_commit=71d1f7dfdf22d2c5c6d79497672827880dc01bb7

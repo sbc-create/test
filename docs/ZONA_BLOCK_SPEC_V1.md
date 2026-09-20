@@ -3440,7 +3440,11 @@ screenshot contact sheet.
 /home/claude/wt-zona-finalization-01/docs/ZONA_BLOCK_SPEC_V1.md
 
 Проверяемая ревизия: ZONA_BLOCK_SPEC_V1, sections 1–24. SHA-256 вычисляется командой `sed '/^## 25\. Команда для Cursor$/,$d' docs/ZONA_BLOCK_SPEC_V1.md | sha256sum`; ожидаемый digest:
-01e9db7b27eb6c4bc41160ca6270f25aa7e6352b743dac2b9f09a0493b7b58fb
+1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017
+
+OWNER_DECISION_ID=ZONA-B00-OVERRIDE-20260920-01
+OLD_EXPECTED_DIGEST=01e9db7b27eb6c4bc41160ca6270f25aa7e6352b743dac2b9f09a0493b7b58fb
+OLD_DIGEST_STATUS=REVOKED_BY_OWNER
 
 Если файл отсутствует, получен не из приложенного владельцем документа, digest не совпадает или sections 1–24 изменились — ничего не реконструируй по памяти и не начинай код: `state=BLOCKED_DEPENDENCY`, `blocker_owner=reference`, `blocker_code=ACCEPTANCE_CONTRACT_MISSING_OR_MISMATCH`. Сохрани observed digest и запроси exact file. Sections 1–24 после B00 immutable; section 25 не входит в acceptance digest.
 

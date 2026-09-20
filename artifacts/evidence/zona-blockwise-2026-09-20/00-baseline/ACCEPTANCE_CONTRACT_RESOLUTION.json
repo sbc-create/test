@@ -1,0 +1,22 @@
+{
+  "state": "RESOLVED_BY_OWNER_OVERRIDE",
+  "owner_decision_id": "ZONA-B00-OVERRIDE-20260920-01",
+  "start_head": "f11df9b5a959c0b416c843868432f1f53e13eed0",
+  "contract_path": "docs/ZONA_BLOCK_SPEC_V1.md",
+  "contract_source": "user-authored full ZONA goal in current Cursor chat",
+  "contract_source_transcript_line": 707,
+  "normalization": "UTF-8_LF_ONE_FINAL_LF",
+  "section_25_heading_normalization": "added markdown H2 markers to exact line '25. Команда для Cursor' -> '## 25. Команда для Cursor' once, required by digest cut recipe and ACCEPTANCE_CONTRACT_GATE",
+  "revoked_digest": "01e9db7b27eb6c4bc41160ca6270f25aa7e6352b743dac2b9f09a0493b7b58fb",
+  "old_digest_status": "REVOKED_BY_OWNER",
+  "new_expected_digest": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+  "new_observed_digest": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+  "committed_blob_digest": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+  "worktree_digest": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+  "contract_commit": "71d1f7dfdf22d2c5c6d79497672827880dc01bb7",
+  "resolved_at": "2026-09-20T12:33:20Z",
+  "old_blocker_path": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/ACCEPTANCE_CONTRACT_BLOCKER.json",
+  "b00_resumed": true,
+  "b00_restarted_from_scratch": false,
+  "acceptance_contract_gate": "PASS"
+}
