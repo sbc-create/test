@@ -371,17 +371,24 @@ def _спец(ключ: str, семейство: str, титул: str, опис�
 
 def _общие(семейство: str, кино: str, сериал: str) -> list[Спецификация]:
     """Коллекции, которые опираются только на реально заполненные поля."""
+    if семейство == "animedia":
+        ra_desc = "Свежие поступления в каталог аниме."
+        ne_desc = "Недавно вышедшие серии аниме."
+    else:
+        ra_desc = "Свежие поступления в каталог по дате добавления."
+        ne_desc = "Серии с подтверждённой датой появления в источнике."
     return [
         _спец("recently_added", семейство, "Недавно добавленные",
-              "Свежие поступления в каталог аниме.",
-              "catalog", {}, {"field": "published_at", "order": "desc"},
+              ra_desc,
+              "catalog", {"fresh_limit": 240}, {"field": "published_at", "order": "desc"},
               "published_at", "/collection/recently_added/"),
         _спец("recently_added_movies", семейство, "Новые фильмы",
               "Фильмы в порядке появления в каталоге.",
-              "catalog", {"kind": кино}, {"field": "published_at", "order": "desc"},
+              "catalog", {"kind": кино, "fresh_limit": 240},
+              {"field": "published_at", "order": "desc"},
               "published_at", "/collection/recently_added_movies/"),
         _спец("new_episodes", семейство, "Новые эпизоды",
-              "Недавно вышедшие серии аниме.",
+              ne_desc,
               "episodes", {"episode_events": True},
               {"field": "episode_published_at", "order": "desc"},
               "episode_published_at", "/collection/new_episodes/"),
@@ -516,6 +523,13 @@ def разрешить(ключ: str, снимок: Снимок, семейст
             "playable" if спец.filter_spec.get("playable") else
             "recent")
         набор = ВЫБОРКИ[имя_выборки](снимок, спец.filter_spec)
+
+    # Freshness collections must not equal the full catalog: keep the same
+    # published_at tail as /new/ (default 240), drop rows without provenance.
+    fresh_limit = спец.filter_spec.get("fresh_limit")
+    if fresh_limit or спец.collection_key.startswith("recently_added"):
+        лимит = int(fresh_limit or 240)
+        набор = [з for з in набор if з.get("published_at")][:лимит]
 
     всего = len(набор)
     if предел is not None:

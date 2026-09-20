@@ -3581,7 +3581,7 @@ class ВидЛордс(Вид):
             "</footer>")
 
     # --- составные части ---------------------------------------------
-    def карточка(self, запись: dict) -> str:
+    def карточка(self, запись: dict, *, показать_добавлено: bool = False) -> str:
         деталь = self.деталь(запись["slug"])
         изо = заглушка_постера(запись, "c__none", "c__img")
         значок = ""
@@ -3602,14 +3602,25 @@ class ВидЛордс(Вид):
         else:
             полоса = '<div class="c__r" aria-hidden="true"></div>'
         год = f'<span class="c__y">{запись["year"]}</span>' if запись.get("year") else ""
+        добавлено = ""
+        if показать_добавлено and запись.get("published_at"):
+            dt = str(запись["published_at"])
+            показ = dt[:10] if len(dt) >= 10 else dt
+            добавлено = (
+                f'<time class="c__added" datetime="{html.escape(dt)}">'
+                f"добавлен {html.escape(показ)}</time>")
         return (f'<a class="c" href="{запись["url"]}" '
                 f'aria-label="{html.escape(запись["title"])}">'
                 f'<span class="c__p">{изо}{значок}</span>'
-                f'<span class="c__cap"><span class="c__t">{html.escape(запись["title"])}</span>{год}</span>'
+                f'<span class="c__cap"><span class="c__t">{html.escape(запись["title"])}</span>'
+                f"{год}{добавлено}</span>"
                 f"{полоса}</a>")
 
-    def сетка(self, набор, класс="grid") -> str:
-        return f'<div class="{класс}">' + "".join(self.карточка(з) for з in набор) + "</div>"
+    def сетка(self, набор, класс="grid", *, показать_добавлено: bool = False) -> str:
+        return (f'<div class="{класс}">'
+                + "".join(self.карточка(з, показать_добавлено=показать_добавлено)
+                          for з in набор)
+                + "</div>")
 
     def листалка(self, разд: str, выбрано: dict, стр: int, всего: int) -> str:
         пункты = страницы(стр, всего)
@@ -3931,7 +3942,22 @@ class ВидЛордс(Вид):
             return None
         кусок = набор[(стр - 1) * НА_СТРАНИЦЕ_1_1: стр * НА_СТРАНИЦЕ_1_1]
         h1 = html.escape(титул)
-        подзаг = f'<p class="zsub" style="margin:0 0 10px;color:#5b6470">{len(набор)} записей в выборке</p>'
+        as_of = getattr(self.д, "built_at", "") or ""
+        if разд == "/new":
+            as_of_html = ""
+            if as_of:
+                as_of_html = (
+                    f' · <span data-as_of="{html.escape(as_of)}">по состоянию на '
+                    f'<time datetime="{html.escape(as_of)}">'
+                    f"{html.escape(as_of[:10] if len(as_of) >= 10 else as_of)}"
+                    f"</time></span>")
+            подзаг = (
+                f'<p class="zsub" style="margin:0 0 10px;color:#5b6470">'
+                f"{len(набор)} записей по дате добавления в каталог"
+                f"{as_of_html}</p>")
+        else:
+            подзаг = (f'<p class="zsub" style="margin:0 0 10px;color:#5b6470">'
+                      f"{len(набор)} записей в выборке</p>")
         if выбрано.get("_unknown"):
             пусто = ('<div class="empty"><b>Неизвестный фильтр</b>'
                      "Параметр фильтра не распознан и не применён молча. "
@@ -3943,8 +3969,10 @@ class ВидЛордс(Вид):
         else:
             пусто = ""
         фильтр = "" if разд == "/new" else self._компактный_фильтр(разд, выбрано)
+        сетка = (self.сетка(кусок, показать_добавлено=(разд == "/new"))
+                 if кусок else пусто)
         тело = (f'<h1 class="lead">{h1}</h1>{подзаг}{фильтр}'
-                + (self.сетка(кусок) if кусок else пусто)
+                + сетка
                 + self.листалка(разд, выбрано, стр, всего))
         return self.оболочка(тело, f"{титул} — {self.имя}", разд + "/", актив=разд + "/",
                              описание=f"{титул} витрины {self.имя}: выборка из утверждённого снимка.")
