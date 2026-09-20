@@ -1,0 +1,75 @@
+{
+  "both_components_P": "7.70",
+  "both_components_expected": "7.700",
+  "both_match": true,
+  "shiki_only_P": "7.0",
+  "animedia_projected_rejected": true,
+  "SOURCE_LINEAGE_DOUBLE_COUNT_COUNT": 0,
+  "SHIKIMORI_INDIRECT_DOUBLE_COUNT_COUNT": 0,
+  "PRIOR_COMPONENTS_INDEPENDENT": 1,
+  "YUMMY_PRIOR_WEIGHT_ANIMEDIA_NATIVE": "0.70",
+  "YUMMY_PRIOR_WEIGHT_SHIKIMORI": "0.30",
+  "dag_animedia": {
+    "component": "animedia_native",
+    "contains_shikimori": false,
+    "layers": {
+      "raw_source": "community_votes(rating_space=animedia)",
+      "observation": null,
+      "projection": "community_display_projection native_user_average/animedia_native",
+      "aggregate": {
+        "S": 0,
+        "N": 0,
+        "A": null
+      },
+      "display_score": "UI rounding only; absent when N=0",
+      "structured_data": "not_emitted_from_canary"
+    }
+  },
+  "dag_prior": {
+    "component": "yummy_prior",
+    "YUMMY_PRIOR_WEIGHT_ANIMEDIA_NATIVE": "0.70",
+    "YUMMY_PRIOR_WEIGHT_SHIKIMORI": "0.30",
+    "YUMMY_PRIOR_STRENGTH": 10,
+    "P": "7.70",
+    "provenance": {
+      "animedia_embeds_shikimori": false,
+      "components_used": [
+        "animedia_native",
+        "shikimori"
+      ],
+      "double_counted_source_count": 0,
+      "shikimori_indirect_double_count_count": 0,
+      "prior_components_independent": true,
+      "YUMMY_PRIOR_WEIGHT_ANIMEDIA_NATIVE": "0.70",
+      "YUMMY_PRIOR_WEIGHT_SHIKIMORI": "0.30",
+      "forbidden_inputs_seen": [],
+      "renormalized_weights": {
+        "animedia_native": "0.7",
+        "shikimori": "0.3"
+      }
+    },
+    "SOURCE_LINEAGE_DOUBLE_COUNT_COUNT": 0,
+    "SHIKIMORI_INDIRECT_DOUBLE_COUNT_COUNT": 0,
+    "PRIOR_COMPONENTS_INDEPENDENT": 1,
+    "forbidden_as_input": [
+      "animedia_projected",
+      "amd_online",
+      "animedia_blend"
+    ],
+    "layers": {
+      "raw_source": "animedia_native ledger XOR/AND shikimori observation",
+      "observation": "shikimori observation id when present",
+      "projection": "yummy_derived public_brand_score (shadow when open-site blocked)",
+      "aggregate": "YummyPublic prior only; m not in vote_count",
+      "display_score": "preliminary label iff prior public-allowed; else native-absent",
+      "structured_data": "STRUCTURED_AGGREGATE_RATING_EMITTED=0"
+    }
+  },
+  "components_used_both": [
+    "animedia_native",
+    "shikimori"
+  ],
+  "components_used_shiki_only": [
+    "shikimori"
+  ]
+}

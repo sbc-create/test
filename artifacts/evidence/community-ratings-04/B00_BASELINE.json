@@ -1,0 +1,50 @@
+{
+  "START_HEAD": "0eb38320329743579a5ebb181d7d6520a997dbd2",
+  "BACKUP_PATH": "/srv/site-factory/repo/var/ratings/backups/ratings.sqlite.community04.20260920T141241Z.bak",
+  "BACKUP_DIGEST": "24d779dfd8dc14d814d1a1358da63057ef926a00227c42856f75617584f2a834",
+  "RESTORE_REHEARSAL_PASS": 1,
+  "SQLITE_INTEGRITY_CHECK": "ok",
+  "FK_VIOLATIONS": 0,
+  "active_projections": 500,
+  "quarantine_active": 0,
+  "comments": 0,
+  "indexability_before": {
+    "yummyani.site": {
+      "status": 200,
+      "x_robots": null,
+      "robots_allow_root": true,
+      "robots_head": "User-agent: *\nAllow: /\nDisallow: /dev/\nDisallow: /api/\nDisallow: /login\nDisallow: /register\nDisallow: /search\nDisallow: /catalog/random\nDisallow: /admin/\n\nSitemap: https://yummyani.site/sitemap.xml\n",
+      "disallow_all": false
+    },
+    "animedia.icu": {
+      "status": 200,
+      "x_robots": "noindex, nofollow",
+      "robots_allow_root": false,
+      "robots_head": "User-agent: *\nDisallow: /\n",
+      "disallow_all": true
+    },
+    "animedia.space": {
+      "status": 200,
+      "x_robots": "noindex, nofollow",
+      "robots_allow_root": false,
+      "robots_head": "User-agent: *\nDisallow: /\n",
+      "disallow_all": true
+    }
+  },
+  "residue": {
+    "ANIMEDIA_CANARY_DB_RESIDUE": 0,
+    "vote_canary_rows": 0,
+    "accepted_votes": 0,
+    "canary_events_retained": 19,
+    "aggregates_nonzero": 0,
+    "icu_score7": false,
+    "icu_absent_or_label": true,
+    "space_score7": false,
+    "yummy_public_badge": false,
+    "yummy_shadow": true,
+    "yummy_aggregateRating_community": false,
+    "icu_AggregateRating": false,
+    "yum_AggregateRating": false
+  },
+  "YUMMY_INDEXABILITY_OPEN": true
+}
