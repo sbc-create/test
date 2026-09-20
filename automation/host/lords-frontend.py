@@ -1692,6 +1692,65 @@ letter-spacing:-.3px}
 .zcr a{color:@ACC@}
 
 /* Пять горизонтальных лент. Управление мышью, клавиатурой и свайпом. */
+
+/* B02 Hero — editorial first screen; no request-time rotation. */
+.zhero{display:grid;grid-template-columns:1fr;gap:0;margin:12px 0 28px;
+border-radius:16px;overflow:hidden;background:@SURF@;border:1px solid @LINE@;
+min-height:300px;max-height:390px}
+@media(min-width:900px){.zhero{grid-template-columns:46% 54%;min-height:340px;max-height:390px}}
+.zhero__media{position:relative;min-height:180px;background:#111;aspect-ratio:16/9}
+@media(min-width:900px){.zhero__media{aspect-ratio:auto;min-height:100%}}
+.zhero__media img{width:100%;height:100%;object-fit:cover;display:block}
+.zhero__body{padding:20px 22px;display:flex;flex-direction:column;justify-content:center;gap:10px}
+@media(min-width:900px){.zhero__body{padding:28px 32px}}
+.zhero__kicker{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:@ACC@;margin:0}
+.zhero h1{font-size:26px;line-height:1.2;font-weight:700;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+@media(min-width:900px){.zhero h1{font-size:34px;line-height:1.18;-webkit-line-clamp:2}}
+.zhero__meta{font-size:13px;color:@DIM@;margin:0}
+.zhero__desc{font-size:14px;line-height:1.5;color:@INK@;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.zhero__cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.zhero__cta a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border-radius:8px;font-weight:700;font-size:14px}
+.zhero__cta a.primary{background:@ACC@;color:#fff}
+.zhero__cta a.secondary{background:transparent;border:1px solid @LINE@;color:@INK@}
+.zhero--compact{min-height:0;max-height:none;padding:18px 0 8px;border:0;background:transparent}
+.zhero--compact h1{font-size:26px}
+
+/* B03 Weekly popular — one tabbed block, not three full rails. */
+.zwpop{margin:8px 0 32px}
+.zwpop__h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 12px}
+.zwpop__h h2{margin:0;font-size:22px;font-weight:600}
+.zwpop__h a{font-size:13px;font-weight:700;color:@ACC@;min-height:44px;display:inline-flex;align-items:center}
+.zwpop__tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.zwpop__tabs a,.zwpop__tabs span{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid @LINE@;font-size:13px;font-weight:600;color:@DIM@;background:@SURF@}
+.zwpop__tabs [aria-current]{background:@ACC@;border-color:@ACC@;color:#fff}
+.zwpop__panel[hidden]{display:none}
+.zwpop .zrl__track{gap:12px}
+.zwpop .zc{width:148px;max-width:160px}
+@media(min-width:1024px){.zwpop .zc{width:150px}}
+@media(min-width:1440px){.zwpop .zc{width:156px}}
+
+/* B04 catalog-added feed */
+.zadded{margin:8px 0 28px}
+.zadded__h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 12px}
+.zadded__h h2{margin:0;font-size:22px;font-weight:600}
+.zadded__list{display:grid;gap:10px;grid-template-columns:1fr}
+@media(min-width:900px){.zadded__list{grid-template-columns:1fr 1fr}}
+.zadded__row{display:grid;grid-template-columns:60px 1fr auto;gap:12px;align-items:center;
+min-height:96px;padding:8px;border:1px solid @LINE@;border-radius:10px;background:@SURF@;color:inherit;text-decoration:none}
+.zadded__row img,.zadded__ph{width:60px;height:90px;object-fit:cover;border-radius:4px;background:#222}
+.zadded__t{font-size:15px;font-weight:700;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zadded__m{font-size:12px;color:@DIM@;margin:4px 0 0}
+.zadded__when{font-size:12px;color:@ACC@;white-space:nowrap}
+
+/* B05 kind entry cards */
+.zkinds{display:grid;gap:12px;grid-template-columns:1fr;margin:8px 0 28px}
+@media(min-width:700px){.zkinds{grid-template-columns:repeat(3,1fr)}}
+.zkind{display:flex;flex-direction:column;justify-content:flex-end;min-height:150px;max-height:190px;
+padding:18px;border-radius:14px;background:linear-gradient(160deg,@SURF@,@RAIL@);border:1px solid @LINE@;color:#fff;text-decoration:none}
+.zkind b{font-size:22px;font-weight:700}
+.zkind span{font-size:13px;opacity:.85;margin-top:6px}
+.zkind em{font-style:normal;font-size:12px;margin-top:10px;opacity:.75}
+
 .zsec{margin:26px 0 30px}
 .zsec__h{display:flex;align-items:baseline;justify-content:space-between;
 gap:12px;margin:0 0 10px}
@@ -4523,6 +4582,134 @@ class ВидЗона(Вид):
         return f'<nav class="zcr" aria-label="Хлебные крошки">{" / ".join(куски)}</nav>'
 
     # --- страницы -----------------------------------------------------
+    # --- B02–B05 home building blocks ---------------------------------
+    def _герой_кандидат(self, weekly, pop_films, pop_series, pop_anim):
+        """Stable hero from weekly snapshot membership; no request-time random."""
+        for набор in (pop_films, pop_series, pop_anim):
+            for з in набор:
+                return з
+        # last-good: newest catalog item with poster
+        for з in sorted(self.д.items, key=lambda x: x.get("published_at") or "", reverse=True)[:40]:
+            if з.get("poster"):
+                return з
+        return None
+
+    def герой(self, з) -> str:
+        if not з:
+            return (f'<section class="zhero zhero--compact" aria-label="Введение">'
+                    f'<h1>{html.escape(self.се["лид"])}</h1>'
+                    f'<p class="zhero__meta">Фильмы, сериалы и анимация в каталоге.</p>'
+                    f'</section>')
+        д = self.деталь(з["slug"])
+        playable = состояние_плеера(д)[0] == "playable"
+        title = з.get("title") or "Без названия"
+        year = з.get("year") or ""
+        kind = з.get("kind") or ""
+        desc = (д.get("description") or "").strip()
+        poster = з.get("poster") or ""
+        href = f'/title/{html.escape(з["slug"])}/'
+        media = (f'<div class="zhero__media"><img src="{html.escape(poster)}" alt="{html.escape(title)}" '
+                 f'width="640" height="360" loading="eager"></div>' if poster else
+                 '<div class="zhero__media" aria-hidden="true"></div>')
+        desc_html = f'<p class="zhero__desc">{html.escape(desc[:280])}</p>' if desc else ""
+        ctas = [f'<a class="secondary" href="{href}">Подробнее</a>']
+        if playable:
+            ctas.insert(0, f'<a class="primary" href="{href}">Смотреть</a>')
+        return (
+            f'<section class="zhero" data-hero-slug="{html.escape(з["slug"])}" '
+            f'data-hero-recompute="0">'
+            f'{media}<div class="zhero__body">'
+            f'<p class="zhero__kicker">Сейчас на Zona</p>'
+            f'<h1>{html.escape(title)}</h1>'
+            f'<p class="zhero__meta">{html.escape(" · ".join(str(x) for x in (kind, year) if x))}</p>'
+            f'{desc_html}<div class="zhero__cta">{"".join(ctas)}</div>'
+            f'</div></section>')
+
+    def недельный_блок(self, pop_films, pop_series, pop_anim, weekly) -> str:
+        """B03: one weekly block with tabs; honest rating-week label."""
+        week_id = (weekly or {}).get("week_id") or ""
+        digest = ((weekly or {}).get("digest") or "")[:12]
+        tabs = [
+            ("films", "Фильмы", pop_films, "/movies/"),
+            ("series", "Сериалы", pop_series, "/series/"),
+            ("anim", "Анимация", pop_anim, "/animation/"),
+        ]
+        # Prefer first non-empty tab as default
+        default = next((t[0] for t in tabs if t[2]), "films")
+        tab_html = []
+        panels = []
+        for key, label, items, cta in tabs:
+            cur = ' aria-current="true"' if key == default else ""
+            tab_html.append(
+                f'<a href="#zwpop-{key}" data-zwpop-tab="{key}"{cur}>{html.escape(label)}</a>')
+            hidden = "" if key == default else " hidden"
+            body = self.карусель(f"weekly-{key}", items) if items else ""
+            panels.append(
+                f'<div class="zwpop__panel" id="zwpop-{key}" data-zwpop-panel="{key}"{hidden}>'
+                f'{body}</div>')
+        if not any(t[2] for t in tabs):
+            return ""
+        meta = f' data-week-id="{html.escape(week_id)}" data-weekly-digest="{html.escape(digest)}"' if week_id else ""
+        return (
+            f'<section class="zwpop" aria-labelledby="zwpop-h"{meta}>'
+            f'<div class="zwpop__h"><h2 id="zwpop-h">Высокие оценки недели</h2>'
+            f'<a href="/catalog/?sort=rating">Смотреть всё</a></div>'
+            f'<div class="zwpop__tabs" role="tablist">{"".join(tab_html)}</div>'
+            f'{"".join(panels)}</section>'
+            '<script>(function(){document.querySelectorAll("[data-zwpop-tab]").forEach(function(a){'
+            'a.addEventListener("click",function(e){e.preventDefault();var k=a.getAttribute("data-zwpop-tab");'
+            'document.querySelectorAll("[data-zwpop-tab]").forEach(function(x){x.removeAttribute("aria-current");});'
+            'a.setAttribute("aria-current","true");'
+            'document.querySelectorAll("[data-zwpop-panel]").forEach(function(p){'
+            'p.hidden=p.getAttribute("data-zwpop-panel")!==k;});});});})();</script>')
+
+    def новое_в_каталоге(self, события) -> str:
+        """B04: catalog_added_at events; hide block if fewer than 1 verified."""
+        if not события:
+            return ""
+        rows = []
+        for з, when, precision in события:
+            title = з.get("title") or "Без названия"
+            href = f'/title/{html.escape(з["slug"])}/'
+            poster = з.get("poster") or ""
+            thumb = (f'<img src="{html.escape(poster)}" alt="" width="60" height="90" loading="lazy">'
+                     if poster else '<span class="zadded__ph" aria-hidden="true"></span>')
+            meta = " · ".join(str(x) for x in (з.get("kind"), з.get("year")) if x)
+            if precision == "date-only":
+                label = f"Добавлено {when}"
+            else:
+                label = f"Добавлено {when}"
+            rows.append(
+                f'<a class="zadded__row" href="{href}">{thumb}<span>'
+                f'<p class="zadded__t">{html.escape(title)}</p>'
+                f'<p class="zadded__m">{html.escape(meta)}</p></span>'
+                f'<span class="zadded__when">{html.escape(label)}</span></a>')
+        return (
+            '<section class="zadded" aria-labelledby="zadded-h">'
+            '<div class="zadded__h"><h2 id="zadded-h">Новое в каталоге</h2>'
+            '<a href="/new/?mode=added">Смотреть всё</a></div>'
+            f'<div class="zadded__list">{"".join(rows)}</div></section>')
+
+    def входы_видов(self) -> str:
+        """B05: Films / Series / Animation entry cards with full-scope counts."""
+        counts = {"Фильм": 0, "Сериал": 0, "Мультфильм": 0}
+        for з in self.д.items:
+            k = з.get("kind")
+            if k in counts:
+                counts[k] += 1
+        cards = [
+            ("Фильмы", "/movies/", counts["Фильм"], "Полный каталог фильмов"),
+            ("Сериалы", "/series/", counts["Сериал"], "Полный каталог сериалов"),
+            ("Анимация", "/animation/", counts["Мультфильм"], "Полный каталог анимации"),
+        ]
+        parts = []
+        for title, href, count, desc in cards:
+            parts.append(
+                f'<a class="zkind" href="{href}"><b>{html.escape(title)}</b>'
+                f'<span>{html.escape(desc)}</span>'
+                f'<em>{count} в каталоге</em></a>')
+        return f'<section class="zkinds" aria-label="Разделы каталога">{"".join(parts)}</section>'
+
     def главная(self) -> str:
         """Пять горизонтальных лент, и ни одна не повторяет выборку другой.
 
@@ -4587,21 +4774,6 @@ class ВидЗона(Вид):
         for з in pop_films + pop_series + pop_anim:
             занято.add(з["slug"])
 
-        ленты = [
-            ("pop-films", "Высокий рейтинг среди недавних фильмов", "/movies/",
-             pop_films, ""),
-            ("pop-series", "Высокий рейтинг среди недавних сериалов", "/series/",
-             pop_series, ""),
-            ("new-films", "Добавленные недавно фильмы", "/movies/",
-             выбрать("Фильм", свежесть, условие=есть_источник),
-             ""),
-            ("new-eps", "Недавно добавленные сериалы", "/series/",
-             выбрать("Сериал", свежесть,
-                     условие=lambda з: есть_серии(з) and есть_источник(з)),
-             ""),
-            ("pop-anim", "Высокий рейтинг среди недавней анимации", "/animation/",
-             pop_anim, ""),
-        ]
         коллекции_html = ""
         снимок = Снимок.получить(self.д, self.п)
         if КОЛЛЕКЦИИ is not None and снимок is not None:
@@ -4624,7 +4796,7 @@ class ВидЗона(Вид):
                 "genre_animation": "Анимация",
                 "popular": "С высокими оценками",
             }
-            for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО)[:12]:
+            for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО)[:8]:
                 if not спец.доступна:
                     continue
                 данные = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО,
@@ -4633,7 +4805,8 @@ class ВидЗона(Вид):
                     continue
                 ключ = getattr(спец, "collection_key", "") or ""
                 подпись = подписи.get(ключ) or (данные.title or "Подборка")
-                # Human label only — never expose internal catalog counts.
+                if подпись == данные.title:
+                    подпись = "Подборка"
                 кол_карточки.append(
                     f'<a class="zhub__c" href="{html.escape(спец.canonical_path)}">'
                     f'<span class="zhub__t">{html.escape(данные.title)}</span>'
@@ -4650,21 +4823,37 @@ class ВидЗона(Вид):
             for код, имя in ZONA_GENRE_NAV)
         блок_жанров = (
             f'<section class="zgenres" aria-labelledby="zgenres-h">'
-            f'<h2 class="zgenres__h" id="zgenres-h">Смотреть по жанрам</h2>'
-            f'<nav class="zgenres__nav" aria-label="Смотреть по жанрам">{жанр_навигация}</nav>'
+            f'<h2 class="zgenres__h" id="zgenres-h">Жанры</h2>'
+            f'<nav class="zgenres__nav" aria-label="Жанры">{жанр_навигация}</nav>'
+            f'<p class="zsub"><a href="/catalog/">Все жанры</a></p>'
             f'</section>') if жанр_навигация else ""
-        куски = [f'<h1 class="zh">{html.escape(self.се["лид"])}</h1>'
-                 '<p class="zsub">Фильмы, сериалы и анимация. '
-                 '<a href="/catalog/">Каталог</a> · '
-                 '<a href="/movies/">Кино</a> · '
-                 '<a href="/series/">Сериалы</a> · '
-                 '<a href="/animation/">Анимация</a> · '
-                 '<a href="/collections/">Подборки</a> · '
-                 '<a href="/new/">Что нового</a> · '
-                 '<a href="/search/">Поиск</a></p>']
-        # Fixed shelf order; genre chips once — no per-genre mega-shelves.
-        for л in ленты:
-            куски.append(self.секция(*л))
+
+        added_events = []
+        for з in выбрать(None, свежесть, сколько=12, условие=есть_источник):
+            raw = з.get("published_at") or ""
+            if not raw:
+                continue
+            if "T" in raw:
+                try:
+                    from datetime import datetime as _dt
+                    d = _dt.fromisoformat(raw.replace("Z", "+00:00"))
+                    when = d.strftime("%d.%m.%Y, %H")
+                    precision = "datetime"
+                except ValueError:
+                    when = raw[:10]
+                    precision = "date-only"
+            else:
+                when = raw[:10]
+                precision = "date-only"
+            added_events.append((з, when, precision))
+
+        hero = self._герой_кандидат(weekly, pop_films, pop_series, pop_anim)
+        куски = [
+            self.герой(hero),
+            self.недельный_блок(pop_films, pop_series, pop_anim, weekly),
+            self.новое_в_каталоге(added_events),
+            self.входы_видов(),
+        ]
         if блок_жанров:
             куски.append(блок_жанров)
         if коллекции_html:
@@ -4673,12 +4862,12 @@ class ВидЗона(Вид):
             '<section class="zsec zsec--seo" aria-labelledby="zona-seo-h">'
             '<h2 id="zona-seo-h">Смотреть кино и сериалы на Zona</h2>'
             f'<p>{html.escape(self.имя)} — витрина фильмов, сериалов и анимации. '
-            "На главной собраны высокие оценки среди недавних поступлений, "
-            "свежие фильмы и сериалы и анимация; "
+            "На главной — редакционный акцент, высокие оценки текущей недели, "
+            "недавние поступления в каталог и входы в разделы; "
             "полный список открывается в каталоге с фильтрами по виду, жанру, году "
             "и стране.</p>"
             "<p>Разделы "
-            '<a href="/movies/">Кино</a>, '
+            '<a href="/movies/">Фильмы</a>, '
             '<a href="/series/">Сериалы</a> и '
             '<a href="/animation/">Анимация</a> '
             "помогают сузить выбор. Жанровые кнопки ведут в каталог с уже выбранным "

@@ -124,10 +124,14 @@ def test_home_renders_header_nav_search_no_side_rail(зона):
     assert "Новинки" in о.тело
     assert "Фильмы" in о.тело
     assert "Каталог" in о.тело
-    assert "Обзор" not in о.тело
+    nav = о.тело.split('id="zhd-nav"', 1)[1].split("</nav>", 1)[0]
+    assert ">Главная<" in nav and ">Обзор<" not in nav
+    assert ">Новинки<" in nav and ">Что нового<" not in nav
+    assert ">Фильмы<" in nav
+    assert 'data-empty-submit="forbid"' in о.тело
+    assert "zhd__searchbtn" in о.тело
     assert "СКРИПТ_ЗОНА_ШАПКА" not in о.тело  # source name never leaks
     assert "zhd-nav" in о.тело
-    assert 'data-empty-submit="forbid"' in о.тело
     assert "noindex" in о.тело
     # Side genre rail must stay suppressed in CSS, not stuck to the page.
     assert "zrail" in зона.ЗОНА_СТИЛЬ

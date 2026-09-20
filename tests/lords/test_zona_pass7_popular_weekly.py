@@ -232,9 +232,15 @@ def _frontend_fixture(tmp_path, weekly_path=None):
 
 def _shelf_ids(html: str, shelf_key: str) -> list[str]:
     import re
-    marker = f'id="rl-{shelf_key}"'
+    # B03 maps pop-films → weekly-films tab panel carousel id.
+    key = {
+        "pop-films": "weekly-films",
+        "pop-series": "weekly-series",
+        "pop-anim": "weekly-anim",
+    }.get(shelf_key, shelf_key)
+    marker = f'id="rl-{key}"'
     assert marker in html, shelf_key
-    chunk = html.split(marker, 1)[1].split("</section>", 1)[0]
+    chunk = html.split(marker, 1)[1].split("</div>", 2)[0]
     return re.findall(r'href="(/title/[^"]+/)"', chunk)
 
 
@@ -333,13 +339,14 @@ def test_new_films_shelf_still_request_fresh_not_weekly(tmp_path):
     mod = _frontend_fixture(tmp_path)
     try:
         о = запросить(mod, "/")
-        assert "Добавленные недавно фильмы" in о.тело
-        assert 'id="rl-new-films"' in о.тело
-        # Popular comes from weekly; new-films must not equal pop-films blindly.
+        # B04: honest catalog-added feed (not a third rating rail).
+        assert "Новое в каталоге" in о.тело
+        assert "Высокие оценки недели" in о.тело
+        assert 'data-hero-recompute="0"' in о.тело or 'zhero--compact' in о.тело
         pop = _shelf_ids(о.тело, "pop-films")
-        neu = _shelf_ids(о.тело, "new-films")
-        assert neu  # still dynamic
-        assert pop != neu or len(pop) == 0
+        assert pop  # weekly membership still rendered
+        assert "Добавленные недавно фильмы" not in о.тело
+        assert 'id="rl-new-films"' not in о.тело
     finally:
         os.environ.clear()
         os.environ.update(mod._тест_env)

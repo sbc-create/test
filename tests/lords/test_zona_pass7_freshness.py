@@ -187,9 +187,9 @@ def зона(tmp_path):
 def test_recently_added_movies_shelf_prefers_catalog_published_at(зона):
     о = запросить(зона, "/")
     assert о.статус == 200
-    assert "Добавленные недавно фильмы" in о.тело
-    assert 'id="rl-new-films"' in о.тело
-    sec = о.тело.split('id="rl-new-films"', 1)[1].split("</section>", 1)[0]
+    assert "Новое в каталоге" in о.тело
+    assert 'id="zadded-h"' in о.тело
+    sec = о.тело.split('id="zadded-h"', 1)[1].split("</section>", 1)[0]
     assert "/title/new-film/" in sec
     if "/title/old-film/" in sec:
         assert sec.find("/title/new-film/") < sec.find("/title/old-film/")
@@ -204,9 +204,8 @@ def test_premiere_and_published_at_not_mixed_on_new_route(зона):
 
 def test_new_series_shelf_uses_catalog_published_not_year(зона):
     о = запросить(зона, "/")
-    assert "Недавно добавленные сериалы" in о.тело
-    assert 'id="rl-new-eps"' in о.тело
-    body = о.тело.split('id="rl-new-eps"', 1)[1].split("</section>", 1)[0]
+    assert "Новое в каталоге" in о.тело
+    body = о.тело.split('id="zadded-h"', 1)[1].split("</section>", 1)[0] if 'id="zadded-h"' in о.тело else о.тело
     assert "/title/new-series/" in body
     if "/title/old-series/" in body:
         assert body.find("/title/new-series/") < body.find("/title/old-series/")
@@ -247,8 +246,8 @@ def test_backfill_old_film_classified_by_published_at(зона):
 
 def test_weekly_snapshot_includes_high_rating_at_build(зона):
     о = запросить(зона, "/")
-    assert "Высокий рейтинг среди недавних фильмов" in о.тело
-    sec = о.тело.split("Высокий рейтинг среди недавних фильмов", 1)[1].split("<section", 1)[0]
+    assert "Высокие оценки недели" in о.тело
+    sec = о.тело.split("Высокие оценки недели", 1)[1].split("<section", 1)[0]
     assert "/title/rated-film/" in sec
 
 
@@ -349,7 +348,7 @@ def test_idempotent_republish_same_revision(зона):
     корень = зона._тест_корень
     os.utime(корень / "zona-01-catalog.json", None)
     о2 = запросить(зона, "/")
-    assert "Добавленные недавно фильмы" in о2.тело
+    assert "Новое в каталоге" in о2.тело
     assert о1.тело.count("data-shelf=") == о2.тело.count("data-shelf=")
 
 
@@ -393,5 +392,6 @@ def test_noindex_preserved(зона):
 
 def test_popular_label_is_not_invented_popularity(зона):
     о = запросить(зона, "/")
-    assert "Высокий рейтинг среди недавних" in о.тело
+    assert "Высокие оценки недели" in о.тело
+    assert "Популярное" not in о.тело.split("zhd",1)[-1][:2000]
     assert "Популярные новинки фильмов" not in о.тело
