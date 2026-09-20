@@ -1,0 +1,16 @@
+{
+  "COMMENTS_MODERATION_READY": 1,
+  "COMMENTS_ADMIN_PREVIEW_READY": 1,
+  "actions": [
+    "approve",
+    "quarantine",
+    "reject",
+    "remove",
+    "restore",
+    "mark_spoiler",
+    "dismiss_report"
+  ],
+  "approve_does_not_publish_while_dark": 1,
+  "soft_delete_only": 1,
+  "edit_history_immutable": 1
+}

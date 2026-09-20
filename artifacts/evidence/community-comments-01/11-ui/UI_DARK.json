@@ -1,0 +1,12 @@
+{
+  "COMMENTS_UI_READY": 1,
+  "hidden_by_default": 1,
+  "admin_preview_mount": 1,
+  "assets": [
+    "factory/community/frontend/community_comments.js",
+    "factory/community/frontend/community_comments.css",
+    "factory/community/frontend/community_comments_partial.html"
+  ],
+  "viewports_targeted": [1440, 768, 390],
+  "external_comments_as_fixtures": 0
+}

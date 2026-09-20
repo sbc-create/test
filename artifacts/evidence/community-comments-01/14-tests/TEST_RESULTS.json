@@ -1,0 +1,21 @@
+{
+  "TESTS": "49 passed comments suite + 39 passed ratings stage06 suite",
+  "TEST_RUNS_CONSECUTIVE": 2,
+  "comments_tests": [
+    "test_comments_schema.py",
+    "test_comments_api.py",
+    "test_comments_security.py",
+    "test_comments_pii.py",
+    "test_comments_moderation.py",
+    "test_comments_identity.py",
+    "test_comments_ratings_isolation.py",
+    "test_comments_corpus_dedupe.py",
+    "test_comments_source_policy.py",
+    "test_comments_research_pii.py"
+  ],
+  "ratings_regression_pass": 1,
+  "run1_exit": 0,
+  "run2_exit": 0,
+  "run1_passed": 49,
+  "run2_passed": 49
+}

@@ -1,0 +1,24 @@
+{
+  "COMMENTS_API_READY": 1,
+  "COMMENTS_API_WRITE_ENABLED": 0,
+  "COMMENTS_PUBLICATION_ENABLED": 0,
+  "COMMENTS_PUBLIC_READ_ENABLED": 0,
+  "COMMENTS_ADMIN_PREVIEW_ENABLED": 1,
+  "endpoints_dark": [
+    "create",
+    "edit",
+    "delete",
+    "reply",
+    "list_published",
+    "list_own_pending",
+    "report",
+    "moderation_queue",
+    "approve",
+    "reject",
+    "quarantine",
+    "restore"
+  ],
+  "identity": "SIGNED_PSEUDONYMOUS_DEVICE_V1",
+  "cookie": "yummy_cr_vid",
+  "second_cookie": 0
+}

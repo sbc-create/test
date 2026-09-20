@@ -1,0 +1,14 @@
+{
+  "COMMENTS_SECURITY_PASS": 1,
+  "xss_sanitization": 1,
+  "unicode_normalization": 1,
+  "csrf_origin": 1,
+  "rate_limit": 1,
+  "cross_space_parent_blocked": 1,
+  "reply_depth_capped": 1,
+  "duplicate_submission_conflict": 1,
+  "client_supplied_user_id_rejected": 1,
+  "ADMIN_FAKE_COMMENT_INSERT": 0,
+  "ADMIN_IMPERSONATE_USER": 0,
+  "ADMIN_SILENT_TEXT_REWRITE": 0
+}

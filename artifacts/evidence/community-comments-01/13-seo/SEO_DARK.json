@@ -1,0 +1,9 @@
+{
+  "COMMENTS_SEO_RENDERING_ENABLED": 0,
+  "COMMENTS_STRUCTURED_DATA_ENABLED": 0,
+  "COMMENTS_IN_SITEMAP": 0,
+  "INDEXING_MUTATIONS": 0,
+  "LIVE_INDEXABILITY_BEFORE": "OPEN",
+  "LIVE_INDEXABILITY_AFTER": "OPEN",
+  "note": "Dark stage — no SEO rendering of comments; yummyani.site indexability not mutated by this stage"
+}
