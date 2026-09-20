@@ -2,56 +2,65 @@
   "blocks": [
     {
       "block_id": "B00",
-      "state": "PASS",
+      "state": "PASS_LOCAL",
       "close_condition": "frozen digest + reference + manifests",
       "acceptance_contract_gate": "PASS",
       "reference_gate": "PASS",
-      "closed_at": "2026-09-20T12:55:00Z"
+      "closed_at": "2026-09-20T13:10:00Z"
     },
     {
       "block_id": "B01",
-      "state": "PENDING",
-      "close_condition": "responsive+a11y header"
+      "state": "PASS_LOCAL",
+      "close_condition": "responsive+a11y header",
+      "closed_at": "2026-09-20T13:10:00Z"
     },
     {
       "block_id": "B02",
-      "state": "PENDING",
-      "close_condition": "hero snapshot/geometry"
+      "state": "PASS_LOCAL",
+      "close_condition": "hero snapshot/geometry",
+      "closed_at": "2026-09-20T13:10:00Z"
     },
     {
       "block_id": "B03",
-      "state": "PENDING",
-      "close_condition": "weekly snapshot gates"
+      "state": "PASS_LOCAL",
+      "close_condition": "weekly snapshot gates",
+      "closed_at": "2026-09-20T13:10:00Z"
     },
     {
       "block_id": "B04",
-      "state": "PENDING",
-      "close_condition": "true catalog-added events"
+      "state": "PASS_LOCAL",
+      "close_condition": "true catalog-added events",
+      "closed_at": "2026-09-20T13:10:00Z"
     },
     {
       "block_id": "B05",
-      "state": "PENDING",
-      "close_condition": "full kind counts"
+      "state": "PASS_LOCAL",
+      "close_condition": "full kind counts",
+      "closed_at": "2026-09-20T13:10:00Z"
     },
     {
       "block_id": "B06",
-      "state": "PENDING",
-      "close_condition": "genre mapping/count oracle"
+      "state": "PASS_LOCAL",
+      "close_condition": "genre mapping/count oracle",
+      "closed_at": "2026-09-20T13:10:00Z"
     },
     {
       "block_id": "B07",
-      "state": "PENDING",
-      "close_condition": "distinct home collections"
+      "state": "PASS_LOCAL",
+      "close_condition": "distinct home collections",
+      "closed_at": "2026-09-20T13:10:00Z"
     },
     {
       "block_id": "B08",
-      "state": "PENDING",
-      "close_condition": "honest/collapsed about"
+      "state": "PASS_LOCAL",
+      "close_condition": "honest/collapsed about",
+      "closed_at": "2026-09-20T13:10:00Z"
     },
     {
       "block_id": "B09",
-      "state": "PENDING",
-      "close_condition": "card profiles/fallbacks"
+      "state": "PASS_LOCAL",
+      "close_condition": "card profiles/fallbacks",
+      "closed_at": "2026-09-20T13:10:00Z"
     },
     {
       "block_id": "B10",
@@ -65,8 +74,9 @@
     },
     {
       "block_id": "B12",
-      "state": "PENDING",
-      "close_condition": "taxonomy years/countries/genres"
+      "state": "PASS_LOCAL",
+      "close_condition": "taxonomy years/countries/genres",
+      "closed_at": "2026-09-20T13:10:00Z"
     },
     {
       "block_id": "B13",
@@ -115,8 +125,9 @@
     },
     {
       "block_id": "B22",
-      "state": "PENDING",
-      "close_condition": "footer/system states"
+      "state": "PASS_LOCAL",
+      "close_condition": "footer/system states",
+      "closed_at": "2026-09-20T13:10:00Z"
     },
     {
       "block_id": "B23",
@@ -129,5 +140,6 @@
       "close_condition": "immutable artifact/owner packet"
     }
   ],
-  "updated_at": "2026-09-20T12:55:00Z"
+  "updated_at": "2026-09-20T13:10:00Z",
+  "note": "Continued after REFERENCE_OWNER_DECISION; local presentation progress; no production deploy"
 }
