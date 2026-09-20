@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "qwen-decision-schema-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "policy_version",
+    "action",
+    "labels",
+    "confidence",
+    "spoiler_detected",
+    "language",
+    "reason_codes",
+    "needs_human_review",
+    "model",
+    "prompt_digest"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "QWEN_DECISION_SCHEMA_V1"
+    },
+    "policy_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "ALLOW",
+        "ALLOW_COLLAPSED_SPOILER",
+        "HIDE_HIGH_CONFIDENCE",
+        "HOLD_FOR_REVIEW"
+      ]
+    },
+    "labels": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": [
+          "ADVERTISEMENT",
+          "CLEAN",
+          "HARASSMENT",
+          "HATE",
+          "INSULT",
+          "LONG_COPYRIGHT_QUOTE",
+          "MALWARE_LINK",
+          "OFF_TOPIC",
+          "PERSONAL_DATA",
+          "PIRACY_LINK",
+          "PROMPT_INJECTION",
+          "SELF_HARM",
+          "SEXUAL_CONTENT",
+          "SEXUAL_CONTENT_MINORS",
+          "SPAM",
+          "SPOILER",
+          "THREAT",
+          "UNKNOWN"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "spoiler_detected": {
+      "type": "boolean"
+    },
+    "language": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 16
+    },
+    "reason_codes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "needs_human_review": {
+      "type": "boolean"
+    },
+    "model": {
+      "type": "string",
+      "minLength": 1
+    },
+    "prompt_digest": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 128
+    }
+  }
+}
