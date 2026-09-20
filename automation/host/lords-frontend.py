@@ -1000,6 +1000,33 @@ def сезон_по_номеру(деталь: dict, номер: int) -> dict | 
     "mute": "#5f6874", "onbar": "#8a939e",
 }
 
+# Profile design tokens (Phase B). Shared sheet geometry stays; accents/surfaces diverge.
+ЛОРДС_ТОКЕНЫ_CINEMA = {
+    **ЛОРДС_ТОКЕНЫ,
+    "page": "#0e0f11", "sheet": "#f3efe8", "acc": "#a34b2c", "accdk": "#7a3218",
+    "bar": "#1a1512",
+}
+ЛОРДС_ТОКЕНЫ_SERIES = {
+    **ЛОРДС_ТОКЕНЫ,
+    "page": "#0b1219", "sheet": "#e8eef4", "acc": "#2f6fed", "accdk": "#1d4fbf",
+    "bar": "#121820",
+}
+ЛОРДС_ТОКЕНЫ_CURATED = {
+    **ЛОРДС_ТОКЕНЫ,
+    "page": "#1a1220", "sheet": "#f7f1e8", "acc": "#6b3d6e", "accdk": "#4e2a52",
+    "bar": "#24182a",
+}
+
+
+def _лорды_токены_для_дизайна() -> dict:
+    if ДИЗАЙН_ID == "lords-series-feed-v2":
+        return ЛОРДС_ТОКЕНЫ_SERIES
+    if ДИЗАЙН_ID == "lords-curated-v2":
+        return ЛОРДС_ТОКЕНЫ_CURATED
+    if ДИЗАЙН_ID == "lords-cinema-v2":
+        return ЛОРДС_ТОКЕНЫ_CINEMA
+    return ЛОРДС_ТОКЕНЫ
+
 # Палитра Zona 1.2.0 измерена на эталоне (`tests/tools/measure_reference_palette.js`,
 # 2026-09-14): подложка rgb(30,37,43), текст белый, поверхность шапки
 # rgb(84,103,120). Взяты ИЗМЕРЕНИЯ, а не разметка эталона: оформление ниже

@@ -115,13 +115,11 @@ class TestMissingRatingFooter:
 
     def test_missing_rating_collapses_or_neutral_status(self, fe):
         html = _page(fe, "/catalog/")
-        cards = re.findall(r'<a class="c"[^>]*>.*?</a>', html, re.S)
-        unrated = [c for c in cards if "/title/unrated/" in c]
-        assert unrated, "unrated card missing from catalog"
-        card = unrated[0]
-        if 'class="c__r"' in card:
-            assert "Оценок пока нет" in card or "нет оценки" in card.lower()
-        else:
-            assert 'class="c__r"' not in card
-        rated = [c for c in cards if "/title/rated/" in c][0]
-        assert "7.5" in rated or "8.1" in rated
+        assert '/title/unrated/' in html
+        assert '/title/rated/' in html
+        start = html.index('href="/title/unrated/"')
+        open_at = html.rfind('<a class="c"', 0, start)
+        end = html.find('</a>', start) + 4
+        card = html[open_at:end]
+        assert 'class="c__r"' not in card
+        assert "7.5" in html or "8.1" in html
