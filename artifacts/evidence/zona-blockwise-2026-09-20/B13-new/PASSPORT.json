@@ -1,0 +1,23 @@
+{
+  "block": "B13",
+  "title": "/new/ temporal modes",
+  "status": "PASS_LOCAL",
+  "contract_digest": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+  "gates": {
+    "NEW_MODE_COUNT": 2,
+    "NEW_MODE_WITHOUT_LEDGER_COUNT": 0,
+    "VISIBLE_TIMESTAMP_EQUALS_MODE_SORT_FIELD": 1,
+    "CATALOG_COUNT_MISLABELED_AS_NEW_COUNT": 0,
+    "FUTURE_PREMIERE_LABELED_AS_ADDED": 0,
+    "EPISODE_FALLBACK_TO_TITLE_DATE": 0
+  },
+  "modes_published": ["premiere", "added"],
+  "modes_omitted_no_ledger": ["provider_available_at", "episode_released_at"],
+  "assumptions": [
+    "catalog published_at is the verified catalog_added_at proxy for mode=added",
+    "provider/episode event feeds absent in current sidecars → tabs omitted"
+  ],
+  "tests": "tests/lords/test_zona_blockwise_b13.py (PASS)",
+  "residual": [],
+  "updated_at": "2026-09-20T13:40:00Z"
+}
