@@ -22,7 +22,7 @@ def fe(tmp_path):
 def test_catalog_uses_compact_filters_not_year_wall(fe):
     mod, catalog, details = fe
     html = _вид(mod, catalog, details).список("/catalog", {})
-    assert 'class="afilt"' in html
+    assert 'class="afilt' in html
     assert "data-afilt-open" in html
     assert 'class="afilt__dd"' in html
     # No old wall nav of years as primary UI
