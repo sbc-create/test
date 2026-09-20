@@ -1,0 +1,41 @@
+{
+  "at_utc": "2026-09-20T10:10:50Z",
+  "block": "08",
+  "message_observed_by_owner": "Failed to allocate directory watch: Too many open files",
+  "service": "nova-lords-02.service",
+  "owner_restart_completed": true,
+  "classification": {
+    "NOT": "process_fd_exhaustion_RLIMIT_NOFILE",
+    "IS": "inotify_directory_watch_allocation_failure",
+    "systemd_phrase": "Failed to allocate directory watch",
+    "maps_to": "fs.inotify (instances and/or watches), not open file table exhaustion"
+  },
+  "limits_read": {
+    "fs.inotify.max_user_watches": 234322,
+    "fs.inotify.max_user_instances": 128,
+    "fs.file-nr": "22944 0 9223372036854775807",
+    "fs.file-max": "9223372036854775807",
+    "observer_RLIMIT_NOFILE_soft_hard": [1048576, 1048576]
+  },
+  "visible_to_uid_1001_only": {
+    "inotify_instances": 15,
+    "inotify_watches": 45,
+    "note": "root/system unit inotify consumers are not readable without elevated access; host-wide consumer of the 128-instance budget not fully enumerated"
+  },
+  "journal_around_09_48_utc": {
+    "readable": false,
+    "reason": "journalctl requires adm/systemd-journal; current user sees no entries",
+    "command_for_owner": "journalctl -u nova-lords-02.service --since '2026-09-20 09:45:00 UTC' --until '2026-09-20 09:55:00 UTC' --no-pager"
+  },
+  "risk": {
+    "restart_succeeded_despite_message": true,
+    "repeat_failure_risk": "MEDIUM",
+    "why": "max_user_instances=128 is low for a multi-unit host; Path/Directory watches from systemd can fail intermittently while ExecStart still succeeds"
+  },
+  "remediation_ready": true,
+  "remediation_command": "sudo sysctl -w fs.inotify.max_user_instances=512",
+  "remediation_persist": "echo fs.inotify.max_user_instances=512 | sudo tee /etc/sysctl.d/99-inotify-instances.conf && sudo sysctl --system",
+  "rollback_command": "sudo sysctl -w fs.inotify.max_user_instances=128",
+  "mutations_performed": 0,
+  "verdict": "RO_DIAGNOSIS_COMPLETE_AWAITING_OWNER_PERMISSION_TO_REMEDIATE"
+}
