@@ -71,12 +71,12 @@ def fe(tmp_path, monkeypatch):
     return мод
 
 
-def _home(мод):
+def _page(мод, path="/catalog/"):
     gathered = {"body": b""}
 
     class Stub(мод.Обработчик):
         def __init__(self):
-            self.path = "/"
+            self.path = path
             self.command = "GET"
             self.headers = {"Host": "test.example"}
 
@@ -100,28 +100,28 @@ def _home(мод):
             return W()
 
     s = Stub()
-    s.маршрут_1_1("/", {})
+    u = urlparse(path)
+    s.маршрут_1_1(u.path.rstrip("/") + "/" if u.path != "/" else "/", parse_qs(u.query))
     body = gathered["body"]
     return body.decode("utf-8") if isinstance(body, bytes) else body
 
 
 class TestMissingRatingFooter:
     def test_no_empty_black_rating_strip(self, fe):
-        html = _home(fe)
-        # Empty decorative strips are forbidden.
+        html = _page(fe, "/catalog/")
         assert 'class="c__r" aria-hidden="true"' not in html
         assert "КП<i>0</i>" not in html
         assert "IMDb<i>0</i>" not in html
 
     def test_missing_rating_collapses_or_neutral_status(self, fe):
-        html = _home(fe)
-        # Either no c__r at all for unrated, or an honest status string.
+        html = _page(fe, "/catalog/")
         cards = re.findall(r'<a class="c"[^>]*>.*?</a>', html, re.S)
         unrated = [c for c in cards if "/title/unrated/" in c]
-        assert unrated, "unrated card missing from home"
+        assert unrated, "unrated card missing from catalog"
         card = unrated[0]
         if 'class="c__r"' in card:
             assert "Оценок пока нет" in card or "нет оценки" in card.lower()
-        # Rated card still shows numbers
+        else:
+            assert 'class="c__r"' not in card
         rated = [c for c in cards if "/title/rated/" in c][0]
         assert "7.5" in rated or "8.1" in rated

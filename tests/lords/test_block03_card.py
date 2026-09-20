@@ -43,9 +43,10 @@ class TestBlock03Card:
 
     def test_missing_rating_not_zero(self):
         src = _карточка_src()
-        assert "aria-hidden=\"true\"" in src
         assert 'КП<i>0</i>' not in src
         assert "if кп or им:" in src
+        # Missing rating collapses the strip (no empty black footer).
+        assert 'aria-hidden="true"' not in src or 'полоса = ""' in src
 
     def test_rating_has_source_label(self):
         src = _карточка_src()
