@@ -1,0 +1,47 @@
+{
+  "block_id": "B10",
+  "status": "PASS_LOCAL_PENDING_LIVE",
+  "contract_sha256": "5f2112e25ef974333c388bad405abfae3c3d460a713b028afa3c0e549b8eaeb3",
+  "contract_mutated": 0,
+  "tests": {
+    "file": "tests/unit/test_animedia_parity03_b10.py",
+    "passed": 8,
+    "failed": 0
+  },
+  "policy": {
+    "title": "Похожее аниме",
+    "priority": [
+      "RecommendationSnapshot",
+      "DETERMINISTIC_METADATA_RELATED_V1",
+      "0px"
+    ],
+    "min_items": 4,
+    "max_items": 12,
+    "sort": [
+      "playable DESC",
+      "shared_genre_count DESC",
+      "year_distance ASC",
+      "canonical_title_id ASC"
+    ],
+    "excludes": [
+      "current_title",
+      "dups",
+      "broken_routes",
+      "cross_type_when_typed",
+      "random",
+      "fake_ratings",
+      "personalization_labels"
+    ]
+  },
+  "data_gaps": [
+    {
+      "gap_code": "RECOMMENDATIONS_DATA_GAP",
+      "affected_surface": "title/episode related shelf",
+      "fallback_used": "DETERMINISTIC_METADATA_RELATED_V1 when ≥4 verified candidates else 0px hidden section",
+      "user_visible_effect": "Похожее аниме from metadata overlap, or shelf collapsed to 0px",
+      "owner_or_feed_dependency": "approved RecommendationSnapshot per title_id",
+      "next_safe_step": "publish config/animedia-recommendations.json with by_title snapshots"
+    }
+  ],
+  "oracle_failures": 0
+}

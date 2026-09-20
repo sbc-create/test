@@ -1,0 +1,54 @@
+{
+  "owner_decision_id": "ANIMEDIA-B10-B16-20260920-01",
+  "updated_at": "2026-09-20T13:00:00Z",
+  "gaps": [
+    {
+      "gap_code": "CATALOG_FRESHNESS_DATA_GAP",
+      "affected_surface": "home/new catalog-added shelf",
+      "fallback_used": "0px or honest empty state",
+      "user_visible_effect": "Новое в каталоге collapsed or empty copy",
+      "owner_or_feed_dependency": "catalog_added ledger",
+      "next_safe_step": "publish verified catalog_added_at ledger"
+    },
+    {
+      "gap_code": "TOP100_DATA_GAP",
+      "affected_surface": "home Top-100 shelf",
+      "fallback_used": "shelf hidden",
+      "user_visible_effect": "Top-100 absent",
+      "owner_or_feed_dependency": "approved TopSnapshot",
+      "next_safe_step": "publish config/animedia-top100.json"
+    },
+    {
+      "gap_code": "WEEKLY_SNAPSHOT_DATA_GAP",
+      "affected_surface": "home weekly popular",
+      "fallback_used": "0px collapse",
+      "user_visible_effect": "Популярное за неделю absent",
+      "owner_or_feed_dependency": "WeeklyPopularSnapshot",
+      "next_safe_step": "publish config/animedia-weekly-popular.json"
+    },
+    {
+      "gap_code": "EPISODE_EVENT_DATA_GAP",
+      "affected_surface": "home new-episodes feed",
+      "fallback_used": "honest empty; no catalog date as air date",
+      "user_visible_effect": "Новые серии empty copy",
+      "owner_or_feed_dependency": "provider_became_playable events",
+      "next_safe_step": "publish provider playable event feed"
+    },
+    {
+      "gap_code": "RECOMMENDATIONS_DATA_GAP",
+      "affected_surface": "title/episode related shelf",
+      "fallback_used": "DETERMINISTIC_METADATA_RELATED_V1 when ≥4 else 0px",
+      "user_visible_effect": "Похожее аниме from metadata or hidden",
+      "owner_or_feed_dependency": "RecommendationSnapshot",
+      "next_safe_step": "publish config/animedia-recommendations.json"
+    },
+    {
+      "gap_code": "OWNER_DATA_REQUIRED",
+      "affected_surface": "footer contacts/legal",
+      "fallback_used": "omit inventable fields; keep verified only",
+      "user_visible_effect": "footer visual OK without invented email/Telegram/legal",
+      "owner_or_feed_dependency": "owner contact + legal URLs",
+      "next_safe_step": "provide verified owner.json fields"
+    }
+  ]
+}

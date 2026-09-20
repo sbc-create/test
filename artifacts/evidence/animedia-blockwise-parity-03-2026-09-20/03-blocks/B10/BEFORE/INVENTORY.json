@@ -1,0 +1,14 @@
+{
+  "block_id": "B10",
+  "captured_at": "2026-09-20T13:03:49Z",
+  "contract_sha256": "5f2112e25ef974333c388bad405abfae3c3d460a713b028afa3c0e549b8eaeb3",
+  "before_state": {
+    "shelf_title": "Смотрите также",
+    "algorithm": "ad_hoc_genre_kind_year",
+    "approved_snapshot": false,
+    "min_items_gate": false,
+    "empty_policy": "omit_section_without_gap_marker"
+  },
+  "root_cause": "Recommendations used ad-hoc genre/kind fill without approved RecommendationSnapshot, DETERMINISTIC_METADATA_RELATED_V1 contract, or ≥4 gate / 0px empty.",
+  "owner_decision_id": "ANIMEDIA-B10-B16-20260920-01"
+}

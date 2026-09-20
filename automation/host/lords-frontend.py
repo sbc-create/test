@@ -1953,8 +1953,12 @@ flex-wrap:nowrap;min-height:1.25em;align-items:center}
 .zt__r b,.zt__r i{color:var(--a-acc);font-weight:700;font-style:normal}
 .zt__r em{color:var(--a-mute);font-style:italic;visibility:hidden}
 .zsec--rel{margin-bottom:28px}
-.zsec--rel .zg{gap:14px}
-@media(min-width:1200px){.zsec--rel .zg{grid-template-columns:repeat(6,minmax(0,1fr))}}
+.zsec--rel[hidden],.zsec--rel-gap{display:none !important;height:0 !important;min-height:0 !important;
+margin:0 !important;padding:0 !important;border:0 !important;overflow:hidden !important}
+.zsec--rel .zg,.zsec--rel .zg--recommendation{gap:var(--a-grid-gap);
+grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.zsec--rel .zg,.zsec--rel .zg--recommendation{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1200px){.zsec--rel .zg,.zsec--rel .zg--recommendation{grid-template-columns:repeat(6,minmax(0,1fr))}}
 .ahome-eps{max-width:min(1760px,100%);margin-inline:auto}
 .ahome-eps--empty{margin:0 0 16px;max-height:96px;overflow:hidden}
 .ahome-eps--empty .zsec__h{margin:0 0 6px}
@@ -4927,6 +4931,20 @@ TOP100_DATA_GAP = 1
 АНИМЕДИА_DEFAULT_EPISODE_POLICY = "FIRST_PLAYABLE_DETERMINISTIC"
 DEFAULT_EPISODE_POLICY_DATA_GAP = 0
 АНИМЕДИА_DEFAULT_EPISODE_OWNER_DECISION = "ANIMEDIA-B10-B16-20260920-01"
+# B10: recommendations — approved RecommendationSnapshot, else deterministic metadata fallback.
+АНИМЕДИА_RECOMMENDATIONS_PATH = os.environ.get(
+    "ANIMEDIA_RECOMMENDATIONS_SNAPSHOT",
+    str(Path(__file__).resolve().parents[2] / "config" / "animedia-recommendations.json"),
+)
+АНИМЕДИА_REC_TITLE = "Похожее аниме"
+АНИМЕДИА_REC_MIN_ITEMS = 4
+АНИМЕДИА_REC_MAX_ITEMS = 12
+АНИМЕДИА_REC_FALLBACK_ALGORITHM = "DETERMINISTIC_METADATA_RELATED_V1"
+АНИМЕДИА_REC_REQUIRED_FIELDS = (
+    "ordered_title_ids", "algorithm_version", "digest",
+)
+# Declared P2 until an approved RecommendationSnapshot is present on disk.
+RECOMMENDATIONS_DATA_GAP = int(not Path(АНИМЕДИА_RECOMMENDATIONS_PATH).is_file())
 # Popular shelf: ONLY an owner/Core-approved WeeklyPopularSnapshot (§5.6).
 # Template must not rank catalog ratings into a public «Популярное за неделю».
 АНИМЕДИА_POPULAR_WINDOW = "weekly"
@@ -5145,6 +5163,201 @@ def аниме_top100_shelf_from_approved(
     if len(out) < min_items:
         return [], None
     return out, approved
+
+
+def _аниме_genre_codes(деталь: dict) -> list[str]:
+    """Verified genre codes only — never invent genres."""
+    коды = [str(к).strip() for к in (деталь.get("genre_codes") or []) if к]
+    if not коды:
+        for г in (деталь.get("genres") or []):
+            к = нормализовать(транслит(str(г)))
+            if к:
+                коды.append(к)
+    seen, out = set(), []
+    for к in коды:
+        if к and к not in seen:
+            seen.add(к)
+            out.append(к)
+    return out
+
+
+def _аниме_rec_digest(parts: list[str]) -> str:
+    import hashlib
+    payload = "\n".join(parts).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()[:32]
+
+
+def аниме_load_approved_recommendations(
+    seed_title_id: str,
+    *,
+    site_id: str = "",
+    path: str | Path | None = None,
+) -> dict | None:
+    """Load per-title RecommendationSnapshot or return None (RECOMMENDATIONS_DATA_GAP)."""
+    путь = Path(path or АНИМЕДИА_RECOMMENDATIONS_PATH)
+    if not путь.is_file():
+        return None
+    try:
+        raw = json.loads(путь.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    if not isinstance(raw, dict):
+        return None
+    entry = None
+    by_title = raw.get("by_title") or raw.get("by_title_id") or {}
+    if isinstance(by_title, dict) and seed_title_id in by_title:
+        entry = by_title[seed_title_id]
+    elif str(raw.get("seed_title_id") or raw.get("title_id") or "") == seed_title_id:
+        entry = raw
+    if not isinstance(entry, dict):
+        return None
+    for key in АНИМЕДИА_REC_REQUIRED_FIELDS:
+        if key not in entry or entry[key] in (None, "", []):
+            return None
+    ids = entry.get("ordered_title_ids")
+    if not isinstance(ids, list) or len(ids) < АНИМЕДИА_REC_MIN_ITEMS:
+        return None
+    seen, slugs = set(), []
+    for x in ids:
+        s = str(x or "").strip()
+        if not s or s == seed_title_id or s in seen:
+            continue
+        seen.add(s)
+        slugs.append(s)
+    if len(slugs) < АНИМЕДИА_REC_MIN_ITEMS:
+        return None
+    if site_id and str(raw.get("site_id") or entry.get("site_id") or "") not in {
+            "", site_id, "animedia", "*"}:
+        sid = str(raw.get("site_id") or entry.get("site_id") or "")
+        if site_id not in sid and sid not in site_id and not sid.startswith("animedia"):
+            return None
+    out = dict(entry)
+    out["slugs"] = slugs
+    out["seed_title_id"] = seed_title_id
+    out["display_approved"] = True
+    out["source"] = "RecommendationSnapshot"
+    out["algorithm_version"] = str(entry.get("algorithm_version") or "")
+    out["digest"] = str(entry.get("digest") or "")
+    out["membership_digest"] = str(
+        entry.get("membership_digest") or _аниме_rec_digest(slugs))
+    out["generated_at"] = str(entry.get("generated_at") or "")
+    return out
+
+
+def аниме_recommendations_from_approved(
+    items: list,
+    approved: dict | None,
+    *,
+    min_items: int = АНИМЕДИА_REC_MIN_ITEMS,
+    limit: int = АНИМЕДИА_REC_MAX_ITEMS,
+) -> tuple[list, dict | None]:
+    if not approved or not approved.get("display_approved"):
+        return [], None
+    by_slug = {з.get("slug"): з for з in items if з.get("slug")}
+    out = []
+    for slug in approved.get("slugs") or []:
+        з = by_slug.get(slug)
+        if з is None:
+            continue
+        # Broken / missing canonical route → skip.
+        url = str(з.get("url") or f"/title/{slug}/")
+        if not url.startswith("/title/"):
+            continue
+        out.append(з)
+        if len(out) >= limit:
+            break
+    if len(out) < min_items:
+        return [], None
+    return out, approved
+
+
+def аниме_build_deterministic_related(
+    seed_item: dict,
+    seed_detail: dict,
+    items: list,
+    detail_fn,
+    *,
+    min_items: int = АНИМЕДИА_REC_MIN_ITEMS,
+    limit: int = АНИМЕДИА_REC_MAX_ITEMS,
+) -> tuple[list, dict | None]:
+    """DETERMINISTIC_METADATA_RELATED_V1 from verified fields only.
+
+    Eligibility: active title, not seed, same content type (when known), ≥1
+    shared genre, working canonical route. Prefer playable. Sort:
+    playable DESC, shared_genre_count DESC, year_distance ASC, slug ASC.
+    """
+    seed_slug = str(seed_item.get("slug") or "")
+    if not seed_slug:
+        return [], None
+    seed_genres = set(_аниме_genre_codes(seed_detail))
+    if not seed_genres:
+        return [], None
+    seed_type = str(seed_detail.get("type") or "").strip().lower() or None
+    try:
+        seed_year = int(seed_item.get("year"))
+    except (TypeError, ValueError):
+        seed_year = None
+
+    scored = []
+    seen = {seed_slug}
+    for з in items:
+        slug = str(з.get("slug") or "")
+        if not slug or slug in seen:
+            continue
+        det = detail_fn(slug) if callable(detail_fn) else {}
+        if not isinstance(det, dict):
+            det = {}
+        genres = set(_аниме_genre_codes(det))
+        shared = len(seed_genres & genres)
+        if shared < 1:
+            continue
+        ctype = str(det.get("type") or "").strip().lower() or None
+        if seed_type and ctype and seed_type != ctype:
+            continue
+        url = str(з.get("url") or f"/title/{slug}/")
+        if not url.startswith("/title/"):
+            continue
+        playable = bool(det.get("playable"))
+        if not playable:
+            try:
+                playable = состояние_плеера(det)[0] == "playable"
+            except Exception:
+                playable = False
+        try:
+            year = int(з.get("year"))
+        except (TypeError, ValueError):
+            year = None
+        if seed_year is not None and year is not None:
+            year_distance = abs(seed_year - year)
+        else:
+            year_distance = 10_000  # unknown year not used as a preference signal
+        seen.add(slug)
+        scored.append((
+            0 if playable else 1,
+            -shared,
+            year_distance,
+            slug,
+            з,
+        ))
+    scored.sort(key=lambda t: (t[0], t[1], t[2], t[3]))
+    out = [t[4] for t in scored[:limit]]
+    if len(out) < min_items:
+        return [], None
+    slugs = [з["slug"] for з in out]
+    digest = _аниме_rec_digest(
+        [АНИМЕДИА_REC_FALLBACK_ALGORITHM, seed_slug, *slugs])
+    meta = {
+        "source": АНИМЕДИА_REC_FALLBACK_ALGORITHM,
+        "algorithm_version": АНИМЕДИА_REC_FALLBACK_ALGORITHM,
+        "digest": digest,
+        "membership_digest": _аниме_rec_digest(slugs),
+        "generated_at": str(МАНИФЕСТ.get("built_at") or МАНИФЕСТ.get("source_commit") or ""),
+        "seed_title_id": seed_slug,
+        "display_approved": False,
+        "fallback": True,
+        "slugs": slugs,
+    }
+    return out, meta
 
 
 def _аниме_формат_времени_анонса(published_at: str, precision: str) -> str:
@@ -5388,7 +5601,8 @@ class ВидАнимедиа(ВидЗона):
                 f'</div>')
 
     def плитки(self, набор, *, вариант: str = "catalog-title") -> str:
-        return ('<div class="zg" data-card-grid="' + html.escape(вариант) + '">'
+        extra = " zg--recommendation" if вариант == "recommendation" else ""
+        return (f'<div class="zg{extra}" data-card-grid="' + html.escape(вариант) + '">'
                 + "".join(self.плитка(з, вариант=вариант) for з in набор) + "</div>")
 
     def логотип(self) -> str:
@@ -5629,10 +5843,7 @@ class ВидАнимедиа(ВидЗона):
             f"{_скрипты_плеера(код)}</section>")
         текущий = (сезон_старт, эпизод_старт) if эпизод_старт is not None else None
         блок_серий = (self._серии(запись, сезоны, текущий=текущий) if сериал else "")
-        похожие = self.похожие(запись, деталь)
-        блок_похожих = (
-            f'<section class="zsec zsec--rel"><h2 class="zh zh--sm">Смотрите также</h2>'
-            f'{self.плитки(похожие, вариант="recommendation")}</section>' if похожие else "")
+        блок_похожих = self._блок_похожих(запись, деталь)
         блок_связей = self._франшиза(деталь)
         ad_title = ('<div class="zad-title" data-ad-slot="title-before-player" '
                     'data-ad-enabled="0"></div>')
@@ -5708,12 +5919,7 @@ class ВидАнимедиа(ВидЗона):
             f'<a class="aep-ctx__back" href="{title_path}">{html.escape(имя)}</a>'
             f'{orig_html}{counts_html}{desc_html}'
             f'</div></aside>')
-        похожие = self.похожие(запись, деталь)
-        блок_похожих = (
-            f'<section class="zsec zsec--rel" data-b09="recs">'
-            f'<h2 class="zh zh--sm">Смотрите также</h2>'
-            f'{self.плитки(похожие, вариант="recommendation")}</section>'
-            if похожие else "")
+        блок_похожих = self._блок_похожих(запись, деталь, extra_attrs=' data-b09="recs"')
         тело = (
             f'<div class="zwrap aep-page" data-b09="exact">'
             f'<h1 class="zh zh--ep">{html.escape(заголовок)}</h1>'
@@ -5837,59 +6043,65 @@ class ВидАнимедиа(ВидЗона):
             f"<details><summary>{html.escape(заголовок)}</summary>"
             f"<p>{html.escape(текст)}</p></details></aside>")
 
-    def похожие(self, запись: dict, деталь: dict, сколько: int = 6) -> list:
-        """Deterministic recommendations: exclude current, no dups, real genres.
+    def _блок_похожих(self, запись: dict, деталь: dict, *, extra_attrs: str = "") -> str:
+        """B10 shelf: ≥4 valid candidates or 0 px (no invented recommendations)."""
+        похожие = self.похожие(запись, деталь)
+        meta = getattr(self, "_rec_meta", None) or {}
+        if not похожие:
+            return (
+                f'<section class="zsec zsec--rel zsec--rel-gap" hidden '
+                f'data-b10="recs" data-rec-state="empty" '
+                f'data-rec-gap="{int(bool(RECOMMENDATIONS_DATA_GAP))}"'
+                f'{extra_attrs}></section>')
+        src = html.escape(str(meta.get("source") or ""))
+        algo = html.escape(str(meta.get("algorithm_version") or ""))
+        digest = html.escape(str(meta.get("digest") or ""))
+        mdigest = html.escape(str(meta.get("membership_digest") or ""))
+        gen = html.escape(str(meta.get("generated_at") or ""))
+        fb = "1" if meta.get("fallback") else "0"
+        return (
+            f'<section class="zsec zsec--rel" data-b10="recs" data-rec-state="populated" '
+            f'data-rec-source="{src}" data-rec-algorithm="{algo}" '
+            f'data-rec-digest="{digest}" data-rec-membership="{mdigest}" '
+            f'data-rec-generated="{gen}" data-rec-fallback="{fb}"'
+            f'{extra_attrs}>'
+            f'<h2 class="zh zh--sm">{html.escape(АНИМЕДИА_REC_TITLE)}</h2>'
+            f'{self.плитки(похожие, вариант="recommendation")}</section>')
 
-        Prefer playable titles when available; fall back by kind/year. Same
-        input always yields the same ordered list.
+    def похожие(self, запись: dict, деталь: dict, сколько: int = АНИМЕДИА_REC_MAX_ITEMS) -> list:
+        """B10 recommendations: approved snapshot → DETERMINISTIC_METADATA_RELATED_V1 → [].
+
+        Never invent ratings, random order, personalization labels, or Top-100.
+        Shelf hidden when fewer than АНИМЕДИА_REC_MIN_ITEMS valid candidates.
         """
-        текущий = запись["slug"]
-        собрано, видели = [], {текущий}
-        коды = list(деталь.get("genre_codes") or [])
-        if not коды:
-            for г in (деталь.get("genres") or [])[:4]:
-                код = нормализовать(транслит(str(г)))
-                if код:
-                    коды.append(код)
-
-        def добавить(slug: str) -> bool:
-            if slug in видели:
-                return False
-            сосед = self.индекс.get("slug", {}).get(slug)
-            if not сосед:
-                return False
-            видели.add(slug)
-            собрано.append(сосед)
-            return len(собрано) >= сколько
-
-        # Pass 1: playable genre matches (stable slug order).
-        for код in коды[:4]:
-            кандидаты = sorted(self.индекс.get("genre", {}).get(код, ()))
-            for slug in кандидаты:
-                det = self.деталь(slug)
-                if not (det.get("playable") or состояние_плеера(det)[0] == "playable"):
-                    continue
-                if добавить(slug):
-                    return собрано
-        # Pass 2: any genre match.
-        for код in коды[:4]:
-            for slug in sorted(self.индекс.get("genre", {}).get(код, ())):
-                if добавить(slug):
-                    return собрано
-        # Pass 3: same kind, then any remaining — deterministic by slug.
-        kind = запись.get("kind")
-        остаток = sorted(
-            (з for з in self.д.items if з["slug"] not in видели),
-            key=lambda з: (
-                0 if з.get("kind") == kind else 1,
-                abs(int(з.get("year") or 0) - int(запись.get("year") or 0)),
-                з["slug"],
-            ),
-        )
-        for з in остаток:
-            if добавить(з["slug"]):
-                break
-        return собрано
+        self._rec_meta = None
+        seed = str(запись.get("slug") or "")
+        if not seed:
+            return []
+        limit = max(АНИМЕДИА_REC_MIN_ITEMS, min(int(сколько or АНИМЕДИА_REC_MAX_ITEMS),
+                                                 АНИМЕДИА_REC_MAX_ITEMS))
+        approved = аниме_load_approved_recommendations(seed)
+        items, meta = аниме_recommendations_from_approved(
+            self.д.items, approved, min_items=АНИМЕДИА_REC_MIN_ITEMS, limit=limit)
+        if items and meta:
+            self._rec_meta = meta
+            return items
+        items, meta = аниме_build_deterministic_related(
+            запись, деталь, self.д.items, self.деталь,
+            min_items=АНИМЕДИА_REC_MIN_ITEMS, limit=limit)
+        if items and meta:
+            self._rec_meta = meta
+            return items
+        self._rec_meta = {
+            "source": "none",
+            "algorithm_version": "",
+            "digest": "",
+            "membership_digest": "",
+            "generated_at": "",
+            "fallback": False,
+            "empty": True,
+        }
+        return []
 
     def подвал(self) -> str:
         """Multi-column footer from real inventory; no invented contacts."""

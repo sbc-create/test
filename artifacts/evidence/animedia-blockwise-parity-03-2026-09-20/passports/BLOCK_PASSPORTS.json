@@ -761,7 +761,7 @@
         "03-blocks/B08/BEFORE/INVENTORY.json",
         "03-blocks/B08/AFTER_LOCAL/ORACLE.json"
       ],
-      "remaining_data_gap": "BLOCKED_DEPENDENCY(owner=player) default-episode policy absent; PASS_LOCAL_PENDING_LIVE"
+      "remaining_data_gap": "OWNER_RESOLVED FIRST_PLAYABLE_DETERMINISTIC (ANIMEDIA-B10-B16-20260920-01); PASS_LOCAL_PENDING_LIVE"
     },
     {
       "block_id": "B09",
@@ -845,9 +845,11 @@
         "tests/unit/test_animedia_parity03_b09.py"
       ],
       "evidence_paths": [
-        "03-blocks/BLOCK_B09.md"
+        "03-blocks/BLOCK_B09.md",
+        "03-blocks/B09/BEFORE/INVENTORY.json",
+        "03-blocks/B09/AFTER_LOCAL/ORACLE.json"
       ],
-      "remaining_data_gap": ""
+      "remaining_data_gap": "PASS_LOCAL_PENDING_LIVE"
     },
     {
       "block_id": "B10",
