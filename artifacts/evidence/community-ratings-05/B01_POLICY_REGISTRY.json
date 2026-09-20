@@ -1,0 +1,192 @@
+{
+  "OWNER_POLICY_DECISION_ID": "COMMUNITY-RATINGS-05-NATIVE-SECURITY-20260920",
+  "RATING_POLICY_VERSION": "rating_policy_v1",
+  "RATING_POLICY_DIGEST": "a2daf212d92ea40dc3de658806fb6f5f5cf7ae77890ff0c25f81bd89088c17d5",
+  "SOURCE_POLICY_DIGEST": "bde8c5c66b28f1b1fd1ae19c36a4ceec18eea4944dec1c18f1dbed8cdd0845aa",
+  "branch": {
+    "SOURCE_POLICY_BRANCH": "NATIVE_ONLY_SAFE_FALLBACK",
+    "YUMMY_SOURCE_POLICY_PASS": 0,
+    "PUBLIC_DISPLAY_PERMISSION_SHIKIMORI": 0,
+    "PUBLIC_DERIVATION_PERMISSION_SHIKIMORI": 0,
+    "PUBLIC_DISPLAY_PERMISSION_ANIMEDIA_NATIVE": 1,
+    "contours": {
+      "YUMMY_NATIVE_VOTE_LEDGER": {
+        "depends_on_shikimori_display": false,
+        "canary_allowed": true,
+        "public_write_enabled": false
+      },
+      "YUMMY_EXTERNAL_PRIOR": {
+        "open_site_public": false,
+        "internal_shadow_calc": true,
+        "components_allowed": [
+          "animedia_native",
+          "shikimori"
+        ],
+        "components_forbidden": [
+          "animedia_projected",
+          "amd_online"
+        ]
+      },
+      "YUMMY_PUBLIC_RATING_DISPLAY": {
+        "external_badges": 0,
+        "derived_prior_public": 0,
+        "native_shadow": 1
+      },
+      "YUMMY_STRUCTURED_DATA": {
+        "aggregateRating_emitted": 0
+      }
+    },
+    "SOURCE_POLICY_DIGEST": "bde8c5c66b28f1b1fd1ae19c36a4ceec18eea4944dec1c18f1dbed8cdd0845aa",
+    "observed_at": "2026-09-20T16:38:58Z"
+  },
+  "sources": [
+    {
+      "source_name": "Shikimori",
+      "source_id": "shikimori",
+      "acquisition_allowed": 1,
+      "storage_allowed": 1,
+      "internal_calculation_allowed": 1,
+      "public_display_closed_site_allowed": 1,
+      "public_display_open_site_allowed": 0,
+      "derived_formula_allowed": 0,
+      "attribution_required": 1,
+      "required_attribution": "Label «Shikimori»; docs/rights/shikimori-ratings.md",
+      "freshness_requirement": "retain_existing_observation; no Stage04 network refresh",
+      "deletion_requirement": "retain_with_provenance; CONTRACT_GATE long-term storage",
+      "policy_source": "artifacts/evidence/ratings-ingestion-05/SOURCE_POLICY.md;community-ratings-02/SOURCE_PERMISSION_MATRIX.md;publication_scope=CLOSED_NOINDEX_ANIMEDIA_UNTIL_INDEXING_DECISION",
+      "policy_observed_at": "2026-09-20T14:12:00Z",
+      "policy_digest": "a2daf212d92ea40dc3de658806fb6f5f5cf7ae77890ff0c25f81bd89088c17d5",
+      "decision": "ALLOWED_PUBLIC_CLOSED_ONLY",
+      "notes": "Owner Stage03/04 canary auth does not expand Shikimori onto open-index Yummy. Internal calc of derived prior may run in shadow; public badges stay hidden."
+    },
+    {
+      "source_name": "AMD Online",
+      "source_id": "amd_online",
+      "acquisition_allowed": 0,
+      "storage_allowed": 1,
+      "internal_calculation_allowed": 0,
+      "public_display_closed_site_allowed": 0,
+      "public_display_open_site_allowed": 0,
+      "derived_formula_allowed": 0,
+      "attribution_required": 1,
+      "required_attribution": "AMD attribution if ever shown",
+      "freshness_requirement": "no_network; last-good retain only",
+      "deletion_requirement": "retain_quarantine; no public projection",
+      "policy_source": "ratings-ingestion-05 SOURCE_POLICY AMD_SOURCE_DISABLED_PERMISSION_MISSING",
+      "policy_observed_at": "2026-09-20T14:12:00Z",
+      "policy_digest": "a2daf212d92ea40dc3de658806fb6f5f5cf7ae77890ff0c25f81bd89088c17d5",
+      "decision": "DENIED",
+      "notes": "No exact site crosswalk; SKIP_PUBLIC_PROJECTION."
+    },
+    {
+      "source_name": "Animedia native community rating",
+      "source_id": "animedia_native",
+      "acquisition_allowed": 1,
+      "storage_allowed": 1,
+      "internal_calculation_allowed": 1,
+      "public_display_closed_site_allowed": 1,
+      "public_display_open_site_allowed": 0,
+      "derived_formula_allowed": 1,
+      "attribution_required": 0,
+      "required_attribution": "",
+      "freshness_requirement": "read_your_write_after_vote",
+      "deletion_requirement": "user_retract_tombstone; canary hard-delete allowed",
+      "policy_source": "rating_policy_v1 spaces.animedia; Stage02 public read allowlist",
+      "policy_observed_at": "2026-09-20T14:12:00Z",
+      "policy_digest": "a2daf212d92ea40dc3de658806fb6f5f5cf7ae77890ff0c25f81bd89088c17d5",
+      "decision": "ALLOWED_PUBLIC_CLOSED_ONLY",
+      "notes": "A=S/N from animedia ledger only; does NOT embed Shikimori."
+    },
+    {
+      "source_name": "Animedia projected/blended rating",
+      "source_id": "animedia_projected",
+      "acquisition_allowed": 0,
+      "storage_allowed": 0,
+      "internal_calculation_allowed": 0,
+      "public_display_closed_site_allowed": 0,
+      "public_display_open_site_allowed": 0,
+      "derived_formula_allowed": 0,
+      "attribution_required": 1,
+      "required_attribution": "n/a — forbidden as Yummy prior input",
+      "freshness_requirement": "n/a",
+      "deletion_requirement": "n/a",
+      "policy_source": "rating_policy_v1 double_count_guard; LINEAGE_DOUBLE_COUNT.md",
+      "policy_observed_at": "2026-09-20T14:12:00Z",
+      "policy_digest": "a2daf212d92ea40dc3de658806fb6f5f5cf7ae77890ff0c25f81bd89088c17d5",
+      "decision": "DENIED",
+      "notes": "Legacy blend/projected must not enter Yummy prior (may embed externals)."
+    },
+    {
+      "source_name": "Yummy native community rating",
+      "source_id": "yummy_native",
+      "acquisition_allowed": 1,
+      "storage_allowed": 1,
+      "internal_calculation_allowed": 1,
+      "public_display_closed_site_allowed": 0,
+      "public_display_open_site_allowed": 0,
+      "derived_formula_allowed": 0,
+      "attribution_required": 0,
+      "required_attribution": "",
+      "freshness_requirement": "read_your_write_after_vote",
+      "deletion_requirement": "ordinary retract=tombstone; canary hard-delete allowed",
+      "policy_source": "rating_policy_v1 spaces.yummy; OWNER_AUTHORIZATION_ID=COMMUNITY-RATINGS-04-YUMMY-NATIVE-CANARY-20260920",
+      "policy_observed_at": "2026-09-20T14:12:00Z",
+      "policy_digest": "a2daf212d92ea40dc3de658806fb6f5f5cf7ae77890ff0c25f81bd89088c17d5",
+      "decision": "ALLOWED_INTERNAL_ONLY",
+      "notes": "Ledger independent of Shikimori display permission. Supervised canary cast/update/retract in shadow; public endpoint stays off."
+    },
+    {
+      "source_name": "Kinopoisk (provider feed)",
+      "source_id": "provider_feed_kinopoisk",
+      "acquisition_allowed": 0,
+      "storage_allowed": 1,
+      "internal_calculation_allowed": 0,
+      "public_display_closed_site_allowed": 1,
+      "public_display_open_site_allowed": 1,
+      "derived_formula_allowed": 0,
+      "attribution_required": 1,
+      "required_attribution": "КП",
+      "freshness_requirement": "provider_feed",
+      "deletion_requirement": "catalog_owned",
+      "policy_source": "community-ratings-02 SOURCE_PERMISSION_MATRIX KEEP_EXISTING_VITRINE",
+      "policy_observed_at": "2026-09-20T14:12:00Z",
+      "policy_digest": "a2daf212d92ea40dc3de658806fb6f5f5cf7ae77890ff0c25f81bd89088c17d5",
+      "decision": "ALLOWED_PUBLIC_INDEXED",
+      "notes": "Existing catalog vitrine only; never enters Yummy community prior."
+    },
+    {
+      "source_name": "IMDb (provider feed)",
+      "source_id": "provider_feed_imdb",
+      "acquisition_allowed": 0,
+      "storage_allowed": 1,
+      "internal_calculation_allowed": 0,
+      "public_display_closed_site_allowed": 1,
+      "public_display_open_site_allowed": 1,
+      "derived_formula_allowed": 0,
+      "attribution_required": 1,
+      "required_attribution": "IMDb",
+      "freshness_requirement": "provider_feed",
+      "deletion_requirement": "catalog_owned",
+      "policy_source": "community-ratings-02 SOURCE_PERMISSION_MATRIX KEEP_EXISTING_VITRINE",
+      "policy_observed_at": "2026-09-20T14:12:00Z",
+      "policy_digest": "a2daf212d92ea40dc3de658806fb6f5f5cf7ae77890ff0c25f81bd89088c17d5",
+      "decision": "ALLOWED_PUBLIC_INDEXED",
+      "notes": "Existing catalog vitrine only; never enters Yummy community prior."
+    }
+  ],
+  "double_count_exclusions": [
+    "animedia_projected",
+    "animedia_blend",
+    "amd_online_in_yummy_prior",
+    "summing_vote_counts_across_sources"
+  ],
+  "invariants": {
+    "SOURCE_LINEAGE_DOUBLE_COUNT_COUNT": 0,
+    "SHIKIMORI_MAX_USES_IN_YUMMY_PRIOR": 1,
+    "ANIMEDIA_NATIVE_EXCLUDES_EXTERNAL": 1,
+    "YUMMY_PRIOR_PUBLICLY_VISIBLE": 0,
+    "YUMMY_PUBLIC_MODE": "NATIVE_ONLY_SAFE_FALLBACK",
+    "PUBLIC_NATIVE_WRITES_ENABLED": 0,
+    "COMMENTS_PUBLICATION_ENABLED": 0
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "STAGE": "COMMUNITY-RATINGS-05",
+  "START_HEAD": "b1ada4686f1635a74f5ac710f8fff922466a7be6",
+  "HEAD": "b1ada4686f1635a74f5ac710f8fff922466a7be6",
+  "ANCESTOR_OK": 1,
+  "BACKUP_PATH": "/srv/site-factory/repo/var/ratings/backups/ratings.sqlite.community05.20260920T163206Z.bak",
+  "BACKUP_DIGEST": "cfb468202fa0753bab2e976ed7f1195e02ea00dfe0e5c979257b39d3fc2ee111",
+  "RESTORE_REHEARSAL_PASS": 1,
+  "SQLITE_INTEGRITY_CHECK": "ok",
+  "FK_VIOLATIONS": 0,
+  "RATING_POLICY_VERSION": "rating_policy_v1",
+  "RATING_POLICY_DIGEST": "a2daf212d92ea40dc3de658806fb6f5f5cf7ae77890ff0c25f81bd89088c17d5",
+  "DB_PATH": "/srv/site-factory/repo/var/ratings/ratings.sqlite",
+  "DB_DIGEST": "cfb468202fa0753bab2e976ed7f1195e02ea00dfe0e5c979257b39d3fc2ee111",
+  "SIDECARES": {
+    "yummy": {
+      "path": "/srv/sites/yummyani-staging/runtime/overlays/yummyani.site/community-ratings-projection.json",
+      "sha256": "343a1177491dda1e92a299e308d95506a9f3cc4732f3066cc3828e5057962cf3",
+      "bytes": 231667,
+      "version": "community-ratings-04",
+      "branch": "NATIVE_ONLY_SAFE_FALLBACK"
+    },
+    "animedia": {
+      "path": "/srv/lords/.frontend/community-ratings-projection.json",
+      "sha256": "343a1177491dda1e92a299e308d95506a9f3cc4732f3066cc3828e5057962cf3",
+      "bytes": 231667,
+      "version": "community-ratings-04",
+      "branch": "NATIVE_ONLY_SAFE_FALLBACK"
+    }
+  },
+  "INDEXABILITY_BEFORE": {
+    "yummyani.site": {
+      "status": 200,
+      "x_robots": null,
+      "robots_allow_root": true,
+      "disallow_all": false,
+      "meta_robots": [
+        "<meta name=\"robots\" content=\"index, follow\"/>"
+      ],
+      "robots_head": "User-agent: *\nAllow: /\nDisallow: /dev/\nDisallow: /api/\nDisallow: /login\nDisallow: /register\nDisallow: /search\nDisallow: /catalog/random\nDisallow: /admin/\n\nSitemap: https://yummyani.site/sitemap.xml\n"
+    },
+    "animedia.icu": {
+      "status": 200,
+      "x_robots": "noindex, nofollow",
+      "robots_allow_root": false,
+      "disallow_all": true,
+      "meta_robots": [
+        "<meta name=\"robots\" content=\"noindex, nofollow\">"
+      ],
+      "robots_head": "User-agent: *\nDisallow: /\n"
+    },
+    "animedia.space": {
+      "status": 200,
+      "x_robots": "noindex, nofollow",
+      "robots_allow_root": false,
+      "disallow_all": true,
+      "meta_robots": [
+        "<meta name=\"robots\" content=\"noindex, nofollow\">"
+      ],
+      "robots_head": "User-agent: *\nDisallow: /\n"
+    }
+  },
+  "STAGE04_RECHECK": {
+    "CANARY_VOTES_REMAINING_DB": 0,
+    "ACCEPTED_VOTES": 0,
+    "AGG_NONZERO": 0,
+    "ACTIVE_PROJECTIONS": 1001,
+    "COMMENTS": 0,
+    "YUMMY_OPEN": true,
+    "POLICY_DIGEST_MATCH": true,
+    "FLAGS": {
+      "RATINGS_PUBLIC_READ_ANIMEDIA": 1,
+      "RATINGS_PUBLIC_READ_YUMMY": 1,
+      "RATINGS_NATIVE_WRITE_ANIMEDIA": 0,
+      "RATINGS_NATIVE_WRITE_YUMMY": 0,
+      "RATINGS_ADMIN_READ_ENABLED": 1,
+      "RATINGS_ADMIN_MODERATION_WRITE_ENABLED": 0,
+      "COMMENTS_ENABLED": 0,
+      "COMMENTS_PUBLICATION_ENABLED": 0,
+      "COMMENTS_SEO_RENDERING_ENABLED": 0,
+      "COMMENTS_PUBLIC_ROUTES_ENABLED": 0,
+      "COMMENTS_ADMIN_ENABLED": 0
+    }
+  },
+  "OWNER_DECISION_SCOPE": {
+    "PUBLIC_NATIVE_WRITES_ENABLED": 0,
+    "SUPERVISED_CANARY_ALLOWED": 1,
+    "YUMMY_PRIOR_PUBLICLY_VISIBLE": 0,
+    "COMMENTS_PUBLICATION_ENABLED": 0,
+    "YUMMY_INDEXABILITY_MUST_STAY": "OPEN"
+  },
+  "created_at": "2026-09-20T16:32:10Z"
+}

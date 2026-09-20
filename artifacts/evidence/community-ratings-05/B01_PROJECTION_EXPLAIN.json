@@ -1,0 +1,38 @@
+{
+  "ACTIVE_PROJECTIONS": 1001,
+  "UNEXPLAINED_PROJECTION_ROWS": 0,
+  "NOTE": "1001 = 225\u00d74 core surfaces + 101 yummy_native rows from refresh_subject",
+  "breakdown": [
+    {
+      "rating_space": "animedia",
+      "surface": "external_badge",
+      "source": "shikimori",
+      "n": 225
+    },
+    {
+      "rating_space": "animedia",
+      "surface": "native_user_average",
+      "source": "animedia_native",
+      "n": 225
+    },
+    {
+      "rating_space": "yummy",
+      "surface": "external_badge",
+      "source": "shikimori",
+      "n": 225
+    },
+    {
+      "rating_space": "yummy",
+      "surface": "native_user_average",
+      "source": "yummy_native",
+      "n": 101
+    },
+    {
+      "rating_space": "yummy",
+      "surface": "public_brand_score",
+      "source": "yummy_derived",
+      "n": 225
+    }
+  ],
+  "SOURCE_LINEAGE_DOUBLE_COUNT_COUNT": 0
+}
