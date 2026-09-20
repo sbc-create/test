@@ -1,0 +1,770 @@
+[
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 0,
+    "vote": 1,
+    "P_Y": "8.150",
+    "Y_before": "8.150",
+    "Y_after_vote": "6.958",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 0,
+    "vote": 5,
+    "P_Y": "8.150",
+    "Y_before": "8.150",
+    "Y_after_vote": "7.625",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 0,
+    "vote": 9,
+    "P_Y": "8.150",
+    "Y_before": "8.150",
+    "Y_after_vote": "8.292",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 0,
+    "vote": 10,
+    "P_Y": "8.150",
+    "Y_before": "8.150",
+    "Y_after_vote": "8.458",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 1,
+    "vote": 1,
+    "P_Y": "8.150",
+    "Y_before": "8.125",
+    "Y_after_vote": "7.107",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 1,
+    "vote": 5,
+    "P_Y": "8.150",
+    "Y_before": "8.125",
+    "Y_after_vote": "7.679",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 1,
+    "vote": 9,
+    "P_Y": "8.150",
+    "Y_before": "8.125",
+    "Y_after_vote": "8.250",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 1,
+    "vote": 10,
+    "P_Y": "8.150",
+    "Y_before": "8.125",
+    "Y_after_vote": "8.393",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 5,
+    "vote": 1,
+    "P_Y": "8.150",
+    "Y_before": "8.075",
+    "Y_after_vote": "7.432",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 5,
+    "vote": 5,
+    "P_Y": "8.150",
+    "Y_before": "8.075",
+    "Y_after_vote": "7.795",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 5,
+    "vote": 9,
+    "P_Y": "8.150",
+    "Y_before": "8.075",
+    "Y_after_vote": "8.159",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 5,
+    "vote": 10,
+    "P_Y": "8.150",
+    "Y_before": "8.075",
+    "Y_after_vote": "8.250",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 10,
+    "vote": 1,
+    "P_Y": "8.150",
+    "Y_before": "8.050",
+    "Y_after_vote": "7.609",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 10,
+    "vote": 5,
+    "P_Y": "8.150",
+    "Y_before": "8.050",
+    "Y_after_vote": "7.859",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 10,
+    "vote": 9,
+    "P_Y": "8.150",
+    "Y_before": "8.050",
+    "Y_after_vote": "8.109",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 10,
+    "vote": 10,
+    "P_Y": "8.150",
+    "Y_before": "8.050",
+    "Y_after_vote": "8.172",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 100,
+    "vote": 1,
+    "P_Y": "8.150",
+    "Y_before": "8.007",
+    "Y_after_vote": "7.941",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 100,
+    "vote": 5,
+    "P_Y": "8.150",
+    "Y_before": "8.007",
+    "Y_after_vote": "7.979",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 100,
+    "vote": 9,
+    "P_Y": "8.150",
+    "Y_before": "8.007",
+    "Y_after_vote": "8.017",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 100,
+    "vote": 10,
+    "P_Y": "8.150",
+    "Y_before": "8.007",
+    "Y_after_vote": "8.026",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 1000,
+    "vote": 1,
+    "P_Y": "8.150",
+    "Y_before": "8.001",
+    "Y_after_vote": "7.994",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 1000,
+    "vote": 5,
+    "P_Y": "8.150",
+    "Y_before": "8.001",
+    "Y_after_vote": "7.998",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 1000,
+    "vote": 9,
+    "P_Y": "8.150",
+    "Y_before": "8.001",
+    "Y_after_vote": "8.002",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 5,
+    "N": 1000,
+    "vote": 10,
+    "P_Y": "8.150",
+    "Y_before": "8.001",
+    "Y_after_vote": "8.003",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 0,
+    "vote": 1,
+    "P_Y": "8.150",
+    "Y_before": "8.150",
+    "Y_after_vote": "7.500",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 0,
+    "vote": 5,
+    "P_Y": "8.150",
+    "Y_before": "8.150",
+    "Y_after_vote": "7.864",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 0,
+    "vote": 9,
+    "P_Y": "8.150",
+    "Y_before": "8.150",
+    "Y_after_vote": "8.227",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 0,
+    "vote": 10,
+    "P_Y": "8.150",
+    "Y_before": "8.150",
+    "Y_after_vote": "8.318",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 1,
+    "vote": 1,
+    "P_Y": "8.150",
+    "Y_before": "8.136",
+    "Y_after_vote": "7.542",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 1,
+    "vote": 5,
+    "P_Y": "8.150",
+    "Y_before": "8.136",
+    "Y_after_vote": "7.875",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 1,
+    "vote": 9,
+    "P_Y": "8.150",
+    "Y_before": "8.136",
+    "Y_after_vote": "8.208",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 1,
+    "vote": 10,
+    "P_Y": "8.150",
+    "Y_before": "8.136",
+    "Y_after_vote": "8.292",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 5,
+    "vote": 1,
+    "P_Y": "8.150",
+    "Y_before": "8.100",
+    "Y_after_vote": "7.656",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 5,
+    "vote": 5,
+    "P_Y": "8.150",
+    "Y_before": "8.100",
+    "Y_after_vote": "7.906",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 5,
+    "vote": 9,
+    "P_Y": "8.150",
+    "Y_before": "8.100",
+    "Y_after_vote": "8.156",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 5,
+    "vote": 10,
+    "P_Y": "8.150",
+    "Y_before": "8.100",
+    "Y_after_vote": "8.219",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 10,
+    "vote": 1,
+    "P_Y": "8.150",
+    "Y_before": "8.075",
+    "Y_after_vote": "7.738",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 10,
+    "vote": 5,
+    "P_Y": "8.150",
+    "Y_before": "8.075",
+    "Y_after_vote": "7.929",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 10,
+    "vote": 9,
+    "P_Y": "8.150",
+    "Y_before": "8.075",
+    "Y_after_vote": "8.119",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 10,
+    "vote": 10,
+    "P_Y": "8.150",
+    "Y_before": "8.075",
+    "Y_after_vote": "8.167",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 100,
+    "vote": 1,
+    "P_Y": "8.150",
+    "Y_before": "8.014",
+    "Y_after_vote": "7.950",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 100,
+    "vote": 5,
+    "P_Y": "8.150",
+    "Y_before": "8.014",
+    "Y_after_vote": "7.986",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 100,
+    "vote": 9,
+    "P_Y": "8.150",
+    "Y_before": "8.014",
+    "Y_after_vote": "8.023",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 100,
+    "vote": 10,
+    "P_Y": "8.150",
+    "Y_before": "8.014",
+    "Y_after_vote": "8.032",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 1000,
+    "vote": 1,
+    "P_Y": "8.150",
+    "Y_before": "8.001",
+    "Y_after_vote": "7.995",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 1000,
+    "vote": 5,
+    "P_Y": "8.150",
+    "Y_before": "8.001",
+    "Y_after_vote": "7.999",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 1000,
+    "vote": 9,
+    "P_Y": "8.150",
+    "Y_before": "8.001",
+    "Y_after_vote": "8.002",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  },
+  {
+    "weights": {
+      "animedia_native": "0.5",
+      "shikimori": "0.5"
+    },
+    "m": 10,
+    "N": 1000,
+    "vote": 10,
+    "P_Y": "8.150",
+    "Y_before": "8.001",
+    "Y_after_vote": "8.003",
+    "components": [
+      "animedia_native",
+      "shikimori"
+    ]
+  }
+]

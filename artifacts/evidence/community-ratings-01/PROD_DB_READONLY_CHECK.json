@@ -1,0 +1,11 @@
+{
+  "prod_db": "/srv/site-factory/repo/var/ratings/ratings.sqlite",
+  "observations": {
+    "amd_online": 100,
+    "shikimori": 125
+  },
+  "legacy_vote_current": 0,
+  "community_tables_on_prod": [],
+  "PRODUCTION_DB_MIGRATIONS": 0,
+  "PRODUCTION_ROWS_INSERTED": 0
+}

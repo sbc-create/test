@@ -1,0 +1,26 @@
+<!-- Animedia title page: native rating + separate external badges.
+     Not mounted in production until owner activation. -->
+<section class="cr-mount" data-community-rating data-space="animedia" data-subject="{{ subject_id }}" aria-label="Оценка Animedia">
+  <div data-role="external-badges">
+    <!-- External badges rendered separately; never summed -->
+    {% for badge in external_badges %}
+    <span class="cr-badge" data-source="{{ badge.source }}">{{ badge.label }}: {{ badge.value }}</span>
+    {% endfor %}
+  </div>
+  <div id="cr-animedia-root"></div>
+</section>
+<script src="/static/community/community_rating.js" defer></script>
+<link rel="stylesheet" href="/static/community/community_rating.css">
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  if (!window.CommunityRatingBlock) return;
+  var el = document.getElementById("cr-animedia-root");
+  if (!el) return;
+  var block = new CommunityRatingBlock(el, {
+    ratingSpaceId: "animedia",
+    subjectId: el.closest("[data-subject]").getAttribute("data-subject"),
+    csrf: document.querySelector('meta[name="csrf-token"]') && document.querySelector('meta[name="csrf-token"]').content
+  });
+  block.render();
+});
+</script>

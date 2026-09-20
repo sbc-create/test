@@ -1,0 +1,80 @@
+/* Community native rating block — compact title-page widget */
+.cr-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 28rem;
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  color: var(--cr-text, #1a1a1a);
+}
+.cr-external {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.cr-external .cr-badge {
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+.cr-native {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+.cr-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.cr-score {
+  font-variant-numeric: tabular-nums;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+.cr-score--absent {
+  font-weight: 500;
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
+.cr-count {
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+.cr-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+.cr-score-btn,
+.cr-delete {
+  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font: inherit;
+}
+.cr-score-btn:hover,
+.cr-score-btn:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+.cr-preview {
+  font-size: 0.8rem;
+  opacity: 0.85;
+  width: 100%;
+}
+.cr-status {
+  font-size: 0.8rem;
+  color: #a33;
+}
+.cr-info {
+  border: 0;
+  background: transparent;
+  cursor: help;
+  font-size: 0.85rem;
+}
+@media (max-width: 640px) {
+  .cr-block {
+    max-width: 100%;
+  }
+}

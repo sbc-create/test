@@ -1,0 +1,133 @@
+{
+  "row_count": 288,
+  "sample_first_8": [
+    {
+      "weights": {
+        "animedia_native": "0.5",
+        "shikimori": "0.5"
+      },
+      "m": 5,
+      "N": 0,
+      "vote": 1,
+      "P_Y": "8.150",
+      "Y_before": "8.150",
+      "Y_after_vote": "6.958",
+      "components": [
+        "animedia_native",
+        "shikimori"
+      ]
+    },
+    {
+      "weights": {
+        "animedia_native": "0.5",
+        "shikimori": "0.5"
+      },
+      "m": 5,
+      "N": 0,
+      "vote": 5,
+      "P_Y": "8.150",
+      "Y_before": "8.150",
+      "Y_after_vote": "7.625",
+      "components": [
+        "animedia_native",
+        "shikimori"
+      ]
+    },
+    {
+      "weights": {
+        "animedia_native": "0.5",
+        "shikimori": "0.5"
+      },
+      "m": 5,
+      "N": 0,
+      "vote": 9,
+      "P_Y": "8.150",
+      "Y_before": "8.150",
+      "Y_after_vote": "8.292",
+      "components": [
+        "animedia_native",
+        "shikimori"
+      ]
+    },
+    {
+      "weights": {
+        "animedia_native": "0.5",
+        "shikimori": "0.5"
+      },
+      "m": 5,
+      "N": 0,
+      "vote": 10,
+      "P_Y": "8.150",
+      "Y_before": "8.150",
+      "Y_after_vote": "8.458",
+      "components": [
+        "animedia_native",
+        "shikimori"
+      ]
+    },
+    {
+      "weights": {
+        "animedia_native": "0.5",
+        "shikimori": "0.5"
+      },
+      "m": 5,
+      "N": 1,
+      "vote": 1,
+      "P_Y": "8.150",
+      "Y_before": "8.125",
+      "Y_after_vote": "7.107",
+      "components": [
+        "animedia_native",
+        "shikimori"
+      ]
+    },
+    {
+      "weights": {
+        "animedia_native": "0.5",
+        "shikimori": "0.5"
+      },
+      "m": 5,
+      "N": 1,
+      "vote": 5,
+      "P_Y": "8.150",
+      "Y_before": "8.125",
+      "Y_after_vote": "7.679",
+      "components": [
+        "animedia_native",
+        "shikimori"
+      ]
+    },
+    {
+      "weights": {
+        "animedia_native": "0.5",
+        "shikimori": "0.5"
+      },
+      "m": 5,
+      "N": 1,
+      "vote": 9,
+      "P_Y": "8.150",
+      "Y_before": "8.125",
+      "Y_after_vote": "8.250",
+      "components": [
+        "animedia_native",
+        "shikimori"
+      ]
+    },
+    {
+      "weights": {
+        "animedia_native": "0.5",
+        "shikimori": "0.5"
+      },
+      "m": 5,
+      "N": 1,
+      "vote": 10,
+      "P_Y": "8.150",
+      "Y_before": "8.125",
+      "Y_after_vote": "8.393",
+      "components": [
+        "animedia_native",
+        "shikimori"
+      ]
+    }
+  ]
+}

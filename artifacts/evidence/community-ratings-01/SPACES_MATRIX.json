@@ -1,0 +1,55 @@
+{
+  "animedia_shared_across_icu_space": true,
+  "yummy_isolated": true,
+  "yummy_cannot_mutate_animedia_native": true,
+  "hostname_auto_merge_forbidden": true,
+  "ip_is_not_identity": true,
+  "device_fingerprint_is_not_proof": true,
+  "sites": [
+    {
+      "brand_id": "animedia",
+      "site_id": "animedia-01",
+      "rating_space_id": "animedia",
+      "discussion_space_id": "animedia",
+      "domains": [
+        "animedia.icu"
+      ]
+    },
+    {
+      "brand_id": "animedia",
+      "site_id": "animedia-02",
+      "rating_space_id": "animedia",
+      "discussion_space_id": "animedia",
+      "domains": [
+        "animedia.space"
+      ]
+    },
+    {
+      "brand_id": "yummy",
+      "site_id": "yummyani-site",
+      "rating_space_id": "yummy",
+      "discussion_space_id": "yummy",
+      "domains": [
+        "yummyani.site"
+      ]
+    },
+    {
+      "brand_id": "yummy",
+      "site_id": "yummyani-org",
+      "rating_space_id": "yummy",
+      "discussion_space_id": "yummy",
+      "domains": [
+        "yummyani.org"
+      ]
+    },
+    {
+      "brand_id": "yummy",
+      "site_id": "yummyani-biz",
+      "rating_space_id": "yummy",
+      "discussion_space_id": "yummy",
+      "domains": [
+        "yummyani.biz"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+<!-- Yummy title page: isolated rating space; prior tooltip; Shikimori badge separate. -->
+<section class="cr-mount" data-community-rating data-space="yummy" data-subject="{{ subject_id }}" aria-label="Оценка Yummy">
+  <div data-role="external-badges">
+    {% if shikimori_badge %}
+    <span class="cr-badge" data-source="shikimori">Shikimori: {{ shikimori_badge }}</span>
+    {% endif %}
+  </div>
+  <div id="cr-yummy-root"></div>
+</section>
+<script src="/static/community/community_rating.js" defer></script>
+<link rel="stylesheet" href="/static/community/community_rating.css">
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  if (!window.CommunityRatingBlock) return;
+  var el = document.getElementById("cr-yummy-root");
+  if (!el) return;
+  var block = new CommunityRatingBlock(el, {
+    ratingSpaceId: "yummy",
+    subjectId: el.closest("[data-subject]").getAttribute("data-subject"),
+    csrf: document.querySelector('meta[name="csrf-token"]') && document.querySelector('meta[name="csrf-token"]').content
+  });
+  block.render();
+});
+</script>
