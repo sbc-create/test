@@ -360,5 +360,6 @@ class TestSafety:
         assert ("noindex" in robots.lower()) or meta
 
     def test_resolving_not_fake_connected(self, зона):
-        assert зона._подпись_плеера("resolving") == "подключение источника"
-        assert "подключён" not in зона._подпись_плеера("resolving")
+        assert зона._подпись_плеера("resolving") == "Подключаем видео"
+        assert "подключён" not in зона._подпись_плеера("resolving").lower()
+        assert "источник" not in зона._подпись_плеера("resolving").lower()

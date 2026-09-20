@@ -1,0 +1,12 @@
+{
+  "block": "B12",
+  "status": "PASS_LOCAL_PARTIAL",
+  "summary": "CTA renamed to «К плееру» (honest scroll-to-player); consumer player labels without «источник»; nosource copy consumer-facing.",
+  "tests": "followup playback + pass2 green after expectation update",
+  "residuals": [
+    "real-provider currentTime>=3s proof requires headed/live",
+    "compact unavailable shell geometry headed proof",
+    "poster/backdrop before load still partial"
+  ],
+  "updated_at": "2026-09-20T17:35:00Z"
+}
