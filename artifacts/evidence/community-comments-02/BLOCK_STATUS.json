@@ -5,6 +5,7 @@
   "B04_outbox_worker": "DONE",
   "B05_service_integration": "DONE",
   "B06_fake_canary": "DONE",
-  "B07_live_canary": "BLOCKED_QWEN_RUNTIME_CONFIG",
+  "B07_admin_ui_v2": "DONE",
+  "B08_live_canary": "BLOCKED_QWEN_RUNTIME_CONFIG",
   "public_rollout": "NOT_AUTHORIZED"
 }

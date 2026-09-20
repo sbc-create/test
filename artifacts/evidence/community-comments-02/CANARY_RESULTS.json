@@ -146,8 +146,8 @@
         "cancelled": 0,
         "dead_letter": 0
       },
-      "final_status": "VISIBLE_SPOILER_COLLAPSED",
-      "spoiler_collapsed": 1,
+      "final_status": "VISIBLE_QWEN_APPROVED",
+      "spoiler_collapsed": 0,
       "xss_escaped": true,
       "ok": true
     },
@@ -246,7 +246,7 @@
         "cancelled": 0,
         "dead_letter": 0
       },
-      "final_status": "VISIBLE_QWEN_APPROVED",
+      "final_status": "HIDDEN_QWEN_HIGH_CONFIDENCE",
       "spoiler_collapsed": 0,
       "xss_escaped": true,
       "ok": true
@@ -266,7 +266,7 @@
         "cancelled": 0,
         "dead_letter": 0
       },
-      "final_status": "VISIBLE_QWEN_APPROVED",
+      "final_status": "HIDDEN_QWEN_HIGH_CONFIDENCE",
       "spoiler_collapsed": 0,
       "xss_escaped": true,
       "ok": true
@@ -286,7 +286,7 @@
         "cancelled": 0,
         "dead_letter": 0
       },
-      "final_status": "VISIBLE_QWEN_APPROVED",
+      "final_status": "HIDDEN_QWEN_HIGH_CONFIDENCE",
       "spoiler_collapsed": 0,
       "xss_escaped": true,
       "ok": true
@@ -306,7 +306,7 @@
         "cancelled": 0,
         "dead_letter": 0
       },
-      "final_status": "VISIBLE_QWEN_APPROVED",
+      "final_status": "HIDDEN_QWEN_HIGH_CONFIDENCE",
       "spoiler_collapsed": 0,
       "xss_escaped": true,
       "ok": true
@@ -406,7 +406,7 @@
         "cancelled": 0,
         "dead_letter": 0
       },
-      "final_status": "VISIBLE_QWEN_APPROVED",
+      "final_status": "HELD_FOR_REVIEW",
       "spoiler_collapsed": 0,
       "xss_escaped": true,
       "ok": true

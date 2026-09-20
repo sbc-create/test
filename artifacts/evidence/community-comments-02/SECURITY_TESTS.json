@@ -10,6 +10,7 @@
   "revision_race": 1,
   "kill_switch": 1,
   "degraded": 1,
+  "admin_override": 1,
   "test_runs_consecutive": 2,
-  "passed": 94
+  "passed": 109
 }

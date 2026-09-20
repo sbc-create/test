@@ -4,9 +4,9 @@
   "BRANCH": "cursor/community-comments-01",
   "WORKTREE": "/home/claude/wt-community-comments-01",
   "START_HEAD": "a867c80c5312356d88cbc771275b1039b9509637",
-  "FINAL_HEAD": "781eec27840220b8f8b413f7088a3eb6a0a83f69",
-  "COMMITS": 7,
-  "TESTS": "94 passed comments suite x2; 12 ratings stage06",
+  "FINAL_HEAD": "WILL_PIN",
+  "COMMITS": 10,
+  "TESTS": "109 passed comments suite x2; 12 ratings stage06",
   "TEST_RUNS_CONSECUTIVE": 2,
   "IDENTITY_MODE": "SIGNED_PSEUDONYMOUS_DEVICE_V1",
   "REGISTRATION_REQUIRED": 0,
@@ -55,5 +55,17 @@
   "BLOCKED_QWEN_RUNTIME_CONFIG": 1,
   "canary_passed": 20,
   "canary_failed": 0,
-  "finished_at": "2026-09-20T22:00:17Z"
+  "finished_at": "2026-09-20T22:11:20Z",
+  "current_tip_before_evidence": "aabe3d839c019882e3c80a0abd77dc4481307898",
+  "commit_list": [
+    "b7a31ab B09: tighten fake Qwen rules and canary expect checks",
+    "aabe3d8 B08: V2 admin overrides, guest DTO list, and postmod UI",
+    "2c80865 B07: COMMUNITY-COMMENTS-02 evidence and PASS verdict",
+    "781eec2 B06: postmod integration tests, fake canary, and systemd packet",
+    "8147188 B05: wire postmod lifecycle into comments service",
+    "21b88d1 B04: moderation outbox, worker, degraded mode, kill switch",
+    "8e0c654 B03: Qwen postmod adapter, schema, policy, and fake provider",
+    "f39ecf0 B02: technical preflight for comments",
+    "78e7bd9 B01: comments lifecycle state machine and schema v2"
+  ]
 }
