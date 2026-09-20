@@ -164,11 +164,11 @@ class TestVisualContracts:
     def test_home_leads_with_episode_feed(self, fe):
         mod, catalog, details = fe
         html = _вид(mod, catalog, details).главная()
-        assert "Недавно добавленные" in html
+        assert "Новое в каталоге" in html
         assert 'class="aeps"' in html
         assert 'class="aeps__row"' in html
         # Episode feed appears before poster shelves (zsec without --eps after).
-        pos_eps = html.find("Недавно добавленные")
+        pos_eps = html.find("Новое в каталоге")
         pos_top = html.find("Высокие оценки")
         assert pos_eps > 0
         if pos_top > 0:
@@ -179,7 +179,7 @@ class TestVisualContracts:
         mod, catalog, details = fe
         вид = _вид(mod, catalog, details)
         html = вид.список("/new", {})
-        assert "Недавно добавленные" in html
+        assert "Новое в каталоге" in html
         assert "aeps__row" in html
         assert "серия" in html
         # Must not be a poster grid of titles only
@@ -228,7 +228,7 @@ class TestVisualContracts:
         hs = _вид(mod, catalog, details, "animedia.space").главная()
         hi = _вид(mod, catalog, details, "animedia.icu").главная()
         assert "animedia-space" in hs and "animedia-icu" in hi
-        assert "Новые серии и популярное" in hs
+        assert "Новое в каталоге и популярное" in hs
         assert "Сериалы, фильмы и дунхуа" in hi
         assert hs != hi
         assert mod.АНИМЕДИА_ДОМЕНЫ["animedia.space"]["home_shelves"] != \

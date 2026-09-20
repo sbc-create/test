@@ -166,7 +166,7 @@ class TestAnimediaFinalRepair:
         assert "закрыта от индексации" not in html
         assert "Template:" not in html
         assert "Animedia 1.2." in html
-        assert "Новые серии и популярное" in html
+        assert "Новое в каталоге и популярное" in html
         assert "Animedia Space" in html
         assert 'name="robots" content="noindex, nofollow"' in html
         assert "источник подключён" not in html
@@ -177,7 +177,7 @@ class TestAnimediaFinalRepair:
         hi = _вид(mod, catalog, details, "animedia.icu").главная()
         assert "animedia-space" in hs
         assert "animedia-icu" in hi
-        assert "Новые серии и популярное" in hs
+        assert "Новое в каталоге и популярное" in hs
         assert "Сериалы, фильмы и дунхуа" in hi
         assert hs != hi
         assert 'rel="canonical" href="https://animedia.space/"' in hs

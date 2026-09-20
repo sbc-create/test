@@ -281,7 +281,7 @@ def test_domain_profiles_diverge_seo_and_shelves():
 
     text = (HOST / "lords-frontend.py").read_text(encoding="utf-8")
     assert "animedia.icu" in text and "animedia.space" in text
-    assert "Новые серии и популярное аниме" in text
+    assert "Новое в каталоге и популярное аниме" in text
     assert "Сериалы, фильмы и дунхуа" in text
     assert text.count('"seo_home"') >= 2 or text.count("seo_home") >= 4
     assert "Шикимуни" in rs.unresolved_owner_names()
@@ -301,7 +301,7 @@ def test_home_css_locks_hero_card_width():
     assert "calc(100% - var(--page-gutters))" in text
     assert "width:152px;height:214px" in text
     assert ".ahero" in text and "max-height:300px" in text
-    assert "clamp(240px,15.8vw,280px) minmax(0,1fr)" in text
+    assert "flex:0 0 152px;width:152px" in text
     assert "aspect-ratio:16/9" in text
     assert "repeat(7,minmax(0,1fr))" in text
 

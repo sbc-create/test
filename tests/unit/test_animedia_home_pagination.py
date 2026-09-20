@@ -158,13 +158,13 @@ class TestEpisodeEvents:
             assert "not episode air" in e["timestamp_semantics"]
             assert e["source_provenance"].startswith("catalog.published_at")
         home = вид.главная()
-        assert "Недавно добавленные" in home
+        assert "Новое в каталоге" in home
         assert "Добавлено" in home
         assert 'href="/new/?page=1"' in home
         assert "вышла серия" not in home.lower()
         assert mod.АНИМЕДИА_EPISODE_EVENT_DATA_GAP == 1
         p1 = вид.список("/new", {})
-        assert "Недавно добавленные" in p1
+        assert "Новое в каталоге" in p1
         assert "Добавлено" in p1
 
     def test_timestamp_semantics(self, fe):
