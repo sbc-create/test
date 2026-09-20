@@ -1780,17 +1780,20 @@ display:none;align-items:center;justify-content:center}
 .zrl__btn--n{right:-6px}
 .zrl__btn[disabled]{opacity:.32;cursor:default}
 
-/* Pass5 densify: 2 / 4 / 7 / 8+ cols; card width capped at 180px. */
+/* B09 densify: auto-fit so 1363 gets 7–8 cols (no half-empty 4-card row). */
 :root{--z-card-max:180px;--z-gap:14px;--z-poster-max-h:270px}
-.zg{display:grid;gap:var(--z-gap);grid-template-columns:repeat(2,minmax(0,var(--z-card-max)));
+.zg{display:grid;gap:var(--z-gap);
+grid-template-columns:repeat(auto-fit,minmax(158px,var(--z-card-max)));
 align-items:stretch;justify-content:start}
-@media(min-width:768px){.zg{grid-template-columns:repeat(4,minmax(0,var(--z-card-max)))}}
-@media(min-width:1440px){.zg{grid-template-columns:repeat(7,minmax(0,var(--z-card-max)))}}
-@media(min-width:1920px){.zg{grid-template-columns:repeat(8,minmax(0,var(--z-card-max)))}}
-.zg--related{display:grid;gap:var(--z-gap);grid-template-columns:repeat(2,minmax(0,var(--z-card-max)));
+@media(min-width:600px){.zg{grid-template-columns:repeat(auto-fit,minmax(140px,var(--z-card-max)))}}
+@media(min-width:900px){.zg{grid-template-columns:repeat(auto-fit,minmax(150px,var(--z-card-max)))}}
+@media(min-width:1280px){.zg{grid-template-columns:repeat(auto-fit,minmax(164px,var(--z-card-max)))}}
+@media(min-width:1680px){.zg{grid-template-columns:repeat(auto-fit,minmax(168px,var(--z-card-max)))}}
+.zg--related{display:grid;gap:var(--z-gap);
+grid-template-columns:repeat(auto-fit,minmax(158px,var(--z-card-max)));
 overflow:visible;justify-content:start}
-@media(min-width:768px){.zg--related{grid-template-columns:repeat(4,minmax(0,var(--z-card-max)))}}
-@media(min-width:1440px){.zg--related{grid-template-columns:repeat(7,minmax(0,var(--z-card-max)))}}
+@media(min-width:768px){.zg--related{grid-template-columns:repeat(auto-fit,minmax(140px,var(--z-card-max)))}}
+@media(min-width:1280px){.zg--related{grid-template-columns:repeat(auto-fit,minmax(164px,var(--z-card-max)))}}
 .zt{display:flex;flex-direction:column;height:100%;min-width:0;max-width:var(--z-card-max);
 background:@SURF@;border:1px solid @LINE@;border-radius:6px;overflow:hidden;
 transition:border-color .16s,transform .16s;color:inherit;text-decoration:none}
@@ -6130,7 +6133,9 @@ def построить_индекс(данные: "Данные", подробн
             else:
                 имена.setdefault(код, код)
         for страна in (деталь.get("countries") or []):
-            код = нормализовать(страна)
+            # ASCII slug for /country/<code>/ (regex is [a-z0-9_-]); Cyrillic
+            # labels stay in country_names for UI.
+            код = нормализовать(транслит(страна))
             if not код:
                 continue
             по_стране.setdefault(код, []).append(slug)
