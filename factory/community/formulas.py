@@ -73,8 +73,14 @@ def build_yummy_prior(
     shikimori: Decimal | None,
     weights: dict[str, Decimal] | None = None,
     animedia_embeds_shikimori: bool = False,
+    animedia_projected: Decimal | None = None,
+    reject_animedia_projected: bool = True,
 ) -> tuple[Decimal | None, dict[str, Any]]:
     """Build P_Y with renormalization; never substitute missing with 0.
+
+    Only independent components: ``animedia_native`` (ledger A=S/N) and
+    ``shikimori`` observation. ``animedia_projected`` / blended scores are
+    rejected so Shikimori cannot enter twice via an Animedia aggregate.
 
     Double-count guard: if Animedia native already embeds Shikimori, use
     Animedia-only prior (drop Shikimori component).
@@ -84,11 +90,35 @@ def build_yummy_prior(
         "animedia_embeds_shikimori": animedia_embeds_shikimori,
         "components_used": [],
         "double_counted_source_count": 0,
+        "shikimori_indirect_double_count_count": 0,
+        "prior_components_independent": True,
+        "YUMMY_PRIOR_WEIGHT_ANIMEDIA_NATIVE": str(w.get("animedia_native", Decimal("0"))),
+        "YUMMY_PRIOR_WEIGHT_SHIKIMORI": str(w.get("shikimori", Decimal("0"))),
+        "forbidden_inputs_seen": [],
     }
+    if reject_animedia_projected and animedia_projected is not None:
+        provenance["forbidden_inputs_seen"].append("animedia_projected")
+        provenance["prior_components_independent"] = False
+        raise ValueError(
+            "animedia_projected is forbidden as Yummy prior input "
+            "(may embed external sources; use animedia_native only)"
+        )
+
     if animedia_embeds_shikimori and animedia_native is not None:
+        # Drop Shikimori to avoid double-count; do not also keep both.
         provenance["components_used"] = ["animedia_native"]
         provenance["shikimori_excluded_reason"] = "animedia_already_embeds_shikimori"
+        provenance["shikimori_indirect_double_count_count"] = 0
+        provenance["double_counted_source_count"] = 0
         return animedia_native, provenance
+
+    if animedia_embeds_shikimori and shikimori is not None and animedia_native is None:
+        # Projected path attempted without true native — refuse substitution.
+        provenance["forbidden_inputs_seen"].append("animedia_embeds_without_native")
+        provenance["shikimori_indirect_double_count_count"] = 1
+        raise ValueError(
+            "cannot use Shikimori-embedded Animedia aggregate as native substitute"
+        )
 
     parts: list[tuple[str, Decimal, Decimal]] = []
     if animedia_native is not None:
@@ -104,6 +134,10 @@ def build_yummy_prior(
     total = sum(score * (wt / weight_sum) for _, score, wt in parts)
     provenance["components_used"] = [p[0] for p in parts]
     provenance["renormalized_weights"] = {p[0]: str(p[2] / weight_sum) for p in parts}
+    # Independence: animedia_native never contains shikimori when embeds flag is false
+    provenance["prior_components_independent"] = not animedia_embeds_shikimori
+    provenance["double_counted_source_count"] = 0
+    provenance["shikimori_indirect_double_count_count"] = 0
     return total, provenance
 
 
