@@ -1,0 +1,28 @@
+{
+  "stage": "COMMUNITY-COMMENTS-02-QWEN-POSTMOD",
+  "checked_at": "2026-09-20T21:42:00Z",
+  "worktree": "/home/claude/wt-community-comments-01",
+  "branch": "cursor/community-comments-01",
+  "expected_start_head": "a867c80c5312356d88cbc771275b1039b9509637",
+  "actual_start_head": "a867c80c5312356d88cbc771275b1039b9509637",
+  "ancestry_ok": true,
+  "worktree_clean": true,
+  "previous_stage": "COMMUNITY-COMMENTS-01",
+  "previous_verdict": "PASS_RESEARCH_1000_COMMENTS_FOUNDATION_READY_DARK_MODE",
+  "corpus_accepted": 1000,
+  "ratings_rollout_before": 1,
+  "yummyani_indexability_before": "OPEN",
+  "comments_flags_before": {
+    "COMMENTS_API_WRITE_ENABLED": 0,
+    "COMMENTS_PUBLICATION_ENABLED": 0,
+    "COMMENTS_SEO_RENDERING_ENABLED": 0,
+    "COMMENTS_QWEN_POSTMOD_ENABLED": null,
+    "COMMENTS_ROLLOUT_PERCENT": null
+  },
+  "identity_mode": "SIGNED_PSEUDONYMOUS_DEVICE_V1",
+  "qwen_ssot_found": [
+    "factory/ratings/qwen_delivery.py",
+    "factory/ratings/qwen_report.py"
+  ],
+  "decision": "CONTINUE_SAME_BRANCH_NO_NEW_BASELINE"
+}

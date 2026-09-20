@@ -1,0 +1,32 @@
+{
+  "RESEARCH_CORPUS_BALANCED_FOR_ALL_SITE_VERTICALS": "NO",
+  "accepted": 1000,
+  "unique_titles": 693,
+  "source_domains": [
+    "graphql.anilist.co"
+  ],
+  "category_skew": {
+    "ANIME": 411,
+    "DORAMA": 578,
+    "ANIMATION": 11,
+    "FILM": 0,
+    "SERIES": 0
+  },
+  "language_skew": {
+    "ru": 0,
+    "en": 1000,
+    "other": 0
+  },
+  "label_distribution_from_stage01": {
+    "positive": 609,
+    "neutral": 247,
+    "negative": 82,
+    "mixed": 62
+  },
+  "spoiler_policy_note": "Spoilers collapse, never auto-delete",
+  "spam_policy_note": "High-confidence spam → hide; low confidence → hold",
+  "toxicity_policy_note": "Criticism allowed; hate/threat force-hide",
+  "false_positive_risk": "MEDIUM — AniList-skewed English reviews; not representative of RU/film/series",
+  "bias_note": "ANIME/DORAMA over-represented; do not claim all verticals covered",
+  "USER_COMMENT_TEXT_IN_EVIDENCE": 0
+}

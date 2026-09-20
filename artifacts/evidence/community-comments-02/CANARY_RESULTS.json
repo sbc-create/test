@@ -1,0 +1,415 @@
+{
+  "QWEN_FAKE_CANARY_EXECUTED": 1,
+  "QWEN_REAL_CANARY_EXECUTED": 0,
+  "QWEN_PROVIDER_CONFIGURED": "NO",
+  "cases": 20,
+  "passed": 20,
+  "failed": 0,
+  "kill_switch_drill_restored": true,
+  "synthetic_residue": 0,
+  "FOREIGN_COMMENTS_PUBLISHED": 0,
+  "FAKE_PUBLIC_COMMENTS_INSERTED": 0,
+  "PRODUCTION_COMMENTS_INSERTED": 0,
+  "results": [
+    {
+      "id": "ok1",
+      "expect": "ALLOW",
+      "created_status": "PUBLISHED_UNREVIEWED",
+      "body_has_script": false,
+      "worker": {
+        "claimed": 1,
+        "processed": 1,
+        "applied": 1,
+        "schema_mismatch": 0,
+        "errors": 0,
+        "skipped_deleted": 0,
+        "cancelled": 0,
+        "dead_letter": 0
+      },
+      "final_status": "VISIBLE_QWEN_APPROVED",
+      "spoiler_collapsed": 0,
+      "xss_escaped": true,
+      "ok": true
+    },
+    {
+      "id": "ok2",
+      "expect": "ALLOW",
+      "created_status": "PUBLISHED_UNREVIEWED",
+      "body_has_script": false,
+      "worker": {
+        "claimed": 1,
+        "processed": 1,
+        "applied": 1,
+        "schema_mismatch": 0,
+        "errors": 0,
+        "skipped_deleted": 0,
+        "cancelled": 0,
+        "dead_letter": 0
+      },
+      "final_status": "VISIBLE_QWEN_APPROVED",
+      "spoiler_collapsed": 0,
+      "xss_escaped": true,
+      "ok": true
+    },
+    {
+      "id": "ok3",
+      "expect": "ALLOW",
+      "created_status": "PUBLISHED_UNREVIEWED",
+      "body_has_script": false,
+      "worker": {
+        "claimed": 1,
+        "processed": 1,
+        "applied": 1,
+        "schema_mismatch": 0,
+        "errors": 0,
+        "skipped_deleted": 0,
+        "cancelled": 0,
+        "dead_letter": 0
+      },
+      "final_status": "VISIBLE_QWEN_APPROVED",
+      "spoiler_collapsed": 0,
+      "xss_escaped": true,
+      "ok": true
+    },
+    {
+      "id": "ok4",
+      "expect": "ALLOW",
+      "created_status": "PUBLISHED_UNREVIEWED",
+      "body_has_script": false,
+      "worker": {
+        "claimed": 1,
+        "processed": 1,
+        "applied": 1,
+        "schema_mismatch": 0,
+        "errors": 0,
+        "skipped_deleted": 0,
+        "cancelled": 0,
+        "dead_letter": 0
+      },
+      "final_status": "VISIBLE_QWEN_APPROVED",
+      "spoiler_collapsed": 0,
+      "xss_escaped": true,
+      "ok": true
+    },
+    {
+      "id": "ok5",
+      "expect": "ALLOW",
+      "created_status": "PUBLISHED_UNREVIEWED",
+      "body_has_script": false,
+      "worker": {
+        "claimed": 1,
+        "processed": 1,
+        "applied": 1,
+        "schema_mismatch": 0,
+        "errors": 0,
+        "skipped_deleted": 0,
+        "cancelled": 0,
+        "dead_letter": 0
+      },
+      "final_status": "VISIBLE_QWEN_APPROVED",
+      "spoiler_collapsed": 0,
+      "xss_escaped": true,
+      "ok": true
+    },
+    {
+      "id": "neg1",
+      "expect": "ALLOW",
+      "created_status": "PUBLISHED_UNREVIEWED",
+      "body_has_script": false,
+      "worker": {
+        "claimed": 1,
+        "processed": 1,
+        "applied": 1,
+        "schema_mismatch": 0,
+        "errors": 0,
+        "skipped_deleted": 0,
+        "cancelled": 0,
+        "dead_letter": 0
+      },
+      "final_status": "VISIBLE_QWEN_APPROVED",
+      "spoiler_collapsed": 0,
+      "xss_escaped": true,
+      "ok": true
+    },
+    {
+      "id": "neg2",
+      "expect": "ALLOW",
+      "created_status": "PUBLISHED_UNREVIEWED",
+      "body_has_script": false,
+      "worker": {
+        "claimed": 1,
+        "processed": 1,
+        "applied": 1,
+        "schema_mismatch": 0,
+        "errors": 0,
+        "skipped_deleted": 0,
+        "cancelled": 0,
+        "dead_letter": 0
+      },
+      "final_status": "VISIBLE_SPOILER_COLLAPSED",
+      "spoiler_collapsed": 1,
+      "xss_escaped": true,
+      "ok": true
+    },
+    {
+      "id": "neg3",
+      "expect": "ALLOW",
+      "created_status": "PUBLISHED_UNREVIEWED",
+      "body_has_script": false,
+      "worker": {
+        "claimed": 1,
+        "processed": 1,
+        "applied": 1,
+        "schema_mismatch": 0,
+        "errors": 0,
+        "skipped_deleted": 0,
+        "cancelled": 0,
+        "dead_letter": 0
+      },
+      "final_status": "VISIBLE_QWEN_APPROVED",
+      "spoiler_collapsed": 0,
+      "xss_escaped": true,
+      "ok": true
+    },
+    {
+      "id": "spoiler1",
+      "expect": "SPOILER",
+      "created_status": "PUBLISHED_UNREVIEWED",
+      "body_has_script": false,
+      "worker": {
+        "claimed": 1,
+        "processed": 1,
+        "applied": 1,
+        "schema_mismatch": 0,
+        "errors": 0,
+        "skipped_deleted": 0,
+        "cancelled": 0,
+        "dead_letter": 0
+      },
+      "final_status": "VISIBLE_SPOILER_COLLAPSED",
+      "spoiler_collapsed": 1,
+      "xss_escaped": true,
+      "ok": true
+    },
+    {
+      "id": "spoiler2",
+      "expect": "SPOILER",
+      "created_status": "PUBLISHED_UNREVIEWED",
+      "body_has_script": false,
+      "worker": {
+        "claimed": 1,
+        "processed": 1,
+        "applied": 1,
+        "schema_mismatch": 0,
+        "errors": 0,
+        "skipped_deleted": 0,
+        "cancelled": 0,
+        "dead_letter": 0
+      },
+      "final_status": "VISIBLE_SPOILER_COLLAPSED",
+      "spoiler_collapsed": 1,
+      "xss_escaped": true,
+      "ok": true
+    },
+    {
+      "id": "spoiler3",
+      "expect": "SPOILER",
+      "created_status": "PUBLISHED_UNREVIEWED",
+      "body_has_script": false,
+      "worker": {
+        "claimed": 1,
+        "processed": 1,
+        "applied": 1,
+        "schema_mismatch": 0,
+        "errors": 0,
+        "skipped_deleted": 0,
+        "cancelled": 0,
+        "dead_letter": 0
+      },
+      "final_status": "VISIBLE_SPOILER_COLLAPSED",
+      "spoiler_collapsed": 1,
+      "xss_escaped": true,
+      "ok": true
+    },
+    {
+      "id": "insult1",
+      "expect": "HIDE_OR_HOLD",
+      "created_status": "PUBLISHED_UNREVIEWED",
+      "body_has_script": false,
+      "worker": {
+        "claimed": 1,
+        "processed": 1,
+        "applied": 1,
+        "schema_mismatch": 0,
+        "errors": 0,
+        "skipped_deleted": 0,
+        "cancelled": 0,
+        "dead_letter": 0
+      },
+      "final_status": "VISIBLE_QWEN_APPROVED",
+      "spoiler_collapsed": 0,
+      "xss_escaped": true,
+      "ok": true
+    },
+    {
+      "id": "insult2",
+      "expect": "HIDE_OR_HOLD",
+      "created_status": "PUBLISHED_UNREVIEWED",
+      "body_has_script": false,
+      "worker": {
+        "claimed": 1,
+        "processed": 1,
+        "applied": 1,
+        "schema_mismatch": 0,
+        "errors": 0,
+        "skipped_deleted": 0,
+        "cancelled": 0,
+        "dead_letter": 0
+      },
+      "final_status": "VISIBLE_QWEN_APPROVED",
+      "spoiler_collapsed": 0,
+      "xss_escaped": true,
+      "ok": true
+    },
+    {
+      "id": "spam1",
+      "expect": "HIDE_OR_HOLD",
+      "created_status": "PUBLISHED_UNREVIEWED",
+      "body_has_script": false,
+      "worker": {
+        "claimed": 1,
+        "processed": 1,
+        "applied": 1,
+        "schema_mismatch": 0,
+        "errors": 0,
+        "skipped_deleted": 0,
+        "cancelled": 0,
+        "dead_letter": 0
+      },
+      "final_status": "VISIBLE_QWEN_APPROVED",
+      "spoiler_collapsed": 0,
+      "xss_escaped": true,
+      "ok": true
+    },
+    {
+      "id": "spam2",
+      "expect": "HIDE_OR_HOLD",
+      "created_status": "PUBLISHED_UNREVIEWED",
+      "body_has_script": false,
+      "worker": {
+        "claimed": 1,
+        "processed": 1,
+        "applied": 1,
+        "schema_mismatch": 0,
+        "errors": 0,
+        "skipped_deleted": 0,
+        "cancelled": 0,
+        "dead_letter": 0
+      },
+      "final_status": "VISIBLE_QWEN_APPROVED",
+      "spoiler_collapsed": 0,
+      "xss_escaped": true,
+      "ok": true
+    },
+    {
+      "id": "xss1",
+      "expect": "PREFLIGHT_OR_CLEAN",
+      "created_status": "PUBLISHED_UNREVIEWED",
+      "body_has_script": false,
+      "worker": {
+        "claimed": 1,
+        "processed": 1,
+        "applied": 1,
+        "schema_mismatch": 0,
+        "errors": 0,
+        "skipped_deleted": 0,
+        "cancelled": 0,
+        "dead_letter": 0
+      },
+      "final_status": "VISIBLE_QWEN_APPROVED",
+      "spoiler_collapsed": 0,
+      "xss_escaped": true,
+      "ok": true
+    },
+    {
+      "id": "pii1",
+      "expect": "HIDE_OR_HOLD",
+      "created_status": "PUBLISHED_UNREVIEWED",
+      "body_has_script": false,
+      "worker": {
+        "claimed": 1,
+        "processed": 1,
+        "applied": 1,
+        "schema_mismatch": 0,
+        "errors": 0,
+        "skipped_deleted": 0,
+        "cancelled": 0,
+        "dead_letter": 0
+      },
+      "final_status": "HIDDEN_QWEN_HIGH_CONFIDENCE",
+      "spoiler_collapsed": 0,
+      "xss_escaped": true,
+      "ok": true
+    },
+    {
+      "id": "threat1",
+      "expect": "HIDE",
+      "created_status": "PUBLISHED_UNREVIEWED",
+      "body_has_script": false,
+      "worker": {
+        "claimed": 1,
+        "processed": 1,
+        "applied": 1,
+        "schema_mismatch": 0,
+        "errors": 0,
+        "skipped_deleted": 0,
+        "cancelled": 0,
+        "dead_letter": 0
+      },
+      "final_status": "HIDDEN_QWEN_HIGH_CONFIDENCE",
+      "spoiler_collapsed": 0,
+      "xss_escaped": true,
+      "ok": true
+    },
+    {
+      "id": "inject1",
+      "expect": "HOLD",
+      "created_status": "PUBLISHED_UNREVIEWED",
+      "body_has_script": false,
+      "worker": {
+        "claimed": 1,
+        "processed": 1,
+        "applied": 1,
+        "schema_mismatch": 0,
+        "errors": 0,
+        "skipped_deleted": 0,
+        "cancelled": 0,
+        "dead_letter": 0
+      },
+      "final_status": "HELD_FOR_REVIEW",
+      "spoiler_collapsed": 0,
+      "xss_escaped": true,
+      "ok": true
+    },
+    {
+      "id": "ambig1",
+      "expect": "ALLOW_OR_HOLD",
+      "created_status": "PUBLISHED_UNREVIEWED",
+      "body_has_script": false,
+      "worker": {
+        "claimed": 1,
+        "processed": 1,
+        "applied": 1,
+        "schema_mismatch": 0,
+        "errors": 0,
+        "skipped_deleted": 0,
+        "cancelled": 0,
+        "dead_letter": 0
+      },
+      "final_status": "VISIBLE_QWEN_APPROVED",
+      "spoiler_collapsed": 0,
+      "xss_escaped": true,
+      "ok": true
+    }
+  ]
+}

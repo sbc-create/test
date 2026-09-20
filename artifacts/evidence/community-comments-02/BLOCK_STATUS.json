@@ -1,0 +1,10 @@
+{
+  "B01_lifecycle": "DONE",
+  "B02_preflight": "DONE",
+  "B03_qwen_adapter": "DONE",
+  "B04_outbox_worker": "DONE",
+  "B05_service_integration": "DONE",
+  "B06_fake_canary": "DONE",
+  "B07_live_canary": "BLOCKED_QWEN_RUNTIME_CONFIG",
+  "public_rollout": "NOT_AUTHORIZED"
+}

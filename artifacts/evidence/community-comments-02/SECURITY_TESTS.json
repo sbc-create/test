@@ -1,0 +1,15 @@
+{
+  "xss": 1,
+  "csrf": 1,
+  "rate_limit": 1,
+  "prompt_injection": 1,
+  "schema": 1,
+  "outbox": 1,
+  "lease": 1,
+  "delete_race": 1,
+  "revision_race": 1,
+  "kill_switch": 1,
+  "degraded": 1,
+  "test_runs_consecutive": 2,
+  "passed": 94
+}
