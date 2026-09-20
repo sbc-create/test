@@ -1,0 +1,7 @@
+{
+  "block": "B14",
+  "status": "PASS_LOCAL_PARTIAL",
+  "summary": "Public footer omits version/commit; tests now assert absence of Zona · marker; OWNER_DATA_REQUIRED via data-contact-config-missing when links absent; balanced brand+2 columns fallback.",
+  "residuals": ["owner contact/legal still OWNER_DATA_REQUIRED"],
+  "updated_at": "2026-09-20T17:20:00Z"
+}
