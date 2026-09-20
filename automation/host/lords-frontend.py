@@ -2053,7 +2053,12 @@ justify-content:center;border-radius:10px;border:1px solid var(--a-line);backgro
 .zempty,.znf{padding:40px 16px;text-align:center;color:var(--a-dim)}
 .znf b,.zempty b{display:block;font-size:22px;font-weight:800;color:var(--a-ink);margin-bottom:8px}
 .asch{display:none}
-.asch-empty{padding:20px;border-radius:var(--a-radius-card);background:var(--a-alt);color:var(--a-dim);line-height:1.5}
+.asch-empty{padding:12px 14px;border-radius:var(--a-radius-card);background:var(--a-alt);color:var(--a-dim);
+line-height:1.4;font-size:14px}
+.asch-empty p{margin:6px 0 0}
+.asch-route{max-height:260px;overflow:hidden;margin:0 0 16px}
+.asch-route .zh{margin:12px 0 8px;font-size:22px;line-height:1.2}
+.ahome-sched{display:none;height:0;margin:0;padding:0;overflow:hidden}
 .zban,.zhead,.zhead__ps,.zhead__x,.zhead__o{display:contents}
 .ztitle{display:grid;grid-template-columns:1fr;gap:16px;margin:12px 0 8px;
 padding:clamp(12px,1.4vw,20px);background:var(--a-page);border-radius:var(--a-radius-shell);
@@ -6373,16 +6378,16 @@ class ВидАнимедиа(ВидЗона):
 
     # --- расписание ----------------------------------------------------
     def расписание(self) -> str:
-        """Honest empty schedule: no fabricated times, no provider jargon."""
+        """B04/B13.3 honest empty: no fabricated times; route panel ≤260px."""
         тело = (
-            '<div class="zwrap"><h1 class="zh">Расписание</h1>'
+            '<div class="zwrap"><div class="asch-route" data-b04="empty">'
+            '<h1 class="zh">Расписание</h1>'
             '<div class="asch-empty"><b>Расписание пока недоступно</b>'
-            '<p>Точные даты и время выхода серий в текущем каталоге не переданы. '
-            'Как только они появятся из источника, этот раздел заполнится сам. '
-            'Пока смотрите <a href="/new/">новое в каталоге</a> и '
-            '<a href="/catalog/">каталог</a>.</p></div></div>')
+            '<p>Источник плановых выходов ещё не подключен. '
+            'Смотрите <a href="/new/">новое в каталоге</a> и '
+            '<a href="/catalog/">каталог</a>.</p></div></div></div>')
         return self.оболочка(тело, f"Расписание — {self.имя}", "/schedule/",
-                             актив="",
+                             актив="/schedule/",
                              описание="Расписание выхода серий аниме "
                              "(даты выхода пока не переданы источником).")
 
