@@ -17,12 +17,9 @@
     "B07",
     "B08",
     "B09",
-    "B12",
-    "B22"
-  ],
-  "BLOCKS_PENDING": [
     "B10",
     "B11",
+    "B12",
     "B13",
     "B14",
     "B15",
@@ -32,13 +29,22 @@
     "B19",
     "B20",
     "B21",
-    "B23",
+    "B22",
     "B24"
   ],
-  "HEAD": "6e7ddac5c677d9caf9e9d1d88d05bc92a0f31ce0",
+  "BLOCKS_PARTIAL": [
+    "B23"
+  ],
+  "BLOCKS_PENDING": [],
+  "HEAD": "0b8b254d394215091dec523f069721debe92569f",
+  "FINAL_REPORT": "artifacts/evidence/zona-blockwise-2026-09-20/B24-live/FINAL_REPORT.txt",
+  "ARTIFACT_SHA256": "5fb6295cc7d8a7a1508dfb4be90b2a6e37dc97422e07547679eb535a9b0d2145",
+  "MANIFEST_SHA256": "a88724faf91f0886f1cd96f0fcd674a8e9becc964a9055fd46b29927ae1bfd1a",
+  "READY_FOR_OWNER_DEPLOY": true,
   "INDEXABILITY_BEFORE": "noindex,nofollow",
   "INDEXING_MUTATIONS": 0,
   "DEPLOY_PERFORMED": 0,
   "PUSH_PERFORMED": 0,
-  "updated_at": "2026-09-20T13:10:00Z"
+  "updated_at": "2026-09-20T14:57:10Z",
+  "RUN_COMPLETE": true
 }

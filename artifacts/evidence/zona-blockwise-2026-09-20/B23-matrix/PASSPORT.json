@@ -1,0 +1,18 @@
+{
+  "block": "B23",
+  "status": "PARTIAL_WITH_RESIDUAL",
+  "local_consecutive_stable_runs": 2,
+  "pytest_runs": [
+    "pytest_run1.txt",
+    "pytest_run2.txt"
+  ],
+  "http_matrix": "AGGREGATES.json",
+  "residual": [
+    {
+      "item": "headed_browser_geometry_oracle",
+      "owner": "qa",
+      "next_step": "Playwright overflow/overlap/overlap matrix"
+    }
+  ],
+  "updated_at": "2026-09-20T14:57:10Z"
+}

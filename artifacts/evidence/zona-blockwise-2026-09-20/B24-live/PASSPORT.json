@@ -1,0 +1,11 @@
+{
+  "block": "B24",
+  "status": "PASS_LOCAL",
+  "live_activation": "BLOCKED_OWNER_ACTION",
+  "blocker_code": "OWNER_DEPLOY_APPROVAL_REQUIRED",
+  "artifact_sha256": "5fb6295cc7d8a7a1508dfb4be90b2a6e37dc97422e07547679eb535a9b0d2145",
+  "manifest_sha256": "a88724faf91f0886f1cd96f0fcd674a8e9becc964a9055fd46b29927ae1bfd1a",
+  "source_artifact_match": true,
+  "deploy_performed": 0,
+  "updated_at": "2026-09-20T14:57:10Z"
+}

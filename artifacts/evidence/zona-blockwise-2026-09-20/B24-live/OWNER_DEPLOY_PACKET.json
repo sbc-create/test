@@ -1,0 +1,63 @@
+{
+  "FINAL_SOURCE_HEAD": "0b8b254d394215091dec523f069721debe92569f",
+  "ARTIFACT_SOURCE_HEAD": "0b8b254d394215091dec523f069721debe92569f",
+  "ARTIFACT_SHA256": "5fb6295cc7d8a7a1508dfb4be90b2a6e37dc97422e07547679eb535a9b0d2145",
+  "MANIFEST_SHA256": "a88724faf91f0886f1cd96f0fcd674a8e9becc964a9055fd46b29927ae1bfd1a",
+  "DEPLOY_SCOPE": "zona-01 template frontend only (lords-frontend.py)",
+  "SERVICE_NAME": "nova-zona-01",
+  "DOMAIN": "zonafilm.space",
+  "PROFILE": "zona-01",
+  "ROLLBACK_PATH_OR_PLAN": "Restore previous artifact tarball + template-manifest.json under /srv/lords/.frontend/; point unit to prior artifact_sha256; systemctl restart nova-zona-01",
+  "RESTART_COMMAND": "systemctl restart nova-zona-01",
+  "POST_RESTART_PROBES": [
+    "curl -sI https://zonafilm.space/ | grep -i x-robots-tag",
+    "curl -s https://zonafilm.space/ | grep -o 'noindex, *nofollow'",
+    "curl -s -o /dev/null -w '%{http_code}' https://zonafilm.space/catalog/",
+    "curl -s -o /dev/null -w '%{http_code}' https://zonafilm.space/country/velikobritaniya/",
+    "curl -s -o /dev/null -w '%{http_code}' https://zonafilm.space/title/seriya-matrix/"
+  ],
+  "ROLLBACK_COMMAND": "Install prior ARTIFACT_SHA256 from rollback inventory; systemctl restart nova-zona-01; re-run POST_RESTART_PROBES",
+  "EXPECTED_INDEXABILITY": "noindex,nofollow",
+  "OWNER_DATA_GAPS": [
+    "footer contact/legal URLs not in confirmed config",
+    "provider_available_at / episode_released_at ledgers absent",
+    "OWNER_DEPLOY_APPROVAL_ID missing for this artifact"
+  ],
+  "RESIDUAL_BACKLOG": [
+    {
+      "item": "headed_browser_geometry_oracle",
+      "owner": "qa",
+      "next_step": "run Playwright overflow/overlap matrix on 1440/768/390"
+    },
+    {
+      "item": "full_catalog_pagination_oracle_53524",
+      "owner": "qa",
+      "next_step": "run against pinned production catalog digest"
+    },
+    {
+      "item": "owner_deploy_approval",
+      "owner": "privileged_restart",
+      "next_step": "issue OWNER_DEPLOY_APPROVAL_ID for this ARTIFACT_SHA256"
+    },
+    {
+      "item": "popular_two_real_weekly_cycles",
+      "owner": "analytics",
+      "next_step": "observe second real weekly cycle before overall close"
+    }
+  ],
+  "DEPLOY_AUTHORIZED_BY_CONTRACT": false,
+  "DEPLOY_PERFORMED": 0,
+  "RESTART_PERFORMED": 0,
+  "LIVE_MUTATIONS": 0,
+  "READY_FOR_OWNER_DEPLOY": true,
+  "LIVE_EXECUTION_STATUS": "NOT_AUTHORIZED",
+  "blocker_code": "OWNER_DEPLOY_APPROVAL_REQUIRED",
+  "SOURCE_ARTIFACT_MATCH": true,
+  "ARTIFACT_LOCAL_MATRIX_PASS": true,
+  "LOCAL_CONSECUTIVE_STABLE_RUNS": 2,
+  "ROLLBACK_INVENTORY": {
+    "current_artifact": "artifacts/zona-blockwise-artifact/zona-01-frontend-0b8b254d3942.tar.gz",
+    "current_artifact_sha256": "5fb6295cc7d8a7a1508dfb4be90b2a6e37dc97422e07547679eb535a9b0d2145",
+    "previous_checkpoint_head": "7f3743dc7a3b656a207ffd8e68886bbfa3342d56"
+  }
+}

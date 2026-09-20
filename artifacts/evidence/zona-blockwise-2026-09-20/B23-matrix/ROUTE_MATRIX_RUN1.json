@@ -1,0 +1,172 @@
+{
+  "run_id": "local-1",
+  "rows": [
+    {
+      "route": "home",
+      "path": "/",
+      "status": 200,
+      "h1_count": 1,
+      "meta_robots": "noindex,nofollow",
+      "x_robots_tag": "",
+      "canonical": "https://test.example/",
+      "player_instance_count": 0,
+      "soft_404": false
+    },
+    {
+      "route": "catalog",
+      "path": "/catalog/",
+      "status": 200,
+      "h1_count": 1,
+      "meta_robots": "noindex,nofollow",
+      "x_robots_tag": "",
+      "canonical": "https://test.example/catalog/?sort=newest",
+      "player_instance_count": 0,
+      "soft_404": false
+    },
+    {
+      "route": "filtered-catalog",
+      "path": "/catalog/?genre=drama&year=2010",
+      "status": 200,
+      "h1_count": 1,
+      "meta_robots": "noindex,nofollow",
+      "x_robots_tag": "",
+      "canonical": "https://test.example/catalog/?year=2010&amp;genre=drama&amp;sort=newest",
+      "player_instance_count": 0,
+      "soft_404": false
+    },
+    {
+      "route": "new",
+      "path": "/new/",
+      "status": 200,
+      "h1_count": 1,
+      "meta_robots": "noindex,nofollow",
+      "x_robots_tag": "",
+      "canonical": "https://test.example/new/?sort=newest",
+      "player_instance_count": 0,
+      "soft_404": false
+    },
+    {
+      "route": "new-added",
+      "path": "/new/?mode=added",
+      "status": 200,
+      "h1_count": 1,
+      "meta_robots": "noindex,nofollow",
+      "x_robots_tag": "",
+      "canonical": "https://test.example/new/?sort=newest&amp;mode=added",
+      "player_instance_count": 0,
+      "soft_404": false
+    },
+    {
+      "route": "search",
+      "path": "/search/?q=%D0%9D%D0%B0%D0%B7%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5",
+      "status": 200,
+      "h1_count": 1,
+      "meta_robots": "noindex,nofollow",
+      "x_robots_tag": "",
+      "canonical": "https://test.example/search/?q=Название",
+      "player_instance_count": 0,
+      "soft_404": false
+    },
+    {
+      "route": "collections",
+      "path": "/collections/",
+      "status": 200,
+      "h1_count": 1,
+      "meta_robots": "noindex,nofollow",
+      "x_robots_tag": "",
+      "canonical": "https://test.example/collections/",
+      "player_instance_count": 0,
+      "soft_404": false
+    },
+    {
+      "route": "title",
+      "path": "/title/t-0000/",
+      "status": 200,
+      "h1_count": 1,
+      "meta_robots": "noindex,nofollow",
+      "x_robots_tag": "",
+      "canonical": "https://test.example/title/t-0000/",
+      "player_instance_count": 1,
+      "soft_404": false
+    },
+    {
+      "route": "generic-series",
+      "path": "/title/seriya-matrix/",
+      "status": 200,
+      "h1_count": 1,
+      "meta_robots": "noindex,nofollow",
+      "x_robots_tag": "",
+      "canonical": "https://test.example/title/seriya-matrix/",
+      "player_instance_count": 1,
+      "soft_404": false
+    },
+    {
+      "route": "exact-episode",
+      "path": "/title/seriya-matrix/season-1/episode-2/",
+      "status": 200,
+      "h1_count": 1,
+      "meta_robots": "noindex,nofollow",
+      "x_robots_tag": "",
+      "canonical": "https://test.example/title/seriya-matrix/season-1/episode-2/",
+      "player_instance_count": 1,
+      "soft_404": false
+    },
+    {
+      "route": "country-canonical",
+      "path": "/country/velikobritaniya/",
+      "status": 200,
+      "h1_count": 1,
+      "meta_robots": "noindex,nofollow",
+      "x_robots_tag": "",
+      "canonical": "https://test.example/catalog/?country=velikobritaniya&amp;sort=newest",
+      "player_instance_count": 0,
+      "soft_404": false
+    },
+    {
+      "route": "movies",
+      "path": "/movies/",
+      "status": 200,
+      "h1_count": 1,
+      "meta_robots": "noindex,nofollow",
+      "x_robots_tag": "",
+      "canonical": "https://test.example/movies/?sort=newest",
+      "player_instance_count": 0,
+      "soft_404": false
+    },
+    {
+      "route": "series",
+      "path": "/series/",
+      "status": 200,
+      "h1_count": 1,
+      "meta_robots": "noindex,nofollow",
+      "x_robots_tag": "",
+      "canonical": "https://test.example/series/?sort=newest",
+      "player_instance_count": 0,
+      "soft_404": false
+    },
+    {
+      "route": "404",
+      "path": "/no-such-route-xyz/",
+      "status": 404,
+      "h1_count": 1,
+      "meta_robots": "noindex,nofollow",
+      "x_robots_tag": "",
+      "canonical": "",
+      "player_instance_count": 0,
+      "soft_404": false
+    }
+  ],
+  "aggregates": {
+    "HTTP_5XX_COUNT": 0,
+    "SOFT_404_COUNT": 0,
+    "REDIRECT_LOOP_COUNT": 0,
+    "HTTP_ROUTES_TESTED": 14,
+    "META_ROBOTS_NOINDEX_COUNT": 14,
+    "H1_VIOLATIONS": 0,
+    "PLAYER_INSTANCE_MAX": 1,
+    "PAGINATION_DUPLICATE_IDS": 0,
+    "INVALID_PAGE_HTTP_404": 1,
+    "EXPECTED_404_PASS": 1,
+    "COUNTRY_CANONICAL_200": 1
+  }
+}
