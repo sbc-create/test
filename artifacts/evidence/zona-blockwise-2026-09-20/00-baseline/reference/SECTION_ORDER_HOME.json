@@ -1,0 +1,64 @@
+{
+  "route": "https://zonafilm.ru/",
+  "viewport": "1440x900",
+  "h2_order": [
+    "Популярные студии",
+    "Популярные новинки фильмов",
+    "Популярные сериалы",
+    "Добавленные недавно фильмы",
+    "Новые серии"
+  ],
+  "document": {
+    "width": 1440,
+    "height": 2319,
+    "clientWidth": 1440,
+    "clientHeight": 900
+  },
+  "estimated_columns_first_card_row": 10,
+  "header": [
+    {
+      "tag": "header",
+      "id": null,
+      "className": "layout-child header flex justify-between gap-5",
+      "x": 120,
+      "y": 0,
+      "width": 1200,
+      "height": 70,
+      "display": "flex",
+      "position": "static",
+      "fontSize": "16px",
+      "lineHeight": "24px",
+      "fontWeight": "400"
+    },
+    {
+      "tag": "nav",
+      "id": null,
+      "className": "navigation z-[60] font-medium w-full lg:w-auto h-screen lg:h-full lg:flex gap-9 lg:bg-transparent absolute lg:static bg-",
+      "x": 375,
+      "y": 0,
+      "width": 373,
+      "height": 70,
+      "display": "flex",
+      "position": "static",
+      "fontSize": "16px",
+      "lineHeight": "24px",
+      "fontWeight": "500"
+    }
+  ],
+  "footer": [
+    {
+      "tag": "footer",
+      "id": "footer",
+      "className": "layout-child pt-8 pb-11 items-center justify-between bg-main-color-900 ",
+      "x": 120,
+      "y": 2183,
+      "width": 1200,
+      "height": 136,
+      "display": "block",
+      "position": "static",
+      "fontSize": "16px",
+      "lineHeight": "24px",
+      "fontWeight": "400"
+    }
+  ]
+}

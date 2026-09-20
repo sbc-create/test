@@ -1,13 +1,12 @@
 {
   "block": "B00",
-  "resumed_after_owner_override": true,
-  "owner_decision_id": "ZONA-B00-OVERRIDE-20260920-01",
-  "acceptance_contract_gate": "PASS",
-  "new_contract_digest": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
-  "reference_gate": "BLOCKED_DEPENDENCY",
-  "blocker_code": "REFERENCE_UNAVAILABLE",
-  "b01_b24_continued": false,
-  "reason_stopped": "Owner has not supplied exact REFERENCE_URL; capturing/guessing another visual target is forbidden",
-  "evidence_root": "artifacts/evidence/zona-blockwise-2026-09-20",
-  "next_action": "Owner provides REFERENCE_URL; then complete reference freeze and proceed B01"
+  "B00_STATUS": "PASS",
+  "REFERENCE_FREEZE": "PASS",
+  "REFERENCE_OWNER_DECISION": "ACCEPTED",
+  "REFERENCE_BLOCKER": "RESOLVED",
+  "ACCEPTANCE_CONTRACT_GATE": "PASS",
+  "CONTRACT_DIGEST": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+  "REFERENCE_PAGES_CAPTURED": 42,
+  "next_block": "B01",
+  "closed_at": "2026-09-20T12:55:00Z"
 }

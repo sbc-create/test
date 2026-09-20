@@ -1,0 +1,954 @@
+{
+  "captured_at": "2026-09-20T12:52:30Z",
+  "viewport": "768x1024",
+  "requested_url": "https://zonafilm.ru/movies/filter/genre-drama",
+  "final_url": "https://zonafilm.ru/movies/filter/genre-drama",
+  "http_status": 200,
+  "redirect_chain": [
+    {
+      "final": "https://zonafilm.ru/movies/filter/genre-drama",
+      "status": 200
+    }
+  ],
+  "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/genre__768x1024.png",
+  "screenshot_sha256": "8f3e55c7d28014d93c05a6b54588c4f2ba90e389af4effd39224ee482ab9f66b",
+  "metrics": {
+    "document": {
+      "width": 768,
+      "height": 8365,
+      "clientWidth": 768,
+      "clientHeight": 1024
+    },
+    "title": "Смотреть Популярные драмы онлайн бесплатно - ZonaFilm.ru",
+    "canonical": "https://zonafilm.ru/movies/filter/genre-drama",
+    "robots": null,
+    "headers": [
+      {
+        "tag": "header",
+        "id": null,
+        "className": "layout-child header flex justify-between gap-5",
+        "x": 16,
+        "y": 0,
+        "width": 736,
+        "height": 70,
+        "display": "flex",
+        "position": "static",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "400"
+      },
+      {
+        "tag": "nav",
+        "id": null,
+        "className": "navigation z-[60] font-medium w-full lg:w-auto h-screen lg:h-full lg:flex gap-9 lg:bg-transparent absolute lg:static bg-",
+        "x": -768,
+        "y": 70,
+        "width": 768,
+        "height": 1024,
+        "display": "block",
+        "position": "absolute",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "500"
+      },
+      {
+        "tag": "nav",
+        "id": null,
+        "className": "layout-child py-5 hidden overflow-x-scroll no-scrollbar",
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "display": "none",
+        "position": "static",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "400"
+      }
+    ],
+    "mains": [],
+    "footers": [
+      {
+        "tag": "footer",
+        "id": "footer",
+        "className": "layout-child pt-8 pb-11 items-center justify-between bg-main-color-900 ",
+        "x": 16,
+        "y": 8193,
+        "width": 736,
+        "height": 172,
+        "display": "block",
+        "position": "static",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "400"
+      }
+    ],
+    "h1": {
+      "tag": "h1",
+      "id": null,
+      "className": "text-ellipsis overflow-hidden text-2xl",
+      "x": 16,
+      "y": 214,
+      "width": 225,
+      "height": 32,
+      "display": "block",
+      "position": "static",
+      "fontSize": "24px",
+      "lineHeight": "32px",
+      "fontWeight": "400"
+    },
+    "h2": [],
+    "cards_sample": [
+      {
+        "href": "/movies/shepot-za-oknom",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 41,
+          "y": 271,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 41,
+          "y": 271,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/betmen-padenie-rytsarya-chast-pervaya",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 293,
+          "y": 271,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 293,
+          "y": 271,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/priglashenie-2026",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 545,
+          "y": 271,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 545,
+          "y": 271,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/proekt-konets-sveta",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 41,
+          "y": 665,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 41,
+          "y": 665,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/sumerki-2008",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 293,
+          "y": 665,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 293,
+          "y": 665,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/poslednii-rassvet-2026",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 545,
+          "y": 665,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 545,
+          "y": 665,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/supergerl-2026",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 41,
+          "y": 1059,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 41,
+          "y": 1059,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/mstiteli-final",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 293,
+          "y": 1059,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 293,
+          "y": 1059,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/smert-robin-guda",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 545,
+          "y": 1059,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 545,
+          "y": 1059,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/sumerki-saga-novolunie",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 41,
+          "y": 1453,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 41,
+          "y": 1453,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/fokus-2014",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 293,
+          "y": 1453,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 293,
+          "y": 1453,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/glyuki-2006",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 545,
+          "y": 1453,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 545,
+          "y": 1453,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/karatel-poslednee-ubiistvo",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 41,
+          "y": 1847,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 41,
+          "y": 1847,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/poslednii-dom-2026",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 293,
+          "y": 1847,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 293,
+          "y": 1847,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/sumerki-saga-rassvet-chast-1",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 545,
+          "y": 1847,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 545,
+          "y": 1847,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/sumerki-saga-rassvet-chast-2",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 41,
+          "y": 2241,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 41,
+          "y": 2241,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/f1",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 293,
+          "y": 2241,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 293,
+          "y": 2241,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/vlastelin-kolets-bratstvo-koltsa",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 545,
+          "y": 2241,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 545,
+          "y": 2241,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/dyavol-nosit-prada-2",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 41,
+          "y": 2635,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 41,
+          "y": 2635,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/vsego-odna-noch-2026",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 293,
+          "y": 2635,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 293,
+          "y": 2635,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/dyuna-2021",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 545,
+          "y": 2635,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 545,
+          "y": 2635,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/krushenie-reisa",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 41,
+          "y": 3029,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 41,
+          "y": 3029,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/interstellar",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 293,
+          "y": 3029,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 293,
+          "y": 3029,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/dyuna-chast-vtoraya",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 545,
+          "y": 3029,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 545,
+          "y": 3029,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      }
+    ],
+    "estimated_columns": 3,
+    "sections_sample": [
+      {
+        "text": "Драма",
+        "box": {
+          "tag": "section",
+          "id": null,
+          "className": "layout-child w-full md:flex flex-wrap rounded-md  bg-inherit px-0 py-5",
+          "x": 16,
+          "y": 70,
+          "width": 736,
+          "height": 124,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Спасибо, что делитесь с друзьями",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "grid items-center md:flex flex-col md:flex-end flex-wrap gap-3 items-start md:flex-row md:items-center",
+          "x": 16,
+          "y": 8225,
+          "width": 736,
+          "height": 96,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Спасибо, что делитесь с друзьями",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "col-start-1 row-start-3 flex flex-col gap-2.5 md:items-center order-3 md:flex-row md:order-none md:mt-0 md:ml-auto lg:ml",
+          "x": 191,
+          "y": 8225,
+          "width": 320,
+          "height": 24,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Мы в соцсетях",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "col-start-2 row-start-3 items-end flex flex-col gap-2.5 md:items-center order-3 md:flex-row md:order-none md:mt-0 md:ml-",
+          "x": 552,
+          "y": 8225,
+          "width": 200,
+          "height": 24,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "admin@zonafilm.ru",
+        "box": {
+          "tag": "noindex",
+          "id": null,
+          "className": "col-start-1 row-start-2 text-main-color-200 w-full lg:w-auto md:text-end ml-auto",
+          "x": 16,
+          "y": 8261,
+          "width": 736,
+          "height": 24,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Пользовательское соглашение",
+        "box": {
+          "tag": "noindex",
+          "id": null,
+          "className": "col-start-2 row-start-1 underline md:w-full text-sm md:text-base text-end",
+          "x": 16,
+          "y": 8297,
+          "width": 736,
+          "height": 24,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      }
+    ],
+    "body_overflow_x": false
+  }
+}

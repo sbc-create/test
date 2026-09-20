@@ -1,12 +1,13 @@
 {
-  "frozen": false,
-  "reason": "Cannot freeze display policies against reference until REFERENCE_URL confirmed and captured",
-  "draft_from_contract_only": {
-    "missing_required": "explicit empty/compact or block hidden height=0 per block passport",
-    "missing_optional": "omit field",
-    "stale": "last-good only with telemetry if policy allows",
-    "error": "honest error; do not substitute neighboring shelf",
-    "absent_rating": "hide; never 0",
-    "true_description_gap": "compact honest state"
-  }
+  "frozen": true,
+  "frozen_at": "2026-09-20T12:55:00Z",
+  "source": "ZONA_BLOCK_SPEC_V1 + reference freeze ZONA-REFERENCE-20260920-01",
+  "missing_required": "explicit empty/compact or block hidden height=0 per block passport",
+  "missing_optional": "omit field",
+  "stale": "last-good only with telemetry if policy allows",
+  "error": "honest error; do not substitute neighboring shelf",
+  "absent_rating": "hide; never render 0",
+  "true_description_gap": "compact honest state",
+  "hidden_optional_block_height_px": 0,
+  "REFERENCE_EXACT_PIXEL_CLONE_REQUIRED": false
 }

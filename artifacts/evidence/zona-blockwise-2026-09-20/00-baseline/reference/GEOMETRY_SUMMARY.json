@@ -1,0 +1,43 @@
+{
+  "movies_1440": {
+    "estimated_columns": 6,
+    "card_widths": [
+      183
+    ],
+    "card_heights": [
+      374
+    ],
+    "sample_card": {
+      "href": "/movies/moana-2026",
+      "card": {
+        "tag": "a",
+        "id": null,
+        "className": "group",
+        "x": 120,
+        "y": 223,
+        "width": 183,
+        "height": 374,
+        "display": "block",
+        "position": "static",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "400"
+      },
+      "img": {
+        "tag": "img",
+        "id": null,
+        "className": "rounded-t-lg",
+        "x": 120,
+        "y": 223,
+        "width": 183,
+        "height": 271,
+        "display": "block",
+        "position": "absolute",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "400"
+      }
+    }
+  },
+  "home_1440_columns": 10
+}

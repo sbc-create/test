@@ -1,0 +1,11 @@
+{
+  "state": "RESOLVED_BY_OWNER_DECISION",
+  "owner_reference_decision_id": "ZONA-REFERENCE-20260920-01",
+  "previous_blocker_path": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/REFERENCE_URL_BLOCKER.json",
+  "previous_blocker_code": "REFERENCE_UNAVAILABLE",
+  "primary_reference_url": "https://zonafilm.ru/",
+  "REFERENCE_OWNER_DECISION": "ACCEPTED",
+  "REFERENCE_BLOCKER": "RESOLVED",
+  "resolved_at": "2026-09-20T12:50:09Z",
+  "note": "Historical REFERENCE_URL_BLOCKER.json left immutable"
+}

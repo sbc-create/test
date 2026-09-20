@@ -1,0 +1,8 @@
+{
+  "captured_at": "2026-09-20T12:54:34Z",
+  "opened_attempted": true,
+  "opened_heuristic": true,
+  "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/mobile_nav__390x844.png",
+  "screenshot_sha256": "ed4fa45f059680074c5fa83b6073612f4036dbfeb4ef0cdb808e5081eb7ea5a2",
+  "final_url": "https://zonafilm.ru/"
+}

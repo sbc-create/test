@@ -1,0 +1,178 @@
+{
+  "captured_at": "2026-09-20T12:53:14Z",
+  "viewport": "1440x900",
+  "requested_url": "https://zonafilm.ru/rules",
+  "final_url": "https://zonafilm.ru/rules",
+  "http_status": 200,
+  "redirect_chain": [
+    {
+      "final": "https://zonafilm.ru/rules",
+      "status": 200
+    }
+  ],
+  "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/rules_footer__1440x900.png",
+  "screenshot_sha256": "3f3bc66dcd9d0ceed544999def1a579398487ed983be03f3d92a7b265bdd685e",
+  "metrics": {
+    "document": {
+      "width": 1440,
+      "height": 1220,
+      "clientWidth": 1440,
+      "clientHeight": 900
+    },
+    "title": "Пользовательское соглашение",
+    "canonical": "https://zonafilm.ru/rules",
+    "robots": null,
+    "headers": [
+      {
+        "tag": "header",
+        "id": null,
+        "className": "layout-child header flex justify-between gap-5",
+        "x": 120,
+        "y": 0,
+        "width": 1200,
+        "height": 70,
+        "display": "flex",
+        "position": "static",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "400"
+      },
+      {
+        "tag": "nav",
+        "id": null,
+        "className": "navigation z-[60] font-medium w-full lg:w-auto h-screen lg:h-full lg:flex gap-9 lg:bg-transparent absolute lg:static bg-",
+        "x": 375,
+        "y": 0,
+        "width": 373,
+        "height": 70,
+        "display": "flex",
+        "position": "static",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "500"
+      }
+    ],
+    "mains": [],
+    "footers": [
+      {
+        "tag": "footer",
+        "id": "footer",
+        "className": "layout-child pt-8 pb-11 items-center justify-between bg-main-color-900 ",
+        "x": 120,
+        "y": 764,
+        "width": 1200,
+        "height": 136,
+        "display": "block",
+        "position": "static",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "400"
+      }
+    ],
+    "h1": {
+      "tag": "h1",
+      "id": null,
+      "className": "text-2xl font-semibold",
+      "x": 120,
+      "y": 126,
+      "width": 1200,
+      "height": 32,
+      "display": "block",
+      "position": "static",
+      "fontSize": "24px",
+      "lineHeight": "32px",
+      "fontWeight": "600"
+    },
+    "h2": [],
+    "cards_sample": [],
+    "estimated_columns": null,
+    "sections_sample": [
+      {
+        "text": "Спасибо, что делитесь с друзьями",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "grid items-center md:flex flex-col md:flex-end flex-wrap gap-3 items-start md:flex-row md:items-center",
+          "x": 120,
+          "y": 796,
+          "width": 1200,
+          "height": 60,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Спасибо, что делитесь с друзьями",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "col-start-1 row-start-3 flex flex-col gap-2.5 md:items-center order-3 md:flex-row md:order-none md:mt-0 md:ml-auto lg:ml",
+          "x": 274,
+          "y": 796,
+          "width": 320,
+          "height": 24,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Мы в соцсетях",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "col-start-2 row-start-3 items-end flex flex-col gap-2.5 md:items-center order-3 md:flex-row md:order-none md:mt-0 md:ml-",
+          "x": 686,
+          "y": 796,
+          "width": 200,
+          "height": 24,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Почта для связи: admin@zonafilm.ru",
+        "box": {
+          "tag": "noindex",
+          "id": null,
+          "className": "col-start-1 row-start-2 text-main-color-200 w-full lg:w-auto md:text-end ml-auto",
+          "x": 1047,
+          "y": 796,
+          "width": 273,
+          "height": 24,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Пользовательское соглашение",
+        "box": {
+          "tag": "noindex",
+          "id": null,
+          "className": "col-start-2 row-start-1 underline md:w-full text-sm md:text-base text-end",
+          "x": 120,
+          "y": 832,
+          "width": 1200,
+          "height": 24,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      }
+    ],
+    "body_overflow_x": false
+  }
+}

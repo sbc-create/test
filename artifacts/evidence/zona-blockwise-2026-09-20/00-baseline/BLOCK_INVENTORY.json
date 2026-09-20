@@ -2,10 +2,11 @@
   "blocks": [
     {
       "block_id": "B00",
-      "state": "PASS_PARTIAL_BLOCKED_REFERENCE",
+      "state": "PASS",
       "close_condition": "frozen digest + reference + manifests",
       "acceptance_contract_gate": "PASS",
-      "reference_gate": "BLOCKED_DEPENDENCY"
+      "reference_gate": "PASS",
+      "closed_at": "2026-09-20T12:55:00Z"
     },
     {
       "block_id": "B01",
@@ -128,5 +129,5 @@
       "close_condition": "immutable artifact/owner packet"
     }
   ],
-  "updated_at": "2026-09-20T12:36:02Z"
+  "updated_at": "2026-09-20T12:55:00Z"
 }

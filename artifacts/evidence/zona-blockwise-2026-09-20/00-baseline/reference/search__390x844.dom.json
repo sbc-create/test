@@ -1,0 +1,1149 @@
+{
+  "captured_at": "2026-09-20T12:52:53Z",
+  "viewport": "390x844",
+  "requested_url": "https://zonafilm.ru/?search=%D0%BC%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0",
+  "final_url": "https://zonafilm.ru/?search=%D0%BC%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0",
+  "http_status": 200,
+  "redirect_chain": [
+    {
+      "final": "https://zonafilm.ru/?search=%D0%BC%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0",
+      "status": 200
+    }
+  ],
+  "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/search__390x844.png",
+  "screenshot_sha256": "131b5e3483ea64586d9305b9e02344663a3df10b3ef34a297bca28fe7a9b7b52",
+  "metrics": {
+    "document": {
+      "width": 600,
+      "height": 2085,
+      "clientWidth": 390,
+      "clientHeight": 844
+    },
+    "title": "Смотреть топовые фильмы и сериалы лучших студий онлайн в хорошем качестве бесплатно - ZonaFilm.ru",
+    "canonical": "https://zonafilm.ru/",
+    "robots": null,
+    "headers": [
+      {
+        "tag": "header",
+        "id": null,
+        "className": "layout-child header flex justify-between gap-5",
+        "x": 16,
+        "y": 0,
+        "width": 358,
+        "height": 70,
+        "display": "flex",
+        "position": "static",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "400"
+      },
+      {
+        "tag": "nav",
+        "id": null,
+        "className": "navigation z-[60] font-medium w-full lg:w-auto h-screen lg:h-full lg:flex gap-9 lg:bg-transparent absolute lg:static bg-",
+        "x": -390,
+        "y": 70,
+        "width": 390,
+        "height": 844,
+        "display": "block",
+        "position": "absolute",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "500"
+      }
+    ],
+    "mains": [],
+    "footers": [
+      {
+        "tag": "footer",
+        "id": "footer",
+        "className": "layout-child pt-8 pb-11 items-center justify-between bg-main-color-900 ",
+        "x": 16,
+        "y": 1847,
+        "width": 358,
+        "height": 238,
+        "display": "block",
+        "position": "static",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "400"
+      }
+    ],
+    "h1": null,
+    "h2": [
+      {
+        "text": "Популярные студии",
+        "box": {
+          "tag": "h2",
+          "id": null,
+          "className": "text-[20px] leading-[24px] lg:text-[24px] lg:leading-[28px]",
+          "x": 16,
+          "y": 110,
+          "width": 358,
+          "height": 24,
+          "display": "block",
+          "position": "static",
+          "fontSize": "20px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Популярные новинки фильмов",
+        "box": {
+          "tag": "h2",
+          "id": null,
+          "className": "text-[20px] leading-[24px] lg:text-[24px] lg:leading-[28px]",
+          "x": 16,
+          "y": 319,
+          "width": 297,
+          "height": 24,
+          "display": "block",
+          "position": "static",
+          "fontSize": "20px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Популярные сериалы",
+        "box": {
+          "tag": "h2",
+          "id": null,
+          "className": "text-[20px] leading-[24px] lg:text-[24px] lg:leading-[28px]",
+          "x": 16,
+          "y": 701,
+          "width": 207,
+          "height": 24,
+          "display": "block",
+          "position": "static",
+          "fontSize": "20px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Добавленные недавно фильмы",
+        "box": {
+          "tag": "h2",
+          "id": null,
+          "className": "text-[20px] leading-[24px] lg:text-[24px] lg:leading-[28px]",
+          "x": 16,
+          "y": 1083,
+          "width": 304,
+          "height": 24,
+          "display": "block",
+          "position": "static",
+          "fontSize": "20px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Новые серии",
+        "box": {
+          "tag": "h2",
+          "id": null,
+          "className": "text-[20px] leading-[24px] lg:text-[24px] lg:leading-[28px]",
+          "x": 16,
+          "y": 1465,
+          "width": 124,
+          "height": 24,
+          "display": "block",
+          "position": "static",
+          "fontSize": "20px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      }
+    ],
+    "cards_sample": [
+      {
+        "href": "/movies/filter/studio-netflix",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "w-[102px] flex flex-col group studio-card",
+          "x": 16,
+          "y": 154,
+          "width": 102,
+          "height": 130,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-lg group-hover:shadow-[0_0px_16px_2px] group-hover:shadow-brand-color xl:group-hover:scale-[0.87] group-focus-vi",
+          "x": 16,
+          "y": 154,
+          "width": 102,
+          "height": 100,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/filter/studio-warner_bros",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "w-[102px] flex flex-col group studio-card",
+          "x": 128,
+          "y": 154,
+          "width": 102,
+          "height": 130,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-lg group-hover:shadow-[0_0px_16px_2px] group-hover:shadow-brand-color xl:group-hover:scale-[0.87] group-focus-vi",
+          "x": 128,
+          "y": 154,
+          "width": 102,
+          "height": 100,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/filter/studio-universal",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "w-[102px] flex flex-col group studio-card",
+          "x": 240,
+          "y": 154,
+          "width": 102,
+          "height": 130,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-lg group-hover:shadow-[0_0px_16px_2px] group-hover:shadow-brand-color xl:group-hover:scale-[0.87] group-focus-vi",
+          "x": 240,
+          "y": 154,
+          "width": 102,
+          "height": 100,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/filter/studio-sony",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "w-[102px] flex flex-col group studio-card",
+          "x": 352,
+          "y": 154,
+          "width": 102,
+          "height": 130,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-lg group-hover:shadow-[0_0px_16px_2px] group-hover:shadow-brand-color xl:group-hover:scale-[0.87] group-focus-vi",
+          "x": 352,
+          "y": 154,
+          "width": 102,
+          "height": 100,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/filter/studio-disney",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "w-[102px] flex flex-col group studio-card",
+          "x": 464,
+          "y": 154,
+          "width": 102,
+          "height": 130,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-lg group-hover:shadow-[0_0px_16px_2px] group-hover:shadow-brand-color xl:group-hover:scale-[0.87] group-focus-vi",
+          "x": 464,
+          "y": 154,
+          "width": 102,
+          "height": 100,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/filter/studio-marvel",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "w-[102px] flex flex-col group studio-card",
+          "x": 576,
+          "y": 154,
+          "width": 102,
+          "height": 130,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-lg group-hover:shadow-[0_0px_16px_2px] group-hover:shadow-brand-color xl:group-hover:scale-[0.87] group-focus-vi",
+          "x": 576,
+          "y": 154,
+          "width": 102,
+          "height": 100,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/filter/studio-dc",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "w-[102px] flex flex-col group studio-card",
+          "x": 688,
+          "y": 154,
+          "width": 102,
+          "height": 130,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-lg group-hover:shadow-[0_0px_16px_2px] group-hover:shadow-brand-color xl:group-hover:scale-[0.87] group-focus-vi",
+          "x": 688,
+          "y": 154,
+          "width": 102,
+          "height": 100,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/filter/studio-pixar",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "w-[102px] flex flex-col group studio-card",
+          "x": 800,
+          "y": 154,
+          "width": 102,
+          "height": 130,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-lg group-hover:shadow-[0_0px_16px_2px] group-hover:shadow-brand-color xl:group-hover:scale-[0.87] group-focus-vi",
+          "x": 800,
+          "y": 154,
+          "width": 102,
+          "height": 100,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/filter/studio-amazon",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "w-[102px] flex flex-col group studio-card",
+          "x": 912,
+          "y": 154,
+          "width": 102,
+          "height": 130,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-lg group-hover:shadow-[0_0px_16px_2px] group-hover:shadow-brand-color xl:group-hover:scale-[0.87] group-focus-vi",
+          "x": 912,
+          "y": 154,
+          "width": 102,
+          "height": 100,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/filter/studio-paramount",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "w-[102px] flex flex-col group studio-card",
+          "x": 1024,
+          "y": 154,
+          "width": 102,
+          "height": 130,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-lg group-hover:shadow-[0_0px_16px_2px] group-hover:shadow-brand-color xl:group-hover:scale-[0.87] group-focus-vi",
+          "x": 1024,
+          "y": 154,
+          "width": 102,
+          "height": 100,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/dedpul-i-rosomaha",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 16,
+          "y": 367,
+          "width": 140,
+          "height": 299,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 16,
+          "y": 367,
+          "width": 140,
+          "height": 207,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/moana-2",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 176,
+          "y": 367,
+          "width": 140,
+          "height": 299,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 176,
+          "y": 367,
+          "width": 140,
+          "height": 207,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/gadkii-ya-4",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 336,
+          "y": 367,
+          "width": 140,
+          "height": 299,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 336,
+          "y": 367,
+          "width": 140,
+          "height": 207,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/venom-poslednii-tanets",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 496,
+          "y": 367,
+          "width": 140,
+          "height": 299,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 496,
+          "y": 367,
+          "width": 140,
+          "height": 207,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/dyuna-chast-vtoraya",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 656,
+          "y": 367,
+          "width": 140,
+          "height": 299,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 656,
+          "y": 367,
+          "width": 140,
+          "height": 207,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/kreiven-ohotnik",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 816,
+          "y": 367,
+          "width": 140,
+          "height": 299,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 816,
+          "y": 367,
+          "width": 140,
+          "height": 207,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/ushchele-2024",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 976,
+          "y": 367,
+          "width": 140,
+          "height": 299,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 976,
+          "y": 367,
+          "width": 140,
+          "height": 207,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/kung-fu-panda-4",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 1136,
+          "y": 367,
+          "width": 140,
+          "height": 299,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 1136,
+          "y": 367,
+          "width": 140,
+          "height": 207,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/sonik-3-v-kino",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 1296,
+          "y": 367,
+          "width": 140,
+          "height": 299,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 1296,
+          "y": 367,
+          "width": 140,
+          "height": 207,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/golovolomka-2",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 1456,
+          "y": 367,
+          "width": 140,
+          "height": 299,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 1456,
+          "y": 367,
+          "width": 140,
+          "height": 207,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/rebel-ridzh",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 1616,
+          "y": 367,
+          "width": 140,
+          "height": 299,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 1616,
+          "y": 367,
+          "width": 140,
+          "height": 207,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/chuzhoi-romul",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 1776,
+          "y": 367,
+          "width": 140,
+          "height": 299,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 1776,
+          "y": 367,
+          "width": 140,
+          "height": 207,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/godzilla-i-kong-novaya-imperiya",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 1936,
+          "y": 367,
+          "width": 140,
+          "height": 299,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 1936,
+          "y": 367,
+          "width": 140,
+          "height": 207,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/furiosa-hroniki-bezumnogo-maksa",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 2096,
+          "y": 367,
+          "width": 140,
+          "height": 299,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 2096,
+          "y": 367,
+          "width": 140,
+          "height": 207,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      }
+    ],
+    "estimated_columns": 10,
+    "sections_sample": [
+      {
+        "text": "Netflix",
+        "box": {
+          "tag": "section",
+          "id": null,
+          "className": "pt-5 pb-[35px] relative",
+          "x": 16,
+          "y": 134,
+          "width": 358,
+          "height": 185,
+          "display": "block",
+          "position": "relative",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Популярные новинки фильмов",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "section flex flex-col",
+          "x": 16,
+          "y": 319,
+          "width": 358,
+          "height": 382,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "2024",
+        "box": {
+          "tag": "section",
+          "id": null,
+          "className": "[&>div]:pt-5 relative",
+          "x": 16,
+          "y": 363,
+          "width": 358,
+          "height": 303,
+          "display": "block",
+          "position": "relative",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Популярные сериалы",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "section flex flex-col",
+          "x": 16,
+          "y": 701,
+          "width": 358,
+          "height": 382,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "2023",
+        "box": {
+          "tag": "section",
+          "id": null,
+          "className": "[&>div]:pt-5 relative",
+          "x": 16,
+          "y": 745,
+          "width": 358,
+          "height": 303,
+          "display": "block",
+          "position": "relative",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Добавленные недавно фильмы",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "section flex flex-col",
+          "x": 16,
+          "y": 1083,
+          "width": 358,
+          "height": 382,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "2025",
+        "box": {
+          "tag": "section",
+          "id": null,
+          "className": "[&>div]:pt-5 relative",
+          "x": 16,
+          "y": 1127,
+          "width": 358,
+          "height": 303,
+          "display": "block",
+          "position": "relative",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Новые серии",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "section flex flex-col",
+          "x": 16,
+          "y": 1465,
+          "width": 358,
+          "height": 382,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "2025",
+        "box": {
+          "tag": "section",
+          "id": null,
+          "className": "[&>div]:pt-5 relative",
+          "x": 16,
+          "y": 1509,
+          "width": 358,
+          "height": 303,
+          "display": "block",
+          "position": "relative",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Спасибо, что делитесь с друзьями",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "grid items-center md:flex flex-col md:flex-end flex-wrap gap-3 items-start md:flex-row md:items-center",
+          "x": 16,
+          "y": 1879,
+          "width": 358,
+          "height": 162,
+          "display": "grid",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Спасибо, что делитесь с друзьями",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "col-start-1 row-start-3 flex flex-col gap-2.5 md:items-center order-3 md:flex-row md:order-none md:mt-0 md:ml-auto lg:ml",
+          "x": 16,
+          "y": 1967,
+          "width": 173,
+          "height": 74,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Мы в соцсетях",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "col-start-2 row-start-3 items-end flex flex-col gap-2.5 md:items-center order-3 md:flex-row md:order-none md:mt-0 md:ml-",
+          "x": 201,
+          "y": 1977,
+          "width": 174,
+          "height": 54,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "admin@zonafilm.ru",
+        "box": {
+          "tag": "noindex",
+          "id": null,
+          "className": "col-start-1 row-start-2 text-main-color-200 w-full lg:w-auto md:text-end ml-auto",
+          "x": 16,
+          "y": 1931,
+          "width": 173,
+          "height": 24,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Пользовательское соглашение",
+        "box": {
+          "tag": "noindex",
+          "id": null,
+          "className": "col-start-2 row-start-1 underline md:w-full text-sm md:text-base text-end",
+          "x": 201,
+          "y": 1879,
+          "width": 174,
+          "height": 40,
+          "display": "block",
+          "position": "static",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400"
+        }
+      }
+    ],
+    "body_overflow_x": true
+  }
+}

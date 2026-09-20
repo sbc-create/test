@@ -1,5 +1,39 @@
 {
-  "status": "PENDING_REFERENCE_CAPTURE",
-  "rule": "Unregistered reference vs product deviation is hard failure",
-  "deviations": []
+  "status": "FROZEN",
+  "frozen_at": "2026-09-20T12:55:00Z",
+  "deviations": [
+    {
+      "deviation_id": "DEV-INDEXABILITY-NOINDEX",
+      "route": "*",
+      "block_id": "B00",
+      "reference_behavior": "reference may be publicly indexable",
+      "required_product_behavior": "keep noindex,nofollow for zonafilm.space",
+      "reason": "immutable owner indexability contract",
+      "owner": "owner",
+      "approval_id": "ZONA-REFERENCE-20260920-01",
+      "acceptance_oracle": "INDEXABILITY_STATE_BEFORE_AFTER_MATCH=1; INDEXING_MUTATIONS=0"
+    },
+    {
+      "deviation_id": "DEV-NO-CONTENT-COPY",
+      "route": "*",
+      "block_id": "B00",
+      "reference_behavior": "reference texts/brand assets",
+      "required_product_behavior": "never copy texts/logo/brand assets/contacts/legal",
+      "reason": "REFERENCE_COPY_PERMISSION=NO",
+      "owner": "owner",
+      "approval_id": "ZONA-REFERENCE-20260920-01",
+      "acceptance_oracle": "no shared unique marketing strings from reference in Zona templates"
+    },
+    {
+      "deviation_id": "DEV-ROUTE-FAMILY-MAPPING",
+      "route": "taxonomy",
+      "block_id": "B12",
+      "reference_behavior": "/movies/filter/{facet}",
+      "required_product_behavior": "Zona route registry; presentation must not invent HTTP redirects when destination broken",
+      "reason": "different IA; product route contract wins for HTTP status",
+      "owner": "owner",
+      "approval_id": "ZONA-REFERENCE-20260920-01",
+      "acceptance_oracle": "REFERENCE_ROUTE_ANALOG_USED allowed"
+    }
+  ]
 }

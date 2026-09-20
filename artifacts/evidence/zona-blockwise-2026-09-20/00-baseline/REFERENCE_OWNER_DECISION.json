@@ -1,0 +1,17 @@
+{
+  "decision_id": "ZONA-REFERENCE-20260920-01",
+  "primary_reference_url": "https://zonafilm.ru/",
+  "decision_source": "owner",
+  "reference_role": "visual_structure_ux_route_reference",
+  "REFERENCE_ROLE": "VISUAL_STRUCTURE_UX_AND_ROUTE_REFERENCE",
+  "content_copy_allowed": false,
+  "brand_asset_copy_allowed": false,
+  "REFERENCE_COPY_PERMISSION": "NO",
+  "REFERENCE_CONTENT_COPY_PERMISSION": "NO",
+  "REFERENCE_BRAND_ASSET_COPY_PERMISSION": "NO",
+  "REFERENCE_EXACT_PIXEL_CLONE_REQUIRED": "NO",
+  "fallback_policy": "enabled",
+  "EXPECTED_INDEXABILITY": "noindex,nofollow",
+  "INDEXABILITY_CHANGE_ALLOWED": "NO",
+  "decided_at": "2026-09-20T12:50:09Z"
+}

@@ -1,0 +1,1323 @@
+{
+  "PRIMARY_REFERENCE_URL": "https://zonafilm.ru/",
+  "owner_reference_decision_id": "ZONA-REFERENCE-20260920-01",
+  "captured_at": "2026-09-20T12:51:28Z",
+  "browser": "chromium",
+  "playwright": "1.63.0",
+  "viewports": [
+    "1440x900",
+    "768x1024",
+    "390x844"
+  ],
+  "pages": [
+    {
+      "id": "home",
+      "requested_url": "https://zonafilm.ru/",
+      "family": "home",
+      "REFERENCE_ROUTE_ANALOG_USED": false,
+      "analog_note": null,
+      "captures": [
+        {
+          "viewport": "1440x900",
+          "final_url": "https://zonafilm.ru/",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/home__1440x900.png",
+          "screenshot_sha256": "d2922f9418c73cae5905e765da3a98babd6f4eb8606a57ffb33bc96b6e037e91",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/home__1440x900.dom.json",
+          "estimated_columns": 10,
+          "document": {
+            "width": 1440,
+            "height": 2319,
+            "clientWidth": 1440,
+            "clientHeight": 900
+          },
+          "h1": null,
+          "canonical": "https://zonafilm.ru/"
+        },
+        {
+          "viewport": "768x1024",
+          "final_url": "https://zonafilm.ru/",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/home__768x1024.png",
+          "screenshot_sha256": "1fc6d0b6d52336852a8a115330a9d9e6fb32e71a7ae872c13190830bb5bb4132",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/home__768x1024.dom.json",
+          "estimated_columns": 10,
+          "document": {
+            "width": 768,
+            "height": 2335,
+            "clientWidth": 768,
+            "clientHeight": 1024
+          },
+          "h1": null,
+          "canonical": "https://zonafilm.ru/"
+        },
+        {
+          "viewport": "390x844",
+          "final_url": "https://zonafilm.ru/",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/home__390x844.png",
+          "screenshot_sha256": "131b5e3483ea64586d9305b9e02344663a3df10b3ef34a297bca28fe7a9b7b52",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/home__390x844.dom.json",
+          "estimated_columns": 10,
+          "document": {
+            "width": 600,
+            "height": 2085,
+            "clientWidth": 390,
+            "clientHeight": 844
+          },
+          "h1": null,
+          "canonical": "https://zonafilm.ru/"
+        }
+      ]
+    },
+    {
+      "id": "movies",
+      "requested_url": "https://zonafilm.ru/movies",
+      "family": "movies",
+      "REFERENCE_ROUTE_ANALOG_USED": false,
+      "analog_note": null,
+      "captures": [
+        {
+          "viewport": "1440x900",
+          "final_url": "https://zonafilm.ru/movies",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/movies__1440x900.png",
+          "screenshot_sha256": "12021c136b5a533e1206cbe918e0d4e7a3e3719abc15540f00c705a44997493d",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/movies__1440x900.dom.json",
+          "estimated_columns": 6,
+          "document": {
+            "width": 1440,
+            "height": 4341,
+            "clientWidth": 1440,
+            "clientHeight": 900
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 120,
+            "y": 166,
+            "width": 243,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/movies"
+        },
+        {
+          "viewport": "768x1024",
+          "final_url": "https://zonafilm.ru/movies",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/movies__768x1024.png",
+          "screenshot_sha256": "ab2f60d95b8c399824b00c56758521799820cd65c2f9cf775d67740de2ae6f7f",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/movies__768x1024.dom.json",
+          "estimated_columns": 3,
+          "document": {
+            "width": 768,
+            "height": 8365,
+            "clientWidth": 768,
+            "clientHeight": 1024
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 16,
+            "y": 214,
+            "width": 243,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/movies"
+        },
+        {
+          "viewport": "390x844",
+          "final_url": "https://zonafilm.ru/movies",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/movies__390x844.png",
+          "screenshot_sha256": "529f8228a4f20dd5a8a1fb96439150448c8708ff05fd29a6450ca5a633807333",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/movies__390x844.dom.json",
+          "estimated_columns": 2,
+          "document": {
+            "width": 600,
+            "height": 11197,
+            "clientWidth": 390,
+            "clientHeight": 844
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 16,
+            "y": 354,
+            "width": 243,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/movies"
+        }
+      ]
+    },
+    {
+      "id": "tvseries",
+      "requested_url": "https://zonafilm.ru/tvseries",
+      "family": "series",
+      "REFERENCE_ROUTE_ANALOG_USED": false,
+      "analog_note": null,
+      "captures": [
+        {
+          "viewport": "1440x900",
+          "final_url": "https://zonafilm.ru/tvseries",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/tvseries__1440x900.png",
+          "screenshot_sha256": "d1461f7f5fff20d2f00490483cf47d3f4207e9e2917f7f71f85a88b8ecc5ed8d",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/tvseries__1440x900.dom.json",
+          "estimated_columns": 6,
+          "document": {
+            "width": 1440,
+            "height": 4341,
+            "clientWidth": 1440,
+            "clientHeight": 900
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 120,
+            "y": 166,
+            "width": 247,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/tvseries"
+        },
+        {
+          "viewport": "768x1024",
+          "final_url": "https://zonafilm.ru/tvseries",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/tvseries__768x1024.png",
+          "screenshot_sha256": "3a6feeb49ff4ac89da1b49fe1ba35c07b48a58b29874fab411cdb3d1a1db8d8e",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/tvseries__768x1024.dom.json",
+          "estimated_columns": 3,
+          "document": {
+            "width": 768,
+            "height": 8365,
+            "clientWidth": 768,
+            "clientHeight": 1024
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 16,
+            "y": 214,
+            "width": 247,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/tvseries"
+        },
+        {
+          "viewport": "390x844",
+          "final_url": "https://zonafilm.ru/tvseries",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/tvseries__390x844.png",
+          "screenshot_sha256": "2e6e229eea31461f0e329575a38f7e4457bc26f42dd817c79f55cd4b31af02d9",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/tvseries__390x844.dom.json",
+          "estimated_columns": 2,
+          "document": {
+            "width": 600,
+            "height": 11197,
+            "clientWidth": 390,
+            "clientHeight": 844
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 16,
+            "y": 354,
+            "width": 247,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/tvseries"
+        }
+      ]
+    },
+    {
+      "id": "collections",
+      "requested_url": "https://zonafilm.ru/collections",
+      "family": "collections",
+      "REFERENCE_ROUTE_ANALOG_USED": false,
+      "analog_note": null,
+      "captures": [
+        {
+          "viewport": "1440x900",
+          "final_url": "https://zonafilm.ru/collections",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/collections__1440x900.png",
+          "screenshot_sha256": "03bfa133c26962dddf2fb0b04557cfb16f2dd92cabc024901660131bf7a2753a",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/collections__1440x900.dom.json",
+          "estimated_columns": null,
+          "document": {
+            "width": 1440,
+            "height": 3333,
+            "clientWidth": 1440,
+            "clientHeight": 900
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 120,
+            "y": 154,
+            "width": 355,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/collections"
+        },
+        {
+          "viewport": "768x1024",
+          "final_url": "https://zonafilm.ru/collections",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/collections__768x1024.png",
+          "screenshot_sha256": "51aa604f389e7609f1123ea79c7e04e4e35f641ede44c0ce47de20937726721f",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/collections__768x1024.dom.json",
+          "estimated_columns": null,
+          "document": {
+            "width": 768,
+            "height": 4755,
+            "clientWidth": 768,
+            "clientHeight": 1024
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 16,
+            "y": 154,
+            "width": 355,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/collections"
+        },
+        {
+          "viewport": "390x844",
+          "final_url": "https://zonafilm.ru/collections",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/collections__390x844.png",
+          "screenshot_sha256": "414a3856b3b5cbec7f357ceb9f5c8b3c11118e0e7ed932dfc38c7891d8e6a0f7",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/collections__390x844.dom.json",
+          "estimated_columns": null,
+          "document": {
+            "width": 600,
+            "height": 4296,
+            "clientWidth": 390,
+            "clientHeight": 844
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 16,
+            "y": 166,
+            "width": 355,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/collections"
+        }
+      ]
+    },
+    {
+      "id": "year",
+      "requested_url": "https://zonafilm.ru/movies/filter/year-2026",
+      "family": "year",
+      "REFERENCE_ROUTE_ANALOG_USED": false,
+      "analog_note": null,
+      "captures": [
+        {
+          "viewport": "1440x900",
+          "final_url": "https://zonafilm.ru/movies/filter/year-2026",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/year__1440x900.png",
+          "screenshot_sha256": "599203a3605210ac41d8e06cc362bbc3854cda8552eb3911bf0b7d2d7f7fba1c",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/year__1440x900.dom.json",
+          "estimated_columns": 6,
+          "document": {
+            "width": 1440,
+            "height": 4341,
+            "clientWidth": 1440,
+            "clientHeight": 900
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 120,
+            "y": 166,
+            "width": 357,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/movies/filter/year-2026"
+        },
+        {
+          "viewport": "768x1024",
+          "final_url": "https://zonafilm.ru/movies/filter/year-2026",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/year__768x1024.png",
+          "screenshot_sha256": "1e2ef5f6e2018cb42eab2ce4fcdf48eaa7fc60691fe97af18c04ba607f703ef8",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/year__768x1024.dom.json",
+          "estimated_columns": 3,
+          "document": {
+            "width": 768,
+            "height": 8365,
+            "clientWidth": 768,
+            "clientHeight": 1024
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 16,
+            "y": 214,
+            "width": 357,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/movies/filter/year-2026"
+        },
+        {
+          "viewport": "390x844",
+          "final_url": "https://zonafilm.ru/movies/filter/year-2026",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/year__390x844.png",
+          "screenshot_sha256": "0b8f199833aed177fad6178d238f52ef4198906bc22281e56861f1d27d14c4bb",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/year__390x844.dom.json",
+          "estimated_columns": 2,
+          "document": {
+            "width": 600,
+            "height": 11197,
+            "clientWidth": 390,
+            "clientHeight": 844
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 16,
+            "y": 354,
+            "width": 357,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/movies/filter/year-2026"
+        }
+      ]
+    },
+    {
+      "id": "genre",
+      "requested_url": "https://zonafilm.ru/movies/filter/genre-drama",
+      "family": "genre",
+      "REFERENCE_ROUTE_ANALOG_USED": false,
+      "analog_note": null,
+      "captures": [
+        {
+          "viewport": "1440x900",
+          "final_url": "https://zonafilm.ru/movies/filter/genre-drama",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/genre__1440x900.png",
+          "screenshot_sha256": "1b46b2933c4015cf49b10abfd31390d8678163691626efd9e1171e8fe7ccefff",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/genre__1440x900.dom.json",
+          "estimated_columns": 6,
+          "document": {
+            "width": 1440,
+            "height": 4341,
+            "clientWidth": 1440,
+            "clientHeight": 900
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 120,
+            "y": 166,
+            "width": 225,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/movies/filter/genre-drama"
+        },
+        {
+          "viewport": "768x1024",
+          "final_url": "https://zonafilm.ru/movies/filter/genre-drama",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/genre__768x1024.png",
+          "screenshot_sha256": "8f3e55c7d28014d93c05a6b54588c4f2ba90e389af4effd39224ee482ab9f66b",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/genre__768x1024.dom.json",
+          "estimated_columns": 3,
+          "document": {
+            "width": 768,
+            "height": 8365,
+            "clientWidth": 768,
+            "clientHeight": 1024
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 16,
+            "y": 214,
+            "width": 225,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/movies/filter/genre-drama"
+        },
+        {
+          "viewport": "390x844",
+          "final_url": "https://zonafilm.ru/movies/filter/genre-drama",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/genre__390x844.png",
+          "screenshot_sha256": "fb6efc8fcb41e8311a01c8da0fb26f69d93b5272e77f12f798b6ecefe5830fad",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/genre__390x844.dom.json",
+          "estimated_columns": 2,
+          "document": {
+            "width": 600,
+            "height": 11197,
+            "clientWidth": 390,
+            "clientHeight": 844
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 16,
+            "y": 354,
+            "width": 225,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/movies/filter/genre-drama"
+        }
+      ]
+    },
+    {
+      "id": "country",
+      "requested_url": "https://zonafilm.ru/movies/filter/country-ssha",
+      "family": "country",
+      "REFERENCE_ROUTE_ANALOG_USED": false,
+      "analog_note": null,
+      "captures": [
+        {
+          "viewport": "1440x900",
+          "final_url": "https://zonafilm.ru/movies/filter/country-ssha",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/country__1440x900.png",
+          "screenshot_sha256": "b2bd61bdcee36a505473652e3814285d43a418d544b09c3d349b5ef9c91e00fd",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/country__1440x900.dom.json",
+          "estimated_columns": 6,
+          "document": {
+            "width": 1440,
+            "height": 4341,
+            "clientWidth": 1440,
+            "clientHeight": 900
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 120,
+            "y": 166,
+            "width": 336,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/movies/filter/country-ssha"
+        },
+        {
+          "viewport": "768x1024",
+          "final_url": "https://zonafilm.ru/movies/filter/country-ssha",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/country__768x1024.png",
+          "screenshot_sha256": "87cb4ad8b187c6fb08972036ec7c8e7aff7730e1ec0c0f3e1c255553611e7a3b",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/country__768x1024.dom.json",
+          "estimated_columns": 3,
+          "document": {
+            "width": 768,
+            "height": 8365,
+            "clientWidth": 768,
+            "clientHeight": 1024
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 16,
+            "y": 214,
+            "width": 336,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/movies/filter/country-ssha"
+        },
+        {
+          "viewport": "390x844",
+          "final_url": "https://zonafilm.ru/movies/filter/country-ssha",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/country__390x844.png",
+          "screenshot_sha256": "bbda3a1d388a372751ab0afdad5bc3fabbce8100abdb815b30ce73a6415586cc",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/country__390x844.dom.json",
+          "estimated_columns": 2,
+          "document": {
+            "width": 600,
+            "height": 11197,
+            "clientWidth": 390,
+            "clientHeight": 844
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 16,
+            "y": 354,
+            "width": 336,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/movies/filter/country-ssha"
+        }
+      ]
+    },
+    {
+      "id": "search",
+      "requested_url": "https://zonafilm.ru/?search=%D0%BC%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0",
+      "family": "search",
+      "REFERENCE_ROUTE_ANALOG_USED": true,
+      "analog_note": "reference uses /?search= query on home family",
+      "captures": [
+        {
+          "viewport": "1440x900",
+          "final_url": "https://zonafilm.ru/?search=%D0%BC%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/search__1440x900.png",
+          "screenshot_sha256": "d2922f9418c73cae5905e765da3a98babd6f4eb8606a57ffb33bc96b6e037e91",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/search__1440x900.dom.json",
+          "estimated_columns": 10,
+          "document": {
+            "width": 1440,
+            "height": 2319,
+            "clientWidth": 1440,
+            "clientHeight": 900
+          },
+          "h1": null,
+          "canonical": "https://zonafilm.ru/"
+        },
+        {
+          "viewport": "768x1024",
+          "final_url": "https://zonafilm.ru/?search=%D0%BC%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/search__768x1024.png",
+          "screenshot_sha256": "1fc6d0b6d52336852a8a115330a9d9e6fb32e71a7ae872c13190830bb5bb4132",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/search__768x1024.dom.json",
+          "estimated_columns": 10,
+          "document": {
+            "width": 768,
+            "height": 2335,
+            "clientWidth": 768,
+            "clientHeight": 1024
+          },
+          "h1": null,
+          "canonical": "https://zonafilm.ru/"
+        },
+        {
+          "viewport": "390x844",
+          "final_url": "https://zonafilm.ru/?search=%D0%BC%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/search__390x844.png",
+          "screenshot_sha256": "131b5e3483ea64586d9305b9e02344663a3df10b3ef34a297bca28fe7a9b7b52",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/search__390x844.dom.json",
+          "estimated_columns": 10,
+          "document": {
+            "width": 600,
+            "height": 2085,
+            "clientWidth": 390,
+            "clientHeight": 844
+          },
+          "h1": null,
+          "canonical": "https://zonafilm.ru/"
+        }
+      ]
+    },
+    {
+      "id": "title_movie",
+      "requested_url": "https://zonafilm.ru/movies/dyuna-chast-vtoraya",
+      "family": "title_film",
+      "REFERENCE_ROUTE_ANALOG_USED": false,
+      "analog_note": null,
+      "captures": [
+        {
+          "viewport": "1440x900",
+          "final_url": "https://zonafilm.ru/movies/dyuna-chast-vtoraya",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/title_movie__1440x900.png",
+          "screenshot_sha256": "847c72da5e0c27d262a2d89c3c5ad23c9e67f7bef8a63ec2f96575c69a424b67",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/title_movie__1440x900.dom.json",
+          "estimated_columns": 2,
+          "document": {
+            "width": 1440,
+            "height": 2765,
+            "clientWidth": 1440,
+            "clientHeight": 900
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-xl md:text-4xl font-black mb-3",
+            "x": 120,
+            "y": 973,
+            "width": 343,
+            "height": 40,
+            "display": "block",
+            "position": "static",
+            "fontSize": "36px",
+            "lineHeight": "40px",
+            "fontWeight": "900"
+          },
+          "canonical": "https://zonafilm.ru/movies/dyuna-chast-vtoraya"
+        },
+        {
+          "viewport": "768x1024",
+          "final_url": "https://zonafilm.ru/movies/dyuna-chast-vtoraya",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/title_movie__768x1024.png",
+          "screenshot_sha256": "e8488b526628e0296152d0b680458ca1d3f270d66cd3dd3f9ff1772d74a51da5",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/title_movie__768x1024.dom.json",
+          "estimated_columns": 2,
+          "document": {
+            "width": 768,
+            "height": 2574,
+            "clientWidth": 768,
+            "clientHeight": 1024
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-xl md:text-4xl font-black mb-3",
+            "x": 16,
+            "y": 548,
+            "width": 343,
+            "height": 40,
+            "display": "block",
+            "position": "static",
+            "fontSize": "36px",
+            "lineHeight": "40px",
+            "fontWeight": "900"
+          },
+          "canonical": "https://zonafilm.ru/movies/dyuna-chast-vtoraya"
+        },
+        {
+          "viewport": "390x844",
+          "final_url": "https://zonafilm.ru/movies/dyuna-chast-vtoraya",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/title_movie__390x844.png",
+          "screenshot_sha256": "c978177a9bbd0e85fb4b9e5c317c911caf9fa07ce486414f89305083e00041be",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/title_movie__390x844.dom.json",
+          "estimated_columns": 2,
+          "document": {
+            "width": 600,
+            "height": 2158,
+            "clientWidth": 390,
+            "clientHeight": 844
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-xl md:text-4xl font-black mb-3",
+            "x": 16,
+            "y": 460,
+            "width": 190,
+            "height": 28,
+            "display": "block",
+            "position": "static",
+            "fontSize": "20px",
+            "lineHeight": "28px",
+            "fontWeight": "900"
+          },
+          "canonical": "https://zonafilm.ru/movies/dyuna-chast-vtoraya"
+        }
+      ]
+    },
+    {
+      "id": "title_series",
+      "requested_url": "https://zonafilm.ru/tvseries/druzya-1994-2",
+      "family": "title_series",
+      "REFERENCE_ROUTE_ANALOG_USED": false,
+      "analog_note": null,
+      "captures": [
+        {
+          "viewport": "1440x900",
+          "final_url": "https://zonafilm.ru/tvseries/druzya-1994-2",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/title_series__1440x900.png",
+          "screenshot_sha256": "0c8ab4e3b68d239bf690df43acbe0ae6c4aced25bfcb24bf306245426ed35043",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/title_series__1440x900.dom.json",
+          "estimated_columns": 24,
+          "document": {
+            "width": 1440,
+            "height": 3010,
+            "clientWidth": 1440,
+            "clientHeight": 900
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-xl md:text-4xl font-black mb-3",
+            "x": 120,
+            "y": 973,
+            "width": 185,
+            "height": 40,
+            "display": "block",
+            "position": "static",
+            "fontSize": "36px",
+            "lineHeight": "40px",
+            "fontWeight": "900"
+          },
+          "canonical": "https://zonafilm.ru/tvseries/druzya-1994-2"
+        },
+        {
+          "viewport": "768x1024",
+          "final_url": "https://zonafilm.ru/tvseries/druzya-1994-2",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/title_series__768x1024.png",
+          "screenshot_sha256": "129e02703ae40d914dd22971a2cd8d7a4f2fffd259456c23ddd225b12076c38a",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/title_series__768x1024.dom.json",
+          "estimated_columns": 24,
+          "document": {
+            "width": 768,
+            "height": 2920,
+            "clientWidth": 768,
+            "clientHeight": 1024
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-xl md:text-4xl font-black mb-3",
+            "x": 16,
+            "y": 548,
+            "width": 185,
+            "height": 40,
+            "display": "block",
+            "position": "static",
+            "fontSize": "36px",
+            "lineHeight": "40px",
+            "fontWeight": "900"
+          },
+          "canonical": "https://zonafilm.ru/tvseries/druzya-1994-2"
+        },
+        {
+          "viewport": "390x844",
+          "final_url": "https://zonafilm.ru/tvseries/druzya-1994-2",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/title_series__390x844.png",
+          "screenshot_sha256": "3501bc63bc87b4f1d5cdddf667073dd9eeb18d4d5128ca90d903c155eab1b9fb",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/title_series__390x844.dom.json",
+          "estimated_columns": 24,
+          "document": {
+            "width": 600,
+            "height": 2323,
+            "clientWidth": 390,
+            "clientHeight": 844
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-xl md:text-4xl font-black mb-3",
+            "x": 16,
+            "y": 460,
+            "width": 140,
+            "height": 28,
+            "display": "block",
+            "position": "static",
+            "fontSize": "20px",
+            "lineHeight": "28px",
+            "fontWeight": "900"
+          },
+          "canonical": "https://zonafilm.ru/tvseries/druzya-1994-2"
+        }
+      ]
+    },
+    {
+      "id": "rules_footer",
+      "requested_url": "https://zonafilm.ru/rules",
+      "family": "footer_legal",
+      "REFERENCE_ROUTE_ANALOG_USED": true,
+      "analog_note": "nearest public footer/legal page",
+      "captures": [
+        {
+          "viewport": "1440x900",
+          "final_url": "https://zonafilm.ru/rules",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/rules_footer__1440x900.png",
+          "screenshot_sha256": "3f3bc66dcd9d0ceed544999def1a579398487ed983be03f3d92a7b265bdd685e",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/rules_footer__1440x900.dom.json",
+          "estimated_columns": null,
+          "document": {
+            "width": 1440,
+            "height": 1220,
+            "clientWidth": 1440,
+            "clientHeight": 900
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-2xl font-semibold",
+            "x": 120,
+            "y": 126,
+            "width": 1200,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "600"
+          },
+          "canonical": "https://zonafilm.ru/rules"
+        },
+        {
+          "viewport": "768x1024",
+          "final_url": "https://zonafilm.ru/rules",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/rules_footer__768x1024.png",
+          "screenshot_sha256": "57e4762aa207aafd408484f5733467eea0b23e539ef3515a41e0225df4e0a4e6",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/rules_footer__768x1024.dom.json",
+          "estimated_columns": null,
+          "document": {
+            "width": 768,
+            "height": 1344,
+            "clientWidth": 768,
+            "clientHeight": 1024
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-2xl font-semibold",
+            "x": 16,
+            "y": 126,
+            "width": 736,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "600"
+          },
+          "canonical": "https://zonafilm.ru/rules"
+        },
+        {
+          "viewport": "390x844",
+          "final_url": "https://zonafilm.ru/rules",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/rules_footer__390x844.png",
+          "screenshot_sha256": "e7ead406772133cd07cd4a8fd3f98cd8320ac4a39403cadc7a5840fda1131db3",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/rules_footer__390x844.dom.json",
+          "estimated_columns": null,
+          "document": {
+            "width": 600,
+            "height": 1164,
+            "clientWidth": 390,
+            "clientHeight": 844
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-2xl font-semibold",
+            "x": 16,
+            "y": 126,
+            "width": 358,
+            "height": 64,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "600"
+          },
+          "canonical": "https://zonafilm.ru/rules"
+        }
+      ]
+    },
+    {
+      "id": "not_found",
+      "requested_url": "https://zonafilm.ru/this-route-does-not-exist-zona-b00",
+      "family": "404",
+      "REFERENCE_ROUTE_ANALOG_USED": false,
+      "analog_note": null,
+      "captures": [
+        {
+          "viewport": "1440x900",
+          "final_url": "https://zonafilm.ru/this-route-does-not-exist-zona-b00",
+          "http_status": 404,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/not_found__1440x900.png",
+          "screenshot_sha256": "43955dcaf4def4e34b64e3ba4f17424dbc8e9e687adb952605ce59b8b031a664",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/not_found__1440x900.dom.json",
+          "estimated_columns": 20,
+          "document": {
+            "width": 1440,
+            "height": 1395,
+            "clientWidth": 1440,
+            "clientHeight": 900
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "pages-404-title",
+            "x": 120,
+            "y": 110,
+            "width": 560,
+            "height": 450,
+            "display": "block",
+            "position": "static",
+            "fontSize": "300px",
+            "lineHeight": "450px",
+            "fontWeight": "400"
+          },
+          "canonical": null
+        },
+        {
+          "viewport": "768x1024",
+          "final_url": "https://zonafilm.ru/this-route-does-not-exist-zona-b00",
+          "http_status": 404,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/not_found__768x1024.png",
+          "screenshot_sha256": "6ba3d0fbb048ac2fff6998671834e920b964db497d523129fdfe68baf80b75a7",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/not_found__768x1024.dom.json",
+          "estimated_columns": 20,
+          "document": {
+            "width": 768,
+            "height": 1455,
+            "clientWidth": 768,
+            "clientHeight": 1024
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "pages-404-title",
+            "x": 32,
+            "y": 70,
+            "width": 704,
+            "height": 450,
+            "display": "block",
+            "position": "static",
+            "fontSize": "300px",
+            "lineHeight": "450px",
+            "fontWeight": "400"
+          },
+          "canonical": null
+        },
+        {
+          "viewport": "390x844",
+          "final_url": "https://zonafilm.ru/this-route-does-not-exist-zona-b00",
+          "http_status": 404,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/not_found__390x844.png",
+          "screenshot_sha256": "4fc28d9c7629490bc1e0e410dd77f683579a3a3f26da00172ccc590c81ac1603",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/not_found__390x844.dom.json",
+          "estimated_columns": 20,
+          "document": {
+            "width": 600,
+            "height": 1210,
+            "clientWidth": 390,
+            "clientHeight": 844
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "pages-404-title",
+            "x": 32,
+            "y": 70,
+            "width": 326,
+            "height": 125,
+            "display": "block",
+            "position": "static",
+            "fontSize": "170px",
+            "lineHeight": "255px",
+            "fontWeight": "400"
+          },
+          "canonical": null
+        }
+      ]
+    },
+    {
+      "id": "animation_analog",
+      "requested_url": "https://zonafilm.ru/movies/filter/studio-pixar",
+      "family": "animation",
+      "REFERENCE_ROUTE_ANALOG_USED": true,
+      "analog_note": "no dedicated animation route; studio-pixar used as visual density analog",
+      "captures": [
+        {
+          "viewport": "1440x900",
+          "final_url": "https://zonafilm.ru/movies/filter/studio-pixar",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/animation_analog__1440x900.png",
+          "screenshot_sha256": "45246967acfce37bd66614fdb72051eadaf596a97439c8de60209c649605d13f",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/animation_analog__1440x900.dom.json",
+          "estimated_columns": 6,
+          "document": {
+            "width": 1440,
+            "height": 4405,
+            "clientWidth": 1440,
+            "clientHeight": 900
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 120,
+            "y": 166,
+            "width": 386,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/movies/filter/studio-pixar"
+        },
+        {
+          "viewport": "768x1024",
+          "final_url": "https://zonafilm.ru/movies/filter/studio-pixar",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/animation_analog__768x1024.png",
+          "screenshot_sha256": "576b4fa9edb6e6b3ad1bbe22b929b63bc69f1d483745acb14cce46904b09827b",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/animation_analog__768x1024.dom.json",
+          "estimated_columns": 3,
+          "document": {
+            "width": 768,
+            "height": 8429,
+            "clientWidth": 768,
+            "clientHeight": 1024
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 16,
+            "y": 214,
+            "width": 386,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/movies/filter/studio-pixar"
+        },
+        {
+          "viewport": "390x844",
+          "final_url": "https://zonafilm.ru/movies/filter/studio-pixar",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/animation_analog__390x844.png",
+          "screenshot_sha256": "e2b8cd863713aa775c84bb19713012edbd381eff58f7434dd31d68cdd2b1d97d",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/animation_analog__390x844.dom.json",
+          "estimated_columns": 2,
+          "document": {
+            "width": 600,
+            "height": 11285,
+            "clientWidth": 390,
+            "clientHeight": 844
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 16,
+            "y": 354,
+            "width": 358,
+            "height": 64,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/movies/filter/studio-pixar"
+        }
+      ]
+    },
+    {
+      "id": "novinki_analog",
+      "requested_url": "https://zonafilm.ru/movies/filter/year-2026",
+      "family": "new",
+      "REFERENCE_ROUTE_ANALOG_USED": true,
+      "analog_note": "no /new route; year-2026 filter used as freshness/catalog analog",
+      "captures": [
+        {
+          "viewport": "1440x900",
+          "final_url": "https://zonafilm.ru/movies/filter/year-2026",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/novinki_analog__1440x900.png",
+          "screenshot_sha256": "599203a3605210ac41d8e06cc362bbc3854cda8552eb3911bf0b7d2d7f7fba1c",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/novinki_analog__1440x900.dom.json",
+          "estimated_columns": 6,
+          "document": {
+            "width": 1440,
+            "height": 4341,
+            "clientWidth": 1440,
+            "clientHeight": 900
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 120,
+            "y": 166,
+            "width": 357,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/movies/filter/year-2026"
+        },
+        {
+          "viewport": "768x1024",
+          "final_url": "https://zonafilm.ru/movies/filter/year-2026",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/novinki_analog__768x1024.png",
+          "screenshot_sha256": "1e2ef5f6e2018cb42eab2ce4fcdf48eaa7fc60691fe97af18c04ba607f703ef8",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/novinki_analog__768x1024.dom.json",
+          "estimated_columns": 3,
+          "document": {
+            "width": 768,
+            "height": 8365,
+            "clientWidth": 768,
+            "clientHeight": 1024
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 16,
+            "y": 214,
+            "width": 357,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/movies/filter/year-2026"
+        },
+        {
+          "viewport": "390x844",
+          "final_url": "https://zonafilm.ru/movies/filter/year-2026",
+          "http_status": 200,
+          "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/novinki_analog__390x844.png",
+          "screenshot_sha256": "0b8f199833aed177fad6178d238f52ef4198906bc22281e56861f1d27d14c4bb",
+          "dom": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/novinki_analog__390x844.dom.json",
+          "estimated_columns": 2,
+          "document": {
+            "width": 600,
+            "height": 11197,
+            "clientWidth": 390,
+            "clientHeight": 844
+          },
+          "h1": {
+            "tag": "h1",
+            "id": null,
+            "className": "text-ellipsis overflow-hidden text-2xl",
+            "x": 16,
+            "y": 354,
+            "width": 357,
+            "height": 32,
+            "display": "block",
+            "position": "static",
+            "fontSize": "24px",
+            "lineHeight": "32px",
+            "fontWeight": "400"
+          },
+          "canonical": "https://zonafilm.ru/movies/filter/year-2026"
+        }
+      ]
+    }
+  ],
+  "REFERENCE_FALLBACK_USED": false
+}

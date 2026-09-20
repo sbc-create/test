@@ -1,0 +1,954 @@
+{
+  "captured_at": "2026-09-20T12:53:37Z",
+  "viewport": "390x844",
+  "requested_url": "https://zonafilm.ru/movies/filter/studio-pixar",
+  "final_url": "https://zonafilm.ru/movies/filter/studio-pixar",
+  "http_status": 200,
+  "redirect_chain": [
+    {
+      "final": "https://zonafilm.ru/movies/filter/studio-pixar",
+      "status": 200
+    }
+  ],
+  "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/animation_analog__390x844.png",
+  "screenshot_sha256": "e2b8cd863713aa775c84bb19713012edbd381eff58f7434dd31d68cdd2b1d97d",
+  "metrics": {
+    "document": {
+      "width": 600,
+      "height": 11285,
+      "clientWidth": 390,
+      "clientHeight": 844
+    },
+    "title": "Смотреть Популярные фильмы студии Pixar онлайн бесплатно - ZonaFilm.ru",
+    "canonical": "https://zonafilm.ru/movies/filter/studio-pixar",
+    "robots": null,
+    "headers": [
+      {
+        "tag": "header",
+        "id": null,
+        "className": "layout-child header flex justify-between gap-5",
+        "x": 16,
+        "y": 0,
+        "width": 358,
+        "height": 70,
+        "display": "flex",
+        "position": "static",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "400"
+      },
+      {
+        "tag": "nav",
+        "id": null,
+        "className": "navigation z-[60] font-medium w-full lg:w-auto h-screen lg:h-full lg:flex gap-9 lg:bg-transparent absolute lg:static bg-",
+        "x": -390,
+        "y": 70,
+        "width": 390,
+        "height": 844,
+        "display": "block",
+        "position": "absolute",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "500"
+      },
+      {
+        "tag": "nav",
+        "id": null,
+        "className": "layout-child py-5 hidden overflow-x-scroll no-scrollbar",
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "display": "none",
+        "position": "static",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "400"
+      }
+    ],
+    "mains": [],
+    "footers": [
+      {
+        "tag": "footer",
+        "id": "footer",
+        "className": "layout-child pt-8 pb-11 items-center justify-between bg-main-color-900 ",
+        "x": 16,
+        "y": 11047,
+        "width": 358,
+        "height": 238,
+        "display": "block",
+        "position": "static",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "400"
+      }
+    ],
+    "h1": {
+      "tag": "h1",
+      "id": null,
+      "className": "text-ellipsis overflow-hidden text-2xl",
+      "x": 16,
+      "y": 354,
+      "width": 358,
+      "height": 64,
+      "display": "block",
+      "position": "static",
+      "fontSize": "24px",
+      "lineHeight": "32px",
+      "fontWeight": "400"
+    },
+    "h2": [],
+    "cards_sample": [
+      {
+        "href": "/movies/istoriya-igrushek-5",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 21,
+          "y": 499,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 21,
+          "y": 499,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/tachki",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 210,
+          "y": 499,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 210,
+          "y": 499,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/tachki-3",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 21,
+          "y": 849,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 21,
+          "y": 849,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/tachki-2",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 210,
+          "y": 849,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 210,
+          "y": 849,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/korporatsiya-monstrov",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 21,
+          "y": 1199,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 21,
+          "y": 1199,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/ratatui",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 210,
+          "y": 1199,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 210,
+          "y": 1199,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/istoriya-igrushek",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 21,
+          "y": 1549,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 21,
+          "y": 1549,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/taina-koko",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 210,
+          "y": 1549,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 210,
+          "y": 1549,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/dusha-2020",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 21,
+          "y": 1899,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 21,
+          "y": 1899,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/vall-i",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 210,
+          "y": 1899,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 210,
+          "y": 1899,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/elementarno-2023",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 21,
+          "y": 2249,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 21,
+          "y": 2249,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/golovolomka-2",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 210,
+          "y": 2249,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 210,
+          "y": 2249,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/v-poiskah-nemo",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 21,
+          "y": 2599,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 21,
+          "y": 2599,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/istoriya-igrushek-4-2019",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 210,
+          "y": 2599,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 210,
+          "y": 2599,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/istoriya-igrushek-bolshoi-pobeg",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 21,
+          "y": 2949,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 21,
+          "y": 2949,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/golovolomka-2015",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 210,
+          "y": 2949,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 210,
+          "y": 2949,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/universitet-monstrov",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 21,
+          "y": 3299,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 21,
+          "y": 3299,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/istoriya-igrushek-2",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 210,
+          "y": 3299,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 210,
+          "y": 3299,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/ya-krasneyu-2022",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 21,
+          "y": 3649,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 21,
+          "y": 3649,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/hrabraya-serdtsem",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 210,
+          "y": 3649,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 210,
+          "y": 3649,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/supersemeika",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 21,
+          "y": 3999,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 21,
+          "y": 3999,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/luka-2021-2",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 210,
+          "y": 3999,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 210,
+          "y": 3999,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/vverh-2009",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 21,
+          "y": 4349,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 21,
+          "y": 4349,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/movies/elio-2025",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 210,
+          "y": 4349,
+          "width": 160,
+          "height": 330,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 210,
+          "y": 4349,
+          "width": 161,
+          "height": 238,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      }
+    ],
+    "estimated_columns": 2,
+    "sections_sample": [
+      {
+        "text": "Жанры",
+        "box": {
+          "tag": "section",
+          "id": null,
+          "className": "layout-child w-full md:flex flex-wrap rounded-md  bg-inherit px-0 py-5",
+          "x": 16,
+          "y": 70,
+          "width": 358,
+          "height": 252,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Спасибо, что делитесь с друзьями",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "grid items-center md:flex flex-col md:flex-end flex-wrap gap-3 items-start md:flex-row md:items-center",
+          "x": 16,
+          "y": 11079,
+          "width": 358,
+          "height": 162,
+          "display": "grid",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Спасибо, что делитесь с друзьями",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "col-start-1 row-start-3 flex flex-col gap-2.5 md:items-center order-3 md:flex-row md:order-none md:mt-0 md:ml-auto lg:ml",
+          "x": 16,
+          "y": 11167,
+          "width": 173,
+          "height": 74,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Мы в соцсетях",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "col-start-2 row-start-3 items-end flex flex-col gap-2.5 md:items-center order-3 md:flex-row md:order-none md:mt-0 md:ml-",
+          "x": 201,
+          "y": 11177,
+          "width": 174,
+          "height": 54,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "admin@zonafilm.ru",
+        "box": {
+          "tag": "noindex",
+          "id": null,
+          "className": "col-start-1 row-start-2 text-main-color-200 w-full lg:w-auto md:text-end ml-auto",
+          "x": 16,
+          "y": 11131,
+          "width": 173,
+          "height": 24,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Пользовательское соглашение",
+        "box": {
+          "tag": "noindex",
+          "id": null,
+          "className": "col-start-2 row-start-1 underline md:w-full text-sm md:text-base text-end",
+          "x": 201,
+          "y": 11079,
+          "width": 174,
+          "height": 40,
+          "display": "block",
+          "position": "static",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400"
+        }
+      }
+    ],
+    "body_overflow_x": true
+  }
+}

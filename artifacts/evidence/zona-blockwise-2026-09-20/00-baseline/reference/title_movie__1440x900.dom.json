@@ -1,0 +1,341 @@
+{
+  "captured_at": "2026-09-20T12:52:56Z",
+  "viewport": "1440x900",
+  "requested_url": "https://zonafilm.ru/movies/dyuna-chast-vtoraya",
+  "final_url": "https://zonafilm.ru/movies/dyuna-chast-vtoraya",
+  "http_status": 200,
+  "redirect_chain": [
+    {
+      "final": "https://zonafilm.ru/movies/dyuna-chast-vtoraya",
+      "status": 200
+    }
+  ],
+  "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/title_movie__1440x900.png",
+  "screenshot_sha256": "847c72da5e0c27d262a2d89c3c5ad23c9e67f7bef8a63ec2f96575c69a424b67",
+  "metrics": {
+    "document": {
+      "width": 1440,
+      "height": 2765,
+      "clientWidth": 1440,
+      "clientHeight": 900
+    },
+    "title": "Дюна: Часть вторая: фильм (2024) смотреть онлайн бесплатно на ZonaFilm.ru",
+    "canonical": "https://zonafilm.ru/movies/dyuna-chast-vtoraya",
+    "robots": null,
+    "headers": [
+      {
+        "tag": "header",
+        "id": null,
+        "className": "layout-child header flex justify-between gap-5",
+        "x": 120,
+        "y": 0,
+        "width": 1200,
+        "height": 70,
+        "display": "flex",
+        "position": "static",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "400"
+      },
+      {
+        "tag": "nav",
+        "id": null,
+        "className": "navigation z-[60] font-medium w-full lg:w-auto h-screen lg:h-full lg:flex gap-9 lg:bg-transparent absolute lg:static bg-",
+        "x": 375,
+        "y": 0,
+        "width": 373,
+        "height": 70,
+        "display": "flex",
+        "position": "static",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "500"
+      },
+      {
+        "tag": "nav",
+        "id": null,
+        "className": "overflow-x-scroll no-scrollbar",
+        "x": 120,
+        "y": 110,
+        "width": 1200,
+        "height": 24,
+        "display": "block",
+        "position": "static",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "400"
+      }
+    ],
+    "mains": [],
+    "footers": [
+      {
+        "tag": "footer",
+        "id": "footer",
+        "className": "layout-child pt-8 pb-11 items-center justify-between bg-main-color-900 ",
+        "x": 120,
+        "y": 2629,
+        "width": 1200,
+        "height": 136,
+        "display": "block",
+        "position": "static",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "400"
+      }
+    ],
+    "h1": {
+      "tag": "h1",
+      "id": null,
+      "className": "text-xl md:text-4xl font-black mb-3",
+      "x": 120,
+      "y": 973,
+      "width": 343,
+      "height": 40,
+      "display": "block",
+      "position": "static",
+      "fontSize": "36px",
+      "lineHeight": "40px",
+      "fontWeight": "900"
+    },
+    "h2": [
+      {
+        "text": "Описание",
+        "box": {
+          "tag": "h2",
+          "id": null,
+          "className": "font-black mb-[20px]",
+          "x": 150,
+          "y": 1677,
+          "width": 1140,
+          "height": 36,
+          "display": "block",
+          "position": "static",
+          "fontSize": "24px",
+          "lineHeight": "36px",
+          "fontWeight": "900"
+        }
+      }
+    ],
+    "cards_sample": [
+      {
+        "href": "/movies/dyuna",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 120,
+          "y": 2220,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 120,
+          "y": 2220,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/dyuna-prorochestvo",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": "group",
+          "x": 323,
+          "y": 2220,
+          "width": 183,
+          "height": 374,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": "rounded-t-lg",
+          "x": 323,
+          "y": 2220,
+          "width": 183,
+          "height": 271,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      }
+    ],
+    "estimated_columns": 2,
+    "sections_sample": [
+      {
+        "text": "8,3",
+        "box": {
+          "tag": "section",
+          "id": null,
+          "className": "bg-main-color-900 px-4 py-6 lg:p-[30px] pb-[70px] rounded-md relative mb-5 mt-5",
+          "x": 120,
+          "y": 1073,
+          "width": 1200,
+          "height": 1047,
+          "display": "block",
+          "position": "relative",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Тимоти Шаламе",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "grid grid-rows-1 grid-cols-[repeat(auto-fit,_minmax(125px,_125px))] md:gap-5 justify-between sm:justify-normal justify-i",
+          "x": 150,
+          "y": 1877,
+          "width": 1140,
+          "height": 213,
+          "display": "grid",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Похожие фильмы",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "section flex flex-col",
+          "x": 120,
+          "y": 2160,
+          "width": 1200,
+          "height": 469,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "1984",
+        "box": {
+          "tag": "section",
+          "id": null,
+          "className": "[&>div]:pt-5 relative",
+          "x": 120,
+          "y": 2216,
+          "width": 1200,
+          "height": 378,
+          "display": "block",
+          "position": "relative",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Спасибо, что делитесь с друзьями",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "grid items-center md:flex flex-col md:flex-end flex-wrap gap-3 items-start md:flex-row md:items-center",
+          "x": 120,
+          "y": 2661,
+          "width": 1200,
+          "height": 60,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Спасибо, что делитесь с друзьями",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "col-start-1 row-start-3 flex flex-col gap-2.5 md:items-center order-3 md:flex-row md:order-none md:mt-0 md:ml-auto lg:ml",
+          "x": 274,
+          "y": 2661,
+          "width": 320,
+          "height": 24,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Мы в соцсетях",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "col-start-2 row-start-3 items-end flex flex-col gap-2.5 md:items-center order-3 md:flex-row md:order-none md:mt-0 md:ml-",
+          "x": 686,
+          "y": 2661,
+          "width": 200,
+          "height": 24,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Почта для связи: admin@zonafilm.ru",
+        "box": {
+          "tag": "noindex",
+          "id": null,
+          "className": "col-start-1 row-start-2 text-main-color-200 w-full lg:w-auto md:text-end ml-auto",
+          "x": 1047,
+          "y": 2661,
+          "width": 273,
+          "height": 24,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Пользовательское соглашение",
+        "box": {
+          "tag": "noindex",
+          "id": null,
+          "className": "col-start-2 row-start-1 underline md:w-full text-sm md:text-base text-end",
+          "x": 120,
+          "y": 2697,
+          "width": 1200,
+          "height": 24,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      }
+    ],
+    "body_overflow_x": false
+  }
+}

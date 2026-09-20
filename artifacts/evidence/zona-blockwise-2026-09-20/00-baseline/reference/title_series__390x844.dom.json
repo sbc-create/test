@@ -1,0 +1,1074 @@
+{
+  "captured_at": "2026-09-20T12:53:11Z",
+  "viewport": "390x844",
+  "requested_url": "https://zonafilm.ru/tvseries/druzya-1994-2",
+  "final_url": "https://zonafilm.ru/tvseries/druzya-1994-2",
+  "http_status": 200,
+  "redirect_chain": [
+    {
+      "final": "https://zonafilm.ru/tvseries/druzya-1994-2",
+      "status": 200
+    }
+  ],
+  "screenshot": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/title_series__390x844.png",
+  "screenshot_sha256": "3501bc63bc87b4f1d5cdddf667073dd9eeb18d4d5128ca90d903c155eab1b9fb",
+  "metrics": {
+    "document": {
+      "width": 600,
+      "height": 2323,
+      "clientWidth": 390,
+      "clientHeight": 844
+    },
+    "title": "Друзья: сериал 1994 смотреть все серии и сезоны онлайн на ZonaFilm.ru",
+    "canonical": "https://zonafilm.ru/tvseries/druzya-1994-2",
+    "robots": null,
+    "headers": [
+      {
+        "tag": "header",
+        "id": null,
+        "className": "layout-child header flex justify-between gap-5",
+        "x": 16,
+        "y": 0,
+        "width": 358,
+        "height": 70,
+        "display": "flex",
+        "position": "static",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "400"
+      },
+      {
+        "tag": "nav",
+        "id": null,
+        "className": "navigation z-[60] font-medium w-full lg:w-auto h-screen lg:h-full lg:flex gap-9 lg:bg-transparent absolute lg:static bg-",
+        "x": -390,
+        "y": 70,
+        "width": 390,
+        "height": 844,
+        "display": "block",
+        "position": "absolute",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "500"
+      },
+      {
+        "tag": "nav",
+        "id": null,
+        "className": "overflow-x-scroll no-scrollbar",
+        "x": 16,
+        "y": 94,
+        "width": 358,
+        "height": 24,
+        "display": "block",
+        "position": "static",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "400"
+      }
+    ],
+    "mains": [],
+    "footers": [
+      {
+        "tag": "footer",
+        "id": "footer",
+        "className": "layout-child pt-8 pb-11 items-center justify-between bg-main-color-900 ",
+        "x": 16,
+        "y": 2085,
+        "width": 358,
+        "height": 238,
+        "display": "block",
+        "position": "static",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontWeight": "400"
+      }
+    ],
+    "h1": {
+      "tag": "h1",
+      "id": null,
+      "className": "text-xl md:text-4xl font-black mb-3",
+      "x": 16,
+      "y": 460,
+      "width": 140,
+      "height": 28,
+      "display": "block",
+      "position": "static",
+      "fontSize": "20px",
+      "lineHeight": "28px",
+      "fontWeight": "900"
+    },
+    "h2": [
+      {
+        "text": "Описание",
+        "box": {
+          "tag": "h2",
+          "id": null,
+          "className": "font-black mb-[20px]",
+          "x": 16,
+          "y": 1217,
+          "width": 358,
+          "height": 36,
+          "display": "block",
+          "position": "static",
+          "fontSize": "24px",
+          "lineHeight": "36px",
+          "fontWeight": "900"
+        }
+      }
+    ],
+    "cards_sample": [
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-1",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 16,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 16,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-2",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 209,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 209,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-3",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 402,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 402,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-4",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 595,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 595,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-5",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 788,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 788,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-6",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 981,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 981,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-7",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 1174,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 1174,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-8",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 1367,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 1367,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-9",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 1560,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 1560,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-10",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 1753,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 1753,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-11",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 1946,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 1946,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-12",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 2139,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 2139,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-13",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 2332,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 2332,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-14",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 2525,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 2525,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-15",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 2718,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 2718,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-16",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 2911,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 2911,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-17",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 3104,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 3104,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-18",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 3297,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 3297,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-19",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 3490,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 3490,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-20",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 3683,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 3683,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-21",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 3876,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 3876,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-22",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 4069,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 4069,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-23",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 4262,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 4262,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "href": "/tvseries/druzya-1994-2/season-1/episode-24",
+        "card": {
+          "tag": "a",
+          "id": null,
+          "className": null,
+          "x": 4455,
+          "y": 664,
+          "width": 173,
+          "height": 180,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        },
+        "img": {
+          "tag": "img",
+          "id": null,
+          "className": null,
+          "x": 4455,
+          "y": 664,
+          "width": 173,
+          "height": 110,
+          "display": "block",
+          "position": "absolute",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      }
+    ],
+    "estimated_columns": 24,
+    "sections_sample": [
+      {
+        "text": "1 сезон",
+        "box": {
+          "tag": "section",
+          "id": null,
+          "className": "relative mt-5 bg-main-color-900 px-4 py-6 lg:p-[30px] rounded-md flex flex-col gap-10",
+          "x": 0,
+          "y": 568,
+          "width": 390,
+          "height": 300,
+          "display": "flex",
+          "position": "relative",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "1 сезон",
+        "box": {
+          "tag": "section",
+          "id": null,
+          "className": "relative",
+          "x": 16,
+          "y": 592,
+          "width": 358,
+          "height": 32,
+          "display": "block",
+          "position": "relative",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "1 серия",
+        "box": {
+          "tag": "section",
+          "id": null,
+          "className": "relative",
+          "x": 16,
+          "y": 664,
+          "width": 358,
+          "height": 180,
+          "display": "block",
+          "position": "relative",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "9,0",
+        "box": {
+          "tag": "section",
+          "id": null,
+          "className": "bg-main-color-900 px-4 py-6 lg:p-[30px] pb-[70px] rounded-md relative mb-5 mt-5",
+          "x": 0,
+          "y": 888,
+          "width": 390,
+          "height": 771,
+          "display": "block",
+          "position": "relative",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Дженнифер Энистон",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "grid grid-rows-1 grid-cols-[repeat(auto-fit,_minmax(125px,_125px))] md:gap-5 justify-between sm:justify-normal justify-i",
+          "x": 16,
+          "y": 1461,
+          "width": 358,
+          "height": 128,
+          "display": "grid",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Похожие сериалы",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "section flex flex-col",
+          "x": 16,
+          "y": 1699,
+          "width": 358,
+          "height": 386,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "2007",
+        "box": {
+          "tag": "section",
+          "id": null,
+          "className": "[&>div]:pt-5 relative",
+          "x": 16,
+          "y": 1747,
+          "width": 358,
+          "height": 303,
+          "display": "block",
+          "position": "relative",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Спасибо, что делитесь с друзьями",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "grid items-center md:flex flex-col md:flex-end flex-wrap gap-3 items-start md:flex-row md:items-center",
+          "x": 16,
+          "y": 2117,
+          "width": 358,
+          "height": 162,
+          "display": "grid",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Спасибо, что делитесь с друзьями",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "col-start-1 row-start-3 flex flex-col gap-2.5 md:items-center order-3 md:flex-row md:order-none md:mt-0 md:ml-auto lg:ml",
+          "x": 16,
+          "y": 2205,
+          "width": 173,
+          "height": 74,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Мы в соцсетях",
+        "box": {
+          "tag": "div",
+          "id": null,
+          "className": "col-start-2 row-start-3 items-end flex flex-col gap-2.5 md:items-center order-3 md:flex-row md:order-none md:mt-0 md:ml-",
+          "x": 201,
+          "y": 2215,
+          "width": 174,
+          "height": 54,
+          "display": "flex",
+          "position": "static",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "admin@zonafilm.ru",
+        "box": {
+          "tag": "noindex",
+          "id": null,
+          "className": "col-start-1 row-start-2 text-main-color-200 w-full lg:w-auto md:text-end ml-auto",
+          "x": 16,
+          "y": 2169,
+          "width": 173,
+          "height": 24,
+          "display": "block",
+          "position": "static",
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "fontWeight": "400"
+        }
+      },
+      {
+        "text": "Пользовательское соглашение",
+        "box": {
+          "tag": "noindex",
+          "id": null,
+          "className": "col-start-2 row-start-1 underline md:w-full text-sm md:text-base text-end",
+          "x": 201,
+          "y": 2117,
+          "width": 174,
+          "height": 40,
+          "display": "block",
+          "position": "static",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400"
+        }
+      }
+    ],
+    "body_overflow_x": true
+  }
+}

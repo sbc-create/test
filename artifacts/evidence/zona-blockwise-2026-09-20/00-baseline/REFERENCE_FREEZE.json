@@ -1,0 +1,23 @@
+{
+  "REFERENCE_FREEZE": "PASS",
+  "REFERENCE_OWNER_DECISION": "ACCEPTED",
+  "REFERENCE_BLOCKER": "RESOLVED",
+  "PRIMARY_REFERENCE_URL": "https://zonafilm.ru/",
+  "owner_reference_decision_id": "ZONA-REFERENCE-20260920-01",
+  "REFERENCE_PAGES_CAPTURED": 42,
+  "REFERENCE_FALLBACK_USED": false,
+  "REFERENCE_FALLBACK_LEVEL": null,
+  "analogs_used": [
+    "search",
+    "rules_footer",
+    "animation_analog",
+    "novinki_analog"
+  ],
+  "viewports": [
+    "1440x900",
+    "768x1024",
+    "390x844"
+  ],
+  "manifest": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/REFERENCE_FREEZE_MANIFEST.json",
+  "frozen_at": "2026-09-20T12:55:00Z"
+}

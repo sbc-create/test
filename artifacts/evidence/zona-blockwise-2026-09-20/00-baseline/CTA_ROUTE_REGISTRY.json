@@ -1,19 +1,102 @@
 {
-  "status": "PENDING_REFERENCE_AND_ROUTE_REGISTRY",
-  "rule": "Undefined CTA hidden or blocks its block per frozen display policy; executor must not invent URLs",
-  "required_entries": [
-    "hero_primary",
-    "hero_secondary",
-    "weekly_watch_all",
-    "catalog_added_cta",
-    "kind_movies",
-    "kind_series",
-    "kind_animation",
-    "all_genres",
-    "collection_card",
-    "title_watch",
-    "footer_links"
-  ],
-  "entries": {},
-  "blocked_reason": "REFERENCE_UNAVAILABLE and route registry not frozen"
+  "status": "FROZEN_FROM_LIVE_ZONA_ROUTES",
+  "frozen_at": "2026-09-20T12:55:00Z",
+  "rule": "Undefined CTA hidden; no invented URLs",
+  "entries": {
+    "hero_primary": {
+      "cta_route": "/title/{slug}/",
+      "label": "Подробнее",
+      "fallback": "hide_secondary_only"
+    },
+    "hero_watch": {
+      "cta_route": "/title/{slug}/",
+      "label": "Смотреть",
+      "requires": "playable=true",
+      "fallback": "hide"
+    },
+    "weekly_watch_all": {
+      "cta_route": "/catalog/",
+      "query": {
+        "sort": "rating"
+      },
+      "fallback": "hide_link_keep_block"
+    },
+    "catalog_added_cta": {
+      "cta_route": "/new/",
+      "query": {
+        "mode": "added"
+      },
+      "fallback": "use_/new/_without_mode_if_unsupported"
+    },
+    "kind_movies": {
+      "cta_route": "/movies/"
+    },
+    "kind_series": {
+      "cta_route": "/series/"
+    },
+    "kind_animation": {
+      "cta_route": "/animation/"
+    },
+    "all_genres": {
+      "cta_route": "/catalog/",
+      "fallback": "keep_chips_hide_all_link_if_missing"
+    },
+    "collection_card": {
+      "cta_route": "/collection/{slug}/"
+    },
+    "title_watch": {
+      "cta_route": "/title/{slug}/",
+      "requires": "playable=true",
+      "fallback": "hide"
+    },
+    "nav_home": {
+      "cta_route": "/"
+    },
+    "nav_new": {
+      "cta_route": "/new/"
+    },
+    "nav_movies": {
+      "cta_route": "/movies/"
+    },
+    "nav_series": {
+      "cta_route": "/series/"
+    },
+    "nav_animation": {
+      "cta_route": "/animation/"
+    },
+    "nav_collections": {
+      "cta_route": "/collections/"
+    },
+    "nav_catalog": {
+      "cta_route": "/catalog/"
+    },
+    "nav_search": {
+      "cta_route": "/search/",
+      "query_schema": {
+        "q": "string"
+      },
+      "empty_submit": "forbid"
+    },
+    "footer_home": {
+      "cta_route": "/"
+    },
+    "footer_catalog": {
+      "cta_route": "/catalog/"
+    },
+    "footer_collections": {
+      "cta_route": "/collections/"
+    },
+    "footer_contacts": {
+      "cta_route": null,
+      "fallback": "hide_if_owner_value_missing"
+    },
+    "footer_privacy": {
+      "cta_route": null,
+      "fallback": "hide_if_owner_value_missing"
+    },
+    "footer_terms": {
+      "cta_route": null,
+      "fallback": "hide_if_owner_value_missing"
+    }
+  }
 }
