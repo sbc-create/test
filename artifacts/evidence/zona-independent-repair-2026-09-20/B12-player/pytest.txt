@@ -1,0 +1,10 @@
+..................................F.....................                 [100%]
+=================================== FAILURES ===================================
+E   AssertionError: assert 'Подключаем видео' == 'подключение источника'
+      
+      - подключение источника
+      + Подключаем видео
+/home/claude/wt-zona-finalization-01/tests/lords/test_zona_followup_playback.py:363: AssertionError: assert 'Подключаем видео' == 'подключение источника'
+=========================== short test summary info ============================
+FAILED tests/lords/test_zona_followup_playback.py::TestSafety::test_resolving_not_fake_connected
+1 failed, 55 passed in 2.46s

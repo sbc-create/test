@@ -486,7 +486,7 @@ def разметка_оценок(деталь: dict, класс: str = "rbs", �
         if not пусто:
             return ""
         return (f'<p class="{класс} {класс}--none">'
-                "<span>Оценок пока нет: источник их не передал</span></p>")
+                "<span>Оценок пока нет</span></p>")
     def элемент(о):
         голоса = (f'<span class="{класс}__v">{_склонение(int(о["голоса"]), "голос", "голоса", "голосов")}</span>'
                   if о["голоса"] else "")
@@ -2945,8 +2945,8 @@ def разметка_плеера(вид, запись: dict, деталь: dict
     if not кандидаты:
         return ("nosource",
                 f'<div class="{вид.кл_состояния}" data-player-state>'
-                "<b>Источник для этой записи не передан</b>"
-                "<p>Запрашивать у провайдера нечего.</p></div>")
+                "<b>Видео временно недоступно</b>"
+                "<p>Для этой записи пока нет воспроизведения.</p></div>")
     агрегатор, ид = кандидаты[0]
     список_json = html.escape(json.dumps(
         [{"aggregator": а, "id": i} for а, i in кандидаты],
@@ -2989,10 +2989,12 @@ def разметка_плеера(вид, запись: dict, деталь: dict
  var generation=0, attempt=0, idx=0, playing=false, отказ=false, seen, timers=[];
  var maxFallback=3, baseAttrs={}, lastPos=0, readyAt=0, activeSource=null;
  var MSG='Видео временно недоступно. Попробуйте другую озвучку или вернитесь позже.';
- var LABELS={idle:'',loading:'подключение источника',resolving:'подключение источника',
-  ready:'источник готов',playing:'воспроизведение',try_next:'подключение источника',
-  provider:'видео недоступно',unavailable:'видео недоступно',error:'видео недоступно',
-  slow:'видео недоступно',nosource:'видео недоступно',noaccess:'видео недоступно'};
+ var LABELS={idle:'',loading:'Подключаем видео',resolving:'Подключаем видео',
+  ready:'Видео готово',playing:'Воспроизведение',try_next:'Подключаем видео',
+  provider:'Видео временно недоступно',unavailable:'Видео временно недоступно',
+  error:'Видео временно недоступно',
+  slow:'Видео временно недоступно',nosource:'Видео временно недоступно',
+  noaccess:'Видео временно недоступно'};
  var ORIGIN='https://player.cdnvideohub.com';
  function el(){ return host.querySelector('video-player'); }
  function clearTimers(){ timers.forEach(clearTimeout); timers=[]; if(seen){clearInterval(seen);seen=null;} }
@@ -5780,7 +5782,7 @@ class ВидЗона(Вид):
             f'<div class="ztitle__main"><h1>{html.escape(имя)}</h1>'
             f'{оригинал_html}{оценки_html}{genres_html}{chips_html}{core_dl}'
             f'{описание_html}'
-            f'<a class="ztitle__cta" href="#watch">Смотреть</a>{ad_slot}</div>'
+            f'<a class="ztitle__cta" href="#watch" data-cta="to-player">К плееру</a>{ad_slot}</div>'
             f'</div></div>{плеер}{блок_серий}{блок_похожих}{expand_js}')
         разметка = [
             self.schema_тайтла(запись, деталь, путь),
@@ -6012,35 +6014,29 @@ def _скрипты_плеера(код: str) -> str:
 
 
 def _подпись_плеера(код: str) -> str:
+    consumer = {
+        "playable": "Подключаем видео",
+        "resolving": "Подключаем видео",
+        "ready": "Видео готово",
+        "playing": "Воспроизведение",
+        "awaiting": "Выберите серию",
+        "unavailable": "Видео временно недоступно",
+        "loading": "Подключаем видео",
+        "nosource": "Видео временно недоступно",
+        "noaccess": "Видео временно недоступно",
+        "provider": "Видео временно недоступно",
+        "error": "Видео временно недоступно",
+        "slow": "Видео временно недоступно",
+    }
     if СЕМЕЙСТВО == "animedia":
         return {
+            **consumer,
             "playable": "смотреть",
-            "resolving": "подключение источника",
             "awaiting": "выберите серию",
             "unavailable": "серия недоступна",
             "loading": "загрузка",
-            "nosource": "видео пока недоступно",
-            "noaccess": "видео пока недоступно",
-            "provider": "видео временно недоступно",
-            "error": "видео временно недоступно",
-            "slow": "видео временно недоступно",
-            "ready": "источник готов",
-            "playing": "воспроизведение",
         }.get(код, "")
-    return {
-        "playable": "подключение источника",
-        "resolving": "подключение источника",
-        "ready": "источник готов",
-        "playing": "воспроизведение",
-        "awaiting": "выберите серию",
-        "unavailable": "серия без дорожки",
-        "loading": "подключение источника",
-        "nosource": "видео временно недоступно",
-        "noaccess": "видео временно недоступно",
-        "provider": "видео временно недоступно",
-        "error": "видео временно недоступно",
-        "slow": "видео временно недоступно",
-    }.get(код, "состояние неизвестно")
+    return consumer.get(код, "")
 
 
 def _открытый_граф(данные: dict) -> str:

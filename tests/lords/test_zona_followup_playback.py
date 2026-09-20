@@ -233,7 +233,7 @@ class TestSourceSelection:
         assert 'data-aggregator="kp"' in о.тело
         assert 'data-title-id="11922371"' in о.тело
         assert "источник подключён" not in о.тело.lower()
-        assert "подключение источника" in о.тело.lower()
+        assert "подключаем видео" in о.тело.lower()
         assert "data-src-candidates=" in о.тело
 
     def test_nosource_honest_no_fake_play(self, зона):
