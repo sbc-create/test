@@ -708,8 +708,8 @@ class Данные:
                 if ф and ф not in увидели:
                     увидели.append(ф)
             з["_формы"] = увидели
-        self.years = sorted({з["year"] for з in self.items if з["year"]}, reverse=True)
-        self.kinds = sorted({з["kind"] for з in self.items if з["kind"]})
+        self.years = sorted({з.get("year") for з in self.items if з.get("year")}, reverse=True)
+        self.kinds = sorted({з.get("kind") for з in self.items if з.get("kind")})
 
     def искать(self, q: str, предел: int = 120) -> list[dict]:
         """Терпимый поиск без заполнения выдачи каталогом.
@@ -3676,7 +3676,7 @@ class ВидЛордс(Вид):
                       + (f'<span class="c__imdb">IMDb<i>{им}</i></span>' if им else "")
                       + "</div>")
         else:
-            полоса = '<div class="c__r" aria-hidden="true"></div>'
+            полоса = ""
         год = f'<span class="c__y">{запись["year"]}</span>' if запись.get("year") else ""
         добавлено = ""
         if показать_добавлено and запись.get("published_at"):
