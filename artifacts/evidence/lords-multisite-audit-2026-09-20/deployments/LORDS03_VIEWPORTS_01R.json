@@ -1,0 +1,155 @@
+{
+  "checks": [
+    {
+      "viewport": "desktop",
+      "path": "/catalog/?year=2016&sort=rating",
+      "overflowX": 0,
+      "compact": true,
+      "filtH": 94.5,
+      "player": null,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "desktop",
+      "path": "/series/?year=2016",
+      "overflowX": 0,
+      "compact": true,
+      "filtH": 94.5,
+      "player": null,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "desktop",
+      "path": "/title/plennica-6/",
+      "overflowX": 0,
+      "compact": false,
+      "filtH": 0,
+      "player": {
+        "state": "active",
+        "contract": "full-bleed-v1",
+        "instances": 1,
+        "fillW": 1,
+        "fillH": 1
+      },
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "desktop",
+      "path": "/title/plennica-6/season-1/episode-1/",
+      "overflowX": 0,
+      "compact": false,
+      "filtH": 0,
+      "player": {
+        "state": "active",
+        "contract": "full-bleed-v1",
+        "instances": 1,
+        "fillW": 1,
+        "fillH": 1
+      },
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "tablet",
+      "path": "/catalog/?year=2016&sort=rating",
+      "overflowX": 0,
+      "compact": true,
+      "filtH": 138.5,
+      "player": null,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "tablet",
+      "path": "/series/?year=2016",
+      "overflowX": 0,
+      "compact": true,
+      "filtH": 138.5,
+      "player": null,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "tablet",
+      "path": "/title/plennica-6/",
+      "overflowX": 0,
+      "compact": false,
+      "filtH": 0,
+      "player": {
+        "state": "active",
+        "contract": "full-bleed-v1",
+        "instances": 1,
+        "fillW": 1,
+        "fillH": 1
+      },
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "tablet",
+      "path": "/title/plennica-6/season-1/episode-1/",
+      "overflowX": 0,
+      "compact": false,
+      "filtH": 0,
+      "player": {
+        "state": "active",
+        "contract": "full-bleed-v1",
+        "instances": 1,
+        "fillW": 1,
+        "fillH": 1
+      },
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "mobile",
+      "path": "/catalog/?year=2016&sort=rating",
+      "overflowX": 0,
+      "compact": true,
+      "filtH": 201,
+      "player": null,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "mobile",
+      "path": "/series/?year=2016",
+      "overflowX": 0,
+      "compact": true,
+      "filtH": 201,
+      "player": null,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "mobile",
+      "path": "/title/plennica-6/",
+      "overflowX": 0,
+      "compact": false,
+      "filtH": 0,
+      "player": {
+        "state": "active",
+        "contract": "full-bleed-v1",
+        "instances": 1,
+        "fillW": 1,
+        "fillH": 1
+      },
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "mobile",
+      "path": "/title/plennica-6/season-1/episode-1/",
+      "overflowX": 0,
+      "compact": false,
+      "filtH": 0,
+      "player": {
+        "state": "active",
+        "contract": "full-bleed-v1",
+        "instances": 1,
+        "fillW": 1,
+        "fillH": 1
+      },
+      "build": "20260920T140520Z-24c54b6-nova"
+    }
+  ],
+  "summary": {
+    "PAGE_OVERFLOW_GT1": 0,
+    "FILTER_COMPACT_MISSING": 0,
+    "PLAYER_INSTANCE_MAX": 1,
+    "PLAYER_CONTRACT_OK": true,
+    "PLAYER_FILL_OK": true
+  }
+}

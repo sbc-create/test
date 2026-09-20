@@ -1,0 +1,271 @@
+{
+  "at_utc": "2026-09-20T14:24:47.148593+00:00",
+  "cards": {
+    "catalog_ids": 48,
+    "catalog_unique": 48,
+    "catalog_dup": 0,
+    "home_ids": 58,
+    "home_unique": 58,
+    "home_dup": 0,
+    "new_ids": 48,
+    "new_unique": 48,
+    "new_dup": 0,
+    "broken_catalog_sample24": 0,
+    "missing_poster_without_img": 0,
+    "aspect_in_css": true
+  },
+  "player_path": "/title/plennica-6/",
+  "ep_path": "/title/plennica-6/season-1/episode-1/",
+  "viewports": [
+    {
+      "viewport": "desktop",
+      "w": 1440,
+      "h": 900,
+      "path": "/catalog/?year=2016&genre=komediya&sort=rating",
+      "overflowX": 0,
+      "compact": true,
+      "filtBox": {
+        "w": 1064,
+        "h": 95
+      },
+      "filtOverflow": 0,
+      "yearButtons": 4,
+      "player": null,
+      "stretch": 0,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "desktop",
+      "w": 1440,
+      "h": 900,
+      "path": "/series/?year=2016",
+      "overflowX": 0,
+      "compact": true,
+      "filtBox": {
+        "w": 1064,
+        "h": 95
+      },
+      "filtOverflow": 0,
+      "yearButtons": 4,
+      "player": null,
+      "stretch": 0,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "desktop",
+      "w": 1440,
+      "h": 900,
+      "path": "/title/plennica-6/",
+      "overflowX": 0,
+      "compact": false,
+      "filtBox": null,
+      "filtOverflow": 0,
+      "yearButtons": 0,
+      "player": {
+        "state": "active",
+        "contract": "full-bleed-v1",
+        "w": 1064,
+        "h": 599,
+        "instances": 1,
+        "fillW": 1,
+        "fillH": 1,
+        "overflowX": 0
+      },
+      "stretch": 0,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "desktop",
+      "w": 1440,
+      "h": 900,
+      "path": "/title/plennica-6/season-1/episode-1/",
+      "overflowX": 0,
+      "compact": false,
+      "filtBox": null,
+      "filtOverflow": 0,
+      "yearButtons": 0,
+      "player": {
+        "state": "active",
+        "contract": "full-bleed-v1",
+        "w": 1064,
+        "h": 599,
+        "instances": 1,
+        "fillW": 1,
+        "fillH": 1,
+        "overflowX": 0
+      },
+      "stretch": 0,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "tablet",
+      "w": 768,
+      "h": 1024,
+      "path": "/catalog/?year=2016&genre=komediya&sort=rating",
+      "overflowX": 0,
+      "compact": true,
+      "filtBox": {
+        "w": 732,
+        "h": 139
+      },
+      "filtOverflow": 0,
+      "yearButtons": 4,
+      "player": null,
+      "stretch": 0,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "tablet",
+      "w": 768,
+      "h": 1024,
+      "path": "/series/?year=2016",
+      "overflowX": 0,
+      "compact": true,
+      "filtBox": {
+        "w": 732,
+        "h": 139
+      },
+      "filtOverflow": 0,
+      "yearButtons": 4,
+      "player": null,
+      "stretch": 0,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "tablet",
+      "w": 768,
+      "h": 1024,
+      "path": "/title/plennica-6/",
+      "overflowX": 0,
+      "compact": false,
+      "filtBox": null,
+      "filtOverflow": 0,
+      "yearButtons": 0,
+      "player": {
+        "state": "active",
+        "contract": "full-bleed-v1",
+        "w": 732,
+        "h": 412,
+        "instances": 1,
+        "fillW": 1,
+        "fillH": 1,
+        "overflowX": 0
+      },
+      "stretch": 0,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "tablet",
+      "w": 768,
+      "h": 1024,
+      "path": "/title/plennica-6/season-1/episode-1/",
+      "overflowX": 0,
+      "compact": false,
+      "filtBox": null,
+      "filtOverflow": 0,
+      "yearButtons": 0,
+      "player": {
+        "state": "active",
+        "contract": "full-bleed-v1",
+        "w": 732,
+        "h": 412,
+        "instances": 1,
+        "fillW": 1,
+        "fillH": 1,
+        "overflowX": 0
+      },
+      "stretch": 0,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "mobile",
+      "w": 390,
+      "h": 844,
+      "path": "/catalog/?year=2016&genre=komediya&sort=rating",
+      "overflowX": 0,
+      "compact": true,
+      "filtBox": {
+        "w": 354,
+        "h": 233
+      },
+      "filtOverflow": 0,
+      "yearButtons": 4,
+      "player": null,
+      "stretch": 0,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "mobile",
+      "w": 390,
+      "h": 844,
+      "path": "/series/?year=2016",
+      "overflowX": 0,
+      "compact": true,
+      "filtBox": {
+        "w": 354,
+        "h": 201
+      },
+      "filtOverflow": 0,
+      "yearButtons": 4,
+      "player": null,
+      "stretch": 0,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "mobile",
+      "w": 390,
+      "h": 844,
+      "path": "/title/plennica-6/",
+      "overflowX": 0,
+      "compact": false,
+      "filtBox": null,
+      "filtOverflow": 0,
+      "yearButtons": 0,
+      "player": {
+        "state": "active",
+        "contract": "full-bleed-v1",
+        "w": 354,
+        "h": 199,
+        "instances": 1,
+        "fillW": 1,
+        "fillH": 1,
+        "overflowX": 0
+      },
+      "stretch": 0,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "viewport": "mobile",
+      "w": 390,
+      "h": 844,
+      "path": "/title/plennica-6/season-1/episode-1/",
+      "overflowX": 0,
+      "compact": false,
+      "filtBox": null,
+      "filtOverflow": 0,
+      "yearButtons": 0,
+      "player": {
+        "state": "active",
+        "contract": "full-bleed-v1",
+        "w": 354,
+        "h": 199,
+        "instances": 1,
+        "fillW": 1,
+        "fillH": 1,
+        "overflowX": 0
+      },
+      "stretch": 0,
+      "build": "20260920T140520Z-24c54b6-nova"
+    }
+  ],
+  "summary": {
+    "PAGE_OVERFLOW_GT1": 0,
+    "FILTER_COMPACT_MISSING": 0,
+    "FILTER_YEAR_WALL": 0,
+    "PLAYER_INSTANCE_MAX": 1,
+    "PLAYER_CONTRACT_OK": true,
+    "PLAYER_FILL_OK": true,
+    "LAST_ROW_STRETCH": 0,
+    "max_filt_h": 233
+  }
+}

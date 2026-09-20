@@ -1,0 +1,31 @@
+{
+  "cmp": {
+    "builds_equal": true,
+    "shas_equal": true,
+    "popular_equal": true,
+    "CONSECUTIVE_STABLE": true
+  },
+  "vp": {
+    "PAGE_OVERFLOW_GT1": 0,
+    "FILTER_COMPACT_MISSING": 0,
+    "PLAYER_INSTANCE_MAX": 1,
+    "PLAYER_CONTRACT_OK": true,
+    "PLAYER_FILL_OK": true
+  },
+  "p1": {
+    "week": "2026-W38",
+    "digest": "05400b9712dbb632303af1a43e0ebd8d",
+    "ids": [
+      "/title/svinorez/",
+      "/title/kadaknath/",
+      "/title/bezdna/",
+      "/title/sheri-lyubov-moya/",
+      "/title/bez-prava-na-strah/",
+      "/title/plasticheskaya-krasota/",
+      "/title/imperiya-artura/",
+      "/title/delo-ob-ubiystve-lakshmikantana/",
+      "/title/littl-lorreyn/",
+      "/title/ubiyca-vnutri/"
+    ]
+  }
+}

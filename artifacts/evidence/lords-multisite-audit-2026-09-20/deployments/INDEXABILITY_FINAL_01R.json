@@ -1,0 +1,28 @@
+{
+  "at_utc": "2026-09-20T14:26:15.374179+00:00",
+  "INDEXABILITY_MUTATIONS": 0,
+  "sites": [
+    {
+      "site": "lords-01",
+      "domain": "lordfilm47.space",
+      "robots_txt": "User-agent: *\nDisallow: /",
+      "x_robots": "noindex, nofollow",
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "site": "lords-02",
+      "domain": "lordserial33.biz",
+      "robots_txt": "User-agent: *\nDisallow: /",
+      "x_robots": "noindex, nofollow",
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "site": "lords-03",
+      "domain": "1lordserials1.online",
+      "robots_txt": "User-agent: *\nDisallow: /",
+      "x_robots": "noindex, nofollow",
+      "build": "20260920T140520Z-24c54b6-nova"
+    }
+  ],
+  "note": "all remain noindex/nofollow; Disallow: / in robots.txt"
+}

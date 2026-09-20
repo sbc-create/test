@@ -1,0 +1,376 @@
+{
+  "run": 2,
+  "at_utc": "2026-09-20T14:25:36.355717+00:00",
+  "build": "20260920T140520Z-24c54b6-nova",
+  "sha": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+  "robots": "noindex, nofollow",
+  "profile": "lords-curated",
+  "build_match": true,
+  "sha_match": true,
+  "country_rows": [
+    {
+      "code": "ssha",
+      "status": 200,
+      "shown": 17789,
+      "titles": 48,
+      "5xx": false,
+      "selected": true
+    },
+    {
+      "code": "yaponiya",
+      "status": 200,
+      "shown": 4104,
+      "titles": 48,
+      "5xx": false,
+      "selected": true
+    },
+    {
+      "code": "velikobritaniya",
+      "status": 200,
+      "shown": 4092,
+      "titles": 48,
+      "5xx": false,
+      "selected": true
+    },
+    {
+      "code": "franciya",
+      "status": 200,
+      "shown": 3010,
+      "titles": 48,
+      "5xx": false,
+      "selected": true
+    },
+    {
+      "code": "kanada",
+      "status": 200,
+      "shown": 2922,
+      "titles": 48,
+      "5xx": false,
+      "selected": true
+    },
+    {
+      "code": "germaniya",
+      "status": 200,
+      "shown": 1789,
+      "titles": 48,
+      "5xx": false,
+      "selected": true
+    },
+    {
+      "code": "indiya",
+      "status": 200,
+      "shown": 1729,
+      "titles": 48,
+      "5xx": false,
+      "selected": true
+    },
+    {
+      "code": "yuzhnayakoreya",
+      "status": 200,
+      "shown": 1494,
+      "titles": 48,
+      "5xx": false,
+      "selected": true
+    }
+  ],
+  "COUNTRY_ROUTE_FAILURES": 0,
+  "uk_cyr_one_redirect": true,
+  "filters": [
+    {
+      "path": "/catalog/",
+      "status": 200,
+      "5xx": false,
+      "compact": true,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "path": "/catalog/?year=2016",
+      "status": 200,
+      "5xx": false,
+      "compact": true,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "path": "/catalog/?genre=komediya&sort=rating",
+      "status": 200,
+      "5xx": false,
+      "compact": true,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "path": "/movies/?year=2016",
+      "status": 200,
+      "5xx": false,
+      "compact": true,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "path": "/series/?year=2016",
+      "status": 200,
+      "5xx": false,
+      "compact": true,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "path": "/catalog/?page=2&year=2016",
+      "status": 200,
+      "5xx": false,
+      "compact": true,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "path": "/animation/",
+      "status": 200,
+      "5xx": false,
+      "compact": true,
+      "build": "20260920T140520Z-24c54b6-nova"
+    }
+  ],
+  "FILTER_COMPACT_PASS": true,
+  "FILTER_5XX": 0,
+  "cards": {
+    "ids": 48,
+    "unique": 48,
+    "dup": 0,
+    "broken_sample_20": 0
+  },
+  "popular": {
+    "p1": {
+      "week": "2026-W38",
+      "digest": "05400b9712dbb632303af1a43e0ebd8d",
+      "ids": [
+        "/title/svinorez/",
+        "/title/kadaknath/",
+        "/title/bezdna/",
+        "/title/sheri-lyubov-moya/",
+        "/title/bez-prava-na-strah/",
+        "/title/plasticheskaya-krasota/",
+        "/title/imperiya-artura/",
+        "/title/delo-ob-ubiystve-lakshmikantana/",
+        "/title/littl-lorreyn/",
+        "/title/ubiyca-vnutri/"
+      ]
+    },
+    "p2": {
+      "week": "2026-W38",
+      "digest": "05400b9712dbb632303af1a43e0ebd8d",
+      "ids": [
+        "/title/svinorez/",
+        "/title/kadaknath/",
+        "/title/bezdna/",
+        "/title/sheri-lyubov-moya/",
+        "/title/bez-prava-na-strah/",
+        "/title/plasticheskaya-krasota/",
+        "/title/imperiya-artura/",
+        "/title/delo-ob-ubiystve-lakshmikantana/",
+        "/title/littl-lorreyn/",
+        "/title/ubiyca-vnutri/"
+      ]
+    },
+    "digest_stable": true
+  },
+  "rec": {
+    "ids": [
+      "/title/kurinyy-gorodok/",
+      "/title/nelyud-chast-2/",
+      "/title/nelyud-film-2-stolknovenie/",
+      "/title/zolotaya-sekira/",
+      "/title/dedushkina-lampa/",
+      "/title/ovosch-supergeroy-morkkorm/"
+    ],
+    "dupes": 0,
+    "current_in_module": 0
+  },
+  "routes": [
+    {
+      "path": "/",
+      "status": 200,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "path": "/catalog/",
+      "status": 200,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "path": "/movies/",
+      "status": 200,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "path": "/series/",
+      "status": 200,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "path": "/animation/",
+      "status": 200,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "path": "/new/",
+      "status": 200,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "path": "/collections/",
+      "status": 200,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "path": "/search/?q=test",
+      "status": 200,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "path": "/genre/komediya/",
+      "status": 200,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "path": "/year/2016/",
+      "status": 200,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "path": "/country/velikobritaniya/",
+      "status": 200,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "path": "/title/__no_such_title_zzz__/",
+      "status": 404,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": null
+    },
+    {
+      "path": "/films/",
+      "status": 200,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "path": "/cartoons/",
+      "status": 200,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T140520Z-24c54b6-nova"
+    },
+    {
+      "path": "/series/?year=2016",
+      "status": 200,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T140520Z-24c54b6-nova"
+    }
+  ],
+  "HTTP_5XX_COUNT": 0,
+  "TIMEOUT_COUNT": 0,
+  "REDIRECT_LOOP_COUNT": 0,
+  "SOFT_404_COUNT": 0,
+  "EXPECTED_404_OK": true,
+  "player": [
+    {
+      "path": "/title/plennica-6/",
+      "status": 200,
+      "series": true,
+      "full_bleed": true,
+      "state": "resolving",
+      "n_data_player": 1,
+      "autoplay": false
+    },
+    {
+      "path": "/title/plennica-6/season-1/episode-1/",
+      "status": 200,
+      "exact_episode": true,
+      "full_bleed": true,
+      "state": "resolving",
+      "episode_kept": true,
+      "n_data_player": 1,
+      "autoplay": false
+    },
+    {
+      "path": "/title/nash-vcherashniy-pobeg/",
+      "status": 200,
+      "series": true,
+      "full_bleed": true,
+      "state": "resolving",
+      "n_data_player": 1,
+      "autoplay": false
+    },
+    {
+      "path": "/title/nash-vcherashniy-pobeg/season-1/episode-1/",
+      "status": 200,
+      "exact_episode": true,
+      "full_bleed": true,
+      "state": "resolving",
+      "episode_kept": true,
+      "n_data_player": 1,
+      "autoplay": false
+    },
+    {
+      "path": "/title/nedetskie-igry-2/",
+      "status": 200,
+      "film": true,
+      "full_bleed": true,
+      "state": "resolving",
+      "n_data_player": 1,
+      "autoplay": false
+    }
+  ],
+  "series_2016_status": 200
+}

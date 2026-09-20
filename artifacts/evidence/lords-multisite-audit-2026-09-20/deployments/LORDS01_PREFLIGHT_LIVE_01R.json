@@ -1,0 +1,40 @@
+{
+  "at_utc": "2026-09-20T14:23:16.366114+00:00",
+  "disk_sha": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+  "manifest_build": "20260920T140520Z-24c54b6-nova",
+  "manifest_sha": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+  "unit": {
+    "MainPID": "3875810",
+    "NRestarts": "0",
+    "ExecMainStartTimestamp": "Sun 2026-09-20 14:18:35 UTC",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "owner_claimed_pid": 3875810,
+  "pid_match": true,
+  "cold_home": {
+    "status": 200,
+    "build": "20260920T140520Z-24c54b6-nova",
+    "sha": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+    "robots": "noindex, nofollow",
+    "compact": false,
+    "popular": false,
+    "data_build": "20260920T140520Z-24c54b6-nova"
+  },
+  "warm_catalog": {
+    "status": 200,
+    "build": "20260920T140520Z-24c54b6-nova",
+    "sha": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+    "robots": "noindex, nofollow",
+    "compact": false,
+    "popular": false,
+    "data_build": "20260920T140520Z-24c54b6-nova"
+  },
+  "EXPECT_BUILD": "20260920T140520Z-24c54b6-nova",
+  "EXPECT_SHA": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+  "LIVE_MATCH": true,
+  "DISK_MATCH_EXPECT": true,
+  "MANIFEST_MATCH_EXPECT": true,
+  "SOURCE_ARTIFACT_RUNTIME_MATCH": true,
+  "STALE_RESPONSE_COUNT": 0
+}
