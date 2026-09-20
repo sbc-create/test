@@ -635,7 +635,26 @@ def закодировать_запрос(url: str) -> str:
 #: Слова, которые в запросе несут форму издания, а не название. По ним нельзя
 #: отсеивать: «Бункер 1-3 сезон» обязан находить «Бункер».
 СЛУЖЕБНЫЕ = {"сезон", "сезона", "сезонов", "серия", "серии", "season", "s",
-             "часть", "все", "смотреть", "онлайн"}
+             "часть", "все", "смотреть", "онлайн",
+             # Generic English fillers that matched almost every original title
+             # via substring OR (P0 false-120 search flood).
+             "title", "film", "movie", "series", "the", "and", "with", "from",
+             "episode", "part", "show", "watch", "online"}
+
+
+def _токен_попал(цель: str, формы: list[str]) -> str | None:
+    """How a single normalized token matches item forms: exact|prefix|contains|soft."""
+    if not цель or not формы:
+        return None
+    if цель in формы:
+        return "exact"
+    if any(ф.startswith(цель) for ф in формы if ф):
+        return "prefix"
+    if len(цель) >= 4 and any(цель in ф for ф in формы if ф):
+        return "contains"
+    if any(_мягкое_совпадение(цель, ф) for ф in формы if ф):
+        return "soft"
+    return None
 
 
 class Снимок:
@@ -693,90 +712,74 @@ class Данные:
         self.kinds = sorted({з["kind"] for з in self.items if з["kind"]})
 
     def искать(self, q: str, предел: int = 120) -> list[dict]:
-        """Терпимый поиск по всем известным названиям записи.
+        """Терпимый поиск без заполнения выдачи каталогом.
 
-        Ищется по русскому названию, оригинальному названию, синонимам,
-        slug и транслиту. Запрос дополнительно читается как набранный в
-        чужой раскладке. Служебные слова («сезон», «серия») отбрасываются.
+        Ранжирование: точное полное название → точный токен → prefix →
+        contains (≥4) → thresholded soft. Несколько значимых токенов
+        требуют AND: каждый должен попасть. OR остаётся только между
+        раскладками одного и того же запроса (латиница ↔ кириллица).
 
-        Смешанный запрос («Matrix матрица») не склеивается в одно ядро:
-        значимые токены проверяются по отдельности (OR), иначе латиница +
-        кириллица никогда не совпали бы ни с одной формой.
-
-        Ранжирование: точное совпадение, затем начало, затем вхождение, затем
-        терпимость к одной-двум опечаткам.
+        P0 regression: nonsense like ``qzxv-no-such-title-visual-audit``
+        must return [] — short/common tokens must not OR-flood the page.
         """
         сырые = [q, из_раскладки(q)]
-        цели: list[str] = []
+        полные: list[str] = []
+        токены_значимые: list[str] = []
         for сырой in сырые:
             нq = нормализовать(сырой)
-            если_токены = [т for т in токены(сырой)
-                           if т not in СЛУЖЕБНЫЕ and not т.isdigit()]
-            if нq:
-                цели.append(нq)
-            for т in если_токены:
+            if нq and нq not in полные:
+                полные.append(нq)
+            for т in токены(сырой):
+                if т in СЛУЖЕБНЫЕ or т.isdigit():
+                    continue
                 нт = нормализовать(т)
-                if нт and нт not in цели:
-                    цели.append(нт)
-            ядро = нормализовать("".join(если_токены))
-            if ядро and ядро not in цели:
-                цели.append(ядро)
-        # Уникальный порядок.
-        увидели_цели: list[str] = []
-        for ц in цели:
-            if ц and ц not in увидели_цели:
-                увидели_цели.append(ц)
-        цели = увидели_цели
-        if not цели:
+                if len(нт) < 3 or нт in токены_значимые:
+                    continue
+                токены_значимые.append(нт)
+        if not полные and not токены_значимые:
             return []
 
-        точн, начало, внутри, мягкие = [], [], [], []
+        ранги = {"exact": 100, "prefix": 70, "contains": 50, "soft": 30}
+        итог: list[tuple[int, str, dict]] = []
         for з in self.items:
-            формы = з["_формы"]
+            формы = з.get("_формы") or []
             if not формы:
                 continue
-            попал = False
-            for цель in цели:
+            балл = 0
+            # Full-string exact / prefix against any form.
+            for цель in полные:
                 if цель in формы:
-                    точн.append(з)
-                    попал = True
+                    балл = max(балл, 120)
                     break
-            if попал:
-                continue
-            for цель in цели:
-                if any(ф.startswith(цель) for ф in формы):
-                    начало.append(з)
-                    попал = True
-                    break
-            if попал:
-                continue
-            for цель in цели:
-                if any(цель in ф for ф in формы):
-                    внутри.append(з)
-                    попал = True
-                    break
-            if попал:
-                continue
-            # Нечёткое сравнение: см. `_мягкое_совпадение` (prefix+ratio).
-            if len(мягкие) < предел:
-                for цель in цели:
-                    for ф in формы:
-                        if _мягкое_совпадение(цель, ф):
-                            мягкие.append(з)
-                            попал = True
-                            break
-                    if попал:
+                if len(цель) >= 3 and any(ф.startswith(цель) for ф in формы):
+                    балл = max(балл, 95)
+            if токены_значимые:
+                виды = []
+                ok = True
+                for т in токены_значимые:
+                    вид = _токен_попал(т, формы)
+                    if вид is None:
+                        ok = False
                         break
-        итог, видели = [], set()
-        for группа in (точн, начало, внутри, мягкие):
-            for з in группа:
-                if з["url"] in видели:
-                    continue
-                видели.add(з["url"])
-                итог.append(з)
-                if len(итог) >= предел:
-                    return итог
-        return итог
+                    виды.append(вид)
+                if not ok:
+                    # Multi-token AND failed: do not accept partial OR noise.
+                    if len(токены_значимые) >= 2:
+                        if балл < 95:
+                            continue
+                    else:
+                        continue
+                else:
+                    балл = max(балл, sum(ранги[в] for в in виды) // max(1, len(виды)))
+                    if all(в == "soft" for в in виды) and len(токены_значимые) >= 2:
+                        # Soft-only multi-token is too weak for a real hit.
+                        continue
+            if балл <= 0:
+                continue
+            итог.append((балл, з.get("slug") or "", з))
+
+        итог.sort(key=lambda п: (-п[0], п[1]))
+        return [з for _, __, з in итог[:предел]]
 
 
 def карточка(з: dict) -> str:
@@ -3236,6 +3239,39 @@ def страницы(текущая: int, всего: int, окно: int = 2) ->
     return итог
 
 
+def номер_страницы(зпр: dict, всего: int) -> int | None:
+    """1-based page from query, or None when the page must be HTTP 404.
+
+    Absent/empty page → 1. page=0, negative, non-numeric, or page>last → None.
+    Soft-clamping to the last page is forbidden: it creates duplicate URL space.
+    ``всего`` is the last valid page number (at least 1 for an empty listing).
+    """
+    сырой = (зпр.get("page") or [None])[0]
+    if сырой is None or сырой == "":
+        return 1
+    try:
+        стр = int(сырой)
+    except (TypeError, ValueError):
+        return None
+    if стр < 1:
+        return None
+    last = max(1, int(всего))
+    if стр > last:
+        return None
+    return стр
+
+
+def склонение_совпадений(n: int) -> str:
+    """Russian plural forms: 1 совпадение / 2–4 совпадения / 5+ совпадений."""
+    n = abs(int(n))
+    mod10, mod100 = n % 10, n % 100
+    if mod10 == 1 and mod100 != 11:
+        return f"{n} совпадение"
+    if mod10 in (2, 3, 4) and mod100 not in (12, 13, 14):
+        return f"{n} совпадения"
+    return f"{n} совпадений"
+
+
 def отбор(данные: "Данные", индекс: dict, зпр: dict, раздел: str) -> tuple[list, dict]:
     """Выборка каталога по параметрам запроса. Возвращает (набор, выбранное).
 
@@ -3455,7 +3491,8 @@ class ВидЛордс(Вид):
 
     def оболочка(self, тело: str, титул: str, путь: str, *, актив: str = "",
                  описание: str = "", разметка: str = "", код: int = 200,
-                 крошки: str = "", og: dict | None = None) -> str:
+                 крошки: str = "", og: dict | None = None,
+                 поиск_q: str = "") -> str:
         нав = "".join(
             f'<a href="{закодировать_запрос(u)}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
             for u, t in self.се["нав"])
@@ -3465,6 +3502,7 @@ class ВидЛордс(Вид):
                          if описание else "")
         канон = (f'<link rel="canonical" href="{html.escape(self.канон(путь))}">'
                  if путь and код == 200 else "")
+        q_attr = (f' value="{html.escape(поиск_q, quote=True)}"' if поиск_q else "")
         return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="lords-sheet">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(титул)}</title>{описание_мета}{канон}
@@ -3481,7 +3519,7 @@ class ВидЛордс(Вид):
 <a class="hd__logo" href="/"><span class="hd__mark" aria-hidden="true">{html.escape(self.се["метка"])}</span>{html.escape(self.имя)}</a>
 <form class="hd__s" action="/search/" method="get" role="search">
 <label class="vh" for="q">Поиск по каталогу</label>
-<input id="q" name="q" placeholder="{html.escape(self.се["поиск"])}">
+<input id="q" name="q" placeholder="{html.escape(self.се["поиск"])}"{q_attr}>
 <button type="submit" aria-label="Найти">&#9906;</button></form>
 <button class="hd__menu" type="button" data-nav-toggle aria-controls="hd-nav"
  aria-expanded="false" aria-label="Меню разделов">&#9776;</button>
@@ -3855,9 +3893,10 @@ class ВидЛордс(Вид):
             титул = {"Фильм": "Фильмы", "Сериал": "Сериалы",
                      "Мультфильм": "Мультфильмы"}.get(выбрано_kind, титул)
         набор, выбрано = отбор(self.д, self.индекс, зпр, разд)
-        стр = max(1, int((зпр.get("page") or ["1"])[0] or 1))
         всего = max(1, (len(набор) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1) if набор else 1
-        стр = min(стр, всего)
+        стр = номер_страницы(зпр, всего)
+        if стр is None:
+            return None
         кусок = набор[(стр - 1) * НА_СТРАНИЦЕ_1_1: стр * НА_СТРАНИЦЕ_1_1]
         h1 = html.escape(титул)
         подзаг = f'<p class="zsub" style="margin:0 0 10px;color:#5b6470">{len(набор)} записей в выборке</p>'
@@ -3888,7 +3927,8 @@ class ВидЛордс(Вид):
                     "Форма издания в запросе не мешает: «Бункер 1-3 сезон» найдёт «Бункер». "
                     '<a href="/catalog/">Открыть каталог целиком</a></div>')
         elif найдено:
-            тело = (f'<h1 class="lead">Поиск: {html.escape(q)} — {len(найдено)} совпадений</h1>'
+            тело = (f'<h1 class="lead">Поиск: {html.escape(q)} — '
+                    f'{склонение_совпадений(len(найдено))}</h1>'
                     + self.сетка(найдено))
         else:
             тело = (f'<h1 class="lead">Поиск: {html.escape(q)}</h1>'
@@ -3899,6 +3939,7 @@ class ВидЛордс(Вид):
         return self.оболочка(
             тело, f"Поиск — {self.имя}", "/search/", актив="",
             описание=f"Поиск по каталогу витрины {self.имя}.",
+            поиск_q=q,
         )
 
     def тайтл(self, запись: dict, деталь: dict) -> str:
@@ -4568,9 +4609,10 @@ class ВидЗона(Вид):
                                  актив="/collections/",
                                  описание=f"Подборки витрины {self.имя}.")
         набор, выбрано = отбор(self.д, self.индекс, зпр, разд)
-        стр = max(1, int((зпр.get("page") or ["1"])[0] or 1))
-        всего = max(1, (len(набор) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1)
-        стр = min(стр, всего)
+        всего = max(1, (len(набор) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1) if набор else 1
+        стр = номер_страницы(зпр, всего)
+        if стр is None:
+            return None
         кусок = набор[(стр - 1) * НА_СТРАНИЦЕ_1_1: стр * НА_СТРАНИЦЕ_1_1]
         жанр_код = выбрано.get("genre")
         жанр_имя = None
@@ -5477,9 +5519,10 @@ class ВидАнимедиа(ВидЗона):
                                  актив="/collections/",
                                  описание=f"Подборки витрины {self.имя}.")
         набор, выбрано = отбор(self.д, self.индекс, зпр, разд)
-        стр = max(1, int((зпр.get("page") or ["1"])[0] or 1))
-        всего = max(1, (len(набор) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1)
-        стр = min(стр, всего)
+        всего = max(1, (len(набор) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1) if набор else 1
+        стр = номер_страницы(зпр, всего)
+        if стр is None:
+            return None
         кусок = набор[(стр - 1) * НА_СТРАНИЦЕ_1_1: стр * НА_СТРАНИЦЕ_1_1]
         титул = self._заголовок_раздела(разд, выбрано)
         фильтры = self._фильтры_каталога(разд, выбрано)
@@ -5597,12 +5640,13 @@ class ВидАнимедиа(ВидЗона):
             f'<span class="aeps__ep"><span class="aeps__num">{row["episode"]}</span>'
             f'<span class="aeps__lab">серия</span></span></a>')
 
-    def _страница_новых_эпизодов(self, зпр: dict) -> str:
+    def _страница_новых_эпизодов(self, зпр: dict) -> str | None:
         rows = self._эпизод_ряды(предел=240)
-        стр = max(1, int((зпр.get("page") or ["1"])[0] or 1))
         per = 24
-        всего = max(1, (len(rows) + per - 1) // per)
-        стр = min(стр, всего)
+        всего = max(1, (len(rows) + per - 1) // per) if rows else 1
+        стр = номер_страницы(зпр, всего)
+        if стр is None:
+            return None
         кусок = rows[(стр - 1) * per: стр * per]
         сетка = '<div class="aeps">' + "".join(self._разметка_эпизод_ряда(r) for r in кусок) + "</div>"
         if not кусок:
@@ -5741,6 +5785,13 @@ class Обработчик(BaseHTTPRequestHandler):
         self.end_headers()
         if self.command != "HEAD":
             self.wfile.write(тело)
+
+    def _отдать_список(self, в, разд: str, зпр: dict, путь_404: str):
+        """Render a catalog-like list; invalid ``page`` → real HTTP 404."""
+        тело = в.список(разд, зпр)
+        if тело is None:
+            return self._отдать(в.не_найдено(путь_404).encode("utf-8"), код=404)
+        return self._отдать(тело.encode("utf-8"))
 
     def do_HEAD(self):
         self.do_GET()
@@ -5919,7 +5970,10 @@ class Обработчик(BaseHTTPRequestHandler):
         if путь == "/":
             return self._отдать(self.главная().encode("utf-8"))
         if путь.rstrip("/") in ("/catalog", "/new", "/collections"):
-            return self._отдать(self.список(путь, зпр).encode("utf-8"))
+            тело = self.список(путь, зпр)
+            if тело is None:
+                return self._отдать(self.не_найдено(путь).encode("utf-8"), код=404)
+            return self._отдать(тело.encode("utf-8"))
         if путь.rstrip("/") == "/search":
             return self._отдать(self.поиск(зпр).encode("utf-8"))
         if путь.rstrip("/") == "/schedule":
@@ -6008,13 +6062,13 @@ class Обработчик(BaseHTTPRequestHandler):
             kind = self.МАРШРУТЫ_ВИДА[обрезанный]
             зпр = dict(зпр)
             зпр["kind"] = [kind]
-            return self._отдать(в.список(обрезанный, зпр).encode("utf-8"))
+            return self._отдать_список(в, обрезанный, зпр, путь)
         if обрезанный in ("/catalog", "/new"):
-            return self._отдать(в.список(обрезанный, зпр).encode("utf-8"))
+            return self._отдать_список(в, обрезанный, зпр, путь)
         if обрезанный == "/collections":
             if СЕМЕЙСТВО == "lords" and hasattr(в, "хаб_подборок"):
                 return self._отдать(в.хаб_подборок().encode("utf-8"))
-            return self._отдать(в.список(обрезанный, зпр).encode("utf-8"))
+            return self._отдать_список(в, обрезанный, зпр, путь)
         if обрезанный == "/search":
             return self._отдать(в.поиск(зпр).encode("utf-8"))
         коллекция = self.МАРШРУТ_КОЛЛЕКЦИИ.match(путь)
@@ -6025,7 +6079,7 @@ class Обработчик(BaseHTTPRequestHandler):
         if год:
             зпр = dict(зпр)
             зпр["year"] = [год.group("year")]
-            return self._отдать(в.список("/catalog", зпр).encode("utf-8"))
+            return self._отдать_список(в, "/catalog", зпр, путь)
         страна = self.МАРШРУТ_СТРАНЫ.match(путь)
         if страна:
             сырой = unquote(страна.group("code"))
@@ -6043,7 +6097,7 @@ class Обработчик(BaseHTTPRequestHandler):
                 return self._переход(f"/country/{канон}/{хвост}")
             зпр = dict(зпр)
             зпр["country"] = [канон]
-            return self._отдать(в.список("/catalog", зпр).encode("utf-8"))
+            return self._отдать_список(в, "/catalog", зпр, путь)
 
         жанр = self.МАРШРУТ_ЖАНРА.match(путь)
         if жанр:
@@ -6054,7 +6108,7 @@ class Обработчик(BaseHTTPRequestHandler):
             if СЕМЕЙСТВО == "lords":
                 зпр = dict(зпр)
                 зпр["genre"] = [код]
-                return self._отдать(в.список("/catalog", зпр).encode("utf-8"))
+                return self._отдать_список(в, "/catalog", зпр, путь)
             return self._переход(f"/catalog/?genre={код}")
         совпало = self.МАРШРУТ_ТАЙТЛА.match(путь)
         if совпало:
@@ -6075,11 +6129,16 @@ class Обработчик(BaseHTTPRequestHandler):
         спец = КОЛЛЕКЦИИ.спецификация(СЕМЕЙСТВО, ключ)
         if спец is None or снимок is None:
             return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
-        try:
-            страница = max(1, int((зпр.get("page") or ["1"])[0] or 1))
-        except (TypeError, ValueError):
-            страница = 1
-        данные = КОЛЛЕКЦИИ.разрешить(ключ, снимок, СЕМЕЙСТВО, страница=страница)
+        на_странице = 60
+        # Pre-count last page so invalid page is HTTP 404, not an empty soft page.
+        пробный = КОЛЛЕКЦИИ.разрешить(ключ, снимок, СЕМЕЙСТВО, предел=1)
+        всего_записей = пробный.total if пробный is not None else 0
+        всего_стр = max(1, (всего_записей + на_странице - 1) // на_странице) if всего_записей else 1
+        страница = номер_страницы(зпр, всего_стр)
+        if страница is None:
+            return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
+        данные = КОЛЛЕКЦИИ.разрешить(
+            ключ, снимок, СЕМЕЙСТВО, страница=страница, на_странице=на_странице)
         if данные is None:
             return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
         тело = в.коллекция(данные)
@@ -6170,8 +6229,10 @@ class Обработчик(BaseHTTPRequestHandler):
             набор = [з for з in набор if з.get("kind") == вид]
         if год and год.isdigit():
             набор = [з for з in набор if з.get("year") == int(год)]
-        стр = max(1, int((зпр.get("page") or ["1"])[0] or 1))
-        всего = (len(набор) + НА_СТРАНИЦЕ - 1) // НА_СТРАНИЦЕ
+        всего = max(1, (len(набор) + НА_СТРАНИЦЕ - 1) // НА_СТРАНИЦЕ) if набор else 1
+        стр = номер_страницы(зпр, всего)
+        if стр is None:
+            return None
         кусок = набор[(стр - 1) * НА_СТРАНИЦЕ: стр * НА_СТРАНИЦЕ]
 
         ТЕК = ' aria-current="true"'

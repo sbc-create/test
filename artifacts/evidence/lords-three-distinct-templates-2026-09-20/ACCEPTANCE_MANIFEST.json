@@ -1,0 +1,23 @@
+{
+  "schema": "lords-three-distinct-templates-acceptance/1",
+  "created_at": "2026-09-20T15:58:39.970441+00:00",
+  "start_head": "fb2adc6c0036c36fa9670e2d256692eac198c7a0",
+  "p0": {
+    "SEARCH_ZERO_RESULT_PASS": "absent query must return 0 cards + empty state",
+    "SEARCH_EXACT_TOP1_PASS": "exact title top-1",
+    "INVALID_PAGE_404_PASS": "page>last and invalid page → HTTP 404",
+    "FILTER_QUERY_LOSSES": 0,
+    "DUPLICATE_FILTER_OPTIONS": 0,
+    "ACTIVE_YEAR_VISIBLE_IN_UI": true
+  },
+  "search_thresholds": {
+    "absent_specificity": 1.0,
+    "exact_top1": 1.0,
+    "fuzzy_min_score_to_include": "TBD_from_code_after_inspect"
+  },
+  "design_ids": [
+    "lords-cinema-v2",
+    "lords-series-feed-v2",
+    "lords-curated-v2"
+  ]
+}
