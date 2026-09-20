@@ -1,0 +1,13 @@
+# Design passport — 1lordserials1.online / lords-curated
+design_id: lords-curated-v2
+audience: editorial / what-to-watch readers
+hero: Выбор редакции
+first_three_blocks:
+  - Выбор редакции
+  - Тематические подборки (when collections exist) or Что посмотреть
+  - Что посмотреть / Новые поступления
+primary_card: mosaic/landscape editorial card (later); poster grid interim
+palette: separate editorial ivory/plum (token fork pending)
+title_page: why-watch + related collections before player (later)
+footer: editorial composition (later)
+responsive: drawer nav until 1024px

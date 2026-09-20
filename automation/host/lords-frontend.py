@@ -75,6 +75,15 @@ def _манифест() -> dict:
 СБОРКА = МАНИФЕСТ["build_id"]
 ПРОФИЛЬ = МАНИФЕСТ.get("profile") or "unknown"
 
+#: Rendered design id — profile label is not a template. Three Lords live
+#: sites must emit three distinct design ids (Block 08–10).
+ДИЗАЙН_ПО_ПРОФИЛЮ = {
+    "lords-general": "lords-cinema-v2",
+    "lords-new": "lords-series-feed-v2",
+    "lords-curated": "lords-curated-v2",
+}
+ДИЗАЙН_ID = ДИЗАЙН_ПО_ПРОФИЛЮ.get(ПРОФИЛЬ, "lords-sheet")
+
 #: Имя общего рантайма. Один артефакт обслуживает все семейства, и это честно —
 #: но называть шаблоном семейства «lords-nova» на Yummy, Zona и Animedia было
 #: неправдой: имя ядра выдавалось за имя шаблона витрины.
@@ -3602,7 +3611,7 @@ class ВидЛордс(Вид):
         канон = (f'<link rel="canonical" href="{html.escape(self.канон(путь))}">'
                  if путь and код == 200 else "")
         q_attr = (f' value="{html.escape(поиск_q, quote=True)}"' if поиск_q else "")
-        return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="lords-sheet">
+        return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="{ДИЗАЙН_ID}" data-profile="{html.escape(ПРОФИЛЬ)}">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(титул)}</title>{описание_мета}{канон}
 <meta name="robots" content="noindex, nofollow">
@@ -3737,26 +3746,100 @@ class ВидЛордс(Вид):
                     break
             return out
 
-        # Owner priority for Lords home: films → series → new → collections
-        # → cartoons. Anime/dorama must not dominate. Each shelf uses a distinct
-        # selection rule; `занято` prevents exact duplicate shelves.
-        фильмы = взять([з for з in готовые if з.get("kind") == "Фильм"], 12)
-        if фильмы:
-            полосы.append(self._полоса("Фильмы", "/movies/", фильмы))
-        сериалы = взять([з for з in готовые if з.get("kind") == "Сериал"], 12)
-        if сериалы:
-            полосы.append(self._полоса("Сериалы", "/series/", сериалы))
-        # Weekly popular snapshot — not reshuffled per request.
         def _оценка_полки(з: dict) -> float:
             try:
                 return float(з.get("_rating") or 0.0)
             except (TypeError, ValueError):
                 return 0.0
-        популяр, week, dig = популярные_недельный(
-            list(self.д.items), _оценка_полки, сколько=12)
-        if популяр:
-            # Exclude titles already shown on earlier shelves when possible,
-            # but never recompute the weekly order — only skip occupied slots.
+
+        дизайн = ДИЗАЙН_ID
+        if дизайн == "lords-series-feed-v2":
+            # Series feed: episodes/series first — not the cinema film dump.
+            сериалы = взять([з for з in готовые if з.get("kind") == "Сериал"], 12)
+            if сериалы:
+                полосы.append(self._полоса("Продолжающиеся сериалы", "/series/", сериалы))
+            нов = взять([з for з in готовые if з.get("kind") == "Сериал"], 12)
+            if not нов:
+                нов = взять(готовые, 12)
+            if нов:
+                полосы.append(self._полоса("Новые поступления сериалов", "/new/", нов,
+                                           показать_добавлено=True))
+            популяр, week, dig = популярные_недельный(
+                [з for з in self.д.items if з.get("kind") == "Сериал"] or list(self.д.items),
+                _оценка_полки, сколько=12)
+            показ = []
+            for з in популяр:
+                if з["slug"] in занято:
+                    continue
+                занято.add(з["slug"])
+                показ.append(з)
+                if len(показ) >= 12:
+                    break
+            if показ:
+                полосы.append(self._полоса(
+                    "Популярное за неделю", "/collection/top_rated/", показ,
+                    attrs=(f' data-popular-week="{html.escape(week)}"'
+                           f' data-popular-digest="{html.escape(dig)}"'
+                           f' data-popular-mode="WEEKLY_SNAPSHOT"')))
+            if КОЛЛЕКЦИИ is not None:
+                под = self._полоса_подборок()
+                if под:
+                    полосы.append(под)
+            фильмы = взять([з for з in готовые if з.get("kind") == "Фильм"], 8)
+            if фильмы:
+                полосы.append(self._полоса("Фильмы в каталоге", "/movies/", фильмы))
+        elif дизайн == "lords-curated-v2":
+            # Curated journal: editorial shelves before catalog dumps.
+            популяр, week, dig = популярные_недельный(
+                list(self.д.items), _оценка_полки, сколько=10)
+            показ = []
+            for з in популяр:
+                if з["slug"] in занято:
+                    continue
+                занято.add(з["slug"])
+                показ.append(з)
+                if len(показ) >= 10:
+                    break
+            if показ:
+                полосы.append(self._полоса(
+                    "Выбор редакции", "/collection/top_rated/", показ,
+                    attrs=(f' data-popular-week="{html.escape(week)}"'
+                           f' data-popular-digest="{html.escape(dig)}"'
+                           f' data-selection="editorial_proxy_top_rated"')))
+            if КОЛЛЕКЦИИ is not None:
+                под = self._полоса_подборок()
+                if под:
+                    # Retitle hub heading for curated IA via dedicated strip.
+                    полосы.append(под.replace(">Подборки</a></h2>",
+                                              ">Тематические подборки</a></h2>", 1)
+                                  .replace(">Подборки</h2>",
+                                           ">Тематические подборки</h2>", 1)
+                                  if "Подборки" in под else под)
+            смотреть = взять(готовые, 12)
+            if смотреть:
+                полосы.append(self._полоса("Что посмотреть", "/catalog/", смотреть))
+            нов = взять(готовые, 8)
+            if нов:
+                полосы.append(self._полоса("Новые поступления", "/new/", нов,
+                                           показать_добавлено=True))
+            жанр_блок = self._полоса_жанров()
+            if жанр_блок:
+                полосы.append(жанр_блок.replace(">По жанрам</h2>",
+                                                ">Страны и эпохи</h2>", 1)
+                              if "По жанрам" in жанр_блок else жанр_блок)
+        else:
+            # lords-cinema-v2 (default for lords-general): cinema IA.
+            премьеры = взять([з for з in готовые if з.get("kind") == "Фильм"], 12)
+            if премьеры:
+                полосы.append(self._полоса("Премьеры недели", "/movies/", премьеры))
+            фильмы = взять([з for з in готовые if з.get("kind") == "Фильм"], 12)
+            if фильмы:
+                полосы.append(self._полоса("Фильмы по жанрам", "/movies/", фильмы))
+            нов = взять(готовые, 12)
+            if нов:
+                полосы.append(self._полоса("Новинки", "/new/", нов))
+            популяр, week, dig = популярные_недельный(
+                list(self.д.items), _оценка_полки, сколько=12)
             показ = []
             for з in популяр:
                 if з["slug"] in занято:
@@ -3771,20 +3854,16 @@ class ВидЛордс(Вид):
                     attrs=(f' data-popular-week="{html.escape(week)}"'
                            f' data-popular-digest="{html.escape(dig)}"'
                            f' data-popular-mode="WEEKLY_SNAPSHOT"')))
-        нов = взять(готовые, 12)
-        if нов:
-            полосы.append(self._полоса("Новинки", "/new/", нов))
-        if КОЛЛЕКЦИИ is not None:
-            под = self._полоса_подборок()
-            if под:
-                полосы.append(под)
-        мульт = взять([з for з in готовые if з.get("kind") == "Мультфильм"], 12)
-        if мульт:
-            полосы.append(self._полоса("Мультфильмы", "/animation/", мульт))
-        # Optional genre index — links only, not a title shelf duplicate.
-        жанр_блок = self._полоса_жанров()
-        if жанр_блок:
-            полосы.append(жанр_блок)
+            if КОЛЛЕКЦИИ is not None:
+                под = self._полоса_подборок()
+                if под:
+                    полосы.append(под)
+            сериалы = взять([з for з in готовые if з.get("kind") == "Сериал"], 12)
+            if сериалы:
+                полосы.append(self._полоса("Сериалы", "/series/", сериалы))
+            жанр_блок = self._полоса_жанров()
+            if жанр_блок:
+                полосы.append(жанр_блок)
 
         intro = (
             f'<h1 class="lead">{html.escape(self.се["лид"])}</h1>'
@@ -3795,11 +3874,10 @@ class ВидЛордс(Вид):
         bottom = (
             '<section class="sec" style="margin-top:22px"><h2>О каталоге</h2>'
             f'<p style="margin:0;line-height:1.6;color:#4d555e;font-size:14px;max-width:68ch">'
-            f"Витрина {html.escape(self.имя)} собрана фабрикой поверх закрытого "
-            "снимка: название, год, тип, постер и оценки приходят из источника. "
-            "Разделы «Фильмы», «Сериалы», «Новинки» и «Мультфильмы» ведут в рабочие "
-            "выборки. Поиск понимает кириллицу, латиницу и транслит. "
-            "Индексация поисковиками на этом стенде закрыта политикой noindex."
+            f"Каталог {html.escape(self.имя)} строится из закрытого снимка: "
+            "название, год, тип, постер и оценки приходят из источника. "
+            "Разделы ведут в рабочие выборки. Поиск понимает кириллицу, латиницу "
+            "и транслит."
             "</p></section>")
         тело = intro + _склеить(полосы) + bottom
         return self.оболочка(
@@ -3812,14 +3890,15 @@ class ВидЛордс(Вид):
                 описание=f"Каталог {self.имя}",
                 путь="/"))
 
-    def _полоса(self, титул: str, ссылка: str, набор, attrs: str = "") -> str:
+    def _полоса(self, титул: str, ссылка: str, набор, attrs: str = "",
+                показать_добавлено: bool = False) -> str:
         if not набор:
             return ""
         return (
             f'<section class="sec-rail"{attrs}><div class="sec-rail__h">'
             f'<h2><a href="{закодировать_запрос(ссылка)}">{html.escape(титул)}</a></h2>'
             f'<a class="sec-rail__all" href="{закодировать_запрос(ссылка)}">Весь раздел</a>'
-            f"</div>{self.сетка(набор)}</section>")
+            f"</div>{self.сетка(набор, показать_добавлено=показать_добавлено)}</section>")
 
     def _полоса_подборок(self) -> str:
         снимок = Снимок.получить(self.д, self.п) if КОЛЛЕКЦИИ else None

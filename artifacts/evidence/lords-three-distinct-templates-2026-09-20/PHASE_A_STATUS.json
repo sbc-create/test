@@ -1,0 +1,29 @@
+{
+  "goal": "LORDS-THREE-DISTINCT-TEMPLATES-02",
+  "phase": "A",
+  "as_of": "2026-09-20",
+  "start_head": "fb2adc6c0036c36fa9670e2d256692eac198c7a0",
+  "feature_head": "00bac29",
+  "blocks_done": {
+    "00": "ACCEPTANCE_MANIFEST + BEFORE P0 failures frozen",
+    "01": "search absent/exact contract — AND-token ranking, nonsense→0",
+    "02": "invalid page→HTTP 404 (no soft-clamp)",
+    "03": "year facet inject + genre dedupe + mobile filter width",
+    "04": "nav drawer overlay until 1024px + SVG search + Escape/outside",
+    "05": "recently_added capped 240 + no anime copy + /new/ <time>/as_of",
+    "06": "recommendation scoring + «Ещё в каталоге» when unproven",
+    "07_partial": "missing rating strip collapses (no empty black footer)"
+  },
+  "blocks_pending": [
+    "07_remainder: grid occupancy, asset ratios, title clamp, eager LCP",
+    "08 lords-cinema-v2",
+    "09 lords-series-feed-v2",
+    "10 lords-curated-v2",
+    "11 title/player/episodes",
+    "12 footer/public copy",
+    "13 distinctness hard gate",
+    "14 full QA + sequential deploy×2"
+  ],
+  "live_deploy": "not started — Phase A source-only so far",
+  "indexability": "unchanged locally; live not mutated"
+}
