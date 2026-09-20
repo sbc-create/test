@@ -580,9 +580,11 @@
         "tests/unit/test_animedia_parity03_b06.py"
       ],
       "evidence_paths": [
-        "03-blocks/BLOCK_B06.md"
+        "03-blocks/BLOCK_B06.md",
+        "03-blocks/B06/BEFORE/INVENTORY.json",
+        "03-blocks/B06/AFTER_LOCAL/ORACLE.json"
       ],
-      "remaining_data_gap": "TOP100_DATA_GAP if TopSnapshot missing; editorial/comments absent without backend"
+      "remaining_data_gap": "TOP100_DATA_GAP=1 without TopSnapshot; editorial/comments absent; PASS_LOCAL_PENDING_LIVE"
     },
     {
       "block_id": "B07",

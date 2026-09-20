@@ -1,0 +1,17 @@
+{
+  "viewport": "d1440",
+  "theme": "light",
+  "mode": "desc-gap",
+  "titleH": 416,
+  "gapH": 20,
+  "cols": "240px 718px 170px",
+  "pad": "28px 32px",
+  "statusNear": true,
+  "railPresent": true,
+  "descState": "gap",
+  "descText": "Описание пока не передано источником",
+  "missingZero": false,
+  "failures": [],
+  "screenshot_sha256": "80ed0d6d2fa36cb62dd91368c80e0c1d9916fb1545ae246b4883f56325bef4bf",
+  "captured_at": "2026-09-20T12:17:57Z"
+}

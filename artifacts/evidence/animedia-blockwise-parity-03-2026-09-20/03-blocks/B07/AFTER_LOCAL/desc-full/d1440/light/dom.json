@@ -1,0 +1,17 @@
+{
+  "viewport": "d1440",
+  "theme": "light",
+  "mode": "desc-full",
+  "titleH": 474,
+  "gapH": 20,
+  "cols": "240px 718px 170px",
+  "pad": "28px 32px",
+  "statusNear": true,
+  "railPresent": true,
+  "descState": "present",
+  "descText": "Описание альфы. Описание альфы. Описание альфы. Описание альфы. Описание альфы. ",
+  "missingZero": false,
+  "failures": [],
+  "screenshot_sha256": "6d8ecef149560861337afe5ccebfd527a6eb062546325994a78357c56704183b",
+  "captured_at": "2026-09-20T12:17:57Z"
+}

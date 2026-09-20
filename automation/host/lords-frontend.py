@@ -2094,14 +2094,18 @@ line-height:1.4;font-size:14px}
 .ahome-sched{display:none;height:0;margin:0;padding:0;overflow:hidden}
 .zban,.zhead,.zhead__ps,.zhead__x,.zhead__o{display:contents}
 .ztitle{display:grid;grid-template-columns:1fr;gap:16px;margin:12px 0 8px;
-padding:clamp(12px,1.4vw,20px);background:var(--a-page);border-radius:var(--a-radius-shell);
-box-shadow:var(--a-shadow-soft);align-items:start;max-height:none}
-@media(min-width:900px){.ztitle{grid-template-columns:clamp(180px,13vw,220px) minmax(0,1fr);
+padding:clamp(16px,2vw,32px);background:var(--a-page);border-radius:var(--a-radius-shell);
+box-shadow:var(--a-shadow-soft);align-items:start;max-height:none;min-height:0}
+@media(min-width:900px){.ztitle{grid-template-columns:180px minmax(0,1fr) 160px;
 column-gap:clamp(20px,2vw,32px)}}
+@media(min-width:1200px){.ztitle{grid-template-columns:240px minmax(0,1fr) 170px;
+column-gap:28px;padding:28px 32px}}
 .ztitle__poster{aspect-ratio:2/3;border-radius:12px;overflow:hidden;
-background:var(--a-surf);position:relative;width:100%;max-width:220px;margin:0 auto}
-@media(min-width:900px){.ztitle__poster{margin:0;max-width:none}}
-@media(max-width:599px){.ztitle__poster{max-width:160px}}
+background:var(--a-surf);position:relative;width:100%;max-width:240px;margin:0 auto;
+height:auto;min-height:0}
+@media(min-width:900px){.ztitle__poster{margin:0;max-width:none;width:180px}}
+@media(min-width:1200px){.ztitle__poster{width:240px}}
+@media(max-width:599px){.ztitle__poster{max-width:112px;margin:0}}
 .ztitle__poster img,.ztitle__poster .zhead__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;max-width:none}
 .ztitle__main{min-width:0;display:flex;flex-direction:column;gap:10px}
 .ztitle__head{display:flex;gap:14px;align-items:flex-start;justify-content:space-between}
@@ -2125,7 +2129,9 @@ font-size:13px;color:var(--a-ink)}
 .ztitle__desc-panel{background:transparent;border-radius:0;padding:0;margin:2px 0 0}
 .ztitle__desc{font-size:clamp(15px,1.15vw,17px);line-height:1.5;color:var(--a-ink);margin:0;
 max-width:70ch;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
-@media(max-width:767px){.ztitle__desc{-webkit-line-clamp:6}}
+.ztitle__desc--gap{display:block;-webkit-line-clamp:unset;color:var(--a-dim);font-size:14px;line-height:1.35;
+max-height:1.5em;overflow:hidden}
+@media(max-width:767px){.ztitle__desc:not(.ztitle__desc--gap){-webkit-line-clamp:6}}
 .ztitle__desc.is-open{-webkit-line-clamp:unset;display:block}
 .ztitle__more{border:0;background:transparent;color:var(--a-acc);font-weight:700;font-size:14px;
 cursor:pointer;padding:0;margin-top:8px;min-height:44px}
@@ -2135,10 +2141,17 @@ text-decoration:none;width:fit-content}
 .ztitle__cta:hover{filter:brightness(1.05)}
 .ztitle__actions{display:flex;flex-direction:column;gap:10px;margin-top:4px}
 @media(max-width:599px){.ztitle__cta,.ztitle__actions .ztitle__cta{width:100%}}
-.ztitle__rail{display:none}
-.ztitle__score{flex:0 0 auto;text-align:right;min-width:3.5em}
-.ztitle__score b{display:block;font-size:clamp(28px,2.2vw,36px);line-height:1;font-weight:800;color:var(--a-acc)}
-.ztitle__score span{display:block;font-size:11px;color:var(--a-dim);margin-top:4px;max-width:9em}
+.ztitle__rail{display:none;min-width:0}
+@media(min-width:900px){
+  .ztitle__rail{display:flex;flex-direction:column;gap:12px;width:100%;max-width:180px}
+}
+.ztitle__rail-ratings{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.ztitle__rail-ratings li{display:flex;flex-direction:column;gap:2px;min-height:0}
+.ztitle__rail-ratings .lab{font-size:11px;letter-spacing:.04em;text-transform:uppercase;
+color:var(--a-dim);font-weight:700}
+.ztitle__rail-ratings .val{font-size:20px;font-weight:800;color:var(--a-ink);line-height:1.1}
+.ztitle__rail-ratings .val[data-missing="1"]{color:var(--a-mute);font-weight:600;font-size:16px}
+.ztitle__score{display:none}
 .ztitle__dl{display:none}
 .ztitle__rels{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 0}
 .ztitle__rels a{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;
@@ -2146,7 +2159,11 @@ border-radius:10px;border:1px solid var(--a-line);background:var(--a-alt);font-s
 .zad{display:none}
 .zbody{display:none}
 .zaside{display:none}
-.ztitle-gap{height:clamp(20px,1.6vw,36px)}
+.ztitle-gap{height:16px;max-height:24px;min-height:16px;margin:0;padding:0}
+@media(min-width:900px){.ztitle-gap{height:20px}}
+.zpl__h{display:flex;align-items:baseline;justify-content:flex-start;gap:12px;flex-wrap:wrap;
+margin:0 0 16px;font-size:clamp(22px,2vw,30px);font-weight:700}
+.zpl__h span{font-size:13px;font-weight:600;color:var(--a-dim)}
 .aep-ctx{display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px 16px;margin:8px 0 12px;
 padding:12px;border-radius:var(--a-radius-shell);background:var(--a-page);box-shadow:var(--a-shadow-soft);
 align-items:start;max-width:100%}
@@ -2165,8 +2182,8 @@ display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hi
 .aep-ctx + .zpl{margin-top:8px}
 @media(max-width:599px){.aep-ctx{grid-template-columns:72px minmax(0,1fr);gap:10px 12px;padding:10px}}
 .zpl{margin:0 auto;width:min(100%,1200px);max-width:1200px}
-.zpl__h{font-size:clamp(22px,2vw,30px);font-weight:700;margin:0 0 clamp(14px,1.4vw,22px);
-display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.zpl__h{font-size:clamp(22px,2vw,30px);font-weight:700;margin:0 0 16px;
+display:flex;align-items:baseline;justify-content:flex-start;gap:12px;flex-wrap:wrap}
 .zpl__h span{font-size:13px;font-weight:600;color:var(--a-dim)}
 .zpl__f{position:relative;width:100%;aspect-ratio:16/9;background:#101010;border:0;
 border-radius:14px;overflow:hidden;max-height:none}
@@ -5464,34 +5481,66 @@ class ВидАнимедиа(ВидЗона):
                 f'<span class="zr__m">{html.escape(мета)}</span></span>'
                 f'{badge}</a>')
 
+    def _рейтинги_колонка_b07(self, деталь: dict) -> str:
+        """Independent source ratings: label always visible; missing ≠ 0."""
+        by_key = {о["ключ"]: о for о in оценки_по_источникам(деталь)}
+        # Fixed order; never invent a primary mega-score without policy.
+        order = (
+            ("shikimori", "Shikimori"),
+            ("kp", "Кинопоиск"),
+            ("imdb", "IMDb"),
+        )
+        items = []
+        for key, label in order:
+            о = by_key.get(key)
+            if о:
+                items.append(
+                    f'<li data-rating-source="{html.escape(key)}">'
+                    f'<span class="lab">{html.escape(label)}</span>'
+                    f'<span class="val">{html.escape(о["значение"])}</span></li>'
+                )
+            else:
+                items.append(
+                    f'<li data-rating-source="{html.escape(key)}" data-rating-missing="1">'
+                    f'<span class="lab">{html.escape(label)}</span>'
+                    f'<span class="val" data-missing="1">—</span></li>'
+                )
+        return (
+            f'<aside class="ztitle__rail" data-b07="ratings">'
+            f'<ul class="ztitle__rail-ratings">{"".join(items)}</ul></aside>'
+        )
+
     def тайтл(self, запись: dict, деталь: dict) -> str:
-        """Two-column detail: poster | content with score in header."""
+        """B07 passport: poster | text | ratings; verified description or true gap."""
         путь = f"/title/{запись['slug']}/"
         имя = запись["title"]
+        # Exact join check: detail id/slug must match catalog item when present.
+        det_slug = str(деталь.get("slug") or "").strip()
+        det_id = str(деталь.get("id") or "").strip()
+        item_id = str(запись.get("id") or "").strip()
+        join_ok = (not det_slug or det_slug == запись["slug"]) and (
+            not det_id or not item_id or det_id == item_id)
         сезоны = список_серий(деталь)
         сериал = bool(сезоны) or запись.get("kind") == "Сериал"
         звенья = [("/", self.имя), ("/catalog/", "Каталог"), ("", имя)]
-        изо = заглушка_постера(запись, "zt__none", "zhead__img", 220, 330)
-        описание = (деталь.get("description") or деталь.get("short_description") or "").strip()
-        описание_html = ""
+        изо = заглушка_постера(запись, "zt__none", "zhead__img", 240, 360)
+        описание = ""
+        if join_ok:
+            описание = (деталь.get("description") or деталь.get("short_description") or "").strip()
         if описание:
             описание_html = (
-                f'<div class="ztitle__desc-panel"><p class="ztitle__desc" id="title-desc">'
-                f'{html.escape(описание)}</p>'
+                f'<div class="ztitle__desc-panel" data-b07-desc="present">'
+                f'<p class="ztitle__desc" id="title-desc">{html.escape(описание)}</p>'
                 + ('<button type="button" class="ztitle__more" data-desc-toggle '
                    'aria-controls="title-desc" aria-expanded="false">'
                    'Развернуть</button>' if len(описание) > 220 else "")
                 + "</div>")
-        оценки = оценки_по_источникам(деталь)
-        primary = оценки[0] if оценки else None
-        score_html = ""
-        if primary:
-            score_html = (
-                f'<div class="ztitle__score"><b>{html.escape(primary["значение"])}</b>'
-                f'<span>{html.escape(primary["подпись"])}'
-                + (f' · {primary["голоса"]} оценок' if primary.get("голоса") else "")
-                + "</span></div>")
-        оценки_html = разметка_оценок(деталь, "rbs", пусто=False)
+        else:
+            описание_html = (
+                '<div class="ztitle__desc-panel" data-b07-desc="gap">'
+                '<p class="ztitle__desc ztitle__desc--gap">'
+                'Описание пока не передано источником</p></div>')
+        rail = self._рейтинги_колонка_b07(деталь)
         orig = html.escape(str(деталь.get("original_name") or деталь.get("original_title") or ""))
         orig_html = f'<p class="ztitle__o">{orig}</p>' if orig else ""
         pills = ""
@@ -5519,8 +5568,10 @@ class ВидАнимедиа(ВидЗона):
                 статус = "Онгоинг"
         if статус:
             факты.append(("Статус", str(статус)))
-        if total:
-            факты.append(("Количество серий", f"{avail} из {total}" if avail else str(total)))
+        if avail > 0:
+            факты.append(("Доступно серий", str(avail)))
+        if total > 0 and total != avail:
+            факты.append(("Вышло серий", str(total)))
         длит = деталь.get("duration") or деталь.get("episode_duration") or деталь.get("runtime")
         if длит:
             факты.append(("Продолжительность", str(длит)))
@@ -5534,14 +5585,18 @@ class ВидАнимедиа(ВидЗона):
             rows = "".join(
                 f"<div><dt>{html.escape(k)}</dt><dd>{html.escape(v)}</dd></div>"
                 for k, v in факты)
-            meta_html = f'<dl class="ztitle__facts">{rows}</dl>' 
+            meta_html = f'<dl class="ztitle__facts">{rows}</dl>'
         сезон_старт, эпизод_старт = выбрать_доступную_серию(деталь) if сезоны else (1, None)
         код, внутри = разметка_плеера(self, запись, деталь, сезон_старт, эпизод_старт)
-        плеер = (f'<div class="ztitle-gap"></div><section class="zpl" id="watch">'
-                 f'<div class="zpl__h"><h2>Смотреть</h2>'
-                 f"<span>{html.escape(_подпись_плеера(код))}</span></div>"
-                 f'<div class="zpl__f" data-player data-state="{код}">{внутри}</div>'
-                 f"{_скрипты_плеера(код)}</section>")
+        # Status lives in the player heading — never a detached right column.
+        плеер = (
+            f'<div class="ztitle-gap" aria-hidden="true"></div>'
+            f'<section class="zpl" id="watch" data-b07-player="1">'
+            f'<div class="zpl__h"><h2>Смотреть</h2>'
+            f'<span data-player-status="{html.escape(код)}">'
+            f'{html.escape(_подпись_плеера(код))}</span></div>'
+            f'<div class="zpl__f" data-player data-state="{код}">{внутри}</div>'
+            f"{_скрипты_плеера(код)}</section>")
         текущий = (сезон_старт, эпизод_старт) if эпизод_старт is not None else None
         блок_серий = (self._серии(запись, сезоны, текущий=текущий) if сериал else "")
         похожие = self.похожие(запись, деталь)
@@ -5552,14 +5607,16 @@ class ВидАнимедиа(ВидЗона):
         ad_title = ('<div class="zad-title" data-ad-slot="title-before-player" '
                     'data-ad-enabled="0"></div>')
         тело = (
-            f'<div class="zwrap"><div class="ztitle">'
+            f'<div class="zwrap"><div class="ztitle" data-b07="passport" '
+            f'data-title-join="{"ok" if join_ok else "mismatch"}">'
             f'<div class="ztitle__poster">{изо}</div>'
             f'<div class="ztitle__main"><div class="ztitle__head">'
             f'<div class="ztitle__head-text"><h1>{html.escape(имя)}</h1>{orig_html}</div>'
-            f'{score_html}</div>{pills}{meta_html}{оценки_html}{описание_html}{блок_связей}'
+            f'</div>{pills}{meta_html}{описание_html}{блок_связей}'
             f'<div class="ztitle__actions"><a class="ztitle__cta" href="#watch">Смотреть</a></div>'
-            f'</div></div>{ad_title}{плеер}{блок_серий}{блок_похожих}</div>')
+            f'</div>{rail}</div>{ad_title}{плеер}{блок_серий}{блок_похожих}</div>')
         разметка = self.schema_тайтла(запись, деталь, путь)
+        # Gap copy must never become meta description.
         краткое = (описание[:180] if описание else
                    f"{имя}: {запись.get('kind') or ''} {запись.get('year') or ''}".strip())
         return self.оболочка(
