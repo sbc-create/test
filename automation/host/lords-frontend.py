@@ -1837,8 +1837,10 @@ display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hi
 .zsec__h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 12px}
 .zsec__h h2{font-size:clamp(20px,1.6vw,26px);font-weight:700;margin:0}
 .zsec__h a{font-size:14px;color:var(--a-acc);font-weight:700;white-space:nowrap}
-.ahero{margin:10px 0 20px;padding:12px;border-radius:var(--a-radius-shell);
+.ahero{margin:8px 0 14px;padding:12px;border-radius:var(--a-radius-shell);
 background:var(--a-acc);color:#fff;overflow:hidden;max-height:300px;box-sizing:border-box}
+.zh--home{font-size:clamp(18px,1.5vw,22px);margin:8px 0 4px;font-weight:700}
+.zsub--home{margin:0 0 16px;font-size:14px;-webkit-line-clamp:2}
 .ahero .zrl__vp{padding-bottom:2px;scrollbar-width:none}
 .ahero .zrl__vp::-webkit-scrollbar{display:none}
 .ahero .zrl__track{gap:13px;align-items:flex-start}
@@ -1859,10 +1861,10 @@ background:var(--a-acc);color:#fff;overflow:hidden;max-height:300px;box-sizing:b
 .ahero .zt__m,.ahero .zt__r{display:none}
 .ahero .zrl__btn{background:rgba(255,255,255,.96);color:var(--a-acc);border:0;border-radius:10px}
 .ahero__cap{display:none}
-.zad,.zad-home,.zad-mid,.zad-title{display:none;height:0;margin:0;padding:0;border:0;overflow:hidden}
+.zad,.zad-home,.zad-mid,.zad-title{display:none;height:0;min-height:0;max-height:0;margin:0;padding:0;border:0;overflow:hidden}
 .zad[data-ad-enabled="1"],.zad-home[data-ad-enabled="1"],.zad-mid[data-ad-enabled="1"],
-.zad-title[data-ad-enabled="1"]{display:block;height:auto;max-width:100%;margin:12px 0;
-max-height:120px;overflow:hidden;border-radius:8px}
+.zad-title[data-ad-enabled="1"]{display:block;height:auto;max-height:120px;max-width:100%;margin:12px 0;
+overflow:hidden;border-radius:8px}
 .zrl{position:relative}
 .zrl__vp{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;scroll-snap-type:x mandatory;
 -webkit-overflow-scrolling:touch;padding:2px 0 6px;scrollbar-width:none}
@@ -1876,7 +1878,7 @@ font-size:18px;display:none;align-items:center;justify-content:center;box-shadow
 .zrl__btn:disabled{opacity:.35;cursor:default}
 .zg{display:grid;gap:var(--a-grid-gap);grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;
 justify-items:stretch}
-.zg .zt{height:100%;align-self:start;width:100%;max-width:100%}
+.zg .zt{align-self:start;width:100%;max-width:100%;height:auto}
 /* CARD_VARIANT_REGISTRY: last incomplete row must not stretch cards */
 .zrl__track{align-items:flex-start}
 @media(min-width:640px){.zg{grid-template-columns:repeat(3,minmax(0,1fr))}}
@@ -5397,9 +5399,7 @@ class ВидАнимедиа(ВидЗона):
                 ("new-anime", "Новые аниме", "/new/", выбрать(свежесть)[:48], ""),
                 ("top", "Топ по оценкам", "/catalog/", выбрать(оценка, пул=400)[:48], ""),
             ]
-        куски = [self.полоса_готовности(),
-                 f'<h1 class="zh">{html.escape(домен["h1"])}</h1>',
-                 f'<p class="zsub">{html.escape(домен["lead"])}</p>']
+        куски = [self.полоса_готовности()]
 
         герой = []
         герой_slug: set[str] = set()
@@ -5413,8 +5413,12 @@ class ВидАнимедиа(ВидЗона):
                     break
             if len(герой) >= 12:
                 break
+        # Reference ATF: header → poster shelf first; H1/lead after shelf (SEO kept).
         if герой:
             куски.append(self.верхняя_карусель(герой))
+        куски.append(f'<h1 class="zh zh--home">{html.escape(домен["h1"])}</h1>')
+        куски.append(f'<p class="zsub zsub--home">{html.escape(домен["lead"])}</p>')
+        # Empty ad slots must collapse to 0px (no Telegram/premium invent).
         куски.append('<div class="zad-home" data-ad-slot="home-after-hero" data-ad-enabled="0"></div>')
         # First major content after compact rail: episode feed page 1 (size 10).
         all_eps = self._эпизод_события()
