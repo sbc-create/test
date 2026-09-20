@@ -124,7 +124,11 @@ class FakeQwenProvider:
                 0.96,
                 ["FAKE_MALWARE"],
             )
-        elif re.search(r"\b\d{3}[-.]?\d{3}[-.]?\d{4}\b|passport\s*\d{6,}|паспорт", lower):
+        elif re.search(
+            r"\b\d{3}[-.]?\d{3}[-.]?\d{4}\b|passport\s*\d{6,}|паспорт|"
+            r"[\w.+-]+@[\w-]+\.[\w.-]+",
+            lower,
+        ):
             action, labels, confidence, reasons = (
                 "HIDE_HIGH_CONFIDENCE",
                 ["PERSONAL_DATA"],
@@ -132,12 +136,26 @@ class FakeQwenProvider:
                 ["FAKE_PII"],
             )
             needs_human = True
-        elif re.search(r"buy cheap|viagra|crypto pump|казино|промокод", lower):
+        elif re.search(
+            r"buy (cheap|crypto|followers)|viagra|crypto pump|казино|промокод|"
+            r"advertisement|promo code|free nitro",
+            lower,
+        ):
             action, labels, confidence, reasons = (
                 "HIDE_HIGH_CONFIDENCE",
                 ["SPAM", "ADVERTISEMENT"],
                 0.9,
                 ["FAKE_SPAM"],
+            )
+        elif re.search(
+            r"\b(idiot|dumb|clown|moron|stupid)\b|мудак|идиот|дебил",
+            lower,
+        ):
+            action, labels, confidence, reasons = (
+                "HIDE_HIGH_CONFIDENCE",
+                ["INSULT"],
+                0.88,
+                ["FAKE_INSULT"],
             )
         elif user_spoiler or re.search(r"spoiler|спойлер|ending is|в финале умирает", lower):
             action, labels, confidence, spoiler, reasons = (
@@ -147,7 +165,7 @@ class FakeQwenProvider:
                 True,
                 ["FAKE_SPOILER"],
             )
-        elif re.search(r"\bunsure\b|не уверен|maybe hate", lower):
+        elif re.search(r"\bunsure\b|не уверен|maybe hate|unclear tone|controversial take", lower):
             action, labels, confidence, reasons = (
                 "HOLD_FOR_REVIEW",
                 ["UNKNOWN"],
