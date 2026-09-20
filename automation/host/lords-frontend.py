@@ -3553,7 +3553,22 @@ class Вид:
         # Stable: playable first, preserve score order within each group.
         scored.sort(key=lambda t: 0 if (self.п.get(t[6]["slug"]) or {}).get("playable") is True
                     else 1)
-        return [t[6] for t in scored[:сколько]]
+        out = []
+        seen_names: set[str] = set()
+        cur_norm = _нормализовать_для_дедупа(запись.get("title") or "")
+        if cur_norm:
+            seen_names.add(cur_norm)
+        for t in scored:
+            сосед = t[6]
+            norm = _нормализовать_для_дедупа(сосед.get("title") or "")
+            if norm and norm in seen_names:
+                continue
+            if norm:
+                seen_names.add(norm)
+            out.append(сосед)
+            if len(out) >= сколько:
+                break
+        return out
 
     # --- разметка ----------------------------------------------------
     def schema_тайтла(self, запись: dict, деталь: dict, путь: str) -> str:
@@ -4966,6 +4981,7 @@ class ВидЗона(Вид):
                 сверху="<span>Обзор каталога</span>")
 
         занято: set = set()
+        занятые_имена: set = set()
 
         def свежесть(з: dict) -> str:
             return з.get("published_at") or ""
@@ -4981,7 +4997,12 @@ class ВидЗона(Вид):
             for з in sorted(подходящие, key=ключ, reverse=True):
                 if з["slug"] in занято:
                     continue
+                norm = _нормализовать_для_дедупа(з.get("title") or "")
+                if norm and norm in занятые_имена:
+                    continue
                 занято.add(з["slug"])
+                if norm:
+                    занятые_имена.add(norm)
                 отобрано.append(з)
                 if len(отобрано) >= сколько:
                     break
@@ -5104,9 +5125,9 @@ class ВидЗона(Вид):
             "собраны тематические выборки, а "
             '<a href="/search/">поиск</a> '
             "находит название по русскому или оригинальному написанию.</p>"
-            "<p>Страница названия показывает описание (если оно передано источником), "
-            "оценки, список серий и плеер. Если дорожки серии ещё нет, она отмечена "
-            "как недоступная и не открывает пустой плеер.</p>"
+            "<p>Страница названия показывает описание (когда оно есть), "
+            "оценки, список серий и плеер. Если видео для серии ещё недоступно, "
+            "это отмечено явно — без пустого плеера.</p>"
             '<button type="button" class="zsec--seo__more" data-seo-more>Читать далее</button>'
             "</section>"
             '<script>(function(){var b=document.querySelector("[data-seo-more]");if(!b)return;'
@@ -6037,6 +6058,15 @@ def _подпись_плеера(код: str) -> str:
             "loading": "загрузка",
         }.get(код, "")
     return consumer.get(код, "")
+
+
+def _нормализовать_для_дедупа(title: str) -> str:
+    """Collapse near-duplicate titles (punctuation/ё/hyphen variants)."""
+    s = нормализовать(title or "")
+    s = s.replace("ё", "е")
+    for ch in "-–—·•_/\\|":
+        s = s.replace(ch, " ")
+    return " ".join(s.split())
 
 
 def _открытый_граф(данные: dict) -> str:

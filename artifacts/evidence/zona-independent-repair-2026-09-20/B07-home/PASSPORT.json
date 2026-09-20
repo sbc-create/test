@@ -1,0 +1,7 @@
+{
+  "block": "B07",
+  "status": "PASS_LOCAL_PARTIAL",
+  "summary": "Home already uses hero + weekly tabs + freshness feed + kind cards + genres + collections (not five identical rails). Near-duplicate title gate added on shelf selection. SEO about text cleaned of provider wording.",
+  "residuals": ["visual variant diversity vs reference geometry still needs headed B15", "collection hub art/preview incomplete"],
+  "updated_at": "2026-09-20T17:45:00Z"
+}
