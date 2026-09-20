@@ -1,0 +1,156 @@
+{
+  "plan": {
+    "space": "yummy",
+    "subject_id": "nova:019e820c-1c30-7466-9e8f-801577489ce1",
+    "actor_id": "canary-cr05-yummy-d9f850d7b2d8",
+    "live_path": "/anime/padshiy-master"
+  },
+  "baseline": {
+    "agg": [
+      0,
+      0
+    ],
+    "html_sha": "656c8ed65697c5ec4ca53681533486ece8bb6d5ce617577ab5e1abb788450929",
+    "idx": {
+      "status": 200,
+      "x_robots": null,
+      "allow": true,
+      "disallow_all": false,
+      "meta": true
+    }
+  },
+  "steps": [
+    {
+      "cast_concurrent": [
+        {
+          "status": 200,
+          "action": "CREATE",
+          "before": null,
+          "after": "7.000",
+          "delta": null,
+          "my_vote": 7,
+          "native_vote_count": 1,
+          "aggregate_version": 5,
+          "policy_version": "rating_policy_v1",
+          "noop": false
+        },
+        {
+          "status": 200,
+          "action": "CREATE",
+          "before": null,
+          "after": "7.000",
+          "delta": null,
+          "my_vote": 7,
+          "native_vote_count": 1,
+          "aggregate_version": 5,
+          "policy_version": "rating_policy_v1",
+          "noop": false
+        },
+        {
+          "status": 200,
+          "action": "CREATE",
+          "before": null,
+          "after": "7.000",
+          "delta": null,
+          "my_vote": 7,
+          "native_vote_count": 1,
+          "aggregate_version": 5,
+          "policy_version": "rating_policy_v1",
+          "noop": false
+        }
+      ],
+      "active_votes": 1,
+      "preview_equals": true
+    },
+    {
+      "idempotency_delta": 0
+    },
+    {
+      "update": {
+        "status": 200,
+        "action": "UPDATE",
+        "before": "7.000",
+        "after": "9.000",
+        "delta": "+2.000",
+        "my_vote": 9,
+        "native_vote_count": 1,
+        "aggregate_version": 6,
+        "policy_version": "rating_policy_v1",
+        "noop": false
+      },
+      "N": 1
+    },
+    {
+      "preview10": {
+        "action": "replace",
+        "score": 10,
+        "before": "9.000",
+        "after": "10.000",
+        "delta": "+1.000",
+        "delta_raw": "1"
+      },
+      "agg_unchanged": true
+    },
+    {
+      "kill_switch": {
+        "status": 503,
+        "error": "community ratings kill switch active",
+        "code": "KillSwitchActive"
+      }
+    },
+    {
+      "read_only": {
+        "status": 503,
+        "error": "community ratings read-only emergency mode",
+        "code": "ReadOnlyMode"
+      }
+    },
+    {
+      "retract": {
+        "status": 200,
+        "action": "DELETE",
+        "before": "9.000",
+        "after": null,
+        "my_vote": null,
+        "native_vote_count": 0,
+        "native_absent": true,
+        "aggregate_version": 7
+      },
+      "agg_after_retract": [
+        0,
+        0
+      ]
+    },
+    {
+      "csrf_fail": {
+        "status": 403,
+        "error": "origin not allowed: https://evil.test",
+        "code": "OriginRejected"
+      }
+    }
+  ],
+  "CANARY_VOTES_REMAINING": 0,
+  "NATIVE_VOTE_COUNT_DELTA": 0,
+  "AGGREGATE_RETURNED_TO_BASELINE": 1,
+  "HTML_RETURNED_TO_BASELINE": 1,
+  "JSONLD_RETURNED_TO_BASELINE": 1,
+  "INDEXABILITY_BEFORE": "OPEN",
+  "INDEXABILITY_AFTER": "OPEN",
+  "INDEXABILITY_INVARIANT_PASS": 1,
+  "PREVIEW_EQUALS_WRITE": 1,
+  "IDEMPOTENCY_PASS": 1,
+  "CONCURRENT_DUPLICATE_VOTES": 0,
+  "KILL_SWITCH_PASS": 1,
+  "READ_ONLY_MODE_PASS": 1,
+  "CSRF_PASS": 1,
+  "ORIGIN_VALIDATION_PASS": 1,
+  "SECRETS_EXPOSED": 0,
+  "PII_EXPOSED": 0,
+  "purge": {
+    "purged_actors": [],
+    "subjects": [],
+    "hard_deleted_rows": 0,
+    "votes_remaining": 0,
+    "accepted_remaining": 0
+  }
+}
