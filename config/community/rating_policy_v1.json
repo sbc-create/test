@@ -1,0 +1,88 @@
+{
+  "policy_id": "rating_policy_v1",
+  "version": "rating_policy_v1",
+  "status": "DRAFT_OWNER_GATED",
+  "activated": false,
+  "activation_requires": [
+    "exact owner approval with site, artifact SHA, migration digest, backup/restore path, change window"
+  ],
+  "score_layers": {
+    "external_source_rating": {
+      "description": "Immutable per-source observations (shikimori, amd_online, provider-feed KP/IMDb)",
+      "mutated_by_user_votes": false,
+      "cross_source_vote_summing": false,
+      "missing_as_zero": false
+    },
+    "native_user_average": {
+      "description": "Space-scoped accepted community votes only; A = S/N",
+      "score_domain": "integer 1..10 inclusive",
+      "absent_display": "Пока нет оценок",
+      "zero_forbidden": true
+    },
+    "public_brand_score": {
+      "description": "Versioned composite for brand UI where policy defines a prior",
+      "yummy": "Bayesian shrink toward prior; m never counted in displayed vote_count"
+    }
+  },
+  "spaces": {
+    "animedia": {
+      "rating_space_id": "animedia",
+      "brand_id": "animedia",
+      "site_ids": ["animedia-01", "animedia-02"],
+      "domains": ["animedia.icu", "animedia.space"],
+      "ui_label": "Оценка Animedia",
+      "formula": "native_average_v1",
+      "shares_votes_across_sites": true,
+      "not_a_source_adapter": true,
+      "distinct_from_amd_online": true
+    },
+    "yummy": {
+      "rating_space_id": "yummy",
+      "brand_id": "yummy",
+      "site_ids": ["yummyani-site", "yummyani-org", "yummyani-biz"],
+      "ui_label": "Оценка Yummy",
+      "formula": "yummy_bayes_prior_v1",
+      "isolated_from_animedia_native": true,
+      "prior": {
+        "proposed_weights": {"animedia_native": 0.7, "shikimori": 0.3},
+        "proposed_m": 10,
+        "renormalize_if_missing": true,
+        "missing_not_zero": true,
+        "double_count_guard": "If Animedia native already embeds Shikimori as prior component, Yummy must not also add Shikimori; use Animedia-only or Shikimori-only with provenance."
+      }
+    }
+  },
+  "dag": [
+    "external_adapters -> observations -> rating_current -> snapshot_badges",
+    "actors -> vote_events -> rating_votes -> rating_aggregates -> native_ui",
+    "yummy_prior(animedia_native XOR documented_shikimori) -> public_brand_score",
+    "comments_foundation shares actors/subjects; never mutates rating_aggregates"
+  ],
+  "invariants": [
+    "N >= 0",
+    "N <= S <= 10N",
+    "one active vote per (rating_space_id, subject_id, actor_id, dimension)",
+    "aggregate_version monotonic",
+    "idempotency same key+payload => same result; same key+diff payload => 409",
+    "EXTERNAL_RATINGS_MUTATED=0",
+    "SOURCE_VOTE_COUNTS_SUMMED_ACROSS_SOURCES=0",
+    "MISSING_RATINGS_RENDERED_AS_ZERO=0",
+    "FAKE_USER_VOTES_INSERTED=0"
+  ],
+  "rounding": {
+    "compute": "full Decimal precision; never feed rounded UI values back into next compute",
+    "display_score": "1-2 decimal places ROUND_HALF_UP",
+    "display_preview_delta": "2-3 decimal places ROUND_HALF_UP",
+    "sub_step_delta_copy": "изменение менее 0,01"
+  },
+  "comments_foundation": {
+    "COMMENTS_ENABLED": 0,
+    "COMMENTS_PUBLICATION_ENABLED": 0,
+    "COMMENTS_SEO_RENDERING_ENABLED": 0,
+    "affects_rating": false
+  },
+  "legacy": {
+    "animedia_blend_v1": "AMD+local closed projection; retained for AMD last-good; not Animedia native UI label",
+    "LocalVotesService": "superseded by community ledger; tables retained; no fake votes"
+  }
+}
