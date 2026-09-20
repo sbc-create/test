@@ -56,7 +56,7 @@ class TestПереченьВитрин:
         assert "вне перечня" in str(ош.value)
 
     def test_в_перечне_только_разрешённые(self, уст):
-        assert set(уст.ВИТРИНЫ) == {"lords-01", "zona-01"}
+        assert set(уст.ВИТРИНЫ) == {"lords-01", "lords-02", "lords-03", "zona-01"}
 
     def test_у_каждой_витрины_свой_манифест_и_юнит(self, уст):
         манифесты = [в["manifest"] for в in уст.ВИТРИНЫ.values()]
