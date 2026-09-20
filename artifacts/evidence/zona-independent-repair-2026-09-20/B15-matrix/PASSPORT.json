@@ -1,0 +1,11 @@
+{
+  "block": "B15",
+  "status": "PASS_LOCAL",
+  "RESPONSIVE_MATRIX_PASS": 1,
+  "rows": 108,
+  "HORIZONTAL_OVERFLOW": 0,
+  "NESTED_ZWRAP_VIOLATIONS": 0,
+  "HEADER_MAIN_OVERLAPS": 0,
+  "note": "Local fixture headed Chromium matrix. Live after-deploy matrix still required (B18). Not owner visual review.",
+  "updated_at": "2026-09-20T18:10:00Z"
+}

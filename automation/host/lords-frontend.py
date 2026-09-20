@@ -1787,13 +1787,16 @@ letter-spacing:-.3px}
 
 /* B02 Hero — editorial first screen; no request-time rotation. */
 .zhero{display:grid;grid-template-columns:1fr;gap:0;margin:12px 0 28px;
+min-width:0;max-width:100%;box-sizing:border-box;
 border-radius:16px;overflow:hidden;background:@SURF@;border:1px solid @LINE@;
 min-height:300px;max-height:390px}
 @media(min-width:900px){.zhero{grid-template-columns:46% 54%;min-height:340px;max-height:390px}}
-.zhero__media{position:relative;min-height:180px;background:#111;aspect-ratio:16/9}
+.zhero__media{position:relative;min-height:180px;background:#111;aspect-ratio:16/9;
+max-width:100%;width:100%;min-width:0;overflow:hidden;box-sizing:border-box}
 @media(min-width:900px){.zhero__media{aspect-ratio:auto;min-height:100%}}
-.zhero__media img{width:100%;height:100%;object-fit:cover;display:block}
-.zhero__body{padding:20px 22px;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.zhero__media img{width:100%;height:100%;object-fit:cover;display:block;max-width:100%}
+.zhero__body{padding:20px 22px;display:flex;flex-direction:column;justify-content:center;gap:10px;
+min-width:0;max-width:100%;box-sizing:border-box}
 @media(min-width:900px){.zhero__body{padding:28px 32px}}
 .zhero__kicker{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:@ACC@;margin:0}
 .zhero h1{font-size:26px;line-height:1.2;font-weight:700;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
@@ -1825,14 +1828,15 @@ min-height:300px;max-height:390px}
 .zadded{margin:8px 0 28px}
 .zadded__h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 12px}
 .zadded__h h2{margin:0;font-size:22px;font-weight:600}
-.zadded__list{display:grid;gap:10px;grid-template-columns:1fr}
-@media(min-width:900px){.zadded__list{grid-template-columns:1fr 1fr}}
-.zadded__row{display:grid;grid-template-columns:60px 1fr auto;gap:12px;align-items:center;
-min-height:96px;padding:8px;border:1px solid @LINE@;border-radius:10px;background:@SURF@;color:inherit;text-decoration:none}
+.zadded__list{display:grid;gap:10px;grid-template-columns:minmax(0,1fr);width:100%;min-width:0}
+@media(min-width:900px){.zadded__list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.zadded__row{display:grid;grid-template-columns:60px minmax(0,1fr) auto;gap:10px;align-items:center;
+min-height:96px;padding:8px;border:1px solid @LINE@;border-radius:10px;background:@SURF@;color:inherit;text-decoration:none;
+width:100%;max-width:100%;min-width:0;box-sizing:border-box}
 .zadded__row img,.zadded__ph{width:60px;height:90px;object-fit:cover;border-radius:4px;background:#222}
-.zadded__t{font-size:15px;font-weight:700;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zadded__t{font-size:15px;font-weight:700;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-width:0}
 .zadded__m{font-size:12px;color:@DIM@;margin:4px 0 0}
-.zadded__when{font-size:12px;color:@ACC@;white-space:nowrap}
+.zadded__when{font-size:12px;color:@ACC@;white-space:nowrap;max-width:7.5rem;overflow:hidden;text-overflow:ellipsis}
 
 /* B05 kind entry cards */
 .zkinds{display:grid;gap:12px;grid-template-columns:1fr;margin:8px 0 28px}
@@ -2340,6 +2344,11 @@ display:flex;align-items:center;justify-content:center;opacity:.92;box-shadow:0 
 .zrl__btn[disabled]{opacity:.32;cursor:default}
 .zrl__vp{mask-image:linear-gradient(90deg,transparent,#000 12px,#000 calc(100% - 12px),transparent);
 -webkit-mask-image:linear-gradient(90deg,transparent,#000 12px,#000 calc(100% - 12px),transparent)}
+@media(max-width:430px){
+.zrl__btn{width:32px;min-width:32px;height:40px;min-height:40px}
+.zrl__btn--p{left:0}.zrl__btn--n{right:0}
+.zrl{padding:0 2px}
+}
 
 /* Компактная сетка: 2→4→5→6→7→8; без прыжка 4→7 и без пустой зоны >1 карточки. */
 .zg{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr));

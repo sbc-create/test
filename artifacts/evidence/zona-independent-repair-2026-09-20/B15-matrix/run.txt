@@ -1,0 +1,62 @@
+{
+  "block": "B15",
+  "mode": "local_headed_fixture",
+  "viewports": [
+    [
+      1440,
+      900
+    ],
+    [
+      1363,
+      936
+    ],
+    [
+      1024,
+      768
+    ],
+    [
+      820,
+      1180
+    ],
+    [
+      768,
+      1024
+    ],
+    [
+      430,
+      932
+    ],
+    [
+      390,
+      844
+    ],
+    [
+      360,
+      800
+    ],
+    [
+      320,
+      720
+    ]
+  ],
+  "pages": [
+    "/",
+    "/catalog/",
+    "/catalog/?year=1902&genre=comedy",
+    "/new/",
+    "/search/?q=Dusty%20Bluffs",
+    "/search/?q=zzznothing",
+    "/collections/",
+    "/collection/recently_added/",
+    "/title/t-0001/",
+    "/title/seriya-matrix/",
+    "/title/seriya-matrix/season-1/episode-1/",
+    "/no-such-page-404/"
+  ],
+  "rows": 108,
+  "failures": [],
+  "RESPONSIVE_MATRIX_PASS": 1,
+  "HORIZONTAL_OVERFLOW": 0,
+  "NESTED_ZWRAP_VIOLATIONS": 0,
+  "HEADER_MAIN_OVERLAPS": 0
+}

@@ -1,0 +1,3090 @@
+{
+  "summary": {
+    "block": "B15",
+    "mode": "local_headed_fixture",
+    "viewports": [
+      [
+        1440,
+        900
+      ],
+      [
+        1363,
+        936
+      ],
+      [
+        1024,
+        768
+      ],
+      [
+        820,
+        1180
+      ],
+      [
+        768,
+        1024
+      ],
+      [
+        430,
+        932
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        360,
+        800
+      ],
+      [
+        320,
+        720
+      ]
+    ],
+    "pages": [
+      "/",
+      "/catalog/",
+      "/catalog/?year=1902&genre=comedy",
+      "/new/",
+      "/search/?q=Dusty%20Bluffs",
+      "/search/?q=zzznothing",
+      "/collections/",
+      "/collection/recently_added/",
+      "/title/t-0001/",
+      "/title/seriya-matrix/",
+      "/title/seriya-matrix/season-1/episode-1/",
+      "/no-such-page-404/"
+    ],
+    "rows": 108,
+    "failures": [],
+    "RESPONSIVE_MATRIX_PASS": 1,
+    "HORIZONTAL_OVERFLOW": 0,
+    "NESTED_ZWRAP_VIOLATIONS": 0,
+    "HEADER_MAIN_OVERLAPS": 0
+  },
+  "results": [
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "path": "/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "wraps": [
+          {
+            "w": 1440,
+            "left": 0,
+            "right": 1440
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Zona B15 — кинопортал",
+        "h1": "Сериал Матрица"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1440x900_home.png"
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "path": "/catalog/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1440,
+            "left": 0,
+            "right": 1440
+          }
+        ],
+        "gridCols": 7,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Каталог — Zona B15",
+        "h1": "Каталог"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1440x900_catalog.png"
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "path": "/catalog/?year=1902&genre=comedy",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1440,
+            "left": 0,
+            "right": 1440
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Комедия 1902 года — Zona B15",
+        "h1": "Комедия 1902 года"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1440x900_catalog_year_1902_genre_comedy.png"
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "path": "/new/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1440,
+            "left": 0,
+            "right": 1440
+          }
+        ],
+        "gridCols": 7,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Премьеры — Zona B15",
+        "h1": "Премьеры"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1440x900_new.png"
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "path": "/search/?q=Dusty%20Bluffs",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1440,
+            "left": 0,
+            "right": 1440
+          }
+        ],
+        "gridCols": 7,
+        "accidentalGapPx": 1182,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Поиск — Zona B15",
+        "h1": "Результаты поиска: «Dusty Bluffs»"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1440x900_search_q_usty_20_luffs.png"
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "path": "/search/?q=zzznothing",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1440,
+            "left": 0,
+            "right": 1440
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Поиск — Zona B15",
+        "h1": "Результаты поиска: «zzznothing»"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1440x900_search_q_zzznothing.png"
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "path": "/collections/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1440,
+            "left": 0,
+            "right": 1440
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Подборки — Zona B15",
+        "h1": "Подборки"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1440x900_collections.png"
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "path": "/collection/recently_added/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1440,
+            "left": 0,
+            "right": 1440
+          }
+        ],
+        "gridCols": 7,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Недавно добавленные — Zona B15",
+        "h1": "Недавно добавленные"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1440x900_collection_recently_added.png"
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "path": "/title/t-0001/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 3,
+        "wraps": [
+          {
+            "w": 1440,
+            "left": 0,
+            "right": 1440
+          }
+        ],
+        "gridCols": 8,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Название 0001 длинное для clamp — смотреть онлайн — Zona B15",
+        "h1": "Название 0001 длинное для clamp"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1440x900_title_t_0001.png"
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "path": "/title/seriya-matrix/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 3,
+        "wraps": [
+          {
+            "w": 1440,
+            "left": 0,
+            "right": 1440
+          }
+        ],
+        "gridCols": 8,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Сериал Матрица — смотреть онлайн — Zona B15",
+        "h1": "Сериал Матрица"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1440x900_title_seriya_matrix.png"
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "path": "/title/seriya-matrix/season-1/episode-1/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 5,
+        "wraps": [
+          {
+            "w": 1440,
+            "left": 0,
+            "right": 1440
+          }
+        ],
+        "gridCols": 8,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Сериал Матрица — 1 сезон, 1 серия — Zona B15",
+        "h1": "Сериал Матрица — 1 сезон, 1 серия"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1440x900_title_seriya_matrix_season_1_episode_1.png"
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "path": "/no-such-page-404/",
+      "status": 404,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "wraps": [
+          {
+            "w": 1440,
+            "left": 0,
+            "right": 1440
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Страница не найдена — Zona B15",
+        "h1": "Страница не найдена"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1440x900_no_such_page_404.png"
+    },
+    {
+      "viewport": [
+        1363,
+        936
+      ],
+      "path": "/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "wraps": [
+          {
+            "w": 1363,
+            "left": 0,
+            "right": 1363
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Zona B15 — кинопортал",
+        "h1": "Сериал Матрица"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1363x936_home.png"
+    },
+    {
+      "viewport": [
+        1363,
+        936
+      ],
+      "path": "/catalog/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1363,
+            "left": 0,
+            "right": 1363
+          }
+        ],
+        "gridCols": 6,
+        "accidentalGapPx": 14,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Каталог — Zona B15",
+        "h1": "Каталог"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1363x936_catalog.png"
+    },
+    {
+      "viewport": [
+        1363,
+        936
+      ],
+      "path": "/catalog/?year=1902&genre=comedy",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1363,
+            "left": 0,
+            "right": 1363
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Комедия 1902 года — Zona B15",
+        "h1": "Комедия 1902 года"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1363x936_catalog_year_1902_genre_comedy.png"
+    },
+    {
+      "viewport": [
+        1363,
+        936
+      ],
+      "path": "/new/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1363,
+            "left": 0,
+            "right": 1363
+          }
+        ],
+        "gridCols": 6,
+        "accidentalGapPx": 14,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Премьеры — Zona B15",
+        "h1": "Премьеры"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1363x936_new.png"
+    },
+    {
+      "viewport": [
+        1363,
+        936
+      ],
+      "path": "/search/?q=Dusty%20Bluffs",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1363,
+            "left": 0,
+            "right": 1363
+          }
+        ],
+        "gridCols": 6,
+        "accidentalGapPx": 1121,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Поиск — Zona B15",
+        "h1": "Результаты поиска: «Dusty Bluffs»"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1363x936_search_q_usty_20_luffs.png"
+    },
+    {
+      "viewport": [
+        1363,
+        936
+      ],
+      "path": "/search/?q=zzznothing",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1363,
+            "left": 0,
+            "right": 1363
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Поиск — Zona B15",
+        "h1": "Результаты поиска: «zzznothing»"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1363x936_search_q_zzznothing.png"
+    },
+    {
+      "viewport": [
+        1363,
+        936
+      ],
+      "path": "/collections/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1363,
+            "left": 0,
+            "right": 1363
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Подборки — Zona B15",
+        "h1": "Подборки"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1363x936_collections.png"
+    },
+    {
+      "viewport": [
+        1363,
+        936
+      ],
+      "path": "/collection/recently_added/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1363,
+            "left": 0,
+            "right": 1363
+          }
+        ],
+        "gridCols": 6,
+        "accidentalGapPx": 14,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Недавно добавленные — Zona B15",
+        "h1": "Недавно добавленные"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1363x936_collection_recently_added.png"
+    },
+    {
+      "viewport": [
+        1363,
+        936
+      ],
+      "path": "/title/t-0001/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 3,
+        "wraps": [
+          {
+            "w": 1363,
+            "left": 0,
+            "right": 1363
+          }
+        ],
+        "gridCols": 8,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 12,
+        "blankRatingRows": 0,
+        "title": "Название 0001 длинное для clamp — смотреть онлайн — Zona B15",
+        "h1": "Название 0001 длинное для clamp"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1363x936_title_t_0001.png"
+    },
+    {
+      "viewport": [
+        1363,
+        936
+      ],
+      "path": "/title/seriya-matrix/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 3,
+        "wraps": [
+          {
+            "w": 1363,
+            "left": 0,
+            "right": 1363
+          }
+        ],
+        "gridCols": 8,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 12,
+        "blankRatingRows": 0,
+        "title": "Сериал Матрица — смотреть онлайн — Zona B15",
+        "h1": "Сериал Матрица"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1363x936_title_seriya_matrix.png"
+    },
+    {
+      "viewport": [
+        1363,
+        936
+      ],
+      "path": "/title/seriya-matrix/season-1/episode-1/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 5,
+        "wraps": [
+          {
+            "w": 1363,
+            "left": 0,
+            "right": 1363
+          }
+        ],
+        "gridCols": 8,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 12,
+        "blankRatingRows": 0,
+        "title": "Сериал Матрица — 1 сезон, 1 серия — Zona B15",
+        "h1": "Сериал Матрица — 1 сезон, 1 серия"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1363x936_title_seriya_matrix_season_1_episode_1.png"
+    },
+    {
+      "viewport": [
+        1363,
+        936
+      ],
+      "path": "/no-such-page-404/",
+      "status": 404,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "wraps": [
+          {
+            "w": 1363,
+            "left": 0,
+            "right": 1363
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Страница не найдена — Zona B15",
+        "h1": "Страница не найдена"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1363x936_no_such_page_404.png"
+    },
+    {
+      "viewport": [
+        1024,
+        768
+      ],
+      "path": "/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "wraps": [
+          {
+            "w": 1024,
+            "left": 0,
+            "right": 1024
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Zona B15 — кинопортал",
+        "h1": "Сериал Матрица"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1024x768_home.png"
+    },
+    {
+      "viewport": [
+        1024,
+        768
+      ],
+      "path": "/catalog/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1024,
+            "left": 0,
+            "right": 1024
+          }
+        ],
+        "gridCols": 5,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Каталог — Zona B15",
+        "h1": "Каталог"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1024x768_catalog.png"
+    },
+    {
+      "viewport": [
+        1024,
+        768
+      ],
+      "path": "/catalog/?year=1902&genre=comedy",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1024,
+            "left": 0,
+            "right": 1024
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Комедия 1902 года — Zona B15",
+        "h1": "Комедия 1902 года"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1024x768_catalog_year_1902_genre_comedy.png"
+    },
+    {
+      "viewport": [
+        1024,
+        768
+      ],
+      "path": "/new/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1024,
+            "left": 0,
+            "right": 1024
+          }
+        ],
+        "gridCols": 5,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Премьеры — Zona B15",
+        "h1": "Премьеры"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1024x768_new.png"
+    },
+    {
+      "viewport": [
+        1024,
+        768
+      ],
+      "path": "/search/?q=Dusty%20Bluffs",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1024,
+            "left": 0,
+            "right": 1024
+          }
+        ],
+        "gridCols": 5,
+        "accidentalGapPx": 782,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Поиск — Zona B15",
+        "h1": "Результаты поиска: «Dusty Bluffs»"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1024x768_search_q_usty_20_luffs.png"
+    },
+    {
+      "viewport": [
+        1024,
+        768
+      ],
+      "path": "/search/?q=zzznothing",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1024,
+            "left": 0,
+            "right": 1024
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Поиск — Zona B15",
+        "h1": "Результаты поиска: «zzznothing»"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1024x768_search_q_zzznothing.png"
+    },
+    {
+      "viewport": [
+        1024,
+        768
+      ],
+      "path": "/collections/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1024,
+            "left": 0,
+            "right": 1024
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Подборки — Zona B15",
+        "h1": "Подборки"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1024x768_collections.png"
+    },
+    {
+      "viewport": [
+        1024,
+        768
+      ],
+      "path": "/collection/recently_added/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 1024,
+            "left": 0,
+            "right": 1024
+          }
+        ],
+        "gridCols": 5,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Недавно добавленные — Zona B15",
+        "h1": "Недавно добавленные"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1024x768_collection_recently_added.png"
+    },
+    {
+      "viewport": [
+        1024,
+        768
+      ],
+      "path": "/title/t-0001/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 3,
+        "wraps": [
+          {
+            "w": 1024,
+            "left": 0,
+            "right": 1024
+          }
+        ],
+        "gridCols": 6,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 12,
+        "blankRatingRows": 0,
+        "title": "Название 0001 длинное для clamp — смотреть онлайн — Zona B15",
+        "h1": "Название 0001 длинное для clamp"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1024x768_title_t_0001.png"
+    },
+    {
+      "viewport": [
+        1024,
+        768
+      ],
+      "path": "/title/seriya-matrix/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 3,
+        "wraps": [
+          {
+            "w": 1024,
+            "left": 0,
+            "right": 1024
+          }
+        ],
+        "gridCols": 6,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 12,
+        "blankRatingRows": 0,
+        "title": "Сериал Матрица — смотреть онлайн — Zona B15",
+        "h1": "Сериал Матрица"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1024x768_title_seriya_matrix.png"
+    },
+    {
+      "viewport": [
+        1024,
+        768
+      ],
+      "path": "/title/seriya-matrix/season-1/episode-1/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 5,
+        "wraps": [
+          {
+            "w": 1024,
+            "left": 0,
+            "right": 1024
+          }
+        ],
+        "gridCols": 6,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 12,
+        "blankRatingRows": 0,
+        "title": "Сериал Матрица — 1 сезон, 1 серия — Zona B15",
+        "h1": "Сериал Матрица — 1 сезон, 1 серия"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1024x768_title_seriya_matrix_season_1_episode_1.png"
+    },
+    {
+      "viewport": [
+        1024,
+        768
+      ],
+      "path": "/no-such-page-404/",
+      "status": 404,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "wraps": [
+          {
+            "w": 1024,
+            "left": 0,
+            "right": 1024
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Страница не найдена — Zona B15",
+        "h1": "Страница не найдена"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp1024x768_no_such_page_404.png"
+    },
+    {
+      "viewport": [
+        820,
+        1180
+      ],
+      "path": "/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "wraps": [
+          {
+            "w": 820,
+            "left": 0,
+            "right": 820
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Zona B15 — кинопортал",
+        "h1": "Сериал Матрица"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp820x1180_home.png"
+    },
+    {
+      "viewport": [
+        820,
+        1180
+      ],
+      "path": "/catalog/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 820,
+            "left": 0,
+            "right": 820
+          }
+        ],
+        "gridCols": 4,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Каталог — Zona B15",
+        "h1": "Каталог"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp820x1180_catalog.png"
+    },
+    {
+      "viewport": [
+        820,
+        1180
+      ],
+      "path": "/catalog/?year=1902&genre=comedy",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 820,
+            "left": 0,
+            "right": 820
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Комедия 1902 года — Zona B15",
+        "h1": "Комедия 1902 года"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp820x1180_catalog_year_1902_genre_comedy.png"
+    },
+    {
+      "viewport": [
+        820,
+        1180
+      ],
+      "path": "/new/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 820,
+            "left": 0,
+            "right": 820
+          }
+        ],
+        "gridCols": 4,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Премьеры — Zona B15",
+        "h1": "Премьеры"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp820x1180_new.png"
+    },
+    {
+      "viewport": [
+        820,
+        1180
+      ],
+      "path": "/search/?q=Dusty%20Bluffs",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 820,
+            "left": 0,
+            "right": 820
+          }
+        ],
+        "gridCols": 4,
+        "accidentalGapPx": 578,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Поиск — Zona B15",
+        "h1": "Результаты поиска: «Dusty Bluffs»"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp820x1180_search_q_usty_20_luffs.png"
+    },
+    {
+      "viewport": [
+        820,
+        1180
+      ],
+      "path": "/search/?q=zzznothing",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 820,
+            "left": 0,
+            "right": 820
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Поиск — Zona B15",
+        "h1": "Результаты поиска: «zzznothing»"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp820x1180_search_q_zzznothing.png"
+    },
+    {
+      "viewport": [
+        820,
+        1180
+      ],
+      "path": "/collections/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 820,
+            "left": 0,
+            "right": 820
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Подборки — Zona B15",
+        "h1": "Подборки"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp820x1180_collections.png"
+    },
+    {
+      "viewport": [
+        820,
+        1180
+      ],
+      "path": "/collection/recently_added/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 820,
+            "left": 0,
+            "right": 820
+          }
+        ],
+        "gridCols": 4,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Недавно добавленные — Zona B15",
+        "h1": "Недавно добавленные"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp820x1180_collection_recently_added.png"
+    },
+    {
+      "viewport": [
+        820,
+        1180
+      ],
+      "path": "/title/t-0001/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 3,
+        "wraps": [
+          {
+            "w": 820,
+            "left": 0,
+            "right": 820
+          }
+        ],
+        "gridCols": 6,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 12,
+        "blankRatingRows": 0,
+        "title": "Название 0001 длинное для clamp — смотреть онлайн — Zona B15",
+        "h1": "Название 0001 длинное для clamp"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp820x1180_title_t_0001.png"
+    },
+    {
+      "viewport": [
+        820,
+        1180
+      ],
+      "path": "/title/seriya-matrix/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 3,
+        "wraps": [
+          {
+            "w": 820,
+            "left": 0,
+            "right": 820
+          }
+        ],
+        "gridCols": 6,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 12,
+        "blankRatingRows": 0,
+        "title": "Сериал Матрица — смотреть онлайн — Zona B15",
+        "h1": "Сериал Матрица"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp820x1180_title_seriya_matrix.png"
+    },
+    {
+      "viewport": [
+        820,
+        1180
+      ],
+      "path": "/title/seriya-matrix/season-1/episode-1/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 5,
+        "wraps": [
+          {
+            "w": 820,
+            "left": 0,
+            "right": 820
+          }
+        ],
+        "gridCols": 6,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 12,
+        "blankRatingRows": 0,
+        "title": "Сериал Матрица — 1 сезон, 1 серия — Zona B15",
+        "h1": "Сериал Матрица — 1 сезон, 1 серия"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp820x1180_title_seriya_matrix_season_1_episode_1.png"
+    },
+    {
+      "viewport": [
+        820,
+        1180
+      ],
+      "path": "/no-such-page-404/",
+      "status": 404,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "wraps": [
+          {
+            "w": 820,
+            "left": 0,
+            "right": 820
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Страница не найдена — Zona B15",
+        "h1": "Страница не найдена"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp820x1180_no_such_page_404.png"
+    },
+    {
+      "viewport": [
+        768,
+        1024
+      ],
+      "path": "/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "wraps": [
+          {
+            "w": 768,
+            "left": 0,
+            "right": 768
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Zona B15 — кинопортал",
+        "h1": "Сериал Матрица"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp768x1024_home.png"
+    },
+    {
+      "viewport": [
+        768,
+        1024
+      ],
+      "path": "/catalog/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 768,
+            "left": 0,
+            "right": 768
+          }
+        ],
+        "gridCols": 4,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Каталог — Zona B15",
+        "h1": "Каталог"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp768x1024_catalog.png"
+    },
+    {
+      "viewport": [
+        768,
+        1024
+      ],
+      "path": "/catalog/?year=1902&genre=comedy",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 768,
+            "left": 0,
+            "right": 768
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Комедия 1902 года — Zona B15",
+        "h1": "Комедия 1902 года"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp768x1024_catalog_year_1902_genre_comedy.png"
+    },
+    {
+      "viewport": [
+        768,
+        1024
+      ],
+      "path": "/new/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 768,
+            "left": 0,
+            "right": 768
+          }
+        ],
+        "gridCols": 4,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Премьеры — Zona B15",
+        "h1": "Премьеры"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp768x1024_new.png"
+    },
+    {
+      "viewport": [
+        768,
+        1024
+      ],
+      "path": "/search/?q=Dusty%20Bluffs",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 768,
+            "left": 0,
+            "right": 768
+          }
+        ],
+        "gridCols": 4,
+        "accidentalGapPx": 537,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Поиск — Zona B15",
+        "h1": "Результаты поиска: «Dusty Bluffs»"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp768x1024_search_q_usty_20_luffs.png"
+    },
+    {
+      "viewport": [
+        768,
+        1024
+      ],
+      "path": "/search/?q=zzznothing",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 768,
+            "left": 0,
+            "right": 768
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Поиск — Zona B15",
+        "h1": "Результаты поиска: «zzznothing»"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp768x1024_search_q_zzznothing.png"
+    },
+    {
+      "viewport": [
+        768,
+        1024
+      ],
+      "path": "/collections/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 768,
+            "left": 0,
+            "right": 768
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Подборки — Zona B15",
+        "h1": "Подборки"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp768x1024_collections.png"
+    },
+    {
+      "viewport": [
+        768,
+        1024
+      ],
+      "path": "/collection/recently_added/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 768,
+            "left": 0,
+            "right": 768
+          }
+        ],
+        "gridCols": 4,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Недавно добавленные — Zona B15",
+        "h1": "Недавно добавленные"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp768x1024_collection_recently_added.png"
+    },
+    {
+      "viewport": [
+        768,
+        1024
+      ],
+      "path": "/title/t-0001/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 3,
+        "wraps": [
+          {
+            "w": 768,
+            "left": 0,
+            "right": 768
+          }
+        ],
+        "gridCols": 6,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 12,
+        "blankRatingRows": 0,
+        "title": "Название 0001 длинное для clamp — смотреть онлайн — Zona B15",
+        "h1": "Название 0001 длинное для clamp"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp768x1024_title_t_0001.png"
+    },
+    {
+      "viewport": [
+        768,
+        1024
+      ],
+      "path": "/title/seriya-matrix/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 3,
+        "wraps": [
+          {
+            "w": 768,
+            "left": 0,
+            "right": 768
+          }
+        ],
+        "gridCols": 6,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 12,
+        "blankRatingRows": 0,
+        "title": "Сериал Матрица — смотреть онлайн — Zona B15",
+        "h1": "Сериал Матрица"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp768x1024_title_seriya_matrix.png"
+    },
+    {
+      "viewport": [
+        768,
+        1024
+      ],
+      "path": "/title/seriya-matrix/season-1/episode-1/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 5,
+        "wraps": [
+          {
+            "w": 768,
+            "left": 0,
+            "right": 768
+          }
+        ],
+        "gridCols": 6,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 12,
+        "blankRatingRows": 0,
+        "title": "Сериал Матрица — 1 сезон, 1 серия — Zona B15",
+        "h1": "Сериал Матрица — 1 сезон, 1 серия"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp768x1024_title_seriya_matrix_season_1_episode_1.png"
+    },
+    {
+      "viewport": [
+        768,
+        1024
+      ],
+      "path": "/no-such-page-404/",
+      "status": 404,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "wraps": [
+          {
+            "w": 768,
+            "left": 0,
+            "right": 768
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Страница не найдена — Zona B15",
+        "h1": "Страница не найдена"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp768x1024_no_such_page_404.png"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "path": "/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "wraps": [
+          {
+            "w": 430,
+            "left": 0,
+            "right": 430
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Zona B15 — кинопортал",
+        "h1": "Сериал Матрица"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp430x932_home.png"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "path": "/catalog/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 430,
+            "left": 0,
+            "right": 430
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 2,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Каталог — Zona B15",
+        "h1": "Каталог"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp430x932_catalog.png"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "path": "/catalog/?year=1902&genre=comedy",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 430,
+            "left": 0,
+            "right": 430
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Комедия 1902 года — Zona B15",
+        "h1": "Комедия 1902 года"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp430x932_catalog_year_1902_genre_comedy.png"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "path": "/new/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 430,
+            "left": 0,
+            "right": 430
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 2,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Премьеры — Zona B15",
+        "h1": "Премьеры"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp430x932_new.png"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "path": "/search/?q=Dusty%20Bluffs",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 430,
+            "left": 0,
+            "right": 430
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 212,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Поиск — Zona B15",
+        "h1": "Результаты поиска: «Dusty Bluffs»"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp430x932_search_q_usty_20_luffs.png"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "path": "/search/?q=zzznothing",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 430,
+            "left": 0,
+            "right": 430
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Поиск — Zona B15",
+        "h1": "Результаты поиска: «zzznothing»"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp430x932_search_q_zzznothing.png"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "path": "/collections/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 430,
+            "left": 0,
+            "right": 430
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Подборки — Zona B15",
+        "h1": "Подборки"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp430x932_collections.png"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "path": "/collection/recently_added/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 430,
+            "left": 0,
+            "right": 430
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 2,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Недавно добавленные — Zona B15",
+        "h1": "Недавно добавленные"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp430x932_collection_recently_added.png"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "path": "/title/t-0001/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 3,
+        "wraps": [
+          {
+            "w": 430,
+            "left": 0,
+            "right": 430
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 2,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Название 0001 длинное для clamp — смотреть онлайн — Zona B15",
+        "h1": "Название 0001 длинное для clamp"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp430x932_title_t_0001.png"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "path": "/title/seriya-matrix/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 3,
+        "wraps": [
+          {
+            "w": 430,
+            "left": 0,
+            "right": 430
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 2,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Сериал Матрица — смотреть онлайн — Zona B15",
+        "h1": "Сериал Матрица"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp430x932_title_seriya_matrix.png"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "path": "/title/seriya-matrix/season-1/episode-1/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 5,
+        "wraps": [
+          {
+            "w": 430,
+            "left": 0,
+            "right": 430
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 2,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Сериал Матрица — 1 сезон, 1 серия — Zona B15",
+        "h1": "Сериал Матрица — 1 сезон, 1 серия"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp430x932_title_seriya_matrix_season_1_episode_1.png"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "path": "/no-such-page-404/",
+      "status": 404,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "wraps": [
+          {
+            "w": 430,
+            "left": 0,
+            "right": 430
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Страница не найдена — Zona B15",
+        "h1": "Страница не найдена"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp430x932_no_such_page_404.png"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "path": "/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "wraps": [
+          {
+            "w": 390,
+            "left": 0,
+            "right": 390
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Zona B15 — кинопортал",
+        "h1": "Сериал Матрица"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp390x844_home.png"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "path": "/catalog/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 390,
+            "left": 0,
+            "right": 390
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Каталог — Zona B15",
+        "h1": "Каталог"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp390x844_catalog.png"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "path": "/catalog/?year=1902&genre=comedy",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 390,
+            "left": 0,
+            "right": 390
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Комедия 1902 года — Zona B15",
+        "h1": "Комедия 1902 года"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp390x844_catalog_year_1902_genre_comedy.png"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "path": "/new/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 390,
+            "left": 0,
+            "right": 390
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Премьеры — Zona B15",
+        "h1": "Премьеры"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp390x844_new.png"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "path": "/search/?q=Dusty%20Bluffs",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 390,
+            "left": 0,
+            "right": 390
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 176,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Поиск — Zona B15",
+        "h1": "Результаты поиска: «Dusty Bluffs»"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp390x844_search_q_usty_20_luffs.png"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "path": "/search/?q=zzznothing",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 390,
+            "left": 0,
+            "right": 390
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Поиск — Zona B15",
+        "h1": "Результаты поиска: «zzznothing»"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp390x844_search_q_zzznothing.png"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "path": "/collections/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 390,
+            "left": 0,
+            "right": 390
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Подборки — Zona B15",
+        "h1": "Подборки"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp390x844_collections.png"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "path": "/collection/recently_added/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 390,
+            "left": 0,
+            "right": 390
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Недавно добавленные — Zona B15",
+        "h1": "Недавно добавленные"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp390x844_collection_recently_added.png"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "path": "/title/t-0001/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 3,
+        "wraps": [
+          {
+            "w": 390,
+            "left": 0,
+            "right": 390
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Название 0001 длинное для clamp — смотреть онлайн — Zona B15",
+        "h1": "Название 0001 длинное для clamp"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp390x844_title_t_0001.png"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "path": "/title/seriya-matrix/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 3,
+        "wraps": [
+          {
+            "w": 390,
+            "left": 0,
+            "right": 390
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Сериал Матрица — смотреть онлайн — Zona B15",
+        "h1": "Сериал Матрица"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp390x844_title_seriya_matrix.png"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "path": "/title/seriya-matrix/season-1/episode-1/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 5,
+        "wraps": [
+          {
+            "w": 390,
+            "left": 0,
+            "right": 390
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Сериал Матрица — 1 сезон, 1 серия — Zona B15",
+        "h1": "Сериал Матрица — 1 сезон, 1 серия"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp390x844_title_seriya_matrix_season_1_episode_1.png"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "path": "/no-such-page-404/",
+      "status": 404,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "wraps": [
+          {
+            "w": 390,
+            "left": 0,
+            "right": 390
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Страница не найдена — Zona B15",
+        "h1": "Страница не найдена"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp390x844_no_such_page_404.png"
+    },
+    {
+      "viewport": [
+        360,
+        800
+      ],
+      "path": "/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "wraps": [
+          {
+            "w": 360,
+            "left": 0,
+            "right": 360
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Zona B15 — кинопортал",
+        "h1": "Сериал Матрица"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp360x800_home.png"
+    },
+    {
+      "viewport": [
+        360,
+        800
+      ],
+      "path": "/catalog/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 360,
+            "left": 0,
+            "right": 360
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Каталог — Zona B15",
+        "h1": "Каталог"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp360x800_catalog.png"
+    },
+    {
+      "viewport": [
+        360,
+        800
+      ],
+      "path": "/catalog/?year=1902&genre=comedy",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 360,
+            "left": 0,
+            "right": 360
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Комедия 1902 года — Zona B15",
+        "h1": "Комедия 1902 года"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp360x800_catalog_year_1902_genre_comedy.png"
+    },
+    {
+      "viewport": [
+        360,
+        800
+      ],
+      "path": "/new/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 360,
+            "left": 0,
+            "right": 360
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Премьеры — Zona B15",
+        "h1": "Премьеры"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp360x800_new.png"
+    },
+    {
+      "viewport": [
+        360,
+        800
+      ],
+      "path": "/search/?q=Dusty%20Bluffs",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 360,
+            "left": 0,
+            "right": 360
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 161,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Поиск — Zona B15",
+        "h1": "Результаты поиска: «Dusty Bluffs»"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp360x800_search_q_usty_20_luffs.png"
+    },
+    {
+      "viewport": [
+        360,
+        800
+      ],
+      "path": "/search/?q=zzznothing",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 360,
+            "left": 0,
+            "right": 360
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Поиск — Zona B15",
+        "h1": "Результаты поиска: «zzznothing»"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp360x800_search_q_zzznothing.png"
+    },
+    {
+      "viewport": [
+        360,
+        800
+      ],
+      "path": "/collections/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 360,
+            "left": 0,
+            "right": 360
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Подборки — Zona B15",
+        "h1": "Подборки"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp360x800_collections.png"
+    },
+    {
+      "viewport": [
+        360,
+        800
+      ],
+      "path": "/collection/recently_added/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 360,
+            "left": 0,
+            "right": 360
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Недавно добавленные — Zona B15",
+        "h1": "Недавно добавленные"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp360x800_collection_recently_added.png"
+    },
+    {
+      "viewport": [
+        360,
+        800
+      ],
+      "path": "/title/t-0001/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 3,
+        "wraps": [
+          {
+            "w": 360,
+            "left": 0,
+            "right": 360
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Название 0001 длинное для clamp — смотреть онлайн — Zona B15",
+        "h1": "Название 0001 длинное для clamp"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp360x800_title_t_0001.png"
+    },
+    {
+      "viewport": [
+        360,
+        800
+      ],
+      "path": "/title/seriya-matrix/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 3,
+        "wraps": [
+          {
+            "w": 360,
+            "left": 0,
+            "right": 360
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Сериал Матрица — смотреть онлайн — Zona B15",
+        "h1": "Сериал Матрица"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp360x800_title_seriya_matrix.png"
+    },
+    {
+      "viewport": [
+        360,
+        800
+      ],
+      "path": "/title/seriya-matrix/season-1/episode-1/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 5,
+        "wraps": [
+          {
+            "w": 360,
+            "left": 0,
+            "right": 360
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Сериал Матрица — 1 сезон, 1 серия — Zona B15",
+        "h1": "Сериал Матрица — 1 сезон, 1 серия"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp360x800_title_seriya_matrix_season_1_episode_1.png"
+    },
+    {
+      "viewport": [
+        360,
+        800
+      ],
+      "path": "/no-such-page-404/",
+      "status": 404,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "wraps": [
+          {
+            "w": 360,
+            "left": 0,
+            "right": 360
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Страница не найдена — Zona B15",
+        "h1": "Страница не найдена"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp360x800_no_such_page_404.png"
+    },
+    {
+      "viewport": [
+        320,
+        720
+      ],
+      "path": "/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "wraps": [
+          {
+            "w": 320,
+            "left": 0,
+            "right": 320
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Zona B15 — кинопортал",
+        "h1": "Сериал Матрица"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp320x720_home.png"
+    },
+    {
+      "viewport": [
+        320,
+        720
+      ],
+      "path": "/catalog/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 320,
+            "left": 0,
+            "right": 320
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 23,
+        "blankRatingRows": 0,
+        "title": "Каталог — Zona B15",
+        "h1": "Каталог"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp320x720_catalog.png"
+    },
+    {
+      "viewport": [
+        320,
+        720
+      ],
+      "path": "/catalog/?year=1902&genre=comedy",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 320,
+            "left": 0,
+            "right": 320
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Комедия 1902 года — Zona B15",
+        "h1": "Комедия 1902 года"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp320x720_catalog_year_1902_genre_comedy.png"
+    },
+    {
+      "viewport": [
+        320,
+        720
+      ],
+      "path": "/new/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 320,
+            "left": 0,
+            "right": 320
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 23,
+        "blankRatingRows": 0,
+        "title": "Премьеры — Zona B15",
+        "h1": "Премьеры"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp320x720_new.png"
+    },
+    {
+      "viewport": [
+        320,
+        720
+      ],
+      "path": "/search/?q=Dusty%20Bluffs",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 320,
+            "left": 0,
+            "right": 320
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 141,
+        "headerOverlap": false,
+        "textOverflowSample": 1,
+        "blankRatingRows": 0,
+        "title": "Поиск — Zona B15",
+        "h1": "Результаты поиска: «Dusty Bluffs»"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp320x720_search_q_usty_20_luffs.png"
+    },
+    {
+      "viewport": [
+        320,
+        720
+      ],
+      "path": "/search/?q=zzznothing",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 320,
+            "left": 0,
+            "right": 320
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Поиск — Zona B15",
+        "h1": "Результаты поиска: «zzznothing»"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp320x720_search_q_zzznothing.png"
+    },
+    {
+      "viewport": [
+        320,
+        720
+      ],
+      "path": "/collections/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 320,
+            "left": 0,
+            "right": 320
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Подборки — Zona B15",
+        "h1": "Подборки"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp320x720_collections.png"
+    },
+    {
+      "viewport": [
+        320,
+        720
+      ],
+      "path": "/collection/recently_added/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "wraps": [
+          {
+            "w": 320,
+            "left": 0,
+            "right": 320
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 23,
+        "blankRatingRows": 0,
+        "title": "Недавно добавленные — Zona B15",
+        "h1": "Недавно добавленные"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp320x720_collection_recently_added.png"
+    },
+    {
+      "viewport": [
+        320,
+        720
+      ],
+      "path": "/title/t-0001/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 3,
+        "wraps": [
+          {
+            "w": 320,
+            "left": 0,
+            "right": 320
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 12,
+        "blankRatingRows": 0,
+        "title": "Название 0001 длинное для clamp — смотреть онлайн — Zona B15",
+        "h1": "Название 0001 длинное для clamp"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp320x720_title_t_0001.png"
+    },
+    {
+      "viewport": [
+        320,
+        720
+      ],
+      "path": "/title/seriya-matrix/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 3,
+        "wraps": [
+          {
+            "w": 320,
+            "left": 0,
+            "right": 320
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 12,
+        "blankRatingRows": 0,
+        "title": "Сериал Матрица — смотреть онлайн — Zona B15",
+        "h1": "Сериал Матрица"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp320x720_title_seriya_matrix.png"
+    },
+    {
+      "viewport": [
+        320,
+        720
+      ],
+      "path": "/title/seriya-matrix/season-1/episode-1/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 5,
+        "wraps": [
+          {
+            "w": 320,
+            "left": 0,
+            "right": 320
+          }
+        ],
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 12,
+        "blankRatingRows": 0,
+        "title": "Сериал Матрица — 1 сезон, 1 серия — Zona B15",
+        "h1": "Сериал Матрица — 1 сезон, 1 серия"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp320x720_title_seriya_matrix_season_1_episode_1.png"
+    },
+    {
+      "viewport": [
+        320,
+        720
+      ],
+      "path": "/no-such-page-404/",
+      "status": 404,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "wraps": [
+          {
+            "w": 320,
+            "left": 0,
+            "right": 320
+          }
+        ],
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "textOverflowSample": 0,
+        "blankRatingRows": 0,
+        "title": "Страница не найдена — Zona B15",
+        "h1": "Страница не найдена"
+      },
+      "screenshot": "artifacts/evidence/zona-independent-repair-2026-09-20/B15-matrix/vp320x720_no_such_page_404.png"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "block": "B13",
+  "status": "PASS_LOCAL_PARTIAL",
+  "summary": "Recommendations apply normalized-title near-duplicate gate; playable-preferred policy retained; sparse rating/country rows already collapse via card contract.",
+  "residuals": ["item-level reason badges", "50-title sample oracle", "video badge vs playable agreement headed proof"],
+  "updated_at": "2026-09-20T17:50:00Z"
+}
