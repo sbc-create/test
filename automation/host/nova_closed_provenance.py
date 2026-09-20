@@ -29,7 +29,7 @@ class ClosedSiteProvenance(TypedDict):
 # source_commit per family; RUNTIME_COMMIT filled after Animedia frontend commit.
 LORDS_COMMIT = "5fc22310fdfb8f0c8748f69e5603e4de3267f27e"
 # Tip filled after REFERENCE-PARITY-02 local blocks; apply-nova pins this HEAD.
-ANIMEDIA_COMMIT = "45563eee66fe55f4eac791646f899a510390b0a3"
+ANIMEDIA_COMMIT = "89666321093651d4bd5b06a00645fdf903124810"
 ZONA_COMMIT = "bcbea00877708c7f930f1fe931a17f66decafed5"
 
 REPO_LORDS = "/home/claude/wt-lords-integration-canary-01"
