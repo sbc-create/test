@@ -1061,39 +1061,42 @@ box-shadow:0 0 60px #0009}
 .pad{padding:0 18px}
 .backdrop{position:fixed;inset:0 0 auto 0;height:330px;z-index:-1;
 background:radial-gradient(120% 140% at 50% 0,#243043 0,#0e1013 68%)}
-/* Шапка: эталон lordfilm-hit — relative, ~70px, одна строка на desktop. */
+/* Шапка: drawer до fit-breakpoint (~1024), затем горизонтальный ряд. */
 .hd{background:@CARD@;border-bottom:1px solid @LINE@;position:relative;z-index:40}
 .hd__in{display:flex;align-items:center;gap:12px;min-height:70px;height:70px;
-padding:0 12px;flex-wrap:nowrap}
-@media(min-width:768px){.hd__in{height:70px;min-height:70px;padding:0 18px;gap:16px}}
+padding:0 12px;flex-wrap:nowrap;position:relative}
+@media(min-width:1024px){.hd__in{height:70px;min-height:70px;padding:0 18px;gap:16px}}
 .hd__logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;
 letter-spacing:.5px;text-transform:uppercase;color:@INK@;flex:0 1 auto;
 max-width:min(42vw,220px);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-@media(min-width:768px){.hd__logo{font-size:19px;max-width:240px}}
+@media(min-width:1024px){.hd__logo{font-size:19px;max-width:240px}}
 .hd__mark{width:30px;height:30px;border-radius:5px;background:@ACC@;color:#fff;
 display:grid;place-items:center;font-size:15px;font-weight:800;flex:0 0 auto}
 .hd__menu{display:inline-flex;align-items:center;justify-content:center;
 width:44px;height:44px;border:1px solid @LINE@;border-radius:4px;background:#fff;
 color:@INK@;font-size:20px;cursor:pointer;margin-left:auto;flex:0 0 auto}
-@media(min-width:768px){.hd__menu{display:none}}
-.hd__nav{display:none;flex-direction:column;gap:4px;flex:1 0 100%;order:5;
-padding:8px 0 12px;border-top:1px solid @LINE@}
+@media(min-width:1024px){.hd__menu{display:none}}
+.hd__nav{display:none;position:absolute;left:0;right:0;top:100%;z-index:50;
+flex-direction:column;gap:4px;padding:8px 12px 12px;border-top:1px solid @LINE@;
+background:@CARD@;box-shadow:0 12px 28px #0004;max-height:min(70vh,520px);overflow:auto}
 .hd__nav.is-open{display:flex}
-@media(min-width:768px){.hd__nav{display:flex;flex-direction:row;flex:1 1 auto;order:0;
-flex-wrap:nowrap;padding:0;border:0;gap:2px;min-width:0;overflow:hidden}}
+@media(min-width:1024px){.hd__nav{display:flex;position:static;flex-direction:row;flex:1 1 auto;
+flex-wrap:nowrap;padding:0;border:0;gap:2px;min-width:0;overflow:visible;box-shadow:none;
+max-height:none;background:transparent}}
 .hd__nav a{padding:12px 14px;border-radius:4px;font-size:14px;font-weight:700;
 text-transform:uppercase;letter-spacing:.3px;color:#39414a;min-height:44px;
 display:flex;align-items:center;white-space:nowrap}
-@media(min-width:768px){.hd__nav a{padding:8px 10px;font-size:13px;min-height:44px}}
+@media(min-width:1024px){.hd__nav a{padding:8px 10px;font-size:13px;min-height:44px}}
 .hd__nav a:hover{background:@SHEET@;color:@ACCDK@}
 .hd__nav a[aria-current]{color:@ACCDK@;box-shadow:inset 0 -2px 0 @ACC@}
 .hd__s{display:flex;border:1px solid @LINE@;border-radius:4px;overflow:hidden;background:#fff;
 flex:1 1 auto;min-width:0;max-width:100%}
-@media(min-width:768px){.hd__s{flex:0 0 200px;max-width:200px}}
+@media(min-width:1024px){.hd__s{flex:0 0 200px;max-width:200px}}
 .hd__s input{border:0;padding:10px 11px;font-size:13px;width:100%;min-width:0;color:@INK@;background:#fff}
 .hd__s button{border:0;background:#fff;color:#6a737d;padding:0 12px;cursor:pointer;font-size:14px;
-min-width:44px;min-height:44px}
+min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center}
 .hd__s button:hover{color:@ACCDK@}
+.hd__s button svg{width:18px;height:18px;display:block}
 body.nav-lock{overflow:hidden}
 /* Заголовок раздела: настоящий H2 + «Весь раздел». */
 .lead{font-size:20px;font-weight:600;color:#3a4149;margin:16px 0 12px}
@@ -2981,19 +2984,22 @@ def заглушка_постера(запись: dict, класс_заглуш�
     "})();"
 )
 
-#: Lords mobile drawer: focus return + Escape + body scroll lock.
+#: Lords mobile drawer: focus return + Escape + outside click + body scroll lock.
 СКРИПТ_ЛОРДС_ШАПКА = (
     "(function(){"
     "function close(nav,btn){if(!nav||!btn)return;nav.classList.remove('is-open');"
     "btn.setAttribute('aria-expanded','false');document.body.classList.remove('nav-lock');"
     "try{btn.focus()}catch(e){}}"
     "document.addEventListener('click',function(e){"
-    "var b=e.target.closest('[data-nav-toggle]');if(!b)return;"
     "var n=document.getElementById('hd-nav');if(!n)return;"
-    "var open=n.classList.toggle('is-open');"
+    "var b=e.target.closest('[data-nav-toggle]');"
+    "if(b){var open=n.classList.toggle('is-open');"
     "b.setAttribute('aria-expanded',open?'true':'false');"
     "document.body.classList.toggle('nav-lock',open);"
     "if(open){var a=n.querySelector('a');if(a)try{a.focus()}catch(err){}}"
+    "return}"
+    "if(n.classList.contains('is-open')&&!e.target.closest('.hd')){"
+    "close(n,document.querySelector('[data-nav-toggle]'));}"
     "});"
     "document.addEventListener('keydown',function(e){"
     "if(e.key!=='Escape')return;"
@@ -3537,7 +3543,7 @@ class ВидЛордс(Вид):
 <form class="hd__s" action="/search/" method="get" role="search">
 <label class="vh" for="q">Поиск по каталогу</label>
 <input id="q" name="q" placeholder="{html.escape(self.се["поиск"])}"{q_attr}>
-<button type="submit" aria-label="Найти">&#9906;</button></form>
+<button type="submit" aria-label="Найти"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></form>
 <button class="hd__menu" type="button" data-nav-toggle aria-controls="hd-nav"
  aria-expanded="false" aria-label="Меню разделов">&#9776;</button>
 <nav id="hd-nav" class="hd__nav" aria-label="Разделы">{нав}</nav>
