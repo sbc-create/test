@@ -1,0 +1,11 @@
+{
+  "B00_preflight": "DONE",
+  "B01_runtime_discovery": "DONE_NO_CREDENTIAL",
+  "B02_staging_contract": "DONE",
+  "B03_schema_v2": "DONE",
+  "B04_injection_prompt": "DONE",
+  "B05_pii_redaction": "DONE",
+  "B06_gold_corpus": "DONE",
+  "B07_real_canary": "BLOCKED_QWEN_RUNTIME_CONFIG",
+  "public_rollout": "NOT_AUTHORIZED"
+}

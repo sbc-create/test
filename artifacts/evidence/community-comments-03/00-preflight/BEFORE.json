@@ -1,0 +1,41 @@
+{
+  "stage": "COMMUNITY-COMMENTS-03-QWEN-STAGING-CANARY",
+  "checked_at": "2026-09-20T22:21:10Z",
+  "OWNER_AUTHORIZATION_ID": "COMMUNITY-COMMENTS-QWEN-STAGING-CANARY-20260920-01",
+  "worktree": "/home/claude/wt-community-comments-01",
+  "branch": "cursor/community-comments-01",
+  "expected_start_head": "cddb4659ef1028f776dcc12fe743582a358ca185",
+  "actual_start_head": "cddb4659ef1028f776dcc12fe743582a358ca185",
+  "ancestry_ok": true,
+  "worktree_clean": true,
+  "comments_flags": {
+    "COMMENTS_API_WRITE_ENABLED": 0,
+    "COMMENTS_PUBLICATION_ENABLED": 0,
+    "COMMENTS_SEO_RENDERING_ENABLED": 0,
+    "COMMENTS_QWEN_POSTMOD_ENABLED": 0,
+    "COMMENTS_QWEN_WORKER_ENABLED": 0,
+    "PRODUCTION_COMMENTS_INSERTED": 0
+  },
+  "RATINGS_PUBLIC_WRITE_ROLLOUT_BEFORE": 1,
+  "YUMMYANI_INDEXABILITY_BEFORE": "OPEN",
+  "YUMMYANI_INDEXABILITY_SOURCE": "artifacts/evidence/community-ratings-06/10-rollout-1pct/INDEXABILITY_AFTER.json",
+  "qwen_discover": {
+    "configured": false,
+    "endpoint_set": false,
+    "token_file_set": false,
+    "token_file_exists": false,
+    "mode": "unset",
+    "QWEN_PROVIDER_CONFIGURED": "NO"
+  },
+  "backup": {
+    "path": "artifacts/evidence/community-comments-03/backups/staging_canary.sqlite.bak",
+    "sha256": "5b06eec484665ee7cb44a51708c5a3528c8fa32e34e609e845994f2a4b209712",
+    "restore_rehearsal_ok": true
+  },
+  "caps": {
+    "REAL_QWEN_REQUEST_CAP": 50,
+    "REAL_QWEN_INPUT_TOKEN_CAP": 100000,
+    "REAL_QWEN_SPEND_CAP_RUB": 100,
+    "paid_retries_max": 2
+  }
+}

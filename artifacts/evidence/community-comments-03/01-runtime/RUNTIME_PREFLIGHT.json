@@ -1,0 +1,57 @@
+{
+  "OWNER_AUTHORIZATION_ID": "COMMUNITY-COMMENTS-QWEN-STAGING-CANARY-20260920-01",
+  "EXPECTED_CREDENTIAL_NAME": "qwen_comments_token",
+  "QWEN_PROVIDER_CONFIGURED": "NO",
+  "QWEN_CREDENTIAL_MODE": "UNSET",
+  "QWEN_ENDPOINT_HOST": "",
+  "QWEN_MODEL": "",
+  "timeout_sec": 20.0,
+  "checks": {
+    "https_endpoint": false,
+    "endpoint_host_present": false,
+    "credential_exists": false,
+    "credential_permissions_ok": false,
+    "model_set": false,
+    "timeout_set": true,
+    "timeout_le_20": true,
+    "request_cap_set": true,
+    "token_cap_set": true,
+    "spend_cap_set": true,
+    "production_publication_off": true,
+    "production_postmod_off": true,
+    "seo_rendering_off": true,
+    "mode_http_post": false
+  },
+  "credential": {
+    "credential_exists": false,
+    "credential_source_type": "systemd_LoadCredential_or_token_file",
+    "credential_name": "qwen_comments_token",
+    "credential_path_set": false,
+    "credential_permission_status": "MISSING",
+    "mode_octal": null,
+    "readable_by_process": false
+  },
+  "discover": {
+    "configured": false,
+    "endpoint_set": false,
+    "token_file_set": false,
+    "token_file_exists": false,
+    "mode": "unset"
+  },
+  "caps": {
+    "REAL_QWEN_REQUEST_CAP": 50,
+    "REAL_QWEN_INPUT_TOKEN_CAP": 100000,
+    "REAL_QWEN_SPEND_CAP_RUB": 100.0,
+    "PAID_RETRIES_MAX": 2,
+    "REAL_QWEN_REQUESTS": 0,
+    "REAL_QWEN_LOGICAL_TASKS": 0,
+    "REAL_QWEN_RETRIES": 0,
+    "REAL_QWEN_INPUT_TOKENS": 0,
+    "REAL_QWEN_OUTPUT_TOKENS": 0,
+    "REAL_QWEN_ACTUAL_SPEND_RUB": 0.0,
+    "REQUEST_CAP_REMAINING": 50,
+    "DUPLICATE_PROVIDER_CALLS": 0
+  },
+  "READY_FOR_REAL_CANARY": false,
+  "BLOCKED_REASON": "missing_or_incomplete_qwen_runtime_config"
+}

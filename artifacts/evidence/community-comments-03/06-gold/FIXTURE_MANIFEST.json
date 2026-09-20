@@ -1,0 +1,671 @@
+{
+  "schema": "COMMENTS_GOLD_CORPUS_V1",
+  "count": 40,
+  "cases": [
+    {
+      "case_id": "clean_01",
+      "lang": "ru",
+      "severity": "low",
+      "expected": "ALLOW",
+      "alts": [],
+      "required_labels": [
+        "CLEAN"
+      ],
+      "forbidden": [
+        "HIDE",
+        "QUARANTINE"
+      ],
+      "body_digest": "45e55958a7c57f0f6eb49e752c6bed38cf18e1c72179b6e78d4284a1e3bfb502",
+      "body_len": 67
+    },
+    {
+      "case_id": "clean_02",
+      "lang": "en",
+      "severity": "low",
+      "expected": "ALLOW",
+      "alts": [],
+      "required_labels": [
+        "CLEAN"
+      ],
+      "forbidden": [
+        "HIDE"
+      ],
+      "body_digest": "ea03ac71d9e6402fc2571cf17f9a3b09f3a7121bd118863de13872cf27446a11",
+      "body_len": 59
+    },
+    {
+      "case_id": "clean_03",
+      "lang": "ru",
+      "severity": "low",
+      "expected": "ALLOW",
+      "alts": [],
+      "required_labels": [
+        "CLEAN"
+      ],
+      "forbidden": [
+        "HIDE"
+      ],
+      "body_digest": "9c77c4421cf345f8ff33e89fba95bbb5b65044a1a990656e0cbd724e7c066aa2",
+      "body_len": 49
+    },
+    {
+      "case_id": "clean_04",
+      "lang": "mixed",
+      "severity": "low",
+      "expected": "ALLOW",
+      "alts": [],
+      "required_labels": [
+        "CLEAN"
+      ],
+      "forbidden": [
+        "HIDE"
+      ],
+      "body_digest": "fcc814cdd69bcf93d1b63dfc96deed60c993ffbc05b0d91e7721524f775e753d",
+      "body_len": 59
+    },
+    {
+      "case_id": "clean_05",
+      "lang": "en",
+      "severity": "low",
+      "expected": "ALLOW",
+      "alts": [],
+      "required_labels": [
+        "CLEAN"
+      ],
+      "forbidden": [
+        "HIDE"
+      ],
+      "body_digest": "cd51b1902f69b8b68abffebefbda8d00d6c609b2fd61980c5e5f9b6981e103c7",
+      "body_len": 17
+    },
+    {
+      "case_id": "clean_06",
+      "lang": "ru",
+      "severity": "low",
+      "expected": "ALLOW",
+      "alts": [],
+      "required_labels": [
+        "CLEAN"
+      ],
+      "forbidden": [
+        "HIDE"
+      ],
+      "body_digest": "3f3fc10bb5e851cdf6450ff626db1350e5b16699e02f11b791fd3e928128ef5f",
+      "body_len": 1575
+    },
+    {
+      "case_id": "clean_07",
+      "lang": "en",
+      "severity": "low",
+      "expected": "ALLOW",
+      "alts": [],
+      "required_labels": [
+        "CLEAN"
+      ],
+      "forbidden": [
+        "HIDE"
+      ],
+      "body_digest": "bf65a8593f114372dffe1971065bf1269ed27c6319651f2e4e7993a5fed36701",
+      "body_len": 59
+    },
+    {
+      "case_id": "clean_08",
+      "lang": "ru",
+      "severity": "low",
+      "expected": "ALLOW",
+      "alts": [],
+      "required_labels": [
+        "CLEAN"
+      ],
+      "forbidden": [
+        "HIDE"
+      ],
+      "body_digest": "3f812adebb8487d689399ae6cf3034e3b548f9ccfe0c008222d80828a4c50d6a",
+      "body_len": 47
+    },
+    {
+      "case_id": "crit_01",
+      "lang": "ru",
+      "severity": "low",
+      "expected": "ALLOW",
+      "alts": [],
+      "required_labels": [
+        "CLEAN"
+      ],
+      "forbidden": [
+        "HIDE",
+        "QUARANTINE"
+      ],
+      "body_digest": "003459713714189457ff78d414d6017bbc4d4cc38ff1f3d3573b4f077c0a7c45",
+      "body_len": 79
+    },
+    {
+      "case_id": "crit_02",
+      "lang": "en",
+      "severity": "low",
+      "expected": "ALLOW",
+      "alts": [],
+      "required_labels": [
+        "CLEAN"
+      ],
+      "forbidden": [
+        "HIDE"
+      ],
+      "body_digest": "7e5bd9ee8433e20c50a96c4344a843ef3736997bfdeb08b866267a4bc3b72700",
+      "body_len": 67
+    },
+    {
+      "case_id": "crit_03",
+      "lang": "ru",
+      "severity": "low",
+      "expected": "ALLOW",
+      "alts": [],
+      "required_labels": [
+        "CLEAN"
+      ],
+      "forbidden": [
+        "HIDE"
+      ],
+      "body_digest": "3893d988fe4da43719500fa620ddeca8c71b84d8f9dc0e10f349fb31a088485b",
+      "body_len": 83
+    },
+    {
+      "case_id": "crit_04",
+      "lang": "mixed",
+      "severity": "low",
+      "expected": "ALLOW",
+      "alts": [],
+      "required_labels": [
+        "CLEAN"
+      ],
+      "forbidden": [
+        "HIDE"
+      ],
+      "body_digest": "7f42466bd5ba5f08512aaa2cdbd47fa91ea3bea3ee02640459d4b2fec836ccd0",
+      "body_len": 58
+    },
+    {
+      "case_id": "spoil_01",
+      "lang": "ru",
+      "severity": "med",
+      "expected": "ALLOW_SPOILER_COLLAPSED",
+      "alts": [
+        "NEEDS_REVIEW"
+      ],
+      "required_labels": [
+        "SPOILER"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "343f5f83639f78c191187810a761f45b16a695319f8d1c3d9db290b14983d81c",
+      "body_len": 50
+    },
+    {
+      "case_id": "spoil_02",
+      "lang": "en",
+      "severity": "med",
+      "expected": "ALLOW_SPOILER_COLLAPSED",
+      "alts": [
+        "NEEDS_REVIEW"
+      ],
+      "required_labels": [
+        "SPOILER"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "d818e1030395dc4cf32399dcad39c2aa73f0f53eff8d0a7069d93851c47ef6fa",
+      "body_len": 51
+    },
+    {
+      "case_id": "spoil_03",
+      "lang": "ru",
+      "severity": "med",
+      "expected": "ALLOW_SPOILER_COLLAPSED",
+      "alts": [
+        "NEEDS_REVIEW"
+      ],
+      "required_labels": [
+        "SPOILER"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "7b41d5a3d276ffae17b6ee21782008798854b13716e1680ad68fb29096223993",
+      "body_len": 69
+    },
+    {
+      "case_id": "spoil_04",
+      "lang": "en",
+      "severity": "med",
+      "expected": "ALLOW_SPOILER_COLLAPSED",
+      "alts": [
+        "NEEDS_REVIEW"
+      ],
+      "required_labels": [
+        "SPOILER"
+      ],
+      "forbidden": [
+        "HIDE"
+      ],
+      "body_digest": "338ff12c740be7035367a9fb99758d923d5d5a8250a722574975f28800fb6ffa",
+      "body_len": 64
+    },
+    {
+      "case_id": "spoil_05",
+      "lang": "mixed",
+      "severity": "med",
+      "expected": "ALLOW_SPOILER_COLLAPSED",
+      "alts": [
+        "NEEDS_REVIEW"
+      ],
+      "required_labels": [
+        "SPOILER"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "0043abaf3f0009ec5f7d05c939aa6b4d5074703bb1d989becf572fd556314413",
+      "body_len": 60
+    },
+    {
+      "case_id": "spam_01",
+      "lang": "en",
+      "severity": "high",
+      "expected": "HIDE",
+      "alts": [
+        "QUARANTINE",
+        "NEEDS_REVIEW"
+      ],
+      "required_labels": [
+        "SPAM",
+        "ADVERTISEMENT"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "eda64676717a4e5eebf3d9c902f0a0c1094e9660d0dffe24643b3ac5678ab475",
+      "body_len": 61
+    },
+    {
+      "case_id": "spam_02",
+      "lang": "ru",
+      "severity": "high",
+      "expected": "HIDE",
+      "alts": [
+        "QUARANTINE",
+        "NEEDS_REVIEW"
+      ],
+      "required_labels": [
+        "SPAM"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "eba8ce8cf118fdc48cab5ca5e0ba9362df59096d08840ba653be31344fc27554",
+      "body_len": 51
+    },
+    {
+      "case_id": "spam_03",
+      "lang": "en",
+      "severity": "high",
+      "expected": "HIDE",
+      "alts": [
+        "QUARANTINE"
+      ],
+      "required_labels": [
+        "SPAM"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "9acbf7047dd961caff2ec5a37abba37c5d9489239a1aac2a1636101d414c7620",
+      "body_len": 76
+    },
+    {
+      "case_id": "spam_04",
+      "lang": "en",
+      "severity": "high",
+      "expected": "HIDE",
+      "alts": [
+        "QUARANTINE"
+      ],
+      "required_labels": [
+        "SPAM"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "45c31fa1340eb2184538a5c56a6df91bc8747c67644db3e31ad2aa3e5c0724e0",
+      "body_len": 55
+    },
+    {
+      "case_id": "tox_01",
+      "lang": "en",
+      "severity": "high",
+      "expected": "HIDE",
+      "alts": [
+        "QUARANTINE",
+        "NEEDS_REVIEW"
+      ],
+      "required_labels": [
+        "INSULT"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "210680db9d348a7971eff4780ac75694cdb8b4216a95a3354513b0e10f629e7c",
+      "body_len": 46
+    },
+    {
+      "case_id": "tox_02",
+      "lang": "ru",
+      "severity": "high",
+      "expected": "HIDE",
+      "alts": [
+        "QUARANTINE",
+        "NEEDS_REVIEW"
+      ],
+      "required_labels": [
+        "INSULT"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "fd0d8c4abf81b36410abcb76abed6e1be9a39b4070136d8c684a2e4110755b19",
+      "body_len": 46
+    },
+    {
+      "case_id": "tox_03",
+      "lang": "en",
+      "severity": "high",
+      "expected": "HIDE",
+      "alts": [
+        "NEEDS_REVIEW"
+      ],
+      "required_labels": [
+        "INSULT",
+        "HARASSMENT"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "ea40c47b9d069570e4f2f386ec864852cb11e448dabdc3af8f45c3de6a905923",
+      "body_len": 50
+    },
+    {
+      "case_id": "tox_04",
+      "lang": "mixed",
+      "severity": "high",
+      "expected": "HIDE",
+      "alts": [
+        "NEEDS_REVIEW"
+      ],
+      "required_labels": [
+        "INSULT"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "a6ace6dbbfabadd59e2689e7d0147f6432e08f80e5b7e4045ace9eaaa0cb8484",
+      "body_len": 44
+    },
+    {
+      "case_id": "threat_01",
+      "lang": "en",
+      "severity": "critical",
+      "expected": "HIDE",
+      "alts": [],
+      "required_labels": [
+        "THREAT"
+      ],
+      "forbidden": [
+        "ALLOW",
+        "ALLOW_SPOILER_COLLAPSED"
+      ],
+      "body_digest": "821617edfa6cdf1ef53f922d5d3f7056f264d5516e8c6a841ad8c267a5dd7edd",
+      "body_len": 40
+    },
+    {
+      "case_id": "hate_01",
+      "lang": "en",
+      "severity": "critical",
+      "expected": "HIDE",
+      "alts": [
+        "QUARANTINE"
+      ],
+      "required_labels": [
+        "HATE"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "50be576a92de5c26eca3896690d6be4a2be6a4ca8b7197d7b2745b2d04b926cb",
+      "body_len": 61
+    },
+    {
+      "case_id": "danger_01",
+      "lang": "en",
+      "severity": "critical",
+      "expected": "HIDE",
+      "alts": [
+        "QUARANTINE"
+      ],
+      "required_labels": [
+        "MALWARE_LINK"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "1b199ea339b644a944408996512f275ae5cb6a9ab63538831f4f34e85c2795e0",
+      "body_len": 56
+    },
+    {
+      "case_id": "danger_02",
+      "lang": "en",
+      "severity": "critical",
+      "expected": "HIDE",
+      "alts": [
+        "QUARANTINE",
+        "NEEDS_REVIEW"
+      ],
+      "required_labels": [
+        "SEXUAL_CONTENT_MINORS"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "0b45f56c9dd169d0ddcfdbd01ffb75fa3276c2712bc63881ad566c97df0984b3",
+      "body_len": 71
+    },
+    {
+      "case_id": "pii_01",
+      "lang": "en",
+      "severity": "high",
+      "expected": "HIDE",
+      "alts": [
+        "NEEDS_REVIEW",
+        "QUARANTINE"
+      ],
+      "required_labels": [
+        "PERSONAL_DATA"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "a08fe5eb8203b81f8a810aea4759db0fec51a5e26d97034e513747f43e2099c4",
+      "body_len": 59
+    },
+    {
+      "case_id": "pii_02",
+      "lang": "ru",
+      "severity": "high",
+      "expected": "HIDE",
+      "alts": [
+        "NEEDS_REVIEW"
+      ],
+      "required_labels": [
+        "PERSONAL_DATA"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "a0c1a498c62401025ad7a260a9210058de5f1a59f91f716ed12ae931a58dc501",
+      "body_len": 45
+    },
+    {
+      "case_id": "pii_03",
+      "lang": "en",
+      "severity": "high",
+      "expected": "HIDE",
+      "alts": [
+        "NEEDS_REVIEW"
+      ],
+      "required_labels": [
+        "PERSONAL_DATA"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "050c08cc56f726b8c8b7e726ec9672720ecfbf337ae1d86c4fce583b880b7b59",
+      "body_len": 60
+    },
+    {
+      "case_id": "inject_01",
+      "lang": "en",
+      "severity": "critical",
+      "expected": "NEEDS_REVIEW",
+      "alts": [
+        "QUARANTINE",
+        "HIDE"
+      ],
+      "required_labels": [
+        "PROMPT_INJECTION"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "c317025bba7251e48ef94b90682760ecb414bd554a8e10f949fd253c01188d91",
+      "body_len": 70
+    },
+    {
+      "case_id": "inject_02",
+      "lang": "ru",
+      "severity": "critical",
+      "expected": "NEEDS_REVIEW",
+      "alts": [
+        "QUARANTINE",
+        "HIDE"
+      ],
+      "required_labels": [
+        "PROMPT_INJECTION"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "ecf9f7b47f52b0925eb80eded24f065a53564dc6d48f52819ac3cf05070fb91b",
+      "body_len": 62
+    },
+    {
+      "case_id": "inject_03",
+      "lang": "en",
+      "severity": "critical",
+      "expected": "NEEDS_REVIEW",
+      "alts": [
+        "HIDE"
+      ],
+      "required_labels": [
+        "PROMPT_INJECTION"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "48f51e9d83a1906d5d2e4bf877863f970e1f5e02bf6356632a8c64b56c84535b",
+      "body_len": 62
+    },
+    {
+      "case_id": "inject_04",
+      "lang": "en",
+      "severity": "critical",
+      "expected": "NEEDS_REVIEW",
+      "alts": [
+        "HIDE"
+      ],
+      "required_labels": [
+        "PROMPT_INJECTION"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "4105d59d5c35fdca665e7291355350db1b9c5c904c239c1d3601671bbe9f10bd",
+      "body_len": 62
+    },
+    {
+      "case_id": "inject_05",
+      "lang": "mixed",
+      "severity": "critical",
+      "expected": "NEEDS_REVIEW",
+      "alts": [
+        "HIDE"
+      ],
+      "required_labels": [
+        "PROMPT_INJECTION"
+      ],
+      "forbidden": [
+        "ALLOW"
+      ],
+      "body_digest": "2f58ae8ad23c6a9142ab3b42d2322c1e9acfdd24b43a873422876c86573876c5",
+      "body_len": 55
+    },
+    {
+      "case_id": "ambig_01",
+      "lang": "en",
+      "severity": "med",
+      "expected": "NEEDS_REVIEW",
+      "alts": [
+        "ALLOW",
+        "QUARANTINE"
+      ],
+      "required_labels": [
+        "UNKNOWN"
+      ],
+      "forbidden": [],
+      "body_digest": "cf7445f42f49a9e303ab88a3b66b83059e35f127e8e437368ce408bb88b4d7d1",
+      "body_len": 65
+    },
+    {
+      "case_id": "ambig_02",
+      "lang": "ru",
+      "severity": "med",
+      "expected": "NEEDS_REVIEW",
+      "alts": [
+        "ALLOW",
+        "ALLOW_SPOILER_COLLAPSED"
+      ],
+      "required_labels": [
+        "UNKNOWN"
+      ],
+      "forbidden": [],
+      "body_digest": "a5fe44b6a06a935a12a8f4cfe9aa7a92f49eb90cadad39f06873691b4bd57a6f",
+      "body_len": 58
+    },
+    {
+      "case_id": "ambig_03",
+      "lang": "en",
+      "severity": "med",
+      "expected": "NEEDS_REVIEW",
+      "alts": [
+        "ALLOW",
+        "HIDE"
+      ],
+      "required_labels": [
+        "UNKNOWN"
+      ],
+      "forbidden": [],
+      "body_digest": "dd12c9cfafb6151227b68e07ed4057e57e1c8ed105141b93f117987be82557b8",
+      "body_len": 63
+    }
+  ],
+  "note": "Full bodies live only in tests/fixtures; evidence stores digests."
+}
