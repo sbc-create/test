@@ -1,0 +1,112 @@
+{
+  "at_utc": "2026-09-20T14:03:13.463224+00:00",
+  "codes": [
+    "ssha",
+    "yaponiya",
+    "velikobritaniya",
+    "franciya",
+    "kanada",
+    "germaniya",
+    "indiya",
+    "yuzhnayakoreya"
+  ],
+  "rows": [
+    {
+      "code": "ssha",
+      "status": 200,
+      "shown": 17789,
+      "title_links": 48,
+      "unique": 48,
+      "selected": true,
+      "n_redir": 0,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "code": "yaponiya",
+      "status": 200,
+      "shown": 4104,
+      "title_links": 48,
+      "unique": 48,
+      "selected": true,
+      "n_redir": 0,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "code": "velikobritaniya",
+      "status": 200,
+      "shown": 4092,
+      "title_links": 48,
+      "unique": 48,
+      "selected": true,
+      "n_redir": 0,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "code": "franciya",
+      "status": 200,
+      "shown": 3010,
+      "title_links": 48,
+      "unique": 48,
+      "selected": true,
+      "n_redir": 0,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "code": "kanada",
+      "status": 200,
+      "shown": 2922,
+      "title_links": 48,
+      "unique": 48,
+      "selected": true,
+      "n_redir": 0,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "code": "germaniya",
+      "status": 200,
+      "shown": 1789,
+      "title_links": 48,
+      "unique": 48,
+      "selected": true,
+      "n_redir": 0,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "code": "indiya",
+      "status": 200,
+      "shown": 1729,
+      "title_links": 48,
+      "unique": 48,
+      "selected": true,
+      "n_redir": 0,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "code": "yuzhnayakoreya",
+      "status": 200,
+      "shown": 1494,
+      "title_links": 48,
+      "unique": 48,
+      "selected": true,
+      "n_redir": 0,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    }
+  ],
+  "COUNTRY_ROUTES_TESTED": 9,
+  "COUNTRY_ROUTE_FAILURES": 0,
+  "all_selected": true,
+  "all_have_titles": true,
+  "uk_cyr_308": true,
+  "uk_final": "https://lordserial33.biz/country/velikobritaniya/",
+  "uk_status_after": 200,
+  "build": "20260920T101032Z-f0b253d-nova",
+  "sha": "4990ea9f8ee6451d86bfad8efa5d5e7592f7eb42a0137ce81b3eeb2078fc6023"
+}

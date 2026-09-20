@@ -1,0 +1,199 @@
+{
+  "at_utc": "2026-09-20T14:00:11.699827+00:00",
+  "B03_card_contract_source": {
+    "aspect_ratio_2_3": true,
+    "object_fit_cover": true,
+    "title_clamp_2": true,
+    "fixed_caption_66": true,
+    "grid_2_3_4_6": true,
+    "placeholder_none": true,
+    "rating_guard_no_fake_zero": true,
+    "full_bleed_contract": true
+  },
+  "B03_profile_renders": {
+    "lords-general": {
+      "status": 200,
+      "card_count": 7,
+      "title_links": 7,
+      "unique_title_links": 7,
+      "duplicate_ids": 0,
+      "missing_poster_placeholders": 10,
+      "fake_zero_ratings": 0,
+      "data_design": "lords-sheet",
+      "has_grid": true,
+      "compact_filter": true
+    },
+    "lords-new": {
+      "status": 200,
+      "card_count": 7,
+      "title_links": 7,
+      "unique_title_links": 7,
+      "duplicate_ids": 0,
+      "missing_poster_placeholders": 10,
+      "fake_zero_ratings": 0,
+      "data_design": "lords-sheet",
+      "has_grid": true,
+      "compact_filter": true
+    },
+    "lords-curated": {
+      "status": 200,
+      "card_count": 7,
+      "title_links": 7,
+      "unique_title_links": 7,
+      "duplicate_ids": 0,
+      "missing_poster_placeholders": 10,
+      "fake_zero_ratings": 0,
+      "data_design": "lords-sheet",
+      "has_grid": true,
+      "compact_filter": true
+    }
+  },
+  "B03_STATUS": "PASS_LOCAL",
+  "B04_popular": {
+    "week": "2026-W38",
+    "digest": "90ea32dbd8f44901c9d2f6ea39e58471",
+    "same_week_digest_match": true,
+    "order1": [
+      "p0",
+      "p1",
+      "p2",
+      "p3",
+      "p4"
+    ],
+    "order3": [
+      "p0",
+      "p1",
+      "p2",
+      "p3",
+      "p4"
+    ],
+    "request_time_recomputes": 0,
+    "membership_changes_within_week": 0
+  },
+  "B04_STATUS": "PASS_LOCAL",
+  "B06_routes": [
+    {
+      "path": "/",
+      "status": 200,
+      "soft_404_suspect": false,
+      "len": 26682,
+      "has_5xx_text": false
+    },
+    {
+      "path": "/catalog/",
+      "status": 200,
+      "soft_404_suspect": false,
+      "len": 27311,
+      "has_5xx_text": false
+    },
+    {
+      "path": "/movies/",
+      "status": 200,
+      "soft_404_suspect": false,
+      "len": 26039,
+      "has_5xx_text": false
+    },
+    {
+      "path": "/series/",
+      "status": 200,
+      "soft_404_suspect": false,
+      "len": 24878,
+      "has_5xx_text": false
+    },
+    {
+      "path": "/animation/",
+      "status": 200,
+      "soft_404_suspect": false,
+      "len": 24335,
+      "has_5xx_text": false
+    },
+    {
+      "path": "/new/",
+      "status": 200,
+      "soft_404_suspect": false,
+      "len": 25909,
+      "has_5xx_text": false
+    },
+    {
+      "path": "/collections/",
+      "status": 200,
+      "soft_404_suspect": false,
+      "len": 23161,
+      "has_5xx_text": false
+    },
+    {
+      "path": "/search/?q=Title",
+      "status": 200,
+      "soft_404_suspect": false,
+      "len": 25273,
+      "has_5xx_text": false
+    },
+    {
+      "path": "/genre/drama/",
+      "status": 200,
+      "soft_404_suspect": false,
+      "len": 27498,
+      "has_5xx_text": false
+    },
+    {
+      "path": "/year/2024/",
+      "status": 200,
+      "soft_404_suspect": false,
+      "len": 24610,
+      "has_5xx_text": false
+    },
+    {
+      "path": "/country/ssha/",
+      "status": 200,
+      "soft_404_suspect": false,
+      "len": 27502,
+      "has_5xx_text": false
+    },
+    {
+      "path": "/country/%D0%A1%D0%A8%D0%90/",
+      "status": 308,
+      "soft_404_suspect": false,
+      "len": 0,
+      "has_5xx_text": false
+    },
+    {
+      "path": "/title/t0/",
+      "status": 200,
+      "soft_404_suspect": false,
+      "len": 26393,
+      "has_5xx_text": false
+    },
+    {
+      "path": "/title/does-not-exist-xyz/",
+      "status": 404,
+      "soft_404_suspect": false,
+      "len": 22491,
+      "has_5xx_text": false
+    },
+    {
+      "path": "/catalog/?page=2",
+      "status": 200,
+      "soft_404_suspect": false,
+      "len": 27311,
+      "has_5xx_text": false
+    },
+    {
+      "path": "/catalog/?year=notayear",
+      "status": 200,
+      "soft_404_suspect": false,
+      "len": 24280,
+      "has_5xx_text": false
+    },
+    {
+      "path": "/movies/?year=2024&sort=rating",
+      "status": 200,
+      "soft_404_suspect": false,
+      "len": 24371,
+      "has_5xx_text": false
+    }
+  ],
+  "B06_nonexistent_is_http_404": true,
+  "B06_STATUS": "PASS_LOCAL",
+  "B02_compact_in_all_profiles": true,
+  "B02_STATUS": "PASS_LOCAL"
+}

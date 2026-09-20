@@ -1,0 +1,51 @@
+{
+ "action": "install",
+ "site": "lords-03",
+ "unit": "nova-lords-03.service",
+ "domain": "1lordserials1.online",
+ "rollback_point": "/srv/lords/.frontend/.rollback/20260920T140507Z-lords-03",
+ "artifact_sha256": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+ "previous_artifact_sha256": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+ "disk_sha_before_write": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+ "manifest": {
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "source_commit": "24c54b6affbdc912d8766ba794f280837f922329",
+  "build_id": "20260920T140520Z-24c54b6-nova",
+  "artifact_sha256": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+  "profile": "lords-curated",
+  "built_at": "2026-09-20T14:05:07Z",
+  "source_dirty": false,
+  "domain": "1lordserials1.online",
+  "player_layout_contract": "full-bleed-v1"
+ },
+ "previous_manifest": {
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "source_commit": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee",
+  "build_id": "20260910T124530Z-a1691c56-nova",
+  "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+  "profile": "lords-curated",
+  "built_at": "2026-09-10T12:45:30Z"
+ },
+ "restart_ok": null,
+ "restart_deferred": true,
+ "restart_output": "deferred: --no-restart; owner must restart unit",
+ "health": {
+  "ok": null,
+  "note": "not probed; process still stale until restart"
+ },
+ "proven_chain": {
+  "nginx_config": "/etc/nginx/lords/lords-03.conf",
+  "upstream_port": 9112,
+  "unit": "nova-lords-03.service",
+  "executable": "/srv/lords/.frontend/lords-frontend.py",
+  "manifest_path": "/srv/lords/.frontend/template-manifest-lords-03.json",
+  "verdict": "MISMATCH"
+ },
+ "at_utc": "20260920T140507Z",
+ "verdict": "STAGED_AWAITING_OWNER_RESTART",
+ "player_layout_contract": "full-bleed-v1"
+}

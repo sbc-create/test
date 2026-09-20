@@ -1,0 +1,231 @@
+{
+  "at_utc": "2026-09-20T14:03:59.983892+00:00",
+  "checks": [
+    {
+      "viewport": "desktop",
+      "w": 1440,
+      "h": 900,
+      "path": "/catalog/?year=2016&genre=komediya&sort=rating",
+      "pageOverflowX": 0,
+      "compact": true,
+      "filtBox": {
+        "w": 1064,
+        "h": 95,
+        "top": 278
+      },
+      "filtOverflow": 0,
+      "yearButtons": 4,
+      "player": null,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "viewport": "desktop",
+      "w": 1440,
+      "h": 900,
+      "path": "/series/?year=2016",
+      "pageOverflowX": 0,
+      "compact": true,
+      "filtBox": {
+        "w": 1064,
+        "h": 95,
+        "top": 278
+      },
+      "filtOverflow": 0,
+      "yearButtons": 4,
+      "player": null,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "viewport": "desktop",
+      "w": 1440,
+      "h": 900,
+      "path": "/title/plennica-6/",
+      "pageOverflowX": 0,
+      "compact": false,
+      "filtBox": null,
+      "filtOverflow": 0,
+      "yearButtons": 0,
+      "player": {
+        "state": "active",
+        "contract": "full-bleed-v1",
+        "w": 1064,
+        "h": 599,
+        "instances": 1,
+        "fillW": 1,
+        "fillH": 1,
+        "overflowX": 0
+      },
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "viewport": "desktop",
+      "w": 1440,
+      "h": 900,
+      "path": "/title/plennica-6/season-1/episode-1/",
+      "pageOverflowX": 0,
+      "compact": false,
+      "filtBox": null,
+      "filtOverflow": 0,
+      "yearButtons": 0,
+      "player": {
+        "state": "active",
+        "contract": "full-bleed-v1",
+        "w": 1064,
+        "h": 599,
+        "instances": 1,
+        "fillW": 1,
+        "fillH": 1,
+        "overflowX": 0
+      },
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "viewport": "tablet",
+      "w": 768,
+      "h": 1024,
+      "path": "/catalog/?year=2016&genre=komediya&sort=rating",
+      "pageOverflowX": 0,
+      "compact": true,
+      "filtBox": {
+        "w": 732,
+        "h": 139,
+        "top": 160
+      },
+      "filtOverflow": 0,
+      "yearButtons": 4,
+      "player": null,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "viewport": "tablet",
+      "w": 768,
+      "h": 1024,
+      "path": "/series/?year=2016",
+      "pageOverflowX": 0,
+      "compact": true,
+      "filtBox": {
+        "w": 732,
+        "h": 139,
+        "top": 160
+      },
+      "filtOverflow": 0,
+      "yearButtons": 4,
+      "player": null,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "viewport": "tablet",
+      "w": 768,
+      "h": 1024,
+      "path": "/title/plennica-6/",
+      "pageOverflowX": 0,
+      "compact": false,
+      "filtBox": null,
+      "filtOverflow": 0,
+      "yearButtons": 0,
+      "player": {
+        "state": "active",
+        "contract": "full-bleed-v1",
+        "w": 732,
+        "h": 412,
+        "instances": 1,
+        "fillW": 1,
+        "fillH": 1,
+        "overflowX": 0
+      },
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "viewport": "tablet",
+      "w": 768,
+      "h": 1024,
+      "path": "/title/plennica-6/season-1/episode-1/",
+      "pageOverflowX": 0,
+      "compact": false,
+      "filtBox": null,
+      "filtOverflow": 0,
+      "yearButtons": 0,
+      "player": {
+        "state": "active",
+        "contract": "full-bleed-v1",
+        "w": 732,
+        "h": 412,
+        "instances": 1,
+        "fillW": 1,
+        "fillH": 1,
+        "overflowX": 0
+      },
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "viewport": "mobile",
+      "w": 390,
+      "h": 844,
+      "path": "/catalog/?year=2016&genre=komediya&sort=rating",
+      "pageOverflowX": 0,
+      "compact": true,
+      "filtBox": {
+        "w": 354,
+        "h": 233,
+        "top": 160
+      },
+      "filtOverflow": 0,
+      "yearButtons": 4,
+      "player": null,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "viewport": "mobile",
+      "w": 390,
+      "h": 844,
+      "path": "/series/?year=2016",
+      "pageOverflowX": 0,
+      "compact": true,
+      "filtBox": {
+        "w": 354,
+        "h": 201,
+        "top": 160
+      },
+      "filtOverflow": 0,
+      "yearButtons": 4,
+      "player": null,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "viewport": "mobile",
+      "w": 390,
+      "h": 844,
+      "path": "/title/plennica-6/",
+      "pageOverflowX": 0,
+      "compact": false,
+      "filtBox": null,
+      "filtOverflow": 0,
+      "yearButtons": 0,
+      "player": null,
+      "build": null
+    },
+    {
+      "viewport": "mobile",
+      "w": 390,
+      "h": 844,
+      "path": "/title/plennica-6/season-1/episode-1/",
+      "pageOverflowX": 0,
+      "compact": false,
+      "filtBox": null,
+      "filtOverflow": 0,
+      "yearButtons": 0,
+      "player": null,
+      "build": null
+    }
+  ],
+  "summary": {
+    "PAGE_HORIZONTAL_OVERFLOW_GT1": 0,
+    "FILTER_COMPACT_MISSING": 0,
+    "FILTER_YEAR_BUTTON_WALL": 0,
+    "FILTER_FILT_OVERFLOW": 0,
+    "PLAYER_INSTANCE_MAX": 1,
+    "PLAYER_CONTRACT_OK": true,
+    "PLAYER_AUTOPLAY": 0,
+    "max_filt_height": 233
+  }
+}

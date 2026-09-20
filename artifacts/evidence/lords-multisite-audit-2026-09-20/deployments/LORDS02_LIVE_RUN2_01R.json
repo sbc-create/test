@@ -1,0 +1,333 @@
+{
+  "run": 2,
+  "at_utc": "2026-09-20T14:02:26.522644+00:00",
+  "build": "20260920T101032Z-f0b253d-nova",
+  "sha": "4990ea9f8ee6451d86bfad8efa5d5e7592f7eb42a0137ce81b3eeb2078fc6023",
+  "robots": "noindex, nofollow",
+  "country_rows": [],
+  "uk": {
+    "cyrillic": {
+      "url": "https://lordserial33.biz/country/%D0%B2%D0%B5%D0%BB%D0%B8%D0%BA%D0%BE%D0%B1%D1%80%D0%B8%D1%82%D0%B0%D0%BD%D0%B8%D1%8F/",
+      "status": 200,
+      "final": "https://lordserial33.biz/country/velikobritaniya/",
+      "redirects": [
+        {
+          "from": "https://lordserial33.biz/country/%D0%B2%D0%B5%D0%BB%D0%B8%D0%BA%D0%BE%D0%B1%D1%80%D0%B8%D1%82%D0%B0%D0%BD%D0%B8%D1%8F/",
+          "to": "https://lordserial33.biz/country/velikobritaniya/",
+          "status": 308
+        }
+      ],
+      "shown": 4092,
+      "title_links": 48,
+      "soft404": false
+    },
+    "latin": {
+      "url": "https://lordserial33.biz/country/velikobritaniya/",
+      "status": 200,
+      "final": "https://lordserial33.biz/country/velikobritaniya/",
+      "redirects": [],
+      "shown": 4092,
+      "title_links": 48,
+      "soft404": false
+    }
+  },
+  "COUNTRY_ROUTES_TESTED": 2,
+  "COUNTRY_ROUTE_FAILURES": 0,
+  "uk_cyr_one_redirect": true,
+  "uk_latin_200": true,
+  "comedy_shown": 14913,
+  "series_2016_status": 200,
+  "series_2016_5xx": false,
+  "popular": {
+    "p1": {
+      "week": "2026-W38",
+      "digest": "05400b9712dbb632303af1a43e0ebd8d",
+      "ids": [
+        "/title/svinorez/",
+        "/title/kadaknath/",
+        "/title/bezdna/",
+        "/title/sheri-lyubov-moya/",
+        "/title/bez-prava-na-strah/",
+        "/title/plasticheskaya-krasota/",
+        "/title/imperiya-artura/",
+        "/title/delo-ob-ubiystve-lakshmikantana/",
+        "/title/littl-lorreyn/",
+        "/title/ubiyca-vnutri/"
+      ],
+      "build": "20260920T101032Z-f0b253d-nova",
+      "sha": "4990ea9f8ee6451d86bfad8efa5d5e7592f7eb42a0137ce81b3eeb2078fc6023"
+    },
+    "p2": {
+      "week": "2026-W38",
+      "digest": "05400b9712dbb632303af1a43e0ebd8d",
+      "ids": [
+        "/title/svinorez/",
+        "/title/kadaknath/",
+        "/title/bezdna/",
+        "/title/sheri-lyubov-moya/",
+        "/title/bez-prava-na-strah/",
+        "/title/plasticheskaya-krasota/",
+        "/title/imperiya-artura/",
+        "/title/delo-ob-ubiystve-lakshmikantana/",
+        "/title/littl-lorreyn/",
+        "/title/ubiyca-vnutri/"
+      ],
+      "build": "20260920T101032Z-f0b253d-nova",
+      "sha": "4990ea9f8ee6451d86bfad8efa5d5e7592f7eb42a0137ce81b3eeb2078fc6023"
+    },
+    "digest_stable": true
+  },
+  "cards": {
+    "ids": 48,
+    "unique": 48,
+    "dup": 0,
+    "placeholders_in_grid": 48,
+    "broken_sample_24": 0
+  },
+  "routes": [
+    {
+      "path": "/",
+      "status": 200,
+      "final": "https://lordserial33.biz/",
+      "n_redir": 0,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/catalog/",
+      "status": 200,
+      "final": "https://lordserial33.biz/catalog/",
+      "n_redir": 0,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/movies/",
+      "status": 200,
+      "final": "https://lordserial33.biz/movies/",
+      "n_redir": 0,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/series/",
+      "status": 200,
+      "final": "https://lordserial33.biz/series/",
+      "n_redir": 0,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/animation/",
+      "status": 200,
+      "final": "https://lordserial33.biz/animation/",
+      "n_redir": 0,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/new/",
+      "status": 200,
+      "final": "https://lordserial33.biz/new/",
+      "n_redir": 0,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/collections/",
+      "status": 200,
+      "final": "https://lordserial33.biz/collections/",
+      "n_redir": 0,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/search/?q=test",
+      "status": 200,
+      "final": "https://lordserial33.biz/search/?q=test",
+      "n_redir": 0,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/genre/komediya/",
+      "status": 200,
+      "final": "https://lordserial33.biz/genre/komediya/",
+      "n_redir": 0,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/year/2016/",
+      "status": 200,
+      "final": "https://lordserial33.biz/year/2016/",
+      "n_redir": 0,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/country/velikobritaniya/",
+      "status": 200,
+      "final": "https://lordserial33.biz/country/velikobritaniya/",
+      "n_redir": 0,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/title/__no_such_title_zzz__/",
+      "status": 404,
+      "final": "https://lordserial33.biz/title/__no_such_title_zzz__/",
+      "n_redir": 0,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": null
+    },
+    {
+      "path": "/films/",
+      "status": 200,
+      "final": "https://lordserial33.biz/movies/",
+      "n_redir": 1,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/cartoons/",
+      "status": 200,
+      "final": "https://lordserial33.biz/animation/",
+      "n_redir": 1,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/catalog/?page=2",
+      "status": 200,
+      "final": "https://lordserial33.biz/catalog/?page=2",
+      "n_redir": 0,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/movies/?year=2016&sort=title",
+      "status": 200,
+      "final": "https://lordserial33.biz/movies/?year=2016&sort=title",
+      "n_redir": 0,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/series/?year=2016",
+      "status": 200,
+      "final": "https://lordserial33.biz/series/?year=2016",
+      "n_redir": 0,
+      "soft404": false,
+      "5xx": false,
+      "timeout": false,
+      "loop": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    }
+  ],
+  "HTTP_5XX_COUNT": 0,
+  "TIMEOUT_COUNT": 0,
+  "REDIRECT_LOOP_COUNT": 0,
+  "SOFT_404_COUNT": 0,
+  "EXPECTED_404_OK": true,
+  "player": [
+    {
+      "path": "/title/plennica-6/",
+      "status": 200,
+      "series": true,
+      "full_bleed": true,
+      "state": "resolving",
+      "n_data_player": 1,
+      "autoplay": false,
+      "video_player": true
+    },
+    {
+      "path": "/title/plennica-6/season-1/episode-1/",
+      "status": 200,
+      "exact_episode": true,
+      "full_bleed": true,
+      "state": "resolving",
+      "episode_kept": true,
+      "n_data_player": 1,
+      "autoplay": false
+    },
+    {
+      "path": "/title/nash-vcherashniy-pobeg/",
+      "status": 200,
+      "series": true,
+      "full_bleed": true,
+      "state": "resolving",
+      "n_data_player": 1,
+      "autoplay": false,
+      "video_player": true
+    },
+    {
+      "path": "/title/nash-vcherashniy-pobeg/season-1/episode-1/",
+      "status": 200,
+      "exact_episode": true,
+      "full_bleed": true,
+      "state": "resolving",
+      "episode_kept": true,
+      "n_data_player": 1,
+      "autoplay": false
+    },
+    {
+      "path": "/title/nedetskie-igry-2/",
+      "status": 200,
+      "film": true,
+      "full_bleed": true,
+      "state": "resolving",
+      "n_data_player": 1,
+      "autoplay": false
+    }
+  ],
+  "FILTER_COMPACT_PASS": true
+}
