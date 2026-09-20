@@ -1182,6 +1182,13 @@ background:@ACC@;color:#fff;font-size:12px;font-weight:700;border:0}
 color:inherit;text-decoration:none;height:100%}
 .c:focus-visible{outline:2px solid @ACC@;outline-offset:2px}
 .c:hover .c__img{transform:scale(1.04)}
+/* Primary card variants — structural, not palette-only. */
+.c--episode{flex-direction:row;align-items:stretch;min-height:96px}
+.c--episode .c__p{aspect-ratio:16/10;width:42%;flex:0 0 42%}
+.c--episode .c__cap{height:auto;flex:1 1 auto;justify-content:center;text-align:left;padding:10px 12px}
+.c--editorial .c__p{aspect-ratio:16/9}
+.c--editorial .c__cap{height:auto;min-height:72px;text-align:left}
+.c--poster .c__p{aspect-ratio:2/3}
 .c__p{display:block;position:relative;aspect-ratio:2/3;overflow:hidden;background:#22272e;flex:0 0 auto}
 .c__img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;
 transition:transform .25s}
@@ -2197,7 +2204,9 @@ def _подставить(шаблон: str, токены: dict) -> str:
     "lords": {
         "вид": "lords",
         "токены": ЛОРДС_ТОКЕНЫ,
-        "стиль": lambda: _общее(ЛОРДС_ТОКЕНЫ) + _подставить(ЛОРДС_СТИЛЬ, ЛОРДС_ТОКЕНЫ),
+        "стиль": lambda: (
+            (lambda т: _общее(т) + _подставить(ЛОРДС_СТИЛЬ, т))(_лорды_токены_для_дизайна())
+        ),
         "нав": [("/movies/", "Фильмы"), ("/series/", "Сериалы"),
                 ("/new/", "Новинки"),
                 ("/collections/", "Подборки"),
@@ -3721,12 +3730,19 @@ class ВидЛордс(Вид):
             добавлено = (
                 f'<time class="c__added" datetime="{html.escape(dt)}">'
                 f"добавлен {html.escape(показ)}</time>")
-        return (f'<a class="c" href="{запись["url"]}" '
+        return (f'<a class="{html.escape(self._класс_карточки())}" href="{запись["url"]}" '
                 f'aria-label="{html.escape(запись["title"])}">'
                 f'<span class="c__p">{изо}{значок}</span>'
                 f'<span class="c__cap"><span class="c__t">{html.escape(запись["title"])}</span>'
                 f"{год}{добавлено}</span>"
                 f"{полоса}</a>")
+
+    def _класс_карточки(self) -> str:
+        if ДИЗАЙН_ID == "lords-series-feed-v2":
+            return "c c--episode"
+        if ДИЗАЙН_ID == "lords-curated-v2":
+            return "c c--editorial"
+        return "c c--poster"
 
     def сетка(self, набор, класс="grid", *, показать_добавлено: bool = False) -> str:
         return (f'<div class="{класс}">'
