@@ -420,6 +420,18 @@ def _склонение(n: int, one: str, few: str, many: str) -> str:
     return f"{n} {form}"
 
 
+def _ld_json_scripts(разметка) -> str:
+    """Emit one <script type=application/ld+json> per JSON string.
+
+    `разметка` may be a single JSON string or a list of them (title + breadcrumb).
+    """
+    if not разметка:
+        return ""
+    items = разметка if isinstance(разметка, (list, tuple)) else [разметка]
+    return "".join(
+        f'<script type="application/ld+json">{р}</script>' for р in items if р)
+
+
 def разметка_оценок(деталь: dict, класс: str = "rbs", пусто: bool = True) -> str:
     """Компонент оценок. Один на все семейства, вид задаёт CSS семейства.
 
@@ -1850,10 +1862,13 @@ align-items:stretch;justify-content:start}
 @media(min-width:1280px){.zg{grid-template-columns:repeat(auto-fit,minmax(164px,var(--z-card-max)))}}
 @media(min-width:1680px){.zg{grid-template-columns:repeat(auto-fit,minmax(168px,var(--z-card-max)))}}
 .zg--related{display:grid;gap:var(--z-gap);
-grid-template-columns:repeat(auto-fit,minmax(158px,var(--z-card-max)));
+grid-template-columns:repeat(2,minmax(0,1fr));
 overflow:visible;justify-content:start}
-@media(min-width:768px){.zg--related{grid-template-columns:repeat(auto-fit,minmax(140px,var(--z-card-max)))}}
-@media(min-width:1280px){.zg--related{grid-template-columns:repeat(auto-fit,minmax(164px,var(--z-card-max)))}}
+@media(min-width:600px){.zg--related{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:768px){.zg--related{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(min-width:1280px){.zg--related{grid-template-columns:repeat(8,minmax(0,1fr))}}
+.zg--related.zg--related-compact{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.zg--related.zg--related-compact{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}}
 .zt{display:flex;flex-direction:column;height:100%;min-width:0;max-width:var(--z-card-max);
 background:@SURF@;border:1px solid @LINE@;border-radius:6px;overflow:hidden;
 transition:border-color .16s,transform .16s;color:inherit;text-decoration:none}
@@ -2031,7 +2046,8 @@ border:1px dashed @LINE@;border-radius:8px;background:@ALT@;margin:0 auto}
 /* Хаб подборок: карточка коллекции, а не ещё одна сетка тайтлов. */
 .zhub{display:grid;gap:12px;margin:14px 0;grid-template-columns:1fr}
 @media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:1000px){.zhub{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1000px){.zhub{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:1440px){.zhub{grid-template-columns:repeat(4,1fr)}}
 .zhub__c{display:block;padding:12px;border:1px solid @LINE@;border-radius:8px;
 background:@SURF@;color:inherit;text-decoration:none}
 .zhub__c:hover{border-color:@ACC@}
@@ -2054,9 +2070,15 @@ font-size:14px;font-weight:600;box-sizing:border-box;min-width:0}
 pointer-events:none}
 .zeps a[aria-current]{background:@ACCDK@;color:#fff;border-color:@ACCDK@;opacity:1;
 pointer-events:auto}
-.zepnav{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
-.zepnav a{background:@SURF@;border:1px solid @LINE@;border-radius:6px;
+.zsea__tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.zsea__tabs button,.zsea__tabs a{background:@SURF@;border:1px solid @LINE@;border-radius:6px;
+padding:8px 14px;font-size:13.5px;font-weight:600;color:@DIM@;cursor:pointer}
+.zsea__tabs button[aria-current],.zsea__tabs a[aria-current]{background:@ACCDK@;color:#fff;
+border-color:@ACCDK@}
+.zepnav{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0;align-items:center}
+.zepnav a,.zepnav span{background:@SURF@;border:1px solid @LINE@;border-radius:6px;
 padding:9px 14px;font-size:13.5px;color:@ACC@;font-weight:600}
+.zepnav span{color:@DIM@;border-style:dashed}
 
 /* Плеер: единый 16:9 stage; компакт только для честных unavailable/error. */
 .zpl{margin:12px auto 22px;width:100%;max-width:1200px}
@@ -3462,7 +3484,12 @@ class Вид:
         return self.п.get(slug)
 
     def похожие(self, запись: dict, деталь: dict, сколько: int = 12) -> list:
-        """Same kind required; then genre overlap, country, year proximity, rating."""
+        """Same kind required; then genre overlap, country, year proximity, rating.
+
+        After score order: stable-sort so playable titles precede non-playable
+        (policy playable_preferred_with_explicit_nonplayable_state_v1). Caller
+        records the policy via a data attribute on the related section.
+        """
         текущий = запись["slug"]
         kind = запись.get("kind")
         жанры = set(деталь.get("genre_codes") or [])
@@ -3490,6 +3517,9 @@ class Вид:
             scored.append((overlap, country_hit, year_prox, r2, сосед.get("_n") or "",
                            сосед["slug"], сосед))
         scored.sort(key=lambda t: (t[0], t[1], t[2], t[3], t[4], t[5]), reverse=True)
+        # Stable: playable first, preserve score order within each group.
+        scored.sort(key=lambda t: 0 if (self.п.get(t[6]["slug"]) or {}).get("playable") is True
+                    else 1)
         return [t[6] for t in scored[:сколько]]
 
     # --- разметка ----------------------------------------------------
@@ -3907,13 +3937,12 @@ class ВидЛордс(Вид):
     кл_состояния = "pl__state"
 
     def оболочка(self, тело: str, титул: str, путь: str, *, актив: str = "",
-                 описание: str = "", разметка: str = "", код: int = 200,
+                 описание: str = "", разметка: str | list = "", код: int = 200,
                  крошки: str = "", og: dict | None = None) -> str:
         нав = "".join(
             f'<a href="{закодировать_запрос(u)}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
             for u, t in self.се["нав"])
-        схемы = "".join(f'<script type="application/ld+json">{р}</script>'
-                        for р in ([разметка] if разметка else []))
+        схемы = _ld_json_scripts(разметка)
         описание_мета = (f'<meta name="description" content="{html.escape(описание)}">'
                          if описание else "")
         канон = (f'<link rel="canonical" href="{html.escape(self.канон(путь))}">'
@@ -4423,7 +4452,7 @@ class ВидЗона(Вид):
     кл_состояния = "zpl__s"
 
     def оболочка(self, тело: str, титул: str, путь: str, *, актив: str = "",
-                 описание: str = "", разметка: str = "", код: int = 200,
+                 описание: str = "", разметка: str | list = "", код: int = 200,
                  сверху: str = "", крошки: str = "", og: dict | None = None) -> str:
         нав = "".join(
             f'<a href="{закодировать_запрос(u)}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
@@ -4431,8 +4460,7 @@ class ВидЗона(Вид):
         жанры = "".join(
             f'<a href="/catalog/?genre={html.escape(код_жанра)}">{html.escape(имя)}</a>'
             for код_жанра, имя in self.индекс["genre_names"][:14])
-        схемы = "".join(f'<script type="application/ld+json">{р}</script>'
-                        for р in ([разметка] if разметка else []))
+        схемы = _ld_json_scripts(разметка)
         описание_мета = (f'<meta name="description" content="{html.escape(описание)}">'
                          if описание else "")
         канон = (f'<link rel="canonical" href="{html.escape(self.канон(путь))}">'
@@ -4571,7 +4599,8 @@ class ВидЗона(Вид):
 
     # --- составные части ---------------------------------------------
     def плитка(self, запись: dict, *, freshness: bool = False,
-               fresh_mode: str = NEW_MODE_PREMIERE) -> str:
+               fresh_mode: str = NEW_MODE_PREMIERE,
+               show_play: bool | None = None) -> str:
         деталь = self.деталь(запись["slug"]) or {}
         изо = заглушка_постера(запись, "zt__none", "zt__img")
         # Line 1: year · country (source-backed only).
@@ -4599,7 +4628,14 @@ class ВидЗона(Вид):
             части.append(f"<span>IMDb <i>{им}</i></span>")
         if not части:
             части.append('<span class="zt__r-empty" aria-hidden="true">&nbsp;</span>')
-        if деталь.get("playable") is True:
+        playable = деталь.get("playable") is True
+        if show_play is False:
+            show_badge = False
+        elif show_play is True:
+            show_badge = playable
+        else:
+            show_badge = playable
+        if show_badge:
             части.append('<span class="zt__play" title="Есть видео">▶</span>')
         оценка = f'<span class="zt__r">{"".join(части)}</span>'
         заголовок = запись["title"] or ""
@@ -5032,6 +5068,9 @@ class ВидЗона(Вид):
         были верны — ломалась только раскладка. Поэтому здесь меняется разметка
         и ничего больше: те же данные, тот же порядок, та же пагинация.
         """
+        # Page size stays 60: collection_contract.разрешить defaults to 60 and
+        # the shared handler does not pass НА_СТРАНИЦЕ_1_1; changing only the
+        # view would desync pager UI from the sliced items.
         на_странице = 60
         всего_страниц = max(1, (данные.total + на_странице - 1) // на_странице)
         листалка = ""
@@ -5043,8 +5082,11 @@ class ВидЗона(Вид):
                 for n in range(max(1, данные.page - 3),
                                min(всего_страниц, данные.page + 3) + 1))
             листалка = f'<nav class="zpg" aria-label="Страницы">{пункты}</nav>'
+        count_line = _склонение(int(данные.total or 0), "название", "названия", "названий")
+        звенья = [("/", self.имя), ("/collections/", "Подборки"), ("", данные.title)]
         тело = (f'<div class="zwrap"><h1 class="zh">{html.escape(данные.title)}</h1>'
                 f'<p class="zsub">{html.escape(данные.description)} · '
+                f'{html.escape(count_line)} · '
                 f'страница {данные.page} из {всего_страниц}</p>'
                 + (self.плитки([к.raw for к in данные.items]) if данные.items else
                    f'<div class="zempty"><b>{html.escape(данные.title)}: пока пусто</b>'
@@ -5053,7 +5095,9 @@ class ВидЗона(Вид):
                 + листалка + "</div>")
         return self.оболочка(тело, f"{данные.title} — {self.имя}",
                              данные.canonical_path, актив="/collections/",
-                             описание=данные.description)
+                             описание=данные.description,
+                             крошки=self.крошки(звенья),
+                             разметка=self.schema_крошек(звенья))
 
     def хаб_коллекций(self) -> str:
         """Перечень коллекций со ссылками на их собственные страницы.
@@ -5131,20 +5175,25 @@ class ВидЗона(Вид):
             подпись_хаб = подписи_хаб.get(ключ_кол) or html.escape(
                 (коллекция.description or "").split(".")[0][:80]
                 or "Подборка")
-            # Never expose internal snapshot totals (e.g. "53524 записей").
+            total = getattr(коллекция, "total", None)
+            if total is None:
+                total = len(коллекция.items or [])
+            count_txt = _склонение(int(total), "название", "названия", "названий")
             карточки.append(
                 f'<a class="zhub__c" data-testid="collection-card" '
                 f'href="{html.escape(спец.canonical_path)}">'
                 f'<span class="zhub__g">{обложки}</span>'
                 f'<span class="zhub__t">{html.escape(коллекция.title)}</span>'
                 f'<span class="zhub__m">{подпись_хаб}</span>'
+                f'<span class="zhub__d">{html.escape(count_txt)}</span>'
                 f'</a>')
         if not карточки:
             return ('<div class="zempty"><b>Подборок пока нет</b>'
                     "<p>Ни одна коллекция контура не набрала записей в текущем снимке. "
                     "Наполнять их похожими тайтлами нельзя: подборка без источника — "
                     "это выдумка.</p></div>")
-        return f'<div class="zhub" data-testid="collection-grid">{"".join(карточки)}</div>'
+        return (f'<div class="zhub" data-testid="collection-grid" '
+                f'data-hub-count="{len(карточки)}">{"".join(карточки)}</div>')
 
     def список(self, разд: str, зпр: dict) -> str:
         имена = {
@@ -5157,11 +5206,20 @@ class ВидЗона(Вид):
         }
         титул = имена.get(разд, "Каталог")
         if разд == "/collections":
+            хаб = self.хаб_коллекций()
+            m_count = re.search(r'data-hub-count="(\d+)"', хаб)
+            hub_n = int(m_count.group(1)) if m_count else 0
+            if hub_n:
+                sub = (f'<p class="zsub">Тематические подборки · '
+                       f'{html.escape(_склонение(hub_n, "подборка", "подборки", "подборок"))}'
+                       f'.</p>')
+            else:
+                sub = '<p class="zsub">Тематические подборки.</p>'
             тело = (f'<div class="zwrap" data-testid="page-container">'
                     f'<h1 class="zh" data-testid="catalog-heading" id="catalog-h1">'
                     f'{html.escape(титул)}</h1>'
-                    f'<p class="zsub">Тематические подборки.</p>'
-                    + self.хаб_коллекций() + "</div>")
+                    f'{sub}'
+                    + хаб + "</div>")
             return self.оболочка(тело, f"{титул} — {self.имя}", "/collections/",
                                  актив="/collections/",
                                  описание=f"Подборки витрины {self.имя}.")
@@ -5445,35 +5503,62 @@ class ВидЗона(Вид):
                              сверху="")
 
     def поиск(self, зпр: dict) -> str:
-        q = (зпр.get("q") or [""])[0]
-        найдено = self.д.искать(q) if q.strip() else []
+        q_raw = (зпр.get("q") or [""])[0]
+        q_stripped = q_raw.strip()
+        truncated = len(q_stripped) > 120
+        q = q_stripped[:120]
         q_attr = html.escape(q, quote=True)
-        if not q.strip():
+        if not q_stripped:
             тело = ('<h1 class="zh">Поиск</h1><p class="zsub">Введите название — '
                     "поиск идёт по русскому и оригинальному написанию.</p>"
                     '<div class="zempty"><b>Запрос пуст</b>'
                     "<p>Наберите название в строке сверху. Слова «сезон» и «серия» "
                     "в запросе поиску не мешают. "
                     '<a href="/catalog/">Открыть каталог целиком</a></p></div>')
-        elif найдено:
+            html_page = self.оболочка(
+                f'<div class="zwrap">{тело}</div>',
+                f"Поиск — {self.имя}", "/search/", актив="")
+            return html_page
+
+        найдено = self.д.искать(q)
+        raw_page = (зпр.get("page") or ["1"])[0]
+        try:
+            стр = int(raw_page or 1)
+        except (TypeError, ValueError):
+            return self.не_найдено(f"/search/?q={q_attr}&page={html.escape(str(raw_page))}")
+        if стр < 1:
+            return self.не_найдено(f"/search/?q={q_attr}&page={стр}")
+
+        clamp_note = ('<p class="zsub">Запрос обрезан до 120 символов.</p>'
+                      if truncated else "")
+        if not найдено:
             тело = (f'<h1 class="zh">Результаты поиска: «{html.escape(q)}»</h1>'
-                    f'<p class="zsub">Совпадений: {len(найдено)}</p>' + self.плитки(найдено))
-        else:
-            тело = (f'<h1 class="zh">Результаты поиска: «{html.escape(q)}»</h1>'
+                    f'{clamp_note}'
                     '<div class="zempty"><b>Совпадений нет</b>'
                     f"<p>По запросу «{html.escape(q)}» ничего не нашлось. "
                     "Проверьте написание. "
                     '<a href="/catalog/">Открыть весь каталог</a></p></div>')
+            канон = f"/search/?q={q_attr}"
+        else:
+            всего_страниц = max(1, (len(найдено) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1)
+            if стр > всего_страниц:
+                return self.не_найдено(f"/search/?q={q_attr}&page={стр}")
+            кусок = найдено[(стр - 1) * НА_СТРАНИЦЕ_1_1: стр * НА_СТРАНИЦЕ_1_1]
+            листалка = self.листалка("/search", {"q": q}, стр, всего_страниц)
+            тело = (f'<h1 class="zh">Результаты поиска: «{html.escape(q)}»</h1>'
+                    f'{clamp_note}'
+                    f'<p class="zsub">Совпадений: {len(найдено)}</p>'
+                    + self.плитки(кусок) + листалка)
+            канон = (f"/search/?q={q_attr}" if стр <= 1
+                     else f"/search/?q={q_attr}&page={стр}")
+
         html_page = self.оболочка(
             f'<div class="zwrap">{тело}</div>',
-            f"Поиск — {self.имя}",
-            f"/search/?q={q_attr}" if q.strip() else "/search/",
-            актив="")
-        if q.strip():
-            html_page = html_page.replace(
-                'id="q" name="q" placeholder=',
-                f'id="q" name="q" value="{q_attr}" placeholder=',
-                1)
+            f"Поиск — {self.имя}", канон, актив="")
+        html_page = html_page.replace(
+            'id="q" name="q" placeholder=',
+            f'id="q" name="q" value="{q_attr}" placeholder=',
+            1)
         return html_page
 
     def тайтл(self, запись: dict, деталь: dict) -> str:
@@ -5482,7 +5567,7 @@ class ВидЗона(Вид):
         сезоны = список_серий(деталь)
         сериал = bool(сезоны) or запись.get("kind") == "Сериал"
         звенья = [("/", self.имя),
-                  ("/series/", "Сериалы") if сериал else ("/movies/", "Кино"),
+                  ("/series/", "Сериалы") if сериал else ("/movies/", "Фильмы"),
                   ("", имя)]
         изо = заглушка_постера(запись, "zt__none", "zhead__img", 260, 390)
         полное = (деталь.get("description") or "").strip()
@@ -5491,20 +5576,34 @@ class ВидЗона(Вид):
         оригинал_html = (f'<p class="ztitle__o">{html.escape(оригинал)}</p>'
                          if оригинал and оригинал != имя else "")
         # Center column: distinct short OR full with clamp+expand (once; no post-player copy).
+        # Expand only when full text is long enough that clamp would overflow (~320).
         if краткое_поле and краткое_поле != полное:
             описание_html = f'<p class="ztitle__desc">{html.escape(краткое_поле)}</p>'
-            if полное:
+            if полное and len(полное) > 320:
                 описание_html += (
                     f'<div class="ztitle__desc ztitle__desc--clamp" id="synopsis" hidden>'
                     f'{html.escape(полное)}</div>'
                     '<button type="button" class="ztitle__more" data-expand-plot '
                     'aria-controls="synopsis">Развернуть</button>')
+            elif полное:
+                описание_html += (
+                    f'<div class="ztitle__desc" id="synopsis" hidden>'
+                    f'{html.escape(полное)}</div>')
         elif полное:
-            описание_html = (
-                f'<div class="ztitle__desc ztitle__desc--clamp" id="synopsis">'
-                f'{html.escape(полное)}</div>'
-                '<button type="button" class="ztitle__more" data-expand-plot '
-                'aria-controls="synopsis" aria-expanded="false">Развернуть</button>')
+            if len(полное) > 320:
+                описание_html = (
+                    f'<div class="ztitle__desc ztitle__desc--clamp" id="synopsis">'
+                    f'{html.escape(полное)}</div>'
+                    '<button type="button" class="ztitle__more" data-expand-plot '
+                    'aria-controls="synopsis" aria-expanded="false">Развернуть</button>')
+            elif len(полное) < 160:
+                описание_html = (
+                    f'<div class="ztitle__desc" id="synopsis">'
+                    f'{html.escape(полное)}</div>')
+            else:
+                описание_html = (
+                    f'<div class="ztitle__desc ztitle__desc--clamp" id="synopsis">'
+                    f'{html.escape(полное)}</div>')
         else:
             описание_html = ""
         оценки_html = разметка_оценок(деталь, "rbs")
@@ -5577,7 +5676,11 @@ class ВидЗона(Вид):
                    f'aria-hidden="{"false" if ads_on else "true"}"></div>') if ads_on else ""
         сезон_старт, эпизод_старт = выбрать_доступную_серию(деталь) if сезоны else (1, None)
         код, внутри = разметка_плеера(self, запись, деталь, сезон_старт, эпизод_старт)
-        плеер = (f'<section class="zpl" id="watch"><div class="zpl__h"><h2>Смотреть</h2>'
+        player_contract = (os.environ.get("PLAYER_CONTRACT_ID")
+                           or "cdnvideohub-player-v1")
+        плеер = (f'<section class="zpl" id="watch" '
+                 f'data-player-contract="{html.escape(player_contract)}">'
+                 f'<div class="zpl__h"><h2>Смотреть</h2>'
                  f"<span>{html.escape(_подпись_плеера(код))}</span></div>"
                  f'<div class="zpl__f" data-player data-state="{код}">{внутри}</div>'
                  f"{_скрипты_плеера(код)}</section>")
@@ -5586,11 +5689,14 @@ class ВидЗона(Вид):
                       if сериал else "")
         похожие = self.похожие(запись, деталь, сколько=12)
         if похожие:
+            compact = " zg--related-compact" if len(похожие) < 4 else ""
             блок_похожих = (
-                f'<div class="zwrap"><section class="zsec" data-testid="related-grid">'
+                f'<div class="zwrap"><section class="zsec" data-testid="related-grid" '
+                f'data-rec-policy="playable_preferred_with_explicit_nonplayable_state_v1">'
                 f'<div class="zsec__h"><h2>Смотрите также</h2></div>'
-                f'<div class="zg zg--related">'
-                f'{"".join(self.плитка(з) for з in похожие)}</div></section></div>')
+                f'<div class="zg zg--related{compact}">'
+                f'{"".join(self.плитка(з, show_play=False) for з in похожие)}'
+                f'</div></section></div>')
         else:
             блок_похожих = ""
         expand_js = ""
@@ -5609,7 +5715,10 @@ class ВидЗона(Вид):
             f'{описание_html}'
             f'<a class="ztitle__cta" href="#watch">Смотреть</a>{ad_slot}</div>'
             f'</div></div>{плеер}{блок_серий}{блок_похожих}{expand_js}')
-        разметка = self.schema_тайтла(запись, деталь, путь)
+        разметка = [
+            self.schema_тайтла(запись, деталь, путь),
+            self.schema_крошек(звенья),
+        ]
         meta_desc = (краткое_поле or полное or "").strip()
         краткое = (meta_desc[:180] if meta_desc else
                    f"{имя}: {запись.get('kind') or ''} {запись.get('year') or ''}".strip())
@@ -5629,8 +5738,8 @@ class ВидЗона(Вид):
                     '<div class="zempty"><b>Состав сезонов не передан</b>'
                     "<p>Источник по этой записи ещё не отдал список серий. "
                     "Как только отдаст, он появится здесь.</p></div>")
-        блоки = []
-        for сезон in сезоны:
+
+        def panel(сезон: dict) -> str:
             ячейки = []
             for н in сезон["номера"]:
                 доступна = н <= сезон["avail"]
@@ -5651,19 +5760,52 @@ class ВидЗона(Вид):
                         f'aria-label="{html.escape(label)}">{н}</span>')
             хвост = ("" if сезон["avail"] >= сезон["eps"]
                      else f", доступно {сезон['avail']}")
-            блоки.append(
-                f'<section class="zsea"><div class="zsea__h">'
+            return (
+                f'<section class="zsea" data-zsea-panel="{сезон["n"]}">'
+                f'<div class="zsea__h">'
                 f'<b>Сезон {сезон["n"]}</b><span>· '
                 f'{_склонение(сезон["eps"], "серия", "серии", "серий")}{хвост}</span></div>'
                 f'<div class="zeps">{"".join(ячейки)}</div></section>')
-        return f'<h2 class="zh zh--sm">Серии</h2>{_склеить(блоки)}'
+
+        if len(сезоны) == 1:
+            return f'<h2 class="zh zh--sm">Серии</h2>{panel(сезоны[0])}'
+
+        # Default panel: season containing current episode, else first.
+        default_n = сезоны[0]["n"]
+        if текущий:
+            for с in сезоны:
+                if с["n"] == текущий[0]:
+                    default_n = с["n"]
+                    break
+        tabs = []
+        panels = []
+        for с in сезоны:
+            cur = ' aria-current="true"' if с["n"] == default_n else ""
+            tabs.append(
+                f'<button type="button" data-zsea-tab="{с["n"]}"{cur}>'
+                f'Сезон {с["n"]}</button>')
+            hidden = "" if с["n"] == default_n else " hidden"
+            p = panel(с).replace(
+                f'data-zsea-panel="{с["n"]}"',
+                f'data-zsea-panel="{с["n"]}"{hidden}', 1)
+            panels.append(p)
+        js = (
+            '<script>(function(){document.querySelectorAll("[data-zsea-tab]").forEach(function(b){'
+            'b.addEventListener("click",function(){var k=b.getAttribute("data-zsea-tab");'
+            'document.querySelectorAll("[data-zsea-tab]").forEach(function(x){x.removeAttribute("aria-current");});'
+            'b.setAttribute("aria-current","true");'
+            'document.querySelectorAll("[data-zsea-panel]").forEach(function(p){'
+            'p.hidden=p.getAttribute("data-zsea-panel")!==k;});});});})();</script>')
+        return (f'<h2 class="zh zh--sm">Серии</h2>'
+                f'<div class="zsea__tabs" data-testid="season-tabs" role="tablist">'
+                f'{"".join(tabs)}</div>{"".join(panels)}{js}')
 
     def сезон(self, запись: dict, деталь: dict, номер: int) -> str:
         имя = запись["title"]
         путь = self.адрес_сезона(запись["slug"], номер)
         только = [с for с in список_серий(деталь) if с["n"] == номер]
         заголовок = f"{имя} — сезон {номер}"
-        звенья = [("/", self.имя), ("/catalog/?kind=Сериал", "Сериалы"),
+        звенья = [("/", self.имя), ("/series/", "Сериалы"),
                   (f"/title/{запись['slug']}/", имя), ("", f"Сезон {номер}")]
         серий = только[0]["eps"] if только else 0
         тело = (f'<div class="zwrap"><h1 class="zh">{html.escape(заголовок)}</h1>'
@@ -5683,29 +5825,95 @@ class ВидЗона(Вид):
         имя = запись["title"]
         путь = self.адрес_эпизода(запись["slug"], сезон, эпизод)
         заголовок = f"{имя} — {сезон} сезон, {эпизод} серия"
-        звенья = [("/", self.имя), ("/catalog/?kind=Сериал", "Сериалы"),
-                  (f"/title/{запись['slug']}/", имя), ("", f"Сезон {сезон}, серия {эпизод}")]
+        звенья = [("/", self.имя), ("/series/", "Сериалы"),
+                  (f"/title/{запись['slug']}/", имя),
+                  ("", f"Сезон {сезон}, серия {эпизод}")]
+        player_contract = (os.environ.get("PLAYER_CONTRACT_ID")
+                           or "cdnvideohub-player-v1")
         код, внутри = разметка_плеера(self, запись, деталь, сезон, эпизод)
-        плеер = (f'<section class="zpl"><div class="zpl__h"><h2>Смотреть серию</h2>'
+        плеер = (f'<section class="zpl" id="watch" '
+                 f'data-player-contract="{html.escape(player_contract)}">'
+                 f'<div class="zpl__h"><h2>Смотреть серию</h2>'
                  f"<span>{html.escape(_подпись_плеера(код))}</span></div>"
                  f'<div class="zpl__f" data-player data-state="{код}">{внутри}</div>'
                  f"{_скрипты_плеера(код)}</section>")
         пред, след = границы_серии(деталь, сезон, эпизод)
+        list_href = self.адрес_сезона(запись["slug"], сезон)
         переход = ('<div class="zwrap"><nav class="zepnav" aria-label="Соседние серии">'
-                   + (f'<a href="{self.адрес_эпизода(запись["slug"], *пред)}" rel="prev">← Сезон '
-                      f"{пред[0]}, серия {пред[1]}</a>" if пред else
+                   + (f'<a href="{self.адрес_эпизода(запись["slug"], *пред)}" rel="prev">'
+                      f'← Предыдущая</a>' if пред else
                       "<span>Это первая серия</span>")
-                   + (f'<a href="{self.адрес_эпизода(запись["slug"], *след)}" rel="next">Сезон '
-                      f"{след[0]}, серия {след[1]} →</a>" if след else
+                   + f'<a href="{list_href}">К списку</a>'
+                   + (f'<a href="{self.адрес_эпизода(запись["slug"], *след)}" rel="next">'
+                      f'Следующая →</a>' if след else
                       "<span>Это последняя серия</span>")
                    + "</nav></div>")
+        # Episode facts: only source-backed fields on the episode object.
+        facts_html = ""
+        ep_obj = None
+        for с in (деталь.get("seasons") or []):
+            if int(с.get("n") or 0) != сезон:
+                continue
+            for эп in (с.get("episodes") or []):
+                if not isinstance(эп, dict):
+                    continue
+                num = эп.get("number") if эп.get("number") is not None else эп.get("n")
+                try:
+                    if int(num) == эпизод:
+                        ep_obj = эп
+                        break
+                except (TypeError, ValueError):
+                    continue
+            break
+        if ep_obj:
+            rows = []
+            if ep_obj.get("title"):
+                rows.append(("Название", html.escape(str(ep_obj["title"]))))
+            air = ep_obj.get("air_date") or ep_obj.get("premiere_date")
+            if air:
+                d = _дата(str(air))
+                if d:
+                    rows.append(("Дата выхода", html.escape(d)))
+            dur = ep_obj.get("duration")
+            if dur:
+                dlabel = _длительность(dur)
+                if dlabel:
+                    rows.append(("Длительность", html.escape(dlabel)))
+            if rows:
+                facts_html = (
+                    '<div class="zwrap"><dl class="ztitle__facts" '
+                    'data-testid="episode-facts">'
+                    + "".join(f"<div><dt>{html.escape(м)}</dt><dd>{з}</dd></div>"
+                              for м, з in rows)
+                    + "</dl></div>")
+        parent = (
+            f'<div class="zwrap"><a class="zr" href="/title/{запись["slug"]}/">'
+            f'<span class="zr__t">{html.escape(имя)}</span>'
+            f'<span class="zr__m">Сезон {сезон}</span></a></div>')
         сезоны = список_серий(деталь)
-        шапка = (f'<div class="zwrap"><h1 class="zh">{html.escape(заголовок)}</h1>'
-                 f'<p class="zsub">Всего в произведении {sum(с["eps"] for с in сезоны) or "?"} '
-                 f'серий · <a href="/title/{запись["slug"]}/">вернуться к описанию</a></p></div>')
-        тело = (шапка + плеер + переход
-                + f'<div class="zwrap">{self._серии(запись, сезоны, текущий=(сезон, эпизод))}</div>')
-        разметка = self.schema_эпизода(запись, деталь, сезон, эпизод, путь)
+        шапка = (f'<div class="zwrap"><h1 class="zh zh--sm">{html.escape(заголовок)}</h1>'
+                 f'<p class="zsub">Сезон {сезон}, серия {эпизод} · '
+                 f'<a href="/title/{запись["slug"]}/">к описанию</a></p></div>')
+        блок_серий = (f'<div class="zwrap">'
+                      f'{self._серии(запись, сезоны, текущий=(сезон, эпизод))}</div>')
+        похожие = self.похожие(запись, деталь, сколько=12)
+        if похожие:
+            compact = " zg--related-compact" if len(похожие) < 4 else ""
+            блок_похожих = (
+                f'<div class="zwrap"><section class="zsec" data-testid="related-grid" '
+                f'data-rec-policy="playable_preferred_with_explicit_nonplayable_state_v1">'
+                f'<div class="zsec__h"><h2>Смотрите также</h2></div>'
+                f'<div class="zg zg--related{compact}">'
+                f'{"".join(self.плитка(з, show_play=False) for з in похожие)}'
+                f'</div></section></div>')
+        else:
+            блок_похожих = ""
+        тело = (шапка + плеер + переход + facts_html + parent
+                + блок_серий + блок_похожих)
+        разметка = [
+            self.schema_эпизода(запись, деталь, сезон, эпизод, путь),
+            self.schema_крошек(звенья),
+        ]
         return self.оболочка(
             тело, f"{заголовок} — {self.имя}", путь,
             описание=f"{заголовок}: смотреть онлайн на витрине {self.имя}.",
@@ -6069,14 +6277,13 @@ class ВидАнимедиа(ВидЗона):
 
     # --- каркас --------------------------------------------------------
     def оболочка(self, тело: str, титул: str, путь: str, *, актив: str = "",
-                 описание: str = "", разметка: str = "", код: int = 200,
+                 описание: str = "", разметка: str | list = "", код: int = 200,
                  сверху: str = "", крошки: str = "", og: dict | None = None) -> str:
         домен = _аниме_домен(self.хост)
         нав = "".join(
             f'<a href="{закодировать_запрос(u)}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
             for u, t in self.се["нав"])
-        схемы = "".join(f'<script type="application/ld+json">{р}</script>'
-                        for р in ([разметка] if разметка else []))
+        схемы = _ld_json_scripts(разметка)
         описание_мета = (f'<meta name="description" content="{html.escape(описание)}">'
                          if описание else "")
         канон = (f'<link rel="canonical" href="{html.escape(self.канон(путь))}">'
@@ -6720,7 +6927,9 @@ class Обработчик(BaseHTTPRequestHandler):
                 return self._отдать(в.хаб_подборок().encode("utf-8"))
             return self._отдать(в.список(обрезанный, зпр).encode("utf-8"))
         if обрезанный == "/search":
-            return self._отдать(в.поиск(зпр).encode("utf-8"))
+            тело = в.поиск(зпр)
+            код = 404 if 'class="znf"' in тело else 200
+            return self._отдать(тело.encode("utf-8"), код=код)
         коллекция = self.МАРШРУТ_КОЛЛЕКЦИИ.match(путь)
         if коллекция is not None:
             return self.маршрут_коллекции(в, коллекция.group("key"), путь, зпр)
