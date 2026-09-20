@@ -39,6 +39,11 @@ COMMENTS_OR_REACTIONS_AFFECT_RATING = 0
 # Soft-delete only; hard delete is never a normal moderation path
 COMMENTS_HARD_DELETE_ENABLED = 0
 
+# --- COMMUNITY-COMMENTS-02 Qwen postmod (default OFF — no production enable) ---
+COMMENTS_QWEN_POSTMOD_ENABLED = 0
+COMMENTS_ROLLOUT_PERCENT = 0
+COMMENTS_QWEN_WORKER_ENABLED = 0
+
 STATUS_PENDING = "PENDING"
 STATUS_PUBLISHED = "PUBLISHED"
 STATUS_QUARANTINED = "QUARANTINED"
@@ -94,6 +99,17 @@ def comments_dark_flags() -> dict[str, int]:
         "ADMIN_SILENT_TEXT_REWRITE": ADMIN_SILENT_TEXT_REWRITE,
         "COMMENTS_OR_REACTIONS_AFFECT_RATING": COMMENTS_OR_REACTIONS_AFFECT_RATING,
         "COMMENTS_HARD_DELETE_ENABLED": COMMENTS_HARD_DELETE_ENABLED,
+        # Postmod / worker stay OFF in production snapshot; staging tests use
+        # bypass_write_flag_for_tests / FakeQwenProvider, not these flags.
+        "COMMENTS_QWEN_POSTMOD_ENABLED": min(
+            _env_int("COMMENTS_QWEN_POSTMOD_ENABLED", COMMENTS_QWEN_POSTMOD_ENABLED), 0
+        ),
+        "COMMENTS_ROLLOUT_PERCENT": min(
+            _env_int("COMMENTS_ROLLOUT_PERCENT", COMMENTS_ROLLOUT_PERCENT), 0
+        ),
+        "COMMENTS_QWEN_WORKER_ENABLED": min(
+            _env_int("COMMENTS_QWEN_WORKER_ENABLED", COMMENTS_QWEN_WORKER_ENABLED), 0
+        ),
     }
 
 

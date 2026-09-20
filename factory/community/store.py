@@ -100,7 +100,13 @@ CREATE TABLE IF NOT EXISTS community_comments (
     discussion_space_id TEXT NOT NULL DEFAULT '',
     subject_id TEXT NOT NULL DEFAULT '',
     actor_id TEXT NOT NULL DEFAULT '',
-    updated_at TEXT NOT NULL DEFAULT ''
+    updated_at TEXT NOT NULL DEFAULT '',
+    moderation_status TEXT NOT NULL DEFAULT '',
+    body_digest TEXT NOT NULL DEFAULT '',
+    spoiler_collapsed INTEGER NOT NULL DEFAULT 0,
+    qwen_decision_json TEXT NOT NULL DEFAULT '',
+    last_moderation_at TEXT NOT NULL DEFAULT '',
+    content_type TEXT NOT NULL DEFAULT ''
 );
 CREATE INDEX IF NOT EXISTS idx_community_comments_space_title
     ON community_comments(site_space, title_id, created_at);
@@ -162,7 +168,11 @@ CREATE TABLE IF NOT EXISTS community_comment_moderation_events (
     detail TEXT NOT NULL DEFAULT '',
     prior_status TEXT NOT NULL DEFAULT '',
     new_status TEXT NOT NULL DEFAULT '',
-    created_at TEXT NOT NULL
+    created_at TEXT NOT NULL,
+    policy_version TEXT NOT NULL DEFAULT '',
+    model TEXT NOT NULL DEFAULT '',
+    prompt_digest TEXT NOT NULL DEFAULT '',
+    decision_json TEXT NOT NULL DEFAULT ''
 );
 CREATE INDEX IF NOT EXISTS idx_community_comment_mod_events
     ON community_comment_moderation_events(comment_id, created_at);
@@ -213,6 +223,59 @@ CREATE TABLE IF NOT EXISTS community_sanctions (
     created_at TEXT NOT NULL,
     expires_at TEXT NOT NULL DEFAULT ''
 );
+
+-- COMMUNITY-COMMENTS-02: Qwen postmod outbox (also exported as COMMENTS_OUTBOX_SQL)
+CREATE TABLE IF NOT EXISTS community_comment_moderation_jobs (
+    job_id TEXT PRIMARY KEY,
+    comment_id TEXT NOT NULL,
+    revision INTEGER NOT NULL DEFAULT 1,
+    idempotency_key TEXT NOT NULL UNIQUE,
+    status TEXT NOT NULL DEFAULT 'PENDING',
+    lease_owner TEXT NOT NULL DEFAULT '',
+    lease_until TEXT NOT NULL DEFAULT '',
+    attempts INTEGER NOT NULL DEFAULT 0,
+    next_attempt_at TEXT NOT NULL DEFAULT '',
+    last_error TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    result_json TEXT NOT NULL DEFAULT '{}'
+);
+CREATE INDEX IF NOT EXISTS idx_community_comment_mod_jobs_status
+    ON community_comment_moderation_jobs(status, next_attempt_at);
+CREATE INDEX IF NOT EXISTS idx_community_comment_mod_jobs_comment
+    ON community_comment_moderation_jobs(comment_id, revision);
+
+CREATE TABLE IF NOT EXISTS community_comment_kill_switch_audit (
+    audit_id TEXT PRIMARY KEY,
+    action TEXT NOT NULL,
+    capabilities_json TEXT NOT NULL DEFAULT '{}',
+    actor TEXT NOT NULL DEFAULT 'system',
+    detail TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL
+);
+"""
+
+# Exported for outbox module / docs (must match SCHEMA_SQL fragment above).
+COMMENTS_OUTBOX_SQL = """
+CREATE TABLE IF NOT EXISTS community_comment_moderation_jobs (
+    job_id TEXT PRIMARY KEY,
+    comment_id TEXT NOT NULL,
+    revision INTEGER NOT NULL DEFAULT 1,
+    idempotency_key TEXT NOT NULL UNIQUE,
+    status TEXT NOT NULL DEFAULT 'PENDING',
+    lease_owner TEXT NOT NULL DEFAULT '',
+    lease_until TEXT NOT NULL DEFAULT '',
+    attempts INTEGER NOT NULL DEFAULT 0,
+    next_attempt_at TEXT NOT NULL DEFAULT '',
+    last_error TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    result_json TEXT NOT NULL DEFAULT '{}'
+);
+CREATE INDEX IF NOT EXISTS idx_community_comment_mod_jobs_status
+    ON community_comment_moderation_jobs(status, next_attempt_at);
+CREATE INDEX IF NOT EXISTS idx_community_comment_mod_jobs_comment
+    ON community_comment_moderation_jobs(comment_id, revision);
 """
 
 # Additive column migrations for DBs created from earlier stub SCHEMA_SQL.
@@ -234,6 +297,13 @@ _COMMENTS_COLUMN_MIGRATIONS: dict[str, tuple[tuple[str, str], ...]] = {
         ("subject_id", "TEXT NOT NULL DEFAULT ''"),
         ("actor_id", "TEXT NOT NULL DEFAULT ''"),
         ("updated_at", "TEXT NOT NULL DEFAULT ''"),
+        # COMMUNITY-COMMENTS-02 additive columns
+        ("moderation_status", "TEXT NOT NULL DEFAULT ''"),
+        ("body_digest", "TEXT NOT NULL DEFAULT ''"),
+        ("spoiler_collapsed", "INTEGER NOT NULL DEFAULT 0"),
+        ("qwen_decision_json", "TEXT NOT NULL DEFAULT ''"),
+        ("last_moderation_at", "TEXT NOT NULL DEFAULT ''"),
+        ("content_type", "TEXT NOT NULL DEFAULT ''"),
     ),
     "community_comment_revisions": (
         ("version", "INTEGER NOT NULL DEFAULT 1"),
@@ -252,6 +322,12 @@ _COMMENTS_COLUMN_MIGRATIONS: dict[str, tuple[tuple[str, str], ...]] = {
         ("status", "TEXT NOT NULL DEFAULT 'OPEN'"),
         ("resolved_at", "TEXT NOT NULL DEFAULT ''"),
     ),
+    "community_comment_moderation_events": (
+        ("policy_version", "TEXT NOT NULL DEFAULT ''"),
+        ("model", "TEXT NOT NULL DEFAULT ''"),
+        ("prompt_digest", "TEXT NOT NULL DEFAULT ''"),
+        ("decision_json", "TEXT NOT NULL DEFAULT ''"),
+    ),
 }
 
 
@@ -269,6 +345,20 @@ def migrate_comments_schema(conn: sqlite3.Connection) -> None:
         for name, decl in cols:
             if name not in present:
                 conn.execute(f"ALTER TABLE {table} ADD COLUMN {name} {decl}")
+    # Ensure outbox + kill-switch audit exist on older DBs (CREATE IF NOT EXISTS).
+    conn.executescript(COMMENTS_OUTBOX_SQL)
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS community_comment_kill_switch_audit (
+            audit_id TEXT PRIMARY KEY,
+            action TEXT NOT NULL,
+            capabilities_json TEXT NOT NULL DEFAULT '{}',
+            actor TEXT NOT NULL DEFAULT 'system',
+            detail TEXT NOT NULL DEFAULT '',
+            created_at TEXT NOT NULL
+        )
+        """
+    )
     # Backfill canonical fields from legacy aliases when empty.
     if _existing_columns(conn, "community_comments"):
         conn.execute(
@@ -276,6 +366,12 @@ def migrate_comments_schema(conn: sqlite3.Connection) -> None:
                SET site_space = CASE WHEN site_space = '' THEN discussion_space_id ELSE site_space END,
                    title_id = CASE WHEN title_id = '' THEN subject_id ELSE title_id END,
                    identity_id = CASE WHEN identity_id = '' THEN actor_id ELSE identity_id END"""
+        )
+        # Backfill moderation_status from status when empty (Stage01 → V2 alias map).
+        conn.execute(
+            """UPDATE community_comments
+               SET moderation_status = status
+               WHERE moderation_status = '' AND status != ''"""
         )
 
 
@@ -300,7 +396,7 @@ class CommunityStore:
         )
         self.conn.execute(
             "INSERT OR REPLACE INTO community_schema_meta(key, value) VALUES ('comments_schema', ?)",
-            ("community_comments_v1",),
+            ("community_comments_v2",),
         )
 
     def close(self) -> None:

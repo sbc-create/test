@@ -55,7 +55,7 @@ def test_comments_schema_meta(store):
     row = store.conn.execute(
         "SELECT value FROM community_schema_meta WHERE key='comments_schema'"
     ).fetchone()
-    assert row["value"] == "community_comments_v1"
+    assert row["value"] == "community_comments_v2"
     ratings = store.conn.execute(
         "SELECT value FROM community_schema_meta WHERE key='version'"
     ).fetchone()
