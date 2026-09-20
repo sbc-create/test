@@ -1,0 +1,11 @@
+{
+  "widget": "CommunityVoteWidget",
+  "absent_label": "\u041f\u043e\u043a\u0430 \u043d\u0435\u0442 \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\u0441\u043a\u0438\u0445 \u043e\u0446\u0435\u043d\u043e\u043a",
+  "cohort_gated": 1,
+  "viewports_target": [
+    1440,
+    768,
+    390
+  ],
+  "structured_aggregate_rating": 0
+}
