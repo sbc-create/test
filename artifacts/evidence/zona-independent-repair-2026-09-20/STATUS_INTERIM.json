@@ -13,5 +13,7 @@
     "OWNER_DEPLOY_APPROVAL_ID",
     "B18 after-live matrix"
   ],
-  "updated_at": "2026-09-20T18:25:00Z"
+  "updated_at": "2026-09-20T18:30:00Z",
+  "B16_LOCAL_TTFB_GATE_PASS": 1,
+  "B16_INVALID_PAGE_404": 1
 }

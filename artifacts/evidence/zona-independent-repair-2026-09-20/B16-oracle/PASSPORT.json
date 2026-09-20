@@ -1,0 +1,13 @@
+{
+  "block": "B16",
+  "status": "PASS_LOCAL_PARTIAL",
+  "LOCAL_TTFB_GATE_PASS": 1,
+  "INVALID_PAGE_404": 1,
+  "PAGINATION_CROSS_PAGE_DUPES": 0,
+  "residuals": [
+    "live TTFB p50/p95",
+    "full-catalog oracle",
+    "cache policy coherence on live"
+  ],
+  "updated_at": "2026-09-20T21:11:44Z"
+}

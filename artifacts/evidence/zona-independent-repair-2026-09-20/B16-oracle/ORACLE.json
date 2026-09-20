@@ -1,0 +1,77 @@
+{
+  "block": "B16",
+  "mode": "local_fixture",
+  "samples": {
+    "/": {
+      "cold_ms": 12.720356928184628,
+      "warm_p50_ms": 8.530204533599317,
+      "warm_p95_ms": 9.12786996923387,
+      "cache_control": "no-store",
+      "etag": "W/\"cat-b15\""
+    },
+    "/catalog/": {
+      "cold_ms": 10.902328882366419,
+      "warm_p50_ms": 8.345665992237628,
+      "warm_p95_ms": 8.406569017097354,
+      "cache_control": "no-store",
+      "etag": "W/\"cat-b15\""
+    },
+    "/new/": {
+      "cold_ms": 8.100852137431502,
+      "warm_p50_ms": 6.878798361867666,
+      "warm_p95_ms": 8.105811895802617,
+      "cache_control": "no-store",
+      "etag": "W/\"cat-b15\""
+    },
+    "/search/?q=Dusty%20Bluffs": {
+      "cold_ms": 19.471822073683143,
+      "warm_p50_ms": 19.567306502722204,
+      "warm_p95_ms": 20.197137026116252,
+      "cache_control": "no-store",
+      "etag": "W/\"cat-b15\""
+    },
+    "/collection/recently_added/": {
+      "cold_ms": 6.6143719013780355,
+      "warm_p50_ms": 6.884393515065312,
+      "warm_p95_ms": 7.368253078311682,
+      "cache_control": "no-store",
+      "etag": "W/\"cat-b15\""
+    },
+    "/title/t-0001/": {
+      "cold_ms": 4.178646020591259,
+      "warm_p50_ms": 4.669063491746783,
+      "warm_p95_ms": 5.485438043251634,
+      "cache_control": "no-store",
+      "etag": "W/\"cat-b15\""
+    },
+    "/title/seriya-matrix/season-1/episode-1/": {
+      "cold_ms": 3.603437915444374,
+      "warm_p50_ms": 4.244863521307707,
+      "warm_p95_ms": 4.308413015678525,
+      "cache_control": "no-store",
+      "etag": "W/\"cat-b15\""
+    }
+  },
+  "pagination": {
+    "page1_cards": 28,
+    "page2_cards": 28,
+    "cross_page_dupes": 0,
+    "invalid_page_status": 404
+  },
+  "search_smoke": {
+    "Dusty Bluffs": {
+      "has_t0001": true,
+      "empty": false
+    },
+    "zzznothingxyz": {
+      "has_t0001": false,
+      "empty": false
+    }
+  },
+  "TTFB_OVER_2_5S": {},
+  "LOCAL_TTFB_GATE_PASS": 1,
+  "PAGINATION_CROSS_PAGE_DUPES": 0,
+  "INVALID_PAGE_404": 1,
+  "note": "Local fixture timings are not live TTFB. Live p95 still required after deploy.",
+  "updated_at": "2026-09-20T21:11:44Z"
+}
