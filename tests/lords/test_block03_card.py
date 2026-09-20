@@ -18,7 +18,7 @@ def _css() -> str:
 def _карточка_src() -> str:
     текст = ИСХОДНИК.read_text(encoding="utf-8")
     i = текст.index("class ВидЛордс")
-    j = текст.index("def карточка(self, запись: dict)", i)
+    j = текст.index("def карточка(self, запись: dict", i)
     k = текст.index("\n    def ", j + 1)
     return текст[j:k]
 

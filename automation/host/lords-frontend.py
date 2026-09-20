@@ -3086,29 +3086,105 @@ class Вид:
         return self.п.get(slug)
 
     def похожие(self, запись: dict, деталь: dict, сколько: int = 6) -> list:
-        """Похожее выбирается по жанру, затем по виду и году. Порядок
-        детерминирован: одна и та же запись всегда даёт один и тот же ряд."""
+        hits, _ = self.похожие_с_мета(запись, деталь, сколько=сколько)
+        return hits
+
+    def похожие_с_мета(self, запись: dict, деталь: dict, сколько: int = 6) -> tuple[list, dict]:
+        """Rank related titles with provenance; never claim similarity without evidence.
+
+        Scoring (lords-general / cinema): shared genre codes, same kind, year
+        proximity, shared country. Catalog kind-only fill is labeled
+        «Ещё в каталоге», not «Похожее».
+        """
         текущий = запись["slug"]
-        собрано, видели = [], {текущий}
-        for код in (деталь.get("genre_codes") or [])[:3]:
-            for slug in self.индекс["genre"].get(код, ()):
-                if slug in видели:
+        свои_жанры = set(деталь.get("genre_codes") or [])
+        if not свои_жанры and деталь.get("genres"):
+            свои_жанры = {нормализовать(транслит(г)) for г in деталь["genres"] if г}
+            свои_жанры.discard("")
+        свои_страны = {нормализовать(транслит(с)) for с in (деталь.get("countries") or []) if с}
+        свои_страны.discard("")
+        свой_год = запись.get("year") if isinstance(запись.get("year"), int) else None
+        свой_вид = запись.get("kind")
+        профиль = str(ПРОФИЛЬ or "")
+
+        кандидаты: list[tuple[int, str, str, dict]] = []
+        for сосед in self.д.items:
+            slug = сосед.get("slug")
+            if not slug or slug == текущий:
+                continue
+            д = self.п.get(slug) if self.п else {}
+            чужие_жанры = set(д.get("genre_codes") or [])
+            if not чужие_жанры and д.get("genres"):
+                чужие_жанры = {нормализовать(транслит(г)) for г in д["genres"] if г}
+                чужие_жанры.discard("")
+            чужие_страны = {нормализовать(транслит(с)) for с in (д.get("countries") or []) if с}
+            чужие_страны.discard("")
+            балл = 0
+            причины = []
+            overlap = свои_жанры & чужие_жанры
+            if overlap:
+                балл += 40 * len(overlap)
+                причины.append("genre_overlap")
+            if свой_вид and сосед.get("kind") == свой_вид:
+                балл += 15
+                причины.append("same_kind")
+            if свой_год and isinstance(сосед.get("year"), int):
+                delta = abs(свой_год - сосед["year"])
+                if delta == 0:
+                    балл += 20
+                    причины.append("same_year")
+                elif delta <= 5:
+                    балл += 10
+                    причины.append("near_year")
+            if свои_страны and (свои_страны & чужие_страны):
+                балл += 12
+                причины.append("country_overlap")
+            # Series profile: boost same kind serials more strongly.
+            if "new" in профиль or "series" in профиль:
+                if свой_вид == "Сериал" and сосед.get("kind") == "Сериал":
+                    балл += 10
+                    причины.append("series_affinity")
+            if балл <= 0:
+                continue
+            reason = "+".join(причины) if причины else "scored"
+            кандидаты.append((балл, slug, reason, сосед))
+
+        кандидаты.sort(key=lambda т: (-т[0], т[1]))
+        доказанные = [т for т in кандидаты if "genre_overlap" in т[2] or "country_overlap" in т[2]]
+        итог: list[dict] = []
+        причины_итог: list[str] = []
+        видели = {текущий}
+        for балл, slug, reason, сосед in доказанные:
+            if slug in видели:
+                continue
+            видели.add(slug)
+            итог.append(сосед)
+            причины_итог.append(reason)
+            if len(итог) >= сколько:
+                break
+
+        heading = "Похожее"
+        if len(итог) < сколько:
+            # Honest catalog fill — never under the «Похожее» claim alone.
+            for сосед in self.д.items:
+                if len(итог) >= сколько:
+                    break
+                slug = сосед.get("slug")
+                if not slug or slug in видели:
                     continue
-                сосед = self.индекс["slug"].get(slug)
-                if not сосед:
+                if свой_вид and сосед.get("kind") != свой_вид:
                     continue
                 видели.add(slug)
-                собрано.append(сосед)
-                if len(собрано) >= сколько:
-                    return собрано
-        for сосед in self.д.items:
-            if len(собрано) >= сколько:
-                break
-            if сосед["slug"] in видели or сосед.get("kind") != запись.get("kind"):
-                continue
-            видели.add(сосед["slug"])
-            собрано.append(сосед)
-        return собрано
+                итог.append(сосед)
+                причины_итог.append("kind_fallback")
+            if any(r == "kind_fallback" for r in причины_итог) and not any(
+                    "genre_overlap" in r for r in причины_итог):
+                heading = "Ещё в каталоге"
+            elif any(r == "kind_fallback" for r in причины_итог) and len(доказанные) == 0:
+                heading = "Ещё в каталоге"
+
+        return итог, {"heading": heading, "reason_codes": причины_итог,
+                      "profile": профиль or "lords-general"}
 
     # --- разметка ----------------------------------------------------
     def schema_тайтла(self, запись: dict, деталь: dict, путь: str) -> str:
@@ -4039,9 +4115,12 @@ class ВидЛордс(Вид):
 
         текущий = (сезон_старт, эпизод_старт) if эпизод_старт is not None else None
         блок_серий = self._серии(запись, сезоны, текущий=текущий) if сериал else ""
-        похожие = self.похожие(запись, деталь)
-        блок_похожих = (f'<section class="sec"><h2>Похожее</h2>'
-                        f'{self.сетка(похожие, "rel")}</section>' if похожие else "")
+        похожие, рек_мета = self.похожие_с_мета(запись, деталь)
+        заголовок_рек = html.escape(рек_мета.get("heading") or "Похожее")
+        блок_похожих = (
+            f'<section class="sec" data-rec-heading="{заголовок_рек}">'
+            f"<h2>{заголовок_рек}</h2>"
+            f'{self.сетка(похожие, "rel")}</section>' if похожие else "")
 
         заявка = (f'<p class="claim">Смотреть {html.escape(имя)} онлайн'
                   f'{" — все серии" if сериал else ""}</p>')
