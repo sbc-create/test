@@ -1,0 +1,18 @@
+{
+  "viewport": "d1440",
+  "theme": "light",
+  "mode": "gap",
+  "route": "/new/",
+  "selector": "[data-b05-page],.anew-empty,.anew-page",
+  "captured_at": "2026-09-20T11:52:13Z",
+  "present": true,
+  "hidden": false,
+  "h": 140,
+  "w": 1248,
+  "text": "Новое в каталоге Новинки каталога недоступны Список новинок каталога пока недоступен: ledger добавлений ещё не подключён",
+  "gap": "",
+  "cards": 0,
+  "episodeRows": 0,
+  "forbidden": false,
+  "screenshot_sha256": "6c312fe84af522c712d7bb6aa647c41531e4ac50ca3c2f0e7842e0c67b6603ac"
+}

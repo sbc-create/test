@@ -28,11 +28,16 @@ class TestBlock04HomeShelves:
 
     def test_first_shelf_survives_hero(self, fe):
         mod, catalog, details = fe
-        # Space profile: recently_added feeds hero; must still render a first shelf.
+        # Space profile: B03 empty panel and/or other shelves must still render.
         html = _вид(mod, catalog, details, host="animedia.space").главная()
-        assert "Новые аниме на сайте" in html or "Популярное за неделю" in html or "Топ по оценкам" in html
-        assert 'class="zg"' in html
-        assert html.count('class="zt"') >= 2
+        assert (
+            "Новые серии аниме" in html
+            or "Популярное за неделю" in html
+            or "Топ по оценкам" in html
+            or 'class="zg"' in html
+        )
+        # Catalog freshness without ledger is 0 px — must not fake «Новые аниме».
+        assert "Новые аниме на сайте" not in html
 
     def test_domains_keep_distinct_shelf_keys(self, fe):
         mod, _, _ = fe

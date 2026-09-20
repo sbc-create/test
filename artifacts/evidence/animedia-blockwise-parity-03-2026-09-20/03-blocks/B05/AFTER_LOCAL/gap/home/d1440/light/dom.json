@@ -1,0 +1,18 @@
+{
+  "viewport": "d1440",
+  "theme": "light",
+  "mode": "gap",
+  "route": "/",
+  "selector": "[data-b05],.zsec--b05",
+  "captured_at": "2026-09-20T11:52:13Z",
+  "present": true,
+  "hidden": true,
+  "h": 0,
+  "w": 0,
+  "text": "",
+  "gap": "1",
+  "cards": 0,
+  "episodeRows": 0,
+  "forbidden": false,
+  "screenshot_sha256": "1dfac95627c5412bd084233606a1d1330dec86e8f63e3ef29070515958e75701"
+}

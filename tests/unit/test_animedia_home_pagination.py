@@ -160,11 +160,14 @@ class TestEpisodeEvents:
         home = вид.главная()
         assert "Новые серии аниме" in home
         assert 'data-b03="empty"' in home
+        assert 'data-b05="gap"' in home
         assert "вышла серия" not in home.lower()
         assert mod.АНИМЕДИА_EPISODE_EVENT_DATA_GAP == 1
+        assert mod.CATALOG_FRESHNESS_DATA_GAP == 1
         p1 = вид.список("/new", {})
         assert "Новое в каталоге" in p1
-        assert "Добавлено" in p1
+        assert "ledger добавлений ещё не подключён" in p1
+        assert 'class="aeps__row"' not in p1
 
     def test_timestamp_semantics(self, fe):
         mod, _, _ = fe
@@ -185,21 +188,40 @@ class TestEpisodeEvents:
 
 
 class TestPagination:
-    def test_home_b03_empty_while_new_keeps_catalog_rows(self, fe):
+    def test_home_b03_empty_and_new_gap_without_ledger(self, fe, monkeypatch, tmp_path):
         mod, items, details = fe
+        missing = tmp_path / "no-ca.json"
+        monkeypatch.setenv("ANIMEDIA_CATALOG_ADDED_LEDGER", str(missing))
+        mod.АНИМЕДИА_CATALOG_ADDED_PATH = str(missing)
         вид = _вид(mod, items, details)
         home = вид.главная()
         p1 = вид.список("/new", {})
         assert 'data-b03="empty"' in home
+        assert 'data-b05="gap"' in home
         assert _ids(home) == []
-        assert len(_ids(p1)) == 10
+        assert _ids(p1) == []
         assert "ahome-eps--empty" in home
-        assert "/new/?page=2" in p1
+        assert "ledger добавлений ещё не подключён" in p1
 
-    def test_pages_partition_full_set(self, fe):
+    def test_pages_partition_full_set(self, fe, monkeypatch, tmp_path):
         mod, items, details = fe
+        events_payload = {
+            "events": [
+                {
+                    "event_id": f"ca-{i:03d}",
+                    "title_slug": f"title-{i:03d}",
+                    "catalog_added_at": f"2026-09-{(19 - (i % 18)):02d}T12:00:00Z",
+                }
+                for i in range(25)
+            ]
+        }
+        path = tmp_path / "ca.json"
+        path.write_text(json.dumps(events_payload), encoding="utf-8")
+        monkeypatch.setenv("ANIMEDIA_CATALOG_ADDED_LEDGER", str(path))
+        mod.АНИМЕДИА_CATALOG_ADDED_PATH = str(path)
         вид = _вид(mod, items, details)
-        events = вид._эпизод_события()
+        events = вид._catalog_added_events()
+        assert len(events) == 25
         p1 = _ids(вид.список("/new", {}))
         p2 = _ids(вид.список("/new", {"page": ["2"]}))
         p3 = _ids(вид.список("/new", {"page": ["3"]}))
@@ -208,8 +230,22 @@ class TestPagination:
         assert set(p2).isdisjoint(p3)
         assert set(p1) | set(p2) | set(p3) == {e["event_id"] for e in events}
 
-    def test_invalid_pages_are_404(self, fe):
+    def test_invalid_pages_are_404(self, fe, monkeypatch, tmp_path):
         mod, items, details = fe
+        events_payload = {
+            "events": [
+                {
+                    "event_id": f"ca-{i:03d}",
+                    "title_slug": f"title-{i:03d}",
+                    "catalog_added_at": f"2026-09-{(19 - (i % 18)):02d}T12:00:00Z",
+                }
+                for i in range(25)
+            ]
+        }
+        path = tmp_path / "ca.json"
+        path.write_text(json.dumps(events_payload), encoding="utf-8")
+        monkeypatch.setenv("ANIMEDIA_CATALOG_ADDED_LEDGER", str(path))
+        mod.АНИМЕДИА_CATALOG_ADDED_PATH = str(path)
         вид = _вид(mod, items, details)
         for raw in ("0", "-1", "abc", "99"):
             html = вид.список("/new", {"page": [raw]})
@@ -218,16 +254,44 @@ class TestPagination:
         вид.список("/new", {})
         assert getattr(вид, "_http_status", 200) == 200
 
-    def test_canonical_page_urls(self, fe):
+    def test_canonical_page_urls(self, fe, monkeypatch, tmp_path):
         mod, items, details = fe
+        events_payload = {
+            "events": [
+                {
+                    "event_id": f"ca-{i:03d}",
+                    "title_slug": f"title-{i:03d}",
+                    "catalog_added_at": f"2026-09-{(19 - (i % 18)):02d}T12:00:00Z",
+                }
+                for i in range(25)
+            ]
+        }
+        path = tmp_path / "ca.json"
+        path.write_text(json.dumps(events_payload), encoding="utf-8")
+        monkeypatch.setenv("ANIMEDIA_CATALOG_ADDED_LEDGER", str(path))
+        mod.АНИМЕДИА_CATALOG_ADDED_PATH = str(path)
         вид = _вид(mod, items, details)
         p1 = вид.список("/new", {})
         p2 = вид.список("/new", {"page": ["2"]})
         assert 'rel="canonical" href="https://animedia.space/new/"' in p1
         assert 'rel="canonical" href="https://animedia.space/new/?page=2"' in p2
 
-    def test_prev_next_states(self, fe):
+    def test_prev_next_states(self, fe, monkeypatch, tmp_path):
         mod, items, details = fe
+        events_payload = {
+            "events": [
+                {
+                    "event_id": f"ca-{i:03d}",
+                    "title_slug": f"title-{i:03d}",
+                    "catalog_added_at": f"2026-09-{(19 - (i % 18)):02d}T12:00:00Z",
+                }
+                for i in range(25)
+            ]
+        }
+        path = tmp_path / "ca.json"
+        path.write_text(json.dumps(events_payload), encoding="utf-8")
+        monkeypatch.setenv("ANIMEDIA_CATALOG_ADDED_LEDGER", str(path))
+        mod.АНИМЕДИА_CATALOG_ADDED_PATH = str(path)
         вид = _вид(mod, items, details)
         p1 = вид.список("/new", {})
         p3 = вид.список("/new", {"page": ["3"]})

@@ -1,0 +1,18 @@
+{
+  "viewport": "m390",
+  "theme": "light",
+  "mode": "populated",
+  "route": "/",
+  "selector": "[data-b05=\"populated\"],.zsec--b05",
+  "captured_at": "2026-09-20T11:52:13Z",
+  "present": true,
+  "hidden": false,
+  "h": 697,
+  "w": 366,
+  "text": "Новое в каталоге Весь раздел А Альфа Аниме · 2026 Добавлено · 18.09.2026, 15:00 Доступно 5 серий Б Бета Аниме · 2025 Добавлено · 17.09.2026, 11:00 Доступно 24 серий Д Дельта Аниме · 2001 Добавлено · 16.09.2026 Доступно 26 серий",
+  "gap": "0",
+  "cards": 3,
+  "episodeRows": 0,
+  "forbidden": false,
+  "screenshot_sha256": "0cdb7ca6b23aaeaf7af257798f53807c59de71e8a6be50ad134989f7b2d5d39e"
+}

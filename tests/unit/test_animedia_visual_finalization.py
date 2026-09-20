@@ -171,15 +171,15 @@ class TestVisualContracts:
         assert 'data-event-kind="catalog_publish"' not in html
         assert "Сегодня выйдет" not in html
 
-    def test_new_route_is_episode_rows(self, fe):
+    def test_new_route_is_catalog_added_or_honest_gap(self, fe):
         mod, catalog, details = fe
         вид = _вид(mod, catalog, details)
         html = вид.список("/new", {})
         assert "Новое в каталоге" in html
-        assert "aeps__row" in html
-        assert "серия" in html
-        # Must not be a poster grid of titles only
-        assert html.count('class="zt"') == 0 or html.count("aeps__row") > 0
+        # Without ledger: honest gap. With ledger: poster cards, never episode rows.
+        assert 'data-b05-page="gap"' in html or 'data-card-variant="catalog-added"' in html
+        assert 'class="aeps__row"' not in html
+        assert "серия всего" not in html.lower()
 
     def test_schedule_single_empty_state(self, fe):
         mod, catalog, details = fe

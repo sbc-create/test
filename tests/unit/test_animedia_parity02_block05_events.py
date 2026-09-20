@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -84,10 +85,24 @@ def test_schedule_empty_state_honest(fe):
     assert re.search(r'href="/new/"', html)
 
 
-def test_pagination_sample_and_invalid_404(fe):
+def test_pagination_sample_and_invalid_404(fe, monkeypatch, tmp_path):
     mod, items, details = fe
+    events_payload = {
+        "events": [
+            {
+                "event_id": f"ca-{i:03d}",
+                "title_slug": f"title-{i:03d}",
+                "catalog_added_at": f"2026-09-{(19 - (i % 18)):02d}T12:00:00Z",
+            }
+            for i in range(25)
+        ]
+    }
+    path = tmp_path / "ca.json"
+    path.write_text(json.dumps(events_payload), encoding="utf-8")
+    monkeypatch.setenv("ANIMEDIA_CATALOG_ADDED_LEDGER", str(path))
+    mod.АНИМЕДИА_CATALOG_ADDED_PATH = str(path)
     вид = _вид(mod, items, details)
-    events = вид._эпизод_события()
+    events = вид._catalog_added_events()
     p1 = _ids(вид.список("/new", {}))
     p2 = _ids(вид.список("/new", {"page": ["2"]}))
     assert set(p1).isdisjoint(p2)

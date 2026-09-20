@@ -1959,6 +1959,27 @@ flex-wrap:nowrap;min-height:1.25em;align-items:center}
 .ahome-eps--empty{margin:0 0 16px;max-height:96px;overflow:hidden}
 .ahome-eps--empty .zsec__h{margin:0 0 6px}
 .ahome-eps--empty .zsec__h h2{font-size:18px;line-height:1.2;margin:0}
+/* B05 catalog-added poster grid: 8/6/5/4/2 — never episode-number chrome */
+.zsec--b05[hidden],.zsec--b05-gap{display:none !important;height:0 !important;min-height:0 !important;
+margin:0 !important;padding:0 !important;border:0 !important;overflow:hidden !important}
+.zsec--b05 .zg--catalog-added{gap:var(--a-grid-gap);
+grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.zsec--b05 .zg--catalog-added{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1024px){.zsec--b05 .zg--catalog-added{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(min-width:1280px){.zsec--b05 .zg--catalog-added{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(min-width:1600px){.zsec--b05 .zg--catalog-added{grid-template-columns:repeat(8,minmax(0,1fr))}}
+.zt--catalog-added .zt__r{display:none}
+.zt--catalog-added .zt__added,.zt--catalog-added .zt__avail{display:block;font-size:11px;
+color:var(--a-dim);line-height:1.25;margin-top:2px}
+.anew-empty{max-width:min(720px,100%);margin:12px 0 24px;padding:12px 14px;
+border-radius:8px;background:var(--a-alt);border:1px solid var(--a-line);
+color:var(--a-dim);font-size:14px;line-height:1.4;max-height:120px;overflow:hidden}
+.anew-page .zg--catalog-added{gap:var(--a-grid-gap);
+grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.anew-page .zg--catalog-added{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1024px){.anew-page .zg--catalog-added{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(min-width:1280px){.anew-page .zg--catalog-added{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(min-width:1600px){.anew-page .zg--catalog-added{grid-template-columns:repeat(8,minmax(0,1fr))}}
 .ahome-eps__empty{margin:0;padding:10px 12px;border-radius:8px;background:var(--a-alt);
 border:1px solid var(--a-line);color:var(--a-dim);font-size:13px;line-height:1.35;
 max-height:56px;overflow:hidden}
@@ -4824,6 +4845,20 @@ TRUE_PROVIDER_PLAYABLE_EVENT_COUNT = 0
 )
 # Legacy alias — catalog-publish rows must not feed B03.
 АНИМЕДИА_ЭПИЗОД_ПОДПИСЬ = АНИМЕДИА_ЭПИЗОД_EMPTY_COPY
+
+# B05: catalog_added ledger — ambiguous published_at is NOT catalog_added_at.
+АНИМЕДИА_CATALOG_ADDED_PATH = os.environ.get(
+    "ANIMEDIA_CATALOG_ADDED_LEDGER",
+    str(Path(__file__).resolve().parents[2] / "config" / "animedia-catalog-added.json"),
+)
+АНИМЕДИА_CATALOG_ADDED_PAGE_SIZE = 10
+АНИМЕДИА_CATALOG_ADDED_H1 = "Новое в каталоге"
+АНИМЕДИА_CATALOG_ADDED_EMPTY = (
+    "Список новинок каталога пока недоступен: ledger добавлений ещё не подключён"
+)
+# Ambiguous catalog.items[].published_at is NOT catalog_added_at (§5.5 / B05).
+CATALOG_FRESHNESS_DATA_GAP = 1
+АНИМЕДИА_CATALOG_ADDED_HOME_LIMIT = 16
 # Popular shelf: ONLY an owner/Core-approved WeeklyPopularSnapshot (§5.6).
 # Template must not rank catalog ratings into a public «Популярное за неделю».
 АНИМЕДИА_POPULAR_WINDOW = "weekly"
@@ -5903,13 +5938,20 @@ class ВидАнимедиа(ВидЗона):
         куски.append('<div class="zad-home" data-ad-slot="home-after-hero" data-ad-enabled="0"></div>')
         # B03: provider_became_playable only — never catalog fallback.
         куски.append(self._блок_новых_серий_b03())
+        # B05: verified catalog_added ledger only — never published_at shelf.
+        куски.append(self._блок_нового_в_каталоге_b05())
         куски.append('<div class="zad-mid" data-ad-slot="home-mid-content" data-ad-enabled="0"></div>')
         # Cross-shelf dedup. Weekly shelf slugs may reappear in lower grids only
         # when the lower shelf is not also the weekly popular block.
         очищенные = []
         герой_slug = {з["slug"] for з in weekly_items}
         занятые: set[str] = set(герой_slug)
+        # B05 owns catalog freshness; collections recently_added/new_episodes
+        # still sort by ambiguous published_at and must not render as that shelf.
+        b05_skip = {"recently-added", "recently_added", "new-episodes", "new_episodes"}
         for ключ, титул, ссылка, кандидаты, причина in ленты:
+            if ключ in b05_skip or ключ.replace("_", "-") in b05_skip:
+                continue
             набор = []
             pool = кандидаты
             skip = занятые
@@ -6197,12 +6239,144 @@ class ВидАнимедиа(ВидЗона):
             f'{feed}</section>'
         )
 
-    def _эпизод_события(self) -> list[dict]:
-        """Deprecated catalog-publish helper — B03 must not use this on home.
+    def _available_episode_count(self, slug: str) -> int | None:
+        """Sum of seasons[].avail — labeled «Доступно N серий», never «N серия»."""
+        det = self.деталь(slug) or {}
+        seasons = список_серий(det)
+        if not seasons:
+            return None
+        total = sum(int(s.get("avail") or 0) for s in seasons)
+        return total if total > 0 else None
 
-        Kept for /new/ transitional callers until B12 rewires that route to the
-        catalog_added ledger. Returns catalog rows explicitly tagged so they
-        cannot be mistaken for provider_became_playable.
+    def _catalog_added_events(self) -> list[dict]:
+        """B05 feed: verified catalog_added_at ledger only.
+
+        Ambiguous catalog.items[].published_at must never populate this list.
+        """
+        путь = Path(АНИМЕДИА_CATALOG_ADDED_PATH)
+        if not путь.is_file():
+            return []
+        try:
+            raw = json.loads(путь.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return []
+        events = raw.get("events") if isinstance(raw, dict) else raw
+        if not isinstance(events, list):
+            return []
+        out = []
+        seen_ids: set[str] = set()
+        seen_slugs: set[str] = set()
+        by_slug = {з.get("slug"): з for з in self.д.items if з.get("slug")}
+        for ev in events:
+            if not isinstance(ev, dict):
+                continue
+            added = str(ev.get("catalog_added_at") or "").strip()
+            if not added:
+                continue
+            slug = str(ev.get("title_slug") or ev.get("slug") or "")
+            if not slug or slug not in by_slug:
+                continue
+            if slug in seen_slugs:
+                continue
+            event_id = str(ev.get("event_id") or f"catalog-added:{slug}:{added}")
+            if event_id in seen_ids:
+                continue
+            seen_ids.add(event_id)
+            seen_slugs.add(slug)
+            з = by_slug[slug]
+            if "T" in added:
+                precision = "datetime"
+            else:
+                precision = "date"
+            avail = self._available_episode_count(slug)
+            out.append({
+                "event_id": event_id,
+                "event_kind": "catalog_added",
+                "title_id": str(ev.get("title_id") or з.get("id") or slug),
+                "title_slug": slug,
+                "slug": slug,
+                "title": з.get("title") or slug,
+                "kind": з.get("kind"),
+                "year": з.get("year"),
+                "catalog_added_at": added,
+                "catalog_added_at_precision": precision,
+                "available_episode_count": avail,
+                "poster": з.get("poster") or "",
+                "url": з.get("url") or f"/title/{slug}/",
+                "provenance": ev.get("provenance") or "catalog_added_ledger",
+                "timestamp_semantics": "catalog_added_at (domain ledger; not published_at)",
+            })
+        out.sort(
+            key=lambda e: (
+                e.get("catalog_added_at") or "",
+                e.get("event_id") or "",
+            ),
+            reverse=True,
+        )
+        return out
+
+    def _плитка_catalog_added(self, row: dict) -> str:
+        """Poster card for B05 — no episode-number chrome, no «N серия»."""
+        запись = {
+            "title": row["title"],
+            "poster": row.get("poster"),
+            "url": row["url"],
+            "slug": row.get("slug") or "",
+            "kind": row.get("kind"),
+            "year": row.get("year"),
+        }
+        изо = заглушка_постера(запись, "zt__none", "zt__img", 190, 285)
+        мета = " · ".join(
+            str(ч) for ч in (row.get("kind"), row.get("year")) if ч)
+        ts = _аниме_формат_времени_анонса(
+            row.get("catalog_added_at") or "",
+            row.get("catalog_added_at_precision") or "none")
+        added = f'<span class="zt__added">Добавлено · {html.escape(ts)}</span>' if ts else ""
+        avail_n = row.get("available_episode_count")
+        avail = ""
+        if isinstance(avail_n, int) and avail_n > 0:
+            avail = f'<span class="zt__avail">Доступно {avail_n} серий</span>'
+        return (
+            f'<a class="zt zt--catalog-added" data-card-variant="catalog-added" '
+            f'href="{html.escape(row["url"])}" '
+            f'data-event-id="{html.escape(row.get("event_id") or "")}" '
+            f'data-event-kind="catalog_added">'
+            f'<span class="zt__p">{изо}</span>'
+            f'<span class="zt__b"><span class="zt__t">{html.escape(row["title"])}</span>'
+            f'<span class="zt__m">{html.escape(мета)}</span>'
+            f'{added}{avail}</span></a>'
+        )
+
+    def _блок_нового_в_каталоге_b05(self) -> str:
+        """Home B05: verified ledger shelf or 0 px + CATALOG_FRESHNESS_DATA_GAP."""
+        events = self._catalog_added_events()
+        self._catalog_added_count = len(events)
+        self._catalog_freshness_gap = 0 if events else 1
+        if not events:
+            return (
+                '<div class="zsec zsec--b05 zsec--b05-gap" data-b05="gap" '
+                'data-catalog-freshness-gap="1" hidden aria-hidden="true"></div>'
+            )
+        rows = events[:АНИМЕДИА_CATALOG_ADDED_HOME_LIMIT]
+        grid = (
+            '<div class="zg zg--catalog-added" data-card-grid="catalog-added">'
+            + "".join(self._плитка_catalog_added(r) for r in rows)
+            + "</div>"
+        )
+        return (
+            f'<section class="zsec zsec--b05" data-b05="populated" '
+            f'data-catalog-freshness-gap="0" '
+            f'data-catalog-added-count="{len(events)}">'
+            f'<div class="zsec__h"><h2>{АНИМЕДИА_CATALOG_ADDED_H1}</h2>'
+            f'<a href="/new/">Весь раздел</a></div>'
+            f'{grid}</section>'
+        )
+
+    def _эпизод_события(self) -> list[dict]:
+        """Deprecated catalog-publish helper — must NOT feed B03 or B05.
+
+        Kept only for legacy unit assertions that document why published_at
+        cannot be treated as catalog_added_at / episode air.
         """
         events = []
         seen = set()
@@ -6252,7 +6426,7 @@ class ВидАнимедиа(ВидЗона):
                 "published_at": published,
                 "published_at_precision": precision,
                 "event_kind": "catalog_publish",
-                "timestamp_semantics": "catalog.items[].published_at (title add/update; not episode air; NOT provider_became_playable)",
+                "timestamp_semantics": "catalog.items[].published_at (title add/update; not episode air; NOT provider_became_playable; NOT catalog_added_at)",
                 "source_updated_at": str(з.get("updated_at") or ""),
                 "poster": з.get("poster") or "",
                 "playable_state": "playable" if det.get("playable") is True else "unknown",
@@ -6292,12 +6466,11 @@ class ВидАнимедиа(ВидЗона):
         return стр, None
 
     def _листалка_эпизодов(self, стр: int, всего: int) -> str:
-        """Pagination for episode archive — always targets /new/."""
+        """Pagination for /new/ catalog-added archive."""
         if всего <= 1:
             return ""
         пункты = страницы(стр, всего)
         куски = []
-        # Prev
         if стр <= 1:
             куски.append('<span aria-disabled="true">←</span>')
         else:
@@ -6315,58 +6488,87 @@ class ВидАнимедиа(ВидЗона):
             куски.append('<span aria-disabled="true">→</span>')
         else:
             куски.append(f'<a href="/new/?page={стр + 1}" rel="next">→</a>')
-        return f'<nav class="zpg" aria-label="Страницы эпизодов">{"".join(куски)}</nav>'
+        return f'<nav class="zpg" aria-label="Страницы новинок">{"".join(куски)}</nav>'
 
     def _разметка_эпизод_ряда(self, row: dict) -> str:
+        """Provider-playable row only — episode number is a real episode, not avail total."""
         изо = заглушка_постера(
             {"title": row["title"], "poster": row.get("poster"), "url": row["url"]},
             "zr__none", "zr__img", 64, 80)
-        ts = _аниме_формат_времени_анонса(
-            row.get("published_at") or "",
-            row.get("published_at_precision") or "none")
-        # Honest label: catalog publish time is not an episode air clock.
-        if ts:
-            meta = f"Добавлено · {ts}"
+        kind = row.get("event_kind") or ""
+        if kind == "provider_became_playable":
+            ts = _аниме_формат_времени_анонса(
+                row.get("provider_available_at") or row.get("published_at") or "",
+                row.get("published_at_precision") or "datetime")
+            meta = f"Доступно · {ts}" if ts else "Доступно у провайдера"
+            season = int(row.get("season_number") or row.get("season") or 0)
+            episode = int(row.get("episode_number") or row.get("episode") or 0)
+            ep_lab = f"с{season} · серия" if season else "серия"
         else:
-            meta = "Добавлено"
+            # Must not surface catalog_publish as an episode air event.
+            ts = _аниме_формат_времени_анонса(
+                row.get("published_at") or "",
+                row.get("published_at_precision") or "none")
+            meta = f"Каталог · {ts}" if ts else "Каталог"
+            episode = int(row.get("episode_number") or 0)
+            ep_lab = "серия"
         return (
             f'<a class="aeps__row" data-card-variant="episode-row" href="{html.escape(row["url"])}" '
             f'data-event-id="{html.escape(row.get("event_id") or "")}" '
-            f'data-event-kind="{html.escape(row.get("event_kind") or "catalog_publish")}">'
+            f'data-event-kind="{html.escape(kind or "catalog_publish")}">'
             f'<span class="aeps__thumb">{изо}</span>'
             f'<span class="aeps__body"><span class="aeps__title">{html.escape(row["title"])}</span>'
             f'<span class="aeps__meta">{html.escape(meta)}</span></span>'
-            f'<span class="aeps__ep"><span class="aeps__num">{int(row["episode_number"])}</span>'
-            f'<span class="aeps__lab">серия</span></span></a>')
+            f'<span class="aeps__ep"><span class="aeps__num">{episode}</span>'
+            f'<span class="aeps__lab">{html.escape(ep_lab)}</span></span></a>')
 
     def _страница_новых_эпизодов(self, зпр: dict) -> str:
-        events = self._эпизод_события()
-        per = АНИМЕДИА_ЭПИЗОД_НА_СТРАНИЦЕ
-        всего = max(1, (len(events) + per - 1) // per) if events else 1
-        стр, err = self._разобрать_страницу_эпизодов(зпр, всего if events else 0)
+        """B05/B12 /new/: catalog_added ledger only — never published_at episode rows."""
+        events = self._catalog_added_events()
+        per = АНИМЕДИА_CATALOG_ADDED_PAGE_SIZE
+        if not events:
+            стр, err = self._разобрать_страницу_эпизодов(зпр, 1)
+            if err or стр is None or стр != 1:
+                # Only canonical /new/ exists while the ledger is absent.
+                if (зпр.get("page") or ["1"])[0] not in (None, "", "1"):
+                    self._http_status = 404
+                    return self.не_найдено("/new/")
+            self._http_status = 200
+            тело = (
+                f'<div class="zwrap anew-page" data-b05-page="gap">'
+                f'<h1 class="zh">{АНИМЕДИА_CATALOG_ADDED_H1}</h1>'
+                f'<div class="anew-empty" data-catalog-freshness-gap="1">'
+                f'<b>Новинки каталога недоступны</b>'
+                f'<p>{html.escape(АНИМЕДИА_CATALOG_ADDED_EMPTY)}</p></div></div>'
+            )
+            return self.оболочка(
+                тело, f"{АНИМЕДИА_CATALOG_ADDED_H1} — {self.имя}", "/new/",
+                актив="/new/",
+                описание=АНИМЕДИА_CATALOG_ADDED_EMPTY)
+        всего = max(1, (len(events) + per - 1) // per)
+        стр, err = self._разобрать_страницу_эпизодов(зпр, всего)
         if err or стр is None:
             self._http_status = 404
             return self.не_найдено("/new/")
         self._http_status = 200
-        if not events:
-            тело = (f'<div class="zwrap ahome-eps"><h1 class="zh">{АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК}</h1>'
-                    '<div class="zempty"><b>Пока пусто</b>'
-                    "<p>В каталоге нет сериалов с доступными сериями.</p></div></div>")
-            self._http_status = 200
-            return self.оболочка(тело, f"{АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК} — {self.имя}", "/new/",
-                                 актив="/new/",
-                                 описание=АНИМЕДИА_ЭПИЗОД_ПОДПИСЬ)
         кусок = events[(стр - 1) * per: стр * per]
-        сетка = '<div class="aeps">' + "".join(self._разметка_эпизод_ряда(r) for r in кусок) + "</div>"
+        сетка = (
+            '<div class="zg zg--catalog-added" data-card-grid="catalog-added">'
+            + "".join(self._плитка_catalog_added(r) for r in кусок)
+            + "</div>"
+        )
         листалка = self._листалка_эпизодов(стр, всего)
         канон = "/new/" if стр == 1 else f"/new/?page={стр}"
-        тело = (f'<div class="zwrap ahome-eps"><h1 class="zh">{АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК}</h1>'
-                f'<p class="zsub">{html.escape(АНИМЕДИА_ЭПИЗОД_ПОДПИСЬ)} '
-                f'Страница {стр} из {всего} · всего {len(events)}.</p>'
-                + сетка + листалка + "</div>")
-        return self.оболочка(тело, f"{АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК} — {self.имя}", канон,
-                             актив="/new/",
-                             описание=АНИМЕДИА_ЭПИЗОД_ПОДПИСЬ)
+        тело = (
+            f'<div class="zwrap anew-page" data-b05-page="populated">'
+            f'<h1 class="zh">{АНИМЕДИА_CATALOG_ADDED_H1}</h1>'
+            f'<p class="zsub">Страница {стр} из {всего} · всего {len(events)}.</p>'
+            + сетка + листалка + "</div>"
+        )
+        return self.оболочка(
+            тело, f"{АНИМЕДИА_CATALOG_ADDED_H1} — {self.имя}", канон,
+            актив="/new/",
+            описание=АНИМЕДИА_CATALOG_ADDED_H1)
 
     def поиск(self, зпр: dict) -> str:
         """Поиск. Пустая выдача объясняется тем же и теми же словами."""

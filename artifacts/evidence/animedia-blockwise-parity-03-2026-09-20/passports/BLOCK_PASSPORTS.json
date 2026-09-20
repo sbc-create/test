@@ -494,9 +494,11 @@
         "tests/unit/test_animedia_parity03_b05.py"
       ],
       "evidence_paths": [
-        "03-blocks/BLOCK_B05.md"
+        "03-blocks/BLOCK_B05.md",
+        "03-blocks/B05/BEFORE/INVENTORY.json",
+        "03-blocks/B05/AFTER_LOCAL/ORACLE.json"
       ],
-      "remaining_data_gap": "catalog_added ledger missing; published_at AMBIGUOUS; CATALOG_FRESHNESS_DATA_GAP=1"
+      "remaining_data_gap": "catalog_added ledger missing; published_at AMBIGUOUS; CATALOG_FRESHNESS_DATA_GAP=1; PASS_LOCAL_PENDING_LIVE"
     },
     {
       "block_id": "B06",

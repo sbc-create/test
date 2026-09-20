@@ -1,0 +1,10 @@
+{
+  "captured_at": "2026-09-20T11:52:13Z",
+  "note": "BEFORE state at HEAD aefdfdc: home recently_added used published_at; /new/ rendered catalog_publish episode rows with avail as «N серия»",
+  "false_labels": [
+    "published_at as Добавлено",
+    "available_episode_count shown as episode number «серия»",
+    "home shelf «Новые аниме на сайте» without catalog_added_at ledger"
+  ],
+  "contract_sha256": "5f2112e25ef974333c388bad405abfae3c3d460a713b028afa3c0e549b8eaeb3"
+}
