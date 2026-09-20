@@ -232,7 +232,8 @@ def оценки_по_источникам(деталь: dict) -> list:
             elif к in ("myanimelist", "my_anime_list"):
                 к = "mal"
             собрано[к] = запись
-    for ключ, поле in (("kp", "kinopoisk_rating"), ("imdb", "imdb_rating")):
+    for ключ, поле in (("kp", "kinopoisk_rating"), ("imdb", "imdb_rating"),
+                       ("shikimori", "shikimori_score"), ("shikimori", "shikimori_rating")):
         if ключ not in собрано and деталь.get(поле) is not None:
             собрано[ключ] = деталь[поле]
     готово = []
@@ -2060,6 +2061,23 @@ border-radius:10px;border:1px solid var(--a-line);background:var(--a-alt);font-s
 .zbody{display:none}
 .zaside{display:none}
 .ztitle-gap{height:clamp(20px,1.6vw,36px)}
+.aep-ctx{display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px 16px;margin:8px 0 12px;
+padding:12px;border-radius:var(--a-radius-shell);background:var(--a-page);box-shadow:var(--a-shadow-soft);
+align-items:start;max-width:100%}
+@media(min-width:900px){.aep-ctx{grid-template-columns:120px minmax(0,1fr);gap:16px 20px;padding:14px 16px}}
+.aep-ctx__poster{aspect-ratio:2/3;border-radius:10px;overflow:hidden;background:var(--a-surf);position:relative;width:100%}
+.aep-ctx__poster img,.aep-ctx__poster .zhead__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.aep-ctx__main{min-width:0;display:flex;flex-direction:column;gap:8px}
+.aep-ctx__main h1{font-size:clamp(20px,1.8vw,26px);line-height:1.25;margin:0}
+.aep-ctx__ep{font-size:14px;font-weight:700;color:var(--a-acc);margin:0}
+.aep-ctx__o{font-size:13px;color:var(--a-dim);margin:0}
+.aep-ctx__meta{font-size:13px;color:var(--a-dim);margin:0;line-height:1.4}
+.aep-ctx__desc{font-size:14px;line-height:1.45;color:var(--a-ink);margin:0;max-width:70ch;
+display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.aep-ctx__back{font-size:13px;font-weight:700;color:var(--a-acc);width:fit-content}
+.aep-ctx .rbs{margin:2px 0 0}
+.aep-ctx + .zpl{margin-top:8px}
+@media(max-width:599px){.aep-ctx{grid-template-columns:72px minmax(0,1fr);gap:10px 12px;padding:10px}}
 .zpl{margin:0 auto;width:min(100%,1200px);max-width:1200px}
 .zpl__h{font-size:clamp(22px,2vw,30px);font-weight:700;margin:0 0 clamp(14px,1.4vw,22px);
 display:flex;align-items:baseline;justify-content:space-between;gap:12px}
@@ -5244,6 +5262,69 @@ class ВидАнимедиа(ВидЗона):
                 титул=имя, описание=краткое, путь=путь,
                 изображение=запись.get("poster") or ""))
 
+    def серия(self, запись: dict, деталь: dict, сезон: int, эпизод: int) -> str:
+        """Compact title-derived episode page — not a player-only shell."""
+        имя = запись["title"]
+        путь = self.адрес_эпизода(запись["slug"], сезон, эпизод)
+        title_path = f"/title/{запись['slug']}/"
+        заголовок = f"{имя} — сезон {сезон}, серия {эпизод}"
+        звенья = [("/", self.имя), ("/series/", "Сериалы"),
+                  (title_path, имя), ("", f"S{сезон}E{эпизод}")]
+        изо = заглушка_постера(запись, "zt__none", "zhead__img", 120, 180)
+        orig = str(деталь.get("original_name") or деталь.get("original_title") or "").strip()
+        orig_html = f'<p class="aep-ctx__o">{html.escape(orig)}</p>' if orig else ""
+        meta_bits = [str(x) for x in (
+            запись.get("year"),
+            запись.get("kind") or деталь.get("type"),
+            ", ".join(деталь.get("countries") or [])[:40] or None,
+        ) if x]
+        genres = деталь.get("genres") or []
+        if genres:
+            meta_bits.append(", ".join(str(г) for г in genres[:4]))
+        meta_html = (f'<p class="aep-ctx__meta">{html.escape(" · ".join(meta_bits))}</p>'
+                     if meta_bits else "")
+        описание = (деталь.get("description") or деталь.get("short_description") or "").strip()
+        desc_html = ""
+        if описание:
+            short = описание if len(описание) <= 320 else описание[:317].rstrip() + "…"
+            desc_html = f'<p class="aep-ctx__desc">{html.escape(short)}</p>'
+        оценки_html = разметка_оценок(деталь, "rbs", пусто=False)
+        код, внутри = разметка_плеера(self, запись, деталь, сезон, эпизод)
+        плеер = (
+            f'<section class="zpl" id="watch"><div class="zpl__h"><h2>Смотреть</h2>'
+            f"<span>{html.escape(_подпись_плеера(код))}</span></div>"
+            f'<div class="zpl__f" data-player data-state="{код}" '
+            f'data-season="{int(сезон)}" data-episode="{int(эпизод)}">{внутри}</div>'
+            f"{_скрипты_плеера(код)}</section>")
+        пред, след = границы_серии(деталь, сезон, эпизод)
+        переход = ('<div class="zwrap"><nav class="zepnav" aria-label="Соседние серии">'
+                   + (f'<a href="{self.адрес_эпизода(запись["slug"], *пред)}" rel="prev">'
+                      f'← S{пред[0]}E{пред[1]}</a>' if пред else "<span></span>")
+                   + (f'<a href="{self.адрес_эпизода(запись["slug"], *след)}" rel="next">'
+                      f'S{след[0]}E{след[1]} →</a>' if след else "<span></span>")
+                   + "</nav></div>")
+        ctx = (
+            f'<div class="zwrap"><div class="aep-ctx" data-episode-context="1">'
+            f'<div class="aep-ctx__poster">{изо}</div>'
+            f'<div class="aep-ctx__main">'
+            f'<h1>{html.escape(имя)}</h1>{orig_html}'
+            f'<p class="aep-ctx__ep">Сезон {int(сезон)} · серия {int(эпизод)}</p>'
+            f'{meta_html}{оценки_html}{desc_html}'
+            f'<a class="aep-ctx__back" href="{title_path}">К странице тайтла</a>'
+            f'</div></div></div>')
+        сезоны = список_серий(деталь)
+        тело = (ctx + плеер + переход
+                + f'<div class="zwrap">{self._серии(запись, сезоны, текущий=(сезон, эпизод))}</div>')
+        разметка = self.schema_эпизода(запись, деталь, сезон, эпизод, путь)
+        return self.оболочка(
+            тело, f"{заголовок} — {self.имя}", путь,
+            описание=(описание[:180] if описание else
+                      f"{заголовок}: смотреть онлайн на витрине {self.имя}."),
+            разметка=разметка, крошки=self.крошки(звенья),
+            og=self.карточка_графа(
+                тип="video.episode", титул=заголовок,
+                описание=f"{заголовок}: смотреть онлайн на витрине {self.имя}.",
+                путь=путь, изображение=запись.get("poster") or ""))
 
     def _франшиза(self, деталь: dict) -> str:
         """Prequel/sequel only from real relation IDs with working title routes."""
