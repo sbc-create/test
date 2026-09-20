@@ -1,0 +1,17 @@
+{
+  "site": "lords-02",
+  "domain": "lordserial33.biz",
+  "service": "nova-lords-02.service",
+  "expected_design": "lords-series-feed-v2",
+  "LORDS02_POST_DEPLOY_PASS": true,
+  "smoke_x2_both_pass": true,
+  "stable_same_build": true,
+  "build_after": "20260920T193847Z-3c90aab-nova",
+  "artifact_after": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+  "data_design_after": "lords-series-feed-v2",
+  "pid_after": 4031916,
+  "indexability_after": "noindex, nofollow",
+  "indexability_mutations": 0,
+  "owner_restart": "PASS",
+  "evidence": "04-lords-02/SMOKE_X2.json"
+}

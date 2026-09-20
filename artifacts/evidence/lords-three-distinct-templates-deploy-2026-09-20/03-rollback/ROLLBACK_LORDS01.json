@@ -1,0 +1,15 @@
+{
+  "ROLLBACK_LORDS01": "/srv/lords/.frontend/.rollback/20260920T205103Z-lords-01",
+  "ROLLBACK_VERIFIED": true,
+  "previous_live_artifact_for_lords01_process": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+  "rollback_disk_artifact_sha": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+  "note": "Shared artifact already at new SHA before lords-01 stage; rollback restores previous lords-01 manifest. Old binary retained at ROLLBACK_LORDS02 point for emergency only (would affect shared disk).",
+  "restore_command": "python3 automation/host/lords-nova-canary.py rollback --site lords-01 --point /srv/lords/.frontend/.rollback/20260920T205103Z-lords-01",
+  "service": "lords-nova-01.service",
+  "domain": "lordfilm47.space",
+  "post_restore_verification": [
+    "curl -sS https://lordfilm47.space/__template_version",
+    "check data-design and artifact_sha256",
+    "confirm lordserial33.biz still lords-series-feed-v2 if shared artifact untouched"
+  ]
+}
