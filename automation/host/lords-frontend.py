@@ -31,13 +31,15 @@
 from __future__ import annotations
 
 import argparse
-import html
 import copy
+import hashlib
+import html
 import json
 import os
 import re
 import sys
 import unicodedata
+from datetime import datetime, timezone
 from difflib import SequenceMatcher
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -96,6 +98,124 @@ def _рядом_с_каталогом(шаблон: str) -> str:
         return ""
     витрина = имя[: -len("-catalog.json")]
     return str(путь.with_name(шаблон.format(site=витрина)))
+
+
+#: In-memory popular shelf cache: shelf_key → (iso_week, slugs, digest).
+_ПОПУЛЯР_КЭШ: dict[str, tuple[str, tuple[str, ...], str]] = {}
+
+
+def недельный_ковш(сейчас: datetime | None = None) -> str:
+    """ISO week bucket used as the popular-shelf refresh unit."""
+    d = сейчас or datetime.now(timezone.utc)
+    год, неделя, _ = d.isocalendar()
+    return f"{год}-W{неделя:02d}"
+
+
+def _путь_популярного_снимка() -> Path | None:
+    env = os.environ.get("LORDS_POPULAR_SNAPSHOT")
+    if env:
+        return Path(env)
+    side = _рядом_с_каталогом("{site}-popular-weekly.json")
+    return Path(side) if side else None
+
+
+def сброс_популярного_кэша() -> None:
+    """Test/helper: drop process-local popular cache (disk file untouched)."""
+    _ПОПУЛЯР_КЭШ.clear()
+
+
+def популярные_недельный(
+    записи: list,
+    оценка,
+    *,
+    сколько: int = 12,
+    вид: str | None = None,
+    сейчас: datetime | None = None,
+    force_rebuild: bool | None = None,
+) -> tuple[list, str, str]:
+    """Stable «Популярное» ordering for one ISO week.
+
+    Contract (LORDS-MULTISITE-AUDIT-01):
+    * do not reshuffle on every HTTP request;
+    * one weekly snapshot keyed by ISO week;
+    * identical order within the week across requests and after restart
+      (disk sidecar when writable);
+    * rebuild only on week rollover or explicit force/LORDS_POPULAR_REBUILD.
+    """
+    if force_rebuild is None:
+        force_rebuild = os.environ.get("LORDS_POPULAR_REBUILD", "").strip() in (
+            "1", "true", "yes", "YES")
+    ковш = недельный_ковш(сейчас)
+    ключ = f"{вид or 'all'}|{сколько}"
+    путь = _путь_популярного_снимка()
+
+    def _digest(slugs: list[str]) -> str:
+        return hashlib.sha256("\n".join(slugs).encode("utf-8")).hexdigest()[:32]
+
+    def _собрать() -> list[str]:
+        подходящие = [з for з in записи if вид is None or з.get("kind") == вид]
+        # Same honesty bound as Zona: score among a recent pool, not a full
+        # 50k re-sort that looks like live popularity.
+        свежие = sorted(
+            подходящие, key=lambda з: з.get("published_at") or "", reverse=True)[:400]
+        с_оценкой = [з for з in свежие if оценка(з) > 0]
+        база = с_оценкой or свежие
+        база = sorted(
+            база,
+            key=lambda з: (оценка(з), з.get("published_at") or "", з.get("slug") or ""),
+            reverse=True)
+        return [з["slug"] for з in база[:сколько]]
+
+    def _из_слагов(slugs: list[str]) -> list:
+        by = {з["slug"]: з for з in записи}
+        return [by[s] for s in slugs if s in by]
+
+    if not force_rebuild and ключ in _ПОПУЛЯР_КЭШ:
+        week, slugs_t, dig = _ПОПУЛЯР_КЭШ[ключ]
+        if week == ковш:
+            return _из_слагов(list(slugs_t)), week, dig
+
+    if not force_rebuild and путь is not None and путь.is_file():
+        try:
+            data = json.loads(путь.read_text(encoding="utf-8"))
+            entry = (data.get("shelves") or {}).get(ключ)
+            if entry and entry.get("week") == ковш and entry.get("slugs"):
+                slugs = [str(s) for s in entry["slugs"][:сколько]]
+                dig = str(entry.get("digest") or _digest(slugs))
+                _ПОПУЛЯР_КЭШ[ключ] = (ковш, tuple(slugs), dig)
+                return _из_слагов(slugs), ковш, dig
+        except (OSError, ValueError, TypeError):
+            pass
+
+    slugs = _собрать()
+    dig = _digest(slugs)
+    _ПОПУЛЯР_КЭШ[ключ] = (ковш, tuple(slugs), dig)
+    if путь is not None:
+        try:
+            data: dict = {}
+            if путь.is_file():
+                try:
+                    data = json.loads(путь.read_text(encoding="utf-8"))
+                except (OSError, ValueError):
+                    data = {}
+            shelves = dict(data.get("shelves") or {})
+            shelves[ключ] = {
+                "week": ковш, "slugs": slugs, "digest": dig,
+                "mode": "WEEKLY_SNAPSHOT",
+            }
+            payload = {
+                "schema": "lords-popular-weekly/1",
+                "shelves": shelves,
+                "updated_at": (сейчас or datetime.now(timezone.utc)).isoformat(),
+            }
+            путь.parent.mkdir(parents=True, exist_ok=True)
+            tmp = путь.with_suffix(путь.suffix + ".tmp")
+            tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2),
+                           encoding="utf-8")
+            os.replace(tmp, путь)
+        except OSError:
+            pass
+    return _из_слагов(slugs), ковш, dig
 
 
 #: Боковой файл подробностей (`build-detail-sidecar.py`). Отсутствие файла —
@@ -3480,6 +3600,31 @@ class ВидЛордс(Вид):
         сериалы = взять([з for з in готовые if з.get("kind") == "Сериал"], 12)
         if сериалы:
             полосы.append(self._полоса("Сериалы", "/series/", сериалы))
+        # Weekly popular snapshot — not reshuffled per request.
+        def _оценка_полки(з: dict) -> float:
+            try:
+                return float(з.get("_rating") or 0.0)
+            except (TypeError, ValueError):
+                return 0.0
+        популяр, week, dig = популярные_недельный(
+            list(self.д.items), _оценка_полки, сколько=12)
+        if популяр:
+            # Exclude titles already shown on earlier shelves when possible,
+            # but never recompute the weekly order — only skip occupied slots.
+            показ = []
+            for з in популяр:
+                if з["slug"] in занято:
+                    continue
+                занято.add(з["slug"])
+                показ.append(з)
+                if len(показ) >= 12:
+                    break
+            if показ:
+                полосы.append(self._полоса(
+                    "Популярное", "/collection/top_rated/", показ,
+                    attrs=(f' data-popular-week="{html.escape(week)}"'
+                           f' data-popular-digest="{html.escape(dig)}"'
+                           f' data-popular-mode="WEEKLY_SNAPSHOT"')))
         нов = взять(готовые, 12)
         if нов:
             полосы.append(self._полоса("Новинки", "/new/", нов))
@@ -3521,11 +3666,11 @@ class ВидЛордс(Вид):
                 описание=f"Каталог {self.имя}",
                 путь="/"))
 
-    def _полоса(self, титул: str, ссылка: str, набор) -> str:
+    def _полоса(self, титул: str, ссылка: str, набор, attrs: str = "") -> str:
         if not набор:
             return ""
         return (
-            f'<section class="sec-rail"><div class="sec-rail__h">'
+            f'<section class="sec-rail"{attrs}><div class="sec-rail__h">'
             f'<h2><a href="{закодировать_запрос(ссылка)}">{html.escape(титул)}</a></h2>'
             f'<a class="sec-rail__all" href="{закодировать_запрос(ссылка)}">Весь раздел</a>'
             f"</div>{self.сетка(набор)}</section>")
@@ -4171,6 +4316,7 @@ class ВидЗона(Вид):
         #: Пул для «популярного» ограничен намеренно: сортировать 50 тысяч
         #: записей по оценке на каждый запрос незачем, а «популярное среди
         #: недавнего» — честная формулировка того, что здесь считается.
+        #: Ordering is frozen for the ISO week (WEEKLY_SNAPSHOT).
         ПУЛ = 400
 
         def выбрать(вид: str | None, ключ, сколько: int = 12,
@@ -4190,6 +4336,19 @@ class ВидЗона(Вид):
                     break
             return отобрано
 
+        def популярная_полка(вид: str | None, сколько: int = 12) -> list:
+            набор, _week, _dig = популярные_недельный(
+                list(self.д.items), оценка, сколько=сколько * 3, вид=вид)
+            out = []
+            for з in набор:
+                if з["slug"] in занято:
+                    continue
+                занято.add(з["slug"])
+                out.append(з)
+                if len(out) >= сколько:
+                    break
+            return out
+
         def есть_серии(з: dict) -> bool:
             return bool(self.деталь(з["slug"]).get("seasons"))
 
@@ -4198,10 +4357,10 @@ class ВидЗона(Вид):
 
         ленты = [
             ("pop-films", "Популярные новинки фильмов", "/movies/",
-             выбрать("Фильм", оценка, пул=ПУЛ),
+             популярная_полка("Фильм"),
              ""),
             ("pop-series", "Популярные сериалы", "/series/",
-             выбрать("Сериал", оценка, пул=ПУЛ),
+             популярная_полка("Сериал"),
              ""),
             ("new-films", "Добавленные недавно фильмы", "/movies/",
              выбрать("Фильм", свежесть, условие=есть_источник),
@@ -4214,7 +4373,7 @@ class ВидЗона(Вид):
              [],
              ""),
             ("pop-anim", "Популярная анимация", "/animation/",
-             выбрать("Мультфильм", оценка, пул=ПУЛ),
+             популярная_полка("Мультфильм"),
              ""),
             ("new-all", "Недавно в каталоге", "/new/",
              выбрать(None, свежесть, условие=есть_источник, сколько=18),
