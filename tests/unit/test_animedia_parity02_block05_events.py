@@ -23,7 +23,6 @@ from tests.unit.test_animedia_visual_finalization import (  # noqa: E402
 
 
 FORBIDDEN_AIR_LABELS = (
-    "новые серии",
     "вышла серия",
     "вышел эпизод",
     "сегодня выйдет",
@@ -41,13 +40,16 @@ def fe_visual(tmp_path):
     return _load_visual(tmp_path, version="1.2.4")
 
 
-def test_feed_title_is_catalog_publish(fe):
+def test_home_b03_empty_not_catalog_fallback(fe):
     mod, items, details = fe
     вид = _вид(mod, items, details)
     home = вид.главная()
-    assert mod.АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК == "Новое в каталоге"
-    assert "Новое в каталоге" in home
+    assert mod.АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК == "Новые серии аниме"
+    assert "Новые серии аниме" in home
+    assert 'data-b03="empty"' in home
+    assert "источник событий ещё не подключён" in home
     assert mod.АНИМЕДИА_EPISODE_EVENT_DATA_GAP == 1
+    assert mod.TRUE_PROVIDER_PLAYABLE_EVENT_COUNT == 0
     low = home.lower()
     for label in FORBIDDEN_AIR_LABELS:
         assert label not in low

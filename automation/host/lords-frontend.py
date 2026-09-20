@@ -1956,6 +1956,12 @@ flex-wrap:nowrap;min-height:1.25em;align-items:center}
 .zsec--rel .zg{gap:14px}
 @media(min-width:1200px){.zsec--rel .zg{grid-template-columns:repeat(6,minmax(0,1fr))}}
 .ahome-eps{max-width:min(1760px,100%);margin-inline:auto}
+.ahome-eps--empty{margin:0 0 16px;max-height:96px;overflow:hidden}
+.ahome-eps--empty .zsec__h{margin:0 0 6px}
+.ahome-eps--empty .zsec__h h2{font-size:18px;line-height:1.2;margin:0}
+.ahome-eps__empty{margin:0;padding:10px 12px;border-radius:8px;background:var(--a-alt);
+border:1px solid var(--a-line);color:var(--a-dim);font-size:13px;line-height:1.35;
+max-height:56px;overflow:hidden}
 .ahome-eps .aeps,.zsec--eps.ahome-eps .zl{display:grid;gap:14px;grid-template-columns:1fr}
 @media(min-width:900px){
   .ahome-eps .aeps,.zsec--eps.ahome-eps .zl{
@@ -4800,13 +4806,19 @@ def _мета_версии() -> str:
 #: Europe/Moscow — documented site timezone for Animedia human timestamps.
 АНИМЕДИА_TZ = timezone(timedelta(hours=3))
 АНИМЕДИА_ЭПИЗОД_НА_СТРАНИЦЕ = 10
-# Snapshot has no episode air timestamps — feed is catalog-publish + latest avail.
+# B03: provider_became_playable ledger absent → compact empty, no catalog fallback.
 АНИМЕДИА_EPISODE_EVENT_DATA_GAP = 1
-АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК = "Новое в каталоге"
-АНИМЕДИА_ЭПИЗОД_ПОДПИСЬ = (
-    "Время — дата добавления тайтла в каталог; номер — последняя доступная серия. "
-    "Отдельной ленты выходов серий в снимке нет."
+TRUE_PROVIDER_PLAYABLE_EVENT_COUNT = 0
+АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК = "Новые серии аниме"
+АНИМЕДИА_ЭПИЗОД_EMPTY_COPY = (
+    "Лента новых серий пока недоступна: источник событий ещё не подключён"
 )
+АНИМЕДИА_PROVIDER_PLAYABLE_PATH = os.environ.get(
+    "ANIMEDIA_PROVIDER_PLAYABLE_EVENTS",
+    str(Path(__file__).resolve().parents[2] / "config" / "animedia-provider-playable-events.json"),
+)
+# Legacy alias — catalog-publish rows must not feed B03.
+АНИМЕДИА_ЭПИЗОД_ПОДПИСЬ = АНИМЕДИА_ЭПИЗОД_EMPTY_COPY
 # Popular shelf: ONLY an owner/Core-approved WeeklyPopularSnapshot (§5.6).
 # Template must not rank catalog ratings into a public «Популярное за неделю».
 АНИМЕДИА_POPULAR_WINDOW = "weekly"
@@ -5884,20 +5896,8 @@ class ВидАнимедиа(ВидЗона):
         куски.append(f'<p class="zsub zsub--home">{html.escape(домен["lead"])}</p>')
         # Empty ad slots must collapse to 0px (no Telegram/premium invent).
         куски.append('<div class="zad-home" data-ad-slot="home-after-hero" data-ad-enabled="0"></div>')
-        # First major content after compact rail: episode feed page 1 (size 10).
-        all_eps = self._эпизод_события()
-        per = АНИМЕДИА_ЭПИЗОД_НА_СТРАНИЦЕ
-        pages = max(1, (len(all_eps) + per - 1) // per) if all_eps else 0
-        ep_rows = all_eps[:per]
-        if ep_rows:
-            feed = '<div class="aeps">' + "".join(
-                self._разметка_эпизод_ряда(r) for r in ep_rows) + "</div>"
-            pager = self._листалка_эпизодов(1, pages) if pages > 1 else ""
-            куски.append(
-                '<section class="zsec zsec--eps ahome-eps"><div class="zsec__h">'
-                f'<h2>{АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК}</h2>'
-                '<a href="/new/?page=1">Все добавленные</a></div>'
-                f'{feed}{pager}</section>')
+        # B03: provider_became_playable only — never catalog fallback.
+        куски.append(self._блок_новых_серий_b03())
         куски.append('<div class="zad-mid" data-ad-slot="home-mid-content" data-ad-enabled="0"></div>')
         # Cross-shelf dedup. Weekly shelf slugs may reappear in lower grids only
         # when the lower shelf is not also the weekly popular block.
@@ -6098,12 +6098,106 @@ class ВидАнимедиа(ВидЗона):
             f'<div class="afilt__rows">{body}</div></div></div>'
         )
 
-    def _эпизод_события(self) -> list[dict]:
-        """Catalog-publish rows with latest available episode — not air dates.
+    def _provider_playable_events(self) -> list[dict]:
+        """B03 feed: only provider_became_playable ledger rows with provenance.
 
-        Each row is one title with ``details.seasons[].avail`` ≥ 1. Timestamp is
-        catalog ``published_at`` (title add/update). True episode-air events are
-        absent (``АНИМЕДИА_EPISODE_EVENT_DATA_GAP=1``); never invent air times.
+        Without an approved ledger file the feed is empty
+        (TRUE_PROVIDER_PLAYABLE_EVENT_COUNT=0). Catalog publish must never
+        populate this list.
+        """
+        путь = Path(АНИМЕДИА_PROVIDER_PLAYABLE_PATH)
+        if not путь.is_file():
+            return []
+        try:
+            raw = json.loads(путь.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return []
+        events = raw.get("events") if isinstance(raw, dict) else raw
+        if not isinstance(events, list):
+            return []
+        out = []
+        seen = set()
+        by_slug = {з.get("slug"): з for з in self.д.items if з.get("slug")}
+        for ev in events:
+            if not isinstance(ev, dict):
+                continue
+            if ev.get("event_type") not in {"provider_became_playable", None}:
+                # Explicit non-playable types skipped; missing type allowed only
+                # when provider_available_at is present (legacy fixture).
+                if ev.get("event_type") and ev.get("event_type") != "provider_became_playable":
+                    continue
+            if not ev.get("provider_available_at"):
+                continue
+            slug = str(ev.get("title_slug") or ev.get("slug") or "")
+            if not slug or slug not in by_slug:
+                continue
+            season = int(ev.get("season") or ev.get("season_number") or 0)
+            episode = int(ev.get("episode") or ev.get("episode_number") or 0)
+            if season < 1 or episode < 1:
+                continue
+            event_id = str(ev.get("event_id") or f"{slug}:s{season}e{episode}")
+            dedupe = (slug, season, episode)
+            if dedupe in seen:
+                continue
+            seen.add(dedupe)
+            з = by_slug[slug]
+            out.append({
+                "event_id": event_id,
+                "event_type": "provider_became_playable",
+                "title_id": str(ev.get("title_id") or slug),
+                "title_slug": slug,
+                "slug": slug,
+                "title": з.get("title") or slug,
+                "season_number": season,
+                "episode_number": episode,
+                "season": season,
+                "episode": episode,
+                "provider_available_at": str(ev["provider_available_at"]),
+                "published_at": str(ev["provider_available_at"]),
+                "published_at_precision": "datetime",
+                "event_kind": "provider_became_playable",
+                "timestamp_semantics": "provider_available_at",
+                "poster": з.get("poster") or "",
+                "url": self.адрес_эпизода(slug, season, episode),
+                "provenance": ev.get("provenance") or "ledger",
+                "current_availability_revision": str(
+                    ev.get("current_availability_revision") or ""),
+            })
+        out.sort(
+            key=lambda e: (e.get("provider_available_at") or "", e.get("event_id") or ""),
+            reverse=True,
+        )
+        return out
+
+    def _блок_новых_серий_b03(self) -> str:
+        """Home B03: populated provider feed or compact empty ≤96px."""
+        events = self._provider_playable_events()
+        self._provider_playable_count = len(events)
+        if not events:
+            return (
+                f'<section class="zsec zsec--eps ahome-eps ahome-eps--empty" '
+                f'data-b03="empty" data-provider-playable-count="0">'
+                f'<div class="zsec__h"><h2>{АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК}</h2></div>'
+                f'<p class="ahome-eps__empty">{html.escape(АНИМЕДИА_ЭПИЗОД_EMPTY_COPY)}</p>'
+                f'</section>'
+            )
+        per = АНИМЕДИА_ЭПИЗОД_НА_СТРАНИЦЕ
+        rows = events[:per]
+        feed = '<div class="aeps">' + "".join(
+            self._разметка_эпизод_ряда(r) for r in rows) + "</div>"
+        return (
+            f'<section class="zsec zsec--eps ahome-eps" data-b03="populated" '
+            f'data-provider-playable-count="{len(events)}">'
+            f'<div class="zsec__h"><h2>{АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК}</h2></div>'
+            f'{feed}</section>'
+        )
+
+    def _эпизод_события(self) -> list[dict]:
+        """Deprecated catalog-publish helper — B03 must not use this on home.
+
+        Kept for /new/ transitional callers until B12 rewires that route to the
+        catalog_added ledger. Returns catalog rows explicitly tagged so they
+        cannot be mistaken for provider_became_playable.
         """
         events = []
         seen = set()
@@ -6153,7 +6247,7 @@ class ВидАнимедиа(ВидЗона):
                 "published_at": published,
                 "published_at_precision": precision,
                 "event_kind": "catalog_publish",
-                "timestamp_semantics": "catalog.items[].published_at (title add/update; not episode air)",
+                "timestamp_semantics": "catalog.items[].published_at (title add/update; not episode air; NOT provider_became_playable)",
                 "source_updated_at": str(з.get("updated_at") or ""),
                 "poster": з.get("poster") or "",
                 "playable_state": "playable" if det.get("playable") is True else "unknown",

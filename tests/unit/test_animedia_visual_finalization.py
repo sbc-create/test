@@ -161,19 +161,15 @@ class TestVisualContracts:
         assert "grid-template-columns:repeat(10" in css
         assert "grid-template-columns:repeat(7" in css
 
-    def test_home_leads_with_episode_feed(self, fe):
+    def test_home_leads_with_b03_empty_not_catalog_feed(self, fe):
         mod, catalog, details = fe
         html = _вид(mod, catalog, details).главная()
-        assert "Новое в каталоге" in html
-        assert 'class="aeps"' in html
-        assert 'class="aeps__row"' in html
-        # Episode feed appears before poster shelves (zsec without --eps after).
-        pos_eps = html.find("Новое в каталоге")
-        pos_top = html.find("Высокие оценки")
-        assert pos_eps > 0
-        if pos_top > 0:
-            assert pos_eps < pos_top
-        assert "Сегодня" not in html or "Сегодня выйдет" not in html
+        assert "Новые серии аниме" in html
+        assert 'data-b03="empty"' in html
+        assert "источник событий ещё не подключён" in html
+        # Catalog-publish rows must not appear as the home episode feed.
+        assert 'data-event-kind="catalog_publish"' not in html
+        assert "Сегодня выйдет" not in html
 
     def test_new_route_is_episode_rows(self, fe):
         mod, catalog, details = fe
@@ -243,13 +239,13 @@ class TestVisualContracts:
         assert "sidecar" not in html.lower()
         assert "поставщик" not in html.lower()
         assert "Animedia 1.2.4 ·" in html
-        assert "/schedule/" not in html
 
-    def test_nav_hides_schedule(self, fe):
+    def test_nav_includes_schedule_from_registry(self, fe):
         mod, _, _ = fe
         nav = " ".join(u for u, _ in mod.СЕМЕЙСТВА_1_1["animedia"]["нав"])
-        assert "/schedule/" not in nav
+        assert "/schedule/" in nav
         assert "/new/" in nav
+        assert "/catalog/" in nav
 
     def test_collections_copy_human(self, fe):
         from factory.lords import collection_contract as кк

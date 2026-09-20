@@ -158,9 +158,8 @@ class TestEpisodeEvents:
             assert "not episode air" in e["timestamp_semantics"]
             assert e["source_provenance"].startswith("catalog.published_at")
         home = вид.главная()
-        assert "Новое в каталоге" in home
-        assert "Добавлено" in home
-        assert 'href="/new/?page=1"' in home
+        assert "Новые серии аниме" in home
+        assert 'data-b03="empty"' in home
         assert "вышла серия" not in home.lower()
         assert mod.АНИМЕДИА_EPISODE_EVENT_DATA_GAP == 1
         p1 = вид.список("/new", {})
@@ -186,16 +185,16 @@ class TestEpisodeEvents:
 
 
 class TestPagination:
-    def test_home_top10_matches_new_page1(self, fe):
+    def test_home_b03_empty_while_new_keeps_catalog_rows(self, fe):
         mod, items, details = fe
         вид = _вид(mod, items, details)
         home = вид.главная()
         p1 = вид.список("/new", {})
-        assert _ids(home) == _ids(p1)
-        assert len(_ids(home)) == 10
-        assert "ahome-eps" in home
-        assert "/new/?page=2" in home
-        assert 'aria-current="page"' in home
+        assert 'data-b03="empty"' in home
+        assert _ids(home) == []
+        assert len(_ids(p1)) == 10
+        assert "ahome-eps--empty" in home
+        assert "/new/?page=2" in p1
 
     def test_pages_partition_full_set(self, fe):
         mod, items, details = fe
@@ -249,7 +248,8 @@ class TestCssIsolation:
         # must not rewrite global article/img card player
         assert "article{" not in css.replace(" ", "")
         assert ".ahero .zrl__track>*" in css
-        assert "152px" in css
+        assert "calc((100% - 144px)/10)" in css
+        assert "112px" in css
 
 
 class TestDomainConsistency:
