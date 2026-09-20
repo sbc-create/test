@@ -1129,9 +1129,9 @@ border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600;color:@INK@}
 .filt__reset{display:inline-flex;align-items:center;min-height:32px;padding:4px 12px;border-radius:3px;
 background:@ACC@;color:#fff;font-size:12px;font-weight:700;border:0}
 @media(max-width:720px){
-.filt__field select{max-width:100%;min-width:0;width:calc(50% - 4px)}
 .filt__form{width:100%}
-.filt__field{flex:1 1 42%}
+.filt__field{flex:1 1 100%;min-width:0}
+.filt__field select{width:100%;max-width:100%;min-width:0;min-height:44px}
 }
 /* Сетка в шесть колонок с тесными желобами. */
 .grid{display:grid;gap:8px;grid-template-columns:repeat(2,1fr)}
@@ -3272,6 +3272,23 @@ def склонение_совпадений(n: int) -> str:
     return f"{n} совпадений"
 
 
+def _уникальные_опции(пары) -> list[tuple[str, str]]:
+    """Dedupe select options by value and by casefolded label (first wins)."""
+    итог: list[tuple[str, str]] = []
+    видели_зн: set[str] = set()
+    видели_имя: set[str] = set()
+    for код, имя in пары:
+        if not код:
+            continue
+        ключ_имя = (имя or код).casefold().strip()
+        if код in видели_зн or ключ_имя in видели_имя:
+            continue
+        видели_зн.add(код)
+        видели_имя.add(ключ_имя)
+        итог.append((код, имя or код))
+    return итог
+
+
 def отбор(данные: "Данные", индекс: dict, зпр: dict, раздел: str) -> tuple[list, dict]:
     """Выборка каталога по параметрам запроса. Возвращает (набор, выбранное).
 
@@ -3799,9 +3816,18 @@ class ВидЛордс(Вид):
                                 if к not in ("kind", "page") and в})
             seg.append(f'<a href="{href}{q}"{cur}>{label}</a>')
 
-        year_opts = [(str(г), str(г)) for г in (self.д.years or [])[:20]]
-        genre_opts = [(код, имя) for код, имя in (self.индекс.get("genre_names") or [])[:40]]
-        country_opts = [(код, имя) for код, имя in (self.индекс.get("country_names") or [])[:40]]
+        year_now = str(выбрано.get("year") or "")
+        # Prefer full catalog years; always inject the active year so a legacy
+        # facet like 1902 stays selected and survives form re-submit.
+        year_opts = [(str(г), str(г)) for г in (self.д.years or [])]
+        if year_now and year_now not in {v for v, _ in year_opts}:
+            year_opts.append((year_now, year_now))
+            year_opts.sort(key=lambda п: int(п[0]) if п[0].isdigit() else 0,
+                           reverse=True)
+        genre_opts = _уникальные_опции(
+            (код, имя) for код, имя in (self.индекс.get("genre_names") or []))
+        country_opts = _уникальные_опции(
+            (код, имя) for код, имя in (self.индекс.get("country_names") or []))
         sort_opts = [("date", "По дате"), ("title", "По названию"),
                      ("year", "По году"), ("rating", "По рейтингу")]
         fields = []
@@ -3811,7 +3837,7 @@ class ВидЛордс(Вид):
             f'<option value="">Все</option>'
             + "".join(
                 f'<option value="{html.escape(v)}"'
-                f'{" selected" if str(выбрано.get("year") or "") == v else ""}>'
+                f'{" selected" if year_now == v else ""}>'
                 f"{html.escape(lbl)}</option>" for v, lbl in year_opts)
             + "</select></label>")
         fields.append(
