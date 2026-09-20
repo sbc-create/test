@@ -4,8 +4,8 @@
 VERDICT=FOUNDATION_READY_OWNER_GATED
 STAGE=COMMUNITY-RATINGS-01
 START_HEAD=77af9da36691da89960a34c628d3bd969f06187c
-FINAL_HEAD=436e36dd61cac43cb11281e7eae7c694d7e2f7a6
-COMMITS=5
+FINAL_HEAD=4593811232c95563fc40a372c3f15596b98134ca
+COMMITS=6
 TESTS=27_PASS
 RATING_POLICY_VERSION=rating_policy_v1
 ANIMEDIA_RATING_SPACE=animedia
@@ -63,3 +63,4 @@ OVERALL_CAN_BE_CLOSED=1
 1. `91be171` Block 00 audit + policy draft
 2. `97876f6` spaces/ledger/formulas/API + migration 0005 (isolated)
 3. `fa94dc3` antifraud, comments dark, frontends, tests, gates
+4. `2e967aa` final verdict report
