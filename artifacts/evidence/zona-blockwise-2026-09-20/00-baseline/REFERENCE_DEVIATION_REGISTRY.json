@@ -1,0 +1,5 @@
+{
+  "status": "PENDING_REFERENCE_CAPTURE",
+  "rule": "Unregistered reference vs product deviation is hard failure",
+  "deviations": []
+}

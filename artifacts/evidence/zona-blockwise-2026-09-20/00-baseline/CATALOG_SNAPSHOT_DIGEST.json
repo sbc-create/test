@@ -1,0 +1,49 @@
+{
+  "pinned_at": "2026-09-20T12:36:02Z",
+  "method": "live_html_observation_plus_spec_baseline; source snapshot digest pending host read if available",
+  "live_observations": {
+    "catalog_total_substring_53548": {
+      "contains": true,
+      "card_links": 28,
+      "sha256": "38abd16a76d49785a6f7c5cc41dc26cb1a816d7b9c3976d21d56e21454b74e8d"
+    },
+    "new_total_substring_1218": {
+      "contains": true,
+      "card_links": 28,
+      "sha256": "68e30c25fd64932f523c106150b0e7943d084fd1413d5138c744bbea76b57b90"
+    },
+    "year_2019_substring_2144": {
+      "contains": true,
+      "card_links": 28,
+      "sha256": "2a9646dbce4ba4a04af1363ec1d0bb4f368339cf42e09e8884ec50b8da1d9e28"
+    },
+    "komediya_2019_substring_616": {
+      "contains": true,
+      "card_links": 28,
+      "sha256": "ccfd4611d57d990417bff64f210f288dfed8b106b6571c2dd1eb0f5dcc9921f9"
+    },
+    "comedy_alias_2019_card_links": {
+      "contains": true,
+      "card_links": 0,
+      "sha256": "55545e90179ed787502c0610f372417fe9198e5b6eacc2112f9a54f892248ccb"
+    },
+    "catalog_last_page_seen": 1913,
+    "year_2019_last_page_seen": 77,
+    "new_last_page_seen": 44,
+    "page_size_contract": 28
+  },
+  "spec_baseline_observations_only": {
+    "CATALOG_TOTAL_PREVIOUS_FROZEN": 53524,
+    "CATALOG_TOTAL_LIVE_SPEC": 53548,
+    "DELTA": 24,
+    "NOTE": "Do not hard-code into templates; valid only with matching CATALOG_SNAPSHOT_DIGEST"
+  },
+  "CATALOG_SNAPSHOT_DIGEST": null,
+  "CATALOG_SNAPSHOT_DIGEST_STATUS": "PENDING_SOURCE_ARTIFACT",
+  "popular": {
+    "week_id": "2026-W38",
+    "digest": "0d16b8a841810a9bef268710223ef576",
+    "mode": "WEEKLY_SNAPSHOT",
+    "template_pass_mutation_count": 0
+  }
+}

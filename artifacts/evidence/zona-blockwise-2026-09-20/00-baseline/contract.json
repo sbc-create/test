@@ -1,0 +1,16 @@
+{
+  "contract_id": "ZONA_BLOCK_SPEC_V1",
+  "contract_path": "docs/ZONA_BLOCK_SPEC_V1.md",
+  "sections_1_24_sha256": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+  "owner_decision_id": "ZONA-B00-OVERRIDE-20260920-01",
+  "old_digest_status": "REVOKED_BY_OWNER",
+  "revoked_digest": "01e9db7b27eb6c4bc41160ca6270f25aa7e6352b743dac2b9f09a0493b7b58fb",
+  "contract_commit": "71d1f7dfdf22d2c5c6d79497672827880dc01bb7",
+  "freeze_commit": "1d96c2de73f2dc60e0ce3b67970b0c3eb1c58667",
+  "acceptance_contract_gate": "PASS",
+  "stage": "ZONA-BLOCKWISE-PARITY-08",
+  "profile": "zona-01",
+  "domain": "zonafilm.space",
+  "frozen_at": "2026-09-20T12:36:02Z",
+  "tolerances_immutable_after_b00": true
+}

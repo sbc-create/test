@@ -1,0 +1,132 @@
+{
+  "blocks": [
+    {
+      "block_id": "B00",
+      "state": "PASS_PARTIAL_BLOCKED_REFERENCE",
+      "close_condition": "frozen digest + reference + manifests",
+      "acceptance_contract_gate": "PASS",
+      "reference_gate": "BLOCKED_DEPENDENCY"
+    },
+    {
+      "block_id": "B01",
+      "state": "PENDING",
+      "close_condition": "responsive+a11y header"
+    },
+    {
+      "block_id": "B02",
+      "state": "PENDING",
+      "close_condition": "hero snapshot/geometry"
+    },
+    {
+      "block_id": "B03",
+      "state": "PENDING",
+      "close_condition": "weekly snapshot gates"
+    },
+    {
+      "block_id": "B04",
+      "state": "PENDING",
+      "close_condition": "true catalog-added events"
+    },
+    {
+      "block_id": "B05",
+      "state": "PENDING",
+      "close_condition": "full kind counts"
+    },
+    {
+      "block_id": "B06",
+      "state": "PENDING",
+      "close_condition": "genre mapping/count oracle"
+    },
+    {
+      "block_id": "B07",
+      "state": "PENDING",
+      "close_condition": "distinct home collections"
+    },
+    {
+      "block_id": "B08",
+      "state": "PENDING",
+      "close_condition": "honest/collapsed about"
+    },
+    {
+      "block_id": "B09",
+      "state": "PENDING",
+      "close_condition": "card profiles/fallbacks"
+    },
+    {
+      "block_id": "B10",
+      "state": "PENDING",
+      "close_condition": "URL/state filter contract"
+    },
+    {
+      "block_id": "B11",
+      "state": "PENDING",
+      "close_condition": "full pagination oracle"
+    },
+    {
+      "block_id": "B12",
+      "state": "PENDING",
+      "close_condition": "taxonomy years/countries/genres"
+    },
+    {
+      "block_id": "B13",
+      "state": "PENDING",
+      "close_condition": "/new timestamp modes"
+    },
+    {
+      "block_id": "B14",
+      "state": "PENDING",
+      "close_condition": "search over existing ranker"
+    },
+    {
+      "block_id": "B15",
+      "state": "PENDING",
+      "close_condition": "title passport geometry"
+    },
+    {
+      "block_id": "B16",
+      "state": "PENDING",
+      "close_condition": "description/ratings provenance"
+    },
+    {
+      "block_id": "B17",
+      "state": "PENDING",
+      "close_condition": "player full-fill"
+    },
+    {
+      "block_id": "B18",
+      "state": "PENDING",
+      "close_condition": "episodes default/exact"
+    },
+    {
+      "block_id": "B19",
+      "state": "PENDING",
+      "close_condition": "recommendations dedupe"
+    },
+    {
+      "block_id": "B20",
+      "state": "PENDING",
+      "close_condition": "exact episode compact"
+    },
+    {
+      "block_id": "B21",
+      "state": "PENDING",
+      "close_condition": "collections hub/detail"
+    },
+    {
+      "block_id": "B22",
+      "state": "PENDING",
+      "close_condition": "footer/system states"
+    },
+    {
+      "block_id": "B23",
+      "state": "PENDING",
+      "close_condition": "responsive/a11y matrix"
+    },
+    {
+      "block_id": "B24",
+      "state": "PENDING",
+      "close_condition": "immutable artifact/owner packet"
+    }
+  ],
+  "updated_at": "2026-09-20T12:36:02Z"
+}

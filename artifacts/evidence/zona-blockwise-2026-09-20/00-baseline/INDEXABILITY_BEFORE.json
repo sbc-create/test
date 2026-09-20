@@ -1,0 +1,13 @@
+{
+  "domain": "zonafilm.space",
+  "profile": "zona-01",
+  "captured_at": "2026-09-20T12:34:51Z",
+  "robots_txt_sha256": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1",
+  "robots_txt_bytes": 26,
+  "robots_txt_text": "User-agent: *\nDisallow: /\n",
+  "home_x_robots_tag": "noindex, nofollow",
+  "home_meta_robots_tag": "<meta name=\"robots\" content=\"noindex, nofollow\">",
+  "home_canonical_tag": "<link rel=\"canonical\" href=\"https://zonafilm.space/\">",
+  "immutable_rule": "this pass must not mutate indexability",
+  "observation": "noindex,nofollow confirmed on live responses"
+}

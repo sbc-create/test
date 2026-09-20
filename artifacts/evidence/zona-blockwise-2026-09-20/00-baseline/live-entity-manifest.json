@@ -1,0 +1,180 @@
+{
+  "manifest_id": "LIVE_ENTITY_MANIFEST",
+  "status": "SKELETON_PENDING_REFERENCE",
+  "domain": "zonafilm.space",
+  "profile": "zona-01",
+  "viewports": [
+    "1920x1080",
+    "1440x900",
+    "1363x936",
+    "1280x900",
+    "1024x900",
+    "768x1024",
+    "390x844",
+    "360x800",
+    "mobile_landscape"
+  ],
+  "expected_case_count_note": "rows = cases x applicable viewports/states; cannot be reduced to match captured files",
+  "cases": [
+    {
+      "case_id": "home_top",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "home_middle",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "home_bottom",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "movies",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "series",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "animation",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "film_title",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "animation_title",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "one_season_series",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "multi_season_series",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "exact_episode",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "no_rating",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "no_description_if_exists",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "no_video",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "catalog_default",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "catalog_page2",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "invalid_catalog_page",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "filtered_genre",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "filtered_year",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "filtered_country",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "new_modes",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "search_exact",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "search_translit",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "search_no_result",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "collections_hub",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "collections_detail",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "invalid_title",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "invalid_episode",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "invalid_taxonomy",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "http_404",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "player_states_safe",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    },
+    {
+      "case_id": "synthetic_5xx_health_without_fault_injection",
+      "domain": "zonafilm.space",
+      "status": "PENDING_ENTITY_BIND"
+    }
+  ]
+}

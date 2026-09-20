@@ -1,0 +1,15 @@
+{
+  "state": "BLOCKED_DEPENDENCY",
+  "blocker_owner": "reference",
+  "blocker_code": "ACCEPTANCE_CONTRACT_MISSING_OR_MISMATCH",
+  "expected_path": "/home/claude/wt-zona-finalization-01/docs/ZONA_BLOCK_SPEC_V1.md",
+  "file_exists": false,
+  "observed_digest": null,
+  "expected_digest": "01e9db7b27eb6c4bc41160ca6270f25aa7e6352b743dac2b9f09a0493b7b58fb",
+  "digest_command": "sed '/^## 25\\. Команда для Cursor$/,$d' docs/ZONA_BLOCK_SPEC_V1.md | sha256sum",
+  "next_action": "Provide exact file at docs/ZONA_BLOCK_SPEC_V1.md whose sections 1-24 digest matches expected; do not reconstruct from chat memory",
+  "reconstruction_forbidden": true,
+  "b01_b24_started": false,
+  "stage": "ZONA-BLOCKWISE-PARITY-08",
+  "branch": "claude/zona-template-finalization-01"
+}

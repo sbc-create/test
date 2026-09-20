@@ -1,0 +1,100 @@
+{
+  "manifest_id": "LOCAL_FIXTURE_MANIFEST",
+  "status": "SKELETON_PENDING_REFERENCE",
+  "never_deploy": true,
+  "expected_case_count": 23,
+  "cases": [
+    {
+      "case_id": "full",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "missing_poster",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "missing_description",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "missing_rating",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "unavailable_player",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "slow_player",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "async_replacement",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "long_title",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "empty_collection",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "invalid_page",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "invalid_title",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "invalid_episode",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "invalid_taxonomy_slug",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "valid_empty_filter",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "controlled_500",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "controlled_upstream_502",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "controlled_maintenance_503",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "stale_weekly",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "missing_weekly",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "future_premiere",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "missing_added_timestamp",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "duplicated_source_row",
+      "status": "PENDING"
+    },
+    {
+      "case_id": "wrong_genre_mapping_fixture",
+      "status": "PENDING"
+    }
+  ]
+}

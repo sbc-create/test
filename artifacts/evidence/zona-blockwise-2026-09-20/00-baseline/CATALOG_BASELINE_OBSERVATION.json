@@ -1,0 +1,212 @@
+{
+  "captured_at": "2026-09-20T12:35:11Z",
+  "baseline_observations_from_spec_not_hardcoded": {
+    "frozen_report_total": 53524,
+    "live_total_observed_in_spec": 53548,
+    "delta": 24,
+    "page_size": 28,
+    "page_count_for_53548": 1913,
+    "year_facets": 92,
+    "year_2019": 2144,
+    "year_2019_pages": 77,
+    "new_total": 1218,
+    "new_2019": 7,
+    "comedy_2019_komediya": 616
+  },
+  "live_fetch_count_candidates": {
+    "home": {
+      "count_candidates": [],
+      "max_count_candidate": null,
+      "page_params_seen": [],
+      "sha256": "37128faab18d175f9c1172aa35ad6e280818c4d5298b081bc89b02f26769ecb1"
+    },
+    "catalog": {
+      "count_candidates": [
+        1913,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "max_count_candidate": 2026,
+      "page_params_seen": [
+        2,
+        3,
+        1913
+      ],
+      "sha256": "38abd16a76d49785a6f7c5cc41dc26cb1a816d7b9c3976d21d56e21454b74e8d"
+    },
+    "new": {
+      "count_candidates": [
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "max_count_candidate": 2026,
+      "page_params_seen": [
+        2,
+        3,
+        44
+      ],
+      "sha256": "68e30c25fd64932f523c106150b0e7943d084fd1413d5138c744bbea76b57b90"
+    },
+    "year_2019": {
+      "count_candidates": [
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "max_count_candidate": 2026,
+      "page_params_seen": [
+        2,
+        3,
+        77
+      ],
+      "sha256": "2a9646dbce4ba4a04af1363ec1d0bb4f368339cf42e09e8884ec50b8da1d9e28"
+    },
+    "genre_comedy_alias": {
+      "count_candidates": [
+        1997,
+        2012,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "max_count_candidate": 2026,
+      "page_params_seen": [],
+      "sha256": "55545e90179ed787502c0610f372417fe9198e5b6eacc2112f9a54f892248ccb"
+    },
+    "genre_komediya": {
+      "count_candidates": [
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "max_count_candidate": 2026,
+      "page_params_seen": [
+        2,
+        3,
+        22
+      ],
+      "sha256": "ccfd4611d57d990417bff64f210f288dfed8b106b6571c2dd1eb0f5dcc9921f9"
+    },
+    "movies": {
+      "count_candidates": [
+        1137,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "max_count_candidate": 2026,
+      "page_params_seen": [
+        2,
+        3,
+        1137
+      ],
+      "sha256": "0e67975b479a60b937e823c77c756819fd1bd22a3509831845e2d82bc07dc057"
+    },
+    "series": {
+      "count_candidates": [
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "max_count_candidate": 2026,
+      "page_params_seen": [
+        2,
+        3,
+        628
+      ],
+      "sha256": "e6e5a830c187d88bb2a141bdd5efed13217152ffa6e397326587ed5bd48fb046"
+    },
+    "animation": {
+      "count_candidates": [
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "max_count_candidate": 2026,
+      "page_params_seen": [
+        2,
+        3,
+        148
+      ],
+      "sha256": "dd40d76126b50f7d5c237c62261c42b7f1d6cca6d3e90b927a50f5192aeb125f"
+    },
+    "collections": {
+      "count_candidates": [],
+      "max_count_candidate": null,
+      "page_params_seen": [],
+      "sha256": "31497a8b532de610eb9787e10878a5b5ebc382840b71a057bc5fc13d2c225e70"
+    }
+  },
+  "note": "Acceptance numbers valid only when CATALOG_SNAPSHOT_DIGEST matches B00 pin; otherwise recompute from source snapshot",
+  "country_velikobritaniya_status": "HTTP_404",
+  "genre_comedy_alias_status": 200,
+  "genre_komediya_status": 200
+}

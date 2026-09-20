@@ -1,0 +1,458 @@
+<!doctype html><html lang="ru" data-template-version="1.2.0" data-template-family="zona" data-build-id="20260920T092117Z-dbaf9a4d-nova" data-design="zona-top">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Что нового — Zona</title><meta name="description" content="Что нового на витрине Zona."><link rel="canonical" href="https://zonafilm.space/new/?sort=newest">
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="site-factory-template-revision" content="dbaf9a4d228ea3481efb2c365518d5b2c38766d8"><meta name="site-factory-design-version" content="1.2.0"><meta name="site-factory-template-family" content="zona"><meta name="site-factory-build-id" content="20260920T092117Z-dbaf9a4d-nova"><meta name="site-factory-artifact-sha256" content="14df083302757613f0d51787963f9f43fd795c71300299fb3cc0dbf34cda5eaa"><meta name="site-factory-template" content="zona-nova"><meta name="site-factory-core" content="site-factory-nova"><meta name="site-factory-profile" content="zona-general"><script data-metrika-counter="112582938">(function(){if(window.__sfMetrikaReady){return;}window.__sfMetrikaReady=1;(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<e.scripts.length;j++){if(e.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym(112582938,"init",{trackLinks:true,accurateTrackBounce:true,webvisor:false});})();</script><noscript><div><img src="https://mc.yandex.ru/watch/112582938" style="position:absolute;left:-9999px" alt=""></div></noscript>
+<style>
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;max-width:100%}
+body{margin:0;min-height:100vh;overflow-x:clip;max-width:100%}
+img,video,iframe,svg{max-width:100%;height:auto;display:block}
+a{text-decoration:none;color:inherit}
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+clip:rect(0 0 0 0);white-space:nowrap;border:0}
+:focus-visible{outline:3px solid #4d9bff;outline-offset:2px;border-radius:3px}
+.skip{position:absolute;left:-9999px;top:0;z-index:200;padding:10px 16px;background:#4d9bff;color:#fff}
+.skip:focus{left:8px;top:8px}
+
+/* Оформление Zona 1.2.0. Числа — измеренные на эталоне; разметка и правила
+   написаны свои. Ключевые цели измерения (см. artifacts/evidence/
+   templates-zona-animedia-visual-parity-006/reference/zona-w140/):
+     контейнер 1400 max, поля 20 (16 на узком), шапка горизонтальная и
+     закреплённая высотой 69 на десктопе, кегль тела 13/17.9,
+     h2 22.1 нормального начертания, ссылки 15.6 полужирные. */
+body{background:#1e252b;color:#ffffff;
+font:13px/1.375 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif;
+/* Mobile uses burger: header is a single ~68px row. Old 117px pad left a
+   49px empty strip between header and content (Pass6 Block 02). */
+padding-top:72px}
+@media(min-width:768px){body{padding-top:138px}}
+@media(min-width:1280px){body{padding-top:69px}}
+.zs{min-height:100vh;display:block}
+.zmain{min-width:0}
+.zwrap{max-width:1760px;margin:0 auto;padding:0 12px;box-sizing:border-box}
+@media(min-width:768px){.zwrap{padding:0 24px}}
+@media(min-width:1440px){.zwrap{padding:0 32px}}
+@media(min-width:1920px){.zwrap{padding:0 64px}}
+
+/* Шапка: горизонтальная, закреплённая. Постоянной левой колонки нет ни на
+   одной ширине — это и было главным расхождением с эталоном. */
+.zhd{position:fixed;top:0;left:0;right:0;z-index:60;background:#546778;
+color:#ffffff;box-shadow:0 1px 0 rgba(0,0,0,.25)}
+.zhd__in{max-width:1400px;margin:0 auto;padding:10px 12px;display:flex;
+align-items:center;gap:12px;flex-wrap:wrap;min-height:72px;box-sizing:border-box}
+@media(min-width:768px){.zhd__in{padding:25px 16px;gap:14px;min-height:0}}
+@media(min-width:1280px){.zhd__in{padding:0 20px;height:69px;min-height:69px;flex-wrap:nowrap;gap:14px}}
+.zhd__logo{font-size:19px;font-weight:700;letter-spacing:-.3px;color:#fff;
+white-space:nowrap;flex:0 0 auto;min-height:44px;display:inline-flex;align-items:center}
+.zhd__logo:focus-visible{outline:2px solid #fff;outline-offset:3px;border-radius:4px}
+/* Пункты в одну строку с горизонтальной прокруткой: перенос на узком экране
+   поднимал шапку до 185 px против измеренных на эталоне 117. */
+.zhd__n{display:flex;gap:2px;flex:1 0 100%;order:3;min-width:0;
+overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.zhd__n::-webkit-scrollbar{display:none}
+@media(min-width:1280px){.zhd__n{flex:1 1 auto;order:0;overflow:visible}}
+.zhd__n a{padding:10px 12px;border-radius:6px;font-size:15.6px;font-weight:500;
+color:#eef3f8;white-space:nowrap;flex:0 0 auto;min-height:44px;min-width:44px;
+display:inline-flex;align-items:center;box-sizing:border-box}
+.zhd__n a:hover{background:rgba(255,255,255,.14)}
+.zhd__n a:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.zhd__n a[aria-current]{background:#0a5bd0;color:#fff}
+.zhd__s{display:flex;flex:1 1 140px;min-width:0;max-width:420px;
+border-radius:6px;overflow:hidden;background:#fff;min-height:44px}
+.zhd__s input{flex:1;min-width:0;border:0;padding:9px 12px;font-size:14px;
+color:#1e252b;font-family:inherit;min-height:44px;box-sizing:border-box}
+.zhd__s input:focus-visible{outline:2px solid #0a5bd0;outline-offset:-2px}
+.zhd__s button{border:0;background:#0a5bd0;color:#fff;padding:0 16px;
+font-weight:600;font-size:14px;cursor:pointer;font-family:inherit;
+min-height:44px;min-width:44px}
+.zhd__s button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+/* Жанры вынесены из шапки в тело главной: третий ряд поднимал шапку до
+   170 px против измеренных на эталоне 137.8. */
+
+/* Прежние узлы каркаса остаются объявленными: на них ссылаются страницы
+   каталога, поиска и произведения. Боковая колонка больше не раскладывается. */
+.zrail,.zrail__logo,.zrail__sub,.zrail__t,.zrail__n,.zrail__g{display:none}
+.ztop{border-bottom:1px solid #3a4450;background:#1e252b}
+.ztop__a{display:flex;align-items:center;gap:16px;padding:12px 0}
+.ztop__s{flex:1;display:flex;border:1px solid #3a4450;border-radius:6px;
+overflow:hidden;background:#28303a;max-width:640px}
+.ztop__s input{flex:1;border:0;padding:10px 13px;font-size:14px;
+background:transparent;color:#ffffff;font-family:inherit}
+.ztop__s button{border:0;background:#0a5bd0;color:#fff;padding:0 18px;
+font-weight:600;font-size:14px;cursor:pointer;font-family:inherit}
+.ztop__b{display:flex;gap:16px;padding:0 0 10px;font-size:13px;color:#aeb9c5;
+flex-wrap:wrap;max-width:100%;min-width:0}
+.ztop__b a{color:#4d9bff;font-weight:600;display:inline-block;padding:5px 2px;
+max-width:100%;overflow-wrap:anywhere}
+.ztop__b a[aria-current]{color:#ffffff;box-shadow:inset 0 -2px 0 #4d9bff}
+
+/* Типографика по измерению: h2 22.1 нормального начертания. */
+.zh{font-size:26px;line-height:1.22;font-weight:600;margin:22px 0 6px;
+letter-spacing:-.3px}
+@media(min-width:1280px){.zh{font-size:30px}}
+.zh--sm{font-size:22.1px;font-weight:400;margin:26px 0 6px;letter-spacing:0}
+.zsub{font-size:13px;color:#aeb9c5;margin:0 0 18px}
+.zsub a{display:inline-block;padding:5px 2px;color:#4d9bff;font-weight:600}
+.zcr{font-size:12.5px;color:#aeb9c5;padding:12px 0 0}
+.zcr a{color:#4d9bff}
+
+/* Пять горизонтальных лент. Управление мышью, клавиатурой и свайпом. */
+.zsec{margin:26px 0 30px}
+.zsec__h{display:flex;align-items:baseline;justify-content:space-between;
+gap:12px;margin:0 0 10px}
+.zsec__h h2{font-size:22.1px;font-weight:400;margin:0;letter-spacing:0}
+.zsec__h a{font-size:13px;color:#4d9bff;font-weight:600;white-space:nowrap}
+.zrl{position:relative}
+.zrl__vp{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;
+scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+scrollbar-width:none;padding:2px 0 4px;container-type:inline-size;container-name:zrl}
+.zrl__vp::-webkit-scrollbar{display:none;width:0;height:0}
+.zrl__track{display:flex;gap:var(--z-gap,14px);width:max-content;align-items:stretch}
+/* Home shelves match locked catalog density: 2 / 4 / 7 / 8. */
+.zrl__track>*{flex:0 0 calc((100cqw - var(--z-gap,14px)) / 2);scroll-snap-align:start;
+min-width:0;height:auto;max-width:var(--z-card-max,180px);box-sizing:border-box}
+@media(min-width:768px){.zrl__track>*{flex:0 0 calc((100cqw - 3 * var(--z-gap,14px)) / 4);
+max-width:var(--z-card-max,180px)}}
+@media(min-width:1440px){.zrl__track>*{flex:0 0 calc((100cqw - 6 * var(--z-gap,14px)) / 7);
+max-width:var(--z-card-max,180px)}}
+@media(min-width:1920px){.zrl__track>*{flex:0 0 calc((100cqw - 7 * var(--z-gap,14px)) / 8);
+max-width:var(--z-card-max,180px)}}
+.zrl__btn{position:absolute;top:28%;transform:translateY(-50%);z-index:5;
+width:34px;height:52px;border:0;border-radius:5px;cursor:pointer;
+background:rgba(16,21,26,.82);color:#fff;font-size:18px;line-height:1;
+display:none;align-items:center;justify-content:center}
+@media(min-width:1024px){.zrl:hover .zrl__btn,.zrl__btn:focus-visible{display:flex}}
+.zrl__btn--p{left:-6px}
+.zrl__btn--n{right:-6px}
+.zrl__btn[disabled]{opacity:.32;cursor:default}
+
+/* Pass5 densify: 2 / 4 / 7 / 8+ cols; card width capped at 180px. */
+:root{--z-card-max:180px;--z-gap:14px;--z-poster-max-h:270px}
+.zg{display:grid;gap:var(--z-gap);grid-template-columns:repeat(2,minmax(0,var(--z-card-max)));
+align-items:stretch;justify-content:start}
+@media(min-width:768px){.zg{grid-template-columns:repeat(4,minmax(0,var(--z-card-max)))}}
+@media(min-width:1440px){.zg{grid-template-columns:repeat(7,minmax(0,var(--z-card-max)))}}
+@media(min-width:1920px){.zg{grid-template-columns:repeat(8,minmax(0,var(--z-card-max)))}}
+.zg--related{display:grid;gap:var(--z-gap);grid-template-columns:repeat(2,minmax(0,var(--z-card-max)));
+overflow:visible;justify-content:start}
+@media(min-width:768px){.zg--related{grid-template-columns:repeat(4,minmax(0,var(--z-card-max)))}}
+@media(min-width:1440px){.zg--related{grid-template-columns:repeat(7,minmax(0,var(--z-card-max)))}}
+.zt{display:flex;flex-direction:column;height:100%;min-width:0;max-width:var(--z-card-max);
+background:#232b34;border:1px solid #3a4450;border-radius:6px;overflow:hidden;
+transition:border-color .16s,transform .16s;color:inherit;text-decoration:none}
+.zt:hover,.zt:focus-visible{border-color:#4d9bff;transform:translateY(-1px);outline:none}
+.zt__p{display:block;aspect-ratio:2/3;max-height:var(--z-poster-max-h);background:#28303a;
+position:relative;flex:0 0 auto;overflow:hidden}
+.zt__p img,.zt__img{position:absolute;inset:0;z-index:1;width:100%;height:100%;
+object-fit:cover;display:block}
+.zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:10px;
+text-align:center;color:#8d9aa8;font-size:11px;line-height:1.3;aspect-ratio:auto}
+.zt__none b{display:block;font-size:20px;font-weight:700;color:#aeb9c5;margin-bottom:3px}
+/* Card body: title (≤2 lines) + up to 2 compact meta lines + sourced rating.
+   Plot snippets stay off cards (Pass6 Block 03). */
+.zt__b{padding:7px 8px 8px;display:flex;flex-direction:column;gap:2px;flex:0 0 auto;
+height:96px;min-height:96px;max-height:96px;box-sizing:border-box;overflow:hidden}
+.zt__t{font-size:12.5px;font-weight:600;line-height:1.25;min-height:calc(1.25em * 2);
+max-height:calc(1.25em * 2);display:-webkit-box;-webkit-line-clamp:2;
+-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.zt__m{font-size:11px;color:#aeb9c5;line-height:1.25;min-height:0;
+max-height:1.25em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zt__x{display:none}
+.zt__r{display:flex;gap:8px;font-size:11px;color:#aeb9c5;margin-top:auto;
+padding-top:2px;flex-wrap:nowrap;min-height:1.25em;max-height:1.25em;align-items:center;
+overflow:hidden}
+.zt__r b{color:#ffb454;font-weight:700}
+.zt__r i{color:#ffb454;font-style:normal;font-weight:700}
+.zt__play{display:inline-block;font-size:10px;font-weight:700;color:#4d9bff;margin-left:auto}
+
+/* Строка списка: постер слева. Это не сетка главной. */
+.zl{display:flex;flex-direction:column;gap:10px}
+.zr{display:grid;grid-template-columns:64px 1fr;gap:12px;padding:10px;
+background:#232b34;border:1px solid #3a4450;border-radius:8px;align-items:start}
+@media(min-width:768px){.zr{grid-template-columns:82px 1fr}}
+.zr:hover{border-color:#4d9bff}
+.zr__p{aspect-ratio:2/3;background:#28303a;border-radius:5px;overflow:hidden;
+position:relative}
+.zr__p img,.zr__img{position:absolute;inset:0;width:100%;height:100%;
+object-fit:cover;display:block;z-index:1}
+.zr__none{position:absolute;inset:0;display:grid;place-items:center;
+text-align:center;color:#8d9aa8;font-size:11px;padding:6px}
+.zr__t{display:block;font-size:15px;font-weight:600;line-height:1.3;margin-bottom:3px}
+.zr__m{display:block;font-size:12.5px;color:#aeb9c5;margin-bottom:5px}
+.zr__d{font-size:12.5px;color:#aeb9c5;line-height:1.45;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zr__r{display:flex;gap:10px;font-size:12px;color:#aeb9c5;margin-top:6px;flex-wrap:wrap}
+
+/* Фильтры каталога (служебные) и жанровая навигация главной. */
+.zstrip{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px;max-width:100%;min-width:0}
+.zstrip a{background:#232b34;border:1px solid #3a4450;border-radius:6px;
+padding:7px 12px;font-size:13px;color:#aeb9c5;font-weight:600;
+max-width:100%;overflow-wrap:anywhere}
+.zstrip a:hover{border-color:#4d9bff;color:#ffffff}
+.zstrip a[aria-current]{background:#0a5bd0;color:#fff;border-color:#0a5bd0}
+.zgenres{margin:8px 0 28px;max-width:100%;min-width:0}
+.zgenres__h{font-size:22.1px;font-weight:400;margin:0 0 12px;letter-spacing:0}
+.zgenres__nav{display:flex;flex-wrap:wrap;gap:10px;max-width:100%}
+.zgenres__nav a{display:inline-flex;align-items:center;justify-content:center;
+min-height:42px;padding:10px 16px;border-radius:9px;border:1px solid #3a4450;
+background:#232b34;color:#ffffff;font-size:14px;font-weight:600;line-height:1.2;
+text-decoration:none;box-sizing:border-box}
+.zgenres__nav a:hover{border-color:#4d9bff;color:#4d9bff;background:#f3f7fc}
+.zgenres__nav a:focus-visible{outline:2px solid #4d9bff;outline-offset:2px}
+.zgenres__nav a[aria-current],.zgenres__nav a.is-active{
+background:#0a5bd0;border-color:#0a5bd0;color:#fff}
+@media(max-width:639px){
+.zgenres__nav{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
+scrollbar-width:none;padding-bottom:4px}
+.zgenres__nav::-webkit-scrollbar{display:none;width:0;height:0}
+.zgenres__nav a{flex:0 0 auto}
+}
+.zpg{display:flex;gap:7px;justify-content:center;margin:26px 0;flex-wrap:wrap}
+.zpg a,.zpg span{display:inline-flex;align-items:center;justify-content:center;
+min-width:44px;min-height:44px;padding:8px 13px;border-radius:6px;border:1px solid #3a4450;
+background:#232b34;font-size:13.5px;text-align:center;box-sizing:border-box}
+.zpg span[aria-current]{background:#0a5bd0;color:#fff;border-color:#0a5bd0}
+.zpg__gap{border:0;background:transparent;min-width:24px;pointer-events:none}
+.zpg__nav{font-weight:600}
+.zsort{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.zsort a{display:inline-flex;align-items:center;min-height:36px;padding:6px 12px;
+border-radius:6px;border:1px solid #3a4450;background:#232b34;font-size:13px;color:#aeb9c5}
+.zsort a[aria-current]{border-color:#4d9bff;color:#4d9bff;font-weight:600}
+.zfilt-wrap{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px;align-items:center}
+.zfilt-wrap a{display:inline-flex;align-items:center;min-height:36px;padding:6px 12px;
+border-radius:6px;border:1px solid #3a4450;background:#232b34;font-size:13px}
+.zfilt-wrap a[aria-current]{background:#0a5bd0;color:#fff;border-color:#0a5bd0}
+.zempty,.znf{padding:52px 18px;text-align:center;color:#aeb9c5}
+.znf b{display:block;font-size:44px;font-weight:700;color:#4d9bff;margin-bottom:6px}
+.znf h1{font-size:24px;margin:0 0 8px;color:#ffffff;font-weight:600}
+.znf a{display:inline-block;margin-top:14px;background:#0a5bd0;color:#fff;
+padding:11px 22px;border-radius:6px;font-weight:600}
+.zsea__h{font-size:13px;color:#aeb9c5;margin:0 0 14px}
+.zsea{margin:0 0 20px}
+
+/* Страница произведения: постер + основная колонка (без правой rail). */
+.zban{display:none}
+.zmain{padding-top:24px;scroll-padding-top:88px}
+@media(min-width:768px){.zmain{padding-top:36px}}
+@media(min-width:1280px){.zmain{padding-top:40px}}
+.ztitle{scroll-margin-top:88px}
+#catalog-h1{scroll-margin-top:88px}
+.ztitle{display:grid;grid-template-columns:1fr;gap:16px;margin:4px 0 12px;
+align-items:start;max-height:none}
+@media(min-width:900px){.ztitle{grid-template-columns:220px minmax(0,1fr);gap:24px}}
+@media(min-width:1280px){.ztitle{grid-template-columns:240px minmax(0,1fr);gap:28px}}
+.ztitle__poster{aspect-ratio:2/3;border-radius:8px;overflow:hidden;background:#28303a;
+position:relative;width:100%;max-width:240px;margin:0 auto}
+@media(min-width:900px){.ztitle__poster{margin:0;max-width:none}}
+.ztitle__poster img,.ztitle__poster .zhead__img{position:absolute;inset:0;z-index:1;
+width:100%;height:100%;object-fit:cover;display:block}
+.ztitle__main{min-width:0}
+.ztitle__main h1{font-size:28px;line-height:1.18;margin:0 0 8px;letter-spacing:-.4px}
+@media(min-width:1280px){.ztitle__main h1{font-size:32px}}
+.ztitle__o{font-size:14px;color:#aeb9c5;margin:0 0 10px;font-weight:500;
+overflow-wrap:anywhere}
+.ztitle__desc{font-size:14.5px;line-height:1.62;color:#ffffff;max-width:70ch;margin:0 0 10px}
+.ztitle__desc--clamp{display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.ztitle__desc.is-open{-webkit-line-clamp:unset;display:block;overflow:visible}
+.ztitle__genres{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.ztitle__genres a{display:inline-flex;align-items:center;min-height:28px;padding:4px 10px;border-radius:999px;border:1px solid #3a4450;background:#232b34;color:#4d9bff;font-size:12.5px;font-weight:600;text-decoration:none}
+.ztitle__genres a:hover{border-color:#4d9bff}
+.ztitle__more{display:inline-block;margin:0 0 14px;color:#4d9bff;font-weight:600;font-size:14px}
+.ztitle__src{font-size:12px;color:#8d9aa8;margin:0 0 12px;line-height:1.4}
+.ztitle__cta{display:inline-flex;align-items:center;justify-content:center;
+min-height:44px;padding:10px 18px;border-radius:8px;background:#0a5bd0;color:#fff;
+font-weight:700;font-size:14px;text-decoration:none;margin:4px 0 0}
+.ztitle__cta:hover{filter:brightness(1.05)}
+.ztitle__rail{display:none}
+.ztitle__dl{display:none}
+.zpl{margin-top:18px}
+.ztitle__facts{margin:0 0 12px;display:grid;gap:6px 16px;
+grid-template-columns:1fr;max-width:70ch}
+@media(min-width:600px){.ztitle__facts{grid-template-columns:1fr 1fr}}
+.ztitle__facts div{display:grid;grid-template-columns:88px minmax(0,1fr);gap:4px 8px;
+align-items:start}
+.ztitle__facts dt{margin:0;font-size:11px;letter-spacing:.03em;text-transform:uppercase;
+color:#aeb9c5;font-weight:700;line-height:1.35;padding-top:2px}
+.ztitle__facts dd{margin:0;font-size:13.5px;color:#ffffff;line-height:1.35;
+overflow-wrap:anywhere;min-width:0}
+.ztitle__facts a{color:#4d9bff;font-weight:600}
+.ztitle__chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.ztitle__chip{display:inline-flex;align-items:center;min-height:28px;padding:4px 10px;
+border-radius:6px;border:1px solid #3a4450;background:#28303a;color:#aeb9c5;font-size:12px}
+.zad{display:none}
+.zad[data-ad-enabled="1"]{display:block;width:100%;max-width:300px;min-height:250px;
+border:1px dashed #3a4450;border-radius:8px;background:#28303a;margin:0 auto}
+.zhead{display:contents}
+.zhead__ps,.zhead__x,.zhead__o{display:contents}
+.zbody{font-size:14.5px;line-height:1.62;color:#ffffff;max-width:70ch;margin:18px 0 0}
+.zaside{display:none}
+/* Хаб подборок: карточка коллекции, а не ещё одна сетка тайтлов. */
+.zhub{display:grid;gap:12px;margin:14px 0;grid-template-columns:1fr}
+@media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.zhub{grid-template-columns:repeat(3,1fr)}}
+.zhub__c{display:block;padding:12px;border:1px solid #3a4450;border-radius:8px;
+background:#232b34;color:inherit;text-decoration:none}
+.zhub__c:hover{border-color:#4d9bff}
+.zhub__g{display:flex;gap:4px;margin-bottom:9px}
+.zhub__p{flex:1 1 0;aspect-ratio:2/3;overflow:hidden;border-radius:5px;background:#28303a}
+.zhub__img{width:100%;height:100%;object-fit:cover;display:block}
+.zhub__t{display:block;font-weight:700;font-size:15.5px}
+.zhub__m{display:block;font-size:12.5px;color:#4d9bff;font-weight:600;margin:2px 0 4px}
+.zhub__d{display:block;font-size:13px;color:#aeb9c5;line-height:1.45}
+
+/* Окно просмотра списка серий ограничено; сам список не обрезается. */
+.zeps{display:grid;gap:8px;margin:14px 0;max-height:none;overflow:visible;
+grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(min-width:768px){.zeps{grid-template-columns:repeat(8,minmax(0,1fr))}}
+@media(min-width:1100px){.zeps{grid-template-columns:repeat(12,minmax(0,1fr))}}
+.zeps a,.zeps span{display:flex;align-items:center;justify-content:center;
+height:48px;padding:0;border-radius:6px;border:1px solid #3a4450;background:#232b34;
+font-size:14px;font-weight:600;box-sizing:border-box;min-width:0}
+.zeps span,.zeps a[aria-disabled="true"],.zeps a[data-off]{opacity:.45;cursor:not-allowed;
+pointer-events:none}
+.zeps a[aria-current]{background:#0a5bd0;color:#fff;border-color:#0a5bd0;opacity:1;
+pointer-events:auto}
+.zepnav{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+.zepnav a{background:#232b34;border:1px solid #3a4450;border-radius:6px;
+padding:9px 14px;font-size:13.5px;color:#4d9bff;font-weight:600}
+
+/* Плеер: единый 16:9 stage; компакт только для честных unavailable/error. */
+.zpl{margin:12px auto 22px;width:100%;max-width:1200px}
+.zpl__f{position:relative;width:100%;aspect-ratio:16/9;background:#0d1217;
+border:1px solid #3a4450;border-radius:8px;overflow:hidden;min-height:200px}
+.zpl__f[data-state="awaiting"],
+.zpl__f[data-state="unavailable"],
+.zpl__f[data-state="nosource"],
+.zpl__f[data-state="noaccess"]{aspect-ratio:auto;min-height:120px;max-height:168px}
+/* provider/error/slow keep stage size until fallback finishes — avoid 150px banner trap */
+.zpl__f[data-state="provider"],
+.zpl__f[data-state="error"],
+.zpl__f[data-state="slow"]{aspect-ratio:16/9;max-height:none;min-height:200px}
+.zpl__f[data-player-host],
+.zpl__f [data-player-host]{position:absolute;inset:0;width:100%;height:100%;
+display:block;min-height:100%}
+.zpl__f video-player{position:absolute;inset:0;display:block;width:100%!important;
+height:100%!important;max-width:none!important;max-height:none!important;border:0;
+min-height:100%}
+.zpl__f iframe,.zpl__f video{position:absolute;inset:0;width:100%;height:100%;
+border:0;object-fit:contain}
+.zpl__h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+font-size:22.1px;font-weight:400;margin:18px 0 10px}
+.zpl__h span{font-size:13px;color:#aeb9c5;font-weight:600}
+.zpl__s{position:absolute;inset:0;display:grid;place-items:center;padding:22px;
+text-align:center;color:#aeb9c5;font-size:13.5px;line-height:1.5;z-index:2;
+pointer-events:none}
+/* P0: [hidden] must win over display:grid — otherwise UNAVAILABLE stays visible while PLAYING */
+.zpl__s[hidden],
+.zpl__f [data-player-state][hidden]{
+display:none!important;visibility:hidden!important;pointer-events:none!important;
+opacity:0!important;z-index:-1!important}
+.zpl__f[data-state="playing"] .zpl__s,
+.zpl__f[data-state="playing"] [data-player-state],
+.zpl__f[data-state="ready"] .zpl__s,
+.zpl__f[data-state="ready"] [data-player-state],
+.zpl__f[data-state="resolving"] .zpl__s,
+.zpl__f[data-state="resolving"] [data-player-state]{
+display:none!important;visibility:hidden!important;pointer-events:none!important}
+.zpl__f[data-state="provider"] .zpl__s,
+.zpl__f[data-state="error"] .zpl__s,
+.zpl__f[data-state="unavailable"] .zpl__s,
+.zpl__f[data-state="nosource"] .zpl__s,
+.zpl__f[data-state="noaccess"] .zpl__s{pointer-events:auto;display:grid}
+.zpl__f [data-player-state]{padding:18px 16px;text-align:center;color:#aeb9c5;
+font-size:13.5px;line-height:1.5;max-width:520px;margin:0 auto}
+.zpl__f [data-player-state] b{display:block;color:#ffffff;margin:0 0 6px;font-size:15px}
+
+.zft{border-top:1px solid #3a4450;margin:48px 0 0;padding:32px 0 24px;
+font-size:13px;color:#aeb9c5;display:block;width:100%;max-width:1760px;margin-left:auto;margin-right:auto}
+.zft__cols{display:grid;gap:18px;grid-template-columns:1fr;margin:0 0 18px}
+@media(min-width:700px){.zft__cols{grid-template-columns:minmax(0,1.3fr) repeat(2,minmax(0,1fr));gap:24px}}
+@media(min-width:1100px){.zft__cols{grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr));gap:28px}}
+.zft__cols--fallback{@media(min-width:700px){grid-template-columns:minmax(0,1.3fr) repeat(2,minmax(0,1fr))}}
+/* Mobile: brand full width, then two compact link columns side-by-side. */
+@media(max-width:699px){
+.zft__cols,.zft__cols--fallback{grid-template-columns:1fr 1fr;gap:12px 18px}
+.zft__cols > .zft__col:first-child,.zft__cols--fallback > .zft__col:first-child{grid-column:1/-1}
+.zft__col--links{display:flex;flex-direction:column;gap:6px}
+}
+.zft__col{display:flex;flex-direction:column;gap:6px;min-width:0}
+.zft__col b{color:#ffffff;font-size:13px;margin:0 0 4px;font-weight:700}
+.zft__col a{color:#4d9bff;font-weight:500;line-height:1.35;min-height:44px;
+display:inline-flex;align-items:center}
+.zft__col a:hover,.zft__col a:focus-visible{text-decoration:underline}
+.zft__about{font-size:13px;line-height:1.5;color:#aeb9c5;margin:0 0 4px;max-width:36ch}
+.zft__bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;
+gap:10px;padding-top:14px;border-top:1px solid #3a4450}
+.zsec--seo{margin:32px 0 16px;max-width:860px}
+.zsec--seo h2{font-size:22px;font-weight:600;margin:0 0 12px}
+.zsec--seo p{font-size:16px;line-height:1.65;color:#aeb9c5;margin:0 0 12px}
+.zsec--seo a{color:#4d9bff;font-weight:600}
+.zvb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;
+border:0;padding:0;background:transparent;color:#8d9aa8}
+.zhd__menu{display:inline-flex;align-items:center;justify-content:center;
+width:44px;height:44px;min-width:44px;min-height:44px;
+border:1px solid rgba(255,255,255,.28);border-radius:6px;
+background:transparent;color:#fff;font-size:20px;cursor:pointer;flex:0 0 auto}
+.zhd__menu:focus-visible{outline:2px solid #fff;outline-offset:2px}
+@media(min-width:768px){.zhd__menu{display:none}}
+@media(max-width:767px){
+.zhd__n{display:none;flex:1 0 100%;order:4;flex-wrap:wrap;overflow:visible;
+background:#546778;padding:8px 0 12px;border-top:1px solid rgba(255,255,255,.12)}
+.zhd__n.is-open{display:flex}
+.zhd__n a{flex:1 1 calc(50% - 4px);justify-content:center}
+body.nav-lock{overflow:hidden}
+}
+.zfilt__y{display:inline-flex;flex-wrap:wrap;gap:6px;max-width:100%;align-items:center}
+.zfilt__year{min-height:36px;padding:6px 10px;border:1px solid #3a4450;border-radius:6px;
+background:#232b34;color:#ffffff;font:inherit;font-size:13px;max-width:100%}
+.zfilt__y a[data-count]::after{content:attr(data-count);margin-left:4px;color:#8d9aa8;font-size:11px}
+.zhub--home{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.zhub--home{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.zsec--seo{margin:28px 0 8px}
+.ztop__b{max-width:100%;overflow-wrap:anywhere}
+
+img[hidden]{display:none}
+
+/* Оценки по источникам. Разметка общая, вид свой у каждого семейства. */
+.rbs{margin:14px 0;display:flex;flex-direction:column;gap:8px}
+.rbs__l{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.rbs__i{display:flex;align-items:baseline;gap:6px;padding:6px 11px;border-radius:6px;
+white-space:nowrap}
+.rbs__s{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.rbs__n{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.rbs__n small{font-size:11px;font-weight:400;opacity:.72}
+.rbs__v{font-size:11px;opacity:.75;font-variant-numeric:tabular-nums}
+.rbs__l--own{border-top:1px dashed currentColor;padding-top:8px;margin-top:2px;opacity:.95}
+.rbs--none{margin:14px 0;font-size:13px;font-style:italic}
+@media(max-width:400px){.rbs__i{padding:5px 8px}.rbs__n{font-size:14px}}
+.rbs__i{background:#232b34;border:1px solid #3a4450;color:#ffffff}
+.rbs__s{color:#4d9bff}
+.rbs__n{color:#ffb454}
+.rbs__l--own{color:#aeb9c5}
+.rbs--none{color:#8d9aa8}
+
+</style><script>document.addEventListener('error',function(e){var i=e.target;if(i&&i.tagName==='IMG'&&i.hasAttribute('data-poster'))i.hidden=true;},true);
+document.addEventListener('click',function(e){var b=e.target.closest('[data-rl]');if(!b)return;var v=document.getElementById(b.getAttribute('aria-controls'));if(!v)return;var d=Math.max(160,Math.round(v.clientWidth*0.86));v.scrollBy({left:b.getAttribute('data-rl')==='next'?d:-d,behavior:'smooth'});});
+(function(){function close(nav,btn){if(!nav||!btn)return;nav.classList.remove('is-open');btn.setAttribute('aria-expanded','false');document.body.classList.remove('nav-lock');try{btn.focus()}catch(e){}}document.addEventListener('click',function(e){var b=e.target.closest('[data-nav-toggle]');if(!b)return;var n=document.getElementById('hd-nav');if(!n)return;var open=n.classList.toggle('is-open');b.setAttribute('aria-expanded',open?'true':'false');document.body.classList.toggle('nav-lock',open);if(open){var a=n.querySelector('a');if(a)try{a.focus()}catch(err){}}});document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;var n=document.getElementById('hd-nav');var b=document.querySelector('[data-nav-toggle]');if(n&&n.classList.contains('is-open'))close(n,b);});})();</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Zona","url":"https://zonafilm.space/","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://zonafilm.space/search/?q={search_term_string}"},"query-input":"required name=search_term_string"}}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://zonafilm.space/"},{"@type":"ListItem","position":2,"name":"new","item":"https://zonafilm.space/new/"}]}</script></head>
+<body><a class="skip" href="#main">Перейти к содержимому</a>
+<div class="zs">
+<header class="zhd">
+<div class="zhd__in">
+<a class="zhd__logo" href="/">Zona</a>
+<button class="zhd__menu" type="button" data-nav-toggle aria-controls="zhd-nav"
+ aria-expanded="false" aria-label="Меню разделов">&#9776;</button>
+<nav id="zhd-nav" class="zhd__n" aria-label="Разделы"><a href="/">Обзор</a><a href="/new/" aria-current="page">Что нового</a><a href="/movies/">Кино</a><a href="/series/">Сериалы</a><a href="/animation/">Анимация</a><a href="/collections/">Подборки</a><a href="/catalog/">Весь каталог</a></nav>
+<form class="zhd__s" action="/search/" method="get" role="search">
+<label class="vh" for="q">Поиск по каталогу</label>
+<input id="q" name="q" placeholder="Название фильма или сериала">
+<button type="submit">Найти</button></form>
+</div>
+</header>
+<div class="zmain">
+<div class="zwrap">
+<main id="main"><div class="zwrap" data-testid="page-container"><h1 class="zh" data-testid="catalog-heading" id="catalog-h1">Что нового</h1><p class="zsub">Сортировка: Сначала новые · Результаты: 1218</p><nav class="zsort" data-testid="catalog-sort" aria-label="Сортировка"><a href="/new/?sort=newest" aria-current="true">Сначала новые</a><a href="/new/?sort=recently_added">Недавно добавленные</a><a href="/new/?sort=rating">По рейтингу</a><a href="/new/?sort=title">По названию</a></nav><div data-testid="catalog-filters" class="zfilt-wrap"><a href="/movies/?sort=newest">Фильм</a><a href="/series/?sort=newest">Сериал</a><a href="/animation/?sort=newest">Мультфильм</a><a href="/new/?sort=newest">Все годы</a><label class="vh" for="zona-year-facet">Год</label><select class="zfilt__year" id="zona-year-facet" onchange="if(this.value)location.href=this.value" aria-label="Фильтр по году"><option value="/new/?sort=newest">Все годы</option><option value="/new/?year=2026&amp;sort=newest">2026 (464)</option><option value="/new/?year=2025&amp;sort=newest">2025 (437)</option><option value="/new/?year=2024&amp;sort=newest">2024 (172)</option><option value="/new/?year=2023&amp;sort=newest">2023 (31)</option><option value="/new/?year=2022&amp;sort=newest">2022 (17)</option><option value="/new/?year=2021&amp;sort=newest">2021 (19)</option><option value="/new/?year=2020&amp;sort=newest">2020 (15)</option><option value="/new/?year=2019&amp;sort=newest">2019 (7)</option><option value="/new/?year=2018&amp;sort=newest">2018 (10)</option><option value="/new/?year=2017&amp;sort=newest">2017 (7)</option><option value="/new/?year=2016&amp;sort=newest">2016 (6)</option><option value="/new/?year=2015&amp;sort=newest">2015 (6)</option><option value="/new/?year=2014&amp;sort=newest">2014 (5)</option><option value="/new/?year=2013&amp;sort=newest">2013 (5)</option><option value="/new/?year=2012&amp;sort=newest">2012 (5)</option><option value="/new/?year=2011&amp;sort=newest">2011 (3)</option><option value="/new/?year=2009&amp;sort=newest">2009 (2)</option><option value="/new/?year=2007&amp;sort=newest">2007 (2)</option><option value="/new/?year=2005&amp;sort=newest">2005 (1)</option><option value="/new/?year=2001&amp;sort=newest">2001 (1)</option><option value="/new/?year=1997&amp;sort=newest">1997 (2)</option><option value="/new/?year=1978&amp;sort=newest">1978 (1)</option></select><span class="zfilt__y"><a href="/new/?year=2026&amp;sort=newest" data-count="(464)">2026</a><a href="/new/?year=2025&amp;sort=newest" data-count="(437)">2025</a><a href="/new/?year=2024&amp;sort=newest" data-count="(172)">2024</a><a href="/new/?year=2023&amp;sort=newest" data-count="(31)">2023</a><a href="/new/?year=2022&amp;sort=newest" data-count="(17)">2022</a><a href="/new/?year=2021&amp;sort=newest" data-count="(19)">2021</a><a href="/new/?year=2020&amp;sort=newest" data-count="(15)">2020</a><a href="/new/?year=2019&amp;sort=newest" data-count="(7)">2019</a><a href="/new/?year=2018&amp;sort=newest" data-count="(10)">2018</a><a href="/new/?year=2017&amp;sort=newest" data-count="(7)">2017</a><a href="/new/?year=2016&amp;sort=newest" data-count="(6)">2016</a><a href="/new/?year=2015&amp;sort=newest" data-count="(6)">2015</a></span></div><div data-testid="catalog-grid"><div class="zg"><a class="zt" data-testid="title-card" href="/title/legenda-ob-aange-posledniy-mag-vozduha/" title="Легенда об Аанге: Последний маг воздуха"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Л</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019d8a30-ef97-7a43-ba92-b47578babc9d.webp" alt="Легенда об Аанге: Последний маг воздуха" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Легенда об Аанге: Последний маг воздуха</span><span class="zt__m">2026 · США</span><span class="zt__m">Мультфильм · западный контент · мультфильм · Премьера · 09.10.2026</span></span><span class="zt__r"><span>IMDb <i>7.7</i></span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/pust-muzyka-letit/" title="Пусть музыка летит!"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>П</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019dabd5-fa95-71c9-ab94-c37d5fd84641.webp" alt="Пусть музыка летит!" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Пусть музыка летит!</span><span class="zt__m">2026</span><span class="zt__m">Фильм · дорама · Премьера · 18.07.2026</span></span><span class="zt__r"><span>IMDb <i>6.1</i></span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/rashititel-grobnic/" title="Расхититель гробниц"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Р</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019ec6da-bf82-73e9-a3de-505997c5454e.webp" alt="Расхититель гробниц" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Расхититель гробниц</span><span class="zt__m">2026 · Япония</span><span class="zt__m">Сериал · аниме · боевик · Премьера · 09.07.2026</span></span><span class="zt__r"><span class="zt__r-empty" aria-hidden="true">&nbsp;</span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/pylayuschee-leto/" title="Пылающее лето"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>П</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019ecfec-cf47-7a0c-bc34-a9526091de1e.webp" alt="Пылающее лето" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Пылающее лето</span><span class="zt__m">2026 · Китай</span><span class="zt__m">Сериал · дорама · романтика · Премьера · 16.06.2026</span></span><span class="zt__r"><span>IMDb <i>7.8</i></span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/feyerverk-lyubvi/" title="Фейерверк любви"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Ф</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019ecc27-2b97-774d-b5c6-35c6a9414d10.webp" alt="Фейерверк любви" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Фейерверк любви</span><span class="zt__m">2026 · Китай</span><span class="zt__m">Сериал · дорама · драма · Премьера · 15.06.2026</span></span><span class="zt__r"><span>IMDb <i>7.4</i></span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/pozvonite-doktoru-czyanu/" title="Позвоните доктору Цзяну"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>П</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019eca10-a472-776f-b057-0b881e4154f1.webp" alt="Позвоните доктору Цзяну" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Позвоните доктору Цзяну</span><span class="zt__m">2026</span><span class="zt__m">Сериал · дорама · Премьера · 14.06.2026</span></span><span class="zt__r"><span class="zt__r-empty" aria-hidden="true">&nbsp;</span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/hloya-i-emma/" title="Хлоя и Эмма"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Х</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019ec625-ef29-7dad-bd33-23358618862a.webp" alt="Хлоя и Эмма" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Хлоя и Эмма</span><span class="zt__m">2026 · Япония</span><span class="zt__m">Сериал · дорама · драма · Премьера · 12.06.2026</span></span><span class="zt__r"><span class="zt__r-empty" aria-hidden="true">&nbsp;</span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/stupivshie-vne-zakona-ochischayuschiy-ogon/" title="Ступившие вне закона: Очищающий огонь"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>С</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019ebc41-6a57-7e02-b465-12d0ab259f96.webp" alt="Ступившие вне закона: Очищающий огонь" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Ступившие вне закона: Очищающий огонь</span><span class="zt__m">2026</span><span class="zt__m">Сериал · дорама · Премьера · 12.06.2026</span></span><span class="zt__r"><span class="zt__r-empty" aria-hidden="true">&nbsp;</span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/svidaniya-s-elis-peres/" title="Свидания с Элис Перес"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>С</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019ebc52-2c94-7e85-a49b-0b5744ecb8a7.webp" alt="Свидания с Элис Перес" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Свидания с Элис Перес</span><span class="zt__m">2026</span><span class="zt__m">Сериал · дорама · Премьера · 12.06.2026</span></span><span class="zt__r"><span>IMDb <i>6.7</i></span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/yuzhnye-arhivy/" title="Южные архивы"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Ю</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019eb753-8b5f-72d8-b703-9f0268ce8f44.webp" alt="Южные архивы" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Южные архивы</span><span class="zt__m">2026 · Китай</span><span class="zt__m">Сериал · дорама · триллер · Премьера · 11.06.2026</span></span><span class="zt__r"><span>IMDb <i>7.9</i></span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/zloy-advokat/" title="Злой адвокат"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>З</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019eb712-d149-7bf2-935f-4f0eb7ad721b.webp" alt="Злой адвокат" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Злой адвокат</span><span class="zt__m">2026</span><span class="zt__m">Сериал · дорама · Премьера · 11.06.2026</span></span><span class="zt__r"><span>IMDb <i>7.5</i></span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/borba-v-pryamom-efire/" title="Борьба в прямом эфире"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Б</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019eb63e-18e3-7b8e-bddc-a17636d077f0.webp" alt="Борьба в прямом эфире" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Борьба в прямом эфире</span><span class="zt__m">2026 · Япония</span><span class="zt__m">Сериал · дорама · Премьера · 11.06.2026</span></span><span class="zt__r"><span>IMDb <i>6.9</i></span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/cvet-zla-chernyy/" title="Цвет зла: Черный"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Ц</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019eb579-4995-7c1b-99cd-df7b768f5ee3.webp" alt="Цвет зла: Черный" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Цвет зла: Черный</span><span class="zt__m">2026 · Польша</span><span class="zt__m">Фильм · западный контент · драма · Премьера · 10.06.2026</span></span><span class="zt__r"><span>IMDb <i>6</i></span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/nikakih-zhenschin-nikakih-detey/" title="Никаких женщин, никаких детей"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Н</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019eb08e-fa57-7ad9-a0ac-fffa52c60e8c.webp" alt="Никаких женщин, никаких детей" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Никаких женщин, никаких детей</span><span class="zt__m">2026 · Великобритания</span><span class="zt__m">Фильм · западный контент · драма · Премьера · 10.06.2026</span></span><span class="zt__r"><span class="zt__r-empty" aria-hidden="true">&nbsp;</span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/luna-v-zvezdnoy-dymke/" title="Луна в звёздной дымке"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Л</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019ebc4f-5f11-7733-bc51-7505affdfb5b.webp" alt="Луна в звёздной дымке" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Луна в звёздной дымке</span><span class="zt__m">2026 · Китай</span><span class="zt__m">Сериал · дорама · фантастика · Премьера · 10.06.2026</span></span><span class="zt__r"><span class="zt__r-empty" aria-hidden="true">&nbsp;</span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/krasnoe-i-chernoe/" title="Красное и чёрное"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>К</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019eafa9-8b2c-7485-9bcd-2006928048df.webp" alt="Красное и чёрное" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Красное и чёрное</span><span class="zt__m">2026</span><span class="zt__m">Сериал · западный контент · драма · Премьера · 10.06.2026</span></span><span class="zt__r"><span>IMDb <i>5.3</i></span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/den-razoblacheniya/" title="День разоблачения"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Д</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019eb56f-f7fa-71f3-9643-33ed7ee79de8.webp" alt="День разоблачения" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">День разоблачения</span><span class="zt__m">2026 · США</span><span class="zt__m">Фильм · западный контент · фантастика · Премьера · 10.06.2026</span></span><span class="zt__r"><span>КП <b>6.449</b></span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/de-goll-zheleznyy-vek/" title="Де Голль: Железный век"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Д</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019e9d62-0523-7940-8631-d66aa5aeb591.webp" alt="Де Голль: Железный век" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Де Голль: Железный век</span><span class="zt__m">2026 · Франция</span><span class="zt__m">Фильм · западный контент · драма · Премьера · 10.06.2026</span></span><span class="zt__r"><span>IMDb <i>7.8</i></span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/davay-lyubit/" title="Давай любить"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Д</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019eb4dd-f4bf-7224-ba67-f44c9280c34a.webp" alt="Давай любить" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Давай любить</span><span class="zt__m">2026 · Великобритания</span><span class="zt__m">Фильм · западный контент · драма · Премьера · 10.06.2026</span></span><span class="zt__r"><span>IMDb <i>4.2</i></span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/put-zvezd-i-luny/" title="Путь звёзд и луны"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>П</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019eb2e6-433a-7b1f-b498-da66cf25e1d7.webp" alt="Путь звёзд и луны" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Путь звёзд и луны</span><span class="zt__m">2026</span><span class="zt__m">Сериал · дорама · Премьера · 09.06.2026</span></span><span class="zt__r"><span class="zt__r-empty" aria-hidden="true">&nbsp;</span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/mo-li/" title="Мо Ли"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>М</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019eab2a-3af1-7a52-8a53-c444965dc4d3.webp" alt="Мо Ли" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Мо Ли</span><span class="zt__m">2026 · Китай</span><span class="zt__m">Сериал · дорама · Премьера · 09.06.2026</span></span><span class="zt__r"><span>IMDb <i>7.8</i></span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/bezopasnaya-distanciya/" title="Безопасная дистанция"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Б</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019eb07a-74c6-76b4-b81d-520e92605891.webp" alt="Безопасная дистанция" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Безопасная дистанция</span><span class="zt__m">2026 · Китай</span><span class="zt__m">Сериал · дорама · драма · Премьера · 09.06.2026</span></span><span class="zt__r"><span class="zt__r-empty" aria-hidden="true">&nbsp;</span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/stena-chudes/" title="Стена чудес"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>С</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019eb780-e082-7c30-9e3c-61056d17afe7.webp" alt="Стена чудес" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Стена чудес</span><span class="zt__m">2026 · Китай</span><span class="zt__m">Сериал · дорама · Премьера · 07.06.2026</span></span><span class="zt__r"><span>IMDb <i>4.3</i></span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/konsultant-chelovek-pishuschiy-o-smerti/" title="Консультант: Человек, пишущий о смерти"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>К</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019ea64c-ff0d-7aac-8f42-caf8291d4926.webp" alt="Консультант: Человек, пишущий о смерти" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Консультант: Человек, пишущий о смерти</span><span class="zt__m">2026</span><span class="zt__m">Сериал · дорама · Премьера · 07.06.2026</span></span><span class="zt__r"><span>IMDb <i>5.7</i></span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/istinnoe-pravosudie-oko-za-oko/" title="Истинное правосудие: Око за око"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>И</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019ea0e5-c639-7f33-ab56-ddf527db5456.webp" alt="Истинное правосудие: Око за око" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Истинное правосудие: Око за око</span><span class="zt__m">2026 · Канада</span><span class="zt__m">Фильм · западный контент · детектив · Премьера · 07.06.2026</span></span><span class="zt__r"><span>IMDb <i>5.8</i></span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/13-dush/" title="13 душ"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>1</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019ebaf5-a1c5-7248-b043-41605dcef54f.webp" alt="13 душ" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">13 душ</span><span class="zt__m">2026 · США</span><span class="zt__m">Фильм · западный контент · драма · Премьера · 07.06.2026</span></span><span class="zt__r"><span class="zt__r-empty" aria-hidden="true">&nbsp;</span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/bigfut-pervobytnyy-strah/" title="Бигфут: Первобытный страх"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Б</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019e9bd3-cccb-7143-802c-7373195dad96.webp" alt="Бигфут: Первобытный страх" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Бигфут: Первобытный страх</span><span class="zt__m">2026 · Великобритания</span><span class="zt__m">Фильм · западный контент · ужасы · Премьера · 06.06.2026</span></span><span class="zt__r"><span>IMDb <i>2.9</i></span><span class="zt__play" title="Есть видео">▶</span></span></a><a class="zt" data-testid="title-card" href="/title/chuzhoe-lico/" title="Чужое лицо"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Ч</b></span><img class="zt__img" src="https://poster.cdnvideohub.com/019e9cdb-269b-7f66-9870-cbb102c93196.webp" alt="Чужое лицо" loading="lazy" width="300" height="450" data-poster></span><span class="zt__b"><span class="zt__t">Чужое лицо</span><span class="zt__m">2026</span><span class="zt__m">Сериал · дорама · Премьера · 05.06.2026</span></span><span class="zt__r"><span class="zt__r-empty" aria-hidden="true">&nbsp;</span><span class="zt__play" title="Есть видео">▶</span></span></a></div></div><nav class="zpg" data-testid="pagination" aria-label="Страницы"><span aria-current="page">1</span><a href="/new/?sort=newest&page=2">2</a><a href="/new/?sort=newest&page=3">3</a><span class="zpg__gap" aria-hidden="true">…</span><a href="/new/?sort=newest&page=44">44</a><a class="zpg__nav" href="/new/?sort=newest&page=2" rel="next">Далее</a></nav></div></main>
+<footer class="zft" data-testid="site-footer"><div class="zft__cols zft__cols--fallback"><div class="zft__col"><b>Zona</b><p class="zft__about">Zona — витрина фильмов, сериалов и анимации с каталогом, поиском и подборками.</p></div><div class="zft__col zft__col--links"><b>Разделы</b><a href="/">Обзор</a><a href="/new/">Что нового</a><a href="/movies/">Кино</a><a href="/series/">Сериалы</a></div><div class="zft__col zft__col--links"><b>Каталог</b><a href="/animation/">Анимация</a><a href="/collections/">Подборки</a><a href="/catalog/">Каталог</a><a href="/search/">Поиск</a></div></div><div class="zft__bar"><span>© Zona</span><span class="zvb" data-contact-config-missing="1" data-footer-contact-gate="0">Zona · 1.2.0 · dbaf9a4d</span></div></footer>
+</div></div></div></body></html>

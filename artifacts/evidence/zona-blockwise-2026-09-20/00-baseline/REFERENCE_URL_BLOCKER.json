@@ -1,0 +1,51 @@
+{
+  "state": "BLOCKED_DEPENDENCY",
+  "blocker_owner": "reference",
+  "blocker_code": "REFERENCE_UNAVAILABLE",
+  "evidence_path": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/REFERENCE_URL_BLOCKER.json",
+  "proposed_example_url_in_spec": "https://zonafilm.ru/",
+  "proposed_url_http_probe": {
+    "url": "https://zonafilm.ru/",
+    "status": 200,
+    "probed_at": "2026-09-20T12:36:02Z",
+    "note": "HTTP reachability is not owner confirmation"
+  },
+  "owner_confirmed_REFERENCE_URL": null,
+  "prior_pass_reference_family": "zona-parity-006 + owner-review-007 screenshots (not a live REFERENCE_URL freeze)",
+  "next_action": "Provide exact owner value REFERENCE_URL (single URL). Do not substitute another site. After confirmation, B00 will capture full reference freeze (screenshots, DOM, geometry, SHA-256) before B01.",
+  "b01_b24_started": false,
+  "acceptance_contract_gate": "PASS",
+  "continued_independent_b00_work": [
+    "ACCEPTANCE_CONTRACT_GATE",
+    "INDEXABILITY_BEFORE",
+    "current-live route fetch",
+    "CATALOG_BASELINE_OBSERVATION",
+    "manifest skeletons"
+  ],
+  "blocked_descendants": [
+    "B01",
+    "B02",
+    "B03",
+    "B04",
+    "B05",
+    "B06",
+    "B07",
+    "B08",
+    "B09",
+    "B10",
+    "B11",
+    "B12",
+    "B13",
+    "B14",
+    "B15",
+    "B16",
+    "B17",
+    "B18",
+    "B19",
+    "B20",
+    "B21",
+    "B22",
+    "B23",
+    "B24"
+  ]
+}

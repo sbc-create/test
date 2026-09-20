@@ -1,0 +1,19 @@
+{
+  "status": "PENDING_REFERENCE_AND_ROUTE_REGISTRY",
+  "rule": "Undefined CTA hidden or blocks its block per frozen display policy; executor must not invent URLs",
+  "required_entries": [
+    "hero_primary",
+    "hero_secondary",
+    "weekly_watch_all",
+    "catalog_added_cta",
+    "kind_movies",
+    "kind_series",
+    "kind_animation",
+    "all_genres",
+    "collection_card",
+    "title_watch",
+    "footer_links"
+  ],
+  "entries": {},
+  "blocked_reason": "REFERENCE_UNAVAILABLE and route registry not frozen"
+}
