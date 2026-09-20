@@ -1,0 +1,12 @@
+{
+  "ADMIN_MANUAL_VOTE_INSERT_ENABLED": 0,
+  "ADMIN_EXTERNAL_RATING_EDIT_ENABLED": 0,
+  "ADMIN_AGGREGATE_DIRECT_EDIT_ENABLED": 0,
+  "ADMIN_IMPERSONATE_USER_ENABLED": 0,
+  "moderation": [
+    "quarantine",
+    "approve",
+    "reject"
+  ],
+  "identity_display": "redacted"
+}
