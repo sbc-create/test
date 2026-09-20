@@ -18,7 +18,8 @@ from factory.community.service import CommunityVotesService
 from factory.community.store import CommunityStore
 from factory.ratings.prod_db import resolve_canonical_db
 
-CANARY_ACTOR_PREFIX = "canary-cr03-"
+CANARY_ACTOR_PREFIX = "canary-cr04-"
+CANARY_ACTOR_PREFIX_LEGACY = "canary-cr03-"
 SIDECAR = Path("/srv/lords/.frontend/community-ratings-projection.json")
 YUMMY_OVERLAY_SIDECAR = Path(
     "/srv/sites/yummyani-staging/runtime/overlays/yummyani.site/community-ratings-projection.json"
@@ -57,12 +58,35 @@ def pick_animedia_title() -> CanaryPlan:
             slug = s
             break
     assert slug, f"no slug for {bare}"
-    actor = f"{CANARY_ACTOR_PREFIX}animedia-{hashlib.sha256(b'animedia-cr03').hexdigest()[:12]}"
+    actor = f"{CANARY_ACTOR_PREFIX}animedia-{hashlib.sha256(b'animedia-cr04').hexdigest()[:12]}"
     return CanaryPlan(
         space="animedia",
         subject_id=subject,
         actor_id=actor,
         live_path=f"/title/{slug}/",
+    )
+
+
+def pick_yummy_title() -> CanaryPlan:
+    """Exact-mapped Yummy title with live slug from overlay title-index."""
+    idx_path = Path(
+        "/srv/sites/yummyani-staging/runtime/overlays/yummyani.site/community-ratings-title-index.json"
+    )
+    items = json.loads(idx_path.read_text(encoding="utf-8")).get("items") or []
+    pick = None
+    for item in items:
+        if item.get("yummy_slug") and item.get("subject_id"):
+            pick = item
+            break
+    assert pick, "no yummy slug in title-index"
+    subject = str(pick["subject_id"])
+    slug = str(pick["yummy_slug"])
+    actor = f"{CANARY_ACTOR_PREFIX}yummy-{hashlib.sha256(b'yummy-cr04').hexdigest()[:12]}"
+    return CanaryPlan(
+        space="yummy",
+        subject_id=subject,
+        actor_id=actor,
+        live_path=f"/anime/{slug}",
     )
 
 
@@ -220,25 +244,32 @@ def run_space_canary(plan: CanaryPlan, *, yummy_prior: dict[str, Any] | None = N
 
 def purge_canary_votes() -> dict[str, Any]:
     store = _open_store()
-    actors = [
-        r[0]
-        for r in store.conn.execute(
-            "SELECT DISTINCT actor_id FROM community_votes WHERE actor_id LIKE ?",
-            (f"{CANARY_ACTOR_PREFIX}%",),
+    prefixes = (f"{CANARY_ACTOR_PREFIX}%", f"{CANARY_ACTOR_PREFIX_LEGACY}%")
+    actors: list[str] = []
+    subjects: list[str] = []
+    for pref in prefixes:
+        actors.extend(
+            r[0]
+            for r in store.conn.execute(
+                "SELECT DISTINCT actor_id FROM community_votes WHERE actor_id LIKE ?",
+                (pref,),
+            )
         )
-    ]
-    subjects = [
-        r[0]
-        for r in store.conn.execute(
-            "SELECT DISTINCT subject_id FROM community_votes WHERE actor_id LIKE ?",
-            (f"{CANARY_ACTOR_PREFIX}%",),
+        subjects.extend(
+            r[0]
+            for r in store.conn.execute(
+                "SELECT DISTINCT subject_id FROM community_votes WHERE actor_id LIKE ?",
+                (pref,),
+            )
         )
-    ]
-    # Hard-delete canary vote rows (immutable audit events retained).
-    deleted = store.conn.execute(
-        "DELETE FROM community_votes WHERE actor_id LIKE ?",
-        (f"{CANARY_ACTOR_PREFIX}%",),
-    ).rowcount
+    actors = sorted(set(actors))
+    subjects = sorted(set(subjects))
+    deleted = 0
+    for pref in prefixes:
+        deleted += store.conn.execute(
+            "DELETE FROM community_votes WHERE actor_id LIKE ?",
+            (pref,),
+        ).rowcount
     for space, sid in store.conn.execute(
         "SELECT DISTINCT rating_space_id, subject_id FROM community_aggregates"
     ):
@@ -254,10 +285,12 @@ def purge_canary_votes() -> dict[str, Any]:
     export_sidecar(store.conn, SIDECAR)
     if YUMMY_OVERLAY_SIDECAR.parent.is_dir():
         export_sidecar(store.conn, YUMMY_OVERLAY_SIDECAR)
-    left = store.conn.execute(
-        "SELECT COUNT(*) FROM community_votes WHERE actor_id LIKE ?",
-        (f"{CANARY_ACTOR_PREFIX}%",),
-    ).fetchone()[0]
+    left = 0
+    for pref in prefixes:
+        left += store.conn.execute(
+            "SELECT COUNT(*) FROM community_votes WHERE actor_id LIKE ?",
+            (pref,),
+        ).fetchone()[0]
     store.conn.commit()
     store.close()
     return {
