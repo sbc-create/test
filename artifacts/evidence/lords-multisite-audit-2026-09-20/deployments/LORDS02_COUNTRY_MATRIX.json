@@ -1,0 +1,320 @@
+{
+  "at_utc": "2026-09-20T10:00:40.001826+00:00",
+  "facet_links_latin": [
+    "/country/ssha/",
+    "/country/yaponiya/",
+    "/country/velikobritaniya/",
+    "/country/franciya/",
+    "/country/kanada/",
+    "/country/germaniya/",
+    "/country/indiya/",
+    "/country/yuzhnayakoreya/"
+  ],
+  "facet_count": 8,
+  "routes": [
+    {
+      "kind": "facet",
+      "href": "/country/ssha/",
+      "status": 200,
+      "error": null,
+      "soft_404": false,
+      "redirects": 0,
+      "chain": [
+        {
+          "url": "https://lordserial33.biz/country/ssha/",
+          "status": 200
+        }
+      ],
+      "final": "https://lordserial33.biz/country/ssha/",
+      "shown_count": 17789,
+      "title_links": 48,
+      "title_sample": [
+        "/title/nedetskie-igry-2/",
+        "/title/reznya-v-norton-krik/",
+        "/title/chya-eto-sobaka/"
+      ],
+      "ms": 89,
+      "build": "20260920T093000Z-f8e5e67-nova",
+      "artifact": "e1fefd2ce242"
+    },
+    {
+      "kind": "facet",
+      "href": "/country/yaponiya/",
+      "status": 200,
+      "error": null,
+      "soft_404": false,
+      "redirects": 0,
+      "chain": [
+        {
+          "url": "https://lordserial33.biz/country/yaponiya/",
+          "status": 200
+        }
+      ],
+      "final": "https://lordserial33.biz/country/yaponiya/",
+      "shown_count": 4104,
+      "title_links": 48,
+      "title_sample": [
+        "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+        "/title/master-lda-i-plameni-2/",
+        "/title/nelyud-chast-2/"
+      ],
+      "ms": 54,
+      "build": "20260920T093000Z-f8e5e67-nova",
+      "artifact": "e1fefd2ce242"
+    },
+    {
+      "kind": "facet",
+      "href": "/country/velikobritaniya/",
+      "status": 200,
+      "error": null,
+      "soft_404": false,
+      "redirects": 0,
+      "chain": [
+        {
+          "url": "https://lordserial33.biz/country/velikobritaniya/",
+          "status": 200
+        }
+      ],
+      "final": "https://lordserial33.biz/country/velikobritaniya/",
+      "shown_count": 4092,
+      "title_links": 48,
+      "title_sample": [
+        "/title/parshivye-ovcy-2/",
+        "/title/operaciya-fortitude/",
+        "/title/v-poiskah-dzheka-charltona/"
+      ],
+      "ms": 49,
+      "build": "20260920T093000Z-f8e5e67-nova",
+      "artifact": "e1fefd2ce242"
+    },
+    {
+      "kind": "facet",
+      "href": "/country/franciya/",
+      "status": 200,
+      "error": null,
+      "soft_404": false,
+      "redirects": 0,
+      "chain": [
+        {
+          "url": "https://lordserial33.biz/country/franciya/",
+          "status": 200
+        }
+      ],
+      "final": "https://lordserial33.biz/country/franciya/",
+      "shown_count": 3010,
+      "title_links": 48,
+      "title_sample": [
+        "/title/kurinyy-gorodok/",
+        "/title/ty-ya-protiv-vsego-mira/",
+        "/title/tihookeanskie-rassledovaniya/"
+      ],
+      "ms": 51,
+      "build": "20260920T093000Z-f8e5e67-nova",
+      "artifact": "e1fefd2ce242"
+    },
+    {
+      "kind": "facet",
+      "href": "/country/kanada/",
+      "status": 200,
+      "error": null,
+      "soft_404": false,
+      "redirects": 0,
+      "chain": [
+        {
+          "url": "https://lordserial33.biz/country/kanada/",
+          "status": 200
+        }
+      ],
+      "final": "https://lordserial33.biz/country/kanada/",
+      "shown_count": 2922,
+      "title_links": 48,
+      "title_sample": [
+        "/title/princessa-i-drakon/",
+        "/title/materinskaya-lihoradka/",
+        "/title/ya-kris-farli/"
+      ],
+      "ms": 52,
+      "build": "20260920T093000Z-f8e5e67-nova",
+      "artifact": "e1fefd2ce242"
+    },
+    {
+      "kind": "facet",
+      "href": "/country/germaniya/",
+      "status": 200,
+      "error": null,
+      "soft_404": false,
+      "redirects": 0,
+      "chain": [
+        {
+          "url": "https://lordserial33.biz/country/germaniya/",
+          "status": 200
+        }
+      ],
+      "final": "https://lordserial33.biz/country/germaniya/",
+      "shown_count": 1789,
+      "title_links": 48,
+      "title_sample": [
+        "/title/obitel-zla-2/",
+        "/title/dikie-malenkie-koshki/",
+        "/title/yanuni/"
+      ],
+      "ms": 56,
+      "build": "20260920T093000Z-f8e5e67-nova",
+      "artifact": "e1fefd2ce242"
+    },
+    {
+      "kind": "facet",
+      "href": "/country/indiya/",
+      "status": 200,
+      "error": null,
+      "soft_404": false,
+      "redirects": 0,
+      "chain": [
+        {
+          "url": "https://lordserial33.biz/country/indiya/",
+          "status": 200
+        }
+      ],
+      "final": "https://lordserial33.biz/country/indiya/",
+      "shown_count": 1729,
+      "title_links": 48,
+      "title_sample": [
+        "/title/pravda-ili-zagovor/",
+        "/title/nerazryvnye-uzy/",
+        "/title/isstuplenie-2/"
+      ],
+      "ms": 54,
+      "build": "20260920T093000Z-f8e5e67-nova",
+      "artifact": "e1fefd2ce242"
+    },
+    {
+      "kind": "facet",
+      "href": "/country/yuzhnayakoreya/",
+      "status": 200,
+      "error": null,
+      "soft_404": false,
+      "redirects": 0,
+      "chain": [
+        {
+          "url": "https://lordserial33.biz/country/yuzhnayakoreya/",
+          "status": 200
+        }
+      ],
+      "final": "https://lordserial33.biz/country/yuzhnayakoreya/",
+      "shown_count": 1494,
+      "title_links": 48,
+      "title_sample": [
+        "/title/skandal-4/",
+        "/title/novyy-rekrut/",
+        "/title/novyy-rekrut-2/"
+      ],
+      "ms": 52,
+      "build": "20260920T093000Z-f8e5e67-nova",
+      "artifact": "e1fefd2ce242"
+    },
+    {
+      "kind": "uk_cyr",
+      "href": "/country/%D0%B2%D0%B5%D0%BB%D0%B8%D0%BA%D0%BE%D0%B1%D1%80%D0%B8%D1%82%D0%B0%D0%BD%D0%B8%D1%8F/",
+      "status": 200,
+      "error": null,
+      "soft_404": false,
+      "redirects": 1,
+      "chain": [
+        {
+          "url": "https://lordserial33.biz/country/%D0%B2%D0%B5%D0%BB%D0%B8%D0%BA%D0%BE%D0%B1%D1%80%D0%B8%D1%82%D0%B0%D0%BD%D0%B8%D1%8F/",
+          "status": 308,
+          "location": "/country/velikobritaniya/"
+        },
+        {
+          "url": "https://lordserial33.biz/country/velikobritaniya/",
+          "status": 200
+        }
+      ],
+      "final": "https://lordserial33.biz/country/velikobritaniya/",
+      "shown_count": 4092,
+      "title_links": 48,
+      "title_sample": [
+        "/title/parshivye-ovcy-2/",
+        "/title/operaciya-fortitude/",
+        "/title/v-poiskah-dzheka-charltona/"
+      ],
+      "ms": 57,
+      "build": "20260920T093000Z-f8e5e67-nova",
+      "artifact": "e1fefd2ce242"
+    },
+    {
+      "kind": "ssha_cyr",
+      "href": "/country/%D1%81%D1%88%D0%B0/",
+      "status": 200,
+      "error": null,
+      "soft_404": false,
+      "redirects": 1,
+      "chain": [
+        {
+          "url": "https://lordserial33.biz/country/%D1%81%D1%88%D0%B0/",
+          "status": 308,
+          "location": "/country/ssha/"
+        },
+        {
+          "url": "https://lordserial33.biz/country/ssha/",
+          "status": 200
+        }
+      ],
+      "final": "https://lordserial33.biz/country/ssha/",
+      "shown_count": 17789,
+      "title_links": 48,
+      "title_sample": [
+        "/title/nedetskie-igry-2/",
+        "/title/reznya-v-norton-krik/",
+        "/title/chya-eto-sobaka/"
+      ],
+      "ms": 78,
+      "build": "20260920T093000Z-f8e5e67-nova",
+      "artifact": "e1fefd2ce242"
+    }
+  ],
+  "pagination": {
+    "page1_status": 200,
+    "page1_shown": 4092,
+    "page2_href": "/catalog/?country=velikobritaniya&page=2",
+    "titles_page1": 48,
+    "page2_status": 200,
+    "page2_shown": 4092,
+    "page2_soft404": false,
+    "overlap_titles": 0,
+    "filter_in_page2_url": true,
+    "pager_links_keep_country": true,
+    "title_links_checked": 48,
+    "title_links_broken": []
+  },
+  "owner_uk": {
+    "latin_status": 200,
+    "latin_shown": 4092,
+    "latin_title_links": 48,
+    "cyr_chain": [
+      {
+        "url": "https://lordserial33.biz/country/%D0%B2%D0%B5%D0%BB%D0%B8%D0%BA%D0%BE%D0%B1%D1%80%D0%B8%D1%82%D0%B0%D0%BD%D0%B8%D1%8F/",
+        "status": 308,
+        "location": "/country/velikobritaniya/"
+      },
+      {
+        "url": "https://lordserial33.biz/country/velikobritaniya/",
+        "status": 200
+      }
+    ],
+    "cyr_final_status": 200,
+    "cyr_shown": 4092,
+    "records_match_4092": true,
+    "oracle_phase_a_cyr_count": 4092
+  },
+  "gates": {
+    "COUNTRY_ROUTES_TESTED": 10,
+    "COUNTRY_ROUTE_FAILURES": 0,
+    "SOFT_404": 0,
+    "HTTP_5XX": 0,
+    "HTTP_404": 0,
+    "REDIRECT_LOOPS": 0,
+    "TITLE_CARD_BROKEN": 0,
+    "PAGINATION_PASS": true
+  }
+}
