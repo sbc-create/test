@@ -1,0 +1,70 @@
+{
+  "stage": "COMMUNITY-COMMENTS-01",
+  "block": "00-existing-work-check",
+  "checked_at": "2026-09-20T21:16:17Z",
+  "target_date_msk": "2026-09-20",
+  "bootstrap_worktree": "/home/claude/wt-ratings-ingestion-01",
+  "base_head_expected": "ab9dec90c2084614f9f227730be5240c4d7baefc",
+  "expected_base_branch": "cursor/ratings-ingestion-01",
+  "target_branch": "cursor/community-comments-01",
+  "target_worktree": "/home/claude/wt-community-comments-01",
+  "shell_unblock": {
+    "issue": "Cursor harness tool name Shell was unknown to hookguard (only Bash)",
+    "fix_applied_in_bootstrap": "seo_operator/hookguard.py SHELL_TOOLS + StrReplace/Delete write tools",
+    "note": "Self (this GOAL agent) is not a pre-existing comments agent"
+  },
+  "worktree_list_summary": {
+    "comment_or_community_comments_worktrees_before": [],
+    "ratings_worktree": {
+      "path": "/home/claude/wt-ratings-ingestion-01",
+      "branch": "cursor/ratings-ingestion-01",
+      "HEAD": "ab9dec90c2084614f9f227730be5240c4d7baefc"
+    }
+  },
+  "branches_matching_comment_community_rating": {
+    "cursor_community_comments_01_before": false,
+    "any_comment_named_branch_before": false,
+    "rating_related": [
+      "cursor/ratings-ingestion-01",
+      "claude/arch-lords-zona-catalog-ratings-daily-004",
+      "claude/site-factory-live-autonomy-content-player-ratings-night-04"
+    ]
+  },
+  "dirs": {
+    "wt_comment_glob_before": [],
+    "wt_community_comments_01_before": false
+  },
+  "processes": {
+    "ps_pgrep_status": "DENIED_BY_UNATTENDED_SAFE (ps/pgrep not in profile)",
+    "transcript_scan": {
+      "other_agents_on_COMMUNITY_COMMENTS": false,
+      "this_goal_transcript": "fbd872cd-bb18-4dd6-a7e6-e3e8056612dc",
+      "bootstrap_subagent_transcript": "e2a13347-0c7f-485b-b17b-4826c4028a0d",
+      "note": "Parent GOAL and its bootstrap helper are this session, not a prior comments module agent"
+    }
+  },
+  "handoff_files_found": [
+    "artifacts/evidence/community-ratings-05/COMMUNITY-COMMENTS-01-NEXT.md",
+    "artifacts/evidence/community-ratings-06/COMMENTS_STAGE_NEXT.md"
+  ],
+  "prior_comments_evidence_root": null,
+  "existing_dark_schema_stub": {
+    "path": "factory/community/store.py",
+    "tables": [
+      "community_comments",
+      "community_comment_revisions",
+      "community_comment_reactions"
+    ],
+    "publication_enabled": 0
+  },
+  "decision": {
+    "EXISTING_COMMENTS_AGENT_FOUND": "NO",
+    "DUPLICATE_WORKTREE_CREATED": "NO",
+    "DUPLICATE_BRANCH_CREATED": "NO",
+    "CREATED_NOW": "YES",
+    "WORKTREE_PATH": "/home/claude/wt-community-comments-01",
+    "BRANCH": "cursor/community-comments-01",
+    "START_HEAD": "ab9dec90c2084614f9f227730be5240c4d7baefc",
+    "command": "git worktree add -b cursor/community-comments-01 /home/claude/wt-community-comments-01 ab9dec90c2084614f9f227730be5240c4d7baefc"
+  }
+}

@@ -48,6 +48,12 @@ class TestUnattendedSafe:
     def test_branch_local_writes_allowed(self):
         assert d("Write", file_path="/home/user/test/seo_operator/x.py") == "allow"
         assert d("Edit", file_path="/home/user/test/docs/y.md") == "allow"
+        assert d("StrReplace", path="/home/user/test/docs/y.md") == "allow"
+
+    def test_cursor_shell_alias_allowed(self):
+        """Cursor harness names the shell tool Shell; treat like Bash."""
+        assert d("Shell", command="git status") == "allow"
+        assert d("Shell", command="mystery-binary --wipe") == "deny"
 
 
 class TestDangerousBlocked:
