@@ -36,7 +36,7 @@
     "B23"
   ],
   "BLOCKS_PENDING": [],
-  "HEAD": "363e9ffce9da7f97dca7bf025a8563a25eddd872",
+  "HEAD": "38fc6aa2c00f69607136ee1dfa239b61f90c8e3f",
   "FINAL_REPORT": "artifacts/evidence/zona-blockwise-2026-09-20/B24-live/FINAL_REPORT.txt",
   "ARTIFACT_SHA256": "5fb6295cc7d8a7a1508dfb4be90b2a6e37dc97422e07547679eb535a9b0d2145",
   "MANIFEST_SHA256": "a88724faf91f0886f1cd96f0fcd674a8e9becc964a9055fd46b29927ae1bfd1a",
@@ -47,6 +47,6 @@
   "PUSH_PERFORMED": 0,
   "updated_at": "2026-09-20T14:57:10Z",
   "RUN_COMPLETE": true,
-  "FINAL_HEAD": "363e9ffce9da7f97dca7bf025a8563a25eddd872",
+  "FINAL_HEAD": "38fc6aa2c00f69607136ee1dfa239b61f90c8e3f",
   "ARTIFACT_SOURCE_HEAD": "0b8b254d394215091dec523f069721debe92569f"
 }
