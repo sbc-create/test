@@ -1,0 +1,42 @@
+{
+  "artifact_sha": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+  "m02": {
+    "schema_version": 1,
+    "template_family": "lords",
+    "design_version": "1.1.0",
+    "source_commit": "f0b253d48964d2f7c601f37e85aa1afa29229410",
+    "build_id": "20260920T101032Z-f0b253d-nova",
+    "artifact_sha256": "4990ea9f8ee6451d86bfad8efa5d5e7592f7eb42a0137ce81b3eeb2078fc6023",
+    "profile": "lords-new",
+    "built_at": "2026-09-20T13:59:07Z",
+    "source_dirty": false,
+    "domain": "lordserial33.biz",
+    "player_layout_contract": "full-bleed-v1"
+  },
+  "m01": {
+    "schema_version": 1,
+    "template_family": "lords",
+    "design_version": "1.1.0",
+    "source_commit": "24c54b6affbdc912d8766ba794f280837f922329",
+    "build_id": "20260920T140520Z-24c54b6-nova",
+    "artifact_sha256": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+    "profile": "lords-general",
+    "built_at": "2026-09-20T14:05:05Z",
+    "source_dirty": false,
+    "domain": "lordfilm47.space",
+    "player_layout_contract": "full-bleed-v1"
+  },
+  "m03": {
+    "schema_version": 1,
+    "template_family": "lords",
+    "design_version": "1.1.0",
+    "source_commit": "24c54b6affbdc912d8766ba794f280837f922329",
+    "build_id": "20260920T140520Z-24c54b6-nova",
+    "artifact_sha256": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+    "profile": "lords-curated",
+    "built_at": "2026-09-20T14:05:07Z",
+    "source_dirty": false,
+    "domain": "1lordserials1.online",
+    "player_layout_contract": "full-bleed-v1"
+  }
+}
