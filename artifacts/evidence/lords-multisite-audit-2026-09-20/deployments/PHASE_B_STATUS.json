@@ -1,0 +1,39 @@
+{
+  "at_utc": "2026-09-20T09:27:20.940577+00:00",
+  "PHASE": "B-partial",
+  "FEATURE_HEAD": "f8e5e67f7c4da18ea176aaccf134ab396e58b1f5",
+  "AUDIT_HEAD": "96db7fb563a9f74ed88906d3324cf57dbf606760",
+  "DISK_SHA": "e1fefd2ce2427e60fbe6252ed464c08ff7004de3f9edba8fc45fb6b6f4b631b8",
+  "lords-02": {
+    "staged": true,
+    "manifest": {
+      "schema_version": 1,
+      "template_family": "lords",
+      "design_version": "1.1.0",
+      "source_commit": "f8e5e67f7c4da18ea176aaccf134ab396e58b1f5",
+      "build_id": "20260920T093000Z-f8e5e67-nova",
+      "artifact_sha256": "e1fefd2ce2427e60fbe6252ed464c08ff7004de3f9edba8fc45fb6b6f4b631b8",
+      "profile": "lords-new",
+      "built_at": "2026-09-20T09:27:09Z",
+      "source_dirty": false,
+      "domain": "lordserial33.biz",
+      "player_layout_contract": "full-bleed-v1"
+    },
+    "disk_match": true,
+    "rollback": "/srv/lords/.frontend/.rollback/20260920T092709Z-lords-02",
+    "owner_restart": "sudo -n systemctl restart nova-lords-02.service",
+    "live_verified": false
+  },
+  "lords-01": {
+    "staged_for_country_fix": false,
+    "manifest_sha": "b9de6b626e6578310b7e35cefd63e08d1715db2ff0664c072064d12e72b146fa",
+    "note": "await lords-02 live gates before staging"
+  },
+  "lords-03": {
+    "staged_for_country_fix": false,
+    "manifest_sha": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "note": "await lords-02 live gates before staging"
+  },
+  "RESTARTS_PERFORMED": 0,
+  "STOP_REASON": "G-PRIV / --no-restart: owner must restart nova-lords-02.service; live PASS not claimed"
+}
