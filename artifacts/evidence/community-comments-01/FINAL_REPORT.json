@@ -4,12 +4,12 @@
   "BRANCH": "cursor/community-comments-01",
   "WORKTREE": "/home/claude/wt-community-comments-01",
   "START_HEAD": "ab9dec90c2084614f9f227730be5240c4d7baefc",
-  "FINAL_HEAD": "8672eec1e42a74fbc31656768acce0ba82f17887",
+  "FINAL_HEAD": "2efa13f402368f21abcac9b1869799942f988de0",
   "COMMITS_SO_FAR": 9,
   "TESTS": "49+49 consecutive comments unit; 39 ratings regression",
   "TEST_RUNS_CONSECUTIVE": 2,
   "started_at": "2026-09-20T21:11:00Z",
-  "finished_at": "2026-09-20T21:28:57Z",
+  "finished_at": "2026-09-20T21:29:35Z",
   "target_date_msk": "2026-09-20",
   "EXISTING_COMMENTS_AGENT_FOUND": "NO",
   "DUPLICATE_WORKTREE_CREATED": "NO",
@@ -103,5 +103,5 @@
     ]
   },
   "MAX_SINGLE_SOURCE_SHARE_NOTE": "Single ALLOWED_API comment source (AniList); 40% multi-source rule waived with documented blocker on film/series scrapers.",
-  "COMMITS": 13
+  "COMMITS": 14
 }
