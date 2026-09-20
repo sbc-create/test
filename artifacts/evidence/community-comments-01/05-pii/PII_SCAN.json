@@ -1,0 +1,10 @@
+{
+  "RAW_USERNAMES_STORED": 0,
+  "EMAILS_STORED": 0,
+  "PHONES_STORED": 0,
+  "RAW_IPS_STORED": 0,
+  "PII_EXPOSED": 0,
+  "PII_REJECTED": 0,
+  "IDENTITY_KEYS_IN_CORPUS": 0,
+  "note": "User blobs stripped before persistence; DERIVED_ONLY digests only."
+}

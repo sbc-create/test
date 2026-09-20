@@ -1,0 +1,29 @@
+{
+  "RAW_USERNAMES_STORED": 0,
+  "EMAILS_STORED": 0,
+  "PHONES_STORED": 0,
+  "RAW_IPS_STORED": 0,
+  "PII_EXPOSED": 0,
+  "PII_REJECTED": 0,
+  "fields_in_derived_sample": [
+    "collected_at",
+    "content_category",
+    "content_digest",
+    "counts_toward_accepted_research",
+    "labels",
+    "language",
+    "license_policy",
+    "observation_id",
+    "provenance",
+    "score_public",
+    "source_domain",
+    "source_name",
+    "source_url",
+    "status",
+    "storage_mode",
+    "structural_template",
+    "text_length",
+    "title_key",
+    "title_name"
+  ]
+}

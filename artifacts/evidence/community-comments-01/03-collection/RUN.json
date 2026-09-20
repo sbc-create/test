@@ -1,0 +1,10 @@
+{
+  "collector": "python3 -m factory.community.comments_research collect",
+  "primary_source": "AniList Reviews GraphQL",
+  "http_counters": {
+    "200": 41
+  },
+  "rate_rps": 0.2,
+  "storage_mode": "DERIVED_ONLY",
+  "full_text_committed": 0
+}

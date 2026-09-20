@@ -1,0 +1,40 @@
+{
+  "accepted": 1000,
+  "unique_titles": 693,
+  "unique_domains": [
+    "graphql.anilist.co"
+  ],
+  "lang": {
+    "en": 1000
+  },
+  "category": {
+    "DORAMA": 578,
+    "ANIME": 411,
+    "ANIMATION_FAMILY": 11
+  },
+  "sentiment": {
+    "positive": 609,
+    "neutral": 247,
+    "negative": 82,
+    "mixed": 62
+  },
+  "spoiler": {
+    "true": 289,
+    "false": 711
+  },
+  "toxicity": {
+    "unlikely": 981,
+    "likely": 19
+  },
+  "spam": {
+    "false": 1000
+  },
+  "quality": {
+    "high": 981,
+    "low": 19
+  },
+  "avg_text_length": 5971.86,
+  "digest_unique": 1000,
+  "FULL_EXTERNAL_COMMENTS_IN_GIT": 0,
+  "RAW_USERNAMES_STORED": 0
+}

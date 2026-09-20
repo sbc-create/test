@@ -1,0 +1,24 @@
+{
+  "ACCEPTED": 1000,
+  "UNIQUE_DIGESTS": 1000,
+  "DUPLICATE_TEXTS": 0,
+  "UNIQUE_TITLES": 693,
+  "MAX_PER_TITLE": 10,
+  "LANGUAGE": {
+    "en": 1000
+  },
+  "CATEGORY": {
+    "DORAMA": 578,
+    "ANIME": 411,
+    "ANIMATION_FAMILY": 11
+  },
+  "STORAGE_MODES": {
+    "DERIVED_ONLY": 1000,
+    "SYNTHETIC_RESEARCH_FIXTURE": 50
+  },
+  "HAS_BODY_FIELD": 0,
+  "HAS_USERNAME_FIELD": 0,
+  "JSONL_SHA256": "0a42e3a0d04a3ca1c669bed841091e4320c7cd1782d88fd4520e067f58b2e300",
+  "JSONL_PATH": "var/community_comments_research/derived_observations.jsonl",
+  "JSONL_IN_GIT": 0
+}

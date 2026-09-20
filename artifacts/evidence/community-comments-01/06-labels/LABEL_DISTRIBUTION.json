@@ -1,0 +1,28 @@
+{
+  "sentiment": {
+    "positive": 609,
+    "neutral": 247,
+    "negative": 82,
+    "mixed": 62
+  },
+  "spoiler": {
+    "True": 289,
+    "False": 711
+  },
+  "toxicity": {
+    "unlikely": 981,
+    "likely": 19
+  },
+  "spam": {
+    "False": 1000
+  },
+  "quality": {
+    "high": 981,
+    "low": 19
+  },
+  "usefulness": {
+    "high": 981,
+    "low": 19
+  },
+  "note": "Heuristic research labels only; not production moderation verdicts."
+}
