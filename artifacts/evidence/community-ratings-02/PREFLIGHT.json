@@ -1,0 +1,81 @@
+{
+  "pwd": "/home/claude/wt-ratings-ingestion-01",
+  "branch": "cursor/ratings-ingestion-01",
+  "HEAD": "52bf9ce93ac7d524212d4fcd46f82fc94892bbb1",
+  "EXPECTED_ANCESTOR": "52bf9ce93ac7d524212d4fcd46f82fc94892bbb1",
+  "ANCESTRY_OK": true,
+  "FOUNDATION_TESTS": "27_PASS",
+  "RATING_POLICY_DIGEST": "a2daf212d92ea40dc3de658806fb6f5f5cf7ae77890ff0c25f81bd89088c17d5",
+  "CANONICAL_DB": "/srv/site-factory/repo/var/ratings/ratings.sqlite",
+  "schema_migrations": [
+    {
+      "version": "0002",
+      "description": "ratings ingestion: registry, mappings, observations, queue, runs",
+      "applied_at": "2026-09-19T20:04:26Z"
+    },
+    {
+      "version": "0003",
+      "description": "amd local votes combined daily ratings",
+      "applied_at": "2026-09-19T20:04:26Z"
+    },
+    {
+      "version": "0004",
+      "description": "rating_source_absence for zero-score/no-vote deferred retry",
+      "applied_at": "2026-09-19T20:04:26Z"
+    }
+  ],
+  "row_counts": {
+    "rating_sources": 5,
+    "title_source_mappings": 250,
+    "rating_observations": 225,
+    "rating_current": 225,
+    "rating_ingestion_runs": 1,
+    "rating_backfill_queue": 150,
+    "rating_backfill_cursor": 0,
+    "rating_conflicts": 0,
+    "rating_review_queue": 0,
+    "rating_dead_letter": 0,
+    "schema_migrations": 3,
+    "rating_vote_event": 0,
+    "rating_vote_current": 0,
+    "rating_local_aggregate": 0,
+    "rating_combined_projection": 100,
+    "ratings_daily_run": 0,
+    "ratings_daily_outcome": 0,
+    "rating_idempotency": 0,
+    "rating_source_absence": 10
+  },
+  "observations_by_source": {
+    "amd_online": 100,
+    "shikimori": 125
+  },
+  "current_by_source": {
+    "amd_online": 100,
+    "shikimori": 125
+  },
+  "native_vote_current": 0,
+  "foreign_untracked": [
+    "artifacts/evidence/ratings-ingestion-02/closed-noindex/animedia.icu/ratings_snapshot_v1.candidate.json.prev",
+    "artifacts/evidence/ratings-ingestion-02/closed-noindex/animedia.space/ratings_snapshot_v1.candidate.json.prev"
+  ],
+  "related_services": [
+    "nova-animedia-01",
+    "nova-animedia-02",
+    "nova-yummy-site",
+    "nova-yummy-org",
+    "nova-yummy-biz",
+    "animedia-01",
+    "animedia-02",
+    "site-factory-control-api"
+  ],
+  "authoritative_gateway": "factory.ratings.gateway.RatingGateway + factory.community.readmodel",
+  "indexability_probe": {
+    "animedia.icu": "x-robots-tag: noindex, nofollow",
+    "animedia.space": "x-robots-tag: noindex, nofollow",
+    "yummyani.site": "no x-robots-tag in headers (check meta separately)"
+  },
+  "OWNER_POLICY_DECISION_ID": "COMMUNITY-RATINGS-POLICY-V1-20260920",
+  "OWNER_POLICY_APPROVAL_SCOPE": "SHADOW_AND_PUBLIC_READ_ONLY",
+  "NATIVE_PUBLIC_WRITES_APPROVED": false,
+  "ts": "2026-09-20T12:46:35.899160+00:00"
+}
