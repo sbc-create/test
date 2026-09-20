@@ -1612,11 +1612,11 @@ white-space:nowrap}
      h2 22.1 нормального начертания, ссылки 15.6 полужирные. */
 body{background:@PAGE@;color:@INK@;
 font:13px/1.375 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif;
-/* Mobile uses burger: header is a single ~68px row. Old 117px pad left a
-   49px empty strip between header and content (Pass6 Block 02). */
-padding-top:72px}
-@media(min-width:768px){body{padding-top:138px}}
-@media(min-width:1280px){body{padding-top:69px}}
+/* B01 header geometry: ≤767 → 56; 768–1279 → 60–64; ≥1280 → 68–72.
+   Burger drawer on narrow; no multi-row header wrap. */
+padding-top:56px}
+@media(min-width:768px){body{padding-top:62px}}
+@media(min-width:1280px){body{padding-top:70px}}
 .zs{min-height:100vh;display:block}
 .zmain{min-width:0}
 .zwrap{max-width:1760px;margin:0 auto;padding:0 12px;box-sizing:border-box}
@@ -1628,27 +1628,32 @@ padding-top:72px}
    одной ширине — это и было главным расхождением с эталоном. */
 .zhd{position:fixed;top:0;left:0;right:0;z-index:60;background:@RAIL@;
 color:@RAILINK@;box-shadow:0 1px 0 rgba(0,0,0,.25)}
-.zhd__in{max-width:1400px;margin:0 auto;padding:10px 12px;display:flex;
-align-items:center;gap:12px;flex-wrap:wrap;min-height:72px;box-sizing:border-box}
-@media(min-width:768px){.zhd__in{padding:25px 16px;gap:14px;min-height:0}}
-@media(min-width:1280px){.zhd__in{padding:0 20px;height:69px;min-height:69px;flex-wrap:nowrap;gap:14px}}
-.zhd__logo{font-size:19px;font-weight:700;letter-spacing:-.3px;color:#fff;
-white-space:nowrap;flex:0 0 auto;min-height:44px;display:inline-flex;align-items:center}
+.zhd__in{max-width:1400px;margin:0 auto;padding:0 12px;display:flex;
+align-items:center;gap:10px;flex-wrap:nowrap;height:56px;min-height:56px;
+max-height:56px;box-sizing:border-box}
+@media(min-width:768px){.zhd__in{padding:0 16px;gap:12px;height:62px;min-height:62px;max-height:62px}}
+@media(min-width:1280px){.zhd__in{padding:0 20px;height:70px;min-height:70px;max-height:70px;gap:14px}}
+.zhd__logo{font-size:18px;font-weight:700;letter-spacing:-.3px;color:#fff;
+white-space:nowrap;flex:0 0 auto;width:110px;max-width:150px;min-height:44px;
+display:inline-flex;align-items:center;overflow:hidden;text-overflow:ellipsis}
+@media(min-width:768px){.zhd__logo{font-size:19px;width:130px}}
 .zhd__logo:focus-visible{outline:2px solid #fff;outline-offset:3px;border-radius:4px}
-/* Пункты в одну строку с горизонтальной прокруткой: перенос на узком экране
-   поднимал шапку до 185 px против измеренных на эталоне 117. */
-.zhd__n{display:flex;gap:2px;flex:1 0 100%;order:3;min-width:0;
+/* Desktop/tablet: inline nav. Mobile: drawer only (see max-width:767 block). */
+.zhd__n{display:flex;gap:2px;flex:1 1 auto;order:0;min-width:0;
 overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .zhd__n::-webkit-scrollbar{display:none}
-@media(min-width:1280px){.zhd__n{flex:1 1 auto;order:0;overflow:visible}}
-.zhd__n a{padding:10px 12px;border-radius:6px;font-size:15.6px;font-weight:500;
+@media(min-width:1280px){.zhd__n{overflow:visible}}
+.zhd__n a{padding:8px 10px;border-radius:6px;font-size:14px;font-weight:500;
 color:#eef3f8;white-space:nowrap;flex:0 0 auto;min-height:44px;min-width:44px;
 display:inline-flex;align-items:center;box-sizing:border-box}
+@media(min-width:1280px){.zhd__n a{padding:10px 12px;font-size:15.6px}}
 .zhd__n a:hover{background:rgba(255,255,255,.14)}
 .zhd__n a:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .zhd__n a[aria-current]{background:@ACCDK@;color:#fff}
-.zhd__s{display:flex;flex:1 1 140px;min-width:0;max-width:420px;
+.zhd__s{display:flex;flex:1 1 140px;min-width:0;max-width:100%;
 border-radius:6px;overflow:hidden;background:#fff;min-height:44px}
+@media(min-width:768px){.zhd__s{flex:0 1 280px;max-width:360px}}
+@media(min-width:1280px){.zhd__s{flex:0 0 360px;min-width:320px;max-width:400px}}
 .zhd__s input{flex:1;min-width:0;border:0;padding:9px 12px;font-size:14px;
 color:@PAGE@;font-family:inherit;min-height:44px;box-sizing:border-box}
 .zhd__s input:focus-visible{outline:2px solid @ACCDK@;outline-offset:-2px}
@@ -1979,17 +1984,23 @@ gap:10px;padding-top:14px;border-top:1px solid @LINE@}
 .zsec--seo a{color:@ACC@;font-weight:600}
 .zvb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;
 border:0;padding:0;background:transparent;color:@MUTE@}
-.zhd__menu{display:inline-flex;align-items:center;justify-content:center;
+.zhd__searchbtn,.zhd__menu{display:inline-flex;align-items:center;justify-content:center;
 width:44px;height:44px;min-width:44px;min-height:44px;
 border:1px solid rgba(255,255,255,.28);border-radius:6px;
-background:transparent;color:#fff;font-size:20px;cursor:pointer;flex:0 0 auto}
-.zhd__menu:focus-visible{outline:2px solid #fff;outline-offset:2px}
-@media(min-width:768px){.zhd__menu{display:none}}
+background:transparent;color:#fff;font-size:18px;cursor:pointer;flex:0 0 auto}
+.zhd__searchbtn{margin-left:auto}
+.zhd__searchbtn:focus-visible,.zhd__menu:focus-visible{outline:2px solid #fff;outline-offset:2px}
+@media(min-width:768px){.zhd__searchbtn,.zhd__menu{display:none;margin-left:0}}
+.zhd__s--drawer{display:none}
 @media(max-width:767px){
-.zhd__n{display:none;flex:1 0 100%;order:4;flex-wrap:wrap;overflow:visible;
-background:@RAIL@;padding:8px 0 12px;border-top:1px solid rgba(255,255,255,.12)}
+.zhd__s--bar{display:none}
+.zhd__n{display:none;flex:1 0 100%;order:4;flex-direction:column;flex-wrap:nowrap;
+overflow:visible;background:@RAIL@;padding:8px 0 12px;
+border-top:1px solid rgba(255,255,255,.12);max-height:calc(100vh - 56px);
+overflow-y:auto}
 .zhd__n.is-open{display:flex}
-.zhd__n a{flex:1 1 calc(50% - 4px);justify-content:center}
+.zhd__n a{flex:1 1 auto;justify-content:flex-start;width:100%}
+.zhd__s--drawer{display:flex;flex:1 1 auto;width:100%;max-width:none;margin-top:8px}
 body.nav-lock{overflow:hidden}
 }
 .zfilt__y{display:inline-flex;flex-wrap:wrap;gap:6px;max-width:100%;align-items:center}
@@ -2415,12 +2426,14 @@ def _подставить(шаблон: str, токены: dict) -> str:
                   (lambda: _общее(ЗОНА_ТОКЕНЫ_1_1) + _подставить(ЗОНА_СТИЛЬ_1_1, ЗОНА_ТОКЕНЫ_1_1)),
         # Clean kind routes — same map as Обработчик.МАРШРУТЫ_ВИДА. Query
         # `?kind=` remains valid for combinations; nav must not 404.
-        "нав": [("/", "Обзор"), ("/new/", "Что нового"),
-                ("/movies/", "Кино"), ("/series/", "Сериалы"),
+        # B01 nav labels: user-facing «Главная»/«Новинки»/«Фильмы»/«Каталог»
+        # (not abstract «Обзор» / «Что нового» / «Кино» / «Весь каталог»).
+        "нав": [("/", "Главная"), ("/new/", "Новинки"),
+                ("/movies/", "Фильмы"), ("/series/", "Сериалы"),
                 ("/animation/", "Анимация"), ("/collections/", "Подборки"),
-                ("/catalog/", "Весь каталог")],
+                ("/catalog/", "Каталог")],
         "поиск": "Название фильма или сериала",
-        "полосы": [("Кино", "/movies/", "Фильм"),
+        "полосы": [("Фильмы", "/movies/", "Фильм"),
                    ("Сериалы", "/series/", "Сериал"),
                    ("Анимация", "/animation/", "Мультфильм")],
         "лид": "Кинопортал: что смотреть и где это найти",
@@ -3160,6 +3173,54 @@ def заглушка_постера(запись: dict, класс_заглуш�
     "if(e.key!=='Escape')return;"
     "var n=document.getElementById('hd-nav');var b=document.querySelector('[data-nav-toggle]');"
     "if(n&&n.classList.contains('is-open'))close(n,b);"
+    "});"
+    "})();"
+)
+
+#: Zona B01: drawer on #zhd-nav + empty-search forbid + basic focus cycle.
+СКРИПТ_ЗОНА_ШАПКА = (
+    "(function(){"
+    "function allToggles(){return document.querySelectorAll('[data-nav-toggle]');}"
+    "function setExpanded(open){allToggles().forEach(function(b){b.setAttribute('aria-expanded',open?'true':'false');});}"
+    "function close(nav,btn){if(!nav)return;nav.classList.remove('is-open');"
+    "setExpanded(false);document.body.classList.remove('nav-lock');"
+    "document.body.style.overflow='';"
+    "var back=btn||document.querySelector('[data-nav-toggle]');"
+    "try{if(back)back.focus()}catch(e){}}"
+    "function trap(e,nav){"
+    "if(e.key!=='Tab'||!nav.classList.contains('is-open'))return;"
+    "var f=[].slice.call(nav.querySelectorAll('a,button,input')).filter(function(el){return el.offsetParent!==null;});"
+    "if(!f.length)return;"
+    "var first=f[0],last=f[f.length-1];"
+    "if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}"
+    "else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}"
+    "}"
+    "document.addEventListener('click',function(e){"
+    "var b=e.target.closest('[data-nav-toggle]');"
+    "var n=document.getElementById('zhd-nav');if(!n)return;"
+    "if(b){var open=!n.classList.contains('is-open');"
+    "n.classList.toggle('is-open',open);setExpanded(open);"
+    "document.body.classList.toggle('nav-lock',open);"
+    "document.body.style.overflow=open?'hidden':'';"
+    "if(open){var fid=b.getAttribute('data-focus-search');"
+    "var focusEl=fid?document.getElementById(fid):n.querySelector('a');"
+    "if(focusEl)try{focusEl.focus()}catch(err){}}return}"
+    "if(n.classList.contains('is-open')&&!e.target.closest('.zhd')){"
+    "close(n,document.querySelector('[data-nav-toggle]'));}"
+    "});"
+    "document.addEventListener('keydown',function(e){"
+    "var n=document.getElementById('zhd-nav');"
+    "if(!n)return;"
+    "if(e.key==='Escape'&&n.classList.contains('is-open'))"
+    "close(n,document.querySelector('[data-nav-toggle]'));"
+    "trap(e,n);"
+    "});"
+    "document.addEventListener('submit',function(e){"
+    "var f=e.target;if(!f||f.getAttribute('role')!=='search')return;"
+    "var inp=f.querySelector('input[name=q]');if(!inp)return;"
+    "var v=(inp.value||'').replace(/^\\s+|\\s+$/g,'').replace(/\\u00a0/g,' ');"
+    "inp.value=v;"
+    "if(!v){e.preventDefault();inp.focus();}"
     "});"
     "})();"
 )
@@ -4230,19 +4291,26 @@ class ВидЗона(Вид):
 {_мета_версии()}
 <style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}
 {СКРИПТ_ЛЕНТ}
-{СКРИПТ_ЛОРДС_ШАПКА}</script></head>
+{СКРИПТ_ЗОНА_ШАПКА}</script></head>
 <body><a class="skip" href="#main">Перейти к содержимому</a>
 <div class="zs">
 <header class="zhd">
 <div class="zhd__in">
-<a class="zhd__logo" href="/">{html.escape(self.имя)}</a>
+<a class="zhd__logo" href="/" aria-label="{html.escape(self.имя)}">{html.escape(self.имя)}</a>
+<button class="zhd__searchbtn" type="button" data-nav-toggle data-focus-search="q-drawer"
+ aria-controls="zhd-nav" aria-expanded="false" aria-label="Открыть поиск">Поиск</button>
 <button class="zhd__menu" type="button" data-nav-toggle aria-controls="zhd-nav"
  aria-expanded="false" aria-label="Меню разделов">&#9776;</button>
-<nav id="zhd-nav" class="zhd__n" aria-label="Разделы">{нав}</nav>
-<form class="zhd__s" action="/search/" method="get" role="search">
-<label class="vh" for="q">Поиск по каталогу</label>
-<input id="q" name="q" placeholder="{html.escape(self.се["поиск"])}">
+<nav id="zhd-nav" class="zhd__n" aria-label="Разделы">{нав}
+<form class="zhd__s zhd__s--drawer" action="/search/" method="get" role="search" data-empty-submit="forbid">
+<label class="vh" for="q-drawer">Поиск по каталогу</label>
+<input id="q-drawer" name="q" placeholder="{html.escape(self.се["поиск"])}" autocomplete="off">
 <button type="submit">Найти</button></form>
+</nav>
+<form class="zhd__s zhd__s--bar" action="/search/" method="get" role="search" data-empty-submit="forbid">
+<label class="vh" for="q">Поиск по каталогу</label>
+<input id="q" name="q" placeholder="{html.escape(self.се["поиск"])}" autocomplete="off">
+<button type="submit" aria-label="Найти">Найти</button></form>
 </div>
 </header>
 <div class="zmain">
@@ -4272,8 +4340,8 @@ class ВидЗона(Вид):
                 out.append(f'<a href="{html.escape(href)}">{html.escape(label)}</a>')
             return "".join(out)
         раздел_а = _links([
-            ("/", "Обзор"), ("/new/", "Что нового"),
-            ("/movies/", "Кино"), ("/series/", "Сериалы"),
+            ("/", "Главная"), ("/new/", "Новинки"),
+            ("/movies/", "Фильмы"), ("/series/", "Сериалы"),
         ])
         раздел_б = _links([
             ("/animation/", "Анимация"), ("/collections/", "Подборки"),

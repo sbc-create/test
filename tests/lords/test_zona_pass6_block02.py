@@ -103,10 +103,14 @@ def зона(tmp_path_factory):
 def test_shell_css_mobile_padding_matches_single_row_header(зона):
     css = зона.ЗОНА_СТИЛЬ
     assert "padding-top:117px" not in css
-    assert re.search(r"body\{[^}]*padding-top:72px", css, re.S)
+    # B01: 56 / 62 / 70 body offset for 390 / tablet / desktop header heights.
+    assert re.search(r"body\{[^}]*padding-top:56px", css, re.S)
+    assert "padding-top:62px" in css
+    assert "padding-top:70px" in css
     assert "min-height:44px" in css
     assert re.search(r"\.zhd__menu\{[^}]*width:44px", css, re.S)
     assert "outline:2px solid" in css
+    assert "height:56px" in css and "height:70px" in css
 
 
 def test_home_renders_header_nav_search_no_side_rail(зона):
@@ -115,7 +119,15 @@ def test_home_renders_header_nav_search_no_side_rail(зона):
     assert 'class="zhd"' in о.тело
     assert "zhd__menu" in о.тело
     assert 'action="/search/"' in о.тело
-    assert "Обзор" in о.тело
+    # B01 contract labels (not abstract «Обзор»).
+    assert "Главная" in о.тело
+    assert "Новинки" in о.тело
+    assert "Фильмы" in о.тело
+    assert "Каталог" in о.тело
+    assert "Обзор" not in о.тело
+    assert "СКРИПТ_ЗОНА_ШАПКА" not in о.тело  # source name never leaks
+    assert "zhd-nav" in о.тело
+    assert 'data-empty-submit="forbid"' in о.тело
     assert "noindex" in о.тело
     # Side genre rail must stay suppressed in CSS, not stuck to the page.
     assert "zrail" in зона.ЗОНА_СТИЛЬ

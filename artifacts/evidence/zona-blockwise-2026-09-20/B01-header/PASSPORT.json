@@ -1,0 +1,21 @@
+{
+  "block_id": "B01",
+  "routes": [
+    "*"
+  ],
+  "intent": "shared compact header/nav/search entry",
+  "ownership": "template",
+  "versioned_contract_id": "ZONA_BLOCK_SPEC_V1/B01",
+  "reference_evidence": "artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference/home__*.png",
+  "changes": [
+    "nav labels Главная/Новинки/Фильмы/Каталог",
+    "header heights 56/62/70",
+    "drawer script on zhd-nav with focus trap + empty search forbid",
+    "mobile logo+searchbtn+menu; search field in drawer",
+    "desktop search width 320-400"
+  ],
+  "tests": [
+    "tests/lords/test_zona_pass6_block02.py"
+  ],
+  "captured_at": "2026-09-20T13:00:24Z"
+}

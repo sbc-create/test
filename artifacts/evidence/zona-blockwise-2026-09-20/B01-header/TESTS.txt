@@ -1,0 +1,1 @@
+pytest tests/lords/test_zona_pass6_block02.py tests/lords/test_zona_pass7_popular_weekly.py -> 17 passed
