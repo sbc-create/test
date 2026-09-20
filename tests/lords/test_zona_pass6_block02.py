@@ -140,6 +140,8 @@ def test_home_renders_header_nav_search_no_side_rail(зона):
 
 
 def test_locked_card_grid_untouched(зона):
-    assert "repeat(7," in зона.ЗОНА_СТИЛЬ
-    assert "repeat(8," in зона.ЗОНА_СТИЛЬ
+    # B09: auto-fit registry (not a hard 1440→7 cliff that starves 1363).
+    assert "auto-fit" in зона.ЗОНА_СТИЛЬ
+    assert "minmax(164px" in зона.ЗОНА_СТИЛЬ or "minmax(158px" in зона.ЗОНА_СТИЛЬ
     assert "--z-card-max:180px" in зона.ЗОНА_СТИЛЬ
+    assert "min-width:1440px){.zg{grid-template-columns:repeat(4" not in зона.ЗОНА_СТИЛЬ

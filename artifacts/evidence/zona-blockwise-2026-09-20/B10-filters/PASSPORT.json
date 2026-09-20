@@ -1,0 +1,21 @@
+{
+  "block": "B10",
+  "title": "Catalog heading and compact filters",
+  "status": "PASS_LOCAL",
+  "head_before": "7f3743dc7a3b656a207ffd8e68886bbfa3342d56",
+  "contract_digest": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+  "changes": [
+    "Compact filter bar: kind chips + year/genre/country/sort selects",
+    "Removed year chip wall (.zfilt__y)",
+    "Mobile accordion toggle «Фильтры N» with sticky reset",
+    "Active filter chips with per-facet clear",
+    "H1 labels: Каталог / Новинки / Фильмы"
+  ],
+  "assumptions": [
+    "Select onchange navigation preserves other query params via запрос_строкой",
+    "genre_names/country_names from index are authoritative facet lists"
+  ],
+  "tests": "tests/lords/test_zona_blockwise_b10_b11.py::test_b10_* (PASS)",
+  "residual": [],
+  "updated_at": "2026-09-20T13:35:00Z"
+}

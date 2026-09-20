@@ -1875,6 +1875,31 @@ background:@SURF@;font-size:13.5px;text-align:center;box-sizing:border-box}
 .zsort a{display:inline-flex;align-items:center;min-height:36px;padding:6px 12px;
 border-radius:6px;border:1px solid @LINE@;background:@SURF@;font-size:13px;color:@DIM@}
 .zsort a[aria-current]{border-color:@ACC@;color:@ACC@;font-weight:600}
+/* B10 compact filter bar */
+.zfilt-bar{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin:0 0 14px;
+min-height:52px;max-height:none;padding:8px 0}
+.zfilt-bar__group{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.zfilt-bar label.zfilt-lab{font-size:12px;font-weight:700;color:@DIM@;margin-right:2px}
+.zfilt-bar select,.zfilt-bar .zfilt__year{min-height:40px;max-width:200px;padding:6px 10px;
+border:1px solid @LINE@;border-radius:8px;background:@SURF@;color:@INK@;font:inherit;font-size:13px}
+.zfilt-bar a.zfilt-chip{display:inline-flex;align-items:center;min-height:40px;padding:0 12px;
+border:1px solid @LINE@;border-radius:8px;background:@SURF@;font-size:13px;font-weight:600;color:@INK@}
+.zfilt-bar a.zfilt-chip[aria-current]{background:@ACCDK@;color:#fff;border-color:@ACCDK@}
+.zfilt-bar a.zfilt-reset{color:@ACC@;font-weight:700;min-height:40px;display:inline-flex;align-items:center}
+.zfilt-chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.zfilt-chips span{display:inline-flex;align-items:center;min-height:32px;padding:0 10px;
+border-radius:999px;background:@SURF@;border:1px solid @LINE@;font-size:12px}
+.zfilt-chips a{margin-left:6px;color:@ACC@;font-weight:700}
+.zfilt-toggle{display:none}
+@media(max-width:767px){
+.zfilt-toggle{display:inline-flex;min-height:44px;align-items:center;padding:0 14px;
+border:1px solid @LINE@;border-radius:8px;background:@SURF@;font:inherit;font-weight:700;cursor:pointer}
+.zfilt-bar{display:none;flex-direction:column;align-items:stretch;max-height:240px;overflow:auto;
+border:1px solid @LINE@;border-radius:10px;padding:10px;background:@SURF@}
+.zfilt-bar.is-open{display:flex}
+.zfilt-bar select,.zfilt-bar .zfilt__year{max-width:none;width:100%}
+.zfilt-bar__sticky{display:flex;gap:8px;position:sticky;bottom:0;padding-top:8px;background:@SURF@}
+}
 .zfilt-wrap{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px;align-items:center}
 .zfilt-wrap a{display:inline-flex;align-items:center;min-height:36px;padding:6px 12px;
 border-radius:6px;border:1px solid @LINE@;background:@SURF@;font-size:13px}
@@ -5033,10 +5058,10 @@ class ВидЗона(Вид):
 
     def список(self, разд: str, зпр: dict) -> str:
         имена = {
-            "/catalog": "Весь каталог",
-            "/new": "Что нового",
+            "/catalog": "Каталог",
+            "/new": "Новинки",
             "/collections": "Подборки",
-            "/movies": "Кино",
+            "/movies": "Фильмы",
             "/series": "Сериалы",
             "/animation": "Анимация",
         }
@@ -5100,7 +5125,7 @@ class ВидЗона(Вид):
         kind_route = разд in ВИД_ПО_МАРШРУТУ
         omit = {"_omit_kind": True} if kind_route else {}
 
-        # Kind chips → real section routes (never /movies/?kind=Сериал).
+        # B10 compact filter bar: kind chips + year/genre/country/sort selects.
         kind_chips = []
         for к, путь_к in (("Фильм", "/movies"), ("Сериал", "/series"),
                           ("Мультфильм", "/animation")):
@@ -5111,19 +5136,19 @@ class ВидЗона(Вид):
                                sort=выбрано.get("sort"),
                                page=None, _omit_kind=True)
             cur = ' aria-current="page"' if выбрано.get("kind") == к else ""
-            kind_chips.append(f'<a href="{путь_к}/{q}"{cur}>{html.escape(к)}</a>')
+            label = {"Фильм": "Фильмы", "Сериал": "Сериалы", "Мультфильм": "Анимация"}[к]
+            kind_chips.append(
+                f'<a class="zfilt-chip" href="{путь_к}/{q}"{cur}>{html.escape(label)}</a>')
         if разд == "/catalog":
             kind_chips = [
-                f'<a href="/catalog/{запрос_строкой(выбрано, kind=к, page=None, _omit_kind=False)}"'
-                f'{ТЕКУЩАЯ_СТРАНИЦА if выбрано.get("kind") == к else ""}>{html.escape(к)}</a>'
+                f'<a class="zfilt-chip" href="/catalog/'
+                f'{запрос_строкой(выбрано, kind=к, page=None, _omit_kind=False)}"'
+                f'{ТЕКУЩАЯ_СТРАНИЦА if выбрано.get("kind") == к else ""}>'
+                f'{html.escape({"Фильм":"Фильмы","Сериал":"Сериалы","Мультфильм":"Анимация"}.get(к, к))}</a>'
                 for к in self.д.kinds
             ]
-        фильтры = "".join(kind_chips)
-        if any(v for k, v in выбрано.items() if k not in ("_unknown", "sort") and v):
-            фильтры += f'<a href="{разд}/">Сбросить</a>'
 
-        # Year facets from kind-scoped full set (no year filter), count>0 only.
-        # Never truncate with [:24] — that hid pre-2003 and under-informed users.
+        # Year facets (full oracle, no [:24] truncate) → select only.
         facet_зпр = {k: ([None] if k == "year" else v) for k, v in зпр.items()}
         if "year" not in facet_зпр:
             facet_зпр["year"] = [None]
@@ -5133,32 +5158,66 @@ class ВидЗона(Вид):
             int(з["year"]) for з in facet_набор
             if isinstance(з.get("year"), int) and 1870 <= int(з["year"]) <= 2100)
         year_list = sorted(year_counts.keys(), reverse=True)
+        year_html = ""
         if year_list:
             all_years_href = разд + "/" + запрос_строкой(
                 {**выбрано, **omit}, year=None, page=None)
-            opts = [f'<option value="{all_years_href}">Все годы</option>']
-            chips = []
+            opts = [f'<option value="{html.escape(all_years_href)}">Все годы</option>']
             for г in year_list:
                 href = разд + "/" + запрос_строкой(
                     {**выбрано, **omit}, year=г, page=None)
                 sel = " selected" if str(выбрано.get("year")) == str(г) else ""
-                cur = ТЕКУЩАЯ_СТРАНИЦА if str(выбрано.get("year")) == str(г) else ""
                 n = year_counts[г]
-                opts.append(f'<option value="{html.escape(href)}"{sel}>{г} ({n})</option>')
-                # Keep a short recent-chip strip for discoverability (≤12 newest).
-                if len(chips) < 12:
-                    chips.append(
-                        f'<a href="{html.escape(href)}"{cur} data-count="({n})">{г}</a>')
-            фильтры += (
-                f'<a href="{html.escape(all_years_href)}">Все годы</a>'
-                f'<label class="vh" for="zona-year-facet">Год</label>'
+                opts.append(
+                    f'<option value="{html.escape(href)}"{sel}>{г} ({n})</option>')
+            year_html = (
+                f'<div class="zfilt-bar__group">'
+                f'<label class="zfilt-lab" for="zona-year-facet">Год</label>'
                 f'<select class="zfilt__year" id="zona-year-facet" '
                 f'onchange="if(this.value)location.href=this.value" '
-                f'aria-label="Фильтр по году">'
-                f'{"".join(opts)}</select>'
-                f'<span class="zfilt__y">{"".join(chips)}</span>')
+                f'aria-label="Фильтр по году">{"".join(opts)}</select></div>')
 
-        # Visible sort selector (URL-backed).
+        # Genre select from full registry (not button wall).
+        genre_html = ""
+        genres = list(self.индекс.get("genre_names") or [])
+        if genres:
+            all_g = разд + "/" + запрос_строкой(
+                {**выбрано, **omit}, genre=None, page=None)
+            gopts = [f'<option value="{html.escape(all_g)}">Все жанры</option>']
+            for код, имя in genres:
+                href = разд + "/" + запрос_строкой(
+                    {**выбрано, **omit}, genre=код, page=None)
+                sel = " selected" if жанр_код == код else ""
+                gopts.append(
+                    f'<option value="{html.escape(href)}"{sel}>{html.escape(имя)}</option>')
+            genre_html = (
+                f'<div class="zfilt-bar__group">'
+                f'<label class="zfilt-lab" for="zona-genre-facet">Жанр</label>'
+                f'<select id="zona-genre-facet" '
+                f'onchange="if(this.value)location.href=this.value" '
+                f'aria-label="Фильтр по жанру">{"".join(gopts)}</select></div>')
+
+        # Country select (ASCII translit codes).
+        country_html = ""
+        countries = list(self.индекс.get("country_names") or [])
+        country_код = выбрано.get("country")
+        if countries:
+            all_c = разд + "/" + запрос_строкой(
+                {**выбрано, **omit}, country=None, page=None)
+            copts = [f'<option value="{html.escape(all_c)}">Все страны</option>']
+            for код, имя in countries:
+                href = разд + "/" + запрос_строкой(
+                    {**выбрано, **omit}, country=код, page=None)
+                sel = " selected" if country_код == код else ""
+                copts.append(
+                    f'<option value="{html.escape(href)}"{sel}>{html.escape(имя)}</option>')
+            country_html = (
+                f'<div class="zfilt-bar__group">'
+                f'<label class="zfilt-lab" for="zona-country-facet">Страна</label>'
+                f'<select id="zona-country-facet" '
+                f'onchange="if(this.value)location.href=this.value" '
+                f'aria-label="Фильтр по стране">{"".join(copts)}</select></div>')
+
         sort_opts = (
             ("newest", "Сначала новые"),
             ("recently_added", "Недавно добавленные"),
@@ -5166,50 +5225,91 @@ class ВидЗона(Вид):
             ("title", "По названию"),
         )
         active_sort = выбрано.get("sort") or "newest"
-        сорт_html = '<nav class="zsort" data-testid="catalog-sort" aria-label="Сортировка">'
+        sopts = []
         for ключ, лейбл in sort_opts:
-            cur = ' aria-current="true"' if active_sort == ключ else ""
             href = разд + "/" + запрос_строкой({**выбрано, **omit}, sort=ключ, page=None)
-            сорт_html += f'<a href="{href}"{cur}>{лейбл}</a>'
-        сорт_html += "</nav>"
+            sel = " selected" if active_sort == ключ else ""
+            sopts.append(
+                f'<option value="{html.escape(href)}"{sel}>{html.escape(лейбл)}</option>')
+        sort_html = (
+            f'<div class="zfilt-bar__group">'
+            f'<label class="zfilt-lab" for="zona-sort-facet">Сортировка</label>'
+            f'<select id="zona-sort-facet" data-testid="catalog-sort" '
+            f'onchange="if(this.value)location.href=this.value" '
+            f'aria-label="Сортировка">{"".join(sopts)}</select></div>')
 
-        активные = []
+        has_active = any(
+            v for k, v in выбрано.items()
+            if k not in ("_unknown", "sort") and v)
+        reset_html = (
+            f'<a class="zfilt-reset" href="{разд}/">Сбросить</a>' if has_active else "")
+
+        n_active = sum(1 for k, v in выбрано.items()
+                       if k not in ("_unknown", "sort") and v)
+        toggle = (
+            f'<button type="button" class="zfilt-toggle" data-filt-toggle '
+            f'aria-controls="zona-filt-bar" aria-expanded="false">'
+            f'Фильтры{f" {n_active}" if n_active else ""}</button>')
+
+        фильтры = (
+            f'{toggle}'
+            f'<div class="zfilt-bar" id="zona-filt-bar" data-testid="catalog-filters">'
+            f'<div class="zfilt-bar__group">{"".join(kind_chips)}</div>'
+            f'{year_html}{genre_html}{country_html}{sort_html}'
+            f'<div class="zfilt-bar__sticky">{reset_html}</div>'
+            f'</div>'
+            '<script>(function(){var b=document.querySelector("[data-filt-toggle]");'
+            'var p=document.getElementById("zona-filt-bar");if(!b||!p)return;'
+            'b.addEventListener("click",function(){var o=!p.classList.contains("is-open");'
+            'p.classList.toggle("is-open",o);b.setAttribute("aria-expanded",o?"true":"false");'
+            '});})();</script>')
+
+        активные_чипы = []
         if выбрано.get("kind"):
-            активные.append(html.escape(str(выбрано["kind"])))
+            активные_чипы.append(
+                {"label": {"Фильм": "Фильмы", "Сериал": "Сериалы",
+                           "Мультфильм": "Анимация"}.get(выбрано["kind"], выбрано["kind"]),
+                 "clear": разд + "/" + запрос_строкой({**выбрано, **omit}, kind=None, page=None)})
         if год:
-            активные.append(html.escape(str(год)))
+            активные_чипы.append({
+                "label": str(год),
+                "clear": разд + "/" + запрос_строкой({**выбрано, **omit}, year=None, page=None)})
         if жанр_имя:
-            активные.append(html.escape(жанр_имя))
-        сорт_лейбл = dict(sort_opts).get(active_sort, active_sort)
-        meta_bits = []
-        if активные:
-            meta_bits.append("Активные фильтры: " + " · ".join(активные))
-        meta_bits.append(f"Сортировка: {сорт_лейбл}")
-        meta_bits.append(f"Результаты: {len(набор)}")
-        zsub = " · ".join(meta_bits)
+            активные_чипы.append({
+                "label": жанр_имя,
+                "clear": разд + "/" + запрос_строкой({**выбрано, **omit}, genre=None, page=None)})
+        if country_код:
+            cname = dict(countries).get(country_код, country_код)
+            активные_чипы.append({
+                "label": cname,
+                "clear": разд + "/" + запрос_строкой(
+                    {**выбрано, **omit}, country=None, page=None)})
+        chips_html = ""
+        if активные_чипы:
+            chips_html = '<div class="zfilt-chips" aria-label="Активные фильтры">' + "".join(
+                f'<span>{html.escape(c["label"])}'
+                f'<a href="{html.escape(c["clear"])}" aria-label="Убрать фильтр">×</a></span>'
+                for c in активные_чипы) + "</div>"
 
-        жанр_навигация = "".join(
-            f'<a href="/catalog/{запрос_строкой({"genre": код})}"'
-            f'{ТЕКУЩИЙ_ПУНКТ if жанр_код == код else ""}>{html.escape(имя)}</a>'
-            for код, имя in ZONA_GENRE_NAV)
-        блок_жанров = (
-            f'<nav class="zgenres__nav" aria-label="Смотреть по жанрам">'
-            f"{жанр_навигация}</nav>") if разд == "/catalog" else ""
+        сорт_лейбл = dict(sort_opts).get(active_sort, active_sort)
+        scope = "в этой выборке" if has_active or разд != "/catalog" else "в каталоге"
+        zsub = f"Результаты {scope}: {len(набор)} · Сортировка: {сорт_лейбл}"
 
         канон_q = запрос_строкой({**выбрано, **omit}, page=None)
         канон = разд + "/" + канон_q
         show_fresh = разд == "/new"
         сетка = (self.плитки(кусок, freshness=show_fresh) if кусок else
                  '<div class="zempty"><b>Ничего не подошло</b>'
-                 "<p>Под выбранные условия не попала ни одна запись.</p></div>")
+                 "<p>Под выбранные условия не попала ни одна запись. "
+                 f'<a href="{разд}/">Сбросить фильтры</a></p></div>')
+
         тело = (
             f'<div class="zwrap" data-testid="page-container">'
             f'<h1 class="zh" data-testid="catalog-heading" id="catalog-h1">'
             f'{html.escape(титул)}</h1>'
             f'<p class="zsub">{zsub}</p>'
-            f'{сорт_html}'
-            f'<div data-testid="catalog-filters" class="zfilt-wrap">{фильтры}</div>'
-            + блок_жанров
+            f'{chips_html}'
+            f'{фильтры}'
             + f'<div data-testid="catalog-grid">{сетка}</div>'
             + self.листалка(разд, {**выбрано, **omit}, стр, всего_страниц)
             + "</div>")
