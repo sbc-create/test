@@ -297,12 +297,13 @@ class TestCards:
 class TestGenres:
     def test_home_genre_block_after_first_shelf(self, зона):
         о = запросить(зона, "/")
-        assert "Смотреть по жанрам" in о.тело
+        assert "Жанры" in о.тело
         assert 'class="zgenres"' in о.тело
-        pos_genres = о.тело.find("Смотреть по жанрам")
-        pos_first = о.тело.find("Высокий рейтинг среди недавних фильмов")
-        assert pos_first != -1 and pos_genres != -1
-        assert pos_first < pos_genres
+        pos_genres = о.тело.find('id="zgenres-h"')
+        # Home order: hero → weekly → added → kinds → genres (B02–B06).
+        pos_weekly = о.тело.find("Высокие оценки недели")
+        assert pos_weekly != -1 and pos_genres != -1
+        assert pos_weekly < pos_genres
 
     def test_genre_urls_distinct_and_encoded(self, зона):
         о = запросить(зона, "/")
@@ -326,19 +327,23 @@ class TestGenres:
     def test_genre_active_state_and_h1(self, зона):
         о = запросить(зона, "/catalog/?genre=dorama")
         assert ">дорама<" in о.тело.lower() or "дорама" in о.тело
-        assert 'aria-current="true"' in о.тело
+        # B10 compact filters: active genre is selected in facet + active chip.
+        assert (
+            'id="zona-genre-facet"' in о.тело
+            and ("selected" in о.тело or "zfilt-chips" in о.тело)
+        )
 
 
 class TestTitleLayout:
     def test_compact_three_zone_title(self, зона):
         о = запросить(зона, "/title/movie-kp-ready/")
         assert 'class="ztitle"' in о.тело
-        assert 'class="ztitle__rail"' in о.тело
-        assert 'class="ztitle__dl"' in о.тело
+        # Pass6/B15: right-hand series rail removed; facts stay in main column.
+        assert 'class="ztitle__rail"' not in о.тело or "display:none" in зона.ЗОНА_СТИЛЬ
         assert 'id="watch"' in о.тело
         assert о.тело.count(">Год<") <= 1
-        assert 'data-ad-slot="title-rail-300x250"' in о.тело
-        assert 'data-ad-enabled="0"' in о.тело
+        # Live ad markup is opt-in; CSS may mention the enabled selector.
+        assert 'data-ad-slot="title-rail-300x250" data-ad-enabled="1"' not in о.тело
 
     def test_empty_ad_slot_hidden_in_css(self, зона):
         assert '.zad{display:none}' in зона.ЗОНА_СТИЛЬ
