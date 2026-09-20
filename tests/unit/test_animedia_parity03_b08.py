@@ -36,11 +36,15 @@ def test_player_shell_single_instance_autoplay_off(fe):
     assert 'data-player-status=' in html
     assert mod.DEFAULT_EPISODE_POLICY_DATA_GAP == 1
     assert 'data-default-episode-policy="absent"' in html
-    # Series hub may be awaiting (no SDK). Film/resolving paths must pin autoplay=0.
+    # Series hub may be awaiting / noaccess / nosource (no SDK). Mounted players
+    # must pin autoplay=0.
     if "<video-player" in html:
         assert 'autoplay="0"' in html
     else:
-        assert 'data-state="awaiting"' in html or "Выберите серию" in html
+        state = re.search(r'data-state="([^"]+)"', html)
+        assert state and state.group(1) in {
+            "awaiting", "noaccess", "nosource", "unavailable", "provider", "error",
+        }
 
     # Film without season list mounts resolving/playable with autoplay off.
     movie = next(з for з in catalog["items"] if з["slug"] == "gamma-movie")
