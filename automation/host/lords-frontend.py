@@ -1767,46 +1767,66 @@ font:16px/1.45 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif}
   margin-inline:auto;padding-inline:0;box-sizing:border-box}
 .zwrap{padding-block:0}
 .zhd{position:relative;background:var(--a-rail);border-bottom:1px solid var(--a-line);z-index:30}
-.zhd__in{display:flex;align-items:center;gap:12px;flex-wrap:nowrap;height:68px;min-height:64px;
-max-height:72px;padding-block:0}
+.zhd__in{display:flex;align-items:center;gap:12px;flex-wrap:nowrap;height:72px;min-height:64px;
+max-height:88px;padding-block:0}
 @media(max-width:767px){
   .zhd__in{height:56px;min-height:52px;max-height:58px;flex-wrap:nowrap;gap:8px;padding-block:0}
 }
 .zhd__logo{font-size:22px;font-weight:800;letter-spacing:-.4px;color:var(--a-ink);flex:0 0 auto;
 line-height:1;min-height:44px;display:inline-flex;align-items:center}
 .zhd__logo b{color:var(--a-acc)}
+.zhd__tax{display:none;align-items:center;gap:2px;flex:1 1 auto;min-width:0}
+@media(min-width:900px){.zhd__tax{display:flex}}
+.zhd__dd{position:relative}
+.zhd__dd-btn{appearance:none;border:0;background:transparent;color:var(--a-ink);font:inherit;
+font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:8px 10px;
+min-height:44px;cursor:pointer;border-radius:8px}
+.zhd__dd-btn:hover,.zhd__dd-btn[aria-expanded=true]{color:var(--a-acc);background:var(--a-alt)}
+.zhd__dd-btn:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
+.zhd__dd-panel{position:absolute;top:calc(100% + 6px);left:0;min-width:220px;max-width:min(420px,70vw);
+max-height:70vh;overflow:auto;display:flex;flex-wrap:wrap;gap:6px;padding:12px;background:var(--a-page);
+border:1px solid var(--a-line);border-radius:12px;box-shadow:var(--a-shadow);z-index:50}
+.zhd__dd-panel[hidden]{display:none !important}
+.zhd__dd-panel a{display:inline-flex;align-items:center;padding:8px 10px;border-radius:8px;
+border:1px solid var(--a-line);color:var(--a-ink);font-size:13px;text-decoration:none;min-height:40px}
+.zhd__dd-panel a:hover{border-color:var(--a-acc);color:var(--a-acc)}
 .zhd__actions{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;margin-left:auto}
 .zhd__menu{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;
 min-width:44px;min-height:44px;flex:0 0 44px;border:1px solid var(--a-line);border-radius:8px;
 background:var(--a-page);color:var(--a-ink);font-size:20px;cursor:pointer;margin-left:0}
-@media(min-width:768px){.zhd__menu{display:none}}
+@media(min-width:900px){.zhd__menu{display:none}}
 .zhd__theme{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;
 min-width:44px;min-height:44px;flex:0 0 44px;border:1px solid var(--a-line);border-radius:8px;
 background:var(--a-page);color:var(--a-ink);font-size:16px;cursor:pointer}
-.zhd__theme:focus-visible,.zhd__menu:focus-visible,.zhd__n a:focus-visible,.zhd__s button:focus-visible{
-outline:2px solid var(--a-acc);outline-offset:2px}
-.zhd__n{display:none;gap:4px;flex-wrap:wrap;padding:8px;border-top:1px solid var(--a-line)}
-@media(max-width:767px){
-  .zhd__n.is-open{display:flex;position:absolute;left:0;right:0;top:100%;z-index:40;
-  background:var(--a-rail);box-shadow:var(--a-shadow);flex-direction:column;max-height:70vh;overflow:auto}
-}
-@media(min-width:768px){.zhd__n{display:flex;flex:1 1 auto;order:0;flex-wrap:nowrap;position:static;
-overflow-x:auto;scrollbar-width:none;padding:0;border-top:0;max-height:none;box-shadow:none}}
-.zhd__n::-webkit-scrollbar{display:none}
-.zhd__n a{padding:8px 10px;border-radius:8px;font-size:15px;color:var(--a-ink);white-space:nowrap;
-min-height:44px;display:inline-flex;align-items:center}
-@media(min-width:768px){.zhd__n a{font-size:16px;min-height:0}}
-.zhd__n a:hover{background:var(--a-alt);color:var(--a-acc)}
-.zhd__n a[aria-current]{color:var(--a-acc);font-weight:700;box-shadow:inset 0 -2px 0 var(--a-acc)}
-.zhd__s{display:flex;flex:0 1 280px;min-width:0;max-width:320px;border:1px solid var(--a-line);
-border-radius:10px;overflow:hidden;background:var(--a-page)}
-@media(max-width:767px){
-  .zhd__s{flex:1 1 calc(100% - 108px);max-width:none;order:0;min-width:120px}
+.zhd__theme:focus-visible,.zhd__menu:focus-visible,.zhd__s button:focus-visible,.zhd__drawer a:focus-visible,
+.zhd__drawer-x:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
+.zhd__n{display:none}
+.zhd__s{display:flex;flex:0 1 220px;min-width:0;max-width:260px;border:1px solid var(--a-line);
+border-radius:999px;overflow:hidden;background:var(--a-page)}
+@media(max-width:899px){
+  .zhd__s{flex:1 1 calc(100% - 108px);max-width:none;order:0;min-width:120px;border-radius:10px}
   .zhd__actions{order:0}
 }
 .zhd__s input{flex:1;min-width:0;border:0;padding:9px 12px;font-size:14px;background:transparent;color:var(--a-ink)}
 .zhd__s button{border:0;background:var(--a-acc);color:#fff;padding:0 14px;font-weight:700;cursor:pointer;
 min-width:44px;min-height:44px;flex:0 0 auto}
+.zhd__backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:60}
+.zhd__backdrop[hidden]{display:none !important;pointer-events:none !important}
+.zhd__drawer{position:fixed;top:0;left:0;bottom:0;width:min(320px,88vw);z-index:70;background:var(--a-page);
+border-right:1px solid var(--a-line);box-shadow:var(--a-shadow);padding:12px 14px 24px;overflow:auto;
+flex-direction:column;gap:12px}
+.zhd__drawer:not([hidden]){display:flex}
+.zhd__drawer[hidden]{display:none !important;pointer-events:none !important}
+.zhd__drawer-h{display:flex;align-items:center;justify-content:space-between;font-weight:700}
+.zhd__drawer-x{width:44px;height:44px;border:1px solid var(--a-line);border-radius:8px;background:var(--a-rail);
+font-size:22px;cursor:pointer;color:var(--a-ink)}
+.zhd__drawer-nav{display:flex;flex-direction:column;gap:4px}
+.zhd__drawer-nav a{padding:12px 10px;border-radius:8px;color:var(--a-ink);min-height:44px;
+display:flex;align-items:center;text-decoration:none}
+.zhd__drawer-nav a[aria-current]{color:var(--a-acc);font-weight:700;background:var(--a-alt)}
+.zhd__drawer .zhd__tax{display:flex;flex-direction:column;align-items:stretch;gap:8px}
+.zhd__drawer .zhd__dd-panel{position:static;max-width:none;box-shadow:none;margin-top:6px}
+body.zhd-lock{overflow:hidden}
 .ast{display:none}
 .zrail,.zrail__logo,.zrail__sub,.zrail__t,.zrail__n,.zrail__g,.ztop{display:none}
 .zh{font-size:clamp(22px,2vw,28px);line-height:1.25;font-weight:700;margin:16px 0 8px}
@@ -2790,9 +2810,26 @@ def заглушка_постера(запись: dict, класс_заглуш�
     "if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync();"
     "try{var mq=window.matchMedia('(prefers-color-scheme: dark)');"
     "mq.addEventListener('change',function(){try{if(!localStorage.getItem(TK))sync();}catch(err){}});}catch(e){}"
-    "function close(nav,btn){if(!nav||!btn)return;nav.classList.remove('is-open');"
-    "btn.setAttribute('aria-expanded','false');document.body.style.overflow='';"
-    "try{btn.focus()}catch(e){}}"
+    "var lastFocus=null;"
+    "function drawerEls(){return{"
+    "d:document.getElementById('zhd-drawer'),"
+    "b:document.querySelector('[data-drawer-toggle]'),"
+    "bd:document.querySelector('[data-drawer-backdrop]')};}"
+    "function closeTax(){document.querySelectorAll('[data-tax-toggle]').forEach(function(btn){"
+    "btn.setAttribute('aria-expanded','false');"
+    "var p=document.getElementById(btn.getAttribute('aria-controls')||'');"
+    "if(p)p.hidden=true;});}"
+    "function closeDrawer(){var e=drawerEls();if(!e.d||!e.b)return;"
+    "e.d.hidden=true;e.d.setAttribute('aria-hidden','true');"
+    "e.b.setAttribute('aria-expanded','false');"
+    "if(e.bd)e.bd.hidden=true;document.body.classList.remove('zhd-lock');"
+    "if(lastFocus){try{lastFocus.focus()}catch(err){}}}"
+    "function openDrawer(btn){var e=drawerEls();if(!e.d||!e.b)return;"
+    "lastFocus=btn||e.b;closeTax();e.d.hidden=false;e.d.setAttribute('aria-hidden','false');"
+    "e.b.setAttribute('aria-expanded','true');if(e.bd)e.bd.hidden=false;"
+    "document.body.classList.add('zhd-lock');"
+    "var f=e.d.querySelector('a,button,[tabindex]:not([tabindex=\"-1\"])');"
+    "try{if(f)f.focus()}catch(err){}}"
     "document.addEventListener('click',function(e){"
     "var th=e.target.closest('[data-theme-toggle]');"
     "if(th){var cur=document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light';"
@@ -2802,19 +2839,20 @@ def заглушка_постера(запись: dict, класс_заглуш�
     "if(more){var p=document.getElementById(more.getAttribute('aria-controls')||'title-desc');"
     "if(p){var open=p.classList.toggle('is-open');more.setAttribute('aria-expanded',open?'true':'false');"
     "more.textContent=open?'Свернуть':'Развернуть';}return;}"
-    "var b=e.target.closest('[data-nav-toggle]');"
-    "var n=document.getElementById('zhd-nav');if(!n)return;"
-    "if(b){var open=n.classList.toggle('is-open');"
-    "b.setAttribute('aria-expanded',open?'true':'false');"
-    "document.body.style.overflow=open?'hidden':'';return}"
-    "if(n.classList.contains('is-open')&&!e.target.closest('.zhd')){"
-    "close(n,document.querySelector('[data-nav-toggle]'));}"
+    "var tax=e.target.closest('[data-tax-toggle]');"
+    "if(tax){var id=tax.getAttribute('aria-controls');var panel=document.getElementById(id||'');"
+    "var open=tax.getAttribute('aria-expanded')!=='true';"
+    "closeTax();if(open&&panel){tax.setAttribute('aria-expanded','true');panel.hidden=false;}return;}"
+    "var db=e.target.closest('[data-drawer-toggle]');"
+    "if(db){var e2=drawerEls();if(e2.d&&!e2.d.hidden)closeDrawer();else openDrawer(db);return;}"
+    "if(e.target.closest('[data-drawer-close]')||e.target.closest('[data-drawer-backdrop]')){"
+    "closeDrawer();return;}"
+    "if(!e.target.closest('.zhd__dd'))closeTax();"
     "});"
     "document.addEventListener('keydown',function(e){"
-    "if(e.key!=='Escape')return;"
-    "var n=document.getElementById('zhd-nav');"
-    "if(n&&n.classList.contains('is-open'))"
-    "close(n,document.querySelector('[data-nav-toggle]'));"
+    "if(e.key!=='Escape')return;closeTax();"
+    "var dr=document.getElementById('zhd-drawer');"
+    "if(dr&&!dr.hidden)closeDrawer();"
     "});"
     "})();"
 )
@@ -3089,10 +3127,19 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
     год = (зпр.get("year") or [None])[0]
     жанр = (зпр.get("genre") or [None])[0]
     страна = (зпр.get("country") or [None])[0]
+    тип = (зпр.get("type") or [None])[0]
     сорт = (зпр.get("sort") or [None])[0]
     неизвестный_фильтр = False
     if вид:
         набор = [з for з in набор if з.get("kind") == вид]
+    if тип:
+        разрешённые = (индекс.get("type") or {}).get(str(тип).lower())
+        if разрешённые is None:
+            неизвестный_фильтр = True
+            набор = []
+        else:
+            членство = set(разрешённые)
+            набор = [з for з in набор if з["slug"] in членство]
     if год:
         if str(год).isdigit():
             набор = [з for з in набор if з.get("year") == int(год)]
@@ -4858,13 +4905,70 @@ class ВидАнимедиа(ВидЗона):
                 f'<span class="zt__m">{html.escape(мета)}</span>{оценка}</span></a>')
 
     def логотип(self) -> str:
-        """Логотип: хвост «dia» акцентом, как у эталона (без чужой иконки)."""
+        """Логотип: «Ani» акцентом + «media», без чужой иконки/Premium."""
         имя = self.имя or "Animedia"
-        if имя.lower().endswith("dia") and len(имя) > 3:
+        low = имя.lower()
+        if low.startswith("ani") and len(имя) > 3:
+            return (f'<a class="zhd__logo" href="/"><b>{html.escape(имя[:3])}</b>'
+                    f"{html.escape(имя[3:])}</a>")
+        if low.endswith("dia") and len(имя) > 3:
             база, хвост = имя[:-3], имя[-3:]
             return (f'<a class="zhd__logo" href="/">{html.escape(база)}'
                     f"<b>{html.escape(хвост)}</b></a>")
         return f'<a class="zhd__logo" href="/">{html.escape(имя)}</a>'
+
+    def таксономия(self, *, префикс: str = "") -> str:
+        """Жанр / Тип / Списки / Ещё — только из реального индекса и маршрутов.
+
+        Статус выпуска в снимке отсутствует → панель не рисуем (не выдумываем).
+        Premium / Telegram / account не добавляем без owner URL.
+        `префикс` различает id панелей в шапке и в drawer (без дублирующих id).
+        """
+        p = префикс
+        индекс = getattr(self, "индекс", None) or {}
+        жанры = list(индекс.get("genre_names") or [])[:14]
+        жанр_ссылки = "".join(
+            f'<a href="/catalog/?genre={html.escape(код)}">{html.escape(имя)}</a>'
+            for код, имя in жанры)
+        типы = []
+        for код, имя in (("tv", "Сериалы"), ("movie", "Фильмы")):
+            if индекс.get("type", {}).get(код):
+                типы.append(
+                    f'<a href="/catalog/?type={код}">{html.escape(имя)}</a>')
+        тип_блок = "".join(типы)
+        годы = "".join(
+            f'<a href="/catalog/?year={г}">{г}</a>'
+            for г in list(getattr(self.д, "years", []) or [])[:10])
+        панели = []
+        if жанр_ссылки:
+            панели.append(
+                f'<div class="zhd__dd" data-tax-panel="genre">'
+                f'<button type="button" class="zhd__dd-btn" data-tax-toggle="genre" '
+                f'aria-expanded="false" aria-controls="{p}tax-genre">Жанр</button>'
+                f'<div id="{p}tax-genre" class="zhd__dd-panel" hidden>{жанр_ссылки}</div></div>')
+        if тип_блок:
+            панели.append(
+                f'<div class="zhd__dd" data-tax-panel="type">'
+                f'<button type="button" class="zhd__dd-btn" data-tax-toggle="type" '
+                f'aria-expanded="false" aria-controls="{p}tax-type">Тип</button>'
+                f'<div id="{p}tax-type" class="zhd__dd-panel" hidden>{тип_блок}</div></div>')
+        панели.append(
+            f'<div class="zhd__dd" data-tax-panel="lists">'
+            f'<button type="button" class="zhd__dd-btn" data-tax-toggle="lists" '
+            f'aria-expanded="false" aria-controls="{p}tax-lists">Списки</button>'
+            f'<div id="{p}tax-lists" class="zhd__dd-panel" hidden>'
+            f'<a href="/collections/">Подборки</a>'
+            f'<a href="/new/?page=1">Новое в каталоге</a>'
+            f'</div></div>')
+        ещё = '<a href="/catalog/">Весь каталог</a><a href="/search/">Поиск</a>'
+        if годы:
+            ещё += годы
+        панели.append(
+            f'<div class="zhd__dd" data-tax-panel="more">'
+            f'<button type="button" class="zhd__dd-btn" data-tax-toggle="more" '
+            f'aria-expanded="false" aria-controls="{p}tax-more">Ещё</button>'
+            f'<div id="{p}tax-more" class="zhd__dd-panel" hidden>{ещё}</div></div>')
+        return '<nav class="zhd__tax" aria-label="Таксономия каталога">' + "".join(панели) + "</nav>"
 
     def строка(self, запись: dict) -> str:
         """Компактная строка для «Новых серий»: без полного описания."""
@@ -5158,18 +5262,27 @@ class ВидАнимедиа(ВидЗона):
 <header class="zhd">
 <div class="zhd__in">
 {self.логотип()}
+{self.таксономия()}
 <form class="zhd__s" action="/search/" method="get" role="search">
 <label class="vh" for="q">Поиск по каталогу аниме</label>
-<input id="q" name="q" placeholder="{html.escape(self.се["поиск"])}">
-<button type="submit">Найти</button></form>
+<input id="q" name="q" placeholder="{html.escape(self.се["поиск"])}" autocomplete="off">
+<button type="submit" aria-label="Найти">Найти</button></form>
 <div class="zhd__actions">
 <button class="zhd__theme" type="button" data-theme-toggle aria-pressed="false"
  aria-label="Переключить тему" title="Тема">◐</button>
-<button class="zhd__menu" type="button" data-nav-toggle aria-controls="zhd-nav"
- aria-expanded="false" aria-label="Меню разделов">&#9776;</button>
+<button class="zhd__menu" type="button" data-drawer-toggle aria-controls="zhd-drawer"
+ aria-expanded="false" aria-label="Открыть меню">&#9776;</button>
 </div>
-<nav id="zhd-nav" class="zhd__n" aria-label="Разделы">{нав}</nav>
 </div>
+<div class="zhd__backdrop" data-drawer-backdrop hidden></div>
+<aside id="zhd-drawer" class="zhd__drawer" hidden aria-hidden="true" aria-label="Меню сайта">
+<div class="zhd__drawer-h">
+<span>Меню</span>
+<button type="button" class="zhd__drawer-x" data-drawer-close aria-label="Закрыть меню">×</button>
+</div>
+<nav class="zhd__drawer-nav" aria-label="Разделы">{нав}</nav>
+<div class="zhd__drawer-tax">{self.таксономия(префикс="d-")}</div>
+</aside>
 </header>
 <div class="zmain">
 <div class="zwrap">{_склеить([f'<div class="ztop"><div class="ztop__b">{сверху}</div></div>' if сверху else ""])}{крошки}
@@ -5621,6 +5734,7 @@ def построить_индекс(данные: "Данные", подробн
     по_slug = {з["slug"]: з for з in данные.items}
     по_жанру: dict[str, list] = {}
     по_стране: dict[str, list] = {}
+    по_типу: dict[str, list] = {}
     имена: dict[str, str] = {}
     имена_стран: dict[str, str] = {}
     for slug, деталь in подробности.записи.items():
@@ -5636,6 +5750,9 @@ def построить_индекс(данные: "Данные", подробн
                 pass
         if рейтинги:
             запись["_rating"] = max(рейтинги)
+        тип = str(деталь.get("type") or "").strip().lower()
+        if тип in ("tv", "movie", "ova", "ona", "special"):
+            по_типу.setdefault(тип, []).append(slug)
         жанры = деталь.get("genres") or []
         коды = list(деталь.get("genre_codes") or [])
         # Animedia sidecar часто отдаёт только русские имена без genre_codes.
@@ -5662,7 +5779,8 @@ def построить_индекс(данные: "Данные", подробн
     порядок_стран = sorted(имена_стран.items(),
                            key=lambda п: -len(по_стране.get(п[0], ())))
     return {"slug": по_slug, "genre": по_жанру, "genre_names": порядок,
-            "country": по_стране, "country_names": порядок_стран}
+            "country": по_стране, "country_names": порядок_стран,
+            "type": по_типу}
 
 
 class Обработчик(BaseHTTPRequestHandler):

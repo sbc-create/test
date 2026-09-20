@@ -36,7 +36,7 @@ class TestBlock01ShellTheme:
         html = _вид(mod, catalog, details).главная()
         assert 'class="zhd__actions"' in html
         assert "data-theme-toggle" in html
-        assert "data-nav-toggle" in html
+        assert "data-drawer-toggle" in html or "data-nav-toggle" in html
         css = mod.АНИМЕДИА_СТИЛЬ
         assert "flex:0 0 44px" in css
         assert "min-width:44px" in css

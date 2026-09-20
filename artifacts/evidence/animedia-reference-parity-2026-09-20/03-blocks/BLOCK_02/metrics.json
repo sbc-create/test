@@ -1,0 +1,47 @@
+{
+  "artifact_sha256": "1a103ea817bedf33ff2be962320a16e437e5de0758cd79c84b9f02adfe37cf5f",
+  "geo": {
+    "headerH": 72,
+    "taxDisplay": "flex",
+    "taxCount": 4,
+    "premium": false,
+    "drawerStartHidden": true
+  },
+  "genre_open": {
+    "expanded": "true",
+    "hidden": false,
+    "links": 14
+  },
+  "open_state": {
+    "hidden": false,
+    "aria": "false",
+    "expanded": "true",
+    "lock": true,
+    "focusIn": true
+  },
+  "after_esc": {
+    "hidden": true,
+    "lock": false,
+    "focusOnToggle": true
+  },
+  "type_closed": true,
+  "gates": {
+    "SIDE_MENU_OPEN_DESKTOP_PASS": true,
+    "SIDE_MENU_OPEN_MOBILE_PASS": true,
+    "SIDE_MENU_KEYBOARD_PASS": true,
+    "SIDE_MENU_ESCAPE_PASS": true,
+    "SIDE_MENU_OUTSIDE_CLICK_PASS": true,
+    "SIDE_MENU_FOCUS_RETURN_PASS": true,
+    "SIDE_MENU_SCROLL_LOCK_PASS": true,
+    "SIDE_MENU_ARIA_PASS": true,
+    "HEADER_HEIGHT_DESKTOP_LE_88": true,
+    "HEADER_STABLE_ACROSS_ROUTES": true,
+    "NO_PREMIUM": true,
+    "TAX_VISIBLE_DESKTOP": true,
+    "TABLET_DRAWER_PASS": true,
+    "DRAWER_STARTS_CLOSED": true
+  },
+  "HEADER_SCORE": 100,
+  "h_cat": 56,
+  "h_title": 56
+}

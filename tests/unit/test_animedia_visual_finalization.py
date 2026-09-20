@@ -199,7 +199,10 @@ class TestVisualContracts:
         вид = _вид(mod, catalog, details)
         html = вид.список("/catalog", {"year": ["2026"]})
         assert "Аниме 2026 года" in html
-        assert "Весь каталог" not in html
+        # H1 must be year-specific (taxonomy may still link «Весь каталог»).
+        import re
+        h1 = re.search(r"<h1[^>]*>(.*?)</h1>", html, re.S)
+        assert h1 and "Весь каталог" not in h1.group(1)
         # Freshness default: alpha (2026 published latest) first among year=2026
         assert "Альфа" in html
         набор, выбрано = mod.отбор(вид.д, вид.индекс, {}, "/catalog")
