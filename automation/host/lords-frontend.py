@@ -3523,8 +3523,6 @@ class ВидЛордс(Вид):
     def карточка(self, запись: dict) -> str:
         деталь = self.деталь(запись["slug"])
         изо = заглушка_постера(запись, "c__none", "c__img")
-        if 'class="c__none"' in изо:
-            изо = изо.replace('class="c__none"', 'class="c__none" aria-hidden="true"', 1)
         значок = ""
         сезоны = деталь.get("seasons") or []
         if сезоны:

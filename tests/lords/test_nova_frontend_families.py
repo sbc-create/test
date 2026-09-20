@@ -344,7 +344,8 @@ class TestСостоянияПлеера:
     def test_есть_источник_есть_элемент_провайдера(self, лордс):
         ответ = запросить(лордс, "/title/seriya-dolgaya/")
         # Сервер отдаёт resolving: SDK ещё подтверждает дорожку на клиенте.
-        assert 'data-player data-state="resolving"' in ответ.тело
+        assert re.search(r'data-player[^>]*data-state="resolving"', ответ.тело), (
+            "resolving player frame missing")
         элемент = re.search(r"<video-player [^>]*>", ответ.тело)
         assert элемент, "в состоянии resolving нет элемента провайдера"
         assert 'data-aggregator="kp"' in элемент.group(0)
@@ -365,7 +366,7 @@ class TestСостоянияПлеера:
 
     def test_недоступность_объяснена_словами(self, лордс):
         ответ = запросить(лордс, "/title/bez-postera/")
-        состояние = re.search(r"data-player data-state=\"(\w+)\"", ответ.тело)
+        состояние = re.search(r'data-player[^>]*data-state="(\w+)"', ответ.тело)
         assert состояние and состояние.group(1) != "playable"
         # Не крутящийся кружок и не пустой прямоугольник, а объяснение.
         assert re.search(r"<b>[^<]{10,}</b>", ответ.тело)

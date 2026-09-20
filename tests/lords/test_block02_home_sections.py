@@ -34,7 +34,7 @@ class TestHomeSectionOrder:
 
     def test_empty_section_returns_empty_string(self):
         текст = ИСХОДНИК.read_text(encoding="utf-8")
-        assert 'def _полоса(self, титул: str, ссылка: str, набор) -> str:' in текст
+        assert 'def _полоса(self, титул: str, ссылка: str, набор, attrs: str = "") -> str:' in текст
         блок = текст[текст.index("def _полоса"):текст.index("def _полоса_подборок")]
         assert 'if not набор:\n            return ""' in блок
 
