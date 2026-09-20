@@ -1,0 +1,23 @@
+{
+  "block_id": "B11",
+  "status": "PASS_LOCAL_PENDING_LIVE",
+  "contract_sha256": "5f2112e25ef974333c388bad405abfae3c3d460a713b028afa3c0e549b8eaeb3",
+  "contract_mutated": 0,
+  "tests": {
+    "file": "tests/unit/test_animedia_parity03_b11.py",
+    "passed": 9,
+    "failed": 0
+  },
+  "grid": {
+    "390": 2,
+    "768": 4,
+    "1440": 6
+  },
+  "facet_routes": [
+    "/catalog/{year}/",
+    "/catalog/{type}/",
+    "/catalog/{genre}/"
+  ],
+  "dedupe_key": "canonical_title_id|slug",
+  "oracle_failures": 0
+}

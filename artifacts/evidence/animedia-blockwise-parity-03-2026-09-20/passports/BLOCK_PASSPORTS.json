@@ -916,7 +916,7 @@
       "evidence_paths": [
         "03-blocks/BLOCK_B10.md"
       ],
-      "remaining_data_gap": "RECOMMENDATIONS_DATA_GAP until RecommendationSnapshot"
+      "remaining_data_gap": "RECOMMENDATIONS_DATA_GAP=1 without RecommendationSnapshot; DETERMINISTIC_METADATA_RELATED_V1 fallback when ≥4 else 0px; PASS_LOCAL_PENDING_LIVE"
     },
     {
       "block_id": "B11",
@@ -1000,7 +1000,7 @@
       "evidence_paths": [
         "03-blocks/BLOCK_B11.md"
       ],
-      "remaining_data_gap": ""
+      "remaining_data_gap": "PASS_LOCAL_PENDING_LIVE"
     },
     {
       "block_id": "B12",

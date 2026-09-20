@@ -1933,6 +1933,14 @@ justify-items:stretch}
 @media(min-width:768px) and (max-width:1199px){
   .zcat .zg,.zwrap--catalog .zg{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
+/* B11 catalog grid: 2 / 4 / 6 — never inherit home 7/10 density */
+.zwrap--catalog .zg,.zcat .zg{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.zwrap--catalog .zg,.zcat .zg{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1200px){.zwrap--catalog .zg,.zcat .zg{grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}}
+@media(min-width:1800px){.zwrap--catalog .zg,.zcat .zg{grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}}
+.afilt--closed{max-height:112px}
+.afilt--closed:not(.is-open):not(:has(details[open])){overflow:hidden}
+.afilt--closed.is-open,.afilt--closed:has(details[open]){overflow:visible;max-height:none}
 .zt{display:flex;flex-direction:column;background:var(--a-page);border:0;border-radius:var(--a-radius-card);
 overflow:hidden;min-width:0;height:auto;max-height:320px;box-shadow:var(--a-shadow-soft);
 transition:transform .14s,box-shadow .14s}
@@ -1988,7 +1996,6 @@ grid-template-columns:repeat(2,minmax(0,1fr))}
 .ahome-filt{margin:0 0 14px;max-height:56px;overflow:hidden}
 .ahome-filt .zstrip{margin:0;max-height:56px;overflow:hidden}
 @media(max-width:767px){.ahome-filt{max-height:48px}}
-.afilt--closed{max-height:112px;overflow:hidden}
 .zsec--top100[hidden],.zsec--top100-gap{display:none !important;height:0 !important;min-height:0 !important;
 margin:0 !important;padding:0 !important;border:0 !important;overflow:hidden !important}
 .zsec--home-cols .zhub--home{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -3396,6 +3403,16 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
         # Hub handled separately; keep stable title order if ever reused.
         набор = sorted(набор, key=lambda з: (з.get("_n") or нормализовать(з["title"]),
                                              з["slug"]))
+    # B11: dedupe by canonical_title_id (slug fallback) — preserve first occurrence.
+    seen_ids: set[str] = set()
+    deduped: list = []
+    for з in набор:
+        tid = str(з.get("canonical_title_id") or з.get("title_id") or з.get("slug") or "")
+        if not tid or tid in seen_ids:
+            continue
+        seen_ids.add(tid)
+        deduped.append(з)
+    набор = deduped
     выбрано = {"kind": вид, "year": год, "genre": жанр, "country": страна,
                "type": тип, "sort": сорт}
     if неизвестный_фильтр:
@@ -6425,11 +6442,19 @@ class ВидАнимедиа(ВидЗона):
         титул = self._заголовок_раздела(разд, выбрано)
         фильтры = self._фильтры_каталога(разд, выбрано, total=len(набор))
         pages_label = f"страница {стр} из {max(всего, 1)}" if всего else "совпадений нет"
-        тело = (f'<div class="zwrap zwrap--catalog"><h1 class="zh">{html.escape(титул)}</h1>'
-                f'<p class="zsub">Найдено {len(набор)} · {pages_label}</p>'
+        facet = ""
+        if выбрано.get("genre"):
+            facet = f' data-catalog-facet="genre:{html.escape(str(выбрано["genre"]))}"'
+        elif выбрано.get("year"):
+            facet = f' data-catalog-facet="year:{html.escape(str(выбрано["year"]))}"'
+        elif выбрано.get("type"):
+            facet = f' data-catalog-facet="type:{html.escape(str(выбрано["type"]))}"'
+        тело = (f'<div class="zwrap zwrap--catalog" data-b11="catalog"{facet}>'
+                f'<h1 class="zh">{html.escape(титул)}</h1>'
+                f'<p class="zsub" data-b11-count="1">Найдено {len(набор)} · {pages_label}</p>'
                 + фильтры
                 + (self.плитки(кусок) if кусок else
-                   '<div class="zempty"><b>Ничего не подошло</b>'
+                   '<div class="zempty" data-b11-empty="1"><b>Ничего не подошло</b>'
                    "<p>Под выбранные условия не попала ни одна запись.</p></div>")
                 + (self.листалка(разд, выбрано, стр, всего) if всего > 1 else "")
                 + "</div>")
@@ -7394,6 +7419,9 @@ class Обработчик(BaseHTTPRequestHandler):
     МАРШРУТ_ЖАНРА = re.compile(r"^/genre/(?P<code>[a-z0-9_-]{1,40})/$")
     МАРШРУТ_ГОДА = re.compile(r"^/year/(?P<year>\d{4})/$")
     МАРШРУТ_СТРАНЫ = re.compile(r"^/country/(?P<code>[a-z0-9_-]{1,40})/$")
+    # B11: /catalog/{facet}/ — year | type | genre code (query form remains canonical combo).
+    МАРШРУТ_КАТАЛОГ_ФАСЕТ = re.compile(
+        r"^/catalog/(?P<facet>[a-z0-9_-]{1,40})/$")
     #: Полная страница коллекции. Тот же ключ, что и у ленты на главной, —
     #: именно поэтому первые карточки страницы совпадают с лентой.
     МАРШРУТ_КОЛЛЕКЦИИ = re.compile(r"^/collection/(?P<key>[a-z0-9_]{1,40})/$")
@@ -7456,6 +7484,32 @@ class Обработчик(BaseHTTPRequestHandler):
             return self._отдать(в.список(обрезанный, зпр).encode("utf-8"))
         if обрезанный in ("/catalog", "/new"):
             тело = в.список(обрезанный, зпр)
+            код = int(getattr(в, "_http_status", 200) or 200)
+            return self._отдать(тело.encode("utf-8"), код=код)
+        фасет = self.МАРШРУТ_КАТАЛОГ_ФАСЕТ.match(путь)
+        if фасет:
+            token = фасет.group("facet")
+            зпр = dict(зпр)
+            resolved = False
+            if token.isdigit() and len(token) == 4:
+                зпр["year"] = [token]
+                resolved = True
+            elif token in (self.индекс.get("type") or {}):
+                зпр["type"] = [token]
+                resolved = True
+            elif token in (self.индекс.get("genre") or {}):
+                зпр["genre"] = [token]
+                resolved = True
+            else:
+                # Try translit-normalized genre match against index keys.
+                for ключ in (token, нормализовать(token), нормализовать(транслит(token))):
+                    if ключ and ключ in (self.индекс.get("genre") or {}):
+                        зпр["genre"] = [ключ]
+                        resolved = True
+                        break
+            if not resolved:
+                return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
+            тело = в.список("/catalog", зпр)
             код = int(getattr(в, "_http_status", 200) or 200)
             return self._отдать(тело.encode("utf-8"), код=код)
         if обрезанный == "/collections":

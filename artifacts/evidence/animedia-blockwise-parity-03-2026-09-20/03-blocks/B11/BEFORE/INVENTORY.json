@@ -1,0 +1,12 @@
+{
+  "block_id": "B11",
+  "captured_at": "2026-09-20T13:10:59Z",
+  "contract_sha256": "5f2112e25ef974333c388bad405abfae3c3d460a713b028afa3c0e549b8eaeb3",
+  "before_state": {
+    "grid_1440_cols": 7,
+    "facet_path": "absent",
+    "dedupe": "none",
+    "afilt_overflow": "clipped_open_panels"
+  },
+  "root_cause": "Catalog inherited home 7-col grid; /catalog/{facet}/ not routed; no title_id dedupe."
+}
