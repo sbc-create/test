@@ -1,0 +1,18 @@
+{
+  "report_date_utc": "2026-09-20",
+  "site": "zona-01",
+  "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+  "catalog_count": 53548,
+  "details_count": 53548,
+  "catalog_built_at": "2026-09-20T03:16:30Z",
+  "latest_catalog_published_at": "2026-09-19T11:24:10Z",
+  "rows_added_vs_previous_daily": 24,
+  "episode_events_available": 0,
+  "source_to_live_status": "INCONCLUSIVE_SOURCE_TIMESTAMP",
+  "shelf_digests_note": "compute request-time; store digests in future passive monitor",
+  "alerts": [
+    "SHARED_FRONTEND_OVERWRITE_RISK if lords deploy writes lords-frontend.py"
+  ],
+  "longer_observation_required": true,
+  "observation_window_days_available": 6
+}

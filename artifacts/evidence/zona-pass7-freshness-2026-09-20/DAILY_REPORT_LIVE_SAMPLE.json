@@ -1,0 +1,18 @@
+{
+  "at_utc": "2026-09-20T09:14:33.470444+00:00",
+  "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+  "catalog_sha256": "99235834548f7acc4ac8bf116996fb3f15589063febb8cf5a07b0d220685cc8b",
+  "details_sha256": "87d65c9696b2f96644f1b56f8f1351b3d8dd1b9e74b1f469fed5f05443d0db20",
+  "catalog_count": 53548,
+  "details_count": 53548,
+  "catalog_built_at": "2026-09-20T03:16:30Z",
+  "latest_catalog_published_at": "2026-09-19T11:24:10Z",
+  "live_build": "20260920T091253Z-d35e6349-nova",
+  "live_catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+  "cache_control": "no-store",
+  "robots": "noindex, nofollow",
+  "honest_labels_present": true,
+  "stale_sixth_shelf": false,
+  "episode_timestamps_available": false,
+  "note": "SOURCE_TO_LIVE remains INCONCLUSIVE without upstream event timestamps"
+}

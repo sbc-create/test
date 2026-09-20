@@ -1,0 +1,88 @@
+{
+  "at_utc": "2026-09-20T08:57:50.688734+00:00",
+  "worktree": "/home/claude/wt-zona-finalization-01",
+  "branch": "claude/zona-template-finalization-01",
+  "source_HEAD": "22ee5ab90ff6b4a8209b735858495a7691efb25c",
+  "expected_start_HEAD": "22ee5ab90ff6b4a8209b735858495a7691efb25c",
+  "HEAD_MATCH": true,
+  "live": {
+    "status": 200,
+    "build": "20260919T224255Z-88cd272f-nova",
+    "artifact": "128c3f6e439b5b4428716d281696ad70835ecc7858444c2790653fb058b88839",
+    "source": "88cd272f30b86f9adc97d6fd33f8250e2dfb06f4",
+    "robots": "noindex, nofollow",
+    "cache_control": "no-store",
+    "age": null,
+    "etag": null,
+    "x_cache": null
+  },
+  "runtime_frontend_py_sha256": "b9de6b626e6578310b7e35cefd63e08d1715db2ff0664c072064d12e72b146fa",
+  "catalog": {
+    "path": "/srv/lords/.frontend/zona-01-catalog.json",
+    "sha256": "99235834548f7acc4ac8bf116996fb3f15589063febb8cf5a07b0d220685cc8b",
+    "bytes": 16721819,
+    "mtime_utc": "2026-09-20T03:35:06.003937+00:00",
+    "count_field": 53548,
+    "items_len": 53548,
+    "revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+    "builtAt": "2026-09-20T03:16:30Z",
+    "schema": "nova-catalog/2.0.0",
+    "site": "zona-01",
+    "top_keys": [
+      "absent_reason",
+      "builtAt",
+      "count",
+      "fields_absent",
+      "fields_present",
+      "items",
+      "revision",
+      "schema",
+      "site",
+      "source",
+      "version",
+      "without_poster"
+    ]
+  },
+  "details": {
+    "path": "/srv/lords/.frontend/zona-01-details.json",
+    "sha256": "87d65c9696b2f96644f1b56f8f1351b3d8dd1b9e74b1f469fed5f05443d0db20",
+    "bytes": 78101031,
+    "mtime_utc": "2026-09-20T03:35:06.655961+00:00",
+    "details_total": 53548,
+    "details_len": 53548,
+    "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+    "source": "canonical-snapshot/1.0.0",
+    "schema": "nova.details.sidecar/2.0.0",
+    "top_keys": [
+      "catalog_built_at",
+      "catalog_revision",
+      "details",
+      "details_total",
+      "items_total",
+      "schema",
+      "site",
+      "source"
+    ]
+  },
+  "service": {
+    "systemctl_show": "MainPID=2519730\nExecMainStartTimestamp=Sun 2026-09-20 03:35:10 UTC\nActiveState=active\nFragmentPath=/etc/systemd/system/nova-zona-01.service\nActiveEnterTimestamp=Sun 2026-09-20 03:35:10 UTC",
+    "rc": 0
+  },
+  "rollback_latest": "/srv/lords/.frontend/.rollback/20260919T224255Z-zona-01-pass6",
+  "rollback_candidates": [
+    "/srv/lords/.frontend/.rollback/20260919T224255Z-zona-01-pass6",
+    "/srv/lords/.frontend/.rollback/20260919T215728Z-zona-01-pass5",
+    "/srv/lords/.frontend/.rollback/20260919T211402Z-zona-01-pass4",
+    "/srv/lords/.frontend/.rollback/20260919T195023Z-zona-01-pass4",
+    "/srv/lords/.frontend/.rollback/20260919T172526Z-zona-01-pass3"
+  ],
+  "cache_hints": {
+    "manifest": "/srv/lords/.frontend/template-manifest-zona-01.json",
+    "manifest_exists": true,
+    "indexing_policy": "/srv/lords/.frontend/indexing-policy.json",
+    "env_cache_keys_sample": [
+      "NODE_COMPILE_CACHE"
+    ]
+  },
+  "count_note": "Pass6 baseline ~53524; any delta must be explained by snapshot update"
+}

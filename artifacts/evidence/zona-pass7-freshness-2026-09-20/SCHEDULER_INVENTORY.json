@@ -1,0 +1,44 @@
+{
+  "at_utc": "2026-09-20T09:11:48.970033+00:00",
+  "schedulers": [
+    {
+      "SERVICE_OR_TIMER": "nova-daily-refresh.timer",
+      "note": "Zona authoritative catalog+details publish",
+      "show": "NextElapseUSecRealtime=Mon 2026-09-21 03:33:14 UTC\nLastTriggerUSec=Sun 2026-09-20 03:31:28 UTC\nResult=success\nId=nova-daily-refresh.timer\nActiveState=active\nSubState=waiting\nFragmentPath=/etc/systemd/system/nova-daily-refresh.timer\nUnitFileState=enabled\nActiveEnterTimestamp=Mon 2026-09-14 16:34:44 UTC\n",
+      "rc": 0
+    },
+    {
+      "SERVICE_OR_TIMER": "nova-daily-refresh.service",
+      "note": "pulls lords-live, details, ratings, publishes canonical snapshot, restarts",
+      "show": "Result=success\nNRestarts=0\nExecMainStartTimestamp=Sun 2026-09-20 03:31:28 UTC\nExecMainExitTimestamp=Sun 2026-09-20 03:35:17 UTC\nId=nova-daily-refresh.service\nActiveState=inactive\nSubState=dead\nFragmentPath=/etc/systemd/system/nova-daily-refresh.service\nUnitFileState=static\nActiveEnterTimestamp=n/a\n",
+      "rc": 0
+    },
+    {
+      "SERVICE_OR_TIMER": "nova-catalog-refresh.timer",
+      "note": "5min — SKIPS zona-01 (canonical)",
+      "show": "NextElapseUSecRealtime=\nLastTriggerUSec=Sun 2026-09-20 09:10:42 UTC\nResult=success\nId=nova-catalog-refresh.timer\nActiveState=active\nSubState=running\nFragmentPath=/etc/systemd/system/nova-catalog-refresh.timer\nUnitFileState=enabled\nActiveEnterTimestamp=Thu 2026-09-10 14:14:37 UTC\n",
+      "rc": 0
+    },
+    {
+      "SERVICE_OR_TIMER": "nova-catalog-refresh.service",
+      "note": "legacy extract path; zona excluded",
+      "show": "Result=success\nNRestarts=0\nExecMainStartTimestamp=Sun 2026-09-20 09:10:42 UTC\nExecMainExitTimestamp=n/a\nId=nova-catalog-refresh.service\nActiveState=activating\nSubState=start\nFragmentPath=/etc/systemd/system/nova-catalog-refresh.service\nUnitFileState=disabled\nActiveEnterTimestamp=n/a\n",
+      "rc": 0
+    },
+    {
+      "SERVICE_OR_TIMER": "lords-content-refresh.timer",
+      "note": "Lords static sites only — not Zona",
+      "show": "NextElapseUSecRealtime=\nLastTriggerUSec=Sun 2026-09-20 09:10:18 UTC\nResult=success\nId=lords-content-refresh.timer\nActiveState=active\nSubState=running\nFragmentPath=/etc/systemd/system/lords-content-refresh.timer\nUnitFileState=enabled\nActiveEnterTimestamp=Thu 2026-09-10 08:23:53 UTC\n",
+      "rc": 0
+    },
+    {
+      "SERVICE_OR_TIMER": "nova-zona-01.service",
+      "note": "Zona runtime process",
+      "show": "Result=success\nNRestarts=0\nExecMainStartTimestamp=Sun 2026-09-20 03:35:10 UTC\nExecMainExitTimestamp=n/a\nId=nova-zona-01.service\nActiveState=active\nSubState=running\nFragmentPath=/etc/systemd/system/nova-zona-01.service\nUnitFileState=enabled\nActiveEnterTimestamp=Sun 2026-09-20 03:35:10 UTC\n",
+      "rc": 0
+    }
+  ],
+  "zona_update_path": "nova-daily-refresh only (canonical); nova-catalog-refresh skips zona-01",
+  "lords_content_refresh_affects_zona": false,
+  "observation": "Daily runs 2026-09-15..20 all exit 0; catalog 53524→53548 on 2026-09-20"
+}

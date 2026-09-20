@@ -1,0 +1,394 @@
+{
+  "window_days": 6,
+  "preferred_days": 28,
+  "available_daily_reports": 22,
+  "reports": [
+    {
+      "run_id": "daily-20260914T164724Z",
+      "started_at": "2026-09-14T16:47:24Z",
+      "finished_at": "2026-09-14T16:48:37Z",
+      "exit_code": 1,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "publish": "refused"
+      },
+      "snapshot_items": null,
+      "snapshot_fetched_at": null,
+      "zona_catalog_items": null,
+      "zona_catalog_before": null,
+      "zona_checksum": null,
+      "LAST_RESULT": "fail"
+    },
+    {
+      "run_id": "daily-20260914T164837Z",
+      "started_at": "2026-09-14T16:48:37Z",
+      "finished_at": "2026-09-14T16:49:45Z",
+      "exit_code": 1,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "publish": "refused"
+      },
+      "snapshot_items": null,
+      "snapshot_fetched_at": null,
+      "zona_catalog_items": null,
+      "zona_catalog_before": null,
+      "zona_checksum": null,
+      "LAST_RESULT": "fail"
+    },
+    {
+      "run_id": "daily-20260914T165022Z",
+      "started_at": "2026-09-14T16:50:22Z",
+      "finished_at": "2026-09-14T16:52:18Z",
+      "exit_code": 0,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "publish": "ok"
+      },
+      "snapshot_items": 53399,
+      "snapshot_fetched_at": "2026-09-14T16:35:23Z",
+      "zona_catalog_items": 53399,
+      "zona_catalog_before": 53393,
+      "zona_checksum": "4b05d8f409b68438f8affe8d2b6f832eeef580ba2b35430ac959ed839c309d5a",
+      "LAST_RESULT": "ok"
+    },
+    {
+      "run_id": "daily-20260914T165219Z",
+      "started_at": "2026-09-14T16:52:19Z",
+      "finished_at": "2026-09-14T16:54:23Z",
+      "exit_code": 0,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "publish": "ok"
+      },
+      "snapshot_items": 53399,
+      "snapshot_fetched_at": "2026-09-14T16:37:19Z",
+      "zona_catalog_items": 53399,
+      "zona_catalog_before": 53399,
+      "zona_checksum": "4b05d8f409b68438f8affe8d2b6f832eeef580ba2b35430ac959ed839c309d5a",
+      "LAST_RESULT": "ok"
+    },
+    {
+      "run_id": "daily-20260914T170640Z",
+      "started_at": "2026-09-14T17:06:40Z",
+      "finished_at": "2026-09-14T17:08:41Z",
+      "exit_code": 0,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "publish": "ok"
+      },
+      "snapshot_items": 53399,
+      "snapshot_fetched_at": "2026-09-14T16:51:40Z",
+      "zona_catalog_items": 53399,
+      "zona_catalog_before": 53399,
+      "zona_checksum": "4b05d8f409b68438f8affe8d2b6f832eeef580ba2b35430ac959ed839c309d5a",
+      "LAST_RESULT": "ok"
+    },
+    {
+      "run_id": "daily-20260914T170913Z",
+      "started_at": "2026-09-14T17:09:13Z",
+      "finished_at": "2026-09-14T17:10:27Z",
+      "exit_code": 1,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "publish": "ok"
+      },
+      "snapshot_items": 53399,
+      "snapshot_fetched_at": "2026-09-14T16:54:14Z",
+      "zona_catalog_items": 53399,
+      "zona_catalog_before": 53399,
+      "zona_checksum": "4b05d8f409b68438f8affe8d2b6f832eeef580ba2b35430ac959ed839c309d5a",
+      "LAST_RESULT": "fail"
+    },
+    {
+      "run_id": "daily-20260914T171027Z",
+      "started_at": "2026-09-14T17:10:27Z",
+      "finished_at": "2026-09-14T17:11:54Z",
+      "exit_code": 0,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "publish": "ok"
+      },
+      "snapshot_items": 53399,
+      "snapshot_fetched_at": "2026-09-14T16:55:28Z",
+      "zona_catalog_items": 53399,
+      "zona_catalog_before": 53399,
+      "zona_checksum": "4b05d8f409b68438f8affe8d2b6f832eeef580ba2b35430ac959ed839c309d5a",
+      "LAST_RESULT": "ok"
+    },
+    {
+      "run_id": "daily-20260914T171154Z",
+      "started_at": "2026-09-14T17:11:54Z",
+      "finished_at": "2026-09-14T17:13:16Z",
+      "exit_code": 0,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "publish": "ok"
+      },
+      "snapshot_items": 53399,
+      "snapshot_fetched_at": "2026-09-14T16:56:54Z",
+      "zona_catalog_items": 53399,
+      "zona_catalog_before": 53399,
+      "zona_checksum": "4b05d8f409b68438f8affe8d2b6f832eeef580ba2b35430ac959ed839c309d5a",
+      "LAST_RESULT": "ok"
+    },
+    {
+      "run_id": "daily-20260914T171338Z",
+      "started_at": "2026-09-14T17:13:38Z",
+      "finished_at": "2026-09-14T17:14:52Z",
+      "exit_code": 1,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "publish": "ok"
+      },
+      "snapshot_items": 53399,
+      "snapshot_fetched_at": "2026-09-14T16:58:38Z",
+      "zona_catalog_items": 53399,
+      "zona_catalog_before": 53399,
+      "zona_checksum": "4b05d8f409b68438f8affe8d2b6f832eeef580ba2b35430ac959ed839c309d5a",
+      "LAST_RESULT": "fail"
+    },
+    {
+      "run_id": "daily-20260914T171452Z",
+      "started_at": "2026-09-14T17:14:52Z",
+      "finished_at": "2026-09-14T17:16:23Z",
+      "exit_code": 0,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "publish": "ok"
+      },
+      "snapshot_items": 53399,
+      "snapshot_fetched_at": "2026-09-14T16:59:53Z",
+      "zona_catalog_items": 53399,
+      "zona_catalog_before": 53399,
+      "zona_checksum": "4b05d8f409b68438f8affe8d2b6f832eeef580ba2b35430ac959ed839c309d5a",
+      "LAST_RESULT": "ok"
+    },
+    {
+      "run_id": "daily-20260914T180202Z",
+      "started_at": "2026-09-14T18:02:02Z",
+      "finished_at": "2026-09-14T18:03:32Z",
+      "exit_code": 0,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "ratings": "ok",
+        "publish": "ok"
+      },
+      "snapshot_items": 53399,
+      "snapshot_fetched_at": "2026-09-14T17:47:02Z",
+      "zona_catalog_items": 53399,
+      "zona_catalog_before": 53399,
+      "zona_checksum": "4b05d8f409b68438f8affe8d2b6f832eeef580ba2b35430ac959ed839c309d5a",
+      "LAST_RESULT": "ok"
+    },
+    {
+      "run_id": "daily-20260914T180332Z",
+      "started_at": "2026-09-14T18:03:32Z",
+      "finished_at": "2026-09-14T18:04:55Z",
+      "exit_code": 0,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "ratings": "ok",
+        "publish": "ok"
+      },
+      "snapshot_items": 53399,
+      "snapshot_fetched_at": "2026-09-14T17:48:33Z",
+      "zona_catalog_items": 53399,
+      "zona_catalog_before": 53399,
+      "zona_checksum": "4b05d8f409b68438f8affe8d2b6f832eeef580ba2b35430ac959ed839c309d5a",
+      "LAST_RESULT": "ok"
+    },
+    {
+      "run_id": "daily-20260914T180613Z",
+      "started_at": "2026-09-14T18:06:13Z",
+      "finished_at": "2026-09-14T18:06:32Z",
+      "exit_code": 1,
+      "steps": {
+        "catalog": "failed",
+        "details": "failed",
+        "ratings": "ok",
+        "publish": "refused"
+      },
+      "snapshot_items": null,
+      "snapshot_fetched_at": null,
+      "zona_catalog_items": null,
+      "zona_catalog_before": null,
+      "zona_checksum": null,
+      "LAST_RESULT": "fail"
+    },
+    {
+      "run_id": "daily-20260914T180758Z",
+      "started_at": "2026-09-14T18:07:58Z",
+      "finished_at": "2026-09-14T18:09:30Z",
+      "exit_code": 0,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "ratings": "ok",
+        "publish": "ok"
+      },
+      "snapshot_items": 53399,
+      "snapshot_fetched_at": "2026-09-14T17:52:58Z",
+      "zona_catalog_items": 53399,
+      "zona_catalog_before": 53399,
+      "zona_checksum": "4b05d8f409b68438f8affe8d2b6f832eeef580ba2b35430ac959ed839c309d5a",
+      "LAST_RESULT": "ok"
+    },
+    {
+      "run_id": "daily-20260915T033131Z",
+      "started_at": "2026-09-15T03:31:31Z",
+      "finished_at": "2026-09-15T03:33:34Z",
+      "exit_code": 0,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "ratings": "ok",
+        "publish": "ok"
+      },
+      "snapshot_items": 53400,
+      "snapshot_fetched_at": "2026-09-15T03:16:31Z",
+      "zona_catalog_items": 53400,
+      "zona_catalog_before": 53399,
+      "zona_checksum": "b12eecd40d7e6964067f1e2f63f97f674258beac27ada8c768277520e9b73520",
+      "LAST_RESULT": "ok"
+    },
+    {
+      "run_id": "daily-20260915T054450Z",
+      "started_at": "2026-09-15T05:44:50Z",
+      "finished_at": "2026-09-15T05:46:46Z",
+      "exit_code": 0,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "ratings": "ok",
+        "publish": "ok"
+      },
+      "snapshot_items": 53400,
+      "snapshot_fetched_at": "2026-09-15T05:29:50Z",
+      "zona_catalog_items": 53400,
+      "zona_catalog_before": 53400,
+      "zona_checksum": "b12eecd40d7e6964067f1e2f63f97f674258beac27ada8c768277520e9b73520",
+      "LAST_RESULT": "ok"
+    },
+    {
+      "run_id": "daily-20260915T054646Z",
+      "started_at": "2026-09-15T05:46:46Z",
+      "finished_at": "2026-09-15T05:48:45Z",
+      "exit_code": 0,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "ratings": "ok",
+        "publish": "ok"
+      },
+      "snapshot_items": 53400,
+      "snapshot_fetched_at": "2026-09-15T05:31:46Z",
+      "zona_catalog_items": 53400,
+      "zona_catalog_before": 53400,
+      "zona_checksum": "b12eecd40d7e6964067f1e2f63f97f674258beac27ada8c768277520e9b73520",
+      "LAST_RESULT": "ok"
+    },
+    {
+      "run_id": "daily-20260916T033315Z",
+      "started_at": "2026-09-16T03:33:15Z",
+      "finished_at": "2026-09-16T03:49:14Z",
+      "exit_code": 0,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "ratings": "ok",
+        "publish": "ok"
+      },
+      "snapshot_items": 53426,
+      "snapshot_fetched_at": "2026-09-16T03:25:08Z",
+      "zona_catalog_items": 53426,
+      "zona_catalog_before": 53416,
+      "zona_checksum": "7c2993cc7151f662fcd08d46e656d96bf4d481b82f764177c43027cbb0ea1ec4",
+      "LAST_RESULT": "ok"
+    },
+    {
+      "run_id": "daily-20260917T033346Z",
+      "started_at": "2026-09-17T03:33:46Z",
+      "finished_at": "2026-09-17T03:51:30Z",
+      "exit_code": 0,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "ratings": "ok",
+        "publish": "ok"
+      },
+      "snapshot_items": 53467,
+      "snapshot_fetched_at": "2026-09-17T03:33:27Z",
+      "zona_catalog_items": 53467,
+      "zona_catalog_before": 53426,
+      "zona_checksum": "e10eceb934d05ef20c94b008a55dfc20bc3fda6069d7ae79ab1d6b728ad4350a",
+      "LAST_RESULT": "ok"
+    },
+    {
+      "run_id": "daily-20260918T033309Z",
+      "started_at": "2026-09-18T03:33:09Z",
+      "finished_at": "2026-09-18T04:06:55Z",
+      "exit_code": 0,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "ratings": "ok",
+        "publish": "ok"
+      },
+      "snapshot_items": 53493,
+      "snapshot_fetched_at": "2026-09-18T03:19:01Z",
+      "zona_catalog_items": 53493,
+      "zona_catalog_before": 53467,
+      "zona_checksum": "9f8f6433722f535e0916d95a14eabd4b3fd916278b66c42f83a8b66f3471f516",
+      "LAST_RESULT": "ok"
+    },
+    {
+      "run_id": "daily-20260919T033251Z",
+      "started_at": "2026-09-19T03:32:51Z",
+      "finished_at": "2026-09-19T03:43:11Z",
+      "exit_code": 0,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "ratings": "ok",
+        "publish": "ok"
+      },
+      "snapshot_items": 53524,
+      "snapshot_fetched_at": "2026-09-19T03:23:34Z",
+      "zona_catalog_items": 53524,
+      "zona_catalog_before": 53493,
+      "zona_checksum": "fe5e1331eb39f75852a5aa6f2bca132d027b1f7a748cf1b713c6cbe4580badf8",
+      "LAST_RESULT": "ok"
+    },
+    {
+      "run_id": "daily-20260920T033130Z",
+      "started_at": "2026-09-20T03:31:30Z",
+      "finished_at": "2026-09-20T03:35:17Z",
+      "exit_code": 0,
+      "steps": {
+        "catalog": "ok",
+        "details": "ok",
+        "ratings": "ok",
+        "publish": "ok"
+      },
+      "snapshot_items": 53548,
+      "snapshot_fetched_at": "2026-09-20T03:16:30Z",
+      "zona_catalog_items": 53548,
+      "zona_catalog_before": 53524,
+      "zona_checksum": "ecc664ad462bab47b51e8a9a151d5ec7d79f5dd76d1a790d9f82ee41563a23bb",
+      "LAST_RESULT": "ok"
+    }
+  ],
+  "note": "Journal+daily-reports cover ~6 calendar days of stable daily success; 28d full ledger not present for zona canonical path"
+}

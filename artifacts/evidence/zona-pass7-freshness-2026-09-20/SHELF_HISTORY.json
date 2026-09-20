@@ -1,0 +1,128 @@
+{
+  "method": "daily-report catalog membership deltas + live shelf digest at audit; no historical shelf digests stored",
+  "catalog_count_series": [
+    {
+      "at": "2026-09-14T16:50:22Z",
+      "zona_items": 53399,
+      "before": 53393
+    },
+    {
+      "at": "2026-09-14T16:52:19Z",
+      "zona_items": 53399,
+      "before": 53399
+    },
+    {
+      "at": "2026-09-14T17:06:40Z",
+      "zona_items": 53399,
+      "before": 53399
+    },
+    {
+      "at": "2026-09-14T17:09:13Z",
+      "zona_items": 53399,
+      "before": 53399
+    },
+    {
+      "at": "2026-09-14T17:10:27Z",
+      "zona_items": 53399,
+      "before": 53399
+    },
+    {
+      "at": "2026-09-14T17:11:54Z",
+      "zona_items": 53399,
+      "before": 53399
+    },
+    {
+      "at": "2026-09-14T17:13:38Z",
+      "zona_items": 53399,
+      "before": 53399
+    },
+    {
+      "at": "2026-09-14T17:14:52Z",
+      "zona_items": 53399,
+      "before": 53399
+    },
+    {
+      "at": "2026-09-14T18:02:02Z",
+      "zona_items": 53399,
+      "before": 53399
+    },
+    {
+      "at": "2026-09-14T18:03:32Z",
+      "zona_items": 53399,
+      "before": 53399
+    },
+    {
+      "at": "2026-09-14T18:07:58Z",
+      "zona_items": 53399,
+      "before": 53399
+    },
+    {
+      "at": "2026-09-15T03:31:31Z",
+      "zona_items": 53400,
+      "before": 53399
+    },
+    {
+      "at": "2026-09-15T05:44:50Z",
+      "zona_items": 53400,
+      "before": 53400
+    },
+    {
+      "at": "2026-09-15T05:46:46Z",
+      "zona_items": 53400,
+      "before": 53400
+    },
+    {
+      "at": "2026-09-16T03:33:15Z",
+      "zona_items": 53426,
+      "before": 53416
+    },
+    {
+      "at": "2026-09-17T03:33:46Z",
+      "zona_items": 53467,
+      "before": 53426
+    },
+    {
+      "at": "2026-09-18T03:33:09Z",
+      "zona_items": 53493,
+      "before": 53467
+    },
+    {
+      "at": "2026-09-19T03:32:51Z",
+      "zona_items": 53524,
+      "before": 53493
+    },
+    {
+      "at": "2026-09-20T03:31:30Z",
+      "zona_items": 53548,
+      "before": 53524
+    }
+  ],
+  "live_before_repair": {
+    "build": "20260919T224255Z-88cd272f-nova",
+    "artifact": "128c3f6e439b5b4428716d281696ad70835ecc7858444c2790653fb058b88839",
+    "cache_control": "no-store",
+    "h2": [
+      "Популярные новинки фильмов",
+      "Популярные сериалы",
+      "Добавленные недавно фильмы",
+      "Новые серии",
+      "Популярная анимация",
+      "Недавно в каталоге",
+      "западный контент",
+      "драма",
+      "комедия",
+      "триллер",
+      "дорама",
+      "боевик",
+      "Подборки"
+    ],
+    "has_stale_sixth_shelf": true,
+    "has_genre_mega_shelves": true,
+    "CROSS_SITE_OVERWRITE": {
+      "detected": true,
+      "at": "2026-09-19T22:51:05Z",
+      "by": "lords-01 deploy rollback 20260919T225105Z-lords-01",
+      "effect": "Pass6 zona artifact (sha128c3f6e) replaced by older shared lords-frontend.py; manifest-zona left pointing at Pass6 digest"
+    }
+  }
+}

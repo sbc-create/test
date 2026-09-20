@@ -1,0 +1,114 @@
+{
+  "at": "2026-09-20T09:13:44.235661+00:00",
+  "artifact_path": "/srv/lords/.frontend/zona-01-frontend.py",
+  "artifact_sha_match": true,
+  "manifest": {
+    "schema_version": 1,
+    "template_family": "zona",
+    "design_version": "1.2.0",
+    "source_commit": "d35e6349b2fd2ed64a3adb700cf3971963694489",
+    "runtime_commit": "d35e6349b2fd2ed64a3adb700cf3971963694489",
+    "build_id": "20260920T091253Z-d35e6349-nova",
+    "artifact_sha256": "085b7c0d1b6187668aee9580c002bf299fa21554bb011e304886d2d8c0ac61ac",
+    "artifact_path": "/srv/lords/.frontend/zona-01-frontend.py",
+    "profile": "zona-general",
+    "built_at": "2026-09-20T09:12:53Z",
+    "pass": "pass7-freshness"
+  },
+  "expect": "085b7c0d1b6187668aee9580c002bf299fa21554bb011e304886d2d8c0ac61ac",
+  "live_runs": [
+    {
+      "n": 1,
+      "status": 200,
+      "build": "20260920T091253Z-d35e6349-nova",
+      "artifact": "085b7c0d1b6187668aee9580c002bf299fa21554bb011e304886d2d8c0ac61ac",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "catalog_built_at": "2026-09-20T03:16:30Z",
+      "etag": "W/\"cat-ecc664ad462bab47b51e8a9a151d5ec7\"",
+      "cache": "no-store",
+      "robots": "noindex, nofollow",
+      "honest_rating": true,
+      "honest_series": true,
+      "recent_films": true,
+      "no_sixth": true,
+      "no_fake_popular": true,
+      "no_genre_mega": true,
+      "has_zgenres_nav": true
+    },
+    {
+      "n": 2,
+      "status": 200,
+      "build": "20260920T091253Z-d35e6349-nova",
+      "artifact": "085b7c0d1b6187668aee9580c002bf299fa21554bb011e304886d2d8c0ac61ac",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "catalog_built_at": "2026-09-20T03:16:30Z",
+      "etag": "W/\"cat-ecc664ad462bab47b51e8a9a151d5ec7\"",
+      "cache": "no-store",
+      "robots": "noindex, nofollow",
+      "honest_rating": true,
+      "honest_series": true,
+      "recent_films": true,
+      "no_sixth": true,
+      "no_fake_popular": true,
+      "no_genre_mega": true,
+      "has_zgenres_nav": true
+    }
+  ],
+  "pages": {
+    "/new/": {
+      "status": 200,
+      "build": "20260920T091253Z-d35e6349-nova",
+      "robots": "noindex, nofollow",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "h1": " class=\"zh\" data-testid=\"catalog-heading\" id=\"catalog-h1\">Что нового",
+      "related_ok": true,
+      "collection_title_honest": null
+    },
+    "/movies/": {
+      "status": 200,
+      "build": "20260920T091253Z-d35e6349-nova",
+      "robots": "noindex, nofollow",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "h1": " class=\"zh\" data-testid=\"catalog-heading\" id=\"catalog-h1\">Кино",
+      "related_ok": true,
+      "collection_title_honest": null
+    },
+    "/series/": {
+      "status": 200,
+      "build": "20260920T091253Z-d35e6349-nova",
+      "robots": "noindex, nofollow",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "h1": " class=\"zh\" data-testid=\"catalog-heading\" id=\"catalog-h1\">Сериалы",
+      "related_ok": true,
+      "collection_title_honest": null
+    },
+    "/collections/": {
+      "status": 200,
+      "build": "20260920T091253Z-d35e6349-nova",
+      "robots": "noindex, nofollow",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "h1": " class=\"zh\" data-testid=\"catalog-heading\" id=\"catalog-h1\">Подборки",
+      "related_ok": true,
+      "collection_title_honest": null
+    },
+    "/collection/new_episodes/": {
+      "status": 200,
+      "build": "20260920T091253Z-d35e6349-nova",
+      "robots": "noindex, nofollow",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "h1": " class=\"zh\">Недавно добавленные сериалы",
+      "related_ok": true,
+      "collection_title_honest": true
+    },
+    "/title/nedetskie-igry-2/": {
+      "status": 200,
+      "build": "20260920T091253Z-d35e6349-nova",
+      "robots": "noindex, nofollow",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "h1": ">Недетские игры",
+      "related_ok": true,
+      "collection_title_honest": null
+    }
+  },
+  "rollback": "/srv/lords/.frontend/.rollback/20260920T091253Z-zona-01-pass7"
+}

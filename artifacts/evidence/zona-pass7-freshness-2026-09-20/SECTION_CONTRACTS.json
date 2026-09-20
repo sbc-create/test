@@ -1,0 +1,116 @@
+[
+  {
+    "SECTION_ID": "home.pop-films",
+    "VISIBLE_TITLE_BEFORE": "Популярные новинки фильмов",
+    "VISIBLE_TITLE_AFTER": "Высокий рейтинг среди недавних фильмов",
+    "SOURCE_DATASET": "catalog+details.ratings",
+    "FILTER": "kind=Фильм; pool=400 newest by published_at",
+    "SORT_FIELD": "max(kinopoisk_rating,imdb_rating)",
+    "SORT_DIRECTION": "desc",
+    "TIME_WINDOW": "implicit: 400 most recent by published_at",
+    "RANKING_SIGNAL": "source rating (NOT popularity/views)",
+    "RECOMPUTE_TRIGGER": "request-time over in-memory snapshot; snapshot reload on mtime",
+    "EXPECTED_CADENCE": "changes when catalog ratings or recent membership change (daily publish)",
+    "CACHE_KEY": "process memory + X-Catalog-Revision/ETag; Cache-Control:no-store",
+    "CACHE_TTL": "no-store (HTML); in-process until snapshot mtime/revision change",
+    "CONTRACT_STATUS": "RELABELED_WRONG_POPULARITY_CLAIM"
+  },
+  {
+    "SECTION_ID": "home.pop-series",
+    "VISIBLE_TITLE_AFTER": "Высокий рейтинг среди недавних сериалов",
+    "SOURCE_DATASET": "catalog+details.ratings",
+    "FILTER": "kind=Сериал; pool=400",
+    "SORT_FIELD": "max(rating)",
+    "RANKING_SIGNAL": "source rating (NOT popularity)",
+    "CONTRACT_STATUS": "RELABELED_WRONG_POPULARITY_CLAIM"
+  },
+  {
+    "SECTION_ID": "home.new-films",
+    "VISIBLE_TITLE": "Добавленные недавно фильмы",
+    "SOURCE_DATASET": "catalog",
+    "FILTER": "kind=Фильм; playable",
+    "SORT_FIELD": "published_at",
+    "SORT_DIRECTION": "desc",
+    "TIME_WINDOW": "none (global newest)",
+    "RANKING_SIGNAL": "catalog first-seen / published_at",
+    "EXPECTED_CADENCE": "daily canonical publish",
+    "CONTRACT_STATUS": "OK_RECENTLY_ADDED"
+  },
+  {
+    "SECTION_ID": "home.new-eps",
+    "VISIBLE_TITLE_BEFORE": "Новые серии",
+    "VISIBLE_TITLE_AFTER": "Недавно добавленные сериалы",
+    "SOURCE_DATASET": "catalog+details.seasons",
+    "FILTER": "kind=Сериал; has seasons; playable",
+    "SORT_FIELD": "published_at (title)",
+    "SORT_DIRECTION": "desc",
+    "TIME_WINDOW": "none",
+    "RANKING_SIGNAL": "title catalog published_at — episode published_at ABSENT (0/484104 eps)",
+    "EXPECTED_CADENCE": "daily; membership changes when new series titles enter catalog",
+    "CONTRACT_STATUS": "RELABELED_WRONG_EPISODE_SEMANTICS"
+  },
+  {
+    "SECTION_ID": "home.pop-anim",
+    "VISIBLE_TITLE_AFTER": "Высокий рейтинг среди недавней анимации",
+    "SOURCE_DATASET": "catalog+details.ratings",
+    "FILTER": "kind=Мультфильм; pool=400",
+    "SORT_FIELD": "max(rating)",
+    "RANKING_SIGNAL": "source rating (NOT popularity)",
+    "CONTRACT_STATUS": "RELABELED_WRONG_POPULARITY_CLAIM"
+  },
+  {
+    "SECTION_ID": "route.new",
+    "VISIBLE_TITLE": "Что нового /new/",
+    "SOURCE_DATASET": "details.premiere_date",
+    "FILTER": "has _premiere_date",
+    "SORT_FIELD": "premiere_date",
+    "SORT_DIRECTION": "desc",
+    "TIME_WINDOW": "none",
+    "RANKING_SIGNAL": "confirmed premiere only — never published_at",
+    "EXPECTED_CADENCE": "daily when premiere-bearing titles change",
+    "CONTRACT_STATUS": "OK_PREMIERE_NOVELTY"
+  },
+  {
+    "SECTION_ID": "collection.recently_added",
+    "VISIBLE_TITLE": "Недавно добавленные",
+    "SOURCE_DATASET": "catalog",
+    "SORT_FIELD": "published_at",
+    "CONTRACT_STATUS": "OK_RECENTLY_ADDED"
+  },
+  {
+    "SECTION_ID": "collection.new_episodes",
+    "VISIBLE_TITLE_BEFORE": "Новые эпизоды",
+    "VISIBLE_TITLE_AFTER": "Недавно добавленные сериалы",
+    "SOURCE_DATASET": "catalog kind=Сериал",
+    "SORT_FIELD": "published_at",
+    "RANKING_SIGNAL": "NO episode timestamps in authorized details",
+    "CONTRACT_STATUS": "RELABELED_NO_EPISODE_EVENTS"
+  },
+  {
+    "SECTION_ID": "collection.new_movie_releases",
+    "VISIBLE_TITLE": "Премьеры фильмов",
+    "SORT_FIELD": "premiere_date / clock year",
+    "CONTRACT_STATUS": "OK_PREMIERE_YEAR"
+  },
+  {
+    "SECTION_ID": "collection.top_rated",
+    "VISIBLE_TITLE": "Высокие оценки",
+    "SORT_FIELD": "rating",
+    "CONTRACT_STATUS": "OK_RATING"
+  },
+  {
+    "SECTION_ID": "title.related",
+    "VISIBLE_TITLE": "Похожее",
+    "SOURCE_DATASET": "details genres/country/year/rating",
+    "RANKING_SIGNAL": "stable similarity; excludes current title",
+    "EXPECTED_CADENCE": "on input change only",
+    "CONTRACT_STATUS": "EXPECTED_STABLE_SECTION"
+  },
+  {
+    "SECTION_ID": "collections.hub",
+    "VISIBLE_TITLE": "Подборки",
+    "SOURCE_DATASET": "collection_contract registry (dynamic filters)",
+    "EXPECTED_CADENCE": "recompute on snapshot revision; editorial keys unavailable marked",
+    "CONTRACT_STATUS": "DYNAMIC_CONTRACT_COLLECTIONS"
+  }
+]
