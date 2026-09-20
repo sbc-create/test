@@ -22,9 +22,16 @@ and is not modified by this packet.
 6. Kill switch / read-only path verified for comments API.
 7. Ratings rollout percent unchanged at 1.
 
+## Status after COMMUNITY-COMMENTS-01
+
+- Research observations ACCEPTED: **1000** (DERIVED_ONLY; AniList).
+- Dark foundation: schema/API/UI/moderation/security tests green.
+- Ratings `PUBLIC_WRITE_ROLLOUT_PERCENT` remains **1**.
+- Public comments remain **OFF**.
+
 ## Non-goals this packet
 
 - Enabling public comments
 - Republishing external comments
-- Collecting the 1000 research observations (parallel agent)
 - Changing ratings canary percent
+- Push / merge / deploy
