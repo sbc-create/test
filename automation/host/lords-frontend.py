@@ -989,6 +989,27 @@ font-weight:700;font-size:15px;padding:10px 18px;border-radius:4px}
 font-size:13px;color:#4a535d;font-weight:600;min-height:44px;display:inline-flex;align-items:center}
 .tabs a:hover{color:@ACCDK@;border-color:@ACC@}
 .tabs a[aria-current]{background:@BAR@;color:#fff;border-color:@BAR@}
+/* Compact catalog filters (shared functional contract; tokens stay profile-scoped). */
+.filt{margin:0 0 14px;max-width:100%;overflow-x:clip}
+.filt__row{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
+.filt__seg{display:inline-flex;flex-wrap:wrap;gap:4px;align-items:center}
+.filt__seg a{background:@CARD@;border:1px solid @LINE@;border-radius:3px;padding:6px 10px;
+font-size:12px;font-weight:600;color:#4a535d;min-height:36px;display:inline-flex;align-items:center}
+.filt__seg a[aria-current]{background:@BAR@;color:#fff;border-color:@BAR@}
+.filt__form{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;flex:1 1 auto}
+.filt__field{display:flex;flex-direction:column;gap:2px;font-size:11px;font-weight:600;color:@DIM@}
+.filt__field select{min-height:36px;max-width:168px;font-size:13px;border:1px solid @LINE@;
+border-radius:3px;background:@CARD@;color:@INK@;padding:4px 8px}
+.filt__chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center}
+.filt__chip{display:inline-flex;align-items:center;gap:4px;background:@CARD@;border:1px solid @LINE@;
+border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600;color:@INK@}
+.filt__reset{display:inline-flex;align-items:center;min-height:32px;padding:4px 12px;border-radius:3px;
+background:@ACC@;color:#fff;font-size:12px;font-weight:700;border:0}
+@media(max-width:720px){
+.filt__field select{max-width:100%;min-width:0;width:calc(50% - 4px)}
+.filt__form{width:100%}
+.filt__field{flex:1 1 42%}
+}
 /* Сетка в шесть колонок с тесными желобами. */
 .grid{display:grid;gap:8px;grid-template-columns:repeat(2,1fr)}
 @media(min-width:520px){.grid{grid-template-columns:repeat(3,1fr)}}
@@ -3573,9 +3594,119 @@ class ВидЛордс(Вид):
                              актив="/collections/",
                              описание=f"Подборки витрины {self.имя}.")
 
+    def _компактный_фильтр(self, разд: str, выбрано: dict) -> str:
+        """Compact filter bar: kind segment + selects + active chips.
+
+        Functional contract is shared; visual tokens come from the active profile.
+        """
+        kind_now = выбрано.get("kind")
+        if разд == "/movies":
+            kind_now = "Фильм"
+        elif разд == "/series":
+            kind_now = "Сериал"
+        elif разд == "/animation":
+            kind_now = "Мультфильм"
+        seg = []
+        for href, kind, label in (
+            ("/catalog/", None, "Все"),
+            ("/movies/", "Фильм", "Фильмы"),
+            ("/series/", "Сериал", "Сериалы"),
+            ("/animation/", "Мультфильм", "Мультики"),
+        ):
+            cur = ' aria-current="true"' if kind_now == kind else ""
+            q = запрос_строкой({к: в for к, в in выбрано.items()
+                                if к not in ("kind", "page") and в})
+            seg.append(f'<a href="{href}{q}"{cur}>{label}</a>')
+
+        year_opts = [(str(г), str(г)) for г in (self.д.years or [])[:20]]
+        genre_opts = [(код, имя) for код, имя in (self.индекс.get("genre_names") or [])[:40]]
+        country_opts = [(код, имя) for код, имя in (self.индекс.get("country_names") or [])[:40]]
+        sort_opts = [("date", "По дате"), ("title", "По названию"),
+                     ("year", "По году"), ("rating", "По рейтингу")]
+        fields = []
+        fields.append(
+            f'<label class="filt__field"><span>Год</span>'
+            f'<select name="year" onchange="this.form.submit()">'
+            f'<option value="">Все</option>'
+            + "".join(
+                f'<option value="{html.escape(v)}"'
+                f'{" selected" if str(выбрано.get("year") or "") == v else ""}>'
+                f"{html.escape(lbl)}</option>" for v, lbl in year_opts)
+            + "</select></label>")
+        fields.append(
+            f'<label class="filt__field"><span>Жанр</span>'
+            f'<select name="genre" onchange="this.form.submit()">'
+            f'<option value="">Все</option>'
+            + "".join(
+                f'<option value="{html.escape(v)}"'
+                f'{" selected" if (выбрано.get("genre") or "") == v else ""}>'
+                f"{html.escape(lbl)}</option>" for v, lbl in genre_opts)
+            + "</select></label>")
+        fields.append(
+            f'<label class="filt__field"><span>Страна</span>'
+            f'<select name="country" onchange="this.form.submit()">'
+            f'<option value="">Все</option>'
+            + "".join(
+                f'<option value="{html.escape(v)}"'
+                f'{" selected" if (выбрано.get("country") or "") == v else ""}>'
+                f"{html.escape(lbl)}</option>" for v, lbl in country_opts)
+            + "</select></label>")
+        fields.append(
+            f'<label class="filt__field"><span>Сортировка</span>'
+            f'<select name="sort" onchange="this.form.submit()">'
+            + "".join(
+                f'<option value="{html.escape(v)}"'
+                f'{" selected" if (выбрано.get("sort") or "date") == v else ""}>'
+                f"{html.escape(lbl)}</option>" for v, lbl in sort_opts)
+            + "</select></label>")
+        hidden = ""
+        if разд == "/catalog" and выбрано.get("kind"):
+            hidden = (f'<input type="hidden" name="kind" '
+                      f'value="{html.escape(выбрано["kind"])}">')
+
+        активные = []
+        labels = {"kind": "Тип", "year": "Год", "genre": "Жанр",
+                  "country": "Страна", "sort": "Сорт."}
+        genre_names = dict(self.индекс.get("genre_names") or [])
+        country_names = dict(self.индекс.get("country_names") or [])
+        sort_names = dict(sort_opts)
+        # Kind is inherent to /movies|/series|/animation — do not chip or
+        # count it as a clearable filter on those surfaces.
+        section_kind = разд in ("/movies", "/series", "/animation")
+        for к, в in выбрано.items():
+            if not в or к.startswith("_") or к == "page":
+                continue
+            if к == "sort" and в == "date":
+                continue
+            if к == "kind" and section_kind:
+                continue
+            показ = в
+            if к == "genre":
+                показ = genre_names.get(в, в)
+            elif к == "country":
+                показ = country_names.get(в, в)
+            elif к == "sort":
+                показ = sort_names.get(в, в)
+            активные.append(f'<span class="filt__chip">{html.escape(labels.get(к, к))}: '
+                            f"{html.escape(str(показ))}</span>")
+        n_active = len(активные)
+        reset = (f'<a class="filt__reset" href="{разд}/">Сбросить</a>' if n_active else "")
+        chips = (f'<div class="filt__chips">{"".join(активные)}{reset}</div>'
+                 if активные or reset else "")
+        summary = f"Фильтры ({n_active})" if n_active else "Фильтры"
+        form = (f'<form class="filt__form" method="get" action="{разд}/">'
+                f"{hidden}{''.join(fields)}"
+                f'<noscript><button type="submit">Применить</button></noscript></form>')
+        return (
+            f'<div class="filt" data-filter-contract="compact-v1">'
+            f'<div class="filt__row"><div class="filt__seg" role="group" '
+            f'aria-label="Тип контента">{"".join(seg)}</div>{form}</div>'
+            f'<p class="vh">{html.escape(summary)}</p>{chips}</div>')
+
     def список(self, разд: str, зпр: dict) -> str:
         имена = {"/catalog": "Каталог", "/new": "Недавно добавлено",
-                 "/collections": "Подборки"}
+                 "/collections": "Подборки", "/movies": "Фильмы",
+                 "/series": "Сериалы", "/animation": "Мультфильмы"}
         титул = имена.get(разд, "Каталог")
         if выбрано_kind := (зпр.get("kind") or [None])[0]:
             титул = {"Фильм": "Фильмы", "Сериал": "Сериалы",
@@ -3585,31 +3716,6 @@ class ВидЛордс(Вид):
         всего = max(1, (len(набор) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1) if набор else 1
         стр = min(стр, всего)
         кусок = набор[(стр - 1) * НА_СТРАНИЦЕ_1_1: стр * НА_СТРАНИЦЕ_1_1]
-        чипы = [f'<span class="tabs__pill">{html.escape(титул)} ›</span>']
-        for к in self.д.kinds:
-            текущий = ' aria-current="true"' if выбрано.get("kind") == к else ""
-            чипы.append(f'<a href="{разд}/{запрос_строкой(выбрано, kind=к, page=None)}"{текущий}>'
-                        f"{html.escape(к)}</a>")
-        активные = {к: в for к, в in выбрано.items() if в and к != "_unknown"}
-        if активные:
-            чипы.append(f'<a href="{разд}/">Сбросить</a>')
-        годы = "".join(
-            f'<a href="{разд}/{запрос_строкой(выбрано, year=г, page=None)}"'
-            f'{ТЕКУЩИЙ_ПУНКТ if выбрано.get("year") == str(г) else ""}>{г}</a>'
-            for г in self.д.years[:12])
-        сорт_чипы = "".join(
-            f'<a href="{разд}/{запрос_строкой(выбрано, sort=с, page=None)}"'
-            f'{ТЕКУЩИЙ_ПУНКТ if выбрано.get("sort") == с else ""}>{html.escape(имя)}</a>'
-            for с, имя in (("title", "По названию"), ("date", "По дате"),
-                           ("year", "По году"), ("rating", "По рейтингу")))
-        жанры = "".join(
-            f'<a href="/genre/{html.escape(код)}/"'
-            f'{ТЕКУЩИЙ_ПУНКТ if выбрано.get("genre") == код else ""}>{html.escape(имя)}</a>'
-            for код, имя in (self.индекс.get("genre_names") or [])[:12])
-        страны = "".join(
-            f'<a href="/country/{html.escape(код)}/"'
-            f'{ТЕКУЩИЙ_ПУНКТ if выбрано.get("country") == код else ""}>{html.escape(имя)}</a>'
-            for код, имя in (self.индекс.get("country_names") or [])[:8])
         h1 = html.escape(титул)
         подзаг = f'<p class="zsub" style="margin:0 0 10px;color:#5b6470">{len(набор)} записей в выборке</p>'
         if выбрано.get("_unknown"):
@@ -3622,15 +3728,10 @@ class ВидЛордс(Вид):
                      "Снимите фильтр или вернитесь в полный каталог.</div>")
         else:
             пусто = ""
-        тело = (f'<h1 class="lead">{h1}</h1>{подзаг}'
-                f'<div class="tabs">{"".join(чипы)}</div>'
-                f'<div class="tabs">{годы}</div>'
-                f'<div class="tabs">{сорт_чипы}</div>'
-                + (f'<div class="tabs">{жанры}</div>' if жанры else "")
-                + (f'<div class="tabs">{страны}</div>' if страны else "")
+        фильтр = "" if разд == "/new" else self._компактный_фильтр(разд, выбрано)
+        тело = (f'<h1 class="lead">{h1}</h1>{подзаг}{фильтр}'
                 + (self.сетка(кусок) if кусок else пусто)
                 + self.листалка(разд, выбрано, стр, всего))
-        # Search/sort/arbitrary filter combos stay noindex via global meta.
         return self.оболочка(тело, f"{титул} — {self.имя}", разд + "/", актив=разд + "/",
                              описание=f"{титул} витрины {self.имя}: выборка из утверждённого снимка.")
 
