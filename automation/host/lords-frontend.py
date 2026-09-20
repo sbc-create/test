@@ -33,6 +33,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta, timezone
 
 import argparse
+import hashlib
 import html
 import copy
 import json
@@ -4697,6 +4698,89 @@ def _мета_версии() -> str:
     "Время — дата добавления тайтла в каталог; номер — последняя доступная серия. "
     "Отдельной ленты выходов серий в снимке нет."
 )
+# Popular shelf: weekly frozen order (not re-sorted on every HTTP request).
+АНИМЕДИА_POPULAR_WINDOW = "weekly"
+АНИМЕДИА_POPULAR_REFRESH_ON_EVERY_REQUEST = 0
+_АНИМЕДИА_POPULAR_CACHE: dict[str, dict] = {}
+
+
+def _аниме_popular_week_key(now: datetime | None = None) -> str:
+    dt = now or datetime.now(timezone.utc)
+    y, w, _ = dt.isocalendar()
+    return f"{y}-W{w:02d}"
+
+
+def _аниме_popular_score(деталь: dict) -> float:
+    числа = []
+    for ключ in ("kinopoisk_rating", "imdb_rating", "shikimori_score"):
+        try:
+            числа.append(float(деталь.get(ключ)))
+        except (TypeError, ValueError):
+            pass
+    return max(числа) if числа else 0.0
+
+
+def аниме_popular_snapshot(
+    items: list,
+    detail_fn,
+    *,
+    revision: str = "",
+    limit: int = 48,
+    now: datetime | None = None,
+) -> dict:
+    """Deterministic weekly top-rated slug order for Animedia home.
+
+    Within the same ISO week and catalog revision the slug order is identical
+    across requests. Recompute only when the week rolls or revision changes.
+    """
+    week = _аниме_popular_week_key(now)
+    rev = str(revision or "")
+    cache_key = f"{rev}|{week}"
+    hit = _АНИМЕДИА_POPULAR_CACHE.get(cache_key)
+    if hit is not None:
+        return hit
+    scored: list[tuple[float, str, str]] = []
+    for з in items:
+        slug = str(з.get("slug") or "")
+        if not slug:
+            continue
+        score = _аниме_popular_score(detail_fn(slug) or {})
+        if score <= 0:
+            continue
+        scored.append((score, str(з.get("published_at") or ""), slug))
+    scored.sort(key=lambda t: (t[0], t[1], t[2]), reverse=True)
+    slugs = [t[2] for t in scored[:limit]]
+    updated = (now or datetime.now(timezone.utc)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    version = hashlib.sha256(
+        f"{cache_key}|{'|'.join(slugs)}".encode("utf-8")).hexdigest()[:16]
+    snap = {
+        "window": АНИМЕДИА_POPULAR_WINDOW,
+        "week_key": week,
+        "catalog_revision": rev,
+        "updated_at": updated,
+        "snapshot_version": version,
+        "slugs": slugs,
+        "refresh_on_every_request": АНИМЕДИА_POPULAR_REFRESH_ON_EVERY_REQUEST,
+    }
+    _АНИМЕДИА_POPULAR_CACHE[cache_key] = snap
+    # Keep at most two weeks per revision to bound memory.
+    stale = [k for k in _АНИМЕДИА_POPULAR_CACHE
+             if k.startswith(f"{rev}|") and k != cache_key]
+    for k in stale[1:]:
+        _АНИМЕДИА_POPULAR_CACHE.pop(k, None)
+    return snap
+
+
+def аниме_popular_apply(набор: list, snapshot: dict) -> list:
+    """Reorder/filter a candidate shelf by weekly popular snapshot slugs."""
+    by_slug = {з.get("slug"): з for з in набор if з.get("slug")}
+    out = []
+    for slug in snapshot.get("slugs") or []:
+        з = by_slug.get(slug)
+        if з is not None:
+            out.append(з)
+    return out
+
 
 
 def _аниме_формат_времени_анонса(published_at: str, precision: str) -> str:
@@ -5171,7 +5255,17 @@ class ВидАнимедиа(ВидЗона):
         if ключ in {"new_episodes", "new-episodes"}:
             тело = self.лента(набор)
             return f'<section class="zsec zsec--eps">{шапка}{тело}</section>'
-        return f'<section class="zsec">{шапка}{self.плитки(набор)}</section>'
+        extra = ""
+        if ключ in {"top-rated", "top", "top_rated"} and getattr(
+                self, "_popular_snapshot", None):
+            ps = self._popular_snapshot
+            extra = (
+                f' data-popular-window="{html.escape(str(ps.get("window") or ""))}"'
+                f' data-popular-week="{html.escape(str(ps.get("week_key") or ""))}"'
+                f' data-popular-snapshot="{html.escape(str(ps.get("snapshot_version") or ""))}"'
+                f' data-popular-updated="{html.escape(str(ps.get("updated_at") or ""))}"'
+            )
+        return f'<section class="zsec"{extra}>{шапка}{self.плитки(набор)}</section>'
 
     def _серии(self, запись: dict, сезоны: list, текущий=None) -> str:
         """Компактные номерные кнопки 40–52px; Zona сохраняет «Серия N»."""
@@ -5366,9 +5460,9 @@ class ВидАнимедиа(ВидЗона):
             "ongoing": ("Онгоинги", ""),
             "new_episodes": ("Недавно в каталоге", ""),
             "series_with_episodes": ("Сериалы с сериями", ""),
-            "today_schedule": ("Сегодня выйдет", ""),
+            "today_schedule": ("Расписание (нет дат выхода)", ""),
             "recently_added": ("Новые аниме на сайте", ""),
-            "top_rated": ("Топ по оценкам", ""),
+            "top_rated": ("Популярное за неделю", ""),
             "anime_movies": ("Аниме-фильмы", ""),
             "donghua": ("Дунхуа", ""),
             "classic": ("Классика", ""),
@@ -5382,6 +5476,7 @@ class ВидАнимедиа(ВидЗона):
             "series_with_episodes", "recently_added", "top_rated",
             "anime_movies", "donghua"))
         снимок = Снимок.получить(self.д, self.п) if КОЛЛЕКЦИИ else None
+        popular_meta = None
         ленты = []
         if снимок is not None:
             for ключ in ПОРЯДОК:
@@ -5391,13 +5486,27 @@ class ВидАнимедиа(ВидЗона):
                 титул, причина = ПРИЧИНЫ.get(ключ, (коллекция.title, ""))
                 # Keep full pool (≤48); hero + cross-shelf trim happens at render.
                 набор = [к.raw for к in коллекция.items[:48]]
+                if ключ == "top_rated":
+                    popular_meta = аниме_popular_snapshot(
+                        self.д.items, self.деталь,
+                        revision=getattr(self.д, "revision", "") or "",
+                        limit=48)
+                    self._popular_snapshot = popular_meta
+                    набор = аниме_popular_apply(набор, popular_meta) or набор
                 ленты.append((ключ.replace("_", "-"), титул,
                               коллекция.view_all_path,
                               набор, причина))
         else:
+            popular_meta = аниме_popular_snapshot(
+                self.д.items, self.деталь,
+                revision=getattr(self.д, "revision", "") or "",
+                limit=48)
+            self._popular_snapshot = popular_meta
+            by_slug = {з["slug"]: з for з in self.д.items if з.get("slug")}
+            top = [by_slug[s] for s in popular_meta["slugs"] if s in by_slug][:48]
             ленты = [
                 ("new-anime", "Новые аниме", "/new/", выбрать(свежесть)[:48], ""),
-                ("top", "Топ по оценкам", "/catalog/", выбрать(оценка, пул=400)[:48], ""),
+                ("top", "Популярное за неделю", "/catalog/", top, ""),
             ]
         куски = [self.полоса_готовности()]
 
@@ -5435,14 +5544,24 @@ class ВидАнимедиа(ВидЗона):
                 '<a href="/new/?page=1">Все добавленные</a></div>'
                 f'{feed}{pager}</section>')
         куски.append('<div class="zad-mid" data-ad-slot="home-mid-content" data-ad-enabled="0"></div>')
-        # Hero + cross-shelf dedup with refill so the first shelf cannot vanish.
+        # Cross-shelf dedup. Popular (weekly) may re-use hero carousel slugs —
+        # carousel ≠ grid shelf — but must not clone another lower shelf set.
         очищенные = []
         занятые: set[str] = set(герой_slug)
         for ключ, титул, ссылка, кандидаты, причина in ленты:
             набор = []
-            for з in кандидаты:
+            pool = кандидаты
+            skip = занятые
+            if ключ in {"top-rated", "top", "top_rated"} and getattr(
+                    self, "_popular_snapshot", None):
+                by_slug = {з.get("slug"): з for з in self.д.items if з.get("slug")}
+                pool = [by_slug[s] for s in self._popular_snapshot["slugs"]
+                        if s in by_slug]
+                # Only exclude titles already placed in other grid shelves.
+                skip = занятые - герой_slug
+            for з in pool:
                 slug = з.get("slug") or ""
-                if not slug or slug in занятые:
+                if not slug or slug in skip:
                     continue
                 набор.append(з)
                 if len(набор) >= 12:

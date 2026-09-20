@@ -30,7 +30,7 @@ class TestBlock04HomeShelves:
         mod, catalog, details = fe
         # Space profile: recently_added feeds hero; must still render a first shelf.
         html = _вид(mod, catalog, details, host="animedia.space").главная()
-        assert "Новые аниме на сайте" in html or "Топ по оценкам" in html
+        assert "Новые аниме на сайте" in html or "Популярное за неделю" in html or "Топ по оценкам" in html
         assert 'class="zg"' in html
         assert html.count('class="zt"') >= 2
 
