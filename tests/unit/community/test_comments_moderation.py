@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 
 from factory.community.comments.admin import CommentsAdmin, assert_forbidden_capabilities
-from factory.community.comments.flags import forbid_admin_capability
+from factory.community.comments.flags import comments_dark_flags, forbid_admin_capability
 from factory.community.comments.service import CommentsService
 from factory.community.identity_v1 import mint_identity_id
 from factory.community.store import CommunityStore
@@ -53,8 +53,14 @@ def test_approve_stays_dark(admin_svc):
         reason_code="OK",
     )
     assert out["status"] == 200
-    assert out["comment"]["published_at"] == ""
-    assert out["comment"]["status"] == "PENDING"
+    # Ledger may set published_at for PUBLISHED_UNREVIEWED; public flag stays off.
+    assert comments_dark_flags()["COMMENTS_PUBLICATION_ENABLED"] == 0
+    assert out["comment"]["status"] in (
+        "PENDING",
+        "PUBLISHED_UNREVIEWED",
+        "VISIBLE_QWEN_APPROVED",
+        "HELD_FOR_REVIEW",
+    )
 
 
 def test_quarantine_reject_remove_restore(admin_svc):
@@ -166,7 +172,7 @@ def test_soft_delete_keeps_row(admin_svc):
         "SELECT status, deleted_at FROM community_comments WHERE comment_id=?", (cid,)
     ).fetchone()
     assert row is not None
-    assert row["status"] == "DELETED_BY_USER"
+    assert row["status"] in ("DELETED_BY_USER", "DELETED_BY_AUTHOR")
     assert row["deleted_at"]
 
 

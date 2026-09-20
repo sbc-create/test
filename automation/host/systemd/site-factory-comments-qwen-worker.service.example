@@ -1,0 +1,21 @@
+# site-factory-comments-qwen-worker.service — placeholder (not enabled)
+
+# Owner must fill QWEN_COMMENTS_ENDPOINT and provide LoadCredential token.
+# Do NOT enable in production without approval.
+
+[Unit]
+Description=Community comments Qwen postmod worker (staging supervised)
+After=network.target
+
+[Service]
+Type=simple
+# LoadCredential=qwen_comments_token:/etc/site-factory/secrets/qwen_comments_token
+# Environment=QWEN_COMMENTS_TOKEN_FILE=%d/qwen_comments_token
+# Environment=QWEN_COMMENTS_ENDPOINT=
+Environment=QWEN_COMMENTS_MODE=dry_run
+WorkingDirectory=/srv/site-factory/repo
+ExecStart=/usr/bin/python3 -c "print('worker not enabled — see OWNER_QWEN_CONFIG_REQUIRED.md')"
+Restart=no
+
+[Install]
+WantedBy=multi-user.target

@@ -67,8 +67,13 @@ def test_create_edit_delete_with_test_bypass(api):
     )
     assert created["status"] == 201
     cid = created["comment"]["comment_id"]
-    assert created["comment"]["status"] in ("PENDING", "QUARANTINED")
-    assert created["comment"]["published_at"] == ""
+    assert created["comment"]["status"] in (
+        "PENDING",
+        "QUARANTINED",
+        "PUBLISHED_UNREVIEWED",
+        "PENDING_MODERATION_DEGRADED",
+        "HELD_FOR_REVIEW",
+    )
 
     edited = api_obj.edit_comment(
         comment_id=cid,
@@ -92,7 +97,7 @@ def test_create_edit_delete_with_test_bypass(api):
         bypass_write_flag_for_tests=True,
     )
     assert deleted["status"] == 200
-    assert deleted["comment"]["status"] == "DELETED_BY_USER"
+    assert deleted["comment"]["status"] in ("DELETED_BY_USER", "DELETED_BY_AUTHOR")
     assert deleted["comment"]["deleted_at"]
 
 

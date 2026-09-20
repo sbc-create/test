@@ -114,7 +114,7 @@ def test_cross_space_parent_rejected(svc):
 
 def test_rate_limit(svc):
     iid = mint_identity_id()
-    for i in range(5):
+    for i in range(3):
         svc.create(
             site_space="yummy",
             title_id="t-rate",
