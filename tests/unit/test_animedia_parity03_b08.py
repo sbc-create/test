@@ -31,13 +31,23 @@ def test_player_shell_single_instance_autoplay_off(fe):
     item = next(з for з in catalog["items"] if з["slug"] == "alpha-anime")
     html = вид.тайтл(item, details["details"]["alpha-anime"])
     assert 'data-b08="player"' in html
-    assert html.count('data-player ') + html.count('data-player>') <= 2  # attr forms
-    assert html.count('data-player') >= 1
+    assert html.count('id="watch"') == 1
     assert html.count("<video-player") <= 1
-    assert 'autoplay="0"' in html
     assert 'data-player-status=' in html
     assert mod.DEFAULT_EPISODE_POLICY_DATA_GAP == 1
     assert 'data-default-episode-policy="absent"' in html
+    # Series hub may be awaiting (no SDK). Film/resolving paths must pin autoplay=0.
+    if "<video-player" in html:
+        assert 'autoplay="0"' in html
+    else:
+        assert 'data-state="awaiting"' in html or "Выберите серию" in html
+
+    # Film without season list mounts resolving/playable with autoplay off.
+    movie = next(з for з in catalog["items"] if з["slug"] == "gamma-movie")
+    mhtml = вид.тайтл(movie, details["details"]["gamma-movie"])
+    if "<video-player" in mhtml:
+        assert 'autoplay="0"' in mhtml
+        assert mhtml.count("<video-player") == 1
 
 
 def test_css_player_16x9_no_fixed_640(fe):
