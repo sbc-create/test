@@ -2520,25 +2520,28 @@ def состояние_плеера(деталь: dict) -> tuple[str, str, str]:
 
 
 def выбрать_доступную_серию(деталь: dict) -> tuple[int, int | None]:
-    """Детерминированный выбор серии для хаба сериала.
+    """Owner policy FIRST_PLAYABLE_DETERMINISTIC (ANIMEDIA-B10-B16-20260920-01).
 
-    Приоритет: первая реально доступная (avail) → номер сезона без эпизода
-    (честный unavailable/awaiting без SDK). Прямой URL недоступного эпизода
-    не подменяется молча — только хаб выбирает первую playable.
+    Generic title hubs bind the first confirmed playable episode after sorting
+    ``(season_number ASC, episode_number ASC)``. Exact episode routes never
+    call this helper for identity — they keep the requested S/E.
     """
     сезоны = список_серий(деталь)
     if not сезоны:
         return 1, None
     доступные: list[tuple[int, int]] = []
-    for с in сезоны:
-        for н in range(1, int(с.get("avail") or 0) + 1):
-            доступные.append((с["n"], н))
+    for с in sorted(сезоны, key=lambda x: int(x.get("n") or 0)):
+        season_n = int(с.get("n") or 0)
+        if season_n < 1:
+            continue
+        avail = int(с.get("avail") or 0)
+        for н in range(1, avail + 1):
+            доступные.append((season_n, н))
     if доступные:
-        # Latest declared-available episode for the hub; direct episode URLs
-        # keep the requested number (no silent swap). Client source fallback
-        # still walks mali→cvh if the provider rejects the first binding.
-        return доступные[-1]
-    return сезоны[0]["n"], None
+        # First playable after ASC sort — never silently pick a random/latest.
+        return доступные[0]
+    # No playable episode: season known, episode unknown → honest empty shell.
+    return int(сезоны[0].get("n") or 1), None
 
 
 def ждёт_выбора_серии(запись: dict, деталь: dict, эпизод: int | None) -> bool:
@@ -4916,12 +4919,14 @@ TOP100_DATA_GAP = 1
     "schema_version", "site_id", "ordered_title_ids", "snapshot_revision",
     "digest", "generated_at",
 )
-# B08: versioned default-episode policy is owned by player/core — not invented here.
+# B08: owner-approved default-episode policy (ANIMEDIA-B10-B16-20260920-01).
 АНИМЕДИА_DEFAULT_EPISODE_POLICY_PATH = os.environ.get(
     "ANIMEDIA_DEFAULT_EPISODE_POLICY",
     str(Path(__file__).resolve().parents[2] / "config" / "animedia-default-episode-policy.json"),
 )
-DEFAULT_EPISODE_POLICY_DATA_GAP = 1
+АНИМЕДИА_DEFAULT_EPISODE_POLICY = "FIRST_PLAYABLE_DETERMINISTIC"
+DEFAULT_EPISODE_POLICY_DATA_GAP = 0
+АНИМЕДИА_DEFAULT_EPISODE_OWNER_DECISION = "ANIMEDIA-B10-B16-20260920-01"
 # Popular shelf: ONLY an owner/Core-approved WeeklyPopularSnapshot (§5.6).
 # Template must not rank catalog ratings into a public «Популярное за неделю».
 АНИМЕДИА_POPULAR_WINDOW = "weekly"
@@ -5613,8 +5618,10 @@ class ВидАнимедиа(ВидЗона):
         плеер = (
             f'<div class="ztitle-gap" aria-hidden="true"></div>'
             f'<section class="zpl" id="watch" data-b07-player="1" data-b08="player" '
-            f'data-default-episode-policy="'
-            f'{"present" if Path(АНИМЕДИА_DEFAULT_EPISODE_POLICY_PATH).is_file() else "absent"}">'
+            f'data-default-episode-policy="{html.escape(АНИМЕДИА_DEFAULT_EPISODE_POLICY)}" '
+            f'data-default-episode-decision="{html.escape(АНИМЕДИА_DEFAULT_EPISODE_OWNER_DECISION)}" '
+            f'data-default-s="{int(сезон_старт)}" '
+            f'data-default-e="{"" if эпизод_старт is None else int(эпизод_старт)}">'
             f'<div class="zpl__h"><h2>Смотреть</h2>'
             f'<span data-player-status="{html.escape(код)}">'
             f'{html.escape(_подпись_плеера(код))}</span></div>'

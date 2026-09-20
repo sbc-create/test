@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "policy_id": "FIRST_PLAYABLE_DETERMINISTIC",
+  "owner_decision_id": "ANIMEDIA-B10-B16-20260920-01",
+  "applies_to": "generic_title_route",
+  "exact_episode_route_preserved": true,
+  "generic_route_redirect": false,
+  "autoplay": 0,
+  "player_instance_max": 1,
+  "sort": [
+    "season_number ASC NULLS LAST",
+    "episode_number ASC NULLS LAST",
+    "canonical_episode_id ASC"
+  ],
+  "selection": "first_playable_confirmed_episode",
+  "unavailable_copy": "Видео пока недоступно",
+  "resolved_at": "2026-09-20T12:56:00Z"
+}
