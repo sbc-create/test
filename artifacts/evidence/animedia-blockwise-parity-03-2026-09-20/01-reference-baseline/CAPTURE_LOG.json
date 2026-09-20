@@ -1,0 +1,114 @@
+{
+  "captured_at": "2026-09-20T11:18:16Z",
+  "REFERENCE_ACCESS_FAILURES": 0,
+  "entries": [
+    {
+      "route": "home",
+      "url": "https://amd.online/",
+      "viewport": "d1440",
+      "w": 1440,
+      "h": 900,
+      "ok": true,
+      "status": 200,
+      "overflowX": 0,
+      "full_sha": "886e058bdf894c31121c6abe7ae643b25263ca82947c413df6002c03105a4b5f",
+      "path": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/home/d1440/full.png"
+    },
+    {
+      "route": "home",
+      "url": "https://amd.online/",
+      "viewport": "t768",
+      "w": 768,
+      "h": 1024,
+      "ok": true,
+      "status": 200,
+      "overflowX": 0,
+      "full_sha": "5fbb210881801325635d4fea6a98f355d2653d67a2cf58c915ac53f8accb392a",
+      "path": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/home/t768/full.png"
+    },
+    {
+      "route": "home",
+      "url": "https://amd.online/",
+      "viewport": "m390",
+      "w": 390,
+      "h": 844,
+      "ok": true,
+      "status": 200,
+      "overflowX": 0,
+      "full_sha": "0cd3e4cf4efd0168016e6b4239a61cd2267e3e56cdec9b2aa45b85a1f34d5930",
+      "path": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/home/m390/full.png"
+    },
+    {
+      "route": "collections",
+      "url": "https://amd.online/anime-collections/",
+      "viewport": "d1440",
+      "w": 1440,
+      "h": 900,
+      "ok": true,
+      "status": 200,
+      "overflowX": 0,
+      "full_sha": "c32cba6506bc2ef3905ee386b594d29a2646c7e24a86769c3512c1d09b303c88",
+      "path": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/collections/d1440/full.png"
+    },
+    {
+      "route": "collections",
+      "url": "https://amd.online/anime-collections/",
+      "viewport": "t768",
+      "w": 768,
+      "h": 1024,
+      "ok": true,
+      "status": 200,
+      "overflowX": 0,
+      "full_sha": "f9116981a23c9dd51d015a408c668b8d9d23585a34f0a95f59ba4cfac5b6f736",
+      "path": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/collections/t768/full.png"
+    },
+    {
+      "route": "collections",
+      "url": "https://amd.online/anime-collections/",
+      "viewport": "m390",
+      "w": 390,
+      "h": 844,
+      "ok": true,
+      "status": 200,
+      "overflowX": 0,
+      "full_sha": "9766630005c58cac8379dd9aa8ee628f130db5587ea06e65d559886ced0578fb",
+      "path": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/collections/m390/full.png"
+    },
+    {
+      "route": "title",
+      "url": "https://amd.online/2397-nekromant-ja-katastrofa.html",
+      "viewport": "d1440",
+      "w": 1440,
+      "h": 900,
+      "ok": true,
+      "status": 200,
+      "overflowX": 0,
+      "full_sha": "f982af516c4adf580ee599afdbb24c24213bac3acaac381e6cef4078a130406a",
+      "path": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/title/d1440/full.png"
+    },
+    {
+      "route": "title",
+      "url": "https://amd.online/2397-nekromant-ja-katastrofa.html",
+      "viewport": "t768",
+      "w": 768,
+      "h": 1024,
+      "ok": true,
+      "status": 200,
+      "overflowX": 0,
+      "full_sha": "92a09fc378aabc02a28248320798c02d4ef7eb0d62e70ebc3e02b97154400963",
+      "path": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/title/t768/full.png"
+    },
+    {
+      "route": "title",
+      "url": "https://amd.online/2397-nekromant-ja-katastrofa.html",
+      "viewport": "m390",
+      "w": 390,
+      "h": 844,
+      "ok": true,
+      "status": 200,
+      "overflowX": 0,
+      "full_sha": "266453a7b44fdb73a78fd48f41788c1ae4c524599c4740bed19f67fd21da6af9",
+      "path": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/title/m390/full.png"
+    }
+  ]
+}

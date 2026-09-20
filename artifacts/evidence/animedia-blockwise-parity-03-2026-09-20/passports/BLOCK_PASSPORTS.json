@@ -1,0 +1,1361 @@
+{
+  "frozen_at": "2026-09-20T11:21:45Z",
+  "spec": "ANIMEDIA_BLOCK_SPEC_V1",
+  "PASSPORT_MANIFEST_VALID": 1,
+  "blocks": [
+    {
+      "block_id": "B00",
+      "routes": [
+        "control"
+      ],
+      "intent": "Freeze ANIMEDIA_BLOCK_SPEC_V1 contract, manifests, passports, reference baseline, indexability BEFORE",
+      "ownership": "template",
+      "versioned_contract_id": "ANIMEDIA_BLOCK_SPEC_V1/B00",
+      "reference_evidence": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/",
+      "entity_or_event_type": "control_gate",
+      "source_path": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/00-contract/DATA_PROVENANCE_INVENTORY.json",
+      "provenance": {
+        "schema": "ProvenanceEnvelope",
+        "required_for": [
+          "public_dates",
+          "descriptions",
+          "ratings",
+          "counts",
+          "rankings"
+        ]
+      },
+      "eligibility": "always",
+      "sort_key": "n/a",
+      "dedupe_key": "n/a",
+      "visible_timestamp_semantic": "none",
+      "required_fields": [
+        "CONTRACT_SHA256",
+        "REFERENCE_BASELINE_VALID",
+        "PASSPORT_MANIFEST_VALID",
+        "DISPLAY_POLICIES_FROZEN"
+      ],
+      "optional_fields": [],
+      "freshness_sla": "n/a",
+      "max_stale": "n/a",
+      "snapshot_revision": "contract_freeze",
+      "display_policy_by_state": {
+        "normal": "populated",
+        "empty": "hidden",
+        "missing_required": "blocked",
+        "missing_optional": "hidden",
+        "stale": "blocked",
+        "error": "blocked"
+      },
+      "desktop_geometry": {
+        "role": "control",
+        "no_dom": true
+      },
+      "tablet_geometry": {
+        "role": "control",
+        "no_dom": true
+      },
+      "mobile_geometry": {
+        "role": "control",
+        "no_dom": true
+      },
+      "interactions": [],
+      "cta_route": null,
+      "seo_contract": {
+        "mutates_indexability": false
+      },
+      "tests": [
+        "tests/unit/test_animedia_parity03_b00.py"
+      ],
+      "evidence_paths": [
+        "03-blocks/BLOCK_B00.md",
+        "gates/B00_FREEZE.json",
+        "gates/B00_INDEPENDENT_GATES.json"
+      ],
+      "remaining_data_gap": "TRUE_PROVIDER_PLAYABLE_EVENT_COUNT=0; catalog_added ledger absent; published_at AMBIGUOUS; weekly/recs/top snapshots absent"
+    },
+    {
+      "block_id": "B01",
+      "routes": [
+        "*"
+      ],
+      "intent": "Shared shell header, taxonomy panel, breadcrumbs",
+      "ownership": "template",
+      "versioned_contract_id": "ANIMEDIA_BLOCK_SPEC_V1/B01",
+      "reference_evidence": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/home/",
+      "entity_or_event_type": "page_ui",
+      "source_path": "00-contract/ROUTE_REGISTRY.json",
+      "provenance": {
+        "facet_counts": "catalog_oracle",
+        "links": "versioned_route_registry"
+      },
+      "eligibility": "route_registry_exists",
+      "sort_key": "n/a",
+      "dedupe_key": "n/a",
+      "visible_timestamp_semantic": "none",
+      "required_fields": [
+        "logo",
+        "primary_nav",
+        "search",
+        "theme_toggle"
+      ],
+      "optional_fields": [
+        "schedule_link",
+        "taxonomy_panel",
+        "breadcrumb"
+      ],
+      "freshness_sla": "n/a",
+      "max_stale": "n/a",
+      "snapshot_revision": "route_registry",
+      "display_policy_by_state": {
+        "normal": "populated",
+        "empty": "hidden",
+        "missing_required": "blocked",
+        "missing_optional": "hidden",
+        "stale": "populated",
+        "error": "hidden"
+      },
+      "desktop_geometry": {
+        "height_px": [
+          64,
+          72
+        ],
+        "logo_width_px": [
+          120,
+          155
+        ],
+        "search_box_px": [
+          280,
+          360,
+          42,
+          46
+        ]
+      },
+      "tablet_geometry": {
+        "height_px": [
+          56,
+          64
+        ]
+      },
+      "mobile_geometry": {
+        "height_px": [
+          56,
+          64
+        ],
+        "drawer_max_px": "min(360,100vw-24)"
+      },
+      "interactions": [
+        "active_route",
+        "search",
+        "theme_persistence",
+        "keyboard_focus",
+        "mobile_drawer",
+        "taxonomy_disclosure"
+      ],
+      "cta_route": null,
+      "seo_contract": {
+        "mutates_indexability": false
+      },
+      "tests": [
+        "tests/unit/test_animedia_parity03_b01.py"
+      ],
+      "evidence_paths": [
+        "03-blocks/BLOCK_B01.md"
+      ],
+      "remaining_data_gap": ""
+    },
+    {
+      "block_id": "B02",
+      "routes": [
+        "/"
+      ],
+      "intent": "Weekly popular poster shelf + telegram/ad collapse",
+      "ownership": "core_data",
+      "versioned_contract_id": "ANIMEDIA_BLOCK_SPEC_V1/B02",
+      "reference_evidence": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/home/",
+      "entity_or_event_type": "weekly_popular_snapshot",
+      "source_path": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/00-contract/DATA_PROVENANCE_INVENTORY.json",
+      "provenance": {
+        "requires": "approved WeeklyPopularSnapshot §5.6"
+      },
+      "eligibility": "approved_snapshot_and_ge_4_valid_items",
+      "sort_key": "snapshot_order",
+      "dedupe_key": "title_id",
+      "visible_timestamp_semantic": "none",
+      "required_fields": [
+        "ordered_title_ids",
+        "week_id",
+        "algorithm_version",
+        "snapshot_revision",
+        "digest"
+      ],
+      "optional_fields": [
+        "labeled_rating",
+        "type"
+      ],
+      "freshness_sla": "weekly",
+      "max_stale": "until_next_week_revision",
+      "snapshot_revision": "pending_approved",
+      "display_policy_by_state": {
+        "normal": "populated",
+        "empty": "hidden",
+        "missing_required": "blocked",
+        "missing_optional": "hidden",
+        "stale": "last_good_with_badge",
+        "error": "hidden"
+      },
+      "desktop_geometry": {
+        "cols_ge1600": 10,
+        "cols_1280_1599": 8,
+        "gap_px": 16,
+        "poster_ratio": "2:3",
+        "caption_px": [
+          44,
+          52
+        ]
+      },
+      "tablet_geometry": {
+        "cols_1024_1279": 6,
+        "cols_768_1023": 4,
+        "gap_px": 16
+      },
+      "mobile_geometry": {
+        "rail": true,
+        "card_width_px": 112,
+        "gap_px": 12
+      },
+      "interactions": [
+        "arrows",
+        "swipe",
+        "keyboard"
+      ],
+      "cta_route": "/title/{slug}/",
+      "seo_contract": {
+        "mutates_indexability": false
+      },
+      "tests": [
+        "tests/unit/test_animedia_parity03_b02.py"
+      ],
+      "evidence_paths": [
+        "03-blocks/BLOCK_B02.md"
+      ],
+      "remaining_data_gap": "POPULAR_DATA_GAP until approved weekly snapshot"
+    },
+    {
+      "block_id": "B03",
+      "routes": [
+        "/"
+      ],
+      "intent": "True provider_became_playable episode feed or compact empty",
+      "ownership": "core_data",
+      "versioned_contract_id": "ANIMEDIA_BLOCK_SPEC_V1/B03",
+      "reference_evidence": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/home/",
+      "entity_or_event_type": "provider_became_playable",
+      "source_path": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/00-contract/DATA_PROVENANCE_INVENTORY.json",
+      "provenance": {
+        "event_type": "provider_became_playable",
+        "timestamp": "provider_available_at",
+        "envelope_required": true
+      },
+      "eligibility": "TRUE_PROVIDER_PLAYABLE_EVENT_COUNT_gt_0_and_current_availability",
+      "sort_key": "(provider_available_at DESC, event_id DESC)",
+      "dedupe_key": "(site_id,title_id,season,episode)",
+      "visible_timestamp_semantic": "provider_available_at",
+      "required_fields": [
+        "event_id",
+        "event_type",
+        "title_id",
+        "season",
+        "episode",
+        "episode_route",
+        "provider_available_at",
+        "provenance",
+        "current_availability_revision"
+      ],
+      "optional_fields": [
+        "thumbnail"
+      ],
+      "freshness_sla": "near_realtime_after_core_feed",
+      "max_stale": "policy_versioned",
+      "snapshot_revision": "pending_ledger",
+      "display_policy_by_state": {
+        "normal": "populated",
+        "empty": "explicit_empty",
+        "missing_required": "explicit_empty",
+        "missing_optional": "hidden",
+        "stale": "blocked",
+        "error": "explicit_error"
+      },
+      "desktop_geometry": {
+        "cols": 2,
+        "rows": 5,
+        "row_px": [
+          82,
+          94
+        ],
+        "thumb_px": [
+          64,
+          80,
+          82,
+          94
+        ],
+        "explicit_empty_max_px": 96
+      },
+      "tablet_geometry": {
+        "cols": 2,
+        "row_px": [
+          82,
+          94
+        ],
+        "explicit_empty_max_px": 96
+      },
+      "mobile_geometry": {
+        "cols": 1,
+        "row_px": [
+          76,
+          84
+        ],
+        "explicit_empty_max_px": 96
+      },
+      "interactions": [
+        "episode_route_click"
+      ],
+      "cta_route": "/title/{slug}/season-{N}/episode-{M}/",
+      "seo_contract": {
+        "mutates_indexability": false
+      },
+      "tests": [
+        "tests/unit/test_animedia_parity03_b03.py"
+      ],
+      "evidence_paths": [
+        "03-blocks/BLOCK_B03.md"
+      ],
+      "remaining_data_gap": "TRUE_PROVIDER_PLAYABLE_EVENT_COUNT=0"
+    },
+    {
+      "block_id": "B04",
+      "routes": [
+        "/",
+        "/schedule/"
+      ],
+      "intent": "Schedule / today air feed or honest empty",
+      "ownership": "core_data",
+      "versioned_contract_id": "ANIMEDIA_BLOCK_SPEC_V1/B04",
+      "reference_evidence": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/home/",
+      "entity_or_event_type": "episode_scheduled",
+      "source_path": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/00-contract/DATA_PROVENANCE_INVENTORY.json",
+      "provenance": {
+        "feed": "episode_air_feed",
+        "timestamp": "episode_scheduled_at"
+      },
+      "eligibility": "episode_air_feed_present",
+      "sort_key": "(episode_scheduled_at ASC, event_id ASC)",
+      "dedupe_key": "(site_id,title_id,season,episode,scheduled_at)",
+      "visible_timestamp_semantic": "episode_scheduled_at",
+      "required_fields": [
+        "title",
+        "time",
+        "timezone",
+        "season",
+        "episode",
+        "status"
+      ],
+      "optional_fields": [
+        "approximate_marker"
+      ],
+      "freshness_sla": "daily",
+      "max_stale": "policy_versioned",
+      "snapshot_revision": "pending_feed",
+      "display_policy_by_state": {
+        "normal": "populated",
+        "empty": "hidden",
+        "missing_required": "hidden",
+        "missing_optional": "hidden",
+        "stale": "blocked",
+        "error": "hidden"
+      },
+      "desktop_geometry": {
+        "day_tabs_px": [
+          44,
+          48
+        ],
+        "cols": 2,
+        "row_px": [
+          82,
+          104
+        ],
+        "home_missing": "hidden",
+        "route_empty_max_px": 260
+      },
+      "tablet_geometry": {
+        "cols": 2,
+        "row_px": [
+          82,
+          104
+        ]
+      },
+      "mobile_geometry": {
+        "cols": 1,
+        "row_px": [
+          82,
+          104
+        ],
+        "route_empty_max_px": 260
+      },
+      "interactions": [
+        "day_tabs"
+      ],
+      "cta_route": "/schedule/",
+      "seo_contract": {
+        "mutates_indexability": false
+      },
+      "tests": [
+        "tests/unit/test_animedia_parity03_b04.py"
+      ],
+      "evidence_paths": [
+        "03-blocks/BLOCK_B04.md"
+      ],
+      "remaining_data_gap": "episode_air_feed missing"
+    },
+    {
+      "block_id": "B05",
+      "routes": [
+        "/",
+        "/new/"
+      ],
+      "intent": "Catalog additions shelf with verified catalog_added_at semantics",
+      "ownership": "core_data",
+      "versioned_contract_id": "ANIMEDIA_BLOCK_SPEC_V1/B05",
+      "reference_evidence": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/home/",
+      "entity_or_event_type": "catalog_added",
+      "source_path": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/00-contract/DATA_PROVENANCE_INVENTORY.json",
+      "provenance": {
+        "timestamp": "catalog_added_at",
+        "forbids": [
+          "published_at",
+          "build_at",
+          "mtime"
+        ]
+      },
+      "eligibility": "verified_catalog_added_ledger",
+      "sort_key": "(catalog_added_at DESC, event_id DESC)",
+      "dedupe_key": "(site_id,title_id,event_id)",
+      "visible_timestamp_semantic": "catalog_added_at",
+      "required_fields": [
+        "title_id",
+        "poster",
+        "title",
+        "catalog_added_at",
+        "event_id",
+        "provenance"
+      ],
+      "optional_fields": [
+        "type",
+        "year",
+        "available_episode_count"
+      ],
+      "freshness_sla": "ledger_bound",
+      "max_stale": "immutable_event",
+      "snapshot_revision": "pending_ledger",
+      "display_policy_by_state": {
+        "normal": "populated",
+        "empty": "hidden",
+        "missing_required": "hidden",
+        "missing_optional": "hidden",
+        "stale": "blocked",
+        "error": "hidden"
+      },
+      "desktop_geometry": {
+        "cols_ge1600": 8,
+        "cols_1280_1599": 6,
+        "gap_px": 16,
+        "poster_ratio": "2:3",
+        "caption_px": [
+          72,
+          92
+        ]
+      },
+      "tablet_geometry": {
+        "cols_1024_1279": 5,
+        "cols_768_1023": 4,
+        "gap_px": 16
+      },
+      "mobile_geometry": {
+        "cols": 2,
+        "gap_px": 12
+      },
+      "interactions": [
+        "title_click"
+      ],
+      "cta_route": "/title/{slug}/",
+      "seo_contract": {
+        "mutates_indexability": false
+      },
+      "tests": [
+        "tests/unit/test_animedia_parity03_b05.py"
+      ],
+      "evidence_paths": [
+        "03-blocks/BLOCK_B05.md"
+      ],
+      "remaining_data_gap": "catalog_added ledger missing; published_at AMBIGUOUS; CATALOG_FRESHNESS_DATA_GAP=1"
+    },
+    {
+      "block_id": "B06",
+      "routes": [
+        "/",
+        "/catalog/"
+      ],
+      "intent": "Compact filters and remaining home modules (top/collections/editorial/comments/seo)",
+      "ownership": "template",
+      "versioned_contract_id": "ANIMEDIA_BLOCK_SPEC_V1/B06",
+      "reference_evidence": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/home/",
+      "entity_or_event_type": "page_ui",
+      "source_path": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/00-contract/DATA_PROVENANCE_INVENTORY.json",
+      "provenance": {
+        "filters": "catalog_facets",
+        "top100": "TopSnapshot",
+        "editorial": "approved_materials"
+      },
+      "eligibility": "normalized_facet_data",
+      "sort_key": "n/a",
+      "dedupe_key": "n/a",
+      "visible_timestamp_semantic": "editorial_published_at_when_present",
+      "required_fields": [
+        "type",
+        "genre",
+        "year",
+        "status",
+        "sort",
+        "reset"
+      ],
+      "optional_fields": [
+        "country",
+        "top100_shelf",
+        "collections_shelf",
+        "editorial",
+        "comments",
+        "seo_about"
+      ],
+      "freshness_sla": "facet_oracle",
+      "max_stale": "n/a",
+      "snapshot_revision": "catalog_snapshot_revision",
+      "display_policy_by_state": {
+        "normal": "populated",
+        "empty": "populated",
+        "missing_required": "blocked",
+        "missing_optional": "hidden",
+        "stale": "populated",
+        "error": "explicit_error"
+      },
+      "desktop_geometry": {
+        "filter_bar_px": [
+          48,
+          56
+        ],
+        "seo_text_width_px": [
+          900,
+          1000
+        ]
+      },
+      "tablet_geometry": {
+        "filter_bar_max_rows": 2
+      },
+      "mobile_geometry": {
+        "filters_button": true,
+        "bottom_sheet": true
+      },
+      "interactions": [
+        "facet_query",
+        "reset",
+        "page_to_1",
+        "back_forward"
+      ],
+      "cta_route": "/catalog/",
+      "seo_contract": {
+        "mutates_indexability": false,
+        "seo_about_after_functional_modules": true
+      },
+      "tests": [
+        "tests/unit/test_animedia_parity03_b06.py"
+      ],
+      "evidence_paths": [
+        "03-blocks/BLOCK_B06.md"
+      ],
+      "remaining_data_gap": "TOP100_DATA_GAP if TopSnapshot missing; editorial/comments absent without backend"
+    },
+    {
+      "block_id": "B07",
+      "routes": [
+        "/title/{slug}/"
+      ],
+      "intent": "Title hero passport, description, ratings",
+      "ownership": "template",
+      "versioned_contract_id": "ANIMEDIA_BLOCK_SPEC_V1/B07",
+      "reference_evidence": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/title/",
+      "entity_or_event_type": "title",
+      "source_path": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/00-contract/DATA_PROVENANCE_INVENTORY.json",
+      "provenance": {
+        "description": "verified_or_true_gap",
+        "ratings": "per_source_fact"
+      },
+      "eligibility": "canonical_title_record",
+      "sort_key": "n/a",
+      "dedupe_key": "title_id",
+      "visible_timestamp_semantic": "none_as_content_date",
+      "required_fields": [
+        "canonical_id",
+        "name",
+        "type",
+        "poster_state"
+      ],
+      "optional_fields": [
+        "original_title",
+        "genres",
+        "year",
+        "country",
+        "status",
+        "studio",
+        "season",
+        "availability_counts",
+        "source_ratings",
+        "description"
+      ],
+      "freshness_sla": "title_record",
+      "max_stale": "n/a",
+      "snapshot_revision": "title_record_revision",
+      "display_policy_by_state": {
+        "normal": "populated",
+        "empty": "explicit_field_placeholder",
+        "missing_required": "blocked",
+        "missing_optional": "hidden",
+        "stale": "populated",
+        "error": "explicit_error"
+      },
+      "desktop_geometry": {
+        "grid": "240px minmax(0,1fr) 150-180px",
+        "gap_px": [
+          28,
+          32
+        ],
+        "padding_px": [
+          28,
+          32
+        ],
+        "poster_px": [
+          240,
+          360
+        ],
+        "height_typical_px": [
+          392,
+          480
+        ]
+      },
+      "tablet_geometry": {
+        "poster_px": [
+          180,
+          270
+        ]
+      },
+      "mobile_geometry": {
+        "poster_px": [
+          112,
+          168
+        ]
+      },
+      "interactions": [
+        "description_expand",
+        "cta"
+      ],
+      "cta_route": "#watch",
+      "seo_contract": {
+        "mutates_indexability": false,
+        "placeholder_not_in_meta": true
+      },
+      "tests": [
+        "tests/unit/test_animedia_parity03_b07.py"
+      ],
+      "evidence_paths": [
+        "03-blocks/BLOCK_B07.md"
+      ],
+      "remaining_data_gap": ""
+    },
+    {
+      "block_id": "B08",
+      "routes": [
+        "/title/{slug}/"
+      ],
+      "intent": "Watch heading, status, full-bleed player, seasons/episodes",
+      "ownership": "player",
+      "versioned_contract_id": "ANIMEDIA_BLOCK_SPEC_V1/B08",
+      "reference_evidence": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/title/",
+      "entity_or_event_type": "playable_episode",
+      "source_path": "versioned default-episode policy (Core/Player)",
+      "provenance": {
+        "player_ready": "provider_confirmation_only"
+      },
+      "eligibility": "versioned_default_episode_policy",
+      "sort_key": "n/a",
+      "dedupe_key": "player_instance",
+      "visible_timestamp_semantic": "none",
+      "required_fields": [
+        "player_shell",
+        "status"
+      ],
+      "optional_fields": [
+        "season_episode_nav"
+      ],
+      "freshness_sla": "provider_bound",
+      "max_stale": "n/a",
+      "snapshot_revision": "availability_revision",
+      "display_policy_by_state": {
+        "normal": "populated",
+        "empty": "explicit_error",
+        "missing_required": "blocked",
+        "missing_optional": "hidden",
+        "stale": "populated",
+        "error": "explicit_error"
+      },
+      "desktop_geometry": {
+        "hero_to_heading_px": [
+          32,
+          48
+        ],
+        "heading_to_shell_px": [
+          16,
+          24
+        ],
+        "hero_to_player_max_px": 120,
+        "aspect": "16:9",
+        "toolbar_px": [
+          52,
+          60
+        ],
+        "fill_ratio_min": 0.98
+      },
+      "tablet_geometry": {
+        "hero_to_player_max_px": 96
+      },
+      "mobile_geometry": {
+        "hero_to_player_max_px": 80
+      },
+      "interactions": [
+        "play",
+        "season_select",
+        "episode_select",
+        "prev_next"
+      ],
+      "cta_route": null,
+      "seo_contract": {
+        "mutates_indexability": false
+      },
+      "tests": [
+        "tests/unit/test_animedia_parity03_b08.py"
+      ],
+      "evidence_paths": [
+        "03-blocks/BLOCK_B08.md"
+      ],
+      "remaining_data_gap": "BLOCKED_CORE_DATA if default-episode policy absent"
+    },
+    {
+      "block_id": "B09",
+      "routes": [
+        "/title/{slug}/season-{N}/episode-{M}/"
+      ],
+      "intent": "Exact episode identity, player, navigation, parent context",
+      "ownership": "player",
+      "versioned_contract_id": "ANIMEDIA_BLOCK_SPEC_V1/B09",
+      "reference_evidence": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/title/",
+      "entity_or_event_type": "exact_episode",
+      "source_path": "episode source record",
+      "provenance": {
+        "episode_fields": "episode_source_only"
+      },
+      "eligibility": "exact_route_exists",
+      "sort_key": "n/a",
+      "dedupe_key": "(title_id,season,episode)",
+      "visible_timestamp_semantic": "episode_released_at_when_proven",
+      "required_fields": [
+        "h1",
+        "title_link",
+        "player"
+      ],
+      "optional_fields": [
+        "official_episode_name",
+        "duration",
+        "available_episode_count",
+        "released_episode_count",
+        "planned_episode_total"
+      ],
+      "freshness_sla": "episode_record",
+      "max_stale": "n/a",
+      "snapshot_revision": "availability_revision",
+      "display_policy_by_state": {
+        "normal": "populated",
+        "empty": "explicit_error",
+        "missing_required": "blocked",
+        "missing_optional": "hidden",
+        "stale": "populated",
+        "error": "explicit_error"
+      },
+      "desktop_geometry": {
+        "identity_px": [
+          88,
+          128
+        ],
+        "identity_to_shell_max_px": 96,
+        "heading_to_shell_px": [
+          16,
+          24
+        ]
+      },
+      "tablet_geometry": {
+        "identity_px": [
+          88,
+          128
+        ]
+      },
+      "mobile_geometry": {
+        "identity_px": [
+          92,
+          150
+        ],
+        "parent_poster_px": [
+          88,
+          132
+        ]
+      },
+      "interactions": [
+        "prev_next",
+        "season_list",
+        "reload_preserve"
+      ],
+      "cta_route": "/title/{slug}/",
+      "seo_contract": {
+        "mutates_indexability": false,
+        "invalid_episode_http": 404
+      },
+      "tests": [
+        "tests/unit/test_animedia_parity03_b09.py"
+      ],
+      "evidence_paths": [
+        "03-blocks/BLOCK_B09.md"
+      ],
+      "remaining_data_gap": ""
+    },
+    {
+      "block_id": "B10",
+      "routes": [
+        "/title/{slug}/"
+      ],
+      "intent": "Recommendations from approved RecommendationSnapshot only",
+      "ownership": "core_data",
+      "versioned_contract_id": "ANIMEDIA_BLOCK_SPEC_V1/B10",
+      "reference_evidence": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/title/",
+      "entity_or_event_type": "recommendation_snapshot",
+      "source_path": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/00-contract/DATA_PROVENANCE_INVENTORY.json",
+      "provenance": {
+        "requires": "RecommendationSnapshot §5.7"
+      },
+      "eligibility": "approved_snapshot_and_ge_4_valid_candidates",
+      "sort_key": "snapshot_order",
+      "dedupe_key": "title_id",
+      "visible_timestamp_semantic": "none",
+      "required_fields": [
+        "ordered_title_ids",
+        "algorithm_version",
+        "digest"
+      ],
+      "optional_fields": [
+        "reason_codes"
+      ],
+      "freshness_sla": "snapshot_valid_window",
+      "max_stale": "valid_to",
+      "snapshot_revision": "pending_approved",
+      "display_policy_by_state": {
+        "normal": "populated",
+        "empty": "hidden",
+        "missing_required": "hidden",
+        "missing_optional": "hidden",
+        "stale": "last_good_with_badge",
+        "error": "hidden"
+      },
+      "desktop_geometry": {
+        "cols": 6,
+        "max_items": 12,
+        "poster_ratio": "2:3",
+        "caption_px": [
+          56,
+          72
+        ]
+      },
+      "tablet_geometry": {
+        "cols": 4
+      },
+      "mobile_geometry": {
+        "cols": 2
+      },
+      "interactions": [
+        "title_click"
+      ],
+      "cta_route": "/title/{slug}/",
+      "seo_contract": {
+        "mutates_indexability": false
+      },
+      "tests": [
+        "tests/unit/test_animedia_parity03_b10.py"
+      ],
+      "evidence_paths": [
+        "03-blocks/BLOCK_B10.md"
+      ],
+      "remaining_data_gap": "RECOMMENDATIONS_DATA_GAP until RecommendationSnapshot"
+    },
+    {
+      "block_id": "B11",
+      "routes": [
+        "/catalog/",
+        "/catalog/{facet}/"
+      ],
+      "intent": "Catalog H1/count, compact filters, grid, pagination, taxonomy pages",
+      "ownership": "template",
+      "versioned_contract_id": "ANIMEDIA_BLOCK_SPEC_V1/B11",
+      "reference_evidence": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/",
+      "entity_or_event_type": "catalog_page",
+      "source_path": "catalog_snapshot + route registry",
+      "provenance": {
+        "count": "backend_oracle",
+        "pagination": "catalog_snapshot_revision+query_digest"
+      },
+      "eligibility": "catalog_snapshot_present",
+      "sort_key": "approved_query_sort",
+      "dedupe_key": "canonical_title_id",
+      "visible_timestamp_semantic": "none_unless_proven_field",
+      "required_fields": [
+        "h1",
+        "count",
+        "grid",
+        "pagination"
+      ],
+      "optional_fields": [
+        "intro_fact_pack",
+        "labeled_rating",
+        "episode_counts"
+      ],
+      "freshness_sla": "catalog_snapshot",
+      "max_stale": "revision_bound",
+      "snapshot_revision": "catalog_snapshot_revision",
+      "display_policy_by_state": {
+        "normal": "populated",
+        "empty": "explicit_empty",
+        "missing_required": "blocked",
+        "missing_optional": "hidden",
+        "stale": "populated",
+        "error": "page_error"
+      },
+      "desktop_geometry": {
+        "header_px": [
+          88,
+          140
+        ],
+        "filter_closed_max_px": 112,
+        "cols_1440": 6,
+        "poster_px": [
+          180,
+          205,
+          270,
+          308
+        ],
+        "caption_px": [
+          72,
+          104
+        ]
+      },
+      "tablet_geometry": {
+        "cols_768": 4
+      },
+      "mobile_geometry": {
+        "cols_390": 2
+      },
+      "interactions": [
+        "filters",
+        "pagination",
+        "back_forward"
+      ],
+      "cta_route": "/title/{slug}/",
+      "seo_contract": {
+        "mutates_indexability": false,
+        "intro_from_approved_fact_pack_only": true
+      },
+      "tests": [
+        "tests/unit/test_animedia_parity03_b11.py"
+      ],
+      "evidence_paths": [
+        "03-blocks/BLOCK_B11.md"
+      ],
+      "remaining_data_gap": ""
+    },
+    {
+      "block_id": "B12",
+      "routes": [
+        "/new/",
+        "/search/"
+      ],
+      "intent": "/new/ catalog-added ledger pages and search form/results; Top-100 route only if registry confirms",
+      "ownership": "template",
+      "versioned_contract_id": "ANIMEDIA_BLOCK_SPEC_V1/B12",
+      "reference_evidence": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/",
+      "entity_or_event_type": "catalog_added_page_and_search",
+      "source_path": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/00-contract/DATA_PROVENANCE_INVENTORY.json",
+      "provenance": {
+        "new": "catalog_added_at",
+        "search_ranking": "Search_API_only_no_template_mutation"
+      },
+      "eligibility": "ledger_for_new_and_search_api_for_results",
+      "sort_key": "/new/:(catalog_added_at,event_id) DESC; /search/:(relevance_score,canonical_title_id)",
+      "dedupe_key": "event_id_or_title_id",
+      "visible_timestamp_semantic": "catalog_added_at_on_new",
+      "required_fields": [
+        "h1",
+        "results_or_empty_state"
+      ],
+      "optional_fields": [
+        "top100_standalone"
+      ],
+      "freshness_sla": "ledger_or_search_index_revision",
+      "max_stale": "revision_bound",
+      "snapshot_revision": "ledger_revision_or_search_index_revision",
+      "display_policy_by_state": {
+        "normal": "populated",
+        "empty": "explicit_empty",
+        "missing_required": "hidden",
+        "missing_optional": "hidden",
+        "stale": "blocked",
+        "error": "page_error"
+      },
+      "desktop_geometry": {
+        "search_block_px": [
+          130,
+          160
+        ],
+        "input_px": [
+          48,
+          52
+        ],
+        "new_page_size": 10,
+        "search_page_size": 24
+      },
+      "tablet_geometry": {
+        "search_block_px": [
+          130,
+          160
+        ]
+      },
+      "mobile_geometry": {
+        "search_block_px": [
+          130,
+          160
+        ]
+      },
+      "interactions": [
+        "submit",
+        "clear",
+        "pagination"
+      ],
+      "cta_route": "/title/{slug}/",
+      "seo_contract": {
+        "mutates_indexability": false,
+        "canonical_param_order": {
+          "new": [
+            "page"
+          ],
+          "search": [
+            "q",
+            "page"
+          ]
+        }
+      },
+      "tests": [
+        "tests/unit/test_animedia_parity03_b12.py"
+      ],
+      "evidence_paths": [
+        "03-blocks/BLOCK_B12.md"
+      ],
+      "remaining_data_gap": "catalog_added ledger missing for /new/; TOP100_ROUTE_DATA_GAP if route unconfirmed"
+    },
+    {
+      "block_id": "B13",
+      "routes": [
+        "/collections/",
+        "/collections/{slug}/",
+        "/schedule/"
+      ],
+      "intent": "Collections list/detail and schedule route honest empty",
+      "ownership": "template",
+      "versioned_contract_id": "ANIMEDIA_BLOCK_SPEC_V1/B13",
+      "reference_evidence": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/collections/",
+      "entity_or_event_type": "collection_and_schedule",
+      "source_path": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/00-contract/DATA_PROVENANCE_INVENTORY.json",
+      "provenance": {
+        "collection_date": "collection_revision_published_at",
+        "schedule": "episode_air_feed"
+      },
+      "eligibility": "collections_snapshot_or_schedule_feed",
+      "sort_key": "collections:(sort_value,collection_id)",
+      "dedupe_key": "collection_id_or_title_id",
+      "visible_timestamp_semantic": "collection_revision_published_at",
+      "required_fields": [
+        "h1",
+        "count"
+      ],
+      "optional_fields": [
+        "summary",
+        "cover",
+        "schedule_events"
+      ],
+      "freshness_sla": "collections_snapshot_revision",
+      "max_stale": "revision_bound",
+      "snapshot_revision": "collections_snapshot_revision",
+      "display_policy_by_state": {
+        "normal": "populated",
+        "empty": "explicit_empty",
+        "missing_required": "blocked",
+        "missing_optional": "hidden",
+        "stale": "populated",
+        "error": "page_error"
+      },
+      "desktop_geometry": {
+        "list_cols": 3,
+        "cover_ratio": "16:9",
+        "detail_hero_px": [
+          240,
+          360
+        ],
+        "schedule_empty_max_px": 260,
+        "page_size_list": 12,
+        "page_size_detail": 24
+      },
+      "tablet_geometry": {
+        "list_cols": 2
+      },
+      "mobile_geometry": {
+        "list_cols": 1
+      },
+      "interactions": [
+        "sort",
+        "category",
+        "pagination"
+      ],
+      "cta_route": "/collections/{slug}/",
+      "seo_contract": {
+        "mutates_indexability": false
+      },
+      "tests": [
+        "tests/unit/test_animedia_parity03_b13.py"
+      ],
+      "evidence_paths": [
+        "03-blocks/BLOCK_B13.md"
+      ],
+      "remaining_data_gap": "episode_air_feed missing for /schedule/"
+    },
+    {
+      "block_id": "B14",
+      "routes": [
+        "*"
+      ],
+      "intent": "Footer and system empty/error/404 states",
+      "ownership": "template",
+      "versioned_contract_id": "ANIMEDIA_BLOCK_SPEC_V1/B14",
+      "reference_evidence": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/",
+      "entity_or_event_type": "page_ui",
+      "source_path": "owner values + route registry",
+      "provenance": {
+        "contacts": "owner_approved_only"
+      },
+      "eligibility": "real_owner_links_only",
+      "sort_key": "n/a",
+      "dedupe_key": "n/a",
+      "visible_timestamp_semantic": "none",
+      "required_fields": [
+        "brand_or_sections"
+      ],
+      "optional_fields": [
+        "contact_email",
+        "telegram_url",
+        "privacy_url",
+        "terms_url"
+      ],
+      "freshness_sla": "n/a",
+      "max_stale": "n/a",
+      "snapshot_revision": "owner_values_revision",
+      "display_policy_by_state": {
+        "normal": "populated",
+        "empty": "hidden",
+        "missing_required": "hidden",
+        "missing_optional": "hidden",
+        "stale": "populated",
+        "error": "hidden"
+      },
+      "desktop_geometry": {
+        "cols": 4,
+        "height_px": [
+          220,
+          300
+        ]
+      },
+      "tablet_geometry": {
+        "cols": 2
+      },
+      "mobile_geometry": {
+        "accordion_or_stack": true
+      },
+      "interactions": [
+        "accordion"
+      ],
+      "cta_route": null,
+      "seo_contract": {
+        "mutates_indexability": false,
+        "http_404_policy_owned_by": "seo_core"
+      },
+      "tests": [
+        "tests/unit/test_animedia_parity03_b14.py"
+      ],
+      "evidence_paths": [
+        "03-blocks/BLOCK_B14.md"
+      ],
+      "remaining_data_gap": "owner contact/legal URLs may be incomplete (NEEDS_OWNER_VALUES)"
+    },
+    {
+      "block_id": "B15",
+      "routes": [
+        "*"
+      ],
+      "intent": "Full responsive/a11y/cross-route local matrix",
+      "ownership": "template",
+      "versioned_contract_id": "ANIMEDIA_BLOCK_SPEC_V1/B15",
+      "reference_evidence": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/",
+      "entity_or_event_type": "control_gate",
+      "source_path": "manifests/LOCAL_FIXTURE_MANIFEST.json",
+      "provenance": {
+        "oracles": "DOM_geometry_JSON"
+      },
+      "eligibility": "all_prior_blocks_pass_local",
+      "sort_key": "n/a",
+      "dedupe_key": "n/a",
+      "visible_timestamp_semantic": "none",
+      "required_fields": [
+        "LOCAL_STABLE_RUNS>=2"
+      ],
+      "optional_fields": [],
+      "freshness_sla": "n/a",
+      "max_stale": "n/a",
+      "snapshot_revision": "local_matrix",
+      "display_policy_by_state": {
+        "normal": "populated",
+        "empty": "hidden",
+        "missing_required": "blocked",
+        "missing_optional": "hidden",
+        "stale": "populated",
+        "error": "blocked"
+      },
+      "desktop_geometry": {
+        "viewports": [
+          "1920",
+          "1440",
+          "1280"
+        ]
+      },
+      "tablet_geometry": {
+        "viewports": [
+          "1024",
+          "768"
+        ]
+      },
+      "mobile_geometry": {
+        "viewports": [
+          "390",
+          "mobile_landscape"
+        ]
+      },
+      "interactions": [
+        "keyboard",
+        "focus_trap",
+        "zoom_200",
+        "reduced_motion"
+      ],
+      "cta_route": null,
+      "seo_contract": {
+        "mutates_indexability": false
+      },
+      "tests": [
+        "tests/unit/test_animedia_parity03_b15.py"
+      ],
+      "evidence_paths": [
+        "03-blocks/BLOCK_B15.md"
+      ],
+      "remaining_data_gap": ""
+    },
+    {
+      "block_id": "B16",
+      "routes": [
+        "deploy"
+      ],
+      "intent": "Scoped canary deploy, after-live matrix, rollback gate, final report",
+      "ownership": "template",
+      "versioned_contract_id": "ANIMEDIA_BLOCK_SPEC_V1/B16",
+      "reference_evidence": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/01-reference-baseline/",
+      "entity_or_event_type": "control_gate",
+      "source_path": "manifests/LIVE_ENTITY_MANIFEST.json",
+      "provenance": {
+        "live_cases": "production_entities_only"
+      },
+      "eligibility": "B00_B15_PASS_LOCAL_PENDING_LIVE",
+      "sort_key": "n/a",
+      "dedupe_key": "n/a",
+      "visible_timestamp_semantic": "none",
+      "required_fields": [
+        "LIVE_STABLE_RUNS_ICU>=2",
+        "LIVE_STABLE_RUNS_SPACE>=2",
+        "ROLLBACK_RESTORE_DRILL_PASS"
+      ],
+      "optional_fields": [],
+      "freshness_sla": "n/a",
+      "max_stale": "n/a",
+      "snapshot_revision": "deploy_artifact",
+      "display_policy_by_state": {
+        "normal": "populated",
+        "empty": "hidden",
+        "missing_required": "blocked",
+        "missing_optional": "hidden",
+        "stale": "blocked",
+        "error": "blocked"
+      },
+      "desktop_geometry": {
+        "role": "control",
+        "no_dom": true
+      },
+      "tablet_geometry": {
+        "role": "control",
+        "no_dom": true
+      },
+      "mobile_geometry": {
+        "role": "control",
+        "no_dom": true
+      },
+      "interactions": [
+        "canary_then_second_domain",
+        "scoped_rollback_on_hard_gate"
+      ],
+      "cta_route": null,
+      "seo_contract": {
+        "mutates_indexability": false,
+        "indexability_before_after_must_match": true
+      },
+      "tests": [
+        "tests/unit/test_animedia_parity03_b16.py"
+      ],
+      "evidence_paths": [
+        "03-blocks/BLOCK_B16.md",
+        "FINAL.md"
+      ],
+      "remaining_data_gap": ""
+    }
+  ]
+}

@@ -1,0 +1,1437 @@
+{
+  "schema_version": 1,
+  "kind": "LIVE_ENTITY_MANIFEST",
+  "frozen_at": "2026-09-20T11:17:59Z",
+  "live_test_fixture_mutations": 0,
+  "case_count": 84,
+  "cases": [
+    {
+      "case_id": "V0001",
+      "domain": "animedia.icu",
+      "route": "/",
+      "route_name": "home",
+      "entity_or_fixture": null,
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/home/d1440/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/home/d1440/light/dom.json"
+    },
+    {
+      "case_id": "V0002",
+      "domain": "animedia.icu",
+      "route": "/",
+      "route_name": "home",
+      "entity_or_fixture": null,
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/home/t768/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/home/t768/light/dom.json"
+    },
+    {
+      "case_id": "V0003",
+      "domain": "animedia.icu",
+      "route": "/",
+      "route_name": "home",
+      "entity_or_fixture": null,
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/home/m390/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/home/m390/light/dom.json"
+    },
+    {
+      "case_id": "V0004",
+      "domain": "animedia.icu",
+      "route": "/title/nelyud-film-2-stolknovenie/",
+      "route_name": "title_problem",
+      "entity_or_fixture": "nelyud-film-2-stolknovenie",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/title_problem/d1440/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/title_problem/d1440/light/dom.json"
+    },
+    {
+      "case_id": "V0005",
+      "domain": "animedia.icu",
+      "route": "/title/nelyud-film-2-stolknovenie/",
+      "route_name": "title_problem",
+      "entity_or_fixture": "nelyud-film-2-stolknovenie",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/title_problem/t768/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/title_problem/t768/light/dom.json"
+    },
+    {
+      "case_id": "V0006",
+      "domain": "animedia.icu",
+      "route": "/title/nelyud-film-2-stolknovenie/",
+      "route_name": "title_problem",
+      "entity_or_fixture": "nelyud-film-2-stolknovenie",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/title_problem/m390/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/title_problem/m390/light/dom.json"
+    },
+    {
+      "case_id": "V0007",
+      "domain": "animedia.icu",
+      "route": "/title/master-lda-i-plameni-2/",
+      "route_name": "title_no_desc",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "true_description_gap",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/title_no_desc/d1440/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/title_no_desc/d1440/light/dom.json"
+    },
+    {
+      "case_id": "V0008",
+      "domain": "animedia.icu",
+      "route": "/title/master-lda-i-plameni-2/",
+      "route_name": "title_no_desc",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "true_description_gap",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/title_no_desc/t768/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/title_no_desc/t768/light/dom.json"
+    },
+    {
+      "case_id": "V0009",
+      "domain": "animedia.icu",
+      "route": "/title/master-lda-i-plameni-2/",
+      "route_name": "title_no_desc",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "true_description_gap",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/title_no_desc/m390/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/title_no_desc/m390/light/dom.json"
+    },
+    {
+      "case_id": "V0010",
+      "domain": "animedia.icu",
+      "route": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "route_name": "episode_problem",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/episode_problem/d1440/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/episode_problem/d1440/light/dom.json"
+    },
+    {
+      "case_id": "V0011",
+      "domain": "animedia.icu",
+      "route": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "route_name": "episode_problem",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/episode_problem/t768/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/episode_problem/t768/light/dom.json"
+    },
+    {
+      "case_id": "V0012",
+      "domain": "animedia.icu",
+      "route": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "route_name": "episode_problem",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/episode_problem/m390/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/episode_problem/m390/light/dom.json"
+    },
+    {
+      "case_id": "V0013",
+      "domain": "animedia.icu",
+      "route": "/catalog/",
+      "route_name": "catalog",
+      "entity_or_fixture": null,
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/catalog/d1440/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/catalog/d1440/light/dom.json"
+    },
+    {
+      "case_id": "V0014",
+      "domain": "animedia.icu",
+      "route": "/catalog/",
+      "route_name": "catalog",
+      "entity_or_fixture": null,
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/catalog/t768/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/catalog/t768/light/dom.json"
+    },
+    {
+      "case_id": "V0015",
+      "domain": "animedia.icu",
+      "route": "/catalog/",
+      "route_name": "catalog",
+      "entity_or_fixture": null,
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/catalog/m390/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/catalog/m390/light/dom.json"
+    },
+    {
+      "case_id": "V0016",
+      "domain": "animedia.icu",
+      "route": "/new/",
+      "route_name": "new",
+      "entity_or_fixture": null,
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "catalog_additions_ambiguous",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/new/d1440/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/new/d1440/light/dom.json"
+    },
+    {
+      "case_id": "V0017",
+      "domain": "animedia.icu",
+      "route": "/new/",
+      "route_name": "new",
+      "entity_or_fixture": null,
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "catalog_additions_ambiguous",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/new/t768/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/new/t768/light/dom.json"
+    },
+    {
+      "case_id": "V0018",
+      "domain": "animedia.icu",
+      "route": "/new/",
+      "route_name": "new",
+      "entity_or_fixture": null,
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "catalog_additions_ambiguous",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/new/m390/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/new/m390/light/dom.json"
+    },
+    {
+      "case_id": "V0019",
+      "domain": "animedia.icu",
+      "route": "/search/?q=%D0%BD%D0%B5%D0%BB%D1%8E%D0%B4",
+      "route_name": "search_ru",
+      "entity_or_fixture": null,
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/search_ru/d1440/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/search_ru/d1440/light/dom.json"
+    },
+    {
+      "case_id": "V0020",
+      "domain": "animedia.icu",
+      "route": "/search/?q=%D0%BD%D0%B5%D0%BB%D1%8E%D0%B4",
+      "route_name": "search_ru",
+      "entity_or_fixture": null,
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/search_ru/t768/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/search_ru/t768/light/dom.json"
+    },
+    {
+      "case_id": "V0021",
+      "domain": "animedia.icu",
+      "route": "/search/?q=%D0%BD%D0%B5%D0%BB%D1%8E%D0%B4",
+      "route_name": "search_ru",
+      "entity_or_fixture": null,
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/search_ru/m390/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/search_ru/m390/light/dom.json"
+    },
+    {
+      "case_id": "V0022",
+      "domain": "animedia.icu",
+      "route": "/collections/",
+      "route_name": "collections",
+      "entity_or_fixture": null,
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/collections/d1440/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/collections/d1440/light/dom.json"
+    },
+    {
+      "case_id": "V0023",
+      "domain": "animedia.icu",
+      "route": "/collections/",
+      "route_name": "collections",
+      "entity_or_fixture": null,
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/collections/t768/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/collections/t768/light/dom.json"
+    },
+    {
+      "case_id": "V0024",
+      "domain": "animedia.icu",
+      "route": "/collections/",
+      "route_name": "collections",
+      "entity_or_fixture": null,
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/collections/m390/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/collections/m390/light/dom.json"
+    },
+    {
+      "case_id": "V0025",
+      "domain": "animedia.icu",
+      "route": "/schedule/",
+      "route_name": "schedule",
+      "entity_or_fixture": null,
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "missing_feed",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/schedule/d1440/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/schedule/d1440/light/dom.json"
+    },
+    {
+      "case_id": "V0026",
+      "domain": "animedia.icu",
+      "route": "/schedule/",
+      "route_name": "schedule",
+      "entity_or_fixture": null,
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "missing_feed",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/schedule/t768/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/schedule/t768/light/dom.json"
+    },
+    {
+      "case_id": "V0027",
+      "domain": "animedia.icu",
+      "route": "/schedule/",
+      "route_name": "schedule",
+      "entity_or_fixture": null,
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "missing_feed",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/schedule/m390/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/schedule/m390/light/dom.json"
+    },
+    {
+      "case_id": "V0028",
+      "domain": "animedia.icu",
+      "route": "/title/no-such-parity03-zzz/",
+      "route_name": "invalid_title",
+      "entity_or_fixture": null,
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "error_404",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/invalid_title/d1440/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/invalid_title/d1440/light/dom.json"
+    },
+    {
+      "case_id": "V0029",
+      "domain": "animedia.icu",
+      "route": "/title/no-such-parity03-zzz/",
+      "route_name": "invalid_title",
+      "entity_or_fixture": null,
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "error_404",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/invalid_title/t768/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/invalid_title/t768/light/dom.json"
+    },
+    {
+      "case_id": "V0030",
+      "domain": "animedia.icu",
+      "route": "/title/no-such-parity03-zzz/",
+      "route_name": "invalid_title",
+      "entity_or_fixture": null,
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "error_404",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/invalid_title/m390/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/invalid_title/m390/light/dom.json"
+    },
+    {
+      "case_id": "V0031",
+      "domain": "animedia.space",
+      "route": "/",
+      "route_name": "home",
+      "entity_or_fixture": null,
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/home/d1440/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/home/d1440/light/dom.json"
+    },
+    {
+      "case_id": "V0032",
+      "domain": "animedia.space",
+      "route": "/",
+      "route_name": "home",
+      "entity_or_fixture": null,
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/home/t768/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/home/t768/light/dom.json"
+    },
+    {
+      "case_id": "V0033",
+      "domain": "animedia.space",
+      "route": "/",
+      "route_name": "home",
+      "entity_or_fixture": null,
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/home/m390/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/home/m390/light/dom.json"
+    },
+    {
+      "case_id": "V0034",
+      "domain": "animedia.space",
+      "route": "/title/nelyud-film-2-stolknovenie/",
+      "route_name": "title_problem",
+      "entity_or_fixture": "nelyud-film-2-stolknovenie",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/title_problem/d1440/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/title_problem/d1440/light/dom.json"
+    },
+    {
+      "case_id": "V0035",
+      "domain": "animedia.space",
+      "route": "/title/nelyud-film-2-stolknovenie/",
+      "route_name": "title_problem",
+      "entity_or_fixture": "nelyud-film-2-stolknovenie",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/title_problem/t768/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/title_problem/t768/light/dom.json"
+    },
+    {
+      "case_id": "V0036",
+      "domain": "animedia.space",
+      "route": "/title/nelyud-film-2-stolknovenie/",
+      "route_name": "title_problem",
+      "entity_or_fixture": "nelyud-film-2-stolknovenie",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/title_problem/m390/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/title_problem/m390/light/dom.json"
+    },
+    {
+      "case_id": "V0037",
+      "domain": "animedia.space",
+      "route": "/title/master-lda-i-plameni-2/",
+      "route_name": "title_no_desc",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "true_description_gap",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/title_no_desc/d1440/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/title_no_desc/d1440/light/dom.json"
+    },
+    {
+      "case_id": "V0038",
+      "domain": "animedia.space",
+      "route": "/title/master-lda-i-plameni-2/",
+      "route_name": "title_no_desc",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "true_description_gap",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/title_no_desc/t768/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/title_no_desc/t768/light/dom.json"
+    },
+    {
+      "case_id": "V0039",
+      "domain": "animedia.space",
+      "route": "/title/master-lda-i-plameni-2/",
+      "route_name": "title_no_desc",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "true_description_gap",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/title_no_desc/m390/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/title_no_desc/m390/light/dom.json"
+    },
+    {
+      "case_id": "V0040",
+      "domain": "animedia.space",
+      "route": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "route_name": "episode_problem",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/episode_problem/d1440/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/episode_problem/d1440/light/dom.json"
+    },
+    {
+      "case_id": "V0041",
+      "domain": "animedia.space",
+      "route": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "route_name": "episode_problem",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/episode_problem/t768/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/episode_problem/t768/light/dom.json"
+    },
+    {
+      "case_id": "V0042",
+      "domain": "animedia.space",
+      "route": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "route_name": "episode_problem",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/episode_problem/m390/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/episode_problem/m390/light/dom.json"
+    },
+    {
+      "case_id": "V0043",
+      "domain": "animedia.space",
+      "route": "/catalog/",
+      "route_name": "catalog",
+      "entity_or_fixture": null,
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/catalog/d1440/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/catalog/d1440/light/dom.json"
+    },
+    {
+      "case_id": "V0044",
+      "domain": "animedia.space",
+      "route": "/catalog/",
+      "route_name": "catalog",
+      "entity_or_fixture": null,
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/catalog/t768/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/catalog/t768/light/dom.json"
+    },
+    {
+      "case_id": "V0045",
+      "domain": "animedia.space",
+      "route": "/catalog/",
+      "route_name": "catalog",
+      "entity_or_fixture": null,
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/catalog/m390/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/catalog/m390/light/dom.json"
+    },
+    {
+      "case_id": "V0046",
+      "domain": "animedia.space",
+      "route": "/new/",
+      "route_name": "new",
+      "entity_or_fixture": null,
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "catalog_additions_ambiguous",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/new/d1440/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/new/d1440/light/dom.json"
+    },
+    {
+      "case_id": "V0047",
+      "domain": "animedia.space",
+      "route": "/new/",
+      "route_name": "new",
+      "entity_or_fixture": null,
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "catalog_additions_ambiguous",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/new/t768/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/new/t768/light/dom.json"
+    },
+    {
+      "case_id": "V0048",
+      "domain": "animedia.space",
+      "route": "/new/",
+      "route_name": "new",
+      "entity_or_fixture": null,
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "catalog_additions_ambiguous",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/new/m390/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/new/m390/light/dom.json"
+    },
+    {
+      "case_id": "V0049",
+      "domain": "animedia.space",
+      "route": "/search/?q=%D0%BD%D0%B5%D0%BB%D1%8E%D0%B4",
+      "route_name": "search_ru",
+      "entity_or_fixture": null,
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/search_ru/d1440/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/search_ru/d1440/light/dom.json"
+    },
+    {
+      "case_id": "V0050",
+      "domain": "animedia.space",
+      "route": "/search/?q=%D0%BD%D0%B5%D0%BB%D1%8E%D0%B4",
+      "route_name": "search_ru",
+      "entity_or_fixture": null,
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/search_ru/t768/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/search_ru/t768/light/dom.json"
+    },
+    {
+      "case_id": "V0051",
+      "domain": "animedia.space",
+      "route": "/search/?q=%D0%BD%D0%B5%D0%BB%D1%8E%D0%B4",
+      "route_name": "search_ru",
+      "entity_or_fixture": null,
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/search_ru/m390/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/search_ru/m390/light/dom.json"
+    },
+    {
+      "case_id": "V0052",
+      "domain": "animedia.space",
+      "route": "/collections/",
+      "route_name": "collections",
+      "entity_or_fixture": null,
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/collections/d1440/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/collections/d1440/light/dom.json"
+    },
+    {
+      "case_id": "V0053",
+      "domain": "animedia.space",
+      "route": "/collections/",
+      "route_name": "collections",
+      "entity_or_fixture": null,
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/collections/t768/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/collections/t768/light/dom.json"
+    },
+    {
+      "case_id": "V0054",
+      "domain": "animedia.space",
+      "route": "/collections/",
+      "route_name": "collections",
+      "entity_or_fixture": null,
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/collections/m390/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/collections/m390/light/dom.json"
+    },
+    {
+      "case_id": "V0055",
+      "domain": "animedia.space",
+      "route": "/schedule/",
+      "route_name": "schedule",
+      "entity_or_fixture": null,
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "missing_feed",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/schedule/d1440/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/schedule/d1440/light/dom.json"
+    },
+    {
+      "case_id": "V0056",
+      "domain": "animedia.space",
+      "route": "/schedule/",
+      "route_name": "schedule",
+      "entity_or_fixture": null,
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "missing_feed",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/schedule/t768/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/schedule/t768/light/dom.json"
+    },
+    {
+      "case_id": "V0057",
+      "domain": "animedia.space",
+      "route": "/schedule/",
+      "route_name": "schedule",
+      "entity_or_fixture": null,
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "missing_feed",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/schedule/m390/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/schedule/m390/light/dom.json"
+    },
+    {
+      "case_id": "V0058",
+      "domain": "animedia.space",
+      "route": "/title/no-such-parity03-zzz/",
+      "route_name": "invalid_title",
+      "entity_or_fixture": null,
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "error_404",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/invalid_title/d1440/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/invalid_title/d1440/light/dom.json"
+    },
+    {
+      "case_id": "V0059",
+      "domain": "animedia.space",
+      "route": "/title/no-such-parity03-zzz/",
+      "route_name": "invalid_title",
+      "entity_or_fixture": null,
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "error_404",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/invalid_title/t768/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/invalid_title/t768/light/dom.json"
+    },
+    {
+      "case_id": "V0060",
+      "domain": "animedia.space",
+      "route": "/title/no-such-parity03-zzz/",
+      "route_name": "invalid_title",
+      "entity_or_fixture": null,
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "error_404",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/invalid_title/m390/light/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/invalid_title/m390/light/dom.json"
+    },
+    {
+      "case_id": "V0061",
+      "domain": "animedia.icu",
+      "route": "/",
+      "route_name": "home",
+      "entity_or_fixture": null,
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/home/d1440/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/home/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "V0062",
+      "domain": "animedia.icu",
+      "route": "/",
+      "route_name": "home",
+      "entity_or_fixture": null,
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/home/t768/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/home/t768/dark/dom.json"
+    },
+    {
+      "case_id": "V0063",
+      "domain": "animedia.icu",
+      "route": "/",
+      "route_name": "home",
+      "entity_or_fixture": null,
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/home/m390/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/home/m390/dark/dom.json"
+    },
+    {
+      "case_id": "V0064",
+      "domain": "animedia.icu",
+      "route": "/title/nelyud-film-2-stolknovenie/",
+      "route_name": "title_problem",
+      "entity_or_fixture": "nelyud-film-2-stolknovenie",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/title_problem/d1440/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/title_problem/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "V0065",
+      "domain": "animedia.icu",
+      "route": "/title/nelyud-film-2-stolknovenie/",
+      "route_name": "title_problem",
+      "entity_or_fixture": "nelyud-film-2-stolknovenie",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/title_problem/t768/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/title_problem/t768/dark/dom.json"
+    },
+    {
+      "case_id": "V0066",
+      "domain": "animedia.icu",
+      "route": "/title/nelyud-film-2-stolknovenie/",
+      "route_name": "title_problem",
+      "entity_or_fixture": "nelyud-film-2-stolknovenie",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/title_problem/m390/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/title_problem/m390/dark/dom.json"
+    },
+    {
+      "case_id": "V0067",
+      "domain": "animedia.icu",
+      "route": "/title/master-lda-i-plameni-2/",
+      "route_name": "title_no_desc",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "true_description_gap",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/title_no_desc/d1440/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/title_no_desc/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "V0068",
+      "domain": "animedia.icu",
+      "route": "/title/master-lda-i-plameni-2/",
+      "route_name": "title_no_desc",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "true_description_gap",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/title_no_desc/t768/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/title_no_desc/t768/dark/dom.json"
+    },
+    {
+      "case_id": "V0069",
+      "domain": "animedia.icu",
+      "route": "/title/master-lda-i-plameni-2/",
+      "route_name": "title_no_desc",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "true_description_gap",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/title_no_desc/m390/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/title_no_desc/m390/dark/dom.json"
+    },
+    {
+      "case_id": "V0070",
+      "domain": "animedia.icu",
+      "route": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "route_name": "episode_problem",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/episode_problem/d1440/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/episode_problem/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "V0071",
+      "domain": "animedia.icu",
+      "route": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "route_name": "episode_problem",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/episode_problem/t768/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/episode_problem/t768/dark/dom.json"
+    },
+    {
+      "case_id": "V0072",
+      "domain": "animedia.icu",
+      "route": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "route_name": "episode_problem",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.icu/episode_problem/m390/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.icu/episode_problem/m390/dark/dom.json"
+    },
+    {
+      "case_id": "V0073",
+      "domain": "animedia.space",
+      "route": "/",
+      "route_name": "home",
+      "entity_or_fixture": null,
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/home/d1440/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/home/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "V0074",
+      "domain": "animedia.space",
+      "route": "/",
+      "route_name": "home",
+      "entity_or_fixture": null,
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/home/t768/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/home/t768/dark/dom.json"
+    },
+    {
+      "case_id": "V0075",
+      "domain": "animedia.space",
+      "route": "/",
+      "route_name": "home",
+      "entity_or_fixture": null,
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/home/m390/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/home/m390/dark/dom.json"
+    },
+    {
+      "case_id": "V0076",
+      "domain": "animedia.space",
+      "route": "/title/nelyud-film-2-stolknovenie/",
+      "route_name": "title_problem",
+      "entity_or_fixture": "nelyud-film-2-stolknovenie",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/title_problem/d1440/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/title_problem/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "V0077",
+      "domain": "animedia.space",
+      "route": "/title/nelyud-film-2-stolknovenie/",
+      "route_name": "title_problem",
+      "entity_or_fixture": "nelyud-film-2-stolknovenie",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/title_problem/t768/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/title_problem/t768/dark/dom.json"
+    },
+    {
+      "case_id": "V0078",
+      "domain": "animedia.space",
+      "route": "/title/nelyud-film-2-stolknovenie/",
+      "route_name": "title_problem",
+      "entity_or_fixture": "nelyud-film-2-stolknovenie",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/title_problem/m390/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/title_problem/m390/dark/dom.json"
+    },
+    {
+      "case_id": "V0079",
+      "domain": "animedia.space",
+      "route": "/title/master-lda-i-plameni-2/",
+      "route_name": "title_no_desc",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "true_description_gap",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/title_no_desc/d1440/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/title_no_desc/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "V0080",
+      "domain": "animedia.space",
+      "route": "/title/master-lda-i-plameni-2/",
+      "route_name": "title_no_desc",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "true_description_gap",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/title_no_desc/t768/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/title_no_desc/t768/dark/dom.json"
+    },
+    {
+      "case_id": "V0081",
+      "domain": "animedia.space",
+      "route": "/title/master-lda-i-plameni-2/",
+      "route_name": "title_no_desc",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "true_description_gap",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/title_no_desc/m390/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/title_no_desc/m390/dark/dom.json"
+    },
+    {
+      "case_id": "V0082",
+      "domain": "animedia.space",
+      "route": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "route_name": "episode_problem",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/episode_problem/d1440/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/episode_problem/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "V0083",
+      "domain": "animedia.space",
+      "route": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "route_name": "episode_problem",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/episode_problem/t768/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/episode_problem/t768/dark/dom.json"
+    },
+    {
+      "case_id": "V0084",
+      "domain": "animedia.space",
+      "route": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "route_name": "episode_problem",
+      "entity_or_fixture": "master-lda-i-plameni-2",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+      "expected_full": "05-after-live/animedia.space/episode_problem/m390/dark/full.png",
+      "expected_dom_oracle": "05-after-live/animedia.space/episode_problem/m390/dark/dom.json"
+    }
+  ]
+}

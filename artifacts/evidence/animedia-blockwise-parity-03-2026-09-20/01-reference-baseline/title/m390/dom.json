@@ -1,0 +1,91 @@
+{
+  "url": "https://amd.online/2397-nekromant-ja-katastrofa.html",
+  "title": "«Некромант: Я катастрофа» аниме смотреть онлайн",
+  "viewport": {
+    "w": 390,
+    "h": 844,
+    "dpr": 1
+  },
+  "scrollWidth": 390,
+  "overflowX": 0,
+  "header": {
+    "x": 0,
+    "y": 0,
+    "w": 390,
+    "h": 126,
+    "tag": "header",
+    "id": null,
+    "cls": "header d-flex ai-center"
+  },
+  "h1": {
+    "x": 34,
+    "y": 1071,
+    "w": 322,
+    "h": 48,
+    "tag": "h1",
+    "id": null,
+    "cls": ""
+  },
+  "section_count": 6,
+  "sections_top10": [
+    {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 126,
+      "tag": "header",
+      "id": null,
+      "cls": "header d-flex ai-center"
+    },
+    {
+      "x": 10,
+      "y": 3327,
+      "w": 370,
+      "h": 189,
+      "tag": "section",
+      "id": null,
+      "cls": "buttttons"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0,
+      "tag": "section",
+      "id": null,
+      "cls": "buttttons"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0,
+      "tag": "section",
+      "id": null,
+      "cls": "buttttons"
+    },
+    {
+      "x": 10,
+      "y": 4106,
+      "w": 370,
+      "h": 812,
+      "tag": "section",
+      "id": null,
+      "cls": "sect"
+    },
+    {
+      "x": 10,
+      "y": 8343,
+      "w": 370,
+      "h": 259,
+      "tag": "footer",
+      "id": null,
+      "cls": "footer"
+    }
+  ],
+  "bodyHeight": 8602,
+  "http_status": 200,
+  "captured_at": "2026-09-20T11:18:16Z",
+  "screenshot_sha256": "266453a7b44fdb73a78fd48f41788c1ae4c524599c4740bed19f67fd21da6af9",
+  "above_fold_sha256": "2fc89dcf19d1b40fd84cd88695074875c99223b34b7acd8819db6c201dc70bcb"
+}

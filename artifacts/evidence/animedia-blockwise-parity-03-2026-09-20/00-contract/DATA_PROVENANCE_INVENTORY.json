@@ -1,0 +1,47 @@
+{
+  "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+  "catalog_built_at": "2026-09-20T03:16:30Z",
+  "catalog_count": 7425,
+  "fields_present": [
+    "slug",
+    "title",
+    "poster",
+    "kind",
+    "year",
+    "url",
+    "published_at"
+  ],
+  "published_at_semantic": "AMBIGUOUS",
+  "published_at_reason": "No ProvenanceEnvelope; entity/source/immutable semantics unproven; cannot label as catalog_added_at or episode_released_at",
+  "TRUE_PROVIDER_PLAYABLE_EVENT_COUNT": 0,
+  "TRUE_EPISODE_RELEASE_EVENT_COUNT": 0,
+  "CATALOG_ADDED_EVENT_COUNT": 0,
+  "provider_playable_ledger": null,
+  "catalog_added_ledger": null,
+  "episode_air_feed": null,
+  "weekly_popular_snapshot": null,
+  "recommendation_snapshot": null,
+  "top100_snapshot": null,
+  "control_titles": {
+    "nelyud-film-2-stolknovenie": {
+      "title_id": "01a0aa6e-2008-70d0-89d1-1af7b85336b1",
+      "source_poster_url": "https://poster.cdnvideohub.com/01a0aa6e-09d6-7526-b228-8df81f8dc726.webp",
+      "source_poster_available": true,
+      "source_description_length": 654,
+      "source_description_available": true,
+      "description_classification": "SOURCE_DESCRIPTION_AVAILABLE",
+      "published_at": "2026-09-16T13:35:39Z",
+      "published_at_estimated": false
+    },
+    "master-lda-i-plameni-2": {
+      "title_id": "01a0b507-3280-7b2a-8af4-674dd73cff72",
+      "source_poster_url": "https://poster.cdnvideohub.com/01a0b507-0813-7526-a2e6-5edf75180827.webp",
+      "source_poster_available": true,
+      "source_description_length": 0,
+      "source_description_available": false,
+      "description_classification": "TRUE_DESCRIPTION_GAP",
+      "published_at": "2026-09-18T14:59:02Z",
+      "published_at_estimated": false
+    }
+  }
+}

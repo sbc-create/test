@@ -1,0 +1,18 @@
+{
+  "animedia.icu": {
+    "meta_robots": "noindex, nofollow",
+    "x_robots_tag": "noindex, nofollow",
+    "build_id": "20260920T102102Z-89666321-nova",
+    "artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+    "html_sha256": "08a7d118e0187edc415efcb6d06afc1b92cc71addb875cd30266c7e92c90e770",
+    "captured_at": "2026-09-20T11:17:59Z"
+  },
+  "animedia.space": {
+    "meta_robots": "noindex, nofollow",
+    "x_robots_tag": "noindex, nofollow",
+    "build_id": "20260920T102102Z-89666321-nova",
+    "artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+    "html_sha256": "bbe4b85fe7c40f87de3971a747166b4326f11ef0b3b0acb077f5d93d6b96966f",
+    "captured_at": "2026-09-20T11:17:59Z"
+  }
+}

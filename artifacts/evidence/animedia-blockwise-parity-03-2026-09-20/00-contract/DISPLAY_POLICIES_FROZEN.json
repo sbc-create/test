@@ -1,0 +1,209 @@
+{
+  "frozen_at": "2026-09-20T11:21:45Z",
+  "spec": "ANIMEDIA_BLOCK_SPEC_V1",
+  "policies": {
+    "B02_weekly_shelf": {
+      "normal": "populated",
+      "empty": "hidden",
+      "missing_required": "blocked",
+      "missing_optional": "hidden",
+      "stale": "last_good_with_badge",
+      "error": "hidden",
+      "note": "<4 valid items or no snapshot → 0px, POPULAR_DATA_GAP=1"
+    },
+    "B02_1_telegram": {
+      "normal": "populated",
+      "empty": "hidden",
+      "missing_required": "hidden",
+      "missing_optional": "hidden",
+      "stale": "hidden",
+      "error": "hidden"
+    },
+    "B02_1_ad": {
+      "normal": "populated",
+      "empty": "hidden",
+      "missing_required": "hidden",
+      "missing_optional": "hidden",
+      "stale": "hidden",
+      "error": "hidden"
+    },
+    "B03_episode_feed": {
+      "normal": "populated",
+      "empty": "explicit_empty",
+      "missing_required": "explicit_empty",
+      "missing_optional": "hidden",
+      "stale": "blocked",
+      "error": "explicit_error",
+      "explicit_empty_max_px": 96,
+      "note": "TRUE_PROVIDER_PLAYABLE_EVENT_COUNT=0 → heading+panel ≤96px; no catalog fallback"
+    },
+    "B04_schedule": {
+      "normal": "populated",
+      "empty": "hidden",
+      "missing_required": "hidden",
+      "missing_optional": "hidden",
+      "stale": "blocked",
+      "error": "hidden",
+      "home_missing": "hidden",
+      "route_missing_max_px": 260
+    },
+    "B05_catalog_additions": {
+      "normal": "populated",
+      "empty": "hidden",
+      "missing_required": "hidden",
+      "missing_optional": "hidden",
+      "stale": "blocked",
+      "error": "hidden",
+      "note": "no catalog_added ledger → 0px + CATALOG_FRESHNESS_DATA_GAP=1"
+    },
+    "B06_filters": {
+      "normal": "populated",
+      "empty": "populated",
+      "missing_required": "blocked",
+      "missing_optional": "hidden",
+      "stale": "populated",
+      "error": "explicit_error"
+    },
+    "B06_1_top100": {
+      "normal": "populated",
+      "empty": "hidden",
+      "missing_required": "hidden",
+      "missing_optional": "hidden",
+      "stale": "last_good_with_badge",
+      "error": "hidden"
+    },
+    "B06_2_collections_home": {
+      "normal": "populated",
+      "empty": "hidden",
+      "missing_required": "hidden",
+      "missing_optional": "hidden",
+      "stale": "populated",
+      "error": "hidden"
+    },
+    "B06_3_editorial": {
+      "normal": "populated",
+      "empty": "hidden",
+      "missing_required": "hidden",
+      "missing_optional": "hidden",
+      "stale": "hidden",
+      "error": "hidden"
+    },
+    "B06_4_comments": {
+      "normal": "populated",
+      "empty": "hidden",
+      "missing_required": "hidden",
+      "missing_optional": "hidden",
+      "stale": "hidden",
+      "error": "hidden"
+    },
+    "B06_5_seo": {
+      "normal": "populated",
+      "empty": "hidden",
+      "missing_required": "blocked",
+      "missing_optional": "hidden",
+      "stale": "populated",
+      "error": "hidden"
+    },
+    "B07_title_passport": {
+      "normal": "populated",
+      "empty": "explicit_field_placeholder",
+      "missing_required": "blocked",
+      "missing_optional": "hidden",
+      "stale": "populated",
+      "error": "explicit_error"
+    },
+    "B07_1_description": {
+      "normal": "populated",
+      "empty": "explicit_field_placeholder",
+      "missing_required": "explicit_field_placeholder",
+      "missing_optional": "hidden",
+      "stale": "populated",
+      "error": "explicit_field_placeholder",
+      "title_true_gap_copy": "Описание пока не передано источником"
+    },
+    "B07_2_ratings": {
+      "normal": "populated",
+      "empty": "hidden",
+      "missing_required": "hidden",
+      "missing_optional": "hidden",
+      "stale": "populated",
+      "error": "hidden"
+    },
+    "B08_player": {
+      "normal": "populated",
+      "empty": "explicit_error",
+      "missing_required": "blocked",
+      "missing_optional": "hidden",
+      "stale": "populated",
+      "error": "explicit_error"
+    },
+    "B09_episode": {
+      "normal": "populated",
+      "empty": "explicit_error",
+      "missing_required": "blocked",
+      "missing_optional": "hidden",
+      "stale": "populated",
+      "error": "explicit_error"
+    },
+    "B10_recommendations": {
+      "normal": "populated",
+      "empty": "hidden",
+      "missing_required": "hidden",
+      "missing_optional": "hidden",
+      "stale": "last_good_with_badge",
+      "error": "hidden"
+    },
+    "B11_catalog": {
+      "normal": "populated",
+      "empty": "explicit_empty",
+      "missing_required": "blocked",
+      "missing_optional": "hidden",
+      "stale": "populated",
+      "error": "page_error"
+    },
+    "B12_new": {
+      "normal": "populated",
+      "empty": "explicit_empty",
+      "missing_required": "hidden",
+      "missing_optional": "hidden",
+      "stale": "blocked",
+      "error": "page_error"
+    },
+    "B12_search": {
+      "normal": "populated",
+      "empty": "explicit_empty",
+      "missing_required": "populated",
+      "missing_optional": "hidden",
+      "stale": "populated",
+      "error": "page_error"
+    },
+    "B13_collections": {
+      "normal": "populated",
+      "empty": "explicit_empty",
+      "missing_required": "blocked",
+      "missing_optional": "hidden",
+      "stale": "populated",
+      "error": "page_error"
+    },
+    "B13_schedule_route": {
+      "normal": "populated",
+      "empty": "explicit_empty",
+      "missing_required": "explicit_empty",
+      "missing_optional": "hidden",
+      "stale": "blocked",
+      "error": "explicit_error",
+      "explicit_empty_max_px": 260
+    },
+    "B14_footer": {
+      "normal": "populated",
+      "empty": "hidden",
+      "missing_required": "hidden",
+      "missing_optional": "hidden",
+      "stale": "populated",
+      "error": "hidden"
+    }
+  },
+  "frozen": true,
+  "DISPLAY_POLICIES_FROZEN": 1,
+  "tolerance_locked": true
+}

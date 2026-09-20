@@ -1,0 +1,55 @@
+{
+  "url": "https://amd.online/",
+  "title": "Animedia Online - Смотреть аниме онлайн!",
+  "viewport": {
+    "w": 390,
+    "h": 844,
+    "dpr": 1
+  },
+  "scrollWidth": 390,
+  "overflowX": 0,
+  "header": {
+    "x": 0,
+    "y": 0,
+    "w": 390,
+    "h": 126,
+    "tag": "header",
+    "id": null,
+    "cls": "header d-flex ai-center"
+  },
+  "h1": {
+    "x": 30,
+    "y": 10997,
+    "w": 330,
+    "h": 42,
+    "tag": "h1",
+    "id": null,
+    "cls": ""
+  },
+  "section_count": 2,
+  "sections_top10": [
+    {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 126,
+      "tag": "header",
+      "id": null,
+      "cls": "header d-flex ai-center"
+    },
+    {
+      "x": 20,
+      "y": 12118,
+      "w": 350,
+      "h": 278,
+      "tag": "footer",
+      "id": null,
+      "cls": "footer"
+    }
+  ],
+  "bodyHeight": 12426,
+  "http_status": 200,
+  "captured_at": "2026-09-20T11:18:16Z",
+  "screenshot_sha256": "0cd3e4cf4efd0168016e6b4239a61cd2267e3e56cdec9b2aa45b85a1f34d5930",
+  "above_fold_sha256": "77560feee14d15cbb2847e0cf2ff2a32a9e370037e2cc3aa88e4a008ab6dd030"
+}

@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "family": "animedia",
+  "routes": [
+    {
+      "path": "/",
+      "name": "home",
+      "blocks": [
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B05",
+        "B06",
+        "B06.1",
+        "B06.2",
+        "B06.5",
+        "B14"
+      ]
+    },
+    {
+      "path": "/catalog/",
+      "name": "catalog",
+      "blocks": [
+        "B01",
+        "B11",
+        "B14"
+      ]
+    },
+    {
+      "path": "/new/",
+      "name": "new_catalog",
+      "canonical_page1": "/new/",
+      "page_param": "page",
+      "page_size": 10,
+      "semantic": "catalog_additions_only_until_core_episode_route",
+      "blocks": [
+        "B01",
+        "B12.1",
+        "B14"
+      ]
+    },
+    {
+      "path": "/search/",
+      "name": "search",
+      "query_params": [
+        "q",
+        "page"
+      ],
+      "page_size": 24,
+      "blocks": [
+        "B01",
+        "B12.2",
+        "B12.3",
+        "B14"
+      ]
+    },
+    {
+      "path": "/collections/",
+      "name": "collections_list",
+      "page_size": 12,
+      "blocks": [
+        "B01",
+        "B13.1",
+        "B14"
+      ]
+    },
+    {
+      "path": "/collections/{slug}/",
+      "name": "collection_detail",
+      "blocks": [
+        "B01",
+        "B13.2",
+        "B14"
+      ]
+    },
+    {
+      "path": "/schedule/",
+      "name": "schedule",
+      "blocks": [
+        "B01",
+        "B13.3",
+        "B14"
+      ],
+      "integration": "episode_air_feed_missing"
+    },
+    {
+      "path": "/title/{slug}/",
+      "name": "title",
+      "blocks": [
+        "B01",
+        "B07",
+        "B08",
+        "B10",
+        "B14"
+      ]
+    },
+    {
+      "path": "/title/{slug}/season-{N}/episode-{M}/",
+      "name": "exact_episode",
+      "blocks": [
+        "B01",
+        "B09",
+        "B14"
+      ]
+    }
+  ],
+  "absent_from_registry_until_core": [
+    "standalone_top100_url",
+    "episode_events_tab",
+    "news",
+    "reviews",
+    "comments"
+  ],
+  "problem_routes": {
+    "title": "/title/nelyud-film-2-stolknovenie/",
+    "episode": "/title/master-lda-i-plameni-2/season-2/episode-104/"
+  }
+}

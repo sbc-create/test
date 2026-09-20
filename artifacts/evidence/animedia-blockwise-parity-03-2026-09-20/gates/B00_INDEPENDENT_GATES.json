@@ -1,0 +1,13 @@
+{
+  "gate_runner": "independent_b00_freeze_validator",
+  "run_at": "2026-09-20T11:22:23Z",
+  "REFERENCE_BASELINE_VALID": 1,
+  "PASSPORT_MANIFEST_VALID": 1,
+  "DISPLAY_POLICIES_FROZEN": 1,
+  "CONTRACT_SHA256": "5f2112e25ef974333c388bad405abfae3c3d460a713b028afa3c0e549b8eaeb3",
+  "REFERENCE_BASELINE_DIGEST": "84132b93f8fa8f61b5e60ab87b82044e30209b4d7db3e505b00d70cb117f5632",
+  "pass": true,
+  "passport_errors": [],
+  "policy_errors": [],
+  "REFERENCE_ACCESS_FAILURES": 0
+}

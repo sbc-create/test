@@ -1,0 +1,1947 @@
+{
+  "schema_version": 1,
+  "kind": "LOCAL_FIXTURE_MANIFEST",
+  "frozen_at": "2026-09-20T11:17:59Z",
+  "never_deploy": true,
+  "case_count": 114,
+  "cases": [
+    {
+      "case_id": "L0001",
+      "domain": "local-fixture",
+      "route": "/",
+      "route_name": "home",
+      "entity_or_fixture": "home",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/home/d1440/light/full.png",
+      "expected_crops": "04-after-local/home/d1440/light/crops/",
+      "expected_dom_oracle": "04-after-local/home/d1440/light/dom.json"
+    },
+    {
+      "case_id": "L0002",
+      "domain": "local-fixture",
+      "route": "/",
+      "route_name": "home",
+      "entity_or_fixture": "home",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/home/d1440/dark/full.png",
+      "expected_crops": "04-after-local/home/d1440/dark/crops/",
+      "expected_dom_oracle": "04-after-local/home/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "L0003",
+      "domain": "local-fixture",
+      "route": "/",
+      "route_name": "home",
+      "entity_or_fixture": "home",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/home/t768/light/full.png",
+      "expected_crops": "04-after-local/home/t768/light/crops/",
+      "expected_dom_oracle": "04-after-local/home/t768/light/dom.json"
+    },
+    {
+      "case_id": "L0004",
+      "domain": "local-fixture",
+      "route": "/",
+      "route_name": "home",
+      "entity_or_fixture": "home",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/home/t768/dark/full.png",
+      "expected_crops": "04-after-local/home/t768/dark/crops/",
+      "expected_dom_oracle": "04-after-local/home/t768/dark/dom.json"
+    },
+    {
+      "case_id": "L0005",
+      "domain": "local-fixture",
+      "route": "/",
+      "route_name": "home",
+      "entity_or_fixture": "home",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/home/m390/light/full.png",
+      "expected_crops": "04-after-local/home/m390/light/crops/",
+      "expected_dom_oracle": "04-after-local/home/m390/light/dom.json"
+    },
+    {
+      "case_id": "L0006",
+      "domain": "local-fixture",
+      "route": "/",
+      "route_name": "home",
+      "entity_or_fixture": "home",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/home/m390/dark/full.png",
+      "expected_crops": "04-after-local/home/m390/dark/crops/",
+      "expected_dom_oracle": "04-after-local/home/m390/dark/dom.json"
+    },
+    {
+      "case_id": "L0007",
+      "domain": "local-fixture",
+      "route": "/",
+      "route_name": "home_b03_empty",
+      "entity_or_fixture": "home_b03_empty",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "b03_empty",
+      "expected_full": "04-after-local/home_b03_empty/d1440/light/full.png",
+      "expected_crops": "04-after-local/home_b03_empty/d1440/light/crops/",
+      "expected_dom_oracle": "04-after-local/home_b03_empty/d1440/light/dom.json"
+    },
+    {
+      "case_id": "L0008",
+      "domain": "local-fixture",
+      "route": "/",
+      "route_name": "home_b03_empty",
+      "entity_or_fixture": "home_b03_empty",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "b03_empty",
+      "expected_full": "04-after-local/home_b03_empty/d1440/dark/full.png",
+      "expected_crops": "04-after-local/home_b03_empty/d1440/dark/crops/",
+      "expected_dom_oracle": "04-after-local/home_b03_empty/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "L0009",
+      "domain": "local-fixture",
+      "route": "/",
+      "route_name": "home_b03_empty",
+      "entity_or_fixture": "home_b03_empty",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "b03_empty",
+      "expected_full": "04-after-local/home_b03_empty/t768/light/full.png",
+      "expected_crops": "04-after-local/home_b03_empty/t768/light/crops/",
+      "expected_dom_oracle": "04-after-local/home_b03_empty/t768/light/dom.json"
+    },
+    {
+      "case_id": "L0010",
+      "domain": "local-fixture",
+      "route": "/",
+      "route_name": "home_b03_empty",
+      "entity_or_fixture": "home_b03_empty",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "b03_empty",
+      "expected_full": "04-after-local/home_b03_empty/t768/dark/full.png",
+      "expected_crops": "04-after-local/home_b03_empty/t768/dark/crops/",
+      "expected_dom_oracle": "04-after-local/home_b03_empty/t768/dark/dom.json"
+    },
+    {
+      "case_id": "L0011",
+      "domain": "local-fixture",
+      "route": "/",
+      "route_name": "home_b03_empty",
+      "entity_or_fixture": "home_b03_empty",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "b03_empty",
+      "expected_full": "04-after-local/home_b03_empty/m390/light/full.png",
+      "expected_crops": "04-after-local/home_b03_empty/m390/light/crops/",
+      "expected_dom_oracle": "04-after-local/home_b03_empty/m390/light/dom.json"
+    },
+    {
+      "case_id": "L0012",
+      "domain": "local-fixture",
+      "route": "/",
+      "route_name": "home_b03_empty",
+      "entity_or_fixture": "home_b03_empty",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "b03_empty",
+      "expected_full": "04-after-local/home_b03_empty/m390/dark/full.png",
+      "expected_crops": "04-after-local/home_b03_empty/m390/dark/crops/",
+      "expected_dom_oracle": "04-after-local/home_b03_empty/m390/dark/dom.json"
+    },
+    {
+      "case_id": "L0013",
+      "domain": "local-fixture",
+      "route": "/title/fixture-full/",
+      "route_name": "title_full",
+      "entity_or_fixture": "title_full",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/title_full/d1440/light/full.png",
+      "expected_crops": "04-after-local/title_full/d1440/light/crops/",
+      "expected_dom_oracle": "04-after-local/title_full/d1440/light/dom.json"
+    },
+    {
+      "case_id": "L0014",
+      "domain": "local-fixture",
+      "route": "/title/fixture-full/",
+      "route_name": "title_full",
+      "entity_or_fixture": "title_full",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/title_full/d1440/dark/full.png",
+      "expected_crops": "04-after-local/title_full/d1440/dark/crops/",
+      "expected_dom_oracle": "04-after-local/title_full/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "L0015",
+      "domain": "local-fixture",
+      "route": "/title/fixture-full/",
+      "route_name": "title_full",
+      "entity_or_fixture": "title_full",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/title_full/t768/light/full.png",
+      "expected_crops": "04-after-local/title_full/t768/light/crops/",
+      "expected_dom_oracle": "04-after-local/title_full/t768/light/dom.json"
+    },
+    {
+      "case_id": "L0016",
+      "domain": "local-fixture",
+      "route": "/title/fixture-full/",
+      "route_name": "title_full",
+      "entity_or_fixture": "title_full",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/title_full/t768/dark/full.png",
+      "expected_crops": "04-after-local/title_full/t768/dark/crops/",
+      "expected_dom_oracle": "04-after-local/title_full/t768/dark/dom.json"
+    },
+    {
+      "case_id": "L0017",
+      "domain": "local-fixture",
+      "route": "/title/fixture-full/",
+      "route_name": "title_full",
+      "entity_or_fixture": "title_full",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/title_full/m390/light/full.png",
+      "expected_crops": "04-after-local/title_full/m390/light/crops/",
+      "expected_dom_oracle": "04-after-local/title_full/m390/light/dom.json"
+    },
+    {
+      "case_id": "L0018",
+      "domain": "local-fixture",
+      "route": "/title/fixture-full/",
+      "route_name": "title_full",
+      "entity_or_fixture": "title_full",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/title_full/m390/dark/full.png",
+      "expected_crops": "04-after-local/title_full/m390/dark/crops/",
+      "expected_dom_oracle": "04-after-local/title_full/m390/dark/dom.json"
+    },
+    {
+      "case_id": "L0019",
+      "domain": "local-fixture",
+      "route": "/title/fixture-no-desc/",
+      "route_name": "title_no_desc",
+      "entity_or_fixture": "title_no_desc",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "missing_description",
+      "expected_full": "04-after-local/title_no_desc/d1440/light/full.png",
+      "expected_crops": "04-after-local/title_no_desc/d1440/light/crops/",
+      "expected_dom_oracle": "04-after-local/title_no_desc/d1440/light/dom.json"
+    },
+    {
+      "case_id": "L0020",
+      "domain": "local-fixture",
+      "route": "/title/fixture-no-desc/",
+      "route_name": "title_no_desc",
+      "entity_or_fixture": "title_no_desc",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "missing_description",
+      "expected_full": "04-after-local/title_no_desc/d1440/dark/full.png",
+      "expected_crops": "04-after-local/title_no_desc/d1440/dark/crops/",
+      "expected_dom_oracle": "04-after-local/title_no_desc/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "L0021",
+      "domain": "local-fixture",
+      "route": "/title/fixture-no-desc/",
+      "route_name": "title_no_desc",
+      "entity_or_fixture": "title_no_desc",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "missing_description",
+      "expected_full": "04-after-local/title_no_desc/t768/light/full.png",
+      "expected_crops": "04-after-local/title_no_desc/t768/light/crops/",
+      "expected_dom_oracle": "04-after-local/title_no_desc/t768/light/dom.json"
+    },
+    {
+      "case_id": "L0022",
+      "domain": "local-fixture",
+      "route": "/title/fixture-no-desc/",
+      "route_name": "title_no_desc",
+      "entity_or_fixture": "title_no_desc",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "missing_description",
+      "expected_full": "04-after-local/title_no_desc/t768/dark/full.png",
+      "expected_crops": "04-after-local/title_no_desc/t768/dark/crops/",
+      "expected_dom_oracle": "04-after-local/title_no_desc/t768/dark/dom.json"
+    },
+    {
+      "case_id": "L0023",
+      "domain": "local-fixture",
+      "route": "/title/fixture-no-desc/",
+      "route_name": "title_no_desc",
+      "entity_or_fixture": "title_no_desc",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "missing_description",
+      "expected_full": "04-after-local/title_no_desc/m390/light/full.png",
+      "expected_crops": "04-after-local/title_no_desc/m390/light/crops/",
+      "expected_dom_oracle": "04-after-local/title_no_desc/m390/light/dom.json"
+    },
+    {
+      "case_id": "L0024",
+      "domain": "local-fixture",
+      "route": "/title/fixture-no-desc/",
+      "route_name": "title_no_desc",
+      "entity_or_fixture": "title_no_desc",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "missing_description",
+      "expected_full": "04-after-local/title_no_desc/m390/dark/full.png",
+      "expected_crops": "04-after-local/title_no_desc/m390/dark/crops/",
+      "expected_dom_oracle": "04-after-local/title_no_desc/m390/dark/dom.json"
+    },
+    {
+      "case_id": "L0025",
+      "domain": "local-fixture",
+      "route": "/title/fixture-no-poster/",
+      "route_name": "title_no_poster",
+      "entity_or_fixture": "title_no_poster",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "missing_poster",
+      "expected_full": "04-after-local/title_no_poster/d1440/light/full.png",
+      "expected_crops": "04-after-local/title_no_poster/d1440/light/crops/",
+      "expected_dom_oracle": "04-after-local/title_no_poster/d1440/light/dom.json"
+    },
+    {
+      "case_id": "L0026",
+      "domain": "local-fixture",
+      "route": "/title/fixture-no-poster/",
+      "route_name": "title_no_poster",
+      "entity_or_fixture": "title_no_poster",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "missing_poster",
+      "expected_full": "04-after-local/title_no_poster/d1440/dark/full.png",
+      "expected_crops": "04-after-local/title_no_poster/d1440/dark/crops/",
+      "expected_dom_oracle": "04-after-local/title_no_poster/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "L0027",
+      "domain": "local-fixture",
+      "route": "/title/fixture-no-poster/",
+      "route_name": "title_no_poster",
+      "entity_or_fixture": "title_no_poster",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "missing_poster",
+      "expected_full": "04-after-local/title_no_poster/t768/light/full.png",
+      "expected_crops": "04-after-local/title_no_poster/t768/light/crops/",
+      "expected_dom_oracle": "04-after-local/title_no_poster/t768/light/dom.json"
+    },
+    {
+      "case_id": "L0028",
+      "domain": "local-fixture",
+      "route": "/title/fixture-no-poster/",
+      "route_name": "title_no_poster",
+      "entity_or_fixture": "title_no_poster",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "missing_poster",
+      "expected_full": "04-after-local/title_no_poster/t768/dark/full.png",
+      "expected_crops": "04-after-local/title_no_poster/t768/dark/crops/",
+      "expected_dom_oracle": "04-after-local/title_no_poster/t768/dark/dom.json"
+    },
+    {
+      "case_id": "L0029",
+      "domain": "local-fixture",
+      "route": "/title/fixture-no-poster/",
+      "route_name": "title_no_poster",
+      "entity_or_fixture": "title_no_poster",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "missing_poster",
+      "expected_full": "04-after-local/title_no_poster/m390/light/full.png",
+      "expected_crops": "04-after-local/title_no_poster/m390/light/crops/",
+      "expected_dom_oracle": "04-after-local/title_no_poster/m390/light/dom.json"
+    },
+    {
+      "case_id": "L0030",
+      "domain": "local-fixture",
+      "route": "/title/fixture-no-poster/",
+      "route_name": "title_no_poster",
+      "entity_or_fixture": "title_no_poster",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "missing_poster",
+      "expected_full": "04-after-local/title_no_poster/m390/dark/full.png",
+      "expected_crops": "04-after-local/title_no_poster/m390/dark/crops/",
+      "expected_dom_oracle": "04-after-local/title_no_poster/m390/dark/dom.json"
+    },
+    {
+      "case_id": "L0031",
+      "domain": "local-fixture",
+      "route": "/title/fixture-no-ratings/",
+      "route_name": "title_no_ratings",
+      "entity_or_fixture": "title_no_ratings",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "missing_ratings",
+      "expected_full": "04-after-local/title_no_ratings/d1440/light/full.png",
+      "expected_crops": "04-after-local/title_no_ratings/d1440/light/crops/",
+      "expected_dom_oracle": "04-after-local/title_no_ratings/d1440/light/dom.json"
+    },
+    {
+      "case_id": "L0032",
+      "domain": "local-fixture",
+      "route": "/title/fixture-no-ratings/",
+      "route_name": "title_no_ratings",
+      "entity_or_fixture": "title_no_ratings",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "missing_ratings",
+      "expected_full": "04-after-local/title_no_ratings/d1440/dark/full.png",
+      "expected_crops": "04-after-local/title_no_ratings/d1440/dark/crops/",
+      "expected_dom_oracle": "04-after-local/title_no_ratings/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "L0033",
+      "domain": "local-fixture",
+      "route": "/title/fixture-no-ratings/",
+      "route_name": "title_no_ratings",
+      "entity_or_fixture": "title_no_ratings",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "missing_ratings",
+      "expected_full": "04-after-local/title_no_ratings/t768/light/full.png",
+      "expected_crops": "04-after-local/title_no_ratings/t768/light/crops/",
+      "expected_dom_oracle": "04-after-local/title_no_ratings/t768/light/dom.json"
+    },
+    {
+      "case_id": "L0034",
+      "domain": "local-fixture",
+      "route": "/title/fixture-no-ratings/",
+      "route_name": "title_no_ratings",
+      "entity_or_fixture": "title_no_ratings",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "missing_ratings",
+      "expected_full": "04-after-local/title_no_ratings/t768/dark/full.png",
+      "expected_crops": "04-after-local/title_no_ratings/t768/dark/crops/",
+      "expected_dom_oracle": "04-after-local/title_no_ratings/t768/dark/dom.json"
+    },
+    {
+      "case_id": "L0035",
+      "domain": "local-fixture",
+      "route": "/title/fixture-no-ratings/",
+      "route_name": "title_no_ratings",
+      "entity_or_fixture": "title_no_ratings",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "missing_ratings",
+      "expected_full": "04-after-local/title_no_ratings/m390/light/full.png",
+      "expected_crops": "04-after-local/title_no_ratings/m390/light/crops/",
+      "expected_dom_oracle": "04-after-local/title_no_ratings/m390/light/dom.json"
+    },
+    {
+      "case_id": "L0036",
+      "domain": "local-fixture",
+      "route": "/title/fixture-no-ratings/",
+      "route_name": "title_no_ratings",
+      "entity_or_fixture": "title_no_ratings",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "missing_ratings",
+      "expected_full": "04-after-local/title_no_ratings/m390/dark/full.png",
+      "expected_crops": "04-after-local/title_no_ratings/m390/dark/crops/",
+      "expected_dom_oracle": "04-after-local/title_no_ratings/m390/dark/dom.json"
+    },
+    {
+      "case_id": "L0037",
+      "domain": "local-fixture",
+      "route": "/title/fixture-series/season-2/episode-104/",
+      "route_name": "episode_exact",
+      "entity_or_fixture": "episode_exact",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/episode_exact/d1440/light/full.png",
+      "expected_crops": "04-after-local/episode_exact/d1440/light/crops/",
+      "expected_dom_oracle": "04-after-local/episode_exact/d1440/light/dom.json"
+    },
+    {
+      "case_id": "L0038",
+      "domain": "local-fixture",
+      "route": "/title/fixture-series/season-2/episode-104/",
+      "route_name": "episode_exact",
+      "entity_or_fixture": "episode_exact",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/episode_exact/d1440/dark/full.png",
+      "expected_crops": "04-after-local/episode_exact/d1440/dark/crops/",
+      "expected_dom_oracle": "04-after-local/episode_exact/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "L0039",
+      "domain": "local-fixture",
+      "route": "/title/fixture-series/season-2/episode-104/",
+      "route_name": "episode_exact",
+      "entity_or_fixture": "episode_exact",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/episode_exact/t768/light/full.png",
+      "expected_crops": "04-after-local/episode_exact/t768/light/crops/",
+      "expected_dom_oracle": "04-after-local/episode_exact/t768/light/dom.json"
+    },
+    {
+      "case_id": "L0040",
+      "domain": "local-fixture",
+      "route": "/title/fixture-series/season-2/episode-104/",
+      "route_name": "episode_exact",
+      "entity_or_fixture": "episode_exact",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/episode_exact/t768/dark/full.png",
+      "expected_crops": "04-after-local/episode_exact/t768/dark/crops/",
+      "expected_dom_oracle": "04-after-local/episode_exact/t768/dark/dom.json"
+    },
+    {
+      "case_id": "L0041",
+      "domain": "local-fixture",
+      "route": "/title/fixture-series/season-2/episode-104/",
+      "route_name": "episode_exact",
+      "entity_or_fixture": "episode_exact",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/episode_exact/m390/light/full.png",
+      "expected_crops": "04-after-local/episode_exact/m390/light/crops/",
+      "expected_dom_oracle": "04-after-local/episode_exact/m390/light/dom.json"
+    },
+    {
+      "case_id": "L0042",
+      "domain": "local-fixture",
+      "route": "/title/fixture-series/season-2/episode-104/",
+      "route_name": "episode_exact",
+      "entity_or_fixture": "episode_exact",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/episode_exact/m390/dark/full.png",
+      "expected_crops": "04-after-local/episode_exact/m390/dark/crops/",
+      "expected_dom_oracle": "04-after-local/episode_exact/m390/dark/dom.json"
+    },
+    {
+      "case_id": "L0043",
+      "domain": "local-fixture",
+      "route": "/title/fixture-series/season-2/episode-9999/",
+      "route_name": "episode_invalid",
+      "entity_or_fixture": "episode_invalid",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "error_404",
+      "expected_full": "04-after-local/episode_invalid/d1440/light/full.png",
+      "expected_crops": "04-after-local/episode_invalid/d1440/light/crops/",
+      "expected_dom_oracle": "04-after-local/episode_invalid/d1440/light/dom.json"
+    },
+    {
+      "case_id": "L0044",
+      "domain": "local-fixture",
+      "route": "/title/fixture-series/season-2/episode-9999/",
+      "route_name": "episode_invalid",
+      "entity_or_fixture": "episode_invalid",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "error_404",
+      "expected_full": "04-after-local/episode_invalid/d1440/dark/full.png",
+      "expected_crops": "04-after-local/episode_invalid/d1440/dark/crops/",
+      "expected_dom_oracle": "04-after-local/episode_invalid/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "L0045",
+      "domain": "local-fixture",
+      "route": "/title/fixture-series/season-2/episode-9999/",
+      "route_name": "episode_invalid",
+      "entity_or_fixture": "episode_invalid",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "error_404",
+      "expected_full": "04-after-local/episode_invalid/t768/light/full.png",
+      "expected_crops": "04-after-local/episode_invalid/t768/light/crops/",
+      "expected_dom_oracle": "04-after-local/episode_invalid/t768/light/dom.json"
+    },
+    {
+      "case_id": "L0046",
+      "domain": "local-fixture",
+      "route": "/title/fixture-series/season-2/episode-9999/",
+      "route_name": "episode_invalid",
+      "entity_or_fixture": "episode_invalid",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "error_404",
+      "expected_full": "04-after-local/episode_invalid/t768/dark/full.png",
+      "expected_crops": "04-after-local/episode_invalid/t768/dark/crops/",
+      "expected_dom_oracle": "04-after-local/episode_invalid/t768/dark/dom.json"
+    },
+    {
+      "case_id": "L0047",
+      "domain": "local-fixture",
+      "route": "/title/fixture-series/season-2/episode-9999/",
+      "route_name": "episode_invalid",
+      "entity_or_fixture": "episode_invalid",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "error_404",
+      "expected_full": "04-after-local/episode_invalid/m390/light/full.png",
+      "expected_crops": "04-after-local/episode_invalid/m390/light/crops/",
+      "expected_dom_oracle": "04-after-local/episode_invalid/m390/light/dom.json"
+    },
+    {
+      "case_id": "L0048",
+      "domain": "local-fixture",
+      "route": "/title/fixture-series/season-2/episode-9999/",
+      "route_name": "episode_invalid",
+      "entity_or_fixture": "episode_invalid",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "error_404",
+      "expected_full": "04-after-local/episode_invalid/m390/dark/full.png",
+      "expected_crops": "04-after-local/episode_invalid/m390/dark/crops/",
+      "expected_dom_oracle": "04-after-local/episode_invalid/m390/dark/dom.json"
+    },
+    {
+      "case_id": "L0049",
+      "domain": "local-fixture",
+      "route": "/catalog/",
+      "route_name": "catalog",
+      "entity_or_fixture": "catalog",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/catalog/d1440/light/full.png",
+      "expected_crops": "04-after-local/catalog/d1440/light/crops/",
+      "expected_dom_oracle": "04-after-local/catalog/d1440/light/dom.json"
+    },
+    {
+      "case_id": "L0050",
+      "domain": "local-fixture",
+      "route": "/catalog/",
+      "route_name": "catalog",
+      "entity_or_fixture": "catalog",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/catalog/d1440/dark/full.png",
+      "expected_crops": "04-after-local/catalog/d1440/dark/crops/",
+      "expected_dom_oracle": "04-after-local/catalog/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "L0051",
+      "domain": "local-fixture",
+      "route": "/catalog/",
+      "route_name": "catalog",
+      "entity_or_fixture": "catalog",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/catalog/t768/light/full.png",
+      "expected_crops": "04-after-local/catalog/t768/light/crops/",
+      "expected_dom_oracle": "04-after-local/catalog/t768/light/dom.json"
+    },
+    {
+      "case_id": "L0052",
+      "domain": "local-fixture",
+      "route": "/catalog/",
+      "route_name": "catalog",
+      "entity_or_fixture": "catalog",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/catalog/t768/dark/full.png",
+      "expected_crops": "04-after-local/catalog/t768/dark/crops/",
+      "expected_dom_oracle": "04-after-local/catalog/t768/dark/dom.json"
+    },
+    {
+      "case_id": "L0053",
+      "domain": "local-fixture",
+      "route": "/catalog/",
+      "route_name": "catalog",
+      "entity_or_fixture": "catalog",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/catalog/m390/light/full.png",
+      "expected_crops": "04-after-local/catalog/m390/light/crops/",
+      "expected_dom_oracle": "04-after-local/catalog/m390/light/dom.json"
+    },
+    {
+      "case_id": "L0054",
+      "domain": "local-fixture",
+      "route": "/catalog/",
+      "route_name": "catalog",
+      "entity_or_fixture": "catalog",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/catalog/m390/dark/full.png",
+      "expected_crops": "04-after-local/catalog/m390/dark/crops/",
+      "expected_dom_oracle": "04-after-local/catalog/m390/dark/dom.json"
+    },
+    {
+      "case_id": "L0055",
+      "domain": "local-fixture",
+      "route": "/catalog/?page=2",
+      "route_name": "catalog_page2",
+      "entity_or_fixture": "catalog_page2",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/catalog_page2/d1440/light/full.png",
+      "expected_crops": "04-after-local/catalog_page2/d1440/light/crops/",
+      "expected_dom_oracle": "04-after-local/catalog_page2/d1440/light/dom.json"
+    },
+    {
+      "case_id": "L0056",
+      "domain": "local-fixture",
+      "route": "/catalog/?page=2",
+      "route_name": "catalog_page2",
+      "entity_or_fixture": "catalog_page2",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/catalog_page2/d1440/dark/full.png",
+      "expected_crops": "04-after-local/catalog_page2/d1440/dark/crops/",
+      "expected_dom_oracle": "04-after-local/catalog_page2/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "L0057",
+      "domain": "local-fixture",
+      "route": "/catalog/?page=2",
+      "route_name": "catalog_page2",
+      "entity_or_fixture": "catalog_page2",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/catalog_page2/t768/light/full.png",
+      "expected_crops": "04-after-local/catalog_page2/t768/light/crops/",
+      "expected_dom_oracle": "04-after-local/catalog_page2/t768/light/dom.json"
+    },
+    {
+      "case_id": "L0058",
+      "domain": "local-fixture",
+      "route": "/catalog/?page=2",
+      "route_name": "catalog_page2",
+      "entity_or_fixture": "catalog_page2",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/catalog_page2/t768/dark/full.png",
+      "expected_crops": "04-after-local/catalog_page2/t768/dark/crops/",
+      "expected_dom_oracle": "04-after-local/catalog_page2/t768/dark/dom.json"
+    },
+    {
+      "case_id": "L0059",
+      "domain": "local-fixture",
+      "route": "/catalog/?page=2",
+      "route_name": "catalog_page2",
+      "entity_or_fixture": "catalog_page2",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/catalog_page2/m390/light/full.png",
+      "expected_crops": "04-after-local/catalog_page2/m390/light/crops/",
+      "expected_dom_oracle": "04-after-local/catalog_page2/m390/light/dom.json"
+    },
+    {
+      "case_id": "L0060",
+      "domain": "local-fixture",
+      "route": "/catalog/?page=2",
+      "route_name": "catalog_page2",
+      "entity_or_fixture": "catalog_page2",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/catalog_page2/m390/dark/full.png",
+      "expected_crops": "04-after-local/catalog_page2/m390/dark/crops/",
+      "expected_dom_oracle": "04-after-local/catalog_page2/m390/dark/dom.json"
+    },
+    {
+      "case_id": "L0061",
+      "domain": "local-fixture",
+      "route": "/catalog/?page=99999",
+      "route_name": "catalog_invalid_page",
+      "entity_or_fixture": "catalog_invalid_page",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "error_404",
+      "expected_full": "04-after-local/catalog_invalid_page/d1440/light/full.png",
+      "expected_crops": "04-after-local/catalog_invalid_page/d1440/light/crops/",
+      "expected_dom_oracle": "04-after-local/catalog_invalid_page/d1440/light/dom.json"
+    },
+    {
+      "case_id": "L0062",
+      "domain": "local-fixture",
+      "route": "/catalog/?page=99999",
+      "route_name": "catalog_invalid_page",
+      "entity_or_fixture": "catalog_invalid_page",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "error_404",
+      "expected_full": "04-after-local/catalog_invalid_page/d1440/dark/full.png",
+      "expected_crops": "04-after-local/catalog_invalid_page/d1440/dark/crops/",
+      "expected_dom_oracle": "04-after-local/catalog_invalid_page/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "L0063",
+      "domain": "local-fixture",
+      "route": "/catalog/?page=99999",
+      "route_name": "catalog_invalid_page",
+      "entity_or_fixture": "catalog_invalid_page",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "error_404",
+      "expected_full": "04-after-local/catalog_invalid_page/t768/light/full.png",
+      "expected_crops": "04-after-local/catalog_invalid_page/t768/light/crops/",
+      "expected_dom_oracle": "04-after-local/catalog_invalid_page/t768/light/dom.json"
+    },
+    {
+      "case_id": "L0064",
+      "domain": "local-fixture",
+      "route": "/catalog/?page=99999",
+      "route_name": "catalog_invalid_page",
+      "entity_or_fixture": "catalog_invalid_page",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "error_404",
+      "expected_full": "04-after-local/catalog_invalid_page/t768/dark/full.png",
+      "expected_crops": "04-after-local/catalog_invalid_page/t768/dark/crops/",
+      "expected_dom_oracle": "04-after-local/catalog_invalid_page/t768/dark/dom.json"
+    },
+    {
+      "case_id": "L0065",
+      "domain": "local-fixture",
+      "route": "/catalog/?page=99999",
+      "route_name": "catalog_invalid_page",
+      "entity_or_fixture": "catalog_invalid_page",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "error_404",
+      "expected_full": "04-after-local/catalog_invalid_page/m390/light/full.png",
+      "expected_crops": "04-after-local/catalog_invalid_page/m390/light/crops/",
+      "expected_dom_oracle": "04-after-local/catalog_invalid_page/m390/light/dom.json"
+    },
+    {
+      "case_id": "L0066",
+      "domain": "local-fixture",
+      "route": "/catalog/?page=99999",
+      "route_name": "catalog_invalid_page",
+      "entity_or_fixture": "catalog_invalid_page",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "error_404",
+      "expected_full": "04-after-local/catalog_invalid_page/m390/dark/full.png",
+      "expected_crops": "04-after-local/catalog_invalid_page/m390/dark/crops/",
+      "expected_dom_oracle": "04-after-local/catalog_invalid_page/m390/dark/dom.json"
+    },
+    {
+      "case_id": "L0067",
+      "domain": "local-fixture",
+      "route": "/new/",
+      "route_name": "new_p1",
+      "entity_or_fixture": "new_p1",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/new_p1/d1440/light/full.png",
+      "expected_crops": "04-after-local/new_p1/d1440/light/crops/",
+      "expected_dom_oracle": "04-after-local/new_p1/d1440/light/dom.json"
+    },
+    {
+      "case_id": "L0068",
+      "domain": "local-fixture",
+      "route": "/new/",
+      "route_name": "new_p1",
+      "entity_or_fixture": "new_p1",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/new_p1/d1440/dark/full.png",
+      "expected_crops": "04-after-local/new_p1/d1440/dark/crops/",
+      "expected_dom_oracle": "04-after-local/new_p1/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "L0069",
+      "domain": "local-fixture",
+      "route": "/new/",
+      "route_name": "new_p1",
+      "entity_or_fixture": "new_p1",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/new_p1/t768/light/full.png",
+      "expected_crops": "04-after-local/new_p1/t768/light/crops/",
+      "expected_dom_oracle": "04-after-local/new_p1/t768/light/dom.json"
+    },
+    {
+      "case_id": "L0070",
+      "domain": "local-fixture",
+      "route": "/new/",
+      "route_name": "new_p1",
+      "entity_or_fixture": "new_p1",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/new_p1/t768/dark/full.png",
+      "expected_crops": "04-after-local/new_p1/t768/dark/crops/",
+      "expected_dom_oracle": "04-after-local/new_p1/t768/dark/dom.json"
+    },
+    {
+      "case_id": "L0071",
+      "domain": "local-fixture",
+      "route": "/new/",
+      "route_name": "new_p1",
+      "entity_or_fixture": "new_p1",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/new_p1/m390/light/full.png",
+      "expected_crops": "04-after-local/new_p1/m390/light/crops/",
+      "expected_dom_oracle": "04-after-local/new_p1/m390/light/dom.json"
+    },
+    {
+      "case_id": "L0072",
+      "domain": "local-fixture",
+      "route": "/new/",
+      "route_name": "new_p1",
+      "entity_or_fixture": "new_p1",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/new_p1/m390/dark/full.png",
+      "expected_crops": "04-after-local/new_p1/m390/dark/crops/",
+      "expected_dom_oracle": "04-after-local/new_p1/m390/dark/dom.json"
+    },
+    {
+      "case_id": "L0073",
+      "domain": "local-fixture",
+      "route": "/new/?page=99999",
+      "route_name": "new_invalid",
+      "entity_or_fixture": "new_invalid",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "error_404",
+      "expected_full": "04-after-local/new_invalid/d1440/light/full.png",
+      "expected_crops": "04-after-local/new_invalid/d1440/light/crops/",
+      "expected_dom_oracle": "04-after-local/new_invalid/d1440/light/dom.json"
+    },
+    {
+      "case_id": "L0074",
+      "domain": "local-fixture",
+      "route": "/new/?page=99999",
+      "route_name": "new_invalid",
+      "entity_or_fixture": "new_invalid",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "error_404",
+      "expected_full": "04-after-local/new_invalid/d1440/dark/full.png",
+      "expected_crops": "04-after-local/new_invalid/d1440/dark/crops/",
+      "expected_dom_oracle": "04-after-local/new_invalid/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "L0075",
+      "domain": "local-fixture",
+      "route": "/new/?page=99999",
+      "route_name": "new_invalid",
+      "entity_or_fixture": "new_invalid",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "error_404",
+      "expected_full": "04-after-local/new_invalid/t768/light/full.png",
+      "expected_crops": "04-after-local/new_invalid/t768/light/crops/",
+      "expected_dom_oracle": "04-after-local/new_invalid/t768/light/dom.json"
+    },
+    {
+      "case_id": "L0076",
+      "domain": "local-fixture",
+      "route": "/new/?page=99999",
+      "route_name": "new_invalid",
+      "entity_or_fixture": "new_invalid",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "error_404",
+      "expected_full": "04-after-local/new_invalid/t768/dark/full.png",
+      "expected_crops": "04-after-local/new_invalid/t768/dark/crops/",
+      "expected_dom_oracle": "04-after-local/new_invalid/t768/dark/dom.json"
+    },
+    {
+      "case_id": "L0077",
+      "domain": "local-fixture",
+      "route": "/new/?page=99999",
+      "route_name": "new_invalid",
+      "entity_or_fixture": "new_invalid",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "error_404",
+      "expected_full": "04-after-local/new_invalid/m390/light/full.png",
+      "expected_crops": "04-after-local/new_invalid/m390/light/crops/",
+      "expected_dom_oracle": "04-after-local/new_invalid/m390/light/dom.json"
+    },
+    {
+      "case_id": "L0078",
+      "domain": "local-fixture",
+      "route": "/new/?page=99999",
+      "route_name": "new_invalid",
+      "entity_or_fixture": "new_invalid",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "error_404",
+      "expected_full": "04-after-local/new_invalid/m390/dark/full.png",
+      "expected_crops": "04-after-local/new_invalid/m390/dark/crops/",
+      "expected_dom_oracle": "04-after-local/new_invalid/m390/dark/dom.json"
+    },
+    {
+      "case_id": "L0079",
+      "domain": "local-fixture",
+      "route": "/search/?q=%D0%BD%D0%B0%D1%80%D1%83%D1%82%D0%BE",
+      "route_name": "search_q",
+      "entity_or_fixture": "search_q",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/search_q/d1440/light/full.png",
+      "expected_crops": "04-after-local/search_q/d1440/light/crops/",
+      "expected_dom_oracle": "04-after-local/search_q/d1440/light/dom.json"
+    },
+    {
+      "case_id": "L0080",
+      "domain": "local-fixture",
+      "route": "/search/?q=%D0%BD%D0%B0%D1%80%D1%83%D1%82%D0%BE",
+      "route_name": "search_q",
+      "entity_or_fixture": "search_q",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/search_q/d1440/dark/full.png",
+      "expected_crops": "04-after-local/search_q/d1440/dark/crops/",
+      "expected_dom_oracle": "04-after-local/search_q/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "L0081",
+      "domain": "local-fixture",
+      "route": "/search/?q=%D0%BD%D0%B0%D1%80%D1%83%D1%82%D0%BE",
+      "route_name": "search_q",
+      "entity_or_fixture": "search_q",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/search_q/t768/light/full.png",
+      "expected_crops": "04-after-local/search_q/t768/light/crops/",
+      "expected_dom_oracle": "04-after-local/search_q/t768/light/dom.json"
+    },
+    {
+      "case_id": "L0082",
+      "domain": "local-fixture",
+      "route": "/search/?q=%D0%BD%D0%B0%D1%80%D1%83%D1%82%D0%BE",
+      "route_name": "search_q",
+      "entity_or_fixture": "search_q",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/search_q/t768/dark/full.png",
+      "expected_crops": "04-after-local/search_q/t768/dark/crops/",
+      "expected_dom_oracle": "04-after-local/search_q/t768/dark/dom.json"
+    },
+    {
+      "case_id": "L0083",
+      "domain": "local-fixture",
+      "route": "/search/?q=%D0%BD%D0%B0%D1%80%D1%83%D1%82%D0%BE",
+      "route_name": "search_q",
+      "entity_or_fixture": "search_q",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/search_q/m390/light/full.png",
+      "expected_crops": "04-after-local/search_q/m390/light/crops/",
+      "expected_dom_oracle": "04-after-local/search_q/m390/light/dom.json"
+    },
+    {
+      "case_id": "L0084",
+      "domain": "local-fixture",
+      "route": "/search/?q=%D0%BD%D0%B0%D1%80%D1%83%D1%82%D0%BE",
+      "route_name": "search_q",
+      "entity_or_fixture": "search_q",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/search_q/m390/dark/full.png",
+      "expected_crops": "04-after-local/search_q/m390/dark/crops/",
+      "expected_dom_oracle": "04-after-local/search_q/m390/dark/dom.json"
+    },
+    {
+      "case_id": "L0085",
+      "domain": "local-fixture",
+      "route": "/search/",
+      "route_name": "search_empty",
+      "entity_or_fixture": "search_empty",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "empty_q",
+      "expected_full": "04-after-local/search_empty/d1440/light/full.png",
+      "expected_crops": "04-after-local/search_empty/d1440/light/crops/",
+      "expected_dom_oracle": "04-after-local/search_empty/d1440/light/dom.json"
+    },
+    {
+      "case_id": "L0086",
+      "domain": "local-fixture",
+      "route": "/search/",
+      "route_name": "search_empty",
+      "entity_or_fixture": "search_empty",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "empty_q",
+      "expected_full": "04-after-local/search_empty/d1440/dark/full.png",
+      "expected_crops": "04-after-local/search_empty/d1440/dark/crops/",
+      "expected_dom_oracle": "04-after-local/search_empty/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "L0087",
+      "domain": "local-fixture",
+      "route": "/search/",
+      "route_name": "search_empty",
+      "entity_or_fixture": "search_empty",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "empty_q",
+      "expected_full": "04-after-local/search_empty/t768/light/full.png",
+      "expected_crops": "04-after-local/search_empty/t768/light/crops/",
+      "expected_dom_oracle": "04-after-local/search_empty/t768/light/dom.json"
+    },
+    {
+      "case_id": "L0088",
+      "domain": "local-fixture",
+      "route": "/search/",
+      "route_name": "search_empty",
+      "entity_or_fixture": "search_empty",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "empty_q",
+      "expected_full": "04-after-local/search_empty/t768/dark/full.png",
+      "expected_crops": "04-after-local/search_empty/t768/dark/crops/",
+      "expected_dom_oracle": "04-after-local/search_empty/t768/dark/dom.json"
+    },
+    {
+      "case_id": "L0089",
+      "domain": "local-fixture",
+      "route": "/search/",
+      "route_name": "search_empty",
+      "entity_or_fixture": "search_empty",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "empty_q",
+      "expected_full": "04-after-local/search_empty/m390/light/full.png",
+      "expected_crops": "04-after-local/search_empty/m390/light/crops/",
+      "expected_dom_oracle": "04-after-local/search_empty/m390/light/dom.json"
+    },
+    {
+      "case_id": "L0090",
+      "domain": "local-fixture",
+      "route": "/search/",
+      "route_name": "search_empty",
+      "entity_or_fixture": "search_empty",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "empty_q",
+      "expected_full": "04-after-local/search_empty/m390/dark/full.png",
+      "expected_crops": "04-after-local/search_empty/m390/dark/crops/",
+      "expected_dom_oracle": "04-after-local/search_empty/m390/dark/dom.json"
+    },
+    {
+      "case_id": "L0091",
+      "domain": "local-fixture",
+      "route": "/search/?q=zzz-no-match-parity03",
+      "route_name": "search_zero",
+      "entity_or_fixture": "search_zero",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "empty_results",
+      "expected_full": "04-after-local/search_zero/d1440/light/full.png",
+      "expected_crops": "04-after-local/search_zero/d1440/light/crops/",
+      "expected_dom_oracle": "04-after-local/search_zero/d1440/light/dom.json"
+    },
+    {
+      "case_id": "L0092",
+      "domain": "local-fixture",
+      "route": "/search/?q=zzz-no-match-parity03",
+      "route_name": "search_zero",
+      "entity_or_fixture": "search_zero",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "empty_results",
+      "expected_full": "04-after-local/search_zero/d1440/dark/full.png",
+      "expected_crops": "04-after-local/search_zero/d1440/dark/crops/",
+      "expected_dom_oracle": "04-after-local/search_zero/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "L0093",
+      "domain": "local-fixture",
+      "route": "/search/?q=zzz-no-match-parity03",
+      "route_name": "search_zero",
+      "entity_or_fixture": "search_zero",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "empty_results",
+      "expected_full": "04-after-local/search_zero/t768/light/full.png",
+      "expected_crops": "04-after-local/search_zero/t768/light/crops/",
+      "expected_dom_oracle": "04-after-local/search_zero/t768/light/dom.json"
+    },
+    {
+      "case_id": "L0094",
+      "domain": "local-fixture",
+      "route": "/search/?q=zzz-no-match-parity03",
+      "route_name": "search_zero",
+      "entity_or_fixture": "search_zero",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "empty_results",
+      "expected_full": "04-after-local/search_zero/t768/dark/full.png",
+      "expected_crops": "04-after-local/search_zero/t768/dark/crops/",
+      "expected_dom_oracle": "04-after-local/search_zero/t768/dark/dom.json"
+    },
+    {
+      "case_id": "L0095",
+      "domain": "local-fixture",
+      "route": "/search/?q=zzz-no-match-parity03",
+      "route_name": "search_zero",
+      "entity_or_fixture": "search_zero",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "empty_results",
+      "expected_full": "04-after-local/search_zero/m390/light/full.png",
+      "expected_crops": "04-after-local/search_zero/m390/light/crops/",
+      "expected_dom_oracle": "04-after-local/search_zero/m390/light/dom.json"
+    },
+    {
+      "case_id": "L0096",
+      "domain": "local-fixture",
+      "route": "/search/?q=zzz-no-match-parity03",
+      "route_name": "search_zero",
+      "entity_or_fixture": "search_zero",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "empty_results",
+      "expected_full": "04-after-local/search_zero/m390/dark/full.png",
+      "expected_crops": "04-after-local/search_zero/m390/dark/crops/",
+      "expected_dom_oracle": "04-after-local/search_zero/m390/dark/dom.json"
+    },
+    {
+      "case_id": "L0097",
+      "domain": "local-fixture",
+      "route": "/collections/",
+      "route_name": "collections",
+      "entity_or_fixture": "collections",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/collections/d1440/light/full.png",
+      "expected_crops": "04-after-local/collections/d1440/light/crops/",
+      "expected_dom_oracle": "04-after-local/collections/d1440/light/dom.json"
+    },
+    {
+      "case_id": "L0098",
+      "domain": "local-fixture",
+      "route": "/collections/",
+      "route_name": "collections",
+      "entity_or_fixture": "collections",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/collections/d1440/dark/full.png",
+      "expected_crops": "04-after-local/collections/d1440/dark/crops/",
+      "expected_dom_oracle": "04-after-local/collections/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "L0099",
+      "domain": "local-fixture",
+      "route": "/collections/",
+      "route_name": "collections",
+      "entity_or_fixture": "collections",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/collections/t768/light/full.png",
+      "expected_crops": "04-after-local/collections/t768/light/crops/",
+      "expected_dom_oracle": "04-after-local/collections/t768/light/dom.json"
+    },
+    {
+      "case_id": "L0100",
+      "domain": "local-fixture",
+      "route": "/collections/",
+      "route_name": "collections",
+      "entity_or_fixture": "collections",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/collections/t768/dark/full.png",
+      "expected_crops": "04-after-local/collections/t768/dark/crops/",
+      "expected_dom_oracle": "04-after-local/collections/t768/dark/dom.json"
+    },
+    {
+      "case_id": "L0101",
+      "domain": "local-fixture",
+      "route": "/collections/",
+      "route_name": "collections",
+      "entity_or_fixture": "collections",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "normal",
+      "expected_full": "04-after-local/collections/m390/light/full.png",
+      "expected_crops": "04-after-local/collections/m390/light/crops/",
+      "expected_dom_oracle": "04-after-local/collections/m390/light/dom.json"
+    },
+    {
+      "case_id": "L0102",
+      "domain": "local-fixture",
+      "route": "/collections/",
+      "route_name": "collections",
+      "entity_or_fixture": "collections",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "normal",
+      "expected_full": "04-after-local/collections/m390/dark/full.png",
+      "expected_crops": "04-after-local/collections/m390/dark/crops/",
+      "expected_dom_oracle": "04-after-local/collections/m390/dark/dom.json"
+    },
+    {
+      "case_id": "L0103",
+      "domain": "local-fixture",
+      "route": "/schedule/",
+      "route_name": "schedule",
+      "entity_or_fixture": "schedule",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "missing_feed",
+      "expected_full": "04-after-local/schedule/d1440/light/full.png",
+      "expected_crops": "04-after-local/schedule/d1440/light/crops/",
+      "expected_dom_oracle": "04-after-local/schedule/d1440/light/dom.json"
+    },
+    {
+      "case_id": "L0104",
+      "domain": "local-fixture",
+      "route": "/schedule/",
+      "route_name": "schedule",
+      "entity_or_fixture": "schedule",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "missing_feed",
+      "expected_full": "04-after-local/schedule/d1440/dark/full.png",
+      "expected_crops": "04-after-local/schedule/d1440/dark/crops/",
+      "expected_dom_oracle": "04-after-local/schedule/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "L0105",
+      "domain": "local-fixture",
+      "route": "/schedule/",
+      "route_name": "schedule",
+      "entity_or_fixture": "schedule",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "missing_feed",
+      "expected_full": "04-after-local/schedule/t768/light/full.png",
+      "expected_crops": "04-after-local/schedule/t768/light/crops/",
+      "expected_dom_oracle": "04-after-local/schedule/t768/light/dom.json"
+    },
+    {
+      "case_id": "L0106",
+      "domain": "local-fixture",
+      "route": "/schedule/",
+      "route_name": "schedule",
+      "entity_or_fixture": "schedule",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "missing_feed",
+      "expected_full": "04-after-local/schedule/t768/dark/full.png",
+      "expected_crops": "04-after-local/schedule/t768/dark/crops/",
+      "expected_dom_oracle": "04-after-local/schedule/t768/dark/dom.json"
+    },
+    {
+      "case_id": "L0107",
+      "domain": "local-fixture",
+      "route": "/schedule/",
+      "route_name": "schedule",
+      "entity_or_fixture": "schedule",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "missing_feed",
+      "expected_full": "04-after-local/schedule/m390/light/full.png",
+      "expected_crops": "04-after-local/schedule/m390/light/crops/",
+      "expected_dom_oracle": "04-after-local/schedule/m390/light/dom.json"
+    },
+    {
+      "case_id": "L0108",
+      "domain": "local-fixture",
+      "route": "/schedule/",
+      "route_name": "schedule",
+      "entity_or_fixture": "schedule",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "missing_feed",
+      "expected_full": "04-after-local/schedule/m390/dark/full.png",
+      "expected_crops": "04-after-local/schedule/m390/dark/crops/",
+      "expected_dom_oracle": "04-after-local/schedule/m390/dark/dom.json"
+    },
+    {
+      "case_id": "L0109",
+      "domain": "local-fixture",
+      "route": "/title/no-such-parity03/",
+      "route_name": "invalid_title",
+      "entity_or_fixture": "invalid_title",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "state": "error_404",
+      "expected_full": "04-after-local/invalid_title/d1440/light/full.png",
+      "expected_crops": "04-after-local/invalid_title/d1440/light/crops/",
+      "expected_dom_oracle": "04-after-local/invalid_title/d1440/light/dom.json"
+    },
+    {
+      "case_id": "L0110",
+      "domain": "local-fixture",
+      "route": "/title/no-such-parity03/",
+      "route_name": "invalid_title",
+      "entity_or_fixture": "invalid_title",
+      "viewport": "d1440",
+      "viewport_px": [
+        1440,
+        900
+      ],
+      "theme": "dark",
+      "state": "error_404",
+      "expected_full": "04-after-local/invalid_title/d1440/dark/full.png",
+      "expected_crops": "04-after-local/invalid_title/d1440/dark/crops/",
+      "expected_dom_oracle": "04-after-local/invalid_title/d1440/dark/dom.json"
+    },
+    {
+      "case_id": "L0111",
+      "domain": "local-fixture",
+      "route": "/title/no-such-parity03/",
+      "route_name": "invalid_title",
+      "entity_or_fixture": "invalid_title",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "light",
+      "state": "error_404",
+      "expected_full": "04-after-local/invalid_title/t768/light/full.png",
+      "expected_crops": "04-after-local/invalid_title/t768/light/crops/",
+      "expected_dom_oracle": "04-after-local/invalid_title/t768/light/dom.json"
+    },
+    {
+      "case_id": "L0112",
+      "domain": "local-fixture",
+      "route": "/title/no-such-parity03/",
+      "route_name": "invalid_title",
+      "entity_or_fixture": "invalid_title",
+      "viewport": "t768",
+      "viewport_px": [
+        768,
+        1024
+      ],
+      "theme": "dark",
+      "state": "error_404",
+      "expected_full": "04-after-local/invalid_title/t768/dark/full.png",
+      "expected_crops": "04-after-local/invalid_title/t768/dark/crops/",
+      "expected_dom_oracle": "04-after-local/invalid_title/t768/dark/dom.json"
+    },
+    {
+      "case_id": "L0113",
+      "domain": "local-fixture",
+      "route": "/title/no-such-parity03/",
+      "route_name": "invalid_title",
+      "entity_or_fixture": "invalid_title",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "state": "error_404",
+      "expected_full": "04-after-local/invalid_title/m390/light/full.png",
+      "expected_crops": "04-after-local/invalid_title/m390/light/crops/",
+      "expected_dom_oracle": "04-after-local/invalid_title/m390/light/dom.json"
+    },
+    {
+      "case_id": "L0114",
+      "domain": "local-fixture",
+      "route": "/title/no-such-parity03/",
+      "route_name": "invalid_title",
+      "entity_or_fixture": "invalid_title",
+      "viewport": "m390",
+      "viewport_px": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "state": "error_404",
+      "expected_full": "04-after-local/invalid_title/m390/dark/full.png",
+      "expected_crops": "04-after-local/invalid_title/m390/dark/crops/",
+      "expected_dom_oracle": "04-after-local/invalid_title/m390/dark/dom.json"
+    }
+  ]
+}

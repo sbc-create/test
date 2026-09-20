@@ -1,0 +1,88 @@
+{
+  "stage": "ANIMEDIA-BLOCKWISE-PARITY-03",
+  "spec": "ANIMEDIA_BLOCK_SPEC_V1",
+  "frozen_at_utc": "2026-09-20T11:17:59Z",
+  "worktree": "/home/claude/wt-animedia-finalization-01",
+  "branch": "claude/animedia-template-finalization-01",
+  "start_head": "242a834f580ded6dca42972c36c3e1454836c852",
+  "deploy_scope": [
+    "animedia.icu",
+    "animedia.space"
+  ],
+  "previous_stage": "ANIMEDIA-REFERENCE-PARITY-02",
+  "previous_verdict": "NEEDS_REPAIR",
+  "live_build_at_freeze": "20260920T102102Z-89666321-nova",
+  "reference": {
+    "home": "https://amd.online/",
+    "collections": "https://amd.online/anime-collections/",
+    "title_example": "https://amd.online/2397-nekromant-ja-katastrofa.html"
+  },
+  "problem_routes": {
+    "title": "/title/nelyud-film-2-stolknovenie/",
+    "episode": "/title/master-lda-i-plameni-2/season-2/episode-104/"
+  },
+  "self_reported_visual_score_allowed": false,
+  "template_only": true,
+  "forbidden_mutations": [
+    "core",
+    "search_ranker",
+    "route_semantics",
+    "player_selection_policy",
+    "global_seo_indexability",
+    "ratings_formula",
+    "http_status_policy",
+    "databases",
+    "event_ledgers",
+    "dns",
+    "other_domains",
+    "push",
+    "merge"
+  ],
+  "timestamp_fields_policy": {
+    "catalog.items[].published_at": "AMBIGUOUS",
+    "allowed_ui_labels_require_proven_envelope": true,
+    "build_deploy_mtime_now_forbidden_as_content_time": true
+  },
+  "feeds": {
+    "TRUE_PROVIDER_PLAYABLE_EVENT_COUNT": 0,
+    "TRUE_EPISODE_RELEASE_EVENT_COUNT": 0,
+    "CATALOG_ADDED_EVENT_COUNT": 0,
+    "B03_populated_forbidden_until_provider_events": true,
+    "B03_empty_max_px": 96
+  },
+  "geometry_tolerances": {
+    "section_order_presence_deviations": 0,
+    "header_player_card_wh_px": 4,
+    "grid_gap_padding_px": 4,
+    "outer_container_px": 8,
+    "vertical_block_position_after_normalize_px": 12,
+    "overflow_overlap_px": 0,
+    "player_width_fill_ratio_min": 0.98,
+    "player_height_fill_ratio_min": 0.98,
+    "player_aspect_ratio_error_percent_max": 1,
+    "title_hero_to_player_gap_max_desktop_px": 120,
+    "title_hero_to_player_gap_max_tablet_px": 96,
+    "title_hero_to_player_gap_max_mobile_px": 80,
+    "b03_empty_heading_panel_max_px": 96,
+    "b04_schedule_empty_max_px": 260,
+    "b13_schedule_empty_max_px": 260
+  },
+  "display_policies_digest_of": "DISPLAY_POLICIES_FROZEN.json",
+  "local_fixture_case_count": 114,
+  "live_entity_case_count": 84,
+  "allowed_verdicts": [
+    "PASS_READY_FOR_OWNER_VISUAL_REVIEW",
+    "PRESENTATION_SHELL_PASS_WITH_GAPS",
+    "BLOCKED_CORE_DATA",
+    "NEEDS_REPAIR",
+    "NEEDS_OWNER_VALUES"
+  ],
+  "close_flags_default": {
+    "READY_FOR_OWNER_VISUAL_REVIEW": "NO",
+    "HOME_CONTENT_PARITY_PASS": "NO",
+    "REFERENCE_PARITY_PASS": "NO",
+    "ANIMEDIA_TEMPLATE_CAN_BE_CLOSED": "NO",
+    "ANIMEDIA_OVERALL_CAN_BE_CLOSED": "NO"
+  },
+  "contract_mutation_forbidden_after_digest": true
+}

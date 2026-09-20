@@ -1,0 +1,17 @@
+{
+  "section_order_presence_deviations": 0,
+  "header_player_card_wh_px": 4,
+  "grid_gap_padding_px": 4,
+  "outer_container_px": 8,
+  "vertical_block_position_after_normalize_px": 12,
+  "overflow_overlap_px": 0,
+  "player_width_fill_ratio_min": 0.98,
+  "player_height_fill_ratio_min": 0.98,
+  "player_aspect_ratio_error_percent_max": 1,
+  "title_hero_to_player_gap_max_desktop_px": 120,
+  "title_hero_to_player_gap_max_tablet_px": 96,
+  "title_hero_to_player_gap_max_mobile_px": 80,
+  "b03_empty_heading_panel_max_px": 96,
+  "b04_schedule_empty_max_px": 260,
+  "b13_schedule_empty_max_px": 260
+}

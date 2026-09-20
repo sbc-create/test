@@ -1,0 +1,64 @@
+{
+  "url": "https://amd.online/anime-collections/",
+  "title": "Подборки аниме",
+  "viewport": {
+    "w": 768,
+    "h": 1024,
+    "dpr": 1
+  },
+  "scrollWidth": 768,
+  "overflowX": 0,
+  "header": {
+    "x": 0,
+    "y": 0,
+    "w": 768,
+    "h": 90,
+    "tag": "header",
+    "id": null,
+    "cls": "header d-flex ai-center"
+  },
+  "h1": {
+    "x": 265,
+    "y": 726,
+    "w": 238,
+    "h": 24,
+    "tag": "h1",
+    "id": null,
+    "cls": "ac-toolbar__title"
+  },
+  "section_count": 3,
+  "sections_top10": [
+    {
+      "x": 0,
+      "y": 0,
+      "w": 768,
+      "h": 90,
+      "tag": "header",
+      "id": null,
+      "cls": "header d-flex ai-center"
+    },
+    {
+      "x": 20,
+      "y": 726,
+      "w": 728,
+      "h": 328,
+      "tag": "header",
+      "id": null,
+      "cls": "ac-toolbar"
+    },
+    {
+      "x": 10,
+      "y": 4020,
+      "w": 748,
+      "h": 141,
+      "tag": "footer",
+      "id": null,
+      "cls": "footer"
+    }
+  ],
+  "bodyHeight": 4161,
+  "http_status": 200,
+  "captured_at": "2026-09-20T11:18:16Z",
+  "screenshot_sha256": "f9116981a23c9dd51d015a408c668b8d9d23585a34f0a95f59ba4cfac5b6f736",
+  "above_fold_sha256": "02c42eb41ed57123cda2626f0a633f69857a31037e9607cc8130b1a5e5d69772"
+}
