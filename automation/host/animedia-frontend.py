@@ -936,323 +936,6 @@ def _общее(токены: dict) -> str:
 
 
 
-ОСНОВА_СТИЛЬ = """
-/* Оформление Zona 1.2.0. Числа — измеренные на эталоне; разметка и правила
-   написаны свои. Ключевые цели измерения (см. artifacts/evidence/
-   templates-zona-animedia-visual-parity-006/reference/zona-w140/):
-     контейнер 1400 max, поля 20 (16 на узком), шапка горизонтальная и
-     закреплённая высотой 69 на десктопе, кегль тела 13/17.9,
-     h2 22.1 нормального начертания, ссылки 15.6 полужирные. */
-body{background:@PAGE@;color:@INK@;
-font:13px/1.375 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif;
-padding-top:117px}
-@media(min-width:768px){body{padding-top:138px}}
-@media(min-width:1280px){body{padding-top:69px}}
-.zs{min-height:100vh;display:block}
-.zmain{min-width:0}
-.zwrap{max-width:1400px;margin:0 auto;padding:0 16px}
-@media(min-width:1280px){.zwrap{padding:0 20px}}
-
-/* Шапка: горизонтальная, закреплённая. Постоянной левой колонки нет ни на
-   одной ширине — это и было главным расхождением с эталоном. */
-.zhd{position:fixed;top:0;left:0;right:0;z-index:60;background:@RAIL@;
-color:@RAILINK@;box-shadow:0 1px 0 rgba(0,0,0,.25)}
-.zhd__in{max-width:1400px;margin:0 auto;padding:14px 16px;display:flex;
-align-items:center;gap:12px;flex-wrap:wrap}
-@media(min-width:768px){.zhd__in{padding:25px 16px;gap:14px}}
-@media(min-width:1280px){.zhd__in{padding:0 20px;height:69px;flex-wrap:nowrap;gap:14px}}
-.zhd__logo{font-size:19px;font-weight:700;letter-spacing:-.3px;color:#fff;
-white-space:nowrap;flex:0 0 auto}
-/* Пункты в одну строку с горизонтальной прокруткой: перенос на узком экране
-   поднимал шапку до 185 px против измеренных на эталоне 117. */
-.zhd__n{display:flex;gap:2px;flex:1 0 100%;order:3;min-width:0;
-overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.zhd__n::-webkit-scrollbar{display:none}
-@media(min-width:1280px){.zhd__n{flex:1 1 auto;order:0;overflow:visible}}
-.zhd__n a{padding:9px 10px;border-radius:6px;font-size:15.6px;font-weight:500;
-color:#eef3f8;white-space:nowrap;flex:0 0 auto}
-.zhd__n a:hover{background:rgba(255,255,255,.14)}
-.zhd__n a[aria-current]{background:@ACCDK@;color:#fff}
-.zhd__s{display:flex;flex:1 1 140px;min-width:0;max-width:420px;
-border-radius:6px;overflow:hidden;background:#fff}
-.zhd__s input{flex:1;min-width:0;border:0;padding:9px 12px;font-size:14px;
-color:@PAGE@;font-family:inherit}
-.zhd__s button{border:0;background:@ACCDK@;color:#fff;padding:0 16px;
-font-weight:600;font-size:14px;cursor:pointer;font-family:inherit}
-/* Жанры вынесены из шапки в тело главной: третий ряд поднимал шапку до
-   170 px против измеренных на эталоне 137.8. */
-
-/* Прежние узлы каркаса остаются объявленными: на них ссылаются страницы
-   каталога, поиска и произведения. Боковая колонка больше не раскладывается. */
-.zrail,.zrail__logo,.zrail__sub,.zrail__t,.zrail__n,.zrail__g{display:none}
-.ztop{border-bottom:1px solid @LINE@;background:@PAGE@}
-.ztop__a{display:flex;align-items:center;gap:16px;padding:12px 0}
-.ztop__s{flex:1;display:flex;border:1px solid @LINE@;border-radius:6px;
-overflow:hidden;background:@ALT@;max-width:640px}
-.ztop__s input{flex:1;border:0;padding:10px 13px;font-size:14px;
-background:transparent;color:@INK@;font-family:inherit}
-.ztop__s button{border:0;background:@ACCDK@;color:#fff;padding:0 18px;
-font-weight:600;font-size:14px;cursor:pointer;font-family:inherit}
-.ztop__b{display:flex;gap:16px;padding:0 0 10px;font-size:13px;color:@DIM@;
-flex-wrap:wrap;max-width:100%;min-width:0}
-.ztop__b a{color:@ACC@;font-weight:600;display:inline-block;padding:5px 2px;
-max-width:100%;overflow-wrap:anywhere}
-.ztop__b a[aria-current]{color:@INK@;box-shadow:inset 0 -2px 0 @ACC@}
-
-/* Типографика по измерению: h2 22.1 нормального начертания. */
-.zh{font-size:26px;line-height:1.22;font-weight:600;margin:22px 0 6px;
-letter-spacing:-.3px}
-@media(min-width:1280px){.zh{font-size:30px}}
-.zh--sm{font-size:22.1px;font-weight:400;margin:26px 0 6px;letter-spacing:0}
-.zsub{font-size:13px;color:@DIM@;margin:0 0 18px}
-.zsub a{display:inline-block;padding:5px 2px;color:@ACC@;font-weight:600}
-.zcr{font-size:12.5px;color:@DIM@;padding:12px 0 0}
-.zcr a{color:@ACC@}
-
-/* Пять горизонтальных лент. Управление мышью, клавиатурой и свайпом. */
-.zsec{margin:26px 0 30px}
-.zsec__h{display:flex;align-items:baseline;justify-content:space-between;
-gap:12px;margin:0 0 10px}
-.zsec__h h2{font-size:22.1px;font-weight:400;margin:0;letter-spacing:0}
-.zsec__h a{font-size:13px;color:@ACC@;font-weight:600;white-space:nowrap}
-.zrl{position:relative}
-.zrl__vp{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;
-scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
-scrollbar-width:thin;padding:2px 0 10px}
-/* align-items:flex-start обязателен: по умолчанию флекс растягивает все
-   карточки до высоты самой высокой, и постер с заданной пропорцией
-   перерастает её — измерено 0.56 вместо 0.67 в лентах с длинными названиями. */
-.zrl__track{display:flex;gap:12px;min-width:min-content;align-items:stretch}
-.zrl__track>*{flex:0 0 148px;scroll-snap-align:start;min-width:0;height:auto}
-@media(min-width:768px){.zrl__track>*{flex-basis:180px}}
-@media(min-width:1280px){.zrl__track>*{flex-basis:216px}}
-.zrl__btn{position:absolute;top:28%;transform:translateY(-50%);z-index:5;
-width:34px;height:52px;border:0;border-radius:5px;cursor:pointer;
-background:rgba(16,21,26,.82);color:#fff;font-size:18px;line-height:1;
-display:none;align-items:center;justify-content:center}
-@media(min-width:1024px){.zrl:hover .zrl__btn,.zrl__btn:focus-visible{display:flex}}
-.zrl__btn--p{left:-6px}
-.zrl__btn--n{right:-6px}
-.zrl__btn[disabled]{opacity:.32;cursor:default}
-
-/* Сетка каталога и карточка. Пропорция постера 2:3, высота ряда ровная. */
-.zg{display:grid;gap:14px;grid-template-columns:repeat(2,minmax(0,1fr));
-align-items:stretch}
-@media(min-width:640px){.zg{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(min-width:900px){.zg{grid-template-columns:repeat(5,minmax(0,1fr))}}
-@media(min-width:1200px){.zg{grid-template-columns:repeat(6,minmax(0,1fr))}}
-@media(min-width:1440px){.zg{grid-template-columns:repeat(7,minmax(0,1fr))}}
-.zt{display:flex;flex-direction:column;height:100%;min-width:0;background:@SURF@;
-border:1px solid @LINE@;border-radius:8px;overflow:hidden;
-transition:border-color .16s,transform .16s;color:inherit;text-decoration:none}
-.zt:hover{border-color:@ACC@;transform:translateY(-2px)}
-.zt__p{display:block;aspect-ratio:2/3;background:@ALT@;position:relative;flex:0 0 auto;
-overflow:hidden}
-.zt__p img,.zt__img{position:absolute;inset:0;z-index:1;width:100%;height:100%;
-object-fit:cover;display:block}
-.zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:12px;
-text-align:center;color:@MUTE@;font-size:12px;line-height:1.3;aspect-ratio:auto}
-.zt__none b{display:block;font-size:24px;font-weight:700;color:@DIM@;margin-bottom:4px}
-.zt__b{padding:8px 9px 10px;display:flex;flex-direction:column;gap:4px;flex:1 1 auto;
-min-height:108px;box-sizing:border-box}
-.zt__t{font-size:13.5px;font-weight:600;line-height:1.28;min-height:calc(1.28em * 2);
-max-height:calc(1.28em * 2);display:-webkit-box;-webkit-line-clamp:2;
--webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
-.zt__m{display:block;font-size:12px;color:@DIM@;line-height:1.3;min-height:1.3em;
-white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.zt__r{display:flex;gap:9px;font-size:12px;color:@DIM@;margin-top:auto;
-padding-top:4px;flex-wrap:nowrap;min-height:1.3em;align-items:center}
-.zt__r b{color:@WARM@;font-weight:700}
-.zt__r i{color:@WARM@;font-style:normal;font-weight:700}
-.zt__r em{color:@MUTE@;font-style:italic}
-
-/* Строка списка: постер слева. Это не сетка главной. */
-.zl{display:flex;flex-direction:column;gap:10px}
-.zr{display:grid;grid-template-columns:64px 1fr;gap:12px;padding:10px;
-background:@SURF@;border:1px solid @LINE@;border-radius:8px;align-items:start}
-@media(min-width:768px){.zr{grid-template-columns:82px 1fr}}
-.zr:hover{border-color:@ACC@}
-.zr__p{aspect-ratio:2/3;background:@ALT@;border-radius:5px;overflow:hidden;
-position:relative}
-.zr__p img,.zr__img{position:absolute;inset:0;width:100%;height:100%;
-object-fit:cover;display:block;z-index:1}
-.zr__none{position:absolute;inset:0;display:grid;place-items:center;
-text-align:center;color:@MUTE@;font-size:11px;padding:6px}
-.zr__t{display:block;font-size:15px;font-weight:600;line-height:1.3;margin-bottom:3px}
-.zr__m{display:block;font-size:12.5px;color:@DIM@;margin-bottom:5px}
-.zr__d{font-size:12.5px;color:@DIM@;line-height:1.45;
-display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.zr__r{display:flex;gap:10px;font-size:12px;color:@DIM@;margin-top:6px;flex-wrap:wrap}
-
-/* Фильтры каталога (служебные) и жанровая навигация главной. */
-.zstrip{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px;max-width:100%;min-width:0}
-.zstrip a{background:@SURF@;border:1px solid @LINE@;border-radius:6px;
-padding:7px 12px;font-size:13px;color:@DIM@;font-weight:600;
-max-width:100%;overflow-wrap:anywhere}
-.zstrip a:hover{border-color:@ACC@;color:@INK@}
-.zstrip a[aria-current]{background:@ACCDK@;color:#fff;border-color:@ACCDK@}
-.zgenres{margin:8px 0 28px;max-width:100%;min-width:0}
-.zgenres__h{font-size:22.1px;font-weight:400;margin:0 0 12px;letter-spacing:0}
-.zgenres__nav{display:flex;flex-wrap:wrap;gap:10px;max-width:100%}
-.zgenres__nav a{display:inline-flex;align-items:center;justify-content:center;
-min-height:42px;padding:10px 16px;border-radius:9px;border:1px solid @LINE@;
-background:@SURF@;color:@INK@;font-size:14px;font-weight:600;line-height:1.2;
-text-decoration:none;box-sizing:border-box}
-.zgenres__nav a:hover{border-color:@ACC@;color:@ACC@;background:#f3f7fc}
-.zgenres__nav a:focus-visible{outline:2px solid @ACC@;outline-offset:2px}
-.zgenres__nav a[aria-current],.zgenres__nav a.is-active{
-background:@ACCDK@;border-color:@ACCDK@;color:#fff}
-@media(max-width:639px){
-.zgenres__nav{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
-scrollbar-width:thin;padding-bottom:4px}
-.zgenres__nav a{flex:0 0 auto}
-}
-.zpg{display:flex;gap:7px;justify-content:center;margin:26px 0;flex-wrap:wrap}
-.zpg a,.zpg span{padding:8px 13px;border-radius:6px;border:1px solid @LINE@;
-background:@SURF@;font-size:13.5px;min-width:40px;text-align:center}
-.zpg span{background:@ACCDK@;color:#fff;border-color:@ACCDK@}
-.zempty,.znf{padding:52px 18px;text-align:center;color:@DIM@}
-.znf b{display:block;font-size:44px;font-weight:700;color:@ACC@;margin-bottom:6px}
-.znf h1{font-size:24px;margin:0 0 8px;color:@INK@;font-weight:600}
-.znf a{display:inline-block;margin-top:14px;background:@ACCDK@;color:#fff;
-padding:11px 22px;border-radius:6px;font-weight:600}
-.zsea__h{font-size:13px;color:@DIM@;margin:0 0 14px}
-.zsea{margin:0 0 20px}
-
-/* Страница произведения: компактная трёхзональная шапка. */
-.zban{display:none}
-.ztitle{display:grid;grid-template-columns:1fr;gap:20px;margin:16px 0 8px;
-align-items:start}
-@media(min-width:900px){.ztitle{grid-template-columns:220px minmax(0,1fr);gap:22px}}
-@media(min-width:1280px){.ztitle{grid-template-columns:260px minmax(0,1fr) 300px;gap:24px}}
-.ztitle__poster{aspect-ratio:2/3;border-radius:8px;overflow:hidden;background:@ALT@;
-position:relative;width:100%;max-width:280px;margin:0 auto}
-@media(min-width:900px){.ztitle__poster{margin:0;max-width:none}}
-.ztitle__poster img,.ztitle__poster .zhead__img{position:absolute;inset:0;z-index:1;
-width:100%;height:100%;object-fit:cover;display:block}
-.ztitle__main{min-width:0}
-.ztitle__main h1{font-size:28px;line-height:1.18;margin:0 0 8px;letter-spacing:-.4px}
-@media(min-width:1280px){.ztitle__main h1{font-size:32px}}
-.ztitle__o{font-size:14px;color:@DIM@;margin:0 0 10px}
-.ztitle__desc{font-size:14.5px;line-height:1.62;color:@INK@;max-width:70ch;margin:0 0 14px;
-display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
-.ztitle__cta{display:inline-flex;align-items:center;justify-content:center;
-min-height:42px;padding:10px 18px;border-radius:8px;background:@ACCDK@;color:#fff;
-font-weight:700;font-size:14px;text-decoration:none}
-.ztitle__cta:hover{filter:brightness(1.05)}
-.ztitle__rail{min-width:0;display:flex;flex-direction:column;gap:16px}
-@media(max-width:899px){.ztitle__rail{order:3}}
-.ztitle__dl{margin:0;background:@SURF@;border:1px solid @LINE@;border-radius:8px;
-padding:12px 14px;display:grid;gap:10px}
-.ztitle__dl div{display:grid;grid-template-columns:96px minmax(0,1fr);gap:8px 12px;
-align-items:baseline}
-.ztitle__dl dt{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
-color:@DIM@;font-weight:700;margin:0}
-.ztitle__dl dd{margin:0;font-size:13.5px;color:@INK@;line-height:1.4;
-overflow-wrap:anywhere}
-.ztitle__dl a{color:@ACC@;font-weight:600}
-.zad{display:none}
-.zad[data-ad-enabled="1"]{display:block;width:100%;max-width:300px;min-height:250px;
-border:1px dashed @LINE@;border-radius:8px;background:@ALT@;margin:0 auto}
-/* legacy hooks kept for older markup paths */
-.zhead{display:contents}
-.zhead__ps,.zhead__x,.zhead__o{display:contents}
-.zbody{font-size:14.5px;line-height:1.62;color:@INK@;max-width:70ch;margin:18px 0 0}
-.zaside{display:none}
-/* Хаб подборок: карточка коллекции, а не ещё одна сетка тайтлов. */
-.zhub{display:grid;gap:12px;margin:14px 0;grid-template-columns:1fr}
-@media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:1000px){.zhub{grid-template-columns:repeat(3,1fr)}}
-.zhub__c{display:block;padding:12px;border:1px solid @LINE@;border-radius:8px;
-background:@SURF@;color:inherit;text-decoration:none}
-.zhub__c:hover{border-color:@ACC@}
-.zhub__g{display:flex;gap:4px;margin-bottom:9px}
-.zhub__p{flex:1 1 0;aspect-ratio:2/3;overflow:hidden;border-radius:5px;background:@ALT@}
-.zhub__img{width:100%;height:100%;object-fit:cover;display:block}
-.zhub__t{display:block;font-weight:700;font-size:15.5px}
-.zhub__m{display:block;font-size:12.5px;color:@ACC@;font-weight:600;margin:2px 0 4px}
-.zhub__d{display:block;font-size:13px;color:@DIM@;line-height:1.45}
-
-/* Окно просмотра списка серий ограничено; сам список не обрезается. */
-.zeps{display:grid;gap:7px;margin:14px 0;max-height:70vh;overflow-y:auto;
-overscroll-behavior:contain}
-@media(min-width:768px){.zeps{max-height:520px}}
-.zeps a,.zeps span{display:block;padding:9px 12px;border-radius:6px;
-border:1px solid @LINE@;background:@SURF@;font-size:13.5px}
-.zeps span{opacity:.55}
-.zeps a[aria-current]{background:@ACCDK@;color:#fff;border-color:@ACCDK@}
-.zepnav{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
-.zepnav a{background:@SURF@;border:1px solid @LINE@;border-radius:6px;
-padding:9px 14px;font-size:13.5px;color:@ACC@;font-weight:600}
-
-/* Плеер: кадр 16:9 только при resolving/ok; честные состояния — компактны. */
-.zpl{margin:18px 0}
-.zpl__f{aspect-ratio:16/9;background:#0d1217;border:1px solid @LINE@;
-border-radius:8px;overflow:hidden;position:relative}
-.zpl__f[data-state="awaiting"],
-.zpl__f[data-state="unavailable"],
-.zpl__f[data-state="nosource"],
-.zpl__f[data-state="noaccess"],
-.zpl__f[data-state="provider"],
-.zpl__f[data-state="error"],
-.zpl__f[data-state="slow"]{aspect-ratio:auto;min-height:120px;max-height:180px}
-.zpl__f video-player{display:block;width:100%;height:100%}
-.zpl__h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
-font-size:22.1px;font-weight:400;margin:22px 0 10px}
-.zpl__h span{font-size:13px;color:@DIM@;font-weight:600}
-.zpl__s{position:absolute;inset:0;display:grid;place-items:center;padding:22px;
-text-align:center;color:@DIM@;font-size:13.5px;line-height:1.5}
-.zpl__f [data-player-state]{padding:18px 16px;text-align:center;color:@DIM@;
-font-size:13.5px;line-height:1.5;max-width:520px;margin:0 auto}
-.zpl__f [data-player-state] b{display:block;color:@INK@;margin:0 0 6px;font-size:15px}
-
-.zft{border-top:1px solid @LINE@;margin:36px 0 0;padding:20px 0 30px;
-font-size:12.5px;color:@DIM@;display:block}
-.zft__cols{display:grid;gap:18px;grid-template-columns:1fr;
-margin:0 0 16px}
-@media(min-width:768px){.zft__cols{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.zft__col{display:flex;flex-direction:column;gap:6px;min-width:0}
-.zft__col b{color:@INK@;font-size:13px;margin:0 0 4px}
-.zft__col a{color:@ACC@;font-weight:500}
-.zft__bar{display:flex;justify-content:flex-end;align-items:center}
-.zvb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;
-border:0;padding:0;background:transparent;color:@MUTE@}
-.zhd__menu{display:inline-flex;align-items:center;justify-content:center;
-width:40px;height:40px;border:1px solid rgba(255,255,255,.28);border-radius:6px;
-background:transparent;color:#fff;font-size:20px;cursor:pointer;flex:0 0 auto}
-@media(min-width:768px){.zhd__menu{display:none}}
-@media(max-width:767px){
-.zhd__n{display:none;flex:1 0 100%;order:4;flex-wrap:wrap;overflow:visible}
-.zhd__n.is-open{display:flex}
-body.nav-lock{overflow:hidden}
-}
-.zfilt__y{display:inline-flex;flex-wrap:wrap;gap:6px;max-width:100%}
-.zhub--home{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}
-@media(min-width:768px){.zhub--home{grid-template-columns:repeat(4,minmax(0,1fr))}}
-.zsec--seo{margin:28px 0 8px}
-.ztop__b{max-width:100%;overflow-wrap:anywhere}
-
-img[hidden]{display:none}
-
-/* Оценки по источникам. Разметка общая, вид свой у каждого семейства. */
-.rbs{margin:14px 0;display:flex;flex-direction:column;gap:8px}
-.rbs__l{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
-.rbs__i{display:flex;align-items:baseline;gap:6px;padding:6px 11px;border-radius:6px;
-white-space:nowrap}
-.rbs__s{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
-.rbs__n{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
-.rbs__n small{font-size:11px;font-weight:400;opacity:.72}
-.rbs__v{font-size:11px;opacity:.75;font-variant-numeric:tabular-nums}
-.rbs__l--own{border-top:1px dashed currentColor;padding-top:8px;margin-top:2px;opacity:.95}
-.rbs--none{margin:14px 0;font-size:13px;font-style:italic}
-@media(max-width:400px){.rbs__i{padding:5px 8px}.rbs__n{font-size:14px}}
-.rbs__i{background:@SURF@;border:1px solid @LINE@;color:@INK@}
-.rbs__s{color:@ACC@}
-.rbs__n{color:@WARM@}
-.rbs__l--own{color:@DIM@}
-.rbs--none{color:@MUTE@}
-
-"""
 
 
 АНИМЕДИА_СТИЛЬ = """
@@ -1440,20 +1123,27 @@ max-height:0 !important;margin:0 !important;padding:0 !important;border:0 !impor
 .ahero__inner{padding-block:12px}
 .ahero .zrl__vp{padding-bottom:2px;scrollbar-width:none}
 .ahero .zrl__vp::-webkit-scrollbar{display:none}
-.ahero .zrl__track{gap:16px;align-items:flex-start}
-/* B02 exact poster grid (desktop/tablet); mobile = rail 112px */
-.ahero .zrl__track>*{flex:0 0 calc((100% - 144px)/10);width:calc((100% - 144px)/10);
+/* Ритм карусели тот же, что у сетки: у оригинала на первом экране семь
+   постеров той же ширины, что и в каталоге, а не десять мелких. */
+.ahero .zrl__track{gap:33px;align-items:flex-start}
+/* Ширина плитки считается от окна прокрутки, а не от ленты.
+   Измерено: проценты в дорожке разрешаются относительно самой дорожки, а она
+   шире экрана ровно настолько, насколько лента листается, — поэтому на 768
+   плитка выходила 203 вместо 118, а на 1920 растягивалась во всю ширину.
+   Единицы контейнера считают от окна прокрутки и дают устойчивый размер;
+   запасное значение на случай, если браузер их не знает, — эталонные 163. */
+.ahero .zrl__vp{container-type:inline-size}
+.ahero .zrl__track>*{flex:0 0 163px;width:163px;
 min-width:0;max-width:none;scroll-snap-align:start}
-.ahero .zt{width:100%;max-width:none;flex:0 0 auto}
-@media(max-width:1599px){
-  .ahero .zrl__track{gap:16px}
-  .ahero .zrl__track>*{flex:0 0 calc((100% - 112px)/8);width:calc((100% - 112px)/8)}
-}
-@media(max-width:1279px){
-  .ahero .zrl__track>*{flex:0 0 calc((100% - 80px)/6);width:calc((100% - 80px)/6)}
-}
-@media(max-width:1023px){
-  .ahero .zrl__track>*{flex:0 0 calc((100% - 48px)/4);width:calc((100% - 48px)/4)}
+.ahero .zt{max-width:none;flex:0 0 auto}
+@supports (width:1cqw){
+  .ahero .zrl__track>*{flex:0 0 calc((100cqw - 198px)/7);width:calc((100cqw - 198px)/7)}
+  @media(max-width:1279px){
+    .ahero .zrl__track>*{flex:0 0 calc((100cqw - 132px)/5);width:calc((100cqw - 132px)/5)}
+  }
+  @media(max-width:767px){
+    .ahero .zrl__track>*{flex:0 0 112px;width:112px;min-width:112px;max-width:112px}
+  }
 }
 @media(max-width:767px){
   .ahero{margin-bottom:16px;padding:10px}
@@ -1463,8 +1153,10 @@ min-width:0;max-width:none;scroll-snap-align:start}
 }
 .ahero .zt{background:transparent;border:0;box-shadow:none;color:#fff;height:auto;max-height:none}
 .ahero .zt:hover{opacity:.92;box-shadow:none;border:0;transform:none}
-.ahero .zt__p{border-radius:10px;width:100%;aspect-ratio:2/3;height:auto;background:rgba(0,0,0,.18);flex:0 0 auto}
-@media(max-width:767px){.ahero .zt__p{width:112px;height:168px;aspect-ratio:auto}}
+/* Плитка карусели — та же пропорция 5/7, что и в сетке: у оригинала постер
+   первого экрана и постер каталога одного размера, 163x228. */
+.ahero .zt__p{border-radius:10px;width:100%;aspect-ratio:5/7;height:auto;background:rgba(0,0,0,.18);flex:0 0 auto}
+@media(max-width:767px){.ahero .zt__p{width:112px;height:157px;aspect-ratio:auto}}
 .ahero .zt__b{padding:6px 2px 0;min-height:44px;max-height:52px}
 .ahero .zt__t{color:#fff;font-size:13px;-webkit-line-clamp:2;min-height:0;line-height:1.25}
 .ahero .zt__m,.ahero .zt__r{display:none}
@@ -1521,6 +1213,23 @@ overflow:hidden;min-width:0;height:auto;max-height:320px;box-shadow:var(--a-shad
 transition:transform .14s,box-shadow .14s}
 .zt:hover{transform:translateY(-2px);box-shadow:var(--a-shadow)}
 .zt:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
+/* Кнопки ленты: цель 44x44 — меньше на телефоне в них не попасть. Точки
+   показывают, сколько страниц у ленты и где мы сейчас; при одной странице
+   они не рисуются вовсе, чтобы не обещать листание там, где его нет. */
+.ahero .zrl__btn,.zsec .zrl__btn{width:44px;height:44px;border-radius:50%;
+font-size:20px;line-height:1;display:inline-flex;align-items:center;justify-content:center;
+background:rgba(16,21,26,.86);color:#fff;top:38%}
+.zrl__dots{display:flex;gap:8px;justify-content:center;align-items:center;
+margin:10px 0 0;padding:0;flex-wrap:wrap}
+.zrl__dots[hidden]{display:none !important}
+.zrl__dot{width:44px;height:44px;min-width:44px;padding:0;border:0;background:transparent;
+cursor:pointer;position:relative;border-radius:50%}
+.zrl__dot::after{content:"";position:absolute;left:50%;top:50%;translate:-50% -50%;
+width:8px;height:8px;border-radius:50%;background:var(--a-line);transition:background .15s}
+.zrl__dot[aria-current="true"]::after{background:var(--a-acc);width:10px;height:10px}
+.zrl__dot:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
+.ahero .zrl__dot::after{background:rgba(255,255,255,.45)}
+.ahero .zrl__dot[aria-current="true"]::after{background:#fff}
 /* Пропорция постера оригинала — 5/7 (0.714): измерено 163x228 на 1440 и 1920,
    118x165 на 768, и на всех ширинах одно и то же отношение. Прежние 2/3 (0.667)
    вытягивали каждую карточку витрины. */
@@ -1870,8 +1579,8 @@ display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hi
 @media(max-width:479px){.zft__cols{grid-template-columns:1fr}}
 .zft__bar{display:flex;justify-content:space-between;gap:12px;align-items:center;
 padding-top:6px;border-top:1px solid var(--a-line);font-size:12px;color:var(--a-mute);flex-wrap:wrap}
-/* Правило .zvb здесь больше не нужно: нижний бар Animedia не печатает версию
-   и коммит. У Zona свой бар и своё правило — оно не затронуто. */
+/* Правило .zvb здесь не нужно: нижний бар Animedia не печатает версию и
+   коммит — знак сборки в подвале был дефектом B14. */
 @media(max-width:767px){.zft{padding:12px 0 8px}.zft__about{-webkit-line-clamp:3}}
 .rbs{margin:6px 0 0}.rbs__l{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
 .rbs__i{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:10px;
@@ -2537,18 +2246,6 @@ def заглушка_постера(запись: dict, класс_заглуш�
     "if(i&&i.tagName==='IMG'&&i.hasAttribute('data-poster'))i.hidden=true;},true);"
 )
 
-#: Скрипт горизонтальных лент. Отдельная константа, а не дополнение к
-#: СКРИПТ_ПОСТЕРОВ: тот подключают обе витрины, и дописывание в него изменило
-#: бы байты, которые отдаёт базу. Здесь ровно кнопочная прокрутка; свайп,
-#: колесо и клавиатура работают нативно и без скрипта.
-СКРИПТ_ЛЕНТ = (
-    "document.addEventListener('click',function(e){"
-    "var b=e.target.closest('[data-rl]');if(!b)return;"
-    "var v=document.getElementById(b.getAttribute('aria-controls'));if(!v)return;"
-    "var d=Math.max(160,Math.round(v.clientWidth*0.86));"
-    "v.scrollBy({left:b.getAttribute('data-rl')==='next'?d:-d,behavior:'smooth'});"
-    "});"
-)
 
 #: Только Animedia: на узком экране пункты меню открываются кнопкой.
 #: Escape и повторный клик закрывают; focus возвращается на кнопку;
@@ -2557,6 +2254,58 @@ def заглушка_постера(запись: dict, класс_заглуш�
     "(function(){try{var k='animedia-theme',r=document.documentElement,s=localStorage.getItem(k);"
     "var t=(s==='light'||s==='dark')?s:((window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light');"
     "r.setAttribute('data-theme',t);r.style.colorScheme=t;}catch(e){document.documentElement.setAttribute('data-theme','light');}})();"
+)
+
+#: Карусель первого экрана: точки-страницы, цикличность и уважение к
+#: настройке «меньше движения». Прокрутка и свайп остаются нативными — скрипт
+#: только добавляет то, чего без него нет, и при его отсутствии лента
+#: по-прежнему листается пальцем, колесом и клавиатурой.
+СКРИПТ_КАРУСЕЛИ = (
+    "(function(){"
+    "function плавно(){try{return !window.matchMedia("
+    "'(prefers-reduced-motion: reduce)').matches;}catch(e){return true;}}"
+    "function страниц(v){return Math.max(1,Math.ceil(v.scrollWidth/Math.max(1,v.clientWidth)));}"
+    "function текущая(v){return Math.round(v.scrollLeft/Math.max(1,v.clientWidth));}"
+    "function точки(рамка,v){"
+    "var к=рамка.querySelector('[data-rl-dots]');if(!к)return;"
+    "var n=страниц(v);if(n<2){к.hidden=true;к.innerHTML='';return;}"
+    "к.hidden=false;"
+    "if(к.children.length!==n){к.innerHTML='';"
+    "for(var i=0;i<n;i++){var b=document.createElement('button');"
+    "b.type='button';b.className='zrl__dot';b.setAttribute('data-rl-dot',String(i));"
+    "b.setAttribute('aria-label','Страница '+(i+1)+' из '+n);к.appendChild(b);}}"
+    "var т=текущая(v);"
+    "for(var j=0;j<к.children.length;j++){"
+    "к.children[j].setAttribute('aria-current',j===т?'true':'false');}}"
+    "function прокрутить(v,куда){"
+    "v.scrollTo({left:куда,behavior:плавно()?'smooth':'auto'});}"
+    "document.addEventListener('click',function(e){"
+    "var t=e.target.closest('[data-rl-dot]');"
+    "if(t){var рамка=t.closest('.zrl');var v=рамка&&рамка.querySelector('.zrl__vp');"
+    "if(v)прокрутить(v,parseInt(t.getAttribute('data-rl-dot'),10)*v.clientWidth);return;}"
+    "var b=e.target.closest('[data-rl]');if(!b)return;"
+    "var v=document.getElementById(b.getAttribute('aria-controls'));if(!v)return;"
+    "var шаг=Math.max(160,Math.round(v.clientWidth*0.86));"
+    "var предел=v.scrollWidth-v.clientWidth-2;"
+    "var вперёд=b.getAttribute('data-rl')==='next';"
+    "var цель=вперёд?v.scrollLeft+шаг:v.scrollLeft-шаг;"
+    "var перескок=false;"
+    "if(вперёд&&v.scrollLeft>=предел){цель=0;перескок=true;}"
+    "else if(!вперёд&&v.scrollLeft<=2){цель=предел;перескок=true;}"
+    # Перескок с конца в начало — мгновенный. Плавная прокрутка через всю
+    # ленту спорит с обязательной привязкой (scroll-snap: mandatory) и
+    # обрывается на середине: измерено, лента останавливалась где попало.
+    "v.scrollTo({left:цель,behavior:(перескок||!плавно())?'auto':'smooth'});});"
+    "function обновить(){var р=document.querySelectorAll('.zrl');"
+    "for(var i=0;i<р.length;i++){var v=р[i].querySelector('.zrl__vp');"
+    "if(v)точки(р[i],v);}}"
+    "document.addEventListener('scroll',function(e){"
+    "var v=e.target;if(!v||!v.classList||!v.classList.contains('zrl__vp'))return;"
+    "var рамка=v.closest('.zrl');if(рамка)точки(рамка,v);},true);"
+    "window.addEventListener('resize',обновить);"
+    "if(document.readyState!=='loading')обновить();"
+    "else document.addEventListener('DOMContentLoaded',обновить);"
+    "})();"
 )
 
 СКРИПТ_АНИМЕДИА_ШАПКА = (
@@ -2623,27 +2372,6 @@ def заглушка_постера(запись: dict, класс_заглуш�
     "})();"
 )
 
-#: базу mobile drawer: focus return + Escape + body scroll lock.
-СКРИПТ_ШАПКИ_ОСНОВЫ = (
-    "(function(){"
-    "function close(nav,btn){if(!nav||!btn)return;nav.classList.remove('is-open');"
-    "btn.setAttribute('aria-expanded','false');document.body.classList.remove('nav-lock');"
-    "try{btn.focus()}catch(e){}}"
-    "document.addEventListener('click',function(e){"
-    "var b=e.target.closest('[data-nav-toggle]');if(!b)return;"
-    "var n=document.getElementById('hd-nav');if(!n)return;"
-    "var open=n.classList.toggle('is-open');"
-    "b.setAttribute('aria-expanded',open?'true':'false');"
-    "document.body.classList.toggle('nav-lock',open);"
-    "if(open){var a=n.querySelector('a');if(a)try{a.focus()}catch(err){}}"
-    "});"
-    "document.addEventListener('keydown',function(e){"
-    "if(e.key!=='Escape')return;"
-    "var n=document.getElementById('hd-nav');var b=document.querySelector('[data-nav-toggle]');"
-    "if(n&&n.classList.contains('is-open'))close(n,b);"
-    "});"
-    "})();"
-)
 
 
 def _склеить(части) -> str:
@@ -3202,6 +2930,8 @@ class ВидОснова(Вид):
                 f'<div class="zrl__track">{плитки}</div></div>'
                 f'<button class="zrl__btn zrl__btn--n" type="button" data-rl="next"'
                 f' aria-controls="{ид}" aria-label="Пролистать вперёд">&#8250;</button>'
+                f'<div class="zrl__dots" data-rl-dots aria-label="Страницы ленты"'
+                f' hidden></div>'
                 f'</div>')
 
     def секция(self, ключ: str, титул: str, ссылка: str, набор, пусто: str) -> str:
@@ -4608,6 +4338,8 @@ class ВидАнимедиа(ВидОснова):
                 f'<div class="zrl__track">{плитки}</div></div>'
                 f'<button class="zrl__btn zrl__btn--n" type="button" data-rl="next"'
                 f' aria-controls="{ид}" aria-label="Пролистать вперёд">&#8250;</button>'
+                f'<div class="zrl__dots" data-rl-dots aria-label="Страницы ленты"'
+                f' hidden></div>'
                 f'</div>')
 
     def плитки(self, набор, *, вариант: str = "catalog-title") -> str:
@@ -5226,7 +4958,7 @@ class ВидАнимедиа(ВидОснова):
 {_мета_версии().replace(f'content="{ПРОФИЛЬ}"', f'content="{профиль_meta}"', 1)}
 <script>{СКРИПТ_АНИМЕДИА_ТЕМА_BOOT}</script>
 <style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}
-{СКРИПТ_ЛЕНТ}
+{СКРИПТ_КАРУСЕЛИ}
 {СКРИПТ_АНИМЕДИА_ШАПКА}</script></head>
 <body><a class="skip" href="#main">Перейти к содержимому</a>
 <div class="zs">

@@ -1,0 +1,411 @@
+{
+ "task": "ANIMEDIA-SLIDER-CHECK",
+ "tenant": "animedia",
+ "checked_at_utc": "2026-09-21T20:34:16Z",
+ "runtime": "automation/host/animedia-frontend.py",
+ "widths": [
+  390,
+  768,
+  1440
+ ],
+ "cells": [
+  {
+   "width": 390,
+   "motion": "no-preference",
+   "present": true,
+   "slides": 24,
+   "unique_ids": 24,
+   "unique_images": 24,
+   "unique_titles": 24,
+   "unique_hrefs": 24,
+   "buttons": [
+    {
+     "dir": "prev",
+     "w": 44,
+     "h": 44,
+     "label": "Пролистать назад"
+    },
+    {
+     "dir": "next",
+     "w": 44,
+     "h": 44,
+     "label": "Пролистать вперёд"
+    }
+   ],
+   "dots": [
+    {
+     "w": 44,
+     "h": 44,
+     "current": "true"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    }
+   ],
+   "dots_hidden": false,
+   "scroll_left": 0,
+   "scroll_width": 2964,
+   "client_width": 346,
+   "vp_tabindex": "0",
+   "overlay": null,
+   "autoplay": 0,
+   "scroll_after_next": 248,
+   "scroll_after_wrap": 0,
+   "scroll_after_key": 124
+  },
+  {
+   "width": 390,
+   "motion": "reduce",
+   "present": true,
+   "slides": 24,
+   "unique_ids": 24,
+   "unique_images": 24,
+   "unique_titles": 24,
+   "unique_hrefs": 24,
+   "buttons": [
+    {
+     "dir": "prev",
+     "w": 44,
+     "h": 44,
+     "label": "Пролистать назад"
+    },
+    {
+     "dir": "next",
+     "w": 44,
+     "h": 44,
+     "label": "Пролистать вперёд"
+    }
+   ],
+   "dots": [
+    {
+     "w": 44,
+     "h": 44,
+     "current": "true"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    }
+   ],
+   "dots_hidden": false,
+   "scroll_left": 0,
+   "scroll_width": 2964,
+   "client_width": 346,
+   "vp_tabindex": "0",
+   "overlay": null,
+   "autoplay": 0,
+   "scroll_after_next": 248,
+   "scroll_after_wrap": 0,
+   "scroll_after_key": 124
+  },
+  {
+   "width": 768,
+   "motion": "no-preference",
+   "present": true,
+   "slides": 24,
+   "unique_ids": 24,
+   "unique_images": 24,
+   "unique_titles": 24,
+   "unique_hrefs": 24,
+   "buttons": [
+    {
+     "dir": "prev",
+     "w": 44,
+     "h": 44,
+     "label": "Пролистать назад"
+    },
+    {
+     "dir": "next",
+     "w": 44,
+     "h": 44,
+     "label": "Пролистать вперёд"
+    }
+   ],
+   "dots": [
+    {
+     "w": 44,
+     "h": 44,
+     "current": "true"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    }
+   ],
+   "dots_hidden": false,
+   "scroll_left": 0,
+   "scroll_width": 3485,
+   "client_width": 700,
+   "vp_tabindex": "0",
+   "overlay": null,
+   "autoplay": 0,
+   "scroll_after_next": 586,
+   "scroll_after_wrap": 0,
+   "scroll_after_key": 146
+  },
+  {
+   "width": 768,
+   "motion": "reduce",
+   "present": true,
+   "slides": 24,
+   "unique_ids": 24,
+   "unique_images": 24,
+   "unique_titles": 24,
+   "unique_hrefs": 24,
+   "buttons": [
+    {
+     "dir": "prev",
+     "w": 44,
+     "h": 44,
+     "label": "Пролистать назад"
+    },
+    {
+     "dir": "next",
+     "w": 44,
+     "h": 44,
+     "label": "Пролистать вперёд"
+    }
+   ],
+   "dots": [
+    {
+     "w": 44,
+     "h": 44,
+     "current": "true"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    }
+   ],
+   "dots_hidden": false,
+   "scroll_left": 0,
+   "scroll_width": 3485,
+   "client_width": 700,
+   "vp_tabindex": "0",
+   "overlay": null,
+   "autoplay": 0,
+   "scroll_after_next": 586,
+   "scroll_after_wrap": 0,
+   "scroll_after_key": 146
+  },
+  {
+   "width": 1440,
+   "motion": "no-preference",
+   "present": true,
+   "slides": 24,
+   "unique_ids": 24,
+   "unique_images": 24,
+   "unique_titles": 24,
+   "unique_hrefs": 24,
+   "buttons": [
+    {
+     "dir": "prev",
+     "w": 44,
+     "h": 44,
+     "label": "Пролистать назад"
+    },
+    {
+     "dir": "next",
+     "w": 44,
+     "h": 44,
+     "label": "Пролистать вперёд"
+    }
+   ],
+   "dots": [
+    {
+     "w": 44,
+     "h": 44,
+     "current": "true"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    }
+   ],
+   "dots_hidden": false,
+   "scroll_left": 0,
+   "scroll_width": 4592,
+   "client_width": 1316,
+   "vp_tabindex": "0",
+   "overlay": null,
+   "autoplay": 0,
+   "scroll_after_next": 1156,
+   "scroll_after_wrap": 0,
+   "scroll_after_key": 192
+  },
+  {
+   "width": 1440,
+   "motion": "reduce",
+   "present": true,
+   "slides": 24,
+   "unique_ids": 24,
+   "unique_images": 24,
+   "unique_titles": 24,
+   "unique_hrefs": 24,
+   "buttons": [
+    {
+     "dir": "prev",
+     "w": 44,
+     "h": 44,
+     "label": "Пролистать назад"
+    },
+    {
+     "dir": "next",
+     "w": 44,
+     "h": 44,
+     "label": "Пролистать вперёд"
+    }
+   ],
+   "dots": [
+    {
+     "w": 44,
+     "h": 44,
+     "current": "true"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    },
+    {
+     "w": 44,
+     "h": 44,
+     "current": "false"
+    }
+   ],
+   "dots_hidden": false,
+   "scroll_left": 0,
+   "scroll_width": 4592,
+   "client_width": 1316,
+   "vp_tabindex": "0",
+   "overlay": null,
+   "autoplay": 0,
+   "scroll_after_next": 1156,
+   "scroll_after_wrap": 0,
+   "scroll_after_key": 192
+  }
+ ],
+ "failures": [],
+ "SLIDER_PASS": true
+}
