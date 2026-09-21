@@ -1,0 +1,109 @@
+# Машинный контекст контура. Читается агентом до первого действия.
+#
+# Файл существует потому, что предыдущий контур этого не имел. Терминал,
+# заведённый под Zona, получил задание по Animedia, продолжил в той же ветке —
+# и в ветке с названием Zona оказались Animedia-evidence, решение D140 и
+# правка общего скрипта. Ни один машинный признак этому не помешал: границы
+# контура жили в переписке, а не в репозитории.
+#
+# Здесь они записаны. Расхождение задания с этим файлом — повод остановиться и
+# спросить владельца, а не продолжить в активном worktree.
+
+schema_version: 1
+
+tenant: yummy
+role: YUMMY_ORIGINAL_PARITY
+created_at: "2026-09-21"
+
+scope:
+  branch_prefix: claude/yummy-
+  branch: claude/yummy-original-parity-01
+  worktree: /home/claude/wt-yummy-original-parity-01
+  base_commit: b9a154ce80133e1670e725f74f514d8b469ce29a
+  base_tree: b5b823182145fbd97abbd57818a4dc9b23aa519f
+  base_lineage: claude/yummy-site-indexing-open-01
+  base_why_clean: >-
+    Линия состоит из Yummy-коммитов; ни один коммит сессии Zona
+    (3a745dd…6ee1385), ни коммиты соседних контуров Animedia (302cb08) и
+    Zona slider (6513e7e) в неё не входят — проверено merge-base.
+
+allowed_source_paths:
+  - automation/host/yummy-frontend.py
+  - automation/host/yummy_contract.py
+  - automation/host/yummy_entity.py
+  - automation/host/yummy_pages.py
+  - automation/host/yummy_readmodel.py
+  - automation/host/yummy_variants.py
+  - automation/host/yummy-extract-catalog.py
+  - automation/host/yummy-route-export.py
+  - automation/host/yummy-catalog-content-check.sh
+  - automation/host/yummy-content-run.sh
+  - config/site-profiles/yummyani-biz.json
+  - config/site-profiles/yummyani-org.json
+  - config/site-profiles/yummyani-site.json
+  - tests/fixtures/yummy/
+  - tests/unit/test_yummy_*.py
+  - docs/YUMMY-TEMPLATE-READINESS.md
+  - docs/handoff/YUMMY-CARD-CONTRACT.md
+  - docs/handoff/YUMMY-HEADER-NAV.md
+  - artifacts/evidence/templates/yummy/
+
+allowed_profiles:
+  - yummyani-site
+  - yummyani-biz
+  - yummyani-org
+
+allowed_domains:
+  yummyani-site: [yummyani.site]
+  yummyani-biz: [yummyani.biz]
+  yummyani-org: [yummyani.org]
+
+allowed_services:
+  - yummy-enrich.service
+  - yummy-episode-watcher.service
+  - yummy-site-backup.service
+  - yummy-site-backup.timer
+  - yummy-watchdog.service
+
+build_and_test:
+  unit: python3 -m pytest tests/unit -q -k yummy
+  full_unit: python3 -m pytest tests/unit -q
+  note: >-
+    Прогон tests/unit не идемпотентен в окружениях без собранного
+    предпросмотра, если запускать его дважды подряд без восстановления
+    artifacts/evidence/products/product-readiness.json. Это известный остаток,
+    записанный в линии Zona; здесь он воспроизводится и чинится отдельно.
+
+forbidden:
+  branch_prefixes:
+    - claude/zona-
+    - claude/animedia-
+    - claude/lords-
+    - claude/core-
+    - cursor/
+  worktrees:
+    - /home/claude/wt-zona-finalization-01        # заморожен, карантин
+    - /home/claude/wt-zona-real-slider-01
+    - /home/claude/wt-zona-slider-01
+    - /home/claude/wt-animedia-finalization-01
+    - /home/claude/wt-animedia-original-parity-01
+    - /srv/site-factory/repo/var/worktrees/yummy-index  # чужой активный Yummy-контур индексации
+  actions:
+    - cross_tenant_imports        # код и evidence чужих контуров не переносятся
+    - cross_tenant_writes         # запись в чужие worktree и ветки
+    - production_mutations        # выкладка, перезапуск, подмена артефакта
+    - systemctl_without_owner     # любой systemctl без отдельного разрешения владельца
+    - dns_tls_indexability_changes
+    - manifest_or_assignment_changes   # /srv/lords/.frontend/{sites,template-manifest-*}
+
+hard_stops:
+  - >-
+    Задание называет tenant, отличный от yummy, — остановиться и сказать
+    владельцу, что для него есть отдельный контур.
+  - >-
+    Задание требует перезапуска сервиса — выдать команду владельцу, не
+    выполнять её самому.
+  - >-
+    nova-zona-01 не перезапускать ни при каких условиях: его assignment и
+    manifest указывают на одну сборку, а живёт другая; сверка передана
+    отдельному Zona-терминалу.
