@@ -386,6 +386,59 @@ def moderate_once(
     }
 
 
+def compute_quality_metrics(records: list[dict[str, Any]]) -> dict[str, Any]:
+    """Score decisions against the gold corpus expectations.
+
+    Only meaningful when a real provider produced the decisions — the caller
+    decides whether to publish these or report them as unmeasured. Each rate is
+    returned with its denominator so a small sample cannot masquerade as a
+    precise number.
+    """
+
+    def _rate(hits: int, total: int) -> Any:
+        if total <= 0:
+            return {"value": None, "hits": 0, "total": 0}
+        return {"value": round(hits / total, 4), "hits": hits, "total": total}
+
+    def _by(pred) -> list[dict[str, Any]]:
+        return [r for r in records if pred(r)]
+
+    blocked_outcomes = {OUTCOME_BLOCK_SPAM, OUTCOME_BLOCK_UNSAFE, OUTCOME_HOLD}
+
+    agree = 0
+    for r in records:
+        allowed = {r.get("expected_family")} | set(r.get("expected_alts") or [])
+        if r.get("decision_v2") in allowed:
+            agree += 1
+
+    clean = _by(lambda r: r.get("category") == "clean")
+    clean_blocked = [r for r in clean if r["outcome"] in blocked_outcomes]
+
+    constructive = _by(lambda r: r.get("category") == "constructive")
+    constructive_blocked = [r for r in constructive if r["outcome"] in blocked_outcomes]
+
+    spoilers = _by(lambda r: r.get("category") == "spoiler")
+    spoilers_caught = [r for r in spoilers if r["outcome"] == OUTCOME_SPOILER]
+
+    spam = _by(lambda r: r.get("category") == "spam")
+    spam_caught = [r for r in spam if r["outcome"] == OUTCOME_BLOCK_SPAM]
+
+    critical = _by(lambda r: r.get("severity") == "critical")
+    critical_allowed = [
+        r for r in critical if r["outcome"] in (OUTCOME_ALLOW, OUTCOME_SPOILER)
+    ]
+
+    return {
+        "DECISION_AGREEMENT_RATE": _rate(agree, len(records)),
+        "CLEAN_FALSE_BLOCK_RATE": _rate(len(clean_blocked), len(clean)),
+        "CONSTRUCTIVE_CRITICISM_FALSE_BLOCK": len(constructive_blocked),
+        "SPOILER_DETECTION_RECALL": _rate(len(spoilers_caught), len(spoilers)),
+        "SPAM_DETECTION_RECALL": _rate(len(spam_caught), len(spam)),
+        "CRITICAL_UNSAFE_FALSE_ALLOW": len(critical_allowed),
+        "critical_false_allow_cases": [r["case_id"] for r in critical_allowed],
+    }
+
+
 def new_request_id(prefix: str = "canary") -> str:
     return f"{prefix}_{uuid.uuid4().hex[:24]}"
 

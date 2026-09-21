@@ -59,6 +59,7 @@ from factory.community.comments.qwen.staging_harness import (  # noqa: E402
     HeuristicV2Provider,
     ProviderInvalidJSON,
     ProviderTimeout,
+    compute_quality_metrics,
     digest,
     moderate_once,
     new_request_id,
@@ -204,6 +205,8 @@ def run_content_scenarios(provider: CountingProvider) -> dict[str, Any]:
                 "category": case["category"],
                 "severity": case["severity"],
                 "expected_family": case["expected"],
+                "expected_alts": list(case["alts"]),
+                "decision_v2": rec.get("decision_v2", ""),
                 "outcome": rec["outcome"],
                 "labels": rec.get("labels", []),
                 "schema_valid": rec["schema_valid"],
@@ -990,18 +993,32 @@ def main() -> int:
             "DUPLICATE_PROVIDER_CALLS": 0,
             "UNRECONCILED_PROVIDER_CALLS": 0,
         },
-        "model_quality_metrics": {
+        "model_quality_metrics": (
+            compute_quality_metrics(sections["content"]["records"])
+            if real
+            else {
+                "_note": (
+                    "Measuring a model requires calling it. With the heuristic "
+                    "provider these stay unmeasured rather than being filled "
+                    "with numbers our own keyword rules produced. A live run "
+                    "scores them against the gold corpus via "
+                    "compute_quality_metrics()."
+                ),
+                "DECISION_AGREEMENT_RATE": unmeasured,
+                "CLEAN_FALSE_BLOCK_RATE": unmeasured,
+                "CONSTRUCTIVE_CRITICISM_FALSE_BLOCK": unmeasured,
+                "SPOILER_DETECTION_RECALL": unmeasured,
+                "SPAM_DETECTION_RECALL": unmeasured,
+                "CRITICAL_UNSAFE_FALSE_ALLOW": unmeasured,
+            }
+        ),
+        "heuristic_reference_scores": {
             "_note": (
-                "Measuring a model requires calling it. With the heuristic "
-                "provider these stay unmeasured rather than being filled with "
-                "numbers our own keyword rules produced."
+                "What the built-in heuristic scores on the same corpus. Recorded "
+                "only as a harness sanity check — it is not a model evaluation "
+                "and must never be quoted as canary results."
             ),
-            "DECISION_AGREEMENT_RATE": unmeasured if not real else None,
-            "CLEAN_FALSE_BLOCK_RATE": unmeasured if not real else None,
-            "CONSTRUCTIVE_CRITICISM_FALSE_BLOCK": unmeasured if not real else None,
-            "SPOILER_DETECTION_RECALL": unmeasured if not real else None,
-            "SPAM_DETECTION_RECALL": unmeasured if not real else None,
-            "CRITICAL_UNSAFE_FALSE_ALLOW": unmeasured if not real else None,
+            **compute_quality_metrics(sections["content"]["records"]),
         },
         "latency_ms": {
             "LATENCY_P50_MS": pct(0.50),

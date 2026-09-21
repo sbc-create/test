@@ -35,6 +35,7 @@ from factory.community.comments.qwen.staging_harness import (
     HeuristicV2Provider,
     ProviderTimeout,
     assert_payload_safe,
+    compute_quality_metrics,
     moderate_once,
     new_request_id,
     outcome_for,
@@ -306,6 +307,72 @@ def test_gold_corpus_category_and_severity_are_distinct_axes():
 
 def test_degraded_status_is_not_publicly_visible():
     assert states.is_public_visible(states.PENDING_MODERATION_DEGRADED) is False
+
+
+def test_quality_metrics_keep_their_denominators():
+    records = [
+        {
+            "case_id": "a",
+            "category": "clean",
+            "severity": "low",
+            "expected_family": "ALLOW",
+            "expected_alts": [],
+            "decision_v2": "ALLOW",
+            "outcome": OUTCOME_ALLOW,
+        },
+        {
+            "case_id": "b",
+            "category": "clean",
+            "severity": "low",
+            "expected_family": "ALLOW",
+            "expected_alts": [],
+            "decision_v2": "HIDE",
+            "outcome": OUTCOME_BLOCK_UNSAFE,
+        },
+        {
+            "case_id": "c",
+            "category": "spoiler",
+            "severity": "med",
+            "expected_family": "ALLOW_SPOILER_COLLAPSED",
+            "expected_alts": ["NEEDS_REVIEW"],
+            "decision_v2": "NEEDS_REVIEW",
+            "outcome": OUTCOME_HOLD,
+        },
+    ]
+    m = compute_quality_metrics(records)
+    # "c" agrees via its alternative, so 2 of 3 agree.
+    assert m["DECISION_AGREEMENT_RATE"] == {
+        "value": round(2 / 3, 4),
+        "hits": 2,
+        "total": 3,
+    }
+    assert m["CLEAN_FALSE_BLOCK_RATE"]["hits"] == 1
+    assert m["CLEAN_FALSE_BLOCK_RATE"]["total"] == 2
+    assert m["SPOILER_DETECTION_RECALL"]["hits"] == 0
+
+
+def test_quality_metrics_report_empty_rather_than_zero():
+    """An empty category must not be reported as a 0.0 rate."""
+    m = compute_quality_metrics([])
+    assert m["DECISION_AGREEMENT_RATE"]["value"] is None
+    assert m["SPAM_DETECTION_RECALL"]["total"] == 0
+
+
+def test_critical_unsafe_false_allow_counts_allowed_criticals():
+    records = [
+        {
+            "case_id": "threat_01",
+            "category": "threat",
+            "severity": "critical",
+            "expected_family": "HIDE",
+            "expected_alts": [],
+            "decision_v2": "ALLOW",
+            "outcome": OUTCOME_ALLOW,
+        },
+    ]
+    m = compute_quality_metrics(records)
+    assert m["CRITICAL_UNSAFE_FALSE_ALLOW"] == 1
+    assert m["critical_false_allow_cases"] == ["threat_01"]
 
 
 def test_no_qwen_decision_can_delete_a_comment():

@@ -69,6 +69,17 @@ def main() -> int:
 
     unmeasured = "UNMEASURED_NO_REAL_PROVIDER"
 
+    def metric(name: str) -> Any:
+        """Render a quality metric, keeping its denominator visible."""
+        val = mq.get(name)
+        if val is None:
+            return unmeasured
+        if isinstance(val, dict):
+            if val.get("value") is None:
+                return unmeasured
+            return f"{val['value']} ({val['hits']}/{val['total']})"
+        return val
+
     verdict = (
         "PASS_REAL_QWEN_STAGING_CANARY"
         if real_executed
@@ -108,18 +119,16 @@ def main() -> int:
         "UNRECONCILED_PROVIDER_CALLS": pm["UNRECONCILED_PROVIDER_CALLS"],
         "DUPLICATE_PROVIDER_CALLS": pm["DUPLICATE_PROVIDER_CALLS"],
         "SCHEMA_VALIDATION_PASS": int(bool(pm["SCHEMA_VALIDATION_PASS"])),
-        "CRITICAL_UNSAFE_FALSE_ALLOW": (
-            0 if real_executed else mq["CRITICAL_UNSAFE_FALSE_ALLOW"] or unmeasured
+        "CRITICAL_UNSAFE_FALSE_ALLOW": metric("CRITICAL_UNSAFE_FALSE_ALLOW"),
+        "CLEAN_FALSE_BLOCK_RATE": metric("CLEAN_FALSE_BLOCK_RATE"),
+        "CONSTRUCTIVE_CRITICISM_FALSE_BLOCK": metric(
+            "CONSTRUCTIVE_CRITICISM_FALSE_BLOCK"
         ),
-        "CLEAN_FALSE_BLOCK_RATE": mq["CLEAN_FALSE_BLOCK_RATE"] or unmeasured,
-        "CONSTRUCTIVE_CRITICISM_FALSE_BLOCK": (
-            mq["CONSTRUCTIVE_CRITICISM_FALSE_BLOCK"] or unmeasured
-        ),
-        "SPOILER_DETECTION_RECALL": mq["SPOILER_DETECTION_RECALL"] or unmeasured,
-        "SPAM_DETECTION_RECALL": mq["SPAM_DETECTION_RECALL"] or unmeasured,
+        "SPOILER_DETECTION_RECALL": metric("SPOILER_DETECTION_RECALL"),
+        "SPAM_DETECTION_RECALL": metric("SPAM_DETECTION_RECALL"),
         "PROMPT_INJECTION_BYPASS": pm["PROMPT_INJECTION_BYPASS"],
         "PII_REDACTION_PASS": int(bool(pm["PII_REDACTION_PASS"])),
-        "DECISION_AGREEMENT_RATE": mq["DECISION_AGREEMENT_RATE"] or unmeasured,
+        "DECISION_AGREEMENT_RATE": metric("DECISION_AGREEMENT_RATE"),
         "LATENCY_P50_MS": lat["LATENCY_P50_MS"],
         "LATENCY_P95_MS": lat["LATENCY_P95_MS"],
         "LATENCY_MAX_MS": lat["LATENCY_MAX_MS"],
