@@ -17,9 +17,15 @@
       "verdict_reported": "READY_FOR_OWNER_RESTART / phase B14_lords-02_staged",
       "verdict_verified": "SUPERSEDED_BY_FACT — рестарт уже произошёл сам на всех трёх витринах; заявленный owner-gate закрыт событием, а не решением",
       "action": "FINISH"
+    },
+    {
+      "run": "LORDS-CLEAN-REBUILD-AND-ISOLATION (решение владельца от 2026-09-21)",
+      "state": "ACTIVE",
+      "start_head": "ed68c2db4b574c69897a546f90bf8eb9d472a1ad",
+      "verdict_verified": "канарейка закрыта, два домена ждут привилегированного перезапуска",
+      "action": "FINISH"
     }
   ],
-
   "blocks": [
     {
       "BLOCK_ID": "R-P1-A",
@@ -43,7 +49,7 @@
       "REPORTED_STATUS": "частично выполнен в артефакте (честные названия секций, чистка аниме-текста, реестр карточек, различные подвалы)",
       "SOURCE_EXISTS": true,
       "TEST_EXISTS": true,
-      "TEST_PASS_CURRENT": "PASS — tests/lords/test_family_distinctness.py и test_three_design_ids.py зелены в прогоне 280 passed",
+      "TEST_PASS_CURRENT": "PASS — tests/lords/test_family_distinctness.py и test_three_design_ids.py зелены в прогоне 294 passed",
       "LOCAL_ARTIFACT_EXISTS": true,
       "STAGED_STATUS": "IN_ARTIFACT b32438c9",
       "LIVE_STATUS": "исполняется на всех трёх витринах",
@@ -59,7 +65,7 @@
       "REPORTED_STATUS": "часть закрыта в артефакте",
       "SOURCE_EXISTS": true,
       "TEST_EXISTS": true,
-      "TEST_PASS_CURRENT": "PASS — 280 passed, 17 skipped",
+      "TEST_PASS_CURRENT": "PASS — 294 passed, 17 skipped",
       "LOCAL_ARTIFACT_EXISTS": true,
       "STAGED_STATUS": "IN_ARTIFACT b32438c9",
       "LIVE_STATUS": "исполняется",
@@ -75,7 +81,7 @@
       "REPORTED_STATUS": "35 passed (заявление STATUS.json)",
       "SOURCE_EXISTS": true,
       "TEST_EXISTS": true,
-      "TEST_PASS_CURRENT": "PASS — перепроверено сейчас: 280 passed, 17 skipped за 25.13 s",
+      "TEST_PASS_CURRENT": "PASS — перепроверено: 294 passed, 17 skipped (на момент спасения работы было 280 passed; рост — тесты, добавленные этой сверкой)",
       "LOCAL_ARTIFACT_EXISTS": true,
       "STAGED_STATUS": "N/A",
       "LIVE_STATUS": "N/A",
@@ -110,28 +116,28 @@
       "TEST_PASS_CURRENT": "N/A",
       "LOCAL_ARTIFACT_EXISTS": true,
       "STAGED_STATUS": "манифест перезаписан только у lords-02",
-      "LIVE_STATUS": "НАРУШЕН — все три витрины подняты на новом артефакте суточным refresh'ем, а не последовательным выкатом",
+      "LIVE_STATUS": "восстановлен: витрины привязаны к неизменяемым релизам по одной, канарейка lords-02 прошла smoke дважды, lords-01 и lords-03 ждут очереди",
       "EVIDENCE_COMPLETE": false,
-      "SOURCE_ARTIFACT_RUNTIME_MATCH": "lords-02 да; lords-01 и lords-03 нет — рантайм b32438c9 против объявленного 5dd817fe",
+      "SOURCE_ARTIFACT_RUNTIME_MATCH": "lords-02 да; lords-01 подготовлен и ждёт рестарта; lords-03 ждёт очереди",
       "REGRESSION_RISK": "high",
-      "ACTION": "OWNER_GATE",
-      "NOTE": "главное расхождение сверки; разобрано в BLOCKERS B-02"
+      "ACTION": "REPAIR",
+      "NOTE": "неконтролируемый рестарт перестал быть опасным: витрина поднимается из своего каталога релиза, а не из общего изменяемого файла"
     },
     {
       "BLOCK_ID": "R-SMOKE2",
       "ORIGINAL_REQUIREMENT": "Дважды smoke по контракту: главная, каталог, поиск, фильтр, тайтл, серия, 404, совпадение design/build/artifact, неизменная индексируемость",
       "REPORTED_STATUS": "не выполнялся",
       "SOURCE_EXISTS": true,
-      "TEST_EXISTS": false,
-      "TEST_PASS_CURRENT": "N/A",
+      "TEST_EXISTS": true,
+      "TEST_PASS_CURRENT": "PASS для lords-02 — два последовательных прогона automation/host/nova-smoke.py",
       "LOCAL_ARTIFACT_EXISTS": true,
       "STAGED_STATUS": "N/A",
-      "LIVE_STATUS": "NOT_MEASURABLE — HTTP закрыт (B-01)",
+      "LIVE_STATUS": "измеряется: smoke ходит на 127.0.0.1:<порт> с Host витрины — тот же процесс, в который проксирует nginx. lords-02 PASS ×2; lords-01 и lords-03 ждут рестарта",
       "EVIDENCE_COMPLETE": false,
       "SOURCE_ARTIFACT_RUNTIME_MATCH": "N/A",
       "REGRESSION_RISK": "high",
-      "ACTION": "OWNER_GATE",
-      "NOTE": "витрины работают на неотсмоканном артефакте уже более семи часов (lords-01 с 03:36Z)"
+      "ACTION": "REPAIR",
+      "NOTE": "публичный контур — TLS, редиректы и заголовки nginx — остаётся неизмеренным: доменов нет в allowlist канонического репозитория (B-01)"
     },
     {
       "BLOCK_ID": "R-POSTLIVE-VISUAL",
@@ -155,10 +161,10 @@
       "REPORTED_STATUS": "соблюдено — один артефакт",
       "SOURCE_EXISTS": true,
       "TEST_EXISTS": true,
-      "TEST_PASS_CURRENT": "PASS — добавлен в этой сверке",
+      "TEST_PASS_CURRENT": "PASS — 14 проверок на фикстуре в tests/lords/test_manifest_coherence.py",
       "LOCAL_ARTIFACT_EXISTS": true,
       "STAGED_STATUS": "N/A",
-      "LIVE_STATUS": "нарушено на lords-01 и lords-03",
+      "LIVE_STATUS": "корень устранён устройством, а не правкой заголовков",
       "EVIDENCE_COMPLETE": true,
       "SOURCE_ARTIFACT_RUNTIME_MATCH": false,
       "REGRESSION_RISK": "high",
@@ -166,13 +172,67 @@
       "NOTE": "требование выполнено буквально (бинарь один), но из него следует обратное: общий бинарь без переоформления манифестов соседей делает их объявленную версию ложной. Корень закрыт сторожем automation/host/nova-manifest-coherence.py"
     }
   ],
-
   "summary": {
-    "BLOCKS_TOTAL": 9,
+    "BLOCKS_TOTAL": 16,
     "BLOCKS_KEPT": 2,
-    "BLOCKS_REPAIRED": 2,
-    "BLOCKS_FINISHED": 1,
-    "BLOCKS_OWNER_GATED": 4,
-    "note": "R-P1-B и R-P2 одновременно REPAIR и частично owner-gated по визуальной приёмке; в счётчике каждый блок учтён один раз по своему главному действию"
-  }
+    "BLOCKS_REPAIRED": 3,
+    "BLOCKS_FINISHED": 5,
+    "BLOCKS_OWNER_GATED": 6,
+    "note": "девять блоков прежней сверки плюс семь блоков выката по решению владельца"
+  },
+  "owner_decision_id": "LORDS-OA1-CLEAN-REBUILD-AND-ISOLATION-20260921-01",
+  "rollout_blocks": [
+    {
+      "BLOCK_ID": "D-CLEAN-BUILD",
+      "ORIGINAL_REQUIREMENT": "Собрать новый immutable artifact из clean committed HEAD; манифест с правдивыми source_commit, source_dirty=false, build_id и sha256",
+      "RESULT": "релиз 20260921T114007Z-89003bb-clean из объекта коммита 89003bb; сборка отказывается начинаться на грязном дереве",
+      "EVIDENCE": "rollout/RELEASE.json",
+      "BYTE_IDENTITY_NOTE": "артефакт побайтово совпал с прежним b32438c9. Это результат проверки: спасённый источник и есть то, что стояло на хосте. Легализации переписыванием манифеста не было — происхождение теперь выводится из истории",
+      "ACTION": "FINISH"
+    },
+    {
+      "BLOCK_ID": "D-RUNTIME-ISOLATION",
+      "ORIGINAL_REQUIREMENT": "Три домена не должны зависеть от одного изменяемого файла; каждый unit исполняет артефакт своего домена",
+      "RESULT": "общий путь занят загрузчиком; шесть витрин привязаны к неизменяемым каталогам releases/. lords-02 и lords-03 уже исполняют свой каталог релиза, lords-01 ждёт рестарта",
+      "EVIDENCE": "LIVE_BASELINE.json, COHERENCE_AFTER_CANARY.json",
+      "SHARED_MUTABLE_RUNTIME_PATH_COUNT": 1,
+      "SHARED_PATH_NOTE": "единица — это lords-01, чей процесс поднят до установки загрузчика. После его перезапуска счётчик станет нулём; ни одна выкладка больше не пишет в общий путь",
+      "ACTION": "OWNER_GATE"
+    },
+    {
+      "BLOCK_ID": "D-REGISTRY-AUTHORITY",
+      "ORIGINAL_REQUIREMENT": "Список доменов сторожа — из exact-domain Core registry, не из hardcoded списка на два домена; покрыть три домена",
+      "RESULT": "реестр собирается из config/site-profiles и юнитов systemd; покрыты все три домена Lords, витрины вне реестра названы явно",
+      "EVIDENCE": "config/lords-runtime-registry.json",
+      "HARDCODED_TWO_DOMAIN_ALLOWLIST_COUNT": 0,
+      "ACTION": "FINISH"
+    },
+    {
+      "BLOCK_ID": "D-TEST-SERVERS",
+      "ORIGINAL_REQUIREMENT": "Удалить только свои временные серверы 19132-19135 с доказательством PID/команды/владельца; добавить ловушки, timeout и предел памяти",
+      "RESULT": "четыре остановлены после доказательства; сервер соседнего задания на 19120 пропущен явно; харнесс получил ловушку, срок и ulimit",
+      "EVIDENCE": "automation/host/lords-testserver.sh",
+      "TEMP_TEST_SERVERS_REMAINING": 0,
+      "ACTION": "FINISH"
+    },
+    {
+      "BLOCK_ID": "D-CANARY-LORDS02",
+      "ORIGINAL_REQUIREMENT": "Канарейка lordserial33.biz: source/artifact/runtime match и smoke ×2",
+      "RESULT": "COHERENT; smoke PASS дважды подряд",
+      "EVIDENCE": "rollout/SMOKE_LORDS_02.json",
+      "ACTION": "FINISH"
+    },
+    {
+      "BLOCK_ID": "D-ROLLOUT-LORDS01",
+      "ORIGINAL_REQUIREMENT": "lordfilm47.space после канарейки, smoke ×2",
+      "RESULT": "привязка и правдивый манифест готовы; рестарт отклонён polkit: Interactive authentication required",
+      "ACTION": "OWNER_GATE"
+    },
+    {
+      "BLOCK_ID": "D-ROLLOUT-LORDS03",
+      "ORIGINAL_REQUIREMENT": "1lordserials1.online после lords-01, smoke ×2",
+      "RESULT": "ждёт очереди; исполняет неизменяемый замороженный снимок, манифест пока объявляет прежнюю сборку",
+      "ACTION": "OWNER_GATE"
+    }
+  ]
 }

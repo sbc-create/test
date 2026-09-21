@@ -1,7 +1,7 @@
 {
   "stage": "LORDS-CURSOR-WORK-RECONCILIATION-01",
   "verdict": "PARTIAL_READY_WITH_OWNER_GATE",
-  "verdict_reason": "Предыдущая работа Cursor найдена, проверена, спасена и продолжена; независимые локальные блоки закрыты. Открыт один подтверждённый P1 на живых доменах (OA-1) и один блокер доступа к измерениям (OA-2). Оба требуют решения владельца и оба относятся к текущим трём витринам, а не к будущей фабрике шаблонов.",
+  "verdict_reason": "Решение владельца исполнено во всём, что не требует root. Артефакт не легализован: собран новый релиз из объекта коммита на чистом дереве, манифесты правдивы, общий изменяемый путь рантайма заменён загрузчиком с привязкой каждой витрины к своему неизменяемому релизу. Канарейка lordserial33.biz прошла smoke дважды. Перезапуск lordfilm47.space отклонён polkit (Interactive authentication required), поэтому выкат остановлен на своей очереди.",
   "canonical_repo": "/srv/site-factory/repo",
   "canonical_repo_head_at_start": "491836048dae11ae639795c7a3827706129faef6",
   "canonical_repo_note": "стоит на ветке claude/players-only-production-009 и грязен чужой работой релиз-оркестратора; не трогался",
@@ -28,38 +28,36 @@
     "94a1d149d2a2d17c234b87f0c530a2ae5e2b4e73 — лэджер сверки"
   ],
   "live_domains": {
-    "lordfilm47.space": {
-      "site": "lords-01",
-      "unit": "lords-nova-01.service",
-      "port": 9110,
-      "profile": "lords-general",
-      "design": "lords-cinema-v2",
-      "declared_artifact": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
-      "running_artifact": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
-      "process_started_utc": "2026-09-21T03:36:36Z",
-      "coherence": "DIVERGED_RUNTIME_AHEAD_OF_MANIFEST"
-    },
     "lordserial33.biz": {
       "site": "lords-02",
       "unit": "nova-lords-02.service",
       "port": 9111,
-      "profile": "lords-new",
-      "design": "lords-series-feed-v2",
-      "declared_artifact": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
-      "running_artifact": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
-      "process_started_utc": "2026-09-21T11:13:09Z",
-      "coherence": "COHERENT"
+      "coherence": "COHERENT",
+      "stable_smoke_runs": 2,
+      "running_release_path": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean/lords-frontend.py",
+      "declared_build_id": "20260921T114007Z-89003bb-clean",
+      "data_design": "lords-series-feed-v2",
+      "canonical": "https://lordserial33.biz/",
+      "indexability": "closed"
+    },
+    "lordfilm47.space": {
+      "site": "lords-01",
+      "unit": "lords-nova-01.service",
+      "port": 9110,
+      "coherence": "PENDING_RESTART_PROCESS_PREDATES_LOADER",
+      "stable_smoke_runs": 0,
+      "bound_release": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean",
+      "manifest_staged_truthfully": true,
+      "blocked_on": "привилегированный перезапуск lords-nova-01.service"
     },
     "1lordserials1.online": {
       "site": "lords-03",
       "unit": "nova-lords-03.service",
       "port": 9112,
-      "profile": "lords-curated",
-      "design": "lords-curated-v2",
-      "declared_artifact": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
-      "running_artifact": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
-      "process_started_utc": "2026-09-21T11:14:58Z",
-      "coherence": "DIVERGED_RUNTIME_AHEAD_OF_MANIFEST"
+      "coherence": "DIVERGED_RUNTIME_DIFFERS_FROM_MANIFEST",
+      "stable_smoke_runs": 0,
+      "bound_release": "/srv/lords/.frontend/releases/legacy-b32438c91aaa",
+      "note": "ждёт своей очереди по контракту выката; исполняет неизменяемый снимок, манифест объявляет прежнюю сборку"
     }
   },
   "live_verification_method": "sha256 исполняемого файла, манифесты витрин и времена старта процессов из /proc; HTTP недоступен — блокер B-01",
@@ -91,20 +89,56 @@
     }
   ],
   "shared_runtime_warning": "все три профиля обслуживаются одним исполняемым файлом /srv/lords/.frontend/lords-frontend.py. Фабрика T001–T050 унаследует это свойство: либо артефакты разделяются по арендаторам, либо манифесты всех затронутых витрин переоформляются в одной транзакции с установкой.",
-  "tests": "tests/lords — 288 passed, 17 skipped (пропуски: нет собранного стенда var/probe и var/lords-candidate)",
+  "tests": "tests/lords — 294 passed, 17 skipped",
   "unresolved_blockers": [
-    "B-01 P2 BLOCKED_ACCESS — HTTP к трём доменам закрыт guard'ом; smoke ×2, метрики A11 по живым страницам, пересъёмка визуальной матрицы и гейт нагрузки остаются NOT_MEASURABLE",
-    "B-02 P1 CONFIRMED_LIVE_DEFECT — lords-01 и lords-03 исполняют артефакт, которого не объявляют",
-    "B-04 P3 — четыре утёкших тестовых сервера на 19132-19135; предел памяти витрин не задан"
+    "B-02 P1 — выкат не завершён: lordfilm47.space и 1lordserials1.online ждут привилегированного перезапуска; 1lordserials1.online при этом объявляет сборку, которой не исполняет",
+    "B-01 P2 BLOCKED_ACCESS — публичный контур (TLS, редиректы, заголовки nginx) не измерен: доменов нет в allowlist канонического репозитория. Поведение приложения измерено по 127.0.0.1 с Host витрины",
+    "B-07 P3 — пределы памяти боевых витрин по-прежнему не заданы; менять их без измерения запрещено правилом A10"
   ],
   "owner_actions_required": [
-    "OA-1 (P1) — выбрать: принять b32438c9 переоформлением манифестов lords-01 и lords-03 со smoke ×2, либо откатить на 5dd817fe из целой точки /srv/lords/.frontend/.rollback/20260920T223958Z-lords-02",
-    "OA-2 (P2) — внести три домена Lords в inventory/network-allowlist.yaml канонического репозитория, иначе живые измерения остаются неисполнимыми",
-    "OA-3 (P3) — остановить четыре тестовых сервера прошлого прогона"
+    "OA-1 — sudo -n systemctl restart lords-nova-01.service (одна команда, текущий шаг выката)",
+    "OA-2 — после прохождения lords-01: привязка, манифест и перезапуск nova-lords-03.service",
+    "OA-3 — при желании измерять публичный контур: внести три домена Lords в inventory/network-allowlist.yaml канонического репозитория"
   ],
   "factory_base_head": "ed68c2db4b574c69897a546f90bf8eb9d472a1ad",
   "factory_base_head_note": "Промпт B ответвляется отсюда: это первый коммит, где HANDOFF.json существует и заполнен.",
   "ready_for_lords_50_factory": false,
-  "ready_reason": "Фабрика T001–T050 технически не заблокирована: её ветка и worktree отдельны, а открытые пункты касаются трёх существующих витрин. Но условие закрытия старого задания требует, чтобы на живых доменах не оставалось подтверждённого P1. Пока OA-1 не выбран владельцем, флаг остаётся false — это решение владельца, а не самооценка агента.",
-  "start_prompt_b_when": "владелец выбрал вариант по OA-1, расхождение закрыто и nova-manifest-coherence.py возвращает 0"
+  "ready_reason": "Требование владельца: YES допускается только после закрытия всех P1 и двух стабильных живых прогонов КАЖДОГО домена. Пройден один домен из трёх. Ставить YES сейчас значило бы заявить проверку, которая не выполнялась.",
+  "start_prompt_b_when": "все три домена COHERENT и прошли smoke дважды",
+  "owner_decision_id": "LORDS-OA1-CLEAN-REBUILD-AND-ISOLATION-20260921-01",
+  "clean_release": {
+    "build_id": "20260921T114007Z-89003bb-clean",
+    "source_commit": "89003bb88447b6f36c1f6f6a365e6f8099d55098",
+    "source_dirty": false,
+    "artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+    "built_from": "git object",
+    "byte_identity_note": "байты совпали с отвергнутым артефактом b32438c9. Это доказательство, а не обход: спасённый и закоммиченный источник и есть то, что стояло на хосте. Отвергнуто было происхождение — грязное дерево и ложный source_dirty=false, — и именно оно заменено."
+  },
+  "runtime_isolation": {
+    "shared_path": "/srv/lords/.frontend/lords-frontend.py",
+    "shared_path_now": "загрузчик: по порту находит релиз витрины и передаёт управление через execv",
+    "deploy_writes_to_shared_path": false,
+    "tenants_bound_to_immutable_releases": [
+      "lords-01",
+      "lords-02",
+      "lords-03",
+      "animedia-01",
+      "animedia-02",
+      "zona-01"
+    ],
+    "sites_still_executing_shared_path": [
+      "lords-01"
+    ],
+    "note": "lords-01 — процесс от 03:36:36Z, поднятый до установки загрузчика; после перезапуска счётчик обнулится"
+  },
+  "measured_metrics_lords02": {
+    "HTTP_5XX_COUNT": 0,
+    "SOFT_404_COUNT": 0,
+    "BROKEN_INTERNAL_LINKS": 0,
+    "INTERNAL_LINKS_CHECKED": 25,
+    "PLAYER_INSTANCE_MAX": 1,
+    "AUTOPLAY_COUNT": 0,
+    "TIMESTAMP_ELLIPSIS_COUNT": 0,
+    "POSTER_ASPECT_RATIO_VIOLATIONS": 0
+  }
 }
