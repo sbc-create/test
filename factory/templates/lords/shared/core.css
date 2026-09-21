@@ -122,3 +122,50 @@ a:focus-visible,input:focus-visible{outline:2px solid var(--brand);outline-offse
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.01ms!important;transition-duration:.01ms!important}
 }
+
+/* --- ранжированный список -------------------------------------------------
+   Номер — позиция в списке, а не оценка: оценок в источнике нет. Колонка
+   номера фиксирована, поэтому подпись не съезжает от двузначных чисел. */
+.g--ranked{list-style:none;margin:0;padding:0}
+.k--ranked{display:grid;grid-template-columns:44px minmax(0,1fr);align-items:center;
+  gap:10px;padding:10px 12px}
+.k__n{font-variant-numeric:tabular-nums;font-weight:800;font-size:18px;
+  color:var(--brand-text);text-align:center}
+.k--ranked .k__cap{padding:0}
+
+/* --- доска по видам -------------------------------------------------------
+   Колонка появляется только там, где есть данные: пустых столбцов не бывает
+   по построению, а не по договорённости. */
+.board{display:grid;gap:var(--gap);grid-template-columns:minmax(0,1fr)}
+@media(min-width:768px){.board{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1200px){.board{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.board__col{min-width:0;border:1px solid var(--line);border-radius:var(--radius);
+  padding:12px;background:var(--soft)}
+.board__t{margin:0 0 10px;font-size:14px;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--brand-text)}
+.board__items{display:grid;gap:8px}
+
+/* --- текстовая плитка ------------------------------------------------------ */
+.k--tile{padding:0}
+.k--tile .k__cap{padding:12px 14px}
+.k--tile .k__t{-webkit-line-clamp:3}
+
+/* --- мозаика ---------------------------------------------------------------
+   Пролёт объявлен классом, а не вычислен на лету: иначе одинаковые данные
+   дают разный макет и сравнивать снимки становится нечем. */
+.mosaic .k--lead{grid-column:span 2;grid-row:span 2}
+@media(max-width:479px){.mosaic .k--lead{grid-column:span 2;grid-row:auto}}
+
+/* --- индекс по буквам ------------------------------------------------------ */
+.idx__l{gap:6px}
+.idx__n{font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums}
+
+/* --- асимметричный разворот ------------------------------------------------ */
+.split__in{display:grid;gap:var(--gap);grid-template-columns:minmax(0,1fr)}
+@media(min-width:900px){.split__in{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}}
+.split__lead{display:block;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--radius);overflow:hidden}
+.split__media{display:block;aspect-ratio:2/3;max-height:420px;overflow:hidden}
+.split__img{width:100%;height:100%;object-fit:cover;object-position:center top}
+.split__cap{display:block;padding:12px 14px}
+.split__list{display:grid;gap:10px;align-content:start;min-width:0}

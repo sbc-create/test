@@ -1,0 +1,13 @@
+/* T008 — панель впереди, витрина под ней и заметно реже */
+.g--panel{grid-template-columns:repeat(1,minmax(0,1fr))}
+@media(min-width:768px){.g--panel{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1200px){.g--panel{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+.g--rest{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.g--rest{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1024px){.g--rest{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1440px){.g--rest{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+.g--upd{grid-template-columns:repeat(1,minmax(0,1fr))}
+@media(min-width:900px){.g--upd{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1440px){.g--upd{grid-template-columns:repeat(4,minmax(0,1fr))}}

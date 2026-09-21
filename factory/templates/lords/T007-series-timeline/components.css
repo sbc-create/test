@@ -1,0 +1,6 @@
+/* T007 — вертикальная ось времени слева от ленты */
+.g--time{position:relative;padding-left:18px}
+.g--time::before{content:'';position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:var(--brand)}
+.g--time .k--compact{border-radius:0;border-left:0}
+.k--tile{border-left:2px solid var(--line)}
+.sec__t{font-size:16px;font-weight:600;letter-spacing:.02em}

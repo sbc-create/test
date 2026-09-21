@@ -1,0 +1,12 @@
+/* T010 — мозаика на четыре колонки, лента и витрина разрежены */
+.g--mos{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.g--mos{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1440px){.g--mos{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+.g--note{grid-template-columns:repeat(1,minmax(0,1fr))}
+@media(min-width:768px){.g--note{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.g--pick{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:700px){.g--pick{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1200px){.g--pick{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1600px){.g--pick{grid-template-columns:repeat(6,minmax(0,1fr))}}

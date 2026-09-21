@@ -1,0 +1,9 @@
+/* T009 — поток в две-три колонки, витрина умеренной плотности */
+.g--flow{grid-template-columns:repeat(1,minmax(0,1fr))}
+@media(min-width:768px){.g--flow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1440px){.g--flow{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+.g--show{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.g--show{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1024px){.g--show{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1600px){.g--show{grid-template-columns:repeat(5,minmax(0,1fr))}}

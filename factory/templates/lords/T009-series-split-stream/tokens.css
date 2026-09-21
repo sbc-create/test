@@ -1,0 +1,6 @@
+/* T009 — тёмный хвойный, крупный радиус, широкий шаг */
+:root{
+  --ink:#e6ede8; --dim:#8da598; --bg:#060a08; --card:#0e1412; --line:#1b2722;
+  --brand:#22B573; --brand-text:#BCE8D0; --brand-ink:#06110b; --soft:#090f0c;
+  --radius:16px; --gap:18px; --pad:18px; --title-size:14px; --title-lines:3;
+}

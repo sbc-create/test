@@ -1,0 +1,6 @@
+/* T006 — лента отделена левой чертой, витрина без рамок */
+.k--compact{border-left:3px solid var(--brand);border-radius:0}
+.g--shelf .k--poster{background:transparent;border-color:transparent}
+.g--shelf .k--poster .k__p{border-radius:var(--radius);overflow:hidden}
+.g--shelf .k--poster .k__cap{padding:6px 2px 0}
+.sec__t{font-size:15px;text-transform:uppercase;letter-spacing:.08em;color:var(--brand-text)}

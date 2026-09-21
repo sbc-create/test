@@ -1,0 +1,7 @@
+/* T007 — хронология всегда в одну колонку — время не раскладывается в сетку */
+.g--time{grid-template-columns:repeat(1,minmax(0,1fr))}
+
+.g--index{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.g--index{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1024px){.g--index{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(min-width:1600px){.g--index{grid-template-columns:repeat(8,minmax(0,1fr))}}

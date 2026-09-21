@@ -1,0 +1,6 @@
+/* T007 — холодный графит с мятной линией времени */
+:root{
+  --ink:#e7ebe8; --dim:#8c9a92; --bg:#0a0d0c; --card:#121715; --line:#212b27;
+  --brand:#2F6B22; --brand-text:#9FD8B4; --brand-ink:#ffffff; --soft:#0d1110;
+  --radius:2px; --gap:8px; --pad:16px; --title-size:14.5px; --title-lines:2;
+}

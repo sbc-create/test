@@ -1,0 +1,7 @@
+/* T010 — журнальная типографика, тонкие линии, паспарту у медиа */
+.sec__t{font-size:22px;font-weight:600;letter-spacing:-.01em;border-bottom:1px solid var(--line);padding-bottom:10px}
+.k{box-shadow:none}
+.k__p{padding:8px;background:var(--card)}
+.k--editorial .k__t{font-size:18px}
+.k--compact{background:var(--soft)}
+.about__p{font-size:16px;line-height:1.7}
