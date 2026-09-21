@@ -1,12 +1,12 @@
 {
   "schema": "lords-template-passport/1",
   "template_id": "T032",
-  "slug": "collection-carousel",
+  "slug": "collection-rows",
   "version": "1.0.0",
   "family": "collection",
-  "package_digest": "bb8de22686c397cc8d2743c3c247dbe10d628f40ca6338f4db68747c1606245e",
+  "package_digest": "a7ce047b40f8ed5ef5a29d2f64a4dd7e234b460702d24131b168f8c8f2cec60f",
   "declared": {
-    "design_intent": "Три витрины подряд разной плотности вместо одной длинной.",
+    "design_intent": "Три витрины подряд разной плотности вместо одной длинной. Карусели нет и не заявляется: страница статическая, скриптов ноль.",
     "primary_user_journey": "скользить по рядам",
     "home_signature": [
       "grid",
@@ -69,14 +69,14 @@
     ]
   },
   "review_screenshots": [
-    "T032-collection-carousel-1024.png",
-    "T032-collection-carousel-1440.png",
-    "T032-collection-carousel-1920.png",
-    "T032-collection-carousel-320.png",
-    "T032-collection-carousel-390.png",
-    "T032-collection-carousel-768.png"
+    "T032-collection-rows-1024.png",
+    "T032-collection-rows-1440.png",
+    "T032-collection-rows-1920.png",
+    "T032-collection-rows-320.png",
+    "T032-collection-rows-390.png",
+    "T032-collection-rows-768.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.752021+00:00"
+  "issued_at_utc": "2026-09-21T20:31:52.816417+00:00"
 }

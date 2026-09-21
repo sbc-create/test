@@ -1,6 +1,6 @@
 {
   "template_id": "T032",
-  "slug": "collection-carousel",
+  "slug": "collection-rows",
   "measured": {
     "HORIZONTAL_OVERFLOW_COUNT": 0,
     "CLIPPED_REQUIRED_TEXT_COUNT": 0,
@@ -36,7 +36,7 @@
   "PASS": true,
   "OWNER_VISUAL_REVIEW_REQUIRED": true,
   "SELF_REPORTED_OWNER_ACCEPTANCE": false,
-  "scored_at_utc": "2026-09-21T20:23:31.154601+00:00",
+  "scored_at_utc": "2026-09-21T20:31:52.471962+00:00",
   "pages": [
     {
       "viewport": 320,
@@ -144,7 +144,7 @@
         "low_contrast": [],
         "focusable": 62
       },
-      "screenshot": "T032-collection-carousel-320.png"
+      "screenshot": "T032-collection-rows-320.png"
     },
     {
       "viewport": 390,
@@ -252,7 +252,7 @@
         "low_contrast": [],
         "focusable": 62
       },
-      "screenshot": "T032-collection-carousel-390.png"
+      "screenshot": "T032-collection-rows-390.png"
     },
     {
       "viewport": 768,
@@ -360,7 +360,7 @@
         "low_contrast": [],
         "focusable": 62
       },
-      "screenshot": "T032-collection-carousel-768.png"
+      "screenshot": "T032-collection-rows-768.png"
     },
     {
       "viewport": 1024,
@@ -468,7 +468,7 @@
         "low_contrast": [],
         "focusable": 62
       },
-      "screenshot": "T032-collection-carousel-1024.png"
+      "screenshot": "T032-collection-rows-1024.png"
     },
     {
       "viewport": 1440,
@@ -576,7 +576,7 @@
         "low_contrast": [],
         "focusable": 62
       },
-      "screenshot": "T032-collection-carousel-1440.png"
+      "screenshot": "T032-collection-rows-1440.png"
     },
     {
       "viewport": 1920,
@@ -684,7 +684,7 @@
         "low_contrast": [],
         "focusable": 62
       },
-      "screenshot": "T032-collection-carousel-1920.png"
+      "screenshot": "T032-collection-rows-1920.png"
     }
   ]
 }

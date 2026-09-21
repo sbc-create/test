@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "pool": "lords-50-v1",
-  "generated_at": "2026-09-21T17:37:33.973105+00:00",
-  "note": "Пятьдесят пакетов. Статус TECHNICAL_CANDIDATE у всех: ASSIGNABLE требует приёмки владельца, а самооценка агента ею не является. Пустых записей в пуле нет — каждая запись соответствует существующему пакету.",
+  "generated_at": "2026-09-21T20:32:11.749880+00:00",
+  "note": "Пятьдесят пакетов, все TECHNICAL_CANDIDATE. ASSIGNABLE требует приёмки владельца. Пустых записей нет: каждая соответствует существующему пакету.",
   "templates": [
     {
       "template_id": "T001",
@@ -10,7 +10,7 @@
       "version": "1.0.0",
       "family": "forest-cinema",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -36,7 +36,7 @@
       "version": "1.0.0",
       "family": "forest-cinema",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -62,7 +62,7 @@
       "version": "1.0.0",
       "family": "forest-cinema",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -88,7 +88,7 @@
       "version": "1.0.0",
       "family": "forest-cinema",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -114,7 +114,7 @@
       "version": "1.0.0",
       "family": "forest-cinema",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -140,7 +140,7 @@
       "version": "1.0.0",
       "family": "series-feed",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -155,7 +155,7 @@
       ],
       "visual_score": 100,
       "hard_fail_count": 0,
-      "artifact_digest": "76197fe7ad69b58abbb77ded32f89eaff8fffe0e9a616c1f5719e1ce7edf1889",
+      "artifact_digest": "ab88f1136ed3419db2152d0b650f64247a25664907ad5ad8b63c3d105899ff59",
       "assigned_domain": null,
       "reserved_at": null,
       "green_identity": "primary"
@@ -166,7 +166,7 @@
       "version": "1.0.0",
       "family": "series-feed",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -192,7 +192,7 @@
       "version": "1.0.0",
       "family": "series-feed",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -218,7 +218,7 @@
       "version": "1.0.0",
       "family": "series-feed",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -244,7 +244,7 @@
       "version": "1.0.0",
       "family": "series-feed",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -270,7 +270,7 @@
       "version": "1.0.0",
       "family": "curated",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -285,7 +285,7 @@
       ],
       "visual_score": 100,
       "hard_fail_count": 0,
-      "artifact_digest": "41290dc11a1dc44c024e8430ecfabce945ba9b889aa5d58626edb02c9b97838d",
+      "artifact_digest": "5fdaf34c437945f120a1aeb853f636682dfa0496353d7725c7b5f7f00e2a0906",
       "assigned_domain": null,
       "reserved_at": null,
       "green_identity": "primary"
@@ -296,7 +296,7 @@
       "version": "1.0.0",
       "family": "curated",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -322,7 +322,7 @@
       "version": "1.0.0",
       "family": "curated",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -337,7 +337,7 @@
       ],
       "visual_score": 100,
       "hard_fail_count": 0,
-      "artifact_digest": "1407692093c32a1f353a81786c9fe536a929a246a14cc81acb1fa2754d230356",
+      "artifact_digest": "f998e0b385274014f6a86a2f4d6a040351edf7032d4f38b91ecd3491f223af00",
       "assigned_domain": null,
       "reserved_at": null,
       "green_identity": "secondary"
@@ -348,7 +348,7 @@
       "version": "1.0.0",
       "family": "curated",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -374,7 +374,7 @@
       "version": "1.0.0",
       "family": "curated",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -400,7 +400,7 @@
       "version": "1.0.0",
       "family": "premiere",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -415,7 +415,7 @@
       ],
       "visual_score": 100,
       "hard_fail_count": 0,
-      "artifact_digest": "57a5ae256766e384043d08b598290eab5e1e237d99971795ca4ac57a8522b944",
+      "artifact_digest": "e79076bc4b368bc4e478d079682c8f2fd7e96b84a0802e9324fd56b17e7a44f0",
       "assigned_domain": null,
       "reserved_at": null,
       "green_identity": "primary"
@@ -426,7 +426,7 @@
       "version": "1.0.0",
       "family": "premiere",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -452,7 +452,7 @@
       "version": "1.0.0",
       "family": "premiere",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -478,7 +478,7 @@
       "version": "1.0.0",
       "family": "premiere",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -504,7 +504,7 @@
       "version": "1.0.0",
       "family": "premiere",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -530,7 +530,7 @@
       "version": "1.0.0",
       "family": "genre",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -556,7 +556,7 @@
       "version": "1.0.0",
       "family": "genre",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -571,7 +571,7 @@
       ],
       "visual_score": 100,
       "hard_fail_count": 0,
-      "artifact_digest": "c702a32c3b30f4ed338ef83f9dd23f0dfad86b0e7eec87dda3519a45111490a5",
+      "artifact_digest": "ce8cf09d0eb78fe14405407e923966a36b15ab5d3035e1dae814e3bc4a2df256",
       "assigned_domain": null,
       "reserved_at": null,
       "green_identity": "primary"
@@ -582,7 +582,7 @@
       "version": "1.0.0",
       "family": "genre",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -608,7 +608,7 @@
       "version": "1.0.0",
       "family": "genre",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -634,7 +634,7 @@
       "version": "1.0.0",
       "family": "genre",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -660,7 +660,7 @@
       "version": "1.0.0",
       "family": "rating",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -686,7 +686,7 @@
       "version": "1.0.0",
       "family": "rating",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -712,7 +712,7 @@
       "version": "1.0.0",
       "family": "rating",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -738,7 +738,7 @@
       "version": "1.0.0",
       "family": "rating",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -753,7 +753,7 @@
       ],
       "visual_score": 100,
       "hard_fail_count": 0,
-      "artifact_digest": "191747c4e5b0a7cafd88d049cbea2e1b4d151eb6e894c5824aa85a2284d6f1f6",
+      "artifact_digest": "0b431d2c8b111bb6098c68982d34f4edd12da1e71b1fc8a8b33dd3b70d5d299e",
       "assigned_domain": null,
       "reserved_at": null,
       "green_identity": "accent-only"
@@ -764,7 +764,7 @@
       "version": "1.0.0",
       "family": "rating",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -779,7 +779,7 @@
       ],
       "visual_score": 100,
       "hard_fail_count": 0,
-      "artifact_digest": "3018900cc222173731fafd6ddeaf49eabad570968db4f68b1eafecfee7468865",
+      "artifact_digest": "6ebcc17e166bc14938429077a3c72f4fc8c69198ea5022c6518a32fa77badd98",
       "assigned_domain": null,
       "reserved_at": null,
       "green_identity": "primary"
@@ -790,7 +790,7 @@
       "version": "1.0.0",
       "family": "collection",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -812,11 +812,11 @@
     },
     {
       "template_id": "T032",
-      "slug": "collection-carousel",
+      "slug": "collection-rows",
       "version": "1.0.0",
       "family": "collection",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -831,7 +831,7 @@
       ],
       "visual_score": 100,
       "hard_fail_count": 0,
-      "artifact_digest": "bb8de22686c397cc8d2743c3c247dbe10d628f40ca6338f4db68747c1606245e",
+      "artifact_digest": "a7ce047b40f8ed5ef5a29d2f64a4dd7e234b460702d24131b168f8c8f2cec60f",
       "assigned_domain": null,
       "reserved_at": null,
       "green_identity": "secondary"
@@ -842,7 +842,7 @@
       "version": "1.0.0",
       "family": "collection",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -857,7 +857,7 @@
       ],
       "visual_score": 100,
       "hard_fail_count": 0,
-      "artifact_digest": "62371827005b66d263aec5ef9c19199aef3764c10346760a026f7585fc45ff45",
+      "artifact_digest": "e8c168575ccd81c5b1468d8d0ad80d6a6cda9ed46f5cd58d6849b1c6ee25be65",
       "assigned_domain": null,
       "reserved_at": null,
       "green_identity": "accent-only"
@@ -868,7 +868,7 @@
       "version": "1.0.0",
       "family": "collection",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -883,7 +883,7 @@
       ],
       "visual_score": 100,
       "hard_fail_count": 0,
-      "artifact_digest": "0bb380ab0dfc02a2d0ba86851e0457a4c224083575383f12cfd888c307dd6327",
+      "artifact_digest": "bad82cbbcb578abc62b2fa0bbc59ea00ea8326e4bf5a3dfafaa218ea767566ad",
       "assigned_domain": null,
       "reserved_at": null,
       "green_identity": "secondary"
@@ -894,7 +894,7 @@
       "version": "1.0.0",
       "family": "collection",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -920,7 +920,7 @@
       "version": "1.0.0",
       "family": "archive",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -946,7 +946,7 @@
       "version": "1.0.0",
       "family": "archive",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -972,7 +972,7 @@
       "version": "1.0.0",
       "family": "archive",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -998,7 +998,7 @@
       "version": "1.0.0",
       "family": "archive",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -1024,7 +1024,7 @@
       "version": "1.0.0",
       "family": "archive",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -1050,7 +1050,7 @@
       "version": "1.0.0",
       "family": "modern",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -1076,7 +1076,7 @@
       "version": "1.0.0",
       "family": "modern",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -1102,7 +1102,7 @@
       "version": "1.0.0",
       "family": "modern",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -1117,7 +1117,7 @@
       ],
       "visual_score": 100,
       "hard_fail_count": 0,
-      "artifact_digest": "3940b39e110b96350745ee86a9f9ca539a4104bc9079dee822519d7c744886ee",
+      "artifact_digest": "b7c8061d1e903a092c8dadd213ddc20ff90e5ed5679d81ff3412f6b985fe8249",
       "assigned_domain": null,
       "reserved_at": null,
       "green_identity": "secondary"
@@ -1128,7 +1128,7 @@
       "version": "1.0.0",
       "family": "modern",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -1154,7 +1154,7 @@
       "version": "1.0.0",
       "family": "modern",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -1169,7 +1169,7 @@
       ],
       "visual_score": 100,
       "hard_fail_count": 0,
-      "artifact_digest": "469a5362dafe71da545553158b3f99e015415669a473ff764ef12574e8f8401f",
+      "artifact_digest": "f32cabbca45ca9b319c03b8c68e64345d205f04e1ee0871a61f2e51373210633",
       "assigned_domain": null,
       "reserved_at": null,
       "green_identity": "primary"
@@ -1180,7 +1180,7 @@
       "version": "1.0.0",
       "family": "hybrid",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -1206,7 +1206,7 @@
       "version": "1.0.0",
       "family": "hybrid",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -1221,7 +1221,7 @@
       ],
       "visual_score": 100,
       "hard_fail_count": 0,
-      "artifact_digest": "e320f6dc8b1b25d717d9f7a68b0cc52e4ea0a9fdc007e2e92afd258ee82cf412",
+      "artifact_digest": "1c91044573976cacd1b095c3441e58569d5381f3549a047746b9cabdbd1e0429",
       "assigned_domain": null,
       "reserved_at": null,
       "green_identity": "primary"
@@ -1232,7 +1232,7 @@
       "version": "1.0.0",
       "family": "hybrid",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -1247,7 +1247,7 @@
       ],
       "visual_score": 100,
       "hard_fail_count": 0,
-      "artifact_digest": "93ef60a8bcbae7f537b92a61c252111e28efb12e78e8b47a074b93625ef21f67",
+      "artifact_digest": "b1a08559da4cec6bdf7488adc1fc0c83c8bb14753913de87005c0336617dc036",
       "assigned_domain": null,
       "reserved_at": null,
       "green_identity": "secondary"
@@ -1258,7 +1258,7 @@
       "version": "1.0.0",
       "family": "hybrid",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -1284,7 +1284,7 @@
       "version": "1.0.0",
       "family": "hybrid",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8d2e9c3c5b90",
+      "source_commit": "2f9c7b640bd6",
       "capabilities": [
         "film",
         "series",
@@ -1299,7 +1299,7 @@
       ],
       "visual_score": 100,
       "hard_fail_count": 0,
-      "artifact_digest": "d1a1767137c7d764b7db08392ae72e891ed4e0bdb95f1fc02c49a1a4772a0366",
+      "artifact_digest": "04f52b289092ea91e80bed6412811fd60694f27ebbd58f1f4d8a5189c6e9b65c",
       "assigned_domain": null,
       "reserved_at": null,
       "green_identity": "primary"

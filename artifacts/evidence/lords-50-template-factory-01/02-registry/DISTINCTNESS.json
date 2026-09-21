@@ -2214,7 +2214,7 @@
     },
     {
       "template_id": "T032",
-      "slug": "collection-carousel",
+      "slug": "collection-rows",
       "family": "collection",
       "green_identity": "secondary",
       "block_order": [

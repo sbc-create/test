@@ -1,13 +1,13 @@
 {
   "template_id": "T032",
-  "slug": "collection-carousel",
+  "slug": "collection-rows",
   "version": "1.0.0",
   "family": "collection",
   "title": "Lords — ряды срезов",
   "brand": "LORDS",
   "preview_domain": "lords-t032.example",
   "footer": "Каталог фильмов и сериалов. Композиция T032: три ряда разной плотности.",
-  "design_intent": "Три витрины подряд разной плотности вместо одной длинной.",
+  "design_intent": "Три витрины подряд разной плотности вместо одной длинной. Карусели нет и не заявляется: страница статическая, скриптов ноль.",
   "primary_user_journey": "скользить по рядам",
   "card_grammar": [
     "poster",

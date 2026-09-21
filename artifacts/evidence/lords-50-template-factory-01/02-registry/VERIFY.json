@@ -1124,9 +1124,9 @@
     },
     {
       "template_id": "T032",
-      "slug": "collection-carousel",
+      "slug": "collection-rows",
       "version": "1.0.0",
-      "package_path": "templates/lords/T032-collection-carousel",
+      "package_path": "templates/lords/T032-collection-rows",
       "files": [
         "PASSPORT.json",
         "components.css",
@@ -1152,7 +1152,7 @@
         "--title-lines",
         "--title-size"
       ],
-      "build_digest": "9f5a3b4ed92eca9d663e2211ca9af1784b254d7c36a33f57ce9493d9e58461e5",
+      "build_digest": "14e19cb417ba54c30b3a806475ab5b5bea22c80bca77455912ab66317a85b5b9",
       "build_reproducible": true,
       "writes_to_neighbours": false,
       "issues": [],
