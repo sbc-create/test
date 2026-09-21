@@ -31,7 +31,7 @@
       "detail": "config/TEMPLATE-BASELINE-MANIFEST.json фиксирует решение владельца TEMPLATE-POSTDEPLOY-REMEDIATION-03A: канонический writer шаблонного релиза — PR #76, ветка claude/fleet-tpl-baseline-001, ca805888a4a3ff723d61b453163e56bae7bfa48c. Гейт test_дайджесты_владения_совпадают_с_файлами был красным уже на 03b3908, до этой стадии: манифест ждёт 1668f71b… у automation/host/lords-frontend.py, файл был 19146d6d…, сейчас e6bdd91c…. Второй управляемый файл factory/lords/collection_contract.py расходится так же (58b78601… против 1de55d9d…) и этой стадией не трогался вовсе.",
       "not_done_on_purpose": "Манифест не обновлялся. Подгонка цифры выдала бы соответствие решению владельца, которого нет.",
       "owner": "владелец шаблонного релиза",
-      "recorded_as": "knowledge/DECISIONS.md D140",
+      "recorded_as": "adr/0008-shared-template-writer-ownership.md (перенесено из knowledge/DECISIONS.md D140 — см. B-FREEZE-02)",
       "next_safe_step": "Владелец решает: переназначить канонического writer'а на ветку Animedia либо вносить правки Animedia через PR #76. До решения гейт остаётся красным честно.",
       "transfer_plan": "SHARED_WRITER_TRANSFER_PLAN.md",
       "rehearsal": "патч управляемых файлов ложится на каноническую вершину b398ca2 с нулём конфликтов и воспроизводит версии Animedia побайтово; каноническая линия за 4 коммита ни разу не трогала оба файла",
@@ -76,6 +76,14 @@
       "why_not_a_gate": "Требование 44×44 в контракте стадии не записано: паспорт B15 перечисляет keyboard, focus_trap, zoom_200, reduced_motion, а метрики A10 цели нажатия не упоминают. Ввести новый гейт посреди замороженной стадии — это мутация контракта.",
       "owner": "владелец контракта",
       "next_safe_step": "Если требование нужно, внести его в следующую редакцию паспорта и поднять min-height ссылок подвала с 32 до 44px отдельной правкой"
+    },
+    {
+      "id": "B-FREEZE-02",
+      "title": "Записать конфликт в knowledge/DECISIONS.md нельзя без переустановки заморозки",
+      "detail": "CLAUDE.md велит записывать конфликт в knowledge/DECISIONS.md. Файл входит в knowledge/KNOWLEDGE_FREEZE.yaml с цифрой f8f2d003… и 104599 байтами, а заморозка собирается только командой factory knowledge freeze. Дописанная строка ломает целостность, и конвейер fail-closed: pipeline.run_job отдаёт BLOCKED_INPUT с полем knowledge/KNOWLEDGE_FREEZE.yaml на стадии VALIDATING. Измерено: пять тестов tests/unit/test_production_gates.py упали из-за этого.",
+      "action_taken": "Запись D140 убрана, DECISIONS.md возвращён к замороженному состоянию побайтово (цифра и размер совпадают). Решение перенесено в adr/0008-shared-template-writer-ownership.md — CLAUDE.md называет adr/ вторым домом решений проекта. Заморозка не переставлялась: смена freeze_version — действие владельца базы знаний, а /research-freeze объявлен для новой официальной документации, а не для журнала решений.",
+      "owner": "владелец базы знаний",
+      "next_safe_step": "Решить, должен ли журнал решений оставаться внутри заморозки. Если да — описать порядок: запись в DECISIONS.md обязана идти вместе с factory knowledge freeze, иначе любая запись роняет production-гейт."
     }
   ],
   "resolved_in_this_stage": [
