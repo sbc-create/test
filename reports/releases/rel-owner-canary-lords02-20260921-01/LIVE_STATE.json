@@ -1,0 +1,58 @@
+{
+  "measured_at_utc": "2026-09-21T12:09:13.495479+00:00",
+  "measured_by": "SITE-FACTORY-RELEASE-ORCHESTRATOR-01",
+  "method": "read-only: sha256 of files, /proc cmdline, nginx proxy_pass, systemd unit files, lords-runtime-registry.json",
+  "host_quiescent": false,
+  "host_quiescent_note": "Во время этой сессии другой поток работ мигрировал общий рантайм на по-доменный диспетчер: /srv/lords/.frontend/lords-frontend.py сменился с 418858 байт (b32438c9) на 6843 байта (2495eac5) между 11:45Z и 12:06Z, появились releases/ и sites/<витрина>/current. Хост не в покое.",
+  "sites": {
+    "lords-01": {
+      "declared_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "declared_build_id": "20260921T114007Z-89003bb-clean",
+      "release_link_resolves_to": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean",
+      "release_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "unit": "lords-nova-01.service",
+      "port": 9110,
+      "exact_domain": "lordfilm47.space",
+      "indexing_enabled": false,
+      "declared_matches_release": true,
+      "running_pid": 1679286,
+      "running_executes": "/srv/lords/.frontend/lords-frontend.py",
+      "running_sha256": "2495eac5a4eb48b99e333549915e04e6f0c448ccd69bbd86f70f4ff6475b3dcf",
+      "runtime_matches_declared": null,
+      "measurement_caveat": "Процесс стартовал 2026-09-21T03:36:36Z, до подмены файла по этому пути. running_sha256 прочитан с пути СЕЙЧАС и описывает диспетчер (2495eac5), а не те байты, которые процесс загрузил при старте. Чем именно исполняется lords-01, по файлу на диске не определяется: нужен рестарт под диспетчером или чтение образа процесса. Помечено неизмеренным, а не додумано.",
+      "runtime_state": "UNMEASURED_PROCESS_PREDATES_MIGRATION"
+    },
+    "lords-02": {
+      "declared_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "declared_build_id": "20260921T114007Z-89003bb-clean",
+      "release_link_resolves_to": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean",
+      "release_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "unit": "nova-lords-02.service",
+      "port": 9111,
+      "exact_domain": "lordserial33.biz",
+      "indexing_enabled": false,
+      "declared_matches_release": true,
+      "running_pid": 1615866,
+      "running_executes": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean/lords-frontend.py",
+      "running_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "runtime_matches_declared": true,
+      "state": "COHERENT — объявленное, назначенное и исполняемое совпадают"
+    },
+    "lords-03": {
+      "declared_artifact_sha256": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+      "declared_build_id": "20260920T193847Z-3c90aab-nova",
+      "release_link_resolves_to": "/srv/lords/.frontend/releases/legacy-b32438c91aaa",
+      "release_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "unit": "nova-lords-03.service",
+      "port": 9112,
+      "exact_domain": "1lordserials1.online",
+      "indexing_enabled": false,
+      "declared_matches_release": false,
+      "running_pid": 1479701,
+      "running_executes": "/srv/lords/.frontend/releases/legacy-b32438c91aaa/lords-frontend.py",
+      "running_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "runtime_matches_declared": false,
+      "defect": "B-02 открыт: манифест объявляет 5dd817fe, витрина исполняет b32438c9."
+    }
+  }
+}

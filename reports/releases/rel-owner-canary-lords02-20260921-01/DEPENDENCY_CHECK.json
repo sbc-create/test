@@ -1,0 +1,75 @@
+{
+  "dependency": "LORDS-CURSOR-WORK-RECONCILIATION-01",
+  "checked_at_utc": "2026-09-21T12:09:13Z",
+  "checked_by": "SITE-FACTORY-RELEASE-ORCHESTRATOR-01",
+  "method": "read-only; ни одна команда не меняла живой хост, репозиторий зависимости не правился",
+  "sources": [
+    "git show claude/lords-cursor-reconciliation-01:artifacts/evidence/lords-cursor-reconciliation-01/HANDOFF.json",
+    "git show claude/lords-cursor-reconciliation-01:artifacts/evidence/lords-cursor-reconciliation-01/BLOCKERS.json",
+    "/srv/lords/.frontend/template-manifest*.json",
+    "/srv/lords/.frontend/lords-runtime-registry.json",
+    "/srv/lords/.frontend/sites/*/current",
+    "/proc/<pid>/cmdline, /proc/<pid>/stat",
+    "/etc/nginx/lords/*.conf",
+    "/etc/systemd/system/*.service"
+  ],
+
+  "required_conditions": {
+    "P1_DEFECTS_OPEN == 0": {
+      "measured": 1,
+      "pass": false,
+      "detail": "B-02 остаётся открыт на lords-03: манифест объявляет 5dd817fe, витрина исполняет b32438c9. lords-01 не измерим по файлу (процесс старше миграции). Решения владельца по OA-1 в репозитории нет."
+    },
+    "all three domains source/artifact/runtime match": {
+      "measured": "1 of 3",
+      "pass": false,
+      "detail": "lords-02 когерентен (объявленное = назначенное = исполняемое = b32438c9). lords-03 расходится. lords-01 неизмерим."
+    },
+    "READY_FOR_LORDS_50_FACTORY == YES": {
+      "measured": false,
+      "pass": false,
+      "detail": "HANDOFF.json: ready_for_lords_50_factory=false, ready_reason — флаг снимает владелец после выбора по OA-1, а не агент. Более нового коммита, меняющего флаг, на ветке нет: вершина 6c49663 от 2026-09-21T11:22:16Z."
+    }
+  },
+
+  "verdict": "DEPENDENCY_NOT_CLOSED",
+
+  "additional_blockers_found_by_this_stage": [
+    {
+      "id": "RO-01",
+      "severity": "P1",
+      "status": "CONFIRMED",
+      "title": "Реестр релиза называет юнит, который не обслуживает домен",
+      "detail": "config/release-registry.json объявляет lords-0N.service. nginx маршрутизирует каждый домен Lords на порт, который слушает *-nova-* юнит. Оба юнита каждой пары живы, поэтому ошибка не проявляется отказом.",
+      "measured": {
+        "lordfilm47.space": "9110 → lords-nova-01.service ≠ lords-01.service (9101)",
+        "lordserial33.biz": "9111 → nova-lords-02.service ≠ lords-02.service (9102)",
+        "1lordserials1.online": "9112 → nova-lords-03.service ≠ lords-03.service (9103)"
+      },
+      "corroborated_by": "/srv/lords/.frontend/lords-runtime-registry.json — независимо построенный другим потоком работ, называет те же юниты и порты",
+      "impact": "Живой canary перезапустил бы объявленный, но не маршрутизируемый юнит. Витрина осталась бы нетронутой, а smoke — он ходит на домен — всё равно бы прошёл: ложный PASS.",
+      "mitigation_in_place": "factory/release_orchestrator/service_binding.py + ворота в runner: мутирующий прогон отказывает с BLOCKED_SERVICE_BINDING до первого перезапуска",
+      "owner_action": "решить, какой юнит канонический, и привести config/release-registry.json в соответствие; расширять реестр по своей инициативе запрещено CLOSED_WORLD"
+    },
+    {
+      "id": "RO-02",
+      "severity": "P1",
+      "status": "CONFIRMED",
+      "title": "Хост не в покое: миграция рантайма шла во время этой сессии",
+      "detail": "/srv/lords/.frontend/lords-frontend.py сменился с 418858 байт (b32438c9) на 6843 байта (2495eac5) между 11:45Z и 12:06Z. Появились releases/ и sites/<витрина>/current; lords-02 перезапускался дважды за сессию (pid 1292312 → 1615866).",
+      "impact": "Canary, запущенный сейчас, гонялся бы с чужой выкладкой за те же файлы и юниты.",
+      "owner_action": "дождаться завершения миграции по-доменного диспетчера и подтвердить покой хоста"
+    },
+    {
+      "id": "RO-03",
+      "severity": "P2",
+      "status": "CONFIRMED",
+      "title": "smoke ×2 по живым доменам неисполним",
+      "detail": "B-01 зависимости не закрыт: трёх доменов Lords нет в inventory/network-allowlist.yaml канонического репозитория, HTTP к ним отклоняется guard'ом.",
+      "impact": "expected_catalog_revision и expected_details_revision в манифесте помечены UNMEASURED_REQUIRES_HTTP, а не заполнены догадкой. Без HTTP постусловие smoke ×2 на живом домене не может быть выполнено.",
+      "owner_action": "OA-2 зависимости — внести три домена в allowlist"
+    }
+  ],
+
+  "conclusion": "Зависимость не закрыта ни по одному из трёх требуемых условий. Live deploy и restart не выполнялись. Подготовлен owner canary packet для lords-02 — единственной витрины, у которой объявленное, назначенное и исполняемое совпадают."
+}

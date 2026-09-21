@@ -1,0 +1,17 @@
+{
+  "ok": false,
+  "nginx_dir": "/etc/nginx/lords",
+  "unit_dir": "/etc/systemd/system",
+  "bindings": [
+    {
+      "domain": "lordserial33.biz",
+      "site_id": "lords-02",
+      "registry_service": "lords-02.service",
+      "routed_port": 9111,
+      "routed_service": "nova-lords-02.service",
+      "registry_service_port": 9102,
+      "match": false,
+      "reason": "MISMATCH: registry declares lords-02.service(port=9102) but lordserial33.biz is routed to port 9111 served by nova-lords-02.service"
+    }
+  ]
+}
