@@ -1,0 +1,88 @@
+{
+  "finding": "BLOCKED_AUTHORIZATION — живое переключение закрыто правилом фабрики, а не профилем сессии",
+  "checked_at_utc": "2026-09-21T16:05:00Z",
+  "rule": "CLAUDE.md: «Успешный staging не является разрешением на production. Production требует production_authorized: true в manifest и подходящей лицензии DLE.» Definition of Done прямо запрещает DONE, если «production не авторизован в manifest». И отдельно: «Пустое поле — не разрешение подставить значение по умолчанию, а BLOCKED_INPUT» — то есть заполнить это поле за владельца нельзя.",
+  "packages": {
+    "lords-01": {
+      "environment": "staging",
+      "domain": "lordfilm47.space",
+      "production_authorized": false,
+      "target_ref": "lords-staging-control-01",
+      "authorized_by": null,
+      "status": "STAGING_READY",
+      "production_blocked_by": [
+        "BLOCKED_INPUT_CDNVIDEOHUB_CREDENTIALS",
+        "BLOCKED_RIGHTS",
+        "production_authorized не подтверждён владельцем"
+      ]
+    },
+    "lords-02": {
+      "environment": "staging",
+      "domain": "lordserial33.biz",
+      "production_authorized": false,
+      "target_ref": "lords-staging-control-01",
+      "authorized_by": null,
+      "status": "STAGING_READY",
+      "production_blocked_by": [
+        "BLOCKED_INPUT_CDNVIDEOHUB_CREDENTIALS",
+        "BLOCKED_RIGHTS",
+        "production_authorized не подтверждён владельцем"
+      ]
+    },
+    "lords-03": {
+      "environment": "staging",
+      "domain": "1lordserials1.online",
+      "production_authorized": false,
+      "target_ref": "lords-staging-control-01",
+      "authorized_by": null,
+      "status": "STAGING_READY",
+      "production_blocked_by": [
+        "BLOCKED_INPUT_CDNVIDEOHUB_CREDENTIALS",
+        "BLOCKED_RIGHTS",
+        "production_authorized не подтверждён владельцем"
+      ]
+    },
+    "animedia-preview": {
+      "environment": "staging",
+      "domain": null,
+      "production_authorized": false,
+      "target_ref": null,
+      "authorized_by": null,
+      "status": "BLOCKED_INPUT_DOMAIN_TARGET",
+      "production_blocked_by": [
+        "домен не передан",
+        "цель выката не передана",
+        "production_authorized не подтверждён владельцем"
+      ]
+    },
+    "zona-cinema-preview": {
+      "environment": "staging",
+      "domain": null,
+      "production_authorized": false,
+      "target_ref": null,
+      "authorized_by": null,
+      "status": "BLOCKED_INPUT_DOMAIN_TARGET",
+      "production_blocked_by": [
+        "домен не передан",
+        "цель выката не передана",
+        "production_authorized не подтверждён владельцем"
+      ]
+    }
+  },
+  "conclusion": "Ни один из пяти пакетов не авторизован на production: у всех production_authorized=false и environment=staging. У animedia-preview и zona-cinema-preview вдобавок не переданы домен и цель выката. Значит штатный путь python3 -m factory deploy — единственный, который CLAUDE.md разрешает — отказал бы и с правами root.",
+  "independent_corroboration": "К тому же выводу независимо пришла линия Zona: artifacts/evidence/zona-slider-01/DEPLOY_BLOCKERS.md, «Блокер 0 (главный) — production Zona не авторизован в манифесте».",
+  "second_independent_blocker": "systemctl вне профиля UNATTENDED_SAFE — проверено даже на systemctl --version. Обходить через apply-nova-closed-update.py, который вызывает systemctl внутри, эта сессия не стала.",
+  "what_unblocks_it": [
+    "владелец подтверждает production_authorized: true в пакете нужной витрины",
+    "для animedia-preview и zona-cinema-preview — передаёт domain и target_ref",
+    "затем: systemctl restart nova-animedia-01.service",
+    "затем: automation/host/animedia-b16-smoke.py дважды подряд — и DONE закрывается"
+  ],
+  "what_is_already_done": {
+    "release_built_and_verified": "20260921T153817Z-c8c4587-animedia-b16 / 7aae3d2c…",
+    "canary_armed_as_pair": "animedia-01: манифест + назначение; animedia-02 не тронута",
+    "rollback_drill": "ROLLBACK_DRILL_PASS=YES, цель воспроизводит живой артефакт побайтово",
+    "checks_390_768_1440": "24 ячейки против самого релиза — всё чисто",
+    "smoke_script_validated_against_current_live": "нашёл ровно дефект B14, 27 из 27 ячеек"
+  }
+}
