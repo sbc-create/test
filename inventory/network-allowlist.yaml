@@ -56,3 +56,22 @@ hosts:
     methods: [GET]
     token_secret_ref: hub:/var/lib/site-factory-secret-hub/store.sqlite3
     contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- zonafilm.space: приёмка выкаченного релиза ----------------------------
+  # Внесено заданием владельца ZONA-SLIDER-CROP-DATE (2026-09-21):
+  # «Добавь zonafilm.space в canonical allowlist». Инвентарь читается хуком от
+  # своего расположения (.claude/hooks/guard_rules.py -> корень), поэтому запись
+  # нужна именно здесь: правка канонического /srv/site-factory/repo на решение
+  # guard'а в этой сессии не влияет.
+  #
+  # Без записи проверка выкладки на 390/768/1440 остаётся словом вместо
+  # измерения: guard отклоняет запрос к домену, которого тут нет.
+  #
+  # Значение host взято из совпадения двух независимых источников на этом хосте:
+  # nginx `server_name` в /etc/nginx/lords/zona-01.conf и `exact_domain` в
+  # /srv/lords/.frontend/lords-runtime-registry.json. Wildcard не заводится:
+  # разрешён ровно один названный хост. Только чтение: приёмка читает.
+  - ref: zonafilm-space-public
+    host: zonafilm.space
+    purpose: "приёмка выкаченного релиза Zona: слайдер, кадрирование, дата, индексация"
+    methods: [GET, HEAD]
