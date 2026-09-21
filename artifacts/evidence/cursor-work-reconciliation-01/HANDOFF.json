@@ -5,6 +5,9 @@
   "closed_at": "2026-09-21T11:42:00Z",
 
   "HANDOFF_HEAD": "598903c08bc34fe17f869f7568bd761d1a4471ab",
+  "HANDOFF_HEAD_SEMANTICS": "Последний коммит, меняющий код. Коммит с этим файлом лежит поверх и своего SHA содержать не может; та же конвенция была у прошлого прогона (POST_ARTIFACT_COMMITS_DOCS_EVIDENCE_ONLY).",
+  "POST_ARTIFACT_COMMITS_DOCS_EVIDENCE_ONLY": true,
+  "BRANCH_TIP_AFTER_HANDOFF": "см. `git rev-parse claude/zona-template-finalization-01` — поверх HANDOFF_HEAD только evidence",
   "HANDOFF_BRANCH": "claude/zona-template-finalization-01",
   "HANDOFF_WORKTREE": "/home/claude/wt-zona-finalization-01",
   "CANONICAL_START_HEAD": "491836048dae11ae639795c7a3827706129faef6",
