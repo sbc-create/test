@@ -1,0 +1,67 @@
+{
+ "task": "ANIMEDIA-CANARY-ARM",
+ "tenant": "animedia",
+ "canary": "animedia-01",
+ "domain": "animedia.icu",
+ "armed_at_utc": "2026-09-21T21:41:59Z",
+ "release": "20260921T213929Z-d8c50de-animedia-parity",
+ "artifact_sha256": "c178831bbb20a4b3449cfc077257bab05d6bf12d5caddb5bf3adc545cd34ce6e",
+ "why_this_canary": "на этой витрине сейчас исполняется визуально отклонённый кандидат, а цель откáта у неё проверена учением; вторая витрина остаётся сравнением",
+ "before": {
+  "manifest": "20260921T153817Z-c8c4587-animedia-b16",
+  "assignment": "20260921T153817Z-c8c4587-animedia-b16",
+  "manifest_sha256": "9184ec47429c4839c08c3160d4269bf3fa14ec427385b5e9ab4d1c48cc174442",
+  "live": {
+   "http": "200",
+   "build": "20260921T153817Z-c8c4587-animedia-b16",
+   "artifact": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+   "robots": "noindex, nofollow"
+  }
+ },
+ "after": {
+  "manifest": "20260921T213929Z-d8c50de-animedia-parity",
+  "assignment": "20260921T213929Z-d8c50de-animedia-parity",
+  "manifest_artifact": "c178831bbb20a4b3449cfc077257bab05d6bf12d5caddb5bf3adc545cd34ce6e",
+  "assigned_code": "c178831bbb20a4b3449cfc077257bab05d6bf12d5caddb5bf3adc545cd34ce6e",
+  "shim": "57bce798c56ab1a9",
+  "live": {
+   "http": "200",
+   "build": "20260921T153817Z-c8c4587-animedia-b16",
+   "artifact": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+   "robots": "noindex, nofollow"
+  }
+ },
+ "pair_switch_window_seconds": 0.0073,
+ "digest_checks": [
+  {
+   "попытка": 1,
+   "манифест": "c178831bbb20a4b3449cfc077257bab05d6bf12d5caddb5bf3adc545cd34ce6e",
+   "файл_релиза": "c178831bbb20a4b3449cfc077257bab05d6bf12d5caddb5bf3adc545cd34ce6e",
+   "release_json": "c178831bbb20a4b3449cfc077257bab05d6bf12d5caddb5bf3adc545cd34ce6e",
+   "дерево": "c178831bbb20a4b3449cfc077257bab05d6bf12d5caddb5bf3adc545cd34ce6e"
+  },
+  {
+   "попытка": 2,
+   "манифест": "c178831bbb20a4b3449cfc077257bab05d6bf12d5caddb5bf3adc545cd34ce6e",
+   "файл_релиза": "c178831bbb20a4b3449cfc077257bab05d6bf12d5caddb5bf3adc545cd34ce6e",
+   "release_json": "c178831bbb20a4b3449cfc077257bab05d6bf12d5caddb5bf3adc545cd34ce6e",
+   "дерево": "c178831bbb20a4b3449cfc077257bab05d6bf12d5caddb5bf3adc545cd34ce6e"
+  },
+  {
+   "попытка": 3,
+   "манифест": "c178831bbb20a4b3449cfc077257bab05d6bf12d5caddb5bf3adc545cd34ce6e",
+   "файл_релиза": "c178831bbb20a4b3449cfc077257bab05d6bf12d5caddb5bf3adc545cd34ce6e",
+   "release_json": "c178831bbb20a4b3449cfc077257bab05d6bf12d5caddb5bf3adc545cd34ce6e",
+   "дерево": "c178831bbb20a4b3449cfc077257bab05d6bf12d5caddb5bf3adc545cd34ce6e"
+  }
+ ],
+ "digest_checks_agree": true,
+ "manifest_backup": "/srv/lords/.frontend/template-manifest-animedia-01.json.before-parity",
+ "rollback_target": "20260921T154512Z-8966632-animedia-rollback",
+ "rollback_manifest": "/srv/lords/.frontend/template-manifest-animedia-01.json.before-b16",
+ "second_site_untouched": true,
+ "restart_performed_by_session": 0,
+ "dns_mutations": 0,
+ "tls_mutations": 0,
+ "indexability_mutations": 0
+}
