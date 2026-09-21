@@ -1,0 +1,34 @@
+{
+  "task": "ANIMEDIA-B16-SMOKE — предпусковой прогон против ТЕКУЩЕГО live",
+  "purpose": "Проверка самого скрипта до выката. Он запущен против сборки, которая отдаётся сейчас, и обязан был найти ровно тот дефект, который кандидат исправляет. Скрипт, который молчит на известном дефекте, ничего не доказывает и после выката.",
+  "checked_at_utc": "2026-09-21T15:59:48Z",
+  "expect_build": "20260920T102102Z-89666321-nova",
+  "SMOKE_PASS": false,
+  "failures_total": 27,
+  "failure_categories": {
+    "знак сборки в подвале": 27
+  },
+  "everything_else_green": {
+    "http_codes": {
+      "home": 200,
+      "catalog": 200,
+      "search": 200,
+      "collections": 200,
+      "collection_detail": 200,
+      "title": 200,
+      "episode": 200,
+      "not_found": 404,
+      "page_huge": 404
+    },
+    "noindex_everywhere": true,
+    "canonical_exact_domain": true,
+    "horizontal_overflow": 0,
+    "clipped_required": 0,
+    "player_instances_max": 1,
+    "player_ratios": [
+      1.7778
+    ]
+  },
+  "peer_domain_unchanged": true,
+  "conclusion": "Скрипт работает: единственная его претензия к сегодняшнему live — знак сборки в подвале, 27 из 27 ячеек. Это дефект B14, и кандидат его закрывает. После перезапуска канарейки тот же прогон обязан дать SMOKE_PASS=YES."
+}
