@@ -136,7 +136,7 @@ def test_источники_не_смешиваются_в_одно_число(�
 # --- разметка -----------------------------------------------------------------
 
 def test_запись_проверки_карточек_зелёная():
-    файл = ДОК / "29-card-final" / "CARD_AUDIT.json"
+    файл = ДОК / "38-card-fill" / "CARD_AUDIT.json"
     assert файл.is_file(), "нет записи разбора карточек"
     з = json.loads(файл.read_text(encoding="utf-8"))
     assert з["CARD_AUDIT_PASS"] is True, з["findings"][:5]
@@ -151,7 +151,7 @@ def test_запись_проверки_карточек_зелёная():
 
 
 def test_запись_проверки_хронологии_зелёная():
-    файл = ДОК / "30-chronology-final" / "CHRONOLOGY_CHECK.json"
+    файл = ДОК / "39-chronology-fill" / "CHRONOLOGY_CHECK.json"
     assert файл.is_file(), "нет записи проверки хронологии"
     з = json.loads(файл.read_text(encoding="utf-8"))
     assert з["CHRONOLOGY_PASS"] is True, з["failures"][:5]

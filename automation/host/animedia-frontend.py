@@ -3839,7 +3839,12 @@ COLLECTION_REVISION_TIMESTAMP_DATA_GAP = 1
     str(Path(__file__).resolve().parents[2] / "config" / "animedia-top100.json"),
 )
 TOP100_DATA_GAP = 1
-АНИМЕДИА_HOME_MAX_CATALOG_SHELVES = 2
+#: Сколько каталожных лент показывает главная. Было два, и страница выходила
+#: втрое короче оригинала при двенадцати лентах, обеспеченных данными, —
+#: это и есть «пустая витрина», которую видел владелец. Восемь набирают
+#: объём оригинала настоящими записями, без выдуманных блоков; ленты
+#: без данных по-прежнему не рисуются вовсе.
+АНИМЕДИА_HOME_MAX_CATALOG_SHELVES = 8
 АНИМЕДИА_TOP100_HOME_LIMIT = 12
 АНИМЕДИА_TOP100_REQUIRED_FIELDS = (
     "schema_version", "site_id", "ordered_title_ids", "snapshot_revision",
