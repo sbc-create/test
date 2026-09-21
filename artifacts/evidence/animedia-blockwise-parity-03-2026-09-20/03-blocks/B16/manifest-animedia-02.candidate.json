@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "template_family": "animedia",
+  "design_version": "1.2.4",
+  "source_commit": "c8c458762c16f69999fcb7d3d1bc156d36f18f48",
+  "runtime_commit": "c8c458762c16f69999fcb7d3d1bc156d36f18f48",
+  "build_id": "20260921T153817Z-c8c4587-animedia-b16",
+  "artifact_sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+  "profile": "animedia-space",
+  "built_at": "2026-09-21T15:41:35Z",
+  "stage": "ANIMEDIA-BLOCKWISE-PARITY-03/B16",
+  "owner_approval": "цифра 7aae3d2c… названа владельцем в задании"
+}

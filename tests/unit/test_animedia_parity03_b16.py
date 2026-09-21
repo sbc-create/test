@@ -85,14 +85,24 @@ def test_indexability_before_is_recorded_closed(запись):
         assert "noindex" in состояние["x_robots"], домен
 
 
-def test_rollback_is_named_and_its_limit_is_stated(запись):
+def test_rollback_target_reproduces_the_live_artifact(запись):
+    """Цель откáта обязана быть тем, что отдаётся сейчас, а не «чем-то рабочим».
+
+    Прежняя цель `legacy-b32438c91aaa` содержала сборку с линии Lords: она
+    поднимается, но на отсутствующем маршруте отдаёт 503 вместо 404. Откат на
+    неё вернул бы не сегодняшнее состояние, а регрессию. Живой артефакт
+    воспроизводится из git, поэтому цель собрана из коммита.
+    """
     откат = запись["rollback"]
     assert откат["target_release"].startswith("/srv/lords/.frontend/releases/")
-    assert откат["verified"] is False
-    assert откат["verified_reason"]
-    # Ограничение обязано быть названо, а не умолчано: байтов, которые
-    # отдаются сейчас, на диске нет.
-    assert "d2e9628f" in откат["limitation"]
+    assert откат["artifact_sha256"] == (
+        "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908")
+    assert откат["reproduces_live_artifact_byte_for_byte"] is True
+    assert откат["verified"] is True
+    assert откат["verified_how"]
+    отклонённая = откат["previous_target_rejected"]
+    assert "legacy-b32438c91aaa" in отклонённая["release"]
+    assert "503" in отклонённая["why"]
 
 
 def test_scope_is_animedia_only(запись):
@@ -109,7 +119,9 @@ def test_packet_states_that_a_restart_is_not_a_no_op(пакет):
 def test_packet_does_not_claim_a_deploy_happened(пакет):
     for ложь in ("выкат выполнен", "DEPLOY_PERFORMED=1", "RESTART_PERFORMED=1"):
         assert ложь not in пакет, ложь
-    assert "не выкачено" in пакет
+    # Статус пакета обязан прямо говорить, что назначение не переключено.
+    assert "назначение не переключено" in пакет
+    assert "DEPLOY_PERFORMED=0" in пакет
 
 
 def test_baseline_manifest_untouched_by_this_stage():
@@ -123,3 +135,25 @@ def test_baseline_manifest_untouched_by_this_stage():
     assert изменён == "", f"манифест правился: {изменён}"
     план = EV.parent / "animedia-cursor-reconciliation-01" / "SHARED_WRITER_TRANSFER_PLAN.md"
     assert план.is_file(), "нет плана переноса в каноническую линию"
+
+
+def test_staged_release_is_built_and_not_armed(запись):
+    """Релиз собран и проверен, но назначение витрины не переключено.
+
+    Переключить только симлинк нельзя: манифест витрины принадлежит root и
+    этой сессии недоступен, а перезапуск с новым кодом и старой подписью
+    заставил бы витрину объявлять не то, что она исполняет.
+    """
+    ст = запись["staged_deploy"]
+    assert ст["candidate_release"].startswith("/srv/lords/.frontend/releases/")
+    assert ст["candidate_release_files"]["lords-frontend.py"] == _цифра()
+    assert ст["candidate_boots"] is True
+    assert ст["candidate_reports_new_identity_with_candidate_manifest"] is True
+    assert ст["symlink_armed"] is False
+    assert ст["symlink_not_armed_reason"]
+    assert len(ст["manifest_candidates"]) == 2
+
+
+def test_earlier_wrong_statement_is_corrected(запись):
+    """Прежний пакет утверждал, что вернуться в текущее live невозможно."""
+    assert "8966632" in запись["correction_of_earlier_statement"]

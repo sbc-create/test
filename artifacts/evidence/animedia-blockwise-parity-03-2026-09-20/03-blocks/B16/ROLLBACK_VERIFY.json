@@ -1,0 +1,16 @@
+{
+ "release": "/srv/lords/.frontend/releases/20260921T154512Z-8966632-animedia-rollback",
+ "boots": true,
+ "x-site-factory-build-id": "20260920T102102Z-89666321-nova",
+ "x-site-factory-artifact-sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+ "x-robots-tag": "noindex, nofollow",
+ "routes": {
+  "/": "200",
+  "/catalog/": "200",
+  "/new/": "200",
+  "/search/?q=a": "200",
+  "/definitely-absent-route-xyz/": "404",
+  "/new/?page=99999": "404"
+ },
+ "matches_live_behaviour": true
+}

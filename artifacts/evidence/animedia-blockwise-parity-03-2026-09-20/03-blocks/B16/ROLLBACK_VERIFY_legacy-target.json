@@ -1,0 +1,15 @@
+{
+ "rollback_release": "/srv/lords/.frontend/releases/legacy-b32438c91aaa",
+ "boots": true,
+ "x-site-factory-build-id": "20260920T102102Z-89666321-nova",
+ "x-site-factory-artifact-sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+ "x-robots-tag": "noindex, nofollow",
+ "x-site-factory-template-version": "1.2.4",
+ "routes": {
+  "/": "200",
+  "/catalog/": "200",
+  "/new/": "200",
+  "/search/?q=a": "200",
+  "/definitely-absent/": "503"
+ }
+}
