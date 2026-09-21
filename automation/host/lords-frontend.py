@@ -181,6 +181,94 @@ def _манифест() -> dict:
 #: Имя общего рантайма. Один артефакт обслуживает все семейства, и это честно —
 #: но называть шаблоном семейства «lords-nova» на Yummy, Zona и Animedia было
 #: неправдой: имя ядра выдавалось за имя шаблона витрины.
+
+#: Скрипт слайдера героя Zona.
+#:
+#: Управление появляется только отсюда: пока скрипт не выставил
+#: `data-zhero-ready="1"`, кнопки и точки скрыты стилем. Мёртвая кнопка хуже
+#: отсутствующей — она обещает действие, которого не произойдёт.
+#:
+#: Панель текста одна на слайдер, поэтому переключение переписывает её поля по
+#: данным активного слайда. Проверка приёмки читает те же поля и видит смену
+#: ID, названия, картинки и ссылки, а не только сдвиг картинки.
+ЗОНА_СКРИПТ_ГЕРОЯ = """<script>(function(){
+var s=document.currentScript&&document.currentScript.closest('[data-zhero-slider]');
+if(!s)s=document.querySelector('[data-zhero-slider]');
+if(!s)return;
+var track=s.querySelector('[data-zhero-track]');
+var slides=[].slice.call(s.querySelectorAll('[data-zhero-slide]'));
+var dots=[].slice.call(s.querySelectorAll('[data-zhero-dot]'));
+if(!track||slides.length<2)return;
+var title=s.querySelector('[data-zhero-title]'),meta=s.querySelector('[data-zhero-meta]'),
+desc=s.querySelector('[data-zhero-desc]'),cta=s.querySelector('[data-zhero-cta]');
+var i=0,timer=null,held=false;
+var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function apply(n){
+ i=(n%slides.length+slides.length)%slides.length;
+ track.style.transform='translateX('+(-100*i)+'%)';
+ slides.forEach(function(el,k){
+  var on=k===i;
+  el.setAttribute('data-active',on?'1':'0');
+  if(on){el.removeAttribute('aria-hidden');}else{el.setAttribute('aria-hidden','true');}
+ });
+ dots.forEach(function(d,k){d.setAttribute('aria-selected',k===i?'true':'false');});
+ var el=slides[i];
+ if(title)title.textContent=el.getAttribute('data-slide-title')||'';
+ if(meta)meta.textContent=el.getAttribute('data-slide-meta')||'';
+ if(desc){var t=el.getAttribute('data-slide-desc')||'';desc.textContent=t;
+  if(t){desc.removeAttribute('hidden');}else{desc.setAttribute('hidden','');}}
+ if(cta){var href=el.getAttribute('data-slide-href')||'#';
+  var play=el.getAttribute('data-slide-playable')==='1';
+  var a=cta.querySelector('[data-zhero-play]'),b=cta.querySelector('[data-zhero-more]');
+  if(b)b.setAttribute('href',href);
+  if(a){a.setAttribute('href',href);a.style.display=play?'':'none';}
+  else if(play){var n2=document.createElement('a');n2.className='primary';
+   n2.setAttribute('data-zhero-play','');n2.setAttribute('href',href);n2.textContent='Смотреть';
+   cta.insertBefore(n2,cta.firstChild);}}
+ s.setAttribute('data-active-index',String(i));
+}
+function go(n){apply(n);restart();}
+function next(){go(i+1);}function prev(){go(i-1);}
+function stop(){if(timer){clearInterval(timer);timer=null;}}
+function restart(){stop();if(reduce||held)return;
+ timer=setInterval(function(){apply(i+1);},7000);}
+var pb=s.querySelector('[data-zhero-prev]'),nb=s.querySelector('[data-zhero-next]');
+if(pb)pb.addEventListener('click',function(e){e.preventDefault();prev();});
+if(nb)nb.addEventListener('click',function(e){e.preventDefault();next();});
+dots.forEach(function(d){d.addEventListener('click',function(e){e.preventDefault();
+ go(parseInt(d.getAttribute('data-goto'),10)||0);});});
+s.addEventListener('keydown',function(e){
+ if(e.key==='ArrowRight'){e.preventDefault();next();}
+ else if(e.key==='ArrowLeft'){e.preventDefault();prev();}});
+s.addEventListener('mouseenter',function(){held=true;stop();});
+s.addEventListener('mouseleave',function(){held=false;restart();});
+s.addEventListener('focusin',function(){held=true;stop();});
+s.addEventListener('focusout',function(){if(!s.contains(document.activeElement)){held=false;restart();}});
+var vp=s.querySelector('[data-zhero-viewport]'),x0=null,dx=0;
+if(vp&&window.PointerEvent){
+ vp.addEventListener('dragstart',function(e){e.preventDefault();});
+ vp.addEventListener('pointerdown',function(e){
+  // Захват указателя на области просмотра перенаправляет на неё pointerup, и
+  // click по вложенной кнопке не доходит. Жест начинается только вне органов
+  // управления — иначе свайп отнимал бы нажатия у кнопок и точек.
+  if(e.target.closest&&e.target.closest('[data-zhero-prev],[data-zhero-next],[data-zhero-dot]'))return;
+  x0=e.clientX;dx=0;held=true;stop();
+  try{vp.setPointerCapture(e.pointerId);}catch(err){}});
+ vp.addEventListener('pointermove',function(e){if(x0!==null)dx=e.clientX-x0;});
+ vp.addEventListener('pointerup',function(){
+  if(x0!==null&&Math.abs(dx)>40){if(dx<0)next();else prev();}
+  x0=null;dx=0;held=false;restart();});
+ vp.addEventListener('pointercancel',function(){x0=null;dx=0;held=false;restart();});
+}
+// Битая картинка не должна ломать слайдер: слайд остаётся на месте, индексы не
+// съезжают, вместо изображения — ровная подложка.
+slides.forEach(function(el){var im=el.querySelector('[data-zhero-img]');
+ if(im)im.addEventListener('error',function(){im.setAttribute('data-broken','1');
+  im.style.visibility='hidden';el.style.background='#1b2027';});});
+s.setAttribute('data-zhero-ready','1');
+apply(0);restart();
+})();</script>"""
+
 ЯДРО = "site-factory-nova"
 #: Имя шаблона КОНКРЕТНОГО семейства. Отсюда и из версии складывается то, что
 #: домен объявляет о себе.
@@ -2015,8 +2103,50 @@ max-width:100%;width:100%;min-width:0;overflow:hidden;box-sizing:border-box}
    умолчанию показывал торс. */
 .zhero__media img{width:100%;height:100%;object-fit:cover;object-position:50% 28%;
 display:block;max-width:100%}
+/* --- Слайдер героя -------------------------------------------------------
+   Дорожка со слайдами занимает медиа-колонку, текстовая панель — вторую.
+   Раскладка 46/54, скругления и палитра прежние: менялось поведение, а не
+   оформление. */
+.zhero--slider{position:relative}
+.zhero__viewport{position:relative;overflow:hidden;min-width:0;
+grid-column:1;background:#111;touch-action:pan-y}
+/* Без этого перетаскивание постера запускает нативный drag браузера: серия
+   pointer-событий обрывается pointercancel, и свайп не срабатывает. */
+.zhero__slide img{-webkit-user-drag:none;user-select:none}
+.zhero__track{display:flex;width:100%;height:100%;
+transition:transform .45s cubic-bezier(.4,0,.2,1)}
+@media(prefers-reduced-motion:reduce){.zhero__track{transition:none}}
+.zhero__slide{flex:0 0 100%;min-width:0;position:relative}
+.zhero__slide .zhero__media{height:100%}
+/* Пропорция задаётся здесь, а не природой картинки: портретный постер иначе
+   растягивает ряд под себя — дефект, уже чинённый в этой витрине. */
+.zhero__slide .zhero__media img{width:100%;height:100%;object-fit:cover;
+object-position:50% 28%;display:block}
+.zhero__nav{position:absolute;top:50%;transform:translateY(-50%);z-index:4;
+width:44px;height:44px;min-width:44px;min-height:44px;border:0;border-radius:50%;
+background:rgba(16,21,26,.72);color:#fff;font-size:24px;line-height:1;cursor:pointer;
+display:none;align-items:center;justify-content:center;padding:0}
+.zhero__nav:hover{background:rgba(16,21,26,.9)}
+.zhero__nav:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.zhero__nav--prev{left:8px}
+.zhero__nav--next{right:8px}
+.zhero__dots{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);
+z-index:4;display:none;gap:6px;padding:0;margin:0}
+.zhero__dot{width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border:0;
+background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.zhero__dot .zhero__dot-i{display:block;width:9px;height:9px;border-radius:50%;
+background:#ffffff66;transition:width .2s,background .2s}
+.zhero__dot[aria-selected="true"] .zhero__dot-i{width:22px;border-radius:5px;background:@ACC@}
+.zhero__dot:focus-visible{outline:3px solid #fff;outline-offset:-6px;border-radius:8px}
+/* Управление появляется только когда скрипт им управляет: мёртвая кнопка
+   хуже отсутствующей — она обещает действие, которого не будет. */
+.zhero--slider[data-zhero-ready="1"] .zhero__nav,
+.zhero--slider[data-zhero-ready="1"] .zhero__dots{display:flex}
 .zhero__body{padding:20px 22px;display:flex;flex-direction:column;justify-content:center;gap:10px;
 min-width:0;max-width:100%;box-sizing:border-box}
+.zhero__t{font-size:26px;line-height:1.2;font-weight:700;margin:0;
+display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+@media(min-width:900px){.zhero__t{font-size:34px;line-height:1.18;-webkit-line-clamp:2}}
 @media(min-width:900px){.zhero__body{padding:28px 32px}}
 .zhero__kicker{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:@ACC@;margin:0}
 .zhero h1{font-size:26px;line-height:1.2;font-weight:700;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
@@ -5088,47 +5218,151 @@ class ВидЗона(Вид):
 
     # --- страницы -----------------------------------------------------
     # --- B02–B05 home building blocks ---------------------------------
-    def _герой_кандидат(self, weekly, pop_films, pop_series, pop_anim):
-        """Stable hero from weekly snapshot membership; no request-time random."""
+    #: Сколько слайдов показывает герой, если хватает годных записей.
+    ГЕРОЙ_СЛАЙДОВ = 8
+    #: Меньше двух — управление прячется: листать нечего.
+    ГЕРОЙ_МИНИМУМ = 2
+
+    def _герои_кандидаты(self, weekly, pop_films, pop_series, pop_anim) -> list:
+        """Слайды героя: РАЗНЫЕ тайтлы настоящего каталога.
+
+        Порядок устойчив: недельный снимок сначала, затем свежие записи с
+        постером. Случайности на запрос нет намеренно — иначе два прогона
+        приёмки дали бы разные ID, и доказать переключение стало бы нечем.
+
+        Годность проверяется, а не предполагается: нужны slug, название и
+        постер. Запись без постера дала бы пустой слайд, повтор slug — видимость
+        нескольких слайдов при одном и том же тайтле.
+        """
+        отобраны: list = []
+        видели: set = set()
+
+        def взять(з) -> None:
+            if len(отобраны) >= self.ГЕРОЙ_СЛАЙДОВ:
+                return
+            slug = (з or {}).get("slug")
+            if not slug or slug in видели:
+                return
+            if not str(з.get("poster") or "").strip():
+                return
+            if not str(з.get("title") or "").strip():
+                return
+            видели.add(slug)
+            отобраны.append(з)
+
         for набор in (pop_films, pop_series, pop_anim):
-            for з in набор:
-                return з
-        # last-good: newest catalog item with poster
-        for з in sorted(self.д.items, key=lambda x: x.get("published_at") or "", reverse=True)[:40]:
-            if з.get("poster"):
-                return з
-        return None
+            for з in набор or ():
+                взять(з)
+        for з in sorted(self.д.items, key=lambda x: x.get("published_at") or "", reverse=True):
+            взять(з)
+        return отобраны
+
+    def _герой_кандидат(self, weekly, pop_films, pop_series, pop_anim):
+        """Первый слайд. Оставлен для вызовов, которым нужна одна запись."""
+        набор = self._герои_кандидаты(weekly, pop_films, pop_series, pop_anim)
+        return набор[0] if набор else None
+
+    def _герой_данные(self, з) -> dict:
+        """Поля одного слайда. Ничего не выдумывается: пусто — значит пусто."""
+        д = self.деталь(з["slug"])
+        мета = " · ".join(str(x) for x in (з.get("kind"), з.get("year")) if x)
+        return {
+            "slug": з["slug"],
+            "title": з.get("title") or "Без названия",
+            "meta": мета,
+            "desc": (д.get("description") or "").strip()[:280],
+            "poster": з.get("poster") or "",
+            "href": f'/title/{з["slug"]}/',
+            "playable": состояние_плеера(д)[0] == "playable",
+        }
+
+    def _герой_панель(self, с: dict) -> str:
+        """Текстовая панель активного слайда.
+
+        Панель одна на весь слайдер, а не по одной на слайд. Иначе шесть
+        слайдов дали бы шесть H1 на странице, а требование — ровно один.
+        Скрипт переписывает её содержимое по активному слайду; без скрипта
+        она остаётся панелью первого слайда, и страница осмысленна.
+        """
+        ctas = [f'<a class="secondary" data-zhero-more href="{html.escape(с["href"])}">Подробнее</a>']
+        if с["playable"]:
+            ctas.insert(0, f'<a class="primary" data-zhero-play href="{html.escape(с["href"])}">Смотреть</a>')
+        desc = (f'<p class="zhero__desc" data-zhero-desc>{html.escape(с["desc"])}</p>'
+                if с["desc"] else '<p class="zhero__desc" data-zhero-desc hidden></p>')
+        return (
+            f'<div class="zhero__body">'
+            f'<p class="zhero__kicker">Сейчас на Zona</p>'
+            f'<h1 class="zhero__t" data-zhero-title>{html.escape(с["title"])}</h1>'
+            f'<p class="zhero__meta" data-zhero-meta>{html.escape(с["meta"])}</p>'
+            f'{desc}'
+            f'<div class="zhero__cta" data-zhero-cta>{"".join(ctas)}</div>'
+            f'</div>')
 
     def герой(self, з) -> str:
-        if not з:
+        """Совместимость: один кандидат — слайдер из одного слайда."""
+        return self.герой_слайдер([з] if з else [])
+
+    def герой_слайдер(self, слайды: list) -> str:
+        if not слайды:
             return (f'<section class="zhero zhero--compact" aria-label="Введение">'
                     f'<h1>{html.escape(self.се["лид"])}</h1>'
                     f'<p class="zhero__meta">Фильмы, сериалы и анимация в каталоге.</p>'
                     f'</section>')
-        д = self.деталь(з["slug"])
-        playable = состояние_плеера(д)[0] == "playable"
-        title = з.get("title") or "Без названия"
-        year = з.get("year") or ""
-        kind = з.get("kind") or ""
-        desc = (д.get("description") or "").strip()
-        poster = з.get("poster") or ""
-        href = f'/title/{html.escape(з["slug"])}/'
-        media = (f'<div class="zhero__media"><img src="{html.escape(poster)}" alt="{html.escape(title)}" '
-                 f'width="640" height="360" loading="eager"></div>' if poster else
-                 '<div class="zhero__media" aria-hidden="true"></div>')
-        desc_html = f'<p class="zhero__desc">{html.escape(desc[:280])}</p>' if desc else ""
-        ctas = [f'<a class="secondary" href="{href}">Подробнее</a>']
-        if playable:
-            ctas.insert(0, f'<a class="primary" href="{href}">Смотреть</a>')
+        данные = [self._герой_данные(з) for з in слайды]
+        много = len(данные) >= self.ГЕРОЙ_МИНИМУМ
+
+        куски = []
+        for i, с in enumerate(данные):
+            активен = "1" if i == 0 else "0"
+            # Постер отдаётся с явной пропорцией: без неё портретная картинка
+            # растягивает ряд под себя — дефект, уже чинённый в этой витрине.
+            img = (f'<img src="{html.escape(с["poster"])}" alt="{html.escape(с["title"])}" '
+                   f'loading="{"eager" if i == 0 else "lazy"}" decoding="async" '
+                   f'draggable="false" data-zhero-img>')
+            скрыт = "" if i == 0 else 'aria-hidden="true"'
+            куски.append(
+                f'<article class="zhero__slide" role="group" aria-roledescription="слайд" '
+                f'aria-label="{i + 1} из {len(данные)}: {html.escape(с["title"])}" '
+                f'data-zhero-slide data-index="{i}" data-active="{активен}" '
+                f'data-slide-id="{html.escape(с["slug"])}" '
+                f'data-slide-title="{html.escape(с["title"])}" '
+                f'data-slide-meta="{html.escape(с["meta"])}" '
+                f'data-slide-desc="{html.escape(с["desc"])}" '
+                f'data-slide-href="{html.escape(с["href"])}" '
+                f'data-slide-playable="{"1" if с["playable"] else "0"}" '
+                f'{скрыт}>'
+                f'<div class="zhero__media">{img}</div>'
+                f'</article>')
+
+        точки = "".join(
+            f'<button type="button" class="zhero__dot" data-zhero-dot data-goto="{i}" '
+            f'role="tab" aria-selected="{"true" if i == 0 else "false"}" '
+            f'aria-label="Слайд {i + 1}: {html.escape(с["title"])}">'
+            f'<span class="zhero__dot-i" aria-hidden="true"></span></button>'
+            for i, с in enumerate(данные)) if много else ""
+
+        нав = (
+            f'<button type="button" class="zhero__nav zhero__nav--prev" data-zhero-prev '
+            f'aria-label="Предыдущий слайд"><span aria-hidden="true">‹</span></button>'
+            f'<button type="button" class="zhero__nav zhero__nav--next" data-zhero-next '
+            f'aria-label="Следующий слайд"><span aria-hidden="true">›</span></button>'
+        ) if много else ""
+
+        точки_блок = (f'<div class="zhero__dots" role="tablist" '
+                      f'aria-label="Выбор слайда">{точки}</div>') if много else ""
+
         return (
-            f'<section class="zhero" data-hero-slug="{html.escape(з["slug"])}" '
-            f'data-hero-recompute="0">'
-            f'{media}<div class="zhero__body">'
-            f'<p class="zhero__kicker">Сейчас на Zona</p>'
-            f'<h1>{html.escape(title)}</h1>'
-            f'<p class="zhero__meta">{html.escape(" · ".join(str(x) for x in (kind, year) if x))}</p>'
-            f'{desc_html}<div class="zhero__cta">{"".join(ctas)}</div>'
-            f'</div></section>')
+            f'<section class="zhero zhero--slider" data-zhero-slider '
+            f'data-hero-slug="{html.escape(данные[0]["slug"])}" data-hero-recompute="0" '
+            f'data-slides="{len(данные)}" data-zhero-ready="0" '
+            f'aria-roledescription="карусель" aria-label="Сейчас на Zona">'
+            f'<div class="zhero__viewport" data-zhero-viewport>'
+            f'<div class="zhero__track" data-zhero-track>{"".join(куски)}</div>'
+            f'{нав}{точки_блок}'
+            f'</div>'
+            f'{self._герой_панель(данные[0])}'
+            f'{ЗОНА_СКРИПТ_ГЕРОЯ if много else ""}'
+            f'</section>')
 
     def недельный_блок(self, pop_films, pop_series, pop_anim, weekly) -> str:
         """B03: one weekly block with tabs; honest rating-week label."""
@@ -5373,9 +5607,9 @@ class ВидЗона(Вид):
                 precision = "date-only"
             added_events.append((з, when, precision))
 
-        hero = self._герой_кандидат(weekly, pop_films, pop_series, pop_anim)
+        hero_слайды = self._герои_кандидаты(weekly, pop_films, pop_series, pop_anim)
         куски = [
-            self.герой(hero),
+            self.герой_слайдер(hero_слайды),
             self.недельный_блок(pop_films, pop_series, pop_anim, weekly),
             self.новое_в_каталоге(added_events),
             self.входы_видов(),
