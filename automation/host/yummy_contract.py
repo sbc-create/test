@@ -364,6 +364,57 @@ def сейчас_выходит(соед, предел: int = 24) -> list[dict]:
     return _карточки(строки)
 
 
+def новое_в_каталоге(соед, предел: int = 24) -> list[dict]:
+    """Недавно опубликованное в источнике. Не «общий каталог» и не «Актуальное».
+
+    Критерий объявлен и один: дата публикации записи в источнике, по убыванию.
+    Запись без этой даты не попадает — неизвестное время не выдаётся ни за
+    старое, ни за новое, и не подменяется временем пересборки сайта.
+
+    Подпись карточки называет именно то, что известно: «в источнике с
+    <дата>». «Добавлено на сайт» здесь было бы ложью — момент добавления в
+    контур хранится отдельно и у всех записей одинаков (время импорта).
+    """
+    соед.row_factory = sqlite3.Row
+    строки = соед.execute(
+        """
+        SELECT entity_id, canonical_path, title_ru, title_original, poster_path,
+               year, kind,
+               'В источнике с ' || substr(published_at, 1, 10) AS caption
+          FROM entity
+         WHERE published_at IS NOT NULL AND published_at != ''
+               AND canonical_path IS NOT NULL AND canonical_path != ''
+         ORDER BY published_at DESC, entity_id LIMIT ?""", (предел,)).fetchall()
+    return _карточки(строки)
+
+
+def пополнение(соед) -> dict:
+    """Когда контур пополнялся последний раз. Неизвестность — не свежесть.
+
+    Возраст данных — первое, что объясняет пустой раздел. Без него посетитель
+    и приёмка видят пустую полку и думают на шаблон, хотя импорт остановился:
+    измерено 2026-09-21 — последний успех 2026-09-10T15:32:41Z и шесть
+    записей `EMPTY_SOURCE` в очереди несработавших.
+
+    Отсутствие таблицы состояния — это `known: False`, а не ноль: «данных о
+    свежести нет» и «данные свежие» обязаны различаться.
+    """
+    соед.row_factory = sqlite3.Row
+    if not Контур(соед).есть_таблицу("import_state"):
+        return {"known": False, "last_success": None, "last_attempt": None,
+                "source_count": None,
+                "reason": "состояние импорта не объявлено контуром"}
+    с = соед.execute(
+        "SELECT last_success, last_attempt, source_count, last_error, error_code"
+        " FROM import_state ORDER BY last_success DESC LIMIT 1").fetchone()
+    if с is None:
+        return {"known": False, "last_success": None, "last_attempt": None,
+                "source_count": None, "reason": "таблица состояния пуста"}
+    return {"known": True, "last_success": с["last_success"],
+            "last_attempt": с["last_attempt"], "source_count": с["source_count"],
+            "last_error": с["last_error"], "error_code": с["error_code"]}
+
+
 def расписание(соед, предел: int = 40, сейчас: str | None = None) -> list[dict]:
     """Подтверждённые ближайшие серии. Прошлое расписанием не является."""
     соед.row_factory = sqlite3.Row

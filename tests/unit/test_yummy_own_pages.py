@@ -1,0 +1,192 @@
+"""Собственные страницы витрины Yummy: данные контура и разметка оригинала.
+
+Что здесь закрепляется
+----------------------
+
+Собственные страницы `/new/`, `/collections/`, `/schedule/` и `/top/` брали
+данные разбором полезной нагрузки приложения регулярными выражениями. Это
+сломалось молча: приложение сменило порядок полей в разметке плитки (`src`
+перед `alt`) и перестало печатать рейтинг у части карточек — и разбор начал
+возвращать ноль. Наружу это вышло не ошибкой, а пустыми разделами, плитками
+без постеров и секцией «Высокие оценки», которая уверяла, что оценок нет, при
+437 подтверждённых оценках в контуре.
+
+Причина глубже опечатки в шаблоне выражения. Документ приложения приходит
+потоком, и его текстовый порядок не совпадает с порядком на экране: между
+заголовком раздела и следующим заголовком лежат чужие карточки и служебные
+скрипты. Любое извлечение «по тексту между заголовками» — догадка, и
+измерение это показало: раздел «Новое на сайте» давал 80 карточек вместо 18,
+«Анонсы» — 2 вместо 12.
+
+Поэтому источник данных собственных страниц — контур чтения, а разметка —
+компоненты самого приложения. Тесты ниже закрепляют оба свойства и главное
+следствие: страница наполнена даже тогда, когда у приложения нечего разбирать.
+"""
+
+from __future__ import annotations
+
+import importlib.machinery
+import importlib.util
+import sqlite3
+import sys
+from pathlib import Path
+
+import pytest
+
+КОРЕНЬ = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(КОРЕНЬ / "tests" / "fixtures" / "yummy"))
+
+import contract_fixture as ФИКСТУРА  # noqa: E402
+
+
+def _модуль(имя: str, файл: str):
+    путь = КОРЕНЬ / "automation" / "host" / файл
+    спец = importlib.util.spec_from_loader(
+        имя, importlib.machinery.SourceFileLoader(имя, str(путь)))
+    м = importlib.util.module_from_spec(спец)
+    sys.modules.setdefault(имя, м)
+    спец.loader.exec_module(м)
+    return м
+
+
+СТР = _модуль("yummy_pages", "yummy_pages.py")
+СВЯЗЬ = _модуль("yummy_contract", "yummy_contract.py")
+
+
+@pytest.fixture()
+def база():
+    соед = sqlite3.connect(":memory:")
+    соед.row_factory = sqlite3.Row
+    return ФИКСТУРА.построить(соед)
+
+
+class TestНовоеВКаталоге:
+    """Поверхность свежести каталога: порядок объявлен, адрес — только свой."""
+
+    def test_порядок_по_дате_публикации_убыванием(self, база):
+        база.execute("UPDATE entity SET published_at='2020-01-01T00:00:00Z'")
+        база.execute("UPDATE entity SET published_at='2026-01-02T00:00:00Z' "
+                     "WHERE entity_id=?", (ФИКСТУРА.ГЛАВНЫЙ,))
+        база.commit()
+        элементы = СВЯЗЬ.новое_в_каталоге(база, 5)
+        assert элементы, "поверхность обязана наполняться из контура"
+        assert элементы[0]["entity_id"] == ФИКСТУРА.ГЛАВНЫЙ
+
+    def test_без_канонического_адреса_не_попадает(self, база):
+        база.execute("UPDATE entity SET canonical_path=NULL")
+        база.commit()
+        assert СВЯЗЬ.новое_в_каталоге(база, 5) == []
+
+    def test_без_даты_публикации_не_попадает(self, база):
+        """Неизвестная дата не выдаётся за старую и не подставляется своей."""
+        база.execute("UPDATE entity SET published_at=NULL")
+        база.commit()
+        assert СВЯЗЬ.новое_в_каталоге(база, 5) == []
+
+    def test_подпись_называет_дату_а_не_придумывает_событие(self, база):
+        элементы = СВЯЗЬ.новое_в_каталоге(база, 3)
+        assert элементы
+        # Дата публикации в источнике — не «добавлено на сайт»: подпись
+        # обязана говорить ровно то, что известно.
+        assert элементы[0]["caption"].startswith("В источнике с ")
+        assert "2026-09-10" in элементы[0]["caption"]
+
+
+class TestПополнениеКонтура:
+    """Возраст данных называется числом, а не умалчивается."""
+
+    def test_без_таблицы_состояния_отвечает_неизвестностью(self, база):
+        # У фикстуры таблицы import_state нет. Это «неизвестно», а не «свежо».
+        свод = СВЯЗЬ.пополнение(база)
+        assert свод["known"] is False
+        assert свод["last_success"] is None
+
+    def test_называет_момент_последнего_успеха(self, база):
+        база.execute("CREATE TABLE import_state (stream TEXT, cursor TEXT, "
+                     "checksum TEXT, last_success TEXT, last_attempt TEXT, "
+                     "attempts INTEGER, last_error TEXT, error_code TEXT, "
+                     "source_count INTEGER)")
+        база.execute("INSERT INTO import_state VALUES "
+                     "('entities','c','h','2026-09-10T15:32:41Z',"
+                     "'2026-09-10T15:32:41Z',0,NULL,NULL,53338)")
+        база.commit()
+        свод = СВЯЗЬ.пополнение(база)
+        assert свод["known"] is True
+        assert свод["last_success"] == "2026-09-10T15:32:41Z"
+        assert свод["source_count"] == 53338
+
+
+class TestРазметкаОригинала:
+    """Карточка собственной страницы — компонент приложения, а не свой."""
+
+    ЭЛЕМЕНТ = {"canonical_path": "/anime/fixture-0001", "title": "Фикстура 0001",
+               "poster": "/poster/fixture-0001.webp", "year": 2024,
+               "kind": "SERIES", "entity_id": "ent-fixture-0001"}
+
+    def test_классы_совпадают_с_приложением(self):
+        разметка = СТР.карточка(self.ЭЛЕМЕНТ)
+        for класс in ("portal-catalog-tile", "portal-catalog-image",
+                      "poster-slot poster-slot--catalog", "portal-catalog-info",
+                      "portal-catalog-caption"):
+            assert класс in разметка, f"нет класса приложения: {класс}"
+
+    def test_тип_и_год_рисуются_как_у_приложения(self):
+        разметка = СТР.карточка(self.ЭЛЕМЕНТ)
+        assert '<div class="portal-catalog-type">' in разметка
+        assert '<span class="portal-catalog-year">2024</span>' in разметка
+        # Вид произведения переводится, а не печатается машинным словом.
+        assert ">Сериал<" in разметка
+
+    def test_рейтинга_нет_значит_блока_нет(self):
+        разметка = СТР.карточка(self.ЭЛЕМЕНТ)
+        assert "portal-catalog-rating" not in разметка
+
+    def test_рейтинг_рисуется_блоком_приложения(self):
+        разметка = СТР.карточка({**self.ЭЛЕМЕНТ, "rating": "8.4"})
+        assert 'class="portal-catalog-rating-value">8.4<' in разметка
+        assert "portal-catalog-star" in разметка
+
+    def test_источник_оценки_назван_и_виден_и_доступен(self):
+        """Число без источника сводит разные шкалы в одно безымянное значение."""
+        разметка = СТР.карточка({**self.ЭЛЕМЕНТ, "rating": "8.4",
+                                 "rating_source": "IMDb, шкала 10"})
+        assert 'aria-label="Оценка IMDb, шкала 10: 8.4"' in разметка
+        assert 'title="Оценка IMDb, шкала 10: 8.4"' in разметка
+        # Видимая строка называет источник и не повторяет число: два
+        # одинаковых числа рядом читаются как две разные оценки.
+        assert "Оценка: IMDb, шкала 10" in разметка
+        assert разметка.count("8.4") == 3  # значок: текст, title, aria-label
+
+    def test_адрес_канонический_без_хвоста_идентификатора(self):
+        разметка = СТР.карточка({
+            **self.ЭЛЕМЕНТ,
+            "canonical_path": "/anime/fixture-0001--0191ae22-d7a8-7743-a0c1-0ca013734f8e"})
+        assert 'href="/anime/fixture-0001"' in разметка
+        assert "0191ae22" not in разметка
+
+    def test_без_адреса_карточка_не_публикуется(self):
+        assert СТР.карточка({**self.ЭЛЕМЕНТ, "canonical_path": None}) == ""
+
+    def test_нет_собственной_системы_карточек(self):
+        """Две системы карточек на одной странице — расхождение с оригиналом."""
+        разметка = СТР.карточка(self.ЭЛЕМЕНТ)
+        assert "sf-rc" not in разметка
+
+
+class TestПустаяСекция:
+    """Поверхность без данных не рисуется вовсе — ни заголовка, ни рамки."""
+
+    def test_пустая_секция_не_рисует_ничего(self):
+        assert СТР.секция("Новые серии", "подпись", []) == ""
+
+    def test_секция_с_данными_рисует_полосу_приложения(self):
+        разметка = СТР.секция("Новые серии", "подпись",
+                              [TestРазметкаОригинала.ЭЛЕМЕНТ])
+        assert '<div class="portal-section-bar">Новые серии</div>' in разметка
+        assert '<div class="portal-catalog-tiles">' in разметка
+
+    def test_страница_без_секций_объясняет_себя(self):
+        """Страница из одного заголовка читается как поломка."""
+        объяснение = СТР.нечего_показать("Расписание", ["schedule", "announcements"])
+        assert "schedule" in объяснение and "announcements" in объяснение
+        assert "portal-empty" in объяснение
