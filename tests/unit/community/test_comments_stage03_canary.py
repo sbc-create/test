@@ -306,3 +306,20 @@ def test_gold_corpus_category_and_severity_are_distinct_axes():
 
 def test_degraded_status_is_not_publicly_visible():
     assert states.is_public_visible(states.PENDING_MODERATION_DEGRADED) is False
+
+
+def test_no_qwen_decision_can_delete_a_comment():
+    """The provider classifies; deletion stays an author or admin act."""
+    from factory.community.comments.qwen.policy import apply_action_to_status
+    from factory.community.comments.qwen.schema_v2 import (
+        ALLOWED_DECISIONS_V2,
+        V2_TO_V1_ACTION,
+    )
+
+    reachable = {
+        apply_action_to_status(V2_TO_V1_ACTION[d], ["CLEAN"], 0.95)["new_status"]
+        for d in ALLOWED_DECISIONS_V2
+    }
+    assert not reachable & {states.DELETED_BY_AUTHOR, states.DELETED_BY_ADMIN}
+    # And every status Qwen can reach keeps the body in the database.
+    assert all(states.retains_body(s) for s in reachable)

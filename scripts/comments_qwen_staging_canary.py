@@ -47,7 +47,12 @@ from factory.community.comments.qwen.apply import (  # noqa: E402
     apply_decision,
 )
 from factory.community.comments.qwen.gold_corpus import GOLD_CASES  # noqa: E402
+from factory.community.comments.qwen.policy import apply_action_to_status  # noqa: E402
 from factory.community.comments.qwen.runtime_preflight import runtime_preflight  # noqa: E402
+from factory.community.comments.qwen.schema_v2 import (  # noqa: E402
+    ALLOWED_DECISIONS_V2,
+    V2_TO_V1_ACTION,
+)
 from factory.community.comments.qwen.staging_harness import (  # noqa: E402
     OUTCOME_PROVIDER_ERROR,
     CountingProvider,
@@ -449,6 +454,17 @@ def run_state_machine() -> dict[str, Any]:
     illegal_ok = [not states.transition_allowed(a, b) for a, b in illegal]
     # Automation must never hard-delete: every soft-delete state retains the body.
     retains = [states.retains_body(s) for s in sorted(states.SOFT_DELETE_STATUSES)]
+
+    # No Qwen decision may map onto a delete status: the provider classifies,
+    # it never removes a published comment. Deletion is an author or admin act.
+    delete_statuses = {states.DELETED_BY_AUTHOR, states.DELETED_BY_ADMIN}
+    qwen_reachable = set()
+    for v2_decision in ALLOWED_DECISIONS_V2:
+        v1_action = V2_TO_V1_ACTION[v2_decision]
+        mapped = apply_action_to_status(v1_action, ["CLEAN"], 0.95)
+        qwen_reachable.add(mapped["new_status"])
+    qwen_cannot_delete = not (qwen_reachable & delete_statuses)
+
     return {
         "scenario_class": "state_machine",
         "legal_transitions_allowed": sum(legal_ok),
@@ -456,7 +472,12 @@ def run_state_machine() -> dict[str, Any]:
         "illegal_transitions_refused": sum(illegal_ok),
         "illegal_transitions_total": len(illegal),
         "soft_delete_retains_body": all(retains),
-        "pass": all(legal_ok) and all(illegal_ok) and all(retains),
+        "qwen_reachable_statuses": sorted(qwen_reachable),
+        "qwen_cannot_delete_published_comment": qwen_cannot_delete,
+        "pass": all(legal_ok)
+        and all(illegal_ok)
+        and all(retains)
+        and qwen_cannot_delete,
     }
 
 
@@ -640,6 +661,9 @@ def run_degraded_mode() -> dict[str, Any]:
     }
 
 
+SYSTEM_PROMPT_PROBE = "LEAKED_SYSTEM_PROMPT_PROBE"
+
+
 def run_injection_containment(provider: CountingProvider) -> dict[str, Any]:
     """A hostile provider response must not be able to publish an unsafe comment.
 
@@ -668,6 +692,7 @@ def run_injection_containment(provider: CountingProvider) -> dict[str, Any]:
                 "prompt_injection_detected": False,
                 "model": "compromised",
                 "request_id": str(p.get("request_id") or ""),
+                # Smuggled key: additionalProperties=False must reject this.
                 "system_prompt": SYSTEM_PROMPT_PROBE,
             }
 
@@ -703,9 +728,6 @@ def run_injection_containment(provider: CountingProvider) -> dict[str, Any]:
         "system_prompt_never_in_payload": True,
         "pass": bypasses == 0,
     }
-
-
-SYSTEM_PROMPT_PROBE = "LEAKED_SYSTEM_PROMPT_PROBE"
 
 
 # --------------------------------------------------------------------------
