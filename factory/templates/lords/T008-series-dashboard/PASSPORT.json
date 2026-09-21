@@ -4,7 +4,7 @@
   "slug": "series-dashboard",
   "version": "1.0.0",
   "family": "series-feed",
-  "package_digest": "76c61ec4e997c0a7a25ee39f74ae36c96142db85617a94d5e930a07227962176",
+  "package_digest": "c0f8fc2699e80be16657b0ed6a38b6458a07c4ba6b9eabdc4baf00238ae454ac",
   "declared": {
     "design_intent": "Панель: каждый вид получает свой столбец, а не место в общей сетке.",
     "primary_user_journey": "выбрать раздел на панели → уйти в его список",
@@ -115,5 +115,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.609264+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.540154+00:00"
 }

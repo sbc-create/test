@@ -4,7 +4,7 @@
   "slug": "rating-leaderboard",
   "version": "1.0.0",
   "family": "rating",
-  "package_digest": "91dfca58e7fae9417f6aaa825ddff2cdca3ad2cdab0e45a99833e5d96ed619e8",
+  "package_digest": "1c916cd2ae0c8c8a913c6be970e37651e3bfba410a305e7ae5cda5751b9bf374",
   "declared": {
     "design_intent": "Ранжированный список ведёт страницу, витрина поддерживает.",
     "primary_user_journey": "пройти список сверху вниз",
@@ -96,5 +96,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.716594+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.697195+00:00"
 }

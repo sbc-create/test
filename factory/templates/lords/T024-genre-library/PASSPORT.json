@@ -4,7 +4,7 @@
   "slug": "genre-library",
   "version": "1.0.0",
   "family": "genre",
-  "package_digest": "e66a2a00491feef5e07f94eb0637315321a74196ebcb7d6c5c2e3c498978b6d7",
+  "package_digest": "7c249d894368d748d7605350da6ae5baf9418c6082c165378f547d245109bcd2",
   "declared": {
     "design_intent": "Библиотека: указатель, полки, разворот.",
     "primary_user_journey": "найти полку → снять запись",
@@ -70,5 +70,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.704423+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.676562+00:00"
 }

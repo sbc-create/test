@@ -4,7 +4,7 @@
   "slug": "collection-rows",
   "version": "1.0.0",
   "family": "collection",
-  "package_digest": "a7ce047b40f8ed5ef5a29d2f64a4dd7e234b460702d24131b168f8c8f2cec60f",
+  "package_digest": "bb7ea315f651d8d4d3dbac6ace7c625c143cde3f5962ebc623e0ae954e2295f4",
   "declared": {
     "design_intent": "Три витрины подряд разной плотности вместо одной длинной. Карусели нет и не заявляется: страница статическая, скриптов ноль.",
     "primary_user_journey": "скользить по рядам",
@@ -78,5 +78,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T20:31:52.816417+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.746890+00:00"
 }

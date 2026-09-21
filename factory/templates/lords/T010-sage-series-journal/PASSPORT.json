@@ -4,7 +4,7 @@
   "slug": "sage-series-journal",
   "version": "1.0.0",
   "family": "series-feed",
-  "package_digest": "15b05d610389dd5c9ab29c236974cfe04e5904e2ed4294b460c32dbd6bc95bf0",
+  "package_digest": "a1423d1799b381a97ffd9df45f712c1cb5e833dfdb823863fecac48f251717bb",
   "declared": {
     "design_intent": "Журнал: мозаика с ведущей записью, под ней лента-тетрадь и разрежённая витрина.",
     "primary_user_journey": "прочитать разворот журнала → уйти в ленту",
@@ -111,5 +111,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.621301+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.555853+00:00"
 }

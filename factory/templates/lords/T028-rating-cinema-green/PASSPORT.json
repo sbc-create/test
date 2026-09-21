@@ -4,7 +4,7 @@
   "slug": "rating-cinema-green",
   "version": "1.0.0",
   "family": "rating",
-  "package_digest": "9267c5243de5bf618175be7ca9a3e86fcdc12b0cdc5395521d734385f1defc63",
+  "package_digest": "c910c9cfade221b469ada3f8883efa1efbee8856ff2c37426e258a5f9d4d5aad",
   "declared": {
     "design_intent": "Крупный кадр, затем порядок и плотная витрина.",
     "primary_user_journey": "войти через кадр → пройти порядок",
@@ -92,5 +92,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.729010+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.714107+00:00"
 }

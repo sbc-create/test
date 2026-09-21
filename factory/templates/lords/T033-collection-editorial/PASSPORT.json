@@ -4,7 +4,7 @@
   "slug": "collection-editorial",
   "version": "1.0.0",
   "family": "collection",
-  "package_digest": "e8c168575ccd81c5b1468d8d0ad80d6a6cda9ed46f5cd58d6849b1c6ee25be65",
+  "package_digest": "4fc18b0118963c40b247aada3cd158644e2bedbd7321029ebb3a901142ad1033",
   "declared": {
     "design_intent": "Разворот: одна ведущая запись слева и четыре спутника справа — не сетка, а именно разворот.",
     "primary_user_journey": "прочитать разворот → пройти витрину",
@@ -96,5 +96,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T18:02:39.651057+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.759041+00:00"
 }

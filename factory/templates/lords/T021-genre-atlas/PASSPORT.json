@@ -4,7 +4,7 @@
   "slug": "genre-atlas",
   "version": "1.0.0",
   "family": "genre",
-  "package_digest": "e0be77c3ed6175ba3799d8e3b886af93439f17423192122a18a548fc12b5c466",
+  "package_digest": "b8be342db460e51fdd1269b15ad1217b5a64b21c38d180c1321d2d9a60f7c29f",
   "declared": {
     "design_intent": "Атлас: две навигации подряд, потом витрина и разворот.",
     "primary_user_journey": "сориентироваться → углубиться",
@@ -97,5 +97,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.687118+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.653129+00:00"
 }

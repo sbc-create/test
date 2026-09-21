@@ -4,7 +4,7 @@
   "slug": "rating-scorecards",
   "version": "1.0.0",
   "family": "rating",
-  "package_digest": "fcde3994eeb624753877e1b7c726623600ed8e6db5271f81c696d54ea65359b5",
+  "package_digest": "a7144423a11bf6681163d2ce3a1454625976dbad42bed0ad314e88cf809de4f2",
   "declared": {
     "design_intent": "Доска разделов, ранжированный список, витрина.",
     "primary_user_journey": "сравнить разделы → пройти список",
@@ -93,5 +93,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.722865+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.706444+00:00"
 }

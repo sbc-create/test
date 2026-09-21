@@ -4,7 +4,7 @@
   "slug": "curated-green-journal",
   "version": "1.0.0",
   "family": "curated",
-  "package_digest": "5fdaf34c437945f120a1aeb853f636682dfa0496353d7725c7b5f7f00e2a0906",
+  "package_digest": "674723a0df82a7df09ffd492909f638103e61c2a6093859cbff6c1f872ddb973",
   "declared": {
     "design_intent": "Обложка: одна запись занимает разворот, остальные идут полосами разной плотности.",
     "primary_user_journey": "прочитать обложку → спуститься по полосам",
@@ -114,5 +114,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T20:29:21.377467+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.564070+00:00"
 }

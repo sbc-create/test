@@ -4,7 +4,7 @@
   "slug": "collection-library",
   "version": "1.0.0",
   "family": "collection",
-  "package_digest": "9be9a9b0e281538b7bf6347b307d6539de504af87506a69b3a867d8af23a312a",
+  "package_digest": "a104367bde5d8c971dfd0b56ea7a61f0e1f5b865e164994bc995383f25fe6fb9",
   "declared": {
     "design_intent": "Указатель, доска срезов, две витрины.",
     "primary_user_journey": "найти срез → уйти в витрину",
@@ -67,5 +67,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.772917+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.775741+00:00"
 }

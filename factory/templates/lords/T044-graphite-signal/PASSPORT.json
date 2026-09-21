@@ -4,7 +4,7 @@
   "slug": "graphite-signal",
   "version": "1.0.0",
   "family": "modern",
-  "package_digest": "71d95c04dc23017c974bfa556f30614713371b527fbef199b05ca904220a129a",
+  "package_digest": "21311862c17893f28cb5ce67a585199846435be52f0c0644ea9d8f45d38b44bd",
   "declared": {
     "design_intent": "Лента-сигналы, порядок, витрина, разделы.",
     "primary_user_journey": "считывать сигналы сверху вниз",
@@ -96,5 +96,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.826868+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.847689+00:00"
 }

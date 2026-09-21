@@ -4,7 +4,7 @@
   "slug": "genre-spectrum",
   "version": "1.0.0",
   "family": "genre",
-  "package_digest": "11e7b61471b582b49014dad6074fdc94e49cafe0aee1652dd7d0423598bd968c",
+  "package_digest": "16d068a59a4dff1eab150153c9217b762a6aad8d871aa3255bdf9091eea975dd",
   "declared": {
     "design_intent": "Доска разделов, затем две витрины разной плотности.",
     "primary_user_journey": "сравнить разделы → выбрать",
@@ -67,5 +67,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.698634+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.668411+00:00"
 }

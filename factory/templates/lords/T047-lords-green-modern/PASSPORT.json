@@ -4,7 +4,7 @@
   "slug": "lords-green-modern",
   "version": "1.0.0",
   "family": "hybrid",
-  "package_digest": "1c91044573976cacd1b095c3441e58569d5381f3549a047746b9cabdbd1e0429",
+  "package_digest": "17b454676d93215f78ebe794e636cc7937f1a4c5b1de6782663a68a505a49ea6",
   "declared": {
     "design_intent": "Геометрический разворот: ведущая запись и сетка постеров рядом с ней.",
     "primary_user_journey": "войти разворотом → идти по геометрии",
@@ -96,5 +96,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T20:29:21.624205+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.889022+00:00"
 }

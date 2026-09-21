@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Отрисовка шаблонного пакета в файл для снимков и измерений.
+"""Отрисовка маршрутов шаблонного пакета в файлы для снимков и измерений.
 
-Режим превью подменяет адреса постеров локальным плейсхолдером 2:3. Это не
-косметика: внешнего CDN в allowlist нет, и каждая картинка считалась бы битой —
-измерение геометрии утонуло бы в артефакте сети. Плейсхолдер несёт настоящие
-интринсик-размеры, поэтому рамка, пропорция и высота карточки меряются честно,
-а «битое изображение» остаётся настоящей находкой, а не следствием запрета.
+Раньше здесь рисовалась одна страница — главная — и постеры подменялись
+плейсхолдером. И то, и другое искажало приёмку: шаблон, проверенный только на
+главной, не проверен, а плейсхолдер вместо постера прячет и настоящую
+геометрию изображения, и настоящую длину заголовков.
+
+Теперь рисуется вся доступная пакету матрица маршрутов, а постеры берутся
+настоящие — из локальной копии, снятой у первичной службы витрины. Внешних
+запросов при отрисовке нет: изображения лежат рядом со страницами.
 
     lords-template-preview --package factory/templates/lords/T001-... --out var/preview
 """
@@ -17,28 +20,61 @@ import copy
 import importlib.util
 import json
 import pathlib
+import shutil
 import sys
 
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[1]
 ЯДРО = КОРЕНЬ / "factory" / "templates" / "lords" / "shared"
-ФИКСТУРА = ЯДРО / "test-fixtures" / "catalog.json"
-ПЛЕЙСХОЛДЕР = "assets/placeholder-2x3.svg"
+ФИКСТУРА = КОРЕНЬ / "var" / "fixture.json"
+ПОСТЕРЫ = КОРЕНЬ / "var" / "preview-assets" / "posters"
+
+#: Матрица маршрутов приёмки. Имя файла — имя маршрута: по нему же измерения
+#: и снимки находят страницу, поэтому список один на всю фабрику.
+МАТРИЦА = [
+    ("home", "home", {}),
+    ("catalog", "catalog", {}),
+    ("catalog-p2", "catalog", {"page": 2}),
+    ("new", "new", {}),
+    ("search", "search", {}),
+    ("search-empty", "search_empty", {}),
+    ("genre", "genre", {}),
+    ("year", "year", {}),
+    ("country", "country", {}),
+    ("collection", "collection", {}),
+    ("title-movie", "title_movie", {}),
+    ("title-series", "title_series", {}),
+    ("season", "season", {}),
+    ("episode", "episode", {}),
+    ("notfound", "notfound", {}),
+]
+
+#: Краевые страницы: настоящие записи каталога с длинным заголовком, без
+#: постера и без описания. Проверять «как ведёт себя шаблон при нехватке
+#: данных» на выдуманной записи бессмысленно — выдуманная всегда удобна.
+КРАЕВЫЕ = [
+    ("edge-long-title", "long_title"),
+    ("edge-no-poster", "no_poster"),
+    ("edge-no-description", "no_description"),
+    ("edge-long-description", "long_description"),
+]
 
 
-def _render():
-    spec = importlib.util.spec_from_file_location("lords_render", ЯДРО / "render.py")
-    модуль = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(модуль)
-    return модуль
+def _модуль(имя: str, файл: str):
+    spec = importlib.util.spec_from_file_location(имя, ЯДРО / файл)
+    м = importlib.util.module_from_spec(spec)
+    sys.modules[имя] = м
+    spec.loader.exec_module(м)
+    return м
 
 
-def подменить_медиа(фикстура: dict) -> dict:
-    """Локальный носитель вместо внешнего. Записи без постера остаются без него."""
+def подготовить_медиа(фикстура: dict, глубина: int) -> dict:
+    """Адреса постеров — относительные, чтобы страница открывалась без сервера."""
     копия = copy.deepcopy(фикстура)
+    вверх = "../" * глубина
     for запись in копия["items"]:
-        if запись.get("poster"):
-            запись["poster"] = ПЛЕЙСХОЛДЕР
-    копия["media_mode"] = "local-placeholder-2x3"
+        if запись.get("poster_local"):
+            запись["poster_local"] = вверх + запись["poster_local"]
+    копия["media_mode"] = "real-local-copy"
     return копия
 
 
@@ -47,8 +83,7 @@ def main() -> int:
     parser.add_argument("--package", required=True)
     parser.add_argument("--out", required=True)
     parser.add_argument("--fixture", default=str(ФИКСТУРА))
-    parser.add_argument("--real-media", action="store_true",
-                        help="не подменять постеры (требует доступа к CDN)")
+    parser.add_argument("--routes", help="через запятую; по умолчанию вся матрица")
     args = parser.parse_args()
 
     пакет = pathlib.Path(args.package)
@@ -56,25 +91,53 @@ def main() -> int:
         print(f"нет template.json в {пакет}", file=sys.stderr)
         return 2
 
-    фикстура = json.loads(pathlib.Path(args.fixture).read_text(encoding="utf-8"))
-    if not args.real_media:
-        фикстура = подменить_медиа(фикстура)
+    render = _модуль("lords_render", "render.py")
+    фикстура_сырая = json.loads(pathlib.Path(args.fixture).read_text(encoding="utf-8"))
+    фикстура = подготовить_медиа(фикстура_сырая, глубина=1)
 
-    html = _render().отрисовать(пакет, фикстура, ЯДРО)
-
-    каталог = pathlib.Path(args.out) / пакет.name
+    корень_вывода = pathlib.Path(args.out)
+    каталог = корень_вывода / пакет.name
     каталог.mkdir(parents=True, exist_ok=True)
-    # Плейсхолдер кладётся рядом со страницей: относительный путь обязан
-    # разрешаться без сети и без сервера.
-    (каталог / "assets").mkdir(exist_ok=True)
-    (каталог / ПЛЕЙСХОЛДЕР).write_bytes((ЯДРО / ПЛЕЙСХОЛДЕР).read_bytes())
-    страница = каталог / "index.html"
-    страница.write_text(html, encoding="utf-8")
+
+    # Постеры лежат один раз рядом с пакетами, а не копируются пятьдесят раз.
+    общие = корень_вывода / "posters"
+    if ПОСТЕРЫ.is_dir() and not общие.is_dir():
+        shutil.copytree(ПОСТЕРЫ, общие)
+
+    хотим = set(args.routes.split(",")) if args.routes else None
+    созданные = []
+    for имя, маршрут, параметры in МАТРИЦА:
+        if хотим and имя not in хотим:
+            continue
+        html = render.отрисовать(пакет, фикстура, ЯДРО, маршрут, параметры)
+        файл = каталог / f"{имя}.html"
+        файл.write_text(html, encoding="utf-8")
+        созданные.append(имя)
+
+    краевые = фикстура.get("edge_cases") or {}
+    for имя, ключ in КРАЕВЫЕ:
+        if хотим and имя not in хотим:
+            continue
+        slug = краевые.get(ключ)
+        if not slug:
+            continue
+        запись = next((з for з in фикстура["items"] if з["slug"] == slug), None)
+        маршрут = "title_series" if запись and запись.get("seasons") else "title_movie"
+        html = render.отрисовать(пакет, фикстура, ЯДРО, маршрут, {"slug": slug})
+        (каталог / f"{имя}.html").write_text(html, encoding="utf-8")
+        созданные.append(имя)
+
+    # Главная остаётся под своим привычным именем: на неё ссылаются каталог
+    # приёмки и контактные листы.
+    if (каталог / "home.html").is_file():
+        (каталог / "index.html").write_text(
+            (каталог / "home.html").read_text(encoding="utf-8"), encoding="utf-8")
+
     print(json.dumps({
         "package": пакет.name,
-        "page": str(страница),
-        "bytes": страница.stat().st_size,
-        "media_mode": фикстура.get("media_mode", "real"),
+        "routes": созданные,
+        "dir": str(каталог),
+        "media_mode": фикстура.get("media_mode"),
     }, ensure_ascii=False))
     return 0
 

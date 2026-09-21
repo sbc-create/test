@@ -4,7 +4,7 @@
   "slug": "forest-cinema-gallery",
   "version": "1.0.0",
   "family": "forest-cinema",
-  "package_digest": "36e6cd587ea93f209eae98c7bb408fe83f2a0ff9afc3de4e96bd287bc2a18088",
+  "package_digest": "235ec410353d80c55b52625b1dab682f9e3e438bada19e3c907aa6146acfa4df",
   "declared": {
     "design_intent": "Галерея: три редакционные карточки во главе, ниже разреженная сетка с крупными полями.",
     "primary_user_journey": "прочитать отбор → уйти в галерею каталога",
@@ -100,5 +100,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.586164+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.508713+00:00"
 }

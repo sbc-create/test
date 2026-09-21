@@ -4,7 +4,7 @@
   "slug": "rating-minimal-table",
   "version": "1.0.0",
   "family": "rating",
-  "package_digest": "0b431d2c8b111bb6098c68982d34f4edd12da1e71b1fc8a8b33dd3b70d5d299e",
+  "package_digest": "cef53bdce6c58bd4ad42d3eb6e9d7b372861b54bb01a5d5be02c719ba922a9d3",
   "declared": {
     "design_intent": "Таблица-указатель ведёт, витрина в конце.",
     "primary_user_journey": "просмотреть таблицу → уйти в запись",
@@ -104,5 +104,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T20:29:21.501783+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.722746+00:00"
 }

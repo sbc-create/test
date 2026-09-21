@@ -4,7 +4,7 @@
   "slug": "archive-decades",
   "version": "1.0.0",
   "family": "archive",
-  "package_digest": "588667bd35ba6fbacabcbbd59efcc129f8259bbd9eb1b0db5178dc6503159b2d",
+  "package_digest": "55fe0e42cc1228a2c7972764eebfd92530e755634d7bf47babf50a898beda415",
   "declared": {
     "design_intent": "Годы ведут, витрина и перечень следуют.",
     "primary_user_journey": "выбрать период → пройти список",
@@ -111,5 +111,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.789638+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.797903+00:00"
 }

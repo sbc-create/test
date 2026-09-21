@@ -4,7 +4,7 @@
   "slug": "premiere-week-board",
   "version": "1.0.0",
   "family": "premiere",
-  "package_digest": "cccb8158f22b27001a53b1bd36cbc1fb2b88c397df66499cf02c46d5117a6a1d",
+  "package_digest": "3ecc9e87dfb1e4b9aafdc5592f7535beacb896c07849dfd2cd0e7131e74d15a1",
   "declared": {
     "design_intent": "Доска: разделы столбцами, лента и витрина под ними.",
     "primary_user_journey": "окинуть доску → углубиться в раздел",
@@ -93,5 +93,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.663005+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.614632+00:00"
 }

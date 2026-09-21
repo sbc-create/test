@@ -4,7 +4,7 @@
   "slug": "rating-community-ready",
   "version": "1.0.0",
   "family": "rating",
-  "package_digest": "6ebcc17e166bc14938429077a3c72f4fc8c69198ea5022c6518a32fa77badd98",
+  "package_digest": "d3755a01e7b8967a3b7fc351813fa9861d7871bb0e9236ebc3e361e4b5b5f2e7",
   "declared": {
     "design_intent": "Честная пустота там, где оценок нет: витрина и порядок без обещаний.",
     "primary_user_journey": "смотреть каталог как есть",
@@ -100,5 +100,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T20:29:21.508256+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.731806+00:00"
 }

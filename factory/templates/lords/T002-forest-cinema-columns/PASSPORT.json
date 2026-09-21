@@ -4,7 +4,7 @@
   "slug": "forest-cinema-columns",
   "version": "1.0.0",
   "family": "forest-cinema",
-  "package_digest": "fe903ac1cffc5af0f432245c8f164252b2bb65f22609b8a37e530eb126ccd637",
+  "package_digest": "3a8578911dbeb60a09554bf4043ffcf5081d889cdcefdfaded7820814c6cfb48",
   "declared": {
     "design_intent": "Асимметричные колонки: узкая лента новых поступлений ведёт, широкая сетка поддерживает.",
     "primary_user_journey": "увидеть свежее → перейти в каталог",
@@ -98,5 +98,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.574412+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.494677+00:00"
 }

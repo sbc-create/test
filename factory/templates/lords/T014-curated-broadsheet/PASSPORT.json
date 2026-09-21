@@ -4,7 +4,7 @@
   "slug": "curated-broadsheet",
   "version": "1.0.0",
   "family": "curated",
-  "package_digest": "4c6632958966457849c722b06464ea86e9c05c7db6013c0ab72812b0fe07220a",
+  "package_digest": "d3d5f553e62235176938e129d414400641603931cbb6aa3619db4260db62548c",
   "declared": {
     "design_intent": "Газетная полоса: разворот сверху, ранжированный список сбоку, плотная сетка внизу.",
     "primary_user_journey": "прочитать полосу → свериться со списком",
@@ -96,5 +96,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.645563+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.586351+00:00"
 }

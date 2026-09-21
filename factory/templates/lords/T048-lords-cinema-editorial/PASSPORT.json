@@ -4,7 +4,7 @@
   "slug": "lords-cinema-editorial",
   "version": "1.0.0",
   "family": "hybrid",
-  "package_digest": "b1a08559da4cec6bdf7488adc1fc0c83c8bb14753913de87005c0336617dc036",
+  "package_digest": "7fcf0556fa9fb9b4c90013362e14837875b7afce460294f30ad64be863a31f33",
   "declared": {
     "design_intent": "Редакционная полоса из равных карточек, под ней плотная витрина и порядок.",
     "primary_user_journey": "прочитать обложку → пройти витрину",
@@ -120,5 +120,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T18:02:39.750353+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.897758+00:00"
 }

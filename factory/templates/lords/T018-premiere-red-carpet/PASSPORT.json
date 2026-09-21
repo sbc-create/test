@@ -4,7 +4,7 @@
   "slug": "premiere-red-carpet",
   "version": "1.0.0",
   "family": "premiere",
-  "package_digest": "413d5eea2e636c27db42b44fd796f58f9a0819e53822368f5862503bb1dec84d",
+  "package_digest": "d2f82ffabb025c30de0ce45c7312c02d91adaeb0158bb53c31f94abf716ff273",
   "declared": {
     "design_intent": "Большой кадр сверху, под ним ранжированный порядок и витрина.",
     "primary_user_journey": "задержаться на кадре → пройти список",
@@ -96,5 +96,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.668653+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.629255+00:00"
 }

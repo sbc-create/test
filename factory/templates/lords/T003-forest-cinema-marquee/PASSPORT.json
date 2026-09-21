@@ -4,7 +4,7 @@
   "slug": "forest-cinema-marquee",
   "version": "1.0.0",
   "family": "forest-cinema",
-  "package_digest": "d8180a9ef8432515723586dc5a8377005dadd2f4f306f7966c944a1ba4050d41",
+  "package_digest": "e917901eeb3688681be54221be6d8016922b5d23f258bb21548613685cd4f713",
   "declared": {
     "design_intent": "Афиша: таксономия ведёт, под ней три равных раздела вместо одной длинной сетки.",
     "primary_user_journey": "выбрать раздел → смотреть подборку раздела",
@@ -100,5 +100,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.580291+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.501702+00:00"
 }

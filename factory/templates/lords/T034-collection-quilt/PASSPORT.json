@@ -4,7 +4,7 @@
   "slug": "collection-quilt",
   "version": "1.0.0",
   "family": "collection",
-  "package_digest": "bad82cbbcb578abc62b2fa0bbc59ea00ea8326e4bf5a3dfafaa218ea767566ad",
+  "package_digest": "2e3c903411076ab0dd14a7748177cb66483f5227d08b4c672ed540e90e0c6076",
   "declared": {
     "design_intent": "Лоскут из текстовых плиток: ритм задаётся пролётами и типографикой, а не постерами.",
     "primary_user_journey": "скользить по лоскуту",
@@ -78,5 +78,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T18:02:39.657468+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.767873+00:00"
 }

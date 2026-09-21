@@ -4,7 +4,7 @@
   "slug": "lords-green-classic",
   "version": "1.0.0",
   "family": "hybrid",
-  "package_digest": "60a4c952592374c36d3c1b4b1d60375e262baa68422d2e06372515d81d3f8716",
+  "package_digest": "d273b4e6cf53de3a66ef611b695aee2da49a01f9f149ad67cdfb72d7ca5f5c8b",
   "declared": {
     "design_intent": "Классическая последовательность: кадр, витрина, разделы, лента.",
     "primary_user_journey": "привычный путь по витрине",
@@ -106,5 +106,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.839874+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.872092+00:00"
 }

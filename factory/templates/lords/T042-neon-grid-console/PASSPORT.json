@@ -4,7 +4,7 @@
   "slug": "neon-grid-console",
   "version": "1.0.0",
   "family": "modern",
-  "package_digest": "545d8ff4cd1c75bb72a29ed3c96981e51a129bebdc86ef81360ab40c0d5a3f51",
+  "package_digest": "5095d67426b8042a465862e2ba825080997ff6cefda29b8ff07a8d878736a76a",
   "declared": {
     "design_intent": "Доска-консоль впереди, витрина и перечень следом.",
     "primary_user_journey": "окинуть консоль → углубиться",
@@ -96,5 +96,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.813205+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.829449+00:00"
 }

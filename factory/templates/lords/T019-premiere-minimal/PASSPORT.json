@@ -4,7 +4,7 @@
   "slug": "premiere-minimal",
   "version": "1.0.0",
   "family": "premiere",
-  "package_digest": "e05218b16c21b0dd53b1a35a26f51876bb252e1df48ae4e89a9d4154a0bcb379",
+  "package_digest": "304aa1346f2136c2a869374074ee1e935a35cb3cbbfb5debe331905a16111df4",
   "declared": {
     "design_intent": "Без героя: сразу указатель дат и очень плотная витрина. Навигация — буквенный указатель, а не чипы: это другой способ искать.",
     "primary_user_journey": "сразу к спискам",
@@ -100,5 +100,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.674951+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.637327+00:00"
 }

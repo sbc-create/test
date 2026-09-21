@@ -4,7 +4,7 @@
   "slug": "forest-cinema-stage",
   "version": "1.0.0",
   "family": "forest-cinema",
-  "package_digest": "c20a8ae0f2ba4f960280e7f7728d9b204ae42d0c17f128c32721d5ffa802a9d5",
+  "package_digest": "8760fe7dce666761ba782b81afc5788300b557f2778689dc58293514b1348770",
   "declared": {
     "design_intent": "Театральная сцена: широкий центрированный герой, под ним плотный зал постеров.",
     "primary_user_journey": "посмотреть, что идёт сейчас → уйти в каталог",
@@ -102,5 +102,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.568691+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.482454+00:00"
 }

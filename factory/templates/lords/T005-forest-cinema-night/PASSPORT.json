@@ -4,7 +4,7 @@
   "slug": "forest-cinema-night",
   "version": "1.0.0",
   "family": "forest-cinema",
-  "package_digest": "8659b3db6a2f07aae4692bcf4d45cef68aceb288fee49c4e69864eac6b099eb7",
+  "package_digest": "088d5d0617e5cebed4fd77a5a9d942fb4dd5aeac09577007906c663d0dd7a726",
   "declared": {
     "design_intent": "Ночной сеанс: широкий кадр с фактами сбоку, дальше самый плотный каталог семейства.",
     "primary_user_journey": "войти через кадр → провалиться в плотный каталог",
@@ -112,5 +112,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.591896+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.516015+00:00"
 }

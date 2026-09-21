@@ -100,7 +100,7 @@ def test_package_renders_and_is_closed_to_indexing(пакет, фикстура)
     assert '<meta name="robots" content="noindex, nofollow">' in html, \
         "индексация обязана оставаться закрытой в каждом пакете"
     assert 'rel="canonical"' in html
-    assert html.count("<h1") <= 1, "на странице не должно быть двух h1"
+    assert html.count("<h1") == 1, "на странице обязан быть ровно один h1"
 
 
 @pytest.mark.parametrize("пакет", пакеты(), ids=lambda p: p.name[:4])
@@ -127,21 +127,23 @@ def test_package_has_no_markup_of_its_own(пакет):
 
 def test_renderer_hides_block_without_enough_data(фикстура):
     """Блок с нехваткой данных скрывается, а не рисует пустые ячейки."""
-    бедная = dict(фикстура)
-    бедная["items"] = фикстура["items"][:2]
-    настройка = {"заголовок": "Мало данных", "грамматика": "poster", "минимум": 6, "максимум": 12}
-    assert render.блок_сетка(бедная, настройка) == ""
+    бедная = dict(фикстура, items=фикстура["items"][:2])
+    вид = render.вид_маршрута(бедная, "home")
+    настройка = {"тип": "grid", "заголовок": "Мало данных", "грамматика": "poster",
+                 "минимум": 6, "максимум": 12}
+    assert render.блок_сетка(вид, настройка) == ""
 
 
 def test_feed_skips_items_without_proven_date(фикстура):
     """В ленту свежести не попадает запись с оценочной датой."""
-    подделка = dict(фикстура)
-    подделка["items"] = [
+    подделка = dict(фикстура, items=[
         {**фикстура["items"][0], "published_at": "2026-09-20T00:00:00Z",
          "published_at_estimated": True},
-    ]
-    настройка = {"заголовок": "Новое", "грамматика": "compact", "минимум": 1, "максимум": 5}
-    assert render.блок_лента(подделка, настройка) == ""
+    ])
+    вид = render.вид_маршрута(подделка, "home")
+    настройка = {"тип": "feed", "заголовок": "Новое", "грамматика": "compact",
+                 "минимум": 1, "максимум": 5}
+    assert render.блок_лента(вид, настройка) == ""
 
 
 def test_escaping_is_applied(фикстура):

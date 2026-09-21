@@ -4,7 +4,7 @@
   "slug": "genre-quickpick",
   "version": "1.0.0",
   "family": "genre",
-  "package_digest": "cc8efe40455eb7cb5488b706c85bb06134b9cd17fd55a93f215669a5e67849f1",
+  "package_digest": "6d04646bb8a6af3be005e74934b9a9977dd5b95888f760c5ff797624695c915c",
   "declared": {
     "design_intent": "Сразу выбор действия, потом лента и витрина.",
     "primary_user_journey": "выбрать намерение → получить список",
@@ -100,5 +100,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.710144+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.684318+00:00"
 }

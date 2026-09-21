@@ -4,7 +4,7 @@
   "slug": "archive-countries",
   "version": "1.0.0",
   "family": "archive",
-  "package_digest": "0dc35f8dbef927ca0311d8e1433f298245414b076b49841fbd9eb5c8320a9987",
+  "package_digest": "a28772ab19b3c588eb2043dc280fc2cd27ccd32c24a549ad4d1978f693799c51",
   "declared": {
     "design_intent": "Доска разделов, перечень, витрина, разворот.",
     "primary_user_journey": "сравнить разделы → уйти в перечень",
@@ -101,5 +101,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.795243+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.805156+00:00"
 }

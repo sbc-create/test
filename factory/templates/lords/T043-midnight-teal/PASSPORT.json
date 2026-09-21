@@ -4,7 +4,7 @@
   "slug": "midnight-teal",
   "version": "1.0.0",
   "family": "modern",
-  "package_digest": "b7c8061d1e903a092c8dadd213ddc20ff90e5ed5679d81ff3412f6b985fe8249",
+  "package_digest": "429ce0a3a3e7e2eae0ab7e60086c596daf514b6896a92e8f6d07bddaa838d534",
   "declared": {
     "design_intent": "Разворот, витрина, мозаика, лента.",
     "primary_user_journey": "чередовать крупное и мелкое",
@@ -106,5 +106,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T20:29:21.596195+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.836955+00:00"
 }

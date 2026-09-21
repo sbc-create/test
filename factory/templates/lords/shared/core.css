@@ -160,6 +160,214 @@ a:focus-visible,input:focus-visible{outline:2px solid var(--brand);outline-offse
 .idx__l{gap:6px}
 .idx__n{font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums}
 
+/* --- ссылка обхода ---------------------------------------------------------
+   Первая цель табуляции. Видима при фокусе, иначе увести с неё фокус некуда. */
+.skip{position:absolute;left:-9999px;top:0;z-index:20;padding:10px 16px;
+  min-height:44px;display:inline-flex;align-items:center;
+  background:var(--brand);color:var(--brand-ink);border-radius:0 0 8px 0}
+.skip:focus{left:0}
+.hd__lb,.srch__lb{position:absolute;width:1px;height:1px;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap}
+
+/* --- оценка и жанры на карточке -------------------------------------------
+   Оценка всегда стоит рядом с именем источника: число без источника — это
+   утверждение, за которое никто не отвечает. */
+.k__r,.k__badge{display:inline-flex;align-items:center;gap:5px;
+  font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.k__rs{color:var(--dim);font-size:10px;letter-spacing:.06em;text-transform:uppercase}
+.k__rv{font-weight:800;color:var(--brand-text)}
+.k__badge{position:absolute;left:8px;top:8px;padding:3px 8px;border-radius:999px;
+  background:rgba(0,0,0,.72);backdrop-filter:none}
+.k__g{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.k__gi{font-size:11px;color:var(--dim);border:1px solid var(--line);
+  border-radius:999px;padding:2px 8px;white-space:nowrap}
+.k__row{display:flex;align-items:center;justify-content:space-between;gap:8px;
+  margin-top:8px;flex-wrap:wrap}
+.k--rich .k__p{aspect-ratio:2/3}
+
+/* Строка перечня: колонки фиксированы, поэтому оценка и год не пляшут.
+   На узком экране колонки схлопываются в две строки, а не жмут заголовок. */
+.k--row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;
+  align-items:center;padding:12px 14px}
+.k--row .k__t{-webkit-line-clamp:2}
+.k--row .k__c1,.k--row .k__c2,.k--row .k__c3,.k--row .k__c4{
+  color:var(--dim);font-size:12px;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis}
+.k--row .k__c3{grid-column:1/-1}
+.g--row{gap:8px}
+.g__hd{display:none}
+@media(min-width:900px){
+  .k--row{grid-template-columns:minmax(0,1fr) 64px 110px minmax(0,220px) 92px}
+  .k--row .k__c3{grid-column:auto}
+  .g__hd{display:grid;grid-template-columns:minmax(0,1fr) 64px 110px minmax(0,220px) 92px;
+    gap:12px;padding:0 14px 6px;color:var(--dim);font-size:11px;
+    text-transform:uppercase;letter-spacing:.06em}
+}
+
+/* --- заголовок раздела ----------------------------------------------------- */
+.ph{margin:20px 0 20px}
+.ph__t{margin:0;font-size:26px;line-height:1.2;display:flex;align-items:baseline;
+  gap:10px;flex-wrap:wrap}
+.ph__n{font-size:14px;color:var(--dim);font-variant-numeric:tabular-nums}
+.ph__d{margin:8px 0 0;color:var(--dim);max-width:var(--measure)}
+
+/* --- хлебные крошки --------------------------------------------------------- */
+.bc{margin:14px 0 0}
+.bc__l{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none;
+  font-size:13px;color:var(--dim)}
+.bc__i+.bc__i::before{content:"/";margin-right:6px;color:var(--line)}
+.bc__a{color:var(--dim)}
+.bc__a:hover,.bc__a:focus-visible{color:var(--brand-text)}
+
+/* --- полоса ----------------------------------------------------------------
+   Прокрутка с привязкой: карточка не замирает наполовину за краем. Мёртвой
+   полосы в начале и конце нет — дорожка не имеет боковых отступов, а
+   привязка выравнивает по началу карточки. */
+.rail__hd{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.rail__nav{display:flex;gap:8px}
+.rail__b{width:44px;height:44px;border-radius:999px;border:1px solid var(--line);
+  background:var(--card);color:var(--ink);font-size:20px;line-height:1;cursor:pointer}
+.rail__b:disabled{opacity:.38;cursor:default}
+.rail__b:hover:not(:disabled){border-color:var(--brand-text)}
+.rail__track{display:grid;grid-auto-flow:column;gap:var(--gap);
+  grid-auto-columns:minmax(148px,1fr);overflow-x:auto;overflow-y:hidden;
+  scroll-snap-type:x mandatory;scrollbar-width:thin;padding-bottom:6px}
+.rail__track>*{scroll-snap-align:start}
+@media(min-width:768px){.rail__track{grid-auto-columns:minmax(180px,1fr)}}
+@media(min-width:1200px){.rail__track{grid-auto-columns:minmax(200px,1fr)}}
+.rail__track:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
+
+/* --- панель фильтров -------------------------------------------------------- */
+.tools__in{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.tools__chips{flex:1 1 320px}
+.chip--f{cursor:pointer;font:inherit;font-size:14px}
+.chip--f[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink);
+  border-color:var(--brand)}
+.chip--r{cursor:pointer;font:inherit;font-size:14px;color:var(--brand-text)}
+.chip__n{margin-left:6px;font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums}
+.chip--f[aria-pressed="true"] .chip__n{color:var(--brand-ink)}
+.tools__sort{display:inline-flex;align-items:center;gap:8px;color:var(--dim);
+  font-size:13px}
+.tools__sel{min-height:44px;padding:0 10px;border-radius:8px;border:1px solid var(--line);
+  background:var(--card);color:var(--ink);font:inherit;font-size:14px}
+.tools__live{margin:10px 0 0;color:var(--dim);font-size:13px}
+
+/* --- перечень и пагинация ---------------------------------------------------- */
+.listing__none{margin:16px 0 0;color:var(--dim)}
+.empty__p{color:var(--dim);max-width:var(--measure)}
+.lnk{color:var(--brand-text);text-decoration:underline}
+.pg{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.pg__l{display:inline-flex;align-items:center;justify-content:center;
+  min-width:44px;min-height:44px;padding:0 12px;border:1px solid var(--line);
+  border-radius:8px;background:var(--card);color:var(--ink);
+  font-variant-numeric:tabular-nums}
+.pg__now{background:var(--brand);color:var(--brand-ink);border-color:var(--brand);
+  font-weight:700}
+
+/* --- поиск ------------------------------------------------------------------- */
+.srch{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}
+.srch__i{flex:1 1 220px;min-height:44px;padding:8px 12px;border-radius:8px;
+  border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit}
+.srch__b{min-height:44px;padding:0 18px;border-radius:8px;border:0;
+  background:var(--brand);color:var(--brand-ink);font:inherit;font-weight:700;
+  cursor:pointer}
+
+/* --- страница тайтла ----------------------------------------------------------
+   Постер не тянется на всю ширину узкого экрана: карточка кино — не обложка
+   книги, и рядом с ней обязан помещаться факт. */
+.ttl{display:grid;gap:var(--gap);grid-template-columns:minmax(0,1fr);margin-top:18px}
+.ttl__media{max-width:220px}
+.ttl__img{aspect-ratio:2/3;object-fit:cover;border-radius:var(--radius);width:100%}
+.ttl__t{margin:0 0 6px;font-size:26px;line-height:1.2;overflow-wrap:anywhere}
+.ttl__sub{margin:0 0 8px;color:var(--dim)}
+.ttl__r{margin:0 0 14px;min-height:20px}
+.ttl__rating{font-size:14px}
+.ttl__cta{display:inline-flex;align-items:center;min-height:44px;padding:0 20px;
+  border-radius:8px;background:var(--brand);color:var(--brand-ink);font-weight:700;
+  margin-bottom:16px}
+.ttl__d{max-width:var(--measure);color:var(--ink)}
+.ttl__d--cut{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;
+  overflow:hidden}
+.ttl__p{margin:0}
+.ttl__more{margin:8px 0 0;min-height:44px;padding:0 14px;border-radius:8px;
+  border:1px solid var(--line);background:var(--card);color:var(--brand-text);
+  font:inherit;cursor:pointer}
+.ttl__facts{display:grid;gap:8px;margin:18px 0 0}
+.ft__r{display:grid;grid-template-columns:minmax(96px,132px) minmax(0,1fr);gap:12px}
+.ft__k{margin:0;color:var(--dim);font-size:13px}
+.ft__v{margin:0;font-size:14px;overflow-wrap:anywhere}
+@media(min-width:768px){
+  .ttl{grid-template-columns:260px minmax(0,1fr);gap:28px}
+  .ttl__media{max-width:260px}
+}
+
+/* Приёмы подачи тайтла. Это не перекраска: меняется порядок чтения — что
+   человек видит первым, постер, заголовок, описание или факты. */
+.ttl--wide .ttl__media{max-width:160px}
+.ttl--wide .ttl__t{font-size:32px}
+@media(min-width:768px){
+  .ttl--wide{grid-template-columns:180px minmax(0,1fr)}
+  .ttl--wide .ttl__t{font-size:40px;letter-spacing:-.02em}
+}
+.ttl--editorial .ttl__d{font-size:17px;line-height:1.65;max-width:62ch}
+.ttl--editorial .ttl__facts{border-top:1px solid var(--line);padding-top:16px}
+@media(min-width:768px){
+  .ttl--editorial{grid-template-columns:minmax(0,1fr) 220px}
+  .ttl--editorial .ttl__media{order:2;max-width:220px}
+  .ttl--editorial .ttl__body{order:1}
+}
+.ttl--panel .ttl__facts{background:var(--soft);border:1px solid var(--line);
+  border-radius:var(--radius);padding:16px}
+.ttl--panel .ttl__body{display:flex;flex-direction:column}
+.ttl--data .ttl__facts{order:-1;margin:0 0 18px;
+  border-left:3px solid var(--brand);padding-left:14px}
+.ttl--data .ttl__body{display:flex;flex-direction:column}
+.ttl--data .ttl__t,.ttl--data .ttl__sub,.ttl--data .ttl__r,.ttl--data .ttl__cta{order:-2}
+
+/* Запасная лестница каталога — на случай пакета без собственной плотной сетки. */
+.g--cat{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.g--cat{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1200px){.g--cat{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* --- сезоны и серии ------------------------------------------------------------
+   Названий серий в источнике нет. Номер — это всё, что подтверждено, и плитка
+   серии построена под номер, а не под выдуманный заголовок. */
+.tabs__l{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.tabs__t{min-height:44px;padding:0 16px;border-radius:8px;border:1px solid var(--line);
+  background:var(--card);color:var(--ink);font:inherit;font-size:14px;cursor:pointer}
+.tabs__t[aria-selected="true"]{background:var(--brand);color:var(--brand-ink);
+  border-color:var(--brand);font-weight:700}
+.eps__sum{margin:0 0 10px;color:var(--dim);font-size:13px}
+.eps{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(92px,1fr))}
+.eps__e{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:56px;border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--card);padding:6px}
+.eps__n{font-weight:800;font-variant-numeric:tabular-nums;font-size:16px}
+.eps__l{font-size:11px;color:var(--dim)}
+.eps__e--soon{opacity:.55}
+.eps__s{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.05em}
+.eps__e:hover,.eps__e:focus-visible{border-color:var(--brand-text)}
+
+/* --- плеер ----------------------------------------------------------------------
+   Рамка держит пропорцию до и после нажатия, поэтому включение просмотра не
+   сдвигает страницу. */
+.player__box{position:relative;aspect-ratio:16/9;width:100%;border-radius:var(--radius);
+  border:1px solid var(--line);background:var(--soft);display:flex;
+  flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  padding:16px;text-align:center}
+.player__go{display:inline-flex;align-items:center;gap:10px;min-height:52px;
+  padding:0 24px;border-radius:999px;border:0;background:var(--brand);
+  color:var(--brand-ink);font:inherit;font-weight:700;font-size:16px;cursor:pointer}
+.player__ico{font-size:18px;line-height:1}
+.player__note{margin:0;color:var(--dim);font-size:13px;max-width:52ch}
+.player__box[data-state="requested"]{background:var(--card)}
+
+/* --- 404 -------------------------------------------------------------------------- */
+.nf{padding:28px 0}
+.nf__t{margin:0 0 10px;font-size:30px}
+.nf__p{color:var(--dim);max-width:var(--measure)}
+.nf__l{margin-top:14px}
+
 /* --- асимметричный разворот ------------------------------------------------ */
 .split__in{display:grid;gap:var(--gap);grid-template-columns:minmax(0,1fr)}
 @media(min-width:900px){.split__in{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}}

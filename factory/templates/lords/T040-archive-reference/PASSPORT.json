@@ -4,7 +4,7 @@
   "slug": "archive-reference",
   "version": "1.0.0",
   "family": "archive",
-  "package_digest": "e36f40b22a42a3bd8d30d0c71023f21b1b282837903dbdd573bcea4daf8e2e6e",
+  "package_digest": "3247c87558f5af5f6f27ab5012143917ac419fee2274bf1b456f91ac5d782d5a",
   "declared": {
     "design_intent": "Без навигации сверху: сразу перечень, потом витрина.",
     "primary_user_journey": "сразу к перечню",
@@ -104,5 +104,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.801097+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.812331+00:00"
 }

@@ -4,7 +4,7 @@
   "slug": "series-split-stream",
   "version": "1.0.0",
   "family": "series-feed",
-  "package_digest": "0aa44e1cb8398eab3bb1ff620852969321d5fddcadeaf93497401a5f29153a8f",
+  "package_digest": "df7561721e77abf675644e5783da4b40c2b4ef3baa92c86391e906ba0d042ce8",
   "declared": {
     "design_intent": "Разворот впереди потока: сначала одна запись крупно, потом поток остальных.",
     "primary_user_journey": "зацепиться за разворот → просмотреть поток",
@@ -100,5 +100,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.615697+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.548524+00:00"
 }

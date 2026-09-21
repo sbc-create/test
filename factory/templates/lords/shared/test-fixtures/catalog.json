@@ -1,647 +1,3131 @@
 {
- "schema": "lords-template-fixture/1",
- "source_revision": "1863a02dbb9beae56ae01fdaa53d5d40",
- "source_built_at": "2026-09-21T03:17:10Z",
- "source_count": 53573,
- "sample_size": 60,
- "fields_present": [
-  "slug",
-  "title",
-  "url",
-  "year",
-  "kind",
-  "poster",
-  "published_at",
-  "published_at_estimated"
- ],
- "absent_fields": [
-  "rating",
-  "genre",
-  "country",
-  "description",
-  "episodes",
-  "premiere_at",
-  "popularity"
- ],
- "kinds": [
-  "Мультфильм",
-  "Сериал",
-  "Фильм"
- ],
- "years": [
-  2026,
-  2025,
-  2024,
-  2023,
-  2022,
-  2020,
-  2019,
-  2016,
-  2015,
-  2011,
-  2006
- ],
- "titles_without_poster": [],
+ "schema": "lords-template-fixture/2",
+ "source": {
+  "catalog": "lords-01-catalog.json",
+  "details": "lords-01-details.json",
+  "root": "первичный каталог витрины вне репозитория",
+  "revision": "1863a02dbb9beae56ae01fdaa53d5d40",
+  "built_at": "2026-09-21T03:17:10Z",
+  "catalog_count": 53573,
+  "details_count": 53573
+ },
+ "sample_size": 55,
  "items": [
   {
    "slug": "korolevskiy-obman",
    "title": "Королевский обман",
+   "original_name": "Royally Screwed",
    "url": "/title/korolevskiy-obman/",
    "year": 2026,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0bea6-027b-7526-baf0-33197a1fc192.webp",
+   "genres": [
+    "мелодрама",
+    "западный контент"
+   ],
+   "countries": [
+    "Великобритания"
+   ],
+   "description": "Бунтарный принц и остроумная официантка сталкиваются на Манхэттене, и вспыхивает королевский роман, который бросает вызов традициям, жёлтой прессе и самой короне.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T11:49:21Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
   },
   {
    "slug": "stalker-s-togo-sveta",
    "title": "Сталкер с того света",
+   "original_name": "Look Who's Stalking",
    "url": "/title/stalker-s-togo-sveta/",
    "year": 2023,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0bea3-7ff0-7526-ab48-df49e71594d2.webp",
+   "genres": [
+    "триллер",
+    "драма",
+    "западный контент"
+   ],
+   "countries": [
+    "США"
+   ],
+   "description": "Доктор Хоуп Коннорс спасается от преследователя и решает перевезти свою семью в пригород, чтобы начать жизнь заново. Но когда снова появляются странные признаки того, что ее преследователь вернулся, она снова погружается в страх и паранойю.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T11:46:49Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
   },
   {
    "slug": "dok-hollidey-2",
    "title": "Док Холлидей 2",
+   "original_name": "Doc Holliday 2",
    "url": "/title/dok-hollidey-2/",
    "year": 2024,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0bea2-c8e7-7526-9e46-c95b7a11d27d.webp",
+   "genres": [
+    "драма",
+    "вестерн",
+    "западный контент"
+   ],
+   "countries": [
+    "США"
+   ],
+   "description": "Приключения Дока Холлидея продолжаются: он оказывается на скамье подсудимых по обвинению в убийстве пропавшего игрока в фаро.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T11:45:47Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
   },
   {
    "slug": "vina-5",
    "title": "Вина",
+   "original_name": "The Blame",
    "url": "/title/vina-5/",
    "year": 2026,
    "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
    "poster": "https://poster.cdnvideohub.com/01a0be87-1f76-7526-b68c-ff0dc48e4806.webp",
+   "genres": [
+    "триллер",
+    "драма",
+    "криминал",
+    "детектив",
+    "западный контент"
+   ],
+   "countries": [
+    "Великобритания"
+   ],
+   "description": "Уэйкстед всегда слыл тихим уголком, где главными новостями были победы местной хоккейной команды да споры о ремонте моста. Но всё меняется, когда в парке обнаруживают тело молодой фигуристки — талантливой девушки, чьи выступления собирали сотни зрителей. За дело берутся детективы Эмма Крэйн и Том Рэдли: поначалу они надеются быстро установить мотив и найти виновного, но город встречает их стеной молчания. Каждый свидетель либо отводит взгляд, либо выдаёт заученные фразы, а в полицейском управлении витает напряжение, будто все знают больше, чем говорят. Вскоре Эмма и Том понимают: они столкнулись не с одиночным преступлением, а с тщательно выстроенной системой обмана. В поисках убийцы им предстоит бросить вызов влиятельным фигурам, раскопать многолетние секреты и рискнуть всем, что им дорого.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T11:16:33Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 6,
+     "avail": 6
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
   },
   {
    "slug": "amerikanskiy-zalozhnik",
    "title": "Американский заложник",
+   "original_name": "American Hostage",
    "url": "/title/amerikanskiy-zalozhnik/",
    "year": 2026,
    "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
    "poster": "https://poster.cdnvideohub.com/01a0be13-29de-7526-b41e-09789c0589ce.webp",
+   "genres": [
+    "триллер",
+    "драма",
+    "криминал",
+    "западный контент"
+   ],
+   "countries": [
+    "США"
+   ],
+   "description": "1970-е годы. Любимый радиожурналист из Индианаполиса Фред Хекман оказывается в центре смертельно опасного кризиса. Захватчик заложников Тони Киритсис требует интервью в его популярной новостной программе. Киритсис берёт в заложники своего ипотечного брокера Дика Холла , привязав к его шее проволоку, соединённую с дробовиком, и требует, чтобы его голос услышали.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T09:08:42Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 8.0,
+     "votes": 102,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-21T03:33:58Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 8,
+     "avail": 2
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
   },
   {
    "slug": "britva-okkama",
    "title": "Бритва Оккама",
+   "original_name": "Occam's Razor",
    "url": "/title/britva-okkama/",
    "year": 2026,
    "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
    "poster": "https://poster.cdnvideohub.com/01a0be0d-a3ec-78d8-85ff-3fb59ee12445.webp",
+   "genres": [
+    "западный контент",
+    "триллер"
+   ],
+   "countries": [
+    "Сербия"
+   ],
+   "description": "История рассказывает о Соне, адвокате по правам женщин, специализирующейся на случаях домашнего насилия. Она соглашается защищать Луку Гуделя, загадочного владельца IT-компании, которого обвиняют в убийстве его девушки — популярной инфлюенсерки Тамары.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T09:05:32Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 2,
+     "avail": 2
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": false
   },
   {
    "slug": "vtoroy-pilot",
    "title": "Второй пилот",
+   "original_name": "Wingman",
    "url": "/title/vtoroy-pilot/",
    "year": 2025,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0be08-0438-7526-a675-6ea166d845e0.webp",
+   "genres": [
+    "комедия",
+    "западный контент"
+   ],
+   "countries": [
+    "США"
+   ],
+   "description": "Второй пилот Тёрк помогает Бобу вернуть свою невесту Терри — увести её у богатого Казима. Но Тёрку приходится противостоять своему сопернику, второму пилоту Эдди, у которого совершенно другие планы на Боба.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T08:56:33Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 4.7,
+     "votes": 287,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-21T03:33:58Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": false
   },
   {
    "slug": "samogonschik",
    "title": "Самогонщик",
+   "original_name": "The Undistilled",
    "url": "/title/samogonschik/",
    "year": 2026,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0be07-73fb-7526-be49-91112778ab40.webp",
+   "genres": [
+    "триллер",
+    "западный контент"
+   ],
+   "countries": [
+    "США"
+   ],
+   "description": "Одинокий винокур, преследуемый призраками прошлого, оказывается втянут в борьбу с таинственными силами. Наступление ночи превращает его жизнь в настоящее сражение с неизвестностью: древние силы не дают ему покинуть свою землю, скрывающую одну из величайших тайн человечества.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T08:55:55Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 4.3,
+     "votes": 45,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-21T03:33:58Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": false
   },
   {
    "slug": "kak-budto-idealnaya-semya",
    "title": "Как будто идеальная семья",
+   "original_name": "The Seemingly Perfect Family",
    "url": "/title/kak-budto-idealnaya-semya/",
    "year": 2026,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0be06-f3f5-7526-8df0-f33c5b2a4789.webp",
+   "genres": [
+    "триллер",
+    "западный контент"
+   ],
+   "countries": [
+    "США"
+   ],
+   "description": "Молодая женщина, только что покинувшая систему опеки, устраивается няней в состоятельную семью, где оказывается втянутой в супружеские конфликты и тёмные тайны этой семьи.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T08:55:23Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 4.5,
+     "votes": 305,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-21T03:33:58Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": false
   },
   {
    "slug": "shkola-soblazneniya",
    "title": "Школа соблазнения",
+   "original_name": "Scuola di seduzione",
    "url": "/title/shkola-soblazneniya/",
    "year": 2026,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0be06-6578-7526-8f19-93999bb3ef16.webp",
+   "genres": [
+    "комедия",
+    "западный контент"
+   ],
+   "countries": [
+    "Италия"
+   ],
+   "description": "Шесть эмоционально хрупких людей обращаются за советом к любовному тренеру, чтобы справиться со своей неуверенностью и восстановить свои отношения в эпоху цифровых технологий.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T08:54:45Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
   },
   {
    "slug": "salbardi",
    "title": "Салбарди",
+   "original_name": "Salbardi",
    "url": "/title/salbardi/",
    "year": 2026,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0be05-b21b-7526-bf96-ab9b9cf1d3ac.webp",
+   "genres": [
+    "драма",
+    "западный контент"
+   ],
+   "countries": [
+    "Индия"
+   ],
+   "description": "В деревне Салбарди череда загадочных смертей сеет ужас. Офицер Манорама ведет расследование, сталкиваясь с суевериями, политическим давлением и сопротивлением местных жителей.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T08:54:00Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 6.0,
+     "votes": 84,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-21T03:33:58Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": false
   },
   {
    "slug": "may-tay",
    "title": "Май Тай",
+   "original_name": "My Tai",
    "url": "/title/may-tay/",
    "year": 2025,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0be04-ca5c-78d7-b7c3-f894fe090907.webp",
+   "genres": [
+    "западный контент",
+    "комедия"
+   ],
+   "countries": [
+    "Австралия"
+   ],
+   "description": "Двое лучших друзей стремятся создать идеальный коктейль до того,  как их бар снесет местный циклон. Таинственная группировка встает у них на пути, пока они охотятся за идеальным ингредиентом.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T08:53:14Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": false
   },
   {
    "slug": "koshachiy-krik",
    "title": "Кошачий крик",
+   "original_name": "Mačji krik",
    "url": "/title/koshachiy-krik/",
    "year": 2024,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0be04-214f-7526-a051-a75a1a0f35aa.webp",
+   "genres": [
+    "драма",
+    "западный контент"
+   ],
+   "countries": [
+    "Канада",
+    "Хорватия",
+    "Сербия"
+   ],
+   "description": "Когда в семье рождается особенный ребенок с редким генетическим заболеванием — синдромом \"кошачьего крика\", родители девочки оказываются не готовы нести этот крест. От малышки готовы отказаться все, кроме ее пожилых бабушки и дедушки. Ради спасения внучки они вступают в неравную войну с бюрократией, бедностью и собственной семьей. Пронзительная, основанная на реальных реалиях драма о безусловной любви, верности и силе человеческого духа, способной преодолеть любые преграды.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T08:52:19Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 7.6,
+     "votes": 57,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-21T03:33:58Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": false
   },
   {
    "slug": "ketchup-na-vaflyah",
    "title": "Кетчуп на вафлях",
+   "original_name": "Ketchup on Waffles",
    "url": "/title/ketchup-na-vaflyah/",
    "year": 2024,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0be03-9842-7526-ba96-6992d7436d56.webp",
+   "genres": [
+    "ужасы",
+    "криминал",
+    "комедия",
+    "западный контент"
+   ],
+   "countries": [
+    "США"
+   ],
+   "description": "Трое вооружённых мужчин в разноцветных масках врываются в ночное кафе студенческого городка и запирают посетителей внутри. Их лидер превращает обычный вечер в жестокую игру, подвергая заложников унижениям, психологическим пыткам и бессмысленному насилию. По мере того как ночь становится всё страшнее, оказавшиеся в ловушке люди пытаются найти способ выжить и остановить нападающих.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T08:51:44Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 5.2,
+     "votes": 92,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-21T03:33:58Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": false
   },
   {
    "slug": "za-pshenichnymi-polyami",
    "title": "За пшеничными полями",
+   "original_name": "Kankaan De Ohle",
    "url": "/title/za-pshenichnymi-polyami/",
    "year": 2026,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0bdfc-95b8-7526-9536-38e45326dbc2.webp",
+   "genres": [
+    "драма",
+    "западный контент"
+   ],
+   "countries": [
+    "Индия"
+   ],
+   "description": "Молодая вдова, ещё в детстве выданная замуж за пожилого человека, оказывается в центре истории, которая бросает вызов устоям общества. Этот необычный союз становится для обоих настоящим эмоциональным путешествием: то, что началось как вынужденный брак, постепенно заставляет их переосмыслить понятия человечности, сострадания и подлинной связи между людьми. Изменит ли эта невероятная близость их жизни навсегда?",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T08:44:02Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 8.8,
+     "votes": 388,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-21T03:33:58Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": false
   },
   {
    "slug": "bog-ne-pomozhet",
    "title": "Бог не поможет",
+   "original_name": "God Will Not Help",
    "url": "/title/bog-ne-pomozhet/",
    "year": 2025,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0bdfb-5736-7526-a3bf-357f7ecf47d5.webp",
+   "genres": [
+    "драма",
+    "западный контент"
+   ],
+   "countries": [
+    "Хорватия",
+    "Италия",
+    "Румыния",
+    "Греция",
+    "Франция",
+    "Словения"
+   ],
+   "description": "Чилийка Тереза приезжает в хорватскую горную деревню к семье Марко и представляется его вдовой. Она хочет похоронить его останки на родной земле — но с местными у неё не складывается: она не понимает их речь, они не понимают её. Чем дольше она остаётся, тем яснее становится, что её прошлое скрывает куда больше, чем она рассказывает.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T08:42:40Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
   },
   {
    "slug": "skvoz-ogon-2",
    "title": "Сквозь огонь",
+   "original_name": "Drive Through Fire",
    "url": "/title/skvoz-ogon-2/",
    "year": 2026,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0bdfa-c01b-7526-b935-5dc649432bfd.webp",
+   "genres": [
+    "боевик",
+    "криминал",
+    "триллер",
+    "западный контент"
+   ],
+   "countries": [
+    "США"
+   ],
+   "description": "Бывший военный Джейсон работает таксистом и подбирает пассажирку, которая оказывается жертвой торговли людьми. Он решает спасти девушку любой ценой. Теперь за ними охотятся влиятельные преступники, коррумпированные чиновники и безжалостные убийцы. Чтобы выжить, Джейсону придётся вновь столкнуться с демонами прошлого.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T08:42:05Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 4.2,
+     "votes": 185,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-21T03:33:58Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": false
   },
   {
    "slug": "sumerki-4",
    "title": "Сумерки",
+   "original_name": "Demring",
    "url": "/title/sumerki-4/",
    "year": 2025,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0bdfa-1620-78d7-bb0d-31e89b3a2d8e.webp",
+   "genres": [
+    "ужасы",
+    "драма",
+    "западный контент"
+   ],
+   "countries": [
+    "Норвегия"
+   ],
+   "description": "Три сестры приезжают в уединённый загородный дом, чтобы помочь младшей из них прийти в себя после попытки самоубийства. Девушки хотят восстановить близость и найти душевный покой на природе, но обстановка быстро перестаёт быть мирной, когда у порога появляется пугающий незнакомец.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T08:41:23Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
   },
   {
    "slug": "500-mil",
    "title": "500 миль",
+   "original_name": "500 Miles",
    "url": "/title/500-mil/",
    "year": 2026,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0bdf9-581b-78d7-91d2-135db167f4c3.webp",
+   "genres": [
+    "драма",
+    "западный контент"
+   ],
+   "countries": [
+    "Великобритания",
+    "Ирландия",
+    "Кипр"
+   ],
+   "description": "Два брата сбегают из дома в Англии, чтобы добраться до живущего на западном побережье Ирландии дедушки, с которым они давно не общаются.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T08:40:36Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
   },
   {
    "slug": "shahty-strasti",
    "title": "Шахты страсти",
+   "original_name": "Minas de pasión",
    "url": "/title/shahty-strasti/",
    "year": 2023,
    "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
    "poster": "https://poster.cdnvideohub.com/01a0bde5-ad9d-7526-af72-674658323426.webp",
+   "genres": [
+    "драма",
+    "западный контент"
+   ],
+   "countries": [
+    "Мексика"
+   ],
+   "description": "Эмилия, мать-одиночка, работающая на шахте, влюбляется в Леонардо, сына Роберты Кастро, самой влиятельной женщины в округе. Роберта решает отомстить Эмилии и делает ее жизнь невыносимой.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T08:19:02Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 107,
+     "avail": 9
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
   },
   {
    "slug": "vnutri-zakoldovannyh-lesov",
    "title": "Внутри Заколдованных Лесов",
+   "original_name": "Inside the Enchanted Forests",
    "url": "/title/vnutri-zakoldovannyh-lesov/",
    "year": 2024,
    "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
    "poster": "https://poster.cdnvideohub.com/01a0bde1-6344-78d7-876d-74de6d3e161d.webp",
+   "genres": [
+    "западный контент",
+    "приключения",
+    "документальный"
+   ],
+   "countries": [
+    "США"
+   ],
+   "description": "Сериал о дикой природе, премьера которого состоялась 6 декабря 2024 года, покажет вам разнообразные леса по всему миру, от тропиков до полюсов. Исследуя диких обитателей этих очаровательных экосистем и то, как леса поддерживают существование множества видов.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T08:17:51Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 7.6,
+     "votes": 65,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-21T03:33:58Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 6,
+     "avail": 6
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": false
   },
   {
    "slug": "simvoly-dikoy-iberii",
    "title": "Символы дикой Иберии",
+   "original_name": "Iconos salvajes de Iberia",
    "url": "/title/simvoly-dikoy-iberii/",
    "year": 2022,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0bd88-281f-7526-a020-a561d6c4cf8b.webp",
+   "genres": [
+    "документальный",
+    "западный контент"
+   ],
+   "countries": [
+    "Испания"
+   ],
+   "description": "В южной Европе, на Иберийском полуострове, жили животные, чья невероятная сила и почти сверхъестественные способности вызывали восхищение и почитание в различных культурах, от доисторических времен до наших дней. Эти животные до сих пор обитают на Иберийском полуострове и являются главными героями удивительных историй, которые мы раскрываем в этом документальном фильме.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T06:36:52Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 6.2,
+     "votes": 12,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-21T03:33:58Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": false
   },
   {
    "slug": "nerasskazannoe-mister-ti-zhal-etogo-glupca",
    "title": "Нерассказанное: Мистер Ти: Жаль этого глупца",
+   "original_name": "Untold Mr. T: I Pity the Fool",
    "url": "/title/nerasskazannoe-mister-ti-zhal-etogo-glupca/",
    "year": 2026,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0bd82-14fb-78d3-b47f-253e76fd1bdb.webp",
+   "genres": [
+    "западный контент",
+    "спорт",
+    "документальный",
+    "криминал",
+    "биография"
+   ],
+   "countries": [
+    "США"
+   ],
+   "description": "Как обычный парень из Чикаго стал живой легендой 80-х? Документальный фильм раскрывает подлинную историю Лоренса Тьюро младшего — человека, которого весь мир узнал под именем Мистер Ти. Путь от вышибалы до культового ирокеза, золотых цепей и главных ролей в \"Команде А\" и \"Рокки 3\" рассказан из первых уст. Вдохновляющая история успеха, скрытая за грозным экранным образом.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-20T06:34:48Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": false
   },
   {
    "slug": "vyzhivanie-v-dikoy-prirode",
    "title": "Выживание в дикой природе",
+   "original_name": "Wild Survival",
    "url": "/title/vyzhivanie-v-dikoy-prirode/",
    "year": 2015,
    "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
    "poster": "https://poster.cdnvideohub.com/01a0ba0e-03a3-7526-9f7a-7be1d4093df7.webp",
+   "genres": [
+    "документальный",
+    "западный контент"
+   ],
+   "countries": [
+    "Южная Корея"
+   ],
+   "description": "Рассказ о том, что значит выживать в природе, раскрытие секретов выживания некоторых животных.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-19T14:24:36Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 5,
+     "avail": 5
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
   },
   {
    "slug": "missiya-taynyy-agent-v-opere",
    "title": "Миссия: Тайный агент в опере",
+   "original_name": "M.I.S.S.I.O.N. ~歌劇な潜入捜査官",
    "url": "/title/missiya-taynyy-agent-v-opere/",
    "year": 2026,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0b99e-85a8-7526-b35d-fcfd1db208e4.webp",
+   "genres": [
+    "комедия",
+    "детектив",
+    "Гендерная интрига",
+    "дорама"
+   ],
+   "countries": [
+    "Япония"
+   ],
+   "description": "Мацуми Каната — детектив с острым умом и исключительными спортивными способностями, но испытывающий трудности в общении с людьми. Однажды Канате поручают совершенно секретное задание — внедриться под прикрытием в качестве студента, чтобы найти виновника серии взрывов беспилотников в художественном университете Цубакино. Однако, поскольку до недавнего времени это был женский университет, и большинство студентов там были женского пола, Каната решает слиться с толпой, переодевшись в девушку.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-19T12:23:00Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 4.2,
+     "votes": 5,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-21T03:33:58Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
   },
   {
    "slug": "moi-dva-centa",
    "title": "Мои два цента",
+   "original_name": "Due spicci",
    "url": "/title/moi-dva-centa/",
    "year": 2026,
    "kind": "Мультфильм",
+   "type": "tv",
+   "is_series": true,
    "poster": "https://poster.cdnvideohub.com/01a0b968-d475-7526-b770-b3d8ca974c8d.webp",
+   "genres": [
+    "мультфильм",
+    "драма",
+    "комедия",
+    "западный контент"
+   ],
+   "countries": [
+    "Италия"
+   ],
+   "description": "Зерокалькар и Синьяле изо всех сил пытаются удержать на плаву их тусовку в районе, но проблемы с деньгами накапливаются, общение сходит на нет, а их личные драмы выходят из-под контроля, подвергая испытанию их дружбу и решимость.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-19T11:24:10Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 8.3,
+     "votes": 2755,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-20T03:32:33Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 4,
+     "avail": 4
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
   },
   {
    "slug": "plennica-6",
    "title": "Пленница",
+   "original_name": "Cautiva",
    "url": "/title/plennica-6/",
    "year": 2026,
    "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
    "poster": "https://poster.cdnvideohub.com/01a0b924-90a6-78a4-9049-1fd43b11d3d4.webp",
+   "genres": [
+    "западный контент",
+    "драма"
+   ],
+   "countries": [
+    "Аргентина"
+   ],
+   "description": "Молодая девушка Клара уходит в закрытый монастырь, следуя религиозному призванию. Там она сталкивается с жестокостью матери-настоятельницы, которая превращает жизнь монахинь в средневековый ад, используя веру как оружие. Спустя 15 лет истощенная Клара сбегает из монастыря и начинает борьбу за справедливость и восстановление своей жизни.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-19T10:11:41Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 6.8,
+     "votes": 18,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-21T03:33:58Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 6,
+     "avail": 6
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": false
   },
   {
    "slug": "nash-vcherashniy-pobeg",
    "title": "Наш вчерашний побег",
+   "original_name": "Our Yesterday's Escape",
    "url": "/title/nash-vcherashniy-pobeg/",
    "year": 2026,
    "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
    "poster": "https://poster.cdnvideohub.com/01a0b8fc-2a80-7526-b193-0bcda1d79ec5.webp",
+   "genres": [
+    "романтика",
+    "дорама"
+   ],
+   "countries": [
+    "Филиппины"
+   ],
+   "description": "Киерра - студентка архитектурного факультета, которая только что вырвалась из токсичных (абьюзивных) отношений. Шан - плейбой-студент юридического факультета. Может ли случайная связь на одну ночь между этими двумя привести к любви, способной исцелить их травмы?",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-19T09:25:29Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 20,
+     "avail": 1
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
   },
   {
    "slug": "nedetskie-igry-2",
    "title": "Недетские игры",
+   "original_name": "The Only Child",
    "url": "/title/nedetskie-igry-2/",
    "year": 2024,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0b890-5434-7526-a42a-ecdeb48817cc.webp",
+   "genres": [
+    "ужасы",
+    "триллер",
+    "западный контент"
+   ],
+   "countries": [
+    "США"
+   ],
+   "description": "После смерти матери девочка начинает опасную игру против новой избранницы отца, решив любой ценой выжить чужачку из дома.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-19T07:27:43Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 4.7,
+     "votes": 59,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-20T03:32:33Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
   },
   {
    "slug": "pravda-ili-zagovor",
    "title": "Правда или заговор",
+   "original_name": "The Bose Files: Sach Ya Sazish",
    "url": "/title/pravda-ili-zagovor/",
    "year": 2026,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0b88f-af55-7526-bdcf-58cedcbb35ac.webp",
+   "genres": [
+    "драма",
+    "западный контент"
+   ],
+   "countries": [
+    "Индия"
+   ],
+   "description": "Картина исследует архивные материалы и различные версии, окружающие загадочную гибель или исчезновение Субхаса Чандры Боса, пытаясь разобраться в том, что произошло на самом деле.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-19T07:27:00Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 7.7,
+     "votes": 565,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-20T03:32:33Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": false
   },
   {
    "slug": "reznya-v-norton-krik",
    "title": "Резня в Нортон-Крик",
+   "original_name": "Norton Creek Massacre",
    "url": "/title/reznya-v-norton-krik/",
    "year": 2026,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0b88f-2897-7526-b530-6416423e5a5e.webp",
+   "genres": [
+    "ужасы",
+    "западный контент"
+   ],
+   "countries": [
+    "США"
+   ],
+   "description": "1998 год. В глухих сосновых лесах на окраине тихого городка Нортон-Крик в Северной Каролине живёт нелюдимый парень, который всю жизнь грезит о славе убийцы. Его единственный настоящий друг - Дрон, настоящий великан, безмолвный и устрашающий громила. Вместе они сеют хаос и разрушения, нападая на местных жителей и случайно оказавшуюся в этих краях банду вампиров.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-19T07:26:26Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 2.4,
+     "votes": 661,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-20T03:32:33Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": false
   },
   {
    "slug": "pervenec-2",
    "title": "Первенец",
+   "original_name": "Il primo figlio",
    "url": "/title/pervenec-2/",
    "year": 2025,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0b88e-a001-7526-992b-db5db29a11f8.webp",
+   "genres": [
+    "ужасы",
+    "драма",
+    "западный контент"
+   ],
+   "countries": [
+    "Италия"
+   ],
+   "description": "Ада и её муж Рино переезжают в уединённую виллу в окружении природы. В ожидании второго ребёнка, Ада оказывается во власти непрожитого горя от потери первенца. С приближением даты родов давно подавляемая скорбь вырывается наружу, и женщина начинает ощущать пугающее присутствие — она убеждена, что её погибший сын вернулся с того света, чтобы помешать рождению второго ребенка.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-19T07:25:51Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 6.1,
+     "votes": 27,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-20T03:32:33Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": false
   },
   {
    "slug": "princessa-i-drakon",
    "title": "Принцесса и дракон",
+   "original_name": "The Princess & The Dragon",
    "url": "/title/princessa-i-drakon/",
    "year": 2026,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0b88d-fb76-7526-87e6-5e39a7c8efa4.webp",
+   "genres": [
+    "ужасы",
+    "западный контент"
+   ],
+   "countries": [
+    "Канада"
+   ],
+   "description": "Очнувшись в заброшенной психиатрической лечебнице, Дженна обнаруживает на себе платье принцессы, а на лице — намертво приклеенную маску. Пока девушка решает странные головоломки, пытаясь собрать всё воедино, по коридорам рыщет дракон. Реальность искажается, обрывки памяти всплывают на поверхность, и Дженне предстоит раскрыть правду до того, как кошмар поглотит её целиком.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-19T07:25:09Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 4.7,
+     "votes": 33,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-20T03:32:33Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": false
   },
   {
    "slug": "kurinyy-gorodok",
    "title": "Куриный городок",
+   "original_name": "Chicken Town",
    "url": "/title/kurinyy-gorodok/",
    "year": 2011,
    "kind": "Мультфильм",
+   "type": "tv",
+   "is_series": true,
    "poster": "https://poster.cdnvideohub.com/01a0b88d-83e5-7526-8e9f-955eb2433cd8.webp",
+   "genres": [
+    "мультфильм",
+    "западный контент"
+   ],
+   "countries": [
+    "Франция"
+   ],
+   "description": "Комедийный мультсериал о злоключениях кур и их хозяев. \"Куриный городок\" расположился в центре города, на парковке автомобилей. В какие только переделки, не попадают действующие персонажи...",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-19T07:24:38Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 39,
+     "avail": 39
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
   },
   {
    "slug": "chya-eto-sobaka",
    "title": "Чья это собака?",
+   "original_name": "Not My Dog",
    "url": "/title/chya-eto-sobaka/",
    "year": 2026,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0b88d-7d87-7526-85b3-088bdc2c0e3a.webp",
+   "genres": [
+    "семейный",
+    "западный контент"
+   ],
+   "countries": [
+    "США"
+   ],
+   "description": "Двенадцатилетняя Бриджет уверена: в её жизни нет места для лишних забот. Поэтому, когда за ней по пятам начинает следовать бродячий пес, она лишь сухо отвечает прохожим: «Это не моя собака». Но у преданного пса свои планы. Чем сильнее Бриджет старается сохранить дистанцию, тем больше понимает — именно этот случайный спутник поможет ей пережить трудные времена и обрести настоящую смелость.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-19T07:24:35Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 9.2,
+     "votes": 47,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-20T03:32:33Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
   },
   {
    "slug": "do-kraya-sveta",
    "title": "До края света",
+   "original_name": "Hasta el Fin del Mundo",
    "url": "/title/do-kraya-sveta/",
    "year": 2026,
    "kind": "Фильм",
+   "type": "movie",
+   "is_series": false,
    "poster": "https://poster.cdnvideohub.com/01a0b88c-cdf1-7526-b19c-2019fb854c6e.webp",
+   "genres": [
+    "драма",
+    "западный контент"
+   ],
+   "countries": [
+    "Испания"
+   ],
+   "description": "Жизнь Мануэля переворачивается с ног на голову, когда ему неожиданно звонит Эсмеральда — его потерянная любовь из прошлого, с которой он расстался 15 лет назад. Несмотря на то что он собирается жениться на другой, Мануэль заново открывает для себя Эсмеральду, и они понимают, что их любовь неподвластна времени.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-19T07:23:51Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 4.8,
+     "votes": 210,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-20T03:32:33Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": false
   },
   {
-   "slug": "elaydzha-pil",
-   "title": "Элайджа Пил",
-   "url": "/title/elaydzha-pil/",
-   "year": 2026,
-   "kind": "Фильм",
-   "poster": "https://poster.cdnvideohub.com/01a0b88c-4add-7526-9b2a-1b1b47b8de31.webp",
-   "published_at": "2026-09-19T07:23:18Z",
-   "published_at_estimated": false
-  },
-  {
-   "slug": "otgoloski-iz-pustoty",
-   "title": "Отголоски из пустоты",
-   "url": "/title/otgoloski-iz-pustoty/",
-   "year": 2026,
-   "kind": "Фильм",
-   "poster": "https://poster.cdnvideohub.com/01a0b88b-b453-7526-a4da-d597a0b66a50.webp",
-   "published_at": "2026-09-19T07:22:39Z",
-   "published_at_estimated": false
-  },
-  {
-   "slug": "bratya-po-oruzhiyu-nasledie",
-   "title": "Братья по оружию: Наследие",
-   "url": "/title/bratya-po-oruzhiyu-nasledie/",
-   "year": 2026,
-   "kind": "Фильм",
-   "poster": "https://poster.cdnvideohub.com/01a0b88a-dd86-7526-9b7e-3ea8d33d0096.webp",
-   "published_at": "2026-09-19T07:21:43Z",
-   "published_at_estimated": false
-  },
-  {
-   "slug": "materinskaya-lihoradka",
-   "title": "Материнская лихорадка",
-   "url": "/title/materinskaya-lihoradka/",
-   "year": 2025,
-   "kind": "Фильм",
-   "poster": "https://poster.cdnvideohub.com/01a0b887-da1c-789a-becc-3dcdc38c1888.webp",
-   "published_at": "2026-09-19T07:19:57Z",
-   "published_at_estimated": false
-  },
-  {
-   "slug": "ty-ya-protiv-vsego-mira",
-   "title": "Ты + Я — против всего мира",
-   "url": "/title/ty-ya-protiv-vsego-mira/",
-   "year": 2026,
-   "kind": "Фильм",
-   "poster": "https://poster.cdnvideohub.com/01a0b887-2789-7526-9284-73aedb591137.webp",
-   "published_at": "2026-09-19T07:17:40Z",
-   "published_at_estimated": false
-  },
-  {
-   "slug": "parshivye-ovcy-2",
-   "title": "Паршивые овцы",
-   "url": "/title/parshivye-ovcy-2/",
-   "year": 2025,
-   "kind": "Фильм",
-   "poster": "https://poster.cdnvideohub.com/01a0b887-1cf5-7526-937b-cb2042fe2252.webp",
-   "published_at": "2026-09-19T07:17:39Z",
-   "published_at_estimated": false
-  },
-  {
-   "slug": "posledniy-prokat",
-   "title": "Последний прокат",
-   "url": "/title/posledniy-prokat/",
-   "year": 2026,
-   "kind": "Фильм",
-   "poster": "https://poster.cdnvideohub.com/01a0b885-b695-7526-a1dd-c38852dfca80.webp",
-   "published_at": "2026-09-19T07:16:08Z",
-   "published_at_estimated": false
-  },
-  {
-   "slug": "umnica-gudi",
-   "title": "Умница Гуди",
-   "url": "/title/umnica-gudi/",
-   "year": 2026,
-   "kind": "Фильм",
-   "poster": "https://poster.cdnvideohub.com/01a0b884-d5f8-7526-a1d5-588964d630f5.webp",
-   "published_at": "2026-09-19T07:15:08Z",
-   "published_at_estimated": false
-  },
-  {
-   "slug": "luchshie-iz-luchshih-2",
-   "title": "Лучшие из лучших",
-   "url": "/title/luchshie-iz-luchshih-2/",
-   "year": 2026,
-   "kind": "Фильм",
-   "poster": "https://poster.cdnvideohub.com/01a0b884-3aeb-7526-bcb7-30eed4dc87b7.webp",
-   "published_at": "2026-09-19T07:14:30Z",
-   "published_at_estimated": false
-  },
-  {
-   "slug": "ya-kris-farli",
-   "title": "Я Крис Фарли",
-   "url": "/title/ya-kris-farli/",
-   "year": 2015,
-   "kind": "Фильм",
-   "poster": "https://poster.cdnvideohub.com/01a0b86a-5c2d-7526-89ac-4bee37f051f1.webp",
-   "published_at": "2026-09-19T06:46:13Z",
-   "published_at_estimated": false
-  },
-  {
-   "slug": "amerikanskaya-amazonka",
-   "title": "Американская Амазонка",
-   "url": "/title/amerikanskaya-amazonka/",
-   "year": 2025,
-   "kind": "Сериал",
-   "poster": "https://poster.cdnvideohub.com/01a0b867-b61e-7899-9407-2cac95b69d11.webp",
-   "published_at": "2026-09-19T06:44:43Z",
-   "published_at_estimated": false
-  },
-  {
-   "slug": "9-11-ataka-na-pentagon",
-   "title": "9/11 Атака на Пентагон",
-   "url": "/title/9-11-ataka-na-pentagon/",
-   "year": 2016,
-   "kind": "Фильм",
-   "poster": "https://poster.cdnvideohub.com/01a0b867-1c98-7526-bc4c-39f1c54a16d2.webp",
-   "published_at": "2026-09-19T06:42:41Z",
-   "published_at_estimated": false
-  },
-  {
-   "slug": "pylnye-utesy",
-   "title": "Пыльные утёсы",
-   "url": "/title/pylnye-utesy/",
+   "slug": "zabota-ob-odarennoy-devushke-v-prestizhnoy-shkole-polnoy-vysokoklassnyh-ucheniko",
+   "title": "Забота об одарённой девушке: В престижной школе, полной высококлассных учеников, я буду тайно заботиться о самой красивой девушке (не имеющей никаких жизненных навыков)",
+   "original_name": "Saijo no Osewa: Takane no Hanadarake na Meimonkou de, Gakuin Ichi no Ojousama (Seikatsu Nouryoku Kaimu) wo Kagenagara Osewa suru Koto ni Narimashita",
+   "url": "/title/zabota-ob-odarennoy-devushke-v-prestizhnoy-shkole-polnoy-vysokoklassnyh-ucheniko/",
    "year": 2026,
    "kind": "Сериал",
-   "poster": "https://poster.cdnvideohub.com/01a0b61e-cab8-7b30-896f-872bb722bb97.webp",
-   "published_at": "2026-09-18T20:06:50Z",
-   "published_at_estimated": false
+   "type": "tv",
+   "is_series": true,
+   "poster": "https://poster.cdnvideohub.com/019efa4f-0515-7233-b705-7d555c167a7f.webp",
+   "genres": [
+    "комедия",
+    "романтика",
+    "школа",
+    "аниме"
+   ],
+   "countries": [
+    "Япония"
+   ],
+   "description": "Ицуки Томонари — бедный, но принципиальный старшеклассник, который по воле случая становится спасителем Хинако Коноханы, дочери влиятельного конгломерата. На публике она воплощение элегантности и совершенства, а в быту... очаровательно беспомощное бедствие, способное устроить катастрофу даже при попытке вскипятить воду. Теперь Ицуки приходится быть её помощником, советником и спасательным кругом в одном лице!\nДень за днём он балансирует между здравым смыслом и хаосом, где капризы звучат как признания, а забота постепенно превращается в нечто большее. Так начинается история, где бедность — далеко не самое страшное испытание, а любовь подозрительно похожа на работу с переработками и эмоциональной привязанностью.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
+   "published_at": "2026-06-24T15:45:43Z",
+   "published_at_estimated": false,
+   "ratings": {
+    "shikimori": {
+     "value": 7.1,
+     "votes": null,
+     "provider": "shikimori",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-14T17:56:14Z",
+     "match_state": "external_id_exact+title_verified"
+    }
+   },
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 11,
+     "avail": 11
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [
+    "chernaya-koshka-i-klass-vedm",
+    "uroven-simpatii-mariki-nenormalno-vysokiy",
+    "vtoraya-yunost-haybary",
+    "fan-klub-kirio",
+    "ya-hochu-zakonchit-etu-igru-lyubvi",
+    "akkuratnaya-i-simpatichnaya-devochka-v-moey-novoy-shkole-podruga-detstva-s-kotor",
+    "hanaori-hochet-dratsya-dazhe-posle-pererozhdeniya",
+    "vpered-otryad-mistiki",
+    "pozhaluysta-prostite-moih-mladshih-bratev",
+    "ty-i-ya-polnye-protivopolozhnosti-2",
+    "sto-devushek-kotorye-ochen-ochen-ochen-ochen-ochen-silno-tebya-lyubyat-3",
+    "ya-ta-kto-pytaetsya-izbezhat-obucheniya-dlya-princess"
+   ],
+   "playable": true
   },
   {
-   "slug": "ohota-za-brakom-v-37-eto-pole-bitvy",
-   "title": "Охота за браком в 37 - это поле битвы",
-   "url": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+   "slug": "milyy-vrag",
+   "title": "Милый враг",
+   "original_name": "Dulce enemiga",
+   "url": "/title/milyy-vrag/",
+   "year": 1995,
+   "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
+   "poster": "https://poster.cdnvideohub.com/019f1d2b-ce49-7233-b3db-d440bbc50c15.webp",
+   "genres": [
+    "драма",
+    "мелодрама",
+    "западный контент"
+   ],
+   "countries": [
+    "Венесуэла"
+   ],
+   "description": "Для красивой Виктории Андуесы любовь и ненависть смешиваются, и она больше не способна разделить их, поскольку обстоятельства вынуждают ее стать самым жестоким врагом единственного человека, которого она когда-либо любила. В то время, как Виктория находится в Италии, ее отец проворачивает незаконные финансовые аферы в туристической корпорации, которую возглавляет. Когда один из его служащих, Хулио Сесар Герреро, обнаруживает, что сеньор Андуеса присвоил миллионы, он предает гласности эту информацию, и следующий за этим скандал приводит Андуесу к фатальному сердечному приступу. \n\nВиктория, только что возвратившаяся из Европы, оказывается рядом с отцом в момент его смерти. Полностью неосведомленная в реальных фактах, она убеждена, что ее отец был обвинен несправедливо. Все, что она знает - это то, что он умер из-за конфликта с неким Хулио Сесаром Герреро, и она клянется отомстить любой ценой. Виктория придумывает простой план: она заслужит любовь и доверие Хулио Сесара, станет необходимой для него, обнаружит его слабые места, и затем разрушит его жизнь и репутацию так же, как он разрушил жизнь ее отца. \n\nЧтобы добиться этого, она собирается женить на себе Хулио Сесара. Вооруженная пакетом поддельных документов, обеспечивающих ей новую фамилию, Виктория намеревается завоевать Хулио Сесара - и делает это в рекордно короткий срок. Скоро он безнадежно влюблен в нее, и назначает день их свадьбы. Но планы Виктории имеют неприятные последствия. После причинения ужасного вреда Хулио Сесару она понимает, что глубокая ненависть, которую она чувствовала к нему, превращается в любовь, не поддающуюся контролю...\n\n Хулио Сесар обнаруживает истинную личность Виктории и вынужден сообщить ей реальную историю позора и смерти ее отца... Она понимает свою ошибку, но слишком поздно. Теперь Хулио Сесар жаждет отыграться.., и не проявляет никакого милосердия к ней. Несмотря на их истинные чувства, Виктория и Хулио Сесар обречены быть врагами...",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
+   "published_at": "2026-07-01T10:13:58Z",
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 153,
+     "avail": 153
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [
+    "imperiya-zhenschin",
+    "moya-rodina",
+    "samaya-krasivaya",
+    "bogatye-i-znamenitye",
+    "cvetok-strasti",
+    "karissima",
+    "v-seme",
+    "manuela",
+    "luchshie",
+    "kleopatra",
+    "na-zapad-2",
+    "vne-kampusa"
+   ],
+   "playable": true
+  },
+  {
+   "slug": "horoshaya-doch-2",
+   "title": "Хорошая дочь",
+   "original_name": "The Good Daughter",
+   "url": "/title/horoshaya-doch-2/",
    "year": 2026,
    "kind": "Сериал",
-   "poster": "https://poster.cdnvideohub.com/01a0b555-997e-7526-b37e-4fe1b2b835e8.webp",
-   "published_at": "2026-09-18T16:24:41Z",
-   "published_at_estimated": false
-  },
-  {
-   "slug": "chti-svoyu-mat",
-   "title": "Чти свою мать",
-   "url": "/title/chti-svoyu-mat/",
-   "year": 2026,
-   "kind": "Сериал",
-   "poster": "https://poster.cdnvideohub.com/01a0b545-fc51-7526-9495-11d8c641e5d7.webp",
-   "published_at": "2026-09-18T16:07:38Z",
-   "published_at_estimated": false
-  },
-  {
-   "slug": "operaciya-fortitude",
-   "title": "Операция Fortitude",
-   "url": "/title/operaciya-fortitude/",
-   "year": null,
-   "kind": "Фильм",
-   "poster": "https://poster.cdnvideohub.com/01a0b52d-c68e-7b2a-af01-56b701e668e5.webp",
-   "published_at": "2026-09-18T15:41:57Z",
-   "published_at_estimated": false
+   "type": "tv",
+   "is_series": true,
+   "poster": null,
+   "genres": [
+    "триллер",
+    "драма",
+    "криминал",
+    "западный контент"
+   ],
+   "countries": [
+    "США"
+   ],
+   "description": "Сёстры Куинн, Саманта и Шарлотта, последние двадцать восемь лет пытались по крупицам собрать воедино свои жизни, разрушенные одной ночью насилия.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
+   "published_at": "2026-06-26T09:00:33Z",
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 8,
+     "avail": 0
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [
+    "zavety",
+    "derzost",
+    "propavshaya-bez-vesti",
+    "mys-straha",
+    "reykyavik-fyuzhn",
+    "doch-ognya-mest-bastardy",
+    "nochnoy-operator",
+    "maksima",
+    "gorod-teney",
+    "ograblenie-veka",
+    "gospozha-deshpande",
+    "pobeg-iz-bolivii"
+   ],
+   "playable": true
   },
   {
    "slug": "master-lda-i-plameni-2",
    "title": "Мастер льда и пламени 2",
+   "original_name": "Binghuo Mochu 2",
    "url": "/title/master-lda-i-plameni-2/",
    "year": 2022,
    "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
    "poster": "https://poster.cdnvideohub.com/01a0b507-0813-7526-a2e6-5edf75180827.webp",
+   "genres": [
+    "боевик",
+    "приключения",
+    "фэнтези",
+    "аниме"
+   ],
+   "countries": [
+    "Япония"
+   ],
+   "description": null,
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
    "published_at": "2026-09-18T14:59:02Z",
-   "published_at_estimated": false
+   "published_at_estimated": false,
+   "ratings": {
+    "shikimori": {
+     "value": 7.1,
+     "votes": null,
+     "provider": "shikimori",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-19T03:38:48Z",
+     "match_state": "external_id_exact+title_verified"
+    }
+   },
+   "seasons": [
+    {
+     "n": 2,
+     "eps": 104,
+     "avail": 104
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
   },
   {
-   "slug": "v-poiskah-dzheka-charltona",
-   "title": "В поисках Джека Чарльтона",
-   "url": "/title/v-poiskah-dzheka-charltona/",
-   "year": 2020,
+   "slug": "operaciya-fortitude",
+   "title": "Операция Fortitude",
+   "original_name": "Fortitude",
+   "url": "/title/operaciya-fortitude/",
+   "year": null,
    "kind": "Фильм",
-   "poster": "https://poster.cdnvideohub.com/01a0b49e-18d6-7526-89f8-d7ec21da131a.webp",
-   "published_at": "2026-09-18T13:04:15Z",
-   "published_at_estimated": false
+   "type": "movie",
+   "is_series": false,
+   "poster": "https://poster.cdnvideohub.com/01a0b52d-c68e-7b2a-af01-56b701e668e5.webp",
+   "genres": [
+    "драма",
+    "приключения",
+    "западный контент"
+   ],
+   "countries": [
+    "Великобритания",
+    "США"
+   ],
+   "description": "Фильм основан на реальных событиях из истории британской разведки, раскрывающих невиданные ранее масштабы стратегических операций, направленных на введение в заблуждение руководства Третьего рейха и изменение хода Второй мировой войны. В центре сюжета мастерство легендарных сотрудников британского разведывательного управления — полковника Дадли Кларка и капитана Томаса Аргайла «Тары» Робертсона. Эти офицеры организовали уникальную операцию, включавшую создание ложных армий, изготовление фальшивых образцов военной техники и формирование сети двойных агентов, благодаря чему немецкая разведка оказалась дезориентирована.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
+   "published_at": "2026-09-18T15:41:57Z",
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
   },
   {
-   "slug": "magiya-zatonuvshih-korabley",
-   "title": "Магия затонувших кораблей",
-   "url": "/title/magiya-zatonuvshih-korabley/",
-   "year": 2006,
-   "kind": "Сериал",
-   "poster": "https://poster.cdnvideohub.com/01a0b46e-5498-7526-a790-a1afbe4b03d3.webp",
-   "published_at": "2026-09-18T12:12:05Z",
-   "published_at_estimated": false
-  },
-  {
-   "slug": "tihookeanskie-rassledovaniya",
-   "title": "Тихоокеанские расследования",
-   "url": "/title/tihookeanskie-rassledovaniya/",
-   "year": 2019,
-   "kind": "Сериал",
-   "poster": "https://poster.cdnvideohub.com/01a0b44e-797c-7526-8eb4-e28d9213edf2.webp",
-   "published_at": "2026-09-18T11:37:30Z",
-   "published_at_estimated": false
-  },
-  {
-   "slug": "le-man-55-taynaya-katastrofa",
-   "title": "Ле-Ман '55. Тайная катастрофа",
-   "url": "/title/le-man-55-taynaya-katastrofa/",
-   "year": 2024,
+   "slug": "milan-cortina-winter",
+   "title": "Milan-Cortina Winter",
+   "original_name": null,
+   "url": "/title/milan-cortina-winter/",
+   "year": null,
    "kind": "Фильм",
-   "poster": "https://poster.cdnvideohub.com/01a0b448-bc7e-7526-a128-f9bf6c25382d.webp",
-   "published_at": "2026-09-18T11:31:01Z",
-   "published_at_estimated": false
+   "type": "movie",
+   "is_series": false,
+   "poster": null,
+   "genres": [],
+   "countries": [],
+   "description": null,
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
+   "published_at": "2026-01-26T08:21:38Z",
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [],
+   "seasons_count": null,
+   "voice_studios": [],
+   "recommendations": [
+    "vzroslye-3",
+    "poltora-dnya",
+    "muhi-2",
+    "posledniy-svidetel-2",
+    "operaciya-vozmezdie-2",
+    "albatros-2",
+    "krovavyy-ruchey-2",
+    "chas-rasplaty-2",
+    "vsego-lish-illyuziya",
+    "dom-zhenschin",
+    "pridurki-2",
+    "pridurki-2-5"
+   ],
+   "playable": true
   },
   {
-   "slug": "sryv",
-   "title": "Срыв",
-   "url": "/title/sryv/",
-   "year": 2025,
+   "slug": "the-ultimate-fighter",
+   "title": "The Ultimate Fighter",
+   "original_name": "The Ultimate Fighter",
+   "url": "/title/the-ultimate-fighter/",
+   "year": 2005,
    "kind": "Сериал",
-   "poster": "https://poster.cdnvideohub.com/01a0b413-6203-7526-8349-508bed7790c1.webp",
-   "published_at": "2026-09-18T10:36:41Z",
-   "published_at_estimated": false
+   "type": "tv",
+   "is_series": true,
+   "poster": "https://poster.cdnvideohub.com/019f0d75-b712-7233-96e3-606f6650e27f.webp",
+   "genres": [
+    "реальное тв",
+    "боевик",
+    "спорт",
+    "западный контент"
+   ],
+   "countries": [
+    "США"
+   ],
+   "description": "Заслуженные ветераны промоушена Дэниэл Кормье и Чейл Соннен тренируют две команды бойцов, стремящихся получить контракт с UFC. Шестнадцать претендентов — две вакансии.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
+   "published_at": "2026-06-28T09:01:14Z",
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 13,
+     "avail": 12
+    },
+    {
+     "n": 2,
+     "eps": 14,
+     "avail": 14
+    },
+    {
+     "n": 3,
+     "eps": 14,
+     "avail": 14
+    },
+    {
+     "n": 4,
+     "eps": 13,
+     "avail": 13
+    },
+    {
+     "n": 5,
+     "eps": 13,
+     "avail": 13
+    },
+    {
+     "n": 6,
+     "eps": 14,
+     "avail": 14
+    },
+    {
+     "n": 7,
+     "eps": 14,
+     "avail": 14
+    },
+    {
+     "n": 8,
+     "eps": 13,
+     "avail": 13
+    },
+    {
+     "n": 9,
+     "eps": 13,
+     "avail": 13
+    },
+    {
+     "n": 10,
+     "eps": 14,
+     "avail": 13
+    },
+    {
+     "n": 11,
+     "eps": 13,
+     "avail": 11
+    },
+    {
+     "n": 12,
+     "eps": 12,
+     "avail": 11
+    },
+    {
+     "n": 13,
+     "eps": 11,
+     "avail": 11
+    },
+    {
+     "n": 14,
+     "eps": 11,
+     "avail": 11
+    },
+    {
+     "n": 15,
+     "eps": 13,
+     "avail": 1
+    },
+    {
+     "n": 16,
+     "eps": 13,
+     "avail": 3
+    },
+    {
+     "n": 17,
+     "eps": 13,
+     "avail": 13
+    },
+    {
+     "n": 18,
+     "eps": 15,
+     "avail": 15
+    },
+    {
+     "n": 19,
+     "eps": 13,
+     "avail": 1
+    },
+    {
+     "n": 20,
+     "eps": 15,
+     "avail": 15
+    },
+    {
+     "n": 21,
+     "eps": 15,
+     "avail": 15
+    },
+    {
+     "n": 22,
+     "eps": 14,
+     "avail": 14
+    },
+    {
+     "n": 23,
+     "eps": 15,
+     "avail": 15
+    },
+    {
+     "n": 24,
+     "eps": 15,
+     "avail": 15
+    },
+    {
+     "n": 25,
+     "eps": 16,
+     "avail": 16
+    },
+    {
+     "n": 26,
+     "eps": 13,
+     "avail": 13
+    },
+    {
+     "n": 27,
+     "eps": 15,
+     "avail": 15
+    },
+    {
+     "n": 28,
+     "eps": 15,
+     "avail": 15
+    },
+    {
+     "n": 29,
+     "eps": 12,
+     "avail": 12
+    },
+    {
+     "n": 30,
+     "eps": 12,
+     "avail": 12
+    },
+    {
+     "n": 31,
+     "eps": 12,
+     "avail": 12
+    },
+    {
+     "n": 32,
+     "eps": 12,
+     "avail": 12
+    },
+    {
+     "n": 33,
+     "eps": 12,
+     "avail": 12
+    },
+    {
+     "n": 34,
+     "eps": 12,
+     "avail": 9
+    }
+   ],
+   "seasons_count": 34,
+   "voice_studios": [],
+   "recommendations": [
+    "chudaki",
+    "luchshie-kollekcii-aukciony-goldin",
+    "luchshiy-povar-ameriki-professionaly",
+    "adepta-sororitas-pokayanie",
+    "klesh-a-rama",
+    "nastoyaschaya-zhenschina",
+    "gnev-2",
+    "goluboy-hrebet",
+    "vystoyat-dzhungli",
+    "100-povarov",
+    "volchonok-poisk-lekarstva",
+    "giperdrayv"
+   ],
+   "playable": true
   },
   {
-   "slug": "lyubov-i-remont",
-   "title": "Любовь и ремонт",
-   "url": "/title/lyubov-i-remont/",
-   "year": 2024,
-   "kind": "Фильм",
-   "poster": "https://poster.cdnvideohub.com/01a0b403-b3c5-7526-a1eb-8acf3de5d6cd.webp",
-   "published_at": "2026-09-18T10:15:39Z",
-   "published_at_estimated": false
-  },
-  {
-   "slug": "skandal-4",
-   "title": "Скандал",
-   "url": "/title/skandal-4/",
+   "slug": "bezdna",
+   "title": "Бездна",
+   "original_name": "深渊无间",
+   "url": "/title/bezdna/",
    "year": 2026,
    "kind": "Сериал",
-   "poster": "https://poster.cdnvideohub.com/01a0b3e3-9497-7526-a630-2aa87a498e6e.webp",
-   "published_at": "2026-09-18T09:40:31Z",
-   "published_at_estimated": false
+   "type": "tv",
+   "is_series": true,
+   "poster": "https://poster.cdnvideohub.com/01a085f3-ace2-7526-8001-4d08882817a2.webp",
+   "genres": [
+    "драма",
+    "детектив",
+    "криминал",
+    "боевик",
+    "приключения",
+    "дорама"
+   ],
+   "countries": [
+    "Китай"
+   ],
+   "description": "История о том, как тайны города всплывают на поверхность. Спокойная жизнь консервативного общества рушится из-за веб-романа «Бездна». Его вымышленное повествование точно повторяет детали давно раскрытого реального преступления, которые могли знать только убийца и полиция. Детектив Ли Чэн, новичок в полиции и жаждущий справедливости, втягивается в сложную интеллектуальную дуэль с несколькими подозреваемыми. Его расследование постепенно раскрывает многослойную душераздирающую историю о семейной любви и верной дружбе, которые пошли наперекосяк. Оно исследует тонкую грань между искуплением для одних и неизбежной пустотой для других.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
+   "published_at": "2026-09-09T11:35:34Z",
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 9.2,
+     "votes": 11,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-15T03:32:21Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 16,
+     "avail": 16
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [
+    "zhenskiy-ad",
+    "priblizhaetsya-poslednyaya-noch",
+    "kletka-teney",
+    "pogonya-skvoz-vremya",
+    "purpurnyy-tuman",
+    "gospodin-lu-my-pererodilis-ne-razvodimsya",
+    "cikada",
+    "gepard",
+    "grand-otel",
+    "hloya-i-emma",
+    "padenie-eto-konec",
+    "moemu-dorogomu-muzhu-lozh-idealnoy-zheny"
+   ],
+   "playable": true
+  },
+  {
+   "slug": "ng-morskie-odissei-otkryvaya-tihiy-okean",
+   "title": "NG. Морские одиссеи: Открывая Тихий океан",
+   "original_name": "Voyagers: Exploring Pacific Waters",
+   "url": "/title/ng-morskie-odissei-otkryvaya-tihiy-okean/",
+   "year": 2026,
+   "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
+   "poster": "https://poster.cdnvideohub.com/019fbc55-944a-79e8-ad3e-a934d63f28ec.webp",
+   "genres": [
+    "документальный",
+    "исторический",
+    "приключения",
+    "западный контент"
+   ],
+   "countries": [
+    "Великобритания",
+    "США"
+   ],
+   "description": "Тысячи лет назад отважные мореплаватели отправились через суровый Тихий океан на самодельных каноэ, ориентируясь по звёздам, ветру, птицам и преданиям предков. Их путешествия привели к открытию и заселению островов от Гуама и Фиджи до Гавайев, Новой Зеландии и Рапа-Нуи, создав уникальный мир океанских культур.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
+   "published_at": "2026-08-01T07:59:24Z",
+   "published_at_estimated": false,
+   "ratings": {},
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 2,
+     "avail": 2
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [
+    "sekrety-pchel",
+    "v-puti",
+    "vzlet-i-padenie-civilizacii-mayya",
+    "sovremennye-chudesa-vtoraya-mirovaya-voyna",
+    "amerikanskiy-eksperiment",
+    "pompei-vne-vremeni-s-tomom-hiddlstonom",
+    "rechnye-monstry",
+    "izbrannye-v-dikoy-prirode-s-bearom-grillsom",
+    "gollivudskaya-kriminalnaya-istoriya-mafiya-zahvatyvaet-kino",
+    "evolyuciya",
+    "morskie-pehotincy",
+    "carstvo-zhivotnyh"
+   ],
+   "playable": false
+  },
+  {
+   "slug": "nascar-amerika",
+   "title": "NASCAR Америка",
+   "original_name": "NASCAR Americana",
+   "url": "/title/nascar-amerika/",
+   "year": 2026,
+   "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
+   "poster": "https://poster.cdnvideohub.com/019fef7e-5fd5-7645-8e74-30dc422179d8.webp",
+   "genres": [
+    "западный контент",
+    "документальный"
+   ],
+   "countries": [
+    "США"
+   ],
+   "description": "Проект подробно исследует глубокие культурные корни гонок, их влияние на американское общество и то, как региональное увлечение превратилось в масштабный национальный феномен.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
+   "published_at": "2026-08-11T06:25:26Z",
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 9.0,
+     "votes": 6,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-14T17:54:13Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 3,
+     "avail": 3
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [
+    "sekrety-pchel",
+    "dovertes-mne-lzheprorok",
+    "katavi-zateryannyy-rayskiy-sad-afriki",
+    "eto-peredacha-o-sadovodstve",
+    "demony-gollivuda",
+    "polnyy-sving",
+    "koshmarnye-byvshie",
+    "halk-hogan-nastoyaschiy-amerikanec",
+    "smertonosnye-stranicy-istorii-s-vingom-reymzom",
+    "tuchchi-v-italii",
+    "vtoraya-mirovaya-voyna-s-tomom-henksom",
+    "vyzhivshaya-zemlya"
+   ],
+   "playable": false
+  },
+  {
+   "slug": "plasticheskaya-krasota",
+   "title": "Пластическая красота",
+   "original_name": "ダウンタイム",
+   "url": "/title/plasticheskaya-krasota/",
+   "year": 2026,
+   "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
+   "poster": "https://poster.cdnvideohub.com/01a0aeca-7c92-7526-93ac-fbf76d0ac7d5.webp",
+   "genres": [
+    "драма",
+    "медицина",
+    "дорама"
+   ],
+   "countries": [
+    "Япония"
+   ],
+   "description": "Нумата Фуми — пластический хирург. Она талантливая и мечтает спасать жизни людей, но обстоятельства вынуждают ее перейти в косметическую хирургию. Такое решение приводит к ссоре с Тохямой Рин, которая верит, что пластическая и реконструктивная хирургия спасает жизни.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
+   "published_at": "2026-09-17T09:55:01Z",
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 8.8,
+     "votes": 66,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-19T03:38:45Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 8,
+     "avail": 8
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
+  },
+  {
+   "slug": "operaciya-beloe-more-missiya-nad-gimalayami",
+   "title": "Операция «Белое море»: Миссия над Гималаями",
+   "original_name": "Operation Safed Sagar",
+   "url": "/title/operaciya-beloe-more-missiya-nad-gimalayami/",
+   "year": 2026,
+   "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
+   "poster": "https://poster.cdnvideohub.com/01a0262b-9bf0-71c3-a1f4-cbb6c68d3139.webp",
+   "genres": [
+    "западный контент",
+    "драма",
+    "боевик"
+   ],
+   "countries": [
+    "Индия"
+   ],
+   "description": "В разгар Каргильской войны между Индией и Пакистаном эскадрилья «Золотые стрелы» ВВС Индии отправляется на опасную миссию в тыл врага. Сериал основан на реальных событиях и рассказывает как о боевых вылетах на больших высотах, так и о жизни семей военных.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
+   "published_at": "2026-08-21T21:23:54Z",
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 8.6,
+     "votes": 7051,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-14T17:54:13Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 6,
+     "avail": 6
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [
+    "rassekrechennye",
+    "goluboy-hrebet",
+    "geymovers",
+    "korol-matki",
+    "nastoyaschaya-zhenschina",
+    "v-dikoy-prirode-s-bearom-grillsom",
+    "obychnyy-multik-uteryannye-plenki",
+    "zaklyatyy-vrag",
+    "priklyucheniya-korolevskogo-strelka-sharpa",
+    "giperzvuk",
+    "ekstrennaya-pomosch-53",
+    "emiliya-romanya-dolina-motorov"
+   ],
+   "playable": false
+  },
+  {
+   "slug": "rassledovanie-prestupleniy",
+   "title": "Расследование преступлений",
+   "original_name": "Crime in Progress",
+   "url": "/title/rassledovanie-prestupleniy/",
+   "year": 2026,
+   "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
+   "poster": "https://poster.cdnvideohub.com/01a0237e-a0a6-7178-b6d9-94f236dba1d5.webp",
+   "genres": [
+    "западный контент",
+    "документальный",
+    "реальное тв",
+    "криминал"
+   ],
+   "countries": [
+    "США"
+   ],
+   "description": "Необработанные полицейские видеозаписи запечатлели напряженные уголовные расследования от начала до конца, демонстрируя реальные решения, принимаемые за доли секунды, и драматические столкновения, снятые на нательные видеокамеры, видеорегистраторы и камеры видеонаблюдения.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
+   "published_at": "2026-08-21T08:48:15Z",
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 8.6,
+     "votes": 338,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-14T17:54:13Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 10,
+     "avail": 8
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [
+    "eto-peredacha-o-sadovodstve",
+    "demony-gollivuda",
+    "koshmarnye-byvshie",
+    "k-9-sobachya-rabota-s-dzheymsom-belushi",
+    "eva-longoriya-issleduya-meksiku",
+    "lyubimicy-ameriki-chirlidery-dallas-cowboys",
+    "ted-bandi-dialog-s-dyavolom",
+    "ubiystva-v-den-matcha",
+    "izbrannye-v-dikoy-prirode-s-bearom-grillsom",
+    "gollivudskaya-kriminalnaya-istoriya-mafiya-zahvatyvaet-kino",
+    "shpionka-po-sosedstvu-istoriya-anny-chapman",
+    "detektiv-hole"
+   ],
+   "playable": false
+  },
+  {
+   "slug": "evolyuciya",
+   "title": "Эволюция",
+   "original_name": "Evolution",
+   "url": "/title/evolyuciya/",
+   "year": 2026,
+   "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
+   "poster": "https://poster.cdnvideohub.com/01a018f4-4c67-7454-9c37-d4a97541f355.webp",
+   "genres": [
+    "западный контент",
+    "документальный",
+    "исторический"
+   ],
+   "countries": [
+    "Великобритания"
+   ],
+   "description": "Из одной искры жизни, через миллионы поколений, животные стали разнообразными, причудливыми и прекрасными. Крис Пэкхэм рассказывает эту невероятную историю в поразительных новых подробностях.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
+   "published_at": "2026-08-19T06:45:37Z",
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 8.6,
+     "votes": 177,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-14T17:54:13Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 5,
+     "avail": 5
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [
+    "vtoraya-mirovaya-voyna-s-tomom-henksom",
+    "sovremennye-chudesa-vtoraya-mirovaya-voyna",
+    "dinozavry",
+    "katavi-zateryannyy-rayskiy-sad-afriki",
+    "chernobyl-v-epicentre-katastrofy",
+    "polnyy-sving",
+    "dni-kotorye-potryasli-mir-chernobyl",
+    "amerikanskiy-eksperiment",
+    "pompei-vne-vremeni-s-tomom-hiddlstonom",
+    "gollivudskaya-kriminalnaya-istoriya-mafiya-zahvatyvaet-kino",
+    "eva-longoriya-issleduya-meksiku",
+    "sekrety-pchel"
+   ],
+   "playable": false
+  },
+  {
+   "slug": "v-chetyre-ruki",
+   "title": "В четыре руки",
+   "original_name": "포핸즈",
+   "url": "/title/v-chetyre-ruki/",
+   "year": 2026,
+   "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
+   "poster": "https://poster.cdnvideohub.com/01a0154f-0356-7622-8554-0a7975cf1aa8.webp",
+   "genres": [
+    "драма",
+    "романтика",
+    "Молодёжное",
+    "музыка",
+    "дорама"
+   ],
+   "countries": [
+    "Южная Корея"
+   ],
+   "description": "История о дружбе, любви, соперничестве и взрослении молодых людей, которые встречаются в Корейской школе искусств. Кан Би О учится в этой школе. Он чрезвычайно талантливый пианист. Кан Би О перфекционист и старается во всем быть первым. Окружающие возлагают на парня большие надежды, пророча ему победы в престижных конкурсах. Но его, казалось бы, безоблачная жизнь переворачивается с ног на голову, когда у него появляется соперник. Чхве Чон Ё — вундеркинд-пианист. Жизнь не была к нему благосклонна, поэтому он не обращал внимания на свой талант. Тем не менее, он смог попасть в школу искусств. Талант и усердие Кан Би О вдохновляют Чон Ё. Хон Чжэ Ин - альтистка с очень тонким слухом. Она дружит с Кан Би О.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
+   "published_at": "2026-08-18T14:38:15Z",
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 8.6,
+     "votes": 320,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-14T17:54:13Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 12,
+     "avail": 6
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [
+    "o-divnyy-novyy-mir",
+    "zavtra-snova-na-rabotu",
+    "suprug",
+    "kletki-empatii",
+    "mechtayu-o-tebe",
+    "lyubov-po-menyu",
+    "moy-kumir-moy-debyut",
+    "moy-lyubimyy-sotrudnik",
+    "eta-proklyataya-lyubov",
+    "lovushka-zhelaniya",
+    "horosho-davay-razvedemsya",
+    "poslednee-leto"
+   ],
+   "playable": true
+  },
+  {
+   "slug": "krutoy-uchitel-onidzuka-7",
+   "title": "Крутой учитель Онидзука",
+   "original_name": "GTO (1998)",
+   "url": "/title/krutoy-uchitel-onidzuka-7/",
+   "year": 1998,
+   "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
+   "poster": "https://poster.cdnvideohub.com/01a0a90f-56a0-7526-9015-b01a147e1493.webp",
+   "genres": [
+    "комедия",
+    "Молодёжное",
+    "драма",
+    "дорама"
+   ],
+   "countries": [
+    "Япония"
+   ],
+   "description": "Игровая версия знаменитой манги о двадцатидвухлетнем раздолбае Эйкити Онидзуке, решившем после ухода из банды заняться карьерой учителя. Правда, из многих школ, куда пытался устроиться Онидзука, его приняли лишь в одну, да и то исключительно для того, чтобы он взялся за самый трудный и неуправляемый класс, ученики которого только и делают, что изводят одного учителя за другим. Что ж, с Онидзукой у них такой фокус не пройдет…",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
+   "published_at": "2026-09-16T07:12:30Z",
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 8.4,
+     "votes": 4149,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-17T03:48:26Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 13,
+     "avail": 13
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
+  },
+  {
+   "slug": "drugaya-lyubov-no-ne-ty",
+   "title": "Другая любовь, но не ты",
+   "original_name": "너 말고 다른 연애",
+   "url": "/title/drugaya-lyubov-no-ne-ty/",
+   "year": 2026,
+   "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
+   "poster": "https://poster.cdnvideohub.com/01a09576-adde-7526-aa57-e71c68082e5c.webp",
+   "genres": [
+    "драма",
+    "романтика",
+    "мелодрама",
+    "дорама"
+   ],
+   "countries": [
+    "Южная Корея"
+   ],
+   "description": "Намгун Хо работает помощником менеджера в команде TF в кондитерской Hunmin. Он дружелюбный человек, способный покорить любого за считанные минуты. Люди считают, что он вырос беззаботным, но на самом деле ему пришлось многое пережить из-за своей проблемной матери. Последние 10 лет он встречается с Ли Ми До, которая всегда поддерживала его в трудную минуту. Ли Ми До — кинорежиссер. Она была многообещающей дебютанткой, получившей мировое признание за свою работу в университете, но после этого все ее мечты рухнули, а жизнь пошла под откос. За 10 лет отношений Намгун Хо и  Ли Ми До прониклись друг к другу доверием и уважением, но страсть давно угасла. Теперь они стоят перед выбором - пожениться или попробовать отношения с кем-то еще",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
+   "published_at": "2026-09-12T11:52:58Z",
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 8.4,
+     "votes": 23,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-14T17:54:13Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 14,
+     "avail": 2
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [
+    "pochti-normalnaya-semya",
+    "snimem-eto-nemedlenno",
+    "idealnaya-lyubov",
+    "ver-v-sebya",
+    "zhenschiny-sami-za-sebya",
+    "enn-droid",
+    "zamuzh-za-ubiycu",
+    "pobeg-iz-raya-dlya-pyshek",
+    "zdes-zhivet-zlo-moy-rebenok-ubiyca",
+    "ng-morskie-odissei-otkryvaya-tihiy-okean",
+    "moya-sopernica",
+    "moya-skrytaya-pravda"
+   ],
+   "playable": true
+  },
+  {
+   "slug": "slava",
+   "title": "Слава",
+   "original_name": "成名在望",
+   "url": "/title/slava/",
+   "year": 2026,
+   "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
+   "poster": "https://poster.cdnvideohub.com/019fc896-8bea-7b3b-b0f0-6414bcf85ead.webp",
+   "genres": [
+    "дорама",
+    "детектив",
+    "триллер"
+   ],
+   "countries": [
+    "Тайвань"
+   ],
+   "description": "История рассказывает о трех школьных друзьях, чьи судьбы навсегда изменились в день выпускного из-за трагического инцидента. Тогда они дали клятву больше никогда не встречаться.\nСпустя десять лет Тайвань сотрясает финансовый кризис, а вместе с ним и громкое преступление - прямо из автомобильного тоннеля похищают младшего наследника влиятельной корпорации Sheng Tai Group. Расследование поручают детективу полиции Чэнь Чживею (Лего Ли). В процессе работы он неожиданно воссоединяется со своими старыми друзьями, которые оказываются тесно связаны с этим делом.\nПохищение ради выкупа быстро превращается в запутанный заговор. За ним стоит тень прошлого и мотив скрытой мести людей, чьи жизни были разрушены махинациями этой корпорации. Граница между законом и криминалом стирается, заставляя героев делать тяжелый моральный выбор.\nПроходят годы, но отголоски прошлого не утихают. Новая волна жестоких преступлений вновь сталкивает героев лицом к лицу. Им предстоит пройти через предательство, эмоциональное выгорание и внутренние дилеммы, чтобы раскрыть всю правду и узнать цену искупления старых грехов.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
+   "published_at": "2026-08-03T17:07:24Z",
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 8.4,
+     "votes": 5,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-14T17:54:13Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 14,
+     "avail": 7
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [
+    "temnaya-storona-lyubvi",
+    "yuzhnye-arhivy",
+    "hloya-i-emma",
+    "masterica-kisti",
+    "nezhnyy-poceluy-babochki",
+    "po-zovu-dobrogo-serdca",
+    "na-pomosch-prizrak",
+    "spasatelnyy-krug-bolshe-chem-druzya-menshe-chem-lyubovniki",
+    "dva-riskovyh-parnya",
+    "radiologicheskoe-otdelenie-2",
+    "yaponskiy-nuar",
+    "zhelayu-tvoey-smerti"
+   ],
+   "playable": true
+  },
+  {
+   "slug": "troe-papash",
+   "title": "Трое папаш",
+   "original_name": "3 Papas",
+   "url": "/title/troe-papash/",
+   "year": 2017,
+   "kind": "Сериал",
+   "type": "tv",
+   "is_series": true,
+   "poster": "https://poster.cdnvideohub.com/01a0ae37-cde2-7526-b079-e16fbc70cccc.webp",
+   "genres": [
+    "драма",
+    "комедия",
+    "дорама"
+   ],
+   "countries": [
+    "Япония"
+   ],
+   "description": "Хирабаяши Такуто вместе с двумя своими друзьями Кёхеем и Хаджиме живут в съемной квартире. Они дружат еще со времен старшей школы. Однажды Такуто возвращается домой и обнаруживает...ребенка с запиской \"он твой\". Только \"твой\"  - это чей именно? Вся троица не слишком ответственная, поэтому каждый может быть кондидатом в отцы.",
+   "short_description": null,
+   "duration": null,
+   "premiere_date": null,
+   "published_at": "2026-09-17T07:14:48Z",
+   "published_at_estimated": false,
+   "ratings": {
+    "imdb": {
+     "value": 8.3,
+     "votes": 21,
+     "provider": "imdb-datasets",
+     "scale": 10.0,
+     "retrieved_at": "2026-09-18T04:03:25Z",
+     "match_state": "external_id_exact"
+    }
+   },
+   "seasons": [
+    {
+     "n": 1,
+     "eps": 11,
+     "avail": 10
+    }
+   ],
+   "seasons_count": 1,
+   "voice_studios": [],
+   "recommendations": [],
+   "playable": true
   }
- ]
+ ],
+ "taxonomies": {
+  "genres": [
+   {
+    "name": "западный контент",
+    "slug": "zapadnyy-kontent",
+    "count": 43
+   },
+   {
+    "name": "драма",
+    "slug": "drama",
+    "count": 26
+   },
+   {
+    "name": "триллер",
+    "slug": "triller",
+    "count": 10
+   },
+   {
+    "name": "дорама",
+    "slug": "dorama",
+    "count": 9
+   },
+   {
+    "name": "комедия",
+    "slug": "komediya",
+    "count": 9
+   },
+   {
+    "name": "документальный",
+    "slug": "dokumentalnyy",
+    "count": 8
+   },
+   {
+    "name": "криминал",
+    "slug": "kriminal",
+    "count": 8
+   },
+   {
+    "name": "ужасы",
+    "slug": "uzhasy",
+    "count": 6
+   },
+   {
+    "name": "боевик",
+    "slug": "boevik",
+    "count": 5
+   },
+   {
+    "name": "приключения",
+    "slug": "priklyucheniya",
+    "count": 5
+   },
+   {
+    "name": "детектив",
+    "slug": "detektiv",
+    "count": 4
+   },
+   {
+    "name": "романтика",
+    "slug": "romantika",
+    "count": 4
+   },
+   {
+    "name": "мелодрама",
+    "slug": "melodrama",
+    "count": 3
+   },
+   {
+    "name": "Молодёжное",
+    "slug": "molodezhnoe",
+    "count": 2
+   },
+   {
+    "name": "аниме",
+    "slug": "anime",
+    "count": 2
+   },
+   {
+    "name": "исторический",
+    "slug": "istoricheskiy",
+    "count": 2
+   },
+   {
+    "name": "мультфильм",
+    "slug": "multfilm",
+    "count": 2
+   },
+   {
+    "name": "реальное тв",
+    "slug": "realnoe-tv",
+    "count": 2
+   },
+   {
+    "name": "спорт",
+    "slug": "sport",
+    "count": 2
+   },
+   {
+    "name": "Гендерная интрига",
+    "slug": "gendernaya-intriga",
+    "count": 1
+   },
+   {
+    "name": "биография",
+    "slug": "biografiya",
+    "count": 1
+   },
+   {
+    "name": "вестерн",
+    "slug": "vestern",
+    "count": 1
+   },
+   {
+    "name": "медицина",
+    "slug": "medicina",
+    "count": 1
+   },
+   {
+    "name": "музыка",
+    "slug": "muzyka",
+    "count": 1
+   },
+   {
+    "name": "семейный",
+    "slug": "semeynyy",
+    "count": 1
+   },
+   {
+    "name": "фэнтези",
+    "slug": "fentezi",
+    "count": 1
+   },
+   {
+    "name": "школа",
+    "slug": "shkola",
+    "count": 1
+   }
+  ],
+  "countries": [
+   {
+    "name": "США",
+    "slug": "ssha",
+    "count": 19
+   },
+   {
+    "name": "Великобритания",
+    "slug": "velikobritaniya",
+    "count": 6
+   },
+   {
+    "name": "Япония",
+    "slug": "yaponiya",
+    "count": 6
+   },
+   {
+    "name": "Индия",
+    "slug": "indiya",
+    "count": 4
+   },
+   {
+    "name": "Италия",
+    "slug": "italiya",
+    "count": 4
+   },
+   {
+    "name": "Южная Корея",
+    "slug": "yuzhnaya-koreya",
+    "count": 3
+   },
+   {
+    "name": "Испания",
+    "slug": "ispaniya",
+    "count": 2
+   },
+   {
+    "name": "Канада",
+    "slug": "kanada",
+    "count": 2
+   },
+   {
+    "name": "Сербия",
+    "slug": "serbiya",
+    "count": 2
+   },
+   {
+    "name": "Франция",
+    "slug": "franciya",
+    "count": 2
+   },
+   {
+    "name": "Хорватия",
+    "slug": "horvatiya",
+    "count": 2
+   },
+   {
+    "name": "Австралия",
+    "slug": "avstraliya",
+    "count": 1
+   },
+   {
+    "name": "Аргентина",
+    "slug": "argentina",
+    "count": 1
+   },
+   {
+    "name": "Венесуэла",
+    "slug": "venesuela",
+    "count": 1
+   },
+   {
+    "name": "Греция",
+    "slug": "greciya",
+    "count": 1
+   },
+   {
+    "name": "Ирландия",
+    "slug": "irlandiya",
+    "count": 1
+   },
+   {
+    "name": "Кипр",
+    "slug": "kipr",
+    "count": 1
+   },
+   {
+    "name": "Китай",
+    "slug": "kitay",
+    "count": 1
+   },
+   {
+    "name": "Мексика",
+    "slug": "meksika",
+    "count": 1
+   },
+   {
+    "name": "Норвегия",
+    "slug": "norvegiya",
+    "count": 1
+   },
+   {
+    "name": "Румыния",
+    "slug": "rumyniya",
+    "count": 1
+   },
+   {
+    "name": "Словения",
+    "slug": "sloveniya",
+    "count": 1
+   },
+   {
+    "name": "Тайвань",
+    "slug": "tayvan",
+    "count": 1
+   },
+   {
+    "name": "Филиппины",
+    "slug": "filippiny",
+    "count": 1
+   }
+  ],
+  "years": [
+   {
+    "name": "2026",
+    "slug": "2026",
+    "count": 33
+   },
+   {
+    "name": "2025",
+    "slug": "2025",
+    "count": 5
+   },
+   {
+    "name": "2024",
+    "slug": "2024",
+    "count": 5
+   },
+   {
+    "name": "2023",
+    "slug": "2023",
+    "count": 2
+   },
+   {
+    "name": "2022",
+    "slug": "2022",
+    "count": 2
+   },
+   {
+    "name": "2017",
+    "slug": "2017",
+    "count": 1
+   },
+   {
+    "name": "2015",
+    "slug": "2015",
+    "count": 1
+   },
+   {
+    "name": "2011",
+    "slug": "2011",
+    "count": 1
+   },
+   {
+    "name": "2005",
+    "slug": "2005",
+    "count": 1
+   },
+   {
+    "name": "1998",
+    "slug": "1998",
+    "count": 1
+   },
+   {
+    "name": "1995",
+    "slug": "1995",
+    "count": 1
+   }
+  ],
+  "kinds": [
+   {
+    "name": "Фильм",
+    "slug": "film",
+    "count": 28
+   },
+   {
+    "name": "Сериал",
+    "slug": "serial",
+    "count": 25
+   },
+   {
+    "name": "Мультфильм",
+    "slug": "multfilm",
+    "count": 2
+   }
+  ]
+ },
+ "collections": [
+  {
+   "key": "popular-weekly",
+   "title": "Популярное за неделю",
+   "provenance": "недельный снимок витрины, 2026-W39, режим WEEKLY_SNAPSHOT",
+   "slugs": [
+    "bezdna",
+    "ng-morskie-odissei-otkryvaya-tihiy-okean",
+    "nascar-amerika",
+    "plasticheskaya-krasota",
+    "operaciya-beloe-more-missiya-nad-gimalayami",
+    "rassledovanie-prestupleniy",
+    "evolyuciya",
+    "v-chetyre-ruki",
+    "krutoy-uchitel-onidzuka-7",
+    "drugaya-lyubov-no-ne-ty",
+    "slava",
+    "troe-papash"
+   ]
+  },
+  {
+   "key": "genre-zapadnyy-kontent",
+   "title": "Западный контент",
+   "provenance": "срез каталога по полю genres записи",
+   "slugs": [
+    "korolevskiy-obman",
+    "stalker-s-togo-sveta",
+    "dok-hollidey-2",
+    "vina-5",
+    "amerikanskiy-zalozhnik",
+    "britva-okkama",
+    "vtoroy-pilot",
+    "samogonschik",
+    "kak-budto-idealnaya-semya",
+    "shkola-soblazneniya",
+    "salbardi",
+    "may-tay",
+    "koshachiy-krik",
+    "ketchup-na-vaflyah",
+    "za-pshenichnymi-polyami",
+    "bog-ne-pomozhet",
+    "skvoz-ogon-2",
+    "sumerki-4",
+    "500-mil",
+    "shahty-strasti",
+    "vnutri-zakoldovannyh-lesov",
+    "simvoly-dikoy-iberii",
+    "nerasskazannoe-mister-ti-zhal-etogo-glupca",
+    "vyzhivanie-v-dikoy-prirode"
+   ]
+  },
+  {
+   "key": "genre-drama",
+   "title": "Драма",
+   "provenance": "срез каталога по полю genres записи",
+   "slugs": [
+    "stalker-s-togo-sveta",
+    "dok-hollidey-2",
+    "vina-5",
+    "amerikanskiy-zalozhnik",
+    "salbardi",
+    "koshachiy-krik",
+    "za-pshenichnymi-polyami",
+    "bog-ne-pomozhet",
+    "sumerki-4",
+    "500-mil",
+    "shahty-strasti",
+    "moi-dva-centa",
+    "plennica-6",
+    "pravda-ili-zagovor",
+    "pervenec-2",
+    "do-kraya-sveta",
+    "milyy-vrag",
+    "horoshaya-doch-2",
+    "operaciya-fortitude",
+    "bezdna",
+    "plasticheskaya-krasota",
+    "operaciya-beloe-more-missiya-nad-gimalayami",
+    "v-chetyre-ruki",
+    "krutoy-uchitel-onidzuka-7"
+   ]
+  },
+  {
+   "key": "genre-triller",
+   "title": "Триллер",
+   "provenance": "срез каталога по полю genres записи",
+   "slugs": [
+    "stalker-s-togo-sveta",
+    "vina-5",
+    "amerikanskiy-zalozhnik",
+    "britva-okkama",
+    "samogonschik",
+    "kak-budto-idealnaya-semya",
+    "skvoz-ogon-2",
+    "nedetskie-igry-2",
+    "horoshaya-doch-2",
+    "slava"
+   ]
+  },
+  {
+   "key": "genre-komediya",
+   "title": "Комедия",
+   "provenance": "срез каталога по полю genres записи",
+   "slugs": [
+    "vtoroy-pilot",
+    "shkola-soblazneniya",
+    "may-tay",
+    "ketchup-na-vaflyah",
+    "missiya-taynyy-agent-v-opere",
+    "moi-dva-centa",
+    "zabota-ob-odarennoy-devushke-v-prestizhnoy-shkole-polnoy-vysokoklassnyh-ucheniko",
+    "krutoy-uchitel-onidzuka-7",
+    "troe-papash"
+   ]
+  }
+ ],
+ "edge_cases": {
+  "long_title": "zabota-ob-odarennoy-devushke-v-prestizhnoy-shkole-polnoy-vysokoklassnyh-ucheniko",
+  "long_description": "milyy-vrag",
+  "no_poster": "horoshaya-doch-2",
+  "no_description": "master-lda-i-plameni-2",
+  "no_year": "operaciya-fortitude",
+  "no_genres": "milan-cortina-winter",
+  "many_seasons": "the-ultimate-fighter",
+  "single_season": "vina-5"
+ },
+ "search": {
+  "queries": [
+   {
+    "q": "а",
+    "hits": [
+     "korolevskiy-obman",
+     "stalker-s-togo-sveta",
+     "vina-5",
+     "amerikanskiy-zalozhnik",
+     "britva-okkama",
+     "samogonschik",
+     "kak-budto-idealnaya-semya",
+     "shkola-soblazneniya",
+     "salbardi",
+     "may-tay",
+     "koshachiy-krik",
+     "ketchup-na-vaflyah",
+     "za-pshenichnymi-polyami",
+     "shahty-strasti",
+     "vnutri-zakoldovannyh-lesov",
+     "nerasskazannoe-mister-ti-zhal-etogo-glupca",
+     "vyzhivanie-v-dikoy-prirode",
+     "missiya-taynyy-agent-v-opere",
+     "moi-dva-centa",
+     "plennica-6",
+     "nash-vcherashniy-pobeg",
+     "pravda-ili-zagovor",
+     "princessa-i-drakon",
+     "chya-eto-sobaka",
+     "do-kraya-sveta",
+     "zabota-ob-odarennoy-devushke-v-prestizhnoy-shkole-polnoy-vysokoklassnyh-ucheniko",
+     "milyy-vrag",
+     "horoshaya-doch-2",
+     "master-lda-i-plameni-2",
+     "operaciya-fortitude",
+     "bezdna",
+     "ng-morskie-odissei-otkryvaya-tihiy-okean",
+     "nascar-amerika",
+     "plasticheskaya-krasota",
+     "operaciya-beloe-more-missiya-nad-gimalayami",
+     "rassledovanie-prestupleniy",
+     "krutoy-uchitel-onidzuka-7",
+     "drugaya-lyubov-no-ne-ty",
+     "slava",
+     "troe-papash"
+    ]
+   }
+  ],
+  "empty_query": "щщщыъ"
+ },
+ "absent_fields": {
+  "poster": {
+   "missing": 2,
+   "of": 55,
+   "examples": [
+    "horoshaya-doch-2",
+    "milan-cortina-winter"
+   ]
+  },
+  "description": {
+   "missing": 2,
+   "of": 55,
+   "examples": [
+    "master-lda-i-plameni-2",
+    "milan-cortina-winter"
+   ]
+  },
+  "year": {
+   "missing": 2,
+   "of": 55,
+   "examples": [
+    "operaciya-fortitude",
+    "milan-cortina-winter"
+   ]
+  },
+  "genres": {
+   "missing": 1,
+   "of": 55,
+   "examples": [
+    "milan-cortina-winter"
+   ]
+  },
+  "countries": {
+   "missing": 1,
+   "of": 55,
+   "examples": [
+    "milan-cortina-winter"
+   ]
+  },
+  "duration": {
+   "missing": 55,
+   "of": 55,
+   "examples": [
+    "korolevskiy-obman",
+    "stalker-s-togo-sveta",
+    "dok-hollidey-2"
+   ]
+  },
+  "premiere_date": {
+   "missing": 55,
+   "of": 55,
+   "examples": [
+    "korolevskiy-obman",
+    "stalker-s-togo-sveta",
+    "dok-hollidey-2"
+   ]
+  },
+  "ratings": {
+   "missing": 21,
+   "of": 55,
+   "examples": [
+    "korolevskiy-obman",
+    "stalker-s-togo-sveta",
+    "dok-hollidey-2"
+   ]
+  },
+  "seasons": {
+   "missing": 28,
+   "of": 55,
+   "examples": [
+    "korolevskiy-obman",
+    "stalker-s-togo-sveta",
+    "dok-hollidey-2"
+   ]
+  },
+  "episode_titles": {
+   "missing": 55,
+   "of": 55,
+   "note": "названий серий в источнике нет ни у одной записи; страница эпизода обязана обходиться номером сезона и серии"
+  }
+ },
+ "poster_mode": "absent"
 }

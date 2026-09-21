@@ -4,7 +4,7 @@
   "slug": "lords-series-curated",
   "version": "1.0.0",
   "family": "hybrid",
-  "package_digest": "3d5b99eb076d3ba94b2b43c773718d335b8032da4bc33402edc3de186b571f45",
+  "package_digest": "090e18feec2f8e6f2834f4f121cf1e77731e1ad6da91d6b888c647e4688d0031",
   "declared": {
     "design_intent": "Лента ведёт, мозаика и доска поддерживают.",
     "primary_user_journey": "идти по ленте → уходить в срезы",
@@ -93,5 +93,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.858612+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.912732+00:00"
 }

@@ -4,7 +4,7 @@
   "slug": "premiere-world",
   "version": "1.0.0",
   "family": "premiere",
-  "package_digest": "11644ef2ad8dc588d540910410e601f872f904cbef07388dd6dcfa5b83736ea4",
+  "package_digest": "e91ec8f93238ba3c8f9bc995f64fc1d100f00cd833ee2d4ff6ee7e73ccc27917",
   "declared": {
     "design_intent": "Годы ведут навигацию, разворот и витрина следуют.",
     "primary_user_journey": "выбрать год → уйти в список",
@@ -97,5 +97,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.681157+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.645952+00:00"
 }

@@ -4,7 +4,7 @@
   "slug": "series-timeline",
   "version": "1.0.0",
   "family": "series-feed",
-  "package_digest": "f324b2aeaafcb4b0585246eeaeaafba28b31dd9a20972c930347c8b6ccaa2a8f",
+  "package_digest": "4ff18035055ffc9ea0d8bf45fdf942217dcbec983214b64ee8f6ae3622522f1d",
   "declared": {
     "design_intent": "Хронология: длинная лента сверху, под ней разворот с одной крупной записью.",
     "primary_user_journey": "пройти по времени → остановиться на развороте",
@@ -92,5 +92,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.603582+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.529972+00:00"
 }

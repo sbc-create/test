@@ -4,7 +4,7 @@
   "slug": "curated-cards",
   "version": "1.0.0",
   "family": "curated",
-  "package_digest": "a324c9e853dbe7ed4e663d1119361a3ea1ec7c5a2ffea8e37d735e541b6c8d74",
+  "package_digest": "cd225629bfb210cec584e192a14ae17a0f8517d270a24218b4a661299daae12c",
   "declared": {
     "design_intent": "Доска подборок впереди всего: вход в каталог идёт через раздел, а не через витрину.",
     "primary_user_journey": "выбрать подборку → уйти в её список",
@@ -97,5 +97,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.651512+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.594380+00:00"
 }

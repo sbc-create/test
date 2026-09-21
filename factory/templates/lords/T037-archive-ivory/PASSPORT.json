@@ -4,7 +4,7 @@
   "slug": "archive-ivory",
   "version": "1.0.0",
   "family": "archive",
-  "package_digest": "26b98e83bbce48bc3348bb386f4684e0e016ae6b1720d6b6e90d9497fe221c9b",
+  "package_digest": "5e1e229a2ddfe3af3991166f8d8a9b4e2215fe42fd397d60498dfd44aec999d8",
   "declared": {
     "design_intent": "Светлый архив: воздух вместо плотности, зелёный в фокусе.",
     "primary_user_journey": "читать архив спокойно",
@@ -104,5 +104,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.784141+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.790788+00:00"
 }

@@ -4,7 +4,7 @@
   "slug": "curated-mosaic",
   "version": "1.0.0",
   "family": "curated",
-  "package_digest": "f998e0b385274014f6a86a2f4d6a040351edf7032d4f38b91ecd3491f223af00",
+  "package_digest": "2698f99e92420610f593f9988dfab3f8a8633b3e5a0eb6512c7d2ec0eca76319",
   "declared": {
     "design_intent": "Мозаика ведёт и повторяется внизу в другой плотности: ритм страницы задаётся пролётами.",
     "primary_user_journey": "скользить по мозаике → выбрать крупное",
@@ -78,5 +78,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T20:29:21.393687+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.579097+00:00"
 }

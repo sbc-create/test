@@ -4,7 +4,7 @@
   "slug": "curated-index",
   "version": "1.0.0",
   "family": "curated",
-  "package_digest": "25c760359e0846ee3263b3ff79eece0a9bba3b29c41d75a2c8f564d7832f7011",
+  "package_digest": "fc1bde377da1dc9ff8326f2487fa1ff3c5dae0257da8ae5031ea295c714b5ac6",
   "declared": {
     "design_intent": "Указатель: навигация по буквам и видам ведёт, изображения второстепенны.",
     "primary_user_journey": "найти по букве → уйти в список",
@@ -106,5 +106,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.632808+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.571226+00:00"
 }

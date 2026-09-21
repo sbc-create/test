@@ -4,7 +4,7 @@
   "slug": "archive-emerald",
   "version": "1.0.0",
   "family": "archive",
-  "package_digest": "5fcefa79ea4c7412ec987bfd0f3de47b35362cc06a90161750576e65510a8c25",
+  "package_digest": "91e8e33421e27d723952a0e3b913a91298b27cac8eb98fcd796404f4b0ceda5c",
   "declared": {
     "design_intent": "Самая плотная витрина семейства, навигация компактная. Навигация — буквенный указатель, а не чипы: это другой способ искать.",
     "primary_user_journey": "охватить взглядом весь каталог",
@@ -100,5 +100,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.778484+00:00"
+  "issued_at_utc": "2026-09-21T21:27:15.783106+00:00"
 }
