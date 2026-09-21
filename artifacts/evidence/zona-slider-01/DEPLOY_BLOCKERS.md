@@ -10,7 +10,38 @@ DNS_MUTATIONS=0
 INDEXABILITY_MUTATIONS=0
 ```
 
-## Блокер 1 (P1) — перезапуск подменит витрину чужим шаблоном
+## Блокер 0 (главный) — production Zona не авторизован в манифесте
+
+Это правило фабрики, а не ограничение среды, и оно старше остальных трёх.
+
+`sites/zona-cinema-preview/package.yaml` — единственный пакет Zona в фабрике:
+
+```yaml
+domain: null
+environment: staging
+production_authorized: false
+target_ref: null
+ssh_host_ref: null
+deployment_readiness:
+  status: BLOCKED_INPUT_DOMAIN_TARGET
+  production_blocked_by:
+  - домен не передан
+  - цель выката не передана
+  - production_authorized не подтверждён владельцем
+```
+
+`CLAUDE.md`: «Production требует `production_authorized: true` в manifest»,
+«Успешный staging **не** является разрешением на production», и в Definition
+of Done — нельзя ставить `DONE`, если «production не авторизован в manifest».
+
+То есть штатная команда фабрики для Zona отказывает по замыслу: у пакета нет
+ни домена, ни цели, а авторизация не подтверждена владельцем.
+
+Поставить `production_authorized: true` самому нельзя: это решение владельца о
+домене, правах и индексации, а CLOSED_WORLD запрещает подставлять такие
+значения по своей инициативе. Пустое поле — `BLOCKED_INPUT`, а не разрешение.
+
+## Блокер 1 (P1) — перезапуск откатил бы витрину на сборку без слайдера
 
 Живой процесс `zonafilm.space` запущен НЕ так, как описывает его юнит.
 
