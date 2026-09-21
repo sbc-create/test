@@ -1,0 +1,57 @@
+{
+  "STAGE": "COMMUNITY-RATINGS-07-1PCT-OBSERVATION",
+  "CLEANED_AT": "2026-09-21T11:45:41Z",
+  "CANONICAL_DB": "/srv/site-factory/repo/var/ratings/ratings.sqlite",
+  "POLICY": "delete synthetic vote rows from community_votes; keep community_vote_events audit trail as stage evidence",
+  "BEFORE": {
+    "votes_total": 1,
+    "votes_accepted": 0,
+    "synthetic_rows": 1,
+    "synthetic_accepted_rows": 0
+  },
+  "SYNTHETIC_ROWS_TARGETED": [
+    {
+      "rating_space_id": "yummy",
+      "subject_id": "nova:019e820c-1c30-7466-9e8f-801577489ce1",
+      "actor_id": "0000000000000000000000000000014c",
+      "dimension": "overall",
+      "score": 9,
+      "status": "RETRACTED",
+      "created_at": "2026-09-20T20:40:15Z",
+      "updated_at": "2026-09-20T20:40:52Z",
+      "retracted_at": "2026-09-20T20:40:52Z",
+      "policy_version": "rating_policy_v1",
+      "risk_state": "CLEAR"
+    }
+  ],
+  "SYNTHETIC_VOTE_ROWS_DELETED": 1,
+  "SYNTHETIC_VOTES_REMAINING": 0,
+  "VOTES_TOTAL_AFTER": 0,
+  "VOTES_ACCEPTED_AFTER": 0,
+  "REAL_VOTES_REMAINING": 0,
+  "AGGREGATES_BEFORE": {
+    "animedia|nova:019e820c-1c30-7466-9e8f-801577489ce1|overall": [
+      0,
+      0
+    ],
+    "yummy|nova:019e820c-1c30-7466-9e8f-801577489ce1|overall": [
+      0,
+      0
+    ]
+  },
+  "AGGREGATES_AFTER": {
+    "animedia|nova:019e820c-1c30-7466-9e8f-801577489ce1|overall": [
+      0,
+      0
+    ],
+    "yummy|nova:019e820c-1c30-7466-9e8f-801577489ce1|overall": [
+      0,
+      0
+    ]
+  },
+  "AGGREGATES_UNCHANGED": true,
+  "AGGREGATE_REBUILD_MISMATCHES_AFTER": 0,
+  "SQLITE_INTEGRITY_CHECK_AFTER": "ok",
+  "FOREIGN_KEY_FAILURES_AFTER": 0,
+  "FAKE_USER_VOTES_INSERTED": 0
+}

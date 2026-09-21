@@ -1,0 +1,34 @@
+{
+  "STAGE": "COMMUNITY-RATINGS-07-1PCT-OBSERVATION",
+  "SUITE": "tests/unit/community",
+  "COMMAND": "python3 -m pytest tests/unit/community -q -p no:cacheprovider --no-header",
+  "TEST_RUNS_CONSECUTIVE": 2,
+  "RUN1": {"result": "51 passed", "exit_code": 0, "artifact": "artifacts/evidence/community-ratings-07/07-tests/TEST_RUN1.txt"},
+  "RUN2": {"result": "51 passed", "exit_code": 0, "artifact": "artifacts/evidence/community-ratings-07/07-tests/TEST_RUN2.txt"},
+  "SCOPE_NOTE": "Stage06 reported TESTS=17_unit_PASS_x2, which covered only test_community_ratings_stage06.py (12) plus test_community_ratings_stage6.py (5). Stage07 runs the whole tests/unit/community package (51 tests), which is a strict superset and surfaced two gates Stage06's narrower selection never executed.",
+  "FINDINGS": [
+    {
+      "id": "CR07-T1",
+      "test": "tests/unit/community/test_community_ratings_stage02.py::Stage02PermissionAndBackfillTests::test_admin_rbac",
+      "status_before": "FAILED",
+      "status_after": "PASSED",
+      "kind": "product regression introduced by Stage06",
+      "root_cause": "commit c97d781 (Stage06 B05) rewrote render_admin_list_html and dropped the two read-only markers: '<title>Ratings admin (read-only)</title>' and '<h1>Community ratings — read-only</h1>'. The Stage02 RBAC contract requires the read-scope admin page to declare itself read-only.",
+      "fix": "factory/community/admin_ui.py — restored the read-only marker in the title and the H1 while keeping Stage06's 'no manual vote insert · no external edit · no aggregate paint' wording. No assertion was weakened.",
+      "why_stage06_missed_it": "Stage06 ran only its own two test modules, so the Stage02 contract test never executed in that stage."
+    },
+    {
+      "id": "CR07-T2",
+      "test": "tests/unit/community/test_community_ratings_stage6.py::LedgerServiceTests::test_concurrent_linearizable",
+      "status_before": "FLAKY (failed 2 of 4 full-suite runs; passed in isolation)",
+      "status_after": "PASSED 12/12 under repeated stress",
+      "kind": "test-harness defect, NOT a ledger defect",
+      "root_cause": "threading.Barrier(20) with 100 tasks on a 20-worker pool ran in five waves. On a loaded machine one slow wave exceeded barrier.wait(timeout=5), which breaks a Barrier permanently, so every later wave raised BrokenBarrierError. Characterisation run over 6 attempts: 1 failure, 80 of 100 workers raising BrokenBarrierError, and zero sqlite/busy/linearizability errors of any kind.",
+      "evidence": "artifacts/evidence/community-ratings-07/07-tests/FLAKY_DIAGNOSIS.json",
+      "fix": "replaced the wave barrier with a single threading.Event start gate and explicit future submission, so all 20 concurrent workers are released at once. Contention is unchanged and all three assertions (errors == [], vote_count == 5, ACCEPTED rows == 5) are untouched.",
+      "product_impact": "none — no write path, lock, or aggregate behaviour was changed; the concurrency guarantee itself never failed."
+    }
+  ],
+  "NO_TEST_DELETED_OR_SKIPPED": true,
+  "NO_ASSERTION_WEAKENED": true
+}

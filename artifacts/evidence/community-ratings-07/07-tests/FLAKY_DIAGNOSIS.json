@@ -1,0 +1,31 @@
+{
+  "STAGE": "COMMUNITY-RATINGS-07-1PCT-OBSERVATION",
+  "TEST": "tests/unit/community/test_community_ratings_stage6.py::LedgerServiceTests::test_concurrent_linearizable",
+  "OBSERVED_BEHAVIOUR": {
+    "full_suite_run_a": "1 failed, 50 passed in 97.05s",
+    "full_suite_run_b": "1 failed, 50 passed in 122.94s",
+    "isolated_run": "1 passed in 11.19s",
+    "correlation": "failure only in the slow, fully loaded full-suite runs"
+  },
+  "CHARACTERISATION_BEFORE_FIX": {
+    "method": "reconstructed the test body verbatim and ran it 6 times against a fresh temp store",
+    "attempts": 6,
+    "clean": 5,
+    "failed": 1,
+    "failing_attempt_error_count": 80,
+    "failing_attempt_error_types": ["BrokenBarrierError"],
+    "sqlite_or_busy_errors": 0,
+    "linearizability_assertion_failures": 0,
+    "conclusion": "the barrier broke; the ledger never misbehaved"
+  },
+  "ROOT_CAUSE": "threading.Barrier(20) released in five waves across 100 tasks on a 20-worker pool. barrier.wait(timeout=5) on a loaded machine trips once, and a tripped Barrier is broken for every subsequent wave, so 80 of the remaining workers fail before reaching put_vote at all.",
+  "FIX": "threading.Event start gate + explicit pool.submit, releasing all 20 concurrent workers simultaneously. Same contention, no wave structure, nothing to break.",
+  "VERIFICATION_AFTER_FIX": {
+    "isolated_pytest": "1 passed in 7.03s",
+    "stress_loop": "12/12 pass",
+    "full_suite_run1": "51 passed in 110.35s",
+    "full_suite_run2": "51 passed in 127.73s"
+  },
+  "ASSERTIONS_CHANGED": 0,
+  "TESTS_DELETED_OR_SKIPPED": 0
+}

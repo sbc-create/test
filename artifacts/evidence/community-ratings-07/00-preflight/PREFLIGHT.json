@@ -1,0 +1,35 @@
+{
+  "STAGE": "COMMUNITY-RATINGS-07-1PCT-OBSERVATION",
+  "START_HEAD": "ab9dec90c2084614f9f227730be5240c4d7baefc",
+  "CANONICAL_DB": "/srv/site-factory/repo/var/ratings/ratings.sqlite",
+  "OBSERVATION_STARTED_AT": "2026-09-20T20:39:20Z",
+  "PREFLIGHT_AT": "2026-09-21T11:41:46Z",
+  "BACKUP_PATH": "/srv/site-factory/repo/var/ratings/backups/ratings.sqlite.community07.20260921T114146Z.bak",
+  "BACKUP_DIGEST": "0168354cda3b32eb92c347201490e324813e98748dba1ca72f329261cffef118",
+  "DB_DIGEST_MAIN_FILE": "d2ef7f85f4e57cb89ffca0894cafaea8e77a15a239c0eca8291e3fe505a23ae4",
+  "DB_SIZE_BYTES": 1527808,
+  "SQLITE_INTEGRITY_CHECK": "ok",
+  "FOREIGN_KEY_FAILURES": 0,
+  "WAL_MODE": "wal",
+  "COMMUNITY_VOTES_TOTAL": 1,
+  "COMMUNITY_VOTES_ACCEPTED": 0,
+  "COMMUNITY_VOTE_EVENTS_SINCE_OBS_START": 4,
+  "SYNTHETIC_VOTE_ROWS_PRESENT": 1,
+  "SYNTHETIC_VOTE_ROWS": [
+    {
+      "rating_space_id": "yummy",
+      "subject_id": "nova:019e820c-1c30-7466-9e8f-801577489ce1",
+      "actor_id": "0000000000000000000000000000014c",
+      "dimension": "overall",
+      "score": 9,
+      "status": "RETRACTED",
+      "created_at": "2026-09-20T20:40:15Z",
+      "updated_at": "2026-09-20T20:40:52Z",
+      "retracted_at": "2026-09-20T20:40:52Z",
+      "policy_version": "rating_policy_v1",
+      "risk_state": "CLEAR"
+    }
+  ],
+  "COMMENTS_ROWS": 0,
+  "AGGREGATE_ROWS": 2
+}

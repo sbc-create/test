@@ -1,0 +1,96 @@
+{
+  "STAGE": "COMMUNITY-RATINGS-07-1PCT-OBSERVATION",
+  "CHECKED_AT": "2026-09-21T11:43:14Z",
+  "YUMMY_TITLE_PAGES_PROBED": 4,
+  "YUMMY_TITLE_PAGES": [
+    {
+      "url": "https://yummyani.site/anime/chernyy-fakel",
+      "status": 200,
+      "bytes": 64386,
+      "widget_markers_found": [],
+      "widget_rendered": false,
+      "structured_aggregate_rating": false,
+      "error": null
+    },
+    {
+      "url": "https://yummyani.site/anime/chernyy-klever-2",
+      "status": 200,
+      "bytes": 55354,
+      "widget_markers_found": [],
+      "widget_rendered": false,
+      "structured_aggregate_rating": false,
+      "error": null
+    },
+    {
+      "url": "https://yummyani.site/anime/gorod-dozhdya",
+      "status": 200,
+      "bytes": 54644,
+      "widget_markers_found": [],
+      "widget_rendered": false,
+      "structured_aggregate_rating": false,
+      "error": null
+    },
+    {
+      "url": "https://yummyani.site/anime/dedushkina-lampa",
+      "status": 200,
+      "bytes": 54339,
+      "widget_markers_found": [],
+      "widget_rendered": false,
+      "structured_aggregate_rating": false,
+      "error": null
+    }
+  ],
+  "VOTE_UI_RENDERED_ON_LIVE_TITLE_PAGES": 0,
+  "VOTE_UI_FINDING": "no community-rating markup, asset or API reference on any probed live title page — the Next.js frontend (nova-yummy-site.service) does not mount the vote widget, so no visitor can reach the write path through the UI; only the nginx-proxied JSON API is exposed",
+  "WIDGET_ASSET_PROBES": {
+    "/assets/community/community_rating.js": 404,
+    "/static/community/community_rating.js": 404,
+    "/community/community_rating.js": 404
+  },
+  "PUBLIC_API_REACHABLE": true,
+  "PUBLIC_API_FLAGS": {
+    "PUBLIC_WRITE_ENABLED": 1,
+    "PUBLIC_WRITE_ROLLOUT_PERCENT": 1,
+    "PUBLIC_WRITE_MAX_PERCENT": 1,
+    "KILL_SWITCH": 0,
+    "READ_ONLY": 0,
+    "PUBLIC_SCORE_MODE": "NATIVE_ONLY",
+    "IDENTITY_MODE": "SIGNED_PSEUDONYMOUS_DEVICE_V1",
+    "STRUCTURED_AGGREGATE_RATING_ENABLED": 0,
+    "PUBLIC_WRITE_STARTED_AT": "2026-09-20T20:39:20Z",
+    "OWNER_APPROVAL_ID": "COMMUNITY-RATINGS-YUMMY-PUBLIC-WRITE-1PCT-20260920-01"
+  },
+  "STRUCTURED_AGGREGATE_RATING_ON_LIVE_PAGES": 0,
+  "INDEXABILITY": {
+    "yummyani.site": {
+      "host": "yummyani.site",
+      "root_status": 200,
+      "robots_status": 200,
+      "x_robots": null,
+      "meta_robots": "index, follow",
+      "robots_allow_root": true,
+      "robots_disallow_all": false,
+      "verdict": "OPEN"
+    },
+    "animedia.icu": {
+      "host": "animedia.icu",
+      "root_status": 200,
+      "robots_status": 200,
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "robots_allow_root": false,
+      "robots_disallow_all": true,
+      "verdict": "CLOSED_NOINDEX"
+    },
+    "animedia.space": {
+      "host": "animedia.space",
+      "root_status": 200,
+      "robots_status": 200,
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "robots_allow_root": false,
+      "robots_disallow_all": true,
+      "verdict": "CLOSED_NOINDEX"
+    }
+  }
+}

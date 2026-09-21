@@ -1,0 +1,43 @@
+{
+  "status": 200,
+  "ok": true,
+  "metrics": {
+    "widget_impressions": 49,
+    "eligible_widget_impressions": 0,
+    "write_attempts": 12,
+    "cast_accepted": 0,
+    "update_accepted": 0,
+    "retract_accepted": 0,
+    "rate_limited": 0,
+    "cohort_denied": 9,
+    "csrf_denied": 0,
+    "origin_denied": 0,
+    "invalid_rating_denied": 0,
+    "unknown_title_denied": 0,
+    "cross_space_denied": 1,
+    "quarantined_votes": 0,
+    "active_native_votes": 0,
+    "aggregate_rebuild_mismatches": 0,
+    "db_busy_errors": 0,
+    "write_4xx": 12,
+    "write_5xx": 0,
+    "write_latency_p50": 0.7178990636020899,
+    "write_latency_p95": 1.65683520026505,
+    "kill_switch_state": 0,
+    "rollout_percent": 1,
+    "identities_created": 33,
+    "captured_at": "2026-09-21T12:11:58Z"
+  },
+  "flags": {
+    "PUBLIC_WRITE_ENABLED": 1,
+    "PUBLIC_WRITE_ROLLOUT_PERCENT": 1,
+    "PUBLIC_WRITE_MAX_PERCENT": 1,
+    "KILL_SWITCH": 0,
+    "READ_ONLY": 0,
+    "PUBLIC_SCORE_MODE": "NATIVE_ONLY",
+    "IDENTITY_MODE": "SIGNED_PSEUDONYMOUS_DEVICE_V1",
+    "STRUCTURED_AGGREGATE_RATING_ENABLED": 0,
+    "PUBLIC_WRITE_STARTED_AT": "2026-09-20T20:39:20Z",
+    "OWNER_APPROVAL_ID": "COMMUNITY-RATINGS-YUMMY-PUBLIC-WRITE-1PCT-20260920-01"
+  }
+}

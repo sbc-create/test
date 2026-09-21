@@ -1,0 +1,182 @@
+{
+  "STAGE": "COMMUNITY-RATINGS-07-1PCT-OBSERVATION",
+  "CHECKED_AT": "2026-09-21T11:45:07Z",
+  "LEDGER_BEFORE": {
+    "votes": 1,
+    "accepted": 0,
+    "events": 57
+  },
+  "LEDGER_AFTER": {
+    "votes": 1,
+    "accepted": 0,
+    "events": 57
+  },
+  "LEDGER_UNCHANGED_BY_PROBES": true,
+  "PROBES_RUN": 13,
+  "WRITE_PROBES_DENIED": 12,
+  "IDENTITY_BYPASSES": 0,
+  "IDENTITY_BYPASS_PROBES": [],
+  "CSRF_FAILURES": 0,
+  "XSS_FAILURES": 0,
+  "XSS_REFLECTING_PROBES": [],
+  "RESPONSES_NOT_JSON": [],
+  "RESPONSES_MISSING_NOSNIFF": [],
+  "PROBE_RESULTS": [
+    {
+      "probe": "write_no_cookie",
+      "http_status": 403,
+      "effective_status": 403,
+      "code": "CohortDenied",
+      "error": "not in public-write cohort",
+      "denied": true,
+      "content_type": "application/json; charset=utf-8",
+      "x_content_type_options": "nosniff",
+      "raw_reflects_payload": false,
+      "raw_contains_unescaped_script_tag": false
+    },
+    {
+      "probe": "write_tampered_identity_cookie",
+      "http_status": 401,
+      "effective_status": 401,
+      "code": "IdentityForgery",
+      "error": "malformed identity token",
+      "denied": true,
+      "content_type": "application/json; charset=utf-8",
+      "x_content_type_options": "nosniff",
+      "raw_reflects_payload": false,
+      "raw_contains_unescaped_script_tag": false
+    },
+    {
+      "probe": "write_client_supplied_user_id",
+      "http_status": 401,
+      "effective_status": 401,
+      "code": "IdentityForgery",
+      "error": "client-supplied user_id rejected",
+      "denied": true,
+      "content_type": "application/json; charset=utf-8",
+      "x_content_type_options": "nosniff",
+      "raw_reflects_payload": false,
+      "raw_contains_unescaped_script_tag": false
+    },
+    {
+      "probe": "write_cross_space",
+      "http_status": 403,
+      "effective_status": 403,
+      "code": "CohortDenied",
+      "error": "body rating_space_id rejected",
+      "denied": true,
+      "content_type": "application/json; charset=utf-8",
+      "x_content_type_options": "nosniff",
+      "raw_reflects_payload": false,
+      "raw_contains_unescaped_script_tag": false
+    },
+    {
+      "probe": "write_bad_origin",
+      "http_status": 403,
+      "effective_status": 403,
+      "code": "CohortDenied",
+      "error": "not in public-write cohort",
+      "denied": true,
+      "content_type": "application/json; charset=utf-8",
+      "x_content_type_options": "nosniff",
+      "raw_reflects_payload": false,
+      "raw_contains_unescaped_script_tag": false
+    },
+    {
+      "probe": "write_csrf_token_mismatch",
+      "http_status": 403,
+      "effective_status": 403,
+      "code": "CohortDenied",
+      "error": "not in public-write cohort",
+      "denied": true,
+      "content_type": "application/json; charset=utf-8",
+      "x_content_type_options": "nosniff",
+      "raw_reflects_payload": false,
+      "raw_contains_unescaped_script_tag": false
+    },
+    {
+      "probe": "write_score_zero",
+      "http_status": 403,
+      "effective_status": 403,
+      "code": "CohortDenied",
+      "error": "not in public-write cohort",
+      "denied": true,
+      "content_type": "application/json; charset=utf-8",
+      "x_content_type_options": "nosniff",
+      "raw_reflects_payload": false,
+      "raw_contains_unescaped_script_tag": false
+    },
+    {
+      "probe": "write_score_eleven",
+      "http_status": 403,
+      "effective_status": 403,
+      "code": "CohortDenied",
+      "error": "not in public-write cohort",
+      "denied": true,
+      "content_type": "application/json; charset=utf-8",
+      "x_content_type_options": "nosniff",
+      "raw_reflects_payload": false,
+      "raw_contains_unescaped_script_tag": false
+    },
+    {
+      "probe": "write_score_fraction",
+      "http_status": 403,
+      "effective_status": 403,
+      "code": "CohortDenied",
+      "error": "not in public-write cohort",
+      "denied": true,
+      "content_type": "application/json; charset=utf-8",
+      "x_content_type_options": "nosniff",
+      "raw_reflects_payload": false,
+      "raw_contains_unescaped_script_tag": false
+    },
+    {
+      "probe": "write_score_string",
+      "http_status": 403,
+      "effective_status": 403,
+      "code": "CohortDenied",
+      "error": "not in public-write cohort",
+      "denied": true,
+      "content_type": "application/json; charset=utf-8",
+      "x_content_type_options": "nosniff",
+      "raw_reflects_payload": false,
+      "raw_contains_unescaped_script_tag": false
+    },
+    {
+      "probe": "write_xss_in_score",
+      "http_status": 403,
+      "effective_status": 403,
+      "code": "CohortDenied",
+      "error": "not in public-write cohort",
+      "denied": true,
+      "content_type": "application/json; charset=utf-8",
+      "x_content_type_options": "nosniff",
+      "raw_reflects_payload": false,
+      "raw_contains_unescaped_script_tag": false
+    },
+    {
+      "probe": "read_xss_in_subject_id",
+      "http_status": 200,
+      "effective_status": 200,
+      "code": null,
+      "error": null,
+      "denied": false,
+      "content_type": "application/json; charset=utf-8",
+      "x_content_type_options": "nosniff",
+      "raw_reflects_payload": false,
+      "raw_contains_unescaped_script_tag": false
+    },
+    {
+      "probe": "retract_no_cookie",
+      "http_status": 403,
+      "effective_status": 403,
+      "code": "CohortDenied",
+      "error": "not in public-write cohort",
+      "denied": true,
+      "content_type": "application/json; charset=utf-8",
+      "x_content_type_options": "nosniff",
+      "raw_reflects_payload": false,
+      "raw_contains_unescaped_script_tag": false
+    }
+  ]
+}
