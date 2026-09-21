@@ -366,11 +366,18 @@ class TestМенюШапкиНаСтатическойСтранице:
         СТР.оживить_меню(исходная)
         assert исходная["header"] == self.ШАПКА
 
-    def test_страница_открывает_список_наведением_и_фокусом(self):
+    def test_страница_не_дублирует_чужое_правило_открытия(self):
+        """Списки открывает стиль приложения; своей копии правила здесь нет.
+
+        Измерено на статической странице: `:hover` и `:focus-within` из
+        таблицы приложения работают и без скриптов — `display` становится
+        `block`. Своё такое же правило было бы второй версией чужого, и
+        однажды они разошлись бы.
+        """
         оболочка = {"head": "<head><title>т</title></head>", "header": self.ШАПКА,
                     "footer": "<footer></footer>"}
         страница = СТР.собрать(оболочка, "Т", "лид", "", вариант={
             "акцент": "#6d8cff", "variant_id": "catalog-search"}).decode("utf-8")
-        assert ".portal-dropdown:hover>.portal-dropdown-menu" in страница
-        assert ".portal-dropdown:focus-within>.portal-dropdown-menu" in страница
+        assert "portal-dropdown:hover" not in страница
+        assert "portal-dropdown:focus-within" not in страница
         assert "aria-expanded" not in страница
