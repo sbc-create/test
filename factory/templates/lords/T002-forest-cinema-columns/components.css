@@ -1,0 +1,7 @@
+/* Признак T002: секции разделены левой линией-корешком, а не подчёркиванием. */
+.sec{padding-left:14px;border-left:2px solid var(--brand)}
+.sec__t{border-bottom:0;font-size:17px;text-transform:uppercase;letter-spacing:.06em}
+.k--compact{border-radius:var(--radius);background:var(--soft)}
+.k--poster{background:transparent;border-color:transparent}
+.k--poster .k__p{border-radius:var(--radius);overflow:hidden}
+.k--poster .k__cap{padding:6px 2px 0}

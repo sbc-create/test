@@ -1,0 +1,12 @@
+/* Разреженная сетка: крупные поля важнее плотности, но карточка не растёт
+   бесконечно — колонок на широком экране больше, а не шире. */
+.g--trio{grid-template-columns:minmax(0,1fr)}
+@media(min-width:680px){.g--trio{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+.g--gallery{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.g--gallery{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1024px){.g--gallery{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1440px){.g--gallery{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+.g--adds{grid-template-columns:minmax(0,1fr)}
+@media(min-width:768px){.g--adds{grid-template-columns:repeat(3,minmax(0,1fr))}}

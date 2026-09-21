@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "pool": "lords-50-v1",
+  "generated_at": "2026-09-21T15:20:48.434838+00:00",
+  "note": "Зарегистрированы только существующие пакеты. Пустых записей под нереализованные T006–T050 в пуле нет: запись без пакета выдавала бы домену несуществующий шаблон.",
+  "templates": [
+    {
+      "template_id": "T001",
+      "slug": "forest-cinema-stage",
+      "version": "1.0.0",
+      "family": "forest-cinema",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8b4eae92d58d",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "c20a8ae0f2ba4f960280e7f7728d9b204ae42d0c17f128c32721d5ffa802a9d5",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T002",
+      "slug": "forest-cinema-columns",
+      "version": "1.0.0",
+      "family": "forest-cinema",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8b4eae92d58d",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "fe903ac1cffc5af0f432245c8f164252b2bb65f22609b8a37e530eb126ccd637",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T003",
+      "slug": "forest-cinema-marquee",
+      "version": "1.0.0",
+      "family": "forest-cinema",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8b4eae92d58d",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "d8180a9ef8432515723586dc5a8377005dadd2f4f306f7966c944a1ba4050d41",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "secondary"
+    },
+    {
+      "template_id": "T004",
+      "slug": "forest-cinema-gallery",
+      "version": "1.0.0",
+      "family": "forest-cinema",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8b4eae92d58d",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "36e6cd587ea93f209eae98c7bb408fe83f2a0ff9afc3de4e96bd287bc2a18088",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "accent-only"
+    },
+    {
+      "template_id": "T005",
+      "slug": "forest-cinema-night",
+      "version": "1.0.0",
+      "family": "forest-cinema",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8b4eae92d58d",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "8659b3db6a2f07aae4692bcf4d45cef68aceb288fee49c4e69864eac6b099eb7",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "secondary"
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+#!/usr/bin/env python3
+"""Отрисовка шаблонного пакета в файл для снимков и измерений.
+
+Режим превью подменяет адреса постеров локальным плейсхолдером 2:3. Это не
+косметика: внешнего CDN в allowlist нет, и каждая картинка считалась бы битой —
+измерение геометрии утонуло бы в артефакте сети. Плейсхолдер несёт настоящие
+интринсик-размеры, поэтому рамка, пропорция и высота карточки меряются честно,
+а «битое изображение» остаётся настоящей находкой, а не следствием запрета.
+
+    lords-template-preview --package factory/templates/lords/T001-... --out var/preview
+"""
+
+from __future__ import annotations
+
+import argparse
+import copy
+import importlib.util
+import json
+import pathlib
+import sys
+
+КОРЕНЬ = pathlib.Path(__file__).resolve().parents[1]
+ЯДРО = КОРЕНЬ / "factory" / "templates" / "lords" / "shared"
+ФИКСТУРА = ЯДРО / "test-fixtures" / "catalog.json"
+ПЛЕЙСХОЛДЕР = "assets/placeholder-2x3.svg"
+
+
+def _render():
+    spec = importlib.util.spec_from_file_location("lords_render", ЯДРО / "render.py")
+    модуль = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(модуль)
+    return модуль
+
+
+def подменить_медиа(фикстура: dict) -> dict:
+    """Локальный носитель вместо внешнего. Записи без постера остаются без него."""
+    копия = copy.deepcopy(фикстура)
+    for запись in копия["items"]:
+        if запись.get("poster"):
+            запись["poster"] = ПЛЕЙСХОЛДЕР
+    копия["media_mode"] = "local-placeholder-2x3"
+    return копия
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--package", required=True)
+    parser.add_argument("--out", required=True)
+    parser.add_argument("--fixture", default=str(ФИКСТУРА))
+    parser.add_argument("--real-media", action="store_true",
+                        help="не подменять постеры (требует доступа к CDN)")
+    args = parser.parse_args()
+
+    пакет = pathlib.Path(args.package)
+    if not (пакет / "template.json").is_file():
+        print(f"нет template.json в {пакет}", file=sys.stderr)
+        return 2
+
+    фикстура = json.loads(pathlib.Path(args.fixture).read_text(encoding="utf-8"))
+    if not args.real_media:
+        фикстура = подменить_медиа(фикстура)
+
+    html = _render().отрисовать(пакет, фикстура, ЯДРО)
+
+    каталог = pathlib.Path(args.out) / пакет.name
+    каталог.mkdir(parents=True, exist_ok=True)
+    # Плейсхолдер кладётся рядом со страницей: относительный путь обязан
+    # разрешаться без сети и без сервера.
+    (каталог / "assets").mkdir(exist_ok=True)
+    (каталог / ПЛЕЙСХОЛДЕР).write_bytes((ЯДРО / ПЛЕЙСХОЛДЕР).read_bytes())
+    страница = каталог / "index.html"
+    страница.write_text(html, encoding="utf-8")
+    print(json.dumps({
+        "package": пакет.name,
+        "page": str(страница),
+        "bytes": страница.stat().st_size,
+        "media_mode": фикстура.get("media_mode", "real"),
+    }, ensure_ascii=False))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

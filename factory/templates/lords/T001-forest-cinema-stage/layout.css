@@ -1,0 +1,19 @@
+/* Композиция: широкая сцена сверху, под ней плотный зал постеров.
+   Лестница колонок зала — от двух на узком экране до восьми на очень широком.
+   Остаток в одну карточку в последнем ряду запрещён приёмкой, поэтому число
+   колонок подобрано под размер блока (18 и 12 делятся на 2, 3, 4 и 6). */
+.hero{text-align:center}
+.hero__media{margin:0 auto;max-width:200px}
+.hero__body{max-width:62ch;margin:0 auto}
+
+.g--hall{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:480px){.g--hall{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:768px){.g--hall{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1024px){.g--hall{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(min-width:1440px){.g--hall{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+.g--adds{grid-template-columns:minmax(0,1fr)}
+@media(min-width:768px){.g--adds{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1280px){.g--adds{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+@media(min-width:768px){.hero{grid-template-columns:minmax(0,1fr)}}

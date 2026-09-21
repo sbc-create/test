@@ -1,0 +1,9 @@
+/* Признак T004: паспарту вокруг медиа и воздух между секциями. */
+.sec{margin-bottom:48px}
+.sec__t{border-bottom:0;font-size:20px;font-weight:600}
+.k{border-radius:var(--radius);box-shadow:0 1px 0 var(--line)}
+.k__p{padding:10px;background:var(--card)}
+.k__img{border-radius:8px}
+.k--editorial .k__cap{padding:4px 14px 16px}
+.k--editorial .k__t{font-size:17px}
+.hero__cta{color:var(--brand-ink)}

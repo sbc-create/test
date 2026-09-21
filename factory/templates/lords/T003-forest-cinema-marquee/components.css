@@ -1,0 +1,8 @@
+/* Признак T003: рамка афиши вокруг каждого ряда и прямые углы. */
+.sec{padding:16px;border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--soft)}
+.sec__t{border-bottom:0;font-size:16px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--brand-text)}
+.chip{border-radius:var(--radius);border-color:var(--brand)}
+.k{border-radius:var(--radius)}
+.k--poster .k__cap{padding:8px 10px}

@@ -1,0 +1,501 @@
+{
+  "templates": 5,
+  "signatures": [
+    {
+      "template_id": "T001",
+      "slug": "forest-cinema-stage",
+      "family": "forest-cinema",
+      "green_identity": "primary",
+      "block_order": [
+        "hero",
+        "grid",
+        "feed",
+        "taxonomy",
+        "grid",
+        "about"
+      ],
+      "card_grammar": [
+        "compact",
+        "poster"
+      ],
+      "desktop_density_1440": 6,
+      "ladders": {
+        "g--hall": [
+          [
+            0,
+            2
+          ],
+          [
+            480,
+            3
+          ],
+          [
+            768,
+            4
+          ],
+          [
+            1024,
+            6
+          ],
+          [
+            1440,
+            6
+          ]
+        ],
+        "g--adds": [
+          [
+            768,
+            2
+          ],
+          [
+            1280,
+            3
+          ]
+        ]
+      },
+      "features": [
+        "блоков:6",
+        "ведущая-грамматика:poster",
+        "герой:да",
+        "грамматики:compact+poster",
+        "зелёный:primary",
+        "навигация:4",
+        "порядок:hero>grid>feed>taxonomy>grid>about",
+        "радиус:12",
+        "сетка0@1440:6",
+        "сетка0@1920:6",
+        "сетка0@320:2",
+        "сетка0@768:4",
+        "сетка1@1440:3",
+        "сетка1@1920:3",
+        "сетка1@320:0",
+        "сетка1@768:2",
+        "сетка2@1440:6",
+        "сетка2@1920:6",
+        "сетка2@320:2",
+        "сетка2@768:4",
+        "фон:#070d0a",
+        "шаг:16"
+      ]
+    },
+    {
+      "template_id": "T002",
+      "slug": "forest-cinema-columns",
+      "family": "forest-cinema",
+      "green_identity": "primary",
+      "block_order": [
+        "feed",
+        "taxonomy",
+        "grid",
+        "taxonomy",
+        "grid",
+        "about"
+      ],
+      "card_grammar": [
+        "compact",
+        "poster"
+      ],
+      "desktop_density_1440": 10,
+      "ladders": {
+        "g--wall": [
+          [
+            0,
+            2
+          ],
+          [
+            480,
+            4
+          ],
+          [
+            768,
+            5
+          ],
+          [
+            1280,
+            10
+          ]
+        ],
+        "g--stream": [
+          [
+            600,
+            2
+          ],
+          [
+            1024,
+            4
+          ]
+        ]
+      },
+      "features": [
+        "блоков:6",
+        "ведущая-грамматика:compact",
+        "герой:нет",
+        "грамматики:compact+poster",
+        "зелёный:primary",
+        "навигация:5",
+        "порядок:feed>taxonomy>grid>taxonomy>grid>about",
+        "радиус:8",
+        "сетка0@1440:4",
+        "сетка0@1920:4",
+        "сетка0@320:0",
+        "сетка0@768:2",
+        "сетка1@1440:10",
+        "сетка1@1920:10",
+        "сетка1@320:2",
+        "сетка1@768:5",
+        "сетка2@1440:10",
+        "сетка2@1920:10",
+        "сетка2@320:2",
+        "сетка2@768:5",
+        "фон:#0a0f0c",
+        "шаг:14"
+      ]
+    },
+    {
+      "template_id": "T003",
+      "slug": "forest-cinema-marquee",
+      "family": "forest-cinema",
+      "green_identity": "secondary",
+      "block_order": [
+        "taxonomy",
+        "grid",
+        "feed",
+        "grid",
+        "taxonomy",
+        "grid",
+        "about"
+      ],
+      "card_grammar": [
+        "compact",
+        "poster"
+      ],
+      "desktop_density_1440": 8,
+      "ladders": {
+        "g--bill": [
+          [
+            0,
+            2
+          ],
+          [
+            600,
+            4
+          ],
+          [
+            1024,
+            4
+          ],
+          [
+            1440,
+            8
+          ]
+        ],
+        "g--ticker": [
+          [
+            768,
+            2
+          ],
+          [
+            1280,
+            4
+          ]
+        ]
+      },
+      "features": [
+        "блоков:7",
+        "ведущая-грамматика:poster",
+        "герой:нет",
+        "грамматики:compact+poster",
+        "зелёный:secondary",
+        "навигация:3",
+        "порядок:taxonomy>grid>feed>grid>taxonomy>grid>about",
+        "радиус:4",
+        "сетка0@1440:8",
+        "сетка0@1920:8",
+        "сетка0@320:2",
+        "сетка0@768:4",
+        "сетка1@1440:4",
+        "сетка1@1920:4",
+        "сетка1@320:0",
+        "сетка1@768:2",
+        "сетка2@1440:8",
+        "сетка2@1920:8",
+        "сетка2@320:2",
+        "сетка2@768:4",
+        "сетка3@1440:8",
+        "сетка3@1920:8",
+        "сетка3@320:2",
+        "сетка3@768:4",
+        "фон:#0d0f0c",
+        "шаг:18"
+      ]
+    },
+    {
+      "template_id": "T004",
+      "slug": "forest-cinema-gallery",
+      "family": "forest-cinema",
+      "green_identity": "accent-only",
+      "block_order": [
+        "grid",
+        "grid",
+        "taxonomy",
+        "feed",
+        "grid",
+        "about"
+      ],
+      "card_grammar": [
+        "compact",
+        "editorial",
+        "poster"
+      ],
+      "desktop_density_1440": 6,
+      "ladders": {
+        "g--gallery": [
+          [
+            0,
+            2
+          ],
+          [
+            600,
+            3
+          ],
+          [
+            1024,
+            4
+          ],
+          [
+            1440,
+            6
+          ]
+        ],
+        "g--trio": [
+          [
+            680,
+            3
+          ]
+        ],
+        "g--adds": [
+          [
+            768,
+            3
+          ]
+        ]
+      },
+      "features": [
+        "блоков:6",
+        "ведущая-грамматика:editorial",
+        "герой:нет",
+        "грамматики:compact+editorial+poster",
+        "зелёный:accent-only",
+        "навигация:4",
+        "порядок:grid>grid>taxonomy>feed>grid>about",
+        "радиус:14",
+        "сетка0@1440:3",
+        "сетка0@1920:3",
+        "сетка0@320:0",
+        "сетка0@768:3",
+        "сетка1@1440:6",
+        "сетка1@1920:6",
+        "сетка1@320:2",
+        "сетка1@768:3",
+        "сетка2@1440:3",
+        "сетка2@1920:3",
+        "сетка2@320:0",
+        "сетка2@768:3",
+        "сетка3@1440:3",
+        "сетка3@1920:3",
+        "сетка3@320:0",
+        "сетка3@768:3",
+        "фон:#f4f1e9",
+        "шаг:24"
+      ]
+    },
+    {
+      "template_id": "T005",
+      "slug": "forest-cinema-night",
+      "family": "forest-cinema",
+      "green_identity": "secondary",
+      "block_order": [
+        "hero",
+        "grid",
+        "feed",
+        "grid",
+        "taxonomy",
+        "about"
+      ],
+      "card_grammar": [
+        "compact",
+        "editorial",
+        "poster"
+      ],
+      "desktop_density_1440": 8,
+      "ladders": {
+        "g--dense": [
+          [
+            0,
+            2
+          ],
+          [
+            480,
+            3
+          ],
+          [
+            768,
+            6
+          ],
+          [
+            1280,
+            8
+          ],
+          [
+            1600,
+            12
+          ]
+        ],
+        "g--picks": [
+          [
+            0,
+            2
+          ],
+          [
+            1024,
+            4
+          ]
+        ],
+        "g--adds": [
+          [
+            768,
+            2
+          ],
+          [
+            1280,
+            4
+          ]
+        ]
+      },
+      "features": [
+        "блоков:6",
+        "ведущая-грамматика:poster",
+        "герой:да",
+        "грамматики:compact+editorial+poster",
+        "зелёный:secondary",
+        "навигация:5",
+        "порядок:hero>grid>feed>grid>taxonomy>about",
+        "радиус:6",
+        "сетка0@1440:8",
+        "сетка0@1920:12",
+        "сетка0@320:2",
+        "сетка0@768:6",
+        "сетка1@1440:4",
+        "сетка1@1920:4",
+        "сетка1@320:0",
+        "сетка1@768:2",
+        "сетка2@1440:4",
+        "сетка2@1920:4",
+        "сетка2@320:2",
+        "сетка2@768:2",
+        "фон:#05070a",
+        "шаг:12"
+      ]
+    }
+  ],
+  "pairs": [
+    {
+      "pair": [
+        "T001",
+        "T002"
+      ],
+      "same_family": true,
+      "similarity": 0.1,
+      "threshold": 0.88
+    },
+    {
+      "pair": [
+        "T001",
+        "T003"
+      ],
+      "same_family": true,
+      "similarity": 0.2,
+      "threshold": 0.88
+    },
+    {
+      "pair": [
+        "T001",
+        "T004"
+      ],
+      "same_family": true,
+      "similarity": 0.0435,
+      "threshold": 0.88
+    },
+    {
+      "pair": [
+        "T001",
+        "T005"
+      ],
+      "same_family": true,
+      "similarity": 0.1892,
+      "threshold": 0.88
+    },
+    {
+      "pair": [
+        "T002",
+        "T003"
+      ],
+      "same_family": true,
+      "similarity": 0.0667,
+      "threshold": 0.88
+    },
+    {
+      "pair": [
+        "T002",
+        "T004"
+      ],
+      "same_family": true,
+      "similarity": 0.0909,
+      "threshold": 0.88
+    },
+    {
+      "pair": [
+        "T002",
+        "T005"
+      ],
+      "same_family": true,
+      "similarity": 0.0732,
+      "threshold": 0.88
+    },
+    {
+      "pair": [
+        "T003",
+        "T004"
+      ],
+      "same_family": true,
+      "similarity": 0.0196,
+      "threshold": 0.88
+    },
+    {
+      "pair": [
+        "T003",
+        "T005"
+      ],
+      "same_family": true,
+      "similarity": 0.2308,
+      "threshold": 0.88
+    },
+    {
+      "pair": [
+        "T004",
+        "T005"
+      ],
+      "same_family": true,
+      "similarity": 0.0435,
+      "threshold": 0.88
+    }
+  ],
+  "PAIRWISE_SIMILARITY_MAX": 0.2308,
+  "PAIRWISE_SIMILARITY_VIOLATIONS": 0,
+  "violations": [],
+  "COLOR_ONLY_VARIANTS": 0,
+  "color_only_pairs": [],
+  "HOME_BLOCK_ORDER_DUPLICATES": 0,
+  "GREEN_PRIMARY_OR_SECONDARY_COUNT": 4,
+  "PASS": true
+}

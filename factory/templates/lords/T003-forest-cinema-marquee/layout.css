@@ -1,0 +1,9 @@
+/* Ровные ряды по четыре и восемь: остаток в одну карточку невозможен. */
+.g--bill{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.g--bill{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1024px){.g--bill{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1440px){.g--bill{grid-template-columns:repeat(8,minmax(0,1fr))}}
+
+.g--ticker{grid-template-columns:minmax(0,1fr)}
+@media(min-width:768px){.g--ticker{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1280px){.g--ticker{grid-template-columns:repeat(4,minmax(0,1fr))}}

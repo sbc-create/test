@@ -1,0 +1,6 @@
+/* T005 — глубокая ночь и бронза. Зелёный второстепенный, ведёт тёплый акцент. */
+:root{
+  --ink:#ece7dd; --dim:#8f8778; --bg:#05070a; --card:#0d1116; --line:#1c2430;
+  --brand:#3F7D26; --brand-text:#9FD8B4; --brand-ink:#ffffff; --soft:#080b0f;
+  --radius:6px; --gap:12px; --pad:14px; --title-size:12.5px; --title-lines:2;
+}

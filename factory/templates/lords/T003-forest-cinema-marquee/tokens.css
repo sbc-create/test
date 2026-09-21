@@ -1,0 +1,7 @@
+/* T003 — слоновая кость на тёмном. Зелёный второстепенный: он в рамках и
+   состояниях, а ведёт светлая типографика афиши. */
+:root{
+  --ink:#f2efe6; --dim:#a39d8c; --bg:#0d0f0c; --card:#15180f; --line:#2a2e1f;
+  --brand:#4A8A2E; --brand-text:#BCE8D0; --brand-ink:#0d0f0c; --soft:#101309;
+  --radius:4px; --gap:18px; --pad:18px; --title-size:14.5px; --title-lines:3;
+}

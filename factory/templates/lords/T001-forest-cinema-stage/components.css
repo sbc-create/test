@@ -1,0 +1,10 @@
+/* Сцена: рамка вокруг героя и подсветка снизу — узнаваемый признак T001. */
+.hero{position:relative;padding:28px 16px 32px;border:1px solid var(--line);
+  border-radius:var(--radius);background:
+    radial-gradient(120% 90% at 50% 0%, rgba(63,125,38,.18), transparent 70%), var(--card)}
+.hero__eyebrow{letter-spacing:.14em}
+.hero__t{font-size:26px}
+.sec__t{padding-bottom:8px;border-bottom:1px solid var(--line)}
+.k--poster{border-color:transparent;background:transparent}
+.k--poster .k__p{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line)}
+.k--poster .k__cap{padding:8px 2px 0;text-align:center}

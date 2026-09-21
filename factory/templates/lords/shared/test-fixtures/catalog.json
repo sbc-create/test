@@ -1,0 +1,647 @@
+{
+ "schema": "lords-template-fixture/1",
+ "source_revision": "1863a02dbb9beae56ae01fdaa53d5d40",
+ "source_built_at": "2026-09-21T03:17:10Z",
+ "source_count": 53573,
+ "sample_size": 60,
+ "fields_present": [
+  "slug",
+  "title",
+  "url",
+  "year",
+  "kind",
+  "poster",
+  "published_at",
+  "published_at_estimated"
+ ],
+ "absent_fields": [
+  "rating",
+  "genre",
+  "country",
+  "description",
+  "episodes",
+  "premiere_at",
+  "popularity"
+ ],
+ "kinds": [
+  "Мультфильм",
+  "Сериал",
+  "Фильм"
+ ],
+ "years": [
+  2026,
+  2025,
+  2024,
+  2023,
+  2022,
+  2020,
+  2019,
+  2016,
+  2015,
+  2011,
+  2006
+ ],
+ "titles_without_poster": [],
+ "items": [
+  {
+   "slug": "korolevskiy-obman",
+   "title": "Королевский обман",
+   "url": "/title/korolevskiy-obman/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0bea6-027b-7526-baf0-33197a1fc192.webp",
+   "published_at": "2026-09-20T11:49:21Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "stalker-s-togo-sveta",
+   "title": "Сталкер с того света",
+   "url": "/title/stalker-s-togo-sveta/",
+   "year": 2023,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0bea3-7ff0-7526-ab48-df49e71594d2.webp",
+   "published_at": "2026-09-20T11:46:49Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "dok-hollidey-2",
+   "title": "Док Холлидей 2",
+   "url": "/title/dok-hollidey-2/",
+   "year": 2024,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0bea2-c8e7-7526-9e46-c95b7a11d27d.webp",
+   "published_at": "2026-09-20T11:45:47Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "vina-5",
+   "title": "Вина",
+   "url": "/title/vina-5/",
+   "year": 2026,
+   "kind": "Сериал",
+   "poster": "https://poster.cdnvideohub.com/01a0be87-1f76-7526-b68c-ff0dc48e4806.webp",
+   "published_at": "2026-09-20T11:16:33Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "amerikanskiy-zalozhnik",
+   "title": "Американский заложник",
+   "url": "/title/amerikanskiy-zalozhnik/",
+   "year": 2026,
+   "kind": "Сериал",
+   "poster": "https://poster.cdnvideohub.com/01a0be13-29de-7526-b41e-09789c0589ce.webp",
+   "published_at": "2026-09-20T09:08:42Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "britva-okkama",
+   "title": "Бритва Оккама",
+   "url": "/title/britva-okkama/",
+   "year": 2026,
+   "kind": "Сериал",
+   "poster": "https://poster.cdnvideohub.com/01a0be0d-a3ec-78d8-85ff-3fb59ee12445.webp",
+   "published_at": "2026-09-20T09:05:32Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "vtoroy-pilot",
+   "title": "Второй пилот",
+   "url": "/title/vtoroy-pilot/",
+   "year": 2025,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0be08-0438-7526-a675-6ea166d845e0.webp",
+   "published_at": "2026-09-20T08:56:33Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "samogonschik",
+   "title": "Самогонщик",
+   "url": "/title/samogonschik/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0be07-73fb-7526-be49-91112778ab40.webp",
+   "published_at": "2026-09-20T08:55:55Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "kak-budto-idealnaya-semya",
+   "title": "Как будто идеальная семья",
+   "url": "/title/kak-budto-idealnaya-semya/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0be06-f3f5-7526-8df0-f33c5b2a4789.webp",
+   "published_at": "2026-09-20T08:55:23Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "shkola-soblazneniya",
+   "title": "Школа соблазнения",
+   "url": "/title/shkola-soblazneniya/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0be06-6578-7526-8f19-93999bb3ef16.webp",
+   "published_at": "2026-09-20T08:54:45Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "salbardi",
+   "title": "Салбарди",
+   "url": "/title/salbardi/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0be05-b21b-7526-bf96-ab9b9cf1d3ac.webp",
+   "published_at": "2026-09-20T08:54:00Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "may-tay",
+   "title": "Май Тай",
+   "url": "/title/may-tay/",
+   "year": 2025,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0be04-ca5c-78d7-b7c3-f894fe090907.webp",
+   "published_at": "2026-09-20T08:53:14Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "koshachiy-krik",
+   "title": "Кошачий крик",
+   "url": "/title/koshachiy-krik/",
+   "year": 2024,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0be04-214f-7526-a051-a75a1a0f35aa.webp",
+   "published_at": "2026-09-20T08:52:19Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "ketchup-na-vaflyah",
+   "title": "Кетчуп на вафлях",
+   "url": "/title/ketchup-na-vaflyah/",
+   "year": 2024,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0be03-9842-7526-ba96-6992d7436d56.webp",
+   "published_at": "2026-09-20T08:51:44Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "za-pshenichnymi-polyami",
+   "title": "За пшеничными полями",
+   "url": "/title/za-pshenichnymi-polyami/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0bdfc-95b8-7526-9536-38e45326dbc2.webp",
+   "published_at": "2026-09-20T08:44:02Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "bog-ne-pomozhet",
+   "title": "Бог не поможет",
+   "url": "/title/bog-ne-pomozhet/",
+   "year": 2025,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0bdfb-5736-7526-a3bf-357f7ecf47d5.webp",
+   "published_at": "2026-09-20T08:42:40Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "skvoz-ogon-2",
+   "title": "Сквозь огонь",
+   "url": "/title/skvoz-ogon-2/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0bdfa-c01b-7526-b935-5dc649432bfd.webp",
+   "published_at": "2026-09-20T08:42:05Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "sumerki-4",
+   "title": "Сумерки",
+   "url": "/title/sumerki-4/",
+   "year": 2025,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0bdfa-1620-78d7-bb0d-31e89b3a2d8e.webp",
+   "published_at": "2026-09-20T08:41:23Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "500-mil",
+   "title": "500 миль",
+   "url": "/title/500-mil/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0bdf9-581b-78d7-91d2-135db167f4c3.webp",
+   "published_at": "2026-09-20T08:40:36Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "shahty-strasti",
+   "title": "Шахты страсти",
+   "url": "/title/shahty-strasti/",
+   "year": 2023,
+   "kind": "Сериал",
+   "poster": "https://poster.cdnvideohub.com/01a0bde5-ad9d-7526-af72-674658323426.webp",
+   "published_at": "2026-09-20T08:19:02Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "vnutri-zakoldovannyh-lesov",
+   "title": "Внутри Заколдованных Лесов",
+   "url": "/title/vnutri-zakoldovannyh-lesov/",
+   "year": 2024,
+   "kind": "Сериал",
+   "poster": "https://poster.cdnvideohub.com/01a0bde1-6344-78d7-876d-74de6d3e161d.webp",
+   "published_at": "2026-09-20T08:17:51Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "simvoly-dikoy-iberii",
+   "title": "Символы дикой Иберии",
+   "url": "/title/simvoly-dikoy-iberii/",
+   "year": 2022,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0bd88-281f-7526-a020-a561d6c4cf8b.webp",
+   "published_at": "2026-09-20T06:36:52Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "nerasskazannoe-mister-ti-zhal-etogo-glupca",
+   "title": "Нерассказанное: Мистер Ти: Жаль этого глупца",
+   "url": "/title/nerasskazannoe-mister-ti-zhal-etogo-glupca/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0bd82-14fb-78d3-b47f-253e76fd1bdb.webp",
+   "published_at": "2026-09-20T06:34:48Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "vyzhivanie-v-dikoy-prirode",
+   "title": "Выживание в дикой природе",
+   "url": "/title/vyzhivanie-v-dikoy-prirode/",
+   "year": 2015,
+   "kind": "Сериал",
+   "poster": "https://poster.cdnvideohub.com/01a0ba0e-03a3-7526-9f7a-7be1d4093df7.webp",
+   "published_at": "2026-09-19T14:24:36Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "missiya-taynyy-agent-v-opere",
+   "title": "Миссия: Тайный агент в опере",
+   "url": "/title/missiya-taynyy-agent-v-opere/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b99e-85a8-7526-b35d-fcfd1db208e4.webp",
+   "published_at": "2026-09-19T12:23:00Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "moi-dva-centa",
+   "title": "Мои два цента",
+   "url": "/title/moi-dva-centa/",
+   "year": 2026,
+   "kind": "Мультфильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b968-d475-7526-b770-b3d8ca974c8d.webp",
+   "published_at": "2026-09-19T11:24:10Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "plennica-6",
+   "title": "Пленница",
+   "url": "/title/plennica-6/",
+   "year": 2026,
+   "kind": "Сериал",
+   "poster": "https://poster.cdnvideohub.com/01a0b924-90a6-78a4-9049-1fd43b11d3d4.webp",
+   "published_at": "2026-09-19T10:11:41Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "nash-vcherashniy-pobeg",
+   "title": "Наш вчерашний побег",
+   "url": "/title/nash-vcherashniy-pobeg/",
+   "year": 2026,
+   "kind": "Сериал",
+   "poster": "https://poster.cdnvideohub.com/01a0b8fc-2a80-7526-b193-0bcda1d79ec5.webp",
+   "published_at": "2026-09-19T09:25:29Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "nedetskie-igry-2",
+   "title": "Недетские игры",
+   "url": "/title/nedetskie-igry-2/",
+   "year": 2024,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b890-5434-7526-a42a-ecdeb48817cc.webp",
+   "published_at": "2026-09-19T07:27:43Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "pravda-ili-zagovor",
+   "title": "Правда или заговор",
+   "url": "/title/pravda-ili-zagovor/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b88f-af55-7526-bdcf-58cedcbb35ac.webp",
+   "published_at": "2026-09-19T07:27:00Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "reznya-v-norton-krik",
+   "title": "Резня в Нортон-Крик",
+   "url": "/title/reznya-v-norton-krik/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b88f-2897-7526-b530-6416423e5a5e.webp",
+   "published_at": "2026-09-19T07:26:26Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "pervenec-2",
+   "title": "Первенец",
+   "url": "/title/pervenec-2/",
+   "year": 2025,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b88e-a001-7526-992b-db5db29a11f8.webp",
+   "published_at": "2026-09-19T07:25:51Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "princessa-i-drakon",
+   "title": "Принцесса и дракон",
+   "url": "/title/princessa-i-drakon/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b88d-fb76-7526-87e6-5e39a7c8efa4.webp",
+   "published_at": "2026-09-19T07:25:09Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "kurinyy-gorodok",
+   "title": "Куриный городок",
+   "url": "/title/kurinyy-gorodok/",
+   "year": 2011,
+   "kind": "Мультфильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b88d-83e5-7526-8e9f-955eb2433cd8.webp",
+   "published_at": "2026-09-19T07:24:38Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "chya-eto-sobaka",
+   "title": "Чья это собака?",
+   "url": "/title/chya-eto-sobaka/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b88d-7d87-7526-85b3-088bdc2c0e3a.webp",
+   "published_at": "2026-09-19T07:24:35Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "do-kraya-sveta",
+   "title": "До края света",
+   "url": "/title/do-kraya-sveta/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b88c-cdf1-7526-b19c-2019fb854c6e.webp",
+   "published_at": "2026-09-19T07:23:51Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "elaydzha-pil",
+   "title": "Элайджа Пил",
+   "url": "/title/elaydzha-pil/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b88c-4add-7526-9b2a-1b1b47b8de31.webp",
+   "published_at": "2026-09-19T07:23:18Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "otgoloski-iz-pustoty",
+   "title": "Отголоски из пустоты",
+   "url": "/title/otgoloski-iz-pustoty/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b88b-b453-7526-a4da-d597a0b66a50.webp",
+   "published_at": "2026-09-19T07:22:39Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "bratya-po-oruzhiyu-nasledie",
+   "title": "Братья по оружию: Наследие",
+   "url": "/title/bratya-po-oruzhiyu-nasledie/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b88a-dd86-7526-9b7e-3ea8d33d0096.webp",
+   "published_at": "2026-09-19T07:21:43Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "materinskaya-lihoradka",
+   "title": "Материнская лихорадка",
+   "url": "/title/materinskaya-lihoradka/",
+   "year": 2025,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b887-da1c-789a-becc-3dcdc38c1888.webp",
+   "published_at": "2026-09-19T07:19:57Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "ty-ya-protiv-vsego-mira",
+   "title": "Ты + Я — против всего мира",
+   "url": "/title/ty-ya-protiv-vsego-mira/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b887-2789-7526-9284-73aedb591137.webp",
+   "published_at": "2026-09-19T07:17:40Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "parshivye-ovcy-2",
+   "title": "Паршивые овцы",
+   "url": "/title/parshivye-ovcy-2/",
+   "year": 2025,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b887-1cf5-7526-937b-cb2042fe2252.webp",
+   "published_at": "2026-09-19T07:17:39Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "posledniy-prokat",
+   "title": "Последний прокат",
+   "url": "/title/posledniy-prokat/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b885-b695-7526-a1dd-c38852dfca80.webp",
+   "published_at": "2026-09-19T07:16:08Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "umnica-gudi",
+   "title": "Умница Гуди",
+   "url": "/title/umnica-gudi/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b884-d5f8-7526-a1d5-588964d630f5.webp",
+   "published_at": "2026-09-19T07:15:08Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "luchshie-iz-luchshih-2",
+   "title": "Лучшие из лучших",
+   "url": "/title/luchshie-iz-luchshih-2/",
+   "year": 2026,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b884-3aeb-7526-bcb7-30eed4dc87b7.webp",
+   "published_at": "2026-09-19T07:14:30Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "ya-kris-farli",
+   "title": "Я Крис Фарли",
+   "url": "/title/ya-kris-farli/",
+   "year": 2015,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b86a-5c2d-7526-89ac-4bee37f051f1.webp",
+   "published_at": "2026-09-19T06:46:13Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "amerikanskaya-amazonka",
+   "title": "Американская Амазонка",
+   "url": "/title/amerikanskaya-amazonka/",
+   "year": 2025,
+   "kind": "Сериал",
+   "poster": "https://poster.cdnvideohub.com/01a0b867-b61e-7899-9407-2cac95b69d11.webp",
+   "published_at": "2026-09-19T06:44:43Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "9-11-ataka-na-pentagon",
+   "title": "9/11 Атака на Пентагон",
+   "url": "/title/9-11-ataka-na-pentagon/",
+   "year": 2016,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b867-1c98-7526-bc4c-39f1c54a16d2.webp",
+   "published_at": "2026-09-19T06:42:41Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "pylnye-utesy",
+   "title": "Пыльные утёсы",
+   "url": "/title/pylnye-utesy/",
+   "year": 2026,
+   "kind": "Сериал",
+   "poster": "https://poster.cdnvideohub.com/01a0b61e-cab8-7b30-896f-872bb722bb97.webp",
+   "published_at": "2026-09-18T20:06:50Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "ohota-za-brakom-v-37-eto-pole-bitvy",
+   "title": "Охота за браком в 37 - это поле битвы",
+   "url": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+   "year": 2026,
+   "kind": "Сериал",
+   "poster": "https://poster.cdnvideohub.com/01a0b555-997e-7526-b37e-4fe1b2b835e8.webp",
+   "published_at": "2026-09-18T16:24:41Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "chti-svoyu-mat",
+   "title": "Чти свою мать",
+   "url": "/title/chti-svoyu-mat/",
+   "year": 2026,
+   "kind": "Сериал",
+   "poster": "https://poster.cdnvideohub.com/01a0b545-fc51-7526-9495-11d8c641e5d7.webp",
+   "published_at": "2026-09-18T16:07:38Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "operaciya-fortitude",
+   "title": "Операция Fortitude",
+   "url": "/title/operaciya-fortitude/",
+   "year": null,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b52d-c68e-7b2a-af01-56b701e668e5.webp",
+   "published_at": "2026-09-18T15:41:57Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "master-lda-i-plameni-2",
+   "title": "Мастер льда и пламени 2",
+   "url": "/title/master-lda-i-plameni-2/",
+   "year": 2022,
+   "kind": "Сериал",
+   "poster": "https://poster.cdnvideohub.com/01a0b507-0813-7526-a2e6-5edf75180827.webp",
+   "published_at": "2026-09-18T14:59:02Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "v-poiskah-dzheka-charltona",
+   "title": "В поисках Джека Чарльтона",
+   "url": "/title/v-poiskah-dzheka-charltona/",
+   "year": 2020,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b49e-18d6-7526-89f8-d7ec21da131a.webp",
+   "published_at": "2026-09-18T13:04:15Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "magiya-zatonuvshih-korabley",
+   "title": "Магия затонувших кораблей",
+   "url": "/title/magiya-zatonuvshih-korabley/",
+   "year": 2006,
+   "kind": "Сериал",
+   "poster": "https://poster.cdnvideohub.com/01a0b46e-5498-7526-a790-a1afbe4b03d3.webp",
+   "published_at": "2026-09-18T12:12:05Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "tihookeanskie-rassledovaniya",
+   "title": "Тихоокеанские расследования",
+   "url": "/title/tihookeanskie-rassledovaniya/",
+   "year": 2019,
+   "kind": "Сериал",
+   "poster": "https://poster.cdnvideohub.com/01a0b44e-797c-7526-8eb4-e28d9213edf2.webp",
+   "published_at": "2026-09-18T11:37:30Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "le-man-55-taynaya-katastrofa",
+   "title": "Ле-Ман '55. Тайная катастрофа",
+   "url": "/title/le-man-55-taynaya-katastrofa/",
+   "year": 2024,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b448-bc7e-7526-a128-f9bf6c25382d.webp",
+   "published_at": "2026-09-18T11:31:01Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "sryv",
+   "title": "Срыв",
+   "url": "/title/sryv/",
+   "year": 2025,
+   "kind": "Сериал",
+   "poster": "https://poster.cdnvideohub.com/01a0b413-6203-7526-8349-508bed7790c1.webp",
+   "published_at": "2026-09-18T10:36:41Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "lyubov-i-remont",
+   "title": "Любовь и ремонт",
+   "url": "/title/lyubov-i-remont/",
+   "year": 2024,
+   "kind": "Фильм",
+   "poster": "https://poster.cdnvideohub.com/01a0b403-b3c5-7526-a1eb-8acf3de5d6cd.webp",
+   "published_at": "2026-09-18T10:15:39Z",
+   "published_at_estimated": false
+  },
+  {
+   "slug": "skandal-4",
+   "title": "Скандал",
+   "url": "/title/skandal-4/",
+   "year": 2026,
+   "kind": "Сериал",
+   "poster": "https://poster.cdnvideohub.com/01a0b3e3-9497-7526-a630-2aa87a498e6e.webp",
+   "published_at": "2026-09-18T09:40:31Z",
+   "published_at_estimated": false
+  }
+ ]
+}

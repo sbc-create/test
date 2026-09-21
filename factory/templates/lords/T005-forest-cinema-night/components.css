@@ -1,0 +1,10 @@
+/* Признак T005: кадр во всю ширину с фактами сбоку и узкие разделители. */
+.hero{padding:0;border:0;background:transparent;grid-template-columns:minmax(0,1fr)}
+@media(min-width:1024px){.hero{grid-template-columns:260px minmax(0,1fr)}}
+.hero__media{max-width:260px}
+.hero__t{font-size:28px}
+.sec__t{border-bottom:1px solid var(--line);padding-bottom:6px;font-size:15px;
+  letter-spacing:.04em;text-transform:uppercase}
+.k--poster{background:transparent;border-color:transparent}
+.k--poster .k__cap{padding:6px 0 0}
+.k--poster .k__p{border-radius:var(--radius);overflow:hidden}

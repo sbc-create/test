@@ -1,0 +1,6 @@
+/* T002 — шалфей и графит. Зелёный ведущий, но приглушённый: лента важнее афиши. */
+:root{
+  --ink:#e6ece6; --dim:#94a89a; --bg:#0a0f0c; --card:#111815; --line:#1f2b24;
+  --brand:#2F6B22; --brand-text:#9FD8B4; --brand-ink:#ffffff; --soft:#0d130f;
+  --radius:8px; --gap:14px; --pad:16px; --title-size:13.5px; --title-lines:2;
+}

@@ -1,0 +1,7 @@
+/* T004 — светлая галерея. Зелёный только в акцентах и фокусе: фон светлый,
+   тёмно-зелёный на нём читается и остаётся узнаваемым. */
+:root{
+  --ink:#16201a; --dim:#5b6b60; --bg:#f4f1e9; --card:#ffffff; --line:#ddd8cb;
+  --brand:#2F6B22; --brand-text:#215318; --brand-ink:#ffffff; --soft:#eae6db;
+  --radius:14px; --gap:24px; --pad:20px; --title-size:15px; --title-lines:2;
+}
