@@ -2079,7 +2079,11 @@ display:flex;align-items:center;justify-content:center;opacity:.9}
 .zrl__btn:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .zrl__btn--p{left:-6px}
 .zrl__btn--n{right:-6px}
-.zrl__btn[disabled]{opacity:.32;cursor:default}
+/* Отключённая кнопка убирается совсем, а не гасится до трети. Полупрозрачная
+   кнопка всё равно лежит поверх первой карточки и всё равно ловит палец —
+   а сделать она уже ничего не может. Место освобождается, и крайняя карточка
+   видна целиком. */
+.zrl__btn[disabled]{opacity:0;visibility:hidden;pointer-events:none}
 
 /* B09 densify: explicit column matrix — no auto-fit 180px blank zone. */
 :root{--z-card-max:180px;--z-gap:14px;--z-poster-max-h:270px}
@@ -2546,7 +2550,11 @@ display:flex;align-items:center;justify-content:center;opacity:.92;box-shadow:0 
 .zrl__btn:focus-visible{outline:2px solid @ACC@;outline-offset:2px}
 .zrl__btn--p{left:-4px}
 .zrl__btn--n{right:-4px}
-.zrl__btn[disabled]{opacity:.32;cursor:default}
+/* Отключённая кнопка убирается совсем, а не гасится до трети. Полупрозрачная
+   кнопка всё равно лежит поверх первой карточки и всё равно ловит палец —
+   а сделать она уже ничего не может. Место освобождается, и крайняя карточка
+   видна целиком. */
+.zrl__btn[disabled]{opacity:0;visibility:hidden;pointer-events:none}
 .zrl__vp{mask-image:linear-gradient(90deg,transparent,#000 12px,#000 calc(100% - 12px),transparent);
 -webkit-mask-image:linear-gradient(90deg,transparent,#000 12px,#000 calc(100% - 12px),transparent)}
 @media(max-width:430px){
@@ -3547,13 +3555,52 @@ def заглушка_постера(запись: dict, класс_заглуш�
 #: СКРИПТ_ПОСТЕРОВ: тот подключают обе витрины, и дописывание в него изменило
 #: бы байты, которые отдаёт Lords. Здесь ровно кнопочная прокрутка; свайп,
 #: колесо и клавиатура работают нативно и без скрипта.
+#:
+#: Кроме прокрутки скрипт держит состояние кнопок. Без этого обе кнопки были
+#: включены всегда: в начале ленты «назад» стояла поверх первой карточки,
+#: ловила палец и не делала ничего. Замер на живой витрине показывал
+#: prevDisabled=false при scrollLeft=0 на 390, 768 и 1440 — при том, что
+#: правило `.zrl__btn[disabled]` в таблице стилей было описано и не
+#: использовалось ни разу.
+#:
+#: Шаг прокрутки намеренно оставлен прежним. По виду 0.86 ширины не кратно
+#: карточке, но `scroll-snap-type: x mandatory` доводит ленту до границы:
+#: замер дал 376 при шаге 188 и 545 при шаге 182. Менять то, что работает,
+#: заодно с починкой соседнего — верный способ не объяснить потом регрессию.
 СКРИПТ_ЛЕНТ = (
+    "(function(){"
+    "function sync(v){"
+    "var rl=v.closest?v.closest('.zrl'):null;if(!rl)return;"
+    "var max=v.scrollWidth-v.clientWidth;"
+    "var p=rl.querySelector('[data-rl=\"prev\"]');"
+    "var n=rl.querySelector('[data-rl=\"next\"]');"
+    "var s=v.scrollLeft,at0=s<=1,end=max<=0||s>=max-1;"
+    "if(p){p.disabled=at0;p.setAttribute('aria-disabled',at0?'true':'false');}"
+    "if(n){n.disabled=end;n.setAttribute('aria-disabled',end?'true':'false');}"
+    "}"
+    "function all(){"
+    "var l=document.querySelectorAll('.zrl__vp');"
+    "for(var i=0;i<l.length;i++)sync(l[i]);"
+    "}"
     "document.addEventListener('click',function(e){"
-    "var b=e.target.closest('[data-rl]');if(!b)return;"
-    "var v=document.getElementById(b.getAttribute('aria-controls'));if(!v)return;"
-    "var d=Math.max(160,Math.round(v.clientWidth*0.86));"
-    "v.scrollBy({left:b.getAttribute('data-rl')==='next'?d:-d,behavior:'smooth'});"
+    "var b=e.target.closest('[data-rl]');"
+    "if(b&&!b.disabled){"
+    "var v=document.getElementById(b.getAttribute('aria-controls'));"
+    "if(v){var d=Math.max(160,Math.round(v.clientWidth*0.86));"
+    "v.scrollBy({left:b.getAttribute('data-rl')==='next'?d:-d,behavior:'smooth'});}"
+    "}"
+    # Вкладки прячут и показывают ленты; у только что показанной ленты
+    # размеры появляются лишь после отрисовки, поэтому пересчёт отложен.
+    "setTimeout(all,0);"
     "});"
+    "document.addEventListener('scroll',function(e){"
+    "var t=e.target;"
+    "if(t&&t.classList&&t.classList.contains('zrl__vp'))sync(t);"
+    "},true);"
+    "window.addEventListener('resize',all);"
+    "if(document.readyState!=='loading')all();"
+    "else document.addEventListener('DOMContentLoaded',all);"
+    "})();"
 )
 
 #: Только Animedia: на узком экране пункты меню открываются кнопкой.
