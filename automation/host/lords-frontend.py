@@ -2264,6 +2264,13 @@ box-shadow:var(--a-shadow-soft);color:inherit;text-decoration:none}
 .zhub__t{display:block;font-weight:700;font-size:16px}
 .zhub__m{display:block;font-size:12px;color:var(--a-dim);font-weight:600;margin:2px 0 4px}
 .zhub__d{display:block;font-size:13px;color:var(--a-dim);line-height:1.45}
+/* B13 collections hub: order switch. Touch targets 44px, no clipped labels. */
+.ahub__sorts{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.ahub__s{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;
+border:1px solid var(--a-line);border-radius:999px;background:var(--a-page);
+color:var(--a-ink);font-size:13px;font-weight:600;text-decoration:none;white-space:nowrap}
+.ahub__s.is-on{background:var(--a-acc);border-color:var(--a-acc);color:#fff}
+.ahub__s:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
 .zseo{margin:20px 0 4px;padding:14px 0;border-top:1px solid var(--a-line);color:var(--a-dim);font-size:14px;line-height:1.5}
 .zseo h2{font-size:17px;color:var(--a-ink);margin:0 0 6px}
 .zseo details{display:none}
@@ -2273,7 +2280,8 @@ box-shadow:var(--a-shadow-soft);color:inherit;text-decoration:none}
 .zft__inner{display:flex;flex-direction:column;gap:12px}
 .zft__cols{display:grid;gap:18px;grid-template-columns:1fr;
 align-items:start}
-@media(min-width:768px){.zft__cols{grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* B14: планшет — две колонки, рабочий стол — четыре, как в паспорте блока. */
+@media(min-width:768px){.zft__cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(min-width:1100px){.zft__cols{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .zft__col{display:flex;flex-direction:column;gap:6px;min-width:0}
 .zft__col b{color:var(--a-ink);font-size:13px;margin:0 0 4px}
@@ -2290,7 +2298,8 @@ display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hi
 @media(max-width:479px){.zft__cols{grid-template-columns:1fr}}
 .zft__bar{display:flex;justify-content:space-between;gap:12px;align-items:center;
 padding-top:6px;border-top:1px solid var(--a-line);font-size:12px;color:var(--a-mute);flex-wrap:wrap}
-.zvb{font-size:11px;color:var(--a-mute);opacity:.85;white-space:nowrap}
+/* Правило .zvb здесь больше не нужно: нижний бар Animedia не печатает версию
+   и коммит. У Zona свой бар и своё правило — оно не затронуто. */
 @media(max-width:767px){.zft{padding:12px 0 8px}.zft__about{-webkit-line-clamp:3}}
 .rbs{margin:6px 0 0}.rbs__l{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
 .rbs__i{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:10px;
@@ -4947,6 +4956,21 @@ CATALOG_FRESHNESS_DATA_GAP = 1
 АНИМЕДИА_SEARCH_ZERO = "Совпадений нет"
 АНИМЕДИА_SEARCH_ERROR = "Поиск временно недоступен"
 
+# B13: collections hub and detail.
+АНИМЕДИА_COLLECTIONS_PAGE_SIZE = 12
+АНИМЕДИА_COLLECTION_DETAIL_PAGE_SIZE = 24
+#: Сортировки хаба идут только по полям, которые в контракте уже есть.
+АНИМЕДИА_COLLECTIONS_SORTS = ("contract", "size", "name")
+#: `section_id` в контракте коллекций взаимно однозначен с `collection_key`,
+#: то есть измерения «категория» у данных нет. Рисовать категории поверх
+#: такого поля значило бы выдумать таксономию, поэтому переключателя нет, а
+#: пробел объявлен.
+COLLECTION_CATEGORY_DATA_GAP = 1
+#: У коллекции есть `data_revision` — отпечаток состава, а не дата публикации
+#: ревизии. Показать отпечаток как дату нельзя, поэтому у карточек и страниц
+#: коллекций видимой даты нет вовсе.
+COLLECTION_REVISION_TIMESTAMP_DATA_GAP = 1
+
 # B06: Top-100 home shelf — approved TopSnapshot only (no frontend ranking).
 АНИМЕДИА_TOP100_PATH = os.environ.get(
     "ANIMEDIA_TOP100_SNAPSHOT",
@@ -6140,12 +6164,15 @@ class ВидАнимедиа(ВидЗона):
         return []
 
     def подвал(self) -> str:
-        """Multi-column footer from real inventory; no invented contacts."""
+        """B14 footer: real inventory only, no invented contacts, no build marks.
+
+        Прежний нижний бар печатал `source=…`, `runtime=…`, `build=…` в
+        атрибуте и укороченный коммит на виду. Это внутренние опознавательные
+        знаки: зрителю они ничего не говорят, а обходу сайта выдают версию
+        сборки. Провенанс живёт в заголовках ответа и в манифесте релиза, и
+        там он проверяется приёмкой — в разметке ему места нет.
+        """
         домен = _аниме_домен(self.хост)
-        runtime = (МАНИФЕСТ.get("runtime_commit") or МАНИФЕСТ.get("source_commit") or "")[:7]
-        tip = (f"source={МАНИФЕСТ.get('source_commit', '')[:12]} "
-               f"runtime={(МАНИФЕСТ.get('runtime_commit') or '')[:12]} "
-               f"build={СБОРКА}")
         contact = _аниме_контакты_html()
         legal = _аниме_legal_html()
         genres = "".join(
@@ -6162,8 +6189,14 @@ class ВидАнимедиа(ВидЗона):
             contact_col = (
                 f'<div class="zft__col"><b>Контакты и правовое</b>'
                 f'{contact}{legal}</div>')
+        # Отсутствие владельческого столбца — объявленный факт, а не тишина:
+        # выдумать email, Telegram и правовые адреса нельзя, а скрыть пробел
+        # молча значит потерять его из приёмки.
+        пробел = "" if contact_col else ' data-b14-owner-gap="1"'
+        столбцов = 4 if contact_col else 3
         return (
-            '<footer class="zft"><div class="zft__inner">'
+            f'<footer class="zft" data-b14="footer"{пробел} '
+            f'data-b14-cols="{столбцов}"><div class="zft__inner">'
             '<div class="zft__cols">'
             f'<div class="zft__col"><b>{html.escape(self.имя)}</b>'
             f'<p class="zft__about">{html.escape(домен["footer_about"])}</p>'
@@ -6174,9 +6207,7 @@ class ВидАнимедиа(ВидЗона):
             f'<div class="zft__col"><b>Годы и тип</b>{years}{types}</div>'
             f'{contact_col}'
             '</div>'
-            f'<div class="zft__bar"><span>© {html.escape(self.имя)}</span>'
-            f'<span class="zvb" title="{html.escape(tip)}">'
-            f"Animedia {html.escape(ВЕРСИЯ)} · {html.escape(runtime)}</span></div>"
+            f'<div class="zft__bar"><span>© {html.escape(self.имя)}</span></div>'
             "</div></footer>")
 
     # --- честное состояние данных -------------------------------------
@@ -6436,15 +6467,7 @@ class ВидАнимедиа(ВидЗона):
         if разд == "/new":
             return self._страница_новых_эпизодов(зпр)
         if разд == "/collections":
-            hub = self.хаб_коллекций()
-            count = hub.count('class="zhub__c"')
-            тело = (f'<div class="zwrap"><h1 class="zh">Подборки аниме</h1>'
-                    f'<p class="zsub">Доступно подборок: {count}. '
-                    'Карточки собраны из собственных постеров каталога.</p>'
-                    + hub + "</div>")
-            return self.оболочка(тело, f"Подборки — {self.имя}", "/collections/",
-                                 актив="/collections/",
-                                 описание=f"Подборки витрины {self.имя}.")
+            return self.страница_коллекций(зпр)
         набор, выбрано = отбор(self.д, self.индекс, зпр, разд)
         raw_page = (зпр.get("page") or ["1"])[0]
         try:
@@ -7233,6 +7256,237 @@ class ВидАнимедиа(ВидЗона):
             тело, f"«{q}» — поиск — {self.имя}", self._адрес_поиска(q, стр, для_html=False),
             f"Результаты поиска по запросу «{q}».")
 
+    # --- B13: коллекции -------------------------------------------------
+    #: Читаются общим маршрутом коллекции; у Lords и Zona остаются прежние.
+    COLLECTION_PAGE_SIZE = АНИМЕДИА_COLLECTION_DETAIL_PAGE_SIZE
+    COLLECTION_STRICT_PAGING = True
+
+    def _карточки_коллекций(self) -> list[dict]:
+        """Доступные коллекции контракта — по одной карточке на коллекцию.
+
+        Коллекция, у которой в снимке нет записей, не показывается: так велит
+        её `empty_policy`, и обещать раздел без содержимого нельзя. А вот
+        прятать существующую коллекцию из-за совпадения коллажа нельзя тоже —
+        тогда до неё не доведёт ни одна ссылка. Поэтому коллаж по возможности
+        собирается из ещё не занятых постеров, а сама плитка остаётся.
+        """
+        снимок = Снимок.получить(self.д, self.п)
+        if КОЛЛЕКЦИИ is None or снимок is None:
+            return []
+        занятые: set[str] = set()
+        карточки: list[dict] = []
+        видели: set[str] = set()
+        for порядок, спец in enumerate(КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО)):
+            if not спец.доступна or спец.collection_key in видели:
+                continue
+            коллекция = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО,
+                                            предел=48)
+            if коллекция is None or not коллекция.items:
+                continue
+            видели.add(спец.collection_key)
+            свежие = [к for к in коллекция.items
+                      if к.poster and к.poster not in занятые][:4]
+            if len(свежие) < 4:
+                for к in коллекция.items:
+                    if к in свежие or not к.poster:
+                        continue
+                    свежие.append(к)
+                    if len(свежие) >= 4:
+                        break
+            for к in свежие:
+                занятые.add(к.poster)
+            карточки.append({
+                "key": спец.collection_key,
+                "order": порядок,
+                "title": коллекция.title,
+                "description": коллекция.description,
+                "total": коллекция.total,
+                "path": спец.canonical_path,
+                "posters": [к.poster for к in свежие[:4] if к.poster],
+            })
+        return карточки
+
+    @staticmethod
+    def _сортировать_коллекции(карточки: list[dict], режим: str) -> list[dict]:
+        """Порядок детерминирован при любом режиме: ключ добивает связи."""
+        if режим == "size":
+            return sorted(карточки, key=lambda к: (-к["total"], к["key"]))
+        if режим == "name":
+            return sorted(карточки, key=lambda к: (к["title"].casefold(), к["key"]))
+        return sorted(карточки, key=lambda к: (к["order"], к["key"]))
+
+    @staticmethod
+    def _адрес_хаба(режим: str, стр: int = 1, *, для_html: bool = True) -> str:
+        пары = []
+        if режим != "contract":
+            пары.append(f"sort={режим}")
+        if стр > 1:
+            пары.append(f"page={стр}")
+        адрес = "/collections/" + (("?" + "&".join(пары)) if пары else "")
+        return html.escape(адрес, quote=True) if для_html else адрес
+
+    def _листалка_хаба(self, режим: str, стр: int, всего: int) -> str:
+        if всего <= 1:
+            return ""
+        куски = []
+        if стр <= 1:
+            куски.append('<span aria-disabled="true">←</span>')
+        else:
+            куски.append(f'<a href="{self._адрес_хаба(режим, стр - 1)}" rel="prev">←</a>')
+        for н in страницы(стр, всего):
+            if н is None:
+                куски.append("<em>…</em>")
+            elif н == стр:
+                куски.append(f'<span aria-current="page">{н}</span>')
+            else:
+                куски.append(f'<a href="{self._адрес_хаба(режим, н)}">{н}</a>')
+        if стр >= всего:
+            куски.append('<span aria-disabled="true">→</span>')
+        else:
+            куски.append(f'<a href="{self._адрес_хаба(режим, стр + 1)}" rel="next">→</a>')
+        return f'<nav class="zpg" aria-label="Страницы подборок">{"".join(куски)}</nav>'
+
+    def _переключатель_сортировки(self, режим: str) -> str:
+        подписи = (("contract", "По контуру"), ("size", "По размеру"),
+                   ("name", "По названию"))
+        кнопки = "".join(
+            (f'<span class="ahub__s is-on" aria-current="true">{html.escape(t)}</span>'
+             if k == режим else
+             f'<a class="ahub__s" href="{self._адрес_хаба(k)}">{html.escape(t)}</a>')
+            for k, t in подписи)
+        return ('<div class="ahub__sorts" data-b13="sort" role="group" '
+                f'aria-label="Порядок подборок">{кнопки}</div>')
+
+    @staticmethod
+    def _сетка_коллекций(карточки: list[dict]) -> str:
+        """Сетка из уже отобранных карточек. Пустых ячеек в ней не бывает."""
+        плитки = "".join(
+            f'<a class="zhub__c" data-card-variant="collection-card" '
+            f'data-collection-key="{html.escape(к["key"])}" '
+            f'href="{html.escape(к["path"])}">'
+            f'<span class="zhub__g">'
+            + "".join(
+                f'<span class="zhub__p">'
+                f'<img class="zhub__img" src="{html.escape(_адрес_постера(п) or "")}"'
+                f' alt="" loading="lazy" width="120" height="180"></span>'
+                for п in к["posters"])
+            + "</span>"
+            f'<span class="zhub__t">{html.escape(к["title"])}</span>'
+            f'<span class="zhub__m">{к["total"]} записей</span>'
+            f'<span class="zhub__d">{html.escape(к["description"])}</span>'
+            "</a>"
+            for к in карточки)
+        return f'<div class="zhub" data-b13="hub">{плитки}</div>'
+
+    def хаб_коллекций(self, зпр: dict | None = None) -> str:
+        """B13.1 хаб: сетка 3/2/1, объявленный порядок, честная пустота."""
+        if КОЛЛЕКЦИИ is None:
+            return ('<div class="zempty" data-b13-state="blocked">'
+                    '<b>Подборки недоступны</b>'
+                    "<p>Контракт коллекций витрине не передан.</p></div>")
+        карточки = self._карточки_коллекций()
+        if not карточки:
+            return ('<div class="zempty" data-b13-state="empty">'
+                    '<b>Подборок пока нет</b>'
+                    "<p>Ни одна коллекция контура не набрала записей в текущем "
+                    "снимке. Наполнять их похожими тайтлами нельзя: подборка "
+                    "без источника — это выдумка.</p></div>")
+        зпр = зпр or {}
+        режим = (зпр.get("sort") or ["contract"])[0] or "contract"
+        if режим not in АНИМЕДИА_COLLECTIONS_SORTS:
+            режим = "contract"
+        return self._сетка_коллекций(self._сортировать_коллекции(карточки, режим))
+
+    def страница_коллекций(self, зпр: dict) -> str:
+        """B13.1 `/collections/`: H1, счётчик, порядок, страницы по 12."""
+        карточки = self._карточки_коллекций()
+        зпр = зпр or {}
+        режим = (зпр.get("sort") or ["contract"])[0] or "contract"
+        if режим not in АНИМЕДИА_COLLECTIONS_SORTS:
+            режим = "contract"
+        if not карточки:
+            self._http_status = 200
+            тело = ('<div class="zwrap"><h1 class="zh">Подборки аниме</h1>'
+                    '<p class="zsub" data-b13-count="0">Доступно подборок: 0.</p>'
+                    + self.хаб_коллекций(зпр) + "</div>")
+            return self.оболочка(тело, f"Подборки — {self.имя}", "/collections/",
+                                 актив="/collections/",
+                                 описание=f"Подборки витрины {self.имя}.")
+        на_странице = АНИМЕДИА_COLLECTIONS_PAGE_SIZE
+        всего = len(карточки)
+        всего_страниц = max(1, (всего + на_странице - 1) // на_странице)
+        стр, ошибка = self._разобрать_страницу_эпизодов(зпр, всего_страниц)
+        if ошибка or стр is None:
+            self._http_status = 404
+            return self.не_найдено("/collections/")
+        self._http_status = 200
+        упорядоченные = self._сортировать_коллекции(карточки, режим)
+        кусок = упорядоченные[(стр - 1) * на_странице: стр * на_странице]
+        плитки = self._сетка_коллекций(кусок)
+        тело = (
+            '<div class="zwrap"><h1 class="zh">Подборки аниме</h1>'
+            f'<p class="zsub" data-b13-count="{всего}" data-b13-page="{стр}" '
+            f'data-b13-pages="{всего_страниц}">Доступно подборок: {всего}'
+            + (f' · страница {стр} из {всего_страниц}' if всего_страниц > 1 else "")
+            + '. Карточки собраны из собственных постеров каталога.</p>'
+            + self._переключатель_сортировки(режим)
+            + плитки
+            + self._листалка_хаба(режим, стр, всего_страниц)
+            + "</div>")
+        return self.оболочка(тело, f"Подборки — {self.имя}",
+                             self._адрес_хаба(режим, стр, для_html=False),
+                             актив="/collections/",
+                             описание=f"Подборки витрины {self.имя}.")
+
+    def коллекция(self, данные) -> str:
+        """B13.2 страница коллекции: H1, счётчик, 24 на страницу, дедупликация."""
+        на_странице = АНИМЕДИА_COLLECTION_DETAIL_PAGE_SIZE
+        всего_страниц = max(1, (данные.total + на_странице - 1) // на_странице)
+        видели: set[str] = set()
+        записи = []
+        for к in данные.items:
+            сырое = к.raw if hasattr(к, "raw") else {}
+            ключ = str(сырое.get("canonical_title_id") or сырое.get("slug")
+                       or к.entity_id or "")
+            if ключ and ключ in видели:
+                continue
+            видели.add(ключ)
+            записи.append(сырое)
+        листалка = ""
+        if всего_страниц > 1:
+            куски = []
+            for н in страницы(данные.page, всего_страниц):
+                if н is None:
+                    куски.append("<em>…</em>")
+                elif н == данные.page:
+                    куски.append(f'<span aria-current="page">{н}</span>')
+                else:
+                    адрес = данные.canonical_path + ("" if н == 1 else f"?page={н}")
+                    куски.append(f'<a href="{html.escape(адрес)}">{н}</a>')
+            листалка = ('<nav class="zpg" aria-label="Страницы подборки">'
+                        f'{"".join(куски)}</nav>')
+        канон = данные.canonical_path + ("" if данные.page == 1
+                                         else f"?page={данные.page}")
+        тело = (
+            f'<div class="zwrap acol-page" data-b13="detail" '
+            f'data-collection-key="{html.escape(данные.collection_key)}">'
+            f'<h1 class="zh">{html.escape(данные.title)}</h1>'
+            f'<p class="zsub" data-b13-count="{данные.total}" '
+            f'data-b13-page="{данные.page}" data-b13-pages="{всего_страниц}">'
+            f'{html.escape(данные.description)} · {данные.total} записей'
+            + (f' · страница {данные.page} из {всего_страниц}'
+               if всего_страниц > 1 else "")
+            + "</p>"
+            + (self.плитки(записи) if записи else
+               f'<div class="zempty" data-b13-state="empty">'
+               f'<b>{html.escape(данные.title)}: пока пусто</b>'
+               "<p>В текущем снимке под эту коллекцию не попала ни одна "
+               "запись.</p></div>")
+            + листалка + "</div>")
+        return self.оболочка(тело, f"{данные.title} — {self.имя}", канон,
+                             актив="/collections/",
+                             описание=данные.description)
+
     # --- расписание ----------------------------------------------------
     def расписание(self) -> str:
         """B04/B13.3 honest empty: no fabricated times; route panel ≤260px."""
@@ -7711,12 +7965,28 @@ class Обработчик(BaseHTTPRequestHandler):
         спец = КОЛЛЕКЦИИ.спецификация(СЕМЕЙСТВО, ключ)
         if спец is None or снимок is None:
             return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
+        # Размер страницы и строгость разбора спрашиваются у вида: у семейств
+        # они разные, а общий маршрут не должен знать про конкретное семейство.
+        # Значения по умолчанию сохраняют прежнее поведение Lords и Zona.
+        на_странице = getattr(в, "COLLECTION_PAGE_SIZE", 60)
+        строго = getattr(в, "COLLECTION_STRICT_PAGING", False)
+        сырая = (зпр.get("page") or ["1"])[0]
         try:
-            страница = max(1, int((зпр.get("page") or ["1"])[0] or 1))
+            номер = int(str(сырая).strip() or 1)
         except (TypeError, ValueError):
-            страница = 1
-        данные = КОЛЛЕКЦИИ.разрешить(ключ, снимок, СЕМЕЙСТВО, страница=страница)
+            if строго:
+                return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
+            номер = 1
+        if номер < 1:
+            if строго:
+                return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
+            номер = 1
+        данные = КОЛЛЕКЦИИ.разрешить(ключ, снимок, СЕМЕЙСТВО, страница=номер,
+                                     на_странице=на_странице)
         if данные is None:
+            return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
+        if строго and номер > 1 and not данные.items:
+            # Страница за концом коллекции — настоящая 404, а не пустая полка.
             return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
         тело = в.коллекция(данные)
         return self._отдать(тело.encode("utf-8"))
