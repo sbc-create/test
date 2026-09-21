@@ -45,6 +45,10 @@ const ROUTES_FILE = arg('--routes');
 const WIDTHS = (arg('--widths', '320,390,768,1024,1440,1920')).split(',').map(Number);
 const AXE_WIDTHS = (arg('--axe-widths', '390,1440')).split(',').map(Number);
 const SHOTS = !has('--no-screenshots');
+// Кадр целиком или первый экран. Целиком — для разбора, первый экран —
+// для свидетельства: каталог на 24 постера даёт 6 МБ на кадр, и такой
+// снимок в репозиторий не кладут.
+const FULL_PAGE = !has('--viewport-shots');
 const EXECUTABLE = process.env.FACTORY_CHROMIUM || null;
 const LABEL = arg('--label', 'run');
 
@@ -271,7 +275,7 @@ async function main() {
         if (SHOTS) {
           await page.screenshot({
             path: path.join(OUT, 'shots', `${маршрут.name}-${width}.png`),
-            fullPage: true,
+            fullPage: FULL_PAGE,
           });
         }
       } catch (e) {

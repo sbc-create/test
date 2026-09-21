@@ -42,6 +42,10 @@ import urllib.request
 from pathlib import Path
 
 КОРЕНЬ = Path(__file__).resolve().parents[2]
+#: Откуда берутся выкатываемые модули. По умолчанию — рабочее дерево;
+#: `--modules` позволяет поднять предпросмотр из ЛЮБОЙ ревизии, выгруженной
+#: рядом. Без этого снимок «до» снять невозможно: код «до» уже исправлен, и
+#: сравнение до/после пришлось бы подменять словами.
 ХОСТ = КОРЕНЬ / "automation" / "host"
 
 #: Шесть выкатываемых модулей. Хэш артефакта считается по всем: правка в любом
@@ -110,6 +114,19 @@ def версия_дерева() -> str:
     except (OSError, IndexError):
         pass
     return "0.0.0"
+
+
+def глобально_модули(каталог: Path) -> None:
+    """Сменить каталог модулей на весь запуск.
+
+    Проверяется наличие всех шести: поднять предпросмотр из половины ревизии
+    значило бы измерить смесь, а не состояние.
+    """
+    global ХОСТ
+    нет = [и for и in МОДУЛИ if not (каталог / и).is_file()]
+    if нет:
+        raise SystemExit(f"в {каталог} нет модулей: {нет}")
+    ХОСТ = каталог
 
 
 def свободен(порт: int) -> bool:
@@ -183,7 +200,7 @@ def погасить(куда: Path, профили: list[str]) -> int:
         except (OSError, ValueError):
             continue
         # Проверка владения: чужой процесс не гасится, даже если pid совпал.
-        if not наш(pid):
+        if not наш(pid, ПОРТЫ[профиль]):
             print(f"[preview] {профиль}: pid {pid} не наш — не трогаю", file=sys.stderr)
             файл.unlink(missing_ok=True)
             continue
@@ -196,12 +213,22 @@ def погасить(куда: Path, профили: list[str]) -> int:
     return 0
 
 
-def наш(pid: int) -> bool:
+def наш(pid: int, порт: int) -> bool:
+    """Процесс наш, если это витрина Yummy на НАШЕМ порту.
+
+    Сверять путь к модулям нельзя: предпросмотр «до» поднимается из выгрузки
+    другой ревизии, и после переключения обратно собственный процесс переставал
+    считаться своим — оставался висеть, а порт оказывался занят.
+
+    Порт достаточен: 9310–9312 принадлежат этому инструменту, а pid взят из
+    его же pid-файла. Совпадение обоих признаков у чужого процесса означало бы,
+    что он и есть наш предпросмотр.
+    """
     try:
         строка = Path(f"/proc/{pid}/cmdline").read_bytes().decode("utf-8", "replace")
     except OSError:
         return False
-    return "yummy-frontend.py" in строка and str(ХОСТ) in строка
+    return "yummy-frontend.py" in строка and f"--port\0{порт}" in строка
 
 
 def main() -> int:
@@ -211,8 +238,12 @@ def main() -> int:
     р.add_argument("--data", required=False, help="каталог со снимком данных")
     р.add_argument("--run", required=True, help="каталог для pid, логов и манифестов")
     р.add_argument("--profiles", default="site,org,biz")
+    р.add_argument("--modules", help="каталог с шестью выкатываемыми модулями; "
+                                     "по умолчанию — рабочее дерево")
     р.add_argument("--wait", type=float, default=30.0)
     а = р.parse_args()
+    if а.modules:
+        глобально_модули(Path(а.modules))
     профили = [п.strip() for п in а.profiles.split(",") if п.strip()]
     неизвестные = [п for п in профили if п not in ПРОФИЛИ]
     if неизвестные:
