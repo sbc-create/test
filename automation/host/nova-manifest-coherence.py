@@ -133,6 +133,9 @@ def check(front: pathlib.Path = FRONT, registry: dict | None = None,
         процессы = процессы_по_портам(порты)
 
     общий = front / RUNTIME_NAME
+    загрузчик_по_общему_пути = (
+        общий.is_file() and b"LORDS_RUNTIME_DISPATCHED" in общий.read_bytes()
+    )
     сведения = {}
     расхождения = []
     общие_пути = []
@@ -158,8 +161,19 @@ def check(front: pathlib.Path = FRONT, registry: dict | None = None,
         if общий_путь:
             общие_пути.append(site_id)
 
+        # Процесс, поднятый по общему пути, на котором СЕЙЧАС лежит загрузчик,
+        # исполняет не загрузчик: он прочитал прежний файл при старте и держит
+        # его в памяти. Хешировать путь в этом случае значит измерить чужие
+        # байты и объявить расхождение, которого нет. Такое состояние — ожидание
+        # перезапуска, и называть его надо так.
+        до_загрузчика = общий_путь and загрузчик_по_общему_пути
+        if до_загрузчика:
+            исполняемый_sha = ""
+
         if not процесс:
             вердикт = "NOT_RUNNING"
+        elif до_загрузчика:
+            вердикт = "PENDING_RESTART_PROCESS_PREDATES_LOADER"
         elif not объявлено:
             вердикт = "UNMEASURABLE_NO_MANIFEST"
         elif not исполняемый_sha:
@@ -196,9 +210,7 @@ def check(front: pathlib.Path = FRONT, registry: dict | None = None,
         "registry_scope": sorted(витрины),
         "out_of_registry": registry.get("out_of_registry", []),
         "shared_mutable_path": str(общий),
-        "shared_path_is_loader": общий.is_file() and b"LORDS_RUNTIME_DISPATCHED" in общий.read_bytes()
-        if общий.is_file()
-        else False,
+        "shared_path_is_loader": загрузчик_по_общему_пути,
         "sites_running_shared_mutable_path": общие_пути,
         "sites": сведения,
         "diverged_sites": расхождения,

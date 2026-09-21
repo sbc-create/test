@@ -132,6 +132,24 @@ def test_running_shared_mutable_path_is_reported(tmp_path):
     assert отчёт["sites"]["lords-01"]["runs_shared_mutable_path"] is True
 
 
+def test_process_started_before_loader_is_pending_not_diverged(tmp_path):
+    """Процесс, поднятый до установки загрузчика, исполняет старый код из памяти.
+
+    Хешировать в этом случае общий путь — значит измерить байты загрузчика и
+    объявить расхождение, которого нет. Такое состояние называется ожиданием
+    перезапуска. Ошибка была допущена и исправлена 2026-09-21.
+    """
+    front = _front(tmp_path)
+    (front / RUNTIME).write_bytes(b"# loader\nLORDS_RUNTIME_DISPATCHED = 1\n")
+    _manifest(front, "lords-01", _sha(NEW))
+    процессы = {9110: {"pid": 1, "exec_script": str(front / RUNTIME), "started_utc": "t"}}
+    код, отчёт = coherence.check(front, _registry(front, {"lords-01": 9110}), процессы)
+    assert код == coherence.COHERENT
+    assert отчёт["sites"]["lords-01"]["verdict"] == "PENDING_RESTART_PROCESS_PREDATES_LOADER"
+    assert отчёт["sites"]["lords-01"]["running_artifact_sha256"] == ""
+    assert отчёт["shared_path_is_loader"] is True
+
+
 def test_stopped_site_is_not_reported_as_pass(tmp_path):
     front = _front(tmp_path)
     _manifest(front, "lords-01", _sha(NEW))

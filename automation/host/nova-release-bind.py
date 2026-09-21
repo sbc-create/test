@@ -42,9 +42,11 @@ import hashlib
 import json
 import os
 import pathlib
+import importlib.util
 import shutil
 import subprocess
 import sys
+import time
 
 FRONT = pathlib.Path("/srv/lords/.frontend")
 RUNTIME_NAME = "lords-frontend.py"
@@ -63,6 +65,15 @@ OK = 0
 
 class Отказ(Exception):
     """Условие, при котором продолжать нельзя."""
+
+
+def _реестр() -> dict:
+    """Exact-domain реестр: единственный источник имён юнитов и портов."""
+    путь = pathlib.Path(__file__).resolve().parent / "nova-runtime-registry.py"
+    spec = importlib.util.spec_from_file_location("nova_runtime_registry", путь)
+    модуль = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(модуль)
+    return модуль.build()
 
 
 def _repo() -> pathlib.Path:
@@ -253,6 +264,138 @@ def поставить_загрузчик(реестр_файл: str) -> dict:
     }
 
 
+#: Поля манифеста, принадлежащие витрине, а не сборке. Они переносятся из
+#: прежнего манифеста: профиль и домен не меняются оттого, что вышел новый код.
+ПОЛЯ_ВИТРИНЫ = (
+    "schema_version", "template_family", "design_version", "profile", "domain",
+    "player_layout_contract", "core_runtime", "family_template",
+)
+
+
+def переоформить_манифест(витрина: str, build_id: str, реестр: dict) -> dict:
+    """Манифест витрины из RELEASE.json: правдиво и с сохранением полей витрины.
+
+    Поля происхождения берутся из релиза, а не из желания: `source_commit`,
+    `source_dirty` и `artifact_sha256` уже проверены сборкой, которая
+    отказывается работать на грязном дереве.
+    """
+    запись = (реестр.get("sites") or {}).get(витрина)
+    if not запись:
+        raise Отказ(f"витрины {витрина} нет в реестре")
+    релиз = FRONT / "releases" / build_id
+    try:
+        сведения = json.loads((релиз / "RELEASE.json").read_text())
+    except (OSError, ValueError) as ошибка:
+        raise Отказ(f"нет или нечитаем RELEASE.json релиза {build_id}: {ошибка}")
+
+    путь = pathlib.Path(запись["manifest_path"])
+    прежний = {}
+    if путь.is_file():
+        try:
+            прежний = json.loads(путь.read_text())
+        except ValueError:
+            прежний = {}
+        метка = _dt.datetime.now(_dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+        откат = FRONT / ".rollback" / f"{метка}-{витрина}-manifest"
+        откат.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(путь, откат / путь.name)
+
+    новый = {ключ: прежний[ключ] for ключ in ПОЛЯ_ВИТРИНЫ if ключ in прежний}
+    новый.setdefault("schema_version", 1)
+    новый.setdefault("domain", запись.get("exact_domain") or "")
+    новый.update({
+        "source_commit": сведения["source_commit"],
+        "source_dirty": сведения["source_dirty"],
+        "build_id": сведения["build_id"],
+        "artifact_sha256": сведения["artifact_sha256"],
+        "release_dir": сведения["release_dir"],
+        "built_at": сведения["built_at"],
+        "built_from": сведения["built_from"],
+        "bound_release_link": запись["release_link"],
+    })
+    временный = путь.parent / f".{путь.name}.new"
+    временный.write_text(json.dumps(новый, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    os.replace(временный, путь)
+    return {"site": витрина, "manifest": str(путь), "previous": прежний, "current": новый}
+
+
+def перезапустить(витрина: str, реестр: dict) -> dict:
+    """Перезапуск ОДНОЙ витрины с проверкой результата по факту, а не по коду.
+
+    Про сообщение «Failed to allocate directory watch: Too many open files».
+    Оно приходит от systemd при исчерпании inotify и НЕ означает, что служба не
+    перезапустилась. Поэтому успех определяется не кодом возврата, а сменой PID
+    и временем старта нового процесса.
+    """
+    запись = (реестр.get("sites") or {}).get(витрина)
+    if not запись:
+        raise Отказ(f"витрины {витрина} нет в реестре")
+    юнит = запись["unit"]
+    порт = int(запись["port"])
+
+    до = _процесс_на_порту(порт)
+    результат = subprocess.run(
+        ["systemctl", "restart", юнит], capture_output=True, text=True
+    )
+    вывод = (результат.stdout + результат.stderr).strip()
+
+    # Ждём смены PID: процесс поднимается не мгновенно.
+    после = None
+    for _ in range(30):
+        после = _процесс_на_порту(порт)
+        if после and (not до or после["pid"] != до["pid"]):
+            break
+        time.sleep(1)
+
+    сменился = bool(после) and (not до or после["pid"] != до["pid"])
+    return {
+        "site": витрина,
+        "unit": юнит,
+        "command": f"systemctl restart {юнит}",
+        "returncode": результат.returncode,
+        "output": вывод,
+        "inotify_warning": "Too many open files" in вывод,
+        "pid_before": до["pid"] if до else None,
+        "pid_after": после["pid"] if после else None,
+        "started_after_utc": после["started_utc"] if после else "",
+        "restarted": сменился,
+        "verdict": "RESTARTED" if сменился else (
+            "NOT_RESTARTED_PRIVILEGE_OR_FAILURE" if результат.returncode != 0 else "NOT_RESTARTED"
+        ),
+    }
+
+
+def _процесс_на_порту(порт: int) -> dict | None:
+    hz = os.sysconf("SC_CLK_TCK")
+    btime = 0.0
+    for line in pathlib.Path("/proc/stat").read_text().splitlines():
+        if line.startswith("btime"):
+            btime = float(line.split()[1])
+            break
+    for запись in pathlib.Path("/proc").iterdir():
+        if not запись.name.isdigit():
+            continue
+        try:
+            сырое = (запись / "cmdline").read_bytes().decode("utf-8", "replace")
+        except OSError:
+            continue
+        части = [ч for ч in сырое.split("\0") if ч]
+        if RUNTIME_NAME not in сырое:
+            continue
+        for i, ч in enumerate(части):
+            if ч == "--port" and i + 1 < len(части) and части[i + 1] == str(порт):
+                try:
+                    поля = (запись / "stat").read_text().rsplit(")", 1)[1].split()
+                    начало = _dt.datetime.fromtimestamp(
+                        btime + int(поля[19]) / hz, _dt.timezone.utc
+                    ).isoformat()
+                except (OSError, IndexError, ValueError):
+                    начало = ""
+                скрипт = next((ч for ч in части[1:] if ч.endswith(".py")), "")
+                return {"pid": int(запись.name), "started_utc": начало, "exec_script": скрипт}
+    return None
+
+
 def статус() -> dict:
     sites = {}
     корень = FRONT / "sites"
@@ -291,6 +434,11 @@ def main() -> int:
     p.add_argument("--build", required=True)
     i = sub.add_parser("install-loader")
     i.add_argument("--registry", required=True)
+    m = sub.add_parser("stage-manifest")
+    m.add_argument("--site", required=True)
+    m.add_argument("--build", required=True)
+    r = sub.add_parser("restart")
+    r.add_argument("--site", required=True)
     sub.add_parser("status")
     args = parser.parse_args()
 
@@ -303,6 +451,10 @@ def main() -> int:
             результат = привязать(args.site, args.build)
         elif args.cmd == "install-loader":
             результат = поставить_загрузчик(args.registry)
+        elif args.cmd == "stage-manifest":
+            результат = переоформить_манифест(args.site, args.build, _реестр())
+        elif args.cmd == "restart":
+            результат = перезапустить(args.site, _реестр())
         else:
             результат = статус()
     except Отказ as ошибка:
