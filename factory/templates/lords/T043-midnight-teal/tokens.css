@@ -1,0 +1,6 @@
+/* T043 — полуночная бирюза с зелёным акцентом */
+:root{
+  --ink:#e4eeee; --dim:#8ba3a3; --bg:#05090b; --card:#0c1416; --line:#192628;
+  --brand:#128A55; --brand-text:#8ED6B0; --brand-ink:#ffffff; --soft:#081012;
+  --radius:10px; --gap:14px; --pad:16px; --title-size:13.5px; --title-lines:2;
+}

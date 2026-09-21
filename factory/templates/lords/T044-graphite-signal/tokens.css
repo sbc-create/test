@@ -1,0 +1,6 @@
+/* T044 — графит, зелёный только в сигналах */
+:root{
+  --ink:#e9eaea; --dim:#8d9190; --bg:#0a0b0b; --card:#131515; --line:#232525;
+  --brand:#3F7D26; --brand-text:#9FD8B4; --brand-ink:#ffffff; --soft:#0e1010;
+  --radius:3px; --gap:12px; --pad:16px; --title-size:13.5px; --title-lines:2;
+}

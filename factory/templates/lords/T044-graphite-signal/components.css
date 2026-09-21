@@ -1,0 +1,6 @@
+/* T044 — сигнальная точка слева у строк ленты */
+.g--sig .k--compact{border-left:3px solid var(--brand)}
+.k__n{color:var(--brand-text)}
+.k{border-radius:var(--radius)}
+.sec__t{font-size:14px;text-transform:uppercase;letter-spacing:.1em;color:var(--dim)}
+.k--poster .k__cap{padding:7px 4px 0}

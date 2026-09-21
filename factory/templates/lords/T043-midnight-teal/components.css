@@ -1,0 +1,6 @@
+/* T043 — бирюзовые линии разделов и мягкие углы */
+.sec__t{border-left:3px solid var(--brand);padding-left:10px;font-size:15px;letter-spacing:.05em}
+.k{border-radius:var(--radius)}
+.k--poster .k__p{border-radius:var(--radius);overflow:hidden}
+.split__lead{border-color:var(--brand)}
+.k--poster{background:transparent;border-color:transparent}

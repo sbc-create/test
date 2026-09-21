@@ -1,0 +1,11 @@
+/* T043 — витрина средняя, мозаика на шесть колонок */
+.g--mt{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.g--mt{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1440px){.g--mt{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+.g--mtm{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.g--mtm{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1024px){.g--mtm{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+.g--mtf{grid-template-columns:repeat(1,minmax(0,1fr))}
+@media(min-width:1000px){.g--mtf{grid-template-columns:repeat(2,minmax(0,1fr))}}

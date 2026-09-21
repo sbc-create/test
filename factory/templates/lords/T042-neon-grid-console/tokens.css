@@ -1,0 +1,6 @@
+/* T042 — консольный графит с мятной подсветкой */
+:root{
+  --ink:#e6ebe9; --dim:#8b9a95; --bg:#07090a; --card:#0f1415; --line:#1d2527;
+  --brand:#2F6B22; --brand-text:#9FD8B4; --brand-ink:#ffffff; --soft:#0a0d0e;
+  --radius:4px; --gap:10px; --pad:14px; --title-size:13px; --title-lines:2;
+}

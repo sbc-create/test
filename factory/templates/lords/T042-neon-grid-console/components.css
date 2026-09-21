@@ -1,0 +1,6 @@
+/* T042 — плитки консоли с моноширинными цифрами */
+.board__col{background:var(--card);border-left:2px solid var(--brand-text)}
+.k--tile{background:var(--soft);border-radius:var(--radius)}
+.idx__n,.k__y{font-variant-numeric:tabular-nums}
+.sec__t{font-size:13px;text-transform:uppercase;letter-spacing:.12em}
+.k--poster .k__cap{padding:6px 3px 0}

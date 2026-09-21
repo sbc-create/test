@@ -1,0 +1,7 @@
+/* T049 — лента широкая, мозаика четыре колонки */
+.g--sf{grid-template-columns:repeat(1,minmax(0,1fr))}
+@media(min-width:900px){.g--sf{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1440px){.g--sf{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+.g--sm{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.g--sm{grid-template-columns:repeat(4,minmax(0,1fr))}}

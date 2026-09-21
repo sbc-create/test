@@ -1,0 +1,6 @@
+/* T045 — панели непрозрачные: размытие убрано, чтобы контраст не падал */
+.board__col{background:var(--card);border-radius:var(--radius)}
+.k{border-radius:var(--radius)}
+.k--poster .k__p{border-radius:var(--radius);overflow:hidden}
+.sec__t{font-size:16px}
+.k--tile{background:var(--soft)}

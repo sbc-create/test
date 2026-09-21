@@ -1,0 +1,23 @@
+{
+  "packages_checked": 50,
+  "violations": [],
+  "ISOLATION_VIOLATIONS": 0,
+  "PASS": true,
+  "boundaries": {
+    "runtime_paths_forbidden": [
+      "/srv/lords/.frontend",
+      "/srv/lords/lords-",
+      "/etc/systemd",
+      "/etc/nginx",
+      "/var/lib/lords-deploy"
+    ],
+    "foreign_families_forbidden": [
+      "animedia",
+      "zona",
+      "yummy",
+      "yummyani"
+    ],
+    "real_domains_forbidden": true,
+    "preview_domain_allowed": "lords-tNNN.example"
+  }
+}

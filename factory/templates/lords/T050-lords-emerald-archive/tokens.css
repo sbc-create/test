@@ -1,0 +1,6 @@
+/* T050 — изумрудный финал: наибольшая плотность пула */
+:root{
+  --ink:#e6efe8; --dim:#8fa896; --bg:#050a07; --card:#0c130f; --line:#1a251f;
+  --brand:#128A55; --brand-text:#9ACD32; --brand-ink:#04120a; --soft:#080e0a;
+  --radius:4px; --gap:8px; --pad:12px; --title-size:12.5px; --title-lines:2;
+}

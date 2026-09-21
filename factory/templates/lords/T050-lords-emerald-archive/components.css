@@ -1,0 +1,6 @@
+/* T050 — предельно компактные подписи, лаймовый акцент */
+.k--tile .k__cap{padding:7px 8px}
+.k--poster .k__cap{padding:5px 1px 0}
+.sec__t{font-size:12.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--brand-text)}
+.k--poster{background:transparent;border-color:transparent}
+.k--poster .k__p{border-radius:var(--radius);overflow:hidden}

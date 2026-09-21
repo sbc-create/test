@@ -1,0 +1,6 @@
+/* T041 — изумрудное свечение по краю, но не в тексте */
+:root{
+  --ink:#e9f2ec; --dim:#93ac9c; --bg:#040907; --card:#0b1310; --line:#17251f;
+  --brand:#22B573; --brand-text:#BCE8D0; --brand-ink:#04120a; --soft:#071009;
+  --radius:12px; --gap:14px; --pad:16px; --title-size:14px; --title-lines:2;
+}

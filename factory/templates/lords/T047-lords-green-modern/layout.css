@@ -1,0 +1,8 @@
+/* T047 — витрина пять колонок, мозаика четыре */
+.g--gm{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.g--gm{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1024px){.g--gm{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(min-width:1600px){.g--gm{grid-template-columns:repeat(7,minmax(0,1fr))}}
+
+.g--gmm{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.g--gmm{grid-template-columns:repeat(4,minmax(0,1fr))}}

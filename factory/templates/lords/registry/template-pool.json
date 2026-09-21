@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "pool": "lords-50-v1",
-  "generated_at": "2026-09-21T15:20:48.434838+00:00",
-  "note": "Зарегистрированы только существующие пакеты. Пустых записей под нереализованные T006–T050 в пуле нет: запись без пакета выдавала бы домену несуществующий шаблон.",
+  "generated_at": "2026-09-21T17:37:33.973105+00:00",
+  "note": "Пятьдесят пакетов. Статус TECHNICAL_CANDIDATE у всех: ASSIGNABLE требует приёмки владельца, а самооценка агента ею не является. Пустых записей в пуле нет — каждая запись соответствует существующему пакету.",
   "templates": [
     {
       "template_id": "T001",
@@ -10,7 +10,7 @@
       "version": "1.0.0",
       "family": "forest-cinema",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8b4eae92d58d",
+      "source_commit": "8d2e9c3c5b90",
       "capabilities": [
         "film",
         "series",
@@ -36,7 +36,7 @@
       "version": "1.0.0",
       "family": "forest-cinema",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8b4eae92d58d",
+      "source_commit": "8d2e9c3c5b90",
       "capabilities": [
         "film",
         "series",
@@ -62,7 +62,7 @@
       "version": "1.0.0",
       "family": "forest-cinema",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8b4eae92d58d",
+      "source_commit": "8d2e9c3c5b90",
       "capabilities": [
         "film",
         "series",
@@ -88,7 +88,7 @@
       "version": "1.0.0",
       "family": "forest-cinema",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8b4eae92d58d",
+      "source_commit": "8d2e9c3c5b90",
       "capabilities": [
         "film",
         "series",
@@ -114,7 +114,7 @@
       "version": "1.0.0",
       "family": "forest-cinema",
       "status": "TECHNICAL_CANDIDATE",
-      "source_commit": "8b4eae92d58d",
+      "source_commit": "8d2e9c3c5b90",
       "capabilities": [
         "film",
         "series",
@@ -133,6 +133,1176 @@
       "assigned_domain": null,
       "reserved_at": null,
       "green_identity": "secondary"
+    },
+    {
+      "template_id": "T006",
+      "slug": "emerald-series-feed",
+      "version": "1.0.0",
+      "family": "series-feed",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "76197fe7ad69b58abbb77ded32f89eaff8fffe0e9a616c1f5719e1ce7edf1889",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T007",
+      "slug": "series-timeline",
+      "version": "1.0.0",
+      "family": "series-feed",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "f324b2aeaafcb4b0585246eeaeaafba28b31dd9a20972c930347c8b6ccaa2a8f",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "secondary"
+    },
+    {
+      "template_id": "T008",
+      "slug": "series-dashboard",
+      "version": "1.0.0",
+      "family": "series-feed",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "76c61ec4e997c0a7a25ee39f74ae36c96142db85617a94d5e930a07227962176",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T009",
+      "slug": "series-split-stream",
+      "version": "1.0.0",
+      "family": "series-feed",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "0aa44e1cb8398eab3bb1ff620852969321d5fddcadeaf93497401a5f29153a8f",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "secondary"
+    },
+    {
+      "template_id": "T010",
+      "slug": "sage-series-journal",
+      "version": "1.0.0",
+      "family": "series-feed",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "15b05d610389dd5c9ab29c236974cfe04e5904e2ed4294b460c32dbd6bc95bf0",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "accent-only"
+    },
+    {
+      "template_id": "T011",
+      "slug": "curated-green-journal",
+      "version": "1.0.0",
+      "family": "curated",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "41290dc11a1dc44c024e8430ecfabce945ba9b889aa5d58626edb02c9b97838d",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T012",
+      "slug": "curated-index",
+      "version": "1.0.0",
+      "family": "curated",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "25c760359e0846ee3263b3ff79eece0a9bba3b29c41d75a2c8f564d7832f7011",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "accent-only"
+    },
+    {
+      "template_id": "T013",
+      "slug": "curated-mosaic",
+      "version": "1.0.0",
+      "family": "curated",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "1407692093c32a1f353a81786c9fe536a929a246a14cc81acb1fa2754d230356",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "secondary"
+    },
+    {
+      "template_id": "T014",
+      "slug": "curated-broadsheet",
+      "version": "1.0.0",
+      "family": "curated",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "4c6632958966457849c722b06464ea86e9c05c7db6013c0ab72812b0fe07220a",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "accent-only"
+    },
+    {
+      "template_id": "T015",
+      "slug": "curated-cards",
+      "version": "1.0.0",
+      "family": "curated",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "a324c9e853dbe7ed4e663d1119361a3ea1ec7c5a2ffea8e37d735e541b6c8d74",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T016",
+      "slug": "premiere-calendar-green",
+      "version": "1.0.0",
+      "family": "premiere",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "57a5ae256766e384043d08b598290eab5e1e237d99971795ca4ac57a8522b944",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T017",
+      "slug": "premiere-week-board",
+      "version": "1.0.0",
+      "family": "premiere",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "cccb8158f22b27001a53b1bd36cbc1fb2b88c397df66499cf02c46d5117a6a1d",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "secondary"
+    },
+    {
+      "template_id": "T018",
+      "slug": "premiere-red-carpet",
+      "version": "1.0.0",
+      "family": "premiere",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "413d5eea2e636c27db42b44fd796f58f9a0819e53822368f5862503bb1dec84d",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "secondary"
+    },
+    {
+      "template_id": "T019",
+      "slug": "premiere-minimal",
+      "version": "1.0.0",
+      "family": "premiere",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "e05218b16c21b0dd53b1a35a26f51876bb252e1df48ae4e89a9d4154a0bcb379",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "accent-only"
+    },
+    {
+      "template_id": "T020",
+      "slug": "premiere-world",
+      "version": "1.0.0",
+      "family": "premiere",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "11644ef2ad8dc588d540910410e601f872f904cbef07388dd6dcfa5b83736ea4",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T021",
+      "slug": "genre-atlas",
+      "version": "1.0.0",
+      "family": "genre",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "e0be77c3ed6175ba3799d8e3b886af93439f17423192122a18a548fc12b5c466",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T022",
+      "slug": "genre-capsules",
+      "version": "1.0.0",
+      "family": "genre",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "c702a32c3b30f4ed338ef83f9dd23f0dfad86b0e7eec87dda3519a45111490a5",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T023",
+      "slug": "genre-spectrum",
+      "version": "1.0.0",
+      "family": "genre",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "11e7b61471b582b49014dad6074fdc94e49cafe0aee1652dd7d0423598bd968c",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "secondary"
+    },
+    {
+      "template_id": "T024",
+      "slug": "genre-library",
+      "version": "1.0.0",
+      "family": "genre",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "e66a2a00491feef5e07f94eb0637315321a74196ebcb7d6c5c2e3c498978b6d7",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T025",
+      "slug": "genre-quickpick",
+      "version": "1.0.0",
+      "family": "genre",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "cc8efe40455eb7cb5488b706c85bb06134b9cd17fd55a93f215669a5e67849f1",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "secondary"
+    },
+    {
+      "template_id": "T026",
+      "slug": "rating-leaderboard",
+      "version": "1.0.0",
+      "family": "rating",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "91dfca58e7fae9417f6aaa825ddff2cdca3ad2cdab0e45a99833e5d96ed619e8",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T027",
+      "slug": "rating-scorecards",
+      "version": "1.0.0",
+      "family": "rating",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "fcde3994eeb624753877e1b7c726623600ed8e6db5271f81c696d54ea65359b5",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "secondary"
+    },
+    {
+      "template_id": "T028",
+      "slug": "rating-cinema-green",
+      "version": "1.0.0",
+      "family": "rating",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "9267c5243de5bf618175be7ca9a3e86fcdc12b0cdc5395521d734385f1defc63",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "secondary"
+    },
+    {
+      "template_id": "T029",
+      "slug": "rating-minimal-table",
+      "version": "1.0.0",
+      "family": "rating",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "191747c4e5b0a7cafd88d049cbea2e1b4d151eb6e894c5824aa85a2284d6f1f6",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "accent-only"
+    },
+    {
+      "template_id": "T030",
+      "slug": "rating-community-ready",
+      "version": "1.0.0",
+      "family": "rating",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "3018900cc222173731fafd6ddeaf49eabad570968db4f68b1eafecfee7468865",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T031",
+      "slug": "mosaic-collections",
+      "version": "1.0.0",
+      "family": "collection",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "716f1c9305103c840fd8f9553909778b07d033be370fecb1e6c56f2c981cfbbf",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T032",
+      "slug": "collection-carousel",
+      "version": "1.0.0",
+      "family": "collection",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "bb8de22686c397cc8d2743c3c247dbe10d628f40ca6338f4db68747c1606245e",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "secondary"
+    },
+    {
+      "template_id": "T033",
+      "slug": "collection-editorial",
+      "version": "1.0.0",
+      "family": "collection",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "62371827005b66d263aec5ef9c19199aef3764c10346760a026f7585fc45ff45",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "accent-only"
+    },
+    {
+      "template_id": "T034",
+      "slug": "collection-quilt",
+      "version": "1.0.0",
+      "family": "collection",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "0bb380ab0dfc02a2d0ba86851e0457a4c224083575383f12cfd888c307dd6327",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "secondary"
+    },
+    {
+      "template_id": "T035",
+      "slug": "collection-library",
+      "version": "1.0.0",
+      "family": "collection",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "9be9a9b0e281538b7bf6347b307d6539de504af87506a69b3a867d8af23a312a",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T036",
+      "slug": "archive-emerald",
+      "version": "1.0.0",
+      "family": "archive",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "5fcefa79ea4c7412ec987bfd0f3de47b35362cc06a90161750576e65510a8c25",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T037",
+      "slug": "archive-ivory",
+      "version": "1.0.0",
+      "family": "archive",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "26b98e83bbce48bc3348bb386f4684e0e016ae6b1720d6b6e90d9497fe221c9b",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "accent-only"
+    },
+    {
+      "template_id": "T038",
+      "slug": "archive-decades",
+      "version": "1.0.0",
+      "family": "archive",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "588667bd35ba6fbacabcbbd59efcc129f8259bbd9eb1b0db5178dc6503159b2d",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "secondary"
+    },
+    {
+      "template_id": "T039",
+      "slug": "archive-countries",
+      "version": "1.0.0",
+      "family": "archive",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "0dc35f8dbef927ca0311d8e1433f298245414b076b49841fbd9eb5c8320a9987",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T040",
+      "slug": "archive-reference",
+      "version": "1.0.0",
+      "family": "archive",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "e36f40b22a42a3bd8d30d0c71023f21b1b282837903dbdd573bcea4daf8e2e6e",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "accent-only"
+    },
+    {
+      "template_id": "T041",
+      "slug": "neon-emerald-screen",
+      "version": "1.0.0",
+      "family": "modern",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "fa7885d9ac9a90e728caccd511829f14c081cdf631aa9e22a481137d865e40f3",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T042",
+      "slug": "neon-grid-console",
+      "version": "1.0.0",
+      "family": "modern",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "545d8ff4cd1c75bb72a29ed3c96981e51a129bebdc86ef81360ab40c0d5a3f51",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "secondary"
+    },
+    {
+      "template_id": "T043",
+      "slug": "midnight-teal",
+      "version": "1.0.0",
+      "family": "modern",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "3940b39e110b96350745ee86a9f9ca539a4104bc9079dee822519d7c744886ee",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "secondary"
+    },
+    {
+      "template_id": "T044",
+      "slug": "graphite-signal",
+      "version": "1.0.0",
+      "family": "modern",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "71d95c04dc23017c974bfa556f30614713371b527fbef199b05ca904220a129a",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "accent-only"
+    },
+    {
+      "template_id": "T045",
+      "slug": "dark-glass-lords",
+      "version": "1.0.0",
+      "family": "modern",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "469a5362dafe71da545553158b3f99e015415669a473ff764ef12574e8f8401f",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T046",
+      "slug": "lords-green-classic",
+      "version": "1.0.0",
+      "family": "hybrid",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "60a4c952592374c36d3c1b4b1d60375e262baa68422d2e06372515d81d3f8716",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T047",
+      "slug": "lords-green-modern",
+      "version": "1.0.0",
+      "family": "hybrid",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "e320f6dc8b1b25d717d9f7a68b0cc52e4ea0a9fdc007e2e92afd258ee82cf412",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T048",
+      "slug": "lords-cinema-editorial",
+      "version": "1.0.0",
+      "family": "hybrid",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "93ef60a8bcbae7f537b92a61c252111e28efb12e78e8b47a074b93625ef21f67",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "secondary"
+    },
+    {
+      "template_id": "T049",
+      "slug": "lords-series-curated",
+      "version": "1.0.0",
+      "family": "hybrid",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "3d5b99eb076d3ba94b2b43c773718d335b8032da4bc33402edc3de186b571f45",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
+    },
+    {
+      "template_id": "T050",
+      "slug": "lords-emerald-archive",
+      "version": "1.0.0",
+      "family": "hybrid",
+      "status": "TECHNICAL_CANDIDATE",
+      "source_commit": "8d2e9c3c5b90",
+      "capabilities": [
+        "film",
+        "series",
+        "catalog",
+        "search"
+      ],
+      "required_feeds": [
+        "catalog"
+      ],
+      "optional_feeds": [
+        "details"
+      ],
+      "visual_score": 100,
+      "hard_fail_count": 0,
+      "artifact_digest": "d1a1767137c7d764b7db08392ae72e891ed4e0bdb95f1fc02c49a1a4772a0366",
+      "assigned_domain": null,
+      "reserved_at": null,
+      "green_identity": "primary"
     }
   ]
 }

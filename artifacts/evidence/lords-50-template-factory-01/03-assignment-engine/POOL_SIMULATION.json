@@ -1,0 +1,13 @@
+{
+  "pool_size": 50,
+  "technical_candidate_refused": true,
+  "fifty_domains_unique": true,
+  "deterministic_order": true,
+  "first_last": [
+    "T001",
+    "T050"
+  ],
+  "pool_exhaustion_refused": true,
+  "ledger_unchanged_after_refusal": true,
+  "replay_same": true
+}

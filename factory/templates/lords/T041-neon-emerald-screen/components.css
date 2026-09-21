@@ -1,0 +1,6 @@
+/* T041 — свечение только на рамках и фокусе, текст без эффектов */
+.hero{border:1px solid var(--brand);border-radius:var(--radius);padding:22px 18px;box-shadow:0 0 0 1px rgba(34,181,115,.18)}
+.k--poster .k__p{border-radius:var(--radius);overflow:hidden;box-shadow:0 0 0 1px rgba(34,181,115,.12)}
+.k--poster{background:transparent;border-color:transparent}
+.sec__t{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--brand-text)}
+a:focus-visible{outline:2px solid var(--brand-text);outline-offset:3px}

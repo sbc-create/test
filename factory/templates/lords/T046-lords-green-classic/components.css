@@ -1,0 +1,6 @@
+/* T046 — канонические карточки и зелёная кнопка */
+.hero__cta{background:var(--brand);color:var(--brand-ink)}
+.sec__t{font-size:17px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.k--poster{background:transparent;border-color:transparent}
+.k--poster .k__p{border-radius:var(--radius);overflow:hidden}
+.k--poster .k__cap{padding:8px 4px 0}

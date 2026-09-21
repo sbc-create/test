@@ -1,0 +1,6 @@
+/* T045 — тёмные панели без размытия, контраст сохранён */
+:root{
+  --ink:#e8efe9; --dim:#91a397; --bg:#060a08; --card:#0e1411; --line:#1c2621;
+  --brand:#3F7D26; --brand-text:#8ED6B0; --brand-ink:#ffffff; --soft:#0a0e0c;
+  --radius:14px; --gap:14px; --pad:16px; --title-size:14px; --title-lines:2;
+}

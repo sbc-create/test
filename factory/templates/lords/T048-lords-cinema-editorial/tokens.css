@@ -1,0 +1,6 @@
+/* T048 — тёмное кино с кремовой типографикой */
+:root{
+  --ink:#f0ece4; --dim:#a29a8b; --bg:#08090a; --card:#121313; --line:#252626;
+  --brand:#22B573; --brand-text:#BCE8D0; --brand-ink:#06110b; --soft:#0b0c0c;
+  --radius:6px; --gap:18px; --pad:18px; --title-size:15px; --title-lines:3;
+}

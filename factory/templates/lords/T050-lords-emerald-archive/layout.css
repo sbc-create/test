@@ -1,0 +1,14 @@
+/* T050 — перечень до двенадцати колонок, витрина до девяти */
+.g--ea{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:480px){.g--ea{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:768px){.g--ea{grid-template-columns:repeat(7,minmax(0,1fr))}}
+@media(min-width:1280px){.g--ea{grid-template-columns:repeat(10,minmax(0,1fr))}}
+@media(min-width:1600px){.g--ea{grid-template-columns:repeat(12,minmax(0,1fr))}}
+
+.g--eag{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.g--eag{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1024px){.g--eag{grid-template-columns:repeat(7,minmax(0,1fr))}}
+@media(min-width:1600px){.g--eag{grid-template-columns:repeat(9,minmax(0,1fr))}}
+
+.g--eaf{grid-template-columns:repeat(1,minmax(0,1fr))}
+@media(min-width:1100px){.g--eaf{grid-template-columns:repeat(2,minmax(0,1fr))}}
