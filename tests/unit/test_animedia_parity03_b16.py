@@ -128,22 +128,48 @@ def test_packet_states_that_a_restart_is_not_a_no_op(пакет):
 def test_packet_states_exactly_what_this_session_did_and_did_not_do(пакет):
     """Пакет обязан отделять сделанное сессией от сделанного владельцем.
 
-    `animedia.icu` выкачен: служба перезапущена владельцем, и живой домен
-    принят гейтом. Писать про него «выката не было» значит лгать; писать
-    «выкат выполнила сессия» — приписывать себе чужое действие, притом
-    запрещённое ей профилем. Названо и то, и другое.
+    Первая витрина была перезапущена не сессией — `systemctl` ей закрыт.
+    Писать «выката не было» значит лгать; писать «выкат выполнила сессия» —
+    приписывать себе чужое действие. Названо и то, и другое.
     """
     assert "RESTART_PERFORMED_BY_SESSION=0" in пакет
     assert "Перезапуск `animedia-01` выполнен не ею" in пакет
-    # Вторая витрина ещё не выкачена — пакет обязан называть оставшуюся команду.
-    assert "`animedia.space` — **0** (заряжен, ждёт перезапуска)" in пакет
-    assert "systemctl restart nova-animedia-01.service" in пакет
-    assert "systemctl restart nova-animedia-02.service" in пакет
 
 
-def test_record_separates_deployed_site_from_armed_site(запись):
+def test_packet_leads_with_the_owner_visual_rejection(пакет):
+    """Шапка пакета обязана начинаться с отказа, а не с зелёных смоуков.
+
+    Пакет читают, чтобы решить, выкатывать ли дальше. Если отказ владельца
+    спрятан ниже зелёных проверок, следующая сессия выложит отвергнутую
+    сборку на вторую витрину.
+    """
+    шапка = пакет[:2000]
+    assert "OWNER_VISUAL_ACCEPTANCE=REJECTED" in шапка
+    assert "LIVE_NOT_OWNER_ACCEPTED" in шапка
+    assert "не выкладывается" in шапка
+    assert "отменена и повторно не запрашивается" in шапка
+
+
+def test_owner_visual_acceptance_is_recorded_as_rejected(запись):
+    """Технический зелёный смоук не является владельческой приёмкой.
+
+    Владелец отверг кандидата визуально: интерфейс не соответствует оригиналу.
+    Запись обязана это держать, иначе следующая сессия прочитает зелёные
+    смоуки как приёмку и выложит отвергнутую сборку на вторую витрину.
+    """
+    в = запись["owner_visual_acceptance"]
+    assert в["verdict"] == "REJECTED"
+    assert в["artifact_sha256_rejected"] == _цифра()
+    assert в["what_previous_tests_did_and_did_not_prove"]
     ст = запись["live_deploy_status"]
-    assert ст["animedia-01"]["state"] == "LIVE_ON_CANDIDATE"
+    assert ст["animedia-01"]["state"] == "LIVE_NOT_OWNER_ACCEPTED"
+    assert ст["animedia-02"]["state"] == "ARMED_BUT_DEPLOY_CANCELLED_BY_OWNER"
+    # Команда перезапуска второй витрины отменена — её нельзя выдавать снова.
+    assert ст["animedia-02"]["remaining_owner_action"] is None
+
+
+def test_record_keeps_the_live_facts_of_the_rejected_candidate(запись):
+    ст = запись["live_deploy_status"]
     assert ст["animedia-01"]["served_artifact_sha256"] == _цифра()
     assert ст["animedia-01"]["template_version_endpoint_agrees"] is True
     assert "noindex" in ст["animedia-01"]["x_robots_tag"]
@@ -156,9 +182,6 @@ def test_record_separates_deployed_site_from_armed_site(запись):
         assert п["SMOKE_PASS"] is True
         assert п["failures"] == []
         assert п["known_build_defects"] == []
-    assert ст["animedia-02"]["state"] == "ARMED_AWAITING_RESTART"
-    assert ст["animedia-02"]["remaining_owner_action"] == (
-        "systemctl restart nova-animedia-02.service")
     assert запись["restart_performed_by_this_session"] == 0
 
 

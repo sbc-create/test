@@ -237,7 +237,7 @@
  "live_deploy_status": {
   "recorded_at_utc": "2026-09-21T17:11:08Z",
   "animedia-01": {
-   "state": "LIVE_ON_CANDIDATE",
+   "state": "LIVE_NOT_OWNER_ACCEPTED",
    "restarted_at_utc": "2026-09-21T16:56:16Z",
    "restarted_by": "не этой сессией — перезапуск требует root; systemd: NRestarts=0, Result=success, то есть перезапуск явный, а не аварийный",
    "main_pid": 664915,
@@ -283,11 +283,12 @@
    "b14_footer_marker_gone_live": true
   },
   "animedia-02": {
-   "state": "ARMED_AWAITING_RESTART",
+   "state": "ARMED_BUT_DEPLOY_CANCELLED_BY_OWNER",
    "main_pid": 2693863,
    "served_build_id": "20260920T102102Z-89666321-nova",
    "served_artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
-   "remaining_owner_action": "systemctl restart nova-animedia-02.service"
+   "remaining_owner_action": null,
+   "why": "Владелец отменил выкат отвергнутого кандидата на вторую витрину. Зарядка остаётся на диске, но перезапуск не запрашивается и не выполняется."
   },
   "note": "Приёмочный гейт --mode deploy зелёный на живом animedia.icu: 27 ячеек на прогон, провалов нет, послаблений не применялось. Знак сборки в подвале на живом домене отсутствует — дефект B14 закрыт выкатом."
  },
@@ -303,5 +304,19 @@
  "deploy_performed_per_site": {
   "animedia.icu": 1,
   "animedia.space": 0
+ },
+ "owner_visual_acceptance": {
+  "verdict": "REJECTED",
+  "recorded_at_utc": "2026-09-21T17:34:13Z",
+  "wording": "Кандидат визуально владельцем не принят: текущий интерфейс существенно не соответствует оригиналу.",
+  "artifact_sha256_rejected": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+  "what_previous_tests_did_and_did_not_prove": "smoke, маршруты и unit-тесты доказали работоспособность сборки: коды, индексация, canonical, геометрия без переполнения, один плеер. Визуальное соответствие оригинальному шаблону они не проверяли и доказать не могли.",
+  "consequences": [
+   "второй домен на этом кандидате не выкладывается",
+   "ранее выданная команда перезапуска второй витрины отменена и повторно не запрашивается",
+   "живой домен остаётся доступным и помечен LIVE_NOT_OWNER_ACCEPTED",
+   "аварийный rollback только при функциональной аварии: 5xx, недоступность маршрутов, пропажа контента, поломка плеера, нарушение индексации",
+   "прежний отвергнутый digest не переиспользуется как новый кандидат"
+  ]
  }
 }
