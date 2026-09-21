@@ -1,0 +1,92 @@
+{
+  "STATUS": "READY_TO_RESTART",
+  "STAGE": "ANIMEDIA-BLOCKWISE-PARITY-03/B16",
+  "checked_at": "2026-09-21T17:05:00Z",
+  "owner_approval": "владелец подтвердил deploy B16 7aae3d2c на animedia.space и animedia.icu (задание 2026-09-21)",
+
+  "ЧТО_ОБНАРУЖЕНО": {
+    "вывод": "Заряжать было нечего: manifest и assignment уже стоят на B16 у обеих витрин, и сделано это согласованно.",
+    "почему_домены_разошлись": "animedia-01 перезапущен в 16:56:16 после зарядки в 16:54 и через execv ушёл в релиз B16. Процесс animedia-02 (PID 2693863) старше загрузчика и держит прежний код в памяти. Диск заряжен у обоих, в память попал один.",
+    "PID_664915": "релиз B16 на порту 9121, витрина animedia-01 — это не та витрина, что осталась на откате"
+  },
+
+  "ARTIFACT": {
+    "artifact_sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+    "build_id": "20260921T153817Z-c8c4587-animedia-b16",
+    "source_commit": "c8c458762c16f69999fcb7d3d1bc156d36f18f48",
+    "source_dirty": false,
+    "release_dir": "/srv/lords/.frontend/releases/20260921T153817Z-c8c4587-animedia-b16",
+    "built_from": "git worktree /home/claude/wt-animedia-finalization-01"
+  },
+
+  "ВОРОТА_ЗАРЯДКИ": {
+    "ASSIGNMENT_IS_SYMLINK": true,
+    "MANIFEST_MATCHES_ASSIGNMENT": true,
+    "BOTH_SITES_SAME_RELEASE": true,
+    "ARTIFACT_MATCHES_SOURCE_REVISION": true,
+    "ROLLBACK_PRESENT_AND_VERIFIED": true,
+    "примечание": "Последнее не совпадение трёх копий одного прогона: digest каждого файла релиза сверен с объектом git на ревизии source_commit. Манифест, RELEASE.json и ссылка писались одним прогоном, и их согласие само по себе ничего не доказывает."
+  },
+
+  "СОСТОЯНИЕ_ДО_ПЕРЕЗАПУСКА": {
+    "animedia-01 (animedia.icu, порт 9121)": {
+      "assignment": "sites/animedia-01/current → releases/20260921T153817Z-c8c4587-animedia-b16",
+      "manifest": "B16 7aae3d2c",
+      "живое": "уже B16: build 20260921T153817Z-c8c4587-animedia-b16, artifact 7aae3d2c",
+      "перезапуск_нужен": false
+    },
+    "animedia-02 (animedia.space, порт 9122)": {
+      "assignment": "sites/animedia-02/current → releases/20260921T153817Z-c8c4587-animedia-b16",
+      "manifest": "B16 7aae3d2c",
+      "живое": "ещё старое: build 20260920T102102Z-89666321-nova, artifact d2e9628f",
+      "перезапуск_нужен": true,
+      "процесс": "PID 2693863"
+    }
+  },
+
+  "ИНДЕКСАЦИЯ": {
+    "animedia.icu": {"robots_txt": "Disallow: /", "header": "noindex, nofollow"},
+    "animedia.space": {"robots_txt": "Disallow: /", "header": "noindex, nofollow"},
+    "изменений_запрошено": 0,
+    "довод_до_перезапуска": "Тот же артефакт B16 уже работает на animedia.icu и отдаёт там noindex, nofollow и Disallow: /. Это не обещание, а наблюдение на соседнем домене того же семейства."
+  },
+
+  "ОТКАТ": {
+    "release_dir": "/srv/lords/.frontend/releases/20260921T154512Z-8966632-animedia-rollback",
+    "artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+    "build_id": "20260921T154512Z-8966632-animedia-rollback",
+    "source_commit": "89666321093651d4bd5b06a00645fdf903124810",
+    "сверен_с_git": true,
+    "совпадает_с_текущим_живым": "да — это ровно то, что animedia.space отдаёт сейчас",
+    "манифесты_отката": [
+      "/srv/lords/.frontend/template-manifest-animedia-01.json.before-b16",
+      "/srv/lords/.frontend/template-manifest-animedia-02.json.before-b16"
+    ],
+    "как_откатить": "переставить ссылку sites/animedia-02/current на каталог отката, вернуть манифест из .before-b16 и перезапустить юнит; порядок в ROLLBACK.md"
+  },
+
+  "ЧЕГО_Я_НЕ_ДЕЛАЛ": [
+    "не перезапускал ни один юнит",
+    "не менял ни одной ссылки current и ни одного манифеста — они уже были верны",
+    "не трогал DNS, TLS и индексацию",
+    "не трогал витрины Lords, Zona и Yummy"
+  ],
+
+  "КОМАНДА_ВЛАДЕЛЬЦУ": {
+    "unit": "nova-animedia-02.service",
+    "источник_имени": "/srv/lords/.frontend/lords-runtime-registry.json → sites['animedia-02'].unit",
+    "команда": "systemctl restart nova-animedia-02.service",
+    "область": "только animedia.space; animedia-01 перезапускать не нужно",
+    "ожидание": "витрина читает каталог 2.5 МБ и подробности 13 МБ; ответ появляется в пределах минуты"
+  },
+
+  "ПРОВЕРКА_ПОСЛЕ_ПЕРЕЗАПУСКА": {
+    "команда": "python3 scripts/reconciliation/animedia_state.py",
+    "ожидаемое": {
+      "порт 9122": "build 20260921T153817Z-c8c4587-animedia-b16, artifact 7aae3d2c, revision c8c45876",
+      "cmdline PID": "должен указывать на releases/20260921T153817Z-c8c4587-animedia-b16/lords-frontend.py — признак того, что execv состоялся",
+      "robots": "noindex, nofollow без изменений"
+    },
+    "если_не_совпало": "откат по ROLLBACK.md и STOP"
+  }
+}
