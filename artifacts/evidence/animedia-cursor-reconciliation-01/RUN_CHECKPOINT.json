@@ -15,7 +15,8 @@
     "A5 block matrix B00-B16 built with per-block evidence",
     "A6 dirty state classified and the useful part preserved in thematic commits",
     "A7 confirmed defects reproduced and repaired at the root cause",
-    "B12 finished locally from the preserved work in progress"
+    "B12 finished locally from the preserved work in progress",
+    "Full unit suite run and every failure attributed against a clean baseline at 03b3908"
   ],
   "steps_not_started": [
     "B13 collections list/detail",
@@ -65,12 +66,16 @@
   "stash_used": 0,
   "reset_hard_used": 0,
   "git_clean_used": 0,
-  "files_deleted": 0,
+  "files_deleted": 1,
   "tests": {
     "selection": "pytest tests/unit -k animedia",
     "baseline_at_dd123c5": "15 failed, 240 passed, 2 skipped",
     "current": "276 passed, 2 skipped, 0 failed",
-    "consecutive_stable_runs": 2
+    "consecutive_stable_runs": 2,
+    "full_unit_suite_all_markers": "9 failed, 5884 passed, 12 skipped, 1 xfailed; 8 of the 9 reproduced at 03b3908, the ninth was the stray backup file and is now resolved"
   },
-  "HANDOFF_CONTENT_HEAD": "9cc9bcc10a5ba59b0ad02aca4cfd25a4ebb381a2"
+  "HANDOFF_CONTENT_HEAD": "9cc9bcc10a5ba59b0ad02aca4cfd25a4ebb381a2",
+  "files_deleted_detail": "automation/host/lords-frontend.animedia-prev.py — untracked, classified first as byte-identical to commit 289a459, removed only after classification; recoverable from git",
+  "evidence_files_restored": 1,
+  "evidence_files_restored_detail": "artifacts/evidence/products/product-readiness.json — rewritten by a test run with unmeasured scores, restored to HEAD"
 }

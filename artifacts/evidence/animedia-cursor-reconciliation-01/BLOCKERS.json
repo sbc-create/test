@@ -31,6 +31,15 @@
       "detail": "FINAL.json стадии 2: HARD_GATE_FAILURES=1, HARD_GATE_REASON=AFTER_LIVE_SCREENSHOT_MATRIX_AND_ORACLE_SCORES_INCOMPLETE. Вердикт стадии — NEEDS_REPAIR. PARITY-03 её вытеснила, но гейт формально не закрыт.",
       "owner": "исполнитель следующей сессии",
       "next_safe_step": "Закрыть в рамках B16 вместе с after-live матрицей PARITY-03 — отдельного прогона по вытесненной стадии не требуется"
+    },
+    {
+      "id": "B-OWNERSHIP-01",
+      "title": "Ветка Animedia правит общий файл релиза вне канонической линии — гейт владения красный",
+      "detail": "config/TEMPLATE-BASELINE-MANIFEST.json фиксирует решение владельца TEMPLATE-POSTDEPLOY-REMEDIATION-03A: канонический writer шаблонного релиза — PR #76, ветка claude/fleet-tpl-baseline-001, ca805888a4a3ff723d61b453163e56bae7bfa48c. Гейт test_дайджесты_владения_совпадают_с_файлами был красным уже на 03b3908, до этой стадии: манифест ждёт 1668f71b… у automation/host/lords-frontend.py, файл был 19146d6d…, сейчас e6bdd91c…. Второй управляемый файл factory/lords/collection_contract.py расходится так же (58b78601… против 1de55d9d…) и этой стадией не трогался вовсе.",
+      "not_done_on_purpose": "Манифест не обновлялся. Подгонка цифры выдала бы соответствие решению владельца, которого нет.",
+      "owner": "владелец шаблонного релиза",
+      "recorded_as": "knowledge/DECISIONS.md D140",
+      "next_safe_step": "Владелец решает: переназначить канонического writer'а на ветку Animedia либо вносить правки Animedia через PR #76. До решения гейт остаётся красным честно."
     }
   ],
   "P2": [
@@ -55,6 +64,21 @@
       "detail": "Ветка claude/animedia-template-finalization-01 опережает origin/claude/animedia-template-finalization-01 (b023bd50…) на 102 коммита до этой сессии и на 5 коммитов больше после неё. Push контрактом стадии запрещён.",
       "owner": "владелец",
       "next_safe_step": "Разрешить push отдельно, если нужна резервная копия работы вне хоста"
+    },
+    {
+      "id": "B-TESTGATE-01",
+      "title": "Unit-тест перезаписывает закоммиченный артефакт измерений",
+      "detail": "Прогон tests/unit (test_owner_status_document.py / test_yummy_is_not_called_unready.py через scripts/product_readiness.py) перезаписал artifacts/evidence/products/product-readiness.json: average_product 87 → 72, average_integration 64 → 30, пометки «предпросмотр не собран, данные не наблюдались». Измеренная запись от 2026-09-10 подменялась неизмеренной на каждом прогоне.",
+      "action_taken": "Файл восстановлен к содержимому HEAD. Неизмеренные значения в доказательства не попали.",
+      "owner": "владелец тестового контура",
+      "next_safe_step": "Перенаправить запись артефакта в tmp_path или под явный флаг — тест не должен пачкать доказательства и понижать записанные измерения"
+    },
+    {
+      "id": "B-DUP-01",
+      "title": "Два экземпляра contract коллекций",
+      "detail": "automation/host/collection_contract.py и factory/lords/collection_contract.py существуют одновременно; гейт test_контракт_коллекций_ровно_один красный на 03b3908 и сейчас. Эта стадия файлы не трогала.",
+      "owner": "Core",
+      "next_safe_step": "Схлопнуть до одного источника правды отдельной задачей Core"
     }
   ],
   "resolved_in_this_stage": [
@@ -81,6 +105,12 @@
       "title": "Слой постера тайтла держался только порядком в разметке",
       "resolution": "z-index:1 задан явно у .ztitle__poster и .aep-ctx__poster, как в оформлении zona.",
       "commit": "f014141"
+    },
+    {
+      "id": "B-RENDERER-01",
+      "title": "Гейт «рендерер ровно один» падал из-за избыточной резервной копии в рабочем дереве",
+      "resolution": "automation/host/lords-frontend.animedia-prev.py классифицирована (побайтово равна файлу в коммите 289a459, sha256 0940212f…, 338720 байт) и удалена только после классификации. Байты восстанавливаются командой git show 289a459:automation/host/lords-frontend.py. Гейт зелёный.",
+      "note": "На чистой выкладке 03b3908 этот тест проходил — падение было свойством рабочего дерева, а не закоммиченного кода."
     }
   ]
 }

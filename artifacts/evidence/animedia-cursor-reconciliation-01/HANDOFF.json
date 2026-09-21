@@ -132,6 +132,11 @@
   ],
   "unresolved_blockers": [
     {
+      "id": "B-OWNERSHIP-01",
+      "severity": "P1",
+      "what": "the Animedia branch edits the shared release file outside the canonical writer named by owner decision TEMPLATE-POSTDEPLOY-REMEDIATION-03A (PR #76 / claude/fleet-tpl-baseline-001); the ownership digest gate was already red at 03b3908 and the manifest was deliberately NOT adjusted. Recorded as knowledge/DECISIONS.md D140."
+    },
+    {
       "id": "B-STAGE-01",
       "severity": "P1",
       "what": "PARITY-03 blocks B13, B14, B15 not started; B16 not reachable"
@@ -139,7 +144,7 @@
     {
       "id": "B-DEPLOY-01",
       "severity": "P1",
-      "what": "live serves 89666321; HANDOFF_HEAD has never been built into an artifact"
+      "what": "live serves 89666321; the handoff head has never been built into an artifact"
     },
     {
       "id": "B-AUTH-01",
@@ -162,12 +167,23 @@
       "what": "ampersand escaping in hrefs inconsistent between B12 and the rest of the template"
     },
     {
+      "id": "B-TESTGATE-01",
+      "severity": "P2",
+      "what": "a unit test rewrites artifacts/evidence/products/product-readiness.json, replacing measured scores with unmeasured ones; restored to HEAD here"
+    },
+    {
+      "id": "B-DUP-01",
+      "severity": "P2",
+      "what": "two collection_contract.py modules; Core's call"
+    },
+    {
       "id": "B-PUSH-01",
       "severity": "P2",
-      "what": "107 commits ahead of origin; push forbidden without owner permission"
+      "what": "commits ahead of origin; push forbidden without owner permission"
     }
   ],
   "owner_actions_required": [
+    "Resolve the release ownership conflict (B-OWNERSHIP-01 / DECISIONS.md D140): either re-designate the canonical writer of automation/host/lords-frontend.py, or land the Animedia work through PR #76. Until then the ownership digest gate stays red, honestly, and config/TEMPLATE-BASELINE-MANIFEST.json must not be edited to hide it.",
     "Decide whether ANIMEDIA-BLOCKWISE-PARITY-03 is finished first (B13, B14, B15, then B16) or whether the five-template factory may branch from this HANDOFF_HEAD while PARITY-03 stays open on its own branch. Prompt B forbids mixing the two, so this is a decision, not an assumption.",
     "Supply the owner footer values (contact_email, telegram_url, privacy_url, terms_url) or confirm they stay absent — B14 cannot invent them.",
     "Approve or decline a deploy of PARITY-03 once an artifact exists; the approval must name the new artifact digest, since the REFERENCE-PARITY-02 approval is bound to d2e9628f and does not transfer.",
@@ -181,5 +197,19 @@
   "ready_for_animedia_5_factory_reason": "The previous work is not closed: PARITY-03 blocks B13-B15 were never started and B16 is an owner gate. The owner asked to finish and accept the existing work before the new factory is created, and this session cannot accept its own work on the owner's behalf. Everything that was finishable without an owner decision has been finished: the freeze gate is green on the original digest, B12 is closed locally, and all 15 inherited test failures are resolved with a clean two-run baseline.",
   "self_reported_owner_acceptance": false,
   "evidence_root": "artifacts/evidence/animedia-cursor-reconciliation-01/",
-  "handoff_head_note": "Content head: the commit that carries the finished B12, the freeze repair, the resolved inherited failures and this ledger. The commit that pins this value is the branch tip and contains nothing but the pin."
+  "handoff_head_note": "Content head: the commit that carries the finished B12, the freeze repair, the resolved inherited failures and this ledger. The commit that pins this value is the branch tip and contains nothing but the pin.",
+  "tests": {
+    "animedia_selection": {
+      "result": "276 passed, 2 skipped, 0 failed",
+      "consecutive_stable_runs": 2,
+      "baseline_at_dd123c5": "15 failed, 240 passed"
+    },
+    "full_unit_suite_all_markers": {
+      "result": "9 failed, 5884 passed, 12 skipped, 1 xfailed",
+      "after_this_stage_closed_one_of_them": "test_рендерер_ровно_один now passes; 8 remain, all reproduced at 03b3908",
+      "regressions_introduced": 0,
+      "detail": "artifacts/evidence/animedia-cursor-reconciliation-01/FULL_SUITE_BASELINE.json"
+    },
+    "project_standard_unit_gate": "tests/run-all.sh runs the unit stage as -m 'not slow'"
+  }
 }
