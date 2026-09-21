@@ -1,0 +1,60 @@
+{
+  "stage": "ANIMEDIA-BLOCKWISE-PARITY-03",
+  "owner_decision": "OPTION_A_FINISH_PARITY03_FIRST",
+  "final_head": "32d27e5bfbff8c8457103d4c13747c5adb0d5e6a",
+  "artifact_sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+  "runs": [
+    {
+      "kind": "targeted",
+      "selection": "pytest tests/unit -k animedia -m 'not slow'",
+      "n": 1,
+      "result": "352 passed, 2 skipped, 0 failed"
+    },
+    {
+      "kind": "standard_gate",
+      "selection": "pytest tests/unit tests/test_traceability.py -m 'not slow' (этап unit-tests из tests/run-all.sh)",
+      "n": 1,
+      "result": "6 failed, 6027 passed, 12 skipped, 1 xfailed",
+      "duration": "23:06"
+    },
+    {
+      "kind": "targeted",
+      "selection": "pytest tests/unit -k animedia -m 'not slow'",
+      "n": 2,
+      "result": "352 passed, 2 skipped, 0 failed"
+    },
+    {
+      "kind": "standard_gate",
+      "selection": "pytest tests/unit tests/test_traceability.py -m 'not slow'",
+      "n": 2,
+      "result": "6 failed, 6027 passed, 12 skipped, 1 xfailed",
+      "duration": "19:34"
+    }
+  ],
+  "two_consecutive_runs_identical": true,
+  "new_regressions": 0,
+  "known_failures_of_the_canonical_base": {
+    "tests/unit/test_template_ownership_gate.py::test_дайджесты_владения_совпадают_с_файлами": "OWNER_DECISION — гейт владения общим файлом; манифест намеренно не правился, см. adr/0008 и B-OWNERSHIP-01",
+    "tests/unit/test_template_routes_and_episodes.py::test_каталог_новинки_и_подборки_отдают_разное": "PRE_EXISTING — воспроизводится на 03b3908; отбор ядра отдаёт /collections тем же набором, что /new",
+    "tests/unit/test_template_routes_and_episodes.py::test_контейнер_серий_ограничен_по_высоте": "PRE_EXISTING — воспроизводится на 03b3908; тест ждёт overflow-y:auto, в стиле overflow:auto",
+    "tests/unit/test_validate_registries_derived.py::test_absent_derived_artifact_is_allowed": "PRE_EXISTING — воспроизводится на 03b3908",
+    "tests/unit/test_validate_registries_derived.py::test_present_derived_artifact_must_pass_its_schema": "PRE_EXISTING — воспроизводится на 03b3908",
+    "tests/unit/test_yummy_entity_view.py::TestЛенты::test_пост_рисуется_с_источником_и_датой": "PRE_EXISTING — воспроизводится на 03b3908; чужое семейство"
+  },
+  "regressions_found_and_fixed_in_this_part": [
+    {
+      "test": "tests/unit/test_template_routes_and_episodes.py::test_подборки_ведут_в_коллекции_а_не_в_каталог",
+      "cause": "B13 добавил сетке хаба маркер data-b13=\"hub\", а тест искал <div class=\"zhub\"> буквально",
+      "fix": "селектор допускает атрибуты; требование не ослаблено",
+      "commit": "32d27e5"
+    },
+    {
+      "tests": "tests/unit/test_production_gates.py — 5 тестов",
+      "cause": "запись D140 в knowledge/DECISIONS.md разошлась с knowledge/KNOWLEDGE_FREEZE.yaml; pipeline.run_job честно fail-closed BLOCKED_INPUT на VALIDATING",
+      "fix": "DECISIONS.md возвращён к замороженному состоянию побайтово, решение перенесено в adr/0008; заморозка не переставлялась",
+      "commit": "32d27e5"
+    }
+  ],
+  "independence_note": "Прогоны штатного гейта не независимы сами по себе: один из тестов перезаписывает artifacts/evidence/products/product-readiness.json, и следующий прогон сверяет числа с изменённым файлом. Поэтому файл восстанавливался к HEAD перед каждым прогоном. Записано как B-TESTGATE-01.",
+  "slow_marker_note": "Штатный этап unit-tests в tests/run-all.sh идёт с -m 'not slow', поэтому таймингозависимый тест подсказок поиска (p95 250 мс) в него не входит."
+}
