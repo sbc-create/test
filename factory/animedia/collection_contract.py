@@ -28,7 +28,12 @@ from __future__ import annotations
 
 import hashlib
 
-from . import chronology as хронология
+# Рядом с выкаченным артефактом пакета нет: deploy кладёт модули спутниками.
+# Поэтому импорт двойной — сначала пакетом, затем плоским соседом.
+try:
+    from . import chronology as хронология
+except ImportError:  # pragma: no cover — путь выкладки
+    import chronology as хронология
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
