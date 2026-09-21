@@ -1,0 +1,162 @@
+{
+ "task": "ANIMEDIA-POST-ROOT-RESTART-SMOKE",
+ "recorded_at_utc": "2026-09-21T16:41:44Z",
+ "owner_action": "root-перезапуск nova-animedia-01.service выполнен владельцем",
+ "what_the_restart_activated": {
+  "served_build_id": "20260920T102102Z-89666321-nova",
+  "served_artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+  "release": "20260921T154512Z-8966632-animedia-rollback",
+  "candidate_7aae3d2c_live": false,
+  "why": "назначение и подпись обеих витрин были переведены на цель откáта при разборе аварии 2026-09-21, зарядка кандидата снята до перезапуска; перезапуск поднял цель откáта, а не кандидата B16"
+ },
+ "sites": {
+  "animedia-01": {
+   "port": "9121",
+   "unit": "nova-animedia-01.service",
+   "release": "20260921T154512Z-8966632-animedia-rollback",
+   "release_code_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+   "release_source_commit": null,
+   "main_pid": 4178279,
+   "started_utc": "Mon 2026-09-21 16:30:08 UTC",
+   "manifest_build_id": "20260920T102102Z-89666321-nova"
+  },
+  "animedia-02": {
+   "port": "9122",
+   "unit": "nova-animedia-02.service",
+   "release": "20260921T154512Z-8966632-animedia-rollback",
+   "release_code_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+   "release_source_commit": null,
+   "main_pid": 2693863,
+   "started_utc": "Sun 2026-09-20 13:20:16 UTC",
+   "manifest_build_id": "20260920T102102Z-89666321-nova"
+  }
+ },
+ "runs": [
+  {
+   "run": "run1-animedia.icu",
+   "domain": "animedia.icu",
+   "peer_domain": "animedia.space",
+   "mode": "incident",
+   "checked_at_utc": "2026-09-21T16:39:41Z",
+   "cells": 27,
+   "viewports": [
+    390,
+    768,
+    1440
+   ],
+   "AVAILABILITY_PASS": true,
+   "SMOKE_PASS": true,
+   "failures": [],
+   "known_build_defects_count": 27,
+   "peer": {
+    "build": "20260920T102102Z-89666321-nova",
+    "x_robots": "noindex, nofollow\nnoindex, nofollow",
+    "http": 200
+   },
+   "matrix": "artifacts/evidence/animedia-incident-space-2026-09-21/post-root-restart/run1-animedia.icu/SMOKE.json",
+   "screenshots": 27
+  },
+  {
+   "run": "run1-animedia.space",
+   "domain": "animedia.space",
+   "peer_domain": "animedia.icu",
+   "mode": "incident",
+   "checked_at_utc": "2026-09-21T16:39:16Z",
+   "cells": 27,
+   "viewports": [
+    390,
+    768,
+    1440
+   ],
+   "AVAILABILITY_PASS": true,
+   "SMOKE_PASS": true,
+   "failures": [],
+   "known_build_defects_count": 27,
+   "peer": {
+    "build": "20260920T102102Z-89666321-nova",
+    "x_robots": "noindex, nofollow\nnoindex, nofollow",
+    "http": 200
+   },
+   "matrix": "artifacts/evidence/animedia-incident-space-2026-09-21/post-root-restart/run1-animedia.space/SMOKE.json",
+   "screenshots": 27
+  },
+  {
+   "run": "run2-animedia.icu",
+   "domain": "animedia.icu",
+   "peer_domain": "animedia.space",
+   "mode": "incident",
+   "checked_at_utc": "2026-09-21T16:40:41Z",
+   "cells": 27,
+   "viewports": [
+    390,
+    768,
+    1440
+   ],
+   "AVAILABILITY_PASS": true,
+   "SMOKE_PASS": true,
+   "failures": [],
+   "known_build_defects_count": 27,
+   "peer": {
+    "build": "20260920T102102Z-89666321-nova",
+    "x_robots": "noindex, nofollow\nnoindex, nofollow",
+    "http": 200
+   },
+   "matrix": "artifacts/evidence/animedia-incident-space-2026-09-21/post-root-restart/run2-animedia.icu/SMOKE.json",
+   "screenshots": 27
+  },
+  {
+   "run": "run2-animedia.space",
+   "domain": "animedia.space",
+   "peer_domain": "animedia.icu",
+   "mode": "incident",
+   "checked_at_utc": "2026-09-21T16:40:02Z",
+   "cells": 27,
+   "viewports": [
+    390,
+    768,
+    1440
+   ],
+   "AVAILABILITY_PASS": true,
+   "SMOKE_PASS": true,
+   "failures": [],
+   "known_build_defects_count": 27,
+   "peer": {
+    "build": "20260920T102102Z-89666321-nova",
+    "x_robots": "noindex, nofollow\nnoindex, nofollow",
+    "http": 200
+   },
+   "matrix": "artifacts/evidence/animedia-incident-space-2026-09-21/post-root-restart/run2-animedia.space/SMOKE.json",
+   "screenshots": 27
+  }
+ ],
+ "verified": {
+  "viewports": [
+   390,
+   768,
+   1440
+  ],
+  "routes": 9,
+  "routes_404": [
+   "not_found",
+   "page_huge"
+  ],
+  "meta_robots": "noindex, nofollow",
+  "x_robots_tag": "noindex, nofollow",
+  "canonical_per_domain": true,
+  "max_overflow_px": 0,
+  "clipped_required_text": 0,
+  "player_instances_max": 1,
+  "h1_max": 1,
+  "peer_domain_drift": false
+ },
+ "observation_not_failure": "знак сборки в подвале присутствует на сборке 20260920T102102Z-89666321-nova — известный дефект B14, который закрывает только кандидат; в режиме incident это наблюдение, гейт --mode deploy на нём по-прежнему падает и не ослаблен",
+ "rollback_performed": false,
+ "rollback_not_needed_because": "все четыре прогона SMOKE_PASS=True, провалов нет",
+ "mutations": {
+  "deploy": 0,
+  "restart_by_claude": 0,
+  "dns": 0,
+  "indexability": 0,
+  "zona_touched": 0
+ }
+}
