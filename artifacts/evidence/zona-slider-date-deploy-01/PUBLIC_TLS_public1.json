@@ -1,0 +1,82 @@
+{
+  "domain": "zonafilm.space",
+  "метка": "public1",
+  "at": "2026-09-21T16:42:33Z",
+  "tls": {
+    "protocol": "TLSv1.3",
+    "cipher": "TLS_AES_256_GCM_SHA384",
+    "cert_subject_cn": "zonafilm.space",
+    "cert_issuer": "Let's Encrypt",
+    "cert_not_after": "Dec  9 08:53:28 2026 GMT",
+    "cert_days_left": 78,
+    "cert_covers_domain": true,
+    "san": [
+      "animedia.icu",
+      "animedia.space",
+      "zonafilm.space"
+    ],
+    "hostname_verified": true
+  },
+  "pages": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 81334,
+      "build": "20260921T161251Z-c3c9c37f-nova",
+      "artifact": "19c3e70cf7a1286b5e1dc5a316aceab778dbf804216558f16e69413dfe7b88b7",
+      "revision": "c3c9c37f8033907b2297f84faf829f89047d3438",
+      "robots_header": "noindex, nofollow",
+      "server": "nginx",
+      "cache": "no-store",
+      "robots_meta_noindex": true
+    },
+    {
+      "path": "/catalog/",
+      "status": 200,
+      "bytes": 93912,
+      "build": "20260921T161251Z-c3c9c37f-nova",
+      "artifact": "19c3e70cf7a1286b5e1dc5a316aceab778dbf804216558f16e69413dfe7b88b7",
+      "revision": "c3c9c37f8033907b2297f84faf829f89047d3438",
+      "robots_header": "noindex, nofollow",
+      "server": "nginx",
+      "cache": "no-store",
+      "robots_meta_noindex": true
+    },
+    {
+      "path": "/new/",
+      "status": 200,
+      "bytes": 88421,
+      "build": "20260921T161251Z-c3c9c37f-nova",
+      "artifact": "19c3e70cf7a1286b5e1dc5a316aceab778dbf804216558f16e69413dfe7b88b7",
+      "revision": "c3c9c37f8033907b2297f84faf829f89047d3438",
+      "robots_header": "noindex, nofollow",
+      "server": "nginx",
+      "cache": "no-store",
+      "robots_meta_noindex": true
+    },
+    {
+      "path": "/search/?q=matrix",
+      "status": 200,
+      "bytes": 49257,
+      "build": "20260921T161251Z-c3c9c37f-nova",
+      "artifact": "19c3e70cf7a1286b5e1dc5a316aceab778dbf804216558f16e69413dfe7b88b7",
+      "revision": "c3c9c37f8033907b2297f84faf829f89047d3438",
+      "robots_header": "noindex, nofollow",
+      "server": "nginx",
+      "cache": "no-store",
+      "robots_meta_noindex": true
+    }
+  ],
+  "ворота": {
+    "TLS_PROTOCOL_MODERN": true,
+    "TLS_CERT_COVERS_DOMAIN": true,
+    "TLS_CERT_NOT_EXPIRING_SOON": true,
+    "ALL_200": true,
+    "ARTIFACT_MATCH": true,
+    "BUILD_MATCH": true,
+    "REVISION_MATCH": true,
+    "NOINDEX_HEADER": true,
+    "NOINDEX_META": true
+  },
+  "VERDICT": "PASS"
+}

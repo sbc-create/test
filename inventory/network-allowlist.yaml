@@ -116,10 +116,16 @@ hosts:
   # Внесены 2026-09-10 после того, как записи DNS появились и подтвердились у
   # авторитетных серверов зоны: все три ведут на 45.131.182.225 — этот хост.
   # Только GET: приёмка читает.
+  # Контракт дописан 2026-09-21 по заданию владельца
+  # ZONA-PUBLIC-GATE-AND-DEPLOY-20260921-01. Хост здесь стоял и раньше, новых
+  # адресов не добавлено: без contract_ref было непонятно, что именно записью
+  # разрешено — проверять доступность домена или и содержимое страниц.
   - ref: zona-public
     host: zonafilm.space
-    purpose: "приёмка zonafilm.space: домен, TLS, health, версия шаблона"
+    purpose: "приёмка zonafilm.space: домен, TLS, health, версия шаблона, разметка"
     methods: [GET]
+    owner_decision_id: ZONA-PUBLIC-GATE-AND-DEPLOY-20260921-01
+    contract_ref: knowledge/zona/PUBLIC_ACCEPTANCE_CONTRACT.yaml
   - ref: animedia-icu-public
     host: animedia.icu
     purpose: "приёмка animedia.icu: домен, TLS, health, версия шаблона"
