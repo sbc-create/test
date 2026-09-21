@@ -1,0 +1,108 @@
+{
+  "stage": "LORDS-CURSOR-WORK-RECONCILIATION-01",
+  "verdict": "PARTIAL_READY_WITH_OWNER_GATE",
+  "verdict_reason": "Предыдущая работа Cursor найдена, проверена, спасена и продолжена; независимые локальные блоки закрыты. Открыт один подтверждённый P1 на живых доменах (OA-1) и один блокер доступа к измерениям (OA-2). Оба требуют решения владельца и оба относятся к текущим трём витринам, а не к будущей фабрике шаблонов.",
+
+  "canonical_repo": "/srv/site-factory/repo",
+  "canonical_repo_head_at_start": "491836048dae11ae639795c7a3827706129faef6",
+  "canonical_repo_note": "стоит на ветке claude/players-only-production-009 и грязен чужой работой релиз-оркестратора; не трогался",
+
+  "handoff_branch": "claude/lords-cursor-reconciliation-01",
+  "handoff_branch_note": "указатель на ту же линию, что и cursor/lords-default-episode-01; работа Cursor никуда не переносилась и не переписывалась",
+  "content_head": "94a1d149d2a2d17c234b87f0c530a2ae5e2b4e73",
+  "handoff_head": "PINNED_BY_NEXT_COMMIT",
+  "handoff_head_note": "вершина ветки — коммит, закрепляющий это поле. Файл не может содержать собственный хеш; проверяется командой `git rev-parse claude/lords-cursor-reconciliation-01`, а всё содержимое сверки лежит уже в content_head.",
+  "worktree": "/home/claude/wt-lords-default-episode-01",
+  "worktree_clean": true,
+
+  "acceptance_contract": "artifacts/evidence/lords-three-distinct-deep-audit-2026-09-20/NEXT_REPAIR_PROMPT.md",
+  "acceptance_contract_digest": "e13cd4f9a2ba47e1bed786e20b0fa1d67438e53c3ae98230d730734419cd4a21",
+  "acceptance_contract_state": "ACTIVE — исполнен частично, остаток в BLOCK_MATRIX.json",
+
+  "preserved_commits": [
+    "4f8ef5a3b5efabeb461437f9fa472df0d859e173 — вершина работы Cursor на момент начала сверки, сохранена как предок",
+    "4bb09ade9ec6b4cc651b923477622d8de613f67c — FINAL_HEAD глубокого аудита, сохранён",
+    "3c90aab08aee275e2b628d34cf6c719cbc120c21 — источник артефакта, стоявшего на витринах до ремонта",
+    "734 коммита ветки cursor/lords-default-episode-01 над main — ancestry не переписывалась, rebase и reset не выполнялись"
+  ],
+  "new_commits": [
+    "79632a0fee289003e8e93ac4cfb0e9fc4f12f771 — спасён незакоммиченный визуальный ремонт (источник и тесты)",
+    "1752ac1fc90faf55d0f2edc68998da0aac5dc562 — сохранён обрывок прогона как документ, без правок",
+    "868dab4b192702d75535445d87321ce8c7d89cd5 — сторож когерентности манифеста и байтов, восемь тестов",
+    "94a1d149d2a2d17c234b87f0c530a2ae5e2b4e73 — лэджер сверки"
+  ],
+
+  "live_domains": {
+    "lordfilm47.space": {
+      "site": "lords-01",
+      "unit": "lords-nova-01.service",
+      "port": 9110,
+      "profile": "lords-general",
+      "design": "lords-cinema-v2",
+      "declared_artifact": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+      "running_artifact": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "process_started_utc": "2026-09-21T03:36:36Z",
+      "coherence": "DIVERGED_RUNTIME_AHEAD_OF_MANIFEST"
+    },
+    "lordserial33.biz": {
+      "site": "lords-02",
+      "unit": "nova-lords-02.service",
+      "port": 9111,
+      "profile": "lords-new",
+      "design": "lords-series-feed-v2",
+      "declared_artifact": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "running_artifact": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "process_started_utc": "2026-09-21T11:13:09Z",
+      "coherence": "COHERENT"
+    },
+    "1lordserials1.online": {
+      "site": "lords-03",
+      "unit": "nova-lords-03.service",
+      "port": 9112,
+      "profile": "lords-curated",
+      "design": "lords-curated-v2",
+      "declared_artifact": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+      "running_artifact": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "process_started_utc": "2026-09-21T11:14:58Z",
+      "coherence": "DIVERGED_RUNTIME_AHEAD_OF_MANIFEST"
+    }
+  },
+  "live_verification_method": "sha256 исполняемого файла, манифесты витрин и времена старта процессов из /proc; HTTP недоступен — блокер B-01",
+
+  "indexability_by_domain": {
+    "lordfilm47.space": "closed",
+    "lordserial33.biz": "closed",
+    "1lordserials1.online": "closed"
+  },
+  "indexability_sources": [
+    "/srv/lords/.frontend/indexing-policy.json — indexing_expected: closed для всех трёх",
+    "automation/host/lords-frontend.py — безусловные meta noindex,nofollow и заголовок X-Robots-Tag"
+  ],
+  "indexability_mutations": 0,
+
+  "existing_template_profiles": [
+    {"profile": "lords-general", "design": "lords-cinema-v2", "domain": "lordfilm47.space"},
+    {"profile": "lords-new", "design": "lords-series-feed-v2", "domain": "lordserial33.biz"},
+    {"profile": "lords-curated", "design": "lords-curated-v2", "domain": "1lordserials1.online"}
+  ],
+  "shared_runtime_warning": "все три профиля обслуживаются одним исполняемым файлом /srv/lords/.frontend/lords-frontend.py. Фабрика T001–T050 унаследует это свойство: либо артефакты разделяются по арендаторам, либо манифесты всех затронутых витрин переоформляются в одной транзакции с установкой.",
+
+  "tests": "tests/lords — 288 passed, 17 skipped (пропуски: нет собранного стенда var/probe и var/lords-candidate)",
+
+  "unresolved_blockers": [
+    "B-01 P2 BLOCKED_ACCESS — HTTP к трём доменам закрыт guard'ом; smoke ×2, метрики A11 по живым страницам, пересъёмка визуальной матрицы и гейт нагрузки остаются NOT_MEASURABLE",
+    "B-02 P1 CONFIRMED_LIVE_DEFECT — lords-01 и lords-03 исполняют артефакт, которого не объявляют",
+    "B-04 P3 — четыре утёкших тестовых сервера на 19132-19135; предел памяти витрин не задан"
+  ],
+  "owner_actions_required": [
+    "OA-1 (P1) — выбрать: принять b32438c9 переоформлением манифестов lords-01 и lords-03 со smoke ×2, либо откатить на 5dd817fe из целой точки /srv/lords/.frontend/.rollback/20260920T223958Z-lords-02",
+    "OA-2 (P2) — внести три домена Lords в inventory/network-allowlist.yaml канонического репозитория, иначе живые измерения остаются неисполнимыми",
+    "OA-3 (P3) — остановить четыре тестовых сервера прошлого прогона"
+  ],
+
+  "factory_base_head": "94a1d149d2a2d17c234b87f0c530a2ae5e2b4e73",
+  "factory_base_head_note": "Промпт B должен ответвляться отсюда либо от вершины handoff_branch, которая отличается только коммитом-закрепкой этого файла.",
+  "ready_for_lords_50_factory": false,
+  "ready_reason": "Фабрика T001–T050 технически не заблокирована: её ветка и worktree отдельны, а открытые пункты касаются трёх существующих витрин. Но условие закрытия старого задания требует, чтобы на живых доменах не оставалось подтверждённого P1. Пока OA-1 не выбран владельцем, флаг остаётся false — это решение владельца, а не самооценка агента.",
+  "start_prompt_b_when": "владелец выбрал вариант по OA-1, расхождение закрыто и nova-manifest-coherence.py возвращает 0"
+}
