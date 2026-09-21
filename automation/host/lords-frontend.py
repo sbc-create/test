@@ -4933,10 +4933,17 @@ class ВидЗона(Вид):
             meta_html += f'<span class="zt__m">{html.escape(мета1)}</span>'
         if мета2:
             meta_html += f'<span class="zt__m">{html.escape(мета2)}</span>'
+        # data-clamp-allowed объявляет обрезку в две строки как замысел, а не
+        # дефект. Без объявления машинный аудит не может отличить задуманный
+        # clamp от съеденного вёрсткой заголовка и считает любой обрезанный
+        # заголовок нарушением. Полное название рядом — в title и aria-label,
+        # иначе объявлять было бы нечего: обрезка допустима только тогда,
+        # когда текст целиком остаётся доступен.
         return (f'<a class="zt" data-testid="title-card" href="{запись["url"]}" '
                 f'title="{html.escape(заголовок)}" aria-label="{html.escape(заголовок)}">'
                 f'<span class="zt__p">{изо}</span>'
-                f'<span class="zt__b"><span class="zt__t">{html.escape(заголовок)}</span>'
+                f'<span class="zt__b"><span class="zt__t" data-clamp-allowed="2">'
+                f'{html.escape(заголовок)}</span>'
                 f'{meta_html}</span>{оценка}</a>')
 
     def строка(self, запись: dict) -> str:
@@ -4978,8 +4985,12 @@ class ВидЗона(Вид):
         return (f'<div class="zrl">'
                 f'<button class="zrl__btn zrl__btn--p" type="button" data-rl="prev"'
                 f' aria-controls="{ид}" aria-label="Пролистать назад">&#8249;</button>'
+                # data-scroller объявляет боковую прокрутку замыслом: у ленты
+                # есть кнопки, клавиатура и подпись. Аудит иначе считает её
+                # непреднамеренной внутренней прокруткой наравне с вёрсткой,
+                # которая поехала.
                 f'<div class="zrl__vp" id="{ид}" tabindex="0" role="group"'
-                f' aria-label="Лента произведений">'
+                f' data-scroller="rail" aria-label="Лента произведений">'
                 f'<div class="zrl__track">{плитки}</div></div>'
                 f'<button class="zrl__btn zrl__btn--n" type="button" data-rl="next"'
                 f' aria-controls="{ид}" aria-label="Пролистать вперёд">&#8250;</button>'
@@ -5132,13 +5143,16 @@ class ВидЗона(Вид):
             thumb = (f'<img src="{html.escape(poster)}" alt="" width="60" height="90" loading="lazy">'
                      if poster else '<span class="zadded__ph" aria-hidden="true"></span>')
             meta = " · ".join(str(x) for x in (з.get("kind"), з.get("year")) if x)
-            if precision == "date-only":
-                label = f"Добавлено {when}"
-            else:
-                label = f"Добавлено {when}"
+            # Полнота метки задана форматом `when`: со временем, когда источник
+            # его дал, и только дата, когда не дал. Отдельная ветка по
+            # precision здесь раньше существовала, но обе её половины давали
+            # один и тот же текст — то есть ничего не решала.
+            label = f"Добавлено {when}"
             rows.append(
-                f'<a class="zadded__row" href="{href}">{thumb}<span>'
-                f'<p class="zadded__t">{html.escape(title)}</p>'
+                f'<a class="zadded__row" href="{href}" '
+                f'title="{html.escape(title)}" aria-label="{html.escape(title)}">'
+                f'{thumb}<span>'
+                f'<p class="zadded__t" data-clamp-allowed="2">{html.escape(title)}</p>'
                 f'<p class="zadded__m">{html.escape(meta)}</p></span>'
                 f'<span class="zadded__when">{html.escape(label)}</span></a>')
         return (
@@ -5287,7 +5301,8 @@ class ВидЗона(Вид):
         блок_жанров = (
             f'<section class="zgenres" aria-labelledby="zgenres-h">'
             f'<h2 class="zgenres__h" id="zgenres-h">Жанры</h2>'
-            f'<nav class="zgenres__nav" aria-label="Жанры">{жанр_навигация}</nav>'
+            f'<nav class="zgenres__nav" data-scroller="chips" '
+            f'aria-label="Жанры">{жанр_навигация}</nav>'
             f'<p class="zsub"><a href="/catalog/">Все жанры</a></p>'
             f'</section>') if жанр_навигация else ""
 
@@ -5296,17 +5311,28 @@ class ВидЗона(Вид):
             raw = з.get("published_at") or ""
             if not raw:
                 continue
+            # Формат обязан быть полным: «%H» без «%M» обрезает время до часа
+            # ещё до вёрстки, и визуальная проверка такую обрезку не видит —
+            # элемент не переполнен, в нём просто лежит неполный текст.
+            def _дата(строка: str) -> str:
+                """ISO-дата в том же точечном формате, что и дата со временем."""
+                части = строка[:10].split("-")
+                if len(части) == 3 and all(ч.isdigit() for ч in части):
+                    год, месяц, день = части
+                    return f"{день}.{месяц}.{год}"
+                return строка[:10]
+
             if "T" in raw:
                 try:
                     from datetime import datetime as _dt
                     d = _dt.fromisoformat(raw.replace("Z", "+00:00"))
-                    when = d.strftime("%d.%m.%Y, %H")
+                    when = d.strftime("%d.%m.%Y, %H:%M")
                     precision = "datetime"
                 except ValueError:
-                    when = raw[:10]
+                    when = _дата(raw)
                     precision = "date-only"
             else:
-                when = raw[:10]
+                when = _дата(raw)
                 precision = "date-only"
             added_events.append((з, when, precision))
 
@@ -5730,7 +5756,8 @@ class ВидЗона(Вид):
 
         фильтры = (
             f'{toggle}'
-            f'<div class="zfilt-bar" id="zona-filt-bar" data-testid="catalog-filters">'
+            f'<div class="zfilt-bar" id="zona-filt-bar" data-scroller="filters" '
+            f'data-testid="catalog-filters">'
             f'<div class="zfilt-bar__group">{"".join(kind_chips)}</div>'
             f'{year_html}{genre_html}{country_html}{sort_html}'
             f'<div class="zfilt-bar__sticky">{reset_html}</div>'
@@ -6458,9 +6485,12 @@ class ВидАнимедиа(ВидЗона):
         if not части:
             части.append("<span><em>оценки нет</em></span>")
         оценка = f'<span class="zt__r">{"".join(части)}</span>'
-        return (f'<a class="zt" href="{запись["url"]}">'
+        полное = запись["title"] or ""
+        return (f'<a class="zt" data-testid="title-card" href="{запись["url"]}" '
+                f'title="{html.escape(полное)}" aria-label="{html.escape(полное)}">'
                 f'<span class="zt__p">{изо}</span>'
-                f'<span class="zt__b"><span class="zt__t">{html.escape(запись["title"])}</span>'
+                f'<span class="zt__b"><span class="zt__t" data-clamp-allowed="2">'
+                f'{html.escape(полное)}</span>'
                 f'<span class="zt__m">{html.escape(мета)}</span>{оценка}</span></a>')
 
     def логотип(self) -> str:
