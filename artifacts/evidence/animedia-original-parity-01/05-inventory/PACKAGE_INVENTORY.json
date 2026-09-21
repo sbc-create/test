@@ -1,0 +1,87 @@
+{
+ "task": "ANIMEDIA-PACKAGE-INVENTORY",
+ "tenant": "animedia",
+ "recorded_at_utc": "2026-09-21T18:00:32Z",
+ "ANIMEDIA_PACKAGES_FOUND": 3,
+ "ANIMEDIA_PACKAGES_PARITY_PASS": 0,
+ "b12_b16_note": "B12–B16 — блоки приёмки одного шаблона, а не отдельные пакеты: все они описывают один и тот же артефакт витрин Animedia. Считать их пятью пакетами было бы подменой счёта.",
+ "packages": [
+  {
+   "template_id": "animedia-original-parity",
+   "version": "в разработке (от 1.2.4)",
+   "source_path": "automation/host/animedia-frontend.py",
+   "extra_source": [
+    "factory/animedia/collection_contract.py",
+    "automation/host/animedia_entrypoint_build.py"
+   ],
+   "profile": [
+    "animedia-icu",
+    "animedia-space"
+   ],
+   "domains": [
+    "animedia.icu",
+    "animedia.space"
+   ],
+   "branch": "claude/animedia-original-parity-01",
+   "commit": "9f204b2113631a7915073e692fe36d0249c6a531",
+   "runtime": "собственный entrypoint, семейство проверяется на старте",
+   "assets": "постеры и изображения — из снимка каталога, своих бинарных assets нет",
+   "build_command": "python3 automation/host/animedia_entrypoint_build.py",
+   "test_command": ".venv/bin/python -m pytest tests/unit/test_animedia_isolated_runtime.py tests/unit/test_animedia_tenant_guard.py",
+   "artifact": "9b95d302e79bd7bce9a180b1b8a2c57529567167885822af25e55f0562d4ab6b",
+   "artifact_bytes": 424064,
+   "status": "ИЗОЛИРОВАН, рендер идентичен прежнему; правки под оригинал не начаты",
+   "visual_parity_score": "UNMEASURED (матрица построена: P0=0, P1=29, P2=63)",
+   "isolated": {
+    "own_source": true,
+    "own_namespace": false,
+    "own_tokens": true,
+    "own_assets": "n/a",
+    "own_bundle": true,
+    "own_artifact": true,
+    "own_rollback": true,
+    "writes_to_neighbours": false,
+    "namespace_note": "пространство классов пока чужое (z*) — отдельный шаг"
+   }
+  },
+  {
+   "template_id": "animedia-nova",
+   "version": "1.2.4",
+   "source_path": "automation/host/lords-frontend.py (общий, канонический writer — чужая линия)",
+   "profile": [
+    "animedia-icu",
+    "animedia-space"
+   ],
+   "domains": [
+    "animedia.icu",
+    "animedia.space"
+   ],
+   "branch": "claude/animedia-template-finalization-01",
+   "commit": "b38ec50",
+   "runtime": "общий рантайм шести витрин",
+   "assets": "—",
+   "build_command": "—(сборка релиза из общего файла)",
+   "test_command": ".venv/bin/python -m pytest tests/unit/test_animedia_parity03_b1*.py",
+   "artifact": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+   "status": "LIVE_NOT_OWNER_ACCEPTED на первом домене; визуально отклонён",
+   "visual_parity_score": "REJECTED владельцем",
+   "isolated": {
+    "own_source": false,
+    "own_namespace": false,
+    "own_tokens": true,
+    "own_bundle": false,
+    "own_artifact": true,
+    "own_rollback": true,
+    "writes_to_neighbours": "источник общий"
+   }
+  },
+  {
+   "template_id": "animedia-preview",
+   "source_path": "sites/animedia-preview",
+   "declared_file": "sites/animedia-preview/package.yaml",
+   "declared_head": "# Пакет локального среза шаблона.\n#\n# Заготовщик шаблонов пакет намеренно не создаёт: пакет — решение владельца\n# о домене, правах и индексации. Здесь ни одного из этих решений не\n# принимается: домен",
+   "status": "пакет заявлен в репозитории; к живым витринам не привязан",
+   "visual_parity_score": "n/a"
+  }
+ ]
+}
