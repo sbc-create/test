@@ -1,0 +1,264 @@
+{
+  "stage": "COMMUNITY-COMMENTS-PLATFORM-01",
+  "block": "00-discovery",
+  "checked_at_utc": "2026-09-21T21:44:04Z",
+  "discovery_complete": true,
+  "environment": {
+    "hostname": "claude-control-01",
+    "user": "claude",
+    "uid": 1001,
+    "pwd_at_start": "/srv/site-factory/repo",
+    "repository_toplevel": "/srv/site-factory/repo",
+    "remote_origin": "https://github.com/sbc-create/test.git",
+    "session_branch_at_start": "claude/players-only-production-009",
+    "session_head_at_start": "491836048dae11ae639795c7a3827706129faef6"
+  },
+  "canonical_checkout_status": {
+    "path": "/srv/site-factory/repo",
+    "clean": false,
+    "modified": [
+      "automation/host/lords-staging-apply.sh",
+      "config/site-profiles/yummyani-site.json",
+      "inventory/network-allowlist.yaml",
+      "seo_operator/hookguard.py"
+    ],
+    "untracked_count": 22,
+    "owner_of_changes": "OTHER_WORK_players-only-production-009_AND_release-orchestrator",
+    "action_taken": "NONE — left read-only and untouched",
+    "related_to_comments": false
+  },
+  "branches_matching_comment_community_discussion_ugc": {
+    "local": [
+      {
+        "ref": "refs/heads/cursor/community-comments-01",
+        "tip": "94374399013b63070e09d81564f50b169f0f02a2",
+        "committed": "2026-09-21T12:05:01+00:00",
+        "author": "CORE integrator"
+      }
+    ],
+    "remote": [],
+    "remote_probe": "git ls-remote --heads origin | grep -i comment => no matches"
+  },
+  "worktrees_relevant": [
+    {
+      "path": "/home/claude/wt-community-comments-01",
+      "branch": "refs/heads/cursor/community-comments-01",
+      "head": "94374399013b63070e09d81564f50b169f0f02a2",
+      "gitdir": "/srv/site-factory/repo/.git/worktrees/wt-community-comments-01",
+      "locked": false,
+      "status_porcelain_lines": 0,
+      "clean": true,
+      "role": "DEDICATED_COMMENTS_WORKTREE",
+      "action_taken": "READ_ONLY — not modified"
+    },
+    {
+      "path": "/home/claude/wt-ratings-ingestion-01",
+      "branch": "refs/heads/cursor/ratings-ingestion-01",
+      "head": "ec29b2c7fa046c9b05537744191c0ade1b6b673e",
+      "role": "RATINGS_BOOTSTRAP_WORKTREE",
+      "action_taken": "READ_ONLY — not modified"
+    }
+  ],
+  "separate_comments_repository": {
+    "found": false,
+    "probe": "find /srv /home/claude /opt -maxdepth 4 -type d -name .git | grep -i comment => no matches",
+    "conclusion": "No standalone comments Git repository exists. The comments module lives inside the site-factory monorepo."
+  },
+  "evidence_directory_in_ratings_worktree": {
+    "path": "/home/claude/wt-ratings-ingestion-01/artifacts/evidence/community-comments-01/",
+    "tracked_by_git": false,
+    "files": [
+      {
+        "path": "00-existing-work-check/DISCOVERY.json",
+        "bytes": 6684,
+        "mtime": "2026-09-20T21:14Z",
+        "owner": "claude"
+      }
+    ],
+    "content_summary": "A bootstrap discovery snapshot written at 2026-09-20T21:11Z by a Cursor subagent whose Shell tool was denied by seo_operator.hookguard (hookguard classifies only tool=='Bash'). At that moment it correctly recorded cursor_community_comments_01_exists=false and wt-community-comments-01 absent, and asked the operator to create the worktree.",
+    "status": "SUPERSEDED_HISTORICAL_SNAPSHOT",
+    "why_superseded": "The worktree /home/claude/wt-community-comments-01 was created at 2026-09-20T21:15Z (four minutes after the snapshot) and branch cursor/community-comments-01 received 30 commits through 2026-09-21T12:05Z. The identical file is now tracked at artifacts/evidence/community-comments-01/00-existing-work-check/DISCOVERY.json on that branch.",
+    "action_taken": "READ_ONLY — not copied, not moved, not deleted, not committed from the foreign worktree"
+  },
+  "premise_corrections": [
+    {
+      "briefed_premise": "отдельная comments-ветка, comments-worktree, comments-commit пока не доказаны",
+      "finding": "DISPROVEN — all three exist and are proven",
+      "proof": "refs/heads/cursor/community-comments-01 @ 9437439; worktree /home/claude/wt-community-comments-01 registered in git worktree list --porcelain; 30 commits B00..B15 across three stages"
+    },
+    {
+      "briefed_premise": "в /home/claude/wt-ratings-ingestion-01 существовал незакоммиченный каталог artifacts/evidence/community-comments-01/",
+      "finding": "CONFIRMED — it exists and holds exactly one file (DISCOVERY.json, 6684 bytes)",
+      "proof": "find /home/claude/wt-ratings-ingestion-01/artifacts/evidence/community-comments-01/ -type f"
+    },
+    {
+      "briefed_premise": "финальный ratings HEAD ec29b2c относится к рейтингам, а не к комментариям",
+      "finding": "CONFIRMED and strengthened",
+      "proof": "git merge-base --is-ancestor ec29b2c 9437439 => false. The comments branch does NOT contain the final ratings tip; it forked earlier, at ab9dec9."
+    },
+    {
+      "briefed_premise": "comments-service и production deployment пока не доказаны",
+      "finding": "CONFIRMED for production; a comments service module exists in source but was never deployed",
+      "proof": "factory/community/comments/service.py (26146 bytes) exists; no systemd unit named *comment* is installed; only automation/host/systemd/site-factory-comments-qwen-staging.service exists as a repository file, uninstalled."
+    }
+  ],
+  "existing_implementation_inventory": {
+    "branch": "cursor/community-comments-01",
+    "tip": "94374399013b63070e09d81564f50b169f0f02a2",
+    "forked_from": "ab9dec90c2084614f9f227730be5240c4d7baefc",
+    "forked_from_branch": "cursor/ratings-ingestion-01 (at Stage06 time)",
+    "merge_base_with_main": "64bb55c1bf1aaf63a1b5b603dfc09c5384aabfde",
+    "contains_final_ratings_tip": false,
+    "commits": 30,
+    "stages": [
+      "COMMUNITY-COMMENTS-01 — research corpus, methodology, policies, dark schema/API/UI — verdict PASS",
+      "COMMUNITY-COMMENTS-02 — lifecycle V2, Qwen postmod adapter, outbox worker, kill switch, admin UI — verdict PASS",
+      "COMMUNITY-COMMENTS-03 — Qwen staging runtime, gold corpus, canary harness — verdict BLOCKED_QWEN_RUNTIME_CONFIG"
+    ],
+    "source_modules": {
+      "factory/community/comments/": [
+        "service.py (26146)", "admin.py (17555)", "api.py (8206)", "outbox.py (6591)",
+        "flags.py (6209)", "kill_switch.py (5104)", "preflight.py (4149)", "worker.py (4213)",
+        "states.py (7101)", "pii.py (3347)", "sanitize.py (2330)", "degraded.py (3018)",
+        "labels.py (3075)", "metrics_postmod.py (3243)", "guest_display.py (1875)",
+        "staging_canary.py (1732)"
+      ],
+      "factory/community/comments/qwen/": [
+        "staging_harness.py (15693)", "gold_corpus.py (13120)", "provider.py (9839)",
+        "runtime_preflight.py (7324)", "apply.py (6684)", "endpoint_policy.py (6304)",
+        "schema_v2.py (6242)", "policy.py (5883)", "prompt.py (5438)", "caps.py (4829)",
+        "schema.py (4306)", "discovery.py (6779)"
+      ],
+      "factory/community/frontend/": [
+        "community_comments.js (14615)", "community_comments.css (3608)",
+        "community_comments_partial.html (1708)"
+      ],
+      "storage": "factory/community/store.py (17637) — SHARED with community ratings",
+      "tests": "tests/unit/community/test_comments_*.py — 19 files, 149 test functions"
+    },
+    "database": {
+      "engine": "sqlite3",
+      "migration_framework": "migrations/NNNN_*.py with UP/DOWN lists, reversibility asserted by test",
+      "comments_tables_defined_in": "factory/community/store.py (not in a migration)",
+      "tables": [
+        "community_comments", "community_comment_revisions", "community_comment_reactions",
+        "community_content_reports", "community_comment_moderation_events",
+        "community_comment_rate_limit_events", "community_comment_risk_signals",
+        "community_comment_moderation_jobs", "community_comment_kill_switch_audit"
+      ]
+    },
+    "flags_default_state": {
+      "COMMENTS_PUBLICATION_ENABLED": 0,
+      "COMMENTS_PUBLIC_READ_ENABLED": 0,
+      "COMMENTS_SEO_RENDERING_ENABLED": 0,
+      "COMMENTS_API_WRITE_ENABLED": 0,
+      "COMMENTS_ROLLOUT_PERCENT": 0,
+      "note": "publication family is env-clamped to 0 by comments_dark_flags()"
+    }
+  },
+  "blocking_architectural_gaps_vs_shared_platform_brief": [
+    {
+      "id": "GAP-1",
+      "severity": "BLOCKING",
+      "finding": "Zero tenant scoping. grep -rniE 'tenant_id|site_id|tenant' over factory/community/comments/ returns no matches at all.",
+      "impact": "The existing module is single-tenant. It cannot host lords, zona, animedia and yummy without cross-site reads. Brief sections 5, 9, 10, 11 are unsatisfiable by retrofit alone."
+    },
+    {
+      "id": "GAP-2",
+      "severity": "BLOCKING",
+      "finding": "Comments tables are created by factory/community/store.py, the same module and same SQLite database that serves community ratings.",
+      "impact": "Brief section 4 requires comments and ratings to be separate products with separate tables, APIs, flags, migrations, kill switches and telemetry. Editing store.py to add tenant columns would mutate the ratings contour, which RATINGS_MUTATIONS_ALLOWED=NO forbids."
+    },
+    {
+      "id": "GAP-3",
+      "severity": "BLOCKING",
+      "finding": "Identity is hard-bound to one site: isolation_invariants() pins IDENTITY_COOKIE='yummy_cr_vid'.",
+      "impact": "Brief section 7 requires per-tenant pseudonymous guest identity that cannot be correlated across sites."
+    },
+    {
+      "id": "GAP-4",
+      "severity": "MAJOR",
+      "finding": "Comments tables are defined in application code, not in a reversible numbered migration.",
+      "impact": "Brief section 10 requires reversible migrations with a rehearsed backup/restore."
+    },
+    {
+      "id": "GAP-5",
+      "severity": "MAJOR",
+      "finding": "No RBAC role model. No platform owner / tenant owner / tenant admin / moderator / auditor / service-account separation.",
+      "impact": "Brief section 9 requires default-deny RBAC."
+    },
+    {
+      "id": "GAP-6",
+      "severity": "MAJOR",
+      "finding": "Stage03 is parked at BLOCKED_QWEN_RUNTIME_CONFIG — the whole postmod path depends on an external Qwen runtime the owner has not configured.",
+      "impact": "A safe local MVP must not depend on that blocker. Moderation must work deterministically without any external model."
+    }
+  ],
+  "runtime_and_process_checks": {
+    "systemd_units_matching_comment_or_community": "PROBE_BLOCKED — systemctl is not in the UNATTENDED_SAFE profile; checked /etc/systemd/system listing instead",
+    "installed_unit_files_matching": [],
+    "repository_unit_files_uninstalled": [
+      "automation/host/systemd/site-factory-comments-qwen-staging.service",
+      "automation/host/systemd/site-factory-comments-qwen-worker.service.example"
+    ],
+    "community_ratings_gateway_service": "OUT_OF_SCOPE — not read, not modified",
+    "processes": "PROBE_BLOCKED — ps is not in the UNATTENDED_SAFE profile",
+    "active_session_on_comments_worktree": {
+      "verdict": "NO_ACTIVE_WRITER",
+      "basis": [
+        "worktree tree is clean (0 porcelain lines)",
+        "no .lock files under the worktree or its gitdir",
+        "gitdir not marked locked",
+        "last commit 2026-09-21T12:05Z, ~9.6 hours before this discovery",
+        "no Cursor transcript project directory matching *comment*"
+      ]
+    },
+    "lock_files": [],
+    "ports": "not probed — no comments service is installed or running"
+  },
+  "classification": {
+    "question": "чем является community-comments-01",
+    "answer": "2 — UNFINISHED_IMPLEMENTATION",
+    "rejected_alternatives": {
+      "1_evidence_only": "rejected — 30 commits contain ~200KB of Python source, a frontend widget, and 149 tests, not only evidence",
+      "3_copy_of_another_branch": "rejected — the comments commits B00..B15 are unique to this branch and absent from cursor/ratings-ingestion-01",
+      "4_part_of_ratings_platform": "partially true and this is the defect — comments share factory/community/store.py and the ratings SQLite database (GAP-2), which is precisely what this stage must undo",
+      "5_abandoned_prototype": "rejected — most recent commit is 2026-09-21T12:05Z, and it carries a live, named blocker (BLOCKED_QWEN_RUNTIME_CONFIG) rather than abandonment"
+    }
+  },
+  "decision": {
+    "priority_rule_applied": "Brief section 3, rule 2 — a dedicated comments branch exists, so its work is continued",
+    "SOURCE_DECISION": "CONTINUE_EXISTING_COMMENTS_CONTOUR_ON_NEW_SAFE_BRANCH",
+    "EXISTING_REPOSITORY": "NONE_SEPARATE — monorepo /srv/site-factory/repo",
+    "EXISTING_BRANCH": "cursor/community-comments-01",
+    "EXISTING_WORKTREE": "/home/claude/wt-community-comments-01",
+    "new_branch": "claude/community-comments-platform-01",
+    "new_worktree": "/home/claude/wt-community-comments-platform-01",
+    "start_head": "94374399013b63070e09d81564f50b169f0f02a2",
+    "why_a_new_branch_rather_than_committing_onto_cursor_branch": [
+      "The new branch starts AT the proven comments tip 9437439, so the entire comments history is preserved as ancestry — nothing is lost, nothing is cherry-picked, and provenance needs no reconstruction.",
+      "The scope manifest fixes ALLOWED_BRANCH_PREFIX=claude/community-comments-; cursor/community-comments-01 is outside that prefix.",
+      "The cursor branch belongs to a different harness session. Writing to it risks colliding with a writer this profile cannot even enumerate (ps is denied), so a fresh branch is the non-interfering choice.",
+      "This is not the section-3 rule-4 case: rule 4 names a base-less fresh start, whereas this branch is rooted in the proven comments contour, not in a random ratings, SEO or template HEAD."
+    ],
+    "base_justification": "9437439 is the tip of the only dedicated comments contour. Its merge-base with main is 64bb55c. It deliberately excludes the final ratings tip ec29b2c, so no ratings work is carried in or put at risk.",
+    "materials_left_untouched": [
+      "/home/claude/wt-ratings-ingestion-01 (all of it)",
+      "/home/claude/wt-community-comments-01 (all of it)",
+      "/srv/site-factory/repo working tree and index",
+      "community-ratings-gateway.service"
+    ]
+  },
+  "engineering_consequence": {
+    "plan": "Build a new shared, tenant-scoped comments core under factory/comments_platform/, independent of factory/community/store.py, with its own reversible migration, its own flags and its own kill switch.",
+    "reuse_from_prior_stages": [
+      "the lifecycle state-machine concepts from factory/community/comments/states.py",
+      "sanitization and PII redaction approach",
+      "the dark-flag discipline: publication family clamped to 0 and unable to leave 0 via environment"
+    ],
+    "explicitly_not_reused": [
+      "factory/community/store.py — shared with ratings, may not be mutated",
+      "the Qwen postmod runtime path — parked on an owner blocker; MVP moderation must be deterministic and local"
+    ]
+  }
+}
