@@ -95,11 +95,12 @@
   "ROLLBACK_NOT_REQUIRED_BASIS": "every safety gate is green and the system is in a fail-safe state: writes are enabled but unreachable from the UI, zero real or synthetic votes remain, kill-switch never fired",
   "NEXT_SAFE_STEP": "ship the vote widget to the live frontend and fix monitor metric export, then restart a 1% window with non-zero exposure",
   "REPORT_HEAD": "75ff9c14cdaf48d8c20ebe4d3cdf1f3c8128cadd",
-  "FINAL_HEAD": null,
+  "FINAL_HEAD": "52e2bd912a5476f4ea016c323fa4a15995bce39a",
   "COMMITS": [
     "12e6a8db8a89a684dc6bbf765d7de134f609206e fix(community): restore read-only marker in ratings admin list",
     "0987fc07b22cdde4b3d7b304e070694046288580 test(community): de-flake concurrent linearizability gate",
-    "75ff9c14cdaf48d8c20ebe4d3cdf1f3c8128cadd docs(community): Stage07 1% observation evidence — OBSERVATION_PENDING"
+    "75ff9c14cdaf48d8c20ebe4d3cdf1f3c8128cadd docs(community): Stage07 1% observation evidence — OBSERVATION_PENDING",
+    "52e2bd912a5476f4ea016c323fa4a15995bce39a docs(community): pin Stage07 commit hashes in final report"
   ],
-  "BLOCK_COMMITS": 3
+  "BLOCK_COMMITS": 4
 }
