@@ -122,7 +122,9 @@ class TestOverlayHidden:
 class TestHomeDensity:
     def test_no_per_genre_shelves(self, зона):
         о = запросить(зона, "/")
-        assert "Смотреть по жанрам" in о.тело
+        # Заголовок секции сократился до «Жанры» в более позднем проходе;
+        # смысл теста — отсутствие отдельной полки на каждый жанр — не менялся.
+        assert 'id="zgenres-h">Жанры</h2>' in о.тело
         # genre nav links present; no shelf titled just a genre as mega-row requirement
         assert о.тело.count('class="zsec"') <= 10
         assert "записей" not in о.тело.lower() or "В снимке" not in о.тело
@@ -157,7 +159,10 @@ class TestFooterGate:
         о = запросить(зона, "/")
         assert 'data-contact-config-missing="1"' in о.тело
         assert "admin@zona.plus" not in о.тело
-        assert "Zona · 1.2.0 ·" in о.тело or "Zona · v1.2.0 ·" in о.тело
+        # Маркер версии в подвале запрещён правилом владельца (B22).
+        assert 'data-footer-technical-marker="0"' in о.тело
+        assert "Zona · 1.2.0 ·" not in о.тело
+        assert "Zona · v1.2.0 ·" not in о.тело
 
 
 class TestPlayerRegression:

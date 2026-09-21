@@ -78,14 +78,22 @@ class TestZonaFilters:
     def test_unknown_genre_empty(self, зона):
         о = запросить(зона, "/catalog/?genre=no-such-genre")
         assert о.статус == 200
-        assert "Ничего не подошло" in о.тело
+        # Раньше тест ждал общего «Ничего не подошло». Витрина теперь отличает
+        # нераспознанный фильтр от пустой выборки, и это различие важнее: в
+        # первом случае условие вообще не применено, и пользователь обязан об
+        # этом узнать, а не решить, что в каталоге ничего нет.
+        assert "<h1 class=\"zh\" id=\"catalog-h1\">Некорректный фильтр</h1>" in о.тело
+        assert "Параметр не распознан" in о.тело
+        assert 'href="/catalog/"' in о.тело
 
 
 class TestZonaFooterAndMarker:
     def test_compact_marker_and_no_debug(self, зона):
         о = запросить(зона, "/")
-        assert "Zona · v1.2.0 · 00000000" in о.тело or re.search(
-            r"Zona\s+[·.]\s*v?1\.2\.0\s+[·.]\s*0{8}", о.тело)
+        # См. test_nova_frontend_families: маркер версии в подвале запрещён
+        # правилом владельца (B22), и тест держит именно запрет.
+        assert 'data-footer-technical-marker="0"' in о.тело
+        assert not re.search(r"Zona\s+[·.]\s*v?1\.2\.0\s+[·.]\s*0{8}", о.тело)
         for запрет in ("тестовая витрина", "закрыта от индексации",
                        "В снимке каталога", "Template:", "записей_в_снимке"):
             assert запрет not in о.тело
@@ -122,9 +130,16 @@ class TestZonaSearchAndPagination:
         assert "В снимке каталога" not in о.тело
 
     def test_catalog_page_links(self, зона):
-        # With tiny fixture page 1 is final; still must not 404.
+        """`?page=1` — не отдельный адрес, а канонический каталог.
+
+        Тест раньше ждал 200. Витрина теперь уводит первую страницу на
+        канонический адрес одним переходом: две ссылки на одну и ту же выдачу
+        поисковику не нужны. Проверяется именно переход и его цель — «не 404»
+        было бы слишком слабым условием и пропустило бы петлю редиректов.
+        """
         о = запросить(зона, "/catalog/?page=1")
-        assert о.статус == 200
+        assert о.статус == 308
+        assert о.заголовки.get("Location") == "/catalog/"
 
 
 class TestZonaNoindex:

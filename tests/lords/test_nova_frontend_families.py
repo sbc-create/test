@@ -580,8 +580,12 @@ class TestПереработкаВключаетсяВерсией:
         assert "тестовая витрина" not in з
         assert "Новые трейлеры" not in з  # empty trailer shelf must stay hidden
         assert '<section class="zsec">' in з or 'class="zsec zsec--seo"' in з
-        assert "Zona · v1.2.0 · 00000000" in з or re.search(
-            r"Zona\s+[·.]\s*v?1\.2\.0\s+[·.]\s*0{8}", з)
+        # Раньше здесь требовался видимый маркер «Zona · v1.2.0 · 00000000».
+        # Правило владельца (B22) его запретило: версия, коммит и build id в
+        # пользовательском подвале не показываются. Ожидание перевёрнуто, а не
+        # снято, — иначе запрет ничем не удерживался бы.
+        assert 'data-footer-technical-marker="0"' in з
+        assert not re.search(r"Zona\s+[·.]\s*v?1\.2\.0\s+[·.]\s*0{8}", з)
         assert "Template:" not in з
 
     def test_animedia_1_2_0_свой_вид_а_не_lords(self, анимедиа_1_2):
