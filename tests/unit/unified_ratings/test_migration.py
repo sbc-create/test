@@ -39,7 +39,14 @@ def migration():
 
 @pytest.fixture
 def production_copy(tmp_path: Path) -> Path:
-    """Копия боевой базы. Оригинал открывается только на чтение."""
+    """Копия боевой базы, приведённая к состоянию «до 0007».
+
+    Оригинал открывается только на чтение. На копии выполняется откат
+    0007, потому что боевая база могла быть уже мигрирована, и тест,
+    который это предполагает, перестаёт проверять миграцию ровно после
+    первого успешного применения — а проверять её нужно и на базе, где
+    её ещё нет, и на базе, где она уже есть.
+    """
     if not PRODUCTION_DB.is_file():
         pytest.skip("production ratings.sqlite недоступна в этом окружении")
     destination = tmp_path / "production_copy.sqlite"
@@ -51,7 +58,29 @@ def production_copy(tmp_path: Path) -> Path:
         target.close()
     finally:
         source.close()
+    conn = sqlite3.connect(str(destination))
+    load_migration_0007().downgrade(conn)
+    conn.close()
     return destination
+
+
+def test_applying_to_an_already_migrated_production_copy_changes_nothing(
+    production_copy, migration
+):
+    """Повторное применение на боевой схеме — no-op, а не ошибка."""
+    conn = sqlite3.connect(str(production_copy))
+    migration.apply(conn)
+    conn.close()
+    before = table_names(production_copy)
+    counts_before = row_counts(production_copy, CANARY_TABLES)
+
+    conn = sqlite3.connect(str(production_copy))
+    second = migration.apply(conn)
+    conn.close()
+
+    assert second["first_apply"] is False
+    assert table_names(production_copy) == before
+    assert row_counts(production_copy, CANARY_TABLES) == counts_before
 
 
 def table_names(path: Path) -> set[str]:

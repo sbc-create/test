@@ -56,6 +56,9 @@ class RunCounters:
     inserted: int = 0
     updated: int = 0
     unchanged: int = 0
+    #: источник ответил «такого тайтла у меня нет» — обычный исход
+    not_found: int = 0
+    #: источник не ответил или ответил ошибкой — это отказ
     failed: int = 0
     rate_limited: int = 0
     retries: int = 0
@@ -176,7 +179,13 @@ class Ingestor:
             if title is None:
                 continue
             if not fetch.found and fetch.error:
-                counters.failed += 1
+                # Отсутствие тайтла у источника — не отказ источника.
+                # Пока эти исходы считались вместе, один не найденный
+                # тайтл ронял ворота всего источника.
+                if fetch.error.startswith("NOT_FOUND") or fetch.error == "NOT_IN_FEED":
+                    counters.not_found += 1
+                else:
+                    counters.failed += 1
                 continue
             counters.received += 1
             outcome = self._ingest_one(title, fetch, run_id=run_id, id_space=id_space)
@@ -242,6 +251,11 @@ class Ingestor:
         from factory.unified_ratings.matching import MatchMethod
 
         our_id = str(title.external_ids.get(id_space) or "")
+        # Идентификаторы «их» стороны берутся из того, что объявил сам
+        # источник. Подставить сюда наш же идентификатор означало бы
+        # сравнить его с собой: такая проверка не падает никогда и потому
+        # не проверяет ничего.
+        their_ids = {k: str(v) for k, v in fetch.crosswalk_ids.items() if v}
         their = TitleFacts(
             title_id=fetch.external_id,
             title_ru=fetch.titles.get("russian", "") or fetch.titles.get("ru", ""),
@@ -256,20 +270,31 @@ class Ingestor:
             year=fetch.year,
             kind=fetch.kind,
             episode_count=fetch.episodes,
-            external_ids={id_space: our_id} if our_id else {},
+            external_ids=their_ids,
         )
         problems = disagreements(title.facts(), their)
+        unconfirmed = bool(our_id) and id_space not in their_ids
+        if unconfirmed:
+            # Источник не подтвердил, про какой тайтл ответ. Это не отказ,
+            # но и не точное сопоставление: связь принимается только когда
+            # идентификатор подтверждён обеими сторонами.
+            problems.append(QuarantineReason.INSUFFICIENT_CONFIDENCE)
         if problems:
+            detail = (
+                f"источник не подтвердил {id_space}={our_id} в своём ответе"
+                if unconfirmed and len(problems) == 1
+                else (
+                    f"{id_space}={our_id} совпал, но факты расходятся: "
+                    + ", ".join(r.value for r in problems)
+                )
+            )
             return MatchDecision(
                 status=MatchStatus.CONFLICT,
                 method=MatchMethod.EXACT_EXTERNAL_ID,
                 confidence=0.0,
                 external_id=fetch.external_id,
                 reasons=tuple(problems),
-                detail=(
-                    f"{id_space}={our_id} совпал, но факты расходятся: "
-                    + ", ".join(r.value for r in problems)
-                ),
+                detail=detail,
                 candidates=(
                     {
                         "external_id": fetch.external_id,
@@ -559,8 +584,8 @@ class Ingestor:
                 """UPDATE unified_import_runs SET
                        finished_at=?, status=?, cursor_out=?, next_checkpoint=?,
                        requested=?, received=?, exact_match=?, pending_match=?, rejected=?,
-                       inserted=?, updated=?, unchanged=?, failed=?, rate_limited=?,
-                       retries=?, notes=?
+                       inserted=?, updated=?, unchanged=?, not_found=?, failed=?,
+                       rate_limited=?, retries=?, notes=?
                    WHERE run_id=?""",
                 (
                     utc_now(),
@@ -575,6 +600,7 @@ class Ingestor:
                     c.inserted,
                     c.updated,
                     c.unchanged,
+                    c.not_found,
                     c.failed,
                     c.rate_limited,
                     c.retries,

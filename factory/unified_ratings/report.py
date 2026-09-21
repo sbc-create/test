@@ -107,7 +107,7 @@ def _runs(store: UnifiedStore) -> list[dict[str, Any]]:
         for row in store.query(
             """SELECT run_id, source_key, stage, status, dry_run, started_at, finished_at,
                       requested, received, exact_match, pending_match, rejected, inserted,
-                      updated, unchanged, failed, rate_limited, retries, next_checkpoint,
+                      updated, unchanged, not_found, failed, rate_limited, retries, next_checkpoint,
                       code_version
                FROM unified_import_runs ORDER BY started_at DESC LIMIT 50"""
         )

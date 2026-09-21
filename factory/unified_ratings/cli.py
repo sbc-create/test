@@ -118,6 +118,50 @@ def cmd_seed_titles(args: argparse.Namespace) -> int:
     return 0
 
 
+def _pick_for_ingest(
+    store: UnifiedStore, registry: TitleRegistry, source_key: str, *, limit: int
+) -> list[CanonicalTitle]:
+    """Тайтлы для инкрементального сбора: сначала те, которых ещё нет.
+
+    Брать каждый раз первые N по порядку — не инкрементальный сбор, а
+    повторная проверка одного и того же хвоста каталога: счётчик
+    ``unchanged`` растёт, а покрытие стоит на месте. Сначала идут тайтлы
+    без записи по этому источнику, затем — те, чей срок проверки наступил.
+    """
+    id_space = ID_SPACE_BY_SOURCE.get(source_key, "")
+    known = {
+        row["title_id"]
+        for row in store.query(
+            "SELECT title_id FROM unified_external_current WHERE source_key=?", (source_key,)
+        )
+    }
+    quarantined = {
+        row["title_id"]
+        for row in store.query(
+            "SELECT title_id FROM unified_source_links WHERE source_key=? AND status IN"
+            " ('pending','conflict','rejected')",
+            (source_key,),
+        )
+    }
+    fresh: list[CanonicalTitle] = []
+    for title in registry.with_external_id(id_space):
+        if title.title_id in known or title.title_id in quarantined:
+            continue
+        fresh.append(title)
+        if len(fresh) >= limit:
+            break
+    if len(fresh) >= limit:
+        return fresh
+
+    # Добор из тех, кому пора по расписанию.
+    due = Scheduler(store).due(source_key=source_key, limit=limit - len(fresh))
+    for title_id in due:
+        title = registry.get(title_id)
+        if title is not None:
+            fresh.append(title)
+    return fresh
+
+
 def _pick(
     registry: TitleRegistry, source_key: str, *, limit: int, diverse: bool
 ) -> list[CanonicalTitle]:
@@ -147,7 +191,12 @@ def _run_stage(args: argparse.Namespace, *, stage: str, cap: int, diverse: bool)
     store = UnifiedStore(args.db)
     registry = TitleRegistry(store)
     source = get(args.source)
-    titles = _pick(registry, args.source, limit=min(args.limit or cap, cap), diverse=diverse)
+    limit = min(args.limit or cap, cap)
+    titles = (
+        _pick_for_ingest(store, registry, args.source, limit=limit)
+        if stage == "INGEST"
+        else _pick(registry, args.source, limit=limit, diverse=diverse)
+    )
     if not titles:
         _out({"stage": stage, "source": args.source, "status": "NOTHING_TO_DO",
               "reason": "в реестре нет тайтлов с нужным внешним идентификатором"})

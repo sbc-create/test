@@ -59,6 +59,11 @@ class ShikimoriUnifiedAdapter:
             out[key] = SourceFetch(
                 source_key=SOURCE_KEY,
                 external_id=res.external_id or key,
+                # Shikimori фильтрует по своему идентификатору, а спрашиваем
+                # мы по MAL. Для большинства тайтлов это одно число, но
+                # «обычно совпадает» — не основание: malId из ответа и есть
+                # независимая проверка того, про какой тайтл он ответил.
+                crosswalk_ids={"myanimelist": str(res.mal_id)} if res.mal_id else {},
                 found=res.found,
                 raw_score=res.raw_score,
                 vote_count=res.vote_count,

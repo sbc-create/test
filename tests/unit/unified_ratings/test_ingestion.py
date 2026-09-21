@@ -52,6 +52,14 @@ class StubAdapter:
             out[mal_id] = SourceFetch(
                 source_key=self.source_key,
                 external_id=mal_id,
+                # Настоящие адаптеры сообщают, про какой тайтл ответ:
+                # AniList отдаёт idMal, Shikimori malId, Kitsu — соответствие
+                # из /mappings. Стаб обязан вести себя так же, иначе он
+                # проверяет конвейер, которого не существует.
+                crosswalk_ids=(
+                    {} if spec.get("no_crosswalk")
+                    else {"myanimelist": str(spec.get("their_mal_id", mal_id))}
+                ),
                 found=spec.get("score") is not None,
                 raw_score=spec.get("score"),
                 vote_count=spec.get("votes"),
@@ -249,6 +257,24 @@ def test_disagreeing_facts_go_to_the_review_queue_not_to_the_snapshot(store, tit
     assert review["status"] == "PENDING"
     link = store.query_one("SELECT * FROM unified_source_links")
     assert link["status"] == "conflict"
+
+
+def test_a_source_that_does_not_confirm_the_id_is_not_accepted(store, titles):
+    """Мы спросили по MAL ID — но ответ не сказал, про какой это тайтл."""
+    adapter = StubAdapter({"1": {"score": 86, "votes": 100, "no_crosswalk": True}})
+    result = ingestor(store, adapter).run(titles)
+    assert result.counters.exact_match == 0
+    assert result.counters.pending_match == 1
+    assert store.count("unified_external_snapshots") == 0
+
+
+def test_a_source_reporting_a_different_id_is_a_conflict(store, titles):
+    """Shikimori фильтрует по своему ID; ответ про чужой тайтл не принимается."""
+    adapter = StubAdapter({"1": {"score": 86, "votes": 100, "their_mal_id": "9999"}})
+    result = ingestor(store, adapter).run(titles)
+    assert result.counters.pending_match == 1
+    review = store.query_one("SELECT * FROM unified_review_queue")
+    assert review["reason_code"] == "EXTERNAL_ID_CONFLICT"
 
 
 def test_review_queue_does_not_duplicate_the_same_open_item(store, titles):

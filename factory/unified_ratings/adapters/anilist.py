@@ -281,9 +281,11 @@ def _to_fetch(row: dict[str, Any], *, requested_key: str) -> SourceFetch:
         "_favourites_is_not_a_rating": row.get("favourites"),
     }
     updated = row.get("updatedAt")
+    id_mal = row.get("idMal")
     return SourceFetch(
         source_key=SOURCE_KEY,
         external_id=requested_key,
+        crosswalk_ids={"myanimelist": str(id_mal)} if id_mal not in (None, "") else {},
         found=row.get("averageScore") is not None,
         raw_score=row.get("averageScore"),
         vote_count=vote_count_from_distribution(stats),

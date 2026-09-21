@@ -19,6 +19,7 @@
 from __future__ import annotations
 
 import urllib.parse
+from dataclasses import replace
 from typing import Any
 
 from factory.ratings.adapters.base import AdapterError
@@ -158,7 +159,9 @@ class KitsuAdapter:
                     )
                     continue
                 fetch = _to_fetch(item, requested_key=str(item.get("id")))
-                out[raw] = fetch
+                # Соответствие объявлено самим Kitsu в /mappings, а не
+                # выведено нами из совпадения названий.
+                out[raw] = replace(fetch, crosswalk_ids={"myanimelist": raw})
         return out
 
     # ------------------------------------------------------------------

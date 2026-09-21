@@ -105,18 +105,7 @@ class TitleRegistry:
         existing = self.store.query_one(
             "SELECT * FROM unified_titles WHERE title_id = ?", (title.title_id,)
         )
-        payload = (
-            title.content_kind,
-            title.title_ru,
-            title.title_original,
-            json.dumps(title.alt_titles, ensure_ascii=False),
-            title.release_year,
-            title.season_number,
-            title.episode_count,
-            json.dumps(title.external_ids, ensure_ascii=False, sort_keys=True),
-            title.catalog_source,
-            title.catalog_revision,
-        )
+        payload = _payload(title)
         if existing is None:
             with self.store.write_tx() as conn:
                 conn.execute(
@@ -154,11 +143,71 @@ class TitleRegistry:
             )
         return "updated"
 
-    def upsert_many(self, titles: list[CanonicalTitle]) -> dict[str, int]:
+    def upsert_many(self, titles: list[CanonicalTitle], *, batch_size: int = 500) -> dict[str, int]:
+        """Пакетная запись каталога.
+
+        Отдельная транзакция на тайтл превращает загрузку каталога из
+        пятидесяти тысяч записей в пятьдесят тысяч блокировок записи на
+        базе, к которой подключён работающий gateway. Пакет держит
+        блокировку коротко и отпускает её между пакетами.
+        """
         counts = {"inserted": 0, "updated": 0, "unchanged": 0}
-        for title in titles:
-            counts[self.upsert(title)] += 1
+        now = utc_now()
+        for start in range(0, len(titles), batch_size):
+            chunk = titles[start : start + batch_size]
+            existing = self._existing_rows([t.title_id for t in chunk])
+            with self.store.write_tx() as conn:
+                for title in chunk:
+                    payload = _payload(title)
+                    current = existing.get(title.title_id)
+                    if current is None:
+                        conn.execute(
+                            """INSERT INTO unified_titles(
+                                   title_id, content_kind, title_ru, title_original,
+                                   alt_titles_json, release_year, season_number, episode_count,
+                                   external_ids_json, catalog_source, catalog_revision,
+                                   created_at, updated_at)
+                               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                            (title.title_id, *payload, now, now),
+                        )
+                        counts["inserted"] += 1
+                    elif current == payload:
+                        counts["unchanged"] += 1
+                    else:
+                        conn.execute(
+                            """UPDATE unified_titles SET
+                                   content_kind=?, title_ru=?, title_original=?,
+                                   alt_titles_json=?, release_year=?, season_number=?,
+                                   episode_count=?, external_ids_json=?, catalog_source=?,
+                                   catalog_revision=?, updated_at=?
+                               WHERE title_id=?""",
+                            (*payload, now, title.title_id),
+                        )
+                        counts["updated"] += 1
         return counts
+
+    def _existing_rows(self, title_ids: list[str]) -> dict[str, tuple]:
+        if not title_ids:
+            return {}
+        placeholders = ",".join("?" * len(title_ids))
+        rows = self.store.query(
+            f"SELECT * FROM unified_titles WHERE title_id IN ({placeholders})", tuple(title_ids)
+        )
+        return {
+            row["title_id"]: (
+                row["content_kind"],
+                row["title_ru"],
+                row["title_original"],
+                row["alt_titles_json"],
+                row["release_year"],
+                row["season_number"],
+                row["episode_count"],
+                row["external_ids_json"],
+                row["catalog_source"],
+                row["catalog_revision"],
+            )
+            for row in rows
+        }
 
     # ------------------------------------------------------------------
 
@@ -220,6 +269,22 @@ class TitleRegistry:
                 (title_id,),
             )
         ]
+
+
+def _payload(title: CanonicalTitle) -> tuple:
+    """Поля тайтла в порядке колонок. Один порядок на запись и на сравнение."""
+    return (
+        title.content_kind,
+        title.title_ru,
+        title.title_original,
+        json.dumps(title.alt_titles, ensure_ascii=False),
+        title.release_year,
+        title.season_number,
+        title.episode_count,
+        json.dumps(title.external_ids, ensure_ascii=False, sort_keys=True),
+        title.catalog_source,
+        title.catalog_revision,
+    )
 
 
 def _row_to_title(row: Any) -> CanonicalTitle:

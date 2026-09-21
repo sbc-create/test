@@ -25,6 +25,11 @@ class SourceFetch:
     #: число пользователей, если источник отличает его от числа голосов
     user_count: int | None = None
     score_distribution: dict[str, int] | None = None
+    #: Идентификаторы, которые источник объявляет сам (например, AniList
+    #: отдаёт ``idMal``). Это независимое свидетельство о том, про какой
+    #: тайтл ответ: сравнивать наш идентификатор с ним же, как с «их»
+    #: значением, — проверка, которая не может не пройти.
+    crosswalk_ids: dict[str, str] = field(default_factory=dict)
     source_rating_date: str = ""
     source_updated_at: str = ""
     provenance_url: str = ""

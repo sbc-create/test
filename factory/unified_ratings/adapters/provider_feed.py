@@ -79,6 +79,11 @@ class ProviderFeedAdapter:
             out[raw] = SourceFetch(
                 source_key=self.source_key,
                 external_id=str(external_ids_map.get(id_field) or raw),
+                # Идентификатор объявлен самим фидом в external_ids: это и
+                # есть подтверждение того, к какому тайтлу относится оценка.
+                crosswalk_ids={
+                    k: str(v) for k, v in external_ids_map.items() if v not in (None, "")
+                },
                 found=value not in (None, ""),
                 raw_score=value,
                 vote_count=None,

@@ -92,15 +92,19 @@ class UnifiedStore:
 
     def ensure_schema(self) -> dict[str, Any]:
         with self._migration_lock:
-            from factory.unified_ratings.migration_loader import load_migration_0007
+            from factory.unified_ratings.migration_loader import load_all
 
-            module = load_migration_0007()
-            return module.apply(self.conn)
+            results = [module.apply(self.conn) for module in load_all()]
+            return {
+                "applied": results,
+                "first_apply": any(r["first_apply"] for r in results),
+                "destructive": False,
+            }
 
     def has_schema(self) -> bool:
-        from factory.unified_ratings.migration_loader import load_migration_0007
+        from factory.unified_ratings.migration_loader import load_all
 
-        return load_migration_0007().applied(self.conn)
+        return all(module.applied(self.conn) for module in load_all())
 
     # ------------------------------------------------------------------
     # транзакции
