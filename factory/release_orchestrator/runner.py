@@ -14,6 +14,7 @@ from factory.release_orchestrator.preflight import preflight_batch
 from factory.release_orchestrator.registry import ReleaseRegistry
 from factory.release_orchestrator.restart import FakeSystemd, restart_once
 from factory.release_orchestrator.rollback import prepare_rollback, restore_from_backup
+from factory.release_orchestrator.service_binding import ServiceBindingError, assert_live_binding
 from factory.release_orchestrator.smoke import dual_smoke
 from factory.release_orchestrator.state import (
     load_checkpoint,
@@ -169,6 +170,27 @@ def _run_batch_locked(
         transition_global(checkpoint, "BATCH_FAILED")
         save_checkpoint(checkpoint_path, checkpoint)
         return BatchResult("BATCH_FAILED", release_id, "BATCH_FAILED", problems=pre.problems, shadow=shadow)
+
+    # Live only: the unit we would restart must be the unit that actually serves
+    # the domain. Restarting a declared-but-unrouted unit leaves the site
+    # untouched while smoke — which talks to the domain — still passes.
+    if mutate and not shadow:
+        try:
+            binding = assert_live_binding(order, registry=registry)
+        except ServiceBindingError as exc:
+            transition_global(checkpoint, "BATCH_FAILED")
+            save_checkpoint(checkpoint_path, checkpoint)
+            return BatchResult(
+                "BLOCKED_SERVICE_BINDING",
+                release_id,
+                "BATCH_FAILED",
+                problems=[str(exc)],
+                shadow=shadow,
+            )
+        (report_dir / "service-binding.json").write_text(
+            json.dumps(binding.as_dict(), ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
 
     def default_fetch_factory(site_id: str):
         row = _row(manifest, site_id)
