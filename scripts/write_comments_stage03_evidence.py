@@ -92,7 +92,11 @@ def main() -> int:
         "VERDICT": verdict,
         "STAGE": "COMMUNITY-COMMENTS-03-QWEN-STAGING-CANARY",
         "START_HEAD": START_HEAD,
+        # A verdict file cannot contain the hash of the commit that adds it.
+        # This is HEAD at generation time; exactly one evidence-pin commit
+        # follows, so the branch tip is this hash plus that single commit.
         "FINAL_HEAD": final_head,
+        "FINAL_HEAD_NOTE": "HEAD at generation; one evidence-pin commit follows",
         "COMMITS": commits,
         "TESTS": (
             f"comments suite {tests.get('passed_counts', ['?'])[0]} passed x2 "
