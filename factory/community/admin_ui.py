@@ -73,11 +73,11 @@ def render_admin_list_html(
     rows = admin_list(site=site, source=source, limit=200)
     parts = [
         "<!doctype html><html lang='ru'><head><meta charset='utf-8'>",
-        "<title>Ratings admin</title>",
+        "<title>Ratings admin (read-only)</title>",
         "<style>body{font:14px/1.4 system-ui;margin:1.5rem}table{border-collapse:collapse;width:100%}",
         "th,td{border:1px solid #ccc;padding:.35rem .5rem;text-align:left}th{background:#f4f4f4}",
         ".muted{color:#666}</style></head><body>",
-        "<h1>Community ratings — aggregates</h1>",
+        "<h1>Community ratings — aggregates (read-only)</h1>",
         "<p class='muted'>No manual vote insert · no external edit · no aggregate paint</p>",
         "<table><thead><tr>",
         "<th>space</th><th>subject</th><th>kind</th><th>source</th>",
