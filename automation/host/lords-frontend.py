@@ -1994,12 +1994,27 @@ letter-spacing:-.3px}
 .zhero{display:grid;grid-template-columns:1fr;gap:0;margin:12px 0 28px;
 min-width:0;max-width:100%;box-sizing:border-box;
 border-radius:16px;overflow:hidden;background:@SURF@;border:1px solid @LINE@;
-min-height:300px;max-height:390px}
-@media(min-width:900px){.zhero{grid-template-columns:46% 54%;min-height:340px;max-height:390px}}
+min-height:300px;max-height:none}
+/* Потолок 390px снят у базового правила. Он был написан для двухколоночной
+   полосы рабочего стола, а ниже 900px ряд складывается в столбец: медиа плюс
+   текст. Измерено в Chromium: на 390px сумма 205+259=464px, на 768px
+   404+259=663px, и при `overflow:hidden` потолок срезал текст — 74px и 273px
+   соответственно. Высоту сложенного ряда задаёт содержимое; на рабочем столе
+   она по-прежнему задана явно ниже. */
+/* Высота ряда задаётся явно. Пока её держали min/max-height, ряд растягивался
+   под ПРИРОДНУЮ пропорцию портретного постера: при колонке 632px картинка
+   500×741 требовала 937px, ряд становился 937px, а max-height лишь обрезал его.
+   Тело справа центрировалось по 937px и уезжало под обрез — правая половина
+   выглядела пустой, а текст пропадал. */
+@media(min-width:900px){.zhero{grid-template-columns:46% 54%;
+height:clamp(340px,26vw,390px);min-height:0;max-height:none}}
 .zhero__media{position:relative;min-height:180px;background:#111;aspect-ratio:16/9;
 max-width:100%;width:100%;min-width:0;overflow:hidden;box-sizing:border-box}
-@media(min-width:900px){.zhero__media{aspect-ratio:auto;min-height:100%}}
-.zhero__media img{width:100%;height:100%;object-fit:cover;display:block;max-width:100%}
+@media(min-width:900px){.zhero__media{aspect-ratio:auto;min-height:0;height:100%}}
+/* Кадрирование от верхней трети: у постеров название и лица сверху, а центр по
+   умолчанию показывал торс. */
+.zhero__media img{width:100%;height:100%;object-fit:cover;object-position:50% 28%;
+display:block;max-width:100%}
 .zhero__body{padding:20px 22px;display:flex;flex-direction:column;justify-content:center;gap:10px;
 min-width:0;max-width:100%;box-sizing:border-box}
 @media(min-width:900px){.zhero__body{padding:28px 32px}}
@@ -2024,7 +2039,11 @@ min-width:0;max-width:100%;box-sizing:border-box}
 .zwpop__tabs a,.zwpop__tabs span{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid @LINE@;font-size:13px;font-weight:600;color:@DIM@;background:@SURF@}
 .zwpop__tabs [aria-current]{background:@ACC@;border-color:@ACC@;color:#fff}
 .zwpop__panel[hidden]{display:none}
-.zwpop .zrl__track{gap:12px}
+/* Один источник правды для промежутка: `gap` и расчёт основы карточки обязаны
+   брать одно значение. Пока полка ставила gap:12px, а расчёт продолжал делить
+   по --z-gap:14px, точная подгонка не сходилась и остаток уходил в пустоту
+   справа. */
+.zwpop .zrl__track{--z-gap:12px;gap:var(--z-gap)}
 .zwpop .zc{width:148px;max-width:160px}
 @media(min-width:1024px){.zwpop .zc{width:150px}}
 @media(min-width:1440px){.zwpop .zc{width:156px}}
@@ -2041,7 +2060,16 @@ width:100%;max-width:100%;min-width:0;box-sizing:border-box}
 .zadded__row img,.zadded__ph{width:60px;height:90px;object-fit:cover;border-radius:4px;background:#222}
 .zadded__t{font-size:15px;font-weight:700;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-width:0}
 .zadded__m{font-size:12px;color:@DIM@;margin:4px 0 0}
-.zadded__when{font-size:12px;color:@ACC@;white-space:nowrap;max-width:7.5rem;overflow:hidden;text-overflow:ellipsis}
+/* Дата показывается целиком. Потолок 7.5rem с многоточием обрезал её на
+   середине времени — «Добавлено 20.09.2026, 11» вместо «…, 11:40». Обрезанная
+   дата не короче, а неверна: она выглядит как время без минут. */
+.zadded__when{font-size:12px;color:@ACC@;white-space:nowrap}
+/* На узких экранах дата уходит на свою строку под названием, а не сжимает его:
+   колонка `auto` иначе съела бы место у заголовка. */
+@media(max-width:559px){
+.zadded__row{grid-template-columns:60px minmax(0,1fr);row-gap:2px}
+.zadded__when{grid-column:2;justify-self:start}
+}
 
 /* B05 kind entry cards */
 .zkinds{display:grid;gap:12px;grid-template-columns:1fr;margin:8px 0 28px}
@@ -2062,16 +2090,25 @@ gap:12px;margin:0 0 10px}
 scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
 scrollbar-width:none;padding:2px 0 4px;container-type:inline-size;container-name:zrl}
 .zrl__vp::-webkit-scrollbar{display:none;width:0;height:0}
-.zrl__track{display:flex;gap:var(--z-gap,14px);width:max-content;align-items:stretch}
-/* Home shelves match locked catalog density: 2 / 4 / 7 / 8. */
+/* На полке ширина карточки — результат деления контейнера, а не потолок.
+   `.zt` несёт собственный max-width:var(--z-card-max) и по порядку каскада
+   перебивал расчётную основу (на 1440: 186.3px → 180px). Потолок снимается
+   здесь, а не у `.zt`: в сетках `.zg` с фиксированным числом колонок он нужен. */
+.zrl__track{display:flex;gap:var(--z-gap,14px);width:max-content;align-items:stretch;
+--z-card-max:none}
+/* Home shelves match locked catalog density: 2 / 4 / 7 / 8.
+
+   max-width здесь снят намеренно. Расчёт основы делит ширину контейнера ровно
+   на N карточек и N-1 промежутков, а потолок --z-card-max обрезал результат
+   (на 1440: основа 184.6px → 180px). Семь карточек занимали 1332px из 1376 и
+   справа оставалась мёртвая полоса 44px. Потолок нужен сеткам `.zg`, где число
+   колонок фиксировано, а не полке, где ширина карточки и есть результат
+   деления. */
 .zrl__track>*{flex:0 0 calc((100cqw - var(--z-gap,14px)) / 2);scroll-snap-align:start;
-min-width:0;height:auto;max-width:var(--z-card-max,180px);box-sizing:border-box}
-@media(min-width:768px){.zrl__track>*{flex:0 0 calc((100cqw - 3 * var(--z-gap,14px)) / 4);
-max-width:var(--z-card-max,180px)}}
-@media(min-width:1440px){.zrl__track>*{flex:0 0 calc((100cqw - 6 * var(--z-gap,14px)) / 7);
-max-width:var(--z-card-max,180px)}}
-@media(min-width:1920px){.zrl__track>*{flex:0 0 calc((100cqw - 7 * var(--z-gap,14px)) / 8);
-max-width:var(--z-card-max,180px)}}
+min-width:0;height:auto;max-width:none;box-sizing:border-box}
+@media(min-width:768px){.zrl__track>*{flex:0 0 calc((100cqw - 3 * var(--z-gap,14px)) / 4)}}
+@media(min-width:1440px){.zrl__track>*{flex:0 0 calc((100cqw - 6 * var(--z-gap,14px)) / 7)}}
+@media(min-width:1920px){.zrl__track>*{flex:0 0 calc((100cqw - 7 * var(--z-gap,14px)) / 8)}}
 .zrl__btn{position:absolute;top:28%;transform:translateY(-50%);z-index:5;
 width:36px;height:48px;min-width:44px;min-height:44px;border:0;border-radius:5px;cursor:pointer;
 background:rgba(16,21,26,.82);color:#fff;font-size:18px;line-height:1;

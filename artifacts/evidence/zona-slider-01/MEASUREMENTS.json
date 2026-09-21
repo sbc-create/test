@@ -1,0 +1,56 @@
+{
+  "stage": "zona-slider-crop-date",
+  "domain": "zonafilm.space",
+  "measured_at_utc": "2026-09-21T15:28:00Z",
+  "method": {
+    "browser": "Chromium (Playwright), viewport 390x844 / 768x1024 / 1440x900",
+    "routing": "--host-resolver-rules=MAP zonafilm.space:80 127.0.0.1:<port>",
+    "before_source": "живой процесс витрины, порт 9120",
+    "after_source": "кандидат из этой ветки, порт 19220, тот же снимок каталога и тот же манифест",
+    "note": "Домен разрешается в петлю локально: наружу запросов не уходит."
+  },
+  "before": {
+    "390":  {"rail_card_px": 176,   "when_text": "Добавлено 20.09.2026, 11", "when_truncated": true,  "hero_media_h_px": 205},
+    "768":  {"rail_card_px": 169.5, "when_text": "Добавлено 20.09.2026, 11", "when_truncated": true,  "hero_media_h_px": 404},
+    "1440": {"rail_card_px": 180,   "when_text": "Добавлено 20.09.2026, 11", "when_truncated": true,  "hero_media_h_px": 937,
+             "rail_dead_strip_px": 44,
+             "note": "основа 184.571px обрезалась потолком --z-card-max:180px; 7*180+6*12=1332 из 1376"}
+  },
+  "after": {
+    "390":  {"rail_card_px": 177, "when_text": "Добавлено 20.09.2026, 11:49", "when_truncated": false, "hero_media_h_px": 205,
+             "exact_fit": "2*177 + 1*12 = 366 = ширина контейнера"},
+    "768":  {"rail_card_px": 171, "when_text": "Добавлено 20.09.2026, 11:49", "when_truncated": false, "hero_media_h_px": 404,
+             "exact_fit": "4*171 + 3*12 = 720 = ширина контейнера"},
+    "1440": {"rail_card_px": 186, "when_text": "Добавлено 20.09.2026, 11:49", "when_truncated": false, "hero_media_h_px": 372,
+             "exact_fit": "7*186.29 + 6*12 = 1376 = ширина контейнера",
+             "rail_dead_strip_px": 0}
+  },
+  "fixed": {
+    "hero_empty_right_half": {
+      "before": "ряд слайдера 937px под природную пропорцию постера 500x741; тело центрировалось по 937px и уезжало под обрез max-height:390px",
+      "after": "height:clamp(340px,26vw,390px) задаёт ряд; на 1440 медиа 372px, текст и кнопки видны целиком"
+    },
+    "hero_cropping": {
+      "before": "object-position по умолчанию (центр) — кадр приходился на торс",
+      "after": "object-position:50% 28% — в кадре название и лица"
+    },
+    "rail_dead_strip": {
+      "before": "gap полки 12px против делителя --z-gap:14px плюс потолок --z-card-max:180px; справа 44px пустоты на 1440",
+      "after": "--z-gap:12px как единственный источник и --z-card-max:none на полке; деление сходится нацело на всех трёх ширинах"
+    },
+    "added_date_truncation": {
+      "before": "max-width:7.5rem + text-overflow:ellipsis обрезали время: «…, 11» вместо «…, 11:49»",
+      "after": "потолок и многоточие сняты; на ширинах <560px дата уходит на свою строку под названием"
+    }
+  },
+  "unchanged": {
+    "design": "палитра, скругления, раскладка 46/54, типографика и состав блоков не менялись",
+    "indexability": "noindex,nofollow — правил индексации не касались",
+    "markup": "разметка не менялась: все четыре правки — CSS витрины Zona"
+  },
+  "live_deploy": {
+    "performed": false,
+    "restart_performed": false,
+    "reason": "см. DEPLOY_BLOCKERS.md"
+  }
+}
