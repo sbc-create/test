@@ -26,8 +26,17 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "artifacts/zona-reconciliation-artifact"
-EV = ROOT / "artifacts/evidence/cursor-work-reconciliation-01"
+
+#: Этап задаётся аргументом: один и тот же сборщик обслуживает и сверку, и
+#: последующие починки, а складывать их артефакты в одну папку значит рано
+#: или поздно перепутать, какой из них выложен.
+STAGE = sys.argv[1] if len(sys.argv) > 1 else "cursor-work-reconciliation-01"
+OUT = ROOT / f"artifacts/zona-{STAGE}-artifact"
+EV = ROOT / f"artifacts/evidence/{STAGE}"
+
+#: Разрешение владельца на выкладку. Пустое значение означает «не выдано»:
+#: пакет тогда собирается, но помечается как ожидающий решения.
+APPROVAL = sys.argv[2] if len(sys.argv) > 2 else None
 
 #: Тот же состав файлов, что у артефакта B17: витрина плюс два её модуля.
 FILES = [
@@ -137,13 +146,14 @@ def main() -> int:
             "Откат возвращает то, что работает на живом сейчас, а не артефакт "
             "B17 5fb6295c — тот перестал быть живым 20 сентября."
         ),
-        "OWNER_DEPLOY_APPROVAL_ID": None,
-        "DEPLOY_AUTHORIZED": False,
+        "OWNER_DEPLOY_APPROVAL_ID": APPROVAL,
+        "DEPLOY_AUTHORIZED": bool(APPROVAL),
         "DEPLOY_PERFORMED": 0,
         "WHY_APPROVAL_REQUIRED": (
             "Разрешение ZONA-INDEPENDENT-REPAIR-DEPLOY-20260920-01 выдано на "
             f"артефакт {LIVE_ARTIFACT[:16]}… и на него не распространяется."
         ),
+        "OWNER_DEPLOY_APPROVAL_SCOPE": "ZONA_01_ONLY" if APPROVAL else None,
         "CHANGES_SINCE_LIVE": [
             "поиск: отбор кандидатов вместо перебора каталога (p95 3825 → 99.7 ms)",
             "главная: время поступления показывается с минутами",
