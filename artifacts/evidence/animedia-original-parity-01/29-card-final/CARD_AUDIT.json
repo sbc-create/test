@@ -1,0 +1,2647 @@
+{
+ "task": "ANIMEDIA-CARD-AUDIT",
+ "tenant": "animedia",
+ "checked_at_utc": "2026-09-21T21:31:36Z",
+ "runtime": "automation/host/animedia-frontend.py",
+ "cells": [
+  {
+   "route": "home",
+   "width": 390,
+   "blocks": {
+    "zrl": {
+     "cards": 24,
+     "title_visible_share": 1,
+     "meta_visible_share": 0,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 112,
+       "h": 201,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Мастер льда и пламени 2",
+       "title_h": 33,
+       "title_font": "13px",
+       "meta_in_dom": false,
+       "meta_visible": false,
+       "meta_text": "",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "compact",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 0,
+       "ratings_sources": [],
+       "ratings_values": [],
+       "ratings_scales": [],
+       "ratings_text": "",
+       "href": "/title/master-lda-i-plameni-2/",
+       "clickable_area": 22512
+      },
+      {
+       "w": 112,
+       "h": 201,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Часть 2",
+       "title_h": 33,
+       "title_font": "13px",
+       "meta_in_dom": false,
+       "meta_visible": false,
+       "meta_text": "",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "compact",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 0,
+       "ratings_sources": [],
+       "ratings_values": [],
+       "ratings_scales": [],
+       "ratings_text": "",
+       "href": "/title/nelyud-chast-2/",
+       "clickable_area": 22512
+      },
+      {
+       "w": 112,
+       "h": 201,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Фильм 2: Столкновение",
+       "title_h": 33,
+       "title_font": "13px",
+       "meta_in_dom": false,
+       "meta_visible": false,
+       "meta_text": "",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "compact",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 0,
+       "ratings_sources": [],
+       "ratings_values": [],
+       "ratings_scales": [],
+       "ratings_text": "",
+       "href": "/title/nelyud-film-2-stolknovenie/",
+       "clickable_area": 22512
+      }
+     ],
+     "unique_hrefs": 24,
+     "unique_titles": 24,
+     "variants": [
+      "compact"
+     ],
+     "eps_badge_share": 0,
+     "eps_data_hidden": 0,
+     "ratings_share": 0,
+     "two_ratings_share": 0,
+     "zero_ratings_shown": 0
+    },
+    "zg": {
+     "cards": 24,
+     "title_visible_share": 1,
+     "meta_visible_share": 1,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 178,
+       "h": 310,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Пришедший из древности 2",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2024",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "90 из 90",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "7"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori7Shikimori: 7 из 10",
+       "href": "/title/prishedshiy-iz-drevnosti-2/",
+       "clickable_area": 55213
+      },
+      {
+       "w": 178,
+       "h": 310,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Дни Сакамото. Часть 2",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2025",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "11 из 11",
+       "ratings_visible": 2,
+       "ratings_sources": [
+        "kp",
+        "imdb"
+       ],
+       "ratings_values": [
+        "7.4",
+        "7.5"
+       ],
+       "ratings_scales": [
+        "10",
+        "10"
+       ],
+       "ratings_text": "КП7.4КП: 7.4 из 10 | IMDb7.5IMDb: 7.5 из",
+       "href": "/title/dni-sakamoto-chast-2/",
+       "clickable_area": 55213
+      },
+      {
+       "w": 178,
+       "h": 310,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Священные звери: Тысячи дней и ночей",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2005",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "2 из 2",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "6.3"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori6.3Shikimori: 6.3 из 10",
+       "href": "/title/svyaschennye-zveri-tysyachi-dney-i-nochey/",
+       "clickable_area": 55213
+      }
+     ],
+     "unique_hrefs": 24,
+     "unique_titles": 24,
+     "variants": [
+      "catalog-title"
+     ],
+     "eps_badge_share": 0.5,
+     "eps_data_hidden": 0,
+     "ratings_share": 0.79,
+     "two_ratings_share": 0.17,
+     "zero_ratings_shown": 0
+    }
+   },
+   "cards_total": 48
+  },
+  {
+   "route": "catalog",
+   "width": 390,
+   "blocks": {
+    "zg": {
+     "cards": 48,
+     "title_visible_share": 1,
+     "meta_visible_share": 1,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 178,
+       "h": 310,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Мастер льда и пламени 2",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2022",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "104 из 104",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "7.1"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori7.1Shikimori: 7.1 из 10",
+       "href": "/title/master-lda-i-plameni-2/",
+       "clickable_area": 55213
+      },
+      {
+       "w": 178,
+       "h": 301,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Часть 2",
+       "title_h": 16,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2016",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "13 из 13",
+       "ratings_visible": 2,
+       "ratings_sources": [
+        "kp",
+        "imdb"
+       ],
+       "ratings_values": [
+        "7.1",
+        "7.5"
+       ],
+       "ratings_scales": [
+        "10",
+        "10"
+       ],
+       "ratings_text": "КП7.1КП: 7.1 из 10 | IMDb7.5IMDb: 7.5 из",
+       "href": "/title/nelyud-chast-2/",
+       "clickable_area": 53611
+      },
+      {
+       "w": 178,
+       "h": 310,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Фильм 2: Столкновение",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2016",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 2,
+       "ratings_sources": [
+        "kp",
+        "imdb"
+       ],
+       "ratings_values": [
+        "7",
+        "7.8"
+       ],
+       "ratings_scales": [
+        "10",
+        "10"
+       ],
+       "ratings_text": "КП7КП: 7 из 10 | IMDb7.8IMDb: 7.8 из 10",
+       "href": "/title/nelyud-film-2-stolknovenie/",
+       "clickable_area": 55213
+      }
+     ],
+     "unique_hrefs": 48,
+     "unique_titles": 48,
+     "variants": [
+      "catalog-title"
+     ],
+     "eps_badge_share": 0.46,
+     "eps_data_hidden": 0,
+     "ratings_share": 0.88,
+     "two_ratings_share": 0.27,
+     "zero_ratings_shown": 0
+    }
+   },
+   "cards_total": 48
+  },
+  {
+   "route": "title",
+   "width": 390,
+   "blocks": {
+    "zg": {
+     "cards": 12,
+     "title_visible_share": 1,
+     "meta_visible_share": 1,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 366,
+       "h": 107,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Фильм 1: Импульс",
+       "title_h": 18,
+       "title_font": "14px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2015",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "related-row",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "kp"
+       ],
+       "ratings_values": [
+        "7.1"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "КП7.1КП: 7.1 из 10",
+       "href": "/title/nelyud-film-1-impuls/",
+       "clickable_area": 39048
+      },
+      {
+       "w": 366,
+       "h": 107,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Рыба",
+       "title_h": 18,
+       "title_font": "14px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2011",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "related-row",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "kp"
+       ],
+       "ratings_values": [
+        "6.1"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "КП6.1КП: 6.1 из 10",
+       "href": "/title/ryba/",
+       "clickable_area": 39048
+      },
+      {
+       "w": 366,
+       "h": 107,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Дюрарара!! 2: Финал — Дюфуфуфу!!",
+       "title_h": 18,
+       "title_font": "14px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2016",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "related-row",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "kp"
+       ],
+       "ratings_values": [
+        "7.7"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "КП7.7КП: 7.7 из 10",
+       "href": "/title/dyurarara-2-final-dyufufufu/",
+       "clickable_area": 39048
+      }
+     ],
+     "unique_hrefs": 12,
+     "unique_titles": 12,
+     "variants": [
+      "related-row"
+     ],
+     "eps_badge_share": 0,
+     "eps_data_hidden": 0,
+     "ratings_share": 1,
+     "two_ratings_share": 0,
+     "zero_ratings_shown": 0
+    }
+   },
+   "cards_total": 12
+  },
+  {
+   "route": "episode",
+   "width": 390,
+   "blocks": {
+    "zg": {
+     "cards": 12,
+     "title_visible_share": 1,
+     "meta_visible_share": 1,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 366,
+       "h": 107,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Арифурэта: Сильнейший ремесленник в мире",
+       "title_h": 18,
+       "title_font": "14px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2022",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "related-row",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "7.1"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori7.1Shikimori: 7.1 из 10",
+       "href": "/title/arifureta-silneyshiy-remeslennik-v-mire-2/",
+       "clickable_area": 39048
+      },
+      {
+       "w": 366,
+       "h": 107,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Бессмертие",
+       "title_h": 18,
+       "title_font": "14px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2022",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "related-row",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "7.5"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori7.5Shikimori: 7.5 из 10",
+       "href": "/title/bessmertie-3/",
+       "clickable_area": 39048
+      },
+      {
+       "w": 366,
+       "h": 107,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Бессмертный бог меча",
+       "title_h": 18,
+       "title_font": "14px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2022",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "related-row",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "6.6"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori6.6Shikimori: 6.6 из 10",
+       "href": "/title/bessmertnyy-bog-mecha-2/",
+       "clickable_area": 39048
+      }
+     ],
+     "unique_hrefs": 12,
+     "unique_titles": 12,
+     "variants": [
+      "related-row"
+     ],
+     "eps_badge_share": 0,
+     "eps_data_hidden": 0,
+     "ratings_share": 0.92,
+     "two_ratings_share": 0,
+     "zero_ratings_shown": 0
+    }
+   },
+   "cards_total": 12
+  },
+  {
+   "route": "collection_detail",
+   "width": 390,
+   "blocks": {
+    "zg": {
+     "cards": 24,
+     "title_visible_share": 1,
+     "meta_visible_share": 1,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 178,
+       "h": 310,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Мастер льда и пламени 2",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2022",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "104 из 104",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "7.1"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori7.1Shikimori: 7.1 из 10",
+       "href": "/title/master-lda-i-plameni-2/",
+       "clickable_area": 55213
+      },
+      {
+       "w": 178,
+       "h": 301,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Часть 2",
+       "title_h": 16,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2016",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "13 из 13",
+       "ratings_visible": 2,
+       "ratings_sources": [
+        "kp",
+        "imdb"
+       ],
+       "ratings_values": [
+        "7.1",
+        "7.5"
+       ],
+       "ratings_scales": [
+        "10",
+        "10"
+       ],
+       "ratings_text": "КП7.1КП: 7.1 из 10 | IMDb7.5IMDb: 7.5 из",
+       "href": "/title/nelyud-chast-2/",
+       "clickable_area": 53611
+      },
+      {
+       "w": 178,
+       "h": 310,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Фильм 2: Столкновение",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2016",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 2,
+       "ratings_sources": [
+        "kp",
+        "imdb"
+       ],
+       "ratings_values": [
+        "7",
+        "7.8"
+       ],
+       "ratings_scales": [
+        "10",
+        "10"
+       ],
+       "ratings_text": "КП7КП: 7 из 10 | IMDb7.8IMDb: 7.8 из 10",
+       "href": "/title/nelyud-film-2-stolknovenie/",
+       "clickable_area": 55213
+      }
+     ],
+     "unique_hrefs": 24,
+     "unique_titles": 24,
+     "variants": [
+      "catalog-title"
+     ],
+     "eps_badge_share": 0.42,
+     "eps_data_hidden": 0,
+     "ratings_share": 0.96,
+     "two_ratings_share": 0.38,
+     "zero_ratings_shown": 0
+    }
+   },
+   "cards_total": 24
+  },
+  {
+   "route": "search",
+   "width": 390,
+   "blocks": {
+    "zg": {
+     "cards": 17,
+     "title_visible_share": 1,
+     "meta_visible_share": 1,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 178,
+       "h": 301,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Аниме для взрослых",
+       "title_h": 16,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2011",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "4 из 4",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "7.4"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori7.4Shikimori: 7.4 из 10",
+       "href": "/title/anime-dlya-vzroslyh/",
+       "clickable_area": 53611
+      },
+      {
+       "w": 178,
+       "h": 301,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Аниме-истории",
+       "title_h": 16,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2017",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "12 из 12",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "imdb"
+       ],
+       "ratings_values": [
+        "6.2"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "IMDb6.2IMDb: 6.2 из 10",
+       "href": "/title/anime-istorii/",
+       "clickable_area": 53611
+      },
+      {
+       "w": 178,
+       "h": 301,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Аниме-тренировки",
+       "title_h": 16,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2015",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "12 из 12",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "5.4"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori5.4Shikimori: 5.4 из 10",
+       "href": "/title/anime-trenirovki/",
+       "clickable_area": 53611
+      }
+     ],
+     "unique_hrefs": 17,
+     "unique_titles": 17,
+     "variants": [
+      "catalog-title"
+     ],
+     "eps_badge_share": 0.88,
+     "eps_data_hidden": 0,
+     "ratings_share": 1,
+     "two_ratings_share": 0.06,
+     "zero_ratings_shown": 0
+    }
+   },
+   "cards_total": 17
+  },
+  {
+   "route": "home",
+   "width": 768,
+   "blocks": {
+    "zrl": {
+     "cards": 24,
+     "title_visible_share": 1,
+     "meta_visible_share": 0,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 114,
+       "h": 203,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Мастер льда и пламени 2",
+       "title_h": 33,
+       "title_font": "13px",
+       "meta_in_dom": false,
+       "meta_visible": false,
+       "meta_text": "",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "compact",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 0,
+       "ratings_sources": [],
+       "ratings_values": [],
+       "ratings_scales": [],
+       "ratings_text": "",
+       "href": "/title/master-lda-i-plameni-2/",
+       "clickable_area": 23063
+      },
+      {
+       "w": 114,
+       "h": 203,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Часть 2",
+       "title_h": 33,
+       "title_font": "13px",
+       "meta_in_dom": false,
+       "meta_visible": false,
+       "meta_text": "",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "compact",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 0,
+       "ratings_sources": [],
+       "ratings_values": [],
+       "ratings_scales": [],
+       "ratings_text": "",
+       "href": "/title/nelyud-chast-2/",
+       "clickable_area": 23063
+      },
+      {
+       "w": 114,
+       "h": 203,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Фильм 2: Столкновение",
+       "title_h": 33,
+       "title_font": "13px",
+       "meta_in_dom": false,
+       "meta_visible": false,
+       "meta_text": "",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "compact",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 0,
+       "ratings_sources": [],
+       "ratings_values": [],
+       "ratings_scales": [],
+       "ratings_text": "",
+       "href": "/title/nelyud-film-2-stolknovenie/",
+       "clickable_area": 23063
+      }
+     ],
+     "unique_hrefs": 24,
+     "unique_titles": 24,
+     "variants": [
+      "compact"
+     ],
+     "eps_badge_share": 0,
+     "eps_data_hidden": 0,
+     "ratings_share": 0,
+     "two_ratings_share": 0,
+     "zero_ratings_shown": 0
+    },
+    "zg": {
+     "cards": 24,
+     "title_visible_share": 1,
+     "meta_visible_share": 1,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 118,
+       "h": 227,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Пришедший из древности 2",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2024",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "90 из 90",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "7"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori7Shikimori: 7 из 10",
+       "href": "/title/prishedshiy-iz-drevnosti-2/",
+       "clickable_area": 26843
+      },
+      {
+       "w": 118,
+       "h": 227,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Дни Сакамото. Часть 2",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2025",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "11 из 11",
+       "ratings_visible": 2,
+       "ratings_sources": [
+        "kp",
+        "imdb"
+       ],
+       "ratings_values": [
+        "7.4",
+        "7.5"
+       ],
+       "ratings_scales": [
+        "10",
+        "10"
+       ],
+       "ratings_text": "КП7.4КП: 7.4 из 10 | IMDb7.5IMDb: 7.5 из",
+       "href": "/title/dni-sakamoto-chast-2/",
+       "clickable_area": 26850
+      },
+      {
+       "w": 118,
+       "h": 227,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Священные звери: Тысячи дней и ночей",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2005",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "2 из 2",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "6.3"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori6.3Shikimori: 6.3 из 10",
+       "href": "/title/svyaschennye-zveri-tysyachi-dney-i-nochey/",
+       "clickable_area": 26843
+      }
+     ],
+     "unique_hrefs": 24,
+     "unique_titles": 24,
+     "variants": [
+      "catalog-title"
+     ],
+     "eps_badge_share": 0.5,
+     "eps_data_hidden": 0,
+     "ratings_share": 0.79,
+     "two_ratings_share": 0.17,
+     "zero_ratings_shown": 0
+    }
+   },
+   "cards_total": 48
+  },
+  {
+   "route": "catalog",
+   "width": 768,
+   "blocks": {
+    "zg": {
+     "cards": 48,
+     "title_visible_share": 1,
+     "meta_visible_share": 1,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 118,
+       "h": 227,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Мастер льда и пламени 2",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2022",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "104 из 104",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "7.1"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori7.1Shikimori: 7.1 из 10",
+       "href": "/title/master-lda-i-plameni-2/",
+       "clickable_area": 26843
+      },
+      {
+       "w": 118,
+       "h": 227,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Часть 2",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2016",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "13 из 13",
+       "ratings_visible": 2,
+       "ratings_sources": [
+        "kp",
+        "imdb"
+       ],
+       "ratings_values": [
+        "7.1",
+        "7.5"
+       ],
+       "ratings_scales": [
+        "10",
+        "10"
+       ],
+       "ratings_text": "КП7.1КП: 7.1 из 10 | IMDb7.5IMDb: 7.5 из",
+       "href": "/title/nelyud-chast-2/",
+       "clickable_area": 26850
+      },
+      {
+       "w": 118,
+       "h": 227,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Фильм 2: Столкновение",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2016",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 2,
+       "ratings_sources": [
+        "kp",
+        "imdb"
+       ],
+       "ratings_values": [
+        "7",
+        "7.8"
+       ],
+       "ratings_scales": [
+        "10",
+        "10"
+       ],
+       "ratings_text": "КП7КП: 7 из 10 | IMDb7.8IMDb: 7.8 из 10",
+       "href": "/title/nelyud-film-2-stolknovenie/",
+       "clickable_area": 26843
+      }
+     ],
+     "unique_hrefs": 48,
+     "unique_titles": 48,
+     "variants": [
+      "catalog-title"
+     ],
+     "eps_badge_share": 0.46,
+     "eps_data_hidden": 0,
+     "ratings_share": 0.88,
+     "two_ratings_share": 0.27,
+     "zero_ratings_shown": 0
+    }
+   },
+   "cards_total": 48
+  },
+  {
+   "route": "title",
+   "width": 768,
+   "blocks": {
+    "zg": {
+     "cards": 12,
+     "title_visible_share": 1,
+     "meta_visible_share": 1,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 354,
+       "h": 120,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Фильм 1: Импульс",
+       "title_h": 19,
+       "title_font": "15px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2015",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "related-row",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "kp"
+       ],
+       "ratings_values": [
+        "7.1"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "КП7.1КП: 7.1 из 10",
+       "href": "/title/nelyud-film-1-impuls/",
+       "clickable_area": 42480
+      },
+      {
+       "w": 354,
+       "h": 120,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Рыба",
+       "title_h": 19,
+       "title_font": "15px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2011",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "related-row",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "kp"
+       ],
+       "ratings_values": [
+        "6.1"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "КП6.1КП: 6.1 из 10",
+       "href": "/title/ryba/",
+       "clickable_area": 42480
+      },
+      {
+       "w": 354,
+       "h": 120,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Дюрарара!! 2: Финал — Дюфуфуфу!!",
+       "title_h": 19,
+       "title_font": "15px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2016",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "related-row",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "kp"
+       ],
+       "ratings_values": [
+        "7.7"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "КП7.7КП: 7.7 из 10",
+       "href": "/title/dyurarara-2-final-dyufufufu/",
+       "clickable_area": 42480
+      }
+     ],
+     "unique_hrefs": 12,
+     "unique_titles": 12,
+     "variants": [
+      "related-row"
+     ],
+     "eps_badge_share": 0,
+     "eps_data_hidden": 0,
+     "ratings_share": 1,
+     "two_ratings_share": 0,
+     "zero_ratings_shown": 0
+    }
+   },
+   "cards_total": 12
+  },
+  {
+   "route": "episode",
+   "width": 768,
+   "blocks": {
+    "zg": {
+     "cards": 12,
+     "title_visible_share": 1,
+     "meta_visible_share": 1,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 354,
+       "h": 120,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Арифурэта: Сильнейший ремесленник в мире",
+       "title_h": 19,
+       "title_font": "15px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2022",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "related-row",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "7.1"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori7.1Shikimori: 7.1 из 10",
+       "href": "/title/arifureta-silneyshiy-remeslennik-v-mire-2/",
+       "clickable_area": 42480
+      },
+      {
+       "w": 354,
+       "h": 120,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Бессмертие",
+       "title_h": 19,
+       "title_font": "15px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2022",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "related-row",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "7.5"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori7.5Shikimori: 7.5 из 10",
+       "href": "/title/bessmertie-3/",
+       "clickable_area": 42480
+      },
+      {
+       "w": 354,
+       "h": 120,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Бессмертный бог меча",
+       "title_h": 19,
+       "title_font": "15px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2022",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "related-row",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "6.6"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori6.6Shikimori: 6.6 из 10",
+       "href": "/title/bessmertnyy-bog-mecha-2/",
+       "clickable_area": 42480
+      }
+     ],
+     "unique_hrefs": 12,
+     "unique_titles": 12,
+     "variants": [
+      "related-row"
+     ],
+     "eps_badge_share": 0,
+     "eps_data_hidden": 0,
+     "ratings_share": 0.92,
+     "two_ratings_share": 0,
+     "zero_ratings_shown": 0
+    }
+   },
+   "cards_total": 12
+  },
+  {
+   "route": "collection_detail",
+   "width": 768,
+   "blocks": {
+    "zg": {
+     "cards": 24,
+     "title_visible_share": 1,
+     "meta_visible_share": 1,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 118,
+       "h": 227,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Мастер льда и пламени 2",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2022",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "104 из 104",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "7.1"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori7.1Shikimori: 7.1 из 10",
+       "href": "/title/master-lda-i-plameni-2/",
+       "clickable_area": 26843
+      },
+      {
+       "w": 118,
+       "h": 227,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Часть 2",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2016",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "13 из 13",
+       "ratings_visible": 2,
+       "ratings_sources": [
+        "kp",
+        "imdb"
+       ],
+       "ratings_values": [
+        "7.1",
+        "7.5"
+       ],
+       "ratings_scales": [
+        "10",
+        "10"
+       ],
+       "ratings_text": "КП7.1КП: 7.1 из 10 | IMDb7.5IMDb: 7.5 из",
+       "href": "/title/nelyud-chast-2/",
+       "clickable_area": 26850
+      },
+      {
+       "w": 118,
+       "h": 227,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Фильм 2: Столкновение",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2016",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 2,
+       "ratings_sources": [
+        "kp",
+        "imdb"
+       ],
+       "ratings_values": [
+        "7",
+        "7.8"
+       ],
+       "ratings_scales": [
+        "10",
+        "10"
+       ],
+       "ratings_text": "КП7КП: 7 из 10 | IMDb7.8IMDb: 7.8 из 10",
+       "href": "/title/nelyud-film-2-stolknovenie/",
+       "clickable_area": 26843
+      }
+     ],
+     "unique_hrefs": 24,
+     "unique_titles": 24,
+     "variants": [
+      "catalog-title"
+     ],
+     "eps_badge_share": 0.42,
+     "eps_data_hidden": 0,
+     "ratings_share": 0.96,
+     "two_ratings_share": 0.38,
+     "zero_ratings_shown": 0
+    }
+   },
+   "cards_total": 24
+  },
+  {
+   "route": "search",
+   "width": 768,
+   "blocks": {
+    "zg": {
+     "cards": 17,
+     "title_visible_share": 1,
+     "meta_visible_share": 1,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 118,
+       "h": 227,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Аниме для взрослых",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2011",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "4 из 4",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "7.4"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori7.4Shikimori: 7.4 из 10",
+       "href": "/title/anime-dlya-vzroslyh/",
+       "clickable_area": 26843
+      },
+      {
+       "w": 118,
+       "h": 227,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Аниме-истории",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2017",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "12 из 12",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "imdb"
+       ],
+       "ratings_values": [
+        "6.2"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "IMDb6.2IMDb: 6.2 из 10",
+       "href": "/title/anime-istorii/",
+       "clickable_area": 26850
+      },
+      {
+       "w": 118,
+       "h": 227,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Аниме-тренировки",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2015",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "12 из 12",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "5.4"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori5.4Shikimori: 5.4 из 10",
+       "href": "/title/anime-trenirovki/",
+       "clickable_area": 26843
+      }
+     ],
+     "unique_hrefs": 17,
+     "unique_titles": 17,
+     "variants": [
+      "catalog-title"
+     ],
+     "eps_badge_share": 0.88,
+     "eps_data_hidden": 0,
+     "ratings_share": 1,
+     "two_ratings_share": 0.06,
+     "zero_ratings_shown": 0
+    }
+   },
+   "cards_total": 17
+  },
+  {
+   "route": "home",
+   "width": 1440,
+   "blocks": {
+    "zrl": {
+     "cards": 24,
+     "title_visible_share": 1,
+     "meta_visible_share": 0,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 160,
+       "h": 268,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Мастер льда и пламени 2",
+       "title_h": 33,
+       "title_font": "13px",
+       "meta_in_dom": false,
+       "meta_visible": false,
+       "meta_text": "",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "compact",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 0,
+       "ratings_sources": [],
+       "ratings_values": [],
+       "ratings_scales": [],
+       "ratings_text": "",
+       "href": "/title/master-lda-i-plameni-2/",
+       "clickable_area": 42733
+      },
+      {
+       "w": 160,
+       "h": 268,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Часть 2",
+       "title_h": 16,
+       "title_font": "13px",
+       "meta_in_dom": false,
+       "meta_visible": false,
+       "meta_text": "",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "compact",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 0,
+       "ratings_sources": [],
+       "ratings_values": [],
+       "ratings_scales": [],
+       "ratings_text": "",
+       "href": "/title/nelyud-chast-2/",
+       "clickable_area": 42733
+      },
+      {
+       "w": 160,
+       "h": 268,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Фильм 2: Столкновение",
+       "title_h": 33,
+       "title_font": "13px",
+       "meta_in_dom": false,
+       "meta_visible": false,
+       "meta_text": "",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "compact",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 0,
+       "ratings_sources": [],
+       "ratings_values": [],
+       "ratings_scales": [],
+       "ratings_text": "",
+       "href": "/title/nelyud-film-2-stolknovenie/",
+       "clickable_area": 42733
+      }
+     ],
+     "unique_hrefs": 24,
+     "unique_titles": 24,
+     "variants": [
+      "compact"
+     ],
+     "eps_badge_share": 0,
+     "eps_data_hidden": 0,
+     "ratings_share": 0,
+     "two_ratings_share": 0,
+     "zero_ratings_shown": 0
+    },
+    "zg": {
+     "cards": 24,
+     "title_visible_share": 1,
+     "meta_visible_share": 1,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 163,
+       "h": 289,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Пришедший из древности 2",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2024",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "90 из 90",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "7"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori7Shikimori: 7 из 10",
+       "href": "/title/prishedshiy-iz-drevnosti-2/",
+       "clickable_area": 47211
+      },
+      {
+       "w": 163,
+       "h": 289,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Дни Сакамото. Часть 2",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2025",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "11 из 11",
+       "ratings_visible": 2,
+       "ratings_sources": [
+        "kp",
+        "imdb"
+       ],
+       "ratings_values": [
+        "7.4",
+        "7.5"
+       ],
+       "ratings_scales": [
+        "10",
+        "10"
+       ],
+       "ratings_text": "КП7.4КП: 7.4 из 10 | IMDb7.5IMDb: 7.5 из",
+       "href": "/title/dni-sakamoto-chast-2/",
+       "clickable_area": 47211
+      },
+      {
+       "w": 163,
+       "h": 289,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Священные звери: Тысячи дней и ночей",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2005",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "2 из 2",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "6.3"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori6.3Shikimori: 6.3 из 10",
+       "href": "/title/svyaschennye-zveri-tysyachi-dney-i-nochey/",
+       "clickable_area": 47211
+      }
+     ],
+     "unique_hrefs": 24,
+     "unique_titles": 24,
+     "variants": [
+      "catalog-title"
+     ],
+     "eps_badge_share": 0.5,
+     "eps_data_hidden": 0,
+     "ratings_share": 0.79,
+     "two_ratings_share": 0.17,
+     "zero_ratings_shown": 0
+    }
+   },
+   "cards_total": 48
+  },
+  {
+   "route": "catalog",
+   "width": 1440,
+   "blocks": {
+    "zg": {
+     "cards": 48,
+     "title_visible_share": 1,
+     "meta_visible_share": 1,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 163,
+       "h": 289,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Мастер льда и пламени 2",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2022",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "104 из 104",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "7.1"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori7.1Shikimori: 7.1 из 10",
+       "href": "/title/master-lda-i-plameni-2/",
+       "clickable_area": 47211
+      },
+      {
+       "w": 163,
+       "h": 280,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Часть 2",
+       "title_h": 16,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2016",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "13 из 13",
+       "ratings_visible": 2,
+       "ratings_sources": [
+        "kp",
+        "imdb"
+       ],
+       "ratings_values": [
+        "7.1",
+        "7.5"
+       ],
+       "ratings_scales": [
+        "10",
+        "10"
+       ],
+       "ratings_text": "КП7.1КП: 7.1 из 10 | IMDb7.5IMDb: 7.5 из",
+       "href": "/title/nelyud-chast-2/",
+       "clickable_area": 45743
+      },
+      {
+       "w": 163,
+       "h": 289,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Фильм 2: Столкновение",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2016",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 2,
+       "ratings_sources": [
+        "kp",
+        "imdb"
+       ],
+       "ratings_values": [
+        "7",
+        "7.8"
+       ],
+       "ratings_scales": [
+        "10",
+        "10"
+       ],
+       "ratings_text": "КП7КП: 7 из 10 | IMDb7.8IMDb: 7.8 из 10",
+       "href": "/title/nelyud-film-2-stolknovenie/",
+       "clickable_area": 47211
+      }
+     ],
+     "unique_hrefs": 48,
+     "unique_titles": 48,
+     "variants": [
+      "catalog-title"
+     ],
+     "eps_badge_share": 0.46,
+     "eps_data_hidden": 0,
+     "ratings_share": 0.88,
+     "two_ratings_share": 0.27,
+     "zero_ratings_shown": 0
+    }
+   },
+   "cards_total": 48
+  },
+  {
+   "route": "title",
+   "width": 1440,
+   "blocks": {
+    "zg": {
+     "cards": 12,
+     "title_visible_share": 1,
+     "meta_visible_share": 1,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 436,
+       "h": 120,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Фильм 1: Импульс",
+       "title_h": 19,
+       "title_font": "15px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2015",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "related-row",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "kp"
+       ],
+       "ratings_values": [
+        "7.1"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "КП7.1КП: 7.1 из 10",
+       "href": "/title/nelyud-film-1-impuls/",
+       "clickable_area": 52320
+      },
+      {
+       "w": 436,
+       "h": 120,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Рыба",
+       "title_h": 19,
+       "title_font": "15px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2011",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "related-row",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "kp"
+       ],
+       "ratings_values": [
+        "6.1"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "КП6.1КП: 6.1 из 10",
+       "href": "/title/ryba/",
+       "clickable_area": 52320
+      },
+      {
+       "w": 436,
+       "h": 120,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Дюрарара!! 2: Финал — Дюфуфуфу!!",
+       "title_h": 19,
+       "title_font": "15px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2016",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "related-row",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "kp"
+       ],
+       "ratings_values": [
+        "7.7"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "КП7.7КП: 7.7 из 10",
+       "href": "/title/dyurarara-2-final-dyufufufu/",
+       "clickable_area": 52320
+      }
+     ],
+     "unique_hrefs": 12,
+     "unique_titles": 12,
+     "variants": [
+      "related-row"
+     ],
+     "eps_badge_share": 0,
+     "eps_data_hidden": 0,
+     "ratings_share": 1,
+     "two_ratings_share": 0,
+     "zero_ratings_shown": 0
+    }
+   },
+   "cards_total": 12
+  },
+  {
+   "route": "episode",
+   "width": 1440,
+   "blocks": {
+    "zg": {
+     "cards": 12,
+     "title_visible_share": 1,
+     "meta_visible_share": 1,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 436,
+       "h": 120,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Арифурэта: Сильнейший ремесленник в мире",
+       "title_h": 19,
+       "title_font": "15px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2022",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "related-row",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "7.1"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori7.1Shikimori: 7.1 из 10",
+       "href": "/title/arifureta-silneyshiy-remeslennik-v-mire-2/",
+       "clickable_area": 52320
+      },
+      {
+       "w": 436,
+       "h": 120,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Бессмертие",
+       "title_h": 19,
+       "title_font": "15px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2022",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "related-row",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "7.5"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori7.5Shikimori: 7.5 из 10",
+       "href": "/title/bessmertie-3/",
+       "clickable_area": 52320
+      },
+      {
+       "w": 436,
+       "h": 120,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Бессмертный бог меча",
+       "title_h": 19,
+       "title_font": "15px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2022",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "related-row",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "6.6"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori6.6Shikimori: 6.6 из 10",
+       "href": "/title/bessmertnyy-bog-mecha-2/",
+       "clickable_area": 52320
+      }
+     ],
+     "unique_hrefs": 12,
+     "unique_titles": 12,
+     "variants": [
+      "related-row"
+     ],
+     "eps_badge_share": 0,
+     "eps_data_hidden": 0,
+     "ratings_share": 0.92,
+     "two_ratings_share": 0,
+     "zero_ratings_shown": 0
+    }
+   },
+   "cards_total": 12
+  },
+  {
+   "route": "collection_detail",
+   "width": 1440,
+   "blocks": {
+    "zg": {
+     "cards": 24,
+     "title_visible_share": 1,
+     "meta_visible_share": 1,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 163,
+       "h": 289,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Мастер льда и пламени 2",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2022",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "104 из 104",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "7.1"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori7.1Shikimori: 7.1 из 10",
+       "href": "/title/master-lda-i-plameni-2/",
+       "clickable_area": 47211
+      },
+      {
+       "w": 163,
+       "h": 280,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Часть 2",
+       "title_h": 16,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2016",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "13 из 13",
+       "ratings_visible": 2,
+       "ratings_sources": [
+        "kp",
+        "imdb"
+       ],
+       "ratings_values": [
+        "7.1",
+        "7.5"
+       ],
+       "ratings_scales": [
+        "10",
+        "10"
+       ],
+       "ratings_text": "КП7.1КП: 7.1 из 10 | IMDb7.5IMDb: 7.5 из",
+       "href": "/title/nelyud-chast-2/",
+       "clickable_area": 45743
+      },
+      {
+       "w": 163,
+       "h": 289,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Нелюдь. Фильм 2: Столкновение",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2016",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": false,
+       "eps_known": false,
+       "eps_badge_text": "",
+       "ratings_visible": 2,
+       "ratings_sources": [
+        "kp",
+        "imdb"
+       ],
+       "ratings_values": [
+        "7",
+        "7.8"
+       ],
+       "ratings_scales": [
+        "10",
+        "10"
+       ],
+       "ratings_text": "КП7КП: 7 из 10 | IMDb7.8IMDb: 7.8 из 10",
+       "href": "/title/nelyud-film-2-stolknovenie/",
+       "clickable_area": 47211
+      }
+     ],
+     "unique_hrefs": 24,
+     "unique_titles": 24,
+     "variants": [
+      "catalog-title"
+     ],
+     "eps_badge_share": 0.42,
+     "eps_data_hidden": 0,
+     "ratings_share": 0.96,
+     "two_ratings_share": 0.38,
+     "zero_ratings_shown": 0
+    }
+   },
+   "cards_total": 24
+  },
+  {
+   "route": "search",
+   "width": 1440,
+   "blocks": {
+    "zg": {
+     "cards": 17,
+     "title_visible_share": 1,
+     "meta_visible_share": 1,
+     "rating_visible_share": 0,
+     "poster_visible_share": 1,
+     "title_in_dom_share": 1,
+     "rating_in_dom_share": 0,
+     "sample": [
+      {
+       "w": 163,
+       "h": 289,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Аниме для взрослых",
+       "title_h": 31,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2011",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "4 из 4",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "7.4"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori7.4Shikimori: 7.4 из 10",
+       "href": "/title/anime-dlya-vzroslyh/",
+       "clickable_area": 47211
+      },
+      {
+       "w": 163,
+       "h": 280,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Аниме-истории",
+       "title_h": 16,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2017",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "12 из 12",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "imdb"
+       ],
+       "ratings_values": [
+        "6.2"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "IMDb6.2IMDb: 6.2 из 10",
+       "href": "/title/anime-istorii/",
+       "clickable_area": 45743
+      },
+      {
+       "w": 163,
+       "h": 280,
+       "poster_visible": true,
+       "title_in_dom": true,
+       "title_visible": true,
+       "title_text": "Аниме-тренировки",
+       "title_h": 16,
+       "title_font": "12.5px",
+       "meta_in_dom": true,
+       "meta_visible": true,
+       "meta_text": "Аниме · 2015",
+       "rating_in_dom": false,
+       "rating_visible": false,
+       "rating_text": "",
+       "variant": "catalog-title",
+       "eps_badge_visible": true,
+       "eps_known": true,
+       "eps_badge_text": "12 из 12",
+       "ratings_visible": 1,
+       "ratings_sources": [
+        "shikimori"
+       ],
+       "ratings_values": [
+        "5.4"
+       ],
+       "ratings_scales": [
+        "10"
+       ],
+       "ratings_text": "Shikimori5.4Shikimori: 5.4 из 10",
+       "href": "/title/anime-trenirovki/",
+       "clickable_area": 45743
+      }
+     ],
+     "unique_hrefs": 17,
+     "unique_titles": 17,
+     "variants": [
+      "catalog-title"
+     ],
+     "eps_badge_share": 0.88,
+     "eps_data_hidden": 0,
+     "ratings_share": 1,
+     "two_ratings_share": 0.06,
+     "zero_ratings_shown": 0
+    }
+   },
+   "cards_total": 17
+  }
+ ],
+ "findings": [],
+ "CARD_AUDIT_PASS": true
+}

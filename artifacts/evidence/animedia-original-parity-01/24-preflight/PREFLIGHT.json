@@ -1,0 +1,82 @@
+{
+ "task": "ANIMEDIA-PREFLIGHT",
+ "tenant": "ANIMEDIA",
+ "checked_at_utc": "2026-09-21T21:16:51Z",
+ "hostname": "claude-control-01",
+ "user": "claude",
+ "repository_root": "/home/claude/wt-animedia-original-parity-01",
+ "worktree": "/home/claude/wt-animedia-original-parity-01",
+ "branch": "claude/animedia-original-parity-01",
+ "head": "fdd8a88fc5c19a331b604ff65fb5de89b5d21cea",
+ "head_subject": "parity: карточка, постер тайтла и цели нажатия доведены до эталона",
+ "upstream": "не задан (ветка не опубликована)",
+ "status_short": [],
+ "known_candidate_commits": {
+  "4f53d07": "4f53d078a04979897c1fda3e29caa38abd3965a4",
+  "b13e5c5": "b13e5c578b3f2eea0fca07ab934197d819a05999",
+  "fdd8a88": "fdd8a88fc5c19a331b604ff65fb5de89b5d21cea"
+ },
+ "branch_ok": true,
+ "verdict_if_wrong_branch": null,
+ "processes_of_this_worktree": [
+  {
+   "pid": 3308452,
+   "cmd": "/bin/bash -c source /home/claude/.claude/shell-snapshots/snapshot-bash-1789989425409-aeodhu.sh 2>/dev/null || true && sh"
+  }
+ ],
+ "locks": [],
+ "sites": {
+  "animedia-01": {
+   "domain": "animedia.icu",
+   "unit": "nova-animedia-01.service",
+   "port": 9121,
+   "exec_start": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9121 ; ignore_errors=no ; start_time=[Mon 2026-09-21 16:56:16 UT",
+   "main_pid": "664915",
+   "active": "active/running",
+   "profile": "animedia-icu",
+   "manifest_build_id": "20260921T153817Z-c8c4587-animedia-b16",
+   "manifest_artifact_sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+   "assignment": "20260921T153817Z-c8c4587-animedia-b16",
+   "assigned_code_sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+   "live_build_id": "20260921T153817Z-c8c4587-animedia-b16",
+   "live_artifact_sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+   "live_template_revision": "c8c458762c16f69999fcb7d3d1bc156d36f18f48",
+   "live_x_robots_tag": "noindex, nofollow",
+   "rollback_target": "20260921T154512Z-8966632-animedia-rollback",
+   "rollback_manifest_backup": "/srv/lords/.frontend/template-manifest-animedia-01.json.before-b16",
+   "serving_artifact": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06"
+  },
+  "animedia-02": {
+   "domain": "animedia.space",
+   "unit": "nova-animedia-02.service",
+   "port": 9122,
+   "exec_start": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9122 ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; p",
+   "main_pid": "2693863",
+   "active": "active/running",
+   "profile": "animedia-space",
+   "manifest_build_id": "20260920T102102Z-89666321-nova",
+   "manifest_artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+   "assignment": "20260921T154512Z-8966632-animedia-rollback",
+   "assigned_code_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+   "live_build_id": "20260920T102102Z-89666321-nova",
+   "live_artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+   "live_template_revision": "89666321093651d4bd5b06a00645fdf903124810",
+   "live_x_robots_tag": "noindex, nofollow",
+   "rollback_target": "20260921T154512Z-8966632-animedia-rollback",
+   "rollback_manifest_backup": "/srv/lords/.frontend/template-manifest-animedia-02.json.before-b16",
+   "serving_artifact": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908"
+  }
+ },
+ "branch_candidate_artifact_sha256": "9925782602a19a3a92ec18f57951d6c51f42e33fa7d918ca848dc2c379617409",
+ "branch_candidate_file": "automation/host/animedia-frontend.py",
+ "LATEST_CANDIDATE_ALREADY_LIVE": "NO",
+ "live_artifacts": [
+  "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+  "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908"
+ ],
+ "FOREIGN_TENANT_WRITES": 0,
+ "CROSS_TENANT_IMPORTS": 0,
+ "DNS_MUTATIONS": 0,
+ "TLS_MUTATIONS": 0,
+ "INDEXABILITY_MUTATIONS": 0
+}

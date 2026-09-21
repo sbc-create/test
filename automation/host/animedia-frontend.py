@@ -301,6 +301,85 @@ def оценки_по_источникам(деталь: dict) -> list:
     return готово
 
 
+
+#: Единый контракт карточки Animedia. Варианты различаются тем, что карточка
+#: обязана показать, а не тем, как её раскрасили: иначе «похожее аниме» и
+#: каталог расходятся молча, и один блок остаётся голыми постерами.
+#:
+#: Поля:
+#:   бейджи    — счётчик серий слева сверху и оценки справа сверху, как у оригинала;
+#:   название  — всегда: изображение без подписи карточкой не является;
+#:   мета      — тип и год строкой под названием;
+#:   оценок    — сколько источников показывать бейджами (0 — не показывать).
+АНИМЕДИА_ВАРИАНТЫ_КАРТОЧКИ = {
+    "catalog-title": {"бейджи": True, "название": True, "мета": True, "оценок": 2},
+    "catalog":       {"бейджи": True, "название": True, "мета": True, "оценок": 2},
+    "related":       {"бейджи": True, "название": True, "мета": True, "оценок": 2},
+    "recommendation": {"бейджи": True, "название": True, "мета": True, "оценок": 2},
+    "compact":       {"бейджи": False, "название": True, "мета": False, "оценок": 0},
+    "top-shelf":     {"бейджи": False, "название": True, "мета": False, "оценок": 0},
+    #: Нижний блок страницы произведения у оригинала — не сетка постеров, а
+    #: строка: миниатюра слева, справа название, оригинальное название и
+    #: оценка с числом голосов. Состав отличается, поэтому и вариант свой.
+    #: Год и тип в строчной карточке — требование владельца: карточка без них
+    #: заставляет уходить на страницу, чтобы понять, что это. У эталона этой
+    #: строки нет, и это единственное место, где мы даём больше.
+    "related-row":   {"бейджи": False, "название": True, "мета": True, "оценок": 1,
+                      "строкой": True, "оригинальное": True, "голоса": True},
+}
+#: Вариант по умолчанию для неизвестного ключа. Fail loud вместо тихого
+#: обеднения: неизвестный вариант получает полный набор, а не пустую карточку.
+АНИМЕДИА_ВАРИАНТ_ПО_УМОЛЧАНИЮ = АНИМЕДИА_ВАРИАНТЫ_КАРТОЧКИ["catalog-title"]
+
+
+def _счётчик_серий(деталь: dict) -> tuple[int, int] | None:
+    """Сколько серий доступно из скольких заявлено.
+
+    Считается по сезонам снимка: `avail` — то, к чему есть дорожка, `eps` —
+    сколько объявлено. Ни одно из двух не выдумывается: нет сезонов или нет
+    чисел — нет и счётчика.
+    """
+    сезоны = деталь.get("seasons")
+    if not isinstance(сезоны, list) or not сезоны:
+        return None
+    доступно = заявлено = 0
+    for с in сезоны:
+        if not isinstance(с, dict):
+            return None
+        try:
+            доступно += int(с.get("avail") or 0)
+            заявлено += int(с.get("eps") or 0)
+        except (TypeError, ValueError):
+            return None
+    if заявлено <= 0:
+        return None
+    return доступно, заявлено
+
+
+def _оценки_для_карточки(деталь: dict, сколько: int) -> list:
+    """Оценки для бейджей: приведены к десятибалльной шкале, источник назван.
+
+    Исходное значение и исходная шкала остаются в данных карточки: приведение
+    нужно глазу, а не хранилищу. Ноль, пустое и неизвестное не показываются
+    вовсе — «нет оценки» и «оценка ноль» разные утверждения.
+    """
+    if сколько <= 0:
+        return []
+    готово = []
+    for о in оценки_по_источникам(деталь)[:сколько]:
+        try:
+            шкала = float(о["шкала"])
+            значение = float(str(о["значение"]).replace(",", "."))
+        except (TypeError, ValueError):
+            continue
+        if шкала <= 0 or значение <= 0:
+            continue
+        на_десять = значение if abs(шкала - 10.0) < 0.01 else значение * 10.0 / шкала
+        готово.append({**о, "на_десять": f"{на_десять:.1f}".rstrip("0").rstrip("."),
+                       "исходное": о["значение"], "исходная_шкала": о["шкала"]})
+    return готово
+
+
 def разметка_оценок(деталь: dict, класс: str = "rbs", пусто: bool = True) -> str:
     """Компонент оценок. Один на все семейства, вид задаёт CSS семейства.
 
@@ -1117,7 +1196,21 @@ min-height:44px;display:inline-flex;align-items:center}
 .ast{display:none}
 .zrail,.zrail__logo,.zrail__sub,.zrail__t,.zrail__n,.zrail__g,.ztop{display:none}
 .zh{font-size:clamp(22px,2vw,28px);line-height:1.25;font-weight:700;margin:16px 0 8px}
-.zh--sm{font-size:clamp(20px,1.8vw,26px);font-weight:700;margin:24px 0 10px}
+/* Заголовки секций у оригинала — прописные, по центру, с разрядкой и заметно
+   мельче наших прежних: «НОВЫЕ СЕРИИ АНИМЕ», «НОВЫЕ АНИМЕ НА САЙТЕ»,
+   «РЕКОМЕНДУЕМ ПОСМОТРЕТЬ:». Крупный тёмный заголовок слева — наша прежняя
+   привычка, а не композиция эталона. */
+.zh--sm{font-size:16px;font-weight:700;margin:24px 0 14px;text-transform:uppercase;
+letter-spacing:.06em;text-align:center;color:var(--a-ink)}
+.zsec__h{display:grid;grid-template-columns:1fr auto 1fr;align-items:baseline;gap:12px}
+.zsec__h h2{grid-column:2;justify-self:center;font-size:16px;font-weight:700;
+text-transform:uppercase;letter-spacing:.06em;text-align:center}
+.zsec__h a{grid-column:3;justify-self:end}
+@media(max-width:767px){
+  .zsec__h{grid-template-columns:1fr auto}
+  .zsec__h h2{grid-column:1;justify-self:center;margin-left:auto}
+  .zsec__h a{grid-column:2}
+}
 .zsub{font-size:15px;color:var(--a-dim);margin:0 0 16px;max-width:72ch;line-height:1.45;
 display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .zsec{margin:0 0 var(--a-section-gap);max-height:none;overflow:visible}
@@ -1170,7 +1263,9 @@ min-width:0;max-width:none;scroll-snap-align:start}
 @media(max-width:767px){.ahero .zt__p{width:112px;height:157px;aspect-ratio:auto}}
 .ahero .zt__b{padding:6px 2px 0;min-height:44px;max-height:52px}
 .ahero .zt__t{color:#fff;font-size:13px;-webkit-line-clamp:2;min-height:0;line-height:1.25}
-.ahero .zt__m,.ahero .zt__r{display:none}
+/* Прятать поля стилем больше не нужно: лента рисует компактную карточку,
+   в которой их нет по контракту. Прятать то, что отдано в разметке, — способ
+   разойтись между обещанием и видимым. */
 .ahero .zrl__btn{background:rgba(255,255,255,.96);color:var(--a-acc);border:0;border-radius:10px}
 .ahero__cap{display:none}
 .atg{display:flex;align-items:center;min-height:46px;max-height:56px;margin:0 0 12px;padding:0 14px;
@@ -1244,6 +1339,72 @@ width:8px;height:8px;border-radius:50%;background:var(--a-line);transition:backg
 .zrl__dot:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
 .ahero .zrl__dot::after{background:rgba(255,255,255,.45)}
 .ahero .zrl__dot[aria-current="true"]::after{background:#fff}
+/* Нижний блок страницы произведения. Измерено на эталоне 1440: три колонки,
+   карточка 436x120, промежуток 16, светлая подложка, скруглeние 10; слева
+   миниатюра около 100, справа название, оригинальное название серым и оценка
+   с числом голосов. Сетка постеров здесь была не «другим размером», а другой
+   композицией. */
+.zg--related-row,.zsec--rel .zg--related-row{display:grid;gap:16px;
+grid-template-columns:1fr}
+@media(min-width:768px){
+  .zg--related-row,.zsec--rel .zg--related-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(min-width:1024px){
+  .zg--related-row,.zsec--rel .zg--related-row{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+.zt--row{display:flex;flex-direction:row;align-items:stretch;gap:0;background:var(--a-alt);
+border-radius:10px;overflow:hidden;min-height:120px;text-decoration:none;color:inherit}
+.zt--row:hover{background:var(--a-surf)}
+.zt--row:focus-visible{outline:3px solid var(--a-acc);outline-offset:2px}
+.zt--row .zt__p{flex:0 0 100px;width:100px;aspect-ratio:auto;height:auto;border-radius:0;
+background:var(--a-surf)}
+.zt--row .zt__p img,.zt--row .zt__p .zt__img{width:100%;height:100%;object-fit:cover}
+.zt--row .zt__b{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;
+justify-content:center;gap:6px;padding:12px 14px}
+.zt--row .zt__t{font-size:15px;font-weight:600;line-height:1.25;color:var(--a-ink);
+display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.zt--row .zt__m{font-size:12px;color:var(--a-dim);line-height:1.3}
+.zt__orig{font-size:12px;color:var(--a-mute);line-height:1.3;
+display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+/* Оценка в строке — просто подпись источника и число, как у оригинала.
+   Подложка с тенью делала её похожей на поле ввода. Селектор с двумя классами
+   нужен, чтобы перекрыть общее правило бейджа, объявленное ниже по листу. */
+.zt--row .zt__rate,.zt--row .zt__rate--row{position:static;background:none;
+box-shadow:none;border:0;padding:0;border-radius:0;font-size:15px;gap:6px;
+align-self:flex-start}
+.zt__rate--row b{font-size:16px;color:var(--a-ink);font-weight:600}
+.zt__rate--row i{font-size:11px}
+.zt__votes{color:var(--a-mute);font-size:11px}
+@media(max-width:767px){
+  .zt--row{min-height:96px}
+  .zt--row .zt__p{flex:0 0 76px;width:76px}
+  .zt--row .zt__t{font-size:14px}
+}
+/* Бейджи карточки — как у оригинала: слева сверху сколько серий доступно из
+   заявленных, справа сверху до двух оценок с названным источником. Подпись
+   источника обязательна: цифра без источника ничего не значит, а сводить
+   несводимые шкалы в одно число мы не станем. */
+.zt__p{position:relative}
+/* Бейджи переносятся, а не выходят за край: на узкой карточке «104 из 104»
+   и подпись источника вместе шире постера, и ссылка получала прокрутку —
+   измерено на 320 и 390. */
+.zt__badges{position:absolute;inset:6px 6px auto 6px;display:flex;justify-content:space-between;
+align-items:flex-start;gap:6px;pointer-events:none;z-index:2;flex-wrap:wrap;max-width:calc(100% - 12px)}
+.zt__eps{background:#fff;color:var(--a-acc);font-size:11px;font-weight:700;line-height:1;
+padding:5px 7px;border-radius:6px;box-shadow:var(--a-shadow-soft);white-space:nowrap;
+max-width:100%;overflow-wrap:anywhere}
+.zt__rates{display:flex;flex-direction:column;gap:4px;align-items:flex-end;max-width:100%;
+min-width:0}
+.zt__rate{display:inline-flex;align-items:center;gap:4px;background:#fff;color:var(--a-ink);
+font-size:11px;line-height:1;padding:5px 7px;border-radius:6px;box-shadow:var(--a-shadow-soft);
+white-space:nowrap;max-width:100%}
+.zt__rate i{font-style:normal;color:var(--a-mute);font-size:10px;font-weight:700;
+text-transform:uppercase;letter-spacing:.02em}
+.zt__rate b{font-weight:700;color:var(--a-acc)}
+@media(max-width:767px){
+  .zt__badges{inset:4px 4px auto 4px}
+  .zt__eps,.zt__rate{font-size:10px;padding:4px 6px}
+}
 /* Пропорция постера оригинала — 5/7 (0.714): измерено 163x228 на 1440 и 1920,
    118x165 на 768, и на всех ширинах одно и то же отношение. Прежние 2/3 (0.667)
    вытягивали каждую карточку витрины. */
@@ -1267,13 +1428,13 @@ flex-wrap:nowrap;min-height:1.25em;align-items:center}
 .zsec--rel{margin-bottom:28px}
 .zsec--rel[hidden],.zsec--rel-gap{display:none !important;height:0 !important;min-height:0 !important;
 margin:0 !important;padding:0 !important;border:0 !important;overflow:hidden !important}
-.zsec--rel .zg,.zsec--rel .zg--recommendation{gap:var(--a-grid-gap);
+.zsec--rel .zg:not(.zg--related-row),.zsec--rel .zg--recommendation{gap:var(--a-grid-gap);
 grid-template-columns:repeat(2,minmax(0,1fr))}
 /* Рекомендации на странице тайтла — та же карточка, что и везде: у оригинала
    на 1440 она 163x228 и в рекомендациях тоже. Шесть колонок давали 197. */
-@media(min-width:768px){.zsec--rel .zg,.zsec--rel .zg--recommendation{
+@media(min-width:768px){.zsec--rel .zg:not(.zg--related-row),.zsec--rel .zg--recommendation{
   grid-template-columns:repeat(5,minmax(0,1fr));gap:33px}}
-@media(min-width:1200px){.zsec--rel .zg,.zsec--rel .zg--recommendation{
+@media(min-width:1200px){.zsec--rel .zg:not(.zg--related-row),.zsec--rel .zg--recommendation{
   grid-template-columns:repeat(7,minmax(0,1fr));gap:33px}}
 .ahome-eps{max-width:min(1760px,100%);margin-inline:auto}
 .ahome-eps--empty{margin:0 0 16px;max-height:96px;overflow:hidden}
@@ -4325,30 +4486,110 @@ class ВидАнимедиа(ВидОснова):
             self.д = свой_срез
 
     def плитка(self, запись: dict, *, вариант: str = "catalog-title") -> str:
-        """Карточка с пропорцией постера 0.86 — измеренной на эталоне.
+        """Карточка по единому контракту: постер, бейджи, название, мета.
 
-        Размеры проставляются в разметке, а не только в CSS: браузер обязан
-        зарезервировать место до загрузки изображения, иначе сетка прыгает.
-        `вариант` — ключ CARD_VARIANT_REGISTRY (parity-02 BLOCK_03).
+        Состав определяется вариантом, а не местом вызова, — иначе «похожее
+        аниме» и каталог расходятся молча и один из блоков остаётся голыми
+        постерами. Именно это владелец и увидел на живых витринах.
+
+        Как у оригинала: слева сверху — сколько серий доступно из заявленных,
+        справа сверху — до двух оценок с названным источником, под постером —
+        название и строка «тип · год». Размеры постера проставляются в
+        разметке, чтобы место было занято до загрузки изображения.
         """
         деталь = self.деталь(запись["slug"])
+        состав = АНИМЕДИА_ВАРИАНТЫ_КАРТОЧКИ.get(вариант, АНИМЕДИА_ВАРИАНТ_ПО_УМОЛЧАНИЮ)
         изо = заглушка_постера(запись, "zt__none", "zt__img", 190, 285)
+
+        бейджи = ""
+        данные = ""
+        if состав["бейджи"]:
+            счёт = _счётчик_серий(деталь)
+            слева = ""
+            if счёт:
+                доступно, заявлено = счёт
+                слева = (f'<span class="zt__eps" data-eps-avail="{доступно}" '
+                         f'data-eps-total="{заявлено}">{доступно} из {заявлено}</span>')
+            оценки = _оценки_для_карточки(деталь, состав["оценок"])
+            справа = "".join(
+                f'<span class="zt__rate" data-rating-source="{html.escape(о["ключ"])}"'
+                f' data-rating-value="{html.escape(str(о["исходное"]))}"'
+                f' data-rating-scale="{html.escape(str(о["исходная_шкала"]))}"'
+                + (f' data-rating-votes="{о["голоса"]}"' if о["голоса"] else "")
+                + f' title="{html.escape(о["подпись"])}: {html.escape(str(о["исходное"]))}'
+                  f' из {html.escape(str(о["исходная_шкала"]))}">'
+                f'<i aria-hidden="true">{html.escape(о["подпись"])}</i>'
+                f'<b>{html.escape(о["на_десять"])}</b>'
+                f'<span class="vh">{html.escape(о["подпись"])}: '
+                f'{html.escape(о["на_десять"])} из 10</span></span>'
+                for о in оценки)
+            обёртка_оценок = (f'<span class="zt__rates">{справа}</span>'
+                              if справа else "")
+            if слева or обёртка_оценок:
+                бейджи = (f'<span class="zt__badges">{слева}{обёртка_оценок}</span>')
+        подпись = (f'<span class="zt__t">{html.escape(запись["title"])}</span>'
+                   if состав["название"] else "")
         мета = " · ".join(str(ч) for ч in (запись.get("kind"), запись.get("year")) if ч)
-        оценки = оценки_по_источникам(деталь)
+        строка_меты = (f'<span class="zt__m">{html.escape(мета)}</span>'
+                       if состав["мета"] and мета else "")
+        if состав.get("строкой"):
+            return self._плитка_строкой(запись, деталь, состав, изо, вариант)
+        тело = (f'<span class="zt__b">{подпись}{строка_меты}</span>'
+                if (подпись or строка_меты) else "")
+        return (f'<a class="zt" data-card-variant="{html.escape(вариант)}"'
+                f' href="{запись["url"]}" title="{html.escape(запись["title"])}">'
+                f'<span class="zt__p">{изо}{бейджи}</span>{тело}{данные}</a>')
+
+    def _плитка_строкой(self, запись: dict, деталь: dict, состав: dict,
+                        изо: str, вариант: str) -> str:
+        """Строчная карточка нижнего блока: миниатюра, название, оценка.
+
+        Оригинальное название показывается только если оно есть и отличается от
+        основного: строка «то же самое серым» ничего не добавляет. Число
+        голосов — рядом с оценкой и только когда источник его прислал.
+        """
+        оригинальное = str(деталь.get("original_name") or "").strip()
+        если_надо = (состав.get("оригинальное") and оригинальное
+                     and оригинальное.casefold() != str(запись["title"]).strip().casefold())
+        подзаголовок = (f'<span class="zt__orig">{html.escape(оригинальное)}</span>'
+                        if если_надо else "")
+        мета = " · ".join(str(ч) for ч in (запись.get("kind"), запись.get("year")) if ч)
+        строка_меты = (f'<span class="zt__m">{html.escape(мета)}</span>'
+                       if состав.get("мета") and мета else "")
+        оценки = _оценки_для_карточки(деталь, состав["оценок"])
+        строка_оценки = ""
         if оценки:
             о = оценки[0]
-            оценка = (f'<span class="zt__r"><span>{html.escape(о["подпись"])} '
-                      f'<b>{html.escape(о["значение"])}</b></span></span>')
-        else:
-            оценка = '<span class="zt__r"><em aria-hidden="true">·</em></span>'
-        return (f'<a class="zt" data-card-variant="{html.escape(вариант)}" href="{запись["url"]}">'
+            голоса = (f'<span class="zt__votes">({о["голоса"]})</span>'
+                      if (состав.get("голоса") and о["голоса"]) else "")
+            строка_оценки = (
+                f'<span class="zt__rate zt__rate--row"'
+                f' data-rating-source="{html.escape(о["ключ"])}"'
+                f' data-rating-value="{html.escape(str(о["исходное"]))}"'
+                f' data-rating-scale="{html.escape(str(о["исходная_шкала"]))}"'
+                + (f' data-rating-votes="{о["голоса"]}"' if о["голоса"] else "")
+                + f'><i aria-hidden="true">{html.escape(о["подпись"])}</i>'
+                f'<b>{html.escape(о["на_десять"])}</b>{голоса}'
+                f'<span class="vh">{html.escape(о["подпись"])}: '
+                f'{html.escape(о["на_десять"])} из 10'
+                + (f", голосов {о['голоса']}" if о["голоса"] else "")
+                + '</span></span>')
+        return (f'<a class="zt zt--row" data-card-variant="{html.escape(вариант)}"'
+                f' href="{запись["url"]}" title="{html.escape(запись["title"])}">'
                 f'<span class="zt__p">{изо}</span>'
-                f'<span class="zt__b"><span class="zt__t">{html.escape(запись["title"])}</span>'
-                f'<span class="zt__m">{html.escape(мета)}</span>{оценка}</span></a>')
+                f'<span class="zt__b">'
+                f'<span class="zt__t">{html.escape(запись["title"])}</span>'
+                f'{подзаголовок}{строка_меты}{строка_оценки}</span></a>')
 
     def карусель(self, ключ: str, набор) -> str:
-        """Hero uses top-shelf card variant; other rails stay catalog-title."""
-        вариант = "top-shelf" if ключ == "hero" else "catalog-title"
+        """Лента первого экрана — компактная карточка, остальные ленты обычные.
+
+        У оригинала под постером ленты только название; состав карточки задаёт
+        вариант контракта, а не правило стиля. Прежде лента рисовала карточку
+        каталога, а CSS прятал у неё мету и оценку: разметка обещала одно,
+        видно было другое.
+        """
+        вариант = "compact" if ключ == "hero" else "catalog-title"
         плитки = "".join(self.плитка(з, вариант=вариант) for з in набор)
         ид = f"rl-{ключ}"
         return (f'<div class="zrl">'
@@ -4365,6 +4606,8 @@ class ВидАнимедиа(ВидОснова):
 
     def плитки(self, набор, *, вариант: str = "catalog-title") -> str:
         extra = " zg--recommendation" if вариант == "recommendation" else ""
+        if вариант == "related-row":
+            extra = " zg--related-row"
         return (f'<div class="zg{extra}" data-card-grid="' + html.escape(вариант) + '">'
                 + "".join(self.плитка(з, вариант=вариант) for з in набор) + "</div>")
 
@@ -4848,7 +5091,7 @@ class ВидАнимедиа(ВидОснова):
             f'data-rec-generated="{gen}" data-rec-fallback="{fb}"'
             f'{extra_attrs}>'
             f'<h2 class="zh zh--sm">{html.escape(АНИМЕДИА_REC_TITLE)}</h2>'
-            f'{self.плитки(похожие, вариант="recommendation")}</section>')
+            f'{self.плитки(похожие, вариант="related-row")}</section>')
 
     def похожие(self, запись: dict, деталь: dict, сколько: int = АНИМЕДИА_REC_MAX_ITEMS) -> list:
         """B10 recommendations: approved snapshot → DETERMINISTIC_METADATA_RELATED_V1 → [].

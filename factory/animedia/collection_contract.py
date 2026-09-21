@@ -27,6 +27,8 @@
 from __future__ import annotations
 
 import hashlib
+
+from . import chronology as хронология
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -158,9 +160,12 @@ class Снимок:
         self.items = items
         self.подробности = подробности or {}
         self.data_revision = revision or self._отпечаток(items)
-        # Порядок по дате публикации считается один раз.
-        self._по_дате = sorted(
-            items, key=lambda з: str(з.get("published_at") or ""), reverse=True)
+        # Порядок «сначала новое» считается один раз и по правилам хронологии
+        # контура: момент времени, факт раньше оценки, канонический ключ.
+        # Прежде здесь сравнивались строки, и на этом снимке это давало
+        # произвол: 4003 записи из 7425 несут одну отметку массовой загрузки,
+        # а сортировка строк среди равных оставляла порядок файла.
+        self._по_дате = хронология.по_добавлению(items)
         self._по_виду: dict[str, list[dict]] = {}
         for з in self._по_дате:
             вид = str(з.get("kind") or "")
@@ -215,14 +220,10 @@ class Снимок:
             д = self.подробности.get(str(з.get("slug") or "")) or {}
             if д.get("playable") is True:
                 готово.append(з)
-        готово.sort(
-            key=lambda з: (
-                self._оценка(з),
-                з.get("published_at") or "",
-                з.get("slug") or "",
-            ),
-            reverse=True,
-        )
+        # Оценка решает первой, дальше — общая хронология контура: она даёт
+        # устойчивый порядок при равных оценках и одинаковых датах.
+        готово.sort(key=lambda з: (self._оценка(з), хронология.ключ_порядка(з)),
+                    reverse=True)
         return готово
 
     def с_эпизодами(self) -> list[dict]:
@@ -299,23 +300,40 @@ class Снимок:
         return [з for з in self._по_дате if з.get("year") == год]
 
     def эпизод_события(self) -> list[dict]:
-        """Настоящие episode events. Без published_at/available_at у эпизода — пусто."""
-        готово = []
+        """Настоящие episode events, упорядоченные по дате появления СЕРИИ.
+
+        Год произведения сюда не подставляется: лента новых серий, собранная по
+        году тайтла, показывает не новые серии, а старые произведения. Порядок
+        задаёт самая свежая дата серии у каждого тайтла; при равных датах
+        действует общий устойчивый ключ хронологии контура.
+
+        Без дат у серий лента пуста — это честное состояние, а не повод
+        подменить её датой добавления тайтла.
+        """
+        собрано: list[tuple[dict, str]] = []
         for з in self._по_дате:
             д = self.подробности.get(str(з.get("slug") or "")) or {}
+            свежайшая = None
             for с in (д.get("seasons") or []):
                 if not isinstance(с, dict):
                     continue
                 for эп in (с.get("episodes") or []):
                     if not isinstance(эп, dict):
                         continue
-                    if эп.get("published_at") or эп.get("available_at"):
-                        готово.append(з)
-                        break
-                else:
-                    continue
-                break
-        return готово
+                    дата = эп.get("published_at") or эп.get("available_at")
+                    момент = хронология.разобрать_момент(дата)
+                    if момент is None:
+                        continue
+                    if свежайшая is None or момент > свежайшая:
+                        свежайшая = момент
+            if свежайшая is not None:
+                собрано.append((з, свежайшая.isoformat()))
+        упорядочено = хронология.по_эпизодам(
+            [{**з, "episode_published_at": дата} for з, дата in собрано])
+        # Наружу отдаются исходные записи: добавленное поле — только ключ
+        # сортировки и в карточку попадать не должно.
+        по_ключу = {хронология.канонический_идентификатор(з): з for з, _ in собрано}
+        return [по_ключу[хронология.канонический_идентификатор(з)] for з in упорядочено]
 
 
 def _карточка(снимок: Снимок, з: dict) -> Карточка:
