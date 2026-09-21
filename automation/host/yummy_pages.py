@@ -79,6 +79,53 @@ def канонический_путь(href: str | None) -> str | None:
         "SPECIAL": "Спецвыпуск"}
 
 
+def _яркость(канал: float) -> float:
+    к = канал / 255.0
+    return к / 12.92 if к <= 0.03928 else ((к + 0.055) / 1.055) ** 2.4
+
+
+def светлота(цвет: str) -> float:
+    """Относительная яркость по WCAG. Непонятный цвет — считается тёмным.
+
+    «Непонятный» трактуется как тёмный намеренно: тогда поверх ляжет светлый
+    текст, а не наоборот, и ошибка разбора не даст белого на белом.
+    """
+    ц = (цвет or "").strip().lstrip("#")
+    if len(ц) == 3:
+        ц = "".join(с * 2 for с in ц)
+    if len(ц) != 6:
+        return 0.0
+    try:
+        r, g, b = (int(ц[i:i + 2], 16) for i in (0, 2, 4))
+    except ValueError:
+        return 0.0
+    return 0.2126 * _яркость(r) + 0.7152 * _яркость(g) + 0.0722 * _яркость(b)
+
+
+def контраст(первый: str, второй: str) -> float:
+    a, b = светлота(первый), светлота(второй)
+    светлее, темнее = max(a, b), min(a, b)
+    return (светлее + 0.05) / (темнее + 0.05)
+
+
+#: Два цвета текста поверх акцента. Не палитра и не вкус: из двух выбирается
+#: тот, что даёт больший контраст с объявленным акцентом домена.
+ТЁМНЫЙ_ТЕКСТ = "#101014"
+СВЕТЛЫЙ_ТЕКСТ = "#ffffff"
+
+
+def текст_на(фон: str) -> str:
+    """Цвет текста поверх заданного фона — по измерению, а не по привычке.
+
+    Белый на акценте `#6d8cff` даёт 3,06 : 1 при норме 4,5 : 1 — измерено
+    axe на 272 узлах страницы `/top/`. Акцент домена при этом менять нельзя:
+    он объявлен профилем и различает три витрины. Меняется то, что можно —
+    цвет текста поверх него.
+    """
+    return (ТЁМНЫЙ_ТЕКСТ if контраст(ТЁМНЫЙ_ТЕКСТ, фон) >= контраст(СВЕТЛЫЙ_ТЕКСТ, фон)
+            else СВЕТЛЫЙ_ТЕКСТ)
+
+
 def _звезда() -> str:
     return ('<svg class="portal-catalog-star" width="14" height="14" '
             'viewBox="0 0 24 24" aria-hidden="true">'
@@ -278,11 +325,17 @@ def первый_экран(в: dict, активный: str = "") -> str:
     r'<meta\s+(?:name="description"|property="og:(?:title|description|type|site_name)")'
     r'[^>]*>', re.I)
 
+#: Приглушение служебного текста — прозрачностью, а не фиксированным цветом.
+#:
+#: Витрина умеет светлую и тёмную тему, и зашитый серый прошёл бы одну и
+#: провалил другую. Прозрачность держит отношение к цвету текста темы. Её
+#: значение поднято с .7 до .85: при .7 подпись давала 3,31 : 1 на светлой
+#: подложке при норме 4,5 : 1 — измерено axe.
 ПУСТО_СТИЛЬ = (
     "<style>.portal-empty{margin:12px 0 28px;padding:22px;border-radius:14px;"
-    "border:1px dashed currentColor;opacity:.7;font-size:15px;line-height:1.5}"
-    ".portal-page-lead{margin:4px 0 18px;opacity:.8;font-size:15px}"
-    ".portal-catalog-meta{margin-top:2px;font-size:12px;opacity:.7}</style>")
+    "border:1px dashed currentColor;opacity:.85;font-size:15px;line-height:1.5}"
+    ".portal-page-lead{margin:4px 0 18px;opacity:.85;font-size:15px}"
+    ".portal-catalog-meta{margin-top:2px;font-size:12px;opacity:.85}</style>")
 
 
 def собрать(оболочка: dict, заголовок: str, лид: str, тело: str,
@@ -296,26 +349,37 @@ def собрать(оболочка: dict, заголовок: str, лид: str,
     в = вариант or {}
     токены = ""
     if в:
+        акцент = в.get("акцент", "#ff5c8a")
+        # Цвет текста поверх акцента выбирается измерением контраста, а не
+        # привычкой. Белый на `#6d8cff` давал 3,06 : 1 при норме 4,5 : 1 —
+        # 272 узла на `/top/` по axe. Сам акцент не меняется: он объявлен
+        # профилем домена и различает три витрины.
+        на_акценте = текст_на(акцент)
         токены = (
-            "<style>:root{--sf-accent:" + в.get("акцент", "#ff5c8a") + ";"
-            "--sf-accent-2:" + в.get("акцент2", "#ffb347") + "}"
+            "<style>:root{--sf-accent:" + акцент + ";"
+            "--sf-accent-2:" + в.get("акцент2", "#ffb347") + ";"
+            "--sf-on-accent:" + на_акценте + "}"
             ".portal-catalog-tiles{grid-template-columns:"
             + в.get("плотность", "repeat(auto-fill,minmax(150px,1fr))") + "}"
             ".portal-section-bar{border-left:4px solid var(--sf-accent);padding-left:10px}"
+            # Номер места и подпись оценки — содержательный текст, а не
+            # украшение: акцент на светлой подложке давал 2,36 : 1, а
+            # полупрозрачность — 3,31 : 1. Оба берут цвет текста страницы.
             ".sf-rank{display:inline-block;margin-right:6px;font-weight:800;"
-            "color:var(--sf-accent)}"
+            "color:inherit}"
             ".sf-rates{display:inline-flex;gap:6px;flex-wrap:wrap}"
-            ".sf-rate{font-size:12px;opacity:.85}.sf-rate small{opacity:.7}"
+            ".sf-rate{font-size:12px}.sf-rate small{color:inherit}"
             ".sf-tabs{display:flex;gap:8px;margin:8px 0 14px}"
             ".sf-tabs a{padding:6px 12px;border:1px solid var(--sf-accent);"
             "border-radius:8px;font-size:13px}"
-            ".sf-tabs a[aria-current]{background:var(--sf-accent);color:#fff}"
+            ".sf-tabs a[aria-current]{background:var(--sf-accent);"
+            "color:var(--sf-on-accent)}"
             ".sf-find{display:flex;gap:8px;margin:6px 0 12px;max-width:560px}"
             ".sf-find input{flex:1 1 auto;min-width:0;padding:9px 12px;border-radius:9px;"
             "border:1px solid color-mix(in srgb,currentColor 25%,transparent);"
             "background:transparent;color:inherit;font:inherit}"
             ".sf-find button{padding:9px 16px;border-radius:9px;border:0;cursor:pointer;"
-            "background:var(--sf-accent);color:#fff;font:inherit}"
+            "background:var(--sf-accent);color:var(--sf-on-accent);font:inherit}"
             ".sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}"
             "</style>")
     мета = ""
