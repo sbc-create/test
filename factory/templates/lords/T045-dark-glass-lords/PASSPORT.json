@@ -4,9 +4,9 @@
   "slug": "dark-glass-lords",
   "version": "1.0.0",
   "family": "modern",
-  "package_digest": "469a5362dafe71da545553158b3f99e015415669a473ff764ef12574e8f8401f",
+  "package_digest": "f32cabbca45ca9b319c03b8c68e64345d205f04e1ee0871a61f2e51373210633",
   "declared": {
-    "design_intent": "Панели-доска, мозаика, витрина, указатель.",
+    "design_intent": "Непрозрачные панели, в каждой — постеры своего раздела, а не текстовый перечень.",
     "primary_user_journey": "переходить по панелям",
     "home_signature": [
       "board",
@@ -96,5 +96,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.834183+00:00"
+  "issued_at_utc": "2026-09-21T18:02:39.729984+00:00"
 }
