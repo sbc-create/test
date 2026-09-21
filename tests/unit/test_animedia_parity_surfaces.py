@@ -97,19 +97,24 @@ def frontend(tmp_path, monkeypatch):
 
 
 class TestAnimediaParitySurfaces:
-    def test_logo_splits_dia_accent(self, frontend):
+    def test_logo_accents_the_brand_prefix(self, frontend):
+        # BLOCK_02 taxonomy header (dfd8e6b) moved the accent from the trailing
+        # "dia" to the leading "Ani": the brand reads Ani+media, and no foreign
+        # icon or Premium badge rides along with it.
         _, вид = frontend
         html = вид.логотип()
         assert 'class="zhd__logo"' in html
-        assert "<b>dia</b>" in html
-        assert "Anime" in html
+        assert "<b>Ani</b>media" in html
+        assert "premium" not in html.lower()
 
-    def test_home_has_hero_carousel_from_catalog(self, frontend):
+    def test_home_hero_is_not_built_from_the_catalog(self, frontend):
+        # The hero shelf is curated, so it may only come from an approved
+        # WeeklyPopularSnapshot (BLOCK_02). Without one it collapses and
+        # declares the gap instead of borrowing rows from the catalog.
         _, вид = frontend
         html = вид.главная()
-        assert 'class="ahero"' in html
-        assert 'class="zrl__track"' in html
-        assert html.count('class="zt"') >= 8  # posters in hero + grids
+        assert 'data-popular-gap="1"' in html
+        assert 'class="ahero"' not in html or "ahero--gap" in html
         assert 'Мы в Telegram' not in html
         assert 'class="premium"' not in html.lower()
         assert "/telegram" not in html.lower()
@@ -135,8 +140,14 @@ class TestAnimediaParitySurfaces:
         assert вид.верхняя_карусель([]) == ""
 
     def test_shell_includes_hamburger(self, frontend):
+        # BLOCK_01/BLOCK_02 renamed the toggle from data-nav-toggle to
+        # data-drawer-toggle and gave the drawer its own close and backdrop
+        # hooks. The shell still has to ship a reachable mobile menu.
         _, вид = frontend
         html = вид.оболочка("<p>x</p>", "t", "/", актив="/")
-        assert "data-nav-toggle" in html
+        assert "data-drawer-toggle" in html
+        assert "data-drawer-close" in html
+        assert "data-drawer-backdrop" in html
         assert 'id="zhd-nav"' in html
-        assert "<b>dia</b>" in html
+        assert 'id="zhd-drawer"' in html
+        assert "<b>Ani</b>media" in html

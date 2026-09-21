@@ -37,8 +37,14 @@ class TestBlock05TitleInfo:
             assert html.count('id="title-desc"') == 1
 
     def test_css_facts_and_compact_poster(self, fe):
+        # B07 of PARITY-03 (a80f306) replaced the fluid clamp(180px,13vw,220px)
+        # with a declared 2:3 frame plus per-breakpoint bounds. The poster is
+        # still compact and still cannot grow from its own image — the guard now
+        # reads the aspect ratio and the bounds instead of the clamp string.
         mod, _, _ = fe
         css = mod.АНИМЕДИА_СТИЛЬ
         assert ".ztitle__facts" in css
-        assert "clamp(180px,13vw,220px)" in css
+        assert "aspect-ratio:2/3" in css
+        assert "max-width:240px" in css
+        assert "max-width:112px" in css
         assert "max-width:70ch" in css

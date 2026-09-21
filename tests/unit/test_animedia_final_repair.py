@@ -184,11 +184,16 @@ class TestAnimediaFinalRepair:
         assert 'rel="canonical" href="https://animedia.icu/"' in hi
 
     def test_default_playable_episode_selected(self, fe):
+        # Owner decision ANIMEDIA-B10-B16-20260920-01 replaced the earlier
+        # "latest available" default with FIRST_PLAYABLE_DETERMINISTIC: the hub
+        # binds the first confirmed playable episode after (season, episode) ASC.
+        # Of the three playable episodes of season 1 that is episode 1, not 3.
         mod, _, _ = fe
+        assert mod.АНИМЕДИА_DEFAULT_EPISODE_POLICY == "FIRST_PLAYABLE_DETERMINISTIC"
         сезон, эпизод = mod.выбрать_доступную_серию(
             {"seasons": [{"n": 1, "eps": 5, "avail": 3}]}
         )
-        assert (сезон, эпизод) == (1, 3)
+        assert (сезон, эпизод) == (1, 1)
 
     def test_player_copy_has_no_provider_diagnostics(self, fe):
         mod, catalog, details = fe

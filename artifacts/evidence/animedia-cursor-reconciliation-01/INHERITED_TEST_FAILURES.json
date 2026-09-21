@@ -1,0 +1,133 @@
+{
+  "stage": "ANIMEDIA-CURSOR-WORK-RECONCILIATION-01",
+  "finding": "Blocks B01-B11 of ANIMEDIA-BLOCKWISE-PARITY-03 were recorded as PASS_LOCAL_PENDING_LIVE while 15 tests from superseded stages, covering the very same surfaces, stayed red and unclassified. Nobody had reconciled them.",
+  "baseline_proof": {
+    "method": "clean detached worktree at the pre-repair commit, same selection",
+    "commit": "dd123c5",
+    "selection": "pytest tests/unit -k animedia",
+    "result": "15 failed, 240 passed, 2 skipped",
+    "conclusion": "All 15 pre-date this session. Zero were caused by B12 or by any repair here."
+  },
+  "policy": [
+    "no failing test was deleted",
+    "no failing test was skipped or xfailed",
+    "no test was weakened: every repaired assertion still proves the same property, expressed against the contract that superseded it",
+    "each repair names the commit that deliberately changed the behaviour"
+  ],
+  "failures": [
+    {
+      "test": "tests/unit/test_animedia_final_repair.py::test_default_playable_episode_selected",
+      "expected_before": "(1, 3) — latest available episode",
+      "actual": "(1, 1) — first playable episode",
+      "classification": "SUPERSEDED_BY_OWNER_DECISION",
+      "superseded_by": "owner decision ANIMEDIA-B10-B16-20260920-01, policy FIRST_PLAYABLE_DETERMINISTIC",
+      "covered_now_by": "tests/unit/test_animedia_parity03_b08.py",
+      "action": "REPAIRED — asserts the owner-approved policy constant and the first playable episode"
+    },
+    {
+      "test": "tests/unit/test_animedia_followup_player_collections.py::test_hub_picks_latest_available_episode",
+      "expected_before": "(2, 104)",
+      "actual": "(2, 1)",
+      "classification": "SUPERSEDED_BY_OWNER_DECISION",
+      "superseded_by": "owner decision ANIMEDIA-B10-B16-20260920-01",
+      "action": "REPAIRED and renamed to test_hub_picks_first_playable_episode"
+    },
+    {
+      "test": "tests/unit/test_animedia_followup_player_collections.py::test_hub_selects_latest_available_episode",
+      "expected_before": "(2, 104)",
+      "actual": "(2, 1)",
+      "classification": "SUPERSEDED_BY_OWNER_DECISION",
+      "superseded_by": "owner decision ANIMEDIA-B10-B16-20260920-01",
+      "action": "REPAIRED and renamed to test_hub_selects_first_playable_episode"
+    },
+    {
+      "test": "tests/unit/test_animedia_followup_player_collections.py::test_home_css_locks_hero_card_width",
+      "expected_before": "width:152px;height:214px and flex:0 0 152px;width:152px",
+      "actual": "flex:0 0 calc((100% - 144px)/10) — ten equal tracks",
+      "classification": "SUPERSEDED_BY_BLOCK_B02",
+      "superseded_by": "b74739f fix(animedia): B02 weekly popular approved snapshot only",
+      "action": "REPAIRED — still proves the card cannot size itself from content, now against the computed track"
+    },
+    {
+      "test": "tests/unit/test_animedia_block_02_top_shelf.py::test_ahero_fixed_poster_contract",
+      "expected_before": "fixed 152x214 hero poster",
+      "classification": "SUPERSEDED_BY_BLOCK_B02",
+      "superseded_by": "b74739f",
+      "action": "REPAIRED and renamed to test_ahero_poster_width_is_locked_not_content_sized"
+    },
+    {
+      "test": "tests/unit/test_animedia_block_02_top_shelf.py::test_home_renders_ahero_when_posters_exist",
+      "expected_before": "posters in the catalog imply a rendered hero carousel",
+      "actual": "hero collapses with data-popular-gap=1",
+      "classification": "SUPERSEDED_BY_BLOCK_B02",
+      "superseded_by": "b74739f — a curated hero may only come from an approved WeeklyPopularSnapshot",
+      "note": "The old expectation is exactly what PARITY-03 outlawed: it would fabricate a curated shelf out of the catalog.",
+      "action": "REPAIRED and renamed to test_home_hero_needs_an_approved_snapshot_not_just_posters — now guards the shortcut closed"
+    },
+    {
+      "test": "tests/unit/test_animedia_block_05_title_info.py::test_css_facts_and_compact_poster",
+      "expected_before": "clamp(180px,13vw,220px)",
+      "actual": "declared 2:3 frame with per-breakpoint bounds 240px / 180px / 112px",
+      "classification": "SUPERSEDED_BY_BLOCK_B07",
+      "superseded_by": "a80f306 fix(animedia): B07 title passport description ratings and compact gap",
+      "action": "REPAIRED — asserts aspect ratio and bounds instead of the clamp string"
+    },
+    {
+      "test": "tests/unit/test_animedia_parity_surfaces.py::test_logo_splits_dia_accent",
+      "expected_before": "<b>dia</b>",
+      "actual": "<b>Ani</b>media",
+      "classification": "SUPERSEDED_BY_BLOCK_B02",
+      "superseded_by": "dfd8e6b fix(animedia): BLOCK_02 taxonomy header and side drawer",
+      "action": "REPAIRED and renamed to test_logo_accents_the_brand_prefix"
+    },
+    {
+      "test": "tests/unit/test_animedia_parity_surfaces.py::test_home_has_hero_carousel_from_catalog",
+      "classification": "SUPERSEDED_BY_BLOCK_B02",
+      "superseded_by": "b74739f",
+      "action": "REPAIRED and renamed to test_home_hero_is_not_built_from_the_catalog"
+    },
+    {
+      "test": "tests/unit/test_animedia_parity_surfaces.py::test_shell_includes_hamburger",
+      "expected_before": "data-nav-toggle",
+      "actual": "data-drawer-toggle, data-drawer-close, data-drawer-backdrop, id=zhd-drawer",
+      "classification": "SUPERSEDED_BY_BLOCK_B01_B02",
+      "superseded_by": "dfd8e6b, 830a32c",
+      "action": "REPAIRED — asserts the current drawer hooks, and now also the close and backdrop hooks the old test never checked"
+    },
+    {
+      "test": "tests/unit/test_animedia_visual_final_closure.py::test_design_124_tokens_and_six_col_grid",
+      "expected_before": ".ahero .zt__p{border-radius:10px;width:152px;height:214px",
+      "actual": ".ahero .zt__p{border-radius:10px;width:100%;aspect-ratio:2/3",
+      "classification": "SUPERSEDED_BY_BLOCK_B02",
+      "superseded_by": "b74739f",
+      "action": "REPAIRED"
+    },
+    {
+      "test": "tests/unit/test_animedia_visual_final_closure.py::test_empty_ad_collapse_css",
+      "expected_before": "exact substring '.zad,...{display:none;height:0;margin:0'",
+      "actual": "the same rule, strengthened with min-height:0 and max-height:0",
+      "classification": "STALE_EXACT_STRING_ASSERTION",
+      "note": "The rule got stricter, not weaker; the exact-substring form could not see that.",
+      "action": "REPAIRED — asserts the eight collapse properties individually"
+    },
+    {
+      "test": "tests/unit/test_animedia_visual_final_closure.py::test_css_isolation_no_global_hidden_override",
+      "classification": "FALSE_POSITIVE_IN_THE_TEST",
+      "note": "The check was a substring test for '[hidden]{display', which also matches the tail of every correctly scoped selector such as '.zhd__drawer[hidden]{display:…'. Inspection of the parsed stylesheet found NO unscoped [hidden] rule: every one is owned by .zhd__dd-panel, .zhd__backdrop, .zhd__drawer, .zpl [data-player-state], .ahero or .zsec--rel-gap. The isolation property the test wanted actually holds.",
+      "action": "REPAIRED — matches on selector boundaries, so a genuinely unscoped rule would still fail it"
+    },
+    {
+      "test": "tests/unit/test_lords_poster_and_banner_layers.py::test_заглушка_не_перекрывает_загруженный_постер[animedia-1.2.0]",
+      "classification": "REAL_DEFECT_IN_SOURCE",
+      "severity": "P2",
+      "note": "This guard comes from a defect measured on live animedia.icu and animedia.space (TEMPLATE-POSTDEPLOY-ACCEPTANCE-01, 6/6 on two domains and three widths): the .zt__none placeholder is position:absolute, so a poster without its own layer is painted over by the 'poster failed to load' caption. The zona stylesheet carries the explicit z-index:1; the animedia one did not. In practice the poster still won, but only because the <img> follows the placeholder in document order — an accident of markup order, which is precisely the fragility the guard exists to forbid.",
+      "action": "SOURCE REPAIRED — z-index:1 added to .ztitle__poster img/.zhead__img and .aep-ctx__poster img/.zhead__img, making the layer explicit. The test's selector lookup was widened to the two scoped Animedia containers, because .zhead__ps is display:contents in this design and the frame is owned by .ztitle__poster and .aep-ctx__poster."
+    }
+  ],
+  "result_after_repairs": {
+    "selection": "pytest tests/unit -k animedia",
+    "result": "276 passed, 2 skipped, 0 failed",
+    "consecutive_stable_runs": 2,
+    "delta_vs_baseline": "+36 passing (21 new B12 tests + 15 repaired), 0 failing"
+  }
+}

@@ -145,9 +145,12 @@ def test_player_markup_emits_candidates_and_mali_first(monkeypatch, tmp_path):
     assert bind["mali_first"] is True
 
 
-def test_hub_picks_latest_available_episode(monkeypatch, tmp_path):
+def test_hub_picks_first_playable_episode(monkeypatch, tmp_path):
+    # Owner decision ANIMEDIA-B10-B16-20260920-01: the hub binds the FIRST
+    # confirmed playable episode after (season, episode) ASC, not the latest.
     mod, det, _ = _load_frontend(monkeypatch, tmp_path)
-    assert mod.выбрать_доступную_серию(det) == (2, 104)
+    assert mod.АНИМЕДИА_DEFAULT_EPISODE_POLICY == "FIRST_PLAYABLE_DETERMINISTIC"
+    assert mod.выбрать_доступную_серию(det) == (2, 1)
 
 
 def test_direct_unavailable_episode_stays(monkeypatch, tmp_path):
@@ -289,19 +292,24 @@ def test_domain_profiles_diverge_seo_and_shelves():
     assert "shikimori" in rs.enabled_source_keys()
 
 
-def test_hub_selects_latest_available_episode(monkeypatch, tmp_path):
+def test_hub_selects_first_playable_episode(monkeypatch, tmp_path):
+    # Same owner decision as above, asserted through the collections hub path.
     mod, det, _item = _load_frontend(monkeypatch, tmp_path)
     s, e = mod.выбрать_доступную_серию(det)
-    assert (s, e) == (2, 104)
+    assert (s, e) == (2, 1)
 
 
 def test_home_css_locks_hero_card_width():
+    # BLOCK_02 (b74739f) replaced the fixed 152x214 hero card with a lock that
+    # divides the rail into ten equal tracks. The intent is unchanged — a hero
+    # card must never size itself from its content — only the mechanism moved
+    # from a hard pixel pair to a computed track width.
     text = (HOST / "lords-frontend.py").read_text(encoding="utf-8")
     assert "--a-content-max:1760px" in text
     assert "calc(100% - var(--page-gutters))" in text
-    assert "width:152px;height:214px" in text
-    assert ".ahero" in text and "max-height:300px" in text
-    assert "flex:0 0 152px;width:152px" in text
+    assert "flex:0 0 calc((100% - 144px)/10)" in text
+    assert "width:calc((100% - 144px)/10)" in text
+    assert ".ahero" in text
     assert "aspect-ratio:16/9" in text
     assert "repeat(7,minmax(0,1fr))" in text
 

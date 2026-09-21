@@ -41,11 +41,18 @@ def test_rendered_variants_are_declared(fe):
     catalog_html = вид.список("/catalog", {})
     found = set(re.findall(r'data-card-variant="([^"]+)"', home + catalog_html))
     declared = set(json.loads((EV / "CARD_VARIANT_REGISTRY.json").read_text())["variants"])
+    # The invariant that matters: nothing renders a variant the registry does
+    # not declare.
     undeclared = found - declared
     assert undeclared == set(), undeclared
-    assert "top-shelf" in found
     assert "catalog-title" in found
-    assert "episode-row" in found
+    # top-shelf and episode-row are data-gated under PARITY-03: the hero needs
+    # an approved WeeklyPopularSnapshot (B02) and the feed needs provider
+    # playable events (B03). This fixture has neither, so both blocks collapse
+    # honestly and their cards are absent by design. They must stay declared
+    # for the day the data arrives; that they render then is proven in
+    # test_animedia_parity03_b02.py and test_animedia_parity03_b03.py.
+    assert {"top-shelf", "episode-row"} <= declared
 
 
 def test_grid_css_prevents_last_row_stretch(fe):

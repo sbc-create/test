@@ -2132,7 +2132,7 @@ height:auto;min-height:0}
 @media(min-width:900px){.ztitle__poster{margin:0;max-width:none;width:180px}}
 @media(min-width:1200px){.ztitle__poster{width:240px}}
 @media(max-width:599px){.ztitle__poster{max-width:112px;margin:0}}
-.ztitle__poster img,.ztitle__poster .zhead__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;max-width:none}
+.ztitle__poster img,.ztitle__poster .zhead__img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;max-width:none}
 .ztitle__main{min-width:0;display:flex;flex-direction:column;gap:10px}
 .ztitle__head{display:flex;gap:14px;align-items:flex-start;justify-content:space-between}
 .ztitle__head-text{min-width:0;flex:1}
@@ -2205,7 +2205,7 @@ padding:12px;border-radius:var(--a-radius-shell);background:var(--a-page);box-sh
 align-items:start;max-width:100%}
 @media(min-width:900px){.aep-ctx{grid-template-columns:120px minmax(0,1fr);gap:16px 20px;padding:14px 16px}}
 .aep-ctx__poster{aspect-ratio:2/3;border-radius:10px;overflow:hidden;background:var(--a-surf);position:relative;width:100%}
-.aep-ctx__poster img,.aep-ctx__poster .zhead__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.aep-ctx__poster img,.aep-ctx__poster .zhead__img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover}
 .aep-ctx__main{min-width:0;display:flex;flex-direction:column;gap:8px}
 .aep-ctx__main h1{font-size:clamp(20px,1.8vw,26px);line-height:1.25;margin:0}
 .aep-ctx__ep{font-size:14px;font-weight:700;color:var(--a-acc);margin:0}

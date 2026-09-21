@@ -31,16 +31,27 @@ class TestVisualFinalClosure:
         assert "min-width:1800px){.zg{grid-template-columns:repeat(10" in css
         assert "min-width:1024px){.zg{grid-template-columns:repeat(5" in css
         assert "max-height:320px" in css
-        assert ".ahero .zt__p{border-radius:10px;width:152px;height:214px" in css
+        # BLOCK_02 (b74739f) swapped the hero poster's hard 152x214 for a
+        # declared 2:3 frame that fills its track. The frame is still declared,
+        # so the poster still cannot be sized by the image it loads.
+        assert ".ahero .zt__p{border-radius:10px;width:100%;aspect-ratio:2/3" in css
         assert ".ahome-eps .aeps__thumb{width:60px" in css
         assert "[data-player-state][hidden]" in css
         assert "height:100% !important" in css
         assert "img,video,iframe" not in mod.АНИМЕДИА_СТИЛЬ
 
     def test_empty_ad_collapse_css(self, fe):
+        # The collapse rule later gained min-height/max-height, so an exact
+        # substring no longer matches. Assert the properties instead: a disabled
+        # slot must take no space at all, not merely be invisible.
         mod, _, _ = fe
         css = mod.АНИМЕДИА_СТИЛЬ
-        assert '.zad,.zad-home,.zad-mid,.zad-title{display:none;height:0;margin:0' in css
+        начало = css.find(".zad,.zad-home,.zad-mid,.zad-title{")
+        assert начало >= 0, "ad slots have no collapse rule"
+        правило = css[начало: css.find("}", начало) + 1]
+        for свойство in ("display:none", "height:0", "min-height:0", "max-height:0",
+                         "margin:0", "padding:0", "border:0", "overflow:hidden"):
+            assert свойство in правило, (свойство, правило)
 
     def test_home_has_collapsed_ad_slots(self, fe):
         mod, catalog, details = fe
@@ -151,8 +162,21 @@ class TestVisualFinalClosure:
         assert "zwrap--catalog" in html
 
     def test_css_isolation_no_global_hidden_override(self, fe):
+        """No unscoped `[hidden]` rule — collapse rules must name their owner.
+
+        The earlier substring form of this check also matched the tail of every
+        scoped selector (`.zhd__drawer[hidden]{display…`), so it failed on rules
+        that are exactly what the isolation contract wants. Match on selector
+        boundaries instead: `[hidden]` may only appear attached to a class, an
+        element or another attribute, never standing alone.
+        """
+        import re
+
         mod, _, _ = fe
         css = mod.АНИМЕДИА_СТИЛЬ
-        assert "[hidden]{display" not in css.replace(
-            ".zpl [data-player-state][hidden],.zpl__s[hidden]{display:none !important}", "")
+        безхозные = [
+            m.group(0)
+            for m in re.finditer(r"(?:^|[,{}\s])\[hidden\][^{,]*\{", css)
+        ]
+        assert безхозные == [], безхозные
         assert "iframe{max-width:100%;height:auto" not in css
