@@ -1,0 +1,361 @@
+{
+  "LIVE_TTFB_P50_MS": 1305.9,
+  "LIVE_TTFB_P95_MS": 7558.4,
+  "LIVE_TTFB_P95_LT_2_5S": 0,
+  "rows": [
+    {
+      "path": "/",
+      "cold_ms": 1523.2831249013543,
+      "p50_ms": 1482.1982940193266,
+      "p95_ms": 1526.9803691189736,
+      "samples": [
+        {
+          "ms": 1523.2831249013543,
+          "status": 200,
+          "bytes": 85929,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 1370.7654420286417,
+          "status": 200,
+          "bytes": 85929,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 1440.5490891076624,
+          "status": 200,
+          "bytes": 85929,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 1356.9854549132288,
+          "status": 200,
+          "bytes": 85929,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 1606.5514348447323,
+          "status": 200,
+          "bytes": 85929,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 1526.9803691189736,
+          "status": 200,
+          "bytes": 85929,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 1523.5365249682218,
+          "status": 200,
+          "bytes": 85929,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 1482.1982940193266,
+          "status": 200,
+          "bytes": 85929,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        }
+      ],
+      "last_status": 200,
+      "last_bytes": 85929,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "final": "https://zonafilm.space/"
+    },
+    {
+      "path": "/catalog/",
+      "cold_ms": 407.17282705008984,
+      "p50_ms": 400.0509041361511,
+      "p95_ms": 472.57528686895967,
+      "samples": [
+        {
+          "ms": 407.17282705008984,
+          "status": 200,
+          "bytes": 99048,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 477.6701519731432,
+          "status": 200,
+          "bytes": 99048,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 394.59892990998924,
+          "status": 200,
+          "bytes": 99048,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 395.11179085820913,
+          "status": 200,
+          "bytes": 99048,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 389.80821007862687,
+          "status": 200,
+          "bytes": 99048,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 400.0509041361511,
+          "status": 200,
+          "bytes": 99048,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 459.4297609291971,
+          "status": 200,
+          "bytes": 99048,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 472.57528686895967,
+          "status": 200,
+          "bytes": 99048,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        }
+      ],
+      "last_status": 200,
+      "last_bytes": 99048,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "final": "https://zonafilm.space/catalog/"
+    },
+    {
+      "path": "/search/?q=test",
+      "cold_ms": 8139.380923006684,
+      "p50_ms": 7303.376620169729,
+      "p95_ms": 7558.381178183481,
+      "samples": [
+        {
+          "ms": 8139.380923006684,
+          "status": 200,
+          "bytes": 66351,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 7429.992884164676,
+          "status": 200,
+          "bytes": 66351,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 7224.508801009506,
+          "status": 200,
+          "bytes": 66351,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 7837.753916857764,
+          "status": 200,
+          "bytes": 66351,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 7558.381178183481,
+          "status": 200,
+          "bytes": 66351,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 7063.613935140893,
+          "status": 200,
+          "bytes": 66351,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 7303.376620169729,
+          "status": 200,
+          "bytes": 66351,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 7120.0129999779165,
+          "status": 200,
+          "bytes": 66351,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        }
+      ],
+      "last_status": 200,
+      "last_bytes": 66351,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "final": "https://zonafilm.space/search/?q=test"
+    },
+    {
+      "path": "/title/v-lovushke/",
+      "cold_ms": 1663.6945710051805,
+      "p50_ms": 1305.8956728782505,
+      "p95_ms": 1368.606555974111,
+      "samples": [
+        {
+          "ms": 1663.6945710051805,
+          "status": 200,
+          "bytes": 63761,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 1135.6594660319388,
+          "status": 200,
+          "bytes": 63761,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 1090.0110038928688,
+          "status": 200,
+          "bytes": 63761,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 1534.1507021803409,
+          "status": 200,
+          "bytes": 63761,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 1368.606555974111,
+          "status": 200,
+          "bytes": 63761,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 1179.7808650881052,
+          "status": 200,
+          "bytes": 63761,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 1343.339717015624,
+          "status": 200,
+          "bytes": 63761,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 1305.8956728782505,
+          "status": 200,
+          "bytes": 63761,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        }
+      ],
+      "last_status": 200,
+      "last_bytes": 63761,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "final": "https://zonafilm.space/title/v-lovushke/"
+    },
+    {
+      "path": "/title/chasha-vesny/season-1/episode-1/",
+      "cold_ms": 637.0631449390203,
+      "p50_ms": 620.7838449627161,
+      "p95_ms": 655.7257929816842,
+      "samples": [
+        {
+          "ms": 637.0631449390203,
+          "status": 200,
+          "bytes": 68807,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 620.7838449627161,
+          "status": 200,
+          "bytes": 68807,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 655.7257929816842,
+          "status": 200,
+          "bytes": 68807,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 919.9331100098789,
+          "status": 200,
+          "bytes": 68807,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 593.2519929483533,
+          "status": 200,
+          "bytes": 68807,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 621.4696171227843,
+          "status": 200,
+          "bytes": 68807,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 618.7173391226679,
+          "status": 200,
+          "bytes": 68807,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        },
+        {
+          "ms": 528.2022901810706,
+          "status": 200,
+          "bytes": 68807,
+          "build": "20260920T212359Z-39dc16ed-nova",
+          "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7"
+        }
+      ],
+      "last_status": 200,
+      "last_bytes": 68807,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "final": "https://zonafilm.space/title/chasha-vesny/season-1/episode-1/"
+    }
+  ],
+  "HTTP_5XX_IN_PERF": 0,
+  "CAUSE_ROUTE": "/search/",
+  "CAUSE": "Full-catalog O(n) ranking in Данные.искать; local :9120 ~8.5s/query",
+  "NON_SEARCH_P95_MS": 1526.9803691189736
+}

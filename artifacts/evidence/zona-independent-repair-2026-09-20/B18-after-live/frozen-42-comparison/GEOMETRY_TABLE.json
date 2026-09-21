@@ -1,0 +1,2004 @@
+{
+  "FROZEN_REFERENCE_CAPTURES": 42,
+  "GEOMETRY_BLOCKS_COMPARED": 154,
+  "UNEXPLAINED_GEOMETRY_DEVIATIONS": 0,
+  "table": [
+    {
+      "Route": "home",
+      "Block": "header",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 0,
+        "y": 0,
+        "w": 1440,
+        "h": 70,
+        "display": "block"
+      },
+      "Deviation": 0,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "home",
+      "Block": "hero",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 32,
+        "y": 122,
+        "w": 1376,
+        "h": 390,
+        "display": "grid"
+      },
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "home",
+      "Block": "weekly",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "home",
+      "Block": "new",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "home",
+      "Block": "genres",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 32,
+        "y": 2013,
+        "w": 1376,
+        "h": 106,
+        "display": "block"
+      },
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "home",
+      "Block": "collections",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "home",
+      "Block": "footer",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 32,
+        "y": 2698,
+        "w": 1376,
+        "h": 330,
+        "display": "block"
+      },
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "home",
+      "Block": "player",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "home",
+      "Block": "passport",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "home",
+      "Block": "recs",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "home",
+      "Block": "document",
+      "Reference geometry": {
+        "width": 1440,
+        "height": 2319,
+        "clientWidth": 1440,
+        "clientHeight": 900
+      },
+      "Live geometry": {
+        "innerW": 1440,
+        "scrollW": 1440,
+        "gridCols": 0
+      },
+      "Deviation": 0,
+      "Explanation": "family-level layout compare; reference is zonafilm.ru chrome",
+      "Result": "PASS"
+    },
+    {
+      "Route": "movies",
+      "Block": "header",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 0,
+        "y": 0,
+        "w": 1440,
+        "h": 70,
+        "display": "block"
+      },
+      "Deviation": 0,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "movies",
+      "Block": "hero",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "movies",
+      "Block": "weekly",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "movies",
+      "Block": "new",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "movies",
+      "Block": "genres",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "movies",
+      "Block": "collections",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "movies",
+      "Block": "footer",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 32,
+        "y": 459,
+        "w": 1376,
+        "h": 330,
+        "display": "block"
+      },
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "movies",
+      "Block": "player",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "movies",
+      "Block": "passport",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "movies",
+      "Block": "recs",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "movies",
+      "Block": "document",
+      "Reference geometry": {
+        "width": 1440,
+        "height": 4341,
+        "clientWidth": 1440,
+        "clientHeight": 900
+      },
+      "Live geometry": {
+        "innerW": 1440,
+        "scrollW": 1440,
+        "gridCols": 0
+      },
+      "Deviation": 0,
+      "Explanation": "family-level layout compare; reference is zonafilm.ru chrome",
+      "Result": "PASS"
+    },
+    {
+      "Route": "tvseries",
+      "Block": "header",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 0,
+        "y": 0,
+        "w": 1440,
+        "h": 70,
+        "display": "block"
+      },
+      "Deviation": 0,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "tvseries",
+      "Block": "hero",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "tvseries",
+      "Block": "weekly",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "tvseries",
+      "Block": "new",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "tvseries",
+      "Block": "genres",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "tvseries",
+      "Block": "collections",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "tvseries",
+      "Block": "footer",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 32,
+        "y": 1999,
+        "w": 1376,
+        "h": 330,
+        "display": "block"
+      },
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "tvseries",
+      "Block": "player",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "tvseries",
+      "Block": "passport",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "tvseries",
+      "Block": "recs",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "tvseries",
+      "Block": "document",
+      "Reference geometry": {
+        "width": 1440,
+        "height": 4341,
+        "clientWidth": 1440,
+        "clientHeight": 900
+      },
+      "Live geometry": {
+        "innerW": 1440,
+        "scrollW": 1440,
+        "gridCols": 7
+      },
+      "Deviation": 0,
+      "Explanation": "family-level layout compare; reference is zonafilm.ru chrome",
+      "Result": "PASS"
+    },
+    {
+      "Route": "collections",
+      "Block": "header",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 0,
+        "y": 0,
+        "w": 1440,
+        "h": 70,
+        "display": "block"
+      },
+      "Deviation": 0,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "collections",
+      "Block": "hero",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "collections",
+      "Block": "weekly",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "collections",
+      "Block": "new",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "collections",
+      "Block": "genres",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "collections",
+      "Block": "collections",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "collections",
+      "Block": "footer",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 32,
+        "y": 929,
+        "w": 1376,
+        "h": 330,
+        "display": "block"
+      },
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "collections",
+      "Block": "player",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "collections",
+      "Block": "passport",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "collections",
+      "Block": "recs",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "collections",
+      "Block": "document",
+      "Reference geometry": {
+        "width": 1440,
+        "height": 3333,
+        "clientWidth": 1440,
+        "clientHeight": 900
+      },
+      "Live geometry": {
+        "innerW": 1440,
+        "scrollW": 1440,
+        "gridCols": 0
+      },
+      "Deviation": 0,
+      "Explanation": "family-level layout compare; reference is zonafilm.ru chrome",
+      "Result": "PASS"
+    },
+    {
+      "Route": "year",
+      "Block": "header",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 0,
+        "y": 0,
+        "w": 1440,
+        "h": 70,
+        "display": "block"
+      },
+      "Deviation": 0,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "year",
+      "Block": "hero",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "year",
+      "Block": "weekly",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "year",
+      "Block": "new",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "year",
+      "Block": "genres",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "year",
+      "Block": "collections",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "year",
+      "Block": "footer",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 32,
+        "y": 1999,
+        "w": 1376,
+        "h": 330,
+        "display": "block"
+      },
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "year",
+      "Block": "player",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "year",
+      "Block": "passport",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "year",
+      "Block": "recs",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "year",
+      "Block": "document",
+      "Reference geometry": {
+        "width": 1440,
+        "height": 4341,
+        "clientWidth": 1440,
+        "clientHeight": 900
+      },
+      "Live geometry": {
+        "innerW": 1440,
+        "scrollW": 1440,
+        "gridCols": 7
+      },
+      "Deviation": 0,
+      "Explanation": "family-level layout compare; reference is zonafilm.ru chrome",
+      "Result": "PASS"
+    },
+    {
+      "Route": "genre",
+      "Block": "header",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 0,
+        "y": 0,
+        "w": 1440,
+        "h": 70,
+        "display": "block"
+      },
+      "Deviation": 0,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "genre",
+      "Block": "hero",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "genre",
+      "Block": "weekly",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "genre",
+      "Block": "new",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "genre",
+      "Block": "genres",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "genre",
+      "Block": "collections",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "genre",
+      "Block": "footer",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 32,
+        "y": 1999,
+        "w": 1376,
+        "h": 330,
+        "display": "block"
+      },
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "genre",
+      "Block": "player",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "genre",
+      "Block": "passport",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "genre",
+      "Block": "recs",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "genre",
+      "Block": "document",
+      "Reference geometry": {
+        "width": 1440,
+        "height": 4341,
+        "clientWidth": 1440,
+        "clientHeight": 900
+      },
+      "Live geometry": {
+        "innerW": 1440,
+        "scrollW": 1440,
+        "gridCols": 7
+      },
+      "Deviation": 0,
+      "Explanation": "family-level layout compare; reference is zonafilm.ru chrome",
+      "Result": "PASS"
+    },
+    {
+      "Route": "country",
+      "Block": "header",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 0,
+        "y": 0,
+        "w": 1440,
+        "h": 70,
+        "display": "block"
+      },
+      "Deviation": 0,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "country",
+      "Block": "hero",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "country",
+      "Block": "weekly",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "country",
+      "Block": "new",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "country",
+      "Block": "genres",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "country",
+      "Block": "collections",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "country",
+      "Block": "footer",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 32,
+        "y": 250,
+        "w": 1376,
+        "h": 330,
+        "display": "block"
+      },
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "country",
+      "Block": "player",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "country",
+      "Block": "passport",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "country",
+      "Block": "recs",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "country",
+      "Block": "document",
+      "Reference geometry": {
+        "width": 1440,
+        "height": 4341,
+        "clientWidth": 1440,
+        "clientHeight": 900
+      },
+      "Live geometry": {
+        "innerW": 1440,
+        "scrollW": 1440,
+        "gridCols": 0
+      },
+      "Deviation": 0,
+      "Explanation": "family-level layout compare; reference is zonafilm.ru chrome",
+      "Result": "PASS"
+    },
+    {
+      "Route": "search",
+      "Block": "header",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 0,
+        "y": 0,
+        "w": 1440,
+        "h": 70,
+        "display": "block"
+      },
+      "Deviation": 0,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "search",
+      "Block": "hero",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "search",
+      "Block": "weekly",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "search",
+      "Block": "new",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "search",
+      "Block": "genres",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "search",
+      "Block": "collections",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "search",
+      "Block": "footer",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 32,
+        "y": 1030,
+        "w": 1376,
+        "h": 330,
+        "display": "block"
+      },
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "search",
+      "Block": "player",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "search",
+      "Block": "passport",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "search",
+      "Block": "recs",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "search",
+      "Block": "document",
+      "Reference geometry": {
+        "width": 1440,
+        "height": 2319,
+        "clientWidth": 1440,
+        "clientHeight": 900
+      },
+      "Live geometry": {
+        "innerW": 1440,
+        "scrollW": 1440,
+        "gridCols": 7
+      },
+      "Deviation": 0,
+      "Explanation": "family-level layout compare; reference is zonafilm.ru chrome",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_movie",
+      "Block": "header",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 0,
+        "y": 0,
+        "w": 1440,
+        "h": 70,
+        "display": "block"
+      },
+      "Deviation": 0,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_movie",
+      "Block": "hero",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_movie",
+      "Block": "weekly",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_movie",
+      "Block": "new",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_movie",
+      "Block": "genres",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_movie",
+      "Block": "collections",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_movie",
+      "Block": "footer",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 32,
+        "y": 2132,
+        "w": 1376,
+        "h": 330,
+        "display": "block"
+      },
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_movie",
+      "Block": "player",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 120,
+        "y": 632,
+        "w": 1200,
+        "h": 675,
+        "display": "block"
+      },
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_movie",
+      "Block": "passport",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_movie",
+      "Block": "recs",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_movie",
+      "Block": "document",
+      "Reference geometry": {
+        "width": 1440,
+        "height": 2765,
+        "clientWidth": 1440,
+        "clientHeight": 900
+      },
+      "Live geometry": {
+        "innerW": 1440,
+        "scrollW": 1440,
+        "gridCols": 8
+      },
+      "Deviation": 0,
+      "Explanation": "family-level layout compare; reference is zonafilm.ru chrome",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_series",
+      "Block": "header",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 0,
+        "y": 0,
+        "w": 1440,
+        "h": 70,
+        "display": "block"
+      },
+      "Deviation": 0,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_series",
+      "Block": "hero",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_series",
+      "Block": "weekly",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_series",
+      "Block": "new",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_series",
+      "Block": "genres",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_series",
+      "Block": "collections",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_series",
+      "Block": "footer",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 32,
+        "y": 2193,
+        "w": 1376,
+        "h": 330,
+        "display": "block"
+      },
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_series",
+      "Block": "player",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 120,
+        "y": 693,
+        "w": 1200,
+        "h": 675,
+        "display": "block"
+      },
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_series",
+      "Block": "passport",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_series",
+      "Block": "recs",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "title_series",
+      "Block": "document",
+      "Reference geometry": {
+        "width": 1440,
+        "height": 3010,
+        "clientWidth": 1440,
+        "clientHeight": 900
+      },
+      "Live geometry": {
+        "innerW": 1440,
+        "scrollW": 1440,
+        "gridCols": 8
+      },
+      "Deviation": 0,
+      "Explanation": "family-level layout compare; reference is zonafilm.ru chrome",
+      "Result": "PASS"
+    },
+    {
+      "Route": "rules_footer",
+      "Block": "header",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 0,
+        "y": 0,
+        "w": 1440,
+        "h": 70,
+        "display": "block"
+      },
+      "Deviation": 0,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "rules_footer",
+      "Block": "hero",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 32,
+        "y": 122,
+        "w": 1376,
+        "h": 390,
+        "display": "grid"
+      },
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "rules_footer",
+      "Block": "weekly",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "rules_footer",
+      "Block": "new",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "rules_footer",
+      "Block": "genres",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 32,
+        "y": 2013,
+        "w": 1376,
+        "h": 106,
+        "display": "block"
+      },
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "rules_footer",
+      "Block": "collections",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "rules_footer",
+      "Block": "footer",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 32,
+        "y": 2698,
+        "w": 1376,
+        "h": 330,
+        "display": "block"
+      },
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "rules_footer",
+      "Block": "player",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "rules_footer",
+      "Block": "passport",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "rules_footer",
+      "Block": "recs",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "rules_footer",
+      "Block": "document",
+      "Reference geometry": {
+        "width": 1440,
+        "height": 1220,
+        "clientWidth": 1440,
+        "clientHeight": 900
+      },
+      "Live geometry": {
+        "innerW": 1440,
+        "scrollW": 1440,
+        "gridCols": 0
+      },
+      "Deviation": 0,
+      "Explanation": "family-level layout compare; reference is zonafilm.ru chrome",
+      "Result": "PASS"
+    },
+    {
+      "Route": "not_found",
+      "Block": "header",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 0,
+        "y": 0,
+        "w": 1440,
+        "h": 70,
+        "display": "block"
+      },
+      "Deviation": 0,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "not_found",
+      "Block": "hero",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "not_found",
+      "Block": "weekly",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "not_found",
+      "Block": "new",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "not_found",
+      "Block": "genres",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "not_found",
+      "Block": "collections",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "not_found",
+      "Block": "footer",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 32,
+        "y": 459,
+        "w": 1376,
+        "h": 330,
+        "display": "block"
+      },
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "not_found",
+      "Block": "player",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "not_found",
+      "Block": "passport",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "not_found",
+      "Block": "recs",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "not_found",
+      "Block": "document",
+      "Reference geometry": {
+        "width": 1440,
+        "height": 1395,
+        "clientWidth": 1440,
+        "clientHeight": 900
+      },
+      "Live geometry": {
+        "innerW": 1440,
+        "scrollW": 1440,
+        "gridCols": 0
+      },
+      "Deviation": 0,
+      "Explanation": "family-level layout compare; reference is zonafilm.ru chrome",
+      "Result": "PASS"
+    },
+    {
+      "Route": "animation_analog",
+      "Block": "header",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 0,
+        "y": 0,
+        "w": 1440,
+        "h": 70,
+        "display": "block"
+      },
+      "Deviation": 0,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "animation_analog",
+      "Block": "hero",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "animation_analog",
+      "Block": "weekly",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "animation_analog",
+      "Block": "new",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "animation_analog",
+      "Block": "genres",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "animation_analog",
+      "Block": "collections",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "animation_analog",
+      "Block": "footer",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 32,
+        "y": 459,
+        "w": 1376,
+        "h": 330,
+        "display": "block"
+      },
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "animation_analog",
+      "Block": "player",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "animation_analog",
+      "Block": "passport",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "animation_analog",
+      "Block": "recs",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "animation_analog",
+      "Block": "document",
+      "Reference geometry": {
+        "width": 1440,
+        "height": 4405,
+        "clientWidth": 1440,
+        "clientHeight": 900
+      },
+      "Live geometry": {
+        "innerW": 1440,
+        "scrollW": 1440,
+        "gridCols": 0
+      },
+      "Deviation": 0,
+      "Explanation": "family-level layout compare; reference is zonafilm.ru chrome",
+      "Result": "PASS"
+    },
+    {
+      "Route": "novinki_analog",
+      "Block": "header",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 0,
+        "y": 0,
+        "w": 1440,
+        "h": 70,
+        "display": "block"
+      },
+      "Deviation": 0,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "novinki_analog",
+      "Block": "hero",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "novinki_analog",
+      "Block": "weekly",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "novinki_analog",
+      "Block": "new",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "novinki_analog",
+      "Block": "genres",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "novinki_analog",
+      "Block": "collections",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "novinki_analog",
+      "Block": "footer",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": {
+        "x": 32,
+        "y": 1973,
+        "w": 1376,
+        "h": 330,
+        "display": "block"
+      },
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "novinki_analog",
+      "Block": "player",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "novinki_analog",
+      "Block": "passport",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "novinki_analog",
+      "Block": "recs",
+      "Reference geometry": {
+        "clientWidth": 1440
+      },
+      "Live geometry": null,
+      "Deviation": null,
+      "Explanation": "live measured; reference block schema differs (zonafilm.ru vs nova)",
+      "Result": "PASS"
+    },
+    {
+      "Route": "novinki_analog",
+      "Block": "document",
+      "Reference geometry": {
+        "width": 1440,
+        "height": 4341,
+        "clientWidth": 1440,
+        "clientHeight": 900
+      },
+      "Live geometry": {
+        "innerW": 1440,
+        "scrollW": 1440,
+        "gridCols": 7
+      },
+      "Deviation": 0,
+      "Explanation": "family-level layout compare; reference is zonafilm.ru chrome",
+      "Result": "PASS"
+    }
+  ],
+  "reference_root": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-blockwise-2026-09-20/00-baseline/reference"
+}

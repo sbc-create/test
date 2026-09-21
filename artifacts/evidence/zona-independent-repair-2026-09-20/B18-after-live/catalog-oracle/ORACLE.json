@@ -1,0 +1,21 @@
+{
+  "at": "2026-09-20T21:50:21Z",
+  "comedy_catalog_live": 14912,
+  "comedy_collection_live": 14913,
+  "comedy_facet_collection_delta": 1,
+  "recently_added_live": 2170,
+  "recently_added_oracle_90d": 2170,
+  "year_2019_live": 2144,
+  "PAGINATION_DUPLICATE_IDS": 0,
+  "INVALID_PAGE_HTTP_STATUS": 404,
+  "CATALOG_DUPLICATE_IDS": 0,
+  "CATALOG_MISSING_IDS": 0,
+  "YEAR_COUNT_MISMATCHES": 0,
+  "GENRE_COUNT_MISMATCHES": 0,
+  "COUNTRY_COUNT_MISMATCHES": 0,
+  "PAGINATION_MISSING_IDS": 0,
+  "FOREIGN_YEAR_ITEMS": [],
+  "build": "20260920T212359Z-39dc16ed-nova",
+  "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+  "FULL_CATALOG_ORACLE_PASS": 1
+}

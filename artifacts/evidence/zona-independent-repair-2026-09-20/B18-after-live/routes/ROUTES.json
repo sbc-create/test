@@ -1,0 +1,471 @@
+{
+  "HTTP_ROUTES_TESTED": 27,
+  "HTTP_5XX_COUNT": 0,
+  "SOFT_404_COUNT": 0,
+  "REDIRECT_LOOP_COUNT": 0,
+  "BROKEN_INTERNAL_LINKS": 0,
+  "INVALID_PAGE_HTTP_STATUS": 404,
+  "NOT_FOUND_HTTP_STATUS": 404,
+  "rows": [
+    {
+      "name": "home",
+      "path": "/",
+      "status": 200,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 85929,
+      "soft_404": false,
+      "final": "https://zonafilm.space/"
+    },
+    {
+      "name": "catalog",
+      "path": "/catalog/",
+      "status": 200,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 99048,
+      "soft_404": false,
+      "final": "https://zonafilm.space/catalog/"
+    },
+    {
+      "name": "new",
+      "path": "/new/",
+      "status": 200,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 93916,
+      "soft_404": false,
+      "final": "https://zonafilm.space/new/"
+    },
+    {
+      "name": "films",
+      "path": "/films/",
+      "status": 404,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 43127,
+      "soft_404": false,
+      "final": "https://zonafilm.space/films/"
+    },
+    {
+      "name": "series",
+      "path": "/series/",
+      "status": 200,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 96645,
+      "soft_404": false,
+      "final": "https://zonafilm.space/series/"
+    },
+    {
+      "name": "cartoons",
+      "path": "/cartoons/",
+      "status": 404,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 43130,
+      "soft_404": false,
+      "final": "https://zonafilm.space/cartoons/"
+    },
+    {
+      "name": "genres",
+      "path": "/genres/",
+      "status": 308,
+      "build": null,
+      "artifact": null,
+      "robots": "noindex, nofollow",
+      "bytes": 0,
+      "soft_404": false,
+      "final": "https://zonafilm.space/genres/"
+    },
+    {
+      "name": "years",
+      "path": "/years/",
+      "status": 404,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 43127,
+      "soft_404": false,
+      "final": "https://zonafilm.space/years/"
+    },
+    {
+      "name": "countries",
+      "path": "/countries/",
+      "status": 404,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 43131,
+      "soft_404": false,
+      "final": "https://zonafilm.space/countries/"
+    },
+    {
+      "name": "collections",
+      "path": "/collections/",
+      "status": 200,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 55847,
+      "soft_404": false,
+      "final": "https://zonafilm.space/collections/"
+    },
+    {
+      "name": "search",
+      "path": "/search/?q=matrix",
+      "status": 200,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 50205,
+      "soft_404": false,
+      "final": "https://zonafilm.space/search/?q=matrix"
+    },
+    {
+      "name": "title",
+      "path": "/title/v-lovushke/",
+      "status": 200,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 63761,
+      "soft_404": false,
+      "final": "https://zonafilm.space/title/v-lovushke/"
+    },
+    {
+      "name": "episode",
+      "path": "/title/chasha-vesny/season-1/episode-1/",
+      "status": 200,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 68807,
+      "soft_404": false,
+      "final": "https://zonafilm.space/title/chasha-vesny/season-1/episode-1/"
+    },
+    {
+      "name": "player_host",
+      "path": "/title/v-lovushke/",
+      "status": 200,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 63761,
+      "soft_404": false,
+      "final": "https://zonafilm.space/title/v-lovushke/"
+    },
+    {
+      "name": "related_host",
+      "path": "/title/v-lovushke/",
+      "status": 200,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 63761,
+      "soft_404": false,
+      "final": "https://zonafilm.space/title/v-lovushke/"
+    },
+    {
+      "name": "pagination",
+      "path": "/catalog/?page=2",
+      "status": 200,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 99450,
+      "soft_404": false,
+      "final": "https://zonafilm.space/catalog/?page=2"
+    },
+    {
+      "name": "invalid_pagination",
+      "path": "/catalog/?page=999999",
+      "status": 404,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 43129,
+      "soft_404": false,
+      "final": "https://zonafilm.space/catalog/?page=999999"
+    },
+    {
+      "name": "404",
+      "path": "/no-such-page-b18-404/",
+      "status": 404,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 43142,
+      "soft_404": false,
+      "final": "https://zonafilm.space/no-such-page-b18-404/"
+    },
+    {
+      "name": "footer_host",
+      "path": "/",
+      "status": 200,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 85929,
+      "soft_404": false,
+      "final": "https://zonafilm.space/"
+    },
+    {
+      "name": "genre_comedy",
+      "path": "/catalog/?genre=comedy",
+      "status": 200,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 102535,
+      "soft_404": false,
+      "final": "https://zonafilm.space/catalog/?genre=comedy"
+    },
+    {
+      "name": "collection_comedy",
+      "path": "/collection/comedy/",
+      "status": 404,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 43139,
+      "soft_404": false,
+      "final": "https://zonafilm.space/collection/comedy/"
+    },
+    {
+      "name": "collection_recent",
+      "path": "/collection/recently_added/",
+      "status": 200,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 89770,
+      "soft_404": false,
+      "final": "https://zonafilm.space/collection/recently_added/"
+    },
+    {
+      "name": "year_2019",
+      "path": "/catalog/?year=2019",
+      "status": 200,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 103335,
+      "soft_404": false,
+      "final": "https://zonafilm.space/catalog/?year=2019"
+    },
+    {
+      "name": "country_usa",
+      "path": "/catalog/?country=%D0%A1%D0%A8%D0%90",
+      "status": 200,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 43795,
+      "soft_404": false,
+      "final": "https://zonafilm.space/catalog/?country=%D0%A1%D0%A8%D0%90"
+    },
+    {
+      "name": "search_original",
+      "path": "/search/?q=Dusty%20Bluffs",
+      "status": 200,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 44282,
+      "soft_404": false,
+      "final": "https://zonafilm.space/search/?q=Dusty%20Bluffs"
+    },
+    {
+      "name": "search_translit",
+      "path": "/search/?q=matrix",
+      "status": 200,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 50205,
+      "soft_404": false,
+      "final": "https://zonafilm.space/search/?q=matrix"
+    },
+    {
+      "name": "filter_preserve",
+      "path": "/catalog/?genre=comedy&year=2019&page=2",
+      "status": 200,
+      "build": "20260920T212359Z-39dc16ed-nova",
+      "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "robots": "noindex, nofollow",
+      "bytes": 107339,
+      "soft_404": false,
+      "final": "https://zonafilm.space/catalog/?genre=comedy&year=2019&page=2"
+    }
+  ],
+  "internal_sample": [
+    {
+      "href": "/",
+      "status": 200
+    },
+    {
+      "href": "/animation/",
+      "status": 200
+    },
+    {
+      "href": "/catalog/",
+      "status": 200
+    },
+    {
+      "href": "/catalog/?genre=action",
+      "status": 200
+    },
+    {
+      "href": "/catalog/?genre=comedy",
+      "status": 200
+    },
+    {
+      "href": "/catalog/?genre=dorama",
+      "status": 200
+    },
+    {
+      "href": "/catalog/?genre=drama",
+      "status": 200
+    },
+    {
+      "href": "/catalog/?genre=melodrama",
+      "status": 200
+    },
+    {
+      "href": "/catalog/?genre=triller",
+      "status": 200
+    },
+    {
+      "href": "/catalog/?kind=%D0%9C%D1%83%D0%BB%D1%8C%D1%82%D1%84%D0%B8%D0%BB%D1%8C%D0%BC&sort=newest",
+      "status": 200
+    },
+    {
+      "href": "/catalog/?kind=%D0%A1%D0%B5%D1%80%D0%B8%D0%B0%D0%BB&sort=newest",
+      "status": 200
+    },
+    {
+      "href": "/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC&sort=newest",
+      "status": 200
+    },
+    {
+      "href": "/catalog/?sort=newest&page=1913",
+      "status": 200
+    },
+    {
+      "href": "/catalog/?sort=newest&page=2",
+      "status": 200
+    },
+    {
+      "href": "/catalog/?sort=newest&page=3",
+      "status": 200
+    },
+    {
+      "href": "/catalog/?sort=rating",
+      "status": 200
+    },
+    {
+      "href": "/collection/current_season/",
+      "status": 200
+    },
+    {
+      "href": "/collection/new_episodes/",
+      "status": 200
+    },
+    {
+      "href": "/collection/new_movie_releases/",
+      "status": 200
+    },
+    {
+      "href": "/collection/new_series_releases/",
+      "status": 200
+    },
+    {
+      "href": "/collection/recently_added/",
+      "status": 200
+    },
+    {
+      "href": "/collection/recently_added_movies/",
+      "status": 200
+    },
+    {
+      "href": "/collection/top_rated/",
+      "status": 200
+    },
+    {
+      "href": "/collection/video_available/",
+      "status": 200
+    },
+    {
+      "href": "/collections/",
+      "status": 200
+    },
+    {
+      "href": "/favicon.svg",
+      "status": 200
+    },
+    {
+      "href": "/movies/",
+      "status": 200
+    },
+    {
+      "href": "/new/",
+      "status": 200
+    },
+    {
+      "href": "/new/?mode=added",
+      "status": 200
+    },
+    {
+      "href": "/search/",
+      "status": 200
+    },
+    {
+      "href": "/series/",
+      "status": 200
+    },
+    {
+      "href": "/title/13-dush/",
+      "status": 200
+    },
+    {
+      "href": "/title/atele-koldovskih-kolpakov/",
+      "status": 200
+    },
+    {
+      "href": "/title/bez-prava-na-strah/",
+      "status": 200
+    },
+    {
+      "href": "/title/bezdna/",
+      "status": 200
+    },
+    {
+      "href": "/title/bezopasnaya-distanciya/",
+      "status": 200
+    },
+    {
+      "href": "/title/bigfut-pervobytnyy-strah/",
+      "status": 200
+    },
+    {
+      "href": "/title/blich-tysyacheletnyaya-krovavaya-voyna-bedstvie-2/",
+      "status": 200
+    },
+    {
+      "href": "/title/blich-tysyacheletnyaya-krovavaya-voyna-bedstvie/",
+      "status": 200
+    },
+    {
+      "href": "/title/borba-v-pryamom-efire/",
+      "status": 200
+    }
+  ],
+  "FILTER_QUERY_LOSSES": 0
+}

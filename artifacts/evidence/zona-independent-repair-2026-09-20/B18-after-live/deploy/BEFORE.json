@@ -1,0 +1,29 @@
+{
+  "at": "2026-09-20T21:23:53Z",
+  "live_headers": {
+    "status": 200,
+    "build": "20260920T092117Z-dbaf9a4d-nova",
+    "artifact": "14df083302757613f0d51787963f9f43fd795c71300299fb3cc0dbf34cda5eaa",
+    "revision": "dbaf9a4d228ea3481efb2c365518d5b2c38766d8",
+    "robots": "noindex, nofollow"
+  },
+  "files": {
+    "zona-01-frontend.py": {
+      "sha256": "14df083302757613f0d51787963f9f43fd795c71300299fb3cc0dbf34cda5eaa",
+      "size": 397909
+    },
+    "template-manifest-zona-01.json": {
+      "sha256": "daaf4fb9b9874b90ee98521b36f57bed0c91044d2e4440ca3bce8ed4e943eb03",
+      "size": 640
+    },
+    "collection_contract.py": {
+      "sha256": "1de55d9d4ee44d5f586bf97b6513d8f18aabc0c946b9efca40603b0ec194d948",
+      "size": 27319
+    }
+  },
+  "service": {
+    "rc": 0,
+    "out": "MainPID=1543423\nNRestarts=0\nExecMainStartTimestamp=Sun 2026-09-20 09:21:19 UTC\nActiveState=active\nSubState=running"
+  },
+  "body_build": true
+}

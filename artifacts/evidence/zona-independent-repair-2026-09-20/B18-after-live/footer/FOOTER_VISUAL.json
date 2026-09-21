@@ -1,0 +1,33 @@
+{
+  "FOOTER_VISUAL_PASS": 1,
+  "FOOTER_DATA_PASS": 0,
+  "OWNER_DATA_REQUIRED": "contacts/legal",
+  "rows": [
+    {
+      "viewport": 1440,
+      "footerBox": {
+        "w": 1376,
+        "h": 330,
+        "top": 570
+      },
+      "overflowX": false,
+      "sha_leak": false,
+      "ver_leak": false,
+      "text_sample": "Zona\n\nZona — витрина фильмов, сериалов и анимации с каталогом, поиском и подборками.\n\nРазделы\nГлавная\nНовинки\nФильмы\nСериалы\nКаталог\nАнимация\nПодборки\nКаталог\nПоиск\n© Zona",
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/footer/footer_1440.png"
+    },
+    {
+      "viewport": 390,
+      "footerBox": {
+        "w": 366,
+        "h": 432,
+        "top": 412
+      },
+      "overflowX": false,
+      "sha_leak": false,
+      "ver_leak": false,
+      "text_sample": "Zona\n\nZona — витрина фильмов, сериалов и анимации с каталогом, поиском и подборками.\n\nРазделы\nГлавная\nНовинки\nФильмы\nСериалы\nКаталог\nАнимация\nПодборки\nКаталог\nПоиск\n© Zona",
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/footer/footer_390.png"
+    }
+  ]
+}

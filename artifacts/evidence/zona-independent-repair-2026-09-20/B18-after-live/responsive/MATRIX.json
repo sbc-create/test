@@ -1,0 +1,7192 @@
+{
+  "RESPONSIVE_LIVE_ROWS": 77,
+  "RESPONSIVE_MATRIX_PASS": 0,
+  "HORIZONTAL_OVERFLOW_COUNT": 0,
+  "UNINTENDED_INNER_SCROLLBARS": 7,
+  "OVERLAP_COUNT": 0,
+  "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+  "TITLE_OVERFLOW_COUNT": 102,
+  "failures": [
+    "title_overflow=6 320 /catalog/",
+    "title_overflow=6 320 /new/",
+    "title_overflow=7 768 /title/chasha-vesny/season-1/episode-1/"
+  ],
+  "failure_count": 3,
+  "rows": [
+    {
+      "viewport": 320,
+      "height": 720,
+      "route": "home",
+      "path": "/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 2,
+        "innerScrollSuspects": 1,
+        "posters": [],
+        "footerBox": {
+          "w": 296,
+          "h": 432,
+          "top": 4200
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 320,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": {
+            "x": 12,
+            "y": 92,
+            "w": 296,
+            "h": 390,
+            "display": "grid"
+          },
+          "weekly": null,
+          "new": null,
+          "genres": {
+            "x": 12,
+            "y": 3107,
+            "w": 296,
+            "h": 154,
+            "display": "block"
+          },
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 4200,
+            "w": 296,
+            "h": 432,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Zona — кинопортал",
+        "scrollW": 320,
+        "innerW": 320
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_home_320x720.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 320,
+      "height": 720,
+      "route": "catalog",
+      "path": "/catalog/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 6,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 296,
+          "h": 432,
+          "top": 5072
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 320,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 5072,
+            "w": 296,
+            "h": 432,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Каталог — Zona",
+        "scrollW": 320,
+        "innerW": 320
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_catalog_320x720.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 320,
+      "height": 720,
+      "route": "new",
+      "path": "/new/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 6,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 296,
+          "h": 432,
+          "top": 5108
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 320,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 5108,
+            "w": 296,
+            "h": 432,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Премьеры — Zona",
+        "scrollW": 320,
+        "innerW": 320
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_new_320x720.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 320,
+      "height": 720,
+      "route": "search",
+      "path": "/search/?q=matrix",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 1,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 296,
+          "h": 432,
+          "top": 1578
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 320,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 1578,
+            "w": 296,
+            "h": 432,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Поиск — Zona",
+        "scrollW": 320,
+        "innerW": 320
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_search_320x720.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 320,
+      "height": 720,
+      "route": "title",
+      "path": "/title/v-lovushke/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 2,
+        "nestedZwrap": false,
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 296,
+          "h": 432,
+          "top": 3294
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 320,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 3294,
+            "w": 296,
+            "h": 432,
+            "display": "block"
+          },
+          "player": {
+            "x": 12,
+            "y": 988,
+            "w": 296,
+            "h": 200,
+            "display": "block"
+          },
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "В ловушке — смотреть онлайн — Zona",
+        "scrollW": 320,
+        "innerW": 320
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_title_320x720.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 320,
+      "height": 720,
+      "route": "episode",
+      "path": "/title/chasha-vesny/season-1/episode-1/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 5,
+        "nestedZwrap": false,
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 2,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 296,
+          "h": 432,
+          "top": 3440
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 320,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 3440,
+            "w": 296,
+            "h": 432,
+            "display": "block"
+          },
+          "player": {
+            "x": 12,
+            "y": 414,
+            "w": 296,
+            "h": 200,
+            "display": "block"
+          },
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Чаша весны — 1 сезон, 1 серия — Zona",
+        "scrollW": 320,
+        "innerW": 320
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_episode_320x720.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 320,
+      "height": 720,
+      "route": "collections",
+      "path": "/collections/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 296,
+          "h": 432,
+          "top": 2774
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 320,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 2774,
+            "w": 296,
+            "h": 432,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Подборки — Zona",
+        "scrollW": 320,
+        "innerW": 320
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_collections_320x720.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 320,
+      "height": 720,
+      "route": "genre",
+      "path": "/catalog/?genre=comedy",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 2,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 296,
+          "h": 432,
+          "top": 5116
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 320,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 5116,
+            "w": 296,
+            "h": 432,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Комедия — Zona",
+        "scrollW": 320,
+        "innerW": 320
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_genre_320x720.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 320,
+      "height": 720,
+      "route": "year",
+      "path": "/catalog/?year=2019",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 5,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          },
+          {
+            "w": 139,
+            "h": 209,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 296,
+          "h": 432,
+          "top": 5116
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 320,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 5116,
+            "w": 296,
+            "h": 432,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Каталог 2019 года — Zona",
+        "scrollW": 320,
+        "innerW": 320
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_year_320x720.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 320,
+      "height": 720,
+      "route": "country",
+      "path": "/catalog/?country=%D0%A1%D0%A8%D0%90",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 296,
+          "h": 432,
+          "top": 265
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 320,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 265,
+            "w": 296,
+            "h": 432,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Некорректный фильтр — Zona",
+        "scrollW": 320,
+        "innerW": 320
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_country_320x720.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 320,
+      "height": 720,
+      "route": "404",
+      "path": "/no-such-page-b18-404/",
+      "status": 404,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 296,
+          "h": 432,
+          "top": 516
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 320,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 516,
+            "w": 296,
+            "h": 432,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Страница не найдена — Zona",
+        "scrollW": 320,
+        "innerW": 320
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_404_320x720.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 390,
+      "height": 844,
+      "route": "home",
+      "path": "/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 1,
+        "innerScrollSuspects": 1,
+        "posters": [],
+        "footerBox": {
+          "w": 366,
+          "h": 432,
+          "top": 4092
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": {
+            "x": 12,
+            "y": 92,
+            "w": 366,
+            "h": 390,
+            "display": "grid"
+          },
+          "weekly": null,
+          "new": null,
+          "genres": {
+            "x": 12,
+            "y": 3051,
+            "w": 366,
+            "h": 154,
+            "display": "block"
+          },
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 4092,
+            "w": 366,
+            "h": 432,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Zona — кинопортал",
+        "scrollW": 390,
+        "innerW": 390
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_home_390x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 390,
+      "height": 844,
+      "route": "catalog",
+      "path": "/catalog/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 4,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 366,
+          "h": 432,
+          "top": 5756
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 5756,
+            "w": 366,
+            "h": 432,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Каталог — Zona",
+        "scrollW": 390,
+        "innerW": 390
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_catalog_390x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 390,
+      "height": 844,
+      "route": "new",
+      "path": "/new/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 4,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 366,
+          "h": 432,
+          "top": 5792
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 5792,
+            "w": 366,
+            "h": 432,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Премьеры — Zona",
+        "scrollW": 390,
+        "innerW": 390
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_new_390x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 390,
+      "height": 844,
+      "route": "search",
+      "path": "/search/?q=matrix",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 366,
+          "h": 432,
+          "top": 1788
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 1788,
+            "w": 366,
+            "h": 432,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Поиск — Zona",
+        "scrollW": 390,
+        "innerW": 390
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_search_390x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 390,
+      "height": 844,
+      "route": "title",
+      "path": "/title/v-lovushke/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 2,
+        "nestedZwrap": false,
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 366,
+          "h": 432,
+          "top": 3615
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 3615,
+            "w": 366,
+            "h": 432,
+            "display": "block"
+          },
+          "player": {
+            "x": 12,
+            "y": 988,
+            "w": 366,
+            "h": 206,
+            "display": "block"
+          },
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "В ловушке — смотреть онлайн — Zona",
+        "scrollW": 390,
+        "innerW": 390
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_title_390x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 390,
+      "height": 844,
+      "route": "episode",
+      "path": "/title/chasha-vesny/season-1/episode-1/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 5,
+        "nestedZwrap": false,
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 1,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 366,
+          "h": 432,
+          "top": 3717
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 3717,
+            "w": 366,
+            "h": 432,
+            "display": "block"
+          },
+          "player": {
+            "x": 12,
+            "y": 370,
+            "w": 366,
+            "h": 206,
+            "display": "block"
+          },
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Чаша весны — 1 сезон, 1 серия — Zona",
+        "scrollW": 390,
+        "innerW": 390
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_episode_390x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 390,
+      "height": 844,
+      "route": "collections",
+      "path": "/collections/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 366,
+          "h": 432,
+          "top": 3012
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 3012,
+            "w": 366,
+            "h": 432,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Подборки — Zona",
+        "scrollW": 390,
+        "innerW": 390
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_collections_390x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 390,
+      "height": 844,
+      "route": "genre",
+      "path": "/catalog/?genre=comedy",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 366,
+          "h": 432,
+          "top": 5800
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 5800,
+            "w": 366,
+            "h": 432,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Комедия — Zona",
+        "scrollW": 390,
+        "innerW": 390
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_genre_390x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 390,
+      "height": 844,
+      "route": "year",
+      "path": "/catalog/?year=2019",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 2,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 1,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          },
+          {
+            "w": 174,
+            "h": 261,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 366,
+          "h": 432,
+          "top": 5800
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 5800,
+            "w": 366,
+            "h": 432,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Каталог 2019 года — Zona",
+        "scrollW": 390,
+        "innerW": 390
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_year_390x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 390,
+      "height": 844,
+      "route": "country",
+      "path": "/catalog/?country=%D0%A1%D0%A8%D0%90",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 366,
+          "h": 432,
+          "top": 233
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 233,
+            "w": 366,
+            "h": 432,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Некорректный фильтр — Zona",
+        "scrollW": 390,
+        "innerW": 390
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_country_390x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 390,
+      "height": 844,
+      "route": "404",
+      "path": "/no-such-page-b18-404/",
+      "status": 404,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 366,
+          "h": 432,
+          "top": 465
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 56,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 12,
+            "y": 465,
+            "w": 366,
+            "h": 432,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Страница не найдена — Zona",
+        "scrollW": 390,
+        "innerW": 390
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_404_390x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 768,
+      "height": 844,
+      "route": "home",
+      "path": "/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 1,
+        "innerScrollSuspects": 1,
+        "posters": [],
+        "footerBox": {
+          "w": 720,
+          "h": 330,
+          "top": 3543
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 768,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": {
+            "x": 24,
+            "y": 110,
+            "w": 720,
+            "h": 390,
+            "display": "grid"
+          },
+          "weekly": null,
+          "new": null,
+          "genres": {
+            "x": 24,
+            "y": 2693,
+            "w": 720,
+            "h": 106,
+            "display": "block"
+          },
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 3543,
+            "w": 720,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Zona — кинопортал",
+        "scrollW": 768,
+        "innerW": 768
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_home_768x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 768,
+      "height": 844,
+      "route": "catalog",
+      "path": "/catalog/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 4,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 4,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 720,
+          "h": 330,
+          "top": 3055
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 768,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 3055,
+            "w": 720,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Каталог — Zona",
+        "scrollW": 768,
+        "innerW": 768
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_catalog_768x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 768,
+      "height": 844,
+      "route": "new",
+      "path": "/new/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 4,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 4,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 720,
+          "h": 330,
+          "top": 3072
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 768,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 3072,
+            "w": 720,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Премьеры — Zona",
+        "scrollW": 768,
+        "innerW": 768
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_new_768x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 768,
+      "height": 844,
+      "route": "search",
+      "path": "/search/?q=matrix",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 4,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 720,
+          "h": 330,
+          "top": 982
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 768,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 982,
+            "w": 720,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Поиск — Zona",
+        "scrollW": 768,
+        "innerW": 768
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_search_768x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 768,
+      "height": 844,
+      "route": "title",
+      "path": "/title/v-lovushke/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 2,
+        "nestedZwrap": false,
+        "gridCols": 6,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 3,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 106,
+            "h": 159,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 159,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 160,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 159,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 159,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 160,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 159,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 159,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 160,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 159,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 159,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 160,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 720,
+          "h": 330,
+          "top": 2034
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 768,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 2034,
+            "w": 720,
+            "h": 330,
+            "display": "block"
+          },
+          "player": {
+            "x": 24,
+            "y": 958,
+            "w": 720,
+            "h": 405,
+            "display": "block"
+          },
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "В ловушке — смотреть онлайн — Zona",
+        "scrollW": 768,
+        "innerW": 768
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_title_768x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 768,
+      "height": 844,
+      "route": "episode",
+      "path": "/title/chasha-vesny/season-1/episode-1/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 5,
+        "nestedZwrap": false,
+        "gridCols": 6,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 7,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 106,
+            "h": 159,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 159,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 160,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 159,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 159,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 160,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 159,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 159,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 160,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 159,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 159,
+            "ar": 1.5
+          },
+          {
+            "w": 106,
+            "h": 160,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 720,
+          "h": 330,
+          "top": 1866
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 768,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 1866,
+            "w": 720,
+            "h": 330,
+            "display": "block"
+          },
+          "player": {
+            "x": 24,
+            "y": 343,
+            "w": 720,
+            "h": 405,
+            "display": "block"
+          },
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Чаша весны — 1 сезон, 1 серия — Zona",
+        "scrollW": 768,
+        "innerW": 768
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_episode_768x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 768,
+      "height": 844,
+      "route": "collections",
+      "path": "/collections/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 720,
+          "h": 330,
+          "top": 1603
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 768,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 1603,
+            "w": 720,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Подборки — Zona",
+        "scrollW": 768,
+        "innerW": 768
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_collections_768x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 768,
+      "height": 844,
+      "route": "genre",
+      "path": "/catalog/?genre=comedy",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 4,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 720,
+          "h": 330,
+          "top": 3099
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 768,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 3099,
+            "w": 720,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Комедия — Zona",
+        "scrollW": 768,
+        "innerW": 768
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_genre_768x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 768,
+      "height": 844,
+      "route": "year",
+      "path": "/catalog/?year=2019",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 4,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 2,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          },
+          {
+            "w": 168,
+            "h": 251,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 720,
+          "h": 330,
+          "top": 3099
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 768,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 3099,
+            "w": 720,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Каталог 2019 года — Zona",
+        "scrollW": 768,
+        "innerW": 768
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_year_768x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 768,
+      "height": 844,
+      "route": "country",
+      "path": "/catalog/?country=%D0%A1%D0%A8%D0%90",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 720,
+          "h": 330,
+          "top": 234
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 768,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 234,
+            "w": 720,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Некорректный фильтр — Zona",
+        "scrollW": 768,
+        "innerW": 768
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_country_768x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 768,
+      "height": 844,
+      "route": "404",
+      "path": "/no-such-page-b18-404/",
+      "status": 404,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 720,
+          "h": 330,
+          "top": 465
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 768,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 465,
+            "w": 720,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Страница не найдена — Zona",
+        "scrollW": 768,
+        "innerW": 768
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_404_768x844.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1024,
+      "height": 900,
+      "route": "home",
+      "path": "/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 1,
+        "innerScrollSuspects": 1,
+        "posters": [],
+        "footerBox": {
+          "w": 976,
+          "h": 330,
+          "top": 2729
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1024,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": {
+            "x": 24,
+            "y": 110,
+            "w": 976,
+            "h": 390,
+            "display": "grid"
+          },
+          "weekly": null,
+          "new": null,
+          "genres": {
+            "x": 24,
+            "y": 2001,
+            "w": 976,
+            "h": 106,
+            "display": "block"
+          },
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 2729,
+            "w": 976,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Zona — кинопортал",
+        "scrollW": 1024,
+        "innerW": 1024
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_home_1024x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1024,
+      "height": 900,
+      "route": "catalog",
+      "path": "/catalog/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 5,
+        "accidentalGapPx": 386,
+        "headerOverlap": false,
+        "titleOverflow": 4,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 976,
+          "h": 330,
+          "top": 2772
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1024,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 2772,
+            "w": 976,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Каталог — Zona",
+        "scrollW": 1024,
+        "innerW": 1024
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_catalog_1024x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1024,
+      "height": 900,
+      "route": "new",
+      "path": "/new/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 5,
+        "accidentalGapPx": 386,
+        "headerOverlap": false,
+        "titleOverflow": 4,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 976,
+          "h": 330,
+          "top": 2790
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1024,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 2790,
+            "w": 976,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Премьеры — Zona",
+        "scrollW": 1024,
+        "innerW": 1024
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_new_1024x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1024,
+      "height": 900,
+      "route": "search",
+      "path": "/search/?q=matrix",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 5,
+        "accidentalGapPx": 386,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 976,
+          "h": 330,
+          "top": 1013
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1024,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 1013,
+            "w": 976,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Поиск — Zona",
+        "scrollW": 1024,
+        "innerW": 1024
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_search_1024x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1024,
+      "height": 900,
+      "route": "title",
+      "path": "/title/v-lovushke/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 2,
+        "nestedZwrap": false,
+        "gridCols": 6,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 976,
+          "h": 330,
+          "top": 1938
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1024,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 1938,
+            "w": 976,
+            "h": 330,
+            "display": "block"
+          },
+          "player": {
+            "x": 24,
+            "y": 590,
+            "w": 976,
+            "h": 549,
+            "display": "block"
+          },
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "В ловушке — смотреть онлайн — Zona",
+        "scrollW": 1024,
+        "innerW": 1024
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_title_1024x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1024,
+      "height": 900,
+      "route": "episode",
+      "path": "/title/chasha-vesny/season-1/episode-1/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 5,
+        "nestedZwrap": false,
+        "gridCols": 6,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 2,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          },
+          {
+            "w": 149,
+            "h": 224,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 976,
+          "h": 330,
+          "top": 2138
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1024,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 2138,
+            "w": 976,
+            "h": 330,
+            "display": "block"
+          },
+          "player": {
+            "x": 24,
+            "y": 343,
+            "w": 976,
+            "h": 549,
+            "display": "block"
+          },
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Чаша весны — 1 сезон, 1 серия — Zona",
+        "scrollW": 1024,
+        "innerW": 1024
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_episode_1024x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1024,
+      "height": 900,
+      "route": "collections",
+      "path": "/collections/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 976,
+          "h": 330,
+          "top": 859
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1024,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 859,
+            "w": 976,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Подборки — Zona",
+        "scrollW": 1024,
+        "innerW": 1024
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_collections_1024x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1024,
+      "height": 900,
+      "route": "genre",
+      "path": "/catalog/?genre=comedy",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 5,
+        "accidentalGapPx": 386,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 976,
+          "h": 330,
+          "top": 2816
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1024,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 2816,
+            "w": 976,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Комедия — Zona",
+        "scrollW": 1024,
+        "innerW": 1024
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_genre_1024x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1024,
+      "height": 900,
+      "route": "year",
+      "path": "/catalog/?year=2019",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 5,
+        "accidentalGapPx": 386,
+        "headerOverlap": false,
+        "titleOverflow": 1,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 976,
+          "h": 330,
+          "top": 2816
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1024,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 2816,
+            "w": 976,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Каталог 2019 года — Zona",
+        "scrollW": 1024,
+        "innerW": 1024
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_year_1024x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1024,
+      "height": 900,
+      "route": "country",
+      "path": "/catalog/?country=%D0%A1%D0%A8%D0%90",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 976,
+          "h": 330,
+          "top": 234
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1024,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 234,
+            "w": 976,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Некорректный фильтр — Zona",
+        "scrollW": 1024,
+        "innerW": 1024
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_country_1024x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1024,
+      "height": 900,
+      "route": "404",
+      "path": "/no-such-page-b18-404/",
+      "status": 404,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 976,
+          "h": 330,
+          "top": 447
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1024,
+            "h": 62,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 447,
+            "w": 976,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Страница не найдена — Zona",
+        "scrollW": 1024,
+        "innerW": 1024
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_404_1024x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1280,
+      "height": 900,
+      "route": "home",
+      "path": "/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 1,
+        "innerScrollSuspects": 1,
+        "posters": [],
+        "footerBox": {
+          "w": 1232,
+          "h": 330,
+          "top": 2741
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": {
+            "x": 24,
+            "y": 122,
+            "w": 1232,
+            "h": 390,
+            "display": "grid"
+          },
+          "weekly": null,
+          "new": null,
+          "genres": {
+            "x": 24,
+            "y": 2013,
+            "w": 1232,
+            "h": 106,
+            "display": "block"
+          },
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 2741,
+            "w": 1232,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Zona — кинопортал",
+        "scrollW": 1280,
+        "innerW": 1280
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_home_1280x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1280,
+      "height": 900,
+      "route": "catalog",
+      "path": "/catalog/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 6,
+        "accidentalGapPx": 415,
+        "headerOverlap": false,
+        "titleOverflow": 4,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1232,
+          "h": 330,
+          "top": 2396
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 2396,
+            "w": 1232,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Каталог — Zona",
+        "scrollW": 1280,
+        "innerW": 1280
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_catalog_1280x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1280,
+      "height": 900,
+      "route": "new",
+      "path": "/new/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 6,
+        "accidentalGapPx": 415,
+        "headerOverlap": false,
+        "titleOverflow": 4,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1232,
+          "h": 330,
+          "top": 2414
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 2414,
+            "w": 1232,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Премьеры — Zona",
+        "scrollW": 1280,
+        "innerW": 1280
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_new_1280x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1280,
+      "height": 900,
+      "route": "search",
+      "path": "/search/?q=matrix",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 6,
+        "accidentalGapPx": 830,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1232,
+          "h": 330,
+          "top": 1030
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 1030,
+            "w": 1232,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Поиск — Zona",
+        "scrollW": 1280,
+        "innerW": 1280
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_search_1280x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1280,
+      "height": 900,
+      "route": "title",
+      "path": "/title/v-lovushke/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 2,
+        "nestedZwrap": false,
+        "gridCols": 8,
+        "accidentalGapPx": 609,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1232,
+          "h": 330,
+          "top": 2078
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 2078,
+            "w": 1232,
+            "h": 330,
+            "display": "block"
+          },
+          "player": {
+            "x": 40,
+            "y": 632,
+            "w": 1200,
+            "h": 675,
+            "display": "block"
+          },
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "В ловушке — смотреть онлайн — Zona",
+        "scrollW": 1280,
+        "innerW": 1280
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_title_1280x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1280,
+      "height": 900,
+      "route": "episode",
+      "path": "/title/chasha-vesny/season-1/episode-1/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 5,
+        "nestedZwrap": false,
+        "gridCols": 8,
+        "accidentalGapPx": 609,
+        "headerOverlap": false,
+        "titleOverflow": 2,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          },
+          {
+            "w": 140,
+            "h": 210,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1232,
+          "h": 330,
+          "top": 2192
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 2192,
+            "w": 1232,
+            "h": 330,
+            "display": "block"
+          },
+          "player": {
+            "x": 40,
+            "y": 355,
+            "w": 1200,
+            "h": 675,
+            "display": "block"
+          },
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Чаша весны — 1 сезон, 1 серия — Zona",
+        "scrollW": 1280,
+        "innerW": 1280
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_episode_1280x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1280,
+      "height": 900,
+      "route": "collections",
+      "path": "/collections/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 1232,
+          "h": 330,
+          "top": 931
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 931,
+            "w": 1232,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Подборки — Zona",
+        "scrollW": 1280,
+        "innerW": 1280
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_collections_1280x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1280,
+      "height": 900,
+      "route": "genre",
+      "path": "/catalog/?genre=comedy",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 6,
+        "accidentalGapPx": 415,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1232,
+          "h": 330,
+          "top": 2440
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 2440,
+            "w": 1232,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Комедия — Zona",
+        "scrollW": 1280,
+        "innerW": 1280
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_genre_1280x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1280,
+      "height": 900,
+      "route": "year",
+      "path": "/catalog/?year=2019",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 6,
+        "accidentalGapPx": 415,
+        "headerOverlap": false,
+        "titleOverflow": 1,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1232,
+          "h": 330,
+          "top": 2440
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 2440,
+            "w": 1232,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Каталог 2019 года — Zona",
+        "scrollW": 1280,
+        "innerW": 1280
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_year_1280x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1280,
+      "height": 900,
+      "route": "country",
+      "path": "/catalog/?country=%D0%A1%D0%A8%D0%90",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 1232,
+          "h": 330,
+          "top": 250
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 250,
+            "w": 1232,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Некорректный фильтр — Zona",
+        "scrollW": 1280,
+        "innerW": 1280
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_country_1280x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1280,
+      "height": 900,
+      "route": "404",
+      "path": "/no-such-page-b18-404/",
+      "status": 404,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 1232,
+          "h": 330,
+          "top": 459
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 24,
+            "y": 459,
+            "w": 1232,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Страница не найдена — Zona",
+        "scrollW": 1280,
+        "innerW": 1280
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_404_1280x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1440,
+      "height": 900,
+      "route": "home",
+      "path": "/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 1,
+        "innerScrollSuspects": 1,
+        "posters": [],
+        "footerBox": {
+          "w": 1376,
+          "h": 330,
+          "top": 2698
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1440,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": {
+            "x": 32,
+            "y": 122,
+            "w": 1376,
+            "h": 390,
+            "display": "grid"
+          },
+          "weekly": null,
+          "new": null,
+          "genres": {
+            "x": 32,
+            "y": 2013,
+            "w": 1376,
+            "h": 106,
+            "display": "block"
+          },
+          "collections": null,
+          "footer": {
+            "x": 32,
+            "y": 2698,
+            "w": 1376,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Zona — кинопортал",
+        "scrollW": 1440,
+        "innerW": 1440
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_home_1440x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1440,
+      "height": 900,
+      "route": "catalog",
+      "path": "/catalog/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 7,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 4,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1376,
+          "h": 330,
+          "top": 1955
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1440,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 32,
+            "y": 1955,
+            "w": 1376,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Каталог — Zona",
+        "scrollW": 1440,
+        "innerW": 1440
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_catalog_1440x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1440,
+      "height": 900,
+      "route": "new",
+      "path": "/new/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 7,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 4,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1376,
+          "h": 330,
+          "top": 1973
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1440,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 32,
+            "y": 1973,
+            "w": 1376,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Премьеры — Zona",
+        "scrollW": 1440,
+        "innerW": 1440
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_new_1440x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1440,
+      "height": 900,
+      "route": "search",
+      "path": "/search/?q=matrix",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 7,
+        "accidentalGapPx": 1182,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1376,
+          "h": 330,
+          "top": 1030
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1440,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 32,
+            "y": 1030,
+            "w": 1376,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Поиск — Zona",
+        "scrollW": 1440,
+        "innerW": 1440
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_search_1440x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1440,
+      "height": 900,
+      "route": "title",
+      "path": "/title/v-lovushke/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 2,
+        "nestedZwrap": false,
+        "gridCols": 8,
+        "accidentalGapPx": 681,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1376,
+          "h": 330,
+          "top": 2132
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1440,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 32,
+            "y": 2132,
+            "w": 1376,
+            "h": 330,
+            "display": "block"
+          },
+          "player": {
+            "x": 120,
+            "y": 632,
+            "w": 1200,
+            "h": 675,
+            "display": "block"
+          },
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "В ловушке — смотреть онлайн — Zona",
+        "scrollW": 1440,
+        "innerW": 1440
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_title_1440x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1440,
+      "height": 900,
+      "route": "episode",
+      "path": "/title/chasha-vesny/season-1/episode-1/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 5,
+        "nestedZwrap": false,
+        "gridCols": 8,
+        "accidentalGapPx": 681,
+        "headerOverlap": false,
+        "titleOverflow": 1,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          },
+          {
+            "w": 158,
+            "h": 237,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1376,
+          "h": 330,
+          "top": 2246
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1440,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 32,
+            "y": 2246,
+            "w": 1376,
+            "h": 330,
+            "display": "block"
+          },
+          "player": {
+            "x": 120,
+            "y": 355,
+            "w": 1200,
+            "h": 675,
+            "display": "block"
+          },
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Чаша весны — 1 сезон, 1 серия — Zona",
+        "scrollW": 1440,
+        "innerW": 1440
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_episode_1440x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1440,
+      "height": 900,
+      "route": "collections",
+      "path": "/collections/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 1376,
+          "h": 330,
+          "top": 929
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1440,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 32,
+            "y": 929,
+            "w": 1376,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Подборки — Zona",
+        "scrollW": 1440,
+        "innerW": 1440
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_collections_1440x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1440,
+      "height": 900,
+      "route": "genre",
+      "path": "/catalog/?genre=comedy",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 7,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1376,
+          "h": 330,
+          "top": 1999
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1440,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 32,
+            "y": 1999,
+            "w": 1376,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Комедия — Zona",
+        "scrollW": 1440,
+        "innerW": 1440
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_genre_1440x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1440,
+      "height": 900,
+      "route": "year",
+      "path": "/catalog/?year=2019",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 7,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 1,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1376,
+          "h": 330,
+          "top": 1999
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1440,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 32,
+            "y": 1999,
+            "w": 1376,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Каталог 2019 года — Zona",
+        "scrollW": 1440,
+        "innerW": 1440
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_year_1440x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1440,
+      "height": 900,
+      "route": "country",
+      "path": "/catalog/?country=%D0%A1%D0%A8%D0%90",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 1376,
+          "h": 330,
+          "top": 250
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1440,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 32,
+            "y": 250,
+            "w": 1376,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Некорректный фильтр — Zona",
+        "scrollW": 1440,
+        "innerW": 1440
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_country_1440x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1440,
+      "height": 900,
+      "route": "404",
+      "path": "/no-such-page-b18-404/",
+      "status": 404,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 1376,
+          "h": 330,
+          "top": 459
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1440,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 32,
+            "y": 459,
+            "w": 1376,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Страница не найдена — Zona",
+        "scrollW": 1440,
+        "innerW": 1440
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_404_1440x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1920,
+      "height": 900,
+      "route": "home",
+      "path": "/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 1,
+        "innerScrollSuspects": 1,
+        "posters": [],
+        "footerBox": {
+          "w": 1632,
+          "h": 330,
+          "top": 2698
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": {
+            "x": 144,
+            "y": 122,
+            "w": 1632,
+            "h": 390,
+            "display": "grid"
+          },
+          "weekly": null,
+          "new": null,
+          "genres": {
+            "x": 144,
+            "y": 2013,
+            "w": 1632,
+            "h": 106,
+            "display": "block"
+          },
+          "collections": null,
+          "footer": {
+            "x": 144,
+            "y": 2698,
+            "w": 1632,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Zona — кинопортал",
+        "scrollW": 1920,
+        "innerW": 1920
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_home_1920x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1920,
+      "height": 900,
+      "route": "catalog",
+      "path": "/catalog/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 8,
+        "accidentalGapPx": 821,
+        "headerOverlap": false,
+        "titleOverflow": 4,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1632,
+          "h": 330,
+          "top": 1955
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 144,
+            "y": 1955,
+            "w": 1632,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Каталог — Zona",
+        "scrollW": 1920,
+        "innerW": 1920
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_catalog_1920x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1920,
+      "height": 900,
+      "route": "new",
+      "path": "/new/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 8,
+        "accidentalGapPx": 821,
+        "headerOverlap": false,
+        "titleOverflow": 4,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1632,
+          "h": 330,
+          "top": 1973
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 144,
+            "y": 1973,
+            "w": 1632,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Премьеры — Zona",
+        "scrollW": 1920,
+        "innerW": 1920
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_new_1920x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1920,
+      "height": 900,
+      "route": "search",
+      "path": "/search/?q=matrix",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 8,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1632,
+          "h": 330,
+          "top": 637
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 144,
+            "y": 637,
+            "w": 1632,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Поиск — Zona",
+        "scrollW": 1920,
+        "innerW": 1920
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_search_1920x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1920,
+      "height": 900,
+      "route": "title",
+      "path": "/title/v-lovushke/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 2,
+        "nestedZwrap": false,
+        "gridCols": 8,
+        "accidentalGapPx": 821,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1632,
+          "h": 330,
+          "top": 2193
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 144,
+            "y": 2193,
+            "w": 1632,
+            "h": 330,
+            "display": "block"
+          },
+          "player": {
+            "x": 360,
+            "y": 632,
+            "w": 1200,
+            "h": 675,
+            "display": "block"
+          },
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "В ловушке — смотреть онлайн — Zona",
+        "scrollW": 1920,
+        "innerW": 1920
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_title_1920x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1920,
+      "height": 900,
+      "route": "episode",
+      "path": "/title/chasha-vesny/season-1/episode-1/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 5,
+        "nestedZwrap": false,
+        "gridCols": 8,
+        "accidentalGapPx": 821,
+        "headerOverlap": false,
+        "titleOverflow": 1,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1632,
+          "h": 330,
+          "top": 2307
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 144,
+            "y": 2307,
+            "w": 1632,
+            "h": 330,
+            "display": "block"
+          },
+          "player": {
+            "x": 360,
+            "y": 355,
+            "w": 1200,
+            "h": 675,
+            "display": "block"
+          },
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Чаша весны — 1 сезон, 1 серия — Zona",
+        "scrollW": 1920,
+        "innerW": 1920
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_episode_1920x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1920,
+      "height": 900,
+      "route": "collections",
+      "path": "/collections/",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 1632,
+          "h": 330,
+          "top": 984
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 144,
+            "y": 984,
+            "w": 1632,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Подборки — Zona",
+        "scrollW": 1920,
+        "innerW": 1920
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_collections_1920x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1920,
+      "height": 900,
+      "route": "genre",
+      "path": "/catalog/?genre=comedy",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 8,
+        "accidentalGapPx": 821,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1632,
+          "h": 330,
+          "top": 1999
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 144,
+            "y": 1999,
+            "w": 1632,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Комедия — Zona",
+        "scrollW": 1920,
+        "innerW": 1920
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_genre_1920x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1920,
+      "height": 900,
+      "route": "year",
+      "path": "/catalog/?year=2019",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 8,
+        "accidentalGapPx": 821,
+        "headerOverlap": false,
+        "titleOverflow": 1,
+        "innerScrollSuspects": 0,
+        "posters": [
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          },
+          {
+            "w": 178,
+            "h": 267,
+            "ar": 1.5
+          }
+        ],
+        "footerBox": {
+          "w": 1632,
+          "h": 330,
+          "top": 1999
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 144,
+            "y": 1999,
+            "w": 1632,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Каталог 2019 года — Zona",
+        "scrollW": 1920,
+        "innerW": 1920
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_year_1920x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1920,
+      "height": 900,
+      "route": "country",
+      "path": "/catalog/?country=%D0%A1%D0%A8%D0%90",
+      "status": 200,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 1,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 1632,
+          "h": 330,
+          "top": 250
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 144,
+            "y": 250,
+            "w": 1632,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Некорректный фильтр — Zona",
+        "scrollW": 1920,
+        "innerW": 1920
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_country_1920x900.png",
+      "poster_ar_violations": 0
+    },
+    {
+      "viewport": 1920,
+      "height": 900,
+      "route": "404",
+      "path": "/no-such-page-b18-404/",
+      "status": 404,
+      "geometry": {
+        "overflowX": false,
+        "wrapCount": 1,
+        "pageCount": 0,
+        "nestedZwrap": false,
+        "gridCols": 0,
+        "accidentalGapPx": 0,
+        "headerOverlap": false,
+        "titleOverflow": 0,
+        "innerScrollSuspects": 0,
+        "posters": [],
+        "footerBox": {
+          "w": 1632,
+          "h": 330,
+          "top": 459
+        },
+        "blocks": {
+          "header": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 70,
+            "display": "block"
+          },
+          "hero": null,
+          "weekly": null,
+          "new": null,
+          "genres": null,
+          "collections": null,
+          "footer": {
+            "x": 144,
+            "y": 459,
+            "w": 1632,
+            "h": 330,
+            "display": "block"
+          },
+          "player": null,
+          "passport": null,
+          "recs": null
+        },
+        "build": "20260920T212359Z-39dc16ed-nova",
+        "title": "Страница не найдена — Zona",
+        "scrollW": 1920,
+        "innerW": 1920
+      },
+      "screenshot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_404_1920x900.png",
+      "poster_ar_violations": 0
+    }
+  ]
+}

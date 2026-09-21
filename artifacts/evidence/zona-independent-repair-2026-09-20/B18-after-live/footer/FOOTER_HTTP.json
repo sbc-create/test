@@ -1,0 +1,9 @@
+{
+  "has_footer": true,
+  "sha_leaked": true,
+  "version_leaked": false,
+  "empty_blocks_heuristic": 0,
+  "OWNER_DATA_REQUIRED": "contacts/legal",
+  "FOOTER_DATA_PASS": 0,
+  "note": "Visual footer pass deferred to playwright; data gate open without owner contacts/legal"
+}

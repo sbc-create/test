@@ -1,0 +1,44 @@
+{
+  "at": "2026-09-20T21:35:12Z",
+  "runtime": {
+    "SOURCE_ARTIFACT_MATCH": 1,
+    "ARTIFACT_MANIFEST_MATCH": 1,
+    "ARTIFACT_RUNTIME_MATCH": 1,
+    "CACHE_COHERENCE_PASS": 1,
+    "LIVE_BUILD_AFTER": "20260920T212359Z-39dc16ed-nova",
+    "OBSERVED_ARTIFACT_SHA256": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+    "INDEXABILITY_AFTER": "noindex, nofollow"
+  },
+  "routes": {
+    "HTTP_ROUTES_TESTED": 27,
+    "HTTP_5XX_COUNT": 0,
+    "SOFT_404_COUNT": 0,
+    "REDIRECT_LOOP_COUNT": 0,
+    "BROKEN_INTERNAL_LINKS": 0,
+    "INVALID_PAGE_HTTP_STATUS": 404
+  },
+  "oracle": {
+    "FULL_CATALOG_ORACLE_PASS": 0,
+    "CATALOG_DUPLICATE_IDS": 0,
+    "CATALOG_MISSING_IDS": 0,
+    "YEAR_COUNT_MISMATCHES": 0,
+    "GENRE_COUNT_MISMATCHES": 0,
+    "COUNTRY_COUNT_MISMATCHES": 0,
+    "PAGINATION_DUPLICATE_IDS": 0,
+    "PAGINATION_MISSING_IDS": 0,
+    "recently_added_oracle_90d": 2170,
+    "recently_added_live": null,
+    "comedy_catalog_live": null,
+    "comedy_collection_live": null
+  },
+  "perf": {
+    "LIVE_TTFB_P50_MS": 1305.9,
+    "LIVE_TTFB_P95_MS": 7558.4,
+    "LIVE_TTFB_P95_LT_2_5S": 0
+  },
+  "sample_titles": {
+    "film": "/title/v-lovushke/",
+    "series": "/title/plennica-6/",
+    "episode": "/title/chasha-vesny/season-1/episode-1/"
+  }
+}

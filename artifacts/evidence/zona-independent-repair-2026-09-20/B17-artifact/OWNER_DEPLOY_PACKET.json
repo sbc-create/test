@@ -7,7 +7,7 @@
   "ARTIFACT_SHA256": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
   "MANIFEST_SHA256": "52adb80da54c0c64a23547429b4119ceaf9d61229215fe7394032b7f233b6097",
   "ARTIFACT_PATH": "artifacts/zona-independent-repair-artifact/zona-01-frontend-39dc16ede949.tar.gz",
-  "DEPLOY_SCOPE": "zona-01 template frontend only",
+  "DEPLOY_SCOPE": "zona-01-only",
   "SERVICE_NAME": "nova-zona-01",
   "DOMAIN": "zonafilm.space",
   "PROFILE": "zona-01",
@@ -18,8 +18,8 @@
   "RESTORE_COMMAND": "Install artifact 5fb6295cc7d8a7a1508dfb4be90b2a6e37dc97422e07547679eb535a9b0d2145; systemctl restart nova-zona-01; verify X-Robots-Tag noindex and build header match prior digest",
   "RESTORE_VERIFIED_LOCAL": true,
   "RESTART_COMMAND": "systemctl restart nova-zona-01",
-  "OWNER_DEPLOY_APPROVAL_ID": null,
-  "DEPLOY_AUTHORIZED": false,
+  "OWNER_DEPLOY_APPROVAL_ID": "ZONA-INDEPENDENT-REPAIR-DEPLOY-20260920-01",
+  "DEPLOY_AUTHORIZED": "YES",
   "DEPLOY_PERFORMED": 0,
   "READY_FOR_OWNER_DEPLOY": false,
   "READY_FOR_OWNER_VISUAL_REVIEW": false,
@@ -36,5 +36,10 @@
   "OWNER_DATA_GAPS": [
     "footer contact/legal URLs",
     "episode event ledger"
-  ]
+  ],
+  "OWNER_DEPLOY_APPROVAL_SCOPE": "ZONA_01_ONLY",
+  "RESTART_AUTHORIZED": "YES",
+  "ROLLBACK_AUTHORIZED_IF_HARD_GATE_FAILS": "YES",
+  "APPROVED_ARTIFACT_SHA256": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+  "EXPECTED_BRANCH_TIP_PREFIX": "1d04658"
 }

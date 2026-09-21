@@ -1,0 +1,174 @@
+{
+  "REAL_PROVIDER_TITLES_TESTED": 3,
+  "PLAYBACK_CURRENT_TIME_GE_3S_PASS": 1,
+  "PLAYER_INSTANCE_MAX": 1,
+  "AUTOPLAY_COUNT": 0,
+  "PLAYER_SMALL_RENDER_COUNT": 0,
+  "results": [
+    {
+      "url": "https://zonafilm.space/title/v-lovushke/",
+      "primary": {
+        "state": "playing",
+        "ACTUAL_PROGRESS": true,
+        "currentTime": 13.156064,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+        "ACTIVE_PLAYER_COUNT": 1,
+        "PLAYER_SMALL_RENDER": 0,
+        "AUTOPLAY_COUNT": 0,
+        "iframes": [],
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 13.156064,
+          "at": 1789940345665
+        },
+        "falseReady": false
+      },
+      "after_resize": {
+        "state": "playing",
+        "ACTUAL_PROGRESS": true,
+        "currentTime": 13.952672,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+        "ACTIVE_PLAYER_COUNT": 1,
+        "PLAYER_SMALL_RENDER": 0,
+        "AUTOPLAY_COUNT": 0,
+        "iframes": [],
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 13.952672,
+          "at": 1789940346462
+        },
+        "falseReady": false
+      },
+      "after_reload_shell": {
+        "state": "ready",
+        "ACTUAL_PROGRESS": false,
+        "currentTime": 0,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+        "ACTIVE_PLAYER_COUNT": 1,
+        "PLAYER_SMALL_RENDER": 0,
+        "AUTOPLAY_COUNT": 0,
+        "iframes": [],
+        "zp": null,
+        "falseReady": true
+      },
+      "kind": "film"
+    },
+    {
+      "url": "https://zonafilm.space/title/voy-2/",
+      "primary": {
+        "state": "playing",
+        "ACTUAL_PROGRESS": true,
+        "currentTime": 12.818975,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+        "ACTIVE_PLAYER_COUNT": 1,
+        "PLAYER_SMALL_RENDER": 0,
+        "AUTOPLAY_COUNT": 0,
+        "iframes": [],
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 12.818975,
+          "at": 1789940366995
+        },
+        "falseReady": false
+      },
+      "after_resize": {
+        "state": "playing",
+        "ACTUAL_PROGRESS": true,
+        "currentTime": 13.878751,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+        "ACTIVE_PLAYER_COUNT": 1,
+        "PLAYER_SMALL_RENDER": 0,
+        "AUTOPLAY_COUNT": 0,
+        "iframes": [],
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 13.878751,
+          "at": 1789940368055
+        },
+        "falseReady": false
+      },
+      "after_reload_shell": {
+        "state": "ready",
+        "ACTUAL_PROGRESS": false,
+        "currentTime": 0,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+        "ACTIVE_PLAYER_COUNT": 1,
+        "PLAYER_SMALL_RENDER": 0,
+        "AUTOPLAY_COUNT": 0,
+        "iframes": [],
+        "zp": null,
+        "falseReady": true
+      },
+      "kind": "series"
+    },
+    {
+      "url": "https://zonafilm.space/title/chasha-vesny/season-1/episode-1/",
+      "primary": {
+        "state": "playing",
+        "ACTUAL_PROGRESS": true,
+        "currentTime": 13.901198,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+        "ACTIVE_PLAYER_COUNT": 1,
+        "PLAYER_SMALL_RENDER": 0,
+        "AUTOPLAY_COUNT": 0,
+        "iframes": [],
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 13.901198,
+          "at": 1789940388352
+        },
+        "falseReady": false
+      },
+      "after_resize": {
+        "state": "playing",
+        "ACTUAL_PROGRESS": true,
+        "currentTime": 15.027094,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+        "ACTIVE_PLAYER_COUNT": 1,
+        "PLAYER_SMALL_RENDER": 0,
+        "AUTOPLAY_COUNT": 0,
+        "iframes": [],
+        "zp": {
+          "generation": 1,
+          "attempt": 1,
+          "event": "pm.timeupdate3",
+          "pos": 15.027094,
+          "at": 1789940389479
+        },
+        "falseReady": false
+      },
+      "after_reload_shell": {
+        "state": "ready",
+        "ACTUAL_PROGRESS": false,
+        "currentTime": 0,
+        "VISIBLE_UNAVAILABLE_OVERLAY": false,
+        "PLAYING_AND_ERROR_SIMULTANEOUS": false,
+        "ACTIVE_PLAYER_COUNT": 1,
+        "PLAYER_SMALL_RENDER": 0,
+        "AUTOPLAY_COUNT": 0,
+        "iframes": [],
+        "zp": null,
+        "falseReady": true
+      },
+      "kind": "episode"
+    }
+  ]
+}
