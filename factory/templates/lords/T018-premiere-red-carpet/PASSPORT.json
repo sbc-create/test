@@ -1,0 +1,100 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T018",
+  "slug": "premiere-red-carpet",
+  "version": "1.0.0",
+  "family": "premiere",
+  "package_digest": "413d5eea2e636c27db42b44fd796f58f9a0819e53822368f5862503bb1dec84d",
+  "declared": {
+    "design_intent": "Большой кадр сверху, под ним ранжированный порядок и витрина.",
+    "primary_user_journey": "задержаться на кадре → пройти список",
+    "home_signature": [
+      "hero",
+      "ranked",
+      "grid",
+      "taxonomy",
+      "about"
+    ],
+    "block_titles": [
+      "Большой кадр",
+      "Порядок пополнения",
+      "Витрина",
+      "Разделы",
+      "О кадре"
+    ],
+    "card_grammar": [
+      "poster",
+      "compact"
+    ],
+    "navigation_items": 4,
+    "green_identity": "secondary",
+    "ladders": {
+      "g--rc": [
+        [
+          0,
+          2
+        ],
+        [
+          600,
+          3
+        ],
+        [
+          1024,
+          5
+        ],
+        [
+          1600,
+          8
+        ]
+      ],
+      "g--rclist": [
+        [
+          0,
+          1
+        ],
+        [
+          1200,
+          2
+        ]
+      ]
+    },
+    "desktop_density_1440": 5
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T018-premiere-red-carpet-1024.png",
+    "T018-premiere-red-carpet-1440.png",
+    "T018-premiere-red-carpet-1920.png",
+    "T018-premiere-red-carpet-320.png",
+    "T018-premiere-red-carpet-390.png",
+    "T018-premiere-red-carpet-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.668653+00:00"
+}

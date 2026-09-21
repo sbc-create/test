@@ -1,0 +1,115 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T010",
+  "slug": "sage-series-journal",
+  "version": "1.0.0",
+  "family": "series-feed",
+  "package_digest": "15b05d610389dd5c9ab29c236974cfe04e5904e2ed4294b460c32dbd6bc95bf0",
+  "declared": {
+    "design_intent": "Журнал: мозаика с ведущей записью, под ней лента-тетрадь и разрежённая витрина.",
+    "primary_user_journey": "прочитать разворот журнала → уйти в ленту",
+    "home_signature": [
+      "mosaic",
+      "feed",
+      "grid",
+      "taxonomy",
+      "about"
+    ],
+    "block_titles": [
+      "Разворот номера",
+      "Тетрадь поступлений",
+      "Отбор номера",
+      "Рубрики",
+      "О журнале"
+    ],
+    "card_grammar": [
+      "editorial",
+      "compact",
+      "poster"
+    ],
+    "navigation_items": 4,
+    "green_identity": "accent-only",
+    "ladders": {
+      "g--mos": [
+        [
+          0,
+          2
+        ],
+        [
+          768,
+          4
+        ],
+        [
+          1440,
+          4
+        ]
+      ],
+      "g--note": [
+        [
+          0,
+          1
+        ],
+        [
+          768,
+          2
+        ]
+      ],
+      "g--pick": [
+        [
+          0,
+          2
+        ],
+        [
+          700,
+          3
+        ],
+        [
+          1200,
+          4
+        ],
+        [
+          1600,
+          6
+        ]
+      ]
+    },
+    "desktop_density_1440": 4
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T010-sage-series-journal-1024.png",
+    "T010-sage-series-journal-1440.png",
+    "T010-sage-series-journal-1920.png",
+    "T010-sage-series-journal-320.png",
+    "T010-sage-series-journal-390.png",
+    "T010-sage-series-journal-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.621301+00:00"
+}

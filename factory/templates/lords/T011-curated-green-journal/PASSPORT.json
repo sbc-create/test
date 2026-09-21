@@ -1,0 +1,118 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T011",
+  "slug": "curated-green-journal",
+  "version": "1.0.0",
+  "family": "curated",
+  "package_digest": "41290dc11a1dc44c024e8430ecfabce945ba9b889aa5d58626edb02c9b97838d",
+  "declared": {
+    "design_intent": "Обложка: одна запись занимает разворот, остальные идут полосами разной плотности.",
+    "primary_user_journey": "прочитать обложку → спуститься по полосам",
+    "home_signature": [
+      "mosaic",
+      "grid",
+      "feed",
+      "taxonomy",
+      "about"
+    ],
+    "block_titles": [
+      "Обложка номера",
+      "Полоса каталога",
+      "Свежая полоса",
+      "Рубрики",
+      "О номере"
+    ],
+    "card_grammar": [
+      "editorial",
+      "poster"
+    ],
+    "navigation_items": 3,
+    "green_identity": "primary",
+    "ladders": {
+      "g--cover": [
+        [
+          0,
+          2
+        ],
+        [
+          768,
+          3
+        ],
+        [
+          1280,
+          3
+        ]
+      ],
+      "g--stripe": [
+        [
+          0,
+          2
+        ],
+        [
+          600,
+          4
+        ],
+        [
+          1024,
+          6
+        ],
+        [
+          1600,
+          8
+        ]
+      ],
+      "g--fresh": [
+        [
+          0,
+          1
+        ],
+        [
+          900,
+          2
+        ],
+        [
+          1440,
+          3
+        ]
+      ]
+    },
+    "desktop_density_1440": 6
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T011-curated-green-journal-1024.png",
+    "T011-curated-green-journal-1440.png",
+    "T011-curated-green-journal-1920.png",
+    "T011-curated-green-journal-320.png",
+    "T011-curated-green-journal-390.png",
+    "T011-curated-green-journal-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.627038+00:00"
+}

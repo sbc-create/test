@@ -1,0 +1,110 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T048",
+  "slug": "lords-cinema-editorial",
+  "version": "1.0.0",
+  "family": "hybrid",
+  "package_digest": "93ef60a8bcbae7f537b92a61c252111e28efb12e78e8b47a074b93625ef21f67",
+  "declared": {
+    "design_intent": "Мозаика-обложка, плотная витрина, порядок.",
+    "primary_user_journey": "прочитать обложку → пройти витрину",
+    "home_signature": [
+      "mosaic",
+      "grid",
+      "ranked",
+      "taxonomy",
+      "about"
+    ],
+    "block_titles": [
+      "Обложка",
+      "Плотная витрина",
+      "По порядку каталога",
+      "Разделы",
+      "О подаче"
+    ],
+    "card_grammar": [
+      "editorial",
+      "poster"
+    ],
+    "navigation_items": 4,
+    "green_identity": "secondary",
+    "ladders": {
+      "g--ce": [
+        [
+          0,
+          2
+        ],
+        [
+          768,
+          4
+        ]
+      ],
+      "g--ceg": [
+        [
+          0,
+          2
+        ],
+        [
+          600,
+          4
+        ],
+        [
+          1024,
+          6
+        ],
+        [
+          1600,
+          8
+        ]
+      ],
+      "g--cel": [
+        [
+          0,
+          1
+        ],
+        [
+          1100,
+          2
+        ]
+      ]
+    },
+    "desktop_density_1440": 6
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T048-lords-cinema-editorial-1024.png",
+    "T048-lords-cinema-editorial-1440.png",
+    "T048-lords-cinema-editorial-1920.png",
+    "T048-lords-cinema-editorial-320.png",
+    "T048-lords-cinema-editorial-390.png",
+    "T048-lords-cinema-editorial-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.852799+00:00"
+}

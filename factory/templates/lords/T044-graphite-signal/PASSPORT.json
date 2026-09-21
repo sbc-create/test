@@ -1,0 +1,100 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T044",
+  "slug": "graphite-signal",
+  "version": "1.0.0",
+  "family": "modern",
+  "package_digest": "71d95c04dc23017c974bfa556f30614713371b527fbef199b05ca904220a129a",
+  "declared": {
+    "design_intent": "Лента-сигналы, порядок, витрина, разделы.",
+    "primary_user_journey": "считывать сигналы сверху вниз",
+    "home_signature": [
+      "feed",
+      "ranked",
+      "grid",
+      "taxonomy",
+      "about"
+    ],
+    "block_titles": [
+      "Сигналы каталога",
+      "По порядку",
+      "Витрина",
+      "Разделы",
+      "О сигналах"
+    ],
+    "card_grammar": [
+      "compact",
+      "poster"
+    ],
+    "navigation_items": 4,
+    "green_identity": "accent-only",
+    "ladders": {
+      "g--sig": [
+        [
+          0,
+          1
+        ],
+        [
+          900,
+          2
+        ],
+        [
+          1440,
+          3
+        ]
+      ],
+      "g--siggrid": [
+        [
+          0,
+          2
+        ],
+        [
+          768,
+          4
+        ],
+        [
+          1440,
+          6
+        ]
+      ]
+    },
+    "desktop_density_1440": 6
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T044-graphite-signal-1024.png",
+    "T044-graphite-signal-1440.png",
+    "T044-graphite-signal-1920.png",
+    "T044-graphite-signal-320.png",
+    "T044-graphite-signal-390.png",
+    "T044-graphite-signal-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.826868+00:00"
+}

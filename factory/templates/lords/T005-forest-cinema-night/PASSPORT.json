@@ -1,0 +1,116 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T005",
+  "slug": "forest-cinema-night",
+  "version": "1.0.0",
+  "family": "forest-cinema",
+  "package_digest": "8659b3db6a2f07aae4692bcf4d45cef68aceb288fee49c4e69864eac6b099eb7",
+  "declared": {
+    "design_intent": "Ночной сеанс: широкий кадр с фактами сбоку, дальше самый плотный каталог семейства.",
+    "primary_user_journey": "войти через кадр → провалиться в плотный каталог",
+    "home_signature": [
+      "hero",
+      "grid",
+      "feed",
+      "grid",
+      "taxonomy",
+      "about"
+    ],
+    "block_titles": [
+      "Ночной сеанс",
+      "Плотный каталог",
+      "Добавлено недавно",
+      "Отбор ночи",
+      "Годы",
+      "О сеансе"
+    ],
+    "card_grammar": [
+      "poster",
+      "editorial"
+    ],
+    "navigation_items": 5,
+    "green_identity": "secondary",
+    "ladders": {
+      "g--dense": [
+        [
+          0,
+          2
+        ],
+        [
+          480,
+          3
+        ],
+        [
+          768,
+          6
+        ],
+        [
+          1280,
+          8
+        ],
+        [
+          1600,
+          12
+        ]
+      ],
+      "g--picks": [
+        [
+          0,
+          2
+        ],
+        [
+          1024,
+          4
+        ]
+      ],
+      "g--adds": [
+        [
+          768,
+          2
+        ],
+        [
+          1280,
+          4
+        ]
+      ]
+    },
+    "desktop_density_1440": 8
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T005-forest-cinema-night-1024.png",
+    "T005-forest-cinema-night-1440.png",
+    "T005-forest-cinema-night-1920.png",
+    "T005-forest-cinema-night-320.png",
+    "T005-forest-cinema-night-390.png",
+    "T005-forest-cinema-night-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.591896+00:00"
+}

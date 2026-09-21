@@ -1,0 +1,100 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T016",
+  "slug": "premiere-calendar-green",
+  "version": "1.0.0",
+  "family": "premiere",
+  "package_digest": "57a5ae256766e384043d08b598290eab5e1e237d99971795ca4ac57a8522b944",
+  "declared": {
+    "design_intent": "Календарь: хронология ведёт, под ней разделы и витрина.",
+    "primary_user_journey": "пройти по датам → уйти в раздел",
+    "home_signature": [
+      "feed",
+      "taxonomy",
+      "grid",
+      "taxonomy",
+      "about"
+    ],
+    "block_titles": [
+      "Пополнение по датам",
+      "Разделы",
+      "Витрина каталога",
+      "Годы",
+      "О календаре"
+    ],
+    "card_grammar": [
+      "compact",
+      "poster"
+    ],
+    "navigation_items": 4,
+    "green_identity": "primary",
+    "ladders": {
+      "g--cal": [
+        [
+          0,
+          1
+        ],
+        [
+          900,
+          2
+        ]
+      ],
+      "g--after": [
+        [
+          0,
+          2
+        ],
+        [
+          600,
+          3
+        ],
+        [
+          1024,
+          5
+        ],
+        [
+          1600,
+          7
+        ]
+      ]
+    },
+    "desktop_density_1440": 5
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T016-premiere-calendar-green-1024.png",
+    "T016-premiere-calendar-green-1440.png",
+    "T016-premiere-calendar-green-1920.png",
+    "T016-premiere-calendar-green-320.png",
+    "T016-premiere-calendar-green-390.png",
+    "T016-premiere-calendar-green-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.657234+00:00"
+}

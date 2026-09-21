@@ -1,0 +1,110 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T043",
+  "slug": "midnight-teal",
+  "version": "1.0.0",
+  "family": "modern",
+  "package_digest": "3940b39e110b96350745ee86a9f9ca539a4104bc9079dee822519d7c744886ee",
+  "declared": {
+    "design_intent": "Разворот, витрина, мозаика, лента.",
+    "primary_user_journey": "чередовать крупное и мелкое",
+    "home_signature": [
+      "split",
+      "grid",
+      "mosaic",
+      "feed",
+      "about"
+    ],
+    "block_titles": [
+      "Открывает",
+      "Витрина",
+      "Мозаика",
+      "Пополнение",
+      "О чередовании"
+    ],
+    "card_grammar": [
+      "compact",
+      "poster"
+    ],
+    "navigation_items": 3,
+    "green_identity": "secondary",
+    "ladders": {
+      "g--mt": [
+        [
+          0,
+          2
+        ],
+        [
+          768,
+          4
+        ],
+        [
+          1440,
+          6
+        ]
+      ],
+      "g--mtm": [
+        [
+          0,
+          2
+        ],
+        [
+          600,
+          3
+        ],
+        [
+          1024,
+          6
+        ]
+      ],
+      "g--mtf": [
+        [
+          0,
+          1
+        ],
+        [
+          1000,
+          2
+        ]
+      ]
+    },
+    "desktop_density_1440": 6
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T043-midnight-teal-1024.png",
+    "T043-midnight-teal-1440.png",
+    "T043-midnight-teal-1920.png",
+    "T043-midnight-teal-320.png",
+    "T043-midnight-teal-390.png",
+    "T043-midnight-teal-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.820610+00:00"
+}

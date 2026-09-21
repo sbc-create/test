@@ -1,0 +1,97 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T017",
+  "slug": "premiere-week-board",
+  "version": "1.0.0",
+  "family": "premiere",
+  "package_digest": "cccb8158f22b27001a53b1bd36cbc1fb2b88c397df66499cf02c46d5117a6a1d",
+  "declared": {
+    "design_intent": "Доска: разделы столбцами, лента и витрина под ними.",
+    "primary_user_journey": "окинуть доску → углубиться в раздел",
+    "home_signature": [
+      "board",
+      "feed",
+      "grid",
+      "index",
+      "about"
+    ],
+    "block_titles": [
+      "Доска разделов",
+      "Лента недели",
+      "Витрина",
+      "Указатель",
+      "О доске"
+    ],
+    "card_grammar": [
+      "tile",
+      "compact",
+      "poster"
+    ],
+    "navigation_items": 3,
+    "green_identity": "secondary",
+    "ladders": {
+      "g--wkfeed": [
+        [
+          0,
+          1
+        ],
+        [
+          1024,
+          2
+        ]
+      ],
+      "g--wkgrid": [
+        [
+          0,
+          2
+        ],
+        [
+          768,
+          4
+        ],
+        [
+          1440,
+          6
+        ]
+      ]
+    },
+    "desktop_density_1440": 6
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T017-premiere-week-board-1024.png",
+    "T017-premiere-week-board-1440.png",
+    "T017-premiere-week-board-1920.png",
+    "T017-premiere-week-board-320.png",
+    "T017-premiere-week-board-390.png",
+    "T017-premiere-week-board-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.663005+00:00"
+}

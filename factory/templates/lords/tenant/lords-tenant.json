@@ -1,0 +1,113 @@
+{
+  "schema": "lords-tenant-contract/1",
+  "tenant": "lords",
+  "role": "LORDS_TEMPLATE_FACTORY_REVIEW",
+  "session_purpose": "независимая проверка и подготовка T001–T050 к визуальной приёмке владельца",
+  "note": "Контракт описывает, что этой сессии РАЗРЕШЕНО. Всё, чего здесь нет, запрещено: guard закрывается наглухо, а не пропускает неизвестное.",
+  "allowed": {
+    "branch_prefix": "claude/lords-",
+    "branches": [
+      "claude/lords-50-template-factory-01",
+      "claude/lords-50-template-owner-review-01"
+    ],
+    "worktrees": [
+      "/home/claude/wt-lords-50-template-factory-01"
+    ],
+    "read_only_sources": {
+      "/home/claude/wt-lords-default-episode-01": "ветка сверки: только чтение подтверждённого состояния"
+    },
+    "paths": [
+      "factory/templates/lords/",
+      "artifacts/evidence/lords-50-template-factory-01/",
+      "tests/lords_factory/",
+      "bin/lords-template-preview",
+      "var/",
+      ".lords-tenant"
+    ],
+    "template_id_pattern": "^T0(0[1-9]|[1-4][0-9]|50)$",
+    "template_id_range": [
+      "T001",
+      "T050"
+    ],
+    "output_dirs": [
+      "artifacts/evidence/lords-50-template-factory-01/",
+      "var/preview/",
+      "var/shots/",
+      "var/scores/",
+      "var/review/"
+    ],
+    "self_referential_files": {
+      "note": "Эти файлы обязаны называть запрещённое, чтобы его запрещать. Исключение точечное и поимённое: любой другой файл, назвавший чужой контур или production-команду, закрывает guard.",
+      "files": [
+        "factory/templates/lords/tenant/lords-tenant.json",
+        "factory/templates/lords/tenant/guard.py",
+        "factory/templates/lords/shared/isolation.py",
+        "factory/templates/lords/shared/build_fixture.py",
+        "tests/lords_factory/test_tenant_guard.py"
+      ]
+    }
+  },
+  "denied": {
+    "reason": "Перечень намеренно machine-readable и не повторяется в обычных отчётах: для контроля достаточно итоговых чисел.",
+    "foreign_tenants": [
+      "animedia",
+      "zona",
+      "yummy",
+      "yummyani",
+      "demo-books"
+    ],
+    "foreign_branch_prefixes": [
+      "cursor/",
+      "claude/animedia-",
+      "claude/zona-",
+      "claude/yummy-",
+      "core"
+    ],
+    "foreign_path_markers": [
+      "config/site-profiles/",
+      "automation/host/nova-",
+      "automation/host/lords-frontend.py",
+      "factory/lords/",
+      "artifacts/evidence/lords-cursor-reconciliation-01/"
+    ],
+    "production_paths": [
+      "/srv/lords/.frontend",
+      "/srv/lords/lords-",
+      "/etc/systemd",
+      "/etc/nginx",
+      "/var/lib/lords-deploy"
+    ],
+    "production_commands": [
+      "systemctl",
+      "sudo",
+      "nginx",
+      "certbot",
+      "docker",
+      "nova-release-bind",
+      "nova-manifest-coherence",
+      "lords-deployctl"
+    ],
+    "mutations": {
+      "production": false,
+      "dns": false,
+      "tls": false,
+      "indexability": false,
+      "template_assignment": false,
+      "live_manifests": false
+    },
+    "git_operations": [
+      "branch -f",
+      "reset --hard",
+      "push --force",
+      "filter-branch",
+      "rebase -i",
+      "checkout-over-foreign-worktree"
+    ]
+  },
+  "template_status_policy": {
+    "current": "TECHNICAL_CANDIDATE",
+    "may_agent_set_assignable": false,
+    "may_agent_set_production_ready": false,
+    "who_promotes": "владелец после визуальной приёмки"
+  }
+}

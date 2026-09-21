@@ -1,0 +1,115 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T031",
+  "slug": "mosaic-collections",
+  "version": "1.0.0",
+  "family": "collection",
+  "package_digest": "716f1c9305103c840fd8f9553909778b07d033be370fecb1e6c56f2c981cfbbf",
+  "declared": {
+    "design_intent": "Мозаика ведёт, доска срезов следом, витрина в конце.",
+    "primary_user_journey": "зацепиться за мозаику → уйти в срез",
+    "home_signature": [
+      "mosaic",
+      "board",
+      "grid",
+      "feed",
+      "about"
+    ],
+    "block_titles": [
+      "Мозаика каталога",
+      "Срезы по виду",
+      "Витрина",
+      "Пополнение",
+      "О срезах"
+    ],
+    "card_grammar": [
+      "poster",
+      "tile",
+      "compact"
+    ],
+    "navigation_items": 3,
+    "green_identity": "primary",
+    "ladders": {
+      "g--mo": [
+        [
+          0,
+          2
+        ],
+        [
+          768,
+          4
+        ],
+        [
+          1440,
+          4
+        ]
+      ],
+      "g--mogrid": [
+        [
+          0,
+          2
+        ],
+        [
+          600,
+          3
+        ],
+        [
+          1024,
+          6
+        ],
+        [
+          1600,
+          6
+        ]
+      ],
+      "g--mofeed": [
+        [
+          0,
+          1
+        ],
+        [
+          1000,
+          2
+        ]
+      ]
+    },
+    "desktop_density_1440": 6
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T031-mosaic-collections-1024.png",
+    "T031-mosaic-collections-1440.png",
+    "T031-mosaic-collections-1920.png",
+    "T031-mosaic-collections-320.png",
+    "T031-mosaic-collections-390.png",
+    "T031-mosaic-collections-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.746398+00:00"
+}

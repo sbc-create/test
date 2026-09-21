@@ -1,0 +1,104 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T036",
+  "slug": "archive-emerald",
+  "version": "1.0.0",
+  "family": "archive",
+  "package_digest": "5fcefa79ea4c7412ec987bfd0f3de47b35362cc06a90161750576e65510a8c25",
+  "declared": {
+    "design_intent": "Самая плотная витрина семейства, навигация компактная. Навигация — буквенный указатель, а не чипы: это другой способ искать.",
+    "primary_user_journey": "охватить взглядом весь каталог",
+    "home_signature": [
+      "taxonomy",
+      "grid",
+      "index",
+      "feed",
+      "about"
+    ],
+    "block_titles": [
+      "Разделы",
+      "Плотный архив",
+      "Переход по букве",
+      "Пополнение",
+      "О плотности"
+    ],
+    "card_grammar": [
+      "poster",
+      "compact"
+    ],
+    "navigation_items": 5,
+    "green_identity": "primary",
+    "ladders": {
+      "g--ar": [
+        [
+          0,
+          2
+        ],
+        [
+          480,
+          3
+        ],
+        [
+          768,
+          6
+        ],
+        [
+          1280,
+          9
+        ],
+        [
+          1600,
+          12
+        ]
+      ],
+      "g--arfeed": [
+        [
+          0,
+          1
+        ],
+        [
+          1100,
+          2
+        ]
+      ]
+    },
+    "desktop_density_1440": 9
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T036-archive-emerald-1024.png",
+    "T036-archive-emerald-1440.png",
+    "T036-archive-emerald-1920.png",
+    "T036-archive-emerald-320.png",
+    "T036-archive-emerald-390.png",
+    "T036-archive-emerald-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.778484+00:00"
+}

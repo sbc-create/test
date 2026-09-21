@@ -1,0 +1,100 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T022",
+  "slug": "genre-capsules",
+  "version": "1.0.0",
+  "family": "genre",
+  "package_digest": "c702a32c3b30f4ed338ef83f9dd23f0dfad86b0e7eec87dda3519a45111490a5",
+  "declared": {
+    "design_intent": "Капсулы таксономии крупно, витрина следом.",
+    "primary_user_journey": "выбрать капсулу → уйти в список",
+    "home_signature": [
+      "taxonomy",
+      "grid",
+      "taxonomy",
+      "feed",
+      "about"
+    ],
+    "block_titles": [
+      "Капсулы разделов",
+      "Витрина",
+      "Капсулы лет",
+      "Свежее",
+      "О капсулах"
+    ],
+    "card_grammar": [
+      "poster",
+      "compact"
+    ],
+    "navigation_items": 4,
+    "green_identity": "primary",
+    "ladders": {
+      "g--cap": [
+        [
+          0,
+          2
+        ],
+        [
+          600,
+          3
+        ],
+        [
+          1024,
+          5
+        ],
+        [
+          1600,
+          7
+        ]
+      ],
+      "g--capfeed": [
+        [
+          0,
+          1
+        ],
+        [
+          1000,
+          2
+        ]
+      ]
+    },
+    "desktop_density_1440": 5
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T022-genre-capsules-1024.png",
+    "T022-genre-capsules-1440.png",
+    "T022-genre-capsules-1920.png",
+    "T022-genre-capsules-320.png",
+    "T022-genre-capsules-390.png",
+    "T022-genre-capsules-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.692900+00:00"
+}

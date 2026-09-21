@@ -1,0 +1,104 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T025",
+  "slug": "genre-quickpick",
+  "version": "1.0.0",
+  "family": "genre",
+  "package_digest": "cc8efe40455eb7cb5488b706c85bb06134b9cd17fd55a93f215669a5e67849f1",
+  "declared": {
+    "design_intent": "Сразу выбор действия, потом лента и витрина.",
+    "primary_user_journey": "выбрать намерение → получить список",
+    "home_signature": [
+      "taxonomy",
+      "feed",
+      "grid",
+      "index",
+      "about"
+    ],
+    "block_titles": [
+      "Что смотрим",
+      "Недавно добавленное",
+      "Весь каталог",
+      "По буквам",
+      "О выборе"
+    ],
+    "card_grammar": [
+      "compact",
+      "poster"
+    ],
+    "navigation_items": 3,
+    "green_identity": "secondary",
+    "ladders": {
+      "g--qfeed": [
+        [
+          0,
+          1
+        ],
+        [
+          900,
+          2
+        ],
+        [
+          1440,
+          3
+        ]
+      ],
+      "g--qgrid": [
+        [
+          0,
+          2
+        ],
+        [
+          600,
+          3
+        ],
+        [
+          1024,
+          5
+        ],
+        [
+          1600,
+          8
+        ]
+      ]
+    },
+    "desktop_density_1440": 5
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T025-genre-quickpick-1024.png",
+    "T025-genre-quickpick-1440.png",
+    "T025-genre-quickpick-1920.png",
+    "T025-genre-quickpick-320.png",
+    "T025-genre-quickpick-390.png",
+    "T025-genre-quickpick-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.710144+00:00"
+}

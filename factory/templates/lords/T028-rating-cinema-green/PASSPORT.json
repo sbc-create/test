@@ -1,0 +1,96 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T028",
+  "slug": "rating-cinema-green",
+  "version": "1.0.0",
+  "family": "rating",
+  "package_digest": "9267c5243de5bf618175be7ca9a3e86fcdc12b0cdc5395521d734385f1defc63",
+  "declared": {
+    "design_intent": "Крупный кадр, затем порядок и плотная витрина.",
+    "primary_user_journey": "войти через кадр → пройти порядок",
+    "home_signature": [
+      "hero",
+      "ranked",
+      "grid",
+      "feed",
+      "about"
+    ],
+    "block_titles": [
+      "Первый в каталоге",
+      "Далее по порядку",
+      "Зал каталога",
+      "Свежее",
+      "О зале"
+    ],
+    "card_grammar": [
+      "poster",
+      "compact"
+    ],
+    "navigation_items": 4,
+    "green_identity": "secondary",
+    "ladders": {
+      "g--cg": [
+        [
+          0,
+          2
+        ],
+        [
+          600,
+          4
+        ],
+        [
+          1024,
+          6
+        ],
+        [
+          1600,
+          9
+        ]
+      ],
+      "g--cglist": [
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    "desktop_density_1440": 6
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T028-rating-cinema-green-1024.png",
+    "T028-rating-cinema-green-1440.png",
+    "T028-rating-cinema-green-1920.png",
+    "T028-rating-cinema-green-320.png",
+    "T028-rating-cinema-green-390.png",
+    "T028-rating-cinema-green-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.729010+00:00"
+}

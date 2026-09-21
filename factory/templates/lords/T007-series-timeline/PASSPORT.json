@@ -1,0 +1,96 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T007",
+  "slug": "series-timeline",
+  "version": "1.0.0",
+  "family": "series-feed",
+  "package_digest": "f324b2aeaafcb4b0585246eeaeaafba28b31dd9a20972c930347c8b6ccaa2a8f",
+  "declared": {
+    "design_intent": "Хронология: длинная лента сверху, под ней разворот с одной крупной записью.",
+    "primary_user_journey": "пройти по времени → остановиться на развороте",
+    "home_signature": [
+      "feed",
+      "split",
+      "taxonomy",
+      "grid",
+      "about"
+    ],
+    "block_titles": [
+      "Хронология поступлений",
+      "В центре внимания",
+      "Годы выпуска",
+      "Указатель каталога",
+      "О хронологии"
+    ],
+    "card_grammar": [
+      "compact",
+      "tile"
+    ],
+    "navigation_items": 4,
+    "green_identity": "secondary",
+    "ladders": {
+      "g--time": [
+        [
+          0,
+          1
+        ]
+      ],
+      "g--index": [
+        [
+          0,
+          2
+        ],
+        [
+          600,
+          3
+        ],
+        [
+          1024,
+          5
+        ],
+        [
+          1600,
+          8
+        ]
+      ]
+    },
+    "desktop_density_1440": 5
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T007-series-timeline-1024.png",
+    "T007-series-timeline-1440.png",
+    "T007-series-timeline-1920.png",
+    "T007-series-timeline-320.png",
+    "T007-series-timeline-390.png",
+    "T007-series-timeline-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.603582+00:00"
+}

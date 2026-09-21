@@ -1,0 +1,104 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T041",
+  "slug": "neon-emerald-screen",
+  "version": "1.0.0",
+  "family": "modern",
+  "package_digest": "fa7885d9ac9a90e728caccd511829f14c081cdf631aa9e22a481137d865e40f3",
+  "declared": {
+    "design_intent": "Кадр, плотная витрина, лента, разворот.",
+    "primary_user_journey": "войти через кадр → уйти в витрину",
+    "home_signature": [
+      "hero",
+      "grid",
+      "feed",
+      "split",
+      "about"
+    ],
+    "block_titles": [
+      "На экране",
+      "Витрина",
+      "Поток",
+      "Крупно",
+      "О свечении"
+    ],
+    "card_grammar": [
+      "poster",
+      "compact"
+    ],
+    "navigation_items": 4,
+    "green_identity": "primary",
+    "ladders": {
+      "g--ne": [
+        [
+          0,
+          2
+        ],
+        [
+          600,
+          3
+        ],
+        [
+          1024,
+          6
+        ],
+        [
+          1600,
+          8
+        ]
+      ],
+      "g--nefeed": [
+        [
+          0,
+          1
+        ],
+        [
+          900,
+          2
+        ],
+        [
+          1440,
+          3
+        ]
+      ]
+    },
+    "desktop_density_1440": 6
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T041-neon-emerald-screen-1024.png",
+    "T041-neon-emerald-screen-1440.png",
+    "T041-neon-emerald-screen-1920.png",
+    "T041-neon-emerald-screen-320.png",
+    "T041-neon-emerald-screen-390.png",
+    "T041-neon-emerald-screen-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.807210+00:00"
+}

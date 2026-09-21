@@ -1,0 +1,119 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T008",
+  "slug": "series-dashboard",
+  "version": "1.0.0",
+  "family": "series-feed",
+  "package_digest": "76c61ec4e997c0a7a25ee39f74ae36c96142db85617a94d5e930a07227962176",
+  "declared": {
+    "design_intent": "Панель: каждый вид получает свой столбец, а не место в общей сетке.",
+    "primary_user_journey": "выбрать раздел на панели → уйти в его список",
+    "home_signature": [
+      "board",
+      "feed",
+      "grid",
+      "taxonomy",
+      "about"
+    ],
+    "block_titles": [
+      "Разделы каталога",
+      "Что добавилось",
+      "Остальное в каталоге",
+      "Годы",
+      "О панели"
+    ],
+    "card_grammar": [
+      "tile",
+      "compact",
+      "poster"
+    ],
+    "navigation_items": 5,
+    "green_identity": "primary",
+    "ladders": {
+      "g--panel": [
+        [
+          0,
+          1
+        ],
+        [
+          768,
+          2
+        ],
+        [
+          1200,
+          3
+        ]
+      ],
+      "g--rest": [
+        [
+          0,
+          2
+        ],
+        [
+          600,
+          3
+        ],
+        [
+          1024,
+          4
+        ],
+        [
+          1440,
+          6
+        ]
+      ],
+      "g--upd": [
+        [
+          0,
+          1
+        ],
+        [
+          900,
+          2
+        ],
+        [
+          1440,
+          4
+        ]
+      ]
+    },
+    "desktop_density_1440": 6
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T008-series-dashboard-1024.png",
+    "T008-series-dashboard-1440.png",
+    "T008-series-dashboard-1920.png",
+    "T008-series-dashboard-320.png",
+    "T008-series-dashboard-390.png",
+    "T008-series-dashboard-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.609264+00:00"
+}

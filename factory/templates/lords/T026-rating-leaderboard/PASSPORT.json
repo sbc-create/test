@@ -1,0 +1,100 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T026",
+  "slug": "rating-leaderboard",
+  "version": "1.0.0",
+  "family": "rating",
+  "package_digest": "91dfca58e7fae9417f6aaa825ddff2cdca3ad2cdab0e45a99833e5d96ed619e8",
+  "declared": {
+    "design_intent": "Ранжированный список ведёт страницу, витрина поддерживает.",
+    "primary_user_journey": "пройти список сверху вниз",
+    "home_signature": [
+      "ranked",
+      "grid",
+      "taxonomy",
+      "feed",
+      "about"
+    ],
+    "block_titles": [
+      "Первые в каталоге по порядку",
+      "Витрина",
+      "Разделы",
+      "Последние поступления",
+      "О порядке"
+    ],
+    "card_grammar": [
+      "compact",
+      "poster"
+    ],
+    "navigation_items": 3,
+    "green_identity": "primary",
+    "ladders": {
+      "g--lb": [
+        [
+          0,
+          1
+        ],
+        [
+          1100,
+          2
+        ]
+      ],
+      "g--lbgrid": [
+        [
+          0,
+          2
+        ],
+        [
+          600,
+          4
+        ],
+        [
+          1024,
+          6
+        ],
+        [
+          1600,
+          8
+        ]
+      ]
+    },
+    "desktop_density_1440": 6
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T026-rating-leaderboard-1024.png",
+    "T026-rating-leaderboard-1440.png",
+    "T026-rating-leaderboard-1920.png",
+    "T026-rating-leaderboard-320.png",
+    "T026-rating-leaderboard-390.png",
+    "T026-rating-leaderboard-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.716594+00:00"
+}

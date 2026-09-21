@@ -1,0 +1,100 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T045",
+  "slug": "dark-glass-lords",
+  "version": "1.0.0",
+  "family": "modern",
+  "package_digest": "469a5362dafe71da545553158b3f99e015415669a473ff764ef12574e8f8401f",
+  "declared": {
+    "design_intent": "Панели-доска, мозаика, витрина, указатель.",
+    "primary_user_journey": "переходить по панелям",
+    "home_signature": [
+      "board",
+      "mosaic",
+      "grid",
+      "index",
+      "about"
+    ],
+    "block_titles": [
+      "Панели разделов",
+      "Панель каталога",
+      "Витрина",
+      "Указатель",
+      "О панелях"
+    ],
+    "card_grammar": [
+      "tile",
+      "poster"
+    ],
+    "navigation_items": 4,
+    "green_identity": "primary",
+    "ladders": {
+      "g--gp": [
+        [
+          0,
+          2
+        ],
+        [
+          768,
+          4
+        ]
+      ],
+      "g--gpg": [
+        [
+          0,
+          2
+        ],
+        [
+          600,
+          3
+        ],
+        [
+          1024,
+          6
+        ],
+        [
+          1600,
+          8
+        ]
+      ]
+    },
+    "desktop_density_1440": 6
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T045-dark-glass-lords-1024.png",
+    "T045-dark-glass-lords-1440.png",
+    "T045-dark-glass-lords-1920.png",
+    "T045-dark-glass-lords-320.png",
+    "T045-dark-glass-lords-390.png",
+    "T045-dark-glass-lords-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.834183+00:00"
+}

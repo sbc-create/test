@@ -1,0 +1,21 @@
+{
+  "schema": "lords-tenant-marker/1",
+  "tenant": "lords",
+  "role": "LORDS_TEMPLATE_FACTORY_REVIEW",
+  "branch": "claude/lords-50-template-factory-01",
+  "worktree": "/home/claude/wt-lords-50-template-factory-01",
+  "template_range": {
+    "from": "T001",
+    "to": "T050",
+    "count": 50
+  },
+  "forbidden_scopes": [
+    "чужие арендаторы и их worktree, ветки, манифесты, назначения и сервисы",
+    "production-мутации, включая deploy, перезапуск служб, DNS, TLS и индексируемость",
+    "самостоятельный systemctl",
+    "создание шаблонов вне T001–T050"
+  ],
+  "session_purpose": "независимая проверка и подготовка T001–T050 к визуальной приёмке владельца",
+  "terminal_title": "LORDS — T001–T050 REVIEW",
+  "issued_at_utc": "2026-09-21T17:48:36.792977+00:00"
+}

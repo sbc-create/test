@@ -1,0 +1,100 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T047",
+  "slug": "lords-green-modern",
+  "version": "1.0.0",
+  "family": "hybrid",
+  "package_digest": "e320f6dc8b1b25d717d9f7a68b0cc52e4ea0a9fdc007e2e92afd258ee82cf412",
+  "declared": {
+    "design_intent": "Разворот, витрина, мозаика, указатель.",
+    "primary_user_journey": "войти разворотом → идти по геометрии",
+    "home_signature": [
+      "split",
+      "grid",
+      "mosaic",
+      "index",
+      "about"
+    ],
+    "block_titles": [
+      "Открывает каталог",
+      "Витрина",
+      "Геометрия каталога",
+      "Указатель",
+      "О геометрии"
+    ],
+    "card_grammar": [
+      "compact",
+      "poster"
+    ],
+    "navigation_items": 4,
+    "green_identity": "primary",
+    "ladders": {
+      "g--gm": [
+        [
+          0,
+          2
+        ],
+        [
+          600,
+          3
+        ],
+        [
+          1024,
+          5
+        ],
+        [
+          1600,
+          7
+        ]
+      ],
+      "g--gmm": [
+        [
+          0,
+          2
+        ],
+        [
+          768,
+          4
+        ]
+      ]
+    },
+    "desktop_density_1440": 5
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T047-lords-green-modern-1024.png",
+    "T047-lords-green-modern-1440.png",
+    "T047-lords-green-modern-1920.png",
+    "T047-lords-green-modern-320.png",
+    "T047-lords-green-modern-390.png",
+    "T047-lords-green-modern-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.846317+00:00"
+}

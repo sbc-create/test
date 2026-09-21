@@ -1,0 +1,104 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T004",
+  "slug": "forest-cinema-gallery",
+  "version": "1.0.0",
+  "family": "forest-cinema",
+  "package_digest": "36e6cd587ea93f209eae98c7bb408fe83f2a0ff9afc3de4e96bd287bc2a18088",
+  "declared": {
+    "design_intent": "Галерея: три редакционные карточки во главе, ниже разреженная сетка с крупными полями.",
+    "primary_user_journey": "прочитать отбор → уйти в галерею каталога",
+    "home_signature": [
+      "grid",
+      "grid",
+      "taxonomy",
+      "feed",
+      "grid",
+      "about"
+    ],
+    "block_titles": [
+      "Отбор редакции",
+      "Галерея каталога",
+      "Разделы галереи",
+      "Поступления",
+      "Ещё в галерее",
+      "О галерее"
+    ],
+    "card_grammar": [
+      "editorial",
+      "poster"
+    ],
+    "navigation_items": 4,
+    "green_identity": "accent-only",
+    "ladders": {
+      "g--gallery": [
+        [
+          0,
+          2
+        ],
+        [
+          600,
+          3
+        ],
+        [
+          1024,
+          4
+        ],
+        [
+          1440,
+          6
+        ]
+      ],
+      "g--trio": [
+        [
+          680,
+          3
+        ]
+      ],
+      "g--adds": [
+        [
+          768,
+          3
+        ]
+      ]
+    },
+    "desktop_density_1440": 6
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T004-forest-cinema-gallery-1024.png",
+    "T004-forest-cinema-gallery-1440.png",
+    "T004-forest-cinema-gallery-1920.png",
+    "T004-forest-cinema-gallery-320.png",
+    "T004-forest-cinema-gallery-390.png",
+    "T004-forest-cinema-gallery-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.586164+00:00"
+}

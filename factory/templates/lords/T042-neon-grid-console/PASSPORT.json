@@ -1,0 +1,100 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T042",
+  "slug": "neon-grid-console",
+  "version": "1.0.0",
+  "family": "modern",
+  "package_digest": "545d8ff4cd1c75bb72a29ed3c96981e51a129bebdc86ef81360ab40c0d5a3f51",
+  "declared": {
+    "design_intent": "Доска-консоль впереди, витрина и перечень следом.",
+    "primary_user_journey": "окинуть консоль → углубиться",
+    "home_signature": [
+      "board",
+      "grid",
+      "feed",
+      "index",
+      "about"
+    ],
+    "block_titles": [
+      "Консоль разделов",
+      "Перечень",
+      "События каталога",
+      "Переход",
+      "О консоли"
+    ],
+    "card_grammar": [
+      "tile",
+      "poster"
+    ],
+    "navigation_items": 5,
+    "green_identity": "secondary",
+    "ladders": {
+      "g--con": [
+        [
+          0,
+          2
+        ],
+        [
+          600,
+          4
+        ],
+        [
+          1024,
+          7
+        ],
+        [
+          1600,
+          10
+        ]
+      ],
+      "g--conf": [
+        [
+          0,
+          1
+        ],
+        [
+          1100,
+          2
+        ]
+      ]
+    },
+    "desktop_density_1440": 7
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T042-neon-grid-console-1024.png",
+    "T042-neon-grid-console-1440.png",
+    "T042-neon-grid-console-1920.png",
+    "T042-neon-grid-console-320.png",
+    "T042-neon-grid-console-390.png",
+    "T042-neon-grid-console-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.813205+00:00"
+}

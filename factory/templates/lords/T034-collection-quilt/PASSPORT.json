@@ -1,0 +1,82 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T034",
+  "slug": "collection-quilt",
+  "version": "1.0.0",
+  "family": "collection",
+  "package_digest": "0bb380ab0dfc02a2d0ba86851e0457a4c224083575383f12cfd888c307dd6327",
+  "declared": {
+    "design_intent": "Две мозаики с разными пролётами и лента между ними. Навигация — буквенный указатель, а не чипы: это другой способ искать.",
+    "primary_user_journey": "скользить по лоскуту",
+    "home_signature": [
+      "mosaic",
+      "feed",
+      "mosaic",
+      "index",
+      "about"
+    ],
+    "block_titles": [
+      "Крупный лоскут",
+      "Между лоскутами",
+      "Мелкий лоскут",
+      "Указатель лоскута",
+      "О лоскуте"
+    ],
+    "card_grammar": [
+      "poster",
+      "compact"
+    ],
+    "navigation_items": 4,
+    "green_identity": "secondary",
+    "ladders": {
+      "g--qfeed": [
+        [
+          0,
+          1
+        ],
+        [
+          1100,
+          2
+        ]
+      ]
+    },
+    "desktop_density_1440": 2
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T034-collection-quilt-1024.png",
+    "T034-collection-quilt-1440.png",
+    "T034-collection-quilt-1920.png",
+    "T034-collection-quilt-320.png",
+    "T034-collection-quilt-390.png",
+    "T034-collection-quilt-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.766821+00:00"
+}

@@ -1,0 +1,71 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T035",
+  "slug": "collection-library",
+  "version": "1.0.0",
+  "family": "collection",
+  "package_digest": "9be9a9b0e281538b7bf6347b307d6539de504af87506a69b3a867d8af23a312a",
+  "declared": {
+    "design_intent": "Указатель, доска срезов, две витрины.",
+    "primary_user_journey": "найти срез → уйти в витрину",
+    "home_signature": [
+      "index",
+      "board",
+      "grid",
+      "grid",
+      "about"
+    ],
+    "block_titles": [
+      "Указатель собрания",
+      "Срезы собрания",
+      "Первая витрина",
+      "Вторая витрина",
+      "О собрании"
+    ],
+    "card_grammar": [
+      "tile",
+      "poster"
+    ],
+    "navigation_items": 5,
+    "green_identity": "primary",
+    "ladders": {},
+    "desktop_density_1440": 0
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T035-collection-library-1024.png",
+    "T035-collection-library-1440.png",
+    "T035-collection-library-1920.png",
+    "T035-collection-library-320.png",
+    "T035-collection-library-390.png",
+    "T035-collection-library-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.772917+00:00"
+}

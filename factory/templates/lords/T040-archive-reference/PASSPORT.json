@@ -1,0 +1,108 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T040",
+  "slug": "archive-reference",
+  "version": "1.0.0",
+  "family": "archive",
+  "package_digest": "e36f40b22a42a3bd8d30d0c71023f21b1b282837903dbdd573bcea4daf8e2e6e",
+  "declared": {
+    "design_intent": "Без навигации сверху: сразу перечень, потом витрина.",
+    "primary_user_journey": "сразу к перечню",
+    "home_signature": [
+      "grid",
+      "index",
+      "taxonomy",
+      "grid",
+      "about"
+    ],
+    "block_titles": [
+      "Перечень каталога",
+      "Переход по букве",
+      "Виды",
+      "Витрина",
+      "О справочнике"
+    ],
+    "card_grammar": [
+      "tile",
+      "poster"
+    ],
+    "navigation_items": 5,
+    "green_identity": "accent-only",
+    "ladders": {
+      "g--ref": [
+        [
+          0,
+          2
+        ],
+        [
+          480,
+          4
+        ],
+        [
+          768,
+          6
+        ],
+        [
+          1200,
+          9
+        ],
+        [
+          1600,
+          12
+        ]
+      ],
+      "g--refg": [
+        [
+          0,
+          2
+        ],
+        [
+          768,
+          4
+        ],
+        [
+          1440,
+          5
+        ]
+      ]
+    },
+    "desktop_density_1440": 9
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T040-archive-reference-1024.png",
+    "T040-archive-reference-1440.png",
+    "T040-archive-reference-1920.png",
+    "T040-archive-reference-320.png",
+    "T040-archive-reference-390.png",
+    "T040-archive-reference-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.801097+00:00"
+}

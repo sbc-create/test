@@ -1,0 +1,104 @@
+{
+  "schema": "lords-template-passport/1",
+  "template_id": "T030",
+  "slug": "rating-community-ready",
+  "version": "1.0.0",
+  "family": "rating",
+  "package_digest": "3018900cc222173731fafd6ddeaf49eabad570968db4f68b1eafecfee7468865",
+  "declared": {
+    "design_intent": "Честная пустота там, где оценок нет: витрина и порядок без обещаний.",
+    "primary_user_journey": "смотреть каталог как есть",
+    "home_signature": [
+      "grid",
+      "feed",
+      "ranked",
+      "taxonomy",
+      "about"
+    ],
+    "block_titles": [
+      "Каталог",
+      "Поступления",
+      "По порядку каталога",
+      "Разделы",
+      "Почему нет оценок"
+    ],
+    "card_grammar": [
+      "poster",
+      "compact"
+    ],
+    "navigation_items": 4,
+    "green_identity": "primary",
+    "ladders": {
+      "g--cr": [
+        [
+          0,
+          2
+        ],
+        [
+          600,
+          3
+        ],
+        [
+          1024,
+          5
+        ],
+        [
+          1600,
+          7
+        ]
+      ],
+      "g--crfeed": [
+        [
+          0,
+          1
+        ],
+        [
+          900,
+          2
+        ],
+        [
+          1440,
+          3
+        ]
+      ]
+    },
+    "desktop_density_1440": 5
+  },
+  "measured": {
+    "visual_score": 100,
+    "hard_fail_count": 0,
+    "zeroes": {
+      "HORIZONTAL_OVERFLOW_COUNT": 0,
+      "CLIPPED_REQUIRED_TEXT_COUNT": 0,
+      "TIMESTAMP_ELLIPSIS_COUNT": 0,
+      "POSTER_ASPECT_RATIO_VIOLATIONS": 0,
+      "BROKEN_IMAGE_COUNT": 0,
+      "EMPTY_GRID_CELL_COUNT": 0,
+      "ORPHAN_LAST_ROW_COUNT": 0,
+      "OVERLAP_COUNT": 0,
+      "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
+      "SMALL_TOUCH_TARGET_COUNT": 0,
+      "HEADING_ORDER_SKIPS": 0,
+      "LOW_CONTRAST_COUNT": 0
+    },
+    "viewports": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "review_screenshots": [
+    "T030-rating-community-ready-1024.png",
+    "T030-rating-community-ready-1440.png",
+    "T030-rating-community-ready-1920.png",
+    "T030-rating-community-ready-320.png",
+    "T030-rating-community-ready-390.png",
+    "T030-rating-community-ready-768.png"
+  ],
+  "owner_visual_accepted": null,
+  "owner_note": "",
+  "issued_at_utc": "2026-09-21T17:45:49.740892+00:00"
+}
