@@ -1,0 +1,25 @@
+{
+  "OWNER_DEPLOY_APPROVAL_ID": null,
+  "OWNER_DEPLOY_APPROVAL_NOTE": "Пусто намеренно: одобрение на артефакт 75b84a4d не переносится на этот digest.",
+  "artifact_path": "artifacts/zona-slider-artifact/zona-01-frontend-5863d2962648.tar.gz",
+  "artifact_sha256": "2650fad6b53a2d97077734d4879d31d02355fe27948114c33fee9d959b87c591",
+  "build_id": "zona-slider-5863d2962648",
+  "built_at": "2026-09-21T15:40:44Z",
+  "code_tree_digest": "ffa57065cf5f99777d223e3d5fa8ae563d1431c0433facb951767b28471164c4",
+  "design_version": "1.2.0",
+  "domain": "zonafilm.space",
+  "expected_indexability": "noindex,nofollow",
+  "files": [
+    "automation/host/lords-frontend.py",
+    "automation/host/genre_aliases.py",
+    "automation/host/collection_contract.py"
+  ],
+  "profile": "zona-01",
+  "rollback_target_running_sha256": "71b0322ee5767b13b43c1081c9f43a55ef35f6e73af115f1e17b967dbaeba51b",
+  "schema_version": 1,
+  "service_name": "nova-zona-01",
+  "source_commit": "5863d296264867f85138bd771f1b90a86ac9c599",
+  "supersedes_artifact_sha256": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+  "supersedes_build": "20260920T212359Z-39dc16ed-nova",
+  "template_family": "zona"
+}
