@@ -91,6 +91,15 @@ def main() -> int:
     р.add_argument("--peer-expect-build", required=True)
     р.add_argument("--out", required=True)
     р.add_argument(
+        "--mode", choices=("deploy", "incident"), default="deploy",
+        help=("deploy — приёмка кандидата: полный набор критериев, включая требование "
+              "B14 «в подвале нет знаков сборки». incident — вопрос «витрина жива и "
+              "отдаёт верное»: доступность, коды маршрутов, индексация, canonical, "
+              "геометрия, плеер и неизменность второго домена. Критерии качества "
+              "содержимого, которые закрывает только новая сборка, в режиме incident "
+              "не считаются провалом, но печатаются и попадают в отчёт наблюдением. "
+              "Аварийный гейт, который не может позеленеть после конца аварии, не гейт."))
+    р.add_argument(
         "--known-footer-marker-build", default=None,
         help=("build_id, у которого знак сборки в подвале — известный дефект B14. "
               "Послабление привязано к одному build_id и на другие сборки не "
@@ -109,6 +118,7 @@ def main() -> int:
         "domain": args.domain, "peer_domain": args.peer_domain,
         "expect_build": args.expect_build, "expect_artifact": args.expect_artifact,
         "peer_expect_build": args.peer_expect_build,
+        "mode": args.mode,
         "known_footer_marker_build": args.known_footer_marker_build,
         "viewports": list(ШИРИНЫ), "cells": [], "failures": [],
         "known_build_defects": [],
@@ -159,9 +169,13 @@ def main() -> int:
                         if abs(r - 16 / 9) / (16 / 9) * 100 > 1:
                             провалы.append(f"{ключ}: рамка плеера {r}")
                     if м["footer_build_marker"]:
-                        # Послабление действует только для названного build_id.
-                        if (args.known_footer_marker_build
-                                and м["served_build"] == args.known_footer_marker_build):
+                        # Требование B14 принадлежит приёмке кандидата. В аварийном
+                        # режиме это наблюдение, а не провал доступности; послабление
+                        # в режиме deploy привязано к одному build_id и на другие
+                        # сборки не распространяется.
+                        известен = (args.known_footer_marker_build
+                                    and м["served_build"] == args.known_footer_marker_build)
+                        if args.mode == "incident" or известен:
                             известные.append(f"{ключ}: знак сборки в подвале (дефект B14)")
                         else:
                             провалы.append(f"{ключ}: знак сборки в подвале")
@@ -187,16 +201,22 @@ def main() -> int:
         finally:
             b.close()
     итог["AVAILABILITY_PASS"] = not провалы
-    итог["SMOKE_PASS"] = not провалы and not известные
+    # В режиме приёмки кандидата зелёным считается только полное отсутствие
+    # замечаний. В аварийном режиме вердикт отвечает на вопрос аварии.
+    итог["SMOKE_PASS"] = (not провалы) if args.mode == "incident" else (
+        not провалы and not известные)
     (вывод / "SMOKE.json").write_text(json.dumps(итог, ensure_ascii=False, indent=1),
                                       encoding="utf-8")
+    print("MODE:", args.mode)
     print("AVAILABILITY_PASS:", итог["AVAILABILITY_PASS"])
     print("SMOKE_PASS:", итог["SMOKE_PASS"])
     for f in провалы[:15]:
         print("  провал:", f)
     if известные:
-        print(f"  известный дефект сборки {args.known_footer_marker_build}: "
-              f"{len(известные)} ячеек — знак сборки в подвале (B14)")
+        чей = (args.known_footer_marker_build
+               or (итог["cells"][0]["served_build"] if итог["cells"] else "?"))
+        print(f"  наблюдение: знак сборки в подвале — {len(известные)} ячеек, "
+              f"сборка {чей} (дефект B14)")
     return 0 if итог["SMOKE_PASS"] else 1
 
 
