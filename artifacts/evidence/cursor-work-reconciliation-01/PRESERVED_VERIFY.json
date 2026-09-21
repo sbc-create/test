@@ -1,0 +1,9 @@
+{
+  "источник_снимка": "/home/claude/wt-ten-templates-01/artifacts/evidence/ten-template-factory-01/preserved/shared-checkout-inventory.json",
+  "checkout": "/srv/site-factory/repo",
+  "файлов_в_снимке": 62,
+  "файлов_проверено": 62,
+  "FOREIGN_FILES_CHANGED": 0,
+  "расхождения": [],
+  "вывод": "Чужие изменения не тронуты."
+}
