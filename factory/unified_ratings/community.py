@@ -256,50 +256,57 @@ class CommunityRatings:
         """Пересчитать агрегат из ledger и записать его."""
         if tenant_id is None:
             return self.rebuild_network(title_id=title_id)
-        rows = self._ledger_rows(tenant_id=tenant_id, title_id=title_id)
-        return self._write_aggregate(
-            scope_kind="tenant", scope_id=tenant_id, title_id=title_id, rows=rows
-        )
+        return self._write_aggregate(scope_kind="tenant", scope_id=tenant_id, title_id=title_id)
 
     def rebuild_network(self, *, title_id: str) -> AggregateView:
         """Сетевой агрегат по правилу NETWORK_RULE."""
-        rows = self._ledger_rows(tenant_id=None, title_id=title_id)
+        return self._write_aggregate(scope_kind="network", scope_id="", title_id=title_id)
+
+    def _collect(self, *, scope_kind: str, scope_id: str, title_id: str) -> list[dict[str, Any]]:
+        rows = self._ledger_rows(
+            tenant_id=scope_id if scope_kind == "tenant" else None, title_id=title_id
+        )
+        if scope_kind != "network":
+            return rows
         latest: dict[str, dict[str, Any]] = {}
         for row in rows:
             previous = latest.get(row["actor_id"])
             if previous is None or str(row["updated_at"]) > str(previous["updated_at"]):
                 latest[row["actor_id"]] = row
-        return self._write_aggregate(
-            scope_kind="network", scope_id="", title_id=title_id, rows=list(latest.values())
-        )
+        return list(latest.values())
 
     def _write_aggregate(
-        self, *, scope_kind: str, scope_id: str, title_id: str, rows: list[dict[str, Any]]
+        self, *, scope_kind: str, scope_id: str, title_id: str
     ) -> AggregateView:
-        distribution = {str(i): 0 for i in range(1, 11)}
-        vote_sum = 0
-        for row in rows:
-            score = int(row["score"])
-            if score < 1 or score > 10:
-                # Ledger не может содержать такого значения; если содержит,
-                # это повреждение данных, и оно не должно молча попасть в
-                # среднее.
-                raise ValueError(
-                    f"ledger содержит оценку вне 1–10: {score} ({title_id}/{scope_id})"
-                )
-            distribution[str(score)] += 1
-            vote_sum += score
-        vote_count = len(rows)
-        checksum = checksum_for(
-            scope_kind=scope_kind,
-            scope_id=scope_id,
-            title_id=title_id,
-            vote_count=vote_count,
-            vote_sum=vote_sum,
-            distribution=distribution,
-        )
+        # Чтение ledger происходит внутри немедленной транзакции записи.
+        # Снаружи два пересчёта успевают прочитать одно и то же состояние,
+        # и тот, кто пишет вторым, затирает более полный результат первого
+        # своим устаревшим — агрегат отстаёт ровно на голос.
         now = utc_now()
         with self.store.write_tx() as conn:
+            rows = self._collect(scope_kind=scope_kind, scope_id=scope_id, title_id=title_id)
+            distribution = {str(i): 0 for i in range(1, 11)}
+            vote_sum = 0
+            for row in rows:
+                score = int(row["score"])
+                if score < 1 or score > 10:
+                    # Ledger не может содержать такого значения; если содержит,
+                    # это повреждение данных, и оно не должно молча попасть в
+                    # среднее.
+                    raise ValueError(
+                        f"ledger содержит оценку вне 1–10: {score} ({title_id}/{scope_id})"
+                    )
+                distribution[str(score)] += 1
+                vote_sum += score
+            vote_count = len(rows)
+            checksum = checksum_for(
+                scope_kind=scope_kind,
+                scope_id=scope_id,
+                title_id=title_id,
+                vote_count=vote_count,
+                vote_sum=vote_sum,
+                distribution=distribution,
+            )
             conn.execute(
                 """INSERT INTO unified_user_aggregates(
                        scope_kind, scope_id, title_id, dimension, vote_sum, vote_count,
@@ -362,24 +369,23 @@ class CommunityRatings:
         )
 
     def verify_aggregate(self, *, scope_kind: str, scope_id: str, title_id: str) -> dict[str, Any]:
-        """Сверить записанный агрегат с пересчётом из ledger."""
+        """Сверить агрегат двумя независимыми проверками.
+
+        Одной проверки мало. Сравнение «пересчёт из ledger против
+        записанной контрольной суммы» не замечает правку самих полей
+        строки: кто-то изменил ``vote_count``, не тронув ``checksum``, и
+        сумма по-прежнему совпадает с ledger. Поэтому строка дополнительно
+        сверяется сама с собой — контрольная сумма должна пересчитываться
+        из тех значений, которые в строке лежат сейчас.
+        """
         stored = self.get_aggregate(scope_kind=scope_kind, scope_id=scope_id, title_id=title_id)
-        rows = self._ledger_rows(
-            tenant_id=scope_id if scope_kind == "tenant" else None, title_id=title_id
-        )
-        if scope_kind == "network":
-            latest: dict[str, dict[str, Any]] = {}
-            for row in rows:
-                previous = latest.get(row["actor_id"])
-                if previous is None or str(row["updated_at"]) > str(previous["updated_at"]):
-                    latest[row["actor_id"]] = row
-            rows = list(latest.values())
+        rows = self._collect(scope_kind=scope_kind, scope_id=scope_id, title_id=title_id)
         distribution = {str(i): 0 for i in range(1, 11)}
         vote_sum = 0
         for row in rows:
             distribution[str(int(row["score"]))] += 1
             vote_sum += int(row["score"])
-        expected = checksum_for(
+        ledger_checksum = checksum_for(
             scope_kind=scope_kind,
             scope_id=scope_id,
             title_id=title_id,
@@ -387,10 +393,27 @@ class CommunityRatings:
             vote_sum=vote_sum,
             distribution=distribution,
         )
+        row_checksum = (
+            None
+            if stored is None
+            else checksum_for(
+                scope_kind=stored.scope_kind,
+                scope_id=stored.scope_id,
+                title_id=stored.title_id,
+                vote_count=stored.vote_count,
+                vote_sum=stored.vote_sum,
+                distribution={str(k): int(v) for k, v in stored.distribution.items()},
+            )
+        )
+        row_intact = stored is not None and row_checksum == stored.checksum
+        agrees_with_ledger = stored is not None and stored.checksum == ledger_checksum
         return {
-            "match": stored is not None and stored.checksum == expected,
+            "match": row_intact and agrees_with_ledger,
+            "row_intact": row_intact,
+            "agrees_with_ledger": agrees_with_ledger,
             "stored_checksum": None if stored is None else stored.checksum,
-            "recomputed_checksum": expected,
+            "row_checksum": row_checksum,
+            "ledger_checksum": ledger_checksum,
             "ledger_vote_count": len(rows),
             "stored_vote_count": None if stored is None else stored.vote_count,
         }
