@@ -4,7 +4,7 @@
   "slug": "emerald-series-feed",
   "version": "1.0.0",
   "family": "series-feed",
-  "package_digest": "76197fe7ad69b58abbb77ded32f89eaff8fffe0e9a616c1f5719e1ce7edf1889",
+  "package_digest": "ab88f1136ed3419db2152d0b650f64247a25664907ad5ad8b63c3d105899ff59",
   "declared": {
     "design_intent": "Плотная событийная лента: что добавилось, тем и открывается страница.",
     "primary_user_journey": "увидеть обновления → уйти в тайтл",
@@ -100,5 +100,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.597577+00:00"
+  "issued_at_utc": "2026-09-21T20:29:21.339652+00:00"
 }

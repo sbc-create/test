@@ -36,7 +36,7 @@
   "PASS": true,
   "OWNER_VISUAL_REVIEW_REQUIRED": true,
   "SELF_REPORTED_OWNER_ACCEPTANCE": false,
-  "scored_at_utc": "2026-09-21T17:35:11.861423+00:00",
+  "scored_at_utc": "2026-09-21T20:22:41.757152+00:00",
   "pages": [
     {
       "viewport": 320,
@@ -50,7 +50,24 @@
       "overlaps": [],
       "big_gaps": [],
       "card_widths": [],
-      "grid_summary": [],
+      "grid_summary": [
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 27,
+          "card_type": "poster",
+          "cls": "g g--tile g--atlas",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 5,
+          "card_type": "episode",
+          "cls": "split__list",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 320,
       "doc_client_width": 320,
       "sr_only_skipped": 0,
@@ -74,7 +91,24 @@
       "overlaps": [],
       "big_gaps": [],
       "card_widths": [],
-      "grid_summary": [],
+      "grid_summary": [
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 27,
+          "card_type": "poster",
+          "cls": "g g--tile g--atlas",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 5,
+          "card_type": "episode",
+          "cls": "split__list",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 390,
       "doc_client_width": 390,
       "sr_only_skipped": 0,
@@ -98,7 +132,24 @@
       "overlaps": [],
       "big_gaps": [],
       "card_widths": [],
-      "grid_summary": [],
+      "grid_summary": [
+        {
+          "cols": 4,
+          "declared": 4,
+          "total": 27,
+          "card_type": "poster",
+          "cls": "g g--tile g--atlas",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 5,
+          "card_type": "episode",
+          "cls": "split__list",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 768,
       "doc_client_width": 768,
       "sr_only_skipped": 0,
@@ -122,7 +173,24 @@
       "overlaps": [],
       "big_gaps": [],
       "card_widths": [],
-      "grid_summary": [],
+      "grid_summary": [
+        {
+          "cols": 6,
+          "declared": 6,
+          "total": 27,
+          "card_type": "poster",
+          "cls": "g g--tile g--atlas",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 5,
+          "card_type": "episode",
+          "cls": "split__list",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 1024,
       "doc_client_width": 1024,
       "sr_only_skipped": 0,
@@ -146,7 +214,24 @@
       "overlaps": [],
       "big_gaps": [],
       "card_widths": [],
-      "grid_summary": [],
+      "grid_summary": [
+        {
+          "cols": 6,
+          "declared": 6,
+          "total": 27,
+          "card_type": "poster",
+          "cls": "g g--tile g--atlas",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 5,
+          "card_type": "episode",
+          "cls": "split__list",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 1440,
       "doc_client_width": 1440,
       "sr_only_skipped": 0,
@@ -170,7 +255,24 @@
       "overlaps": [],
       "big_gaps": [],
       "card_widths": [],
-      "grid_summary": [],
+      "grid_summary": [
+        {
+          "cols": 9,
+          "declared": 9,
+          "total": 27,
+          "card_type": "poster",
+          "cls": "g g--tile g--atlas",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 5,
+          "card_type": "episode",
+          "cls": "split__list",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 1920,
       "doc_client_width": 1920,
       "sr_only_skipped": 0,

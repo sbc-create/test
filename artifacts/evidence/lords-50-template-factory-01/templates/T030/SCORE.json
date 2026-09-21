@@ -14,7 +14,7 @@
     "SMALL_TOUCH_TARGET_COUNT": 0,
     "HEADING_ORDER_SKIPS": 0,
     "LOW_CONTRAST_COUNT": 0,
-    "FOCUSABLE_ELEMENTS": 47,
+    "FOCUSABLE_ELEMENTS": 46,
     "CSS_BYTES": 1189
   },
   "criteria": {
@@ -36,7 +36,7 @@
   "PASS": true,
   "OWNER_VISUAL_REVIEW_REQUIRED": true,
   "SELF_REPORTED_OWNER_ACCEPTANCE": false,
-  "scored_at_utc": "2026-09-21T17:35:50.675195+00:00",
+  "scored_at_utc": "2026-09-21T20:23:20.845873+00:00",
   "pages": [
     {
       "viewport": 320,
@@ -49,8 +49,54 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137
+      ],
+      "grid_summary": [
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 20,
+          "card_type": "poster",
+          "cls": "g g--poster g--cr",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 9,
+          "card_type": "episode",
+          "cls": "g g--compact g--crfeed",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 8,
+          "card_type": "poster",
+          "cls": "g g--ranked g--crfeed",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 320,
       "doc_client_width": 320,
       "sr_only_skipped": 0,
@@ -58,7 +104,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 47
+        "focusable": 46
       },
       "screenshot": "T030-rating-community-ready-320.png"
     },
@@ -73,8 +119,54 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172
+      ],
+      "grid_summary": [
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 20,
+          "card_type": "poster",
+          "cls": "g g--poster g--cr",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 9,
+          "card_type": "episode",
+          "cls": "g g--compact g--crfeed",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 8,
+          "card_type": "poster",
+          "cls": "g g--ranked g--crfeed",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 390,
       "doc_client_width": 390,
       "sr_only_skipped": 0,
@@ -82,7 +174,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 47
+        "focusable": 46
       },
       "screenshot": "T030-rating-community-ready-390.png"
     },
@@ -97,8 +189,54 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236
+      ],
+      "grid_summary": [
+        {
+          "cols": 3,
+          "declared": 3,
+          "total": 20,
+          "card_type": "poster",
+          "cls": "g g--poster g--cr",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 9,
+          "card_type": "episode",
+          "cls": "g g--compact g--crfeed",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 8,
+          "card_type": "poster",
+          "cls": "g g--ranked g--crfeed",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 768,
       "doc_client_width": 768,
       "sr_only_skipped": 0,
@@ -106,7 +244,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 47
+        "focusable": 46
       },
       "screenshot": "T030-rating-community-ready-768.png"
     },
@@ -121,8 +259,54 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        187.2,
+        187.2,
+        187.2,
+        187.2,
+        187.2,
+        187.2,
+        187.2,
+        187.2,
+        187.2,
+        187.2,
+        187.2,
+        187.2,
+        187.2,
+        187.2,
+        187.2,
+        187.2,
+        187.2,
+        187.2,
+        187.2,
+        187.2
+      ],
+      "grid_summary": [
+        {
+          "cols": 5,
+          "declared": 5,
+          "total": 20,
+          "card_type": "poster",
+          "cls": "g g--poster g--cr",
+          "is_rel": false
+        },
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 9,
+          "card_type": "episode",
+          "cls": "g g--compact g--crfeed",
+          "is_rel": false
+        },
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 8,
+          "card_type": "poster",
+          "cls": "g g--ranked g--crfeed",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 1024,
       "doc_client_width": 1024,
       "sr_only_skipped": 0,
@@ -130,7 +314,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 47
+        "focusable": 46
       },
       "screenshot": "T030-rating-community-ready-1024.png"
     },
@@ -145,8 +329,54 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        270.4,
+        270.4,
+        270.4,
+        270.4,
+        270.4,
+        270.4,
+        270.4,
+        270.4,
+        270.4,
+        270.4,
+        270.4,
+        270.4,
+        270.4,
+        270.4,
+        270.4,
+        270.4,
+        270.4,
+        270.4,
+        270.4,
+        270.4
+      ],
+      "grid_summary": [
+        {
+          "cols": 5,
+          "declared": 5,
+          "total": 20,
+          "card_type": "poster",
+          "cls": "g g--poster g--cr",
+          "is_rel": false
+        },
+        {
+          "cols": 3,
+          "declared": 3,
+          "total": 9,
+          "card_type": "episode",
+          "cls": "g g--compact g--crfeed",
+          "is_rel": false
+        },
+        {
+          "cols": 3,
+          "declared": 3,
+          "total": 8,
+          "card_type": "poster",
+          "cls": "g g--ranked g--crfeed",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 1440,
       "doc_client_width": 1440,
       "sr_only_skipped": 0,
@@ -154,7 +384,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 47
+        "focusable": 46
       },
       "screenshot": "T030-rating-community-ready-1440.png"
     },
@@ -169,8 +399,54 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        189.1,
+        189.1,
+        189.1,
+        189.1,
+        189.1,
+        189.1,
+        189.1,
+        189.1,
+        189.1,
+        189.1,
+        189.1,
+        189.1,
+        189.1,
+        189.1,
+        189.1,
+        189.1,
+        189.1,
+        189.1,
+        189.1,
+        189.1
+      ],
+      "grid_summary": [
+        {
+          "cols": 7,
+          "declared": 7,
+          "total": 20,
+          "card_type": "poster",
+          "cls": "g g--poster g--cr",
+          "is_rel": false
+        },
+        {
+          "cols": 3,
+          "declared": 3,
+          "total": 9,
+          "card_type": "episode",
+          "cls": "g g--compact g--crfeed",
+          "is_rel": false
+        },
+        {
+          "cols": 3,
+          "declared": 3,
+          "total": 8,
+          "card_type": "poster",
+          "cls": "g g--ranked g--crfeed",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 1920,
       "doc_client_width": 1920,
       "sr_only_skipped": 0,
@@ -178,7 +454,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 47
+        "focusable": 46
       },
       "screenshot": "T030-rating-community-ready-1920.png"
     }

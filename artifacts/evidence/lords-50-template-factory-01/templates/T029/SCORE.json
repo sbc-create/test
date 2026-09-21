@@ -14,7 +14,7 @@
     "SMALL_TOUCH_TARGET_COUNT": 0,
     "HEADING_ORDER_SKIPS": 0,
     "LOW_CONTRAST_COUNT": 0,
-    "FOCUSABLE_ELEMENTS": 86,
+    "FOCUSABLE_ELEMENTS": 85,
     "CSS_BYTES": 1338
   },
   "criteria": {
@@ -36,7 +36,7 @@
   "PASS": true,
   "OWNER_VISUAL_REVIEW_REQUIRED": true,
   "SELF_REPORTED_OWNER_ACCEPTANCE": false,
-  "scored_at_utc": "2026-09-21T17:35:45.971343+00:00",
+  "scored_at_utc": "2026-09-21T20:23:16.111187+00:00",
   "pages": [
     {
       "viewport": 320,
@@ -49,8 +49,41 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142
+      ],
+      "grid_summary": [
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 39,
+          "card_type": "poster",
+          "cls": "g g--tile g--tbl",
+          "is_rel": false
+        },
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 15,
+          "card_type": "poster",
+          "cls": "g g--poster g--tblgrid",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 320,
       "doc_client_width": 320,
       "sr_only_skipped": 0,
@@ -58,7 +91,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 86
+        "focusable": 85
       },
       "screenshot": "T029-rating-minimal-table-320.png"
     },
@@ -73,8 +106,41 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        177,
+        177,
+        177,
+        177,
+        177,
+        177,
+        177,
+        177,
+        177,
+        177,
+        177,
+        177,
+        177,
+        177,
+        177
+      ],
+      "grid_summary": [
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 39,
+          "card_type": "poster",
+          "cls": "g g--tile g--tbl",
+          "is_rel": false
+        },
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 15,
+          "card_type": "poster",
+          "cls": "g g--poster g--tblgrid",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 390,
       "doc_client_width": 390,
       "sr_only_skipped": 0,
@@ -82,7 +148,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 86
+        "focusable": 85
       },
       "screenshot": "T029-rating-minimal-table-390.png"
     },
@@ -97,8 +163,41 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179
+      ],
+      "grid_summary": [
+        {
+          "cols": 5,
+          "declared": 5,
+          "total": 39,
+          "card_type": "poster",
+          "cls": "g g--tile g--tbl",
+          "is_rel": false
+        },
+        {
+          "cols": 4,
+          "declared": 4,
+          "total": 15,
+          "card_type": "poster",
+          "cls": "g g--poster g--tblgrid",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 768,
       "doc_client_width": 768,
       "sr_only_skipped": 0,
@@ -106,7 +205,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 86
+        "focusable": 85
       },
       "screenshot": "T029-rating-minimal-table-768.png"
     },
@@ -121,8 +220,41 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        243,
+        243,
+        243,
+        243,
+        243,
+        243,
+        243,
+        243,
+        243,
+        243,
+        243,
+        243,
+        243,
+        243,
+        243
+      ],
+      "grid_summary": [
+        {
+          "cols": 5,
+          "declared": 5,
+          "total": 39,
+          "card_type": "poster",
+          "cls": "g g--tile g--tbl",
+          "is_rel": false
+        },
+        {
+          "cols": 4,
+          "declared": 4,
+          "total": 15,
+          "card_type": "poster",
+          "cls": "g g--poster g--tblgrid",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 1024,
       "doc_client_width": 1024,
       "sr_only_skipped": 0,
@@ -130,7 +262,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 86
+        "focusable": 85
       },
       "screenshot": "T029-rating-minimal-table-1024.png"
     },
@@ -145,8 +277,41 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        276,
+        276,
+        276,
+        276,
+        276,
+        276,
+        276,
+        276,
+        276,
+        276,
+        276,
+        276,
+        276,
+        276,
+        276
+      ],
+      "grid_summary": [
+        {
+          "cols": 8,
+          "declared": 8,
+          "total": 39,
+          "card_type": "poster",
+          "cls": "g g--tile g--tbl",
+          "is_rel": false
+        },
+        {
+          "cols": 5,
+          "declared": 5,
+          "total": 15,
+          "card_type": "poster",
+          "cls": "g g--poster g--tblgrid",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 1440,
       "doc_client_width": 1440,
       "sr_only_skipped": 0,
@@ -154,7 +319,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 86
+        "focusable": 85
       },
       "screenshot": "T029-rating-minimal-table-1440.png"
     },
@@ -169,8 +334,41 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        276,
+        276,
+        276,
+        276,
+        276,
+        276,
+        276,
+        276,
+        276,
+        276,
+        276,
+        276,
+        276,
+        276,
+        276
+      ],
+      "grid_summary": [
+        {
+          "cols": 10,
+          "declared": 10,
+          "total": 39,
+          "card_type": "poster",
+          "cls": "g g--tile g--tbl",
+          "is_rel": false
+        },
+        {
+          "cols": 5,
+          "declared": 5,
+          "total": 15,
+          "card_type": "poster",
+          "cls": "g g--poster g--tblgrid",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 1920,
       "doc_client_width": 1920,
       "sr_only_skipped": 0,
@@ -178,7 +376,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 86
+        "focusable": 85
       },
       "screenshot": "T029-rating-minimal-table-1920.png"
     }

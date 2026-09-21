@@ -4,7 +4,7 @@
   "slug": "genre-capsules",
   "version": "1.0.0",
   "family": "genre",
-  "package_digest": "c702a32c3b30f4ed338ef83f9dd23f0dfad86b0e7eec87dda3519a45111490a5",
+  "package_digest": "ce8cf09d0eb78fe14405407e923966a36b15ab5d3035e1dae814e3bc4a2df256",
   "declared": {
     "design_intent": "Капсулы таксономии крупно, витрина следом.",
     "primary_user_journey": "выбрать капсулу → уйти в список",
@@ -96,5 +96,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.692900+00:00"
+  "issued_at_utc": "2026-09-21T20:29:21.453822+00:00"
 }

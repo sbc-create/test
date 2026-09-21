@@ -112,11 +112,40 @@ import sys
 """
 
 
+#: Разметка пакетов фабрики размечена как `k--poster`, живого рантайма — как
+#: `c--poster`. Общий измеритель написан под второй, и на пакетах фабрики он
+#: молча не находил ни одной карточки: сетки, пустые ячейки, одинокие хвосты и
+#: наложения измерялись на пустом множестве и давали ноль всегда.
+#: Проверка, которая не может упасть, ничего не проверяет — поэтому селектор
+#: расширяется на обе разметки. Определение «обрезанного текста» при этом
+#: остаётся одно: второй измеритель означал бы два разных определения.
+ЗАМЕНЫ_СЕЛЕКТОРОВ = (
+    ('[class*="c--poster"], [class*="c--episode"], [class*="c--editorial"]',
+     '[class*="c--poster"], [class*="c--episode"], [class*="c--editorial"], '
+     '[class*="k--poster"], [class*="k--compact"], [class*="k--editorial"], '
+     '[class*="k--tile"], [class*="k--ranked"]'),
+    ("c.className.includes('c--poster')",
+     "(c.className.includes('c--poster') || c.className.includes('k--poster'))"),
+    ("/c--editorial/.test(классы)", "/c--editorial|k--editorial/.test(классы)"),
+    ("/c--episode/.test(классы)", "/c--episode|k--compact/.test(классы)"),
+    ("'.c__poster, .c__media, [data-poster]'", "'.c__poster, .c__media, .k__p, [data-poster]'"),
+)
+
+
 def _измеритель():
     путь = КОРЕНЬ / "automation" / "host" / "nova-visual-audit.py"
     spec = importlib.util.spec_from_file_location("nova_visual_audit", путь)
     модуль = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(модуль)
+    измерение = модуль.ИЗМЕРЕНИЕ
+    for было, стало in ЗАМЕНЫ_СЕЛЕКТОРОВ:
+        if было not in измерение:
+            raise RuntimeError(
+                f"измеритель изменился: не найдено {было!r}. Молча продолжать нельзя — "
+                f"значит расширение селекторов не применилось и проверки снова пусты."
+            )
+        измерение = измерение.replace(было, стало)
+    модуль.ИЗМЕРЕНИЕ = измерение
     return модуль
 
 
@@ -153,6 +182,30 @@ def измерить(страница: pathlib.Path, снимки: pathlib.Path 
     return результаты
 
 
+def одинокие_хвосты(страницы: list[dict]) -> list[dict]:
+    """Одинокий хвост сетки, посчитанный по объявленным колонкам, а не по виду.
+
+    Общий измеритель определяет число колонок как «сколько элементов стоят на
+    одной высоте с первым». Для мозаики это неверно: ведущая плитка растянута
+    на две колонки, и в первом ряду видно три элемента вместо четырёх. Семь
+    карточек делились на три с остатком один, и шесть исправных шаблонов
+    объявлялись дефектными.
+
+    Здесь колонки берутся из `grid-template-columns`, а растянутая плитка
+    считается за четыре ячейки — как она и занимает.
+    """
+    найдено = []
+    for страница in страницы:
+        for сетка in (страница.get("grid_summary") or []):
+            колонок = сетка.get("declared") or сетка.get("cols") or 0
+            если_мозаика = "mosaic" in (сетка.get("cls") or "")
+            ячеек = (сетка.get("total") or 0) + (3 if если_мозаика else 0)
+            if колонок >= 3 and ячеек % колонок == 1:
+                найдено.append({"viewport": страница.get("viewport"), "cols": колонок,
+                                "cells": ячеек, "cls": сетка.get("cls")})
+    return найдено
+
+
 def оценить(манифест: dict, страницы: list[dict], css_байт: int = 0) -> dict:
     def всего(ключ):
         return sum(len(с.get(ключ) or []) for с in страницы)
@@ -170,7 +223,7 @@ def оценить(манифест: dict, страницы: list[dict], css_б�
         "POSTER_ASPECT_RATIO_VIOLATIONS": всего("poster_ratio_violations"),
         "BROKEN_IMAGE_COUNT": всего("broken_images"),
         "EMPTY_GRID_CELL_COUNT": пустые,
-        "ORPHAN_LAST_ROW_COUNT": всего("orphan_rows"),
+        "ORPHAN_LAST_ROW_COUNT": len(одинокие_хвосты(страницы)),
         "OVERLAP_COUNT": всего("overlaps"),
         "UNINTENDED_GAP_OVER_96PX_COUNT": всего("big_gaps"),
         "SMALL_TOUCH_TARGET_COUNT": sum(len(с.get("a11y", {}).get("small_targets", [])) for с in страницы),

@@ -2276,7 +2276,7 @@
       "family": "collection",
       "green_identity": "accent-only",
       "block_order": [
-        "mosaic",
+        "split",
         "grid",
         "taxonomy",
         "index",
@@ -2324,16 +2324,12 @@
         "грамматики:editorial+poster",
         "зелёный:accent-only",
         "навигация:3",
-        "порядок:mosaic>grid>taxonomy>index>about",
+        "порядок:split>grid>taxonomy>index>about",
         "радиус:12",
-        "сетка0@1440:4",
-        "сетка0@1920:4",
+        "сетка0@1440:5",
+        "сетка0@1920:6",
         "сетка0@320:2",
-        "сетка0@768:4",
-        "сетка1@1440:5",
-        "сетка1@1920:6",
-        "сетка1@320:2",
-        "сетка1@768:3",
+        "сетка0@768:3",
         "фон:#f7f5f0",
         "шаг:20"
       ]
@@ -2352,7 +2348,8 @@
       ],
       "card_grammar": [
         "compact",
-        "poster"
+        "poster",
+        "tile"
       ],
       "desktop_density_1440": 2,
       "ladders": {
@@ -2369,9 +2366,9 @@
       },
       "features": [
         "блоков:5",
-        "ведущая-грамматика:poster",
+        "ведущая-грамматика:tile",
         "герой:нет",
-        "грамматики:compact+poster",
+        "грамматики:compact+poster+tile",
         "зелёный:secondary",
         "навигация:4",
         "порядок:mosaic>feed>mosaic>index>about",
@@ -3122,8 +3119,7 @@
         "about"
       ],
       "card_grammar": [
-        "poster",
-        "tile"
+        "poster"
       ],
       "desktop_density_1440": 6,
       "ladders": {
@@ -3158,9 +3154,9 @@
       },
       "features": [
         "блоков:5",
-        "ведущая-грамматика:tile",
+        "ведущая-грамматика:poster",
         "герой:нет",
-        "грамматики:poster+tile",
+        "грамматики:poster",
         "зелёный:primary",
         "навигация:4",
         "порядок:board>mosaic>grid>index>about",
@@ -3267,7 +3263,6 @@
         "about"
       ],
       "card_grammar": [
-        "compact",
         "poster"
       ],
       "desktop_density_1440": 5,
@@ -3303,9 +3298,9 @@
       },
       "features": [
         "блоков:5",
-        "ведущая-грамматика:compact",
+        "ведущая-грамматика:poster",
         "герой:нет",
-        "грамматики:compact+poster",
+        "грамматики:poster",
         "зелёный:primary",
         "навигация:4",
         "порядок:split>grid>mosaic>index>about",
@@ -3328,7 +3323,7 @@
       "family": "hybrid",
       "green_identity": "secondary",
       "block_order": [
-        "mosaic",
+        "grid",
         "grid",
         "ranked",
         "taxonomy",
@@ -3377,6 +3372,20 @@
             1100,
             2
           ]
+        ],
+        "g--ced": [
+          [
+            0,
+            1
+          ],
+          [
+            700,
+            2
+          ],
+          [
+            1100,
+            3
+          ]
         ]
       },
       "features": [
@@ -3386,12 +3395,12 @@
         "грамматики:editorial+poster",
         "зелёный:secondary",
         "навигация:4",
-        "порядок:mosaic>grid>ranked>taxonomy>about",
+        "порядок:grid>grid>ranked>taxonomy>about",
         "радиус:6",
-        "сетка0@1440:4",
-        "сетка0@1920:4",
-        "сетка0@320:2",
-        "сетка0@768:4",
+        "сетка0@1440:3",
+        "сетка0@1920:3",
+        "сетка0@320:1",
+        "сетка0@768:2",
         "сетка1@1440:6",
         "сетка1@1920:8",
         "сетка1@320:2",
@@ -3570,6 +3579,10 @@
       ]
     }
   ],
+  "result_fingerprints_measured": true,
+  "SCREENSHOT_NEAR_DUPLICATES": 0,
+  "screenshot_near_pairs": [],
+  "DOM_FINGERPRINT_DUPLICATES": 0,
   "pairs": [
     {
       "pair": [
@@ -3856,7 +3869,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.0811,
+      "similarity": 0.0909,
       "threshold": 0.76
     },
     {
@@ -3865,7 +3878,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.0732,
+      "similarity": 0.0233,
       "threshold": 0.76
     },
     {
@@ -3964,7 +3977,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.1111,
+      "similarity": 0.1429,
       "threshold": 0.76
     },
     {
@@ -3991,7 +4004,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.0732,
+      "similarity": 0.0233,
       "threshold": 0.76
     },
     {
@@ -4288,7 +4301,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.1111,
+      "similarity": 0.0286,
       "threshold": 0.76
     },
     {
@@ -4297,7 +4310,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.1,
+      "similarity": 0.0732,
       "threshold": 0.76
     },
     {
@@ -4414,7 +4427,7 @@
         "T047"
       ],
       "same_family": false,
-      "similarity": 0.1429,
+      "similarity": 0.0811,
       "threshold": 0.76
     },
     {
@@ -4423,7 +4436,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.1,
+      "similarity": 0.0732,
       "threshold": 0.76
     },
     {
@@ -4711,7 +4724,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.1,
+      "similarity": 0.0811,
       "threshold": 0.76
     },
     {
@@ -4720,7 +4733,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.0909,
+      "similarity": 0.0435,
       "threshold": 0.76
     },
     {
@@ -4819,7 +4832,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.0732,
+      "similarity": 0.1,
       "threshold": 0.76
     },
     {
@@ -4846,7 +4859,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.1163,
+      "similarity": 0.0667,
       "threshold": 0.76
     },
     {
@@ -5125,7 +5138,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.1579,
+      "similarity": 0.1111,
       "threshold": 0.76
     },
     {
@@ -5260,7 +5273,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.1163,
+      "similarity": 0.1707,
       "threshold": 0.76
     },
     {
@@ -5530,7 +5543,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.0256,
+      "similarity": 0.0286,
       "threshold": 0.76
     },
     {
@@ -5539,7 +5552,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.0476,
+      "similarity": 0.0233,
       "threshold": 0.76
     },
     {
@@ -5638,7 +5651,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.0256,
+      "similarity": 0.0526,
       "threshold": 0.76
     },
     {
@@ -5656,7 +5669,7 @@
         "T047"
       ],
       "same_family": false,
-      "similarity": 0.0811,
+      "similarity": 0.1111,
       "threshold": 0.76
     },
     {
@@ -5665,7 +5678,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.0732,
+      "similarity": 0.0476,
       "threshold": 0.76
     },
     {
@@ -5926,7 +5939,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.1111,
+      "similarity": 0.0909,
       "threshold": 0.76
     },
     {
@@ -5935,7 +5948,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.1,
+      "similarity": 0.0732,
       "threshold": 0.76
     },
     {
@@ -6052,7 +6065,7 @@
         "T047"
       ],
       "same_family": false,
-      "similarity": 0.1765,
+      "similarity": 0.1111,
       "threshold": 0.76
     },
     {
@@ -6061,7 +6074,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.1,
+      "similarity": 0.2222,
       "threshold": 0.76
     },
     {
@@ -6313,7 +6326,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.1613,
+      "similarity": 0.0667,
       "threshold": 0.76
     },
     {
@@ -6439,7 +6452,7 @@
         "T047"
       ],
       "same_family": false,
-      "similarity": 0.1613,
+      "similarity": 0.125,
       "threshold": 0.76
     },
     {
@@ -6448,7 +6461,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.1765,
+      "similarity": 0.2121,
       "threshold": 0.76
     },
     {
@@ -6691,7 +6704,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.2414,
+      "similarity": 0.0667,
       "threshold": 0.76
     },
     {
@@ -6700,7 +6713,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.0526,
+      "similarity": 0.1111,
       "threshold": 0.76
     },
     {
@@ -6799,7 +6812,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.3333,
+      "similarity": 0.2857,
       "threshold": 0.76
     },
     {
@@ -6826,7 +6839,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.1765,
+      "similarity": 0.1429,
       "threshold": 0.76
     },
     {
@@ -7060,7 +7073,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.1613,
+      "similarity": 0.1034,
       "threshold": 0.76
     },
     {
@@ -7069,7 +7082,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.1111,
+      "similarity": 0.0811,
       "threshold": 0.76
     },
     {
@@ -7186,7 +7199,7 @@
         "T047"
       ],
       "same_family": false,
-      "similarity": 0.2414,
+      "similarity": 0.1613,
       "threshold": 0.76
     },
     {
@@ -7195,7 +7208,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.1429,
+      "similarity": 0.2903,
       "threshold": 0.76
     },
     {
@@ -7420,7 +7433,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.25,
+      "similarity": 0.1613,
       "threshold": 0.76
     },
     {
@@ -7555,7 +7568,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.2222,
+      "similarity": 0.1,
       "threshold": 0.76
     },
     {
@@ -7771,7 +7784,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.2121,
+      "similarity": 0.2414,
       "threshold": 0.76
     },
     {
@@ -7906,7 +7919,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.2941,
+      "similarity": 0.3333,
       "threshold": 0.76
     },
     {
@@ -8113,7 +8126,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.1613,
+      "similarity": 0.1034,
       "threshold": 0.76
     },
     {
@@ -8122,7 +8135,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.0526,
+      "similarity": 0.0811,
       "threshold": 0.76
     },
     {
@@ -8221,7 +8234,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.2414,
+      "similarity": 0.1613,
       "threshold": 0.76
     },
     {
@@ -8248,7 +8261,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.1765,
+      "similarity": 0.1429,
       "threshold": 0.76
     },
     {
@@ -8446,7 +8459,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.0811,
+      "similarity": 0.0909,
       "threshold": 0.76
     },
     {
@@ -8455,7 +8468,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.6296,
+      "similarity": 0.5172,
       "threshold": 0.76
     },
     {
@@ -8554,7 +8567,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.0811,
+      "similarity": 0.1111,
       "threshold": 0.76
     },
     {
@@ -8770,7 +8783,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.125,
+      "similarity": 0.1034,
       "threshold": 0.76
     },
     {
@@ -8779,7 +8792,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.1111,
+      "similarity": 0.0811,
       "threshold": 0.76
     },
     {
@@ -8896,7 +8909,7 @@
         "T047"
       ],
       "same_family": false,
-      "similarity": 0.3333,
+      "similarity": 0.2414,
       "threshold": 0.76
     },
     {
@@ -8905,7 +8918,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.25,
+      "similarity": 0.2903,
       "threshold": 0.76
     },
     {
@@ -9085,7 +9098,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.1613,
+      "similarity": 0.1852,
       "threshold": 0.76
     },
     {
@@ -9094,7 +9107,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.1111,
+      "similarity": 0.1765,
       "threshold": 0.76
     },
     {
@@ -9193,7 +9206,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.2,
+      "similarity": 0.1613,
       "threshold": 0.76
     },
     {
@@ -9220,7 +9233,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.1111,
+      "similarity": 0.0526,
       "threshold": 0.76
     },
     {
@@ -9391,7 +9404,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.1613,
+      "similarity": 0.0667,
       "threshold": 0.76
     },
     {
@@ -9400,7 +9413,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.1429,
+      "similarity": 0.1111,
       "threshold": 0.76
     },
     {
@@ -9517,7 +9530,7 @@
         "T047"
       ],
       "same_family": false,
-      "similarity": 0.2414,
+      "similarity": 0.1613,
       "threshold": 0.76
     },
     {
@@ -9526,7 +9539,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.1111,
+      "similarity": 0.1429,
       "threshold": 0.76
     },
     {
@@ -9688,7 +9701,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.1613,
+      "similarity": 0.1034,
       "threshold": 0.76
     },
     {
@@ -9697,7 +9710,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.0811,
+      "similarity": 0.1429,
       "threshold": 0.76
     },
     {
@@ -9796,7 +9809,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.1613,
+      "similarity": 0.125,
       "threshold": 0.76
     },
     {
@@ -9823,7 +9836,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.1765,
+      "similarity": 0.2121,
       "threshold": 0.76
     },
     {
@@ -9976,7 +9989,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.125,
+      "similarity": 0.0323,
       "threshold": 0.76
     },
     {
@@ -9985,7 +9998,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.1111,
+      "similarity": 0.0811,
       "threshold": 0.76
     },
     {
@@ -10084,7 +10097,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.1613,
+      "similarity": 0.2414,
       "threshold": 0.76
     },
     {
@@ -10102,7 +10115,7 @@
         "T047"
       ],
       "same_family": false,
-      "similarity": 0.0909,
+      "similarity": 0.1613,
       "threshold": 0.76
     },
     {
@@ -10111,7 +10124,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.1429,
+      "similarity": 0.1765,
       "threshold": 0.76
     },
     {
@@ -10255,7 +10268,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.1111,
+      "similarity": 0.0909,
       "threshold": 0.76
     },
     {
@@ -10264,7 +10277,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.0732,
+      "similarity": 0.0476,
       "threshold": 0.76
     },
     {
@@ -10381,7 +10394,7 @@
         "T047"
       ],
       "same_family": false,
-      "similarity": 0.1429,
+      "similarity": 0.0811,
       "threshold": 0.76
     },
     {
@@ -10390,7 +10403,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.1,
+      "similarity": 0.1282,
       "threshold": 0.76
     },
     {
@@ -10525,7 +10538,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.1613,
+      "similarity": 0.1429,
       "threshold": 0.76
     },
     {
@@ -10534,7 +10547,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.2121,
+      "similarity": 0.1765,
       "threshold": 0.76
     },
     {
@@ -10651,7 +10664,7 @@
         "T047"
       ],
       "same_family": false,
-      "similarity": 0.2,
+      "similarity": 0.125,
       "threshold": 0.76
     },
     {
@@ -10660,7 +10673,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.1111,
+      "similarity": 0.0526,
       "threshold": 0.76
     },
     {
@@ -10786,7 +10799,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.1852,
+      "similarity": 0.1667,
       "threshold": 0.76
     },
     {
@@ -10795,7 +10808,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.0909,
+      "similarity": 0.125,
       "threshold": 0.76
     },
     {
@@ -10894,7 +10907,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.28,
+      "similarity": 0.2308,
       "threshold": 0.76
     },
     {
@@ -10921,7 +10934,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.125,
+      "similarity": 0.0588,
       "threshold": 0.76
     },
     {
@@ -11038,7 +11051,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.0909,
+      "similarity": 0.1852,
       "threshold": 0.76
     },
     {
@@ -11047,7 +11060,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.2903,
+      "similarity": 0.2121,
       "threshold": 0.76
     },
     {
@@ -11146,7 +11159,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.1613,
+      "similarity": 0.2,
       "threshold": 0.76
     },
     {
@@ -11173,7 +11186,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.1111,
+      "similarity": 0.0811,
       "threshold": 0.76
     },
     {
@@ -11281,7 +11294,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.0588,
+      "similarity": 0.0667,
       "threshold": 0.76
     },
     {
@@ -11290,7 +11303,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.25,
+      "similarity": 0.2903,
       "threshold": 0.76
     },
     {
@@ -11389,7 +11402,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.1613,
+      "similarity": 0.0909,
       "threshold": 0.76
     },
     {
@@ -11515,7 +11528,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.0286,
+      "similarity": 0.0323,
       "threshold": 0.76
     },
     {
@@ -11524,7 +11537,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.2121,
+      "similarity": 0.1429,
       "threshold": 0.76
     },
     {
@@ -11623,7 +11636,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.0588,
+      "similarity": 0.0909,
       "threshold": 0.76
     },
     {
@@ -11740,7 +11753,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.2,
+      "similarity": 0.1034,
       "threshold": 0.76
     },
     {
@@ -11749,7 +11762,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.1111,
+      "similarity": 0.0811,
       "threshold": 0.76
     },
     {
@@ -11866,7 +11879,7 @@
         "T047"
       ],
       "same_family": false,
-      "similarity": 0.1613,
+      "similarity": 0.0909,
       "threshold": 0.76
     },
     {
@@ -11875,7 +11888,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.1429,
+      "similarity": 0.25,
       "threshold": 0.76
     },
     {
@@ -11956,7 +11969,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.1111,
+      "similarity": 0.0909,
       "threshold": 0.76
     },
     {
@@ -11965,7 +11978,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.1,
+      "similarity": 0.0476,
       "threshold": 0.76
     },
     {
@@ -12064,7 +12077,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.1765,
+      "similarity": 0.2121,
       "threshold": 0.76
     },
     {
@@ -12091,7 +12104,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.3333,
+      "similarity": 0.375,
       "threshold": 0.76
     },
     {
@@ -12163,7 +12176,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.125,
+      "similarity": 0.0667,
       "threshold": 0.76
     },
     {
@@ -12172,7 +12185,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.1111,
+      "similarity": 0.1429,
       "threshold": 0.76
     },
     {
@@ -12271,7 +12284,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.2857,
+      "similarity": 0.2,
       "threshold": 0.76
     },
     {
@@ -12298,7 +12311,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.2121,
+      "similarity": 0.25,
       "threshold": 0.76
     },
     {
@@ -12361,7 +12374,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.0526,
+      "similarity": 0.0286,
       "threshold": 0.76
     },
     {
@@ -12370,7 +12383,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.1579,
+      "similarity": 0.1,
       "threshold": 0.76
     },
     {
@@ -12469,7 +12482,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.1111,
+      "similarity": 0.1429,
       "threshold": 0.76
     },
     {
@@ -12496,7 +12509,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.2222,
+      "similarity": 0.2571,
       "threshold": 0.76
     },
     {
@@ -12550,7 +12563,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.2,
+      "similarity": 0.1429,
       "threshold": 0.76
     },
     {
@@ -12559,7 +12572,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.0526,
+      "similarity": 0.0811,
       "threshold": 0.76
     },
     {
@@ -12658,7 +12671,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.2,
+      "similarity": 0.125,
       "threshold": 0.76
     },
     {
@@ -12685,7 +12698,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.1429,
+      "similarity": 0.1111,
       "threshold": 0.76
     },
     {
@@ -12730,7 +12743,7 @@
         "T033"
       ],
       "same_family": false,
-      "similarity": 0.0811,
+      "similarity": 0.1613,
       "threshold": 0.76
     },
     {
@@ -12739,7 +12752,7 @@
         "T034"
       ],
       "same_family": false,
-      "similarity": 0.1892,
+      "similarity": 0.1282,
       "threshold": 0.76
     },
     {
@@ -12838,7 +12851,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.1765,
+      "similarity": 0.2121,
       "threshold": 0.76
     },
     {
@@ -12865,7 +12878,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.1579,
+      "similarity": 0.1282,
       "threshold": 0.76
     },
     {
@@ -12901,7 +12914,7 @@
         "T033"
       ],
       "same_family": true,
-      "similarity": 0.3333,
+      "similarity": 0.125,
       "threshold": 0.88
     },
     {
@@ -13009,7 +13022,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.3793,
+      "similarity": 0.4286,
       "threshold": 0.76
     },
     {
@@ -13027,7 +13040,7 @@
         "T047"
       ],
       "same_family": false,
-      "similarity": 0.1429,
+      "similarity": 0.1765,
       "threshold": 0.76
     },
     {
@@ -13036,7 +13049,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.375,
+      "similarity": 0.2222,
       "threshold": 0.76
     },
     {
@@ -13063,7 +13076,7 @@
         "T033"
       ],
       "same_family": true,
-      "similarity": 0.0476,
+      "similarity": 0.0526,
       "threshold": 0.88
     },
     {
@@ -13072,7 +13085,7 @@
         "T034"
       ],
       "same_family": true,
-      "similarity": 0.4118,
+      "similarity": 0.3333,
       "threshold": 0.88
     },
     {
@@ -13171,7 +13184,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.0732,
+      "similarity": 0.1,
       "threshold": 0.76
     },
     {
@@ -13225,7 +13238,7 @@
         "T034"
       ],
       "same_family": true,
-      "similarity": 0.0526,
+      "similarity": 0.0588,
       "threshold": 0.88
     },
     {
@@ -13234,7 +13247,7 @@
         "T035"
       ],
       "same_family": true,
-      "similarity": 0.0588,
+      "similarity": 0.0667,
       "threshold": 0.88
     },
     {
@@ -13243,7 +13256,7 @@
         "T036"
       ],
       "same_family": false,
-      "similarity": 0.0909,
+      "similarity": 0.1034,
       "threshold": 0.76
     },
     {
@@ -13252,7 +13265,7 @@
         "T037"
       ],
       "same_family": false,
-      "similarity": 0.2857,
+      "similarity": 0.3333,
       "threshold": 0.76
     },
     {
@@ -13261,7 +13274,7 @@
         "T038"
       ],
       "same_family": false,
-      "similarity": 0.1429,
+      "similarity": 0.125,
       "threshold": 0.76
     },
     {
@@ -13270,7 +13283,7 @@
         "T039"
       ],
       "same_family": false,
-      "similarity": 0.2,
+      "similarity": 0.1034,
       "threshold": 0.76
     },
     {
@@ -13279,7 +13292,7 @@
         "T040"
       ],
       "same_family": false,
-      "similarity": 0.2,
+      "similarity": 0.1429,
       "threshold": 0.76
     },
     {
@@ -13288,7 +13301,7 @@
         "T041"
       ],
       "same_family": false,
-      "similarity": 0.0909,
+      "similarity": 0.1429,
       "threshold": 0.76
     },
     {
@@ -13297,7 +13310,7 @@
         "T042"
       ],
       "same_family": false,
-      "similarity": 0.125,
+      "similarity": 0.1034,
       "threshold": 0.76
     },
     {
@@ -13306,7 +13319,7 @@
         "T043"
       ],
       "same_family": false,
-      "similarity": 0.25,
+      "similarity": 0.1613,
       "threshold": 0.76
     },
     {
@@ -13315,7 +13328,7 @@
         "T044"
       ],
       "same_family": false,
-      "similarity": 0.0811,
+      "similarity": 0.0909,
       "threshold": 0.76
     },
     {
@@ -13324,7 +13337,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.2857,
+      "similarity": 0.1034,
       "threshold": 0.76
     },
     {
@@ -13333,7 +13346,7 @@
         "T046"
       ],
       "same_family": false,
-      "similarity": 0.0588,
+      "similarity": 0.0667,
       "threshold": 0.76
     },
     {
@@ -13342,7 +13355,7 @@
         "T047"
       ],
       "same_family": false,
-      "similarity": 0.125,
+      "similarity": 0.1852,
       "threshold": 0.76
     },
     {
@@ -13351,7 +13364,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.2903,
+      "similarity": 0.125,
       "threshold": 0.76
     },
     {
@@ -13360,7 +13373,7 @@
         "T049"
       ],
       "same_family": false,
-      "similarity": 0.125,
+      "similarity": 0.1034,
       "threshold": 0.76
     },
     {
@@ -13369,7 +13382,7 @@
         "T050"
       ],
       "same_family": false,
-      "similarity": 0.0476,
+      "similarity": 0.0526,
       "threshold": 0.76
     },
     {
@@ -13378,7 +13391,7 @@
         "T035"
       ],
       "same_family": true,
-      "similarity": 0.1765,
+      "similarity": 0.2121,
       "threshold": 0.88
     },
     {
@@ -13387,7 +13400,7 @@
         "T036"
       ],
       "same_family": false,
-      "similarity": 0.25,
+      "similarity": 0.1765,
       "threshold": 0.76
     },
     {
@@ -13396,7 +13409,7 @@
         "T037"
       ],
       "same_family": false,
-      "similarity": 0.0811,
+      "similarity": 0.0526,
       "threshold": 0.76
     },
     {
@@ -13414,7 +13427,7 @@
         "T039"
       ],
       "same_family": false,
-      "similarity": 0.0811,
+      "similarity": 0.1429,
       "threshold": 0.76
     },
     {
@@ -13423,7 +13436,7 @@
         "T040"
       ],
       "same_family": false,
-      "similarity": 0.0526,
+      "similarity": 0.0811,
       "threshold": 0.76
     },
     {
@@ -13432,7 +13445,7 @@
         "T041"
       ],
       "same_family": false,
-      "similarity": 0.1765,
+      "similarity": 0.1111,
       "threshold": 0.76
     },
     {
@@ -13441,7 +13454,7 @@
         "T042"
       ],
       "same_family": false,
-      "similarity": 0.25,
+      "similarity": 0.2903,
       "threshold": 0.76
     },
     {
@@ -13450,7 +13463,7 @@
         "T043"
       ],
       "same_family": false,
-      "similarity": 0.1,
+      "similarity": 0.0732,
       "threshold": 0.76
     },
     {
@@ -13459,7 +13472,7 @@
         "T044"
       ],
       "same_family": false,
-      "similarity": 0.1579,
+      "similarity": 0.1282,
       "threshold": 0.76
     },
     {
@@ -13477,7 +13490,7 @@
         "T046"
       ],
       "same_family": false,
-      "similarity": 0.1111,
+      "similarity": 0.0526,
       "threshold": 0.76
     },
     {
@@ -13486,7 +13499,7 @@
         "T047"
       ],
       "same_family": false,
-      "similarity": 0.1111,
+      "similarity": 0.0811,
       "threshold": 0.76
     },
     {
@@ -13513,7 +13526,7 @@
         "T050"
       ],
       "same_family": false,
-      "similarity": 0.1163,
+      "similarity": 0.1707,
       "threshold": 0.76
     },
     {
@@ -13603,7 +13616,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.2,
+      "similarity": 0.125,
       "threshold": 0.76
     },
     {
@@ -13729,7 +13742,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.125,
+      "similarity": 0.1613,
       "threshold": 0.76
     },
     {
@@ -13756,7 +13769,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.0811,
+      "similarity": 0.0526,
       "threshold": 0.76
     },
     {
@@ -13864,7 +13877,7 @@
         "T047"
       ],
       "same_family": false,
-      "similarity": 0.2,
+      "similarity": 0.2414,
       "threshold": 0.76
     },
     {
@@ -13873,7 +13886,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.2121,
+      "similarity": 0.1429,
       "threshold": 0.76
     },
     {
@@ -13954,7 +13967,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.1765,
+      "similarity": 0.2121,
       "threshold": 0.76
     },
     {
@@ -13972,7 +13985,7 @@
         "T047"
       ],
       "same_family": false,
-      "similarity": 0.1765,
+      "similarity": 0.2121,
       "threshold": 0.76
     },
     {
@@ -13981,7 +13994,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.375,
+      "similarity": 0.2941,
       "threshold": 0.76
     },
     {
@@ -14053,7 +14066,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.3846,
+      "similarity": 0.3333,
       "threshold": 0.76
     },
     {
@@ -14080,7 +14093,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.2903,
+      "similarity": 0.2121,
       "threshold": 0.76
     },
     {
@@ -14143,7 +14156,7 @@
         "T045"
       ],
       "same_family": false,
-      "similarity": 0.2,
+      "similarity": 0.125,
       "threshold": 0.76
     },
     {
@@ -14170,7 +14183,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.1429,
+      "similarity": 0.1111,
       "threshold": 0.76
     },
     {
@@ -14224,7 +14237,7 @@
         "T045"
       ],
       "same_family": true,
-      "similarity": 0.1613,
+      "similarity": 0.2,
       "threshold": 0.88
     },
     {
@@ -14251,7 +14264,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.0811,
+      "similarity": 0.0526,
       "threshold": 0.76
     },
     {
@@ -14296,7 +14309,7 @@
         "T045"
       ],
       "same_family": true,
-      "similarity": 0.1613,
+      "similarity": 0.125,
       "threshold": 0.88
     },
     {
@@ -14323,7 +14336,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.1429,
+      "similarity": 0.0811,
       "threshold": 0.76
     },
     {
@@ -14377,7 +14390,7 @@
         "T047"
       ],
       "same_family": false,
-      "similarity": 0.1765,
+      "similarity": 0.1111,
       "threshold": 0.76
     },
     {
@@ -14386,7 +14399,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.3333,
+      "similarity": 0.2571,
       "threshold": 0.76
     },
     {
@@ -14431,7 +14444,7 @@
         "T047"
       ],
       "same_family": false,
-      "similarity": 0.1429,
+      "similarity": 0.0811,
       "threshold": 0.76
     },
     {
@@ -14440,7 +14453,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.0732,
+      "similarity": 0.1579,
       "threshold": 0.76
     },
     {
@@ -14467,7 +14480,7 @@
         "T046"
       ],
       "same_family": false,
-      "similarity": 0.0909,
+      "similarity": 0.125,
       "threshold": 0.76
     },
     {
@@ -14476,7 +14489,7 @@
         "T047"
       ],
       "same_family": false,
-      "similarity": 0.2,
+      "similarity": 0.2857,
       "threshold": 0.76
     },
     {
@@ -14485,7 +14498,7 @@
         "T048"
       ],
       "same_family": false,
-      "similarity": 0.3333,
+      "similarity": 0.1765,
       "threshold": 0.76
     },
     {
@@ -14503,7 +14516,7 @@
         "T050"
       ],
       "same_family": false,
-      "similarity": 0.1,
+      "similarity": 0.0732,
       "threshold": 0.76
     },
     {
@@ -14521,7 +14534,7 @@
         "T048"
       ],
       "same_family": true,
-      "similarity": 0.0526,
+      "similarity": 0.0,
       "threshold": 0.88
     },
     {
@@ -14548,7 +14561,7 @@
         "T048"
       ],
       "same_family": true,
-      "similarity": 0.2121,
+      "similarity": 0.1765,
       "threshold": 0.88
     },
     {
@@ -14557,7 +14570,7 @@
         "T049"
       ],
       "same_family": true,
-      "similarity": 0.3333,
+      "similarity": 0.2857,
       "threshold": 0.88
     },
     {
@@ -14575,7 +14588,7 @@
         "T049"
       ],
       "same_family": true,
-      "similarity": 0.1429,
+      "similarity": 0.25,
       "threshold": 0.88
     },
     {
@@ -14584,7 +14597,7 @@
         "T050"
       ],
       "same_family": true,
-      "similarity": 0.0435,
+      "similarity": 0.0213,
       "threshold": 0.88
     },
     {
@@ -14597,7 +14610,7 @@
       "threshold": 0.88
     }
   ],
-  "PAIRWISE_SIMILARITY_MAX": 0.6296,
+  "PAIRWISE_SIMILARITY_MAX": 0.5652,
   "PAIRWISE_SIMILARITY_VIOLATIONS": 0,
   "violations": [],
   "COLOR_ONLY_VARIANTS": 0,

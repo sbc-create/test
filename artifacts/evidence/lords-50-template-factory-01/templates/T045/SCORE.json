@@ -14,7 +14,7 @@
     "SMALL_TOUCH_TARGET_COUNT": 0,
     "HEADING_ORDER_SKIPS": 0,
     "LOW_CONTRAST_COUNT": 0,
-    "FOCUSABLE_ELEMENTS": 70,
+    "FOCUSABLE_ELEMENTS": 68,
     "CSS_BYTES": 1197
   },
   "criteria": {
@@ -36,7 +36,7 @@
   "PASS": true,
   "OWNER_VISUAL_REVIEW_REQUIRED": true,
   "SELF_REPORTED_OWNER_ACCEPTANCE": false,
-  "scored_at_utc": "2026-09-21T17:36:59.259538+00:00",
+  "scored_at_utc": "2026-09-21T20:24:31.515981+00:00",
   "pages": [
     {
       "viewport": 320,
@@ -49,8 +49,83 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        262,
+        262,
+        262,
+        262,
+        262,
+        262,
+        262,
+        262,
+        262,
+        262,
+        288,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137
+      ],
+      "grid_summary": [
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 4,
+          "card_type": "poster",
+          "cls": "board__items",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 4,
+          "card_type": "poster",
+          "cls": "board__items",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 2,
+          "total": 7,
+          "card_type": "poster",
+          "cls": "g g--poster mosaic g--gp",
+          "is_rel": false
+        },
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 24,
+          "card_type": "poster",
+          "cls": "g g--poster g--gpg",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 320,
       "doc_client_width": 320,
       "sr_only_skipped": 0,
@@ -58,7 +133,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 70
+        "focusable": 68
       },
       "screenshot": "T045-dark-glass-lords-320.png"
     },
@@ -73,8 +148,83 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        332,
+        332,
+        332,
+        332,
+        332,
+        332,
+        332,
+        332,
+        332,
+        332,
+        358,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172,
+        172
+      ],
+      "grid_summary": [
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 4,
+          "card_type": "poster",
+          "cls": "board__items",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 4,
+          "card_type": "poster",
+          "cls": "board__items",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 2,
+          "total": 7,
+          "card_type": "poster",
+          "cls": "g g--poster mosaic g--gp",
+          "is_rel": false
+        },
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 24,
+          "card_type": "poster",
+          "cls": "g g--poster g--gpg",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 390,
       "doc_client_width": 390,
       "sr_only_skipped": 0,
@@ -82,7 +232,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 70
+        "focusable": 68
       },
       "screenshot": "T045-dark-glass-lords-390.png"
     },
@@ -94,11 +244,92 @@
       "broken_images": [],
       "poster_ratio_violations": [],
       "empty_cells": 0,
-      "orphan_rows": [],
+      "orphan_rows": [
+        {
+          "cols": 3,
+          "total": 7,
+          "cls": "g g--poster mosaic g--gp"
+        }
+      ],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        335,
+        335,
+        335,
+        335,
+        335,
+        335,
+        335,
+        335,
+        335,
+        335,
+        361,
+        173.5,
+        173.5,
+        173.5,
+        173.5,
+        173.5,
+        173.5,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236,
+        236
+      ],
+      "grid_summary": [
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 4,
+          "card_type": "poster",
+          "cls": "board__items",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 4,
+          "card_type": "poster",
+          "cls": "board__items",
+          "is_rel": false
+        },
+        {
+          "cols": 3,
+          "declared": 4,
+          "total": 7,
+          "card_type": "poster",
+          "cls": "g g--poster mosaic g--gp",
+          "is_rel": false
+        },
+        {
+          "cols": 3,
+          "declared": 3,
+          "total": 24,
+          "card_type": "poster",
+          "cls": "g g--poster g--gpg",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 768,
       "doc_client_width": 768,
       "sr_only_skipped": 0,
@@ -106,7 +337,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 70
+        "focusable": 68
       },
       "screenshot": "T045-dark-glass-lords-768.png"
     },
@@ -118,11 +349,92 @@
       "broken_images": [],
       "poster_ratio_violations": [],
       "empty_cells": 0,
-      "orphan_rows": [],
+      "orphan_rows": [
+        {
+          "cols": 3,
+          "total": 7,
+          "cls": "g g--poster mosaic g--gp"
+        }
+      ],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        463,
+        463,
+        463,
+        463,
+        463,
+        463,
+        463,
+        463,
+        463,
+        463,
+        489,
+        237.5,
+        237.5,
+        237.5,
+        237.5,
+        237.5,
+        237.5,
+        153.7,
+        153.7,
+        153.7,
+        153.7,
+        153.7,
+        153.7,
+        153.7,
+        153.7,
+        153.7,
+        153.7,
+        153.7,
+        153.7,
+        153.7,
+        153.7,
+        153.7,
+        153.7,
+        153.7,
+        153.7,
+        153.7,
+        153.7,
+        153.7,
+        153.7,
+        153.7,
+        153.7
+      ],
+      "grid_summary": [
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 4,
+          "card_type": "poster",
+          "cls": "board__items",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 4,
+          "card_type": "poster",
+          "cls": "board__items",
+          "is_rel": false
+        },
+        {
+          "cols": 3,
+          "declared": 4,
+          "total": 7,
+          "card_type": "poster",
+          "cls": "g g--poster mosaic g--gp",
+          "is_rel": false
+        },
+        {
+          "cols": 6,
+          "declared": 6,
+          "total": 24,
+          "card_type": "poster",
+          "cls": "g g--poster g--gpg",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 1024,
       "doc_client_width": 1024,
       "sr_only_skipped": 0,
@@ -130,7 +442,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 70
+        "focusable": 68
       },
       "screenshot": "T045-dark-glass-lords-1024.png"
     },
@@ -142,11 +454,92 @@
       "broken_images": [],
       "poster_ratio_violations": [],
       "empty_cells": 0,
-      "orphan_rows": [],
+      "orphan_rows": [
+        {
+          "cols": 3,
+          "total": 7,
+          "cls": "g g--poster mosaic g--gp"
+        }
+      ],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        434,
+        434,
+        434,
+        434,
+        434,
+        434,
+        434,
+        434,
+        434,
+        434,
+        697,
+        341.5,
+        341.5,
+        341.5,
+        341.5,
+        341.5,
+        341.5,
+        223,
+        223,
+        223,
+        223,
+        223,
+        223,
+        223,
+        223,
+        223,
+        223,
+        223,
+        223,
+        223,
+        223,
+        223,
+        223,
+        223,
+        223,
+        223,
+        223,
+        223,
+        223,
+        223,
+        223
+      ],
+      "grid_summary": [
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 4,
+          "card_type": "poster",
+          "cls": "board__items",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 4,
+          "card_type": "poster",
+          "cls": "board__items",
+          "is_rel": false
+        },
+        {
+          "cols": 3,
+          "declared": 4,
+          "total": 7,
+          "card_type": "poster",
+          "cls": "g g--poster mosaic g--gp",
+          "is_rel": false
+        },
+        {
+          "cols": 6,
+          "declared": 6,
+          "total": 24,
+          "card_type": "poster",
+          "cls": "g g--poster g--gpg",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 1440,
       "doc_client_width": 1440,
       "sr_only_skipped": 0,
@@ -154,7 +547,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 70
+        "focusable": 68
       },
       "screenshot": "T045-dark-glass-lords-1440.png"
     },
@@ -166,11 +559,92 @@
       "broken_images": [],
       "poster_ratio_violations": [],
       "empty_cells": 0,
-      "orphan_rows": [],
+      "orphan_rows": [
+        {
+          "cols": 3,
+          "total": 7,
+          "cls": "g g--poster mosaic g--gp"
+        }
+      ],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        434,
+        434,
+        434,
+        434,
+        434,
+        434,
+        434,
+        434,
+        434,
+        434,
+        697,
+        341.5,
+        341.5,
+        341.5,
+        341.5,
+        341.5,
+        341.5,
+        163.8,
+        163.8,
+        163.8,
+        163.8,
+        163.8,
+        163.8,
+        163.8,
+        163.8,
+        163.8,
+        163.8,
+        163.8,
+        163.8,
+        163.8,
+        163.8,
+        163.8,
+        163.8,
+        163.8,
+        163.8,
+        163.8,
+        163.8,
+        163.8,
+        163.8,
+        163.8,
+        163.8
+      ],
+      "grid_summary": [
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 4,
+          "card_type": "poster",
+          "cls": "board__items",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 4,
+          "card_type": "poster",
+          "cls": "board__items",
+          "is_rel": false
+        },
+        {
+          "cols": 3,
+          "declared": 4,
+          "total": 7,
+          "card_type": "poster",
+          "cls": "g g--poster mosaic g--gp",
+          "is_rel": false
+        },
+        {
+          "cols": 8,
+          "declared": 8,
+          "total": 24,
+          "card_type": "poster",
+          "cls": "g g--poster g--gpg",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 1920,
       "doc_client_width": 1920,
       "sr_only_skipped": 0,
@@ -178,7 +652,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 70
+        "focusable": 68
       },
       "screenshot": "T045-dark-glass-lords-1920.png"
     }

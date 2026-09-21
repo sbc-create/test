@@ -14,7 +14,7 @@
     "SMALL_TOUCH_TARGET_COUNT": 0,
     "HEADING_ORDER_SKIPS": 0,
     "LOW_CONTRAST_COUNT": 0,
-    "FOCUSABLE_ELEMENTS": 106,
+    "FOCUSABLE_ELEMENTS": 105,
     "CSS_BYTES": 1646
   },
   "criteria": {
@@ -36,7 +36,7 @@
   "PASS": true,
   "OWNER_VISUAL_REVIEW_REQUIRED": true,
   "SELF_REPORTED_OWNER_ACCEPTANCE": false,
-  "scored_at_utc": "2026-09-21T17:37:21.636265+00:00",
+  "scored_at_utc": "2026-09-21T20:24:53.564229+00:00",
   "pages": [
     {
       "viewport": 320,
@@ -49,8 +49,69 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144
+      ],
+      "grid_summary": [
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 35,
+          "card_type": "poster",
+          "cls": "g g--tile g--ea",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 8,
+          "card_type": "poster",
+          "cls": "g g--ranked g--eaf",
+          "is_rel": false
+        },
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 27,
+          "card_type": "poster",
+          "cls": "g g--poster g--eag",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 6,
+          "card_type": "episode",
+          "cls": "g g--compact g--eaf",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 320,
       "doc_client_width": 320,
       "sr_only_skipped": 0,
@@ -58,7 +119,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 106
+        "focusable": 105
       },
       "screenshot": "T050-lords-emerald-archive-320.png"
     },
@@ -73,8 +134,69 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179,
+        179
+      ],
+      "grid_summary": [
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 35,
+          "card_type": "poster",
+          "cls": "g g--tile g--ea",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 8,
+          "card_type": "poster",
+          "cls": "g g--ranked g--eaf",
+          "is_rel": false
+        },
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 27,
+          "card_type": "poster",
+          "cls": "g g--poster g--eag",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 6,
+          "card_type": "episode",
+          "cls": "g g--compact g--eaf",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 390,
       "doc_client_width": 390,
       "sr_only_skipped": 0,
@@ -82,7 +204,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 106
+        "focusable": 105
       },
       "screenshot": "T050-lords-emerald-archive-390.png"
     },
@@ -97,8 +219,69 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "grid_summary": [
+        {
+          "cols": 7,
+          "declared": 7,
+          "total": 35,
+          "card_type": "poster",
+          "cls": "g g--tile g--ea",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 8,
+          "card_type": "poster",
+          "cls": "g g--ranked g--eaf",
+          "is_rel": false
+        },
+        {
+          "cols": 4,
+          "declared": 4,
+          "total": 27,
+          "card_type": "poster",
+          "cls": "g g--poster g--eag",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 6,
+          "card_type": "episode",
+          "cls": "g g--compact g--eaf",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 768,
       "doc_client_width": 768,
       "sr_only_skipped": 0,
@@ -106,7 +289,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 106
+        "focusable": 105
       },
       "screenshot": "T050-lords-emerald-archive-768.png"
     },
@@ -121,8 +304,69 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136
+      ],
+      "grid_summary": [
+        {
+          "cols": 7,
+          "declared": 7,
+          "total": 35,
+          "card_type": "poster",
+          "cls": "g g--tile g--ea",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 8,
+          "card_type": "poster",
+          "cls": "g g--ranked g--eaf",
+          "is_rel": false
+        },
+        {
+          "cols": 7,
+          "declared": 7,
+          "total": 27,
+          "card_type": "poster",
+          "cls": "g g--poster g--eag",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 6,
+          "card_type": "episode",
+          "cls": "g g--compact g--eaf",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 1024,
       "doc_client_width": 1024,
       "sr_only_skipped": 0,
@@ -130,7 +374,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 106
+        "focusable": 105
       },
       "screenshot": "T050-lords-emerald-archive-1024.png"
     },
@@ -145,8 +389,69 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4,
+        195.4
+      ],
+      "grid_summary": [
+        {
+          "cols": 10,
+          "declared": 10,
+          "total": 35,
+          "card_type": "poster",
+          "cls": "g g--tile g--ea",
+          "is_rel": false
+        },
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 8,
+          "card_type": "poster",
+          "cls": "g g--ranked g--eaf",
+          "is_rel": false
+        },
+        {
+          "cols": 7,
+          "declared": 7,
+          "total": 27,
+          "card_type": "poster",
+          "cls": "g g--poster g--eag",
+          "is_rel": false
+        },
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 6,
+          "card_type": "episode",
+          "cls": "g g--compact g--eaf",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 1440,
       "doc_client_width": 1440,
       "sr_only_skipped": 0,
@@ -154,7 +459,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 106
+        "focusable": 105
       },
       "screenshot": "T050-lords-emerald-archive-1440.png"
     },
@@ -169,8 +474,69 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2,
+        150.2
+      ],
+      "grid_summary": [
+        {
+          "cols": 12,
+          "declared": 12,
+          "total": 35,
+          "card_type": "poster",
+          "cls": "g g--tile g--ea",
+          "is_rel": false
+        },
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 8,
+          "card_type": "poster",
+          "cls": "g g--ranked g--eaf",
+          "is_rel": false
+        },
+        {
+          "cols": 9,
+          "declared": 9,
+          "total": 27,
+          "card_type": "poster",
+          "cls": "g g--poster g--eag",
+          "is_rel": false
+        },
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 6,
+          "card_type": "episode",
+          "cls": "g g--compact g--eaf",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 1920,
       "doc_client_width": 1920,
       "sr_only_skipped": 0,
@@ -178,7 +544,7 @@
         "small_targets": [],
         "heading_skips": [],
         "low_contrast": [],
-        "focusable": 106
+        "focusable": 105
       },
       "screenshot": "T050-lords-emerald-archive-1920.png"
     }

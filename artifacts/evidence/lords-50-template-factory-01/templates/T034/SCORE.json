@@ -36,7 +36,7 @@
   "PASS": true,
   "OWNER_VISUAL_REVIEW_REQUIRED": true,
   "SELF_REPORTED_OWNER_ACCEPTANCE": false,
-  "scored_at_utc": "2026-09-21T17:36:10.103926+00:00",
+  "scored_at_utc": "2026-09-21T20:23:39.965960+00:00",
   "pages": [
     {
       "viewport": 320,
@@ -49,8 +49,51 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        292,
+        141,
+        141,
+        141,
+        141,
+        141,
+        141,
+        141,
+        141,
+        141,
+        141,
+        141,
+        141,
+        141,
+        141,
+        141,
+        141
+      ],
+      "grid_summary": [
+        {
+          "cols": 1,
+          "declared": 2,
+          "total": 7,
+          "card_type": "poster",
+          "cls": "g g--tile mosaic g--q1",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 6,
+          "card_type": "episode",
+          "cls": "g g--compact g--qfeed",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 2,
+          "total": 17,
+          "card_type": "poster",
+          "cls": "g g--poster mosaic g--q2",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 320,
       "doc_client_width": 320,
       "sr_only_skipped": 0,
@@ -73,8 +116,51 @@
       "orphan_rows": [],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        362,
+        176,
+        176,
+        176,
+        176,
+        176,
+        176,
+        176,
+        176,
+        176,
+        176,
+        176,
+        176,
+        176,
+        176,
+        176,
+        176
+      ],
+      "grid_summary": [
+        {
+          "cols": 1,
+          "declared": 2,
+          "total": 7,
+          "card_type": "poster",
+          "cls": "g g--tile mosaic g--q1",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 6,
+          "card_type": "episode",
+          "cls": "g g--compact g--qfeed",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 2,
+          "total": 17,
+          "card_type": "poster",
+          "cls": "g g--poster mosaic g--q2",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 390,
       "doc_client_width": 390,
       "sr_only_skipped": 0,
@@ -94,11 +180,60 @@
       "broken_images": [],
       "poster_ratio_violations": [],
       "empty_cells": 0,
-      "orphan_rows": [],
+      "orphan_rows": [
+        {
+          "cols": 3,
+          "total": 7,
+          "cls": "g g--tile mosaic g--q1"
+        }
+      ],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        365,
+        177.5,
+        177.5,
+        177.5,
+        177.5,
+        177.5,
+        177.5,
+        177.5,
+        177.5,
+        177.5,
+        177.5,
+        177.5,
+        177.5,
+        177.5,
+        177.5,
+        177.5,
+        177.5
+      ],
+      "grid_summary": [
+        {
+          "cols": 3,
+          "declared": 4,
+          "total": 7,
+          "card_type": "poster",
+          "cls": "g g--tile mosaic g--q1",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 6,
+          "card_type": "episode",
+          "cls": "g g--compact g--qfeed",
+          "is_rel": false
+        },
+        {
+          "cols": 3,
+          "declared": 4,
+          "total": 17,
+          "card_type": "poster",
+          "cls": "g g--poster mosaic g--q2",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 768,
       "doc_client_width": 768,
       "sr_only_skipped": 0,
@@ -118,11 +253,60 @@
       "broken_images": [],
       "poster_ratio_violations": [],
       "empty_cells": 0,
-      "orphan_rows": [],
+      "orphan_rows": [
+        {
+          "cols": 3,
+          "total": 7,
+          "cls": "g g--tile mosaic g--q1"
+        }
+      ],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        241.5,
+        115.8,
+        115.8,
+        115.8,
+        115.8,
+        115.8,
+        115.8,
+        115.8,
+        115.8,
+        115.8,
+        115.8,
+        115.8,
+        115.8,
+        115.8,
+        115.8,
+        115.8,
+        115.8
+      ],
+      "grid_summary": [
+        {
+          "cols": 3,
+          "declared": 4,
+          "total": 7,
+          "card_type": "poster",
+          "cls": "g g--tile mosaic g--q1",
+          "is_rel": false
+        },
+        {
+          "cols": 1,
+          "declared": 1,
+          "total": 6,
+          "card_type": "episode",
+          "cls": "g g--compact g--qfeed",
+          "is_rel": false
+        },
+        {
+          "cols": 7,
+          "declared": 8,
+          "total": 17,
+          "card_type": "poster",
+          "cls": "g g--poster mosaic g--q2",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 1024,
       "doc_client_width": 1024,
       "sr_only_skipped": 0,
@@ -142,11 +326,60 @@
       "broken_images": [],
       "poster_ratio_violations": [],
       "empty_cells": 0,
-      "orphan_rows": [],
+      "orphan_rows": [
+        {
+          "cols": 3,
+          "total": 7,
+          "cls": "g g--tile mosaic g--q1"
+        }
+      ],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        345.5,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8
+      ],
+      "grid_summary": [
+        {
+          "cols": 3,
+          "declared": 4,
+          "total": 7,
+          "card_type": "poster",
+          "cls": "g g--tile mosaic g--q1",
+          "is_rel": false
+        },
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 6,
+          "card_type": "episode",
+          "cls": "g g--compact g--qfeed",
+          "is_rel": false
+        },
+        {
+          "cols": 7,
+          "declared": 8,
+          "total": 17,
+          "card_type": "poster",
+          "cls": "g g--poster mosaic g--q2",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 1440,
       "doc_client_width": 1440,
       "sr_only_skipped": 0,
@@ -166,11 +399,60 @@
       "broken_images": [],
       "poster_ratio_violations": [],
       "empty_cells": 0,
-      "orphan_rows": [],
+      "orphan_rows": [
+        {
+          "cols": 3,
+          "total": 7,
+          "cls": "g g--tile mosaic g--q1"
+        }
+      ],
       "overlaps": [],
       "big_gaps": [],
-      "card_widths": [],
-      "grid_summary": [],
+      "card_widths": [
+        345.5,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8,
+        167.8
+      ],
+      "grid_summary": [
+        {
+          "cols": 3,
+          "declared": 4,
+          "total": 7,
+          "card_type": "poster",
+          "cls": "g g--tile mosaic g--q1",
+          "is_rel": false
+        },
+        {
+          "cols": 2,
+          "declared": 2,
+          "total": 6,
+          "card_type": "episode",
+          "cls": "g g--compact g--qfeed",
+          "is_rel": false
+        },
+        {
+          "cols": 7,
+          "declared": 8,
+          "total": 17,
+          "card_type": "poster",
+          "cls": "g g--poster mosaic g--q2",
+          "is_rel": false
+        }
+      ],
       "doc_scroll_width": 1920,
       "doc_client_width": 1920,
       "sr_only_skipped": 0,

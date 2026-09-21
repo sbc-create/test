@@ -4,7 +4,7 @@
   "slug": "premiere-calendar-green",
   "version": "1.0.0",
   "family": "premiere",
-  "package_digest": "57a5ae256766e384043d08b598290eab5e1e237d99971795ca4ac57a8522b944",
+  "package_digest": "e79076bc4b368bc4e478d079682c8f2fd7e96b84a0802e9324fd56b17e7a44f0",
   "declared": {
     "design_intent": "Календарь: хронология ведёт, под ней разделы и витрина.",
     "primary_user_journey": "пройти по датам → уйти в раздел",
@@ -96,5 +96,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.657234+00:00"
+  "issued_at_utc": "2026-09-21T20:29:21.413483+00:00"
 }
