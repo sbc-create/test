@@ -1258,8 +1258,14 @@ white-space:nowrap}
 АНИМЕДИА_СТИЛЬ = """
 /* Animedia 1.2.4 — blockwise: shell/header/theme (BLOCK_01) + shelves. */
 :root{
-  --a-content-max:1760px;
-  --page-gutters:96px;
+  /* Оболочка по оригиналу. Измерено на снимке 20.09: шапка оригинала имеет
+     ширину 1420 и на 1440, и на 1920 — внешняя рамка ограничена и на широком
+     экране не растягивается; ширина содержимого около 1272 при окне 1363, то
+     есть боковые поля внутри рамки около 40. Прежние 1760 разворачивали сетку
+     до десяти колонок там, где у оригинала их семь. */
+  --a-shell-max:1420px;
+  --a-content-max:1340px;
+  --page-gutters:80px;
   --a-gutter-desktop:48px;
   --a-gutter-tablet:22px;
   --a-gutter-mobile:14px;
@@ -1287,8 +1293,11 @@ html[data-theme=dark]{color-scheme:dark;
 }
 *{box-sizing:border-box}
 html,body{max-width:100%;overflow-x:hidden}
+/* Базовый кегль оригинала — 14px при плотной типографике (наблюдение источника
+   эталона, CR v2.0 §3). Прежние 16px растягивали каждую строку и вместе с
+   широким контейнером давали витрину на треть «крупнее» оригинала. */
 body{background:var(--a-page);color:var(--a-ink);
-font:16px/1.45 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif}
+font:14px/1.5 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;
   transition-duration:.01ms !important;scroll-behavior:auto !important}
@@ -1299,14 +1308,28 @@ font:16px/1.45 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif}
   width:min(var(--a-content-max),calc(100% - var(--page-gutters)));
   margin-inline:auto;padding-inline:0;box-sizing:border-box}
 .zwrap{padding-block:0}
-.zhd{position:relative;background:var(--a-rail);border-bottom:1px solid var(--a-line);z-index:30}
-.zhd__in{display:flex;align-items:center;gap:12px;flex-wrap:nowrap;height:68px;min-height:64px;
-max-height:72px;padding-block:0}
+/* Шапка оригинала — не во всю ширину окна: это ограниченная рамка, и её нижняя
+   линия обрывается вместе с ней. Высота измерена: 90 на 768 и шире, 126 на
+   телефоне, где шапка складывается в две строки — поиск уходит на свою. */
+.zhd{position:relative;background:var(--a-rail);border-bottom:1px solid var(--a-line);z-index:30;
+width:100%;margin-inline:auto}
+/* Рамка ограничена только на широком экране: у оригинала шапка занимает всю
+   ширину на 390 и на 768 и ровно 1420 на 1440 и на 1920. */
+@media(min-width:1024px){
+  .zhd{width:min(var(--a-shell-max),calc(100% - 20px))}
+}
+/* 89 + 1px нижней линии = измеренные 90. Считать высоту без линии значило бы
+   ошибаться на пиксель на каждом маршруте. */
+.zhd__in{display:flex;align-items:center;gap:12px;flex-wrap:nowrap;height:89px;min-height:89px;
+max-height:89px;padding-block:0}
 @media(max-width:1023px){
-  .zhd__in{height:60px;min-height:56px;max-height:64px;flex-wrap:nowrap;gap:8px;padding-block:0}
+  .zhd__in{height:89px;min-height:89px;max-height:89px;flex-wrap:nowrap;gap:8px;padding-block:0}
 }
 @media(max-width:767px){
-  .zhd__in{height:56px;min-height:56px;max-height:64px;gap:8px}
+  .zhd__in{height:auto;min-height:125px;max-height:none;flex-wrap:wrap;align-content:center;
+  gap:8px;row-gap:10px;padding-block:12px}
+  .zhd__s{flex:1 0 100%;order:3;max-width:none}
+  .zhd__actions{order:2;margin-left:auto}
 }
 .zhd__logo{font-size:22px;font-weight:800;letter-spacing:-.4px;color:var(--a-ink);flex:0 0 auto;
 line-height:1;min-height:44px;min-width:120px;max-width:155px;width:max-content;
@@ -1472,10 +1495,16 @@ justify-items:stretch}
 /* CARD_VARIANT_REGISTRY: last incomplete row must not stretch cards */
 .zrl__track{align-items:flex-start}
 @media(min-width:640px){.zg{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(min-width:768px){.zg{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media(min-width:1024px){.zg{grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}}
-@media(min-width:1200px){.zg{grid-template-columns:repeat(7,minmax(0,1fr));gap:14px}}
-@media(min-width:1800px){.zg{grid-template-columns:repeat(10,minmax(0,1fr));gap:14px}}
+/* Промежуток сетки у оригинала — 33. Он выведен из двух независимых измерений,
+   а не подобран: при содержимом 724 пять колонок с промежутком 33 дают карточку
+   118 — ровно измеренную на 768; при содержимом 1340 семь колонок с тем же
+   промежутком дают 163 — ровно измеренную на 1440 и на 1920.
+   Правила на 1800 здесь нет намеренно: у оригинала постер одинаков и на 1440,
+   и на 1920, потому что рамка ограничена. Колонки, растущие от ширины окна при
+   ограниченном контейнере, мельчили карточку — было 121 на 1920. */
+@media(min-width:768px){.zg{grid-template-columns:repeat(5,minmax(0,1fr));gap:33px}}
+@media(min-width:1024px){.zg{grid-template-columns:repeat(5,minmax(0,1fr));gap:33px}}
+@media(min-width:1200px){.zg{grid-template-columns:repeat(7,minmax(0,1fr));gap:33px}}
 @media(min-width:768px) and (max-width:1199px){
   .zcat .zg,.zwrap--catalog .zg{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
@@ -1492,7 +1521,10 @@ overflow:hidden;min-width:0;height:auto;max-height:320px;box-shadow:var(--a-shad
 transition:transform .14s,box-shadow .14s}
 .zt:hover{transform:translateY(-2px);box-shadow:var(--a-shadow)}
 .zt:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
-.zt__p{display:block;aspect-ratio:2/3;background:var(--a-surf);position:relative;flex:0 0 auto;width:100%}
+/* Пропорция постера оригинала — 5/7 (0.714): измерено 163x228 на 1440 и 1920,
+   118x165 на 768, и на всех ширинах одно и то же отношение. Прежние 2/3 (0.667)
+   вытягивали каждую карточку витрины. */
+.zt__p{display:block;aspect-ratio:5/7;background:var(--a-surf);position:relative;flex:0 0 auto;width:100%}
 .zt__p img,.zt__img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;display:block;
 max-width:none;max-height:none}
 .zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:10px;text-align:center;color:var(--a-mute);font-size:12px}
@@ -4936,15 +4968,28 @@ class ВидАнимедиа(ВидОснова):
         return ('<nav class="ztitle__rels" aria-label="Связанные тайтлы">'
                 + "".join(ссылки) + "</nav>")
 
-    def верхняя_карусель(self, набор, *, snapshot: dict | None = None) -> str:
-        """B02 weekly popular poster shelf — approved snapshot only.
+    def верхняя_карусель(self, набор, *, snapshot: dict | None = None,
+                         подпись: str = "Популярное за неделю",
+                         источник: str = "weekly-popular") -> str:
+        """Карусель первого экрана — как у оригинала, но только из своих данных.
 
-        Empty / missing / <4 valid → 0 px (caller must omit). When rendered,
-        exposes weekly digest attrs for oracle stability checks.
+        У оригинала первый экран — карусель отобранного каталога, а не заголовок
+        с лидом. Композиция воспроизводится; содержимое берётся из уже
+        утверждённых источников и подписывается тем, чем оно является:
+
+        * есть утверждённый недельный снимок — «Популярное за неделю»;
+        * нет — лента проверенного реестра добавлений с её собственным
+          названием;
+        * нет и её — карусель не рисуется вовсе.
+
+        Подписывать одну выборку названием другой нельзя: это и была бы
+        выдуманная популярность.
         """
         if not набор:
             return ""
-        extra = ' data-weekly-popular="1"'
+        extra = f' data-carousel-source="{html.escape(источник)}"'
+        if источник == "weekly-popular":
+            extra += ' data-weekly-popular="1"'
         if snapshot:
             extra += (
                 f' data-popular-window="{html.escape(str(snapshot.get("window") or "weekly"))}"'
@@ -4953,7 +4998,7 @@ class ВидАнимедиа(ВидОснова):
                 f' data-popular-updated="{html.escape(str(snapshot.get("updated_at") or snapshot.get("generated_at") or ""))}"'
                 f' data-popular-algo="{html.escape(str(snapshot.get("algorithm_version") or ""))}"'
             )
-        return (f'<section class="ahero" aria-label="Популярное за неделю"{extra}>'
+        return (f'<section class="ahero" aria-label="{html.escape(подпись)}"{extra}>'
                 f'<div class="ahero__inner">{self.карусель("hero", набор)}</div></section>')
 
     def секция(self, ключ: str, титул: str, ссылка: str, набор, пусто: str) -> str:
@@ -5010,13 +5055,19 @@ class ВидАнимедиа(ВидОснова):
                 f'<div class="zeps">{"".join(ссылки)}</div></section>')
         return f'<h2 class="zh zh--sm">Серии</h2>{_склеить(блоки)}'
 
-    def seo_блок(self, *, заголовок: str, текст: str) -> str:
-        """Нижний SEO-текст перед footer: на mobile — details."""
+    def seo_блок(self, *, заголовок: str, текст: str, как_h1: bool = False) -> str:
+        """Нижний блок «о сайте» перед подвалом; на узком экране — details.
+
+        На главной он несёт H1. Так у оригинала: первый экран там начинается
+        каруселью, а название и описание сайта стоят внизу отдельной секцией.
+        Заголовок при этом остаётся ровно один на странице.
+        """
         if not текст:
             return ""
+        тег = "h1" if как_h1 else "h2"
         return (
             f'<aside class="zseo" aria-label="{html.escape(заголовок)}">'
-            f'<div class="zseo__full"><h2>{html.escape(заголовок)}</h2>'
+            f'<div class="zseo__full"><{тег} class="zseo__t">{html.escape(заголовок)}</{тег}>'
             f"<p>{html.escape(текст)}</p></div>"
             f"<details><summary>{html.escape(заголовок)}</summary>"
             f"<p>{html.escape(текст)}</p></details></aside>")
@@ -5214,6 +5265,9 @@ class ВидАнимедиа(ВидОснова):
     # --- главная -------------------------------------------------------
     def главная(self) -> str:
         занято: set = set()
+        #: Что уже показано каруселью первого экрана: ниже эти записи не
+        #: повторяются, иначе первый экран и первая лента дублируют друг друга.
+        занятые_каруселью: set = set()
 
         def оценка(з: dict) -> float:
             д = self.деталь(з["slug"])
@@ -5308,16 +5362,30 @@ class ВидАнимедиа(ВидОснова):
             # Catalog-addition shelves are B05 — not invented here without collections.
         куски = [self.полоса_готовности()]
 
-        # B02: upper poster shelf = approved weekly only (≥4). Else 0 px + gap flag.
+        # Первый экран оригинала — карусель, а не заголовок с лидом. Источник
+        # выбирается по убыванию доказанности и подписывается собой.
         if weekly_items and weekly_meta:
             куски.append(self.верхняя_карусель(weekly_items[:24], snapshot=weekly_meta))
         else:
-            куски.append(
-                '<div class="ahero ahero--gap" data-weekly-popular="0" '
-                'data-popular-gap="1" hidden aria-hidden="true"></div>')
+            запасная = None
+            if снимок is not None:
+                for ключ in ("recently_added", "series_with_episodes"):
+                    коллекция = КОЛЛЕКЦИИ.разрешить(ключ, снимок, СЕМЕЙСТВО, предел=24)
+                    if коллекция is not None and len(коллекция.items) >= 4:
+                        запасная = (ключ, коллекция)
+                        break
+            if запасная is not None:
+                ключ, коллекция = запасная
+                титул, _ = ПРИЧИНЫ.get(ключ, (коллекция.title, ""))
+                куски.append(self.верхняя_карусель(
+                    [к.raw for к in коллекция.items[:24]],
+                    подпись=титул, источник=ключ.replace("_", "-")))
+                занятые_каруселью |= {к.raw.get("slug") for к in коллекция.items[:24]}
+            else:
+                куски.append(
+                    '<div class="ahero ahero--gap" data-weekly-popular="0" '
+                    'data-popular-gap="1" hidden aria-hidden="true"></div>')
         куски.append(_аниме_telegram_promo_html())
-        куски.append(f'<h1 class="zh zh--home">{html.escape(домен["h1"])}</h1>')
-        куски.append(f'<p class="zsub zsub--home">{html.escape(домен["lead"])}</p>')
         # Empty ad slots must collapse to 0px (no Telegram/premium invent).
         куски.append('<div class="zad-home" data-ad-slot="home-after-hero" data-ad-enabled="0"></div>')
         # B03: provider_became_playable only — never catalog fallback.
@@ -5332,7 +5400,7 @@ class ВидАнимедиа(ВидОснова):
         # Cross-shelf dedup. Weekly shelf slugs may reappear in lower grids only
         # when the lower shelf is not also the weekly popular block.
         очищенные = []
-        герой_slug = {з["slug"] for з in weekly_items}
+        герой_slug = {з["slug"] for з in weekly_items} | set(занятые_каруселью)
         занятые: set[str] = set(герой_slug)
         # B05 owns catalog freshness; B02 owns weekly; top_rated must not
         # reappear as a second ranked shelf without TopSnapshot.
@@ -5370,7 +5438,7 @@ class ВидАнимедиа(ВидОснова):
             'hidden aria-hidden="true"></div>')
         # B06.7 SEO/about after functional modules, before footer.
         куски.append(self.seo_блок(заголовок=домен["seo_home_title"],
-                                   текст=домен["seo_home"]))
+                                   текст=домен["seo_home"], как_h1=True))
         return self.оболочка(
             _склеить(куски),
             домен["title_home"], "/", актив="/",

@@ -223,32 +223,86 @@ from pathlib import Path
 """
 
 
+def поднять_локально(рантайм: Path, витрина: str, лог: Path):
+    """Поднять изолированный рантайм на служебном порту с боевым снимком.
+
+    Нужен, чтобы мерить правки ДО выкладки: живой домен для этого трогать
+    нельзя, а без настоящего `Host` витрина объявила бы чужой canonical.
+    """
+    import os
+    import socket
+    import subprocess
+    import time
+
+    корень = Path(os.environ.get("ANIMEDIA_RUNTIME_ROOT", "/srv/lords/.frontend"))
+    with socket.socket() as s:
+        s.bind(("127.0.0.1", 0))
+        порт = s.getsockname()[1]
+    окр = dict(os.environ)
+    окр.update({
+        "ANIMEDIA_TEMPLATE_MANIFEST": str(корень / f"template-manifest-{витрина}.json"),
+        "ANIMEDIA_CATALOG": str(корень / f"{витрина}-catalog.json"),
+        "ANIMEDIA_SITE_NAME": "Animedia",
+        "PYTHONDONTWRITEBYTECODE": "1",
+    })
+    for чужое in ("LORDS_TEMPLATE_MANIFEST", "LORDS_CATALOG", "LORDS_DETAILS"):
+        окр.pop(чужое, None)
+    ф = лог.open("w", encoding="utf-8")
+    p = subprocess.Popen(["/usr/bin/python3", str(рантайм), "--port", str(порт)],
+                         stdout=ф, stderr=subprocess.STDOUT, env=окр,
+                         cwd=str(рантайм.resolve().parents[2]))
+    for _ in range(600):
+        time.sleep(0.5)
+        if p.poll() is not None:
+            raise SystemExit(f"рантайм не поднялся, см. {лог}")
+        try:
+            with socket.create_connection(("127.0.0.1", порт), timeout=0.5):
+                return p, порт
+        except OSError:
+            continue
+    raise SystemExit("порт не открылся")
+
+
 def main() -> int:
     р = argparse.ArgumentParser(description=__doc__)
     р.add_argument("--domain", required=True)
     р.add_argument("--label", required=True, help="before | after")
     р.add_argument("--out", required=True)
-    р.add_argument("--shots-for-comparable-only", action="store_true", default=True)
+    р.add_argument("--local-runtime", default=None,
+                   help=("путь к рантайму: поднять его локально и мерить его, "
+                         "а не живой домен. Домен разрешается в петлю, `Host` "
+                         "остаётся настоящим."))
+    р.add_argument("--site", default="animedia-01",
+                   help="витрина, чьи манифест и снимок брать при локальном запуске")
     a = р.parse_args()
     вывод = Path(a.out)
     (вывод / "screenshots").mkdir(parents=True, exist_ok=True)
+
+    процесс = порт = None
+    if a.local_runtime:
+        процесс, порт = поднять_локально(Path(a.local_runtime), a.site,
+                                         вывод / "runtime.log")
 
     from playwright.sync_api import sync_playwright
 
     итог = {"task": "ANIMEDIA-PARITY-PROBE", "tenant": "animedia",
             "domain": a.domain, "label": a.label,
             "measured_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "local_runtime": a.local_runtime, "site": a.site if a.local_runtime else None,
             "widths": list(ШИРИНЫ), "cells": []}
+    схема = "http" if a.local_runtime else "https"
+    аргументы = ([f"--host-resolver-rules=MAP {a.domain} 127.0.0.1:{порт}"]
+                 if a.local_runtime else [])
     with sync_playwright() as pw:
-        b = pw.chromium.launch()
+        b = pw.chromium.launch(args=аргументы)
         try:
             for ширина in ШИРИНЫ:
                 ctx = b.new_context(viewport={"width": ширина, "height": 900},
                                     device_scale_factor=1)
                 стр = ctx.new_page()
                 for имя, путь, ждём, сопоставим in МАРШРУТЫ:
-                    ответ = стр.goto(f"https://{a.domain}{путь}", wait_until="load",
-                                     timeout=60000)
+                    ответ = стр.goto(f"{схема}://{a.domain}{путь}",
+                                     wait_until="load", timeout=60000)
                     стр.wait_for_timeout(250)
                     м = стр.evaluate(ОРАКУЛ)
                     з = ответ.headers if ответ else {}
@@ -273,6 +327,12 @@ def main() -> int:
                 ctx.close()
         finally:
             b.close()
+            if процесс is not None:
+                процесс.terminate()
+                try:
+                    процесс.wait(timeout=20)
+                except Exception:
+                    процесс.kill()
     (вывод / f"PROBE_{a.label}_{a.domain.replace('.', '_')}.json").write_text(
         json.dumps(итог, ensure_ascii=False, indent=1), encoding="utf-8")
     print("ячеек:", len(итог["cells"]), "->", вывод)
