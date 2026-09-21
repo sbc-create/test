@@ -1,0 +1,38 @@
+{
+ "dns": {
+  "animedia.space": [
+   "45.131.182.225"
+  ],
+  "animedia.icu": [
+   "45.131.182.225"
+  ]
+ },
+ "tls": {
+  "animedia.space": {
+   "cn": [
+    "zonafilm.space"
+   ],
+   "san": [
+    "animedia.icu",
+    "animedia.space",
+    "zonafilm.space"
+   ],
+   "notAfter": "Dec  9 08:53:28 2026 GMT",
+   "days_left": 78,
+   "proto": "TLSv1.3"
+  },
+  "animedia.icu": {
+   "cn": [
+    "zonafilm.space"
+   ],
+   "san": [
+    "animedia.icu",
+    "animedia.space",
+    "zonafilm.space"
+   ],
+   "notAfter": "Dec  9 08:53:28 2026 GMT",
+   "days_left": 78,
+   "proto": "TLSv1.3"
+  }
+ }
+}

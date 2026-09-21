@@ -1,0 +1,109 @@
+{
+  "incident": "animedia.space — заявлен аварийный отказ",
+  "checked_at_utc": "2026-09-21T16:30:00Z",
+  "VERDICT": "ОТКАЗА НЕ НАЙДЕНО — оба домена доступны и корректны",
+  "cause": "Отказ не воспроизводится. Оба домена отдают 200 на всех девяти маршрутах на 390/768/1440, по два прогона на домен. DNS у обоих 45.131.182.225, сертификат действителен и покрывает оба имени (78 дней, TLSv1.3). Отдаваемая сборка — прежняя 20260920T102102Z-89666321-nova / d2e9628f, ревизия 89666321: она не менялась.",
+  "relation_to_release_7aae3d2c": "НЕ СВЯЗАН. Релиз 7aae3d2c ни разу не активировался: перезапуск не выполнялся (polkit отказал и владельцу), и оба процесса витрин исполняют прежний путь, а не каталог релиза. Откатывать по причине релиза нечего.",
+  "pids": {
+    "animedia-01": 2693862,
+    "animedia-02": 2693863,
+    "note": "оба исполняют /srv/lords/.frontend/lords-frontend.py — путь до установки загрузчика, то есть процессы старше раскладки релизов"
+  },
+  "served": {
+    "build_id": "20260920T102102Z-89666321-nova",
+    "artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+    "template_revision": "896663210936",
+    "robots": "noindex, nofollow"
+  },
+  "real_hazard_found_and_removed": {
+    "what": "Обе витрины Animedia были назначены на релизы, код которых НЕ совпадал с отдаваемым. animedia-02 была назначена на legacy-b32438c91aaa — сборку с линии Lords, которая на отсутствующем маршруте отдаёт 503 вместо 404. Любой перезапуск при разборе аварии ухудшил бы именно тот домен, из-за которого тревога.",
+    "action": "Оба назначения переведены на 20260921T154512Z-8966632-animedia-rollback — релиз, побайтово равный отдаваемому артефакту d2e9628f. Манифесты приведены в соответствие: у animedia-01 восстановлен из резерва, у animedia-02 уже совпадал.",
+    "result": "перезапуск любой из двух витрин стал пустой операцией",
+    "my_pending_change_disarmed": "зарядка канарейки animedia-01 на 7aae3d2c снята"
+  },
+  "transient_observed": "Один переход браузера на https://animedia.icu/catalog/ завершился ошибкой навигации. Шесть последовательных запросов curl к тому же адресу дали 200 одинакового размера, и напрямую на порт тоже 200. Сбой на стороне браузера под нагрузкой, не на сервере.",
+  "runs": {
+    "SMOKE_icu_run1": {
+      "domain": "animedia.icu",
+      "AVAILABILITY_PASS": true,
+      "SMOKE_PASS": false,
+      "failures": 0,
+      "known_build_defects": 27,
+      "http": {
+        "home": 200,
+        "catalog": 200,
+        "search": 200,
+        "collections": 200,
+        "collection_detail": 200,
+        "title": 200,
+        "episode": 200,
+        "not_found": 404,
+        "page_huge": 404
+      },
+      "peer": "20260920T102102Z-89666321-nova"
+    },
+    "SMOKE_icu_run2": {
+      "domain": "animedia.icu",
+      "AVAILABILITY_PASS": true,
+      "SMOKE_PASS": false,
+      "failures": 0,
+      "known_build_defects": 27,
+      "http": {
+        "home": 200,
+        "catalog": 200,
+        "search": 200,
+        "collections": 200,
+        "collection_detail": 200,
+        "title": 200,
+        "episode": 200,
+        "not_found": 404,
+        "page_huge": 404
+      },
+      "peer": "20260920T102102Z-89666321-nova"
+    },
+    "SMOKE_space_run1": {
+      "domain": "animedia.space",
+      "AVAILABILITY_PASS": true,
+      "SMOKE_PASS": false,
+      "failures": 0,
+      "known_build_defects": 27,
+      "http": {
+        "home": 200,
+        "catalog": 200,
+        "search": 200,
+        "collections": 200,
+        "collection_detail": 200,
+        "title": 200,
+        "episode": 200,
+        "not_found": 404,
+        "page_huge": 404
+      },
+      "peer": "20260920T102102Z-89666321-nova"
+    },
+    "SMOKE_space_run2": {
+      "domain": "animedia.space",
+      "AVAILABILITY_PASS": true,
+      "SMOKE_PASS": false,
+      "failures": 0,
+      "known_build_defects": 27,
+      "http": {
+        "home": 200,
+        "catalog": 200,
+        "search": 200,
+        "collections": 200,
+        "collection_detail": 200,
+        "title": 200,
+        "episode": 200,
+        "not_found": 404,
+        "page_huge": 404
+      },
+      "peer": "20260920T102102Z-89666321-nova"
+    }
+  },
+  "outstanding": "SMOKE_PASS=False по одной причине на всех прогонах: знак сборки в подвале — дефект B14 текущей живой сборки, 27 ячеек из 27. Это не отказ доступности; закрывается кандидатом 7aae3d2c, которому нужен root-перезапуск. Послабление в smoke привязано к конкретному build_id и на кандидата не распространяется.",
+  "not_touched": [
+    "Zona",
+    "DNS",
+    "индексация — noindex, nofollow на обоих доменах до и после"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "target": "20260921T154512Z-8966632-animedia-rollback",
+  "steps": [
+    {
+      "site": "animedia-01",
+      "action": "зарядка снята, назначение на цель откáта"
+    },
+    {
+      "site": "animedia-02",
+      "action": "назначение снято с legacy на цель откáта; манифест не менялся"
+    },
+    {
+      "site": "animedia-01",
+      "assigned": "20260921T154512Z-8966632-animedia-rollback",
+      "code_matches_served": true,
+      "manifest_matches_served": true
+    },
+    {
+      "site": "animedia-02",
+      "assigned": "20260921T154512Z-8966632-animedia-rollback",
+      "code_matches_served": true,
+      "manifest_matches_served": true
+    }
+  ]
+}

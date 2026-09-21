@@ -1,0 +1,57 @@
+{
+ "served": {
+  "animedia.space": {
+   "build": "20260920T102102Z-89666321-nova",
+   "art": "d2e9628f2a4b14c5",
+   "rev": "896663210936",
+   "robots": "noindex, nofollow",
+   "profile": "animedia-space",
+   "server": "nginx"
+  },
+  "animedia.icu": {
+   "build": "20260920T102102Z-89666321-nova",
+   "art": "d2e9628f2a4b14c5",
+   "rev": "896663210936",
+   "robots": "noindex, nofollow",
+   "profile": "animedia-icu",
+   "server": "nginx"
+  }
+ },
+ "pids": {
+  "19120": {
+   "pid": 668557,
+   "script": "/home/claude/wt-zona-finalization-01/automation/host/lords-frontend.py",
+   "starttime_ticks": "132756788"
+  },
+  "9110": {
+   "pid": 2395188,
+   "script": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean/lords-frontend.py",
+   "starttime_ticks": "148821404"
+  },
+  "?": {
+   "pid": 4009375,
+   "script": null,
+   "starttime_ticks": "150168749"
+  },
+  "9121": {
+   "pid": 2693862,
+   "script": "/srv/lords/.frontend/lords-frontend.py",
+   "starttime_ticks": "140429165"
+  },
+  "9122": {
+   "pid": 2693863,
+   "script": "/srv/lords/.frontend/lords-frontend.py",
+   "starttime_ticks": "140429166"
+  },
+  "9111": {
+   "pid": 3935240,
+   "script": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix/lords-frontend.py",
+   "starttime_ticks": "150151246"
+  },
+  "9112": {
+   "pid": 3951933,
+   "script": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix/lords-frontend.py",
+   "starttime_ticks": "150155145"
+  }
+ }
+}

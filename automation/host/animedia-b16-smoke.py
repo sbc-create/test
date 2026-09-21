@@ -90,6 +90,13 @@ def main() -> int:
     р.add_argument("--expect-artifact", required=True)
     р.add_argument("--peer-expect-build", required=True)
     р.add_argument("--out", required=True)
+    р.add_argument(
+        "--known-footer-marker-build", default=None,
+        help=("build_id, у которого знак сборки в подвале — известный дефект B14. "
+              "Послабление привязано к одному build_id и на другие сборки не "
+              "распространяется: иначе оно молча закрыло бы тот самый дефект и у "
+              "кандидата. Такие провалы уходят в отдельный список и не влияют на "
+              "доступность, но SMOKE_PASS остаётся False."))
     args = р.parse_args()
     вывод = Path(args.out)
     (вывод / "screenshots").mkdir(parents=True, exist_ok=True)
@@ -102,9 +109,12 @@ def main() -> int:
         "domain": args.domain, "peer_domain": args.peer_domain,
         "expect_build": args.expect_build, "expect_artifact": args.expect_artifact,
         "peer_expect_build": args.peer_expect_build,
+        "known_footer_marker_build": args.known_footer_marker_build,
         "viewports": list(ШИРИНЫ), "cells": [], "failures": [],
+        "known_build_defects": [],
     }
     провалы = итог["failures"]
+    известные = итог["known_build_defects"]
     with sync_playwright() as pw:
         b = pw.chromium.launch()
         try:
@@ -149,7 +159,12 @@ def main() -> int:
                         if abs(r - 16 / 9) / (16 / 9) * 100 > 1:
                             провалы.append(f"{ключ}: рамка плеера {r}")
                     if м["footer_build_marker"]:
-                        провалы.append(f"{ключ}: знак сборки в подвале")
+                        # Послабление действует только для названного build_id.
+                        if (args.known_footer_marker_build
+                                and м["served_build"] == args.known_footer_marker_build):
+                            известные.append(f"{ключ}: знак сборки в подвале (дефект B14)")
+                        else:
+                            провалы.append(f"{ключ}: знак сборки в подвале")
                     print(f"  {ширина:>5} {имя:<18} http={м['http']} "
                           f"build={(м['served_build'] or '?')[:32]}", flush=True)
                 ctx.close()
@@ -171,12 +186,17 @@ def main() -> int:
             ctx.close()
         finally:
             b.close()
-    итог["SMOKE_PASS"] = not провалы
+    итог["AVAILABILITY_PASS"] = not провалы
+    итог["SMOKE_PASS"] = not провалы and not известные
     (вывод / "SMOKE.json").write_text(json.dumps(итог, ensure_ascii=False, indent=1),
                                       encoding="utf-8")
+    print("AVAILABILITY_PASS:", итог["AVAILABILITY_PASS"])
     print("SMOKE_PASS:", итог["SMOKE_PASS"])
     for f in провалы[:15]:
         print("  провал:", f)
+    if известные:
+        print(f"  известный дефект сборки {args.known_footer_marker_build}: "
+              f"{len(известные)} ячеек — знак сборки в подвале (B14)")
     return 0 if итог["SMOKE_PASS"] else 1
 
 

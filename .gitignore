@@ -95,3 +95,6 @@ blueprints/payload-next-multisite/app/var/
 # измерения лежат в RESPONSIVE_MATRIX.json, а картинки пересоздаются одной
 # командой из 03-blocks/BLOCK_B15.md — держать их в истории незачем.
 artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/03-blocks/B15/screenshots/
+
+# Кадры разбора аварии: 27 на прогон, четыре прогона. Измерения — в JSON.
+artifacts/evidence/animedia-incident-space-2026-09-21/**/screenshots/
