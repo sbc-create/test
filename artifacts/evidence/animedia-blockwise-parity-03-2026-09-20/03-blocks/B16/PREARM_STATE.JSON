@@ -1,0 +1,27 @@
+{
+  "animedia-01": {
+    "manifest_path": "/srv/lords/.frontend/template-manifest-animedia-01.json",
+    "manifest_sha256": "0630b90e8fa124c1dc6f6d3bec2d6f9ce96ed1f65824035c9169fb08af3e7900",
+    "manifest_bytes": 419,
+    "manifest_uid": 0,
+    "manifest_gid": 0,
+    "manifest_mode": "0o644",
+    "manifest_build_id": "20260920T102102Z-89666321-nova",
+    "symlink": "/srv/lords/.frontend/sites/animedia-01/current",
+    "symlink_target": "../../releases/legacy-b32438c91aaa",
+    "symlink_resolved": "/srv/lords/.frontend/releases/legacy-b32438c91aaa"
+  },
+  "animedia-02": {
+    "manifest_path": "/srv/lords/.frontend/template-manifest-animedia-02.json",
+    "manifest_sha256": "7add1978bef974cd1dea1f3fc7d98ce7196efcdf9bc327f1808f774aa5d87fb6",
+    "manifest_bytes": 421,
+    "manifest_uid": 0,
+    "manifest_gid": 0,
+    "manifest_mode": "0o644",
+    "manifest_build_id": "20260920T102102Z-89666321-nova",
+    "symlink": "/srv/lords/.frontend/sites/animedia-02/current",
+    "symlink_target": "../../releases/legacy-b32438c91aaa",
+    "symlink_resolved": "/srv/lords/.frontend/releases/legacy-b32438c91aaa"
+  },
+  "captured_at_utc": "2026-09-21T15:54:41Z"
+}

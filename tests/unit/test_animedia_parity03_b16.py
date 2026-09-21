@@ -119,8 +119,10 @@ def test_packet_states_that_a_restart_is_not_a_no_op(пакет):
 def test_packet_does_not_claim_a_deploy_happened(пакет):
     for ложь in ("выкат выполнен", "DEPLOY_PERFORMED=1", "RESTART_PERFORMED=1"):
         assert ложь not in пакет, ложь
-    # Статус пакета обязан прямо говорить, что назначение не переключено.
-    assert "назначение не переключено" in пакет
+    # Пакет обязан прямо называть, что осталось несделанным. Сейчас это
+    # перезапуск: назначение и подпись витрины уже переключены парой.
+    assert "осталась одна команда: перезапуск" in пакет
+    assert "systemctl restart nova-animedia-01.service" in пакет
     assert "DEPLOY_PERFORMED=0" in пакет
 
 
@@ -137,21 +139,44 @@ def test_baseline_manifest_untouched_by_this_stage():
     assert план.is_file(), "нет плана переноса в каноническую линию"
 
 
-def test_staged_release_is_built_and_not_armed(запись):
-    """Релиз собран и проверен, но назначение витрины не переключено.
+def test_canary_is_armed_as_a_pair_and_only_on_one_site(запись):
+    """Манифест и назначение переключены вместе, и только у канарейки.
 
-    Переключить только симлинк нельзя: манифест витрины принадлежит root и
-    этой сессии недоступен, а перезапуск с новым кодом и старой подписью
-    заставил бы витрину объявлять не то, что она исполняет.
+    Порознь их переключать нельзя: новый код со старой подписью заставил бы
+    витрину объявлять не то, что она исполняет. Вторая витрина остаётся
+    сравнением, иначе канарейка не канарейка.
     """
     ст = запись["staged_deploy"]
     assert ст["candidate_release"].startswith("/srv/lords/.frontend/releases/")
     assert ст["candidate_release_files"]["lords-frontend.py"] == _цифра()
     assert ст["candidate_boots"] is True
     assert ст["candidate_reports_new_identity_with_candidate_manifest"] is True
-    assert ст["symlink_armed"] is False
-    assert ст["symlink_not_armed_reason"]
-    assert len(ст["manifest_candidates"]) == 2
+    assert ст["symlink_armed"] is True
+    assert ст["armed_site"] == "animedia-01"
+    assert ст["animedia_02_untouched"] is True
+    пара = ст["armed_pair"]
+    assert пара["manifest_build_id"] in пара["symlink"]
+    assert пара["manifest_backup"].endswith(".before-b16")
+    assert пара["manifest_owner_note"]
+    assert ст["remaining_owner_action"] == "systemctl restart nova-animedia-01.service"
+    assert ст["restart_denied_by_profile"]
+
+
+def test_arming_did_not_change_the_live_state(запись):
+    """Код выбирается при старте процесса, поэтому зарядка ничего не меняет."""
+    живое = запись["live_after_arming"]["animedia.icu"]
+    assert живое["build_id"] == "20260920T102102Z-89666321-nova"
+    assert живое["artifact_sha256"] == (
+        "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908")
+    assert "noindex" in живое["x_robots"]
+
+
+def test_rollback_drill_was_performed_end_to_end(запись):
+    учение = запись["rollback"]["drill"]
+    assert учение["performed"] is True
+    assert учение["manifest_restored_byte_for_byte"] is True
+    assert учение["rollback_target_reproduces_live_artifact"] is True
+    assert учение["live_unchanged_during_drill"] is True
 
 
 def test_earlier_wrong_statement_is_corrected(запись):
