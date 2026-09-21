@@ -23,9 +23,14 @@
 «сосед не изменился» после перезапуска больше нет — вместо него требуется
 одинаковая личность на обоих доменах и совпадение её с кандидатом.
 
-Ни одно действие из раздела «Живые действия» не выполнено:
-`DEPLOY_PERFORMED=0`, `RESTART_PERFORMED=0`, `DNS_MUTATIONS=0`,
-`INDEXABILITY_MUTATIONS=0`, `PUSH_PERFORMED=0`, `MERGE_PERFORMED=0`.
+Чем распоряжалась эта сессия: `RESTART_PERFORMED_BY_SESSION=0`,
+`DNS_MUTATIONS=0`, `INDEXABILITY_MUTATIONS=0`, `PUSH_PERFORMED=0`,
+`MERGE_PERFORMED=0`. Зарядка манифестов и назначений — выполнена ею, по
+разрешению владельца. Перезапуск `animedia-01` выполнен не ею: `systemctl`
+закрыт профилем, и обходить запрет сессия не стала.
+
+`DEPLOY_PERFORMED`: `animedia.icu` — **1** (живой, принят гейтом),
+`animedia.space` — **0** (заряжен, ждёт перезапуска).
 
 ## 1. Что предлагается выкатить
 

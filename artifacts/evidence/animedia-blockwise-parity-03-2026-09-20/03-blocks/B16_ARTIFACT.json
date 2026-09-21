@@ -100,8 +100,6 @@
    "evidence": "B16/ROLLBACK_DRILL_BOTH.json"
   }
  },
- "deploy_performed": 0,
- "restart_performed": 0,
  "dns_mutations": 0,
  "indexability_mutations": 0,
  "push_performed": 0,
@@ -293,5 +291,17 @@
   },
   "note": "Приёмочный гейт --mode deploy зелёный на живом animedia.icu: 27 ячеек на прогон, провалов нет, послаблений не применялось. Знак сборки в подвале на живом домене отсутствует — дефект B14 закрыт выкатом."
  },
- "restart_performed_by_this_session": 0
+ "restart_performed_by_this_session": 0,
+ "session_mutations": {
+  "restart": 0,
+  "dns": 0,
+  "indexability": 0,
+  "push": 0,
+  "merge": 0,
+  "note": "Зарядка манифестов и назначений выполнена этой сессией по разрешению владельца и здесь не считается: она перечислена в staged_deploy. Перезапуск animedia-01 выполнен не этой сессией — systemctl закрыт профилем UNATTENDED_SAFE."
+ },
+ "deploy_performed_per_site": {
+  "animedia.icu": 1,
+  "animedia.space": 0
+ }
 }

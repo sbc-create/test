@@ -65,10 +65,19 @@ def test_owner_approval_is_bound_to_the_digest(запись):
     assert запись["owner_approval_bound_to"] == _цифра()
 
 
-def test_nothing_was_deployed_or_mutated(запись):
-    for поле in ("deploy_performed", "restart_performed", "dns_mutations",
-                 "indexability_mutations", "push_performed", "merge_performed"):
-        assert запись[поле] == 0, поле
+def test_session_performed_no_forbidden_mutation(запись):
+    """Что сессии запрещено — того она не делала, и это записано поимённо.
+
+    Прежняя редакция проверяла «выката не было вовсе». После выката
+    `animedia.icu` такое утверждение стало бы ложным, поэтому проверяется
+    другое и более точное: перезапуск, DNS, индексация, push и merge — ноль,
+    а выкат назван посайтово.
+    """
+    м = запись["session_mutations"]
+    for поле in ("restart", "dns", "indexability", "push", "merge"):
+        assert м[поле] == 0, поле
+    assert запись["deploy_performed_per_site"] == {
+        "animedia.icu": 1, "animedia.space": 0}
 
 
 def test_release_gate_result_is_recorded_and_green(запись):
@@ -116,15 +125,41 @@ def test_packet_states_that_a_restart_is_not_a_no_op(пакет):
     assert "b32438c91aaa" in пакет
 
 
-def test_packet_does_not_claim_a_deploy_happened(пакет):
-    for ложь in ("выкат выполнен", "DEPLOY_PERFORMED=1", "RESTART_PERFORMED=1"):
-        assert ложь not in пакет, ложь
-    # Пакет обязан прямо называть, что осталось несделанным. Сейчас это две
-    # команды перезапуска: назначения и подписи обеих витрин уже переключены.
-    assert "остались две команды: перезапуск каждой" in пакет
+def test_packet_states_exactly_what_this_session_did_and_did_not_do(пакет):
+    """Пакет обязан отделять сделанное сессией от сделанного владельцем.
+
+    `animedia.icu` выкачен: служба перезапущена владельцем, и живой домен
+    принят гейтом. Писать про него «выката не было» значит лгать; писать
+    «выкат выполнила сессия» — приписывать себе чужое действие, притом
+    запрещённое ей профилем. Названо и то, и другое.
+    """
+    assert "RESTART_PERFORMED_BY_SESSION=0" in пакет
+    assert "Перезапуск `animedia-01` выполнен не ею" in пакет
+    # Вторая витрина ещё не выкачена — пакет обязан называть оставшуюся команду.
+    assert "`animedia.space` — **0** (заряжен, ждёт перезапуска)" in пакет
     assert "systemctl restart nova-animedia-01.service" in пакет
     assert "systemctl restart nova-animedia-02.service" in пакет
-    assert "DEPLOY_PERFORMED=0" in пакет
+
+
+def test_record_separates_deployed_site_from_armed_site(запись):
+    ст = запись["live_deploy_status"]
+    assert ст["animedia-01"]["state"] == "LIVE_ON_CANDIDATE"
+    assert ст["animedia-01"]["served_artifact_sha256"] == _цифра()
+    assert ст["animedia-01"]["template_version_endpoint_agrees"] is True
+    assert "noindex" in ст["animedia-01"]["x_robots_tag"]
+    assert ст["animedia-01"]["b14_footer_marker_gone_live"] is True
+    # Приёмочный гейт обязан быть пройден именно в режиме deploy и дважды.
+    прогоны = ст["animedia-01"]["deploy_mode_smoke"]
+    assert len(прогоны) == 2
+    for п in прогоны:
+        assert п["mode"] == "deploy"
+        assert п["SMOKE_PASS"] is True
+        assert п["failures"] == []
+        assert п["known_build_defects"] == []
+    assert ст["animedia-02"]["state"] == "ARMED_AWAITING_RESTART"
+    assert ст["animedia-02"]["remaining_owner_action"] == (
+        "systemctl restart nova-animedia-02.service")
+    assert запись["restart_performed_by_this_session"] == 0
 
 
 def test_baseline_manifest_untouched_by_this_stage():
