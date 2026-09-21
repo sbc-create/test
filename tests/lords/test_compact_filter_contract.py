@@ -164,7 +164,7 @@ class TestCompactFilterContract:
         assert 'aria-label="Тип контента"' in html
         assert 'href="/movies/' in html
         # Active year must not be a wall of <a> year pills inside .filt.
-        filt = re.search(r'<div class="filt"[^>]*>.*?</div>\s*(?:<div class="filt__chips"|<h1|<div class="grid"|<div class="empty")',
+        filt = re.search(r'<div class="filt"[^>]*>.*?</div>\s*(?:<div class="filt__chips"|<h1|<div class="grid|<div class="empty")',
                          html, re.S)
         assert filt, "compact filter block missing"
         block = filt.group(0)

@@ -33,13 +33,13 @@ class TestBlock03Card:
     def test_title_two_line_clamp(self):
         css = _css()
         assert "-webkit-line-clamp:2" in css
-        assert "height:66px" in css  # fixed caption band
+        assert "min-height:66px" in css or "height:66px" in css
 
     def test_grid_columns_by_viewport(self):
         css = _css()
-        assert "repeat(2,1fr)" in css
-        assert "repeat(4,1fr)" in css
-        assert "repeat(6,1fr)" in css
+        assert "repeat(2,minmax(0,1fr))" in css or "repeat(2,1fr)" in css
+        assert "repeat(4,minmax(0,1fr))" in css or "repeat(4,1fr)" in css
+        assert "repeat(6,minmax(0,1fr))" in css or "repeat(6,1fr)" in css
 
     def test_missing_rating_not_zero(self):
         src = _карточка_src()

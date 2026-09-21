@@ -19,19 +19,22 @@ def _главная_src() -> str:
 
 
 class TestHomeSectionOrder:
-    def test_cinema_branch_premiere_before_new(self):
+    def test_cinema_branch_films_new_popular(self):
         src = _главная_src()
-        # lords-cinema-v2 branch: Премьеры → Фильмы по жанрам → Новинки
-        assert '_полоса("Премьеры недели"' in src
-        assert src.index('_полоса("Премьеры недели"') < src.index('_полоса("Новинки"')
-        assert '_полоса("Фильмы по жанрам"' in src
+        cinema = src[src.index("# Cinema IA"):]
+        titles = re.findall(r'_полоса\(\s*"([^"]+)"', cinema)
+        assert titles[:3] == ["Фильмы", "Недавно добавлено", "Популярное"]
+        assert "Премьеры недели" not in cinema
 
     def test_series_and_curated_branches_present(self):
         src = _главная_src()
         assert "lords-series-feed-v2" in src
         assert "lords-curated-v2" in src
-        assert "Продолжающиеся сериалы" in src
-        assert "Выбор редакции" in src
+        # Honest labels: no false ongoing / editorial claims.
+        assert "Сериалы в каталоге" in src
+        assert "Высокие оценки" in src
+        assert "Продолжающиеся сериалы" not in src
+        assert "Выбор редакции" not in src
 
     def test_no_popular_or_high_rating_duplicate_shelves(self):
         src = _главная_src()
@@ -44,13 +47,14 @@ class TestHomeSectionOrder:
         блок = текст[текст.index("def _полоса"):текст.index("def _полоса_подборок")]
         assert 'if not набор:\n            return ""' in блок
 
-    def test_nav_films_before_new(self):
+    def test_nav_films_before_new_in_cinema(self):
         текст = ИСХОДНИК.read_text(encoding="utf-8")
-        m = re.search(r'"lords":\s*\{.*?"нав":\s*\[(.*?)\]', текст, re.S)
-        assert m
-        nav = m.group(1)
-        assert nav.index("/movies/") < nav.index("/new/")
-        assert nav.index("/series/") < nav.index("/new/")
+        # Cinema nav lives in _лорды_нав default branch.
+        i = текст.index("def _лорды_нав()")
+        j = текст.index("\ndef _лорды_лид()", i)
+        nav_fn = текст[i:j]
+        assert nav_fn.index('("/movies/", "Фильмы")') < nav_fn.index('("/new/", "Новое в каталоге")')
+        assert nav_fn.index('("/series/", "Сериалы")') < nav_fn.index('("/new/", "Новое в каталоге")')
 
     def test_dedupe_set_used(self):
         src = _главная_src()

@@ -993,28 +993,33 @@ def сезон_по_номеру(деталь: dict, номер: int) -> dict | 
 #
 #   acc   — фон под БЕЛЫМ текстом (кнопки, таблетки, значки): 5.03:1
 #   accdk — зелёный ТЕКСТ на светлом (ссылки, крошки): 6.17:1 на фоне крошек
+# Family green is mandatory primary brand for all Lords profiles (visual repair).
+# Profile distinction is structure + secondary surfaces — never brown/blue/plum CTA.
 ЛОРДС_ТОКЕНЫ = {
     "ink": "#1f2329", "dim": "#5b6470", "page": "#111111", "sheet": "#eef1f4",
-    "card": "#ffffff", "line": "#d7dde3", "acc": "#3f7d26", "accdk": "#2f5e1c",
+    "card": "#ffffff", "line": "#d7dde3", "acc": "#3F7D26", "accdk": "#2F641C",
     "kp": "#b34700", "imdb": "#f5c518", "bar": "#171a1e",
     "mute": "#5f6874", "onbar": "#8a939e",
+    "soft": "#EAF3E4", "greendark": "#173319", "accent2": "#3F7D26",
 }
 
-# Profile design tokens (Phase B). Shared sheet geometry stays; accents/surfaces diverge.
+# Cinema: forest/olive green + warm ivory; gold ratings. Green CTA preserved.
 ЛОРДС_ТОКЕНЫ_CINEMA = {
     **ЛОРДС_ТОКЕНЫ,
-    "page": "#0e0f11", "sheet": "#f3efe8", "acc": "#a34b2c", "accdk": "#7a3218",
-    "bar": "#1a1512",
+    "page": "#0f1410", "sheet": "#f3f1e8", "acc": "#3F7D26", "accdk": "#2F641C",
+    "bar": "#173319", "accent2": "#6b7c3a", "soft": "#EAF3E4",
 }
+# Series feed: emerald/teal secondary surfaces; actions stay family green.
 ЛОРДС_ТОКЕНЫ_SERIES = {
     **ЛОРДС_ТОКЕНЫ,
-    "page": "#0b1219", "sheet": "#e8eef4", "acc": "#2f6fed", "accdk": "#1d4fbf",
-    "bar": "#121820",
+    "page": "#0b1210", "sheet": "#e8f0ed", "acc": "#3F7D26", "accdk": "#2F641C",
+    "bar": "#122018", "accent2": "#1a7a6d", "soft": "#E4F1EE",
 }
+# Curated: deep jade/forest + warm ivory; plum only as secondary editorial accent.
 ЛОРДС_ТОКЕНЫ_CURATED = {
     **ЛОРДС_ТОКЕНЫ,
-    "page": "#1a1220", "sheet": "#f7f1e8", "acc": "#6b3d6e", "accdk": "#4e2a52",
-    "bar": "#24182a",
+    "page": "#0e1512", "sheet": "#f4f1e9", "acc": "#3F7D26", "accdk": "#2F641C",
+    "bar": "#173319", "accent2": "#5c4a6e", "soft": "#EAF3E4",
 }
 
 
@@ -1026,6 +1031,44 @@ def _лорды_токены_для_дизайна() -> dict:
     if ДИЗАЙН_ID == "lords-cinema-v2":
         return ЛОРДС_ТОКЕНЫ_CINEMA
     return ЛОРДС_ТОКЕНЫ
+
+
+def _лорды_нав() -> list[tuple[str, str]]:
+    """Profile-distinct primary nav (not palette-only)."""
+    if ДИЗАЙН_ID == "lords-series-feed-v2":
+        return [("/series/", "Сериалы"), ("/new/", "Обновления"),
+                ("/movies/", "Фильмы"), ("/collections/", "Подборки"),
+                ("/animation/", "Мультфильмы"), ("/catalog/", "Каталог")]
+    if ДИЗАЙН_ID == "lords-curated-v2":
+        return [("/collections/", "Подборки"), ("/catalog/", "Каталог"),
+                ("/movies/", "Фильмы"), ("/series/", "Сериалы"),
+                ("/new/", "Новое"), ("/animation/", "Мультфильмы")]
+    return [("/movies/", "Фильмы"), ("/series/", "Сериалы"),
+            ("/new/", "Новое в каталоге"),
+            ("/collections/", "Подборки"),
+            ("/animation/", "Мультфильмы"),
+            ("/catalog/", "Каталог")]
+
+
+def _лорды_лид() -> str:
+    if ДИЗАЙН_ID == "lords-series-feed-v2":
+        return "Сериалы и обновления серий"
+    if ДИЗАЙН_ID == "lords-curated-v2":
+        return "Подборки и рекомендации каталога"
+    return "Фильмы и сериалы онлайн"
+
+
+def _лорды_класс_сетки(класс: str = "grid") -> str:
+    """Map generic grid class to the card-registry grid for this design."""
+    if класс in ("rel", "hub"):
+        return класс
+    if класс.startswith("grid--"):
+        return класс
+    if ДИЗАЙН_ID == "lords-series-feed-v2":
+        return "grid grid--episode"
+    if ДИЗАЙН_ID == "lords-curated-v2":
+        return "grid grid--editorial"
+    return "grid grid--poster"
 
 # Палитра Zona 1.2.0 измерена на эталоне (`tests/tools/measure_reference_palette.js`,
 # 2026-09-14): подложка rgb(30,37,43), текст белый, поверхность шапки
@@ -1089,17 +1132,17 @@ def _общее(токены: dict) -> str:
 ЛОРДС_СТИЛЬ = """
 body{background:@PAGE@;color:@INK@;
 font:14px/1.5 'Open Sans','Segoe UI',system-ui,-apple-system,sans-serif}
-/* Лист. Узкая светлая полоса на тёмной подложке — первое, по чему семейство
-   узнают; ширина взята из измерения эталона на 1440 (контейнер 1100). */
-.sheet{max-width:1100px;margin:0 auto;background:@SHEET@;min-height:100vh;
+/* Sheet: full-bleed to top of viewport (no 118px dead band). Max 1440. */
+.sheet{max-width:1440px;margin:0 auto;background:@SHEET@;min-height:100vh;
 box-shadow:0 0 60px #0009}
-@media(min-width:1000px){.sheet{margin-top:118px;min-height:calc(100vh - 118px)}}
-.pad{padding:0 18px}
-.backdrop{position:fixed;inset:0 0 auto 0;height:330px;z-index:-1;
-background:radial-gradient(120% 140% at 50% 0,#243043 0,#0e1013 68%)}
+.pad{padding:0 24px}
+@media(max-width:1023px){.pad{padding:0 20px}}
+@media(max-width:767px){.pad{padding:0 14px}}
+.backdrop{position:fixed;inset:0 0 auto 0;height:280px;z-index:-1;
+background:radial-gradient(120% 140% at 50% 0,@GREENDARK@ 0,#0e1013 68%)}
 /* Шапка: drawer до fit-breakpoint (~1024), затем горизонтальный ряд. */
 .hd{background:@CARD@;border-bottom:1px solid @LINE@;position:relative;z-index:40}
-.hd__in{display:flex;align-items:center;gap:12px;min-height:70px;height:70px;
+.hd__in{display:flex;align-items:center;gap:12px;min-height:64px;height:64px;
 padding:0 12px;flex-wrap:nowrap;position:relative}
 @media(min-width:1024px){.hd__in{height:70px;min-height:70px;padding:0 18px;gap:16px}}
 .hd__logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;
@@ -1123,7 +1166,7 @@ max-height:none;background:transparent}}
 text-transform:uppercase;letter-spacing:.3px;color:#39414a;min-height:44px;
 display:flex;align-items:center;white-space:nowrap}
 @media(min-width:1024px){.hd__nav a{padding:8px 10px;font-size:13px;min-height:44px}}
-.hd__nav a:hover{background:@SHEET@;color:@ACCDK@}
+.hd__nav a:hover{background:@SOFT@;color:@ACCDK@}
 .hd__nav a[aria-current]{color:@ACCDK@;box-shadow:inset 0 -2px 0 @ACC@}
 .hd__s{display:flex;border:1px solid @LINE@;border-radius:4px;overflow:hidden;background:#fff;
 flex:1 1 auto;min-width:0;max-width:100%}
@@ -1134,6 +1177,13 @@ min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-co
 .hd__s button:hover{color:@ACCDK@}
 .hd__s button svg{width:18px;height:18px;display:block}
 body.nav-lock{overflow:hidden}
+/* Profile shell markers (DOM distinctness beyond palette). */
+html[data-design="lords-series-feed-v2"] .hd{border-bottom:3px solid @ACCENT2@}
+html[data-design="lords-curated-v2"] .hd{border-bottom:3px solid @ACC@}
+html[data-design="lords-curated-v2"] .lead{font-size:26px;letter-spacing:-.2px;font-weight:700;
+max-width:42ch;line-height:1.25}
+html[data-design="lords-series-feed-v2"] .lead{font-size:22px;font-weight:700;color:@GREENDARK@}
+html[data-design="lords-cinema-v2"] .lead{font-size:22px;font-weight:700}
 /* Заголовок раздела: настоящий H2 + «Весь раздел». */
 .lead{font-size:20px;font-weight:600;color:#3a4149;margin:16px 0 12px}
 .sec-rail{margin:0 0 18px}
@@ -1157,7 +1207,7 @@ font-size:13px;color:#4a535d;font-weight:600;min-height:44px;display:inline-flex
 .filt__seg{display:inline-flex;flex-wrap:wrap;gap:4px;align-items:center}
 .filt__seg a{background:@CARD@;border:1px solid @LINE@;border-radius:3px;padding:6px 10px;
 font-size:12px;font-weight:600;color:#4a535d;min-height:36px;display:inline-flex;align-items:center}
-.filt__seg a[aria-current]{background:@BAR@;color:#fff;border-color:@BAR@}
+.filt__seg a[aria-current]{background:@ACC@;color:#fff;border-color:@ACC@}
 .filt__form{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;flex:1 1 auto}
 .filt__field{display:flex;flex-direction:column;gap:2px;font-size:11px;font-weight:600;color:@DIM@}
 .filt__field select{min-height:36px;max-width:168px;font-size:13px;border:1px solid @LINE@;
@@ -1172,45 +1222,91 @@ background:@ACC@;color:#fff;font-size:12px;font-weight:700;border:0}
 .filt__field{flex:1 1 100%;min-width:0}
 .filt__field select{width:100%;max-width:100%;min-width:0;min-height:44px}
 }
-/* Сетка в шесть колонок с тесными желобами. */
-.grid{display:grid;gap:8px;grid-template-columns:repeat(2,1fr)}
-@media(min-width:520px){.grid{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:860px){.grid{grid-template-columns:repeat(4,1fr)}}
-@media(min-width:1080px){.grid{grid-template-columns:repeat(6,1fr)}}
-/* Карточка: постер 2:3, подпись фиксированной высоты, весь блок кликабелен. */
+/* ===== Card registry grids (centralized; no ad-hoc widths) ===== */
+.grid,.grid--poster{display:grid;gap:18px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid > *,.grid--poster > *,.grid--episode > *,.grid--editorial > *,.grid--search > *,.rel > *{min-width:0}
+@media(min-width:480px){.grid,.grid--poster{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:768px){.grid,.grid--poster{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}}
+@media(min-width:1024px){.grid,.grid--poster{grid-template-columns:repeat(5,minmax(0,1fr));gap:18px}}
+@media(min-width:1280px){.grid,.grid--poster{grid-template-columns:repeat(6,minmax(0,1fr));gap:20px}}
+.grid--episode{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:768px){.grid--episode{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}}
+@media(min-width:1200px){.grid--episode{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}}
+.grid--editorial{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.grid--editorial{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}
+@media(min-width:1024px){.grid--editorial{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}}
+.grid--search{display:grid;gap:18px;grid-template-columns:repeat(2,minmax(0,1fr));
+max-width:720px;margin:0 auto}
+@media(min-width:768px){.grid--search{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.grid--search.grid--search-one{max-width:280px;grid-template-columns:minmax(0,1fr);margin:24px auto}
+/* Карточка: registry types poster / episode / editorial. */
 .c{position:relative;display:flex;flex-direction:column;background:@BAR@;overflow:hidden;border-radius:3px;
-color:inherit;text-decoration:none;height:100%}
+color:inherit;text-decoration:none;height:100%;min-width:0}
 .c:focus-visible{outline:2px solid @ACC@;outline-offset:2px}
-.c:hover .c__img{transform:scale(1.04)}
-/* Primary card variants — structural, not palette-only. */
-.c--episode{flex-direction:row;align-items:stretch;min-height:96px}
-.c--episode .c__p{aspect-ratio:16/10;width:42%;flex:0 0 42%}
-.c--episode .c__cap{height:auto;flex:1 1 auto;justify-content:center;text-align:left;padding:10px 12px}
-.c--editorial .c__p{aspect-ratio:16/9}
-.c--editorial .c__cap{height:auto;min-height:72px;text-align:left}
-.c--poster .c__p{aspect-ratio:2/3}
-.c__p{display:block;position:relative;aspect-ratio:2/3;overflow:hidden;background:#22272e;flex:0 0 auto}
+.c:hover .c__img{transform:scale(1.03)}
+.c__p{display:block;position:relative;aspect-ratio:2/3;overflow:hidden;
+background:linear-gradient(160deg,#243028,@GREENDARK@);flex:0 0 auto}
 .c__img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;
-transition:transform .25s}
+object-position:center top;transition:transform .25s}
+.c__img[data-fit=contain]{object-fit:contain;background:@GREENDARK@}
 .c__none{position:absolute;inset:0;display:grid;place-items:center;text-align:center;
-padding:10px;color:#8b95a1;font-size:12px;font-weight:600;
-background:repeating-linear-gradient(135deg,#242a32 0 9px,#1e242b 9px 18px)}
-.c__none b{display:block;font-size:26px;margin-bottom:4px;color:#aab4c0}
+padding:10px;color:#a8b5a4;font-size:12px;font-weight:600;
+background:repeating-linear-gradient(135deg,#243028 0 9px,#1a221c 9px 18px)}
+.c__none b{display:block;font-size:26px;margin-bottom:4px;color:#c5d2c0}
 .c__badge{position:absolute;z-index:2;top:6px;left:6px;background:@ACC@;color:#fff;font-size:11px;
 font-weight:700;padding:3px 7px;border-radius:3px;max-width:calc(100% - 12px);
-overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.c__cap{display:flex;flex-direction:column;justify-content:flex-end;gap:2px;
-height:66px;padding:8px 7px;text-align:center;background:#11161c;flex:0 0 66px;
+white-space:normal;line-height:1.2}
+.c__badges{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 0}
+.c__badge--meta{position:static;max-width:none;background:@SOFT@;color:@GREENDARK@;
+border:1px solid @LINE@;white-space:nowrap;text-overflow:clip;overflow:visible}
+.c__cap{display:flex;flex-direction:column;justify-content:flex-start;gap:2px;
+min-height:66px;padding:8px 7px;text-align:center;background:#11161c;flex:1 1 auto;
 box-sizing:border-box}
 .c__t{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
-color:#fff;font-size:13.5px;font-weight:700;line-height:1.25;margin:0}
+color:#fff;font-size:13.5px;font-weight:700;line-height:1.25;margin:0;
+overflow-wrap:anywhere;word-break:break-word}
 .c__y{display:block;color:#c5ccd4;font-size:12px}
+.c__added{display:block;color:#d7e2d4;font-size:11.5px;font-weight:600;margin-top:2px}
 .c__r{display:flex;justify-content:space-between;align-items:center;gap:6px;
 padding:6px 8px;background:@BAR@;font-size:12px;font-weight:700;min-height:30px;
-box-sizing:border-box;flex:0 0 auto}
+box-sizing:border-box;flex:0 0 auto;flex-wrap:wrap}
 .c__kp{color:#ff8b3d}.c__imdb{color:@IMDB@}
 .c__r span i{font-style:normal;color:#fff;margin-left:4px}
 .c__r em{font-style:normal;color:@ONBAR@;font-weight:600}
+/* poster type (cinema default) */
+.c--poster .c__p{aspect-ratio:2/3}
+.c--poster .c__t{-webkit-line-clamp:2;line-height:1.25}
+/* episode type (series feed): horizontal row, fixed 2:3 thumb */
+.c--episode{flex-direction:row;align-items:stretch;min-height:168px;
+background:@CARD@;border:1px solid @LINE@;overflow:hidden}
+.c--episode .c__p{aspect-ratio:2/3;width:112px;flex:0 0 112px;height:168px}
+.c--episode .c__cap{height:auto;flex:1 1 auto;justify-content:flex-start;text-align:left;
+padding:12px 14px;gap:6px;background:@CARD@;min-width:0}
+.c--episode .c__t{color:@INK@;-webkit-line-clamp:3;font-size:15px;line-height:1.3}
+.c--episode .c__y,.c--episode .c__added{color:#3a4740}
+.c--episode .c__r{background:@SOFT@;border-top:1px solid @LINE@}
+.c--episode .c__kp{color:@KP@}.c--episode .c__imdb{color:#6f5900}
+.c--episode .c__r span i{color:@INK@}
+.c--episode .c__badge{position:static}
+@media(max-width:1199px){.c--episode .c__p{width:104px;flex-basis:104px;height:156px}
+.c--episode{min-height:156px}}
+@media(max-width:767px){.c--episode .c__p{width:96px;flex-basis:96px;height:144px}
+.c--episode{min-height:144px}.c--episode .c__cap{padding:10px 12px;gap:4px}}
+/* editorial type (curated): portrait by default; no forced 16:9 poster crop */
+.c--editorial{background:@CARD@;border:1px solid @LINE@}
+.c--editorial .c__p{aspect-ratio:2/3}
+.c--editorial .c__cap{height:auto;min-height:84px;text-align:left;background:@CARD@;padding:10px 12px}
+.c--editorial .c__t{color:@INK@;-webkit-line-clamp:3;font-size:14.5px;line-height:1.3}
+.c--editorial .c__y{color:@DIM@}
+.c--editorial .c__r{background:@SOFT@}
+.c--editorial .c__r span i{color:@INK@}
+.c--editorial.c--span2{grid-column:span 2}
+.c--editorial.c--span2 .c__inner{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);
+gap:0;min-height:0}
+.c--editorial.c--span2 .c__p{aspect-ratio:2/3;max-height:280px}
+@media(max-width:767px){.c--editorial.c--span2{grid-column:span 1}
+.c--editorial.c--span2 .c__inner{display:block}}
+.c--editorial.c--backdrop .c__p{aspect-ratio:16/9}
 /* Листалка. */
 .pg{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:22px 0 8px}
 .pg a,.pg span{min-width:36px;text-align:center;padding:8px 10px;border-radius:4px;
@@ -1313,8 +1409,10 @@ font-size:13px;font-weight:600;background:#fff;color:#3f4750;min-height:44px;
 display:inline-flex;align-items:center;box-sizing:border-box}
 .epnav span{color:@MUTE@;background:#f3f5f7}
 /* Похожее и подвал. */
-.rel{display:grid;gap:8px;grid-template-columns:repeat(3,1fr)}
-@media(min-width:860px){.rel{grid-template-columns:repeat(6,1fr)}}
+.rel{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.rel{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1024px){.rel{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}}
+@media(min-width:1280px){.rel{grid-template-columns:repeat(6,minmax(0,1fr));gap:18px}}
 .empty{background:@CARD@;border:1px solid @LINE@;border-radius:4px;padding:44px 22px;
 text-align:center;color:#4d555e;margin:14px 0}
 .empty b{display:block;font-size:17px;color:@INK@;margin-bottom:8px}
@@ -1325,19 +1423,19 @@ text-align:center;color:#4d555e;margin:14px 0}
 .nf p{color:#4d555e;margin:0 auto 18px;max-width:460px}
 .nf a{display:inline-block;background:@ACC@;color:#fff;font-weight:700;padding:11px 22px;
 border-radius:4px}
-.ft{background:@CARD@;border-top:1px solid @LINE@;margin-top:26px;padding:22px 18px 16px;
+.ft{background:@CARD@;border-top:3px solid @ACC@;margin-top:26px;padding:22px 18px 18px;
 color:#5b6470;font-size:13px}
-.ft__cols{display:grid;gap:18px;grid-template-columns:1fr;margin-bottom:16px}
+.ft__cols{display:grid;gap:18px;grid-template-columns:1fr;margin-bottom:12px}
 @media(min-width:720px){.ft__cols{grid-template-columns:repeat(4,1fr)}}
 .ft__col b{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.4px;
 color:@INK@;margin-bottom:8px}
 .ft__col a{display:block;padding:6px 0;color:#4a535d;font-weight:600;min-height:44px}
 .ft__col a:hover{color:@ACCDK@}
 .ft__about{font-size:12.5px;line-height:1.5;color:#5b6470;max-width:52ch;margin:0 0 12px}
-.ft__bar{display:flex;justify-content:flex-end;align-items:center;gap:10px;
-border-top:1px solid @LINE@;padding-top:10px}
-.vb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:#4d555e;
-padding:4px 8px;background:transparent;border:0;cursor:help}
+.ft__bar{display:flex;justify-content:space-between;align-items:center;gap:10px;
+border-top:1px solid @LINE@;padding-top:12px;color:@DIM@;font-size:12px}
+html[data-design="lords-series-feed-v2"] .ft{border-top-color:@ACCENT2@}
+html[data-design="lords-curated-v2"] .ft{border-top-color:@ACCENT2@}
 .hub{display:grid;gap:12px;grid-template-columns:1fr;margin:14px 0}
 @media(min-width:600px){.hub{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1000px){.hub{grid-template-columns:repeat(3,1fr)}}
@@ -2207,16 +2305,12 @@ def _подставить(шаблон: str, токены: dict) -> str:
         "стиль": lambda: (
             (lambda т: _общее(т) + _подставить(ЛОРДС_СТИЛЬ, т))(_лорды_токены_для_дизайна())
         ),
-        "нав": [("/movies/", "Фильмы"), ("/series/", "Сериалы"),
-                ("/new/", "Новинки"),
-                ("/collections/", "Подборки"),
-                ("/animation/", "Мультфильмы"),
-                ("/catalog/", "Каталог")],
+        "нав": _лорды_нав,
         "поиск": "Введите название",
         "полосы": [("Фильмы", "/movies/", "Фильм"),
                    ("Сериалы", "/series/", "Сериал"),
                    ("Мультфильмы", "/animation/", "Мультфильм")],
-        "лид": "Фильмы и сериалы онлайн",
+        "лид": _лорды_лид,
         "метка": "LF",
     },
     "zona": {
@@ -2990,6 +3084,20 @@ def заглушка_постера(запись: dict, класс_заглуш�
     "if(i&&i.tagName==='IMG'&&i.hasAttribute('data-poster'))i.hidden=true;},true);"
 )
 
+#: Classify natural image aspect; keep portrait posters out of aggressive crops.
+СКРИПТ_КЛАССИФИКАТОР_ИЗОБРАЖЕНИЙ = (
+    "document.addEventListener('load',function(e){var i=e.target;"
+    "if(!i||i.tagName!=='IMG'||!i.hasAttribute('data-poster'))return;"
+    "var w=i.naturalWidth||0,h=i.naturalHeight||0;if(!w||!h)return;"
+    "var r=h/w,k=w/h,cls='mixed';"
+    "if(r>=1.25)cls='portrait';else if(k>=1.25)cls='landscape';"
+    "i.setAttribute('data-aspect-class',cls);"
+    "var box=i.closest('.c__p');if(box)box.setAttribute('data-aspect-class',cls);"
+    "if(cls==='mixed')i.setAttribute('data-fit','contain');"
+    "},true);"
+)
+
+
 #: Скрипт горизонтальных лент. Отдельная константа, а не дополнение к
 #: СКРИПТ_ПОСТЕРОВ: тот подключают обе витрины, и дописывание в него изменило
 #: бы байты, которые отдаёт Lords. Здесь ровно кнопочная прокрутка; свайп,
@@ -3091,6 +3199,12 @@ def _дата(значение: str) -> str:
     if not 1 <= месяц <= 12:
         return ""
     return f"{день} {МЕСЯЦЫ[месяц - 1]} {год}"
+
+
+def _се_значение(се: dict, ключ: str):
+    """Resolve family config values that may be callables (Lords profile forks)."""
+    зн = се[ключ]
+    return зн() if callable(зн) else зн
 
 
 class Вид:
@@ -3639,7 +3753,7 @@ class ВидЛордс(Вид):
                  поиск_q: str = "") -> str:
         нав = "".join(
             f'<a href="{закодировать_запрос(u)}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
-            for u, t in self.се["нав"])
+            for u, t in _се_значение(self.се, "нав"))
         схемы = "".join(f'<script type="application/ld+json">{р}</script>'
                         for р in ([разметка] if разметка else []))
         описание_мета = (f'<meta name="description" content="{html.escape(описание)}">'
@@ -3655,7 +3769,8 @@ class ВидЛордс(Вид):
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {_мета_версии()}
 <style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}
-{СКРИПТ_ЛОРДС_ШАПКА}</script></head>
+{СКРИПТ_ЛОРДС_ШАПКА}
+{СКРИПТ_КЛАССИФИКАТОР_ИЗОБРАЖЕНИЙ}</script></head>
 <body><div class="backdrop"></div>
 <a class="skip" href="#main">Перейти к содержимому</a>
 <div class="sheet">
@@ -3674,43 +3789,64 @@ class ВидЛордс(Вид):
 </div>{схемы}</body></html>"""
 
     def _подвал(self) -> str:
-        """Footer: working section links + compact build badge (no test slogans)."""
+        """User-facing footer: no SHA/version/build in public HTML."""
         жанры = "".join(
             f'<a href="/genre/{html.escape(код)}/">{html.escape(имя)}</a>'
-            for код, имя in (self.индекс.get("genre_names") or [])[:8])
+            for код, имя in _уникальные_опции(self.индекс.get("genre_names") or [])[:8])
         годы = "".join(
             f'<a href="/year/{г}/">{г}</a>' for г in (self.д.years or [])[:6])
-        runtime = (МАНИФЕСТ.get("runtime_commit") or МАНИФЕСТ.get("source_commit") or "")[:8]
-        tip = (f"source={МАНИФЕСТ.get('source_commit', '')[:12]} "
-               f"runtime={(МАНИФЕСТ.get('runtime_commit') or МАНИФЕСТ.get('source_commit') or '')[:12]} "
-               f"build={СБОРКА}")
-        about = (f"{html.escape(self.имя)} — каталог фильмов, сериалов и мультфильмов "
-                 "из утверждённого снимка витрины. Описание и оценки только из источника.")
+        if ДИЗАЙН_ID == "lords-series-feed-v2":
+            about = (f"{html.escape(self.имя)} — лента сериалов и обновлений. "
+                     "Сезон, серия и дата добавления берутся только из каталога.")
+            col1 = ('<div class="ft__col"><b>Лента</b>'
+                    '<a href="/series/">Сериалы</a><a href="/new/">Обновления</a>'
+                    '<a href="/movies/">Фильмы</a><a href="/collections/">Подборки</a></div>')
+        elif ДИЗАЙН_ID == "lords-curated-v2":
+            about = (f"{html.escape(self.имя)} — тематические подборки каталога. "
+                     "Редакционные формулировки показываются только при наличии источника.")
+            col1 = ('<div class="ft__col"><b>Разделы</b>'
+                    '<a href="/collections/">Подборки</a><a href="/catalog/">Каталог</a>'
+                    '<a href="/movies/">Фильмы</a><a href="/series/">Сериалы</a></div>')
+        else:
+            about = (f"{html.escape(self.имя)} — каталог фильмов, сериалов и мультфильмов. "
+                     "Название, год, тип и оценка — только из переданного снимка.")
+            col1 = ('<div class="ft__col"><b>Разделы</b>'
+                    '<a href="/movies/">Фильмы</a><a href="/series/">Сериалы</a>'
+                    '<a href="/animation/">Мультфильмы</a><a href="/new/">Новое в каталоге</a>'
+                    '<a href="/collections/">Подборки</a></div>')
         return (
             '<footer class="ft">'
             '<div class="ft__cols">'
-            '<div class="ft__col"><b>Разделы</b>'
-            '<a href="/movies/">Фильмы</a><a href="/series/">Сериалы</a>'
-            '<a href="/animation/">Мультфильмы</a><a href="/new/">Новинки</a>'
-            '<a href="/collections/">Подборки</a></div>'
+            f"{col1}"
             f'<div class="ft__col"><b>Жанры</b>{жанры or "<span>жанры появятся из sidecar</span>"}</div>'
             f'<div class="ft__col"><b>Годы</b>{годы or "<span>—</span>"}</div>'
             f'<div class="ft__col"><b>О витрине</b><p class="ft__about">{about}</p></div>'
             "</div>"
-            f'<div class="ft__bar"><span class="vb" title="{html.escape(tip)}">'
-            f"Lords · {html.escape(ВЕРСИЯ)} · {html.escape(runtime)}</span></div>"
+            f'<div class="ft__bar"><span>© {html.escape(self.имя)}</span>'
+            '<span>Каталог фильмов и сериалов</span></div>'
             "</footer>")
 
     # --- составные части ---------------------------------------------
     def карточка(self, запись: dict, *, показать_добавлено: bool = False) -> str:
         деталь = self.деталь(запись["slug"])
-        изо = заглушка_постера(запись, "c__none", "c__img")
+        тип = self._тип_карточки()
+        if тип == "episode":
+            изо = заглушка_постера(запись, "c__none", "c__img", 112, 168)
+        else:
+            изо = заглушка_постера(запись, "c__none", "c__img", 300, 450)
         значок = ""
+        бейджи_мета = ""
         сезоны = деталь.get("seasons") or []
-        if сезоны:
+        if тип == "episode" and сезоны:
             последний = сезоны[-1]
-            значок = (f'<span class="c__badge">{последний["n"]} сезон, '
-                      f'{последний["eps"]} сер.</span>')
+            бейджи_мета = (
+                '<span class="c__badges">'
+                f'<span class="c__badge c__badge--meta">{int(последний["n"])} сезон</span>'
+                f'<span class="c__badge c__badge--meta">{int(последний["eps"])} сер.</span>'
+                "</span>")
+        elif сезоны and тип != "episode":
+            последний = сезоны[-1]
+            значок = f'<span class="c__badge">{int(последний["n"])} сезон</span>'
         elif запись.get("kind"):
             значок = f'<span class="c__badge">{html.escape(запись["kind"])}</span>'
         кп = _число(деталь.get("kinopoisk_rating"))
@@ -3730,22 +3866,29 @@ class ВидЛордс(Вид):
             добавлено = (
                 f'<time class="c__added" datetime="{html.escape(dt)}">'
                 f"добавлен {html.escape(показ)}</time>")
-        return (f'<a class="{html.escape(self._класс_карточки())}" href="{запись["url"]}" '
-                f'aria-label="{html.escape(запись["title"])}">'
-                f'<span class="c__p">{изо}{значок}</span>'
-                f'<span class="c__cap"><span class="c__t">{html.escape(запись["title"])}</span>'
-                f"{год}{добавлено}</span>"
-                f"{полоса}</a>")
+        title_attr = html.escape(запись["title"], quote=True)
+        return (
+            f'<a class="{html.escape(self._класс_карточки())}" href="{запись["url"]}" '
+            f'data-card-type="{тип}" title="{title_attr}" '
+            f'aria-label="{title_attr}">'
+            f'<span class="c__p">{изо}{значок}</span>'
+            f'<span class="c__cap"><span class="c__t">{html.escape(запись["title"])}</span>'
+            f"{год}{бейджи_мета}{добавлено}</span>"
+            f"{полоса}</a>")
+
+    def _тип_карточки(self) -> str:
+        if ДИЗАЙН_ID == "lords-series-feed-v2":
+            return "episode"
+        if ДИЗАЙН_ID == "lords-curated-v2":
+            return "editorial"
+        return "poster"
 
     def _класс_карточки(self) -> str:
-        if ДИЗАЙН_ID == "lords-series-feed-v2":
-            return "c c--episode"
-        if ДИЗАЙН_ID == "lords-curated-v2":
-            return "c c--editorial"
-        return "c c--poster"
+        return f"c c--{self._тип_карточки()}"
 
     def сетка(self, набор, класс="grid", *, показать_добавлено: bool = False) -> str:
-        return (f'<div class="{класс}">'
+        css = _лорды_класс_сетки(класс)
+        return (f'<div class="{css}" data-card-grid="{html.escape(self._тип_карточки())}">'
                 + "".join(self.карточка(з, показать_добавлено=показать_добавлено)
                           for з in набор)
                 + "</div>")
@@ -3797,27 +3940,20 @@ class ВидЛордс(Вид):
 
         дизайн = ДИЗАЙН_ID
         if дизайн == "lords-series-feed-v2":
-            # Series feed: episodes/series first — not the cinema film dump.
+            # Series feed: series/updates first. No "ongoing" claim without provenance.
             сериалы = взять([з for з in готовые if з.get("kind") == "Сериал"], 12)
             if сериалы:
-                полосы.append(self._полоса("Продолжающиеся сериалы", "/series/", сериалы))
+                полосы.append(self._полоса("Сериалы в каталоге", "/series/", сериалы))
             нов = взять([з for з in готовые if з.get("kind") == "Сериал"], 12)
             if not нов:
                 нов = взять(готовые, 12)
             if нов:
-                полосы.append(self._полоса("Новые поступления сериалов", "/new/", нов,
+                полосы.append(self._полоса("Недавно добавлено", "/new/", нов,
                                            показать_добавлено=True))
             популяр, week, dig = популярные_недельный(
                 [з for з in self.д.items if з.get("kind") == "Сериал"] or list(self.д.items),
                 _оценка_полки, сколько=12)
-            показ = []
-            for з in популяр:
-                if з["slug"] in занято:
-                    continue
-                занято.add(з["slug"])
-                показ.append(з)
-                if len(показ) >= 12:
-                    break
+            показ = взять(популяр, 12)
             if показ:
                 полосы.append(self._полоса(
                     "Популярное за неделю", "/collection/top_rated/", показ,
@@ -3828,31 +3964,23 @@ class ВидЛордс(Вид):
                 под = self._полоса_подборок()
                 if под:
                     полосы.append(под)
-            фильмы = взять([з for з in готовые if з.get("kind") == "Фильм"], 8)
+            фильмы = взять([з for з in готовые if з.get("kind") == "Фильм"], 12)
             if фильмы:
                 полосы.append(self._полоса("Фильмы в каталоге", "/movies/", фильмы))
         elif дизайн == "lords-curated-v2":
-            # Curated journal: editorial shelves before catalog dumps.
+            # Honest algorithmic label — no editorial claim without ledger.
             популяр, week, dig = популярные_недельный(
-                list(self.д.items), _оценка_полки, сколько=10)
-            показ = []
-            for з in популяр:
-                if з["slug"] in занято:
-                    continue
-                занято.add(з["slug"])
-                показ.append(з)
-                if len(показ) >= 10:
-                    break
+                list(self.д.items), _оценка_полки, сколько=12)
+            показ = взять(популяр, 12)
             if показ:
                 полосы.append(self._полоса(
-                    "Выбор редакции", "/collection/top_rated/", показ,
+                    "Высокие оценки", "/collection/top_rated/", показ,
                     attrs=(f' data-popular-week="{html.escape(week)}"'
                            f' data-popular-digest="{html.escape(dig)}"'
-                           f' data-selection="editorial_proxy_top_rated"')))
+                           f' data-selection="top_rated"')))
             if КОЛЛЕКЦИИ is not None:
                 под = self._полоса_подборок()
                 if под:
-                    # Retitle hub heading for curated IA via dedicated strip.
                     полосы.append(под.replace(">Подборки</a></h2>",
                                               ">Тематические подборки</a></h2>", 1)
                                   .replace(">Подборки</h2>",
@@ -3861,42 +3989,37 @@ class ВидЛордс(Вид):
             смотреть = взять(готовые, 12)
             if смотреть:
                 полосы.append(self._полоса("Что посмотреть", "/catalog/", смотреть))
-            нов = взять(готовые, 8)
+            нов = взять(готовые, 12)
             if нов:
-                полосы.append(self._полоса("Новые поступления", "/new/", нов,
+                полосы.append(self._полоса("Недавно добавлено", "/new/", нов,
                                            показать_добавлено=True))
             жанр_блок = self._полоса_жанров()
             if жанр_блок:
-                полосы.append(жанр_блок.replace(">По жанрам</h2>",
-                                                ">Страны и эпохи</h2>", 1)
-                              if "По жанрам" in жанр_блок else жанр_блок)
+                полосы.append(жанр_блок)
+            страны = self._полоса_стран_и_эпох()
+            if страны:
+                полосы.append(страны)
         else:
-            # lords-cinema-v2 (default for lords-general): cinema IA.
-            премьеры = взять([з for з in готовые if з.get("kind") == "Фильм"], 12)
-            if премьеры:
-                полосы.append(self._полоса("Премьеры недели", "/movies/", премьеры))
+            # Cinema IA: films → new-in-catalog → popular → genres → collections.
             фильмы = взять([з for з in готовые if з.get("kind") == "Фильм"], 12)
             if фильмы:
-                полосы.append(self._полоса("Фильмы по жанрам", "/movies/", фильмы))
+                полосы.append(self._полоса("Фильмы", "/movies/", фильмы))
             нов = взять(готовые, 12)
             if нов:
-                полосы.append(self._полоса("Новинки", "/new/", нов))
+                полосы.append(self._полоса("Недавно добавлено", "/new/", нов,
+                                           показать_добавлено=True))
             популяр, week, dig = популярные_недельный(
-                list(self.д.items), _оценка_полки, сколько=12)
-            показ = []
-            for з in популяр:
-                if з["slug"] in занято:
-                    continue
-                занято.add(з["slug"])
-                показ.append(з)
-                if len(показ) >= 12:
-                    break
+                list(self.д.items), _оценка_полки, сколько=60)
+            показ = взять(популяр, 12)
             if показ:
                 полосы.append(self._полоса(
                     "Популярное", "/collection/top_rated/", показ,
                     attrs=(f' data-popular-week="{html.escape(week)}"'
                            f' data-popular-digest="{html.escape(dig)}"'
                            f' data-popular-mode="WEEKLY_SNAPSHOT"')))
+            жанр_блок = self._полоса_жанров()
+            if жанр_блок:
+                полосы.append(жанр_блок)
             if КОЛЛЕКЦИИ is not None:
                 под = self._полоса_подборок()
                 if под:
@@ -3904,24 +4027,36 @@ class ВидЛордс(Вид):
             сериалы = взять([з for з in готовые if з.get("kind") == "Сериал"], 12)
             if сериалы:
                 полосы.append(self._полоса("Сериалы", "/series/", сериалы))
-            жанр_блок = self._полоса_жанров()
-            if жанр_блок:
-                полосы.append(жанр_блок)
+
+        if дизайн == "lords-series-feed-v2":
+            lead_sub = (f"{html.escape(self.имя)} собирает сериалы и обновления "
+                        "в информационную ленту: сезон, серия и дата добавления "
+                        "видны на карточке.")
+            about_p = (f"Лента {html.escape(self.имя)} строится из каталожного снимка. "
+                       "Поиск понимает кириллицу, латиницу и транслит.")
+        elif дизайн == "lords-curated-v2":
+            lead_sub = (f"{html.escape(self.имя)} показывает тематические подборки "
+                        "и рекомендации каталога. Алгоритмические списки не "
+                        "выдаются за редакционный выбор.")
+            about_p = (f"Каталог {html.escape(self.имя)} опирается на переданные "
+                       "жанры, годы и оценки. Редакционные пометки — только при "
+                       "наличии подтверждённого источника.")
+        else:
+            lead_sub = (f"{html.escape(self.имя)} показывает фильмы, сериалы и мультфильмы "
+                        "в кинематографической сетке постеров. Подборки и фильтры "
+                        "опираются на переданные данные — без выдуманных фактов.")
+            about_p = (f"Каталог {html.escape(self.имя)} содержит название, год, тип, "
+                       "постер и оценки из источника. Разделы ведут в рабочие выборки. "
+                       "Поиск понимает кириллицу, латиницу и транслит.")
 
         intro = (
-            f'<h1 class="lead">{html.escape(self.се["лид"])}</h1>'
+            f'<h1 class="lead">{html.escape(_се_значение(self.се, "лид"))}</h1>'
             f'<p class="zsub" style="margin:0 0 14px;color:#5b6470;font-size:13.5px;line-height:1.55">'
-            f"{html.escape(self.имя)} показывает фильмы, сериалы и мультфильмы "
-            "из утверждённого снимка каталога. Подборки и фильтры опираются на "
-            "переданные жанры, годы и оценки — без выдуманных фактов.</p>")
+            f"{lead_sub}</p>")
         bottom = (
             '<section class="sec" style="margin-top:22px"><h2>О каталоге</h2>'
             f'<p style="margin:0;line-height:1.6;color:#4d555e;font-size:14px;max-width:68ch">'
-            f"Каталог {html.escape(self.имя)} строится из закрытого снимка: "
-            "название, год, тип, постер и оценки приходят из источника. "
-            "Разделы ведут в рабочие выборки. Поиск понимает кириллицу, латиницу "
-            "и транслит."
-            "</p></section>")
+            f"{about_p}</p></section>")
         тело = intro + _склеить(полосы) + bottom
         return self.оболочка(
             тело, f"{self.имя} — фильмы и сериалы онлайн", "/", актив="/",
@@ -3943,6 +4078,16 @@ class ВидЛордс(Вид):
             f'<a class="sec-rail__all" href="{закодировать_запрос(ссылка)}">Весь раздел</a>'
             f"</div>{self.сетка(набор, показать_добавлено=показать_добавлено)}</section>")
 
+    def _описание_подборки(self, текст: str) -> str:
+        """Strip Animedia wording that must never appear on Lords shelves."""
+        t = (текст or "").strip()
+        if not t:
+            return ""
+        low = t.casefold()
+        if "каталог аниме" in low or "новые аниме" in low or "серии аниме" in low:
+            return "Свежие поступления в каталог по дате добавления."
+        return t
+
     def _полоса_подборок(self) -> str:
         снимок = Снимок.получить(self.д, self.п) if КОЛЛЕКЦИИ else None
         if снимок is None:
@@ -3952,10 +4097,11 @@ class ВидЛордс(Вид):
             данные = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО, предел=1)
             if данные is None or not данные.items:
                 continue
+            desc = self._описание_подборки(данные.description or "")
             карточки.append(
                 f'<a class="hub__c" href="{html.escape(данные.canonical_path)}">'
                 f"<b>{html.escape(данные.title)}</b>"
-                f"<p>{html.escape((данные.description or '')[:160])}</p>"
+                f"<p>{html.escape(desc[:160])}</p>"
                 f"<span>Открыть подборку →</span></a>")
         if not карточки:
             return ""
@@ -3966,16 +4112,46 @@ class ВидЛордс(Вид):
             f'<div class="hub">{"".join(карточки)}</div></section>')
 
     def _полоса_жанров(self) -> str:
-        имена = self.индекс.get("genre_names") or []
+        имена = _уникальные_опции(self.индекс.get("genre_names") or [])
         if not имена:
             return ""
         ссылки = "".join(
             f'<a href="/genre/{html.escape(код)}/">{html.escape(имя)}</a>'
-            for код, имя in имена[:10])
+            for код, имя in имена[:12])
         return (
             '<section class="sec-rail"><div class="sec-rail__h">'
-            '<h2>По жанрам</h2></div>'
+            '<h2>Жанры</h2></div>'
             f'<div class="tabs">{ссылки}</div></section>')
+
+    def _полоса_стран_и_эпох(self) -> str:
+        """Real countries + decades only — never retitle genres as eras."""
+        страны = _уникальные_опции(self.индекс.get("country_names") or [])[:8]
+        годы = list(self.д.years or [])
+        десятилетия = []
+        видели = set()
+        for г in годы:
+            try:
+                y = int(г)
+            except (TypeError, ValueError):
+                continue
+            d = (y // 10) * 10
+            if d < 1950 or d in видели:
+                continue
+            видели.add(d)
+            десятилетия.append(d)
+            if len(десятилетия) >= 6:
+                break
+        if not страны and not десятилетия:
+            return ""
+        ссылки = []
+        for код, имя in страны:
+            ссылки.append(f'<a href="/country/{html.escape(код)}/">{html.escape(имя)}</a>')
+        for d in десятилетия:
+            ссылки.append(f'<a href="/year/{d}/">{d}-е</a>')
+        return (
+            '<section class="sec-rail"><div class="sec-rail__h">'
+            '<h2>Страны и эпохи</h2></div>'
+            f'<div class="tabs">{"".join(ссылки)}</div></section>')
 
     def хаб_подборок(self) -> str:
         """`/collections/` — список контрактных подборок, не копия каталога."""
@@ -3988,10 +4164,11 @@ class ВидЛордс(Вид):
                     continue
                 n = данные.total
                 хвост = f"{n} записей" if n else ""
+                desc = self._описание_подборки(данные.description or "")
                 карточки.append(
                     f'<a class="hub__c" href="{html.escape(данные.canonical_path)}">'
                     f"<b>{html.escape(данные.title)}</b>"
-                    f"<p>{html.escape(данные.description or '')}</p>"
+                    f"<p>{html.escape(desc)}</p>"
                     f"<span>{html.escape(хвост)} →</span></a>")
         if not карточки:
             тело = ('<h1 class="lead">Подборки</h1>'
@@ -4024,7 +4201,7 @@ class ВидЛордс(Вид):
             ("/catalog/", None, "Все"),
             ("/movies/", "Фильм", "Фильмы"),
             ("/series/", "Сериал", "Сериалы"),
-            ("/animation/", "Мультфильм", "Мультики"),
+            ("/animation/", "Мультфильм", "Мультфильмы"),
         ):
             cur = ' aria-current="true"' if kind_now == kind else ""
             q = запрос_строкой({к: в for к, в in выбрано.items()
@@ -4185,9 +4362,13 @@ class ВидЛордс(Вид):
                     "Форма издания в запросе не мешает: «Бункер 1-3 сезон» найдёт «Бункер». "
                     '<a href="/catalog/">Открыть каталог целиком</a></div>')
         elif найдено:
+            if len(найдено) == 1:
+                сетка = self.сетка(найдено, "grid--search grid--search-one")
+            else:
+                сетка = self.сетка(найдено[:48], "grid--search")
             тело = (f'<h1 class="lead">Поиск: {html.escape(q)} — '
                     f'{склонение_совпадений(len(найдено))}</h1>'
-                    + self.сетка(найдено))
+                    + сетка)
         else:
             тело = (f'<h1 class="lead">Поиск: {html.escape(q)}</h1>'
                     '<div class="empty"><b>Ничего не найдено</b>'
@@ -4375,7 +4556,7 @@ class ВидЗона(Вид):
                  сверху: str = "", крошки: str = "", og: dict | None = None) -> str:
         нав = "".join(
             f'<a href="{закодировать_запрос(u)}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
-            for u, t in self.се["нав"])
+            for u, t in _се_значение(self.се, "нав"))
         жанры = "".join(
             f'<a href="/catalog/?genre={html.escape(код_жанра)}">{html.escape(имя)}</a>'
             for код_жанра, имя in self.индекс["genre_names"][:14])
@@ -4584,7 +4765,7 @@ class ВидЗона(Вид):
         """
         if not ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ:
             свежие = новинки_с_источником(self.д, self.п, 8)
-            куски = [f'<h1 class="zh">{html.escape(self.се["лид"])}</h1>'
+            куски = [f'<h1 class="zh">{html.escape(_се_значение(self.се, "лид"))}</h1>'
                      f'<p class="zsub">В снимке каталога {len(self.д.items)} записей. '
                      f"Ниже — то, что появилось последним.</p>"
                      + self.плитки(свежие)]
@@ -4719,7 +4900,7 @@ class ВидЗона(Вид):
             f'<h2 class="zgenres__h" id="zgenres-h">Смотреть по жанрам</h2>'
             f'<nav class="zgenres__nav" aria-label="Смотреть по жанрам">{жанр_навигация}</nav>'
             f'</section>') if жанр_навигация else ""
-        куски = [f'<h1 class="zh">{html.escape(self.се["лид"])}</h1>'
+        куски = [f'<h1 class="zh">{html.escape(_се_значение(self.се, "лид"))}</h1>'
                  '<p class="zsub">Фильмы, сериалы и анимация из каталога витрины. '
                  '<a href="/catalog/">Открыть весь каталог</a> · '
                  '<a href="/movies/">Кино</a> · '
@@ -5584,7 +5765,7 @@ class ВидАнимедиа(ВидЗона):
         домен = _аниме_домен(self.хост)
         нав = "".join(
             f'<a href="{закодировать_запрос(u)}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
-            for u, t in self.се["нав"])
+            for u, t in _се_значение(self.се, "нав"))
         схемы = "".join(f'<script type="application/ld+json">{р}</script>'
                         for р in ([разметка] if разметка else []))
         описание_мета = (f'<meta name="description" content="{html.escape(описание)}">'

@@ -17,10 +17,13 @@ def _lords_css() -> str:
 
 
 class TestBlock01Container:
-    def test_sheet_max_width_1100(self):
+    def test_sheet_max_width_1440(self):
         css = _lords_css()
-        assert ".sheet{max-width:1100px" in css.replace(" ", "") or \
-               "max-width:1100px" in css
+        assert "max-width:1440px" in css.replace(" ", "") or "max-width:1440px" in css
+
+    def test_no_dead_top_margin_118(self):
+        css = _lords_css()
+        assert "margin-top:118px" not in css
 
     def test_html_overflow_clip(self):
         текст = ИСХОДНИК.read_text(encoding="utf-8")
