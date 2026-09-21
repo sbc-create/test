@@ -338,3 +338,39 @@ class TestКаталогНастоящегоРазмера:
         разметка = СТР.секция("Новое в каталоге", "критерий", элементы)
         assert разметка.count('class="portal-catalog-tile"') == 24
         assert "http://" not in разметка.replace("https://", "")
+
+
+class TestМенюШапкиНаСтатическойСтранице:
+    """Кнопка, которая ничего не делает, учит не нажимать и рабочие."""
+
+    ШАПКА = ('<header><div class="portal-dropdown">'
+             '<button type="button" class="portal-nav-button" aria-haspopup="menu" '
+             'aria-expanded="false" aria-controls="_R_1_">Аниме</button>'
+             '<ul id="_R_1_" class="portal-dropdown-menu" role="menu">'
+             '<li role="none"><a role="menuitem" href="/catalog">Каталог</a></li>'
+             '</ul></div></header>')
+
+    def test_признаки_скриптового_поведения_сняты(self):
+        о = СТР.оживить_меню({"header": self.ШАПКА})
+        assert "aria-expanded" not in о["header"]
+        assert "aria-haspopup" not in о["header"]
+        assert "aria-controls" not in о["header"]
+
+    def test_сами_ссылки_меню_остаются(self):
+        о = СТР.оживить_меню({"header": self.ШАПКА})
+        assert 'href="/catalog"' in о["header"]
+        assert 'class="portal-dropdown-menu"' in о["header"]
+
+    def test_исходная_шапка_не_меняется(self):
+        исходная = {"header": self.ШАПКА}
+        СТР.оживить_меню(исходная)
+        assert исходная["header"] == self.ШАПКА
+
+    def test_страница_открывает_список_наведением_и_фокусом(self):
+        оболочка = {"head": "<head><title>т</title></head>", "header": self.ШАПКА,
+                    "footer": "<footer></footer>"}
+        страница = СТР.собрать(оболочка, "Т", "лид", "", вариант={
+            "акцент": "#6d8cff", "variant_id": "catalog-search"}).decode("utf-8")
+        assert ".portal-dropdown:hover>.portal-dropdown-menu" in страница
+        assert ".portal-dropdown:focus-within>.portal-dropdown-menu" in страница
+        assert "aria-expanded" not in страница
