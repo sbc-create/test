@@ -73,7 +73,8 @@
   "independent_corroboration": "К тому же выводу независимо пришла линия Zona: artifacts/evidence/zona-slider-01/DEPLOY_BLOCKERS.md, «Блокер 0 (главный) — production Zona не авторизован в манифесте».",
   "second_independent_blocker": "systemctl вне профиля UNATTENDED_SAFE — проверено даже на systemctl --version. Обходить через apply-nova-closed-update.py, который вызывает systemctl внутри, эта сессия не стала.",
   "what_unblocks_it": [
-    "владелец подтверждает production_authorized: true в пакете нужной витрины",
+    "владелец подтверждает права: content_source.rights_confirmed: true + rights_manifest_ref с документом",
+    "владелец подтверждает production_authorized: true",
     "для animedia-preview и zona-cinema-preview — передаёт domain и target_ref",
     "затем: systemctl restart nova-animedia-01.service",
     "затем: automation/host/animedia-b16-smoke.py дважды подряд — и DONE закрывается"
@@ -84,5 +85,42 @@
     "rollback_drill": "ROLLBACK_DRILL_PASS=YES, цель воспроизводит живой артефакт побайтово",
     "checks_390_768_1440": "24 ячейки против самого релиза — всё чисто",
     "smoke_script_validated_against_current_live": "нашёл ровно дефект B14, 27 из 27 ячеек"
-  }
+  },
+  "deepest_gate": {
+    "status": "BLOCKED_RIGHTS / BLOCKED_CONTENT_RIGHTS",
+    "measured_by": "python3 -m factory validate --site <любой из пяти>",
+    "finding": "Ни у одного пакета права на публикацию контента не подтверждены: content_source.rights_confirmed=false и rights_manifest_ref=None у всех пяти. Валидатор отдаёт BLOCKED_RIGHTS, поэтому даже план не строится: factory plan --site lords-03 → «план не строится по невалидному пакету».",
+    "per_package": {
+      "lords-01": {
+        "rights_confirmed": false,
+        "rights_manifest_ref": null
+      },
+      "lords-02": {
+        "rights_confirmed": false,
+        "rights_manifest_ref": null
+      },
+      "lords-03": {
+        "rights_confirmed": false,
+        "rights_manifest_ref": null
+      },
+      "animedia-preview": {
+        "rights_confirmed": false,
+        "rights_manifest_ref": null
+      },
+      "zona-cinema-preview": {
+        "rights_confirmed": false,
+        "rights_manifest_ref": null
+      }
+    },
+    "animedia_extra": "BLOCKED_ACCESS: target не указан в пакете — значение не передано владельцем",
+    "rule": "CLAUDE.md, Definition of Done: «Нельзя ставить DONE, если… не подтверждены права/происхождение контента». И CLOSED_WORLD: выдумывать значения — включая документ прав — запрещено.",
+    "why_this_outranks_the_other_two": "Права на контент — вопрос не доступа и не тулинга. Подставить rights_confirmed: true без документа прав значило бы подделать правовое утверждение. Этого не сделает ни root, ни другой профиль.",
+    "observation_for_owner": "Шесть витрин при этом обслуживаются вживую, а пакеты фабрики права не подтверждают. Расхождение между фактическим состоянием и пакетами названо как факт; решать его — владельцу."
+  },
+  "gates_total": 3,
+  "gates": [
+    "BLOCKED_RIGHTS / BLOCKED_CONTENT_RIGHTS — права на контент",
+    "production_authorized: false — production не авторизован в манифесте",
+    "systemctl вне профиля UNATTENDED_SAFE"
+  ]
 }
