@@ -173,7 +173,8 @@ def main() -> int:
         "MANIFEST_SHA256": man_sha,
         "CODE_TREE_DIGEST": code_tree,
         "RESTORE_DRILL": "PASS",
-        "DEPLOY_AUTHORIZED": False,
+        "DEPLOY_AUTHORIZED": bool(APPROVAL),
+        "OWNER_DEPLOY_APPROVAL_ID": APPROVAL,
     }, ensure_ascii=False, indent=2))
     return 0
 
