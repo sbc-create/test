@@ -1,0 +1,17 @@
+{
+  "at": "2026-09-21T16:12:47Z",
+  "files": {
+    "zona-01-frontend.py": "71b0322ee5767b13b43c1081c9f43a55ef35f6e73af115f1e17b967dbaeba51b",
+    "template-manifest-zona-01.json": "4d586863710ebdbe1c38a17697c71ddefd361d9d9ef8595754426cc22ac59568",
+    "collection_contract.py": "8758a18513c96d624a37c737d07cf9db8ef4f65cd66ef4c776cdecc6e7b072e7",
+    "genre_aliases.py": "e98b93cb1937e4c022b0e88280d8c60ec0a0e472cdbe2d0ee61258b835ea74e5"
+  },
+  "live": {
+    "status": 200,
+    "build": "20260920T212359Z-39dc16ed-nova",
+    "artifact": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+    "revision": "39dc16ede9490160adfc4719cecc0f5b8c026799",
+    "robots": "noindex, nofollow"
+  },
+  "service": "MainPID=1679285\nNRestarts=0\nActiveState=active\nSubState=running"
+}

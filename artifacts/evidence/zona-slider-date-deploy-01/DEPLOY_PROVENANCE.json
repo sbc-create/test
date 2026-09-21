@@ -1,0 +1,67 @@
+{
+  "OWNER_DEPLOY_APPROVAL_ID": "ZONA-SLIDER-DATE-DEPLOY-20260921-01",
+  "OWNER_DEPLOY_APPROVAL_SCOPE": "ZONA_01_ONLY",
+  "DOMAIN": "zonafilm.space",
+  "APPROVED_ARTIFACT_SHA256": "19c3e70cf7a1286b5e1dc5a316aceab778dbf804216558f16e69413dfe7b88b7",
+  "OBSERVED_TARBALL_SHA256": "19c3e70cf7a1286b5e1dc5a316aceab778dbf804216558f16e69413dfe7b88b7",
+  "ARTIFACT_DIGEST_MATCH": true,
+  "SOURCE_HEAD": "c3c9c37f8033907b2297f84faf829f89047d3438",
+  "BUILD_ID": "20260921T161251Z-c3c9c37f-nova",
+  "DEPLOYED_FILES": {
+    "zona-01-frontend.py": "611a55911a0cca90eab1ac23b93c208b2e22780425f083ebe36da9ffaf67af10",
+    "template-manifest-zona-01.json": "a484294f8ed96946d2e886d8909fa9bde29a87ccd91c89798cd1b214af0c8aee",
+    "collection_contract.py": "237723a2061a7be3a4d78a9e3009bb42a201b9eae85e8a5abf45edfee31ad5b4",
+    "genre_aliases.py": "e98b93cb1937e4c022b0e88280d8c60ec0a0e472cdbe2d0ee61258b835ea74e5"
+  },
+  "ROLLBACK_PATH": "/srv/lords/.frontend/.rollback/20260921T161251Z-zona-01-slider-date",
+  "DEPLOY_PERFORMED": 1,
+  "RESTART_PERFORMED": 1,
+  "INDEXABILITY_BEFORE": "noindex, nofollow",
+  "INDEXABILITY_AFTER": "noindex, nofollow",
+  "neighbors_unchanged": true,
+  "gates": {
+    "SERVICE_READY": true,
+    "RESTART_RC_ZERO": true,
+    "ALL_200": true,
+    "ARTIFACT_RUNTIME_MATCH": true,
+    "CACHE_COHERENCE": true,
+    "INDEXABILITY_UNCHANGED": true,
+    "NEIGHBORS_UNCHANGED": true
+  },
+  "live_runs": [
+    {
+      "n": 1,
+      "status": 200,
+      "build": "20260921T161251Z-c3c9c37f-nova",
+      "artifact": "19c3e70cf7a1286b5e1dc5a316aceab778dbf804216558f16e69413dfe7b88b7",
+      "revision": "c3c9c37f8033907b2297f84faf829f89047d3438",
+      "robots": "noindex, nofollow",
+      "cache": "no-store",
+      "noindex": true,
+      "bytes": 81319
+    },
+    {
+      "n": 2,
+      "status": 200,
+      "build": "20260921T161251Z-c3c9c37f-nova",
+      "artifact": "19c3e70cf7a1286b5e1dc5a316aceab778dbf804216558f16e69413dfe7b88b7",
+      "revision": "c3c9c37f8033907b2297f84faf829f89047d3438",
+      "robots": "noindex, nofollow",
+      "cache": "no-store",
+      "noindex": true,
+      "bytes": 81319
+    },
+    {
+      "n": 3,
+      "status": 200,
+      "build": "20260921T161251Z-c3c9c37f-nova",
+      "artifact": "19c3e70cf7a1286b5e1dc5a316aceab778dbf804216558f16e69413dfe7b88b7",
+      "revision": "c3c9c37f8033907b2297f84faf829f89047d3438",
+      "robots": "noindex, nofollow",
+      "cache": "no-store",
+      "noindex": true,
+      "bytes": 81319
+    }
+  ],
+  "VERDICT": "PASS"
+}
