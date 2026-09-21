@@ -1,0 +1,1 @@
+{"schema_version": 1, "template_family": "animedia", "design_version": "1.2.4", "source_commit": "1cc115824ce684fc47f005edfaa393bd61037f94", "runtime_commit": "block01-local", "profile": "animedia-icu", "build_id": "block01-local-qa-b", "artifact_sha256": "3f6549b973c5bb221b350e106fc8a727b905c998afa9ec8d6a341caeff8f2d7d", "built_at": "2026-09-19T22:06:32Z"}
