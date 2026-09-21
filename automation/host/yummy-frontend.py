@@ -15,6 +15,7 @@ Animedia. Общее ядро осталось тем же, разошлись �
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html
 import json
 import os
@@ -180,6 +181,25 @@ def _рядом(имя: str, модуль: str):
 
 ЧИТМОДЕЛЬ = _рядом("yummy_readmodel.py", "yummy_readmodel")
 ВАРИАНТЫ_МОД = _рядом("yummy_variants.py", "yummy_variants")
+#: Виджет пользовательских оценок (COMMUNITY-RATINGS, 1% канарейка).
+#: Модуль решает всё сам: путь тайтла, флаги, subject и байты вставки. Витрина
+#: только спрашивает и вставляет — бизнес-правил про оценки здесь нет.
+ОЦЕНКИ = _рядом("community_widget_inject.py", "community_widget_inject")
+ОЦЕНКИ_ФЛАГИ = os.environ.get(
+    "COMMUNITY_WIDGET_FLAGS",
+    "/srv/site-factory/repo/var/ratings/community_rollout_flags.json")
+#: Каталог с community_rating.js/.css. Рядом с модулем, как и всё остальное.
+ОЦЕНКИ_АКТИВЫ = Path(os.environ.get(
+    "COMMUNITY_WIDGET_ASSETS",
+    str(Path(__file__).resolve().parent / "community-assets")))
+#: Версия активов в query: кэш обновляется вместе с файлом, а не по TTL.
+ОЦЕНКИ_ВЕРСИЯ = ""
+if ОЦЕНКИ is not None:
+    try:
+        _js = ОЦЕНКИ_АКТИВЫ / "community_rating.js"
+        ОЦЕНКИ_ВЕРСИЯ = hashlib.sha256(_js.read_bytes()).hexdigest()[:12] if _js.is_file() else ""
+    except OSError:
+        ОЦЕНКИ_ВЕРСИЯ = ""
 #: Представление сущности и переходник к контуру. Компоненты знают про поля,
 #: переходник — про таблицы, витрина — ни про то, ни про другое.
 ВИД = _рядом("yummy_entity.py", "yummy_entity")
@@ -539,7 +559,28 @@ class Обработчик(BaseHTTPRequestHandler):
         if self.command != "HEAD":
             self.wfile.write(тело)
 
-    def _потоком(self, ответ, голова: bytes, тип: str, код: int, перенос: list) -> None:
+    def _вставка_оценок(self, путь: str) -> bytes | None:
+        """Байты виджета оценок для этой страницы — или None.
+
+        Решение целиком за модулем оценок: страница тайтла, включённые флаги и
+        известный subject. Неизвестный слаг — не ошибка, а просто отсутствие
+        виджета: угадывать subject означало бы записать голос не тому тайтлу.
+        """
+        if ОЦЕНКИ is None or not ИНДЕКСАЦИЯ_ОТКРЫТА:
+            return None
+        try:
+            return ОЦЕНКИ.plan_injection(
+                путь,
+                flags_path=ОЦЕНКИ_ФЛАГИ,
+                readmodel=БАЗА_ЧТЕНИЯ,
+                asset_version=ОЦЕНКИ_ВЕРСИЯ,
+            )
+        except Exception:
+            # Виджет — дополнение к странице, а не её условие.
+            return None
+
+    def _потоком(self, ответ, голова: bytes, тип: str, код: int, перенос: list,
+                 вставка: bytes | None = None) -> None:
         """Отдать ответ приложения, не дожидаясь его конца.
 
         Чужую разметку витрина не меняет, поэтому держать её в памяти незачем.
@@ -558,7 +599,15 @@ class Обработчик(BaseHTTPRequestHandler):
             self.send_header(имя, значение)
         длина = ответ.getheader("Content-Length")
         if длина:
-            self.send_header("Content-Length", длина)
+            # Длина объявляется с учётом вставки: браузер иначе обрежет
+            # документ ровно на её размер и потеряет конец разметки.
+            if вставка:
+                try:
+                    длина = str(int(длина) + len(вставка))
+                except ValueError:
+                    длина = None
+            if длина:
+                self.send_header("Content-Length", длина)
         if not ИНДЕКСАЦИЯ_ОТКРЫТА:
             self.send_header("X-Robots-Tag", "noindex, nofollow")
         self.send_header("X-Site-Factory-Template-Revision", МАНИФЕСТ["source_commit"])
@@ -573,13 +622,34 @@ class Обработчик(BaseHTTPRequestHandler):
         self.end_headers()
         if self.command == "HEAD":
             return
+        if not вставка:
+            if голова:
+                self.wfile.write(голова)
+            while True:
+                кусок = ответ.read(64 * 1024)
+                if not кусок:
+                    break
+                self.wfile.write(кусок)
+            return
+        # Вставка идёт скользящим окном: наружу придерживается меньше байт, чем
+        # длина «</body>», поэтому страница по-прежнему уходит потоком и первый
+        # байт не ждёт конца приложения.
+        поток = ОЦЕНКИ.StreamInjector(вставка)
         if голова:
-            self.wfile.write(голова)
+            self.wfile.write(поток.feed(голова))
         while True:
             кусок = ответ.read(64 * 1024)
             if not кусок:
                 break
-            self.wfile.write(кусок)
+            self.wfile.write(поток.feed(кусок))
+        хвост = поток.finish()
+        if хвост:
+            self.wfile.write(хвост)
+        if not поток.done:
+            # «</body>» не встретилось: документ отдан байт в байт, а
+            # объявленная длина обещала на вставку больше. Дописывать нечего,
+            # кроме самой вставки — иначе ответ короче заголовка.
+            self.wfile.write(вставка)
 
     def do_HEAD(self):
         self.do_GET()
@@ -625,6 +695,20 @@ class Обработчик(BaseHTTPRequestHandler):
                                 "application/json; charset=utf-8")
         if путь == "/healthz":
             return self._отдать(b'{"ok":true}', "application/json")
+        # Активы виджета оценок. Отдаются всегда, а не только когда виджет
+        # включён: код без разметки безвреден, а 404 на активе у посетителя,
+        # попавшего в когорту между двумя запросами, — ошибка в консоли.
+        if ОЦЕНКИ is not None:
+            имя_актива = ОЦЕНКИ.asset_name(путь)
+            if имя_актива:
+                актив = ОЦЕНКИ.read_asset(имя_актива, assets_dir=ОЦЕНКИ_АКТИВЫ)
+                if актив is None:
+                    return self._отдать(b"not found", "text/plain; charset=utf-8", код=404)
+                данные, тип_актива = актив
+                return self._отдать(данные, тип_актива, ещё=[
+                    ("Cache-Control", "public, max-age=300"),
+                    ("X-Content-Type-Options", "nosniff"),
+                ])
         if путь == "/assets/nova.webmanifest":
             м = json.dumps({"name": ИМЯ_ВИТРИНЫ, "template": ШАБЛОН_СЕМЕЙСТВА,
                             "core": ЯДРО, "family": СЕМЕЙСТВО, "profile": ПРОФИЛЬ,
@@ -1382,7 +1466,14 @@ class Обработчик(BaseHTTPRequestHandler):
                 голова = ответ.read(ПРОБА_СВОЕЙ)
                 своя = b'data-sf-own="1"' in голова
             if not своя:
-                self._потоком(ответ, голова, тип, код, перенос)
+                # Чужая разметка по-прежнему не переписывается: единственное
+                # исключение — один <script> последним узлом body на странице
+                # тайтла. Узел в конце контейнера гидратацию не ломает, а
+                # внутрь дерева приложения по-прежнему не добавляется ничего.
+                вставка = None
+                if "text/html" in тип and код == 200:
+                    вставка = self._вставка_оценок(unquote(разбор.path))
+                self._потоком(ответ, голова, тип, код, перенос, вставка)
                 соед.close()
                 return
             тело = голова + ответ.read()

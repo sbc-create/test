@@ -143,11 +143,14 @@ class CommunityStore:
     """Dedicated community DB file — never the production ratings.sqlite unless owner-approved."""
 
     def __init__(self, path: Path | str) -> None:
+        # The signature accepts a str, so the normalised value is what the rest
+        # of the constructor must use: `--db` on the gateway passes a str and
+        # crashed here on `path.parent`.
         self.path = Path(path)
         self._lock = threading.RLock()
-        path.parent.mkdir(parents=True, exist_ok=True)
+        self.path.parent.mkdir(parents=True, exist_ok=True)
         self.conn = sqlite3.connect(
-            str(path), timeout=30.0, isolation_level=None, check_same_thread=False
+            str(self.path), timeout=30.0, isolation_level=None, check_same_thread=False
         )
         self.conn.row_factory = sqlite3.Row
         self.conn.execute("PRAGMA journal_mode=WAL")
