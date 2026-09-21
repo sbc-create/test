@@ -1,0 +1,78 @@
+{
+  "stage": "ZONA-SLIDER-CROP-DATE — живая приёмка",
+  "domain": "zonafilm.space",
+  "accepted_at_utc": "2026-09-21T16:57:29Z",
+  "restart": {
+    "performed_by": "владелец",
+    "old_pid": 3737964,
+    "new_pid": 550959,
+    "unit": "nova-zona-01.service",
+    "cgroup": "/system.slice/nova-zona-01.service",
+    "came_up_after_s": 235
+  },
+  "running_artifact_sha256": "7ccf094a1d7f2b5e648a38f51f6a63de9627576637d96f6c966fe1759ad8fa1e",
+  "approved_artifact_sha256": "2650fad6b53a2d97077734d4879d31d02355fe27948114c33fee9d959b87c591",
+  "method": "Chromium (Playwright) по настоящему https://zonafilm.space/, не по петле",
+  "per_width": {
+    "390": {
+      "rail_card_px": 177,
+      "cards_visible": 2,
+      "dead_strip_px": 0,
+      "gap": "12px",
+      "date": "Добавлено 20.09.2026, 11:49",
+      "date_truncated": false,
+      "hero_row_h": 465,
+      "hero_media_h": 205,
+      "hero_body_h": 259,
+      "hero_body_overflows": false,
+      "object_position": "50% 28%",
+      "horizontal_overflow": false,
+      "robots": "noindex, nofollow"
+    },
+    "768": {
+      "rail_card_px": 171,
+      "cards_visible": 4,
+      "dead_strip_px": 0,
+      "gap": "12px",
+      "date": "Добавлено 20.09.2026, 11:49",
+      "date_truncated": false,
+      "hero_row_h": 664,
+      "hero_media_h": 404,
+      "hero_body_h": 259,
+      "hero_body_overflows": false,
+      "object_position": "50% 28%",
+      "horizontal_overflow": false,
+      "robots": "noindex, nofollow"
+    },
+    "1440": {
+      "rail_card_px": 186,
+      "cards_visible": 7,
+      "dead_strip_px": 0,
+      "gap": "12px",
+      "date": "Добавлено 20.09.2026, 11:49",
+      "date_truncated": false,
+      "hero_row_h": 374,
+      "hero_media_h": 372,
+      "hero_body_h": 372,
+      "hero_body_overflows": false,
+      "object_position": "50% 28%",
+      "horizontal_overflow": false,
+      "robots": "noindex, nofollow"
+    }
+  },
+  "verdict": "LIVE_PASS",
+  "rollback_performed": false,
+  "rollback_reason": "не потребовался: расхождений с ожидаемым нет ни на одной ширине",
+  "unchanged": {
+    "dns": 0,
+    "indexability": "noindex, nofollow на всех трёх ширинах",
+    "other_domains": "не трогались"
+  },
+  "before_for_comparison": {
+    "1440": {
+      "dead_strip_px": 44,
+      "hero_media_h": 937,
+      "date": "Добавлено 20.09.2026, 11 (обрезана)"
+    }
+  }
+}
