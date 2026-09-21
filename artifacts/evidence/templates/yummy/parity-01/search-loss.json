@@ -1,0 +1,373 @@
+{
+  "captured_at_utc": "2026-09-21T21:23:04.851178+00:00",
+  "readmodel": "/tmp/claude-1001/-home-claude-wt-yummy-original-parity-01/b477e469-83b4-45fa-b3da-4280693984aa/scratchpad/preview/readmodel.sqlite3",
+  "app": "http://127.0.0.1:3101",
+  "front": "http://127.0.0.1:9310",
+  "entities": 7299,
+  "words_probed": 60,
+  "lost_by_app": 18,
+  "lost_share": 0.3,
+  "covered_by_front": 18,
+  "rows": [
+    {
+      "word": "битва",
+      "in_catalog": 35,
+      "app_api": 0,
+      "front_page": 35
+    },
+    {
+      "word": "песня",
+      "in_catalog": 15,
+      "app_api": 8,
+      "front_page": 15
+    },
+    {
+      "word": "часть",
+      "in_catalog": 62,
+      "app_api": 0,
+      "front_page": 60
+    },
+    {
+      "word": "гинтама",
+      "in_catalog": 25,
+      "app_api": 8,
+      "front_page": 25
+    },
+    {
+      "word": "вольный",
+      "in_catalog": 10,
+      "app_api": 8,
+      "front_page": 10
+    },
+    {
+      "word": "леди",
+      "in_catalog": 16,
+      "app_api": 8,
+      "front_page": 11
+    },
+    {
+      "word": "человек",
+      "in_catalog": 24,
+      "app_api": 0,
+      "front_page": 24
+    },
+    {
+      "word": "мечты",
+      "in_catalog": 12,
+      "app_api": 8,
+      "front_page": 12
+    },
+    {
+      "word": "приключение",
+      "in_catalog": 21,
+      "app_api": 8,
+      "front_page": 22
+    },
+    {
+      "word": "карточные",
+      "in_catalog": 22,
+      "app_api": 8,
+      "front_page": 22
+    },
+    {
+      "word": "дракона",
+      "in_catalog": 20,
+      "app_api": 8,
+      "front_page": 20
+    },
+    {
+      "word": "сестра",
+      "in_catalog": 12,
+      "app_api": 8,
+      "front_page": 12
+    },
+    {
+      "word": "демонов",
+      "in_catalog": 54,
+      "app_api": 8,
+      "front_page": 54
+    },
+    {
+      "word": "бейблэйд",
+      "in_catalog": 9,
+      "app_api": 8,
+      "front_page": 9
+    },
+    {
+      "word": "любовь",
+      "in_catalog": 76,
+      "app_api": 0,
+      "front_page": 60
+    },
+    {
+      "word": "эпохи",
+      "in_catalog": 15,
+      "app_api": 8,
+      "front_page": 15
+    },
+    {
+      "word": "повесть",
+      "in_catalog": 18,
+      "app_api": 8,
+      "front_page": 18
+    },
+    {
+      "word": "небес",
+      "in_catalog": 95,
+      "app_api": 0,
+      "front_page": 60
+    },
+    {
+      "word": "магическая",
+      "in_catalog": 9,
+      "app_api": 8,
+      "front_page": 9
+    },
+    {
+      "word": "самурай",
+      "in_catalog": 12,
+      "app_api": 8,
+      "front_page": 12
+    },
+    {
+      "word": "квест",
+      "in_catalog": 10,
+      "app_api": 8,
+      "front_page": 10
+    },
+    {
+      "word": "военная",
+      "in_catalog": 9,
+      "app_api": 8,
+      "front_page": 9
+    },
+    {
+      "word": "земля",
+      "in_catalog": 15,
+      "app_api": 0,
+      "front_page": 15
+    },
+    {
+      "word": "волшебная",
+      "in_catalog": 9,
+      "app_api": 8,
+      "front_page": 9
+    },
+    {
+      "word": "оммедзи",
+      "in_catalog": 9,
+      "app_api": 0,
+      "front_page": 9
+    },
+    {
+      "word": "звездный",
+      "in_catalog": 21,
+      "app_api": 2,
+      "front_page": 2
+    },
+    {
+      "word": "новая",
+      "in_catalog": 14,
+      "app_api": 8,
+      "front_page": 14
+    },
+    {
+      "word": "бога",
+      "in_catalog": 37,
+      "app_api": 0,
+      "front_page": 37
+    },
+    {
+      "word": "возвращение",
+      "in_catalog": 15,
+      "app_api": 0,
+      "front_page": 15
+    },
+    {
+      "word": "песнь",
+      "in_catalog": 16,
+      "app_api": 8,
+      "front_page": 16
+    },
+    {
+      "word": "святой",
+      "in_catalog": 13,
+      "app_api": 8,
+      "front_page": 13
+    },
+    {
+      "word": "повар",
+      "in_catalog": 11,
+      "app_api": 8,
+      "front_page": 11
+    },
+    {
+      "word": "дневник",
+      "in_catalog": 25,
+      "app_api": 0,
+      "front_page": 25
+    },
+    {
+      "word": "сторону",
+      "in_catalog": 9,
+      "app_api": 8,
+      "front_page": 9
+    },
+    {
+      "word": "друзья",
+      "in_catalog": 15,
+      "app_api": 0,
+      "front_page": 15
+    },
+    {
+      "word": "маленькая",
+      "in_catalog": 11,
+      "app_api": 8,
+      "front_page": 11
+    },
+    {
+      "word": "этот",
+      "in_catalog": 22,
+      "app_api": 8,
+      "front_page": 22
+    },
+    {
+      "word": "сердца",
+      "in_catalog": 13,
+      "app_api": 0,
+      "front_page": 13
+    },
+    {
+      "word": "джоджо",
+      "in_catalog": 9,
+      "app_api": 8,
+      "front_page": 9
+    },
+    {
+      "word": "королева",
+      "in_catalog": 12,
+      "app_api": 8,
+      "front_page": 10
+    },
+    {
+      "word": "зеро",
+      "in_catalog": 13,
+      "app_api": 8,
+      "front_page": 13
+    },
+    {
+      "word": "девушка",
+      "in_catalog": 62,
+      "app_api": 0,
+      "front_page": 60
+    },
+    {
+      "word": "герои",
+      "in_catalog": 29,
+      "app_api": 8,
+      "front_page": 29
+    },
+    {
+      "word": "против",
+      "in_catalog": 39,
+      "app_api": 0,
+      "front_page": 39
+    },
+    {
+      "word": "герой",
+      "in_catalog": 56,
+      "app_api": 0,
+      "front_page": 56
+    },
+    {
+      "word": "черный",
+      "in_catalog": 26,
+      "app_api": 5,
+      "front_page": 5
+    },
+    {
+      "word": "бессмертного",
+      "in_catalog": 10,
+      "app_api": 8,
+      "front_page": 10
+    },
+    {
+      "word": "линкор",
+      "in_catalog": 10,
+      "app_api": 8,
+      "front_page": 10
+    },
+    {
+      "word": "фантазия",
+      "in_catalog": 22,
+      "app_api": 8,
+      "front_page": 22
+    },
+    {
+      "word": "алиса",
+      "in_catalog": 13,
+      "app_api": 8,
+      "front_page": 13
+    },
+    {
+      "word": "только",
+      "in_catalog": 12,
+      "app_api": 0,
+      "front_page": 12
+    },
+    {
+      "word": "лиричная",
+      "in_catalog": 9,
+      "app_api": 8,
+      "front_page": 9
+    },
+    {
+      "word": "девяти",
+      "in_catalog": 14,
+      "app_api": 8,
+      "front_page": 14
+    },
+    {
+      "word": "жизнь",
+      "in_catalog": 73,
+      "app_api": 0,
+      "front_page": 60
+    },
+    {
+      "word": "смертных",
+      "in_catalog": 20,
+      "app_api": 8,
+      "front_page": 20
+    },
+    {
+      "word": "синева",
+      "in_catalog": 11,
+      "app_api": 8,
+      "front_page": 11
+    },
+    {
+      "word": "повелитель",
+      "in_catalog": 36,
+      "app_api": 8,
+      "front_page": 36
+    },
+    {
+      "word": "дорога",
+      "in_catalog": 13,
+      "app_api": 0,
+      "front_page": 13
+    },
+    {
+      "word": "сейлор",
+      "in_catalog": 9,
+      "app_api": 8,
+      "front_page": 9
+    },
+    {
+      "word": "трусливый",
+      "in_catalog": 9,
+      "app_api": 8,
+      "front_page": 9
+    }
+  ]
+}

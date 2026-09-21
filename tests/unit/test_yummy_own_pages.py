@@ -190,3 +190,33 @@ class TestПустаяСекция:
         объяснение = СТР.нечего_показать("Расписание", ["schedule", "announcements"])
         assert "schedule" in объяснение and "announcements" in объяснение
         assert "portal-empty" in объяснение
+
+
+class TestЗапросОстаётсяВПоле:
+    """Страница результатов с пустым полем стирает вопрос посетителя."""
+
+    ШАПКА = ('<header><form><input class="portal-search-input" name="q" '
+             'value="" placeholder="Поиск"/></form></header>')
+
+    def test_значение_подставляется(self):
+        о = СТР.подставить_запрос({"header": self.ШАПКА}, "воин")
+        assert 'value="воин"' in о["header"]
+        assert о["header"].count("value=") == 1
+
+    def test_кавычки_экранируются(self):
+        о = СТР.подставить_запрос({"header": self.ШАПКА}, 'а"б<в')
+        assert 'value="а&quot;б&lt;в"' in о["header"]
+        assert '<в"' not in о["header"]
+
+    def test_самозакрывающийся_тег_остаётся_самозакрывающимся(self):
+        о = СТР.подставить_запрос({"header": self.ШАПКА}, "мир")
+        assert 'value="мир"/>' in о["header"]
+
+    def test_пустой_запрос_шапку_не_трогает(self):
+        о = СТР.подставить_запрос({"header": self.ШАПКА}, "")
+        assert о["header"] == self.ШАПКА
+
+    def test_исходная_оболочка_не_меняется(self):
+        исходная = {"header": self.ШАПКА}
+        СТР.подставить_запрос(исходная, "воин")
+        assert исходная["header"] == self.ШАПКА
