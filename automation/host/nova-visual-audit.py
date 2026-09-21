@@ -316,7 +316,20 @@ def аудит(site: str, база: str, домен: str, снимки: pathlib.
                                                           wait_until="load", timeout=45000)
                                     break
                                 except Exception as отказ:
-                                    if "ERR_CONNECTION_REFUSED" not in str(отказ) or попытка == 3:
+                                    # Перезапуск витрины даёт не только отказ в
+                                    # соединении: соединение может быть принято
+                                    # и тут же закрыто. Все эти признаки — одно
+                                    # и то же окно рестарта, и различать их
+                                    # незачем; счётчик повторов оставляет его
+                                    # видимым.
+                                    транзиент = any(
+                                        признак in str(отказ) for признак in (
+                                            "ERR_CONNECTION_REFUSED", "ERR_EMPTY_RESPONSE",
+                                            "ERR_CONNECTION_RESET", "ERR_CONNECTION_CLOSED",
+                                            "ERR_SOCKET_NOT_CONNECTED",
+                                        )
+                                    )
+                                    if not транзиент or попытка == 3:
                                         raise
                                     запись["retries"] = запись.get("retries", 0) + 1
                                     страница.wait_for_timeout(5000)

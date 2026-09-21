@@ -1,6 +1,6 @@
 {
-  "site": "lords-03",
-  "domain": "1lordserials1.online",
+  "site": "lords-02",
+  "domain": "lordserial33.biz",
   "checks": {
     "new_200": {
       "pass": true,
@@ -52,7 +52,7 @@
         "slugs": 48
       }
     },
-    "transport_retries": 2,
+    "transport_retries": 0,
     "links_crawled": 101,
     "broken_internal_links": 0,
     "http_5xx_count": 0,
@@ -62,5 +62,5 @@
   },
   "failed_checks": [],
   "verdict": "PASS",
-  "checked_at_utc": "2026-09-21T14:11:50.635323+00:00"
+  "checked_at_utc": "2026-09-21T13:54:34.975502+00:00"
 }

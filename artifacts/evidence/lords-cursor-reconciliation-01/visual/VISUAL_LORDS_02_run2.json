@@ -30,7 +30,7 @@
     1440,
     1920
   ],
-  "checked_at_utc": "2026-09-21T13:46:28.566802+00:00",
+  "checked_at_utc": "2026-09-21T13:49:18.898899+00:00",
   "pages": [
     {
       "route": "home",
@@ -83,8 +83,7 @@
       ],
       "doc_scroll_width": 320,
       "doc_client_width": 320,
-      "sr_only_skipped": 0,
-      "screenshot": "lords-02-home-320.png"
+      "sr_only_skipped": 0
     },
     {
       "route": "catalog",
@@ -113,8 +112,7 @@
       ],
       "doc_scroll_width": 320,
       "doc_client_width": 320,
-      "sr_only_skipped": 0,
-      "screenshot": "lords-02-catalog-320.png"
+      "sr_only_skipped": 0
     },
     {
       "route": "catalog_page2",
@@ -172,8 +170,7 @@
       ],
       "doc_scroll_width": 320,
       "doc_client_width": 320,
-      "sr_only_skipped": 0,
-      "screenshot": "lords-02-new-320.png"
+      "sr_only_skipped": 0
     },
     {
       "route": "movies",
@@ -456,8 +453,7 @@
       ],
       "doc_scroll_width": 320,
       "doc_client_width": 320,
-      "sr_only_skipped": 1,
-      "screenshot": "lords-02-title_film-320.png"
+      "sr_only_skipped": 1
     },
     {
       "route": "title_series",
@@ -486,8 +482,7 @@
       ],
       "doc_scroll_width": 320,
       "doc_client_width": 320,
-      "sr_only_skipped": 1,
-      "screenshot": "lords-02-title_series-320.png"
+      "sr_only_skipped": 1
     },
     {
       "route": "episode",
@@ -507,8 +502,7 @@
       "grid_summary": [],
       "doc_scroll_width": 320,
       "doc_client_width": 320,
-      "sr_only_skipped": 1,
-      "screenshot": "lords-02-episode-320.png"
+      "sr_only_skipped": 1
     },
     {
       "route": "not_found",
@@ -581,8 +575,7 @@
       ],
       "doc_scroll_width": 390,
       "doc_client_width": 390,
-      "sr_only_skipped": 0,
-      "screenshot": "lords-02-home-390.png"
+      "sr_only_skipped": 0
     },
     {
       "route": "catalog",
@@ -611,8 +604,7 @@
       ],
       "doc_scroll_width": 390,
       "doc_client_width": 390,
-      "sr_only_skipped": 0,
-      "screenshot": "lords-02-catalog-390.png"
+      "sr_only_skipped": 0
     },
     {
       "route": "catalog_page2",
@@ -670,8 +662,7 @@
       ],
       "doc_scroll_width": 390,
       "doc_client_width": 390,
-      "sr_only_skipped": 0,
-      "screenshot": "lords-02-new-390.png"
+      "sr_only_skipped": 0
     },
     {
       "route": "movies",
@@ -954,8 +945,7 @@
       ],
       "doc_scroll_width": 390,
       "doc_client_width": 390,
-      "sr_only_skipped": 1,
-      "screenshot": "lords-02-title_film-390.png"
+      "sr_only_skipped": 1
     },
     {
       "route": "title_series",
@@ -984,8 +974,7 @@
       ],
       "doc_scroll_width": 390,
       "doc_client_width": 390,
-      "sr_only_skipped": 1,
-      "screenshot": "lords-02-title_series-390.png"
+      "sr_only_skipped": 1
     },
     {
       "route": "episode",
@@ -1005,8 +994,7 @@
       "grid_summary": [],
       "doc_scroll_width": 390,
       "doc_client_width": 390,
-      "sr_only_skipped": 1,
-      "screenshot": "lords-02-episode-390.png"
+      "sr_only_skipped": 1
     },
     {
       "route": "not_found",
@@ -1079,8 +1067,7 @@
       ],
       "doc_scroll_width": 768,
       "doc_client_width": 768,
-      "sr_only_skipped": 0,
-      "screenshot": "lords-02-home-768.png"
+      "sr_only_skipped": 0
     },
     {
       "route": "catalog",
@@ -1109,8 +1096,7 @@
       ],
       "doc_scroll_width": 768,
       "doc_client_width": 768,
-      "sr_only_skipped": 0,
-      "screenshot": "lords-02-catalog-768.png"
+      "sr_only_skipped": 0
     },
     {
       "route": "catalog_page2",
@@ -1168,8 +1154,7 @@
       ],
       "doc_scroll_width": 768,
       "doc_client_width": 768,
-      "sr_only_skipped": 0,
-      "screenshot": "lords-02-new-768.png"
+      "sr_only_skipped": 0
     },
     {
       "route": "movies",
@@ -1452,8 +1437,7 @@
       ],
       "doc_scroll_width": 768,
       "doc_client_width": 768,
-      "sr_only_skipped": 1,
-      "screenshot": "lords-02-title_film-768.png"
+      "sr_only_skipped": 1
     },
     {
       "route": "title_series",
@@ -1482,8 +1466,7 @@
       ],
       "doc_scroll_width": 768,
       "doc_client_width": 768,
-      "sr_only_skipped": 1,
-      "screenshot": "lords-02-title_series-768.png"
+      "sr_only_skipped": 1
     },
     {
       "route": "episode",
@@ -1503,8 +1486,7 @@
       "grid_summary": [],
       "doc_scroll_width": 768,
       "doc_client_width": 768,
-      "sr_only_skipped": 1,
-      "screenshot": "lords-02-episode-768.png"
+      "sr_only_skipped": 1
     },
     {
       "route": "not_found",
@@ -1577,8 +1559,7 @@
       ],
       "doc_scroll_width": 1024,
       "doc_client_width": 1024,
-      "sr_only_skipped": 0,
-      "screenshot": "lords-02-home-1024.png"
+      "sr_only_skipped": 0
     },
     {
       "route": "catalog",
@@ -1607,8 +1588,7 @@
       ],
       "doc_scroll_width": 1024,
       "doc_client_width": 1024,
-      "sr_only_skipped": 0,
-      "screenshot": "lords-02-catalog-1024.png"
+      "sr_only_skipped": 0
     },
     {
       "route": "catalog_page2",
@@ -1666,8 +1646,7 @@
       ],
       "doc_scroll_width": 1024,
       "doc_client_width": 1024,
-      "sr_only_skipped": 0,
-      "screenshot": "lords-02-new-1024.png"
+      "sr_only_skipped": 0
     },
     {
       "route": "movies",
@@ -1950,8 +1929,7 @@
       ],
       "doc_scroll_width": 1024,
       "doc_client_width": 1024,
-      "sr_only_skipped": 1,
-      "screenshot": "lords-02-title_film-1024.png"
+      "sr_only_skipped": 1
     },
     {
       "route": "title_series",
@@ -1980,8 +1958,7 @@
       ],
       "doc_scroll_width": 1024,
       "doc_client_width": 1024,
-      "sr_only_skipped": 1,
-      "screenshot": "lords-02-title_series-1024.png"
+      "sr_only_skipped": 1
     },
     {
       "route": "episode",
@@ -2001,8 +1978,7 @@
       "grid_summary": [],
       "doc_scroll_width": 1024,
       "doc_client_width": 1024,
-      "sr_only_skipped": 1,
-      "screenshot": "lords-02-episode-1024.png"
+      "sr_only_skipped": 1
     },
     {
       "route": "not_found",
@@ -2075,13 +2051,13 @@
       ],
       "doc_scroll_width": 1440,
       "doc_client_width": 1440,
-      "sr_only_skipped": 0,
-      "screenshot": "lords-02-home-1440.png"
+      "sr_only_skipped": 0
     },
     {
       "route": "catalog",
       "path": "/catalog/",
       "viewport": 1440,
+      "retries": 2,
       "status": 200,
       "overflow_x": 0,
       "clipped": [],
@@ -2105,8 +2081,7 @@
       ],
       "doc_scroll_width": 1440,
       "doc_client_width": 1440,
-      "sr_only_skipped": 0,
-      "screenshot": "lords-02-catalog-1440.png"
+      "sr_only_skipped": 0
     },
     {
       "route": "catalog_page2",
@@ -2164,8 +2139,7 @@
       ],
       "doc_scroll_width": 1440,
       "doc_client_width": 1440,
-      "sr_only_skipped": 0,
-      "screenshot": "lords-02-new-1440.png"
+      "sr_only_skipped": 0
     },
     {
       "route": "movies",
@@ -2448,8 +2422,7 @@
       ],
       "doc_scroll_width": 1440,
       "doc_client_width": 1440,
-      "sr_only_skipped": 1,
-      "screenshot": "lords-02-title_film-1440.png"
+      "sr_only_skipped": 1
     },
     {
       "route": "title_series",
@@ -2478,8 +2451,7 @@
       ],
       "doc_scroll_width": 1440,
       "doc_client_width": 1440,
-      "sr_only_skipped": 1,
-      "screenshot": "lords-02-title_series-1440.png"
+      "sr_only_skipped": 1
     },
     {
       "route": "episode",
@@ -2499,8 +2471,7 @@
       "grid_summary": [],
       "doc_scroll_width": 1440,
       "doc_client_width": 1440,
-      "sr_only_skipped": 1,
-      "screenshot": "lords-02-episode-1440.png"
+      "sr_only_skipped": 1
     },
     {
       "route": "not_found",
@@ -2573,8 +2544,7 @@
       ],
       "doc_scroll_width": 1920,
       "doc_client_width": 1920,
-      "sr_only_skipped": 0,
-      "screenshot": "lords-02-home-1920.png"
+      "sr_only_skipped": 0
     },
     {
       "route": "catalog",
@@ -2603,8 +2573,7 @@
       ],
       "doc_scroll_width": 1920,
       "doc_client_width": 1920,
-      "sr_only_skipped": 0,
-      "screenshot": "lords-02-catalog-1920.png"
+      "sr_only_skipped": 0
     },
     {
       "route": "catalog_page2",
@@ -2662,8 +2631,7 @@
       ],
       "doc_scroll_width": 1920,
       "doc_client_width": 1920,
-      "sr_only_skipped": 0,
-      "screenshot": "lords-02-new-1920.png"
+      "sr_only_skipped": 0
     },
     {
       "route": "movies",
@@ -2946,8 +2914,7 @@
       ],
       "doc_scroll_width": 1920,
       "doc_client_width": 1920,
-      "sr_only_skipped": 1,
-      "screenshot": "lords-02-title_film-1920.png"
+      "sr_only_skipped": 1
     },
     {
       "route": "title_series",
@@ -2976,8 +2943,7 @@
       ],
       "doc_scroll_width": 1920,
       "doc_client_width": 1920,
-      "sr_only_skipped": 1,
-      "screenshot": "lords-02-title_series-1920.png"
+      "sr_only_skipped": 1
     },
     {
       "route": "episode",
@@ -2997,8 +2963,7 @@
       "grid_summary": [],
       "doc_scroll_width": 1920,
       "doc_client_width": 1920,
-      "sr_only_skipped": 1,
-      "screenshot": "lords-02-episode-1920.png"
+      "sr_only_skipped": 1
     },
     {
       "route": "not_found",
@@ -3025,7 +2990,7 @@
   "metrics": {
     "pages_measured": 108,
     "pages_failed": 0,
-    "CONNECTION_REFUSED_RETRIES": 0,
+    "CONNECTION_REFUSED_RETRIES": 2,
     "HORIZONTAL_OVERFLOW_COUNT": 0,
     "CLIPPED_REQUIRED_TEXT_COUNT": 0,
     "CLIPPED_SOFT_COUNT": 0,

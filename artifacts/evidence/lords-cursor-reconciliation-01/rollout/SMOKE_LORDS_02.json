@@ -18,7 +18,7 @@
         },
         "declared_equals_running": {
           "pass": true,
-          "detail": "объявлено b32438c91aaa, исполняется b32438c91aaa"
+          "detail": "объявлено 1831c87730eb, исполняется 1831c87730eb"
         },
         "source_dirty_false": {
           "pass": true,
@@ -26,15 +26,15 @@
         },
         "artifact_matches_expected": {
           "pass": true,
-          "detail": "ждали b32438c91aaa"
+          "detail": "ждали 1831c87730eb"
         },
         "runs_from_expected_release_dir": {
           "pass": true,
-          "detail": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean/lords-frontend.py"
+          "detail": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix/lords-frontend.py"
         },
         "runtime_not_shared_mutable_path": {
           "pass": true,
-          "detail": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean/lords-frontend.py"
+          "detail": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix/lords-frontend.py"
         },
         "home_200": {
           "pass": true,
@@ -134,15 +134,15 @@
         }
       },
       "metrics": {
-        "declared_build_id": "20260921T114007Z-89003bb-clean",
-        "declared_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
-        "declared_source_commit": "89003bb88447b6f36c1f6f6a365e6f8099d55098",
+        "declared_build_id": "20260921T134330Z-515fcf0-cardfix",
+        "declared_artifact_sha256": "1831c87730ebc67435172cae5b7b0b3212d1217dffd9e899c4e567c1be3387cc",
+        "declared_source_commit": "515fcf0b39de009e31f531cd380ab52c38c33520",
         "declared_source_dirty": false,
         "declared_profile": "lords-new",
-        "running_release_path": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean/lords-frontend.py",
-        "running_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
-        "pid": 1292312,
-        "process_start_time": "2026-09-21T11:56:34Z",
+        "running_release_path": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix/lords-frontend.py",
+        "running_artifact_sha256": "1831c87730ebc67435172cae5b7b0b3212d1217dffd9e899c4e567c1be3387cc",
+        "pid": 4121744,
+        "process_start_time": "2026-09-21T13:44:43Z",
         "data_design": "lords-series-feed-v2",
         "indexability": "closed",
         "canonical": "https://lordserial33.biz/",
@@ -164,7 +164,7 @@
       },
       "failed_checks": [],
       "verdict": "PASS",
-      "checked_at_utc": "2026-09-21T12:04:06.820345+00:00",
+      "checked_at_utc": "2026-09-21T13:45:36.367927+00:00",
       "not_measurable_here": [
         "TLS, редиректы и заголовки nginx: публичный контур недоступен (нет хостов в allowlist)",
         "обрезание текста и наложения в пикселях: требуется браузер; контракт закрыт набором tests/lords"
@@ -186,7 +186,7 @@
         },
         "declared_equals_running": {
           "pass": true,
-          "detail": "объявлено b32438c91aaa, исполняется b32438c91aaa"
+          "detail": "объявлено 1831c87730eb, исполняется 1831c87730eb"
         },
         "source_dirty_false": {
           "pass": true,
@@ -194,15 +194,15 @@
         },
         "artifact_matches_expected": {
           "pass": true,
-          "detail": "ждали b32438c91aaa"
+          "detail": "ждали 1831c87730eb"
         },
         "runs_from_expected_release_dir": {
           "pass": true,
-          "detail": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean/lords-frontend.py"
+          "detail": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix/lords-frontend.py"
         },
         "runtime_not_shared_mutable_path": {
           "pass": true,
-          "detail": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean/lords-frontend.py"
+          "detail": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix/lords-frontend.py"
         },
         "home_200": {
           "pass": true,
@@ -302,15 +302,15 @@
         }
       },
       "metrics": {
-        "declared_build_id": "20260921T114007Z-89003bb-clean",
-        "declared_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
-        "declared_source_commit": "89003bb88447b6f36c1f6f6a365e6f8099d55098",
+        "declared_build_id": "20260921T134330Z-515fcf0-cardfix",
+        "declared_artifact_sha256": "1831c87730ebc67435172cae5b7b0b3212d1217dffd9e899c4e567c1be3387cc",
+        "declared_source_commit": "515fcf0b39de009e31f531cd380ab52c38c33520",
         "declared_source_dirty": false,
         "declared_profile": "lords-new",
-        "running_release_path": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean/lords-frontend.py",
-        "running_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
-        "pid": 1292312,
-        "process_start_time": "2026-09-21T11:56:34Z",
+        "running_release_path": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix/lords-frontend.py",
+        "running_artifact_sha256": "1831c87730ebc67435172cae5b7b0b3212d1217dffd9e899c4e567c1be3387cc",
+        "pid": 4121744,
+        "process_start_time": "2026-09-21T13:44:43Z",
         "data_design": "lords-series-feed-v2",
         "indexability": "closed",
         "canonical": "https://lordserial33.biz/",
@@ -332,7 +332,7 @@
       },
       "failed_checks": [],
       "verdict": "PASS",
-      "checked_at_utc": "2026-09-21T12:04:51.123971+00:00",
+      "checked_at_utc": "2026-09-21T13:46:20.824700+00:00",
       "not_measurable_here": [
         "TLS, редиректы и заголовки nginx: публичный контур недоступен (нет хостов в allowlist)",
         "обрезание текста и наложения в пикселях: требуется браузер; контракт закрыт набором tests/lords"
