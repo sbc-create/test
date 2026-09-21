@@ -10,20 +10,50 @@
     "note": "Домен разрешается в петлю локально: наружу запросов не уходит."
   },
   "before": {
-    "390":  {"rail_card_px": 176,   "when_text": "Добавлено 20.09.2026, 11", "when_truncated": true,  "hero_media_h_px": 205},
-    "768":  {"rail_card_px": 169.5, "when_text": "Добавлено 20.09.2026, 11", "when_truncated": true,  "hero_media_h_px": 404},
-    "1440": {"rail_card_px": 180,   "when_text": "Добавлено 20.09.2026, 11", "when_truncated": true,  "hero_media_h_px": 937,
-             "rail_dead_strip_px": 44,
-             "note": "основа 184.571px обрезалась потолком --z-card-max:180px; 7*180+6*12=1332 из 1376"}
+    "390": {
+      "rail_card_px": 176,
+      "when_text": "Добавлено 20.09.2026, 11",
+      "when_truncated": true,
+      "hero_media_h_px": 205
+    },
+    "768": {
+      "rail_card_px": 169.5,
+      "when_text": "Добавлено 20.09.2026, 11",
+      "when_truncated": true,
+      "hero_media_h_px": 404
+    },
+    "1440": {
+      "rail_card_px": 180,
+      "when_text": "Добавлено 20.09.2026, 11",
+      "when_truncated": true,
+      "hero_media_h_px": 937,
+      "rail_dead_strip_px": 44,
+      "note": "основа 184.571px обрезалась потолком --z-card-max:180px; 7*180+6*12=1332 из 1376"
+    }
   },
   "after": {
-    "390":  {"rail_card_px": 177, "when_text": "Добавлено 20.09.2026, 11:49", "when_truncated": false, "hero_media_h_px": 205,
-             "exact_fit": "2*177 + 1*12 = 366 = ширина контейнера"},
-    "768":  {"rail_card_px": 171, "when_text": "Добавлено 20.09.2026, 11:49", "when_truncated": false, "hero_media_h_px": 404,
-             "exact_fit": "4*171 + 3*12 = 720 = ширина контейнера"},
-    "1440": {"rail_card_px": 186, "when_text": "Добавлено 20.09.2026, 11:49", "when_truncated": false, "hero_media_h_px": 372,
-             "exact_fit": "7*186.29 + 6*12 = 1376 = ширина контейнера",
-             "rail_dead_strip_px": 0}
+    "390": {
+      "rail_card_px": 177,
+      "when_text": "Добавлено 20.09.2026, 11:49",
+      "when_truncated": false,
+      "hero_media_h_px": 205,
+      "exact_fit": "2*177 + 1*12 = 366 = ширина контейнера"
+    },
+    "768": {
+      "rail_card_px": 171,
+      "when_text": "Добавлено 20.09.2026, 11:49",
+      "when_truncated": false,
+      "hero_media_h_px": 404,
+      "exact_fit": "4*171 + 3*12 = 720 = ширина контейнера"
+    },
+    "1440": {
+      "rail_card_px": 186,
+      "when_text": "Добавлено 20.09.2026, 11:49",
+      "when_truncated": false,
+      "hero_media_h_px": 372,
+      "exact_fit": "7*186.29 + 6*12 = 1376 = ширина контейнера",
+      "rail_dead_strip_px": 0
+    }
   },
   "fixed": {
     "hero_empty_right_half": {
@@ -52,5 +82,11 @@
     "performed": false,
     "restart_performed": false,
     "reason": "см. DEPLOY_BLOCKERS.md"
+  },
+  "correction": {
+    "what_i_missed": "Я мерил только высоту медиа (hero.boxH) и не проверял, не срезает ли ряд текст целиком. Базовое правило .zhero несло max-height:390px при overflow:hidden, и ниже 900px, где ряд складывается в столбец, оно резало тело: на 390px сумма 205+259=464px (срез 74px), на 768px 404+259=663px (срез 273px).",
+    "who_found_it": "Параллельная сессия, независимым прогоном своего стенда — artifacts/evidence/zona-slider-crop-date-01/INDEPENDENT_RECHECK.json. Её правка снимает базовый потолок и входит в коммит ba4fb87.",
+    "attribution": "ba4fb87 содержит и мои четыре правки, и её правку базового правила: мы редактировали один файл одновременно, и `git add` захватил обе. Сообщение того коммита описывает только мою часть — это ошибка атрибуции, исправленная отдельным коммитом, а не переписыванием общей истории.",
+    "verification_gap_closed_by": "hero_body_overflows: false на 390/768/1440 в её матрице; мои числа этого поля не содержали вовсе."
   }
 }
