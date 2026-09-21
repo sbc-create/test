@@ -88,24 +88,54 @@ const ИЗМЕРИТЬ = () => {
 
   const изображения = [...document.querySelectorAll('img')].map((у) => {
     const п = у.getBoundingClientRect();
+    const с = getComputedStyle(у);
     const естеств = у.naturalWidth && у.naturalHeight ? у.naturalWidth / у.naturalHeight : null;
     const выведен = п.width && п.height ? п.width / п.height : null;
+    // Расхождение соотношений само по себе дефектом не является.
+    //
+    // При `object-fit: cover` кадр обрезается, и постер 424×594 в рамке
+    // 230×322 выглядит правильно — он подрезан, а не сплющен. Растягиванием
+    // считается только `fill` (значение по умолчанию) при разошедшихся
+    // соотношениях: тогда изображение действительно деформировано.
+    const расхождение = естеств && выведен ? Math.abs(естеств - выведен) / естеств : null;
     return {
       src: (у.currentSrc || у.src || '').slice(0, 200),
       alt: у.getAttribute('alt'),
       loading: у.getAttribute('loading'),
+      objectFit: с.objectFit,
       natural: [у.naturalWidth, у.naturalHeight],
       box: [Math.round(п.width), Math.round(п.height)],
-      // Растягивание: соотношение на экране разошлось с собственным более чем
-      // на 2 %. Порог назван здесь, а не спрятан в утверждении теста.
-      stretched: естеств && выведен ? Math.abs(естеств - выведен) / естеств > 0.02 : null,
+      ratio_delta: расхождение === null ? null : Number(расхождение.toFixed(4)),
+      stretched: расхождение === null ? null
+        : (с.objectFit === 'fill' || с.objectFit === 'none') && расхождение > 0.02,
+      cropped: расхождение === null ? null : с.objectFit === 'cover' && расхождение > 0.02,
       broken: у.complete && у.naturalWidth === 0,
     };
   });
 
+  // Визуально скрытый узел — не дефект вёрстки.
+  //
+  // Ссылка «Перейти к содержимому» намеренно имеет размер 1×1 с обрезкой и
+  // разворачивается только в фокусе. Без этого различения она попадала и в
+  // «обрезанный текст», и в «мелкие цели» на каждой странице каждой ширины,
+  // и настоящие находки тонули в её повторах.
+  const служебно_скрыт = (у) => {
+    for (let э = у; э && э !== document.body; э = э.parentElement) {
+      const с = getComputedStyle(э);
+      const клип = с.clip === 'rect(0px, 0px, 0px, 0px)'
+        || (с.clipPath && с.clipPath.startsWith('inset(50%'));
+      const п = э.getBoundingClientRect();
+      if (клип && п.width <= 2 && п.height <= 2) return true;
+      if (с.position === 'absolute' && п.width <= 1 && п.height <= 1
+          && с.overflow === 'hidden') return true;
+    }
+    return false;
+  };
+
   // Обрезанный текст: узел прячет содержимое, которое в него не поместилось.
   const обрезанные = [];
   for (const у of document.querySelectorAll('h1,h2,h3,h4,a,p,span,li,button,div')) {
+    if (служебно_скрыт(у)) continue;
     const с = getComputedStyle(у);
     if (с.overflow === 'visible' && с.overflowX === 'visible' && с.overflowY === 'visible') continue;
     const текст = (у.textContent || '').trim();
@@ -153,22 +183,32 @@ const ИЗМЕРИТЬ = () => {
 
   // Размер цели: пальцем по ссылке размером 20×12 не попасть.
   const мелкие = [...document.querySelectorAll('a,button,[role="button"],input,select')]
+    .filter((у) => !служебно_скрыт(у))
     .map((у) => ({ у, п: у.getBoundingClientRect() }))
     .filter(({ п }) => п.width > 0 && п.height > 0 && (п.width < 24 || п.height < 24))
     .map(({ у, п }) => ({
       tag: у.tagName.toLowerCase(), cls: String(у.className || '').slice(0, 50),
+      text: (у.textContent || '').trim().slice(0, 40),
       box: [Math.round(п.width), Math.round(п.height)],
     }));
 
   // Скрытые интерактивные элементы: в фокус попадают, глазом не видны.
+  //
+  // Схлопнутое меню и содержимое закрытого выпадающего списка сюда не
+  // относятся: они скрыты вместе с родителем и из фокуса выведены. Считается
+  // узел, который сам по себе нулевого размера, но остаётся достижимым.
   const скрытые = [...document.querySelectorAll('a,button,input,select,textarea')]
     .filter((у) => {
       const с = getComputedStyle(у);
       if (с.visibility === 'hidden' || с.display === 'none') return false; // не в дереве — не в фокусе
+      if (служебно_скрыт(у)) return false;
+      if (у.closest('[hidden],[aria-hidden="true"],[inert]')) return false;
       const п = у.getBoundingClientRect();
       return (п.width === 0 || п.height === 0) && !у.hasAttribute('hidden')
         && у.tabIndex >= 0 && с.position !== 'fixed';
-    }).length;
+    })
+    .map((у) => ({ tag: у.tagName.toLowerCase(), cls: String(у.className || '').slice(0, 50),
+      text: (у.textContent || '').trim().slice(0, 40) }));
 
   return {
     overflow: перелив, overflow_culprits: виновные.slice(0, 12),
@@ -177,7 +217,8 @@ const ИЗМЕРИТЬ = () => {
     headings: заголовки.slice(0, 40), heading_jumps: скачки,
     images: изображения, truncated: обрезанные.slice(0, 20),
     duplicate_ids: дубли, grids: сетки, links: ссылки,
-    small_targets: мелкие.slice(0, 20), hidden_interactive: скрытые,
+    small_targets: мелкие.slice(0, 20), hidden_interactive: скрытые.slice(0, 20),
+    hidden_interactive_count: скрытые.length,
     landmarks: {
       main: document.querySelectorAll('main, [role="main"]').length,
       header: document.querySelectorAll('header, [role="banner"]').length,
