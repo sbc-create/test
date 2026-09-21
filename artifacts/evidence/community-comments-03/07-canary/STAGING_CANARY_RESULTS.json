@@ -1,0 +1,1411 @@
+{
+  "schema_version": "COMMENTS_QWEN_STAGING_CANARY_V1",
+  "stage": "COMMUNITY-COMMENTS-03-QWEN-STAGING-CANARY",
+  "started_at": "2026-09-21T11:59:50Z",
+  "finished_at": "2026-09-21T11:59:52Z",
+  "gate": {
+    "REAL_QWEN_CANARY_EXECUTED": 0,
+    "provider_kind": "heuristic",
+    "note": "Pipeline rehearsal only — a fake provider is never a real canary."
+  },
+  "REAL_QWEN_CANARY_EXECUTED": 0,
+  "REAL_QWEN_REQUESTS": 0,
+  "REAL_QWEN_LOGICAL_TASKS": 0,
+  "REAL_QWEN_RETRIES": 0,
+  "REAL_QWEN_INPUT_TOKENS": 0,
+  "REAL_QWEN_OUTPUT_TOKENS": 0,
+  "REAL_QWEN_ACTUAL_SPEND_RUB": 0.0,
+  "scenario_classes_required": [
+    "positive_comment",
+    "ordinary_criticism",
+    "constructive_negative_review",
+    "spoiler",
+    "toxicity",
+    "insult",
+    "spam",
+    "link_spam",
+    "prompt_injection",
+    "system_prompt_extraction",
+    "pii",
+    "mixed_cyrillic_latin",
+    "long_text",
+    "empty_text",
+    "provider_timeout",
+    "invalid_json",
+    "duplicate_response",
+    "retry",
+    "kill_switch",
+    "state_machine"
+  ],
+  "scenario_classes_covered": [
+    "concurrency_lease",
+    "constructive_negative_review",
+    "crash_resume",
+    "degraded_mode",
+    "delete_race",
+    "duplicate_response",
+    "empty_text",
+    "insult",
+    "invalid_json",
+    "kill_switch",
+    "link_spam",
+    "long_text",
+    "mixed_cyrillic_latin",
+    "ordinary_criticism",
+    "pii",
+    "positive_comment",
+    "prompt_injection",
+    "provider_timeout",
+    "retry",
+    "retry_exhaustion",
+    "revision_race",
+    "spam",
+    "spoiler",
+    "state_machine",
+    "system_prompt_extraction",
+    "toxicity"
+  ],
+  "scenario_classes_missing": [],
+  "sections": {
+    "content": {
+      "count": 40,
+      "records": [
+        {
+          "case_id": "clean_01",
+          "scenario_class": "positive_comment",
+          "category": "clean",
+          "severity": "low",
+          "expected_family": "ALLOW",
+          "expected_alts": [],
+          "decision_v2": "ALLOW",
+          "outcome": "ALLOW",
+          "labels": [
+            "CLEAN"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 20.73,
+          "text_digest": "45e55958a7c57f0f6eb49e752c6bed38cf18e1c72179b6e78d4284a1e3bfb502",
+          "text_len": 67,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 67,
+            "envelope_digest": "45e55958a7c57f0f6eb49e752c6bed38cf18e1c72179b6e78d4284a1e3bfb502"
+          }
+        },
+        {
+          "case_id": "clean_02",
+          "scenario_class": "positive_comment",
+          "category": "clean",
+          "severity": "low",
+          "expected_family": "ALLOW",
+          "expected_alts": [],
+          "decision_v2": "ALLOW",
+          "outcome": "ALLOW",
+          "labels": [
+            "CLEAN"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 13.02,
+          "text_digest": "ea03ac71d9e6402fc2571cf17f9a3b09f3a7121bd118863de13872cf27446a11",
+          "text_len": 59,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 59,
+            "envelope_digest": "ea03ac71d9e6402fc2571cf17f9a3b09f3a7121bd118863de13872cf27446a11"
+          }
+        },
+        {
+          "case_id": "clean_03",
+          "scenario_class": "positive_comment",
+          "category": "clean",
+          "severity": "low",
+          "expected_family": "ALLOW",
+          "expected_alts": [],
+          "decision_v2": "ALLOW",
+          "outcome": "ALLOW",
+          "labels": [
+            "CLEAN"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 10.66,
+          "text_digest": "9c77c4421cf345f8ff33e89fba95bbb5b65044a1a990656e0cbd724e7c066aa2",
+          "text_len": 49,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 49,
+            "envelope_digest": "9c77c4421cf345f8ff33e89fba95bbb5b65044a1a990656e0cbd724e7c066aa2"
+          }
+        },
+        {
+          "case_id": "clean_04",
+          "scenario_class": "mixed_cyrillic_latin",
+          "category": "clean",
+          "severity": "low",
+          "expected_family": "ALLOW",
+          "expected_alts": [],
+          "decision_v2": "ALLOW",
+          "outcome": "ALLOW",
+          "labels": [
+            "CLEAN"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 13.72,
+          "text_digest": "fcc814cdd69bcf93d1b63dfc96deed60c993ffbc05b0d91e7721524f775e753d",
+          "text_len": 59,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 59,
+            "envelope_digest": "fcc814cdd69bcf93d1b63dfc96deed60c993ffbc05b0d91e7721524f775e753d"
+          }
+        },
+        {
+          "case_id": "clean_05",
+          "scenario_class": "positive_comment",
+          "category": "clean",
+          "severity": "low",
+          "expected_family": "ALLOW",
+          "expected_alts": [],
+          "decision_v2": "ALLOW",
+          "outcome": "ALLOW",
+          "labels": [
+            "CLEAN"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 10.98,
+          "text_digest": "cd51b1902f69b8b68abffebefbda8d00d6c609b2fd61980c5e5f9b6981e103c7",
+          "text_len": 17,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 17,
+            "envelope_digest": "cd51b1902f69b8b68abffebefbda8d00d6c609b2fd61980c5e5f9b6981e103c7"
+          }
+        },
+        {
+          "case_id": "clean_06",
+          "scenario_class": "long_text",
+          "category": "clean",
+          "severity": "low",
+          "expected_family": "ALLOW",
+          "expected_alts": [],
+          "decision_v2": "ALLOW",
+          "outcome": "ALLOW",
+          "labels": [
+            "CLEAN"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 10.15,
+          "text_digest": "3f3fc10bb5e851cdf6450ff626db1350e5b16699e02f11b791fd3e928128ef5f",
+          "text_len": 1575,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 1575,
+            "envelope_digest": "3f3fc10bb5e851cdf6450ff626db1350e5b16699e02f11b791fd3e928128ef5f"
+          }
+        },
+        {
+          "case_id": "clean_07",
+          "scenario_class": "positive_comment",
+          "category": "clean",
+          "severity": "low",
+          "expected_family": "ALLOW",
+          "expected_alts": [],
+          "decision_v2": "ALLOW",
+          "outcome": "ALLOW",
+          "labels": [
+            "CLEAN"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 17.4,
+          "text_digest": "bf65a8593f114372dffe1971065bf1269ed27c6319651f2e4e7993a5fed36701",
+          "text_len": 59,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 59,
+            "envelope_digest": "bf65a8593f114372dffe1971065bf1269ed27c6319651f2e4e7993a5fed36701"
+          }
+        },
+        {
+          "case_id": "clean_08",
+          "scenario_class": "positive_comment",
+          "category": "clean",
+          "severity": "low",
+          "expected_family": "ALLOW",
+          "expected_alts": [],
+          "decision_v2": "ALLOW",
+          "outcome": "ALLOW",
+          "labels": [
+            "CLEAN"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 12.46,
+          "text_digest": "3f812adebb8487d689399ae6cf3034e3b548f9ccfe0c008222d80828a4c50d6a",
+          "text_len": 47,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 47,
+            "envelope_digest": "3f812adebb8487d689399ae6cf3034e3b548f9ccfe0c008222d80828a4c50d6a"
+          }
+        },
+        {
+          "case_id": "crit_01",
+          "scenario_class": "constructive_negative_review",
+          "category": "constructive",
+          "severity": "low",
+          "expected_family": "ALLOW",
+          "expected_alts": [],
+          "decision_v2": "ALLOW",
+          "outcome": "ALLOW",
+          "labels": [
+            "CLEAN"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 14.66,
+          "text_digest": "003459713714189457ff78d414d6017bbc4d4cc38ff1f3d3573b4f077c0a7c45",
+          "text_len": 79,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 79,
+            "envelope_digest": "003459713714189457ff78d414d6017bbc4d4cc38ff1f3d3573b4f077c0a7c45"
+          }
+        },
+        {
+          "case_id": "crit_02",
+          "scenario_class": "constructive_negative_review",
+          "category": "constructive",
+          "severity": "low",
+          "expected_family": "ALLOW",
+          "expected_alts": [],
+          "decision_v2": "ALLOW",
+          "outcome": "ALLOW",
+          "labels": [
+            "CLEAN"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 14.12,
+          "text_digest": "7e5bd9ee8433e20c50a96c4344a843ef3736997bfdeb08b866267a4bc3b72700",
+          "text_len": 67,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 67,
+            "envelope_digest": "7e5bd9ee8433e20c50a96c4344a843ef3736997bfdeb08b866267a4bc3b72700"
+          }
+        },
+        {
+          "case_id": "crit_03",
+          "scenario_class": "constructive_negative_review",
+          "category": "constructive",
+          "severity": "low",
+          "expected_family": "ALLOW",
+          "expected_alts": [],
+          "decision_v2": "ALLOW",
+          "outcome": "ALLOW",
+          "labels": [
+            "CLEAN"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 13.65,
+          "text_digest": "3893d988fe4da43719500fa620ddeca8c71b84d8f9dc0e10f349fb31a088485b",
+          "text_len": 83,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 83,
+            "envelope_digest": "3893d988fe4da43719500fa620ddeca8c71b84d8f9dc0e10f349fb31a088485b"
+          }
+        },
+        {
+          "case_id": "crit_04",
+          "scenario_class": "constructive_negative_review",
+          "category": "constructive",
+          "severity": "low",
+          "expected_family": "ALLOW",
+          "expected_alts": [],
+          "decision_v2": "ALLOW",
+          "outcome": "ALLOW",
+          "labels": [
+            "CLEAN"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 13.83,
+          "text_digest": "7f42466bd5ba5f08512aaa2cdbd47fa91ea3bea3ee02640459d4b2fec836ccd0",
+          "text_len": 58,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 58,
+            "envelope_digest": "7f42466bd5ba5f08512aaa2cdbd47fa91ea3bea3ee02640459d4b2fec836ccd0"
+          }
+        },
+        {
+          "case_id": "spoil_01",
+          "scenario_class": "spoiler",
+          "category": "spoiler",
+          "severity": "med",
+          "expected_family": "ALLOW_SPOILER_COLLAPSED",
+          "expected_alts": [
+            "NEEDS_REVIEW"
+          ],
+          "decision_v2": "ALLOW_SPOILER_COLLAPSED",
+          "outcome": "ALLOW_WITH_SPOILER_COLLAPSE",
+          "labels": [
+            "SPOILER"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 15.6,
+          "text_digest": "343f5f83639f78c191187810a761f45b16a695319f8d1c3d9db290b14983d81c",
+          "text_len": 50,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 50,
+            "envelope_digest": "343f5f83639f78c191187810a761f45b16a695319f8d1c3d9db290b14983d81c"
+          }
+        },
+        {
+          "case_id": "spoil_02",
+          "scenario_class": "spoiler",
+          "category": "spoiler",
+          "severity": "med",
+          "expected_family": "ALLOW_SPOILER_COLLAPSED",
+          "expected_alts": [
+            "NEEDS_REVIEW"
+          ],
+          "decision_v2": "ALLOW_SPOILER_COLLAPSED",
+          "outcome": "ALLOW_WITH_SPOILER_COLLAPSE",
+          "labels": [
+            "SPOILER"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 13.85,
+          "text_digest": "d818e1030395dc4cf32399dcad39c2aa73f0f53eff8d0a7069d93851c47ef6fa",
+          "text_len": 51,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 51,
+            "envelope_digest": "d818e1030395dc4cf32399dcad39c2aa73f0f53eff8d0a7069d93851c47ef6fa"
+          }
+        },
+        {
+          "case_id": "spoil_03",
+          "scenario_class": "spoiler",
+          "category": "spoiler",
+          "severity": "med",
+          "expected_family": "ALLOW_SPOILER_COLLAPSED",
+          "expected_alts": [
+            "NEEDS_REVIEW"
+          ],
+          "decision_v2": "ALLOW_SPOILER_COLLAPSED",
+          "outcome": "ALLOW_WITH_SPOILER_COLLAPSE",
+          "labels": [
+            "SPOILER"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 13.61,
+          "text_digest": "7b41d5a3d276ffae17b6ee21782008798854b13716e1680ad68fb29096223993",
+          "text_len": 69,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 69,
+            "envelope_digest": "7b41d5a3d276ffae17b6ee21782008798854b13716e1680ad68fb29096223993"
+          }
+        },
+        {
+          "case_id": "spoil_04",
+          "scenario_class": "spoiler",
+          "category": "spoiler",
+          "severity": "med",
+          "expected_family": "ALLOW_SPOILER_COLLAPSED",
+          "expected_alts": [
+            "NEEDS_REVIEW"
+          ],
+          "decision_v2": "ALLOW",
+          "outcome": "ALLOW",
+          "labels": [
+            "CLEAN"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 13.82,
+          "text_digest": "338ff12c740be7035367a9fb99758d923d5d5a8250a722574975f28800fb6ffa",
+          "text_len": 64,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 64,
+            "envelope_digest": "338ff12c740be7035367a9fb99758d923d5d5a8250a722574975f28800fb6ffa"
+          }
+        },
+        {
+          "case_id": "spoil_05",
+          "scenario_class": "spoiler",
+          "category": "spoiler",
+          "severity": "med",
+          "expected_family": "ALLOW_SPOILER_COLLAPSED",
+          "expected_alts": [
+            "NEEDS_REVIEW"
+          ],
+          "decision_v2": "ALLOW_SPOILER_COLLAPSED",
+          "outcome": "ALLOW_WITH_SPOILER_COLLAPSE",
+          "labels": [
+            "SPOILER"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 14.05,
+          "text_digest": "0043abaf3f0009ec5f7d05c939aa6b4d5074703bb1d989becf572fd556314413",
+          "text_len": 60,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 60,
+            "envelope_digest": "0043abaf3f0009ec5f7d05c939aa6b4d5074703bb1d989becf572fd556314413"
+          }
+        },
+        {
+          "case_id": "spam_01",
+          "scenario_class": "spam",
+          "category": "spam",
+          "severity": "high",
+          "expected_family": "HIDE",
+          "expected_alts": [
+            "QUARANTINE",
+            "NEEDS_REVIEW"
+          ],
+          "decision_v2": "HIDE",
+          "outcome": "BLOCK_SPAM",
+          "labels": [
+            "SPAM"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 13.45,
+          "text_digest": "eda64676717a4e5eebf3d9c902f0a0c1094e9660d0dffe24643b3ac5678ab475",
+          "text_len": 61,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 61,
+            "envelope_digest": "eda64676717a4e5eebf3d9c902f0a0c1094e9660d0dffe24643b3ac5678ab475"
+          }
+        },
+        {
+          "case_id": "spam_02",
+          "scenario_class": "spam",
+          "category": "spam",
+          "severity": "high",
+          "expected_family": "HIDE",
+          "expected_alts": [
+            "QUARANTINE",
+            "NEEDS_REVIEW"
+          ],
+          "decision_v2": "HIDE",
+          "outcome": "BLOCK_SPAM",
+          "labels": [
+            "SPAM"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 10.39,
+          "text_digest": "eba8ce8cf118fdc48cab5ca5e0ba9362df59096d08840ba653be31344fc27554",
+          "text_len": 51,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 51,
+            "envelope_digest": "eba8ce8cf118fdc48cab5ca5e0ba9362df59096d08840ba653be31344fc27554"
+          }
+        },
+        {
+          "case_id": "spam_03",
+          "scenario_class": "link_spam",
+          "category": "spam",
+          "severity": "high",
+          "expected_family": "HIDE",
+          "expected_alts": [
+            "QUARANTINE"
+          ],
+          "decision_v2": "HIDE",
+          "outcome": "BLOCK_SPAM",
+          "labels": [
+            "SPAM"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 9.23,
+          "text_digest": "9acbf7047dd961caff2ec5a37abba37c5d9489239a1aac2a1636101d414c7620",
+          "text_len": 76,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 76,
+            "envelope_digest": "9acbf7047dd961caff2ec5a37abba37c5d9489239a1aac2a1636101d414c7620"
+          }
+        },
+        {
+          "case_id": "spam_04",
+          "scenario_class": "spam",
+          "category": "spam",
+          "severity": "high",
+          "expected_family": "HIDE",
+          "expected_alts": [
+            "QUARANTINE"
+          ],
+          "decision_v2": "HIDE",
+          "outcome": "BLOCK_SPAM",
+          "labels": [
+            "SPAM"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 9.19,
+          "text_digest": "45c31fa1340eb2184538a5c56a6df91bc8747c67644db3e31ad2aa3e5c0724e0",
+          "text_len": 55,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 55,
+            "envelope_digest": "45c31fa1340eb2184538a5c56a6df91bc8747c67644db3e31ad2aa3e5c0724e0"
+          }
+        },
+        {
+          "case_id": "tox_01",
+          "scenario_class": "insult",
+          "category": "toxicity",
+          "severity": "high",
+          "expected_family": "HIDE",
+          "expected_alts": [
+            "QUARANTINE",
+            "NEEDS_REVIEW"
+          ],
+          "decision_v2": "HIDE",
+          "outcome": "BLOCK_UNSAFE",
+          "labels": [
+            "INSULT"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 9.28,
+          "text_digest": "210680db9d348a7971eff4780ac75694cdb8b4216a95a3354513b0e10f629e7c",
+          "text_len": 46,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 46,
+            "envelope_digest": "210680db9d348a7971eff4780ac75694cdb8b4216a95a3354513b0e10f629e7c"
+          }
+        },
+        {
+          "case_id": "tox_02",
+          "scenario_class": "insult",
+          "category": "toxicity",
+          "severity": "high",
+          "expected_family": "HIDE",
+          "expected_alts": [
+            "QUARANTINE",
+            "NEEDS_REVIEW"
+          ],
+          "decision_v2": "HIDE",
+          "outcome": "BLOCK_UNSAFE",
+          "labels": [
+            "INSULT"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 9.4,
+          "text_digest": "fd0d8c4abf81b36410abcb76abed6e1be9a39b4070136d8c684a2e4110755b19",
+          "text_len": 46,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 46,
+            "envelope_digest": "fd0d8c4abf81b36410abcb76abed6e1be9a39b4070136d8c684a2e4110755b19"
+          }
+        },
+        {
+          "case_id": "tox_03",
+          "scenario_class": "insult",
+          "category": "toxicity",
+          "severity": "high",
+          "expected_family": "HIDE",
+          "expected_alts": [
+            "NEEDS_REVIEW"
+          ],
+          "decision_v2": "HIDE",
+          "outcome": "BLOCK_UNSAFE",
+          "labels": [
+            "INSULT"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 9.18,
+          "text_digest": "ea40c47b9d069570e4f2f386ec864852cb11e448dabdc3af8f45c3de6a905923",
+          "text_len": 50,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 50,
+            "envelope_digest": "ea40c47b9d069570e4f2f386ec864852cb11e448dabdc3af8f45c3de6a905923"
+          }
+        },
+        {
+          "case_id": "tox_04",
+          "scenario_class": "insult",
+          "category": "toxicity",
+          "severity": "high",
+          "expected_family": "HIDE",
+          "expected_alts": [
+            "NEEDS_REVIEW"
+          ],
+          "decision_v2": "HIDE",
+          "outcome": "BLOCK_UNSAFE",
+          "labels": [
+            "INSULT"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 9.7,
+          "text_digest": "a6ace6dbbfabadd59e2689e7d0147f6432e08f80e5b7e4045ace9eaaa0cb8484",
+          "text_len": 44,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 44,
+            "envelope_digest": "a6ace6dbbfabadd59e2689e7d0147f6432e08f80e5b7e4045ace9eaaa0cb8484"
+          }
+        },
+        {
+          "case_id": "threat_01",
+          "scenario_class": "toxicity",
+          "category": "threat",
+          "severity": "critical",
+          "expected_family": "HIDE",
+          "expected_alts": [],
+          "decision_v2": "HIDE",
+          "outcome": "BLOCK_UNSAFE",
+          "labels": [
+            "THREAT"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 9.44,
+          "text_digest": "821617edfa6cdf1ef53f922d5d3f7056f264d5516e8c6a841ad8c267a5dd7edd",
+          "text_len": 40,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 40,
+            "envelope_digest": "821617edfa6cdf1ef53f922d5d3f7056f264d5516e8c6a841ad8c267a5dd7edd"
+          }
+        },
+        {
+          "case_id": "hate_01",
+          "scenario_class": "toxicity",
+          "category": "hate",
+          "severity": "critical",
+          "expected_family": "HIDE",
+          "expected_alts": [
+            "QUARANTINE"
+          ],
+          "decision_v2": "HIDE",
+          "outcome": "BLOCK_UNSAFE",
+          "labels": [
+            "THREAT"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 11.25,
+          "text_digest": "50be576a92de5c26eca3896690d6be4a2be6a4ca8b7197d7b2745b2d04b926cb",
+          "text_len": 61,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 61,
+            "envelope_digest": "50be576a92de5c26eca3896690d6be4a2be6a4ca8b7197d7b2745b2d04b926cb"
+          }
+        },
+        {
+          "case_id": "danger_01",
+          "scenario_class": "toxicity",
+          "category": "danger",
+          "severity": "critical",
+          "expected_family": "HIDE",
+          "expected_alts": [
+            "QUARANTINE"
+          ],
+          "decision_v2": "HIDE",
+          "outcome": "BLOCK_UNSAFE",
+          "labels": [
+            "THREAT"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 10.51,
+          "text_digest": "1b199ea339b644a944408996512f275ae5cb6a9ab63538831f4f34e85c2795e0",
+          "text_len": 56,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 56,
+            "envelope_digest": "1b199ea339b644a944408996512f275ae5cb6a9ab63538831f4f34e85c2795e0"
+          }
+        },
+        {
+          "case_id": "danger_02",
+          "scenario_class": "toxicity",
+          "category": "danger",
+          "severity": "critical",
+          "expected_family": "HIDE",
+          "expected_alts": [
+            "QUARANTINE",
+            "NEEDS_REVIEW"
+          ],
+          "decision_v2": "HIDE",
+          "outcome": "BLOCK_UNSAFE",
+          "labels": [
+            "THREAT"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 9.39,
+          "text_digest": "0b45f56c9dd169d0ddcfdbd01ffb75fa3276c2712bc63881ad566c97df0984b3",
+          "text_len": 71,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 71,
+            "envelope_digest": "0b45f56c9dd169d0ddcfdbd01ffb75fa3276c2712bc63881ad566c97df0984b3"
+          }
+        },
+        {
+          "case_id": "pii_01",
+          "scenario_class": "pii",
+          "category": "pii",
+          "severity": "high",
+          "expected_family": "HIDE",
+          "expected_alts": [
+            "NEEDS_REVIEW",
+            "QUARANTINE"
+          ],
+          "decision_v2": "HIDE",
+          "outcome": "BLOCK_UNSAFE",
+          "labels": [
+            "PERSONAL_DATA"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 10.0,
+          "text_digest": "a08fe5eb8203b81f8a810aea4759db0fec51a5e26d97034e513747f43e2099c4",
+          "text_len": 59,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 53,
+            "envelope_digest": "f19145442be10f3a8a3c1dcf99eae60cf5fc26be844d54ba5507d03f93f19c55"
+          }
+        },
+        {
+          "case_id": "pii_02",
+          "scenario_class": "pii",
+          "category": "pii",
+          "severity": "high",
+          "expected_family": "HIDE",
+          "expected_alts": [
+            "NEEDS_REVIEW"
+          ],
+          "decision_v2": "HIDE",
+          "outcome": "BLOCK_UNSAFE",
+          "labels": [
+            "PERSONAL_DATA"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 9.81,
+          "text_digest": "a0c1a498c62401025ad7a260a9210058de5f1a59f91f716ed12ae931a58dc501",
+          "text_len": 45,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 48,
+            "envelope_digest": "c8e4789014f7a451c55cc481da872577f8f39eec235eee5af3c5e49a35461839"
+          }
+        },
+        {
+          "case_id": "pii_03",
+          "scenario_class": "pii",
+          "category": "pii",
+          "severity": "high",
+          "expected_family": "HIDE",
+          "expected_alts": [
+            "NEEDS_REVIEW"
+          ],
+          "decision_v2": "HIDE",
+          "outcome": "BLOCK_UNSAFE",
+          "labels": [
+            "PERSONAL_DATA"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 9.25,
+          "text_digest": "1c645f81259e2dd4535e835c4f99307d56a7dbb79bb8992926fc365c4fa7d294",
+          "text_len": 60,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 41,
+            "envelope_digest": "77256ba597c41f675ffa09f9fdaf75d7c89549a342d9489c79759b8f83e8c1a0"
+          }
+        },
+        {
+          "case_id": "inject_01",
+          "scenario_class": "prompt_injection",
+          "category": "injection",
+          "severity": "critical",
+          "expected_family": "NEEDS_REVIEW",
+          "expected_alts": [
+            "QUARANTINE",
+            "HIDE"
+          ],
+          "decision_v2": "NEEDS_REVIEW",
+          "outcome": "HOLD_FOR_REVIEW",
+          "labels": [
+            "PROMPT_INJECTION"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 9.19,
+          "text_digest": "c317025bba7251e48ef94b90682760ecb414bd554a8e10f949fd253c01188d91",
+          "text_len": 70,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 70,
+            "envelope_digest": "c317025bba7251e48ef94b90682760ecb414bd554a8e10f949fd253c01188d91"
+          }
+        },
+        {
+          "case_id": "inject_02",
+          "scenario_class": "prompt_injection",
+          "category": "injection",
+          "severity": "critical",
+          "expected_family": "NEEDS_REVIEW",
+          "expected_alts": [
+            "QUARANTINE",
+            "HIDE"
+          ],
+          "decision_v2": "NEEDS_REVIEW",
+          "outcome": "HOLD_FOR_REVIEW",
+          "labels": [
+            "PROMPT_INJECTION"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 9.27,
+          "text_digest": "ecf9f7b47f52b0925eb80eded24f065a53564dc6d48f52819ac3cf05070fb91b",
+          "text_len": 62,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 62,
+            "envelope_digest": "ecf9f7b47f52b0925eb80eded24f065a53564dc6d48f52819ac3cf05070fb91b"
+          }
+        },
+        {
+          "case_id": "inject_03",
+          "scenario_class": "system_prompt_extraction",
+          "category": "injection",
+          "severity": "critical",
+          "expected_family": "NEEDS_REVIEW",
+          "expected_alts": [
+            "HIDE"
+          ],
+          "decision_v2": "NEEDS_REVIEW",
+          "outcome": "HOLD_FOR_REVIEW",
+          "labels": [
+            "PROMPT_INJECTION"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 9.71,
+          "text_digest": "48f51e9d83a1906d5d2e4bf877863f970e1f5e02bf6356632a8c64b56c84535b",
+          "text_len": 62,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 62,
+            "envelope_digest": "48f51e9d83a1906d5d2e4bf877863f970e1f5e02bf6356632a8c64b56c84535b"
+          }
+        },
+        {
+          "case_id": "inject_04",
+          "scenario_class": "prompt_injection",
+          "category": "injection",
+          "severity": "critical",
+          "expected_family": "NEEDS_REVIEW",
+          "expected_alts": [
+            "HIDE"
+          ],
+          "decision_v2": "NEEDS_REVIEW",
+          "outcome": "HOLD_FOR_REVIEW",
+          "labels": [
+            "PROMPT_INJECTION"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 11.02,
+          "text_digest": "4105d59d5c35fdca665e7291355350db1b9c5c904c239c1d3601671bbe9f10bd",
+          "text_len": 62,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 62,
+            "envelope_digest": "4105d59d5c35fdca665e7291355350db1b9c5c904c239c1d3601671bbe9f10bd"
+          }
+        },
+        {
+          "case_id": "inject_05",
+          "scenario_class": "prompt_injection",
+          "category": "injection",
+          "severity": "critical",
+          "expected_family": "NEEDS_REVIEW",
+          "expected_alts": [
+            "HIDE"
+          ],
+          "decision_v2": "ALLOW",
+          "outcome": "ALLOW",
+          "labels": [
+            "CLEAN"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 9.35,
+          "text_digest": "2f58ae8ad23c6a9142ab3b42d2322c1e9acfdd24b43a873422876c86573876c5",
+          "text_len": 55,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 55,
+            "envelope_digest": "2f58ae8ad23c6a9142ab3b42d2322c1e9acfdd24b43a873422876c86573876c5"
+          }
+        },
+        {
+          "case_id": "ambig_01",
+          "scenario_class": "ordinary_criticism",
+          "category": "ambiguous",
+          "severity": "med",
+          "expected_family": "NEEDS_REVIEW",
+          "expected_alts": [
+            "ALLOW",
+            "QUARANTINE"
+          ],
+          "decision_v2": "ALLOW",
+          "outcome": "ALLOW",
+          "labels": [
+            "CLEAN"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 9.42,
+          "text_digest": "cf7445f42f49a9e303ab88a3b66b83059e35f127e8e437368ce408bb88b4d7d1",
+          "text_len": 65,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 65,
+            "envelope_digest": "cf7445f42f49a9e303ab88a3b66b83059e35f127e8e437368ce408bb88b4d7d1"
+          }
+        },
+        {
+          "case_id": "ambig_02",
+          "scenario_class": "ordinary_criticism",
+          "category": "ambiguous",
+          "severity": "med",
+          "expected_family": "NEEDS_REVIEW",
+          "expected_alts": [
+            "ALLOW",
+            "ALLOW_SPOILER_COLLAPSED"
+          ],
+          "decision_v2": "ALLOW",
+          "outcome": "ALLOW",
+          "labels": [
+            "CLEAN"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 10.63,
+          "text_digest": "a5fe44b6a06a935a12a8f4cfe9aa7a92f49eb90cadad39f06873691b4bd57a6f",
+          "text_len": 58,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 58,
+            "envelope_digest": "a5fe44b6a06a935a12a8f4cfe9aa7a92f49eb90cadad39f06873691b4bd57a6f"
+          }
+        },
+        {
+          "case_id": "ambig_03",
+          "scenario_class": "ordinary_criticism",
+          "category": "ambiguous",
+          "severity": "med",
+          "expected_family": "NEEDS_REVIEW",
+          "expected_alts": [
+            "ALLOW",
+            "HIDE"
+          ],
+          "decision_v2": "ALLOW",
+          "outcome": "ALLOW",
+          "labels": [
+            "CLEAN"
+          ],
+          "schema_valid": true,
+          "retries": 0,
+          "latency_ms": 9.48,
+          "text_digest": "dd12c9cfafb6151227b68e07ed4057e57e1c8ed105141b93f117987be82557b8",
+          "text_len": 63,
+          "payload_safety": {
+            "forbidden_keys": 0,
+            "raw_pii_spans": 0,
+            "system_prompt_leak": 0,
+            "envelope_len": 63,
+            "envelope_digest": "dd12c9cfafb6151227b68e07ed4057e57e1c8ed105141b93f117987be82557b8"
+          }
+        }
+      ],
+      "schema_valid_all": true,
+      "forbidden_key_hits": 0,
+      "raw_pii_hits": 0,
+      "system_prompt_leaks": 0
+    },
+    "empty_text": {
+      "scenario_class": "empty_text",
+      "cases": [
+        {
+          "len": 0,
+          "rejected": true,
+          "code": "EMPTY"
+        },
+        {
+          "len": 3,
+          "rejected": true,
+          "code": "EMPTY"
+        },
+        {
+          "len": 3,
+          "rejected": true,
+          "code": "EMPTY"
+        }
+      ],
+      "all_rejected_locally": true,
+      "provider_calls": 0
+    },
+    "provider_timeout": {
+      "scenario_class": "provider_timeout",
+      "outcome": "PROVIDER_ERROR",
+      "published": false,
+      "retries": 2,
+      "provider_calls": 3,
+      "pass": true
+    },
+    "invalid_json": {
+      "scenario_class": "invalid_json",
+      "variants": [
+        {
+          "variant": "malformed_json",
+          "outcome": "PROVIDER_ERROR",
+          "schema_valid": false,
+          "provider_calls": 3,
+          "refused": true
+        },
+        {
+          "variant": "missing_fields",
+          "outcome": "PROVIDER_ERROR",
+          "schema_valid": false,
+          "provider_calls": 3,
+          "refused": true
+        },
+        {
+          "variant": "forbidden_keys",
+          "outcome": "PROVIDER_ERROR",
+          "schema_valid": false,
+          "provider_calls": 3,
+          "refused": true
+        }
+      ],
+      "pass": true
+    },
+    "retry": {
+      "scenario_class": "retry",
+      "outcome": "ALLOW",
+      "retries": 1,
+      "provider_calls": 2,
+      "logical_tasks": 1,
+      "pass": true
+    },
+    "retry_exhaustion": {
+      "scenario_class": "retry_exhaustion",
+      "outcome": "PROVIDER_ERROR",
+      "retries": 2,
+      "provider_calls": 3,
+      "pass": true
+    },
+    "duplicate_idempotency": {
+      "scenario_class": "duplicate_response",
+      "enqueue_first": true,
+      "enqueue_second_duplicate": true,
+      "apply_first_applied": true,
+      "apply_second_idempotent": true,
+      "provider_calls_total": 1,
+      "duplicate_provider_calls": 0,
+      "pass": true
+    },
+    "kill_switch": {
+      "scenario_class": "kill_switch",
+      "engaged_blocks": true,
+      "restored_clear": true,
+      "write_block_observed": true,
+      "restored_after_probe": true,
+      "audit_records": 46,
+      "pass": true
+    },
+    "state_machine": {
+      "scenario_class": "state_machine",
+      "legal_transitions_allowed": 5,
+      "legal_transitions_total": 5,
+      "illegal_transitions_refused": 3,
+      "illegal_transitions_total": 3,
+      "soft_delete_retains_body": true,
+      "qwen_reachable_statuses": [
+        "HELD_FOR_REVIEW",
+        "HIDDEN_QWEN_HIGH_CONFIDENCE",
+        "VISIBLE_QWEN_APPROVED",
+        "VISIBLE_SPOILER_COLLAPSED"
+      ],
+      "qwen_cannot_delete_published_comment": true,
+      "pass": true
+    },
+    "revision_race": {
+      "scenario_class": "revision_race",
+      "stale_decision_refused": true,
+      "error": "revision mismatch: job=1 current=2",
+      "status_after": "PUBLISHED_UNREVIEWED",
+      "pass": true
+    },
+    "delete_race": {
+      "scenario_class": "delete_race",
+      "late_decision_refused": true,
+      "error": "refused: comment deleted by author",
+      "jobs_cancelled": 0,
+      "still_deleted": true,
+      "not_republished": true,
+      "pass": true
+    },
+    "concurrency_lease": {
+      "scenario_class": "concurrency_lease",
+      "worker_a_claimed": 1,
+      "worker_b_claimed": 0,
+      "same_job_leased_twice": 0,
+      "lease_owner": "worker-A",
+      "single_owner": true,
+      "pass": true
+    },
+    "crash_resume": {
+      "scenario_class": "crash_resume",
+      "reclaimed": 1,
+      "same_job": true,
+      "attempts": 2,
+      "completed_job_reissued": false,
+      "final_status": "DONE",
+      "no_double_processing_after_done": true,
+      "pass": true
+    },
+    "degraded_mode": {
+      "scenario_class": "degraded_mode",
+      "outage_status": "PENDING_MODERATION_DEGRADED",
+      "healthy_status": "PUBLISHED_UNREVIEWED",
+      "backlog_status": "PENDING_MODERATION_DEGRADED",
+      "stale_status": "PENDING_MODERATION_DEGRADED",
+      "degraded_is_not_public": true,
+      "pass": true
+    },
+    "prompt_injection": {
+      "scenario_class": "prompt_injection",
+      "compromised_provider_cases": [],
+      "compromised_bypasses": 0,
+      "honest_path": [],
+      "system_prompt_never_in_payload": true,
+      "pass": true
+    }
+  },
+  "cleanup": {
+    "rows_before": 5,
+    "CANARY_COMMENT_ROWS_REMAINING": 0,
+    "canary_jobs_remaining": 0,
+    "canary_events_remaining": 0,
+    "pass": true
+  },
+  "production_isolation": {
+    "staging_db": "/home/claude/wt-community-comments-01/var/community_comments/staging_canary.sqlite",
+    "before": [
+      {
+        "path": "/home/claude/wt-community-comments-01/var/community/ratings.sqlite",
+        "exists": false
+      },
+      {
+        "path": "/home/claude/wt-community-comments-01/var/community_comments/production.sqlite",
+        "exists": false
+      },
+      {
+        "path": "/srv/site-factory/repo/var/community/ratings.sqlite",
+        "exists": false
+      }
+    ],
+    "after": [
+      {
+        "path": "/home/claude/wt-community-comments-01/var/community/ratings.sqlite",
+        "exists": false
+      },
+      {
+        "path": "/home/claude/wt-community-comments-01/var/community_comments/production.sqlite",
+        "exists": false
+      },
+      {
+        "path": "/srv/site-factory/repo/var/community/ratings.sqlite",
+        "exists": false
+      }
+    ],
+    "changed_paths": [],
+    "PRODUCTION_COMMENTS_INSERTED": 0,
+    "PRODUCTION_COMMENTS_PUBLISHED": 0,
+    "production_db_opened": false,
+    "pass": true
+  },
+  "pipeline_metrics": {
+    "SCHEMA_VALIDATION_PASS": true,
+    "PROMPT_INJECTION_BYPASS": 0,
+    "PII_REDACTION_PASS": true,
+    "RAW_IP_SENT_TO_QWEN": 0,
+    "RAW_USER_AGENT_SENT_TO_QWEN": 0,
+    "DEVICE_ID_SENT_TO_QWEN": 0,
+    "EMAIL_SENT_TO_QWEN": 0,
+    "PHONE_SENT_TO_QWEN": 0,
+    "DEGRADED_MODE_PASS": true,
+    "KILL_SWITCH_PASS": true,
+    "STATE_MACHINE_PASS": true,
+    "REVISION_RACE_PASS": true,
+    "DELETE_RACE_PASS": true,
+    "CONCURRENCY_LEASE_PASS": true,
+    "CRASH_RESUME_PASS": true,
+    "DUPLICATE_PROVIDER_CALLS": 0,
+    "UNRECONCILED_PROVIDER_CALLS": 0
+  },
+  "model_quality_metrics": {
+    "_note": "Measuring a model requires calling it. With the heuristic provider these stay unmeasured rather than being filled with numbers our own keyword rules produced. A live run scores them against the gold corpus via compute_quality_metrics().",
+    "DECISION_AGREEMENT_RATE": "UNMEASURED_NO_REAL_PROVIDER",
+    "CLEAN_FALSE_BLOCK_RATE": "UNMEASURED_NO_REAL_PROVIDER",
+    "CONSTRUCTIVE_CRITICISM_FALSE_BLOCK": "UNMEASURED_NO_REAL_PROVIDER",
+    "SPOILER_DETECTION_RECALL": "UNMEASURED_NO_REAL_PROVIDER",
+    "SPAM_DETECTION_RECALL": "UNMEASURED_NO_REAL_PROVIDER",
+    "CRITICAL_UNSAFE_FALSE_ALLOW": "UNMEASURED_NO_REAL_PROVIDER"
+  },
+  "heuristic_reference_scores": {
+    "_note": "What the built-in heuristic scores on the same corpus. Recorded only as a harness sanity check — it is not a model evaluation and must never be quoted as canary results.",
+    "DECISION_AGREEMENT_RATE": {
+      "value": 0.95,
+      "hits": 38,
+      "total": 40
+    },
+    "CLEAN_FALSE_BLOCK_RATE": {
+      "value": 0.0,
+      "hits": 0,
+      "total": 8
+    },
+    "CONSTRUCTIVE_CRITICISM_FALSE_BLOCK": 0,
+    "SPOILER_DETECTION_RECALL": {
+      "value": 0.8,
+      "hits": 4,
+      "total": 5
+    },
+    "SPAM_DETECTION_RECALL": {
+      "value": 1.0,
+      "hits": 4,
+      "total": 4
+    },
+    "CRITICAL_UNSAFE_FALSE_ALLOW": 1,
+    "critical_false_allow_cases": [
+      "inject_05"
+    ]
+  },
+  "latency_ms": {
+    "LATENCY_P50_MS": 10.63,
+    "LATENCY_P95_MS": 15.6,
+    "LATENCY_MAX_MS": 20.73,
+    "_note": "Local pipeline latency; excludes real network time.",
+    "mean": 11.6
+  },
+  "PIPELINE_PASS": true
+}

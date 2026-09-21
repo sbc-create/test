@@ -6,6 +6,20 @@
   "B04_injection_prompt": "DONE",
   "B05_pii_redaction": "DONE",
   "B06_gold_corpus": "DONE",
-  "B07_real_canary": "BLOCKED_QWEN_RUNTIME_CONFIG",
-  "public_rollout": "NOT_AUTHORIZED"
+  "B07_defect_repair": "DONE",
+  "B08_credential_scope_and_endpoint_allowlist": "DONE",
+  "B09_staging_canary_harness": "DONE_PIPELINE_PASS",
+  "B10_stage03_tests": "DONE",
+  "B11_delete_safety_invariant": "DONE",
+  "B12_quality_scoring": "DONE",
+  "B13_observability_and_rollback": "DONE",
+  "B14_owner_packet": "DONE",
+  "B15_real_canary": "BLOCKED_QWEN_RUNTIME_CONFIG_OWNER_ACTION_REQUIRED",
+  "public_rollout": "NOT_AUTHORIZED",
+  "notes": [
+    "B07 repaired two defects: apply_decision rejected every normalized V2 decision, and the gold corpus collapsed category into severity via a duplicate dict key.",
+    "B08 added the two gates the real-canary preflight was missing: credential scope and an inventory-bound, purpose-bound endpoint allowlist.",
+    "B09 exercised all 20 required scenario classes against an isolated staging database; every synthetic row was removed afterwards.",
+    "B15 is the only block still open and it is owner-gated: no credential, no endpoint, no model, and no inventory allowlist entry exist."
+  ]
 }

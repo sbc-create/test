@@ -9,6 +9,9 @@
   "checks": {
     "https_endpoint": false,
     "endpoint_host_present": false,
+    "endpoint_allowlisted": false,
+    "endpoint_policy_ok": false,
+    "credential_scope_ok": false,
     "credential_exists": false,
     "credential_permissions_ok": false,
     "model_set": false,
@@ -30,6 +33,32 @@
     "credential_permission_status": "MISSING",
     "mode_octal": null,
     "readable_by_process": false
+  },
+  "endpoint_policy": {
+    "schema_version": "COMMENTS_QWEN_ENDPOINT_POLICY_V1",
+    "endpoint_set": false,
+    "scheme_https": false,
+    "host": "",
+    "port": null,
+    "has_userinfo": false,
+    "has_query": false,
+    "has_fragment": false,
+    "is_ip_literal": false,
+    "is_non_public": false,
+    "allowlisted": false,
+    "allowlist_ref": "",
+    "purpose_bound": false,
+    "post_permitted": false,
+    "errors": [
+      "endpoint_not_set"
+    ],
+    "ok": false
+  },
+  "credential_scope": {
+    "QWEN_COMMENTS_CREDENTIAL_CONFIGURED": "NO",
+    "CREDENTIAL_SCOPE_PASS": false,
+    "REUSABLE_FOREIGN_CREDENTIALS": 0,
+    "verdict": "NO_IN_SCOPE_CREDENTIAL"
   },
   "discover": {
     "configured": false,
@@ -53,5 +82,16 @@
     "DUPLICATE_PROVIDER_CALLS": 0
   },
   "READY_FOR_REAL_CANARY": false,
-  "BLOCKED_REASON": "missing_or_incomplete_qwen_runtime_config"
+  "BLOCKED_REASON": "missing_qwen_comments_credential",
+  "BLOCKING_CHECKS": [
+    "credential_exists",
+    "credential_permissions_ok",
+    "credential_scope_ok",
+    "endpoint_allowlisted",
+    "endpoint_host_present",
+    "endpoint_policy_ok",
+    "https_endpoint",
+    "mode_http_post",
+    "model_set"
+  ]
 }

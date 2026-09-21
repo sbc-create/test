@@ -1,0 +1,23 @@
+=== COMMENTS_RUN_1 ===
+command: python3 -m pytest tests/unit/community/ -k comment -q
+........................................................................ [ 44%]
+........................................................................ [ 88%]
+..................                                                       [100%]
+162 passed, 49 deselected in 205.64s (0:03:25)
+COMMENTS_RUN_1_EXIT=0
+
+=== COMMENTS_RUN_2 ===
+command: python3 -m pytest tests/unit/community/ -k comment -q
+........................................................................ [ 44%]
+........................................................................ [ 88%]
+..................                                                       [100%]
+162 passed, 49 deselected in 138.84s (0:02:18)
+COMMENTS_RUN_2_EXIT=0
+
+=== RATINGS_STAGE06 ===
+command: python3 -m pytest tests/unit/community/test_community_ratings_stage06.py tests/unit/community/test_community_ratings_stage6.py -q
+.......................................                                  [100%]
+39 passed in 40.12s
+RATINGS_STAGE06_EXIT=0
+
+SUMMARY COMMENTS_RUN_1=0 COMMENTS_RUN_2=0 RATINGS_STAGE06=0
