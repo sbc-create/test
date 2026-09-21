@@ -1,0 +1,114 @@
+{
+  "stage": "LORDS-CURSOR-WORK-RECONCILIATION-01",
+  "mode": "RECOVER_VERIFY_FINISH_DO_NOT_RESTART",
+  "measured_at_utc": "2026-09-21T11:15:00Z",
+  "method": "git + файловая система хоста + /proc; ни одно поле не взято из текста предыдущего отчёта",
+
+  "CANONICAL_HEAD": "491836048dae11ae639795c7a3827706129faef6",
+  "CANONICAL_REPO": "/srv/site-factory/repo",
+  "CANONICAL_BRANCH": "claude/players-only-production-009",
+  "CANONICAL_REPO_NOTE": "канонический репозиторий стоит на чужой ветке и грязен (4 изменённых, 20 неотслеживаемых путей релиз-оркестратора). К цепочке блоков Lords это не относится и не трогалось.",
+
+  "CURSOR_HEADS_FOUND": {
+    "cursor/lords-default-episode-01": "4f8ef5a3b5efabeb461437f9fa472df0d859e173",
+    "cursor/lords-integration-canary-01": "a0e6acf",
+    "cursor/lords-cards-media-01": "7a3eda3",
+    "cursor/lords-header-sticky-01": "e50e8e5",
+    "cursor/site-factory-release-orchestrator-01": "4119c67",
+    "cursor/community-comments-01": "0609968",
+    "cursor/ratings-ingestion-01": "ab9dec9"
+  },
+  "ACTIVE_CURSOR_HEAD": "cursor/lords-default-episode-01 @ 4f8ef5a",
+  "ACTIVE_HEAD_RATIONALE": "единственная ветка, чья цепочка блоков заканчивается тремя различимыми шаблонами Lords и чей обрыв совпадает по времени и по digest с артефактом, стоящим на хосте",
+
+  "RELATED_BRANCHES_FOUND": 73,
+  "RELATED_WORKTREES_FOUND": 21,
+  "WORKTREES_TOTAL": 108,
+  "DIRTY_WORKTREES_FOUND": 17,
+  "DIRTY_LORDS_WORKTREES": [
+    {"path": "/home/claude/wt-lords-default-episode-01", "dirty": 8, "verdict": "ACTIVE — спасено коммитами 79632a0 и 1752ac1"},
+    {"path": "/home/claude/wt-lords-integration-canary-01", "dirty": 100, "verdict": "PRESERVED_IN_PLACE — другой этап (live-template-qa), не смешивается"},
+    {"path": "/home/claude/wt-release-03", "dirty": 13, "verdict": "PRESERVED_IN_PLACE — приёмочные снимки этапа lords-release-30"},
+    {"path": "/home/claude/wt-lords-r2", "dirty": 5, "verdict": "PRESERVED_IN_PLACE — этап zona/animedia parity"},
+    {"path": "/home/claude/wt-cursor-header-sticky-01", "dirty": 1, "verdict": "PRESERVED_IN_PLACE — правка hookguard вне цепочки"}
+  ],
+
+  "UNCOMMITTED_SOURCE_FILES": 2,
+  "UNCOMMITTED_TEST_FILES": 5,
+  "UNCOMMITTED_EVIDENCE_FILES": 20,
+  "UNCOMMITTED_TOTAL_BYTES": 3542322,
+  "SECRETS_FOUND_IN_RECOVERED_WORK": 0,
+
+  "CHECKPOINTS_FOUND": [
+    "artifacts/evidence/lords-three-distinct-deep-audit-2026-09-20/RUN_CHECKPOINT.md",
+    "artifacts/evidence/lords-visual-repair-2026-09-20/STATUS.json"
+  ],
+  "ACCEPTANCE_CONTRACTS_FOUND": [
+    {"path": "artifacts/evidence/lords-three-distinct-templates-2026-09-20/ACCEPTANCE_MANIFEST.json", "state": "SUPERSEDED"},
+    {"path": "artifacts/evidence/lords-three-distinct-deep-audit-2026-09-20/FINAL_REPORT.json", "state": "ACTIVE", "verdict": "PASS_AUDIT_COMPLETE_VISUAL_REPAIR_REQUIRED"},
+    {"path": "artifacts/evidence/lords-three-distinct-deep-audit-2026-09-20/NEXT_REPAIR_PROMPT.md", "state": "ACTIVE", "role": "приёмочный контракт незавершённого блока"}
+  ],
+  "OWNER_PACKETS_FOUND": [
+    {"path": "artifacts/evidence/lords-visual-repair-2026-09-20/deploy/lords-02/OWNER_RESTART_LORDS_02.md", "state": "SUPERSEDED_AND_DEFECTIVE", "reason": "называет непроверенный IP и требует рестарта, который уже произошёл сам"}
+  ],
+  "ARTIFACTS_FOUND": {
+    "previous": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc (build 20260920T193847Z-3c90aab-nova)",
+    "current_on_host": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988 (build 20260920T223935Z-4f8ef5a-visual)",
+    "rollback_point": "/srv/lords/.frontend/.rollback/20260920T223958Z-lords-02 (цел: прежний исполняемый файл и прежний манифест)"
+  },
+
+  "LIVE_BUILD_BY_DOMAIN": {
+    "lordfilm47.space": "объявлено 20260920T193847Z-3c90aab-nova, исполняется 20260920T223935Z-4f8ef5a-visual",
+    "lordserial33.biz": "20260920T223935Z-4f8ef5a-visual (объявлено и исполняется)",
+    "1lordserials1.online": "объявлено 20260920T193847Z-3c90aab-nova, исполняется 20260920T223935Z-4f8ef5a-visual"
+  },
+  "LIVE_ARTIFACT_BY_DOMAIN": {
+    "lordfilm47.space": "b32438c9 (манифест заявляет 5dd817fe)",
+    "lordserial33.biz": "b32438c9 (совпадает)",
+    "1lordserials1.online": "b32438c9 (манифест заявляет 5dd817fe)"
+  },
+  "LIVE_DESIGN_BY_DOMAIN": {
+    "lordfilm47.space": "lords-cinema-v2 (профиль lords-general)",
+    "lordserial33.biz": "lords-series-feed-v2 (профиль lords-new)",
+    "1lordserials1.online": "lords-curated-v2 (профиль lords-curated)"
+  },
+  "LIVE_DESIGN_SOURCE": "манифесты витрин и config/site-profiles; HTTP-подтверждение data-design недоступно, см. BLOCKERS B-01",
+  "LIVE_INDEXABILITY_BY_DOMAIN": {
+    "lordfilm47.space": "closed",
+    "lordserial33.biz": "closed",
+    "1lordserials1.online": "closed"
+  },
+  "LIVE_INDEXABILITY_SOURCE": "/srv/lords/.frontend/indexing-policy.json (indexing_expected) и безусловные noindex/X-Robots-Tag в самом рантайме — два независимых источника",
+  "INDEXABILITY_MUTATIONS_THIS_STAGE": 0,
+
+  "SERVICE_BY_DOMAIN": {
+    "lordfilm47.space": "lords-nova-01.service (порт 9110)",
+    "lordserial33.biz": "nova-lords-02.service (порт 9111)",
+    "1lordserials1.online": "nova-lords-03.service (порт 9112)"
+  },
+  "SERVICE_NAME_PROVENANCE": "ExecStart и Description юнитов в /etc/systemd/system, подтверждено реестром automation/host/lords-nova-canary.py. Асимметрия имени lords-01 — факт реестра, а не опечатка; угадывания нет.",
+  "SHARED_EXECUTABLE": "/srv/lords/.frontend/lords-frontend.py — один файл на все три витрины; различаются только переменные окружения юнита и манифест",
+
+  "ACTIVE_HEAVY_JOBS": {
+    "nova-daily-refresh.timer": "OnCalendar 03:30 UTC, Persistent, RandomizedDelaySec=300 — перезапускает витрины после публикации",
+    "nova-catalog-refresh.service": "пересборка каталогов, работает от root и перезапускает витрину после публикации",
+    "observed_effect": "именно эти таймеры подняли все три витрины на новом артефакте без согласованного деплоя"
+  },
+  "LEAKED_PROCESSES": [
+    "PID 2243469/2286035/2296612/2325880 — python3 automation/host/lords-frontend.py на 127.0.0.1:19132-19135, живут с 2026-09-20, остаток оборванного прогона"
+  ],
+  "MEMORY_LIMITS": {
+    "lords-nova-01.service": "не задан (MemoryMax отсутствует), RSS 509 МБ",
+    "nova-lords-02.service": "не задан, RSS 363 МБ",
+    "nova-lords-03.service": "не задан, RSS 362 МБ",
+    "verdict": "предел памяти витрин не ограничен; прошлый OOM не лечился поднятием лимита и лимит не появился"
+  },
+
+  "CURSOR_TRANSCRIPTS_FOUND": {
+    "path": "/home/claude/.cursor/projects/home-claude-wt-lords-default-episode-01/",
+    "terminals": 15,
+    "agent_transcripts": 1,
+    "last_terminal_write_utc": "2026-09-20T22:17:52Z",
+    "note": "запись терминалов обрывается на 22:17Z, а работа шла до 22:40Z — последние действия прогона в транскрипт не попали"
+  }
+}

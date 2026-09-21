@@ -1,0 +1,66 @@
+{
+  "measured_at_utc": "2026-09-21T11:13:37.899271+00:00",
+  "runtime_executable_shared_by_all_sites": true,
+  "runtime_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+  "runtime_mtime_utc": "2026-09-20T22:39:58.226047+00:00",
+  "http_probe": "BLOCKED_ACCESS: хостов Lords нет в allowlist канонического репозитория",
+  "sites": {
+    "lords-01": {
+      "domain": "lordfilm47.space",
+      "unit": "lords-nova-01.service",
+      "port": 9110,
+      "manifest_path": "/srv/lords/.frontend/template-manifest.json",
+      "declared_artifact_sha256": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+      "declared_build_id": "20260920T193847Z-3c90aab-nova",
+      "declared_source_commit": "3c90aab08aee275e2b628d34cf6c719cbc120c21",
+      "declared_profile": "lords-general",
+      "runtime_executable": "/srv/lords/.frontend/lords-frontend.py",
+      "runtime_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "runtime_matches_manifest": false,
+      "process": {
+        "pid": 1679286,
+        "started_utc": "2026-09-21T03:36:36.410000Z"
+      },
+      "indexing_expected": "closed",
+      "indexing_reason": "решения об открытии нет"
+    },
+    "lords-02": {
+      "domain": "lordserial33.biz",
+      "unit": "nova-lords-02.service",
+      "port": 9111,
+      "manifest_path": "/srv/lords/.frontend/template-manifest-lords-02.json",
+      "declared_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "declared_build_id": "20260920T223935Z-4f8ef5a-visual",
+      "declared_source_commit": "4f8ef5a3b5efabeb461437f9fa472df0d859e173",
+      "declared_profile": "lords-new",
+      "runtime_executable": "/srv/lords/.frontend/lords-frontend.py",
+      "runtime_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "runtime_matches_manifest": true,
+      "process": {
+        "pid": 196966,
+        "started_utc": "2026-09-21T11:13:09.160000Z"
+      },
+      "indexing_expected": "closed",
+      "indexing_reason": "решения об открытии нет"
+    },
+    "lords-03": {
+      "domain": "1lordserials1.online",
+      "unit": "nova-lords-03.service",
+      "port": 9112,
+      "manifest_path": "/srv/lords/.frontend/template-manifest-lords-03.json",
+      "declared_artifact_sha256": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+      "declared_build_id": "20260920T193847Z-3c90aab-nova",
+      "declared_source_commit": "3c90aab08aee275e2b628d34cf6c719cbc120c21",
+      "declared_profile": "lords-curated",
+      "runtime_executable": "/srv/lords/.frontend/lords-frontend.py",
+      "runtime_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "runtime_matches_manifest": false,
+      "process": {
+        "pid": 105620,
+        "started_utc": "2026-09-21T11:09:30.120000Z"
+      },
+      "indexing_expected": "closed",
+      "indexing_reason": "решения об открытии нет"
+    }
+  }
+}
