@@ -1,0 +1,148 @@
+# Контракт изоляции контура ANIMEDIA.
+#
+# Машинный, а не описательный: его читает `automation/host/animedia_tenant_guard.py`
+# и отказывает при любом выходе за границы. Режим — fail closed: неизвестная
+# ветка, директория, служба, домен, профиль или template ID означают отказ, а не
+# разрешение по умолчанию.
+#
+# Имена соседних контуров допускаются только в машинном denylist ниже. В отчётах
+# они не перечисляются.
+
+schema_version: 1
+tenant: animedia
+
+repository:
+  # Один и тот же git-репозиторий; worktree у контура свой.
+  git_common_dir_basename: .git
+  toplevel_must_be_allowed_worktree: true
+
+branch:
+  allowed_prefix: "claude/animedia-"
+  # Ветка production-подготовки и ветка работы над паритетом.
+  known:
+    - claude/animedia-original-parity-01
+    - claude/animedia-template-finalization-01
+
+worktrees:
+  allowed:
+    - /home/claude/wt-animedia-original-parity-01
+    - /home/claude/wt-animedia-finalization-01
+  # Запись в чужой worktree запрещена всегда, даже read-only обход не нужен.
+  write_outside_allowed_worktrees: forbidden
+
+source_paths:
+  # Что контуру разрешено менять в репозитории. Пути относительны корня worktree.
+  allowed_write:
+    - "automation/host/animedia-*"
+    - "automation/host/animedia_*"
+    - "factory/animedia/**"
+    - "config/animedia/**"
+    - "config/animedia-*.json"
+    - "config/site-profiles/animedia-*.json"
+    - "sites/animedia*/**"
+    - "tests/unit/test_animedia_*.py"
+    - "tests/fixtures/animedia/**"
+    - "artifacts/evidence/animedia-*/**"
+    - "adr/*animedia*.md"
+    - "docs/animedia/**"
+  # Чтение общего ядра допустимо для аудита; запись — нет.
+  allowed_read_only:
+    - "automation/host/lords-frontend.py"
+    - "config/TEMPLATE-BASELINE-MANIFEST.json"
+    - "inventory/**"
+    - "knowledge/**"
+
+output_paths:
+  allowed:
+    - "artifacts/evidence/animedia-original-parity-01/**"
+    - "artifacts/evidence/animedia-*/**"
+  scratch_root: "/tmp/claude-1001/-srv-site-factory-repo/8ca8197e-7812-42cc-bf2d-ab1145272c2d/scratchpad"
+
+domains:
+  allowed:
+    - animedia.icu
+    - animedia.space
+
+services:
+  allowed:
+    - nova-animedia-01.service
+    - nova-animedia-02.service
+  # Перезапуск — действие владельца под root. Сессия не выполняет его никогда.
+  session_may_run_systemctl: false
+
+profiles:
+  allowed:
+    - animedia-icu
+    - animedia-space
+
+template_ids:
+  allowed:
+    - animedia-nova            # действующая семья шаблона на витринах
+    - animedia-original-parity # изолированный пакет этой стадии
+
+runtime_paths:
+  # Корень рантайма носит имя соседнего контура по историческим причинам и
+  # является общим. Контуру разрешены только собственные файлы внутри него.
+  shared_root: /srv/lords/.frontend
+  allowed_write:
+    - /srv/lords/.frontend/template-manifest-animedia-01.json
+    - /srv/lords/.frontend/template-manifest-animedia-02.json
+    - /srv/lords/.frontend/sites/animedia-01/current
+    - /srv/lords/.frontend/sites/animedia-02/current
+  allowed_write_globs:
+    - /srv/lords/.frontend/releases/*animedia*/**
+  allowed_read_only:
+    - /srv/lords/.frontend/lords-runtime-registry.json
+    - /srv/lords/.frontend/animedia-01-catalog.json
+    - /srv/lords/.frontend/animedia-01-details.json
+    - /srv/lords/.frontend/animedia-02-catalog.json
+    - /srv/lords/.frontend/animedia-02-details.json
+  planned_own_root:
+    path: /srv/animedia/.frontend
+    status: requires_root_and_owner_approval
+    why: "полная физическая изоляция требует смены ExecStart юнитов — действие владельца"
+
+denylist:
+  # Машинный список чужих префиксов. Совпадение = отказ.
+  foreign_tenant_prefixes:
+    - lords
+    - lordfilm
+    - lordserial
+    - zona
+    - zonafilm
+    - yummy
+    - yummyani
+  exceptions_read_only:
+    # Единственные исключения: общий реестр и общее ядро — только чтение.
+    - /srv/lords/.frontend/lords-runtime-registry.json
+    - automation/host/lords-frontend.py
+  forbidden:
+    foreign_paths: true
+    foreign_services: true
+    foreign_manifests: true
+    cross_tenant_imports: true
+    cross_tenant_writes: true
+    self_systemctl: true
+    dns_mutations: true
+    tls_mutations: true
+    indexability_mutations: true
+    mass_deploy: true
+    force_branch_move: true
+    reset_hard: true
+    force_push: true
+    history_rewrite: true
+
+gates:
+  # Производственные команды запрещены до прохождения ворот.
+  production_requires:
+    - owner_visual_acceptance
+    - parity_matrix_p0_open_zero
+    - parity_matrix_p1_open_zero
+    - two_identical_test_runs
+    - rollback_target_verified
+  owner_visual_acceptance:
+    previous: REJECTED
+    rejected_artifact_sha256: "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06"
+    rejected_artifact_reuse: forbidden
+
+mode: fail_closed

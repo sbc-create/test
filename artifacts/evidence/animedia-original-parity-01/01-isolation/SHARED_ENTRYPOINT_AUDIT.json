@@ -1,0 +1,112 @@
+{
+ "task": "ANIMEDIA-SHARED-ENTRYPOINT-AUDIT",
+ "audited_at_utc": "2026-09-21T17:38:45Z",
+ "file": "automation/host/lords-frontend.py",
+ "bytes": 498397,
+ "lines": 8267,
+ "sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+ "q1_why_foreign_named_entrypoint": "Исторически по этому пути лежал единственный рантайм шести витрин трёх семейств, и ExecStart всех шести юнитов называет его. Имя файла — имя витрины, которая появилась первой, а не признак принадлежности кода.",
+ "q2_name_only_or_tenant_code": "НЕ только имя: файл содержит код трёх семейств",
+ "family_surface_in_file": {
+  "animedia": {
+   "top_level_blocks": 1,
+   "lines": 1937,
+   "names": [
+    "ВидАнимедиа"
+   ]
+  },
+  "tenant_a": {
+   "top_level_blocks": 1,
+   "lines": 510,
+   "names": [
+    "ВидЛордс"
+   ]
+  },
+  "tenant_b": {
+   "top_level_blocks": 1,
+   "lines": 757,
+   "names": [
+    "ВидЗона"
+   ]
+  }
+ },
+ "q3_shared_by_several_projects": true,
+ "q3_evidence": "шесть юнитов указывают ExecStart на общий путь; загрузчик разводит их по релизам",
+ "q4_change_in_one_branch_can_change_another": true,
+ "q4_evidence": "до раскладки релизов одна выкладка перезаписывала общий путь и меняла исполняемые байты всех шести витрин; источник по-прежнему один файл, канонический writer которого — чужая линия",
+ "q5_domains_share_mutable_runtime": {
+  "at_runtime": false,
+  "runtime_note": "каждая витрина исполняет неизменяемый каталог релиза по своему назначению; байты соседей физически недостижимы",
+  "at_source": true,
+  "source_note": "общий файл-источник и общий mutable загрузчик по общему пути"
+ },
+ "q6_foreign_profiles_routes_tokens_assets_mixed": {
+  "profiles": "ПРОФИЛИ_СЕМЕЙСТВ содержит записи трёх семейств",
+  "view_inheritance": "ВидАнимедиа наследует вид соседнего семейства",
+  "css_namespace_used_by_animedia": {
+   "aep": 9,
+   "aeps": 9,
+   "afilt": 10,
+   "ahero": 4,
+   "ahome": 7,
+   "ahub": 3,
+   "is": 1,
+   "anew": 2,
+   "asch": 2,
+   "asearch": 5,
+   "ast": 1,
+   "lab": 1,
+   "skip": 1,
+   "val": 1,
+   "vh": 1,
+   "zad": 3,
+   "zcr": 1,
+   "zempty": 1,
+   "zepnav": 1,
+   "zeps": 1,
+   "zft": 6,
+   "zg": 2,
+   "zh": 7,
+   "zhd": 19,
+   "zhub": 10,
+   "zmain": 1,
+   "zpg": 1,
+   "zpl": 3,
+   "zr": 6,
+   "zrl": 7,
+   "zs": 1,
+   "zsea": 2,
+   "zsec": 25,
+   "zseo": 2,
+   "zstrip": 1,
+   "zsub": 3,
+   "zt": 10,
+   "ztitle": 19,
+   "ztop": 2,
+   "zwrap": 7,
+   "acol": 1
+  },
+  "config_paths_in_file": [
+   "animedia-catalog-added.json",
+   "animedia-default-episode-policy.json",
+   "animedia-owner.json",
+   "animedia-provider-playable-events.json",
+   "animedia-recommendations.json",
+   "animedia-top100.json",
+   "animedia-weekly-popular.json"
+  ]
+ },
+ "q7_declared_digest_equals_executed": {
+  "animedia-01": {
+   "manifest_artifact": "7aae3d2cff614275",
+   "executed_code": "7aae3d2cff614275",
+   "match": true
+  },
+  "animedia-02": {
+   "manifest_artifact": "d2e9628f2a4b14c5",
+   "executed_code": "d2e9628f2a4b14c5",
+   "match": true
+  }
+ },
+ "verdict": "ФАЙЛ СОДЕРЖИТ ЧУЖУЮ TENANT-ЛОГИКУ. Нейтральным read-only core он не является: в нём живут виды, профили, токены и стили трёх семейств, а вид Animedia наследует вид соседнего семейства и пользуется его пространством CSS-классов. Значит Animedia отделяется физически: собственный entrypoint, пакет, assets, токены, пространство классов, bundle, артефакт, манифест, назначение и откат. Чужой файл в этой задаче не правится."
+}
