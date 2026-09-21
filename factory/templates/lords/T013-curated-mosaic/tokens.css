@@ -1,0 +1,6 @@
+/* T013 — тёплый уголь с мятой, крупные скругления */
+:root{
+  --ink:#ebeee9; --dim:#98a49b; --bg:#0b0c0a; --card:#151814; --line:#242a23;
+  --brand:#22B573; --brand-text:#BCE8D0; --brand-ink:#07130c; --soft:#0f110e;
+  --radius:18px; --gap:14px; --pad:16px; --title-size:14px; --title-lines:2;
+}

@@ -1,0 +1,6 @@
+/* T015 — тёмно-зелёная доска, средние скругления, крупный шаг */
+:root{
+  --ink:#e7efe8; --dim:#93a897; --bg:#081009; --card:#0f180f; --line:#1d2c1f;
+  --brand:#3F7D26; --brand-text:#9ACD32; --brand-ink:#08120a; --soft:#0b140c;
+  --radius:12px; --gap:16px; --pad:18px; --title-size:14px; --title-lines:2;
+}

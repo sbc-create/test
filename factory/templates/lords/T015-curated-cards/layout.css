@@ -1,0 +1,8 @@
+/* T015 — доска широкая, витрина под ней средней плотности */
+.g--pick{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.g--pick{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1440px){.g--pick{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+.g--news{grid-template-columns:repeat(1,minmax(0,1fr))}
+@media(min-width:900px){.g--news{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1440px){.g--news{grid-template-columns:repeat(3,minmax(0,1fr))}}

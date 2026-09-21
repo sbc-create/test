@@ -1,0 +1,6 @@
+/* T015 — заливка столбцов доски и лаймовый акцент заголовков */
+.board__col{background:var(--card);border-radius:var(--radius)}
+.board__t{color:var(--brand-text);font-size:13px}
+.k--tile{background:var(--soft);border-radius:var(--radius)}
+.sec__t{font-size:16px;letter-spacing:.04em}
+.chip{background:var(--soft)}

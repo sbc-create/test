@@ -1,0 +1,6 @@
+/* T011 — глубокая зелень и кремовая типографика обложки */
+:root{
+  --ink:#eef2e9; --dim:#9cb0a2; --bg:#0a120d; --card:#101a14; --line:#1f2f25;
+  --brand:#128A55; --brand-text:#BCE8D0; --brand-ink:#ffffff; --soft:#0d1610;
+  --radius:0px; --gap:20px; --pad:20px; --title-size:16px; --title-lines:3;
+}

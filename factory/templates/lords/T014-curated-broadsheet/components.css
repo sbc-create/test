@@ -1,0 +1,6 @@
+/* T014 — газетные линейки, прямые углы, без теней */
+.sec__t{font-size:20px;font-weight:700;border-bottom:3px double var(--line);padding-bottom:6px}
+.k{border-radius:0;box-shadow:none}
+.k--ranked{border-bottom:1px solid var(--line);background:transparent}
+.split__lead{border-radius:0}
+.k--poster .k__cap{padding:6px 2px 0}

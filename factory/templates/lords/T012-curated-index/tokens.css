@@ -1,0 +1,6 @@
+/* T012 — почти монохром с зелёным только в состояниях */
+:root{
+  --ink:#e9ece9; --dim:#8b938d; --bg:#0c0e0d; --card:#141715; --line:#242927;
+  --brand:#3F7D26; --brand-text:#9FD8B4; --brand-ink:#ffffff; --soft:#101211;
+  --radius:4px; --gap:8px; --pad:16px; --title-size:14px; --title-lines:2;
+}

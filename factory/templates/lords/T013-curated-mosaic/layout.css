@@ -1,0 +1,12 @@
+/* T013 — первая мозаика на четыре колонки, вторая на шесть; лента строк-карточек вынесена из мелкой мозаики в собственную лестницу */
+.g--m1{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.g--m1{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1440px){.g--m1{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+.g--m2{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.g--m2{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1024px){.g--m2{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(min-width:1600px){.g--m2{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+.g--recent{grid-template-columns:repeat(1,minmax(0,1fr))}
+@media(min-width:900px){.g--recent{grid-template-columns:repeat(2,minmax(0,1fr))}}

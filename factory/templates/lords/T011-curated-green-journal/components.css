@@ -1,0 +1,6 @@
+/* T011 — прямые углы, крупная антиква заголовков, тонкая линия полосы */
+.sec__t{font-size:24px;font-weight:700;letter-spacing:-.02em;border-bottom:2px solid var(--brand);padding-bottom:8px}
+.mosaic .k--lead .k__t{font-size:22px}
+.k--editorial .k__cap{padding:12px 14px 18px}
+.k--poster .k__cap{padding:8px 4px 0}
+.k{border-radius:0}

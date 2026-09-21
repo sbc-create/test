@@ -1,0 +1,6 @@
+/* T014 — газетная бумага: светлый фон, чёрный текст, зелёный только в акценте */
+:root{
+  --ink:#191c18; --dim:#54625b; --bg:#f6f4ee; --card:#ffffff; --line:#d9d5c9;
+  --brand:#215318; --brand-text:#215318; --brand-ink:#ffffff; --soft:#eceadf;
+  --radius:0px; --gap:18px; --pad:18px; --title-size:15px; --title-lines:3;
+}

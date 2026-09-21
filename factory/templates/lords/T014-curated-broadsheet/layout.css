@@ -1,0 +1,8 @@
+/* T014 — список в одну колонку, сетка внизу очень плотная */
+.g--list{grid-template-columns:repeat(1,minmax(0,1fr))}
+@media(min-width:1024px){.g--list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.g--dense{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.g--dense{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1024px){.g--dense{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(min-width:1600px){.g--dense{grid-template-columns:repeat(8,minmax(0,1fr))}}
