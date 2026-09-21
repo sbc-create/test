@@ -1,0 +1,178 @@
+{
+ "task": "ANIMEDIA-RENDER-EQUIVALENCE",
+ "tenant": "animedia",
+ "checked_at_utc": "2026-09-21T17:59:25Z",
+ "previous_runtime": "automation/host/lords-frontend.py",
+ "isolated_runtime": "automation/host/animedia-frontend.py",
+ "previous_sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+ "isolated_sha256": "9b95d302e79bd7bce9a180b1b8a2c57529567167885822af25e55f0562d4ab6b",
+ "routes": [
+  {
+   "path": "/",
+   "http_previous": 200,
+   "http_isolated": 200,
+   "bytes_previous": 76652,
+   "bytes_isolated": 76652,
+   "sha_previous": "dab81657fb314659",
+   "sha_isolated": "dab81657fb314659",
+   "identical": true,
+   "code_match": true
+  },
+  {
+   "path": "/catalog/",
+   "http_previous": 200,
+   "http_isolated": 200,
+   "bytes_previous": 99438,
+   "bytes_isolated": 99438,
+   "sha_previous": "394adf469cd23c97",
+   "sha_isolated": "394adf469cd23c97",
+   "identical": true,
+   "code_match": true
+  },
+  {
+   "path": "/catalog/?page=2",
+   "http_previous": 200,
+   "http_isolated": 200,
+   "bytes_previous": 100365,
+   "bytes_isolated": 100365,
+   "sha_previous": "515aec8f86704aaf",
+   "sha_isolated": "515aec8f86704aaf",
+   "identical": true,
+   "code_match": true
+  },
+  {
+   "path": "/new/",
+   "http_previous": 200,
+   "http_isolated": 200,
+   "bytes_previous": 59627,
+   "bytes_isolated": 59627,
+   "sha_previous": "9aed801a5d384d42",
+   "sha_isolated": "9aed801a5d384d42",
+   "identical": true,
+   "code_match": true
+  },
+  {
+   "path": "/collections/",
+   "http_previous": 200,
+   "http_isolated": 200,
+   "bytes_previous": 71511,
+   "bytes_isolated": 71511,
+   "sha_previous": "5126b05d2ea3c247",
+   "sha_isolated": "5126b05d2ea3c247",
+   "identical": true,
+   "code_match": true
+  },
+  {
+   "path": "/collection/recently_added/",
+   "http_previous": 200,
+   "http_isolated": 200,
+   "bytes_previous": 73363,
+   "bytes_isolated": 73363,
+   "sha_previous": "4931978170ce36f0",
+   "sha_isolated": "4931978170ce36f0",
+   "identical": true,
+   "code_match": true
+  },
+  {
+   "path": "/search/?q=%D0%B0%D0%BD%D0%B8%D0%BC%D0%B5",
+   "http_previous": 200,
+   "http_isolated": 200,
+   "bytes_previous": 70277,
+   "bytes_isolated": 70277,
+   "sha_previous": "f25e08f153214820",
+   "sha_isolated": "f25e08f153214820",
+   "identical": true,
+   "code_match": true
+  },
+  {
+   "path": "/search/?q=%D1%8A%D1%8B%D1%8C%D1%89",
+   "http_previous": 200,
+   "http_isolated": 200,
+   "bytes_previous": 60172,
+   "bytes_isolated": 60172,
+   "sha_previous": "fca88b1e1167a047",
+   "sha_isolated": "fca88b1e1167a047",
+   "identical": true,
+   "code_match": true
+  },
+  {
+   "path": "/schedule/",
+   "http_previous": 200,
+   "http_isolated": 200,
+   "bytes_previous": 59666,
+   "bytes_isolated": 59666,
+   "sha_previous": "f68992b4b9906d93",
+   "sha_isolated": "f68992b4b9906d93",
+   "identical": true,
+   "code_match": true
+  },
+  {
+   "path": "/title/nelyud-film-2-stolknovenie/",
+   "http_previous": 200,
+   "http_isolated": 200,
+   "bytes_previous": 80334,
+   "bytes_isolated": 80334,
+   "sha_previous": "882916569726c81b",
+   "sha_isolated": "882916569726c81b",
+   "identical": true,
+   "code_match": true
+  },
+  {
+   "path": "/title/master-lda-i-plameni-2/season-2/episode-104/",
+   "http_previous": 200,
+   "http_isolated": 200,
+   "bytes_previous": 83746,
+   "bytes_isolated": 83746,
+   "sha_previous": "ca41c5d104f13ab3",
+   "sha_isolated": "ca41c5d104f13ab3",
+   "identical": true,
+   "code_match": true
+  },
+  {
+   "path": "/genre/action/",
+   "http_previous": 404,
+   "http_isolated": 404,
+   "bytes_previous": 58644,
+   "bytes_isolated": 58644,
+   "sha_previous": "cf17a0a230e98de9",
+   "sha_isolated": "cf17a0a230e98de9",
+   "identical": true,
+   "code_match": true
+  },
+  {
+   "path": "/year/2024/",
+   "http_previous": 200,
+   "http_isolated": 200,
+   "bytes_previous": 101536,
+   "bytes_isolated": 101536,
+   "sha_previous": "fc6fe16b6850ccbf",
+   "sha_isolated": "fc6fe16b6850ccbf",
+   "identical": true,
+   "code_match": true
+  },
+  {
+   "path": "/definitely-absent-route-xyz/",
+   "http_previous": 404,
+   "http_isolated": 404,
+   "bytes_previous": 58659,
+   "bytes_isolated": 58659,
+   "sha_previous": "e7c920c6993579ab",
+   "sha_isolated": "e7c920c6993579ab",
+   "identical": true,
+   "code_match": true
+  },
+  {
+   "path": "/__template_version",
+   "http_previous": 200,
+   "http_isolated": 200,
+   "bytes_previous": 918,
+   "bytes_isolated": 918,
+   "sha_previous": "2000052e9478129e",
+   "sha_isolated": "2000052e9478129e",
+   "identical": true,
+   "code_match": true
+  }
+ ],
+ "all_identical": true,
+ "all_codes_match": true
+}
