@@ -20,6 +20,7 @@ from __future__ import annotations
 import hashlib
 import json
 import subprocess
+import sys
 import tarfile
 import tempfile
 import time
