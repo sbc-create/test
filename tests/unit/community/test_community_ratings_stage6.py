@@ -236,12 +236,19 @@ class LedgerServiceTests(unittest.TestCase):
         self.assertEqual(int(agg["vote_sum"]), 8)
 
     def test_concurrent_linearizable(self) -> None:
-        barrier = threading.Barrier(20)
+        # Start gate rather than threading.Barrier(20): with 100 tasks on 20
+        # workers the barrier ran in five waves, and one slow wave on a loaded
+        # machine broke it permanently — every later wave then raised
+        # BrokenBarrierError and the test failed for a reason that has nothing
+        # to do with ledger linearizability. The gate releases all workers at
+        # once and keeps the same contention, with the assertions unchanged.
+        start = threading.Event()
         errors: list[BaseException] = []
 
         def worker(i: int) -> None:
             try:
-                barrier.wait(timeout=5)
+                if not start.wait(timeout=30):
+                    raise TimeoutError("start gate never opened")
                 self.svc.put_vote(
                     idempotency_key=f"conc-{i}",
                     rating_space_id="animedia",
@@ -253,7 +260,9 @@ class LedgerServiceTests(unittest.TestCase):
                 errors.append(exc)
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=20) as pool:
-            list(pool.map(worker, range(100)))
+            futures = [pool.submit(worker, i) for i in range(100)]
+            start.set()
+            concurrent.futures.wait(futures, timeout=60)
         self.assertEqual(errors, [])
         agg = self.store.get_aggregate(rating_space_id="animedia", subject_id="tconc")
         self.assertEqual(int(agg["vote_count"]), 5)
