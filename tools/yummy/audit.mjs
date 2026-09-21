@@ -49,6 +49,12 @@ const SHOTS = !has('--no-screenshots');
 // для свидетельства: каталог на 24 постера даёт 6 МБ на кадр, и такой
 // снимок в репозиторий не кладут.
 const FULL_PAGE = !has('--viewport-shots');
+// Формат кадра. PNG точен и огромен: первый экран каталога с постерами
+// занимает мегабайты, а матрица «маршрут × ширина» — это десятки кадров.
+// Для свидетельства достаточно JPEG: он показывает композицию, отступы и
+// цвет, а пиксельное сравнение по нему всё равно не ведётся.
+const SHOT_EXT = arg('--shot-format', 'png');
+const SHOT_QUALITY = Number(arg('--shot-quality', '85'));
 const EXECUTABLE = process.env.FACTORY_CHROMIUM || null;
 const LABEL = arg('--label', 'run');
 
@@ -274,8 +280,10 @@ async function main() {
         измерения = await page.evaluate(ИЗМЕРИТЬ);
         if (SHOTS) {
           await page.screenshot({
-            path: path.join(OUT, 'shots', `${маршрут.name}-${width}.png`),
+            path: path.join(OUT, 'shots', `${маршрут.name}-${width}.${SHOT_EXT}`),
             fullPage: FULL_PAGE,
+            ...(SHOT_EXT === 'jpeg' || SHOT_EXT === 'jpg'
+              ? { quality: SHOT_QUALITY } : {}),
           });
         }
       } catch (e) {
