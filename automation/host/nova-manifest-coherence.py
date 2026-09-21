@@ -1,33 +1,33 @@
 #!/usr/bin/env python3
-"""Сторож когерентности: объявленная версия витрины против исполняемых байтов.
+"""Сторож когерентности: объявленное витриной против фактически исполняемого.
 
-Все витрины Lords исполняют ОДИН файл — `/srv/lords/.frontend/lords-frontend.py`.
-Различаются они только переменными окружения юнита и своим манифестом
-`template-manifest-<site>.json`. Из этого следует свойство, которое легко
-упустить: установка нового артефакта ради одной витрины немедленно меняет байты
-для всех трёх. Пока соседние витрины не перезапущены, они продолжают исполнять
-прежний код и расхождения не видно. После первого же перезапуска — суточным
-refresh'ем, перезагрузкой, чем угодно — сосед начинает исполнять новый код,
-продолжая объявлять в `/__template_version` прежние build_id и source_commit.
+## Что сверяется
 
-Ответ становится внутренне противоречивым: `runtime_sha256` считается по
-фактическому файлу, а `build_id` и `source_commit` берутся из манифеста. Это
-ровно тот дефект, который запрещён правилом «live-заголовки не должны заявлять
-сборку, не совпадающую с байтами и рантаймом».
+Для каждой витрины из exact-domain реестра берутся три независимые величины:
 
-Сторож измеряет три независимые величины и сравнивает их:
+* `artifact_sha256` из манифеста витрины — что она ОБЪЯВЛЯЕТ;
+* путь исполняемого файла из `/proc/<pid>/cmdline` — что она ЗАПУСТИЛА;
+* sha256 этого файла — что она ИСПОЛНЯЕТ.
 
-* sha256 исполняемого файла на диске;
-* artifact_sha256, объявленный манифестом каждой витрины;
-* время старта процесса витрины против времени подмены файла.
+Путь берётся из cmdline, а не из ExecStart юнита, и это принципиально: после
+`execv` в загрузчике cmdline показывает настоящий путь релиза, тогда как
+ExecStart остаётся общим для всех витрин. Сверять ExecStart значило бы сверять
+намерение вместо результата.
 
-Последнее и отличает «ещё не подхватил» от «уже лжёт»: процесс, поднятый
-раньше подмены, честно исполняет старое; поднятый позже — исполняет новое.
+## Откуда берётся список витрин
 
-Скрипт только читает. Он ничего не переписывает и не перезапускает: выбор между
-переоформлением манифестов и откатом принадлежит владельцу.
+Из `nova-runtime-registry.py`, который собирает его из `config/site-profiles`
+и юнитов systemd. Жёсткого списка доменов внутри этого файла нет и быть не
+должно: прежняя редакция держала три витрины прямо в коде, и любое изменение
+парка делало сторож тихо неполным — он возвращал «всё хорошо» про витрины, о
+которых не знал.
 
-Коды возврата: 0 — когерентно, 2 — расхождение, 3 — измерить нельзя.
+## Коды возврата
+
+0 — когерентно; 2 — расхождение; 3 — измерить нельзя.
+
+Сторож только читает. Выбор между переоформлением манифеста, перепривязкой и
+откатом принадлежит владельцу.
 """
 
 from __future__ import annotations
@@ -35,39 +35,41 @@ from __future__ import annotations
 import argparse
 import datetime as _dt
 import hashlib
+import importlib.util
 import json
 import os
 import pathlib
 import sys
 
 FRONT = pathlib.Path("/srv/lords/.frontend")
-RUNTIME = FRONT / "lords-frontend.py"
-
-#: Порт → (витрина, домен, юнит). Источник — ExecStart юнитов systemd.
-SITES: dict[str, tuple[str, str, str]] = {
-    "9110": ("lords-01", "lordfilm47.space", "lords-nova-01.service"),
-    "9111": ("lords-02", "lordserial33.biz", "nova-lords-02.service"),
-    "9112": ("lords-03", "1lordserials1.online", "nova-lords-03.service"),
-}
+RUNTIME_NAME = "lords-frontend.py"
 
 COHERENT = 0
 DIVERGED = 2
 UNMEASURABLE = 3
 
 
+def _загрузить_реестр_модуль():
+    путь = pathlib.Path(__file__).resolve().parent / "nova-runtime-registry.py"
+    spec = importlib.util.spec_from_file_location("nova_runtime_registry", путь)
+    модуль = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(модуль)
+    return модуль
+
+
 def digest(path: pathlib.Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    try:
+        return hashlib.sha256(path.read_bytes()).hexdigest()
+    except OSError:
+        return ""
 
 
-def manifest_path(site: str, front: pathlib.Path) -> pathlib.Path:
-    """Манифест витрины; lords-01 исторически обслуживается манифестом по умолчанию."""
-    specific = front / f"template-manifest-{site}.json"
-    return specific if specific.is_file() else front / "template-manifest.json"
+def процессы_по_портам(порты: set[int]) -> dict[int, dict]:
+    """Порт → живой процесс: PID, исполняемый путь и время старта.
 
-
-def process_starts(front: pathlib.Path) -> dict[str, float]:
-    """Порт → epoch старта процесса, который исполняет общий файл рантайма."""
-    runtime = str(front / "lords-frontend.py")
+    Исполняемый путь — второй аргумент командной строки (после интерпретатора).
+    Именно он меняется при `execv`, и именно он доказывает, какой релиз поднят.
+    """
     hz = os.sysconf("SC_CLK_TCK")
     btime = 0.0
     for line in pathlib.Path("/proc/stat").read_text().splitlines():
@@ -75,111 +77,154 @@ def process_starts(front: pathlib.Path) -> dict[str, float]:
             btime = float(line.split()[1])
             break
 
-    starts: dict[str, float] = {}
-    for entry in pathlib.Path("/proc").iterdir():
-        if not entry.name.isdigit():
+    найдено: dict[int, dict] = {}
+    for запись in pathlib.Path("/proc").iterdir():
+        if not запись.name.isdigit():
             continue
         try:
-            cmd = (entry / "cmdline").read_bytes().decode("utf-8", "replace").replace("\0", " ")
+            сырое = (запись / "cmdline").read_bytes().decode("utf-8", "replace")
         except OSError:
             continue
-        if runtime not in cmd:
+        части = [ч for ч in сырое.split("\0") if ч]
+        if not части or RUNTIME_NAME not in сырое:
             continue
-        for port in SITES:
-            if f"--port {port}" in cmd:
-                try:
-                    fields = (entry / "stat").read_text().rsplit(")", 1)[1].split()
-                    starts[port] = btime + int(fields[19]) / hz
-                except (OSError, IndexError, ValueError):
-                    continue
-    return starts
-
-
-def check(front: pathlib.Path = FRONT, starts: dict[str, float] | None = None) -> tuple[int, dict]:
-    """Сверяет объявленное с исполняемым.
-
-    `starts` принимается извне, чтобы проверку можно было прогнать на фикстуре:
-    на живом хосте времена старта берутся из /proc, в тесте — задаются.
-    """
-    runtime = front / "lords-frontend.py"
-    if not runtime.is_file():
-        return UNMEASURABLE, {"error": f"нет исполняемого файла {runtime}"}
-
-    runtime_sha = digest(runtime)
-    runtime_mtime = runtime.stat().st_mtime
-    starts = process_starts(front) if starts is None else starts
-
-    sites = {}
-    diverged = []
-    for port, (site, domain, unit) in SITES.items():
-        mpath = manifest_path(site, front)
+        порт = None
+        for i, ч in enumerate(части):
+            if ч == "--port" and i + 1 < len(части) and части[i + 1].isdigit():
+                порт = int(части[i + 1])
+        if порт is None or порт not in порты:
+            continue
+        скрипт = next((ч for ч in части[1:] if ч.endswith(".py")), "")
         try:
-            manifest = json.loads(mpath.read_text())
+            поля = (запись / "stat").read_text().rsplit(")", 1)[1].split()
+            начало = btime + int(поля[19]) / hz
+            начало_iso = (
+                _dt.datetime.fromtimestamp(начало, _dt.timezone.utc)
+                .isoformat()
+                .replace("+00:00", "Z")
+            )
+            rss_mb = int(поля[21]) * os.sysconf("SC_PAGE_SIZE") // (1024 * 1024)
+        except (OSError, IndexError, ValueError):
+            начало_iso, rss_mb = "NOT_MEASURABLE", None
+        найдено[порт] = {
+            "pid": int(запись.name),
+            "exec_script": скрипт,
+            "started_utc": начало_iso,
+            "rss_mb": rss_mb,
+        }
+    return найдено
+
+
+def check(front: pathlib.Path = FRONT, registry: dict | None = None,
+          процессы: dict[int, dict] | None = None) -> tuple[int, dict]:
+    """Сверка. `registry` и `процессы` принимаются извне ради проверок на фикстуре."""
+    if registry is None:
+        registry = _загрузить_реестр_модуль().build(front=front)
+
+    витрины = {
+        s: v for s, v in (registry.get("sites") or {}).items()
+        if v.get("scope") == "exact-domain-registry"
+    }
+    if not витрины:
+        return UNMEASURABLE, {"error": "в реестре нет ни одной витрины с точным доменом"}
+
+    порты = {int(v["port"]) for v in витрины.values()}
+    if процессы is None:
+        процессы = процессы_по_портам(порты)
+
+    общий = front / RUNTIME_NAME
+    сведения = {}
+    расхождения = []
+    общие_пути = []
+
+    for site_id, запись in sorted(витрины.items()):
+        порт = int(запись["port"])
+        манифест_путь = pathlib.Path(запись["manifest_path"])
+        try:
+            манифест = json.loads(манифест_путь.read_text())
         except (OSError, ValueError):
-            manifest = {}
-        declared = manifest.get("artifact_sha256", "")
-        started = starts.get(port)
+            манифест = {}
+        объявлено = манифест.get("artifact_sha256", "")
 
-        if not declared:
-            verdict = "UNMEASURABLE_NO_MANIFEST"
-        elif declared == runtime_sha:
-            verdict = "COHERENT"
-        elif started is None:
-            verdict = "STALE_MANIFEST_PROCESS_DOWN"
-        elif started < runtime_mtime:
-            # Процесс старше подмены: он честно исполняет то, что объявляет.
-            verdict = "PENDING_RESTART"
+        ссылка = pathlib.Path(запись["release_link"])
+        привязка = ссылка.resolve(strict=False) if ссылка.is_symlink() else None
+        привязан_sha = digest(привязка / RUNTIME_NAME) if привязка else ""
+
+        процесс = процессы.get(порт)
+        исполняемый = pathlib.Path(процесс["exec_script"]) if процесс and процесс["exec_script"] else None
+        исполняемый_sha = digest(исполняемый) if исполняемый else ""
+
+        общий_путь = bool(исполняемый and исполняемый.resolve(strict=False) == общий.resolve(strict=False))
+        if общий_путь:
+            общие_пути.append(site_id)
+
+        if not процесс:
+            вердикт = "NOT_RUNNING"
+        elif not объявлено:
+            вердикт = "UNMEASURABLE_NO_MANIFEST"
+        elif not исполняемый_sha:
+            вердикт = "UNMEASURABLE_NO_EXEC_PATH"
+        elif объявлено == исполняемый_sha:
+            вердикт = "COHERENT"
         else:
-            verdict = "DIVERGED_RUNTIME_AHEAD_OF_MANIFEST"
-            diverged.append(site)
+            вердикт = "DIVERGED_RUNTIME_DIFFERS_FROM_MANIFEST"
+            расхождения.append(site_id)
 
-        sites[site] = {
-            "domain": domain,
-            "unit": unit,
-            "port": int(port),
-            "manifest_path": str(mpath),
-            "declared_artifact_sha256": declared,
-            "declared_build_id": manifest.get("build_id", ""),
-            "runtime_artifact_sha256": runtime_sha,
-            "process_started_utc": _dt.datetime.fromtimestamp(started, _dt.timezone.utc).isoformat()
-            if started
-            else "NOT_RUNNING",
-            "verdict": verdict,
+        сведения[site_id] = {
+            "exact_domain": запись.get("exact_domain"),
+            "canonical_host": запись.get("canonical_host"),
+            "unit": запись.get("unit"),
+            "port": порт,
+            "manifest_path": str(манифест_путь),
+            "declared_artifact_sha256": объявлено,
+            "declared_build_id": манифест.get("build_id", ""),
+            "declared_source_commit": манифест.get("source_commit", ""),
+            "declared_source_dirty": манифест.get("source_dirty", "ABSENT"),
+            "declared_profile": манифест.get("profile", ""),
+            "bound_release": str(привязка) if привязка else "",
+            "bound_artifact_sha256": привязан_sha,
+            "running_exec_path": str(исполняемый) if исполняемый else "",
+            "running_artifact_sha256": исполняемый_sha,
+            "runs_shared_mutable_path": общий_путь,
+            "indexing_enabled": запись.get("indexing_enabled"),
+            "process": процесс or {"pid": None, "started_utc": "NOT_RUNNING"},
+            "verdict": вердикт,
         }
 
-    report = {
+    отчёт = {
         "checked_at_utc": _dt.datetime.now(_dt.timezone.utc).isoformat(),
-        "runtime_executable": str(runtime),
-        "runtime_artifact_sha256": runtime_sha,
-        "runtime_mtime_utc": _dt.datetime.fromtimestamp(
-            runtime_mtime, _dt.timezone.utc
-        ).isoformat(),
-        "sites": sites,
-        "diverged_sites": diverged,
-        "verdict": "DIVERGED" if diverged else "COHERENT",
+        "registry_scope": sorted(витрины),
+        "out_of_registry": registry.get("out_of_registry", []),
+        "shared_mutable_path": str(общий),
+        "shared_path_is_loader": общий.is_file() and b"LORDS_RUNTIME_DISPATCHED" in общий.read_bytes()
+        if общий.is_file()
+        else False,
+        "sites_running_shared_mutable_path": общие_пути,
+        "sites": сведения,
+        "diverged_sites": расхождения,
+        "verdict": "DIVERGED" if расхождения else "COHERENT",
     }
-    return (DIVERGED if diverged else COHERENT), report
+    return (DIVERGED if расхождения else COHERENT), отчёт
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--front", default=str(FRONT), help="каталог рантайма витрин")
+    parser.add_argument("--front", default=str(FRONT))
     parser.add_argument("--record", help="куда записать отчёт JSON")
     args = parser.parse_args()
 
-    code, report = check(pathlib.Path(args.front))
-    text = json.dumps(report, ensure_ascii=False, indent=2)
+    код, отчёт = check(pathlib.Path(args.front))
+    текст = json.dumps(отчёт, ensure_ascii=False, indent=2)
     if args.record:
-        pathlib.Path(args.record).write_text(text, encoding="utf-8")
-    print(text)
-    if code == DIVERGED:
+        pathlib.Path(args.record).write_text(текст, encoding="utf-8")
+    print(текст)
+    if код == DIVERGED:
         print(
-            "РАСХОЖДЕНИЕ: витрины "
-            + ", ".join(report["diverged_sites"])
+            "РАСХОЖДЕНИЕ: " + ", ".join(отчёт["diverged_sites"])
             + " исполняют артефакт, которого не объявляют.",
             file=sys.stderr,
         )
-    return code
+    return код
 
 
 if __name__ == "__main__":

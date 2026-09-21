@@ -1,127 +1,249 @@
-"""Сторож когерентности манифестов витрин Lords.
+"""Сторож когерентности витрин: объявленное против фактически исполняемого.
 
-Дефект, который закрывает этот набор, наблюдался вживую 2026-09-21: артефакт
-визуального ремонта установили ради lords-02, а исполняемый файл у всех трёх
-витрин общий. Манифест переписали только у lords-02. Дальше суточный refresh
-перезапустил соседей, и lords-01 с lords-03 начали исполнять новый код,
-продолжая объявлять прежнюю сборку.
+Дефект, который закрывает набор, наблюдался вживую 2026-09-21: артефакт
+установили ради lords-02, исполняемый файл у шести витрин был общий, манифест
+переписали одной витрине, а суточный refresh перезапустил соседей — и они стали
+исполнять чужой код, продолжая объявлять прежнюю сборку.
 
-Проверки идут на фикстуре, а не на живом хосте: набор обязан краснеть в CI, где
-никакого `/srv/lords` нет.
+Проверки идут на фикстуре: набор обязан краснеть в CI, где нет ни `/srv/lords`,
+ни systemd.
 """
 
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 import pathlib
 
 import pytest
 
-MODULE_PATH = (
-    pathlib.Path(__file__).resolve().parents[2] / "automation" / "host" / "nova-manifest-coherence.py"
-)
+HOST = pathlib.Path(__file__).resolve().parents[2] / "automation" / "host"
 
 
-def _load():
-    spec = importlib.util.spec_from_file_location("nova_manifest_coherence", MODULE_PATH)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
+def _load(имя: str, файл: str):
+    spec = importlib.util.spec_from_file_location(имя, HOST / файл)
+    модуль = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(модуль)
+    return модуль
 
 
-coherence = _load()
+coherence = _load("nova_manifest_coherence", "nova-manifest-coherence.py")
+registry_mod = _load("nova_runtime_registry", "nova-runtime-registry.py")
 
-
-def _front(tmp_path: pathlib.Path, runtime_body: bytes, manifests: dict[str, str]) -> pathlib.Path:
-    """Каталог рантайма с общим исполняемым файлом и манифестами витрин."""
-    front = tmp_path / "frontend"
-    front.mkdir()
-    (front / "lords-frontend.py").write_bytes(runtime_body)
-    for site, artifact_sha in manifests.items():
-        name = "template-manifest.json" if site == "lords-01" else f"template-manifest-{site}.json"
-        (front / name).write_text(
-            json.dumps(
-                {
-                    "schema_version": 1,
-                    "artifact_sha256": artifact_sha,
-                    "build_id": f"build-for-{artifact_sha[:8]}",
-                    "profile": site,
-                },
-                ensure_ascii=False,
-            ),
-            encoding="utf-8",
-        )
-    return front
+NEW = b"# new release\n"
+OLD = b"# old release\n"
 
 
 def _sha(body: bytes) -> str:
-    import hashlib
-
     return hashlib.sha256(body).hexdigest()
 
 
-NEW = b"# new artifact\n"
-OLD_SHA = "0" * 64
+def _front(tmp_path: pathlib.Path) -> pathlib.Path:
+    front = tmp_path / "frontend"
+    front.mkdir()
+    (front / RUNTIME).write_bytes(b"# shared legacy runtime\n")
+    return front
 
 
-def test_all_manifests_match_runtime_is_coherent(tmp_path):
-    front = _front(tmp_path, NEW, {s: _sha(NEW) for s in ("lords-01", "lords-02", "lords-03")})
-    mtime = (front / "lords-frontend.py").stat().st_mtime
-    code, report = coherence.check(front, starts={"9110": mtime + 5, "9111": mtime + 5, "9112": mtime + 5})
-    assert code == coherence.COHERENT
-    assert report["diverged_sites"] == []
+RUNTIME = "lords-frontend.py"
 
 
-def test_process_older_than_swap_is_pending_not_diverged(tmp_path):
-    """Сосед, поднятый до подмены, исполняет то, что объявляет — это не ложь."""
-    front = _front(
-        tmp_path, NEW, {"lords-01": OLD_SHA, "lords-02": _sha(NEW), "lords-03": OLD_SHA}
+def _release(front: pathlib.Path, build_id: str, body: bytes) -> pathlib.Path:
+    каталог = front / "releases" / build_id
+    каталог.mkdir(parents=True)
+    (каталог / RUNTIME).write_bytes(body)
+    return каталог
+
+
+def _bind(front: pathlib.Path, site: str, каталог: pathlib.Path) -> None:
+    ссылка = front / "sites" / site / "current"
+    ссылка.parent.mkdir(parents=True, exist_ok=True)
+    ссылка.symlink_to(каталог)
+
+
+def _manifest(front: pathlib.Path, site: str, artifact: str, **extra) -> pathlib.Path:
+    путь = front / f"template-manifest-{site}.json"
+    путь.write_text(
+        json.dumps({"artifact_sha256": artifact, "build_id": f"b-{artifact[:8]}", **extra}),
+        encoding="utf-8",
     )
-    mtime = (front / "lords-frontend.py").stat().st_mtime
-    code, report = coherence.check(
-        front, starts={"9110": mtime - 60, "9111": mtime + 5, "9112": mtime - 60}
+    return путь
+
+
+def _registry(front: pathlib.Path, sites: dict[str, int]) -> dict:
+    записи = {}
+    for site, порт in sites.items():
+        записи[site] = {
+            "site_id": site,
+            "port": порт,
+            "unit": f"{site}.service",
+            "exact_domain": f"{site}.example",
+            "canonical_host": f"{site}.example",
+            "indexing_enabled": False,
+            "scope": "exact-domain-registry",
+            "manifest_path": str(front / f"template-manifest-{site}.json"),
+            "release_link": str(front / "sites" / site / "current"),
+        }
+    return {"sites": записи, "out_of_registry": [], "shared_runtime_path": str(front / RUNTIME)}
+
+
+def test_each_site_running_its_own_release_is_coherent(tmp_path):
+    front = _front(tmp_path)
+    рел = _release(front, "b-new", NEW)
+    процессы = {}
+    for i, site in enumerate(("lords-01", "lords-02", "lords-03"), start=9110):
+        _bind(front, site, рел)
+        _manifest(front, site, _sha(NEW))
+        процессы[i] = {"pid": 100 + i, "exec_script": str(рел / RUNTIME), "started_utc": "t"}
+    код, отчёт = coherence.check(
+        front, _registry(front, {"lords-01": 9110, "lords-02": 9111, "lords-03": 9112}), процессы
     )
-    assert code == coherence.COHERENT
-    assert report["sites"]["lords-01"]["verdict"] == "PENDING_RESTART"
-    assert report["sites"]["lords-03"]["verdict"] == "PENDING_RESTART"
+    assert код == coherence.COHERENT
+    assert отчёт["diverged_sites"] == []
+    assert отчёт["sites_running_shared_mutable_path"] == []
 
 
-def test_neighbour_restarted_after_swap_is_diverged(tmp_path):
-    """Наблюдавшийся дефект: сосед перезапущен после подмены и объявляет старое."""
-    front = _front(
-        tmp_path, NEW, {"lords-01": OLD_SHA, "lords-02": _sha(NEW), "lords-03": OLD_SHA}
+def test_neighbour_running_foreign_bytes_is_diverged(tmp_path):
+    """Наблюдавшийся дефект: сосед исполняет новое, объявляя старое."""
+    front = _front(tmp_path)
+    новый = _release(front, "b-new", NEW)
+    процессы = {
+        9110: {"pid": 1, "exec_script": str(новый / RUNTIME), "started_utc": "t"},
+        9111: {"pid": 2, "exec_script": str(новый / RUNTIME), "started_utc": "t"},
+    }
+    _manifest(front, "lords-01", _sha(OLD))
+    _manifest(front, "lords-02", _sha(NEW))
+    код, отчёт = coherence.check(front, _registry(front, {"lords-01": 9110, "lords-02": 9111}), процессы)
+    assert код == coherence.DIVERGED
+    assert отчёт["diverged_sites"] == ["lords-01"]
+    assert отчёт["sites"]["lords-02"]["verdict"] == "COHERENT"
+
+
+def test_running_shared_mutable_path_is_reported(tmp_path):
+    """Исполнение общего изменяемого пути называется прямо, даже когда sha сходится."""
+    front = _front(tmp_path)
+    общий = front / RUNTIME
+    _manifest(front, "lords-01", _sha(общий.read_bytes()))
+    процессы = {9110: {"pid": 1, "exec_script": str(общий), "started_utc": "t"}}
+    код, отчёт = coherence.check(front, _registry(front, {"lords-01": 9110}), процессы)
+    assert код == coherence.COHERENT
+    assert отчёт["sites_running_shared_mutable_path"] == ["lords-01"]
+    assert отчёт["sites"]["lords-01"]["runs_shared_mutable_path"] is True
+
+
+def test_stopped_site_is_not_reported_as_pass(tmp_path):
+    front = _front(tmp_path)
+    _manifest(front, "lords-01", _sha(NEW))
+    код, отчёт = coherence.check(front, _registry(front, {"lords-01": 9110}), {})
+    assert отчёт["sites"]["lords-01"]["verdict"] == "NOT_RUNNING"
+    assert код == coherence.COHERENT
+
+
+def test_empty_registry_is_unmeasurable_not_pass(tmp_path):
+    front = _front(tmp_path)
+    код, отчёт = coherence.check(front, {"sites": {}}, {})
+    assert код == coherence.UNMEASURABLE
+    assert "error" in отчёт
+
+
+def test_declared_source_dirty_is_surfaced(tmp_path):
+    """Ложное source_dirty обязано быть видно в отчёте, а не молчать."""
+    front = _front(tmp_path)
+    рел = _release(front, "b-new", NEW)
+    _bind(front, "lords-01", рел)
+    _manifest(front, "lords-01", _sha(NEW), source_dirty=True, source_commit="deadbeef")
+    процессы = {9110: {"pid": 1, "exec_script": str(рел / RUNTIME), "started_utc": "t"}}
+    _, отчёт = coherence.check(front, _registry(front, {"lords-01": 9110}), процессы)
+    assert отчёт["sites"]["lords-01"]["declared_source_dirty"] is True
+    assert отчёт["sites"]["lords-01"]["bound_artifact_sha256"] == _sha(NEW)
+
+
+# --- реестр -----------------------------------------------------------------
+
+
+def _unit(dir_: pathlib.Path, имя: str, описание: str, порт: int) -> None:
+    (dir_ / имя).write_text(
+        "[Unit]\n"
+        f"Description={описание}\n"
+        "[Service]\n"
+        f"Environment=LORDS_TEMPLATE_MANIFEST=/srv/lords/.frontend/template-manifest-x.json\n"
+        f"ExecStart=/usr/bin/python3 /srv/lords/.frontend/{RUNTIME} --port {порт}\n",
+        encoding="utf-8",
     )
-    mtime = (front / "lords-frontend.py").stat().st_mtime
-    code, report = coherence.check(
-        front, starts={"9110": mtime + 60, "9111": mtime + 5, "9112": mtime + 60}
+
+
+def test_registry_reads_units_and_does_not_guess_names(tmp_path):
+    """Асимметричное имя юнита берётся как есть, а не приводится к шаблону."""
+    units = tmp_path / "units"
+    units.mkdir()
+    _unit(units, "lords-nova-01.service", "Lords nova frontend: lords-01 (lordfilm47.space)", 9110)
+    _unit(units, "nova-lords-02.service", "Lords nova frontend: lords-02 (lordserial33.biz)", 9111)
+    repo = tmp_path / "repo"
+    (repo / "config" / "site-profiles").mkdir(parents=True)
+    for site, домен in (("lords-01", "lordfilm47.space"), ("lords-02", "lordserial33.biz")):
+        (repo / "config" / "site-profiles" / f"{site}.json").write_text(
+            json.dumps(
+                {
+                    "site_id": site,
+                    "domains": [домен],
+                    "seo": {"canonical_host": домен, "indexing_enabled": False},
+                }
+            ),
+            encoding="utf-8",
+        )
+    реестр = registry_mod.build(units, repo, tmp_path / "front")
+    assert реестр["sites"]["lords-01"]["unit"] == "lords-nova-01.service"
+    assert реестр["sites"]["lords-02"]["unit"] == "nova-lords-02.service"
+    assert реестр["sites"]["lords-01"]["exact_domain"] == "lordfilm47.space"
+    assert реестр["conflicts"] == []
+    assert реестр["in_registry"] == ["lords-01", "lords-02"]
+
+
+def test_registry_flags_domain_conflict_between_unit_and_profile(tmp_path):
+    units = tmp_path / "units"
+    units.mkdir()
+    _unit(units, "nova-lords-02.service", "Lords nova frontend: lords-02 (wrong.example)", 9111)
+    repo = tmp_path / "repo"
+    (repo / "config" / "site-profiles").mkdir(parents=True)
+    (repo / "config" / "site-profiles" / "lords-02.json").write_text(
+        json.dumps(
+            {
+                "site_id": "lords-02",
+                "domains": ["lordserial33.biz"],
+                "seo": {"canonical_host": "lordserial33.biz", "indexing_enabled": False},
+            }
+        ),
+        encoding="utf-8",
     )
-    assert code == coherence.DIVERGED
-    assert sorted(report["diverged_sites"]) == ["lords-01", "lords-03"]
-    assert report["sites"]["lords-02"]["verdict"] == "COHERENT"
-    assert report["sites"]["lords-01"]["verdict"] == "DIVERGED_RUNTIME_AHEAD_OF_MANIFEST"
+    реестр = registry_mod.build(units, repo, tmp_path / "front")
+    assert реестр["conflicts"], "расхождение домена юнита и профиля обязано быть замечено"
 
 
-def test_missing_runtime_is_unmeasurable_not_pass(tmp_path):
-    """Отсутствие файла не превращается в «всё хорошо»."""
-    empty = tmp_path / "empty"
-    empty.mkdir()
-    code, report = coherence.check(empty, starts={})
-    assert code == coherence.UNMEASURABLE
-    assert "error" in report
+def test_registry_keeps_sites_without_profile_visible(tmp_path):
+    """Витрина без профиля не исчезает: она исполняет тот же файл."""
+    units = tmp_path / "units"
+    units.mkdir()
+    _unit(units, "nova-animedia-01.service", "Animedia nova frontend: animedia-01", 9121)
+    repo = tmp_path / "repo"
+    (repo / "config" / "site-profiles").mkdir(parents=True)
+    реестр = registry_mod.build(units, repo, tmp_path / "front")
+    assert реестр["out_of_registry"] == ["animedia-01"]
+    assert реестр["sites"]["animedia-01"]["exact_domain"] is None
 
 
-def test_missing_manifest_is_unmeasurable_per_site(tmp_path):
-    front = _front(tmp_path, NEW, {"lords-02": _sha(NEW)})
-    mtime = (front / "lords-frontend.py").stat().st_mtime
-    code, report = coherence.check(front, starts={"9111": mtime + 5})
-    assert report["sites"]["lords-01"]["verdict"] == "UNMEASURABLE_NO_MANIFEST"
-    assert code == coherence.COHERENT
+@pytest.mark.parametrize("порт,ожидание", [(9110, "lords-01"), (9112, "lords-03"), (9999, "")])
+def test_loader_maps_port_to_site(tmp_path, порт, ожидание, monkeypatch):
+    loader = _load("nova_runtime_dispatch", "nova-runtime-dispatch.py")
+    реестр = {"sites": {"lords-01": {"port": 9110}, "lords-03": {"port": 9112}}}
+    файл = tmp_path / "lords-runtime-registry.json"
+    файл.write_text(json.dumps(реестр), encoding="utf-8")
+    monkeypatch.setattr(loader, "REGISTRY", файл)
+    assert loader.витрина_по_порту(str(порт)) == ожидание
 
 
-@pytest.mark.parametrize("site,port", [("lords-01", 9110), ("lords-02", 9111), ("lords-03", 9112)])
-def test_site_port_and_unit_mapping_is_declared(site, port):
-    """Имена юнитов не угадываются: они зафиксированы и проверяются."""
-    mapping = {v[0]: (int(k), v[2]) for k, v in coherence.SITES.items()}
-    assert mapping[site][0] == port
-    assert mapping[site][1].endswith(".service")
+def test_loader_parses_port_from_both_argument_forms():
+    loader = _load("nova_runtime_dispatch", "nova-runtime-dispatch.py")
+    assert loader.порт_из_аргументов(["--port", "9111"]) == "9111"
+    assert loader.порт_из_аргументов(["--port=9112"]) == "9112"
+    assert loader.порт_из_аргументов(["--host", "127.0.0.1"]) == ""
