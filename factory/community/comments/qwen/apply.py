@@ -41,7 +41,15 @@ def apply_decision(
     - comment already DELETED_BY_AUTHOR (or Stage01 DELETED_BY_USER)
     - decision fails schema validation
     """
-    check = validate_decision(decision)
+    # Underscore-prefixed keys are our own provenance annotations (e.g. the
+    # "_v2" block normalize_v2_to_v1 attaches, and the "_applied_*" stamps
+    # written below) — never provider-supplied. The wire contract stays strict:
+    # a live provider response is validated unstripped in moderate_comment, so
+    # a provider cannot smuggle keys past the schema by underscore-prefixing.
+    # Here we validate the decision proper and carry provenance alongside.
+    decision_core = {k: v for k, v in decision.items() if not k.startswith("_")}
+
+    check = validate_decision(decision_core)
     if not check["ok"]:
         raise ApplyDecisionError(f"invalid decision: {check['errors']}")
 
