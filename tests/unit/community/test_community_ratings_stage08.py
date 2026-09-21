@@ -327,6 +327,11 @@ class MetricsStoreTests(unittest.TestCase):
         self.path = Path(self.tmpdir.name) / "metrics.sqlite"
         self.addCleanup(self.tmpdir.cleanup)
         self.addCleanup(metrics_store.reset_cache)
+        # The drop counter is deliberately process-global and cumulative in
+        # production — once writes have been refused, every later count really
+        # is a lower bound. Tests must therefore start from a clean slate.
+        metrics_store.reset_drop_stats()
+        self.addCleanup(metrics_store.reset_drop_stats)
 
     def test_counter_survives_a_fresh_reader_process_view(self) -> None:
         metrics_store.incr("cast_attempts", 3, path=self.path)
@@ -427,6 +432,8 @@ class MetricsBridgeTests(unittest.TestCase):
 
         self.addCleanup(restore)
         metrics.reset_for_tests()
+        metrics_store.reset_drop_stats()
+        self.addCleanup(metrics_store.reset_drop_stats)
 
     def test_incr_is_mirrored_to_the_store(self) -> None:
         metrics.incr("cast_accepted", 2)

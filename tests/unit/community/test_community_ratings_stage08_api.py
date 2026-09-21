@@ -61,8 +61,12 @@ def metrics_path(tmp_path, monkeypatch):
     monkeypatch.setattr(metrics_store, "DEFAULT_STORE_PATH", p)
     metrics_store.reset_cache()
     metrics.reset_for_tests()
+    # Cumulative by design in production; per-test here, or a drop recorded by
+    # an earlier test would mark these counters PARTIAL.
+    metrics_store.reset_drop_stats()
     yield p
     metrics_store.reset_cache()
+    metrics_store.reset_drop_stats()
 
 
 def _identity(eligible: bool) -> str:
