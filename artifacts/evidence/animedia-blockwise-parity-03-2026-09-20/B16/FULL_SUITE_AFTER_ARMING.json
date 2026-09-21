@@ -1,0 +1,34 @@
+{
+ "task": "ANIMEDIA-B16-FULL-SUITE-AFTER-ARMING",
+ "checked_at_utc": "2026-09-21T17:15:43Z",
+ "command": ".venv/bin/python -m pytest tests/unit -q",
+ "summary": "6 failed, 5970 passed, 12 skipped, 1 xfailed, 14 warnings in 1028.52s (0:17:08)",
+ "failures_now": [
+  "tests/unit/test_template_ownership_gate.py::test_дайджесты_владения_совпадают_с_файлами",
+  "tests/unit/test_template_routes_and_episodes.py::test_каталог_новинки_и_подборки_отдают_разное",
+  "tests/unit/test_template_routes_and_episodes.py::test_контейнер_серий_ограничен_по_высоте",
+  "tests/unit/test_validate_registries_derived.py::test_absent_derived_artifact_is_allowed",
+  "tests/unit/test_validate_registries_derived.py::test_present_derived_artifact_must_pass_its_schema",
+  "tests/unit/test_yummy_entity_view.py::TestЛенты::test_пост_рисуется_с_источником_и_датой"
+ ],
+ "baseline_failures": [
+  "tests/unit/test_lords_search_index.py::test_живой_каталог_подсказка_при_наборе_укладывается_в_250_мс",
+  "tests/unit/test_template_ownership_gate.py::test_дайджесты_владения_совпадают_с_файлами",
+  "tests/unit/test_template_ownership_gate.py::test_контракт_коллекций_ровно_один",
+  "tests/unit/test_template_ownership_gate.py::test_рендерер_ровно_один",
+  "tests/unit/test_template_routes_and_episodes.py::test_каталог_новинки_и_подборки_отдают_разное",
+  "tests/unit/test_template_routes_and_episodes.py::test_контейнер_серий_ограничен_по_высоте",
+  "tests/unit/test_validate_registries_derived.py::test_absent_derived_artifact_is_allowed",
+  "tests/unit/test_validate_registries_derived.py::test_present_derived_artifact_must_pass_its_schema",
+  "tests/unit/test_yummy_entity_view.py::TestЛенты::test_пост_рисуется_с_источником_и_датой"
+ ],
+ "new_regressions": [],
+ "fixed_since_baseline": [
+  "tests/unit/test_lords_search_index.py::test_живой_каталог_подсказка_при_наборе_укладывается_в_250_мс",
+  "tests/unit/test_template_ownership_gate.py::test_контракт_коллекций_ровно_один",
+  "tests/unit/test_template_ownership_gate.py::test_рендерер_ровно_один"
+ ],
+ "verdict": "новых регрессий нет",
+ "baseline_ref": "artifacts/evidence/animedia-cursor-reconciliation-01/FULL_SUITE_BASELINE.json (воспроизведено на 03b3908)",
+ "note": "Файл artifacts/evidence/products/product-readiness.json переписывается самим прогоном (известный дефект порядка тестов B-TESTGATE-01) и восстановлен из HEAD после прогона."
+}
