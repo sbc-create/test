@@ -1,0 +1,112 @@
+{
+  "stage": "ANIMEDIA-CURSOR-WORK-RECONCILIATION-01",
+  "mode": "RECOVER_VERIFY_FINISH_DO_NOT_RESTART",
+  "discovered_at_utc": "2026-09-21T11:22:00Z",
+  "discovery_method": "read_only_git_fs_http",
+  "canonical_repo": "/srv/site-factory/repo",
+  "canonical_worktree_for_animedia": "/home/claude/wt-animedia-finalization-01",
+  "CANONICAL_HEAD": "03b3908e7956552c418e917fc152c16e8151677e",
+  "CANONICAL_BRANCH": "claude/animedia-template-finalization-01",
+  "CURSOR_HEADS_FOUND": {
+    "note": "No branch named cursor/*animedia* exists. The Animedia work was carried on claude/animedia-template-finalization-01 by committer 'CORE integrator'. cursor/* branches exist in this repo but all belong to other products (lords, community-comments, ratings-ingestion, release-orchestrator) and none touch animedia.icu or animedia.space.",
+    "cursor_branches_present": [
+      {"branch": "cursor/lords-default-episode-01", "tip": "1752ac1", "committed": "2026-09-21T11:12:37Z", "animedia_scope": false},
+      {"branch": "cursor/site-factory-release-orchestrator-01", "tip": "4119c67", "committed": "2026-09-20T22:31:33Z", "animedia_scope": false},
+      {"branch": "cursor/community-comments-01", "tip": "0609968", "committed": "2026-09-20T22:25:09Z", "animedia_scope": false},
+      {"branch": "cursor/ratings-ingestion-01", "tip": "ab9dec9", "committed": "2026-09-20T20:44:24Z", "animedia_scope": false},
+      {"branch": "cursor/lords-integration-canary-01", "tip": "a0e6acf", "committed": "2026-09-19T13:55:39Z", "animedia_scope": false},
+      {"branch": "cursor/lords-cards-media-01", "tip": "7a3eda3", "committed": "2026-09-18T20:24:32Z", "animedia_scope": false},
+      {"branch": "cursor/lords-header-sticky-01", "tip": "e50e8e5", "committed": "2026-09-18T15:30:08Z", "animedia_scope": false}
+    ],
+    "cursor_project_terminals": {
+      "path_probed": ".cursor/projects/**/terminals/*.txt",
+      "result": "ABSENT",
+      "detail": "/home/claude/wt-animedia-finalization-01/.cursor exists but is empty (0 files). No terminal transcripts recoverable."
+    }
+  },
+  "RELATED_BRANCHES_FOUND": [
+    {"branch": "claude/animedia-template-finalization-01", "tip": "03b3908", "role": "ACTIVE_CANONICAL", "ahead_of_origin_main": 681, "ahead_of_own_remote": 102, "remote_tip": "b023bd50cced8d281cb3814a75bf72b429afee0b"},
+    {"branch": "claude/content-runtime-animedia-lords33-01", "tip": "49d7b14", "committed": "2026-09-17T12:50:54Z", "role": "SUPERSEDED_UPSTREAM_CONTENT_RUNTIME"},
+    {"branch": "claude/templates-zona-animedia-visual-parity-005", "tip": "60870de", "committed": "2026-09-15T10:23:10Z", "role": "SUPERSEDED_VISUAL_PARITY"},
+    {"branch": "claude/reference-pack-amd-online-01", "tip": "9284c7f", "committed": "2026-09-17T09:20:16Z", "role": "REFERENCE_PACK_amd_online"},
+    {"branch": "claude/reference-pack-amd-online-checker-02", "tip": "18fb2d7", "committed": "2026-09-16T20:23:17Z", "role": "REFERENCE_PACK_CHECKER"}
+  ],
+  "RELATED_WORKTREES_FOUND": [
+    {"path": "/home/claude/wt-animedia-finalization-01", "branch": "claude/animedia-template-finalization-01", "head": "03b3908", "dirty": true, "role": "CANONICAL"},
+    {"path": "/home/claude/wt-content-runtime-01", "branch": "claude/content-runtime-animedia-lords33-01", "head": "49d7b14", "role": "UPSTREAM_REFERENCE"},
+    {"path": "/home/claude/wt-refpack-amd", "branch": "claude/reference-pack-amd-online-01", "head": "9284c7f", "role": "REFERENCE_PACK"},
+    {"path": "/home/claude/wt-refpack-amd-checker", "branch": "claude/reference-pack-amd-online-checker-02", "head": "18fb2d7", "role": "REFERENCE_PACK_CHECKER"},
+    {"path": "/home/claude/wt-lords-r2", "branch": "claude/templates-zona-animedia-visual-parity-005", "head": "60870de", "role": "SUPERSEDED"},
+    {"path": "/tmp/animedia-canary-GEkyVM", "branch": "(detached)", "head": "49d7b14", "role": "THROWAWAY_CANARY_CHECKOUT"}
+  ],
+  "DIRTY_WORKTREES_FOUND": [
+    {"path": "/home/claude/wt-animedia-finalization-01", "modified": 3, "untracked": 10, "staged": 0, "stash_entries_repo_wide": 2}
+  ],
+  "UNCOMMITTED_SOURCE_FILES": [
+    {"path": "automation/host/lords-frontend.py", "class": "source", "verdict": "PRESERVE_WIP", "detail": "B12 work-in-progress: .asearch on-page search block CSS (min-height 130px / max-height 160px, input 48-52px) + 4 frozen search copy constants. No render function yet. Matches B12 passport desktop_geometry exactly."}
+  ],
+  "UNCOMMITTED_TEST_FILES": [],
+  "UNCOMMITTED_EVIDENCE_FILES": [
+    {"path": "artifacts/evidence/animedia-blockwise-2026-09-19/BLOCK_MATRIX.md", "class": "evidence", "verdict": "PRESERVE_COMMIT", "detail": "Corrects provenance to the real deployed tip ca169679 / build 20260919T224052Z / artifact f89b9d82; removes a stale 'disk != live' warning that no longer holds."},
+    {"path": "artifacts/evidence/animedia-final-repair-2026-09-19/FINAL.md", "class": "evidence", "verdict": "PRESERVE_COMMIT", "detail": "Marks commit 43dc842 as superseded and records evidence tip 5e9e816."},
+    {"path": "artifacts/evidence/animedia-blockwise-2026-09-19/raw/block01-local-server.log", "class": "evidence_raw", "verdict": "PRESERVE_COMMIT"},
+    {"path": "artifacts/evidence/animedia-blockwise-2026-09-19/raw/block02-server.log", "class": "evidence_raw", "verdict": "PRESERVE_COMMIT"},
+    {"path": "artifacts/evidence/animedia-blockwise-2026-09-19/raw/block03-server.log", "class": "evidence_raw", "verdict": "PRESERVE_COMMIT"},
+    {"path": "artifacts/evidence/animedia-blockwise-2026-09-19/raw/block01-manifest.json", "class": "evidence_raw", "verdict": "PRESERVE_COMMIT"},
+    {"path": "artifacts/evidence/animedia-followup-2026-09-19/player-probe/", "class": "evidence_screenshots", "verdict": "PRESERVE_COMMIT", "files": ["before-click.png", "after-5s.png", "after-17s.png"], "detail": "Player autoplay/overlay probe frames, 188K total."}
+  ],
+  "UNCOMMITTED_NON_EVIDENCE": [
+    {"path": "artifacts/evidence/animedia-blockwise-2026-09-19/raw/block01-local.pid", "class": "runtime_temporary", "verdict": "KEEP_ON_DISK_DO_NOT_COMMIT", "detail": "Local fixture-server PID file; not evidence."},
+    {"path": "artifacts/evidence/animedia-blockwise-2026-09-19/raw/block02-local.pid", "class": "runtime_temporary", "verdict": "KEEP_ON_DISK_DO_NOT_COMMIT"},
+    {"path": "artifacts/evidence/animedia-blockwise-2026-09-19/raw/block03-local.pid", "class": "runtime_temporary", "verdict": "KEEP_ON_DISK_DO_NOT_COMMIT"},
+    {"path": "artifacts/evidence/animedia-reference-parity-2026-09-20/raw/block02-parity-server.log", "class": "evidence_raw", "verdict": "PRESERVE_COMMIT"},
+    {"path": "automation/host/lords-frontend.animedia-prev.py", "class": "generated_backup_redundant", "verdict": "KEEP_ON_DISK_DO_NOT_COMMIT", "detail": "Byte-identical to automation/host/lords-frontend.py at commit 289a459f0e9359777b988f61cc0d66084fc94cd3 (git blob d9a7b4e4ee927936d78c1bd85bfe517794a4d64b). History already preserves it; committing would duplicate 332K."}
+  ],
+  "SECRETS_FOUND_IN_DIRTY_STATE": 0,
+  "ACCEPTANCE_CONTRACTS_FOUND": [
+    {"stage": "ANIMEDIA-REFERENCE-PARITY-02", "digest_file": "artifacts/evidence/animedia-reference-parity-2026-09-20/00-contract/ACCEPTANCE_CONTRACT_SHA256.txt", "state": "SUPERSEDED", "verdict_recorded": "NEEDS_REPAIR"},
+    {"stage": "ANIMEDIA-BLOCKWISE-PARITY-03", "spec": "ANIMEDIA_BLOCK_SPEC_V1", "CONTRACT_SHA256": "5f2112e25ef974333c388bad405abfae3c3d460a713b028afa3c0e549b8eaeb3", "state": "ACTIVE", "frozen_at_utc": "2026-09-20T11:17:59Z", "start_head": "242a834f580ded6dca42972c36c3e1454836c852"},
+    {"stage": "ANIMEDIA-BLOCKWISE-2026-09-19", "state": "SUPERSEDED", "evidence_root": "artifacts/evidence/animedia-blockwise-2026-09-19"}
+  ],
+  "REFERENCE_CAPTURE_DIGESTS": {
+    "reference_host": "amd.online",
+    "REFERENCE_BASELINE_DIGEST": "84132b93f8fa8f61b5e60ab87b82044e30209b4d7db3e505b00d70cb117f5632",
+    "REFERENCE_ACCESS_FAILURES": 0,
+    "captures": 9,
+    "routes": ["home", "collections", "title"],
+    "viewports": ["d1440", "t768", "m390"],
+    "allowlisted": true,
+    "allowlist_ref": "inventory/network-allowlist.yaml:102 animedia-reference"
+  },
+  "OWNER_PACKETS_FOUND": [
+    {"decision_id": "ANIMEDIA-B10-B16-20260920-01", "scope": "B10 recommendations fallback + B08 default-episode FIRST_PLAYABLE_DETERMINISTIC", "recorded_in": "artifacts/evidence/animedia-blockwise-parity-03-2026-09-20/04-backlog/DATA_GAPS.json"}
+  ],
+  "ARTIFACTS_FOUND": {
+    "deployed_artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+    "deployed_build_id": "20260920T102102Z-89666321-nova",
+    "deployed_source_commit": "89666321093651d4bd5b06a00645fdf903124810",
+    "previous_rollback_point": "/srv/lords/.frontend/.rollback/pre-closed-update-20260919T224052Z",
+    "local_head_not_deployed": true
+  },
+  "LIVE_BUILD_BY_DOMAIN": {
+    "animedia.icu": "20260920T102102Z-89666321-nova",
+    "animedia.space": "20260920T102102Z-89666321-nova"
+  },
+  "LIVE_ARTIFACT_BY_DOMAIN": {
+    "animedia.icu": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+    "animedia.space": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908"
+  },
+  "LIVE_DESIGN_BY_DOMAIN": {
+    "animedia.icu": {"data_design": "animedia-portal", "template_family": "animedia", "template_version": "1.2.4", "profile": "animedia-icu"},
+    "animedia.space": {"data_design": "animedia-portal", "template_family": "animedia", "template_version": "1.2.4", "profile": "animedia-space"}
+  },
+  "LIVE_INDEXABILITY_BY_DOMAIN": {
+    "animedia.icu": {"meta_robots": "noindex, nofollow", "x_robots_tag": "noindex, nofollow", "state": "CLOSED"},
+    "animedia.space": {"meta_robots": "noindex, nofollow", "x_robots_tag": "noindex, nofollow", "state": "CLOSED"}
+  },
+  "SERVICE_BY_DOMAIN": {
+    "animedia.icu": {"serving_unit": "nova-animedia-01.service", "site_id": "animedia-01", "source": "artifacts/evidence/animedia-reference-parity-2026-09-20/raw/deploy-apply.log:49 + config/site-profiles/animedia-01.json@claude/players-only-production-009", "verified_by_restart": false},
+    "animedia.space": {"serving_unit": "nova-animedia-02.service", "site_id": "animedia-02", "source": "artifacts/evidence/animedia-reference-parity-2026-09-20/raw/deploy-apply.log:714 + config/site-profiles/animedia-02.json@claude/players-only-production-009", "verified_by_restart": false}
+  },
+  "BRANCH_DIVERGENCE_NOTE": "config/site-profiles/animedia-01.json and animedia-02.json exist only on branch claude/players-only-production-009 (the /srv/site-factory/repo checkout), not on claude/animedia-template-finalization-01. The template branch carries automation/host/lords-frontend.py; the profile branch carries the site registry. Their deployment blocks disagree with live (profiles pin build 20260910T124530Z-a1691c56-nova / artifact 9229879e..., live serves 20260920T102102Z-89666321-nova / d2e9628f...). Recorded as BLOCKER B-REG-01, not silently reconciled."
+}

@@ -1,0 +1,185 @@
+{
+  "stage": "ANIMEDIA-CURSOR-WORK-RECONCILIATION-01",
+  "verdict": "PARTIAL_READY_WITH_OWNER_GATE",
+  "canonical_repo": "/srv/site-factory/repo",
+  "handoff_head": null,
+  "handoff_branch": "claude/animedia-template-finalization-01",
+  "handoff_worktree": "/home/claude/wt-animedia-finalization-01",
+  "worktree_clean": true,
+  "worktree_clean_detail": {
+    "tracked_modified_or_staged": 0,
+    "untracked_left_on_disk": 12,
+    "untracked_are": "three fixture-server .pid files (runtime, not evidence) and lords-frontend.animedia-prev.py, a backup byte-identical to commit 289a459. Classified in FILE_PROVENANCE.json, kept on disk, deliberately not committed and deliberately not deleted."
+  },
+  "acceptance_contract_digest": "5f2112e25ef974333c388bad405abfae3c3d460a713b028afa3c0e549b8eaeb3",
+  "acceptance_contract_state": "ACTIVE, unmutated, restored after a post-freeze drift; spec ANIMEDIA_BLOCK_SPEC_V1, stage ANIMEDIA-BLOCKWISE-PARITY-03",
+  "start_head": "03b3908e7956552c418e917fc152c16e8151677e",
+  "preserved_commits": [
+    {
+      "commit": "f6a8e20",
+      "what": "provenance corrections of earlier stages found uncommitted in the worktree"
+    },
+    {
+      "commit": "3911db5",
+      "what": "raw fixture-server logs and the three player-probe frames, untracked and about to be lost"
+    }
+  ],
+  "new_commits": [
+    {
+      "commit": "dd123c5",
+      "what": "B00 freeze repaired: frozen passport file restored, progress moved out of the contract corpus, two regression guards"
+    },
+    {
+      "commit": "2d44df0",
+      "what": "B12 finished from the preserved work in progress: on-page search, three states, pagination, real 404, canonical q then page"
+    },
+    {
+      "commit": "f014141",
+      "what": "15 inherited red tests resolved; poster layer made explicit in source"
+    }
+  ],
+  "live_domains": {
+    "animedia.icu": {
+      "http": 200,
+      "build_id": "20260920T102102Z-89666321-nova",
+      "artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+      "source_commit": "89666321093651d4bd5b06a00645fdf903124810",
+      "template_version": "1.2.4",
+      "design": "animedia-portal",
+      "profile": "animedia-icu",
+      "serving_unit": "nova-animedia-01.service",
+      "routes_probed": 14,
+      "http_5xx": 0,
+      "soft_404": 0
+    },
+    "animedia.space": {
+      "http": 200,
+      "build_id": "20260920T102102Z-89666321-nova",
+      "artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+      "source_commit": "89666321093651d4bd5b06a00645fdf903124810",
+      "template_version": "1.2.4",
+      "design": "animedia-portal",
+      "profile": "animedia-space",
+      "serving_unit": "nova-animedia-02.service",
+      "routes_probed": 14,
+      "http_5xx": 0,
+      "soft_404": 0
+    }
+  },
+  "indexability_by_domain": {
+    "animedia.icu": {
+      "before": "noindex, nofollow",
+      "after": "noindex, nofollow",
+      "changed": false
+    },
+    "animedia.space": {
+      "before": "noindex, nofollow",
+      "after": "noindex, nofollow",
+      "changed": false
+    }
+  },
+  "existing_template_profiles": [
+    {
+      "profile": "animedia-icu",
+      "site_id": "animedia-01",
+      "domain": "animedia.icu",
+      "template_family": "animedia",
+      "template_version": "1.2.4",
+      "design": "animedia-portal",
+      "theme": "lords-showcase",
+      "indexing_enabled": false
+    },
+    {
+      "profile": "animedia-space",
+      "site_id": "animedia-02",
+      "domain": "animedia.space",
+      "template_family": "animedia",
+      "template_version": "1.2.4",
+      "design": "animedia-portal",
+      "theme": "lords-showcase",
+      "indexing_enabled": false
+    },
+    {
+      "profile": "animedia-general",
+      "role": "registry template_profile recorded in config/site-profiles/animedia-0{1,2}.json on branch claude/players-only-production-009"
+    }
+  ],
+  "real_data_gaps": [
+    {
+      "gap_code": "CATALOG_FRESHNESS_DATA_GAP",
+      "needs": "verified catalog_added_at ledger"
+    },
+    {
+      "gap_code": "TOP100_DATA_GAP",
+      "needs": "config/animedia-top100.json approved TopSnapshot"
+    },
+    {
+      "gap_code": "WEEKLY_SNAPSHOT_DATA_GAP",
+      "needs": "config/animedia-weekly-popular.json approved WeeklyPopularSnapshot"
+    },
+    {
+      "gap_code": "EPISODE_EVENT_DATA_GAP",
+      "needs": "provider playable event feed; TRUE_EPISODE_RELEASE_EVENT_COUNT=0 today"
+    },
+    {
+      "gap_code": "RECOMMENDATIONS_DATA_GAP",
+      "needs": "config/animedia-recommendations.json approved RecommendationSnapshot"
+    },
+    {
+      "gap_code": "OWNER_DATA_REQUIRED",
+      "needs": "verified owner contact_email, telegram_url, privacy_url, terms_url"
+    }
+  ],
+  "unresolved_blockers": [
+    {
+      "id": "B-STAGE-01",
+      "severity": "P1",
+      "what": "PARITY-03 blocks B13, B14, B15 not started; B16 not reachable"
+    },
+    {
+      "id": "B-DEPLOY-01",
+      "severity": "P1",
+      "what": "live serves 89666321; HANDOFF_HEAD has never been built into an artifact"
+    },
+    {
+      "id": "B-AUTH-01",
+      "severity": "P1",
+      "what": "no owner approval bound to a PARITY-03 artifact digest"
+    },
+    {
+      "id": "B-HARDGATE-02",
+      "severity": "P1",
+      "what": "REFERENCE-PARITY-02 hard gate AFTER_LIVE_SCREENSHOT_MATRIX_AND_ORACLE_SCORES_INCOMPLETE formally still open"
+    },
+    {
+      "id": "B-REG-01",
+      "severity": "P2",
+      "what": "site profiles on another branch disagree with live and point canonical_host/analytics at lordfilm47.space"
+    },
+    {
+      "id": "B-HTML-01",
+      "severity": "P2",
+      "what": "ampersand escaping in hrefs inconsistent between B12 and the rest of the template"
+    },
+    {
+      "id": "B-PUSH-01",
+      "severity": "P2",
+      "what": "107 commits ahead of origin; push forbidden without owner permission"
+    }
+  ],
+  "owner_actions_required": [
+    "Decide whether ANIMEDIA-BLOCKWISE-PARITY-03 is finished first (B13, B14, B15, then B16) or whether the five-template factory may branch from this HANDOFF_HEAD while PARITY-03 stays open on its own branch. Prompt B forbids mixing the two, so this is a decision, not an assumption.",
+    "Supply the owner footer values (contact_email, telegram_url, privacy_url, terms_url) or confirm they stay absent — B14 cannot invent them.",
+    "Approve or decline a deploy of PARITY-03 once an artifact exists; the approval must name the new artifact digest, since the REFERENCE-PARITY-02 approval is bound to d2e9628f and does not transfer.",
+    "Perform the owner visual review of the Animedia template; the contract sets self_reported_visual_score_allowed=false, so this session cannot score it.",
+    "Decide whether to reconcile config/site-profiles/animedia-0{1,2}.json (B-REG-01) as a separate task.",
+    "Decide whether the branch may be pushed to origin as an off-host backup."
+  ],
+  "factory_base_head": "f014141c98f4d67813220003f3a46d79b3dfe5d8",
+  "factory_base_head_note": "Offered as the base if, and only if, the owner chooses to let the factory branch proceed while PARITY-03 stays open. Not a self-granted acceptance.",
+  "ready_for_animedia_5_factory": false,
+  "ready_for_animedia_5_factory_reason": "The previous work is not closed: PARITY-03 blocks B13-B15 were never started and B16 is an owner gate. The owner asked to finish and accept the existing work before the new factory is created, and this session cannot accept its own work on the owner's behalf. Everything that was finishable without an owner decision has been finished: the freeze gate is green on the original digest, B12 is closed locally, and all 15 inherited test failures are resolved with a clean two-run baseline.",
+  "self_reported_owner_acceptance": false,
+  "evidence_root": "artifacts/evidence/animedia-cursor-reconciliation-01/",
+  "handoff_head_note": "Pinned by the commit immediately following this one; that pin commit is the branch tip and contains nothing but this pin."
+}

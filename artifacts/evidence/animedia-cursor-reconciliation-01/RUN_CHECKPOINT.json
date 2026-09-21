@@ -1,0 +1,70 @@
+{
+  "stage": "ANIMEDIA-CURSOR-WORK-RECONCILIATION-01",
+  "mode": "RECOVER_VERIFY_FINISH_DO_NOT_RESTART",
+  "updated_at_utc": "2026-09-21T12:05:00Z",
+  "branch": "claude/animedia-template-finalization-01",
+  "worktree": "/home/claude/wt-animedia-finalization-01",
+  "START_HEAD": "03b3908e7956552c418e917fc152c16e8151677e",
+  "CURRENT_HEAD": "f014141c98f4d67813220003f3a46d79b3dfe5d8",
+  "CONTRACT_SHA256": "5f2112e25ef974333c388bad405abfae3c3d460a713b028afa3c0e549b8eaeb3",
+  "CONTRACT_MUTATED": 0,
+  "steps_completed": [
+    "A2 read-only discovery of branches, worktrees, commits, evidence, artifacts and live state",
+    "A3 recovery ledger written",
+    "A4 acceptance contract chronology restored (3 stages, 1 ACTIVE, 2 SUPERSEDED)",
+    "A5 block matrix B00-B16 built with per-block evidence",
+    "A6 dirty state classified and the useful part preserved in thematic commits",
+    "A7 confirmed defects reproduced and repaired at the root cause",
+    "B12 finished locally from the preserved work in progress"
+  ],
+  "steps_not_started": [
+    "B13 collections list/detail",
+    "B14 footer and system states",
+    "B15 full local responsive and accessibility matrix",
+    "B16 deploy, after-live matrix, rollback drill, final report (owner gate)"
+  ],
+  "new_commits": [
+    {
+      "commit": "f6a8e20dc182bbe10fd3c897e175534b5bdb9366",
+      "short": "f6a8e20",
+      "subject": "evidence(animedia): сохранены правки провенанса прошлых стадий"
+    },
+    {
+      "commit": "3911db56fc787ed7c4c345c6ab5935f56bf47091",
+      "short": "3911db5",
+      "subject": "evidence(animedia): сырые логи прогонов и кадры пробы плеера сохранены"
+    },
+    {
+      "commit": "dd123c54d4044cc7d08cda2d81ebd1d470a2e822",
+      "short": "dd123c5",
+      "subject": "fix(animedia): восстановлен замороженный паспорт-файл стадии PARITY-03"
+    },
+    {
+      "commit": "2d44df0ab31e822635ac9b9714c0d0422ba5db6e",
+      "short": "2d44df0",
+      "subject": "fix(animedia): B12 достроен — поиск на странице, состояния и листалка"
+    },
+    {
+      "commit": "f014141c98f4d67813220003f3a46d79b3dfe5d8",
+      "short": "f014141",
+      "subject": "fix(animedia): разобраны 15 унаследованных падений тестов"
+    }
+  ],
+  "mutations_outside_repo": 0,
+  "deploys_performed": 0,
+  "restarts_performed": 0,
+  "dns_mutations": 0,
+  "indexability_mutations": 0,
+  "push_performed": 0,
+  "merge_performed": 0,
+  "stash_used": 0,
+  "reset_hard_used": 0,
+  "git_clean_used": 0,
+  "files_deleted": 0,
+  "tests": {
+    "selection": "pytest tests/unit -k animedia",
+    "baseline_at_dd123c5": "15 failed, 240 passed, 2 skipped",
+    "current": "276 passed, 2 skipped, 0 failed",
+    "consecutive_stable_runs": 2
+  }
+}
