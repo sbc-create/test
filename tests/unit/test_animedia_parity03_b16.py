@@ -119,10 +119,11 @@ def test_packet_states_that_a_restart_is_not_a_no_op(пакет):
 def test_packet_does_not_claim_a_deploy_happened(пакет):
     for ложь in ("выкат выполнен", "DEPLOY_PERFORMED=1", "RESTART_PERFORMED=1"):
         assert ложь not in пакет, ложь
-    # Пакет обязан прямо называть, что осталось несделанным. Сейчас это
-    # перезапуск: назначение и подпись витрины уже переключены парой.
-    assert "осталась одна команда: перезапуск" in пакет
+    # Пакет обязан прямо называть, что осталось несделанным. Сейчас это две
+    # команды перезапуска: назначения и подписи обеих витрин уже переключены.
+    assert "остались две команды: перезапуск каждой" in пакет
     assert "systemctl restart nova-animedia-01.service" in пакет
+    assert "systemctl restart nova-animedia-02.service" in пакет
     assert "DEPLOY_PERFORMED=0" in пакет
 
 
@@ -139,12 +140,21 @@ def test_baseline_manifest_untouched_by_this_stage():
     assert план.is_file(), "нет плана переноса в каноническую линию"
 
 
-def test_canary_is_armed_as_a_pair_and_only_on_one_site(запись):
-    """Манифест и назначение переключены вместе, и только у канарейки.
+def test_owner_approval_names_both_domains_and_the_digest(запись):
+    """Область выката — ровно то, что разрешил владелец, и ни доменом больше."""
+    од = запись["owner_production_approval"]
+    assert од["bound_to_artifact_sha256"] == _цифра()
+    assert од["scope"] == ["animedia.icu", "animedia.space"]
+    assert set(од["excluded"]) == {"lords-01", "lords-02", "lords-03", "zona-01"}
+
+
+def test_both_sites_are_armed_as_pairs(запись):
+    """Манифест и назначение переключены вместе — у каждой витрины.
 
     Порознь их переключать нельзя: новый код со старой подписью заставил бы
-    витрину объявлять не то, что она исполняет. Вторая витрина остаётся
-    сравнением, иначе канарейка не канарейка.
+    витрину объявлять не то, что она исполняет. Владелец подтвердил выкат на
+    обе витрины, поэтому канарейка одной витриной больше не действует — и
+    прежнее состояние сохранено в записи как история, а не переписано.
     """
     ст = запись["staged_deploy"]
     assert ст["candidate_release"].startswith("/srv/lords/.frontend/releases/")
@@ -152,23 +162,59 @@ def test_canary_is_armed_as_a_pair_and_only_on_one_site(запись):
     assert ст["candidate_boots"] is True
     assert ст["candidate_reports_new_identity_with_candidate_manifest"] is True
     assert ст["symlink_armed"] is True
-    assert ст["armed_site"] == "animedia-01"
-    assert ст["animedia_02_untouched"] is True
-    пара = ст["armed_pair"]
-    assert пара["manifest_build_id"] in пара["symlink"]
-    assert пара["manifest_backup"].endswith(".before-b16")
-    assert пара["manifest_owner_note"]
-    assert ст["remaining_owner_action"] == "systemctl restart nova-animedia-01.service"
+    assert ст["armed_sites"] == ["animedia-01", "animedia-02"]
+    assert ст["history_canary_only"]["armed_site"] == "animedia-01"
+
+    профили = set()
+    for sid in ("animedia-01", "animedia-02"):
+        пара = ст["armed_pairs"][sid]
+        assert пара["manifest_build_id"] in пара["symlink"]
+        assert пара["manifest_artifact_sha256"] == _цифра()
+        assert пара["symlink_resolves_to_code_sha256"] == _цифра()
+        assert пара["manifest_backup"].endswith(".before-b16")
+        assert пара["manifest_backup_matches_pre_arm_state"] is True
+        профили.add(пара["manifest_profile"])
+    # Подпись каждой витрины осталась своей: общий шаблон, но не общий профиль.
+    assert профили == {"animedia-icu", "animedia-space"}
+    assert ст["manifest_owner_note"]
+    assert ст["remaining_owner_actions"] == [
+        "systemctl restart nova-animedia-01.service",
+        "systemctl restart nova-animedia-02.service"]
     assert ст["restart_denied_by_profile"]
+
+
+def test_candidate_was_checked_on_both_profiles_before_arming(запись):
+    """Каталоги витрин различаются побайтно — значит и проверять надо обе."""
+    пр = запись["staged_deploy"]["prearm_checked_on_both_profiles"]
+    assert пр["PREARM_PASS"] is True
+    assert пр["cells"] == 54  # 2 витрины × 9 маршрутов × 3 ширины
+    assert пр["footer_build_marker_present"] is False
 
 
 def test_arming_did_not_change_the_live_state(запись):
     """Код выбирается при старте процесса, поэтому зарядка ничего не меняет."""
-    живое = запись["live_after_arming"]["animedia.icu"]
-    assert живое["build_id"] == "20260920T102102Z-89666321-nova"
-    assert живое["artifact_sha256"] == (
-        "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908")
-    assert "noindex" in живое["x_robots"]
+    живое = запись["live_after_arming"]
+    assert set(живое) == {"animedia.icu", "animedia.space"}
+    for домен, состояние in живое.items():
+        assert состояние["build_id"] == "20260920T102102Z-89666321-nova", домен
+        assert состояние["http"] == "200", домен
+
+
+def test_rollback_drill_covers_both_sites(запись):
+    """Откат проверен на том составе витрин, который заряжен, а не на одной."""
+    учение = запись["rollback"]["drill_both_sites"]
+    assert учение["performed"] is True
+    assert учение["rollback_restores_both_sites_exactly"] is True
+    assert учение["re_arming_restores_candidate_exactly"] is True
+    assert учение["state_after_drill_equals_state_before"] is True
+    assert учение["live_unchanged_during_drill"] is True
+    for sid in ("animedia-01", "animedia-02"):
+        шаги = учение["commands"][sid]
+        # Резерв обязан пережить откат: mv унёс бы его, и второй откат стало бы
+        # нечем выполнять.
+        assert any(с.startswith("install -m 0644") for с in шаги)
+        assert not any(с.startswith("mv ") for с in шаги)
+        assert шаги[-1] == f"systemctl restart nova-{sid}.service"
 
 
 def test_rollback_drill_was_performed_end_to_end(запись):

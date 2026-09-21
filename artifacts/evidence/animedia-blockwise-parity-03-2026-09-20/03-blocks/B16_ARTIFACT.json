@@ -1,134 +1,239 @@
 {
-  "stage": "ANIMEDIA-BLOCKWISE-PARITY-03",
-  "block": "B16",
-  "built_at_utc": "2026-09-21T13:08:26Z",
-  "branch": "claude/animedia-template-finalization-01",
-  "source_commit_at_record_time": "e6204ff75b95e588a3d052d3f5a7d87fa5b78b49",
-  "note": "source_commit фиксируется коммитом, который добавляет эту запись; окончательное значение — FINAL_HEAD стадии. Цифру артефакта обязательно перепроверить перед выкатом: sha256sum automation/host/lords-frontend.py",
-  "artifact": {
-    "primary_file": "automation/host/lords-frontend.py",
-    "artifact_sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
-    "bytes": 498397,
-    "artifact_sha256_reverified": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06"
+ "stage": "ANIMEDIA-BLOCKWISE-PARITY-03",
+ "block": "B16",
+ "built_at_utc": "2026-09-21T13:08:26Z",
+ "branch": "claude/animedia-template-finalization-01",
+ "source_commit_at_record_time": "e6204ff75b95e588a3d052d3f5a7d87fa5b78b49",
+ "note": "source_commit фиксируется коммитом, который добавляет эту запись; окончательное значение — FINAL_HEAD стадии. Цифру артефакта обязательно перепроверить перед выкатом: sha256sum automation/host/lords-frontend.py",
+ "artifact": {
+  "primary_file": "automation/host/lords-frontend.py",
+  "artifact_sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+  "bytes": 498397,
+  "artifact_sha256_reverified": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06"
+ },
+ "release_files": {
+  "automation/host/lords-frontend.py": {
+   "sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+   "bytes": 498397
   },
-  "release_files": {
-    "automation/host/lords-frontend.py": {
-      "sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
-      "bytes": 498397
-    },
-    "automation/host/seo_layer.py": {
-      "sha256": "8fb0a0bac3f88dde2c8d44ef352914255ccb7ffbaa4a308d07bf7499ef7c19f0",
-      "bytes": 17637
-    },
-    "factory/lords/collection_contract.py": {
-      "sha256": "1de55d9d4ee44d5f586bf97b6513d8f18aabc0c946b9efca40603b0ec194d948",
-      "bytes": 27319
-    }
+  "automation/host/seo_layer.py": {
+   "sha256": "8fb0a0bac3f88dde2c8d44ef352914255ccb7ffbaa4a308d07bf7499ef7c19f0",
+   "bytes": 17637
   },
-  "reproducible_by": "артефакт — это сам файл; цифра считается sha256 от его байтов, как это делает automation/host/apply-nova-closed-update.py::sha256",
-  "release_gate": {
-    "ok": true,
-    "flags": {
-      "RUNTIME_DOWNGRADE": 0,
-      "RUNTIME_COMPATIBLE": 1,
-      "CONTENT_SNAPSHOT_DIGEST_MATCH": 1,
-      "CATALOG_DETAILS_SKEW": 0,
-      "PROVIDER_BINDING_MATCH": null
-    }
-  },
-  "deploy_scope": [
-    "animedia.icu",
-    "animedia.space"
-  ],
-  "out_of_scope_sites_sharing_the_runtime": [
-    "lords-01",
-    "lords-02",
-    "lords-03",
-    "zona-01"
-  ],
-  "live_before": {
-    "animedia.icu": {
-      "build_id": "20260920T102102Z-89666321-nova",
-      "artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
-      "x_robots": "noindex, nofollow"
-    },
-    "animedia.space": {
-      "build_id": "20260920T102102Z-89666321-nova",
-      "artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
-      "x_robots": "noindex, nofollow"
-    }
-  },
-  "rollback": {
-    "target_release": "/srv/lords/.frontend/releases/20260921T154512Z-8966632-animedia-rollback",
-    "built_from": "git object, коммит 89666321093651d4bd5b06a00645fdf903124810",
-    "artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
-    "reproduces_live_artifact_byte_for_byte": true,
-    "verified": true,
-    "verified_how": "Релиз поднят на служебном порту с боевым манифестом и снимком: отдаёт d2e9628f, сохраняет noindex, и повторяет живое поведение — 200 на /, /catalog/, /new/, /search/ и 404 на отсутствующем маршруте и на ?page=99999. 03-blocks/B16/ROLLBACK_VERIFY.json",
-    "method": "обратная перестановка sites/animedia-0N/current + восстановление манифеста + перезапуск",
-    "previous_target_rejected": {
-      "release": "/srv/lords/.frontend/releases/legacy-b32438c91aaa",
-      "why": "Содержит сборку b32438c9 с линии Lords (коммит 79632a0), а не живой код Animedia. Измерено: на отсутствующем маршруте она отдаёт 503, тогда как живая витрина и кандидат отдают 404. Откат на неё вернул бы не сегодняшнее состояние, а регрессию. 03-blocks/B16/ROLLBACK_VERIFY_legacy-target.json"
-    },
-    "drill": {
-      "performed": true,
-      "sequence": "зарядка → откат → повторная зарядка",
-      "manifest_restored_byte_for_byte": true,
-      "rollback_target_reproduces_live_artifact": true,
-      "live_unchanged_during_drill": true,
-      "evidence": "03-blocks/B16/ROLLBACK_DRILL.JSON"
-    }
-  },
-  "deploy_performed": 0,
-  "restart_performed": 0,
-  "dns_mutations": 0,
-  "indexability_mutations": 0,
-  "push_performed": 0,
-  "merge_performed": 0,
-  "owner_approval_required": true,
-  "owner_approval_bound_to": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
-  "packet": "03-blocks/B16_OWNER_DEPLOY_PACKET.md",
-  "staged_deploy": {
-    "owner_instruction": "выполни staged B16 deploy 7aae3d2c…",
-    "candidate_release": "/srv/lords/.frontend/releases/20260921T153817Z-c8c4587-animedia-b16",
-    "candidate_release_files": {
-      "lords-frontend.py": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
-      "seo_layer.py": "8fb0a0bac3f88dde2c8d44ef352914255ccb7ffbaa4a308d07bf7499ef7c19f0",
-      "collection_contract.py": "1de55d9d4ee44d5f586bf97b6513d8f18aabc0c946b9efca40603b0ec194d948"
-    },
-    "candidate_boots": true,
-    "candidate_reports_new_identity_with_candidate_manifest": true,
-    "candidate_checked_at_390_768_1440": "03-blocks/B16/STAGED_CHECK.json — 24 ячейки, переполнение 0, обрезка 0, плеер 1, рамка 1.7778, подвал 296px на 1440, 404 только на отсутствующем маршруте, noindex сохранён",
-    "symlink_armed": true,
-    "symlink_not_armed_reason": null,
-    "manifest_candidates": [
-      "03-blocks/B16/manifest-animedia-01.candidate.json",
-      "03-blocks/B16/manifest-animedia-02.candidate.json"
-    ],
-    "restart_not_available_to_this_session": "systemctl вне профиля UNATTENDED_SAFE",
-    "armed_site": "animedia-01",
-    "armed_at_utc": "2026-09-21T15:55:00Z",
-    "armed_pair": {
-      "manifest": "/srv/lords/.frontend/template-manifest-animedia-01.json",
-      "manifest_build_id": "20260921T153817Z-c8c4587-animedia-b16",
-      "manifest_backup": "/srv/lords/.frontend/template-manifest-animedia-01.json.before-b16",
-      "manifest_owner_now": "uid=1001 gid=1001 mode=0o644",
-      "manifest_owner_before": "uid=0 gid=0 mode=0o644",
-      "manifest_owner_note": "Файл заменён через запись в каталоге, который доступен этой сессии, поэтому владение сменилось с root на claude. Права 0644 сохранены, служба читает файл без помех. Владельцу восстановить владение: install -m 0644 -o root -g root <файл> <тот же путь>.",
-      "symlink": "/srv/lords/.frontend/sites/animedia-01/current -> ../../releases/20260921T153817Z-c8c4587-animedia-b16",
-      "symlink_target_before": "../../releases/legacy-b32438c91aaa"
-    },
-    "animedia_02_untouched": true,
-    "remaining_owner_action": "systemctl restart nova-animedia-01.service",
-    "restart_denied_by_profile": "Проверено: systemctl закрыт профилем UNATTENDED_SAFE даже для systemctl --version. Обходить запрет через скрипт-посредник (apply-nova-closed-update.py вызывает systemctl внутри) эта сессия не стала: это ровно тот запрет, который поставил владелец."
-  },
-  "correction_of_earlier_statement": "В предыдущем отчёте я написал, что вернуться ровно в текущее live невозможно, потому что артефакта d2e9628f нет на диске. На диске его действительно нет, но вывод был неверен: файл побайтово воспроизводится из коммита 8966632 (422 618 байт, цифра совпадает). Цель откáта собрана из git и проверена.",
-  "live_after_arming": {
-    "animedia.icu": {
-      "build_id": "20260920T102102Z-89666321-nova",
-      "artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
-      "x_robots": "noindex, nofollow",
-      "note": "Зарядка не меняет живое состояние: код выбирается при старте процесса."
-    }
+  "factory/lords/collection_contract.py": {
+   "sha256": "1de55d9d4ee44d5f586bf97b6513d8f18aabc0c946b9efca40603b0ec194d948",
+   "bytes": 27319
   }
+ },
+ "reproducible_by": "артефакт — это сам файл; цифра считается sha256 от его байтов, как это делает automation/host/apply-nova-closed-update.py::sha256",
+ "release_gate": {
+  "ok": true,
+  "flags": {
+   "RUNTIME_DOWNGRADE": 0,
+   "RUNTIME_COMPATIBLE": 1,
+   "CONTENT_SNAPSHOT_DIGEST_MATCH": 1,
+   "CATALOG_DETAILS_SKEW": 0,
+   "PROVIDER_BINDING_MATCH": null
+  }
+ },
+ "deploy_scope": [
+  "animedia.icu",
+  "animedia.space"
+ ],
+ "out_of_scope_sites_sharing_the_runtime": [
+  "lords-01",
+  "lords-02",
+  "lords-03",
+  "zona-01"
+ ],
+ "live_before": {
+  "animedia.icu": {
+   "build_id": "20260920T102102Z-89666321-nova",
+   "artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+   "x_robots": "noindex, nofollow"
+  },
+  "animedia.space": {
+   "build_id": "20260920T102102Z-89666321-nova",
+   "artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+   "x_robots": "noindex, nofollow"
+  }
+ },
+ "rollback": {
+  "target_release": "/srv/lords/.frontend/releases/20260921T154512Z-8966632-animedia-rollback",
+  "built_from": "git object, коммит 89666321093651d4bd5b06a00645fdf903124810",
+  "artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+  "reproduces_live_artifact_byte_for_byte": true,
+  "verified": true,
+  "verified_how": "Релиз поднят на служебном порту с боевым манифестом и снимком: отдаёт d2e9628f, сохраняет noindex, и повторяет живое поведение — 200 на /, /catalog/, /new/, /search/ и 404 на отсутствующем маршруте и на ?page=99999. 03-blocks/B16/ROLLBACK_VERIFY.json",
+  "method": "обратная перестановка sites/animedia-0N/current + восстановление манифеста + перезапуск",
+  "previous_target_rejected": {
+   "release": "/srv/lords/.frontend/releases/legacy-b32438c91aaa",
+   "why": "Содержит сборку b32438c9 с линии Lords (коммит 79632a0), а не живой код Animedia. Измерено: на отсутствующем маршруте она отдаёт 503, тогда как живая витрина и кандидат отдают 404. Откат на неё вернул бы не сегодняшнее состояние, а регрессию. 03-blocks/B16/ROLLBACK_VERIFY_legacy-target.json"
+  },
+  "drill": {
+   "performed": true,
+   "sequence": "зарядка → откат → повторная зарядка",
+   "manifest_restored_byte_for_byte": true,
+   "rollback_target_reproduces_live_artifact": true,
+   "live_unchanged_during_drill": true,
+   "evidence": "03-blocks/B16/ROLLBACK_DRILL.JSON"
+  },
+  "drill_both_sites": {
+   "performed": true,
+   "sequence": "зарядка обеих → откат обеих из резервов → повторная зарядка обеих",
+   "rollback_restores_both_sites_exactly": true,
+   "re_arming_restores_candidate_exactly": true,
+   "state_after_drill_equals_state_before": true,
+   "live_unchanged_during_drill": true,
+   "commands": {
+    "animedia-01": [
+     "install -m 0644 /srv/lords/.frontend/template-manifest-animedia-01.json.before-b16 /srv/lords/.frontend/template-manifest-animedia-01.json",
+     "ln -sfn ../../releases/20260921T154512Z-8966632-animedia-rollback /srv/lords/.frontend/sites/animedia-01/current",
+     "systemctl restart nova-animedia-01.service"
+    ],
+    "animedia-02": [
+     "install -m 0644 /srv/lords/.frontend/template-manifest-animedia-02.json.before-b16 /srv/lords/.frontend/template-manifest-animedia-02.json",
+     "ln -sfn ../../releases/20260921T154512Z-8966632-animedia-rollback /srv/lords/.frontend/sites/animedia-02/current",
+     "systemctl restart nova-animedia-02.service"
+    ]
+   },
+   "evidence": "B16/ROLLBACK_DRILL_BOTH.json"
+  }
+ },
+ "deploy_performed": 0,
+ "restart_performed": 0,
+ "dns_mutations": 0,
+ "indexability_mutations": 0,
+ "push_performed": 0,
+ "merge_performed": 0,
+ "owner_approval_required": true,
+ "owner_approval_bound_to": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+ "packet": "03-blocks/B16_OWNER_DEPLOY_PACKET.md",
+ "staged_deploy": {
+  "owner_instruction": "выполни staged B16 deploy 7aae3d2c…",
+  "candidate_release": "/srv/lords/.frontend/releases/20260921T153817Z-c8c4587-animedia-b16",
+  "candidate_release_files": {
+   "lords-frontend.py": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+   "seo_layer.py": "8fb0a0bac3f88dde2c8d44ef352914255ccb7ffbaa4a308d07bf7499ef7c19f0",
+   "collection_contract.py": "1de55d9d4ee44d5f586bf97b6513d8f18aabc0c946b9efca40603b0ec194d948"
+  },
+  "candidate_boots": true,
+  "candidate_reports_new_identity_with_candidate_manifest": true,
+  "candidate_checked_at_390_768_1440": "03-blocks/B16/STAGED_CHECK.json — 24 ячейки, переполнение 0, обрезка 0, плеер 1, рамка 1.7778, подвал 296px на 1440, 404 только на отсутствующем маршруте, noindex сохранён",
+  "symlink_armed": true,
+  "symlink_not_armed_reason": null,
+  "manifest_candidates": [
+   "03-blocks/B16/manifest-animedia-01.candidate.json",
+   "03-blocks/B16/manifest-animedia-02.candidate.json"
+  ],
+  "restart_not_available_to_this_session": "systemctl вне профиля UNATTENDED_SAFE",
+  "restart_denied_by_profile": "Проверено: systemctl закрыт профилем UNATTENDED_SAFE даже для systemctl --version. Обходить запрет через скрипт-посредник (apply-nova-closed-update.py вызывает systemctl внутри) эта сессия не стала: это ровно тот запрет, который поставил владелец.",
+  "superseded_by_owner_approval": "Канареечная зарядка одной витрины отменена решением владельца: подтверждён выкат на обе витрины. Прежние значения сохранены ниже как история.",
+  "history_canary_only": {
+   "armed_site": "animedia-01",
+   "animedia_02_untouched": true,
+   "armed_at_utc": "2026-09-21T15:55:00Z",
+   "armed_pair": {
+    "manifest": "/srv/lords/.frontend/template-manifest-animedia-01.json",
+    "manifest_build_id": "20260921T153817Z-c8c4587-animedia-b16",
+    "manifest_backup": "/srv/lords/.frontend/template-manifest-animedia-01.json.before-b16",
+    "manifest_owner_now": "uid=1001 gid=1001 mode=0o644",
+    "manifest_owner_before": "uid=0 gid=0 mode=0o644",
+    "manifest_owner_note": "Файл заменён через запись в каталоге, который доступен этой сессии, поэтому владение сменилось с root на claude. Права 0644 сохранены, служба читает файл без помех. Владельцу восстановить владение: install -m 0644 -o root -g root <файл> <тот же путь>.",
+    "symlink": "/srv/lords/.frontend/sites/animedia-01/current -> ../../releases/20260921T153817Z-c8c4587-animedia-b16",
+    "symlink_target_before": "../../releases/legacy-b32438c91aaa"
+   },
+   "remaining_owner_action": "systemctl restart nova-animedia-01.service"
+  },
+  "armed_sites": [
+   "animedia-01",
+   "animedia-02"
+  ],
+  "armed_at_utc": "2026-09-21T16:53:36Z",
+  "armed_pairs": {
+   "animedia-01": {
+    "manifest": "/srv/lords/.frontend/template-manifest-animedia-01.json",
+    "manifest_build_id": "20260921T153817Z-c8c4587-animedia-b16",
+    "manifest_artifact_sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+    "manifest_profile": "animedia-icu",
+    "manifest_backup": "/srv/lords/.frontend/template-manifest-animedia-01.json.before-b16",
+    "manifest_backup_sha256": "0630b90e8fa124c1dc6f6d3bec2d6f9ce96ed1f65824035c9169fb08af3e7900",
+    "manifest_backup_matches_pre_arm_state": true,
+    "manifest_owner_now": "claude:claude",
+    "manifest_owner_before": "claude:claude",
+    "symlink": "/srv/lords/.frontend/sites/animedia-01/current -> ../../releases/20260921T153817Z-c8c4587-animedia-b16",
+    "symlink_target_before": "../../releases/20260921T154512Z-8966632-animedia-rollback",
+    "symlink_resolves_to_code_sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+    "pair_switch_window_seconds": 0.2269
+   },
+   "animedia-02": {
+    "manifest": "/srv/lords/.frontend/template-manifest-animedia-02.json",
+    "manifest_build_id": "20260921T153817Z-c8c4587-animedia-b16",
+    "manifest_artifact_sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+    "manifest_profile": "animedia-space",
+    "manifest_backup": "/srv/lords/.frontend/template-manifest-animedia-02.json.before-b16",
+    "manifest_backup_sha256": "7add1978bef974cd1dea1f3fc7d98ce7196efcdf9bc327f1808f774aa5d87fb6",
+    "manifest_backup_matches_pre_arm_state": true,
+    "manifest_owner_now": "claude:claude",
+    "manifest_owner_before": "root:root",
+    "symlink": "/srv/lords/.frontend/sites/animedia-02/current -> ../../releases/20260921T153817Z-c8c4587-animedia-b16",
+    "symlink_target_before": "../../releases/20260921T154512Z-8966632-animedia-rollback",
+    "symlink_resolves_to_code_sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+    "pair_switch_window_seconds": 0.0245
+   }
+  },
+  "manifest_owner_note": "Манифесты заменены записью в каталоге, доступном этой сессии, поэтому владение сменилось root → claude при правах 0644. Служба (пользователь lords) читает их без помех — проверено. Владельцу вернуть владение при желании: install -m 0644 -o root -g root <резерв> <путь манифеста>.",
+  "prearm_checked_on_both_profiles": {
+   "evidence": "B16/PREARM_BOTH/PREARM_BOTH.json",
+   "PREARM_PASS": true,
+   "cells": 54,
+   "why": "каталоги и детали витрин различаются побайтно, поэтому вторая витрина проверена своим содержимым, а не содержимым первой",
+   "footer_build_marker_present": false,
+   "note": "знак сборки в подвале у кандидата отсутствует — дефект B14 закрыт"
+  },
+  "remaining_owner_actions": [
+   "systemctl restart nova-animedia-01.service",
+   "systemctl restart nova-animedia-02.service"
+  ]
+ },
+ "correction_of_earlier_statement": "В предыдущем отчёте я написал, что вернуться ровно в текущее live невозможно, потому что артефакта d2e9628f нет на диске. На диске его действительно нет, но вывод был неверен: файл побайтово воспроизводится из коммита 8966632 (422 618 байт, цифра совпадает). Цель откáта собрана из git и проверена.",
+ "live_after_arming": {
+  "animedia.icu": {
+   "build_id": "20260920T102102Z-89666321-nova",
+   "http": "200",
+   "note": "Зарядка не меняет живое состояние: код и манифест выбираются при старте процесса."
+  },
+  "animedia.space": {
+   "build_id": "20260920T102102Z-89666321-nova",
+   "http": "200",
+   "note": "Зарядка не меняет живое состояние: код и манифест выбираются при старте процесса."
+  }
+ },
+ "owner_production_approval": {
+  "granted_at_utc": "2026-09-21T16:53:36Z",
+  "wording": "Я подтверждаю production-deploy B16 7aae3d2c только на animedia.space и animedia.icu.",
+  "bound_to_artifact_sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+  "scope": [
+   "animedia.icu",
+   "animedia.space"
+  ],
+  "excluded": [
+   "lords-01",
+   "lords-02",
+   "lords-03",
+   "zona-01"
+  ],
+  "constraints": [
+   "DNS не менять",
+   "индексацию не менять",
+   "после зарядки — STOP, перезапуск делает владелец"
+  ]
+ },
+ "release_json_defect": {
+  "file": "releases/20260921T153817Z-c8c4587-animedia-b16/RELEASE.json",
+  "field": "built_at",
+  "value": "2026-09-21T15:38:17.%fZ",
+  "why_not_fixed": "релиз неизменяем после сборки: правка его байтов ради косметики обесценила бы само свойство неизменяемости. Поле не участвует ни в одной проверке и не попадает в заголовки — витрина берёт личность из манифеста. Формат исправлен в сборщике для будущих релизов.",
+  "serving_impact": "нет"
+ }
 }
