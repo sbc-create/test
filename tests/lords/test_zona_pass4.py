@@ -127,32 +127,36 @@ def зона241(tmp_path_factory):
     return _поднять(tmp_path_factory.mktemp("zona-pass4-241"), n=241)
 
 
+def _виды_карточек(зона, о) -> list[str]:
+    """Виды произведений, реально попавших на страницу.
+
+    Раньше вид читался из подписи карточки. Позже вид оттуда убрали как
+    избыточный: на /movies/ он повторял сам маршрут в каждой карточке. От
+    этого проверка чистоты маршрута сломалась, хотя сам отбор не менялся.
+    Читать вид из снимка каталога по адресу карточки и вернее: подпись можно
+    нарисовать какую угодно, а здесь сверяется то, что маршрут отобрал.
+    """
+    по_url = {з.get("url"): з.get("kind") for з in зона.Обработчик.данные.items}
+    адреса = re.findall(r'data-testid="title-card" href="([^"]+)"', о.тело)
+    assert адреса, "на странице нет ни одной карточки"
+    виды = [по_url.get(а) for а in адреса]
+    assert all(виды), f"карточка ведёт за пределы снимка каталога: {адреса[:3]}"
+    return виды
+
+
 class TestRouteKinds:
     def test_movies_route_contains_only_films(self, зона):
         о = запросить(зона, "/movies/")
         assert о.статус == 200
-        cards = re.findall(r'data-testid="title-card"[^>]*>(.*?)</a>', о.тело, re.S)
-        assert cards
-        for card in cards:
-            blob = " ".join(re.findall(r'class="zt__m"[^>]*>([^<]+)', card))
-            assert "Фильм" in blob
-            assert "Сериал" not in blob
+        assert set(_виды_карточек(зона, о)) == {"Фильм"}
 
     def test_series_route_contains_only_series(self, зона):
         о = запросить(зона, "/series/")
-        cards = re.findall(r'data-testid="title-card"[^>]*>(.*?)</a>', о.тело, re.S)
-        assert cards
-        for card in cards:
-            blob = " ".join(re.findall(r'class="zt__m"[^>]*>([^<]+)', card))
-            assert "Сериал" in blob
+        assert set(_виды_карточек(зона, о)) == {"Сериал"}
 
     def test_animation_route_contains_only_animation(self, зона):
         о = запросить(зона, "/animation/")
-        cards = re.findall(r'data-testid="title-card"[^>]*>(.*?)</a>', о.тело, re.S)
-        assert cards
-        for card in cards:
-            blob = " ".join(re.findall(r'class="zt__m"[^>]*>([^<]+)', card))
-            assert "Мультфильм" in blob
+        assert set(_виды_карточек(зона, о)) == {"Мультфильм"}
 
     def test_route_specific_urls_do_not_emit_kind_param(self, зона):
         о = запросить(зона, "/movies/")
@@ -213,7 +217,9 @@ class TestSortAndNew:
 class TestPagination:
     def test_pagination_241_items(self, зона241):
         о = запросить(зона241, "/catalog/")
-        assert "Результаты:" in о.тело
+        # Подпись стала конкретнее: вместо «Результаты:» витрина называет раздел
+        # и число записей. Проверяется число — оно и есть смысл подписи.
+        assert "Результаты в каталоге: 243" in о.тело
         # Pass5 PAGE_SIZE=28; 241+2 traps ≈ 243 → ceil(243/28)=9 pages.
         assert 'aria-current="page">1<' in о.тело
         о2 = запросить(зона241, "/catalog/?page=9")
