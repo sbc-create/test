@@ -21,6 +21,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import socket
@@ -333,6 +334,14 @@ def main() -> int:
 
     коммит = subprocess.run(["git", "rev-parse", "HEAD"], cwd=str(КОРЕНЬ),
                             capture_output=True, text=True).stdout.strip()
+    # Однозначная привязка к измеренным байтам. Одного коммита мало: правки
+    # могут быть ещё не зафиксированы, и тогда `source_commit` назвал бы файл,
+    # который не измеряли. Цифра артефакта такой двусмысленности не допускает.
+    артефакт = КОРЕНЬ / "automation/host/lords-frontend.py"
+    цифра = hashlib.sha256(артефакт.read_bytes()).hexdigest()
+    грязно = bool(subprocess.run(
+        ["git", "status", "--porcelain=v1", "--", "automation/host/lords-frontend.py"],
+        cwd=str(КОРЕНЬ), capture_output=True, text=True).stdout.strip())
     ман = манифест(вывод / "raw" / "local-manifest.json", коммит)
     порт = свободный_порт()
     лог = вывод / "raw" / "local-server.log"
@@ -347,6 +356,9 @@ def main() -> int:
         "stage": "ANIMEDIA-BLOCKWISE-PARITY-03",
         "block": "B15",
         "source_commit": коммит,
+        "measured_artifact_sha256": цифра,
+        "measured_artifact_bytes": артефакт.stat().st_size,
+        "artifact_uncommitted_at_measurement": грязно,
         "snapshot": {"catalog": str(СНИМОК), "details": str(ПОДРОБНОСТИ)},
         "measured_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "browser": "chromium",

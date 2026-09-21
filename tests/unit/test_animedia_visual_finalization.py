@@ -239,7 +239,9 @@ class TestVisualContracts:
         assert "снимке каталога" not in html
         assert "sidecar" not in html.lower()
         assert "поставщик" not in html.lower()
-        assert "Animedia 1.2.4 ·" in html
+        # См. B14: значок версии и коммита из подвала убран.
+        assert "Animedia 1.2.4 ·" not in html
+        assert "zvb" not in html
 
     def test_nav_includes_schedule_from_registry(self, fe):
         mod, _, _ = fe

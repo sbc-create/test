@@ -1,12 +1,15 @@
 {
  "stage": "ANIMEDIA-BLOCKWISE-PARITY-03",
  "block": "B15",
- "source_commit": "e6204ff75b95e588a3d052d3f5a7d87fa5b78b49",
+ "source_commit": "f124be66b6a924b39b9657a490831748fc36cd3e",
+ "measured_artifact_sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+ "measured_artifact_bytes": 498397,
+ "artifact_uncommitted_at_measurement": false,
  "snapshot": {
   "catalog": "/srv/lords/.frontend/animedia-01-catalog.json",
   "details": "/srv/lords/.frontend/animedia-01-details.json"
  },
- "measured_at_utc": "2026-09-21T13:07:38Z",
+ "measured_at_utc": "2026-09-21T13:13:41Z",
  "browser": "chromium",
  "viewports": [
   320,

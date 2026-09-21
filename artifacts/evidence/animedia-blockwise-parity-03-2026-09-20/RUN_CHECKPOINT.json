@@ -1,0 +1,131 @@
+{
+  "stage": "ANIMEDIA-BLOCKWISE-PARITY-03",
+  "spec": "ANIMEDIA_BLOCK_SPEC_V1",
+  "CONTRACT_SHA256": "5f2112e25ef974333c388bad405abfae3c3d460a713b028afa3c0e549b8eaeb3",
+  "CONTRACT_MUTATED": 0,
+  "BASELINE_MANIFEST_MUTATED": 0,
+  "start_head_of_stage": "242a834f580ded6dca42972c36c3e1454836c852",
+  "owner_decision": "OPTION_A_FINISH_PARITY03_FIRST",
+  "accepted_handoff_head": "e585fd5e3ec595ec9eca8e346965b17845afb255",
+  "resumed_from": "de477ec75340739f0fdc806c62af32629c01ecaa",
+  "branch": "claude/animedia-template-finalization-01",
+  "worktree": "/home/claude/wt-animedia-finalization-01",
+  "blocks": {
+    "B00": {
+      "report": "BLOCK_B00.md",
+      "test": "tests/unit/test_animedia_parity03_b00.py"
+    },
+    "B01": {
+      "report": "BLOCK_B01.md",
+      "test": "tests/unit/test_animedia_parity03_b01.py"
+    },
+    "B02": {
+      "report": "BLOCK_B02.md",
+      "test": "tests/unit/test_animedia_parity03_b02.py"
+    },
+    "B03": {
+      "report": "BLOCK_B03.md",
+      "test": "tests/unit/test_animedia_parity03_b03.py"
+    },
+    "B04": {
+      "report": "BLOCK_B04.md",
+      "test": "tests/unit/test_animedia_parity03_b04.py"
+    },
+    "B05": {
+      "report": "BLOCK_B05.md",
+      "test": "tests/unit/test_animedia_parity03_b05.py"
+    },
+    "B06": {
+      "report": "BLOCK_B06.md",
+      "test": "tests/unit/test_animedia_parity03_b06.py"
+    },
+    "B07": {
+      "report": "BLOCK_B07.md",
+      "test": "tests/unit/test_animedia_parity03_b07.py"
+    },
+    "B08": {
+      "report": "BLOCK_B08.md",
+      "test": "tests/unit/test_animedia_parity03_b08.py"
+    },
+    "B09": {
+      "report": "BLOCK_B09.md",
+      "test": "tests/unit/test_animedia_parity03_b09.py"
+    },
+    "B10": {
+      "report": "BLOCK_B10.md",
+      "test": "tests/unit/test_animedia_parity03_b10.py"
+    },
+    "B11": {
+      "report": "BLOCK_B11.md",
+      "test": "tests/unit/test_animedia_parity03_b11.py"
+    },
+    "B12": {
+      "report": "BLOCK_B12.md",
+      "test": "tests/unit/test_animedia_parity03_b12.py"
+    },
+    "B13": {
+      "report": "BLOCK_B13.md",
+      "test": "tests/unit/test_animedia_parity03_b13.py"
+    },
+    "B14": {
+      "report": "BLOCK_B14.md",
+      "test": "tests/unit/test_animedia_parity03_b14.py"
+    },
+    "B15": {
+      "report": "BLOCK_B15.md",
+      "test": "tests/unit/test_animedia_parity03_b15.py"
+    },
+    "B16": {
+      "report": "B16_OWNER_DEPLOY_PACKET.md",
+      "test": null,
+      "artifact_record": "B16_ARTIFACT.json"
+    }
+  },
+  "blocks_closed_local": [
+    "B00",
+    "B01",
+    "B02",
+    "B03",
+    "B04",
+    "B05",
+    "B06",
+    "B07",
+    "B08",
+    "B09",
+    "B10",
+    "B11",
+    "B12",
+    "B13",
+    "B14",
+    "B15"
+  ],
+  "blocks_owner_gated": [
+    "B16"
+  ],
+  "deploy_performed": 0,
+  "restart_performed": 0,
+  "dns_mutations": 0,
+  "indexability_mutations": 0,
+  "push_performed": 0,
+  "merge_performed": 0,
+  "stash_used": 0,
+  "reset_hard_used": 0,
+  "git_clean_used": 0,
+  "declared_data_gaps": [
+    "CATALOG_FRESHNESS_DATA_GAP",
+    "TOP100_DATA_GAP",
+    "WEEKLY_SNAPSHOT_DATA_GAP",
+    "EPISODE_EVENT_DATA_GAP",
+    "RECOMMENDATIONS_DATA_GAP",
+    "OWNER_DATA_REQUIRED",
+    "COLLECTION_CATEGORY_DATA_GAP",
+    "COLLECTION_REVISION_TIMESTAMP_DATA_GAP"
+  ],
+  "owner_actions_required": [
+    "выкат по пакету 03-blocks/B16_OWNER_DEPLOY_PACKET.md, разрешение привязать к цифре артефакта",
+    "перенос управляемых файлов в каноническую линию и регенерация TEMPLATE-BASELINE-MANIFEST.json",
+    "владельческие значения подвала",
+    "визуальная приёмка шаблона — самооценка запрещена контрактом",
+    "разрешение на push ветки"
+  ]
+}

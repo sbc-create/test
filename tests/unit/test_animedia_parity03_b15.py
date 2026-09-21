@@ -86,6 +86,24 @@ def test_matrix_was_measured_in_a_browser_on_the_real_snapshot(матрица):
     assert len(матрица["source_commit"]) == 40
 
 
+def test_matrix_was_measured_against_the_current_source(матрица):
+    """Матрица обязана описывать те байты, что лежат в дереве сейчас.
+
+    Одного `source_commit` для этого мало: правки могут быть ещё не
+    зафиксированы, и тогда метка назвала бы коммит, который не измеряли.
+    Поэтому стенд пишет цифру измеренного артефакта, а гейт её сверяет — иначе
+    зелёная матрица могла бы относиться к прошлой вёрстке.
+    """
+    import hashlib
+
+    цифра = матрица.get("measured_artifact_sha256")
+    assert цифра, (
+        "в матрице нет цифры измеренного артефакта — пересоздайте её стендом")
+    файл = ROOT / "automation/host/lords-frontend.py"
+    assert цифра == hashlib.sha256(файл.read_bytes()).hexdigest(), (
+        "матрица снята с другой версии шаблона: пересоздайте её стендом")
+
+
 def test_http_status_per_route(ячейки):
     for (маршрут, ширина), c in ячейки.items():
         ожидаем = 404 if маршрут == "not_found" else 200

@@ -73,7 +73,11 @@ class TestVisualFinalClosure:
         assert "zft__inner" in html
         assert "zft__grid" not in html
         assert "появятся из снимка" not in html
-        assert "Animedia 1.2.4 ·" in html
+        # B14 запретил внутренние знаки в подвале: прежняя стадия требовала
+        # значок «Animedia <версия> · <коммит>», и он был на обоих боевых
+        # доменах. Провенанс живёт в заголовках ответа и манифесте релиза.
+        assert "Animedia 1.2.4 ·" not in html
+        assert "zvb" not in html
         assert "mailto:" not in html
         assert "t.me/" not in html
 
