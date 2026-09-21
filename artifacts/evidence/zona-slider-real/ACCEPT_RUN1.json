@@ -1,0 +1,347 @@
+{
+  "base": "http://127.0.0.1:19230",
+  "tag": "final1",
+  "widths": {
+    "390": {
+      "width": 390,
+      "checks": {
+        "слайдов_не_меньше_6": true,
+        "скрипт_инициализировал": true,
+        "точек_столько_же": true,
+        "вперёд1_сменил_id": true,
+        "вперёд1_сменил_название": true,
+        "вперёд1_сменил_картинку": true,
+        "вперёд1_сменил_ссылку": true,
+        "вперёд2_сменил_id": true,
+        "вперёд2_сменил_название": true,
+        "вперёд2_сменил_картинку": true,
+        "вперёд2_сменил_ссылку": true,
+        "вперёд3_сменил_id": true,
+        "вперёд3_сменил_название": true,
+        "вперёд3_сменил_картинку": true,
+        "вперёд3_сменил_ссылку": true,
+        "назад_вернул": true,
+        "точка0_точный_переход": true,
+        "точка_последняя_точный_переход": true,
+        "ArrowRight_переключил": true,
+        "ArrowLeft_вернул": true,
+        "цикл_последний_к_первому": true,
+        "цикл_первый_к_последнему": true,
+        "swipe_переключил": true,
+        "CTA_ведёт_на_активный": true,
+        "prev_настоящая_кнопка": true,
+        "prev_hitbox_44": true,
+        "prev_не_перекрыта": true,
+        "prev_есть_aria_label": true,
+        "prev_не_disabled": true,
+        "next_настоящая_кнопка": true,
+        "next_hitbox_44": true,
+        "next_не_перекрыта": true,
+        "next_есть_aria_label": true,
+        "next_не_disabled": true,
+        "нет_горизонтального_overflow": true,
+        "ровно_один_h1": true,
+        "индексация_закрыта": true,
+        "ID_уникальны": true,
+        "названия_уникальны": true,
+        "картинки_уникальны": true
+      },
+      "problems": [],
+      "slides": 8,
+      "dots": 8,
+      "first": {
+        "id": "tancuy-chtoby-zhit",
+        "index": "0",
+        "title": "Танцуй, чтобы жить",
+        "meta": "Фильм · 2026",
+        "img": "https://poster.cdnvideohub.com/01a04262-9c6e-7622-8e0b-c4f6c705dc52.webp",
+        "href": "/title/tancuy-chtoby-zhit/",
+        "playHref": "/title/tancuy-chtoby-zhit/",
+        "slides": 8,
+        "ready": "1",
+        "dots": 8
+      },
+      "forward": [
+        {
+          "id": "tancuy-chtoby-zhit",
+          "title": "Танцуй, чтобы жить",
+          "href": "/title/tancuy-chtoby-zhit/"
+        },
+        {
+          "id": "chya-eto-sobaka",
+          "title": "Чья это собака?",
+          "href": "/title/chya-eto-sobaka/"
+        },
+        {
+          "id": "svinorez",
+          "title": "Свинорез",
+          "href": "/title/svinorez/"
+        },
+        {
+          "id": "kadaknath",
+          "title": "Кадакнатх",
+          "href": "/title/kadaknath/"
+        }
+      ],
+      "overlay": {
+        "prev": {
+          "w": 44,
+          "h": 44,
+          "hit": true,
+          "selfOnTop": true,
+          "top": "SPAN.",
+          "tag": "BUTTON",
+          "aria": "Предыдущий слайд",
+          "disabled": false
+        },
+        "next": {
+          "w": 44,
+          "h": 44,
+          "hit": true,
+          "selfOnTop": true,
+          "top": "SPAN.",
+          "tag": "BUTTON",
+          "aria": "Следующий слайд",
+          "disabled": false
+        },
+        "docOverflow": false,
+        "h1": 1,
+        "robots": "noindex, nofollow"
+      },
+      "uniqueness": {
+        "n": 8,
+        "ids": 8,
+        "titles": 8,
+        "imgs": 8
+      },
+      "passed": true
+    },
+    "768": {
+      "width": 768,
+      "checks": {
+        "слайдов_не_меньше_6": true,
+        "скрипт_инициализировал": true,
+        "точек_столько_же": true,
+        "вперёд1_сменил_id": true,
+        "вперёд1_сменил_название": true,
+        "вперёд1_сменил_картинку": true,
+        "вперёд1_сменил_ссылку": true,
+        "вперёд2_сменил_id": true,
+        "вперёд2_сменил_название": true,
+        "вперёд2_сменил_картинку": true,
+        "вперёд2_сменил_ссылку": true,
+        "вперёд3_сменил_id": true,
+        "вперёд3_сменил_название": true,
+        "вперёд3_сменил_картинку": true,
+        "вперёд3_сменил_ссылку": true,
+        "назад_вернул": true,
+        "точка0_точный_переход": true,
+        "точка_последняя_точный_переход": true,
+        "ArrowRight_переключил": true,
+        "ArrowLeft_вернул": true,
+        "цикл_последний_к_первому": true,
+        "цикл_первый_к_последнему": true,
+        "CTA_ведёт_на_активный": true,
+        "prev_настоящая_кнопка": true,
+        "prev_hitbox_44": true,
+        "prev_не_перекрыта": true,
+        "prev_есть_aria_label": true,
+        "prev_не_disabled": true,
+        "next_настоящая_кнопка": true,
+        "next_hitbox_44": true,
+        "next_не_перекрыта": true,
+        "next_есть_aria_label": true,
+        "next_не_disabled": true,
+        "нет_горизонтального_overflow": true,
+        "ровно_один_h1": true,
+        "индексация_закрыта": true,
+        "ID_уникальны": true,
+        "названия_уникальны": true,
+        "картинки_уникальны": true
+      },
+      "problems": [],
+      "slides": 8,
+      "dots": 8,
+      "first": {
+        "id": "tancuy-chtoby-zhit",
+        "index": "0",
+        "title": "Танцуй, чтобы жить",
+        "meta": "Фильм · 2026",
+        "img": "https://poster.cdnvideohub.com/01a04262-9c6e-7622-8e0b-c4f6c705dc52.webp",
+        "href": "/title/tancuy-chtoby-zhit/",
+        "playHref": "/title/tancuy-chtoby-zhit/",
+        "slides": 8,
+        "ready": "1",
+        "dots": 8
+      },
+      "forward": [
+        {
+          "id": "tancuy-chtoby-zhit",
+          "title": "Танцуй, чтобы жить",
+          "href": "/title/tancuy-chtoby-zhit/"
+        },
+        {
+          "id": "chya-eto-sobaka",
+          "title": "Чья это собака?",
+          "href": "/title/chya-eto-sobaka/"
+        },
+        {
+          "id": "svinorez",
+          "title": "Свинорез",
+          "href": "/title/svinorez/"
+        },
+        {
+          "id": "kadaknath",
+          "title": "Кадакнатх",
+          "href": "/title/kadaknath/"
+        }
+      ],
+      "overlay": {
+        "prev": {
+          "w": 44,
+          "h": 44,
+          "hit": true,
+          "selfOnTop": true,
+          "top": "SPAN.",
+          "tag": "BUTTON",
+          "aria": "Предыдущий слайд",
+          "disabled": false
+        },
+        "next": {
+          "w": 44,
+          "h": 44,
+          "hit": true,
+          "selfOnTop": true,
+          "top": "SPAN.",
+          "tag": "BUTTON",
+          "aria": "Следующий слайд",
+          "disabled": false
+        },
+        "docOverflow": false,
+        "h1": 1,
+        "robots": "noindex, nofollow"
+      },
+      "uniqueness": {
+        "n": 8,
+        "ids": 8,
+        "titles": 8,
+        "imgs": 8
+      },
+      "passed": true
+    },
+    "1440": {
+      "width": 1440,
+      "checks": {
+        "слайдов_не_меньше_6": true,
+        "скрипт_инициализировал": true,
+        "точек_столько_же": true,
+        "вперёд1_сменил_id": true,
+        "вперёд1_сменил_название": true,
+        "вперёд1_сменил_картинку": true,
+        "вперёд1_сменил_ссылку": true,
+        "вперёд2_сменил_id": true,
+        "вперёд2_сменил_название": true,
+        "вперёд2_сменил_картинку": true,
+        "вперёд2_сменил_ссылку": true,
+        "вперёд3_сменил_id": true,
+        "вперёд3_сменил_название": true,
+        "вперёд3_сменил_картинку": true,
+        "вперёд3_сменил_ссылку": true,
+        "назад_вернул": true,
+        "точка0_точный_переход": true,
+        "точка_последняя_точный_переход": true,
+        "ArrowRight_переключил": true,
+        "ArrowLeft_вернул": true,
+        "цикл_последний_к_первому": true,
+        "цикл_первый_к_последнему": true,
+        "CTA_ведёт_на_активный": true,
+        "prev_настоящая_кнопка": true,
+        "prev_hitbox_44": true,
+        "prev_не_перекрыта": true,
+        "prev_есть_aria_label": true,
+        "prev_не_disabled": true,
+        "next_настоящая_кнопка": true,
+        "next_hitbox_44": true,
+        "next_не_перекрыта": true,
+        "next_есть_aria_label": true,
+        "next_не_disabled": true,
+        "нет_горизонтального_overflow": true,
+        "ровно_один_h1": true,
+        "индексация_закрыта": true,
+        "ID_уникальны": true,
+        "названия_уникальны": true,
+        "картинки_уникальны": true
+      },
+      "problems": [],
+      "slides": 8,
+      "dots": 8,
+      "first": {
+        "id": "tancuy-chtoby-zhit",
+        "index": "0",
+        "title": "Танцуй, чтобы жить",
+        "meta": "Фильм · 2026",
+        "img": "https://poster.cdnvideohub.com/01a04262-9c6e-7622-8e0b-c4f6c705dc52.webp",
+        "href": "/title/tancuy-chtoby-zhit/",
+        "playHref": "/title/tancuy-chtoby-zhit/",
+        "slides": 8,
+        "ready": "1",
+        "dots": 8
+      },
+      "forward": [
+        {
+          "id": "tancuy-chtoby-zhit",
+          "title": "Танцуй, чтобы жить",
+          "href": "/title/tancuy-chtoby-zhit/"
+        },
+        {
+          "id": "chya-eto-sobaka",
+          "title": "Чья это собака?",
+          "href": "/title/chya-eto-sobaka/"
+        },
+        {
+          "id": "svinorez",
+          "title": "Свинорез",
+          "href": "/title/svinorez/"
+        },
+        {
+          "id": "kadaknath",
+          "title": "Кадакнатх",
+          "href": "/title/kadaknath/"
+        }
+      ],
+      "overlay": {
+        "prev": {
+          "w": 44,
+          "h": 44,
+          "hit": true,
+          "selfOnTop": true,
+          "top": "SPAN.",
+          "tag": "BUTTON",
+          "aria": "Предыдущий слайд",
+          "disabled": false
+        },
+        "next": {
+          "w": 44,
+          "h": 44,
+          "hit": true,
+          "selfOnTop": true,
+          "top": "SPAN.",
+          "tag": "BUTTON",
+          "aria": "Следующий слайд",
+          "disabled": false
+        },
+        "docOverflow": false,
+        "h1": 1,
+        "robots": "noindex, nofollow"
+      },
+      "uniqueness": {
+        "n": 8,
+        "ids": 8,
+        "titles": 8,
+        "imgs": 8
+      },
+      "passed": true
+    }
+  },
+  "verdict": "PASS"
+}

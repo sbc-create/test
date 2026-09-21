@@ -1,0 +1,197 @@
+{
+  "base": "http://127.0.0.1:19230",
+  "tag": "cand",
+  "routes": [
+    {
+      "path": "/",
+      "status": 200,
+      "gates": {
+        "h1": 1,
+        "h1text": "Танцуй, чтобы жить",
+        "imgs": 56,
+        "brokenImgs": 0,
+        "robots": "noindex, nofollow",
+        "canonical": "https://127.0.0.1/",
+        "title": "Zona — кинопортал",
+        "videos": [],
+        "playerRatio": null,
+        "docOverflow": false,
+        "bodyText": "Перейти к содержимому\nZona\nГлавная\nНовинки\nФильмы\nСериалы\nАнимация\nПодборки\nКаталог\nПоиск по каталогу\nНайти\n‹\n›\n\nСЕЙЧАС НА ZONA\n\nТанцуй, чтобы жить\n\nФильм · 202"
+      },
+      "problems": [],
+      "passed": true
+    },
+    {
+      "path": "/catalog/",
+      "status": 200,
+      "gates": {
+        "h1": 1,
+        "h1text": "Каталог",
+        "imgs": 28,
+        "brokenImgs": 0,
+        "robots": "noindex, nofollow",
+        "canonical": "https://127.0.0.1/catalog/?sort=newest",
+        "title": "Каталог — Zona",
+        "videos": [],
+        "playerRatio": null,
+        "docOverflow": false,
+        "bodyText": "Перейти к содержимому\nZona\nГлавная\nНовинки\nФильмы\nСериалы\nАнимация\nПодборки\nКаталог\nПоиск по каталогу\nНайти\nКаталог\n\nРезультаты в каталоге: 53573 · Сортировка: "
+      },
+      "problems": [],
+      "passed": true
+    },
+    {
+      "path": "/new/",
+      "status": 200,
+      "gates": {
+        "h1": 1,
+        "h1text": "Премьеры",
+        "imgs": 28,
+        "brokenImgs": 0,
+        "robots": "noindex, nofollow",
+        "canonical": "https://127.0.0.1/new/?sort=newest",
+        "title": "Премьеры — Zona",
+        "videos": [],
+        "playerRatio": null,
+        "docOverflow": false,
+        "bodyText": "Перейти к содержимому\nZona\nГлавная\nНовинки\nФильмы\nСериалы\nАнимация\nПодборки\nКаталог\nПоиск по каталогу\nНайти\nПремьеры\n\nПо дате премьеры из источника — не по дате"
+      },
+      "problems": [],
+      "passed": true
+    },
+    {
+      "path": "/movies/",
+      "status": 200,
+      "gates": {
+        "h1": 1,
+        "h1text": "Фильмы",
+        "imgs": 28,
+        "brokenImgs": 0,
+        "robots": "noindex, nofollow",
+        "canonical": "https://127.0.0.1/movies/?sort=newest",
+        "title": "Фильмы — Zona",
+        "videos": [],
+        "playerRatio": null,
+        "docOverflow": false,
+        "bodyText": "Перейти к содержимому\nZona\nГлавная\nНовинки\nФильмы\nСериалы\nАнимация\nПодборки\nКаталог\nПоиск по каталогу\nНайти\nФильмы\n\nРезультаты в этой выборке: 31844 · Сортировк"
+      },
+      "problems": [],
+      "passed": true
+    },
+    {
+      "path": "/series/",
+      "status": 200,
+      "gates": {
+        "h1": 1,
+        "h1text": "Сериалы",
+        "imgs": 28,
+        "brokenImgs": 0,
+        "robots": "noindex, nofollow",
+        "canonical": "https://127.0.0.1/series/?sort=newest",
+        "title": "Сериалы — Zona",
+        "videos": [],
+        "playerRatio": null,
+        "docOverflow": false,
+        "bodyText": "Перейти к содержимому\nZona\nГлавная\nНовинки\nФильмы\nСериалы\nАнимация\nПодборки\nКаталог\nПоиск по каталогу\nНайти\nСериалы\n\nРезультаты в этой выборке: 17589 · Сортиров"
+      },
+      "problems": [],
+      "passed": true
+    },
+    {
+      "path": "/search/?q=%D0%A2%D0%B0%D0%BD%D1%86%D1%83%D0%B9",
+      "status": 200,
+      "gates": {
+        "h1": 1,
+        "h1text": "Результаты поиска: «Танцуй»",
+        "imgs": 11,
+        "brokenImgs": 0,
+        "robots": "noindex, nofollow",
+        "canonical": "https://127.0.0.1/search/?q=%D0%A2%D0%B0%D0%BD%D1%86%D1%83%D0%B9",
+        "title": "Поиск — Zona",
+        "videos": [],
+        "playerRatio": null,
+        "docOverflow": false,
+        "bodyText": "Перейти к содержимому\nZona\nГлавная\nНовинки\nФильмы\nСериалы\nАнимация\nПодборки\nКаталог\nПоиск по каталогу\nНайти\nРезультаты поиска: «Танцуй»\n\nСовпадений: 11\n\nТ\nТанцу"
+      },
+      "problems": [],
+      "passed": true
+    },
+    {
+      "path": "/search/?q=zzzqqqxxx000",
+      "status": 200,
+      "gates": {
+        "h1": 1,
+        "h1text": "Результаты поиска: «zzzqqqxxx000»",
+        "imgs": 0,
+        "brokenImgs": 0,
+        "robots": "noindex, nofollow",
+        "canonical": "https://127.0.0.1/search/?q=zzzqqqxxx000",
+        "title": "Поиск — Zona",
+        "videos": [],
+        "playerRatio": null,
+        "docOverflow": false,
+        "bodyText": "Перейти к содержимому\nZona\nГлавная\nНовинки\nФильмы\nСериалы\nАнимация\nПодборки\nКаталог\nПоиск по каталогу\nНайти\nРезультаты поиска: «zzzqqqxxx000»\nСовпадений нет\n\nПо"
+      },
+      "problems": [],
+      "passed": true
+    },
+    {
+      "path": "/definitely-missing-page-xyz/",
+      "status": 404,
+      "gates": {
+        "h1": 1,
+        "h1text": "Страница не найдена",
+        "imgs": 0,
+        "brokenImgs": 0,
+        "robots": "noindex, nofollow",
+        "canonical": null,
+        "title": "Страница не найдена — Zona",
+        "videos": [],
+        "playerRatio": null,
+        "docOverflow": false,
+        "bodyText": "Перейти к содержимому\nZona\nГлавная\nНовинки\nФильмы\nСериалы\nАнимация\nПодборки\nКаталог\nПоиск по каталогу\nНайти\n404\nСтраница не найдена\n\nАдрес /definitely-missing-p"
+      },
+      "problems": [],
+      "passed": true
+    },
+    {
+      "path": "/title/tancuy-chtoby-zhit/",
+      "status": 200,
+      "gates": {
+        "h1": 1,
+        "h1text": "Танцуй, чтобы жить",
+        "imgs": 14,
+        "brokenImgs": 0,
+        "robots": "noindex, nofollow",
+        "canonical": "https://127.0.0.1/title/tancuy-chtoby-zhit/",
+        "title": "Танцуй, чтобы жить — смотреть онлайн — Zona",
+        "videos": [],
+        "playerRatio": 1.78,
+        "docOverflow": false,
+        "bodyText": "Перейти к содержимому\nZona\nГлавная\nНовинки\nФильмы\nСериалы\nАнимация\nПодборки\nКаталог\nПоиск по каталогу\nНайти\nZona / Фильмы / Танцуй, чтобы жить\nТ\nТанцуй, чтобы ж"
+      },
+      "problems": [],
+      "passed": true
+    },
+    {
+      "path": "/title/chya-eto-sobaka/",
+      "status": 200,
+      "gates": {
+        "h1": 1,
+        "h1text": "Чья это собака?",
+        "imgs": 14,
+        "brokenImgs": 0,
+        "robots": "noindex, nofollow",
+        "canonical": "https://127.0.0.1/title/chya-eto-sobaka/",
+        "title": "Чья это собака? — смотреть онлайн — Zona",
+        "videos": [],
+        "playerRatio": 1.78,
+        "docOverflow": false,
+        "bodyText": "Перейти к содержимому\nZona\nГлавная\nНовинки\nФильмы\nСериалы\nАнимация\nПодборки\nКаталог\nПоиск по каталогу\nНайти\nZona / Фильмы / Чья это собака?\nЧ\nЧья это собака?\n\nN"
+      },
+      "problems": [],
+      "passed": true
+    }
+  ],
+  "verdict": "PASS"
+}
