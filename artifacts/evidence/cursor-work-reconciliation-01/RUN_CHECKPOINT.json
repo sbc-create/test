@@ -4,8 +4,10 @@
   "next_stage": "SITE-FACTORY-TEN-DISTINCT-TEMPLATES-01",
   "updated_at": "2026-09-21T10:52:00Z",
 
-  "phase": "A6_PRESERVED_A5_MATRIX_BUILT",
-  "verdict_so_far": "IN_PROGRESS",
+  "phase": "A11_HANDOFF_READY",
+  "verdict_so_far": "PARTIAL_READY_WITH_OWNER_GATE",
+  "handoff": "artifacts/evidence/cursor-work-reconciliation-01/HANDOFF.json",
+  "handoff_head": "598903c08bc34fe17f869f7568bd761d1a4471ab",
 
   "canonical_head": "491836048dae11ae639795c7a3827706129faef6",
   "worktree": "/home/claude/wt-zona-finalization-01",
@@ -46,17 +48,27 @@
     }
   ],
 
-  "remaining_steps": [
-    "A7 воспроизвести и исправить P0-SEARCH-FULL-SCAN",
-    "A7 исправить P1-TITLE-OVERFLOW и P1-INNER-SCROLLBARS",
-    "A5 FINISH B14A — матрица пустых и деградированных состояний",
-    "A8 перепрогнать тесты блоков со статусом RETEST",
-    "A9 два стабильных живых прогона, индексируемость before=after",
-    "A10 сформировать HANDOFF_HEAD и HANDOFF.json",
-    "A11 отчёт и обязательная остановка"
+  "completed_after_matrix": [
+    {"step": "A7 P0-SEARCH-FULL-SCAN", "commit": "a9d846e",
+     "result": "p95 3825 → 99.7 ms, 157 запросов сличены с перебором, расхождений 0"},
+    {"step": "A7 устаревшие ожидания тестов", "commit": "fbadbb3",
+     "result": "tests/lords 403 passed; на чистом HEAD падало 12"},
+    {"step": "A7 обрезанное время и объявление clamp/scroll", "commit": "f98e74c",
+     "result": "формат времени исправлен, замысел объявлен машинно"},
+    {"step": "A5 FINISH B14A", "commit": "d361a85",
+     "result": "8 состояний, 5 различимых, SOFT_404_COUNT=0"},
+    {"step": "A9 артефакт починки", "commit": "8b12689",
+     "result": "28c4ba5f…, restore drill PASS, выкладка не выполнялась"},
+    {"step": "A7 часовая бомба в tests/unit", "commit": "598903c",
+     "result": "tests/unit 5582 passed"}
   ],
 
-  "first_unfinished_block": "B14A",
+  "remaining_steps_blocked_by_owner": [
+    "A9 два стабильных ЖИВЫХ прогона — нужен owner approval на новый digest",
+    "B14 footer data gate — нужны контакты и юридические данные владельца"
+  ],
+
+  "first_unfinished_block": "нет — B14A закрыт",
   "deploy_performed_this_stage": 0,
   "push_performed_this_stage": 0,
   "indexability_mutations_this_stage": 0,

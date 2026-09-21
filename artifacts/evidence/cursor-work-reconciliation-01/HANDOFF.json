@@ -1,0 +1,154 @@
+{
+  "STAGE": "SITE-FACTORY-CURSOR-WORK-RECONCILIATION-01",
+  "NEXT_STAGE": "SITE-FACTORY-TEN-DISTINCT-TEMPLATES-01",
+  "VERDICT": "PARTIAL_READY_WITH_OWNER_GATE",
+  "closed_at": "2026-09-21T11:42:00Z",
+
+  "HANDOFF_HEAD": "598903c08bc34fe17f869f7568bd761d1a4471ab",
+  "HANDOFF_BRANCH": "claude/zona-template-finalization-01",
+  "HANDOFF_WORKTREE": "/home/claude/wt-zona-finalization-01",
+  "CANONICAL_START_HEAD": "491836048dae11ae639795c7a3827706129faef6",
+  "BRANCH_HEAD_AT_ENTRY": "1d046589e65b373d116ab4e4ec24ff8fbe469260",
+
+  "READY_TO_START_TEN_TEMPLATE_FACTORY": "YES",
+  "READY_BASIS": [
+    "Вся незакоммиченная работа предыдущего прогона сохранена, ничего не сброшено",
+    "Acceptance contract восстановлен и верифицирован побайтово",
+    "Каждый блок B00–B18 имеет доказанный статус, а не заявленный",
+    "Первый незавершённый блок B14A закрыт",
+    "P0 поиска исправлен и доказан сличением с перебором",
+    "tests/lords 437 passed дважды подряд; tests/unit 5582 passed",
+    "Рабочее дерево чистое, неизвестных файлов нет"
+  ],
+  "READY_CAVEAT": "Поле — технический вердикт этапа A. Запуск Промпта B остаётся действием владельца: этап A обязан остановиться после handoff.",
+  "WHY_NOT_FULL_PASS": "Два стабильных ЖИВЫХ прогона не выполнены. Починка не выложена, потому что разрешение владельца было выдано на другой digest.",
+  "TEN_TEMPLATE_FACTORY_DEPENDS_ON_OPEN_GATE": false,
+  "INDEPENDENCE_NOTE": "Фабрика десяти шаблонов создаёт новые пакеты и не зависит ни от выкладки zona, ни от контактов подвала. Открытые ворота её не блокируют.",
+
+  "ЧТО_СДЕЛАНО": {
+    "сохранено": {
+      "commit": "3a745dd",
+      "файлов": 112,
+      "байт": "43 MB",
+      "состав": "93 скриншота, 16 записей, 3 harness",
+      "секретов_и_временных_закоммичено": 0
+    },
+    "восстановлено": {
+      "контракт": "docs/ZONA_BLOCK_SPEC_V1.md",
+      "digest_секций_1_24": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+      "пересчитан_и_совпал": true,
+      "CONTRACT_MUTATED": 0
+    },
+    "исправлений_кода": 6,
+    "исправлений_устаревших_ожиданий": 13,
+    "новых_тестов": 4
+  },
+
+  "ИСПРАВЛЕНО_НО_НЕ_ВЫЛОЖЕНО": [
+    "поиск: отбор кандидатов вместо перебора каталога",
+    "главная: время поступления с минутами",
+    "пустой раздел без фильтров назван своим именем",
+    "страница 400 получила выход навигацией",
+    "обрезка и прокрутка объявлены машинно",
+    "карточки animedia получили доступное имя"
+  ],
+
+  "АРТЕФАКТ_ПОЧИНКИ": {
+    "ARTIFACT_SOURCE_HEAD": "598903c08bc34fe17f869f7568bd761d1a4471ab",
+    "ARTIFACT_SHA256": "28c4ba5f87133e441febab56221789e6a5ca58bf24bf1182de932cf039b66895",
+    "MANIFEST_SHA256": "f6c2efcc97c42cc6479590fc8c7f8afd2407f065501ac01bac9320d6c8492f3c",
+    "CODE_TREE_DIGEST": "ca8ee4902f63c793b87f8b4fa0806ea2d8cd5b9eff993eea7c9736992f954adf",
+    "ARTIFACT_PATH": "artifacts/zona-reconciliation-artifact/zona-01-frontend-598903c08bc3.tar.gz",
+    "RESTORE_DRILL": "PASS",
+    "DEPLOY_AUTHORIZED": false,
+    "DEPLOY_PERFORMED": 0,
+    "packet": "artifacts/evidence/cursor-work-reconciliation-01/OWNER_DEPLOY_PACKET.json"
+  },
+
+  "LIVE": {
+    "domain": "zonafilm.space",
+    "build": "20260920T212359Z-39dc16ed-nova",
+    "artifact_sha256": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+    "проверено": "2026-09-21T10:36:51Z",
+    "соответствует_одобренному_артефакту": true,
+    "повторная_выкладка_не_требовалась": true,
+    "INDEXABILITY_BEFORE": "noindex,nofollow",
+    "INDEXABILITY_AFTER": "noindex, nofollow",
+    "UNAUTHORIZED_INDEXABILITY_TRANSITIONS": 0,
+    "живые_дефекты_на_текущей_сборке": [
+      "поиск 8.4 s — исправление собрано, но не выложено",
+      "«Добавлено DD.MM.YYYY, HH» без минут — исправление собрано, но не выложено"
+    ]
+  },
+
+  "OWNER_ACTIONS_REQUIRED": [
+    {
+      "id": "ZONA-DEPLOY-RECONCILIATION-01",
+      "что": "Разрешение на выкладку артефакта починки на zona-01",
+      "почему": "Старое разрешение привязано к digest 75b84a4d и на новый код не распространяется",
+      "нужен_digest": "28c4ba5f87133e441febab56221789e6a5ca58bf24bf1182de932cf039b66895",
+      "scope": "ZONA_01_ONLY",
+      "индексируемость": "остаётся noindex,nofollow — изменение не запрашивается",
+      "блокирует": ["два стабильных живых прогона", "живая проверка P0 поиска"],
+      "не_блокирует": ["фабрику десяти шаблонов"]
+    },
+    {
+      "id": "ZONA-FOOTER-CONTACTS",
+      "что": "Контактные и юридические данные подвала zonafilm.space",
+      "почему": "Выдумывать контакты и юридические сведения запрещено",
+      "текущее_поведение": "подвал честно отдаёт OWNER_DATA_REQUIRED и сохраняет композицию",
+      "блокирует": ["FOOTER_DATA_PASS"],
+      "не_блокирует": ["всё остальное"]
+    }
+  ],
+
+  "RESIDUAL_BACKLOG": [
+    "Живая адаптивная матрица не перезапущена после правок: её перезапуск имеет смысл только после выкладки",
+    "Заголовок первого экрана (.zhero h1) обрезается по строкам, и полного текста рядом нет — требует решения владельца по оформлению, а не правки на ходу",
+    "comedy_facet_collection_delta=1: одна запись расходится между facet каталога и коллекцией",
+    "Прогон tests/unit перезаписывает закоммиченный artifacts/evidence/products/product-readiness.json значениями своего окружения",
+    "Нумерация блоков в ZONA_BLOCK_SPEC_V1.md и в прогоне independent-repair не совпадает"
+  ],
+
+  "СЧЁТЧИКИ": {
+    "DEPLOY_PERFORMED_THIS_STAGE": 0,
+    "PUSH_PERFORMED_THIS_STAGE": 0,
+    "INDEXABILITY_MUTATIONS_THIS_STAGE": 0,
+    "NEW_BASELINE_CREATED": 0,
+    "FOREIGN_CHANGES_RESET": 0,
+    "OOM_KILLS_THIS_STAGE": 0,
+    "PEAK_RSS_MB": 135,
+    "TESTS_LORDS": "437 passed, 17 skipped ×2",
+    "TESTS_UNIT": "5582 passed, 5 skipped, 1 xfailed"
+  },
+
+  "ЛЕДЖЕР": {
+    "DISCOVERY": "artifacts/evidence/cursor-work-reconciliation-01/DISCOVERY.json",
+    "PREVIOUS_GOALS": "artifacts/evidence/cursor-work-reconciliation-01/PREVIOUS_GOALS.md",
+    "BLOCK_MATRIX": "artifacts/evidence/cursor-work-reconciliation-01/BLOCK_MATRIX.json",
+    "FILE_PROVENANCE": "artifacts/evidence/cursor-work-reconciliation-01/FILE_PROVENANCE.json",
+    "WORKTREE_SCAN": "artifacts/evidence/cursor-work-reconciliation-01/WORKTREE_SCAN.json",
+    "SEARCH_EQUIVALENCE": "artifacts/evidence/cursor-work-reconciliation-01/SEARCH_EQUIVALENCE.json",
+    "B14A_MATRIX": "artifacts/evidence/cursor-work-reconciliation-01/B14A_MATRIX.json",
+    "BLOCKERS": "artifacts/evidence/cursor-work-reconciliation-01/BLOCKERS.json",
+    "OWNER_DEPLOY_PACKET": "artifacts/evidence/cursor-work-reconciliation-01/OWNER_DEPLOY_PACKET.json",
+    "RUN_CHECKPOINT": "artifacts/evidence/cursor-work-reconciliation-01/RUN_CHECKPOINT.json"
+  },
+
+  "СОХРАНЁННОЕ_ЧУЖОЕ": {
+    "общий_checkout": "/srv/site-factory/repo",
+    "dirty_записей": 26,
+    "файлов_с_хешами": 62,
+    "инвентарь": "ветка claude/ten-distinct-templates-01, artifacts/evidence/ten-template-factory-01/preserved/",
+    "тронуто": 0
+  },
+
+  "ПАРАЛЛЕЛЬНАЯ_ВЕТКА": {
+    "branch": "claude/ten-distinct-templates-01",
+    "worktree": "/home/claude/wt-ten-templates-01",
+    "head": "f77e2cfc10e6935ff924626172052fd7834f14ad",
+    "что_там": "Заморожен acceptance contract фабрики десяти шаблонов",
+    "CONTRACT_SHA256": "02e51bcbae0b4f865b7e7c7758aee490f53c2ef74200219f0cb453ff4ab6249f",
+    "состояние": "BLOCKED_PRECONDITION — ждала этот handoff; реализация T01–T10 не начата"
+  }
+}

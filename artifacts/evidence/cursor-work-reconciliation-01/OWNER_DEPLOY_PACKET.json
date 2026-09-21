@@ -1,0 +1,31 @@
+{
+  "STAGE": "SITE-FACTORY-CURSOR-WORK-RECONCILIATION-01",
+  "ARTIFACT_SOURCE_HEAD": "598903c08bc34fe17f869f7568bd761d1a4471ab",
+  "ARTIFACT_SHA256": "28c4ba5f87133e441febab56221789e6a5ca58bf24bf1182de932cf039b66895",
+  "MANIFEST_SHA256": "f6c2efcc97c42cc6479590fc8c7f8afd2407f065501ac01bac9320d6c8492f3c",
+  "CODE_TREE_DIGEST": "ca8ee4902f63c793b87f8b4fa0806ea2d8cd5b9eff993eea7c9736992f954adf",
+  "ARTIFACT_PATH": "artifacts/zona-reconciliation-artifact/zona-01-frontend-598903c08bc3.tar.gz",
+  "BUILT_AT": "2026-09-21T11:37:47Z",
+  "DOMAIN": "zonafilm.space",
+  "PROFILE": "zona-01",
+  "SERVICE_NAME": "nova-zona-01",
+  "DEPLOY_SCOPE": "zona-01-only",
+  "EXPECTED_INDEXABILITY": "noindex,nofollow",
+  "INDEXABILITY_MUTATIONS_ALLOWED": 0,
+  "ROLLBACK_TARGET_ARTIFACT": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+  "ROLLBACK_TARGET_BUILD": "20260920T212359Z-39dc16ed-nova",
+  "ROLLBACK_TARGET_SOURCE_HEAD": "39dc16ede9490160adfc4719cecc0f5b8c026799",
+  "ROLLBACK_NOTE": "Откат возвращает то, что работает на живом сейчас, а не артефакт B17 5fb6295c — тот перестал быть живым 20 сентября.",
+  "OWNER_DEPLOY_APPROVAL_ID": null,
+  "DEPLOY_AUTHORIZED": false,
+  "DEPLOY_PERFORMED": 0,
+  "WHY_APPROVAL_REQUIRED": "Разрешение ZONA-INDEPENDENT-REPAIR-DEPLOY-20260920-01 выдано на артефакт 75b84a4d686a381a… и на него не распространяется.",
+  "CHANGES_SINCE_LIVE": [
+    "поиск: отбор кандидатов вместо перебора каталога (p95 3825 → 99.7 ms)",
+    "главная: время поступления показывается с минутами",
+    "обрезка и прокрутка объявлены разметкой для машинного аудита",
+    "пустой раздел без фильтров назван своим именем",
+    "страница 400 получила выход навигацией",
+    "карточки animedia получили доступное имя"
+  ]
+}
