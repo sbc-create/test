@@ -1,0 +1,54 @@
+{
+ "task": "ANIMEDIA-DEPLOY-PACKET",
+ "tenant": "animedia",
+ "prepared_at_utc": "2026-09-21T21:43:50Z",
+ "release": "20260921T213929Z-d8c50de-animedia-parity",
+ "artifact_sha256": "c178831bbb20a4b3449cfc077257bab05d6bf12d5caddb5bf3adc545cd34ce6e",
+ "source_commit": "d8c50de779681f1c23661b8725ebf3f4f58fd49e",
+ "tree_hash": "f084b2cb67753c3005df16627d79ac3338612b8a",
+ "CODE_TREE_MATCH": "YES",
+ "ARTIFACT_SOURCE_MATCH": "YES",
+ "stage_1_canary": {
+  "site": "animedia-01",
+  "domain": "animedia.icu",
+  "state": "ARMED_AWAITING_RESTART",
+  "armed": {
+   "manifest": true,
+   "assignment": true,
+   "digest_checked_times": 3
+  },
+  "remaining_owner_command": "systemctl restart nova-animedia-01.service",
+  "after_restart_session_will": [
+   "два живых прогона на 320/390/768/1024/1440/1920",
+   "сверка живого артефакта с принятым",
+   "откат канарейки при расхождении"
+  ],
+  "rollback": {
+   "commands": [
+    "install -m 0644 /srv/lords/.frontend/template-manifest-animedia-01.json.before-b16 /srv/lords/.frontend/template-manifest-animedia-01.json",
+    "ln -sfn ../../releases/20260921T154512Z-8966632-animedia-rollback /srv/lords/.frontend/sites/animedia-01/current",
+    "systemctl restart nova-animedia-01.service"
+   ],
+   "drill": "36-rollback-drill/ROLLBACK_DRILL.json",
+   "verified": true
+  }
+ },
+ "stage_2_secondary": {
+  "site": "animedia-02",
+  "domain": "animedia.space",
+  "state": "NOT_PREPARED_BY_DESIGN",
+  "why": "второй домен готовится только после зелёной живой приёмки канарейки",
+  "manifest_ready_at": "scratchpad/manifest-animedia-02.parity.json",
+  "remaining_owner_command_later": "systemctl restart nova-animedia-02.service"
+ },
+ "blocked_by": {
+  "what": "перезапуск службы",
+  "who": "владелец под root",
+  "why": "systemctl закрыт профилем сессии, а polkit отказывает в неинтерактивной аутентификации; задание прямо запрещает выполнять systemctl самостоятельно и обходить root-гейт",
+  "measured": "PID 664915 не менялся с 16:56:16 UTC"
+ },
+ "dns_mutations": 0,
+ "tls_mutations": 0,
+ "indexability_mutations": 0,
+ "restart_performed_by_session": 0
+}
