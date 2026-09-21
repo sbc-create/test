@@ -107,7 +107,14 @@ def main() -> int:
         ),
         "QWEN_ENDPOINT_HTTPS_PASS": int(bool(preflight["checks"]["https_endpoint"])),
         "QWEN_MODEL": preflight["QWEN_MODEL"] or "UNSET",
-        "OWNER_AUTHORIZATION_ID": preflight["OWNER_AUTHORIZATION_ID"],
+        # The id below was declared when the stage was scoped. No paid call was
+        # made, so no spend authorization was exercised — say so rather than
+        # letting a bare id read as owner approval to spend.
+        "OWNER_AUTHORIZATION_ID": (
+            preflight["OWNER_AUTHORIZATION_ID"]
+            if real_executed
+            else f"{preflight['OWNER_AUTHORIZATION_ID']} (DECLARED_NOT_EXERCISED)"
+        ),
         "SPEND_CAP_RUB": preflight["caps"]["REAL_QWEN_SPEND_CAP_RUB"],
         "REAL_QWEN_CANARY_EXECUTED": real_executed,
         "REAL_QWEN_REQUESTS": canary["REAL_QWEN_REQUESTS"],

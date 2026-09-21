@@ -786,34 +786,60 @@ def cleanup_canary_rows(store: CommunityStore) -> dict[str, Any]:
     }
 
 
-def production_isolation_proof() -> dict[str, Any]:
-    """Prove no production comments database was opened or written."""
-    candidates = [
-        REPO / "var/community/ratings.sqlite",
-        REPO / "var/community_comments/production.sqlite",
-        Path("/srv/site-factory/repo/var/community/ratings.sqlite"),
-    ]
-    observed = []
-    for path in candidates:
-        try:
-            exists = path.is_file()
-        except OSError:
-            exists = False
-        observed.append(
-            {
-                "path": str(path),
-                "exists": exists,
-                "opened_by_canary": False,
-                "mtime": path.stat().st_mtime if exists else None,
-            }
-        )
+PRODUCTION_DB_CANDIDATES = (
+    REPO / "var/community/ratings.sqlite",
+    REPO / "var/community_comments/production.sqlite",
+    Path("/srv/site-factory/repo/var/community/ratings.sqlite"),
+)
+
+
+def _db_fingerprint(path: Path) -> dict[str, Any]:
+    """Size + mtime + content digest, without opening the file as a database."""
+    try:
+        if not path.is_file():
+            return {"path": str(path), "exists": False}
+        st = path.stat()
+        return {
+            "path": str(path),
+            "exists": True,
+            "size": st.st_size,
+            "mtime_ns": st.st_mtime_ns,
+            "sha256": hashlib_file(path),
+        }
+    except OSError as exc:
+        return {"path": str(path), "exists": False, "error": type(exc).__name__}
+
+
+def hashlib_file(path: Path) -> str:
+    import hashlib
+
+    h = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def snapshot_production_dbs() -> list[dict[str, Any]]:
+    return [_db_fingerprint(p) for p in PRODUCTION_DB_CANDIDATES]
+
+
+def production_isolation_proof(before: list[dict[str, Any]]) -> dict[str, Any]:
+    """Compare production databases before and after — not merely assert."""
+    after = snapshot_production_dbs()
+    changed: list[str] = []
+    for b, a in zip(before, after, strict=True):
+        if b != a:
+            changed.append(b["path"])
     return {
         "staging_db": str(STAGING_DB),
-        "production_candidates": observed,
+        "before": before,
+        "after": after,
+        "changed_paths": changed,
         "PRODUCTION_COMMENTS_INSERTED": 0,
         "PRODUCTION_COMMENTS_PUBLISHED": 0,
         "production_db_opened": False,
-        "pass": True,
+        "pass": not changed,
     }
 
 
@@ -875,6 +901,7 @@ def main() -> int:
         if side.exists():
             side.unlink()
 
+    production_before = snapshot_production_dbs()
     provider, gate = build_provider(args.provider, args)
     store = CommunityStore(STAGING_DB)
     outbox.ensure_outbox_schema(store)
@@ -903,7 +930,7 @@ def main() -> int:
         if args.keep_rows
         else cleanup_canary_rows(store)
     )
-    isolation = production_isolation_proof()
+    isolation = production_isolation_proof(production_before)
     store.close()
 
     latencies = [r["latency_ms"] for r in sections["content"]["records"]]
@@ -949,6 +976,7 @@ def main() -> int:
             sections["prompt_injection"]["pass"],
             not missing_classes,
             cleanup.get("pass", False) or args.keep_rows,
+            isolation["pass"],
         ]
     )
 
