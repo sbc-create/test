@@ -33,7 +33,7 @@ def эталон() -> dict:
 
 @pytest.fixture(scope="module")
 def замер() -> dict:
-    файл = ДОК / "15-after-cleanup" / "PROBE_after-cleanup_animedia_icu.json"
+    файл = ДОК / "23-final" / "PROBE_final_animedia_icu.json"
     assert файл.is_file(), "нет замера после правок оболочки"
     д = json.loads(файл.read_text(encoding="utf-8"))
     return {(c["route"], c["width"]): c for c in д["cells"]}
@@ -96,6 +96,43 @@ def test_ширина_плитки_карусели_считается_от_ок
     assert "container-type:inline-size" in стиль
     assert "calc((100cqw - 198px)/7)" in стиль
     assert "calc((100% - 198px)/7)" not in стиль
+
+
+def test_карточка_одинакова_на_всех_маршрутах(замер):
+    """У оригинала карточка одного размера везде: 118 на планшете, 163 на 1440.
+
+    Прежде каталог имел собственную плотность (198), рекомендации — свою (197),
+    а страница каталога вдобавок была на двойной боковой отступ уже остальных,
+    потому что обёртка оказывалась внутри обёртки.
+    """
+    ожидания = {768: 118, 1440: 163, 1920: 163}
+    for маршрут in ("catalog", "search", "collection_detail", "title", "episode"):
+        for ш, эт in ожидания.items():
+            постеры = [p for p in замер[(маршрут, ш)]["posters"] if 40 < p["w"] < 600]
+            assert постеры, f"{маршрут}@{ш}: постеров нет"
+            w = постеры[0]["w"]
+            assert abs(w - эт) <= 2, f"{маршрут}@{ш}: карточка {w}, эталон {эт}"
+
+
+def test_контейнер_одинаков_на_всех_маршрутах(замер):
+    for маршрут in ("home", "catalog", "search", "collection_detail", "title", "episode"):
+        assert замер[(маршрут, 1440)]["container"]["width"] == 1340, маршрут
+        assert замер[(маршрут, 1920)]["container"]["width"] == 1340, маршрут
+
+
+def test_вложенная_обёртка_не_применяет_поля_дважды(стиль):
+    assert ".zwrap .zwrap{width:100%;max-width:none;margin-inline:0}" in стиль
+
+
+def test_постер_страницы_тайтла_как_у_оригинала(стиль):
+    """240x351 — измерено на снимке 390 и подтверждено записью для ~1363."""
+    assert "aspect-ratio:240/351" in стиль
+    assert ".ztitle__poster{width:240px;max-width:100%;aspect-ratio:240/351;margin:0}" in стиль
+    # Прежние 112 на телефоне превращали постер в миниатюру. Ограничение 112
+    # осталось только у плитки карусели, и это другое место.
+    import re as _re
+    узкий = _re.findall(r"\.ztitle__poster\{[^}]*max-width:112px", стиль)
+    assert узкий == [], узкий
 
 
 # --- первый экран -------------------------------------------------------------
@@ -166,6 +203,34 @@ def test_после_правок_нет_переполнения_обрезок_
         assert c["broken_images"] == 0, f"{маршрут}@{ширина}: битые изображения"
         assert c["player_instances"] <= 1, f"{маршрут}@{ширина}: плееров {c['player_instances']}"
         assert c["http"] == c["expected_http"], f"{маршрут}@{ширина}: код {c['http']}"
+
+
+def test_нет_целей_нажатия_меньше_44(замер):
+    """Меряется действительная область нажатия, а не прямоугольник ссылки."""
+    мелкие = {(м, ш): c["small_touch_targets"] for (м, ш), c in замер.items()
+              if c["small_touch_targets"]}
+    assert мелкие == {}, мелкие
+
+
+def test_нет_изображений_с_неизвестным_местом(замер):
+    """Место под изображение известно до загрузки — значит вёрстка не прыгнет."""
+    плохие = {(м, ш): c["images_without_size"] for (м, ш), c in замер.items()
+              if c["images_without_size"]}
+    assert плохие == {}, плохие
+
+
+def test_матрица_расхождений_закрыта_или_названа_блокировкой():
+    """Нельзя объявить паритет, не показав, что осталось и почему."""
+    м = json.loads((ДОК / "04-matrix" / "PARITY_MATRIX.json").read_text(encoding="utf-8"))
+    assert м["ANIMEDIA_P0_OPEN"] == 0
+    assert м["ANIMEDIA_P1_OPEN"] == 0
+    assert м["ANIMEDIA_P2_OPEN"] == 0
+    # То, что упирается в данные, обязано называть источник, а не «сделано».
+    блок = [р for р in м["divergences"] if р.get("status") == "BLOCKED_SOURCE_DATA"]
+    assert блок, "блокировки источником должны быть названы явно"
+    for р in блок:
+        assert р["blocked_by"], р
+        assert р["what_would_close_it"], р
 
 
 def test_индексация_не_менялась(замер):

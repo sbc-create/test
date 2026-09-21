@@ -990,6 +990,11 @@ font:14px/1.5 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif}
 .zwrap,.zhd__in,.zft__inner{
   width:min(var(--a-content-max),calc(100% - var(--page-gutters)));
   margin-inline:auto;padding-inline:0;box-sizing:border-box}
+/* Вложенная обёртка не применяет поля второй раз. Измерено: страница каталога
+   была 1260 вместо 1340 и карточка 152 вместо 163 — ровно на двойной боковой
+   отступ уже остальных страниц, потому что `.zwrap` оказывалась внутри
+   `.zwrap`. */
+.zwrap .zwrap{width:100%;max-width:none;margin-inline:0}
 .zwrap{padding-block:0}
 /* Шапка оригинала — не во всю ширину окна: это ограниченная рамка, и её нижняя
    линия обрывается вместе с ней. Высота измерена: 90 на 768 и шире, 126 на
@@ -1097,10 +1102,16 @@ display:flex;align-items:center;text-decoration:none}
 grid-template-columns:1fr}
 body.zhd-lock{overflow:hidden}
 /* B01.2 breadcrumb */
-.zcr{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-height:32px;max-height:40px;
-padding:6px 0;margin:0 0 8px;font-size:13px;color:var(--a-dim);line-height:1.3;overflow:hidden}
-@media(max-width:767px){.zcr{max-height:none;min-height:0;height:auto;max-height:2.8em}}
-.zcr a{color:var(--a-acc);font-weight:600;text-decoration:none;padding:2px 0}
+/* Полоса крошек: высота подчинена правилу цели нажатия. Невидимое расширение
+   области пробовалось первым и не сработало — полоса обрезает содержимое, и
+   расширенная область обрезалась вместе с ним. Поэтому высота настоящая: 44.
+   Геометрия крошек у оригинала не измерена, так что паритету это не
+   противоречит. */
+.zcr{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-height:44px;
+padding:0;margin:0 0 8px;font-size:13px;color:var(--a-dim);line-height:1.3}
+@media(max-width:767px){.zcr{min-height:44px;height:auto}}
+.zcr a{color:var(--a-acc);font-weight:600;text-decoration:none;
+min-height:44px;display:inline-flex;align-items:center}
 .zcr a:hover{text-decoration:underline}
 .zcr [aria-current=page]{color:var(--a-ink);font-weight:600}
 .ast{display:none}
@@ -1194,17 +1205,20 @@ justify-items:stretch}
    Правила на 1800 здесь нет намеренно: у оригинала постер одинаков и на 1440,
    и на 1920, потому что рамка ограничена. Колонки, растущие от ширины окна при
    ограниченном контейнере, мельчили карточку — было 121 на 1920. */
+/* На телефоне у оригинала две колонки по ~180 при промежутке около 10:
+   измерено на полностраничном снимке 390. Промежуток 33 сужал карточку до
+   163 и оставлял пустую полосу между колонками. */
+@media(max-width:767px){.zg{gap:10px}}
 @media(min-width:768px){.zg{grid-template-columns:repeat(5,minmax(0,1fr));gap:33px}}
 @media(min-width:1024px){.zg{grid-template-columns:repeat(5,minmax(0,1fr));gap:33px}}
 @media(min-width:1200px){.zg{grid-template-columns:repeat(7,minmax(0,1fr));gap:33px}}
-@media(min-width:768px) and (max-width:1199px){
-  .zcat .zg,.zwrap--catalog .zg{grid-template-columns:repeat(4,minmax(0,1fr))}
-}
-/* B11 catalog grid: 2 / 4 / 6 — never inherit home 7/10 density */
+/* Каталог держит тот же ритм, что и остальные сетки витрины: у оригинала
+   карточка одного размера на главной, в подборках и в рекомендациях, и делать
+   её на каталоге шире незачем. Прежние шесть колонок с промежутком 14 давали
+   198 вместо измеренных 163. */
 .zwrap--catalog .zg,.zcat .zg{grid-template-columns:repeat(2,minmax(0,1fr))}
-@media(min-width:768px){.zwrap--catalog .zg,.zcat .zg{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media(min-width:1200px){.zwrap--catalog .zg,.zcat .zg{grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}}
-@media(min-width:1800px){.zwrap--catalog .zg,.zcat .zg{grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}}
+@media(min-width:768px){.zwrap--catalog .zg,.zcat .zg{grid-template-columns:repeat(5,minmax(0,1fr));gap:33px}}
+@media(min-width:1200px){.zwrap--catalog .zg,.zcat .zg{grid-template-columns:repeat(7,minmax(0,1fr));gap:33px}}
 .afilt--closed{max-height:112px}
 .afilt--closed:not(.is-open):not(:has(details[open])){overflow:hidden}
 .afilt--closed.is-open,.afilt--closed:has(details[open]){overflow:visible;max-height:none}
@@ -1255,8 +1269,12 @@ flex-wrap:nowrap;min-height:1.25em;align-items:center}
 margin:0 !important;padding:0 !important;border:0 !important;overflow:hidden !important}
 .zsec--rel .zg,.zsec--rel .zg--recommendation{gap:var(--a-grid-gap);
 grid-template-columns:repeat(2,minmax(0,1fr))}
-@media(min-width:768px){.zsec--rel .zg,.zsec--rel .zg--recommendation{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media(min-width:1200px){.zsec--rel .zg,.zsec--rel .zg--recommendation{grid-template-columns:repeat(6,minmax(0,1fr))}}
+/* Рекомендации на странице тайтла — та же карточка, что и везде: у оригинала
+   на 1440 она 163x228 и в рекомендациях тоже. Шесть колонок давали 197. */
+@media(min-width:768px){.zsec--rel .zg,.zsec--rel .zg--recommendation{
+  grid-template-columns:repeat(5,minmax(0,1fr));gap:33px}}
+@media(min-width:1200px){.zsec--rel .zg,.zsec--rel .zg--recommendation{
+  grid-template-columns:repeat(7,minmax(0,1fr));gap:33px}}
 .ahome-eps{max-width:min(1760px,100%);margin-inline:auto}
 .ahome-eps--empty{margin:0 0 16px;max-height:96px;overflow:hidden}
 .ahome-eps--empty .zsec__h{margin:0 0 6px}
@@ -1328,7 +1346,7 @@ justify-content:center;padding-right:2px;min-width:44px}
 font-variant-numeric:tabular-nums}
 .ahome-eps .aeps__lab{font-size:11px;color:var(--a-dim)}
 .ahome-eps .zpg{margin-top:12px;margin-bottom:4px}
-.ahome-eps .zpg a,.ahome-eps .zpg span{min-width:40px;min-height:40px}
+.ahome-eps .zpg a,.ahome-eps .zpg span{min-width:44px;min-height:44px}
 @media(max-width:899px){
   .ahome-eps .aeps{gap:12px}
   .ahome-eps .aeps__row{height:72px;gap:8px;
@@ -1344,7 +1362,7 @@ font-variant-numeric:tabular-nums}
 .aeps:not(.ahome-eps .aeps){display:grid;gap:12px;grid-template-columns:1fr}
 .zfilt,.zgenres__nav,.zstrip{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;align-items:center}
 .zfilt a,.zgenres__nav a,.zstrip a,.zfilt__y a{display:inline-flex;align-items:center;
-min-height:40px;padding:0 12px;border-radius:var(--a-radius-chip);border:1px solid var(--a-line);
+min-height:44px;padding:0 12px;border-radius:var(--a-radius-chip);border:1px solid var(--a-line);
 background:var(--a-page);font-size:13px;font-weight:600;color:var(--a-ink);white-space:nowrap}
 .zfilt a:hover,.zgenres__nav a:hover,.zstrip a:hover{border-color:var(--a-acc);color:var(--a-acc)}
 .zfilt a[aria-current],.zgenres__nav a[aria-current],.zgenres__nav a[aria-current=true],
@@ -1355,12 +1373,12 @@ background:var(--a-page);font-size:13px;font-weight:600;color:var(--a-ink);white
 background:var(--a-page);font-weight:700;font-size:14px;color:var(--a-ink);cursor:pointer}
 .afilt__panel{display:block}
 .afilt__chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px;align-items:center}
-.afilt__chip{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;
+.afilt__chip{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 12px;
 border-radius:999px;border:1px solid var(--a-acc);background:var(--a-alt);color:var(--a-acc);font-size:13px;font-weight:700}
 .afilt__reset{min-height:36px;display:inline-flex;align-items:center;padding:0 10px;font-size:13px;font-weight:700;color:var(--a-dim)}
 .afilt__rows{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start}
 .afilt__dd{position:relative;min-width:0}
-.afilt__dd>summary{list-style:none;cursor:pointer;min-height:40px;padding:0 12px;border-radius:var(--a-radius-chip);
+.afilt__dd>summary{list-style:none;cursor:pointer;min-height:44px;padding:0 12px;border-radius:var(--a-radius-chip);
 border:1px solid var(--a-line);background:var(--a-page);font-size:13px;font-weight:700;color:var(--a-ink);
 display:inline-flex;align-items:center;gap:6px}
 .afilt__dd>summary::-webkit-details-marker{display:none}
@@ -1368,7 +1386,7 @@ display:inline-flex;align-items:center;gap:6px}
 .afilt__opts{position:absolute;z-index:40;top:calc(100% + 4px);left:0;min-width:220px;max-height:280px;overflow:auto;
 padding:8px;border-radius:12px;border:1px solid var(--a-line);background:var(--a-page);box-shadow:var(--a-shadow-soft);
 display:flex;flex-direction:column;gap:2px}
-.afilt__opts a{display:flex;justify-content:space-between;gap:12px;min-height:40px;padding:8px 10px;border-radius:8px;
+.afilt__opts a{display:flex;justify-content:space-between;gap:12px;min-height:44px;padding:8px 10px;border-radius:8px;
 color:var(--a-ink);font-size:13px;text-decoration:none}
 .afilt__opts a:hover,.afilt__opts a[aria-current]{background:var(--a-alt);color:var(--a-acc)}
 .afilt__opts small{color:var(--a-dim);font-variant-numeric:tabular-nums}
@@ -1401,12 +1419,15 @@ box-shadow:var(--a-shadow-soft);align-items:start;max-height:none;min-height:0}
 column-gap:clamp(20px,2vw,32px)}}
 @media(min-width:1200px){.ztitle{grid-template-columns:240px minmax(0,1fr) 170px;
 column-gap:28px;padding:28px 32px}}
-.ztitle__poster{aspect-ratio:2/3;border-radius:12px;overflow:hidden;
+.ztitle__poster{aspect-ratio:240/351;border-radius:12px;overflow:hidden;
 background:var(--a-surf);position:relative;width:100%;max-width:240px;margin:0 auto;
 height:auto;min-height:0}
-@media(min-width:900px){.ztitle__poster{margin:0;max-width:none;width:180px}}
-@media(min-width:1200px){.ztitle__poster{width:240px}}
-@media(max-width:599px){.ztitle__poster{max-width:112px;margin:0}}
+/* Постер страницы тайтла у оригинала — 240x351 и на телефоне, и на широком
+   экране: измерено на снимке 390 и подтверждено владельческой записью для
+   ~1363. У нас он был 112 на телефоне и 180 на промежуточной ширине, то есть
+   страница произведения начиналась с миниатюры вместо постера. */
+.ztitle__poster{width:240px;max-width:100%;aspect-ratio:240/351;margin:0}
+@media(max-width:599px){.ztitle__poster{width:240px;max-width:100%;margin:0}}
 .ztitle__poster img,.ztitle__poster .zhead__img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;max-width:none}
 .ztitle__main{min-width:0;display:flex;flex-direction:column;gap:10px}
 .ztitle__head{display:flex;gap:14px;align-items:flex-start;justify-content:space-between}
@@ -1425,7 +1446,7 @@ overflow-wrap:anywhere;word-break:normal}
 @media(max-width:599px){.ztitle__facts{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px}}
 .ztitle__pills{display:flex;flex-wrap:wrap;gap:8px;margin:0}
 .ztitle__pills a,.ztitle__pills span{display:inline-flex;align-items:center;min-height:30px;
-padding:0 12px;border-radius:var(--a-radius-chip);border:1px solid var(--a-line);background:var(--a-alt);
+padding:0 12px;min-height:44px;border-radius:var(--a-radius-chip);border:1px solid var(--a-line);background:var(--a-alt);
 font-size:13px;color:var(--a-ink)}
 .ztitle__desc-panel{background:transparent;border-radius:0;padding:0;margin:2px 0 0}
 .ztitle__desc{font-size:clamp(15px,1.15vw,17px);line-height:1.5;color:var(--a-ink);margin:0;
@@ -1526,7 +1547,7 @@ border:1px solid var(--a-line);background:var(--a-page);font-size:13px;font-weig
 .zeps a:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
 .zsea__h{display:flex;justify-content:space-between;gap:10px;margin:0 0 10px;flex-wrap:wrap}
 .zepnav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
-.zepnav a{background:var(--a-alt);border-radius:10px;padding:8px 12px;font-size:13px;color:var(--a-acc);font-weight:700}
+.zepnav a{background:var(--a-alt);border-radius:10px;padding:8px 12px;font-size:13px;color:var(--a-acc);font-weight:700;min-height:44px}
 .zhub{display:grid;gap:14px;margin:14px 0;grid-template-columns:1fr}
 @media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1000px){.zhub{grid-template-columns:repeat(3,1fr)}}

@@ -1,7 +1,7 @@
 {
  "task": "ANIMEDIA-SLIDER-CHECK",
  "tenant": "animedia",
- "checked_at_utc": "2026-09-21T20:34:16Z",
+ "checked_at_utc": "2026-09-21T21:01:40Z",
  "runtime": "automation/host/animedia-frontend.py",
  "widths": [
   390,

@@ -157,16 +157,48 @@ from pathlib import Path
       }
     }
   }
-  const мелкие = [...document.querySelectorAll('a, button, [role=button], input, select')]
-    .filter(видим).map((el) => { const r = el.getBoundingClientRect();
-      return {w: Math.round(r.width), h: Math.round(r.height),
-              text: (el.textContent || '').trim().slice(0, 20)}; })
+  // Цель нажатия — орган управления, а не любая ссылка в тексте: подчёркнутое
+  // слово внутри абзаца не обязано быть 44 пикселя, и считать его дефектом
+  // значило бы искать кнопки там, где их нет.
+  const управление = [...document.querySelectorAll(
+    'button, [role=button], input, select, nav a, .zpg a, [class*="chip"] a,'
+    + ' [class*="filt"] a, [data-rl-dot], [data-rl], header a')].filter(видим);
+  // Меряется действительная область нажатия, а не прямоугольник самой ссылки:
+  // невидимое расширение области — обычный приём, и делать вид, что его нет,
+  // значит искать дефект там, где палец попадает.
+  const попадает = (el, cx, cy) => {
+    const e = document.elementFromPoint(cx, cy);
+    return !!e && (e === el || el.contains(e) || e.contains(el));
+  };
+  const мелкие = управление.map((el) => {
+      const r = el.getBoundingClientRect();
+      const cx = r.x + r.width / 2, cy = r.y + r.height / 2;
+      const выс = (попадает(el, cx, cy - 21) && попадает(el, cx, cy + 21))
+        ? Math.max(Math.round(r.height), 44) : Math.round(r.height);
+      const шир = (попадает(el, cx - 21, cy) && попадает(el, cx + 21, cy))
+        ? Math.max(Math.round(r.width), 44) : Math.round(r.width);
+      return {w: шир, h: выс, box_h: Math.round(r.height),
+              text: (el.textContent || '').trim().slice(0, 20),
+              cls: String(el.className).slice(0, 30)}; })
     .filter((b) => b.w < 44 || b.h < 44);
   const битые = [...document.querySelectorAll('img')]
     .filter((i) => i.complete && i.naturalWidth === 0 && !i.hidden).length;
-  const без_размеров = [...document.querySelectorAll('img')]
-    .filter((i) => !(i.getAttribute('width') && i.getAttribute('height'))
-                   && !cs(i).aspectRatio.includes('/')).length;
+  // Скачок вёрстки возникает, когда место под изображение неизвестно до
+  // загрузки. Если рамка изображения имеет заданную пропорцию, место известно,
+  // и атрибуты размеров ничего не добавляют.
+  const без_размеров = [...document.querySelectorAll('img')].filter((i) => {
+    // Неотрисованное изображение вёрстку не двигает: счётчик посещаемости
+    // размером 0x0 дефектом стабильности не является.
+    const рб = i.getBoundingClientRect();
+    if (рб.width === 0 || рб.height === 0) return false;
+    if (i.getAttribute('width') && i.getAttribute('height')) return false;
+    if (cs(i).aspectRatio.includes('/')) return false;
+    const рамка = i.parentElement;
+    if (рамка && cs(рамка).aspectRatio.includes('/')) return false;
+    if (рамка && cs(рамка).position !== 'static'
+        && cs(i).position === 'absolute') return false;
+    return true;
+  }).length;
 
   return {
     viewport_w: W, scroll_w: док.scrollWidth, overflow_px: Math.round(док.scrollWidth - W),
