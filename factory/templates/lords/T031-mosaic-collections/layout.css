@@ -1,0 +1,12 @@
+/* T031 — мозаика на четыре колонки, витрина на шесть */
+.g--mo{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.g--mo{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1440px){.g--mo{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+.g--mogrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.g--mogrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1024px){.g--mogrid{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(min-width:1600px){.g--mogrid{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+.g--mofeed{grid-template-columns:repeat(1,minmax(0,1fr))}
+@media(min-width:1000px){.g--mofeed{grid-template-columns:repeat(2,minmax(0,1fr))}}

@@ -1,0 +1,6 @@
+/* T017 — холодный камень с мятой, прямые углы */
+:root{
+  --ink:#e8ebe9; --dim:#8d9a94; --bg:#0a0c0c; --card:#121616; --line:#212928;
+  --brand:#2F6B22; --brand-text:#9FD8B4; --brand-ink:#ffffff; --soft:#0d1010;
+  --radius:2px; --gap:12px; --pad:16px; --title-size:13.5px; --title-lines:3;
+}

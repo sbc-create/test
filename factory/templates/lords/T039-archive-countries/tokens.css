@@ -1,0 +1,6 @@
+/* T039 — тёмная зелень с песочными подписями */
+:root{
+  --ink:#eae6dd; --dim:#9a9587; --bg:#070c08; --card:#101510; --line:#1f281e;
+  --brand:#3F7D26; --brand-text:#BCE8D0; --brand-ink:#ffffff; --soft:#0a0f0b;
+  --radius:6px; --gap:14px; --pad:16px; --title-size:14px; --title-lines:2;
+}

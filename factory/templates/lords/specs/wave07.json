@@ -1,0 +1,626 @@
+{
+  "wave": "W07",
+  "note": "Мозаичное семейство. Подборок в источнике нет — «подборка» здесь означает срез каталога по виду или порядку и подписана так.",
+  "templates": [
+    {
+      "template_id": "T031",
+      "slug": "mosaic-collections",
+      "family": "collection",
+      "title": "Lords — мозаика срезов",
+      "footer": "Каталог фильмов и сериалов. Композиция T031: мозаика и срезы каталога.",
+      "design_intent": "Мозаика ведёт, доска срезов следом, витрина в конце.",
+      "journey": "зацепиться за мозаику → уйти в срез",
+      "card_grammar": [
+        "poster",
+        "tile",
+        "compact"
+      ],
+      "green_identity": "primary",
+      "tokens_note": "лесная зелень, крупные пролёты",
+      "tokens": [
+        "--ink:#e8f0e9; --dim:#93a998; --bg:#071009; --card:#0f1811; --line:#1e2c22;",
+        "--brand:#128A55; --brand-text:#8ED6B0; --brand-ink:#ffffff; --soft:#0a130c;",
+        "--radius:14px; --gap:16px; --pad:16px; --title-size:14px; --title-lines:2;"
+      ],
+      "layout_note": "мозаика на четыре колонки, витрина на шесть",
+      "ladders": {
+        "g--mo": [
+          [
+            0,
+            2
+          ],
+          [
+            768,
+            4
+          ],
+          [
+            1440,
+            4
+          ]
+        ],
+        "g--mogrid": [
+          [
+            0,
+            2
+          ],
+          [
+            600,
+            3
+          ],
+          [
+            1024,
+            6
+          ],
+          [
+            1600,
+            6
+          ]
+        ],
+        "g--mofeed": [
+          [
+            0,
+            1
+          ],
+          [
+            1000,
+            2
+          ]
+        ]
+      },
+      "components_note": "ведущая плитка с рамкой бренда",
+      "components": [
+        ".mosaic .k--lead .k__p{border:2px solid var(--brand);border-radius:var(--radius)}",
+        ".k--poster{background:transparent;border-color:transparent}",
+        ".k--poster .k__p{border-radius:var(--radius);overflow:hidden}",
+        ".sec__t{font-size:17px}",
+        ".board__col{border-radius:var(--radius)}"
+      ],
+      "navigation": [
+        {
+          "подпись": "Мозаика",
+          "url": "/"
+        },
+        {
+          "подпись": "Каталог",
+          "url": "/catalog/"
+        },
+        {
+          "подпись": "Новое",
+          "url": "/new/"
+        }
+      ],
+      "blocks": [
+        {
+          "тип": "mosaic",
+          "заголовок": "Мозаика каталога",
+          "грамматика": "poster",
+          "класс": "g--mo",
+          "сдвиг": 0,
+          "максимум": 7,
+          "минимум": 5
+        },
+        {
+          "тип": "board",
+          "заголовок": "Срезы по виду",
+          "грамматика": "tile",
+          "максимум_в_группе": 5,
+          "минимум_в_группе": 2,
+          "минимум": 2
+        },
+        {
+          "тип": "grid",
+          "заголовок": "Витрина",
+          "грамматика": "poster",
+          "класс": "g--mogrid",
+          "сдвиг": 7,
+          "максимум": 24,
+          "минимум": 8
+        },
+        {
+          "тип": "feed",
+          "заголовок": "Пополнение",
+          "грамматика": "compact",
+          "класс": "g--mofeed",
+          "максимум": 6,
+          "минимум": 3
+        },
+        {
+          "тип": "about",
+          "заголовок": "О срезах",
+          "текст": "Срез — это фильтр каталога по виду. Редакционных подборок в источнике нет, и называть срез подборкой значило бы приписать работу, которой не было."
+        }
+      ]
+    },
+    {
+      "template_id": "T032",
+      "slug": "collection-carousel",
+      "family": "collection",
+      "title": "Lords — ряды срезов",
+      "footer": "Каталог фильмов и сериалов. Композиция T032: три ряда разной плотности.",
+      "design_intent": "Три витрины подряд разной плотности вместо одной длинной.",
+      "journey": "скользить по рядам",
+      "card_grammar": [
+        "poster",
+        "compact"
+      ],
+      "green_identity": "secondary",
+      "tokens_note": "тёмный изумруд, ровные ряды",
+      "tokens": [
+        "--ink:#e6eee9; --dim:#90a597; --bg:#06100b; --card:#0d1711; --line:#1b2921;",
+        "--brand:#22B573; --brand-text:#BCE8D0; --brand-ink:#06110b; --soft:#091310;",
+        "--radius:10px; --gap:12px; --pad:16px; --title-size:13.5px; --title-lines:2;"
+      ],
+      "layout_note": "три ряда: четыре, шесть и восемь колонок",
+      "ladders": {
+        "g--r1": [
+          [
+            0,
+            2
+          ],
+          [
+            768,
+            4
+          ]
+        ],
+        "g--r2": [
+          [
+            0,
+            2
+          ],
+          [
+            600,
+            3
+          ],
+          [
+            1024,
+            6
+          ]
+        ],
+        "g--r3": [
+          [
+            0,
+            2
+          ],
+          [
+            600,
+            4
+          ],
+          [
+            1024,
+            8
+          ]
+        ],
+        "g--rfeed": [
+          [
+            0,
+            1
+          ],
+          [
+            1000,
+            2
+          ]
+        ]
+      },
+      "components_note": "ряды с подписью слева и тонкой линией",
+      "components": [
+        ".sec__t{font-size:14px;text-transform:uppercase;letter-spacing:.09em;color:var(--brand-text);border-left:3px solid var(--brand);padding-left:10px}",
+        ".k--poster{background:transparent;border-color:transparent}",
+        ".k--poster .k__p{border-radius:var(--radius);overflow:hidden}",
+        ".k--poster .k__cap{padding:6px 2px 0}",
+        ".k--compact{border-radius:var(--radius)}"
+      ],
+      "navigation": [
+        {
+          "подпись": "Ряды",
+          "url": "/"
+        },
+        {
+          "подпись": "Каталог",
+          "url": "/catalog/"
+        },
+        {
+          "подпись": "Новое",
+          "url": "/new/"
+        },
+        {
+          "подпись": "Сериалы",
+          "url": "/series/"
+        }
+      ],
+      "blocks": [
+        {
+          "тип": "grid",
+          "заголовок": "Крупный ряд",
+          "грамматика": "poster",
+          "класс": "g--r1",
+          "сдвиг": 0,
+          "максимум": 8,
+          "минимум": 4
+        },
+        {
+          "тип": "grid",
+          "заголовок": "Средний ряд",
+          "грамматика": "poster",
+          "класс": "g--r2",
+          "сдвиг": 8,
+          "максимум": 18,
+          "минимум": 6
+        },
+        {
+          "тип": "grid",
+          "заголовок": "Плотный ряд",
+          "грамматика": "poster",
+          "класс": "g--r3",
+          "сдвиг": 26,
+          "максимум": 24,
+          "минимум": 8
+        },
+        {
+          "тип": "feed",
+          "заголовок": "Пополнение рядов",
+          "грамматика": "compact",
+          "класс": "g--rfeed",
+          "максимум": 6,
+          "минимум": 3
+        },
+        {
+          "тип": "about",
+          "заголовок": "О рядах",
+          "текст": "Ряды отличаются плотностью, а не отбором: за каждым стоит один и тот же каталог, просто показанный крупнее или мельче."
+        }
+      ]
+    },
+    {
+      "template_id": "T033",
+      "slug": "collection-editorial",
+      "family": "collection",
+      "title": "Lords — один и четыре",
+      "footer": "Каталог фильмов и сериалов. Композиция T033: разворот один плюс четыре.",
+      "design_intent": "Разворот с одной ведущей записью и четырьмя спутниками.",
+      "journey": "прочитать разворот → пройти витрину",
+      "card_grammar": [
+        "editorial",
+        "poster"
+      ],
+      "green_identity": "accent-only",
+      "tokens_note": "светлый разворот, зелёный в акценте",
+      "tokens": [
+        "--ink:#1c211d; --dim:#55635c; --bg:#f7f5f0; --card:#ffffff; --line:#ddd9cf;",
+        "--brand:#215318; --brand-text:#215318; --brand-ink:#ffffff; --soft:#eeece5;",
+        "--radius:12px; --gap:20px; --pad:20px; --title-size:16px; --title-lines:3;"
+      ],
+      "layout_note": "разворот на четыре колонки, витрина умеренная",
+      "ladders": {
+        "g--ce": [
+          [
+            0,
+            2
+          ],
+          [
+            768,
+            4
+          ]
+        ],
+        "g--cegrid": [
+          [
+            0,
+            2
+          ],
+          [
+            600,
+            3
+          ],
+          [
+            1024,
+            5
+          ],
+          [
+            1600,
+            6
+          ]
+        ]
+      },
+      "components_note": "паспарту и крупная типографика разворота",
+      "components": [
+        ".k__p{padding:8px;background:var(--card)}",
+        ".k--editorial .k__t{font-size:19px}",
+        ".sec__t{font-size:22px;font-weight:600;border-bottom:1px solid var(--line);padding-bottom:10px}",
+        ".k{box-shadow:none}",
+        ".mosaic .k--lead .k__t{font-size:24px}"
+      ],
+      "navigation": [
+        {
+          "подпись": "Разворот",
+          "url": "/"
+        },
+        {
+          "подпись": "Каталог",
+          "url": "/catalog/"
+        },
+        {
+          "подпись": "Новое",
+          "url": "/new/"
+        }
+      ],
+      "blocks": [
+        {
+          "тип": "mosaic",
+          "заголовок": "Один и четыре",
+          "грамматика": "editorial",
+          "класс": "g--ce",
+          "сдвиг": 0,
+          "максимум": 5,
+          "минимум": 5
+        },
+        {
+          "тип": "grid",
+          "заголовок": "Витрина",
+          "грамматика": "poster",
+          "класс": "g--cegrid",
+          "сдвиг": 5,
+          "максимум": 18,
+          "минимум": 6
+        },
+        {
+          "тип": "taxonomy",
+          "заголовок": "Разделы",
+          "источник": "kinds"
+        },
+        {
+          "тип": "index",
+          "заголовок": "Указатель",
+          "минимум": 4
+        },
+        {
+          "тип": "about",
+          "заголовок": "О развороте",
+          "текст": "Ведущая запись крупнее остальных, но несёт те же поля: тип и год. Описания в источнике нет, и разворот его не придумывает."
+        }
+      ]
+    },
+    {
+      "template_id": "T034",
+      "slug": "collection-quilt",
+      "family": "collection",
+      "title": "Lords — лоскут",
+      "footer": "Каталог фильмов и сериалов. Композиция T034: два лоскута разной плотности.",
+      "design_intent": "Две мозаики с разными пролётами и лента между ними.",
+      "journey": "скользить по лоскуту",
+      "card_grammar": [
+        "poster",
+        "compact"
+      ],
+      "green_identity": "secondary",
+      "tokens_note": "холодная хвоя, средние скругления",
+      "tokens": [
+        "--ink:#e7ecea; --dim:#8d9a96; --bg:#080b0b; --card:#111615; --line:#1f2827;",
+        "--brand:#2F6B22; --brand-text:#9FD8B4; --brand-ink:#ffffff; --soft:#0b0f0e;",
+        "--radius:8px; --gap:10px; --pad:14px; --title-size:13.5px; --title-lines:2;"
+      ],
+      "layout_note": "первый лоскут четыре колонки, второй восемь",
+      "ladders": {
+        "g--q1": [
+          [
+            0,
+            2
+          ],
+          [
+            768,
+            4
+          ]
+        ],
+        "g--q2": [
+          [
+            0,
+            2
+          ],
+          [
+            600,
+            4
+          ],
+          [
+            1024,
+            8
+          ]
+        ],
+        "g--qfeed": [
+          [
+            0,
+            1
+          ],
+          [
+            1100,
+            2
+          ]
+        ]
+      },
+      "components_note": "детерминированные пролёты, без теней",
+      "components": [
+        ".mosaic .k--lead{grid-column:span 2;grid-row:span 2}",
+        ".k{box-shadow:none;border-radius:var(--radius)}",
+        ".sec__t{font-size:15px;letter-spacing:.04em}",
+        ".k--poster .k__cap{padding:6px 4px 0}",
+        ".k--poster{background:transparent;border-color:transparent}"
+      ],
+      "navigation": [
+        {
+          "подпись": "Лоскут",
+          "url": "/"
+        },
+        {
+          "подпись": "Каталог",
+          "url": "/catalog/"
+        },
+        {
+          "подпись": "Новое",
+          "url": "/new/"
+        },
+        {
+          "подпись": "Фильмы",
+          "url": "/movies/"
+        }
+      ],
+      "blocks": [
+        {
+          "тип": "mosaic",
+          "заголовок": "Крупный лоскут",
+          "грамматика": "poster",
+          "класс": "g--q1",
+          "сдвиг": 0,
+          "максимум": 7,
+          "минимум": 5
+        },
+        {
+          "тип": "feed",
+          "заголовок": "Между лоскутами",
+          "грамматика": "compact",
+          "класс": "g--qfeed",
+          "максимум": 6,
+          "минимум": 3
+        },
+        {
+          "тип": "mosaic",
+          "заголовок": "Мелкий лоскут",
+          "грамматика": "poster",
+          "класс": "g--q2",
+          "сдвиг": 7,
+          "максимум": 17,
+          "минимум": 9
+        },
+        {
+          "тип": "taxonomy",
+          "заголовок": "Годы",
+          "источник": "years"
+        },
+        {
+          "тип": "about",
+          "заголовок": "О лоскуте",
+          "текст": "Пролёты заданы классом, а не вычислены: макет обязан повторяться при одинаковых данных, иначе снимки нечем сравнивать."
+        }
+      ]
+    },
+    {
+      "template_id": "T035",
+      "slug": "collection-library",
+      "family": "collection",
+      "title": "Lords — собрание",
+      "footer": "Каталог фильмов и сериалов. Композиция T035: указатель, срезы и две витрины.",
+      "design_intent": "Указатель, доска срезов, две витрины.",
+      "journey": "найти срез → уйти в витрину",
+      "card_grammar": [
+        "tile",
+        "poster"
+      ],
+      "green_identity": "primary",
+      "tokens_note": "тёмное дерево и зелень собрания",
+      "tokens": [
+        "--ink:#ebe6db; --dim:#9a9283; --bg:#090b08; --card:#131610; --line:#25281e;",
+        "--brand:#3F7D26; --brand-text:#9ACD32; --brand-ink:#090b08; --soft:#0c0e0a;",
+        "--radius:4px; --gap:14px; --pad:18px; --title-size:14px; --title-lines:2;"
+      ],
+      "layout_note": "витрины разной плотности, доска широкая",
+      "ladders": {
+        "g--lib1": [
+          [
+            0,
+            2
+          ],
+          [
+            768,
+            4
+          ],
+          [
+            1440,
+            6
+          ]
+        ],
+        "g--lib2": [
+          [
+            0,
+            2
+          ],
+          [
+            600,
+            4
+          ],
+          [
+            1024,
+            7
+          ],
+          [
+            1600,
+            9
+          ]
+        ]
+      },
+      "components_note": "полки с нижней линией и лаймовым акцентом",
+      "components": [
+        ".sec__t{border-bottom:1px solid var(--brand-text);padding-bottom:6px;font-size:15px;letter-spacing:.06em;text-transform:uppercase}",
+        ".board__col{background:var(--card);border-radius:var(--radius)}",
+        ".k--tile{background:var(--soft)}",
+        ".k--poster{background:transparent;border-color:transparent}",
+        ".k--poster .k__p{border-radius:var(--radius);overflow:hidden}"
+      ],
+      "navigation": [
+        {
+          "подпись": "Собрание",
+          "url": "/"
+        },
+        {
+          "подпись": "Каталог",
+          "url": "/catalog/"
+        },
+        {
+          "подпись": "Фильмы",
+          "url": "/movies/"
+        },
+        {
+          "подпись": "Сериалы",
+          "url": "/series/"
+        },
+        {
+          "подпись": "Новое",
+          "url": "/new/"
+        }
+      ],
+      "blocks": [
+        {
+          "тип": "index",
+          "заголовок": "Указатель собрания",
+          "минимум": 4
+        },
+        {
+          "тип": "board",
+          "заголовок": "Срезы собрания",
+          "грамматика": "tile",
+          "максимум_в_группе": 6,
+          "минимум_в_группе": 2,
+          "минимум": 2
+        },
+        {
+          "тип": "grid",
+          "заголовок": "Первая витрина",
+          "грамматика": "poster",
+          "класс": "g--lib1",
+          "сдвиг": 0,
+          "максимум": 18,
+          "минимум": 6
+        },
+        {
+          "тип": "grid",
+          "заголовок": "Вторая витрина",
+          "грамматика": "poster",
+          "класс": "g--lib2",
+          "сдвиг": 18,
+          "максимум": 27,
+          "минимум": 9
+        },
+        {
+          "тип": "about",
+          "заголовок": "О собрании",
+          "текст": "Собрание — это весь каталог, показанный через указатель и срезы. Отдельного отбора за словом «собрание» не стоит."
+        }
+      ]
+    }
+  ]
+}

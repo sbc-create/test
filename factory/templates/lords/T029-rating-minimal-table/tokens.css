@@ -1,0 +1,6 @@
+/* T029 — светлая таблица, зелёный только в фокусе */
+:root{
+  --ink:#1a1d1b; --dim:#54625b; --bg:#fbfbf8; --card:#ffffff; --line:#e3e1d9;
+  --brand:#215318; --brand-text:#215318; --brand-ink:#ffffff; --soft:#f1f0ea;
+  --radius:2px; --gap:8px; --pad:14px; --title-size:13.5px; --title-lines:2;
+}

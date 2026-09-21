@@ -1,0 +1,6 @@
+/* T035 — тёмное дерево и зелень собрания */
+:root{
+  --ink:#ebe6db; --dim:#9a9283; --bg:#090b08; --card:#131610; --line:#25281e;
+  --brand:#3F7D26; --brand-text:#9ACD32; --brand-ink:#090b08; --soft:#0c0e0a;
+  --radius:4px; --gap:14px; --pad:18px; --title-size:14px; --title-lines:2;
+}

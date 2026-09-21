@@ -1,0 +1,6 @@
+/* T021 — плитки указателя без рамок, заголовки мятные */
+.k--tile{background:var(--soft);border-color:transparent}
+.sec__t{color:var(--brand-text);font-size:15px;letter-spacing:.06em;text-transform:uppercase}
+.k--poster{background:transparent;border-color:transparent}
+.k--poster .k__p{border-radius:var(--radius);overflow:hidden}
+.chip{background:var(--soft)}

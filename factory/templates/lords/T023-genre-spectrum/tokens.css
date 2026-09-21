@@ -1,0 +1,6 @@
+/* T023 — спектр от хвои к графиту */
+:root{
+  --ink:#e8ebe7; --dim:#8f9a92; --bg:#090b0a; --card:#111514; --line:#202726;
+  --brand:#2F6B22; --brand-text:#9FD8B4; --brand-ink:#ffffff; --soft:#0c0f0e;
+  --radius:4px; --gap:12px; --pad:16px; --title-size:13.5px; --title-lines:3;
+}

@@ -1,0 +1,9 @@
+/* T035 — витрины разной плотности, доска широкая */
+.g--lib1{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.g--lib1{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1440px){.g--lib1{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+.g--lib2{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.g--lib2{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1024px){.g--lib2{grid-template-columns:repeat(7,minmax(0,1fr))}}
+@media(min-width:1600px){.g--lib2{grid-template-columns:repeat(9,minmax(0,1fr))}}

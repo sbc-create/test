@@ -1,0 +1,6 @@
+/* T029 — строки таблицы с тонкими линиями */
+.k--tile{border-radius:0;border-left:0;border-right:0;border-top:0}
+.k--tile .k__cap{padding:8px 10px}
+.sec__t{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--dim)}
+.k{box-shadow:none}
+.chip{border-radius:2px}

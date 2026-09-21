@@ -1,0 +1,6 @@
+/* T027 — столбцы с заливкой, номера в кружке */
+.board__col{background:var(--card)}
+.k__n{background:var(--soft);border-radius:999px;line-height:32px}
+.sec__t{font-size:15px;font-weight:600}
+.k{border-radius:var(--radius)}
+.k--tile{background:var(--soft)}

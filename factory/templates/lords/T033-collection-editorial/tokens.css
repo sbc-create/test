@@ -1,0 +1,6 @@
+/* T033 — светлый разворот, зелёный в акценте */
+:root{
+  --ink:#1c211d; --dim:#55635c; --bg:#f7f5f0; --card:#ffffff; --line:#ddd9cf;
+  --brand:#215318; --brand-text:#215318; --brand-ink:#ffffff; --soft:#eeece5;
+  --radius:12px; --gap:20px; --pad:20px; --title-size:16px; --title-lines:3;
+}

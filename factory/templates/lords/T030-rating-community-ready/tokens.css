@@ -1,0 +1,6 @@
+/* T030 — спокойная зелень без акцентов-обещаний */
+:root{
+  --ink:#e6eee8; --dim:#8fa596; --bg:#080e0b; --card:#101713; --line:#1e2a24;
+  --brand:#3F7D26; --brand-text:#8ED6B0; --brand-ink:#ffffff; --soft:#0b110e;
+  --radius:10px; --gap:14px; --pad:16px; --title-size:14px; --title-lines:2;
+}

@@ -1,0 +1,6 @@
+/* T038 — прямые углы, годы как крупные чипы */
+.chip{border-radius:0;min-height:48px;font-size:15px;font-variant-numeric:tabular-nums}
+.k{border-radius:0}
+.sec__t{font-size:15px;letter-spacing:.05em;text-transform:uppercase}
+.k--poster .k__cap{padding:6px 4px 0}
+.k--tile .k__cap{padding:9px 11px}

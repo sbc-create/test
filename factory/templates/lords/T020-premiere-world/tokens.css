@@ -1,0 +1,6 @@
+/* T020 — глубокая зелень и песочный акцент */
+:root{
+  --ink:#eaf0e9; --dim:#98a897; --bg:#081009; --card:#101810; --line:#1f2c20;
+  --brand:#3F7D26; --brand-text:#BCE8D0; --brand-ink:#ffffff; --soft:#0b130c;
+  --radius:999px; --gap:14px; --pad:16px; --title-size:14px; --title-lines:2;
+}

@@ -1,0 +1,6 @@
+/* T028 — латунная линия под заголовком и подсветка кадра */
+.hero{border-bottom:2px solid var(--brand);padding-bottom:20px}
+.hero__t{font-size:30px}
+.sec__t{font-size:17px;letter-spacing:.04em}
+.k__n{color:var(--brand-text)}
+.k--poster .k__cap{padding:8px 4px 0}

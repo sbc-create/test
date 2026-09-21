@@ -1,0 +1,9 @@
+/* T023 — первая витрина реже, вторая плотнее */
+.g--sp1{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.g--sp1{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1280px){.g--sp1{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+.g--sp2{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.g--sp2{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1024px){.g--sp2{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(min-width:1600px){.g--sp2{grid-template-columns:repeat(8,minmax(0,1fr))}}

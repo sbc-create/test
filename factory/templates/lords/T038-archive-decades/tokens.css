@@ -1,0 +1,6 @@
+/* T038 — графит с мятной хронологией */
+:root{
+  --ink:#e7eae8; --dim:#8c9994; --bg:#0a0c0c; --card:#121615; --line:#212827;
+  --brand:#2F6B22; --brand-text:#9FD8B4; --brand-ink:#ffffff; --soft:#0d1010;
+  --radius:2px; --gap:12px; --pad:16px; --title-size:13.5px; --title-lines:2;
+}

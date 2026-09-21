@@ -1,0 +1,6 @@
+/* T039 — столбцы доски с нижней чертой */
+.board__col{border-bottom:2px solid var(--brand)}
+.board__t{color:var(--brand-text)}
+.sec__t{font-size:15px}
+.k--tile{background:var(--card)}
+.k--poster{background:transparent;border-color:transparent}

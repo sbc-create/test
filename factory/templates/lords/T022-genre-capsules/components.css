@@ -1,0 +1,6 @@
+/* T022 — крупные капсулы и круглые медиа */
+.chip{min-height:52px;padding:0 22px;font-size:15px;border-color:var(--brand)}
+.k{border-radius:16px}
+.k--poster .k__p{border-radius:16px;overflow:hidden}
+.sec__t{font-size:17px;font-weight:600}
+.k--compact{border-radius:16px}

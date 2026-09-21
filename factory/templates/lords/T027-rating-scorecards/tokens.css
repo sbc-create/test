@@ -1,0 +1,6 @@
+/* T027 — графит с мятой, прямые формы */
+:root{
+  --ink:#e8ebe9; --dim:#8e9a94; --bg:#0a0c0b; --card:#121615; --line:#212827;
+  --brand:#2F6B22; --brand-text:#9FD8B4; --brand-ink:#ffffff; --soft:#0d100f;
+  --radius:3px; --gap:14px; --pad:16px; --title-size:13.5px; --title-lines:3;
+}

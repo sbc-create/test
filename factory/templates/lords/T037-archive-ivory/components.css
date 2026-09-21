@@ -1,0 +1,6 @@
+/* T037 — широкие поля, тонкие линии, без теней */
+.k{box-shadow:none}
+.sec{margin-bottom:48px}
+.sec__t{font-size:19px;font-weight:600}
+.k--poster .k__p{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.k--poster{background:transparent;border-color:transparent}

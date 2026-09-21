@@ -1,0 +1,6 @@
+/* T021 — лесной атлас: тёмная зелень и мята */
+:root{
+  --ink:#e7efe8; --dim:#92a897; --bg:#071009; --card:#0e1710; --line:#1d2b21;
+  --brand:#128A55; --brand-text:#8ED6B0; --brand-ink:#ffffff; --soft:#0a130b;
+  --radius:8px; --gap:14px; --pad:16px; --title-size:14px; --title-lines:2;
+}

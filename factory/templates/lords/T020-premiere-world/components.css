@@ -1,0 +1,6 @@
+/* T020 — капсульные чипы и круглые углы медиа */
+.chip{border-radius:999px;border-color:var(--brand)}
+.k--poster .k__p{border-radius:14px;overflow:hidden}
+.k{border-radius:14px}
+.sec__t{font-size:16px}
+.k--tile{border-radius:14px}

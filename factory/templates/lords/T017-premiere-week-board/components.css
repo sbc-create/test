@@ -1,0 +1,6 @@
+/* T017 — столбцы доски с верхней чертой и прямыми углами */
+.board__col{border-radius:0;border-top:2px solid var(--brand-text)}
+.k{border-radius:0}
+.k--tile .k__cap{padding:10px 12px}
+.sec__t{font-size:15px;font-weight:600}
+.chip{border-radius:0}

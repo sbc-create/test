@@ -1,0 +1,6 @@
+/* T034 — холодная хвоя, средние скругления */
+:root{
+  --ink:#e7ecea; --dim:#8d9a96; --bg:#080b0b; --card:#111615; --line:#1f2827;
+  --brand:#2F6B22; --brand-text:#9FD8B4; --brand-ink:#ffffff; --soft:#0b0f0e;
+  --radius:8px; --gap:10px; --pad:14px; --title-size:13.5px; --title-lines:2;
+}

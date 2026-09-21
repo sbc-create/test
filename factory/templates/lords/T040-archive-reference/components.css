@@ -1,0 +1,6 @@
+/* T040 — справочные строки без украшений */
+.k{border-radius:var(--radius);box-shadow:none}
+.k--tile .k__cap{padding:8px 9px}
+.sec__t{font-size:12.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--dim)}
+.k--poster .k__cap{padding:5px 2px 0}
+.chip{border-radius:2px;min-height:44px}

@@ -1,0 +1,14 @@
+/* T032 — три ряда: четыре, шесть и восемь колонок */
+.g--r1{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.g--r1{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+.g--r2{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.g--r2{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1024px){.g--r2{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+.g--r3{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.g--r3{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1024px){.g--r3{grid-template-columns:repeat(8,minmax(0,1fr))}}
+
+.g--rfeed{grid-template-columns:repeat(1,minmax(0,1fr))}
+@media(min-width:1000px){.g--rfeed{grid-template-columns:repeat(2,minmax(0,1fr))}}

@@ -1,0 +1,6 @@
+/* T033 — паспарту и крупная типографика разворота */
+.k__p{padding:8px;background:var(--card)}
+.k--editorial .k__t{font-size:19px}
+.sec__t{font-size:22px;font-weight:600;border-bottom:1px solid var(--line);padding-bottom:10px}
+.k{box-shadow:none}
+.mosaic .k--lead .k__t{font-size:24px}

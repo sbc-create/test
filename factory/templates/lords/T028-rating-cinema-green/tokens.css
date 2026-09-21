@@ -1,0 +1,6 @@
+/* T028 — изумруд и латунь */
+:root{
+  --ink:#f0ece2; --dim:#a39a86; --bg:#070a08; --card:#111410; --line:#262b22;
+  --brand:#22B573; --brand-text:#BCE8D0; --brand-ink:#06110b; --soft:#0a0d0a;
+  --radius:8px; --gap:16px; --pad:18px; --title-size:14px; --title-lines:2;
+}

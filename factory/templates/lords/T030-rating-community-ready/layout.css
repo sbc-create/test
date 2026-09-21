@@ -1,0 +1,9 @@
+/* T030 — витрина средней плотности, лента широкая */
+.g--cr{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.g--cr{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1024px){.g--cr{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(min-width:1600px){.g--cr{grid-template-columns:repeat(7,minmax(0,1fr))}}
+
+.g--crfeed{grid-template-columns:repeat(1,minmax(0,1fr))}
+@media(min-width:900px){.g--crfeed{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1440px){.g--crfeed{grid-template-columns:repeat(3,minmax(0,1fr))}}

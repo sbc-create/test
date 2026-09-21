@@ -1,0 +1,6 @@
+/* T032 — ряды с подписью слева и тонкой линией */
+.sec__t{font-size:14px;text-transform:uppercase;letter-spacing:.09em;color:var(--brand-text);border-left:3px solid var(--brand);padding-left:10px}
+.k--poster{background:transparent;border-color:transparent}
+.k--poster .k__p{border-radius:var(--radius);overflow:hidden}
+.k--poster .k__cap{padding:6px 2px 0}
+.k--compact{border-radius:var(--radius)}

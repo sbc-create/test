@@ -1,0 +1,6 @@
+/* T037 — слоновая кость, зелёный только в состояниях */
+:root{
+  --ink:#1b1f1c; --dim:#54625b; --bg:#faf8f3; --card:#ffffff; --line:#e4e1d8;
+  --brand:#215318; --brand-text:#215318; --brand-ink:#ffffff; --soft:#f0eee7;
+  --radius:10px; --gap:20px; --pad:20px; --title-size:14.5px; --title-lines:2;
+}

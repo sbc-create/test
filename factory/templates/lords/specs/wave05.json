@@ -1,0 +1,584 @@
+{
+  "wave": "W05",
+  "note": "Семейство навигации. Жанров в источнике нет — навигация строится на видах, годах и буквах, которые в каталоге есть.",
+  "templates": [
+    {
+      "template_id": "T021",
+      "slug": "genre-atlas",
+      "family": "genre",
+      "title": "Lords — атлас",
+      "footer": "Каталог фильмов и сериалов. Композиция T021: две навигации впереди витрины.",
+      "design_intent": "Атлас: две навигации подряд, потом витрина и разворот.",
+      "journey": "сориентироваться → углубиться",
+      "card_grammar": [
+        "tile",
+        "poster",
+        "compact"
+      ],
+      "green_identity": "primary",
+      "tokens_note": "лесной атлас: тёмная зелень и мята",
+      "tokens": [
+        "--ink:#e7efe8; --dim:#92a897; --bg:#071009; --card:#0e1710; --line:#1d2b21;",
+        "--brand:#128A55; --brand-text:#8ED6B0; --brand-ink:#ffffff; --soft:#0a130b;",
+        "--radius:8px; --gap:14px; --pad:16px; --title-size:14px; --title-lines:2;"
+      ],
+      "layout_note": "указатель плотный, витрина средняя",
+      "ladders": {
+        "g--atlas": [
+          [
+            0,
+            2
+          ],
+          [
+            600,
+            4
+          ],
+          [
+            1024,
+            6
+          ],
+          [
+            1600,
+            9
+          ]
+        ],
+        "g--atfeed": [
+          [
+            0,
+            1
+          ],
+          [
+            1000,
+            2
+          ]
+        ]
+      },
+      "components_note": "плитки указателя без рамок, заголовки мятные",
+      "components": [
+        ".k--tile{background:var(--soft);border-color:transparent}",
+        ".sec__t{color:var(--brand-text);font-size:15px;letter-spacing:.06em;text-transform:uppercase}",
+        ".k--poster{background:transparent;border-color:transparent}",
+        ".k--poster .k__p{border-radius:var(--radius);overflow:hidden}",
+        ".chip{background:var(--soft)}"
+      ],
+      "navigation": [
+        {
+          "подпись": "Атлас",
+          "url": "/"
+        },
+        {
+          "подпись": "Каталог",
+          "url": "/catalog/"
+        },
+        {
+          "подпись": "Новое",
+          "url": "/new/"
+        }
+      ],
+      "blocks": [
+        {
+          "тип": "taxonomy",
+          "заголовок": "Виды",
+          "источник": "kinds"
+        },
+        {
+          "тип": "index",
+          "заголовок": "Буквы",
+          "минимум": 4
+        },
+        {
+          "тип": "grid",
+          "заголовок": "Атлас каталога",
+          "грамматика": "tile",
+          "класс": "g--atlas",
+          "сдвиг": 0,
+          "максимум": 27,
+          "минимум": 9
+        },
+        {
+          "тип": "split",
+          "заголовок": "Крупным планом",
+          "грамматика": "compact",
+          "сдвиг": 27,
+          "максимум": 6,
+          "минимум": 4
+        },
+        {
+          "тип": "about",
+          "заголовок": "Об атласе",
+          "текст": "Жанров в источнике нет, поэтому атлас ведёт по видам, годам и буквам — по тому, что в каталоге действительно есть."
+        }
+      ]
+    },
+    {
+      "template_id": "T022",
+      "slug": "genre-capsules",
+      "family": "genre",
+      "title": "Lords — капсулы",
+      "footer": "Каталог фильмов и сериалов. Композиция T022: капсульная навигация.",
+      "design_intent": "Капсулы таксономии крупно, витрина следом.",
+      "journey": "выбрать капсулу → уйти в список",
+      "card_grammar": [
+        "poster",
+        "compact"
+      ],
+      "green_identity": "primary",
+      "tokens_note": "капсульная зелень, круглые формы",
+      "tokens": [
+        "--ink:#e9f1ea; --dim:#94aa99; --bg:#06100a; --card:#0d180f; --line:#1c2b20;",
+        "--brand:#22B573; --brand-text:#BCE8D0; --brand-ink:#06110b; --soft:#09140c;",
+        "--radius:999px; --gap:16px; --pad:18px; --title-size:14px; --title-lines:2;"
+      ],
+      "layout_note": "витрина умеренная, лента узкая",
+      "ladders": {
+        "g--cap": [
+          [
+            0,
+            2
+          ],
+          [
+            600,
+            3
+          ],
+          [
+            1024,
+            5
+          ],
+          [
+            1600,
+            7
+          ]
+        ],
+        "g--capfeed": [
+          [
+            0,
+            1
+          ],
+          [
+            1000,
+            2
+          ]
+        ]
+      },
+      "components_note": "крупные капсулы и круглые медиа",
+      "components": [
+        ".chip{min-height:52px;padding:0 22px;font-size:15px;border-color:var(--brand)}",
+        ".k{border-radius:16px}",
+        ".k--poster .k__p{border-radius:16px;overflow:hidden}",
+        ".sec__t{font-size:17px;font-weight:600}",
+        ".k--compact{border-radius:16px}"
+      ],
+      "navigation": [
+        {
+          "подпись": "Капсулы",
+          "url": "/"
+        },
+        {
+          "подпись": "Каталог",
+          "url": "/catalog/"
+        },
+        {
+          "подпись": "Фильмы",
+          "url": "/movies/"
+        },
+        {
+          "подпись": "Сериалы",
+          "url": "/series/"
+        }
+      ],
+      "blocks": [
+        {
+          "тип": "taxonomy",
+          "заголовок": "Капсулы разделов",
+          "источник": "kinds"
+        },
+        {
+          "тип": "grid",
+          "заголовок": "Витрина",
+          "грамматика": "poster",
+          "класс": "g--cap",
+          "сдвиг": 0,
+          "максимум": 21,
+          "минимум": 8
+        },
+        {
+          "тип": "taxonomy",
+          "заголовок": "Капсулы лет",
+          "источник": "years"
+        },
+        {
+          "тип": "feed",
+          "заголовок": "Свежее",
+          "грамматика": "compact",
+          "класс": "g--capfeed",
+          "максимум": 6,
+          "минимум": 3
+        },
+        {
+          "тип": "about",
+          "заголовок": "О капсулах",
+          "текст": "Капсула — это фильтр по виду или году. Она не обещает отбора: за ней стоит весь каталог, отфильтрованный по одному полю."
+        }
+      ]
+    },
+    {
+      "template_id": "T023",
+      "slug": "genre-spectrum",
+      "family": "genre",
+      "title": "Lords — полосы разделов",
+      "footer": "Каталог фильмов и сериалов. Композиция T023: полосы разделов и две витрины.",
+      "design_intent": "Доска разделов, затем две витрины разной плотности.",
+      "journey": "сравнить разделы → выбрать",
+      "card_grammar": [
+        "tile",
+        "poster"
+      ],
+      "green_identity": "secondary",
+      "tokens_note": "спектр от хвои к графиту",
+      "tokens": [
+        "--ink:#e8ebe7; --dim:#8f9a92; --bg:#090b0a; --card:#111514; --line:#202726;",
+        "--brand:#2F6B22; --brand-text:#9FD8B4; --brand-ink:#ffffff; --soft:#0c0f0e;",
+        "--radius:4px; --gap:12px; --pad:16px; --title-size:13.5px; --title-lines:3;"
+      ],
+      "layout_note": "первая витрина реже, вторая плотнее",
+      "ladders": {
+        "g--sp1": [
+          [
+            0,
+            2
+          ],
+          [
+            768,
+            3
+          ],
+          [
+            1280,
+            4
+          ]
+        ],
+        "g--sp2": [
+          [
+            0,
+            2
+          ],
+          [
+            600,
+            4
+          ],
+          [
+            1024,
+            6
+          ],
+          [
+            1600,
+            8
+          ]
+        ]
+      },
+      "components_note": "разделы с цветными полосами сверху",
+      "components": [
+        ".board__col{border-top:4px solid var(--brand)}",
+        ".board__t{font-size:14px}",
+        ".sec__t{font-size:15px;letter-spacing:.05em}",
+        ".k{border-radius:var(--radius)}",
+        ".k--poster .k__cap{padding:8px 6px 0}"
+      ],
+      "navigation": [
+        {
+          "подпись": "Разделы",
+          "url": "/"
+        },
+        {
+          "подпись": "Каталог",
+          "url": "/catalog/"
+        },
+        {
+          "подпись": "Новое",
+          "url": "/new/"
+        },
+        {
+          "подпись": "Мультфильмы",
+          "url": "/animation/"
+        }
+      ],
+      "blocks": [
+        {
+          "тип": "board",
+          "заголовок": "Полосы разделов",
+          "грамматика": "tile",
+          "максимум_в_группе": 5,
+          "минимум_в_группе": 2,
+          "минимум": 2
+        },
+        {
+          "тип": "grid",
+          "заголовок": "Крупная витрина",
+          "грамматика": "poster",
+          "класс": "g--sp1",
+          "сдвиг": 0,
+          "максимум": 12,
+          "минимум": 6
+        },
+        {
+          "тип": "grid",
+          "заголовок": "Плотная витрина",
+          "грамматика": "poster",
+          "класс": "g--sp2",
+          "сдвиг": 12,
+          "максимум": 24,
+          "минимум": 8
+        },
+        {
+          "тип": "taxonomy",
+          "заголовок": "Годы",
+          "источник": "years"
+        },
+        {
+          "тип": "about",
+          "заголовок": "О полосах",
+          "текст": "Полоса раздела появляется только при наличии записей этого вида: пустых полос на странице не бывает."
+        }
+      ]
+    },
+    {
+      "template_id": "T024",
+      "slug": "genre-library",
+      "family": "genre",
+      "title": "Lords — библиотека",
+      "footer": "Каталог фильмов и сериалов. Композиция T024: указатель и полки.",
+      "design_intent": "Библиотека: указатель, полки, разворот.",
+      "journey": "найти полку → снять запись",
+      "card_grammar": [
+        "poster",
+        "tile",
+        "compact"
+      ],
+      "green_identity": "primary",
+      "tokens_note": "дерево и тёмная зелень библиотеки",
+      "tokens": [
+        "--ink:#ece7dc; --dim:#9b9384; --bg:#0a0c07; --card:#14170f; --line:#26291d;",
+        "--brand:#3F7D26; --brand-text:#9ACD32; --brand-ink:#0a0c07; --soft:#0d1009;",
+        "--radius:6px; --gap:16px; --pad:18px; --title-size:14px; --title-lines:2;"
+      ],
+      "layout_note": "полки плотные, указатель в одну строку",
+      "ladders": {
+        "g--shelf1": [
+          [
+            0,
+            2
+          ],
+          [
+            600,
+            4
+          ],
+          [
+            1024,
+            6
+          ],
+          [
+            1600,
+            8
+          ]
+        ],
+        "g--shelf2": [
+          [
+            0,
+            2
+          ],
+          [
+            768,
+            4
+          ],
+          [
+            1440,
+            6
+          ]
+        ]
+      },
+      "components_note": "полки с нижней линией, лаймовый акцент",
+      "components": [
+        ".sec__t{border-bottom:2px solid var(--brand-text);padding-bottom:6px;font-size:16px}",
+        ".k--poster{background:transparent;border-color:transparent}",
+        ".k--poster .k__p{border-radius:var(--radius);overflow:hidden}",
+        ".k--tile{background:var(--card)}",
+        ".chip{border-color:var(--brand-text)}"
+      ],
+      "navigation": [
+        {
+          "подпись": "Библиотека",
+          "url": "/"
+        },
+        {
+          "подпись": "Каталог",
+          "url": "/catalog/"
+        },
+        {
+          "подпись": "Фильмы",
+          "url": "/movies/"
+        },
+        {
+          "подпись": "Сериалы",
+          "url": "/series/"
+        },
+        {
+          "подпись": "Новое",
+          "url": "/new/"
+        }
+      ],
+      "blocks": [
+        {
+          "тип": "index",
+          "заголовок": "Указатель полок",
+          "минимум": 4
+        },
+        {
+          "тип": "grid",
+          "заголовок": "Первая полка",
+          "грамматика": "poster",
+          "класс": "g--shelf1",
+          "сдвиг": 0,
+          "максимум": 24,
+          "минимум": 8
+        },
+        {
+          "тип": "taxonomy",
+          "заголовок": "Разделы",
+          "источник": "kinds"
+        },
+        {
+          "тип": "grid",
+          "заголовок": "Вторая полка",
+          "грамматика": "poster",
+          "класс": "g--shelf2",
+          "сдвиг": 24,
+          "максимум": 18,
+          "минимум": 6
+        },
+        {
+          "тип": "split",
+          "заголовок": "С полки",
+          "грамматика": "compact",
+          "сдвиг": 42,
+          "максимум": 6,
+          "минимум": 4
+        },
+        {
+          "тип": "about",
+          "заголовок": "О библиотеке",
+          "текст": "Полка — это срез каталога, а не собрание. Указатель считает записи по первой букве названия и ничего к ним не добавляет."
+        }
+      ]
+    },
+    {
+      "template_id": "T025",
+      "slug": "genre-quickpick",
+      "family": "genre",
+      "title": "Lords — быстрый выбор",
+      "footer": "Каталог фильмов и сериалов. Композиция T025: выбор впереди содержимого.",
+      "design_intent": "Сразу выбор действия, потом лента и витрина.",
+      "journey": "выбрать намерение → получить список",
+      "card_grammar": [
+        "compact",
+        "poster"
+      ],
+      "green_identity": "secondary",
+      "tokens_note": "тёмный нейтральный с зелёной кнопкой",
+      "tokens": [
+        "--ink:#e7eae8; --dim:#8d948f; --bg:#0b0d0c; --card:#141716; --line:#232827;",
+        "--brand:#3F7D26; --brand-text:#9FD8B4; --brand-ink:#ffffff; --soft:#0e100f;",
+        "--radius:10px; --gap:14px; --pad:16px; --title-size:14px; --title-lines:2;"
+      ],
+      "layout_note": "лента широкая, витрина плотная",
+      "ladders": {
+        "g--qfeed": [
+          [
+            0,
+            1
+          ],
+          [
+            900,
+            2
+          ],
+          [
+            1440,
+            3
+          ]
+        ],
+        "g--qgrid": [
+          [
+            0,
+            2
+          ],
+          [
+            600,
+            3
+          ],
+          [
+            1024,
+            5
+          ],
+          [
+            1600,
+            8
+          ]
+        ]
+      },
+      "components_note": "крупные цели выбора и заметный фокус",
+      "components": [
+        ".chip{min-height:56px;font-size:15px;background:var(--card)}",
+        ".sec__t{font-size:15px;text-transform:uppercase;letter-spacing:.07em}",
+        ".k--compact{background:var(--card)}",
+        ".k--poster .k__cap{padding:8px 4px 0}",
+        ".k--poster{background:transparent;border-color:transparent}"
+      ],
+      "navigation": [
+        {
+          "подпись": "Выбор",
+          "url": "/"
+        },
+        {
+          "подпись": "Каталог",
+          "url": "/catalog/"
+        },
+        {
+          "подпись": "Новое",
+          "url": "/new/"
+        }
+      ],
+      "blocks": [
+        {
+          "тип": "taxonomy",
+          "заголовок": "Что смотрим",
+          "источник": "kinds"
+        },
+        {
+          "тип": "feed",
+          "заголовок": "Недавно добавленное",
+          "грамматика": "compact",
+          "класс": "g--qfeed",
+          "максимум": 9,
+          "минимум": 4
+        },
+        {
+          "тип": "grid",
+          "заголовок": "Весь каталог",
+          "грамматика": "poster",
+          "класс": "g--qgrid",
+          "сдвиг": 0,
+          "максимум": 24,
+          "минимум": 8
+        },
+        {
+          "тип": "index",
+          "заголовок": "По буквам",
+          "минимум": 4
+        },
+        {
+          "тип": "about",
+          "заголовок": "О выборе",
+          "текст": "Выбор ведёт к фильтру по полю каталога. Ничего, кроме фильтра, за ним нет — и обещать больше нельзя."
+        }
+      ]
+    }
+  ]
+}

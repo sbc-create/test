@@ -1,0 +1,7 @@
+/* T017 — доска широкая, лента узкая, витрина умеренная */
+.g--wkfeed{grid-template-columns:repeat(1,minmax(0,1fr))}
+@media(min-width:1024px){.g--wkfeed{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.g--wkgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.g--wkgrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1440px){.g--wkgrid{grid-template-columns:repeat(6,minmax(0,1fr))}}

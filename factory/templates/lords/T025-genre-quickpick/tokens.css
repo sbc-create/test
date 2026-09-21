@@ -1,0 +1,6 @@
+/* T025 — тёмный нейтральный с зелёной кнопкой */
+:root{
+  --ink:#e7eae8; --dim:#8d948f; --bg:#0b0d0c; --card:#141716; --line:#232827;
+  --brand:#3F7D26; --brand-text:#9FD8B4; --brand-ink:#ffffff; --soft:#0e100f;
+  --radius:10px; --gap:14px; --pad:16px; --title-size:14px; --title-lines:2;
+}

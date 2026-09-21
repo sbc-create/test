@@ -1,0 +1,6 @@
+/* T035 — полки с нижней линией и лаймовым акцентом */
+.sec__t{border-bottom:1px solid var(--brand-text);padding-bottom:6px;font-size:15px;letter-spacing:.06em;text-transform:uppercase}
+.board__col{background:var(--card);border-radius:var(--radius)}
+.k--tile{background:var(--soft)}
+.k--poster{background:transparent;border-color:transparent}
+.k--poster .k__p{border-radius:var(--radius);overflow:hidden}

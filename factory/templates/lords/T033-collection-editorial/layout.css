@@ -1,0 +1,8 @@
+/* T033 — разворот на четыре колонки, витрина умеренная */
+.g--ce{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.g--ce{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+.g--cegrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.g--cegrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1024px){.g--cegrid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(min-width:1600px){.g--cegrid{grid-template-columns:repeat(6,minmax(0,1fr))}}

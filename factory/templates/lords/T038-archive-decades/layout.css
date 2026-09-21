@@ -1,0 +1,12 @@
+/* T038 — витрина средняя, перечень плотный; лента строк-карточек вынесена из витрины в свою лестницу */
+.g--dec{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.g--dec{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1440px){.g--dec{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+.g--decx{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.g--decx{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1024px){.g--decx{grid-template-columns:repeat(7,minmax(0,1fr))}}
+@media(min-width:1600px){.g--decx{grid-template-columns:repeat(10,minmax(0,1fr))}}
+
+.g--decfeed{grid-template-columns:repeat(1,minmax(0,1fr))}
+@media(min-width:1000px){.g--decfeed{grid-template-columns:repeat(2,minmax(0,1fr))}}

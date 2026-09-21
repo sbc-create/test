@@ -1,0 +1,6 @@
+/* T024 — полки с нижней линией, лаймовый акцент */
+.sec__t{border-bottom:2px solid var(--brand-text);padding-bottom:6px;font-size:16px}
+.k--poster{background:transparent;border-color:transparent}
+.k--poster .k__p{border-radius:var(--radius);overflow:hidden}
+.k--tile{background:var(--card)}
+.chip{border-color:var(--brand-text)}

@@ -1,0 +1,7 @@
+/* T028 — витрина плотная, список в одну колонку */
+.g--cg{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.g--cg{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1024px){.g--cg{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(min-width:1600px){.g--cg{grid-template-columns:repeat(9,minmax(0,1fr))}}
+
+.g--cglist{grid-template-columns:repeat(1,minmax(0,1fr))}

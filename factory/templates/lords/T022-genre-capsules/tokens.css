@@ -1,0 +1,6 @@
+/* T022 — капсульная зелень, круглые формы */
+:root{
+  --ink:#e9f1ea; --dim:#94aa99; --bg:#06100a; --card:#0d180f; --line:#1c2b20;
+  --brand:#22B573; --brand-text:#BCE8D0; --brand-ink:#06110b; --soft:#09140c;
+  --radius:999px; --gap:16px; --pad:18px; --title-size:14px; --title-lines:2;
+}

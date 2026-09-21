@@ -1,0 +1,6 @@
+/* T032 — тёмный изумруд, ровные ряды */
+:root{
+  --ink:#e6eee9; --dim:#90a597; --bg:#06100b; --card:#0d1711; --line:#1b2921;
+  --brand:#22B573; --brand-text:#BCE8D0; --brand-ink:#06110b; --soft:#091310;
+  --radius:10px; --gap:12px; --pad:16px; --title-size:13.5px; --title-lines:2;
+}

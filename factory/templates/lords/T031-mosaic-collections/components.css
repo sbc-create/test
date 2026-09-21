@@ -1,0 +1,6 @@
+/* T031 — ведущая плитка с рамкой бренда */
+.mosaic .k--lead .k__p{border:2px solid var(--brand);border-radius:var(--radius)}
+.k--poster{background:transparent;border-color:transparent}
+.k--poster .k__p{border-radius:var(--radius);overflow:hidden}
+.sec__t{font-size:17px}
+.board__col{border-radius:var(--radius)}

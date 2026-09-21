@@ -1,0 +1,569 @@
+{
+  "wave": "W04",
+  "note": "Календарное семейство. Дат премьер в источнике нет — календарь строится на дате добавления в каталог и называется так честно.",
+  "templates": [
+    {
+      "template_id": "T016",
+      "slug": "premiere-calendar-green",
+      "family": "premiere",
+      "title": "Lords — календарь пополнения",
+      "footer": "Каталог фильмов и сериалов. Композиция T016: календарь пополнения каталога.",
+      "design_intent": "Календарь: хронология ведёт, под ней разделы и витрина.",
+      "journey": "пройти по датам → уйти в раздел",
+      "card_grammar": [
+        "compact",
+        "poster"
+      ],
+      "green_identity": "primary",
+      "tokens_note": "календарная зелень, средние скругления, ровный шаг",
+      "tokens": [
+        "--ink:#e6f0e8; --dim:#90a896; --bg:#071009; --card:#0e1811; --line:#1c2c21;",
+        "--brand:#128A55; --brand-text:#8ED6B0; --brand-ink:#ffffff; --soft:#0a140d;",
+        "--radius:8px; --gap:14px; --pad:16px; --title-size:14px; --title-lines:2;"
+      ],
+      "layout_note": "календарь в одну-две колонки, витрина средней плотности",
+      "ladders": {
+        "g--cal": [
+          [
+            0,
+            1
+          ],
+          [
+            900,
+            2
+          ]
+        ],
+        "g--after": [
+          [
+            0,
+            2
+          ],
+          [
+            600,
+            3
+          ],
+          [
+            1024,
+            5
+          ],
+          [
+            1600,
+            7
+          ]
+        ]
+      },
+      "components_note": "даты вынесены в подпись блока, карточки календаря с левой чертой",
+      "components": [
+        ".g--cal .k--compact{border-left:3px solid var(--brand-text)}",
+        ".sec__t{font-size:16px;letter-spacing:.05em;text-transform:uppercase}",
+        ".k--poster .k__cap{padding:8px 4px 0}",
+        ".k--poster{background:transparent;border-color:transparent}",
+        ".k--poster .k__p{border-radius:var(--radius);overflow:hidden}"
+      ],
+      "navigation": [
+        {
+          "подпись": "Календарь",
+          "url": "/new/"
+        },
+        {
+          "подпись": "Каталог",
+          "url": "/catalog/"
+        },
+        {
+          "подпись": "Фильмы",
+          "url": "/movies/"
+        },
+        {
+          "подпись": "Сериалы",
+          "url": "/series/"
+        }
+      ],
+      "blocks": [
+        {
+          "тип": "feed",
+          "заголовок": "Пополнение по датам",
+          "грамматика": "compact",
+          "класс": "g--cal",
+          "максимум": 10,
+          "минимум": 5
+        },
+        {
+          "тип": "taxonomy",
+          "заголовок": "Разделы",
+          "источник": "kinds"
+        },
+        {
+          "тип": "grid",
+          "заголовок": "Витрина каталога",
+          "грамматика": "poster",
+          "класс": "g--after",
+          "сдвиг": 0,
+          "максимум": 21,
+          "минимум": 8
+        },
+        {
+          "тип": "taxonomy",
+          "заголовок": "Годы",
+          "источник": "years"
+        },
+        {
+          "тип": "about",
+          "заголовок": "О календаре",
+          "текст": "Календарь показывает даты добавления в каталог, а не даты премьер: дат премьер в источнике нет, и называть одно другим нельзя."
+        }
+      ]
+    },
+    {
+      "template_id": "T017",
+      "slug": "premiere-week-board",
+      "family": "premiere",
+      "title": "Lords — доска недели",
+      "footer": "Каталог фильмов и сериалов. Композиция T017: доска разделов и лента.",
+      "design_intent": "Доска: разделы столбцами, лента и витрина под ними.",
+      "journey": "окинуть доску → углубиться в раздел",
+      "card_grammar": [
+        "tile",
+        "compact",
+        "poster"
+      ],
+      "green_identity": "secondary",
+      "tokens_note": "холодный камень с мятой, прямые углы",
+      "tokens": [
+        "--ink:#e8ebe9; --dim:#8d9a94; --bg:#0a0c0c; --card:#121616; --line:#212928;",
+        "--brand:#2F6B22; --brand-text:#9FD8B4; --brand-ink:#ffffff; --soft:#0d1010;",
+        "--radius:2px; --gap:12px; --pad:16px; --title-size:13.5px; --title-lines:3;"
+      ],
+      "layout_note": "доска широкая, лента узкая, витрина умеренная",
+      "ladders": {
+        "g--wkfeed": [
+          [
+            0,
+            1
+          ],
+          [
+            1024,
+            2
+          ]
+        ],
+        "g--wkgrid": [
+          [
+            0,
+            2
+          ],
+          [
+            768,
+            4
+          ],
+          [
+            1440,
+            6
+          ]
+        ]
+      },
+      "components_note": "столбцы доски с верхней чертой и прямыми углами",
+      "components": [
+        ".board__col{border-radius:0;border-top:2px solid var(--brand-text)}",
+        ".k{border-radius:0}",
+        ".k--tile .k__cap{padding:10px 12px}",
+        ".sec__t{font-size:15px;font-weight:600}",
+        ".chip{border-radius:0}"
+      ],
+      "navigation": [
+        {
+          "подпись": "Доска",
+          "url": "/"
+        },
+        {
+          "подпись": "Каталог",
+          "url": "/catalog/"
+        },
+        {
+          "подпись": "Новое",
+          "url": "/new/"
+        }
+      ],
+      "blocks": [
+        {
+          "тип": "board",
+          "заголовок": "Доска разделов",
+          "грамматика": "tile",
+          "максимум_в_группе": 6,
+          "минимум_в_группе": 2,
+          "минимум": 2
+        },
+        {
+          "тип": "feed",
+          "заголовок": "Лента недели",
+          "грамматика": "compact",
+          "класс": "g--wkfeed",
+          "максимум": 8,
+          "минимум": 4
+        },
+        {
+          "тип": "grid",
+          "заголовок": "Витрина",
+          "грамматика": "poster",
+          "класс": "g--wkgrid",
+          "сдвиг": 0,
+          "максимум": 18,
+          "минимум": 8
+        },
+        {
+          "тип": "index",
+          "заголовок": "Указатель",
+          "минимум": 4
+        },
+        {
+          "тип": "about",
+          "заголовок": "О доске",
+          "текст": "Столбцы доски — это виды записей из каталога. Неделя в названии означает срез ленты, а не подтверждённый недельный отбор."
+        }
+      ]
+    },
+    {
+      "template_id": "T018",
+      "slug": "premiere-red-carpet",
+      "family": "premiere",
+      "title": "Lords — большой кадр",
+      "footer": "Каталог фильмов и сериалов. Композиция T018: крупный кадр и ранжированный порядок.",
+      "design_intent": "Большой кадр сверху, под ним ранжированный порядок и витрина.",
+      "journey": "задержаться на кадре → пройти список",
+      "card_grammar": [
+        "poster",
+        "compact"
+      ],
+      "green_identity": "secondary",
+      "tokens_note": "тёмный бордовый с зелёным акцентом",
+      "tokens": [
+        "--ink:#f0e9ea; --dim:#a4939a; --bg:#0c0708; --card:#17100f; --line:#2b1f1f;",
+        "--brand:#3F7D26; --brand-text:#9FD8B4; --brand-ink:#ffffff; --soft:#0f0a0a;",
+        "--radius:10px; --gap:16px; --pad:18px; --title-size:14px; --title-lines:2;"
+      ],
+      "layout_note": "витрина широкая, список в одну колонку",
+      "ladders": {
+        "g--rc": [
+          [
+            0,
+            2
+          ],
+          [
+            600,
+            3
+          ],
+          [
+            1024,
+            5
+          ],
+          [
+            1600,
+            8
+          ]
+        ],
+        "g--rclist": [
+          [
+            0,
+            1
+          ],
+          [
+            1200,
+            2
+          ]
+        ]
+      },
+      "components_note": "крупный герой с подсветкой и бордовой рамкой",
+      "components": [
+        ".hero{border:1px solid var(--line);border-radius:var(--radius);padding:24px 18px;background:radial-gradient(120% 90% at 30% 0%,rgba(63,125,38,.16),transparent 70%),var(--card)}",
+        ".hero__t{font-size:28px}",
+        ".k--ranked{border-bottom:1px solid var(--line)}",
+        ".sec__t{font-size:17px;letter-spacing:.03em}",
+        ".k--poster .k__cap{padding:8px 4px 0}"
+      ],
+      "navigation": [
+        {
+          "подпись": "Кадр",
+          "url": "/"
+        },
+        {
+          "подпись": "Каталог",
+          "url": "/catalog/"
+        },
+        {
+          "подпись": "Новое",
+          "url": "/new/"
+        },
+        {
+          "подпись": "Сериалы",
+          "url": "/series/"
+        }
+      ],
+      "blocks": [
+        {
+          "тип": "hero",
+          "заголовок": "Большой кадр",
+          "максимум": 1
+        },
+        {
+          "тип": "ranked",
+          "заголовок": "Порядок пополнения",
+          "класс": "g--rclist",
+          "сдвиг": 1,
+          "максимум": 10,
+          "минимум": 5
+        },
+        {
+          "тип": "grid",
+          "заголовок": "Витрина",
+          "грамматика": "poster",
+          "класс": "g--rc",
+          "сдвиг": 11,
+          "максимум": 24,
+          "минимум": 8
+        },
+        {
+          "тип": "taxonomy",
+          "заголовок": "Разделы",
+          "источник": "kinds"
+        },
+        {
+          "тип": "about",
+          "заголовок": "О кадре",
+          "текст": "Кадр — первая запись каталога, а не выбор редакции. Номер в списке означает позицию по порядку добавления."
+        }
+      ]
+    },
+    {
+      "template_id": "T019",
+      "slug": "premiere-minimal",
+      "family": "premiere",
+      "title": "Lords — минимум",
+      "footer": "Каталог фильмов и сериалов. Композиция T019: без героя, сразу списки.",
+      "design_intent": "Без героя: сразу указатель дат и очень плотная витрина.",
+      "journey": "сразу к спискам",
+      "card_grammar": [
+        "compact",
+        "poster"
+      ],
+      "green_identity": "accent-only",
+      "tokens_note": "светлый минимум, зелёный только в фокусе",
+      "tokens": [
+        "--ink:#1a1d1b; --dim:#54625b; --bg:#fafaf7; --card:#ffffff; --line:#e2e0d8;",
+        "--brand:#215318; --brand-text:#215318; --brand-ink:#ffffff; --soft:#f0efe9;",
+        "--radius:6px; --gap:12px; --pad:14px; --title-size:13.5px; --title-lines:2;"
+      ],
+      "layout_note": "витрина самая плотная в семействе, лента узкая",
+      "ladders": {
+        "g--minfeed": [
+          [
+            0,
+            1
+          ],
+          [
+            1100,
+            2
+          ]
+        ],
+        "g--mingrid": [
+          [
+            0,
+            2
+          ],
+          [
+            480,
+            3
+          ],
+          [
+            768,
+            5
+          ],
+          [
+            1200,
+            7
+          ],
+          [
+            1600,
+            10
+          ]
+        ]
+      },
+      "components_note": "тонкие линии, без заливок, минимальные подписи",
+      "components": [
+        ".k{box-shadow:none}",
+        ".sec__t{font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim)}",
+        ".k--poster{border-color:transparent;background:transparent}",
+        ".k--poster .k__p{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}",
+        ".k--poster .k__cap{padding:6px 2px 0}"
+      ],
+      "navigation": [
+        {
+          "подпись": "Каталог",
+          "url": "/catalog/"
+        },
+        {
+          "подпись": "Новое",
+          "url": "/new/"
+        },
+        {
+          "подпись": "Фильмы",
+          "url": "/movies/"
+        },
+        {
+          "подпись": "Сериалы",
+          "url": "/series/"
+        },
+        {
+          "подпись": "Мультфильмы",
+          "url": "/animation/"
+        }
+      ],
+      "blocks": [
+        {
+          "тип": "feed",
+          "заголовок": "Последнее",
+          "грамматика": "compact",
+          "класс": "g--minfeed",
+          "максимум": 6,
+          "минимум": 3
+        },
+        {
+          "тип": "grid",
+          "заголовок": "Каталог",
+          "грамматика": "poster",
+          "класс": "g--mingrid",
+          "сдвиг": 0,
+          "максимум": 30,
+          "минимум": 10
+        },
+        {
+          "тип": "taxonomy",
+          "заголовок": "Годы",
+          "источник": "years"
+        },
+        {
+          "тип": "grid",
+          "заголовок": "Продолжение",
+          "грамматика": "poster",
+          "класс": "g--mingrid",
+          "сдвиг": 30,
+          "максимум": 20,
+          "минимум": 10
+        },
+        {
+          "тип": "about",
+          "заголовок": "О подаче",
+          "текст": "Крупного кадра нет намеренно: содержимое начинается в первом экране, а не после него."
+        }
+      ]
+    },
+    {
+      "template_id": "T020",
+      "slug": "premiere-world",
+      "family": "premiere",
+      "title": "Lords — по годам",
+      "footer": "Каталог фильмов и сериалов. Композиция T020: навигация по годам.",
+      "design_intent": "Годы ведут навигацию, разворот и витрина следуют.",
+      "journey": "выбрать год → уйти в список",
+      "card_grammar": [
+        "compact",
+        "poster",
+        "tile"
+      ],
+      "green_identity": "primary",
+      "tokens_note": "глубокая зелень и песочный акцент",
+      "tokens": [
+        "--ink:#eaf0e9; --dim:#98a897; --bg:#081009; --card:#101810; --line:#1f2c20;",
+        "--brand:#3F7D26; --brand-text:#BCE8D0; --brand-ink:#ffffff; --soft:#0b130c;",
+        "--radius:999px; --gap:14px; --pad:16px; --title-size:14px; --title-lines:2;"
+      ],
+      "layout_note": "витрина умеренная, указатель плотный",
+      "ladders": {
+        "g--yr": [
+          [
+            0,
+            2
+          ],
+          [
+            600,
+            4
+          ],
+          [
+            1024,
+            6
+          ],
+          [
+            1600,
+            9
+          ]
+        ],
+        "g--yrfeed": [
+          [
+            0,
+            1
+          ],
+          [
+            1000,
+            2
+          ]
+        ]
+      },
+      "components_note": "капсульные чипы и круглые углы медиа",
+      "components": [
+        ".chip{border-radius:999px;border-color:var(--brand)}",
+        ".k--poster .k__p{border-radius:14px;overflow:hidden}",
+        ".k{border-radius:14px}",
+        ".sec__t{font-size:16px}",
+        ".k--tile{border-radius:14px}"
+      ],
+      "navigation": [
+        {
+          "подпись": "Годы",
+          "url": "/"
+        },
+        {
+          "подпись": "Каталог",
+          "url": "/catalog/"
+        },
+        {
+          "подпись": "Новое",
+          "url": "/new/"
+        }
+      ],
+      "blocks": [
+        {
+          "тип": "taxonomy",
+          "заголовок": "Годы выпуска",
+          "источник": "years"
+        },
+        {
+          "тип": "split",
+          "заголовок": "Из последнего года",
+          "грамматика": "compact",
+          "сдвиг": 0,
+          "максимум": 6,
+          "минимум": 4
+        },
+        {
+          "тип": "grid",
+          "заголовок": "Витрина по каталогу",
+          "грамматика": "poster",
+          "класс": "g--yr",
+          "сдвиг": 6,
+          "максимум": 27,
+          "минимум": 9
+        },
+        {
+          "тип": "feed",
+          "заголовок": "Свежее",
+          "грамматика": "compact",
+          "класс": "g--yrfeed",
+          "максимум": 6,
+          "минимум": 3
+        },
+        {
+          "тип": "about",
+          "заголовок": "О годах",
+          "текст": "Год — это год выпуска из каталога. Он не означает, что запись добавлена в этом году: для этого есть отдельная дата и отдельный блок."
+        }
+      ]
+    }
+  ]
+}

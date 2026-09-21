@@ -1,0 +1,6 @@
+/* T030 — нейтральные карточки без значков и баллов */
+.k--poster .k__cap{padding:8px 6px 0}
+.sec__t{font-size:16px}
+.k{border-radius:var(--radius)}
+.k--compact{background:var(--card)}
+.about__p{max-width:66ch}

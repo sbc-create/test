@@ -1,0 +1,6 @@
+/* T025 — крупные цели выбора и заметный фокус */
+.chip{min-height:56px;font-size:15px;background:var(--card)}
+.sec__t{font-size:15px;text-transform:uppercase;letter-spacing:.07em}
+.k--compact{background:var(--card)}
+.k--poster .k__cap{padding:8px 4px 0}
+.k--poster{background:transparent;border-color:transparent}

@@ -1,0 +1,6 @@
+/* T034 — детерминированные пролёты, без теней */
+.mosaic .k--lead{grid-column:span 2;grid-row:span 2}
+.k{box-shadow:none;border-radius:var(--radius)}
+.sec__t{font-size:15px;letter-spacing:.04em}
+.k--poster .k__cap{padding:6px 4px 0}
+.k--poster{background:transparent;border-color:transparent}

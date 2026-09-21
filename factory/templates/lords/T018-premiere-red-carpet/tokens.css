@@ -1,0 +1,6 @@
+/* T018 — тёмный бордовый с зелёным акцентом */
+:root{
+  --ink:#f0e9ea; --dim:#a4939a; --bg:#0c0708; --card:#17100f; --line:#2b1f1f;
+  --brand:#3F7D26; --brand-text:#9FD8B4; --brand-ink:#ffffff; --soft:#0f0a0a;
+  --radius:10px; --gap:16px; --pad:18px; --title-size:14px; --title-lines:2;
+}

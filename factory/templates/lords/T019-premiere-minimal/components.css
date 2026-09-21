@@ -1,0 +1,6 @@
+/* T019 — тонкие линии, без заливок, минимальные подписи */
+.k{box-shadow:none}
+.sec__t{font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim)}
+.k--poster{border-color:transparent;background:transparent}
+.k--poster .k__p{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.k--poster .k__cap{padding:6px 2px 0}

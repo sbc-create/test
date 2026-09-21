@@ -1,0 +1,8 @@
+/* T018 — витрина широкая, список в одну колонку */
+.g--rc{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:600px){.g--rc{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1024px){.g--rc{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(min-width:1600px){.g--rc{grid-template-columns:repeat(8,minmax(0,1fr))}}
+
+.g--rclist{grid-template-columns:repeat(1,minmax(0,1fr))}
+@media(min-width:1200px){.g--rclist{grid-template-columns:repeat(2,minmax(0,1fr))}}

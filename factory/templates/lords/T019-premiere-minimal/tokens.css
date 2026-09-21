@@ -1,0 +1,6 @@
+/* T019 — светлый минимум, зелёный только в фокусе */
+:root{
+  --ink:#1a1d1b; --dim:#54625b; --bg:#fafaf7; --card:#ffffff; --line:#e2e0d8;
+  --brand:#215318; --brand-text:#215318; --brand-ink:#ffffff; --soft:#f0efe9;
+  --radius:6px; --gap:12px; --pad:14px; --title-size:13.5px; --title-lines:2;
+}

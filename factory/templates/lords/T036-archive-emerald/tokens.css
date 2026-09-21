@@ -1,0 +1,6 @@
+/* T036 — изумруд на угле, минимальный шаг */
+:root{
+  --ink:#e5eee7; --dim:#8ea795; --bg:#060b08; --card:#0d1310; --line:#1a2620;
+  --brand:#128A55; --brand-text:#8ED6B0; --brand-ink:#ffffff; --soft:#080d0a;
+  --radius:4px; --gap:8px; --pad:12px; --title-size:12.5px; --title-lines:2;
+}

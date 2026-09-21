@@ -1,0 +1,6 @@
+/* T026 — крупные номера и разделители строк */
+.k__n{font-size:22px}
+.k--ranked{border-bottom:1px solid var(--line);background:transparent}
+.sec__t{font-size:16px;letter-spacing:.05em;text-transform:uppercase}
+.k--poster{background:transparent;border-color:transparent}
+.k--poster .k__p{border-radius:var(--radius);overflow:hidden}
