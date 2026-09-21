@@ -170,6 +170,15 @@ def check(front: pathlib.Path = FRONT, registry: dict | None = None,
         if до_загрузчика:
             исполняемый_sha = ""
 
+        # Путь релиза сверяется отдельно от байтов. Два разных каталога могут
+        # содержать одинаковые байты — так и вышло, когда замороженный снимок и
+        # чистая сборка совпали побайтово. Тогда сверка одних digest'ов
+        # объявляет когерентность, хотя витрина исполняет не тот релиз, который
+        # объявлен, и перепривязка ещё не вступила в силу.
+        объявленный_каталог = манифест.get("release_dir", "")
+        фактический_каталог = str(исполняемый.parent) if исполняемый else ""
+        путь_совпал = bool(объявленный_каталог) and фактический_каталог == объявленный_каталог
+
         if not процесс:
             вердикт = "NOT_RUNNING"
         elif до_загрузчика:
@@ -178,11 +187,14 @@ def check(front: pathlib.Path = FRONT, registry: dict | None = None,
             вердикт = "UNMEASURABLE_NO_MANIFEST"
         elif not исполняемый_sha:
             вердикт = "UNMEASURABLE_NO_EXEC_PATH"
-        elif объявлено == исполняемый_sha:
-            вердикт = "COHERENT"
-        else:
+        elif объявлено != исполняемый_sha:
             вердикт = "DIVERGED_RUNTIME_DIFFERS_FROM_MANIFEST"
             расхождения.append(site_id)
+        elif объявленный_каталог and not путь_совпал:
+            вердикт = "RELEASE_PATH_MISMATCH_PENDING_RESTART"
+            расхождения.append(site_id)
+        else:
+            вердикт = "COHERENT"
 
         сведения[site_id] = {
             "exact_domain": запись.get("exact_domain"),
@@ -198,6 +210,9 @@ def check(front: pathlib.Path = FRONT, registry: dict | None = None,
             "bound_release": str(привязка) if привязка else "",
             "bound_artifact_sha256": привязан_sha,
             "running_exec_path": str(исполняемый) if исполняемый else "",
+            "declared_release_dir": объявленный_каталог,
+            "running_release_dir": фактический_каталог,
+            "release_path_matches_manifest": путь_совпал,
             "running_artifact_sha256": исполняемый_sha,
             "runs_shared_mutable_path": общий_путь,
             "indexing_enabled": запись.get("indexing_enabled"),

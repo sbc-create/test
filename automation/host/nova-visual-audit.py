@@ -54,11 +54,21 @@ SCREENSHOT_ROUTES = {"home", "catalog", "title_film", "title_series", "episode",
 CARD_REGISTRY_PATH = pathlib.Path(__file__).resolve().parents[2] / "config" / "lords-card-registry.json"
 
 
-def ожидаемые_колонки(контракт: dict, ширина: int, это_рекомендации: bool) -> int:
-    """Сколько колонок обязано быть на этой ширине по контракту."""
+def ожидаемые_колонки(контракт: dict, ширина: int, это_рекомендации: bool,
+                      тип_карточки: str = "poster") -> int:
+    """Сколько колонок обязано быть на этой ширине по контракту.
+
+    Лестница у каждого типа своя: у постера одна, у горизонтальной карточки
+    серии другая, у редакционной третья. Сверять всё с постером значит
+    объявлять дефектом каждый профиль, который постером не пользуется, — ровно
+    это и случилось с curated-витриной: сорок восемь «нарушений» на ровном месте.
+    """
     типы = контракт.get("types", {})
     если_рек = (типы.get("recommendation") or {}).get("columns_rel")
-    таблица = если_рек if (это_рекомендации and если_рек) else (типы.get("poster") or {}).get("columns", {})
+    if это_рекомендации and если_рек:
+        таблица = если_рек
+    else:
+        таблица = (типы.get(тип_карточки) or типы.get("poster") or {}).get("columns", {})
     точки = sorted((int(k) for k in таблица), reverse=True)
     for точка in точки:
         if ширина >= точка:
@@ -163,7 +173,11 @@ def ожидаемые_колонки(контракт: dict, ширина: int,
     }
     const pcs = getComputedStyle(parent);
     const declared = (pcs.gridTemplateColumns || '').split(' ').filter(x => x && x !== 'none').length;
-    out.grid_summary.push({cols, declared, total: items.length,
+    const классы = items.map(i => i.el.className || '').join(' ');
+    const тип = /c--editorial/.test(классы) ? 'editorial'
+              : /c--episode/.test(классы) ? 'episode'
+              : 'poster';
+    out.grid_summary.push({cols, declared, total: items.length, card_type: тип,
                            cls: (parent.className || '').slice(0, 40),
                            is_rel: /\brel\b/.test(parent.className || '')});
     // Наложения: сравниваются только соседи одного контейнера.
@@ -290,7 +304,22 @@ def аудит(site: str, база: str, домен: str, снимки: pathlib.
                         страница = контекст.new_page()
                         запись = {"route": имя, "path": путь, "viewport": ширина}
                         try:
-                            ответ = страница.goto(f"http://{домен}{путь}", wait_until="load", timeout=45000)
+                            # Перезапуск витрины платформой закрывает порт на
+                            # считанные секунды. Без повтора это окно читается
+                            # как визуальный дефект, которым не является;
+                            # с повтором оно остаётся видимым отдельной
+                            # метрикой, а не растворяется.
+                            ответ = None
+                            for попытка in range(4):
+                                try:
+                                    ответ = страница.goto(f"http://{домен}{путь}",
+                                                          wait_until="load", timeout=45000)
+                                    break
+                                except Exception as отказ:
+                                    if "ERR_CONNECTION_REFUSED" not in str(отказ) or попытка == 3:
+                                        raise
+                                    запись["retries"] = запись.get("retries", 0) + 1
+                                    страница.wait_for_timeout(5000)
                             запись["status"] = ответ.status if ответ else 0
                             страница.wait_for_timeout(350)
                             измерено = страница.evaluate(ИЗМЕРЕНИЕ)
@@ -331,17 +360,20 @@ def аудит(site: str, база: str, домен: str, снимки: pathlib.
                 continue
             for сетка in (p.get("grid_summary") or []):
                 факт = сетка.get("declared") or сетка.get("cols") or 0
-                ждём = ожидаемые_колонки(контракт, p["viewport"], bool(сетка.get("is_rel")))
+                ждём = ожидаемые_колонки(контракт, p["viewport"], bool(сетка.get("is_rel")),
+                                         сетка.get("card_type", "poster"))
                 if ждём and факт and факт != ждём:
                     нарушения_сетки.append({
                         "route": p["route"], "viewport": p["viewport"],
-                        "container": сетка.get("cls", ""), "expected_columns": ждём,
+                        "container": сетка.get("cls", ""), "card_type": сетка.get("card_type"),
+                        "expected_columns": ждём,
                         "actual_columns": факт, "items": сетка.get("total"),
                     })
 
     итог["metrics"] = {
         "pages_measured": len(для_сводки),
         "pages_failed": len(итог["pages"]) - len(для_сводки),
+        "CONNECTION_REFUSED_RETRIES": sum(p.get("retries", 0) for p in итог["pages"]),
         "HORIZONTAL_OVERFLOW_COUNT": sum(1 for p in для_сводки if p.get("overflow_x")),
         "CLIPPED_REQUIRED_TEXT_COUNT": len(строгие),
         "CLIPPED_SOFT_COUNT": len(мягкие),

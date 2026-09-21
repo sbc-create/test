@@ -1277,11 +1277,19 @@ box-sizing:border-box;flex:0 0 auto;flex-wrap:wrap}
 .c--poster .c__p{aspect-ratio:2/3}
 .c--poster .c__t{-webkit-line-clamp:2;line-height:1.25}
 /* episode type (series feed): horizontal row, fixed 2:3 thumb */
-.c--episode{flex-direction:row;align-items:stretch;min-height:168px;
+/* Сетка, а не ряд. Полоса оценок вставала третьим элементом строки и отбирала
+   у подписи до 78 px: подпись падала со 194 до 116, и на 320 px дата
+   «добавлен 2026-09-18» ужималась до 26 px при нужных 64 — то есть
+   обязательная дата обрезалась ровно у тех тайтлов, у которых есть оценка.
+   В сетке полоса стоит ПОД подписью, обе справа от миниатюры, и ширина
+   подписи больше не зависит от наличия оценки. */
+.c--episode{display:grid;grid-template-columns:112px minmax(0,1fr);
+grid-template-areas:"thumb cap" "thumb bar";align-items:stretch;min-height:168px;
 background:@CARD@;border:1px solid @LINE@;overflow:hidden}
-.c--episode .c__p{aspect-ratio:2/3;width:112px;flex:0 0 112px;height:168px}
-.c--episode .c__cap{height:auto;flex:1 1 auto;justify-content:flex-start;text-align:left;
-padding:12px 14px;gap:6px;background:@CARD@;min-width:0}
+.c--episode .c__p{grid-area:thumb;aspect-ratio:2/3;width:112px;flex:0 0 112px;height:168px}
+.c--episode .c__cap{grid-area:cap;height:auto;flex:1 1 auto;justify-content:flex-start;
+text-align:left;padding:12px 14px;gap:6px;background:@CARD@;min-width:0}
+.c--episode .c__r{grid-area:bar}
 .c--episode .c__t{color:@INK@;-webkit-line-clamp:3;font-size:15px;line-height:1.3}
 .c--episode .c__y,.c--episode .c__added{color:#3a4740}
 .c--episode .c__r{background:@SOFT@;border-top:1px solid @LINE@}
@@ -1289,9 +1297,10 @@ padding:12px 14px;gap:6px;background:@CARD@;min-width:0}
 .c--episode .c__r span i{color:@INK@}
 .c--episode .c__badge{position:static}
 @media(max-width:1199px){.c--episode .c__p{width:104px;flex-basis:104px;height:156px}
-.c--episode{min-height:156px}}
+.c--episode{min-height:156px;grid-template-columns:104px minmax(0,1fr)}}
 @media(max-width:767px){.c--episode .c__p{width:96px;flex-basis:96px;height:144px}
-.c--episode{min-height:144px}.c--episode .c__cap{padding:10px 12px;gap:4px}}
+.c--episode{min-height:144px;grid-template-columns:96px minmax(0,1fr)}
+.c--episode .c__cap{padding:10px 12px;gap:4px}}
 /* editorial type (curated): portrait by default; no forced 16:9 poster crop */
 .c--editorial{background:@CARD@;border:1px solid @LINE@}
 .c--editorial .c__p{aspect-ratio:2/3}

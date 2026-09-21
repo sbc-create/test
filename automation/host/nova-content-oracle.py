@@ -31,6 +31,7 @@ import json
 import pathlib
 import re
 import sys
+import time
 import urllib.error
 import urllib.request
 
@@ -46,17 +47,32 @@ def _реестр():
     return модуль.build()
 
 
-def запрос(база: str, путь: str, домен: str) -> tuple[int, str]:
+#: Сколько раз транспортный отказ перепроверяется, прежде чем стать находкой.
+#: Витрина перезапускается публикацией каталога, и её порт закрыт около семи
+#: секунд. Без повтора обход объявляет битой каждую ссылку, попавшую в это
+#: окно, — и настоящая битая ссылка тонет среди них.
+ПОВТОРОВ = 2
+ПАУЗА = 8
+
+
+def запрос(база: str, путь: str, домен: str, счётчик: dict | None = None) -> tuple[int, str]:
     req = urllib.request.Request(
         база + путь, headers={"Host": домен, "User-Agent": "nova-content-oracle/1"}
     )
-    try:
-        with urllib.request.urlopen(req, timeout=ТАЙМАУТ) as ответ:
-            return ответ.status, ответ.read().decode("utf-8", "replace")
-    except urllib.error.HTTPError as ошибка:
-        return ошибка.code, ""
-    except (urllib.error.URLError, OSError, ValueError):
-        return 0, ""
+    for попытка in range(ПОВТОРОВ + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=ТАЙМАУТ) as ответ:
+                return ответ.status, ответ.read().decode("utf-8", "replace")
+        except urllib.error.HTTPError as ошибка:
+            # HTTP-код — это ответ витрины, а не обрыв: повторять нечего.
+            return ошибка.code, ""
+        except (urllib.error.URLError, OSError, ValueError):
+            if счётчик is not None:
+                счётчик["transport_retries"] = счётчик.get("transport_retries", 0) + 1
+            if попытка == ПОВТОРОВ:
+                return 0, ""
+            time.sleep(ПАУЗА)
+    return 0, ""
 
 
 def ссылки(html: str) -> list[str]:
@@ -152,11 +168,12 @@ def проверить(site: str, база: str, домен: str, предел_�
         if путь in посещено:
             continue
         посещено.add(путь)
-        код_с, тело = запрос(база, путь, домен)
+        код_с, тело = запрос(база, путь, домен, итог["metrics"])
         коды[код_с] += 1
         if код_с >= 400 or код_с == 0:
             битые.append(f"{путь}:{код_с}")
 
+    итог["metrics"].setdefault("transport_retries", 0)
     итог["metrics"]["links_crawled"] = len(посещено)
     итог["metrics"]["broken_internal_links"] = len(битые)
     итог["metrics"]["http_5xx_count"] = sum(n for к, n in коды.items() if к >= 500 or к == 0)

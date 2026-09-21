@@ -1,0 +1,66 @@
+{
+  "site": "lords-03",
+  "domain": "1lordserials1.online",
+  "checks": {
+    "new_200": {
+      "pass": true,
+      "detail": "код 200"
+    },
+    "no_future_dates": {
+      "pass": true,
+      "detail": "0 дат из будущего: []"
+    },
+    "new_without_dates_is_honest": {
+      "pass": true,
+      "detail": "дат на странице нет; порядок по дате не проверяется"
+    },
+    "pagination_no_duplicates": {
+      "pass": true,
+      "detail": "дубли: []"
+    },
+    "pagination_pages_non_empty": {
+      "pass": true,
+      "detail": "{\"1\": {\"status\": 200, \"slugs\": 48}, \"2\": {\"status\": 200, \"slugs\": 48}, \"3\": {\"status\": 200, \"slugs\": 48}}"
+    },
+    "no_broken_links": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_5xx_on_crawl": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "metrics": {
+    "dates_found_on_new": 0,
+    "future_dated_items": 0,
+    "new_dates_descending": true,
+    "freshest_date": null,
+    "pagination_items_seen": 144,
+    "pagination_duplicate_ids": 0,
+    "pagination_pages": {
+      "1": {
+        "status": 200,
+        "slugs": 48
+      },
+      "2": {
+        "status": 200,
+        "slugs": 48
+      },
+      "3": {
+        "status": 200,
+        "slugs": 48
+      }
+    },
+    "transport_retries": 0,
+    "links_crawled": 101,
+    "broken_internal_links": 0,
+    "http_5xx_count": 0,
+    "status_histogram": {
+      "200": 101
+    }
+  },
+  "failed_checks": [],
+  "verdict": "PASS",
+  "checked_at_utc": "2026-09-21T13:35:13.032278+00:00"
+}

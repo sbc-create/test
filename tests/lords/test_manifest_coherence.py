@@ -71,6 +71,36 @@ def _manifest(front: pathlib.Path, site: str, artifact: str, **extra) -> pathlib
     return путь
 
 
+def test_same_bytes_from_wrong_release_dir_is_not_coherent(tmp_path):
+    """Одинаковые байты в двух каталогах не делают витрину когерентной.
+
+    Замороженный снимок и чистая сборка совпали побайтово, и сверка одних
+    digest'ов объявила когерентность, хотя витрина исполняла не тот релиз,
+    который объявлен, а перепривязка ещё не вступила в силу.
+    """
+    front = _front(tmp_path)
+    чистый = _release(front, "b-clean", NEW)
+    снимок = _release(front, "b-frozen", NEW)  # те же байты, другой каталог
+    _bind(front, "lords-01", чистый)
+    _manifest(front, "lords-01", _sha(NEW), release_dir=str(чистый))
+    процессы = {9110: {"pid": 1, "exec_script": str(снимок / RUNTIME), "started_utc": "t"}}
+    код, отчёт = coherence.check(front, _registry(front, {"lords-01": 9110}), процессы)
+    assert код == coherence.DIVERGED
+    assert отчёт["sites"]["lords-01"]["verdict"] == "RELEASE_PATH_MISMATCH_PENDING_RESTART"
+    assert отчёт["sites"]["lords-01"]["release_path_matches_manifest"] is False
+
+
+def test_matching_release_dir_is_coherent(tmp_path):
+    front = _front(tmp_path)
+    чистый = _release(front, "b-clean", NEW)
+    _bind(front, "lords-01", чистый)
+    _manifest(front, "lords-01", _sha(NEW), release_dir=str(чистый))
+    процессы = {9110: {"pid": 1, "exec_script": str(чистый / RUNTIME), "started_utc": "t"}}
+    код, отчёт = coherence.check(front, _registry(front, {"lords-01": 9110}), процессы)
+    assert код == coherence.COHERENT
+    assert отчёт["sites"]["lords-01"]["verdict"] == "COHERENT"
+
+
 def _registry(front: pathlib.Path, sites: dict[str, int]) -> dict:
     записи = {}
     for site, порт in sites.items():
