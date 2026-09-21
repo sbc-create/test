@@ -76,8 +76,11 @@ python3 automation/host/lords-canary-provenance.py --write   # только на
 # карта страниц направления (пересобирает docs/templates/PAGE-MAP-lords.md)
 .venv/bin/python -m factory.templates.pagemap --write
 
-# готовность продуктов: три раздельные величины
+# готовность продуктов: три раздельные величины (только показать)
 .venv/bin/python scripts/product_readiness.py
+
+# обновить файл оценки artifacts/evidence/products/product-readiness.json
+.venv/bin/python scripts/product_readiness.py --write
 
 # реестр технического долга
 .venv/bin/python scripts/debt_audit.py

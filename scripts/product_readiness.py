@@ -17,7 +17,14 @@
 в двух местах значит рано или поздно развести.
 
 Запуск:
-    .venv/bin/python scripts/product_readiness.py [--json]
+    .venv/bin/python scripts/product_readiness.py            # таблица, ничего не пишет
+    .venv/bin/python scripts/product_readiness.py --json     # то же машиночитаемо
+    .venv/bin/python scripts/product_readiness.py --write    # обновить файл оценки
+
+Запись отделена флагом намеренно. Скрипт запускается в том числе из тестов, а
+тест, молча переписывающий закоммиченный файл оценки, делает набор
+неидемпотентным и в окружении без собранного предпросмотра предлагает
+закоммитить деградацию, которой нет.
 """
 
 from __future__ import annotations
@@ -398,11 +405,23 @@ def evaluate() -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--json", action="store_true")
+    parser.add_argument(
+        "--write", action="store_true",
+        help=f"обновить {OUT.relative_to(ROOT)}; без флага скрипт только считает")
     args = parser.parse_args()
 
     report = evaluate()
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    # Запись в репозиторий стала явной. Раньше скрипт переписывал закоммиченный
+    # файл на каждом запуске, включая запуск из тестов. От этого набор
+    # tests/unit переставал быть идемпотентным: один тест перезаписывал оценку
+    # значениями текущего окружения, а другой сверял с ней закоммиченный
+    # документ — и падал на втором прогоне подряд. Хуже того, в окружении без
+    # собранного предпросмотра оценка падает с 87 до 72, и такой прогон
+    # предлагал закоммитить деградацию, которой не было.
+    if args.write:
+        OUT.parent.mkdir(parents=True, exist_ok=True)
+        OUT.write_text(
+            json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     if args.json:
         print(json.dumps(report, ensure_ascii=False, indent=2))
