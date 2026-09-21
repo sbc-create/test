@@ -79,6 +79,9 @@
     "ad6ebb2 feat(community): give the monitor a real inter-process metric source",
     "23ebde3 test(community): Stage08 cohort, widget, exposure and metric-honesty gates",
     "116e5aa test(community): isolate the process-global metric drop counter",
-    "f2564f2 test(community): stop test runs writing into production telemetry"
-  ]
+    "f2564f2 test(community): stop test runs writing into production telemetry",
+    "84f727f docs(community): Stage08 evidence and verified owner release"
+  ],
+  "FINAL_HEAD": "84f727f923c795c23f30bb0764b10e79c5e54477",
+  "BLOCK_COMMITS": 6
 }
