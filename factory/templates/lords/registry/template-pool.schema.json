@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://site-factory.local/schemas/lords/template-pool.schema.json",
+  "title": "Пул шаблонов Lords",
+  "description": "Реестр шаблонных пакетов и их состояний. Домену назначается только ASSIGNABLE-шаблон; назначение фиксируется в отдельном ledger и не переписывается.",
+  "type": "object",
+  "required": ["schema_version", "pool", "templates"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": 1},
+    "pool": {"type": "string", "minLength": 1},
+    "generated_at": {"type": "string"},
+    "note": {"type": "string"},
+    "templates": {
+      "type": "array",
+      "items": {"$ref": "#/definitions/template"},
+      "minItems": 0
+    }
+  },
+  "definitions": {
+    "template": {
+      "type": "object",
+      "required": [
+        "template_id", "slug", "version", "family", "status",
+        "source_commit", "capabilities", "required_feeds", "visual_score",
+        "artifact_digest", "assigned_domain", "reserved_at"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "template_id": {
+          "type": "string",
+          "pattern": "^T0(0[1-9]|[1-4][0-9]|50)$",
+          "description": "T001..T050, ровно три цифры: сортировка по идентификатору обязана быть лексикографической"
+        },
+        "slug": {"type": "string", "pattern": "^[a-z][a-z0-9-]{2,48}$"},
+        "version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+        "family": {
+          "type": "string",
+          "enum": ["forest-cinema", "series-feed", "curated", "premiere", "genre",
+                   "rating", "collection", "archive", "modern", "hybrid"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["DRAFT", "CONTRACT_PASS", "LOCAL_PASS", "VISUAL_QA_PASS",
+                   "TECHNICAL_CANDIDATE", "OWNER_VISUAL_ACCEPTED", "RELEASE_READY",
+                   "ASSIGNABLE", "RESERVED", "STAGED", "CANARY_PASS", "ACTIVE",
+                   "DEPRECATED", "RETIRED"],
+          "description": "Назначать домену разрешено только ASSIGNABLE. TECHNICAL_CANDIDATE — не готов к домену."
+        },
+        "source_commit": {"type": "string", "pattern": "^[0-9a-f]{7,40}$"},
+        "capabilities": {
+          "type": "array",
+          "items": {"type": "string", "enum": ["film", "series", "animation", "catalog",
+                                               "search", "collections", "episodes", "ratings"]},
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "required_feeds": {
+          "type": "array",
+          "items": {"type": "string", "enum": ["catalog", "details", "episodes",
+                                               "weekly_popular", "premieres", "ratings"]},
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "optional_feeds": {
+          "type": "array",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        },
+        "visual_score": {"type": "integer", "minimum": 0, "maximum": 100},
+        "hard_fail_count": {"type": "integer", "minimum": 0},
+        "artifact_digest": {"type": "string", "pattern": "^([0-9a-f]{64})?$"},
+        "assigned_domain": {"type": ["string", "null"]},
+        "reserved_at": {"type": ["string", "null"]},
+        "green_identity": {
+          "type": "string",
+          "enum": ["primary", "secondary", "accent-only"],
+          "description": "Роль зелёного в палитре: пул обязан удерживать узнаваемость Lords"
+        }
+      }
+    }
+  }
+}
