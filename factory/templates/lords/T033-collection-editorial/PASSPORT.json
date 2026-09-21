@@ -4,12 +4,12 @@
   "slug": "collection-editorial",
   "version": "1.0.0",
   "family": "collection",
-  "package_digest": "62371827005b66d263aec5ef9c19199aef3764c10346760a026f7585fc45ff45",
+  "package_digest": "e8c168575ccd81c5b1468d8d0ad80d6a6cda9ed46f5cd58d6849b1c6ee25be65",
   "declared": {
-    "design_intent": "Разворот с одной ведущей записью и четырьмя спутниками.",
+    "design_intent": "Разворот: одна ведущая запись слева и четыре спутника справа — не сетка, а именно разворот.",
     "primary_user_journey": "прочитать разворот → пройти витрину",
     "home_signature": [
-      "mosaic",
+      "split",
       "grid",
       "taxonomy",
       "index",
@@ -96,5 +96,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.761092+00:00"
+  "issued_at_utc": "2026-09-21T18:02:39.651057+00:00"
 }

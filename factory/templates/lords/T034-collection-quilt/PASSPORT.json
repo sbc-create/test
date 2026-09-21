@@ -4,9 +4,9 @@
   "slug": "collection-quilt",
   "version": "1.0.0",
   "family": "collection",
-  "package_digest": "0bb380ab0dfc02a2d0ba86851e0457a4c224083575383f12cfd888c307dd6327",
+  "package_digest": "bad82cbbcb578abc62b2fa0bbc59ea00ea8326e4bf5a3dfafaa218ea767566ad",
   "declared": {
-    "design_intent": "Две мозаики с разными пролётами и лента между ними. Навигация — буквенный указатель, а не чипы: это другой способ искать.",
+    "design_intent": "Лоскут из текстовых плиток: ритм задаётся пролётами и типографикой, а не постерами.",
     "primary_user_journey": "скользить по лоскуту",
     "home_signature": [
       "mosaic",
@@ -78,5 +78,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.766821+00:00"
+  "issued_at_utc": "2026-09-21T18:02:39.657468+00:00"
 }
