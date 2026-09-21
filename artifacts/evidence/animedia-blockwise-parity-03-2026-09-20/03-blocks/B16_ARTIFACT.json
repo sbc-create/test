@@ -235,5 +235,63 @@
   "value": "2026-09-21T15:38:17.%fZ",
   "why_not_fixed": "релиз неизменяем после сборки: правка его байтов ради косметики обесценила бы само свойство неизменяемости. Поле не участвует ни в одной проверке и не попадает в заголовки — витрина берёт личность из манифеста. Формат исправлен в сборщике для будущих релизов.",
   "serving_impact": "нет"
- }
+ },
+ "live_deploy_status": {
+  "recorded_at_utc": "2026-09-21T17:11:08Z",
+  "animedia-01": {
+   "state": "LIVE_ON_CANDIDATE",
+   "restarted_at_utc": "2026-09-21T16:56:16Z",
+   "restarted_by": "не этой сессией — перезапуск требует root; systemd: NRestarts=0, Result=success, то есть перезапуск явный, а не аварийный",
+   "main_pid": 664915,
+   "served_build_id": "20260921T153817Z-c8c4587-animedia-b16",
+   "served_artifact_sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+   "template_version_endpoint_agrees": true,
+   "x_robots_tag": "noindex, nofollow",
+   "catalog_details_skew": false,
+   "deploy_mode_smoke": [
+    {
+     "run": "icu-run1",
+     "mode": "deploy",
+     "domain": "animedia.icu",
+     "cells": 27,
+     "AVAILABILITY_PASS": true,
+     "SMOKE_PASS": true,
+     "failures": [],
+     "known_build_defects": [],
+     "peer": {
+      "build": "20260920T102102Z-89666321-nova",
+      "x_robots": "noindex, nofollow\nnoindex, nofollow",
+      "http": 200
+     },
+     "checked_at_utc": "2026-09-21T17:09:44Z"
+    },
+    {
+     "run": "icu-run2",
+     "mode": "deploy",
+     "domain": "animedia.icu",
+     "cells": 27,
+     "AVAILABILITY_PASS": true,
+     "SMOKE_PASS": true,
+     "failures": [],
+     "known_build_defects": [],
+     "peer": {
+      "build": "20260920T102102Z-89666321-nova",
+      "x_robots": "noindex, nofollow\nnoindex, nofollow",
+      "http": 200
+     },
+     "checked_at_utc": "2026-09-21T17:10:18Z"
+    }
+   ],
+   "b14_footer_marker_gone_live": true
+  },
+  "animedia-02": {
+   "state": "ARMED_AWAITING_RESTART",
+   "main_pid": 2693863,
+   "served_build_id": "20260920T102102Z-89666321-nova",
+   "served_artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+   "remaining_owner_action": "systemctl restart nova-animedia-02.service"
+  },
+  "note": "Приёмочный гейт --mode deploy зелёный на живом animedia.icu: 27 ячеек на прогон, провалов нет, послаблений не применялось. Знак сборки в подвале на живом домене отсутствует — дефект B14 закрыт выкатом."
+ },
+ "restart_performed_by_this_session": 0
 }

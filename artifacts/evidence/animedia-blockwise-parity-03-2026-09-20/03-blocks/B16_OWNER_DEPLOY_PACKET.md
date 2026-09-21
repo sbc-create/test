@@ -2,7 +2,15 @@
 
 - stage: ANIMEDIA-BLOCKWISE-PARITY-03
 - block_id: B16
-- status: **ARMED — обе витрины заряжены, остались две команды: перезапуск каждой**
+- status: **animedia.icu — ВЫКАЧЕН и проверен приёмочным гейтом;
+  animedia.space — заряжен, ждёт одной команды перезапуска**
+
+`nova-animedia-01.service` был перезапущен в 16:56:16 UTC — не этой сессией
+(`systemctl` ей закрыт); systemd показывает `NRestarts=0`, `Result=success`,
+то есть перезапуск явный, а не аварийный. После него `animedia.icu` отдаёт
+кандидата, и приёмочный смоук `--mode deploy` по нему зелёный дважды подряд,
+без единого послабления: 27 ячеек на прогон, провалов нет, знак сборки в
+подвале отсутствует — дефект B14 закрыт на живом домене.
 - CONTRACT_SHA256: `5f2112e25ef974333c388bad405abfae3c3d460a713b028afa3c0e549b8eaeb3`
 - owner_decision, по которому собран пакет: `OPTION_A_FINISH_PARITY03_FIRST`
 - owner_approval на выкат (2026-09-21): «Я подтверждаю production-deploy B16
@@ -302,8 +310,8 @@ UNATTENDED_SAFE, и обходить этот запрет сессия не с�
 ```bash
 # Выполнять под root (не через sudo из этой сессии: polkit требует
 # интерактивной аутентификации — проверено).
-systemctl restart nova-animedia-01.service   # animedia.icu,   порт 9121
-systemctl restart nova-animedia-02.service   # animedia.space, порт 9122
+systemctl restart nova-animedia-01.service   # animedia.icu,   порт 9121 — СДЕЛАНО 16:56:16 UTC
+systemctl restart nova-animedia-02.service   # animedia.space, порт 9122 — осталось
 ```
 
 Ожидаемое состояние сразу после: оба домена отдают

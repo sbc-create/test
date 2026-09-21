@@ -1,0 +1,51 @@
+{
+ "task": "ANIMEDIA-B16-OUT-OF-SCOPE-CONTROL",
+ "checked_at_utc": "2026-09-21T17:08:36Z",
+ "sites": {
+  "lords-01": {
+   "port": 9110,
+   "unit": "lords-nova-01.service",
+   "domain": "lordfilm47.space",
+   "manifest_build_id": "20260921T134330Z-515fcf0-cardfix",
+   "manifest_artifact": "1831c87730ebc674",
+   "assignment": "20260921T134330Z-515fcf0-cardfix",
+   "assigned_code_sha256": "1831c87730ebc674",
+   "manifest_owner": "claude:claude",
+   "manifest_mtime": "2026-09-21T14:11:50Z"
+  },
+  "lords-02": {
+   "port": 9111,
+   "unit": "nova-lords-02.service",
+   "domain": "lordserial33.biz",
+   "manifest_build_id": "20260921T134330Z-515fcf0-cardfix",
+   "manifest_artifact": "1831c87730ebc674",
+   "assignment": "20260921T134330Z-515fcf0-cardfix",
+   "assigned_code_sha256": "1831c87730ebc674",
+   "manifest_owner": "claude:claude",
+   "manifest_mtime": "2026-09-21T13:43:36Z"
+  },
+  "lords-03": {
+   "port": 9112,
+   "unit": "nova-lords-03.service",
+   "domain": "1lordserials1.online",
+   "manifest_build_id": "20260921T134330Z-515fcf0-cardfix",
+   "manifest_artifact": "1831c87730ebc674",
+   "assignment": "20260921T134330Z-515fcf0-cardfix",
+   "assigned_code_sha256": "1831c87730ebc674",
+   "manifest_owner": "claude:claude",
+   "manifest_mtime": "2026-09-21T13:54:43Z"
+  },
+  "zona-01": {
+   "port": 9120,
+   "unit": "nova-zona-01.service",
+   "domain": null,
+   "manifest_build_id": "20260921T161251Z-c3c9c37f-nova",
+   "manifest_artifact": "19c3e70cf7a1286b",
+   "assignment": "zona-slider-2650fad6",
+   "assigned_code_sha256": "7ccf094a1d7f2b5e",
+   "manifest_owner": "claude:claude",
+   "manifest_mtime": "2026-09-21T16:12:51Z"
+  }
+ },
+ "conclusion": "Ни один манифест и ни одно назначение витрин вне области не изменены этой сессией: время изменения предшествует зарядке, назначения указывают на собственные релизы линий Lords и Zona."
+}
