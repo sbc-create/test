@@ -5,7 +5,7 @@
   "branch": "claude/animedia-template-finalization-01",
   "worktree": "/home/claude/wt-animedia-finalization-01",
   "START_HEAD": "03b3908e7956552c418e917fc152c16e8151677e",
-  "CURRENT_HEAD": "f014141c98f4d67813220003f3a46d79b3dfe5d8",
+  "CURRENT_HEAD": "9cc9bcc10a5ba59b0ad02aca4cfd25a4ebb381a2",
   "CONTRACT_SHA256": "5f2112e25ef974333c388bad405abfae3c3d460a713b028afa3c0e549b8eaeb3",
   "CONTRACT_MUTATED": 0,
   "steps_completed": [
@@ -48,6 +48,11 @@
       "commit": "f014141c98f4d67813220003f3a46d79b3dfe5d8",
       "short": "f014141",
       "subject": "fix(animedia): разобраны 15 унаследованных падений тестов"
+    },
+    {
+      "commit": "9cc9bcc10a5ba59b0ad02aca4cfd25a4ebb381a2",
+      "short": "9cc9bcc",
+      "subject": "docs(animedia): ledger восстановления предыдущей работы"
     }
   ],
   "mutations_outside_repo": 0,
@@ -66,5 +71,6 @@
     "baseline_at_dd123c5": "15 failed, 240 passed, 2 skipped",
     "current": "276 passed, 2 skipped, 0 failed",
     "consecutive_stable_runs": 2
-  }
+  },
+  "HANDOFF_CONTENT_HEAD": "9cc9bcc10a5ba59b0ad02aca4cfd25a4ebb381a2"
 }
