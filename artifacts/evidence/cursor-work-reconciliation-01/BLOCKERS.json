@@ -1,0 +1,46 @@
+{
+  "task_id": "SITE-FACTORY-CURSOR-WORK-RECONCILIATION-01",
+  "updated_at": "2026-09-21T10:50:00Z",
+  "rule": "Блокер останавливает только ту операцию, которой реально нужен недостающий вход. Все независимые блоки продолжаются.",
+
+  "owner_blockers": [
+    {
+      "id": "OWNER-CONTACTS-LEGAL",
+      "blocks": ["B14 footer data gate"],
+      "needs": "Контактные и юридические данные витрины zonafilm.space",
+      "why_not_self_serviceable": "Выдумывать контакты и юридические сведения запрещено правилом владельца.",
+      "current_behaviour": "Подвал отдаёт честное OWNER_DATA_REQUIRED и сохраняет композицию из доступных разделов; выдуманных данных нет.",
+      "independent_work_continues": true,
+      "does_not_block": ["B14A", "P0-SEARCH-FULL-SCAN", "P1-TITLE-OVERFLOW", "stable runs"]
+    }
+  ],
+
+  "resource_blockers": [
+    {
+      "id": "HOST-CAPACITY",
+      "observed_at": "2026-09-21T10:35Z",
+      "loadavg_1m": 9.87,
+      "cpus": 12,
+      "mem_available_mb": 4077,
+      "disk_free_gb": 36,
+      "disk_used_pct": 82.2,
+      "thresholds_breached": ["disk_used_pct >= 75", "disk_free_gb < 50"],
+      "effect": "HEAVY_JOB_SAFE_TO_START=NO. Chromium-матрица и полный oracle не запускаются одновременно ни с чем.",
+      "mitigation": "Работа ведётся партиями под общим замком /home/claude/run-locks/site-factory-heavy-build.lock; очистка файлов не выполняется автоматически.",
+      "independent_work_continues": true
+    }
+  ],
+
+  "technical_blockers": [],
+
+  "not_blockers": [
+    {
+      "id": "OOM-CHECKPOINT-ARCHIVE",
+      "note": "Архив zona-b18-oom-checkpoint-20260921T0710Z.tar.gz существует, но распаковка не нужна: рабочее дерево новее и уже сохранено коммитом 3a745dd. Архив оставлен как read-only свидетельство инцидента."
+    },
+    {
+      "id": "REDEPLOY",
+      "note": "Живой runtime уже отдаёт одобренный артефакт 75b84a4d… Повторная выкладка не требуется и запрещена правилом A1."
+    }
+  ]
+}

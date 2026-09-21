@@ -1,0 +1,85 @@
+{
+  "task_id": "SITE-FACTORY-CURSOR-WORK-RECONCILIATION-01",
+  "mode": "RECOVER_VERIFY_FINISH_DO_NOT_RESTART",
+  "next_stage": "SITE-FACTORY-TEN-DISTINCT-TEMPLATES-01",
+  "updated_at": "2026-09-21T10:52:00Z",
+
+  "phase": "A6_PRESERVED_A5_MATRIX_BUILT",
+  "verdict_so_far": "IN_PROGRESS",
+
+  "canonical_head": "491836048dae11ae639795c7a3827706129faef6",
+  "worktree": "/home/claude/wt-zona-finalization-01",
+  "branch": "claude/zona-template-finalization-01",
+  "head_at_entry": "1d046589e65b373d116ab4e4ec24ff8fbe469260",
+
+  "recovered_contract": {
+    "path": "docs/ZONA_BLOCK_SPEC_V1.md",
+    "digest_scope": "секции 1–24",
+    "digest": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+    "recomputed_and_matched": true,
+    "status": "FULL",
+    "CONTRACT_MUTATED": 0,
+    "CONTRACT_WEAKENED": 0
+  },
+
+  "completed_steps": [
+    {
+      "step": "A2/A3 discovery",
+      "at": "2026-09-21T10:40Z",
+      "result": "108 worktree просмотрено, 17 dirty, 7 веток cursor/*, 3 checkpoint. Всё read-only."
+    },
+    {
+      "step": "A4 восстановление контракта",
+      "at": "2026-09-21T10:44Z",
+      "result": "Контракт найден и верифицирован побайтово. Зафиксированы две несовпадающие нумерации блоков."
+    },
+    {
+      "step": "A6 сохранение незакоммиченного",
+      "at": "2026-09-21T10:41Z",
+      "commit": "3a745dd",
+      "result": "112 файлов, 43 MB. Классификация: 93 скриншота, 16 записей, 3 harness. Временных файлов и секретов не закоммичено."
+    },
+    {
+      "step": "A5 блочная сверка",
+      "at": "2026-09-21T10:48Z",
+      "result": "20 блоков. KEEP=5, RETEST=6, REPAIR=5, FINISH=4, OWNER_GATE=1. Пять утверждений предыдущего отчёта исправлены."
+    }
+  ],
+
+  "remaining_steps": [
+    "A7 воспроизвести и исправить P0-SEARCH-FULL-SCAN",
+    "A7 исправить P1-TITLE-OVERFLOW и P1-INNER-SCROLLBARS",
+    "A5 FINISH B14A — матрица пустых и деградированных состояний",
+    "A8 перепрогнать тесты блоков со статусом RETEST",
+    "A9 два стабильных живых прогона, индексируемость before=after",
+    "A10 сформировать HANDOFF_HEAD и HANDOFF.json",
+    "A11 отчёт и обязательная остановка"
+  ],
+
+  "first_unfinished_block": "B14A",
+  "deploy_performed_this_stage": 0,
+  "push_performed_this_stage": 0,
+  "indexability_mutations_this_stage": 0,
+  "new_baseline_created": 0,
+  "foreign_changes_reset": 0,
+  "oom_kills_this_stage": 0,
+
+  "live": {
+    "domain": "zonafilm.space",
+    "build": "20260920T212359Z-39dc16ed-nova",
+    "artifact_sha256": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+    "indexability": "noindex, nofollow",
+    "matches_approved_artifact": true,
+    "redeploy_required": false
+  },
+
+  "ledger": {
+    "DISCOVERY": "artifacts/evidence/cursor-work-reconciliation-01/DISCOVERY.json",
+    "PREVIOUS_GOALS": "artifacts/evidence/cursor-work-reconciliation-01/PREVIOUS_GOALS.md",
+    "BLOCK_MATRIX": "artifacts/evidence/cursor-work-reconciliation-01/BLOCK_MATRIX.json",
+    "FILE_PROVENANCE": "artifacts/evidence/cursor-work-reconciliation-01/FILE_PROVENANCE.json",
+    "WORKTREE_SCAN": "artifacts/evidence/cursor-work-reconciliation-01/WORKTREE_SCAN.json",
+    "BLOCKERS": "artifacts/evidence/cursor-work-reconciliation-01/BLOCKERS.json",
+    "HANDOFF": "artifacts/evidence/cursor-work-reconciliation-01/HANDOFF.json (ещё не создан)"
+  }
+}

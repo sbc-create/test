@@ -1,0 +1,1223 @@
+{
+  "repo": "/srv/site-factory/repo",
+  "worktrees_total": 108,
+  "worktrees_dirty": 17,
+  "worktrees_clean": 91,
+  "worktrees_unreadable": 0,
+  "uncommitted_entries_total": 278,
+  "worktrees": [
+    {
+      "path": "/srv/site-factory/repo",
+      "head": "491836048dae11ae639795c7a3827706129faef6",
+      "branch": "claude/players-only-production-009",
+      "exists": true,
+      "status": "DIRTY",
+      "dirty_count": 26,
+      "dirty_kinds": {
+        "source_or_config": 17,
+        "unknown": 7,
+        "docs": 1,
+        "test": 1
+      },
+      "sample": [
+        " M automation/host/lords-staging-apply.sh",
+        " M config/site-profiles/yummyani-site.json",
+        "M  inventory/network-allowlist.yaml",
+        " M seo_operator/hookguard.py",
+        "?? automation/host/nova-api-surface-probe.py",
+        "?? automation/host/nova-catalog-publish.py"
+      ]
+    },
+    {
+      "path": "/home/claude/work-availability-01",
+      "head": "12825376ac14ba5ef09175259c559bf8b6251e1d",
+      "branch": "claude/source-availability-01",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/work-day05",
+      "head": "123b82b2456652fc51d85a1138a08c7d1f9b1abe",
+      "branch": "claude/site-factory-day-content-and-visual-fix-05",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/work-deploy-n04",
+      "head": "2a8615c966595018f4f2d968e740d7dcd102d79e",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/work-h01",
+      "head": "a7f7cb6236fbc9770af949ef98eae511cd3c8fc4",
+      "branch": "claude/hardening-parallel-templates-01",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/work-lords-02f",
+      "head": "8b141883cd4dd803fcc7f881a362841b5a582d3f",
+      "branch": "claude/lords-fast-path-02f",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/work-night03",
+      "head": "e97edfcf93f13253d7bc5ff8bf809e5de8640357",
+      "branch": "claude/site-factory-multi-engine-api-cms-control-plane-night-03",
+      "exists": true,
+      "status": "DIRTY",
+      "dirty_count": 6,
+      "dirty_kinds": {
+        "unknown": 6
+      },
+      "sample": [
+        "?? install-fast-path.log",
+        "?? install-fix-snapshot.txt",
+        "?? install-fix.log",
+        "?? install-mount-snapshot.txt",
+        "?? install-mount.log",
+        "?? install-snapshot.txt"
+      ]
+    },
+    {
+      "path": "/home/claude/work-night04",
+      "head": "6e762910e0531778d2246c2e494249e3a20d5a9d",
+      "branch": "claude/site-factory-live-autonomy-content-player-ratings-night-04",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/work-perf-collections-01",
+      "head": "acdeaffe71cc6ca8323f4914af2765394e428391",
+      "branch": "claude/perf-collections-01",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/work-templates/families",
+      "head": "9667354fb0994d1687a7ce45fbbb92fa87d5e78c",
+      "branch": "claude/templates-new-families-01",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/work-templates/rc-verify",
+      "head": "2f87236a6e27b68fd1deed523390e5e3cc559d99",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "DIRTY",
+      "dirty_count": 86,
+      "dirty_kinds": {
+        "evidence": 86
+      },
+      "sample": [
+        " M artifacts/evidence/templates/a11y/axe-lords-01-catalog-1440.json",
+        " M artifacts/evidence/templates/a11y/axe-lords-01-catalog-390.json",
+        " M artifacts/evidence/templates/a11y/axe-lords-01-catalog-768.json",
+        " M artifacts/evidence/templates/a11y/axe-lords-01-home-1440.json",
+        " M artifacts/evidence/templates/a11y/axe-lords-01-home-390.json",
+        " M artifacts/evidence/templates/a11y/axe-lords-01-home-768.json"
+      ]
+    },
+    {
+      "path": "/home/claude/work-templates/site-factory",
+      "head": "cd2f718ae656e6bfcdc68099601d92078bd1f13f",
+      "branch": "claude/templates-lords-yummy-refpacks-01",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/work-templates/theme-sf",
+      "head": "2f87236a6e27b68fd1deed523390e5e3cc559d99",
+      "branch": "claude/templates-theme-collections-01",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/work-templates/v0",
+      "head": "20a94212ff68b4b0541bbdec9a24b3864a9c7c61",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-animedia-finalization-01",
+      "head": "03b3908e7956552c418e917fc152c16e8151677e",
+      "branch": "claude/animedia-template-finalization-01",
+      "exists": true,
+      "status": "DIRTY",
+      "dirty_count": 13,
+      "dirty_kinds": {
+        "evidence": 11,
+        "source_or_config": 2
+      },
+      "sample": [
+        " M artifacts/evidence/animedia-blockwise-2026-09-19/BLOCK_MATRIX.md",
+        " M artifacts/evidence/animedia-final-repair-2026-09-19/FINAL.md",
+        " M automation/host/lords-frontend.py",
+        "?? artifacts/evidence/animedia-blockwise-2026-09-19/raw/block01-local-server.log",
+        "?? artifacts/evidence/animedia-blockwise-2026-09-19/raw/block01-local.pid",
+        "?? artifacts/evidence/animedia-blockwise-2026-09-19/raw/block01-manifest.json"
+      ]
+    },
+    {
+      "path": "/home/claude/wt-arc-002",
+      "head": "f3c8188ea2f2fcad8ddf51a2933e098f3ca3943d",
+      "branch": "claude/arc-integration-provisioner-002",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-arc-seo-003",
+      "head": "0d24e262cf22cca097c4e20fc98a9f521e69095c",
+      "branch": "claude/arc-seo-canonical-proposal-003",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-audit-ledger-002",
+      "head": "1bb8d6a46aa4f9c08e92cd4aafd2f65e514cd7b0",
+      "branch": "claude/core-audit-ledger-002",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-base-2",
+      "head": "f87b2ffa3e0107b51daa93dd2907530b166edb67",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-canary",
+      "head": "21d2c21dfc50c01b2fdd5a13821a29f3cbce1626",
+      "branch": "claude/core-lords-canary-01",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-canon-76",
+      "head": "b398ca2d0f5812049e3788a46618f005255ef77f",
+      "branch": "claude/fleet-tpl-baseline-001",
+      "exists": true,
+      "status": "DIRTY",
+      "dirty_count": 4,
+      "dirty_kinds": {
+        "source_or_config": 2,
+        "evidence": 1,
+        "unknown": 1
+      },
+      "sample": [
+        " M blueprints/lords/profiles/animedia-portal.yaml",
+        " M factory/lords/theme.py",
+        "?? artifacts/evidence/closed-template-canary-26/",
+        "?? \"tatus --short\""
+      ]
+    },
+    {
+      "path": "/home/claude/wt-canon-76-checker",
+      "head": "bc97871fbb5910f35a6bdf13abd7343c39e0b5ff",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "DIRTY",
+      "dirty_count": 1,
+      "dirty_kinds": {
+        "evidence": 1
+      },
+      "sample": [
+        " M artifacts/evidence/products/product-readiness.json"
+      ]
+    },
+    {
+      "path": "/home/claude/wt-catalog-004",
+      "head": "cae3d3451dcd90339ed982542cf9fc0644043151",
+      "branch": "claude/arch-lords-zona-catalog-ratings-daily-004",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-ccp-core",
+      "head": "50e71fe92838b4fe6e7492aebc76eb61fcdab2d9",
+      "branch": "claude/core-control-plane-01",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-changeset-003",
+      "head": "e415e6e297220e53eaf1ae652417b4907afdb7ea",
+      "branch": "claude/core-changeset-workflow-003",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-community-comments-01",
+      "head": "06099689012c538f36b2698caa94ac95a2dd4f80",
+      "branch": "cursor/community-comments-01",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-content-runtime-01",
+      "head": "49d7b14289ca87e06dd8773c28cef2da1301aa9d",
+      "branch": "claude/content-runtime-animedia-lords33-01",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-content-runtime-checker",
+      "head": "22de389b38777c775fdbdf5742a65658403dc9ce",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-content-runtime-checker-16",
+      "head": "49d7b14289ca87e06dd8773c28cef2da1301aa9d",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-core-02",
+      "head": "76552b9a7372c5ad15cfc7d8b1052a10024722a3",
+      "branch": "claude/core-hardening-02",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-core-idem-004",
+      "head": "1c460d9d76653f4c6041954facae713e9a11409c",
+      "branch": "claude/core-idempotency-fingerprint-004",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-core-ident-35",
+      "head": "d158064e52020c8fb2d4bc0052780d476e25671d",
+      "branch": "claude/yummy-content-contour-36",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-core-identity-22",
+      "head": "14226a45faf659d5eaf51f9921be41423872cdbc",
+      "branch": "claude/core-seo-identity-contract-22",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-core-kind-33",
+      "head": "974a8bb65c766c3244b9f41cd4437bebdd3e5362",
+      "branch": "claude/core-content-kind-contract-33",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-core-routes-31",
+      "head": "1f29ed5a8d7c1f56f928d35171cedc548a615f01",
+      "branch": "claude/core-lords-route-snapshot-31",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-core-seo-29",
+      "head": "2ccfa102b639942df4807efdfa68278d790ebc48",
+      "branch": "claude/core-seo-integration-unblock-29",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-core-yummy-23",
+      "head": "e4664da45b67b5b504a47483f0f81719aedae3e7",
+      "branch": "claude/core-yummyani-route-binding-23",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-core003",
+      "head": "fbcbca768f2e31c79aebe936b66dc500288a6fe9",
+      "branch": "core002-integrate",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-cursor-cards-media-01",
+      "head": "7a3eda35adf04373e0e71a63235a3301fda7b51e",
+      "branch": "cursor/lords-cards-media-01",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-cursor-header-sticky-01",
+      "head": "e50e8e5bb5b27578adaa2a181b003d8c9de87650",
+      "branch": "cursor/lords-header-sticky-01",
+      "exists": true,
+      "status": "DIRTY",
+      "dirty_count": 1,
+      "dirty_kinds": {
+        "source_or_config": 1
+      },
+      "sample": [
+        " M seo_operator/hookguard.py"
+      ]
+    },
+    {
+      "path": "/home/claude/wt-docs-06",
+      "head": "c478b8bec4872e8857a96447af189dd99b571aba",
+      "branch": "claude/sprint06-docs",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-identity-19",
+      "head": "9c00fb0ebf4ff039fbc3a82b84cf5c24dc9e9e86",
+      "branch": "claude/core-content-identity-resolution-19",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-integration-005",
+      "head": "c7ef0061e9bd5a7fdb399a121fbe0113c0e15159",
+      "branch": "claude/arch-fleet-visible-content-005",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-integration-28",
+      "head": "a5363a6571f6addf076eb390cf49bc950881d1f8",
+      "branch": "claude/fleet-seo-004-content-quality",
+      "exists": true,
+      "status": "DIRTY",
+      "dirty_count": 4,
+      "dirty_kinds": {
+        "unknown": 4
+      },
+      "sample": [
+        "?? .claude/hooks/guard_rules.py.bak.20260909T211105.306980Z",
+        "?? .claude/settings.json.bak.20260909T205407Z",
+        "?? .claude/settings.json.bak.20260910T095148Z",
+        "?? seo_operator/unattended.py.bak.20260909T205407Z"
+      ]
+    },
+    {
+      "path": "/home/claude/wt-lineage-001",
+      "head": "0c5b37325ae8a101d36c2d4e9573b91e7fe802db",
+      "branch": "claude/arch-lords-data-lineage-001",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-lords-contract-002",
+      "head": "c69eadd92cc427090bb9fa3cd54712281e99298f",
+      "branch": "claude/arch-lords-data-contract-backfill-002",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-lords-default-episode-01",
+      "head": "4f8ef5a3b5efabeb461437f9fa472df0d859e173",
+      "branch": "cursor/lords-default-episode-01",
+      "exists": true,
+      "status": "DIRTY",
+      "dirty_count": 8,
+      "dirty_kinds": {
+        "source_or_config": 2,
+        "test": 5,
+        "evidence": 1
+      },
+      "sample": [
+        " M automation/host/collection_contract.py",
+        " M automation/host/lords-frontend.py",
+        " M tests/lords/test_block01_header_shell.py",
+        " M tests/lords/test_block02_home_sections.py",
+        " M tests/lords/test_block03_card.py",
+        " M tests/lords/test_compact_filter_contract.py"
+      ]
+    },
+    {
+      "path": "/home/claude/wt-lords-integration-canary-01",
+      "head": "a0e6acfb0c273252bf45e3e8b284caaae044e12b",
+      "branch": "cursor/lords-integration-canary-01",
+      "exists": true,
+      "status": "DIRTY",
+      "dirty_count": 100,
+      "dirty_kinds": {
+        "evidence": 97,
+        "source_or_config": 2,
+        "test": 1
+      },
+      "sample": [
+        " M artifacts/evidence/live-template-qa/html/animedia_icu__search_partial.html",
+        " M artifacts/evidence/live-template-qa/html/animedia_space__search_partial.html",
+        " M artifacts/evidence/live-template-qa/html/zona__search_partial.html",
+        " M artifacts/evidence/live-template-qa/screenshots/animedia-space-home-1440-wait.png",
+        " M artifacts/evidence/live-template-qa/screenshots/animedia-space-home-390.png",
+        " M artifacts/evidence/live-template-qa/screenshots/zona-home-1440.png"
+      ]
+    },
+    {
+      "path": "/home/claude/wt-lords-r2",
+      "head": "60870de482b9f8b912aea9a4246397d076868cd3",
+      "branch": "claude/templates-zona-animedia-visual-parity-005",
+      "exists": true,
+      "status": "DIRTY",
+      "dirty_count": 5,
+      "dirty_kinds": {
+        "source_or_config": 1,
+        "evidence": 3,
+        "docs": 1
+      },
+      "sample": [
+        " M inventory/targets.yaml",
+        "?? artifacts/evidence/templates-zona-animedia-standing-009/",
+        "?? artifacts/evidence/templates-zona-canary-r2-verify/",
+        "?? artifacts/evidence/templates-zona-served-fingerprint-r2/canary-run/",
+        "?? docs/policy/"
+      ]
+    },
+    {
+      "path": "/home/claude/wt-lords-tok",
+      "head": "34a74a12f3773af753b09f9cbcd431e8454792b9",
+      "branch": "claude/lords-search-tokens-29",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-lords-vp",
+      "head": "b944178bd39190756c53705d88df06b76461abf9",
+      "branch": "claude/lords-visual-parity-001",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-oper-02",
+      "head": "4d02258ff5bef9e1eafb4fab1c9cbd63b598be94",
+      "branch": "claude/core-operability-02",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-p8-20",
+      "head": "a70fcb009dc47c24f102fb69257f31f35d90914a",
+      "branch": "claude/core-product-8plus-20",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-player-03",
+      "head": "568863d350c320e4101ac17417c846ca4b7265c0",
+      "branch": "claude/core-player-autonomy-03",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-prod-25",
+      "head": "0bc291f737c70c0e6773a476a8c4cc4381793d04",
+      "branch": "claude/program-production-finish-25",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-prod-check",
+      "head": "41031da02cb7d3ca1fb30c0bdfeca6fe4b4e21c1",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-prodfix-29",
+      "head": "d633b1947f87fe87720d7ad19e740e63def26a09",
+      "branch": "claude/templates-production-fix-29",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-ratings-ingestion-01",
+      "head": "ab9dec90c2084614f9f227730be5240c4d7baefc",
+      "branch": "cursor/ratings-ingestion-01",
+      "exists": true,
+      "status": "DIRTY",
+      "dirty_count": 6,
+      "dirty_kinds": {
+        "source_or_config": 2,
+        "test": 1,
+        "evidence": 3
+      },
+      "sample": [
+        " M seo_operator/hookguard.py",
+        " M seo_operator/permission_model.py",
+        " M tests/operator/test_hookguard.py",
+        "?? artifacts/evidence/community-comments-01/",
+        "?? artifacts/evidence/ratings-ingestion-02/closed-noindex/animedia.icu/ratings_snapshot_v1.candidate.json.prev",
+        "?? artifacts/evidence/ratings-ingestion-02/closed-noindex/animedia.space/ratings_snapshot_v1.candidate.json.prev"
+      ]
+    },
+    {
+      "path": "/home/claude/wt-refpack-amd",
+      "head": "9284c7f2917c5d963edd657a97d5c302de1e12b6",
+      "branch": "claude/reference-pack-amd-online-01",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-refpack-amd-checker",
+      "head": "18fb2d7ec3824fc8a137f0785a27b7164af77ffc",
+      "branch": "claude/reference-pack-amd-online-checker-02",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-refpack-amd-checker-02",
+      "head": "9284c7f2917c5d963edd657a97d5c302de1e12b6",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-release-03",
+      "head": "f8f20dde0efb24e58f239c8e662cdbb5f0bf2bcf",
+      "branch": "claude/lords-release-30",
+      "exists": true,
+      "status": "DIRTY",
+      "dirty_count": 13,
+      "dirty_kinds": {
+        "evidence": 13
+      },
+      "sample": [
+        "?? artifacts/evidence/release/live-acceptance/acceptance-lords-02.json",
+        "?? artifacts/evidence/release/live-acceptance/lords-02-catalog-1440.png",
+        "?? artifacts/evidence/release/live-acceptance/lords-02-catalog-390.png",
+        "?? artifacts/evidence/release/live-acceptance/lords-02-catalog-768.png",
+        "?? artifacts/evidence/release/live-acceptance/lords-02-catalog-page-2-1440.png",
+        "?? artifacts/evidence/release/live-acceptance/lords-02-catalog-page-2-390.png"
+      ]
+    },
+    {
+      "path": "/home/claude/wt-release-03-v3",
+      "head": "1d8c845a1e0dd266e97f086771e4e680cfba7afb",
+      "branch": "claude/core-release-live-circuit-03-artifact-v3",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-remediation-003",
+      "head": "e47227bc6b1cd993af8f6b24fab981d8c0e1620b",
+      "branch": "claude/arch-lords-zona-live-data-remediation-003",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-seo-frequency-checker-22",
+      "head": "9e685abefce1c4bdace19d2194a06a7ba3b057c6",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-seo-frequency-policy-01",
+      "head": "9e685abefce1c4bdace19d2194a06a7ba3b057c6",
+      "branch": "claude/seo-frequency-taxonomy-policy-01",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-seo006",
+      "head": "90cb4b03b92ac73091c6947fdecfd2173708a549",
+      "branch": "claude/fleet-seo-006-metrika-topvisor-production",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-seo007",
+      "head": "84736cae01d880d0c9ac1cf0d9c3105cd22703c4",
+      "branch": "claude/fleet-seo-007-e2e-readiness",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-seo009",
+      "head": "db1ec10fd227ffa31fe14796d0fcb64094fbb17c",
+      "branch": "claude/fleet-seo-009-live-seo-layer",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-seo009b",
+      "head": "17c7e837b6dfc7c40a8374bdf8c0c71044cff64f",
+      "branch": "claude/fleet-seo-009-layer-on-templates-tip",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-site-factory-release-orchestrator-01",
+      "head": "4119c6746c7990c55a56bc22f7597afd53c27512",
+      "branch": "cursor/site-factory-release-orchestrator-01",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-stream-06",
+      "head": "3ecbe27ab1a1885439aa5dbc53a12c8b75b93d4d",
+      "branch": "claude/sprint06-stream",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-templates-06",
+      "head": "c6d5f109b2b36c27e9ee5979247adc0a33b71ea2",
+      "branch": "claude/sprint06-templates",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-templates-23",
+      "head": "378d2812a25c6cad87ac28a2d42397c88c5425b4",
+      "branch": "claude/templates-nonlords-visual-26",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-ten-templates-01",
+      "head": "f77e2cfc10e6935ff924626172052fd7834f14ad",
+      "branch": "claude/ten-distinct-templates-01",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-tpl-r2",
+      "head": "4f26172c7e0853f14765c773bc4df9b369533b2d",
+      "branch": "claude/fleet-tpl-001-r2",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-visual-scoring-01",
+      "head": "ca0c273a291ca601dd7e3a9ec075ab589d850685",
+      "branch": "claude/template-visual-scoring-contract-01",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-visual-scoring-checker-14",
+      "head": "04c1fe16763f9be4ec5db0474fe9ab31a055fc08",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-visual-scoring-checker-18",
+      "head": "ca0c273a291ca601dd7e3a9ec075ab589d850685",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-yummy-013",
+      "head": "b713db94baa5d721db7900cc1fb5dde50a12ee55",
+      "branch": "claude/yummy-episodes-contact-live-013",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-zona-finalization-01",
+      "head": "1d046589e65b373d116ab4e4ec24ff8fbe469260",
+      "branch": "claude/zona-template-finalization-01",
+      "exists": true,
+      "status": "DIRTY",
+      "dirty_count": 2,
+      "dirty_kinds": {
+        "evidence": 2
+      },
+      "sample": [
+        " M artifacts/evidence/zona-independent-repair-2026-09-20/B17-artifact/OWNER_DEPLOY_PACKET.json",
+        "?? artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/"
+      ]
+    },
+    {
+      "path": "/home/claude/wt-zone",
+      "head": "e698e2adf50223c4b922efae5ff019355751f2a1",
+      "branch": "claude/zone-tpl-001",
+      "exists": true,
+      "status": "DIRTY",
+      "dirty_count": 1,
+      "dirty_kinds": {
+        "source_or_config": 1
+      },
+      "sample": [
+        "?? automation/host/zone-link-capture.py"
+      ]
+    },
+    {
+      "path": "/home/claude/wt-zone-r2",
+      "head": "c999313c5f0734ae1b210682c2d45c0de06a5840",
+      "branch": "claude/zone-tpl-001-r2",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/home/claude/wt-zone2",
+      "head": "7829941fc61b96f77b532eb24cba293145b30cf5",
+      "branch": "claude/zone-tpl-001-repair",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/srv/site-factory/analytics-pr8",
+      "head": "1d40f0444a92a3147746f05afa0d00b4f2d4840b",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/srv/site-factory/backup-fix",
+      "head": "dcba100b6df3d6fbae802026c7200c21fdf59fb8",
+      "branch": "claude/fix-backup-protected-dir",
+      "exists": true,
+      "status": "DIRTY",
+      "dirty_count": 1,
+      "dirty_kinds": {
+        "source_or_config": 1
+      },
+      "sample": [
+        " M automation/host/site-factory-backup.sh"
+      ]
+    },
+    {
+      "path": "/srv/site-factory/repo/.claude/worktrees/bridge-cse_012h7umTm1Npqv2ksEApfDfQ",
+      "head": "bedcbd811f69220631b9ab7089f6a984b6a19898",
+      "branch": "worktree-bridge-cse_012h7umTm1Npqv2ksEApfDfQ",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/srv/site-factory/repo/.claude/worktrees/bridge-cse_013BtENLdLmYAawPvbzGPHm2",
+      "head": "a32ba30cb940759b4f58c527ff3a06a3b9c8f594",
+      "branch": "claude/yandex-analytics-automation",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/srv/site-factory/repo/.claude/worktrees/bridge-cse_017Phgo2edCK9z2xpYdLpB3C",
+      "head": "a7f7cb6236fbc9770af949ef98eae511cd3c8fc4",
+      "branch": "worktree-bridge-cse_017Phgo2edCK9z2xpYdLpB3C",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/srv/site-factory/repo/.claude/worktrees/bridge-cse_01EnwMfSoSugyUjgT5kB31Lr",
+      "head": "1d40f0444a92a3147746f05afa0d00b4f2d4840b",
+      "branch": "worktree-bridge-cse_01EnwMfSoSugyUjgT5kB31Lr",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/srv/site-factory/repo/.claude/worktrees/bridge-cse_01EoW52Qu8ZV93XDauggZFqR",
+      "head": "1d40f0444a92a3147746f05afa0d00b4f2d4840b",
+      "branch": "worktree-bridge-cse_01EoW52Qu8ZV93XDauggZFqR",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/srv/site-factory/repo/.claude/worktrees/bridge-cse_01L5w4YbfZo5rrwM7Xy2JGvy",
+      "head": "f81c5176c0fd1cc1cdcb5e4fd2132293603ff3e4",
+      "branch": "claude/unattended-no-ask",
+      "exists": true,
+      "status": "DIRTY",
+      "dirty_count": 1,
+      "dirty_kinds": {
+        "source_or_config": 1
+      },
+      "sample": [
+        " M seo_operator/unattended.py"
+      ]
+    },
+    {
+      "path": "/srv/site-factory/repo/.claude/worktrees/bridge-cse_01LtZXugJJbG3JY6UDatRWkE",
+      "head": "a7f7cb6236fbc9770af949ef98eae511cd3c8fc4",
+      "branch": "worktree-bridge-cse_01LtZXugJJbG3JY6UDatRWkE",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/srv/site-factory/repo/.claude/worktrees/bridge-cse_01MDqryeb59QBi6PSgEYw4ba",
+      "head": "a7f7cb6236fbc9770af949ef98eae511cd3c8fc4",
+      "branch": "worktree-bridge-cse_01MDqryeb59QBi6PSgEYw4ba",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/srv/site-factory/repo/.claude/worktrees/bridge-cse_01SaqgT5APihqF288cJpRaKs",
+      "head": "1d40f0444a92a3147746f05afa0d00b4f2d4840b",
+      "branch": "worktree-bridge-cse_01SaqgT5APihqF288cJpRaKs",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/srv/site-factory/repo/var/finalize",
+      "head": "aab286a1b13c782d4b2193f7920f461b08e85dd3",
+      "branch": "claude/finalize-public-sites",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/srv/site-factory/repo/var/lords-deploy",
+      "head": "97c3cfa4d1864b15ef3b1965b6999290d37bdc8f",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/srv/site-factory/repo/var/worktrees/repro-base",
+      "head": "a7f7cb6236fbc9770af949ef98eae511cd3c8fc4",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/srv/site-factory/repo/var/worktrees/repro-task",
+      "head": "a699b461d1525395cf7f9a1c981f6fe0bcc01eaf",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/srv/site-factory/repo/var/worktrees/secret-hub-006",
+      "head": "88025ccec51898c10b62736c385870944550ce7e",
+      "branch": "claude/templates-secret-hub-cloud-access-006",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/srv/site-factory/repo/var/worktrees/yummy-index",
+      "head": "b9a154ce80133e1670e725f74f514d8b469ce29a",
+      "branch": "claude/yummy-site-indexing-open-01",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/srv/site-factory/secret-hub",
+      "head": "a06a1dbfd25c8f8d9f14f283477b7d07a4433c27",
+      "branch": "claude/secret-hub",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/tmp/animedia-canary-GEkyVM",
+      "head": "49d7b14289ca87e06dd8773c28cef2da1301aa9d",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/tmp/claude-1001/-home-claude-wt-core003/3ac250e1-e7ff-4235-a6c0-50e865adb5c5/scratchpad/head77",
+      "head": "1f9b6e862566c6104a0cf58688b119c7f2f59ea6",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/tmp/claude-1001/-home-claude-wt-lords-r2/ec1cc6d9-c19a-40a7-8f72-186b2addbca0/scratchpad/base",
+      "head": "cc3816d83c53d46d68d8987c6f1096c0de064076",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/tmp/lords-canary-P25bjw",
+      "head": "b398ca2d0f5812049e3788a46618f005255ef77f",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/tmp/wt-base",
+      "head": "0a2658c02f26970de4c41b386fd05336d20febbe",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    },
+    {
+      "path": "/tmp/zona-canary-oMmeFU",
+      "head": "60870de482b9f8b912aea9a4246397d076868cd3",
+      "branch": "(detached)",
+      "exists": true,
+      "status": "CLEAN",
+      "dirty_count": 0,
+      "dirty_kinds": {},
+      "sample": []
+    }
+  ]
+}

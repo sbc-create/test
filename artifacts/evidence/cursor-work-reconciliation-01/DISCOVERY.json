@@ -1,0 +1,158 @@
+{
+  "task_id": "SITE-FACTORY-CURSOR-WORK-RECONCILIATION-01",
+  "mode": "RECOVER_VERIFY_FINISH_DO_NOT_RESTART",
+  "discovered_at": "2026-09-21T10:40:00Z",
+  "discovery_method": "read-only: git worktree/status, файлы evidence, HTTP-пробы живого процесса. Ничего не сброшено, не распаковано поверх, не перезаписано.",
+
+  "CANONICAL_HEAD": "491836048dae11ae639795c7a3827706129faef6",
+  "CANONICAL_BRANCH": "claude/players-only-production-009",
+  "CANONICAL_REPO": "/srv/site-factory/repo",
+
+  "WORKTREES_TOTAL": 108,
+  "WORKTREES_DIRTY": 17,
+  "WORKTREES_CLEAN": 91,
+  "UNCOMMITTED_ENTRIES_TOTAL": 278,
+  "CURSOR_WORKTREES_FOUND": 7,
+  "CURSOR_BRANCHES_FOUND": [
+    "cursor/community-comments-01",
+    "cursor/lords-cards-media-01",
+    "cursor/lords-default-episode-01",
+    "cursor/lords-header-sticky-01",
+    "cursor/lords-integration-canary-01",
+    "cursor/ratings-ingestion-01",
+    "cursor/site-factory-release-orchestrator-01"
+  ],
+  "CURSOR_WORKTREES_DIRTY": {
+    "/home/claude/wt-cursor-header-sticky-01": 1,
+    "/home/claude/wt-lords-default-episode-01": 8,
+    "/home/claude/wt-lords-integration-canary-01": 100,
+    "/home/claude/wt-ratings-ingestion-01": 6
+  },
+  "WORKTREE_SCAN_ARTIFACT": "artifacts/evidence/cursor-work-reconciliation-01/WORKTREE_SCAN.json",
+
+  "PRIMARY_PREVIOUS_RUN": {
+    "RUN_ID": "ZONA-INDEPENDENT-REPAIR-AND-LIVE-PARITY-03",
+    "OWNER_DECISION_ID": "ZONA-INDEPENDENT-REPAIR-ACCEPTANCE-20260920-01",
+    "worktree": "/home/claude/wt-zona-finalization-01",
+    "branch": "claude/zona-template-finalization-01",
+    "head_at_discovery": "1d046589e65b373d116ab4e4ec24ff8fbe469260",
+    "dirty_at_discovery": 2,
+    "dirty_detail": [
+      "M  B17-artifact/OWNER_DEPLOY_PACKET.json — дописано owner deploy approval",
+      "?? B18-after-live/ — 111 файлов, 43 MB, целиком вне git"
+    ],
+    "preserved_by_commit": "3a745dd",
+    "evidence_root": "artifacts/evidence/zona-independent-repair-2026-09-20/"
+  },
+
+  "ACCEPTANCE_CONTRACTS_FOUND": [
+    {
+      "path": "docs/ZONA_BLOCK_SPEC_V1.md",
+      "bytes": 88014,
+      "digest_scope": "секции 1–24 (sed '/^## 25\\. Команда для Cursor$/,$d')",
+      "digest_recorded": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+      "digest_recomputed": "1bcfd44734c8cc4041fa6f5a9b28ac9169ceba41dd2f08494b5236043c6fe017",
+      "digest_match": true,
+      "full_file_sha256": "c9556f11471c5d1e426fb6e6fa51987617ce3de9beaa5b1e5683e3ba21084fae",
+      "contract_commit": "71d1f7dfdf22d2c5c6d79497672827880dc01bb7",
+      "revoked_digest": "01e9db7b27eb6c4bc41160ca6270f25aa7e6352b743dac2b9f09a0493b7b58fb",
+      "revocation_decision": "ZONA-B00-OVERRIDE-20260920-01",
+      "status": "RECOVERED_FULL",
+      "CONTRACT_MUTATED": 0,
+      "CONTRACT_WEAKENED": 0
+    }
+  ],
+  "CONTRACT_NUMBERING_WARNING": "Существуют две несовпадающие нумерации блоков. В ZONA_BLOCK_SPEC_V1.md B14=search, B17=player, B18=seasons/episodes. В RUN_CHECKPOINT прогона independent-repair B14=footer, B17=artifact, B18=after-live. Это разные системы отсчёта одного и того же контракта; ниже используется нумерация прогона, как в RUN_CHECKPOINT и каталогах evidence.",
+
+  "OWNER_DEPLOY_PACKETS_FOUND": [
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B17-artifact/OWNER_DEPLOY_PACKET.json",
+      "OWNER_DEPLOY_APPROVAL_ID": "ZONA-INDEPENDENT-REPAIR-DEPLOY-20260920-01",
+      "scope": "ZONA_01_ONLY",
+      "service": "nova-zona-01",
+      "domain": "zonafilm.space",
+      "deploy_authorized": "YES",
+      "restart_authorized": "YES",
+      "rollback_authorized_if_hard_gate_fails": "YES",
+      "rollback_old_digest": "5fb6295cc7d8a7a1508dfb4be90b2a6e37dc97422e07547679eb535a9b0d2145",
+      "restore_verified_local": true,
+      "stale_field": "DEPLOY_PERFORMED=0 — опровергается B18/deploy/DEPLOY_PROVENANCE.json"
+    }
+  ],
+
+  "ARTIFACTS_FOUND": [
+    {
+      "artifact_sha256": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "manifest_sha256": "52adb80da54c0c64a23547429b4119ceaf9d61229215fe7394032b7f233b6097",
+      "code_tree_digest": "bb7b840f82f9d25804ab65dc2b5ad1efd9ee3b0e43e6dd81b8f76614bf378eb3",
+      "source_head": "39dc16ede9490160adfc4719cecc0f5b8c026799",
+      "tarball": "artifacts/zona-independent-repair-artifact/zona-01-frontend-39dc16ede949.tar.gz",
+      "profile": "zona-general",
+      "build_id": "20260920T212359Z-39dc16ed-nova"
+    }
+  ],
+
+  "LIVE_BUILDS_BY_DOMAIN": {
+    "zonafilm.space": {
+      "probe": "http://127.0.0.1:9120/ (локальный процесс витрины, PID 1679285)",
+      "probed_at": "2026-09-21T10:36:51Z",
+      "http_status": 200,
+      "build_id": "20260920T212359Z-39dc16ed-nova",
+      "artifact_sha256": "75b84a4d686a381a9e9ddbd2b9038d4e6590f95730a65706accb9a521c738fc7",
+      "template_revision": "39dc16ede9490160adfc4719cecc0f5b8c026799",
+      "catalog_revision": "1863a02dbb9beae56ae01fdaa53d5d40",
+      "catalog_built_at": "2026-09-21T03:17:10Z",
+      "matches_approved_artifact": true,
+      "redeploy_required": false,
+      "redeploy_reason": "Живой runtime уже отдаёт одобренный артефакт. Повторная выкладка запрещена правилом A1."
+    }
+  },
+
+  "INDEXABILITY_BY_DOMAIN": {
+    "zonafilm.space": {
+      "expected": "noindex,nofollow",
+      "before_deploy": "noindex,nofollow",
+      "after_deploy": "noindex, nofollow",
+      "observed_now": "noindex, nofollow",
+      "source": "заголовок X-Robots-Tag и meta name=robots живого ответа",
+      "UNAUTHORIZED_TRANSITIONS": 0
+    }
+  },
+
+  "CHECKPOINT_ARCHIVES_FOUND": [
+    {
+      "path": "/home/claude/zona-b18-oom-checkpoint-20260921T0710Z.tar.gz",
+      "bytes": 43902806,
+      "mtime": "2026-09-21T07:16Z",
+      "handling": "READ_ONLY. Не распакован: рабочее дерево новее архива и содержит те же данные B18, которые уже сохранены коммитом 3a745dd. Распаковка поверх запрещена правилом A2."
+    }
+  ],
+
+  "MEMORY_LIMITS": {
+    "host_mem_total_mb": 30075,
+    "host_mem_available_mb": 4077,
+    "loadavg_1m": 9.87,
+    "cpus": 12,
+    "disk_free_gb": 36,
+    "disk_used_pct": 82.2,
+    "heavy_job_safe_to_start": "NO",
+    "known_incident": "lords-content-refresh.service ≈2.08 GB RSS при MemoryMax=2G → OOM-kill",
+    "heavy_lock": "/home/claude/run-locks/site-factory-heavy-build.lock"
+  },
+
+  "LIVE_DEFECTS_REPRODUCED_NOW": [
+    {
+      "id": "P0-SEARCH-FULL-SCAN",
+      "measured_at": "2026-09-21T10:38Z",
+      "evidence": "GET /search/?q=matrix → TTFB 8.425 s и 8.210 s на двух подряд прогонах; GET /catalog/ → 0.387 s",
+      "verdict": "ВОСПРОИЗВЕДЁН, НЕ ИСПРАВЛЕН",
+      "cause_recorded_by_previous_run": "Full-catalog O(n) ranking в Данные.искать"
+    },
+    {
+      "id": "P1-PUBLIC-TECHNICAL-MARKERS",
+      "measured_at": "2026-09-21T10:37Z",
+      "evidence": "Видимый подвал чист — ни sha, ни build id. Идентификаторы находятся в <head>: meta site-factory-template-revision, site-factory-build-id, site-factory-artifact-sha256, site-factory-core, и в data-build-id на <html>.",
+      "verdict": "УТОЧНЁН. Флаг sha_leaked=true в B18/footer/FOOTER_HTTP.json относится ко всей странице, а не к подвалу; требование владельца про подвал не нарушено, но техническая разметка публично отдаётся."
+    }
+  ]
+}

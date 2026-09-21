@@ -1,0 +1,803 @@
+{
+  "preserving_commit": "3a745ddc6fd8889f8d526120d30f005da3cc19c4",
+  "policy": "Содержимое сохранено без правок. Классификация описывает спасённое, а не переписывает его.",
+  "files_total": 112,
+  "bytes_total": 44545077,
+  "by_kind": {
+    "evidence_record": 16,
+    "evidence_harness": 3,
+    "evidence_screenshot": 93
+  },
+  "bytes_by_kind": {
+    "evidence_record": 262928,
+    "evidence_harness": 53003,
+    "evidence_screenshot": 44229146
+  },
+  "temporary_or_secret_committed": 0,
+  "files": [
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B17-artifact/OWNER_DEPLOY_PACKET.json",
+      "change": "M",
+      "kind": "evidence_record",
+      "size": 2488,
+      "sha256": "956b18d8647d67ab8392ebe91f22186e3bac44cc91b720ecee18f13c3a18548f"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/catalog-oracle/ORACLE.json",
+      "change": "A",
+      "kind": "evidence_record",
+      "size": 673,
+      "sha256": "fe55f9964157ca59946746a570fd37b5e701b79ba661073725126699cde452e3"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/deploy/BEFORE.json",
+      "change": "A",
+      "kind": "evidence_record",
+      "size": 941,
+      "sha256": "8d99f60093883a3b42edaf78f76a60dbe922a80f77286109cb67ab5a0275df2f"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/deploy/DEPLOY_PROVENANCE.json",
+      "change": "A",
+      "kind": "evidence_record",
+      "size": 719,
+      "sha256": "ad46df0a87b3826e179aab365e440652127f8420be7af571dc7e69529ffe9a61"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/deploy/PREFLIGHT.json",
+      "change": "A",
+      "kind": "evidence_record",
+      "size": 796,
+      "sha256": "2628c521de8277cb68f67a269a745c9fbf9ee0459f8bfd26bcf392b0fe624f53"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/deploy/ROLLBACK.md",
+      "change": "A",
+      "kind": "evidence_record",
+      "size": 210,
+      "sha256": "8dcd768cf89a220ab8812de975c50db264cec8666ee9deb5fe03ec9b196705e3"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/deploy/deploy_zona01.py",
+      "change": "A",
+      "kind": "evidence_harness",
+      "size": 13103,
+      "sha256": "f82419757437ab7b4c41c096c781f5235893ca0289d2b6d99a3d1c37788c51bb"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/footer/FOOTER_HTTP.json",
+      "change": "A",
+      "kind": "evidence_record",
+      "size": 273,
+      "sha256": "7ca3bd519d11c7c7e4164df747600ccf1bb00f2d6ac8458c1812a00b7aa89d17"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/footer/FOOTER_VISUAL.json",
+      "change": "A",
+      "kind": "evidence_record",
+      "size": 1493,
+      "sha256": "d2bdc59a4fb544f76bcd6a511aa59e3fe93b2bf4c38277e6123cbf81ba049c6e"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/footer/footer_1440.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 116658,
+      "sha256": "82239918a31f7ca4ac3d3fc599c5643bd9f042c20433ae0419de69da7f01cfd8"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/footer/footer_390.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 44283,
+      "sha256": "7937461c4fe095229da4244677415fdc21f6108c82b84cb50a79fd069f177ec7"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/frozen-42-comparison/GEOMETRY_TABLE.json",
+      "change": "A",
+      "kind": "evidence_record",
+      "size": 52219,
+      "sha256": "e5776bc304fd9b029dcc38e6388cf755525f9a4b007e7ef73b147965c49462fb"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/frozen-42-comparison/live_animation_analog_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 46241,
+      "sha256": "ad9b21898c485cfc23ef0834371b85542f6009fa8838326cb0f4db8a06a768b8"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/frozen-42-comparison/live_collections_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 918276,
+      "sha256": "a03332072ba4bca7a822e444d348e097531e63d16b1a4b33c7f7b3ae8930f422"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/frozen-42-comparison/live_country_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 42609,
+      "sha256": "7d9fcace05a40033e416d4a04d2d8468a15bbba3d576d2c639b5f89071e51613"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/frozen-42-comparison/live_genre_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 1146462,
+      "sha256": "77e63df8b420e6b4e21637d92e2f77510f1dcc128df70e23412c57407ace0bb3"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/frozen-42-comparison/live_home_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 921367,
+      "sha256": "9c584762f5d2b7d4bc0720a92bc7286fd71baf7623aa891c9169760f3b0146da"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/frozen-42-comparison/live_movies_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 45803,
+      "sha256": "9698d2842699a2b409107081d96e2e4a71a671f564f9e0a09b9294deafb2e047"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/frozen-42-comparison/live_not_found_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 47672,
+      "sha256": "37431801cc64c3a60688e61fc108005f152f0a71ccea89815570f9f95fd1f986"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/frozen-42-comparison/live_novinki_analog_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 1110229,
+      "sha256": "5c90472985297b6e79d3de17d8beb2b5ba0f964c0a81ac966743039af327d5b7"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/frozen-42-comparison/live_rules_footer_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 921367,
+      "sha256": "9c584762f5d2b7d4bc0720a92bc7286fd71baf7623aa891c9169760f3b0146da"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/frozen-42-comparison/live_search_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 784056,
+      "sha256": "8d4cae6b59682dfc01563a4704cd2dd71aef5125a8734d65a231ad252019c55b"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/frozen-42-comparison/live_title_movie_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 228563,
+      "sha256": "cf03295ce352838a87476e9b3ec1fa57652ee2e0e4adc70f3aa6d553c6f5524a"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/frozen-42-comparison/live_title_series_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 195420,
+      "sha256": "25a8c09531d08b4a437e090864f32e1d1dd68d85156b188e4eca4f258db0f9a7"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/frozen-42-comparison/live_tvseries_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 1068488,
+      "sha256": "b5000ad3663496e6465e83bbacd92836c92f8ec14796d9e899fe6dc764b65b34"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/frozen-42-comparison/live_year_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 1019130,
+      "sha256": "be1849b3e1a0c8acaa719a3139959ed4a30870fa13e4f2fe1b9ae9a8ba6ddd2e"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/performance/PERF.json",
+      "change": "A",
+      "kind": "evidence_record",
+      "size": 12596,
+      "sha256": "8dbac439ad548facfce9ef1bc08cf1466809f8fd0930438f7c362ee00f1e38b6"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/player/PLAYER.json",
+      "change": "A",
+      "kind": "evidence_record",
+      "size": 4888,
+      "sha256": "76b9feda9f34fe2a63854ae488ed6705cd361a5e60a4557a919b82ba300ca330"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/responsive/MATRIX.json",
+      "change": "A",
+      "kind": "evidence_record",
+      "size": 165842,
+      "sha256": "e5409fe0fdce16c18540906cffb3e9397ed76d973a0b31c287f5edf0f1548a8a"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/responsive/SUMMARY.json",
+      "change": "A",
+      "kind": "evidence_record",
+      "size": 761,
+      "sha256": "0ccc2312abf978553e47033910da5cce035963d316c0fbfaf6d8986de9bccad1"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/routes/HTTP_SUMMARY.json",
+      "change": "A",
+      "kind": "evidence_record",
+      "size": 1275,
+      "sha256": "6e9959d1e59fb633c3e29d11cfe8733e3851d2e0d53745916e0165bcd6ac57c9"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/routes/ROUTES.json",
+      "change": "A",
+      "kind": "evidence_record",
+      "size": 13327,
+      "sha256": "0011db6ed55afadbcf99a559665efb211e1d6773dd207696c133e578bc6deaa6"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/run_b18_http.py",
+      "change": "A",
+      "kind": "evidence_harness",
+      "size": 19304,
+      "sha256": "99156ae9851c0f22a1a89f2277c35a82d4a1dddd30e3858361b6c2ea0b4c404e"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/run_b18_playwright.py",
+      "change": "A",
+      "kind": "evidence_harness",
+      "size": 20596,
+      "sha256": "5c01c172f64adea860e9ff4d9c9286c483c0a5d4088272558da250a12571e7d2"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/runtime/RUNTIME_COHERENCE.json",
+      "change": "A",
+      "kind": "evidence_record",
+      "size": 4427,
+      "sha256": "f310b17a730abadcb0205de3dea57bc9147b84f9740f2f00961308b625c9a35b"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_404_1024x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 44231,
+      "sha256": "dfce3de0525d973708dadccc65f80320d880834e7d2e3cc54ab5aacde498001c"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_404_1280x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 46717,
+      "sha256": "7cb8fdbc145ff618228feffd2180c2273c219b00c01a042d5f42bce79d6832b1"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_404_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 47672,
+      "sha256": "37431801cc64c3a60688e61fc108005f152f0a71ccea89815570f9f95fd1f986"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_404_1920x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 49728,
+      "sha256": "640f00c960c0f8d7d8cdf3d13670c1ebeb2374f642ecf72e9dade869309a1935"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_404_320x720.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 28514,
+      "sha256": "1230f1b2429c88c68ad4637bff03c98696f43a693c6490b8252427a42dc39577"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_404_390x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 33034,
+      "sha256": "c7f23f58c32164ea0e9239bac8229ea10f8ff3edaf084aa6e7abdd21efd40ed0"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_404_768x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 41078,
+      "sha256": "f73a2d9de40e2e1733c1a9e255f85acb6fe1d314ac39631031f15f6dbff62436"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_catalog_1024x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 801956,
+      "sha256": "71f78dc7b4cbc6ba2b43ab7f67a75902c1c27624182b6f9d7b926a4f59d09023"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_catalog_1280x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 909638,
+      "sha256": "294288e3462c236bd8ca1c9d0e763b268eb192bac748a09f22377c3e1a292f37"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_catalog_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 1144923,
+      "sha256": "dade73aa3ff9c334d1594c919f37ee8e1489bdce93ebd986d9da81ef615d693e"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_catalog_1920x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 1314697,
+      "sha256": "cbce279af178e9ade048d22c98505c1a4b25b7d82558c982868f3ab19fae2cec"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_catalog_320x720.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 212937,
+      "sha256": "9a9660025219341e2b75ad9a6a3159f7fecc7be90889fc3274b22c58a4aef527"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_catalog_390x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 336510,
+      "sha256": "9c3347be9fa880303c9b556a12caee51e874f702283ea140dc541d36c5b1c8bd"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_catalog_768x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 539061,
+      "sha256": "3cb2de8b7503f5302d4705e02849a61154aa84eb686b92d51ff0991a9a3236d1"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_collections_1024x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 471119,
+      "sha256": "2e28e0e5bb2010eadbad9df700ec2f95f93fe6a57c0e551a560274ff61bb0d6c"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_collections_1280x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 741437,
+      "sha256": "1424a5eb4e32c8bd4cc0fe4ba3bf694677355bcbca645ee00810151521cc481f"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_collections_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 918252,
+      "sha256": "b9c3828d28d95049c54dbf4578b9d8413aa7941b5337559f514503120f90e522"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_collections_1920x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 1276741,
+      "sha256": "071e5d60a58cbc1c02a0b1da5493a7de5fb0701bfd3653367439024e5ae7a4b7"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_collections_320x720.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 187488,
+      "sha256": "d7ab4d3a689884a8d85902076b8cd783c9935b9b8141ce451030ce34a79f6113"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_collections_390x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 281232,
+      "sha256": "e6d4088831b84199af3128882bdd548fe906357641d31376ce689a27d211b861"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_collections_768x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 521631,
+      "sha256": "0ab60963f340b8f5a09aad1e45e9ba736f9f69649e3d9720506f19bf2dd88b32"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_country_1024x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 38963,
+      "sha256": "474c000efa07a4b5059f6b52736514b9a58ae7039d154fa7c2fa8ddecf7f2b24"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_country_1280x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 41605,
+      "sha256": "c8538fac55d2218ff1a4d4472fbe2d25c827525a62beb5937d297214200a8699"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_country_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 42609,
+      "sha256": "7d9fcace05a40033e416d4a04d2d8468a15bbba3d576d2c639b5f89071e51613"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_country_1920x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 44271,
+      "sha256": "810dbadf2c251d1e9a7320c022f1c34caa10a28e215f9992ffa75e27671e2d09"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_country_320x720.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 27454,
+      "sha256": "24413924c79365c5f0086c7f61d8dda9ed39c575ccb76c584a7430301c31b739"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_country_390x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 28443,
+      "sha256": "02736fa60819c619df23d5d16a0e879190b2c04f9ddf40fb14d8a425ae909136"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_country_768x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 35114,
+      "sha256": "72ca763b2136b1d11bdf1bddf7f6f982ced611f64d3b1113364d945a81636785"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_episode_1024x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 38408,
+      "sha256": "cb317335e01467abbe145636c2618b514b861a4593f5d457d2513cb4b8c06454"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_episode_1280x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 40578,
+      "sha256": "45d43fd95a25e49aefc0e5af18250a0e18349f593949897c0c55119c0921b6f0"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_episode_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 41505,
+      "sha256": "a5791d5a731cf63ce6ee432046c117ac7ef20c139cec2ee3afc7d8fa1da977e3"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_episode_1920x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 42950,
+      "sha256": "cdb3af4a4d6c37a5726694224475efed366708f20bfd4513e858e599a47c12bc"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_episode_320x720.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 29783,
+      "sha256": "0e30bb184c47f9e29c3720f7ebddbf19cd15b2c27186c7a23b32ca26a8095c18"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_episode_390x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 39907,
+      "sha256": "8858c0b310cf6ecabac4b1ea2cad8a1e2165c80b2d53d989747066251d441c3f"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_episode_768x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 40750,
+      "sha256": "f281cae9c103b4221b5d5555726afd4440e353533e2f9c76055ff248bacdd00c"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_genre_1024x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 743935,
+      "sha256": "e77a9435d18791bacba3e2cc0396dd962492d1db5b14b99254df596e813a4d1a"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_genre_1280x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 861483,
+      "sha256": "a601bda072d25abc4c92b06caa3179a11c8387186da1a48d03a77ed58bd6d599"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_genre_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 1146396,
+      "sha256": "992f943919e8a65dbbb35544571f004c97bc443fcfaee324c733b13f3fdba20a"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_genre_1920x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 1310311,
+      "sha256": "fd4f7b6396473f5cfdaf4ae3f8cc5a3dc9eacf8f558fa21daaba39d51d87523e"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_genre_320x720.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 180656,
+      "sha256": "b08aca37d355510b9999db14a17064c919dc04a5e00253eb377b1784cbb7b497"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_genre_390x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 293626,
+      "sha256": "473a85ead4be979238a499c4030bff8a2f2c75d982e55a36ca63b0fb4234f12f"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_genre_768x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 499840,
+      "sha256": "4f45396b756d70aef6c0e1b1f0d1c2b777a4c687a923e1e21d0890d6fc037798"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_home_1024x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 724498,
+      "sha256": "53fec04557e4e787a364ab56fad835cd25c5bd97e005708b933771f70003f51d"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_home_1280x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 850812,
+      "sha256": "a11a4fc5730707dc9a83cc5f200f7d58456e366907ec112dfe46d38ea1fc55bf"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_home_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 921352,
+      "sha256": "9dfc4aae15f61cf4bffef752183cd76e614400540cbeef110156a7ae51521e17"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_home_1920x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 1035556,
+      "sha256": "929b94d8cbf7f29f8a26894eb6d33ebab38cb40cf9d81dcedfe7a401e6f9491f"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_home_320x720.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 121566,
+      "sha256": "65a20e154135265227446c57dcd9d76010164ddee421cc4af3c894c3d0d4acaa"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_home_390x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 267033,
+      "sha256": "5a8042cbfe56424a6d43c1bfa7092732d5afa94da3d5a1be0a783363eb9046b8"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_home_768x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 616483,
+      "sha256": "60685ee3abdf96e990a0ae1958b10da8722914304bcd8179a13e120173465b24"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_new_1024x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 778653,
+      "sha256": "c7e52de9f82d4c6f140eb0afa17b48dca427655fdb426814f77f0d777e1a2a24"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_new_1280x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 880743,
+      "sha256": "05de688f8273dcd38151b35294476c7794474b02577c3bc4656e9ac577232a4b"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_new_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 1110229,
+      "sha256": "5c90472985297b6e79d3de17d8beb2b5ba0f964c0a81ac966743039af327d5b7"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_new_1920x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 1273034,
+      "sha256": "ee4916785f0a36e9c04c95f888dfb437e3000afd706ed676beea3db5bd8f62c4"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_new_320x720.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 196865,
+      "sha256": "14810f9bac25995321a3d2ec37fee2e0f750b9e502aa5deb558f28c000717e11"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_new_390x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 316498,
+      "sha256": "1b3d9a8aec117c1092fa80f50aa6f9fbb06c2c54dec0dcb48d9cd692dff0f888"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_new_768x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 525664,
+      "sha256": "7d87e73a6cd4ade7a384cd0dc50edb3c1f03aef6431defa52493e146cc35bc58"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_search_1024x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 771561,
+      "sha256": "ec4e6c454908cb2b8c3cd1c936bbb5fe8a133961c40392ec073fbdf8674e9f16"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_search_1280x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 780816,
+      "sha256": "948b1404ea8139dbee4435ba70f41f08d71f4a85d88cc1780db2649199d0b1aa"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_search_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 784069,
+      "sha256": "5f64182aa988a764adf2c15c657f2eb4b494d68dfbc562bda6f07117941de3a0"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_search_1920x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 799073,
+      "sha256": "371fd637bf7e519e43b2e1fe12402244dacc325b6de2e9fbbc323208e022b62f"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_search_320x720.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 222728,
+      "sha256": "08b3f1697210c0f1238ec1a968c5e985f1866c3f15c2427e428b353ec7b742ea"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_search_390x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 362236,
+      "sha256": "671b23a404fa8921eb6cc7ce39c096a9073452b6043ac0cdb7b2f32810b158b9"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_search_768x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 684350,
+      "sha256": "13199725f74d87050ab4d756d65498476ca9b4613f5c912fb307099881c50e60"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_title_1024x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 198404,
+      "sha256": "ccdf8c88e27c6d35f30bb4f53aca9aa1e9963d38c6626c770b15e7af6e7d3798"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_title_1280x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 225300,
+      "sha256": "08ab397440cb0d7976951c4be641fc0c835052fc793cd03c84ff085ef792505f"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_title_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 228563,
+      "sha256": "cf03295ce352838a87476e9b3ec1fa57652ee2e0e4adc70f3aa6d553c6f5524a"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_title_1920x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 231242,
+      "sha256": "3e4790d1c0b1f55ac6933bb6addc6be6bb834915820bb7730e1d116070df53ad"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_title_320x720.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 184086,
+      "sha256": "acc1afbb357d800567597f796d6014df7a071362e82c1ea55b8fed364856d80b"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_title_390x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 195064,
+      "sha256": "4e8ccd44d4d57fc981af66feb59384406ceb85e1878c18d9a7b4299d33a6dde1"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_title_768x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 208192,
+      "sha256": "e6b43da0900725b5b1b58594ef53d16eddaa885f1772da5e47a9662e01a44f88"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_year_1024x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 702641,
+      "sha256": "794e798dbf9a1f584be3b1e62df083134786ef3fdcf42b8324791a25400996a2"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_year_1280x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 784210,
+      "sha256": "5b5e180638d4444e04237439585e129b25eaf7ca1d82b5a5b8819b463c0cbdfc"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_year_1440x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 1019131,
+      "sha256": "a2756e853515d88d6fbed6054ef1be34f7fda2d690bbfc32496dab13c8058306"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_year_1920x900.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 1124079,
+      "sha256": "bc97ae59d0178025157262095686b55faba2088e7b0a70b410595ba71d5e3278"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_year_320x720.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 172061,
+      "sha256": "2dde3412a4cac9f7bce0e84190a59f0f81c661762f709f592f3cb5178d61a03e"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_year_390x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 288430,
+      "sha256": "2c77086751e718e6a10d776e3cfcf13da45c77ba69dc4d6d2f8cb84fbff6d185"
+    },
+    {
+      "path": "artifacts/evidence/zona-independent-repair-2026-09-20/B18-after-live/screenshots/live_year_768x844.png",
+      "change": "A",
+      "kind": "evidence_screenshot",
+      "size": 470117,
+      "sha256": "c83538aa80684e64b52f87129093535fe2c692c6dd0a2358bc0929f88fea251c"
+    }
+  ]
+}
