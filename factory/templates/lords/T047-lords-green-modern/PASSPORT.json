@@ -4,9 +4,9 @@
   "slug": "lords-green-modern",
   "version": "1.0.0",
   "family": "hybrid",
-  "package_digest": "e320f6dc8b1b25d717d9f7a68b0cc52e4ea0a9fdc007e2e92afd258ee82cf412",
+  "package_digest": "c826fc56166bb25ed248cd17e7cb139e77d021d6c241a432b044869839762ba0",
   "declared": {
-    "design_intent": "Разворот, витрина, мозаика, указатель.",
+    "design_intent": "Геометрический разворот: ведущая запись и сетка постеров рядом с ней.",
     "primary_user_journey": "войти разворотом → идти по геометрии",
     "home_signature": [
       "split",
@@ -96,5 +96,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.846317+00:00"
+  "issued_at_utc": "2026-09-21T18:02:39.743679+00:00"
 }

@@ -4,19 +4,19 @@
   "slug": "lords-cinema-editorial",
   "version": "1.0.0",
   "family": "hybrid",
-  "package_digest": "93ef60a8bcbae7f537b92a61c252111e28efb12e78e8b47a074b93625ef21f67",
+  "package_digest": "b1a08559da4cec6bdf7488adc1fc0c83c8bb14753913de87005c0336617dc036",
   "declared": {
-    "design_intent": "Мозаика-обложка, плотная витрина, порядок.",
+    "design_intent": "Редакционная полоса из равных карточек, под ней плотная витрина и порядок.",
     "primary_user_journey": "прочитать обложку → пройти витрину",
     "home_signature": [
-      "mosaic",
+      "grid",
       "grid",
       "ranked",
       "taxonomy",
       "about"
     ],
     "block_titles": [
-      "Обложка",
+      "Редакционная полоса",
       "Плотная витрина",
       "По порядку каталога",
       "Разделы",
@@ -66,6 +66,20 @@
           1100,
           2
         ]
+      ],
+      "g--ced": [
+        [
+          0,
+          1
+        ],
+        [
+          700,
+          2
+        ],
+        [
+          1100,
+          3
+        ]
       ]
     },
     "desktop_density_1440": 6
@@ -106,5 +120,5 @@
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T17:45:49.852799+00:00"
+  "issued_at_utc": "2026-09-21T18:02:39.750353+00:00"
 }
