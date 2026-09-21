@@ -1,0 +1,78 @@
+{
+  "schema": "lords-card-registry/1.0.0",
+  "container": {
+    "max_width_px": 1440,
+    "padding_desktop_px": 24,
+    "padding_tablet_px": 20,
+    "padding_mobile_px": 14,
+    "gap_desktop_px": 18,
+    "gap_tablet_px": 16,
+    "gap_mobile_px": 12,
+    "grid_child_min_width": 0,
+    "horizontal_overflow": "forbidden",
+    "empty_placeholders": "forbidden",
+    "preferred_shelf_size": 12
+  },
+  "image_classifier": {
+    "portrait_min_hw": 1.25,
+    "landscape_min_wh": 1.25,
+    "max_crop_factor": 1.2,
+    "poster_object_position": "center top",
+    "unknown_fit": "contain"
+  },
+  "types": {
+    "poster": {
+      "designs": ["lords-cinema-v2"],
+      "aspect": "2/3",
+      "columns": {"1280": 6, "1024": 5, "768": 4, "480": 3, "0": 2},
+      "title_lines": 2,
+      "title_line_height_min": 1.25,
+      "rating": "below_or_overlay_stable",
+      "fallback": "lords-neutral-letter"
+    },
+    "episode": {
+      "designs": ["lords-series-feed-v2"],
+      "layout": "horizontal",
+      "columns": {"1200": 3, "768": 2, "0": 1},
+      "image_px": {"desktop": [112, 168], "tablet": [104, 156], "mobile": [96, 144]},
+      "min_card_width_desktop_px": 360,
+      "min_card_height_px": 168,
+      "title_lines": 3,
+      "badges": "season_episode_wrap_no_ellipsis",
+      "fallback": "lords-neutral-letter"
+    },
+    "editorial": {
+      "designs": ["lords-curated-v2"],
+      "aspect_default": "2/3",
+      "backdrop_aspect": "16/9",
+      "backdrop_requires_landscape": true,
+      "columns": {"1280": 4, "1024": 4, "768": 3, "0": 2},
+      "title_lines": 3,
+      "fallback": "lords-neutral-letter"
+    },
+    "collection": {
+      "aspect": "auto",
+      "layout": "hub_tile"
+    },
+    "recommendation": {
+      "inherits": "poster",
+      "columns_rel": {"860": 6, "0": 3}
+    },
+    "search-result": {
+      "one_result_layout": "compact_centered",
+      "many_inherits_by_design": true
+    }
+  },
+  "brand": {
+    "lords_green": "#3F7D26",
+    "lords_green_hover": "#2F641C",
+    "lords_green_dark": "#173319",
+    "lords_green_soft": "#EAF3E4",
+    "rating_gold": "#f5c518",
+    "profiles": {
+      "lords-cinema-v2": {"secondary": "olive/ivory", "primary_must_remain_green": true},
+      "lords-series-feed-v2": {"secondary": "teal/cool-gray", "primary_must_remain_green": true},
+      "lords-curated-v2": {"secondary": "jade/ivory; plum editorial-only", "primary_must_remain_green": true}
+    }
+  }
+}

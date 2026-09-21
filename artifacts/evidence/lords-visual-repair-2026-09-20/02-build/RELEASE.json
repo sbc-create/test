@@ -1,0 +1,39 @@
+{
+  "final_code_head": "4f8ef5a3b5efabeb461437f9fa472df0d859e173",
+  "source_dirty": true,
+  "source_path": "/home/claude/wt-lords-default-episode-01/automation/host/lords-frontend.py",
+  "release_copy": "/home/claude/wt-lords-default-episode-01/artifacts/evidence/lords-visual-repair-2026-09-20/02-build/lords-frontend-20260920T223935Z-4f8ef5a-visual.py",
+  "collection_contract_copy": "/home/claude/wt-lords-default-episode-01/artifacts/evidence/lords-visual-repair-2026-09-20/02-build/collection_contract-20260920T223935Z-4f8ef5a-visual.py",
+  "artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+  "build_id": "20260920T223935Z-4f8ef5a-visual",
+  "design_version": "1.1.0",
+  "player_layout_contract": "full-bleed-v1",
+  "deploy_order": [
+    "lords-02",
+    "lords-01",
+    "lords-03"
+  ],
+  "built_at_utc": "2026-09-20T22:39:35.491135+00:00",
+  "sites": {
+    "lords-01": {
+      "domain": "lordfilm47.space",
+      "profile": "lords-general",
+      "design": "lords-cinema-v2",
+      "unit": "lords-nova-01.service"
+    },
+    "lords-02": {
+      "domain": "lordserial33.biz",
+      "profile": "lords-new",
+      "design": "lords-series-feed-v2",
+      "unit": "nova-lords-02.service"
+    },
+    "lords-03": {
+      "domain": "1lordserials1.online",
+      "profile": "lords-curated",
+      "design": "lords-curated-v2",
+      "unit": "nova-lords-03.service"
+    }
+  },
+  "staged_lords02": "STAGED_AWAITING_OWNER_RESTART",
+  "rollback_lords02": "/srv/lords/.frontend/.rollback/20260920T223958Z-lords-02"
+}
