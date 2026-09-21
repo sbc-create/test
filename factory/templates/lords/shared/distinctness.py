@@ -28,6 +28,7 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import itertools
 import json
 import pathlib
@@ -119,7 +120,34 @@ def сходство(a: dict, b: dict) -> float:
     return len(п1 & п2) / len(п1 | п2)
 
 
-def проверить(пакеты: list[pathlib.Path]) -> dict:
+def отпечатки_результата(превью: pathlib.Path, снимки: pathlib.Path) -> dict:
+    """Отпечатки РЕЗУЛЬТАТА: DOM, раскладка и вид страницы.
+
+    Подпись композиции сравнивает объявленное и имеет слепое пятно: два пакета
+    могут объявлять разное, а выглядеть одинаково. Именно так и вышло — семь
+    пар оказались визуально неразличимы при расхождении подписей, а одна пара
+    совпала попиксельно на первом экране. Поэтому гейт различимости обязан
+    смотреть и на результат.
+    """
+    путь = pathlib.Path(__file__).resolve().parent / "fingerprints.py"
+    spec = importlib.util.spec_from_file_location("lords_fingerprints", путь)
+    модуль = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(модуль)
+    записи = модуль.собрать(превью, снимки)
+    близкие = []
+    for (a, x), (b, y) in itertools.combinations(записи.items(), 2):
+        if x["screenshot"] and y["screenshot"]:
+            d = модуль.расстояние(x["screenshot"], y["screenshot"])
+            if d <= модуль.ПОРОГ_СНИМКА:
+                близкие.append({"pair": [a, b], "hamming": d})
+    dom = [(a, b) for (a, x), (b, y) in itertools.combinations(записи.items(), 2)
+           if x["dom"] == y["dom"]]
+    return {"screenshot_near_duplicates": близкие, "dom_duplicates": dom,
+            "measured": bool(записи)}
+
+
+def проверить(пакеты: list[pathlib.Path], превью: pathlib.Path | None = None,
+              снимки: pathlib.Path | None = None) -> dict:
     подписи = [подпись(п) for п in пакеты]
     пары = []
     нарушения = []
@@ -148,9 +176,18 @@ def проверить(пакеты: list[pathlib.Path]) -> dict:
     порядки = [">".join(п["block_order"]) for п in подписи]
     дубли_порядка = len(порядки) - len(set(порядки))
 
+    результат = ({} if превью is None or снимки is None
+                 else отпечатки_результата(превью, снимки))
+    визуальные_дубли = результат.get("screenshot_near_duplicates", [])
+    dom_дубли_рез = результат.get("dom_duplicates", [])
+
     return {
         "templates": len(подписи),
         "signatures": подписи,
+        "result_fingerprints_measured": результат.get("measured", False),
+        "SCREENSHOT_NEAR_DUPLICATES": len(визуальные_дубли),
+        "screenshot_near_pairs": визуальные_дубли,
+        "DOM_FINGERPRINT_DUPLICATES": len(dom_дубли_рез),
         "pairs": пары,
         "PAIRWISE_SIMILARITY_MAX": max((п["similarity"] for п in пары), default=0.0),
         "PAIRWISE_SIMILARITY_VIOLATIONS": len(нарушения),
@@ -160,7 +197,8 @@ def проверить(пакеты: list[pathlib.Path]) -> dict:
         "HOME_BLOCK_ORDER_DUPLICATES": дубли_порядка,
         "GREEN_PRIMARY_OR_SECONDARY_COUNT": sum(
             1 for п in подписи if п["green_identity"] in ("primary", "secondary")),
-        "PASS": not нарушения and not только_цвет and дубли_порядка == 0,
+        "PASS": (not нарушения and not только_цвет and дубли_порядка == 0
+                 and not визуальные_дубли and not dom_дубли_рез),
     }
 
 
@@ -168,11 +206,13 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default="factory/templates/lords")
     parser.add_argument("--record")
+    parser.add_argument("--preview", default="var/preview")
+    parser.add_argument("--shots", default="var/shots")
     args = parser.parse_args()
 
     пакеты = sorted(p for p in pathlib.Path(args.root).iterdir()
                     if p.is_dir() and re.match(r"^T\d{3}-", p.name))
-    отчёт = проверить(пакеты)
+    отчёт = проверить(пакеты, pathlib.Path(args.preview), pathlib.Path(args.shots))
     if args.record:
         pathlib.Path(args.record).parent.mkdir(parents=True, exist_ok=True)
         pathlib.Path(args.record).write_text(

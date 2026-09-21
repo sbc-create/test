@@ -40,11 +40,18 @@ class Отказ(Exception):
     """Guard закрылся. Причина всегда названа конкретно."""
 
 
-def _git(*args: str, cwd: pathlib.Path) -> str:
+def _git(*args: str, cwd: pathlib.Path, сырой: bool = False) -> str:
+    """Вывод git. `сырой` сохраняет ведущие пробелы.
+
+    В `status --porcelain` первые два символа — код состояния, и у изменённого
+    незастейдженного файла первый из них пробел. Обрезка пробелов всей выдачи
+    съедала его у ПЕРВОЙ строки, и путь сдвигался на символ: «factory/…»
+    превращалось в «actory/…», а guard объявлял собственный путь чужим.
+    """
     р = subprocess.run(["git", *args], cwd=str(cwd), capture_output=True, text=True)
     if р.returncode != 0:
         raise Отказ(f"git {' '.join(args)}: {р.stderr.strip()}")
-    return р.stdout.strip()
+    return р.stdout if сырой else р.stdout.strip()
 
 
 def загрузить_контракт(путь: pathlib.Path) -> dict:
@@ -108,7 +115,7 @@ def проверить(worktree: pathlib.Path, контракт: dict, марк�
 
     # --- изменяемые пути ------------------------------------------------------
     if изменения is None:
-        сырое = _git("status", "--porcelain=v1", cwd=worktree)
+        сырое = _git("status", "--porcelain=v1", cwd=worktree, сырой=True)
         изменения = [строка[3:].strip() for строка in сырое.splitlines() if строка.strip()]
     допустимые_пути = tuple(разрешено["paths"])
     вне = [п for п in изменения if not п.startswith(допустимые_пути)]

@@ -186,6 +186,24 @@ def test_index_lock_is_treated_as_foreign(контракт, маркер):
         замок.unlink()
 
 
+def test_status_parsing_keeps_leading_space(контракт, маркер):
+    """Путь из `git status` не должен терять первый символ.
+
+    Ошибка была настоящей: `_git` обрезал пробелы всей выдачи и съедал ведущий
+    пробел ПЕРВОЙ строки статуса. Путь сдвигался на символ, «factory/…»
+    становилось «actory/…», и guard объявлял собственный путь чужим.
+    """
+    сырое = guard._git("status", "--porcelain=v1", cwd=КОРЕНЬ, сырой=True)
+    строки = [с for с in сырое.splitlines() if с.strip()]
+    if not строки:
+        pytest.skip("дерево чисто — разбирать нечего")
+    пути = [с[3:].strip() for с in строки]
+    assert all(not п.startswith(("actory/", "ests/", "rtifacts/", "in/")) for п in пути), \
+        f"путь потерял первый символ: {пути[:3]}"
+    assert any(п.startswith(("factory/", "tests/", "artifacts/", "bin/", ".lords-tenant"))
+               for п in пути), f"ни один путь не выглядит корректным: {пути[:3]}"
+
+
 # --- политика статусов --------------------------------------------------------
 
 def test_agent_may_not_promote_status(контракт):
