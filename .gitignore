@@ -90,3 +90,8 @@ blueprints/payload-next-multisite/app/var/
 # Временные копии, снятые перед правкой: содержимое совпадает с git,
 # и держать их в состоянии дерева значит блокировать заморозку артефакта.
 *.bak.*
+
+# Кадры независимой перепроверки Zona: 5.6 МБ. Измерения лежат в
+# SLIDER_DATE_MATRIX.json, а before/after той же тройки ширин уже
+# закоммичены соседней сессией в zona-slider-01/.
+artifacts/evidence/zona-slider-crop-date-01/screenshots/

@@ -1,0 +1,51 @@
+{
+  "task": "ZONA-SLIDER-CROP-DATE — независимая перепроверка",
+  "measured_at_utc": "2026-09-21T15:38:13Z",
+  "measured_artifact_sha256": "7ccf094a1d7f2b5e648a38f51f6a63de9627576637d96f6c966fe1759ad8fa1e",
+  "source_commit_at_measurement": "549eae9fd25da72019fa720cc69ffeec3f928268",
+  "method": "automation/host/zona-slider-date-matrix.py: свой стенд на настоящем снимке zona-01, Chromium, 390/768/1440",
+  "note": "Правка слайдера и даты была сделана и закоммичена параллельной сессией (ba4fb87). Это измерение снято независимо и подтверждает итог, а также добавляет находку, которой в её замерах нет: до снятия базового потолка max-height:390px сложенный ряд слайдера обрезал текст на 390 и 768.",
+  "per_width": {
+    "390": {
+      "hero_h": 465,
+      "hero_media_h": 205,
+      "hero_body_h": 259,
+      "hero_body_overflows": false,
+      "hero_object_position": "50% 28%",
+      "added_dates_total": 12,
+      "added_dates_clipped": 0,
+      "added_date_example": "Добавлено 20.09.2026, 11:49",
+      "horizontal_overflow_px": 0,
+      "http": 200
+    },
+    "768": {
+      "hero_h": 664,
+      "hero_media_h": 404,
+      "hero_body_h": 259,
+      "hero_body_overflows": false,
+      "hero_object_position": "50% 28%",
+      "added_dates_total": 12,
+      "added_dates_clipped": 0,
+      "added_date_example": "Добавлено 20.09.2026, 11:49",
+      "horizontal_overflow_px": 0,
+      "http": 200
+    },
+    "1440": {
+      "hero_h": 374,
+      "hero_media_h": 372,
+      "hero_body_h": 372,
+      "hero_body_overflows": false,
+      "hero_object_position": "50% 28%",
+      "added_dates_total": 12,
+      "added_dates_clipped": 0,
+      "added_date_example": "Добавлено 20.09.2026, 11:49",
+      "horizontal_overflow_px": 0,
+      "http": 200
+    }
+  },
+  "verdict": {
+    "date_rendered_in_full": true,
+    "hero_body_never_clipped": true,
+    "no_horizontal_overflow": true
+  }
+}

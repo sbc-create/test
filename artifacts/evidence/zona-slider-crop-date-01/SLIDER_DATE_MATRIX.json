@@ -1,0 +1,550 @@
+{
+ "task": "ZONA-SLIDER-CROP-DATE",
+ "measured_at_utc": "2026-09-21T15:38:13Z",
+ "browser": "chromium",
+ "source_commit": "549eae9fd25da72019fa720cc69ffeec3f928268",
+ "measured_artifact_sha256": "7ccf094a1d7f2b5e648a38f51f6a63de9627576637d96f6c966fe1759ad8fa1e",
+ "artifact_uncommitted_at_measurement": true,
+ "snapshot": {
+  "catalog": "/srv/lords/.frontend/zona-01-catalog.json",
+  "details": "/srv/lords/.frontend/zona-01-details.json"
+ },
+ "viewports": [
+  390,
+  768,
+  1440
+ ],
+ "cells": [
+  {
+   "viewport": {
+    "w": 390,
+    "h": 900
+   },
+   "overflow_px": 0,
+   "heroes": [
+    {
+     "h": 465,
+     "w": 366,
+     "media_h": 205,
+     "body_h": 259,
+     "body_overflows": false,
+     "body_visible_text": 309,
+     "object_position": "50% 28%",
+     "object_fit": "cover",
+     "img_natural": [
+      500,
+      741
+     ]
+    }
+   ],
+   "shelves": [
+    {
+     "cards_in_row": 12,
+     "card_w": 177,
+     "gap": 12,
+     "wrapper_w": 366,
+     "row_w": 2256,
+     "fits": false,
+     "tail_px": null,
+     "max_width_computed": "none"
+    }
+   ],
+   "added_dates": [
+    {
+     "text": "Добавлено 20.09.2026, 11:49",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 11:46",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 11:45",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 11:16",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 09:08",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 09:05",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 08:56",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 08:55",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 08:55",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 08:54",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 08:54",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 08:53",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    }
+   ],
+   "robots": "noindex, nofollow",
+   "route": "home",
+   "width": 390,
+   "http": 200
+  },
+  {
+   "viewport": {
+    "w": 390,
+    "h": 900
+   },
+   "overflow_px": 0,
+   "heroes": [],
+   "shelves": [],
+   "added_dates": [],
+   "robots": "noindex, nofollow",
+   "route": "catalog",
+   "width": 390,
+   "http": 200
+  },
+  {
+   "viewport": {
+    "w": 390,
+    "h": 900
+   },
+   "overflow_px": 0,
+   "heroes": [],
+   "shelves": [],
+   "added_dates": [],
+   "robots": "noindex, nofollow",
+   "route": "new",
+   "width": 390,
+   "http": 200
+  },
+  {
+   "viewport": {
+    "w": 768,
+    "h": 900
+   },
+   "overflow_px": 0,
+   "heroes": [
+    {
+     "h": 664,
+     "w": 720,
+     "media_h": 404,
+     "body_h": 259,
+     "body_overflows": false,
+     "body_visible_text": 309,
+     "object_position": "50% 28%",
+     "object_fit": "cover",
+     "img_natural": [
+      500,
+      741
+     ]
+    }
+   ],
+   "shelves": [
+    {
+     "cards_in_row": 12,
+     "card_w": 171,
+     "gap": 12,
+     "wrapper_w": 720,
+     "row_w": 2184,
+     "fits": false,
+     "tail_px": null,
+     "max_width_computed": "none"
+    }
+   ],
+   "added_dates": [
+    {
+     "text": "Добавлено 20.09.2026, 11:49",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 11:46",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 11:45",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 11:16",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 09:08",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 09:05",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 08:56",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 08:55",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 08:55",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 08:54",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 08:54",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 08:53",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    }
+   ],
+   "robots": "noindex, nofollow",
+   "route": "home",
+   "width": 768,
+   "http": 200
+  },
+  {
+   "viewport": {
+    "w": 768,
+    "h": 900
+   },
+   "overflow_px": 0,
+   "heroes": [],
+   "shelves": [],
+   "added_dates": [],
+   "robots": "noindex, nofollow",
+   "route": "catalog",
+   "width": 768,
+   "http": 200
+  },
+  {
+   "viewport": {
+    "w": 768,
+    "h": 900
+   },
+   "overflow_px": 0,
+   "heroes": [],
+   "shelves": [],
+   "added_dates": [],
+   "robots": "noindex, nofollow",
+   "route": "new",
+   "width": 768,
+   "http": 200
+  },
+  {
+   "viewport": {
+    "w": 1440,
+    "h": 900
+   },
+   "overflow_px": 0,
+   "heroes": [
+    {
+     "h": 374,
+     "w": 1376,
+     "media_h": 372,
+     "body_h": 372,
+     "body_overflows": false,
+     "body_visible_text": 309,
+     "object_position": "50% 28%",
+     "object_fit": "cover",
+     "img_natural": [
+      500,
+      741
+     ]
+    }
+   ],
+   "shelves": [
+    {
+     "cards_in_row": 12,
+     "card_w": 186,
+     "gap": 12,
+     "wrapper_w": 1376,
+     "row_w": 2367,
+     "fits": false,
+     "tail_px": null,
+     "max_width_computed": "none"
+    }
+   ],
+   "added_dates": [
+    {
+     "text": "Добавлено 20.09.2026, 11:49",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 11:46",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 11:45",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 11:16",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 09:08",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 09:05",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 08:56",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 08:55",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 08:55",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 08:54",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 08:54",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    },
+    {
+     "text": "Добавлено 20.09.2026, 08:53",
+     "scrollW": 184,
+     "clientW": 184,
+     "clipped": false,
+     "ellipsis": false,
+     "max_width": "none",
+     "has_ellipsis_char": false
+    }
+   ],
+   "robots": "noindex, nofollow",
+   "route": "home",
+   "width": 1440,
+   "http": 200
+  },
+  {
+   "viewport": {
+    "w": 1440,
+    "h": 900
+   },
+   "overflow_px": 0,
+   "heroes": [],
+   "shelves": [],
+   "added_dates": [],
+   "robots": "noindex, nofollow",
+   "route": "catalog",
+   "width": 1440,
+   "http": 200
+  },
+  {
+   "viewport": {
+    "w": 1440,
+    "h": 900
+   },
+   "overflow_px": 0,
+   "heroes": [],
+   "shelves": [],
+   "added_dates": [],
+   "robots": "noindex, nofollow",
+   "route": "new",
+   "width": 1440,
+   "http": 200
+  }
+ ]
+}

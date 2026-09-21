@@ -1,0 +1,11 @@
+{
+ "schema_version": 1,
+ "template_family": "zona",
+ "design_version": "1.2.0",
+ "source_commit": "549eae9fd25da72019fa720cc69ffeec3f928268",
+ "runtime_commit": "549eae9fd25da72019fa720cc69ffeec3f928268",
+ "build_id": "local-zona-slider-date",
+ "artifact_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+ "profile": "zona-general",
+ "built_at": "2026-09-21T15:34:19Z"
+}
