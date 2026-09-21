@@ -1,0 +1,43 @@
+{
+  "STAGE": "COMMUNITY-RATINGS-08-WIDGET-OBSERVABILITY",
+  "CHECKED_AT": "2026-09-21T14:12:10Z",
+  "G1_ROLLBACK_PREPARED": true,
+  "G2_ARTIFACT_DIGESTS": {
+    "MANIFEST.json": "4fa0f9be63e67d0aa96b388fd00ad13fc5c44d2be4f693bc5ab6ac745c9283b5",
+    "community_rating.css": "6ea4dd3898fb2f1b93800482509e34acaaf874bf73eca4fb48d23b039e1ca113",
+    "community_rating.js": "93fe1b78cfaa604c643ccc3b5773db2c6e12af72633ef44daeb920748b06bf4d",
+    "community_widget_inject.py": "b89aa789c9306f0da97c8dc8d43f966b203daec6f609edaab44617711aaf2928",
+    "yummy-frontend.py": "599c72c03961807dd3288563a134d510f7ed2ef992a18cc2001eda73c779c67a"
+  },
+  "G3_SOURCE_NOT_DIRTY": {
+    "head": "f2564f28cb88f5eac0b320324f5c8c7bb8e2296d",
+    "dirty_paths": [],
+    "clean": true
+  },
+  "G4_EXACT_DOMAIN_BINDING": {
+    "unit": "nova-yummy-site.service",
+    "domain_env": "YUMMY_VARIANT_DOMAIN=yummyani.site",
+    "port": 9132,
+    "other_domains_served_by_other_units": [
+      "nova-yummy-org.service",
+      "nova-yummy-biz.service"
+    ],
+    "note": "only the .site unit is restarted; .org and .biz are untouched"
+  },
+  "G5_ROLLOUT_PERCENT": 1,
+  "G5_ROLLOUT_IS_EXACTLY_1": true,
+  "G5_MAX_PERCENT": 1,
+  "G6_KILL_SWITCH": {
+    "state": 0,
+    "ready": true,
+    "verified": "release verification toggled it and the loader node disappeared"
+  },
+  "G7_DB": {
+    "backup": "see 00-preflight and Stage07 backup",
+    "integrity_check": "ok",
+    "foreign_key_failures": 0,
+    "community_votes": 0
+  },
+  "ALL_GATES_PASS": true,
+  "STAGING_DIR": "/srv/lords/.frontend/.cr08-release"
+}

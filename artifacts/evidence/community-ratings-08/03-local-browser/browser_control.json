@@ -1,0 +1,59 @@
+{
+  "runs_per_mode": 3,
+  "injection_off": {
+    "cls_samples": [
+      0.0008216820652756343,
+      0.005597450078433107,
+      0
+    ],
+    "cls_median": 0.0008216820652756343,
+    "loader_tag": 0,
+    "widget_mounted": 0,
+    "console_errors": [],
+    "aborted_requests_union": [
+      "http://127.0.0.1:9134/catalog/random",
+      "http://127.0.0.1:9134/catalog/top",
+      "http://127.0.0.1:9134/login",
+      "https://plapi.cdnvideohub.com/"
+    ],
+    "html_bytes": [
+      59375,
+      59375,
+      59375
+    ],
+    "last_body_child": "SCRIPT"
+  },
+  "injection_on": {
+    "cls_samples": [
+      0.005597450078433107,
+      0.007756565423659337,
+      0.007756565423659337
+    ],
+    "cls_median": 0.007756565423659337,
+    "loader_tag": 1,
+    "widget_mounted": 1,
+    "console_errors": [],
+    "aborted_requests_union": [
+      "http://127.0.0.1:9134/",
+      "http://127.0.0.1:9134/catalog/random",
+      "http://127.0.0.1:9134/catalog/top",
+      "http://127.0.0.1:9134/login",
+      "http://127.0.0.1:9134/register",
+      "https://plapi.cdnvideohub.com/"
+    ],
+    "html_bytes": [
+      61653,
+      61653,
+      61653
+    ],
+    "last_body_child": "DIV"
+  },
+  "delta": {
+    "cls_median_delta": 0.006935,
+    "console_errors_added": [],
+    "aborted_requests_added": [
+      "http://127.0.0.1:9134/",
+      "http://127.0.0.1:9134/register"
+    ]
+  }
+}

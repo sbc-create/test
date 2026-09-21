@@ -1,0 +1,200 @@
+{
+  "label": "predeploy_run1",
+  "checked_at": "2026-09-21T15:12:06Z",
+  "site": "https://yummyani.site",
+  "home": {
+    "status": 200,
+    "bytes": 227916,
+    "loader_nodes": 0
+  },
+  "title_pages": {
+    "/anime/padshiy-master::desktop": {
+      "status": 200,
+      "bytes": 58392,
+      "loader_nodes": 0,
+      "loader_before_body_end": false,
+      "subject_attr": null,
+      "aggregate_rating": false,
+      "shikimori_mentioned": false,
+      "html_closed": true,
+      "content_length_header": null,
+      "content_length_matches": true
+    },
+    "/anime/padshiy-master::mobile": {
+      "status": 200,
+      "bytes": 58392,
+      "loader_nodes": 0,
+      "loader_before_body_end": false,
+      "subject_attr": null,
+      "aggregate_rating": false,
+      "shikimori_mentioned": false,
+      "html_closed": true,
+      "content_length_header": null,
+      "content_length_matches": true
+    },
+    "/anime/chernyy-fakel::desktop": {
+      "status": 200,
+      "bytes": 64386,
+      "loader_nodes": 0,
+      "loader_before_body_end": false,
+      "subject_attr": null,
+      "aggregate_rating": false,
+      "shikimori_mentioned": false,
+      "html_closed": true,
+      "content_length_header": null,
+      "content_length_matches": true
+    },
+    "/anime/chernyy-fakel::mobile": {
+      "status": 200,
+      "bytes": 64386,
+      "loader_nodes": 0,
+      "loader_before_body_end": false,
+      "subject_attr": null,
+      "aggregate_rating": false,
+      "shikimori_mentioned": false,
+      "html_closed": true,
+      "content_length_header": null,
+      "content_length_matches": true
+    },
+    "/anime/neprevzoydennyy::desktop": {
+      "status": 200,
+      "bytes": 57757,
+      "loader_nodes": 0,
+      "loader_before_body_end": false,
+      "subject_attr": null,
+      "aggregate_rating": false,
+      "shikimori_mentioned": false,
+      "html_closed": true,
+      "content_length_header": null,
+      "content_length_matches": true
+    },
+    "/anime/neprevzoydennyy::mobile": {
+      "status": 200,
+      "bytes": 57757,
+      "loader_nodes": 0,
+      "loader_before_body_end": false,
+      "subject_attr": null,
+      "aggregate_rating": false,
+      "shikimori_mentioned": false,
+      "html_closed": true,
+      "content_length_header": null,
+      "content_length_matches": true
+    },
+    "/anime/istoriya-o-perekure-za-supermarketom::desktop": {
+      "status": 200,
+      "bytes": 62996,
+      "loader_nodes": 0,
+      "loader_before_body_end": false,
+      "subject_attr": null,
+      "aggregate_rating": false,
+      "shikimori_mentioned": false,
+      "html_closed": true,
+      "content_length_header": null,
+      "content_length_matches": true
+    },
+    "/anime/istoriya-o-perekure-za-supermarketom::mobile": {
+      "status": 200,
+      "bytes": 62996,
+      "loader_nodes": 0,
+      "loader_before_body_end": false,
+      "subject_attr": null,
+      "aggregate_rating": false,
+      "shikimori_mentioned": false,
+      "html_closed": true,
+      "content_length_header": null,
+      "content_length_matches": true
+    }
+  },
+  "WIDGET_MARKUP_PRESENT": false,
+  "assets": {
+    "/assets/community/community_rating.js": {
+      "status": 404,
+      "bytes": 0,
+      "content_type": "text/html; charset=utf-8",
+      "nosniff": "nosniff"
+    },
+    "/assets/community/community_rating.css": {
+      "status": 404,
+      "bytes": 0,
+      "content_type": "text/html; charset=utf-8",
+      "nosniff": "nosniff"
+    }
+  },
+  "ASSETS_HTTP_200": false,
+  "api": {
+    "/api/community/ratings/flags": {
+      "status": 200,
+      "cohort": null,
+      "flags": {
+        "PUBLIC_WRITE_ENABLED": 1,
+        "PUBLIC_WRITE_ROLLOUT_PERCENT": 1,
+        "PUBLIC_WRITE_MAX_PERCENT": 1,
+        "KILL_SWITCH": 0,
+        "READ_ONLY": 0,
+        "PUBLIC_SCORE_MODE": "NATIVE_ONLY",
+        "IDENTITY_MODE": "SIGNED_PSEUDONYMOUS_DEVICE_V1",
+        "STRUCTURED_AGGREGATE_RATING_ENABLED": 0,
+        "PUBLIC_WRITE_STARTED_AT": "2026-09-20T20:39:20Z",
+        "OWNER_APPROVAL_ID": "COMMUNITY-RATINGS-YUMMY-PUBLIC-WRITE-1PCT-20260920-01"
+      },
+      "has_csrf": false
+    },
+    "/api/community/ratings/session": {
+      "status": 200,
+      "cohort": {
+        "cohort_bucket": 79,
+        "rollout_percent": 1,
+        "eligible": false,
+        "policy_version": "rating_policy_v1"
+      },
+      "flags": {
+        "PUBLIC_WRITE_ENABLED": 1,
+        "PUBLIC_WRITE_ROLLOUT_PERCENT": 1,
+        "PUBLIC_WRITE_MAX_PERCENT": 1,
+        "KILL_SWITCH": 0,
+        "READ_ONLY": 0,
+        "PUBLIC_SCORE_MODE": "NATIVE_ONLY",
+        "IDENTITY_MODE": "SIGNED_PSEUDONYMOUS_DEVICE_V1",
+        "STRUCTURED_AGGREGATE_RATING_ENABLED": 0,
+        "PUBLIC_WRITE_STARTED_AT": "2026-09-20T20:39:20Z",
+        "OWNER_APPROVAL_ID": "COMMUNITY-RATINGS-YUMMY-PUBLIC-WRITE-1PCT-20260920-01"
+      },
+      "has_csrf": true
+    }
+  },
+  "ROLLOUT_PERCENT": 1,
+  "KILL_SWITCH": 0,
+  "STRUCTURED_AGGREGATE_RATING_ENABLED": 0,
+  "THIS_VISITOR_ELIGIBLE": false,
+  "COHORT_GATING_OBSERVED": "a fresh visitor is almost always outside a 1% cohort; eligible=False for this probe",
+  "indexability": {
+    "yummyani.site": {
+      "status": 200,
+      "x_robots": null,
+      "meta_robots": "index, follow",
+      "robots_disallow_all": false,
+      "verdict": "OPEN"
+    },
+    "animedia.icu": {
+      "status": 200,
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "robots_disallow_all": true,
+      "verdict": "CLOSED_NOINDEX"
+    },
+    "animedia.space": {
+      "status": 200,
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "robots_disallow_all": true,
+      "verdict": "CLOSED_NOINDEX"
+    }
+  },
+  "YUMMY_INDEXABILITY": "OPEN",
+  "ANIMEDIA_UNCHANGED": true,
+  "NO_AGGREGATE_RATING_ON_PAGES": true,
+  "NO_SHIKIMORI_ON_PAGES": true,
+  "ALL_TITLE_PAGES_200": true,
+  "ALL_HTML_CLOSED": true,
+  "ALL_CONTENT_LENGTH_CONSISTENT": true
+}

@@ -1,0 +1,44 @@
+{
+  "STAGE": "COMMUNITY-RATINGS-08-WIDGET-OBSERVABILITY",
+  "DEFECT_FROM_STAGE07": "monitor_once ran out-of-process from the gateway and called metrics.snapshot() on its own freshly created, empty counters; all 63 ticks published structural zeros as if measured",
+  "FIX": {
+    "transport": "factory/community/metrics_store.py — SQLite at /srv/site-factory/repo/var/ratings/metrics.sqlite",
+    "writer": "community-ratings-gateway.service (ReadWritePaths already covers the directory)",
+    "readers": "monitor_once, CLI, tests — any process",
+    "monitor_now_reads": "metrics_store, never its own memory"
+  },
+  "HONESTY_RULES": {
+    "never_recorded_counter": "UNMEASURED with reason, never 0",
+    "unreachable_store": "UNMEASURED with reason, never 0",
+    "recorded_zero": "MEASURED 0 — a real observation",
+    "refused_write": "counted and surfaced; affected counters become PARTIAL and are described as a lower bound"
+  },
+  "METRIC_MATRIX": {
+    "session_bootstraps": "metrics_store counter, cumulative",
+    "eligible_cohort_impressions": "metrics_store counter, cumulative",
+    "widget_rendered": "metrics_store counter fed by the browser beacon POST /widget-event",
+    "exposed_visitors": "metrics_store unique_marks, distinct identities via keyed HMAC",
+    "cast_attempts": "metrics_store counter",
+    "accepted_casts": "metrics_store counter (cast_accepted)",
+    "updates": "metrics_store counter (update_accepted)",
+    "retracts": "metrics_store counter (retract_accepted)",
+    "rejected_writes": "metrics_store counter (write_4xx)",
+    "api_errors": "metrics_store counter (write_5xx)",
+    "rate_limit_violations": "metrics_store counter (rate_limited)",
+    "quarantine_events": "metrics_store counter (quarantined_votes)",
+    "duplicate_active_votes": "ratings ledger, computed per tick",
+    "preview_write_mismatches": "ratings ledger — UNMEASURED until a comparator exists",
+    "aggregate_rebuild_mismatches": "ratings ledger, computed per tick",
+    "latency_p50_ms": "metrics_store latency ring (5000 samples)",
+    "latency_p95_ms": "metrics_store latency ring (5000 samples)",
+    "kill_switch_state": "rollout flags file"
+  },
+  "EXPOSURE_IS_COUNTED_SERVER_SIDE": "the injector can only attest the widget was offered; only the browser knows it rendered, so the beacon is the source, and it is accepted only from a genuinely eligible identity",
+  "PRIVACY": "no identity id, IP, cookie, device id or user text is stored; uniqueness is a keyed HMAC, verified absent from the file in test_identity_is_not_stored_in_the_clear",
+  "BUG_FOUND_AND_FIXED_DURING_THIS_STAGE": [
+    "cached sqlite connection was unusable from ThreadingHTTPServer request threads; writes were refused and swallowed, so counters silently read low — fixed with check_same_thread=False under the existing lock, and a concurrency regression test",
+    "test runs wrote synthetic counters into the production store (37 cast attempts, 13 accepted casts observed); fixed with a package autouse fixture, the polluted store removed, production ledger verified untouched"
+  ],
+  "MONITOR_TICK_VERIFIED": "a tick run with the new code reported metrics_source=metrics_store(sqlite, inter-process) and listed UNMEASURED_METRICS explicitly",
+  "NO_RESTART_NEEDED_FOR_MONITOR": "community-ratings-monitor.service is oneshot on a timer and already executes from this worktree, so it picks up the new code on its next tick; until the gateway restarts it will correctly report the store as unreachable rather than report zeros"
+}

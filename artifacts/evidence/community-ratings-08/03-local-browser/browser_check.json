@@ -1,0 +1,197 @@
+{
+  "base": "http://127.0.0.1:9134",
+  "title_path": "/anime/padshiy-master",
+  "checks": {
+    "assets": {
+      "/assets/community/community_rating.js": {
+        "status": 200,
+        "content_type": "application/javascript; charset=utf-8",
+        "bytes": 14978
+      },
+      "/assets/community/community_rating.css": {
+        "status": 200,
+        "content_type": "text/css; charset=utf-8",
+        "bytes": 3721
+      }
+    },
+    "ineligible": {
+      "loader_tag_present": true,
+      "widget_mounted": false,
+      "console_errors": [],
+      "request_failures": [
+        "https://plapi.cdnvideohub.com/ net::ERR_ABORTED"
+      ]
+    },
+    "eligible": {
+      "loader_tag_present": true,
+      "widget_mounted": true,
+      "absent_label": "Пока нет пользовательских оценок",
+      "after_cast": "7.0 · голосов: 1",
+      "my_after_cast": "Ваша оценка: 7",
+      "after_update": "9.0 · голосов: 1",
+      "my_after_update": "Ваша оценка: 9",
+      "after_retract": "Пока нет пользовательских оценок",
+      "delete_button_gone_after_retract": true,
+      "cumulative_layout_shift": 0.007756565423659337,
+      "page_geometry_before": {
+        "w": 1300,
+        "h": 2152.890625,
+        "x": 70,
+        "y": 297
+      },
+      "page_geometry_after": {
+        "w": 1300,
+        "h": 2152.890625,
+        "x": 70,
+        "y": 297
+      },
+      "geometry_unchanged": true,
+      "keyboard": {
+        "focusable": true,
+        "tag": "BUTTON",
+        "label": "Поставить оценку 1 из 10",
+        "role": "radio",
+        "outlineWidth": ""
+      },
+      "all_buttons_tabbable": true,
+      "aria": {
+        "toggle": true,
+        "group": true,
+        "checked": 10,
+        "live": 2
+      },
+      "dom_position": {
+        "host_parent": "BODY",
+        "inside_app_root": false
+      },
+      "console_errors": [],
+      "request_failures": [
+        "https://plapi.cdnvideohub.com/ net::ERR_ABORTED"
+      ]
+    },
+    "responsive": {
+      "320x568": {
+        "panel": {
+          "x": 12,
+          "y": 309.109375,
+          "w": 296,
+          "h": 236.890625,
+          "right": 308,
+          "bottom": 546,
+          "vw": 320,
+          "vh": 568,
+          "docScrollW": 320
+        },
+        "fits_horizontally": true,
+        "no_horizontal_page_scroll": true,
+        "console_errors": [],
+        "request_failures": [
+          "https://plapi.cdnvideohub.com/ net::ERR_ABORTED"
+        ]
+      },
+      "390x844": {
+        "panel": {
+          "x": 12,
+          "y": 601.703125,
+          "w": 366,
+          "h": 220.296875,
+          "right": 378,
+          "bottom": 822,
+          "vw": 390,
+          "vh": 844,
+          "docScrollW": 390
+        },
+        "fits_horizontally": true,
+        "no_horizontal_page_scroll": true,
+        "console_errors": [],
+        "request_failures": [
+          "https://plapi.cdnvideohub.com/ net::ERR_ABORTED"
+        ]
+      },
+      "768x1024": {
+        "panel": {
+          "x": 432,
+          "y": 777.703125,
+          "w": 320,
+          "h": 220.296875,
+          "right": 752,
+          "bottom": 998,
+          "vw": 768,
+          "vh": 1024,
+          "docScrollW": 768
+        },
+        "fits_horizontally": true,
+        "no_horizontal_page_scroll": true,
+        "console_errors": [],
+        "request_failures": [
+          "http://127.0.0.1:9134/?_rsc=QC-D31IhJhIyKxgQ net::ERR_ABORTED",
+          "https://plapi.cdnvideohub.com/ net::ERR_ABORTED"
+        ]
+      },
+      "1024x768": {
+        "panel": {
+          "x": 688,
+          "y": 521.703125,
+          "w": 320,
+          "h": 220.296875,
+          "right": 1008,
+          "bottom": 742,
+          "vw": 1024,
+          "vh": 768,
+          "docScrollW": 1024
+        },
+        "fits_horizontally": true,
+        "no_horizontal_page_scroll": true,
+        "console_errors": [],
+        "request_failures": [
+          "http://127.0.0.1:9134/catalog/random?_rsc=L2AeaR-GjVHDlqd7 net::ERR_ABORTED",
+          "https://plapi.cdnvideohub.com/ net::ERR_ABORTED"
+        ]
+      },
+      "1440x900": {
+        "panel": {
+          "x": 1104,
+          "y": 653.703125,
+          "w": 320,
+          "h": 220.296875,
+          "right": 1424,
+          "bottom": 874,
+          "vw": 1440,
+          "vh": 900,
+          "docScrollW": 1440
+        },
+        "fits_horizontally": true,
+        "no_horizontal_page_scroll": true,
+        "console_errors": [],
+        "request_failures": [
+          "http://127.0.0.1:9134/register?_rsc=L2AeaR-GjVHDlqd7 net::ERR_ABORTED",
+          "https://plapi.cdnvideohub.com/ net::ERR_ABORTED"
+        ]
+      },
+      "1920x1080": {
+        "panel": {
+          "x": 1584,
+          "y": 833.703125,
+          "w": 320,
+          "h": 220.296875,
+          "right": 1904,
+          "bottom": 1054,
+          "vw": 1920,
+          "vh": 1080,
+          "docScrollW": 1920
+        },
+        "fits_horizontally": true,
+        "no_horizontal_page_scroll": true,
+        "console_errors": [],
+        "request_failures": [
+          "https://plapi.cdnvideohub.com/ net::ERR_ABORTED"
+        ]
+      }
+    },
+    "no_javascript": {
+      "page_renders": true,
+      "html_bytes": 58522,
+      "widget_absent": true
+    }
+  }
+}

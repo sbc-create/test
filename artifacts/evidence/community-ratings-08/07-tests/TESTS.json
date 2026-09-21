@@ -1,0 +1,39 @@
+{
+  "STAGE": "COMMUNITY-RATINGS-08-WIDGET-OBSERVABILITY",
+  "SUITE": "tests/unit/community tests/unit/ratings",
+  "COMMAND": "python3 -m pytest tests/unit/community tests/unit/ratings -q -p no:cacheprovider --no-header",
+  "COMMITTED_STATE_HEAD": "f2564f28cb88f5eac0b320324f5c8c7bb8e2296d",
+  "WORKTREE_CLEAN_FOR_SOURCE_PATHS": true,
+  "TEST_RUNS_CONSECUTIVE": 2,
+  "RUN1": {
+    "result": "228 passed",
+    "exit_code": 0,
+    "seconds": 661.78,
+    "production_metrics_store_written": false
+  },
+  "RUN2": {
+    "result": "228 passed",
+    "exit_code": 0,
+    "seconds": 711.73,
+    "production_metrics_store_written": false
+  },
+  "BASELINE_BEFORE_STAGE": "Stage07 ran 51 tests in tests/unit/community; this stage runs 228 across community + ratings",
+  "NEW_TESTS_THIS_STAGE": 79,
+  "TESTS_DELETED_OR_SKIPPED": 0,
+  "ASSERTIONS_WEAKENED": 0,
+  "COVERAGE_ADDED": [
+    "cohort at 0%, 1%, excluded visitor; stability across requests; identity-only input",
+    "widget hidden/visible across kill switch, read-only, writes-off, 0%, unknown slug, non-title routes",
+    "exactly one node injected, last in body, never in head, document otherwise byte-identical",
+    "streaming injector byte-identical to whole-document at every chunk size, split markers, no </body>",
+    "cast, update, retract, N=0 absent label, single active row on repeat vote, preview == write",
+    "exposure beacon accepts only eligible visitors; rejects unknown events; dead under kill switch",
+    "monitor reads the inter-process store, not its own counters",
+    "UNMEASURED for never-recorded and unreachable; MEASURED for a recorded zero; nothing unmeasured equals 0",
+    "metric writes survive concurrent threads; a refused write is reported, not hidden",
+    "deployable host bundle byte-identical to canonical source",
+    "asset routes 200 with correct type; traversal and unknown assets refused",
+    "no Shikimori, no external score, no aggregateRating in the public read or the widget",
+    "test runs never write into the production metrics store"
+  ]
+}

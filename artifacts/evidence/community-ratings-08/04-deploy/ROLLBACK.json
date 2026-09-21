@@ -1,0 +1,31 @@
+{
+  "STAGE": "COMMUNITY-RATINGS-08-WIDGET-OBSERVABILITY",
+  "PREPARED_AT": "2026-09-21T14:11:50Z",
+  "BACKUP_OF_LIVE_FRONTEND": "/srv/lords/.frontend/.rollback/yummy-frontend.py.before-cr08.20260921T141150Z",
+  "BACKUP_DIGEST": "60aa6158126f6152f7ec6daeba896196f0fecf53d28caa0b4894e394ded54438",
+  "LIVE_DIGEST_AT_BACKUP": "60aa6158126f6152f7ec6daeba896196f0fecf53d28caa0b4894e394ded54438",
+  "BACKUP_MATCHES_LIVE": true,
+  "ROLLBACK_LEVELS": [
+    {
+      "level": 1,
+      "name": "flag-only, no restart, instant",
+      "effect": "the injector stops emitting the loader node on the next request; no visitor can reach the write path through the UI",
+      "command": "python3 -c \"import sys; sys.path.insert(0,'/home/claude/wt-ratings-ingestion-01'); from factory.community.rollout import trigger_kill_switch; trigger_kill_switch('cr08 rollback')\"",
+      "verified": "release verification showed loader_nodes 1 -> 0 with KILL_SWITCH=1, and back to 1 when cleared",
+      "privileged": false
+    },
+    {
+      "level": 2,
+      "name": "restore the previous frontend binary",
+      "effect": "runtime returns byte-for-byte to the pre-stage file",
+      "command": "install -o root -g root -m 0755 /srv/lords/.frontend/.rollback/yummy-frontend.py.before-cr08.20260921T141150Z /srv/lords/.frontend/yummy-frontend.py && systemctl restart nova-yummy-site.service",
+      "privileged": true
+    }
+  ],
+  "NOT_TOUCHED_BY_ROLLBACK": [
+    "the ratings ledger (the widget change writes no rows)",
+    "rollout percent (stays 1)",
+    "robots.txt, sitemap, DNS",
+    "Animedia and every other domain"
+  ]
+}

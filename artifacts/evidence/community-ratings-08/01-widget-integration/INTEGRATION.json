@@ -1,0 +1,43 @@
+{
+  "STAGE": "COMMUNITY-RATINGS-08-WIDGET-OBSERVABILITY",
+  "PROBLEM_FROM_STAGE07": "API live, widget absent from the live frontend, so the 1% cohort had zero exposure for 15.544h",
+  "SOURCE_ARTIFACT_RUNTIME_CHAIN": {
+    "source": "factory/community/widget_inject.py + factory/community/frontend/community_rating.{js,css}",
+    "artifact": "automation/host/community_widget_inject.py + automation/host/community-assets/ (byte-identical, asserted by DeployBundleParityTests)",
+    "release": "/srv/lords/.frontend/.cr08-release (patched from the LIVE runtime file, not from the repo copy)",
+    "runtime": "/srv/lords/.frontend/yummy-frontend.py executed by nova-yummy-site.service",
+    "domain": "yummyani.site (YUMMY_VARIANT_DOMAIN), port 9132"
+  },
+  "CONSTRAINTS_RESPECTED": [
+    "no node inside the React tree: hydration broke there before (Minified React error #418)",
+    "nothing added to <head>: the app router renders head, and meta injection is what broke it",
+    "no full-body buffering: foreign pages keep streaming, TTFB unchanged (0.79s full fetch measured)",
+    "Content-Length adjusted by exactly the injected length, else the browser truncates the document"
+  ],
+  "WIDGET_BEHAVIOUR": {
+    "visibility": "server decides; client obeys. cohort.eligible + PUBLIC_WRITE_ENABLED + not KILL_SWITCH",
+    "mount": "after window load, into a fixed-position container appended to body",
+    "layout_shift_attributable_to_widget": 0.0,
+    "layout_shift_evidence": "03-local-browser/cls_sources.json — every shift traced to the host app's own portal-* elements",
+    "absent_state": "«Пока нет пользовательских оценок» — never 0",
+    "business_logic_in_client": "none; every score, average, delta and label comes from the API",
+    "preview": "server /preview endpoint, the same library the write uses",
+    "no_js": "page renders, widget simply absent",
+    "api_failure": "page keeps rendering, no page errors"
+  },
+  "SUBJECT_RESOLUTION": {
+    "method": "slug -> entity_id from /srv/lords/.frontend/yummy-readmodel.sqlite3, prefixed nova:",
+    "unknown_slug": "no widget; a guessed subject id would attach votes to the wrong title",
+    "verified_example": "/anime/padshiy-master -> nova:019e820c-1c30-7466-9e8f-801577489ce1"
+  },
+  "LOCAL_BROWSER_VERIFICATION": {
+    "harness": "real gateway + real frontend + real Next.js upstream, scratch database",
+    "rollout_percent_used": 1,
+    "how_eligibility_was_obtained": "minted an identity that genuinely falls in bucket 0 under the local salt — the gate was not widened",
+    "cast_update_retract": "7.0 -> 9.0 -> absent, verified in the browser",
+    "console_errors": 0,
+    "hydration": "no errors with the script injected; control run with injection off shows the same clean console",
+    "responsive": "320, 390, 768, 1024, 1440, 1920 — panel fits, no horizontal page scroll",
+    "keyboard": "all controls tabbable, aria-label on every button, radiogroup with aria-checked, :focus-visible outline"
+  }
+}

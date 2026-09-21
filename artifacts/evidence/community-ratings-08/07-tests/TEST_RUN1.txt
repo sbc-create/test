@@ -1,0 +1,2 @@
+228 passed in 661.78s (0:11:01)
+production metrics store exists after run1: False

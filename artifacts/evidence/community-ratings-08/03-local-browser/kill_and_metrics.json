@@ -1,0 +1,103 @@
+{
+  "kill_switch_on": {
+    "loader_tag": 0,
+    "widget_mounted": 0,
+    "panel_html": "",
+    "page_alive": true,
+    "console_errors": []
+  },
+  "read_only": {
+    "loader_tag": 0,
+    "widget_mounted": 0,
+    "panel_html": "",
+    "page_alive": true,
+    "console_errors": []
+  },
+  "restored": {
+    "loader_tag": 1,
+    "widget_mounted": 1,
+    "panel_html": "<button type=\"button\" class=\"cr-toggle\" aria-expanded=\"false\" aria-controls=\"cr-panel\" aria-label=\"Оценить аниме\">★</button><div class=\"cr-panel\" id=\"cr-panel\" role=\"group\" aria-label=\"Пользовательская оценка Yummy\" hidden=\"\"><div class=\"cr-head\"><span class=\"cr-label\">Оценка Yummy</span></div><div class=\"cr-body\"><div class=\"cr-current\" aria-live=\"polite\"><span class=\"cr-score cr-score--absent\">Пока нет пользовательских оценок</span></div><div class=\"cr-selector\" role=\"radiogroup\" aria-label=\"Выберите оценку от 1 до 10\"><button type=\"button\" class=\"cr-score-btn\" role=\"radio\" aria-checked=\"false\" data-score=\"1\" aria-label=\"Поставить оценку 1 из 10\">1</button><button type=\"button\" class=\"cr-score-btn\" role=\"radio\" aria-checked=\"false\" data-score=\"2\" aria-label=\"Поставить оценку 2 из 10\">2</button><button type=\"button\" class=\"cr-score-btn\" role=\"radio\" aria-checked=\"false\" data-score=\"3\" aria-label=\"Поставить оценку 3 из 10\">3</button><button type=\"button\" class=\"cr-score-btn\" role=\"radio\" aria-checked=\"false\" data-score=\"4\" aria-label=\"Поставить оценку 4 из 10\">4</button><button type=\"button\" class=\"cr-score-btn\" role=\"radio\" aria-checked=\"false\" data-score=\"5\" aria-label=\"Поставить оценку 5 из 10\">5</button><button type=\"button\" class=\"cr-score-btn\" role=\"radio\" aria-checked=\"false\" data-score=\"6\" aria-label=\"Поставить оценку 6 из 10\">6</button><button type=\"button\" class=\"cr-score-btn\" role=\"radio\" aria-checked=\"false\" data-score=\"7\" aria-label=\"Поставить оценку 7 из 10\">7</button><button type=\"button\" class=\"cr-score-btn\" role=\"radio\" aria-checked=\"false\" data-score=\"8\" aria-label=\"Поставить оценку 8 из 10\">8</button><button type=\"button\" class=\"cr-score-btn\" role=\"radio\" aria-checked=\"false\" data-score=\"9\" aria-label=\"Поставить оценку 9 из 10\">9</button><button type=\"button\" class=\"cr-score-btn\" role=\"radio\" aria-checked=\"false\" data-score=\"10\" aria-label=\"Поставить оценку 10 из 10\">10</button></div><p class=\"cr-preview\" aria-live=\"polite\"></p></div></div>",
+    "page_alive": true,
+    "console_errors": []
+  },
+  "api_dead": {
+    "page_still_renders": true,
+    "widget_absent_or_error_only": true,
+    "pageerrors": []
+  },
+  "metrics": {
+    "counters_before": {
+      "widget_impressions": 8,
+      "session_bootstraps": 8,
+      "eligible_widget_impressions": 7,
+      "eligible_cohort_impressions": 7,
+      "widget_rendered": 7,
+      "preview_requests": 4,
+      "write_attempts": 3,
+      "cast_attempts": 2,
+      "cast_accepted": 1,
+      "update_accepted": 1,
+      "retract_accepted": 1
+    },
+    "counters_after": {
+      "widget_impressions": 9,
+      "session_bootstraps": 9,
+      "eligible_widget_impressions": 8,
+      "eligible_cohort_impressions": 8,
+      "widget_rendered": 8,
+      "preview_requests": 4,
+      "write_attempts": 3,
+      "cast_attempts": 2,
+      "cast_accepted": 1,
+      "update_accepted": 1,
+      "retract_accepted": 1
+    },
+    "uniques_after": {
+      "exposed_visitor": 1
+    },
+    "latency_samples": 3,
+    "snapshot_metrics": {
+      "session_bootstraps": 9,
+      "eligible_cohort_impressions": 8,
+      "widget_rendered": 8,
+      "cast_attempts": 2,
+      "accepted_casts": 1,
+      "updates": 1,
+      "retracts": 1,
+      "rejected_writes": "UNMEASURED",
+      "api_errors": "UNMEASURED",
+      "rate_limit_violations": "UNMEASURED",
+      "quarantine_events": "UNMEASURED",
+      "csrf_denied": "UNMEASURED",
+      "origin_denied": "UNMEASURED",
+      "cohort_denied": "UNMEASURED",
+      "cross_space_denied": "UNMEASURED",
+      "invalid_rating_denied": "UNMEASURED",
+      "identities_created": "UNMEASURED",
+      "preview_requests": 4,
+      "exposed_visitors": 1,
+      "latency_p50_ms": 48.32385992631316,
+      "latency_p95_ms": 212.64371601864696,
+      "duplicate_active_votes": "UNMEASURED",
+      "preview_write_mismatches": "UNMEASURED",
+      "aggregate_rebuild_mismatches": "UNMEASURED",
+      "kill_switch_state": 0,
+      "rollout_percent": 1
+    },
+    "unmeasured": [
+      "aggregate_rebuild_mismatches",
+      "api_errors",
+      "cohort_denied",
+      "cross_space_denied",
+      "csrf_denied",
+      "duplicate_active_votes",
+      "identities_created",
+      "invalid_rating_denied",
+      "origin_denied",
+      "preview_write_mismatches",
+      "quarantine_events",
+      "rate_limit_violations",
+      "rejected_writes"
+    ]
+  }
+}

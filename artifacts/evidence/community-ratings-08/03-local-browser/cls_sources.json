@@ -1,0 +1,62 @@
+{
+  "samples": [
+    {
+      "mounted": 1,
+      "shifts": [],
+      "total": 0
+    },
+    {
+      "mounted": 1,
+      "shifts": [
+        {
+          "value": 0.007756565423659337,
+          "time": 797,
+          "sources": [
+            "UL.portal-meta-list",
+            "P.portal-title-description",
+            "?",
+            "UL.portal-alt-list",
+            "BUTTON.portal-nav-button"
+          ]
+        }
+      ],
+      "total": 0.007756565423659337
+    },
+    {
+      "mounted": 1,
+      "shifts": [
+        {
+          "value": 0.007756565423659337,
+          "time": 1519,
+          "sources": [
+            "UL.portal-meta-list",
+            "P.portal-title-description",
+            "?",
+            "UL.portal-alt-list",
+            "BUTTON.portal-nav-button"
+          ]
+        }
+      ],
+      "total": 0.007756565423659337
+    },
+    {
+      "mounted": 1,
+      "shifts": [
+        {
+          "value": 0.007756565423659337,
+          "time": 636,
+          "sources": [
+            "UL.portal-meta-list",
+            "P.portal-title-description",
+            "?",
+            "UL.portal-alt-list",
+            "BUTTON.portal-nav-button"
+          ]
+        }
+      ],
+      "total": 0.007756565423659337
+    }
+  ],
+  "widget_attributed_shifts": [],
+  "widget_attributed_total": 0
+}

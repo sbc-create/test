@@ -1,0 +1,131 @@
+{
+  "checked_at": "2026-09-21T14:13:34Z",
+  "title_pages": {
+    "/anime/padshiy-master": {
+      "status": 200,
+      "loader_nodes": 0,
+      "aggregate_rating": false
+    },
+    "/anime/chernyy-fakel": {
+      "status": 200,
+      "loader_nodes": 0,
+      "aggregate_rating": false
+    },
+    "/anime/neprevzoydennyy": {
+      "status": 200,
+      "loader_nodes": 0,
+      "aggregate_rating": false
+    },
+    "/anime/istoriya-o-perekure-za-supermarketom": {
+      "status": 200,
+      "loader_nodes": 0,
+      "aggregate_rating": false
+    }
+  },
+  "C1_widget_on_live_pages": false,
+  "no_structured_aggregate_rating": true,
+  "assets": {
+    "/assets/community/community_rating.js": {
+      "status": 404,
+      "content_type": "text/html; charset=utf-8"
+    },
+    "/assets/community/community_rating.css": {
+      "status": 404,
+      "content_type": "text/html; charset=utf-8"
+    }
+  },
+  "C2_assets_served": false,
+  "flags": {
+    "PUBLIC_WRITE_ENABLED": 1,
+    "PUBLIC_WRITE_ROLLOUT_PERCENT": 1,
+    "PUBLIC_WRITE_MAX_PERCENT": 1,
+    "KILL_SWITCH": 0,
+    "READ_ONLY": 0
+  },
+  "C3_rollout_exactly_1pct_and_live": true,
+  "C4_metrics_store_reachable": false,
+  "metrics_store_path": "/srv/site-factory/repo/var/ratings/metrics.sqlite",
+  "metrics": {
+    "session_bootstraps": "UNMEASURED",
+    "eligible_cohort_impressions": "UNMEASURED",
+    "widget_rendered": "UNMEASURED",
+    "cast_attempts": "UNMEASURED",
+    "accepted_casts": "UNMEASURED",
+    "updates": "UNMEASURED",
+    "retracts": "UNMEASURED",
+    "rejected_writes": "UNMEASURED",
+    "api_errors": "UNMEASURED",
+    "rate_limit_violations": "UNMEASURED",
+    "quarantine_events": "UNMEASURED",
+    "csrf_denied": "UNMEASURED",
+    "origin_denied": "UNMEASURED",
+    "cohort_denied": "UNMEASURED",
+    "cross_space_denied": "UNMEASURED",
+    "invalid_rating_denied": "UNMEASURED",
+    "identities_created": "UNMEASURED",
+    "preview_requests": "UNMEASURED",
+    "exposed_visitors": "UNMEASURED",
+    "latency_p50_ms": "UNMEASURED",
+    "latency_p95_ms": "UNMEASURED",
+    "duplicate_active_votes": "UNMEASURED",
+    "preview_write_mismatches": "UNMEASURED",
+    "aggregate_rebuild_mismatches": "UNMEASURED",
+    "kill_switch_state": 0,
+    "rollout_percent": 1
+  },
+  "unmeasured": [
+    "accepted_casts",
+    "aggregate_rebuild_mismatches",
+    "api_errors",
+    "cast_attempts",
+    "cohort_denied",
+    "cross_space_denied",
+    "csrf_denied",
+    "duplicate_active_votes",
+    "eligible_cohort_impressions",
+    "exposed_visitors",
+    "identities_created",
+    "invalid_rating_denied",
+    "latency_p50_ms",
+    "latency_p95_ms",
+    "origin_denied",
+    "preview_requests",
+    "preview_write_mismatches",
+    "quarantine_events",
+    "rate_limit_violations",
+    "rejected_writes",
+    "retracts",
+    "session_bootstraps",
+    "updates",
+    "widget_rendered"
+  ],
+  "C5_real_exposure_recorded": false,
+  "exposure": {
+    "eligible_cohort_impressions": "UNMEASURED",
+    "widget_rendered": "UNMEASURED",
+    "exposed_visitors": "UNMEASURED"
+  },
+  "indexability": {
+    "root_status": 200,
+    "x_robots": null,
+    "meta_robots": "index, follow",
+    "robots_disallow_all": false
+  },
+  "C6_indexability_open": true,
+  "ALL_CONDITIONS": {
+    "C1_widget_on_live_pages": false,
+    "C2_assets_served": false,
+    "C3_rollout_exactly_1pct_and_live": true,
+    "C4_metrics_store_reachable": false,
+    "C5_real_exposure_recorded": false,
+    "C6_indexability_open": true
+  },
+  "READY_TO_START": false,
+  "ACTION": "not started — conditions not met",
+  "FAILED_CONDITIONS": [
+    "C1_widget_on_live_pages",
+    "C2_assets_served",
+    "C4_metrics_store_reachable",
+    "C5_real_exposure_recorded"
+  ]
+}

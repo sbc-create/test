@@ -1,0 +1,44 @@
+{
+  "STAGE": "COMMUNITY-RATINGS-08-WIDGET-OBSERVABILITY",
+  "CAPTURED_AT": "2026-09-21T13:31:17Z",
+  "START_HEAD": "58834386001603e8ab12c6bdf0dd269347635389",
+  "HEAD_AT_CAPTURE": "58834386001603e8ab12c6bdf0dd269347635389",
+  "INTEGRATION_POINT": {
+    "live_frontend_unit": "nova-yummy-site.service",
+    "unit_file": "/etc/systemd/system/nova-yummy-site.service",
+    "runtime_entrypoint": "/srv/lords/.frontend/yummy-frontend.py --port 9132",
+    "domain": "yummyani.site",
+    "upstream_app": "127.0.0.1:3101 (Next.js)",
+    "api_gateway_unit": "community-ratings-gateway.service",
+    "api_gateway_bind": "127.0.0.1:9145",
+    "nginx_snippet": "/etc/nginx/snippets/yummyani-community-ratings.conf",
+    "readmodel": "/srv/lords/.frontend/yummy-readmodel.sqlite3",
+    "how_verified": "systemctl cat of the unit; nginx snippet read; slug->entity_id resolved from the readmodel; not guessed"
+  },
+  "WHY_THIS_INTEGRATION": "_обогатить refuses to rewrite upstream markup because nodes inside the React tree broke hydration (Minified React error #418), and foreign pages are streamed rather than buffered to keep TTFB at 0.2s instead of 1.2s. The injection therefore adds exactly one <script> as the last node of <body>, through a rolling tail window that holds back fewer bytes than '</body>' is long. Nothing enters <head> and nothing enters the app tree.",
+  "CANONICAL_SOURCES": {
+    "factory/community/widget_inject.py": "b89aa789c9306f0da97c8dc8d43f966b203daec6f609edaab44617711aaf2928",
+    "factory/community/frontend/community_rating.js": "93fe1b78cfaa604c643ccc3b5773db2c6e12af72633ef44daeb920748b06bf4d",
+    "factory/community/frontend/community_rating.css": "6ea4dd3898fb2f1b93800482509e34acaaf874bf73eca4fb48d23b039e1ca113",
+    "factory/community/metrics_store.py": "428a37b623ea4d0ce73113db27a6fcc9e3f4e1c8d766184895af6244628e9077"
+  },
+  "DEPLOYABLE_HOST_BUNDLE": {
+    "automation/host/community_widget_inject.py": "b89aa789c9306f0da97c8dc8d43f966b203daec6f609edaab44617711aaf2928",
+    "automation/host/community-assets/community_rating.js": "93fe1b78cfaa604c643ccc3b5773db2c6e12af72633ef44daeb920748b06bf4d",
+    "automation/host/community-assets/community_rating.css": "6ea4dd3898fb2f1b93800482509e34acaaf874bf73eca4fb48d23b039e1ca113",
+    "automation/host/yummy-frontend.py": "20b9e0dc1d48709965a67d4a8997d13684c0ba6e2198115eaf80aee7ee4e293f"
+  },
+  "BUNDLE_MATCHES_CANONICAL": true,
+  "RUNTIME_BEFORE_DEPLOY": {
+    "/srv/lords/.frontend/yummy-frontend.py": "60aa6158126f6152f7ec6daeba896196f0fecf53d28caa0b4894e394ded54438",
+    "widget_module_present": false,
+    "assets_present": false
+  },
+  "KNOWN_RUNTIME_SOURCE_DIVERGENCE": {
+    "file": "/srv/lords/.frontend/yummy-frontend.py vs automation/host/yummy-frontend.py",
+    "state": "PRE-EXISTING, NOT CREATED BY THIS STAGE",
+    "runtime_ahead": "uses nova_core_indexability.resolve_or_exit() as the indexability authority",
+    "repo_ahead": "hardcoded open-domain allowlist; RSC request-header stripping for the internal fetch",
+    "consequence": "the repo file must NOT be copied over the runtime file: that would revert the Core indexability authority and risk closing indexability, which this stage forbids. The widget change is applied to the runtime lineage as the same minimal additive patch instead, and both lineages carry it."
+  }
+}
