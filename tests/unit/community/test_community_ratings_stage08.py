@@ -601,3 +601,32 @@ class GatewayDbFlagTests(unittest.TestCase):
                 self.assertTrue(store.path.is_file())
             finally:
                 store.close()
+
+
+class ProductionTelemetryIsolationTests(unittest.TestCase):
+    """A test run must never write into production telemetry.
+
+    metrics.incr mirrors into a durable store whose default path is the
+    production one — that default is what lets the monitor read what the
+    gateway wrote. It also means an unisolated test writes synthetic counters
+    where they cannot be told apart from real visitor traffic. This asserts the
+    package-level isolation fixture is actually in force.
+    """
+
+    PRODUCTION_STORE = Path("/srv/site-factory/repo/var/ratings/metrics.sqlite")
+
+    def test_default_store_path_is_redirected_during_tests(self) -> None:
+        self.assertNotEqual(
+            Path(metrics_store.DEFAULT_STORE_PATH).resolve(),
+            self.PRODUCTION_STORE,
+            "the metrics store is pointing at production during a test run",
+        )
+
+    def test_counter_writes_land_in_the_isolated_store(self) -> None:
+        before = self.PRODUCTION_STORE.stat().st_mtime if self.PRODUCTION_STORE.exists() else None
+        metrics.incr("cast_accepted", 3)
+        metrics_store.reset_cache()
+        raw = metrics_store.read_raw(Path(metrics_store.DEFAULT_STORE_PATH))
+        self.assertEqual(raw["counters"]["cast_accepted"], 3)
+        after = self.PRODUCTION_STORE.stat().st_mtime if self.PRODUCTION_STORE.exists() else None
+        self.assertEqual(before, after, "production metrics store was modified by a test")
