@@ -1,0 +1,38 @@
+{
+  "stage": "ANIMEDIA-BLOCKWISE-PARITY-03",
+  "block": "B15",
+  "purpose": "Две независимые пересъёмки подряд одним и тем же стендом; гейт зелёный на каждой.",
+  "run1": {
+    "measured_at_utc": "2026-09-21T13:06:16Z",
+    "cells": 48,
+    "source_commit": "e6204ff75b95e588a3d052d3f5a7d87fa5b78b49",
+    "gate": "24 passed"
+  },
+  "run2": {
+    "measured_at_utc": "2026-09-21T13:07:38Z",
+    "cells": 48,
+    "source_commit": "e6204ff75b95e588a3d052d3f5a7d87fa5b78b49",
+    "gate": "24 passed"
+  },
+  "compared_fields": [
+    "http",
+    "overflow_px",
+    "clipped_required",
+    "card_title_overflow",
+    "timestamp_ellipsis",
+    "broken_images",
+    "empty_visible_blocks",
+    "gaps_over_96",
+    "grid_overlaps",
+    "player_instances",
+    "autoplay_attrs",
+    "h1_count",
+    "header_h",
+    "footer_h",
+    "robots",
+    "canonical"
+  ],
+  "divergences": [],
+  "STABLE": true,
+  "note": "Сравниваются только детерминированные поля. Размеры постеров и карточек в пикселях сюда не входят: субпиксельная раскладка даёт дробные отличия между запусками, и для них есть собственные допуски в гейте."
+}

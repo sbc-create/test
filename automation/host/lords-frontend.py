@@ -118,13 +118,25 @@ def _рядом_с_каталогом(шаблон: str) -> str:
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import seo_layer as SEO  # noqa: E402
 
-# Контракт коллекций. Канонический экземпляр живёт в `factory/lords/`, рядом с
-# артефактом лежит его копия — тем же способом, что и SEO-слой. Отсутствие
-# файла не должно ронять витрину: без него главная собирается прежним образом.
+# Контракт коллекций. Канонический экземпляр — `factory/lords/collection_contract.py`,
+# и он же единственный: второй отслеживаемый экземпляр означал бы второй
+# источник правды о лентах, а разъехаться они могут незаметно.
+#
+# При запуске из репозитория модуль берётся пакетом. Рядом с выкаченным
+# артефактом пакета нет — там deploy кладёт тот же файл спутником
+# (`install … factory/lords/collection_contract.py → <frontend>/`), и работает
+# второй путь. Отсутствие обоих не должно ронять витрину: без контракта главная
+# собирается прежним образом.
+_КОРЕНЬ_РЕПО = Path(__file__).resolve().parents[2]
+if (_КОРЕНЬ_РЕПО / "factory" / "lords" / "collection_contract.py").is_file():
+    sys.path.insert(0, str(_КОРЕНЬ_РЕПО))
 try:
-    import collection_contract as КОЛЛЕКЦИИ  # noqa: E402
+    from factory.lords import collection_contract as КОЛЛЕКЦИИ  # noqa: E402
 except ImportError:
-    КОЛЛЕКЦИИ = None
+    try:
+        import collection_contract as КОЛЛЕКЦИИ  # noqa: E402
+    except ImportError:
+        КОЛЛЕКЦИИ = None
 
 #: Каталог готовых файлов карты сайта. Пусто — карта не отдаётся.
 SITEMAP_DIR = os.environ.get("LORDS_SITEMAP_DIR", "").strip()
@@ -1968,7 +1980,10 @@ max-width:none;max-height:none}
 .zt__none b{display:block;font-size:28px;font-weight:800;color:var(--a-dim);margin-bottom:4px}
 .zt__b{padding:6px 8px 8px;display:flex;flex-direction:column;gap:2px;flex:0 0 auto;min-height:52px}
 .zt__t{font-size:12.5px;font-weight:700;line-height:1.25;
-display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:0}
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:0;
+/* B15: длинное слово в узкой карточке переносится, а не срезается краем.
+   Измерено на 320px: «Противостояние» выходило за рамку на 6px. */
+overflow-wrap:anywhere}
 .zt__m{display:block;font-size:11px;color:var(--a-dim);line-height:1.25;
 display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;min-height:0}
 .zt__r{display:flex;gap:8px;font-size:12px;color:var(--a-dim);margin-top:4px;padding-top:0;
@@ -2280,16 +2295,22 @@ color:var(--a-ink);font-size:13px;font-weight:600;text-decoration:none;white-spa
 .zft__inner{display:flex;flex-direction:column;gap:12px}
 .zft__cols{display:grid;gap:18px;grid-template-columns:1fr;
 align-items:start}
-/* B14: планшет — две колонки, рабочий стол — четыре, как в паспорте блока. */
+/* B14: планшет — две колонки, рабочий стол — четыре, как в паспорте блока.
+   Порог рабочего стола — 1024px, а не 1100: 1024 входит в список ширин B15 как
+   десктопная, и при пороге 1100 она получала планшетную раскладку, то есть
+   паспортная полоса высоты 220–300 на ней формально не применялась ни к чему. */
 @media(min-width:768px){.zft__cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(min-width:1100px){.zft__cols{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1024px){.zft__cols{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .zft__col{display:flex;flex-direction:column;gap:6px;min-width:0}
 .zft__col b{color:var(--a-ink);font-size:13px;margin:0 0 4px}
 .zft__col a{color:var(--a-acc);font-weight:500;font-size:13px;min-height:32px;
 display:inline-flex;align-items:center;width:fit-content}
 .zft__row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 18px}
+/* B15: три строки, а не четыре. В четырёхколоночной раскладке на 1024px
+   колонка узкая, текст переносился на четыре строки и подвал вырастал до
+   314px при паспортных 220–300. На мобильной раскладке было три и раньше. */
 .zft__about{font-size:13px;color:var(--a-dim);line-height:1.4;margin:0;max-width:62ch;
-display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .zft__nav{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
 .zft__nav a{font-size:13px;color:var(--a-dim);font-weight:600;min-height:36px;display:inline-flex;align-items:center}
 .zft__nav a:hover{color:var(--a-acc)}
@@ -6175,15 +6196,16 @@ class ВидАнимедиа(ВидЗона):
         домен = _аниме_домен(self.хост)
         contact = _аниме_контакты_html()
         legal = _аниме_legal_html()
+        # Списки подрезаны до пяти по измерению, а не по вкусу: на восьми
+        # ссылках самый высокий столбец давал подвал 463px при паспортных
+        # 220–300. Ссылки настоящие, просто их меньше; остальные жанры и годы
+        # открываются из таксономии шапки и фильтров каталога.
         genres = "".join(
             f'<a href="/catalog/?genre={html.escape(код)}">{html.escape(имя)}</a>'
-            for код, имя in (self.индекс.get("genre_names") or [])[:8])
+            for код, имя in (self.индекс.get("genre_names") or [])[:5])
         years = "".join(
             f'<a href="/catalog/?year={г}">{г}</a>'
-            for г in (self.д.years or [])[:8])
-        types = "".join(
-            f'<a href="/catalog/?type={html.escape(t)}">{html.escape(t.upper())}</a>'
-            for t in sorted((self.индекс.get("type") or {}).keys())[:6])
+            for г in (self.д.years or [])[:5])
         contact_col = ""
         if contact or legal:
             contact_col = (
@@ -6204,7 +6226,7 @@ class ВидАнимедиа(ВидЗона):
             '<a href="/new/">Новое в каталоге</a>'
             '<a href="/collections/">Подборки</a></div>'
             f'<div class="zft__col"><b>Жанры</b>{genres or "<span>—</span>"}</div>'
-            f'<div class="zft__col"><b>Годы и тип</b>{years}{types}</div>'
+            f'<div class="zft__col"><b>Годы</b>{years or "<span>—</span>"}</div>'
             f'{contact_col}'
             '</div>'
             f'<div class="zft__bar"><span>© {html.escape(self.имя)}</span></div>'

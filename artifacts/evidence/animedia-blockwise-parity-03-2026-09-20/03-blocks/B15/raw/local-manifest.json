@@ -1,0 +1,11 @@
+{
+ "schema_version": 1,
+ "template_family": "animedia",
+ "design_version": "1.2.4",
+ "source_commit": "e6204ff75b95e588a3d052d3f5a7d87fa5b78b49",
+ "runtime_commit": "e6204ff75b95e588a3d052d3f5a7d87fa5b78b49",
+ "build_id": "local-b15",
+ "artifact_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+ "profile": "animedia-icu",
+ "built_at": "2026-09-21T13:07:36Z"
+}

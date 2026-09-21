@@ -1,0 +1,77 @@
+{
+  "stage": "ANIMEDIA-BLOCKWISE-PARITY-03",
+  "block": "B16",
+  "built_at_utc": "2026-09-21T13:08:26Z",
+  "branch": "claude/animedia-template-finalization-01",
+  "source_commit_at_record_time": "e6204ff75b95e588a3d052d3f5a7d87fa5b78b49",
+  "note": "source_commit фиксируется коммитом, который добавляет эту запись; окончательное значение — FINAL_HEAD стадии. Цифру артефакта обязательно перепроверить перед выкатом: sha256sum automation/host/lords-frontend.py",
+  "artifact": {
+    "primary_file": "automation/host/lords-frontend.py",
+    "artifact_sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+    "bytes": 498397
+  },
+  "release_files": {
+    "automation/host/lords-frontend.py": {
+      "sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+      "bytes": 498397
+    },
+    "automation/host/seo_layer.py": {
+      "sha256": "8fb0a0bac3f88dde2c8d44ef352914255ccb7ffbaa4a308d07bf7499ef7c19f0",
+      "bytes": 17637
+    },
+    "factory/lords/collection_contract.py": {
+      "sha256": "1de55d9d4ee44d5f586bf97b6513d8f18aabc0c946b9efca40603b0ec194d948",
+      "bytes": 27319
+    }
+  },
+  "reproducible_by": "артефакт — это сам файл; цифра считается sha256 от его байтов, как это делает automation/host/apply-nova-closed-update.py::sha256",
+  "release_gate": {
+    "ok": true,
+    "flags": {
+      "RUNTIME_DOWNGRADE": 0,
+      "RUNTIME_COMPATIBLE": 1,
+      "CONTENT_SNAPSHOT_DIGEST_MATCH": 1,
+      "CATALOG_DETAILS_SKEW": 0,
+      "PROVIDER_BINDING_MATCH": null
+    }
+  },
+  "deploy_scope": [
+    "animedia.icu",
+    "animedia.space"
+  ],
+  "out_of_scope_sites_sharing_the_runtime": [
+    "lords-01",
+    "lords-02",
+    "lords-03",
+    "zona-01"
+  ],
+  "live_before": {
+    "animedia.icu": {
+      "build_id": "20260920T102102Z-89666321-nova",
+      "artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+      "x_robots": "noindex, nofollow"
+    },
+    "animedia.space": {
+      "build_id": "20260920T102102Z-89666321-nova",
+      "artifact_sha256": "d2e9628f2a4b14c56ef28a6814b53f49cdb4017db1ab8ddebebb79aaad39e908",
+      "x_robots": "noindex, nofollow"
+    }
+  },
+  "rollback": {
+    "target_release": "/srv/lords/.frontend/releases/legacy-b32438c91aaa",
+    "target_provenance_commit": "79632a0",
+    "method": "обратная перестановка sites/animedia-0N/current + перезапуск службы",
+    "verified": false,
+    "verified_reason": "проверка требует перезапуска службы — действие владельца",
+    "limitation": "артефакт d2e9628f, который отдаётся сейчас, на диске отсутствует; вернуться ровно в него после перезапуска невозможно"
+  },
+  "deploy_performed": 0,
+  "restart_performed": 0,
+  "dns_mutations": 0,
+  "indexability_mutations": 0,
+  "push_performed": 0,
+  "merge_performed": 0,
+  "owner_approval_required": true,
+  "owner_approval_bound_to": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+  "packet": "03-blocks/B16_OWNER_DEPLOY_PACKET.md"
+}

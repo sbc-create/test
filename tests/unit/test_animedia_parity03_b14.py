@@ -158,7 +158,7 @@ def test_footer_columns_are_four_two_one(fe):
     css = mod.АНИМЕДИА_СТИЛЬ
     assert ".zft__cols{display:grid" in css
     assert "@media(min-width:768px){.zft__cols{grid-template-columns:repeat(2,minmax(0,1fr))}}" in css
-    assert "@media(min-width:1100px){.zft__cols{grid-template-columns:repeat(4,minmax(0,1fr))}}" in css
+    assert "@media(min-width:1024px){.zft__cols{grid-template-columns:repeat(4,minmax(0,1fr))}}" in css
     assert "@media(max-width:479px){.zft__cols{grid-template-columns:1fr}}" in css
 
 
