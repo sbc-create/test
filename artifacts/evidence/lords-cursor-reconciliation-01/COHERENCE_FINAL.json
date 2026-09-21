@@ -1,0 +1,104 @@
+{
+  "checked_at_utc": "2026-09-21T14:14:40.530298+00:00",
+  "registry_scope": [
+    "lords-01",
+    "lords-02",
+    "lords-03"
+  ],
+  "out_of_registry": [
+    "animedia-01",
+    "animedia-02",
+    "zona-01"
+  ],
+  "shared_mutable_path": "/srv/lords/.frontend/lords-frontend.py",
+  "shared_path_is_loader": true,
+  "sites_running_shared_mutable_path": [],
+  "sites": {
+    "lords-01": {
+      "exact_domain": "lordfilm47.space",
+      "canonical_host": "lordfilm47.space",
+      "unit": "lords-nova-01.service",
+      "port": 9110,
+      "manifest_path": "/srv/lords/.frontend/template-manifest.json",
+      "declared_artifact_sha256": "1831c87730ebc67435172cae5b7b0b3212d1217dffd9e899c4e567c1be3387cc",
+      "declared_build_id": "20260921T134330Z-515fcf0-cardfix",
+      "declared_source_commit": "515fcf0b39de009e31f531cd380ab52c38c33520",
+      "declared_source_dirty": false,
+      "declared_profile": "lords-general",
+      "bound_release": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix",
+      "bound_artifact_sha256": "1831c87730ebc67435172cae5b7b0b3212d1217dffd9e899c4e567c1be3387cc",
+      "running_exec_path": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean/lords-frontend.py",
+      "declared_release_dir": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix",
+      "running_release_dir": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean",
+      "release_path_matches_manifest": false,
+      "running_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "runs_shared_mutable_path": false,
+      "indexing_enabled": false,
+      "process": {
+        "pid": 2395188,
+        "exec_script": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean/lords-frontend.py",
+        "started_utc": "2026-09-21T12:38:59.040000Z",
+        "rss_mb": 572
+      },
+      "verdict": "PENDING_RESTART_STAGED"
+    },
+    "lords-02": {
+      "exact_domain": "lordserial33.biz",
+      "canonical_host": "lordserial33.biz",
+      "unit": "nova-lords-02.service",
+      "port": 9111,
+      "manifest_path": "/srv/lords/.frontend/template-manifest-lords-02.json",
+      "declared_artifact_sha256": "1831c87730ebc67435172cae5b7b0b3212d1217dffd9e899c4e567c1be3387cc",
+      "declared_build_id": "20260921T134330Z-515fcf0-cardfix",
+      "declared_source_commit": "515fcf0b39de009e31f531cd380ab52c38c33520",
+      "declared_source_dirty": false,
+      "declared_profile": "lords-new",
+      "bound_release": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix",
+      "bound_artifact_sha256": "1831c87730ebc67435172cae5b7b0b3212d1217dffd9e899c4e567c1be3387cc",
+      "running_exec_path": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix/lords-frontend.py",
+      "declared_release_dir": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix",
+      "running_release_dir": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix",
+      "release_path_matches_manifest": true,
+      "running_artifact_sha256": "1831c87730ebc67435172cae5b7b0b3212d1217dffd9e899c4e567c1be3387cc",
+      "runs_shared_mutable_path": false,
+      "indexing_enabled": false,
+      "process": {
+        "pid": 657120,
+        "exec_script": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix/lords-frontend.py",
+        "started_utc": "2026-09-21T14:12:52.370000Z",
+        "rss_mb": 368
+      },
+      "verdict": "COHERENT"
+    },
+    "lords-03": {
+      "exact_domain": "1lordserials1.online",
+      "canonical_host": "1lordserials1.online",
+      "unit": "nova-lords-03.service",
+      "port": 9112,
+      "manifest_path": "/srv/lords/.frontend/template-manifest-lords-03.json",
+      "declared_artifact_sha256": "1831c87730ebc67435172cae5b7b0b3212d1217dffd9e899c4e567c1be3387cc",
+      "declared_build_id": "20260921T134330Z-515fcf0-cardfix",
+      "declared_source_commit": "515fcf0b39de009e31f531cd380ab52c38c33520",
+      "declared_source_dirty": false,
+      "declared_profile": "lords-curated",
+      "bound_release": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix",
+      "bound_artifact_sha256": "1831c87730ebc67435172cae5b7b0b3212d1217dffd9e899c4e567c1be3387cc",
+      "running_exec_path": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix/lords-frontend.py",
+      "declared_release_dir": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix",
+      "running_release_dir": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix",
+      "release_path_matches_manifest": true,
+      "running_artifact_sha256": "1831c87730ebc67435172cae5b7b0b3212d1217dffd9e899c4e567c1be3387cc",
+      "runs_shared_mutable_path": false,
+      "indexing_enabled": false,
+      "process": {
+        "pid": 678306,
+        "exec_script": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix/lords-frontend.py",
+        "started_utc": "2026-09-21T14:13:41.060000Z",
+        "rss_mb": 374
+      },
+      "verdict": "COHERENT"
+    }
+  },
+  "diverged_sites": [],
+  "verdict": "COHERENT"
+}

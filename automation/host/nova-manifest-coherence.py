@@ -188,8 +188,24 @@ def check(front: pathlib.Path = FRONT, registry: dict | None = None,
         elif not исполняемый_sha:
             вердикт = "UNMEASURABLE_NO_EXEC_PATH"
         elif объявлено != исполняемый_sha:
-            вердикт = "DIVERGED_RUNTIME_DIFFERS_FROM_MANIFEST"
-            расхождения.append(site_id)
+            # «Подготовлено и ждёт перезапуска» — не то же самое, что «объявляет
+            # чужое». Различать их обязательно: именно смешение этих состояний и
+            # породило исходную путаницу, когда staged-состояние читали как
+            # выкаченное. Признак подготовленного: манифест и привязка называют
+            # ОДИН и тот же релиз, а исполняется другой, всё ещё существующий.
+            подготовлено = (
+                bool(привязан_sha)
+                and объявлено == привязан_sha
+                and привязка is not None
+                and объявленный_каталог == str(привязка)
+                and исполняемый is not None
+                and исполняемый.parent.is_dir()
+            )
+            if подготовлено:
+                вердикт = "PENDING_RESTART_STAGED"
+            else:
+                вердикт = "DIVERGED_RUNTIME_DIFFERS_FROM_MANIFEST"
+                расхождения.append(site_id)
         elif объявленный_каталог and not путь_совпал:
             вердикт = "RELEASE_PATH_MISMATCH_PENDING_RESTART"
             расхождения.append(site_id)

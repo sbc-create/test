@@ -90,6 +90,38 @@ def test_same_bytes_from_wrong_release_dir_is_not_coherent(tmp_path):
     assert отчёт["sites"]["lords-01"]["release_path_matches_manifest"] is False
 
 
+def test_staged_awaiting_restart_is_not_called_diverged(tmp_path):
+    """Подготовленное состояние отличается от лжи манифеста.
+
+    Манифест и привязка называют один и тот же новый релиз, а процесс всё ещё
+    исполняет прежний. Это ожидание перезапуска, а не «объявляет чужое».
+    Смешение этих двух состояний и породило исходную путаницу.
+    """
+    front = _front(tmp_path)
+    прежний = _release(front, "b-old", OLD)
+    новый = _release(front, "b-new", NEW)
+    _bind(front, "lords-01", новый)
+    _manifest(front, "lords-01", _sha(NEW), release_dir=str(новый))
+    процессы = {9110: {"pid": 1, "exec_script": str(прежний / RUNTIME), "started_utc": "t"}}
+    код, отчёт = coherence.check(front, _registry(front, {"lords-01": 9110}), процессы)
+    assert отчёт["sites"]["lords-01"]["verdict"] == "PENDING_RESTART_STAGED"
+    assert код == coherence.COHERENT
+    assert отчёт["diverged_sites"] == []
+
+
+def test_manifest_disagreeing_with_binding_is_still_diverged(tmp_path):
+    """Если манифест и привязка расходятся, это уже не подготовка."""
+    front = _front(tmp_path)
+    прежний = _release(front, "b-old", OLD)
+    новый = _release(front, "b-new", NEW)
+    _bind(front, "lords-01", прежний)          # привязка на старом
+    _manifest(front, "lords-01", _sha(NEW), release_dir=str(новый))  # манифест на новом
+    процессы = {9110: {"pid": 1, "exec_script": str(прежний / RUNTIME), "started_utc": "t"}}
+    код, отчёт = coherence.check(front, _registry(front, {"lords-01": 9110}), процессы)
+    assert код == coherence.DIVERGED
+    assert отчёт["sites"]["lords-01"]["verdict"] == "DIVERGED_RUNTIME_DIFFERS_FROM_MANIFEST"
+
+
 def test_matching_release_dir_is_coherent(tmp_path):
     front = _front(tmp_path)
     чистый = _release(front, "b-clean", NEW)
