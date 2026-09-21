@@ -206,3 +206,27 @@ def test_geometry_tolerances_locked() -> None:
     assert tol["section_order_presence_deviations"] == 0
     assert tol["overflow_overlap_px"] == 0
     assert tol["b03_empty_heading_panel_max_px"] == 96
+
+
+def test_progress_annotations_live_outside_frozen_corpus() -> None:
+    """Block progress must never be written back into the frozen passport file.
+
+    B05-B11 once annotated passports/BLOCK_PASSPORTS.json in place, which broke
+    the freeze gate because the contract forbids mutation after the digest.
+    Progress belongs in the mutable ledger next to it.
+    """
+    ledger = PASSPORTS / "BLOCK_PROGRESS.json"
+    assert ledger.is_file(), "mutable progress ledger is missing"
+    data = json.loads(ledger.read_text(encoding="utf-8"))
+    assert data["not_part_of_frozen_contract_corpus"] is True
+    assert data["CONTRACT_SHA256"] == (
+        CONTRACT / "CONTRACT_SHA256.txt"
+    ).read_text(encoding="utf-8").strip()
+    assert ledger not in _contract_corpus()
+
+
+def test_frozen_passport_file_matches_freeze_record(freeze: dict) -> None:
+    """The passport file must still hash to the digest B00 recorded."""
+    assert _sha256_file(PASSPORTS / "BLOCK_PASSPORTS.json") == (
+        freeze["file_digests"]["passports/BLOCK_PASSPORTS.json"]
+    )

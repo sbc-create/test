@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "file_role": "MUTABLE_PROGRESS_LEDGER",
+  "not_part_of_frozen_contract_corpus": true,
+  "corpus_definition": "tests/unit/test_animedia_parity03_b00.py::_contract_corpus — 00-contract/*.json + passports/BLOCK_PASSPORTS.json + manifests/{LOCAL_FIXTURE,LIVE_ENTITY}_MANIFEST.json",
+  "stage": "ANIMEDIA-BLOCKWISE-PARITY-03",
+  "spec": "ANIMEDIA_BLOCK_SPEC_V1",
+  "CONTRACT_SHA256": "5f2112e25ef974333c388bad405abfae3c3d460a713b028afa3c0e549b8eaeb3",
+  "recovered_by": "ANIMEDIA-CURSOR-WORK-RECONCILIATION-01",
+  "why": "Blocks B05-B11 wrote progress annotations (evidence_paths, remaining_data_gap) directly into passports/BLOCK_PASSPORTS.json, which the acceptance contract declares immutable after the digest (contract_mutation_forbidden_after_digest=true). That broke the B00 freeze gate. The passport file has been restored byte for byte to its frozen content; the annotations are preserved here instead, losing nothing.",
+  "mutating_commits": [
+    {
+      "commit": "c7bc5c8",
+      "subject": "fix(animedia): B05 catalog-added ledger truth without published_at fallback"
+    },
+    {
+      "commit": "a80f306",
+      "subject": "fix(animedia): B07 title passport description ratings and compact gap"
+    },
+    {
+      "commit": "81b3665",
+      "subject": "fix(animedia): B08 player shell geometry and autoplay off"
+    },
+    {
+      "commit": "2e24f7f",
+      "subject": "fix(animedia): B10 recommendations snapshot/fallback/0px"
+    },
+    {
+      "commit": "7b05b98",
+      "subject": "fix(animedia): B11 catalog grid facets pagination dedupe"
+    }
+  ],
+  "blocks": {
+    "B05": {
+      "evidence_paths": {
+        "frozen": [
+          "03-blocks/BLOCK_B05.md"
+        ],
+        "post_freeze": [
+          "03-blocks/BLOCK_B05.md",
+          "03-blocks/B05/BEFORE/INVENTORY.json",
+          "03-blocks/B05/AFTER_LOCAL/ORACLE.json"
+        ]
+      },
+      "remaining_data_gap": {
+        "frozen": "catalog_added ledger missing; published_at AMBIGUOUS; CATALOG_FRESHNESS_DATA_GAP=1",
+        "post_freeze": "catalog_added ledger missing; published_at AMBIGUOUS; CATALOG_FRESHNESS_DATA_GAP=1; PASS_LOCAL_PENDING_LIVE"
+      }
+    },
+    "B06": {
+      "evidence_paths": {
+        "frozen": [
+          "03-blocks/BLOCK_B06.md"
+        ],
+        "post_freeze": [
+          "03-blocks/BLOCK_B06.md",
+          "03-blocks/B06/BEFORE/INVENTORY.json",
+          "03-blocks/B06/AFTER_LOCAL/ORACLE.json"
+        ]
+      },
+      "remaining_data_gap": {
+        "frozen": "TOP100_DATA_GAP if TopSnapshot missing; editorial/comments absent without backend",
+        "post_freeze": "TOP100_DATA_GAP=1 without TopSnapshot; editorial/comments absent; PASS_LOCAL_PENDING_LIVE"
+      }
+    },
+    "B07": {
+      "evidence_paths": {
+        "frozen": [
+          "03-blocks/BLOCK_B07.md"
+        ],
+        "post_freeze": [
+          "03-blocks/BLOCK_B07.md",
+          "03-blocks/B07/BEFORE/INVENTORY.json",
+          "03-blocks/B07/AFTER_LOCAL/ORACLE.json"
+        ]
+      },
+      "remaining_data_gap": {
+        "frozen": "",
+        "post_freeze": "PASS_LOCAL_PENDING_LIVE"
+      }
+    },
+    "B08": {
+      "evidence_paths": {
+        "frozen": [
+          "03-blocks/BLOCK_B08.md"
+        ],
+        "post_freeze": [
+          "03-blocks/BLOCK_B08.md",
+          "03-blocks/B08/BEFORE/INVENTORY.json",
+          "03-blocks/B08/AFTER_LOCAL/ORACLE.json"
+        ]
+      },
+      "remaining_data_gap": {
+        "frozen": "BLOCKED_CORE_DATA if default-episode policy absent",
+        "post_freeze": "OWNER_RESOLVED FIRST_PLAYABLE_DETERMINISTIC (ANIMEDIA-B10-B16-20260920-01); PASS_LOCAL_PENDING_LIVE"
+      }
+    },
+    "B09": {
+      "evidence_paths": {
+        "frozen": [
+          "03-blocks/BLOCK_B09.md"
+        ],
+        "post_freeze": [
+          "03-blocks/BLOCK_B09.md",
+          "03-blocks/B09/BEFORE/INVENTORY.json",
+          "03-blocks/B09/AFTER_LOCAL/ORACLE.json"
+        ]
+      },
+      "remaining_data_gap": {
+        "frozen": "",
+        "post_freeze": "PASS_LOCAL_PENDING_LIVE"
+      }
+    },
+    "B10": {
+      "remaining_data_gap": {
+        "frozen": "RECOMMENDATIONS_DATA_GAP until RecommendationSnapshot",
+        "post_freeze": "RECOMMENDATIONS_DATA_GAP=1 without RecommendationSnapshot; DETERMINISTIC_METADATA_RELATED_V1 fallback when ≥4 else 0px; PASS_LOCAL_PENDING_LIVE"
+      }
+    },
+    "B11": {
+      "remaining_data_gap": {
+        "frozen": "",
+        "post_freeze": "PASS_LOCAL_PENDING_LIVE"
+      }
+    }
+  }
+}
