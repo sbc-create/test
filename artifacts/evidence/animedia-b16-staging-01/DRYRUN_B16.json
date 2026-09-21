@@ -1,0 +1,63 @@
+{
+  "что_это": "Холостой прогон релиза B16 под профилем animedia-space на отдельном порту.",
+  "зачем": "Перезапуск боевой витрины необратим: если релиз не поднимется, домен ляжет, и узнаем мы об этом уже после. Тот же код с тем же окружением, запущенный рядом, отвечает на вопрос «поднимется ли» заранее.",
+  "at": "2026-09-21T17:12:00Z",
+
+  "окружение": {
+    "источник": "systemctl show nova-animedia-02.service -p Environment",
+    "LORDS_TEMPLATE_MANIFEST": "/srv/lords/.frontend/template-manifest-animedia-02.json",
+    "LORDS_CATALOG": "/srv/lords/.frontend/animedia-02-catalog.json",
+    "LORDS_LEGACY_ROOT": "/srv/lords/animedia-02/current/site",
+    "LORDS_SITE_NAME": "Animedia",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "отличие_от_боевого": "только порт 9500 вместо 9122"
+  },
+
+  "бинарь": "/srv/lords/.frontend/releases/20260921T153817Z-c8c4587-animedia-b16/lords-frontend.py",
+
+  "старт": {
+    "строка_лога": "[nova] 127.0.0.1:9500 ревизия unknown оформление 1.2.4 тайтлов 7425 подробностей 7425 жанров 56 плеер подключён",
+    "поднялся_за_секунд": "менее 15",
+    "ttfb_главной_s": 0.129
+  },
+
+  "заголовки": {
+    "X-Site-Factory-Profile": "animedia-space",
+    "X-Site-Factory-Template-Family": "animedia",
+    "X-Site-Factory-Build-Id": "20260921T153817Z-c8c4587-animedia-b16",
+    "X-Site-Factory-Artifact-Sha256": "7aae3d2cff614275db6bda926b6023fdf0c6208c76cda7eac8b796673c74ef06",
+    "X-Site-Factory-Template-Revision": "c8c458762c16f69999fcb7d3d1bc156d36f18f48",
+    "X-Robots-Tag": "noindex, nofollow"
+  },
+
+  "маршруты": {
+    "/": 200,
+    "/catalog/": 200,
+    "/new/": 200,
+    "/search/?q=naruto": 200,
+    "/no-such-page-here/": 404
+  },
+
+  "robots_txt": "User-agent: *\nDisallow: /",
+
+  "ворота": {
+    "PROFILE_CORRECT": true,
+    "BUILD_MATCHES_APPROVED": true,
+    "ARTIFACT_MATCHES_APPROVED": true,
+    "REVISION_MATCHES_APPROVED": true,
+    "INDEXABILITY_PRESERVED": true,
+    "ROUTES_OK": true,
+    "REAL_404_NOT_SOFT": true,
+    "CATALOG_LOADED": "7425 тайтлов, 7425 подробностей, 56 жанров",
+    "PLAYER_CONNECTED": true
+  },
+
+  "после_прогона": {
+    "порт_9500": "освобождён, процесс остановлен",
+    "nova-animedia-02": "MainPID=2693863 без изменений, NRestarts=0",
+    "живое_на_9122": "20260920T102102Z-89666321-nova — не тронуто"
+  },
+
+  "ВЫВОД": "Перезапуск nova-animedia-02.service доказанно поднимет B16 под профилем animedia-space с сохранением noindex. Это проверка, а не ожидание.",
+  "VERDICT": "PASS"
+}
