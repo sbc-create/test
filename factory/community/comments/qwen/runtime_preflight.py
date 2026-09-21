@@ -10,6 +10,8 @@ from urllib.parse import urlparse
 
 from factory.community.comments.flags import comments_dark_flags
 from factory.community.comments.qwen import caps
+from factory.community.comments.qwen.discovery import discovery_report
+from factory.community.comments.qwen.endpoint_policy import validate_endpoint
 from factory.community.comments.qwen.provider import discover_config
 
 OWNER_AUTHORIZATION_ID = "COMMUNITY-COMMENTS-QWEN-STAGING-CANARY-20260920-01"
@@ -78,6 +80,8 @@ def runtime_preflight() -> dict[str, Any]:
     host = endpoint_host(endpoint)
     https_ok = endpoint.lower().startswith("https://") if endpoint else False
     cred = credential_meta(token_file)
+    endpoint_policy = validate_endpoint(endpoint)
+    discovery = discovery_report()
     flags = comments_dark_flags()
     publication_off = flags.get("COMMENTS_PUBLICATION_ENABLED", 1) == 0
     prod_postmod_off = flags.get("COMMENTS_QWEN_POSTMOD_ENABLED", 1) == 0
@@ -86,6 +90,13 @@ def runtime_preflight() -> dict[str, Any]:
     checks = {
         "https_endpoint": https_ok,
         "endpoint_host_present": bool(host),
+        "endpoint_allowlisted": bool(
+            endpoint_policy["allowlisted"]
+            and endpoint_policy["post_permitted"]
+            and endpoint_policy["purpose_bound"]
+        ),
+        "endpoint_policy_ok": bool(endpoint_policy["ok"]),
+        "credential_scope_ok": bool(discovery["CREDENTIAL_SCOPE_PASS"]),
         "credential_exists": bool(cred["credential_exists"]),
         "credential_permissions_ok": cred["credential_permission_status"] == "OK_RESTRICTED",
         "model_set": bool(model),
@@ -102,6 +113,9 @@ def runtime_preflight() -> dict[str, Any]:
     ready = all(
         [
             checks["https_endpoint"],
+            checks["endpoint_allowlisted"],
+            checks["endpoint_policy_ok"],
+            checks["credential_scope_ok"],
             checks["credential_exists"],
             checks["credential_permissions_ok"],
             checks["model_set"],
@@ -120,6 +134,15 @@ def runtime_preflight() -> dict[str, Any]:
         "timeout_sec": timeout,
         "checks": checks,
         "credential": cred,
+        "endpoint_policy": endpoint_policy,
+        "credential_scope": {
+            "QWEN_COMMENTS_CREDENTIAL_CONFIGURED": discovery[
+                "QWEN_COMMENTS_CREDENTIAL_CONFIGURED"
+            ],
+            "CREDENTIAL_SCOPE_PASS": discovery["CREDENTIAL_SCOPE_PASS"],
+            "REUSABLE_FOREIGN_CREDENTIALS": discovery["REUSABLE_FOREIGN_CREDENTIALS"],
+            "verdict": discovery["verdict"],
+        },
         "discover": {
             "configured": cfg.get("configured"),
             "endpoint_set": cfg.get("endpoint_set"),
@@ -129,7 +152,27 @@ def runtime_preflight() -> dict[str, Any]:
         },
         "caps": caps.caps_public_status(),
         "READY_FOR_REAL_CANARY": bool(ready),
-        "BLOCKED_REASON": None
-        if ready
-        else "missing_or_incomplete_qwen_runtime_config",
+        "BLOCKED_REASON": None if ready else _blocked_reason(checks),
+        "BLOCKING_CHECKS": [] if ready else sorted(k for k, v in checks.items() if not v),
     }
+
+
+def _blocked_reason(checks: dict[str, bool]) -> str:
+    """Name the most actionable failing gate rather than a generic message."""
+    if not checks["credential_exists"]:
+        return "missing_qwen_comments_credential"
+    if not checks["credential_permissions_ok"]:
+        return "qwen_comments_credential_permissions_insecure"
+    if not checks["credential_scope_ok"]:
+        return "qwen_comments_credential_scope_unconfirmed"
+    if not checks["https_endpoint"]:
+        return "qwen_comments_endpoint_not_https"
+    if not checks["endpoint_allowlisted"]:
+        return "qwen_comments_endpoint_not_in_inventory_allowlist"
+    if not checks["endpoint_policy_ok"]:
+        return "qwen_comments_endpoint_policy_violation"
+    if not checks["model_set"]:
+        return "qwen_comments_model_not_set"
+    if not checks["mode_http_post"]:
+        return "qwen_comments_mode_not_http_post"
+    return "missing_or_incomplete_qwen_runtime_config"
