@@ -1816,15 +1816,30 @@ min-width:44px;min-height:44px;flex:0 0 44px;border:1px solid var(--a-line);bord
 background:var(--a-page);color:var(--a-ink);font-size:16px;cursor:pointer}
 .zhd__theme:focus-visible,.zhd__menu:focus-visible,.zhd__s button:focus-visible,.zhd__drawer a:focus-visible,
 .zhd__drawer-x:focus-visible,.zhd__n a:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
-.zhd__s{display:flex;flex:0 1 320px;min-width:280px;max-width:360px;height:44px;border:1px solid var(--a-line);
+.zhd__s{display:flex;flex:0 1 320px;min-width:280px;max-width:360px;height:48px;border:1px solid var(--a-line);
 border-radius:999px;overflow:hidden;background:var(--a-page);align-items:stretch}
 @media(max-width:1099px){
-  .zhd__s{flex:1 1 calc(100% - 108px);min-width:120px;max-width:none;order:0;border-radius:10px;height:44px}
+  .zhd__s{flex:1 1 calc(100% - 108px);min-width:120px;max-width:none;order:0;border-radius:10px;height:48px}
   .zhd__actions{order:0}
 }
-.zhd__s input{flex:1;min-width:0;border:0;padding:0 12px;font-size:14px;background:transparent;color:var(--a-ink);height:100%}
+.zhd__s input{flex:1;min-width:0;border:0;padding:0 12px;font-size:14px;background:transparent;color:var(--a-ink);height:100%;min-height:48px}
 .zhd__s button{border:0;background:var(--a-acc);color:#fff;padding:0 14px;font-weight:700;cursor:pointer;
-min-width:44px;min-height:44px;height:100%;flex:0 0 auto}
+min-width:48px;min-height:48px;height:100%;flex:0 0 auto}
+/* B12 on-page search block */
+.asearch{margin:0 0 18px;padding:14px 16px;border:1px solid var(--a-line);border-radius:12px;
+background:var(--a-alt);min-height:130px;max-height:160px;box-sizing:border-box;
+display:flex;flex-direction:column;justify-content:center;gap:10px}
+.asearch__form{display:flex;gap:8px;align-items:stretch;flex-wrap:wrap}
+.asearch__form input{flex:1 1 220px;min-height:48px;max-height:52px;height:50px;padding:0 14px;
+border:1px solid var(--a-line);border-radius:10px;background:var(--a-page);color:var(--a-ink);font-size:15px}
+.asearch__form button{min-height:48px;max-height:52px;padding:0 18px;border:0;border-radius:10px;
+background:var(--a-acc);color:#fff;font-weight:700;cursor:pointer}
+.asearch__clear{display:inline-flex;align-items:center;min-height:48px;padding:0 12px;
+font-size:13px;font-weight:700;color:var(--a-dim);text-decoration:underline}
+.asearch__hint{margin:0;font-size:13px;color:var(--a-dim);line-height:1.35;
+overflow:hidden;text-overflow:clip}
+.asearch__clear:focus-visible,.asearch__form input:focus-visible,
+.asearch__form button:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
 .zhd__backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:60}
 .zhd__backdrop[hidden]{display:none !important;pointer-events:none !important}
 .zhd__drawer{position:fixed;top:0;left:0;bottom:0;width:min(360px,calc(100vw - 24px));z-index:70;background:var(--a-page);
@@ -4927,6 +4942,10 @@ TRUE_PROVIDER_PLAYABLE_EVENT_COUNT = 0
 # Ambiguous catalog.items[].published_at is NOT catalog_added_at (§5.5 / B05).
 CATALOG_FRESHNESS_DATA_GAP = 1
 АНИМЕДИА_CATALOG_ADDED_HOME_LIMIT = 16
+АНИМЕДИА_SEARCH_PAGE_SIZE = 24
+АНИМЕДИА_SEARCH_EMPTY = "Запрос пуст"
+АНИМЕДИА_SEARCH_ZERO = "Совпадений нет"
+АНИМЕДИА_SEARCH_ERROR = "Поиск временно недоступен"
 
 # B06: Top-100 home shelf — approved TopSnapshot only (no frontend ranking).
 АНИМЕДИА_TOP100_PATH = os.environ.get(
@@ -7080,13 +7099,139 @@ class ВидАнимедиа(ВидЗона):
             актив="/new/",
             описание=АНИМЕДИА_CATALOG_ADDED_H1)
 
+    # --- B12.2/B12.3: поиск --------------------------------------------
+    @staticmethod
+    def _адрес_поиска(q: str, стр: int = 1, *, для_html: bool = True) -> str:
+        """Порядок параметров — q, затем page, как в паспорте B12.
+
+        В атрибут href строка уходит экранированной: «&» между параметрами
+        сам по себе ссылкой на сущность не является, и браузер разберёт его
+        одинаково, но валидную разметку это возвращает без побочных эффектов.
+        """
+        база = f"/search/?q={q}"
+        адрес = закодировать_запрос(база if стр <= 1 else f"{база}&page={стр}")
+        return html.escape(адрес, quote=True) if для_html else адрес
+
+    def _листалка_поиска(self, q: str, стр: int, всего: int) -> str:
+        if всего <= 1:
+            return ""
+        куски = []
+        if стр <= 1:
+            куски.append('<span aria-disabled="true">←</span>')
+        else:
+            куски.append(f'<a href="{self._адрес_поиска(q, стр - 1)}" rel="prev">←</a>')
+        for н in страницы(стр, всего):
+            if н is None:
+                куски.append("<em>…</em>")
+            elif н == стр:
+                куски.append(f'<span aria-current="page">{н}</span>')
+            else:
+                куски.append(f'<a href="{self._адрес_поиска(q, н)}">{н}</a>')
+        if стр >= всего:
+            куски.append('<span aria-disabled="true">→</span>')
+        else:
+            куски.append(f'<a href="{self._адрес_поиска(q, стр + 1)}" rel="next">→</a>')
+        return f'<nav class="zpg" aria-label="Страницы поиска">{"".join(куски)}</nav>'
+
+    def _блок_поиска(self, q: str) -> str:
+        """Форма на самой странице: отправка и сброс без ухода в шапку."""
+        сброс = ('<a class="asearch__clear" href="/search/" data-b12-clear="1">'
+                 "Очистить</a>" if q else "")
+        return (
+            '<div class="asearch" data-b12="search-form">'
+            '<form class="asearch__form" action="/search/" method="get" role="search">'
+            f'<input id="asearch-q" name="q" type="search" value="{html.escape(q)}" '
+            'aria-label="Поиск по каталогу" '
+            'placeholder="Название на русском или в оригинале" autocomplete="off">'
+            f'<button type="submit">Найти</button>{сброс}</form>'
+            '<p class="asearch__hint">Ищем по русскому и оригинальному написанию, '
+            "по синонимам и транслиту.</p></div>")
+
+    def _страница_поиска(self, тело: str, титул: str, путь: str,
+                         описание: str) -> str:
+        # Полоса готовности каталога остаётся и на поиске: причина пустоты
+        # должна называться на той же странице, где её видно.
+        return self.оболочка(
+            self.полоса_готовности() + f'<div class="zwrap asearch-page">{тело}</div>',
+            титул, путь, актив="", описание=описание)
+
     def поиск(self, зпр: dict) -> str:
-        """Поиск. Пустая выдача объясняется тем же и теми же словами."""
-        готово = super().поиск(зпр)
-        полоса = self.полоса_готовности()
-        if полоса and "<main id=\"main\">" in готово:
-            готово = готово.replace("<main id=\"main\">", "<main id=\"main\">" + полоса, 1)
-        return готово
+        """B12.2/B12.3 /search/: форма, выдача Search API, честная пустота.
+
+        Шаблон не ранжирует: порядок приходит из Search API и сохраняется.
+        Дедупликация — только по canonical_title_id, чтобы одна запись не
+        занимала две карточки.
+        """
+        q = ((зпр.get("q") or [""])[0] or "").strip()
+        форма = self._блок_поиска(q)
+        заголовок_пусто = "Поиск"
+
+        if not q:
+            self._http_status = 200
+            тело = (f'<h1 class="zh">{заголовок_пусто}</h1>{форма}'
+                    '<div class="zempty" data-b12-state="empty">'
+                    f"<b>{html.escape(АНИМЕДИА_SEARCH_EMPTY)}</b>"
+                    "<p>Наберите название в строке выше. "
+                    '<a href="/catalog/">Открыть каталог целиком</a></p></div>')
+            return self._страница_поиска(
+                тело, f"Поиск — {self.имя}", "/search/",
+                "Поиск аниме, сериалов и фильмов по каталогу.")
+
+        try:
+            найдено = self.д.искать(q)
+        except Exception:  # noqa: BLE001 — источник выдачи недоступен
+            self._http_status = 200
+            тело = (f'<h1 class="zh">«{html.escape(q)}»</h1>{форма}'
+                    '<div class="zempty" data-b12-state="error">'
+                    f"<b>{html.escape(АНИМЕДИА_SEARCH_ERROR)}</b>"
+                    "<p>Попробуйте повторить запрос позже или "
+                    '<a href="/catalog/">откройте каталог</a>.</p></div>')
+            return self._страница_поиска(
+                тело, f"Поиск — {self.имя}", self._адрес_поиска(q, для_html=False),
+                "Поиск временно недоступен.")
+
+        видели: set[str] = set()
+        набор = []
+        for з in найдено:
+            ключ = str(з.get("canonical_title_id") or з.get("slug") or "")
+            if ключ and ключ in видели:
+                continue
+            видели.add(ключ)
+            набор.append(з)
+
+        if not набор:
+            self._http_status = 200
+            тело = (f'<h1 class="zh">«{html.escape(q)}»</h1>{форма}'
+                    '<div class="zempty" data-b12-state="zero" data-b12-count="0">'
+                    f"<b>{html.escape(АНИМЕДИА_SEARCH_ZERO)}</b>"
+                    f"<p>По запросу «{html.escape(q)}» ничего не нашлось. "
+                    "Проверьте написание. "
+                    '<a href="/catalog/">Открыть весь каталог</a></p></div>')
+            return self._страница_поиска(
+                тело, f"«{q}» — поиск — {self.имя}", self._адрес_поиска(q, для_html=False),
+                f"По запросу «{q}» совпадений нет.")
+
+        на_странице = АНИМЕДИА_SEARCH_PAGE_SIZE
+        всего_страниц = max(1, (len(набор) + на_странице - 1) // на_странице)
+        стр, ошибка = self._разобрать_страницу_эпизодов(зпр, всего_страниц)
+        if ошибка or стр is None:
+            self._http_status = 404
+            return self.не_найдено("/search/")
+        self._http_status = 200
+        кусок = набор[(стр - 1) * на_странице: стр * на_странице]
+        тело = (
+            f'<h1 class="zh">«{html.escape(q)}»</h1>{форма}'
+            f'<div data-b12-state="populated" data-b12-count="{len(набор)}" '
+            f'data-b12-page="{стр}" data-b12-pages="{всего_страниц}">'
+            f'<p class="zsub">Совпадений: {len(набор)}'
+            + (f" · страница {стр} из {всего_страниц}" if всего_страниц > 1 else "")
+            + "</p>"
+            + self.плитки(кусок)
+            + self._листалка_поиска(q, стр, всего_страниц)
+            + "</div>")
+        return self._страница_поиска(
+            тело, f"«{q}» — поиск — {self.имя}", self._адрес_поиска(q, стр, для_html=False),
+            f"Результаты поиска по запросу «{q}».")
 
     # --- расписание ----------------------------------------------------
     def расписание(self) -> str:

@@ -122,6 +122,31 @@
         "frozen": "",
         "post_freeze": "PASS_LOCAL_PENDING_LIVE"
       }
+    },
+    "B12": {
+      "status": {
+        "frozen": null,
+        "post_freeze": "PASS_LOCAL_PENDING_LIVE"
+      },
+      "evidence_paths": {
+        "frozen": [
+          "03-blocks/BLOCK_B12.md"
+        ],
+        "post_freeze": [
+          "03-blocks/BLOCK_B12.md"
+        ]
+      },
+      "remaining_data_gap": {
+        "frozen": "catalog_added ledger missing for /new/; TOP100_ROUTE_DATA_GAP if route unconfirmed",
+        "post_freeze": "CATALOG_FRESHNESS_DATA_GAP=1 (catalog_added ledger absent); TOP100_ROUTE_DATA_GAP=1 (no standalone Top-100 route in registry); PASS_LOCAL_PENDING_LIVE"
+      },
+      "tests": {
+        "frozen": [
+          "tests/unit/test_animedia_parity03_b12.py"
+        ],
+        "result": "21 passed"
+      },
+      "closed_by": "ANIMEDIA-CURSOR-WORK-RECONCILIATION-01"
     }
   }
 }
