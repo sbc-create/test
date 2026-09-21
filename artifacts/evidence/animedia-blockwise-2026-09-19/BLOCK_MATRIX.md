@@ -3,19 +3,19 @@
 UTC date: 2026-09-19  
 Branch: `claude/animedia-template-finalization-01`  
 START_HEAD: `939df3d31b1ddc7648004c0b55dd2f475ebafa38`  
-FEATURE_HEAD (live artifact source): `1cc115824ce684fc47f005edfaa393bd61037f94`  
-Live build: `20260919T205122Z-1cc11582-nova`  
-Worktree artifact SHA256: `6cae6d38890447730bd2460a499d1f4603fa9d164eda3fb538b2ff09e0ef4a46`
+FEATURE_HEAD (live artifact source): `ca1696796b4f95e0e474664497cf2866ca0d343f`  
+FINAL_HEAD (evidence tip): `93f9f656fbd3f2eb9c74b968c7ee7f40bfffcc52`  
+Live build: `20260919T224052Z-ca169679-nova`  
+Worktree/live artifact SHA256: `f89b9d8257f20b5170333bbdac372eebf1be6f2aa934b49be5b27487c4cbc680`
 
 ## Provenance note
 
 | Layer | Value |
 | --- | --- |
-| Live HTTP artifact | `6cae6d38…` (matches worktree / FEATURE_HEAD) |
-| `/srv/lords/.frontend/lords-frontend.py` on disk | `dec73873…` (foreign overwrite; **not** Animedia 1.2.4) |
-| Running ports 9121/9122 | still serve 1.2.4 from process memory |
-
-Disk ≠ live until next restart. Do not treat disk hash as live proof. Restore on next authorized Animedia deploy.
+| Live HTTP artifact | `f89b9d82…` (matches disk + runtime on both domains) |
+| FEATURE_HEAD tip | `ca169679…` BLOCK_08–11 |
+| Intermediate home deploy | `20260919T222328Z-18cd7d7e-nova` |
+| Rollback | `/srv/lords/.frontend/.rollback/pre-closed-update-20260919T224052Z` |
 
 Unrelated dirty (left untouched): `artifacts/evidence/animedia-final-repair-…/FINAL.md`, `player-probe/`, `lords-frontend.animedia-prev.py`.
 

@@ -24,8 +24,8 @@ Commits on this window (after base):
 6. `6ce421e` — accept design `1.2.1` portal gate
 7. `960bf9d` — provenance tip for gate fix
 8. `289a459` — genre index from Russian names
-9. `43dc842` — provenance tip for genre fix
-
+9. `43dc842` — provenance tip (superseded by evidence commit tip)
+10. `5e9e816` — live matrix + FINAL report + provenance tip = runtime `289a459`
 ## Live manifests (after deploy)
 
 ### animedia.space (`animedia-02`)
