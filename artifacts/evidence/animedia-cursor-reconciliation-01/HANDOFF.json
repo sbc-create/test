@@ -2,7 +2,7 @@
   "stage": "ANIMEDIA-CURSOR-WORK-RECONCILIATION-01",
   "verdict": "PARTIAL_READY_WITH_OWNER_GATE",
   "canonical_repo": "/srv/site-factory/repo",
-  "handoff_head": "9cc9bcc10a5ba59b0ad02aca4cfd25a4ebb381a2",
+  "handoff_head": "e585fd5e3ec595ec9eca8e346965b17845afb255",
   "handoff_branch": "claude/animedia-template-finalization-01",
   "handoff_worktree": "/home/claude/wt-animedia-finalization-01",
   "worktree_clean": true,
@@ -197,7 +197,7 @@
   "ready_for_animedia_5_factory_reason": "The previous work is not closed: PARITY-03 blocks B13-B15 were never started and B16 is an owner gate. The owner asked to finish and accept the existing work before the new factory is created, and this session cannot accept its own work on the owner's behalf. Everything that was finishable without an owner decision has been finished: the freeze gate is green on the original digest, B12 is closed locally, and all 15 inherited test failures are resolved with a clean two-run baseline.",
   "self_reported_owner_acceptance": false,
   "evidence_root": "artifacts/evidence/animedia-cursor-reconciliation-01/",
-  "handoff_head_note": "Content head: the commit that carries the finished B12, the freeze repair, the resolved inherited failures and this ledger. The commit that pins this value is the branch tip and contains nothing but the pin.",
+  "handoff_head_note": "Content head: carries the finished B12, the freeze repair, the resolved inherited failures, the full-suite attribution and this ledger. The commit that pins this value is the branch tip and contains nothing but the pin.",
   "tests": {
     "animedia_selection": {
       "result": "276 passed, 2 skipped, 0 failed",

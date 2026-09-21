@@ -5,7 +5,7 @@
   "branch": "claude/animedia-template-finalization-01",
   "worktree": "/home/claude/wt-animedia-finalization-01",
   "START_HEAD": "03b3908e7956552c418e917fc152c16e8151677e",
-  "CURRENT_HEAD": "9cc9bcc10a5ba59b0ad02aca4cfd25a4ebb381a2",
+  "CURRENT_HEAD": "e585fd5e3ec595ec9eca8e346965b17845afb255",
   "CONTRACT_SHA256": "5f2112e25ef974333c388bad405abfae3c3d460a713b028afa3c0e549b8eaeb3",
   "CONTRACT_MUTATED": 0,
   "steps_completed": [
@@ -74,7 +74,7 @@
     "consecutive_stable_runs": 2,
     "full_unit_suite_all_markers": "9 failed, 5884 passed, 12 skipped, 1 xfailed; 8 of the 9 reproduced at 03b3908, the ninth was the stray backup file and is now resolved"
   },
-  "HANDOFF_CONTENT_HEAD": "9cc9bcc10a5ba59b0ad02aca4cfd25a4ebb381a2",
+  "HANDOFF_CONTENT_HEAD": "e585fd5e3ec595ec9eca8e346965b17845afb255",
   "files_deleted_detail": "automation/host/lords-frontend.animedia-prev.py — untracked, classified first as byte-identical to commit 289a459, removed only after classification; recoverable from git",
   "evidence_files_restored": 1,
   "evidence_files_restored_detail": "artifacts/evidence/products/product-readiness.json — rewritten by a test run with unmeasured scores, restored to HEAD"
