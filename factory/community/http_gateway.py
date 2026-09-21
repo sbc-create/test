@@ -16,6 +16,7 @@ from urllib.parse import parse_qs, urlparse
 
 from factory.community.api import CSRF_COOKIE, MAX_BODY_BYTES, PublicRatingsFacade
 from factory.community.identity_v1 import COOKIE_NAME, set_cookie_header
+from factory.community import metrics_store
 from factory.community.metrics import snapshot
 from factory.community.rollout import as_public_dict, load_flags
 from factory.community.service import CommunityVotesService
@@ -29,6 +30,7 @@ _SUBJECT_RE = re.compile(r"^/api/community/ratings/(?:titles|subjects)/([^/]+)(?
 _SESSION_RE = re.compile(r"^/api/community/ratings/session$")
 _HEALTH_RE = re.compile(r"^/api/community/ratings/(?:health|metrics)$")
 _FLAGS_RE = re.compile(r"^/api/community/ratings/flags$")
+_EVENT_RE = re.compile(r"^/api/community/ratings/widget-event$")
 
 
 def _strip_internal(payload: dict[str, Any]) -> tuple[dict[str, Any], list[tuple[str, str]]]:
@@ -110,12 +112,20 @@ class CommunityRatingsHandler(BaseHTTPRequestHandler):
         path = urlparse(self.path).path
         if _HEALTH_RE.match(path):
             flags = load_flags()
+            # in-process view (this gateway only) plus the durable cross-process
+            # view any other process can read — they are reported separately so
+            # nobody mistakes one for the other again.
             return self._send(
                 200,
                 {
                     "status": 200,
                     "ok": True,
                     "metrics": snapshot(
+                        kill_switch_state=int(flags.KILL_SWITCH),
+                        rollout_percent=int(flags.PUBLIC_WRITE_ROLLOUT_PERCENT),
+                    ),
+                    "metrics_scope": "in_process_gateway_counters",
+                    "durable": metrics_store.snapshot(
                         kill_switch_state=int(flags.KILL_SWITCH),
                         rollout_percent=int(flags.PUBLIC_WRITE_ROLLOUT_PERCENT),
                     ),
@@ -140,6 +150,12 @@ class CommunityRatingsHandler(BaseHTTPRequestHandler):
         body, length, err = self._read_json()
         if err:
             return self._send(400, {"status": 400, "error": err})
+        if _EVENT_RE.match(path):
+            out = self.facade.widget_event(
+                event=str((body or {}).get("event") or ""),
+                cookie_header=self._cookie(),
+            )
+            return self._send(int(out.get("status") or 200), out)
         m = _SUBJECT_RE.match(path)
         if m and m.group(2) == "preview":
             score = (body or {}).get("score", (body or {}).get("rating"))

@@ -8,7 +8,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from factory.community import metrics
+from factory.community import metrics_store
 from factory.community.rollout import load_flags, trigger_kill_switch
 from factory.ratings.prod_db import resolve_canonical_db
 
@@ -50,6 +50,12 @@ def run() -> dict:
                  select actor_id from community_votes where rating_space_id='yummy'
                ) and status='ACCEPTED'"""
         ).fetchone()[0]
+        duplicates = c.execute(
+            """select count(*) from (
+                 select 1 from community_votes where status='ACCEPTED'
+                 group by rating_space_id, subject_id, actor_id, dimension
+                 having count(*) > 1)"""
+        ).fetchone()[0]
         # crude: identities that wrote both spaces in same stage — still useful signal
         report.update(
             {
@@ -57,19 +63,39 @@ def run() -> dict:
                 "FOREIGN_KEY_FAILURES": len(fk),
                 "AGGREGATE_REBUILD_MISMATCHES": mismatches,
                 "CROSS_SPACE_IDENTITY_OVERLAP_ACCEPTED": cross,
+                "DUPLICATE_ACTIVE_VOTES": duplicates,
             }
         )
     finally:
         c.close()
 
-    snap = metrics.snapshot(
+    # The counters come from the durable cross-process store, never from this
+    # process's own memory. A monitor tick that snapshotted its own freshly
+    # created counters — the COMMUNITY-RATINGS-07 defect — reported structural
+    # zeros as if they were observations.
+    snap = metrics_store.snapshot(
         kill_switch_state=int(flags.KILL_SWITCH),
         rollout_percent=int(flags.PUBLIC_WRITE_ROLLOUT_PERCENT),
+        db_derived={
+            "duplicate_active_votes": duplicates,
+            "aggregate_rebuild_mismatches": mismatches,
+        },
     )
-    report["metrics"] = snap
-    write_5xx = int(snap.get("write_5xx") or 0)
-    attempts = int(snap.get("write_attempts") or 0)
-    rate = (100.0 * write_5xx / attempts) if attempts else 0.0
+    report["metrics"] = snap["metrics"]
+    report["metrics_provenance"] = snap["provenance"]
+    report["metrics_source"] = "metrics_store(sqlite, inter-process)"
+    report["metrics_store_reachable"] = snap["store_reachable"]
+    report["metrics_store_path"] = snap["store_path"]
+    report["UNMEASURED_METRICS"] = snap["unmeasured"]
+
+    def _num(name: str) -> int | None:
+        """A value only counts for a kill gate when it was actually measured."""
+        v = snap["metrics"].get(name)
+        return None if v is None or v == metrics_store.UNMEASURED else int(v)
+
+    write_5xx = _num("api_errors")
+    attempts = _num("cast_attempts")
+    rate = (100.0 * write_5xx / attempts) if (write_5xx is not None and attempts) else 0.0
     kill_reason = None
     if mismatches > 0:
         kill_reason = "AGGREGATE_REBUILD_MISMATCHES"
@@ -79,9 +105,11 @@ def run() -> dict:
         kill_reason = "FOREIGN_KEY_FAILURES"
     elif int(flags.PUBLIC_WRITE_ROLLOUT_PERCENT) > 1:
         kill_reason = "PUBLIC_WRITE_PERCENT > 1"
-    elif write_5xx >= 3:
+    elif duplicates > 0:
+        kill_reason = "DUPLICATE_ACTIVE_VOTES"
+    elif write_5xx is not None and write_5xx >= 3:
         kill_reason = "WRITE_5XX_COUNT >= 3"
-    elif attempts >= 50 and rate > 2.0:
+    elif attempts is not None and attempts >= 50 and rate > 2.0:
         kill_reason = "WRITE_5XX_RATE_PERCENT > 2"
 
     if kill_reason and not flags.KILL_SWITCH:

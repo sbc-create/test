@@ -181,8 +181,12 @@ class PublicRatingsFacade:
         )
         csrf = secrets.token_urlsafe(24)
         metrics.incr("widget_impressions")
+        metrics.incr("session_bootstraps")
         if cohort.eligible:
             metrics.incr("eligible_widget_impressions")
+            metrics.incr("eligible_cohort_impressions")
+            # Distinct exposure, counted without storing the identity itself.
+            metrics.mark_unique("exposed_visitor", identity.identity_id)
         return {
             "status": 200,
             "identity_mode": IDENTITY_MODE,
@@ -233,6 +237,49 @@ class PublicRatingsFacade:
         body["_identity_id"] = identity.identity_id
         return body
 
+    def widget_event(
+        self,
+        *,
+        event: str,
+        cookie_header: str | None,
+    ) -> dict[str, Any]:
+        """Beacon from the mounted widget: it is on screen for this visitor.
+
+        Server-side exposure counting is the only honest kind. The injector can
+        only report that it *offered* the widget; whether the browser actually
+        rendered it is something only the browser knows. The payload carries no
+        user text, no page content and no identifier — the identity comes from
+        the signed cookie, exactly as on every other endpoint.
+        """
+        if event != "rendered":
+            return {"status": 400, "error": "unsupported event", "code": "CommunityValidationError"}
+        identity, set_cookie = resolve_or_mint(cookie_header, mint_if_missing=True)
+        flags = load_flags()
+        cohort = decide_cohort(
+            identity.identity_id,
+            rollout_percent=int(flags.PUBLIC_WRITE_ROLLOUT_PERCENT) if writes_allowed(flags) else 0,
+        )
+        # Only a genuinely eligible visitor can mark the widget as rendered;
+        # otherwise a crafted beacon could inflate the exposure figure.
+        if not cohort.eligible:
+            return {
+                "status": 403,
+                "error": "not in public-write cohort",
+                "code": "CohortDenied",
+                "cache_control": "no-store",
+                "_set_identity_cookie": set_cookie,
+            }
+        metrics.incr("widget_rendered")
+        metrics.mark_unique("exposed_visitor", identity.identity_id)
+        # 200, not 204: the gateway always writes a JSON body with a
+        # Content-Length, and a 204 carrying a body is a malformed response.
+        return {
+            "status": 200,
+            "ok": True,
+            "cache_control": "no-store",
+            "_set_identity_cookie": set_cookie,
+        }
+
     def preview(
         self,
         *,
@@ -246,6 +293,7 @@ class PublicRatingsFacade:
                 raise CohortDenied("cross-space")
             identity, set_cookie = resolve_or_mint(cookie_header, mint_if_missing=True)
             score_i = _coerce_score(score)
+            metrics.incr("preview_requests")
             prev = self.service.preview_one(
                 rating_space_id=rating_space_id,
                 subject_id=subject_id,
@@ -324,6 +372,7 @@ class PublicRatingsFacade:
             ip_hmac = self.guard.ip_prefix_hmac(peer_ip) if peer_ip else ""
 
             if method.upper() in ("PUT", "POST") and method.upper() != "DELETE":
+                metrics.incr("cast_attempts")
                 score = _coerce_score((body or {}).get("score", (body or {}).get("rating")))
                 # Rate-limit only after schema validation so junk probes do not burn title budget.
                 self.guard.check_rate(
