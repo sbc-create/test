@@ -150,17 +150,23 @@ def main() -> int:
 
     report = queue.report()
     coverage = CoverageReporter(store).report(site_slices={"animedia.icu": site_ids})
+    # Цель суточная, поэтому в неё идёт весь день, а не один процесс.
+    # Но «за сутки» и «за этот прогон» — разные величины, и под одним
+    # заголовком они врут: прогон, начатый после полного бэкфилла,
+    # унаследовал бы чужие пятьсот и отчитался бы о выполненной цели,
+    # не собрав ничего. Обе цифры называются своими именами, и причина
+    # недобора считается от той, с которой цель сравнивают.
     payload = {
         "date": utc(),
         "DAILY_TARGET": args.target,
-        "DAILY_COMPLETED": achieved,
+        "DAILY_COMPLETED": report.completed,
+        "DAILY_COMPLETED_THIS_RUN": achieved,
+        "DAILY_TARGET_MET": report.met,
         "DAILY_PENDING_BACKLOG": report.pending_backlog,
         "DAILY_UNCHANGED_CHECKED": report.unchanged_checked,
         "DAILY_BLOCKED_BY_RATE_LIMIT": report.blocked_by_rate_limit,
         "DAILY_BLOCKED_BY_SECRET": report.blocked_by_secret,
-        "DAILY_SHORTFALL_REASON": (
-            "" if achieved >= args.target else report.shortfall_reason
-        ),
+        "DAILY_SHORTFALL_REASON": "" if report.met else report.shortfall_reason,
         "mode": report.mode,
         "per_source": per_source,
         "dead_letter": dead_letter,
@@ -173,7 +179,7 @@ def main() -> int:
         "elapsed_seconds": round(time.monotonic() - started, 1),
         "stale_alert": (
             f"нет новых результатов дольше {STALE_ALERT_HOURS} часов"
-            if achieved == 0 and report.pending_backlog > 0
+            if report.completed == 0 and report.pending_backlog > 0
             else ""
         ),
 

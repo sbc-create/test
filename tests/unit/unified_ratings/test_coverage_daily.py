@@ -266,3 +266,32 @@ def test_community_and_editorial_stay_separate_in_the_projection(store, seeded, 
     assert entry["composite"]["value"] == "9.0", "тройка зрителя не входит в сводную"
     assert entry["native"]["average"] == "3.00"
     assert entry["native"]["label"] == "Оценка зрителей"
+
+
+def test_daily_payload_separates_the_run_from_the_day(store, seeded, tmp_path, monkeypatch):
+    """«За прогон» и «за сутки» — разные числа под разными именами.
+
+    Прогон, запущенный после полного бэкфилла, видит в ленте чужие
+    пятьсот изменений. Если отчёт назовёт их своими, он объявит цель
+    выполненной, не собрав ничего; если сравнит цель со своими двадцатью
+    двумя, объявит недобор там, где сутки отработаны. Оба числа
+    печатаются, и причина недобора считается от суточного.
+    """
+    import importlib.util
+
+    from pathlib import Path
+
+    repo = Path(__file__).resolve().parents[3]
+    spec = importlib.util.spec_from_file_location(
+        "ur_daily", repo / "tools" / "unified_ratings_daily.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    source = (repo / "tools" / "unified_ratings_daily.py").read_text(encoding="utf-8")
+    assert '"DAILY_COMPLETED": report.completed' in source
+    assert '"DAILY_COMPLETED_THIS_RUN": achieved' in source
+    assert '"DAILY_SHORTFALL_REASON": "" if report.met else report.shortfall_reason' in source
+    assert "achieved >= args.target" not in source.split("payload = {")[1], (
+        "причина недобора не должна считаться от счётчика одного прогона"
+    )
