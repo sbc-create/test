@@ -795,3 +795,53 @@ class TestPublicDeployScript:
                 assert not any(w in low for w in ("ln -sfn", "systemctl restart")), (
                     f"скрипт действует на вторую витрину: {line.strip()}"
                 )
+
+
+class TestShellIdentifiersAreAscii:
+    """`ошибок=0` — это не присваивание, а имя команды.
+
+    Имя переменной в bash обязано быть [A-Za-z_][A-Za-z0-9_]*. Кириллическое
+    имя разбирается как команда, и `bash -n` пропускает строку: как команда она
+    синтаксически законна. Владелец получил "line 83: ошибок=0: command not
+    found" уже ПОСЛЕ переключения ссылки — витрина осталась на новом релизе без
+    приёмки. Поэтому проверка на уровне текста, а не только разбора.
+    """
+
+    ПРИСВАИВАНИЕ = re.compile(r'^\s*([^\s=()#]*[^\x00-\x7f][^\s=()#]*)=', re.M)
+    ФУНКЦИЯ = re.compile(r'^\s*([^\s()#]*[^\x00-\x7f][^\s()#]*)\s*\(\)\s*\{', re.M)
+    ЦИКЛ = re.compile(r'^\s*for\s+([^\s]*[^\x00-\x7f][^\s]*)\s+in\b', re.M)
+
+    @pytest.mark.parametrize("script", sorted(HARNESS.glob("*.sh")), ids=lambda p: p.name)
+    def test_no_non_ascii_identifier(self, script):
+        текст = script.read_text(encoding="utf-8")
+        плохие = (self.ПРИСВАИВАНИЕ.findall(текст)
+                  + self.ФУНКЦИЯ.findall(текст)
+                  + self.ЦИКЛ.findall(текст))
+        assert not плохие, (
+            f"{script.name}: имена разбираются как команды, а не как "
+            f"переменные/функции: {sorted(set(плохие))}"
+        )
+
+    @pytest.mark.parametrize("script", sorted(HARNESS.glob("*.sh")), ids=lambda p: p.name)
+    def test_it_parses(self, script):
+        готово = subprocess.run(["bash", "-n", str(script)],
+                                capture_output=True, text=True)
+        assert готово.returncode == 0, готово.stderr
+
+
+class TestDeployRehearsal:
+    """Скрипт выкладки должен ИСПОЛНЯТЬСЯ в песочнице, а не только разбираться."""
+
+    def test_rehearsal_passes(self):
+        репетиция = HARNESS / "community_deploy_rehearsal.sh"
+        assert репетиция.exists(), "репетиции выкладки нет"
+        готово = subprocess.run(["bash", str(репетиция)],
+                                capture_output=True, text=True, timeout=300)
+        assert "REHEARSAL=PASS" in готово.stdout, готово.stdout + готово.stderr
+        assert готово.returncode == 0
+
+    def test_it_covers_failure_and_rerun(self):
+        текст = (HARNESS / "community_deploy_rehearsal.sh").read_text(encoding="utf-8")
+        for нужно in ("живая проверка падает", "повторный запуск",
+                      "записи посетителей целы", "откат по записанной точке"):
+            assert нужно in текст, f"репетиция не покрывает: {нужно}"

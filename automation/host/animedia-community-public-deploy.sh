@@ -1,127 +1,207 @@
 #!/usr/bin/env bash
 # Включить публичные комментарии и оценки на animedia.icu.
 #
-# Одна команда владельца. Всё, что можно было проверить без root, проверено:
-# 984 модульных теста и 40 сценариев обычного посетителя и модератора по
-# настоящему HTTP на отдельном порту (automation/host/community_public_shadow_verify.py).
-# Здесь остаётся то, что требует root: переставить ссылку и перезапустить юнит.
+# ВСЕ имена переменных и функций здесь — ASCII, и это не стиль. Bash разбирает
+# `ошибок=0` не как присваивание, а как ИМЯ КОМАНДЫ: имя переменной обязано
+# быть [A-Za-z_][A-Za-z0-9_]*. Владелец получил ровно это —
+# "line 83: ошибок=0: command not found" — уже ПОСЛЕ переключения ссылки,
+# поэтому витрина осталась на новом релизе непроверенной. `bash -n` такую
+# строку пропускает: как команда она синтаксически законна. Ловит только
+# исполнение, поэтому рядом лежит репетиция (community_deploy_rehearsal.sh).
 #
 # Скрипт трогает только animedia-01. animedia.space (animedia-02), Zona, Lords
 # и Yummy не упоминаются нигде, кроме проверки, что они не изменились.
 set -euo pipefail
 
 RELEASE_ID="20260923T001500Z-community-public-03"
-RELEASE_DIR="/srv/lords/.frontend/releases/$RELEASE_ID"
-LINK=/srv/lords/.frontend/sites/animedia-01/current
+
+# Пути и команды вынесены в переменные с боевыми значениями по умолчанию:
+# иначе скрипт нельзя прогнать ни в какой репетиции, а непрогоняемый скрипт
+# и привёз этот сбой.
+: "${FRONTEND_ROOT:=/srv/lords/.frontend}"
+: "${STATE_DIR:=/srv/site-factory/var/comments}"
+: "${SITE_DATA:=/srv/lords/animedia-01/data}"
+: "${SYSTEMCTL:=systemctl}"
+: "${CURL:=curl}"
+: "${REQUIRE_ROOT:=1}"
+
+RELEASE_DIR="$FRONTEND_ROOT/releases/$RELEASE_ID"
+LINK="$FRONTEND_ROOT/sites/animedia-01/current"
+LINK_SPACE="$FRONTEND_ROOT/sites/animedia-02/current"
+STORE="$SITE_DATA/animedia-community.json"
+STATE="$STATE_DIR/community-public-state.json"
+# Публичный build-id читается ОТСЮДА, а не из каталога релиза. Оставить его
+# нетронутым — значит заставить витрину объявлять релиз, который она не
+# исполняет; ровно это и вышло при первом запуске.
+MANIFEST="$FRONTEND_ROOT/template-manifest-animedia-01.json"
+# Копия манифеста лежит рядом с ним, а не в каталоге состояния: каталог
+# состояния принадлежит root, и приёмка без root спотыкалась именно об это.
+MANIFEST_BACKUP="$MANIFEST.before-community-public"
 UNIT=nova-animedia-01.service
-STORE=/srv/lords/animedia-01/data/animedia-community.json
 RESOLVE="animedia.icu:443:127.0.0.1"
 SITE=https://animedia.icu
 TITLE=/title/master-lda-i-plameni-2/
-STATE=/srv/site-factory/var/comments/community-public-state.json
 
-say() { printf '\n== %s\n' "$*"; }
-die() { printf '\nREFUSED: %s\n' "$*" >&2; exit 1; }
+say()  { printf '\n== %s\n' "$*"; }
+die()  { printf '\nREFUSED: %s\n' "$*" >&2; exit 1; }
 
-[ "$(id -u)" -eq 0 ] || die "нужен root: переставить ссылку и перезапустить юнит"
+errors=0
+check() {
+  if [ "$2" = "yes" ]; then
+    printf '   ok   %s\n' "$1"
+  else
+    printf '   FAIL %s\n' "$1"
+    errors=$((errors + 1))
+  fi
+}
+
+if [ "$REQUIRE_ROOT" = "1" ] && [ "$(id -u)" -ne 0 ]; then
+  die "нужен root: переставить ссылку и перезапустить юнит"
+fi
 [ -d "$RELEASE_DIR" ] || die "релиз не найден: $RELEASE_DIR"
 [ -L "$LINK" ] || die "ожидалась символическая ссылка: $LINK"
 
 say "состояние до"
-BEFORE=$(readlink "$LINK")
+CURRENT=$(basename "$(readlink -f "$LINK")")
+SPACE_BEFORE=$(readlink "$LINK_SPACE" 2>/dev/null || echo "")
+printf '   ссылка сейчас : %s\n' "$CURRENT"
 
-# Идемпотентность. Второй запуск на уже выложенном релизе не должен ни
-# трогать витрину, ни — главное — записывать сам себя точкой отката: после
-# этого откатываться было бы некуда.
-if [ "$(basename "$(readlink -f "$LINK")")" = "$RELEASE_ID" ]; then
-  printf '   %s уже выложен — витрина не трогается\n' "$RELEASE_ID"
+SWITCHED=0
+if [ "$CURRENT" = "$RELEASE_ID" ]; then
+  # Уже выложен. Это не повод выйти: первый запуск умер ПОСЛЕ переключения и
+  # ДО живой проверки, значит приёмка не выполнена. Повторный запуск её
+  # доводит — не трогая ни витрину, ни записанную точку отката, ни резервную
+  # копию данных. Переписать их здесь значило бы стереть точку возврата.
+  printf '   релиз уже выложен — переключение пропускается, приёмка доводится\n'
   if [ -f "$STATE" ]; then
-    printf '   точка отката сохранена: %s\n' \
-      "$(python3 -c "import json;print(json.load(open('$STATE'))['release_before'])")"
+    BEFORE=$(python3 -c "import json;print(json.load(open('$STATE'))['release_before'])")
+    printf '   точка отката из состояния: %s\n' "$BEFORE"
+  else
+    BEFORE=""
+    printf '   точки отката нет: откат этим скриптом невозможен\n'
   fi
-  curl -sS -m 15 --resolve "$RESOLVE" -o /dev/null -w '   главная: %{http_code}\n' \
-    "$SITE/" || true
-  exit 0
-fi
-BASE_DECLARED=$(basename "$(readlink -f "$LINK")")
-BASE_OF_RELEASE=$(python3 -c "
-import json;print(json.load(open('$RELEASE_DIR/RELEASE.json'))['rebased_onto']['build_id'])")
-printf '   ссылка сейчас : %s\n' "$BEFORE"
-printf '   релиз собран от: %s\n' "$BASE_OF_RELEASE"
-[ "$BASE_DECLARED" = "$BASE_OF_RELEASE" ] || die \
-  "релиз собран от $BASE_OF_RELEASE, а витрина объявляет $BASE_DECLARED — пересоберите адаптер"
-
-# Данные посетителей — оценки и сообщения — переживают выкладку и откат.
-say "резервная копия данных сообщества"
-mkdir -p "$(dirname "$STATE")"
-if [ -f "$STORE" ]; then
-  cp -a "$STORE" "$STORE.before-community-public.$(date -u +%Y%m%dT%H%M%SZ)"
-  printf '   скопировано: %s\n' "$STORE"
 else
-  printf '   файла ещё нет — копировать нечего\n'
-fi
-SPACE_BEFORE=$(readlink /srv/lords/.frontend/sites/animedia-02/current)
-printf '{"release_before":"%s","release_applied":"%s","unit":"%s","animedia_02_before":"%s"}\n' \
-  "$BEFORE" "$RELEASE_ID" "$UNIT" "$SPACE_BEFORE" > "$STATE"
+  BEFORE=$(readlink "$LINK")
+  say "резервная копия данных сообщества"
+  mkdir -p "$STATE_DIR"
+  if [ -f "$STORE" ]; then
+    cp -a "$STORE" "$STORE.before-community-public.$(date -u +%Y%m%dT%H%M%SZ)"
+    printf '   скопировано: %s\n' "$STORE"
+  else
+    printf '   файла ещё нет, копировать нечего\n'
+  fi
+  printf '{"release_before":"%s","release_applied":"%s","unit":"%s","animedia_02_before":"%s"}\n' \
+    "$BEFORE" "$RELEASE_ID" "$UNIT" "$SPACE_BEFORE" > "$STATE"
 
-откат() {
-  printf '\n!! проверка не прошла — откат только этой выкладки\n' >&2
-  ln -sfn "$BEFORE" "$LINK"
-  systemctl restart "$UNIT" || true
+  say "переключение"
+  if [ -f "$MANIFEST" ]; then
+    cp -a "$MANIFEST" "$MANIFEST_BACKUP"
+  else
+    die "манифест витрины не найден: $MANIFEST"
+  fi
+  ln -sfn "../../releases/$RELEASE_ID" "$LINK"
+  SWITCHED=1
+  "$SYSTEMCTL" restart "$UNIT"
   sleep 3
-  printf 'ROLLED_BACK -> %s (данные посетителей не тронуты)\n' "$BEFORE" >&2
+fi
+
+rollback_now() {
+  printf '\n!! приёмка не пройдена — откат только этой выкладки\n' >&2
+  if [ -z "$BEFORE" ]; then
+    printf 'ОТКАТ НЕВОЗМОЖЕН: точка возврата не записана\n' >&2
+    exit 3
+  fi
+  ln -sfn "$BEFORE" "$LINK"
+  if [ -f "$MANIFEST_BACKUP" ]; then
+    cp -a "$MANIFEST_BACKUP" "$MANIFEST"
+    printf 'манифест возвращён\n' >&2
+  fi
+  "$SYSTEMCTL" restart "$UNIT" || true
+  sleep 3
+  printf 'ROLLED_BACK -> %s\n' "$BEFORE" >&2
+  printf 'Данные посетителей сохранены в %s\n' "$STORE" >&2
   exit 2
 }
 
-say "переключение"
-ln -sfn "../../releases/$RELEASE_ID" "$LINK"
-systemctl restart "$UNIT"
-sleep 3
-systemctl is-active --quiet "$UNIT" || откат
+say "согласование манифеста"
+DECLARED_NOW=$(python3 -c "import json;print(json.load(open('$MANIFEST'))['build_id'])" 2>/dev/null || echo "")
+if [ "$DECLARED_NOW" = "$RELEASE_ID" ]; then
+  printf '   манифест уже объявляет %s\n' "$RELEASE_ID"
+else
+  if [ ! -f "$MANIFEST_BACKUP" ]; then
+    cp -a "$MANIFEST" "$MANIFEST_BACKUP"
+  fi
+  python3 - "$MANIFEST" "$RELEASE_ID" "$RELEASE_DIR/RELEASE.json" <<'PYMAN'
+import json, sys
+manifest, build_id, release = sys.argv[1], sys.argv[2], sys.argv[3]
+m = json.load(open(manifest, encoding="utf-8"))
+r = json.load(open(release, encoding="utf-8"))
+m["build_id"] = build_id
+m["artifact_sha256"] = r["artifact_sha256"]
+m["stage"] = "ANIMEDIA-COMMUNITY-PUBLIC-01"
+json.dump(m, open(manifest, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+PYMAN
+  printf '   манифест приведён к %s (заголовок догонит после перезапуска)\n' "$RELEASE_ID"
+fi
+
+"$SYSTEMCTL" is-active --quiet "$UNIT" || rollback_now
 
 say "живая проверка"
-ошибок=0
-проверить() {
-  if [ "$2" = "да" ]; then printf '   ok   %s\n' "$1"
-  else printf '   FAIL %s\n' "$1"; ошибок=$((ошибок + 1)); fi
-}
+PAGE=$("$CURL" -sS -m 15 --resolve "$RESOLVE" "$SITE$TITLE" || true)
+HEADERS=$("$CURL" -sS -m 15 --resolve "$RESOLVE" -D - -o /dev/null "$SITE$TITLE" || true)
 
-СТР=$(curl -sS -m 15 --resolve "$RESOLVE" "$SITE$TITLE" || true)
-ЗАГ=$(curl -sS -m 15 --resolve "$RESOLVE" -D - -o /dev/null "$SITE$TITLE" || true)
+case "$PAGE" in *'data-b07-player="1"'*) check "плеер на месте" yes;;
+  *) check "плеер на месте" no;; esac
+case "$PAGE" in *'data-community="on"'*) check "раздел сообщества включён" yes;;
+  *) check "раздел сообщества включён" no;; esac
+case "$PAGE" in *'name="csrf"'*) check "CSRF-токен в формах" yes;;
+  *) check "CSRF-токен в формах" no;; esac
+case "$PAGE" in *'data-comments-subject-kind="content-id"'*)
+  check "ключ обсуждения — постоянный идентификатор" yes;;
+  *) check "ключ обсуждения — постоянный идентификатор" no;; esac
+case "$PAGE" in *'data-comments-space="animedia-01"'*)
+  check "пространство — конкретная витрина" yes;;
+  *) check "пространство — конкретная витрина" no;; esac
+case "$HEADERS" in *[Nn]oindex*) check "noindex сохранён" yes;;
+  *) check "noindex сохранён" no;; esac
 
-case "$СТР" in *'data-b07-player="1"'*) проверить "плеер на месте" да;;
-  *) проверить "плеер на месте" нет;; esac
-case "$СТР" in *'data-community="on"'*) проверить "раздел сообщества включён" да;;
-  *) проверить "раздел сообщества включён" нет;; esac
-case "$СТР" in *'name="csrf"'*) проверить "CSRF-токен в формах" да;;
-  *) проверить "CSRF-токен в формах" нет;; esac
-case "$СТР" in *'data-comments-subject-kind="content-id"'*)
-  проверить "ключ обсуждения — постоянный идентификатор" да;;
-  *) проверить "ключ обсуждения — постоянный идентификатор" нет;; esac
-case "$СТР" in *'data-comments-space="animedia-01"'*)
-  проверить "пространство — конкретная витрина" да;;
-  *) проверить "пространство — конкретная витрина" нет;; esac
-case "$ЗАГ" in *[Nn]oindex*) проверить "noindex сохранён" да;;
-  *) проверить "noindex сохранён" нет;; esac
-case "$ЗАГ" in *"$RELEASE_ID"*) проверить "выложен именно этот релиз" да;;
-  *) проверить "выложен именно этот релиз" нет;; esac
-for путь in / /catalog/; do
-  код=$(curl -sS -m 15 --resolve "$RESOLVE" -o /dev/null -w '%{http_code}' "$SITE$путь" || true)
-  [ "$код" = "200" ] && проверить "$путь отвечает 200" да || проверить "$путь отвечает 200" нет
+for path in / /catalog/; do
+  code=$("$CURL" -sS -m 15 --resolve "$RESOLVE" -o /dev/null -w '%{http_code}' \
+    "$SITE$path" || true)
+  if [ "$code" = "200" ]; then check "$path отвечает 200" yes
+  else check "$path отвечает 200" no; fi
 done
-СЕЙЧАС=$(readlink /srv/lords/.frontend/sites/animedia-02/current)
-[ "$СЕЙЧАС" = "$SPACE_BEFORE" ] && проверить "animedia.space не изменён" да \
-  || проверить "animedia.space не изменён" нет
 
-[ "$ошибок" -eq 0 ] || откат
+SPACE_NOW=$(readlink "$LINK_SPACE" 2>/dev/null || echo "")
+if [ "$SPACE_NOW" = "$SPACE_BEFORE" ]; then check "animedia.space не изменён" yes
+else check "animedia.space не изменён" no; fi
 
-say "готово"
+if [ -f "$STORE" ]; then check "хранилище записей на месте" yes
+else check "хранилище записей на месте" no; fi
+
+RUNNING=$(basename "$(readlink -f "$LINK")")
+DECLARED=$(python3 -c "import json;print(json.load(open('$MANIFEST'))['build_id'])" 2>/dev/null || echo "")
+if [ "$RUNNING" = "$DECLARED" ]; then check "манифест объявляет исполняемый релиз" yes
+else
+  printf '   note исполняет %s, объявляет %s\n' "$RUNNING" "$DECLARED"
+  check "манифест объявляет исполняемый релиз" no
+fi
+
+if [ "$errors" -ne 0 ]; then
+  if [ "$SWITCHED" = "1" ] || [ -n "$BEFORE" ]; then
+    rollback_now
+  fi
+  printf '\nприёмка не пройдена, откатывать нечего\n' >&2
+  exit 2
+fi
+
+say "приёмка пройдена"
 cat <<SUM
 RELEASE=$RELEASE_ID
-BEFORE=$BEFORE
+SWITCHED=$SWITCHED
+ROLLBACK_POINT=${BEFORE:-нет}
 STATE=$STATE
-Откат вручную: ln -sfn "$BEFORE" $LINK && systemctl restart $UNIT
-Модератор: задайте ANIMEDIA_COMMUNITY_MODERATOR_KEY в юните и поставьте себе
-куку amd_mod с тем же значением; очередь появится на странице произведения.
-Данные посетителей (оценки и сообщения) лежат в $STORE и выкладкой не трогаются.
+STORE=$STORE
+Откат вручную: ln -sfn "${BEFORE:-<точка отката>}" "$LINK" && $SYSTEMCTL restart $UNIT
+Модератор: ANIMEDIA_COMMUNITY_MODERATOR_KEY в юните + кука amd_mod с тем же значением.
 SUM
