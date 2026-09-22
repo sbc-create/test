@@ -272,6 +272,46 @@ def _дождаться(стр, узел, выражение: str, таймау�
         return False
 
 
+#: Браузеру здесь незачем держать кэши на диске: страницы локальные, а
+#: свободного места на хосте мало — при его нехватке вкладка падает с
+#: «Page crashed», и измерение теряется целиком.
+ФЛАГИ_БРАУЗЕРА = [
+    "--disable-dev-shm-usage", "--disk-cache-size=1", "--media-cache-size=1",
+    "--disable-gpu-shader-disk-cache", "--disable-background-networking",
+    "--disable-extensions", "--no-first-run", "--disable-breakpad",
+]
+
+
+#: Кадры, по которым считаются отпечатки, сохраняются без потерь: сравнение
+#: похожести не должно зависеть от артефактов сжатия. Остальные кадры идут в
+#: JPEG — их сотни, и в PNG они занимали втрое больше места, чем есть на диске.
+БЕЗ_ПОТЕРЬ = (("home", 1440), ("home", 390), ("catalog", 1440),
+              ("title-series", 1440))
+
+
+def _расширение(маршрут: str, ширина: int) -> str:
+    return ".png" if (маршрут, ширина) in БЕЗ_ПОТЕРЬ else ".jpg"
+
+
+def _дождаться_картинок(стр, таймаут: int = 15000) -> None:
+    """Дождаться, пока все изображения страницы дорисованы.
+
+    Ленивая загрузка и раскодирование WebP занимают время. Снимок, сделанный
+    раньше, отличается от снимка той же страницы в следующем прогоне — и
+    воспроизводимость превращается в лотерею, а «битое изображение» — в
+    случайную находку.
+    """
+    try:
+        стр.wait_for_function(
+            "() => [...document.images].every(i => i.complete)", timeout=таймаут)
+    except Exception:  # noqa: BLE001 — неготовность будет видна в измерении
+        pass
+    try:
+        стр.wait_for_timeout(120)
+    except Exception:  # noqa: BLE001 — вкладка могла упасть; решит вызывающий
+        pass
+
+
 def _проба(итог: list, узел: str, что: str, годно: bool, подробность=""):
     итог.append({"component": узел, "check": что, "ok": bool(годно),
                  "detail": str(подробность)[:160]})
@@ -581,7 +621,7 @@ def измерить(превью: pathlib.Path, снимки: pathlib.Path | No
     действия: list[dict] = []
     нужны_снимки = set(СНИМКИ) if not полная else {(м, ш) for м, ш in пары}
     with sync_playwright() as pw:
-        браузер = pw.chromium.launch(args=["--disable-dev-shm-usage"])
+        браузер = pw.chromium.launch(args=ФЛАГИ_БРАУЗЕРА)
         try:
             for ширина in sorted(по_ширине):
                 контекст = браузер.new_context(viewport={"width": ширина, "height": 900})
@@ -589,21 +629,107 @@ def измерить(превью: pathlib.Path, снимки: pathlib.Path | No
                 try:
                     for маршрут in по_ширине[ширина]:
                         адрес = (превью / f"{маршрут}.html").resolve().as_uri()
-                        стр.goto(адрес, wait_until="load", timeout=45000)
-                        стр.wait_for_timeout(200)
-                        запись = {"route": маршрут, "viewport": ширина}
-                        запись.update(стр.evaluate(измеритель.ИЗМЕРЕНИЕ))
-                        запись["a11y"] = стр.evaluate(ДОСТУПНОСТЬ)
+                        # Страница со ста тридцатью настоящими постерами изредка
+                        # роняет вкладку под нагрузкой. Это сбой среды, а не
+                        # дефект шаблона, и терять из-за него сотню измерений
+                        # нельзя: вкладка пересоздаётся, а неудача записывается
+                        # и остаётся видимой в отчёте.
+                        сорвалось = None
+                        for попытка in range(2):
+                            try:
+                                стр.goto(адрес, wait_until="load", timeout=45000)
+                                стр.wait_for_timeout(200)
+                                сорвалось = None
+                                break
+                            except Exception as сбой:  # noqa: BLE001
+                                сорвалось = str(сбой)[:160]
+                                if попытка:
+                                    break
+                                try:
+                                    стр.close()
+                                    контекст.close()
+                                except Exception:  # noqa: BLE001
+                                    pass
+                                контекст = браузер.new_context(
+                                    viewport={"width": ширина, "height": 900})
+                                стр = контекст.new_page()
+                        if сорвалось:
+                            страницы.append({"route": маршрут, "viewport": ширина,
+                                             "measurement_error": сорвалось})
+                            continue
+                        # Измерение и снимок — только после того, как все
+                        # изображения дорисованы. Иначе отпечаток первого экрана
+                        # зависит от того, успел ли браузер раскодировать
+                        # постеры, и два одинаковых прогона дают разные
+                        # расстояния: воспроизводимости конец.
+                        try:
+                            _дождаться_картинок(стр)
+                            запись = {"route": маршрут, "viewport": ширина}
+                            запись.update(стр.evaluate(измеритель.ИЗМЕРЕНИЕ))
+                            запись["a11y"] = стр.evaluate(ДОСТУПНОСТЬ)
+                        except Exception as сбой:  # noqa: BLE001
+                            # Вкладка может упасть на любом шаге, а не только
+                            # при переходе: под нехваткой места браузеру негде
+                            # держать даже свои кэши. Маршрут отмечается
+                            # несостоявшимся, вкладка пересоздаётся, прогон
+                            # пакета продолжается.
+                            страницы.append({"route": маршрут, "viewport": ширина,
+                                             "measurement_error": str(сбой)[:160]})
+                            try:
+                                стр.close()
+                                контекст.close()
+                            except Exception:  # noqa: BLE001
+                                pass
+                            контекст = браузер.new_context(
+                                viewport={"width": ширина, "height": 900})
+                            стр = контекст.new_page()
+                            continue
+                        # Битое изображение подтверждается вторым измерением:
+                        # под нагрузкой браузер изредка не успевает раскодировать
+                        # картинку, и однократное наблюдение назвало бы дефектом
+                        # файл, который лежит на месте и цел на пяти других
+                        # ширинах. Настоящая пропажа переживёт перезагрузку.
+                        if запись.get("broken_images"):
+                            стр.reload(wait_until="load", timeout=45000)
+                            _дождаться_картинок(стр)
+                            повтор = стр.evaluate(измеритель.ИЗМЕРЕНИЕ)
+                            запись["broken_images_first_pass"] = запись["broken_images"]
+                            запись["broken_images"] = повтор.get("broken_images") or []
                         if снимки and (маршрут, ширина) in нужны_снимки:
                             снимки.mkdir(parents=True, exist_ok=True)
-                            файл = снимки / f"{маршрут}-{ширина}.png"
-                            стр.screenshot(path=str(файл), full_page=False)
-                            запись["screenshot"] = файл.name
+                            файл = снимки / (f"{маршрут}-{ширина}"
+                                             f"{_расширение(маршрут, ширина)}")
+                            for попытка in range(3):
+                                try:
+                                    стр.screenshot(path=str(файл), full_page=False,
+                                                   **({} if файл.suffix == ".png"
+                                                      else {"quality": 74}))
+                                    запись["screenshot"] = файл.name
+                                    break
+                                except Exception as сбой:  # noqa: BLE001
+                                    запись["screenshot_error"] = str(сбой)[:120]
+                                    стр.wait_for_timeout(400 * (попытка + 1))
                         страницы.append(запись)
                         # Действия проверяются на узкой и широкой: на узкой
                         # ломается касание, на широкой — прокрутка полосы.
                         if ширина in (390, 1440):
-                            for проба in проверить_действия(стр, маршрут):
+                            try:
+                                пробы = проверить_действия(стр, маршрут)
+                            except Exception as сбой:  # noqa: BLE001
+                                # Падение вкладки посреди проверки действием —
+                                # сбой среды. Он записывается как несостоявшаяся
+                                # проверка, а не как исправный интерфейс.
+                                пробы = [{"component": "среда",
+                                          "check": "проверки действием состоялись",
+                                          "ok": False, "detail": str(сбой)[:120]}]
+                                try:
+                                    стр.close(); контекст.close()
+                                except Exception:  # noqa: BLE001
+                                    pass
+                                контекст = браузер.new_context(
+                                    viewport={"width": ширина, "height": 900})
+                                стр = контекст.new_page()
+                            for проба in пробы:
                                 проба["route"] = маршрут
                                 проба["viewport"] = ширина
                                 действия.append(проба)
@@ -622,9 +748,14 @@ def измерить(превью: pathlib.Path, снимки: pathlib.Path | No
                          wait_until="load", timeout=45000)
                 стр.wait_for_timeout(150)
                 спокойствие = стр.evaluate(СПОКОЙСТВИЕ)
+            except Exception as сбой:  # noqa: BLE001
+                спокойствие = {"respects": None, "offenders": [],
+                               "measurement_error": str(сбой)[:120]}
             finally:
-                стр.close()
-                контекст.close()
+                try:
+                    стр.close(); контекст.close()
+                except Exception:  # noqa: BLE001
+                    pass
         finally:
             браузер.close()
     действия.extend(пагинация_связна(превью))
@@ -658,33 +789,42 @@ def одинокие_хвосты(страницы: list[dict]) -> list[dict]:
 
 def оценить(манифест: dict, страницы: list[dict], действия: list[dict],
             css_байт: int = 0, спокойствие: dict | None = None) -> dict:
+    # Несостоявшееся измерение — не дефект шаблона и не его заслуга. Запись о
+    # нём не несёт ни геометрии, ни доступности, и если считать её наравне с
+    # остальными, страница без данных превращается в «страницу без h1 и без
+    # ориентиров». Ровно это и случилось: сбой среды выглядел как отказ
+    # доступности. Такие записи исключаются из счёта и считаются отдельно.
+    несостоявшиеся = [с for с in страницы if с.get("measurement_error")]
+    измеренные = [с for с in страницы if not с.get("measurement_error")]
+
     def всего(ключ):
-        return sum(len(с.get(ключ) or []) for с in страницы)
+        return sum(len(с.get(ключ) or []) for с in измеренные)
 
     def a11y(ключ):
-        return sum(len(с.get("a11y", {}).get(ключ, [])) for с in страницы)
+        return sum(len(с.get("a11y", {}).get(ключ, [])) for с in измеренные)
 
-    строгие = [c for с in страницы for c in (с.get("clipped") or []) if c.get("strict")]
-    переполнение = sum(1 for с in страницы if с.get("overflow_x"))
-    пустые = sum(с.get("empty_cells", 0) for с in страницы)
+    строгие = [c for с in измеренные for c in (с.get("clipped") or []) if c.get("strict")]
+    переполнение = sum(1 for с in измеренные if с.get("overflow_x"))
+    пустые = sum(с.get("empty_cells", 0) for с in измеренные)
     провалы = [д for д in действия if not д["ok"]]
-    без_h1 = [с["route"] for с in страницы if с.get("a11y", {}).get("h1") != 1]
-    тяжёлые = sum(с.get("a11y", {}).get("heavy_frames", 0) for с in страницы)
+    без_h1 = [с["route"] for с in измеренные if с.get("a11y", {}).get("h1") != 1]
+    тяжёлые = sum(с.get("a11y", {}).get("heavy_frames", 0) for с in измеренные)
     без_ориентиров = [
-        с["route"] for с in страницы
+        с["route"] for с in измеренные
         if not all((с.get("a11y", {}).get("landmarks") or {}).get(к)
                    for к in ("banner", "main", "contentinfo", "nav"))]
 
     измерено = {
-        "ROUTES_MEASURED": len({с["route"] for с in страницы}),
-        "PAGE_MEASUREMENTS": len(страницы),
+        "ROUTES_MEASURED": len({с["route"] for с in измеренные}),
+        "PAGE_MEASUREMENTS": len(измеренные),
+        "MEASUREMENTS_FAILED": len(несостоявшиеся),
         "HORIZONTAL_OVERFLOW_COUNT": переполнение,
         "CLIPPED_REQUIRED_TEXT_COUNT": len(строгие),
         "TIMESTAMP_ELLIPSIS_COUNT": всего("date_ellipsis"),
         "POSTER_ASPECT_RATIO_VIOLATIONS": всего("poster_ratio_violations"),
         "BROKEN_IMAGE_COUNT": всего("broken_images"),
         "EMPTY_GRID_CELL_COUNT": пустые,
-        "ORPHAN_LAST_ROW_COUNT": len(одинокие_хвосты(страницы)),
+        "ORPHAN_LAST_ROW_COUNT": len(одинокие_хвосты(измеренные)),
         "OVERLAP_COUNT": всего("overlaps"),
         "UNINTENDED_GAP_OVER_96PX_COUNT": всего("big_gaps"),
         "SMALL_TOUCH_TARGET_COUNT": a11y("small_targets"),
@@ -697,9 +837,9 @@ def оценить(манифест: dict, страницы: list[dict], дей�
         "PAGES_WITHOUT_SINGLE_H1": len(без_h1),
         "PAGES_WITHOUT_LANDMARKS": len(без_ориентиров),
         "HEAVY_FRAMES_BEFORE_ACTION": тяжёлые,
-        "AUTOPLAY_COUNT": sum(с.get("a11y", {}).get("autoplay", 0) for с in страницы),
+        "AUTOPLAY_COUNT": sum(с.get("a11y", {}).get("autoplay", 0) for с in измеренные),
         "FOCUSABLE_ELEMENTS": max(
-            (с.get("a11y", {}).get("focusable", 0) for с in страницы), default=0),
+            (с.get("a11y", {}).get("focusable", 0) for с in измеренные), default=0),
         "INTERACTION_CHECKS": len(действия),
         "INTERACTION_FAILURES": len(провалы),
         "CSS_BYTES": css_байт,
@@ -768,6 +908,9 @@ def оценить(манифест: dict, страницы: list[dict], дей�
         "measured": измерено,
         "criteria": баллы,
         "hard_fails": отказы,
+        "measurement_failures": [
+            {"route": с["route"], "viewport": с["viewport"],
+             "error": с["measurement_error"]} for с in несостоявшиеся],
         "interaction_failures": провалы[:12],
         "HARD_FAIL_COUNT": len(отказы),
         "TOTAL_SCORE": итог,

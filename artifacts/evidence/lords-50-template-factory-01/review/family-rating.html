@@ -1,6 +1,6 @@
 <!doctype html><html lang=ru><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>Lords — Порядок</title><style>
 :root{--ink:#e8efe6;--dim:#9fb3a3;--bg:#0c1210;--card:#121a16;--line:#223029;
---brand:#3F7D26;--mint:#8ED6B0}
+--brand:#3F7D26;--mint:#8ED6B0;--warn:#E4B363}
 *,*::before,*::after{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);
 font:400 15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
@@ -8,7 +8,8 @@ a{color:var(--mint)}
 .wrap{max-width:1680px;margin:0 auto;padding:24px 20px 64px}
 h1{font-size:26px;margin:0 0 6px}
 h2{font-size:19px;margin:36px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
-.lead{color:var(--dim);max-width:78ch;margin:0 0 20px}
+h3{font-size:16px;margin:24px 0 10px}
+.lead{color:var(--dim);max-width:82ch;margin:0 0 20px}
 .nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 24px}
 .nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;
 border:1px solid var(--line);border-radius:999px;background:var(--card);text-decoration:none}
@@ -23,11 +24,13 @@ padding:16px;margin:0 0 20px}
 .shots img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:8px}
 .meta{display:grid;gap:10px;margin:14px 0 0}
 @media(min-width:760px){.meta{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1200px){.meta{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .k{color:var(--dim);font-size:13px;text-transform:uppercase;letter-spacing:.06em;margin:0 0 2px}
 .v{margin:0}
 .badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;
-border:1px solid var(--line);background:#0f1713}
+border:1px solid var(--line);background:#0f1713;margin:0 4px 4px 0}
 .ok{color:var(--mint)}
+.bad{color:var(--warn);border-color:var(--warn)}
 .decide{margin-top:14px;padding:12px;border:1px dashed var(--line);border-radius:8px;
 color:var(--dim)}
 .grid50{display:grid;gap:14px;grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -39,5 +42,9 @@ color:var(--dim)}
 .row5{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
 @media(min-width:760px){.row5{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(min-width:1300px){.row5{grid-template-columns:repeat(5,minmax(0,1fr))}}
+.routes{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--dim);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
 footer{margin-top:40px;color:var(--dim);border-top:1px solid var(--line);padding-top:16px}
-</style></head><body><div class=wrap><h1>Порядок — пять шаблонов рядом</h1><p class=lead>Один масштаб, одна ширина (1440 px), одна страница. Так видно, различаются ли шаблоны внутри семьи на самом деле.</p><p class=nav><a href='index.html'>← Указатель</a><a href='all.html'>Сводный лист</a></p><div class=row5><div class=cell><a href='../templates/T026/screenshots/T026-rating-leaderboard-1440.png'><img loading=lazy src='../templates/T026/screenshots/T026-rating-leaderboard-1440.png' alt='T026'></a><div class=cap><b>T026</b> Lords — порядок пополнения<br><span class=fam>ranked · без карточек · до 6 колонок на 1440</span></div></div><div class=cell><a href='../templates/T027/screenshots/T027-rating-scorecards-1440.png'><img loading=lazy src='../templates/T027/screenshots/T027-rating-scorecards-1440.png' alt='T027'></a><div class=cap><b>T027</b> Lords — карточки разделов<br><span class=fam>board · tile · до 6 колонок на 1440</span></div></div><div class=cell><a href='../templates/T028/screenshots/T028-rating-cinema-green-1440.png'><img loading=lazy src='../templates/T028/screenshots/T028-rating-cinema-green-1440.png' alt='T028'></a><div class=cap><b>T028</b> Lords — зал по порядку<br><span class=fam>hero · без карточек · до 6 колонок на 1440</span></div></div><div class=cell><a href='../templates/T029/screenshots/T029-rating-minimal-table-1440.png'><img loading=lazy src='../templates/T029/screenshots/T029-rating-minimal-table-1440.png' alt='T029'></a><div class=cap><b>T029</b> Lords — таблица<br><span class=fam>index · без карточек · до 8 колонок на 1440</span></div></div><div class=cell><a href='../templates/T030/screenshots/T030-rating-community-ready-1440.png'><img loading=lazy src='../templates/T030/screenshots/T030-rating-community-ready-1440.png' alt='T030'></a><div class=cap><b>T030</b> Lords — без оценок<br><span class=fam>grid · poster · до 5 колонок на 1440</span></div></div></div><footer>Каталог собран 2026-09-21T20:36:12+00:00. Технический балл — самооценка проверок фабрики, а не приёмка. Все шаблоны в статусе TECHNICAL_CANDIDATE.</footer></div></body></html>
+</style></head><body><div class=wrap><h1>Порядок — пять шаблонов рядом</h1><p class=lead>Один масштаб, одна ширина (1440 px), одна страница. Так видно, различаются ли шаблоны внутри семьи на самом деле — и не только на главной: под каждым указано, как устроены каталог и страница тайтла.</p><p class=nav><a href='index.html'>← Указатель</a><a href='all.html'>Сводный лист</a></p><div class=row5><div class=cell><a href='../templates/T026/screenshots/home-1440.jpg'><img loading=lazy src='../templates/T026/screenshots/home-1440.jpg' alt='T026'></a><div class=cap><b>T026</b> Lords — порядок пополнения<br><span class=fam>каталог: доска по видам · тайтл: панель фактов</span></div></div><div class=cell><a href='../templates/T027/screenshots/home-1440.jpg'><img loading=lazy src='../templates/T027/screenshots/home-1440.jpg' alt='T027'></a><div class=cap><b>T027</b> Lords — карточки разделов<br><span class=fam>каталог: азбука и таблица · тайтл: крупный заголовок</span></div></div><div class=cell><a href='../templates/T028/screenshots/home-1440.jpg'><img loading=lazy src='../templates/T028/screenshots/home-1440.jpg' alt='T028'></a><div class=cap><b>T028</b> Lords — зал по порядку<br><span class=fam>каталог: разворот · тайтл: постер сбоку</span></div></div><div class=cell><a href='../templates/T029/screenshots/home-1440.jpg'><img loading=lazy src='../templates/T029/screenshots/home-1440.jpg' alt='T029'></a><div class=cap><b>T029</b> Lords — таблица<br><span class=fam>каталог: разворот · тайтл: панель фактов</span></div></div><div class=cell><a href='../templates/T030/screenshots/home-1440.jpg'><img loading=lazy src='../templates/T030/screenshots/home-1440.jpg' alt='T030'></a><div class=cap><b>T030</b> Lords — без оценок<br><span class=fam>каталог: журнальная полоса · тайтл: описание первым</span></div></div></div><footer>Каталог собран 2026-09-22T14:34:55+00:00. Технический балл — самооценка проверок фабрики, а не приёмка. Все шаблоны в статусе TECHNICAL_CANDIDATE.</footer></div></body></html>

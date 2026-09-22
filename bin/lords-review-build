@@ -23,7 +23,21 @@ import sys
 ДОКАЗАТЕЛЬСТВА = КОРЕНЬ / "artifacts" / "evidence" / "lords-50-template-factory-01"
 
 
-def перенести_снимки(снимки: pathlib.Path, куда: pathlib.Path, качество: int) -> dict:
+#: Что едет в доказательства. Измеряется больше — для shortlist снимается вся
+#: матрица, — но приёмке нужны не все тысяча триста кадров: сто мегабайт в
+#: истории на каждый прогон сделают репозиторий неподъёмным через три прогона.
+ДЛЯ_ВСЕХ = ("home-390", "home-1440", "catalog-390", "catalog-1440",
+            "title-series-1440", "episode-1440")
+ДЛЯ_ОТБОРА = ДЛЯ_ВСЕХ + (
+    "home-320", "home-768", "home-1024", "home-1920",
+    "catalog-320", "catalog-1920", "title-movie-1440", "season-1440",
+    "search-1440", "search-empty-1440", "notfound-1440", "new-1440",
+    "collection-1440", "genre-1440", "edge-long-title-1440",
+    "edge-no-poster-1440", "title-series-390", "episode-390")
+
+
+def перенести_снимки(снимки: pathlib.Path, куда: pathlib.Path, качество: int,
+                     отбор: set[str] | None = None) -> dict:
     from PIL import Image
 
     перенесено, байт = 0, 0
@@ -32,13 +46,22 @@ def перенести_снимки(снимки: pathlib.Path, куда: pathli
             continue
         цель = куда / каталог.name / "screenshots"
         цель.mkdir(parents=True, exist_ok=True)
+        нужные = set(ДЛЯ_ОТБОРА if каталог.name in (отбор or set()) else ДЛЯ_ВСЕХ)
         живые = set()
-        for кадр in sorted(каталог.glob("*.png")):
+        # Кадры приходят смешанными: без потерь снимается только то, по чему
+        # считаются отпечатки, остальное — сразу JPEG. Первые пережимаются,
+        # вторые копируются как есть: пережимать пережатое незачем.
+        for кадр in sorted(list(каталог.glob("*.png")) + list(каталог.glob("*.jpg"))):
+            if кадр.stem not in нужные:
+                continue
             файл = цель / f"{кадр.stem}.jpg"
             живые.add(файл.name)
-            with Image.open(кадр) as картинка:
-                картинка.convert("RGB").save(файл, "JPEG", quality=качество,
-                                             optimize=True, progressive=True)
+            if кадр.suffix == ".png":
+                with Image.open(кадр) as картинка:
+                    картинка.convert("RGB").save(файл, "JPEG", quality=качество,
+                                                 optimize=True, progressive=True)
+            else:
+                файл.write_bytes(кадр.read_bytes())
             перенесено += 1
             байт += файл.stat().st_size
         # Снимки прошлого прогона того же шаблона удаляются: два набора рядом
@@ -55,7 +78,7 @@ def главное() -> int:
     parser.add_argument("--scores", default="var/scores")
     parser.add_argument("--shots", default="var/shots")
     parser.add_argument("--shortlist", default="")
-    parser.add_argument("--quality", type=int, default=80)
+    parser.add_argument("--quality", type=int, default=74)
     args = parser.parse_args()
 
     отпечатки_файл = КОРЕНЬ / "var" / "review" / "FINGERPRINTS.json"
@@ -68,8 +91,9 @@ def главное() -> int:
         return 2
     отпечатки = json.loads(отпечатки_файл.read_text(encoding="utf-8"))
 
+    отбор = {и.strip() for и in args.shortlist.split(",") if и.strip()}
     перенос = перенести_снимки(pathlib.Path(args.shots),
-                               ДОКАЗАТЕЛЬСТВА / "templates", args.quality)
+                               ДОКАЗАТЕЛЬСТВА / "templates", args.quality, отбор)
 
     каталог = subprocess.run(
         [sys.executable, str(ЯДРО / "review_catalogue.py"),

@@ -107,14 +107,32 @@
     ]
   },
   "review_screenshots": [
-    "catalog-1440.png",
-    "catalog-390.png",
-    "episode-1440.png",
-    "home-1440.png",
-    "home-390.png",
-    "title-series-1440.png"
+    "catalog-1440.jpg",
+    "catalog-1920.jpg",
+    "catalog-320.jpg",
+    "catalog-390.jpg",
+    "collection-1440.jpg",
+    "edge-long-title-1440.jpg",
+    "edge-no-poster-1440.jpg",
+    "episode-1440.jpg",
+    "episode-390.jpg",
+    "genre-1440.jpg",
+    "home-1024.jpg",
+    "home-1440.jpg",
+    "home-1920.jpg",
+    "home-320.jpg",
+    "home-390.jpg",
+    "home-768.jpg",
+    "new-1440.jpg",
+    "notfound-1440.jpg",
+    "search-1440.jpg",
+    "search-empty-1440.jpg",
+    "season-1440.jpg",
+    "title-movie-1440.jpg",
+    "title-series-1440.jpg",
+    "title-series-390.jpg"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-22T07:14:03.768386+00:00"
+  "issued_at_utc": "2026-09-22T14:36:40.606698+00:00"
 }

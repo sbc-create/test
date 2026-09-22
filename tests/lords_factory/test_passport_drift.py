@@ -94,4 +94,13 @@ def test_passport_carries_what_review_needs(пакет):
     assert паспорт["declared"]["home_signature"]
     assert паспорт["measured"]["visual_score"] is not None
     assert паспорт["measured"]["hard_fail_count"] == 0
-    assert len(паспорт["review_screenshots"]) == 6, "приёмка идёт по шести ширинам"
+    # Приёмка идёт по кадрам, которые действительно лежат в доказательствах.
+    # Обязательный минимум — рабочий стол и мобильный на главной плюс
+    # внутренние страницы: по одной главной шаблон принимать нельзя.
+    кадры = set(паспорт["review_screenshots"])
+    for обязательный in ("home-1440", "home-390", "catalog-1440",
+                         "title-series-1440"):
+        assert any(к.startswith(обязательный) for к in кадры), \
+            f"в паспорте нет кадра {обязательный}: {sorted(кадры)}"
+    assert len(кадры) >= 6, f"кадров для приёмки мало: {sorted(кадры)}"
+    assert паспорт["measured"]["viewports"] == [320, 390, 768, 1024, 1440, 1920]

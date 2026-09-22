@@ -152,7 +152,7 @@ def днк(манифест: dict, паспорт: dict, токены: str) -> d
 
 
 def собрать_данные(корень: pathlib.Path, оценки: pathlib.Path, снимки: pathlib.Path,
-                   отпечатки: dict) -> list[dict]:
+                   отпечатки: dict, доказательства: pathlib.Path) -> list[dict]:
     соседи = отпечатки.get("nearest") or {}
     записи = []
     for пакет in sorted(корень.glob("T0*")):
@@ -166,8 +166,11 @@ def собрать_данные(корень: pathlib.Path, оценки: pathli
         файл = оценки / f"{tid}.json"
         if файл.is_file():
             оценка = json.loads(файл.read_text(encoding="utf-8"))
-        кадры = sorted(п.name for п in (снимки / tid).glob("*.png")) \
-            if (снимки / tid).is_dir() else []
+        # Список кадров берётся из доказательств, а не из рабочего каталога:
+        # мерится больше, чем едет в приёмку, и ссылка на неперенесённый кадр
+        # вела бы в никуда. Каталог обязан показывать то, что в нём есть.
+        папка = доказательства / "templates" / tid / "screenshots"
+        кадры = sorted(п.name for п in папка.glob("*.jpg")) if папка.is_dir() else []
         измерено = оценка.get("measured", {})
         записи.append({
             "tid": tid, "slug": манифест["slug"], "name": манифест["title"],
@@ -192,7 +195,7 @@ def собрать_данные(корень: pathlib.Path, оценки: pathli
 
 
 def _имя_кадра(запись: dict, маршрут: str, ширина: int) -> str | None:
-    имя = f"{маршрут}-{ширина}.png"
+    имя = f"{маршрут}-{ширина}.jpg"
     return имя if имя in запись["frames"] else None
 
 
@@ -200,7 +203,7 @@ def _ссылка(запись: dict, путь: str, маршрут: str, шир
     имя = _имя_кадра(запись, маршрут, ширина)
     if not имя:
         return ""
-    адрес = f"{путь}/{запись['tid']}/screenshots/{имя[:-4]}.jpg"
+    адрес = f"{путь}/{запись['tid']}/screenshots/{имя}"
     return (f"<a href='{э(адрес)}'><img loading=lazy src='{э(адрес)}' "
             f"alt='{э(alt)}'></a>")
 
@@ -307,8 +310,9 @@ def таблица_охвата() -> str:
 
 
 def построить(корень: pathlib.Path, оценки: pathlib.Path, снимки: pathlib.Path,
-              отпечатки: dict, куда: pathlib.Path, отбор: list[str]) -> dict:
-    записи = собрать_данные(корень, оценки, снимки, отпечатки)
+              отпечатки: dict, куда: pathlib.Path, отбор: list[str],
+              доказательства: pathlib.Path) -> dict:
+    записи = собрать_данные(корень, оценки, снимки, отпечатки, доказательства)
     куда.mkdir(parents=True, exist_ok=True)
     метка = _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds")
     подвал = (f"Каталог собран {э(метка)}. Технический балл — самооценка проверок "
@@ -425,7 +429,8 @@ def главное() -> int:
         отпечатки = json.loads(pathlib.Path(args.fingerprints).read_text(encoding="utf-8"))
     отбор = [и.strip() for и in args.shortlist.split(",") if и.strip()]
     итог = построить(pathlib.Path(args.root), pathlib.Path(args.scores),
-                     pathlib.Path(args.shots), отпечатки, pathlib.Path(args.out), отбор)
+                     pathlib.Path(args.shots), отпечатки, pathlib.Path(args.out),
+                     отбор, pathlib.Path(args.out).parent)
     print(json.dumps(итог, ensure_ascii=False, indent=2))
     return 0
 

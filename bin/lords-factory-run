@@ -79,6 +79,8 @@ def главное() -> int:
     parser.add_argument("--only")
     parser.add_argument("--full", action="store_true")
     parser.add_argument("--workers", type=int, default=3)
+    parser.add_argument("--full-workers", type=int, default=2,
+                        help="полная матрица тяжелее: меньше одновременных браузеров")
     parser.add_argument("--record", help="сводка прогона")
     args = parser.parse_args()
 
@@ -110,7 +112,8 @@ def главное() -> int:
         отрисовано = round(time.time() - начало, 1)
 
         итоги = []
-        with futures.ThreadPoolExecutor(max_workers=args.workers) as пул:
+        рабочих = args.full_workers if args.full else args.workers
+        with futures.ThreadPoolExecutor(max_workers=рабочих) as пул:
             задачи = [пул.submit(измерить, п, превью, оценки, снимки, args.full)
                       for п in список]
             for задача in futures.as_completed(задачи):

@@ -23,6 +23,7 @@
       "bin/lords-template-preview",
       "bin/lords-factory-run",
       "bin/lords-review-build",
+      "bin/lords-final-report",
       "bin/lords-diversify",
       "var/",
       ".lords-tenant"
