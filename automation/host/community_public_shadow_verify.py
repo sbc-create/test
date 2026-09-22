@@ -1,0 +1,285 @@
+#!/usr/bin/env python3
+"""Пройти сценарии обычного посетителя и модератора по настоящему HTTP.
+
+Витрина поднимается на отдельном порту, с собственным файлом хранилища во
+временном каталоге: боевые данные animedia.icu не читаются и не изменяются.
+Проверяется не разметка, а поведение — что посетитель может сделать и что он
+после этого видит.
+"""
+from __future__ import annotations
+
+import http.cookiejar
+import json
+import os
+import pathlib
+import re
+import subprocess
+import sys
+import tempfile
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
+
+RELEASES = pathlib.Path("/srv/lords/.frontend/releases")
+NEW = RELEASES / "20260922T223000Z-community-public-01"
+BASE = RELEASES / "20260922T143111Z-efdef56-animedia-parity"
+TITLE = "/title/master-lda-i-plameni-2/"
+MOD_KEY = "shadow-moderator-key"
+
+провалы: list[str] = []
+
+
+def проверить(условие, описание, подробность=""):
+    print(f"   {'ok  ' if условие else 'FAIL'} {описание}"
+          + (f"  [{подробность}]" if подробность and not условие else ""))
+    if not условие:
+        провалы.append(описание)
+
+
+class Посетитель:
+    """Отдельный браузер: своя банка кук, свой ключ."""
+
+    def __init__(self, порт: int, куки_модератора: str = ""):
+        self.порт = порт
+        self.jar = http.cookiejar.CookieJar()
+        self.opener = urllib.request.build_opener(
+            urllib.request.HTTPCookieProcessor(self.jar),
+            _НеСледоватьЗаРедиректом())
+        if куки_модератора:
+            # Именно в банку. Ручной заголовок Cookie заставил бы urllib
+            # пропустить свои куки, модератор остался бы без amd_v, а значит и
+            # без CSRF-токена — и каждая его запись молча отвергалась бы.
+            self.jar.set_cookie(http.cookiejar.Cookie(
+                0, "amd_mod", куки_модератора, None, False,
+                "127.0.0.1", False, False, "/", True,
+                False, None, True, None, None, {}))
+
+    def _заголовки(self):
+        return {"Host": "animedia.icu"}
+
+    def get(self, путь: str):
+        req = urllib.request.Request(f"http://127.0.0.1:{self.порт}{путь}",
+                                     headers=self._заголовки())
+        with self.opener.open(req, timeout=10) as r:
+            return r.status, r.read().decode("utf-8", "replace"), dict(r.headers)
+
+    def post_ok(self, путь: str, поля: dict) -> str:
+        """POST, который обязан быть принят. Возвращает Location."""
+        код, куда = self.post(путь, поля)
+        assert код == 303, f"{путь}: код {код}"
+        assert "community=ok" in (куда or ""), f"{путь}: отказ — {куда}"
+        return куда or ""
+
+    def post(self, путь: str, поля: dict):
+        данные = urllib.parse.urlencode(поля).encode("utf-8")
+        req = urllib.request.Request(f"http://127.0.0.1:{self.порт}{путь}",
+                                     data=данные, headers=self._заголовки())
+        try:
+            with self.opener.open(req, timeout=10) as r:
+                return r.status, r.headers.get("Location", "")
+        except urllib.error.HTTPError as e:
+            return e.code, e.headers.get("Location", "")
+
+    def csrf(self, страница: str) -> str:
+        m = re.search(r'name="csrf" value="([0-9a-f]+)"', страница)
+        return m.group(1) if m else ""
+
+
+class _НеСледоватьЗаРедиректом(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, *a, **k):
+        return None
+
+
+def поднять(release: pathlib.Path, порт: int, store: pathlib.Path):
+    env = dict(os.environ)
+    env["ANIMEDIA_COMMUNITY_STORE"] = str(store)
+    env["ANIMEDIA_COMMUNITY_MODERATOR_KEY"] = MOD_KEY
+    п = subprocess.Popen([sys.executable, "animedia-frontend.py", "--port", str(порт)],
+                         cwd=str(release), env=env,
+                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    for _ in range(60):
+        try:
+            req = urllib.request.Request(f"http://127.0.0.1:{порт}/",
+                                         headers={"Host": "animedia.icu"})
+            urllib.request.urlopen(req, timeout=3).read()
+            return п
+        except Exception:
+            if п.poll() is not None:
+                print(п.stdout.read() if п.stdout else "")
+                raise SystemExit(f"витрина на {порт} не поднялась")
+            time.sleep(0.5)
+    raise SystemExit(f"витрина на {порт} не ответила")
+
+
+def main() -> int:
+    tmp = pathlib.Path(tempfile.mkdtemp(prefix="community-shadow-"))
+    store = tmp / "community.json"
+    сервер = поднять(NEW, 9191, store)
+    try:
+        гость = Посетитель(9191)
+        второй = Посетитель(9191)
+        модератор = Посетитель(9191, куки_модератора=MOD_KEY)
+
+        print("\n== страница и текущий UX")
+        код, стр, заг = гость.get(TITLE)
+        проверить(код == 200, "страница произведения отвечает 200", str(код))
+        проверить("noindex" in (заг.get("X-Robots-Tag") or ""),
+                  "noindex/nofollow сохранён", заг.get("X-Robots-Tag", ""))
+        проверить('data-b07-player="1"' in стр, "плеер на месте")
+        проверить('data-community="on"' in стр, "раздел сообщества включён")
+        проверить("amd_v=" in (заг.get("Set-Cookie") or ""),
+                  "кука посетителя выдана на обычном GET",
+                  заг.get("Set-Cookie", "нет"))
+        for путь in ("/", "/catalog/"):
+            к, _, _ = гость.get(путь)
+            проверить(к == 200, f"{путь} отвечает 200", str(к))
+
+        токен = гость.csrf(стр)
+        проверить(bool(токен), "CSRF-токен в форме есть")
+
+        print("\n== оценка 1–10")
+        код, куда = гость.post("/community/vote", {
+            "slug": "master-lda-i-plameni-2", "back": TITLE, "value": "8",
+            "csrf": токен})
+        проверить("community=ok" in (куда or ""), "голос принят", куда or str(код))
+        _, стр, _ = гость.get(TITLE)
+        проверить('data-user-votes="1"' in стр, "голос посчитан")
+        проверить('data-user-score="8.0"' in стр, "среднее 8.0")
+        проверить('value="8" aria-pressed="true"' in стр, "своя оценка показана")
+
+        гость.post("/community/vote", {"slug": "master-lda-i-plameni-2",
+                                       "back": TITLE, "value": "5", "csrf": токен})
+        _, стр, _ = гость.get(TITLE)
+        проверить('data-user-votes="1"' in стр, "смена оценки не добавила второй голос")
+        проверить('data-user-score="5.0"' in стр, "среднее пересчитано на 5.0")
+
+        _, стр2, _ = второй.get(TITLE)
+        т2 = второй.csrf(стр2)
+        второй.post("/community/vote", {"slug": "master-lda-i-plameni-2",
+                                        "back": TITLE, "value": "9", "csrf": т2})
+        _, стр, _ = гость.get(TITLE)
+        проверить('data-user-votes="2"' in стр, "второй посетитель посчитан отдельно")
+        проверить('data-user-score="7.0"' in стр, "среднее по двоим 7.0")
+
+        print("\n== CSRF")
+        код, куда = гость.post("/community/comment", {
+            "slug": "master-lda-i-plameni-2", "back": TITLE,
+            "name": "Без токена", "text": "это не должно пройти"})
+        проверить("community=csrf" in (куда or ""),
+                  "запись без CSRF-токена отклонена", куда or "")
+
+        print("\n== комментарий и премодерация")
+        код, куда = гость.post("/community/comment", {
+            "slug": "master-lda-i-plameni-2", "back": TITLE,
+            "name": "Гость", "text": "Первое сообщение посетителя.", "csrf": токен})
+        проверить("community=ok" in (куда or ""), "сообщение принято", куда or str(код))
+        _, своя, _ = гость.get(TITLE)
+        проверить("Первое сообщение посетителя." in своя, "автор видит своё сообщение")
+        проверить('data-comment-status="pending"' in своя, "статус «на проверке» показан")
+        проверить("появится в ленте после" in своя, "статус объяснён словами")
+        _, чужая, _ = второй.get(TITLE)
+        проверить("Первое сообщение посетителя." not in чужая,
+                  "постороннему неодобренное не видно")
+
+        print("\n== модератор")
+        _, мод_стр, _ = модератор.get(TITLE)
+        проверить('data-moderation-queue="1"' in мод_стр, "очередь модерации видна")
+        m = re.search(r'data-moderation-id="([0-9a-f]+)"', мод_стр)
+        проверить(bool(m), "сообщение в очереди адресуемо")
+        ид = m.group(1) if m else ""
+        т_мод = модератор.csrf(мод_стр)
+        код, куда = модератор.post("/community/comment/decide", {
+            "slug": "master-lda-i-plameni-2", "back": TITLE, "id": ид,
+            "decision": "approved", "csrf": т_мод})
+        проверить("community=ok" in (куда or ""), "решение принято", куда or str(код))
+        _, чужая, _ = второй.get(TITLE)
+        проверить("Первое сообщение посетителя." in чужая,
+                  "одобренное сообщение опубликовано для всех")
+
+        print("\n== посторонний не модератор")
+        _, стр2, _ = второй.get(TITLE)
+        проверить('data-moderation-queue="1"' not in стр2,
+                  "обычный посетитель очереди не видит")
+        код, куда = второй.post("/community/comment/decide", {
+            "slug": "master-lda-i-plameni-2", "back": TITLE, "id": ид,
+            "decision": "approved", "csrf": второй.csrf(стр2)})
+        проверить("community=forbidden" in (куда or ""),
+                  "чужое решение модератора отклонено", куда or "")
+
+        print("\n== ответ")
+        _, стр2, _ = второй.get(TITLE)
+        код, куда = второй.post("/community/comment", {
+            "slug": "master-lda-i-plameni-2", "back": TITLE, "name": "Второй",
+            "text": "Ответ на первое.", "reply_to": ид,
+            "csrf": второй.csrf(стр2)})
+        проверить("community=ok" in (куда or ""), "ответ принят", куда or str(код))
+        _, свой2, _ = второй.get(TITLE)
+        проверить("acomm__list--replies" in свой2, "ответ показан веткой")
+
+        print("\n== защита от заливки")
+        _, своя, _ = гость.get(TITLE)
+        т = гость.csrf(своя)
+        код, куда = гость.post("/community/comment", {
+            "slug": "master-lda-i-plameni-2", "back": TITLE, "name": "Гость",
+            "text": "Первое сообщение посетителя.", "csrf": т})
+        проверить("community=error" in (куда or ""), "повтор слово в слово отклонён",
+                  куда or "")
+        код, куда = гость.post("/community/comment", {
+            "slug": "master-lda-i-plameni-2", "back": TITLE, "name": "Гость",
+            "text": "Совсем другое сообщение.", "csrf": т})
+        проверить("community=error" in (куда or ""), "слишком частая отправка отклонена",
+                  куда or "")
+
+        print("\n== правка и удаление своего")
+        код, куда = гость.post("/community/comment/edit", {
+            "slug": "master-lda-i-plameni-2", "back": TITLE, "id": ид,
+            "text": "Поправленное сообщение.", "csrf": т})
+        проверить("community=ok" in (куда or ""), "правка принята", куда or str(код))
+        _, чужая, _ = второй.get(TITLE)
+        проверить("Поправленное сообщение." not in чужая,
+                  "правка вернула сообщение на проверку")
+        код, куда = второй.post("/community/comment/delete", {
+            "slug": "master-lda-i-plameni-2", "back": TITLE, "id": ид,
+            "csrf": второй.csrf(чужая)})
+        проверить("community=error" in (куда or ""), "чужое сообщение удалить нельзя",
+                  куда or "")
+        код, куда = гость.post("/community/comment/delete", {
+            "slug": "master-lda-i-plameni-2", "back": TITLE, "id": ид, "csrf": т})
+        проверить("community=ok" in (куда or ""), "своё сообщение удалено",
+                  куда or str(код))
+
+        print("\n== XSS")
+        _, своя, _ = гость.get(TITLE)
+        т = гость.csrf(своя)
+        time.sleep(1)
+        гость.post("/community/comment", {
+            "slug": "master-lda-i-plameni-2", "back": TITLE,
+            "name": "<img src=x onerror=alert(1)>",
+            "text": "<script>alert('xss')</script>", "csrf": т})
+        _, своя, _ = гость.get(TITLE)
+        проверить("<script>alert('xss')</script>" not in своя,
+                  "разметка из сообщения не попала на страницу сырой")
+        проверить("&lt;script&gt;" in своя, "она экранирована")
+
+        print("\n== изоляция домена")
+        проверить(json.loads(store.read_text("utf-8")).get("titles") is not None,
+                  "запись легла в собственный файл витрины")
+        боевой = pathlib.Path("/srv/lords/animedia-01/data/animedia-community.json")
+        проверить(store != боевой, "боевой файл animedia.icu не использовался")
+
+    finally:
+        сервер.terminate()
+        try:
+            сервер.wait(timeout=10)
+        except subprocess.TimeoutExpired:
+            сервер.kill()
+
+    print(f"\nSHADOW_PUBLIC_VERDICT={'PASS' if not провалы else 'FAIL'}")
+    for п in провалы:
+        print(f"  - {п}")
+    return 0 if not провалы else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
