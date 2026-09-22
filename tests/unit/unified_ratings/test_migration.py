@@ -38,25 +38,22 @@ def migration():
     return load_migration_0007()
 
 
-@pytest.fixture
-def production_copy(tmp_path: Path):
-    """Копия боевой базы, приведённая к состоянию «до 0007».
+@pytest.fixture(scope="session")
+def _production_base(tmp_path_factory) -> Path:
+    """Одна копия боевой базы на весь прогон.
 
-    Оригинал открывается только на чтение. На копии выполняется откат
-    0007, потому что боевая база могла быть уже мигрирована, и тест,
-    который это предполагает, перестаёт проверять миграцию ровно после
-    первого успешного применения — а проверять её нужно и на базе, где
-    её ещё нет, и на базе, где она уже есть.
+    Копия на каждый тест обходилась в сотню мегабайт за тест: база
+    выросла со сбором, pytest держит каталоги трёх последних прогонов, и
+    временный каталог занимал гигабайты на диске, который делят с боевыми
+    службами. Это уже приводило к переполнению.
 
-    Копия удаляется сразу после теста. pytest держит каталоги трёх
-    последних прогонов, а боевая база выросла со сбором до сотни
-    мегабайт: пять тестов на прогон, три прогона в запасе и несколько
-    производных файлов в каждом — и временный каталог занимает гигабайты
-    на диске, который делят с боевыми службами. Это уже случилось.
+    Повторное использование безопасно, потому что откат 0007 возвращает
+    схему ровно в прежний вид — это отдельно доказано
+    ``test_apply_downgrade_apply_cycle_is_stable``.
     """
     if not PRODUCTION_DB.is_file():
         pytest.skip("production ratings.sqlite недоступна в этом окружении")
-    destination = tmp_path / "production_copy.sqlite"
+    destination = tmp_path_factory.mktemp("production") / "base.sqlite"
     source = sqlite3.connect(f"file:{PRODUCTION_DB}?mode=ro", uri=True)
     try:
         target = sqlite3.connect(str(destination))
@@ -65,13 +62,30 @@ def production_copy(tmp_path: Path):
         target.close()
     finally:
         source.close()
-    conn = sqlite3.connect(str(destination))
-    load_migration_0007().downgrade(conn)
-    conn.close()
     yield destination
-    for path in tmp_path.glob("*.sqlite*"):
+    for path in destination.parent.glob("*.sqlite*"):
         with contextlib.suppress(OSError):
             path.unlink()
+
+
+@pytest.fixture
+def production_copy(_production_base: Path):
+    """Боевая схема, приведённая к состоянию «до 0007».
+
+    Откат выполняется перед каждым тестом, потому что боевая база могла
+    быть уже мигрирована, и тест, который предполагает обратное,
+    перестаёт проверять миграцию ровно после первого успешного
+    применения — а проверять её нужно и там, где миграции ещё нет, и
+    там, где она уже есть.
+    """
+    conn = sqlite3.connect(str(_production_base))
+    load_migration_0007().downgrade(conn)
+    conn.close()
+    yield _production_base
+    for path in _production_base.parent.glob("*.sqlite"):
+        if path != _production_base:
+            with contextlib.suppress(OSError):
+                path.unlink()
 
 
 def test_applying_to_an_already_migrated_production_copy_changes_nothing(
@@ -271,6 +285,10 @@ def test_backup_restores_byte_identical(tmp_path, production_copy):
     integrity = conn.execute("PRAGMA integrity_check").fetchone()[0]
     conn.close()
     assert integrity == "ok"
+    # Копии боевой базы по сотне мегабайт не остаются на общем диске.
+    for path in (backup, restored):
+        with contextlib.suppress(OSError):
+            path.unlink()
 
 
 # ---------------------------------------------------------------------------
