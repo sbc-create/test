@@ -906,16 +906,21 @@ class CommentsStore:
         satisfies the erasure request while leaving the replies legible.
         """
         anon = f"anon_{uuid.uuid4().hex[:16]}"
-        cursor = self._conn.execute(
-            "UPDATE cp_comments SET subject_id = ? WHERE tenant_id = ? AND site_id = ?"
-            " AND subject_id = ?",
-            (anon, scope.tenant_id, scope.site_id, subject_id),
-        )
+        # The placeholder identity must exist *before* any comment points at
+        # it: `cp_comments` carries a composite foreign key to `cp_identities`,
+        # so reassigning first fails with an integrity error. The original
+        # order did exactly that, and only a file database with foreign keys
+        # enforced revealed it.
         self._conn.execute(
             "INSERT INTO cp_identities(tenant_id, site_id, subject_id, display_name, is_guest,"
             " created_at, updated_at) VALUES (?,?,?,'',1,?,?)"
             " ON CONFLICT(tenant_id, site_id, subject_id) DO NOTHING",
             (scope.tenant_id, scope.site_id, anon, utc_now(), utc_now()),
+        )
+        cursor = self._conn.execute(
+            "UPDATE cp_comments SET subject_id = ? WHERE tenant_id = ? AND site_id = ?"
+            " AND subject_id = ?",
+            (anon, scope.tenant_id, scope.site_id, subject_id),
         )
         self._conn.execute(
             "DELETE FROM cp_reactions WHERE tenant_id = ? AND site_id = ? AND subject_id = ?",
