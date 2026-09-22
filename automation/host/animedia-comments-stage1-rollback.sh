@@ -73,6 +73,7 @@ BUILD_BEFORE=$(read_state build_id_before)
 PID_BEFORE=$(read_state pid_before)
 MANIFEST_BACKUP=$(read_state manifest_backup)
 VHOST_BACKUP=$(read_state vhost_backup)
+RELEASE_APPLIED=$(read_state release_applied)
 
 note "recorded previous release : $LINK_BEFORE"
 note "recorded previous build   : $BUILD_BEFORE"
@@ -121,20 +122,47 @@ fi
 # --- level 3: previous release and manifest --------------------------------
 
 say "level 3 — previous release and template manifest"
-if [ -n "$LINK_BEFORE" ] && [ -L "$LINK" ]; then
-  if [ "$(readlink "$LINK")" = "$LINK_BEFORE" ]; then
-    note "symlink already at the recorded previous release"
-  else
-    ln -sfn "$LINK_BEFORE" "$LINK"
-    note "symlink -> $(readlink "$LINK")"
-  fi
-else
+
+# A rollback restores what THIS harness changed and nothing else. That is not
+# a nicety: the recorded state can be older than the symlink it describes.
+#
+# Exactly that is on the host now. The failed apply of 11:27 recorded
+# symlink_before=fac5643; at 14:31 another contour repointed animedia-01 at
+# efdef56 and the stale record was never cleared. Restoring blindly would set
+# the site back to fac5643 — undoing somebody else's UX release under the name
+# of rolling back comments, which is the opposite of what a rollback is for.
+#
+# So the question is not "what was here before" but "is what is here now the
+# thing I put here". If the symlink does not point at the release this harness
+# applied, this harness did not put it there, and it is not ours to move.
+LINK_NOW=$(readlink "$LINK" 2>/dev/null || true)
+if [ -z "$LINK_BEFORE" ] || [ ! -L "$LINK" ]; then
   note "no previous symlink recorded or no symlink present — left alone"
+elif [ "$LINK_NOW" = "$LINK_BEFORE" ]; then
+  note "symlink already at the recorded previous release"
+elif [ -n "$RELEASE_APPLIED" ] && \
+     [ "$(basename "$LINK_NOW")" != "$RELEASE_APPLIED" ]; then
+  note "REFUSED to move the site release."
+  note "  recorded as applied by this harness : $RELEASE_APPLIED"
+  note "  symlink actually points at          : $(basename "$LINK_NOW")"
+  note "Another contour owns the current release. Rolling it back to"
+  note "$(basename "$LINK_BEFORE") would undo that work, not this pilot's."
+  note "Comments are off regardless — levels 1, 2 and 4 do not need the release."
+  RELEASE_LEFT_ALONE=1
+else
+  ln -sfn "$LINK_BEFORE" "$LINK"
+  note "symlink -> $(readlink "$LINK")"
 fi
 
 # The public build id lives in this file, not in the release directory. Leaving
 # it behind would leave the site announcing a release it is no longer running.
-if [ -n "$MANIFEST_BACKUP" ] && [ -f "$MANIFEST_BACKUP" ]; then
+# But the reverse is just as wrong: if the release was left where another
+# contour put it, restoring our recorded manifest would make the site announce
+# a build it is not running — a false statement in a public header, produced by
+# the very step meant to restore truth.
+if [ "${RELEASE_LEFT_ALONE:-0}" -eq 1 ]; then
+  note "template-manifest left as is: the release it describes was left alone"
+elif [ -n "$MANIFEST_BACKUP" ] && [ -f "$MANIFEST_BACKUP" ]; then
   cp -a "$MANIFEST_BACKUP" "$MANIFEST"
   note "template-manifest restored from $MANIFEST_BACKUP"
 else
@@ -145,9 +173,13 @@ systemctl restart "$SITE_UNIT" || true
 sleep 3
 BUILD_NOW=$(curl -sS -m 10 --resolve "$RESOLVE" -D - -o /dev/null "$SITE/" \
   | awk 'tolower($1)=="x-site-factory-build-id:"{print $2}' | tr -d '\r' || true)
-note "build now: ${BUILD_NOW:-unknown} (recorded before: $BUILD_BEFORE)"
-if [ -n "$BUILD_BEFORE" ] && [ "$BUILD_NOW" != "$BUILD_BEFORE" ]; then
+if [ "${RELEASE_LEFT_ALONE:-0}" -eq 1 ]; then
+  note "build now: ${BUILD_NOW:-unknown} (the release was deliberately not moved)"
+elif [ -n "$BUILD_BEFORE" ] && [ "$BUILD_NOW" != "$BUILD_BEFORE" ]; then
+  note "build now: ${BUILD_NOW:-unknown} (recorded before: $BUILD_BEFORE)"
   note "WARNING: build id does not match what was recorded"
+else
+  note "build now: ${BUILD_NOW:-unknown} (recorded before: $BUILD_BEFORE)"
 fi
 
 # --- level 4: remove the gateway and the nginx include ---------------------

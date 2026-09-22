@@ -659,3 +659,50 @@ class TestDiskSpaceGate:
         assert int(match.group(1)) >= 1024, (
             "a threshold under 1GB does not cover a release plus its journal"
         )
+
+
+class TestRollbackMovesOnlyWhatItApplied:
+    """A rollback restores what this harness changed, and nothing else.
+
+    The recorded state can be older than the thing it describes. That is the
+    live situation on this host: the failed apply of 11:27 recorded
+    symlink_before=fac5643, and at 14:31 another contour repointed animedia-01
+    at efdef56 without clearing the record. A blind restore would set the site
+    back to fac5643 — undoing somebody else's release under the name of
+    rolling back comments.
+    """
+
+    def test_rollback_reads_the_release_it_applied(self):
+        assert "RELEASE_APPLIED" in ROLLBACK_TEXT, (
+            "rollback never reads which release this harness actually applied"
+        )
+
+    def test_rollback_refuses_to_move_a_release_it_did_not_apply(self):
+        assert "REFUSED to move the site release" in ROLLBACK_TEXT, (
+            "rollback has no refusal path for a release owned by another contour"
+        )
+        guard = ROLLBACK_TEXT.index("RELEASE_APPLIED")
+        restore = ROLLBACK_TEXT.index('ln -sfn "$LINK_BEFORE"')
+        assert guard < restore, "the symlink is restored before the guard is read"
+
+    def test_the_manifest_is_not_restored_when_the_release_was_left_alone(self):
+        """Otherwise the site announces a build id it is not running — a false
+        public header produced by the step meant to restore truth."""
+        assert "RELEASE_LEFT_ALONE" in ROLLBACK_TEXT
+        left_alone = ROLLBACK_TEXT.index('if [ "${RELEASE_LEFT_ALONE:-0}" -eq 1 ]')
+        manifest_copy = ROLLBACK_TEXT.index('cp -a "$MANIFEST_BACKUP" "$MANIFEST"')
+        assert left_alone < manifest_copy, (
+            "the manifest is restored before the release-left-alone case is checked"
+        )
+
+    def test_the_cheap_levels_do_not_depend_on_the_release(self):
+        """Comments must go off even when the release cannot be touched."""
+        release_logic = ROLLBACK_TEXT.index("level 3 — previous release")
+        for level in ("level 1 — kill switch", "level 2 — unmount"):
+            assert level in ROLLBACK_TEXT
+            assert ROLLBACK_TEXT.index(level) < release_logic, (
+                f"{level} runs after the release logic and could be skipped by it"
+            )
+        # And the release is only reachable behind --full, so the default
+        # invocation — the one in the owner's runbook — cannot move it at all.
+        assert ROLLBACK_TEXT.index('[ "$FULL" -eq 0 ]') < release_logic
