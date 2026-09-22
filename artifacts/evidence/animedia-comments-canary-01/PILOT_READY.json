@@ -1,0 +1,75 @@
+{
+  "schema_version": "ANIMEDIA_COMMENTS_PILOT_READY_V1",
+  "recorded_at_utc": "2026-09-22T12:44:41Z",
+  "root_access": {
+    "sudo_available": false,
+    "reason": "sudo is refused by this session's permission profile, not by sudoers",
+    "consequence": "the deploy is one owner command; everything provable without root was proved on a shadow contour",
+    "retried": false
+  },
+  "inotify_measurement": {
+    "max_user_instances": 128,
+    "scope_of_limit": "per uid",
+    "this_uid_held": 21,
+    "this_uid_headroom": 107,
+    "exhausted_for_this_uid": false,
+    "root_consumption": "not measurable without root; the systemd message came from root's accounting",
+    "sysctl_changed": false,
+    "blocks_the_pilot": false
+  },
+  "shadow_rehearsal": {
+    "api_checks": "30/30",
+    "browser_checks": "22/22",
+    "widget_suite": "45/45",
+    "python_suite": "941/941",
+    "contour": "real Animedia runtime with the adapter + real gateway + a router mimicking the nginx location split",
+    "production_touched": false
+  },
+  "defects_found_and_fixed": [
+    {
+      "what": "an ordinary visitor was shown a comment form",
+      "cause": "the widget built the form before learning whether writing was permitted",
+      "fix": "the server states can_write; the widget renders no composing surface without it"
+    },
+    {
+      "what": "a refused visitor was left with an empty widget and a notice",
+      "cause": "the widget revealed itself regardless of the answer",
+      "fix": "on 503 it withdraws entirely; the height reservation became opt-in via --cp-reserve"
+    },
+    {
+      "what": "the owner's first write failed with 403",
+      "cause": "no CSRF token existed on the page and the adapter passed none",
+      "fix": "the gateway issues a double-submit cookie; the widget reads it per request"
+    },
+    {
+      "what": "contrast ratio 1.2 on the dark theme",
+      "cause": "the widget set a foreground colour but left its background transparent, and Animedia paints its dark ground on a wrapper rather than on body",
+      "fix": "the widget paints its own background in both themes"
+    }
+  ],
+  "fixture_defect_found": {
+    "what": "the rehearsal router rewrote Host to animedia.icu for every request",
+    "consequence": "the tenant-isolation check passed for the wrong reason",
+    "fix": "Host is passed through; only a caller that addressed loopback and named no site is mapped"
+  },
+  "second_domain": {
+    "animedia_02_current": "20260922T123254Z-9a2e935-animedia-parity",
+    "changed_by_this_work": false,
+    "changed_by": "ANIMEDIA-UX-REBUILD-01, branch claude/animedia-ux-rebuild-01, built 2026-09-22T12:32:54Z",
+    "note": "animedia.space moved to a newer release while this pilot was being prepared. It was not touched here and is not part of Stage 1. The consequence worth naming: the prepared animedia-01 release is based on fac5643, the commit animedia-01 still runs, so the two domains no longer share a release and the adapter would need rebasing if animedia-01 is later moved to the UX rebuild."
+  },
+  "production_state_now": {
+    "animedia_01_release": "20260921T214937Z-fac5643-animedia-parity",
+    "manifest_build_id": "20260921T214937Z-fac5643-animedia-parity",
+    "gateway_unit": false,
+    "nginx_include": false,
+    "mount_dropin": false,
+    "database_preserved": true,
+    "deploy_performed": false
+  },
+  "prepared_release": {
+    "build_id": "20260922T071857Z-e84ee6e-animedia-comments-stage1",
+    "widget_artifact_sha256": "98000cc77444f6fd79494232a8fbf3da36a6affdc58f356f3f0da37d134fe9c4",
+    "symlink_moved": false
+  }
+}
