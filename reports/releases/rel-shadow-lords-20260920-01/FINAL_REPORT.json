@@ -1,0 +1,13 @@
+{
+  "verdict": "BATCH_PASS",
+  "release_id": "rel-shadow-lords-20260920-01",
+  "global_state": "BATCH_PASS",
+  "sites": {
+    "lords-01": "POST_DEPLOY_PASS",
+    "lords-02": "POST_DEPLOY_PASS",
+    "lords-03": "POST_DEPLOY_PASS"
+  },
+  "extra": {
+    "authorization": "SITE-FACTORY-RELEASE-ORCHESTRATOR-SHADOW-20260920-01"
+  }
+}

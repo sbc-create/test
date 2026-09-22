@@ -1,0 +1,20 @@
+{
+  "http_status": 200,
+  "build_id": "shadow-build-lords-02",
+  "source_commit": "020ad31ccf9c9d19ed48aae74d52af9e35bf3e29",
+  "artifact_sha256": "658eb04606cf80eea6fcf974e4b1cee06b5a17e9927814d8a578e80980f39e7f",
+  "template_family": "lords",
+  "profile": "lords-series-feed",
+  "design_id": "lords-new",
+  "domain": "lordserial33.biz",
+  "catalog_revision": "shadow-cat-1",
+  "details_revision": "shadow-det-1",
+  "catalog_details_skew": 1,
+  "player_ok": true,
+  "robots": "Disallow: /",
+  "meta_robots": "noindex",
+  "x_robots_tag": "noindex, nofollow",
+  "canonical": "https://lordserial33.biz/",
+  "sitemap": "200",
+  "extras": {}
+}

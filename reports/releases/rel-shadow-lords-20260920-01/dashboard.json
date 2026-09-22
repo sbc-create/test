@@ -1,0 +1,44 @@
+{
+  "release_id": "rel-shadow-lords-20260920-01",
+  "global_state": "BATCH_PASS",
+  "active_site_id": "lords-03",
+  "updated_at": "2026-09-20T22:29:49.262967+00:00",
+  "rows": [
+    {
+      "site": "lords-01",
+      "stage": "POST_DEPLOY_PASS",
+      "build": "",
+      "artifact": "",
+      "profile": "",
+      "design": "",
+      "indexability": "",
+      "smoke_1": "",
+      "smoke_2": "",
+      "result": "POST_DEPLOY_PASS"
+    },
+    {
+      "site": "lords-02",
+      "stage": "POST_DEPLOY_PASS",
+      "build": "",
+      "artifact": "",
+      "profile": "",
+      "design": "",
+      "indexability": "",
+      "smoke_1": "",
+      "smoke_2": "",
+      "result": "POST_DEPLOY_PASS"
+    },
+    {
+      "site": "lords-03",
+      "stage": "POST_DEPLOY_PASS",
+      "build": "",
+      "artifact": "",
+      "profile": "",
+      "design": "",
+      "indexability": "",
+      "smoke_1": "",
+      "smoke_2": "",
+      "result": "POST_DEPLOY_PASS"
+    }
+  ]
+}

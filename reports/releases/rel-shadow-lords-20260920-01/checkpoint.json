@@ -1,0 +1,254 @@
+{
+  "active_site_id": "lords-03",
+  "events": [
+    {
+      "at": "2026-09-20T22:29:48.359522+00:00",
+      "global_state": "CANARY_RUNNING"
+    },
+    {
+      "at": "2026-09-20T22:29:48.391546+00:00",
+      "notes": {},
+      "site_id": "lords-01",
+      "stage": "PREFLIGHT"
+    },
+    {
+      "at": "2026-09-20T22:29:48.418979+00:00",
+      "notes": {},
+      "site_id": "lords-01",
+      "stage": "BUILT"
+    },
+    {
+      "at": "2026-09-20T22:29:48.435692+00:00",
+      "notes": {},
+      "site_id": "lords-01",
+      "stage": "ARTIFACT_VERIFIED"
+    },
+    {
+      "at": "2026-09-20T22:29:48.458003+00:00",
+      "notes": {
+        "backup": "/home/claude/wt-site-factory-release-orchestrator-01/var/release-orchestrator/rel-shadow-lords-20260920-01/sandbox/backups/lords-01"
+      },
+      "site_id": "lords-01",
+      "stage": "ROLLBACK_PREPARED"
+    },
+    {
+      "at": "2026-09-20T22:29:48.470578+00:00",
+      "notes": {},
+      "site_id": "lords-01",
+      "stage": "STAGED"
+    },
+    {
+      "at": "2026-09-20T22:29:48.508678+00:00",
+      "notes": {},
+      "site_id": "lords-01",
+      "stage": "RESTART_REQUESTED"
+    },
+    {
+      "at": "2026-09-20T22:29:48.530301+00:00",
+      "notes": {},
+      "site_id": "lords-01",
+      "stage": "RUNTIME_WAIT"
+    },
+    {
+      "at": "2026-09-20T22:29:48.538900+00:00",
+      "notes": {},
+      "site_id": "lords-01",
+      "stage": "RUNTIME_VERIFIED"
+    },
+    {
+      "at": "2026-09-20T22:29:48.568329+00:00",
+      "notes": {},
+      "site_id": "lords-01",
+      "stage": "SMOKE_RUN_1"
+    },
+    {
+      "at": "2026-09-20T22:29:48.596163+00:00",
+      "notes": {},
+      "site_id": "lords-01",
+      "stage": "SMOKE_RUN_2"
+    },
+    {
+      "at": "2026-09-20T22:29:48.611925+00:00",
+      "notes": {},
+      "site_id": "lords-01",
+      "stage": "POST_DEPLOY_PASS"
+    },
+    {
+      "at": "2026-09-20T22:29:48.621139+00:00",
+      "global_state": "CANARY_PASS"
+    },
+    {
+      "at": "2026-09-20T22:29:48.639377+00:00",
+      "global_state": "SITES_RUNNING"
+    },
+    {
+      "at": "2026-09-20T22:29:48.653085+00:00",
+      "notes": {},
+      "site_id": "lords-02",
+      "stage": "PREFLIGHT"
+    },
+    {
+      "at": "2026-09-20T22:29:48.661059+00:00",
+      "notes": {},
+      "site_id": "lords-02",
+      "stage": "BUILT"
+    },
+    {
+      "at": "2026-09-20T22:29:48.676584+00:00",
+      "notes": {},
+      "site_id": "lords-02",
+      "stage": "ARTIFACT_VERIFIED"
+    },
+    {
+      "at": "2026-09-20T22:29:48.694849+00:00",
+      "notes": {
+        "backup": "/home/claude/wt-site-factory-release-orchestrator-01/var/release-orchestrator/rel-shadow-lords-20260920-01/sandbox/backups/lords-02"
+      },
+      "site_id": "lords-02",
+      "stage": "ROLLBACK_PREPARED"
+    },
+    {
+      "at": "2026-09-20T22:29:48.705708+00:00",
+      "notes": {},
+      "site_id": "lords-02",
+      "stage": "STAGED"
+    },
+    {
+      "at": "2026-09-20T22:29:48.721060+00:00",
+      "notes": {},
+      "site_id": "lords-02",
+      "stage": "RESTART_REQUESTED"
+    },
+    {
+      "at": "2026-09-20T22:29:48.732313+00:00",
+      "notes": {},
+      "site_id": "lords-02",
+      "stage": "RUNTIME_WAIT"
+    },
+    {
+      "at": "2026-09-20T22:29:48.740870+00:00",
+      "notes": {},
+      "site_id": "lords-02",
+      "stage": "RUNTIME_VERIFIED"
+    },
+    {
+      "at": "2026-09-20T22:29:48.791335+00:00",
+      "notes": {},
+      "site_id": "lords-02",
+      "stage": "SMOKE_RUN_1"
+    },
+    {
+      "at": "2026-09-20T22:29:48.802608+00:00",
+      "notes": {},
+      "site_id": "lords-02",
+      "stage": "SMOKE_RUN_2"
+    },
+    {
+      "at": "2026-09-20T22:29:48.813425+00:00",
+      "notes": {},
+      "site_id": "lords-02",
+      "stage": "POST_DEPLOY_PASS"
+    },
+    {
+      "at": "2026-09-20T22:29:48.836099+00:00",
+      "notes": {},
+      "site_id": "lords-03",
+      "stage": "PREFLIGHT"
+    },
+    {
+      "at": "2026-09-20T22:29:48.850632+00:00",
+      "notes": {},
+      "site_id": "lords-03",
+      "stage": "BUILT"
+    },
+    {
+      "at": "2026-09-20T22:29:48.868507+00:00",
+      "notes": {},
+      "site_id": "lords-03",
+      "stage": "ARTIFACT_VERIFIED"
+    },
+    {
+      "at": "2026-09-20T22:29:49.006794+00:00",
+      "notes": {
+        "backup": "/home/claude/wt-site-factory-release-orchestrator-01/var/release-orchestrator/rel-shadow-lords-20260920-01/sandbox/backups/lords-03"
+      },
+      "site_id": "lords-03",
+      "stage": "ROLLBACK_PREPARED"
+    },
+    {
+      "at": "2026-09-20T22:29:49.117520+00:00",
+      "notes": {},
+      "site_id": "lords-03",
+      "stage": "STAGED"
+    },
+    {
+      "at": "2026-09-20T22:29:49.133911+00:00",
+      "notes": {},
+      "site_id": "lords-03",
+      "stage": "RESTART_REQUESTED"
+    },
+    {
+      "at": "2026-09-20T22:29:49.140711+00:00",
+      "notes": {},
+      "site_id": "lords-03",
+      "stage": "RUNTIME_WAIT"
+    },
+    {
+      "at": "2026-09-20T22:29:49.150185+00:00",
+      "notes": {},
+      "site_id": "lords-03",
+      "stage": "RUNTIME_VERIFIED"
+    },
+    {
+      "at": "2026-09-20T22:29:49.159435+00:00",
+      "notes": {},
+      "site_id": "lords-03",
+      "stage": "SMOKE_RUN_1"
+    },
+    {
+      "at": "2026-09-20T22:29:49.167912+00:00",
+      "notes": {},
+      "site_id": "lords-03",
+      "stage": "SMOKE_RUN_2"
+    },
+    {
+      "at": "2026-09-20T22:29:49.227673+00:00",
+      "notes": {},
+      "site_id": "lords-03",
+      "stage": "POST_DEPLOY_PASS"
+    },
+    {
+      "at": "2026-09-20T22:29:49.262938+00:00",
+      "global_state": "BATCH_PASS"
+    }
+  ],
+  "global_state": "BATCH_PASS",
+  "release_id": "rel-shadow-lords-20260920-01",
+  "sites": {
+    "lords-01": {
+      "attempts": {},
+      "notes": {
+        "backup": "/home/claude/wt-site-factory-release-orchestrator-01/var/release-orchestrator/rel-shadow-lords-20260920-01/sandbox/backups/lords-01"
+      },
+      "site_id": "lords-01",
+      "stage": "POST_DEPLOY_PASS"
+    },
+    "lords-02": {
+      "attempts": {},
+      "notes": {
+        "backup": "/home/claude/wt-site-factory-release-orchestrator-01/var/release-orchestrator/rel-shadow-lords-20260920-01/sandbox/backups/lords-02"
+      },
+      "site_id": "lords-02",
+      "stage": "POST_DEPLOY_PASS"
+    },
+    "lords-03": {
+      "attempts": {},
+      "notes": {
+        "backup": "/home/claude/wt-site-factory-release-orchestrator-01/var/release-orchestrator/rel-shadow-lords-20260920-01/sandbox/backups/lords-03"
+      },
+      "site_id": "lords-03",
+      "stage": "POST_DEPLOY_PASS"
+    }
+  },
+  "updated_at": "2026-09-20T22:29:49.262967+00:00"
+}

@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-factory.local/schemas/release-orchestrator/release-registry.schema.json",
+  "title": "ReleaseRegistry",
+  "description": "Ops overlay for Site Factory Release Orchestrator. Joins with config/site-profiles for identity. Exact-domain only; no TLD fallbacks. Secrets never appear here.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "registry_id", "sites"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "registry_id": {
+      "type": "string",
+      "const": "site-factory-core-release"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "sites": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "site_id",
+          "domain",
+          "www_policy",
+          "site_family",
+          "template_profile",
+          "design_id",
+          "repository",
+          "source_branch",
+          "build_command",
+          "artifact_type",
+          "artifact_destination",
+          "runtime",
+          "service_name",
+          "health_url",
+          "version_url",
+          "smoke_profile",
+          "expected_indexability",
+          "robots_policy",
+          "sitemap_policy",
+          "canonical_policy",
+          "analytics_policy",
+          "deploy_handler",
+          "restart_handler",
+          "rollback_handler",
+          "data_sources",
+          "owner_state",
+          "enabled"
+        ],
+        "properties": {
+          "site_id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{1,40}$"
+          },
+          "domain": {
+            "type": "string",
+            "pattern": "^[a-z0-9.-]+\\.[a-z]{2,}$",
+            "description": "Exact apex domain. Lookup is exact equality only."
+          },
+          "www_policy": {
+            "type": "string",
+            "enum": ["apex_only", "www_to_apex_308", "www_allowed"]
+          },
+          "site_family": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{1,40}$"
+          },
+          "template_profile": {
+            "type": "string",
+            "minLength": 1
+          },
+          "design_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "repository": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_branch": {
+            "type": "string",
+            "minLength": 1
+          },
+          "build_command": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Logical build verb from allowlisted handlers, not free-form shell."
+          },
+          "artifact_type": {
+            "type": "string",
+            "enum": ["static-release", "docker-image", "payload-bundle", "control-api"]
+          },
+          "artifact_destination": {
+            "type": "string",
+            "minLength": 1
+          },
+          "runtime": {
+            "type": "string",
+            "enum": ["systemd-static", "systemd-app", "docker-compose", "local-disposable"]
+          },
+          "service_name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9@_.\\\\-]{1,128}$",
+            "description": "Exact systemd unit basename. Never guessed."
+          },
+          "container_name_if_any": {
+            "type": ["string", "null"]
+          },
+          "health_url": {
+            "type": "string",
+            "minLength": 1
+          },
+          "version_url": {
+            "type": "string",
+            "minLength": 1
+          },
+          "smoke_profile": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expected_indexability": {
+            "type": "string",
+            "enum": ["OPEN", "CLOSED"]
+          },
+          "robots_policy": {
+            "type": "string",
+            "enum": ["allow_all", "disallow_all", "selective"]
+          },
+          "sitemap_policy": {
+            "type": "string",
+            "enum": ["emit", "empty", "omit"]
+          },
+          "canonical_policy": {
+            "type": "string",
+            "enum": ["apex", "www", "self"]
+          },
+          "analytics_policy": {
+            "type": "string",
+            "enum": ["enabled", "disabled", "staging_blocked"]
+          },
+          "deploy_handler": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{2,60}$"
+          },
+          "restart_handler": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{2,60}$"
+          },
+          "rollback_handler": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{2,60}$"
+          },
+          "data_sources": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "owner_state": {
+            "type": "string",
+            "enum": ["draft", "staging", "production", "retired"]
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}

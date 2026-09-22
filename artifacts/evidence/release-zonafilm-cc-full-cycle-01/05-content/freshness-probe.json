@@ -1,0 +1,46 @@
+{
+  "started_at": "2026-09-22T14:30:09Z",
+  "catalog": "/srv/lords/.frontend/zona-02-catalog.json",
+  "marker": "SYNTHETIC-FRESHNESS-PROBE",
+  "steps": [
+    {
+      "step": "baseline",
+      "revision": ""
+    },
+    {
+      "step": "inject",
+      "new_revision_in_file": "6200fe100bb474299f82eecc474d310f",
+      "items": 53653
+    },
+    {
+      "step": "observe",
+      "revision": "6200fe100bb474299f82eecc474d310f"
+    }
+  ],
+  "backup": {
+    "path": "var/freshness/zona-02-catalog.before-probe.1790087409.json",
+    "sha256": "5cd67cf22cd00b4f29391e1d2b513a3ba986402b8e5c868e5c89944238fca150"
+  },
+  "revision_before": "",
+  "revision_after_inject": "6200fe100bb474299f82eecc474d310f",
+  "auto_reload_without_restart": true,
+  "visible": {
+    "home_status": 200,
+    "home_contains_marker": true,
+    "recently_added_status": 200,
+    "recently_added_contains_marker": true,
+    "recently_added_first": true,
+    "title_page_status": 200
+  },
+  "restored": {
+    "sha256": "5cd67cf22cd00b4f29391e1d2b513a3ba986402b8e5c868e5c89944238fca150",
+    "matches_original": true
+  },
+  "revision_after_restore": "0b59f77bb3c78e6c3c568f93d3579184",
+  "cleanup": {
+    "marker_still_in_recently_added": false,
+    "synthetic_title_status": 200,
+    "revision_returned": false
+  },
+  "finished_at": "2026-09-22T14:40:33Z"
+}

@@ -1,0 +1,18 @@
+{
+  "build_id": "20260921T114007Z-89003bb-clean",
+  "artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+  "design_id": "lords-new",
+  "route_statuses": {
+    "/": 200,
+    "/catalog": 200,
+    "/search": 200,
+    "/series/2024": 200,
+    "/title/sample": 200,
+    "/definitely-missing-404": 404
+  },
+  "indexability": "CLOSED",
+  "catalog_revision": "UNMEASURED_REQUIRES_HTTP",
+  "http_5xx": 0,
+  "soft404": 0,
+  "redirect_loops": 0
+}

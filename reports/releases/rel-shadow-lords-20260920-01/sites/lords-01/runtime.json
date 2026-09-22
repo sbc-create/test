@@ -1,0 +1,20 @@
+{
+  "http_status": 200,
+  "build_id": "shadow-build-lords-01",
+  "source_commit": "020ad31ccf9c9d19ed48aae74d52af9e35bf3e29",
+  "artifact_sha256": "64a7b4a05c1c710f86f904fe7cbf7caf1a3659d089caa9cd511aacff8fb85e18",
+  "template_family": "lords",
+  "profile": "lords-general",
+  "design_id": "lords-general",
+  "domain": "lordfilm47.space",
+  "catalog_revision": "shadow-cat-1",
+  "details_revision": "shadow-det-1",
+  "catalog_details_skew": 1,
+  "player_ok": true,
+  "robots": "Disallow: /",
+  "meta_robots": "noindex",
+  "x_robots_tag": "noindex, nofollow",
+  "canonical": "https://lordfilm47.space/",
+  "sitemap": "200",
+  "extras": {}
+}

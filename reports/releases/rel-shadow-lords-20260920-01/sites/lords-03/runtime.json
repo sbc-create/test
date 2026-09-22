@@ -1,0 +1,20 @@
+{
+  "http_status": 200,
+  "build_id": "shadow-build-lords-03",
+  "source_commit": "020ad31ccf9c9d19ed48aae74d52af9e35bf3e29",
+  "artifact_sha256": "58a3fbc5a497db77fa1a279ce31160b1ea1acaf1c1cff715778622ff5363e10b",
+  "template_family": "lords",
+  "profile": "lords-curated",
+  "design_id": "lords-curated",
+  "domain": "1lordserials1.online",
+  "catalog_revision": "shadow-cat-1",
+  "details_revision": "shadow-det-1",
+  "catalog_details_skew": 1,
+  "player_ok": true,
+  "robots": "Disallow: /",
+  "meta_robots": "noindex",
+  "x_robots_tag": "noindex, nofollow",
+  "canonical": "https://1lordserials1.online/",
+  "sitemap": "200",
+  "extras": {}
+}

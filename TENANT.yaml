@@ -1,0 +1,117 @@
+# Маркер контура. Читается человеком и проверкой изоляции
+# (tests/unit/test_zonafilm_cc_tenant.py). Один файл — один tenant.
+#
+# Смысл файла: назвать границу, за которую эта сессия не выходит. Всё, чего нет
+# в `allowed_writes`, для неё чужое, даже если права на запись есть. Права есть
+# на весь /srv/lords/.frontend — именно поэтому граница описана явно, а не
+# оставлена на усмотрение.
+
+schema_version: 1
+
+tenant: zona-02
+role: SITE_RELEASE_FULL_CYCLE
+terminal_owner: RELEASE_ZONAFILM_CC
+domain: zonafilm.cc
+www_domain: www.zonafilm.cc
+family: zona
+environment: LIVE_CANARY
+indexability_initial_state: CLOSED
+
+branch: claude/release-zonafilm-cc-full-cycle-01
+worktree: /home/claude/wt-release-zonafilm-cc-full-cycle-01
+base_commit: af8f6f2b6e1c7d0d19d01a1bd7fb010e9f578c34
+base_branch: cursor/site-factory-release-orchestrator-01
+base_rationale: >-
+  Чистая база release-orchestrator: worktree без изменений, ветка выведена прямо
+  из origin/main a7f7cb6236fbc9770af949ef98eae511cd3c8fc4, содержит реестр
+  config/release-registry.json и схемы, без которых выкат нечем описать. Ветка
+  разработки шаблона Zona (claude/zona-real-slider-01) в базу не входит.
+
+# Идентификаторы выданы аллокатором, а не выбраны.
+# automation/host/zonafilm-cc-allocate.py --family zona --domain zonafilm.cc \
+#   --service-name-source runtime_registry
+allocation:
+  site_id: zona-02
+  service_name: nova-zona-02.service
+  port: 9123
+  evidence: artifacts/evidence/release-zonafilm-cc-full-cycle-01/04-site-creation/allocation.json
+  service_name_source: runtime_registry
+  service_name_source_rationale: >-
+    Реестры расходятся: config/release-registry.json называет для zona-01 юнит
+    zona-01.service, а диспетчер и диск — nova-zona-01.service. Связывает
+    runtime_registry: nginx zona-01.conf проксирует на 127.0.0.1:9120, ExecStart
+    nova-zona-01.service слушает 9120, запись реестра называет тот же порт.
+    zona-01.service — легаси serve.py на 9104, на который не ссылается ни один
+    vhost. Три независимых совпадения против нуля.
+
+# Неизменяемый шаблон. Зафиксирован по факту исполнения, а не по манифесту.
+pinned_template:
+  family: zona
+  release_dir: /srv/lords/.frontend/releases/zona-slider-2650fad6
+  code_sha256: 7ccf094a1d7f2b5e648a38f51f6a63de9627576637d96f6c966fe1759ad8fa1e
+  source_commit: 5863d296264867f85138bd771f1b90a86ac9c599
+  built_at: "2026-09-21T16:29:37Z"
+  evidence: artifacts/evidence/release-zonafilm-cc-full-cycle-01/02-start-point/template-pin.md
+  why_not_newer: >-
+    /srv/lords/.frontend/zona-01-frontend.py (sha256 bbd6467f…, commit 6513e7e7)
+    новее и объявлен в template-manifest-zona-01.json, но не назначен: ссылка
+    sites/zona-01/current ведёт на zona-slider-2650fad6, а живая выдача
+    127.0.0.1:9120 не содержит ни одного data-zhero-* — разметки, которая есть
+    только в новом артефакте. Он не опубликован, это незавершённая работа
+    соседнего терминала, и брать её значило бы подхватить чужие коммиты.
+
+# Границы записи. Всё остальное — чужое.
+allowed_writes:
+  repo:
+    - /home/claude/wt-release-zonafilm-cc-full-cycle-01/**
+  runtime:
+    - /srv/lords/.frontend/sites/zona-02/**
+    - /srv/lords/.frontend/releases/zona-02-*/**
+    - /srv/lords/.frontend/template-manifest-zona-02.json
+    - /srv/lords/.frontend/zona-02-catalog.json
+    - /srv/lords/.frontend/zona-02-details.json
+    - /srv/lords/.frontend/lords-runtime-registry.json   # только добавление ключа zona-02
+  runtime_registry_rule: >-
+    Общий файл. Разрешено ровно одно: добавить ключ sites.zona-02. Любое
+    изменение байтов остальных записей — нарушение, проверяется посимвольным
+    сравнением до и после (tests/unit/test_zonafilm_cc_tenant.py).
+
+forbidden:
+  cross_tenant_writes: true
+  other_site_mutations: true
+  other_domain_dns_mutations: true
+  restart_of_other_units: true
+  touching_zona_template_branch: true
+  force_push: true
+  opening_indexing_without_owner_command: true
+
+# Соседи, которых нельзя трогать ни при каких обстоятельствах.
+neighbours_readonly:
+  units:
+    - nova-zona-01.service
+    - zona-01.service
+    - nova-animedia-01.service
+    - nova-animedia-02.service
+    - lords-nova-01.service
+    - nova-lords-02.service
+    - nova-lords-03.service
+    - nova-yummy-site.service
+    - nova-yummy-org.service
+    - nova-yummy-biz.service
+    - yummyani-site.service
+  domains:
+    - zonafilm.space
+    - animedia.icu
+    - animedia.space
+    - lordfilm47.space
+    - lordserial33.biz
+    - 1lordserials1.online
+    - yummyani.site
+    - yummyani.org
+    - yummyani.biz
+  worktrees:
+    - /home/claude/wt-zona-real-slider-01      # активен: другой терминал, шаблон Zona
+    - /home/claude/wt-zona-finalization-01
+    - /home/claude/wt-zona-slider-01
+
+evidence_path: artifacts/evidence/release-zonafilm-cc-full-cycle-01

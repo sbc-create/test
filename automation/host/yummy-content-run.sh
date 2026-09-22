@@ -22,6 +22,14 @@
 #   YUMMY_CONTENT_SERVICE=web-org yummy-content-run.sh scripts/watchdog-run.mjs
 set -Eeuo pipefail
 
+
+if [[ "${RELEASE_ORCHESTRATOR_REQUIRED:-0}" == "1" ]]; then
+  echo "[RELEASE_ORCHESTRATOR_REQUIRED] yummy-content-run.sh is not a supported automation path. Use bin/site-factory-release." >&2
+  exit 78
+fi
+echo "[deprecated] yummy-content-run.sh: prefer site-factory-release (set RELEASE_ORCHESTRATOR_REQUIRED=1 to refuse)." >&2
+
+
 PROJECT="${YUMMY_CONTENT_PROJECT:-yummyani-staging}"
 REPO="${YUMMY_CONTENT_REPO:-/srv/sites/yummyani-staging/repo}"
 COMPOSE_FILE="${YUMMY_CONTENT_COMPOSE:-${REPO}/compose.staging.yaml}"

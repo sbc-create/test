@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.0",
+  "site_id": "zona-02",
+  "cms_contract": "1.2.0",
+  "site_type": "video-showcase",
+  "domains": [
+    "zonafilm.cc"
+  ],
+  "locale": "ru-RU",
+  "timezone": "Europe/Moscow",
+  "theme": {
+    "name": "lords-showcase"
+  },
+  "content_providers": [
+    {
+      "adapter": "cdnvideohub-public-v1",
+      "role": "primary",
+      "directions": [
+        "movie",
+        "series"
+      ],
+      "credentials_ref": "cdnvideohub_api_token"
+    }
+  ],
+  "content_directions": [
+    "movie",
+    "series"
+  ],
+  "enabled_modules": [
+    "content-ingestion",
+    "content-catalog",
+    "episodes-seasons",
+    "playback-availability",
+    "homepage-shelves",
+    "ratings",
+    "seo",
+    "site-configuration",
+    "cache-invalidation",
+    "monitoring-audit",
+    "provider-adapters",
+    "renderer-adapters"
+  ],
+  "render_strategy": {
+    "mode": "static",
+    "release_size_budget_mb": 1600,
+    "full_render_budget_minutes": 120
+  },
+  "seo_profile": {
+    "enabled": true,
+    "indexing_enabled": false,
+    "canonical_host": "zonafilm.cc",
+    "editorial_profile": null
+  },
+  "analytics_profile": {
+    "enabled": false,
+    "provider": null,
+    "counter_id": null,
+    "allowed_hosts": [
+      "zonafilm.cc"
+    ],
+    "blocked_reason": "BLOCKED_EXTERNAL_CREDENTIAL: отдельный счётчик для zonafilm.cc не создан — нет доступа к API Яндекс.Метрики. Счётчик соседней витрины не подставлен намеренно: он писал бы события не туда."
+  },
+  "legal_profile": {
+    "contact_email": null,
+    "owner": null,
+    "documents": null,
+    "blocked_reason": "BLOCKED_INPUT: правовые данные нового сайта владельцем не переданы. Пустое поле — не разрешение взять их у соседней витрины."
+  },
+  "release_policy": {
+    "keep_releases": 2,
+    "rollback_ready": true,
+    "zero_downtime_switch": true
+  },
+  "feature_flags": {
+    "ad_slots_enabled": false
+  },
+  "owners": {
+    "content-ingestion": "site-factory/content",
+    "seo": "site-factory/seo",
+    "renderer-adapters": "site-factory/platform",
+    "monitoring-audit": "site-factory/platform"
+  },
+  "health_endpoint": "/healthz",
+  "coverage_endpoint": "/api/v1/coverage",
+  "deployment": {
+    "template_family": "zona",
+    "template_version": "1.2.0",
+    "build_id": "zona-02-1015c650d8be",
+    "artifact_sha256": "7ccf094a1d7f2b5e648a38f51f6a63de9627576637d96f6c966fe1759ad8fa1e",
+    "source_commit": "5863d296264867f85138bd771f1b90a86ac9c599",
+    "template_profile": "zona-general",
+    "built_at": "2026-09-22T12:48:44Z",
+    "release_id": "zona-02-1015c650d8be",
+    "serving_unit": "nova-zona-02.service",
+    "evidence": "template-manifest-zona-02.json + realpath(sites/zona-02/current) + sha256 рантайма"
+  },
+  "family": "zona",
+  "environment": "staging",
+  "lifecycle_state": "PROVISIONED",
+  "monitoring_profile_ref": null,
+  "backup_policy_ref": null,
+  "content_profile_ref": null,
+  "registry_note": "Заведён заданием SITE_RELEASE_FULL_CYCLE 2026-09-22. Идентификатор, имя юнита и порт выданы аллокатором (automation/host/zonafilm-cc-allocate.py) по четырём реестрам, а не выбраны. Ничего не унаследовано от zona-01, кроме байтов закреплённого шаблона. owner_state и environment — staging, а не canary: перечень состояний задан схемой (draft|staging|production|retired), и «canary» в нём нет. Витрина закрыта от индексации и не авторизована в production — это ровно staging в терминах схемы; придумывать шестое состояние ради красивого слова значило бы разойтись со схемой, которая здесь главнее.",
+  "player": {
+    "provider": "cdnvideohub",
+    "credential_profile": null,
+    "publisher_id_ref": null,
+    "sidecar": "/srv/lords/.frontend/player-zona-02.json",
+    "source_mode": "provider-id",
+    "blocked_reason": "BLOCKED_EXTERNAL_CREDENTIAL: Publisher ID витрине не выдан. Пара учётных данных соседней витрины не переиспользуется без решения владельца: у провайдера publisher привязан к перечню доменов, и zonafilm.cc в нём не подтверждён. До выдачи рантайм честно отдаёт состояние noaccess без пустого iframe."
+  }
+}

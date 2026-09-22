@@ -1,0 +1,44 @@
+# Витрина zona-02 (zonafilm.cc), семейство zona.
+#
+# Форма повторяет nova-zona-01.service: тот же пользователь, тот же рабочий
+# каталог, тот же загрузчик. Различаются ровно те значения, которые и должны
+# различаться у двух разных витрин — порт, манифест, каталог, корень старого
+# релиза и имя.
+#
+# Порт и имя юнита выданы аллокатором по четырём реестрам, а не выбраны:
+#   automation/host/zonafilm-cc-allocate.py --family zona --domain zonafilm.cc \
+#     --service-name-source runtime_registry
+#
+# ExecStart указывает на общий загрузчик, а не на релиз напрямую. Загрузчик
+# находит витрину по порту в lords-runtime-registry.json, разрешает
+# sites/zona-02/current и передаёт управление через execv — поэтому
+# `__file__` работающего процесса становится путём неизменяемого релиза, и
+# «какой релиз исполняется» перестаёт быть вопросом доверия.
+
+[Unit]
+Description=nova frontend: zona-02 (zonafilm.cc) [zona]
+After=network-online.target
+
+[Service]
+Type=simple
+User=lords
+WorkingDirectory=/srv/lords/.frontend
+Environment=LORDS_TEMPLATE_MANIFEST=/srv/lords/.frontend/template-manifest-zona-02.json
+Environment=LORDS_CATALOG=/srv/lords/.frontend/zona-02-catalog.json
+Environment=LORDS_LEGACY_ROOT=/srv/lords/.frontend/sites/zona-02/legacy
+Environment=LORDS_SITE_NAME=Zona
+Environment=PYTHONDONTWRITEBYTECODE=1
+# Интерпретатор из .venv, а не системный.
+#
+# Шесть установленных юнитов семейства запускаются через /usr/bin/python3, и
+# первая редакция этого файла повторила их форму. Правило фабрики
+# (tests/unit/test_analytics_unit_execstart.py) это отклонило, и по делу:
+# системный интерпретатор приносит тот набор пакетов, который окажется в
+# образе, а не тот, на котором витрина проверена. Здесь взят ровно тот
+# интерпретатор, на котором прогнаны обе приёмки и оба браузерных прогона.
+ExecStart=/srv/site-factory/repo/.venv/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9123
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

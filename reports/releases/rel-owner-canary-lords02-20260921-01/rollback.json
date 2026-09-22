@@ -1,0 +1,8 @@
+{
+  "site_id": "lords-02",
+  "backup_path": "var/release-orchestrator/rehearsal-lords02/work/backups/lords-02",
+  "digest": "28bac0b58a46f80265e65b36716bea8863b4ede024502f53f9f941f293c27c14",
+  "rollback_prepared": 1,
+  "rollback_digest_match": 1,
+  "rollback_rehearsal_pass": 1
+}

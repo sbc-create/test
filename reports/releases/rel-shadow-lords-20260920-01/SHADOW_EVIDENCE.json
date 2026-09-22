@@ -1,0 +1,96 @@
+{
+  "OWNER_AUTHORIZATION_ID": "SITE-FACTORY-RELEASE-ORCHESTRATOR-SHADOW-20260920-01",
+  "result": {
+    "verdict": "BATCH_PASS",
+    "release_id": "rel-shadow-lords-20260920-01",
+    "global_state": "BATCH_PASS",
+    "sites": {
+      "lords-01": "POST_DEPLOY_PASS",
+      "lords-02": "POST_DEPLOY_PASS",
+      "lords-03": "POST_DEPLOY_PASS"
+    },
+    "problems": [],
+    "shadow": true
+  },
+  "SHADOW_SITES_PLANNED": [
+    "lords-01",
+    "lords-02",
+    "lords-03"
+  ],
+  "SHADOW_SITES_PASSED": [
+    "lords-01",
+    "lords-02",
+    "lords-03"
+  ],
+  "SHADOW_MUTATIONS": 0,
+  "mutation_paths": [],
+  "INOTIFY_DIAGNOSIS": {
+    "max_user_instances": 128,
+    "max_user_watches": 234322,
+    "max_queued_events": 16384,
+    "observed_instances": 11,
+    "top_processes": [
+      {
+        "pid": 397189,
+        "inotify_instances": 3,
+        "comm": "systemd"
+      },
+      {
+        "pid": 749656,
+        "inotify_instances": 1,
+        "comm": "dbus-daemon"
+      },
+      {
+        "pid": 839338,
+        "inotify_instances": 1,
+        "comm": "MainThread"
+      },
+      {
+        "pid": 937547,
+        "inotify_instances": 1,
+        "comm": "MainThread"
+      },
+      {
+        "pid": 1455637,
+        "inotify_instances": 1,
+        "comm": "MainThread"
+      },
+      {
+        "pid": 1625415,
+        "inotify_instances": 1,
+        "comm": "MainThread"
+      },
+      {
+        "pid": 2500802,
+        "inotify_instances": 1,
+        "comm": "claude"
+      },
+      {
+        "pid": 3005813,
+        "inotify_instances": 1,
+        "comm": "claude"
+      },
+      {
+        "pid": 3340817,
+        "inotify_instances": 1,
+        "comm": "MainThread"
+      }
+    ],
+    "fd_soft_limit": 1048576,
+    "fd_hard_limit": 1048576,
+    "likely_cause": "inotify_headroom_ok",
+    "remediation_applied": false,
+    "notes": []
+  },
+  "BYPASS_REFUSE_PASS": true,
+  "live_before": {
+    "/srv/lords/lords-01": "402eb73f991297feaf39f6f4373d9541167581d30e021c5badc86bf7dba53945",
+    "/srv/lords/lords-02": "3f489209286f9b7aae66759ce3ed6b572b6eb46b06e19e9d7ce09ebe78ed3e49",
+    "/srv/lords/lords-03": "cb9a1ee323413a28fce61b3d33b5412a6c52b40210f58fcad87b3629d0a6fcf7"
+  },
+  "live_after": {
+    "/srv/lords/lords-01": "402eb73f991297feaf39f6f4373d9541167581d30e021c5badc86bf7dba53945",
+    "/srv/lords/lords-02": "3f489209286f9b7aae66759ce3ed6b572b6eb46b06e19e9d7ce09ebe78ed3e49",
+    "/srv/lords/lords-03": "cb9a1ee323413a28fce61b3d33b5412a6c52b40210f58fcad87b3629d0a6fcf7"
+  }
+}

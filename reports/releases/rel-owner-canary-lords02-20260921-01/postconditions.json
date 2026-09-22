@@ -1,0 +1,21 @@
+{
+  "RESTART_COMMAND_WARNING": 0,
+  "RESTART_POSTCONDITIONS_PASS": 1,
+  "RESTART_EFFECTIVE_RESULT": "PASS",
+  "DUPLICATE_RESTART_COUNT": 0,
+  "old": {
+    "ActiveState": "active",
+    "SubState": "running",
+    "MainPID": "2000",
+    "ExecMainStartTimestamp": "2000",
+    "NRestarts": "0"
+  },
+  "new": {
+    "ActiveState": "active",
+    "SubState": "running",
+    "MainPID": "2001",
+    "ExecMainStartTimestamp": "2010",
+    "NRestarts": "1"
+  },
+  "detail": ""
+}

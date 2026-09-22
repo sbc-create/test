@@ -1,0 +1,1591 @@
+{
+  "origin": "http://127.0.0.1:9123",
+  "host": "zonafilm.cc",
+  "started_at": "2026-09-22T14:49:09Z",
+  "routes": {
+    "home": {
+      "path": "/",
+      "status": 200,
+      "ms": 937.8,
+      "bytes": 47742,
+      "error": "",
+      "allowed": [
+        200
+      ]
+    },
+    "catalog": {
+      "path": "/catalog/",
+      "status": 200,
+      "ms": 375.9,
+      "bytes": 92888,
+      "error": "",
+      "allowed": [
+        200
+      ]
+    },
+    "catalog_page2": {
+      "path": "/catalog/?page=2",
+      "status": 200,
+      "ms": 609.5,
+      "bytes": 92380,
+      "error": "",
+      "allowed": [
+        200
+      ]
+    },
+    "movies": {
+      "path": "/movies/",
+      "status": 200,
+      "ms": 270.6,
+      "bytes": 91760,
+      "error": "",
+      "allowed": [
+        200
+      ]
+    },
+    "series": {
+      "path": "/series/",
+      "status": 200,
+      "ms": 216.7,
+      "bytes": 90888,
+      "error": "",
+      "allowed": [
+        200
+      ]
+    },
+    "animation": {
+      "path": "/animation/",
+      "status": 200,
+      "ms": 71.3,
+      "bytes": 92697,
+      "error": "",
+      "allowed": [
+        200
+      ]
+    },
+    "new": {
+      "path": "/new/",
+      "status": 200,
+      "ms": 306.4,
+      "bytes": 95800,
+      "error": "",
+      "allowed": [
+        200
+      ]
+    },
+    "collections": {
+      "path": "/collections/",
+      "status": 200,
+      "ms": 3179.3,
+      "bytes": 55582,
+      "error": "",
+      "allowed": [
+        200
+      ]
+    },
+    "schedule": {
+      "path": "/schedule/",
+      "status": 308,
+      "ms": 1.7,
+      "bytes": 0,
+      "error": "",
+      "allowed": [
+        200,
+        301,
+        308
+      ],
+      "location": "/new/"
+    },
+    "search_empty": {
+      "path": "/search/",
+      "status": 200,
+      "ms": 2.6,
+      "bytes": 44025,
+      "error": "",
+      "allowed": [
+        200
+      ]
+    },
+    "search_query": {
+      "path": "/search/?q=матрица",
+      "status": 200,
+      "ms": 3321.3,
+      "bytes": 50471,
+      "error": "",
+      "allowed": [
+        200
+      ]
+    },
+    "robots": {
+      "path": "/robots.txt",
+      "status": 200,
+      "ms": 1.5,
+      "bytes": 26,
+      "error": "",
+      "allowed": [
+        200
+      ]
+    },
+    "sitemap": {
+      "path": "/sitemap.xml",
+      "status": 404,
+      "ms": 1.8,
+      "bytes": 0,
+      "error": "",
+      "allowed": [
+        200,
+        404
+      ]
+    },
+    "healthz": {
+      "path": "/healthz",
+      "status": 200,
+      "ms": 1.3,
+      "bytes": 11,
+      "error": "",
+      "allowed": [
+        200
+      ]
+    },
+    "template_version": {
+      "path": "/__template_version",
+      "status": 200,
+      "ms": 1.9,
+      "bytes": 1465,
+      "error": "",
+      "allowed": [
+        200
+      ]
+    },
+    "not_found": {
+      "status": 0,
+      "bytes": 0,
+      "has_shell": false
+    }
+  },
+  "indexing": {
+    "pages": {
+      "/": {
+        "x_robots_tag": "noindex,nofollow",
+        "meta_robots": [
+          "noindex,nofollow"
+        ],
+        "canonical": [
+          "https://zonafilm.cc/"
+        ]
+      },
+      "/catalog/": {
+        "x_robots_tag": "noindex,nofollow",
+        "meta_robots": [
+          "noindex,nofollow"
+        ],
+        "canonical": [
+          "https://zonafilm.cc/catalog/?sort=newest"
+        ]
+      },
+      "/new/": {
+        "x_robots_tag": "noindex,nofollow",
+        "meta_robots": [
+          "noindex,nofollow"
+        ],
+        "canonical": [
+          "https://zonafilm.cc/new/?sort=newest&amp;mode=added"
+        ]
+      },
+      "/search/?q=тест": {
+        "x_robots_tag": "noindex,nofollow",
+        "meta_robots": [
+          "noindex,nofollow"
+        ],
+        "canonical": [
+          "https://zonafilm.cc/search/?q=тест"
+        ]
+      }
+    },
+    "robots_txt": {
+      "status": 200,
+      "body": "User-agent: *\nDisallow: /\n"
+    },
+    "sitemap": {
+      "status": 404,
+      "urls": 0,
+      "bytes": 0
+    }
+  },
+  "home": {
+    "hero_present": 1,
+    "hero_slides": 0,
+    "hero_distinct_links": 1,
+    "hero_dots": 0,
+    "sections": {
+      "Жанры": 1,
+      "Подборки": 1,
+      "Смотреть кино и сериалы на Zona": 1
+    },
+    "title_links": 1,
+    "collection_tiles": [
+      "/collection/recently_added/",
+      "/collection/recently_added_movies/",
+      "/collection/new_movie_releases/",
+      "/collection/new_series_releases/",
+      "/collection/new_episodes/",
+      "/collection/top_rated/",
+      "/collection/current_season/",
+      "/collection/video_available/"
+    ],
+    "kind_links": [
+      "/movies/",
+      "/series/",
+      "/animation/"
+    ],
+    "collection_links": 8,
+    "empty_sections": 0,
+    "footer": 1,
+    "bytes": 47742,
+    "ms": 837.3
+  },
+  "collections": {
+    "/collection/recently_added/": {
+      "status": 200,
+      "title": "Недавно добавленные",
+      "items": 60,
+      "distinct": 60,
+      "duplicates": 0,
+      "deterministic": true,
+      "ms": 49.7
+    },
+    "/collection/recently_added_movies/": {
+      "status": 200,
+      "title": "Недавно добавленные фильмы",
+      "items": 60,
+      "distinct": 60,
+      "duplicates": 0,
+      "deterministic": true,
+      "ms": 54.6
+    },
+    "/collection/new_movie_releases/": {
+      "status": 200,
+      "title": "Премьеры фильмов",
+      "items": 60,
+      "distinct": 60,
+      "duplicates": 0,
+      "deterministic": true,
+      "ms": 120.4
+    },
+    "/collection/new_series_releases/": {
+      "status": 200,
+      "title": "Новые сериалы",
+      "items": 60,
+      "distinct": 60,
+      "duplicates": 0,
+      "deterministic": true,
+      "ms": 66.7
+    },
+    "/collection/new_episodes/": {
+      "status": 200,
+      "title": "Недавно добавленные сериалы",
+      "items": 60,
+      "distinct": 60,
+      "duplicates": 0,
+      "deterministic": true,
+      "ms": 49.5
+    },
+    "/collection/top_rated/": {
+      "status": 200,
+      "title": "Высокие оценки",
+      "items": 60,
+      "distinct": 60,
+      "duplicates": 0,
+      "deterministic": true,
+      "ms": 11.1
+    },
+    "/collection/current_season/": {
+      "status": 200,
+      "title": "Этого года",
+      "items": 60,
+      "distinct": 60,
+      "duplicates": 0,
+      "deterministic": true,
+      "ms": 22.3
+    },
+    "/collection/video_available/": {
+      "status": 200,
+      "title": "С видео",
+      "items": 60,
+      "distinct": 60,
+      "duplicates": 0,
+      "deterministic": true,
+      "ms": 354.1
+    },
+    "added_vs_episodes_overlap": 16,
+    "video_available_probe": {
+      "checked": 12,
+      "player_states": {
+        "noaccess": 12
+      },
+      "without_block": [],
+      "empty_iframe": []
+    }
+  },
+  "catalog": {
+    "page1_titles": 28,
+    "page2_titles": 28,
+    "overlap": 0,
+    "filters": {
+      "genre": {
+        "links_found": 94,
+        "sample": [
+          "/catalog/?genre=action&sort=newest",
+          "/catalog/?genre=ai&sort=newest",
+          "/catalog/?genre=animation&sort=newest"
+        ],
+        "probe": "/catalog/?genre=action&sort=newest",
+        "status": 200,
+        "titles": 28
+      },
+      "country": {
+        "links_found": 157,
+        "sample": [
+          "/catalog/?country=afganistan&sort=newest",
+          "/catalog/?country=albaniya&sort=newest",
+          "/catalog/?country=alzhir&sort=newest"
+        ],
+        "probe": "/catalog/?country=afganistan&sort=newest",
+        "status": 200,
+        "titles": 3
+      },
+      "year": {
+        "links_found": 95,
+        "sample": [
+          "/catalog/?year=1902&sort=newest",
+          "/catalog/?year=1909&sort=newest",
+          "/catalog/?year=1911&sort=newest"
+        ],
+        "probe": "/catalog/?year=1902&sort=newest",
+        "status": 200,
+        "titles": 1
+      },
+      "kind": {
+        "links_found": 3,
+        "sample": [
+          "/catalog/?kind=%D0%9C%D1%83%D0%BB%D1%8C%D1%82%D1%84%D0%B8%D0%BB%D1%8C%D0%BC&sort=newest",
+          "/catalog/?kind=%D0%A1%D0%B5%D1%80%D0%B8%D0%B0%D0%BB&sort=newest",
+          "/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC&sort=newest"
+        ],
+        "probe": "/catalog/?kind=%D0%9C%D1%83%D0%BB%D1%8C%D1%82%D1%84%D0%B8%D0%BB%D1%8C%D0%BC&sort=newest",
+        "status": 200,
+        "titles": 28
+      },
+      "sort": {
+        "links_found": 355,
+        "sample": [
+          "/catalog/?country=afganistan&sort=newest",
+          "/catalog/?country=albaniya&sort=newest",
+          "/catalog/?country=alzhir&sort=newest"
+        ],
+        "probe": "/catalog/?country=afganistan&sort=newest",
+        "status": 200,
+        "titles": 3
+      }
+    },
+    "combination": {
+      "url": "/catalog/?genre=action&sort=newest&sort=year",
+      "status": 200
+    }
+  },
+  "search": {
+    "exact": {
+      "q": "матрица",
+      "status": 200,
+      "results": 9,
+      "ms": 7.0,
+      "raw_script_reflected": false
+    },
+    "partial": {
+      "q": "матри",
+      "status": 200,
+      "results": 8,
+      "ms": 8.3,
+      "raw_script_reflected": false
+    },
+    "upper": {
+      "q": "МАТРИЦА",
+      "status": 200,
+      "results": 9,
+      "ms": 10.8,
+      "raw_script_reflected": false
+    },
+    "lower": {
+      "q": "матрица",
+      "status": 200,
+      "results": 9,
+      "ms": 6.3,
+      "raw_script_reflected": false
+    },
+    "latin": {
+      "q": "matrix",
+      "status": 200,
+      "results": 8,
+      "ms": 9.3,
+      "raw_script_reflected": false
+    },
+    "cyrillic": {
+      "q": "матрица",
+      "status": 200,
+      "results": 9,
+      "ms": 5.5,
+      "raw_script_reflected": false
+    },
+    "hyphen": {
+      "q": "человек-паук",
+      "status": 200,
+      "results": 18,
+      "ms": 9.3,
+      "raw_script_reflected": false
+    },
+    "colon": {
+      "q": "миссия: невыполнима",
+      "status": 200,
+      "results": 11,
+      "ms": 13.6,
+      "raw_script_reflected": false
+    },
+    "spaces": {
+      "q": "  два   пробела  ",
+      "status": 200,
+      "results": 0,
+      "ms": 6.3,
+      "raw_script_reflected": false
+    },
+    "absent": {
+      "q": "щщщнесуществующийзапросщщщ",
+      "status": 200,
+      "results": 0,
+      "ms": 6.7,
+      "raw_script_reflected": false
+    },
+    "xss": {
+      "q": "<script>alert(1)</script>",
+      "status": 200,
+      "results": 5,
+      "ms": 57.4,
+      "raw_script_reflected": false
+    },
+    "sqli": {
+      "q": "' OR 1=1 --",
+      "status": 200,
+      "results": 28,
+      "ms": 3732.3,
+      "raw_script_reflected": false
+    },
+    "median_ms": 8.8,
+    "follow_first_result": {
+      "href": "/title/armitazh-dvoynaya-matrica/",
+      "status": 200
+    }
+  },
+  "title": {
+    "href": "/title/razorennaya-no-obozhaemaya-princem/",
+    "status": 200,
+    "ms": 790.6,
+    "bytes": 63679,
+    "h1_count": 1,
+    "canonical": [
+      "https://zonafilm.cc/title/razorennaya-no-obozhaemaya-princem/"
+    ],
+    "og_keys": [
+      "og:description",
+      "og:image",
+      "og:locale",
+      "og:site_name",
+      "og:title",
+      "og:type",
+      "og:url"
+    ],
+    "jsonld_blocks": 3,
+    "breadcrumbs": 1,
+    "iframes": 0,
+    "player_state": [
+      "noaccess",
+      "noaccess",
+      "awaiting"
+    ],
+    "player_contract": "cdnvideohub-player-v1",
+    "rating_sources": [],
+    "iframe_src": [],
+    "season_markers": 0,
+    "episode_markers": 0,
+    "related_links": 13,
+    "rating_like": [],
+    "provider_logo_mentions": 0
+  },
+  "cards": {
+    "checked": 29,
+    "codes": {
+      "200": 29
+    },
+    "bad": []
+  },
+  "images": {
+    "checked": 1,
+    "codes": {},
+    "broken": []
+  },
+  "security": {
+    "set_cookie": null,
+    "foreign_host_canonical": [
+      "evil.example"
+    ],
+    "path_traversal": {
+      "status": 404,
+      "leaked": false
+    },
+    "method_POST": 501,
+    "method_PUT": 501,
+    "method_DELETE": 501,
+    "debug_leak": false
+  },
+  "performance": {
+    "by_path": {
+      "/": {
+        "median_ms": 924.1,
+        "p95_ms": 977.3,
+        "samples": 7
+      },
+      "/catalog/": {
+        "median_ms": 427.9,
+        "p95_ms": 441.7,
+        "samples": 7
+      },
+      "/new/": {
+        "median_ms": 262.8,
+        "p95_ms": 316.1,
+        "samples": 7
+      },
+      "/search/?q=матрица": {
+        "median_ms": 5.8,
+        "p95_ms": 7.8,
+        "samples": 7
+      }
+    },
+    "origin_p95_ms": 977.3
+  },
+  "checks": [
+    {
+      "id": "route.home",
+      "ok": true,
+      "measured": {
+        "path": "/",
+        "status": 200,
+        "allowed": [
+          200
+        ],
+        "ms": 937.8
+      },
+      "note": ""
+    },
+    {
+      "id": "route.catalog",
+      "ok": true,
+      "measured": {
+        "path": "/catalog/",
+        "status": 200,
+        "allowed": [
+          200
+        ],
+        "ms": 375.9
+      },
+      "note": ""
+    },
+    {
+      "id": "route.catalog_page2",
+      "ok": true,
+      "measured": {
+        "path": "/catalog/?page=2",
+        "status": 200,
+        "allowed": [
+          200
+        ],
+        "ms": 609.5
+      },
+      "note": ""
+    },
+    {
+      "id": "route.movies",
+      "ok": true,
+      "measured": {
+        "path": "/movies/",
+        "status": 200,
+        "allowed": [
+          200
+        ],
+        "ms": 270.6
+      },
+      "note": ""
+    },
+    {
+      "id": "route.series",
+      "ok": true,
+      "measured": {
+        "path": "/series/",
+        "status": 200,
+        "allowed": [
+          200
+        ],
+        "ms": 216.7
+      },
+      "note": ""
+    },
+    {
+      "id": "route.animation",
+      "ok": true,
+      "measured": {
+        "path": "/animation/",
+        "status": 200,
+        "allowed": [
+          200
+        ],
+        "ms": 71.3
+      },
+      "note": ""
+    },
+    {
+      "id": "route.new",
+      "ok": true,
+      "measured": {
+        "path": "/new/",
+        "status": 200,
+        "allowed": [
+          200
+        ],
+        "ms": 306.4
+      },
+      "note": ""
+    },
+    {
+      "id": "route.collections",
+      "ok": true,
+      "measured": {
+        "path": "/collections/",
+        "status": 200,
+        "allowed": [
+          200
+        ],
+        "ms": 3179.3
+      },
+      "note": ""
+    },
+    {
+      "id": "route.schedule",
+      "ok": true,
+      "measured": {
+        "path": "/schedule/",
+        "status": 308,
+        "allowed": [
+          200,
+          301,
+          308
+        ],
+        "ms": 1.7
+      },
+      "note": ""
+    },
+    {
+      "id": "route.search_empty",
+      "ok": true,
+      "measured": {
+        "path": "/search/",
+        "status": 200,
+        "allowed": [
+          200
+        ],
+        "ms": 2.6
+      },
+      "note": ""
+    },
+    {
+      "id": "route.search_query",
+      "ok": true,
+      "measured": {
+        "path": "/search/?q=матрица",
+        "status": 200,
+        "allowed": [
+          200
+        ],
+        "ms": 3321.3
+      },
+      "note": ""
+    },
+    {
+      "id": "route.robots",
+      "ok": true,
+      "measured": {
+        "path": "/robots.txt",
+        "status": 200,
+        "allowed": [
+          200
+        ],
+        "ms": 1.5
+      },
+      "note": ""
+    },
+    {
+      "id": "route.sitemap",
+      "ok": true,
+      "measured": {
+        "path": "/sitemap.xml",
+        "status": 404,
+        "allowed": [
+          200,
+          404
+        ],
+        "ms": 1.8
+      },
+      "note": ""
+    },
+    {
+      "id": "route.healthz",
+      "ok": true,
+      "measured": {
+        "path": "/healthz",
+        "status": 200,
+        "allowed": [
+          200
+        ],
+        "ms": 1.3
+      },
+      "note": ""
+    },
+    {
+      "id": "route.template_version",
+      "ok": true,
+      "measured": {
+        "path": "/__template_version",
+        "status": 200,
+        "allowed": [
+          200
+        ],
+        "ms": 1.9
+      },
+      "note": ""
+    },
+    {
+      "id": "route.404_meaningful",
+      "ok": false,
+      "measured": {
+        "status": 0,
+        "bytes": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "seo.noindex_header_and_meta",
+      "ok": true,
+      "measured": {
+        "pages": 4
+      },
+      "note": ""
+    },
+    {
+      "id": "seo.canonical_own_domain_only",
+      "ok": true,
+      "measured": {
+        "foreign": []
+      },
+      "note": ""
+    },
+    {
+      "id": "seo.robots_txt_closed",
+      "ok": true,
+      "measured": {
+        "status": 200,
+        "body_head": "User-agent: *\nDisallow: /\n"
+      },
+      "note": ""
+    },
+    {
+      "id": "seo.sitemap_matches_closed_canary",
+      "ok": true,
+      "measured": {
+        "status": 404,
+        "url_count": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "home.hero_present",
+      "ok": true,
+      "measured": {
+        "hero_blocks": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "home.slider_multiple_titles",
+      "ok": false,
+      "measured": {
+        "slides": 0,
+        "distinct_links": 1
+      },
+      "note": "TEMPLATE_ZONA_BLOCKER-01, если 0: в 1.2.0 герой статичен"
+    },
+    {
+      "id": "home.slider_controls",
+      "ok": false,
+      "measured": {
+        "dots": 0
+      },
+      "note": "управление слайдером: точки или стрелки"
+    },
+    {
+      "id": "home.collection_tiles",
+      "ok": true,
+      "measured": {
+        "tiles": 8,
+        "hrefs": [
+          "/collection/recently_added/",
+          "/collection/recently_added_movies/",
+          "/collection/new_movie_releases/",
+          "/collection/new_series_releases/",
+          "/collection/new_episodes/",
+          "/collection/top_rated/",
+          "/collection/current_season/",
+          "/collection/video_available/"
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "home.kind_links",
+      "ok": true,
+      "measured": {
+        "kinds": [
+          "/movies/",
+          "/series/",
+          "/animation/"
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "home.no_empty_containers",
+      "ok": true,
+      "measured": {
+        "empty_sections": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "home.footer_present",
+      "ok": true,
+      "measured": {
+        "footer": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.recently_added.has_items",
+      "ok": true,
+      "measured": {
+        "href": "/collection/recently_added/",
+        "status": 200,
+        "items": 60
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.recently_added.no_duplicates",
+      "ok": true,
+      "measured": {
+        "items": 60,
+        "distinct": 60
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.recently_added.deterministic",
+      "ok": true,
+      "measured": {
+        "href": "/collection/recently_added/"
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.recently_added_movies.has_items",
+      "ok": true,
+      "measured": {
+        "href": "/collection/recently_added_movies/",
+        "status": 200,
+        "items": 60
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.recently_added_movies.no_duplicates",
+      "ok": true,
+      "measured": {
+        "items": 60,
+        "distinct": 60
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.recently_added_movies.deterministic",
+      "ok": true,
+      "measured": {
+        "href": "/collection/recently_added_movies/"
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.new_movie_releases.has_items",
+      "ok": true,
+      "measured": {
+        "href": "/collection/new_movie_releases/",
+        "status": 200,
+        "items": 60
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.new_movie_releases.no_duplicates",
+      "ok": true,
+      "measured": {
+        "items": 60,
+        "distinct": 60
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.new_movie_releases.deterministic",
+      "ok": true,
+      "measured": {
+        "href": "/collection/new_movie_releases/"
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.new_series_releases.has_items",
+      "ok": true,
+      "measured": {
+        "href": "/collection/new_series_releases/",
+        "status": 200,
+        "items": 60
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.new_series_releases.no_duplicates",
+      "ok": true,
+      "measured": {
+        "items": 60,
+        "distinct": 60
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.new_series_releases.deterministic",
+      "ok": true,
+      "measured": {
+        "href": "/collection/new_series_releases/"
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.new_episodes.has_items",
+      "ok": true,
+      "measured": {
+        "href": "/collection/new_episodes/",
+        "status": 200,
+        "items": 60
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.new_episodes.no_duplicates",
+      "ok": true,
+      "measured": {
+        "items": 60,
+        "distinct": 60
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.new_episodes.deterministic",
+      "ok": true,
+      "measured": {
+        "href": "/collection/new_episodes/"
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.top_rated.has_items",
+      "ok": true,
+      "measured": {
+        "href": "/collection/top_rated/",
+        "status": 200,
+        "items": 60
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.top_rated.no_duplicates",
+      "ok": true,
+      "measured": {
+        "items": 60,
+        "distinct": 60
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.top_rated.deterministic",
+      "ok": true,
+      "measured": {
+        "href": "/collection/top_rated/"
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.current_season.has_items",
+      "ok": true,
+      "measured": {
+        "href": "/collection/current_season/",
+        "status": 200,
+        "items": 60
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.current_season.no_duplicates",
+      "ok": true,
+      "measured": {
+        "items": 60,
+        "distinct": 60
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.current_season.deterministic",
+      "ok": true,
+      "measured": {
+        "href": "/collection/current_season/"
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.video_available.has_items",
+      "ok": true,
+      "measured": {
+        "href": "/collection/video_available/",
+        "status": 200,
+        "items": 60
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.video_available.no_duplicates",
+      "ok": true,
+      "measured": {
+        "items": 60,
+        "distinct": 60
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.collection.video_available.deterministic",
+      "ok": true,
+      "measured": {
+        "href": "/collection/video_available/"
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.added_and_episodes_are_different",
+      "ok": true,
+      "measured": {
+        "overlap": 16,
+        "added": 60,
+        "episodes": 60
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.video_available_has_player_block",
+      "ok": true,
+      "measured": {
+        "checked": 12,
+        "states": {
+          "noaccess": 12
+        },
+        "without_block": []
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.video_available_no_empty_iframe",
+      "ok": true,
+      "measured": {
+        "empty": []
+      },
+      "note": ""
+    },
+    {
+      "id": "collection.video_available_is_watchable",
+      "ok": false,
+      "measured": {
+        "states": {
+          "noaccess": 12
+        }
+      },
+      "note": "BLOCKED_EXTERNAL_CREDENTIAL: все записи в состоянии noaccess — витрине не выдан Publisher ID провайдера (player-zona-02.json)"
+    },
+    {
+      "id": "catalog.pagination_distinct",
+      "ok": true,
+      "measured": {
+        "page1": 28,
+        "page2": 28,
+        "overlap": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "catalog.page1_no_duplicates",
+      "ok": true,
+      "measured": {
+        "distinct": 28
+      },
+      "note": ""
+    },
+    {
+      "id": "catalog.filter_genre",
+      "ok": true,
+      "measured": {
+        "probe": "/catalog/?genre=action&sort=newest",
+        "status": 200,
+        "titles": 28
+      },
+      "note": ""
+    },
+    {
+      "id": "catalog.filter_country",
+      "ok": true,
+      "measured": {
+        "probe": "/catalog/?country=afganistan&sort=newest",
+        "status": 200,
+        "titles": 3
+      },
+      "note": ""
+    },
+    {
+      "id": "catalog.filter_year",
+      "ok": true,
+      "measured": {
+        "probe": "/catalog/?year=1902&sort=newest",
+        "status": 200,
+        "titles": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "catalog.filter_kind",
+      "ok": true,
+      "measured": {
+        "probe": "/catalog/?kind=%D0%9C%D1%83%D0%BB%D1%8C%D1%82%D1%84%D0%B8%D0%BB%D1%8C%D0%BC&sort=newest",
+        "status": 200,
+        "titles": 28
+      },
+      "note": ""
+    },
+    {
+      "id": "catalog.filter_sort",
+      "ok": true,
+      "measured": {
+        "probe": "/catalog/?country=afganistan&sort=newest",
+        "status": 200,
+        "titles": 3
+      },
+      "note": ""
+    },
+    {
+      "id": "catalog.url_state_deterministic",
+      "ok": true,
+      "measured": {
+        "url": "/catalog/?genre=action&sort=newest",
+        "equal": true
+      },
+      "note": ""
+    },
+    {
+      "id": "catalog.filter_combination",
+      "ok": true,
+      "measured": {
+        "url": "/catalog/?genre=action&sort=newest&sort=year",
+        "status": 200
+      },
+      "note": ""
+    },
+    {
+      "id": "search.exact",
+      "ok": true,
+      "measured": {
+        "status": 200,
+        "results": 9,
+        "ms": 7.0
+      },
+      "note": ""
+    },
+    {
+      "id": "search.partial",
+      "ok": true,
+      "measured": {
+        "status": 200,
+        "results": 8,
+        "ms": 8.3
+      },
+      "note": ""
+    },
+    {
+      "id": "search.upper",
+      "ok": true,
+      "measured": {
+        "status": 200,
+        "results": 9,
+        "ms": 10.8
+      },
+      "note": ""
+    },
+    {
+      "id": "search.lower",
+      "ok": true,
+      "measured": {
+        "status": 200,
+        "results": 9,
+        "ms": 6.3
+      },
+      "note": ""
+    },
+    {
+      "id": "search.latin",
+      "ok": true,
+      "measured": {
+        "status": 200,
+        "results": 8,
+        "ms": 9.3
+      },
+      "note": ""
+    },
+    {
+      "id": "search.cyrillic",
+      "ok": true,
+      "measured": {
+        "status": 200,
+        "results": 9,
+        "ms": 5.5
+      },
+      "note": ""
+    },
+    {
+      "id": "search.hyphen",
+      "ok": true,
+      "measured": {
+        "status": 200,
+        "results": 18,
+        "ms": 9.3
+      },
+      "note": ""
+    },
+    {
+      "id": "search.colon",
+      "ok": true,
+      "measured": {
+        "status": 200,
+        "results": 11,
+        "ms": 13.6
+      },
+      "note": ""
+    },
+    {
+      "id": "search.spaces",
+      "ok": true,
+      "measured": {
+        "status": 200,
+        "results": 0,
+        "ms": 6.3
+      },
+      "note": ""
+    },
+    {
+      "id": "search.no_results_is_a_page",
+      "ok": true,
+      "measured": {
+        "status": 200,
+        "results": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "search.xss_not_reflected",
+      "ok": true,
+      "measured": {
+        "status": 200,
+        "reflected": false
+      },
+      "note": ""
+    },
+    {
+      "id": "search.sqli_handled",
+      "ok": true,
+      "measured": {
+        "status": 200,
+        "results": 28
+      },
+      "note": ""
+    },
+    {
+      "id": "search.responds_fast",
+      "ok": true,
+      "measured": {
+        "median_ms": 8.8
+      },
+      "note": ""
+    },
+    {
+      "id": "search.result_leads_to_page",
+      "ok": true,
+      "measured": {
+        "href": "/title/armitazh-dvoynaya-matrica/",
+        "status": 200
+      },
+      "note": ""
+    },
+    {
+      "id": "title.status",
+      "ok": true,
+      "measured": {
+        "href": "/title/razorennaya-no-obozhaemaya-princem/",
+        "status": 200
+      },
+      "note": ""
+    },
+    {
+      "id": "title.single_h1",
+      "ok": true,
+      "measured": {
+        "count": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "title.canonical_own_domain",
+      "ok": true,
+      "measured": {
+        "canonical": [
+          "https://zonafilm.cc/title/razorennaya-no-obozhaemaya-princem/"
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "title.open_graph",
+      "ok": true,
+      "measured": {
+        "keys": [
+          "og:description",
+          "og:image",
+          "og:locale",
+          "og:site_name",
+          "og:title",
+          "og:type",
+          "og:url"
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "title.jsonld",
+      "ok": true,
+      "measured": {
+        "blocks": 3
+      },
+      "note": ""
+    },
+    {
+      "id": "title.breadcrumbs",
+      "ok": true,
+      "measured": {
+        "markers": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "title.back_to_catalog",
+      "ok": true,
+      "measured": {},
+      "note": "ссылка назад в каталог"
+    },
+    {
+      "id": "title.no_provider_logo_pile",
+      "ok": true,
+      "measured": {
+        "rating_sources": []
+      },
+      "note": ""
+    },
+    {
+      "id": "title.player_has_no_empty_iframe",
+      "ok": true,
+      "measured": {
+        "iframes": 0,
+        "srcs": [],
+        "state": [
+          "noaccess",
+          "noaccess",
+          "awaiting"
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "title.player_contract_declared",
+      "ok": true,
+      "measured": {
+        "contract": "cdnvideohub-player-v1",
+        "state": [
+          "noaccess",
+          "noaccess",
+          "awaiting"
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "cards.every_card_resolves",
+      "ok": true,
+      "measured": {
+        "checked": 29,
+        "codes": {
+          "200": 29
+        },
+        "bad": []
+      },
+      "note": ""
+    },
+    {
+      "id": "images.no_broken",
+      "ok": true,
+      "measured": {
+        "checked": 1,
+        "codes": {},
+        "broken": []
+      },
+      "note": ""
+    },
+    {
+      "id": "security.no_session_cookie_without_flags",
+      "ok": true,
+      "measured": {
+        "set_cookie": null
+      },
+      "note": ""
+    },
+    {
+      "id": "security.host_header_canonical_note",
+      "ok": true,
+      "measured": {
+        "canonical_for_foreign_host": [
+          "evil.example"
+        ]
+      },
+      "note": "origin отражает Host в canonical; отсечение — на nginx server_name"
+    },
+    {
+      "id": "security.path_traversal",
+      "ok": true,
+      "measured": {
+        "status": 404
+      },
+      "note": ""
+    },
+    {
+      "id": "security.path_traversal_encoded",
+      "ok": true,
+      "measured": {
+        "status": 308
+      },
+      "note": ""
+    },
+    {
+      "id": "security.method_post_not_accepted",
+      "ok": true,
+      "measured": {
+        "status": 501
+      },
+      "note": ""
+    },
+    {
+      "id": "security.method_put_not_accepted",
+      "ok": true,
+      "measured": {
+        "status": 501
+      },
+      "note": ""
+    },
+    {
+      "id": "security.method_delete_not_accepted",
+      "ok": true,
+      "measured": {
+        "status": 501
+      },
+      "note": ""
+    },
+    {
+      "id": "security.no_debug_traces",
+      "ok": true,
+      "measured": {},
+      "note": ""
+    },
+    {
+      "id": "perf.origin_ttfb_p95_under_800ms",
+      "ok": false,
+      "measured": {
+        "p95_ms": 977.3,
+        "by_path": {
+          "/": {
+            "median_ms": 924.1,
+            "p95_ms": 977.3,
+            "samples": 7
+          },
+          "/catalog/": {
+            "median_ms": 427.9,
+            "p95_ms": 441.7,
+            "samples": 7
+          },
+          "/new/": {
+            "median_ms": 262.8,
+            "p95_ms": 316.1,
+            "samples": 7
+          },
+          "/search/?q=матрица": {
+            "median_ms": 5.8,
+            "p95_ms": 7.8,
+            "samples": 7
+          }
+        }
+      },
+      "note": ""
+    }
+  ],
+  "summary": {
+    "total": 99,
+    "passed": 94,
+    "failed": [
+      "collection.video_available_is_watchable",
+      "home.slider_controls",
+      "home.slider_multiple_titles",
+      "perf.origin_ttfb_p95_under_800ms",
+      "route.404_meaningful"
+    ]
+  },
+  "finished_at": "2026-09-22T14:50:28Z"
+}

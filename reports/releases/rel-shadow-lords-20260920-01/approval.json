@@ -1,0 +1,23 @@
+{
+  "allowed_dns_changes": false,
+  "allowed_indexability_changes": false,
+  "allowed_paid_operations": false,
+  "approval_id": "apr-shadow-lords-20260920-01",
+  "approved_at": "2026-09-20T22:29:48.181656+00:00",
+  "approved_by": "SITE-FACTORY-RELEASE-ORCHESTRATOR-SHADOW-20260920-01",
+  "exact_artifact_digests": {
+    "lords-01": "64a7b4a05c1c710f86f904fe7cbf7caf1a3659d089caa9cd511aacff8fb85e18",
+    "lords-02": "658eb04606cf80eea6fcf974e4b1cee06b5a17e9927814d8a578e80980f39e7f",
+    "lords-03": "58a3fbc5a497db77fa1a279ce31160b1ea1acaf1c1cff715778622ff5363e10b"
+  },
+  "exact_site_ids": [
+    "lords-01",
+    "lords-02",
+    "lords-03"
+  ],
+  "expires_at": "2026-09-21T22:29:48.162701+00:00",
+  "manifest_digest": "85c36c0eecb0bfbf10178f8afcbe98f0ab4e830de557d3579d9d53786cfae357",
+  "release_id": "rel-shadow-lords-20260920-01",
+  "schema_version": "1.0.0",
+  "state": "CONSUMED"
+}

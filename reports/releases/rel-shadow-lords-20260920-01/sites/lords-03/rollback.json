@@ -1,0 +1,8 @@
+{
+  "site_id": "lords-03",
+  "backup_path": "/home/claude/wt-site-factory-release-orchestrator-01/var/release-orchestrator/rel-shadow-lords-20260920-01/sandbox/backups/lords-03",
+  "digest": "3a2f2155e02783de9b3fdba7976556da2b18bc7713dc2b3019b77a8ae37991aa",
+  "rollback_prepared": 1,
+  "rollback_digest_match": 1,
+  "rollback_rehearsal_pass": 1
+}

@@ -33,6 +33,10 @@ MAPPING = {
     # без держателя, свободный с держателем, отозванный publisher_id.
     "template-pool.json": "template-pool.schema.json",
     "site-cells.json": "site-cells.schema.json",
+    # Ops-оверлей релиз-оркестратора: домены, юниты и обработчики витрин.
+    # Схема лежит в подкаталоге, потому что вместе с ней живут манифест
+    # релиза, одобрение владельца и приём витрины — один контракт, один каталог.
+    "release-registry.json": "release-orchestrator/release-registry.schema.json",
 }
 
 # Производные артефакты: файл порождается из другого источника и в некоторых

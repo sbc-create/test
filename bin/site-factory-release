@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Site Factory Release Orchestrator entry point.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+PY="${PY:-.venv/bin/python}"
+if [ ! -x "$PY" ]; then
+  if [ "${FACTORY_REQUIRE_VENV:-0}" = "1" ]; then
+    echo "bin/site-factory-release: missing $PWD/$PY (FACTORY_REQUIRE_VENV=1)." >&2
+    exit 78
+  fi
+  PY="$(command -v python3)"
+fi
+exec "$PY" -m factory.release_orchestrator "$@"

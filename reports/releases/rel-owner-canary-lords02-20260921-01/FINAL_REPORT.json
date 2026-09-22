@@ -1,0 +1,20 @@
+{
+  "verdict": "BLOCKED_LORDS_P1_DEPENDENCY",
+  "release_id": "rel-owner-canary-lords02-20260921-01",
+  "state": "PREPARED_NOT_EXECUTED",
+  "scope": [
+    "lords-02"
+  ],
+  "live_deploy_performed": 0,
+  "restart_performed": 0,
+  "indexability_mutations": 0,
+  "dns_mutations": 0,
+  "owner_canary_approval_id": null,
+  "manifest_digest": "8accb344ae5a20f9e9d629818ab94252c7409a4446f8ae7c0001afbc297331c4",
+  "blockers": [
+    "BLOCK-1 dependency not closed",
+    "BLOCK-2 RO-01 service binding",
+    "BLOCK-3 RO-02 host not quiescent",
+    "BLOCK-4 RO-03 smoke x2 not measurable"
+  ]
+}
