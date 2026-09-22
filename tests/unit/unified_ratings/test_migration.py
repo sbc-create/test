@@ -7,6 +7,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import shutil
 import sqlite3
 from pathlib import Path
@@ -38,7 +39,7 @@ def migration():
 
 
 @pytest.fixture
-def production_copy(tmp_path: Path) -> Path:
+def production_copy(tmp_path: Path):
     """Копия боевой базы, приведённая к состоянию «до 0007».
 
     Оригинал открывается только на чтение. На копии выполняется откат
@@ -46,6 +47,12 @@ def production_copy(tmp_path: Path) -> Path:
     который это предполагает, перестаёт проверять миграцию ровно после
     первого успешного применения — а проверять её нужно и на базе, где
     её ещё нет, и на базе, где она уже есть.
+
+    Копия удаляется сразу после теста. pytest держит каталоги трёх
+    последних прогонов, а боевая база выросла со сбором до сотни
+    мегабайт: пять тестов на прогон, три прогона в запасе и несколько
+    производных файлов в каждом — и временный каталог занимает гигабайты
+    на диске, который делят с боевыми службами. Это уже случилось.
     """
     if not PRODUCTION_DB.is_file():
         pytest.skip("production ratings.sqlite недоступна в этом окружении")
@@ -61,7 +68,10 @@ def production_copy(tmp_path: Path) -> Path:
     conn = sqlite3.connect(str(destination))
     load_migration_0007().downgrade(conn)
     conn.close()
-    return destination
+    yield destination
+    for path in tmp_path.glob("*.sqlite*"):
+        with contextlib.suppress(OSError):
+            path.unlink()
 
 
 def test_applying_to_an_already_migrated_production_copy_changes_nothing(

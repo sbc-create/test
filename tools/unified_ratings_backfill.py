@@ -57,7 +57,15 @@ class Progress:
         self.path = path
         self.data = {}
         if path.is_file():
-            self.data = json.loads(path.read_text(encoding="utf-8"))
+            # Оборванный на середине checkpoint — обычное следствие
+            # падения (у нас это был переполненный диск). Он не должен
+            # мешать возобновлению: пустой прогресс означает повторную
+            # проверку уже собранного, а она идемпотентна и дешева.
+            try:
+                self.data = json.loads(path.read_text(encoding="utf-8"))
+            except (json.JSONDecodeError, OSError) as exc:
+                print(f"checkpoint повреждён ({exc}); продолжаем с пустого прогресса")
+                self.data = {}
 
     def done_for(self, source: str) -> set[str]:
         return set(self.data.get(source, {}).get("completed_title_ids", []))
