@@ -22,11 +22,11 @@
         "width": 320,
         "status": 200,
         "metrics": {
-          "lcp": 1252,
+          "lcp": 1128,
           "cls": 0,
           "longtasks": 1,
-          "ttfb": 918.5999999046326,
-          "domContentLoaded": 1143.5999999046326,
+          "ttfb": 821.2999999523163,
+          "domContentLoaded": 839,
           "transferSize": 52022
         },
         "inspect": {
@@ -49,7 +49,7 @@
           "visible": true,
           "inViewport": true
         },
-        "interaction_ms": 136.4,
+        "interaction_ms": 139.0,
         "screenshot": "root-320.png",
         "console_errors": [],
         "failed_requests": [],
@@ -61,11 +61,11 @@
         "width": 390,
         "status": 200,
         "metrics": {
-          "lcp": 1160,
+          "lcp": 1188,
           "cls": 0,
           "longtasks": 0,
-          "ttfb": 940.4000000953674,
-          "domContentLoaded": 957,
+          "ttfb": 944.7999999523163,
+          "domContentLoaded": 965.2999999523163,
           "transferSize": 52022
         },
         "inspect": {
@@ -88,7 +88,7 @@
           "visible": true,
           "inViewport": true
         },
-        "interaction_ms": 390.0,
+        "interaction_ms": 188.0,
         "screenshot": "root-390.png",
         "console_errors": [],
         "failed_requests": [],
@@ -100,11 +100,11 @@
         "width": 768,
         "status": 200,
         "metrics": {
-          "lcp": 1156,
+          "lcp": 1060,
           "cls": 0,
           "longtasks": 0,
-          "ttfb": 894.5,
-          "domContentLoaded": 925.7000000476837,
+          "ttfb": 833.2000000476837,
+          "domContentLoaded": 883.5999999046326,
           "transferSize": 52022
         },
         "inspect": {
@@ -140,11 +140,11 @@
         "width": 1024,
         "status": 200,
         "metrics": {
-          "lcp": 1124,
+          "lcp": 1160,
           "cls": 0,
           "longtasks": 0,
-          "ttfb": 844.2999999523163,
-          "domContentLoaded": 937.2999999523163,
+          "ttfb": 909.7999999523163,
+          "domContentLoaded": 940.0999999046326,
           "transferSize": 52022
         },
         "inspect": {
@@ -180,11 +180,11 @@
         "width": 1440,
         "status": 200,
         "metrics": {
-          "lcp": 1120,
+          "lcp": 1104,
           "cls": 0,
           "longtasks": 1,
-          "ttfb": 893.2999999523163,
-          "domContentLoaded": 986.1000001430511,
+          "ttfb": 880.2999999523163,
+          "domContentLoaded": 900.2000000476837,
           "transferSize": 52022
         },
         "inspect": {
@@ -220,11 +220,11 @@
         "width": 1920,
         "status": 200,
         "metrics": {
-          "lcp": 1124,
+          "lcp": 1252,
           "cls": 0,
           "longtasks": 0,
-          "ttfb": 884,
-          "domContentLoaded": 903.4000000953674,
+          "ttfb": 900.4000000953674,
+          "domContentLoaded": 1050,
           "transferSize": 52022
         },
         "inspect": {
@@ -262,11 +262,11 @@
         "width": 320,
         "status": 200,
         "metrics": {
-          "lcp": 736,
+          "lcp": 824,
           "cls": 0,
           "longtasks": 0,
-          "ttfb": 422.10000014305115,
-          "domContentLoaded": 448.30000019073486,
+          "ttfb": 511.2000000476837,
+          "domContentLoaded": 543.2000000476837,
           "transferSize": 101770
         },
         "inspect": {
@@ -289,7 +289,7 @@
           "visible": true,
           "inViewport": true
         },
-        "interaction_ms": 113.2,
+        "interaction_ms": 129.4,
         "screenshot": "catalog-320.png",
         "console_errors": [],
         "failed_requests": [],
@@ -301,11 +301,11 @@
         "width": 390,
         "status": 200,
         "metrics": {
-          "lcp": 764,
+          "lcp": 952,
           "cls": 0,
           "longtasks": 0,
-          "ttfb": 424,
-          "domContentLoaded": 485.2000000476837,
+          "ttfb": 420.7000000476837,
+          "domContentLoaded": 526.4000000953674,
           "transferSize": 101770
         },
         "inspect": {
@@ -328,7 +328,7 @@
           "visible": true,
           "inViewport": true
         },
-        "interaction_ms": 122.6,
+        "interaction_ms": 226.9,
         "screenshot": "catalog-390.png",
         "console_errors": [],
         "failed_requests": [],
@@ -340,11 +340,11 @@
         "width": 768,
         "status": 200,
         "metrics": {
-          "lcp": 980,
+          "lcp": 1160,
           "cls": 0,
           "longtasks": 1,
-          "ttfb": 440.89999985694885,
-          "domContentLoaded": 538.0999999046326,
+          "ttfb": 532.2999999523163,
+          "domContentLoaded": 673.7000000476837,
           "transferSize": 101770
         },
         "inspect": {
@@ -380,11 +380,11 @@
         "width": 1024,
         "status": 200,
         "metrics": {
-          "lcp": 656,
-          "cls": 0,
+          "lcp": 1528,
+          "cls": 0.013389492034912109,
           "longtasks": 0,
-          "ttfb": 385.40000009536743,
-          "domContentLoaded": 446.7999999523163,
+          "ttfb": 406.59999990463257,
+          "domContentLoaded": 576.2999999523163,
           "transferSize": 101770
         },
         "inspect": {
@@ -420,11 +420,11 @@
         "width": 1440,
         "status": 200,
         "metrics": {
-          "lcp": 696,
+          "lcp": 1192,
           "cls": 0,
           "longtasks": 1,
-          "ttfb": 382.2000000476837,
-          "domContentLoaded": 409,
+          "ttfb": 565.4000000953674,
+          "domContentLoaded": 754.1000001430511,
           "transferSize": 101770
         },
         "inspect": {
@@ -460,11 +460,11 @@
         "width": 1920,
         "status": 200,
         "metrics": {
-          "lcp": 656,
+          "lcp": 640,
           "cls": 0,
           "longtasks": 0,
-          "ttfb": 351.2000000476837,
-          "domContentLoaded": 375.7000000476837,
+          "ttfb": 355.10000014305115,
+          "domContentLoaded": 386.60000014305115,
           "transferSize": 101770
         },
         "inspect": {
@@ -502,11 +502,11 @@
         "width": 320,
         "status": 200,
         "metrics": {
-          "lcp": 408,
+          "lcp": 376,
           "cls": 0,
-          "longtasks": 0,
-          "ttfb": 63.30000019073486,
-          "domContentLoaded": 87.80000019073486,
+          "longtasks": 1,
+          "ttfb": 52.299999952316284,
+          "domContentLoaded": 80.89999985694885,
           "transferSize": 93517
         },
         "inspect": {
@@ -529,7 +529,7 @@
           "visible": true,
           "inViewport": true
         },
-        "interaction_ms": 102.6,
+        "interaction_ms": 159.9,
         "screenshot": "collection-recently-added-320.png",
         "console_errors": [],
         "failed_requests": [],
@@ -541,11 +541,11 @@
         "width": 390,
         "status": 200,
         "metrics": {
-          "lcp": 364,
+          "lcp": 492,
           "cls": 0,
           "longtasks": 0,
-          "ttfb": 66.70000004768372,
-          "domContentLoaded": 146.39999985694885,
+          "ttfb": 84.5,
+          "domContentLoaded": 214.20000004768372,
           "transferSize": 93517
         },
         "inspect": {
@@ -568,7 +568,7 @@
           "visible": true,
           "inViewport": true
         },
-        "interaction_ms": 94.0,
+        "interaction_ms": 169.6,
         "screenshot": "collection-recently-added-390.png",
         "console_errors": [],
         "failed_requests": [],
@@ -580,11 +580,11 @@
         "width": 768,
         "status": 200,
         "metrics": {
-          "lcp": 396,
+          "lcp": 452,
           "cls": 0,
           "longtasks": 1,
-          "ttfb": 53,
-          "domContentLoaded": 78.09999990463257,
+          "ttfb": 52.5,
+          "domContentLoaded": 76,
           "transferSize": 93517
         },
         "inspect": {
@@ -620,11 +620,11 @@
         "width": 1024,
         "status": 200,
         "metrics": {
-          "lcp": 476,
+          "lcp": 364,
           "cls": 0,
-          "longtasks": 1,
-          "ttfb": 55.200000047683716,
-          "domContentLoaded": 95.10000014305115,
+          "longtasks": 0,
+          "ttfb": 63.40000009536743,
+          "domContentLoaded": 83.70000004768372,
           "transferSize": 93517
         },
         "inspect": {
@@ -660,11 +660,11 @@
         "width": 1440,
         "status": 200,
         "metrics": {
-          "lcp": 488,
+          "lcp": 508,
           "cls": 0,
           "longtasks": 1,
-          "ttfb": 57.19999980926514,
-          "domContentLoaded": 83.09999990463257,
+          "ttfb": 59.799999952316284,
+          "domContentLoaded": 91.79999995231628,
           "transferSize": 93517
         },
         "inspect": {
@@ -700,11 +700,11 @@
         "width": 1920,
         "status": 200,
         "metrics": {
-          "lcp": 336,
+          "lcp": 512,
           "cls": 0,
           "longtasks": 1,
-          "ttfb": 45.59999990463257,
-          "domContentLoaded": 69.39999985694885,
+          "ttfb": 49.799999952316284,
+          "domContentLoaded": 92.79999995231628,
           "transferSize": 93517
         },
         "inspect": {
@@ -742,11 +742,11 @@
         "width": 320,
         "status": 200,
         "metrics": {
-          "lcp": 472,
+          "lcp": 676,
           "cls": 0,
           "longtasks": 0,
-          "ttfb": 9.399999856948853,
-          "domContentLoaded": 133.5,
+          "ttfb": 10.799999952316284,
+          "domContentLoaded": 89.59999990463257,
           "transferSize": 54477
         },
         "inspect": {
@@ -769,7 +769,7 @@
           "visible": true,
           "inViewport": true
         },
-        "interaction_ms": 139.7,
+        "interaction_ms": 135.0,
         "screenshot": "search-q-320.png",
         "console_errors": [],
         "failed_requests": [],
@@ -781,11 +781,11 @@
         "width": 390,
         "status": 200,
         "metrics": {
-          "lcp": 384,
+          "lcp": 504,
           "cls": 0,
           "longtasks": 1,
-          "ttfb": 9.299999952316284,
-          "domContentLoaded": 42.700000047683716,
+          "ttfb": 8.100000143051147,
+          "domContentLoaded": 28.5,
           "transferSize": 54477
         },
         "inspect": {
@@ -808,7 +808,7 @@
           "visible": true,
           "inViewport": true
         },
-        "interaction_ms": 116.8,
+        "interaction_ms": 256.3,
         "screenshot": "search-q-390.png",
         "console_errors": [],
         "failed_requests": [],
@@ -820,11 +820,11 @@
         "width": 768,
         "status": 200,
         "metrics": {
-          "lcp": 312,
+          "lcp": 352,
           "cls": 0,
           "longtasks": 0,
-          "ttfb": 12,
-          "domContentLoaded": 33.299999952316284,
+          "ttfb": 7.099999904632568,
+          "domContentLoaded": 28.799999952316284,
           "transferSize": 54477
         },
         "inspect": {
@@ -860,11 +860,11 @@
         "width": 1024,
         "status": 200,
         "metrics": {
-          "lcp": 500,
+          "lcp": 556,
           "cls": 0,
-          "longtasks": 0,
-          "ttfb": 8.099999904632568,
-          "domContentLoaded": 25.90000009536743,
+          "longtasks": 1,
+          "ttfb": 11.599999904632568,
+          "domContentLoaded": 48.40000009536743,
           "transferSize": 54477
         },
         "inspect": {
@@ -900,11 +900,11 @@
         "width": 1440,
         "status": 200,
         "metrics": {
-          "lcp": 520,
+          "lcp": 500,
           "cls": 0,
           "longtasks": 0,
-          "ttfb": 8.599999904632568,
-          "domContentLoaded": 36.90000009536743,
+          "ttfb": 6.299999952316284,
+          "domContentLoaded": 29.100000143051147,
           "transferSize": 54477
         },
         "inspect": {
@@ -940,11 +940,11 @@
         "width": 1920,
         "status": 200,
         "metrics": {
-          "lcp": 424,
+          "lcp": 672,
           "cls": 0,
           "longtasks": 0,
-          "ttfb": 8.399999856948853,
-          "domContentLoaded": 45.799999952316284,
+          "ttfb": 8.099999904632568,
+          "domContentLoaded": 191.79999995231628,
           "transferSize": 54477
         },
         "inspect": {
@@ -982,11 +982,11 @@
         "width": 320,
         "status": 200,
         "metrics": {
-          "lcp": 1356,
+          "lcp": 1072,
           "cls": 0,
           "longtasks": 1,
-          "ttfb": 939.6999998092651,
-          "domContentLoaded": 1068.3999998569489,
+          "ttfb": 662.0999999046326,
+          "domContentLoaded": 706.7000000476837,
           "transferSize": 71613
         },
         "inspect": {
@@ -1009,7 +1009,7 @@
           "visible": true,
           "inViewport": true
         },
-        "interaction_ms": 122.2,
+        "interaction_ms": 552.3,
         "screenshot": "title-razorennaya-no-obozhaemaya-princem-320.png",
         "console_errors": [],
         "failed_requests": [],
@@ -1021,11 +1021,11 @@
         "width": 390,
         "status": 200,
         "metrics": {
-          "lcp": 1044,
+          "lcp": 1532,
           "cls": 0,
-          "longtasks": 0,
-          "ttfb": 684.3999998569489,
-          "domContentLoaded": 849.5,
+          "longtasks": 3,
+          "ttfb": 549.5,
+          "domContentLoaded": 642.2999999523163,
           "transferSize": 71613
         },
         "inspect": {
@@ -1048,7 +1048,7 @@
           "visible": true,
           "inViewport": true
         },
-        "interaction_ms": 145.3,
+        "interaction_ms": 143.5,
         "screenshot": "title-razorennaya-no-obozhaemaya-princem-390.png",
         "console_errors": [],
         "failed_requests": [],
@@ -1060,11 +1060,11 @@
         "width": 768,
         "status": 200,
         "metrics": {
-          "lcp": 976,
+          "lcp": 1112,
           "cls": 0,
           "longtasks": 1,
-          "ttfb": 677.7999999523163,
-          "domContentLoaded": 789.5,
+          "ttfb": 654.0999999046326,
+          "domContentLoaded": 675,
           "transferSize": 71613
         },
         "inspect": {
@@ -1100,11 +1100,11 @@
         "width": 1024,
         "status": 200,
         "metrics": {
-          "lcp": 1076,
+          "lcp": 1560,
           "cls": 0,
-          "longtasks": 0,
-          "ttfb": 698.1000001430511,
-          "domContentLoaded": 766.2000000476837,
+          "longtasks": 1,
+          "ttfb": 942.7000000476837,
+          "domContentLoaded": 1256.2000000476837,
           "transferSize": 71613
         },
         "inspect": {
@@ -1140,11 +1140,11 @@
         "width": 1440,
         "status": 200,
         "metrics": {
-          "lcp": 1196,
+          "lcp": 1028,
           "cls": 0,
           "longtasks": 1,
-          "ttfb": 642.3999998569489,
-          "domContentLoaded": 671.7999999523163,
+          "ttfb": 616.0999999046326,
+          "domContentLoaded": 650.7999999523163,
           "transferSize": 71613
         },
         "inspect": {
@@ -1180,11 +1180,11 @@
         "width": 1920,
         "status": 200,
         "metrics": {
-          "lcp": 1096,
+          "lcp": 1068,
           "cls": 0,
           "longtasks": 1,
-          "ttfb": 679.3000001907349,
-          "domContentLoaded": 759.7000000476837,
+          "ttfb": 695.1000001430511,
+          "domContentLoaded": 730.7999999523163,
           "transferSize": 71613
         },
         "inspect": {
@@ -1218,7 +1218,7 @@
       }
     }
   },
-  "started_at": "2026-09-22T14:52:05Z",
+  "started_at": "2026-09-22T14:55:47Z",
   "host_resolver_rules": "MAP zonafilm.cc 127.0.0.1, MAP www.zonafilm.cc 127.0.0.1",
   "summary": {
     "pages_measured": 30,
@@ -1228,11 +1228,11 @@
     "horizontal_overflow_pages": [],
     "http_5xx": 0,
     "http_4xx": 0,
-    "lcp_p75_ms": 1120,
-    "cls_max": 0,
+    "lcp_p75_ms": 1160,
+    "cls_max": 0.0134,
     "keyboard_focus_visible_pages": 30,
     "controls_without_label": 0,
     "errors": []
   },
-  "finished_at": "2026-09-22T14:55:41Z"
+  "finished_at": "2026-09-22T14:59:28Z"
 }

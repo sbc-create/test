@@ -164,6 +164,38 @@
       "enabled": true
     },
     {
+      "site_id": "zona-02",
+      "domain": "zonafilm.cc",
+      "www_policy": "www_to_apex_308",
+      "site_family": "zona",
+      "template_profile": "zona",
+      "design_id": "zona-02",
+      "repository": "site-factory",
+      "source_branch": "main",
+      "build_command": "nova_static_build",
+      "artifact_type": "static-release",
+      "artifact_destination": "/srv/lords/.frontend/sites/zona-02",
+      "runtime": "systemd-static",
+      "service_name": "nova-zona-02.service",
+      "container_name_if_any": null,
+      "health_url": "https://zonafilm.cc/healthz",
+      "version_url": "https://zonafilm.cc/version.json",
+      "smoke_profile": "zona",
+      "expected_indexability": "CLOSED",
+      "robots_policy": "disallow_all",
+      "sitemap_policy": "empty",
+      "canonical_policy": "apex",
+      "analytics_policy": "staging_blocked",
+      "deploy_handler": "nova_static_deploy",
+      "restart_handler": "systemd_restart_unit",
+      "rollback_handler": "nova_static_rollback",
+      "data_sources": [
+        "cdnvideohub-public-v1"
+      ],
+      "owner_state": "canary",
+      "enabled": true
+    },
+    {
       "site_id": "yummyani-site",
       "domain": "yummyani.site",
       "www_policy": "www_to_apex_308",

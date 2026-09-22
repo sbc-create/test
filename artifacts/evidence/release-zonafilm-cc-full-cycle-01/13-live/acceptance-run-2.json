@@ -1,12 +1,12 @@
 {
   "origin": "http://127.0.0.1:9123",
   "host": "zonafilm.cc",
-  "started_at": "2026-09-22T14:49:09Z",
+  "started_at": "2026-09-22T14:50:33Z",
   "routes": {
     "home": {
       "path": "/",
       "status": 200,
-      "ms": 937.8,
+      "ms": 876.4,
       "bytes": 47742,
       "error": "",
       "allowed": [
@@ -16,7 +16,7 @@
     "catalog": {
       "path": "/catalog/",
       "status": 200,
-      "ms": 375.9,
+      "ms": 488.3,
       "bytes": 92888,
       "error": "",
       "allowed": [
@@ -26,7 +26,7 @@
     "catalog_page2": {
       "path": "/catalog/?page=2",
       "status": 200,
-      "ms": 609.5,
+      "ms": 524.9,
       "bytes": 92380,
       "error": "",
       "allowed": [
@@ -36,7 +36,7 @@
     "movies": {
       "path": "/movies/",
       "status": 200,
-      "ms": 270.6,
+      "ms": 329.3,
       "bytes": 91760,
       "error": "",
       "allowed": [
@@ -46,7 +46,7 @@
     "series": {
       "path": "/series/",
       "status": 200,
-      "ms": 216.7,
+      "ms": 201.9,
       "bytes": 90888,
       "error": "",
       "allowed": [
@@ -56,7 +56,7 @@
     "animation": {
       "path": "/animation/",
       "status": 200,
-      "ms": 71.3,
+      "ms": 61.6,
       "bytes": 92697,
       "error": "",
       "allowed": [
@@ -66,7 +66,7 @@
     "new": {
       "path": "/new/",
       "status": 200,
-      "ms": 306.4,
+      "ms": 348.5,
       "bytes": 95800,
       "error": "",
       "allowed": [
@@ -76,7 +76,7 @@
     "collections": {
       "path": "/collections/",
       "status": 200,
-      "ms": 3179.3,
+      "ms": 2725.6,
       "bytes": 55582,
       "error": "",
       "allowed": [
@@ -86,7 +86,7 @@
     "schedule": {
       "path": "/schedule/",
       "status": 308,
-      "ms": 1.7,
+      "ms": 2.8,
       "bytes": 0,
       "error": "",
       "allowed": [
@@ -99,7 +99,7 @@
     "search_empty": {
       "path": "/search/",
       "status": 200,
-      "ms": 2.6,
+      "ms": 7.6,
       "bytes": 44025,
       "error": "",
       "allowed": [
@@ -109,7 +109,7 @@
     "search_query": {
       "path": "/search/?q=матрица",
       "status": 200,
-      "ms": 3321.3,
+      "ms": 6.9,
       "bytes": 50471,
       "error": "",
       "allowed": [
@@ -119,7 +119,7 @@
     "robots": {
       "path": "/robots.txt",
       "status": 200,
-      "ms": 1.5,
+      "ms": 1.8,
       "bytes": 26,
       "error": "",
       "allowed": [
@@ -129,7 +129,7 @@
     "sitemap": {
       "path": "/sitemap.xml",
       "status": 404,
-      "ms": 1.8,
+      "ms": 2.0,
       "bytes": 0,
       "error": "",
       "allowed": [
@@ -140,7 +140,7 @@
     "healthz": {
       "path": "/healthz",
       "status": 200,
-      "ms": 1.3,
+      "ms": 1.8,
       "bytes": 11,
       "error": "",
       "allowed": [
@@ -150,7 +150,7 @@
     "template_version": {
       "path": "/__template_version",
       "status": 200,
-      "ms": 1.9,
+      "ms": 2.6,
       "bytes": 1465,
       "error": "",
       "allowed": [
@@ -242,7 +242,7 @@
     "empty_sections": 0,
     "footer": 1,
     "bytes": 47742,
-    "ms": 837.3
+    "ms": 829.8
   },
   "collections": {
     "/collection/recently_added/": {
@@ -252,7 +252,7 @@
       "distinct": 60,
       "duplicates": 0,
       "deterministic": true,
-      "ms": 49.7
+      "ms": 54.3
     },
     "/collection/recently_added_movies/": {
       "status": 200,
@@ -261,7 +261,7 @@
       "distinct": 60,
       "duplicates": 0,
       "deterministic": true,
-      "ms": 54.6
+      "ms": 46.5
     },
     "/collection/new_movie_releases/": {
       "status": 200,
@@ -270,7 +270,7 @@
       "distinct": 60,
       "duplicates": 0,
       "deterministic": true,
-      "ms": 120.4
+      "ms": 124.0
     },
     "/collection/new_series_releases/": {
       "status": 200,
@@ -279,7 +279,7 @@
       "distinct": 60,
       "duplicates": 0,
       "deterministic": true,
-      "ms": 66.7
+      "ms": 68.6
     },
     "/collection/new_episodes/": {
       "status": 200,
@@ -288,7 +288,7 @@
       "distinct": 60,
       "duplicates": 0,
       "deterministic": true,
-      "ms": 49.5
+      "ms": 52.0
     },
     "/collection/top_rated/": {
       "status": 200,
@@ -297,7 +297,7 @@
       "distinct": 60,
       "duplicates": 0,
       "deterministic": true,
-      "ms": 11.1
+      "ms": 8.8
     },
     "/collection/current_season/": {
       "status": 200,
@@ -306,7 +306,7 @@
       "distinct": 60,
       "duplicates": 0,
       "deterministic": true,
-      "ms": 22.3
+      "ms": 30.4
     },
     "/collection/video_available/": {
       "status": 200,
@@ -315,7 +315,7 @@
       "distinct": 60,
       "duplicates": 0,
       "deterministic": true,
-      "ms": 354.1
+      "ms": 350.0
     },
     "added_vs_episodes_overlap": 16,
     "video_available_probe": {
@@ -398,87 +398,87 @@
       "q": "матрица",
       "status": 200,
       "results": 9,
-      "ms": 7.0,
+      "ms": 7.4,
       "raw_script_reflected": false
     },
     "partial": {
       "q": "матри",
       "status": 200,
       "results": 8,
-      "ms": 8.3,
+      "ms": 5.5,
       "raw_script_reflected": false
     },
     "upper": {
       "q": "МАТРИЦА",
       "status": 200,
       "results": 9,
-      "ms": 10.8,
+      "ms": 8.7,
       "raw_script_reflected": false
     },
     "lower": {
       "q": "матрица",
       "status": 200,
       "results": 9,
-      "ms": 6.3,
+      "ms": 8.4,
       "raw_script_reflected": false
     },
     "latin": {
       "q": "matrix",
       "status": 200,
       "results": 8,
-      "ms": 9.3,
+      "ms": 8.1,
       "raw_script_reflected": false
     },
     "cyrillic": {
       "q": "матрица",
       "status": 200,
       "results": 9,
-      "ms": 5.5,
+      "ms": 5.2,
       "raw_script_reflected": false
     },
     "hyphen": {
       "q": "человек-паук",
       "status": 200,
       "results": 18,
-      "ms": 9.3,
+      "ms": 6.8,
       "raw_script_reflected": false
     },
     "colon": {
       "q": "миссия: невыполнима",
       "status": 200,
       "results": 11,
-      "ms": 13.6,
+      "ms": 10.8,
       "raw_script_reflected": false
     },
     "spaces": {
       "q": "  два   пробела  ",
       "status": 200,
       "results": 0,
-      "ms": 6.3,
+      "ms": 5.6,
       "raw_script_reflected": false
     },
     "absent": {
       "q": "щщщнесуществующийзапросщщщ",
       "status": 200,
       "results": 0,
-      "ms": 6.7,
+      "ms": 4.3,
       "raw_script_reflected": false
     },
     "xss": {
       "q": "<script>alert(1)</script>",
       "status": 200,
       "results": 5,
-      "ms": 57.4,
+      "ms": 43.4,
       "raw_script_reflected": false
     },
     "sqli": {
       "q": "' OR 1=1 --",
       "status": 200,
       "results": 28,
-      "ms": 3732.3,
+      "ms": 3281.5,
       "raw_script_reflected": false
     },
-    "median_ms": 8.8,
+    "median_ms": 7.75,
     "follow_first_result": {
       "href": "/title/armitazh-dvoynaya-matrica/",
       "status": 200
@@ -487,7 +487,7 @@
   "title": {
     "href": "/title/razorennaya-no-obozhaemaya-princem/",
     "status": 200,
-    "ms": 790.6,
+    "ms": 622.1,
     "bytes": 63679,
     "h1_count": 1,
     "canonical": [
@@ -548,27 +548,27 @@
   "performance": {
     "by_path": {
       "/": {
-        "median_ms": 924.1,
-        "p95_ms": 977.3,
+        "median_ms": 813.5,
+        "p95_ms": 919.1,
         "samples": 7
       },
       "/catalog/": {
-        "median_ms": 427.9,
-        "p95_ms": 441.7,
+        "median_ms": 374.9,
+        "p95_ms": 432.4,
         "samples": 7
       },
       "/new/": {
-        "median_ms": 262.8,
-        "p95_ms": 316.1,
+        "median_ms": 297.8,
+        "p95_ms": 327.7,
         "samples": 7
       },
       "/search/?q=матрица": {
-        "median_ms": 5.8,
-        "p95_ms": 7.8,
+        "median_ms": 8.8,
+        "p95_ms": 9.8,
         "samples": 7
       }
     },
-    "origin_p95_ms": 977.3
+    "origin_p95_ms": 919.1
   },
   "checks": [
     {
@@ -580,7 +580,7 @@
         "allowed": [
           200
         ],
-        "ms": 937.8
+        "ms": 876.4
       },
       "note": ""
     },
@@ -593,7 +593,7 @@
         "allowed": [
           200
         ],
-        "ms": 375.9
+        "ms": 488.3
       },
       "note": ""
     },
@@ -606,7 +606,7 @@
         "allowed": [
           200
         ],
-        "ms": 609.5
+        "ms": 524.9
       },
       "note": ""
     },
@@ -619,7 +619,7 @@
         "allowed": [
           200
         ],
-        "ms": 270.6
+        "ms": 329.3
       },
       "note": ""
     },
@@ -632,7 +632,7 @@
         "allowed": [
           200
         ],
-        "ms": 216.7
+        "ms": 201.9
       },
       "note": ""
     },
@@ -645,7 +645,7 @@
         "allowed": [
           200
         ],
-        "ms": 71.3
+        "ms": 61.6
       },
       "note": ""
     },
@@ -658,7 +658,7 @@
         "allowed": [
           200
         ],
-        "ms": 306.4
+        "ms": 348.5
       },
       "note": ""
     },
@@ -671,7 +671,7 @@
         "allowed": [
           200
         ],
-        "ms": 3179.3
+        "ms": 2725.6
       },
       "note": ""
     },
@@ -686,7 +686,7 @@
           301,
           308
         ],
-        "ms": 1.7
+        "ms": 2.8
       },
       "note": ""
     },
@@ -699,7 +699,7 @@
         "allowed": [
           200
         ],
-        "ms": 2.6
+        "ms": 7.6
       },
       "note": ""
     },
@@ -712,7 +712,7 @@
         "allowed": [
           200
         ],
-        "ms": 3321.3
+        "ms": 6.9
       },
       "note": ""
     },
@@ -725,7 +725,7 @@
         "allowed": [
           200
         ],
-        "ms": 1.5
+        "ms": 1.8
       },
       "note": ""
     },
@@ -739,7 +739,7 @@
           200,
           404
         ],
-        "ms": 1.8
+        "ms": 2.0
       },
       "note": ""
     },
@@ -752,7 +752,7 @@
         "allowed": [
           200
         ],
-        "ms": 1.3
+        "ms": 1.8
       },
       "note": ""
     },
@@ -765,7 +765,7 @@
         "allowed": [
           200
         ],
-        "ms": 1.9
+        "ms": 2.6
       },
       "note": ""
     },
@@ -1231,7 +1231,7 @@
       "measured": {
         "status": 200,
         "results": 9,
-        "ms": 7.0
+        "ms": 7.4
       },
       "note": ""
     },
@@ -1241,7 +1241,7 @@
       "measured": {
         "status": 200,
         "results": 8,
-        "ms": 8.3
+        "ms": 5.5
       },
       "note": ""
     },
@@ -1251,7 +1251,7 @@
       "measured": {
         "status": 200,
         "results": 9,
-        "ms": 10.8
+        "ms": 8.7
       },
       "note": ""
     },
@@ -1261,7 +1261,7 @@
       "measured": {
         "status": 200,
         "results": 9,
-        "ms": 6.3
+        "ms": 8.4
       },
       "note": ""
     },
@@ -1271,7 +1271,7 @@
       "measured": {
         "status": 200,
         "results": 8,
-        "ms": 9.3
+        "ms": 8.1
       },
       "note": ""
     },
@@ -1281,7 +1281,7 @@
       "measured": {
         "status": 200,
         "results": 9,
-        "ms": 5.5
+        "ms": 5.2
       },
       "note": ""
     },
@@ -1291,7 +1291,7 @@
       "measured": {
         "status": 200,
         "results": 18,
-        "ms": 9.3
+        "ms": 6.8
       },
       "note": ""
     },
@@ -1301,7 +1301,7 @@
       "measured": {
         "status": 200,
         "results": 11,
-        "ms": 13.6
+        "ms": 10.8
       },
       "note": ""
     },
@@ -1311,7 +1311,7 @@
       "measured": {
         "status": 200,
         "results": 0,
-        "ms": 6.3
+        "ms": 5.6
       },
       "note": ""
     },
@@ -1346,7 +1346,7 @@
       "id": "search.responds_fast",
       "ok": true,
       "measured": {
-        "median_ms": 8.8
+        "median_ms": 7.75
       },
       "note": ""
     },
@@ -1549,26 +1549,26 @@
       "id": "perf.origin_ttfb_p95_under_800ms",
       "ok": false,
       "measured": {
-        "p95_ms": 977.3,
+        "p95_ms": 919.1,
         "by_path": {
           "/": {
-            "median_ms": 924.1,
-            "p95_ms": 977.3,
+            "median_ms": 813.5,
+            "p95_ms": 919.1,
             "samples": 7
           },
           "/catalog/": {
-            "median_ms": 427.9,
-            "p95_ms": 441.7,
+            "median_ms": 374.9,
+            "p95_ms": 432.4,
             "samples": 7
           },
           "/new/": {
-            "median_ms": 262.8,
-            "p95_ms": 316.1,
+            "median_ms": 297.8,
+            "p95_ms": 327.7,
             "samples": 7
           },
           "/search/?q=матрица": {
-            "median_ms": 5.8,
-            "p95_ms": 7.8,
+            "median_ms": 8.8,
+            "p95_ms": 9.8,
             "samples": 7
           }
         }
@@ -1587,5 +1587,5 @@
       "route.404_meaningful"
     ]
   },
-  "finished_at": "2026-09-22T14:50:28Z"
+  "finished_at": "2026-09-22T14:51:48Z"
 }
