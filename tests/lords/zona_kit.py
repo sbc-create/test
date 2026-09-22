@@ -93,10 +93,13 @@ def _деталь(**поля):
                                                          "votes": 55}}),
     "bez-postera": _деталь(genres=["комедия"], description="Нет постера."),
     "multik": _деталь(genres=["мультфильм", "семейный"], description="Мультфильм."),
+    # Форма сезонов взята с боевого снимка zona-01: компактные ключи
+    # `n`/`eps`/`avail`, а не `number`/`episodes`. Фикстура, не совпадающая с
+    # данными, проверяет не витрину, а сама себя: маршрут сезона на выдуманной
+    # форме отвечал 404, и это выглядело бы дефектом витрины.
     "serial-s-sezonami": _деталь(
         genres=["драма"], description="Сериал.",
-        seasons=[{"number": 1, "episodes": [{"number": 1, "title": "Первая"},
-                                            {"number": 2, "title": "Вторая"}]}]),
+        seasons=[{"n": 1, "eps": 2, "avail": 2}, {"n": 2, "eps": 3, "avail": 1}]),
     "tolko-imdb": _деталь(genres=["драма"], imdb_rating=5.5,
                           ratings_by_source={"imdb": {"value": 5.5, "scale": 10.0,
                                                       "votes": 10}}),
