@@ -695,6 +695,24 @@ def транслит(с: str) -> str:
     return "".join(_ТРАНСЛИТ.get(ch, ch) for ch in (с or "").lower().replace("ё", "е"))
 
 
+def склонение_записей(n: int) -> str:
+    """«1 запись», «2 записи», «5 записей» — подпись счётчика рядом с числом.
+
+    Не украшение: счётчики стоят в хабах жанров и типов по несколько десятков
+    на страницу, и несогласованное число там заметнее любого огреха вёрстки.
+    """
+    n = abs(int(n))
+    если_сотня = n % 100
+    if 11 <= если_сотня <= 14:
+        return "записей"
+    последняя = n % 10
+    if последняя == 1:
+        return "запись"
+    if 2 <= последняя <= 4:
+        return "записи"
+    return "записей"
+
+
 #: Четыре цифры в хвосте формы — год из названия. Выражение собрано один раз:
 #: в мягком сравнении оно вызывается миллионами.
 _ХВОСТ_ГОДА = re.compile(r"\d{4}$")
@@ -2080,12 +2098,17 @@ def _подставить(шаблон: str, токены: dict) -> str:
         "вид": "animedia",
         "токены": АНИМЕДИА_ТОКЕНЫ,
         "стиль": lambda: _общее(АНИМЕДИА_ТОКЕНЫ) + _подставить(АНИМЕДИА_СТИЛЬ, АНИМЕДИА_ТОКЕНЫ),
-        # B01: registry routes only. Top-100 omitted until standalone route exists.
-        # /new/ = catalog additions (not episode events). /schedule/ exists → shown.
+        # Навигация обязательного каркаса. Каждый пункт ведёт на страницу с
+        # содержимым: пункт, открывающий пустой раздел или объяснение про
+        # неподключённый источник, хуже отсутствующего пункта.
         "нав": [("/", "Главная"), ("/catalog/", "Каталог"),
-                ("/new/", "Новое в каталоге"),
+                ("/new/", "Новое"),
                 ("/collections/", "Подборки"),
-                ("/schedule/", "Расписание")],
+                ("/schedule/", "Расписание"),
+                ("/genres/", "Жанры"),
+                ("/types/", "Типы"),
+                ("/lists/", "Списки"),
+                ("/top/", "Топ")],
         "поиск": "Поиск аниме",
         "полосы": [],
         "лид": "Аниме онлайн",
@@ -4216,13 +4239,66 @@ TRUE_PROVIDER_PLAYABLE_EVENT_COUNT = 0
     str(Path(__file__).resolve().parents[2] / "config" / "animedia-catalog-added.json"),
 )
 АНИМЕДИА_CATALOG_ADDED_PAGE_SIZE = 10
-АНИМЕДИА_CATALOG_ADDED_H1 = "Новое в каталоге"
+АНИМЕДИА_CATALOG_ADDED_H1 = "Недавно добавленные"
 АНИМЕДИА_CATALOG_ADDED_EMPTY = (
-    "Список новинок каталога пока недоступен: ledger добавлений ещё не подключён"
+    "Пока нечего показать — вернитесь чуть позже"
 )
-# Ambiguous catalog.items[].published_at is NOT catalog_added_at (§5.5 / B05).
 CATALOG_FRESHNESS_DATA_GAP = 1
 АНИМЕДИА_CATALOG_ADDED_HOME_LIMIT = 16
+#: Сколько записей показывает раздел «Недавно добавленные» на своей странице.
+АНИМЕДИА_CATALOG_ADDED_PAGE_LIMIT = 48
+
+#: Доля каталога, начиная с которой одинаковая отметка времени перестаёт быть
+#: датой добавления конкретной записи и становится следом массовой загрузки.
+#:
+#: Зачем порог вообще. В живом снимке 4003 записи из 7426 несут одну и ту же
+#: метку `2024-11-12T12:20:11Z` — это не день, когда добавили четыре тысячи
+#: произведений, а момент первичного импорта. Ровно из-за неё раздел новинок
+#: когда-то отключили целиком: сортировка по этому полю выносила наверх
+#: случайную часть импорта. Но отключать пришлось не поле, а когорту: у
+#: остальных 3423 записей метки различны, идут по одной-две в день и
+#: описывают настоящие поступления. Их и показываем.
+#:
+#: Порог задан долей, а не числом: он должен работать и на каталоге в сто
+#: записей, и на каталоге в сто тысяч.
+АНИМЕДИА_ДОЛЯ_МАССОВОЙ_МЕТКИ = 0.01
+
+
+def массовые_метки(записи, доля: float = АНИМЕДИА_ДОЛЯ_МАССОВОЙ_МЕТКИ) -> set:
+    """Отметки времени, которые повторяются слишком часто, чтобы быть датой.
+
+    Возвращается множество таких меток. Пустое множество — законный ответ:
+    в каталоге без массового импорта отбрасывать нечего.
+    """
+    записи = list(записи)
+    if not записи:
+        return set()
+    порог = max(2, int(len(записи) * доля))
+    счёт: dict = {}
+    for з in записи:
+        метка = str(з.get("published_at") or "")
+        if метка:
+            счёт[метка] = счёт.get(метка, 0) + 1
+    return {метка for метка, n in счёт.items() if n >= порог}
+
+
+def недавно_добавленные(записи, предел: int = 0) -> list:
+    """Записи в порядке добавления в каталог, начиная с самой свежей.
+
+    Год выхода произведения сюда не примешивается: сортировка идёт по дате
+    добавления и только по ней, а при равных датах — стабильным вторым ключом
+    из модуля хронологии, иначе одна и та же карточка прыгала бы между
+    страницами при листании.
+    """
+    массовые = массовые_метки(записи)
+    отобранные = [з for з in записи
+                  if з.get("published_at") and str(з["published_at"]) not in массовые]
+    if ХРОНОЛОГИЯ is not None:
+        отобранные = ХРОНОЛОГИЯ.по_добавлению(отобранные)
+    else:  # модуль хронологии не подключён — порядок всё равно по дате
+        отобранные.sort(key=lambda з: (str(з.get("published_at")), з.get("slug") or ""),
+                        reverse=True)
+    return отобранные[:предел] if предел else отобранные
 АНИМЕДИА_SEARCH_PAGE_SIZE = 24
 АНИМЕДИА_SEARCH_EMPTY = "Запрос пуст"
 АНИМЕДИА_SEARCH_ZERO = "Совпадений нет"
@@ -6181,14 +6257,13 @@ class ВидАнимедиа(ВидОснова):
             источник = "snapshot-diff" if events else "none"
         self._episode_feed_source = источник
         if not events:
-            return (
-                f'<section class="zsec zsec--eps ahome-eps ahome-eps--empty" '
-                f'data-b03="empty" data-provider-playable-count="0" '
-                f'data-episode-feed-source="none">'
-                f'<div class="zsec__h"><h2>{АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК}</h2></div>'
-                f'<p class="ahome-eps__empty">{html.escape(АНИМЕДИА_ЭПИЗОД_EMPTY_COPY)}</p>'
-                f'</section>'
-            )
+            # Событий выхода серий ещё не накоплено: реестр выводит их
+            # сравнением соседних снимков и до второго снимка знать их не
+            # может. Показывать вместо ленты объяснение про источник —
+            # значит отдать посетителю внутреннюю кухню вместо продукта.
+            # Поэтому здесь стоит соседний блок из настоящих данных: что
+            # сейчас выходит и сколько серий уже доступно.
+            return self._блок_сейчас_выходит()
         per = АНИМЕДИА_ЭПИЗОД_НА_СТРАНИЦЕ
         rows = events[:per]
         feed = '<div class="aeps">' + "".join(
@@ -6199,6 +6274,68 @@ class ВидАнимедиа(ВидОснова):
             f'data-episode-feed-source="{html.escape(источник)}">'
             f'<div class="zsec__h"><h2>{АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК}</h2></div>'
             f'{feed}</section>'
+        )
+
+    def онгоинги(self, предел: int = 0) -> list[tuple]:
+        """Тайтлы, у которых доступно меньше серий, чем заявлено.
+
+        Это настоящий факт из снимка подробностей, а не догадка о выходе
+        серии: `avail` — к скольким сериям есть дорожка, `eps` — сколько
+        объявлено. Ни одной даты здесь не придумывается, поэтому блок
+        называется «Сейчас выходит», а не «Новые серии».
+
+        Порядок — от самого свежего поступления в каталог: у равных данных
+        должен быть один и тот же порядок на каждой странице.
+        """
+        готовые = []
+        for з in недавно_добавленные(self.д.items):
+            деталь = self.деталь(з.get("slug") or "") or {}
+            сезоны = деталь.get("seasons")
+            if not isinstance(сезоны, list) or not сезоны:
+                continue
+            доступно = заявлено = 0
+            for с in сезоны:
+                if not isinstance(с, dict):
+                    continue
+                доступно += int(с.get("avail") or 0)
+                заявлено += int(с.get("eps") or 0)
+            if заявлено and 0 < доступно < заявлено:
+                готовые.append((з, доступно, заявлено))
+            if предел and len(готовые) >= предел:
+                break
+        return готовые
+
+    def _блок_сейчас_выходит(self, *, сбоку: bool = False) -> str:
+        """Лента «Сейчас выходит»: сколько серий уже доступно из заявленных."""
+        строки = self.онгоинги(АНИМЕДИА_ЭПИЗОД_НА_СТРАНИЦЕ)
+        if not строки:
+            return (
+                '<section class="zsec zsec--eps ahome-eps ahome-eps--empty" '
+                'data-b03="empty" data-provider-playable-count="0" '
+                'data-episode-feed-source="none" hidden aria-hidden="true"></section>'
+            )
+        ряды = []
+        for з, доступно, заявлено in строки:
+            изо = заглушка_постера(з, "aeps__none", "aeps__img", 60, 90)
+            ряды.append(
+                f'<a class="aeps__row" data-card-variant="episode-row" '
+                f'href="{html.escape(з["url"])}" data-event-kind="ongoing" '
+                f'data-eps-avail="{доступно}" data-eps-total="{заявлено}">'
+                f'<span class="aeps__thumb">{изо}</span>'
+                f'<span class="aeps__body">'
+                f'<span class="aeps__title">{html.escape(з["title"])}</span>'
+                f'<span class="aeps__meta">Доступно {доступно} из {заявлено} серий</span>'
+                f'</span>'
+                f'<span class="aeps__ep"><span class="aeps__num">{доступно}</span>'
+                f'<span class="aeps__lab">серий</span></span></a>')
+        класс = "aside-eps" if сбоку else "ahome-eps"
+        return (
+            f'<section class="zsec zsec--eps {класс}" data-b03="ongoing" '
+            f'data-episode-feed-source="ongoing-counters" '
+            f'data-ongoing-count="{len(строки)}">'
+            f'<div class="zsec__h"><h2>Сейчас выходит</h2>'
+            f'<a href="/catalog/?sort=date">Весь каталог</a></div>'
+            f'<div class="aeps">{"".join(ряды)}</div></section>'
         )
 
     def _available_episode_count(self, slug: str) -> int | None:
@@ -6309,29 +6446,48 @@ class ВидАнимедиа(ВидОснова):
             f'{added}{avail}</span></a>'
         )
 
+    def недавно_добавленные_записи(self, предел: int = 0) -> tuple[list, str]:
+        """Записи для «Недавно добавленных» и откуда они взяты.
+
+        Порядок источников — по убыванию доказанности. Утверждённый реестр
+        добавлений остаётся первым: когда он появится, ничего переписывать не
+        придётся. Пока его нет, берётся дата добавления из самого снимка, из
+        которой убрана когорта массового импорта.
+        """
+        события = self._catalog_added_events()
+        if события:
+            slugs = [str(с.get("title_slug") or с.get("slug") or "") for с in события]
+            по_slug = {з.get("slug"): з for з in self.д.items if з.get("slug")}
+            записи = [по_slug[s] for s in slugs if s in по_slug]
+            if записи:
+                return (записи[:предел] if предел else записи), "ledger"
+        return недавно_добавленные(self.д.items, предел), "catalog-added-at"
+
     def _блок_нового_в_каталоге_b05(self) -> str:
-        """Home B05: verified ledger shelf or 0 px + CATALOG_FRESHNESS_DATA_GAP."""
-        events = self._catalog_added_events()
-        self._catalog_added_count = len(events)
-        self._catalog_freshness_gap = 0 if events else 1
-        if not events:
+        """Полка «Недавно добавленные» на главной.
+
+        Раньше полка пряталась целиком, если не подключён утверждённый реестр
+        добавлений. Снаружи это выглядело так, будто на сайт ничего не
+        поступает, хотя в снимке лежат настоящие даты добавления. Реестр
+        по-прежнему главнее, но его отсутствие больше не отменяет раздел.
+        """
+        записи, источник = self.недавно_добавленные_записи(
+            АНИМЕДИА_CATALOG_ADDED_HOME_LIMIT)
+        self._catalog_added_count = len(записи)
+        self._catalog_freshness_gap = 0 if записи else 1
+        if not записи:
             return (
                 '<div class="zsec zsec--b05 zsec--b05-gap" data-b05="gap" '
                 'data-catalog-freshness-gap="1" hidden aria-hidden="true"></div>'
             )
-        rows = events[:АНИМЕДИА_CATALOG_ADDED_HOME_LIMIT]
-        grid = (
-            '<div class="zg zg--catalog-added" data-card-grid="catalog-added">'
-            + "".join(self._плитка_catalog_added(r) for r in rows)
-            + "</div>"
-        )
         return (
             f'<section class="zsec zsec--b05" data-b05="populated" '
             f'data-catalog-freshness-gap="0" '
-            f'data-catalog-added-count="{len(events)}">'
+            f'data-catalog-added-source="{источник}" '
+            f'data-catalog-added-count="{len(записи)}">'
             f'<div class="zsec__h"><h2>{АНИМЕДИА_CATALOG_ADDED_H1}</h2>'
             f'<a href="/new/">Весь раздел</a></div>'
-            f'{grid}</section>'
+            f'{self.плитки(записи, вариант="catalog-title")}</section>'
         )
 
     def _блок_компактных_фильтров_b06(self) -> str:
@@ -6658,52 +6814,55 @@ class ВидАнимедиа(ВидОснова):
             f'<span class="aeps__lab">{html.escape(ep_lab)}</span></span></a>')
 
     def _страница_новых_эпизодов(self, зпр: dict) -> str:
-        """B05/B12 /new/: catalog_added ledger only — never published_at episode rows."""
-        events = self._catalog_added_events()
-        per = АНИМЕДИА_CATALOG_ADDED_PAGE_SIZE
-        if not events:
-            стр, err = self._разобрать_страницу_эпизодов(зпр, 1)
-            if err or стр is None or стр != 1:
-                # Only canonical /new/ exists while the ledger is absent.
-                if (зпр.get("page") or ["1"])[0] not in (None, "", "1"):
-                    self._http_status = 404
-                    return self.не_найдено("/new/")
+        """Раздел «Недавно добавленные»: полноценная страница, а не объяснение.
+
+        Прежде здесь стояло сообщение о неподключённом внутреннем реестре.
+        Посетителю нечего делать с названием внутреннего компонента: он пришёл
+        смотреть, что появилось на сайте. Теперь страница строится из тех же
+        данных, что и полка на главной, и пустой остаётся только если в
+        каталоге действительно нет ни одной датированной записи.
+        """
+        записи, источник = self.недавно_добавленные_записи()
+        per = АНИМЕДИА_CATALOG_ADDED_PAGE_LIMIT
+        if not записи:
+            if (зпр.get("page") or ["1"])[0] not in (None, "", "1"):
+                self._http_status = 404
+                return self.не_найдено("/new/")
             self._http_status = 200
             тело = (
                 f'<div class="zwrap anew-page" data-b05-page="gap">'
                 f'<h1 class="zh">{АНИМЕДИА_CATALOG_ADDED_H1}</h1>'
                 f'<div class="anew-empty" data-catalog-freshness-gap="1">'
-                f'<b>Новинки каталога недоступны</b>'
-                f'<p>{html.escape(АНИМЕДИА_CATALOG_ADDED_EMPTY)}</p></div></div>'
+                f'<b>{html.escape(АНИМЕДИА_CATALOG_ADDED_EMPTY)}</b>'
+                f'<p>Каталог открыт целиком — '
+                f'<a href="/catalog/">перейти в каталог</a>.</p></div></div>'
             )
             return self.оболочка(
                 тело, f"{АНИМЕДИА_CATALOG_ADDED_H1} — {self.имя}", "/new/",
                 актив="/new/",
                 описание=АНИМЕДИА_CATALOG_ADDED_EMPTY)
-        всего = max(1, (len(events) + per - 1) // per)
+        всего = max(1, (len(записи) + per - 1) // per)
         стр, err = self._разобрать_страницу_эпизодов(зпр, всего)
         if err or стр is None:
             self._http_status = 404
             return self.не_найдено("/new/")
         self._http_status = 200
-        кусок = events[(стр - 1) * per: стр * per]
-        сетка = (
-            '<div class="zg zg--catalog-added" data-card-grid="catalog-added">'
-            + "".join(self._плитка_catalog_added(r) for r in кусок)
-            + "</div>"
-        )
+        кусок = записи[(стр - 1) * per: стр * per]
         листалка = self._листалка_эпизодов(стр, всего)
         канон = "/new/" if стр == 1 else f"/new/?page={стр}"
         тело = (
-            f'<div class="zwrap anew-page" data-b05-page="populated">'
+            f'<div class="zwrap anew-page" data-b05-page="populated" '
+            f'data-catalog-added-source="{источник}" '
+            f'data-catalog-added-total="{len(записи)}">'
             f'<h1 class="zh">{АНИМЕДИА_CATALOG_ADDED_H1}</h1>'
-            f'<p class="zsub">Страница {стр} из {всего} · всего {len(events)}.</p>'
-            + сетка + листалка + "</div>"
+            f'<p class="zsub">Всего {len(записи)} · страница {стр} из {всего}. '
+            f'Порядок — от самого свежего поступления.</p>'
+            + self.плитки(кусок, вариант="catalog-title") + листалка + "</div>"
         )
         return self.оболочка(
             тело, f"{АНИМЕДИА_CATALOG_ADDED_H1} — {self.имя}", канон,
             актив="/new/",
-            описание=АНИМЕДИА_CATALOG_ADDED_H1)
+            описание=f"{АНИМЕДИА_CATALOG_ADDED_H1} на витрине {self.имя}.")
 
     # --- B12.2/B12.3: поиск --------------------------------------------
     @staticmethod
@@ -7075,19 +7234,264 @@ class ВидАнимедиа(ВидОснова):
                              описание=данные.description)
 
     # --- расписание ----------------------------------------------------
-    def расписание(self) -> str:
-        """B04/B13.3 honest empty: no fabricated times; route panel ≤260px."""
+    # --- хабы разделов ---------------------------------------------------
+
+    def _плитка_раздела(self, адрес: str, имя: str, сколько: int,
+                        пояснение: str = "") -> str:
+        return (
+            f'<a class="ahub__c" href="{html.escape(адрес, quote=True)}">'
+            f'<span class="ahub__n">{html.escape(имя)}</span>'
+            f'<span class="ahub__k">{сколько} {склонение_записей(сколько)}</span>'
+            + (f'<span class="ahub__p">{html.escape(пояснение)}</span>' if пояснение else "")
+            + '</a>')
+
+    def хаб_жанров(self) -> str:
+        """Страница «Жанры»: все жанры каталога со счётчиками.
+
+        Прежде `/genres/` отвечал переходом на каталог. Пункт навигации,
+        который никуда не ведёт, — это не навигация; здесь он ведёт к списку
+        жанров, каждый из которых открывает свою выдачу.
+        """
+        жанры = []
+        for код, имя in (self.индекс.get("genre_names") or []):
+            сколько = len((self.индекс.get("genre") or {}).get(код) or [])
+            if сколько:
+                жанры.append((сколько, код, имя))
+        жанры.sort(key=lambda т: (-т[0], т[2]))
+        плитки = "".join(
+            self._плитка_раздела(f"/catalog/?genre={код}", имя.capitalize(), сколько)
+            for сколько, код, имя in жанры)
         тело = (
-            '<div class="zwrap"><div class="asch-route" data-b04="empty">'
-            '<h1 class="zh">Расписание</h1>'
-            '<div class="asch-empty"><b>Расписание пока недоступно</b>'
-            '<p>Источник плановых выходов ещё не подключен. '
-            'Смотрите <a href="/new/">новое в каталоге</a> и '
-            '<a href="/catalog/">каталог</a>.</p></div></div></div>')
+            f'<div class="zwrap"><h1 class="zh">Жанры</h1>'
+            f'<p class="zsub">Жанров в каталоге: {len(жанры)}. '
+            f'Счётчик показывает, сколько произведений отнесено к жанру '
+            f'в утверждённом снимке.</p>'
+            f'<div class="ahub" data-hub="genres" data-hub-count="{len(жанры)}">'
+            f'{плитки}</div></div>')
+        return self.оболочка(тело, f"Жанры — {self.имя}", "/genres/",
+                             актив="/genres/",
+                             описание=f"Жанры аниме на витрине {self.имя}.")
+
+    def хаб_типов(self) -> str:
+        """Страница «Типы»: форматы произведений со счётчиками."""
+        подписи = {"tv": ("Сериалы", "/series/", "Многосерийные произведения."),
+                   "movie": ("Фильмы", "/movies/", "Полнометражные произведения.")}
+        типы = []
+        for код, slugs in sorted((self.индекс.get("type") or {}).items()):
+            сколько = len(slugs or [])
+            if not сколько:
+                continue
+            имя, адрес, пояснение = подписи.get(
+                код, (код.upper(), f"/catalog/?type={код}", ""))
+            типы.append((сколько, адрес, имя, пояснение))
+        типы.sort(key=lambda т: -т[0])
+        плитки = "".join(self._плитка_раздела(адрес, имя, сколько, пояснение)
+                         for сколько, адрес, имя, пояснение in типы)
+        тело = (
+            f'<div class="zwrap"><h1 class="zh">Типы</h1>'
+            f'<p class="zsub">Формат произведения берётся из снимка '
+            f'подробностей. Типов в каталоге: {len(типы)}.</p>'
+            f'<div class="ahub" data-hub="types" data-hub-count="{len(типы)}">'
+            f'{плитки}</div></div>')
+        return self.оболочка(тело, f"Типы — {self.имя}", "/types/",
+                             актив="/types/",
+                             описание=f"Типы аниме на витрине {self.имя}.")
+
+    # --- топ ---------------------------------------------------------------
+
+    #: Срезы топа: ключ, подпись и объяснение метода. Популярность сюда не
+    #: входит — её данных витрине не передали, и называть оценку популярностью
+    #: нельзя. Каждый срез обязан объяснять, как он посчитан.
+    СРЕЗЫ_ТОПА = (
+        ("rating", "По сводной оценке",
+         "Порядок по сводной оценке Animedia, собранной из подтверждённых "
+         "источников. Записи с малым числом голосов не участвуют."),
+        ("votes", "По голосам посетителей",
+         "Порядок по средней оценке посетителей этой витрины. Внешние "
+         "источники в этот срез не входят."),
+        ("fresh", "Новое за месяц",
+         "Записи, добавленные в каталог за последние 30 дней, от самой "
+         "свежей. Это срез по дате добавления, а не по популярности."),
+    )
+
+    def _топ_по_оценке(self, предел: int) -> list:
+        топ = загрузить_топ_по_оценкам()
+        if not топ:
+            return []
+        по_slug = {з.get("slug"): з for з in self.д.items if з.get("slug")}
+        записи = [по_slug[м["slug"]] for м in (топ.get("places") or [])
+                  if м.get("slug") in по_slug]
+        return записи[:предел]
+
+    def _топ_по_голосам(self, предел: int) -> list:
+        хранилище = сообщество()
+        if хранилище is None or not getattr(хранилище, "доступно", False):
+            return []
+        сырое = хранилище._прочитать().get("titles") or {}
+        по_slug = {з.get("slug"): з for з in self.д.items if з.get("slug")}
+        собрано = []
+        for slug, запись in сырое.items():
+            if slug not in по_slug:
+                continue
+            голоса = [int(v) for v in (запись.get("votes") or {}).values()
+                      if isinstance(v, (int, float))]
+            if not голоса:
+                continue
+            собрано.append((sum(голоса) / len(голоса), len(голоса), slug))
+        собрано.sort(key=lambda т: (-т[0], -т[1], т[2]))
+        return [по_slug[slug] for _, _, slug in собрано[:предел]]
+
+    def _топ_свежего(self, предел: int) -> list:
+        порог = datetime.now(timezone.utc) - timedelta(days=30)
+        свежие = []
+        for з in недавно_добавленные(self.д.items):
+            момент = (ХРОНОЛОГИЯ.разобрать_момент(з.get("published_at"))
+                      if ХРОНОЛОГИЯ is not None else None)
+            if момент is None or момент < порог:
+                break
+            свежие.append(з)
+            if len(свежие) >= предел:
+                break
+        return свежие
+
+    def страница_топа(self, зпр: dict) -> str:
+        """Страница «Топ» с названным методом у каждого среза."""
+        срез = ((зпр.get("by") or [""])[0] or "rating").strip()
+        известные = {к for к, _, _ in self.СРЕЗЫ_ТОПА}
+        if срез not in известные:
+            self._http_status = 404
+            return self.не_найдено("/top/")
+        предел = 48
+        if срез == "rating":
+            записи = self._топ_по_оценке(предел)
+        elif срез == "votes":
+            записи = self._топ_по_голосам(предел)
+        else:
+            записи = self._топ_свежего(предел)
+        подпись = next(о for к, _, о in self.СРЕЗЫ_ТОПА if к == срез)
+        текущая = ' aria-current="page"'
+        вкладки = "".join(
+            f'<a class="atabs__t{" is-on" if к == срез else ""}" '
+            f'href="/top/?by={к}"{текущая if к == срез else ""}>'
+            f'{html.escape(имя)}</a>'
+            for к, имя, _ in self.СРЕЗЫ_ТОПА)
+        if записи:
+            содержимое = self.плитки(записи, вариант="catalog-title")
+            счёт = f'<p class="zsub">Мест в списке: {len(записи)}.</p>'
+        else:
+            содержимое = (
+                '<div class="zempty" data-top-state="empty">'
+                '<b>Здесь пока пусто</b>'
+                '<p>В этом срезе ещё нет записей. '
+                '<a href="/catalog/">Открыть каталог</a>.</p></div>')
+            счёт = ""
+        self._http_status = 200
+        тело = (
+            f'<div class="zwrap atop-page" data-top-slice="{html.escape(срез)}" '
+            f'data-top-count="{len(записи)}">'
+            f'<h1 class="zh">Топ</h1>'
+            f'<nav class="atabs" aria-label="Срезы топа">{вкладки}</nav>'
+            f'<p class="zsub atop__method">{html.escape(подпись)}</p>'
+            f'{счёт}{содержимое}</div>')
+        канон = "/top/" if срез == "rating" else f"/top/?by={срез}"
+        return self.оболочка(тело, f"Топ — {self.имя}", канон, актив="/top/",
+                             описание=f"Топ аниме на витрине {self.имя}: {подпись}")
+
+    # --- списки посетителя -------------------------------------------------
+
+    def страница_списков(self, зпр: dict) -> str:
+        """«Списки»: что посетитель отложил себе, а не редакционные подборки.
+
+        Раздел раньше отвечал 404, хотя пункт навигации на него ссылался.
+        Списки держатся в том же хранилище сообщества и привязаны к
+        обезличенному отпечатку посетителя: учётных записей у витрины нет, и
+        выдумывать их ради раздела не нужно.
+        """
+        хранилище = сообщество()
+        self._http_status = 200
+        if хранилище is None or not getattr(хранилище, "доступно", False):
+            причина = getattr(хранилище, "причина", "") if хранилище else "модуль не подключён"
+            тело = (
+                '<div class="zwrap alists-page" data-lists="unavailable" '
+                f'data-lists-reason="{html.escape(причина[:120])}">'
+                '<h1 class="zh">Списки</h1>'
+                '<div class="zempty"><b>Списки временно недоступны</b>'
+                '<p>Сейчас их нельзя сохранить. '
+                '<a href="/catalog/">Открыть каталог</a>.</p></div></div>')
+            return self.оболочка(тело, f"Списки — {self.имя}", "/lists/",
+                                 актив="/lists/", описание="Списки посетителя.")
+        разложено = хранилище.списки_посетителя(self._ключ_посетителя())
+        по_slug = {з.get("slug"): з for з in self.д.items if з.get("slug")}
+        всего = sum(len(v) for v in разложено.values())
+        блоки = []
+        for ключ, подпись in СООБЩЕСТВО.СПИСКИ:
+            записи = [по_slug[s] for s in разложено.get(ключ, []) if s in по_slug]
+            if not записи:
+                continue
+            блоки.append(
+                f'<section class="zsec" data-list="{ключ}" '
+                f'data-list-count="{len(записи)}">'
+                f'<div class="zsec__h"><h2>{html.escape(подпись)}</h2></div>'
+                f'{self.плитки(записи, вариант="catalog-title")}</section>')
+        if not блоки:
+            содержимое = (
+                '<div class="zempty" data-lists="empty"><b>Списки пока пусты</b>'
+                '<p>Откройте любое произведение и выберите список — '
+                '«Смотрю», «Буду смотреть» или «Любимое». '
+                '<a href="/catalog/">Перейти в каталог</a>.</p></div>')
+        else:
+            содержимое = "".join(блоки)
+        тело = (
+            f'<div class="zwrap alists-page" data-lists="on" '
+            f'data-lists-total="{всего}">'
+            f'<h1 class="zh">Списки</h1>'
+            f'<p class="zsub">Списки хранятся в этом браузере и видны только '
+            f'вам. Всего отложено: {всего}.</p>{содержимое}</div>')
+        return self.оболочка(тело, f"Списки — {self.имя}", "/lists/",
+                             актив="/lists/",
+                             описание=f"Личные списки на витрине {self.имя}.")
+
+    def расписание(self) -> str:
+        """Расписание: что сейчас выходит, с честным словом о датах.
+
+        Плановых дат выхода источник не передаёт, и выдумывать сетку по дням
+        нельзя. Но «расписание» для посетителя — это прежде всего ответ на
+        вопрос «что сейчас идёт и сколько уже вышло», и на него данные есть:
+        число доступных серий против заявленных. Раздел отвечает на него, а
+        про отсутствующие даты говорит одной строкой, без внутренних имён.
+        """
+        строки = self.онгоинги(96)
+        if not строки:
+            тело = (
+                '<div class="zwrap"><h1 class="zh">Расписание</h1>'
+                '<div class="zempty" data-b04="empty">'
+                '<b>Сейчас ничего не выходит</b>'
+                '<p>Незавершённых произведений в каталоге нет. '
+                '<a href="/new/">Недавно добавленные</a> · '
+                '<a href="/catalog/">Каталог</a>.</p></div></div>')
+            return self.оболочка(тело, f"Расписание — {self.имя}", "/schedule/",
+                                 актив="/schedule/",
+                                 описание="Что сейчас выходит на витрине.")
+        ряды = "".join(
+            f'<a class="asch__row" href="{html.escape(з["url"])}" '
+            f'data-eps-avail="{д}" data-eps-total="{в}">'
+            f'<span class="asch__t">{html.escape(з["title"])}</span>'
+            f'<span class="asch__p"><span class="asch__bar" '
+            f'style="width:{min(100, round(д * 100 / в))}%"></span></span>'
+            f'<span class="asch__k">{д} из {в}</span></a>'
+            for з, д, в in строки)
+        тело = (
+            f'<div class="zwrap asch-page" data-b04="ongoing" '
+            f'data-ongoing-count="{len(строки)}">'
+            f'<h1 class="zh">Расписание</h1>'
+            f'<p class="zsub">Сейчас выходит: {len(строки)}. '
+            f'Показано, сколько серий уже доступно из заявленных. '
+            f'Точные даты выхода источник не передаёт, поэтому сетки по дням '
+            f'здесь нет.</p>'
+            f'<div class="asch">{ряды}</div></div>')
         return self.оболочка(тело, f"Расписание — {self.имя}", "/schedule/",
                              актив="/schedule/",
-                             описание="Расписание выхода серий аниме "
-                             "(даты выхода пока не переданы источником).")
+                             описание=f"Что сейчас выходит на витрине {self.имя}.")
 
 
 #: Вид Animedia появляется только у витрины, объявившей переработанное
@@ -7268,6 +7672,11 @@ class Обработчик(BaseHTTPRequestHandler):
             elif путь == "/community/comment":
                 хранилище.добавить_комментарий(
                     slug, поля.get("name") or "", поля.get("text") or "", ключ)
+            elif путь == "/community/list":
+                # Пустое значение — «убрать из списков»: у кнопки, которая
+                # умеет только добавлять, нет обратного хода.
+                выбор = str(поля.get("list") or "").strip() or None
+                хранилище.выбрать_список(slug, выбор, ключ)
             else:
                 return self._отдать(b"", код=404, тип="text/plain; charset=utf-8")
         except (ValueError, RuntimeError) as ош:
@@ -7510,13 +7919,28 @@ class Обработчик(BaseHTTPRequestHandler):
     #: Адреса, существовавшие до 1.1.0. Каждый уводит РОВНО одним переходом на
     #: действующий раздел: молча отдавать по ним 404 значило бы терять ссылки,
     #: которые уже кем-то сохранены.
-    ПРЕЖНИЕ_АДРЕСА = {"/schedule/": "/new/", "/genres/": "/catalog/"}
+    #: Расписание у Animedia своё, а хаб жанров теперь настоящая страница —
+    #: подменять их соседними разделами больше не нужно.
+    ПРЕЖНИЕ_АДРЕСА: dict = {}
 
-    #: Чистые kind-маршруты (базу). Query остаётся каноном для комбинаций.
-    МАРШРУТЫ_ВИДА = {
-        "/movies": "Фильм",
-        "/series": "Сериал",
-        "/animation": "Мультфильм",
+    #: Разделы по формату произведения. Ключи — значения фасета `type` из
+    #: снимка подробностей, а не выдуманные подписи.
+    #:
+    #: Прежде эти маршруты фильтровали по `kind` значениями «Фильм», «Сериал»,
+    #: «Мультфильм». В каталоге Animedia `kind` у всех 7426 записей один и тот
+    #: же — «Аниме», поэтому каждый из трёх разделов честно находил ноль и
+    #: показывал «Найдено 0» под панелью фильтров, где рядом было написано
+    #: «MOVIE 1922, TV 5504». Значения пришли из чужого профиля вместе с
+    #: механикой страниц; здесь они заменены на те, что есть в данных.
+    МАРШРУТЫ_ВИДА: dict = {}
+    МАРШРУТЫ_ТИПА = {
+        "/movies": "movie",
+        "/series": "tv",
+    }
+    #: Вся витрина — анимация, поэтому отдельного раздела «Анимация» у неё нет:
+    #: он повторял бы каталог целиком. Ссылка ведёт в каталог, а не в пустоту.
+    ПЕРЕХОДЫ_РАЗДЕЛОВ = {
+        "/animation": "/catalog/",
     }
 
     #: Исторические slug → канонический. 301 с сохранением season/episode.
@@ -7562,11 +7986,25 @@ class Обработчик(BaseHTTPRequestHandler):
             return self._отдать(в.главная().encode("utf-8"))
         # Clean kind routes (базу profile surfaces). Canonical = own path
         # (/movies/, /series/, /animation/), not a silent rewrite to /catalog/.
+        if обрезанный in self.ПЕРЕХОДЫ_РАЗДЕЛОВ:
+            return self._переход(self.ПЕРЕХОДЫ_РАЗДЕЛОВ[обрезанный])
+        if обрезанный in self.МАРШРУТЫ_ТИПА:
+            зпр = dict(зпр)
+            зпр["type"] = [self.МАРШРУТЫ_ТИПА[обрезанный]]
+            return self._отдать(в.список(обрезанный, зпр).encode("utf-8"))
         if обрезанный in self.МАРШРУТЫ_ВИДА:
             kind = self.МАРШРУТЫ_ВИДА[обрезанный]
             зпр = dict(зпр)
             зпр["kind"] = [kind]
             return self._отдать(в.список(обрезанный, зпр).encode("utf-8"))
+        if обрезанный == "/genres":
+            return self._отдать(в.хаб_жанров().encode("utf-8"))
+        if обрезанный == "/types":
+            return self._отдать(в.хаб_типов().encode("utf-8"))
+        if обрезанный == "/top":
+            return self._отдать(в.страница_топа(зпр).encode("utf-8"))
+        if обрезанный == "/lists":
+            return self._отдать(в.страница_списков(зпр).encode("utf-8"))
         if обрезанный in ("/catalog", "/new"):
             тело = в.список(обрезанный, зпр)
             код = int(getattr(в, "_http_status", 200) or 200)
