@@ -1,0 +1,22 @@
+{
+  "source": "anilist",
+  "finished_at": "2026-09-22T07:09:57Z",
+  "titles_queued": 2053,
+  "titles_processed": 2053,
+  "elapsed_seconds": 326.9,
+  "counters": {
+    "requested": 2053,
+    "received": 1952,
+    "exact_match": 1657,
+    "pending_match": 295,
+    "rejected": 152,
+    "inserted": 756,
+    "updated": 0,
+    "unchanged": 901,
+    "not_found": 101,
+    "failed": 0,
+    "rate_limited": 126,
+    "retries": 126
+  },
+  "progress_file": "var/unified-ratings/backfill-progress.json"
+}

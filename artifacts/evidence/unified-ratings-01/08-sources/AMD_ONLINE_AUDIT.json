@@ -1,0 +1,60 @@
+{
+  "SOURCE": "AMD_ONLINE",
+  "DOMAIN": "https://amd.online/",
+  "audit_performed_at": "2026-09-22",
+  "audit_method": "read-only проверка публичных служебных путей; страницы не собирались",
+  "probes": {
+    "official_api_root": {
+      "http": 404,
+      "content_type": "text/html; charset=utf-8"
+    },
+    "openapi": {
+      "http": 404,
+      "content_type": "text/html; charset=iso-8859-1"
+    },
+    "graphql": {
+      "http": 404,
+      "content_type": "text/html; charset=utf-8"
+    },
+    "robots": {
+      "http": 200,
+      "content_type": "text/plain"
+    }
+  },
+  "1_official_api": "НЕ НАЙДЕН: /api/ → 404, /openapi.json и /graphql недоступны; сайт на DataLife Engine",
+  "2_authorized_feed": "НЕ НАЙДЕН: в inventory/ и config/rating-sources.yaml фида AMD нет",
+  "3_internal_export": "НЕ НАЙДЕН: доступа владельца к данным AMD в проекте не зафиксировано",
+  "4_robots_and_terms": "robots.txt существует и закрывает /user/, /mylists/, */page*, do=* служебные пути. Карточки произведений не запрещены, но разрешение robots не является разрешением владельца источника на систематический сбор.",
+  "5_stable_title_id": "числовой ID в URL карточки (например /1200-...html) — пригоден как external_id",
+  "6_fields_available": "на публичной карточке присутствуют общая оценка 1–10, число голосов и покритериальные оценки (сюжет, персонажи, рисовка, озвучка); дата обновления не публикуется",
+  "7_html_is_not_permission": "наличие HTML-страницы не считается разрешением на массовый сбор — это прямое требование владельца и оно соблюдено: парсер не создан",
+  "existing_project_record": {
+    "file": "artifacts/evidence/ratings-ingestion-02/AMD_PERMISSION_STATUS.md",
+    "AMD_PERMISSION_STATUS": "NOT_PROVIDED",
+    "config": "config/rating-sources.yaml → amd_online.authorization.status = not_provided_recurring_disabled",
+    "AMD_RECURRING_FETCHES": "DISABLED"
+  },
+  "AMD_ONLINE_STATUS": "BLOCKED_SOURCE_PERMISSION",
+  "AMD_ONLINE_API_FOUND": "NO",
+  "AMD_ONLINE_FEED_FOUND": "NO",
+  "AMD_ONLINE_AUTHORIZED_EXPORT_FOUND": "NO",
+  "AMD_ONLINE_ACCESS_TYPE": "BLOCKED",
+  "AMD_ONLINE_IMPORTED": 0,
+  "AMD_ONLINE_UNIQUE_TITLES": 0,
+  "adapter_created": false,
+  "AMD_ONLINE_NEXT_OWNER_ACTION": "Получить у владельца amd.online письменное разрешение на систематическое чтение публичных карточек с указанием допустимой частоты, либо доступ к экспорту/фиду. Документ приложить как docs/rights/amd-online-ratings.md, после чего источник переводится в READY и проходит Этап A заново. Обходить отсутствие разрешения разбором страниц запрещено.",
+  "planned_model_when_permitted": {
+    "SOURCE_ID": "amd_online",
+    "SOURCE_TYPE": "external_community_rating",
+    "NATIVE_SCALE": "1-10",
+    "NORMALIZED_SCALE": "1-10",
+    "dimensions_stored_separately": [
+      "overall",
+      "story",
+      "characters",
+      "art",
+      "voice"
+    ],
+    "note": "покритериальные оценки хранятся отдельными dimensions и не смешиваются с общей оценкой произведения"
+  }
+}

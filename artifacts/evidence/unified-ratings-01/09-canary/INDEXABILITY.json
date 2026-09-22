@@ -1,0 +1,52 @@
+{
+  "checked_at": "2026-09-22",
+  "host": "animedia.icu",
+  "upstream": "http://127.0.0.1:9121",
+  "routes": {
+    "main": {
+      "path": "/",
+      "http": 200,
+      "x_robots_tag": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "canonical": "https://animedia.icu/",
+      "noindex_confirmed": true
+    },
+    "catalog": {
+      "path": "/catalog/",
+      "http": 200,
+      "x_robots_tag": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "canonical": "https://animedia.icu/catalog/",
+      "noindex_confirmed": true
+    },
+    "title": {
+      "path": "/title/master-lda-i-plameni-2/",
+      "http": 200,
+      "x_robots_tag": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "canonical": "https://animedia.icu/title/master-lda-i-plameni-2/",
+      "noindex_confirmed": true
+    },
+    "episode": {
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-1/",
+      "http": 200,
+      "x_robots_tag": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "canonical": "https://animedia.icu/title/master-lda-i-plameni-2/season-2/episode-1/",
+      "noindex_confirmed": true
+    },
+    "404": {
+      "path": "/nonexistent-zzz/",
+      "http": 404,
+      "x_robots_tag": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "canonical": null,
+      "noindex_confirmed": true
+    }
+  },
+  "INDEXABILITY_BEFORE": "noindex, nofollow на всех пяти маршрутах",
+  "INDEXABILITY_AFTER": "noindex, nofollow на всех пяти маршрутах",
+  "INDEXABILITY_MUTATIONS": 0,
+  "CANONICAL_UNCHANGED": "YES — адаптер canonical не трогает",
+  "gate": "PASS"
+}

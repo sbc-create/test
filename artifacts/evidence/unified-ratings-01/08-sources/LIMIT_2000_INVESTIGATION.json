@@ -1,0 +1,56 @@
+{
+  "IMDB": {
+    "SOURCE_NAME": "provider_feed_imdb",
+    "ACCESS_TYPE": "CONTRACT_FEED",
+    "TOTAL_AVAILABLE_REPORTED": 45254,
+    "TOTAL_DISCOVERED": 45254,
+    "TOTAL_FETCHED": 2000,
+    "TOTAL_IMPORTED": 2000,
+    "UNIQUE_TITLES_MATCHED": 2000,
+    "PAGES_FETCHED": "неприменимо: фид не пагинируется",
+    "LAST_CURSOR": "tt7510222",
+    "HAS_MORE": "YES",
+    "EXHAUSTED_PROVEN": "NO",
+    "STOP_REASON": "искусственный срез [:2000] в разовом скрипте запуска",
+    "HARD_CODED_LIMIT_FOUND": "YES — в скрипте запуска прошлого этапа, не в модуле",
+    "DAILY_PROVIDER_LIMIT": "отсутствует: сетевых обращений нет",
+    "items_with_rating_value_in_feed": 26834,
+    "investigation": "Число 2000 не является пределом фида, курсора, страницы, дневной квоты или лицензии. Это срез [:2000] в разовом скрипте запуска предыдущего этапа: `titles = reg.with_external_id(...)[:2000]`. В коде модуля такого предела нет вовсе.",
+    "module_code_grep_for_2000": "(совпадений нет)",
+    "checked": {
+      "feed_manifest_limit": "нет: фид отдаётся файлом каталога целиком",
+      "pagination_cursor": "неприменимо: адаптер фида не пагинирует, читает загруженный снимок",
+      "checkpoint": "не содержал предела; прогон записан как requested=2000",
+      "daily_provider_limit": "не объявлен: обращений к площадке не выполняется вовсе",
+      "licence_limit": "docs/rights/provider-feed-ratings.md ограничивает способ доступа, не объём",
+      "post_filter_accepted": "часть записей отклонена как ABSENT — у них есть ID, но нет оценки"
+    }
+  },
+  "KINOPOISK": {
+    "SOURCE_NAME": "provider_feed_kinopoisk",
+    "ACCESS_TYPE": "CONTRACT_FEED",
+    "TOTAL_AVAILABLE_REPORTED": 46823,
+    "TOTAL_DISCOVERED": 46823,
+    "TOTAL_FETCHED": 2000,
+    "TOTAL_IMPORTED": 2000,
+    "UNIQUE_TITLES_MATCHED": 2000,
+    "PAGES_FETCHED": "неприменимо: фид не пагинируется",
+    "LAST_CURSOR": "11313966",
+    "HAS_MORE": "YES",
+    "EXHAUSTED_PROVEN": "NO",
+    "STOP_REASON": "искусственный срез [:2000] в разовом скрипте запуска",
+    "HARD_CODED_LIMIT_FOUND": "YES — в скрипте запуска прошлого этапа, не в модуле",
+    "DAILY_PROVIDER_LIMIT": "отсутствует: сетевых обращений нет",
+    "items_with_rating_value_in_feed": 19600,
+    "investigation": "Число 2000 не является пределом фида, курсора, страницы, дневной квоты или лицензии. Это срез [:2000] в разовом скрипте запуска предыдущего этапа: `titles = reg.with_external_id(...)[:2000]`. В коде модуля такого предела нет вовсе.",
+    "module_code_grep_for_2000": "(совпадений нет)",
+    "checked": {
+      "feed_manifest_limit": "нет: фид отдаётся файлом каталога целиком",
+      "pagination_cursor": "неприменимо: адаптер фида не пагинирует, читает загруженный снимок",
+      "checkpoint": "не содержал предела; прогон записан как requested=2000",
+      "daily_provider_limit": "не объявлен: обращений к площадке не выполняется вовсе",
+      "licence_limit": "docs/rights/provider-feed-ratings.md ограничивает способ доступа, не объём",
+      "post_filter_accepted": "часть записей отклонена как ABSENT — у них есть ID, но нет оценки"
+    }
+  }
+}

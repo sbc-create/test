@@ -1,0 +1,22 @@
+{
+  "source": "shikimori",
+  "finished_at": "2026-09-22T07:04:28Z",
+  "titles_queued": 532,
+  "titles_processed": 532,
+  "elapsed_seconds": 22.5,
+  "counters": {
+    "requested": 532,
+    "received": 532,
+    "exact_match": 518,
+    "pending_match": 14,
+    "rejected": 57,
+    "inserted": 518,
+    "updated": 0,
+    "unchanged": 0,
+    "not_found": 0,
+    "failed": 0,
+    "rate_limited": 0,
+    "retries": 0
+  },
+  "progress_file": "var/unified-ratings/backfill-progress.json"
+}

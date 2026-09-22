@@ -1,0 +1,62 @@
+{
+  "AUTHORIZED_DOMAIN": "animedia.icu",
+  "chain": {
+    "domain": "animedia.icu",
+    "nginx_config": "/etc/nginx/lords/animedia-01.conf",
+    "upstream": "http://127.0.0.1:9121",
+    "service": "nova-animedia-01.service",
+    "service_description": "nova frontend: animedia-01 (animedia.icu) [animedia]",
+    "MainPID": "279780",
+    "ActiveState": "active",
+    "started_at": "Mon 2026-09-21 21:59:38 UTC",
+    "release_dir": "/srv/lords/.frontend/releases/20260921T214937Z-fac5643-animedia-parity",
+    "artifact": "animedia-frontend.py",
+    "artifact_sha256": "826f54a2c8a743fb517852917aa713c579d1be38848d2c0ee3c26cc82e0e425f",
+    "note": "animedia-01.service — другой юнит (/srv/lords/animedia-01/current/serve.py, MainPID 474239), порт 9121 не держит"
+  },
+  "current_release_manifest": {
+    "build_id": "20260921T214937Z-fac5643-animedia-parity",
+    "branch": "claude/animedia-original-parity-01",
+    "source_commit": "fac5643fcefd8d9c3a69ef32379a069a20ed60fd",
+    "built_from": "git worktree /home/claude/wt-animedia-original-parity-01",
+    "built_at": "2026-09-21T21:49:37Z",
+    "artifact_sha256": "826f54a2c8a743fb517852917aa713c579d1be38848d2c0ee3c26cc82e0e425f"
+  },
+  "artifact_matches_manifest": true,
+  "concurrent_owner": {
+    "branch": "claude/animedia-original-parity-01",
+    "worktree": "/home/claude/wt-animedia-original-parity-01",
+    "active_processes": [
+      {
+        "pid": 2817280,
+        "started_at": "2026-09-22T07:34:47Z",
+        "cmd": "/bin/bash -c source /home/claude/.claude/shell-snapshots/snapshot-bash-1789989425409-aeodhu.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { "
+      },
+      {
+        "pid": 2818267,
+        "started_at": "2026-09-22T07:34:49Z",
+        "cmd": "/home/claude/wt-animedia-original-parity-01/.venv/bin/python /home/claude/wt-animedia-original-parity-01/automation/host/lords-refresh-guard.py --runtime-root /"
+      },
+      {
+        "pid": 2818341,
+        "started_at": "2026-09-22T07:34:49Z",
+        "cmd": "git -C /home/claude/wt-animedia-original-parity-01 archive --format=tar.gz 752bfb8d64a21cb957f42f0d5f0fbec5fa2abc41 "
+      },
+      {
+        "pid": 2830297,
+        "started_at": "2026-09-22T07:35:16Z",
+        "cmd": "/bin/bash -c source /home/claude/.claude/shell-snapshots/snapshot-bash-1790024332239-vspqoj.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { "
+      }
+    ],
+    "evidence": "работающий релиз animedia.icu собран ветки claude/animedia-original-parity-01; её сессия продолжает собирать новые релизы (git archive новых коммитов) в момент проверки"
+  },
+  "overlay_wired_into_running_release": false,
+  "overlay_note": "текущий animedia-frontend.py не импортирует ни community-, ни unified-overlay: подключение требует правки файла витрины, который ведёт другая сессия",
+  "concurrent_catalog_refresh": {
+    "unit": "nova-catalog-refresh.service",
+    "ActiveState": "activating",
+    "SubState": "start"
+  },
+  "VERDICT_FOR_DEPLOYMENT": "BLOCKED_CONCURRENT_DEPLOYMENT",
+  "safe_next_step": "Дождаться, пока терминал «ШАБЛОН ANIMEDIA» (ветка claude/animedia-original-parity-01, worktree /home/claude/wt-animedia-ratings-canary-01 — не он, а /home/claude/wt-animedia-original-parity-01) закончит свой цикл выкладки, затем передать ему контракт из docs/animedia/UNIFIED_RATINGS_INTEGRATION.md ветки claude/animedia-ratings-canary-01. Сборка своего артефакта animedia-frontend.py из ветки оценок перезаписала бы их живой релиз."
+}
