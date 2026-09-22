@@ -486,6 +486,48 @@ def _счётчик_серий(деталь: dict) -> tuple[int, int] | None:
     return доступно, заявлено
 
 
+#: Что видит посетитель вместо оценки, когда её ещё нет. Не ноль и не пустое
+#: место: ноль — это утверждение о качестве, которого никто не делал, а пустота
+#: ломает ряд карточек, потому что у соседних знак есть.
+АНИМЕДИА_ОЦЕНКА_НЕТ = "—"
+
+
+def фирменный_знак_оценки(деталь: dict, *, строкой: bool = False) -> str:
+    """Одна оценка Animedia на карточке вместо набора чужих плашек.
+
+    Раньше на постере висели подписи источников — IMDb, Кинопоиск, Shikimori —
+    по две-три на карточку. В ряду из семи карточек это двадцать мелких надписей
+    поверх постеров, и ни одна из них не отвечает на вопрос «стоит ли смотреть»
+    быстрее, чем одно число.
+
+    Число берётся из сводной оценки: при двух и более подтверждённых источниках
+    это взвешенная сводная, при одном — его значение, приведённое к десяти.
+    Ничего не выдумывается: когда источников нет, знак остаётся на месте и
+    показывает прочерк. Состав сводной посетитель по-прежнему может увидеть —
+    на странице произведения, в раскрытии «Подробнее», а не поверх постера.
+    """
+    свод = сводная_оценка(деталь)
+    класс = "zt__score" + (" zt__score--row" if строкой else "")
+    if not свод:
+        return (f'<span class="{класс} zt__score--none" data-score-state="none" '
+                f'title="Оценка появится, когда придут данные">'
+                f'<b aria-hidden="true">{АНИМЕДИА_ОЦЕНКА_НЕТ}</b>'
+                f'<span class="vh">Оценка пока неизвестна</span></span>')
+    источников = int(свод.get("источников") or 0)
+    голосов = свод.get("всего_голосов") or 0
+    подсказка = f"Оценка Animedia {свод['значение']} из 10 · источников: {источников}"
+    if голосов:
+        подсказка += f" · голосов: {голосов}"
+    return (f'<span class="{класс}" data-score-state="value" '
+            f'data-score="{html.escape(str(свод["значение"]))}" '
+            f'data-score-sources="{источников}" '
+            + (f'data-score-votes="{голосов}" ' if голосов else "")
+            + f'data-score-method="{html.escape(str(свод.get("методика") or ""))}" '
+              f'title="{html.escape(подсказка)}">'
+              f'<b aria-hidden="true">{html.escape(str(свод["значение"]))}</b>'
+              f'<span class="vh">{html.escape(подсказка)}</span></span>')
+
+
 def _оценки_для_карточки(деталь: dict, сколько: int) -> list:
     """Оценки для бейджей: приведены к десятибалльной шкале, источник назван.
 
@@ -1470,9 +1512,61 @@ display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hi
 .zsec__h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 12px}
 .zsec__h h2{font-size:clamp(20px,1.6vw,26px);font-weight:700;margin:0}
 .zsec__h a{font-size:14px;color:var(--a-acc);font-weight:700;white-space:nowrap}
-.ahero{margin:8px 0 14px;padding:12px;border-radius:var(--a-radius-shell);
-background:var(--a-acc);color:#fff;overflow:hidden;box-sizing:border-box;
-min-height:0;height:auto;max-height:none}
+/* Слайдер первого экрана.
+   Была сплошная красная подложка во всю ширину, а на ней ряд обычных
+   постеров: большая цветная площадь, которая ничего не сообщает. Стало —
+   один слайд за раз: постер, название, короткая информация, оценка и кнопка
+   перехода. Красный остался на кнопке и на знаке оценки, то есть там, где он
+   что-то значит. Высота ограничена: первый экран не должен съедать страницу. */
+.ahero{margin:8px 0 18px;padding:0;border-radius:var(--a-radius-shell);
+background:var(--a-card);color:var(--a-ink);overflow:hidden;box-sizing:border-box;
+border:1px solid var(--a-line)}
+.ahero__vp{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;
+scrollbar-width:none}
+.ahero__vp::-webkit-scrollbar{display:none}
+.ahero__track{display:flex;margin:0;padding:0;list-style:none}
+.ahero__s{flex:0 0 100%;width:100%;min-width:0;scroll-snap-align:start;
+display:grid;grid-template-columns:200px minmax(0,1fr);gap:22px;
+padding:22px;box-sizing:border-box;align-items:center}
+.ahero__p{display:block;position:relative;width:200px;aspect-ratio:5/7;border-radius:12px;
+overflow:hidden;background:var(--a-line)}
+.ahero__p img,.ahero__img{width:100%;height:100%;object-fit:cover;display:block}
+.ahero__none{display:flex;align-items:center;justify-content:center;width:100%;height:100%;
+color:var(--a-mute);font-size:40px;font-weight:700}
+.ahero__c{min-width:0}
+.ahero__t{margin:0 0 6px;font-size:clamp(20px,2vw,28px);line-height:1.2;font-weight:700}
+.ahero__t a{color:inherit;text-decoration:none}
+.ahero__t a:hover,.ahero__t a:focus-visible{color:var(--a-acc)}
+.ahero__m{margin:0 0 10px;color:var(--a-dim);font-size:14px}
+.ahero__d{margin:0 0 14px;color:var(--a-dim);font-size:14px;line-height:1.5;
+display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.ahero__r{margin:0 0 14px}
+/* Знак оценки внутри слайда стоит в потоке, а не в углу постера. */
+.ahero__r .zt__score{position:static;width:44px;height:44px}
+.ahero__r .zt__score b{font-size:16px}
+.ahero__cta{display:inline-flex;align-items:center;min-height:46px;padding:0 26px;
+border-radius:12px;background:var(--a-acc);color:#fff;font-weight:700;text-decoration:none}
+.ahero__cta:focus-visible{outline:2px solid var(--a-acc);outline-offset:3px}
+.ahero__nav{display:flex;align-items:center;justify-content:center;gap:10px;
+padding:0 16px 14px}
+.ahero__arr,.ahero__play{display:inline-flex;align-items:center;justify-content:center;
+width:40px;height:40px;border:1px solid var(--a-line);border-radius:50%;
+background:var(--a-card);color:var(--a-ink);font-size:20px;line-height:1;cursor:pointer}
+.ahero__arr:hover,.ahero__play:hover,.ahero__arr:focus-visible,.ahero__play:focus-visible{
+border-color:var(--a-acc);color:var(--a-acc)}
+.ahero__dots{display:flex;gap:8px;align-items:center}
+.ahero__dot{width:10px;height:10px;padding:0;border:0;border-radius:50%;
+background:var(--a-line);cursor:pointer}
+.ahero__dot[aria-current="true"]{background:var(--a-acc);width:24px;border-radius:999px}
+.ahero__dot:focus-visible{outline:2px solid var(--a-acc);outline-offset:3px}
+@media(max-width:767px){
+  .ahero__s{grid-template-columns:1fr;gap:14px;padding:16px;justify-items:center;
+  text-align:center}
+  .ahero__p{width:150px}
+  .ahero__r{display:flex;justify-content:center}
+  .ahero__d{-webkit-line-clamp:2}
+}
+@media(prefers-reduced-motion:reduce){.ahero__vp{scroll-behavior:auto}}
 .ahero[hidden],.ahero--gap{display:none !important;height:0 !important;min-height:0 !important;
 max-height:0 !important;margin:0 !important;padding:0 !important;border:0 !important;overflow:hidden}
 .zh--home{font-size:clamp(18px,1.5vw,22px);margin:8px 0 4px;font-weight:700}
@@ -1702,17 +1796,86 @@ align-items:flex-start;gap:6px;pointer-events:none;z-index:2;flex-wrap:wrap;max-
 .zt__eps{background:#fff;color:var(--a-acc);font-size:11px;font-weight:700;line-height:1;
 padding:5px 7px;border-radius:6px;box-shadow:var(--a-shadow-soft);white-space:nowrap;
 max-width:100%;overflow-wrap:anywhere}
-.zt__rates{display:flex;flex-direction:column;gap:4px;align-items:flex-end;max-width:100%;
-min-width:0}
-.zt__rate{display:inline-flex;align-items:center;gap:4px;background:#fff;color:var(--a-ink);
-font-size:11px;line-height:1;padding:5px 7px;border-radius:6px;box-shadow:var(--a-shadow-soft);
-white-space:nowrap;max-width:100%}
-.zt__rate i{font-style:normal;color:var(--a-mute);font-size:10px;font-weight:700;
-text-transform:uppercase;letter-spacing:.02em}
-.zt__rate b{font-weight:700;color:var(--a-acc)}
+/* Крупный поиск на главной. Красный здесь — тонкая рамка и кнопка, а не
+   заливка во весь экран: большая красная плоскость съедает первый экран и
+   ничего не сообщает. Поле высокое, потому что в него целятся пальцем. */
+.ahero-s{margin:0 0 22px;padding:26px 0 24px;border-bottom:1px solid var(--a-line)}
+.ahero-s__in{max-width:720px;margin:0 auto;padding:0 4px;text-align:center}
+.ahero-s__t{margin:0 0 6px;font-size:26px;line-height:1.2;font-weight:700}
+.ahero-s__p{margin:0 0 16px;color:var(--a-dim);font-size:14px;line-height:1.4}
+.ahero-s__f{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
+.ahero-s__f input{flex:1 1 260px;min-width:0;height:56px;padding:0 18px;font:inherit;
+font-size:16px;border:2px solid var(--a-line);border-radius:14px;background:var(--a-card);
+color:var(--a-ink)}
+.ahero-s__f input:focus-visible{outline:none;border-color:var(--a-acc)}
+.ahero-s__f button{flex:0 0 auto;height:56px;padding:0 28px;border:0;border-radius:14px;
+background:var(--a-acc);color:#fff;font:inherit;font-size:16px;font-weight:700;cursor:pointer}
+.ahero-s__f button:focus-visible{outline:2px solid var(--a-acc);outline-offset:3px}
+.ahero-s__chips{margin:14px 0 0;display:flex;gap:8px;flex-wrap:wrap;
+align-items:center;justify-content:center}
+.ahero-s__lab{color:var(--a-dim);font-size:13px}
+.ahero-s__chip{display:inline-flex;align-items:center;min-height:32px;padding:0 12px;
+border:1px solid var(--a-line);border-radius:999px;font-size:13px;color:var(--a-ink);
+text-decoration:none;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ahero-s__chip:hover,.ahero-s__chip:focus-visible{border-color:var(--a-acc);color:var(--a-acc)}
+@media(max-width:767px){
+  .ahero-s{padding:18px 0 16px;margin-bottom:16px}
+  .ahero-s__t{font-size:21px}
+  .ahero-s__f input,.ahero-s__f button{height:50px}
+  .ahero-s__f button{width:100%}
+}
+/* Хабы жанров и типов: одинаковые карточки-ссылки, счётчик под названием. */
+.ahub{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+margin:18px 0 8px}
+.ahub__c{display:flex;flex-direction:column;gap:3px;min-height:74px;padding:14px 16px;
+border:1px solid var(--a-line);border-radius:12px;background:var(--a-card);
+color:var(--a-ink);text-decoration:none}
+.ahub__c:hover,.ahub__c:focus-visible{border-color:var(--a-acc)}
+.ahub__n{font-weight:600;font-size:15px}
+.ahub__k{color:var(--a-dim);font-size:13px}
+.ahub__p{color:var(--a-mute);font-size:12px}
+/* Вкладки срезов топа. */
+.atabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 10px}
+.atabs__t{display:inline-flex;align-items:center;min-height:40px;padding:0 16px;
+border:1px solid var(--a-line);border-radius:999px;font-size:14px;color:var(--a-ink);
+text-decoration:none}
+.atabs__t.is-on{background:var(--a-acc);border-color:var(--a-acc);color:#fff}
+.atabs__t:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
+.atop__method{margin:0 0 12px;color:var(--a-dim)}
+/* Расписание: строка с полосой доступности серий. */
+.asch{display:flex;flex-direction:column;gap:8px;margin:16px 0}
+.asch__row{display:grid;grid-template-columns:minmax(0,1fr) 120px auto;gap:14px;
+align-items:center;min-height:52px;padding:8px 14px;border:1px solid var(--a-line);
+border-radius:10px;background:var(--a-card);color:var(--a-ink);text-decoration:none}
+.asch__row:hover,.asch__row:focus-visible{border-color:var(--a-acc)}
+.asch__t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:15px}
+.asch__p{height:6px;border-radius:999px;background:var(--a-line);overflow:hidden}
+.asch__bar{display:block;height:100%;background:var(--a-acc)}
+.asch__k{color:var(--a-dim);font-size:13px;white-space:nowrap}
+@media(max-width:767px){
+  .asch__row{grid-template-columns:minmax(0,1fr) auto;gap:8px}
+  .asch__p{grid-column:1 / -1}
+}
+/* Фирменный знак оценки. Один на карточку, один и тот же размер везде:
+   именно постоянство размера и места делает ряд карточек читаемым — глаз
+   находит число, не перечитывая каждую плитку. Красный здесь работает как
+   акцент на маленькой площади, а не как заливка. */
+.zt__score{position:absolute;top:0;right:0;display:inline-flex;align-items:center;
+justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--a-acc);
+color:#fff;box-shadow:var(--a-shadow-soft);pointer-events:none}
+.zt__score b{font-size:13px;font-weight:700;line-height:1;letter-spacing:-.01em}
+/* Нет данных — тот же знак приглушённым, чтобы ряд не рвался пустотой. */
+.zt__score--none{background:var(--a-line);color:var(--a-mute)}
+.zt__score--none b{font-size:14px}
+/* Строчная карточка: знак встаёт в поток, круг там неуместен. */
+.zt__score--row{position:static;width:auto;height:auto;border-radius:8px;
+padding:4px 9px;background:var(--a-acc)}
+.zt__score--row.zt__score--none{background:var(--a-line)}
 @media(max-width:767px){
   .zt__badges{inset:4px 4px auto 4px}
-  .zt__eps,.zt__rate{font-size:10px;padding:4px 6px}
+  .zt__eps{font-size:10px;padding:4px 6px}
+  .zt__score{width:30px;height:30px}
+  .zt__score b{font-size:12px}
 }
 /* Пропорция постера оригинала — 5/7 (0.714): измерено 163x228 на 1440 и 1920,
    118x165 на 768, и на всех ширинах одно и то же отношение. Прежние 2/3 (0.667)
@@ -2750,6 +2913,58 @@ def заглушка_постера(запись: dict, класс_заглуш�
     "(function(){try{var k='animedia-theme',r=document.documentElement,s=localStorage.getItem(k);"
     "var t=(s==='light'||s==='dark')?s:((window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light');"
     "r.setAttribute('data-theme',t);r.style.colorScheme=t;}catch(e){document.documentElement.setAttribute('data-theme','light');}})();"
+)
+
+#: Слайдер первого экрана: стрелки, точки, автопрокрутка с кнопкой остановки,
+#: клавиатура и свайп. Свайп и прокрутка нативные — их даёт `scroll-snap`, и
+#: без скрипта слайдер всё равно листается пальцем и колесом. Автопрокрутка
+#: останавливается сама при наведении, при фокусе внутри слайдера и при
+#: настройке «меньше движения»: карусель, которая уезжает из-под читающего, —
+#: это не оживление страницы, а помеха.
+СКРИПТ_СЛАЙДЕРА = (
+    "(function(){"
+    "var s=document.querySelector('[data-hero]');if(!s)return;"
+    "var vp=s.querySelector('.ahero__vp'),tr=s.querySelector('.ahero__track');"
+    "if(!vp||!tr)return;"
+    "var сл=[].slice.call(s.querySelectorAll('[data-hero-slide]'));"
+    "var то=[].slice.call(s.querySelectorAll('[data-hero-dot]'));"
+    "if(сл.length<2){var n=s.querySelector('.ahero__nav');if(n)n.hidden=true;return;}"
+    "var i=0,таймер=null,идёт=true;"
+    "function тихо(){try{return window.matchMedia("
+    "'(prefers-reduced-motion: reduce)').matches;}catch(e){return false;}}"
+    "function показать(н,гладко){i=(н+сл.length)%сл.length;"
+    "vp.scrollTo({left:i*vp.clientWidth,behavior:(гладко&&!тихо())?'smooth':'auto'});"
+    "то.forEach(function(д,j){if(j===i)д.setAttribute('aria-current','true');"
+    "else д.removeAttribute('aria-current');});}"
+    "function пуск(){if(таймер||тихо())return;таймер=setInterval(function(){"
+    "показать(i+1,true);},7000);}"
+    "function стоп(){if(таймер!==null)clearInterval(таймер);таймер=null;}"
+    "s.querySelector('[data-hero-next]').addEventListener('click',function(){"
+    "показать(i+1,true);});"
+    "s.querySelector('[data-hero-prev]').addEventListener('click',function(){"
+    "показать(i-1,true);});"
+    "то.forEach(function(д,j){д.addEventListener('click',function(){показать(j,true);});});"
+    "var кн=s.querySelector('[data-hero-play]');"
+    "кн.addEventListener('click',function(){идёт=!идёт;"
+    "кн.setAttribute('aria-pressed',идёт?'true':'false');"
+    "кн.firstChild.textContent=идёт?'\\u23F8':'\\u25B6';"
+    "кн.querySelector('.vh').textContent=идёт?'Остановить автопрокрутку':'Включить автопрокрутку';"
+    "if(идёт)пуск();else стоп();});"
+    "s.addEventListener('keydown',function(e){"
+    "if(e.key==='ArrowRight'){e.preventDefault();показать(i+1,true);}"
+    "else if(e.key==='ArrowLeft'){e.preventDefault();показать(i-1,true);}});"
+    "s.addEventListener('mouseenter',стоп);"
+    "s.addEventListener('mouseleave',function(){if(идёт)пуск();});"
+    "s.addEventListener('focusin',стоп);"
+    "s.addEventListener('focusout',function(e){"
+    "if(!s.contains(e.relatedTarget)&&идёт)пуск();});"
+    "var ждём=null;"
+    "vp.addEventListener('scroll',function(){if(ждём)clearTimeout(ждём);"
+    "ждём=setTimeout(function(){var н=Math.round(vp.scrollLeft/vp.clientWidth);"
+    "if(н!==i)показать(н,false);},120);});"
+    "window.addEventListener('resize',function(){показать(i,false);});"
+    "показать(0,false);пуск();"
+    "})();"
 )
 
 #: Карусель первого экрана: точки-страницы, цикличность и уважение к
@@ -5043,23 +5258,9 @@ class ВидАнимедиа(ВидОснова):
                 доступно, заявлено = счёт
                 слева = (f'<span class="zt__eps" data-eps-avail="{доступно}" '
                          f'data-eps-total="{заявлено}">{доступно} из {заявлено}</span>')
-            оценки = _оценки_для_карточки(деталь, состав["оценок"])
-            справа = "".join(
-                f'<span class="zt__rate" data-rating-source="{html.escape(о["ключ"])}"'
-                f' data-rating-value="{html.escape(str(о["исходное"]))}"'
-                f' data-rating-scale="{html.escape(str(о["исходная_шкала"]))}"'
-                + (f' data-rating-votes="{о["голоса"]}"' if о["голоса"] else "")
-                + f' title="{html.escape(о["подпись"])}: {html.escape(str(о["исходное"]))}'
-                  f' из {html.escape(str(о["исходная_шкала"]))}">'
-                f'<i aria-hidden="true">{html.escape(о["подпись"])}</i>'
-                f'<b>{html.escape(о["на_десять"])}</b>'
-                f'<span class="vh">{html.escape(о["подпись"])}: '
-                f'{html.escape(о["на_десять"])} из 10</span></span>'
-                for о in оценки)
-            обёртка_оценок = (f'<span class="zt__rates">{справа}</span>'
-                              if справа else "")
-            if слева or обёртка_оценок:
-                бейджи = (f'<span class="zt__badges">{слева}{обёртка_оценок}</span>')
+            знак = фирменный_знак_оценки(деталь)
+            if слева or знак:
+                бейджи = (f'<span class="zt__badges">{слева}{знак}</span>')
         подпись = (f'<span class="zt__t">{html.escape(запись["title"])}</span>'
                    if состав["название"] else "")
         мета = " · ".join(str(ч) for ч in (запись.get("kind"), запись.get("year")) if ч)
@@ -5089,24 +5290,7 @@ class ВидАнимедиа(ВидОснова):
         мета = " · ".join(str(ч) for ч in (запись.get("kind"), запись.get("year")) if ч)
         строка_меты = (f'<span class="zt__m">{html.escape(мета)}</span>'
                        if состав.get("мета") and мета else "")
-        оценки = _оценки_для_карточки(деталь, состав["оценок"])
-        строка_оценки = ""
-        if оценки:
-            о = оценки[0]
-            голоса = (f'<span class="zt__votes">({о["голоса"]})</span>'
-                      if (состав.get("голоса") and о["голоса"]) else "")
-            строка_оценки = (
-                f'<span class="zt__rate zt__rate--row"'
-                f' data-rating-source="{html.escape(о["ключ"])}"'
-                f' data-rating-value="{html.escape(str(о["исходное"]))}"'
-                f' data-rating-scale="{html.escape(str(о["исходная_шкала"]))}"'
-                + (f' data-rating-votes="{о["голоса"]}"' if о["голоса"] else "")
-                + f'><i aria-hidden="true">{html.escape(о["подпись"])}</i>'
-                f'<b>{html.escape(о["на_десять"])}</b>{голоса}'
-                f'<span class="vh">{html.escape(о["подпись"])}: '
-                f'{html.escape(о["на_десять"])} из 10'
-                + (f", голосов {о['голоса']}" if о["голоса"] else "")
-                + '</span></span>')
+        строка_оценки = фирменный_знак_оценки(деталь, строкой=True)
         return (f'<a class="zt zt--row" data-card-variant="{html.escape(вариант)}"'
                 f' href="{запись["url"]}" title="{html.escape(запись["title"])}">'
                 f'<span class="zt__p">{изо}</span>'
@@ -5549,8 +5733,64 @@ class ВидАнимедиа(ВидОснова):
                 f' data-popular-updated="{html.escape(str(snapshot.get("updated_at") or snapshot.get("generated_at") or ""))}"'
                 f' data-popular-algo="{html.escape(str(snapshot.get("algorithm_version") or ""))}"'
             )
-        return (f'<section class="ahero" aria-label="{html.escape(подпись)}"{extra}>'
-                f'<div class="ahero__inner">{self.карусель("hero", набор)}</div></section>')
+        слайды = []
+        точки = []
+        отобрано = [з for з in набор if з.get("slug") and з.get("title")][:8]
+        for н, з in enumerate(отобрано):
+            деталь = self.деталь(з["slug"]) or {}
+            изо = заглушка_постера(з, "ahero__none", "ahero__img", 240, 351)
+            знак = фирменный_знак_оценки(деталь)
+            мета = " · ".join(str(ч) for ч in (
+                з.get("kind"), з.get("year"),
+                ", ".join((деталь.get("genres") or [])[:2]) or None) if ч)
+            описание = str(деталь.get("description") or "").strip()
+            # Короткая информация, а не полстраницы текста: слайд читают
+            # мельком, и обрезанный абзац здесь честнее полного.
+            if len(описание) > 210:
+                описание = описание[:207].rsplit(" ", 1)[0] + "…"
+            текущая_точка = ' aria-current="true"' if н == 0 else ""
+            # Слайды не прячутся от читалки через aria-hidden: внутри каждого
+            # есть ссылки, а фокусируемая ссылка внутри скрытого блока — это
+            # ловушка, из которой пользователь клавиатуры не понимает, куда
+            # попал. Слайдер — обычный контейнер прокрутки, и всё его
+            # содержимое доступно; текущий слайд показывают точки.
+            #
+            # Название слайда — не заголовок раздела: восемь h2 подряд
+            # заставляют читалку перечислять карусель как восемь разделов
+            # страницы. Имя слайду даёт ссылка.
+            слайды.append(
+                f'<li class="ahero__s" data-hero-slide="{н}">'
+                f'<a class="ahero__p" href="{html.escape(з["url"])}" tabindex="-1" '
+                f'aria-hidden="true">{изо}</a>'
+                f'<div class="ahero__c">'
+                f'<p class="ahero__t"><a href="{html.escape(з["url"])}">'
+                f'{html.escape(з["title"])}</a></p>'
+                + (f'<p class="ahero__m">{html.escape(мета)}</p>' if мета else "")
+                + (f'<p class="ahero__d">{html.escape(описание)}</p>' if описание else "")
+                + f'<div class="ahero__r">{знак}</div>'
+                f'<a class="ahero__cta" href="{html.escape(з["url"])}">Смотреть</a>'
+                f'</div></li>')
+            точки.append(
+                f'<button class="ahero__dot" type="button" data-hero-dot="{н}"'
+                f'{текущая_точка}>'
+                f'<span class="vh">Слайд {н + 1}</span></button>')
+        if not слайды:
+            return ""
+        return (
+            f'<section class="ahero" aria-roledescription="carousel" '
+            f'aria-label="{html.escape(подпись)}" data-hero="1" '
+            f'data-hero-count="{len(слайды)}"{extra}>'
+            f'<div class="ahero__vp"><ul class="ahero__track">{"".join(слайды)}</ul></div>'
+            f'<div class="ahero__nav">'
+            f'<button class="ahero__arr" type="button" data-hero-prev>'
+            f'<span aria-hidden="true">‹</span><span class="vh">Предыдущий слайд</span></button>'
+            f'<div class="ahero__dots" role="tablist">{"".join(точки)}</div>'
+            f'<button class="ahero__play" type="button" data-hero-play aria-pressed="true">'
+            f'<span aria-hidden="true">⏸</span>'
+            f'<span class="vh">Остановить автопрокрутку</span></button>'
+            f'<button class="ahero__arr" type="button" data-hero-next>'
+            f'<span aria-hidden="true">›</span><span class="vh">Следующий слайд</span></button>'
+            f'</div></section>')
 
     def секция(self, ключ: str, титул: str, ссылка: str, набор, пусто: str) -> str:
         """Секция аниме-портала — плотная сетка, а не горизонтальная лента.
@@ -5778,7 +6018,8 @@ class ВидАнимедиа(ВидОснова):
 <script>{СКРИПТ_АНИМЕДИА_ТЕМА_BOOT}</script>
 <style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}
 {СКРИПТ_КАРУСЕЛИ}
-{СКРИПТ_АНИМЕДИА_ШАПКА}</script></head>
+{СКРИПТ_АНИМЕДИА_ШАПКА}</script>
+<script defer>document.addEventListener('DOMContentLoaded',function(){{{СКРИПТ_СЛАЙДЕРА}}});</script></head>
 <body><a class="skip" href="#main">Перейти к содержимому</a>
 <div class="zs">
 <header class="zhd">
@@ -5916,7 +6157,8 @@ class ВидАнимедиа(ВидОснова):
         # там нет, но документ без H1 в начале заставляет читалку идти по H2
         # до самого низа. Композиция сохраняется, семантика становится верной.
         куски = [f'<h1 class="vh">{html.escape(домен["title_home"])}</h1>',
-                 self.полоса_готовности()]
+                 self.полоса_готовности(),
+                 self._крупный_поиск()]
 
         # Первый экран оригинала — карусель, а не заголовок с лидом. Источник
         # выбирается по убыванию доказанности и подписывается собой.
@@ -5944,10 +6186,11 @@ class ВидАнимедиа(ВидОснова):
         куски.append(_аниме_telegram_promo_html())
         # Empty ad slots must collapse to 0px (no Telegram/premium invent).
         куски.append('<div class="zad-home" data-ad-slot="home-after-hero" data-ad-enabled="0"></div>')
-        # B03: provider_became_playable only — never catalog fallback.
-        куски.append(self._блок_новых_серий_b03())
-        # B05: verified catalog_added ledger only — never published_at shelf.
+        # Порядок каркаса: сначала «Недавно добавленные» — это ответ на вопрос
+        # «что нового на сайте», ради которого на главную и заходят, — и только
+        # потом лента серий.
         куски.append(self._блок_нового_в_каталоге_b05())
+        куски.append(self._блок_новых_серий_b03())
         куски.append('<div class="zad-mid" data-ad-slot="home-mid-content" data-ad-enabled="0"></div>')
         # B06.1 compact filters (before remaining shelves).
         куски.append(self._блок_компактных_фильтров_b06())
@@ -6489,6 +6732,41 @@ class ВидАнимедиа(ВидОснова):
             f'<a href="/new/">Весь раздел</a></div>'
             f'{self.плитки(записи, вариант="catalog-title")}</section>'
         )
+
+    def _крупный_поиск(self) -> str:
+        """Главный поиск на первом экране — центральный элемент, а не строчка.
+
+        В шапке поиск остаётся компактным: на внутренних страницах посетитель
+        уже знает, куда идти. На главной он приходит с названием в голове, и
+        поле должно быть первым, на что падает взгляд.
+
+        Подсказки работают без сети: рядом лежат несколько живых примеров
+        каталога, и любой из них — настоящая ссылка на произведение, а не
+        нарисованная строка. Обещание «ищем по оригинальному написанию»
+        подтверждено указателем, в который оригинальные названия загружены.
+        """
+        примеры = []
+        for з in недавно_добавленные(self.д.items, 6):
+            примеры.append(
+                f'<a class="ahero-s__chip" href="{html.escape(з["url"])}">'
+                f'{html.escape(з["title"])}</a>')
+        подсказки = (f'<div class="ahero-s__chips"><span class="ahero-s__lab">'
+                     f'Недавно добавили:</span>{"".join(примеры)}</div>'
+                     if примеры else "")
+        return (
+            '<section class="ahero-s" data-home="search" aria-labelledby="hs-t">'
+            '<div class="ahero-s__in">'
+            '<h2 class="ahero-s__t" id="hs-t">Найдите аниме за секунду</h2>'
+            '<p class="ahero-s__p">Ищем по русскому и оригинальному написанию, '
+            'по части слова и с опечатками.</p>'
+            '<form class="ahero-s__f" action="/search/" method="get" role="search">'
+            '<label class="vh" for="home-q">Поиск по каталогу аниме</label>'
+            '<input id="home-q" name="q" type="search" autocomplete="off" '
+            'placeholder="Например: Наруто, One Piece, cvetuschaya">'
+            '<button type="submit">Найти</button>'
+            '</form>'
+            f'{подсказки}'
+            '</div></section>')
 
     def _блок_компактных_фильтров_b06(self) -> str:
         """Home compact facet strip → catalog routes (no invented facets)."""
