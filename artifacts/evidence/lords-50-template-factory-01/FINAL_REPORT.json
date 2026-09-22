@@ -1,23 +1,25 @@
 {
   "schema": "lords-factory-final-report/2",
-  "generated_at_utc": "2026-09-22T14:37:53+00:00",
+  "generated_at_utc": "2026-09-22T14:46:20+00:00",
   "TENANT": "LORDS",
   "ROLE": "LORDS_TEMPLATE_FACTORY_NIGHTLY_REFINEMENT",
   "BRANCH": "claude/lords-50-template-factory-01",
   "WORKTREE": "/home/claude/wt-lords-50-template-factory-01",
   "START_HEAD": "1bbc7a5ccc2cc14deb64e3802f9da849de1ad904",
-  "FINAL_HEAD": "65bf9f39ec346d14378de94f007230d697196521",
-  "TREE": "bca8ad0907a85b7994627ef3d751724f66c7e2dd",
-  "REMOTE_HEAD": "NONE",
-  "COMMITS_CREATED": 4,
+  "FINAL_HEAD": "1bb9451a2e633a066c1c42e4170520d3d4ddb25c",
+  "TREE": "898688346c24f5432cb3312c098b8b64ebe9c8ff",
+  "REMOTE_HEAD": "1bb9451a2e633a066c1c42e4170520d3d4ddb25c",
+  "COMMITS_CREATED": 5,
   "COMMITS": [
+    "1bb9451 evidence: итоговый отчёт ночной доработки T001-T050",
     "65bf9f3 lords: материалы приёмки на настоящих данных и два совпавших прогона",
     "94a64e1 lords: каталоги перестали повторять друг друга",
     "2307897 lords: проверки научились падать, и это нашло настоящие дефекты",
     "40fb105 lords: маршруты пакета и настоящие данные каталога"
   ],
-  "PUSH_PERFORMED": "NO",
-  "WORKTREE_CLEAN": "YES",
+  "PUSH_PERFORMED": "YES",
+  "UPSTREAM": "origin/claude/lords-50-template-factory-01",
+  "WORKTREE_CLEAN": "NO",
   "TEMPLATES_PRESENT": "50/50",
   "TEMPLATES_BUILT": "50/50",
   "TEMPLATES_AUDITED": "50/50",
@@ -70,6 +72,13 @@
     "T046"
   ],
   "REVIEW_INDEX": "/home/claude/wt-lords-50-template-factory-01/artifacts/evidence/lords-50-template-factory-01/review/index.html",
+  "LIVE_DOMAINS_CHECKED_READ_ONLY": [
+    "lordserial33.biz",
+    "lordfilm47.space",
+    "1lordserials1.online"
+  ],
+  "LIVE_RUNTIME_RELEASE": "20260921T134330Z-515fcf0-cardfix",
+  "LIVE_UNCHANGED_BY_THIS_WORK": "YES",
   "STATUS": "READY_FOR_OWNER_VISUAL_ACCEPTANCE",
   "NEXT_OWNER_ACTION": "OPEN_REVIEW_INDEX_AND_RECORD_ACCEPTANCE",
   "RESIDUAL_BLOCKERS": []

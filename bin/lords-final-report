@@ -104,12 +104,17 @@ def главное() -> int:
         "START_HEAD": args.start_head,
         "FINAL_HEAD": _git("rev-parse", "HEAD"),
         "TREE": _git("rev-parse", "HEAD^{tree}"),
-        "REMOTE_HEAD": _git("ls-remote", "--heads", "origin",
-                            _git("rev-parse", "--abbrev-ref", "HEAD")) or "NONE",
+        "REMOTE_HEAD": (_git("ls-remote", "--heads", "origin",
+                             _git("rev-parse", "--abbrev-ref", "HEAD")).split()[0]
+                        if _git("ls-remote", "--heads", "origin",
+                                _git("rev-parse", "--abbrev-ref", "HEAD")) else "NONE"),
         "COMMITS_CREATED": len([с for с in _git(
             "log", "--oneline", f"{args.start_head}..HEAD").splitlines() if с]),
         "COMMITS": _git("log", "--oneline", f"{args.start_head}..HEAD").splitlines(),
-        "PUSH_PERFORMED": "NO",
+        "PUSH_PERFORMED": "YES" if _git(
+            "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}") else "NO",
+        "UPSTREAM": _git("rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}")
+                    or "NONE",
         "WORKTREE_CLEAN": "YES" if not _git("status", "--porcelain") else "NO",
         "TEMPLATES_PRESENT": f"{len(пакеты)}/50",
         "TEMPLATES_BUILT": f"{прогон1['packages']}/50",
@@ -157,6 +162,13 @@ def главное() -> int:
         "RESTART_PERFORMED": 0,
         "REVIEW_SHORTLIST": [и.strip() for и in args.shortlist.split(",") if и.strip()],
         "REVIEW_INDEX": str(ДОКАЗАТЕЛЬСТВА / "review" / "index.html"),
+        # Живые домены проверены только чтением. Выкладка и назначение шаблона
+        # домену требуют решения владельца: ни один пакет не принят, и
+        # присваивать ASSIGNABLE самостоятельно запрещено контрактом.
+        "LIVE_DOMAINS_CHECKED_READ_ONLY": [
+            "lordserial33.biz", "lordfilm47.space", "1lordserials1.online"],
+        "LIVE_RUNTIME_RELEASE": "20260921T134330Z-515fcf0-cardfix",
+        "LIVE_UNCHANGED_BY_THIS_WORK": "YES",
         "STATUS": "READY_FOR_OWNER_VISUAL_ACCEPTANCE",
         "NEXT_OWNER_ACTION": "OPEN_REVIEW_INDEX_AND_RECORD_ACCEPTANCE",
     }
