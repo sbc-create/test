@@ -517,7 +517,12 @@ def handoff() -> dict:
         "module_version": MODULE_VERSION,
         "api_version": API_VERSION,
         "artifact_checksum": artifact_checksum(),
-        "commit": git_head(),
+        # No commit hash here on purpose. A file that lives inside a commit
+        # cannot name that commit: writing it made the document stale the
+        # moment it was committed, and `--check` failed on every run after the
+        # first. The commit is recorded in INDEX.json, which is generated
+        # alongside but deliberately not part of the freshness comparison, and
+        # git knows it anyway.
         "status": "READY_FOR_LOCAL_REVIEW",
         "production_allowed": False,
         "sites_bound": len(registry.all_bindings()),

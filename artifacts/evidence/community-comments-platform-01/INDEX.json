@@ -1,7 +1,7 @@
 {
   "schema_version": "COMMENTS_EVIDENCE_INDEX_V1",
-  "generated_at": "2026-09-22T01:59:15Z",
-  "commit": "2a1d4d35e7c026a1a726aafba5992e595b8bbc8d",
+  "generated_at": "2026-09-22T02:02:13Z",
+  "commit": "31c26872bf57f104923ea40c537bdb259458c8f9",
   "module_version": "0.1.0-mvp",
   "artifact_checksum": "6032fb3cd24769390a7826473cc93932aed459a15fa2a92e6a771188092fa082",
   "documents": [
@@ -22,6 +22,6 @@
     "05-rollout/ROLLOUT_PLAN.json",
     "HANDOFF.json"
   ],
-  "content_digest": "0e5a56312184deb941024a6aa5c881c9a72bc78a84a0f18ee11da599e25afc9d",
+  "content_digest": "5d3ed4e0ecf08d381cbedd290af8fdb3ba2855764c652d8ab7639183381c390c",
   "note": "Every document is serialised from the modules that implement the behaviour. generated_at and commit are the only fields that change between identical runs; content_digest covers the documents only."
 }

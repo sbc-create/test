@@ -5,7 +5,6 @@
   "module_version": "0.1.0-mvp",
   "api_version": "v1",
   "artifact_checksum": "6032fb3cd24769390a7826473cc93932aed459a15fa2a92e6a771188092fa082",
-  "commit": "2a1d4d35e7c026a1a726aafba5992e595b8bbc8d",
   "status": "READY_FOR_LOCAL_REVIEW",
   "production_allowed": false,
   "sites_bound": 9,
