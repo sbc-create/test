@@ -75,6 +75,11 @@ from pathlib import Path
 #: превращается в лестницу, которую нельзя прочитать с телефона.
 ГЛУБИНА_ОТВЕТОВ = 1
 
+#: Версия формата. 1 — записи под slug, 2 — под постоянным идентификатором.
+#: Переход не ломающий: запись, заведённая под адресом, переезжает под
+#: постоянный ключ при первом же изменении, с сохранением содержимого.
+ФОРМАТ = 2
+
 
 @dataclass
 class Состояние:
@@ -107,24 +112,51 @@ def _посетитель(ключ: str) -> str:
 class Хранилище:
     """Файловое хранилище сообщества одной витрины."""
 
-    def __init__(self, путь: str | os.PathLike) -> None:
+    def __init__(self, путь: str | os.PathLike, витрина: str = "") -> None:
+        """`витрина` — идентификатор КОНКРЕТНОГО сайта, не семейства.
+
+        Семейство — не граница данных: animedia.icu и animedia.space, как
+        zonafilm.space и zonafilm.cc, принадлежат одному семейству и остаются
+        разными публичными сайтами. Общий ключ показал бы сообщения одного на
+        другом, а это та самая cross-site утечка, которую Definition of Done
+        запрещает прямо. Хранилище помнит, чьё оно, и чужое не обслуживает.
+        """
         self.путь = Path(путь)
+        self.витрина = str(витрина or "").strip()
         self.доступно = False
         self.причина = ""
         self._проверить()
+
+    # --- ключ темы ---------------------------------------------------------
+
+    @staticmethod
+    def _найти_запись(данные: dict, тема: str, slug: str = "") -> dict:
+        """Запись темы для чтения. Старый ключ по адресу ещё понимается."""
+        titles = данные.get("titles") or {}
+        запись = titles.get(тема)
+        if запись is None and slug:
+            запись = titles.get(slug)
+        return запись if isinstance(запись, dict) else {}
 
     def _проверить(self) -> None:
         try:
             self.путь.parent.mkdir(parents=True, exist_ok=True)
             if not self.путь.exists():
-                self._записать({"schema_version": 1, "titles": {}})
+                self._записать({"schema_version": ФОРМАТ,
+                                "site_id": self.витрина, "titles": {}})
+            иначе = self._прочитать().get("site_id") or ""
+            if self.витрина and иначе and иначе != self.витрина:
+                # Один сайт — одно хранилище и один писатель. Файл, заведённый
+                # другой витриной, не дописывается: это её записи.
+                raise PermissionError(
+                    f"хранилище принадлежит витрине {иначе}, а не {self.витрина}")
             # Проверяется именно запись: каталог может существовать и быть
             # чужим, и тогда «доступно» было бы неправдой.
             if not os.access(self.путь, os.W_OK):
                 raise PermissionError(f"нет прав на запись: {self.путь}")
             self.доступно = True
             self.причина = ""
-        except OSError as ош:
+        except (OSError, PermissionError) as ош:
             self.доступно = False
             self.причина = f"{type(ош).__name__}: {ош}"
 
@@ -147,7 +179,7 @@ class Хранилище:
             Path(врем).unlink(missing_ok=True)
             raise
 
-    def _изменить(self, slug: str, правка) -> dict:
+    def _изменить(self, тема: str, правка, slug: str = "") -> dict:
         """Правка под файловой блокировкой: соседний поток не затрёт чужое."""
         if not self.доступно:
             raise RuntimeError(self.причина or "хранилище недоступно")
@@ -156,8 +188,18 @@ class Хранилище:
             fcntl.flock(ф, fcntl.LOCK_EX)
             try:
                 данные = self._прочитать()
-                запись = данные.setdefault("titles", {}).setdefault(
-                    slug, {"votes": {}, "reactions": {}, "comments": []})
+                данные["schema_version"] = ФОРМАТ
+                if self.витрина:
+                    данные.setdefault("site_id", self.витрина)
+                titles = данные.setdefault("titles", {})
+                # Перенос записи, заведённой под адресом. Один раз, с
+                # содержимым: голоса и сообщения посетителей переживают смену
+                # ключа, иначе смысл постоянного идентификатора теряется.
+                if тема not in titles and slug and slug in titles:
+                    titles[тема] = titles.pop(slug)
+                    titles[тема]["migrated_from_slug"] = slug
+                запись = titles.setdefault(
+                    тема, {"votes": {}, "reactions": {}, "comments": []})
                 правка(запись)
                 данные["updated_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
                 self._записать(данные)
@@ -172,9 +214,9 @@ class Хранилище:
         значение = str(с.get("status") or "").strip()
         return значение if значение in СТАТУСЫ else СТАТУС_ПО_УМОЛЧАНИЮ
 
-    def состояние(self, slug: str, ключ_посетителя: str = "",
-                  модератор: bool = False) -> Состояние:
-        запись = (self._прочитать().get("titles") or {}).get(slug) or {}
+    def состояние(self, тема: str, ключ_посетителя: str = "",
+                  модератор: bool = False, slug: str = "") -> Состояние:
+        запись = self._найти_запись(self._прочитать(), тема, slug)
         голоса = запись.get("votes") or {}
         значения = [int(v) for v in голоса.values()
                     if isinstance(v, (int, float)) and ОЦЕНКА_МИН <= int(v) <= ОЦЕНКА_МАКС]
@@ -212,7 +254,7 @@ class Хранилище:
                     мой_список = имя
                     break
         return Состояние(
-            slug=slug,
+            slug=(slug or тема),
             голосов=len(значения),
             сумма=sum(значения),
             средняя=(round(sum(значения) / len(значения), 1) if значения else None),
@@ -229,8 +271,8 @@ class Хранилище:
 
     # --- списки посетителя -------------------------------------------------
 
-    def выбрать_список(self, slug: str, список: str | None,
-                       ключ_посетителя: str) -> Состояние:
+    def выбрать_список(self, тема: str, список: str | None,
+                       ключ_посетителя: str, slug: str = "") -> Состояние:
         """Положить произведение в список посетителя или убрать из списков.
 
         `список=None` или повторный выбор того же списка убирают запись: у
@@ -254,11 +296,11 @@ class Хранилище:
             if список is not None and список != был:
                 все.setdefault(список, []).append(я)
 
-        self._изменить(slug, правка)
-        return self.состояние(slug, ключ_посетителя)
+        self._изменить(тема, правка, slug=slug)
+        return self.состояние(тема, ключ_посетителя, slug=slug)
 
     def списки_посетителя(self, ключ_посетителя: str) -> dict:
-        """Что посетитель разложил по спискам: ключ списка → список slug.
+        """Что посетитель разложил по спискам: ключ списка → список тема.
 
         Пустой словарь — обычное состояние нового посетителя, а не ошибка.
         """
@@ -266,29 +308,31 @@ class Хранилище:
         итог: dict = {к: [] for к in КЛЮЧИ_СПИСКОВ}
         if not я:
             return итог
-        for slug, запись in (self._прочитать().get("titles") or {}).items():
+        for тема, запись in (self._прочитать().get("titles") or {}).items():
             for имя, участники in (запись.get("lists") or {}).items():
                 if имя in итог and isinstance(участники, list) and я in участники:
-                    итог[имя].append(slug)
+                    итог[имя].append(тема)
         return итог
 
     # --- изменения ---------------------------------------------------------
 
-    def добавить_голос(self, slug: str, значение: int, ключ_посетителя: str) -> Состояние:
+    def добавить_голос(self, тема: str, значение: int, ключ_посетителя: str,
+                       slug: str = "") -> Состояние:
         значение = int(значение)
         if not ОЦЕНКА_МИН <= значение <= ОЦЕНКА_МАКС:
             raise ValueError(f"оценка вне шкалы {ОЦЕНКА_МИН}–{ОЦЕНКА_МАКС}")
         я = _посетитель(ключ_посетителя)
-        self._изменить(slug, lambda з: з.setdefault("votes", {}).__setitem__(я, значение))
-        return self.состояние(slug, ключ_посетителя)
+        self._изменить(тема, lambda з: з.setdefault("votes", {}).__setitem__(я, значение),
+                       slug=slug)
+        return self.состояние(тема, ключ_посетителя, slug=slug)
 
-    def снять_голос(self, slug: str, ключ_посетителя: str) -> Состояние:
+    def снять_голос(self, тема: str, ключ_посетителя: str, slug: str = "") -> Состояние:
         я = _посетитель(ключ_посетителя)
-        self._изменить(slug, lambda з: (з.get("votes") or {}).pop(я, None))
-        return self.состояние(slug, ключ_посетителя)
+        self._изменить(тема, lambda з: (з.get("votes") or {}).pop(я, None), slug=slug)
+        return self.состояние(тема, ключ_посетителя, slug=slug)
 
-    def переключить_реакцию(self, slug: str, реакция: str,
-                            ключ_посетителя: str) -> Состояние:
+    def переключить_реакцию(self, тема: str, реакция: str,
+                            ключ_посетителя: str, slug: str = "") -> Состояние:
         if реакция not in РЕАКЦИИ:
             raise ValueError(f"неизвестная реакция: {реакция}")
         я = _посетитель(ключ_посетителя)
@@ -304,11 +348,12 @@ class Хранилище:
                         return  # повторное нажатие снимает реакцию
             все.setdefault(реакция, []).append(я)
 
-        self._изменить(slug, правка)
-        return self.состояние(slug, ключ_посетителя)
+        self._изменить(тема, правка)
+        return self.состояние(тема, ключ_посетителя, slug=slug)
 
-    def добавить_комментарий(self, slug: str, имя: str, текст: str,
-                             ключ_посетителя: str, ответ_на: str = "") -> Состояние:
+    def добавить_комментарий(self, тема: str, имя: str, текст: str,
+                             ключ_посетителя: str, ответ_на: str = "",
+                             slug: str = "") -> Состояние:
         текст = re.sub(r"\s+", " ", str(текст or "")).strip()
         имя = re.sub(r"\s+", " ", str(имя or "")).strip()[:40]
         if not текст:
@@ -321,8 +366,8 @@ class Хранилище:
             имя = "Гость"
         я = _посетитель(ключ_посетителя)
         сейчас = time.time()
-        существующие = [с for с in (self._прочитать().get("titles") or {}
-                                    ).get(slug, {}).get("comments") or []
+        существующие = [с for с in (self._найти_запись(
+                            self._прочитать(), тема, slug).get("comments") or [])
                         if isinstance(с, dict)]
 
         # Ответ возможен только на существующее сообщение этого же тайтла и
@@ -358,7 +403,7 @@ class Хранилище:
 
         запись = {
             "id": hashlib.sha256(
-                f"{slug}|{текст}|{time.time_ns()}".encode("utf-8")).hexdigest()[:16],
+                f"{тема}|{текст}|{time.time_ns()}".encode("utf-8")).hexdigest()[:16],
             "name": имя,
             "text": текст,
             "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
@@ -368,12 +413,13 @@ class Хранилище:
             "status": СТАТУС_ОЖИДАЕТ,
             "parent_id": родитель,
         }
-        self._изменить(slug, lambda з: з.setdefault("comments", []).insert(0, запись))
-        return self.состояние(slug, ключ_посетителя)
+        self._изменить(тема, lambda з: з.setdefault("comments", []).insert(0, запись),
+                       slug=slug)
+        return self.состояние(тема, ключ_посетителя, slug=slug)
 
     # --- модерация и правка ------------------------------------------------
 
-    def _правка_сообщения(self, slug: str, ид: str, правка) -> None:
+    def _правка_сообщения(self, тема: str, ид: str, правка, slug: str = "") -> None:
         найдено = [False]
 
         def изменить(з: dict) -> None:
@@ -383,23 +429,24 @@ class Хранилище:
                     найдено[0] = True
                     return
 
-        self._изменить(slug, изменить)
+        self._изменить(тема, изменить, slug=slug)
         if not найдено[0]:
             raise ValueError("сообщение не найдено")
 
-    def решить_комментарий(self, slug: str, ид: str, статус: str,
-                           ключ_посетителя: str = "") -> Состояние:
+    def решить_комментарий(self, тема: str, ид: str, статус: str,
+                           ключ_посетителя: str = "", slug: str = "") -> Состояние:
         """Одобрить или отклонить сообщение. Только для модератора."""
         if статус not in (СТАТУС_ОДОБРЕН, СТАТУС_ОТКЛОНЁН):
             raise ValueError(f"недопустимое решение: {статус}")
-        self._правка_сообщения(slug, ид, lambda с: с.update({
+        self._правка_сообщения(тема, ид, lambda с: с.update({
             "status": статус,
             "moderated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        }))
-        return self.состояние(slug, ключ_посетителя, модератор=True)
+        }), slug=slug)
+        return self.состояние(тема, ключ_посетителя, модератор=True, slug=slug)
 
-    def изменить_комментарий(self, slug: str, ид: str, текст: str,
-                             ключ_посетителя: str, модератор: bool = False) -> Состояние:
+    def изменить_комментарий(self, тема: str, ид: str, текст: str,
+                             ключ_посетителя: str, модератор: bool = False,
+                             slug: str = "") -> Состояние:
         """Правка текста автором или модератором.
 
         Чужое сообщение правит только модератор: иначе достаточно угадать
@@ -422,11 +469,11 @@ class Хранилище:
             if not модератор:
                 с["status"] = СТАТУС_ОЖИДАЕТ
 
-        self._правка_сообщения(slug, ид, правка)
-        return self.состояние(slug, ключ_посетителя, модератор=модератор)
+        self._правка_сообщения(тема, ид, правка, slug=slug)
+        return self.состояние(тема, ключ_посетителя, модератор=модератор, slug=slug)
 
-    def удалить_комментарий(self, slug: str, ид: str, ключ_посетителя: str,
-                            модератор: bool = False) -> Состояние:
+    def удалить_комментарий(self, тема: str, ид: str, ключ_посетителя: str,
+                            модератор: bool = False, slug: str = "") -> Состояние:
         """Удаление автором или модератором. Ответы на удалённое уходят с ним."""
         я = _посетитель(ключ_посетителя)
         отказ = []
@@ -444,24 +491,28 @@ class Хранилище:
             з["comments"] = [с for с in сообщения
                              if с.get("id") != ид and с.get("parent_id") != ид]
 
-        self._изменить(slug, изменить)
+        self._изменить(тема, изменить, slug=slug)
         if отказ:
             raise ValueError(отказ[0])
-        return self.состояние(slug, ключ_посетителя, модератор=модератор)
+        return self.состояние(тема, ключ_посетителя, модератор=модератор, slug=slug)
 
     def очередь_модерации(self) -> list:
         """Все ждущие разбора сообщения витрины, свежие первыми."""
         итог = []
-        for slug, запись in (self._прочитать().get("titles") or {}).items():
+        for тема, запись in (self._прочитать().get("titles") or {}).items():
             for с in запись.get("comments") or []:
                 if isinstance(с, dict) and self._статус(с) == СТАТУС_ОЖИДАЕТ:
-                    итог.append(dict(с, slug=slug))
+                    итог.append(dict(с, subject=тема))
         итог.sort(key=lambda с: str(с.get("created_at") or ""), reverse=True)
         return итог
 
 
-def открыть(путь: str | os.PathLike | None) -> Хранилище | None:
-    """Хранилище по пути или None, если путь не задан вовсе."""
+def открыть(путь: str | os.PathLike | None, витрина: str = "") -> Хранилище | None:
+    """Хранилище по пути или None, если путь не задан вовсе.
+
+    `витрина` — идентификатор конкретного сайта (animedia-01, а не animedia):
+    у каждого публичного сайта своё хранилище и один писатель.
+    """
     if not путь:
         return None
-    return Хранилище(путь)
+    return Хранилище(путь, витрина=витрина)

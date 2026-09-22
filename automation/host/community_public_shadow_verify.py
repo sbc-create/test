@@ -22,10 +22,12 @@ import urllib.parse
 import urllib.request
 
 RELEASES = pathlib.Path("/srv/lords/.frontend/releases")
-NEW = RELEASES / "20260922T223000Z-community-public-01"
+NEW = RELEASES / "20260923T001500Z-community-public-03"
 BASE = RELEASES / "20260922T143111Z-efdef56-animedia-parity"
 TITLE = "/title/master-lda-i-plameni-2/"
 MOD_KEY = "shadow-moderator-key"
+#: Постоянный ключ этого тайтла в боевых подробностях обеих витрин семейства.
+CONTENT_ID = "01a0b507-3280-7b2a-8af4-674dd73cff72"
 
 провалы: list[str] = []
 
@@ -91,10 +93,16 @@ class _НеСледоватьЗаРедиректом(urllib.request.HTTPRedirec
         return None
 
 
-def поднять(release: pathlib.Path, порт: int, store: pathlib.Path):
+def поднять(release: pathlib.Path, порт: int, store: pathlib.Path,
+            витрина: str = "animedia-01"):
     env = dict(os.environ)
     env["ANIMEDIA_COMMUNITY_STORE"] = str(store)
     env["ANIMEDIA_COMMUNITY_MODERATOR_KEY"] = MOD_KEY
+    # Вторая витрина того же семейства — настоящая, со своим снимком каталога,
+    # а не тот же процесс с другим файлом: идентификатор витрины выводится из
+    # имени снимка, и подменять надо именно его.
+    env["ANIMEDIA_CATALOG"] = f"/srv/lords/.frontend/{витрина}-catalog.json"
+    env["ANIMEDIA_DETAILS"] = f"/srv/lords/.frontend/{витрина}-details.json"
     п = subprocess.Popen([sys.executable, "animedia-frontend.py", "--port", str(порт)],
                          cwd=str(release), env=env,
                          stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
@@ -140,7 +148,7 @@ def main() -> int:
 
         print("\n== оценка 1–10")
         код, куда = гость.post("/community/vote", {
-            "slug": "master-lda-i-plameni-2", "back": TITLE, "value": "8",
+            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID, "back": TITLE, "value": "8",
             "csrf": токен})
         проверить("community=ok" in (куда or ""), "голос принят", куда or str(код))
         _, стр, _ = гость.get(TITLE)
@@ -148,30 +156,32 @@ def main() -> int:
         проверить('data-user-score="8.0"' in стр, "среднее 8.0")
         проверить('value="8" aria-pressed="true"' in стр, "своя оценка показана")
 
-        гость.post("/community/vote", {"slug": "master-lda-i-plameni-2",
-                                       "back": TITLE, "value": "5", "csrf": токен})
+        гость.post_ok("/community/vote", {
+            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID,
+            "back": TITLE, "value": "5", "csrf": токен})
         _, стр, _ = гость.get(TITLE)
         проверить('data-user-votes="1"' in стр, "смена оценки не добавила второй голос")
         проверить('data-user-score="5.0"' in стр, "среднее пересчитано на 5.0")
 
         _, стр2, _ = второй.get(TITLE)
         т2 = второй.csrf(стр2)
-        второй.post("/community/vote", {"slug": "master-lda-i-plameni-2",
-                                        "back": TITLE, "value": "9", "csrf": т2})
+        второй.post_ok("/community/vote", {
+            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID,
+            "back": TITLE, "value": "9", "csrf": т2})
         _, стр, _ = гость.get(TITLE)
         проверить('data-user-votes="2"' in стр, "второй посетитель посчитан отдельно")
         проверить('data-user-score="7.0"' in стр, "среднее по двоим 7.0")
 
         print("\n== CSRF")
         код, куда = гость.post("/community/comment", {
-            "slug": "master-lda-i-plameni-2", "back": TITLE,
+            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID, "back": TITLE,
             "name": "Без токена", "text": "это не должно пройти"})
         проверить("community=csrf" in (куда or ""),
                   "запись без CSRF-токена отклонена", куда or "")
 
         print("\n== комментарий и премодерация")
         код, куда = гость.post("/community/comment", {
-            "slug": "master-lda-i-plameni-2", "back": TITLE,
+            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID, "back": TITLE,
             "name": "Гость", "text": "Первое сообщение посетителя.", "csrf": токен})
         проверить("community=ok" in (куда or ""), "сообщение принято", куда or str(код))
         _, своя, _ = гость.get(TITLE)
@@ -190,7 +200,7 @@ def main() -> int:
         ид = m.group(1) if m else ""
         т_мод = модератор.csrf(мод_стр)
         код, куда = модератор.post("/community/comment/decide", {
-            "slug": "master-lda-i-plameni-2", "back": TITLE, "id": ид,
+            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID, "back": TITLE, "id": ид,
             "decision": "approved", "csrf": т_мод})
         проверить("community=ok" in (куда or ""), "решение принято", куда or str(код))
         _, чужая, _ = второй.get(TITLE)
@@ -202,7 +212,7 @@ def main() -> int:
         проверить('data-moderation-queue="1"' not in стр2,
                   "обычный посетитель очереди не видит")
         код, куда = второй.post("/community/comment/decide", {
-            "slug": "master-lda-i-plameni-2", "back": TITLE, "id": ид,
+            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID, "back": TITLE, "id": ид,
             "decision": "approved", "csrf": второй.csrf(стр2)})
         проверить("community=forbidden" in (куда or ""),
                   "чужое решение модератора отклонено", куда or "")
@@ -210,7 +220,7 @@ def main() -> int:
         print("\n== ответ")
         _, стр2, _ = второй.get(TITLE)
         код, куда = второй.post("/community/comment", {
-            "slug": "master-lda-i-plameni-2", "back": TITLE, "name": "Второй",
+            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID, "back": TITLE, "name": "Второй",
             "text": "Ответ на первое.", "reply_to": ид,
             "csrf": второй.csrf(стр2)})
         проверить("community=ok" in (куда or ""), "ответ принят", куда or str(код))
@@ -221,31 +231,31 @@ def main() -> int:
         _, своя, _ = гость.get(TITLE)
         т = гость.csrf(своя)
         код, куда = гость.post("/community/comment", {
-            "slug": "master-lda-i-plameni-2", "back": TITLE, "name": "Гость",
+            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID, "back": TITLE, "name": "Гость",
             "text": "Первое сообщение посетителя.", "csrf": т})
         проверить("community=error" in (куда or ""), "повтор слово в слово отклонён",
                   куда or "")
         код, куда = гость.post("/community/comment", {
-            "slug": "master-lda-i-plameni-2", "back": TITLE, "name": "Гость",
+            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID, "back": TITLE, "name": "Гость",
             "text": "Совсем другое сообщение.", "csrf": т})
         проверить("community=error" in (куда or ""), "слишком частая отправка отклонена",
                   куда or "")
 
         print("\n== правка и удаление своего")
         код, куда = гость.post("/community/comment/edit", {
-            "slug": "master-lda-i-plameni-2", "back": TITLE, "id": ид,
+            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID, "back": TITLE, "id": ид,
             "text": "Поправленное сообщение.", "csrf": т})
         проверить("community=ok" in (куда or ""), "правка принята", куда or str(код))
         _, чужая, _ = второй.get(TITLE)
         проверить("Поправленное сообщение." not in чужая,
                   "правка вернула сообщение на проверку")
         код, куда = второй.post("/community/comment/delete", {
-            "slug": "master-lda-i-plameni-2", "back": TITLE, "id": ид,
+            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID, "back": TITLE, "id": ид,
             "csrf": второй.csrf(чужая)})
         проверить("community=error" in (куда or ""), "чужое сообщение удалить нельзя",
                   куда or "")
         код, куда = гость.post("/community/comment/delete", {
-            "slug": "master-lda-i-plameni-2", "back": TITLE, "id": ид, "csrf": т})
+            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID, "back": TITLE, "id": ид, "csrf": т})
         проверить("community=ok" in (куда or ""), "своё сообщение удалено",
                   куда or str(код))
 
@@ -254,13 +264,64 @@ def main() -> int:
         т = гость.csrf(своя)
         time.sleep(1)
         гость.post("/community/comment", {
-            "slug": "master-lda-i-plameni-2", "back": TITLE,
+            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID, "back": TITLE,
             "name": "<img src=x onerror=alert(1)>",
             "text": "<script>alert('xss')</script>", "csrf": т})
         _, своя, _ = гость.get(TITLE)
         проверить("<script>alert('xss')</script>" not in своя,
                   "разметка из сообщения не попала на страницу сырой")
         проверить("&lt;script&gt;" in своя, "она экранирована")
+
+        print("\n== контракт точки подключения (f54a5f6)")
+        _, стр, _ = гость.get(TITLE)
+        проверить(f'data-comments-subject="{CONTENT_ID}"' in стр,
+                  "ключ обсуждения — постоянный идентификатор, не адрес")
+        проверить('data-comments-subject-kind="content-id"' in стр,
+                  "род ключа объявлен, а не угадывается")
+        проверить('data-comments-space="animedia-01"' in стр,
+                  "пространство — конкретная витрина")
+        проверить('data-comments-space="animedia"' not in стр.replace(
+                      'data-comments-space="animedia-01"', ''),
+                  "пространство не объявлено семейством")
+        проверить('data-comments-slug="master-lda-i-plameni-2"' in стр,
+                  "адрес сохранён справочным полем")
+        проверить('name="subject"' in стр, "формы несут постоянный ключ")
+
+        print("\n== изоляция двух витрин одного семейства")
+        store2 = tmp / "community-02.json"
+        второй_сайт = поднять(NEW, 9192, store2, витрина="animedia-02")
+        try:
+            соседка = Посетитель(9192)
+            _, стр02, _ = соседка.get(TITLE)
+            проверить('data-comments-space="animedia-02"' in стр02,
+                      "вторая витрина объявляет себя")
+            проверить("Первое сообщение посетителя." not in стр02,
+                      "сообщение с animedia-01 не видно на animedia-02")
+            проверить('data-user-votes="0"' in стр02,
+                      "голоса с animedia-01 не посчитаны на animedia-02")
+            т02 = соседка.csrf(стр02)
+            соседка.post_ok("/community/vote", {
+                "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID,
+                "back": TITLE, "value": "3", "csrf": т02})
+            _, стр02, _ = соседка.get(TITLE)
+            проверить('data-user-score="3.0"' in стр02, "своя оценка на animedia-02")
+            _, стр01, _ = гость.get(TITLE)
+            проверить('data-user-score="3.0"' not in стр01,
+                      "оценка с animedia-02 не протекла на animedia-01")
+            д1 = json.loads(store.read_text("utf-8"))
+            д2 = json.loads(store2.read_text("utf-8"))
+            проверить(д1.get("site_id") == "animedia-01"
+                      and д2.get("site_id") == "animedia-02",
+                      "каждое хранилище помнит свою витрину",
+                      f"{д1.get('site_id')} / {д2.get('site_id')}")
+            проверить(CONTENT_ID in (д1.get("titles") or {}),
+                      "запись лежит под постоянным ключом")
+        finally:
+            второй_сайт.terminate()
+            try:
+                второй_сайт.wait(timeout=10)
+            except subprocess.TimeoutExpired:
+                второй_сайт.kill()
 
         print("\n== изоляция домена")
         проверить(json.loads(store.read_text("utf-8")).get("titles") is not None,

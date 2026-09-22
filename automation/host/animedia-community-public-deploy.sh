@@ -10,7 +10,7 @@
 # и Yummy не упоминаются нигде, кроме проверки, что они не изменились.
 set -euo pipefail
 
-RELEASE_ID="20260922T223000Z-community-public-01"
+RELEASE_ID="20260923T001500Z-community-public-03"
 RELEASE_DIR="/srv/lords/.frontend/releases/$RELEASE_ID"
 LINK=/srv/lords/.frontend/sites/animedia-01/current
 UNIT=nova-animedia-01.service
@@ -29,6 +29,20 @@ die() { printf '\nREFUSED: %s\n' "$*" >&2; exit 1; }
 
 say "состояние до"
 BEFORE=$(readlink "$LINK")
+
+# Идемпотентность. Второй запуск на уже выложенном релизе не должен ни
+# трогать витрину, ни — главное — записывать сам себя точкой отката: после
+# этого откатываться было бы некуда.
+if [ "$(basename "$(readlink -f "$LINK")")" = "$RELEASE_ID" ]; then
+  printf '   %s уже выложен — витрина не трогается\n' "$RELEASE_ID"
+  if [ -f "$STATE" ]; then
+    printf '   точка отката сохранена: %s\n' \
+      "$(python3 -c "import json;print(json.load(open('$STATE'))['release_before'])")"
+  fi
+  curl -sS -m 15 --resolve "$RESOLVE" -o /dev/null -w '   главная: %{http_code}\n' \
+    "$SITE/" || true
+  exit 0
+fi
 BASE_DECLARED=$(basename "$(readlink -f "$LINK")")
 BASE_OF_RELEASE=$(python3 -c "
 import json;print(json.load(open('$RELEASE_DIR/RELEASE.json'))['rebased_onto']['build_id'])")
@@ -81,6 +95,12 @@ case "$СТР" in *'data-community="on"'*) проверить "раздел со
   *) проверить "раздел сообщества включён" нет;; esac
 case "$СТР" in *'name="csrf"'*) проверить "CSRF-токен в формах" да;;
   *) проверить "CSRF-токен в формах" нет;; esac
+case "$СТР" in *'data-comments-subject-kind="content-id"'*)
+  проверить "ключ обсуждения — постоянный идентификатор" да;;
+  *) проверить "ключ обсуждения — постоянный идентификатор" нет;; esac
+case "$СТР" in *'data-comments-space="animedia-01"'*)
+  проверить "пространство — конкретная витрина" да;;
+  *) проверить "пространство — конкретная витрина" нет;; esac
 case "$ЗАГ" in *[Nn]oindex*) проверить "noindex сохранён" да;;
   *) проверить "noindex сохранён" нет;; esac
 case "$ЗАГ" in *"$RELEASE_ID"*) проверить "выложен именно этот релиз" да;;

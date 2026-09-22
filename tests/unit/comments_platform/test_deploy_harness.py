@@ -737,3 +737,61 @@ class TestShadowContourCannotOutliveItsLauncher:
         """PDEATHSIG is the backstop, not a replacement for stopping properly."""
         assert "def stop(" in self.REHEARSAL_TEXT
         assert "signal.SIGTERM" in self.REHEARSAL_TEXT
+
+
+class TestStage1Superseded:
+    """Старый пилот не должен уезжать на витрину вместо публичного модуля.
+
+    Его проверка базы этого не ловит: адаптер собран от efdef56, витрина
+    объявляет efdef56, ворота открываются — и на сайт приезжает сборка без
+    премодерации, без CSRF, с ключом по адресу и без изоляции витрин, а отчёт
+    при этом успешный. Поэтому отказ, а не предупреждение.
+    """
+
+    def test_apply_refuses_as_superseded(self):
+        assert "SUPERSEDED_BY" in APPLY_TEXT, "нет отметки о замене"
+        assert "STAGE1_ALLOW_SUPERSEDED" in APPLY_TEXT, "нет осознанного обхода"
+        отказ = APPLY_TEXT.find("SUPERSEDED_BY")
+        первая_мутация = APPLY_TEXT.find("MUTATED=$((MUTATED + 1))")
+        assert отказ < первая_мутация, "отказ стоит после первой мутации"
+
+    def test_it_names_the_replacement(self):
+        assert "animedia-community-public-deploy.sh" in APPLY_TEXT, (
+            "отказ не называет, что ставить вместо пилота"
+        )
+
+
+class TestPublicDeployScript:
+    DEPLOY = (HARNESS / "animedia-community-public-deploy.sh").read_text(encoding="utf-8")
+
+    def test_it_is_idempotent_on_an_already_deployed_release(self):
+        """Второй запуск не должен записать сам себя точкой отката."""
+        assert "уже выложен" in self.DEPLOY
+        отметка = self.DEPLOY.find("уже выложен")
+        запись_состояния = self.DEPLOY.find('> "$STATE"')
+        assert отметка < запись_состояния, (
+            "проверка «уже выложен» стоит после записи точки отката"
+        )
+
+    def test_it_backs_up_visitor_data_before_switching(self):
+        копия = self.DEPLOY.find("before-community-public")
+        переключение = self.DEPLOY.find("ln -sfn")
+        assert копия != -1 and копия < переключение, (
+            "данные посетителей копируются не раньше переключения"
+        )
+
+    def test_rollback_keeps_visitor_data(self):
+        for line in self.DEPLOY.splitlines():
+            if "откат()" in line or "ln -sfn \"$BEFORE\"" in line:
+                continue
+            assert not ("rm " in line and "community" in line and ".json" in line), (
+                f"откат удаляет данные посетителей: {line.strip()}"
+            )
+
+    def test_it_does_not_touch_the_second_domain(self):
+        for line in self.DEPLOY.splitlines():
+            low = line.lower()
+            if "animedia-02" in low or "animedia.space" in low:
+                assert not any(w in low for w in ("ln -sfn", "systemctl restart")), (
+                    f"скрипт действует на вторую витрину: {line.strip()}"
+                )

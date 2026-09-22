@@ -100,6 +100,26 @@ install -d -m 0755 "$STATE_DIR" "$BACKUP_DIR"
 [ -L "$LINK" ] || die "expected a symlink at $LINK"
 [ -f "$MANIFEST" ] || die "template manifest missing: $MANIFEST"
 
+# --- superseded ------------------------------------------------------------
+#
+# Этот скрипт ставил пилот комментариев для владельца: шлюз на /api/comments/v1,
+# когорта, виджет, видимый только владельцу. Его сменил публичный модуль
+# сообщества, который живёт в самой витрине и не требует ни шлюза, ни когорты.
+#
+# Опасность не в том, что скрипт устарел, а в том, что его проверка базы это
+# пропускает: адаптер собран от efdef56, витрина объявляет efdef56, ворота
+# открываются — и на сайт уезжает сборка без премодерации, без CSRF, с ключом
+# по адресу вместо постоянного идентификатора и без изоляции витрин. Отчёт при
+# этом был бы успешным. Поэтому отказ здесь, а не предупреждение.
+SUPERSEDED_BY="20260923T001500Z-community-public-03"
+if [ "${STAGE1_ALLOW_SUPERSEDED:-0}" != "1" ]; then
+  die "этот пилот заменён публичным модулем сообщества.
+  Ставьте $SUPERSEDED_BY:
+    /home/claude/wt-community-comments-platform-01/automation/host/animedia-community-public-deploy.sh
+  Он содержит премодерацию, CSRF, постоянный ключ обсуждения и изоляцию витрин,
+  которых здесь нет. Запуск всё равно: STAGE1_ALLOW_SUPERSEDED=1"
+fi
+
 say "adapter base matches what the site declares"
 # The first prepared release was built from fac5643 while animedia-01 had
 # already been pointed at the UX rebuild. Applying it would have restarted the

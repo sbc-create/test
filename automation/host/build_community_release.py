@@ -25,7 +25,7 @@ import sys
 REPO = pathlib.Path(__file__).resolve().parents[2]
 RELEASES = pathlib.Path("/srv/lords/.frontend/releases")
 BASE_ID = "20260922T143111Z-efdef56-animedia-parity"
-NEW_ID = "20260922T223000Z-community-public-01"
+NEW_ID = "20260923T001500Z-community-public-03"
 BASE, NEW = RELEASES / BASE_ID, RELEASES / NEW_ID
 
 
@@ -118,21 +118,22 @@ POST_ROUTES_ANCHOR = '''            elif путь == "/community/comment":
                     slug, поля.get("name") or "", поля.get("text") or "", ключ)'''
 POST_ROUTES_PATCH = '''            elif путь == "/community/comment":
                 хранилище.добавить_комментарий(
-                    slug, поля.get("name") or "", поля.get("text") or "", ключ,
-                    ответ_на=str(поля.get("reply_to") or "").strip())
+                    subject, поля.get("name") or "", поля.get("text") or "", ключ,
+                    ответ_на=str(поля.get("reply_to") or "").strip(), slug=slug)
             elif путь == "/community/comment/decide":
                 if not модератор:
                     return self._перенаправить(назад + "?community=forbidden")
                 хранилище.решить_комментарий(
-                    slug, str(поля.get("id") or ""), str(поля.get("decision") or ""),
-                    ключ)
+                    subject, str(поля.get("id") or ""),
+                    str(поля.get("decision") or ""), ключ, slug=slug)
             elif путь == "/community/comment/edit":
                 хранилище.изменить_комментарий(
-                    slug, str(поля.get("id") or ""), поля.get("text") or "", ключ,
-                    модератор=модератор)
+                    subject, str(поля.get("id") or ""), поля.get("text") or "", ключ,
+                    модератор=модератор, slug=slug)
             elif путь == "/community/comment/delete":
                 хранилище.удалить_комментарий(
-                    slug, str(поля.get("id") or ""), ключ, модератор=модератор)'''
+                    subject, str(поля.get("id") or ""), ключ, модератор=модератор,
+                    slug=slug)'''
 
 # --- 4. renderer: moderator state, CSRF field in every form -----------------
 STATE_ANCHOR = '''        с = хранилище.состояние(slug, self._ключ_посетителя())'''
@@ -300,6 +301,71 @@ QUEUE_ATTR_PATCH = '''            f'data-community-comments="{len(с.комме�
             f'data-community-pending="{с.всего_на_модерации}" \''''
 
 
+# --- 6. f54a5f6: постоянный ключ вместо адреса и изоляция по витрине --------
+# Оба дефекта были найдены на Zona до раскатки модуля. На Animedia записи под
+# старым ключом уже есть, поэтому модуль их переносит, а не бросает.
+STORE_ANCHOR = '''        _сообщество_хранилище = СООБЩЕСТВО.открыть(АНИМЕДИА_СООБЩЕСТВО_ПУТЬ)'''
+STORE_PATCH = '''        # Витрина, а не семейство: animedia.icu и animedia.space — разные
+        # публичные сайты на одном шаблоне, и общее хранилище показало бы
+        # записи одного на другом.
+        _сообщество_хранилище = СООБЩЕСТВО.открыть(
+            АНИМЕДИА_СООБЩЕСТВО_ПУТЬ, витрина=САЙТ_ID)'''
+
+SUBJECT_ANCHOR = '''        модератор = self._я_модератор()
+        с = хранилище.состояние(slug, self._ключ_посетителя(), модератор=модератор)'''
+SUBJECT_PATCH = '''        # Ключ обсуждения — постоянный идентификатор записи, а не адрес: адрес
+        # меняется, и переименование тайтла осиротило бы все его сообщения.
+        # Без идентификатора раздел не показывается вовсе: завести данные под
+        # ключом, который потом придётся мигрировать, хуже, чем не завести.
+        subject = str(деталь.get("id") or запись.get("id") or "").strip()
+        if not subject:
+            return ""
+        модератор = self._я_модератор()
+        с = хранилище.состояние(subject, self._ключ_посетителя(),
+                                модератор=модератор, slug=slug)'''
+
+SUBJECT_FIELD_ANCHOR = '''            f'{csrf_поле}\''''
+SUBJECT_FIELD_PATCH = '''            f'{csrf_поле}'
+            f'<input type="hidden" name="subject" value="{html.escape(subject)}">\''''
+
+SECTION_ATTR_ANCHOR = '''            f'data-community-pending="{с.всего_на_модерации}" \''''
+SECTION_ATTR_PATCH = '''            f'data-community-pending="{с.всего_на_модерации}" '
+            f'data-comments-space="{html.escape(САЙТ_ID)}" '
+            f'data-comments-subject="{html.escape(subject)}" '
+            f'data-comments-subject-kind="content-id" '
+            f'data-comments-slug="{html.escape(slug)}" \''''
+
+HANDLER_KEY_ANCHOR = '''        slug = str(поля.get("slug") or "").strip()'''
+HANDLER_KEY_PATCH = '''        slug = str(поля.get("slug") or "").strip()
+        subject = str(поля.get("subject") or "").strip()'''
+
+HANDLER_GUARD_ANCHOR = '''        if хранилище is None or not хранилище.доступно or not slug:
+            return self._перенаправить(назад + "?community=unavailable")'''
+HANDLER_GUARD_PATCH = '''        if хранилище is None or not хранилище.доступно or not subject:
+            return self._перенаправить(назад + "?community=unavailable")'''
+
+
+# Ключом записи должен стать постоянный идентификатор во ВСЕХ маршрутах, а не
+# только в отрисовке. Пока запись шла под адресом, чтение спасал запасной
+# поиск по slug — то есть дефект был не виден ни на одной странице.
+ROUTE_KEY_ANCHOR = '''                if значение == 0:
+                    хранилище.снять_голос(slug, ключ)
+                else:
+                    хранилище.добавить_голос(slug, значение, ключ)
+            elif путь == "/community/reaction":
+                хранилище.переключить_реакцию(slug, str(поля.get("reaction") or ""), ключ)'''
+ROUTE_KEY_PATCH = '''                if значение == 0:
+                    хранилище.снять_голос(subject, ключ, slug=slug)
+                else:
+                    хранилище.добавить_голос(subject, значение, ключ, slug=slug)
+            elif путь == "/community/reaction":
+                хранилище.переключить_реакцию(
+                    subject, str(поля.get("reaction") or ""), ключ, slug=slug)'''
+
+ROUTE_LIST_ANCHOR = '''                хранилище.выбрать_список(slug, выбор, ключ)'''
+ROUTE_LIST_PATCH = '''                хранилище.выбрать_список(subject, выбор, ключ, slug=slug)'''
+
+
 def main() -> int:
     if not BASE.is_dir():
         die(f"base release missing: {BASE}")
@@ -334,6 +400,17 @@ def main() -> int:
     src = replace_once(src, FEED_ANCHOR, FEED_PATCH, "comment feed")
     src = replace_once(src, RETURN_ANCHOR, RETURN_PATCH, "section return")
     src = replace_once(src, QUEUE_ATTR_ANCHOR, QUEUE_ATTR_PATCH, "pending attribute")
+    src = replace_once(src, STORE_ANCHOR, STORE_PATCH, "store per site")
+    src = replace_once(src, SUBJECT_ANCHOR, SUBJECT_PATCH, "content-id subject")
+    src = replace_once(src, SECTION_ATTR_ANCHOR, SECTION_ATTR_PATCH, "mount contract")
+    src = replace_once(src, HANDLER_KEY_ANCHOR, HANDLER_KEY_PATCH, "handler subject")
+    src = replace_once(src, HANDLER_GUARD_ANCHOR, HANDLER_GUARD_PATCH, "handler guard")
+    src = replace_once(src, ROUTE_KEY_ANCHOR, ROUTE_KEY_PATCH, "vote/reaction key")
+    src = replace_once(src, ROUTE_LIST_ANCHOR, ROUTE_LIST_PATCH, "list key")
+    n = src.count(SUBJECT_FIELD_ANCHOR)
+    if n < 4:
+        die(f"expected every community form to carry the subject, found {n}")
+    src = src.replace(SUBJECT_FIELD_ANCHOR, SUBJECT_FIELD_PATCH)
 
     try:
         compile(src, "animedia-frontend.py", "exec")
