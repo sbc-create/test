@@ -1,0 +1,51 @@
+{
+  "site_id": "zona-02",
+  "domain": "zonafilm.cc",
+  "release_id": "zona-02-1015c650d8be",
+  "release_dir": "/srv/lords/.frontend/releases/zona-02-1015c650d8be",
+  "pinned_source": "/srv/lords/.frontend/releases/zona-slider-2650fad6",
+  "pinned_code_sha256": "7ccf094a1d7f2b5e648a38f51f6a63de9627576637d96f6c966fe1759ad8fa1e",
+  "files": [
+    "collection_contract.py",
+    "community_ratings_overlay.py",
+    "genre_aliases.py",
+    "lords-frontend.py",
+    "nova_core_indexability.py",
+    "popular_weekly.py",
+    "seo_layer.py"
+  ],
+  "design_version_gate": {
+    "artifact_supports": [
+      "1.1.0",
+      "1.2.0",
+      "1.2.1"
+    ],
+    "family_reworked_on": [
+      "1.2.0"
+    ],
+    "declared": "1.2.0"
+  },
+  "mode": "apply",
+  "mutations": 10,
+  "release_files_sha256": {
+    "collection_contract.py": "237723a2061a7be3a4d78a9e3009bb42a201b9eae85e8a5abf45edfee31ad5b4",
+    "community_ratings_overlay.py": "746e4ade069e7d5f59ca57eeedc55425240e0ca026a4fece5d074c26496e4ff7",
+    "genre_aliases.py": "e98b93cb1937e4c022b0e88280d8c60ec0a0e472cdbe2d0ee61258b835ea74e5",
+    "lords-frontend.py": "7ccf094a1d7f2b5e648a38f51f6a63de9627576637d96f6c966fe1759ad8fa1e",
+    "nova_core_indexability.py": "7092853cbc29f951c5811699235d7bfbdcd612e78fa399d4bbd4724e509ff6e2",
+    "popular_weekly.py": "63cd16bd76564dae399f77cf008641a05a4289af249a8c403aa11ac45a370a68",
+    "seo_layer.py": "8fb0a0bac3f88dde2c8d44ef352914255ccb7ffbaa4a308d07bf7499ef7c19f0"
+  },
+  "manifest_path": "/srv/lords/.frontend/template-manifest-zona-02.json",
+  "manifest_sha256": "3e6c39fbc09a7d74385084aab163e9238ef7b0c52efd64ba224f9c9b11f39130",
+  "current_link": "/srv/lords/.frontend/sites/zona-02/current",
+  "current_target": "../../releases/zona-02-1015c650d8be",
+  "previous_target": "../../releases/zona-02-1015c650d8be",
+  "dispatcher_registry": {
+    "neighbours_unchanged": true,
+    "added_key": "zona-02",
+    "before_sha256": "98a2eef6b08aad469b42ede32ba73a2b76f37ae9f30ca0eacedca1364badcd55",
+    "backup": "/srv/lords/.frontend/lords-runtime-registry.json.before-zona-02.20260922T121806Z",
+    "after_sha256": "98a2eef6b08aad469b42ede32ba73a2b76f37ae9f30ca0eacedca1364badcd55"
+  }
+}
