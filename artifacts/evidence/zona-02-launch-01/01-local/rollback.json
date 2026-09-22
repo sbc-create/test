@@ -1,0 +1,23 @@
+{
+  "running_release": "/srv/lords/.frontend/sites/zona-02/releases/622837413f9f/template/zona-02-1015c650d8be/lords-frontend.py",
+  "catalog": {
+    "status": 200,
+    "bytes": 101470
+  },
+  "data_after_rollback": {
+    "player-zona-02.json": [
+      278,
+      "e0ebcc0161acbcb7"
+    ],
+    "zona-02-catalog.json": [
+      16754608,
+      "5cd67cf22cd00b4f"
+    ],
+    "zona-02-details.json": [
+      75564204,
+      "633be4b18c60a65c"
+    ]
+  },
+  "current": "/srv/lords/.frontend/sites/zona-02/releases/622837413f9f",
+  "previous": "/srv/lords/.frontend/sites/zona-02/releases/60351b24f24b"
+}

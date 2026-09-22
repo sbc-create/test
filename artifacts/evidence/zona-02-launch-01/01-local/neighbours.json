@@ -1,0 +1,90 @@
+{
+  "http": {
+    "lords-01": {
+      "port": 9110,
+      "status": 200,
+      "bytes": 68334,
+      "build_id": "20260921T134330Z-515fcf0-cardfix"
+    },
+    "lords-02": {
+      "port": 9111,
+      "status": 200,
+      "bytes": 71508,
+      "build_id": "20260921T134330Z-515fcf0-cardfix"
+    },
+    "lords-03": {
+      "port": 9112,
+      "status": 200,
+      "bytes": 61122,
+      "build_id": "20260921T134330Z-515fcf0-cardfix"
+    },
+    "zona-01": {
+      "port": 9120,
+      "status": 200,
+      "bytes": 123917,
+      "build_id": "zona-01-a0209877e1db"
+    },
+    "animedia-01": {
+      "port": 9121,
+      "status": 200,
+      "bytes": 219062,
+      "build_id": "20260922T143111Z-efdef56-animedia-parity"
+    },
+    "animedia-02": {
+      "port": 9122,
+      "status": 200,
+      "bytes": 194539,
+      "build_id": "20260922T143111Z-efdef56-animedia-parity"
+    }
+  },
+  "files": {
+    "animedia-01-catalog.json": {
+      "size": 2516554,
+      "mtime": 1790050303
+    },
+    "animedia-02-catalog.json": {
+      "size": 2516554,
+      "mtime": 1790050303
+    },
+    "lords-01-catalog.json": {
+      "size": 16754609,
+      "mtime": 1790050304
+    },
+    "lords-02-catalog.json": {
+      "size": 16754609,
+      "mtime": 1790117443
+    },
+    "lords-03-catalog.json": {
+      "size": 16754609,
+      "mtime": 1790117471
+    },
+    "yummy-biz-catalog.json": {
+      "size": 3422807,
+      "mtime": 1789073693
+    },
+    "yummy-org-catalog.json": {
+      "size": 3422807,
+      "mtime": 1789073705
+    },
+    "yummy-site-catalog.json": {
+      "size": 3422807,
+      "mtime": 1789073682
+    },
+    "zona-01-catalog.json": {
+      "size": 16754608,
+      "mtime": 1790050311
+    },
+    "zona-02-catalog.json": {
+      "size": 16754608,
+      "mtime": 1790087660
+    }
+  },
+  "releases": {
+    "lords-01": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix",
+    "lords-02": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix",
+    "lords-03": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix",
+    "zona-01": "/srv/lords/.frontend/releases/zona-01-a0209877e1db",
+    "animedia-01": "/srv/lords/.frontend/releases/20260923T001500Z-community-public-03",
+    "animedia-02": "/srv/lords/.frontend/releases/20260922T143111Z-efdef56-animedia-parity"
+  }
+}

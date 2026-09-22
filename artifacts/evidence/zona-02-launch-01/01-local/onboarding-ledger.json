@@ -1,0 +1,225 @@
+{
+  "schema_version": "1.0",
+  "order_id": "zona-02-launch-01",
+  "site_id": "zona-02",
+  "domain": "zonafilm.cc",
+  "stages": [
+    {
+      "name": "domain_validated",
+      "status": "done",
+      "detail": {
+        "domain": "zonafilm.cc",
+        "ns_present": true,
+        "address_matches_target": false,
+        "https_ready": null,
+        "ready_for_cutover": false,
+        "observed": {
+          "ns": [
+            "paris.ns.cloudflare.com",
+            "piers.ns.cloudflare.com"
+          ],
+          "ns_evidence": "artifacts/evidence/release-zonafilm-cc-full-cycle-01/03-dns/zonafilm-cc.json",
+          "addresses": [],
+          "address_matches_target": false,
+          "expected_a": "45.131.182.225",
+          "https_ready": null,
+          "resolve_error": "gaierror: [Errno -5] No address associated with hostname"
+        },
+        "reason": null,
+        "verdict": "DELEGATED_NO_RECORDS",
+        "cutover_blocked_by": [
+          "A-запись apex и www отсутствуют; зона Cloudflare, учётных данных нет"
+        ]
+      },
+      "at": "2026-09-22T23:20:48.775570+00:00"
+    },
+    {
+      "name": "site_id_assigned",
+      "status": "done",
+      "detail": {
+        "site_id": "zona-02",
+        "port": 9123,
+        "unit": "nova-zona-02.service",
+        "port_busy_now": true,
+        "neighbour_ports": {
+          "lords-01": 9110,
+          "lords-02": 9111,
+          "lords-03": 9112,
+          "zona-01": 9120,
+          "animedia-01": 9121,
+          "animedia-02": 9122
+        },
+        "evidence": "artifacts/evidence/release-zonafilm-cc-full-cycle-01/04-site-creation/allocation.json",
+        "allocated": false,
+        "reused": true
+      },
+      "at": "2026-09-22T23:20:48.795483+00:00"
+    },
+    {
+      "name": "template_reserved",
+      "status": "done",
+      "detail": {
+        "template_id": "zona-general",
+        "family": "zona",
+        "design_version": "1.2.0",
+        "pinned_release": "zona-slider-2650fad6",
+        "code_sha256": "7ccf094a1d7f2b5e648a38f51f6a63de9627576637d96f6c966fe1759ad8fa1e",
+        "source_commit": "5863d296264867f85138bd771f1b90a86ac9c599",
+        "manifest": "/srv/lords/.frontend/template-manifest-zona-02.json",
+        "verified_sha256": "7ccf094a1d7f2b5e648a38f51f6a63de9627576637d96f6c966fe1759ad8fa1e",
+        "reserved": false,
+        "reused": true,
+        "pool_spent": false,
+        "pool_note": "семейства zona в config/template-pool.json нет; пул не расходуется",
+        "neighbour_zona_01": {
+          "profile": "zona-general",
+          "design_version": "1.3.0",
+          "code_file_sha256": "ba33083e904cb721aa37b0fae1954de91f8a74582d0f4b283f5a9bfbd831b251",
+          "same_profile_name": true,
+          "same_bytes": false
+        }
+      },
+      "at": "2026-09-22T22:26:52.273618+00:00"
+    },
+    {
+      "name": "repo_created",
+      "status": "done",
+      "detail": {
+        "repository": "sbc-create/site-zonafilm-cc",
+        "created": true,
+        "reused": false,
+        "url": "https://github.com/sbc-create/site-zonafilm-cc",
+        "private": true
+      },
+      "at": "2026-09-22T22:27:06.315027+00:00"
+    },
+    {
+      "name": "repo_pushed",
+      "status": "done",
+      "detail": {
+        "branch": "claude/bootstrap-zona-02",
+        "local_sha": "98232b6f7edb3652228921ffc7994c24cf7234fb",
+        "remote_sha": "98232b6f7edb3652228921ffc7994c24cf7234fb",
+        "match": true,
+        "repository": "sbc-create/site-zonafilm-cc"
+      },
+      "at": "2026-09-22T23:20:49.614862+00:00"
+    },
+    {
+      "name": "ci_verified",
+      "status": "done",
+      "detail": {
+        "head_sha": "98232b6f7edb3652228921ffc7994c24cf7234fb",
+        "runs": [
+          {
+            "id": 35796293673,
+            "workflow": "release",
+            "conclusion": "success"
+          }
+        ]
+      },
+      "at": "2026-09-22T23:20:50.535204+00:00"
+    },
+    {
+      "name": "release_ready",
+      "status": "done",
+      "detail": {
+        "digest": "sha256:9ed1bdb728e575d9475fbefd72f5147e6931b7476cd1993c9c0f8aea5a3c1039",
+        "source_commit": "98232b6f7edb3652228921ffc7994c24cf7234fb",
+        "artifact": "/home/claude/wt-zona-02-launch-01/artifacts/cells/zona-02/zona-02-98232b6f7edb.tar.gz",
+        "verified_digest": "sha256:9ed1bdb728e575d9475fbefd72f5147e6931b7476cd1993c9c0f8aea5a3c1039"
+      },
+      "at": "2026-09-22T23:20:50.969469+00:00"
+    },
+    {
+      "name": "server_staged",
+      "status": "done",
+      "detail": {
+        "current": "/srv/lords/.frontend/sites/zona-02/releases/98232b6f7edb",
+        "previous": "/srv/lords/.frontend/sites/zona-02/releases/60351b24f24b",
+        "pid": 523838,
+        "executing": "/srv/lords/.frontend/sites/zona-02/releases/98232b6f7edb/template/zona-02-1015c650d8be/lords-frontend.py",
+        "port": 9123,
+        "healthz": 200,
+        "unit_installed": false
+      },
+      "at": "2026-09-22T23:20:51.031241+00:00"
+    },
+    {
+      "name": "data_verified",
+      "status": "done",
+      "detail": {
+        "data_root": "/srv/lords/.frontend/sites/zona-02/data",
+        "files": {
+          "player-zona-02.json": 278,
+          "zona-02-catalog.json": 16754608,
+          "zona-02-details.json": 75564204
+        },
+        "inside_release": [],
+        "rollback_evidence": "artifacts/evidence/zona-02-launch-01/01-local/rollback.json",
+        "data_unchanged_across_rollback": true
+      },
+      "at": "2026-09-22T23:20:51.086577+00:00"
+    },
+    {
+      "name": "sync_verified",
+      "status": "done",
+      "detail": {
+        "first_applied": 2,
+        "repeat_applied": 0,
+        "repeat_duplicates": 2,
+        "deleted": 1,
+        "field_ownership": {
+          "title_uuid": "0197ac6c-a079-718d-ab24-b9c6481c41bd",
+          "seo_survives_catalog_update": true,
+          "catalog_survives_seo_update": true,
+          "seo_cannot_write_catalog_field": "seo пытается записать чужие поля: episodes принадлежит catalog",
+          "revision": 3,
+          "conflicts": []
+        },
+        "evidence": "artifacts/evidence/zona-02-launch-01/01-local/sync.json"
+      },
+      "at": "2026-09-22T23:20:51.114698+00:00"
+    },
+    {
+      "name": "seo_verified",
+      "status": "done",
+      "detail": {
+        "seo.noindex_header_and_meta": {
+          "pages": 4
+        },
+        "seo.canonical_own_domain_only": {
+          "foreign": []
+        },
+        "seo.robots_txt_closed": {
+          "status": 200,
+          "body_head": "User-agent: *\nDisallow: /\n"
+        },
+        "seo.sitemap_matches_closed_canary": {
+          "status": 404,
+          "url_count": 0
+        },
+        "indexing_enabled": false,
+        "note": "индексация закрыта намеренно; открытие — отдельная команда владельца",
+        "evidence": "artifacts/evidence/zona-02-launch-01/01-local/acceptance-own-release.json"
+      },
+      "at": "2026-09-22T23:20:51.154736+00:00"
+    },
+    {
+      "name": "deployed",
+      "status": "blocked",
+      "detail": {
+        "reason": "BLOCKED_ACCESS: не установлены /etc/systemd/system/nova-zona-02.service, /etc/nginx/lords/zona-02.conf; установка требует root, профиль UNATTENDED_SAFE его не даёт. Команды — docs/zona-02/OWNER_COMMANDS.md"
+      },
+      "at": "2026-09-22T23:20:51.230085+00:00"
+    },
+    {
+      "name": "publicly_accepted",
+      "status": "pending",
+      "detail": {},
+      "at": null
+    }
+  ],
+  "created_at": "2026-09-22T22:26:52.117882+00:00",
+  "updated_at": "2026-09-22T23:20:51.230085+00:00"
+}

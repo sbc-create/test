@@ -346,6 +346,60 @@
       "last_update": null,
       "backup": {},
       "resources": {}
+    },
+    {
+      "site_id": "zona-02",
+      "domain": "zonafilm.cc",
+      "aliases": [
+        "www.zonafilm.cc"
+      ],
+      "status": "staged",
+      "repo": {
+        "kind": "remote",
+        "path": "var/site-repos/site-zonafilm-cc",
+        "remote": "https://github.com/sbc-create/site-zonafilm-cc"
+      },
+      "template": {
+        "template_id": "zona-general",
+        "order_id": "zona-02-launch-01",
+        "family": "zona",
+        "design_version": "1.2.0",
+        "note": "закреплён исполнением: байты релиза zona-slider-2650fad6, sha256 7ccf094a…, область ZONA_02_ONLY. Из пула не выдавался — семейства zona в пуле нет. Профиль оформления называется так же, как у zona-01, но байты разные (у соседа design_version 1.3.0); расхождение записано в knowledge/DECISIONS.md, индексация закрыта."
+      },
+      "pins": {
+        "common_core": "5863d296264867f85138bd771f1b90a86ac9c599",
+        "template": "zona-slider-2650fad6",
+        "modules": {
+          "runtime": "zona-02-1015c650d8be"
+        },
+        "schemas": {
+          "site_manifest": "1",
+          "release_manifest": "1"
+        }
+      },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id": "10238",
+        "publisher_id_ref": "secret://cdnvideohub/lords/lords-01/publisher-id"
+      },
+      "data": {
+        "database": "/srv/lords/.frontend/sites/zona-02/data/zona-02-community.json",
+        "media": "/srv/lords/.frontend/sites/zona-02/data/media"
+      },
+      "deployed": {
+        "release_digest": "sha256:9ed1bdb728e575d9475fbefd72f5147e6931b7476cd1993c9c0f8aea5a3c1039",
+        "source_commit": "98232b6f7edb3652228921ffc7994c24cf7234fb",
+        "artifact": "/home/claude/wt-zona-02-launch-01/artifacts/cells/zona-02/zona-02-98232b6f7edb.tar.gz",
+        "built_at": "2026-09-22T23:14:33.543561+00:00"
+      },
+      "content_revision": null,
+      "last_update": "2026-09-22T23:14:33.544352+00:00",
+      "backup": {},
+      "resources": {}
     }
   ]
 }

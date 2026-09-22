@@ -40,10 +40,154 @@
     "provider-adapters",
     "renderer-adapters"
   ],
+  "shelf_configuration": [
+    {
+      "shelf_id": "new-titles",
+      "title": "Новинки каталога",
+      "source": "query",
+      "requires_playback": true,
+      "limit": 18,
+      "position": 0
+    },
+    {
+      "shelf_id": "recently-added",
+      "title": "Последние добавления",
+      "source": "query",
+      "requires_playback": true,
+      "limit": 18,
+      "position": 1
+    },
+    {
+      "shelf_id": "top-rated",
+      "title": "Высокие оценки",
+      "source": "query",
+      "requires_playback": true,
+      "limit": 18,
+      "position": 2
+    }
+  ],
   "render_strategy": {
     "mode": "static",
     "release_size_budget_mb": 1600,
     "full_render_budget_minutes": 120
+  },
+  "cache_policy": {
+    "schema_version": "1.0",
+    "layers": {
+      "new_episodes": {
+        "ttl_seconds": 300,
+        "stale_while_revalidate_seconds": 120,
+        "last_known_good": true,
+        "tags": [
+          "shelf:new-episodes",
+          "events"
+        ]
+      },
+      "homepage_shelves": {
+        "ttl_seconds": 300,
+        "stale_while_revalidate_seconds": 300,
+        "last_known_good": true,
+        "tags": [
+          "shelf"
+        ]
+      },
+      "catalog": {
+        "ttl_seconds": 900,
+        "stale_while_revalidate_seconds": 600,
+        "last_known_good": true,
+        "tags": [
+          "catalog"
+        ]
+      },
+      "title_page": {
+        "ttl_seconds": 900,
+        "stale_while_revalidate_seconds": 600,
+        "last_known_good": true,
+        "tags": [
+          "title"
+        ]
+      },
+      "ratings": {
+        "ttl_seconds": 21600,
+        "stale_while_revalidate_seconds": 3600,
+        "last_known_good": true,
+        "tags": [
+          "ratings"
+        ]
+      },
+      "schedule": {
+        "ttl_seconds": 1800,
+        "stale_while_revalidate_seconds": 600,
+        "last_known_good": true,
+        "tags": [
+          "schedule"
+        ]
+      },
+      "announcements": {
+        "ttl_seconds": 1800,
+        "stale_while_revalidate_seconds": 600,
+        "last_known_good": true,
+        "tags": [
+          "announcements"
+        ]
+      },
+      "seo": {
+        "ttl_seconds": 3600,
+        "stale_while_revalidate_seconds": 1800,
+        "last_known_good": true,
+        "tags": [
+          "seo"
+        ]
+      },
+      "static_assets": {
+        "ttl_seconds": 86400,
+        "last_known_good": true,
+        "tags": [
+          "static"
+        ]
+      }
+    },
+    "invalidation": {
+      "mode": "event-driven",
+      "event_map": {
+        "EPISODE_ADDED": [
+          "title",
+          "shelf:new-episodes",
+          "catalog"
+        ],
+        "TITLE_CREATED": [
+          "shelf:new-titles",
+          "catalog"
+        ],
+        "PLAYBACK_AVAILABLE": [
+          "title",
+          "shelf:watchable"
+        ],
+        "RATING_UPDATED": [
+          "title",
+          "ratings"
+        ],
+        "SCHEDULE_UPDATED": [
+          "schedule"
+        ],
+        "ANNOUNCEMENT_UPDATED": [
+          "announcements"
+        ]
+      },
+      "dry_run_supported": true
+    },
+    "keys": {
+      "site_scoped": true,
+      "stampede_protection": "coalesce"
+    },
+    "forbidden": {
+      "cache_errors": false,
+      "empty_response_as_success": false,
+      "indefinite_html_cache": false
+    },
+    "observability": {
+      "expose_hit_miss_stale": true
+    }
   },
   "seo_profile": {
     "enabled": true,
@@ -100,7 +244,7 @@
   "monitoring_profile_ref": null,
   "backup_policy_ref": null,
   "content_profile_ref": null,
-  "registry_note": "Заведён заданием SITE_RELEASE_FULL_CYCLE 2026-09-22. Идентификатор, имя юнита и порт выданы аллокатором (automation/host/zonafilm-cc-allocate.py) по четырём реестрам, а не выбраны. Ничего не унаследовано от zona-01, кроме байтов закреплённого шаблона. owner_state и environment — staging, а не canary: перечень состояний задан схемой (draft|staging|production|retired), и «canary» в нём нет. Витрина закрыта от индексации и не авторизована в production — это ровно staging в терминах схемы; придумывать шестое состояние ради красивого слова значило бы разойтись со схемой, которая здесь главнее.",
+  "registry_note": "Заведён заданием SITE_RELEASE_FULL_CYCLE 2026-09-22. Идентификатор, имя юнита и порт выданы аллокатором (automation/host/zonafilm-cc-allocate.py) по четырём реестрам, а не выбраны. Ничего не унаследовано от zona-01, кроме байтов закреплённого шаблона. owner_state и environment — staging, а не canary: перечень состояний задан схемой (draft|staging|production|retired), и «canary» в нём нет. Витрина закрыта от индексации и не авторизована в production — это ровно staging в терминах схемы; придумывать шестое состояние ради красивого слова значило бы разойтись со схемой, которая здесь главнее. Поля cache_policy и shelf_configuration добавлены 2026-09-22: без первого профиль не читается движком (factory.site_engine.profiles требует его обязательным), второе есть у всех десяти остальных витрин, и его отсутствие было неполнотой профиля, а не решением. Значения взяты из профиля семейства zona: это эксплуатационная политика кэша и состав полок, одинаковые у всего направления, а не идентичность. Идентичность остаётся своей — домен, canonical_host, счётчик, редакционный профиль и пара издателя у zona-02 собственные и от соседа не наследуются.",
   "player": {
     "provider": "cdnvideohub",
     "credential_profile": null,

@@ -1,0 +1,33 @@
+{
+  "cells_before": 9,
+  "cells_after": 9,
+  "zona_02_records": 1,
+  "domain_unique": true,
+  "pool_free_before": 0,
+  "pool_free_after": 0,
+  "pool_unchanged": true,
+  "repo_stage": {
+    "repository": "sbc-create/site-zonafilm-cc",
+    "created": true,
+    "reused": false,
+    "url": "https://github.com/sbc-create/site-zonafilm-cc",
+    "private": true
+  },
+  "onboarding_rc": 1,
+  "repeat_create_repo_step": {
+    "repository": "sbc-create/site-zonafilm-cc",
+    "created": false,
+    "reused": true,
+    "url": "https://github.com/sbc-create/site-zonafilm-cc",
+    "private": true
+  },
+  "repos_named_zonafilm": [
+    {
+      "isPrivate": true,
+      "name": "site-zonafilm-cc"
+    }
+  ],
+  "repo_name_stable_across_calls": [
+    "site-zonafilm-cc"
+  ]
+}

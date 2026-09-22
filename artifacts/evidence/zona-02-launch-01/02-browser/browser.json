@@ -1,0 +1,396 @@
+{
+  "origin": "http://zonafilm.cc:9123",
+  "host": "zonafilm.cc",
+  "widths": [
+    390,
+    1440
+  ],
+  "routes": [
+    "/",
+    "/catalog/",
+    "/collection/recently_added/",
+    "/search/?q=матрица"
+  ],
+  "pages": {
+    "/": {
+      "390": {
+        "width": 390,
+        "status": 200,
+        "metrics": {
+          "lcp": 2880,
+          "cls": 0,
+          "longtasks": 1,
+          "ttfb": 2612.699999999255,
+          "domContentLoaded": 2642.699999999255,
+          "transferSize": 58434
+        },
+        "inspect": {
+          "overflow_px": 0,
+          "wide_elements": [],
+          "images": 13,
+          "broken_images": [],
+          "links": 56,
+          "small_targets": 2,
+          "controls_without_label": 0,
+          "h1": 1,
+          "title": "Zona — кинопортал",
+          "robots": "noindex, nofollow",
+          "canonical": "https://zonafilm.cc/"
+        },
+        "keyboard": {
+          "focused": "A.skip",
+          "outline": "solid 3px",
+          "boxShadow": "none",
+          "visible": true,
+          "inViewport": true
+        },
+        "interaction_ms": 139.3,
+        "screenshot": "root-390.png",
+        "console_errors": [],
+        "failed_requests": [],
+        "response_codes": {
+          "200": 13
+        }
+      },
+      "1440": {
+        "width": 1440,
+        "status": 200,
+        "metrics": {
+          "lcp": 1740,
+          "cls": 0,
+          "longtasks": 1,
+          "ttfb": 1492.5,
+          "domContentLoaded": 1518.7000000011176,
+          "transferSize": 58434
+        },
+        "inspect": {
+          "overflow_px": 0,
+          "wide_elements": [],
+          "images": 13,
+          "broken_images": [],
+          "links": 56,
+          "small_targets": 7,
+          "controls_without_label": 0,
+          "h1": 1,
+          "title": "Zona — кинопортал",
+          "robots": "noindex, nofollow",
+          "canonical": "https://zonafilm.cc/"
+        },
+        "keyboard": {
+          "focused": "A.skip",
+          "outline": "solid 3px",
+          "boxShadow": "none",
+          "visible": true,
+          "inViewport": true
+        },
+        "interaction_ms": null,
+        "interaction_error": "TimeoutError",
+        "screenshot": "root-1440.png",
+        "console_errors": [],
+        "failed_requests": [],
+        "response_codes": {
+          "200": 13
+        }
+      }
+    },
+    "/catalog/": {
+      "390": {
+        "width": 390,
+        "status": 200,
+        "metrics": {
+          "lcp": 792,
+          "cls": 0,
+          "longtasks": 0,
+          "ttfb": 435.59999999962747,
+          "domContentLoaded": 479.5,
+          "transferSize": 101770
+        },
+        "inspect": {
+          "overflow_px": 0,
+          "wide_elements": [],
+          "images": 28,
+          "broken_images": [],
+          "links": 52,
+          "small_targets": 0,
+          "controls_without_label": 0,
+          "h1": 1,
+          "title": "Каталог — Zona",
+          "robots": "noindex, nofollow",
+          "canonical": "https://zonafilm.cc/catalog/?sort=newest"
+        },
+        "keyboard": {
+          "focused": "A.skip",
+          "outline": "solid 3px",
+          "boxShadow": "none",
+          "visible": true,
+          "inViewport": true
+        },
+        "interaction_ms": 152.6,
+        "screenshot": "catalog-390.png",
+        "console_errors": [],
+        "failed_requests": [],
+        "response_codes": {
+          "200": 21
+        }
+      },
+      "1440": {
+        "width": 1440,
+        "status": 200,
+        "metrics": {
+          "lcp": 772,
+          "cls": 0,
+          "longtasks": 1,
+          "ttfb": 471,
+          "domContentLoaded": 503.59999999962747,
+          "transferSize": 101770
+        },
+        "inspect": {
+          "overflow_px": 0,
+          "wide_elements": [],
+          "images": 28,
+          "broken_images": [],
+          "links": 52,
+          "small_targets": 0,
+          "controls_without_label": 0,
+          "h1": 1,
+          "title": "Каталог — Zona",
+          "robots": "noindex, nofollow",
+          "canonical": "https://zonafilm.cc/catalog/?sort=newest"
+        },
+        "keyboard": {
+          "focused": "A.skip",
+          "outline": "solid 3px",
+          "boxShadow": "none",
+          "visible": true,
+          "inViewport": true
+        },
+        "interaction_ms": null,
+        "interaction_error": "TimeoutError",
+        "screenshot": "catalog-1440.png",
+        "console_errors": [],
+        "failed_requests": [],
+        "response_codes": {
+          "200": 29
+        }
+      }
+    },
+    "/collection/recently_added/": {
+      "390": {
+        "width": 390,
+        "status": 200,
+        "metrics": {
+          "lcp": 408,
+          "cls": 0,
+          "longtasks": 0,
+          "ttfb": 59.100000001490116,
+          "domContentLoaded": 88.10000000149012,
+          "transferSize": 93517
+        },
+        "inspect": {
+          "overflow_px": 0,
+          "wide_elements": [],
+          "images": 60,
+          "broken_images": [],
+          "links": 82,
+          "small_targets": 2,
+          "controls_without_label": 0,
+          "h1": 1,
+          "title": "Недавно добавленные — Zona",
+          "robots": "noindex, nofollow",
+          "canonical": "https://zonafilm.cc/collection/recently_added/"
+        },
+        "keyboard": {
+          "focused": "A.skip",
+          "outline": "solid 3px",
+          "boxShadow": "none",
+          "visible": true,
+          "inViewport": true
+        },
+        "interaction_ms": 134.0,
+        "screenshot": "collection-recently-added-390.png",
+        "console_errors": [],
+        "failed_requests": [],
+        "response_codes": {
+          "200": 21
+        }
+      },
+      "1440": {
+        "width": 1440,
+        "status": 200,
+        "metrics": {
+          "lcp": 364,
+          "cls": 0,
+          "longtasks": 0,
+          "ttfb": 52.40000000037253,
+          "domContentLoaded": 76.90000000037253,
+          "transferSize": 93517
+        },
+        "inspect": {
+          "overflow_px": 0,
+          "wide_elements": [],
+          "images": 60,
+          "broken_images": [],
+          "links": 82,
+          "small_targets": 2,
+          "controls_without_label": 0,
+          "h1": 1,
+          "title": "Недавно добавленные — Zona",
+          "robots": "noindex, nofollow",
+          "canonical": "https://zonafilm.cc/collection/recently_added/"
+        },
+        "keyboard": {
+          "focused": "A.skip",
+          "outline": "solid 3px",
+          "boxShadow": "none",
+          "visible": true,
+          "inViewport": true
+        },
+        "interaction_ms": null,
+        "interaction_error": "TimeoutError",
+        "screenshot": "collection-recently-added-1440.png",
+        "console_errors": [],
+        "failed_requests": [],
+        "response_codes": {
+          "200": 61
+        }
+      }
+    },
+    "/search/?q=матрица": {
+      "390": {
+        "width": 390,
+        "status": 200,
+        "metrics": {
+          "lcp": 3352,
+          "cls": 0,
+          "longtasks": 0,
+          "ttfb": 3074.300000000745,
+          "domContentLoaded": 3092.5999999996275,
+          "transferSize": 54477
+        },
+        "inspect": {
+          "overflow_px": 0,
+          "wide_elements": [],
+          "images": 9,
+          "broken_images": [],
+          "links": 26,
+          "small_targets": 0,
+          "controls_without_label": 0,
+          "h1": 1,
+          "title": "Поиск — Zona",
+          "robots": "noindex, nofollow",
+          "canonical": "https://zonafilm.cc/search/?q=%D0%BC%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0"
+        },
+        "keyboard": {
+          "focused": "A.skip",
+          "outline": "solid 3px",
+          "boxShadow": "none",
+          "visible": true,
+          "inViewport": true
+        },
+        "interaction_ms": 130.2,
+        "screenshot": "search-q-390.png",
+        "console_errors": [],
+        "failed_requests": [],
+        "response_codes": {
+          "200": 10
+        }
+      },
+      "1440": {
+        "width": 1440,
+        "status": 200,
+        "metrics": {
+          "lcp": 348,
+          "cls": 0,
+          "longtasks": 1,
+          "ttfb": 7.699999999254942,
+          "domContentLoaded": 24.90000000037253,
+          "transferSize": 54477
+        },
+        "inspect": {
+          "overflow_px": 0,
+          "wide_elements": [],
+          "images": 9,
+          "broken_images": [
+            "https://poster.cdnvideohub.com/019156d3-9064-7a3b-8613-329b18277752.webp",
+            "https://poster.cdnvideohub.com/01985062-cdd1-71d5-afb2-6316692f6906.webp",
+            "https://poster.cdnvideohub.com/019156d3-900f-7e4a-8865-f665afa0bc92.webp",
+            "https://poster.cdnvideohub.com/019156d3-903a-77f7-89f8-921da7ff6158.webp",
+            "https://poster.cdnvideohub.com/01915258-8fd3-771f-8824-39397cd276ec.webp",
+            "https://poster.cdnvideohub.com/0196b192-e235-7671-a7d1-af0b2cd056e9.webp"
+          ],
+          "links": 26,
+          "small_targets": 0,
+          "controls_without_label": 0,
+          "h1": 1,
+          "title": "Поиск — Zona",
+          "robots": "noindex, nofollow",
+          "canonical": "https://zonafilm.cc/search/?q=%D0%BC%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0"
+        },
+        "keyboard": {
+          "focused": "A.skip",
+          "outline": "solid 3px",
+          "boxShadow": "none",
+          "visible": true,
+          "inViewport": true
+        },
+        "interaction_ms": null,
+        "interaction_error": "TimeoutError",
+        "screenshot": "search-q-1440.png",
+        "console_errors": [
+          "error: Failed to load resource: net::ERR_NETWORK_CHANGED",
+          "error: Failed to load resource: net::ERR_NETWORK_CHANGED",
+          "error: Failed to load resource: net::ERR_NETWORK_CHANGED",
+          "error: Failed to load resource: net::ERR_NETWORK_CHANGED",
+          "error: Failed to load resource: net::ERR_NETWORK_CHANGED",
+          "error: Failed to load resource: net::ERR_NETWORK_CHANGED"
+        ],
+        "failed_requests": [
+          {
+            "url": "https://poster.cdnvideohub.com/019156d3-9064-7a3b-8613-329b18277752.webp",
+            "failure": "net::ERR_NETWORK_CHANGED"
+          },
+          {
+            "url": "https://poster.cdnvideohub.com/0196b192-e235-7671-a7d1-af0b2cd056e9.webp",
+            "failure": "net::ERR_NETWORK_CHANGED"
+          },
+          {
+            "url": "https://poster.cdnvideohub.com/019156d3-903a-77f7-89f8-921da7ff6158.webp",
+            "failure": "net::ERR_NETWORK_CHANGED"
+          },
+          {
+            "url": "https://poster.cdnvideohub.com/01915258-8fd3-771f-8824-39397cd276ec.webp",
+            "failure": "net::ERR_NETWORK_CHANGED"
+          },
+          {
+            "url": "https://poster.cdnvideohub.com/01985062-cdd1-71d5-afb2-6316692f6906.webp",
+            "failure": "net::ERR_NETWORK_CHANGED"
+          },
+          {
+            "url": "https://poster.cdnvideohub.com/019156d3-900f-7e4a-8865-f665afa0bc92.webp",
+            "failure": "net::ERR_NETWORK_CHANGED"
+          }
+        ],
+        "response_codes": {
+          "200": 4
+        }
+      }
+    }
+  },
+  "started_at": "2026-09-22T23:02:53Z",
+  "host_resolver_rules": "MAP zonafilm.cc 127.0.0.1, MAP www.zonafilm.cc 127.0.0.1",
+  "summary": {
+    "pages_measured": 8,
+    "console_errors": 6,
+    "failed_requests": 6,
+    "broken_images": 6,
+    "horizontal_overflow_pages": [],
+    "http_5xx": 0,
+    "http_4xx": 0,
+    "lcp_p75_ms": 2880,
+    "cls_max": 0,
+    "keyboard_focus_visible_pages": 8,
+    "controls_without_label": 0,
+    "errors": []
+  },
+  "finished_at": "2026-09-22T23:03:53Z"
+}
