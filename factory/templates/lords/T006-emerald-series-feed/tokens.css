@@ -1,6 +1,6 @@
 /* T006 — изумруд на угле, минимальные скругления: лента должна читаться как поток */
 :root{
   --ink:#e4efe7; --dim:#8fa895; --bg:#080c0a; --card:#101613; --line:#1c2a22;
-  --brand:#128A55; --brand-text:#8ED6B0; --brand-ink:#ffffff; --soft:#0b110e;
+  --brand:#118652; --brand-text:#8ED6B0; --brand-ink:#ffffff; --soft:#0b110e;
   --radius:6px; --gap:10px; --pad:14px; --title-size:14px; --title-lines:2;
 }

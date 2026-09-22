@@ -176,8 +176,14 @@ a:focus-visible,input:focus-visible{outline:2px solid var(--brand);outline-offse
   font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}
 .k__rs{color:var(--dim);font-size:10px;letter-spacing:.06em;text-transform:uppercase}
 .k__rv{font-weight:800;color:var(--brand-text)}
+/* Значок оценки лежит на затемнении поверх постера, а не на фоне темы.
+   Поэтому его цвета заданы от затемнения и не зависят от палитры пакета:
+   светлые темы отдавали сюда приглушённый серый, и на чёрной подложке он
+   давал 1.32 при пороге 4.5. Значения ниже проверены статическим гейтом. */
 .k__badge{position:absolute;left:8px;top:8px;padding:3px 8px;border-radius:999px;
-  background:rgba(0,0,0,.72);backdrop-filter:none}
+  background:rgba(6,10,8,.86);color:#EAF4EE}
+.k__badge .k__rs{color:#C6DCCF}
+.k__badge .k__rv{color:#9FE7C0}
 .k__g{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
 .k__gi{font-size:11px;color:var(--dim);border:1px solid var(--line);
   border-radius:999px;padding:2px 8px;white-space:nowrap}
@@ -212,11 +218,17 @@ a:focus-visible,input:focus-visible{outline:2px solid var(--brand);outline-offse
 .ph__d{margin:8px 0 0;color:var(--dim);max-width:var(--measure)}
 
 /* --- хлебные крошки --------------------------------------------------------- */
-.bc{margin:14px 0 0}
-.bc__l{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none;
-  font-size:13px;color:var(--dim)}
+/* Ссылка крошки — такая же цель нажатия, как и любая другая: 56×15 пальцем
+   не берётся, и измерение это показало. Высоту держит сама ссылка, поэтому
+   строка крошек не разъезжается. */
+.bc{margin:8px 0 0}
+.bc__l{display:flex;flex-wrap:wrap;align-items:center;gap:0 6px;margin:0;padding:0;
+  list-style:none;font-size:13px;color:var(--dim)}
+.bc__i{display:inline-flex;align-items:center}
 .bc__i+.bc__i::before{content:"/";margin-right:6px;color:var(--line)}
-.bc__a{color:var(--dim)}
+.bc__i>span{display:inline-flex;align-items:center;min-height:44px}
+.bc__a{display:inline-flex;align-items:center;justify-content:center;
+  min-height:44px;min-width:44px;padding:0 4px;color:var(--dim)}
 .bc__a:hover,.bc__a:focus-visible{color:var(--brand-text)}
 
 /* --- полоса ----------------------------------------------------------------
@@ -324,6 +336,12 @@ a:focus-visible,input:focus-visible{outline:2px solid var(--brand);outline-offse
 .ttl--data .ttl__body{display:flex;flex-direction:column}
 .ttl--data .ttl__t,.ttl--data .ttl__sub,.ttl--data .ttl__r,.ttl--data .ttl__cta{order:-2}
 
+/* Лестница для строки-карточки: колонка никогда не уже 210 px, иначе
+   обязательная дата обрезается. Это не украшение, а условие годности. */
+.g--rowsafe{grid-template-columns:minmax(0,1fr)}
+@media(min-width:760px){.g--rowsafe{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1280px){.g--rowsafe{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
 /* Запасная лестница каталога — на случай пакета без собственной плотной сетки. */
 .g--cat{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(min-width:768px){.g--cat{grid-template-columns:repeat(3,minmax(0,1fr))}}
@@ -377,3 +395,12 @@ a:focus-visible,input:focus-visible{outline:2px solid var(--brand);outline-offse
 .split__img{width:100%;height:100%;object-fit:cover;object-position:center top}
 .split__cap{display:block;padding:12px 14px}
 .split__list{display:grid;gap:10px;align-content:start;min-width:0}
+/* Развороты различаются стороной и долей ведущей записи: это разная
+   композиция, а не зеркальная копия одной. */
+@media(min-width:900px){
+  .split--flip .split__in{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
+  .split--flip .split__lead{order:2}
+  .split--wide .split__in{grid-template-columns:minmax(0,9fr) minmax(0,5fr)}
+}
+.split--wide .split__media{max-height:560px}
+.split--flip .split__media{max-height:320px}

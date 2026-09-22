@@ -36,6 +36,11 @@
     var вперёд = document.createElement("button");
     назад.type = вперёд.type = "button";
     назад.className = вперёд.className = "rail__b";
+    // Метка говорит проверке, что за кнопкой стоит поведение. Без неё кнопка
+    // неотличима от нарисованной, и проверка «мёртвых органов управления»
+    // обязана считать её мёртвой — она права по своей разметке.
+    назад.setAttribute("data-lx-scroll", "prev");
+    вперёд.setAttribute("data-lx-scroll", "next");
     назад.setAttribute("aria-label", "Прокрутить назад");
     вперёд.setAttribute("aria-label", "Прокрутить вперёд");
     назад.innerHTML = '<span aria-hidden="true">‹</span>';

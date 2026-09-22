@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+"""Сборка материалов приёмки: отпечатки, снимки, каталог.
+
+Снимки для каталога кладутся в доказательства в JPEG. Причина не в экономии
+ради экономии: шестьсот PNG — это около семидесяти мегабайт в истории на
+каждый прогон, и через три прогона репозиторий станет неподъёмным. Измерения
+и сравнение отпечатков идут по PNG в рабочем каталоге, а в доказательства едет
+то, на что смотрит человек.
+
+    lords-review-build --shortlist T004,T010,...
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import subprocess
+import sys
+
+КОРЕНЬ = pathlib.Path(__file__).resolve().parents[1]
+ЯДРО = КОРЕНЬ / "factory" / "templates" / "lords" / "shared"
+ДОКАЗАТЕЛЬСТВА = КОРЕНЬ / "artifacts" / "evidence" / "lords-50-template-factory-01"
+
+
+def перенести_снимки(снимки: pathlib.Path, куда: pathlib.Path, качество: int) -> dict:
+    from PIL import Image
+
+    перенесено, байт = 0, 0
+    for каталог in sorted(снимки.iterdir()):
+        if not каталог.is_dir():
+            continue
+        цель = куда / каталог.name / "screenshots"
+        цель.mkdir(parents=True, exist_ok=True)
+        живые = set()
+        for кадр in sorted(каталог.glob("*.png")):
+            файл = цель / f"{кадр.stem}.jpg"
+            живые.add(файл.name)
+            with Image.open(кадр) as картинка:
+                картинка.convert("RGB").save(файл, "JPEG", quality=качество,
+                                             optimize=True, progressive=True)
+            перенесено += 1
+            байт += файл.stat().st_size
+        # Снимки прошлого прогона того же шаблона удаляются: два набора рядом
+        # означают, что принимают по одному, а смотрят на другой.
+        for старый in цель.iterdir():
+            if старый.name not in живые:
+                старый.unlink()
+    return {"frames": перенесено, "megabytes": round(байт / 1048576, 1)}
+
+
+def главное() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--preview", default="var/preview")
+    parser.add_argument("--scores", default="var/scores")
+    parser.add_argument("--shots", default="var/shots")
+    parser.add_argument("--shortlist", default="")
+    parser.add_argument("--quality", type=int, default=80)
+    args = parser.parse_args()
+
+    отпечатки_файл = КОРЕНЬ / "var" / "review" / "FINGERPRINTS.json"
+    р = subprocess.run(
+        [sys.executable, str(ЯДРО / "fingerprints.py"), "--preview", args.preview,
+         "--shots", args.shots, "--record", str(отпечатки_файл)],
+        capture_output=True, text=True, cwd=str(КОРЕНЬ))
+    if not отпечатки_файл.is_file():
+        print(р.stdout + р.stderr, file=sys.stderr)
+        return 2
+    отпечатки = json.loads(отпечатки_файл.read_text(encoding="utf-8"))
+
+    перенос = перенести_снимки(pathlib.Path(args.shots),
+                               ДОКАЗАТЕЛЬСТВА / "templates", args.quality)
+
+    каталог = subprocess.run(
+        [sys.executable, str(ЯДРО / "review_catalogue.py"),
+         "--scores", args.scores, "--shots", args.shots,
+         "--fingerprints", str(отпечатки_файл), "--shortlist", args.shortlist],
+        capture_output=True, text=True, cwd=str(КОРЕНЬ))
+    if каталог.returncode != 0:
+        print(каталог.stdout + каталог.stderr, file=sys.stderr)
+        return 2
+
+    print(json.dumps({
+        "fingerprints": {к: отпечатки[к] for к in (
+            "templates", "with_screenshot", "DOM_FINGERPRINT_DUPLICATES",
+            "LAYOUT_FINGERPRINT_DUPLICATES", "SCREENSHOT_NEAR_DUPLICATES",
+            "CATALOG_NEAR_DUPLICATES", "screenshot_hamming_min",
+            "screenshot_hamming_median") if к in отпечатки},
+        "screenshots": перенос,
+        "catalogue": json.loads(каталог.stdout),
+    }, ensure_ascii=False, indent=2))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(главное())

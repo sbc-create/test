@@ -21,6 +21,9 @@
       "artifacts/evidence/lords-50-template-factory-01/",
       "tests/lords_factory/",
       "bin/lords-template-preview",
+      "bin/lords-factory-run",
+      "bin/lords-review-build",
+      "bin/lords-diversify",
       "var/",
       ".lords-tenant"
     ],
@@ -45,7 +48,8 @@
         "factory/templates/lords/shared/build_fixture.py",
         "tests/lords_factory/test_tenant_guard.py"
       ]
-    }
+    },
+    "paths_note": "Инструменты фабрики перечислены поимённо. Разрешать bin/ целиком нельзя: там лежат инструменты соседних задач, и контракт перестал бы быть границей."
   },
   "denied": {
     "reason": "Перечень намеренно machine-readable и не повторяется в обычных отчётах: для контроля достаточно итоговых чисел.",

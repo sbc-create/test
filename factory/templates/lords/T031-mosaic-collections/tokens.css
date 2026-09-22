@@ -1,6 +1,6 @@
 /* T031 — лесная зелень, крупные пролёты */
 :root{
   --ink:#e8f0e9; --dim:#93a998; --bg:#071009; --card:#0f1811; --line:#1e2c22;
-  --brand:#128A55; --brand-text:#8ED6B0; --brand-ink:#ffffff; --soft:#0a130c;
+  --brand:#118652; --brand-text:#8ED6B0; --brand-ink:#ffffff; --soft:#0a130c;
   --radius:14px; --gap:16px; --pad:16px; --title-size:14px; --title-lines:2;
 }

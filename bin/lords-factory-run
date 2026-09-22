@@ -1,0 +1,150 @@
+#!/usr/bin/env python3
+"""Полный прогон фабрики: отрисовка маршрутов, измерения, действия, снимки.
+
+Тяжёлый прогон берёт общий замок сборки. Замок не отбирается и не удаляется:
+если его держит другой процесс, прогон честно останавливается и говорит, кто
+владелец, — перехват чужого замка стоит дороже любого ожидания.
+
+    lords-factory-run --scores var/scores --shots var/shots
+    lords-factory-run --only T004,T010 --full      # shortlist на шести ширинах
+"""
+
+from __future__ import annotations
+
+import argparse
+import concurrent.futures as futures
+import fcntl
+import json
+import os
+import pathlib
+import subprocess
+import sys
+import time
+
+КОРЕНЬ = pathlib.Path(__file__).resolve().parents[1]
+ПАКЕТЫ = КОРЕНЬ / "factory" / "templates" / "lords"
+ЗАМОК = pathlib.Path("/home/claude/run-locks/site-factory-heavy-build.lock")
+
+
+def пакеты(только: str | None) -> list[pathlib.Path]:
+    все = sorted(п for п in ПАКЕТЫ.iterdir()
+                 if п.is_dir() and (п / "template.json").is_file())
+    if не_все := (только or "").strip():
+        нужные = {и.strip() for и in не_все.split(",")}
+        все = [п for п in все if п.name[:4] in нужные]
+    return все
+
+
+def отрисовать(пакет: pathlib.Path, превью: pathlib.Path) -> tuple[str, int, str]:
+    р = subprocess.run(
+        [sys.executable, str(КОРЕНЬ / "bin" / "lords-template-preview"),
+         "--package", str(пакет), "--out", str(превью)],
+        capture_output=True, text=True, cwd=str(КОРЕНЬ))
+    return пакет.name, р.returncode, (р.stderr or "").strip()[-200:]
+
+
+def измерить(пакет: pathlib.Path, превью: pathlib.Path, оценки: pathlib.Path,
+             снимки: pathlib.Path | None, полная: bool) -> dict:
+    tid = пакет.name[:4]
+    запись = оценки / f"{tid}.json"
+    команда = [sys.executable, str(КОРЕНЬ / "factory" / "templates" / "lords"
+                                   / "shared" / "score.py"),
+               "--package", str(пакет), "--preview", str(превью / пакет.name),
+               "--record", str(запись)]
+    if снимки:
+        команда += ["--screenshots", str(снимки / tid)]
+    if полная:
+        команда.append("--full")
+    начало = time.time()
+    р = subprocess.run(команда, capture_output=True, text=True, cwd=str(КОРЕНЬ))
+    итог = {"template_id": tid, "returncode": р.returncode,
+            "seconds": round(time.time() - начало, 1)}
+    if запись.is_file():
+        отчёт = json.loads(запись.read_text(encoding="utf-8"))
+        итог.update({"score": отчёт["TOTAL_SCORE"], "pass": отчёт["PASS"],
+                     "hard_fails": list(отчёт["hard_fails"]),
+                     "interaction_failures":
+                         отчёт["measured"]["INTERACTION_FAILURES"],
+                     "routes": отчёт["measured"]["ROUTES_MEASURED"]})
+    else:
+        итог["stderr"] = (р.stderr or "")[-300:]
+    return итог
+
+
+def главное() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--preview", default="var/preview")
+    parser.add_argument("--scores", default="var/scores")
+    parser.add_argument("--shots", default="var/shots")
+    parser.add_argument("--only")
+    parser.add_argument("--full", action="store_true")
+    parser.add_argument("--workers", type=int, default=3)
+    parser.add_argument("--record", help="сводка прогона")
+    args = parser.parse_args()
+
+    превью = pathlib.Path(args.preview)
+    оценки = pathlib.Path(args.scores); оценки.mkdir(parents=True, exist_ok=True)
+    снимки = pathlib.Path(args.shots) if args.shots else None
+    список = пакеты(args.only)
+    if not список:
+        print("нечего измерять", file=sys.stderr)
+        return 2
+
+    ЗАМОК.parent.mkdir(parents=True, exist_ok=True)
+    файл = os.open(ЗАМОК, os.O_RDWR | os.O_CREAT)
+    try:
+        try:
+            fcntl.flock(файл, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError:
+            print(f"общий замок сборки занят: {ЗАМОК}. Прогон не начат — "
+                  f"чужой замок не отбирается.", file=sys.stderr)
+            return 3
+        os.write(файл, f"lords-factory-run pid={os.getpid()}\n".encode())
+
+        начало = time.time()
+        for пакет in список:
+            имя, код, ошибка = отрисовать(пакет, превью)
+            if код != 0:
+                print(f"ОТКАЗ отрисовки {имя}: {ошибка}", file=sys.stderr)
+                return 2
+        отрисовано = round(time.time() - начало, 1)
+
+        итоги = []
+        with futures.ThreadPoolExecutor(max_workers=args.workers) as пул:
+            задачи = [пул.submit(измерить, п, превью, оценки, снимки, args.full)
+                      for п in список]
+            for задача in futures.as_completed(задачи):
+                итог = задача.result()
+                итоги.append(итог)
+                метка = "ok " if итог.get("pass") else "ПРОВАЛ"
+                print(f'{метка} {итог["template_id"]} балл={итог.get("score")} '
+                      f'маршрутов={итог.get("routes")} '
+                      f'действий-провалов={итог.get("interaction_failures")} '
+                      f'{итог["seconds"]}с {итог.get("hard_fails") or ""}',
+                      flush=True)
+
+        итоги.sort(key=lambda и: и["template_id"])
+        сводка = {
+            "packages": len(итоги),
+            "passed": sum(1 for и in итоги if и.get("pass")),
+            "failed": [и["template_id"] for и in итоги if not и.get("pass")],
+            "interaction_failures": sum(и.get("interaction_failures", 0) for и in итоги),
+            "render_seconds": отрисовано,
+            "total_seconds": round(time.time() - начало, 1),
+            "full_matrix": bool(args.full),
+            "results": итоги,
+        }
+        if args.record:
+            pathlib.Path(args.record).parent.mkdir(parents=True, exist_ok=True)
+            pathlib.Path(args.record).write_text(
+                json.dumps(сводка, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(json.dumps({k: v for k, v in сводка.items() if k != "results"},
+                         ensure_ascii=False, indent=2))
+        return 0 if not сводка["failed"] else 2
+    finally:
+        fcntl.flock(файл, fcntl.LOCK_UN)
+        os.close(файл)
+
+
+if __name__ == "__main__":
+    raise SystemExit(главное())

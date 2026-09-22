@@ -128,21 +128,55 @@ def расстояние(a: str, b: str) -> int:
     return bin(int(a, 16) ^ int(b, 16)).count("1")
 
 
+#: Маршруты, по которым считается сходство. Одной главной мало: два шаблона
+#: могут открываться по-разному и оказаться неотличимыми в каталоге, где
+#: человек проводит больше времени.
+СРАВНИВАЕМЫЕ = ("home", "catalog", "title-series")
+
+
 def собрать(превью: pathlib.Path, снимки: pathlib.Path) -> dict:
     записи = {}
     for каталог in sorted(превью.iterdir()):
-        страница = каталог / "index.html"
+        страница = каталог / "home.html"
+        if not страница.is_file():
+            страница = каталог / "index.html"
         if not страница.is_file():
             continue
         tid = каталог.name[:4]
         html = страница.read_text(encoding="utf-8")
-        кандидаты = sorted((снимки / tid).glob("*-1440.png")) if (снимки / tid).is_dir() else []
+        каталожная = каталог / "catalog.html"
+        снимки_маршрутов = {}
+        for маршрут in СРАВНИВАЕМЫЕ:
+            файл = снимки / tid / f"{маршрут}-1440.png"
+            if файл.is_file():
+                снимки_маршрутов[маршрут] = снимок_отпечаток(файл)
         записи[tid] = {
             "dom": dom_отпечаток(html),
+            "dom_catalog": (dom_отпечаток(каталожная.read_text(encoding="utf-8"))
+                            if каталожная.is_file() else None),
             "layout": раскладка_отпечаток(html),
-            "screenshot": снимок_отпечаток(кандидаты[0]) if кандидаты else None,
+            "screenshot": снимки_маршрутов.get("home"),
+            "routes": снимки_маршрутов,
         }
     return записи
+
+
+def ближайшие(записи: dict) -> dict:
+    """Ближайший визуальный сосед каждого шаблона и расстояние до него.
+
+    Владельцу это нужнее среднего по пулу: «на что это больше всего похоже» —
+    первый вопрос при отборе, и ответ на него должен быть измеренным.
+    """
+    итог = {}
+    for a, x in записи.items():
+        если_есть = [(расстояние(x["screenshot"], y["screenshot"]), b)
+                     for b, y in записи.items()
+                     if b != a and x["screenshot"] and y["screenshot"]]
+        if не_пусто := sorted(если_есть):
+            д, сосед = не_пусто[0]
+            итог[a] = {"neighbour": сосед, "hamming": д,
+                       "mean": round(sum(р for р, _ in не_пусто) / len(не_пусто), 1)}
+    return итог
 
 
 def главное() -> int:
@@ -164,6 +198,16 @@ def главное() -> int:
             if d <= ПОРОГ_СНИМКА:
                 близкие.append({"pair": [a, b], "hamming": d})
 
+    # Пара считается визуально близкой, только если она близка И на главной,
+    # И в каталоге: шаблоны с одинаковым входом, но разным каталогом — это
+    # разные шаблоны, и объявлять их дублями нечестно.
+    каталожные = []
+    for (a, x), (b, y) in itertools.combinations(записи.items(), 2):
+        ка, кб = x["routes"].get("catalog"), y["routes"].get("catalog")
+        if ка and кб and расстояние(ка, кб) <= ПОРОГ_СНИМКА:
+            каталожные.append({"pair": [a, b], "hamming": расстояние(ка, кб)})
+    близкие = [п for п in близкие
+               if any(к["pair"] == п["pair"] for к in каталожные)] if каталожные else []
     расстояния = [расстояние(x["screenshot"], y["screenshot"])
                   for (a, x), (b, y) in itertools.combinations(записи.items(), 2)
                   if x["screenshot"] and y["screenshot"]]
@@ -179,6 +223,9 @@ def главное() -> int:
         "screenshot_hamming_min": min(расстояния) if расстояния else None,
         "screenshot_hamming_median": sorted(расстояния)[len(расстояния) // 2] if расстояния else None,
         "threshold": ПОРОГ_СНИМКА,
+        "CATALOG_NEAR_DUPLICATES": len(каталожные),
+        "catalog_near_pairs": каталожные,
+        "nearest": ближайшие(записи),
         "fingerprints": записи,
         "PASS": not dom_дубли and not layout_дубли and not близкие,
     }

@@ -1,6 +1,6 @@
 /* T026 — тёмная зелень с мятными номерами */
 :root{
   --ink:#e7efe9; --dim:#91a897; --bg:#070d0a; --card:#0e1512; --line:#1c2822;
-  --brand:#128A55; --brand-text:#8ED6B0; --brand-ink:#ffffff; --soft:#0a100d;
+  --brand:#118652; --brand-text:#8ED6B0; --brand-ink:#ffffff; --soft:#0a100d;
   --radius:6px; --gap:12px; --pad:16px; --title-size:14px; --title-lines:2;
 }

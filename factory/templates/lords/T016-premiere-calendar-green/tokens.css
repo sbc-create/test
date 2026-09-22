@@ -1,6 +1,6 @@
 /* T016 — календарная зелень, средние скругления, ровный шаг */
 :root{
   --ink:#e6f0e8; --dim:#90a896; --bg:#071009; --card:#0e1811; --line:#1c2c21;
-  --brand:#128A55; --brand-text:#8ED6B0; --brand-ink:#ffffff; --soft:#0a140d;
+  --brand:#118652; --brand-text:#8ED6B0; --brand-ink:#ffffff; --soft:#0a140d;
   --radius:8px; --gap:14px; --pad:16px; --title-size:14px; --title-lines:2;
 }
