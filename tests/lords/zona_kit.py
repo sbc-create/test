@@ -78,6 +78,15 @@ def _деталь(**поля):
     return основа
 
 
+#: Постоянный идентификатор записи. В боевых данных zona-01 у каждой
+#: подробности есть UUID (`details[<slug>]["id"]`), и комментарии ключуются
+#: именно на него. Фикстура без этого поля проверяла бы сама себя: точка
+#: подключения не смонтировалась бы вовсе, а тест назвал бы это нормой.
+def _постоянный_id(slug: str) -> str:
+    import uuid
+    return str(uuid.uuid5(uuid.NAMESPACE_URL, f"zona-01/{slug}"))
+
+
 ПОДРОБНОСТИ = {
     "kadr-null-date": _деталь(genres=["драма"], countries=["США"], description="Без даты."),
     "svezhiy": _деталь(genres=["боевик"], countries=["Россия"], description="Свежий.",
@@ -115,6 +124,11 @@ def _деталь(**поля):
                                    description="Ещё не вышло."),
 }
 
+# Идентификатор проставляется всем подробностям разом: в боевых данных он есть
+# у каждой записи, и выборочная фикстура скрыла бы регрессию на остальных.
+for _слаг, _деталь_записи in ПОДРОБНОСТИ.items():
+    _деталь_записи.setdefault("id", _постоянный_id(_слаг))
+
 
 @dataclass
 class Ответ:
@@ -141,7 +155,8 @@ class Ответ:
 def поднять(tmp_path, *, design: str = ЖИВАЯ_ВЕРСИЯ_ZONA, family: str = "zona",
             записи=None, подробности=None, site_name: str = "Zona",
             имя_модуля: str | None = None, clock: str = ЧАС,
-            weekly=НЕДЕЛЬНЫЙ_СНИМОК, profile: str | None = None):
+            weekly=НЕДЕЛЬНЫЙ_СНИМОК, profile: str | None = None,
+            site: str | None = None):
     """Импортировать рантайм с собственными данными и манифестом."""
     записи = ЗАПИСИ if записи is None else записи
     подробности = ПОДРОБНОСТИ if подробности is None else подробности
@@ -181,6 +196,11 @@ def поднять(tmp_path, *, design: str = ЖИВАЯ_ВЕРСИЯ_ZONA, fami
         "LORDS_DETAILS": str(корень / "details.json"),
         "LORDS_PLAYER_CONFIG": str(корень / "player.json"),
         "LORDS_SITE_NAME": site_name,
+        # В бою имя витрины ставит загрузчик (`lords-frontend.py` → execv).
+        # Без него стенд проверял бы поведение, которого в production нет.
+        # Параметр нужен, чтобы поднять вторую витрину того же семейства и
+        # доказать, что их данные не смешиваются.
+        "LORDS_RUNTIME_SITE": site or f"{family}-01",
         "LORDS_CLOCK_ISO": clock,
         "LORDS_LEGACY_ROOT": str(корень / "legacy-root-otsutstvuet"),
         "LORDS_LEGACY_UPSTREAM": "",
