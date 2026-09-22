@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import hashlib
 import html as html_mod
+import http.client
 import random
 import re
 import time
@@ -147,6 +148,7 @@ class AmdOnlineAdapter:
     cache: dict[str, str] = field(default_factory=dict)
     requests: int = 0
     retries: int = 0
+    disconnects: int = 0
     _last_request: float = 0.0
 
     # ------------------------------------------------------------------
@@ -219,10 +221,27 @@ class AmdOnlineAdapter:
                         "UPSTREAM_5XX", f"HTTP {exc.code}", hard_circuit=True
                     ) from exc
                 raise AdapterError("HTTP_ERROR", f"HTTP {exc.code}", retryable=False) from exc
-            except (TimeoutError, urllib.error.URLError) as exc:
+            except (
+                TimeoutError,
+                urllib.error.URLError,
+                OSError,
+                http.client.HTTPException,
+            ) as exc:
+                # RemoteDisconnected — ConnectionResetError (OSError), а
+                # IncompleteRead — HTTPException: ни один из них не
+                # URLError. Сайт обрывает ответы под длительным сбором, и
+                # ловить нужно обе ветки, иначе проход падает целиком.
                 attempt += 1
+                self.disconnects += 1
                 if attempt > self.max_retries:
-                    raise AdapterError("TIMEOUT", str(exc), retryable=False) from exc
+                    # Сервер, раз за разом закрывающий соединение, отказывает
+                    # нам без кода ответа. Это отказ, и настаивать нельзя.
+                    self.kill_switch.trip(
+                        f"источник закрывает соединение ({type(exc).__name__}) на {url}"
+                    )
+                    raise AdapterError(
+                        "CONNECTION_REFUSED", str(exc), hard_circuit=True
+                    ) from exc
                 self.retries += 1
                 self.sleeper(2**attempt)
                 continue
@@ -402,4 +421,5 @@ class AmdOnlineAdapter:
             "pagination_blocked": "Disallow */page/*",
             "requests": self.requests,
             "retries": self.retries,
+            "disconnects": self.disconnects,
         }

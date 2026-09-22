@@ -418,3 +418,23 @@ def test_dimensions_do_not_enter_the_composite(store, index, seeded):
     result = compute(store, title_id="nova:a")
     assert result.state == "SINGLE_SOURCE_ONLY", "один источник сводной оценкой не является"
     assert {c.source_key for c in result.sources_used} == {"amd_online"}
+
+
+def test_a_dropped_connection_is_retried_then_treated_as_refusal():
+    """RemoteDisconnected — OSError, а не URLError: ловить надо обе ветки."""
+    import http.client
+
+    calls = {"n": 0}
+
+    def _open(req, timeout):  # noqa: ARG001
+        calls["n"] += 1
+        raise http.client.RemoteDisconnected("closed")
+
+    adapter = AmdOnlineAdapter(opener=_open, sleeper=lambda _s: None, min_interval=0, jitter=0)
+    with pytest.raises(AdapterError) as exc:
+        adapter.fetch_page(TITLE_URL)
+    assert exc.value.code == "CONNECTION_REFUSED"
+    assert exc.value.hard_circuit is True
+    assert calls["n"] == adapter.max_retries + 1, "повторы ограничены"
+    assert adapter.kill_switch.active is True
+    assert adapter.disconnects >= 1

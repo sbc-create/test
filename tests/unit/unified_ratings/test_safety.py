@@ -138,9 +138,52 @@ def test_imdb_and_kinopoisk_are_feed_only():
         assert "не запускается" in source.blocker
 
 
-def test_no_source_uses_page_parsing():
+def test_page_parsing_is_the_exception_and_names_its_basis():
+    """Разбор страниц допустим, но не молча.
+
+    Раньше здесь стоял запрет на `PUBLIC_PAGE_PARSE` целиком: источников
+    такого рода не было, и запрет ничего не стоил. AMD Online подключён
+    как `AMD_ONLINE_PUBLIC_HTML` — ни API, ни фида, ни разрешения
+    владельца нет, и источник обязан называться тем, чем является.
+
+    Поэтому проверяется не отсутствие разбора, а его условия: разбор
+    применяется только там, где выше по приоритету ничего не нашлось,
+    основание записано в источнике, и нагрузка ограничена. Тест по-
+    прежнему падает на настоящем нарушении — на источнике, который
+    полез бы парсить страницы вместо официального API или без предела
+    частоты.
+    """
+    allowed = {"amd_online"}
     for source in REGISTRY.values():
-        assert source.access_method is not AccessMethod.PUBLIC_PAGE_PARSE, source.source_key
+        if source.access_method is not AccessMethod.PUBLIC_PAGE_PARSE:
+            continue
+        assert source.source_key in allowed, (
+            f"{source.source_key}: разбор страниц не заявлен в задании"
+        )
+        assert source.notes, f"{source.source_key}: основание доступа не записано"
+        assert "AMD_ONLINE_PUBLIC_HTML" in source.notes, (
+            "источник обязан называться тем, чем является: не API и не фид"
+        )
+        assert 0 < source.max_requests_per_minute <= 60, (
+            f"{source.source_key}: разбор страниц без предела частоты запрещён"
+        )
+
+
+def test_page_parsing_source_respects_robots():
+    """Явно запрещённый robots.txt путь не обходится, а заменяется.
+
+    Пагинация `/ongoingi/page/N/` закрыта правилом `Disallow */page*`.
+    Адаптер не притворяется браузером и не подбирает адреса: он берёт
+    перечисление из карты сайта, объявленной тем же robots.txt.
+    """
+    from factory.unified_ratings.adapters.amd_online import (
+        ROBOTS_DISALLOW_PATTERNS,
+        robots_allows,
+    )
+
+    assert ROBOTS_DISALLOW_PATTERNS, "правила robots не загружены"
+    assert robots_allows("https://amd.online/12345-nekotorroe-anime.html")
+    assert not robots_allows("https://amd.online/ongoingi/page/2/")
 
 
 # ---------------------------------------------------------------------------

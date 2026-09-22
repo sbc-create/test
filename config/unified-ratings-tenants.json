@@ -1,0 +1,71 @@
+{
+  "schema": "unified.ratings.tenants/1.0.0",
+  "note": "Реестр площадок единого модуля оценок. Модуль ничего не знает про Animedia: он знает про арендатора, у которого есть каталог, пространство имён и два файла на диске. Новая площадка подключается записью здесь, а не правкой кода.",
+  "contract": {
+    "title_ids": "details-снимок площадки; идентификаторы вида <provider>:<internal_id>",
+    "projection": "файл только на чтение для витрины; витрина в базу оценок не ходит",
+    "flags": "показ и запись включаются флагом, а не наличием файла",
+    "defaults": "public_read=0, public_write=0, kill_switch=0, allowlist пуст — то есть никому"
+  },
+  "tenants": {
+    "animedia-01": {
+      "space": "animedia",
+      "domain": "animedia.icu",
+      "family": "animedia",
+      "port": 9121,
+      "unit": "nova-animedia-01.service",
+      "release_link": "/srv/lords/.frontend/sites/animedia-01/current",
+      "details": "/srv/lords/.frontend/animedia-01-details.json",
+      "provider": "nova",
+      "projection": "/srv/lords/.frontend/unified-ratings-projection-animedia.json",
+      "flags": "/srv/lords/.frontend/unified-ratings-flags-animedia.json",
+      "authorized": true,
+      "stage": "CANARY_OWNER_ONLY"
+    },
+    "animedia-02": {
+      "space": "animedia-space",
+      "domain": "animedia.space",
+      "family": "animedia",
+      "port": 9122,
+      "unit": "nova-animedia-02.service",
+      "release_link": "/srv/lords/.frontend/sites/animedia-02/current",
+      "details": "/srv/lords/.frontend/animedia-02-details.json",
+      "provider": "nova",
+      "projection": "/srv/lords/.frontend/unified-ratings-projection-animedia-space.json",
+      "flags": "/srv/lords/.frontend/unified-ratings-flags-animedia-space.json",
+      "authorized": false,
+      "stage": "NOT_AUTHORIZED",
+      "blocker": "Задание разрешает только animedia.icu. Этот домен не трогать и не перезапускать."
+    },
+    "lords-01": {
+      "space": "lords",
+      "domain": "lordfilm47.space",
+      "family": "lords",
+      "port": 9110,
+      "unit": "lords-nova-01.service",
+      "release_link": "/srv/lords/.frontend/sites/lords-01/current",
+      "details": "/srv/lords/.frontend/lords-01-details.json",
+      "provider": "nova",
+      "projection": "/srv/lords/.frontend/unified-ratings-projection-lords.json",
+      "flags": "/srv/lords/.frontend/unified-ratings-flags-lords.json",
+      "authorized": false,
+      "stage": "NOT_AUTHORIZED",
+      "blocker": "Каталог фильмов и сериалов, а не аниме: покрытие внешними источниками не измерялось."
+    },
+    "zona-01": {
+      "space": "zona",
+      "domain": null,
+      "family": "zona",
+      "port": 9120,
+      "unit": "nova-zona-01.service",
+      "release_link": "/srv/lords/.frontend/sites/zona-01/current",
+      "details": "",
+      "provider": "nova",
+      "projection": "/srv/lords/.frontend/unified-ratings-projection-zona.json",
+      "flags": "/srv/lords/.frontend/unified-ratings-flags-zona.json",
+      "authorized": false,
+      "stage": "NOT_AUTHORIZED",
+      "blocker": "Нет details-снимка на этом пути: знаменатель площадки неизвестен, покрытие считать не из чего."
+    }
+  }
+}

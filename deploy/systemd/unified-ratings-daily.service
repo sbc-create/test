@@ -1,0 +1,32 @@
+[Unit]
+# Суточное пополнение оценок из разрешённых источников.
+# Не трогает витрины: пишет только в базу оценок.
+Description=unified ratings: суточное пополнение из разрешённых источников
+Documentation=file:///srv/site-factory/repo/docs/unified-ratings/ARCHITECTURE.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/home/claude/wt-unified-ratings-1-10-sources-01
+ExecStart=/srv/site-factory/repo/.venv/bin/python \
+    /home/claude/wt-unified-ratings-1-10-sources-01/tools/unified_ratings_daily.py \
+    --db /srv/site-factory/repo/var/ratings/ratings.sqlite \
+    --target 500 \
+    --evidence /srv/site-factory/repo/var/ratings/daily/latest.json
+
+# Прогон не должен идти бесконечно: лимиты источников делают сбор
+# медленным, но не безграничным.
+TimeoutStartSec=3h
+
+# Пишет ровно в два места: база оценок и каталог суточных отчётов.
+ReadWritePaths=/srv/site-factory/repo/var/ratings
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

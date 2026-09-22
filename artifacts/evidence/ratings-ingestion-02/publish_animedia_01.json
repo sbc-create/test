@@ -1,0 +1,25 @@
+{
+  "built_at": "2026-09-22T14:33:49Z",
+  "registry": "/home/claude/wt-unified-ratings-1-10-sources-01/config/unified-ratings-tenants.json",
+  "published": {
+    "tenant": "animedia-01",
+    "status": "PUBLISHED",
+    "projection": {
+      "path": "/srv/lords/.frontend/unified-ratings-projection-animedia.json",
+      "bytes": 16091493,
+      "sha256": "efd6cb48426af59742becc926cdb331307ed9aa85b549ef3ff13dbede1916e31",
+      "titles": 6954
+    },
+    "flags_path": "/srv/lords/.frontend/unified-ratings-flags-animedia.json",
+    "public_read": true,
+    "public_write": false,
+    "stats": {
+      "titles_in_projection": 6954,
+      "with_external": 6954,
+      "with_composite": 5736,
+      "with_community": 0,
+      "with_editorial": 0,
+      "skipped_no_data": 471
+    }
+  }
+}

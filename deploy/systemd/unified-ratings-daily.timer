@@ -1,0 +1,17 @@
+[Unit]
+Description=unified ratings: запуск суточного пополнения оценок
+Documentation=file:///srv/site-factory/repo/docs/unified-ratings/ARCHITECTURE.md
+
+[Timer]
+# Ночью по UTC: источники в это время свободнее, а наша нагрузка на них
+# и так не выше одного запроса в секунду.
+OnCalendar=*-*-* 03:20:00 UTC
+# Случайная задержка, чтобы запуск не попадал ровно в ту же секунду, что
+# у остальных суточных задач хоста.
+RandomizedDelaySec=900
+# Пропущенный из-за выключенного хоста запуск выполняется при старте.
+Persistent=true
+Unit=unified-ratings-daily.service
+
+[Install]
+WantedBy=timers.target
