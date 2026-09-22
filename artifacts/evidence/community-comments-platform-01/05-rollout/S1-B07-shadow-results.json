@@ -1,0 +1,62 @@
+[
+  {
+    "label": "base efdef56 (no adapter)",
+    "title_status": 200,
+    "title_bytes": 126519,
+    "home_status": 200,
+    "home_bytes": 194331,
+    "catalog_status": 200,
+    "ux": {
+      "player section": true,
+      "player frame": true,
+      "community section": true,
+      "recommendation shelf": true
+    },
+    "mount": {
+      "mount div": false,
+      "widget css": false,
+      "widget js": false
+    },
+    "robots": "noindex, nofollow"
+  },
+  {
+    "label": "rebased, mount OFF",
+    "title_status": 200,
+    "title_bytes": 126519,
+    "home_status": 200,
+    "home_bytes": 194331,
+    "catalog_status": 200,
+    "ux": {
+      "player section": true,
+      "player frame": true,
+      "community section": true,
+      "recommendation shelf": true
+    },
+    "mount": {
+      "mount div": false,
+      "widget css": false,
+      "widget js": false
+    },
+    "robots": "noindex, nofollow"
+  },
+  {
+    "label": "rebased, mount ON",
+    "title_status": 200,
+    "title_bytes": 127114,
+    "home_status": 200,
+    "home_bytes": 194331,
+    "catalog_status": 200,
+    "ux": {
+      "player section": true,
+      "player frame": true,
+      "community section": true,
+      "recommendation shelf": true
+    },
+    "mount": {
+      "mount div": true,
+      "widget css": true,
+      "widget js": true
+    },
+    "robots": "noindex, nofollow"
+  }
+]

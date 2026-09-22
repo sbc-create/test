@@ -429,3 +429,200 @@ class TestRollbackScriptStructure:
                 assert not any(w in low for w in ("ln -sfn", "systemctl restart", "rm -f")), (
                     f"rollback acts on the second domain: {line.strip()}"
                 )
+
+
+HYGIENE = HARNESS / "nginx_backup_hygiene.sh"
+HYGIENE_TEXT = HYGIENE.read_text(encoding="utf-8")
+
+
+class TestNginxBackupHygiene:
+    """The rule that an nginx backup never lands in a directory nginx globs.
+
+    This is the defect that blocked Stage 1: an earlier apply wrote
+    `/etc/nginx/lords/animedia-01.conf.before-comments-stage1`, and the
+    successor script refused to start while it was there — a stop that no
+    unprivileged session could clear, because moving the file needs the root
+    the blocked script was holding.
+
+    The rules live in one sourced file so apply and rollback cannot drift, and
+    they are exercised here against a real directory tree rather than asserted
+    about by grep.
+    """
+
+    def _run(self, tmp_path, script: str) -> subprocess.CompletedProcess:
+        lords = tmp_path / "etc" / "lords"
+        enabled = tmp_path / "etc" / "sites-enabled"
+        backups = tmp_path / "backups"
+        for d in (lords, enabled, backups):
+            d.mkdir(parents=True, exist_ok=True)
+        return subprocess.run(
+            ["bash", "-c", f'''
+set -uo pipefail
+die() {{ printf 'DIE: %s\\n' "$*" >&2; exit 9; }}
+BACKUP_DIR="{backups}"
+NGINX_GLOB_DIRS="{lords} {enabled}"
+. "{HYGIENE}"
+{script}
+'''],
+            capture_output=True, text=True,
+        )
+
+    def test_both_scripts_source_the_same_rules(self):
+        for name, text in (("apply", APPLY_TEXT), ("rollback", ROLLBACK_TEXT)):
+            assert "nginx_backup_hygiene.sh" in text, (
+                f"{name} does not source the shared hygiene rules"
+            )
+
+    def test_a_stray_is_moved_out_of_nginx_and_not_deleted(self, tmp_path):
+        stray = tmp_path / "etc" / "lords" / "animedia-01.conf.before-comments-stage1"
+        stray.parent.mkdir(parents=True, exist_ok=True)
+        stray.write_text("server { listen 443; }\n", encoding="utf-8")
+
+        result = self._run(tmp_path, "nginx_quarantine")
+        assert result.returncode == 0, result.stderr
+
+        assert not stray.exists(), "the stray is still inside the nginx directory"
+        copies = list((tmp_path / "backups").glob(
+            "animedia-01.conf.before-comments-stage1.quarantined.*"))
+        assert len(copies) == 1, f"expected one quarantined copy, got {copies}"
+        assert copies[0].read_text(encoding="utf-8") == "server { listen 443; }\n", (
+            "quarantine changed the file it was supposed to preserve"
+        )
+
+    def test_it_leaves_configs_and_foreign_backups_alone(self, tmp_path):
+        lords = tmp_path / "etc" / "lords"
+        lords.mkdir(parents=True, exist_ok=True)
+        live = lords / "animedia-01.conf"
+        foreign = lords / "animedia-01.conf.bak.20260910T093255Z"
+        live.write_text("real\n", encoding="utf-8")
+        foreign.write_text("someone else's\n", encoding="utf-8")
+
+        self._run(tmp_path, "nginx_quarantine")
+
+        assert live.exists(), "quarantine moved a live config"
+        assert foreign.exists(), (
+            "quarantine moved a backup this harness did not create; those "
+            "belong to whoever made them"
+        )
+
+    def test_quarantine_is_idempotent_and_never_overwrites(self, tmp_path):
+        stray = tmp_path / "etc" / "lords" / "animedia-01.conf.before-comments-stage1"
+        stray.parent.mkdir(parents=True, exist_ok=True)
+
+        stray.write_text("first\n", encoding="utf-8")
+        self._run(tmp_path, "nginx_quarantine")
+        second = self._run(tmp_path, "nginx_quarantine")
+        assert second.stdout.strip() == "", "a second run moved something again"
+
+        stray.write_text("second\n", encoding="utf-8")
+        self._run(tmp_path, "nginx_quarantine")
+
+        copies = sorted((tmp_path / "backups").glob("*before-comments-stage1.quarantined*"))
+        assert len(copies) == 2, f"a colliding name overwrote an earlier copy: {copies}"
+        assert {c.read_text(encoding="utf-8") for c in copies} == {"first\n", "second\n"}
+
+    def test_assert_clean_reports_a_dirty_tree(self, tmp_path):
+        stray = tmp_path / "etc" / "sites-enabled" / "x.conf.prev"
+        stray.parent.mkdir(parents=True, exist_ok=True)
+        stray.write_text("x\n", encoding="utf-8")
+
+        dirty = self._run(tmp_path, "nginx_assert_clean")
+        assert dirty.returncode == 1, "a dirty tree was reported clean"
+        assert "x.conf.prev" in dirty.stdout
+
+        self._run(tmp_path, "nginx_quarantine")
+        clean = self._run(tmp_path, "nginx_assert_clean")
+        assert clean.returncode == 0, clean.stdout
+
+    def test_a_backup_path_inside_etc_nginx_is_unreachable(self, tmp_path):
+        """The guarantee is structural, not a convention to remember."""
+        result = self._run(
+            tmp_path,
+            'BACKUP_DIR=/etc/nginx/lords; nginx_backup_path "animedia-01.conf.before"',
+        )
+        assert result.returncode == 9, (
+            "a backup destination inside /etc/nginx was accepted"
+        )
+        assert "refusing" in result.stderr.lower()
+
+    def test_a_backup_name_cannot_escape_the_backup_store(self, tmp_path):
+        result = self._run(tmp_path, 'nginx_backup_path "../../etc/nginx/lords/x.conf"')
+        assert result.returncode == 9, "a traversing backup name was accepted"
+
+    def test_apply_writes_its_vhost_backup_through_the_guarded_helper(self):
+        """A literal path would bypass the guard that makes this permanent."""
+        assert 'VHOST_BACKUP=$(nginx_backup_path' in APPLY_TEXT, (
+            "the vhost backup path is not produced by nginx_backup_path"
+        )
+        for line in APPLY_TEXT.splitlines():
+            stripped = line.strip()
+            if stripped.startswith("#"):
+                continue
+            if "cp -a" in stripped and "/etc/nginx" in stripped.split("cp -a")[1]:
+                dest = stripped.split()[-1]
+                assert not dest.startswith("/etc/nginx"), (
+                    f"apply copies a backup into an nginx directory: {stripped}"
+                )
+
+    def test_rollback_refuses_to_restore_from_inside_etc_nginx(self):
+        assert "/etc/nginx/*)" in ROLLBACK_TEXT, (
+            "rollback does not check where its recorded backup lives"
+        )
+        assert "REFUSED" in ROLLBACK_TEXT
+
+
+class TestAdapterBaseGate:
+    """Applying a release built from a base the site no longer runs is a
+    silent rollback of whatever replaced that base. It has to be refused."""
+
+    def test_apply_compares_the_adapter_base_with_the_live_symlink(self):
+        assert "rebased_onto" in APPLY_TEXT, (
+            "apply does not read the base the adapter was built from"
+        )
+        assert "BASE_DECLARED" in APPLY_TEXT and "BASE_OF_RELEASE" in APPLY_TEXT
+        assert "readlink -f" in APPLY_TEXT
+
+    def test_the_configured_release_records_its_base(self):
+        """The release the script points at must carry the field the gate reads."""
+        match = re.search(r'^RELEASE_ID="([^"]+)"', APPLY_TEXT, re.M)
+        assert match, "apply does not define RELEASE_ID"
+        release_json = Path("/srv/lords/.frontend/releases") / match.group(1) / "RELEASE.json"
+        if not release_json.exists():
+            pytest.skip(f"release not present on this host: {release_json}")
+        manifest = json.loads(release_json.read_text(encoding="utf-8"))
+        base = (manifest.get("rebased_onto") or manifest.get("parent_release") or {})
+        assert base.get("build_id"), "the release does not record the base it was built from"
+
+
+class TestRehearsalTestsTheShippedRelease:
+    """A rehearsal of a different artifact than the one being shipped is worse
+    than no rehearsal: it reports confidence it has not earned.
+
+    This is not hypothetical. The shadow contour carried a literal release path
+    and kept exercising the adapter built from fac5643 for hours after apply
+    had been rebuilt onto efdef56 — the two names differ by six characters in
+    the middle of a long string, which is exactly the kind of drift that is
+    invisible to a reader and fatal to a conclusion.
+    """
+
+    REHEARSAL_TEXT = (HARNESS / "comments_shadow_rehearsal.py").read_text(encoding="utf-8")
+
+    def test_the_release_id_is_declared_in_exactly_one_place(self):
+        hardcoded = re.findall(
+            r'"/srv/lords/\.frontend/releases/[^"]+"', self.REHEARSAL_TEXT)
+        assert hardcoded == [], (
+            f"the rehearsal hardcodes a release path and can drift: {hardcoded}"
+        )
+
+    def test_the_rehearsal_resolves_the_same_release_apply_deploys(self):
+        spec = importlib.util.spec_from_file_location(
+            "_shadow", HARNESS / "comments_shadow_rehearsal.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+
+        match = re.search(r'^RELEASE_ID="([^"]+)"', APPLY_TEXT, re.M)
+        assert match, "apply does not define RELEASE_ID"
+        assert module.RELEASE.name == match.group(1), (
+            f"rehearsal would test {module.RELEASE.name}, "
+            f"apply would deploy {match.group(1)}"
+        )

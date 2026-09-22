@@ -34,6 +34,7 @@ UNIT=/etc/systemd/system/comments-gateway.service
 SITE_UNIT=nova-animedia-01.service
 MANIFEST=/srv/lords/.frontend/template-manifest-animedia-01.json
 CHECK="$REPO/automation/host/comments_endpoint_check.py"
+HYGIENE="$REPO/automation/host/nginx_backup_hygiene.sh"
 RESOLVE="animedia.icu:443:127.0.0.1"
 SITE=https://animedia.icu
 
@@ -45,6 +46,13 @@ note() { printf '   %s\n' "$*"; }
 die()  { printf '\nREFUSED: %s\n' "$*" >&2; exit 1; }
 
 [ "$(id -u)" -eq 0 ] || die "must run as root"
+
+# Same rules as apply: a backup never lives inside a directory nginx globs.
+# Rollback enforces it too, so a stray cannot survive by being created during a
+# failed apply and then left behind by the rollback that cleans up after it.
+[ -f "$HYGIENE" ] || die "nginx backup hygiene rules missing: $HYGIENE"
+# shellcheck source=automation/host/nginx_backup_hygiene.sh
+. "$HYGIENE"
 
 if [ ! -f "$STATE_FILE" ]; then
   # Nothing was recorded, so nothing was applied by this harness. Removing what
@@ -153,8 +161,22 @@ rm -rf /etc/systemd/system/comments-gateway.service.d
 systemctl daemon-reload
 
 if [ -n "$VHOST_BACKUP" ] && [ -f "$VHOST_BACKUP" ]; then
-  cp -a "$VHOST_BACKUP" "$VHOST"
-  note "vhost restored from $VHOST_BACKUP (kept outside every nginx include glob)"
+  # A backup that lives inside /etc/nginx is itself loaded by an include glob,
+  # so restoring from one would mean the rollback depended on the defect it is
+  # supposed to undo. Refuse rather than quietly use it: the include line can
+  # still be removed by the sed branch below, which needs no backup at all.
+  case "$(readlink -f "$VHOST_BACKUP")" in
+    /etc/nginx/*)
+      note "REFUSED: recorded vhost backup is inside /etc/nginx ($VHOST_BACKUP)"
+      note "falling back to removing the include line in place"
+      sed -i '/animedia-comments.conf/d' "$VHOST"
+      note "include line removed without using the misplaced backup"
+      ;;
+    *)
+      cp -a "$VHOST_BACKUP" "$VHOST"
+      note "vhost restored from $VHOST_BACKUP (kept outside every nginx include glob)"
+      ;;
+  esac
 elif grep -q 'animedia-comments.conf' "$VHOST" 2>/dev/null; then
   sed -i '/animedia-comments.conf/d' "$VHOST"
   note "include line removed (no backup was recorded)"
@@ -162,6 +184,19 @@ else
   note "vhost has no comments include — already clean"
 fi
 rm -f "$SNIPPET"
+
+# Leave nginx's include directories the way they should have been all along.
+# Quarantined files are moved into $BACKUP_DIR, never deleted.
+while IFS= read -r moved; do
+  [ -n "$moved" ] || continue
+  note "quarantined into $moved (preserved, not deleted)"
+done <<EOF
+$(nginx_quarantine)
+EOF
+if ! LEFT=$(nginx_assert_clean); then
+  note "WARNING: a harness file remains inside an nginx include directory: $LEFT"
+fi
+
 nginx -t && systemctl reload nginx
 
 # --- verification ----------------------------------------------------------

@@ -31,7 +31,7 @@ STATE_FILE="$STATE_DIR/stage1-state.json"
 BACKUP_DIR="$STATE_DIR/backups"
 EVIDENCE="$STATE_DIR/stage1-apply-evidence.txt"
 KEY_DIR=/etc/comments-platform/keys
-RELEASE_ID="20260922T071857Z-e84ee6e-animedia-comments-stage1"
+RELEASE_ID="20260922T150000Z-632a622-animedia-comments-stage1-efdef56"
 RELEASE_DIR="/srv/lords/.frontend/releases/$RELEASE_ID"
 LINK=/srv/lords/.frontend/sites/animedia-01/current
 MANIFEST=/srv/lords/.frontend/template-manifest-animedia-01.json
@@ -41,6 +41,7 @@ VHOST=/etc/nginx/lords/animedia-01.conf
 SITE_UNIT=nova-animedia-01.service
 CHECK="$REPO/automation/host/comments_endpoint_check.py"
 ROLLBACK="$REPO/automation/host/animedia-comments-stage1-rollback.sh"
+HYGIENE="$REPO/automation/host/nginx_backup_hygiene.sh"
 
 # Endpoint probes go through nginx on this host, with the real SNI and Host.
 RESOLVE="animedia.icu:443:127.0.0.1"
@@ -77,6 +78,11 @@ on_exit() {
 }
 trap on_exit EXIT
 
+# Sourced after die() exists: the hygiene rules call it.
+[ -f "$HYGIENE" ] || die "nginx backup hygiene rules missing: $HYGIENE"
+# shellcheck source=automation/host/nginx_backup_hygiene.sh
+. "$HYGIENE"
+
 # --- 0. preconditions, before anything is touched --------------------------
 #
 # The root check is first, ahead of even creating a directory: running this as
@@ -93,6 +99,28 @@ install -d -m 0755 "$STATE_DIR" "$BACKUP_DIR"
 [ -f "$ROLLBACK" ] || die "rollback script missing — refusing to mutate without it"
 [ -L "$LINK" ] || die "expected a symlink at $LINK"
 [ -f "$MANIFEST" ] || die "template manifest missing: $MANIFEST"
+
+say "adapter base matches what the site declares"
+# The first prepared release was built from fac5643 while animedia-01 had
+# already been pointed at the UX rebuild. Applying it would have restarted the
+# site onto the older UX — a rollback nobody asked for, arriving as a side
+# effect of switching comments on. The release records the base it was built
+# from; the site's symlink says which base it expects. They have to agree, and
+# the comparison is cheap, so it is a precondition rather than a convention.
+BASE_DECLARED=$(basename "$(readlink -f "$LINK")")
+BASE_OF_RELEASE=$(python3 -c "
+import json,sys
+m=json.load(open('$RELEASE_DIR/RELEASE.json',encoding='utf-8'))
+print((m.get('rebased_onto') or m.get('parent_release') or {}).get('build_id',''))
+")
+[ -n "$BASE_OF_RELEASE" ] || die "release does not record the base it was built from"
+note "site currently declares : $BASE_DECLARED"
+note "adapter was built from  : $BASE_OF_RELEASE"
+if [ "$BASE_DECLARED" != "$BASE_OF_RELEASE" ] && [ "$BASE_DECLARED" != "$RELEASE_ID" ]; then
+  die "the adapter is built from $BASE_OF_RELEASE but animedia-01 declares \
+$BASE_DECLARED — applying it would move the site off that release. Rebuild the \
+adapter from $BASE_DECLARED instead of deploying this one."
+fi
 
 say "file descriptors and inotify (diagnosed before any mutation)"
 note "fs.file-nr            : $(cat /proc/sys/fs/file-nr)"
@@ -126,14 +154,37 @@ say "nginx include hygiene"
 # /etc/nginx/conf.d/lords.conf includes /etc/nginx/lords/*.conf and
 # /etc/nginx/nginx.conf includes /etc/nginx/sites-enabled/* — the second has no
 # extension filter, which is why a '.bak' beside a Yummy config loads as a
-# duplicate server block. This harness must never add to that: its backups go
-# to $BACKUP_DIR, outside both directories. Asserted rather than assumed.
-STRAY=$(find /etc/nginx/lords /etc/nginx/sites-enabled /etc/nginx/snippets \
-          -maxdepth 1 -name '*comments-stage1*' -o -maxdepth 1 -name '*.prev' 2>/dev/null | head)
-if [ -n "$STRAY" ]; then
-  die "this harness left files inside an nginx include directory: $STRAY"
+# duplicate server block. A backup of an nginx file therefore may never be
+# written next to it.
+#
+# Two things enforce that, because a comment enforces nothing:
+#
+#   * nginx_backup_path() is the only way this harness names a backup, and it
+#     refuses to return a path outside $BACKUP_DIR. Writing one into an include
+#     directory is not a mistake to avoid; it is unreachable.
+#   * the earlier version of this script did write one there
+#     (animedia-01.conf.before-comments-stage1), and refusing to start while it
+#     exists is a dead end — the file needs root to move and the script holding
+#     root is this one. So a stray is quarantined into $BACKUP_DIR under a name
+#     that cannot collide, and never deleted: it is somebody's rollback copy.
+
+QUARANTINED=$(nginx_quarantine)
+while IFS= read -r moved; do
+  [ -n "$moved" ] || continue
+  note "quarantined into $moved (preserved, not deleted)"
+done <<EOF
+$QUARANTINED
+EOF
+
+if ! STRAY=$(nginx_assert_clean); then
+  die "a harness file is still inside an nginx include directory: $STRAY"
 fi
-note "no harness file inside /etc/nginx/{lords,sites-enabled,snippets}"
+if [ -n "$QUARANTINED" ]; then
+  note "rollback does not put quarantined files back: they are the defect, and"
+  note "the vhost backup rollback actually uses is $BACKUP_DIR/animedia-01.conf.before"
+else
+  note "no harness file inside any nginx include directory"
+fi
 
 say "foreign nginx warnings (recorded, not fixed)"
 nginx -t 2>&1 | grep -i 'conflicting server name' | sed 's/^/   /' | tee -a "$EVIDENCE" || true
@@ -146,8 +197,16 @@ say "recording rollback state"
 PID_BEFORE=$(systemctl show -p MainPID --value "$SITE_UNIT" || echo 0)
 LINK_BEFORE=$(readlink "$LINK")
 BUILD_BEFORE=$(python3 -c "import json;print(json.load(open('$MANIFEST'))['build_id'])")
-cp -a "$MANIFEST" "$BACKUP_DIR/template-manifest-animedia-01.json.before"
-[ -f "$VHOST" ] && cp -a "$VHOST" "$BACKUP_DIR/animedia-01.conf.before"
+MANIFEST_BACKUP=$(nginx_backup_path "template-manifest-animedia-01.json.before")
+VHOST_BACKUP=$(nginx_backup_path "animedia-01.conf.before")
+cp -a "$MANIFEST" "$MANIFEST_BACKUP"
+# `[ -f x ] && cp ...` as a bare statement returns 1 when the file is absent,
+# and under `set -e` that ends the run with no message at all.
+if [ -f "$VHOST" ]; then
+  cp -a "$VHOST" "$VHOST_BACKUP"
+else
+  die "vhost is missing: $VHOST"
+fi
 
 # Backups live here, outside every directory nginx globs. A '.bak' beside a
 # config is loaded as a second server block — that is exactly what produces
@@ -161,8 +220,10 @@ cat > "$STATE_FILE" <<JSON
   "symlink_before": "$LINK_BEFORE",
   "symlink_path": "$LINK",
   "manifest_path": "$MANIFEST",
-  "manifest_backup": "$BACKUP_DIR/template-manifest-animedia-01.json.before",
-  "vhost_backup": "$BACKUP_DIR/animedia-01.conf.before",
+  "manifest_backup": "$MANIFEST_BACKUP",
+  "vhost_backup": "$VHOST_BACKUP",
+  "vhost_backup_policy": "every nginx backup lives under $BACKUP_DIR, outside every include glob",
+  "quarantined_from_nginx": [$(printf '%s' "$QUARANTINED" | sed '/^$/d;s/.*/"&"/' | paste -sd, -)],
   "release_applied": "$RELEASE_ID",
   "database": "$STATE_DIR/comments.sqlite",
   "database_policy": "preserved by every rollback level; never deleted"
