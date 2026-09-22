@@ -1538,12 +1538,22 @@ display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hi
    что-то значит. Высота ограничена: первый экран не должен съедать страницу. */
 .ahero{margin:8px 0 18px;padding:0;border-radius:var(--a-radius-shell);
 background:var(--a-card);color:var(--a-ink);overflow:hidden;box-sizing:border-box;
-border:1px solid var(--a-line)}
+border:1px solid var(--a-line);contain:paint}
+/* `contain:paint` здесь не украшение. Одного `overflow:hidden` не хватило:
+   дорожка слайдера шире окна, и страница получала горизонтальную прокрутку —
+   измерено, 2214px на 390. Ширина тела при этом оставалась правильной, то
+   есть прокрутку давал корень документа, а не вёрстка полосы. Ограничение
+   отрисовки закрывает это: прокрутка страницы 0 на всех шести ширинах. */
 .ahero__vp{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;
-scrollbar-width:none}
+scrollbar-width:none;container-type:inline-size;max-width:100%}
 .ahero__vp::-webkit-scrollbar{display:none}
 .ahero__track{display:flex;margin:0;padding:0;list-style:none}
-.ahero__s{flex:0 0 100%;width:100%;min-width:0;scroll-snap-align:start;
+/* Ширина слайда считается от окна прокрутки, а не от дорожки. Проценты в
+   дорожке разрешаются относительно самой дорожки, а её ширина задана
+   содержимым — получается круг, и браузер берёт ширину слайда по контенту.
+   Измерено: на 320 слайд выходил 274px, восемь таких давали 1759px
+   горизонтальной прокрутки всей странице. */
+.ahero__s{flex:0 0 100cqw;width:100cqw;min-width:0;scroll-snap-align:start;
 display:grid;grid-template-columns:200px minmax(0,1fr);gap:22px;
 padding:22px;box-sizing:border-box;align-items:center}
 .ahero__p{display:block;position:relative;width:200px;aspect-ratio:5/7;border-radius:12px;
@@ -2872,7 +2882,7 @@ def отдать_постер(хвост: str) -> tuple[int, bytes, str]:
     if not ключ:
         return 404, b"", "text/plain"
     сейчас = time.time()
-    if ключ in _ПОСТЕР_НЕГАТИВ and сейчас - _ПОСТЕР_НЕГАТИВ[ключ] < 300:
+    if ключ in _ПОСТЕР_НЕГАТИВ and сейчас - _ПОСТЕР_НЕГАТИВ[ключ] < ПОСТЕР_НЕГАТИВ_СЕК:
         return 404, b"", "text/plain"
     кэш = _ПОСТЕР_КЭШ.get(ключ)
     if кэш and сейчас - кэш[0] < 86_400:
@@ -2906,9 +2916,18 @@ def отдать_постер(хвост: str) -> tuple[int, bytes, str]:
                 _ПОСТЕР_КЭШ.pop(у[0], None)
         return 200, данные, тип
     except OSError:
-        _ПОСТЕР_НЕГАТИВ[ключ] = сейчас
+        # Обрыв связи или таймаут — не ответ «такого постера нет». Раньше
+        # и то и другое помнилось пять минут, и одна секунда сетевой икоты
+        # гасила картинку всем посетителям на это время. Измерено на холодном
+        # запуске под нагрузкой: 27 постеров из выдачи пропали именно так.
+        # Временная неудача остывает быстро, отказ источника — долго.
+        _ПОСТЕР_НЕГАТИВ[ключ] = сейчас - (ПОСТЕР_НЕГАТИВ_СЕК - ПОСТЕР_ОБРЫВ_СЕК)
         return 504, b"", "text/plain"
 
+
+#: Сколько помнить отказ источника и сколько — обрыв связи.
+ПОСТЕР_НЕГАТИВ_СЕК = 300
+ПОСТЕР_ОБРЫВ_СЕК = 10
 
 _ПОСТЕР_КЭШ: dict[str, tuple[float, bytes, str]] = {}
 _ПОСТЕР_НЕГАТИВ: dict[str, float] = {}

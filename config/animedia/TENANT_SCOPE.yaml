@@ -80,7 +80,8 @@ profiles:
 template_ids:
   allowed:
     - animedia-nova            # действующая семья шаблона на витринах
-    - animedia-original-parity # изолированный пакет этой стадии
+    - animedia-original-parity # изолированный пакет стадии паритета
+    - animedia-ux-rebuild      # изолированный пакет переработки интерфейса
 
 runtime_paths:
   # Корень рантайма носит имя соседнего контура по историческим причинам и
