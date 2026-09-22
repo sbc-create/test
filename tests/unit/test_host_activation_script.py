@@ -108,3 +108,47 @@ def test_activation_script_reaches_its_manifest_check():
     assert "нет манифеста витрины" in output, (
         f"сценарий не дошёл до штатной проверки манифеста:\n{output}")
     assert result.returncode == 1, f"ожидался выход 1, получен {result.returncode}"
+
+
+def test_rollback_repoints_release_link_not_artifact_copy():
+    """REQ-HOST-EXEC: откат переводит ссылку релиза, а не копирует байты.
+
+    Юнит исполняет общий загрузчик, а тот через `execv` уходит в релиз, на
+    который смотрит `sites/<витрина>/current`. Значит `artifact_path` манифеста
+    не исполняется никем, и прежний откат — `cp` в этот файл — возвращал
+    витрину ровно никуда, сообщая при этом об успехе.
+    """
+    text = ACTIVATE.read_text(encoding="utf-8")
+    assert "ln -sfn" in text, "откат обязан переводить ссылку релиза"
+    assert 'cp "$rollback_src" "$artifact"' not in text, (
+        "откат копирует байты в artifact_path — файл, который не исполняется")
+    assert "PREVIOUS_TARGET.txt" in text, "откат обязан брать цель из PREVIOUS_TARGET.txt"
+
+
+def test_rollback_resolution_lands_on_previous_release(tmp_path):
+    """Разрешение цели отката и перевод ссылки — на песочном дереве.
+
+    Проверяется поведение, а не текст: относительная запись PREVIOUS_TARGET.txt
+    обязана разрешаться относительно каталога витрины и приводить к прежнему
+    релизу с рантаймом внутри.
+    """
+    front = tmp_path / "frontend"
+    site_dir = front / "sites" / "zona-01"
+    site_dir.mkdir(parents=True)
+    for build in ("new", "old"):
+        release = front / "releases" / build
+        release.mkdir(parents=True)
+        (release / "lords-frontend.py").write_text(f"# {build}\n", encoding="utf-8")
+
+    link = site_dir / "current"
+    link.symlink_to("../../releases/new")
+    (site_dir / "PREVIOUS_TARGET.txt").write_text("../../releases/old", encoding="utf-8")
+
+    # Ровно те шаги, что делает сценарий в ветке отката.
+    previous = (site_dir / "PREVIOUS_TARGET.txt").read_text(encoding="utf-8").strip()
+    previous_dir = (site_dir / previous).resolve()
+    assert (previous_dir / "lords-frontend.py").is_file()
+
+    subprocess.run(["ln", "-sfn", previous, str(link)], check=True, timeout=30)
+    assert link.resolve() == previous_dir
+    assert link.resolve().name == "old"

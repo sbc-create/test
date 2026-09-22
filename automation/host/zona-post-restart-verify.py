@@ -138,8 +138,15 @@ def main() -> int:
     итог["verdict"] = "PASS" if not беды else "FAIL"
     итог["issues"] = беды
     if беды:
+        # Откат — это перевод ссылки релиза, а не копирование байтов в
+        # `artifact_path`: исполняется то, на что смотрит `sites/<витрина>/current`,
+        # и копия в неисполняемый файл вернула бы витрину ровно никуда.
+        ссылка = ФРОНТ / "sites" / а.site / "current"
+        прежний = ФРОНТ / "sites" / а.site / "PREVIOUS_TARGET.txt"
+        цель = (прежний.read_text(encoding="utf-8").strip()
+                if прежний.is_file() else "<PREVIOUS_TARGET.txt пуст>")
         итог["rollback"] = (
-            f"cp {манифест.get('rollback_target_file')} {артефакт} && "
+            f"sudo ln -sfn {цель} {ссылка} && "
             f"sudo systemctl restart nova-{а.site}.service")
     if а.out:
         Path(а.out).write_text(json.dumps(итог, ensure_ascii=False, indent=1),
