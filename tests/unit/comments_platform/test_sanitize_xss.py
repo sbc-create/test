@@ -20,6 +20,9 @@ from factory.comments_platform.sanitize import (
     to_plain_preview,
 )
 
+from .htmlcheck import assert_no_scripting, attribute_values
+from .htmlcheck import inspect as inspect_html
+
 XSS_CORPUS = [
     "<script>alert(1)</script>",
     "<SCRIPT SRC=//evil.test/x.js></SCRIPT>",
@@ -64,46 +67,33 @@ XSS_CORPUS = [
     "<noscript><p title=\"</noscript><img src=x onerror=alert(1)>\">",
 ]
 
-# Tags the renderer is permitted to emit. Anything else in the output is a leak.
+# Tags and attributes the renderer is permitted to emit. Anything else that a
+# real parser can see in the output is a leak.
 ALLOWED_TAGS = {"strong", "em", "code", "a", "br", "span"}
-
-# A *real* element in the output: an unescaped `<`, a name, then its attributes
-# up to the closing `>`. Attacker text survives as `&lt;img ...&gt;` and does
-# not match, which is the point — `onerror=` sitting in escaped text is inert,
-# so asserting on the raw string would fail honest output and teach nothing.
-_ELEMENT_RE = re.compile(r"<\s*(/?)([a-zA-Z0-9]+)([^>]*)>")
-_EVENT_ATTR_RE = re.compile(r"\bon[a-z]+\s*=", re.IGNORECASE)
-_DANGEROUS_SCHEME_RE = re.compile(r"(?:javascript|data|vbscript)\s*:", re.IGNORECASE)
-
-# Attributes the renderer may emit. Anything else inside a real tag is a leak.
 ALLOWED_ATTRS = {
     "href", "rel", "target", "class", "tabindex", "role", "aria-expanded", "data-cp-spoiler",
 }
-_ATTR_NAME_RE = re.compile(r"([a-zA-Z_:][-a-zA-Z0-9_:.]*)\s*=")
+_DANGEROUS_SCHEME_RE = re.compile(r"(?:javascript|data|vbscript)\s*:", re.IGNORECASE)
 
 
 def assert_inert(rendered: str) -> None:
-    # 1. No unescaped `<` may introduce anything but an allowlisted element.
-    for match in _ELEMENT_RE.finditer(rendered):
-        name = match.group(2).lower()
-        attrs = match.group(3)
-        assert name in ALLOWED_TAGS, f"unexpected tag <{name}> in {rendered!r}"
-        assert not _EVENT_ATTR_RE.search(attrs), f"event handler survived: {match.group(0)!r}"
-        for attr in _ATTR_NAME_RE.findall(attrs):
-            assert attr.lower() in ALLOWED_ATTRS, f"unexpected attribute {attr!r} on <{name}>"
+    """Judged by a parser, never by a substring search.
 
-    # 2. Every `<` in the output must belong to one of those elements. This is
-    #    what catches a malformed tag the element pattern would skip over.
-    consumed = set()
-    for match in _ELEMENT_RE.finditer(rendered):
-        consumed.update(range(match.start(), match.end()))
-    stray = [i for i, ch in enumerate(rendered) if ch == "<" and i not in consumed]
-    assert not stray, f"unescaped '<' outside any allowlisted element in {rendered!r}"
+    A substring search fails in both directions here: `onerror=` inside escaped
+    text is harmless, and an attribute name hidden inside a quoted value looks
+    like an attribute to a regex. `htmlcheck.inspect` reports what a browser
+    would actually parse, which is the only question that matters.
+    """
+    assert_no_scripting(rendered, allowed_tags=ALLOWED_TAGS)
 
-    # 3. A dangerous scheme may appear as escaped text, but never inside an href.
-    for href in re.findall(r'href="([^"]*)"', rendered):
+    parsed = inspect_html(rendered)
+    unexpected = {
+        f"{tag}[{attr}]" for tag, attr in parsed.attributes if attr not in ALLOWED_ATTRS
+    }
+    assert not unexpected, f"unexpected attributes {sorted(unexpected)} in {rendered!r}"
+
+    for href in attribute_values(rendered, "href"):
         assert not _DANGEROUS_SCHEME_RE.match(href.strip()), f"dangerous href: {href!r}"
-        assert href.lower().startswith(("http://", "https://")), f"non-http href: {href!r}"
 
 
 class TestXssCorpus:
