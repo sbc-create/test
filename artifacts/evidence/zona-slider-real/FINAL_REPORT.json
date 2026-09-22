@@ -5,10 +5,13 @@
  "worktree": "/home/claude/wt-zona-real-slider-01",
  "branch": "claude/zona-real-slider-01",
  "start_head": "738e07d",
- "final_head": "6da8229596551da30956606c0e9a1543bfd4aa6b",
- "remote_head": "6da8229596551da30956606c0e9a1543bfd4aa6b",
- "commits_created": 11,
+ "final_head": "c1070d5a16dea778fec3d77f712cf0408fe4ee8c",
+ "remote_head": "c1070d5a16dea778fec3d77f712cf0408fe4ee8c",
+ "commits_created": 14,
  "commits": [
+  "c1070d5 test(zona): полный набор фабрики прогнан, падения разобраны поимённо",
+  "65fee74 docs(zona): поправка к READY_TO_RESTART — его вывод оказался неверен",
+  "6051b45 evidence(zona): ветка опубликована, отчёт называет remote",
   "6da8229 evidence(zona): итог ночи — два совпавших прогона и отчёт с процентами",
   "04c7db0 fix(zona): компактный герой перестал держать высоту слайдера",
   "95cabe9 feat(zona): шаблоны витрины объявлением, а не пятьюдесятью копиями",
@@ -21,7 +24,7 @@
   "747f821 fix(zona): объявленная версия оформления исполняется, а не проваливается молча",
   "3f4d5d9 test(zona): воспроизведён дефект объявленной версии оформления"
  ],
- "files_changed": 259,
+ "files_changed": 260,
  "push_performed": 1,
  "production_mutations": 0,
  "restart_performed": 0,
@@ -120,19 +123,27 @@
   "identical": true
  },
  "tests": {
-  "run1": {
+  "lords_run1": {
    "passed": 662,
    "failed": 2,
    "skipped": 17,
    "foreign_failed": 2,
    "seconds": 57.0
   },
-  "run2": {
+  "lords_run2": {
    "passed": 662,
    "failed": 2,
    "skipped": 17,
    "foreign_failed": 2,
    "seconds": 59.2
+  },
+  "unit_zone": {
+   "passed": 5557,
+   "failed": 30,
+   "errors": 62,
+   "skipped": 93,
+   "foreign_failed": 30,
+   "seconds": 2416
   }
  },
  "cross_tenant_identical": true,
@@ -180,5 +191,6 @@
    "percent": 50
   },
   "overall_percent": 73
- }
+ },
+ "note_final_head": "SHA снят в момент сборки отчёта; коммит, который его сохраняет, идёт следующим — это один шаг, а не расхождение"
 }
