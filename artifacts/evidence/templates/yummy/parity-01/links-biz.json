@@ -1,0 +1,992 @@
+{
+  "captured_at_utc": "2026-09-22T07:06:20.381192+00:00",
+  "base": "http://127.0.0.1:9312",
+  "pages": [
+    "/new/",
+    "/collections/",
+    "/schedule/",
+    "/top/"
+  ],
+  "cards_only": true,
+  "unique_links": 134,
+  "by_status": {
+    "200": 132,
+    "404": 2
+  },
+  "not_ok": 2,
+  "rows": [
+    {
+      "href": "/anime/agent-vremeni-3",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/atele-koldovskih-kolpakov",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/berserk",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/blich-tysyacheletnyaya-krovavaya-voyna-bedstvie",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/bozhestvennyy-sad-u-pomestya-kusunoki",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/brachnyy-toksin",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/brodyaga-kensin-besporyadki-v-kioto",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/chasha-snega",
+      "status": 200,
+      "found_on": [
+        "/new/"
+      ]
+    },
+    {
+      "href": "/anime/chernyy-dzhek-babushka",
+      "status": 200,
+      "found_on": [
+        "/new/"
+      ]
+    },
+    {
+      "href": "/anime/chernyy-klever-2",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/chernyy-klever-prosti-menya",
+      "status": 200,
+      "found_on": [
+        "/collections/"
+      ]
+    },
+    {
+      "href": "/anime/chuvstvennye-slova",
+      "status": 200,
+      "found_on": [
+        "/new/",
+        "/collections/"
+      ]
+    },
+    {
+      "href": "/anime/dazhe-kopiya-sposobna-vlyubitsya",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/detektiv-konan-padshiy-angel-avtostrady",
+      "status": 200,
+      "found_on": [
+        "/collections/"
+      ]
+    },
+    {
+      "href": "/anime/detektiv-konan-posledniy-volshebnik-veka",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/detektiv-konan-umenshivshiysya-velikiy-detektiv",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/devushki-i-tanki-final",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/dobro-pozhalovat-v-klass-prevoshodstva-4-vtoroy-god-pervyy-semestr",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/drakon-gornichnaya-gospozhi-kobayasi-odinokiy-drakon",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/dyurarara-2-final-dyufufufu",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/grobnitsa-bogov",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/grobnitsa-bogov-2",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/grobnitsa-bogov-3",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/gurren-lagann-zvezdnyy-svet",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/hot-ya-i-bezdarnaya-zlodeyka-skazka-o-tom-kak-babochka-i-krysa-pomenyalis",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/hranitel-kamfornogo-dereva",
+      "status": 200,
+      "found_on": [
+        "/collections/"
+      ]
+    },
+    {
+      "href": "/anime/hroniki-kartochnyh-bitv",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/i-nastupit-rassvet",
+      "status": 200,
+      "found_on": [
+        "/collections/"
+      ]
+    },
+    {
+      "href": "/anime/initsial-di-stadiya-pervaya",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/initsial-di-stadiya-vtoraya",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/istoriya-efendi",
+      "status": 200,
+      "found_on": [
+        "/new/",
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/istoriya-epohi-seva-film",
+      "status": 200,
+      "found_on": [
+        "/new/"
+      ]
+    },
+    {
+      "href": "/anime/istoriya-treh-tsarstv",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/k-chertu-tvoy-ostrov",
+      "status": 200,
+      "found_on": [
+        "/new/"
+      ]
+    },
+    {
+      "href": "/anime/kaydzyu-nomer-vosem-rabochiy-den-narumi",
+      "status": 200,
+      "found_on": [
+        "/new/"
+      ]
+    },
+    {
+      "href": "/anime/klevatess-2-korol-demonicheskih-zverey-i-legenda-o-lozhnom-geroe",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/klinki-hraniteley-2",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/klyatva-mastera",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/korol-shamanov",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/krovavyy-lager-akula-kloun",
+      "status": 404,
+      "found_on": [
+        "/collections/"
+      ]
+    },
+    {
+      "href": "/anime/lazurnaya-volchitsa-glava-o-pogruzhenii-v-son",
+      "status": 200,
+      "found_on": [
+        "/new/"
+      ]
+    },
+    {
+      "href": "/anime/legenda-o-syaohee-lo-2",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/lozhnokokon",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/lyubovnyy-van-pis",
+      "status": 200,
+      "found_on": [
+        "/new/"
+      ]
+    },
+    {
+      "href": "/anime/mag-na-polnuyu-stavku-7",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/magi-korolevstvo-magii",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/magi-labirint-magii",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/magi-priklyucheniya-sindbada",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/magicheskaya-bitva-pagubnyy-talant-talanty-umirayut-molodymi",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/malenkie-monstry-s-gory-lanlan",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/mech-gryaduschego-2",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/mech-i-zhezl-vistorii-2",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/mir-po-prezhnemu-krasiv",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/mir-tantsuet",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/mobilnyy-voin-gandam-gquuuuuux-nachalo",
+      "status": 200,
+      "found_on": [
+        "/new/",
+        "/collections/"
+      ]
+    },
+    {
+      "href": "/anime/momoko-slyshit-pesnyu-lyagushat",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/motor-siti",
+      "status": 404,
+      "found_on": [
+        "/collections/"
+      ]
+    },
+    {
+      "href": "/anime/mumi-trolli",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/neobyatnyy-okean",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/neobyatnyy-okean-2",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/neobyatnyy-okean-3",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/novyy-dzhey-hryu-bond-supergonki",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/nu-ne-mozhet-moya-sestrenka-byt-takoy-miloy-2",
+      "status": 200,
+      "found_on": [
+        "/collections/"
+      ]
+    },
+    {
+      "href": "/anime/odnazhdy-v-tokio",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/odnomu-lish-bogu-vedomyy-mir-ii",
+      "status": 200,
+      "found_on": [
+        "/collections/"
+      ]
+    },
+    {
+      "href": "/anime/odnomu-lish-bogu-vedomyy-mir-iii-bogini",
+      "status": 200,
+      "found_on": [
+        "/collections/"
+      ]
+    },
+    {
+      "href": "/anime/okutyvaya-nebesa",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/piraty-chernoy-laguny-krovavaya-tropa-roberty",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/po-tu-storonu-granitsy-rassvet",
+      "status": 200,
+      "found_on": [
+        "/new/",
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/pokemon",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/pokemon-konserzh",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/poketun",
+      "status": 200,
+      "found_on": [
+        "/new/",
+        "/collections/"
+      ]
+    },
+    {
+      "href": "/anime/poketun-2024",
+      "status": 200,
+      "found_on": [
+        "/new/"
+      ]
+    },
+    {
+      "href": "/anime/poketun-2025",
+      "status": 200,
+      "found_on": [
+        "/new/"
+      ]
+    },
+    {
+      "href": "/anime/povar-boets-soma",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/priklyucheniya-digimonov-priznanie",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/proekt-kapsul-geroi",
+      "status": 200,
+      "found_on": [
+        "/collections/"
+      ]
+    },
+    {
+      "href": "/anime/proekt-key-sem-istoriy-krugovoe-zrenie-bezymyannaya-pesnya",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/proekt-key-sem-istoriy-vospominaniya-o-krasnom-kleymo",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/proekt-kirameki",
+      "status": 200,
+      "found_on": [
+        "/new/"
+      ]
+    },
+    {
+      "href": "/anime/proshlo-desyat-let-s-momenta-kak-ya-skazal-ostavte-eto-na-menya-i-uhodite-i",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/puteshestvie-k-bessmertiyu-mchas-v-sinhay-prolog",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/puteshestvie-kino-prekrasnyy-mir-zhizn-prodolzhaetsya",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/raskolotaya-bitvoy-sineva-nebes-2",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/re-zero-zhizn-s-nulya-v-alternativnom-mire",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/re-zero-zhizn-s-nulya-v-alternativnom-mire-2-chast-2",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/re-zero-zhizn-s-nulya-v-alternativnom-mire-4",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/re-zero-zhizn-s-nulya-v-drugom-mire-3",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/re-zhizn-v-alternativnom-mire-s-nulya-2",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/rilakkuma-i-kaoru",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/s-dnem-rozhdeniya-prekrasnym-momentom-zhizni",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/s-mesta-na-mesto-epizod-13",
+      "status": 200,
+      "found_on": [
+        "/new/"
+      ]
+    },
+    {
+      "href": "/anime/schastlivoe-semeystvo-mumi-trolley",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/sem-smertnyh-grehov",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/sem-smertnyh-grehov-vozrozhdenie-zapovedey",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/sinyaya-tyurma-blyu-lok",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/sinyaya-tyurma-blyu-lok-protiv-yunosheskoy-sbornoy-yaponii",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/so-sklonov-kokuriko",
+      "status": 200,
+      "found_on": [
+        "/new/",
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/spisok-nano",
+      "status": 200,
+      "found_on": [
+        "/new/"
+      ]
+    },
+    {
+      "href": "/anime/stena-velikih-voinov",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/sto-vidov-avadzimy",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/strana-chudes",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/stranniki-duhovnogo-mira",
+      "status": 200,
+      "found_on": [
+        "/new/"
+      ]
+    },
+    {
+      "href": "/anime/strelok-s-chernoy-skaly",
+      "status": 200,
+      "found_on": [
+        "/collections/"
+      ]
+    },
+    {
+      "href": "/anime/svyaschennye-zveri",
+      "status": 200,
+      "found_on": [
+        "/new/"
+      ]
+    },
+    {
+      "href": "/anime/svyaschennye-zveri-tysyachi-dney-i-nochey",
+      "status": 200,
+      "found_on": [
+        "/new/"
+      ]
+    },
+    {
+      "href": "/anime/temnyy-dvoretskiy-spetsvypusk",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/tikava-tayna-ostrova-rusalok",
+      "status": 200,
+      "found_on": [
+        "/new/",
+        "/collections/"
+      ]
+    },
+    {
+      "href": "/anime/tofu-boy",
+      "status": 200,
+      "found_on": [
+        "/new/",
+        "/collections/"
+      ]
+    },
+    {
+      "href": "/anime/tualetnyy-malchik-hanako",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/tualetnyy-malchik-hanako-2",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/tualetnyy-malchik-hanako-2-chast-2",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/tumannyy-holm-pyati-stihiy-2",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/tvoe-pismo",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/ty-vkusnyashka",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/u-menya-malo-druzey-dopolnenie",
+      "status": 200,
+      "found_on": [
+        "/collections/"
+      ]
+    },
+    {
+      "href": "/anime/u-menya-malo-druzey-epizod-0",
+      "status": 200,
+      "found_on": [
+        "/collections/"
+      ]
+    },
+    {
+      "href": "/anime/ubiytsa-bogov-final",
+      "status": 200,
+      "found_on": [
+        "/new/"
+      ]
+    },
+    {
+      "href": "/anime/unesennye-prizrakami",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/usio-i-tora-teatr-komicheskih-deformatsiy",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/van-pis",
+      "status": 200,
+      "found_on": [
+        "/collections/",
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/vlast-knizhnogo-chervya-2",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/vlast-knizhnogo-chervya-3",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/voennaya-hronika-malenkoy-devochki",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/voennaya-hronika-malenkoy-devochki-2",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/yugio-duelnye-monstry",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/yuniko",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/yunyy-lord-master-pobega",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/zemlya-snezhok",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/zhivaya-lyubov-superzvezda",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/zhivaya-lyubov-superzvezda-2",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/zhivaya-lyubov-superzvezda-3",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    },
+    {
+      "href": "/anime/zombilend-saga-film",
+      "status": 200,
+      "found_on": [
+        "/top/"
+      ]
+    }
+  ]
+}
