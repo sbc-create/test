@@ -2180,9 +2180,23 @@ display:none;align-items:center;justify-content:center;padding:0}
 .zhero__nav:focus-visible{outline:3px solid #fff;outline-offset:2px}
 .zhero__nav--prev{left:8px}
 .zhero__nav--next{right:8px}
+/* Полоса точек обязана поместиться в героя на ЛЮБОЙ ширине.
+   Измерено на 320px: восемь точек по 44px давали строку 394px при героe
+   296px. Строка выезжала за экран на 74px, первая точка оказывалась при
+   x=-37 — `elementFromPoint` в её середине не находил её вовсе, то есть
+   две точки из восьми не нажимались. Документ при этом не переполнялся:
+   строку обрезал родитель, и обычная проверка горизонтальной прокрутки
+   дефекта не видела.
+   Лечится не брейкпойнтом, а разрешением точкам сжиматься: `min-width:0`
+   и `flex:0 1 44px`. На широких ширинах точка остаётся 44px, на узких
+   делит доступное поровну — 35px при 320px, что выше порога 24px
+   (WCAG 2.5.8 AA). Полные цели 44px остаются у «вперёд» и «назад», то есть
+   эквивалентная цель того же действия никуда не делась. */
 .zhero__dots{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);
-z-index:4;display:none;gap:6px;padding:0;margin:0}
-.zhero__dot{width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border:0;
+z-index:4;display:none;gap:6px;padding:0;margin:0;
+max-width:calc(100% - 16px);flex-wrap:nowrap;justify-content:center}
+.zhero__dot{width:44px;height:44px;min-width:0;min-height:44px;flex:0 1 44px;
+padding:0;border:0;
 background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .zhero__dot .zhero__dot-i{display:block;width:9px;height:9px;border-radius:50%;
 background:#ffffff66;transition:width .2s,background .2s}
