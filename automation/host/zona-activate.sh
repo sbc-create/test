@@ -11,49 +11,52 @@
 # Чего сценарий НЕ делает: не собирает артефакт, не трогает манифест, DNS, TLS,
 # robots и индексацию, не касается соседних витрин. Только перезапуск того
 # юнита, что назван, и проверка того домена, что объявлен его манифестом.
+#
+# Имена переменных и функций — только ASCII: Bash не принимает не-ASCII
+# идентификаторы, и сценарий с кириллическими именами не исполняется вовсе.
 set -uo pipefail
 
-САЙТ="${1:-zona-01}"
-ФРОНТ=/srv/lords/.frontend
-МАНИФЕСТ="${ФРОНТ}/template-manifest-${САЙТ}.json"
-ЮНИТ="nova-${САЙТ}.service"
-КОРЕНЬ="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-ПРОВЕРКА="${КОРЕНЬ}/automation/host/zona-post-restart-verify.py"
+site="${1:-zona-01}"
+frontend_dir=/srv/lords/.frontend
+manifest="${frontend_dir}/template-manifest-${site}.json"
+unit="nova-${site}.service"
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+verify_script="${repo_root}/automation/host/zona-post-restart-verify.py"
 
-сказать() { echo "[$(date -u +%H:%M:%S)] $*"; }
-умереть() { echo "ОШИБКА: $*" >&2; exit 1; }
+log() { echo "[$(date -u +%H:%M:%S)] $*"; }
+die() { echo "ОШИБКА: $*" >&2; exit 1; }
 
-[ -f "$МАНИФЕСТ" ] || умереть "нет манифеста витрины: $МАНИФЕСТ"
-[ -f "$ПРОВЕРКА" ] || умереть "нет сценария проверки: $ПРОВЕРКА"
+[ -f "$manifest" ] || die "нет манифеста витрины: $manifest"
+[ -f "$verify_script" ] || die "нет сценария проверки: $verify_script"
 
-СЕМЕЙСТВО=$(python3 -c "import json,sys;print(json.load(open('$МАНИФЕСТ')).get('template_family',''))")
-[ "$СЕМЕЙСТВО" = "zona" ] || умереть "манифест объявляет семейство '$СЕМЕЙСТВО', а не zona"
+family=$(python3 -c "import json,sys;print(json.load(open('$manifest')).get('template_family',''))")
+[ "$family" = "zona" ] || die "манифест объявляет семейство '$family', а не zona"
 
-ДОМЕН=$(python3 -c "import json;print(json.load(open('$МАНИФЕСТ')).get('domain',''))")
-ОТКАТ=$(python3 -c "import json;print(json.load(open('$МАНИФЕСТ')).get('rollback_target_file',''))")
-АРТЕФАКТ=$(python3 -c "import json;print(json.load(open('$МАНИФЕСТ')).get('artifact_path',''))")
-СБОРКА=$(python3 -c "import json;print(json.load(open('$МАНИФЕСТ')).get('build_id',''))")
+domain=$(python3 -c "import json;print(json.load(open('$manifest')).get('domain',''))")
+rollback_src=$(python3 -c "import json;print(json.load(open('$manifest')).get('rollback_target_file',''))")
+artifact=$(python3 -c "import json;print(json.load(open('$manifest')).get('artifact_path',''))")
+build_id=$(python3 -c "import json;print(json.load(open('$manifest')).get('build_id',''))")
 
-сказать "витрина ${САЙТ}, домен ${ДОМЕН}, сборка ${СБОРКА}"
-сказать "перезапуск ${ЮНИТ}"
-systemctl restart "$ЮНИТ" || умереть "служба не перезапущена"
+log "витрина ${site}, домен ${domain}, сборка ${build_id}"
+log "перезапуск ${unit}"
+systemctl restart "$unit" || die "служба не перезапущена"
 
 # Витрина поднимает снимок каталога десятками секунд: проверять раньше
 # готовности значит проверять загрузку, а не витрину.
-сказать "жду готовности"
+log "жду готовности"
 for _ in $(seq 1 120); do
-  if systemctl is-active --quiet "$ЮНИТ"; then
-    if python3 - "$МАНИФЕСТ" <<'PY' >/dev/null 2>&1
+  if systemctl is-active --quiet "$unit"; then
+    if python3 - "$manifest" <<'PY' >/dev/null 2>&1
 import json, socket, sys, urllib.request
-м = json.load(open(sys.argv[1]))
-порт = int(м.get("port") or 0)
-if not порт:
+data = json.load(open(sys.argv[1]))
+port = int(data.get("port") or 0)
+if not port:
     import re, pathlib
-    юнит = pathlib.Path(f"/etc/systemd/system/nova-{м['service_name'].replace('.service','').replace('nova-','')}.service")
-    текст = юнит.read_text() if юнит.is_file() else ""
-    m = re.search(r"--port\s+(\d+)", текст)
-    порт = int(m.group(1)) if m else 0
-socket.create_connection(("127.0.0.1", порт), timeout=3).close()
+    unit_path = pathlib.Path(f"/etc/systemd/system/nova-{data['service_name'].replace('.service','').replace('nova-','')}.service")
+    unit_text = unit_path.read_text() if unit_path.is_file() else ""
+    m = re.search(r"--port\s+(\d+)", unit_text)
+    port = int(m.group(1)) if m else 0
+socket.create_connection(("127.0.0.1", port), timeout=3).close()
 PY
     then
       break
@@ -62,16 +65,16 @@ PY
   sleep 2
 done
 
-сказать "приёмка живого домена"
-if python3 "$ПРОВЕРКА" --site "$САЙТ" --domain "$ДОМЕН"; then
-  сказать "PASS — релиз ${СБОРКА} активен на ${ДОМЕН}"
+log "приёмка живого домена"
+if python3 "$verify_script" --site "$site" --domain "$domain"; then
+  log "PASS — релиз ${build_id} активен на ${domain}"
   exit 0
 fi
 
-сказать "FAIL — возвращаю прежние байты"
-[ -n "$ОТКАТ" ] && [ -f "$ОТКАТ" ] || умереть "цель отката недоступна: '$ОТКАТ'"
-cp "$ОТКАТ" "$АРТЕФАКТ" || умереть "откат не скопирован"
-systemctl restart "$ЮНИТ" || умереть "служба не перезапущена после отката"
-сказать "откат выполнен: ${АРТЕФАКТ} ← ${ОТКАТ}"
-сказать "витрина возвращена в прежнее состояние; причины провала выше"
+log "FAIL — возвращаю прежние байты"
+[ -n "$rollback_src" ] && [ -f "$rollback_src" ] || die "цель отката недоступна: '$rollback_src'"
+cp "$rollback_src" "$artifact" || die "откат не скопирован"
+systemctl restart "$unit" || die "служба не перезапущена после отката"
+log "откат выполнен: ${artifact} ← ${rollback_src}"
+log "витрина возвращена в прежнее состояние; причины провала выше"
 exit 2

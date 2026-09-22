@@ -34,6 +34,7 @@
 | REQ-AUTH | `production_authorized=false` → ноль мутаций; staging не открывает production | §7 | `tests/unit/test_production_gates.py` |
 | REQ-SSH | Least-privilege, host key pinning, узкий sudo-allowlist, scoped DNS-токены | §8 | `tests/unit/test_inventory_security.py` |
 | REQ-ATOMIC | Атомарные релизы; переключение после health; предыдущий релиз сохраняется | §8.7 | `tests/integration/test_rollback.py` |
+| REQ-HOST-EXEC | Сценарии активации на хосте исполнимы в Bash: ASCII-идентификаторы, разбор и фактический запуск | §8.7 | `tests/unit/test_host_activation_script.py` |
 | REQ-EXPOSURE | Закрыты installer, конфиги, бэкапы, `.env`, git-метаданные, debug, листинг каталогов | §8.10 | `tests/integration/test_security_smoke.py` |
 | REQ-ENVSEP | Mock-интеграции технически невозможны в production | §8.11 | `tests/unit/test_vk_ads_gating.py` |
 | REQ-CONTENT | Контент только из пакета; нет alt — материал не публикуется | §9 | `tests/unit/test_content_rules.py` |
