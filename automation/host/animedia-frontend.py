@@ -4337,6 +4337,53 @@ def _аниме_owner_config() -> dict:
     return сырое if isinstance(сырое, dict) else {}
 
 
+
+# --- COMMUNITY_COMMENTS: Stage 1 adapter (animedia.icu owner pilot) ---------
+#
+# The entire integration with the shared comments module is this function plus
+# one f-string interpolation on the title page. There is no comments logic
+# here, no styling, no markup beyond a mount point: the widget, the API, the
+# cohort gate and every policy live in the shared module and are served by the
+# comments gateway at /api/comments/v1/.
+#
+# Off unless ANIMEDIA_COMMENTS_MOUNT=1 is set in the unit. Shipping the release
+# therefore changes nothing by itself, and the switch that turns it on is a
+# root-owned file, which is the correct place for it.
+#
+# Even when mounted, an ordinary visitor sees an empty container and no
+# network request result: the widget asks the gateway, the gateway answers 503
+# for the public cohort, and the widget renders a notice inside its own box
+# without touching the page. What gates the pilot is the server, never this.
+КОММЕНТАРИИ_ВКЛЮЧЕНЫ = os.environ.get("ANIMEDIA_COMMENTS_MOUNT", "") == "1"
+КОММЕНТАРИИ_БАЗА = "/api/comments/v1"
+
+
+def _блок_комментариев(content_id: str) -> str:
+    """Mount point for the shared comments widget, or nothing at all.
+
+    `content_id` is the provider UUID of the title, not its slug. A slug is an
+    address and addresses change; keying the discussion on the stable id means
+    renaming a title does not orphan its comments.
+    """
+    if not КОММЕНТАРИИ_ВКЛЮЧЕНЫ or not content_id:
+        return ""
+    безопасный = html.escape(str(content_id), quote=True)
+    return (
+        f'<link rel="stylesheet" href="{КОММЕНТАРИИ_БАЗА}/assets/comments-widget.css">'
+        f'<div class="zwrap zwrap--title">'
+        f'<div id="cp-comments" data-cp-comments '
+        f'data-cp-resource-type="title" data-cp-content-id="{безопасный}"></div>'
+        f"</div>"
+        f'<script src="{КОММЕНТАРИИ_БАЗА}/assets/comments-widget.js" defer></script>'
+        f"<script>"
+        f"window.addEventListener('DOMContentLoaded',function(){{"
+        f"if(!window.SiteFactoryComments)return;"
+        f"window.SiteFactoryComments.mount('#cp-comments',{{"
+        f"apiBase:'',resourceType:'title',canonicalContentId:'{безопасный}',"
+        f"theme:'dark',locale:'ru'}});}});"
+        f"</script>"
+    )
+
 def _аниме_контакты_html() -> str:
     conf = _аниме_owner_config()
     parts = []
@@ -4866,7 +4913,8 @@ class ВидАнимедиа(ВидОснова):
             f'<div class="ztitle__head-text"><h1>{html.escape(имя)}</h1>{orig_html}</div>'
             f'</div>{pills}{meta_html}{описание_html}{блок_связей}'
             f'<div class="ztitle__actions"><a class="ztitle__cta" href="#watch">Смотреть</a></div>'
-            f'</div>{rail}</div>{ad_title}{плеер}{блок_серий}{блок_похожих}</div>')
+            f'</div>{rail}</div>{ad_title}{плеер}{блок_серий}{блок_похожих}'
+            f'{_блок_комментариев(деталь.get("id") or "")}</div>')
         разметка = self.schema_тайтла(запись, деталь, путь)
         # Gap copy must never become meta description.
         краткое = (описание[:180] if описание else
