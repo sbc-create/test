@@ -325,3 +325,62 @@ def test_titles_without_the_needed_external_id_are_not_requested(store, registry
     result = ingestor(store, adapter).run([registry.get("nova:t-009")])
     assert result.status == "NOTHING_TO_DO"
     assert adapter.calls == []
+
+
+# ---------------------------------------------------------------------------
+# один внешний идентификатор — одно произведение
+# ---------------------------------------------------------------------------
+
+
+def test_two_titles_claiming_one_external_id_do_not_crash_the_run(store, registry):
+    """Полный проход нашёл это на живых данных: каталог содержит две записи
+    с одним MAL ID, и уникальный индекс валил прогон посреди пакета."""
+    from factory.unified_ratings.titles import CanonicalTitle
+
+    for suffix in ("a", "b"):
+        registry.upsert(
+            CanonicalTitle(
+                title_id=f"nova:dup-{suffix}",
+                content_kind="tv",
+                title_ru=f"Дубль {suffix}",
+                title_original="Cowboy Bebop",
+                release_year=1998,
+                episode_count=26,
+                external_ids={"myanimelist": "1"},
+            )
+        )
+    titles = [registry.get("nova:dup-a"), registry.get("nova:dup-b")]
+    adapter = StubAdapter({"1": {"score": 86, "votes": 100}})
+    result = ingestor(store, adapter).run(titles, stage="DUPLICATE")
+
+    assert result.status in ("OK", "PARTIAL"), "прогон не должен падать на конфликте данных"
+    assert result.counters.exact_match == 1, "идентификатор достаётся ровно одному произведению"
+    accepted = store.count("unified_source_links", "source_key='anilist' AND status='exact'")
+    assert accepted == 1
+    review = store.query_one(
+        "SELECT * FROM unified_review_queue WHERE reason_code='EXTERNAL_ID_CONFLICT'"
+    )
+    assert review is not None, "проигравший кандидат обязан оказаться в очереди проверки"
+
+
+def test_the_claim_check_also_sees_siblings_inside_one_batch(store, registry):
+    """Оба произведения в одном пакете: запрос к БД сиблинга ещё не видит."""
+    from factory.unified_ratings.titles import CanonicalTitle
+
+    for suffix in ("x", "y"):
+        registry.upsert(
+            CanonicalTitle(
+                title_id=f"nova:same-{suffix}",
+                content_kind="tv",
+                title_ru=f"Один ID {suffix}",
+                title_original="Cowboy Bebop",
+                release_year=1998,
+                external_ids={"myanimelist": "1"},
+            )
+        )
+    titles = [registry.get("nova:same-x"), registry.get("nova:same-y")]
+    engine = ingestor(store, StubAdapter({"1": {"score": 86, "votes": 100}}))
+    engine.write_batch_size = 500  # оба произведения в одной транзакции
+    result = engine.run(titles, stage="SAME_BATCH")
+    assert result.counters.exact_match == 1
+    assert result.counters.pending_match == 1

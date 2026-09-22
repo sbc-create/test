@@ -107,12 +107,35 @@ class Ingestor:
         adapter: Any,
         *,
         dry_run: bool = True,
+        write_batch_size: int = 250,
     ) -> None:
         self.store = store
         self.source = source
         self.adapter = adapter
         self.dry_run = dry_run
+        self.write_batch_size = max(1, write_batch_size)
         self.registry = TitleRegistry(store)
+        #: текущие значения по произведениям пакета; читаются одним
+        #: запросом вместо одного запроса на произведение
+        self._current: dict[tuple[str, str], Any] = {}
+        self._claimed_in_batch: dict[str, str] = {}
+
+    def _load_current_cache(self, title_ids: list[str]) -> None:
+        self._current = {}
+        # Заявки, сделанные внутри текущей транзакции: запрос к БД их ещё
+        # не видит, а конфликт двух произведений одного пакета за один
+        # внешний идентификатор так же реален, как и конфликт с уже
+        # записанным.
+        self._claimed_in_batch = {}
+        for start in range(0, len(title_ids), 400):
+            chunk = title_ids[start : start + 400]
+            marks = ",".join("?" * len(chunk))
+            for row in self.store.query(
+                f"SELECT * FROM unified_external_current"
+                f" WHERE source_key=? AND title_id IN ({marks})",
+                (self.source.source_key, *chunk),
+            ):
+                self._current[(row["title_id"], row["source_key"])] = row
 
     # ------------------------------------------------------------------
     # прогон
@@ -141,12 +164,16 @@ class Ingestor:
         result = IngestionResult(run_id=run_id, source_key=self.source.source_key,
                                  status="RUNNING", counters=counters)
         id_space = ID_SPACE_BY_SOURCE.get(self.source.source_key, "")
-        lookup = {
-            str(t.external_ids.get(id_space)): t
-            for t in titles
-            if t.external_ids.get(id_space)
-        }
-        counters.requested = len(lookup)
+        # Один внешний идентификатор может быть у нескольких наших
+        # произведений. Словарь «идентификатор → произведение» терял бы
+        # всех, кроме последнего: ни снимка, ни записи в очереди, ни следа
+        # в журнале — самая тихая из возможных потерь данных.
+        lookup: dict[str, list[CanonicalTitle]] = {}
+        for title in titles:
+            external = title.external_ids.get(id_space)
+            if external:
+                lookup.setdefault(str(external), []).append(title)
+        counters.requested = sum(len(v) for v in lookup.values())
 
         if not lookup:
             result.status = "NOTHING_TO_DO"
@@ -174,22 +201,44 @@ class Ingestor:
         counters.retries = getattr(getattr(self.adapter, "client", None), "retries", 0) or 0
         counters.rate_limited = getattr(getattr(self.adapter, "client", None), "rate_limited", 0) or 0
 
+        usable: list[tuple[CanonicalTitle, SourceFetch]] = []
         for key, fetch in fetched.items():
-            title = lookup.get(key)
-            if title is None:
+            claimants = lookup.get(key) or []
+            for title in claimants:
+                if not fetch.found and fetch.error:
+                    # Отсутствие тайтла у источника — не отказ источника.
+                    # Пока эти исходы считались вместе, один не найденный
+                    # тайтл ронял ворота всего источника.
+                    if fetch.error.startswith("NOT_FOUND") or fetch.error == "NOT_IN_FEED":
+                        counters.not_found += 1
+                    else:
+                        counters.failed += 1
+                    continue
+                counters.received += 1
+                usable.append((title, fetch))
+
+        # Запись идёт пакетами в одной транзакции на пакет. Отдельная
+        # транзакция на произведение означала бы для полного каталога
+        # девяносто тысяч блокировок записи на базе, к которой подключён
+        # живой gateway, — и медленно, и недружелюбно к соседям.
+        for start in range(0, len(usable), self.write_batch_size):
+            chunk = usable[start : start + self.write_batch_size]
+            self._load_current_cache([t.title_id for t, _ in chunk])
+            if self.dry_run:
+                for title, fetch in chunk:
+                    self._apply_outcome(
+                        counters,
+                        result,
+                        self._ingest_one(None, title, fetch, run_id=run_id, id_space=id_space),
+                    )
                 continue
-            if not fetch.found and fetch.error:
-                # Отсутствие тайтла у источника — не отказ источника.
-                # Пока эти исходы считались вместе, один не найденный
-                # тайтл ронял ворота всего источника.
-                if fetch.error.startswith("NOT_FOUND") or fetch.error == "NOT_IN_FEED":
-                    counters.not_found += 1
-                else:
-                    counters.failed += 1
-                continue
-            counters.received += 1
-            outcome = self._ingest_one(title, fetch, run_id=run_id, id_space=id_space)
-            self._apply_outcome(counters, result, outcome)
+            with self.store.write_tx() as conn:
+                outcomes = [
+                    self._ingest_one(conn, title, fetch, run_id=run_id, id_space=id_space)
+                    for title, fetch in chunk
+                ]
+            for outcome in outcomes:
+                self._apply_outcome(counters, result, outcome)
 
         result.status = "OK" if not counters.failed else "PARTIAL"
         result.cursor_out = max(lookup.keys(), key=_sort_key) if lookup else cursor_in
@@ -220,19 +269,21 @@ class Ingestor:
     # ------------------------------------------------------------------
 
     def _ingest_one(
-        self, title: CanonicalTitle, fetch: SourceFetch, *, run_id: str, id_space: str
+        self, conn, title: CanonicalTitle, fetch: SourceFetch, *, run_id: str, id_space: str
     ) -> dict[str, Any]:
         decision = self._decide(title, fetch, id_space=id_space)
+        if decision.status is MatchStatus.EXACT:
+            decision = self._check_exclusive_claim(title, fetch, decision)
         if decision.status in (MatchStatus.PENDING, MatchStatus.CONFLICT):
-            self._queue_review(title, decision, run_id=run_id)
-            self._write_link(title, fetch, decision)
+            self._queue_review(conn, title, decision, run_id=run_id)
+            self._write_link(conn, title, fetch, decision)
             return {"kind": "review", "decision": decision, "title": title, "fetch": fetch}
         if decision.status is MatchStatus.REJECTED:
             return {"kind": "rejected", "decision": decision, "title": title, "fetch": fetch}
 
-        self._write_link(title, fetch, decision)
+        self._write_link(conn, title, fetch, decision)
         normalized = normalize(fetch.raw_score, self.source.scale)
-        stored = self._store_snapshot(title, fetch, normalized, run_id=run_id)
+        stored = self._store_snapshot(conn, title, fetch, normalized, run_id=run_id)
         return {
             "kind": stored,
             "decision": decision,
@@ -240,6 +291,51 @@ class Ingestor:
             "fetch": fetch,
             "normalized": normalized,
         }
+
+    def _check_exclusive_claim(
+        self, title: CanonicalTitle, fetch: SourceFetch, decision: MatchDecision
+    ) -> MatchDecision:
+        """Один внешний идентификатор — одно произведение.
+
+        В каталоге встречаются две записи с одним и тем же MAL ID: части
+        одного релиза, дубль или ошибка импорта. Принять обе значило бы
+        показать одну и ту же внешнюю оценку как оценку двух разных
+        произведений. Схема это запрещает уникальным индексом, но падать
+        на нём нельзя: конфликт двух каталожных записей — обычное
+        состояние данных, и разбирать его должен человек, а не аварийный
+        останов посреди прохода.
+        """
+        from factory.unified_ratings.matching import MatchMethod
+
+        external_id = decision.external_id or fetch.external_id
+        holder = self._claimed_in_batch.get(external_id)
+        if holder is None:
+            row = self.store.query_one(
+                "SELECT title_id FROM unified_source_links"
+                " WHERE source_key=? AND external_id=? AND status IN ('exact','reviewed')",
+                (self.source.source_key, external_id),
+            )
+            holder = row["title_id"] if row is not None else None
+        if holder is None or holder == title.title_id:
+            self._claimed_in_batch[external_id] = title.title_id
+            return decision
+        row = {"title_id": holder}
+        return MatchDecision(
+            status=MatchStatus.CONFLICT,
+            method=MatchMethod.EXACT_EXTERNAL_ID,
+            confidence=0.0,
+            external_id=external_id,
+            reasons=(QuarantineReason.EXTERNAL_ID_CONFLICT,),
+            detail=(
+                f"{self.source.source_key}:{external_id} уже закреплён за "
+                f"{row['title_id']}; два наших произведения претендуют на одну "
+                "запись источника"
+            ),
+            candidates=(
+                {"external_id": external_id, "held_by_title_id": row["title_id"]},
+                {"external_id": external_id, "claimed_by_title_id": title.title_id},
+            ),
+        )
 
     def _decide(self, title: CanonicalTitle, fetch: SourceFetch, *, id_space: str) -> MatchDecision:
         """Проверить связь, полученную по точному идентификатору.
@@ -316,13 +412,12 @@ class Ingestor:
     # ------------------------------------------------------------------
 
     def _write_link(
-        self, title: CanonicalTitle, fetch: SourceFetch, decision: MatchDecision
+        self, conn, title: CanonicalTitle, fetch: SourceFetch, decision: MatchDecision
     ) -> None:
-        if self.dry_run:
+        if self.dry_run or conn is None:
             return
         now = utc_now()
-        with self.store.write_tx() as conn:
-            conn.execute(
+        conn.execute(
                 """INSERT INTO unified_source_links(
                        title_id, source_key, external_id, source_url, match_method,
                        confidence, status, verified_by, verified_at, evidence_json,
@@ -353,54 +448,49 @@ class Ingestor:
             )
 
     def _queue_review(
-        self, title: CanonicalTitle, decision: MatchDecision, *, run_id: str
+        self, conn, title: CanonicalTitle, decision: MatchDecision, *, run_id: str
     ) -> None:
-        if self.dry_run:
+        if self.dry_run or conn is None:
             return
         reason = (
             decision.reasons[0].value
             if decision.reasons
             else QuarantineReason.INSUFFICIENT_CONFIDENCE.value
         )
-        with self.store.write_tx() as conn:
-            conn.execute(
-                """INSERT OR IGNORE INTO unified_review_queue(
-                       title_id, source_key, reason_code, candidates_json, detail,
-                       status, created_at, run_id)
-                   VALUES (?,?,?,?,?,'PENDING',?,?)""",
-                (
-                    title.title_id,
-                    self.source.source_key,
-                    reason,
-                    json.dumps(list(decision.candidates), ensure_ascii=False),
-                    decision.detail,
-                    utc_now(),
-                    run_id,
-                ),
-            )
+        conn.execute(
+            """INSERT OR IGNORE INTO unified_review_queue(
+                   title_id, source_key, reason_code, candidates_json, detail,
+                   status, created_at, run_id)
+               VALUES (?,?,?,?,?,'PENDING',?,?)""",
+            (
+                title.title_id,
+                self.source.source_key,
+                reason,
+                json.dumps(list(decision.candidates), ensure_ascii=False),
+                decision.detail,
+                utc_now(),
+                run_id,
+            ),
+        )
 
     # ------------------------------------------------------------------
 
     def _store_snapshot(
-        self, title: CanonicalTitle, fetch: SourceFetch, normalized, *, run_id: str
+        self, conn, title: CanonicalTitle, fetch: SourceFetch, normalized, *, run_id: str
     ) -> str:
         """Записать снимок. Неизменившееся содержимое новой версии не создаёт."""
         content_hash = fetch.content_hash()
-        current = self.store.query_one(
-            "SELECT * FROM unified_external_current WHERE title_id=? AND source_key=?",
-            (title.title_id, self.source.source_key),
-        )
+        current = self._current.get((title.title_id, self.source.source_key))
         now = utc_now()
 
         if current is not None and current["content_hash"] == content_hash:
-            if not self.dry_run:
-                with self.store.write_tx() as conn:
-                    conn.execute(
-                        """UPDATE unified_external_current
-                           SET last_checked_at=?, unchanged_streak=unchanged_streak+1
-                           WHERE title_id=? AND source_key=?""",
-                        (now, title.title_id, self.source.source_key),
-                    )
+            if not self.dry_run and conn is not None:
+                conn.execute(
+                    """UPDATE unified_external_current
+                       SET last_checked_at=?, unchanged_streak=unchanged_streak+1
+                       WHERE title_id=? AND source_key=?""",
+                    (now, title.title_id, self.source.source_key),
+                )
             return "unchanged"
 
         validation_state = normalized.state.value
@@ -420,79 +510,78 @@ class Ingestor:
             "raw_field": self.source.scale.raw_field,
             "distribution": fetch.score_distribution,
         }
-        with self.store.write_tx() as conn:
-            cursor = conn.execute(
-                """INSERT INTO unified_external_snapshots(
-                       title_id, source_key, external_id, raw_score,
-                       source_scale_min, source_scale_max, normalization_formula,
-                       normalized_score, vote_count, user_count, source_rating_date,
-                       fetched_at, source_updated_at, adapter_version,
-                       raw_payload_sha256, content_hash, validation_state,
-                       rejection_reason, provenance_json, prev_snapshot_id, run_id)
-                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
-                (
-                    title.title_id,
-                    self.source.source_key,
-                    fetch.external_id,
-                    None if fetch.raw_score is None else str(fetch.raw_score),
-                    str(self.source.scale.source_scale_min),
-                    str(self.source.scale.source_scale_max),
-                    self.source.scale.formula.value,
-                    None if normalized.normalized is None else str(normalized.normalized),
-                    fetch.vote_count,
-                    fetch.user_count,
-                    fetch.source_rating_date,
-                    now,
-                    fetch.source_updated_at,
-                    self.source.adapter_version,
-                    fetch.payload_sha256(),
-                    content_hash,
-                    validation_state,
-                    rejection_reason,
-                    json.dumps(provenance, ensure_ascii=False),
-                    current["snapshot_id"] if current is not None else None,
-                    run_id,
-                ),
-            )
-            snapshot_id = cursor.lastrowid
-            conn.execute(
-                """INSERT INTO unified_external_current(
-                       title_id, source_key, snapshot_id, raw_score, source_scale_max,
-                       normalized_score, vote_count, user_count, content_hash,
-                       validation_state, fetched_at, last_checked_at, unchanged_streak,
-                       provenance_url, adapter_version)
-                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,0,?,?)
-                   ON CONFLICT(title_id, source_key) DO UPDATE SET
-                       snapshot_id=excluded.snapshot_id,
-                       raw_score=excluded.raw_score,
-                       source_scale_max=excluded.source_scale_max,
-                       normalized_score=excluded.normalized_score,
-                       vote_count=excluded.vote_count,
-                       user_count=excluded.user_count,
-                       content_hash=excluded.content_hash,
-                       validation_state=excluded.validation_state,
-                       fetched_at=excluded.fetched_at,
-                       last_checked_at=excluded.last_checked_at,
-                       unchanged_streak=0,
-                       provenance_url=excluded.provenance_url,
-                       adapter_version=excluded.adapter_version""",
-                (
-                    title.title_id,
-                    self.source.source_key,
-                    snapshot_id,
-                    None if fetch.raw_score is None else str(fetch.raw_score),
-                    str(self.source.scale.source_scale_max),
-                    None if normalized.normalized is None else str(normalized.normalized),
-                    fetch.vote_count,
-                    fetch.user_count,
-                    content_hash,
-                    validation_state,
-                    now,
-                    now,
-                    fetch.provenance_url,
-                    self.source.adapter_version,
-                ),
-            )
+        cursor = conn.execute(
+            """INSERT INTO unified_external_snapshots(
+                   title_id, source_key, external_id, raw_score,
+                   source_scale_min, source_scale_max, normalization_formula,
+                   normalized_score, vote_count, user_count, source_rating_date,
+                   fetched_at, source_updated_at, adapter_version,
+                   raw_payload_sha256, content_hash, validation_state,
+                   rejection_reason, provenance_json, prev_snapshot_id, run_id)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+            (
+                title.title_id,
+                self.source.source_key,
+                fetch.external_id,
+                None if fetch.raw_score is None else str(fetch.raw_score),
+                str(self.source.scale.source_scale_min),
+                str(self.source.scale.source_scale_max),
+                self.source.scale.formula.value,
+                None if normalized.normalized is None else str(normalized.normalized),
+                fetch.vote_count,
+                fetch.user_count,
+                fetch.source_rating_date,
+                now,
+                fetch.source_updated_at,
+                self.source.adapter_version,
+                fetch.payload_sha256(),
+                content_hash,
+                validation_state,
+                rejection_reason,
+                json.dumps(provenance, ensure_ascii=False),
+                current["snapshot_id"] if current is not None else None,
+                run_id,
+            ),
+        )
+        snapshot_id = cursor.lastrowid
+        conn.execute(
+            """INSERT INTO unified_external_current(
+                   title_id, source_key, snapshot_id, raw_score, source_scale_max,
+                   normalized_score, vote_count, user_count, content_hash,
+                   validation_state, fetched_at, last_checked_at, unchanged_streak,
+                   provenance_url, adapter_version)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,0,?,?)
+               ON CONFLICT(title_id, source_key) DO UPDATE SET
+                   snapshot_id=excluded.snapshot_id,
+                   raw_score=excluded.raw_score,
+                   source_scale_max=excluded.source_scale_max,
+                   normalized_score=excluded.normalized_score,
+                   vote_count=excluded.vote_count,
+                   user_count=excluded.user_count,
+                   content_hash=excluded.content_hash,
+                   validation_state=excluded.validation_state,
+                   fetched_at=excluded.fetched_at,
+                   last_checked_at=excluded.last_checked_at,
+                   unchanged_streak=0,
+                   provenance_url=excluded.provenance_url,
+                   adapter_version=excluded.adapter_version""",
+            (
+                title.title_id,
+                self.source.source_key,
+                snapshot_id,
+                None if fetch.raw_score is None else str(fetch.raw_score),
+                str(self.source.scale.source_scale_max),
+                None if normalized.normalized is None else str(normalized.normalized),
+                fetch.vote_count,
+                fetch.user_count,
+                content_hash,
+                validation_state,
+                now,
+                now,
+                fetch.provenance_url,
+                self.source.adapter_version,
+            ),
+        )
         return "inserted" if current is None else "updated"
 
     # ------------------------------------------------------------------
