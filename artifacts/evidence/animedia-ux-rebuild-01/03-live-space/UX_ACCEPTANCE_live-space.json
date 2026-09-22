@@ -1,0 +1,5182 @@
+{
+ "task": "ANIMEDIA-UX-ACCEPTANCE",
+ "tenant": "animedia",
+ "domain": "animedia.space",
+ "label": "live-space",
+ "measured_at_utc": "2026-09-22T12:51:36Z",
+ "widths": [
+  320,
+  390,
+  768,
+  1024,
+  1440,
+  1920
+ ],
+ "routes": [
+  "home",
+  "catalog",
+  "new",
+  "top",
+  "top_votes",
+  "lists",
+  "schedule",
+  "collections",
+  "genres",
+  "types",
+  "search_hit",
+  "search_empty",
+  "genre_page",
+  "type_page",
+  "title",
+  "not_found"
+ ],
+ "cells": [
+  {
+   "width": 320,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "ahero-s__chip",
+     "w": 204,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 202,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 140,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 252,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 134,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 251,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 76,
+   "score_badges": 84,
+   "score_with_value": 65,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "home",
+   "path": "/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 320,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 106,
+     "h": 21
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 41,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "catalog",
+   "path": "/catalog/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 320,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 41,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "new",
+   "path": "/new/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 320,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 48,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "top",
+   "path": "/top/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 320,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "top_votes",
+   "path": "/top/?by=votes",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 320,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "lists",
+   "path": "/lists/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 320,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "schedule",
+   "path": "/schedule/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 320,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "collections",
+   "path": "/collections/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 320,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "genres",
+   "path": "/genres/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 320,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "types",
+   "path": "/types/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 320,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 4,
+   "score_badges": 4,
+   "score_with_value": 4,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "search_hit",
+   "path": "/search/?q=naruto",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 320,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "search_empty",
+   "path": "/search/?q=%D1%8A%D1%8B%D1%8C%D1%89%D0%B7%D1%85",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 320,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 106,
+     "h": 21
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 25,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "genre_page",
+   "path": "/catalog/?genre=fentezi",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 320,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 106,
+     "h": 21
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 27,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "type_page",
+   "path": "/series/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 320,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 24,
+   "score_badges": 24,
+   "score_with_value": 23,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "title",
+   "path": "/title/naruto-posledniy-film/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 320,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "not_found",
+   "path": "/definitely-absent-route-xyz/",
+   "http": 404,
+   "expected_http": 404,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 390,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "ahero-s__chip",
+     "w": 204,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 202,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 140,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 252,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 134,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 251,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 76,
+   "score_badges": 84,
+   "score_with_value": 65,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "home",
+   "path": "/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 390,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 106,
+     "h": 21
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 41,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "catalog",
+   "path": "/catalog/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 390,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 41,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "new",
+   "path": "/new/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 390,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 48,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "top",
+   "path": "/top/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 390,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "top_votes",
+   "path": "/top/?by=votes",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 390,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "lists",
+   "path": "/lists/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 390,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "schedule",
+   "path": "/schedule/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 390,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "collections",
+   "path": "/collections/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 390,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "genres",
+   "path": "/genres/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 390,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "types",
+   "path": "/types/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 390,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 4,
+   "score_badges": 4,
+   "score_with_value": 4,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "search_hit",
+   "path": "/search/?q=naruto",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 390,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "search_empty",
+   "path": "/search/?q=%D1%8A%D1%8B%D1%8C%D1%89%D0%B7%D1%85",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 390,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 106,
+     "h": 21
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 25,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "genre_page",
+   "path": "/catalog/?genre=fentezi",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 390,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 106,
+     "h": 21
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 27,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "type_page",
+   "path": "/series/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 390,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 24,
+   "score_badges": 24,
+   "score_with_value": 23,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "title",
+   "path": "/title/naruto-posledniy-film/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 390,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "not_found",
+   "path": "/definitely-absent-route-xyz/",
+   "http": 404,
+   "expected_http": 404,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 768,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "ahero-s__chip",
+     "w": 204,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 202,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 140,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 252,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 134,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 251,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 76,
+   "score_badges": 84,
+   "score_with_value": 65,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "home",
+   "path": "/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 768,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 106,
+     "h": 21
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 41,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "catalog",
+   "path": "/catalog/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 768,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 41,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "new",
+   "path": "/new/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 768,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 48,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "top",
+   "path": "/top/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 768,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "top_votes",
+   "path": "/top/?by=votes",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 768,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "lists",
+   "path": "/lists/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 768,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "schedule",
+   "path": "/schedule/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 768,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "collections",
+   "path": "/collections/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 768,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "genres",
+   "path": "/genres/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 768,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "types",
+   "path": "/types/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 768,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 4,
+   "score_badges": 4,
+   "score_with_value": 4,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "search_hit",
+   "path": "/search/?q=naruto",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 768,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "search_empty",
+   "path": "/search/?q=%D1%8A%D1%8B%D1%8C%D1%89%D0%B7%D1%85",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 768,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 106,
+     "h": 21
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 25,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "genre_page",
+   "path": "/catalog/?genre=fentezi",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 768,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 106,
+     "h": 21
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 27,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "type_page",
+   "path": "/series/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 768,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 24,
+   "score_badges": 24,
+   "score_with_value": 23,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "title",
+   "path": "/title/naruto-posledniy-film/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 768,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "not_found",
+   "path": "/definitely-absent-route-xyz/",
+   "http": 404,
+   "expected_http": 404,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1024,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "ahero-s__chip",
+     "w": 204,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 202,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 140,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 252,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 134,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 251,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 76,
+   "score_badges": 84,
+   "score_with_value": 65,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "home",
+   "path": "/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1024,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 106,
+     "h": 21
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 41,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "catalog",
+   "path": "/catalog/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1024,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 41,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "new",
+   "path": "/new/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1024,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 48,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "top",
+   "path": "/top/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1024,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "top_votes",
+   "path": "/top/?by=votes",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1024,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "lists",
+   "path": "/lists/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1024,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "schedule",
+   "path": "/schedule/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1024,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "collections",
+   "path": "/collections/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1024,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "genres",
+   "path": "/genres/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1024,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "types",
+   "path": "/types/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1024,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 4,
+   "score_badges": 4,
+   "score_with_value": 4,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "search_hit",
+   "path": "/search/?q=naruto",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1024,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "search_empty",
+   "path": "/search/?q=%D1%8A%D1%8B%D1%8C%D1%89%D0%B7%D1%85",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1024,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 106,
+     "h": 21
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 25,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "genre_page",
+   "path": "/catalog/?genre=fentezi",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1024,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 106,
+     "h": 21
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 27,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "type_page",
+   "path": "/series/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1024,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 24,
+   "score_badges": 24,
+   "score_with_value": 23,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "title",
+   "path": "/title/naruto-posledniy-film/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1024,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "not_found",
+   "path": "/definitely-absent-route-xyz/",
+   "http": 404,
+   "expected_http": 404,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1440,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "ahero-s__chip",
+     "w": 204,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 202,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 140,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 252,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 134,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 251,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 76,
+   "score_badges": 84,
+   "score_with_value": 65,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "home",
+   "path": "/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1440,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 106,
+     "h": 21
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 41,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "catalog",
+   "path": "/catalog/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1440,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 41,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "new",
+   "path": "/new/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1440,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 48,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "top",
+   "path": "/top/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1440,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "top_votes",
+   "path": "/top/?by=votes",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1440,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "lists",
+   "path": "/lists/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1440,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "schedule",
+   "path": "/schedule/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1440,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "collections",
+   "path": "/collections/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1440,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "genres",
+   "path": "/genres/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1440,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "types",
+   "path": "/types/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1440,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 4,
+   "score_badges": 4,
+   "score_with_value": 4,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "search_hit",
+   "path": "/search/?q=naruto",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1440,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "search_empty",
+   "path": "/search/?q=%D1%8A%D1%8B%D1%8C%D1%89%D0%B7%D1%85",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1440,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 106,
+     "h": 21
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 25,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "genre_page",
+   "path": "/catalog/?genre=fentezi",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1440,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 106,
+     "h": 21
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 27,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "type_page",
+   "path": "/series/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1440,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 24,
+   "score_badges": 24,
+   "score_with_value": 23,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "title",
+   "path": "/title/naruto-posledniy-film/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1440,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "not_found",
+   "path": "/definitely-absent-route-xyz/",
+   "http": 404,
+   "expected_http": 404,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1920,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "ahero-s__chip",
+     "w": 204,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 202,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 140,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 252,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 134,
+     "h": 32
+    },
+    {
+     "cls": "ahero-s__chip",
+     "w": 251,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 76,
+   "score_badges": 84,
+   "score_with_value": 65,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "home",
+   "path": "/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1920,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 106,
+     "h": 21
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 41,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "catalog",
+   "path": "/catalog/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1920,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 41,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "new",
+   "path": "/new/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1920,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 48,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "top",
+   "path": "/top/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1920,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "top_votes",
+   "path": "/top/?by=votes",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1920,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "lists",
+   "path": "/lists/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1920,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "schedule",
+   "path": "/schedule/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1920,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "collections",
+   "path": "/collections/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1920,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "genres",
+   "path": "/genres/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1920,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "types",
+   "path": "/types/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1920,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 4,
+   "score_badges": 4,
+   "score_with_value": 4,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "search_hit",
+   "path": "/search/?q=naruto",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1920,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "search_empty",
+   "path": "/search/?q=%D1%8A%D1%8B%D1%8C%D1%89%D0%B7%D1%85",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1920,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 106,
+     "h": 21
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 25,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "genre_page",
+   "path": "/catalog/?genre=fentezi",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1920,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 106,
+     "h": 21
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 48,
+   "score_badges": 48,
+   "score_with_value": 27,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "type_page",
+   "path": "/series/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1920,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 24,
+   "score_badges": 24,
+   "score_with_value": 23,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "title",
+   "path": "/title/naruto-posledniy-film/",
+   "http": 200,
+   "expected_http": 200,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  },
+  {
+   "width": 1920,
+   "overflow_px": 0,
+   "overflow_culprits": [],
+   "broken_images": [],
+   "empty_clickables": [],
+   "small_targets": [
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 56,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 120,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 67,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 43,
+     "h": 32
+    },
+    {
+     "cls": "",
+     "w": 86,
+     "h": 32
+    }
+   ],
+   "h1_count": 1,
+   "cards": 0,
+   "score_badges": 0,
+   "score_with_value": 0,
+   "source_plaques": 0,
+   "nav_links": 9,
+   "route": "not_found",
+   "path": "/definitely-absent-route-xyz/",
+   "http": 404,
+   "expected_http": 404,
+   "missing_required": [],
+   "served_build": "20260922T123254Z-9a2e935-animedia-parity",
+   "x_robots": "noindex, nofollow\nnoindex, nofollow"
+  }
+ ],
+ "actions": [
+  {
+   "action": "поиск с главной",
+   "pass": true,
+   "details": {
+    "url": "https://animedia.space/search/?q=naruto",
+    "cards": 4
+   }
+  },
+  {
+   "action": "подсказка ведёт на произведение",
+   "pass": true,
+   "details": {
+    "chip": "Цветущая звезда Парижа",
+    "url": "https://animedia.space/title/cvetuschaya-zvezda-parizha/"
+   }
+  },
+  {
+   "action": "пустой поиск честен",
+   "pass": true,
+   "details": {
+    "cards": 0
+   }
+  },
+  {
+   "action": "фильтр меняет выдачу",
+   "pass": true,
+   "details": {
+    "all": 7426,
+    "genre": 2463,
+    "genre_ongoing": 40
+   }
+  },
+  {
+   "action": "сброс фильтров",
+   "pass": true,
+   "details": {
+    "after_reset": 7426
+   }
+  },
+  {
+   "action": "назад и вперёд",
+   "pass": true,
+   "details": {
+    "filtered": 2463,
+    "back": 7426,
+    "forward": 2463
+   }
+  },
+  {
+   "action": "сортировка",
+   "pass": true,
+   "details": {
+    "default_top": [
+     "Цветущая звезда Парижа",
+     "Мастер льда и пламени 2"
+    ],
+    "by_rating_top": [
+     "Грация духа",
+     "Стальной алхимик: Братство"
+    ],
+    "monotonic": true
+   }
+  },
+  {
+   "action": "листалка",
+   "pass": true,
+   "details": {
+    "page1": 48,
+    "page2": 48,
+    "overlap": 0
+   }
+  },
+  {
+   "action": "слайдер",
+   "pass": true,
+   "details": {
+    "scroll_after_next": 1338,
+    "scroll_after_dot": 0,
+    "autoplay_toggled": "true→false"
+   }
+  },
+  {
+   "action": "открытие произведения",
+   "pass": true,
+   "details": {
+    "url": "https://animedia.space/title/cvetuschaya-zvezda-parizha/"
+   }
+  },
+  {
+   "action": "выбор серии",
+   "pass": true,
+   "details": {
+    "url": "https://animedia.space/title/master-lda-i-plameni-2/season-2/episode-1/"
+   }
+  },
+  {
+   "action": "голос: поставить, сменить, снять",
+   "pass": true,
+   "details": {
+    "after_vote": "1",
+    "after_change": "1",
+    "after_clear": "0"
+   }
+  },
+  {
+   "action": "реакция",
+   "pass": true,
+   "details": {
+    "on": 1,
+    "off": 0
+   }
+  },
+  {
+   "action": "комментарий",
+   "pass": true,
+   "details": {
+    "skipped_on_live": "форма и раздел проверены разметкой; отправка проверена на том же артефакте локально"
+   }
+  },
+  {
+   "action": "списки",
+   "pass": true,
+   "details": {
+    "chosen": "watching",
+    "in_lists": 1,
+    "cleared": true
+   }
+  },
+  {
+   "action": "мобильное меню",
+   "pass": true,
+   "details": {
+    "opened": true,
+    "closed_by_escape": true
+   }
+  }
+ ],
+ "console": [],
+ "bad_responses": [],
+ "summary": {
+  "cells": 96,
+  "cell_failures": [],
+  "actions": 16,
+  "action_failures": [],
+  "console_errors": 0,
+  "bad_responses": 0,
+  "bad_responses_poster_proxy": 0,
+  "bad_responses_other": [],
+  "http_5xx": 0,
+  "broken_images": 0,
+  "overflow_failures": 0,
+  "source_plaques": 0,
+  "pass": true
+ }
+}

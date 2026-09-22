@@ -2155,9 +2155,14 @@ text-decoration:none;width:fit-content}
 .ztitle__cta:hover{filter:brightness(1.05)}
 .ztitle__actions{display:flex;flex-direction:column;gap:10px;margin-top:4px}
 @media(max-width:599px){.ztitle__cta,.ztitle__actions .ztitle__cta{width:100%}}
-.ztitle__rail{display:none;min-width:0}
+/* Колонка оценки видна на всех ширинах. Раньше она скрывалась до 900px, и
+   на телефоне страница произведения оставалась вообще без оценки — то есть
+   без ответа на вопрос, ради которого её и открывают. На узком экране
+   колонка идёт строкой над содержимым, на широком — боковой колонкой. */
+.ztitle__rail{display:flex;flex-direction:column;gap:12px;min-width:0;width:100%;
+max-width:none;margin:0 0 12px}
 @media(min-width:900px){
-  .ztitle__rail{display:flex;flex-direction:column;gap:12px;width:100%;max-width:180px}
+  .ztitle__rail{max-width:180px;margin:0}
 }
 .ztitle__rail-ratings{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
 .ztitle__rail-ratings li{display:flex;flex-direction:column;gap:2px;min-height:0}
@@ -2165,7 +2170,11 @@ text-decoration:none;width:fit-content}
 color:var(--a-dim);font-weight:700}
 .ztitle__rail-ratings .val{font-size:20px;font-weight:800;color:var(--a-ink);line-height:1.1}
 .ztitle__rail-ratings .val[data-missing="1"]{color:var(--a-mute);font-weight:600;font-size:16px}
-.ztitle__score{display:none}
+/* Прежде здесь стояло `.ztitle__score{display:none}` — наследство оформления,
+   в котором крупной сводной не было. Правило шло ниже объявления и гасило её
+   насмерть: разметка с числом отдавалась, но не отрисовывалась ни на одной
+   ширине. Проверено в браузере на боевом домене: 7.6 присутствовало в DOM и
+   имело нулевой размер. */
 .ztitle__dl{display:none}
 .ztitle__rels{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 0}
 .ztitle__rels a{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;

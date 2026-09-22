@@ -274,3 +274,21 @@ def test_запасной_импорт_рядом_с_артефактом_объ
     for модуль in re.findall(r"from factory\.animedia import (\w+)", рантайм):
         assert re.search(rf"import {модуль} as ", рантайм), (
             f"у {модуль} нет запасного импорта для плоского релиза")
+
+
+def test_сводная_оценка_не_спрятана_стилем():
+    """Правило display:none не должно гасить то, что витрина обязана показать.
+
+    В боевом релизе `.ztitle__score{display:none}` стояло ниже объявления
+    блока и гасило крупную сводную на всех ширинах: разметка с числом
+    отдавалась, а размер элемента был нулевым. Проверено в браузере.
+    """
+    исходник = (ROOT / "automation/host/animedia-frontend.py").read_text(encoding="utf-8")
+    # Правило CSS начинается с начала строки; в комментарии оно стоит внутри
+    # предложения, и путать одно с другим тест не должен.
+    правила = {с.strip() for с in исходник.splitlines() if с.startswith(".ztitle__")}
+    assert ".ztitle__score{display:none}" not in правила, (
+        "крупная сводная снова погашена стилем")
+    assert not any(п.startswith(".ztitle__rail{display:none") for п in правила), (
+        "колонка оценки снова скрыта на телефоне")
+    assert any(п.startswith(".ztitle__score{display:flex") for п in правила)
