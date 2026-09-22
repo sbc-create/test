@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import hmac
 import json
+import sys
 import uuid
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
@@ -172,8 +173,14 @@ class CommentsApi:
         """
         return Principal(subject_id=identity.subject_id, role=USER, scope=scope)
 
-    def handle(self, request: Request) -> Response:
-        """Single entry point. Every error leaves through one place."""
+    def handle(self, request: Request, *, cohort: str = "public") -> Response:
+        """Single entry point. Every error leaves through one place.
+
+        The cohort arrives from the caller (the gateway resolves it from a
+        signed cookie) rather than being read here, so this module keeps no
+        opinion about audiences and a deployment that forgets to resolve one
+        gets `public` — the answer that serves nothing.
+        """
         request_id = request.request_id
         binding = None
         try:
@@ -190,7 +197,7 @@ class CommentsApi:
             handler, params = self._route(request)
             if handler is None:
                 raise NotFound("no such endpoint")
-            response = handler(request, scope, binding, params, request_id)
+            response = handler(request, scope, binding, params, request_id, cohort)
             return self._finish(response, request, binding, request_id)
 
         except CommentsError as exc:
@@ -201,8 +208,15 @@ class CommentsApi:
                 request_id,
             )
         except Exception:  # noqa: BLE001 — the boundary must not leak internals
-            # No message, no type, no traceback. The request id is the handle
-            # an operator uses to find the real error in the logs.
+            # No message, no type, no traceback *to the client*. The request id
+            # is the handle an operator uses to find the real error, so the
+            # real error has to reach the log — silently swallowing it here is
+            # what makes a 500 undiagnosable.
+            import traceback as _traceback
+
+            sys.stderr.write(
+                f"[comments] request_id={request_id} unhandled:\n{_traceback.format_exc()}"
+            )
             return self._finish(
                 Response(
                     500,
@@ -268,7 +282,7 @@ class CommentsApi:
             )
         return ResourceRef(resource_type, content_id)
 
-    def _get_thread(self, request, scope, binding, params, request_id) -> Response:
+    def _get_thread(self, request, scope, binding, params, request_id, cohort) -> Response:
         identity = self._identity(scope, request)
         principal = self._principal(scope, identity)
         view = self._service.thread_view(
@@ -279,14 +293,15 @@ class CommentsApi:
             limit=int(request.query.get("limit", "20") or 20),
             cursor=request.query.get("cursor", ""),
             viewer_subject_id=identity.subject_id,
+            cohort=cohort,
         )
         return Response(200, view.as_dict())
 
-    def _get_count(self, request, scope, binding, params, request_id) -> Response:
+    def _get_count(self, request, scope, binding, params, request_id, cohort) -> Response:
         identity = self._identity(scope, request)
         principal = self._principal(scope, identity)
         count = self._service.comment_count(
-            scope, principal, self._ref_from_query(request)
+            scope, principal, self._ref_from_query(request), cohort=cohort
         )
         return Response(200, {"count": count})
 
@@ -295,7 +310,7 @@ class CommentsApi:
             raise BadRequest("a JSON object body is required")
         return request.body
 
-    def _post_comment(self, request, scope, binding, params, request_id) -> Response:
+    def _post_comment(self, request, scope, binding, params, request_id, cohort) -> Response:
         body = self._body(request)
         identity = self._identity(scope, request)
         principal = self._principal(scope, identity)
@@ -310,49 +325,50 @@ class CommentsApi:
             parent_id=str(body.get("parent_id", "") or ""),
             idempotency_key=request.header("idempotency-key"),
             request_id=request_id,
+            cohort=cohort,
         )
         # 202 when held: the write succeeded, the comment is not public yet,
         # and the widget needs to tell the author that rather than pretend.
         status = 201 if not result["moderation"]["held"] else 202
         return Response(status, result)
 
-    def _patch_comment(self, request, scope, binding, params, request_id) -> Response:
+    def _patch_comment(self, request, scope, binding, params, request_id, cohort) -> Response:
         body = self._body(request)
         identity = self._identity(scope, request)
         principal = self._principal(scope, identity)
         result = self._service.edit_own_comment(
             scope, principal, identity, params["comment_id"],
-            body=str(body.get("body", "")), request_id=request_id,
+            body=str(body.get("body", "")), request_id=request_id, cohort=cohort,
         )
         return Response(200, result)
 
-    def _delete_comment(self, request, scope, binding, params, request_id) -> Response:
+    def _delete_comment(self, request, scope, binding, params, request_id, cohort) -> Response:
         identity = self._identity(scope, request)
         principal = self._principal(scope, identity)
         result = self._service.delete_own_comment(
-            scope, principal, params["comment_id"], request_id=request_id
+            scope, principal, params["comment_id"], request_id=request_id, cohort=cohort
         )
         return Response(200, result)
 
-    def _post_reaction(self, request, scope, binding, params, request_id) -> Response:
+    def _post_reaction(self, request, scope, binding, params, request_id, cohort) -> Response:
         body = self._body(request)
         identity = self._identity(scope, request)
         principal = self._principal(scope, identity)
         result = self._service.set_reaction(
             scope, principal, identity, params["comment_id"],
-            str(body.get("reaction", "")), request_id=request_id,
+            str(body.get("reaction", "")), request_id=request_id, cohort=cohort,
         )
         return Response(200, result)
 
-    def _delete_reaction(self, request, scope, binding, params, request_id) -> Response:
+    def _delete_reaction(self, request, scope, binding, params, request_id, cohort) -> Response:
         identity = self._identity(scope, request)
         principal = self._principal(scope, identity)
         result = self._service.clear_reaction(
-            scope, principal, identity, params["comment_id"]
+            scope, principal, identity, params["comment_id"], cohort=cohort
         )
         return Response(200, result)
 
-    def _post_report(self, request, scope, binding, params, request_id) -> Response:
+    def _post_report(self, request, scope, binding, params, request_id, cohort) -> Response:
         body = self._body(request)
         identity = self._identity(scope, request)
         principal = self._principal(scope, identity)
@@ -361,6 +377,7 @@ class CommentsApi:
             reason=str(body.get("reason", "")),
             note=str(body.get("note", "")),
             request_id=request_id,
+            cohort=cohort,
         )
         return Response(202, result)
 

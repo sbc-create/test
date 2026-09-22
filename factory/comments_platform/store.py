@@ -54,9 +54,17 @@ class Page:
 
 
 class CommentsStore:
-    def __init__(self, db_path: str | Path) -> None:
+    def __init__(self, db_path: str | Path, *, allow_cross_thread: bool = False) -> None:
+        """`allow_cross_thread` is for a server that serialises its own access.
+
+        SQLite's Python binding refuses cross-thread use by default, and that
+        default is right: interleaved transactions on one connection corrupt
+        each other's units of work. A threaded server may lift the guard only
+        if it holds a lock across whole transactions — which is exactly what
+        `gateway.py` does, and why the flag is named rather than implied.
+        """
         self.db_path = str(db_path)
-        self._conn = sqlite3.connect(self.db_path)
+        self._conn = sqlite3.connect(self.db_path, check_same_thread=not allow_cross_thread)
         self._conn.row_factory = sqlite3.Row
         # Composite foreign keys are the second line of tenant isolation, and
         # SQLite leaves them off unless asked, per connection.

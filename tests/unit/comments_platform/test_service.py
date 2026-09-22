@@ -165,6 +165,63 @@ class TestReplies:
             )
         assert exc.value.rule == "MAX_DEPTH"
 
+    def test_an_author_may_reply_to_their_own_comment_awaiting_review(
+        self, store, scopes, users, identities, gates_open
+    ):
+        """Pre-moderation must not strand an author under their own comment."""
+        from factory.comments_platform.service import CommentsService
+        from factory.comments_platform.tenancy import SiteRegistry
+
+        from .conftest import open_binding
+
+        strict = SiteRegistry([open_binding("lords", "lords-main", moderation_mode="pre")])
+        service = CommentsService(store, strict)
+        scope, user, identity = scopes["lords"], users["lords"], identities["lords"]
+
+        parent = service.create_comment(scope, user, identity, REF, body="первый, ждёт проверки")
+        assert parent["moderation"]["state"] == states.PENDING
+
+        reply = service.create_comment(
+            scope, user, identity, REF, body="мой собственный ответ на него",
+            parent_id=parent["comment"]["comment_id"],
+        )
+        assert reply["comment"]["depth"] == 1
+
+    def test_a_stranger_may_not_reply_to_a_comment_awaiting_review(
+        self, store, scopes, users, identities, gates_open
+    ):
+        from factory.comments_platform.identity import Identity
+        from factory.comments_platform.service import CommentsService
+        from factory.comments_platform.tenancy import SiteRegistry
+
+        from .conftest import open_binding
+
+        strict = SiteRegistry([open_binding("lords", "lords-main", moderation_mode="pre")])
+        service = CommentsService(store, strict)
+        scope, user, identity = scopes["lords"], users["lords"], identities["lords"]
+
+        parent = service.create_comment(scope, user, identity, REF, body="чужой, ждёт проверки")
+
+        stranger_identity = Identity(subject_id="g_stranger", scope=scope, is_guest=True)
+        stranger = Principal(subject_id="g_stranger", role=USER, scope=scope)
+        with pytest.raises(NotFound):
+            service.create_comment(
+                scope, stranger, stranger_identity, REF, body="ответ постороннего",
+                parent_id=parent["comment"]["comment_id"],
+            )
+
+    def test_an_author_may_not_reply_once_a_moderator_has_hidden_it(
+        self, service, lords, author, author_identity, moderator
+    ):
+        """A decision against a comment is not a thread to keep building on."""
+        comment_id = post(service, lords, author, author_identity)["comment"]["comment_id"]
+        service.moderate(lords, moderator, comment_id, action="hide", reason="off topic")
+        with pytest.raises(NotFound):
+            service.create_comment(
+                lords, author, author_identity, REF,
+                body="продолжаю под скрытым комментарием", parent_id=comment_id,
+            )
+
     def test_replying_to_a_hidden_comment_reports_it_as_missing(
         self, service, lords, author, author_identity, moderator
     ):

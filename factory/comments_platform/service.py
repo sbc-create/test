@@ -312,8 +312,25 @@ class CommentsService:
             parent = self._store.get_comment(scope, parent_id)
             if parent["thread_id"] != thread_id:
                 raise ValidationFailed("parent belongs to another thread", field="parent_id")
-            if not states.is_public_visible(parent["state"]):
-                # Replying to a hidden comment would leak that it exists.
+            # Who may reply to a parent that is not publicly visible?
+            #
+            # Nobody, with one narrow exception: its own author, and only while
+            # it is still `pending` — accepted and awaiting review, with no
+            # decision taken. Refusing even that was a real defect under
+            # pre-moderation, where an author writes a comment and cannot then
+            # reply to it, which is half of the Stage 1 owner scenario.
+            #
+            # The exception stops at `pending` deliberately. `quarantined`,
+            # `hidden` and `removed` are decisions *against* the comment, and
+            # letting the author keep building a thread underneath one would
+            # quietly undo the moderator's action.
+            parent_awaiting_own_review = (
+                parent["subject_id"] == identity.subject_id
+                and parent["state"] == states.PENDING
+            )
+            if not states.is_public_visible(parent["state"]) and not parent_awaiting_own_review:
+                # For anyone else this is indistinguishable from "no such
+                # comment", which is what keeps a hidden comment hidden.
                 raise NotFound("parent not found", parent_id=parent_id)
             depth = int(parent["depth"]) + 1
             if depth >= binding.max_depth:
