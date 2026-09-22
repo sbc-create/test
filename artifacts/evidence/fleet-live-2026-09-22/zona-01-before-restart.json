@@ -1,0 +1,75 @@
+{
+ "domain": "zonafilm.space",
+ "site": "zona-01",
+ "manifest_build": "zona-01-fca1d54eeeb7",
+ "manifest_code_sha256": "b23d4c64933e72f26b688614db15cd6b7fb47919bb1732031642d3eec901857a",
+ "artifact_sha256_on_disk": "b23d4c64933e72f26b688614db15cd6b7fb47919bb1732031642d3eec901857a",
+ "home_status": 200,
+ "h1_count": 0,
+ "slides": 0,
+ "unique_ids": 0,
+ "unique_titles": 0,
+ "unique_images": 0,
+ "served_build": "zona-slider-6513e7e7f34b",
+ "robots": "noindex, nofollow",
+ "title_pages_checked": 12,
+ "title_pages_bad": [
+  {
+   "url": "/title/razorennaya-no-obozhaemaya-princem/",
+   "status": 404
+  },
+  {
+   "url": "/title/pepel-lunnogo-sveta/",
+   "status": 404
+  },
+  {
+   "url": "/title/tam-gde-smeleet-lyubov/",
+   "status": 404
+  },
+  {
+   "url": "/title/poryadochnyy-chelovek/",
+   "status": 404
+  },
+  {
+   "url": "/title/futbolnyy-ubiyca/",
+   "status": 404
+  },
+  {
+   "url": "/title/obman-serdca-igra-lisy/",
+   "status": 404
+  },
+  {
+   "url": "/title/vne-zakona-yarost-tigrov/",
+   "status": 404
+  },
+  {
+   "url": "/title/cvetuschaya-zvezda-parizha/",
+   "status": 404
+  },
+  {
+   "url": "/title/my-v-etom-vmeste/",
+   "status": 404
+  },
+  {
+   "url": "/title/molodost-3/",
+   "status": 404
+  },
+  {
+   "url": "/title/luchshiy-ohotnik-na-vampirov/",
+   "status": 404
+  },
+  {
+   "url": "/title/urodlivaya-istoriya/",
+   "status": 404
+  }
+ ],
+ "missing_status": 404,
+ "verdict": "FAIL",
+ "issues": [
+  "H1 на главной: 0",
+  "в героe 0 слайд(ов) — это картинка, а не слайдер",
+  "витрина объявляет сборку 'zona-slider-6513e7e7f34b', манифест — 'zona-01-fca1d54eeeb7'",
+  "страниц произведений с ошибкой: 12 из 12"
+ ],
+ "rollback": "cp /srv/lords/.frontend/.rollback/20260922T122428Z-zona-01-frontend-bbd6467f7ee9.py /srv/lords/.frontend/zona-01-frontend.py && sudo systemctl restart nova-zona-01.service"
+}
