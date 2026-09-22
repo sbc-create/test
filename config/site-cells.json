@@ -3,6 +3,50 @@
   "note": "Паспорта ячеек: по домену и site_id задача находит свой проект, шаблон, закреплённые версии и цель выката. Идентичность сайта живёт в config/site-profiles/ и sites/<site_id>/package.yaml — здесь на неё ссылаются, а не заводят вторую. Файл меняется через factory.cell.registry: правка руками обходит проверку «один домен — один сайт». status=not_extracted означает, что отдельный Git-проект сайта ещё не выделен; это честное состояние, а не пропуск поля.",
   "cells": [
     {
+      "site_id": "animedia-01",
+      "domain": "animedia.icu",
+      "aliases": [],
+      "status": "staged",
+      "repo": {
+        "kind": "remote",
+        "path": "var/site-repos/animedia-icu",
+        "remote": "https://github.com/sbc-create/site-animedia-icu"
+      },
+      "template": {
+        "template_id": "animedia-nova",
+        "order_id": "legacy-animedia-01",
+        "note": "закреплён исторически; из свободного пула не выдавался"
+      },
+      "pins": {
+        "common_core": null,
+        "template": "animedia-nova",
+        "modules": {},
+        "schemas": {
+          "site_config": "1"
+        }
+      },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id": "10252"
+      },
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {
+        "source_commit": "2f76164e79cde3717d2dd70baec5c8b9ca8128d7",
+        "note": "Выделено и собрано. НЕ активировано: нужен root."
+      },
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {}
+    },
+    {
       "site_id": "animedia-02",
       "domain": "animedia.space",
       "aliases": [
@@ -59,40 +103,41 @@
     {
       "site_id": "lords-01",
       "domain": "lordfilm47.space",
-      "aliases": [
-        "www.lordfilm47.space"
-      ],
-      "status": "not_extracted",
+      "aliases": [],
+      "status": "staged",
       "repo": {
-        "kind": null,
-        "path": null,
-        "remote": null
+        "kind": "remote",
+        "path": "var/site-repos/lordfilm47-space",
+        "remote": "https://github.com/sbc-create/site-lordfilm47-space"
       },
       "template": {
         "template_id": "lords-general",
-        "order_id": "legacy-lords-01"
+        "order_id": "legacy-lords-01",
+        "note": "закреплён исторически; из свободного пула не выдавался"
       },
       "pins": {
-        "common_core": null,
+        "common_core": "515fcf0b39de009e31f531cd380ab52c38c33520",
         "template": "lords-general",
         "modules": {},
-        "schemas": {}
+        "schemas": {
+          "site_config": "1"
+        }
       },
       "deploy_target": {
-        "ref": "lords-staging-control-01",
+        "ref": "claude-control-01",
         "server": null
       },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id_ref": null
+        "publisher_id": "10238"
       },
       "data": {
         "database": null,
         "media": null
       },
       "deployed": {
-        "release_digest": null,
-        "source_commit": null
+        "source_commit": "7368d267234be895b71e5ae5209b1a06657872f9",
+        "note": "Выделено и собрано. НЕ активировано: нужен root."
       },
       "content_revision": null,
       "last_update": null,
@@ -343,6 +388,182 @@
       "deployed": {
         "release_digest": null,
         "source_commit": null
+      },
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {}
+    },
+    {
+      "site_id": "yummy-biz",
+      "domain": "yummyani.biz",
+      "aliases": [],
+      "status": "staged",
+      "repo": {
+        "kind": "remote",
+        "path": "var/site-repos/yummyani-biz",
+        "remote": "https://github.com/sbc-create/site-yummyani-biz"
+      },
+      "template": {
+        "template_id": "yummy-biz",
+        "order_id": "legacy-yummy-biz",
+        "note": "закреплён исторически; из свободного пула не выдавался"
+      },
+      "pins": {
+        "common_core": null,
+        "template": "yummy-biz",
+        "modules": {},
+        "schemas": {
+          "site_config": "1"
+        }
+      },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id": null
+      },
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {
+        "source_commit": "e4ed596eed0920801e94152df584460dd9ce33db",
+        "note": "Выделено и собрано. НЕ активировано: нужен root."
+      },
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {}
+    },
+    {
+      "site_id": "yummy-org",
+      "domain": "yummyani.org",
+      "aliases": [],
+      "status": "staged",
+      "repo": {
+        "kind": "remote",
+        "path": "var/site-repos/yummyani-org",
+        "remote": "https://github.com/sbc-create/site-yummyani-org"
+      },
+      "template": {
+        "template_id": "yummy-org",
+        "order_id": "legacy-yummy-org",
+        "note": "закреплён исторически; из свободного пула не выдавался"
+      },
+      "pins": {
+        "common_core": null,
+        "template": "yummy-org",
+        "modules": {},
+        "schemas": {
+          "site_config": "1"
+        }
+      },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id": null
+      },
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {
+        "source_commit": "ba4566fb506dee9d8381cdc95b90b722273c031e",
+        "note": "Выделено и собрано. НЕ активировано: нужен root."
+      },
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {}
+    },
+    {
+      "site_id": "yummy-site",
+      "domain": "yummyani.site",
+      "aliases": [],
+      "status": "staged",
+      "repo": {
+        "kind": "remote",
+        "path": "var/site-repos/yummyani-site",
+        "remote": "https://github.com/sbc-create/site-yummyani-site"
+      },
+      "template": {
+        "template_id": "yummy-site",
+        "order_id": "legacy-yummy-site",
+        "note": "закреплён исторически; из свободного пула не выдавался"
+      },
+      "pins": {
+        "common_core": null,
+        "template": "yummy-site",
+        "modules": {},
+        "schemas": {
+          "site_config": "1"
+        }
+      },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id": null
+      },
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {
+        "source_commit": "dfa7eb2fc60b53ca6813a9b62c69de626e0ff011",
+        "note": "Выделено и собрано. НЕ активировано: нужен root."
+      },
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {}
+    },
+    {
+      "site_id": "zona-01",
+      "domain": "zonafilm.space",
+      "aliases": [],
+      "status": "staged",
+      "repo": {
+        "kind": "remote",
+        "path": "var/site-repos/zonafilm-space",
+        "remote": "https://github.com/sbc-create/site-zonafilm-space"
+      },
+      "template": {
+        "template_id": "zona-nova",
+        "order_id": "legacy-zona-01",
+        "note": "закреплён исторически; из свободного пула не выдавался"
+      },
+      "pins": {
+        "common_core": "a0209877e1dbe3276487720c8785cb6a2c3456f8",
+        "template": "zona-nova",
+        "modules": {},
+        "schemas": {
+          "site_config": "1"
+        }
+      },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id": "10238"
+      },
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {
+        "source_commit": "cb6bca985f187084cc83ae7e1034c9981d41a3b7",
+        "note": "Выделено и собрано. НЕ активировано: нужен root."
       },
       "content_revision": null,
       "last_update": null,
