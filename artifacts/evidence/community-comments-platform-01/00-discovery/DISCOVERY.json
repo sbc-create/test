@@ -22,10 +22,16 @@
       "inventory/network-allowlist.yaml",
       "seo_operator/hookguard.py"
     ],
-    "untracked_count": 22,
+    "untracked_count": 23,
     "owner_of_changes": "OTHER_WORK_players-only-production-009_AND_release-orchestrator",
     "action_taken": "NONE — left read-only and untouched",
-    "related_to_comments": false
+    "related_to_comments": false,
+    "verified_unchanged_at_end_of_stage": {
+      "modified": 4,
+      "untracked": 23,
+      "head": "491836048dae11ae639795c7a3827706129faef6",
+      "note": "Identical to the session-start snapshot, entry for entry."
+    }
   },
   "branches_matching_comment_community_discussion_ugc": {
     "local": [
@@ -56,7 +62,20 @@
       "branch": "refs/heads/cursor/ratings-ingestion-01",
       "head": "ec29b2c7fa046c9b05537744191c0ade1b6b673e",
       "role": "RATINGS_BOOTSTRAP_WORKTREE",
-      "action_taken": "READ_ONLY — not modified"
+      "action_taken": "READ_ONLY — not modified",
+      "pre_existing_state_not_authored_here": {
+        "modified": [
+          "seo_operator/hookguard.py",
+          "seo_operator/permission_model.py",
+          "tests/operator/test_hookguard.py"
+        ],
+        "untracked": [
+          "artifacts/evidence/community-comments-01/",
+          "artifacts/evidence/ratings-ingestion-02/closed-noindex/animedia.icu/ratings_snapshot_v1.candidate.json.prev",
+          "artifacts/evidence/ratings-ingestion-02/closed-noindex/animedia.space/ratings_snapshot_v1.candidate.json.prev"
+        ],
+        "note": "Recorded so that a later reader can tell this stage's footprint from someone else's. The hookguard changes look like the Shell-to-Bash mapping the bootstrap snapshot asked for; they were neither made nor used here."
+      }
     }
   ],
   "separate_comments_repository": {
