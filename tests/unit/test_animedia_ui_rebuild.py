@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import re
 import os
 import sys
 from pathlib import Path
@@ -244,3 +245,32 @@ def test_пробел_популярности_остаётся_объявлен
     assert 'data-b06-top100="gap"' in исходник
     # Заголовок блока не называет его популярностью.
     assert "Лучшее по оценкам" in исходник
+
+
+# --- состав релиза ------------------------------------------------------------
+
+def test_релиз_везёт_всё_что_рантайм_импортирует():
+    """Модуль, который витрина импортирует, обязан лежать в релизе.
+
+    `community.py` однажды не попал в состав, и витрина поднималась молча:
+    рантайм ловит ImportError и выключает раздел сообщества. Снаружи это
+    выглядело бы как «голосование и списки не работают», хотя код на месте.
+    """
+    сборщик = (ROOT / "automation/host/animedia_release_build.py").read_text(
+        encoding="utf-8")
+    рантайм = (ROOT / "automation/host/animedia-frontend.py").read_text(
+        encoding="utf-8")
+    импорты = set(re.findall(r"from factory\.animedia import (\w+)", рантайм))
+    assert импорты, "рантайм перестал импортировать модули контура"
+    for модуль in импорты:
+        assert f'"factory/animedia/{модуль}.py"' in сборщик, (
+            f"{модуль}.py импортируется витриной, но не входит в релиз")
+
+
+def test_запасной_импорт_рядом_с_артефактом_объявлен():
+    """В релизе модули лежат плоско, поэтому нужен второй путь импорта."""
+    рантайм = (ROOT / "automation/host/animedia-frontend.py").read_text(
+        encoding="utf-8")
+    for модуль in re.findall(r"from factory\.animedia import (\w+)", рантайм):
+        assert re.search(rf"import {модуль} as ", рантайм), (
+            f"у {модуль} нет запасного импорта для плоского релиза")

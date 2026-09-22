@@ -34,6 +34,12 @@ from pathlib import Path
     "automation/host/seo_layer.py": "seo_layer.py",
     "factory/animedia/collection_contract.py": "collection_contract.py",
     "factory/animedia/chronology.py": "chronology.py",
+    # Без него витрина поднимается, но раздел сообщества и личные списки
+    # молча выключаются: рантайм ловит ImportError и ставит СООБЩЕСТВО=None.
+    # То есть голосование, реакции, комментарии и /lists/ в релизе, собранном
+    # без этого файла, были бы «недоступны» — ровно там, где владелец их и
+    # смотрит.
+    "factory/animedia/community.py": "community.py",
 }
 
 #: Артефакт, по цифре которого даётся разрешение на выкат.
