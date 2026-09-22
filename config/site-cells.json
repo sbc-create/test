@@ -3,6 +3,58 @@
   "note": "Паспорта ячеек: по домену и site_id задача находит свой проект, шаблон, закреплённые версии и цель выката. Идентичность сайта живёт в config/site-profiles/ и sites/<site_id>/package.yaml — здесь на неё ссылаются, а не заводят вторую. Файл меняется через factory.cell.registry: правка руками обходит проверку «один домен — один сайт». status=not_extracted означает, что отдельный Git-проект сайта ещё не выделен; это честное состояние, а не пропуск поля.",
   "cells": [
     {
+      "site_id": "animedia-02",
+      "domain": "animedia.space",
+      "aliases": [
+        "www.animedia.space"
+      ],
+      "status": "staged",
+      "repo": {
+        "kind": "remote",
+        "path": "var/site-repos/animedia-space",
+        "remote": "https://github.com/sbc-create/site-animedia-space"
+      },
+      "template": {
+        "template_id": "animedia-space",
+        "order_id": "legacy-animedia-02",
+        "family": "animedia",
+        "design_version": "1.2.4",
+        "note": "закреплён исторически; из пула lords не выдавался"
+      },
+      "pins": {
+        "common_core": "efdef56e5fd19cda8ed3a449306c833de2e5c77d",
+        "template": "animedia-space",
+        "modules": {
+          "runtime": "20260922T143111Z-efdef56-animedia-parity"
+        },
+        "schemas": {
+          "site_manifest": "1",
+          "release_manifest": "1"
+        }
+      },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id": "10252"
+      },
+      "data": {
+        "database": "<data>/site-data/animedia-community.json",
+        "media": "<data>/site"
+      },
+      "deployed": {
+        "release_digest": "sha256:1017b15ec0a24d1d105b875964833c0ae4226d01a95caaa1945199697e36263d",
+        "source_commit": "a0b89677c69f9d33a6502c2c758d417eb03c11b2",
+        "artifact": "animedia-space-a0b89677c69f.tar.gz"
+      },
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {}
+    },
+    {
       "site_id": "lords-01",
       "domain": "lordfilm47.space",
       "aliases": [
