@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import contextlib
 import json
+import shutil
 import sys
 import time
 from datetime import datetime, timezone
@@ -44,6 +45,10 @@ FETCH_BATCH = {
     "provider_feed_imdb": 1000,
     "provider_feed_kinopoisk": 1000,
 }
+
+
+#: Ниже этого порога свободного места сбор останавливается сам.
+MIN_FREE_MB = 1024
 
 
 def utc() -> str:
@@ -184,6 +189,14 @@ def main() -> int:
           f"(площадка-канарейка первой), пакет {batch}")
 
     for start in range(0, len(titles), batch):
+        # Диск делится с боевыми службами. Остановиться с сохранённым
+        # checkpoint можно и нужно; заполнить его до нуля — нельзя, и
+        # один раз в этой работе уже было.
+        free_mb = shutil.disk_usage(Path(args.db).parent).free // 2**20
+        if free_mb < MIN_FREE_MB:
+            print(f"[{utc()}] ОСТАНОВ: свободно {free_mb} МБ, порог {MIN_FREE_MB} МБ")
+            print("  прогресс сохранён; освободите место и запустите снова")
+            break
         chunk = titles[start : start + batch]
         try:
             result = ingestor.run(chunk, stage="BACKFILL")
