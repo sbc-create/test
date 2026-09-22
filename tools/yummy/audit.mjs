@@ -28,6 +28,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
+import { разобрать_консоль } from './oracle.mjs';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
@@ -257,8 +258,14 @@ async function main() {
       const page = await context.newPage();
       const консоль = [];
       const сбои = [];
+      const исключения = [];
+      const коды = [];
       page.on('console', (м) => { if (м.type() === 'error') консоль.push(м.text().slice(0, 300)); });
-      page.on('pageerror', (е) => консоль.push('pageerror: ' + String(е).slice(0, 300)));
+      // Необработанное исключение — отдельный список. Смешивать его с
+      // записями консоли нельзя: браузер пишет в консоль и то, что ошибкой
+      // страницы не является.
+      page.on('pageerror', (е) => исключения.push(String(е).slice(0, 300)));
+      page.on('response', (о) => коды.push({ url: о.url(), status: о.status() }));
       page.on('requestfailed', (з) => сбои.push({
         url: з.url().slice(0, 200), failure: (з.failure() || {}).errorText,
       }));
@@ -308,14 +315,25 @@ async function main() {
         } catch (e) { axe = { error: String(e).slice(0, 200) }; }
       }
 
+      // Оракул ожидаемого 404 живёт отдельным модулем и проверяется
+      // самим собой: `tests/unit/test_yummy_console_oracle.py` подсаживает
+      // заведомые дефекты и требует, чтобы он их не проглотил.
+      const разбор = разобрать_консоль({ status, консоль, исключения, сбои, коды });
+      const ожидаемый404 = разбор.ожидаемый;
+      const реальные = разбор.реальные;
+
       сводка.pages.push({
         route: маршрут.name, path: маршрут.path, width, status,
-        console_errors: консоль, failed_requests: сбои, error: ошибка,
+        console_errors: реальные, expected_404_notice: ожидаемый404,
+        page_errors: исключения, failed_requests: сбои, error: ошибка,
+        server_errors: коды.filter((к) => к.status >= 500)
+          .map((к) => ({ url: к.url.slice(0, 160), status: к.status })),
         axe, ...(измерения || {}),
       });
       console.log(`[audit] ${LABEL} ${width}px ${маршрут.name} status=${status}`
         + (измерения ? ` overflow=${измерения.overflow} h1=${измерения.h1}` : ' (ошибка)')
-        + ` console=${консоль.length}`);
+        + ` console=${реальные.length}`
+        + (ожидаемый404.length ? ` (+${ожидаемый404.length} ожидаемый 404)` : ''));
       await page.close();
     }
     await context.close();
