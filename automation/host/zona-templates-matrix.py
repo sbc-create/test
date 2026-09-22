@@ -23,10 +23,16 @@ from pathlib import Path
 
 
 def шаблоны() -> dict:
-    """Объявления шаблонов читаются из рантайма, а не дублируются здесь."""
+    """Объявления шаблонов читаются из рантайма, а не дублируются здесь.
+
+    Берётся самодостаточный кусок исходника — от словаря букв состава до
+    строки, собирающей словарь шаблонов. Копия таблицы в этом файле означала
+    бы два источника правды и расхождение на первой же правке.
+    """
     текст = (КОРЕНЬ / "automation/host/lords-frontend.py").read_text(encoding="utf-8")
-    начало = текст.index("ЗОНА_ШАБЛОНЫ = {")
-    конец = текст.index("\n}\n", начало) + 3
+    начало = текст.index("ЗОНА_БЛОКИ_КОД = {")
+    маркер = "ЗОНА_ШАБЛОНЫ = _развернуть_шаблоны(ЗОНА_ТАБЛИЦА_ШАБЛОНОВ)"
+    конец = текст.index(маркер) + len(маркер)
     пространство: dict = {}
     exec(текст[начало:конец], пространство)  # noqa: S102 — свой же исходник
     return пространство["ЗОНА_ШАБЛОНЫ"]
@@ -47,14 +53,15 @@ def контактный_лист(куда: Path, итоги: list, ширины
         значок = "PASS" if итог["verdict"] == "PASS" else "FAIL"
         беды = "".join(f"<li>{html.escape(str(б))}</li>" for б in итог["failures"][:6])
         строки.append(
-            f'<section class="t"><h2>{html.escape(итог["title"])} '
-            f'<code>{html.escape(итог["profile"])}</code> '
+            f'<section class="t" id="{html.escape(итог["profile"])}">'
+            f'<h2>{html.escape(итог["profile"])} · {html.escape(итог["title"])} '
             f'<b class="{значок.lower()}">{значок}</b></h2>'
             f'<p>{html.escape(итог["description"])}</p>'
             f'<p class="s">Состав: {html.escape(" → ".join(итог["order"]))}; '
-            f'герой — {html.escape(итог["hero"])}, неделя — '
-            f'{html.escape(итог["weekly"])}, поступления — '
-            f'{html.escape(итог["added"])}, сетка новинок — {итог["fresh"]}.</p>'
+            f'герой — {html.escape(итог["hero"])} / {html.escape(итог["width"])}, '
+            f'неделя — {html.escape(итог["weekly"])}, поступления — '
+            f'{html.escape(итог["added"])}, сетка — {html.escape(итог["grid"])}, '
+            f'новинок — {итог["fresh"]}.</p>'
             f'<div class="g">{"".join(снимки)}</div>'
             + (f"<ul class=\"f\">{беды}</ul>" if беды else "")
             + "</section>")
@@ -112,8 +119,9 @@ def main() -> int:
         итоги.append({
             "profile": имя, "title": шаблон["имя"], "description": шаблон["описание"],
             "order": шаблон["порядок"], "hero": шаблон["герой"],
+            "width": шаблон.get("ширина", "boxed"),
             "weekly": шаблон["недельный"], "added": шаблон["новое"],
-            "fresh": шаблон["свежие"],
+            "grid": шаблон.get("сетка", "tile"), "fresh": шаблон["свежие"],
             "verdict": отчёт["verdict"], "exit": код,
             "failures": отчёт["failures"],
         })

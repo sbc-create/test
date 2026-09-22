@@ -86,6 +86,7 @@ def main() -> int:
     run1 = прочитать(ev / "run1/audit-run1.json")
     run2 = прочитать(ev / "run2/audit-run2.json")
     шаблоны = прочитать(ev / "templates/templates.json")
+    десятка = прочитать(ev / "templates-top10/templates.json")
     кросс = прочитать(ev / "cross-tenant-bytes.json")
     тесты = json.loads(а.tests)
 
@@ -120,8 +121,12 @@ def main() -> int:
     }
     визуал = {
         "снимки кандидата на шести ширинах": с1.get("pages_measured", 0) > 0,
-        "снимки всех шаблонов": прошло_шаблонов == всего_шаблонов > 0,
-        "контактный лист": (ev / "templates/index.html").is_file(),
+        "снимки всех пятидесяти шаблонов": (прошло_шаблонов == всего_шаблонов
+                                            == 50),
+        "полная матрица десяти сильнейших": bool(
+            десятка and десятка.get("passed") == десятка.get("total") == 10),
+        "контактные листы": ((ev / "templates/index.html").is_file()
+                             and (ev / "templates-top10/index.html").is_file()),
         "приёмка владельцем": False,
     }
     выкладка = {
@@ -160,8 +165,11 @@ def main() -> int:
             "present": всего_шаблонов, "built": всего_шаблонов,
             "tested": прошло_шаблонов, "reviewed_by_agent": всего_шаблонов,
             "owner_accepted": 0, "target_asked": 50,
-            "note": "пакеты T001–T050 в ленте Zona не существуют; собран "
-                    "собственный слой шаблонов Zona",
+            "top10_tested": (десятка or {}).get("passed", 0),
+            "top10_total": (десятка or {}).get("total", 0),
+            "note": "T001–T050 не существовали в ленте Zona и собраны заново "
+                    "в собственном слое: таблица объявлений поверх общей "
+                    "отрисовки, ни одной строки кода на шаблон",
         },
         "runs": {"run1": с1, "run2": с2, "identical": оба_pass},
         "tests": тесты,

@@ -1,0 +1,1572 @@
+{
+ "base": "http://127.0.0.1:19400",
+ "tag": "T024",
+ "widths": [
+  320,
+  390,
+  768,
+  1024,
+  1440,
+  1920
+ ],
+ "pages": {
+  "/@320": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "zt__m",
+     "text": "триллер · западный контент"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 9.5 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 5.1 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "западный контент · драма"
+    },
+    {
+     "cls": "zt__m",
+     "text": "2025 · Новая Зеландия"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.1 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "западный контент · комедия"
+    }
+   ],
+   "cards": 54,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 50,
+   "cards_in_hidden_tabs": 24,
+   "images": 90,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 7,
+   "buttons_invisible": [
+    "",
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Кинопортал: что смотреть и где это найти"
+   ],
+   "dup_ids": [],
+   "grid_filled": 42,
+   "dead_space": [],
+   "first_screen": 137,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 22,
+    "blocked_scripts": 0
+   }
+  },
+  "/catalog/@320": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "IMDb 9.2 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "Shikimori 6.7 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "турецкий сериал · драма"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "западный контент · драма"
+    },
+    {
+     "cls": "zt__m",
+     "text": "драма · документальный"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 8.4 из 10"
+    }
+   ],
+   "cards": 28,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 24,
+   "cards_in_hidden_tabs": 0,
+   "images": 28,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "",
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Каталог"
+   ],
+   "dup_ids": [],
+   "grid_filled": 28,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 44,
+    "blocked_scripts": 0
+   }
+  },
+  "/new/?mode=added@320": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "zt__m",
+     "text": "романтика · фэнтези · Добавлено · 21.09."
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · дорама · Добавлено · 21.09.2"
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · драма · Добавлено · 21.09.20"
+    },
+    {
+     "cls": "zt__m",
+     "text": "триллер · драма · Добавлено · 21.09.2026"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.7 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "комедия · спорт · Добавлено · 21.09.2026"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 3.1 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · Костюмированная драма · Доба"
+    }
+   ],
+   "cards": 28,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 24,
+   "cards_in_hidden_tabs": 0,
+   "images": 28,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "",
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Добавлено на сайт"
+   ],
+   "dup_ids": [],
+   "grid_filled": 28,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 66,
+    "blocked_scripts": 0
+   }
+  },
+  "/title/poteryannyy-v-momente/@320": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 0,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 4,
+   "buttons_invisible": [
+    "",
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Страница не найдена"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 66,
+    "blocked_scripts": 0
+   }
+  },
+  "/@390": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "zt__m",
+     "text": "триллер · западный контент"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 9.5 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 5.1 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.1 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "западный контент · комедия"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 8.5 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "семейный · западный контент"
+    }
+   ],
+   "cards": 54,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 50,
+   "cards_in_hidden_tabs": 24,
+   "images": 90,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 7,
+   "buttons_invisible": [
+    "",
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Кинопортал: что смотреть и где это найти"
+   ],
+   "dup_ids": [],
+   "grid_filled": 42,
+   "dead_space": [],
+   "first_screen": 106,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 20,
+    "blocked_scripts": 0
+   }
+  },
+  "/catalog/@390": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "IMDb 9.2 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "Shikimori 6.7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 8.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 3.8 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · Костюмированная драма"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 2.6 из 10"
+    }
+   ],
+   "cards": 28,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 24,
+   "cards_in_hidden_tabs": 0,
+   "images": 28,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "",
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Каталог"
+   ],
+   "dup_ids": [],
+   "grid_filled": 28,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 40,
+    "blocked_scripts": 0
+   }
+  },
+  "/new/?mode=added@390": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "zt__m",
+     "text": "романтика · фэнтези · Добавлено · 21.09."
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · дорама · Добавлено · 21.09.2"
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · драма · Добавлено · 21.09.20"
+    },
+    {
+     "cls": "zt__m",
+     "text": "триллер · драма · Добавлено · 21.09.2026"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.7 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "комедия · спорт · Добавлено · 21.09.2026"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 3.1 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · Костюмированная драма · Доба"
+    }
+   ],
+   "cards": 28,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 24,
+   "cards_in_hidden_tabs": 0,
+   "images": 28,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "",
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Добавлено на сайт"
+   ],
+   "dup_ids": [],
+   "grid_filled": 28,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 60,
+    "blocked_scripts": 0
+   }
+  },
+  "/title/poteryannyy-v-momente/@390": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 0,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 4,
+   "buttons_invisible": [
+    "",
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Страница не найдена"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 60,
+    "blocked_scripts": 0
+   }
+  },
+  "/@768": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    },
+    {
+     "cls": "zt__m",
+     "text": "триллер · западный контент"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 9.5 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 5.1 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "западный контент · драма"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.1 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "западный контент · комедия"
+    }
+   ],
+   "cards": 54,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 46,
+   "cards_in_hidden_tabs": 24,
+   "images": 90,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 7,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    "",
+    "zsec--seo__more"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Кинопортал: что смотреть и где это найти"
+   ],
+   "dup_ids": [],
+   "grid_filled": 42,
+   "dead_space": [],
+   "first_screen": 75,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 40,
+    "blocked_scripts": 0
+   }
+  },
+  "/catalog/@768": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 9.2 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "Shikimori 6.7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "западный контент · драма"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 8.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 3.8 из 10"
+    }
+   ],
+   "cards": 28,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 20,
+   "cards_in_hidden_tabs": 0,
+   "images": 28,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    "",
+    "zfilt-toggle"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Каталог"
+   ],
+   "dup_ids": [],
+   "grid_filled": 28,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 68,
+    "blocked_scripts": 0
+   }
+  },
+  "/new/?mode=added@768": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · фэнтези · Добавлено · 21.09."
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · дорама · Добавлено · 21.09.2"
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · драма · Добавлено · 21.09.20"
+    },
+    {
+     "cls": "zt__m",
+     "text": "триллер · драма · Добавлено · 21.09.2026"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.7 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "комедия · спорт · Добавлено · 21.09.2026"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 3.1 из 10"
+    }
+   ],
+   "cards": 28,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 20,
+   "cards_in_hidden_tabs": 0,
+   "images": 28,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    "",
+    "zfilt-toggle"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Добавлено на сайт"
+   ],
+   "dup_ids": [],
+   "grid_filled": 28,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 96,
+    "blocked_scripts": 0
+   }
+  },
+  "/title/poteryannyy-v-momente/@768": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 0,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 4,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    ""
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Страница не найдена"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 96,
+    "blocked_scripts": 0
+   }
+  },
+  "/@1024": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    },
+    {
+     "cls": "zt__m",
+     "text": "триллер · западный контент"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 9.5 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 5.1 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.1 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "западный контент · комедия"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 8.5 из 10"
+    }
+   ],
+   "cards": 54,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 44,
+   "cards_in_hidden_tabs": 24,
+   "images": 90,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 7,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    "",
+    "zsec--seo__more"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Кинопортал: что смотреть и где это найти"
+   ],
+   "dup_ids": [],
+   "grid_filled": 42,
+   "dead_space": [],
+   "first_screen": 75,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 42,
+    "blocked_scripts": 0
+   }
+  },
+  "/catalog/@1024": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 9.2 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "Shikimori 6.7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 8.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 3.8 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · Костюмированная драма"
+    }
+   ],
+   "cards": 28,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 18,
+   "cards_in_hidden_tabs": 0,
+   "images": 28,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    "",
+    "zfilt-toggle"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Каталог"
+   ],
+   "dup_ids": [],
+   "grid_filled": 28,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 70,
+    "blocked_scripts": 0
+   }
+  },
+  "/new/?mode=added@1024": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · фэнтези · Добавлено · 21.09."
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · дорама · Добавлено · 21.09.2"
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · драма · Добавлено · 21.09.20"
+    },
+    {
+     "cls": "zt__m",
+     "text": "триллер · драма · Добавлено · 21.09.2026"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.7 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "комедия · спорт · Добавлено · 21.09.2026"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 3.1 из 10"
+    }
+   ],
+   "cards": 28,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 23,
+   "cards_in_hidden_tabs": 0,
+   "images": 28,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    "",
+    "zfilt-toggle"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Добавлено на сайт"
+   ],
+   "dup_ids": [],
+   "grid_filled": 28,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 98,
+    "blocked_scripts": 0
+   }
+  },
+  "/title/poteryannyy-v-momente/@1024": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 0,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 4,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    ""
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Страница не найдена"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 98,
+    "blocked_scripts": 0
+   }
+  },
+  "/@1440": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    },
+    {
+     "cls": "zt__m",
+     "text": "триллер · западный контент"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 9.5 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 5.1 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.1 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "западный контент · комедия"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 8.5 из 10"
+    }
+   ],
+   "cards": 54,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 40,
+   "cards_in_hidden_tabs": 24,
+   "images": 90,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 7,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    "",
+    "zsec--seo__more"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Кинопортал: что смотреть и где это найти"
+   ],
+   "dup_ids": [],
+   "grid_filled": 42,
+   "dead_space": [],
+   "first_screen": 75,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 60,
+    "blocked_scripts": 0
+   }
+  },
+  "/catalog/@1440": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 9.2 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "Shikimori 6.7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 8.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 3.8 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · Костюмированная драма"
+    }
+   ],
+   "cards": 28,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 14,
+   "cards_in_hidden_tabs": 0,
+   "images": 28,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    "",
+    "zfilt-toggle"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Каталог"
+   ],
+   "dup_ids": [],
+   "grid_filled": 28,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 88,
+    "blocked_scripts": 0
+   }
+  },
+  "/new/?mode=added@1440": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · фэнтези · Добавлено · 21.09."
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · дорама · Добавлено · 21.09.2"
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · драма · Добавлено · 21.09.20"
+    },
+    {
+     "cls": "zt__m",
+     "text": "триллер · драма · Добавлено · 21.09.2026"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.7 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "комедия · спорт · Добавлено · 21.09.2026"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 3.1 из 10"
+    }
+   ],
+   "cards": 28,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 14,
+   "cards_in_hidden_tabs": 0,
+   "images": 28,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    "",
+    "zfilt-toggle"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Добавлено на сайт"
+   ],
+   "dup_ids": [],
+   "grid_filled": 28,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 116,
+    "blocked_scripts": 0
+   }
+  },
+  "/title/poteryannyy-v-momente/@1440": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 0,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 4,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    ""
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Страница не найдена"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 116,
+    "blocked_scripts": 0
+   }
+  },
+  "/@1920": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    },
+    {
+     "cls": "zt__m",
+     "text": "триллер · западный контент"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 9.5 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 5.1 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.1 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "западный контент · комедия"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 8.5 из 10"
+    }
+   ],
+   "cards": 54,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 38,
+   "cards_in_hidden_tabs": 24,
+   "images": 90,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 7,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    "",
+    "zsec--seo__more"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Кинопортал: что смотреть и где это найти"
+   ],
+   "dup_ids": [],
+   "grid_filled": 42,
+   "dead_space": [],
+   "first_screen": 75,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 61,
+    "blocked_scripts": 0
+   }
+  },
+  "/catalog/@1920": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 9.2 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "Shikimori 6.7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 8.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 3.8 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · Костюмированная драма"
+    }
+   ],
+   "cards": 28,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 12,
+   "cards_in_hidden_tabs": 0,
+   "images": 28,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    "",
+    "zfilt-toggle"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Каталог"
+   ],
+   "dup_ids": [],
+   "grid_filled": 28,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 89,
+    "blocked_scripts": 0
+   }
+  },
+  "/new/?mode=added@1920": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · фэнтези · Добавлено · 21.09."
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · дорама · Добавлено · 21.09.2"
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · драма · Добавлено · 21.09.20"
+    },
+    {
+     "cls": "zt__m",
+     "text": "триллер · драма · Добавлено · 21.09.2026"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.7 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "комедия · спорт · Добавлено · 21.09.2026"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 3.1 из 10"
+    }
+   ],
+   "cards": 28,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 12,
+   "cards_in_hidden_tabs": 0,
+   "images": 28,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    "",
+    "zfilt-toggle"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Добавлено на сайт"
+   ],
+   "dup_ids": [],
+   "grid_filled": 28,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 117,
+    "blocked_scripts": 0
+   }
+  },
+  "/title/poteryannyy-v-momente/@1920": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 0,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 4,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    ""
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Страница не найдена"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 117,
+    "blocked_scripts": 0
+   }
+  }
+ },
+ "slider": {
+  "320": {
+   "applicable": false,
+   "reason": "слайдера на странице нет"
+  },
+  "390": {
+   "applicable": false,
+   "reason": "слайдера на странице нет"
+  },
+  "768": {
+   "applicable": false,
+   "reason": "слайдера на странице нет"
+  },
+  "1024": {
+   "applicable": false,
+   "reason": "слайдера на странице нет"
+  },
+  "1440": {
+   "applicable": false,
+   "reason": "слайдера на странице нет"
+  },
+  "1920": {
+   "applicable": false,
+   "reason": "слайдера на странице нет"
+  }
+ },
+ "verdict": "PASS",
+ "failures": []
+}

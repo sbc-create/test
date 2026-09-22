@@ -1,5 +1,5 @@
 {
- "base": "http://127.0.0.1:19400",
+ "base": "http://127.0.0.1:19401",
  "tag": "run2",
  "widths": [
   320,
@@ -1677,7 +1677,7 @@
    "first_screen": 0,
    "viewport": 900,
    "slider": null,
-   "cls": 0,
+   "cls": 0.0004975194879708769,
    "blocked": {
     "posters": 200,
     "blocked_scripts": 2
@@ -3487,7 +3487,7 @@
    "first_screen": 0,
    "viewport": 900,
    "slider": null,
-   "cls": 0,
+   "cls": 0.0002669728298981985,
    "blocked": {
     "posters": 243,
     "blocked_scripts": 2

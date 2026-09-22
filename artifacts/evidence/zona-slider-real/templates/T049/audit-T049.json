@@ -1,0 +1,306 @@
+{
+ "base": "http://127.0.0.1:19401",
+ "tag": "T049",
+ "widths": [
+  390,
+  1440
+ ],
+ "pages": {
+  "/@390": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "zt__m",
+     "text": "триллер · западный контент"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 9.5 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 5.1 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.1 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "западный контент · комедия"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 8.5 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "семейный · западный контент"
+    }
+   ],
+   "cards": 48,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 44,
+   "cards_in_hidden_tabs": 0,
+   "images": 60,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 11,
+   "buttons_invisible": [
+    "",
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Кинопортал: что смотреть и где это найти"
+   ],
+   "dup_ids": [],
+   "grid_filled": 12,
+   "dead_space": [],
+   "first_screen": 137,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 18,
+    "blocked_scripts": 0
+   }
+  },
+  "/catalog/@390": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "IMDb 9.2 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "Shikimori 6.7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 8.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 3.8 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · Костюмированная драма"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 2.6 из 10"
+    }
+   ],
+   "cards": 28,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 24,
+   "cards_in_hidden_tabs": 0,
+   "images": 28,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "",
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Каталог"
+   ],
+   "dup_ids": [],
+   "grid_filled": 28,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 38,
+    "blocked_scripts": 0
+   }
+  },
+  "/@1440": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    },
+    {
+     "cls": "zt__m",
+     "text": "триллер · западный контент"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 9.5 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 5.1 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.1 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "западный контент · комедия"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 8.5 из 10"
+    }
+   ],
+   "cards": 48,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 36,
+   "cards_in_hidden_tabs": 0,
+   "images": 60,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 11,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    "",
+    "zsec--seo__more"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Кинопортал: что смотреть и где это найти"
+   ],
+   "dup_ids": [],
+   "grid_filled": 12,
+   "dead_space": [],
+   "first_screen": 75,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 48,
+    "blocked_scripts": 0
+   }
+  },
+  "/catalog/@1440": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 9.2 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "Shikimori 6.7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 8.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 3.8 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · Костюмированная драма"
+    }
+   ],
+   "cards": 28,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 14,
+   "cards_in_hidden_tabs": 0,
+   "images": 28,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    "",
+    "zfilt-toggle"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Каталог"
+   ],
+   "dup_ids": [],
+   "grid_filled": 28,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 76,
+    "blocked_scripts": 0
+   }
+  }
+ },
+ "slider": {
+  "390": {
+   "applicable": false,
+   "reason": "слайдера на странице нет"
+  },
+  "1440": {
+   "applicable": false,
+   "reason": "слайдера на странице нет"
+  }
+ },
+ "verdict": "PASS",
+ "failures": []
+}

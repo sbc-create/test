@@ -1,5 +1,5 @@
 {
- "base": "http://127.0.0.1:19401",
+ "base": "http://127.0.0.1:19400",
  "tag": "run1",
  "widths": [
   320,
@@ -822,7 +822,7 @@
    "first_screen": 0,
    "viewport": 900,
    "slider": null,
-   "cls": 0,
+   "cls": 0.00012360532407407407,
    "blocked": {
     "posters": 210,
     "blocked_scripts": 2
@@ -3487,7 +3487,7 @@
    "first_screen": 0,
    "viewport": 900,
    "slider": null,
-   "cls": 0.0002669728298981985,
+   "cls": 0,
    "blocked": {
     "posters": 243,
     "blocked_scripts": 2
@@ -3590,7 +3590,7 @@
     },
     "height": 374
    },
-   "cls": 5.724488141932441e-05,
+   "cls": 0,
    "blocked": {
     "posters": 20,
     "blocked_scripts": 0
@@ -4395,7 +4395,7 @@
    "first_screen": 0,
    "viewport": 900,
    "slider": null,
-   "cls": 0,
+   "cls": 0.00013500255694605195,
    "blocked": {
     "posters": 246,
     "blocked_scripts": 2
@@ -5185,7 +5185,7 @@
    "first_screen": 0,
    "viewport": 900,
    "slider": null,
-   "cls": 8.04059346516927e-05,
+   "cls": 0,
    "blocked": {
     "posters": 235,
     "blocked_scripts": 1
@@ -5299,7 +5299,7 @@
    "first_screen": 0,
    "viewport": 900,
    "slider": null,
-   "cls": 0,
+   "cls": 7.593893828215422e-05,
    "blocked": {
     "posters": 247,
     "blocked_scripts": 2

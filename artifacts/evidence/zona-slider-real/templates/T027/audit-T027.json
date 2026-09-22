@@ -1,0 +1,274 @@
+{
+ "base": "http://127.0.0.1:19401",
+ "tag": "T027",
+ "widths": [
+  390,
+  1440
+ ],
+ "pages": {
+  "/@390": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "zhero__desc",
+     "text": "Десять молодых австралийских танцоров из"
+    }
+   ],
+   "cards": 12,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 12,
+   "cards_in_hidden_tabs": 24,
+   "images": 49,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 7,
+   "buttons_invisible": [
+    "",
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Танцуй, чтобы жить"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 479,
+   "viewport": 900,
+   "slider": {
+    "ready": "0",
+    "slides": 1,
+    "dots": 0,
+    "index": null,
+    "prev_visible": false,
+    "next_visible": false,
+    "prev_hit": null,
+    "height": 479
+   },
+   "cls": 0,
+   "blocked": {
+    "posters": 14,
+    "blocked_scripts": 0
+   }
+  },
+  "/catalog/@390": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "IMDb 9.2 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "Shikimori 6.7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 8.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 3.8 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "романтика · Костюмированная драма"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 2.6 из 10"
+    }
+   ],
+   "cards": 28,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 24,
+   "cards_in_hidden_tabs": 0,
+   "images": 28,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "",
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Каталог"
+   ],
+   "dup_ids": [],
+   "grid_filled": 28,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 34,
+    "blocked_scripts": 0
+   }
+  },
+  "/@1440": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    }
+   ],
+   "cards": 12,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 5,
+   "cards_in_hidden_tabs": 24,
+   "images": 49,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 7,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    "",
+    "zsec--seo__more"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Танцуй, чтобы жить"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 374,
+   "viewport": 900,
+   "slider": {
+    "ready": "0",
+    "slides": 1,
+    "dots": 0,
+    "index": null,
+    "prev_visible": false,
+    "next_visible": false,
+    "prev_hit": null,
+    "height": 374
+   },
+   "cls": 0,
+   "blocked": {
+    "posters": 20,
+    "blocked_scripts": 0
+   }
+  },
+  "/catalog/@1440": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 9.2 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "Shikimori 6.7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 8.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 3.8 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 2.6 из 10"
+    }
+   ],
+   "cards": 28,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 18,
+   "cards_in_hidden_tabs": 0,
+   "images": 28,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    "",
+    "zfilt-toggle"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Каталог"
+   ],
+   "dup_ids": [],
+   "grid_filled": 28,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 48,
+    "blocked_scripts": 0
+   }
+  }
+ },
+ "slider": {
+  "390": {
+   "applicable": false,
+   "reason": "один кадр героя по замыслу шаблона",
+   "slides": 1,
+   "dead_controls": 0,
+   "failures": []
+  },
+  "1440": {
+   "applicable": false,
+   "reason": "один кадр героя по замыслу шаблона",
+   "slides": 1,
+   "dead_controls": 0,
+   "failures": []
+  }
+ },
+ "verdict": "PASS",
+ "failures": []
+}

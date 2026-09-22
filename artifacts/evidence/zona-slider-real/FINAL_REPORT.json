@@ -5,10 +5,11 @@
  "worktree": "/home/claude/wt-zona-real-slider-01",
  "branch": "claude/zona-real-slider-01",
  "start_head": "738e07d",
- "final_head": "c1070d5a16dea778fec3d77f712cf0408fe4ee8c",
- "remote_head": "c1070d5a16dea778fec3d77f712cf0408fe4ee8c",
- "commits_created": 14,
+ "final_head": "3fe8f77f00a489d4a7c1c0ede836a7f01beaf870",
+ "remote_head": "3fe8f77f00a489d4a7c1c0ede836a7f01beaf870",
+ "commits_created": 15,
  "commits": [
+  "3fe8f77 evidence(zona): машинный итог пересобран со всеми числами прогонов",
   "c1070d5 test(zona): полный набор фабрики прогнан, падения разобраны поимённо",
   "65fee74 docs(zona): поправка к READY_TO_RESTART — его вывод оказался неверен",
   "6051b45 evidence(zona): ветка опубликована, отчёт называет remote",
@@ -49,13 +50,15 @@
   }
  },
  "templates": {
-  "present": 6,
-  "built": 6,
-  "tested": 6,
-  "reviewed_by_agent": 6,
+  "present": 50,
+  "built": 50,
+  "tested": 50,
+  "reviewed_by_agent": 50,
   "owner_accepted": 0,
   "target_asked": 50,
-  "note": "пакеты T001–T050 в ленте Zona не существуют; собран собственный слой шаблонов Zona"
+  "top10_tested": 10,
+  "top10_total": 10,
+  "note": "T001–T050 не существовали в ленте Zona и собраны заново в собственном слое: таблица объявлений поверх общей отрисовки, ни одной строки кода на шаблон"
  },
  "runs": {
   "run1": {
@@ -109,7 +112,7 @@
    "dup_id_pages": 0,
    "dead_space_pages": 0,
    "covered_controls": 0,
-   "worst_cls": 0.00040500767083815584,
+   "worst_cls": 0.0004975194879708769,
    "cards_total": 1140,
    "slider_widths": 6,
    "slider_failures": 0,
@@ -124,18 +127,18 @@
  },
  "tests": {
   "lords_run1": {
-   "passed": 662,
+   "passed": 649,
    "failed": 2,
    "skipped": 17,
    "foreign_failed": 2,
-   "seconds": 57.0
+   "seconds": 68.3
   },
   "lords_run2": {
-   "passed": 662,
+   "passed": 649,
    "failed": 2,
    "skipped": 17,
    "foreign_failed": 2,
-   "seconds": 59.2
+   "seconds": 60.1
   },
   "unit_zone": {
    "passed": 5557,
@@ -173,11 +176,12 @@
   "visual": {
    "criteria": {
     "снимки кандидата на шести ширинах": true,
-    "снимки всех шаблонов": true,
-    "контактный лист": true,
+    "снимки всех пятидесяти шаблонов": true,
+    "полная матрица десяти сильнейших": true,
+    "контактные листы": true,
     "приёмка владельцем": false
    },
-   "percent": 75
+   "percent": 80
   },
   "deploy": {
    "criteria": {
@@ -190,7 +194,7 @@
    },
    "percent": 50
   },
-  "overall_percent": 73
+  "overall_percent": 74
  },
  "note_final_head": "SHA снят в момент сборки отчёта; коммит, который его сохраняет, идёт следующим — это один шаг, а не расхождение"
 }

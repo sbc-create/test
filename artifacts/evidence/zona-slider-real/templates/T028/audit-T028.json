@@ -1,0 +1,482 @@
+{
+ "base": "http://127.0.0.1:19402",
+ "tag": "T028",
+ "widths": [
+  390,
+  1440
+ ],
+ "pages": {
+  "/@390": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "zhero__desc",
+     "text": "Десять молодых австралийских танцоров из"
+    },
+    {
+     "cls": "zt__m",
+     "text": "триллер · западный контент"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "триллер · криминал"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 9.5 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 5.1 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "западный контент · драма"
+    },
+    {
+     "cls": "zt__m",
+     "text": "2025 · Новая Зеландия"
+    }
+   ],
+   "cards": 47,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 44,
+   "cards_in_hidden_tabs": 24,
+   "images": 91,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 17,
+   "buttons_invisible": [
+    "",
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Танцуй, чтобы жить"
+   ],
+   "dup_ids": [],
+   "grid_filled": 35,
+   "dead_space": [],
+   "first_screen": 479,
+   "viewport": 900,
+   "slider": {
+    "ready": "1",
+    "slides": 8,
+    "dots": 8,
+    "index": "0",
+    "prev_visible": true,
+    "next_visible": true,
+    "prev_hit": {
+     "w": 44,
+     "h": 44
+    },
+    "height": 479
+   },
+   "cls": 0,
+   "blocked": {
+    "posters": 37,
+    "blocked_scripts": 0
+   }
+  },
+  "/catalog/@390": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "zt__m",
+     "text": "драма · детектив"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 9.2 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "Shikimori 6.7 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "турецкий сериал · драма"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "западный контент · драма"
+    },
+    {
+     "cls": "zt__m",
+     "text": "драма · документальный"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.7 из 10"
+    }
+   ],
+   "cards": 28,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 22,
+   "cards_in_hidden_tabs": 0,
+   "images": 28,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "",
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Каталог"
+   ],
+   "dup_ids": [],
+   "grid_filled": 28,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 65,
+    "blocked_scripts": 0
+   }
+  },
+  "/@1440": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    },
+    {
+     "cls": "zt__m",
+     "text": "триллер · западный контент"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 9.5 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 5.1 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "западный контент · драма"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.1 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "западный контент · комедия"
+    }
+   ],
+   "cards": 47,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 39,
+   "cards_in_hidden_tabs": 24,
+   "images": 91,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 17,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    "",
+    "zsec--seo__more"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Танцуй, чтобы жить"
+   ],
+   "dup_ids": [],
+   "grid_filled": 35,
+   "dead_space": [],
+   "first_screen": 374,
+   "viewport": 900,
+   "slider": {
+    "ready": "1",
+    "slides": 8,
+    "dots": 8,
+    "index": "0",
+    "prev_visible": true,
+    "next_visible": true,
+    "prev_hit": {
+     "w": 44,
+     "h": 44
+    },
+    "height": 374
+   },
+   "cls": 0,
+   "blocked": {
+    "posters": 55,
+    "blocked_scripts": 0
+   }
+  },
+  "/catalog/@1440": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 9.2 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "Shikimori 6.7 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "турецкий сериал · драма"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 6.4 из 10"
+    },
+    {
+     "cls": "zt__m",
+     "text": "западный контент · драма"
+    },
+    {
+     "cls": "zt__m",
+     "text": "драма · документальный"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb 7.7 из 10"
+    }
+   ],
+   "cards": 28,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 12,
+   "cards_in_hidden_tabs": 0,
+   "images": 28,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "Открыть поиск",
+    "Меню разделов",
+    "",
+    "zfilt-toggle"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Каталог"
+   ],
+   "dup_ids": [],
+   "grid_filled": 28,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 83,
+    "blocked_scripts": 0
+   }
+  }
+ },
+ "slider": {
+  "390": {
+   "applicable": true,
+   "start": {
+    "index": "0",
+    "id": "tancuy-chtoby-zhit",
+    "title": "Танцуй, чтобы жить",
+    "img": "https://poster.cdnvideohub.com/01a04262-9c6e-7622-8e0b-c4f6c705dc52.webp",
+    "href": "/title/tancuy-chtoby-zhit/",
+    "dot": 0
+   },
+   "steps": [
+    {
+     "step": "click-next",
+     "from": "tancuy-chtoby-zhit",
+     "to": "chya-eto-sobaka",
+     "changed": true
+    },
+    {
+     "step": "click-next-2",
+     "from": "chya-eto-sobaka",
+     "to": "svinorez",
+     "changed": true
+    },
+    {
+     "step": "click-prev",
+     "from": "svinorez",
+     "to": "chya-eto-sobaka",
+     "changed": true
+    },
+    {
+     "step": "dot-7",
+     "from": "chya-eto-sobaka",
+     "to": "bez-prava-na-strah",
+     "changed": true
+    },
+    {
+     "step": "key-ArrowRight",
+     "from": "bez-prava-na-strah",
+     "to": "tancuy-chtoby-zhit",
+     "changed": true
+    },
+    {
+     "step": "key-ArrowLeft",
+     "from": "tancuy-chtoby-zhit",
+     "to": "bez-prava-na-strah",
+     "changed": true
+    },
+    {
+     "step": "swipe",
+     "from": "bez-prava-na-strah",
+     "to": "tancuy-chtoby-zhit",
+     "changed": true
+    },
+    {
+     "step": "wrap-forward",
+     "from": "bez-prava-na-strah",
+     "to": "tancuy-chtoby-zhit",
+     "changed": true
+    },
+    {
+     "step": "wrap-backward",
+     "from": "tancuy-chtoby-zhit",
+     "to": "bez-prava-na-strah",
+     "changed": true
+    }
+   ],
+   "failures": [],
+   "rapid": {
+    "expected_dot": 2,
+    "actual_dot": 2
+   },
+   "focus": {
+    "el": "Следующий слайд",
+    "visible": true,
+    "outline": "solid",
+    "width": "3px",
+    "shadow": "none"
+   },
+   "unique_ids_seen": 4
+  },
+  "1440": {
+   "applicable": true,
+   "start": {
+    "index": "0",
+    "id": "tancuy-chtoby-zhit",
+    "title": "Танцуй, чтобы жить",
+    "img": "https://poster.cdnvideohub.com/01a04262-9c6e-7622-8e0b-c4f6c705dc52.webp",
+    "href": "/title/tancuy-chtoby-zhit/",
+    "dot": 0
+   },
+   "steps": [
+    {
+     "step": "click-next",
+     "from": "tancuy-chtoby-zhit",
+     "to": "chya-eto-sobaka",
+     "changed": true
+    },
+    {
+     "step": "click-next-2",
+     "from": "chya-eto-sobaka",
+     "to": "svinorez",
+     "changed": true
+    },
+    {
+     "step": "click-prev",
+     "from": "svinorez",
+     "to": "chya-eto-sobaka",
+     "changed": true
+    },
+    {
+     "step": "dot-7",
+     "from": "chya-eto-sobaka",
+     "to": "bez-prava-na-strah",
+     "changed": true
+    },
+    {
+     "step": "key-ArrowRight",
+     "from": "bez-prava-na-strah",
+     "to": "tancuy-chtoby-zhit",
+     "changed": true
+    },
+    {
+     "step": "key-ArrowLeft",
+     "from": "tancuy-chtoby-zhit",
+     "to": "bez-prava-na-strah",
+     "changed": true
+    },
+    {
+     "step": "swipe",
+     "from": "bez-prava-na-strah",
+     "to": "tancuy-chtoby-zhit",
+     "changed": true
+    },
+    {
+     "step": "wrap-forward",
+     "from": "bez-prava-na-strah",
+     "to": "tancuy-chtoby-zhit",
+     "changed": true
+    },
+    {
+     "step": "wrap-backward",
+     "from": "tancuy-chtoby-zhit",
+     "to": "bez-prava-na-strah",
+     "changed": true
+    }
+   ],
+   "failures": [],
+   "rapid": {
+    "expected_dot": 2,
+    "actual_dot": 2
+   },
+   "focus": {
+    "el": "Следующий слайд",
+    "visible": true,
+    "outline": "solid",
+    "width": "3px",
+    "shadow": "none"
+   },
+   "unique_ids_seen": 4
+  }
+ },
+ "verdict": "PASS",
+ "failures": []
+}

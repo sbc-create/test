@@ -1,5 +1,5 @@
 {
- "runtime_before": "/tmp/claude-1001/-home-claude-wt-zona-real-slider-01/3bd2676e-1ba6-48ed-88ba-b9d6aba75f4a/scratchpad/base-head/automation/host/lords-frontend.py",
+ "runtime_before": "/tmp/claude-1001/-home-claude-wt-zona-real-slider-01/3bd2676e-1ba6-48ed-88ba-b9d6aba75f4a/scratchpad/base/automation/host/lords-frontend.py",
  "runtime_after": "automation/host/lords-frontend.py",
  "families": [
   {
