@@ -845,3 +845,102 @@ class TestDeployRehearsal:
         for нужно in ("живая проверка падает", "повторный запуск",
                       "записи посетителей целы", "откат по записанной точке"):
             assert нужно in текст, f"репетиция не покрывает: {нужно}"
+
+
+class TestModeratorEnable:
+    """Включение модератора обязано быть возвратным.
+
+    Скрипт правит конфигурацию юнита. Любой отказ после первой правки — записи,
+    daemon-reload, перезапуска, готовности, build-id или приёмки — должен
+    вернуть прежний drop-in (или его отсутствие) и ненулевой код. Ключ и данные
+    посетителей не трогаются никогда.
+    """
+
+    MOD = (HARNESS / "animedia-enable-moderator.sh").read_text(encoding="utf-8")
+
+    def test_it_snapshots_before_the_first_change(self):
+        снимок = self.MOD.find("снимок прежней конфигурации")
+        правка = self.MOD.find("MUTATED=1")
+        assert снимок != -1 and правка != -1
+        assert снимок < правка, "снимок снимается после первой правки"
+
+    def test_it_restores_on_any_failure(self):
+        assert "trap on_exit EXIT" in self.MOD
+        assert "restore" in self.MOD
+        assert "MODERATOR_ENABLE_FAILED" in self.MOD
+
+    def test_the_snapshot_outlives_the_restore(self):
+        """Копия прежнего drop-in нужна ВО ВРЕМЯ восстановления, не до него."""
+        restore_at = self.MOD.find("  restore\n")
+        cleanup_at = self.MOD.find('rm -rf "$SNAP"', restore_at)
+        assert restore_at != -1 and cleanup_at != -1
+        assert restore_at < cleanup_at, "снимок удаляется раньше восстановления"
+
+    def test_it_does_not_delete_a_dropin_it_did_not_create(self):
+        assert 'if [ "$DROPIN_EXISTED" -eq 1 ]; then' in self.MOD
+        assert 'cp -a "$SNAP/dropin" "$DROPIN"' in self.MOD
+
+    def test_it_never_reissues_an_existing_key(self):
+        assert 'if [ "$KEY_EXISTED" -eq 1 ]; then' in self.MOD
+        for line in self.MOD.splitlines():
+            if "openssl rand" in line:
+                assert "umask" in line, "ключ создаётся без ограничения прав"
+
+    def test_it_never_deletes_the_key(self):
+        for line in self.MOD.splitlines():
+            if "rm " in line and "KEYFILE" in line:
+                pytest.fail(f"скрипт удаляет ключ: {line.strip()}")
+
+    def test_no_unbounded_or_blind_sleep(self):
+        assert "wait_ready" in self.MOD, "нет ожидания готовности"
+        assert "READY_TIMEOUT" in self.MOD, "ожидание не ограничено по времени"
+        # Упоминание в комментарии — это объяснение, а не поведение: сравнивать
+        # надо исполняемые строки.
+        # Тик опроса в ограниченном цикле — не слепое ожидание. Слепое — это
+        # пауза на глазок вместо признака готовности, то есть `sleep N` при
+        # N >= 2 где угодно вне цикла ожидания.
+        код = [l for l in self.MOD.splitlines() if not l.strip().startswith("#")]
+        слепые = [l.strip() for l in код
+                  if re.search(r'\bsleep\s+([2-9]|\d{2,})\b', l)]
+        assert not слепые, f"осталось слепое ожидание: {слепые}"
+        assert re.search(r'\bsleep\s+1\b', "\n".join(код)), (
+            "цикл ожидания не опрашивает состояние"
+        )
+
+    def test_build_id_mismatch_is_fatal(self):
+        строка = next((l for l in self.MOD.splitlines()
+                       if '"$BUILD" = "$RELEASE_ID"' in l), "")
+        assert строка, "build-id не сравнивается"
+        assert "die" in строка, f"несовпадение build-id не завершает ошибкой: {строка.strip()}"
+
+    def test_it_asserts_acceptance_did_not_switch_or_rewrite(self):
+        assert "SWITCHED=0" in self.MOD, "не проверено, что релиз не переключали"
+        assert "ROLLBACK_BEFORE" in self.MOD and "ROLLBACK_AFTER" in self.MOD, (
+            "не проверено, что точка отката не переписана"
+        )
+
+    def test_it_does_not_print_the_key_value(self):
+        """Значение секрета не попадает в вывод — .claude/rules/security.md.
+
+        Запись ключа в сам drop-in — это не вывод: файл принадлежит root и
+        ради него всё и затевается. Ловить надо печать в stdout/stderr.
+        """
+        for line in self.MOD.splitlines():
+            голая = line.strip()
+            if голая.startswith("#"):
+                continue
+            if not ("printf" in голая or "echo" in голая):
+                continue
+            if ">" in голая:  # перенаправление в файл, а не печать
+                continue
+            assert "$KEY" not in голая.replace("$KEYFILE", ""), (
+                f"значение ключа печатается: {голая}"
+            )
+
+    def test_rehearsal_passes(self):
+        репетиция = HARNESS / "moderator_enable_rehearsal.sh"
+        assert репетиция.exists(), "репетиции включения модератора нет"
+        готово = subprocess.run(["bash", str(репетиция)],
+                                capture_output=True, text=True, timeout=300)
+        assert "MODERATOR_REHEARSAL=PASS" in готово.stdout, готово.stdout + готово.stderr
+        assert готово.returncode == 0
