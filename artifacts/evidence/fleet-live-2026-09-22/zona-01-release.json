@@ -16,7 +16,8 @@
  "activation": {
   "automatic": "nova-daily-refresh.timer → 2026-09-23 03:30:59 UTC (перезапуск только при успешной публикации)",
   "manual": "sudo systemctl restart nova-zona-01.service",
-  "verify": "python3 automation/host/zona-post-restart-verify.py"
+  "verify": "python3 automation/host/zona-post-restart-verify.py",
+  "one_command": "sudo bash automation/host/zona-activate.sh zona-01 — перезапуск, ожидание готовности, приёмка живого домена и автоматический откат при провале"
  },
  "note_correction": "первый прогон установщика получил выдуманный полный SHA коммита; манифест и RELEASE.json исправлены на настоящий a0209877e1dbe3276487720c8785cb6a2c3456f8, байты не менялись"
 }
