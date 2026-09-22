@@ -120,9 +120,25 @@ class Ответ:
     заголовки: dict
 
 
+#: Недельный снимок «Высоких оценок недели». На боевой витрине он есть
+#: (`/srv/lords/.frontend/zona-01-popular-weekly.json`), и без него у главной
+#: не остаётся ни одной горизонтальной ленты. Проверять главную без снимка
+#: значило бы проверять не ту главную, которую видит зритель.
+НЕДЕЛЬНЫЙ_СНИМОК = {
+    "week_id": "2026-W38",
+    "digest": "kitdigest0000",
+    "shelves": {
+        "pop-films": ["svezhiy", "ravnyy-a", "tolko-imdb", "tolko-kp", "nol-ocenka"],
+        "pop-series": ["samyy-svezhiy", "ravnyy-b", "serial-s-sezonami"],
+        "pop-anim": ["multik", "tolko-shiki"],
+    },
+}
+
+
 def поднять(tmp_path, *, design: str = ЖИВАЯ_ВЕРСИЯ_ZONA, family: str = "zona",
             записи=None, подробности=None, site_name: str = "Zona",
-            имя_модуля: str | None = None, clock: str = ЧАС):
+            имя_модуля: str | None = None, clock: str = ЧАС,
+            weekly=НЕДЕЛЬНЫЙ_СНИМОК):
     """Импортировать рантайм с собственными данными и манифестом."""
     записи = ЗАПИСИ if записи is None else записи
     подробности = ПОДРОБНОСТИ if подробности is None else подробности
@@ -148,6 +164,10 @@ def поднять(tmp_path, *, design: str = ЖИВАЯ_ВЕРСИЯ_ZONA, fami
         "profile": f"{family}-test", "built_at": "2026-09-20T00:00:00Z",
     }), encoding="utf-8")
 
+    недельный = корень / "popular-weekly.json"
+    if weekly:
+        недельный.write_text(json.dumps(weekly, ensure_ascii=False), encoding="utf-8")
+
     старое = dict(os.environ)
     os.environ.update({
         "LORDS_TEMPLATE_MANIFEST": str(манифест),
@@ -159,8 +179,12 @@ def поднять(tmp_path, *, design: str = ЖИВАЯ_ВЕРСИЯ_ZONA, fami
         "LORDS_LEGACY_ROOT": str(корень / "legacy-root-otsutstvuet"),
         "LORDS_LEGACY_UPSTREAM": "",
     })
-    for ключ in ("LORDS_POPULAR_WEEKLY", "LORDS_SITEMAP_DIR", "LORDS_METRIKA_COUNTER"):
+    for ключ in ("LORDS_SITEMAP_DIR", "LORDS_METRIKA_COUNTER"):
         os.environ.pop(ключ, None)
+    if weekly:
+        os.environ["LORDS_POPULAR_WEEKLY"] = str(недельный)
+    else:
+        os.environ.pop("LORDS_POPULAR_WEEKLY", None)
     try:
         имя = имя_модуля or f"nova_zona_kit_{family}_{design.replace('.', '')}_{Path(tmp_path).name}"
         спец = importlib.util.spec_from_file_location(имя, ИСХОДНИК)
