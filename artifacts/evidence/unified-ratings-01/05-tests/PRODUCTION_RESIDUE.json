@@ -1,0 +1,29 @@
+{
+  "community_votes_total": 0,
+  "community_vote_events_total": 57,
+  "unified_user_aggregates_total": 0,
+  "unified_editorial_ratings_total": 0,
+  "fixture_titles_leaked": 0,
+  "test_actor_votes": 0,
+  "FAKE_USER_VOTES_INSERTED": 0,
+  "CROSS_TENANT_READS": 0,
+  "CROSS_TENANT_WRITES": 0,
+  "COMMENTS_MUTATIONS": 0,
+  "tables_now": 51,
+  "migrations": [
+    "0002",
+    "0003",
+    "0004",
+    "0006",
+    "0007",
+    "0008",
+    "0009"
+  ],
+  "unified_external_snapshots": 110557,
+  "unified_external_current": 110100,
+  "unified_composite_ratings": 24737,
+  "unified_review_queue_pending": 2440,
+  "unified_titles": 53596,
+  "SYNTHETIC_VOTES_REMAINING": 0,
+  "TEST_TELEMETRY_IN_PRODUCTION": 0
+}

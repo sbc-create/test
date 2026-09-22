@@ -1,0 +1,573 @@
+{
+  "coverage": {
+    "generated_at": "2026-09-22T07:52:08Z",
+    "sla_hours": {
+      "ONGOING": 24,
+      "RECENT_FINISHED": 168,
+      "ARCHIVE": 720,
+      "RETRY": 168,
+      "UNSCHEDULED": 720
+    },
+    "note": "процент считается по уникальным произведениям; строки источников и внешние идентификаторы показаны отдельно и покрытием не являются",
+    "sources_registry": {
+      "anilist": {
+        "status": "READY",
+        "access_method": "OFFICIAL_API"
+      },
+      "simkl": {
+        "status": "BLOCKED_SECRET",
+        "access_method": "OFFICIAL_API"
+      },
+      "kitsu": {
+        "status": "READY",
+        "access_method": "OFFICIAL_API"
+      },
+      "shikimori": {
+        "status": "READY",
+        "access_method": "EXISTING_PROJECT_CONNECTOR"
+      },
+      "provider_feed_imdb": {
+        "status": "FEED_ONLY",
+        "access_method": "EXISTING_PROJECT_CONNECTOR"
+      },
+      "provider_feed_kinopoisk": {
+        "status": "FEED_ONLY",
+        "access_method": "EXISTING_PROJECT_CONNECTOR"
+      }
+    },
+    "slices": {
+      "catalog": {
+        "name": "полный канонический каталог",
+        "denominator": "все уникальные произведения каталога",
+        "titles_total": 53596,
+        "distinct_counts": {
+          "unique_titles": 53596,
+          "external_ids": 107431,
+          "source_records": 110100,
+          "ratings_with_value": 63427,
+          "matched_titles": 51182
+        },
+        "by_kind": {
+          "movie": 33190,
+          "series": 20406
+        },
+        "with_any_external_rating": {
+          "count": 33687,
+          "percent": 62.85
+        },
+        "with_2plus_external_ratings": {
+          "count": 24737,
+          "percent": 46.15
+        },
+        "with_editorial_rating": {
+          "count": 0,
+          "percent": 0.0
+        },
+        "with_community_rating": {
+          "count": 0,
+          "percent": 0.0
+        },
+        "without_any_rating": {
+          "count": 19909,
+          "percent": 37.15
+        },
+        "with_external_ids": {
+          "count": 53517,
+          "percent": 99.85
+        },
+        "without_external_ids": {
+          "count": 79,
+          "percent": 0.15
+        },
+        "in_manual_review": {
+          "count": 1299,
+          "percent": 2.42
+        },
+        "blocked_by_ambiguous_match": {
+          "count": 1299,
+          "percent": 2.42
+        },
+        "stale_by_sla": {
+          "count": 0,
+          "percent": 0.0
+        },
+        "per_source": {
+          "anilist": {
+            "count": 5484,
+            "percent": 10.23
+          },
+          "simkl": {
+            "count": 0,
+            "percent": 0.0
+          },
+          "kitsu": {
+            "count": 4833,
+            "percent": 9.02
+          },
+          "shikimori": {
+            "count": 6760,
+            "percent": 12.61
+          },
+          "provider_feed_imdb": {
+            "count": 26807,
+            "percent": 50.02
+          },
+          "provider_feed_kinopoisk": {
+            "count": 19543,
+            "percent": 36.46
+          }
+        },
+        "coverage_percent": 62.85
+      },
+      "animedia.icu": {
+        "name": "animedia.icu",
+        "denominator": "фактический каталог animedia.icu",
+        "titles_total": 7425,
+        "distinct_counts": {
+          "unique_titles": 7425,
+          "external_ids": 14495,
+          "source_records": 25455,
+          "ratings_with_value": 17500,
+          "matched_titles": 7358
+        },
+        "by_kind": {
+          "series": 5504,
+          "movie": 1921
+        },
+        "with_any_external_rating": {
+          "count": 6860,
+          "percent": 92.39
+        },
+        "with_2plus_external_ratings": {
+          "count": 5637,
+          "percent": 75.92
+        },
+        "with_editorial_rating": {
+          "count": 0,
+          "percent": 0.0
+        },
+        "with_community_rating": {
+          "count": 0,
+          "percent": 0.0
+        },
+        "without_any_rating": {
+          "count": 565,
+          "percent": 7.61
+        },
+        "with_external_ids": {
+          "count": 7402,
+          "percent": 99.69
+        },
+        "without_external_ids": {
+          "count": 23,
+          "percent": 0.31
+        },
+        "in_manual_review": {
+          "count": 1296,
+          "percent": 17.45
+        },
+        "blocked_by_ambiguous_match": {
+          "count": 1296,
+          "percent": 17.45
+        },
+        "stale_by_sla": {
+          "count": 0,
+          "percent": 0.0
+        },
+        "per_source": {
+          "anilist": {
+            "count": 5484,
+            "percent": 73.86
+          },
+          "simkl": {
+            "count": 0,
+            "percent": 0.0
+          },
+          "kitsu": {
+            "count": 4833,
+            "percent": 65.09
+          },
+          "shikimori": {
+            "count": 6760,
+            "percent": 91.04
+          },
+          "provider_feed_imdb": {
+            "count": 226,
+            "percent": 3.04
+          },
+          "provider_feed_kinopoisk": {
+            "count": 197,
+            "percent": 2.65
+          }
+        },
+        "coverage_percent": 92.39
+      }
+    }
+  },
+  "composite": {
+    "COMPOSITE_FORMULA_VERSION": "equal_weight_mean_v1",
+    "COMPOSITE_MIN_SOURCES": 2,
+    "TITLES_WITH_COMPOSITE_RATING": 24737,
+    "COMPOSITE_COVERAGE_PERCENT": 46.15,
+    "ANIMEDIA_ICU_TITLES_WITH_COMPOSITE": 5637,
+    "ANIMEDIA_ICU_COMPOSITE_COVERAGE_PERCENT": 75.92
+  },
+  "sources": {
+    "anilist": {
+      "SOURCE_NAME": "anilist",
+      "ACCESS_TYPE": "OFFICIAL_API",
+      "STATUS": "READY",
+      "TOTAL_FETCHED": 8555,
+      "TOTAL_IMPORTED": 5759,
+      "UNIQUE_TITLES_MATCHED": 5759,
+      "RECORDS_STORED": 5759,
+      "RECORDS_WITH_VALUE": 5484,
+      "NOT_FOUND": 188,
+      "FAILED": 25,
+      "RUNS": 328,
+      "LAST_CURSOR": "53477",
+      "BLOCKER": ""
+    },
+    "simkl": {
+      "SOURCE_NAME": "simkl",
+      "ACCESS_TYPE": "BLOCKED",
+      "STATUS": "BLOCKED_SECRET",
+      "TOTAL_FETCHED": 0,
+      "TOTAL_IMPORTED": 0,
+      "UNIQUE_TITLES_MATCHED": 0,
+      "RECORDS_STORED": 0,
+      "RECORDS_WITH_VALUE": 0,
+      "NOT_FOUND": 0,
+      "FAILED": 0,
+      "RUNS": 0,
+      "LAST_CURSOR": "",
+      "BLOCKER": "GET https://api.simkl.com/anime/1 без ключа → HTTP 412 {\"error\":\"client_id_failed\"}. Ключа нет ни в secret storage, ни в inventory. Обход блокировки подделкой client_id или разбором страницы запрещён, поэтому источник остаётся BLOCKED_SECRET."
+    },
+    "kitsu": {
+      "SOURCE_NAME": "kitsu",
+      "ACCESS_TYPE": "OFFICIAL_API",
+      "STATUS": "READY",
+      "TOTAL_FETCHED": 7161,
+      "TOTAL_IMPORTED": 5653,
+      "UNIQUE_TITLES_MATCHED": 5402,
+      "RECORDS_STORED": 5402,
+      "RECORDS_WITH_VALUE": 4833,
+      "NOT_FOUND": 489,
+      "FAILED": 1,
+      "RUNS": 356,
+      "LAST_CURSOR": "64340",
+      "BLOCKER": ""
+    },
+    "shikimori": {
+      "SOURCE_NAME": "shikimori",
+      "ACCESS_TYPE": "AUTHORIZED_CONNECTOR",
+      "STATUS": "READY",
+      "TOTAL_FETCHED": 7765,
+      "TOTAL_IMPORTED": 7159,
+      "UNIQUE_TITLES_MATCHED": 6953,
+      "RECORDS_STORED": 6953,
+      "RECORDS_WITH_VALUE": 6760,
+      "NOT_FOUND": 7,
+      "FAILED": 0,
+      "RUNS": 147,
+      "LAST_CURSOR": "64340",
+      "BLOCKER": ""
+    },
+    "provider_feed_imdb": {
+      "SOURCE_NAME": "provider_feed_imdb",
+      "ACCESS_TYPE": "AUTHORIZED_CONNECTOR",
+      "STATUS": "FEED_ONLY",
+      "TOTAL_FETCHED": 49252,
+      "TOTAL_IMPORTED": 45216,
+      "UNIQUE_TITLES_MATCHED": 45216,
+      "RECORDS_STORED": 45216,
+      "RECORDS_WITH_VALUE": 26807,
+      "NOT_FOUND": 2,
+      "FAILED": 0,
+      "RUNS": 48,
+      "LAST_CURSOR": "46023662",
+      "BLOCKER": "Новый сбор с imdb.com не запускается: скрапинг IMDb запрещён."
+    },
+    "provider_feed_kinopoisk": {
+      "SOURCE_NAME": "provider_feed_kinopoisk",
+      "ACCESS_TYPE": "AUTHORIZED_CONNECTOR",
+      "STATUS": "FEED_ONLY",
+      "TOTAL_FETCHED": 51849,
+      "TOTAL_IMPORTED": 46770,
+      "UNIQUE_TITLES_MATCHED": 46770,
+      "RECORDS_STORED": 46770,
+      "RECORDS_WITH_VALUE": 19543,
+      "NOT_FOUND": 2,
+      "FAILED": 0,
+      "RUNS": 50,
+      "LAST_CURSOR": "14174750",
+      "BLOCKER": "Новый сбор с kinopoisk.ru не запускается: скрапинг Кинопоиска запрещён."
+    }
+  },
+  "review_queue": {
+    "total_pending": 2440,
+    "by_reason": {
+      "SPECIAL_OVA_VS_MAIN": 1843,
+      "MOVIE_VS_SERIES": 288,
+      "YEAR_MISMATCH": 240,
+      "EXTERNAL_ID_CONFLICT": 46,
+      "SEASON_MISMATCH": 18,
+      "REMAKE": 5
+    },
+    "by_source": {
+      "provider_feed_imdb": 36,
+      "provider_feed_kinopoisk": 79,
+      "anilist": 1098,
+      "kitsu": 1154,
+      "shikimori": 73
+    },
+    "auto_published": 0,
+    "note": "ни одна запись очереди не публикуется автоматически: строка источника получает состояние PENDING_REVIEW вместо значения",
+    "samples_per_reason": {
+      "EXTERNAL_ID_CONFLICT": [
+        {
+          "title": "Re:Zero. Жизнь с нуля в альтернативном мире 2. Часть 2",
+          "year": 2021,
+          "kind": "tv",
+          "source": "provider_feed_imdb",
+          "detail": "imdb=tt5607616 совпал, но факты расходятся: EXTERNAL_ID_CONFLICT"
+        },
+        {
+          "title": "Re:Zero. Жизнь с нуля в альтернативном мире 2. Часть 2",
+          "year": 2021,
+          "kind": "tv",
+          "source": "provider_feed_kinopoisk",
+          "detail": "kinopoisk=971114 совпал, но факты расходятся: EXTERNAL_ID_CONFLICT"
+        },
+        {
+          "title": "Альдноа.Зеро 2",
+          "year": 2015,
+          "kind": "tv",
+          "source": "provider_feed_kinopoisk",
+          "detail": "kinopoisk=842575 совпал, но факты расходятся: EXTERNAL_ID_CONFLICT"
+        },
+        {
+          "title": "Бродяга Кэнсин",
+          "year": 2023,
+          "kind": "tv",
+          "source": "provider_feed_imdb",
+          "detail": "imdb=22249034 совпал, но факты расходятся: EXTERNAL_ID_CONFLICT"
+        },
+        {
+          "title": "Бродяга Кэнсин",
+          "year": 2023,
+          "kind": "tv",
+          "source": "provider_feed_kinopoisk",
+          "detail": "kinopoisk=5118210 совпал, но факты расходятся: EXTERNAL_ID_CONFLICT"
+        }
+      ],
+      "MOVIE_VS_SERIES": [
+        {
+          "title": "And2! And2!",
+          "year": 2018,
+          "kind": "movie",
+          "source": "anilist",
+          "detail": "myanimelist=38346 совпал, но факты расходятся: MOVIE_VS_SERIES"
+        },
+        {
+          "title": "And2! And2!",
+          "year": 2018,
+          "kind": "movie",
+          "source": "kitsu",
+          "detail": "myanimelist=38346 совпал, но факты расходятся: MOVIE_VS_SERIES"
+        },
+        {
+          "title": "Genshin Impact: Божьи границы",
+          "year": 2025,
+          "kind": "movie",
+          "source": "kitsu",
+          "detail": "myanimelist=62022 совпал, но факты расходятся: MOVIE_VS_SERIES"
+        },
+        {
+          "title": "Genshin Impact: Горящая в золе песнь",
+          "year": 2024,
+          "kind": "movie",
+          "source": "anilist",
+          "detail": "myanimelist=58689 совпал, но факты расходятся: MOVIE_VS_SERIES"
+        },
+        {
+          "title": "Genshin Impact: Горящая в золе песнь",
+          "year": 2024,
+          "kind": "movie",
+          "source": "kitsu",
+          "detail": "myanimelist=58689 совпал, но факты расходятся: MOVIE_VS_SERIES"
+        }
+      ],
+      "REMAKE": [
+        {
+          "title": "Полиция будущего: Перезагрузка",
+          "year": 2016,
+          "kind": "movie",
+          "source": "anilist",
+          "detail": "myanimelist=33741 совпал, но факты расходятся: REMAKE"
+        },
+        {
+          "title": "Полиция будущего: Перезагрузка",
+          "year": 2016,
+          "kind": "movie",
+          "source": "kitsu",
+          "detail": "myanimelist=33741 совпал, но факты расходятся: REMAKE"
+        },
+        {
+          "title": "Полиция будущего: Перезагрузка",
+          "year": 2016,
+          "kind": "movie",
+          "source": "shikimori",
+          "detail": "myanimelist=33741 совпал, но факты расходятся: REMAKE"
+        },
+        {
+          "title": "Учитель-мафиози Реборн!",
+          "year": 2006,
+          "kind": "tv",
+          "source": "anilist",
+          "detail": "myanimelist=1604 совпал, но факты расходятся: REMAKE"
+        },
+        {
+          "title": "Учитель-мафиози Реборн!",
+          "year": 2006,
+          "kind": "tv",
+          "source": "kitsu",
+          "detail": "myanimelist=1604 совпал, но факты расходятся: REMAKE"
+        }
+      ],
+      "SEASON_MISMATCH": [
+        {
+          "title": "Бей эйс! OVA-1",
+          "year": 1988,
+          "kind": "tv",
+          "source": "anilist",
+          "detail": "myanimelist=314 совпал, но факты расходятся: SEASON_MISMATCH"
+        },
+        {
+          "title": "Бей эйс! OVA-1",
+          "year": 1988,
+          "kind": "tv",
+          "source": "kitsu",
+          "detail": "myanimelist=314 совпал, но факты расходятся: SEASON_MISMATCH"
+        },
+        {
+          "title": "Бей эйс! OVA-1",
+          "year": 1988,
+          "kind": "tv",
+          "source": "shikimori",
+          "detail": "myanimelist=314 совпал, но факты расходятся: SEASON_MISMATCH"
+        },
+        {
+          "title": "Власть книжного червя 3",
+          "year": 2019,
+          "kind": "tv",
+          "source": "provider_feed_kinopoisk",
+          "detail": "kinopoisk=1297259 совпал, но факты расходятся: SEASON_MISMATCH, EXTERNAL_ID_CONFLICT"
+        },
+        {
+          "title": "Гинтама 3",
+          "year": 2012,
+          "kind": "tv",
+          "source": "anilist",
+          "detail": "myanimelist=15417 совпал, но факты расходятся: SEASON_MISMATCH"
+        }
+      ],
+      "SPECIAL_OVA_VS_MAIN": [
+        {
+          "title": ".хак//Интермедия",
+          "year": 2003,
+          "kind": "movie",
+          "source": "anilist",
+          "detail": "myanimelist=1143 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "title": ".хак//Интермедия",
+          "year": 2003,
+          "kind": "movie",
+          "source": "kitsu",
+          "detail": "myanimelist=1143 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "title": ".хак//Квантум",
+          "year": 2011,
+          "kind": "tv",
+          "source": "anilist",
+          "detail": "myanimelist=9332 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "title": ".хак//Квантум",
+          "year": 2011,
+          "kind": "tv",
+          "source": "kitsu",
+          "detail": "myanimelist=9332 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "title": ".хак//ПОДАРОК",
+          "year": 2003,
+          "kind": "movie",
+          "source": "anilist",
+          "detail": "myanimelist=454 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        }
+      ],
+      "YEAR_MISMATCH": [
+        {
+          "title": "Re: Zero — жизнь с нуля в другом мире 3",
+          "year": 2016,
+          "kind": "tv",
+          "source": "anilist",
+          "detail": "myanimelist=54857 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "title": "Re: Zero — жизнь с нуля в другом мире 3",
+          "year": 2016,
+          "kind": "tv",
+          "source": "kitsu",
+          "detail": "myanimelist=54857 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "title": "Re: Zero — жизнь с нуля в другом мире 3",
+          "year": 2016,
+          "kind": "tv",
+          "source": "provider_feed_kinopoisk",
+          "detail": "kinopoisk=971114 совпал, но факты расходятся: YEAR_MISMATCH, SEASON_MISMATCH, EXTERNAL_ID_CONFLICT"
+        },
+        {
+          "title": "Re:Zero. Жизнь с нуля в альтернативном мире",
+          "year": 2016,
+          "kind": "tv",
+          "source": "provider_feed_imdb",
+          "detail": "imdb=tt5607616 совпал, но факты расходятся: YEAR_MISMATCH, EXTERNAL_ID_CONFLICT"
+        },
+        {
+          "title": "Re:Zero. Жизнь с нуля в альтернативном мире",
+          "year": 2016,
+          "kind": "tv",
+          "source": "provider_feed_kinopoisk",
+          "detail": "kinopoisk=971114 совпал, но факты расходятся: YEAR_MISMATCH, EXTERNAL_ID_CONFLICT"
+        }
+      ]
+    }
+  },
+  "daily": {
+    "DAILY_TARGET": 500,
+    "DAILY_COMPLETED": 110100,
+    "DAILY_UNCHANGED_CHECKED": 7466,
+    "DAILY_PENDING_BACKLOG": 660,
+    "DAILY_BLOCKED_BY_RATE_LIMIT": 147,
+    "DAILY_BLOCKED_BY_PERMISSION": 0,
+    "DAILY_BLOCKED_BY_SECRET": 1,
+    "DAILY_SHORTFALL_REASON": "",
+    "mode": "FILL",
+    "target_met": true,
+    "date": "2026-09-22",
+    "new_titles_that_got_a_first_rating": 51182,
+    "sent_to_review": 2440,
+    "coverage_percent_before": 0.0,
+    "coverage_percent_after": 62.85,
+    "exhausted_sources": [],
+    "blocked_sources": [
+      "simkl: ключ отсутствует"
+    ],
+    "estimated_days_to_backfill_complete": 1
+  }
+}

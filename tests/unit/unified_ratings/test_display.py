@@ -197,49 +197,57 @@ def test_view_is_json_serialisable(display, store):
 
 
 # ---------------------------------------------------------------------------
-# сортировочный показатель
+# сводная оценка рядом с источниками
 # ---------------------------------------------------------------------------
+#
+# Формула сводной оценки проверяется в test_composite.py. Здесь — только
+# то, что касается показа: сводная не подменяет источники и не появляется
+# там, где показывать нечего.
 
 
-def test_composite_refuses_on_a_thin_sample(store, seeded):
+def test_composite_needs_two_sources_to_exist(store, seeded):
     put_external(store, source="anilist", normalized="9.9", votes=3)
-    result = compute(store, title_id="nova:t-001", tenant_id="yummy")
+    result = compute(store, title_id="nova:t-001")
     assert result.value is None
-    assert result.state == "INSUFFICIENT_DATA"
+    assert result.state == "SINGLE_SOURCE_ONLY"
     assert result.reason
 
 
 def test_composite_names_what_it_used_and_what_it_skipped(store, seeded):
     put_external(store, source="anilist", normalized="8.6", votes=170305)
     put_external(store, source="kitsu", normalized="8.2", votes=None)
-    result = compute(store, title_id="nova:t-001", tenant_id="yummy")
-    used = {s["source"] for s in result.sources_used}
+    put_external(store, source="shikimori", raw="0", normalized=None,
+                 state="ZERO_NOT_A_RATING", votes=10)
+    result = compute(store, title_id="nova:t-001")
+    used = {c.source_key for c in result.sources_used}
     skipped = {s["source"] for s in result.sources_excluded}
-    assert "anilist" in used
-    assert "kitsu" in skipped, "источник без числа голосов не участвует"
-    assert result.formula_version == "weighted_bayes_v1"
+    assert used == {"anilist", "kitsu"}
+    assert "shikimori" in skipped, "источник без валидной оценки не участвует"
+    assert result.formula_version == "equal_weight_mean_v1"
 
 
-def test_composite_pulls_a_thin_but_admitted_sample_toward_the_prior(store, seeded):
-    put_external(store, source="anilist", normalized="10", votes=60)
-    result = compute(store, title_id="nova:t-001", tenant_id="yummy")
-    assert result.state == "OK"
-    from decimal import Decimal
-
-    assert Decimal(result.value) < Decimal("10")
-    assert Decimal(result.value) > Decimal("5.5")
+def test_a_source_without_votes_still_counts_in_the_composite(store, seeded):
+    """Число голосов — признак уверенности, а не право участвовать."""
+    put_external(store, source="anilist", normalized="8.0", votes=170305)
+    put_external(store, source="provider_feed_imdb", normalized="6.0", votes=None)
+    result = compute(store, title_id="nova:t-001")
+    assert result.value == "7.0"
+    assert result.source_count == 2
+    assert result.total_votes == 170305
 
 
 def test_composite_does_not_replace_the_source_values(store, seeded, display):
     put_external(store, source="anilist", normalized="8.6", votes=170305)
-    compute(store, title_id="nova:t-001", tenant_id="yummy")
+    put_external(store, source="kitsu", normalized="7.0", votes=100)
+    assert compute(store, title_id="nova:t-001").value == "7.8"
     row = rows_by_key(display, title_id="nova:t-001", tenant_id="yummy")["anilist"]
-    assert row.display_value == "8.6"
+    assert row.display_value == "8.6", "источник показывает своё значение, не сводное"
 
 
 def test_composite_ignores_scores_that_failed_validation(store, seeded):
     put_external(store, source="anilist", raw="0", normalized=None, state="ZERO_NOT_A_RATING",
                  votes=100000)
-    result = compute(store, title_id="nova:t-001", tenant_id="yummy")
-    assert result.value is None
+    put_external(store, source="kitsu", normalized="8.0", votes=10)
+    result = compute(store, title_id="nova:t-001")
+    assert result.value is None, "остался один валидный источник — это не сводная оценка"
     assert any(s["source"] == "anilist" for s in result.sources_excluded)

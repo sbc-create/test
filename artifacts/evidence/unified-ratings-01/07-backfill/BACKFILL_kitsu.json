@@ -1,0 +1,22 @@
+{
+  "source": "kitsu",
+  "finished_at": "2026-09-22T07:42:16Z",
+  "titles_queued": 4591,
+  "titles_processed": 4591,
+  "elapsed_seconds": 705.8,
+  "counters": {
+    "requested": 4591,
+    "received": 4184,
+    "exact_match": 3389,
+    "pending_match": 795,
+    "rejected": 465,
+    "inserted": 3370,
+    "updated": 0,
+    "unchanged": 19,
+    "not_found": 407,
+    "failed": 0,
+    "rate_limited": 0,
+    "retries": 0
+  },
+  "progress_file": "var/unified-ratings/backfill-progress.json"
+}

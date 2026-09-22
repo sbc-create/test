@@ -1,0 +1,29 @@
+{
+  "artifact": "unified-ratings-projection-animedia.json",
+  "built_path": "var/unified-ratings/deploy-packet/unified-ratings-projection-animedia.json",
+  "target_path": "/srv/lords/.frontend/unified-ratings-projection-animedia.json",
+  "bytes": 14753169,
+  "sha256": "cd92db74d79d2b15e8f6b460a07bcdaec9ec1db9699ddae19b556770496b4240",
+  "schema": "unified.ratings.projection/1.0.0",
+  "module_version": "unified-ratings/1.0.0",
+  "built_at": "2026-09-22T07:53:31Z",
+  "space": "animedia",
+  "catalog_size": 7425,
+  "cohort_size": 7425,
+  "stats": {
+    "skipped_no_data": 565,
+    "titles_in_projection": 6860,
+    "with_community": 0,
+    "with_composite": 5637,
+    "with_editorial": 0,
+    "with_external": 6860
+  },
+  "public_read_enabled_in_file": false,
+  "public_write_enabled_in_file": false,
+  "note": "файл не размещён в /srv/lords/.frontend: витрина animedia.icu занята выкладкой другой сессии, и запись в её runtime была бы перехватом",
+  "flags_artifact": {
+    "path": "artifacts/evidence/unified-ratings-01/09-canary/deploy-packet/unified-ratings-flags-animedia.json",
+    "target_path": "/srv/lords/.frontend/unified-ratings-flags-animedia.json",
+    "sha256": "898f264798ae3167addd7d7c2a716004346a80d2250d5d59d547cc2c4558d841"
+  }
+}

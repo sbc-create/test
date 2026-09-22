@@ -1,0 +1,22 @@
+{
+  "source": "provider_feed_kinopoisk",
+  "finished_at": "2026-09-22T07:44:50Z",
+  "titles_queued": 11851,
+  "titles_processed": 11851,
+  "elapsed_seconds": 29.5,
+  "counters": {
+    "requested": 11851,
+    "received": 11849,
+    "exact_match": 11849,
+    "pending_match": 0,
+    "rejected": 6275,
+    "inserted": 10849,
+    "updated": 0,
+    "unchanged": 1000,
+    "not_found": 2,
+    "failed": 0,
+    "rate_limited": 0,
+    "retries": 0
+  },
+  "progress_file": "var/unified-ratings/backfill-progress-feeds.json"
+}
