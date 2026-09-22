@@ -1,0 +1,183 @@
+{
+ "verdict": "READY_FOR_OWNER_DEPLOY",
+ "terminal_owner": "ZONA",
+ "tenant": "ZONA",
+ "worktree": "/home/claude/wt-zona-real-slider-01",
+ "branch": "claude/zona-real-slider-01",
+ "start_head": "738e07d",
+ "final_head": "04c7db08d98dfc63e86e8426bd31fc02e8e5ec11",
+ "remote_head": "NOT_PUSHED",
+ "commits_created": 10,
+ "commits": [
+  "04c7db0 fix(zona): компактный герой перестал держать высоту слайдера",
+  "95cabe9 feat(zona): шаблоны витрины объявлением, а не пятьюдесятью копиями",
+  "500b0c5 evidence(zona): два полных прогона шести ширин и доказательство изоляции",
+  "0603788 fix(zona): на 320px две точки слайдера из восьми не нажимались",
+  "ed965de test(zona): маршруты, заголовки, плеер и настоящий 404",
+  "bd98576 test(zona): контракт слайдера героя и вырожденные случаи",
+  "fe210a9 test(zona): закреплены порядок дат, границы страниц и заполненность блоков",
+  "415872e feat(zona): карточка читает оценки из того же разбора, что и страница тайтла",
+  "747f821 fix(zona): объявленная версия оформления исполняется, а не проваливается молча",
+  "3f4d5d9 test(zona): воспроизведён дефект объявленной версии оформления"
+ ],
+ "files_changed": 161,
+ "push_performed": 0,
+ "production_mutations": 0,
+ "restart_performed": 0,
+ "dns_mutations": 0,
+ "tls_mutations": 0,
+ "indexability_mutations": 0,
+ "animedia_mutations": 0,
+ "lords_mutations": 0,
+ "yummy_mutations": 0,
+ "ratings_backend_mutations": 0,
+ "comments_module_mutations": 0,
+ "slider": {
+  "items": 8,
+  "dots": 8,
+  "ready": "1",
+  "control_tests": "PASS",
+  "widths_checked": 6,
+  "steps_per_width": 9,
+  "rapid_clicks": {
+   "expected_dot": 2,
+   "actual_dot": 2
+  }
+ },
+ "templates": {
+  "present": 6,
+  "built": 6,
+  "tested": 6,
+  "reviewed_by_agent": 6,
+  "owner_accepted": 0,
+  "target_asked": 50,
+  "note": "пакеты T001–T050 в ленте Zona не существуют; собран собственный слой шаблонов Zona"
+ },
+ "runs": {
+  "run1": {
+   "present": true,
+   "verdict": "PASS",
+   "pages_measured": 90,
+   "widths": [
+    320,
+    390,
+    768,
+    1024,
+    1440,
+    1920
+   ],
+   "overflow_failures": 0,
+   "h1_failures": 0,
+   "missing_card_titles": 0,
+   "broken_images": 0,
+   "unclickable_cards": 0,
+   "dup_id_pages": 0,
+   "dead_space_pages": 0,
+   "covered_controls": 0,
+   "worst_cls": 0.0004975194879708769,
+   "cards_total": 1140,
+   "slider_widths": 6,
+   "slider_failures": 0,
+   "slider_steps": 9,
+   "slider_unique_ids": 4,
+   "slider_rapid": {
+    "expected_dot": 2,
+    "actual_dot": 2
+   }
+  },
+  "run2": {
+   "present": true,
+   "verdict": "PASS",
+   "pages_measured": 90,
+   "widths": [
+    320,
+    390,
+    768,
+    1024,
+    1440,
+    1920
+   ],
+   "overflow_failures": 0,
+   "h1_failures": 0,
+   "missing_card_titles": 0,
+   "broken_images": 0,
+   "unclickable_cards": 0,
+   "dup_id_pages": 0,
+   "dead_space_pages": 0,
+   "covered_controls": 0,
+   "worst_cls": 0.00040500767083815584,
+   "cards_total": 1140,
+   "slider_widths": 6,
+   "slider_failures": 0,
+   "slider_steps": 9,
+   "slider_unique_ids": 4,
+   "slider_rapid": {
+    "expected_dot": 2,
+    "actual_dot": 2
+   }
+  },
+  "identical": true
+ },
+ "tests": {
+  "run1": {
+   "passed": 662,
+   "failed": 2,
+   "skipped": 17,
+   "foreign_failed": 2,
+   "seconds": 57.0
+  },
+  "run2": {
+   "passed": 662,
+   "failed": 2,
+   "skipped": 17,
+   "foreign_failed": 2,
+   "seconds": 59.2
+  }
+ },
+ "cross_tenant_identical": true,
+ "readiness": {
+  "code": {
+   "criteria": {
+    "дефект версии оформления закрыт": true,
+    "точки слайдера нажимаются на 320": true,
+    "оценки карточки из общего разбора": true,
+    "мёртвая полоса закрыта": true,
+    "слой шаблонов работает": true,
+    "оценки сообщества": false
+   },
+   "percent": 83
+  },
+  "tests": {
+   "criteria": {
+    "модульные и контрактные": true,
+    "браузерная матрица шести ширин": true,
+    "два совпавших прогона": true,
+    "отрицательные тесты": true,
+    "изоляция соседей доказана": true,
+    "живая проверка после перезапуска": false
+   },
+   "percent": 83
+  },
+  "visual": {
+   "criteria": {
+    "снимки кандидата на шести ширинах": true,
+    "снимки всех шаблонов": true,
+    "контактный лист": true,
+    "приёмка владельцем": false
+   },
+   "percent": 75
+  },
+  "deploy": {
+   "criteria": {
+    "артефакт исправления готов в ветке": true,
+    "цель отката подтверждена": true,
+    "состояние production описано": true,
+    "артефакт собран и установлен": false,
+    "перезапуск выполнен": false,
+    "живая витрина исправна": false
+   },
+   "percent": 50
+  },
+  "overall_percent": 73
+ }
+}

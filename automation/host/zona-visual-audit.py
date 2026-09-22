@@ -419,7 +419,15 @@ def main() -> int:
              "pages": {}, "slider": {}, "verdict": "PASS", "failures": []}
 
     with sync_playwright() as pw:
-        браузер = pw.chromium.launch(args=["--no-sandbox", "--disable-dev-shm-usage"])
+        # Флаги памяти, а не удобства: стенд делит машину с другими сеансами,
+        # и на пике свободной памяти остаётся около двух гигабайт. Chromium с
+        # процессом на вкладку в такой обстановке убивает ядро, и прогон
+        # обрывается без единой строки — то есть выглядит как «тесты прошли».
+        браузер = pw.chromium.launch(args=[
+            "--no-sandbox", "--disable-dev-shm-usage", "--disable-gpu",
+            "--renderer-process-limit=1", "--js-flags=--max-old-space-size=256",
+            "--disable-extensions", "--disable-background-networking",
+            "--blink-settings=imagesEnabled=true"])
         for ширина in ширины:
             контекст = браузер.new_context(
                 viewport={"width": ширина, "height": 900},
