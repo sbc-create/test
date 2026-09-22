@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+"""Mint an owner-cohort cookie for one site, and print how to set it.
+
+The token itself is printed once, to a terminal, and nowhere else. It is not
+written to a file, not logged, and not echoed into any report — a cohort cookie
+is a credential, and a credential that appears in an evidence bundle has been
+disclosed.
+
+    sudo -u lords bin/comments-owner-cookie animedia.icu
+
+The output is a `document.cookie` line to paste into the browser console on the
+site itself, plus a curl form for checking from a terminal. There is no URL
+parameter form and there will not be one: a secret in a query string lands in
+access logs, in `Referer` headers sent to every third-party asset, and in
+browser history.
+"""
+
+from __future__ import annotations
+
+import argparse
+import pathlib
+import sys
+
+REPO = pathlib.Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO))
+
+from factory.comments_platform import cohorts  # noqa: E402
+from factory.comments_platform.gateway import CredentialSecretResolver  # noqa: E402
+from factory.comments_platform.tenancy import SiteRegistry  # noqa: E402
+
+DEFAULT_KEYS = "/etc/comments-platform/keys"
+DEFAULT_CONFIG = REPO / "config" / "comments-platform" / "sites.json"
+
+
+def main(argv: list[str]) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("host", help="the site's host, e.g. animedia.icu")
+    parser.add_argument("--subject", default="owner", help="who this token is for")
+    parser.add_argument(
+        "--hours", type=int, default=24 * 7, help="lifetime in hours (max 168)"
+    )
+    parser.add_argument("--keys", default=DEFAULT_KEYS)
+    parser.add_argument("--config", default=str(DEFAULT_CONFIG))
+    args = parser.parse_args(argv)
+
+    registry = SiteRegistry.from_file(args.config)
+    binding = registry.resolve_host(args.host)
+    secrets = CredentialSecretResolver(args.keys)
+
+    token = cohorts.issue_cohort_token(
+        secrets,
+        binding.scope,
+        cohort=cohorts.OWNER_TEST,
+        subject_id=args.subject,
+        ttl_seconds=min(args.hours, 168) * 3600,
+    )
+
+    host = binding.hosts[0]
+    hours = min(args.hours, 168)
+    print(f"Owner cohort cookie for {host} ({binding.site_id}), valid {hours}h.")
+    print()
+    print(f"In the browser, on https://{host}, open the console and paste:")
+    print()
+    print(
+        f'  document.cookie = "{cohorts.COHORT_COOKIE}={token}; '
+        f'path=/; max-age={hours * 3600}; secure; samesite=lax";'
+    )
+    print()
+    print("Then reload a title page. To check from a terminal instead:")
+    print()
+    print(
+        f"  curl -sS -H 'Cookie: {cohorts.COHORT_COOKIE}={token}' \\\n"
+        f"       'https://{host}/api/comments/v1/healthz'"
+    )
+    print()
+    print("Notes:")
+    print("  * This token is shown once. It is not stored anywhere by this command.")
+    print(f"  * It works only on {host} — the site is inside the signed message.")
+    print("  * To revoke it and every other one, rotate the tenant cohort key:")
+    print(f"      openssl rand -hex 32 > {args.keys}/{binding.tenant_id}.cohort")
+    print("      systemctl restart comments-gateway.service")
+    print("  * HttpOnly cannot be set from the console. The cookie the gateway")
+    print("    issues to guests is HttpOnly; this one is set by hand for a test")
+    print("    and should be cleared when the test is finished.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

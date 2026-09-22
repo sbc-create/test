@@ -12,6 +12,7 @@
     {
       "tenant_id": "lords",
       "site_id": "lords-01",
+      "cohort": "public",
       "COMMENTS_READ_ENABLED": 0,
       "COMMENTS_WRITE_ENABLED": 0,
       "COMMENTS_PUBLICATION_ENABLED": 0,
@@ -25,6 +26,7 @@
     {
       "tenant_id": "lords",
       "site_id": "lords-02",
+      "cohort": "public",
       "COMMENTS_READ_ENABLED": 0,
       "COMMENTS_WRITE_ENABLED": 0,
       "COMMENTS_PUBLICATION_ENABLED": 0,
@@ -38,6 +40,7 @@
     {
       "tenant_id": "lords",
       "site_id": "lords-03",
+      "cohort": "public",
       "COMMENTS_READ_ENABLED": 0,
       "COMMENTS_WRITE_ENABLED": 0,
       "COMMENTS_PUBLICATION_ENABLED": 0,
@@ -51,6 +54,7 @@
     {
       "tenant_id": "zona",
       "site_id": "zona-01",
+      "cohort": "public",
       "COMMENTS_READ_ENABLED": 0,
       "COMMENTS_WRITE_ENABLED": 0,
       "COMMENTS_PUBLICATION_ENABLED": 0,
@@ -64,6 +68,7 @@
     {
       "tenant_id": "animedia",
       "site_id": "animedia-01",
+      "cohort": "public",
       "COMMENTS_READ_ENABLED": 0,
       "COMMENTS_WRITE_ENABLED": 0,
       "COMMENTS_PUBLICATION_ENABLED": 0,
@@ -77,6 +82,7 @@
     {
       "tenant_id": "animedia",
       "site_id": "animedia-02",
+      "cohort": "public",
       "COMMENTS_READ_ENABLED": 0,
       "COMMENTS_WRITE_ENABLED": 0,
       "COMMENTS_PUBLICATION_ENABLED": 0,
@@ -90,6 +96,7 @@
     {
       "tenant_id": "yummy",
       "site_id": "yummyani-site",
+      "cohort": "public",
       "COMMENTS_READ_ENABLED": 0,
       "COMMENTS_WRITE_ENABLED": 0,
       "COMMENTS_PUBLICATION_ENABLED": 0,
@@ -103,6 +110,7 @@
     {
       "tenant_id": "yummy",
       "site_id": "yummyani-org",
+      "cohort": "public",
       "COMMENTS_READ_ENABLED": 0,
       "COMMENTS_WRITE_ENABLED": 0,
       "COMMENTS_PUBLICATION_ENABLED": 0,
@@ -116,6 +124,7 @@
     {
       "tenant_id": "yummy",
       "site_id": "yummyani-biz",
+      "cohort": "public",
       "COMMENTS_READ_ENABLED": 0,
       "COMMENTS_WRITE_ENABLED": 0,
       "COMMENTS_PUBLICATION_ENABLED": 0,

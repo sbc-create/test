@@ -1,0 +1,27 @@
+{
+  "schema_version": "COMMENTS_COHORTS_V1",
+  "cohorts": [
+    "public",
+    "owner_test"
+  ],
+  "membership_proof": "HMAC over (tenant, site, cohort, subject, expiry) under a per-tenant key",
+  "transport": "cookie cp_cohort",
+  "cookie_attributes": {
+    "HttpOnly": true,
+    "Secure": true,
+    "SameSite": "Lax",
+    "Path": "/",
+    "Domain": "exact host only — never a parent domain"
+  },
+  "default_ttl_seconds": 604800,
+  "never": [
+    "a token in a URL query string",
+    "a token in a request body",
+    "an IP allowlist used as the mechanism",
+    "a server-side session store",
+    "printing the token into a report, a log or a metric"
+  ],
+  "public_cohort_experience": "identical to the site without comments — no container, no spinner, no empty block, no error",
+  "cross_site": "a token names its site inside the signed message, so it does not travel",
+  "revocation": "rotate the tenant cohort key"
+}

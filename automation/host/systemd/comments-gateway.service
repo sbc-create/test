@@ -1,0 +1,55 @@
+# Shared comments module — loopback API gateway.
+#
+# Modelled on community-ratings-gateway.service, which already runs on this
+# host, so that an operator reviewing both sees one pattern rather than two.
+# That service is a different product and is not touched by this one: separate
+# unit, separate port, separate database, separate kill switch.
+#
+# Install: root copies this to /etc/systemd/system/comments-gateway.service
+#
+# Bound to 127.0.0.1 only. The tenant is derived from the Host header, which
+# nginx supplies; a process reachable from outside nginx would let a caller
+# choose that header for itself.
+
+[Unit]
+Description=Shared comments module — loopback API gateway (animedia.icu Stage 1)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=lords
+Group=lords
+WorkingDirectory=/home/claude/wt-community-comments-platform-01
+Environment=PYTHONPATH=/home/claude/wt-community-comments-platform-01
+Environment=PYTHONDONTWRITEBYTECODE=1
+
+# Per-tenant keys, hex text, created with `openssl rand -hex 32`. They live
+# outside the repository and reach the process through LoadCredential, which
+# puts them in a private tmpfs the service can read and nothing else can.
+# The gateway refuses to start without them rather than generating keys that
+# would silently orphan every pseudonym on the next restart.
+LoadCredential=animedia.subject:/etc/comments-platform/keys/animedia.subject
+LoadCredential=animedia.network:/etc/comments-platform/keys/animedia.network
+LoadCredential=animedia.cohort:/etc/comments-platform/keys/animedia.cohort
+
+ExecStart=/usr/bin/python3 -m factory.comments_platform.gateway \
+  --host 127.0.0.1 \
+  --port 9150 \
+  --store /srv/site-factory/var/comments/comments.sqlite \
+  --config /home/claude/wt-community-comments-platform-01/config/comments-platform/sites.json \
+  --artifact-checksum 6032fb3cd24769390a7826473cc93932aed459a15fa2a92e6a771188092fa082
+
+Restart=on-failure
+RestartSec=2
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/srv/site-factory/var/comments
+# The comments database is the only thing this service may write. It has no
+# business touching the ratings store, the site runtimes or nginx.
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,186 @@
+{
+  "schema_version": "ANIMEDIA_COMMENTS_ADAPTER_PROOF_V1",
+  "checked_at_utc": "2026-09-22T07:18:13Z",
+  "baseline_artifact_sha256": "826f54a2c8a743fb517852917aa713c579d1be38848d2c0ee3c26cc82e0e425f",
+  "baseline_source_commit": "fac5643fcefd8d9c3a69ef32379a069a20ed60fd",
+  "adapter_branch": "claude/animedia-comments-canary-01",
+  "method": "two fresh processes on the same catalogue files and the same manifest: one running the deployed artifact unmodified, one running the adapter branch. Compared byte for byte, switch off and switch on.",
+  "why_not_compared_against_the_live_process": "the live animedia-01 process holds a catalogue snapshot from when it started, and the catalogue files on disk were regenerated at 04:11 UTC today. Comparing against it showed differing genre counts that had nothing to do with the adapter. That is worth stating on its own: restarting this service changes page content regardless of this change, because it picks up newer data.",
+  "switch_off": {
+    "routes": [
+      {
+        "route": "/",
+        "http_code": "200",
+        "baseline_sha256": "6d42c2eab4295d66d90f80e79f7b68f2089dd5533f32e9f39ada6c93f592b95d",
+        "patched_off_sha256": "6d42c2eab4295d66d90f80e79f7b68f2089dd5533f32e9f39ada6c93f592b95d",
+        "identical": true,
+        "empty_body": false
+      },
+      {
+        "route": "/catalog/",
+        "http_code": "200",
+        "baseline_sha256": "2cc39b661e433625f7f8d54fe95b7f692d3d737ef1ab0023416f95147d8c697c",
+        "patched_off_sha256": "2cc39b661e433625f7f8d54fe95b7f692d3d737ef1ab0023416f95147d8c697c",
+        "identical": true,
+        "empty_body": false
+      },
+      {
+        "route": "/search/?q=x",
+        "http_code": "200",
+        "baseline_sha256": "0588b94195679d04663021987aa9e6d1c50920392a5b6ecf3b8c1f394ea47237",
+        "patched_off_sha256": "0588b94195679d04663021987aa9e6d1c50920392a5b6ecf3b8c1f394ea47237",
+        "identical": true,
+        "empty_body": false
+      },
+      {
+        "route": "/genres/",
+        "http_code": "308",
+        "baseline_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "patched_off_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "identical": true,
+        "empty_body": true
+      },
+      {
+        "route": "/countries/",
+        "http_code": "404",
+        "baseline_sha256": "cf98cee4cfa5b6eeaec1698897dbb4d0f5d122f28b35cf142da62794450d4688",
+        "patched_off_sha256": "cf98cee4cfa5b6eeaec1698897dbb4d0f5d122f28b35cf142da62794450d4688",
+        "identical": true,
+        "empty_body": false
+      },
+      {
+        "route": "/schedule/",
+        "http_code": "200",
+        "baseline_sha256": "3f4de93d45077419942e268ec370d35ab11adfab935493e57c11e5956d7694bb",
+        "patched_off_sha256": "3f4de93d45077419942e268ec370d35ab11adfab935493e57c11e5956d7694bb",
+        "identical": true,
+        "empty_body": false
+      },
+      {
+        "route": "/title/master-lda-i-plameni-2/",
+        "http_code": "200",
+        "baseline_sha256": "259d5859712ec4fb047bc721a3b9c00fbb50451dfafa161a464a20a146930269",
+        "patched_off_sha256": "259d5859712ec4fb047bc721a3b9c00fbb50451dfafa161a464a20a146930269",
+        "identical": true,
+        "empty_body": false
+      },
+      {
+        "route": "/title/nelyud-chast-2/",
+        "http_code": "200",
+        "baseline_sha256": "a4e62473d38ccc1c0581cd039b5b6f29c4783285ecfcac1ef375ccb137472724",
+        "patched_off_sha256": "a4e62473d38ccc1c0581cd039b5b6f29c4783285ecfcac1ef375ccb137472724",
+        "identical": true,
+        "empty_body": false
+      },
+      {
+        "route": "/title/zolotaya-sekira/",
+        "http_code": "200",
+        "baseline_sha256": "7455c516dbb1b4b59b6c1e0181af5fbaa6c2a8cf14e640ed7fd23b9ae78cd7b0",
+        "patched_off_sha256": "7455c516dbb1b4b59b6c1e0181af5fbaa6c2a8cf14e640ed7fd23b9ae78cd7b0",
+        "identical": true,
+        "empty_body": false
+      },
+      {
+        "route": "/title/master-lda-i-plameni-2/season-2/episode-1/",
+        "http_code": "200",
+        "baseline_sha256": "ec90292822efd6204b27171d2309808b1b1639ca6279b4a46201da91e8f4d6cf",
+        "patched_off_sha256": "ec90292822efd6204b27171d2309808b1b1639ca6279b4a46201da91e8f4d6cf",
+        "identical": true,
+        "empty_body": false
+      },
+      {
+        "route": "/nope-xyz/",
+        "http_code": "404",
+        "baseline_sha256": "dade72cc2d44ab1e4c16ce1c07fcca1d6c3ed7d893c5a62fdbfdeafec2ceef7a",
+        "patched_off_sha256": "dade72cc2d44ab1e4c16ce1c07fcca1d6c3ed7d893c5a62fdbfdeafec2ceef7a",
+        "identical": true,
+        "empty_body": false
+      }
+    ],
+    "identical": 11,
+    "total": 11,
+    "verdict": "INERT"
+  },
+  "switch_on": {
+    "routes": [
+      {
+        "route": "/",
+        "baseline_sha256": "6d42c2eab4295d66d90f80e79f7b68f2089dd5533f32e9f39ada6c93f592b95d",
+        "patched_on_sha256": "6d42c2eab4295d66d90f80e79f7b68f2089dd5533f32e9f39ada6c93f592b95d",
+        "identical": true
+      },
+      {
+        "route": "/catalog/",
+        "baseline_sha256": "2cc39b661e433625f7f8d54fe95b7f692d3d737ef1ab0023416f95147d8c697c",
+        "patched_on_sha256": "2cc39b661e433625f7f8d54fe95b7f692d3d737ef1ab0023416f95147d8c697c",
+        "identical": true
+      },
+      {
+        "route": "/search/?q=x",
+        "baseline_sha256": "0588b94195679d04663021987aa9e6d1c50920392a5b6ecf3b8c1f394ea47237",
+        "patched_on_sha256": "0588b94195679d04663021987aa9e6d1c50920392a5b6ecf3b8c1f394ea47237",
+        "identical": true
+      },
+      {
+        "route": "/genres/",
+        "baseline_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "patched_on_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "identical": true
+      },
+      {
+        "route": "/countries/",
+        "baseline_sha256": "cf98cee4cfa5b6eeaec1698897dbb4d0f5d122f28b35cf142da62794450d4688",
+        "patched_on_sha256": "cf98cee4cfa5b6eeaec1698897dbb4d0f5d122f28b35cf142da62794450d4688",
+        "identical": true
+      },
+      {
+        "route": "/schedule/",
+        "baseline_sha256": "3f4de93d45077419942e268ec370d35ab11adfab935493e57c11e5956d7694bb",
+        "patched_on_sha256": "3f4de93d45077419942e268ec370d35ab11adfab935493e57c11e5956d7694bb",
+        "identical": true
+      },
+      {
+        "route": "/title/master-lda-i-plameni-2/",
+        "baseline_sha256": "259d5859712ec4fb047bc721a3b9c00fbb50451dfafa161a464a20a146930269",
+        "patched_on_sha256": "604288b6e5ebed872cb1c12d5f17472ede66b178ac010039229c73994da17399",
+        "identical": false
+      },
+      {
+        "route": "/title/nelyud-chast-2/",
+        "baseline_sha256": "a4e62473d38ccc1c0581cd039b5b6f29c4783285ecfcac1ef375ccb137472724",
+        "patched_on_sha256": "99bb69603201407f632da1e649e0adf725d54bed9151c3777889905cd0b32de9",
+        "identical": false
+      },
+      {
+        "route": "/title/zolotaya-sekira/",
+        "baseline_sha256": "7455c516dbb1b4b59b6c1e0181af5fbaa6c2a8cf14e640ed7fd23b9ae78cd7b0",
+        "patched_on_sha256": "66b4944b1bf4c6037e2f40072430ee6abab4e5f122c13b9ad773a9baea43d194",
+        "identical": false
+      },
+      {
+        "route": "/title/master-lda-i-plameni-2/season-2/episode-1/",
+        "baseline_sha256": "ec90292822efd6204b27171d2309808b1b1639ca6279b4a46201da91e8f4d6cf",
+        "patched_on_sha256": "ec90292822efd6204b27171d2309808b1b1639ca6279b4a46201da91e8f4d6cf",
+        "identical": true
+      },
+      {
+        "route": "/nope-xyz/",
+        "baseline_sha256": "dade72cc2d44ab1e4c16ce1c07fcca1d6c3ed7d893c5a62fdbfdeafec2ceef7a",
+        "patched_on_sha256": "dade72cc2d44ab1e4c16ce1c07fcca1d6c3ed7d893c5a62fdbfdeafec2ceef7a",
+        "identical": true
+      }
+    ],
+    "routes_that_differ": [
+      "/title/master-lda-i-plameni-2/",
+      "/title/nelyud-chast-2/",
+      "/title/zolotaya-sekira/"
+    ],
+    "verdict": "TITLE_PAGES_ONLY"
+  },
+  "pre_existing_observation": {
+    "empty_body_routes": [
+      "/genres/"
+    ],
+    "note": "/genres/ returns an empty body on the unmodified artifact too. It is recorded because an empty response and an identical response hash the same way, and a check that ignored it could hide a real regression. Not caused by this work and not fixed by it — Animedia's to decide."
+  }
+}

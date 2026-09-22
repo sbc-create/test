@@ -1,0 +1,80 @@
+{
+  "schema_version": "ANIMEDIA_COMMENTS_STAGE1_V1",
+  "recorded_at_utc": "2026-09-22T07:35:13Z",
+  "authorisation": {
+    "AUTHORIZED_DOMAIN": "animedia.icu",
+    "AUTHORIZED_TENANT": "animedia",
+    "AUTHORIZED_PRODUCT": "COMMUNITY_COMMENTS",
+    "PUBLIC_ROLLOUT_PERCENT": 0,
+    "OWNER_TEST_ACCESS_ONLY": true,
+    "INDEXABILITY_CHANGE_ALLOWED": false,
+    "SECOND_DOMAIN_DEPLOY_ALLOWED": false
+  },
+  "module": {
+    "worktree": "/home/claude/wt-community-comments-platform-01",
+    "branch": "claude/community-comments-platform-01",
+    "head": "a3fba20217146e16dbb8df89229b48ad7708be50",
+    "widget_artifact_sha256": "6032fb3cd24769390a7826473cc93932aed459a15fa2a92e6a771188092fa082"
+  },
+  "integration": {
+    "worktree": "/home/claude/wt-animedia-comments-canary-01",
+    "branch": "claude/animedia-comments-canary-01",
+    "head": "e84ee6edd1e5d2016182217a89ed1d85c0e75d74",
+    "base_commit": "fac5643fcefd8d9c3a69ef32379a069a20ed60fd",
+    "base_is_the_deployed_commit": true,
+    "diff": "automation/host/animedia-frontend.py: +49 -1"
+  },
+  "prepared_release": {
+    "build_id": "20260922T071857Z-e84ee6e-animedia-comments-stage1",
+    "dir": "/srv/lords/.frontend/releases/20260922T071857Z-e84ee6e-animedia-comments-stage1",
+    "artifact_sha256": "d5fee4452b59d28694503ed2d140aad24117e05b596a1cac0dbdd64c8f056e5a",
+    "parent_build_id": "20260921T214937Z-fac5643-animedia-parity",
+    "parent_artifact_sha256": "826f54a2c8a743fb517852917aa713c579d1be38848d2c0ee3c26cc82e0e425f",
+    "symlink_moved": false,
+    "note": "built and inert; the symlink is deliberately not repointed, so an unrelated restart cannot activate it"
+  },
+  "cohort_state": {
+    "public": "read 0 / write 0 / publication 0 on every site including the pilot",
+    "owner_test": "read 1 / write 1 / publication 1 on animedia-01 only",
+    "ssr": "0 in every cohort on every site",
+    "animedia_02": "all zeros in both cohorts"
+  },
+  "test_runs": {
+    "full_runs_consecutive": 2,
+    "overall_exit_code": 0,
+    "gates_per_run": 7,
+    "python_tests_per_run": 904,
+    "browser_tests_per_run": 43,
+    "log": "04-tests/TEST_RUNS.log"
+  },
+  "earlier_flake_recorded_honestly": {
+    "what": "run 1 of an earlier attempt failed with sqlite3.OperationalError: database or disk is full",
+    "where": "tests/unit/comments_platform/test_gateway.py fixture",
+    "conditions": "three local Animedia runtimes were running alongside the suite; the filesystem was 98.4% used with ~3.5 GB free",
+    "not_reproducible_in_isolation": "40 concurrent WAL databases created without error",
+    "action": "the local runtimes were stopped and the two runs repeated; both green",
+    "conclusion": "an environmental constraint on a nearly full disk, not a defect in the module. Recorded rather than quietly re-run, because a green result obtained after discarding a red one is only honest if the red one is on the record."
+  },
+  "not_done": {
+    "deploy_performed": false,
+    "service_restarted": false,
+    "nginx_changed": false,
+    "systemd_unit_installed": false,
+    "keys_created": false,
+    "reason": "every one of these needs root; the apply script is the single command prepared for the owner"
+  },
+  "untouched": {
+    "animedia.space": true,
+    "zona": true,
+    "lords": true,
+    "yummy": true,
+    "ratings_gateway": true,
+    "ratings_tables": true,
+    "dns": true,
+    "tls": true,
+    "robots": true,
+    "canonical": true,
+    "sitemap": true,
+    "animedia_working_branch": "claude/animedia-original-parity-01 — read only, 20 dirty files left alone"
+  }
+}

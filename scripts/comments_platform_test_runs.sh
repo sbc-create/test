@@ -67,9 +67,14 @@ for run in 1 2; do
   find "$REPO/factory/comments_platform" "$REPO/tests/unit/comments_platform" \
     -name '__pycache__' -type d -prune -exec rm -rf {} + 2>/dev/null
 
+  # Scoped to this module's own paths, deliberately. A run of `ruff --fix`
+  # over all of factory/ during this stage auto-modified 30 files belonging to
+  # the ratings contour and two other products; they were reverted, and the
+  # gate is written narrowly so the mistake is not repeatable from here.
   run_gate "$run" "ruff" \
     python3 -m ruff check factory/comments_platform/ tests/unit/comments_platform/ \
-    scripts/comments_platform_artifact.py scripts/comments_platform_evidence.py
+    scripts/comments_platform_artifact.py scripts/comments_platform_evidence.py \
+    bin/comments-owner-cookie
   run_gate "$run" "pytest-unit" \
     python3 -m pytest tests/unit/comments_platform/ -q -p no:randomly
   run_gate "$run" "artifact-checksum" \
@@ -78,6 +83,10 @@ for run in 1 2; do
     python3 scripts/comments_platform_evidence.py --check
   run_gate "$run" "playwright-widget" \
     npx playwright test --config=playwright.comments.config.js --workers=2
+  run_gate "$run" "shell-syntax" \
+    bash -n automation/host/animedia-comments-stage1-apply.sh
+  run_gate "$run" "shell-syntax-rollback" \
+    bash -n automation/host/animedia-comments-stage1-rollback.sh
 done
 
 ended_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
