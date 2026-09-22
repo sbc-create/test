@@ -336,12 +336,22 @@ def foreign_paths(env: dict, config: dict) -> list:
 
 
 def check_player(config: dict, env: dict) -> list:
-    """Publisher ID обязан быть на месте и быть тем самым."""
+    """Publisher ID обязан быть на месте и быть тем самым.
+
+    Проверка применяется там, где плеер вообще настраивается. У витрин Yummy
+    воспроизведением занимается верхний поток Next.js, своего player.json у них
+    нет и не должно быть — требовать его значило бы заваливать корректную
+    конфигурацию. Но если сайт объявил ожидаемый publisher_id, файл обязан быть
+    и обязан совпасть: тут послабления нет.
+    """
     path = env.get("LORDS_PLAYER_CONFIG")
     expected = str(config.get("publisher_id_expected") or "").strip()
     retired = {{"10331", "10332", "10333"}}
+    if not path and not expected:
+        return []
     if not path:
-        return ["LORDS_PLAYER_CONFIG не задан: плеер не настроен"]
+        return [f"сайт объявляет publisher_id {{expected}}, но LORDS_PLAYER_CONFIG "
+                "не задан: плеер не настроен"]
     p = Path(path)
     if not p.is_file():
         return [f"нет {{p}}: плеер без publisher_id не заработает"]
@@ -904,3 +914,254 @@ def add_tooling(destination: Path, site_id: str, domain: str) -> None:
     wf.mkdir(parents=True, exist_ok=True)
     (wf / "release.yml").write_text(
         CI_WORKFLOW.format(domain=domain, site_id=site_id), encoding="utf-8")
+
+
+ACTIVATE = '''#!/usr/bin/env bash
+# Активация {domain} на текущем хосте. Одна команда, один сайт.
+#
+# Делает только то, что нельзя без root: учётная запись, каталоги, перенос
+# данных, юнит и переключение службы. Всё остальное уже проверено в репозитории.
+#
+#   sudo .../deploy/activate.sh --dry-run   # показать план, ничего не менять
+#   sudo .../deploy/activate.sh             # выполнить
+#
+# Откат: sudo .../deploy/rollback.sh
+#
+# ВАЖНО об именах: только ASCII. Bash считает именем лишь
+# [A-Za-z_][A-Za-z0-9_]*, и строка вида `СУХОЙ=0` для него не присваивание, а
+# вызов команды. `bash -n` такую строку пропускает, падает она при запуске.
+set -euo pipefail
+
+dry_run=0
+[ "${{1:-}}" = "--dry-run" ] && dry_run=1
+
+project="$(cd "$(dirname "$0")/.." && pwd)"
+site_id="{site_id}"
+account="${{SITE_ACCOUNT:-{account}}}"
+root_dir="${{SITE_ROOT:-/srv/{account}}}"
+app_dir="$root_dir/app"
+data_dir="$root_dir/data"
+unit="${{SITE_UNIT:-nova-{account}.service}}"
+old_unit="${{SITE_OLD_UNIT:-{old_unit}}}"
+port="${{SITE_PORT:-{port}}}"
+
+shared_dir="${{SITE_SHARED:-/srv/lords/.frontend}}"
+old_root="${{SITE_OLD_ROOT:-{old_root}}}"
+
+# Крючки изолированной репетиции: без них скрипт нельзя выполнить ни разу до
+# боевого запуска — а именно этого и не хватило в прошлый раз.
+require_root="${{SITE_REQUIRE_ROOT:-1}}"
+systemctl_cmd="${{SITE_SYSTEMCTL:-systemctl}}"
+useradd_cmd="${{SITE_USERADD:-useradd}}"
+unit_dir="${{SITE_UNIT_DIR:-/etc/systemd/system}}"
+install_owner="${{SITE_INSTALL_OWNER:-1}}"
+# Двоеточия нет намеренно: `${{X:-...}}` подставил бы умолчание и для пустого
+# значения, то есть явная попытка отключить префикс молча вернула бы sudo.
+run_as="${{SITE_RUN_AS-sudo -u $account}}"
+health_tries="${{SITE_HEALTH_TRIES:-20}}"
+
+step() {{ printf '\\n== %s\\n' "$1"; }}
+run_step() {{
+  if [ "$dry_run" = 1 ]; then printf '   [сухой прогон] %s\\n' "$*"; else "$@"; fi
+}}
+own() {{ if [ "$install_owner" = 1 ]; then printf '%s' "-o $account -g $account"; fi; }}
+
+step "проверка предусловий"
+if [ "$require_root" = 1 ] && [ "$(id -u)" != 0 ]; then
+  echo "нужен root" >&2; exit 1
+fi
+
+# Рядом работают другие сессии: они перезапускают витрины направления.
+lock_file="$shared_dir/.deploy.lock"
+if [ -e "$lock_file" ]; then
+  lock_age=$(( $(date +%s) - $(stat -c %Y "$lock_file") ))
+  if [ "$lock_age" -lt 900 ]; then
+    echo "рядом идёт выкладка (замок $lock_file, $lock_age с назад):" >&2
+    cat "$lock_file" >&2
+    echo "дождитесь её окончания; чужой замок снимать нельзя" >&2
+    exit 1
+  fi
+fi
+
+# Замок направления ненадёжен (наблюдался возраст 72 ч при активной работе
+# соседей), поэтому отдельно смотрим на то, что подделать нечем.
+if [ -d "$old_root" ]; then
+  restarted=$(( $(date +%s) - $(stat -c %Y "$old_root" 2>/dev/null || date +%s) ))
+  if [ "$restarted" -lt 600 ]; then
+    echo "   ВНИМАНИЕ: каталог сайта менялся $restarted с назад — возможна чужая работа."
+  fi
+fi
+
+own_lock="$root_dir/.activate.lock"
+if [ "$dry_run" = 0 ]; then
+  mkdir -p "$root_dir"
+  if ! mkdir "$own_lock" 2>/dev/null; then
+    echo "активация $site_id уже идёт ($own_lock); второй запуск отклонён" >&2
+    exit 1
+  fi
+  trap 'rmdir "$own_lock" 2>/dev/null || true' EXIT
+fi
+
+if "$systemctl_cmd" is-active --quiet "$unit"; then
+  echo "$unit уже активна: сайт, похоже, уже переключён." >&2
+  exit 1
+fi
+
+if [ "${{SITE_SKIP_CHECKS:-0}}" != 1 ]; then
+  "$project/checks/run.sh"
+else
+  echo "   проверки пропущены: запуск изнутри checks/run.sh"
+fi
+
+step "учётная запись и каталоги"
+id -u "$account" >/dev/null 2>&1 || run_step "$useradd_cmd" --system --home "$root_dir" --shell /usr/sbin/nologin "$account"
+# shellcheck disable=SC2046
+run_step install -d $(own) -m 0755 "$root_dir" "$app_dir" "$data_dir"
+# shellcheck disable=SC2046
+run_step install -d $(own) -m 0700 "$data_dir/site-data"
+
+step "код из репозитория сайта"
+run_step rsync -a --delete --exclude .git --exclude config/player.json \\
+    --exclude dist --exclude data "$project/" "$app_dir/"
+
+step "секрет плеера (вне Git)"
+if [ -r "$shared_dir/player-$site_id.json" ]; then
+  # shellcheck disable=SC2046
+  run_step install $(own) -m 0600 "$shared_dir/player-$site_id.json" "$app_dir/config/player.json"
+fi
+
+step "данные сайта"
+for f in "$site_id-catalog.json" "$site_id-details.json" \\
+         "$site_id-ratings-top.json" "template-manifest-$site_id.json"; do
+  if [ -r "$shared_dir/$f" ]; then
+    # shellcheck disable=SC2046
+    run_step install $(own) -m 0644 "$shared_dir/$f" "$data_dir/$f"
+  fi
+done
+if [ -d "$old_root/current/site" ]; then
+  run_step cp -a "$old_root/current/site" "$data_dir/site"
+fi
+
+step "проверка конфигурации до запуска"
+# shellcheck disable=SC2086
+run_step $run_as python3 "$app_dir/run.py" --check --data-dir "$data_dir"
+
+step "короткая пауза записи и перенос последней дельты"
+# Старая служба останавливается ДО копирования пользовательских записей:
+# иначе два экземпляра писали бы одновременно и дельта потерялась бы.
+run_step "$systemctl_cmd" stop "$old_unit"
+if [ -r "$old_root/data/animedia-community.json" ]; then
+  # shellcheck disable=SC2046
+  run_step install $(own) -m 0600 \\
+      "$old_root/data/animedia-community.json" "$data_dir/site-data/animedia-community.json"
+fi
+
+step "установка и запуск службы"
+run_step cp "$project/deploy/$unit" "$unit_dir/"
+run_step "$systemctl_cmd" daemon-reload
+run_step "$systemctl_cmd" enable --now "$unit"
+
+step "проверка здоровья"
+if [ "$dry_run" = 1 ]; then
+  echo
+  echo "сухой прогон завершён: ничего не менялось"
+  exit 0
+fi
+
+for _ in $(seq 1 "$health_tries"); do
+  if curl -fsS -o /dev/null "http://127.0.0.1:$port/healthz"; then
+    echo "healthz отвечает"
+    "$systemctl_cmd" is-active "$unit"
+    echo
+    echo "ГОТОВО. Проверьте публично и, если что-то не так:"
+    echo "  sudo $project/deploy/rollback.sh"
+    exit 0
+  fi
+  sleep 2
+done
+
+echo "healthz не ответил за $(( health_tries * 2 )) с — откатываюсь" >&2
+"$systemctl_cmd" disable --now "$unit" || true
+"$systemctl_cmd" enable --now "$old_unit"
+echo "прежняя служба возвращена; данные в $data_dir не трогались" >&2
+exit 1
+'''
+
+ROLLBACK = '''#!/usr/bin/env bash
+# Откат {domain} на прежнюю службу. Данные сохраняются.
+#
+# Возвращает КОД и маршрутизацию. Записи, принятые после переключения, остаются
+# на месте: каталог данных не трогается вовсе. Восстановление вчерашней базы
+# откатом не является.
+set -euo pipefail
+
+account="${{SITE_ACCOUNT:-{account}}}"
+unit="${{SITE_UNIT:-nova-{account}.service}}"
+old_unit="${{SITE_OLD_UNIT:-{old_unit}}}"
+port="${{SITE_PORT:-{port}}}"
+systemctl_cmd="${{SITE_SYSTEMCTL:-systemctl}}"
+data_dir="${{SITE_ROOT:-/srv/{account}}}/data"
+
+echo "== остановка новой службы"
+"$systemctl_cmd" disable --now "$unit" || true
+
+echo "== возврат прежней службы"
+"$systemctl_cmd" enable --now "$old_unit"
+
+echo "== здоровье прежней службы"
+for _ in $(seq 1 15); do
+  if curl -fsS -o /dev/null "http://127.0.0.1:$port/healthz"; then
+    echo "healthz отвечает; данные в $data_dir не изменялись"
+    exit 0
+  fi
+  sleep 2
+done
+echo "healthz не ответил за 30 с" >&2
+exit 1
+'''
+
+
+UNIT_TEMPLATE = '''# Служба {domain} ({site_id}). Ставится владельцем под root.
+#
+# Отличие от прежнего юнита: рабочий каталог и ExecStart указывают на ЭТОТ
+# проект, а не на общий /srv/lords/.frontend. Пути данных задаёт run.py из
+# config/site.json — забыть переменную и уехать на каталог соседа больше нечем.
+[Unit]
+Description={domain} ({site_id}), собственное развёртывание
+After=network-online.target
+
+[Service]
+Type=simple
+User={account}
+Group={account}
+WorkingDirectory=/srv/{account}/app
+ExecStart=/usr/bin/python3 /srv/{account}/app/run.py --port {port} --data-dir /srv/{account}/data
+Restart=on-failure
+RestartSec=2
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/srv/{account}/data
+ProtectKernelTunables=true
+RestrictSUIDSGID=true
+
+[Install]
+WantedBy=multi-user.target
+'''
+
+
+def add_deploy(destination: Path, *, site_id: str, domain: str, account: str,
+               old_unit: str, port: int, old_root: str) -> None:
+    """Скрипты активации и отката плюс юнит — одинаковой формы у всех сайтов."""
+    deploy = destination / "deploy"
+    deploy.mkdir(exist_ok=True)
+    поля = {"site_id": site_id, "domain": domain, "account": account,
+            "old_unit": old_unit, "port": port, "old_root": old_root}
+    for имя, шаблон in (("activate.sh", ACTIVATE), ("rollback.sh", ROLLBACK)):
+        путь = deploy / имя
+        путь.write_text(шаблон.format(**поля), encoding="utf-8")
+        путь.chmod(0o755)
+    (deploy / f"nova-{account}.service").write_text(
+        UNIT_TEMPLATE.format(**поля), encoding="utf-8")

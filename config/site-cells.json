@@ -38,11 +38,11 @@
         "media": null
       },
       "deployed": {
-        "source_commit": "2f76164e79cde3717d2dd70baec5c8b9ca8128d7",
-        "note": "Выделено и собрано. НЕ активировано: нужен root."
+        "source_commit": "e775c338015548a23b79ced05b19664a6e1d3e0e",
+        "note": "Выделено, CI зелёный, сценарии активации проверены исполнением. НЕ активировано: нужен root."
       },
       "content_revision": null,
-      "last_update": null,
+      "last_update": "2026-09-22T23:41:04.158516+00:00",
       "backup": {},
       "resources": {}
     },
@@ -136,11 +136,11 @@
         "media": null
       },
       "deployed": {
-        "source_commit": "7368d267234be895b71e5ae5209b1a06657872f9",
-        "note": "Выделено и собрано. НЕ активировано: нужен root."
+        "source_commit": "25bb2bafccf42decf9d60a79eb7681cb5f548a81",
+        "note": "Выделено, CI зелёный, сценарии активации проверены исполнением. НЕ активировано: нужен root."
       },
       "content_revision": null,
-      "last_update": null,
+      "last_update": "2026-09-22T23:41:04.180174+00:00",
       "backup": {},
       "resources": {}
     },
@@ -430,11 +430,11 @@
         "media": null
       },
       "deployed": {
-        "source_commit": "e4ed596eed0920801e94152df584460dd9ce33db",
-        "note": "Выделено и собрано. НЕ активировано: нужен root."
+        "source_commit": "32779e6e1f21aa1a10e8964941abffdb22c73103",
+        "note": "Выделено, CI зелёный, сценарии активации проверены исполнением. НЕ активировано: нужен root."
       },
       "content_revision": null,
-      "last_update": null,
+      "last_update": "2026-09-22T23:41:04.245746+00:00",
       "backup": {},
       "resources": {}
     },
@@ -474,11 +474,11 @@
         "media": null
       },
       "deployed": {
-        "source_commit": "ba4566fb506dee9d8381cdc95b90b722273c031e",
-        "note": "Выделено и собрано. НЕ активировано: нужен root."
+        "source_commit": "4cc62c9378393fb343bae6fca8a61f1bdaec89fa",
+        "note": "Выделено, CI зелёный, сценарии активации проверены исполнением. НЕ активировано: нужен root."
       },
       "content_revision": null,
-      "last_update": null,
+      "last_update": "2026-09-22T23:41:04.227938+00:00",
       "backup": {},
       "resources": {}
     },
@@ -518,11 +518,11 @@
         "media": null
       },
       "deployed": {
-        "source_commit": "dfa7eb2fc60b53ca6813a9b62c69de626e0ff011",
-        "note": "Выделено и собрано. НЕ активировано: нужен root."
+        "source_commit": "46b3eca408a80d0fe0e7ddf97004b2064457800b",
+        "note": "Выделено, CI зелёный, сценарии активации проверены исполнением. НЕ активировано: нужен root."
       },
       "content_revision": null,
-      "last_update": null,
+      "last_update": "2026-09-22T23:41:04.205052+00:00",
       "backup": {},
       "resources": {}
     },
@@ -562,11 +562,11 @@
         "media": null
       },
       "deployed": {
-        "source_commit": "cb6bca985f187084cc83ae7e1034c9981d41a3b7",
-        "note": "Выделено и собрано. НЕ активировано: нужен root."
+        "source_commit": "fcd07a9764d9bd671de88799877c369c73a061ab",
+        "note": "Выделено, CI зелёный, сценарии активации проверены исполнением. НЕ активировано: нужен root."
       },
       "content_revision": null,
-      "last_update": null,
+      "last_update": "2026-09-22T23:41:04.126983+00:00",
       "backup": {},
       "resources": {}
     }
