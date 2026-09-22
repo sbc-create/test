@@ -925,6 +925,24 @@ class Данные:
         учтено = 0
         for з in self.items:
             деталь = записи.get(з.get("slug")) or {}
+            # Заодно раскладываются две величины, которые иначе пришлось бы
+            # считать на каждый запрос по всему каталогу: сводная оценка и
+            # признак незавершённости. Сортировка «по оценке» до этого
+            # обращалась к полю `_rating`, которое никто не заполнял, и
+            # честно расставляла семь тысяч записей по нулю.
+            свод = сводная_оценка(деталь)
+            try:
+                з["_rating"] = float(str(свод["значение"]).replace(",", ".")) if свод else 0.0
+            except (TypeError, ValueError):
+                з["_rating"] = 0.0
+            з["_votes"] = int((свод or {}).get("всего_голосов") or 0)
+            доступно = заявлено = 0
+            for с in (деталь.get("seasons") or []):
+                if isinstance(с, dict):
+                    доступно += int(с.get("avail") or 0)
+                    заявлено += int(с.get("eps") or 0)
+            з["_avail"], з["_eps"] = доступно, заявлено
+            з["_ongoing"] = 1 if (заявлено and 0 < доступно < заявлено) else 0
             оригинал = str(деталь.get("original_name") or "").strip()
             if not оригинал or оригинал == (з.get("title") or ""):
                 continue
@@ -3397,6 +3415,43 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
         else:
             членство = set(разрешённые)
             набор = [з for з in набор if з["slug"] in членство]
+    # Исключение жанра: «фэнтези, но без ужасов» — обычный запрос, и без
+    # него панель фильтров умеет только сужать в одну сторону.
+    исключить = (зпр.get("exclude") or [None])[0]
+    if исключить:
+        ключи = [исключить, нормализовать(исключить), нормализовать(транслит(исключить))]
+        запрещённые = None
+        for ключ in ключи:
+            if ключ and (запрещённые := индекс["genre"].get(ключ)) is not None:
+                break
+        if запрещённые is None:
+            неизвестный_фильтр = True
+            набор = []
+        else:
+            вне = set(запрещённые)
+            набор = [з for з in набор if з["slug"] not in вне]
+    # Порог оценки. Записи без оценки под порог не подставляются нулём —
+    # «нет оценки» и «оценка ноль» разные утверждения, и вторым нельзя
+    # отвечать на вопрос про первое: они просто не проходят порог.
+    порог = (зпр.get("rating") or [None])[0]
+    if порог:
+        try:
+            число = float(str(порог).replace(",", "."))
+        except (TypeError, ValueError):
+            неизвестный_фильтр = True
+            набор = []
+        else:
+            набор = [з for з in набор if float(з.get("_rating") or 0.0) >= число]
+    # Незавершённые: доступно серий меньше, чем заявлено.
+    онгоинг = (зпр.get("ongoing") or [None])[0]
+    if онгоинг:
+        if str(онгоинг) not in ("1", "0"):
+            неизвестный_фильтр = True
+            набор = []
+        elif str(онгоинг) == "1":
+            набор = [з for з in набор if з.get("_ongoing")]
+        else:
+            набор = [з for з in набор if not з.get("_ongoing")]
     if страна:
         разрешённые = (индекс.get("country") or {}).get(страна)
         if разрешённые is None:
@@ -3445,7 +3500,8 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
         deduped.append(з)
     набор = deduped
     выбрано = {"kind": вид, "year": год, "genre": жанр, "country": страна,
-               "type": тип, "sort": сорт}
+               "type": тип, "sort": сорт, "exclude": исключить,
+               "rating": порог, "ongoing": онгоинг}
     if неизвестный_фильтр:
         выбрано["_unknown"] = "1"
     return набор, выбрано
@@ -6382,7 +6438,8 @@ class ВидАнимедиа(ВидОснова):
                    if сбоку else основное)
                 + "</div>")
         канон = разд + "/" + (запрос_строкой(выбрано, page=None) if any(
-            выбрано.get(k) for k in ("genre", "year", "kind", "country", "type", "sort")) else "")
+            выбрано.get(k) for k in ("genre", "year", "kind", "country", "type",
+                                     "sort", "exclude", "rating", "ongoing")) else "")
         return self.оболочка(тело, f"{титул} — {self.имя}", канон or (разд + "/"),
                              актив=разд + "/",
                              описание=f"{титул} на витрине {self.имя}.",
@@ -6417,8 +6474,10 @@ class ВидАнимедиа(ВидОснова):
     def _фильтры_каталога(self, разд: str, выбрано: dict, total: int | None = None) -> str:
         """Compact disclosure filters + chips (no year/genre button wall)."""
         idx = self.индекс or {}
+        набор_для_счёта = self.д.items
         chips = []
-        active_keys = ("kind", "type", "year", "genre", "country", "sort")
+        active_keys = ("kind", "type", "year", "genre", "country", "sort",
+                       "exclude", "rating", "ongoing")
 
         def chip(label: str, clear_key: str) -> str:
             cleared = dict(выбрано)
@@ -6447,6 +6506,18 @@ class ВидАнимедиа(ВидОснова):
                     cname = имя
                     break
             chips.append(chip(str(cname), "country"))
+        if выбрано.get("exclude"):
+            ename = выбрано["exclude"]
+            for код, имя in (idx.get("genre_names") or []):
+                if код == выбрано["exclude"]:
+                    ename = имя
+                    break
+            chips.append(chip(f"без «{ename}»", "exclude"))
+        if выбрано.get("rating"):
+            chips.append(chip(f"оценка от {выбрано['rating']}", "rating"))
+        if выбрано.get("ongoing"):
+            chips.append(chip("Онгоинг" if str(выбрано["ongoing"]) == "1"
+                              else "Завершённые", "ongoing"))
         if выбрано.get("sort"):
             sort_labels = {"title": "По названию", "rating": "По оценке",
                            "year": "По году", "date": "По свежести"}
@@ -6490,11 +6561,28 @@ class ВидАнимедиа(ВидОснова):
             reset = f'<a class="afilt__reset" href="{разд}/">Сбросить фильтры</a>'
         chips_html = (f'<div class="afilt__chips" aria-label="Активные фильтры">'
                       f'{"".join(chips)}{reset}</div>' if (chips or reset) else "")
+        # Порог оценки: ступени, а не свободное число. Свободное поле здесь
+        # порождает запросы вроде «от 9.7», под которые в каталоге две записи,
+        # и посетитель решает, что фильтр сломан.
+        rating_pairs = [
+            (str(п), f"от {п}", sum(1 for з in набор_для_счёта
+                                    if float(з.get("_rating") or 0.0) >= п))
+            for п in (9, 8, 7, 6)]
+        rating_pairs = [(v, l, c) for v, l, c in rating_pairs if c]
+        онгоингов = sum(1 for з in набор_для_счёта if з.get("_ongoing"))
+        ongoing_pairs = ([("1", "Онгоинг", онгоингов)] if онгоингов else []) + [
+            ("0", "Завершённые", len(набор_для_счёта) - онгоингов)]
+        exclude_pairs = [(код, f"без «{имя}»",
+                          len((idx.get("genre") or {}).get(код) or []))
+                         for код, имя in (idx.get("genre_names") or [])]
         body = (
             opts("Тип", kind_pairs, "kind")
             + opts("Формат", type_pairs, "type")
             + opts("Год", year_pairs, "year")
             + opts("Жанр", genre_pairs, "genre")
+            + opts("Исключить жанр", exclude_pairs, "exclude")
+            + opts("Оценка", rating_pairs, "rating")
+            + opts("Статус", ongoing_pairs, "ongoing")
             + opts("Страна", country_pairs, "country")
             + opts("Сортировка", sort_pairs, "sort")
         )
@@ -7886,15 +7974,12 @@ def построить_индекс(данные: "Данные", подробн
         if slug not in по_slug:
             continue
         запись = по_slug[slug]
-        # Лучшая доступная оценка для sort=rating (без выдумки нулей).
-        рейтинги = []
-        for ключ in ("kinopoisk_rating", "imdb_rating"):
-            try:
-                рейтинги.append(float(деталь.get(ключ)))
-            except (TypeError, ValueError):
-                pass
-        if рейтинги:
-            запись["_rating"] = max(рейтинги)
+        # `_rating` здесь больше не трогается. Раньше он ставился как максимум
+        # из Кинопоиска и IMDb, а индекс строится после обогащения снимка —
+        # то есть это значение затирало сводную. На карточке посетитель видел
+        # сводную, а каталог сортировался по максимуму из двух источников:
+        # одно и то же слово «оценка» означало два разных числа, и порядок в
+        # выдаче выглядел случайным. Определение теперь одно — сводная.
         тип = str(деталь.get("type") or "").strip().lower()
         if тип in ("tv", "movie", "ova", "ona", "special"):
             по_типу.setdefault(тип, []).append(slug)
