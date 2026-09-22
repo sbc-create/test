@@ -149,6 +149,35 @@ def test_release_digest_is_reproducible_from_the_same_commit(tmp_path, template)
     assert first.source_commit == second.source_commit
 
 
+def test_digest_does_not_depend_on_the_builders_umask(tmp_path, template):
+    """Один коммит — один digest, кем бы он ни собирался.
+
+    Git хранит у файла ровно один бит прав. Остальное берётся из umask, и без
+    нормализации режима один и тот же коммит давал разный digest у разработчика
+    (664) и на раннере CI (644) — digest отвечал на вопрос «кто собирал».
+    """
+    import os
+    import tarfile
+
+    repo = _repo(tmp_path, template)
+    first = release.build(site_id="pilot-cell", repo=repo.path,
+                          output_dir=tmp_path / "umask-a")
+
+    # Меняем права рабочих файлов так, как это сделал бы другой umask.
+    for path in repo.path.rglob("*"):
+        if path.is_file() and ".git" not in path.parts:
+            mode = path.stat().st_mode
+            os.chmod(path, (mode | 0o020) if not (mode & 0o111) else (mode | 0o020))
+
+    second = release.build(site_id="pilot-cell", repo=repo.path,
+                           output_dir=tmp_path / "umask-b")
+    assert first.digest == second.digest, "digest зависит от прав файлов"
+
+    with tarfile.open(second.artifact, "r:gz") as tar:
+        режимы = {oct(m.mode) for m in tar.getmembers() if m.isfile()}
+    assert режимы <= {"0o644", "0o755"}, f"в архиве неканонические режимы: {режимы}"
+
+
 def test_release_manifest_locates_the_source_without_the_old_server(tmp_path, template):
     repo = _repo(tmp_path, template)
     rel = release.build(site_id="pilot-cell", repo=repo.path, output_dir=tmp_path / "out")

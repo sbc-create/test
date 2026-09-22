@@ -274,6 +274,42 @@
         "season_select": 602711760,
         "title_view": 602711759
       }
+    },
+    {
+      "domain": "animedia.space",
+      "site_id": "animedia-02",
+      "counter_name": "Animedia — animedia.space",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "animedia.space"
+      ],
+      "goals": [
+        "comment_submit",
+        "episode_select",
+        "filter_apply",
+        "player_error",
+        "player_ready",
+        "player_start",
+        "search",
+        "season_select",
+        "title_view"
+      ],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "BLOCKED_DEPLOYMENT",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": null,
+      "problems": [
+        "Счётчик не заведён: сайт ещё не активирован, создавать счётчик до активации значит завести пустой счётчик без данных."
+      ]
     }
   ]
 }
