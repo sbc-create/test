@@ -192,7 +192,7 @@
       "data_sources": [
         "cdnvideohub-public-v1"
       ],
-      "owner_state": "canary",
+      "owner_state": "staging",
       "enabled": true
     },
     {

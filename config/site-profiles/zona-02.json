@@ -95,12 +95,12 @@
     "evidence": "template-manifest-zona-02.json + realpath(sites/zona-02/current) + sha256 рантайма"
   },
   "family": "zona",
-  "environment": "canary",
+  "environment": "staging",
   "lifecycle_state": "PROVISIONED",
   "monitoring_profile_ref": null,
   "backup_policy_ref": null,
   "content_profile_ref": null,
-  "registry_note": "Заведён заданием SITE_RELEASE_FULL_CYCLE 2026-09-22. Идентификатор, имя юнита и порт выданы аллокатором (automation/host/zonafilm-cc-allocate.py) по четырём реестрам, а не выбраны. Ничего не унаследовано от zona-01, кроме байтов закреплённого шаблона.",
+  "registry_note": "Заведён заданием SITE_RELEASE_FULL_CYCLE 2026-09-22. Идентификатор, имя юнита и порт выданы аллокатором (automation/host/zonafilm-cc-allocate.py) по четырём реестрам, а не выбраны. Ничего не унаследовано от zona-01, кроме байтов закреплённого шаблона. owner_state и environment — staging, а не canary: перечень состояний задан схемой (draft|staging|production|retired), и «canary» в нём нет. Витрина закрыта от индексации и не авторизована в production — это ровно staging в терминах схемы; придумывать шестое состояние ради красивого слова значило бы разойтись со схемой, которая здесь главнее.",
   "player": {
     "provider": "cdnvideohub",
     "credential_profile": null,

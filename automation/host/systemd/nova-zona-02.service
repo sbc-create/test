@@ -28,7 +28,15 @@ Environment=LORDS_CATALOG=/srv/lords/.frontend/zona-02-catalog.json
 Environment=LORDS_LEGACY_ROOT=/srv/lords/.frontend/sites/zona-02/legacy
 Environment=LORDS_SITE_NAME=Zona
 Environment=PYTHONDONTWRITEBYTECODE=1
-ExecStart=/usr/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9123
+# Интерпретатор из .venv, а не системный.
+#
+# Шесть установленных юнитов семейства запускаются через /usr/bin/python3, и
+# первая редакция этого файла повторила их форму. Правило фабрики
+# (tests/unit/test_analytics_unit_execstart.py) это отклонило, и по делу:
+# системный интерпретатор приносит тот набор пакетов, который окажется в
+# образе, а не тот, на котором витрина проверена. Здесь взят ровно тот
+# интерпретатор, на котором прогнаны обе приёмки и оба браузерных прогона.
+ExecStart=/srv/site-factory/repo/.venv/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9123
 Restart=on-failure
 RestartSec=2
 
