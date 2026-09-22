@@ -44,9 +44,29 @@ from urllib.parse import urlsplit
 REPO = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO))
 
-RELEASE = pathlib.Path(
-    "/srv/lords/.frontend/releases/20260922T071857Z-e84ee6e-animedia-comments-stage1"
-)
+APPLY = pathlib.Path(__file__).with_name("animedia-comments-stage1-apply.sh")
+
+
+def _release_under_test() -> pathlib.Path:
+    """The release the apply script would actually deploy — read from it.
+
+    This used to be a literal path, and it went stale the moment the adapter
+    was rebuilt onto a newer base: the rehearsal kept exercising the release
+    built from fac5643 while apply had moved on to the one built from efdef56.
+    A rehearsal of a different artifact than the one being shipped is worse
+    than no rehearsal, because it reports confidence it has not earned.
+
+    So there is one declaration of the release id, in the script that deploys
+    it, and everything else reads that.
+    """
+    for line in APPLY.read_text(encoding="utf-8").splitlines():
+        if line.startswith("RELEASE_ID="):
+            release_id = line.split("=", 1)[1].strip().strip('"')
+            return pathlib.Path("/srv/lords/.frontend/releases") / release_id
+    raise SystemExit(f"no RELEASE_ID declared in {APPLY}")
+
+
+RELEASE = _release_under_test()
 MANIFEST = "/srv/lords/.frontend/template-manifest-animedia-01.json"
 CATALOG = "/srv/lords/.frontend/animedia-01-catalog.json"
 LEGACY = "/srv/lords/animedia-01/current/site"
@@ -107,12 +127,29 @@ class _Router(BaseHTTPRequestHandler):
             self.end_headers()
             if self.command != "HEAD":
                 self.wfile.write(payload)
+        except (BrokenPipeError, ConnectionResetError):
+            # The browser hung up before the response was written. Chromium
+            # does this on every navigation that supersedes an in-flight
+            # request, so it is ordinary traffic, not a fault — but the
+            # default handler prints a full traceback per occurrence, and
+            # forty of those buried the one real failure in this suite
+            # (a renderer crash from ENOSPC) well below the fold.
+            pass
         except Exception as exc:  # noqa: BLE001 — a fixture, not a product
-            self.send_response(502)
-            self.end_headers()
-            self.wfile.write(str(exc).encode())
+            try:
+                self.send_response(502)
+                self.end_headers()
+                self.wfile.write(str(exc).encode())
+            except (BrokenPipeError, ConnectionResetError):
+                pass
         finally:
             conn.close()
+
+    def handle_one_request(self):
+        try:
+            super().handle_one_request()
+        except (BrokenPipeError, ConnectionResetError):
+            self.close_connection = True
 
     def _dispatch(self):
         path = urlsplit(self.path).path

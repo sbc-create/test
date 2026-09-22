@@ -1,0 +1,93 @@
+{
+  "schema_version": "ANIMEDIA_COMMENTS_REBASE_V1",
+  "recorded_at_utc": "2026-09-22T15:40:00Z",
+  "cycle": "S1-B08",
+
+  "live_release_divergence": {
+    "question": "does animedia.icu run the release the adapter was built from?",
+    "served_build_id": "20260921T214937Z-fac5643-animedia-parity",
+    "served_artifact_sha256": "826f54a2c8a743fb517852917aa713c579d1be38848d2c0ee3c26cc82e0e425f",
+    "assigned_symlink": "20260922T143111Z-efdef56-animedia-parity",
+    "assigned_manifest": "20260922T143111Z-efdef56-animedia-parity",
+    "diverged": true,
+    "reading": "another contour repointed animedia-01 at efdef56 and did not restart the service, so the process still executes fac5643. The site therefore has a restart pending that is not ours and that changes page output on its own.",
+    "consequence_for_this_pilot": "the first prepared adapter was built from fac5643. Applying it would have moved the site off efdef56 — a rollback of somebody else's UX work arriving as a side effect of switching comments on.",
+    "action": "adapter rebuilt from efdef56; a precondition now refuses an adapter whose base disagrees with the live symlink",
+    "measured_with": "curl --resolve animedia.icu:443:127.0.0.1 against real nginx; readlink of the site symlink; template manifest read directly"
+  },
+
+  "rebuilt_release": {
+    "build_id": "20260922T150000Z-632a622-animedia-comments-stage1-efdef56",
+    "rebased_onto": "20260922T143111Z-efdef56-animedia-parity",
+    "supersedes": "20260922T071857Z-e84ee6e-animedia-comments-stage1",
+    "artifact_sha256": "e95cf7af1eb0ebc9a4a11faabc2d8c84ea7281f4597e211e4192146bb84bf5df",
+    "delta_against_base": {
+      "files_changed": 1,
+      "lines_added": 48,
+      "lines_replaced": 1,
+      "ui_blocks_removed": 0,
+      "note": "additive only — the player, the community section and the recommendation shelf of the UX rebuild keep their order and markup; the mount point is appended after them"
+    }
+  },
+
+  "verification_on_the_rebuilt_release": {
+    "contour": "shadow — real Animedia runtime with the rebuilt adapter, real comments gateway, router mimicking the nginx location split",
+    "api_checks": "30/30",
+    "browser_checks": "22/22",
+    "deploy_harness_tests": "53/53",
+    "python_suite": "957/957",
+    "production_touched": false,
+    "player_markup_present": true,
+    "canonical_unchanged": true,
+    "noindex_on_every_probed_route": true,
+    "visitor_sees_no_writing_surface": true
+  },
+
+  "disk_exhaustion": {
+    "found": "the filesystem holding /, /srv, /home and /tmp reached 100% of 203.3G during this cycle",
+    "how_it_presented": "not as ENOSPC but as a Chromium renderer crash mid-navigation, reported by the acceptance suite as a failed route check — which reads as a defect in the release",
+    "time_to_true_cause": "one additional run; the ENOSPC line appeared only after the trace writer also failed",
+    "largest_consumer": "/tmp/pytest-of-claude/pytest-3133 — 10.75G of pytest temp directories, 7 hours without a write",
+    "freed_by_this_session": "10.90G, by removing pytest temp directories older than 3 hours",
+    "free_after": "42.08G of 203.3G (79.3% used)",
+    "other_sessions_data_touched": false,
+    "permanent_fix": "apply now gates on free space before any mutation (BLOCKED_DISK_SPACE under 2048MB on /srv), with three tests pinning that the gate exists, precedes every mutation, and compares against a real threshold",
+    "note": "the suite failure was environmental. The release was not at fault, and the test was not adjusted to pass — it passes unchanged once there is room."
+  },
+
+  "harness_defects_fixed": [
+    {
+      "what": "the shadow rehearsal carried a literal release path",
+      "effect": "it kept exercising the adapter built from fac5643 after apply had been rebuilt onto efdef56 — a rehearsal of a different artifact than the one being shipped",
+      "fix": "the release id is declared once, in the script that deploys it; the rehearsal reads it from there",
+      "pinned_by": "TestRehearsalTestsTheShippedRelease — forbids a hardcoded release path and asserts both resolve to the same id"
+    },
+    {
+      "what": "the shadow router printed a full traceback for every BrokenPipeError",
+      "effect": "ordinary Chromium navigation cancellation produced ~40 tracebacks that buried the one real failure well below the fold",
+      "fix": "connection-reset and broken-pipe are handled as the ordinary traffic they are; every other exception still surfaces"
+    }
+  ],
+
+  "root_access": {
+    "sudo_available": false,
+    "reason": "sudo is outside this session's UNATTENDED_SAFE permission profile, not refused by sudoers",
+    "retried": false,
+    "consequence": "the stray nginx backup and the apply run remain one owner command; everything provable without root was proved"
+  },
+
+  "stray_nginx_backup": {
+    "path": "/etc/nginx/lords/animedia-01.conf.before-comments-stage1",
+    "owner": "root",
+    "bytes": 1951,
+    "still_present": true,
+    "why_it_matters": "/etc/nginx/lords/*.conf is an include glob, so the backup loads as a second server block",
+    "resolution": "apply quarantines it into /srv/site-factory/var/comments/backups/ as its first privileged act and never deletes it; nginx_backup_path() makes writing a backup into an include directory unreachable rather than merely discouraged"
+  },
+
+  "second_domain": {
+    "animedia_space_mutations": 0,
+    "other_sites_mutations": 0,
+    "guard": "apply refuses if animedia-02 resolves to the release directory; rollback acts on no second-domain path"
+  }
+}

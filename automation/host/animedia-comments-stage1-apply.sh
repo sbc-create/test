@@ -137,6 +137,27 @@ if [ "$INST_MAX" -lt 256 ]; then
   note "         applied here."
 fi
 
+say "free space (diagnosed before any mutation)"
+# The host reached 100% during this cycle, and the effect was not an error but
+# a lie: Chromium's renderer died mid-navigation and the acceptance suite
+# reported a failed route check, which reads as a defect in the release. It
+# took a second run to find ENOSPC underneath.
+#
+# A deploy is worse placed than a test to survive that. The sqlite store, the
+# journal, the nginx reload and the manifest rewrite all assume a write can
+# fail only for a reason worth reporting. So this is a gate, not a note:
+# below the threshold nothing is mutated and nothing is left half-written.
+FREE_MB=$(df -Pm /srv | awk 'NR==2{print $4}')
+FREE_PCT=$(df -P /srv | awk 'NR==2{gsub(/%/,"",$5); print 100-$5}')
+note "free on /srv          : ${FREE_MB}MB (${FREE_PCT}% of the filesystem)"
+[ "$FREE_MB" -ge 2048 ] \
+  || die "only ${FREE_MB}MB free on /srv — BLOCKED_DISK_SPACE. A deploy needs \
+room for the release, the manifest rewrite, the sqlite store and the journal. \
+Free space and re-run; nothing has been changed."
+if [ "$FREE_MB" -lt 10240 ]; then
+  note "WARNING: under 10GB free — enough to apply, thin for a busy host"
+fi
+
 say "indexability gate"
 for path in / /catalog/ /title/master-lda-i-plameni-2/ /definitely-not-real-9d2f/; do
   headers=$(curl -sS -m 10 --resolve "$RESOLVE" -D - -o /dev/null "$SITE$path" || true)

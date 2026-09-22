@@ -626,3 +626,36 @@ class TestRehearsalTestsTheShippedRelease:
             f"rehearsal would test {module.RELEASE.name}, "
             f"apply would deploy {match.group(1)}"
         )
+
+
+class TestDiskSpaceGate:
+    """A full filesystem does not announce itself as a full filesystem.
+
+    It arrives as a renderer crash, a truncated sqlite write, a half-rewritten
+    manifest — failures that read as defects in whatever was being deployed.
+    This cycle spent a run chasing a "failed route check" that was ENOSPC, and
+    a deploy has more to lose from the same confusion than a test does.
+    """
+
+    def test_apply_refuses_to_start_without_room(self):
+        assert "BLOCKED_DISK_SPACE" in APPLY_TEXT, (
+            "apply has no free-space gate"
+        )
+        assert "df -Pm /srv" in APPLY_TEXT, (
+            "the gate does not measure the filesystem the release is written to"
+        )
+
+    def test_the_gate_runs_before_anything_is_mutated(self):
+        """A gate after the first write is not a gate, it is a regret."""
+        gate = APPLY_TEXT.index("BLOCKED_DISK_SPACE")
+        for mutation in ("ln -sfn", "systemctl restart", "systemctl daemon-reload"):
+            assert APPLY_TEXT.index(mutation) > gate, (
+                f"'{mutation}' happens before the free-space gate"
+            )
+
+    def test_the_threshold_is_a_real_number_not_a_placeholder(self):
+        match = re.search(r'\[ "\$FREE_MB" -ge (\d+) \]', APPLY_TEXT)
+        assert match, "the gate does not compare free space against a threshold"
+        assert int(match.group(1)) >= 1024, (
+            "a threshold under 1GB does not cover a release plus its journal"
+        )
