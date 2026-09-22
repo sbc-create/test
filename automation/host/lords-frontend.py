@@ -2295,7 +2295,15 @@ display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hi
 .zhero__cta a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border-radius:8px;font-weight:700;font-size:14px}
 .zhero__cta a.primary{background:@ACC@;color:#fff}
 .zhero__cta a.secondary{background:transparent;border:1px solid @LINE@;color:@INK@}
-.zhero--compact{min-height:0;max-height:none;padding:18px 0 8px;border:0;background:transparent}
+/* Компактный герой обязан быть ростом со своё содержимое.
+   Десктопное правило `.zhero` задаёт height:clamp(340px,26vw,390px) ради
+   слайдера; компактный вариант его наследовал, и под лидом из двух строк
+   висела мёртвая полоса около 350px — пустой первый экран. Измерено на
+   шаблоне grid-lead при 1440px. Сетка 46/54 здесь тоже не нужна: кадра нет,
+   и правая колонка оставалась пустой. */
+.zhero--compact{min-height:0;max-height:none;height:auto;
+grid-template-columns:1fr;padding:18px 0 8px;border:0;background:transparent}
+@media(min-width:900px){.zhero--compact{height:auto;grid-template-columns:1fr}}
 .zhero--compact h1{font-size:26px}
 
 /* B03 Weekly popular — one tabbed block, not three full rails. */

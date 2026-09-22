@@ -1,0 +1,144 @@
+{
+ "templates": [
+  {
+   "profile": "classic",
+   "title": "Классическая витрина",
+   "description": "Слайдер героя, вкладки недели, поступления списком.",
+   "order": [
+    "hero",
+    "weekly",
+    "added",
+    "kinds",
+    "genres",
+    "collections",
+    "seo"
+   ],
+   "hero": "slider",
+   "weekly": "tabs",
+   "added": "list",
+   "fresh": 0,
+   "verdict": "PASS",
+   "exit": 0,
+   "failures": []
+  },
+  {
+   "profile": "catalog-first",
+   "title": "Каталог сразу",
+   "description": "Один кадр героя, следом плотная сетка новинок; ленты ниже.",
+   "order": [
+    "hero",
+    "fresh",
+    "kinds",
+    "weekly",
+    "added",
+    "genres",
+    "collections",
+    "seo"
+   ],
+   "hero": "single",
+   "weekly": "stacked",
+   "added": "rail",
+   "fresh": 21,
+   "verdict": "PASS",
+   "exit": 0,
+   "failures": []
+  },
+  {
+   "profile": "editorial",
+   "title": "Редакционная",
+   "description": "Слайдер, сразу поступления списком, затем ленты недели.",
+   "order": [
+    "hero",
+    "added",
+    "weekly",
+    "genres",
+    "kinds",
+    "collections",
+    "seo"
+   ],
+   "hero": "slider",
+   "weekly": "stacked",
+   "added": "list",
+   "fresh": 0,
+   "verdict": "PASS",
+   "exit": 0,
+   "failures": []
+  },
+  {
+   "profile": "discovery",
+   "title": "Навигационная",
+   "description": "Без кадра героя: сверху жанры и подборки, поиск по вкусу.",
+   "order": [
+    "hero",
+    "genres",
+    "collections",
+    "weekly",
+    "fresh",
+    "kinds",
+    "added",
+    "seo"
+   ],
+   "hero": "compact",
+   "weekly": "tabs",
+   "added": "list",
+   "fresh": 14,
+   "verdict": "PASS",
+   "exit": 0,
+   "failures": []
+  },
+  {
+   "profile": "rail-dense",
+   "title": "Ленточная",
+   "description": "Один кадр, три ленты недели подряд, поступления лентой.",
+   "order": [
+    "hero",
+    "weekly",
+    "added",
+    "fresh",
+    "kinds",
+    "genres",
+    "collections",
+    "seo"
+   ],
+   "hero": "single",
+   "weekly": "stacked",
+   "added": "rail",
+   "fresh": 28,
+   "verdict": "PASS",
+   "exit": 0,
+   "failures": []
+  },
+  {
+   "profile": "grid-lead",
+   "title": "Сеточная",
+   "description": "Лид вместо кадра и крупная сетка новинок первым экраном.",
+   "order": [
+    "hero",
+    "fresh",
+    "weekly",
+    "kinds",
+    "added",
+    "genres",
+    "collections",
+    "seo"
+   ],
+   "hero": "compact",
+   "weekly": "tabs",
+   "added": "list",
+   "fresh": 35,
+   "verdict": "PASS",
+   "exit": 0,
+   "failures": []
+  }
+ ],
+ "passed": 6,
+ "total": 6,
+ "widths": [
+  320,
+  390,
+  768,
+  1024,
+  1440,
+  1920
+ ]
+}

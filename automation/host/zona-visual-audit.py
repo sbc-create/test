@@ -158,6 +158,30 @@ def заглушка_для(url: str, широкая: bool = False) -> bytes:
     return r.width < 24 || r.height < 24;
   }).map(b => b.getAttribute('aria-label') || b.className);
 
+  // Мёртвая полоса: секция заметно выше собственного содержимого. Так
+  // ловится пустой первый экран, который не является ни переполнением, ни
+  // пропавшим элементом, — измеримый только через разницу высот.
+  const мёртвые = [];
+  for (const sec of document.querySelectorAll('section')) {
+    if (скрыт_замыслом(sec)) continue;
+    const r = sec.getBoundingClientRect();
+    if (r.height < 160) continue;
+    let верх = Infinity, низ = -Infinity;
+    for (const el of sec.querySelectorAll('*')) {
+      if (!видимый(el)) continue;
+      if (el.children.length && !el.matches('img,video,svg,canvas')) continue;
+      const b = el.getBoundingClientRect();
+      if (b.height < 1 || b.width < 1) continue;
+      верх = Math.min(верх, b.top);
+      низ = Math.max(низ, b.bottom);
+    }
+    if (верх === Infinity) continue;
+    const пусто = Math.round(r.height - (низ - верх));
+    if (пусто > 200) {
+      мёртвые.push({ cls: sec.className, height: Math.round(r.height), empty: пусто });
+    }
+  }
+
   // Заголовки и идентификаторы
   const h1 = [...document.querySelectorAll('h1')];
   const ids = [...document.querySelectorAll('[id]')].map(el => el.id);
@@ -194,7 +218,7 @@ def заглушка_для(url: str, широкая: bool = False) -> bytes:
     buttons_covered: перекрытые, buttons_small: мелкие,
     h1: h1.length, h1_text: h1.map(e => e.textContent.trim().slice(0, 60)),
     dup_ids: дубли_id,
-    grid_filled: заполнено,
+    grid_filled: заполнено, dead_space: мёртвые,
     first_screen: герой ? Math.round(герой.getBoundingClientRect().height) : 0,
     viewport: innerHeight,
     slider: слайдер,
@@ -429,6 +453,9 @@ def main() -> int:
                     беды.append(f"CLS {данные['cls']:.3f}")
                 if данные["широкие"]:
                     беды.append(f"элементы шире экрана: {данные['широкие'][:3]}")
+                if данные["dead_space"]:
+                    беды.append("мёртвая полоса: " + ", ".join(
+                        f"{м['cls']} {м['empty']}px" for м in данные["dead_space"][:3]))
                 if беды:
                     отчёт["failures"].append({"page": ключ, "issues": беды})
                 if а.shots:
