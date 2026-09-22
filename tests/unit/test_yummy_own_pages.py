@@ -381,3 +381,48 @@ class TestМенюШапкиНаСтатическойСтранице:
         assert "portal-dropdown:hover" not in страница
         assert "portal-dropdown:focus-within" not in страница
         assert "aria-expanded" not in страница
+
+
+class TestПлотностьСетки:
+    """Объявленная плотность обязана иметь последствие, а не только запись."""
+
+    @staticmethod
+    def _страница(вариант: dict) -> str:
+        оболочка = {"head": "<head><title>т</title></head>",
+                    "header": "<header></header>", "footer": "<footer></footer>"}
+        return СТР.собрать(оболочка, "Т", "лид", "", вариант=вариант).decode("utf-8")
+
+    def test_минимум_читается_из_объявления(self):
+        assert СТР.ширина_плитки("repeat(auto-fill,minmax(132px,1fr))") == 132
+        assert СТР.ширина_плитки("repeat(auto-fill,minmax(168px,1fr))") == 168
+
+    def test_непонятное_объявление_не_выдумывает_своё(self):
+        assert СТР.ширина_плитки(None) == СТР.ПЛОТНОСТЬ_ПО_УМОЛЧАНИЮ
+        assert СТР.ширина_плитки("как-нибудь") == СТР.ПЛОТНОСТЬ_ПО_УМОЛЧАНИЮ
+
+    def test_правило_пишется_под_фактический_контейнер(self):
+        """`grid-template-columns` на flex-контейнере не действует вовсе.
+
+        Измерено до правки: три профиля объявляли 132, 150 и 168 px и давали
+        одинаковые пять колонок по 260 px — поле профиля было объявлением без
+        последствий.
+        """
+        страница = self._страница({"акцент": "#6d8cff",
+                                   "плотность": "repeat(auto-fill,minmax(132px,1fr))"})
+        assert "grid-template-columns" not in страница
+        assert ".portal-catalog-tiles>*{flex:1 1 min(132px,44%)}" in страница
+
+    def test_пол_в_две_колонки_объявлен(self):
+        """Объявленный минимум 168 px на ширине 320 не помещается дважды."""
+        страница = self._страница({"акцент": "#6d8cff",
+                                   "плотность": "repeat(auto-fill,minmax(168px,1fr))"})
+        assert f"min(168px,{СТР.ПОЛ_КОЛОНОК}%)" in страница
+
+    def test_три_профиля_дают_три_разных_правила(self):
+        ВАР = _модуль("yummy_variants", "yummy_variants.py").ВАРИАНТЫ
+        правила = set()
+        for в in ВАР.values():
+            страница = self._страница(в)
+            начало = страница.index(".portal-catalog-tiles>*{")
+            правила.add(страница[начало:начало + 60])
+        assert len(правила) == len(ВАР), f"профили дали одинаковую плотность: {правила}"
