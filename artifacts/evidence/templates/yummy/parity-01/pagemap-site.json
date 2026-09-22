@@ -1,5 +1,5 @@
 {
-  "captured_at_utc": "2026-09-21T21:46:32.635722+00:00",
+  "captured_at_utc": "2026-09-22T06:29:35.034229+00:00",
   "base": "http://127.0.0.1:9310",
   "map": "docs/templates/PAGE-MAP-yummy.md",
   "probed": 37,
@@ -28,7 +28,7 @@
       "declared_http": "200",
       "implemented": true,
       "status": 200,
-      "bytes": 223900,
+      "bytes": 223005,
       "h1": 1,
       "title_links": 71,
       "findings": []
@@ -83,7 +83,7 @@
       "declared_http": "200",
       "implemented": true,
       "status": 200,
-      "bytes": 64228,
+      "bytes": 64269,
       "h1": 1,
       "title_links": 24,
       "findings": []
@@ -94,7 +94,7 @@
       "declared_http": "200",
       "implemented": true,
       "status": 200,
-      "bytes": 161483,
+      "bytes": 161440,
       "h1": 1,
       "title_links": 76,
       "findings": []
@@ -105,7 +105,7 @@
       "declared_http": "307/308 to title or 404",
       "implemented": true,
       "status": 200,
-      "bytes": 35399,
+      "bytes": 35387,
       "h1": 0,
       "title_links": 0,
       "findings": [
