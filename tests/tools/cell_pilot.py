@@ -198,6 +198,7 @@ def run_pilot(root: Path) -> PilotResult:  # noqa: C901 — сценарий п�
     free_before = templates.free_templates(pool_path)
     progress = onboarding.run(order, root=onboarding_root, steps={
         "domain_validated": lambda o: onboarding.validate_domain(o).to_dict(),
+        "site_id_assigned": lambda o: {"site_id": o.site_id, "permanent": True},
         "template_reserved": lambda o: onboarding.reserve_template_step(
             o, pool_path=pool_path),
     })
@@ -206,6 +207,7 @@ def run_pilot(root: Path) -> PilotResult:  # noqa: C901 — сценарий п�
     # Повтор того же заказа ничего не расходует.
     repeat = onboarding.run(order, root=onboarding_root, steps={
         "domain_validated": lambda o: onboarding.validate_domain(o).to_dict(),
+        "site_id_assigned": lambda o: {"site_id": o.site_id, "permanent": True},
         "template_reserved": lambda o: onboarding.reserve_template_step(
             o, pool_path=pool_path),
     })
@@ -318,7 +320,7 @@ def run_pilot(root: Path) -> PilotResult:  # noqa: C901 — сценарий п�
         NEIGHBOUR_SITE: transfer.Layout(root=root / "hosts" / NEIGHBOUR_SITE).ensure(),
     }
     for site_id in (PILOT_SITE, NEIGHBOUR_SITE):
-        transfer.install(site_id=site_id, artifact=releases[site_id].artifact,
+        transfer.install(require_own_repo=False, site_id=site_id, artifact=releases[site_id].artifact,
                          manifest=releases[site_id].manifest, layout=layouts[site_id])
 
     store = tenant.open_store(PILOT_SITE, layouts[PILOT_SITE].database)
@@ -590,7 +592,7 @@ def run_pilot(root: Path) -> PilotResult:  # noqa: C901 — сценарий п�
     neighbour_counts = neighbour_store.row_counts()
     neighbour_store.close()
 
-    transfer.install(site_id=PILOT_SITE, artifact=second_release.artifact,
+    transfer.install(require_own_repo=False, site_id=PILOT_SITE, artifact=second_release.artifact,
                      manifest=second_release.manifest, layout=layouts[PILOT_SITE])
     # Витрина пересобирается поверх нового релиза: содержимое живёт вне релиза.
     site_dir = _render(records, layouts[PILOT_SITE], 6)
@@ -638,7 +640,7 @@ def run_pilot(root: Path) -> PilotResult:  # noqa: C901 — сценарий п�
     except tenant.CrossTenantAccess:
         forged_refused = True
     try:
-        transfer.install(site_id=NEIGHBOUR_SITE, artifact=second_release.artifact,
+        transfer.install(require_own_repo=False, site_id=NEIGHBOUR_SITE, artifact=second_release.artifact,
                          manifest=second_release.manifest, layout=layouts[NEIGHBOUR_SITE],
                          dry_run=True)
         foreign_artifact_refused = False
@@ -674,7 +676,7 @@ def run_pilot(root: Path) -> PilotResult:  # noqa: C901 — сценарий п�
                dns_switched=moved["dns_switched"],
                target_rows=target_counts)
 
-    transfer.install(site_id=PILOT_SITE, artifact=second_release.artifact,
+    transfer.install(require_own_repo=False, site_id=PILOT_SITE, artifact=second_release.artifact,
                      manifest=second_release.manifest, layout=target)
     reinstall_store = tenant.open_store(PILOT_SITE, target.database)
     reinstall_ok = reinstall_store.comment(fresh_on_target.comment_id).body == \

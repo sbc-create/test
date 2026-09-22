@@ -243,8 +243,29 @@ def _free_bytes(path: Path) -> int:
 
 def install(*, site_id: str, artifact: Path, manifest: Path | dict[str, Any],
             layout: Layout, dry_run: bool = False,
-            expected_digest: str | None = None) -> dict[str, Any]:
-    """Поставить готовый артефакт. Сборки здесь не происходит."""
+            expected_digest: str | None = None,
+            require_own_repo: bool = True) -> dict[str, Any]:
+    """Поставить готовый артефакт. Сборки здесь не происходит.
+
+    Перед установкой проверяется, что у сайта есть собственный репозиторий.
+    Случай, ради которого: создание репозитория сорвалось, конвейер пошёл
+    дальше и выложил сайт из монорепозитория. Снаружи это неотличимо от
+    нормального выпуска — до первой правки, когда выясняется, что менять нечего
+    и откатывать некуда. Поэтому отказ, а не предупреждение.
+
+    `require_own_repo=False` оставлен для пилотов и стендов, которых нет в
+    реестре: они и не публикуются наружу.
+    """
+    if require_own_repo:
+        from factory.cell import registry as _registry
+        try:
+            cell = _registry.resolve(site_id)
+        except _registry.UnknownCell:
+            raise TransferError(
+                f"{site_id}: сайта нет в реестре ячеек, собственный репозиторий "
+                "не подтверждён; выкладка из монорепозитория запрещена"
+            ) from None
+        _registry.require_own_repo(cell)
     data = (json.loads(Path(manifest).read_text(encoding="utf-8"))
             if isinstance(manifest, str | Path) else manifest)
     if data["site_id"] != site_id:

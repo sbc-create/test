@@ -76,3 +76,4 @@
 | REQ-CELL-NEIGHBOR | Точечный выпуск одного сайта не меняет digest и данные соседа | PORTABLE-SITE-CELL-01 §5 | `tests/integration/test_cell_pilot.py` |
 | REQ-CELL-URLS | Инвентарь опубликованных URL до и после совпадает на одной content_revision | PORTABLE-SITE-CELL-01 §5 | `tests/integration/test_cell_pilot.py` |
 | REQ-CELL-OUTAGE | При недоступном центре страницы, комментарии и голоса продолжают работать | PORTABLE-SITE-CELL-01 §5 | `tests/integration/test_cell_pilot.py` |
+| REQ-CELL-OWNREPO | Каждый сайт публикуется только из собственного приватного репозитория; повтор заказа не создаёт второй, сорвавшееся создание не приводит к выпуску из монорепозитория | PORTABLE-ANIMEDIA-SPACE-01 §2 | `tests/unit/test_cell_onboarding_repo.py` |

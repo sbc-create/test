@@ -115,7 +115,7 @@ def test_install_puts_the_verified_artifact_and_leaves_data_alone(tmp_path, temp
     counts_before = before.row_counts()
     before.close()
 
-    result = transfer.install(site_id="pilot-cell", artifact=rel.artifact,
+    result = transfer.install(require_own_repo=False, site_id="pilot-cell", artifact=rel.artifact,
                               manifest=rel.manifest, layout=dst)
     assert result["status"] == "installed"
     assert dst.current.exists()
@@ -131,7 +131,7 @@ def test_install_dry_run_changes_nothing(tmp_path, template):
     rel = release_mod.build(site_id="pilot-cell", repo=repo.path,
                             output_dir=tmp_path / "out")
     dst = _layout(tmp_path, "dst")
-    result = transfer.install(site_id="pilot-cell", artifact=rel.artifact,
+    result = transfer.install(require_own_repo=False, site_id="pilot-cell", artifact=rel.artifact,
                               manifest=rel.manifest, layout=dst, dry_run=True)
     assert result["status"] == "dry-run"
     assert not dst.current.exists()
@@ -143,7 +143,7 @@ def test_install_refuses_another_sites_artifact(tmp_path, template):
                             output_dir=tmp_path / "out")
     dst = _layout(tmp_path, "dst")
     with pytest.raises(TransferError, match="чужой артефакт"):
-        transfer.install(site_id="neighbour-cell", artifact=rel.artifact,
+        transfer.install(require_own_repo=False, site_id="neighbour-cell", artifact=rel.artifact,
                          manifest=rel.manifest, layout=dst)
 
 
@@ -154,7 +154,7 @@ def test_install_refuses_a_tampered_artifact(tmp_path, template):
     rel.artifact.write_bytes("подмена".encode())
     dst = _layout(tmp_path, "dst")
     with pytest.raises(release_mod.DigestMismatch):
-        transfer.install(site_id="pilot-cell", artifact=rel.artifact,
+        transfer.install(require_own_repo=False, site_id="pilot-cell", artifact=rel.artifact,
                          manifest=rel.manifest, layout=dst)
 
 
@@ -164,7 +164,7 @@ def test_verify_is_not_satisfied_by_a_missing_route(tmp_path, template):
                             output_dir=tmp_path / "out")
     dst = _layout(tmp_path, "dst")
     _seed(dst)
-    transfer.install(site_id="pilot-cell", artifact=rel.artifact,
+    transfer.install(require_own_repo=False, site_id="pilot-cell", artifact=rel.artifact,
                      manifest=rel.manifest, layout=dst)
     report = transfer.verify(site_id="pilot-cell", layout=dst,
                              expected_routes=("/catalog/", "/about/"))
@@ -180,7 +180,7 @@ def test_verify_passes_when_the_routes_are_actually_published(tmp_path, template
                             output_dir=tmp_path / "out")
     dst = _layout(tmp_path, "dst")
     _seed(dst)
-    transfer.install(site_id="pilot-cell", artifact=rel.artifact,
+    transfer.install(require_own_repo=False, site_id="pilot-cell", artifact=rel.artifact,
                      manifest=rel.manifest, layout=dst)
     for route in ("catalog", "about"):
         page = dst.public / route / "index.html"
@@ -200,7 +200,7 @@ def test_published_pages_survive_a_code_rollback(tmp_path, template):
     first = release_mod.build(site_id="pilot-cell", repo=repo.path,
                               output_dir=tmp_path / "out1")
     dst = _layout(tmp_path, "dst")
-    transfer.install(site_id="pilot-cell", artifact=first.artifact,
+    transfer.install(require_own_repo=False, site_id="pilot-cell", artifact=first.artifact,
                      manifest=first.manifest, layout=dst)
     page = dst.public / "catalog" / "index.html"
     page.parent.mkdir(parents=True, exist_ok=True)
@@ -210,7 +210,7 @@ def test_published_pages_survive_a_code_rollback(tmp_path, template):
     subprocess.run(["git", "-C", str(repo.path), "commit", "-aqm", "второй"], check=True)
     second = release_mod.build(site_id="pilot-cell", repo=repo.path,
                                output_dir=tmp_path / "out2")
-    transfer.install(site_id="pilot-cell", artifact=second.artifact,
+    transfer.install(require_own_repo=False, site_id="pilot-cell", artifact=second.artifact,
                      manifest=second.manifest, layout=dst)
     transfer.rollback(site_id="pilot-cell", layout=dst, reason="проверка")
     assert page.exists(), "откат кода унёс опубликованные страницы"
@@ -229,7 +229,7 @@ def test_a_relative_root_still_produces_a_working_current_link(tmp_path, templat
                             output_dir=tmp_path / "out")
     monkeypatch.chdir(tmp_path)
     layout = Layout(root=Path("hosts/relative")).ensure()
-    transfer.install(site_id="pilot-cell", artifact=rel.artifact,
+    transfer.install(require_own_repo=False, site_id="pilot-cell", artifact=rel.artifact,
                      manifest=rel.manifest, layout=layout)
     assert layout.current.is_dir(), "current указывает в никуда"
     assert (layout.current / "site-manifest.json").exists()
@@ -241,7 +241,7 @@ def test_verify_without_routes_says_not_run_rather_than_pass(tmp_path, template)
                             output_dir=tmp_path / "out")
     dst = _layout(tmp_path, "dst")
     _seed(dst)
-    transfer.install(site_id="pilot-cell", artifact=rel.artifact,
+    transfer.install(require_own_repo=False, site_id="pilot-cell", artifact=rel.artifact,
                      manifest=rel.manifest, layout=dst)
     report = transfer.verify(site_id="pilot-cell", layout=dst)
     routes = next(s for s in report["steps"] if s["step"] == "published-routes")
@@ -320,7 +320,7 @@ def test_rollback_keeps_records_accepted_after_the_switch(tmp_path, template):
                               output_dir=tmp_path / "out1")
     dst = _layout(tmp_path, "dst")
     _seed(dst)
-    transfer.install(site_id="pilot-cell", artifact=first.artifact,
+    transfer.install(require_own_repo=False, site_id="pilot-cell", artifact=first.artifact,
                      manifest=first.manifest, layout=dst)
 
     import subprocess
@@ -328,7 +328,7 @@ def test_rollback_keeps_records_accepted_after_the_switch(tmp_path, template):
     subprocess.run(["git", "-C", str(repo.path), "commit", "-aqm", "второй"], check=True)
     second = release_mod.build(site_id="pilot-cell", repo=repo.path,
                                output_dir=tmp_path / "out2")
-    transfer.install(site_id="pilot-cell", artifact=second.artifact,
+    transfer.install(require_own_repo=False, site_id="pilot-cell", artifact=second.artifact,
                      manifest=second.manifest, layout=dst)
 
     # Новые записи приняты уже на новом релизе.
@@ -352,7 +352,7 @@ def test_rollback_without_a_previous_release_is_refused(tmp_path, template):
     rel = release_mod.build(site_id="pilot-cell", repo=repo.path,
                             output_dir=tmp_path / "out")
     dst = _layout(tmp_path, "dst")
-    transfer.install(site_id="pilot-cell", artifact=rel.artifact,
+    transfer.install(require_own_repo=False, site_id="pilot-cell", artifact=rel.artifact,
                      manifest=rel.manifest, layout=dst)
     with pytest.raises(TransferError, match="предыдущего релиза нет"):
         transfer.rollback(site_id="pilot-cell", layout=dst, reason="нет предыдущего")
@@ -363,14 +363,14 @@ def test_rollback_dry_run_changes_nothing(tmp_path, template):
     first = release_mod.build(site_id="pilot-cell", repo=repo.path,
                               output_dir=tmp_path / "out1")
     dst = _layout(tmp_path, "dst")
-    transfer.install(site_id="pilot-cell", artifact=first.artifact,
+    transfer.install(require_own_repo=False, site_id="pilot-cell", artifact=first.artifact,
                      manifest=first.manifest, layout=dst)
     import subprocess
     (repo.path / "config" / "site.json").write_text('{"v": 2}', encoding="utf-8")
     subprocess.run(["git", "-C", str(repo.path), "commit", "-aqm", "второй"], check=True)
     second = release_mod.build(site_id="pilot-cell", repo=repo.path,
                                output_dir=tmp_path / "out2")
-    transfer.install(site_id="pilot-cell", artifact=second.artifact,
+    transfer.install(require_own_repo=False, site_id="pilot-cell", artifact=second.artifact,
                      manifest=second.manifest, layout=dst)
     where = dst.current.resolve()
     result = transfer.rollback(site_id="pilot-cell", layout=dst, reason="проверка",
@@ -388,9 +388,9 @@ def test_reinstall_does_not_lose_data(tmp_path, template):
     store = tenant.open_store("pilot-cell", dst.database)
     counts = store.row_counts()
     store.close()
-    transfer.install(site_id="pilot-cell", artifact=rel.artifact,
+    transfer.install(require_own_repo=False, site_id="pilot-cell", artifact=rel.artifact,
                      manifest=rel.manifest, layout=dst)
-    transfer.install(site_id="pilot-cell", artifact=rel.artifact,
+    transfer.install(require_own_repo=False, site_id="pilot-cell", artifact=rel.artifact,
                      manifest=rel.manifest, layout=dst)
     again = tenant.open_store("pilot-cell", dst.database)
     assert again.row_counts() == counts

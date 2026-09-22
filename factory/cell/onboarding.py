@@ -30,16 +30,31 @@ from factory.cell import ledger, registry, templates
 
 SCHEMA_VERSION = "1.0"
 
+#: Этапы заведения сайта. Порядок обязателен, и `repo_created` стоит до
+#: `release_ready` не случайно: пока у сайта нет своего репозитория, собирать
+#: и публиковать нечего — а собрать из монорепозитория означает выпустить
+#: сайт, который потом нечем ни изменить, ни откатить.
 STAGES = (
     "domain_validated",
+    "site_id_assigned",
     "template_reserved",
-    "repo_ready",
+    "repo_created",
+    "repo_pushed",
+    "ci_verified",
     "release_ready",
     "server_staged",
     "data_verified",
     "sync_verified",
     "seo_verified",
-    "live",
+    "deployed",
+    "publicly_accepted",
+)
+
+#: Этапы, которые нельзя объявить пройденными без доказательства извне:
+#: у каждого из них есть внешний наблюдаемый признак (ответ GitHub, вывод CI,
+#: код публичной страницы). Отметка без признака — это отчёт о непроверенном.
+STAGES_REQUIRING_EVIDENCE = (
+    "repo_created", "repo_pushed", "ci_verified", "deployed", "publicly_accepted",
 )
 
 PENDING = "pending"
@@ -321,3 +336,75 @@ def register_cell_step(order: Order, *, repo_path: str, pins: dict[str, Any],
     )
     registry.register(cell, path=registry_path, replace=True)
     return {"site_id": cell.site_id, "repo": repo_path, "template_id": template_id}
+
+
+#: Пространство, в котором владелец разрешил заводить репозитории сайтов.
+#: Расширять его по своей инициативе нельзя: чужое пространство — чужие права.
+REPO_NAMESPACE = "sbc-create"
+
+
+def repo_name_for(site_id: str, domain: str) -> str:
+    """Имя репозитория сайта. Выводится из домена, а не придумывается.
+
+    Устойчивость важнее красоты: имя должно получаться одинаковым при каждом
+    повторе заказа, иначе повторный запуск заведёт второй проект на тот же сайт.
+    """
+    основа = domain.strip().lower().replace(".", "-")
+    return f"site-{основа}"
+
+
+def create_repo_step(order: Order, *, namespace: str = REPO_NAMESPACE,
+                     runner: Callable[[list[str]], tuple[int, str]] | None = None,
+                     ) -> dict[str, Any]:
+    """Создать приватный репозиторий сайта — ровно один на сайт.
+
+    Идемпотентность здесь не украшение. Повторный запуск onboarding — штатное
+    событие: прогон обрывается на пятом шаге, и повтор обязан продолжить, а не
+    завести второй проект. Поэтому сначала спрашиваем, существует ли репозиторий,
+    и только потом создаём.
+
+    Создание, которое не удалось, обязано остаться провалом этапа: следующий шаг
+    (`release_ready`) без записанного remote не пройдёт, и сайт не будет выпущен
+    из монорепозитория.
+    """
+    import subprocess
+
+    имя = repo_name_for(order.site_id, order.domain)
+    полное = f"{namespace}/{имя}"
+
+    def выполнить(cmd: list[str]) -> tuple[int, str]:
+        if runner is not None:
+            return runner(cmd)
+        p = subprocess.run(cmd, capture_output=True, text=True, check=False)
+        return p.returncode, (p.stdout or "") + (p.stderr or "")
+
+    # 1. Уже существует? Тогда ничего не создаём и возвращаем его же.
+    код, вывод = выполнить(["gh", "api", f"repos/{полное}", "--jq", ".full_name,.private"])
+    if код == 0:
+        строки = [s for s in вывод.strip().splitlines() if s]
+        приватный = strings_last_is_true(строки)
+        if not приватный:
+            raise StageBlocked(
+                f"{полное} существует, но он не приватный. Публичный репозиторий "
+                "сайта здесь не принимается: сделайте его приватным вручную."
+            )
+        return {"repository": полное, "created": False, "reused": True,
+                "url": f"https://github.com/{полное}", "private": True}
+
+    # 2. Нет — создаём приватным.
+    код, вывод = выполнить([
+        "gh", "repo", "create", полное, "--private",
+        "--description", f"{order.domain} — самостоятельный сайт (tenant {order.site_id})",
+    ])
+    if код != 0:
+        raise StageBlocked(
+            f"репозиторий {полное} не создан: {вывод.strip()[:300]}. "
+            "Выпуск остановлен: публиковать сайт из монорепозитория нельзя."
+        )
+    return {"repository": полное, "created": True, "reused": False,
+            "url": f"https://github.com/{полное}", "private": True}
+
+
+def strings_last_is_true(строки: list[str]) -> bool:
+    """`gh --jq` печатает поля построчно; приватность — последняя строка."""
+    return bool(строки) and строки[-1].strip().lower() == "true"

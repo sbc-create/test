@@ -62,23 +62,24 @@ def test_progress_resumes_from_the_failed_stage(root: Path):
         return runner
 
     def broken(order):
-        calls.append("repo_ready")
+        calls.append("repo_created")
         raise RuntimeError("диск кончился")
 
     steps = {"domain_validated": ok("domain_validated"),
+             "site_id_assigned": ok("site_id_assigned"),
              "template_reserved": ok("template_reserved"),
-             "repo_ready": broken}
+             "repo_created": broken}
     first = onboarding.run(_order(), root=root, steps=steps)
     assert first.by_name["domain_validated"].status == "done"
-    assert first.by_name["repo_ready"].status == "failed"
+    assert first.by_name["repo_created"].status == "failed"
     assert first.complete is False
 
     calls.clear()
-    steps["repo_ready"] = ok("repo_ready")
+    steps["repo_created"] = ok("repo_created")
     second = onboarding.run(_order(), root=root, steps=steps)
     # Пройденные этапы не переигрываются.
-    assert calls == ["repo_ready"]
-    assert second.by_name["repo_ready"].status == "done"
+    assert calls == ["repo_created"]
+    assert second.by_name["repo_created"].status == "done"
 
 
 def test_partial_failure_is_never_reported_as_ready(root: Path):
@@ -98,7 +99,7 @@ def test_a_stage_without_a_runner_is_not_run_rather_than_passed(root: Path):
         _order(), root=root,
         steps={"domain_validated": lambda o: {"ok": True}})
     assert progress.by_name["domain_validated"].status == "done"
-    assert progress.by_name["template_reserved"].status == "not_run"
+    assert progress.by_name["site_id_assigned"].status == "not_run"
     assert progress.complete is False
 
 
@@ -124,6 +125,7 @@ def test_dry_run_reaches_nothing_and_spends_nothing(root: Path, pool: Path):
 
 def test_repeating_the_order_spends_no_second_template(root: Path, pool: Path):
     steps = {"domain_validated": lambda o: {"ok": True},
+             "site_id_assigned": lambda o: {"site_id": o.site_id},
              "template_reserved":
                  lambda o: onboarding.reserve_template_step(o, pool_path=pool)}
     first = onboarding.run(_order(), root=root, steps=steps)
@@ -137,6 +139,7 @@ def test_repeating_the_order_spends_no_second_template(root: Path, pool: Path):
 
 def test_two_orders_never_share_a_template(root: Path, pool: Path):
     steps = {"domain_validated": lambda o: {"ok": True},
+             "site_id_assigned": lambda o: {"site_id": o.site_id},
              "template_reserved":
              lambda o: onboarding.reserve_template_step(o, pool_path=pool)}
     a = onboarding.run(_order(order_id="o-a", site_id="site-a", domain="a.test"),
@@ -175,4 +178,4 @@ def test_progress_survives_a_restart(root: Path):
                    steps={"domain_validated": lambda o: {"ok": True}})
     reloaded = onboarding.start(_order(), root=root)
     assert reloaded.by_name["domain_validated"].status == "done"
-    assert reloaded.next_stage == "template_reserved"
+    assert reloaded.next_stage == "site_id_assigned"
