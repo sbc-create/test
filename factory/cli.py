@@ -774,6 +774,84 @@ def cmd_input_request(args) -> int:
     return EXIT_OK
 
 
+def _пары_семейств_существуют(корень: Path, publisher_policy) -> list[str]:
+    """Пара семейства обязана быть заведена в Secret Hub.
+
+    Семейство, указывающее на несуществующий портфель, ломается не в git, а на
+    хосте в момент подключения плеера — сообщением про отсутствующий файл, по
+    которому причину не видно. Здесь она названа прямо.
+    """
+    файл = корень / "config" / "secret-hub.json"
+    try:
+        реестр = json.loads(файл.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        # Отсутствие реестра — не забота этой проверки: о нём говорят другие.
+        return []
+    портфели = {str(п.get("id")) for п in (реестр.get("portfolios") or [])}
+    проблемы = []
+    for имя in publisher_policy.семейства(root=корень):
+        описание = publisher_policy.загрузить(корень).семейства[имя]
+        пара = описание.credential_profile
+        if пара and пара not in портфели:
+            проблемы.append(
+                f"семейство {имя!r}: пара {пара!r} не заведена в config/secret-hub.json"
+            )
+    return проблемы
+
+
+def проверить_publisher_ids(root: Path | str | None = None) -> int:
+    """Релизная проверка: профили тенантов не расходятся с политикой семейств.
+
+    Три места могли разойтись молча — профиль тенанта в git, боковой файл на
+    хосте и ожидание семейства. Пока сверять было нечем, расхождение
+    обнаруживалось единственным способом: чужим каталогом на живой витрине.
+    Проверка читает тот же config/publisher-ids.yaml, что генератор и гейт;
+    своей копии значений у неё нет и быть не должно.
+
+    Семейства вне политики (Lords, Yummy и прочие) не упоминаются вовсе:
+    мнения о них у проверки нет, а лишние строки в релизном отчёте читают так же
+    невнимательно, как и любые другие.
+    """
+    from factory.site_engine import publisher_policy
+
+    корень = Path(root) if root is not None else PATHS.root
+    publisher_policy.сбросить_кэш()
+
+    профили = []
+    for путь in sorted((корень / "config" / "site-profiles").glob("*.json")):
+        try:
+            профили.append(json.loads(путь.read_text(encoding="utf-8")))
+        except ValueError as ошибка:
+            print(f"[BLOCKED_INPUT] {путь.name} не читается как JSON: {ошибка}")
+            return 1
+
+    проблемы: list[str] = []
+    try:
+        for профиль in профили:
+            проблемы.extend(publisher_policy.проблемы_профиля(профиль, root=корень))
+        проблемы.extend(publisher_policy.столкновения_доменов(профили))
+        проблемы.extend(_пары_семейств_существуют(корень, publisher_policy))
+    except publisher_policy.PublisherIdОтклонён as отказ:
+        print(f"[BLOCKED_INPUT] политика недоступна: {отказ}")
+        return 1
+
+    источник = publisher_policy.POLICY_REF
+    if проблемы:
+        print(f"Publisher ID: РАСХОЖДЕНИЕ ({источник}), профилей проверено: {len(профили)}")
+        for проблема in проблемы:
+            print(f"  - {проблема}")
+        return 1
+
+    ведомые = ", ".join(sorted(publisher_policy.семейства(root=корень)))
+    print(f"Publisher ID: OK ({источник}), профилей проверено: {len(профили)}, "
+          f"семейства под политикой: {ведомые}")
+    return 0
+
+
+def cmd_publisher_ids(args) -> int:
+    return проверить_publisher_ids(getattr(args, "root", None))
+
+
 def cmd_selfcheck(args) -> int:
     problems: list[str] = []
     claude_md = PATHS.root / "CLAUDE.md"
@@ -942,6 +1020,10 @@ def main(argv: list[str] | None = None) -> int:
     p.set_defaults(func=cmd_env_report)
     p = sub.add_parser("input-request", help="сформировать пакет недостающих данных")
     p.set_defaults(func=cmd_input_request)
+    p = sub.add_parser("publisher-ids",
+                       help="релизная проверка: Publisher ID семейств против config/publisher-ids.yaml")
+    p.add_argument("--root", default=None, help="корень проверяемой копии (по умолчанию — репозиторий)")
+    p.set_defaults(func=cmd_publisher_ids)
     p = sub.add_parser("selfcheck", help="самопроверка конфигурации Claude Code")
     p.add_argument("what", nargs="?", default="claude-config")
     p.set_defaults(func=cmd_selfcheck)

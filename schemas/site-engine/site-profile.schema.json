@@ -33,6 +33,37 @@
       "type": "string",
       "pattern": "^[a-z][a-z0-9-]{1,40}$"
     },
+    "family": {
+      "description": "Семейство витрин. Ядро его не интерпретирует: имя семейства — ключ в config/publisher-ids.yaml, а не значение, зашитое в код. Сайт без семейства политикой Publisher ID не ведётся.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{1,30}$"
+    },
+    "player": {
+      "description": "Привязка витрины к паре учётных данных провайдера. Значение Publisher ID здесь не хранится: оно живёт в Secret Hub, а профиль несёт только ссылку. Поле publisher_id допускается как ожидание и сверяется с config/publisher-ids.yaml.",
+      "type": "object",
+      "required": ["provider", "credential_profile", "publisher_id_ref"],
+      "additionalProperties": false,
+      "properties": {
+        "provider": { "type": "string" },
+        "credential_profile": { "type": "string" },
+        "publisher_id_ref": {
+          "description": "Ссылка на пару в Secret Hub. Значение в git не попадает.",
+          "type": "string",
+          "pattern": "^secret://"
+        },
+        "publisher_id": {
+          "description": "Ожидаемый публичный идентификатор издателя. Не credential: рендерер печатает его в разметку атрибутом data-publisher-id. Сверяется с семейным значением политики.",
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "sidecar": { "type": "string" },
+        "note": { "type": "string" },
+        "source_mode": {
+          "type": "string",
+          "enum": ["external-ids", "provider-id"]
+        }
+      }
+    },
     "cms_contract": {
       "type": "string",
       "pattern": "^\\d+\\.\\d+(\\.\\d+)?$",

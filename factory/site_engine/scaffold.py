@@ -10,8 +10,10 @@
 """
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
+from factory.site_engine import publisher_policy
 from factory.site_engine.contracts import ContractError
 
 SCHEMA_VERSION = "1.0"
@@ -40,6 +42,71 @@ BASE_MODULES = ("site-configuration", "cache-invalidation", "monitoring-audit",
                 "renderer-adapters")
 
 
+def _привязка_плеера(
+    *,
+    site_id: str,
+    domain: str,
+    family: str | None,
+    publisher_id: str | None,
+    root: Path | str | None,
+) -> dict[str, Any]:
+    """Семейство и блок плеера из единого источника.
+
+    Ни имя семейства, ни его значение здесь не зашиты: и то и другое читается
+    из config/publisher-ids.yaml. Зашить их означало бы завести второе мнение о
+    правилах — а расходятся два мнения молча.
+
+    Сайт без семейства получает профиль как прежде: Lords, Yummy и всё, что не
+    ведётся политикой, эта функция не касается.
+    """
+    закреплено = publisher_policy.семейство_домена(domain, root=root)
+    if family is None:
+        family = закреплено
+    elif закреплено and закреплено != family:
+        raise ContractError(
+            f"{site_id}: домен {domain} закреплён за семейством {закреплено!r}, "
+            f"а заводится под {family!r}"
+        )
+
+    if family is None:
+        if publisher_id is not None:
+            raise ContractError(
+                f"{site_id}: Publisher ID указан, но семейство не названо — "
+                "проверить принадлежность значения не с чем"
+            )
+        return {}
+
+    ожидаемый = publisher_policy.ожидаемый(family, root=root)
+    if ожидаемый is None:
+        # Выдумать значение неназванного семейства нельзя: пустое поле — это
+        # отказ, а не разрешение подставить умолчание.
+        raise ContractError(
+            f"{site_id}: семейство {family!r} не описано в "
+            f"{publisher_policy.POLICY_REF} — значения для него не существует"
+        )
+
+    if publisher_id is not None:
+        # Отказ политики — это отказ контракта генератора: заводящий сайт читает
+        # один тип ошибки, а не два в зависимости от того, что именно не сошлось.
+        try:
+            publisher_policy.проверить(site_id, family, publisher_id, root=root)
+        except publisher_policy.PublisherIdОтклонён as отказ:
+            raise ContractError(str(отказ)) from отказ
+
+    описание = publisher_policy.загрузить(root).семейства[family]
+    пара = описание.credential_profile
+    return {
+        "family": family,
+        "player": {
+            "provider": "cdnvideohub",
+            "credential_profile": пара,
+            "publisher_id_ref": f"secret://cdnvideohub/{пара}/publisher-id",
+            "source_mode": "provider-id",
+            **({"publisher_id": publisher_id} if publisher_id is not None else {}),
+        },
+    }
+
+
 def scaffold_profile(
     *,
     site_id: str,
@@ -63,6 +130,9 @@ def scaffold_profile(
     feature_flags: dict[str, Any] | None = None,
     seo_enabled: bool = True,
     indexing_enabled: bool = False,
+    family: str | None = None,
+    publisher_id: str | None = None,
+    root: Path | str | None = None,
 ) -> dict[str, Any]:
     """Профиль нового сайта.
 
@@ -88,11 +158,17 @@ def scaffold_profile(
             f"{site_id}: объявлен provider-adapters, но сайт к поставщику не ходит"
         )
 
+    блок_плеера = _привязка_плеера(
+        site_id=site_id, domain=domain, family=family,
+        publisher_id=publisher_id, root=root,
+    )
+
     return {
         "schema_version": SCHEMA_VERSION,
         "site_id": site_id,
         "site_type": site_type,
         "domains": [domain],
+        **блок_плеера,
         "locale": locale,
         "timezone": timezone,
         "theme": {"name": theme},

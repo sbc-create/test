@@ -23,6 +23,8 @@ from pathlib import Path
 
 import jsonschema
 
+from factory.site_engine import publisher_policy
+
 SCHEMA_DIR = "schemas/site-engine"
 PROFILE_DIR = "config/site-profiles"
 
@@ -145,6 +147,16 @@ def check_profile(profile: dict, root: Path) -> GateResult:
     for problem in _find_secrets(profile):
         result.fail(problem)
 
+    # 2a. Принадлежность Publisher ID семейству. Проверка намеренно не зависит
+    # от исхода схемы: профиль может не пройти её по совершенно другой причине,
+    # и терять из-за этого сообщение о чужом идентификаторе нельзя — именно его
+    # читает человек, заводящий сайт.
+    try:
+        for problem in publisher_policy.проблемы_профиля(profile, root):
+            result.fail(problem)
+    except publisher_policy.PublisherIdОтклонён as error:
+        result.fail(f"политика Publisher ID недоступна: {error}")
+
     # 3. Стратегия рендера и политика кэша.
     if not (profile.get("render_strategy") or {}).get("mode"):
         result.fail("не задана стратегия рендера")
@@ -251,9 +263,14 @@ def check_core_neutrality(root: Path, core_paths: tuple[str, ...]) -> list[str]:
 def run(root: Path | str = ".") -> tuple[bool, list[GateResult], list[str]]:
     root = Path(root)
     results = []
+    profiles = []
     for path in sorted((root / PROFILE_DIR).glob("*.json")):
         profile = json.loads(path.read_text(encoding="utf-8"))
+        profiles.append(profile)
         results.append(check_profile(profile, root))
     core = check_core_neutrality(root, ("factory/site_engine",))
+    # Один домен — один тенант. Проверка межпрофильная и потому живёт здесь:
+    # по одному профилю столкновение не видно в принципе.
+    core = core + publisher_policy.столкновения_доменов(profiles)
     ok = all(r.passed for r in results) and not core
     return ok, results, core
