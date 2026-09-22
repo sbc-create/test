@@ -33,9 +33,16 @@ from dataclasses import dataclass
 from pathlib import Path
 
 ЛОГОВО = Path("/srv/lords/.frontend")
-ПРОФИЛИ_ВИТРИН = Path("/srv/site-factory/repo/config/site-profiles")
+#: Корень рабочей копии. Переопределяется для прогона операции из worktree:
+#: иначе проверка семейства читала бы ожидания одной копии, а профили другой.
+КОРЕНЬ_РЕПО = Path(os.environ.get("NOVA_REPO_ROOT") or "/srv/site-factory/repo")
+ПРОФИЛИ_ВИТРИН = КОРЕНЬ_РЕПО / "config/site-profiles"
 ОБРАЗЕЦ = ЛОГОВО / "player-lords-01.json"
 ПЛЕЙЛИСТ = "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist"
+
+if str(КОРЕНЬ_РЕПО) not in sys.path:
+    sys.path.insert(0, str(КОРЕНЬ_РЕПО))
+from factory.site_engine import publisher_policy as публикация  # noqa: E402
 
 #: Профили учётных данных. Значения живут только в этих файлах и наружу не выходят.
 ПРОФИЛИ = {
@@ -83,6 +90,13 @@ def издатель(цель: Цель) -> str:
     # Плеер вызывает Number(publisherId): нечисловое даёт NaN и 400 от провайдера.
     if not значение.isdigit() or значение.startswith("0"):
         raise SystemExit(f"{цель.сайт}: Publisher ID профиля {цель.профиль} непригоден")
+    # Пара профиля прочитана — но принадлежит ли она семейству этой витрины,
+    # файл пары не знает. Без этой сверки витрина, которой досталась пара
+    # другого семейства, ответит 200 и покажет чужой каталог: плеер исправен,
+    # страница исправна, дорожки чужие. Семейства вне config/publisher-ids.yaml
+    # (Lords, Yummy и прочие) политика пропускает без изменения поведения.
+    семейство = публикация.семейство_витрины(цель.сайт, root=КОРЕНЬ_РЕПО)
+    публикация.проверить(цель.сайт, семейство, значение, root=КОРЕНЬ_РЕПО)
     return значение
 
 
@@ -303,6 +317,43 @@ def применить(цель: Цель, сколько: int) -> dict:
             "checked": len(строки), "player_working": ок, "rows": строки}
 
 
+def сверить(цель: Цель, сколько: int) -> dict:
+    """Проверка без единой мутации: ни записи, ни перезапуска.
+
+    Нужна отдельно от `применить`, потому что применение перезапускает юнит.
+    Когда боковой файл уже несёт требуемое значение, перезапуск — это простой
+    витрины ради доказательства того, что и так верно. Значение здесь читается
+    из бокового файла, а не из пары профиля: root не нужен, и секрет не
+    открывается ради проверки.
+    """
+    путь = боковой_файл(цель)
+    try:
+        боковой = json.loads(путь.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as e:
+        return {"site": цель.сайт, "domain": цель.домен, "status": "NO_SIDECAR",
+                "reason": str(e), "sidecar": str(путь)}
+
+    pub = str(боковой.get("publisher_id") or "").strip()
+    семейство = публикация.семейство_витрины(цель.сайт, root=КОРЕНЬ_РЕПО)
+    try:
+        публикация.проверить(цель.сайт, семейство, pub, root=КОРЕНЬ_РЕПО)
+    except публикация.PublisherIdОтклонён as e:
+        return {"site": цель.сайт, "domain": цель.домен, "status": "PUBLISHER_ID_REJECTED",
+                "family": семейство, "reason": str(e)}
+
+    ожидание = публикация.ожидаемый(семейство, root=КОРЕНЬ_РЕПО)
+    ок, плохо, строки = проверить(цель, pub, сколько)
+    return {
+        "site": цель.сайт, "domain": цель.домен, "family": семейство,
+        "publisher_id": pub, "publisher_id_expected": ожидание,
+        "publisher_id_matches": (ожидание is None or pub == ожидание),
+        "source_mode": боковой.get("source_mode"),
+        "checked": len(строки), "player_working": ок, "bad": плохо,
+        "status": "VERIFIED" if (ок >= 1 and плохо == 0) else "VERIFY_FAILED",
+        "rows": строки,
+    }
+
+
 def откатить(цель: Цель) -> dict:
     путь = боковой_файл(цель)
     было = путь.exists()
@@ -317,6 +368,8 @@ def главная() -> int:
                    help="через запятую: " + ", ".join(sorted(ЦЕЛИ)))
     р.add_argument("--apply", action="store_true", help="без него — только план")
     р.add_argument("--rollback", action="store_true", help="снять привязку плеера")
+    р.add_argument("--verify", action="store_true",
+                   help="только проверка живьём: без записи и без перезапуска")
     р.add_argument("--checks", type=int, default=5, help="сколько карточек проверить")
     а = р.parse_args()
 
@@ -326,7 +379,9 @@ def главная() -> int:
         print(json.dumps({"error": "target not allowed", "sites": чужие},
                          ensure_ascii=False))
         return 2
-    if os.geteuid() != 0:
+    # Проверке root не нужен: она читает боковой файл витрины, а не пару профиля.
+    # Требовать его здесь значило бы просить лишних прав ради чтения.
+    if os.geteuid() != 0 and not а.verify:
         print(json.dumps({"error": "нужен root: Publisher ID читается из защищённого файла"},
                          ensure_ascii=False))
         return 2
@@ -336,6 +391,8 @@ def главная() -> int:
         ц = ЦЕЛИ[имя]
         if а.rollback:
             итог.append(откатить(ц))
+        elif а.verify:
+            итог.append(сверить(ц, а.checks))
         elif а.apply:
             итог.append(применить(ц, а.checks))
         else:
@@ -343,7 +400,8 @@ def главная() -> int:
                          "profile": ц.профиль, "sidecar": str(боковой_файл(ц)),
                          "source_mode": режим_источника(ц), "status": "PLANNED"})
     print(json.dumps(итог, ensure_ascii=False, indent=1))
-    плохо = [с for с in итог if с.get("status") == "ROLLED_BACK"]
+    неудача = {"ROLLED_BACK", "VERIFY_FAILED", "PUBLISHER_ID_REJECTED", "NO_SIDECAR"}
+    плохо = [с for с in итог if с.get("status") in неудача]
     return 1 if плохо else 0
 
 
