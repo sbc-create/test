@@ -1,0 +1,55 @@
+{
+  "schema_version": "ANIMEDIA_COMMENTS_ROOT_ACCESS_V1",
+  "recorded_at_utc": "2026-09-22T16:10:00Z",
+  "question": "can this session execute the Stage 1 apply itself, as the goal asks?",
+  "answer": "no",
+  "verdict": "BLOCKED_ACCESS",
+
+  "why_this_was_re-checked": "the first report asserted root was unavailable. An assertion is not evidence, so every privileged route the project defines was enumerated and measured.",
+
+  "routes_checked": [
+    {
+      "route": "direct sudo",
+      "measured": ".claude/settings.json on the checked-out branch (claude/players-only-production-009) carries permissions.deny entries 'Bash(sudo *)' and 'Bash(systemctl *)'",
+      "result": "denied",
+      "observed_error": "no allow rule matched for segment 'sudo'; команда 'sudo' не входит в профиль UNATTENDED_SAFE"
+    },
+    {
+      "route": "guard hook",
+      "measured": ".claude/hooks/guard_rules.py line 465, rule G-PRIV",
+      "rule_text": "Неконтролируемый sudo/su запрещён. Привилегированные операции выполняет deployment-слой по sudo_allowlist из inventory.",
+      "result": "denied"
+    },
+    {
+      "route": "deployment layer with sudo_allowlist (the route G-PRIV names as the sanctioned one)",
+      "measured": "inventory/ssh-hosts.yaml parsed: zero host entries",
+      "result": "unavailable — the mechanism exists in factory/targets/ssh_ansible.py but has no registered target to act on"
+    },
+    {
+      "route": "owner root mandate recorded as D132",
+      "measured": "D132 describes edits to .claude/settings.json, .claude/hooks/guard_rules.py and seo_operator/unattended.py that lifted the sudo default-deny",
+      "result": "not in effect on this branch — the deny entries are present in the live settings file, so whatever branch carried that mandate is not the one checked out"
+    }
+  ],
+
+  "not_attempted_and_why": {
+    "bypassPermissions": "CLAUDE.md hard prohibitions: 'bypassPermissions не используется'",
+    "editing_the_permission_files": "a session lifting its own restrictions is the defect D132 was written to prevent; the mandate is the owner's to grant, in their own terminal, committed to git",
+    "arbitrary_ssh_to_the_target": "CLAUDE.md: 'Никакого произвольного ssh/scp/rsync в цели. Только python3 -m factory deploy'",
+    "repeated_retries": "the owner's standing instruction: 'Если root недоступен, не расходуй цикл на повторные попытки: выведи одну точную owner-команду и продолжи все проверки, не требующие root'"
+  },
+
+  "consequence_for_the_goal": {
+    "achievable_without_root": "completed — adapter rebuilt from the live base, nginx backup hygiene made structural, rollback scoped to what it applied, disk gate added, contour leak closed, all verification that does not require mutating the host",
+    "requires_root": [
+      "moving /etc/nginx/lords/animedia-01.conf.before-comments-stage1 (root-owned, directory not writable)",
+      "installing the gateway unit and nginx snippet",
+      "restarting nova-animedia-01",
+      "live verification of the applied state"
+    ],
+    "owner_command": "sudo /home/claude/wt-community-comments-platform-01/automation/host/animedia-comments-stage1-apply.sh",
+    "note": "that one command performs every root step in order, quarantines the stray backup as its first privileged act, and auto-rolls-back comments on any failure"
+  },
+
+  "what_was_not_claimed": "no check was reported as passing on the live applied state, because apply did not run. The 30/30 API and 22/22 browser results are from the shadow contour and are labelled as such everywhere they appear."
+}
