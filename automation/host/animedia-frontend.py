@@ -1796,6 +1796,37 @@ align-items:flex-start;gap:6px;pointer-events:none;z-index:2;flex-wrap:wrap;max-
 .zt__eps{background:#fff;color:var(--a-acc);font-size:11px;font-weight:700;line-height:1;
 padding:5px 7px;border-radius:6px;box-shadow:var(--a-shadow-soft);white-space:nowrap;
 max-width:100%;overflow-wrap:anywhere}
+/* Списки посетителя на странице произведения: строка кнопок, выбранная
+   подсвечена. Повторное нажатие снимает выбор — у кнопки, которая умеет
+   только добавлять, нет обратного хода. */
+.acomm__lists{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 16px}
+.acomm__lists-lab{color:var(--a-dim);font-size:13px;margin-right:2px}
+.acomm__list{display:inline-flex;align-items:center;min-height:38px;padding:0 14px;
+border:1px solid var(--a-line);border-radius:999px;background:var(--a-card);
+color:var(--a-ink);font:inherit;font-size:14px;cursor:pointer}
+.acomm__list:hover{border-color:var(--a-acc);color:var(--a-acc)}
+.acomm__list.is-on{background:var(--a-acc);border-color:var(--a-acc);color:#fff}
+.acomm__list:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
+/* Состав сводной — в раскрытии, а не столбиком поверх первого экрана. */
+.ztitle__ourvotes{margin:8px 0 10px;color:var(--a-dim);font-size:13px}
+.ztitle__ourvotes b{color:var(--a-ink);font-size:15px}
+.ztitle__more{margin:0}
+.ztitle__more summary{cursor:pointer;color:var(--a-acc);font-size:13px;
+list-style:none;min-height:32px;display:inline-flex;align-items:center}
+.ztitle__more summary::-webkit-details-marker{display:none}
+.ztitle__more summary::after{content:" \25BE";font-size:11px}
+.ztitle__more[open] summary::after{content:" \25B4"}
+.ztitle__more summary:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
+.ztitle__method{margin:8px 0 10px;color:var(--a-dim);font-size:12px;line-height:1.45}
+.ztitle__score-val--none{color:var(--a-mute)}
+/* Боковая лента новых серий на внутренних страницах. */
+.awrap-side{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px;
+align-items:start}
+.aside-eps{position:sticky;top:104px;margin:0}
+@media(max-width:1023px){
+  .awrap-side{grid-template-columns:minmax(0,1fr)}
+  .aside-eps{position:static}
+}
 /* Крупный поиск на главной. Красный здесь — тонкая рамка и кнопка, а не
    заливка во весь экран: большая красная плоскость съедает первый экран и
    ничего не сообщает. Поле высокое, потому что в него целятся пальцем. */
@@ -4214,13 +4245,30 @@ class ВидОснова(Вид):
                 f'<section class="zsec acomm acomm--off" data-community="unavailable" '
                 f'data-community-reason="{html.escape(причина[:120])}">'
                 f'<h2 class="zh zh--sm">Оценки и обсуждение</h2>'
-                f'<p class="acomm__off">Раздел выключен: хранилище сообщества '
-                f'недоступно. Пока оно не подключено, витрина не показывает ни '
-                f'оценок посетителей, ни обсуждения — и не подставляет вместо '
-                f'них выдуманные.</p>'
-                f'<p class="acomm__why"><code>{html.escape(причина[:160])}</code></p>'
+                f'<p class="acomm__off">Сейчас нельзя оставить оценку или '
+                f'сообщение. Придуманных вместо них здесь не будет: как только '
+                f'раздел заработает, тут появятся настоящие отзывы '
+                f'посетителей.</p>'
                 f'</section>')
         с = хранилище.состояние(slug, self._ключ_посетителя())
+        # --- списки посетителя ---
+        # Кнопка «в список» стоит первой: это самое частое действие на
+        # странице произведения, и ради него не нужно ни регистрации, ни
+        # выдуманной учётной записи.
+        кнопки_списков = "".join(
+            f'<button class="acomm__list{" is-on" if с.мой_список == ключ else ""}" '
+            f'type="submit" name="list" value="{ключ if с.мой_список != ключ else ""}" '
+            f'aria-pressed="{"true" if с.мой_список == ключ else "false"}">'
+            f'{html.escape(подпись)}</button>'
+            for ключ, подпись in СООБЩЕСТВО.СПИСКИ)
+        блок_списков = (
+            f'<form class="acomm__lists" method="post" action="/community/list" '
+            f'data-lists-widget="1" '
+            f'data-my-list="{html.escape(с.мой_список or "")}">'
+            f'<input type="hidden" name="slug" value="{html.escape(slug)}">'
+            f'<input type="hidden" name="back" value="{html.escape(путь)}">'
+            f'<span class="acomm__lists-lab">В список:</span>{кнопки_списков}'
+            f'</form>')
         # --- голосование ---
         кнопки = "".join(
             f'<button class="acomm__vote{" is-on" if с.мой_голос == n else ""}" '
@@ -4280,9 +4328,10 @@ class ВидОснова(Вид):
         return (
             f'<section class="zsec acomm" data-community="on" '
             f'data-community-votes="{с.голосов}" '
-            f'data-community-comments="{len(с.комментарии)}">'
+            f'data-community-comments="{len(с.комментарии)}" '
+            f'data-my-list="{html.escape(с.мой_список or "")}">'
             f'<h2 class="zh zh--sm">Оценки и обсуждение</h2>'
-            f'{голосование}{блок_реакций}'
+            f'{блок_списков}{голосование}{блок_реакций}'
             f'<div class="acomm__list-wrap">{список_сообщений}</div>'
             f'{форма}</section>')
 
@@ -5444,10 +5493,20 @@ class ВидАнимедиа(ВидОснова):
                 f'<span class="zr__m">{html.escape(мета)}</span></span>'
                 f'{badge}</a>')
 
-    def _рейтинги_колонка_b07(self, деталь: dict) -> str:
-        """Independent source ratings: label always visible; missing ≠ 0."""
+    def _рейтинги_колонка_b07(self, деталь: dict, slug: str = "") -> str:
+        """Оценка произведения: крупная сводная, состав — в раскрытии.
+
+        Прежде колонка перечисляла источники столбиком, и посетитель первым
+        делом читал три чужих названия, а не ответ на свой вопрос. Теперь
+        первым идёт одно число и то, из чего оно сложилось: сколько
+        источников и сколько голосов оставили посетители этой витрины. Состав
+        никуда не делся — он в раскрытии «Подробнее», где ему и место.
+
+        Голоса посетителей стоят рядом, но в сводную не входят: смешивать
+        внешнюю оценку с оценкой своей аудитории — значит получить число, о
+        котором нельзя сказать, что оно означает.
+        """
         by_key = {о["ключ"]: о for о in оценки_по_источникам(деталь)}
-        # Fixed order; never invent a primary mega-score without policy.
         order = (
             ("shikimori", "Shikimori"),
             ("kp", "Кинопоиск"),
@@ -5468,30 +5527,53 @@ class ВидАнимедиа(ВидОснова):
                     f'<span class="lab">{html.escape(label)}</span>'
                     f'<span class="val" data-missing="1">—</span></li>'
                 )
+        свои_голоса = 0
+        свои_средняя = None
+        хранилище = сообщество()
+        if slug and хранилище is not None and getattr(хранилище, "доступно", False):
+            с = хранилище.состояние(slug)
+            свои_голоса = int(с.голосов or 0)
+            свои_средняя = с.средняя
         сводная = сводная_оценка(деталь)
-        шапка = ""
         if сводная:
-            состав = ", ".join(
-                f'{к["подпись"]} {к["значение"]}'
-                + (f' ({к["голоса"]})' if к["голоса"] else "")
-                for к in сводная["компоненты"])
-            шапка = (
-                f'<div class="ztitle__score" data-aggregate="1"'
+            подписи = {1: "источник", 2: "источника", 3: "источника", 4: "источника"}
+            число = (f'<span class="ztitle__score-val">'
+                     f'{html.escape(сводная["значение"])}</span>')
+            строка = (f'{АНИМЕДИА_СВОДНАЯ_ПОДПИСЬ} · {сводная["источников"]} '
+                      f'{подписи.get(сводная["источников"], "источников")}')
+            атрибуты = (
+                ' data-aggregate="1"'
                 f' data-aggregate-method="{html.escape(сводная["методика"])}"'
                 f' data-aggregate-sources="{сводная["источников"]}"'
                 + (f' data-aggregate-votes="{сводная["всего_голосов"]}"'
-                   if сводная["всего_голосов"] else "")
-                + f' title="{html.escape(АНИМЕДИА_СВОДНАЯ_ПОДПИСЬ)}: '
-                  f'{html.escape(состав)}">'
-                f'<span class="ztitle__score-val">{html.escape(сводная["значение"])}</span>'
-                f'<span class="ztitle__score-lab">{html.escape(АНИМЕДИА_СВОДНАЯ_ПОДПИСЬ)}'
-                f' · {сводная["источников"]} '
-                f'{"источник" if сводная["источников"] == 1 else "источника"}</span>'
-                f'</div>')
+                   if сводная["всего_голосов"] else ""))
+        else:
+            число = (f'<span class="ztitle__score-val ztitle__score-val--none">'
+                     f'{АНИМЕДИА_ОЦЕНКА_НЕТ}</span>')
+            строка = "Оценка появится, когда придут данные"
+            атрибуты = ' data-aggregate="0" data-aggregate-sources="0"'
+        if свои_голоса:
+            слово = ("голос" if свои_голоса % 10 == 1 and свои_голоса % 100 != 11
+                     else "голосов")
+            своя_строка = (
+                f'<p class="ztitle__ourvotes" data-our-votes="{свои_голоса}"'
+                f' data-our-average="{свои_средняя}">'
+                f'Посетители: <b>{свои_средняя}</b> · {свои_голоса} {слово}</p>')
+        else:
+            своя_строка = ('<p class="ztitle__ourvotes" data-our-votes="0">'
+                           'Посетители ещё не голосовали</p>')
         return (
             f'<aside class="ztitle__rail" data-b07="ratings">'
-            f'{шапка}'
-            f'<ul class="ztitle__rail-ratings">{"".join(items)}</ul></aside>'
+            f'<div class="ztitle__score"{атрибуты}>{число}'
+            f'<span class="ztitle__score-lab">{html.escape(строка)}</span></div>'
+            f'{своя_строка}'
+            f'<details class="ztitle__more" data-rating-details="1">'
+            f'<summary>Подробнее</summary>'
+            f'<p class="ztitle__method">Сводная считается по подтверждённым '
+            f'источникам с весом по числу голосов. Оценки посетителей витрины '
+            f'в неё не входят.</p>'
+            f'<ul class="ztitle__rail-ratings">{"".join(items)}</ul>'
+            f'</details></aside>'
         )
 
     def тайтл(self, запись: dict, деталь: dict) -> str:
@@ -5524,7 +5606,7 @@ class ВидАнимедиа(ВидОснова):
                 '<div class="ztitle__desc-panel" data-b07-desc="gap">'
                 '<p class="ztitle__desc ztitle__desc--gap">'
                 'Описание пока не передано источником</p></div>')
-        rail = self._рейтинги_колонка_b07(деталь)
+        rail = self._рейтинги_колонка_b07(деталь, запись.get("slug") or "")
         orig = html.escape(str(деталь.get("original_name") or деталь.get("original_title") or ""))
         orig_html = f'<p class="ztitle__o">{orig}</p>' if orig else ""
         pills = ""
@@ -6282,14 +6364,22 @@ class ВидАнимедиа(ВидОснова):
             facet = f' data-catalog-facet="year:{html.escape(str(выбрано["year"]))}"'
         elif выбрано.get("type"):
             facet = f' data-catalog-facet="type:{html.escape(str(выбрано["type"]))}"'
+        # Боковая лента серий: посетитель каталога не должен уходить на
+        # главную, чтобы узнать, что сейчас выходит.
+        сбоку = self._блок_сейчас_выходит(сбоку=True)
+        основное = (
+            f'<h1 class="zh">{html.escape(титул)}</h1>'
+            f'<p class="zsub" data-b11-count="1">Найдено {len(набор)} · {pages_label}</p>'
+            + фильтры
+            + (self.плитки(кусок) if кусок else
+               '<div class="zempty" data-b11-empty="1"><b>Ничего не подошло</b>'
+               "<p>Под выбранные условия не попала ни одна запись. "
+               f'<a href="{разд}/">Сбросить фильтры</a>.</p></div>')
+            + (self.листалка(разд, выбрано, стр, всего) if всего > 1 else ""))
         тело = (f'<div class="zwrap zwrap--catalog" data-b11="catalog"{facet}>'
-                f'<h1 class="zh">{html.escape(титул)}</h1>'
-                f'<p class="zsub" data-b11-count="1">Найдено {len(набор)} · {pages_label}</p>'
-                + фильтры
-                + (self.плитки(кусок) if кусок else
-                   '<div class="zempty" data-b11-empty="1"><b>Ничего не подошло</b>'
-                   "<p>Под выбранные условия не попала ни одна запись.</p></div>")
-                + (self.листалка(разд, выбрано, стр, всего) if всего > 1 else "")
+                + (f'<div class="awrap-side"><div>{основное}</div>'
+                   f'<div class="awrap-side__a">{сбоку}</div></div>'
+                   if сбоку else основное)
                 + "</div>")
         канон = разд + "/" + (запрос_строкой(выбрано, page=None) if any(
             выбрано.get(k) for k in ("genre", "year", "kind", "country", "type", "sort")) else "")
