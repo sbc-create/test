@@ -1,0 +1,44 @@
+{
+  "anilist": {
+    "requested": 64,
+    "received": 0,
+    "exact_match": 0,
+    "pending_match": 0,
+    "rejected": 0,
+    "inserted": 0,
+    "updated": 0,
+    "unchanged": 0,
+    "not_found": 59,
+    "failed": 5,
+    "rate_limited": 0,
+    "retries": 0
+  },
+  "kitsu": {
+    "requested": 121,
+    "received": 0,
+    "exact_match": 0,
+    "pending_match": 0,
+    "rejected": 0,
+    "inserted": 0,
+    "updated": 0,
+    "unchanged": 0,
+    "not_found": 121,
+    "failed": 0,
+    "rate_limited": 0,
+    "retries": 0
+  },
+  "shikimori": {
+    "requested": 6,
+    "received": 0,
+    "exact_match": 0,
+    "pending_match": 0,
+    "rejected": 0,
+    "inserted": 0,
+    "updated": 0,
+    "unchanged": 0,
+    "not_found": 6,
+    "failed": 0,
+    "rate_limited": 0,
+    "retries": 0
+  }
+}

@@ -310,6 +310,54 @@ PROVIDER_FEED_KINOPOISK = SourceDefinition(
 )
 
 
+AMD_ONLINE_SCALE = SourceScaleContract(
+    source_key="amd_online",
+    source_scale_min=Decimal(0),
+    source_scale_max=Decimal(10),
+    formula=FormulaId.IDENTITY_0_10,
+    measures="общая пользовательская оценка AMD Online",
+    raw_field="multirating-itog-rateval",
+    verified=True,
+    verified_evidence=(
+        "живой разбор 2026-09-22: multirating-itog-rateval=9.67 при "
+        "multirating-itog-votes=(583); шкала подписана на странице как 1–10"
+    ),
+    vote_count_field="multirating-itog-votes",
+    notes=(
+        "покритериальные оценки (Сюжет, Персонажи, Рисовка, Озвучка) "
+        "подписаны атрибутом title и хранятся отдельными dimensions; "
+        "в общую оценку произведения они не входят"
+    ),
+)
+
+AMD_ONLINE = SourceDefinition(
+    source_key="amd_online",
+    display_name="AMD Online (публичные страницы)",
+    ui_label="AMD Online",
+    adapter_version="amd_online_public_html/2.0.0",
+    # Честное имя способа доступа. Ни API, ни фида, ни письменного
+    # разрешения у источника нет, и называть его иначе — записать в
+    # provenance неправду.
+    access_method=AccessMethod.PUBLIC_PAGE_PARSE,
+    status=SourceStatus.READY,
+    scale=AMD_ONLINE_SCALE,
+    documented_rate_limit="лимит не объявлен; собственный потолок — 1 запрос в секунду",
+    max_rps=1.0,
+    max_requests_per_minute=60,
+    requires_credential=False,
+    legal_basis=(
+        "указание владельца от 2026-09-22 подключить источник через публичные "
+        "страницы с соблюдением robots.txt; официального разрешения сайта нет"
+    ),
+    blocker=(
+        "robots.txt закрывает пагинацию (Disallow */page/*), поэтому раздел "
+        "онгоингов целиком не листается: перечисление идёт через sitemap"
+    ),
+    not_a_rating=("Сюжет", "Персонажи", "Рисовка", "Озвучка"),
+    notes="AMD_ONLINE_PUBLIC_HTML: разбор публичных карточек, 1 запрос в секунду",
+)
+
+
 REGISTRY: dict[str, SourceDefinition] = {
     s.source_key: s
     for s in (
@@ -317,6 +365,7 @@ REGISTRY: dict[str, SourceDefinition] = {
         KITSU,
         SIMKL,
         SHIKIMORI,
+        AMD_ONLINE,
         PROVIDER_FEED_IMDB,
         PROVIDER_FEED_KINOPOISK,
     )
@@ -329,6 +378,7 @@ EXTERNAL_DISPLAY_ORDER: tuple[str, ...] = (
     "simkl",
     "kitsu",
     "shikimori",
+    "amd_online",
     "provider_feed_imdb",
     "provider_feed_kinopoisk",
 )

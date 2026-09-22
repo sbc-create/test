@@ -417,6 +417,75 @@ def match(
     )
 
 
+def match_by_facts(
+    ours: TitleFacts, candidates: list[TitleFacts]
+) -> MatchDecision:
+    """Сопоставление для источника без общего идентификатора.
+
+    Для AMD Online внешнего ключа к нашему каталогу не существует, и
+    владелец разрешил принимать связь по нормализованному названию
+    вместе с годом и типом. Порог здесь не «похоже», а **точное
+    совпадение нормализованного названия**: fuzzy-близость 0.95 на
+    франшизах срабатывает между соседними сезонами, и один такой
+    автоматический приём стоит дороже сотни записей в очереди.
+
+    Приём возможен только когда ровно один кандидат удовлетворяет всем
+    условиям сразу. Два одинаково подходящих — это неоднозначность, а не
+    выбор.
+    """
+    if not candidates:
+        return MatchDecision(
+            status=MatchStatus.REJECTED,
+            method=MatchMethod.NONE,
+            confidence=0.0,
+            detail="в каталоге нет кандидатов с таким названием",
+        )
+
+    our_names = {normalize_title(t) for t in ours.all_titles if t}
+    accepted: list[TitleFacts] = []
+    blocked: list[QuarantineReason] = []
+    for candidate in candidates:
+        problems = disagreements(ours, candidate)
+        if problems:
+            blocked.extend(problems)
+            continue
+        if ours.year is None or candidate.year is None:
+            blocked.append(QuarantineReason.INSUFFICIENT_CONFIDENCE)
+            continue
+        their_names = {normalize_title(t) for t in candidate.all_titles if t}
+        if not (our_names & their_names):
+            blocked.append(QuarantineReason.INSUFFICIENT_CONFIDENCE)
+            continue
+        accepted.append(candidate)
+
+    if len(accepted) == 1:
+        return MatchDecision(
+            status=MatchStatus.REVIEWED,
+            method=MatchMethod.ORIGINAL_TITLE_YEAR_KIND,
+            confidence=1.0,
+            external_id=accepted[0].title_id,
+            detail="точное совпадение нормализованного названия, года и типа",
+            candidates=(_describe(accepted[0]),),
+        )
+    if len(accepted) > 1:
+        return MatchDecision(
+            status=MatchStatus.PENDING,
+            method=MatchMethod.FUZZY_CANDIDATE,
+            confidence=0.0,
+            reasons=(QuarantineReason.MULTIPLE_EQUAL_CANDIDATES,),
+            detail=f"{len(accepted)} кандидата с тем же названием, годом и типом",
+            candidates=tuple(_describe(c) for c in accepted[:5]),
+        )
+    return MatchDecision(
+        status=MatchStatus.PENDING,
+        method=MatchMethod.FUZZY_CANDIDATE,
+        confidence=0.0,
+        reasons=tuple(dict.fromkeys(blocked)) or (QuarantineReason.INSUFFICIENT_CONFIDENCE,),
+        detail="ни один кандидат не подтверждён названием, годом и типом одновременно",
+        candidates=tuple(_describe(c) for c in candidates[:5]),
+    )
+
+
 def _describe(facts: TitleFacts) -> dict[str, Any]:
     return {
         "external_id": facts.title_id,

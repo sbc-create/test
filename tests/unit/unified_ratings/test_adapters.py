@@ -372,3 +372,43 @@ def test_every_adapter_declares_its_capabilities():
         assert caps["source_key"]
         assert caps["incremental_mode"], "режим инкрементального сбора обязан быть назван"
         assert isinstance(caps["requires_credential"], bool)
+
+
+# ---------------------------------------------------------------------------
+# мусорный идентификатор не уносит соседей по пакету
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("bad", ["-2680", "witcher-siren", "0", "-9999987899999", "1864094294"])
+def test_invalid_external_ids_never_reach_the_source(bad):
+    """Каталог содержит слаги и отрицательные числа в поле MAL ID."""
+    from factory.unified_ratings.adapters.anilist import valid_external_id
+
+    assert valid_external_id(bad) is None
+
+
+@pytest.mark.parametrize("good", ["1", "5114", "64536"])
+def test_plausible_ids_pass(good):
+    from factory.unified_ratings.adapters.anilist import valid_external_id
+
+    assert valid_external_id(good) == int(good)
+
+
+def test_a_rejected_batch_is_split_instead_of_lost():
+    """AniList отвечает 400 на весь запрос из-за одного идентификатора."""
+    poison = "777777"
+    calls = {"n": 0}
+
+    def _open(req, timeout):  # noqa: ARG001
+        calls["n"] += 1
+        body = req.data.decode()
+        if f"{poison}" in body:
+            raise urllib.error.HTTPError(req.full_url, 400, "bad", {}, io.BytesIO(b"{}"))
+        return FakeResponse(json.dumps({"data": {"Page": {"media": [ANILIST_MEDIA]}}}).encode())
+
+    adapter = AniListAdapter(client(_open, max_retries=0))
+    result = adapter.fetch_by_mal_ids(["1", poison])
+    assert result["1"].found is True, "здоровый тайтл не должен теряться вместе с виновником"
+    assert result[poison].found is False
+    assert "REJECTED_BY_SOURCE" in result[poison].error
+    assert calls["n"] >= 3, "пакет делился, а не отбрасывался целиком"

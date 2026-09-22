@@ -67,6 +67,29 @@ BATCH_BY_MAL_QUERY = (
 
 MAX_BATCH = 25
 
+#: Верхняя граница правдоподобного идентификатора. Реальные id MAL и
+#: AniList на порядок меньше; всё, что выше, — мусор в каталоге, а не
+#: тайтл, и отправлять его источнику незачем.
+MAX_EXTERNAL_ID = 2_000_000
+
+
+def valid_external_id(raw: str) -> int | None:
+    """Целое в правдоподобном диапазоне или ``None``.
+
+    Отрицательные и нулевые идентификаторы проходят ``int()`` без
+    возражений и уходят в запрос, где AniList отвечает HTTP 400 на весь
+    пакет. Один мусорный идентификатор в каталоге стоил двадцати четырёх
+    здоровых тайтлов в том же пакете, поэтому проверка стоит здесь, до
+    отправки.
+    """
+    text = str(raw).strip()
+    if not text.isdigit():
+        return None
+    value = int(text)
+    if value <= 0 or value > MAX_EXTERNAL_ID:
+        return None
+    return value
+
 
 class AniListAdapter:
     source_key = SOURCE_KEY
@@ -138,50 +161,85 @@ class AniListAdapter:
         out: dict[str, SourceFetch] = {}
         for start in range(0, len(requested), MAX_BATCH):
             chunk = requested[start : start + MAX_BATCH]
-            numeric: list[int] = []
+            usable: list[str] = []
             for raw in chunk:
-                try:
-                    numeric.append(int(raw))
-                except ValueError:
+                if valid_external_id(raw) is None:
                     out[raw] = SourceFetch(
                         source_key=SOURCE_KEY,
                         external_id=raw,
                         found=False,
-                        error="INVALID_EXTERNAL_ID: AniList использует целые идентификаторы",
+                        error=(
+                            "INVALID_EXTERNAL_ID: идентификатор не является "
+                            "положительным целым в допустимом диапазоне"
+                        ),
                     )
-            if not numeric:
-                continue
-            query = BATCH_BY_MAL_QUERY if by_mal else BATCH_BY_ID_QUERY
-            variables = (
-                {"malIds": numeric, "perPage": len(numeric)}
-                if by_mal
-                else {"ids": numeric, "perPage": len(numeric)}
-            )
+                    continue
+                usable.append(raw)
+            if usable:
+                out.update(self._fetch_group(usable, by_mal=by_mal))
+        return out
+
+    def _fetch_group(self, ids: list[str], *, by_mal: bool) -> dict[str, SourceFetch]:
+        """Запросить группу, при отказе на весь пакет — разделить её пополам.
+
+        AniList отвечает HTTP 400 на весь запрос, если ему не понравился
+        один идентификатор. Без деления такой ответ уносит вместе с
+        виновником всех соседей по пакету, и в журнале остаётся двадцать
+        пять отказов вместо одного.
+        """
+        numeric = [valid_external_id(raw) for raw in ids]
+        query = BATCH_BY_MAL_QUERY if by_mal else BATCH_BY_ID_QUERY
+        variables = (
+            {"malIds": numeric, "perPage": len(numeric)}
+            if by_mal
+            else {"ids": numeric, "perPage": len(numeric)}
+        )
+        try:
             data = self._post(query, variables)
-            page = (data.get("data") or {}).get("Page") or {}
-            media = page.get("media")
-            if not isinstance(media, list):
-                raise AdapterError("SCHEMA_DRIFT", "Page.media не список", hard_circuit=True)
-
-            by_key: dict[str, dict[str, Any]] = {}
-            for row in media:
-                if not isinstance(row, dict):
-                    continue
-                key = str(row.get("idMal") if by_mal else row.get("id") or "")
-                if key and key != "None":
-                    by_key[key] = row
-
-            for raw in chunk:
-                row = by_key.get(raw)
-                if row is None:
-                    out[raw] = SourceFetch(
+        except AdapterError as exc:
+            # Делится только отказ в разборе запроса (HTTP 400): он и
+            # означает «мне не понравилось что-то в этом наборе». Ошибка
+            # GraphQL, rate limit или 5xx относятся к источнику целиком —
+            # делить их значит повторять один и тот же отказ вдвое чаще.
+            if exc.code != "HTTP_ERROR":
+                raise
+            if len(ids) == 1:
+                return {
+                    ids[0]: SourceFetch(
                         source_key=SOURCE_KEY,
-                        external_id=raw,
+                        external_id=ids[0],
                         found=False,
-                        error="NOT_FOUND",
+                        error=f"REJECTED_BY_SOURCE: {exc.code}",
                     )
-                    continue
-                out[raw] = _to_fetch(row, requested_key=raw)
+                }
+            middle = len(ids) // 2
+            out = self._fetch_group(ids[:middle], by_mal=by_mal)
+            out.update(self._fetch_group(ids[middle:], by_mal=by_mal))
+            return out
+
+        page = (data.get("data") or {}).get("Page") or {}
+        media = page.get("media")
+        if not isinstance(media, list):
+            raise AdapterError("SCHEMA_DRIFT", "Page.media не список", hard_circuit=True)
+
+        by_key: dict[str, dict[str, Any]] = {}
+        for row in media:
+            if not isinstance(row, dict):
+                continue
+            key = str(row.get("idMal") if by_mal else row.get("id") or "")
+            if key and key != "None":
+                by_key[key] = row
+
+        out: dict[str, SourceFetch] = {}
+        for raw in ids:
+            row = by_key.get(raw)
+            out[raw] = (
+                _to_fetch(row, requested_key=raw)
+                if row is not None
+                else SourceFetch(
+                    source_key=SOURCE_KEY, external_id=raw, found=False, error="NOT_FOUND"
+                )
+            )
         return out
 
     # ------------------------------------------------------------------

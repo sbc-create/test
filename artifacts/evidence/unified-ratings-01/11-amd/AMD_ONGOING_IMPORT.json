@@ -1,0 +1,40 @@
+{
+  "finished_at": "2026-09-22T11:50:52Z",
+  "dry_run": false,
+  "section": {
+    "pagination_links_seen": 10,
+    "max_page_advertised": 21,
+    "pagination_fetched": false,
+    "pagination_blocked_by": "robots.txt: Disallow */page/* и */page*",
+    "enumeration_fallback": "sitemap news_pages.xml"
+  },
+  "ongoing_first_page": 12,
+  "sitemap_urls": 0,
+  "queued": 12,
+  "processed": 12,
+  "elapsed_seconds": 17.0,
+  "counters": {
+    "section_pages_fetched": 1,
+    "pagination_pages_advertised": 21,
+    "ongoing_urls_found": 12,
+    "sitemap_urls_found": 0,
+    "title_pages_fetched": 12,
+    "with_main_score": 12,
+    "with_vote_count": 12,
+    "dimensions_found": 48,
+    "exact_matches": 11,
+    "sent_to_review": 0,
+    "unmatched": 1,
+    "inserted": 0,
+    "updated": 0,
+    "unchanged": 0,
+    "failed": 0,
+    "stopped_reason": ""
+  },
+  "adapter": {
+    "requests": 13,
+    "retries": 0,
+    "kill_switch_active": false,
+    "kill_switch_reason": ""
+  }
+}
