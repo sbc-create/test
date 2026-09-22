@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comments widget harness</title>
+<!--
+  A host page, deliberately opinionated and slightly hostile.
+
+  It brings its own reset, its own box-sizing and its own heavy typography, so
+  that a widget which leaked styles upward — or which depended on a reset it
+  does not ship — would look obviously wrong here rather than subtly wrong on
+  a real site. It also renders content above and below the widget, so a layout
+  shift caused by comments loading is measurable against real neighbours.
+-->
+<link rel="stylesheet" href="../../../factory/comments_platform/widget/comments-widget.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font: 16px/1.4 system-ui, sans-serif;
+    color: #111;
+    background: #fff;
+  }
+  .page { max-width: 1100px; margin: 0 auto; padding: 16px; }
+  .hero { height: 180px; background: #eceff4; border-radius: 8px; }
+  .after { height: 400px; background: #f4f1ec; border-radius: 8px; margin-top: 24px; }
+  h1 { font-size: 28px; }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>Фильм</h1>
+  <div class="hero" id="hero"></div>
+
+  <div id="comments"
+       data-cp-comments
+       data-cp-resource-type="title"
+       data-cp-content-id="tt-0001"></div>
+
+  <div class="after" id="after"></div>
+</div>
+
+<script src="../../../factory/comments_platform/widget/comments-widget.js"></script>
+<script>
+  // The integration a tenant template performs: a config object and one call.
+  // No widget source, no styles, no markup of its own.
+  window.__events = [];
+  window.__mountWidget = function (overrides) {
+    return window.SiteFactoryComments.mount("#comments", Object.assign({
+      apiBase: "",
+      resourceType: "title",
+      canonicalContentId: "tt-0001",
+      csrfToken: "test-csrf",
+      onEvent: function (e) { window.__events.push(e); }
+    }, overrides || {}));
+  };
+</script>
+</body>
+</html>

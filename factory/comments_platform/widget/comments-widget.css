@@ -1,0 +1,344 @@
+/*
+ * Shared comments widget — styles.
+ *
+ * Every rule is scoped under `.cp-widget`. There is no reset, no `*` selector,
+ * no element selector at the top level and no `!important`: the widget is a
+ * guest on four different sites and must not restyle its host. Colours,
+ * spacing and radii come from custom properties so a site can retheme without
+ * a fork — which is the alternative this module exists to prevent.
+ *
+ * Layout targets 320px first. Every horizontal rule below is written so that
+ * nothing can exceed the container: long words break, code and tables scroll
+ * inside their own box, and nesting indentation is capped so a deep reply
+ * chain cannot push the thread sideways at phone width.
+ */
+
+/*
+ * The mount point, before any JavaScript runs.
+ *
+ * This is the only rule that targets something the widget did not create, and
+ * it is here for one measured reason: without it the container is zero-height
+ * at first paint and the entire page below the comments jumps when the widget
+ * mounts. That measured CLS 0.45 in the harness, and reserving rows inside the
+ * list only brought it to 0.42 — the shift was the widget appearing at all,
+ * not the list filling up.
+ *
+ * The widget itself carries the same floor, deliberately. An earlier attempt
+ * released the reservation once the widget mounted, which simply moved the
+ * shift rather than removing it: the container went from 320px to whatever the
+ * thread happened to need. Keeping both at one value means mounting changes no
+ * height at all. The cost is that an empty thread occupies 320px, which is
+ * roughly what its heading, notice and form need anyway.
+ */
+[data-cp-comments] {
+  min-height: var(--cp-reserve, 320px);
+}
+
+.cp-widget {
+  /* Theme tokens. A site overrides these on the container, not in our file. */
+  --cp-fg: #16181d;
+  --cp-fg-muted: #5c6370;
+  --cp-bg: transparent;
+  --cp-surface: #f6f7f9;
+  --cp-border: #d8dce3;
+  --cp-accent: #2f6fd0;
+  --cp-danger: #b3261e;
+  --cp-radius: 10px;
+  --cp-gap: 12px;
+  --cp-indent: 16px;
+  /* Cap the nesting indent so depth cannot overflow a narrow screen. */
+  --cp-depth: 0;
+
+  /* Same floor as the mount point above: mounting must not change a height. */
+  min-height: var(--cp-reserve, 320px);
+  box-sizing: border-box;
+  color: var(--cp-fg);
+  background: var(--cp-bg);
+  font: inherit;
+  line-height: 1.5;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  /* Containment: our layout and paint stay inside our box, so a change here
+     cannot reflow the page around us. */
+  contain: layout style;
+}
+
+.cp-widget *,
+.cp-widget *::before,
+.cp-widget *::after {
+  box-sizing: inherit;
+}
+
+@media (prefers-color-scheme: dark) {
+  .cp-widget[data-cp-theme="auto"],
+  .cp-widget[data-cp-theme="dark"] {
+    --cp-fg: #e8eaee;
+    --cp-fg-muted: #a2a9b5;
+    --cp-surface: #1c1f26;
+    --cp-border: #333944;
+    --cp-accent: #7aa7ee;
+    --cp-danger: #f2b8b5;
+  }
+}
+
+.cp-widget[data-cp-theme="dark"] {
+  --cp-fg: #e8eaee;
+  --cp-fg-muted: #a2a9b5;
+  --cp-surface: #1c1f26;
+  --cp-border: #333944;
+  --cp-accent: #7aa7ee;
+  --cp-danger: #f2b8b5;
+}
+
+/* --- heading and controls ------------------------------------------- */
+
+.cp-widget .cp-heading {
+  font-size: 1.125rem;
+  margin: 0 0 var(--cp-gap);
+  font-weight: 600;
+}
+
+.cp-widget .cp-count {
+  color: var(--cp-fg-muted);
+  font-weight: 400;
+}
+
+.cp-widget .cp-sort {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: var(--cp-gap);
+}
+
+.cp-widget .cp-sort__button,
+.cp-widget .cp-more,
+.cp-widget .cp-retry,
+.cp-widget .cp-form__submit {
+  /* 44px minimum in both directions: a control a finger cannot reliably hit
+     is a control that is not there. */
+  min-height: 44px;
+  min-width: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--cp-border);
+  border-radius: var(--cp-radius);
+  background: var(--cp-surface);
+  color: var(--cp-fg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.cp-widget .cp-sort__button[aria-pressed="true"] {
+  border-color: var(--cp-accent);
+  color: var(--cp-accent);
+  font-weight: 600;
+}
+
+.cp-widget :focus-visible {
+  /* Visible focus, always. Removing it is the single most common way a widget
+     becomes unusable by keyboard while looking fine. */
+  outline: 2px solid var(--cp-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* --- list ------------------------------------------------------------ */
+
+.cp-widget .cp-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cp-gap);
+}
+
+.cp-widget .cp-comment {
+  /* min(depth, 3) in effect: the calc is clamped so deep chains stop indenting
+     rather than walking off the right edge at 320px. */
+  margin-inline-start: calc(min(var(--cp-depth), 3) * var(--cp-indent));
+  padding: 12px;
+  border: 1px solid var(--cp-border);
+  border-radius: var(--cp-radius);
+  background: var(--cp-surface);
+  /* Reserve the row before content arrives, so filling it does not shift the
+     page underneath. */
+  min-height: 84px;
+}
+
+.cp-widget .cp-comment--own {
+  border-color: var(--cp-accent);
+}
+
+/* Placeholder rows shown while the first page is in flight. Same box model
+   and same min-height as a real comment, so swapping content in moves
+   nothing. Without them the container grew from zero and the page below the
+   widget jumped — measured at CLS 0.45 before this existed. */
+.cp-widget .cp-skeleton {
+  min-height: 84px;
+  padding: 12px;
+  border: 1px solid var(--cp-border);
+  border-radius: var(--cp-radius);
+  background: var(--cp-surface);
+  opacity: 0.55;
+}
+
+.cp-widget .cp-comment__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: var(--cp-fg-muted);
+  font-size: 0.875rem;
+}
+
+.cp-widget .cp-comment__author {
+  font-weight: 600;
+  color: var(--cp-fg);
+  /* Author ids are opaque hex; without this they would stretch the row. */
+  overflow-wrap: anywhere;
+}
+
+.cp-widget .cp-comment__status {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--cp-bg);
+  border: 1px solid var(--cp-border);
+  font-size: 0.75rem;
+}
+
+.cp-widget .cp-comment__body {
+  /* The three rules that make arbitrary user text safe to lay out. */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+.cp-widget .cp-comment__body a {
+  color: var(--cp-accent);
+}
+
+.cp-widget .cp-comment__body code {
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: var(--cp-bg);
+  border: 1px solid var(--cp-border);
+  font-size: 0.9em;
+}
+
+.cp-widget .cp-comment__body pre,
+.cp-widget .cp-comment__body table {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.cp-widget .cp-comment__meta {
+  margin-top: 8px;
+  color: var(--cp-fg-muted);
+  font-size: 0.875rem;
+}
+
+/* --- spoilers -------------------------------------------------------- */
+
+.cp-widget .cp-spoiler {
+  display: inline;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cp-widget .cp-spoiler[aria-expanded="false"] .cp-spoiler__body {
+  /* Blur rather than removal: the text stays selectable-free but the layout
+     is identical before and after, so revealing a spoiler shifts nothing. */
+  filter: blur(6px);
+  background: var(--cp-border);
+  color: transparent;
+  user-select: none;
+}
+
+.cp-widget .cp-spoiler[aria-expanded="true"] .cp-spoiler__body {
+  filter: none;
+  background: transparent;
+  color: inherit;
+}
+
+/* --- status and empty ------------------------------------------------ */
+
+.cp-widget .cp-status,
+.cp-widget .cp-empty {
+  margin: var(--cp-gap) 0;
+  color: var(--cp-fg-muted);
+}
+
+.cp-widget .cp-status[data-cp-status="error"],
+.cp-widget .cp-status[data-cp-status="offline"] {
+  color: var(--cp-danger);
+}
+
+.cp-widget [hidden] {
+  display: none;
+}
+
+/* --- form ------------------------------------------------------------ */
+
+.cp-widget .cp-form {
+  margin-top: calc(var(--cp-gap) * 1.5);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cp-widget .cp-form__label {
+  font-size: 0.875rem;
+  color: var(--cp-fg-muted);
+}
+
+.cp-widget .cp-form__input {
+  width: 100%;
+  max-width: 100%;
+  min-height: 88px;
+  padding: 10px;
+  border: 1px solid var(--cp-border);
+  border-radius: var(--cp-radius);
+  background: var(--cp-bg);
+  color: var(--cp-fg);
+  font: inherit;
+  resize: vertical;
+}
+
+.cp-widget .cp-form__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* --- motion ---------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .cp-widget *,
+  .cp-widget *::before,
+  .cp-widget *::after {
+    animation-duration: 0.001ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.001ms;
+    scroll-behavior: auto;
+  }
+}
+
+/* --- narrow widths --------------------------------------------------- */
+
+@media (max-width: 480px) {
+  .cp-widget {
+    --cp-indent: 10px;
+    --cp-gap: 10px;
+  }
+
+  .cp-widget .cp-sort {
+    /* Let the sort row scroll rather than wrap into a tall stack that pushes
+       the first comment below the fold on a phone. */
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .cp-widget .cp-sort__button {
+    flex: 0 0 auto;
+  }
+}

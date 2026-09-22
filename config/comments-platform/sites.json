@@ -1,0 +1,229 @@
+{
+  "schema_version": "COMMENTS_PLATFORM_SITES_V1",
+  "note": "Привязка сайтов флота к общему модулю комментариев. Домены и site_id взяты из config/FLEET-REGISTRY.json, а не придуманы: реестр строится по живым release-manifest.json и пакетам sites/. Семейство сайта из реестра становится tenant_id — lords, zona, animedia, yummy.",
+  "source_of_truth": {
+    "site_id_and_domain": "config/FLEET-REGISTRY.json",
+    "tenant_id": "поле family того же реестра"
+  },
+  "gates": {
+    "note": "Все ворота здесь нули, и это не заготовка под заполнение. Потолки в factory/comments_platform/flags.py тоже нули, поэтому единица в этом файле ничего бы не включила: значение зажимается до нуля при разрешении флагов. Включение — отдельное решение владельца, оно меняет и потолок в коде, и эту строку, и проходит через аудит.",
+    "COMMENTS_READ_ENABLED": 0,
+    "COMMENTS_WRITE_ENABLED": 0,
+    "COMMENTS_PUBLICATION_ENABLED": 0,
+    "COMMENTS_ROLLOUT_PERCENT": 0,
+    "COMMENTS_SEO_MODE": "user_initiated"
+  },
+  "artifact": {
+    "module_version": "0.1.0-mvp",
+    "checksum_note": "artifact_checksum ниже — sha256 конкатенации файлов виджета, вычисленный scripts/comments_platform_artifact.py. Значение обязано совпадать с выложенным артефактом: плавающие версии и latest запрещены, и SiteBinding отказывается их принимать."
+  },
+  "sites": [
+    {
+      "tenant_id": "lords",
+      "site_id": "lords-01",
+      "hosts": [
+        "lordfilm47.space"
+      ],
+      "allowed_origins": [
+        "https://lordfilm47.space"
+      ],
+      "module_version": "0.1.0-mvp",
+      "artifact_checksum": "6032fb3cd24769390a7826473cc93932aed459a15fa2a92e6a771188092fa082",
+      "theme": "dark",
+      "language": "ru",
+      "moderation_mode": "pre",
+      "read_enabled": 0,
+      "write_enabled": 0,
+      "publication_enabled": 0,
+      "seo_mode": "user_initiated",
+      "rollout_percent": 0,
+      "max_depth": 3,
+      "max_length": 4000,
+      "max_links": 2
+    },
+    {
+      "tenant_id": "lords",
+      "site_id": "lords-02",
+      "hosts": [
+        "lordserial33.biz"
+      ],
+      "allowed_origins": [
+        "https://lordserial33.biz"
+      ],
+      "module_version": "0.1.0-mvp",
+      "artifact_checksum": "6032fb3cd24769390a7826473cc93932aed459a15fa2a92e6a771188092fa082",
+      "theme": "dark",
+      "language": "ru",
+      "moderation_mode": "pre",
+      "read_enabled": 0,
+      "write_enabled": 0,
+      "publication_enabled": 0,
+      "seo_mode": "user_initiated",
+      "rollout_percent": 0,
+      "max_depth": 3,
+      "max_length": 4000,
+      "max_links": 2
+    },
+    {
+      "tenant_id": "lords",
+      "site_id": "lords-03",
+      "hosts": [
+        "1lordserials1.online"
+      ],
+      "allowed_origins": [
+        "https://1lordserials1.online"
+      ],
+      "module_version": "0.1.0-mvp",
+      "artifact_checksum": "6032fb3cd24769390a7826473cc93932aed459a15fa2a92e6a771188092fa082",
+      "theme": "dark",
+      "language": "ru",
+      "moderation_mode": "pre",
+      "read_enabled": 0,
+      "write_enabled": 0,
+      "publication_enabled": 0,
+      "seo_mode": "user_initiated",
+      "rollout_percent": 0,
+      "max_depth": 3,
+      "max_length": 4000,
+      "max_links": 2
+    },
+    {
+      "tenant_id": "zona",
+      "site_id": "zona-01",
+      "hosts": [
+        "zonafilm.space"
+      ],
+      "allowed_origins": [
+        "https://zonafilm.space"
+      ],
+      "module_version": "0.1.0-mvp",
+      "artifact_checksum": "6032fb3cd24769390a7826473cc93932aed459a15fa2a92e6a771188092fa082",
+      "theme": "auto",
+      "language": "ru",
+      "moderation_mode": "pre",
+      "read_enabled": 0,
+      "write_enabled": 0,
+      "publication_enabled": 0,
+      "seo_mode": "user_initiated",
+      "rollout_percent": 0,
+      "max_depth": 3,
+      "max_length": 4000,
+      "max_links": 2
+    },
+    {
+      "tenant_id": "animedia",
+      "site_id": "animedia-01",
+      "hosts": [
+        "animedia.icu"
+      ],
+      "allowed_origins": [
+        "https://animedia.icu"
+      ],
+      "module_version": "0.1.0-mvp",
+      "artifact_checksum": "6032fb3cd24769390a7826473cc93932aed459a15fa2a92e6a771188092fa082",
+      "theme": "auto",
+      "language": "ru",
+      "moderation_mode": "pre",
+      "read_enabled": 0,
+      "write_enabled": 0,
+      "publication_enabled": 0,
+      "seo_mode": "user_initiated",
+      "rollout_percent": 0,
+      "max_depth": 3,
+      "max_length": 4000,
+      "max_links": 2
+    },
+    {
+      "tenant_id": "animedia",
+      "site_id": "animedia-02",
+      "hosts": [
+        "animedia.space"
+      ],
+      "allowed_origins": [
+        "https://animedia.space"
+      ],
+      "module_version": "0.1.0-mvp",
+      "artifact_checksum": "6032fb3cd24769390a7826473cc93932aed459a15fa2a92e6a771188092fa082",
+      "theme": "auto",
+      "language": "ru",
+      "moderation_mode": "pre",
+      "read_enabled": 0,
+      "write_enabled": 0,
+      "publication_enabled": 0,
+      "seo_mode": "user_initiated",
+      "rollout_percent": 0,
+      "max_depth": 3,
+      "max_length": 4000,
+      "max_links": 2
+    },
+    {
+      "tenant_id": "yummy",
+      "site_id": "yummyani-site",
+      "hosts": [
+        "yummyani.site"
+      ],
+      "allowed_origins": [
+        "https://yummyani.site"
+      ],
+      "module_version": "0.1.0-mvp",
+      "artifact_checksum": "6032fb3cd24769390a7826473cc93932aed459a15fa2a92e6a771188092fa082",
+      "theme": "auto",
+      "language": "ru",
+      "moderation_mode": "pre",
+      "read_enabled": 0,
+      "write_enabled": 0,
+      "publication_enabled": 0,
+      "seo_mode": "user_initiated",
+      "rollout_percent": 0,
+      "max_depth": 3,
+      "max_length": 4000,
+      "max_links": 2
+    },
+    {
+      "tenant_id": "yummy",
+      "site_id": "yummyani-org",
+      "hosts": [
+        "yummyani.org"
+      ],
+      "allowed_origins": [
+        "https://yummyani.org"
+      ],
+      "module_version": "0.1.0-mvp",
+      "artifact_checksum": "6032fb3cd24769390a7826473cc93932aed459a15fa2a92e6a771188092fa082",
+      "theme": "auto",
+      "language": "ru",
+      "moderation_mode": "pre",
+      "read_enabled": 0,
+      "write_enabled": 0,
+      "publication_enabled": 0,
+      "seo_mode": "user_initiated",
+      "rollout_percent": 0,
+      "max_depth": 3,
+      "max_length": 4000,
+      "max_links": 2
+    },
+    {
+      "tenant_id": "yummy",
+      "site_id": "yummyani-biz",
+      "hosts": [
+        "yummyani.biz"
+      ],
+      "allowed_origins": [
+        "https://yummyani.biz"
+      ],
+      "module_version": "0.1.0-mvp",
+      "artifact_checksum": "6032fb3cd24769390a7826473cc93932aed459a15fa2a92e6a771188092fa082",
+      "theme": "auto",
+      "language": "ru",
+      "moderation_mode": "pre",
+      "read_enabled": 0,
+      "write_enabled": 0,
+      "publication_enabled": 0,
+      "seo_mode": "user_initiated",
+      "rollout_percent": 0,
+      "max_depth": 3,
+      "max_length": 4000,
+      "max_links": 2
+    }
+  ]
+}
