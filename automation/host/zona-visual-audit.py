@@ -37,9 +37,19 @@ from pathlib import Path
 
 
 def png_заглушка(ширина: int, высота: int, цвет=(32, 38, 46)) -> bytes:
-    """Одноцветный PNG нужной пропорции — без внешних зависимостей."""
-    строка = bytes(цвет) * ширина
-    сырьё = b"".join(b"\x00" + строка for _ in range(высота))
+    """PNG нужной пропорции с мягким вертикальным градиентом.
+
+    Ровная заливка делала контактный лист нечитаемым: все постеры сливались в
+    одно тёмное поле, и по снимку нельзя было понять ни плотность сетки, ни
+    ритм ленты. Цвет выводится из адреса картинки, поэтому у разных тайтлов
+    разные плашки — композиция читается, а выдуманного содержимого нет.
+    """
+    строки = []
+    for y in range(высота):
+        k = 0.75 + 0.5 * (y / max(1, высота - 1))
+        пиксель = bytes(min(255, int(c * k)) for c in цвет)
+        строки.append(b"\x00" + пиксель * ширина)
+    сырьё = b"".join(строки)
 
     def кусок(тип: bytes, данные: bytes) -> bytes:
         return (struct.pack(">I", len(данные)) + тип + данные
@@ -51,8 +61,22 @@ def png_заглушка(ширина: int, высота: int, цвет=(32, 38,
             + кусок(b"IEND", b""))
 
 
-ПОСТЕР = png_заглушка(200, 300)
-ШИРОКАЯ = png_заглушка(320, 180)
+def цвет_по_адресу(url: str) -> tuple:
+    """Устойчивый приглушённый цвет из адреса: два прогона дают один снимок."""
+    h = zlib.crc32(url.encode("utf-8"))
+    return (46 + (h & 0x3F), 54 + ((h >> 6) & 0x3F), 66 + ((h >> 12) & 0x3F))
+
+
+_КЭШ_ЗАГЛУШЕК: dict = {}
+
+
+def заглушка_для(url: str, широкая: bool = False) -> bytes:
+    ключ = (url, широкая)
+    if ключ not in _КЭШ_ЗАГЛУШЕК:
+        ц = цвет_по_адресу(url)
+        _КЭШ_ЗАГЛУШЕК[ключ] = (png_заглушка(320, 180, ц) if широкая
+                               else png_заглушка(200, 300, ц))
+    return _КЭШ_ЗАГЛУШЕК[ключ]
 
 ИЗМЕРЕНИЕ_JS = r"""
 () => {
@@ -217,8 +241,9 @@ def настроить_маршруты(page) -> dict:
             return route.continue_()
         if запрос.resource_type == "image":
             счёт["posters"] += 1
-            тело = ПОСТЕР if re.search(r"poster|webp|jpg|jpeg", url) else ШИРОКАЯ
-            return route.fulfill(status=200, body=тело, content_type="image/png")
+            широкая = not re.search(r"poster|webp|jpg|jpeg", url)
+            return route.fulfill(status=200, body=заглушка_для(url, широкая),
+                                 content_type="image/png")
         счёт["blocked_scripts"] += 1
         return route.abort()
 
@@ -229,9 +254,22 @@ def настроить_маршруты(page) -> dict:
 def проверить_слайдер(page) -> dict:
     """Настоящая смена состояния: нажатие, точка, клавиша, жест, серия."""
     из_ = page.evaluate(СОСТОЯНИЕ_JS)
-    если_нет = {"applicable": False}
     if not из_ or not из_.get("id"):
-        return если_нет
+        return {"applicable": False, "reason": "слайдера на странице нет"}
+
+    # Шаблон с одним кадром героя — законное состояние, а не сломанный слайдер.
+    # Листать там нечего, и органов управления быть НЕ должно: мёртвая кнопка
+    # хуже отсутствующей. Поэтому здесь проверяется именно их отсутствие.
+    слайдов = page.locator("[data-zhero-slide]").count()
+    if слайдов < 2:
+        лишние = (page.locator("[data-zhero-next]").count()
+                  + page.locator("[data-zhero-prev]").count()
+                  + page.locator("[data-zhero-dot]").count())
+        return {"applicable": False, "reason": "один кадр героя по замыслу шаблона",
+                "slides": слайдов, "dead_controls": лишние,
+                "failures": ([f"при одном слайде осталось органов управления: {лишние}"]
+                             if лишние else [])}
+
     итог: dict = {"applicable": True, "start": из_, "steps": [], "failures": []}
 
     def состояние():
@@ -401,7 +439,10 @@ def main() -> int:
             # Слайдер: отдельный проход на объявленной странице
             page.goto(а.base + а.slider_on, wait_until="load", timeout=60000)
             page.wait_for_timeout(700)
-            итог = проверить_слайдер(page)
+            try:
+                итог = проверить_слайдер(page)
+            except Exception as ош:  # noqa: BLE001 — приёмка обязана назвать причину
+                итог = {"applicable": True, "failures": [f"проверка слайдера сорвалась: {ош!r}"]}
             отчёт["slider"][str(ширина)] = итог
             if итог.get("failures"):
                 отчёт["failures"].append({"page": f"slider@{ширина}",

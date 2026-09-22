@@ -111,8 +111,15 @@ def main() -> int:
         (выход / f"{а.site}-popular-weekly.json").write_text(
             json.dumps({**weekly, "shelves": полки}, ensure_ascii=False),
             encoding="utf-8")
+    # Конфигурация плеера копируется как есть: без неё стенд считает видео
+    # недоступным, и на снимках пропадает кнопка «Смотреть» — то есть витрина
+    # выглядит беднее, чем она есть.
+    плеер = ИСТОЧНИК / f"player-{а.site}.json"
+    if плеер.is_file():
+        (выход / плеер.name).write_text(плеер.read_text(encoding="utf-8"),
+                                        encoding="utf-8")
     print(json.dumps({
-        "site": а.site, "items": len(записи),
+        "site": а.site, "items": len(записи), "player_config": плеер.is_file(),
         "details": sum(1 for s in слаги if s in подробности),
         "shelves": {k: len(v) for k, v in
                     ((weekly or {}).get("shelves") or {}).items()},

@@ -40,15 +40,19 @@ def свободный_порт(начало: int = 19400, конец: int = 194
     raise SystemExit("нет свободного порта в 194xx")
 
 
-def манифест(куда: Path, design: str, build_id: str) -> Path:
+def манифест(куда: Path, design: str, build_id: str,
+              profile: str | None = None) -> Path:
     путь = куда / "template-manifest-zona-local.json"
-    путь.write_text(json.dumps({
+    поля = {
         "schema_version": 1, "template_family": "zona", "design_version": design,
         "source_commit": "local", "build_id": build_id, "artifact_sha256": "local",
         "profile": "zona-general", "built_at": "2026-09-22T00:00:00Z",
         "domain": "zonafilm.space", "service_name": "local-stand",
         "expected_indexability": "noindex,nofollow",
-    }, ensure_ascii=False, indent=1), encoding="utf-8")
+    }
+    if profile:
+        поля["template_profile"] = profile
+    путь.write_text(json.dumps(поля, ensure_ascii=False, indent=1), encoding="utf-8")
     return путь
 
 
@@ -74,6 +78,7 @@ def main() -> int:
     р.add_argument("--out", required=True)
     р.add_argument("--tag", default="run1")
     р.add_argument("--design", default="1.3.0")
+    р.add_argument("--profile", default="", help="шаблон витрины Zona")
     р.add_argument("--widths", default="320,390,768,1024,1440,1920")
     р.add_argument("--pages", default="")
     р.add_argument("--shots", action="store_true")
@@ -91,7 +96,7 @@ def main() -> int:
     порт = свободный_порт()
     среда = dict(os.environ)
     среда.update({
-        "LORDS_TEMPLATE_MANIFEST": str(манифест(выход, а.design, f"zona-local-{а.tag}")),
+        "LORDS_TEMPLATE_MANIFEST": str(манифест(выход, а.design, f"zona-local-{а.tag}", а.profile or None)),
         "LORDS_CATALOG": str(каталог),
         "LORDS_DETAILS": str(корень_снимка / "zona-01-details.json"),
         "LORDS_POPULAR_WEEKLY": str(корень_снимка / "zona-01-popular-weekly.json"),
@@ -102,6 +107,9 @@ def main() -> int:
     })
     среда.pop("LORDS_LEGACY_UPSTREAM", None)
     среда.pop("LORDS_METRIKA_COUNTER", None)
+    плеер = корень_снимка / "player-zona-01.json"
+    if плеер.is_file():
+        среда["LORDS_PLAYER_CONFIG"] = str(плеер)
 
     лог = (выход / f"stand-{а.tag}.log").open("wb")
     proc = subprocess.Popen(

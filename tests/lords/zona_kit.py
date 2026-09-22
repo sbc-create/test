@@ -141,7 +141,7 @@ class Ответ:
 def поднять(tmp_path, *, design: str = ЖИВАЯ_ВЕРСИЯ_ZONA, family: str = "zona",
             записи=None, подробности=None, site_name: str = "Zona",
             имя_модуля: str | None = None, clock: str = ЧАС,
-            weekly=НЕДЕЛЬНЫЙ_СНИМОК):
+            weekly=НЕДЕЛЬНЫЙ_СНИМОК, profile: str | None = None):
     """Импортировать рантайм с собственными данными и манифестом."""
     записи = ЗАПИСИ if записи is None else записи
     подробности = ПОДРОБНОСТИ if подробности is None else подробности
@@ -160,12 +160,15 @@ def поднять(tmp_path, *, design: str = ЖИВАЯ_ВЕРСИЯ_ZONA, fami
         json.dumps({"publisher_id": "10238", "source_mode": "provider-id"}),
         encoding="utf-8")
     манифест = корень / "manifest.json"
-    манифест.write_text(json.dumps({
+    поля = {
         "schema_version": 1, "template_family": family,
         "design_version": design, "source_commit": "0" * 40,
         "build_id": f"kit-{family}-{design}", "artifact_sha256": "0" * 64,
         "profile": f"{family}-test", "built_at": "2026-09-20T00:00:00Z",
-    }), encoding="utf-8")
+    }
+    if profile is not None:
+        поля["template_profile"] = profile
+    манифест.write_text(json.dumps(поля), encoding="utf-8")
 
     недельный = корень / "popular-weekly.json"
     if weekly:
