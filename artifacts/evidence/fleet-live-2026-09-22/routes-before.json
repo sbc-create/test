@@ -1,0 +1,8477 @@
+{
+ "sites": [
+  {
+   "domain": "lordfilm47.space",
+   "port": 9110,
+   "family": "lords",
+   "checked": 70,
+   "ok": 70,
+   "pages": {
+    "/": {
+     "status": 200,
+     "chain": [
+      [
+       "/",
+       200
+      ]
+     ],
+     "from": "seed",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/catalog/": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/search/?q=a": {
+     "status": 200,
+     "chain": [
+      [
+       "/search/?q=a",
+       200
+      ]
+     ],
+     "from": "seed",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/movies/": {
+     "status": 200,
+     "chain": [
+      [
+       "/movies/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/series/": {
+     "status": 200,
+     "chain": [
+      [
+       "/series/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/new/": {
+     "status": 200,
+     "chain": [
+      [
+       "/new/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/collections/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collections/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/animation/": {
+     "status": 200,
+     "chain": [
+      [
+       "/animation/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/futbolnyy-ubiyca/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/futbolnyy-ubiyca/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/cvetuschaya-zvezda-parizha/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/cvetuschaya-zvezda-parizha/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/my-v-etom-vmeste/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/my-v-etom-vmeste/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/luchshiy-ohotnik-na-vampirov/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/luchshiy-ohotnik-na-vampirov/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/urodlivaya-istoriya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/urodlivaya-istoriya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/noch-peremen/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/noch-peremen/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/velikoe-ograblenie-v-pendzhabe/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/velikoe-ograblenie-v-pendzhabe/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/na-ispug/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/na-ispug/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/yarost-ubit-ili-byt-ubitym/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/yarost-ubit-ili-byt-ubitym/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/delo-o-propavshey-rybke/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/delo-o-propavshey-rybke/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/maniya-2/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/maniya-2/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/iosif-rozhdennyy-stat-velikim/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/iosif-rozhdennyy-stat-velikim/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/razorennaya-no-obozhaemaya-princem/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/razorennaya-no-obozhaemaya-princem/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/pepel-lunnogo-sveta/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/pepel-lunnogo-sveta/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/tam-gde-smeleet-lyubov/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/tam-gde-smeleet-lyubov/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/poryadochnyy-chelovek/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/poryadochnyy-chelovek/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/obman-serdca-igra-lisy/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/obman-serdca-igra-lisy/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/vne-zakona-yarost-tigrov/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/vne-zakona-yarost-tigrov/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/molodost-3/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/molodost-3/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/dizayn-ot-priti/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/dizayn-ot-priti/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/neizvestnyy-brat/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/neizvestnyy-brat/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/32-kadra-tayna-11-sentyabrya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/32-kadra-tayna-11-sentyabrya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/seyf/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/seyf/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/serdce-zverya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/serdce-zverya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/collection/top_rated/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/top_rated/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/chya-eto-sobaka/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/chya-eto-sobaka/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/svinorez/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/svinorez/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/kadaknath/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/kadaknath/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/bezdna/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/bezdna/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/bez-prava-na-strah/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/bez-prava-na-strah/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/za-pshenichnymi-polyami/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/za-pshenichnymi-polyami/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/plasticheskaya-krasota/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/plasticheskaya-krasota/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/delo-ob-ubiystve-lakshmikantana/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/delo-ob-ubiystve-lakshmikantana/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/littl-lorreyn/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/littl-lorreyn/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/ubiyca-vnutri/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ubiyca-vnutri/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/bratya-po-oruzhiyu-nasledie/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/bratya-po-oruzhiyu-nasledie/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/krutoy-uchitel-onidzuka-7/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/krutoy-uchitel-onidzuka-7/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/genre/zapadnyykontent/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/zapadnyykontent/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/genre/drama/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/drama/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/genre/komediya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/komediya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/genre/triller/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/triller/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/genre/dorama/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/dorama/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/genre/melodrama/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/melodrama/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/genre/anime/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/anime/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/genre/boevik/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/boevik/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/genre/kriminal/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/kriminal/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/genre/uzhasy/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/uzhasy/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/genre/detektiv/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/detektiv/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/genre/fentezi/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/fentezi/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/collection/recently_added/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/recently_added/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/collection/recently_added_movies/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/recently_added_movies/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/collection/current_season/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/current_season/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/collection/video_available/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/video_available/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/vina-5/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/vina-5/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/amerikanskiy-zalozhnik/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/amerikanskiy-zalozhnik/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/britva-okkama/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/britva-okkama/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/shahty-strasti/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/shahty-strasti/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/vnutri-zakoldovannyh-lesov/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/vnutri-zakoldovannyh-lesov/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/vyzhivanie-v-dikoy-prirode/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/vyzhivanie-v-dikoy-prirode/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/plennica-6/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/plennica-6/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/nash-vcherashniy-pobeg/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/nash-vcherashniy-pobeg/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/title/amerikanskaya-amazonka/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/amerikanskaya-amazonka/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordfilm47.space",
+     "h1": 1
+    },
+    "/takogo-adresa-tochno-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/takogo-adresa-tochno-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/title/takogo-tajtla-tochno-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/takogo-tajtla-tochno-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/catalog/takogo-razdela-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/catalog/takogo-razdela-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    }
+   },
+   "defects": [],
+   "valid_content_404": 0,
+   "broken_internal_links": 0,
+   "fake_200_for_missing_page": 0,
+   "wrong_tenant_routes": 0,
+   "errors": 0,
+   "site": "lords-01"
+  },
+  {
+   "domain": "lordserial33.biz",
+   "port": 9111,
+   "family": "lords",
+   "checked": 70,
+   "ok": 70,
+   "pages": {
+    "/": {
+     "status": 200,
+     "chain": [
+      [
+       "/",
+       200
+      ]
+     ],
+     "from": "seed",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/catalog/": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/search/?q=a": {
+     "status": 200,
+     "chain": [
+      [
+       "/search/?q=a",
+       200
+      ]
+     ],
+     "from": "seed",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/series/": {
+     "status": 200,
+     "chain": [
+      [
+       "/series/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/new/": {
+     "status": 200,
+     "chain": [
+      [
+       "/new/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/movies/": {
+     "status": 200,
+     "chain": [
+      [
+       "/movies/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/collections/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collections/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/animation/": {
+     "status": 200,
+     "chain": [
+      [
+       "/animation/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/razorennaya-no-obozhaemaya-princem/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/razorennaya-no-obozhaemaya-princem/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/pepel-lunnogo-sveta/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/pepel-lunnogo-sveta/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/tam-gde-smeleet-lyubov/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/tam-gde-smeleet-lyubov/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/poryadochnyy-chelovek/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/poryadochnyy-chelovek/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/obman-serdca-igra-lisy/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/obman-serdca-igra-lisy/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/vne-zakona-yarost-tigrov/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/vne-zakona-yarost-tigrov/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/molodost-3/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/molodost-3/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/seyf/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/seyf/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/vina-5/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/vina-5/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/amerikanskiy-zalozhnik/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/amerikanskiy-zalozhnik/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/britva-okkama/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/britva-okkama/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/shahty-strasti/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/shahty-strasti/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/vnutri-zakoldovannyh-lesov/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/vnutri-zakoldovannyh-lesov/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/vyzhivanie-v-dikoy-prirode/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/vyzhivanie-v-dikoy-prirode/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/plennica-6/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/plennica-6/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/nash-vcherashniy-pobeg/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/nash-vcherashniy-pobeg/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/amerikanskaya-amazonka/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/amerikanskaya-amazonka/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/pylnye-utesy/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/pylnye-utesy/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/ohota-za-brakom-v-37-eto-pole-bitvy/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/chti-svoyu-mat/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/chti-svoyu-mat/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/master-lda-i-plameni-2/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/master-lda-i-plameni-2/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/magiya-zatonuvshih-korabley/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/magiya-zatonuvshih-korabley/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/tihookeanskie-rassledovaniya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/tihookeanskie-rassledovaniya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/sryv/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/sryv/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/collection/top_rated/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/top_rated/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/bezdna/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/bezdna/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/ng-morskie-odissei-otkryvaya-tihiy-okean/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ng-morskie-odissei-otkryvaya-tihiy-okean/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/nascar-amerika/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/nascar-amerika/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/plasticheskaya-krasota/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/plasticheskaya-krasota/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/operaciya-beloe-more-missiya-nad-gimalayami/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/operaciya-beloe-more-missiya-nad-gimalayami/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/rassledovanie-prestupleniy/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/rassledovanie-prestupleniy/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/evolyuciya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/evolyuciya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/v-chetyre-ruki/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/v-chetyre-ruki/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/krutoy-uchitel-onidzuka-7/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/krutoy-uchitel-onidzuka-7/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/drugaya-lyubov-no-ne-ty/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/drugaya-lyubov-no-ne-ty/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/slava/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/slava/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/troe-papash/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/troe-papash/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/collection/recently_added/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/recently_added/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/collection/recently_added_movies/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/recently_added_movies/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/collection/current_season/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/current_season/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/collection/video_available/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/video_available/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/futbolnyy-ubiyca/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/futbolnyy-ubiyca/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/cvetuschaya-zvezda-parizha/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/cvetuschaya-zvezda-parizha/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/my-v-etom-vmeste/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/my-v-etom-vmeste/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/luchshiy-ohotnik-na-vampirov/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/luchshiy-ohotnik-na-vampirov/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/urodlivaya-istoriya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/urodlivaya-istoriya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/noch-peremen/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/noch-peremen/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/velikoe-ograblenie-v-pendzhabe/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/velikoe-ograblenie-v-pendzhabe/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/na-ispug/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/na-ispug/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/yarost-ubit-ili-byt-ubitym/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/yarost-ubit-ili-byt-ubitym/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/delo-o-propavshey-rybke/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/delo-o-propavshey-rybke/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/maniya-2/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/maniya-2/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/title/iosif-rozhdennyy-stat-velikim/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/iosif-rozhdennyy-stat-velikim/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/genre/zapadnyykontent/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/zapadnyykontent/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/genre/drama/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/drama/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/genre/komediya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/komediya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/genre/triller/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/triller/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/genre/dorama/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/dorama/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/genre/boevik/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/boevik/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/genre/melodrama/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/melodrama/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/genre/anime/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/anime/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/year/2026/": {
+     "status": 200,
+     "chain": [
+      [
+       "/year/2026/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "lordserial33.biz",
+     "h1": 1
+    },
+    "/takogo-adresa-tochno-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/takogo-adresa-tochno-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/title/takogo-tajtla-tochno-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/takogo-tajtla-tochno-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/catalog/takogo-razdela-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/catalog/takogo-razdela-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    }
+   },
+   "defects": [],
+   "valid_content_404": 0,
+   "broken_internal_links": 0,
+   "fake_200_for_missing_page": 0,
+   "wrong_tenant_routes": 0,
+   "errors": 0,
+   "site": "lords-02"
+  },
+  {
+   "domain": "1lordserials1.online",
+   "port": 9112,
+   "family": "lords",
+   "checked": 70,
+   "ok": 70,
+   "pages": {
+    "/": {
+     "status": 200,
+     "chain": [
+      [
+       "/",
+       200
+      ]
+     ],
+     "from": "seed",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/catalog/": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/search/?q=a": {
+     "status": 200,
+     "chain": [
+      [
+       "/search/?q=a",
+       200
+      ]
+     ],
+     "from": "seed",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/collections/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collections/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/movies/": {
+     "status": 200,
+     "chain": [
+      [
+       "/movies/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/series/": {
+     "status": 200,
+     "chain": [
+      [
+       "/series/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/new/": {
+     "status": 200,
+     "chain": [
+      [
+       "/new/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/animation/": {
+     "status": 200,
+     "chain": [
+      [
+       "/animation/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/collection/top_rated/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/top_rated/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/chya-eto-sobaka/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/chya-eto-sobaka/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/svinorez/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/svinorez/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/kadaknath/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/kadaknath/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/bezdna/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/bezdna/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/bez-prava-na-strah/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/bez-prava-na-strah/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/za-pshenichnymi-polyami/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/za-pshenichnymi-polyami/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/plasticheskaya-krasota/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/plasticheskaya-krasota/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/imperiya-artura/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/imperiya-artura/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/delo-ob-ubiystve-lakshmikantana/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/delo-ob-ubiystve-lakshmikantana/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/littl-lorreyn/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/littl-lorreyn/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/ubiyca-vnutri/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ubiyca-vnutri/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/bratya-po-oruzhiyu-nasledie/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/bratya-po-oruzhiyu-nasledie/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/collection/recently_added/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/recently_added/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/collection/recently_added_movies/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/recently_added_movies/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/collection/current_season/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/current_season/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/collection/video_available/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/video_available/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/razorennaya-no-obozhaemaya-princem/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/razorennaya-no-obozhaemaya-princem/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/pepel-lunnogo-sveta/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/pepel-lunnogo-sveta/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/tam-gde-smeleet-lyubov/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/tam-gde-smeleet-lyubov/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/poryadochnyy-chelovek/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/poryadochnyy-chelovek/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/futbolnyy-ubiyca/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/futbolnyy-ubiyca/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/obman-serdca-igra-lisy/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/obman-serdca-igra-lisy/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/vne-zakona-yarost-tigrov/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/vne-zakona-yarost-tigrov/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/cvetuschaya-zvezda-parizha/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/cvetuschaya-zvezda-parizha/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/my-v-etom-vmeste/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/my-v-etom-vmeste/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/molodost-3/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/molodost-3/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/luchshiy-ohotnik-na-vampirov/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/luchshiy-ohotnik-na-vampirov/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/urodlivaya-istoriya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/urodlivaya-istoriya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/noch-peremen/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/noch-peremen/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/velikoe-ograblenie-v-pendzhabe/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/velikoe-ograblenie-v-pendzhabe/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/na-ispug/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/na-ispug/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/yarost-ubit-ili-byt-ubitym/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/yarost-ubit-ili-byt-ubitym/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/delo-o-propavshey-rybke/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/delo-o-propavshey-rybke/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/maniya-2/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/maniya-2/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/iosif-rozhdennyy-stat-velikim/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/iosif-rozhdennyy-stat-velikim/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/dizayn-ot-priti/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/dizayn-ot-priti/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/neizvestnyy-brat/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/neizvestnyy-brat/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/32-kadra-tayna-11-sentyabrya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/32-kadra-tayna-11-sentyabrya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/seyf/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/seyf/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/title/serdce-zverya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/serdce-zverya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/genre/zapadnyykontent/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/zapadnyykontent/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/genre/drama/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/drama/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/genre/komediya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/komediya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/genre/triller/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/triller/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/genre/dorama/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/dorama/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/genre/boevik/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/boevik/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/genre/melodrama/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/melodrama/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/genre/anime/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/anime/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/genre/kriminal/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/kriminal/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/genre/fentezi/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/fentezi/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/genre/uzhasy/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/uzhasy/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/genre/priklyucheniya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/genre/priklyucheniya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/country/ssha/": {
+     "status": 200,
+     "chain": [
+      [
+       "/country/ssha/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/country/yaponiya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/country/yaponiya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/country/velikobritaniya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/country/velikobritaniya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/country/franciya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/country/franciya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/country/kanada/": {
+     "status": 200,
+     "chain": [
+      [
+       "/country/kanada/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/country/germaniya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/country/germaniya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/country/indiya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/country/indiya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/country/yuzhnayakoreya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/country/yuzhnayakoreya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/year/2020/": {
+     "status": 200,
+     "chain": [
+      [
+       "/year/2020/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "1lordserials1.online",
+     "h1": 1
+    },
+    "/takogo-adresa-tochno-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/takogo-adresa-tochno-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/title/takogo-tajtla-tochno-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/takogo-tajtla-tochno-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/catalog/takogo-razdela-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/catalog/takogo-razdela-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    }
+   },
+   "defects": [],
+   "valid_content_404": 0,
+   "broken_internal_links": 0,
+   "fake_200_for_missing_page": 0,
+   "wrong_tenant_routes": 0,
+   "errors": 0,
+   "site": "lords-03"
+  },
+  {
+   "domain": "yummyani.biz",
+   "port": 9130,
+   "family": "yummy",
+   "checked": 70,
+   "ok": 68,
+   "pages": {
+    "/": {
+     "status": 200,
+     "chain": [
+      [
+       "/",
+       200
+      ]
+     ],
+     "from": "seed",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/catalog/": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/",
+       308
+      ],
+      [
+       "/catalog",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/search/?q=a": {
+     "status": 308,
+     "chain": [
+      [
+       "/search/?q=a",
+       308
+      ]
+     ],
+     "from": "seed"
+    },
+    "/login": {
+     "status": 200,
+     "chain": [
+      [
+       "/login",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/register": {
+     "status": 200,
+     "chain": [
+      [
+       "/register",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/catalog/ongoing": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/ongoing",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/catalog/announcement": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/announcement",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/catalog/schedule": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/schedule",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/catalog/add-anime": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/add-anime",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/catalog/top": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/top",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/catalog/random": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/random",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 0
+    },
+    "/reviews": {
+     "status": 200,
+     "chain": [
+      [
+       "/reviews",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/posts": {
+     "status": 200,
+     "chain": [
+      [
+       "/posts",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/blogger": {
+     "status": 200,
+     "chain": [
+      [
+       "/blogger",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/users": {
+     "status": 200,
+     "chain": [
+      [
+       "/users",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/pages/info": {
+     "status": 200,
+     "chain": [
+      [
+       "/pages/info",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/sitemap": {
+     "status": 200,
+     "chain": [
+      [
+       "/sitemap",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/about": {
+     "status": 200,
+     "chain": [
+      [
+       "/about",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/legal/terms": {
+     "status": 200,
+     "chain": [
+      [
+       "/legal/terms",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/legal/privacy": {
+     "status": 200,
+     "chain": [
+      [
+       "/legal/privacy",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/legal/rightsholders": {
+     "status": 200,
+     "chain": [
+      [
+       "/legal/rightsholders",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/pages/sources": {
+     "status": 200,
+     "chain": [
+      [
+       "/pages/sources",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/pages/editorial": {
+     "status": 200,
+     "chain": [
+      [
+       "/pages/editorial",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/support": {
+     "status": 200,
+     "chain": [
+      [
+       "/support",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/pages/faq": {
+     "status": 200,
+     "chain": [
+      [
+       "/pages/faq",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/pages/report": {
+     "status": 200,
+     "chain": [
+      [
+       "/pages/report",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/catalog?sort=updated": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog?sort=updated",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/tsvetuschaya-zvezda-parizha": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/tsvetuschaya-zvezda-parizha",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/rytsari-zodiaka-omega": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/rytsari-zodiaka-omega",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/hori-san-i-miyamura-kun": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/hori-san-i-miyamura-kun",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/master-lda-i-plameni-2": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/master-lda-i-plameni-2",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/nelyud-chast-2": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/nelyud-chast-2",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/nelyud-film-2-stolknovenie": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/nelyud-film-2-stolknovenie",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/vo-vseoruzhii-sila-artefaktov": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/vo-vseoruzhii-sila-artefaktov",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/dedushkina-lampa": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/dedushkina-lampa",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/ovosch-supergeroy-morkkorm": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/ovosch-supergeroy-morkkorm",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/violonchelist-gosyu-1982": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/violonchelist-gosyu-1982",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/gorod-dozhdya": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/gorod-dozhdya",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/ryba": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/ryba",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/uchitel-medium": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/uchitel-medium",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/uzh-ne-zombi-li-eto-sredi-mertvetsov-ova": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/uzh-ne-zombi-li-eto-sredi-mertvetsov-ova",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/uzh-ne-zombi-li-eto-ova": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/uzh-ne-zombi-li-eto-ova",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/daybaster-dotyanis-do-neba-2": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/daybaster-dotyanis-do-neba-2",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/daybaster-dotyanis-do-neba": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/daybaster-dotyanis-do-neba",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/drakoniy-zhemchug-zet-plan-po-unichtozheniyu-sayyanov-2": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/drakoniy-zhemchug-zet-plan-po-unichtozheniyu-sayyanov-2",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/catalog/anime-updates": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/anime-updates",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/vechnaya-volya-4--019f94d7-1e45-71c0-abc3-6b00100660e7": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/vechnaya-volya-4--019f94d7-1e45-71c0-abc3-6b00100660e7",
+       308
+      ],
+      [
+       "/anime/vechnaya-volya-4",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/boevoy-master--01915137-083b-738b-9791-5025cf1327da": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/boevoy-master--01915137-083b-738b-9791-5025cf1327da",
+       308
+      ],
+      [
+       "/anime/boevoy-master",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/velikiy-pravitel-2023-2--019baf84-680d-71aa-b734-14b81b68256d": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/velikiy-pravitel-2023-2--019baf84-680d-71aa-b734-14b81b68256d",
+       308
+      ],
+      [
+       "/anime/velikiy-pravitel-2023-2",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/protivostoyaschiy-nebesam--01915137-4c41-7109-a481-069fb08695be": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/protivostoyaschiy-nebesam--01915137-4c41-7109-a481-069fb08695be",
+       308
+      ],
+      [
+       "/anime/protivostoyaschiy-nebesam",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/vladyka-mnozhestva-mirov--019152a4-5711-7b7e-bc08-a27c6962bd32": {
+     "status": 404,
+     "chain": [
+      [
+       "/anime/vladyka-mnozhestva-mirov--019152a4-5711-7b7e-bc08-a27c6962bd32",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/anime/hori-san-i-miyamura-kun--01a0b52f-43bc-7b2a-8e5e-aede005c3c01": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/hori-san-i-miyamura-kun--01a0b52f-43bc-7b2a-8e5e-aede005c3c01",
+       308
+      ],
+      [
+       "/anime/hori-san-i-miyamura-kun",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/rytsari-zodiaka-omega--01a0c369-c8c4-785f-acd2-66dbb4f4d7c5": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/rytsari-zodiaka-omega--01a0c369-c8c4-785f-acd2-66dbb4f4d7c5",
+       308
+      ],
+      [
+       "/anime/rytsari-zodiaka-omega",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/rashititel-grobnits": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/rashititel-grobnits",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/akkuratnaya-i-simpatichnaya-devochka-v-moey-novoy-shkole-podruga-detstva-s": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/akkuratnaya-i-simpatichnaya-devochka-v-moey-novoy-shkole-podruga-detstva-s",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/taynaya-bitva-za-prestol-silneyshego-printsa-duraleya": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/taynaya-bitva-za-prestol-silneyshego-printsa-duraleya",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/proschay-lara": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/proschay-lara",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/prizrak-v-dospehah-2026": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/prizrak-v-dospehah-2026",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/hori-san-i-miyamura-kun/season/1/episode/6": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/hori-san-i-miyamura-kun/season/1/episode/6",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/rytsari-zodiaka-omega/season/2/episode/97": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/rytsari-zodiaka-omega/season/2/episode/97",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/perevorot-voennogo-dvizheniya/season/1/episode/12": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/perevorot-voennogo-dvizheniya/season/1/episode/12",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/kaydzyu-nomer-vosem-rabochiy-den-narumi/season/4/episode/3": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/kaydzyu-nomer-vosem-rabochiy-den-narumi/season/4/episode/3",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/posts/perelinkovka-title-collection-genre": {
+     "status": 200,
+     "chain": [
+      [
+       "/posts/perelinkovka-title-collection-genre",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/posts/zhanrovye-vitriny-ne-filtry": {
+     "status": 200,
+     "chain": [
+      [
+       "/posts/zhanrovye-vitriny-ne-filtry",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/kastlvaniya-2-sezon--019154c8-1c31-7945-b702-352fcad5a0d9": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/kastlvaniya-2-sezon--019154c8-1c31-7945-b702-352fcad5a0d9",
+       308
+      ],
+      [
+       "/anime/kastlvaniya-2-sezon",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/skazka-o-saharnom-yabloke--0191527f-c532-76b9-9185-18fe00cc8d8a": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/skazka-o-saharnom-yabloke--0191527f-c532-76b9-9185-18fe00cc8d8a",
+       308
+      ],
+      [
+       "/anime/skazka-o-saharnom-yabloke",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/horimiya-kusochek--01915275-168c-73f7-a75c-3c5743168501": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/horimiya-kusochek--01915275-168c-73f7-a75c-3c5743168501",
+       308
+      ],
+      [
+       "/anime/horimiya-kusochek",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/anime/stesnyashka--01915150-18a3-7568-9a2d-fb10501d3340": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/stesnyashka--01915150-18a3-7568-9a2d-fb10501d3340",
+       308
+      ],
+      [
+       "/anime/stesnyashka-2023",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/catalog?sort=created": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog?sort=created",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.biz",
+     "h1": 1
+    },
+    "/takogo-adresa-tochno-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/takogo-adresa-tochno-net-9f3a/",
+       308
+      ],
+      [
+       "/takogo-adresa-tochno-net-9f3a",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/title/takogo-tajtla-tochno-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/takogo-tajtla-tochno-net-9f3a/",
+       308
+      ],
+      [
+       "/title/takogo-tajtla-tochno-net-9f3a",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/catalog/takogo-razdela-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/catalog/takogo-razdela-net-9f3a/",
+       308
+      ],
+      [
+       "/catalog/takogo-razdela-net-9f3a",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    }
+   },
+   "defects": [
+    {
+     "type": "valid_content_404",
+     "url": "/anime/vladyka-mnozhestva-mirov--019152a4-5711-7b7e-bc08-a27c6962bd32",
+     "from": "/"
+    }
+   ],
+   "valid_content_404": 1,
+   "broken_internal_links": 1,
+   "fake_200_for_missing_page": 0,
+   "wrong_tenant_routes": 0,
+   "errors": 0,
+   "site": "yummy-biz"
+  },
+  {
+   "domain": "yummyani.org",
+   "port": 9131,
+   "family": "yummy",
+   "checked": 70,
+   "ok": 68,
+   "pages": {
+    "/": {
+     "status": 200,
+     "chain": [
+      [
+       "/",
+       200
+      ]
+     ],
+     "from": "seed",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/catalog/": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/",
+       308
+      ],
+      [
+       "/catalog",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/search/?q=a": {
+     "status": 308,
+     "chain": [
+      [
+       "/search/?q=a",
+       308
+      ]
+     ],
+     "from": "seed"
+    },
+    "/login": {
+     "status": 200,
+     "chain": [
+      [
+       "/login",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/register": {
+     "status": 200,
+     "chain": [
+      [
+       "/register",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/posts": {
+     "status": 200,
+     "chain": [
+      [
+       "/posts",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/catalog/genre/comedy": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/genre/comedy",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/catalog/genre/drama": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/genre/drama",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/catalog/genre/fantasy": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/genre/fantasy",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/pages/editorial": {
+     "status": 200,
+     "chain": [
+      [
+       "/pages/editorial",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/catalog/schedule": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/schedule",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/catalog/ongoing": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/ongoing",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/catalog/announcement": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/announcement",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/sitemap": {
+     "status": 200,
+     "chain": [
+      [
+       "/sitemap",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/about": {
+     "status": 200,
+     "chain": [
+      [
+       "/about",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/legal/terms": {
+     "status": 200,
+     "chain": [
+      [
+       "/legal/terms",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/legal/privacy": {
+     "status": 200,
+     "chain": [
+      [
+       "/legal/privacy",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/legal/rightsholders": {
+     "status": 200,
+     "chain": [
+      [
+       "/legal/rightsholders",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/pages/sources": {
+     "status": 200,
+     "chain": [
+      [
+       "/pages/sources",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/support": {
+     "status": 200,
+     "chain": [
+      [
+       "/support",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/pages/faq": {
+     "status": 200,
+     "chain": [
+      [
+       "/pages/faq",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/pages/info": {
+     "status": 200,
+     "chain": [
+      [
+       "/pages/info",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/pages/report": {
+     "status": 200,
+     "chain": [
+      [
+       "/pages/report",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/posts/perelinkovka-title-collection-genre": {
+     "status": 200,
+     "chain": [
+      [
+       "/posts/perelinkovka-title-collection-genre",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/posts/zhanrovye-vitriny-ne-filtry": {
+     "status": 200,
+     "chain": [
+      [
+       "/posts/zhanrovye-vitriny-ne-filtry",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/posts/kak-chitat-raspisanie-seriy": {
+     "status": 200,
+     "chain": [
+      [
+       "/posts/kak-chitat-raspisanie-seriy",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/posts/2123": {
+     "status": 200,
+     "chain": [
+      [
+       "/posts/2123",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/posts/2122": {
+     "status": 200,
+     "chain": [
+      [
+       "/posts/2122",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/catalog/collection/genre-bridges": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/collection/genre-bridges",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/catalog/genre/action": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/genre/action",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/catalog/genre/romance": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/genre/romance",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/catalog/collection/seasonal-watchlist": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/collection/seasonal-watchlist",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/rashititel-grobnits": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/rashititel-grobnits",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/akkuratnaya-i-simpatichnaya-devochka-v-moey-novoy-shkole-podruga-detstva-s": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/akkuratnaya-i-simpatichnaya-devochka-v-moey-novoy-shkole-podruga-detstva-s",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/taynaya-bitva-za-prestol-silneyshego-printsa-duraleya": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/taynaya-bitva-za-prestol-silneyshego-printsa-duraleya",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/proschay-lara": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/proschay-lara",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/prizrak-v-dospehah-2026": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/prizrak-v-dospehah-2026",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/catalog/anime-updates": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/anime-updates",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/hori-san-i-miyamura-kun/season/1/episode/6": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/hori-san-i-miyamura-kun/season/1/episode/6",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/rytsari-zodiaka-omega/season/2/episode/97": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/rytsari-zodiaka-omega/season/2/episode/97",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/perevorot-voennogo-dvizheniya/season/1/episode/12": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/perevorot-voennogo-dvizheniya/season/1/episode/12",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/tsvetuschaya-zvezda-parizha": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/tsvetuschaya-zvezda-parizha",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/kaydzyu-nomer-vosem-rabochiy-den-narumi/season/4/episode/3": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/kaydzyu-nomer-vosem-rabochiy-den-narumi/season/4/episode/3",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/chernyy-klever-2": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/chernyy-klever-2",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/vo-vseoruzhii-sila-artefaktov": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/vo-vseoruzhii-sila-artefaktov",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/vechnaya-volya-4--019f94d7-1e45-71c0-abc3-6b00100660e7": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/vechnaya-volya-4--019f94d7-1e45-71c0-abc3-6b00100660e7",
+       308
+      ],
+      [
+       "/anime/vechnaya-volya-4",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/boevoy-master--01915137-083b-738b-9791-5025cf1327da": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/boevoy-master--01915137-083b-738b-9791-5025cf1327da",
+       308
+      ],
+      [
+       "/anime/boevoy-master",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/velikiy-pravitel-2023-2--019baf84-680d-71aa-b734-14b81b68256d": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/velikiy-pravitel-2023-2--019baf84-680d-71aa-b734-14b81b68256d",
+       308
+      ],
+      [
+       "/anime/velikiy-pravitel-2023-2",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/protivostoyaschiy-nebesam--01915137-4c41-7109-a481-069fb08695be": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/protivostoyaschiy-nebesam--01915137-4c41-7109-a481-069fb08695be",
+       308
+      ],
+      [
+       "/anime/protivostoyaschiy-nebesam",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/catalog?sort=updated": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog?sort=updated",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/kastlvaniya-2-sezon--019154c8-1c31-7945-b702-352fcad5a0d9": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/kastlvaniya-2-sezon--019154c8-1c31-7945-b702-352fcad5a0d9",
+       308
+      ],
+      [
+       "/anime/kastlvaniya-2-sezon",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/skazka-o-saharnom-yabloke--0191527f-c532-76b9-9185-18fe00cc8d8a": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/skazka-o-saharnom-yabloke--0191527f-c532-76b9-9185-18fe00cc8d8a",
+       308
+      ],
+      [
+       "/anime/skazka-o-saharnom-yabloke",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/horimiya-kusochek--01915275-168c-73f7-a75c-3c5743168501": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/horimiya-kusochek--01915275-168c-73f7-a75c-3c5743168501",
+       308
+      ],
+      [
+       "/anime/horimiya-kusochek",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/stesnyashka--01915150-18a3-7568-9a2d-fb10501d3340": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/stesnyashka--01915150-18a3-7568-9a2d-fb10501d3340",
+       308
+      ],
+      [
+       "/anime/stesnyashka",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/rytsari-zodiaka-omega": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/rytsari-zodiaka-omega",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/hori-san-i-miyamura-kun": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/hori-san-i-miyamura-kun",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/master-lda-i-plameni-2": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/master-lda-i-plameni-2",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/vladyka-mnozhestva-mirov--019152a4-5711-7b7e-bc08-a27c6962bd32": {
+     "status": 404,
+     "chain": [
+      [
+       "/anime/vladyka-mnozhestva-mirov--019152a4-5711-7b7e-bc08-a27c6962bd32",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/anime/hori-san-i-miyamura-kun--01a0b52f-43bc-7b2a-8e5e-aede005c3c01": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/hori-san-i-miyamura-kun--01a0b52f-43bc-7b2a-8e5e-aede005c3c01",
+       308
+      ],
+      [
+       "/anime/hori-san-i-miyamura-kun",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/rytsari-zodiaka-omega--01a0c369-c8c4-785f-acd2-66dbb4f4d7c5": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/rytsari-zodiaka-omega--01a0c369-c8c4-785f-acd2-66dbb4f4d7c5",
+       308
+      ],
+      [
+       "/anime/rytsari-zodiaka-omega",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/catalog?sort=created": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog?sort=created",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/nelyud-chast-2": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/nelyud-chast-2",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/nelyud-film-2-stolknovenie": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/nelyud-film-2-stolknovenie",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/yunyy-lord-master-pobega-2": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/yunyy-lord-master-pobega-2",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/voennaya-hronika-malenkoy-devochki-2": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/voennaya-hronika-malenkoy-devochki-2",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/mir-otome-igr-eto-tyazhelyy-mir-dlya-mobov-2": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/mir-otome-igr-eto-tyazhelyy-mir-dlya-mobov-2",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/lazurnyy-put-malyy-vpered-2": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/lazurnyy-put-malyy-vpered-2",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/rytsar-skelet-vstupaet-v-parallelnyy-mir-2": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/rytsar-skelet-vstupaet-v-parallelnyy-mir-2",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/anime/kompaniya-magi-lyumer-2": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/kompaniya-magi-lyumer-2",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.org",
+     "h1": 1
+    },
+    "/takogo-adresa-tochno-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/takogo-adresa-tochno-net-9f3a/",
+       308
+      ],
+      [
+       "/takogo-adresa-tochno-net-9f3a",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/title/takogo-tajtla-tochno-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/takogo-tajtla-tochno-net-9f3a/",
+       308
+      ],
+      [
+       "/title/takogo-tajtla-tochno-net-9f3a",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/catalog/takogo-razdela-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/catalog/takogo-razdela-net-9f3a/",
+       308
+      ],
+      [
+       "/catalog/takogo-razdela-net-9f3a",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    }
+   },
+   "defects": [
+    {
+     "type": "valid_content_404",
+     "url": "/anime/vladyka-mnozhestva-mirov--019152a4-5711-7b7e-bc08-a27c6962bd32",
+     "from": "/"
+    }
+   ],
+   "valid_content_404": 1,
+   "broken_internal_links": 1,
+   "fake_200_for_missing_page": 0,
+   "wrong_tenant_routes": 0,
+   "errors": 0,
+   "site": "yummy-org"
+  },
+  {
+   "domain": "yummyani.site",
+   "port": 9132,
+   "family": "yummy",
+   "checked": 70,
+   "ok": 68,
+   "pages": {
+    "/": {
+     "status": 200,
+     "chain": [
+      [
+       "/",
+       200
+      ]
+     ],
+     "from": "seed",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/catalog/": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/",
+       308
+      ],
+      [
+       "/catalog",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/search/?q=a": {
+     "status": 308,
+     "chain": [
+      [
+       "/search/?q=a",
+       308
+      ]
+     ],
+     "from": "seed"
+    },
+    "/login": {
+     "status": 200,
+     "chain": [
+      [
+       "/login",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/register": {
+     "status": 200,
+     "chain": [
+      [
+       "/register",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/catalog/ongoing": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/ongoing",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/catalog/announcement": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/announcement",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/catalog/schedule": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/schedule",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/catalog/add-anime": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/add-anime",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/catalog/top": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/top",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/catalog/random": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/random",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 0
+    },
+    "/reviews": {
+     "status": 200,
+     "chain": [
+      [
+       "/reviews",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/posts": {
+     "status": 200,
+     "chain": [
+      [
+       "/posts",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/blogger": {
+     "status": 200,
+     "chain": [
+      [
+       "/blogger",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/users": {
+     "status": 200,
+     "chain": [
+      [
+       "/users",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/pages/info": {
+     "status": 200,
+     "chain": [
+      [
+       "/pages/info",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/sitemap": {
+     "status": 200,
+     "chain": [
+      [
+       "/sitemap",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/about": {
+     "status": 200,
+     "chain": [
+      [
+       "/about",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/legal/terms": {
+     "status": 200,
+     "chain": [
+      [
+       "/legal/terms",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/legal/privacy": {
+     "status": 200,
+     "chain": [
+      [
+       "/legal/privacy",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/legal/rightsholders": {
+     "status": 200,
+     "chain": [
+      [
+       "/legal/rightsholders",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/pages/sources": {
+     "status": 200,
+     "chain": [
+      [
+       "/pages/sources",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/pages/editorial": {
+     "status": 200,
+     "chain": [
+      [
+       "/pages/editorial",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/support": {
+     "status": 200,
+     "chain": [
+      [
+       "/support",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/pages/faq": {
+     "status": 200,
+     "chain": [
+      [
+       "/pages/faq",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/pages/report": {
+     "status": 200,
+     "chain": [
+      [
+       "/pages/report",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/catalog/anime-updates": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/anime-updates",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/vechnaya-volya-4--019f94d7-1e45-71c0-abc3-6b00100660e7": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/vechnaya-volya-4--019f94d7-1e45-71c0-abc3-6b00100660e7",
+       308
+      ],
+      [
+       "/anime/vechnaya-volya-4",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/boevoy-master--01915137-083b-738b-9791-5025cf1327da": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/boevoy-master--01915137-083b-738b-9791-5025cf1327da",
+       308
+      ],
+      [
+       "/anime/boevoy-master",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/velikiy-pravitel-2023-2--019baf84-680d-71aa-b734-14b81b68256d": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/velikiy-pravitel-2023-2--019baf84-680d-71aa-b734-14b81b68256d",
+       308
+      ],
+      [
+       "/anime/velikiy-pravitel-2023-2",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/protivostoyaschiy-nebesam--01915137-4c41-7109-a481-069fb08695be": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/protivostoyaschiy-nebesam--01915137-4c41-7109-a481-069fb08695be",
+       308
+      ],
+      [
+       "/anime/protivostoyaschiy-nebesam",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/tikava--0191ae22-d7a8-7743-a0c1-0ca013734f8e": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/tikava--0191ae22-d7a8-7743-a0c1-0ca013734f8e",
+       308
+      ],
+      [
+       "/anime/tikava",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/igra-lzhetsov--019d6427-f691-7d9d-9e78-03ccb769d2f6": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/igra-lzhetsov--019d6427-f691-7d9d-9e78-03ccb769d2f6",
+       308
+      ],
+      [
+       "/anime/igra-lzhetsov",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/otverzhennaya-svyataya-i-ee-gastronomicheskoe-puteshestvie-v-drugom-mire--019efa55-eb64-7ef3-9358-318ec6901673": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/otverzhennaya-svyataya-i-ee-gastronomicheskoe-puteshestvie-v-drugom-mire--019efa55-eb64-7ef3-9358-318ec6901673",
+       308
+      ],
+      [
+       "/anime/otverzhennaya-svyataya-i-ee-gastronomicheskoe-puteshestvie-v-drugom-mire",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/neobyatnyy-okean-3--019efa4c-fee0-7eea-8fbb-a78d080861de": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/neobyatnyy-okean-3--019efa4c-fee0-7eea-8fbb-a78d080861de",
+       308
+      ],
+      [
+       "/anime/neobyatnyy-okean-3",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/akkuratnaya-i-simpatichnaya-devochka-v-moey-novoy-shkole-podruga-detstva-s--019ef9d6-0eea-7ed4-8899-2390be34735f": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/akkuratnaya-i-simpatichnaya-devochka-v-moey-novoy-shkole-podruga-detstva-s--019ef9d6-0eea-7ed4-8899-2390be34735f",
+       308
+      ],
+      [
+       "/anime/akkuratnaya-i-simpatichnaya-devochka-v-moey-novoy-shkole-podruga-detstva-s",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/razgnevannaya-ledi-poklyalas-otomstit-ya-razrushu-svoyu-stranu-s-pomoschyu-sily--019efa2b-62ad-7ee4-90cb-4c0fee682ddc": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/razgnevannaya-ledi-poklyalas-otomstit-ya-razrushu-svoyu-stranu-s-pomoschyu-sily--019efa2b-62ad-7ee4-90cb-4c0fee682ddc",
+       308
+      ],
+      [
+       "/anime/razgnevannaya-ledi-poklyalas-otomstit-ya-razrushu-svoyu-stranu-s-pomoschyu-sily",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/kompaniya-magi-lyumer-2--019efa17-9b20-7ee0-96ab-c44c95072f6d": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/kompaniya-magi-lyumer-2--019efa17-9b20-7ee0-96ab-c44c95072f6d",
+       308
+      ],
+      [
+       "/anime/kompaniya-magi-lyumer-2",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/lirichnaya-volshebnitsa-nanoha-operediteli-ognennyy-vystrel-vozmezdiya--019efa24-d300-7ee1-9d41-f8e7cfc76c2f": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/lirichnaya-volshebnitsa-nanoha-operediteli-ognennyy-vystrel-vozmezdiya--019efa24-d300-7ee1-9d41-f8e7cfc76c2f",
+       308
+      ],
+      [
+       "/anime/lirichnaya-volshebnitsa-nanoha-operediteli-ognennyy-vystrel-vozmezdiya",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/catalog?sort=updated": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog?sort=updated",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/tsvetuschaya-zvezda-parizha": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/tsvetuschaya-zvezda-parizha",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/rytsari-zodiaka-omega": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/rytsari-zodiaka-omega",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/hori-san-i-miyamura-kun": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/hori-san-i-miyamura-kun",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/master-lda-i-plameni-2": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/master-lda-i-plameni-2",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/vladyka-mnozhestva-mirov--019152a4-5711-7b7e-bc08-a27c6962bd32": {
+     "status": 404,
+     "chain": [
+      [
+       "/anime/vladyka-mnozhestva-mirov--019152a4-5711-7b7e-bc08-a27c6962bd32",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/anime/hori-san-i-miyamura-kun--01a0b52f-43bc-7b2a-8e5e-aede005c3c01": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/hori-san-i-miyamura-kun--01a0b52f-43bc-7b2a-8e5e-aede005c3c01",
+       308
+      ],
+      [
+       "/anime/hori-san-i-miyamura-kun",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/rytsari-zodiaka-omega--01a0c369-c8c4-785f-acd2-66dbb4f4d7c5": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/rytsari-zodiaka-omega--01a0c369-c8c4-785f-acd2-66dbb4f4d7c5",
+       308
+      ],
+      [
+       "/anime/rytsari-zodiaka-omega",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/kastlvaniya-2-sezon--019154c8-1c31-7945-b702-352fcad5a0d9": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/kastlvaniya-2-sezon--019154c8-1c31-7945-b702-352fcad5a0d9",
+       308
+      ],
+      [
+       "/anime/kastlvaniya-2-sezon",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/skazka-o-saharnom-yabloke--0191527f-c532-76b9-9185-18fe00cc8d8a": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/skazka-o-saharnom-yabloke--0191527f-c532-76b9-9185-18fe00cc8d8a",
+       308
+      ],
+      [
+       "/anime/skazka-o-saharnom-yabloke",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/horimiya-kusochek--01915275-168c-73f7-a75c-3c5743168501": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/horimiya-kusochek--01915275-168c-73f7-a75c-3c5743168501",
+       308
+      ],
+      [
+       "/anime/horimiya-kusochek",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/stesnyashka--01915150-18a3-7568-9a2d-fb10501d3340": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/stesnyashka--01915150-18a3-7568-9a2d-fb10501d3340",
+       308
+      ],
+      [
+       "/anime/stesnyashka",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/rashititel-grobnits": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/rashititel-grobnits",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/akkuratnaya-i-simpatichnaya-devochka-v-moey-novoy-shkole-podruga-detstva-s": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/akkuratnaya-i-simpatichnaya-devochka-v-moey-novoy-shkole-podruga-detstva-s",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/taynaya-bitva-za-prestol-silneyshego-printsa-duraleya": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/taynaya-bitva-za-prestol-silneyshego-printsa-duraleya",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/proschay-lara": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/proschay-lara",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/prizrak-v-dospehah-2026": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/prizrak-v-dospehah-2026",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/hori-san-i-miyamura-kun/season/1/episode/6": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/hori-san-i-miyamura-kun/season/1/episode/6",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/rytsari-zodiaka-omega/season/2/episode/97": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/rytsari-zodiaka-omega/season/2/episode/97",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/perevorot-voennogo-dvizheniya/season/1/episode/12": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/perevorot-voennogo-dvizheniya/season/1/episode/12",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/kaydzyu-nomer-vosem-rabochiy-den-narumi/season/4/episode/3": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/kaydzyu-nomer-vosem-rabochiy-den-narumi/season/4/episode/3",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/posts/perelinkovka-title-collection-genre": {
+     "status": 200,
+     "chain": [
+      [
+       "/posts/perelinkovka-title-collection-genre",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/posts/zhanrovye-vitriny-ne-filtry": {
+     "status": 200,
+     "chain": [
+      [
+       "/posts/zhanrovye-vitriny-ne-filtry",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/catalog?sort=created": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog?sort=created",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/nelyud-chast-2": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/nelyud-chast-2",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/nelyud-film-2-stolknovenie": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/nelyud-film-2-stolknovenie",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/vo-vseoruzhii-sila-artefaktov": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/vo-vseoruzhii-sila-artefaktov",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/dedushkina-lampa": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/dedushkina-lampa",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/ovosch-supergeroy-morkkorm": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/ovosch-supergeroy-morkkorm",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/anime/violonchelist-gosyu-1982": {
+     "status": 200,
+     "chain": [
+      [
+       "/anime/violonchelist-gosyu-1982",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "yummyani.site",
+     "h1": 1
+    },
+    "/takogo-adresa-tochno-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/takogo-adresa-tochno-net-9f3a/",
+       308
+      ],
+      [
+       "/takogo-adresa-tochno-net-9f3a",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/title/takogo-tajtla-tochno-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/takogo-tajtla-tochno-net-9f3a/",
+       308
+      ],
+      [
+       "/title/takogo-tajtla-tochno-net-9f3a",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/catalog/takogo-razdela-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/catalog/takogo-razdela-net-9f3a/",
+       308
+      ],
+      [
+       "/catalog/takogo-razdela-net-9f3a",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    }
+   },
+   "defects": [
+    {
+     "type": "valid_content_404",
+     "url": "/anime/vladyka-mnozhestva-mirov--019152a4-5711-7b7e-bc08-a27c6962bd32",
+     "from": "/"
+    }
+   ],
+   "valid_content_404": 1,
+   "broken_internal_links": 1,
+   "fake_200_for_missing_page": 0,
+   "wrong_tenant_routes": 0,
+   "errors": 0,
+   "site": "yummy-site"
+  },
+  {
+   "domain": "animedia.icu",
+   "port": 9121,
+   "family": "animedia",
+   "checked": 70,
+   "ok": 70,
+   "pages": {
+    "/": {
+     "status": 200,
+     "chain": [
+      [
+       "/",
+       200
+      ]
+     ],
+     "from": "seed",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/search/?q=a": {
+     "status": 200,
+     "chain": [
+      [
+       "/search/?q=a",
+       200
+      ]
+     ],
+     "from": "seed",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/new/": {
+     "status": 200,
+     "chain": [
+      [
+       "/new/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/collections/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collections/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/schedule/": {
+     "status": 200,
+     "chain": [
+      [
+       "/schedule/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?genre=anime": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=anime",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?genre=multfilm": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=multfilm",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?genre=boevik": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=boevik",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?genre=komediya": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=komediya",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?genre=fentezi": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=fentezi",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?genre=priklyucheniya": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=priklyucheniya",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?genre=drama": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=drama",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?genre=fantastika": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=fantastika",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?genre=senen": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=senen",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?genre=romantika": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=romantika",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?genre=dunhua": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=dunhua",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?genre=nauchnayafantastika": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=nauchnayafantastika",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?genre=shkola": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=shkola",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?genre=melodrama": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=melodrama",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?type=tv": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?type=tv",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?type=movie": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?type=movie",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/search/": {
+     "status": 200,
+     "chain": [
+      [
+       "/search/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?year=2026": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?year=2026",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?year=2025": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?year=2025",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?year=2024": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?year=2024",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?year=2023": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?year=2023",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?year=2022": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?year=2022",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?year=2021": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?year=2021",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?year=2020": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?year=2020",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?year=2019": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?year=2019",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?year=2018": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?year=2018",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?year=2017": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?year=2017",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/cvetuschaya-zvezda-parizha/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/cvetuschaya-zvezda-parizha/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/master-lda-i-plameni-2/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/master-lda-i-plameni-2/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/nelyud-chast-2/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/nelyud-chast-2/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/nelyud-film-2-stolknovenie/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/nelyud-film-2-stolknovenie/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/zolotaya-sekira/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/zolotaya-sekira/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/vo-vseoruzhii-sila-artefaktov/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/vo-vseoruzhii-sila-artefaktov/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/dedushkina-lampa/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/dedushkina-lampa/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/ovosch-supergeroy-morkkorm/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ovosch-supergeroy-morkkorm/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/violonchelist-gosyu-1982/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/violonchelist-gosyu-1982/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/gorod-dozhdya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/gorod-dozhdya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/ryba/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ryba/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/uchitel-medium/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/uchitel-medium/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/uzh-ne-zombi-li-eto-sredi-mertvecov-ova/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/uzh-ne-zombi-li-eto-sredi-mertvecov-ova/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/uzh-ne-zombi-li-eto-ova/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/uzh-ne-zombi-li-eto-ova/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/daybaster-dotyanis-do-neba-2/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/daybaster-dotyanis-do-neba-2/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/daybaster-dotyanis-do-neba/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/daybaster-dotyanis-do-neba/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/drakoniy-zhemchug-zet-plan-po-unichtozheniyu-sayyanov-2/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/drakoniy-zhemchug-zet-plan-po-unichtozheniyu-sayyanov-2/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/nelyud-film-1-impuls/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/nelyud-film-1-impuls/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/ksi-avant/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ksi-avant/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/korolevskie-kosmicheskie-sily-krylya-honneamiz/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/korolevskie-kosmicheskie-sily-krylya-honneamiz/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/generator-gaul/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/generator-gaul/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/kiberegoist-kaydzo/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/kiberegoist-kaydzo/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/legenda-boevyh-lentyaev-severnoy-zvezdy/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/legenda-boevyh-lentyaev-severnoy-zvezdy/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/toriko-3d-appetitnoe-priklyuchenie/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/toriko-3d-appetitnoe-priklyuchenie/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?kind=Аниме": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?kind=Аниме",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/catalog/?kind=Аниме-фильм": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?kind=Аниме-фильм",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/collection/series_with_episodes/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/series_with_episodes/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/prishedshiy-iz-drevnosti-2/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/prishedshiy-iz-drevnosti-2/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/dni-sakamoto-chast-2/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/dni-sakamoto-chast-2/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/svyaschennye-zveri-tysyachi-dney-i-nochey/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/svyaschennye-zveri-tysyachi-dney-i-nochey/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/svyaschennye-zveri/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/svyaschennye-zveri/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/kaydzyu-nomer-vosem-rabochiy-den-narumi/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/kaydzyu-nomer-vosem-rabochiy-den-narumi/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/chuvstvennye-slova/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/chuvstvennye-slova/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/stranniki-duhovnogo-mira/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/stranniki-duhovnogo-mira/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/proekt-kirameki/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/proekt-kirameki/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/istoriya-efendi/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/istoriya-efendi/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/title/ubiyca-bogov-final/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ubiyca-bogov-final/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.icu",
+     "h1": 1
+    },
+    "/takogo-adresa-tochno-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/takogo-adresa-tochno-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/title/takogo-tajtla-tochno-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/takogo-tajtla-tochno-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/catalog/takogo-razdela-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/catalog/takogo-razdela-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    }
+   },
+   "defects": [],
+   "valid_content_404": 0,
+   "broken_internal_links": 0,
+   "fake_200_for_missing_page": 0,
+   "wrong_tenant_routes": 0,
+   "errors": 0,
+   "site": "animedia-01"
+  },
+  {
+   "domain": "animedia.space",
+   "port": 9122,
+   "family": "animedia",
+   "checked": 70,
+   "ok": 70,
+   "pages": {
+    "/": {
+     "status": 200,
+     "chain": [
+      [
+       "/",
+       200
+      ]
+     ],
+     "from": "seed",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/search/?q=a": {
+     "status": 200,
+     "chain": [
+      [
+       "/search/?q=a",
+       200
+      ]
+     ],
+     "from": "seed",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/new/": {
+     "status": 200,
+     "chain": [
+      [
+       "/new/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/collections/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collections/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/schedule/": {
+     "status": 200,
+     "chain": [
+      [
+       "/schedule/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?genre=anime": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=anime",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?genre=multfilm": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=multfilm",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?genre=boevik": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=boevik",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?genre=komediya": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=komediya",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?genre=fentezi": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=fentezi",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?genre=priklyucheniya": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=priklyucheniya",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?genre=drama": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=drama",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?genre=fantastika": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=fantastika",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?genre=senen": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=senen",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?genre=romantika": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=romantika",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?genre=dunhua": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=dunhua",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?genre=nauchnayafantastika": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=nauchnayafantastika",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?genre=shkola": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=shkola",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?genre=melodrama": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=melodrama",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?type=tv": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?type=tv",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?type=movie": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?type=movie",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/search/": {
+     "status": 200,
+     "chain": [
+      [
+       "/search/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?year=2026": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?year=2026",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?year=2025": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?year=2025",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?year=2024": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?year=2024",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?year=2023": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?year=2023",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?year=2022": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?year=2022",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?year=2021": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?year=2021",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?year=2020": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?year=2020",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?year=2019": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?year=2019",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?year=2018": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?year=2018",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?year=2017": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?year=2017",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/cvetuschaya-zvezda-parizha/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/cvetuschaya-zvezda-parizha/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/master-lda-i-plameni-2/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/master-lda-i-plameni-2/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/nelyud-chast-2/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/nelyud-chast-2/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/nelyud-film-2-stolknovenie/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/nelyud-film-2-stolknovenie/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/zolotaya-sekira/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/zolotaya-sekira/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/vo-vseoruzhii-sila-artefaktov/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/vo-vseoruzhii-sila-artefaktov/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/dedushkina-lampa/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/dedushkina-lampa/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/ovosch-supergeroy-morkkorm/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ovosch-supergeroy-morkkorm/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/violonchelist-gosyu-1982/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/violonchelist-gosyu-1982/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/gorod-dozhdya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/gorod-dozhdya/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/ryba/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ryba/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/uchitel-medium/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/uchitel-medium/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/uzh-ne-zombi-li-eto-sredi-mertvecov-ova/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/uzh-ne-zombi-li-eto-sredi-mertvecov-ova/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/uzh-ne-zombi-li-eto-ova/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/uzh-ne-zombi-li-eto-ova/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/daybaster-dotyanis-do-neba-2/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/daybaster-dotyanis-do-neba-2/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/daybaster-dotyanis-do-neba/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/daybaster-dotyanis-do-neba/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/drakoniy-zhemchug-zet-plan-po-unichtozheniyu-sayyanov-2/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/drakoniy-zhemchug-zet-plan-po-unichtozheniyu-sayyanov-2/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/nelyud-film-1-impuls/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/nelyud-film-1-impuls/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/ksi-avant/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ksi-avant/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/korolevskie-kosmicheskie-sily-krylya-honneamiz/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/korolevskie-kosmicheskie-sily-krylya-honneamiz/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/generator-gaul/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/generator-gaul/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/kiberegoist-kaydzo/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/kiberegoist-kaydzo/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/legenda-boevyh-lentyaev-severnoy-zvezdy/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/legenda-boevyh-lentyaev-severnoy-zvezdy/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/toriko-3d-appetitnoe-priklyuchenie/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/toriko-3d-appetitnoe-priklyuchenie/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?kind=Аниме": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?kind=Аниме",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/catalog/?kind=Аниме-фильм": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?kind=Аниме-фильм",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/collection/action/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/action/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/tenti-lishniy-v-lyubvi/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/tenti-lishniy-v-lyubvi/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/prishedshiy-iz-drevnosti-2/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/prishedshiy-iz-drevnosti-2/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/dni-sakamoto-chast-2/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/dni-sakamoto-chast-2/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/svyaschennye-zveri/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/svyaschennye-zveri/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/stranniki-duhovnogo-mira/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/stranniki-duhovnogo-mira/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/chasha-snega/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/chasha-snega/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/po-tu-storonu-granicy-rassvet/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/po-tu-storonu-granicy-rassvet/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/ubiyca-bogov-final/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ubiyca-bogov-final/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/mobilnyy-voin-gandam-gquuuuuux-nachalo/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/mobilnyy-voin-gandam-gquuuuuux-nachalo/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/title/poketun/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/poketun/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "animedia.space",
+     "h1": 1
+    },
+    "/takogo-adresa-tochno-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/takogo-adresa-tochno-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/title/takogo-tajtla-tochno-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/takogo-tajtla-tochno-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/catalog/takogo-razdela-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/catalog/takogo-razdela-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    }
+   },
+   "defects": [],
+   "valid_content_404": 0,
+   "broken_internal_links": 0,
+   "fake_200_for_missing_page": 0,
+   "wrong_tenant_routes": 0,
+   "errors": 0,
+   "site": "animedia-02"
+  },
+  {
+   "domain": "zonafilm.space",
+   "port": 9120,
+   "family": "zona",
+   "checked": 70,
+   "ok": 6,
+   "pages": {
+    "/": {
+     "status": 200,
+     "chain": [
+      [
+       "/",
+       200
+      ]
+     ],
+     "from": "seed",
+     "canonical_host": "zonafilm.space",
+     "h1": 0
+    },
+    "/catalog/": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.space",
+     "h1": 0
+    },
+    "/search/?q=a": {
+     "status": 200,
+     "chain": [
+      [
+       "/search/?q=a",
+       200
+      ]
+     ],
+     "from": "seed",
+     "canonical_host": "zonafilm.space",
+     "h1": 0
+    },
+    "/new/": {
+     "status": 200,
+     "chain": [
+      [
+       "/new/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.space",
+     "h1": 0
+    },
+    "/collections/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collections/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.space",
+     "h1": 0
+    },
+    "/schedule/": {
+     "status": 200,
+     "chain": [
+      [
+       "/schedule/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.space",
+     "h1": 0
+    },
+    "/title/razorennaya-no-obozhaemaya-princem/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/razorennaya-no-obozhaemaya-princem/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/pepel-lunnogo-sveta/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/pepel-lunnogo-sveta/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/tam-gde-smeleet-lyubov/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/tam-gde-smeleet-lyubov/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/poryadochnyy-chelovek/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/poryadochnyy-chelovek/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/futbolnyy-ubiyca/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/futbolnyy-ubiyca/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/obman-serdca-igra-lisy/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/obman-serdca-igra-lisy/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/collection/recently_added/": {
+     "status": 404,
+     "chain": [
+      [
+       "/collection/recently_added/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/vne-zakona-yarost-tigrov/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/vne-zakona-yarost-tigrov/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/cvetuschaya-zvezda-parizha/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/cvetuschaya-zvezda-parizha/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/my-v-etom-vmeste/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/my-v-etom-vmeste/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/molodost-3/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/molodost-3/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/luchshiy-ohotnik-na-vampirov/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/luchshiy-ohotnik-na-vampirov/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/urodlivaya-istoriya/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/urodlivaya-istoriya/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/collection/recently_added_movies/": {
+     "status": 404,
+     "chain": [
+      [
+       "/collection/recently_added_movies/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/noch-peremen/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/noch-peremen/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/velikoe-ograblenie-v-pendzhabe/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/velikoe-ograblenie-v-pendzhabe/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/na-ispug/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/na-ispug/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/yarost-ubit-ili-byt-ubitym/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/yarost-ubit-ili-byt-ubitym/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/delo-o-propavshey-rybke/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/delo-o-propavshey-rybke/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/maniya-2/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/maniya-2/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/iosif-rozhdennyy-stat-velikim/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/iosif-rozhdennyy-stat-velikim/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/collection/new_movie_releases/": {
+     "status": 404,
+     "chain": [
+      [
+       "/collection/new_movie_releases/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/pust-muzyka-letit/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/pust-muzyka-letit/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/cvet-zla-chernyy/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/cvet-zla-chernyy/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/den-razoblacheniya/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/den-razoblacheniya/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/davay-lyubit/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/davay-lyubit/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/nikakih-zhenschin-nikakih-detey/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/nikakih-zhenschin-nikakih-detey/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/de-goll-zheleznyy-vek/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/de-goll-zheleznyy-vek/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/13-dush/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/13-dush/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/istinnoe-pravosudie-oko-za-oko/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/istinnoe-pravosudie-oko-za-oko/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/bigfut-pervobytnyy-strah/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/bigfut-pervobytnyy-strah/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/sluzhebnyy-roman/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/sluzhebnyy-roman/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/vlasteliny-vselennoy/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/vlasteliny-vselennoy/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/ochen-strashnoe-kino/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/ochen-strashnoe-kino/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/collection/new_series_releases/": {
+     "status": 404,
+     "chain": [
+      [
+       "/collection/new_series_releases/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/rashititel-grobnic/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/rashititel-grobnic/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/pylayuschee-leto/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/pylayuschee-leto/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/feyerverk-lyubvi/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/feyerverk-lyubvi/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/pozvonite-doktoru-czyanu/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/pozvonite-doktoru-czyanu/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/hloya-i-emma/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/hloya-i-emma/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/svidaniya-s-elis-peres/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/svidaniya-s-elis-peres/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/stupivshie-vne-zakona-ochischayuschiy-ogon/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/stupivshie-vne-zakona-ochischayuschiy-ogon/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/yuzhnye-arhivy/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/yuzhnye-arhivy/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/zloy-advokat/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/zloy-advokat/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/borba-v-pryamom-efire/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/borba-v-pryamom-efire/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/luna-v-zvezdnoy-dymke/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/luna-v-zvezdnoy-dymke/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/krasnoe-i-chernoe/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/krasnoe-i-chernoe/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/collection/new_episodes/": {
+     "status": 404,
+     "chain": [
+      [
+       "/collection/new_episodes/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/seyf/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/seyf/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/vina-5/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/vina-5/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/amerikanskiy-zalozhnik/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/amerikanskiy-zalozhnik/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/britva-okkama/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/britva-okkama/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/shahty-strasti/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/shahty-strasti/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/collection/top_rated/": {
+     "status": 404,
+     "chain": [
+      [
+       "/collection/top_rated/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/neprimetnyy/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/neprimetnyy/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/tam-gde-tancuyut-svetlyachki/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/tam-gde-tancuyut-svetlyachki/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/40-dney-2/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/40-dney-2/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/prekrasnyy-shum/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/prekrasnyy-shum/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/svyatoy-paisiy-iz-farasy-na-nebesa/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/svyatoy-paisiy-iz-farasy-na-nebesa/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/tancuy-chtoby-zhit/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/tancuy-chtoby-zhit/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/malandriny/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/malandriny/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/dzhudzhi/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/dzhudzhi/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/zemlya-mpondo/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/zemlya-mpondo/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/title/v-lovushke-4/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/v-lovushke-4/",
+       404
+      ]
+     ],
+     "from": "/"
+    },
+    "/takogo-adresa-tochno-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/takogo-adresa-tochno-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/title/takogo-tajtla-tochno-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/takogo-tajtla-tochno-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/catalog/takogo-razdela-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/catalog/takogo-razdela-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    }
+   },
+   "defects": [
+    {
+     "type": "valid_content_404",
+     "url": "/title/razorennaya-no-obozhaemaya-princem/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/pepel-lunnogo-sveta/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/tam-gde-smeleet-lyubov/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/poryadochnyy-chelovek/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/futbolnyy-ubiyca/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/obman-serdca-igra-lisy/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/collection/recently_added/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/vne-zakona-yarost-tigrov/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/cvetuschaya-zvezda-parizha/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/my-v-etom-vmeste/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/molodost-3/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/luchshiy-ohotnik-na-vampirov/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/urodlivaya-istoriya/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/collection/recently_added_movies/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/noch-peremen/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/velikoe-ograblenie-v-pendzhabe/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/na-ispug/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/yarost-ubit-ili-byt-ubitym/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/delo-o-propavshey-rybke/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/maniya-2/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/iosif-rozhdennyy-stat-velikim/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/collection/new_movie_releases/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/pust-muzyka-letit/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/cvet-zla-chernyy/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/den-razoblacheniya/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/davay-lyubit/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/nikakih-zhenschin-nikakih-detey/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/de-goll-zheleznyy-vek/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/13-dush/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/istinnoe-pravosudie-oko-za-oko/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/bigfut-pervobytnyy-strah/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/sluzhebnyy-roman/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/vlasteliny-vselennoy/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/ochen-strashnoe-kino/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/collection/new_series_releases/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/rashititel-grobnic/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/pylayuschee-leto/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/feyerverk-lyubvi/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/pozvonite-doktoru-czyanu/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/hloya-i-emma/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/svidaniya-s-elis-peres/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/stupivshie-vne-zakona-ochischayuschiy-ogon/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/yuzhnye-arhivy/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/zloy-advokat/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/borba-v-pryamom-efire/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/luna-v-zvezdnoy-dymke/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/krasnoe-i-chernoe/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/collection/new_episodes/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/seyf/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/vina-5/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/amerikanskiy-zalozhnik/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/britva-okkama/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/shahty-strasti/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/collection/top_rated/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/neprimetnyy/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/tam-gde-tancuyut-svetlyachki/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/40-dney-2/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/prekrasnyy-shum/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/svyatoy-paisiy-iz-farasy-na-nebesa/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/tancuy-chtoby-zhit/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/malandriny/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/dzhudzhi/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/zemlya-mpondo/",
+     "from": "/"
+    },
+    {
+     "type": "valid_content_404",
+     "url": "/title/v-lovushke-4/",
+     "from": "/"
+    }
+   ],
+   "valid_content_404": 64,
+   "broken_internal_links": 64,
+   "fake_200_for_missing_page": 0,
+   "wrong_tenant_routes": 0,
+   "errors": 0,
+   "site": "zona-01"
+  },
+  {
+   "domain": "zonafilm.cc",
+   "port": 9123,
+   "family": "zona",
+   "checked": 3,
+   "ok": 0,
+   "pages": {
+    "/": {
+     "status": 0,
+     "chain": [
+      [
+       "/",
+       0
+      ]
+     ],
+     "from": "seed"
+    },
+    "/catalog/": {
+     "status": 0,
+     "chain": [
+      [
+       "/catalog/",
+       0
+      ]
+     ],
+     "from": "seed"
+    },
+    "/search/?q=a": {
+     "status": 0,
+     "chain": [
+      [
+       "/search/?q=a",
+       0
+      ]
+     ],
+     "from": "seed"
+    },
+    "/takogo-adresa-tochno-net-9f3a/": {
+     "status": 0,
+     "chain": [
+      [
+       "/takogo-adresa-tochno-net-9f3a/",
+       0
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/title/takogo-tajtla-tochno-net-9f3a/": {
+     "status": 0,
+     "chain": [
+      [
+       "/title/takogo-tajtla-tochno-net-9f3a/",
+       0
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/catalog/takogo-razdela-net-9f3a/": {
+     "status": 0,
+     "chain": [
+      [
+       "/catalog/takogo-razdela-net-9f3a/",
+       0
+      ]
+     ],
+     "from": "probe-missing"
+    }
+   },
+   "defects": [
+    {
+     "type": "error",
+     "url": "/",
+     "status": 0,
+     "body": "URLError(ConnectionRefusedError(111, 'Connection refused'))"
+    },
+    {
+     "type": "error",
+     "url": "/catalog/",
+     "status": 0,
+     "body": "URLError(ConnectionRefusedError(111, 'Connection refused'))"
+    },
+    {
+     "type": "error",
+     "url": "/search/?q=a",
+     "status": 0,
+     "body": "URLError(ConnectionRefusedError(111, 'Connection refused'))"
+    }
+   ],
+   "valid_content_404": 0,
+   "broken_internal_links": 0,
+   "fake_200_for_missing_page": 0,
+   "wrong_tenant_routes": 0,
+   "errors": 3,
+   "site": "zona-02"
+  }
+ ],
+ "VALID_CONTENT_404": 67,
+ "BROKEN_INTERNAL_LINKS": 67,
+ "WRONG_TENANT_ROUTES": 0,
+ "FAKE_200_FOR_MISSING_PAGE": 0,
+ "ERRORS": 3
+}

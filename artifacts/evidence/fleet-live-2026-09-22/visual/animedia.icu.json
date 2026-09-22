@@ -1,0 +1,411 @@
+{
+ "base": "http://animedia.icu",
+ "tag": "animedia-icu",
+ "widths": [
+  390,
+  1440
+ ],
+ "pages": {
+  "/@390": {
+   "overflow": 0,
+   "широкие": [
+    "zrl__track"
+   ],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу аниме"
+    },
+    {
+     "cls": "zt__t",
+     "text": "Цветущая звезда Парижа"
+    },
+    {
+     "cls": "zt__t",
+     "text": "Нелюдь. Фильм 2: Столкновение"
+    },
+    {
+     "cls": "zt__t",
+     "text": "Во всеоружии: Сила артефактов"
+    },
+    {
+     "cls": "zt__t",
+     "text": "Овощ-супергерой Морккорм"
+    },
+    {
+     "cls": "zt__t",
+     "text": "Уж не зомби ли это? Среди мертвецов OVA"
+    },
+    {
+     "cls": "zt__t",
+     "text": "Дайбастер: Дотянись до неба! 2"
+    },
+    {
+     "cls": "zt__t",
+     "text": "Дайбастер: Дотянись до неба"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 96,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 18,
+   "buttons_invisible": [
+    "zhd__dd-btn",
+    "zhd__dd-btn",
+    "zhd__dd-btn",
+    "zhd__dd-btn"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Чем полезен Animedia ICU"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 0,
+    "blocked_scripts": 0
+   }
+  },
+  "/catalog/@390": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу аниме"
+    },
+    {
+     "cls": "vh",
+     "text": "Shikimori: 7.1 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "КП: 7.1 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb: 7.5 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "КП: 7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb: 7.8 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb: 7.2 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb: 6.7 из 10"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 48,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 8,
+   "buttons_invisible": [
+    "zhd__dd-btn",
+    "zhd__dd-btn",
+    "zhd__dd-btn",
+    "zhd__dd-btn"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Весь каталог"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 0,
+    "blocked_scripts": 0
+   }
+  },
+  "/search/?q=%D0%B0@390": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу аниме"
+    },
+    {
+     "cls": "asearch__hint",
+     "text": "Ищем по русскому и оригинальному написан"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 0,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 8,
+   "buttons_invisible": [
+    "zhd__dd-btn",
+    "zhd__dd-btn",
+    "zhd__dd-btn",
+    "zhd__dd-btn"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "«а»"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 0,
+    "blocked_scripts": 0
+   }
+  },
+  "/@1440": {
+   "overflow": 0,
+   "широкие": [
+    "zrl__track"
+   ],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу аниме"
+    },
+    {
+     "cls": "zt__t",
+     "text": "Уж не зомби ли это? Среди мертвецов OVA"
+    },
+    {
+     "cls": "zt__t",
+     "text": "Драконий жемчуг Зет: План по уничтожению"
+    },
+    {
+     "cls": "zt__t",
+     "text": "Королевские космические силы: Крылья Хон"
+    },
+    {
+     "cls": "zt__t",
+     "text": "Легенда боевых лентяев Северной звезды"
+    },
+    {
+     "cls": "zt__t",
+     "text": "Торико 3D: Аппетитное приключение!"
+    },
+    {
+     "cls": "vh",
+     "text": "Shikimori: 7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "КП: 7.4 из 10"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 96,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 13,
+   "buttons_invisible": [
+    "Открыть меню"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Чем полезен Animedia ICU"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0.018644675925925926,
+   "blocked": {
+    "posters": 0,
+    "blocked_scripts": 0
+   }
+  },
+  "/catalog/@1440": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу аниме"
+    },
+    {
+     "cls": "vh",
+     "text": "Shikimori: 7.1 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "КП: 7.1 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb: 7.5 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "КП: 7 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb: 7.8 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb: 7.2 из 10"
+    },
+    {
+     "cls": "vh",
+     "text": "IMDb: 6.7 из 10"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 48,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 8,
+   "buttons_invisible": [
+    "Открыть меню",
+    "afilt__open"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Весь каталог"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 0,
+    "blocked_scripts": 0
+   }
+  },
+  "/search/?q=%D0%B0@1440": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу аниме"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 0,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 8,
+   "buttons_invisible": [
+    "Открыть меню"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "«а»"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 0,
+    "blocked_scripts": 0
+   }
+  }
+ },
+ "slider": {
+  "390": {
+   "applicable": false,
+   "reason": "слайдера на странице нет"
+  },
+  "1440": {
+   "applicable": false,
+   "reason": "слайдера на странице нет"
+  }
+ },
+ "verdict": "FAIL",
+ "failures": [
+  {
+   "page": "/@390",
+   "issues": [
+    "элементы шире экрана: ['zrl__track']"
+   ]
+  },
+  {
+   "page": "/@1440",
+   "issues": [
+    "элементы шире экрана: ['zrl__track']"
+   ]
+  }
+ ]
+}

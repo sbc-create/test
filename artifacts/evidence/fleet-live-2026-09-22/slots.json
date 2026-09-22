@@ -1,0 +1,137 @@
+[
+ {
+  "domain": "lordfilm47.space",
+  "home_status": 200,
+  "title_url": "/title/32-kadra-tayna-11-sentyabrya/",
+  "title_status": 200,
+  "h1": 1,
+  "rating_slot": true,
+  "rating_sources": [
+   "imdb"
+  ],
+  "rating_none_state": false,
+  "comments_slot": false,
+  "player_slot": true,
+  "autoplay": false,
+  "iframe_in_html": false,
+  "card_rating_slot": true
+ },
+ {
+  "domain": "lordserial33.biz",
+  "home_status": 200,
+  "title_url": "/title/amerikanskaya-amazonka/",
+  "title_status": 200,
+  "h1": 1,
+  "rating_slot": true,
+  "rating_sources": [],
+  "rating_none_state": true,
+  "comments_slot": false,
+  "player_slot": true,
+  "autoplay": false,
+  "iframe_in_html": false,
+  "card_rating_slot": true
+ },
+ {
+  "domain": "1lordserials1.online",
+  "home_status": 200,
+  "title_url": "/title/32-kadra-tayna-11-sentyabrya/",
+  "title_status": 200,
+  "h1": 1,
+  "rating_slot": true,
+  "rating_sources": [
+   "imdb"
+  ],
+  "rating_none_state": false,
+  "comments_slot": false,
+  "player_slot": true,
+  "autoplay": false,
+  "iframe_in_html": false,
+  "card_rating_slot": true
+ },
+ {
+  "domain": "yummyani.biz",
+  "home_status": 200,
+  "title_url": "/anime/akkuratnaya-i-simpatichnaya-devochka-v-moey-novoy-shkole-podruga-detstva-s",
+  "title_status": 200,
+  "h1": 1,
+  "rating_slot": false,
+  "rating_sources": [],
+  "rating_none_state": false,
+  "comments_slot": true,
+  "player_slot": true,
+  "autoplay": false,
+  "iframe_in_html": false,
+  "card_rating_slot": false
+ },
+ {
+  "domain": "yummyani.org",
+  "home_status": 200,
+  "title_url": "/anime/akkuratnaya-i-simpatichnaya-devochka-v-moey-novoy-shkole-podruga-detstva-s",
+  "title_status": 200,
+  "h1": 1,
+  "rating_slot": false,
+  "rating_sources": [],
+  "rating_none_state": false,
+  "comments_slot": true,
+  "player_slot": true,
+  "autoplay": false,
+  "iframe_in_html": false,
+  "card_rating_slot": false
+ },
+ {
+  "domain": "yummyani.site",
+  "home_status": 200,
+  "title_url": "/anime/akkuratnaya-i-simpatichnaya-devochka-v-moey-novoy-shkole-podruga-detstva-s",
+  "title_status": 200,
+  "h1": 1,
+  "rating_slot": false,
+  "rating_sources": [],
+  "rating_none_state": false,
+  "comments_slot": true,
+  "player_slot": true,
+  "autoplay": false,
+  "iframe_in_html": false,
+  "card_rating_slot": false
+ },
+ {
+  "domain": "animedia.icu",
+  "home_status": 200,
+  "title_url": "/title/1999-otdel-protivodeystviya-okkultizmu/",
+  "title_status": 200,
+  "h1": 1,
+  "rating_slot": true,
+  "rating_sources": [],
+  "rating_none_state": false,
+  "comments_slot": false,
+  "player_slot": true,
+  "autoplay": true,
+  "iframe_in_html": false,
+  "card_rating_slot": true
+ },
+ {
+  "domain": "animedia.space",
+  "home_status": 200,
+  "title_url": "/title/agent-vremeni-3/",
+  "title_status": 200,
+  "h1": 1,
+  "rating_slot": true,
+  "rating_sources": [],
+  "rating_none_state": false,
+  "comments_slot": false,
+  "player_slot": true,
+  "autoplay": true,
+  "iframe_in_html": false,
+  "card_rating_slot": true
+ },
+ {
+  "domain": "zonafilm.space",
+  "home_status": 200,
+  "title_url": "/title/13-dush/",
+  "title_status": 404
+ },
+ {
+  "domain": "zonafilm.cc",
+  "home_status": 0,
+  "error": "URLError(ConnectionRefusedError(111, 'Connection refused'))"
+ }
+]

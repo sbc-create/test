@@ -1,0 +1,270 @@
+{
+ "base": "http://1lordserials1.online",
+ "tag": "1lordserials1-online",
+ "widths": [
+  390,
+  1440
+ ],
+ "pages": {
+  "/@390": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 36,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 2,
+   "buttons_invisible": [],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Подборки и рекомендации каталога"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 16,
+    "blocked_scripts": 1
+   }
+  },
+  "/catalog/@390": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    },
+    {
+     "cls": "vh",
+     "text": "Фильтры"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 48,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 2,
+   "buttons_invisible": [],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Каталог"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 34,
+    "blocked_scripts": 2
+   }
+  },
+  "/search/?q=%D0%B0@390": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 0,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 2,
+   "buttons_invisible": [],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Поиск: а"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 34,
+    "blocked_scripts": 3
+   }
+  },
+  "/@1440": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 36,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 2,
+   "buttons_invisible": [
+    "Меню разделов"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Подборки и рекомендации каталога"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 24,
+    "blocked_scripts": 1
+   }
+  },
+  "/catalog/@1440": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    },
+    {
+     "cls": "vh",
+     "text": "Фильтры"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 48,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 2,
+   "buttons_invisible": [
+    "Меню разделов"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Каталог"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 48,
+    "blocked_scripts": 2
+   }
+  },
+  "/search/?q=%D0%B0@1440": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "vh",
+     "text": "Поиск по каталогу"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 0,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 2,
+   "buttons_invisible": [
+    "Меню разделов"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Поиск: а"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 48,
+    "blocked_scripts": 3
+   }
+  }
+ },
+ "slider": {
+  "390": {
+   "applicable": false,
+   "reason": "слайдера на странице нет"
+  },
+  "1440": {
+   "applicable": false,
+   "reason": "слайдера на странице нет"
+  }
+ },
+ "verdict": "PASS",
+ "failures": []
+}

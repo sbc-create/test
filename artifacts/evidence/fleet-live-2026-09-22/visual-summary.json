@@ -1,0 +1,109 @@
+{
+ "lordserial33.biz": {
+  "exit": 0,
+  "verdict": "PASS",
+  "pages": 6,
+  "failures": []
+ },
+ "1lordserials1.online": {
+  "exit": 0,
+  "verdict": "PASS",
+  "pages": 6,
+  "failures": []
+ },
+ "animedia.icu": {
+  "exit": 2,
+  "verdict": "FAIL",
+  "pages": 6,
+  "failures": [
+   {
+    "page": "/@390",
+    "issues": [
+     "элементы шире экрана: ['zrl__track']"
+    ]
+   },
+   {
+    "page": "/@1440",
+    "issues": [
+     "элементы шире экрана: ['zrl__track']"
+    ]
+   }
+  ]
+ },
+ "animedia.space": {
+  "exit": 2,
+  "verdict": "FAIL",
+  "pages": 6,
+  "failures": [
+   {
+    "page": "/@390",
+    "issues": [
+     "элементы шире экрана: ['zrl__track']"
+    ]
+   },
+   {
+    "page": "/@1440",
+    "issues": [
+     "элементы шире экрана: ['zrl__track']"
+    ]
+   }
+  ]
+ },
+ "yummyani.biz": {
+  "exit": 2,
+  "verdict": "FAIL",
+  "pages": 4,
+  "failures": [
+   {
+    "page": "/@390",
+    "issues": [
+     "CLS 0.478"
+    ]
+   },
+   {
+    "page": "/@1440",
+    "issues": [
+     "CLS 0.299"
+    ]
+   }
+  ]
+ },
+ "yummyani.org": {
+  "exit": 2,
+  "verdict": "FAIL",
+  "pages": 4,
+  "failures": [
+   {
+    "page": "/@390",
+    "issues": [
+     "CLS 0.478"
+    ]
+   },
+   {
+    "page": "/@1440",
+    "issues": [
+     "CLS 0.299"
+    ]
+   }
+  ]
+ },
+ "yummyani.site": {
+  "exit": 2,
+  "verdict": "FAIL",
+  "pages": 4,
+  "failures": [
+   {
+    "page": "/@390",
+    "issues": [
+     "CLS 0.478"
+    ]
+   },
+   {
+    "page": "/@1440",
+    "issues": [
+     "CLS 0.299"
+    ]
+   }
+  ]
+ }
+}

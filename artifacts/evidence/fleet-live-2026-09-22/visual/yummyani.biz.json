@@ -1,0 +1,295 @@
+{
+ "base": "http://yummyani.biz",
+ "tag": "yummyani-biz",
+ "widths": [
+  390,
+  1440
+ ],
+ "pages": {
+  "/@390": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "bg-accent text-accent-fg sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[80] focus:rounded-[6px] focus:px-3 focus:py-2",
+     "text": "Перейти к содержимому"
+    },
+    {
+     "cls": "sr-only",
+     "text": "Найти аниме по названию"
+    },
+    {
+     "cls": "portal-season-caption",
+     "text": "Уж не зомби ли это? Среди мертвецов OVA"
+    },
+    {
+     "cls": "portal-season-caption",
+     "text": "Драконий жемчуг Зет: План по уничтожению"
+    },
+    {
+     "cls": "portal-season-caption",
+     "text": "Отверженная святая и её гастрономическое"
+    },
+    {
+     "cls": "portal-season-caption",
+     "text": "Аккуратная и симпатичная девочка в моей "
+    },
+    {
+     "cls": "portal-season-caption",
+     "text": "Разгневанная леди поклялась отомстить: Я"
+    },
+    {
+     "cls": "portal-season-caption",
+     "text": "Лиричная волшебница Наноха: Опередители "
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 89,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 7,
+   "buttons_invisible": [
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Новинки, сезоны и новые серии"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0.47804131054131055,
+   "blocked": {
+    "posters": 13,
+    "blocked_scripts": 1
+   }
+  },
+  "/catalog@390": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "bg-accent text-accent-fg sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[80] focus:rounded-[6px] focus:px-3 focus:py-2",
+     "text": "Перейти к содержимому"
+    },
+    {
+     "cls": "sr-only",
+     "text": "Найти аниме по названию"
+    },
+    {
+     "cls": "portal-catalog-caption",
+     "text": "Кайдзю номер восемь: Рабочий день Наруми"
+    },
+    {
+     "cls": "portal-catalog-caption",
+     "text": "Легенда боевых лентяев Северной звезды"
+    },
+    {
+     "cls": "portal-catalog-caption",
+     "text": "Вперёд, Анпанман! Давайте победим корабл"
+    },
+    {
+     "cls": "portal-catalog-caption",
+     "text": "Торико 3D: Аппетитное приключение!"
+    },
+    {
+     "cls": "portal-catalog-caption",
+     "text": "Драконий жемчуг Зет: План по уничтожению"
+    },
+    {
+     "cls": "portal-catalog-caption",
+     "text": "Уж не зомби ли это? Среди мертвецов OVA"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 26,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Новинки и сезоны — каталог YummyAnime"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 33,
+    "blocked_scripts": 2
+   }
+  },
+  "/@1440": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "bg-accent text-accent-fg sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[80] focus:rounded-[6px] focus:px-3 focus:py-2",
+     "text": "Перейти к содержимому"
+    },
+    {
+     "cls": "sr-only",
+     "text": "Найти аниме по названию"
+    },
+    {
+     "cls": "portal-season-caption",
+     "text": "Драконий жемчуг Зет: План по уничтожению"
+    },
+    {
+     "cls": "portal-season-caption",
+     "text": "Отверженная святая и её гастрономическое"
+    },
+    {
+     "cls": "portal-season-caption",
+     "text": "Аккуратная и симпатичная девочка в моей "
+    },
+    {
+     "cls": "portal-season-caption",
+     "text": "Разгневанная леди поклялась отомстить: Я"
+    },
+    {
+     "cls": "portal-season-caption",
+     "text": "Лиричная волшебница Наноха: Опередители "
+    },
+    {
+     "cls": "portal-season-caption",
+     "text": "Аккуратная и симпатичная девочка в моей "
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 89,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 7,
+   "buttons_invisible": [
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Новинки, сезоны и новые серии"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0.29919358409154234,
+   "blocked": {
+    "posters": 33,
+    "blocked_scripts": 1
+   }
+  },
+  "/catalog@1440": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "bg-accent text-accent-fg sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[80] focus:rounded-[6px] focus:px-3 focus:py-2",
+     "text": "Перейти к содержимому"
+    },
+    {
+     "cls": "sr-only",
+     "text": "Найти аниме по названию"
+    },
+    {
+     "cls": "portal-catalog-caption",
+     "text": "Вперёд, Анпанман! Давайте победим корабл"
+    },
+    {
+     "cls": "portal-catalog-caption",
+     "text": "Драконий жемчуг Зет: План по уничтожению"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 26,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Новинки и сезоны — каталог YummyAnime"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0.00021592068142361112,
+   "blocked": {
+    "posters": 57,
+    "blocked_scripts": 2
+   }
+  }
+ },
+ "slider": {
+  "390": {
+   "applicable": false,
+   "reason": "слайдера на странице нет"
+  },
+  "1440": {
+   "applicable": false,
+   "reason": "слайдера на странице нет"
+  }
+ },
+ "verdict": "FAIL",
+ "failures": [
+  {
+   "page": "/@390",
+   "issues": [
+    "CLS 0.478"
+   ]
+  },
+  {
+   "page": "/@1440",
+   "issues": [
+    "CLS 0.299"
+   ]
+  }
+ ]
+}

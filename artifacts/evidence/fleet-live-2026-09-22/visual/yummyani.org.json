@@ -1,0 +1,295 @@
+{
+ "base": "http://yummyani.org",
+ "tag": "yummyani-org",
+ "widths": [
+  390,
+  1440
+ ],
+ "pages": {
+  "/@390": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "bg-accent text-accent-fg sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[80] focus:rounded-[6px] focus:px-3 focus:py-2",
+     "text": "Перейти к содержимому"
+    },
+    {
+     "cls": "sr-only",
+     "text": "Найти аниме по названию"
+    },
+    {
+     "cls": "portal-update-title",
+     "text": "Связка title → collection → genre → rela"
+    },
+    {
+     "cls": "portal-update-info",
+     "text": "Как редакция усиливает внутренние ссылки"
+    },
+    {
+     "cls": "portal-update-title",
+     "text": "Жанровые витрины — не фильтры каталога"
+    },
+    {
+     "cls": "portal-update-info",
+     "text": "Почему /catalog/genre/{slug} получает со"
+    },
+    {
+     "cls": "portal-update-title",
+     "text": "Как читать расписание серий на YummyAnim"
+    },
+    {
+     "cls": "portal-update-info",
+     "text": "Разбор того, какие поля расписания счита"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 89,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 7,
+   "buttons_invisible": [
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Редакция YummyAnime: статьи, подборки, расписание"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0.47804131054131055,
+   "blocked": {
+    "posters": 13,
+    "blocked_scripts": 1
+   }
+  },
+  "/catalog@390": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "bg-accent text-accent-fg sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[80] focus:rounded-[6px] focus:px-3 focus:py-2",
+     "text": "Перейти к содержимому"
+    },
+    {
+     "cls": "sr-only",
+     "text": "Найти аниме по названию"
+    },
+    {
+     "cls": "portal-catalog-caption",
+     "text": "Кайдзю номер восемь: Рабочий день Наруми"
+    },
+    {
+     "cls": "portal-catalog-caption",
+     "text": "Легенда боевых лентяев Северной звезды"
+    },
+    {
+     "cls": "portal-catalog-caption",
+     "text": "Вперёд, Анпанман! Давайте победим корабл"
+    },
+    {
+     "cls": "portal-catalog-caption",
+     "text": "Торико 3D: Аппетитное приключение!"
+    },
+    {
+     "cls": "portal-catalog-caption",
+     "text": "Драконий жемчуг Зет: План по уничтожению"
+    },
+    {
+     "cls": "portal-catalog-caption",
+     "text": "Уж не зомби ли это? Среди мертвецов OVA"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 26,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Каталог с редакционной навигацией — YummyAnime"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0.00024132993035770814,
+   "blocked": {
+    "posters": 33,
+    "blocked_scripts": 2
+   }
+  },
+  "/@1440": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "bg-accent text-accent-fg sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[80] focus:rounded-[6px] focus:px-3 focus:py-2",
+     "text": "Перейти к содержимому"
+    },
+    {
+     "cls": "sr-only",
+     "text": "Найти аниме по названию"
+    },
+    {
+     "cls": "portal-update-info",
+     "text": "Новое оригинальное аниме «Maiden Blood» "
+    },
+    {
+     "cls": "portal-season-caption",
+     "text": "Аккуратная и симпатичная девочка в моей "
+    },
+    {
+     "cls": "portal-season-caption",
+     "text": "Тайная битва за престол сильнейшего прин"
+    },
+    {
+     "cls": "portal-season-caption",
+     "text": "Изгнанный реинкарнированный тяжёлый рыца"
+    },
+    {
+     "cls": "portal-season-caption",
+     "text": "Мир отомэ-игр — это тяжёлый мир для мобо"
+    },
+    {
+     "cls": "portal-season-caption",
+     "text": "Блич: Тысячелетняя кровавая война — Бедс"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 89,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 7,
+   "buttons_invisible": [
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Редакция YummyAnime: статьи, подборки, расписание"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0.29924114743247116,
+   "blocked": {
+    "posters": 33,
+    "blocked_scripts": 1
+   }
+  },
+  "/catalog@1440": {
+   "overflow": 0,
+   "широкие": [],
+   "обрезано": [
+    {
+     "cls": "bg-accent text-accent-fg sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[80] focus:rounded-[6px] focus:px-3 focus:py-2",
+     "text": "Перейти к содержимому"
+    },
+    {
+     "cls": "sr-only",
+     "text": "Найти аниме по названию"
+    },
+    {
+     "cls": "portal-catalog-caption",
+     "text": "Вперёд, Анпанман! Давайте победим корабл"
+    },
+    {
+     "cls": "portal-catalog-caption",
+     "text": "Драконий жемчуг Зет: План по уничтожению"
+    }
+   ],
+   "cards": 0,
+   "cards_no_title": 0,
+   "cards_hidden": 0,
+   "cards_no_href": 0,
+   "cards_unclickable": 0,
+   "cards_offscreen": 0,
+   "cards_in_hidden_tabs": 0,
+   "images": 26,
+   "images_broken": 0,
+   "images_marked_broken": 0,
+   "buttons": 5,
+   "buttons_invisible": [
+    "Найти"
+   ],
+   "buttons_covered": [],
+   "buttons_small": [],
+   "h1": 1,
+   "h1_text": [
+    "Каталог с редакционной навигацией — YummyAnime"
+   ],
+   "dup_ids": [],
+   "grid_filled": 0,
+   "dead_space": [],
+   "first_screen": 0,
+   "viewport": 900,
+   "slider": null,
+   "cls": 0,
+   "blocked": {
+    "posters": 57,
+    "blocked_scripts": 2
+   }
+  }
+ },
+ "slider": {
+  "390": {
+   "applicable": false,
+   "reason": "слайдера на странице нет"
+  },
+  "1440": {
+   "applicable": false,
+   "reason": "слайдера на странице нет"
+  }
+ },
+ "verdict": "FAIL",
+ "failures": [
+  {
+   "page": "/@390",
+   "issues": [
+    "CLS 0.478"
+   ]
+  },
+  {
+   "page": "/@1440",
+   "issues": [
+    "CLS 0.299"
+   ]
+  }
+ ]
+}

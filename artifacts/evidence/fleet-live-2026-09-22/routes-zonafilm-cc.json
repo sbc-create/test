@@ -1,0 +1,775 @@
+{
+ "sites": [
+  {
+   "domain": "zonafilm.cc",
+   "port": 9123,
+   "family": "zona",
+   "checked": 60,
+   "ok": 60,
+   "pages": {
+    "/": {
+     "status": 200,
+     "chain": [
+      [
+       "/",
+       200
+      ]
+     ],
+     "from": "seed",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/catalog/": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/search/?q=a": {
+     "status": 200,
+     "chain": [
+      [
+       "/search/?q=a",
+       200
+      ]
+     ],
+     "from": "seed",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/new/": {
+     "status": 200,
+     "chain": [
+      [
+       "/new/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/movies/": {
+     "status": 200,
+     "chain": [
+      [
+       "/movies/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/series/": {
+     "status": 200,
+     "chain": [
+      [
+       "/series/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/animation/": {
+     "status": 200,
+     "chain": [
+      [
+       "/animation/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/collections/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collections/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/razorennaya-no-obozhaemaya-princem/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/razorennaya-no-obozhaemaya-princem/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/catalog/?genre=dorama": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=dorama",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/catalog/?genre=drama": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=drama",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/catalog/?genre=comedy": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=comedy",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/catalog/?genre=triller": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=triller",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/catalog/?genre=action": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=action",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/catalog/?genre=melodrama": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?genre=melodrama",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/collection/recently_added/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/recently_added/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/collection/recently_added_movies/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/recently_added_movies/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/collection/new_movie_releases/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/new_movie_releases/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/collection/new_series_releases/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/new_series_releases/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/collection/new_episodes/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/new_episodes/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/collection/top_rated/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/top_rated/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/collection/current_season/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/current_season/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/collection/video_available/": {
+     "status": 200,
+     "chain": [
+      [
+       "/collection/video_available/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/search/": {
+     "status": 200,
+     "chain": [
+      [
+       "/search/",
+       200
+      ]
+     ],
+     "from": "/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/catalog/?kind=%D0%9C%D1%83%D0%BB%D1%8C%D1%82%D1%84%D0%B8%D0%BB%D1%8C%D0%BC&sort=newest": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?kind=%D0%9C%D1%83%D0%BB%D1%8C%D1%82%D1%84%D0%B8%D0%BB%D1%8C%D0%BC&sort=newest",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/catalog/?kind=%D0%A1%D0%B5%D1%80%D0%B8%D0%B0%D0%BB&sort=newest": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?kind=%D0%A1%D0%B5%D1%80%D0%B8%D0%B0%D0%BB&sort=newest",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC&sort=newest": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC&sort=newest",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-hochu-zakonchit-etu-igru-lyubvi/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-hochu-zakonchit-etu-igru-lyubvi/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-hochu-bolshego/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-hochu-bolshego/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-fey-fan/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-fey-fan/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-ubila-ego-vo-sne/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-ubila-ego-vo-sne/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-tebya-znayu/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-tebya-znayu/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-tvoy-ty-moya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-tvoy-ty-moya/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/yastreb/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/yastreb/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/yasnoe-utro-ranney-vesny/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/yasnoe-utro-ranney-vesny/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/yarost-ubit-ili-byt-ubitym/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/yarost-ubit-ili-byt-ubitym/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/yarost-tigra/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/yarost-tigra/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/yarostnaya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/yarostnaya/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-restavriruyu-relikvii-v-universitete/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-restavriruyu-relikvii-v-universitete/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-propishu-tebe-lyubov/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-propishu-tebe-lyubov/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-poluchil-chiterskie-sposobnosti-v-drugom-mire-i-stal-ekstraordinarnym-v-realn/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-poluchil-chiterskie-sposobnosti-v-drugom-mire-i-stal-ekstraordinarnym-v-realn/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-podruzhilsya-so-vtoroy-samoy-simpatichnoy-devushkoy-v-klasse/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-podruzhilsya-so-vtoroy-samoy-simpatichnoy-devushkoy-v-klasse/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-pod-prikrytiem/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-pod-prikrytiem/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-podaryu-tebe-vselennuyu/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-podaryu-tebe-vselennuyu/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-pererodilsya-torgovym-avtomatom-i-skitayus-po-labirintu-3/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-pererodilsya-torgovym-avtomatom-i-skitayus-po-labirintu-3/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/yanuni/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/yanuni/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-ne-umru-ot-lyubvi/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-ne-umru-ot-lyubvi/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-ne-boyus/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-ne-boyus/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-naydu-tebya/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-naydu-tebya/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/yami-shibai-yaponskie-rasskazy-o-privideniyah-16/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/yami-shibai-yaponskie-rasskazy-o-privideniyah-16/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-luna-snova-na-rolikah/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-luna-snova-na-rolikah/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-idu-iskat-2/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-idu-iskat-2/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-znayu-kto-ty/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-znayu-kto-ty/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-znayu-kak-ty-umresh/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-znayu-kak-ty-umresh/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/ya-dumal-chto-cheloveka-sudyat-ne-po-vneshnosti/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/ya-dumal-chto-cheloveka-sudyat-ne-po-vneshnosti/",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/catalog/?sort=newest&page=2": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?sort=newest&page=2",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/catalog/?sort=newest&page=3": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?sort=newest&page=3",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/catalog/?sort=newest&page=1917": {
+     "status": 200,
+     "chain": [
+      [
+       "/catalog/?sort=newest&page=1917",
+       200
+      ]
+     ],
+     "from": "/catalog/",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/100-prichin-ne-byt-imperatorom/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/100-prichin-ne-byt-imperatorom/",
+       200
+      ]
+     ],
+     "from": "/search/?q=a",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/title/avantyurist-pozhirayuschiy-demonov-ya-edinstvennyy-kto-stanovitsya-silnee-pozhir/": {
+     "status": 200,
+     "chain": [
+      [
+       "/title/avantyurist-pozhirayuschiy-demonov-ya-edinstvennyy-kto-stanovitsya-silnee-pozhir/",
+       200
+      ]
+     ],
+     "from": "/search/?q=a",
+     "canonical_host": "zonafilm.cc",
+     "h1": 1
+    },
+    "/takogo-adresa-tochno-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/takogo-adresa-tochno-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/title/takogo-tajtla-tochno-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/title/takogo-tajtla-tochno-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    },
+    "/catalog/takogo-razdela-net-9f3a/": {
+     "status": 404,
+     "chain": [
+      [
+       "/catalog/takogo-razdela-net-9f3a/",
+       404
+      ]
+     ],
+     "from": "probe-missing"
+    }
+   },
+   "defects": [],
+   "valid_content_404": 0,
+   "broken_internal_links": 0,
+   "fake_200_for_missing_page": 0,
+   "wrong_tenant_routes": 0,
+   "errors": 0,
+   "site": "zona-02"
+  }
+ ],
+ "VALID_CONTENT_404": 0,
+ "BROKEN_INTERNAL_LINKS": 0,
+ "WRONG_TENANT_ROUTES": 0,
+ "FAKE_200_FOR_MISSING_PAGE": 0,
+ "ERRORS": 0
+}
