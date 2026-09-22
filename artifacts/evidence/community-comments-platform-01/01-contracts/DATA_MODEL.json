@@ -1,0 +1,327 @@
+{
+  "schema_version": "COMMENTS_PLATFORM_V1",
+  "engine": "sqlite3",
+  "migration": "migrations/0007_comments_platform.py",
+  "reversible": true,
+  "table_prefix": "cp_",
+  "shared_with_ratings": false,
+  "tenant_scoped_tables": [
+    "cp_sites",
+    "cp_threads",
+    "cp_identities",
+    "cp_comments",
+    "cp_comment_revisions",
+    "cp_reactions",
+    "cp_reports",
+    "cp_moderation_actions",
+    "cp_policies",
+    "cp_rate_events",
+    "cp_content_digests",
+    "cp_idempotency",
+    "cp_audit_events",
+    "cp_outbox",
+    "cp_sequences"
+  ],
+  "unscoped_tables": [
+    "cp_schema_migrations"
+  ],
+  "columns": {
+    "cp_sites": [
+      "tenant_id",
+      "site_id",
+      "module_version",
+      "artifact_checksum",
+      "moderation_mode",
+      "seo_mode",
+      "read_enabled",
+      "write_enabled",
+      "publication_enabled",
+      "rollout_percent",
+      "max_depth",
+      "max_length",
+      "max_links",
+      "created_at",
+      "updated_at"
+    ],
+    "cp_threads": [
+      "tenant_id",
+      "site_id",
+      "thread_id",
+      "resource_type",
+      "canonical_content_id",
+      "comment_count",
+      "locked",
+      "created_at",
+      "updated_at"
+    ],
+    "cp_identities": [
+      "tenant_id",
+      "site_id",
+      "subject_id",
+      "display_name",
+      "is_guest",
+      "reputation",
+      "banned",
+      "ban_reason",
+      "banned_at",
+      "muted_until",
+      "created_at",
+      "updated_at"
+    ],
+    "cp_comments": [
+      "tenant_id",
+      "site_id",
+      "comment_id",
+      "thread_id",
+      "parent_id",
+      "depth",
+      "subject_id",
+      "body",
+      "body_html",
+      "state",
+      "revision",
+      "reaction_count",
+      "reply_count",
+      "report_count",
+      "risk_score",
+      "created_at",
+      "updated_at",
+      "edited_at",
+      "seq"
+    ],
+    "cp_comment_revisions": [
+      "tenant_id",
+      "site_id",
+      "comment_id",
+      "revision",
+      "body",
+      "editor_subject_id",
+      "reason",
+      "created_at"
+    ],
+    "cp_reactions": [
+      "tenant_id",
+      "site_id",
+      "comment_id",
+      "subject_id",
+      "reaction",
+      "created_at",
+      "updated_at"
+    ],
+    "cp_reports": [
+      "tenant_id",
+      "site_id",
+      "comment_id",
+      "reporter_subject_id",
+      "reason",
+      "note",
+      "state",
+      "network_hmac",
+      "created_at",
+      "resolved_at",
+      "resolved_by"
+    ],
+    "cp_moderation_actions": [
+      "tenant_id",
+      "site_id",
+      "action_id",
+      "comment_id",
+      "subject_id",
+      "actor_subject_id",
+      "actor_role",
+      "action",
+      "from_state",
+      "to_state",
+      "reason",
+      "automatic",
+      "rule_version",
+      "request_id",
+      "created_at"
+    ],
+    "cp_policies": [
+      "tenant_id",
+      "site_id",
+      "policy_version",
+      "moderation_mode",
+      "stoplist",
+      "max_links",
+      "max_length",
+      "max_depth",
+      "rate_per_minute",
+      "rate_per_hour",
+      "duplicate_window_seconds",
+      "updated_by",
+      "updated_at"
+    ],
+    "cp_rate_events": [
+      "tenant_id",
+      "site_id",
+      "bucket",
+      "principal_key",
+      "endpoint",
+      "occurred_at",
+      "event_id"
+    ],
+    "cp_content_digests": [
+      "tenant_id",
+      "site_id",
+      "subject_id",
+      "thread_id",
+      "digest",
+      "near_digest",
+      "comment_id",
+      "created_at"
+    ],
+    "cp_idempotency": [
+      "tenant_id",
+      "site_id",
+      "subject_id",
+      "idempotency_key",
+      "operation",
+      "request_fingerprint",
+      "response_json",
+      "created_at"
+    ],
+    "cp_audit_events": [
+      "tenant_id",
+      "site_id",
+      "event_id",
+      "occurred_at",
+      "actor_subject_id",
+      "actor_role",
+      "action",
+      "object_type",
+      "object_id",
+      "before_redacted",
+      "after_redacted",
+      "reason",
+      "request_id",
+      "rule_version",
+      "artifact_hash"
+    ],
+    "cp_outbox": [
+      "tenant_id",
+      "site_id",
+      "event_id",
+      "event_type",
+      "payload_json",
+      "state",
+      "attempts",
+      "created_at",
+      "processed_at"
+    ],
+    "cp_sequences": [
+      "tenant_id",
+      "site_id",
+      "name",
+      "value"
+    ]
+  },
+  "primary_keys": {
+    "cp_sites": [
+      "tenant_id",
+      "site_id"
+    ],
+    "cp_threads": [
+      "tenant_id",
+      "site_id",
+      "thread_id"
+    ],
+    "cp_identities": [
+      "tenant_id",
+      "site_id",
+      "subject_id"
+    ],
+    "cp_comments": [
+      "tenant_id",
+      "site_id",
+      "comment_id"
+    ],
+    "cp_comment_revisions": [
+      "tenant_id",
+      "site_id",
+      "comment_id",
+      "revision"
+    ],
+    "cp_reactions": [
+      "tenant_id",
+      "site_id",
+      "comment_id",
+      "subject_id"
+    ],
+    "cp_reports": [
+      "tenant_id",
+      "site_id",
+      "comment_id",
+      "reporter_subject_id"
+    ],
+    "cp_moderation_actions": [
+      "tenant_id",
+      "site_id",
+      "action_id"
+    ],
+    "cp_policies": [
+      "tenant_id",
+      "site_id"
+    ],
+    "cp_rate_events": [
+      "tenant_id",
+      "site_id",
+      "event_id"
+    ],
+    "cp_content_digests": [
+      "tenant_id",
+      "site_id",
+      "subject_id",
+      "thread_id",
+      "digest"
+    ],
+    "cp_idempotency": [
+      "tenant_id",
+      "site_id",
+      "subject_id",
+      "idempotency_key"
+    ],
+    "cp_audit_events": [
+      "tenant_id",
+      "site_id",
+      "event_id"
+    ],
+    "cp_outbox": [
+      "tenant_id",
+      "site_id",
+      "event_id"
+    ],
+    "cp_sequences": [
+      "tenant_id",
+      "site_id",
+      "name"
+    ]
+  },
+  "thread_key": [
+    "tenant_id",
+    "site_id",
+    "resource_type",
+    "canonical_content_id"
+  ],
+  "resource_types": [
+    "title",
+    "episode",
+    "collection",
+    "article",
+    "person"
+  ],
+  "unique_constraints": [
+    "cp_threads(tenant_id, site_id, resource_type, canonical_content_id)",
+    "cp_reactions(tenant_id, site_id, comment_id, subject_id)",
+    "cp_reports(tenant_id, site_id, comment_id, reporter_subject_id)",
+    "cp_idempotency(tenant_id, site_id, subject_id, idempotency_key)",
+    "cp_comments(tenant_id, site_id, seq)"
+  ],
+  "read_indexes": [
+    "ix_cp_comments_thread_state_seq",
+    "ix_cp_comments_popular",
+    "ix_cp_comments_parent",
+    "ix_cp_comments_queue"
+  ]
+}

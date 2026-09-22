@@ -1,0 +1,44 @@
+{
+  "schema_version": "COMMENTS_ISOLATION_PROOF_V1",
+  "claim": "No user or moderator of one site can read, modify or detect the existence of another site's data.",
+  "structural_controls": [
+    "tenant_id and site_id lead the primary key of every table",
+    "foreign keys are composite, so the database refuses a cross-tenant link",
+    "read indexes lead with the tenant pair",
+    "every store method takes a TenantScope; there is no overload without one",
+    "rows are re-checked against the scope after being read",
+    "scope is checked before permission, so refusals present as 404"
+  ],
+  "behavioural_proof": {
+    "matrix": "every ordered pair of the four tenants",
+    "operations": [
+      "read",
+      "write",
+      "edit",
+      "delete",
+      "react",
+      "report",
+      "moderate",
+      "admin",
+      "export"
+    ],
+    "expected_result": "404 in every cross-tenant case, never 403",
+    "below_the_api": [
+      "store reads",
+      "moderation queue",
+      "audit trail",
+      "export",
+      "outbox worker",
+      "rate-limit state",
+      "duplicate digests",
+      "bans"
+    ],
+    "row_accounting": "for every table, the unscoped row count equals the sum of the per-tenant counts — a row belonging to no tenant fails the test"
+  },
+  "the_proof_was_itself_tested": {
+    "method": "mutation",
+    "mutation": "removed the tenant_id/site_id filter from store.get_comment and disabled the post-read ownership assertion",
+    "result": "84 of 182 isolation tests failed",
+    "conclusion": "the suite detects a broken boundary rather than describing one"
+  }
+}

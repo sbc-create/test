@@ -1,0 +1,30 @@
+{
+  "schema_version": "COMMENTS_SEO_V1",
+  "modes": [
+    "user_initiated",
+    "ssr_first_page",
+    "ssr_paginated"
+  ],
+  "default_mode": "user_initiated",
+  "never_modified": [
+    "robots.txt",
+    "meta robots",
+    "canonical link",
+    "sitemap",
+    "hreflang",
+    "site indexability",
+    "ratings JSON-LD"
+  ],
+  "cloaking": "none — no user-agent branch exists in this module",
+  "rendered_states": [
+    "published",
+    "restored"
+  ],
+  "never_rendered_states": [
+    "hidden",
+    "pending",
+    "quarantined",
+    "removed"
+  ],
+  "ssr_requires_publication": true
+}

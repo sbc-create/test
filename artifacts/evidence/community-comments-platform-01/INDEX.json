@@ -1,0 +1,27 @@
+{
+  "schema_version": "COMMENTS_EVIDENCE_INDEX_V1",
+  "generated_at": "2026-09-22T01:59:15Z",
+  "commit": "2a1d4d35e7c026a1a726aafba5992e595b8bbc8d",
+  "module_version": "0.1.0-mvp",
+  "artifact_checksum": "6032fb3cd24769390a7826473cc93932aed459a15fa2a92e6a771188092fa082",
+  "documents": [
+    "01-contracts/AUDIT_CONTRACT.json",
+    "01-contracts/DATA_MODEL.json",
+    "01-contracts/INTEGRATION_CONTRACT.json",
+    "01-contracts/MODERATION_POLICY.json",
+    "01-contracts/OBSERVABILITY.json",
+    "01-contracts/OPENAPI.json",
+    "01-contracts/PRIVACY.json",
+    "01-contracts/RBAC_MATRIX.json",
+    "01-contracts/SEO_CONTRACT.json",
+    "01-contracts/STATE_MACHINE.json",
+    "02-threat-model/THREAT_MODEL.json",
+    "03-isolation/ISOLATION_PROOF.json",
+    "04-tests/TEST_MATRIX.json",
+    "05-rollout/ROLLBACK_PLAN.json",
+    "05-rollout/ROLLOUT_PLAN.json",
+    "HANDOFF.json"
+  ],
+  "content_digest": "0e5a56312184deb941024a6aa5c881c9a72bc78a84a0f18ee11da599e25afc9d",
+  "note": "Every document is serialised from the modules that implement the behaviour. generated_at and commit are the only fields that change between identical runs; content_digest covers the documents only."
+}

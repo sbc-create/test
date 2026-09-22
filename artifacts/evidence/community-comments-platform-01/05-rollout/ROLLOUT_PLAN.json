@@ -1,0 +1,62 @@
+{
+  "schema_version": "COMMENTS_ROLLOUT_V1",
+  "status": "NOT_STARTED — this stage ships no rollout",
+  "current_state": {
+    "COMMENTS_READ_ENABLED": 0,
+    "COMMENTS_WRITE_ENABLED": 0,
+    "COMMENTS_PUBLICATION_ENABLED": 0,
+    "COMMENTS_ROLLOUT_PERCENT": 0,
+    "COMMENTS_SEO_MODE": "user_initiated"
+  },
+  "why_a_config_change_is_not_enough": "the compiled ceilings in flags.py are all zero and clamp any configuration or environment value to zero, so enabling comments requires a source change, a review and an audit record",
+  "stages": [
+    {
+      "stage": 0,
+      "name": "local review",
+      "gate": "this stage — READY_FOR_LOCAL_REVIEW",
+      "requires": "owner reads the evidence and the code"
+    },
+    {
+      "stage": 1,
+      "name": "staging, one site, read only",
+      "requires": [
+        "owner approval recorded in audit",
+        "migration applied to a staging database with a rehearsed rollback",
+        "COMMENTS_READ_ENABLED ceiling raised to 1 in source",
+        "one site's read_enabled set to 1"
+      ],
+      "exit": "no cross-tenant attempt served; API error rate within budget"
+    },
+    {
+      "stage": 2,
+      "name": "staging, one site, writes with pre-moderation",
+      "requires": [
+        "stage 1 exit met",
+        "moderation queue staffed"
+      ],
+      "exit": "moderation outcomes reviewed; no spam published"
+    },
+    {
+      "stage": 3,
+      "name": "production canary, one site, 1%",
+      "requires": [
+        "four-eyes approval: the author of the change does not approve it",
+        "backup taken and restore verified",
+        "kill switch rehearsed"
+      ],
+      "exit": "observation window completed with a recorded keep verdict"
+    },
+    {
+      "stage": 4,
+      "name": "widen within one site, then to further sites",
+      "rule": "never beyond canary without a completed observation and a keep verdict; one site at a time"
+    }
+  ],
+  "blocking_conditions": [
+    "any confirmed cross-tenant disclosure (P0)",
+    "pending or hidden content found in public output",
+    "a moderation action without a reason",
+    "an audit gap for any privileged operation",
+    "a failing test in any required category"
+  ]
+}

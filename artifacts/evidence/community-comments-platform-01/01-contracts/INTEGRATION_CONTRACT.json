@@ -1,0 +1,63 @@
+{
+  "schema_version": "COMMENTS_INTEGRATION_V1",
+  "module": "COMMUNITY_COMMENTS",
+  "module_version": "0.1.0-mvp",
+  "api_version": "v1",
+  "artifact_checksum": "6032fb3cd24769390a7826473cc93932aed459a15fa2a92e6a771188092fa082",
+  "principle": "One shared module. A site references a pinned artifact and supplies configuration; it never contains comments source code.",
+  "what_a_site_pins": [
+    "module_version (exact, never latest)",
+    "artifact_checksum (sha256 of the widget files)",
+    "tenant_id and site_id",
+    "hosts and allowed_origins (exact)",
+    "theme, language",
+    "moderation_mode (pre|post)",
+    "read_enabled, write_enabled, publication_enabled",
+    "seo_mode (user_initiated|ssr_first_page|ssr_paginated)",
+    "rollout_percent",
+    "max_depth, max_length, max_links"
+  ],
+  "forbidden": [
+    "copying widget sources into a theme or template",
+    "a floating version such as latest, main or HEAD",
+    "supplying tenant_id or site_id from the browser",
+    "a wildcard CORS origin"
+  ],
+  "widget_files": [
+    "comments-widget.js",
+    "comments-widget.css"
+  ],
+  "widget_home": "factory/comments_platform/widget/",
+  "mount_contract": {
+    "global": "window.SiteFactoryComments",
+    "methods": [
+      "mount(rootOrSelector, config)",
+      "mountAll(selector, config)"
+    ],
+    "handle": [
+      "update(patch)",
+      "reload()",
+      "destroy()"
+    ],
+    "idempotent": [
+      "mount",
+      "destroy"
+    ],
+    "multiple_instances": "safe; keyed by root element"
+  },
+  "host_page_requirements": [
+    "a container element carrying data-cp-comments",
+    "the widget stylesheet loaded before first paint (it reserves height)",
+    "a CSRF token supplied to the config when cookie authentication is used",
+    "an identity provider on the server side, or guest mode"
+  ],
+  "layout_note": "In user_initiated mode a small layout shift is inherent: the height of a thread is unknowable before it is fetched. The stylesheet reserves --cp-reserve (320px by default, overridable per site) and the measured contribution is under the 0.1 CLS threshold. A site that needs zero shift uses an ssr_* seo_mode, where the markup is present at first paint.",
+  "client_forbidden_fields": [
+    "site",
+    "site_id",
+    "tenant",
+    "tenant_id",
+    "x-site-id",
+    "x-tenant-id"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": "COMMENTS_IDENTITY_PRIVACY_V1",
+  "stores_passwords": false,
+  "stores_raw_ip": false,
+  "stores_email": false,
+  "network_identifier": "HMAC(tenant key, ip + daily epoch), one-way",
+  "network_epoch_seconds": 86400,
+  "network_retention_days": 7,
+  "public_id_derivation": "HMAC(per-tenant key, tenant + site + upstream subject)",
+  "cross_tenant_correlation": "not computable without both tenant keys",
+  "guest_token": "random, not a device fingerprint",
+  "profile_scope": "per tenant and site; nicknames, reputation, mutes and bans do not travel"
+}

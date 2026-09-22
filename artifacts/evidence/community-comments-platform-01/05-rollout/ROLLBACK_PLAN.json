@@ -1,0 +1,47 @@
+{
+  "schema_version": "COMMENTS_ROLLBACK_V1",
+  "levels": [
+    {
+      "level": 1,
+      "name": "stop writes",
+      "action": "engage the kill switch (global or per site)",
+      "effect": "writes and reads refuse with 503; the host page still renders",
+      "reversible": true,
+      "restart_required": false,
+      "rehearsed_by": "test_resilience.py::TestFailureInjection"
+    },
+    {
+      "level": 2,
+      "name": "dark the site",
+      "action": "set read_enabled and write_enabled to 0 for that site",
+      "effect": "the widget renders a notice; no data is changed",
+      "reversible": true
+    },
+    {
+      "level": 3,
+      "name": "revert the artifact",
+      "action": "repin the previous module_version and artifact_checksum",
+      "effect": "the previous widget is served; the API contract is unchanged",
+      "reversible": true
+    },
+    {
+      "level": 4,
+      "name": "roll back the schema",
+      "action": "migrations/0007 downgrade, after a backup",
+      "effect": "cp_* tables are dropped; no other product is touched",
+      "reversible": true,
+      "rehearsed_by": "test_resilience.py::TestMigrationRollbackRehearsal",
+      "warning": "this discards comment data; the backup taken immediately before is the only recovery path, and the rehearsal proves that path works"
+    }
+  ],
+  "data_recovery": {
+    "backup_method": "SQLite online backup API, not a filesystem copy of a live WAL file",
+    "verification": "PRAGMA integrity_check and foreign_key_check on the copy",
+    "partitioning_preserved": true,
+    "rehearsed_by": "test_resilience.py::TestBackupAndRestore"
+  },
+  "never": [
+    "hard-deleting comment bodies as a rollback step",
+    "a rollback that also touches the ratings schema"
+  ]
+}

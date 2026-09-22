@@ -1,0 +1,56 @@
+{
+  "schema_version": "COMMENTS_OBSERVABILITY_V1",
+  "counters": [
+    "api_requests_total",
+    "api_errors_total",
+    "read_success_total",
+    "write_success_total",
+    "moderation_outcomes_total",
+    "idempotency_conflicts_total",
+    "duplicates_rejected_total",
+    "rate_limited_total",
+    "widget_load_total",
+    "widget_ready_total",
+    "widget_error_total",
+    "hydration_mismatch_total",
+    "ssr_render_total",
+    "ssr_timeout_total",
+    "ssr_cache_hit_total",
+    "js_error_free_sessions_total",
+    "queue_depth",
+    "kill_switch_engaged",
+    "cross_tenant_attempts_total"
+  ],
+  "histograms": [
+    "api_latency_ms",
+    "ssr_latency_ms",
+    "widget_ready_ms"
+  ],
+  "labels": [
+    "code",
+    "operation",
+    "outcome",
+    "reason_class",
+    "site_id",
+    "state",
+    "tenant_id",
+    "version"
+  ],
+  "always_labelled_by": [
+    "tenant_id",
+    "site_id",
+    "version"
+  ],
+  "never_in_metrics": [
+    "comment text",
+    "subject ids",
+    "network identifiers",
+    "tokens",
+    "email",
+    "raw IP"
+  ],
+  "p0_signal": {
+    "metric": "cross_tenant_attempts_total",
+    "rule": "a confirmed cross-tenant disclosure is P0 and blocks rollout; a refused probe also increments this counter, and that is the system working"
+  }
+}

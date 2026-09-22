@@ -1,0 +1,28 @@
+{
+  "schema_version": "COMMENTS_ANTIABUSE_V1",
+  "external_model_required": false,
+  "hold_threshold": 50,
+  "buckets": [
+    "subject",
+    "network",
+    "thread",
+    "endpoint"
+  ],
+  "refusing_rules": [
+    "EXACT_DUPLICATE",
+    "NEAR_DUPLICATE_FLOOD",
+    "rate limits",
+    "ban"
+  ],
+  "scoring_rules": [
+    "STOPLIST",
+    "LINK_CAP_EXCEEDED",
+    "LINK_WITHOUT_CONTENT",
+    "SHOUTING",
+    "CHARACTER_FLOOD",
+    "WORD_FLOOD",
+    "FIRST_POST_WITH_LINK"
+  ],
+  "on_degraded": "fail closed — the comment is held, never published unchecked",
+  "telemetry_contains_text": false
+}

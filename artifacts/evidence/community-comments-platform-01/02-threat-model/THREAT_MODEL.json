@@ -1,0 +1,113 @@
+{
+  "schema_version": "COMMENTS_THREAT_MODEL_V1",
+  "assets": [
+    "comment bodies of four independent communities",
+    "the mapping between a person and their comments on one site",
+    "moderation decisions and their reasons",
+    "per-tenant HMAC keys"
+  ],
+  "trust_boundaries": [
+    "browser to API (fully untrusted input)",
+    "site adapter to shared API (scope asserted by host or credential)",
+    "API to database (scope carried on every statement)",
+    "platform to tenant operators (RBAC, default deny)"
+  ],
+  "threats": [
+    {
+      "id": "T1",
+      "threat": "cross-tenant read by guessing or leaking an id",
+      "control": "tenant pair in every primary key, composite foreign keys, scope re-asserted on every row read, 404 rather than 403",
+      "tested_by": "tests/unit/comments_platform/test_tenant_isolation.py"
+    },
+    {
+      "id": "T2",
+      "threat": "a client naming its own tenant",
+      "control": "reject_client_supplied_scope refuses the request outright",
+      "tested_by": "test_tenancy.py::TestClientSuppliedScope, test_api.py"
+    },
+    {
+      "id": "T3",
+      "threat": "stored XSS through a comment body",
+      "control": "escape everything, then rebuild only allowlisted constructs",
+      "tested_by": "test_sanitize_xss.py (42-payload corpus, parsed not grepped)"
+    },
+    {
+      "id": "T4",
+      "threat": "cross-site request forgery on a write",
+      "control": "CSRF token required on unsafe methods under cookie auth",
+      "tested_by": "test_api.py::TestCsrf"
+    },
+    {
+      "id": "T5",
+      "threat": "IDOR on edit, delete, react or report",
+      "control": "ownership checked separately from the grant; scope first",
+      "tested_by": "test_rbac_matrix.py::TestOwnership, test_tenant_isolation.py"
+    },
+    {
+      "id": "T6",
+      "threat": "SQL injection",
+      "control": "every statement is parameterised; no string interpolation of values",
+      "tested_by": "test_security_probes.py"
+    },
+    {
+      "id": "T7",
+      "threat": "spam and coordinated flooding",
+      "control": "four independent rate buckets, exact and near duplicate detection, deterministic risk scoring, fail closed",
+      "tested_by": "test_service.py::TestDuplicatesAndFlood"
+    },
+    {
+      "id": "T8",
+      "threat": "report brigading used to hide a comment",
+      "control": "reporters per distinct network compared before queueing",
+      "tested_by": "test_service.py::TestReports, test_security_probes.py"
+    },
+    {
+      "id": "T9",
+      "threat": "cross-site tracking through comment identity",
+      "control": "public ids derived under per-tenant keys; no shared identifier",
+      "tested_by": "test_identity.py::TestNonCorrelation"
+    },
+    {
+      "id": "T10",
+      "threat": "privilege escalation by a tenant operator",
+      "control": "default deny, platform-only permissions, no self-elevation, four-eyes on rollout, short-lived scoped service tokens",
+      "tested_by": "test_rbac_matrix.py"
+    },
+    {
+      "id": "T11",
+      "threat": "pending content reaching a crawler",
+      "control": "SSR renders published states only and is gated on publication",
+      "tested_by": "test_ssr_seo.py"
+    },
+    {
+      "id": "T12",
+      "threat": "comment text leaking into logs, metrics or audit",
+      "control": "audit stores a shape; metric labels are an allowlist",
+      "tested_by": "test_audit.py, test_metrics.py"
+    },
+    {
+      "id": "T13",
+      "threat": "a comments outage breaking the host page",
+      "control": "every widget entry point guarded; API failure degrades to a notice",
+      "tested_by": "tests/browser/comments-widget/widget.spec.js"
+    },
+    {
+      "id": "T14",
+      "threat": "SSRF through a user-supplied link",
+      "control": "the platform never fetches a URL from a comment; links are rendered as text with an http(s) scheme check",
+      "tested_by": "test_security_probes.py::TestNoOutboundFetch"
+    }
+  ],
+  "accepted_residual": [
+    {
+      "item": "a small layout shift in user_initiated mode",
+      "why": "thread height is unknowable before the fetch",
+      "mitigation": "reserved height; ssr_* modes eliminate it"
+    },
+    {
+      "item": "network HMAC is reversible by brute force within an epoch",
+      "why": "the address space is small; this is inherent to any IP-derived value",
+      "mitigation": "daily rotation, 7-day retention, per-tenant key, never logged"
+    }
+  ]
+}

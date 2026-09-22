@@ -1,0 +1,97 @@
+{
+  "schema_version": "COMMENTS_STATE_MACHINE_V1",
+  "states": [
+    "pending",
+    "published",
+    "quarantined",
+    "hidden",
+    "restored",
+    "removed"
+  ],
+  "public_visible": [
+    "published",
+    "restored"
+  ],
+  "author_visible_extra": [
+    "hidden",
+    "pending",
+    "quarantined",
+    "removed"
+  ],
+  "queue_states": [
+    "pending",
+    "quarantined"
+  ],
+  "counted_states": [
+    "published",
+    "restored"
+  ],
+  "retains_body": [
+    "hidden",
+    "pending",
+    "published",
+    "quarantined",
+    "removed",
+    "restored"
+  ],
+  "allowed_transitions": {
+    "hidden": [
+      "quarantined",
+      "removed",
+      "restored"
+    ],
+    "pending": [
+      "hidden",
+      "published",
+      "quarantined",
+      "removed"
+    ],
+    "published": [
+      "hidden",
+      "quarantined",
+      "removed"
+    ],
+    "quarantined": [
+      "hidden",
+      "published",
+      "removed",
+      "restored"
+    ],
+    "removed": [],
+    "restored": [
+      "hidden",
+      "quarantined",
+      "removed"
+    ]
+  },
+  "automatic_transitions": [
+    "pending->hidden",
+    "pending->published",
+    "pending->quarantined",
+    "published->hidden",
+    "published->quarantined"
+  ],
+  "reason_required": [
+    "hidden->removed",
+    "hidden->restored",
+    "pending->hidden",
+    "pending->removed",
+    "published->hidden",
+    "published->removed",
+    "quarantined->hidden",
+    "quarantined->removed",
+    "quarantined->restored",
+    "restored->hidden",
+    "restored->removed"
+  ],
+  "reversible_automatic": [
+    "hidden",
+    "quarantined"
+  ],
+  "invariants": [
+    "no state deletes the body; removal and hiding are soft",
+    "automation may hide but may never remove",
+    "an edit re-enters moderation",
+    "removed is terminal"
+  ]
+}
