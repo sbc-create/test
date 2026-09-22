@@ -1,0 +1,87 @@
+{
+  "kind": "TLS_TERMINATION_REHEARSAL",
+  "not_a_public_https": true,
+  "started_at": "2026-09-22T17:29:35Z",
+  "terminator": "https://127.0.0.1:49505 (одноразовый сертификат)",
+  "cert_san_covers_domain": false,
+  "checks": {
+    "home": {
+      "hops": 0,
+      "final_status": 200,
+      "loop_suspected": false,
+      "canonical": [
+        "https://zonafilm.cc/"
+      ],
+      "x_robots_tag": "noindex, nofollow",
+      "chain": [
+        {
+          "url": "https://127.0.0.1:49505/",
+          "status": 200,
+          "location": null
+        }
+      ]
+    },
+    "catalog": {
+      "hops": 0,
+      "final_status": 200,
+      "loop_suspected": false,
+      "canonical": [
+        "https://zonafilm.cc/catalog/?sort=newest"
+      ],
+      "x_robots_tag": "noindex, nofollow",
+      "chain": [
+        {
+          "url": "https://127.0.0.1:49505/catalog/",
+          "status": 200,
+          "location": null
+        }
+      ]
+    },
+    "title": {
+      "hops": 0,
+      "final_status": 200,
+      "loop_suspected": false,
+      "canonical": [
+        "https://zonafilm.cc/title/razorennaya-no-obozhaemaya-princem/"
+      ],
+      "x_robots_tag": "noindex, nofollow",
+      "chain": [
+        {
+          "url": "https://127.0.0.1:49505/title/razorennaya-no-obozhaemaya-princem/",
+          "status": 200,
+          "location": null
+        }
+      ]
+    },
+    "no_slash": {
+      "hops": 1,
+      "final_status": 200,
+      "loop_suspected": false,
+      "canonical": [
+        "https://zonafilm.cc/catalog/?sort=newest"
+      ],
+      "x_robots_tag": "noindex, nofollow",
+      "chain": [
+        {
+          "url": "https://127.0.0.1:49505/catalog",
+          "status": 308,
+          "location": "https://zonafilm.cc/catalog/"
+        },
+        {
+          "url": "https://127.0.0.1:49505/catalog/",
+          "status": 200,
+          "location": null
+        }
+      ]
+    }
+  },
+  "verdict": {
+    "no_redirect_loop": true,
+    "all_200": true,
+    "canonical_https_own_domain": true,
+    "noindex_survives_proxy": true,
+    "slash_fix_applied_before_origin": true
+  },
+  "cert_removed": true,
+  "finished_at": "2026-09-22T17:29:38Z"
+}

@@ -54,6 +54,11 @@ KNOWN = {
     # include — директива ядра, есть во всех поддерживаемых версиях. Нужна для
     # каталога временных адресов: include по пустому шаблону ничего не делает.
     "include", "client_body_buffer_size",
+    # Директивы ядра и ngx_http_access_module, которых здесь не было только
+    # потому, что vhost'ы Lords их не используют. Отсутствие в списке делало их
+    # «опечаткой», и первый же vhost, скрывающий версию сервера и закрывающий
+    # /healthz с петли, получал три ложных отказа подряд.
+    "server_tokens", "allow", "deny", "satisfy",
 }
 
 
@@ -95,6 +100,33 @@ def _balanced(text: str) -> bool:
     return depth == 0
 
 
+def _tail_until_semicolon(text: str, start: int) -> str:
+    """Хвост директивы: до `;`, `{` или `}` вне кавычек.
+
+    Кавычки считаются так же, как их считает сам nginx: внутри них `;` — обычный
+    символ значения, а не конец директивы. Экранированная кавычка не закрывает
+    строку.
+    """
+    out = []
+    quote = None
+    index = start
+    while index < len(text):
+        char = text[index]
+        if quote:
+            if char == quote and text[index - 1] != "\\":
+                quote = None
+            out.append(char)
+        elif char in "\"'":
+            quote = char
+            out.append(char)
+        elif char in ";{}":
+            break
+        else:
+            out.append(char)
+        index += 1
+    return "".join(out)
+
+
 def check(text: str, *, expect_tls: bool) -> Result:
     """Разбирает конфигурацию и проверяет то, что можно проверить без nginx."""
     result = Result()
@@ -104,8 +136,19 @@ def check(text: str, *, expect_tls: bool) -> Result:
         result.fail("фигурные скобки не сбалансированы")
         return result
 
-    for statement in re.finditer(r"^\s*([a-z_][a-z0-9_]*)\b([^;{}]*)", body, re.M):
-        name, tail = statement.group(1), statement.group(2)
+    # Хвост директивы читается до точки с запятой ВНЕ кавычек.
+    #
+    # Прежний `[^;{}]*` обрывался на первой `;` в любом месте, включая середину
+    # кавычек. Content-Security-Policy состоит из таких точек с запятой почти
+    # целиком, и у директивы
+    #     add_header Content-Security-Policy "default-src 'self'; …" always;
+    # хвостом оказывалось ` Content-Security-Policy "default-src 'self'`.
+    # Слово `always` в него не попадало, и проверка требовала добавить то, что
+    # уже стоит. Хуже: «исправление» под это требование сняло бы CSP с ответов
+    # 404 и 5xx — ровно с тех, ради которых `always` и нужен.
+    for statement in re.finditer(r"^\s*([a-z_][a-z0-9_]*)\b", body, re.M):
+        name = statement.group(1)
+        tail = _tail_until_semicolon(body, statement.end())
         result.directives.add(name)
         if name in INTRODUCED_AFTER_1_18:
             version = ".".join(str(part) for part in INTRODUCED_AFTER_1_18[name])
