@@ -1,23 +1,23 @@
 {
   "schema_version": "COMMENTS_TEST_RUNS_V1",
-  "commit": "31c26872bf57f104923ea40c537bdb259458c8f9",
-  "started_at": "2026-09-22T02:00:45Z",
-  "ended_at": "2026-09-22T02:01:48Z",
+  "commit": "dd9ba38b5021f28c1f20c38d5c39725e191c0abd",
+  "started_at": "2026-09-22T02:02:13Z",
+  "ended_at": "2026-09-22T02:03:21Z",
   "full_runs_consecutive": 2,
   "clean_state_between_runs": true,
   "production_touched": false,
   "log": "artifacts/evidence/community-comments-platform-01/04-tests/TEST_RUNS.log",
-  "overall_exit_code": 1,
+  "overall_exit_code": 0,
   "gates": [
-    {"run":1,"gate":"ruff","command":"python3 -m ruff check factory/comments_platform/ tests/unit/comments_platform/ scripts/comments_platform_artifact.py scripts/comments_platform_evidence.py","exit_code":0,"started_at":"2026-09-22T02:00:45Z","ended_at":"2026-09-22T02:00:45Z"},
-    {"run":1,"gate":"pytest-unit","command":"python3 -m pytest tests/unit/comments_platform/ -q -p no:randomly","exit_code":0,"started_at":"2026-09-22T02:00:45Z","ended_at":"2026-09-22T02:01:04Z"},
-    {"run":1,"gate":"artifact-checksum","command":"python3 scripts/comments_platform_artifact.py --check","exit_code":0,"started_at":"2026-09-22T02:01:04Z","ended_at":"2026-09-22T02:01:04Z"},
-    {"run":1,"gate":"evidence-freshness","command":"python3 scripts/comments_platform_evidence.py --check","exit_code":1,"started_at":"2026-09-22T02:01:04Z","ended_at":"2026-09-22T02:01:04Z"},
-    {"run":1,"gate":"playwright-widget","command":"npx playwright test --config=playwright.comments.config.js --workers=2","exit_code":0,"started_at":"2026-09-22T02:01:04Z","ended_at":"2026-09-22T02:01:17Z"},
-    {"run":2,"gate":"ruff","command":"python3 -m ruff check factory/comments_platform/ tests/unit/comments_platform/ scripts/comments_platform_artifact.py scripts/comments_platform_evidence.py","exit_code":0,"started_at":"2026-09-22T02:01:17Z","ended_at":"2026-09-22T02:01:17Z"},
-    {"run":2,"gate":"pytest-unit","command":"python3 -m pytest tests/unit/comments_platform/ -q -p no:randomly","exit_code":0,"started_at":"2026-09-22T02:01:17Z","ended_at":"2026-09-22T02:01:35Z"},
-    {"run":2,"gate":"artifact-checksum","command":"python3 scripts/comments_platform_artifact.py --check","exit_code":0,"started_at":"2026-09-22T02:01:35Z","ended_at":"2026-09-22T02:01:35Z"},
-    {"run":2,"gate":"evidence-freshness","command":"python3 scripts/comments_platform_evidence.py --check","exit_code":1,"started_at":"2026-09-22T02:01:35Z","ended_at":"2026-09-22T02:01:35Z"},
-    {"run":2,"gate":"playwright-widget","command":"npx playwright test --config=playwright.comments.config.js --workers=2","exit_code":0,"started_at":"2026-09-22T02:01:35Z","ended_at":"2026-09-22T02:01:48Z"}
+    {"run":1,"gate":"ruff","command":"python3 -m ruff check factory/comments_platform/ tests/unit/comments_platform/ scripts/comments_platform_artifact.py scripts/comments_platform_evidence.py","exit_code":0,"started_at":"2026-09-22T02:02:13Z","ended_at":"2026-09-22T02:02:13Z"},
+    {"run":1,"gate":"pytest-unit","command":"python3 -m pytest tests/unit/comments_platform/ -q -p no:randomly","exit_code":0,"started_at":"2026-09-22T02:02:14Z","ended_at":"2026-09-22T02:02:37Z"},
+    {"run":1,"gate":"artifact-checksum","command":"python3 scripts/comments_platform_artifact.py --check","exit_code":0,"started_at":"2026-09-22T02:02:37Z","ended_at":"2026-09-22T02:02:38Z"},
+    {"run":1,"gate":"evidence-freshness","command":"python3 scripts/comments_platform_evidence.py --check","exit_code":0,"started_at":"2026-09-22T02:02:38Z","ended_at":"2026-09-22T02:02:38Z"},
+    {"run":1,"gate":"playwright-widget","command":"npx playwright test --config=playwright.comments.config.js --workers=2","exit_code":0,"started_at":"2026-09-22T02:02:38Z","ended_at":"2026-09-22T02:02:51Z"},
+    {"run":2,"gate":"ruff","command":"python3 -m ruff check factory/comments_platform/ tests/unit/comments_platform/ scripts/comments_platform_artifact.py scripts/comments_platform_evidence.py","exit_code":0,"started_at":"2026-09-22T02:02:51Z","ended_at":"2026-09-22T02:02:51Z"},
+    {"run":2,"gate":"pytest-unit","command":"python3 -m pytest tests/unit/comments_platform/ -q -p no:randomly","exit_code":0,"started_at":"2026-09-22T02:02:51Z","ended_at":"2026-09-22T02:03:08Z"},
+    {"run":2,"gate":"artifact-checksum","command":"python3 scripts/comments_platform_artifact.py --check","exit_code":0,"started_at":"2026-09-22T02:03:08Z","ended_at":"2026-09-22T02:03:08Z"},
+    {"run":2,"gate":"evidence-freshness","command":"python3 scripts/comments_platform_evidence.py --check","exit_code":0,"started_at":"2026-09-22T02:03:08Z","ended_at":"2026-09-22T02:03:08Z"},
+    {"run":2,"gate":"playwright-widget","command":"npx playwright test --config=playwright.comments.config.js --workers=2","exit_code":0,"started_at":"2026-09-22T02:03:08Z","ended_at":"2026-09-22T02:03:21Z"}
   ]
 }

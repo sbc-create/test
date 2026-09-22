@@ -1,17 +1,17 @@
 ==================================================================
 run 1 | gate ruff
 command: python3 -m ruff check factory/comments_platform/ tests/unit/comments_platform/ scripts/comments_platform_artifact.py scripts/comments_platform_evidence.py
-started: 2026-09-22T02:00:45Z
+started: 2026-09-22T02:02:13Z
 ------------------------------------------------------------------
 All checks passed!
 ------------------------------------------------------------------
 exit code: 0
-ended: 2026-09-22T02:00:45Z
+ended: 2026-09-22T02:02:13Z
 
 ==================================================================
 run 1 | gate pytest-unit
 command: python3 -m pytest tests/unit/comments_platform/ -q -p no:randomly
-started: 2026-09-22T02:00:45Z
+started: 2026-09-22T02:02:14Z
 ------------------------------------------------------------------
 ........................................................................ [  8%]
 ........................................................................ [ 17%]
@@ -25,103 +25,102 @@ started: 2026-09-22T02:00:45Z
 ........................................................................ [ 87%]
 ........................................................................ [ 96%]
 .............................                                            [100%]
-821 passed in 17.77s
+821 passed in 23.39s
 ------------------------------------------------------------------
 exit code: 0
-ended: 2026-09-22T02:01:04Z
+ended: 2026-09-22T02:02:37Z
 
 ==================================================================
 run 1 | gate artifact-checksum
 command: python3 scripts/comments_platform_artifact.py --check
-started: 2026-09-22T02:01:04Z
+started: 2026-09-22T02:02:37Z
 ------------------------------------------------------------------
 artifact checksum up to date: 6032fb3cd24769390a7826473cc93932aed459a15fa2a92e6a771188092fa082
 ------------------------------------------------------------------
 exit code: 0
-ended: 2026-09-22T02:01:04Z
+ended: 2026-09-22T02:02:38Z
 
 ==================================================================
 run 1 | gate evidence-freshness
 command: python3 scripts/comments_platform_evidence.py --check
-started: 2026-09-22T02:01:04Z
+started: 2026-09-22T02:02:38Z
 ------------------------------------------------------------------
-stale evidence: HANDOFF.json
-run: python3 scripts/comments_platform_evidence.py
+evidence up to date (16 documents)
 ------------------------------------------------------------------
-exit code: 1
-ended: 2026-09-22T02:01:04Z
+exit code: 0
+ended: 2026-09-22T02:02:38Z
 
 ==================================================================
 run 1 | gate playwright-widget
 command: npx playwright test --config=playwright.comments.config.js --workers=2
-started: 2026-09-22T02:01:04Z
+started: 2026-09-22T02:02:38Z
 ------------------------------------------------------------------
 
 Running 43 tests using 2 workers
 
-  ✓   2 [chromium] › tests/browser/comments-widget/widget.spec.js:94:3 › rendering and structure › shows the empty state when there are no comments (539ms)
-  ✓   1 [chromium] › tests/browser/comments-widget/widget.spec.js:86:3 › rendering and structure › renders the thread returned by the API (652ms)
-  ✓   3 [chromium] › tests/browser/comments-widget/widget.spec.js:101:3 › rendering and structure › each comment has a stable anchor (486ms)
-  ✓   4 [chromium] › tests/browser/comments-widget/widget.spec.js:109:3 › rendering and structure › a moderation state is announced on the comment (402ms)
-  ✓   5 [chromium] › tests/browser/comments-widget/widget.spec.js:120:3 › the page survives a broken comments service › a 500 leaves the host page intact and says so (415ms)
-  ✓   6 [chromium] › tests/browser/comments-widget/widget.spec.js:131:3 › the page survives a broken comments service › a network failure does not throw into the page (405ms)
-  ✓   7 [chromium] › tests/browser/comments-widget/widget.spec.js:141:3 › the page survives a broken comments service › a retry control is offered and works (423ms)
-  ✓   8 [chromium] › tests/browser/comments-widget/widget.spec.js:162:3 › composing › the typed text survives a failed submit (486ms)
-  ✓   9 [chromium] › tests/browser/comments-widget/widget.spec.js:185:3 › composing › a rate limit is explained, not shown as a generic error (570ms)
-  ✓  10 [chromium] › tests/browser/comments-widget/widget.spec.js:203:3 › composing › a held comment tells the author it is awaiting moderation (551ms)
-  ✓  12 [chromium] › tests/browser/comments-widget/widget.spec.js:247:3 › lifecycle › mounting twice returns one widget, not two (410ms)
-  ✓  11 [chromium] › tests/browser/comments-widget/widget.spec.js:224:3 › composing › the box is cleared only after the server accepted the text (602ms)
-  ✓  13 [chromium] › tests/browser/comments-widget/widget.spec.js:255:3 › lifecycle › destroy removes the widget and leaves the host node (551ms)
-  ✓  14 [chromium] › tests/browser/comments-widget/widget.spec.js:267:3 › lifecycle › destroy twice is a no-op (442ms)
-  ✓  16 [chromium] › tests/browser/comments-widget/widget.spec.js:295:3 › lifecycle › two instances on one page stay independent (332ms)
-  ✓  15 [chromium] › tests/browser/comments-widget/widget.spec.js:283:3 › lifecycle › remounting after destroy works (449ms)
-  ✓  17 [chromium] › tests/browser/comments-widget/widget.spec.js:316:3 › server-rendered comments › prerendered markup is adopted, not discarded (370ms)
-  ✓  18 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 320px (356ms)
-  ✓  20 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 390px (343ms)
-  ✓  19 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 320px (396ms)
-  ✓  21 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 390px (311ms)
-  ✓  22 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 768px (415ms)
-  ✓  23 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 768px (450ms)
-  ✓  24 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 1024px (513ms)
-  ✓  25 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 1024px (458ms)
-  ✓  26 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 1440px (434ms)
-  ✓  27 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 1440px (404ms)
-  ✓  28 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 1920px (450ms)
-  ✓  29 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 1920px (485ms)
-  ✓  30 [chromium] › tests/browser/comments-widget/widget.spec.js:391:5 › accessibility › axe reports no WCAG 2.2 A/AA violations at 320px (894ms)
-  ✓  31 [chromium] › tests/browser/comments-widget/widget.spec.js:391:5 › accessibility › axe reports no WCAG 2.2 A/AA violations at 768px (832ms)
-  ✓  33 [chromium] › tests/browser/comments-widget/widget.spec.js:409:3 › accessibility › the whole widget is reachable by keyboard (368ms)
-  ✓  32 [chromium] › tests/browser/comments-widget/widget.spec.js:391:5 › accessibility › axe reports no WCAG 2.2 A/AA violations at 1440px (932ms)
-  ✓  34 [chromium] › tests/browser/comments-widget/widget.spec.js:429:3 › accessibility › focus is visible, not suppressed (397ms)
-  ✓  35 [chromium] › tests/browser/comments-widget/widget.spec.js:443:3 › accessibility › status messages sit in a live region (356ms)
-  ✓  36 [chromium] › tests/browser/comments-widget/widget.spec.js:452:3 › accessibility › the textarea has a real label (344ms)
-  ✓  37 [chromium] › tests/browser/comments-widget/widget.spec.js:465:3 › accessibility › spoilers are operable by keyboard (441ms)
-  ✓  38 [chromium] › tests/browser/comments-widget/widget.spec.js:486:3 › accessibility › reduced motion is respected (445ms)
-  ✓  40 [chromium] › tests/browser/comments-widget/widget.spec.js:529:3 › style isolation › the widget does not restyle the host page (329ms)
-  ✓  41 [chromium] › tests/browser/comments-widget/widget.spec.js:547:3 › style isolation › the stylesheet contains no global selectors (5ms)
-  ✓  39 [chromium] › tests/browser/comments-widget/widget.spec.js:503:3 › layout stability › loading comments does not shift the page (1.0s)
-  ✓  42 [chromium] › tests/browser/comments-widget/widget.spec.js:580:3 › telemetry carries no content › events contain no comment text, ids or tokens (597ms)
-  ✓  43 [chromium] › tests/browser/comments-widget/widget.spec.js:602:3 › external links › links in a comment body carry ugc nofollow (393ms)
+  ✓   2 [chromium] › tests/browser/comments-widget/widget.spec.js:94:3 › rendering and structure › shows the empty state when there are no comments (606ms)
+  ✓   1 [chromium] › tests/browser/comments-widget/widget.spec.js:86:3 › rendering and structure › renders the thread returned by the API (627ms)
+  ✓   3 [chromium] › tests/browser/comments-widget/widget.spec.js:109:3 › rendering and structure › a moderation state is announced on the comment (488ms)
+  ✓   4 [chromium] › tests/browser/comments-widget/widget.spec.js:101:3 › rendering and structure › each comment has a stable anchor (521ms)
+  ✓   5 [chromium] › tests/browser/comments-widget/widget.spec.js:120:3 › the page survives a broken comments service › a 500 leaves the host page intact and says so (350ms)
+  ✓   6 [chromium] › tests/browser/comments-widget/widget.spec.js:131:3 › the page survives a broken comments service › a network failure does not throw into the page (328ms)
+  ✓   7 [chromium] › tests/browser/comments-widget/widget.spec.js:141:3 › the page survives a broken comments service › a retry control is offered and works (484ms)
+  ✓   8 [chromium] › tests/browser/comments-widget/widget.spec.js:162:3 › composing › the typed text survives a failed submit (547ms)
+  ✓   9 [chromium] › tests/browser/comments-widget/widget.spec.js:185:3 › composing › a rate limit is explained, not shown as a generic error (433ms)
+  ✓  10 [chromium] › tests/browser/comments-widget/widget.spec.js:203:3 › composing › a held comment tells the author it is awaiting moderation (421ms)
+  ✓  11 [chromium] › tests/browser/comments-widget/widget.spec.js:224:3 › composing › the box is cleared only after the server accepted the text (537ms)
+  ✓  12 [chromium] › tests/browser/comments-widget/widget.spec.js:247:3 › lifecycle › mounting twice returns one widget, not two (537ms)
+  ✓  13 [chromium] › tests/browser/comments-widget/widget.spec.js:255:3 › lifecycle › destroy removes the widget and leaves the host node (493ms)
+  ✓  14 [chromium] › tests/browser/comments-widget/widget.spec.js:267:3 › lifecycle › destroy twice is a no-op (487ms)
+  ✓  16 [chromium] › tests/browser/comments-widget/widget.spec.js:295:3 › lifecycle › two instances on one page stay independent (320ms)
+  ✓  15 [chromium] › tests/browser/comments-widget/widget.spec.js:283:3 › lifecycle › remounting after destroy works (426ms)
+  ✓  17 [chromium] › tests/browser/comments-widget/widget.spec.js:316:3 › server-rendered comments › prerendered markup is adopted, not discarded (401ms)
+  ✓  18 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 320px (393ms)
+  ✓  19 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 320px (389ms)
+  ✓  20 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 390px (429ms)
+  ✓  21 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 390px (439ms)
+  ✓  22 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 768px (454ms)
+  ✓  23 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 768px (378ms)
+  ✓  24 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 1024px (387ms)
+  ✓  25 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 1024px (368ms)
+  ✓  26 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 1440px (371ms)
+  ✓  27 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 1440px (336ms)
+  ✓  28 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 1920px (441ms)
+  ✓  29 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 1920px (403ms)
+  ✓  30 [chromium] › tests/browser/comments-widget/widget.spec.js:391:5 › accessibility › axe reports no WCAG 2.2 A/AA violations at 320px (716ms)
+  ✓  31 [chromium] › tests/browser/comments-widget/widget.spec.js:391:5 › accessibility › axe reports no WCAG 2.2 A/AA violations at 768px (861ms)
+  ✓  33 [chromium] › tests/browser/comments-widget/widget.spec.js:409:3 › accessibility › the whole widget is reachable by keyboard (407ms)
+  ✓  32 [chromium] › tests/browser/comments-widget/widget.spec.js:391:5 › accessibility › axe reports no WCAG 2.2 A/AA violations at 1440px (823ms)
+  ✓  34 [chromium] › tests/browser/comments-widget/widget.spec.js:429:3 › accessibility › focus is visible, not suppressed (519ms)
+  ✓  35 [chromium] › tests/browser/comments-widget/widget.spec.js:443:3 › accessibility › status messages sit in a live region (483ms)
+  ✓  36 [chromium] › tests/browser/comments-widget/widget.spec.js:452:3 › accessibility › the textarea has a real label (447ms)
+  ✓  37 [chromium] › tests/browser/comments-widget/widget.spec.js:465:3 › accessibility › spoilers are operable by keyboard (556ms)
+  ✓  38 [chromium] › tests/browser/comments-widget/widget.spec.js:486:3 › accessibility › reduced motion is respected (352ms)
+  ✓  40 [chromium] › tests/browser/comments-widget/widget.spec.js:529:3 › style isolation › the widget does not restyle the host page (313ms)
+  ✓  41 [chromium] › tests/browser/comments-widget/widget.spec.js:547:3 › style isolation › the stylesheet contains no global selectors (3ms)
+  ✓  39 [chromium] › tests/browser/comments-widget/widget.spec.js:503:3 › layout stability › loading comments does not shift the page (972ms)
+  ✓  42 [chromium] › tests/browser/comments-widget/widget.spec.js:580:3 › telemetry carries no content › events contain no comment text, ids or tokens (564ms)
+  ✓  43 [chromium] › tests/browser/comments-widget/widget.spec.js:602:3 › external links › links in a comment body carry ugc nofollow (343ms)
 
-  43 passed (11.9s)
+  43 passed (11.8s)
 ------------------------------------------------------------------
 exit code: 0
-ended: 2026-09-22T02:01:17Z
+ended: 2026-09-22T02:02:51Z
 
 ==================================================================
 run 2 | gate ruff
 command: python3 -m ruff check factory/comments_platform/ tests/unit/comments_platform/ scripts/comments_platform_artifact.py scripts/comments_platform_evidence.py
-started: 2026-09-22T02:01:17Z
+started: 2026-09-22T02:02:51Z
 ------------------------------------------------------------------
 All checks passed!
 ------------------------------------------------------------------
 exit code: 0
-ended: 2026-09-22T02:01:17Z
+ended: 2026-09-22T02:02:51Z
 
 ==================================================================
 run 2 | gate pytest-unit
 command: python3 -m pytest tests/unit/comments_platform/ -q -p no:randomly
-started: 2026-09-22T02:01:17Z
+started: 2026-09-22T02:02:51Z
 ------------------------------------------------------------------
 ........................................................................ [  8%]
 ........................................................................ [ 17%]
@@ -135,86 +134,85 @@ started: 2026-09-22T02:01:17Z
 ........................................................................ [ 87%]
 ........................................................................ [ 96%]
 .............................                                            [100%]
-821 passed in 16.91s
+821 passed in 16.45s
 ------------------------------------------------------------------
 exit code: 0
-ended: 2026-09-22T02:01:35Z
+ended: 2026-09-22T02:03:08Z
 
 ==================================================================
 run 2 | gate artifact-checksum
 command: python3 scripts/comments_platform_artifact.py --check
-started: 2026-09-22T02:01:35Z
+started: 2026-09-22T02:03:08Z
 ------------------------------------------------------------------
 artifact checksum up to date: 6032fb3cd24769390a7826473cc93932aed459a15fa2a92e6a771188092fa082
 ------------------------------------------------------------------
 exit code: 0
-ended: 2026-09-22T02:01:35Z
+ended: 2026-09-22T02:03:08Z
 
 ==================================================================
 run 2 | gate evidence-freshness
 command: python3 scripts/comments_platform_evidence.py --check
-started: 2026-09-22T02:01:35Z
+started: 2026-09-22T02:03:08Z
 ------------------------------------------------------------------
-stale evidence: HANDOFF.json
-run: python3 scripts/comments_platform_evidence.py
+evidence up to date (16 documents)
 ------------------------------------------------------------------
-exit code: 1
-ended: 2026-09-22T02:01:35Z
+exit code: 0
+ended: 2026-09-22T02:03:08Z
 
 ==================================================================
 run 2 | gate playwright-widget
 command: npx playwright test --config=playwright.comments.config.js --workers=2
-started: 2026-09-22T02:01:35Z
+started: 2026-09-22T02:03:08Z
 ------------------------------------------------------------------
 
 Running 43 tests using 2 workers
 
-  ✓   2 [chromium] › tests/browser/comments-widget/widget.spec.js:94:3 › rendering and structure › shows the empty state when there are no comments (472ms)
-  ✓   1 [chromium] › tests/browser/comments-widget/widget.spec.js:86:3 › rendering and structure › renders the thread returned by the API (578ms)
-  ✓   3 [chromium] › tests/browser/comments-widget/widget.spec.js:101:3 › rendering and structure › each comment has a stable anchor (411ms)
-  ✓   4 [chromium] › tests/browser/comments-widget/widget.spec.js:109:3 › rendering and structure › a moderation state is announced on the comment (418ms)
-  ✓   5 [chromium] › tests/browser/comments-widget/widget.spec.js:120:3 › the page survives a broken comments service › a 500 leaves the host page intact and says so (366ms)
-  ✓   6 [chromium] › tests/browser/comments-widget/widget.spec.js:131:3 › the page survives a broken comments service › a network failure does not throw into the page (375ms)
-  ✓   7 [chromium] › tests/browser/comments-widget/widget.spec.js:141:3 › the page survives a broken comments service › a retry control is offered and works (475ms)
-  ✓   8 [chromium] › tests/browser/comments-widget/widget.spec.js:162:3 › composing › the typed text survives a failed submit (614ms)
-  ✓   9 [chromium] › tests/browser/comments-widget/widget.spec.js:185:3 › composing › a rate limit is explained, not shown as a generic error (646ms)
-  ✓  10 [chromium] › tests/browser/comments-widget/widget.spec.js:203:3 › composing › a held comment tells the author it is awaiting moderation (591ms)
-  ✓  11 [chromium] › tests/browser/comments-widget/widget.spec.js:224:3 › composing › the box is cleared only after the server accepted the text (539ms)
-  ✓  12 [chromium] › tests/browser/comments-widget/widget.spec.js:247:3 › lifecycle › mounting twice returns one widget, not two (450ms)
-  ✓  13 [chromium] › tests/browser/comments-widget/widget.spec.js:255:3 › lifecycle › destroy removes the widget and leaves the host node (356ms)
-  ✓  14 [chromium] › tests/browser/comments-widget/widget.spec.js:267:3 › lifecycle › destroy twice is a no-op (371ms)
-  ✓  16 [chromium] › tests/browser/comments-widget/widget.spec.js:295:3 › lifecycle › two instances on one page stay independent (364ms)
-  ✓  15 [chromium] › tests/browser/comments-widget/widget.spec.js:283:3 › lifecycle › remounting after destroy works (459ms)
-  ✓  17 [chromium] › tests/browser/comments-widget/widget.spec.js:316:3 › server-rendered comments › prerendered markup is adopted, not discarded (345ms)
-  ✓  18 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 320px (343ms)
-  ✓  19 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 320px (339ms)
-  ✓  20 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 390px (361ms)
-  ✓  21 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 390px (533ms)
-  ✓  22 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 768px (490ms)
-  ✓  23 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 768px (347ms)
-  ✓  24 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 1024px (369ms)
-  ✓  25 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 1024px (445ms)
-  ✓  26 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 1440px (440ms)
-  ✓  27 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 1440px (471ms)
-  ✓  28 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 1920px (441ms)
-  ✓  29 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 1920px (544ms)
-  ✓  30 [chromium] › tests/browser/comments-widget/widget.spec.js:391:5 › accessibility › axe reports no WCAG 2.2 A/AA violations at 320px (990ms)
-  ✓  31 [chromium] › tests/browser/comments-widget/widget.spec.js:391:5 › accessibility › axe reports no WCAG 2.2 A/AA violations at 768px (780ms)
-  ✓  33 [chromium] › tests/browser/comments-widget/widget.spec.js:409:3 › accessibility › the whole widget is reachable by keyboard (372ms)
-  ✓  32 [chromium] › tests/browser/comments-widget/widget.spec.js:391:5 › accessibility › axe reports no WCAG 2.2 A/AA violations at 1440px (843ms)
-  ✓  34 [chromium] › tests/browser/comments-widget/widget.spec.js:429:3 › accessibility › focus is visible, not suppressed (412ms)
-  ✓  35 [chromium] › tests/browser/comments-widget/widget.spec.js:443:3 › accessibility › status messages sit in a live region (368ms)
-  ✓  36 [chromium] › tests/browser/comments-widget/widget.spec.js:452:3 › accessibility › the textarea has a real label (372ms)
-  ✓  37 [chromium] › tests/browser/comments-widget/widget.spec.js:465:3 › accessibility › spoilers are operable by keyboard (479ms)
-  ✓  38 [chromium] › tests/browser/comments-widget/widget.spec.js:486:3 › accessibility › reduced motion is respected (399ms)
-  ✓  40 [chromium] › tests/browser/comments-widget/widget.spec.js:529:3 › style isolation › the widget does not restyle the host page (393ms)
-  ✓  41 [chromium] › tests/browser/comments-widget/widget.spec.js:547:3 › style isolation › the stylesheet contains no global selectors (6ms)
-  ✓  39 [chromium] › tests/browser/comments-widget/widget.spec.js:503:3 › layout stability › loading comments does not shift the page (1.0s)
-  ✓  42 [chromium] › tests/browser/comments-widget/widget.spec.js:580:3 › telemetry carries no content › events contain no comment text, ids or tokens (631ms)
-  ✓  43 [chromium] › tests/browser/comments-widget/widget.spec.js:602:3 › external links › links in a comment body carry ugc nofollow (433ms)
+  ✓   2 [chromium] › tests/browser/comments-widget/widget.spec.js:94:3 › rendering and structure › shows the empty state when there are no comments (508ms)
+  ✓   1 [chromium] › tests/browser/comments-widget/widget.spec.js:86:3 › rendering and structure › renders the thread returned by the API (592ms)
+  ✓   3 [chromium] › tests/browser/comments-widget/widget.spec.js:101:3 › rendering and structure › each comment has a stable anchor (431ms)
+  ✓   4 [chromium] › tests/browser/comments-widget/widget.spec.js:109:3 › rendering and structure › a moderation state is announced on the comment (415ms)
+  ✓   6 [chromium] › tests/browser/comments-widget/widget.spec.js:131:3 › the page survives a broken comments service › a network failure does not throw into the page (494ms)
+  ✓   5 [chromium] › tests/browser/comments-widget/widget.spec.js:120:3 › the page survives a broken comments service › a 500 leaves the host page intact and says so (549ms)
+  ✓   7 [chromium] › tests/browser/comments-widget/widget.spec.js:141:3 › the page survives a broken comments service › a retry control is offered and works (454ms)
+  ✓   8 [chromium] › tests/browser/comments-widget/widget.spec.js:162:3 › composing › the typed text survives a failed submit (543ms)
+  ✓   9 [chromium] › tests/browser/comments-widget/widget.spec.js:185:3 › composing › a rate limit is explained, not shown as a generic error (571ms)
+  ✓  10 [chromium] › tests/browser/comments-widget/widget.spec.js:203:3 › composing › a held comment tells the author it is awaiting moderation (646ms)
+  ✓  12 [chromium] › tests/browser/comments-widget/widget.spec.js:247:3 › lifecycle › mounting twice returns one widget, not two (419ms)
+  ✓  11 [chromium] › tests/browser/comments-widget/widget.spec.js:224:3 › composing › the box is cleared only after the server accepted the text (548ms)
+  ✓  13 [chromium] › tests/browser/comments-widget/widget.spec.js:255:3 › lifecycle › destroy removes the widget and leaves the host node (491ms)
+  ✓  14 [chromium] › tests/browser/comments-widget/widget.spec.js:267:3 › lifecycle › destroy twice is a no-op (519ms)
+  ✓  16 [chromium] › tests/browser/comments-widget/widget.spec.js:295:3 › lifecycle › two instances on one page stay independent (413ms)
+  ✓  15 [chromium] › tests/browser/comments-widget/widget.spec.js:283:3 › lifecycle › remounting after destroy works (518ms)
+  ✓  18 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 320px (395ms)
+  ✓  17 [chromium] › tests/browser/comments-widget/widget.spec.js:316:3 › server-rendered comments › prerendered markup is adopted, not discarded (458ms)
+  ✓  20 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 390px (406ms)
+  ✓  19 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 320px (439ms)
+  ✓  21 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 390px (453ms)
+  ✓  22 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 768px (511ms)
+  ✓  23 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 768px (352ms)
+  ✓  24 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 1024px (350ms)
+  ✓  25 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 1024px (401ms)
+  ✓  26 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 1440px (383ms)
+  ✓  27 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 1440px (391ms)
+  ✓  28 [chromium] › tests/browser/comments-widget/widget.spec.js:334:5 › responsive matrix › no horizontal overflow at 1920px (372ms)
+  ✓  29 [chromium] › tests/browser/comments-widget/widget.spec.js:367:5 › responsive matrix › touch targets are at least 44px at 1920px (414ms)
+  ✓  30 [chromium] › tests/browser/comments-widget/widget.spec.js:391:5 › accessibility › axe reports no WCAG 2.2 A/AA violations at 320px (731ms)
+  ✓  31 [chromium] › tests/browser/comments-widget/widget.spec.js:391:5 › accessibility › axe reports no WCAG 2.2 A/AA violations at 768px (791ms)
+  ✓  33 [chromium] › tests/browser/comments-widget/widget.spec.js:409:3 › accessibility › the whole widget is reachable by keyboard (347ms)
+  ✓  32 [chromium] › tests/browser/comments-widget/widget.spec.js:391:5 › accessibility › axe reports no WCAG 2.2 A/AA violations at 1440px (872ms)
+  ✓  34 [chromium] › tests/browser/comments-widget/widget.spec.js:429:3 › accessibility › focus is visible, not suppressed (450ms)
+  ✓  35 [chromium] › tests/browser/comments-widget/widget.spec.js:443:3 › accessibility › status messages sit in a live region (425ms)
+  ✓  36 [chromium] › tests/browser/comments-widget/widget.spec.js:452:3 › accessibility › the textarea has a real label (521ms)
+  ✓  37 [chromium] › tests/browser/comments-widget/widget.spec.js:465:3 › accessibility › spoilers are operable by keyboard (537ms)
+  ✓  38 [chromium] › tests/browser/comments-widget/widget.spec.js:486:3 › accessibility › reduced motion is respected (367ms)
+  ✓  40 [chromium] › tests/browser/comments-widget/widget.spec.js:529:3 › style isolation › the widget does not restyle the host page (373ms)
+  ✓  41 [chromium] › tests/browser/comments-widget/widget.spec.js:547:3 › style isolation › the stylesheet contains no global selectors (3ms)
+  ✓  39 [chromium] › tests/browser/comments-widget/widget.spec.js:503:3 › layout stability › loading comments does not shift the page (1.1s)
+  ✓  43 [chromium] › tests/browser/comments-widget/widget.spec.js:602:3 › external links › links in a comment body carry ugc nofollow (399ms)
+  ✓  42 [chromium] › tests/browser/comments-widget/widget.spec.js:580:3 › telemetry carries no content › events contain no comment text, ids or tokens (714ms)
 
-  43 passed (11.8s)
+  43 passed (12.0s)
 ------------------------------------------------------------------
 exit code: 0
-ended: 2026-09-22T02:01:48Z
+ended: 2026-09-22T02:03:21Z
 
