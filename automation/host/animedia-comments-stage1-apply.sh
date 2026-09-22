@@ -122,6 +122,19 @@ say "second-domain guard"
   || die "animedia-02 already points at the Stage 1 release; it must not"
 note "animedia-02 -> $(readlink /srv/lords/.frontend/sites/animedia-02/current)"
 
+say "nginx include hygiene"
+# /etc/nginx/conf.d/lords.conf includes /etc/nginx/lords/*.conf and
+# /etc/nginx/nginx.conf includes /etc/nginx/sites-enabled/* — the second has no
+# extension filter, which is why a '.bak' beside a Yummy config loads as a
+# duplicate server block. This harness must never add to that: its backups go
+# to $BACKUP_DIR, outside both directories. Asserted rather than assumed.
+STRAY=$(find /etc/nginx/lords /etc/nginx/sites-enabled /etc/nginx/snippets \
+          -maxdepth 1 -name '*comments-stage1*' -o -maxdepth 1 -name '*.prev' 2>/dev/null | head)
+if [ -n "$STRAY" ]; then
+  die "this harness left files inside an nginx include directory: $STRAY"
+fi
+note "no harness file inside /etc/nginx/{lords,sites-enabled,snippets}"
+
 say "foreign nginx warnings (recorded, not fixed)"
 nginx -t 2>&1 | grep -i 'conflicting server name' | sed 's/^/   /' | tee -a "$EVIDENCE" || true
 note "These come from '.bak' files picked up by include sites-enabled/* and"
@@ -286,22 +299,38 @@ for path in / /catalog/ /title/master-lda-i-plameni-2/ /definitely-not-real-9d2f
   case "$code" in 5*) note "5xx on $path"; fail=1;; esac
 done
 
-# The check that got this wrong last time. Through nginx, chain followed,
-# judged on where it ends and on whether any hop was the gateway.
-VISITOR_URL="$SITE/api/comments/v1/threads?resource_type=title&canonical_content_id=$CONTENT_ID"
-if python3 "$CHECK" "$VISITOR_URL" --resolve "$RESOLVE" --expect closed-visitor \
-     | tee -a "$EVIDENCE" | grep -q '"ok": true'; then
-  note "ordinary visitor: refused at the end of the chain — correct"
-else
-  note "ORDINARY VISITOR WAS NOT REFUSED"; fail=1
-fi
+# The checks that got this wrong last time. Through nginx with the real Host,
+# chain followed, judged on where it ends and on whether any hop was the
+# gateway. Both URL spellings are probed: the gateway strips a trailing slash
+# in its router, so `/threads` and `/threads/` are the same endpoint and a gate
+# that held for one and not the other would be a gate with a hole in it.
+QUERY="resource_type=title&canonical_content_id=$CONTENT_ID"
+probe_closed() {
+  local label="$1" url="$2" method="${3:-GET}"
+  if python3 "$CHECK" "$url" --resolve "$RESOLVE" --method "$method" \
+       --expect closed-visitor | tee -a "$EVIDENCE" | grep -q '"ok": true'; then
+    note "visitor refused: $label"
+  else
+    note "VISITOR NOT REFUSED: $label"; fail=1
+  fi
+}
 
-# And POST, because a read refusal that still accepts writes is worthless.
+probe_closed "GET  /threads"        "$SITE/api/comments/v1/threads?$QUERY"
+probe_closed "GET  /threads/"       "$SITE/api/comments/v1/threads/?$QUERY"
+probe_closed "GET  /threads/count"  "$SITE/api/comments/v1/threads/count?$QUERY"
+probe_closed "POST /comments"       "$SITE/api/comments/v1/comments"        POST
+probe_closed "POST /comments/"      "$SITE/api/comments/v1/comments/"       POST
+
+# A CORS preflight is answered before any flag, by design — the browser is
+# asking about origins, not permissions. What must not happen is a foreign
+# origin receiving Access-Control-Allow-Origin, because that is the header
+# that would let another site read the response.
 if python3 "$CHECK" "$SITE/api/comments/v1/comments" --resolve "$RESOLVE" \
-     --method POST --expect closed-visitor | tee -a "$EVIDENCE" | grep -q '"ok": true'; then
-  note "ordinary visitor: write refused — correct"
+     --method OPTIONS --origin "https://not-animedia.example" \
+     --expect preflight-not-permissive | tee -a "$EVIDENCE" | grep -q '"ok": true'; then
+  note "preflight: no CORS grant to a foreign origin — correct"
 else
-  note "ORDINARY VISITOR COULD WRITE"; fail=1
+  note "PREFLIGHT GRANTED CORS TO A FOREIGN ORIGIN"; fail=1
 fi
 
 space=$(curl -sS -m 10 -o /dev/null -w '%{http_code}' -H 'Host: animedia.space' \

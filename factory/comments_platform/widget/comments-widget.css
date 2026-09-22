@@ -14,31 +14,37 @@
  */
 
 /*
- * The mount point, before any JavaScript runs.
+ * The mount point is deliberately NOT given a reserved height.
  *
- * This is the only rule that targets something the widget did not create, and
- * it is here for one measured reason: without it the container is zero-height
- * at first paint and the entire page below the comments jumps when the widget
- * mounts. That measured CLS 0.45 in the harness, and reserving rows inside the
- * list only brought it to 0.42 — the shift was the widget appearing at all,
- * not the list filling up.
+ * An earlier version reserved 320px here so that the widget appearing would
+ * not push the page down. That helped the one person who can see the widget
+ * and cost every other visitor an empty gap on a page that is supposed to
+ * look exactly as it did before the pilot. During an owner-only stage the
+ * visitor's experience is the one that must not change, so the reservation is
+ * gone and the widget appends itself only once the server has said it belongs
+ * on this page.
  *
- * The widget itself carries the same floor, deliberately. An earlier attempt
- * released the reservation once the widget mounted, which simply moved the
- * shift rather than removing it: the container went from 320px to whatever the
- * thread happened to need. Keeping both at one value means mounting changes no
- * height at all. The cost is that an empty thread occupies 320px, which is
- * roughly what its heading, notice and form need anyway.
+ * The consequence is honest and measured: the owner sees one layout shift
+ * when the thread arrives. A site that later opens comments to everyone
+ * should set --cp-reserve on the mount point and get the reservation back.
  */
-[data-cp-comments] {
-  min-height: var(--cp-reserve, 320px);
+[data-cp-comments][style*="--cp-reserve"] {
+  min-height: var(--cp-reserve);
 }
 
 .cp-widget {
   /* Theme tokens. A site overrides these on the container, not in our file. */
   --cp-fg: #16181d;
   --cp-fg-muted: #5c6370;
-  --cp-bg: transparent;
+  /* A real colour, not `transparent`.
+     The widget declares its own text colour, so it must own the ground under
+     that text. With a transparent background the contrast depends on whatever
+     the host page paints behind the block — and axe measured exactly that
+     failure on Animedia: #e8eaee on #ffffff, a ratio of 1.2, because the
+     site's dark background sits on a wrapper rather than on <body>. A guest
+     that sets a foreground and borrows a background is a guest that is
+     unreadable on some hosts and fine on others. */
+  --cp-bg: #ffffff;
   --cp-surface: #f6f7f9;
   --cp-border: #d8dce3;
   --cp-accent: #2f6fd0;
@@ -49,8 +55,6 @@
   /* Cap the nesting indent so depth cannot overflow a narrow screen. */
   --cp-depth: 0;
 
-  /* Same floor as the mount point above: mounting must not change a height. */
-  min-height: var(--cp-reserve, 320px);
   box-sizing: border-box;
   color: var(--cp-fg);
   background: var(--cp-bg);
@@ -75,6 +79,7 @@
   .cp-widget[data-cp-theme="dark"] {
     --cp-fg: #e8eaee;
     --cp-fg-muted: #a2a9b5;
+    --cp-bg: #14161b;
     --cp-surface: #1c1f26;
     --cp-border: #333944;
     --cp-accent: #7aa7ee;
@@ -85,6 +90,7 @@
 .cp-widget[data-cp-theme="dark"] {
   --cp-fg: #e8eaee;
   --cp-fg-muted: #a2a9b5;
+  --cp-bg: #14161b;
   --cp-surface: #1c1f26;
   --cp-border: #333944;
   --cp-accent: #7aa7ee;

@@ -84,6 +84,11 @@ class ThreadView:
     next_cursor: str
     has_more: bool
     sort: str
+    # Whether this caller, in this cohort, may write here. The widget renders
+    # no composing surface without it: a visitor who can see a form and type
+    # into it has been told they may take part, and discovering otherwise on
+    # submit is a worse experience than never being offered the box.
+    can_write: bool = False
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -95,6 +100,7 @@ class ThreadView:
             "next_cursor": self.next_cursor,
             "has_more": self.has_more,
             "sort": self.sort,
+            "can_write": self.can_write,
         }
 
 
@@ -218,8 +224,9 @@ class CommentsService:
         viewer_subject_id: str = "",
         cohort: str = "public",
     ) -> ThreadView:
-        self._require_reads(scope, cohort)
+        flags = self._require_reads(scope, cohort)
         authorize(principal, P_READ_PUBLISHED, scope)
+        can_write = flags.writes_allowed
 
         thread = self._store.find_thread(scope, ref)
         if thread is None:
@@ -229,6 +236,7 @@ class CommentsService:
                 thread_id="", resource_type=ref.resource_type,
                 canonical_content_id=ref.canonical_content_id,
                 total_count=0, items=(), next_cursor="", has_more=False, sort=sort,
+                can_write=can_write,
             )
 
         page = self._store.list_comments(
@@ -251,6 +259,7 @@ class CommentsService:
             next_cursor=page.next_cursor,
             has_more=page.has_more,
             sort=sort,
+            can_write=can_write,
         )
 
     def comment_count(

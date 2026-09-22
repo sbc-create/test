@@ -45,6 +45,12 @@ MAX_HOPS = 5
 # the route does not exist at all, which is the correct state after a rollback.
 CLOSED_CODES = frozenset({401, 403, 404, 405, 501, 503})
 
+# A CORS preflight is answered before any flag is consulted, by design: the
+# browser asks "may I send this at all", and the answer is about origins, not
+# about permissions. 204 there is therefore neither open nor closed, and the
+# thing worth checking is narrower — see `expect_preflight_not_permissive`.
+PREFLIGHT_CODES = frozenset({200, 204})
+
 # What an ordinary visitor must never receive: a served read or an accepted
 # write. 200 on a comments endpoint means the gate is open.
 OPEN_CODES = frozenset({200, 201, 202, 206})
@@ -73,6 +79,7 @@ class ChainResult:
     hops: list[Hop] = field(default_factory=list)
     verdict: str = "UNKNOWN"
     reason: str = ""
+    last_headers: str = ""
 
     @property
     def final(self) -> Hop | None:
@@ -93,7 +100,9 @@ class ChainResult:
         }
 
 
-def _curl(url: str, method: str, resolve: str, cookie: str) -> tuple[int, str, str]:
+def _curl(
+    url: str, method: str, resolve: str, cookie: str, origin: str = ""
+) -> tuple[int, str, str]:
     """One request, no redirect following. Returns (code, location, headers)."""
     cmd = [
         "curl", "-sS", "-m", "12", "-o", "/dev/null", "-D", "-",
@@ -103,6 +112,10 @@ def _curl(url: str, method: str, resolve: str, cookie: str) -> tuple[int, str, s
         cmd += ["--resolve", resolve]
     if cookie:
         cmd += ["-H", f"Cookie: {cookie}"]
+    if origin:
+        cmd += ["-H", f"Origin: {origin}"]
+        if method == "OPTIONS":
+            cmd += ["-H", "Access-Control-Request-Method: POST"]
     if method == "POST":
         cmd += ["-H", "Content-Type: application/json", "-d", "{}"]
     cmd.append(url)
@@ -128,8 +141,11 @@ def _is_gateway(headers: str) -> bool:
     return "x-comments-module-version:" in lowered or "comments-gateway" in lowered
 
 
-def follow(url: str, *, method: str = "GET", resolve: str = "", cookie: str = "") -> ChainResult:
+def follow(
+    url: str, *, method: str = "GET", resolve: str = "", cookie: str = "", origin: str = ""
+) -> ChainResult:
     result = ChainResult()
+    result.last_headers = ""
     seen: set[str] = set()
     current = url
 
@@ -140,7 +156,8 @@ def follow(url: str, *, method: str = "GET", resolve: str = "", cookie: str = ""
             return result
         seen.add(current)
 
-        code, location, headers = _curl(current, method, resolve, cookie)
+        code, location, headers = _curl(current, method, resolve, cookie, origin)
+        result.last_headers = headers
         hop = Hop(url=current, code=code, location=location,
                   served_by_gateway=_is_gateway(headers))
         result.hops.append(hop)
@@ -204,6 +221,25 @@ def expect_closed_visitor(result: ChainResult) -> tuple[bool, str]:
     return True, f"visitor refused, chain {result.codes}"
 
 
+def expect_preflight_not_permissive(result: ChainResult, headers: str) -> tuple[bool, str]:
+    """An OPTIONS request from an origin the site does not allow.
+
+    The answer may be 204 — that is a preflight doing its job. What must not
+    appear is an `Access-Control-Allow-Origin` for an origin outside the
+    site's exact allowlist, because that is the header a browser uses to
+    decide whether to let a foreign page read the response.
+    """
+    final = result.final
+    if final is None:
+        return False, "no response to the preflight"
+    lowered = headers.lower()
+    if "access-control-allow-origin" in lowered:
+        return False, "a disallowed origin received Access-Control-Allow-Origin"
+    if final.code not in PREFLIGHT_CODES | CLOSED_CODES:
+        return False, f"unexpected preflight answer {final.code}"
+    return True, f"preflight {final.code} with no CORS grant for a foreign origin"
+
+
 def expect_no_gateway(result: ChainResult) -> tuple[bool, str]:
     """After a rollback: nothing on this path may be the comments gateway."""
     if any(h.served_by_gateway for h in result.hops):
@@ -219,20 +255,30 @@ def main(argv: list[str]) -> int:
     parser.add_argument("--method", default="GET")
     parser.add_argument("--resolve", default="", help="curl --resolve host:port:addr")
     parser.add_argument("--cookie", default="", help="cookie header value")
+    parser.add_argument("--origin", default="", help="Origin header to send")
     parser.add_argument(
-        "--expect", choices=("closed-visitor", "no-gateway", "report"), default="report"
+        "--expect",
+        choices=("closed-visitor", "no-gateway", "preflight-not-permissive", "report"),
+        default="report",
     )
     args = parser.parse_args(argv)
 
-    result = follow(args.url, method=args.method, resolve=args.resolve, cookie=args.cookie)
+    result = follow(
+        args.url, method=args.method, resolve=args.resolve,
+        cookie=args.cookie, origin=args.origin,
+    )
     payload = result.as_dict()
 
     if args.expect == "report":
         print(json.dumps(payload, ensure_ascii=False))
         return 0
 
-    check = expect_closed_visitor if args.expect == "closed-visitor" else expect_no_gateway
-    ok, message = check(result)
+    if args.expect == "closed-visitor":
+        ok, message = expect_closed_visitor(result)
+    elif args.expect == "no-gateway":
+        ok, message = expect_no_gateway(result)
+    else:
+        ok, message = expect_preflight_not_permissive(result, result.last_headers)
     payload["check"] = args.expect
     payload["ok"] = ok
     payload["message"] = message

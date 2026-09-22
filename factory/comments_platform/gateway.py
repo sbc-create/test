@@ -36,6 +36,7 @@ import hashlib
 import json
 import os
 import pathlib
+import secrets
 import sys
 import threading
 from http.cookies import SimpleCookie
@@ -57,6 +58,14 @@ ASSET_PREFIX = f"{API_PREFIX}/assets/"
 
 # The browser-side guest pseudonym. Random, not a device fingerprint.
 GUEST_COOKIE = "cp_guest"
+
+# Double-submit CSRF. Deliberately NOT HttpOnly: the whole mechanism is that
+# the page reads this value and echoes it in a header, which an attacker's
+# page cannot do because it cannot read cookies for another origin. Issuing it
+# here rather than asking every site template to render one removes an
+# integration step that, when missed, fails as a 403 on the first write — which
+# is exactly how it was missed.
+CSRF_COOKIE = "cp_csrf"
 HEALTH_PATH = f"{API_PREFIX}/healthz"
 
 ASSET_TYPES = {
@@ -72,6 +81,10 @@ MAX_BODY_BYTES = 64 * 1024
 # can still edit or delete what they wrote yesterday, short enough that it is
 # not a permanent identifier.
 GUEST_COOKIE_MAX_AGE = 30 * 24 * 3600
+
+# Shorter than the guest cookie: a CSRF token is cheap to reissue and its
+# value is only ever compared against a header sent moments later.
+CSRF_COOKIE_MAX_AGE = 12 * 3600
 
 
 class CredentialSecretResolver:
@@ -191,20 +204,26 @@ class _Handler(BaseHTTPRequestHandler):
             return {}
         return {k: v.value for k, v in jar.items()}
 
-    def _send(self, status: int, body: bytes, headers: dict[str, str]) -> None:
+    def _send(self, status: int, body: bytes, headers: dict[str, str],
+              set_cookies: list[str] | None = None) -> None:
         self.send_response(status)
         for name, value in headers.items():
             self.send_header(name, value)
+        # Several Set-Cookie headers, not one joined value: a comma-joined
+        # cookie header is not what browsers parse.
+        for cookie in set_cookies or []:
+            self.send_header("Set-Cookie", cookie)
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         if self.command != "HEAD":
             self.wfile.write(body)
 
-    def _json(self, status: int, payload: dict[str, Any], headers: dict[str, str]) -> None:
+    def _json(self, status: int, payload: dict[str, Any], headers: dict[str, str],
+              set_cookies: list[str] | None = None) -> None:
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
         headers = dict(headers)
         headers.setdefault("Content-Type", "application/json; charset=utf-8")
-        self._send(status, body, headers)
+        self._send(status, body, headers, set_cookies)
 
     # --- routes ---------------------------------------------------------
 
@@ -250,6 +269,13 @@ class _Handler(BaseHTTPRequestHandler):
             issued_guest = GuestIdentityProvider.issue_guest_token()
             cookies[GUEST_COOKIE] = issued_guest
 
+        issued_csrf = ""
+        if not cookies.get(CSRF_COOKIE):
+            issued_csrf = secrets.token_urlsafe(24)
+            # Not added to `cookies` for this request: a token the caller has
+            # not yet received cannot be one they echoed back, and treating it
+            # as if they had would make the first write bypass the check.
+
         request = Request(
             method=self.command,
             path=path,
@@ -290,14 +316,20 @@ class _Handler(BaseHTTPRequestHandler):
             response = self.api.handle(request, cohort=cohort)
 
         headers = dict(response.headers)
+        set_cookies = []
+        if issued_csrf:
+            set_cookies.append(
+                f"{CSRF_COOKIE}={issued_csrf}; Path=/; Max-Age={CSRF_COOKIE_MAX_AGE}; "
+                "Secure; SameSite=Lax"
+            )
         if issued_guest:
             # HttpOnly: the widget never needs to read it, and script access
             # would put a stable pseudonym within reach of any injected code.
-            headers["Set-Cookie"] = (
+            set_cookies.append(
                 f"{GUEST_COOKIE}={issued_guest}; Path=/; Max-Age={GUEST_COOKIE_MAX_AGE}; "
                 "HttpOnly; Secure; SameSite=Lax"
             )
-        self._json(response.status, response.body, headers)
+        self._json(response.status, response.body, headers, set_cookies)
 
     def _asset(self, name: str) -> None:
         found = _asset_bytes(name)

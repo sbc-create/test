@@ -84,6 +84,13 @@ class _Fixture(BaseHTTPRequestHandler):
         if path == "/gateway/redirect-open":
             return self._send(308, {"Location": f"http://{host}/gateway/open"})
 
+        # A preflight that grants CORS to whoever asked — the thing that must
+        # never be observed from an origin outside the site's allowlist.
+        if path == "/preflight/permissive":
+            return self._send(204, {"Access-Control-Allow-Origin": "*"})
+        if path == "/preflight/strict":
+            return self._send(204)
+
         if path == "/loop/a":
             return self._send(308, {"Location": f"http://{host}/loop/b"})
         if path == "/loop/b":
@@ -102,6 +109,9 @@ class _Fixture(BaseHTTPRequestHandler):
             return self._send(404)
 
         return self._send(404)
+
+    def do_OPTIONS(self):
+        return self.do_GET()
 
     def do_POST(self):
         if self.path == "/gateway/closed":
@@ -198,6 +208,47 @@ class TestUnsafeChains:
         # But for a rollback check, nothing listening is an acceptable answer.
         ok, _ = cec.expect_no_gateway(result)
         assert ok
+
+
+class TestPreflight:
+    def test_a_preflight_without_a_cors_grant_passes(self, fixture_base):
+        result = cec.follow(f"{fixture_base}/preflight/strict", method="OPTIONS",
+                            origin="https://not-animedia.example")
+        ok, message = cec.expect_preflight_not_permissive(result, result.last_headers)
+        assert ok, message
+
+    def test_a_preflight_granting_cors_to_a_foreign_origin_fails(self, fixture_base):
+        result = cec.follow(f"{fixture_base}/preflight/permissive", method="OPTIONS",
+                            origin="https://not-animedia.example")
+        ok, message = cec.expect_preflight_not_permissive(result, result.last_headers)
+        assert not ok
+        assert "Access-Control-Allow-Origin" in message
+
+    def test_a_204_preflight_is_neither_open_nor_closed(self, fixture_base):
+        """It answers a question about origins, not about permissions."""
+        result = cec.follow(f"{fixture_base}/preflight/strict", method="OPTIONS")
+        assert result.final.code == 204
+        assert 204 not in cec.OPEN_CODES
+        assert 204 in cec.PREFLIGHT_CODES
+
+
+class TestBothUrlSpellings:
+    def test_the_apply_script_probes_slash_and_no_slash(self):
+        """The gateway strips a trailing slash in its router, so the two
+        spellings are one endpoint. A gate that held for one only would have a
+        hole in it."""
+        assert "/threads?" in APPLY_TEXT
+        assert "/threads/?" in APPLY_TEXT
+        assert "/comments\"" in APPLY_TEXT or "/comments " in APPLY_TEXT
+        assert "/comments/\"" in APPLY_TEXT or "/comments/ " in APPLY_TEXT
+
+    def test_the_apply_script_probes_a_preflight(self):
+        assert "preflight-not-permissive" in APPLY_TEXT
+        assert "not-animedia.example" in APPLY_TEXT
+
+    def test_the_apply_script_asserts_nginx_include_hygiene(self):
+        assert "include hygiene" in APPLY_TEXT
+        assert "sites-enabled" in APPLY_TEXT
 
 
 class TestMethods:

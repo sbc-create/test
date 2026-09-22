@@ -1,9 +1,9 @@
 {
   "schema_version": "COMMENTS_EVIDENCE_INDEX_V1",
-  "generated_at": "2026-09-22T07:22:53Z",
-  "commit": "a3fba20217146e16dbb8df89229b48ad7708be50",
+  "generated_at": "2026-09-22T12:42:56Z",
+  "commit": "e8eaed061805b3920997e28388bb3fdbac09cf1e",
   "module_version": "0.1.0-mvp",
-  "artifact_checksum": "6032fb3cd24769390a7826473cc93932aed459a15fa2a92e6a771188092fa082",
+  "artifact_checksum": "98000cc77444f6fd79494232a8fbf3da36a6affdc58f356f3f0da37d134fe9c4",
   "documents": [
     "01-contracts/AUDIT_CONTRACT.json",
     "01-contracts/COHORTS.json",
@@ -23,6 +23,6 @@
     "05-rollout/ROLLOUT_PLAN.json",
     "HANDOFF.json"
   ],
-  "content_digest": "a254ca7a74c57a1b03bdd489237d979d34a876b7fd232f894f4556d955c1939e",
+  "content_digest": "f01acec923d6209461d2b2e73e69884defe4589d7ea803be7a8b9e3d544ff74d",
   "note": "Every document is serialised from the modules that implement the behaviour. generated_at and commit are the only fields that change between identical runs; content_digest covers the documents only."
 }

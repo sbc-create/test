@@ -1,0 +1,161 @@
+{
+  "schema_version": "ANIMEDIA_COMMENTS_SHADOW_REHEARSAL_V1",
+  "contour": "shadow — spare loopback ports, temporary database, no root",
+  "production_touched": false,
+  "marker_comment": "Тест комментариев Animedia — владелец — 2026-09-22T12:42:54Z",
+  "checks": [
+    {
+      "name": "home page unchanged and noindex",
+      "ok": true,
+      "detail": "200"
+    },
+    {
+      "name": "catalog unchanged and noindex",
+      "ok": true,
+      "detail": "200"
+    },
+    {
+      "name": "404 route still 404",
+      "ok": true,
+      "detail": "404"
+    },
+    {
+      "name": "no comments block on the home page",
+      "ok": true,
+      "detail": "absent"
+    },
+    {
+      "name": "no comments block in the catalog",
+      "ok": true,
+      "detail": "absent"
+    },
+    {
+      "name": "no comments block on 404",
+      "ok": true,
+      "detail": "absent"
+    },
+    {
+      "name": "comments block present on title page one",
+      "ok": true,
+      "detail": "content id 01a0b507-3280-7b2a-8af4-674dd73cff72"
+    },
+    {
+      "name": "comments block present on title page two",
+      "ok": true,
+      "detail": "present"
+    },
+    {
+      "name": "player markup still on the title page",
+      "ok": true,
+      "detail": "player intact"
+    },
+    {
+      "name": "canonical unchanged on the title page",
+      "ok": true,
+      "detail": "['https://animedia.icu/title/master-lda-i-plameni-2/']"
+    },
+    {
+      "name": "visitor cannot read comments",
+      "ok": true,
+      "detail": "503"
+    },
+    {
+      "name": "visitor cannot write, slash form too",
+      "ok": true,
+      "detail": "403/403 — both refused"
+    },
+    {
+      "name": "visitor refusal leaks nothing about the pilot",
+      "ok": true,
+      "detail": "clean"
+    },
+    {
+      "name": "owner can read the empty thread",
+      "ok": true,
+      "detail": "200, 0 comments"
+    },
+    {
+      "name": "owner creates the marker comment",
+      "ok": true,
+      "detail": "202"
+    },
+    {
+      "name": "comment survives a reload",
+      "ok": true,
+      "detail": "1 visible to the owner"
+    },
+    {
+      "name": "owner replies to it",
+      "ok": true,
+      "detail": "202"
+    },
+    {
+      "name": "the reply is bound to its parent",
+      "ok": true,
+      "detail": "parent c_0b14ab4fd3… depth 1"
+    },
+    {
+      "name": "owner edits the comment and a revision is kept",
+      "ok": true,
+      "detail": "200, revision 2"
+    },
+    {
+      "name": "a repeat submit with one key creates no duplicate",
+      "ok": true,
+      "detail": "same comment id returned twice"
+    },
+    {
+      "name": "an exact duplicate without a key is refused",
+      "ok": true,
+      "detail": "400"
+    },
+    {
+      "name": "HTML in a comment is escaped, not executed",
+      "ok": true,
+      "detail": "escaped"
+    },
+    {
+      "name": "rate limit stops a burst",
+      "ok": true,
+      "detail": "codes [429]"
+    },
+    {
+      "name": "comments survive a gateway restart",
+      "ok": true,
+      "detail": "4 still present after restart"
+    },
+    {
+      "name": "owner deletes the comment; it leaves the public view",
+      "ok": true,
+      "detail": "200, removed and hidden"
+    },
+    {
+      "name": "tenant isolation: the second animedia site is refused",
+      "ok": true,
+      "detail": "503 for animedia.space with a valid animedia.icu cookie"
+    },
+    {
+      "name": "a foreign origin gets no CORS grant",
+      "ok": true,
+      "detail": "no grant"
+    },
+    {
+      "name": "title page indexability unchanged with comments mounted",
+      "ok": true,
+      "detail": "noindex on header and meta"
+    },
+    {
+      "name": "no comment text is rendered into the page for a crawler",
+      "ok": true,
+      "detail": "container only, no comments"
+    },
+    {
+      "name": "kill switch hides comments from the owner too",
+      "ok": true,
+      "detail": "switch available and currently released"
+    }
+  ],
+  "passed": 30,
+  "total": 30,
+  "generated_at_utc": "2026-09-22T12:42:56Z"
+}

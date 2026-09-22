@@ -81,6 +81,27 @@
     return node;
   }
 
+  /**
+   * One cookie by name, or "".
+   *
+   * Only the CSRF token is ever read this way, and it is the one cookie
+   * deliberately not marked HttpOnly — that is the entire double-submit
+   * mechanism. The guest pseudonym and the cohort token are HttpOnly and this
+   * function cannot see them, which is the point.
+   */
+  function readCookie(name) {
+    try {
+      var parts = (document.cookie || "").split(";");
+      for (var i = 0; i < parts.length; i += 1) {
+        var pair = parts[i].trim();
+        if (pair.indexOf(name + "=") === 0) return pair.slice(name.length + 1);
+      }
+    } catch (_ignored) {
+      // A document without cookies is not an error worth breaking a page for.
+    }
+    return "";
+  }
+
   function debounce(fn, wait) {
     var timer = null;
     return function () {
@@ -120,7 +141,11 @@
       readOnly: !!cfg.readOnly,
       maxLength: parseInt(cfg.maxLength, 10) || 4000,
       csrfHeader: cfg.csrfHeader || "X-CP-CSRF",
+      // Explicit token wins; otherwise the double-submit cookie the gateway
+      // issues is read at request time. Reading it per request rather than
+      // once at mount matters: the very first response is what creates it.
       csrfToken: cfg.csrfToken || "",
+      csrfCookie: cfg.csrfCookie || "cp_csrf",
       onEvent: typeof cfg.onEvent === "function" ? cfg.onEvent : noop,
       strings: Object.assign({}, DEFAULT_STRINGS, cfg.strings || {})
     };
@@ -184,7 +209,8 @@
     var url = state.config.apiBase + "/api/comments/" + API_VERSION + path;
     var headers = { Accept: "application/json" };
     if (body) headers["Content-Type"] = "application/json";
-    if (state.config.csrfToken) headers[state.config.csrfHeader] = state.config.csrfToken;
+    var csrf = state.config.csrfToken || readCookie(state.config.csrfCookie);
+    if (csrf) headers[state.config.csrfHeader] = csrf;
 
     var controller = typeof AbortController !== "undefined" ? new AbortController() : null;
     if (controller) state.pending.push(controller);
@@ -281,6 +307,27 @@
     }
   }
 
+  /**
+   * Show or hide the composing surface, on the server's word alone.
+   *
+   * `canWrite` comes from the thread response. There is no client-side
+   * inference and no default of true: an unanswered or failed request leaves
+   * the form off, which is the safe direction.
+   */
+  function setWritable(state, canWrite) {
+    var slot = state.nodes.formSlot;
+    if (!slot) return;
+    var shouldShow = !!canWrite && !state.config.readOnly;
+    var attached = slot.firstChild === state.nodes.form;
+    if (shouldShow && !attached) {
+      slot.appendChild(state.nodes.form);
+      var draft = restoreDraft(state);
+      if (draft) state.nodes.textarea.value = draft;
+    } else if (!shouldShow && attached) {
+      slot.removeChild(state.nodes.form);
+    }
+  }
+
   function setStatus(state, kind, message) {
     var box = state.nodes.status;
     box.textContent = message || "";
@@ -288,6 +335,21 @@
     // A live region, so a screen reader hears "sent, awaiting moderation"
     // rather than silently receiving a DOM change nobody announced.
     box.hidden = !message;
+  }
+
+  /** Put the widget on the page, once, when we know it belongs there. */
+  function reveal(state) {
+    if (!state.nodes.pendingContainer) return;
+    state.nodes.root.appendChild(state.nodes.pendingContainer);
+    state.nodes.pendingContainer = null;
+  }
+
+  /** Leave the page untouched: this caller gets no comments at all. */
+  function stayHidden(state) {
+    if (state.nodes.container && state.nodes.container.parentNode) {
+      state.nodes.container.parentNode.removeChild(state.nodes.container);
+      state.nodes.pendingContainer = state.nodes.container;
+    }
   }
 
   function renderList(state, items, append) {
@@ -346,6 +408,8 @@
     return request(state, "GET", "/threads" + query)
       .then(function (data) {
         state.cursor = data.next_cursor || "";
+        reveal(state);
+        setWritable(state, data.can_write);
         state.nodes.more.hidden = !data.has_more;
         renderList(state, data.items || [], append);
         state.nodes.count.textContent = String(data.total_count || 0);
@@ -354,6 +418,19 @@
       })
       .catch(function (err) {
         // The page keeps working. That is the whole contract of this branch.
+        // A failed read tells us nothing about write permission, so the form
+        // stays off rather than being left over from a previous answer.
+        setWritable(state, false);
+
+        // 503 is the designed answer for "comments are not enabled for you".
+        // It is not an error to show a reader — it is the site as it is, and
+        // the widget withdraws rather than leaving a notice behind.
+        if (err && err.status === 503) {
+          stayHidden(state);
+          emit(state, "not_enabled", { status: 503 });
+          return;
+        }
+        reveal(state);
         var offline = typeof navigator !== "undefined" && navigator.onLine === false;
         setStatus(
           state,
@@ -540,9 +617,17 @@
     // the largest single layout shift in this widget (0.118 of a total 0.197).
     // A control that walks down the page while you are reaching for it is a
     // worse problem than an unconventional order.
-    var children = [heading, sortControl, status];
-    if (!state.config.readOnly) children.push(form);
-    children.push(list, empty, more, retry);
+    //
+    // It is NOT attached here. The server decides who may write, and until it
+    // has said so the widget offers no writing surface at all. Building the
+    // box first and discovering on submit that the answer is no shows a
+    // visitor an invitation the site never meant to extend — which is exactly
+    // what an owner-only pilot must not do.
+    var children = [heading, sortControl, status, list, empty, more, retry];
+
+    var formSlot = el("div", { class: "cp-form-slot" });
+    // Third child: immediately after the status line, above the list.
+    children.splice(3, 0, formSlot);
 
     var container = el("section", {
       class: "cp-widget",
@@ -559,7 +644,20 @@
       prerendered.remove();
     }
 
-    root.appendChild(container);
+    // Not appended yet. Nothing of the widget reaches the page until the
+    // server has said what this caller may see. For an ordinary visitor
+    // during an owner-only pilot the answer is "nothing", and the page must
+    // then look exactly as it does without comments — no container, no
+    // notice, no reserved gap. That requirement outranks the layout-shift
+    // reservation this code used to make, which only ever helped the one
+    // person who can see the widget.
+    state.nodes.pendingContainer = container;
+
+    // Except when the server already rendered comments into the page. SSR is
+    // the server saying "these belong here"; holding them back until a fetch
+    // returns would blank content that was readable a moment ago, including
+    // for a reader with no JavaScript at all.
+    state.hadPrerendered = !!prerendered;
 
     Object.assign(state.nodes, {
       container: container,
@@ -570,12 +668,14 @@
       status: status,
       count: heading.querySelector(".cp-count"),
       form: form,
+      formSlot: formSlot,
       textarea: textarea,
       submit: submitButton,
       sort: sortControl
     });
 
     empty.hidden = list.children.length !== 0;
+    if (state.hadPrerendered) reveal(state);
   }
 
   function bind(state) {
@@ -622,8 +722,6 @@
           saveDraft(state, state.nodes.textarea.value);
         }, 400)
       );
-      var draft = restoreDraft(state);
-      if (draft) state.nodes.textarea.value = draft;
     }
 
     bindSpoilers(state.nodes.container, state.config.strings);

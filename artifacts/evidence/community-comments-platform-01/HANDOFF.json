@@ -4,7 +4,7 @@
   "role": "SHARED_PLATFORM",
   "module_version": "0.1.0-mvp",
   "api_version": "v1",
-  "artifact_checksum": "6032fb3cd24769390a7826473cc93932aed459a15fa2a92e6a771188092fa082",
+  "artifact_checksum": "98000cc77444f6fd79494232a8fbf3da36a6affdc58f356f3f0da37d134fe9c4",
   "status": "READY_FOR_LOCAL_REVIEW",
   "production_allowed": false,
   "sites_bound": 9,
