@@ -103,6 +103,36 @@ def test_generated_ci_shell_steps_are_syntactically_valid(tmp_path, template):
         assert result.returncode == 0, f"bash -n: {result.stderr}\n{script}"
 
 
+def test_generated_checks_catch_non_ascii_shell_names(tmp_path, template):
+    """Кириллическое имя переменной в shell — отказ проверки, а не сюрприз в бою.
+
+    Куплено отказом активации animedia.space: `СУХОЙ=0` для bash не
+    присваивание, а вызов команды с таким именем. `bash -n` такую строку
+    принимает, поэтому проверка синтаксиса её не ловит — и нужна отдельная.
+    """
+    repo = _repo(tmp_path, template)
+    чисто = subprocess.run(["bash", "checks/run.sh"], cwd=repo.path,
+                           capture_output=True, text=True)
+    assert чисто.returncode == 0, чисто.stdout
+    assert "shell-ascii-names" in чисто.stdout
+
+    плохой = repo.path / "deploy"
+    плохой.mkdir(exist_ok=True)
+    (плохой / "bad.sh").write_text(
+        '#!/usr/bin/env bash\nСУХОЙ=0\necho "$СУХОЙ"\n', encoding="utf-8")
+
+    # bash -n этот файл принимает — именно поэтому проверка отдельная.
+    синтаксис = subprocess.run(["bash", "-n", str(плохой / "bad.sh")],
+                               capture_output=True, text=True)
+    assert синтаксис.returncode == 0, "bash -n внезапно поймал — тест потерял смысл"
+
+    после = subprocess.run(["bash", "checks/run.sh"], cwd=repo.path,
+                           capture_output=True, text=True)
+    assert после.returncode != 0
+    assert "shell-ascii-names" in после.stdout
+    assert "FAIL" in после.stdout
+
+
 def test_repo_checks_reject_floating_pins(tmp_path, template):
     repo = _repo(tmp_path, template)
     pins_file = repo.path / "pins.lock.json"

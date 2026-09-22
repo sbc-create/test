@@ -191,9 +191,51 @@ check "pins-are-json"        python3 -c "import json;json.load(open('pins.lock.j
 check "template-present"     test -d template
 check "no-floating-pins"     python3 checks/no_floating_pins.py
 check "no-data-or-secrets"   python3 checks/no_data_or_secrets.py
+check "shell-ascii-names"    python3 checks/ascii_shell_identifiers.py
 
 exit "$fail"
 """
+
+#: Имена в shell — только ASCII.
+#:
+#: Куплено отказом активации animedia.space: строка `СУХОЙ=0` для bash не
+#: присваивание, а вызов команды с таким именем, и скрипт падал на ней при
+#: первом же запуске. `bash -n` такую строку принимает — синтаксически это
+#: законный вызов, — поэтому проверка синтаксиса здесь ничего не доказывает и
+#: нужна отдельная.
+ASCII_SHELL_IDENTIFIERS = '''"""Имена переменных и функций в shell-скриптах — только ASCII.
+
+Bash считает именем переменной лишь [A-Za-z_][A-Za-z0-9_]*. Строка вида
+`СУХОЙ=0` — это не присваивание, а попытка выполнить команду с таким именем;
+падает она только при запуске. `bash -n` её пропускает.
+
+Русские сообщения и комментарии не ограничиваются: правило про идентификаторы.
+"""
+import re
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+
+ASSIGNMENT = re.compile(r"^\\s*(?:export\\s+|local\\s+|declare\\s+)?([^\\s=]*[^\\x00-\\x7F][^\\s=]*)=")
+REFERENCE = re.compile(r"\\$\\{?([A-Za-z_]*[^\\x00-\\x7F][^\\s}/:\\-]*)")
+FUNCTION = re.compile(r"^\\s*(?:function\\s+)?([^\\s()]*[^\\x00-\\x7F][^\\s()]*)\\s*\\(\\s*\\)")
+
+bad = []
+for path in sorted(ROOT.rglob("*.sh")):
+    if ".git" in path.parts:
+        continue
+    for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        code = line.split("#", 1)[0]
+        for rule, what in ((ASSIGNMENT, "присваивание"), (REFERENCE, "обращение"),
+                           (FUNCTION, "функция")):
+            for name in rule.findall(code):
+                bad.append(f"{path.relative_to(ROOT)}:{number}: {what} к не-ASCII имени {name!r}")
+
+if bad:
+    print("не-ASCII имена в shell (bash их не примет):", *bad, sep="\\n  ", file=sys.stderr)
+    sys.exit(1)
+'''
 
 NO_FLOATING_PINS = '''"""Плавающих версий в проекте сайта не бывает.
 
@@ -465,6 +507,8 @@ def generate(*, site_id: str, domain: str, template_id: str, template_source: Pa
     run_sh.write_text(CHECKS_TEMPLATE, encoding="utf-8")
     run_sh.chmod(0o755)
     (checks / "no_floating_pins.py").write_text(NO_FLOATING_PINS, encoding="utf-8")
+    (checks / "ascii_shell_identifiers.py").write_text(
+        ASCII_SHELL_IDENTIFIERS, encoding="utf-8")
     (checks / "no_data_or_secrets.py").write_text(
         NO_DATA_OR_SECRETS.replace("{forbidden!r}", repr(list(FORBIDDEN_IN_REPO))),
         encoding="utf-8")

@@ -45,14 +45,14 @@
         "media": "<data>/site"
       },
       "deployed": {
-        "release_digest": "sha256:70595a3020bb99dfcd74b889e368eab91b14b89564bd3744755d1e42e35f7097",
-        "source_commit": "d73711705ebc9cb25ab2419abd8a6db9fb1ee42f",
-        "artifact": "animedia-space-d73711705ebc.tar.gz",
-        "built_by": "github actions 35792462379; локальная сборка того же коммита — тот же digest",
+        "release_digest": "sha256:32d938100f6981f8849f1274d6c94a3084948b41c5b28d57c85b64f473ac5659",
+        "source_commit": "ad9680dae2a61165c1d7fa9ed48b8c8862dc65e9",
+        "artifact": "animedia-space-ad9680dae2a6.tar.gz",
+        "built_by": "github actions 35794492227; 14 проверок на раннере, включая выполнение сценариев активации",
         "note": "Собрано и проверено. НЕ развёрнуто: активация требует root."
       },
       "content_revision": null,
-      "last_update": "2026-09-22T22:28:15.838448+00:00",
+      "last_update": "2026-09-22T22:52:57.839749+00:00",
       "backup": {},
       "resources": {}
     },
