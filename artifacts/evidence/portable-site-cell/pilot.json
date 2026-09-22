@@ -1,0 +1,367 @@
+{
+  "schema_version": "1.0",
+  "pilot_domain": "pilot-cell.invalid",
+  "gates": [
+    {
+      "gate": "ONBOARDING_RETRY",
+      "status": "PASS",
+      "detail": {
+        "template_id": "lords-curated",
+        "free_before": 4,
+        "free_after_repeat": 3
+      }
+    },
+    {
+      "gate": "TEMPLATE_ASSIGNMENT",
+      "status": "PASS",
+      "detail": {
+        "handed_out": [
+          "lords-curated",
+          "lords-general",
+          "lords-genre",
+          "lords-new"
+        ],
+        "unique": 4,
+        "note": "восемь одновременных заявок на четыре шаблона"
+      }
+    },
+    {
+      "gate": "SITE_ROUTING",
+      "status": "PASS",
+      "detail": {
+        "resolved": "pilot-cell",
+        "partial_name_refused": true
+      }
+    },
+    {
+      "gate": "SITE_REPO",
+      "status": "PASS",
+      "detail": {
+        "path": "var/cells/pilot-final-02/repos/pilot-cell",
+        "commit": "71d6d29eebaacf0c191859b2ced1f01d56989f71",
+        "checks_exit_code": 0,
+        "checks_output": "manifest-is-json                   PASS\npins-are-json                      PASS\ntemplate-present                   PASS\nno-floating-pins                   PASS\nno-data-or-secrets                 PASS"
+      }
+    },
+    {
+      "gate": "REMOTE_CI",
+      "status": "NOT_RUN",
+      "detail": {
+        "ci_template": "var/cells/pilot-final-02/repos/pilot-cell/.github/workflows/release.yml",
+        "ci_template_parses": true,
+        "remote_created": false,
+        "reason": "пространство Git-проектов для сайтов не передано и прав на создание репозиториев нет; подготовлен локальный Git-пилот и шаблон CI, настоящий remote не создавался"
+      }
+    },
+    {
+      "gate": "RELEASE_DIGEST",
+      "status": "PASS",
+      "detail": {
+        "digest": "sha256:872146352b446b58cab979015f91e4a25d7a08ebbcb614a3d43b2f611e5301bf",
+        "source_commit": "71d6d29eebaacf0c191859b2ced1f01d56989f71",
+        "reproducible": true
+      }
+    },
+    {
+      "gate": "COMMENTS",
+      "status": "PASS",
+      "detail": {
+        "approved": 2,
+        "reply_linked": true,
+        "premoderation": true,
+        "survived_restart": true
+      }
+    },
+    {
+      "gate": "VOTING",
+      "status": "PASS",
+      "detail": {
+        "title_uuid": "3f2a7c10-0000-4000-8000-00000000000a",
+        "votes": 2,
+        "average": 7.0,
+        "kind": "user"
+      }
+    },
+    {
+      "gate": "LOCAL_DB",
+      "status": "PASS",
+      "detail": {
+        "database": "/home/claude/wt-portable-site-cell-01/var/cells/pilot-final-02/hosts/pilot-cell/data/site.sqlite3",
+        "neighbour_database": "/home/claude/wt-portable-site-cell-01/var/cells/pilot-final-02/hosts/neighbour-cell/data/site.sqlite3",
+        "separate_files": true,
+        "inside_release_directory": false,
+        "note": "у каждого сайта свой файл базы; общий writable том не используется"
+      }
+    },
+    {
+      "gate": "CONTENT_SYNC",
+      "status": "PASS",
+      "detail": {
+        "first_applied": 2,
+        "repeat_applied": 0,
+        "duplicates": 2,
+        "content_revision": 2
+      }
+    },
+    {
+      "gate": "FIELD_OWNERSHIP",
+      "status": "PASS",
+      "detail": {
+        "seo_text_survived_catalog_update": true,
+        "episodes_updated": true,
+        "episodes_survived_seo_edit": true,
+        "rating_and_seo_coexist": true,
+        "episodes_before": 12
+      }
+    },
+    {
+      "gate": "STALE_CONTENT_REJECTED",
+      "status": "PASS",
+      "detail": {
+        "conflicts": 1
+      }
+    },
+    {
+      "gate": "SEO_CONTRACT",
+      "status": "PASS",
+      "detail": {
+        "seo_owns_its_fields": true,
+        "seo_cannot_write_catalog_fields": true,
+        "urls_canonical_untouched": true,
+        "note": "проверен контракт владения и применение в локальном слое; живая публикация — LIVE_SEO"
+      }
+    },
+    {
+      "gate": "URLS_BEFORE_AFTER",
+      "status": "PASS",
+      "detail": {
+        "before_total": 5,
+        "after_total": 5,
+        "lost": [],
+        "emptied": []
+      }
+    },
+    {
+      "gate": "LOST_URLS",
+      "status": "PASS",
+      "detail": {
+        "lost": []
+      }
+    },
+    {
+      "gate": "CATALOG_COMPLETENESS",
+      "status": "PASS",
+      "detail": {
+        "catalog_records": 2,
+        "title_pages": 2,
+        "routes": [
+          "/title/1212833fa9/",
+          "/title/12a2f1761f/"
+        ]
+      }
+    },
+    {
+      "gate": "UNKNOWN_ROUTE_IS_404",
+      "status": "PASS",
+      "detail": {
+        "note": "несуществующий адрес не имеет файла: сервер отдаёт настоящий 404"
+      }
+    },
+    {
+      "gate": "PLAYER_PUBLISHER_ID",
+      "status": "PASS",
+      "detail": {
+        "publisher_id": "10252",
+        "title_pages": 2,
+        "players_configured": 2,
+        "retired_ids_present": false,
+        "note": "проверена разметка плеера и идентификатор издателя; фактическое воспроизведение у провайдера в изоляции не проверялось"
+      }
+    },
+    {
+      "gate": "CENTRAL_OUTAGE",
+      "status": "PASS",
+      "detail": {
+        "pages_served": true,
+        "upstream_reported": true,
+        "local_writes_accepted": true,
+        "freshness_state": "fresh",
+        "last_verified_revision": 4
+      }
+    },
+    {
+      "gate": "RECOVERY_DELIVERY",
+      "status": "PASS",
+      "detail": {
+        "applied": 2,
+        "replay_applied": 0,
+        "replay_duplicates": 2,
+        "new_title_published": true
+      }
+    },
+    {
+      "gate": "STALE_DEPLOY_REJECTED",
+      "status": "PASS",
+      "detail": {
+        "deployed": "cb78e9df295b",
+        "attempted": "71d6d29eebaa"
+      }
+    },
+    {
+      "gate": "TARGETED_DEPLOY",
+      "status": "PASS",
+      "detail": {
+        "deployed_digest": "sha256:15b877a83af7bfc3d792983147d2681817ac06f2c71e63fbee60e3460e1d69b5",
+        "expected_digest": "sha256:15b877a83af7bfc3d792983147d2681817ac06f2c71e63fbee60e3460e1d69b5",
+        "sites_touched": [
+          "pilot-cell"
+        ],
+        "note": "выкат адресован одному сайту; соседний экземпляр не трогался"
+      }
+    },
+    {
+      "gate": "NEIGHBOR_UNCHANGED",
+      "status": "PASS",
+      "detail": {
+        "digest_before": "sha256:65c7dad528689eb83451674ba958af7bb61cfd5f5b43d1a6d0ac51a8cec75720",
+        "digest_after": "sha256:65c7dad528689eb83451674ba958af7bb61cfd5f5b43d1a6d0ac51a8cec75720",
+        "rows_before": {
+          "identities": 1,
+          "comments": 1,
+          "votes": 0,
+          "audit_local": 1
+        },
+        "rows_after": {
+          "identities": 1,
+          "comments": 1,
+          "votes": 0,
+          "audit_local": 1
+        }
+      }
+    },
+    {
+      "gate": "CUTOVER_ROLLBACK",
+      "status": "PASS",
+      "detail": {
+        "rollback_status": "rolled-back",
+        "comment_kept": true,
+        "votes_kept": 1,
+        "seo_text_kept": true
+      }
+    },
+    {
+      "gate": "TENANT_ACCESS_DENIED",
+      "status": "PASS",
+      "detail": {
+        "forged_site_id_refused": true,
+        "foreign_artifact_refused": true
+      }
+    },
+    {
+      "gate": "LIVE_MUTATIONS",
+      "status": "PASS",
+      "detail": {
+        "cutover_status": "PASS",
+        "old_side_frozen": true,
+        "dns_switched": false,
+        "target_rows": {
+          "identities": 2,
+          "comments": 4,
+          "votes": 3,
+          "audit_local": 10
+        }
+      }
+    },
+    {
+      "gate": "RESTORE",
+      "status": "PASS",
+      "detail": {
+        "reinstall_kept_data": true,
+        "integrity_check": true,
+        "row_counts": {
+          "identities": 2,
+          "comments": 5,
+          "votes": 3,
+          "audit_local": 11
+        }
+      }
+    },
+    {
+      "gate": "RAM_DISK",
+      "status": "PASS",
+      "detail": {
+        "site_disk_bytes": 248854,
+        "site_disk_mb": 0.2,
+        "release_artifact_bytes": 7592,
+        "free_bytes_on_host": 46143528960,
+        "free_gb_on_host": 43.0,
+        "note": "RAM пилота не измерялась: витрина статическая, постоянного процесса сайта в пилоте нет"
+      }
+    },
+    {
+      "gate": "OS_LEVEL_ISOLATION",
+      "status": "NOT_RUN",
+      "detail": {
+        "proven_here": [
+          "отдельные каталоги данных и релизов",
+          "отдельные файлы базы на сайт",
+          "отказ при подмене site_id и чужом артефакте"
+        ],
+        "not_attempted": [
+          "отдельный uid/gid на сайт",
+          "systemd LoadCredential на сайт",
+          "ACL файловой системы"
+        ],
+        "reason": "создание пользователей и смена прав — системная операция; границы задания запрещают менять права действующих процессов, поэтому проверка не проводилась",
+        "note": "общий root, общий Docker socket и универсальный ключ сети пилоту не выдавались: он их не использует"
+      }
+    },
+    {
+      "gate": "CROSS_HOST_TEST",
+      "status": "NOT_RUN",
+      "detail": {
+        "reason": "целевой сервер не предоставлен; перенос проверен между двумя каталогами одной машины"
+      }
+    },
+    {
+      "gate": "DNS_SWITCHED",
+      "status": "NOT_RUN",
+      "detail": {
+        "reason": "переключение домена в пилот не входит и не выполнялось"
+      }
+    },
+    {
+      "gate": "LIVE_SEO",
+      "status": "NOT_RUN",
+      "detail": {
+        "reason": "боевой SEO-процесс и Topvisor в изолированной среде недоступны; проверен контракт полей и доставка, не живая публикация"
+      }
+    },
+    {
+      "gate": "TOPVISOR",
+      "status": "NOT_RUN",
+      "detail": {
+        "reason": "без учётных данных и без разрешения на платные операции проект не создавался"
+      }
+    }
+  ],
+  "facts": {
+    "pilot_site": "pilot-cell",
+    "pilot_domain": "pilot-cell.invalid",
+    "site_repo": "var/cells/pilot-final-02/repos/pilot-cell",
+    "source_commit": "cb78e9df295b55bd8bd4676a97beb1ad5cb48c19",
+    "release_digest": "sha256:15b877a83af7bfc3d792983147d2681817ac06f2c71e63fbee60e3460e1d69b5",
+    "template_id": "lords-curated",
+    "publisher_id": "10252",
+    "content_revision": 6,
+    "routes_published": 6,
+    "registry": "var/cells/pilot-final-02/site-cells.json"
+  },
+  "summary": {
+    "pass": 27,
+    "fail": 0,
+    "not_run": 6
+  },
+  "pilot_root": "var/cells/pilot-final-02",
+  "pilot_root_kept": true
+}

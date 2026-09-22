@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "site_id": "pilot-cell",
+  "domain": "pilot-cell.invalid",
+  "aliases": [],
+  "template": {
+    "template_id": "lords-curated"
+  },
+  "modules": [
+    "content-catalog",
+    "comments",
+    "seo"
+  ],
+  "publisher": {
+    "provider": "cdnvideohub",
+    "publisher_id": "10252"
+  },
+  "deploy_target": {
+    "ref": "local-disposable",
+    "server": null
+  },
+  "field_ownership": {
+    "catalog": [
+      "title",
+      "original_name",
+      "year",
+      "kind",
+      "seasons",
+      "episodes",
+      "availability",
+      "poster_url"
+    ],
+    "external_ratings": [
+      "rating_external"
+    ],
+    "seo": [
+      "seo_title",
+      "seo_description",
+      "seo_text",
+      "meta_keywords"
+    ],
+    "manual": [
+      "*"
+    ],
+    "rule": "Владелец пишет только свои поля. Приоритет ручной правки выше обоих источников. «Последний записавший победил» не применяется."
+  },
+  "data": {
+    "location": "вне каталога релиза",
+    "note": "Каталог, SEO-тексты и пользовательские данные не лежат внутри сменяемой папки релиза: смена релиза не должна их касаться."
+  },
+  "generated_at": "2026-09-22T17:05:11.452714+00:00",
+  "pins_ref": "pins.lock.json"
+}

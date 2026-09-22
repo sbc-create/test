@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-factory.local/schemas/template-pool.schema.json",
+  "title": "Template pool",
+  "description": "Пул шаблонов витрин и их состояние. Шаблон исчерпаем: пока он выдавался по договорённости, два заказа получали один профиль, и расходились они уже на живых доменах. Схема закрепляет то, что нельзя проверить кодом постфактум: у зарезервированного и назначенного шаблона обязан быть держатель, а у свободного — не может быть. Файл меняется через factory.cell.templates; правка руками обходит блокировку, а с ней и защиту от выдачи одного шаблона дважды.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "templates"],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "note": {
+      "type": "string"
+    },
+    "families": {
+      "type": "object",
+      "description": "Семейства шаблонов. Ключ — идентификатор семейства.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_dir"],
+        "properties": {
+          "source_dir": {"type": "string"},
+          "manifest_schema": {"type": "string"},
+          "exclusive": {
+            "type": "boolean",
+            "description": "Шаблон семейства принадлежит одному сайту. Для семейств, владеющих страницей произведения и разделами каталога, иначе быть не может: два сайта на одном профиле дали бы одинаковые разделы и заголовки на разных доменах."
+          },
+          "exclusivity_reason": {"type": "string"}
+        }
+      }
+    },
+    "templates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["template_id", "family", "source", "status"],
+        "properties": {
+          "template_id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{2,40}$"
+          },
+          "family": {"type": "string"},
+          "label": {"type": "string"},
+          "source": {
+            "type": "string",
+            "description": "Исходник шаблона. Назначение не удаляет его: шаблон закреплён за сайтом, а не израсходован."
+          },
+          "status": {
+            "enum": ["free", "reserved", "assigned"]
+          },
+          "assignment": {
+            "description": "Держатель шаблона. У свободного шаблона держателя нет; у зарезервированного и назначенного — обязан быть.",
+            "oneOf": [
+              {"type": "null"},
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["order_id", "site_id", "reserved_at"],
+                "properties": {
+                  "order_id": {"type": "string", "minLength": 1},
+                  "site_id": {"type": "string", "minLength": 1},
+                  "domain": {"type": ["string", "null"]},
+                  "reserved_at": {"type": "string", "minLength": 1},
+                  "assigned_at": {"type": ["string", "null"]},
+                  "evidence": {"type": "string"}
+                }
+              }
+            ]
+          },
+          "history": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true,
+              "required": ["event", "at"],
+              "properties": {
+                "event": {"type": "string"},
+                "at": {"type": "string"}
+              }
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {"properties": {"status": {"const": "free"}}, "required": ["status"]},
+            "then": {
+              "properties": {"assignment": {"type": "null"}},
+              "description": "Свободный шаблон с держателем означал бы, что выдача уже произошла, а пул об этом не знает."
+            }
+          },
+          {
+            "if": {
+              "properties": {"status": {"enum": ["reserved", "assigned"]}},
+              "required": ["status"]
+            },
+            "then": {
+              "properties": {"assignment": {"type": "object"}},
+              "required": ["assignment"],
+              "description": "Занятый шаблон без держателя нельзя ни вернуть в пул, ни отдать по назначению: неизвестно, чей он."
+            }
+          }
+        ]
+      }
+    }
+  }
+}

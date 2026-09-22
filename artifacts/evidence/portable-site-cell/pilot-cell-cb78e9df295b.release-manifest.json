@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "site_id": "pilot-cell",
+  "domain": "pilot-cell.invalid",
+  "artifact": "pilot-cell-cb78e9df295b.tar.gz",
+  "digest": "sha256:15b877a83af7bfc3d792983147d2681817ac06f2c71e63fbee60e3460e1d69b5",
+  "size_bytes": 7592,
+  "source_commit": "cb78e9df295b55bd8bd4676a97beb1ad5cb48c19",
+  "source_repo": "var/cells/pilot-final-02/repos/pilot-cell",
+  "template": {
+    "template_id": "lords-curated"
+  },
+  "modules": [
+    "content-catalog",
+    "comments",
+    "seo"
+  ],
+  "pins": {
+    "common_core": "491836048dae11ae639795c7a3827706129faef6",
+    "template": "lords-curated",
+    "modules": {
+      "content-catalog": "1.0.0",
+      "comments": "1.0.0",
+      "seo": "1.0.0"
+    },
+    "schemas": {
+      "site_manifest": "1.0",
+      "release_manifest": "1.0"
+    }
+  },
+  "schema_versions": {
+    "site_manifest": "1.0",
+    "release_manifest": "1.0"
+  },
+  "built_at": "2026-09-22T17:05:12.842031+00:00",
+  "contains": {
+    "code": true,
+    "config": true,
+    "database": false,
+    "media": false,
+    "secrets": false
+  }
+}

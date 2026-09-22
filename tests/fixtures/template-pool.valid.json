@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "note": "Фикстура: пул в трёх состояниях сразу — свободный, зарезервированный, назначенный.",
+  "families": {
+    "example": {
+      "source_dir": "blueprints/example/profiles",
+      "exclusive": true,
+      "exclusivity_reason": "Профиль владеет страницей произведения; два сайта на нём дали бы дубль между доменами."
+    }
+  },
+  "templates": [
+    {
+      "template_id": "example-free",
+      "family": "example",
+      "label": "Example Free",
+      "source": "blueprints/example/profiles/example-free.yaml",
+      "status": "free",
+      "assignment": null
+    },
+    {
+      "template_id": "example-reserved",
+      "family": "example",
+      "label": "Example Reserved",
+      "source": "blueprints/example/profiles/example-reserved.yaml",
+      "status": "reserved",
+      "assignment": {
+        "order_id": "order-0001",
+        "site_id": "example-site",
+        "domain": "example.invalid",
+        "reserved_at": "2026-09-22T10:00:00+00:00",
+        "assigned_at": null
+      }
+    },
+    {
+      "template_id": "example-assigned",
+      "family": "example",
+      "label": "Example Assigned",
+      "source": "blueprints/example/profiles/example-assigned.yaml",
+      "status": "assigned",
+      "assignment": {
+        "order_id": "order-0002",
+        "site_id": "another-site",
+        "domain": "another.invalid",
+        "reserved_at": "2026-09-20T10:00:00+00:00",
+        "assigned_at": "2026-09-20T10:05:00+00:00",
+        "evidence": "sites/another-site/package.yaml: tenant.seo_profile = example-assigned"
+      },
+      "history": [
+        {"event": "reservation_released", "at": "2026-09-19T09:00:00+00:00"}
+      ]
+    }
+  ]
+}

@@ -17,6 +17,7 @@ from factory import build as build_mod
 from factory import queue as queue_mod
 from factory import verify as verify_mod
 from factory.analytics import cli as analytics_cli
+from factory.cell import cli as cell_cli
 from factory.errors import FactoryError
 from factory.locks import LockBusy, site_lock
 from factory.paths import PATHS
@@ -893,6 +894,7 @@ def main(argv: list[str] | None = None) -> int:
 
     analytics_cli.register(sub)
     secret_hub_cli.register(sub)
+    cell_cli.register(sub)
 
     p = sub.add_parser("template-check",
                        help="Lords: проверка шаблонов по контракту (schemas/template-manifest.schema.json)")

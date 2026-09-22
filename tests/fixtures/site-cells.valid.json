@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "note": "Фикстура: ячейка, у которой проект ещё не выделен, и ячейка с выпущенным релизом.",
+  "cells": [
+    {
+      "site_id": "example-not-extracted",
+      "domain": "example.invalid",
+      "aliases": [],
+      "status": "not_extracted",
+      "repo": {"kind": null, "path": null, "remote": null},
+      "template": {"template_id": "example-general", "order_id": "legacy-example"},
+      "pins": {"common_core": null, "template": "example-general", "modules": {}, "schemas": {}},
+      "deploy_target": {"ref": "local-disposable", "server": null},
+      "publisher": {"provider": "cdnvideohub", "publisher_id_ref": "secret://example/publisher-id"},
+      "data": {"database": null, "media": null},
+      "deployed": {"release_digest": null, "source_commit": null},
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {}
+    },
+    {
+      "site_id": "example-live",
+      "domain": "live.example.invalid",
+      "aliases": ["www.live.example.invalid"],
+      "status": "live",
+      "repo": {"kind": "local", "path": "var/site-repos/example-live", "remote": null},
+      "template": {"template_id": "example-curated", "order_id": "order-0002"},
+      "pins": {
+        "common_core": "491836048dae11ae639795c7a3827706129faef6",
+        "template": "example-curated",
+        "modules": {"content-catalog": "1.0.0"},
+        "schemas": {"site_manifest": "1.0"}
+      },
+      "deploy_target": {"ref": "local-disposable", "server": null},
+      "publisher": {"provider": "cdnvideohub", "publisher_id": "10252"},
+      "data": {"database": "data/site.sqlite3", "media": "data/media"},
+      "deployed": {
+        "release_digest": "sha256:27206af432615e5ddd36c0b4491198f67b6a424b5985c0ee4b34d5595c0ea3a3",
+        "source_commit": "2d4c2b6d7ae59c892e5da95e8988dc7009ee9d64",
+        "artifact": "artifacts/cells/example-live/example-live-2d4c2b6d7ae5.tar.gz",
+        "built_at": "2026-09-22T16:41:26+00:00"
+      },
+      "content_revision": 6,
+      "last_update": "2026-09-22T16:45:00+00:00",
+      "backup": {},
+      "resources": {}
+    }
+  ]
+}

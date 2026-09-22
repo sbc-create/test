@@ -55,3 +55,24 @@
 | REQ-DOD | Запрет `DONE` при провале критических проверок и при отчёте о незапущенной проверке | §10 | `tests/unit/test_job_result.py` |
 | REQ-INPUT-REQUEST | Один пакет недостающих данных вместо череды вопросов | §13 | `tests/unit/test_input_request.py` |
 | REQ-CDNVH | CDN Video Hub не интегрируется; создана extension point | §11 | `tests/unit/test_repo_hygiene.py` |
+| REQ-CELL-TEMPLATE | Шаблон выдаётся атомарно free→reserved→assigned; два заказа не получают один, повтор не расходует второй | PORTABLE-SITE-CELL-01 §2 | `tests/unit/test_cell_templates.py` |
+| REQ-CELL-ROUTING | domain/site_id разрешается однозначно; похожее имя не подставляется, неоднозначность останавливает | PORTABLE-SITE-CELL-01 §1 | `tests/unit/test_cell_registry.py` |
+| REQ-CELL-PUBID | Отозванные publisher_id 10331/10332/10333 запрещены; пустой — `BLOCKED_INPUT`, не умолчание | PORTABLE-SITE-CELL-01 §3 | `tests/unit/test_cell_registry.py` |
+| REQ-CELL-REPO | Отдельный Git-проект сайта с AGENTS.md, закреплёнными версиями и проверками; без данных и секретов | PORTABLE-SITE-CELL-01 §2 | `tests/unit/test_cell_release.py` |
+| REQ-CELL-RELEASE | Воспроизводимый артефакт: один коммит — один digest; манифест несёт source commit и версии схем | PORTABLE-SITE-CELL-01 §2 | `tests/unit/test_cell_release.py` |
+| REQ-CELL-STALE | Устаревшая сессия не перезаписывает более свежий релиз; чужой артефакт не ставится | PORTABLE-SITE-CELL-01 §2 | `tests/unit/test_cell_release.py` |
+| REQ-CELL-TENANT | Чужие данные не читаются и не меняются, в том числе при подмене site_id и манифеста | PORTABLE-SITE-CELL-01 §5 | `tests/unit/test_cell_tenant.py` |
+| REQ-CELL-LOCALDATA | Комментарии, ответы, премодерация и голосование 1–10 локальны и переживают перезапуск | PORTABLE-SITE-CELL-01 §3 | `tests/unit/test_cell_tenant.py` |
+| REQ-CELL-SNAPSHOT | Согласованный снимок работающей базы снимается SQLite Online Backup API, а не копированием файла | PORTABLE-SITE-CELL-01 §4 | `tests/unit/test_cell_tenant.py` |
+| REQ-CELL-SYNC | Доставка с долговечным курсором: повтор без дублей, удаления доезжают, партия атомарна | PORTABLE-SITE-CELL-01 §3 | `tests/unit/test_cell_sync.py` |
+| REQ-CELL-FRESHNESS | Недоступный источник называется недоступным, а не нулём; работает последний проверенный снимок | PORTABLE-SITE-CELL-01 §3 | `tests/unit/test_cell_sync.py` |
+| REQ-CELL-OWNERSHIP | Каталог, внешние оценки, SEO и ручная правка не затирают друг друга; конфликт фиксируется | PORTABLE-SITE-CELL-01 §3 | `tests/unit/test_cell_ownership.py` |
+| REQ-CELL-CONTENTREV | Выкат и откат кода не перезаписывают более свежую content_revision | PORTABLE-SITE-CELL-01 §3 | `tests/unit/test_cell_ownership.py` |
+| REQ-CELL-TRANSFER | export/install/verify/cutover/rollback с `--site`, `--dry-run`, проверкой манифеста и блокировкой | PORTABLE-SITE-CELL-01 §4 | `tests/unit/test_cell_transfer.py` |
+| REQ-CELL-ROLLBACK | Откат кода сохраняет комментарии и голоса, принятые на новой стороне | PORTABLE-SITE-CELL-01 §4 | `tests/unit/test_cell_transfer.py` |
+| REQ-CELL-FREEZE | Окно запрета записи только для этого сайта; два пишущих экземпляра исключены | PORTABLE-SITE-CELL-01 §4 | `tests/unit/test_cell_transfer.py` |
+| REQ-CELL-ONBOARD | Этапы продолжаются с места сбоя; частичный провал не отмечается как «готово» | PORTABLE-SITE-CELL-01 §2 | `tests/unit/test_cell_onboarding.py` |
+| REQ-CELL-DNS | NS, A/AAAA и готовность HTTPS различаются; непроверенное называется непроверенным | PORTABLE-SITE-CELL-01 §2 | `tests/unit/test_cell_onboarding.py` |
+| REQ-CELL-NEIGHBOR | Точечный выпуск одного сайта не меняет digest и данные соседа | PORTABLE-SITE-CELL-01 §5 | `tests/integration/test_cell_pilot.py` |
+| REQ-CELL-URLS | Инвентарь опубликованных URL до и после совпадает на одной content_revision | PORTABLE-SITE-CELL-01 §5 | `tests/integration/test_cell_pilot.py` |
+| REQ-CELL-OUTAGE | При недоступном центре страницы, комментарии и голоса продолжают работать | PORTABLE-SITE-CELL-01 §5 | `tests/integration/test_cell_pilot.py` |

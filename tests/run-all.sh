@@ -66,6 +66,9 @@ run "validate-pilot"     "python3 -m factory validate --site pilot-local > /dev/
 run "plan-no-mutations"  "python3 -m factory plan --site pilot-local > /dev/null"
 run "build-pilot"        "python3 -m factory build --site pilot-local --force > /dev/null"
 run "integration-fast"   "python3 -m pytest tests/integration -q -m 'not slow'"
+# Пилот переносимой ячейки идёт отдельным шагом и пишет свои доказательства:
+# сводка ворот нужна в отчёте прогона, а не только в выводе pytest.
+run "cell-pilot"         "PYTHONPATH=. python3 tests/tools/cell_pilot.py --evidence artifacts/evidence/portable-site-cell/pilot.json > /dev/null"
 run "integration-slow"   "python3 -m pytest tests/integration -q -m slow"
 run "seo-lint"           "python3 -m factory seo-lint --site pilot-local > /dev/null"
 

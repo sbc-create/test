@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "note": "Фикстура отказа: занятый шаблон без держателя. Такой нельзя ни вернуть в пул, ни отдать по назначению — неизвестно, чей он.",
+  "templates": [
+    {
+      "template_id": "example-reserved",
+      "family": "example",
+      "source": "blueprints/example/profiles/example-reserved.yaml",
+      "status": "reserved",
+      "assignment": null
+    }
+  ]
+}

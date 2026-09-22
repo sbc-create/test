@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "note": "Фикстура отказа: отозванный поставщиком publisher_id и плавающая версия общего ядра. Первое даёт пустой плеер на живом сайте, второе — невоспроизводимую сборку.",
+  "cells": [
+    {
+      "site_id": "example-broken",
+      "domain": "broken.example.invalid",
+      "status": "live",
+      "repo": {"kind": "local", "path": "var/site-repos/example-broken", "remote": null},
+      "template": {"template_id": "example-general", "order_id": "order-0003"},
+      "pins": {"common_core": "latest", "template": "example-general"},
+      "deploy_target": {"ref": "local-disposable", "server": null},
+      "publisher": {"provider": "cdnvideohub", "publisher_id": "10331"}
+    }
+  ]
+}

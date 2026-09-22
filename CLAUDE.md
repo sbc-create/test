@@ -50,14 +50,14 @@ python3 -m factory build     --site <site_id>          # детерминиро�
 python3 -m factory deploy    --site <site_id> --environment staging|production
 python3 -m factory verify    --site <site_id>          # QA + SEO + security gates
 python3 -m factory rollback  --site <site_id> --environment <env>
-python3 -m factory status | resume | report | queue | analytics …   # analytics пишет только с --confirm-writes
+python3 -m factory status | resume | report | queue | analytics | cell …   # analytics пишет только с --confirm-writes; cell — docs/PORTABLE_SITE_CELL.md
 python3 -m factory seo-plan | seo-lint | seo-crawl | seo-render | seo-report --site <site_id>
 bash tests/run-all.sh                                  # полный прогон с чистого состояния
 ```
 
 ## Архитектурная карта
 
-- `factory/` — controller, state machine, locks, retry, redaction, audit, SEO, цели, `analytics/`
+- `factory/` — controller, state machine, locks, retry, redaction, audit, SEO, цели, `analytics/`, `cell/` (переносимая ячейка, `docs/PORTABLE_SITE_CELL.md`)
 - `schemas/` — `site-package.schema.json` (единственный вход), `job-result.schema.json`
 - `knowledge/` — замороженная база знаний; менять только через skill `/research-freeze`
 - `inventory/` — разрешённые SSH-хосты, DNS-зоны, лицензии, дистрибутивы, targets

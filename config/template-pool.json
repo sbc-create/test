@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "note": "Пул шаблонов витрин. Состояние каждого шаблона: free → reserved → assigned. Файл меняется только через factory.cell.templates: правка руками обходит блокировку, а значит и защиту от выдачи одного шаблона двум заказам. Назначение отражает действительность — seo_profile в sites/<site_id>/package.yaml, а не пожелание. Исходники назначенного шаблона остаются в blueprints/lords/profiles/: шаблон закреплён за сайтом, а не израсходован.",
+  "families": {
+    "lords": {
+      "source_dir": "blueprints/lords/profiles",
+      "manifest_schema": "schemas/template-manifest.schema.json",
+      "exclusive": true,
+      "exclusivity_reason": "Профиль владеет страницей произведения (owns_title_page) и разделами каталога. Два сайта на одном профиле дали бы одинаковые разделы и заголовки на разных доменах — это тот самый дубль, который ловит гейт seo-cross-site."
+    }
+  },
+  "templates": [
+    {
+      "template_id": "lords-curated",
+      "family": "lords",
+      "label": "Lords Curated",
+      "source": "blueprints/lords/profiles/lords-curated.yaml",
+      "status": "assigned",
+      "assignment": {
+        "order_id": "legacy-lords-03",
+        "site_id": "lords-03",
+        "domain": "1lordserials1.online",
+        "reserved_at": "legacy",
+        "assigned_at": "legacy",
+        "evidence": "sites/lords-03/package.yaml: tenant.seo_profile = lords-curated"
+      }
+    },
+    {
+      "template_id": "lords-general",
+      "family": "lords",
+      "label": "Lords General",
+      "source": "blueprints/lords/profiles/lords-general.yaml",
+      "status": "assigned",
+      "assignment": {
+        "order_id": "legacy-lords-01",
+        "site_id": "lords-01",
+        "domain": "lordfilm47.space",
+        "reserved_at": "legacy",
+        "assigned_at": "legacy",
+        "evidence": "sites/lords-01/package.yaml: tenant.seo_profile = lords-general"
+      }
+    },
+    {
+      "template_id": "lords-genre",
+      "family": "lords",
+      "label": "Lords Genre",
+      "source": "blueprints/lords/profiles/lords-genre.yaml",
+      "status": "assigned",
+      "assignment": {
+        "order_id": "legacy-lords-04",
+        "site_id": "lords-04",
+        "domain": null,
+        "reserved_at": "legacy",
+        "assigned_at": "legacy",
+        "evidence": "sites/lords-04/package.yaml: tenant.seo_profile = lords-genre"
+      }
+    },
+    {
+      "template_id": "lords-new",
+      "family": "lords",
+      "label": "Lords New",
+      "source": "blueprints/lords/profiles/lords-new.yaml",
+      "status": "assigned",
+      "assignment": {
+        "order_id": "legacy-lords-02",
+        "site_id": "lords-02",
+        "domain": "lordserial33.biz",
+        "reserved_at": "legacy",
+        "assigned_at": "legacy",
+        "evidence": "sites/lords-02/package.yaml: tenant.seo_profile = lords-new"
+      }
+    }
+  ]
+}

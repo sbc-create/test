@@ -1,0 +1,299 @@
+{
+  "schema_version": "1.0",
+  "note": "Паспорта ячеек: по домену и site_id задача находит свой проект, шаблон, закреплённые версии и цель выката. Идентичность сайта живёт в config/site-profiles/ и sites/<site_id>/package.yaml — здесь на неё ссылаются, а не заводят вторую. Файл меняется через factory.cell.registry: правка руками обходит проверку «один домен — один сайт». status=not_extracted означает, что отдельный Git-проект сайта ещё не выделен; это честное состояние, а не пропуск поля.",
+  "cells": [
+    {
+      "site_id": "lords-01",
+      "domain": "lordfilm47.space",
+      "aliases": [
+        "www.lordfilm47.space"
+      ],
+      "status": "not_extracted",
+      "repo": {
+        "kind": null,
+        "path": null,
+        "remote": null
+      },
+      "template": {
+        "template_id": "lords-general",
+        "order_id": "legacy-lords-01"
+      },
+      "pins": {
+        "common_core": null,
+        "template": "lords-general",
+        "modules": {},
+        "schemas": {}
+      },
+      "deploy_target": {
+        "ref": "lords-staging-control-01",
+        "server": null
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id_ref": null
+      },
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {
+        "release_digest": null,
+        "source_commit": null
+      },
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {}
+    },
+    {
+      "site_id": "lords-02",
+      "domain": "lordserial33.biz",
+      "aliases": [
+        "www.lordserial33.biz"
+      ],
+      "status": "not_extracted",
+      "repo": {
+        "kind": null,
+        "path": null,
+        "remote": null
+      },
+      "template": {
+        "template_id": "lords-new",
+        "order_id": "legacy-lords-02"
+      },
+      "pins": {
+        "common_core": null,
+        "template": "lords-new",
+        "modules": {},
+        "schemas": {}
+      },
+      "deploy_target": {
+        "ref": "lords-staging-control-01",
+        "server": null
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id_ref": null
+      },
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {
+        "release_digest": null,
+        "source_commit": null
+      },
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {}
+    },
+    {
+      "site_id": "lords-03",
+      "domain": "1lordserials1.online",
+      "aliases": [
+        "www.1lordserials1.online"
+      ],
+      "status": "not_extracted",
+      "repo": {
+        "kind": null,
+        "path": null,
+        "remote": null
+      },
+      "template": {
+        "template_id": "lords-curated",
+        "order_id": "legacy-lords-03"
+      },
+      "pins": {
+        "common_core": null,
+        "template": "lords-curated",
+        "modules": {},
+        "schemas": {}
+      },
+      "deploy_target": {
+        "ref": "lords-staging-control-01",
+        "server": null
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id_ref": null
+      },
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {
+        "release_digest": null,
+        "source_commit": null
+      },
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {}
+    },
+    {
+      "site_id": "pilot-local",
+      "domain": "pilot.localhost.test",
+      "aliases": [],
+      "status": "not_extracted",
+      "repo": {
+        "kind": null,
+        "path": null,
+        "remote": null
+      },
+      "template": {
+        "template_id": null,
+        "order_id": "legacy-pilot-local"
+      },
+      "pins": {
+        "common_core": null,
+        "template": null,
+        "modules": {},
+        "schemas": {}
+      },
+      "deploy_target": {
+        "ref": "local-disposable",
+        "server": null
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id_ref": null
+      },
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {
+        "release_digest": null,
+        "source_commit": null
+      },
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {}
+    },
+    {
+      "site_id": "site-a",
+      "domain": "site-a.localhost",
+      "aliases": [],
+      "status": "not_extracted",
+      "repo": {
+        "kind": null,
+        "path": null,
+        "remote": null
+      },
+      "template": {
+        "template_id": "catalog_authority",
+        "order_id": "legacy-site-a"
+      },
+      "pins": {
+        "common_core": null,
+        "template": "catalog_authority",
+        "modules": {},
+        "schemas": {}
+      },
+      "deploy_target": {
+        "ref": "payload-local",
+        "server": null
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id_ref": null
+      },
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {
+        "release_digest": null,
+        "source_commit": null
+      },
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {}
+    },
+    {
+      "site_id": "site-b",
+      "domain": "site-b.localhost",
+      "aliases": [],
+      "status": "not_extracted",
+      "repo": {
+        "kind": null,
+        "path": null,
+        "remote": null
+      },
+      "template": {
+        "template_id": "release_pulse",
+        "order_id": "legacy-site-b"
+      },
+      "pins": {
+        "common_core": null,
+        "template": "release_pulse",
+        "modules": {},
+        "schemas": {}
+      },
+      "deploy_target": {
+        "ref": "payload-local",
+        "server": null
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id_ref": null
+      },
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {
+        "release_digest": null,
+        "source_commit": null
+      },
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {}
+    },
+    {
+      "site_id": "site-c",
+      "domain": "site-c.localhost",
+      "aliases": [],
+      "status": "not_extracted",
+      "repo": {
+        "kind": null,
+        "path": null,
+        "remote": null
+      },
+      "template": {
+        "template_id": "editorial_guide",
+        "order_id": "legacy-site-c"
+      },
+      "pins": {
+        "common_core": null,
+        "template": "editorial_guide",
+        "modules": {},
+        "schemas": {}
+      },
+      "deploy_target": {
+        "ref": "payload-local",
+        "server": null
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id_ref": null
+      },
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {
+        "release_digest": null,
+        "source_commit": null
+      },
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {}
+    }
+  ]
+}

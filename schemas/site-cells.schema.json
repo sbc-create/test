@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-factory.local/schemas/site-cells.schema.json",
+  "title": "Site cell registry",
+  "description": "Паспорта переносимых ячеек: по домену и site_id задача находит свой проект, шаблон, закреплённые версии и цель выката. Реестр не заводит вторую правду об идентичности сайта — она живёт в config/site-profiles/ и sites/<site_id>/package.yaml, здесь на неё ссылаются. Отозванные идентификаторы издателя запрещены схемой, а не только кодом: подставить такой значит получить пустой плеер на живом сайте.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "cells"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "note": {"type": "string"},
+    "cells": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["site_id", "domain", "status", "repo", "template", "deploy_target"],
+        "properties": {
+          "site_id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{1,62}$"
+          },
+          "domain": {
+            "type": "string",
+            "format": "hostname",
+            "minLength": 3
+          },
+          "aliases": {
+            "type": "array",
+            "items": {"type": "string", "format": "hostname"}
+          },
+          "status": {
+            "enum": ["planned", "not_extracted", "staged", "live", "retired"],
+            "description": "not_extracted — отдельный Git-проект сайта ещё не выделен. Это честное состояние, а не пропущенное поле."
+          },
+          "repo": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {"type": ["string", "null"], "enum": ["local", "remote", null]},
+              "path": {"type": ["string", "null"]},
+              "remote": {"type": ["string", "null"]}
+            }
+          },
+          "template": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "template_id": {"type": ["string", "null"]},
+              "order_id": {"type": ["string", "null"]}
+            }
+          },
+          "pins": {
+            "type": "object",
+            "description": "Закреплённые версии. Плавающих значений (latest, main, HEAD) здесь быть не может: завтра сборка дала бы другой результат, а сегодняшняя проверка не доказывала бы ничего.",
+            "additionalProperties": true,
+            "properties": {
+              "common_core": {
+                "type": ["string", "null"],
+                "not": {"enum": ["latest", "main", "master", "HEAD", "head", "*", ""]}
+              },
+              "template": {"type": ["string", "null"]},
+              "modules": {"type": "object"},
+              "schemas": {"type": "object"}
+            }
+          },
+          "deploy_target": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "ref": {"type": ["string", "null"]},
+              "server": {"type": ["string", "null"]}
+            }
+          },
+          "publisher": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "provider": {"type": ["string", "null"]},
+              "publisher_id": {
+                "description": "Открытое значение настройки web component (D89), не учётные данные. Отозванные поставщиком идентификаторы запрещены.",
+                "type": ["string", "null"],
+                "not": {"enum": ["10331", "10332", "10333"]}
+              },
+              "publisher_id_ref": {"type": ["string", "null"]}
+            }
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "database": {"type": ["string", "null"]},
+              "media": {"type": ["string", "null"]}
+            }
+          },
+          "deployed": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "release_digest": {
+                "type": ["string", "null"],
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              "source_commit": {"type": ["string", "null"]},
+              "artifact": {"type": ["string", "null"]},
+              "built_at": {"type": ["string", "null"]}
+            }
+          },
+          "content_revision": {"type": ["integer", "string", "null"]},
+          "last_update": {"type": ["string", "null"]},
+          "backup": {"type": "object"},
+          "resources": {"type": "object"}
+        }
+      }
+    }
+  }
+}

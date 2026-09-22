@@ -1,0 +1,77 @@
+# Выпуск сайта pilot-cell. Меняет только его.
+name: release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Один выкат на сайт одновременно. cancel-in-progress выключен намеренно:
+# прерванный посередине выкат оставляет сайт в состоянии, которого нет ни в
+# одном релизе.
+concurrency:
+  group: release-pilot-cell
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Полная история обязательна: по умолчанию checkout берёт один
+          # коммит, и `git merge-base` ниже не смог бы ответить на вопрос о
+          # родстве — а неответ выглядел бы как «не устарел».
+          fetch-depth: 0
+
+      - name: Проверки проекта
+        run: ./checks/run.sh
+
+      - name: Этот репозиторий описывает именно свой сайт
+        run: |
+          set -euo pipefail
+          declared=$(python3 -c "import json;print(json.load(open('site-manifest.json'))['site_id'])")
+          if [ "$declared" != "pilot-cell" ]; then
+            echo "манифест описывает $declared, а проект — pilot-cell: чужой сайт не выпускается" >&2
+            exit 1
+          fi
+
+      - name: Исходник не устарел
+        run: |
+          set -euo pipefail
+          # Выкат, основанный на предке уже развёрнутого коммита, — это
+          # перезапись более свежего релиза. Ожидаемая ревизия приходит
+          # снаружи; без неё шаг честно сообщает, что не проверял.
+          if [ -z "${DEPLOYED_COMMIT:-}" ]; then
+            echo "DEPLOYED_COMMIT не передан: сверка с развёрнутым релизом НЕ ВЫПОЛНЯЛАСЬ"
+            exit 0
+          fi
+          # Три исхода, и их нельзя сводить к двум. `merge-base --is-ancestor`
+          # отвечает 0 (предок), 1 (не предок) и иначе — «не смог ответить»,
+          # например когда коммита нет в истории. Считать «не смог» за «не
+          # устарел» значит пропустить ровно тот выкат, ради которого шаг и
+          # написан.
+          set +e
+          git merge-base --is-ancestor "$GITHUB_SHA" "${DEPLOYED_COMMIT}"
+          verdict=$?
+          set -e
+          case "$verdict" in
+            0) echo "развёрнут потомок ${DEPLOYED_COMMIT}: устаревший выкат отклонён" >&2
+               exit 1 ;;
+            1) echo "исходник не устарел" ;;
+            *) echo "родство с ${DEPLOYED_COMMIT} установить не удалось: выкат остановлен" >&2
+               exit 1 ;;
+          esac
+
+      - name: Сборка артефакта
+        run: |
+          echo "Артефакт собирается фабрикой:"
+          echo "  python3 -m factory cell release --site pilot-cell"
+          echo "Сборка на целевом сервере не выполняется: собранное там — другая сборка."
+
+# Чего здесь нет намеренно: шага, который трогает соседние сайты, и шага,
+# который переключает домен. Переключение маршрутизации — отдельное решение
+# с подтверждением владельца, а не побочный эффект зелёной сборки.
