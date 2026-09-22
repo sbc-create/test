@@ -14,7 +14,7 @@ from .htmlcheck import assert_no_scripting
 
 def flags(*, ssr_enabled: int = 1, seo_mode: str = "ssr_first_page") -> EffectiveFlags:
     return EffectiveFlags(
-        tenant_id="lords", site_id="lords-main",
+        tenant_id="lords", site_id="lords-main", cohort="owner_test",
         read_enabled=1, write_enabled=1, publication_enabled=1, rollout_percent=100,
         ssr_enabled=ssr_enabled, seo_mode=seo_mode, moderation_mode="post",
         kill_switch_global=0, kill_switch_site=0,

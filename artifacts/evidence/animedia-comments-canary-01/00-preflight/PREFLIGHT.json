@@ -1,0 +1,105 @@
+{
+  "schema_version": "ANIMEDIA_COMMENTS_PREFLIGHT_V1",
+  "checked_at_utc": "2026-09-22T06:38:41Z",
+  "comments_module": {
+    "worktree": "/home/claude/wt-community-comments-platform-01",
+    "branch": "claude/community-comments-platform-01",
+    "head": "021b7a99102fb1c29d95f98c3c0a0679aad21194",
+    "remote_head": "021b7a99102fb1c29d95f98c3c0a0679aad21194",
+    "clean": false,
+    "locks": [],
+    "widget_artifact_sha256": "6032fb3cd24769390a7826473cc93932aed459a15fa2a92e6a771188092fa082"
+  },
+  "service_proof": {
+    "method": "port in nginx vhost -> unit ExecStart -> runtime registry -> HTTP headers -> release manifest",
+    "domain": "animedia.icu",
+    "public_dns": {
+      "resolves": true,
+      "ip": "45.131.182.225",
+      "https_code": 200
+    },
+    "nginx_vhost": "/etc/nginx/lords/animedia-01.conf",
+    "nginx_proxy_pass": "http://127.0.0.1:9121",
+    "PROVEN_SERVICE": "nova-animedia-01.service",
+    "unit_path": "/etc/systemd/system/nova-animedia-01.service",
+    "unit_execstart": "/usr/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9121",
+    "unit_user": "lords",
+    "runtime_registry_confirms_port": true,
+    "http_headers_confirm": {
+      "X-Site-Factory-Profile": "animedia-icu",
+      "X-Site-Factory-Build-Id": "20260921T214937Z-fac5643-animedia-parity",
+      "X-Site-Factory-Artifact-Sha256": "826f54a2c8a743fb517852917aa713c579d1be38848d2c0ee3c26cc82e0e425f",
+      "X-Robots-Tag": "noindex, nofollow"
+    },
+    "release_manifest": "/srv/lords/.frontend/template-manifest-animedia-01.json",
+    "manifest_matches_headers": true,
+    "assignment": "/srv/lords/.frontend/sites/animedia-01/current -> ../../releases/20260921T214937Z-fac5643-animedia-parity",
+    "release_source_commit": "fac5643fcefd8d9c3a69ef32379a069a20ed60fd",
+    "rollback_target_on_disk": "/srv/lords/.frontend/releases/20260921T213929Z-d8c50de-animedia-parity"
+  },
+  "registry_discrepancies_found": [
+    {
+      "source": "config/FLEET-REGISTRY.json",
+      "claims": "upstream 127.0.0.1:9105, unit animedia-01.service, public_http null (домен не резолвится)",
+      "actual": "nginx proxies animedia.icu to 127.0.0.1:9121 served by nova-animedia-01.service; the domain resolves publicly and answers 200",
+      "impact": "Naming the service from the registry would have restarted the wrong unit. The service was proven from the vhost port instead.",
+      "action_taken": "recorded only; the registry is another contour's file and was not modified"
+    }
+  ],
+  "architecture": {
+    "dispatcher": "/srv/lords/.frontend/lords-frontend.py — resolves port -> site -> per-site release, then execv",
+    "shared_by_units": 6,
+    "per_site_release_link": true,
+    "animedia_01_and_02_share_one_release_dir": true,
+    "consequence": "editing the current release directory would change animedia.space as well; a new release directory repointed for animedia-01 only is the isolating move the layout is designed for",
+    "runtime_artifact": "animedia-frontend.py (436312 bytes, ~7300 lines)",
+    "css_delivery": "inlined as <style>{СТИЛЬ}</style> — no external stylesheet route",
+    "static_routes": [
+      "/assets/nova.webmanifest",
+      "/sitemap*.xml",
+      "/poster/*",
+      "/robots.txt",
+      "/favicon.*"
+    ],
+    "generic_html_injection_seam": false,
+    "title_page_body": "assembled in one hardcoded f-string; ZONA_AD_SLOTS only toggles an attribute on a fixed empty div and is not a slot mechanism"
+  },
+  "comments_serving_prerequisites_missing": [
+    "no comments HTTP gateway exists (the platform ships a framework-free CommentsApi class, no server, no unit, no port)",
+    "no nginx location routes /api/comments/ anywhere",
+    "no owner-only cohort mechanism exists in the comments module"
+  ],
+  "root_boundary": {
+    "/etc/systemd/system": {
+      "owner": "root",
+      "writable_by_me": false
+    },
+    "/etc/nginx/lords": {
+      "owner": "root",
+      "writable_by_me": false
+    },
+    "/etc/nginx/lords/animedia-01.conf": {
+      "owner": "root",
+      "writable_by_me": false
+    },
+    "service_restart": "requires root (systemctl)",
+    "writable_by_me": [
+      "/srv/lords/.frontend (claude)",
+      "/srv/lords/.frontend/sites/*/current symlinks (claude)",
+      "/srv/lords/.frontend/releases (claude)"
+    ]
+  },
+  "established_pattern_to_model": {
+    "nginx_snippet": "/etc/nginx/snippets/yummyani-community-ratings.conf",
+    "unit": "/etc/systemd/system/community-ratings-gateway.service",
+    "note": "read only; the ratings gateway is a different product and is not modified by this work"
+  },
+  "animedia_source": {
+    "worktree": "/home/claude/wt-animedia-original-parity-01",
+    "branch": "claude/animedia-original-parity-01",
+    "head": "085842174319b5b6fcec4eedd015dee0e97dea93",
+    "dirty_entries": 20,
+    "deployed_commit_is_ancestor": true,
+    "action": "READ_ONLY — another contour's in-progress work; not modified, nothing of it committed here"
+  }
+}

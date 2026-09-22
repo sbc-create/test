@@ -30,13 +30,48 @@ from typing import Any
 
 from .tenancy import SiteBinding, TenantScope
 
-# Compiled ceilings for this stage. READY_FOR_LOCAL_REVIEW means every one of
-# these stays at 0 until an owner decision moves the ceiling in source.
+# Compiled ceilings for the public cohort. These stay at 0: Stage 1 is an
+# owner test, and the public experience must be the site exactly as it is
+# today. A value here is what an ordinary visitor can ever receive.
 CEILING_READ_ENABLED = 0
 CEILING_WRITE_ENABLED = 0
 CEILING_PUBLICATION_ENABLED = 0
 CEILING_ROLLOUT_PERCENT = 0
 CEILING_SSR_ENABLED = 0
+
+# Per-cohort ceilings. The public row is the one above, restated so that the
+# two cannot drift; the owner row is what the Stage 1 authorisation opens, and
+# it opens for one named audience rather than for a percentage of traffic.
+#
+# SSR stays 0 for every cohort. Server-rendering comments into HTML is
+# publishing them, and an owner test must not put text where a crawler could
+# read it even in principle.
+COHORT_CEILINGS: dict[str, dict[str, int]] = {
+    "public": {
+        "read": CEILING_READ_ENABLED,
+        "write": CEILING_WRITE_ENABLED,
+        "publication": CEILING_PUBLICATION_ENABLED,
+        "rollout": CEILING_ROLLOUT_PERCENT,
+        "ssr": CEILING_SSR_ENABLED,
+    },
+    "owner_test": {
+        "read": 1,
+        "write": 1,
+        "publication": 1,
+        # Rollout percent is a *public* traffic dial. The owner cohort is not
+        # a percentage of visitors, so this stays 0 and the two mechanisms
+        # never get confused for one another.
+        "rollout": 0,
+        "ssr": 0,
+    },
+}
+
+# Sites this stage is authorised to serve at all, in any cohort. A site absent
+# from this tuple is refused before cohorts are even considered, so a token
+# minted by mistake for another site cannot enable anything.
+#
+# Stage 1 authorisation: animedia.icu only. animedia.space is explicitly out.
+PILOT_SITES: tuple[tuple[str, str], ...] = (("animedia", "animedia-01"),)
 
 # Capabilities that must never exist, in any stage, for any role. They are
 # listed so that a test can assert their absence instead of a reviewer noticing.
@@ -73,6 +108,10 @@ def _clamped(name: str, configured: int, ceiling: int) -> int:
 class EffectiveFlags:
     tenant_id: str
     site_id: str
+    # Which audience this answer is about. Two cohorts on one site get two
+    # different EffectiveFlags, and carrying the label prevents one being
+    # mistaken for the other downstream.
+    cohort: str
     read_enabled: int
     write_enabled: int
     publication_enabled: int
@@ -99,6 +138,7 @@ class EffectiveFlags:
         return {
             "tenant_id": self.tenant_id,
             "site_id": self.site_id,
+            "cohort": self.cohort,
             "COMMENTS_READ_ENABLED": self.read_enabled,
             "COMMENTS_WRITE_ENABLED": self.write_enabled,
             "COMMENTS_PUBLICATION_ENABLED": self.publication_enabled,
@@ -145,26 +185,46 @@ class FlagResolver:
         return 1 if int(self._overrides.get(scope.key, {}).get(name, 0)) else 0
 
     def resolve(self, binding: SiteBinding) -> EffectiveFlags:
+        """What an ordinary visitor gets. Kept as the default on purpose.
+
+        A caller that forgets to say which cohort it is resolving for receives
+        the public answer, which is the safe one. The unsafe direction has to
+        be asked for by name.
+        """
+        return self.resolve_for_cohort(binding, "public")
+
+    def resolve_for_cohort(self, binding: SiteBinding, cohort: str) -> EffectiveFlags:
         scope = binding.scope
+
+        if cohort not in COHORT_CEILINGS:
+            raise ValueError(f"unknown cohort {cohort!r}")
+
+        # Site allowlist first. A site outside the pilot gets nothing, whatever
+        # cohort the caller claims and whatever the configuration says.
+        if (scope.tenant_id, scope.site_id) not in PILOT_SITES:
+            ceilings = COHORT_CEILINGS["public"]
+        else:
+            ceilings = COHORT_CEILINGS[cohort]
+
         read = _clamped(
             "COMMENTS_READ_ENABLED",
             self._override(scope, "read_enabled", int(binding.read_enabled)),
-            CEILING_READ_ENABLED,
+            ceilings["read"],
         )
         write = _clamped(
             "COMMENTS_WRITE_ENABLED",
             self._override(scope, "write_enabled", int(binding.write_enabled)),
-            CEILING_WRITE_ENABLED,
+            ceilings["write"],
         )
         publication = _clamped(
             "COMMENTS_PUBLICATION_ENABLED",
             self._override(scope, "publication_enabled", int(binding.publication_enabled)),
-            CEILING_PUBLICATION_ENABLED,
+            ceilings["publication"],
         )
         rollout = _clamped(
             "COMMENTS_ROLLOUT_PERCENT",
             self._override(scope, "rollout_percent", int(binding.rollout_percent)),
-            CEILING_ROLLOUT_PERCENT,
+            ceilings["rollout"],
         )
         # SSR is a strict subset of publication: rendering comments into HTML
         # that a crawler can read *is* publishing them.
@@ -172,11 +232,12 @@ class FlagResolver:
         ssr = _clamped(
             "COMMENTS_SSR_ENABLED",
             min(ssr_configured, publication),
-            CEILING_SSR_ENABLED,
+            ceilings["ssr"],
         )
         return EffectiveFlags(
             tenant_id=binding.tenant_id,
             site_id=binding.site_id,
+            cohort=cohort,
             read_enabled=read,
             write_enabled=write,
             publication_enabled=publication,

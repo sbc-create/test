@@ -124,21 +124,27 @@ class CommentsService:
     def binding(self, scope: TenantScope) -> SiteBinding:
         return self._registry.get(scope.tenant_id, scope.site_id)
 
-    def effective_flags(self, scope: TenantScope) -> EffectiveFlags:
-        return self._flags.resolve(self.binding(scope))
+    def effective_flags(self, scope: TenantScope, cohort: str = "public") -> EffectiveFlags:
+        """Flags for one audience.
+
+        The default is `public`, deliberately: a call site that forgets to
+        thread the cohort through receives the ordinary-visitor answer, which
+        in this stage is "nothing". The permissive direction must be named.
+        """
+        return self._flags.resolve_for_cohort(self.binding(scope), cohort)
 
     def policy(self, scope: TenantScope) -> Policy:
         return Policy.from_row(self._store.get_policy(scope))
 
-    def _require_reads(self, scope: TenantScope) -> EffectiveFlags:
-        flags = self.effective_flags(scope)
+    def _require_reads(self, scope: TenantScope, cohort: str = "public") -> EffectiveFlags:
+        flags = self.effective_flags(scope, cohort)
         if not flags.reads_allowed:
             # 503, so a page embedding the widget degrades rather than breaks.
             raise FeatureDisabled("comments reading is not enabled for this site")
         return flags
 
-    def _require_writes(self, scope: TenantScope) -> EffectiveFlags:
-        flags = self.effective_flags(scope)
+    def _require_writes(self, scope: TenantScope, cohort: str = "public") -> EffectiveFlags:
+        flags = self.effective_flags(scope, cohort)
         if flags.any_kill_switch:
             raise FeatureDisabled("comments are stopped by a kill switch")
         if not flags.writes_allowed:
@@ -210,8 +216,9 @@ class CommentsService:
         limit: int = 20,
         cursor: str = "",
         viewer_subject_id: str = "",
+        cohort: str = "public",
     ) -> ThreadView:
-        self._require_reads(scope)
+        self._require_reads(scope, cohort)
         authorize(principal, P_READ_PUBLISHED, scope)
 
         thread = self._store.find_thread(scope, ref)
@@ -246,8 +253,11 @@ class CommentsService:
             sort=sort,
         )
 
-    def comment_count(self, scope: TenantScope, principal: Principal, ref: ResourceRef) -> int:
-        self._require_reads(scope)
+    def comment_count(
+        self, scope: TenantScope, principal: Principal, ref: ResourceRef,
+        *, cohort: str = "public",
+    ) -> int:
+        self._require_reads(scope, cohort)
         authorize(principal, P_READ_PUBLISHED, scope)
         thread = self._store.find_thread(scope, ref)
         return int(thread["comment_count"]) if thread else 0
@@ -266,8 +276,9 @@ class CommentsService:
         idempotency_key: str = "",
         request_id: str = "",
         antispam_degraded: bool = False,
+        cohort: str = "public",
     ) -> dict[str, Any]:
-        flags = self._require_writes(scope)
+        flags = self._require_writes(scope, cohort)
         authorize(principal, P_CREATE, scope)
 
         if self._store.is_banned(scope, identity.subject_id):
@@ -428,8 +439,9 @@ class CommentsService:
         *,
         body: str,
         request_id: str = "",
+        cohort: str = "public",
     ) -> dict[str, Any]:
-        flags = self._require_writes(scope)
+        flags = self._require_writes(scope, cohort)
         current = self._store.get_comment(scope, comment_id)
         authorize(
             principal, P_EDIT_OWN, scope, owner_subject_id=current["subject_id"]
@@ -486,6 +498,7 @@ class CommentsService:
         comment_id: str,
         *,
         request_id: str = "",
+        cohort: str = "public",
     ) -> dict[str, Any]:
         """Soft delete. The row and its text stay; the comment stops being public.
 
@@ -493,7 +506,7 @@ class CommentsService:
         unreadable, and an irreversible operation triggered by a misclick is
         not something this service is willing to perform.
         """
-        self._require_writes(scope)
+        self._require_writes(scope, cohort)
         current = self._store.get_comment(scope, comment_id)
         authorize(principal, P_DELETE_OWN, scope, owner_subject_id=current["subject_id"])
 
@@ -528,8 +541,9 @@ class CommentsService:
         reaction: str,
         *,
         request_id: str = "",
+        cohort: str = "public",
     ) -> dict[str, Any]:
-        self._require_writes(scope)
+        self._require_writes(scope, cohort)
         authorize(principal, P_REACT, scope)
         if reaction not in REACTIONS:
             raise ValidationFailed(f"unknown reaction {reaction!r}", field="reaction")
@@ -557,9 +571,10 @@ class CommentsService:
         return {"comment_id": comment_id, "reaction": reaction, "reaction_count": count}
 
     def clear_reaction(
-        self, scope: TenantScope, principal: Principal, identity: Identity, comment_id: str
+        self, scope: TenantScope, principal: Principal, identity: Identity, comment_id: str,
+        *, cohort: str = "public",
     ) -> dict[str, Any]:
-        self._require_writes(scope)
+        self._require_writes(scope, cohort)
         authorize(principal, P_REACT, scope)
         self._store.get_comment(scope, comment_id)
         with self._store.transaction():
@@ -579,8 +594,9 @@ class CommentsService:
         reason: str,
         note: str = "",
         request_id: str = "",
+        cohort: str = "public",
     ) -> dict[str, Any]:
-        self._require_writes(scope)
+        self._require_writes(scope, cohort)
         authorize(principal, P_REPORT, scope)
         if reason not in REPORT_REASONS:
             raise ValidationFailed(f"unknown report reason {reason!r}", field="reason")

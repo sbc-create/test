@@ -6,12 +6,21 @@
     "tenant_id": "поле family того же реестра"
   },
   "gates": {
-    "note": "Все ворота здесь нули, и это не заготовка под заполнение. Потолки в factory/comments_platform/flags.py тоже нули, поэтому единица в этом файле ничего бы не включила: значение зажимается до нуля при разрешении флагов. Включение — отдельное решение владельца, оно меняет и потолок в коде, и эту строку, и проходит через аудит.",
+    "note": "Две независимые задвижки, и открыть нужно обе. Посайтовое значение ниже разрешает сайт; потолок когорты в factory/comments_platform/flags.py разрешает аудиторию. Для публичной когорты потолок нулевой на всех сайтах, поэтому единица здесь не открывает комментарии обычному посетителю — она лишь позволяет owner-когорте их получить там, где сайт входит в PILOT_SITES. Это и есть требование Stage 1: не включать ничего глобального, что распространилось бы сразу на все витрины.",
     "COMMENTS_READ_ENABLED": 0,
     "COMMENTS_WRITE_ENABLED": 0,
     "COMMENTS_PUBLICATION_ENABLED": 0,
     "COMMENTS_ROLLOUT_PERCENT": 0,
-    "COMMENTS_SEO_MODE": "user_initiated"
+    "COMMENTS_SEO_MODE": "user_initiated",
+    "stage_1_authorisation": {
+      "AUTHORIZED_DOMAIN": "animedia.icu",
+      "AUTHORIZED_TENANT": "animedia",
+      "site_id": "animedia-01",
+      "PUBLIC_ROLLOUT_PERCENT": 0,
+      "OWNER_TEST_ACCESS_ONLY": true,
+      "SECOND_DOMAIN_DEPLOY_ALLOWED": false,
+      "note": "animedia.space (animedia-02) намеренно остаётся со всеми нулями."
+    }
   },
   "artifact": {
     "module_version": "0.1.0-mvp",
@@ -124,14 +133,15 @@
       "theme": "auto",
       "language": "ru",
       "moderation_mode": "pre",
-      "read_enabled": 0,
-      "write_enabled": 0,
-      "publication_enabled": 0,
+      "read_enabled": 1,
+      "write_enabled": 1,
+      "publication_enabled": 1,
       "seo_mode": "user_initiated",
       "rollout_percent": 0,
       "max_depth": 3,
       "max_length": 4000,
-      "max_links": 2
+      "max_links": 2,
+      "cohort_note": "Значения 1 разрешают только owner-когорту: потолок публичной когорты равен нулю, и обычный посетитель получает страницу без комментариев."
     },
     {
       "tenant_id": "animedia",

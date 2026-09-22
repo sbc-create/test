@@ -9,6 +9,7 @@ from pathlib import Path
 
 import pytest
 
+from factory.comments_platform import flags as flags_module
 from factory.comments_platform.flags import FlagResolver, assert_dark
 from factory.comments_platform.tenancy import ALLOWED_TENANTS, SiteRegistry
 
@@ -57,23 +58,74 @@ class TestSitesAreReal:
 
 
 class TestEveryGateIsDark:
-    def test_configuration_declares_everything_off(self, raw):
+    def test_only_the_authorised_pilot_site_may_carry_a_non_zero_gate(self, raw):
+        """The config value is one of two keys, and only one site holds it.
+
+        This test used to assert that every gate in the file was 0, which was
+        true before Stage 1 and is no longer the invariant worth protecting.
+        The real one is narrower and stronger: a value of 1 is permitted on
+        exactly the site the owner authorised, and nowhere else. The public
+        experience is protected by the cohort ceiling, asserted below.
+        """
+        authorised = {s for _, s in flags_module.PILOT_SITES}
         for site in raw["sites"]:
-            for gate in ("read_enabled", "write_enabled", "publication_enabled", "rollout_percent"):
-                assert site[gate] == 0, f"{site['site_id']}: {gate} is {site[gate]}"
+            for gate in ("read_enabled", "write_enabled", "publication_enabled"):
+                if site[gate] != 0:
+                    assert site["site_id"] in authorised, (
+                        f"{site['site_id']}: {gate}={site[gate]} but the site is not in PILOT_SITES"
+                    )
+            # A public traffic dial is never opened by this stage, on any site.
+            assert site["rollout_percent"] == 0, f"{site['site_id']}: rollout is not 0"
+            # SSR would put comment text where a crawler reads it.
             assert site["seo_mode"] == "user_initiated"
 
-    def test_effective_flags_are_dark_for_every_site(self, shipped_registry):
+    def test_the_second_animedia_domain_is_entirely_untouched(self, raw):
+        """animedia.space shares a release with animedia.icu and must stay dark."""
+        second = next(s for s in raw["sites"] if s["site_id"] == "animedia-02")
+        for gate in ("read_enabled", "write_enabled", "publication_enabled", "rollout_percent"):
+            assert second[gate] == 0, f"animedia-02: {gate} is {second[gate]}"
+
+    def test_the_public_cohort_is_dark_on_every_site_including_the_pilot(
+        self, shipped_registry
+    ):
+        """The property an ordinary visitor actually experiences."""
         resolver = FlagResolver()
         for binding in shipped_registry.all_bindings():
+            assert_dark(resolver.resolve_for_cohort(binding, "public"))
+            # And `resolve` without a cohort must mean the public one.
             assert_dark(resolver.resolve(binding))
 
-    def test_a_stray_one_in_the_config_would_still_resolve_dark(self, raw):
-        """The compiled ceiling is the real gate.
+    def test_the_owner_cohort_is_open_on_the_pilot_site_and_nowhere_else(
+        self, shipped_registry
+    ):
+        resolver = FlagResolver()
+        authorised = {s for _, s in flags_module.PILOT_SITES}
+        for binding in shipped_registry.all_bindings():
+            effective = resolver.resolve_for_cohort(binding, "owner_test")
+            if binding.site_id in authorised:
+                assert effective.read_enabled == 1
+                assert effective.write_enabled == 1
+                assert effective.publication_enabled == 1
+            else:
+                assert effective.read_enabled == 0, binding.site_id
+                assert effective.write_enabled == 0, binding.site_id
+                assert effective.publication_enabled == 0, binding.site_id
+            # Never, on any site, in any cohort, in this stage.
+            assert effective.ssr_enabled == 0
+            assert effective.rollout_percent == 0
 
-        If somebody edits this file to enable reading, the ceiling in
-        flags.py clamps it back to zero. Enabling comments takes a source
-        change as well, which is the point.
+    def test_the_pilot_allowlist_names_exactly_the_authorised_domain(self, raw):
+        assert flags_module.PILOT_SITES == (("animedia", "animedia-01"),)
+        pilot = next(s for s in raw["sites"] if s["site_id"] == "animedia-01")
+        assert pilot["hosts"] == ["animedia.icu"]
+
+    def test_a_stray_one_in_the_config_would_still_resolve_dark(self, raw):
+        """The cohort ceiling is the real gate for the public.
+
+        If somebody edits this file to enable reading on all nine sites, the
+        public ceiling in flags.py clamps every one of them back to zero. An
+        ordinary visitor is protected by source, not by a config row somebody
+        might edit in a hurry.
         """
         mutated = json.loads(json.dumps(raw))
         for site in mutated["sites"]:
@@ -84,11 +136,11 @@ class TestEveryGateIsDark:
         registry = SiteRegistry.from_mapping(mutated)
         resolver = FlagResolver()
         for binding in registry.all_bindings():
-            effective = resolver.resolve(binding)
-            assert effective.read_enabled == 0
-            assert effective.write_enabled == 0
-            assert effective.publication_enabled == 0
-            assert effective.rollout_percent == 0
+            effective = resolver.resolve_for_cohort(binding, "public")
+            assert effective.read_enabled == 0, binding.site_id
+            assert effective.write_enabled == 0, binding.site_id
+            assert effective.publication_enabled == 0, binding.site_id
+            assert effective.rollout_percent == 0, binding.site_id
 
 
 class TestArtifactPinning:

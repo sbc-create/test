@@ -99,6 +99,20 @@ def gates_open(monkeypatch):
     ):
         monkeypatch.setattr(flags_module, name, 1)
     monkeypatch.setattr(flags_module, "CEILING_ROLLOUT_PERCENT", 100)
+
+    # The resolver reads the cohort table and the pilot allowlist, not the bare
+    # constants above, so both have to be opened for the generic suites. The
+    # constants are still patched because some tests assert on them directly.
+    monkeypatch.setattr(
+        flags_module,
+        "COHORT_CEILINGS",
+        {
+            "public": {"read": 1, "write": 1, "publication": 1, "rollout": 100, "ssr": 1},
+            "owner_test": {"read": 1, "write": 1, "publication": 1, "rollout": 100, "ssr": 1},
+        },
+    )
+    monkeypatch.setattr(flags_module, "PILOT_SITES", tuple(TENANTS))
+
     flags_module.KillSwitch.release_global()
     yield
     flags_module.KillSwitch.release_global()

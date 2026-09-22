@@ -148,7 +148,8 @@ class TestForbiddenCapabilities:
 class TestAssertDark:
     def test_assert_dark_raises_if_a_gate_is_lit(self):
         lit = flags.EffectiveFlags(
-            tenant_id="lords", site_id="lords-main", read_enabled=1, write_enabled=0,
+            tenant_id="lords", site_id="lords-main", cohort="public",
+            read_enabled=1, write_enabled=0,
             publication_enabled=0, rollout_percent=0, ssr_enabled=0,
             seo_mode="user_initiated", moderation_mode="pre",
             kill_switch_global=0, kill_switch_site=0,

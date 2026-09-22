@@ -1,0 +1,211 @@
+{
+  "schema_version": "ANIMEDIA_COMMENTS_INDEXABILITY_V1",
+  "checked_at_utc": "2026-09-22T06:35:22Z",
+  "domain": "animedia.icu",
+  "public_resolves": true,
+  "public_ip": "45.131.182.225",
+  "origin": "127.0.0.1:9121",
+  "public": [
+    {
+      "route": "home",
+      "path": "/",
+      "http_code": 200,
+      "redirects": 0,
+      "x_robots_tag": [
+        "noindex, nofollow"
+      ],
+      "meta_robots": [
+        "noindex, nofollow"
+      ],
+      "canonical": [
+        "https://animedia.icu/"
+      ],
+      "canonical_domain": [
+        "animedia.icu"
+      ],
+      "http_html_agree": true,
+      "indexable": false
+    },
+    {
+      "route": "catalog",
+      "path": "/catalog/",
+      "http_code": 200,
+      "redirects": 0,
+      "x_robots_tag": [
+        "noindex, nofollow"
+      ],
+      "meta_robots": [
+        "noindex, nofollow"
+      ],
+      "canonical": [
+        "https://animedia.icu/catalog/"
+      ],
+      "canonical_domain": [
+        "animedia.icu"
+      ],
+      "http_html_agree": true,
+      "indexable": false
+    },
+    {
+      "route": "title",
+      "path": "/title/master-lda-i-plameni-2/",
+      "http_code": 200,
+      "redirects": 0,
+      "x_robots_tag": [
+        "noindex, nofollow"
+      ],
+      "meta_robots": [
+        "noindex, nofollow"
+      ],
+      "canonical": [
+        "https://animedia.icu/title/master-lda-i-plameni-2/"
+      ],
+      "canonical_domain": [
+        "animedia.icu"
+      ],
+      "http_html_agree": true,
+      "indexable": false
+    },
+    {
+      "route": "episode",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-1/",
+      "http_code": 200,
+      "redirects": 0,
+      "x_robots_tag": [
+        "noindex, nofollow"
+      ],
+      "meta_robots": [
+        "noindex, nofollow"
+      ],
+      "canonical": [
+        "https://animedia.icu/title/master-lda-i-plameni-2/season-2/episode-1/"
+      ],
+      "canonical_domain": [
+        "animedia.icu"
+      ],
+      "http_html_agree": true,
+      "indexable": false
+    },
+    {
+      "route": "404",
+      "path": "/definitely-not-a-real-page-9d2f/",
+      "http_code": 404,
+      "redirects": 0,
+      "x_robots_tag": [
+        "noindex, nofollow"
+      ],
+      "meta_robots": [
+        "noindex, nofollow"
+      ],
+      "canonical": [],
+      "canonical_domain": [],
+      "http_html_agree": true,
+      "indexable": false
+    }
+  ],
+  "origin_by_host": [
+    {
+      "route": "home",
+      "path": "/",
+      "http_code": 200,
+      "redirects": 0,
+      "x_robots_tag": [
+        "noindex, nofollow"
+      ],
+      "meta_robots": [
+        "noindex, nofollow"
+      ],
+      "canonical": [
+        "https://animedia.icu/"
+      ],
+      "canonical_domain": [
+        "animedia.icu"
+      ],
+      "http_html_agree": true,
+      "indexable": false
+    },
+    {
+      "route": "catalog",
+      "path": "/catalog/",
+      "http_code": 200,
+      "redirects": 0,
+      "x_robots_tag": [
+        "noindex, nofollow"
+      ],
+      "meta_robots": [
+        "noindex, nofollow"
+      ],
+      "canonical": [
+        "https://animedia.icu/catalog/"
+      ],
+      "canonical_domain": [
+        "animedia.icu"
+      ],
+      "http_html_agree": true,
+      "indexable": false
+    },
+    {
+      "route": "title",
+      "path": "/title/master-lda-i-plameni-2/",
+      "http_code": 200,
+      "redirects": 0,
+      "x_robots_tag": [
+        "noindex, nofollow"
+      ],
+      "meta_robots": [
+        "noindex, nofollow"
+      ],
+      "canonical": [
+        "https://animedia.icu/title/master-lda-i-plameni-2/"
+      ],
+      "canonical_domain": [
+        "animedia.icu"
+      ],
+      "http_html_agree": true,
+      "indexable": false
+    },
+    {
+      "route": "episode",
+      "path": "/title/master-lda-i-plameni-2/season-2/episode-1/",
+      "http_code": 200,
+      "redirects": 0,
+      "x_robots_tag": [
+        "noindex, nofollow"
+      ],
+      "meta_robots": [
+        "noindex, nofollow"
+      ],
+      "canonical": [
+        "https://animedia.icu/title/master-lda-i-plameni-2/season-2/episode-1/"
+      ],
+      "canonical_domain": [
+        "animedia.icu"
+      ],
+      "http_html_agree": true,
+      "indexable": false
+    },
+    {
+      "route": "404",
+      "path": "/definitely-not-a-real-page-9d2f/",
+      "http_code": 404,
+      "redirects": 0,
+      "x_robots_tag": [
+        "noindex, nofollow"
+      ],
+      "meta_robots": [
+        "noindex, nofollow"
+      ],
+      "canonical": [],
+      "canonical_domain": [],
+      "http_html_agree": true,
+      "indexable": false
+    }
+  ],
+  "any_route_indexable": false,
+  "all_routes_noindex_nofollow": true,
+  "canonical_self_domain": true,
+  "unexpected_redirects": [],
+  "http_html_contradiction": [],
+  "INDEXABILITY_BEFORE": "NOINDEX_NOFOLLOW",
+  "CANONICAL_SELF_DOMAIN": "YES"
+}
