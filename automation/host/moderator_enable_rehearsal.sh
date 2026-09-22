@@ -56,6 +56,14 @@ done
 case "$*" in *%{http_code}*) printf '200'; exit 0;; esac
 printf 'page'
 STUB
+  cat > "$ROOT/box/bin/verify.py" <<'STUB'
+#!/usr/bin/env python3
+import os, sys
+if os.path.exists(os.environ["SANDBOX"] + "/verify-fails"):
+    print("MODERATION_VERDICT=FAIL"); sys.exit(1)
+print("MODERATION_VERDICT=PASS")
+STUB
+  chmod +x "$ROOT/box/bin/verify.py"
   cat > "$ROOT/box/bin/deploy.sh" <<'STUB'
 #!/usr/bin/env bash
 if [ -f "$SANDBOX/accept-fails" ]; then echo "приёмка провалена"; exit 2; fi
@@ -74,6 +82,7 @@ run_mod() {
   SYSTEMCTL="$ROOT/box/bin/systemctl" \
   CURL="$ROOT/box/bin/curl" \
   DEPLOY="$ROOT/box/bin/deploy.sh" \
+  VERIFY="$ROOT/box/bin/verify.py" \
   REQUIRE_ROOT=0 READY_TIMEOUT=5 \
   bash "$SCRIPT" > "$ROOT/box/out.txt" 2>&1
   echo $?
@@ -153,6 +162,24 @@ rc=$(run_mod)
 report "код возврата ненулевой" "$([ "$rc" != "0" ] && echo yes || echo no)"
 report "названа причина" \
   "$(grep -q 'переключила релиз' "$ROOT/box/out.txt" && echo yes || echo no)"
+
+echo
+echo "== сценарий 7: модерация не подтвердилась — отказ и восстановление"
+make_sandbox
+touch "$ROOT/box/verify-fails"
+rc=$(run_mod)
+report "код возврата ненулевой" "$([ "$rc" != "0" ] && echo yes || echo no)"
+report "drop-in убран" "$([ -f "$DROPIN" ] && echo no || echo yes)"
+report "названа причина" \
+  "$(grep -q 'проверка модерации не пройдена' "$ROOT/box/out.txt" && echo yes || echo no)"
+
+echo
+echo "== сценарий 8: успех включает подтверждение модерации"
+make_sandbox
+rc=$(run_mod)
+report "код возврата 0" "$([ "$rc" = "0" ] && echo yes || echo no)"
+report "модерация подтверждена" \
+  "$(grep -q 'MODERATION_VERDICT=PASS' "$ROOT/box/out.txt" && echo yes || echo no)"
 
 echo
 if [ "$fails" -eq 0 ]; then echo "MODERATOR_REHEARSAL=PASS"; else echo "MODERATOR_REHEARSAL=FAIL ($fails)"; fi

@@ -35,6 +35,7 @@ RELEASE_ID="20260923T001500Z-community-public-03"
 : "${REQUIRE_ROOT:=1}"
 : "${READY_TIMEOUT:=60}"
 : "${DEPLOY:=/home/claude/wt-community-comments-platform-01/automation/host/animedia-community-public-deploy.sh}"
+: "${VERIFY:=/home/claude/wt-community-comments-platform-01/automation/host/animedia_verify_moderation.py}"
 
 DROPIN_DIR="$ETC_SYSTEMD/$UNIT.d"
 DROPIN="$DROPIN_DIR/community-moderator.conf"
@@ -198,6 +199,20 @@ if [ -n "$ROLLBACK_BEFORE" ]; then
   [ "$ROLLBACK_AFTER" = "$ROLLBACK_BEFORE" ] \
     || die "точка отката переписана: была $ROLLBACK_BEFORE, стала $ROLLBACK_AFTER"
   printf '   точка отката не тронута\n'
+fi
+
+# --- проверка модерации тремя ролями ---------------------------------------
+#
+# Включить модератора и не проверить, что он может одобрить, — значит отчитаться
+# о работе, которой никто не видел. Ключ читается здесь же, под root, и никуда
+# не печатается. Тестовое сообщение убирается за собой.
+say "проверка модерации на живой витрине"
+if [ -f "$VERIFY" ]; then
+  if ! python3 "$VERIFY"; then
+    die "проверка модерации не пройдена"
+  fi
+else
+  printf '   ВНИМАНИЕ: %s не найден, модерация не проверена\n' "$VERIFY" >&2
 fi
 
 SUCCEEDED=1
