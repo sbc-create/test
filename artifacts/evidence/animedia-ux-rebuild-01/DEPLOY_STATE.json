@@ -1,0 +1,16 @@
+{
+ "site": "animedia-02",
+ "domain": "animedia.space",
+ "service": "nova-animedia-02.service",
+ "armed_at_utc": "2026-09-22T12:33:45Z",
+ "build_id": "20260922T123254Z-9a2e935-animedia-parity",
+ "artifact_sha256": "aa5c1f88f2be2ca9f9b438f7a6fcffe1119376ea2357e14cde5bc4af3cef574e",
+ "source_commit": "9a2e935b3cdcfd6abccc36427a97c90007f3ab9c",
+ "assignment_now": "../../releases/20260922T123254Z-9a2e935-animedia-parity",
+ "rollback_release": "../../releases/20260921T214937Z-fac5643-animedia-parity",
+ "rollback_manifest_backup": "/srv/lords/.frontend/template-manifest-animedia-02.json.before-ux-rebuild.20260922T123345Z",
+ "rollback_build_id": "20260921T214937Z-fac5643-animedia-parity",
+ "rollback_artifact_sha256": "826f54a2c8a743fb517852917aa713c579d1be38848d2c0ee3c26cc82e0e425f",
+ "icu_untouched": true,
+ "pid_before": 1663001
+}
