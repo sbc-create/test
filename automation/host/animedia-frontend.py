@@ -42,6 +42,9 @@ import json
 import os
 import re
 import sys
+import secrets
+import threading
+import time
 import unicodedata
 from difflib import SequenceMatcher
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -128,6 +131,25 @@ def _рядом_с_каталогом(шаблон: str) -> str:
 #: законное состояние: страницы тайтлов тогда строятся на полях снимка.
 ПОДРОБНОСТИ_ФАЙЛ = (_окр("ANIMEDIA_DETAILS", "LORDS_DETAILS")
                     or _рядом_с_каталогом("{site}-details.json"))
+
+
+def _сайт_из_каталога() -> str:
+    """Идентификатор витрины из имени снимка: `animedia-01-catalog.json` → `animedia-01`.
+
+    Единственный вывод идентификатора в файле. Прежде он выводился из профиля
+    строковой заменой (`animedia-icu` → `animedia-0icu`), и путь к реестру
+    событий указывал на файл, которого нет: лента новых серий молча оставалась
+    пустой при живом реестре рядом. Имя снимка задаётся юнитом витрины и уже
+    служит источником для соседних файлов — здесь используется то же правило.
+    """
+    имя = Path(КАТАЛОГ_ФАЙЛ).name
+    хвост = "-catalog.json"
+    return имя[: -len(хвост)] if имя.endswith(хвост) else ""
+
+
+#: Идентификатор витрины. Пустым не бывает: без него пути к файлам контура
+#: пришлось бы угадывать, а угаданный путь — это чужие данные на своей витрине.
+САЙТ_ID = _сайт_из_каталога() or "animedia-01"
 СТАРЫЙ_КОРЕНЬ = Path(_окр("ANIMEDIA_LEGACY_ROOT", "LORDS_LEGACY_ROOT",
                           "/srv/animedia/animedia-01/current/site"))
 ИМЯ_ВИТРИНЫ = _окр("ANIMEDIA_SITE_NAME", "LORDS_SITE_NAME", "Animedia")
@@ -162,6 +184,26 @@ except ImportError:
         import collection_contract as КОЛЛЕКЦИИ  # noqa: E402
     except ImportError:
         КОЛЛЕКЦИИ = None
+
+# Сообщество контура: голоса, реакции и комментарии посетителей. Импорт
+# двойной по той же причине — рядом с артефактом пакета нет.
+try:
+    from factory.animedia import community as СООБЩЕСТВО  # noqa: E402
+except ImportError:
+    try:
+        import community as СООБЩЕСТВО  # noqa: E402
+    except ImportError:
+        СООБЩЕСТВО = None
+
+# Хронология контура: один порядок «сначала новое» для лент и для реестра
+# событий. Импорт двойной по той же причине — рядом с артефактом пакета нет.
+try:
+    from factory.animedia import chronology as ХРОНОЛОГИЯ  # noqa: E402
+except ImportError:
+    try:
+        import chronology as ХРОНОЛОГИЯ  # noqa: E402
+    except ImportError:
+        ХРОНОЛОГИЯ = None
 
 #: Каталог готовых файлов карты сайта. Пусто — карта не отдаётся.
 SITEMAP_DIR = os.environ.get("LORDS_SITEMAP_DIR", "").strip()
@@ -330,6 +372,94 @@ def оценки_по_источникам(деталь: dict) -> list:
 #: Вариант по умолчанию для неизвестного ключа. Fail loud вместо тихого
 #: обеднения: неизвестный вариант получает полный набор, а не пустую карточку.
 АНИМЕДИА_ВАРИАНТ_ПО_УМОЛЧАНИЮ = АНИМЕДИА_ВАРИАНТЫ_КАРТОЧКИ["catalog-title"]
+
+
+
+#: Методика сводной оценки Animedia. Записана отдельно, потому что сводить
+#: несколько источников в одно число без объявленного правила — значит выдать
+#: собственную арифметику за чужую оценку.
+#:
+#: Правило:
+#:   1. каждая оценка приводится к десятибалльной шкале по своей объявленной;
+#:   2. вес источника — log10(голоса + 10): источник с десятками тысяч голосов
+#:      весит больше случайной единичной оценки, но не подавляет остальные;
+#:      если голоса не переданы, вес равен единице;
+#:   3. сводная — взвешенное среднее, округлённое до десятых;
+#:   4. один источник даёт сводную, равную ему самому: усреднять нечего;
+#:   5. ни одного источника — сводной нет. Ноль сюда не подставляется.
+#:
+#: Сводная всегда подписана как наша и всегда показывает, из чего сложилась:
+#: иначе посетитель примет её за оценку конкретного сайта.
+#: Хранилище сообщества. Пишется витриной, поэтому лежит не в репозитории и не
+#: в корне рантайма: и то и другое принадлежит другой учётной записи, а служба
+#: работает под своей и создать там файл не может — проверено на живом хосте.
+#: Каталог данных витрины (`/srv/lords/<сайт>/data`) — то же место, где держат
+#: своё состояние соседние витрины флота.
+#:
+#: Каталога для Animedia пока нет, и создать его может только владелец:
+#: родитель принадлежит служебной учётной записи. Пока его нет, раздел честно
+#: выключен и называет причину — это состояние, а не поломка.
+#: Выводится от корня рантайма, а не набирается руками: корень задаётся одной
+#: переменной, и каталог данных обязан переезжать вместе с ним.
+АНИМЕДИА_ДАННЫЕ_ВИТРИНЫ = Path(os.environ.get("ANIMEDIA_SITE_DATA_DIR")
+                               or str(_КОРЕНЬ_РАНТАЙМА.parent / САЙТ_ID / "data"))
+АНИМЕДИА_СООБЩЕСТВО_ПУТЬ = os.environ.get(
+    "ANIMEDIA_COMMUNITY_STORE",
+    str(АНИМЕДИА_ДАННЫЕ_ВИТРИНЫ / "animedia-community.json"),
+)
+_сообщество_хранилище = None
+
+
+def сообщество():
+    """Хранилище сообщества или None, если модуль не подключён."""
+    global _сообщество_хранилище
+    if _сообщество_хранилище is None and СООБЩЕСТВО is not None:
+        _сообщество_хранилище = СООБЩЕСТВО.открыть(АНИМЕДИА_СООБЩЕСТВО_ПУТЬ)
+    return _сообщество_хранилище
+
+
+АНИМЕДИА_СВОДНАЯ_ПОДПИСЬ = "Сводная"
+
+
+def сводная_оценка(деталь: dict) -> dict | None:
+    """Взвешенная сводная по источникам или None, если источников нет."""
+    оценки = оценки_по_источникам(деталь)
+    if not оценки:
+        return None
+    import math
+
+    сумма_весов = 0.0
+    сумма = 0.0
+    компоненты = []
+    for о in оценки:
+        try:
+            шкала = float(о["шкала"])
+            значение = float(str(о["значение"]).replace(",", "."))
+        except (TypeError, ValueError):
+            continue
+        if шкала <= 0 or значение <= 0:
+            continue
+        на_десять = значение if abs(шкала - 10.0) < 0.01 else значение * 10.0 / шкала
+        голоса = о.get("голоса") or 0
+        вес = math.log10(голоса + 10) if голоса else 1.0
+        сумма += на_десять * вес
+        сумма_весов += вес
+        компоненты.append({
+            "ключ": о["ключ"], "подпись": о["подпись"],
+            "значение": о["значение"], "шкала": о["шкала"],
+            "на_десять": round(на_десять, 2), "голоса": голоса or None,
+            "вес": round(вес, 3),
+        })
+    if not компоненты or сумма_весов <= 0:
+        return None
+    значение = round(сумма / сумма_весов, 1)
+    return {
+        "значение": f"{значение:g}",
+        "источников": len(компоненты),
+        "компоненты": компоненты,
+        "методика": "weighted-log-votes/1.0",
+        "всего_голосов": sum(к["голоса"] or 0 for к in компоненты) or None,
+    }
 
 
 def _счётчик_серий(деталь: dict) -> tuple[int, int] | None:
@@ -565,6 +695,11 @@ def транслит(с: str) -> str:
     return "".join(_ТРАНСЛИТ.get(ch, ch) for ch in (с or "").lower().replace("ё", "е"))
 
 
+#: Четыре цифры в хвосте формы — год из названия. Выражение собрано один раз:
+#: в мягком сравнении оно вызывается миллионами.
+_ХВОСТ_ГОДА = re.compile(r"\d{4}$")
+
+
 def _мягкое_совпадение(цель: str, форма: str) -> bool:
     """Нестрогий матч без ложных соседей вроде matrix→maori.
 
@@ -575,19 +710,23 @@ def _мягкое_совпадение(цель: str, форма: str) -> bool:
     У форм с годом в хвосте (`matrica1999` из «Матрица (1999)») дополнительно
     сравниваем обрезанный вариант без четырёх цифр на конце, иначе латиница
     не находила живые тайтлы Матрицы на боевом снимке.
+
+    Порядок проверок — от дешёвых к дорогим, и это не вкусовщина. Функция
+    вызывается больше миллиона раз на один запрос без совпадений; когда
+    обрезка года и разбор регулярного выражения шли первыми, один запрос
+    занимал секунды. Общий префикс отсекает почти всё и стоит одно сравнение,
+    а обрезка года префикс не меняет — значит, её можно отложить.
     """
-    if len(цель) < 5:
+    if len(цель) < 5 or len(форма) < 5:
+        return False
+    if цель[:4] != форма[:4]:
         return False
     кандидаты = [форма]
-    без_года = re.sub(r"\d{4}$", "", форма)
-    if без_года and без_года != форма:
+    без_года = _ХВОСТ_ГОДА.sub("", форма)
+    if без_года != форма and len(без_года) >= 5:
         кандидаты.append(без_года)
     for ф in кандидаты:
-        if len(ф) < 5:
-            continue
         if abs(len(цель) - len(ф)) > 2:
-            continue
-        if цель[:4] != ф[:4]:
             continue
         if SequenceMatcher(None, цель, ф).ratio() >= 0.75:
             return True
@@ -624,12 +763,72 @@ class Снимок:
     _снимок = None
 
     @classmethod
+    def сбросить(cls) -> None:
+        """Забыть прежний снимок: на диске появился новый каталог."""
+        cls._снимок = None
+
+    @classmethod
     def получить(cls, данные, подробности):
         if cls._снимок is None and КОЛЛЕКЦИИ is not None:
             cls._снимок = КОЛЛЕКЦИИ.Снимок(
                 данные.items, getattr(подробности, "записи", None) or {},
                 revision=getattr(данные, "revision", "") or "")
         return cls._снимок
+
+
+#: Слова короче этого в отдельный указатель не попадают: «на», «и», «the»
+#: совпадают почти со всем и только портят выдачу.
+ДЛИНА_СЛОВА_УКАЗАТЕЛЯ = 3
+
+
+def _написания(запись: dict) -> list[str]:
+    """Все известные написания названия одной записи, склеенными формами.
+
+    Русское название, оригинальное, синонимы владельца, slug и транслит.
+    Пустых среди них нет — сравнивать с пустой строкой значило бы совпадать
+    со всем подряд. Без slug/транслита запрос «matrix» / «naruto» / точный
+    slug живого `/title/{slug}/` давал пустую выдачу при живой карточке.
+    """
+    формы = [нормализовать(запись.get("title") or "")]
+    if запись.get("slug"):
+        формы.append(нормализовать(запись["slug"]))
+    if запись.get("title"):
+        формы.append(нормализовать(транслит(запись["title"])))
+    for поле in ("original_title", "original_name"):
+        if запись.get(поле):
+            формы.append(нормализовать(запись[поле]))
+            формы.append(нормализовать(транслит(запись[поле])))
+    for доп in (запись.get("aliases") or []):
+        формы.append(нормализовать(доп))
+        формы.append(нормализовать(транслит(доп)))
+    увидели: list[str] = []
+    for ф in формы:
+        if ф and ф not in увидели:
+            увидели.append(ф)
+    return увидели
+
+
+def _слова_записи(запись: dict) -> set[str]:
+    """Отдельные слова названий — то, чего не даёт склеенная форма.
+
+    `нормализовать` выбрасывает дефисы и пробелы, поэтому slug
+    «cvetuschaya-zvezda-parizha» превращался в одно слово, и запрос
+    «cvetuschaya» не совпадал с ним ни точно, ни префиксом. Слова хранятся
+    отдельно от склеенных форм намеренно: фразовое совпадение остаётся
+    фразовым, а совпадение одного слова не поднимается до верхнего уровня.
+    """
+    слова: set[str] = set()
+    источники = [запись.get("title") or "", (запись.get("slug") or "").replace("-", " ")]
+    for поле in ("original_title", "original_name"):
+        if запись.get(поле):
+            источники.append(str(запись[поле]))
+    источники.extend(str(д) for д in (запись.get("aliases") or []))
+    for источник in источники:
+        for слово in токены(источник):
+            for вариант in (нормализовать(слово), нормализовать(транслит(слово))):
+                if len(вариант) >= ДЛИНА_СЛОВА_УКАЗАТЕЛЯ:
+                    слова.add(вариант)
+    return слова
 
 
 class Данные:
@@ -639,34 +838,42 @@ class Данные:
         self.absent = сырое.get("fields_absent", [])
         self.revision = str(сырое.get("revision") or "")
         self.built_at = str(сырое.get("builtAt") or сырое.get("built_at") or "")
+        self.оригинальных_названий = 0
         for з in self.items:
             з["_n"] = нормализовать(з["title"])
-            # Все известные формы названия: русское, оригинальное, синонимы
-            # владельца, slug и транслит. Пустых среди них нет — сравнивать
-            # с пустой строкой значило бы совпадать со всем подряд.
-            #
-            # Без slug/транслита запрос «matrix» / «naruto» / точный slug
-            # живого `/title/{slug}/` давал пустую выдачу при живой карточке.
-            формы = [з["_n"]]
-            if з.get("slug"):
-                формы.append(нормализовать(з["slug"]))
-            if з.get("title"):
-                формы.append(нормализовать(транслит(з["title"])))
-            for поле in ("original_title", "original_name"):
-                if з.get(поле):
-                    формы.append(нормализовать(з[поле]))
-                    формы.append(нормализовать(транслит(з[поле])))
-            for доп in (з.get("aliases") or []):
-                формы.append(нормализовать(доп))
-                формы.append(нормализовать(транслит(доп)))
-            # Уникальный порядок без пустых.
-            увидели: list[str] = []
-            for ф in формы:
-                if ф and ф not in увидели:
-                    увидели.append(ф)
-            з["_формы"] = увидели
+            з["_формы"] = _написания(з)
+            з["_слова"] = _слова_записи(з)
         self.years = sorted({з["year"] for з in self.items if з["year"]}, reverse=True)
         self.kinds = sorted({з["kind"] for з in self.items if з["kind"]})
+
+    def обогатить_подробностями(self, подробности) -> int:
+        """Достроить поисковый указатель оригинальными названиями.
+
+        Снимок каталога несёт только русское название: `original_name` лежит
+        в боковом файле подробностей. Поэтому обещание формы поиска («ищем по
+        русскому и оригинальному написанию») до этого было неправдой — запрос
+        «naruto» не находил «Наруто», хотя оригинальное написание у записи
+        есть. Здесь оно добавляется в указатель из настоящих данных; там, где
+        подробностей нет, не добавляется ничего.
+
+        Возвращает число записей, которым нашлось оригинальное написание.
+        """
+        записи = getattr(подробности, "записи", None) or {}
+        if not записи:
+            self.оригинальных_названий = 0
+            return 0
+        учтено = 0
+        for з in self.items:
+            деталь = записи.get(з.get("slug")) or {}
+            оригинал = str(деталь.get("original_name") or "").strip()
+            if not оригинал or оригинал == (з.get("title") or ""):
+                continue
+            з["original_name"] = оригинал
+            з["_формы"] = _написания(з)
+            з["_слова"] = _слова_записи(з)
+            учтено += 1
+        self.оригинальных_названий = учтено
+        return учтено
 
     def искать(self, q: str, предел: int = 120) -> list[dict]:
         """Терпимый поиск по всем известным названиям записи.
@@ -683,49 +890,56 @@ class Данные:
 
         Для «Звёздные войны» точное/полное название обязано быть выше
         однотокенных prefix-совпадений вроде «Воин…».
+
+        Прочтения запроса считаются по отдельности. Раньше строка «как есть» и
+        строка «прочитанная в другой раскладке» сваливались в один набор
+        токенов, и правило AND требовало совпадения с обоими сразу. Для любого
+        латинского слова второе прочтение — бессмысленный набор букв
+        («naruto» → «тфкгещ»), поэтому ни один запрос латиницей не мог найти
+        ничего: выдача была пустой не из-за данных, а из-за самого правила.
         """
-        сырые = [q, из_раскладки(q)]
-        фразы: list[str] = []
-        токены_запроса: list[str] = []
-        for сырой in сырые:
+        прочтения: list[tuple[str, list[str]]] = []
+        for сырой in (q, из_раскладки(q)):
             нq = нормализовать(сырой)
-            если_токены = [т for т in токены(сырой)
-                           if т not in СЛУЖЕБНЫЕ and not т.isdigit()]
-            if нq and нq not in фразы:
-                фразы.append(нq)
-            for т in если_токены:
+            ткн: list[str] = []
+            for т in токены(сырой):
+                if т in СЛУЖЕБНЫЕ or т.isdigit():
+                    continue
                 нт = нормализовать(т)
-                if нт and нт not in токены_запроса and len(нт) >= 2:
-                    токены_запроса.append(нт)
-        if not фразы and not токены_запроса:
+                if нт and len(нт) >= 2 and нт not in ткн:
+                    ткн.append(нт)
+            if (нq or ткн) and (нq, ткн) not in прочтения:
+                прочтения.append((нq, ткн))
+        if not прочтения:
             return []
+        разобранные = [(нq, ткн, [т for т in ткн if len(т) >= 3],
+                        len([т for т in ткн if len(т) >= 3]) >= 2)
+                       for нq, ткн in прочтения]
 
-        знач_токены = [т for т in токены_запроса if len(т) >= 3]
-        многословный = len(знач_токены) >= 2
-
-        def токен_в_формах(т: str, формы: list[str]) -> str | None:
-            if т in формы:
+        def токен_в_формах(т: str, формы: list[str], слова: set) -> str | None:
+            if т in формы or т in слова:
                 return "exact"
-            if any(ф.startswith(т) for ф in формы):
+            if any(ф.startswith(т) for ф in формы) or any(с.startswith(т) for с in слова):
                 return "prefix"
             if any(т in ф for ф in формы):
                 return "sub"
             return None
 
-        scored: list[tuple[int, str, dict]] = []
-        for з in self.items:
-            формы = з["_формы"]
-            if not формы:
-                continue
+        def оценить(формы: list[str], слова: set, прочтение: tuple) -> int:
+            """Вес записи для одного прочтения запроса.
+
+            Разобранное прочтение приходит готовым: перебор идёт по тысячам
+            записей, и пересобирать один и тот же список токенов на каждой из
+            них — это вся стоимость запроса, потраченная впустую.
+            """
+            нq, токены_запроса, знач_токены, многословный = прочтение
             score = 0
             # 1) full-phrase exact
-            for фраза in фразы:
-                if фраза and фраза in формы:
-                    score = max(score, 1000)
-                    break
+            if нq and нq in формы:
+                score = 1000
             # 2) multi-token AND
             if score < 1000 and знач_токены:
-                kinds = [токен_в_формах(т, формы) for т in знач_токены]
+                kinds = [токен_в_формах(т, формы, слова) for т in знач_токены]
                 if all(kinds):
                     if all(k == "exact" for k in kinds):
                         score = max(score, 900)
@@ -736,7 +950,7 @@ class Данные:
                 elif not многословный:
                     # single meaningful token — OR tiers
                     for т in знач_токены:
-                        k = токен_в_формах(т, формы)
+                        k = токен_в_формах(т, формы, слова)
                         if k == "exact":
                             score = max(score, 600)
                         elif k == "prefix":
@@ -745,7 +959,7 @@ class Данные:
                             score = max(score, 300)
             elif score < 1000 and not многословный:
                 for т in токены_запроса:
-                    k = токен_в_формах(т, формы)
+                    k = токен_в_формах(т, формы, слова)
                     if k == "exact":
                         score = max(score, 600)
                     elif k == "prefix":
@@ -753,18 +967,38 @@ class Данные:
                     elif k == "sub":
                         score = max(score, 300)
             # 3) soft only if still unmatched and short query
+            #
+            # Опечатка в одном слове длинного названия не ловилась: склеенная
+            # форма «цветущаязвездапарижа» отличается от «цветущаяя» длиной
+            # больше допуска, и запрос давал честную, но бесполезную пустоту.
+            # Поэтому опечатка сравнивается и с отдельными словами тоже.
             if score == 0 and not многословный:
-                for цель in (фразы + токены_запроса):
+                for цель in ([нq] if нq else []) + токены_запроса:
                     if any(_мягкое_совпадение(цель, ф) for ф in формы):
                         score = 100
+                        break
+                    if any(_мягкое_совпадение(цель, с) for с in слова):
+                        score = 80
                         break
             if score == 0 and многословный:
                 soft_hits = sum(
                     1 for т in знач_токены
-                    if токен_в_формах(т, формы) or any(_мягкое_совпадение(т, ф) for ф in формы[:3])
+                    if токен_в_формах(т, формы, слова)
+                    or any(_мягкое_совпадение(т, ф) for ф in формы[:3])
                 )
                 if soft_hits == len(знач_токены):
                     score = 150
+            return score
+
+        scored: list[tuple[int, str, dict]] = []
+        for з in self.items:
+            формы = з["_формы"]
+            if not формы:
+                continue
+            слова = з.get("_слова") or set()
+            # Лучшее из прочтений, а не пересечение: неверная раскладка —
+            # это другая версия того же запроса, а не дополнительное условие.
+            score = max(оценить(формы, слова, п) for п in разобранные)
             if score > 0:
                 scored.append((score, з.get("title") or "", з))
 
@@ -1200,6 +1434,7 @@ min-height:44px;display:inline-flex;align-items:center}
    мельче наших прежних: «НОВЫЕ СЕРИИ АНИМЕ», «НОВЫЕ АНИМЕ НА САЙТЕ»,
    «РЕКОМЕНДУЕМ ПОСМОТРЕТЬ:». Крупный тёмный заголовок слева — наша прежняя
    привычка, а не композиция эталона. */
+.zh__n{color:var(--a-mute);font-weight:600}
 .zh--sm{font-size:16px;font-weight:700;margin:24px 0 14px;text-transform:uppercase;
 letter-spacing:.06em;text-align:center;color:var(--a-ink)}
 .zsec__h{display:grid;grid-template-columns:1fr auto 1fr;align-items:baseline;gap:12px}
@@ -1380,6 +1615,62 @@ align-self:flex-start}
   .zt--row .zt__p{flex:0 0 76px;width:76px}
   .zt--row .zt__t{font-size:14px}
 }
+/* Раздел сообщества: оценка посетителей, реакции и обсуждение. Кнопки шкалы и
+   реакций — настоящие цели нажатия 44x44: пальцем по цифре «7» иначе не
+   попасть. Оценка посетителей стоит рядом со сводной, но отдельной величиной:
+   смешивать её с внешними источниками нельзя. */
+.acomm{margin:24px 0 0}
+.acomm__off{color:var(--a-dim);margin:0 0 6px;max-width:72ch}
+.acomm__why{margin:0;color:var(--a-mute);font-size:12px}
+.acomm__why code{background:var(--a-alt);padding:2px 6px;border-radius:6px}
+.acomm__votes{display:flex;flex-direction:column;gap:10px;align-items:center;
+padding:14px;border:1px solid var(--a-line);border-radius:12px;background:var(--a-alt)}
+.acomm__score{display:flex;align-items:baseline;gap:8px;font-size:14px;color:var(--a-dim)}
+.acomm__score b{font-size:26px;font-weight:800;color:var(--a-acc);line-height:1}
+.acomm__none{color:var(--a-mute);font-size:13px;margin:0}
+.acomm__scale{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.acomm__vote{min-width:44px;min-height:44px;border-radius:10px;border:1px solid var(--a-line);
+background:var(--a-page);color:var(--a-ink);font:inherit;font-weight:700;cursor:pointer}
+.acomm__vote:hover{border-color:var(--a-acc);color:var(--a-acc)}
+.acomm__vote.is-on{background:var(--a-acc);border-color:var(--a-acc);color:#fff}
+.acomm__vote:focus-visible,.acomm__react:focus-visible,.acomm__form button:focus-visible{
+outline:3px solid var(--a-acc);outline-offset:2px}
+.acomm__clear{min-height:44px;padding:0 14px;border:0;background:none;color:var(--a-mute);
+font:inherit;font-size:13px;cursor:pointer;text-decoration:underline}
+.acomm__reactions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0;justify-content:center}
+.acomm__react{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 14px;
+border:1px solid var(--a-line);border-radius:999px;background:var(--a-page);color:var(--a-ink);
+font:inherit;font-size:13px;cursor:pointer}
+.acomm__react.is-on{border-color:var(--a-acc);color:var(--a-acc);background:var(--a-alt)}
+.acomm__react b{font-weight:700;color:var(--a-mute)}
+.acomm__react.is-on b{color:var(--a-acc)}
+.acomm__list-wrap{margin:16px 0 0}
+.acomm__list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.acomm__item{padding:12px 14px;border-radius:12px;background:var(--a-alt);
+border:1px solid var(--a-line)}
+.acomm__item p{margin:6px 0 0;color:var(--a-ink);line-height:1.45;overflow-wrap:anywhere}
+.acomm__name{font-weight:700;color:var(--a-ink);margin-right:8px}
+.acomm__item time{color:var(--a-mute);font-size:12px}
+.acomm__form{display:flex;flex-direction:column;gap:6px;margin:16px 0 0}
+.acomm__form label{font-size:12px;color:var(--a-mute);text-transform:uppercase;
+letter-spacing:.04em}
+.acomm__form input,.acomm__form textarea{font:inherit;padding:10px 12px;min-height:44px;
+border:1px solid var(--a-line);border-radius:10px;background:var(--a-page);color:var(--a-ink)}
+.acomm__form textarea{min-height:88px;resize:vertical}
+.acomm__form button{align-self:flex-start;min-height:44px;padding:0 20px;border:0;
+border-radius:10px;background:var(--a-acc);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+@media(min-width:768px){
+  .acomm__votes{flex-direction:row;justify-content:space-between}
+  .acomm__scale{justify-content:flex-end}
+}
+/* Сводная оценка: крупное число и подпись, из чего она сложилась. Без подписи
+   посетитель принял бы нашу арифметику за оценку конкретного сайта. */
+.ztitle__score{display:flex;flex-direction:column;align-items:center;gap:2px;
+padding:10px 12px;margin:0 0 10px;border-radius:12px;background:var(--a-alt);
+border:1px solid var(--a-line)}
+.ztitle__score-val{font-size:28px;font-weight:800;line-height:1;color:var(--a-acc)}
+.ztitle__score-lab{font-size:11px;color:var(--a-mute);text-transform:uppercase;
+letter-spacing:.04em;text-align:center}
 /* Бейджи карточки — как у оригинала: слева сверху сколько серий доступно из
    заявленных, справа сверху до двух оценок с названным источником. Подпись
    источника обязательна: цифра без источника ничего не значит, а сводить
@@ -3653,6 +3944,110 @@ class ВидОснова(Вид):
                 описание=f"{заголовок}: список серий на витрине {self.имя}.",
                 путь=путь, изображение=запись.get("poster") or ""))
 
+    def _ключ_посетителя(self) -> str:
+        """Обезличенный ключ посетителя: cookie, иначе адрес соединения.
+
+        Учётных записей у витрины нет, и выдумывать их нельзя. Но «один голос
+        от одного посетителя» без какого-то ключа не сделать, поэтому берётся
+        cookie, а при её отсутствии — адрес. Ни то, ни другое не хранится: в
+        файл уходит только отпечаток.
+        """
+        куки = getattr(self, "_куки_посетителя", "") or ""
+        if not куки:
+            обработчик = getattr(self, "_обработчик", None)
+            куки = getattr(обработчик, "_куки_посетителя", "") or ""
+        if куки:
+            return куки
+        адрес = ""
+        заголовки = getattr(self, "_заголовки_запроса", None)
+        if заголовки is not None:
+            адрес = (заголовки.get("X-Forwarded-For") or "").split(",")[0].strip()
+        return адрес or getattr(self, "_адрес_клиента", "") or "гость"
+
+    def блок_сообщества(self, запись: dict, деталь: dict) -> str:
+        """Голоса, реакции и комментарии — или честная причина их отсутствия."""
+        хранилище = сообщество()
+        slug = запись["slug"]
+        путь = f"/title/{slug}/"
+        if хранилище is None or not хранилище.доступно:
+            причина = ("модуль сообщества не подключён" if хранилище is None
+                       else хранилище.причина)
+            return (
+                f'<section class="zsec acomm acomm--off" data-community="unavailable" '
+                f'data-community-reason="{html.escape(причина[:120])}">'
+                f'<h2 class="zh zh--sm">Оценки и обсуждение</h2>'
+                f'<p class="acomm__off">Раздел выключен: хранилище сообщества '
+                f'недоступно. Пока оно не подключено, витрина не показывает ни '
+                f'оценок посетителей, ни обсуждения — и не подставляет вместо '
+                f'них выдуманные.</p>'
+                f'<p class="acomm__why"><code>{html.escape(причина[:160])}</code></p>'
+                f'</section>')
+        с = хранилище.состояние(slug, self._ключ_посетителя())
+        # --- голосование ---
+        кнопки = "".join(
+            f'<button class="acomm__vote{" is-on" if с.мой_голос == n else ""}" '
+            f'type="submit" name="value" value="{n}" '
+            f'aria-pressed="{"true" if с.мой_голос == n else "false"}">{n}</button>'
+            for n in range(СООБЩЕСТВО.ОЦЕНКА_МИН, СООБЩЕСТВО.ОЦЕНКА_МАКС + 1))
+        свод = (f'<b>{с.средняя:g}</b><span>из 10 · {с.голосов} '
+                f'{"голос" if с.голосов == 1 else "голосов"}</span>'
+                if с.средняя is not None else
+                '<span class="acomm__none">Оценок посетителей пока нет</span>')
+        снять = (f'<button class="acomm__clear" type="submit" name="value" value="0">'
+                 f'Снять свою оценку</button>' if с.мой_голос else "")
+        голосование = (
+            f'<form class="acomm__votes" method="post" action="/community/vote">'
+            f'<input type="hidden" name="slug" value="{html.escape(slug)}">'
+            f'<input type="hidden" name="back" value="{html.escape(путь)}">'
+            f'<div class="acomm__score" data-user-score="{с.средняя if с.средняя is not None else ""}"'
+            f' data-user-votes="{с.голосов}">{свод}</div>'
+            f'<div class="acomm__scale" role="group" aria-label="Поставить оценку">'
+            f'{кнопки}</div>{снять}</form>')
+        # --- реакции ---
+        реакции = "".join(
+            f'<button class="acomm__react{" is-on" if с.моя_реакция == р else ""}" '
+            f'type="submit" name="reaction" value="{html.escape(р)}" '
+            f'aria-pressed="{"true" if с.моя_реакция == р else "false"}">'
+            f'<span>{html.escape(р)}</span>'
+            f'<b data-reaction-count="{с.реакции.get(р, 0)}">{с.реакции.get(р, 0)}</b>'
+            f'</button>' for р in СООБЩЕСТВО.РЕАКЦИИ)
+        блок_реакций = (
+            f'<form class="acomm__reactions" method="post" action="/community/reaction">'
+            f'<input type="hidden" name="slug" value="{html.escape(slug)}">'
+            f'<input type="hidden" name="back" value="{html.escape(путь)}">'
+            f'{реакции}</form>')
+        # --- комментарии ---
+        лента = "".join(
+            f'<li class="acomm__item"><span class="acomm__name">'
+            f'{html.escape(str(к.get("name") or "Гость"))}</span>'
+            f'<time datetime="{html.escape(str(к.get("created_at") or ""))}">'
+            f'{html.escape(_аниме_формат_времени_анонса(str(к.get("created_at") or ""), "datetime"))}'
+            f'</time><p>{html.escape(str(к.get("text") or ""))}</p></li>'
+            for к in с.комментарии[:20])
+        пусто = ('<p class="acomm__none">Обсуждения пока нет. Первое сообщение '
+                 'появится здесь сразу после отправки.</p>')
+        список_сообщений = (f'<ul class="acomm__list">{лента}</ul>'
+                            if лента else пусто)
+        форма = (
+            f'<form class="acomm__form" method="post" action="/community/comment">'
+            f'<input type="hidden" name="slug" value="{html.escape(slug)}">'
+            f'<input type="hidden" name="back" value="{html.escape(путь)}">'
+            f'<label for="acomm-name">Имя</label>'
+            f'<input id="acomm-name" name="name" maxlength="40" placeholder="Гость">'
+            f'<label for="acomm-text">Сообщение</label>'
+            f'<textarea id="acomm-text" name="text" rows="3" required '
+            f'maxlength="{СООБЩЕСТВО.ДЛИНА_КОММЕНТАРИЯ}" '
+            f'placeholder="Что скажете об этом аниме?"></textarea>'
+            f'<button type="submit">Отправить</button></form>')
+        return (
+            f'<section class="zsec acomm" data-community="on" '
+            f'data-community-votes="{с.голосов}" '
+            f'data-community-comments="{len(с.комментарии)}">'
+            f'<h2 class="zh zh--sm">Оценки и обсуждение</h2>'
+            f'{голосование}{блок_реакций}'
+            f'<div class="acomm__list-wrap">{список_сообщений}</div>'
+            f'{форма}</section>')
+
     def серия(self, запись: dict, деталь: dict, сезон: int, эпизод: int) -> str:
         имя = запись["title"]
         путь = self.адрес_эпизода(запись["slug"], сезон, эпизод)
@@ -3793,6 +4188,21 @@ TRUE_PROVIDER_PLAYABLE_EVENT_COUNT = 0
 АНИМЕДИА_ЭПИЗОД_EMPTY_COPY = (
     "Лента новых серий пока недоступна: источник событий ещё не подключён"
 )
+#: Собственный реестр событий «стало больше доступных серий». Он выводится
+#: сравнением соседних снимков подробностей и потому говорит ровно то, что
+#: знает: не «вышла серия N», а «стало доступно N серий». Номер серии, которого
+#: в данных нет, здесь не появляется.
+#
+#: Файл лежит рядом со снимком каталога, а не в репозитории. Путь от `__file__`
+#: в боевом релизе указывает внутрь неизменяемого каталога релиза — туда, где
+#: данных нет и быть не может; витрина искала реестр там и молча показывала
+#: пустую ленту. Снимки же лежат в корне рантайма, читаются пользователем
+#: витрины и обновляются без пересборки релиза — реестру место там же.
+АНИМЕДИА_EPISODE_LEDGER_PATH = os.environ.get(
+    "ANIMEDIA_EPISODE_LEDGER",
+    str(_КОРЕНЬ_РАНТАЙМА / f"{САЙТ_ID}-episode-events.json"),
+)
+
 АНИМЕДИА_PROVIDER_PLAYABLE_PATH = os.environ.get(
     "ANIMEDIA_PROVIDER_PLAYABLE_EVENTS",
     str(Path(__file__).resolve().parents[2] / "config" / "animedia-provider-playable-events.json"),
@@ -3839,6 +4249,40 @@ COLLECTION_REVISION_TIMESTAMP_DATA_GAP = 1
     str(Path(__file__).resolve().parents[2] / "config" / "animedia-top100.json"),
 )
 TOP100_DATA_GAP = 1
+
+#: Топ по сводной оценке. Отдельный файл и отдельное основание: популярность
+#: сюда не примешивается, и подменить ею пробел «Топ‑100» нельзя даже случайно.
+АНИМЕДИА_ТОП_ПО_ОЦЕНКАМ_ПУТЬ = os.environ.get(
+    "ANIMEDIA_RATINGS_TOP",
+    str(_КОРЕНЬ_РАНТАЙМА / "{site}-ratings-top.json"),
+)
+
+
+def загрузить_топ_по_оценкам(*, site_id: str = "",
+                             path: str | Path | None = None) -> dict | None:
+    """Готовый топ по оценкам или None, если его ещё не собирали.
+
+    Отсутствие файла — обычное состояние, а не ошибка: топ собирается
+    отдельным инструментом по снимку, и до первого запуска его просто нет.
+    Витрина в этом случае не показывает блок вовсе — пустая полка под
+    заголовком хуже отсутствия полки.
+    """
+    шаблон = str(path or АНИМЕДИА_ТОП_ПО_ОЦЕНКАМ_ПУТЬ)
+    сайт = site_id or САЙТ_ID
+    путь = Path(шаблон.replace("{site}", сайт))
+    if not путь.is_file():
+        return None
+    try:
+        сырое = json.loads(путь.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    if not isinstance(сырое, dict) or not isinstance(сырое.get("places"), list):
+        return None
+    if сырое.get("basis") != "ratings-aggregate":
+        # Файл с другим основанием под этим именем — не наш случай; молча
+        # показывать его как «лучшее по оценкам» нельзя.
+        return None
+    return сырое
 #: Сколько каталожных лент показывает главная. Было два, и страница выходила
 #: втрое короче оригинала при двенадцати лентах, обеспеченных данными, —
 #: это и есть «пустая витрина», которую видел владелец. Восемь набирают
@@ -4502,6 +4946,14 @@ class ВидАнимедиа(ВидОснова):
         название и строка «тип · год». Размеры постера проставляются в
         разметке, чтобы место было занято до загрузки изображения.
         """
+        название = str(запись.get("title") or "").strip()
+        адрес = str(запись.get("url") or "").strip()
+        if not название or not адрес:
+            # Карточка без имени или без адреса карточкой не является: подписать
+            # её выдуманным словом значило бы соврать, а показать безымянный
+            # прямоугольник — оставить посетителю нерабочую плитку. Запись
+            # просто не рисуется.
+            return ""
         деталь = self.деталь(запись["slug"])
         состав = АНИМЕДИА_ВАРИАНТЫ_КАРТОЧКИ.get(вариант, АНИМЕДИА_ВАРИАНТ_ПО_УМОЛЧАНИЮ)
         изо = заглушка_постера(запись, "zt__none", "zt__img", 190, 285)
@@ -4756,8 +5208,29 @@ class ВидАнимедиа(ВидОснова):
                     f'<span class="lab">{html.escape(label)}</span>'
                     f'<span class="val" data-missing="1">—</span></li>'
                 )
+        сводная = сводная_оценка(деталь)
+        шапка = ""
+        if сводная:
+            состав = ", ".join(
+                f'{к["подпись"]} {к["значение"]}'
+                + (f' ({к["голоса"]})' if к["голоса"] else "")
+                for к in сводная["компоненты"])
+            шапка = (
+                f'<div class="ztitle__score" data-aggregate="1"'
+                f' data-aggregate-method="{html.escape(сводная["методика"])}"'
+                f' data-aggregate-sources="{сводная["источников"]}"'
+                + (f' data-aggregate-votes="{сводная["всего_голосов"]}"'
+                   if сводная["всего_голосов"] else "")
+                + f' title="{html.escape(АНИМЕДИА_СВОДНАЯ_ПОДПИСЬ)}: '
+                  f'{html.escape(состав)}">'
+                f'<span class="ztitle__score-val">{html.escape(сводная["значение"])}</span>'
+                f'<span class="ztitle__score-lab">{html.escape(АНИМЕДИА_СВОДНАЯ_ПОДПИСЬ)}'
+                f' · {сводная["источников"]} '
+                f'{"источник" if сводная["источников"] == 1 else "источника"}</span>'
+                f'</div>')
         return (
             f'<aside class="ztitle__rail" data-b07="ratings">'
+            f'{шапка}'
             f'<ul class="ztitle__rail-ratings">{"".join(items)}</ul></aside>'
         )
 
@@ -4866,7 +5339,8 @@ class ВидАнимедиа(ВидОснова):
             f'<div class="ztitle__head-text"><h1>{html.escape(имя)}</h1>{orig_html}</div>'
             f'</div>{pills}{meta_html}{описание_html}{блок_связей}'
             f'<div class="ztitle__actions"><a class="ztitle__cta" href="#watch">Смотреть</a></div>'
-            f'</div>{rail}</div>{ad_title}{плеер}{блок_серий}{блок_похожих}</div>')
+            f'</div>{rail}</div>{ad_title}{плеер}{блок_серий}'
+            f'{self.блок_сообщества(запись, деталь)}{блок_похожих}</div>')
         разметка = self.schema_тайтла(запись, деталь, путь)
         # Gap copy must never become meta description.
         краткое = (описание[:180] if описание else
@@ -5361,7 +5835,12 @@ class ВидАнимедиа(ВидОснова):
                     ("top", "Популярное за неделю", "/catalog/", weekly_items[:48], ""),
                 ]
             # Catalog-addition shelves are B05 — not invented here without collections.
-        куски = [self.полоса_готовности()]
+        # Единственный H1 страницы стоит первым в содержимом и визуально скрыт:
+        # у оригинала первый экран начинается каруселью, и крупного заголовка
+        # там нет, но документ без H1 в начале заставляет читалку идти по H2
+        # до самого низа. Композиция сохраняется, семантика становится верной.
+        куски = [f'<h1 class="vh">{html.escape(домен["title_home"])}</h1>',
+                 self.полоса_готовности()]
 
         # Первый экран оригинала — карусель, а не заголовок с лидом. Источник
         # выбирается по убыванию доказанности и подписывается собой.
@@ -5398,6 +5877,11 @@ class ВидАнимедиа(ВидОснова):
         куски.append(self._блок_компактных_фильтров_b06())
         # B06.2 Top-100 — approved snapshot only.
         куски.append(self._блок_top100_b06())
+        # Топ по оценкам стоит после пробела «Топ‑100», а не вместо него:
+        # это соседний блок с другим основанием, и подменять им популярность
+        # нельзя. Когда придёт утверждённый снимок популярности, верхний блок
+        # заполнится, а этот останется тем, чем был.
+        куски.append(self._блок_топа_по_оценкам())
         # Cross-shelf dedup. Weekly shelf slugs may reappear in lower grids only
         # when the lower shelf is not also the weekly popular block.
         очищенные = []
@@ -5438,8 +5922,8 @@ class ВидАнимедиа(ВидОснова):
             '<div class="ahome-comments" data-b06="comments" data-comments="0" '
             'hidden aria-hidden="true"></div>')
         # B06.7 SEO/about after functional modules, before footer.
-        куски.append(self.seo_блок(заголовок=домен["seo_home_title"],
-                                   текст=домен["seo_home"], как_h1=True))
+        куски.append(self.seo_блок(заголовок=домен["title_home"],
+                                   текст=домен["seo_home"]))
         return self.оболочка(
             _склеить(куски),
             домен["title_home"], "/", актив="/",
@@ -5688,10 +6172,19 @@ class ВидАнимедиа(ВидОснова):
         """Home B03: populated provider feed or compact empty ≤96px."""
         events = self._provider_playable_events()
         self._provider_playable_count = len(events)
+        источник = "provider"
+        if not events:
+            # Источник провайдера не подключён — берём собственный реестр
+            # сравнения снимков. Пустая лента остаётся пустой: выдумывать
+            # события всё так же нельзя.
+            events = self._episode_ledger_events()
+            источник = "snapshot-diff" if events else "none"
+        self._episode_feed_source = источник
         if not events:
             return (
                 f'<section class="zsec zsec--eps ahome-eps ahome-eps--empty" '
-                f'data-b03="empty" data-provider-playable-count="0">'
+                f'data-b03="empty" data-provider-playable-count="0" '
+                f'data-episode-feed-source="none">'
                 f'<div class="zsec__h"><h2>{АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК}</h2></div>'
                 f'<p class="ahome-eps__empty">{html.escape(АНИМЕДИА_ЭПИЗОД_EMPTY_COPY)}</p>'
                 f'</section>'
@@ -5702,7 +6195,8 @@ class ВидАнимедиа(ВидОснова):
             self._разметка_эпизод_ряда(r) for r in rows) + "</div>"
         return (
             f'<section class="zsec zsec--eps ahome-eps" data-b03="populated" '
-            f'data-provider-playable-count="{len(events)}">'
+            f'data-provider-playable-count="{self._provider_playable_count}" '
+            f'data-episode-feed-source="{html.escape(источник)}">'
             f'<div class="zsec__h"><h2>{АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК}</h2></div>'
             f'{feed}</section>'
         )
@@ -5883,6 +6377,45 @@ class ВидАнимедиа(ВидОснова):
             f'{grid}</section>'
         )
 
+    def _блок_топа_по_оценкам(self) -> str:
+        """Полка «Лучшее по оценкам» — порядок по сводной, а не по популярности.
+
+        Отдельный блок, а не замена «Топ‑100». Популярность и оценка — разные
+        величины, и подставить вторую под заголовок первой значило бы соврать
+        ровно там, где витрина обещает цифру. Поэтому пробел популярности
+        остаётся объявленным, а здесь честно названо основание порядка и
+        порог голосов, ниже которого записи не брались.
+        """
+        топ = загрузить_топ_по_оценкам()
+        if not топ:
+            return ""
+        по_slug = {з.get("slug"): з for з in self.д.items if з.get("slug")}
+        записи = []
+        for место in топ.get("places") or []:
+            з = по_slug.get(место.get("slug"))
+            if з is not None:
+                записи.append(з)
+            if len(записи) >= АНИМЕДИА_TOP100_HOME_LIMIT:
+                break
+        if len(записи) < 4:
+            # Меньше четырёх — это не полка, а обрывок. Лучше ничего.
+            return ""
+        порог = int(топ.get("threshold_votes") or 0)
+        подпись = (f"Порядок по сводной оценке ({html.escape(str(топ.get('method') or ''))}), "
+                   f"от {порог} голосов и выше. Не популярность: данных о просмотрах "
+                   f"в снимке нет.")
+        return (
+            f'<section class="zsec zsec--toprated" data-top-basis="ratings-aggregate" '
+            f'data-top-method="{html.escape(str(топ.get("method") or ""))}" '
+            f'data-top-threshold="{порог}" '
+            f'data-top-digest="{html.escape(str(топ.get("digest") or ""))}" '
+            f'data-top-count="{len(записи)}">'
+            f'<div class="zsec__h"><h2>Лучшее по оценкам</h2>'
+            f'<a href="/catalog/">Весь каталог</a></div>'
+            f'<p class="zsub">{подпись}</p>'
+            f'{self.плитки(записи, вариант="top100-shelf")}</section>'
+        )
+
     def _блок_подборок_home_b06(self) -> str:
         """Home collections shelf — real collection specs only."""
         if КОЛЛЕКЦИИ is None:
@@ -6030,6 +6563,53 @@ class ВидАнимедиа(ВидОснова):
             куски.append(f'<a href="/new/?page={стр + 1}" rel="next">→</a>')
         return f'<nav class="zpg" aria-label="Страницы новинок">{"".join(куски)}</nav>'
 
+    def _episode_ledger_events(self) -> list[dict]:
+        """События из собственного реестра сравнения снимков.
+
+        Это не подмена ленты провайдера: когда придёт настоящий источник
+        событий, он останется первым, а реестр — запасным. Провенанс у каждой
+        строки виден в разметке (`data-event-kind="snapshot_diff"`), чтобы
+        никто не принял вывод сравнения за сообщение провайдера.
+        """
+        путь = Path(АНИМЕДИА_EPISODE_LEDGER_PATH)
+        if not путь.is_file():
+            return []
+        try:
+            сырое = json.loads(путь.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return []
+        события = сырое.get("events") if isinstance(сырое, dict) else сырое
+        if not isinstance(события, list):
+            return []
+        по_slug = {з.get("slug"): з for з in self.д.items if з.get("slug")}
+        строки = []
+        for с in события:
+            if not isinstance(с, dict):
+                continue
+            slug = str(с.get("slug") or "")
+            запись = по_slug.get(slug)
+            if запись is None:
+                # Тайтл ушёл из каталога — строка без страницы не нужна.
+                continue
+            строки.append({
+                "slug": slug,
+                "title": запись.get("title") or с.get("title") or slug,
+                "url": запись.get("url") or с.get("url") or f"/title/{slug}/",
+                "poster": запись.get("poster"),
+                "event_kind": "snapshot_diff",
+                "event_id": f"{slug}-s{с.get('season')}-e{с.get('episode_to')}",
+                "season": int(с.get("season") or 0),
+                "episode_number": int(с.get("episode_to") or 0),
+                "episode_from": int(с.get("episode_from") or 0),
+                "episodes_total": int(с.get("episodes_total") or 0),
+                "episode_published_at": str(с.get("episode_published_at") or ""),
+                "published_at": str(с.get("episode_published_at") or ""),
+                "published_at_precision": "datetime",
+            })
+        if ХРОНОЛОГИЯ is not None:
+            строки = ХРОНОЛОГИЯ.по_эпизодам(строки)
+        return строки
+
     def _разметка_эпизод_ряда(self, row: dict) -> str:
         """Provider-playable row only — episode number is a real episode, not avail total."""
         изо = заглушка_постера(
@@ -6044,6 +6624,21 @@ class ВидАнимедиа(ВидОснова):
             season = int(row.get("season_number") or row.get("season") or 0)
             episode = int(row.get("episode_number") or row.get("episode") or 0)
             ep_lab = f"с{season} · серия" if season else "серия"
+        elif kind == "snapshot_diff":
+            # Сравнение снимков знает, что серий стало больше, и не знает, какая
+            # именно вышла. Подпись говорит ровно это.
+            ts = _аниме_формат_времени_анонса(
+                row.get("episode_published_at") or row.get("published_at") or "",
+                "datetime")
+            было_ = int(row.get("episode_from") or 0)
+            стало_ = int(row.get("episode_number") or 0)
+            прибавка = max(0, стало_ - было_)
+            сезон = int(row.get("season") or 0)
+            meta = (f"Доступно серий: {стало_}"
+                    + (f" из {row['episodes_total']}" if row.get("episodes_total") else "")
+                    + (f" · {ts}" if ts else ""))
+            episode = прибавка or стало_
+            ep_lab = (f"с{сезон} · новых" if сезон else "новых")
         else:
             # Must not surface catalog_publish as an episode air event.
             ts = _аниме_формат_времени_анонса(
@@ -6352,6 +6947,9 @@ class ВидАнимедиа(ВидОснова):
             f'<a class="zhub__c" data-card-variant="collection-card" '
             f'data-collection-key="{html.escape(к["key"])}" '
             f'href="{html.escape(к["path"])}">'
+            # Название стоит над коллажем — так у оригинала: сначала читаешь,
+            # о чём подборка, потом смотришь, что в ней.
+            f'<span class="zhub__t">{html.escape(к["title"])}</span>'
             f'<span class="zhub__g">'
             + "".join(
                 f'<span class="zhub__p">'
@@ -6359,7 +6957,6 @@ class ВидАнимедиа(ВидОснова):
                 f' alt="" loading="lazy" width="120" height="180"></span>'
                 for п in к["posters"])
             + "</span>"
-            f'<span class="zhub__t">{html.escape(к["title"])}</span>'
             f'<span class="zhub__m">{к["total"]} записей</span>'
             f'<span class="zhub__d">{html.escape(к["description"])}</span>'
             "</a>"
@@ -6412,7 +7009,9 @@ class ВидАнимедиа(ВидОснова):
         кусок = упорядоченные[(стр - 1) * на_странице: стр * на_странице]
         плитки = self._сетка_коллекций(кусок)
         тело = (
-            '<div class="zwrap"><h1 class="zh">Подборки аниме</h1>'
+            # Счётчик в самом заголовке — как у оригинала: «Подборки аниме (N)».
+            f'<div class="zwrap"><h1 class="zh">Подборки аниме '
+            f'<span class="zh__n">({всего})</span></h1>'
             f'<p class="zsub" data-b13-count="{всего}" data-b13-page="{стр}" '
             f'data-b13-pages="{всего_страниц}">Доступно подборок: {всего}'
             + (f' · страница {стр} из {всего_страниц}' if всего_страниц > 1 else "")
@@ -6601,14 +7200,101 @@ class Обработчик(BaseHTTPRequestHandler):
         self.send_header("X-Site-Factory-Build-Id", СБОРКА)
         self.send_header("X-Site-Factory-Artifact-Sha256", МАНИФЕСТ["artifact_sha256"])
         self.send_header("Cache-Control", "no-store")
+        if getattr(self, "_новая_кука", ""):
+            self.send_header(
+                "Set-Cookie",
+                f"{self.COOKIE_ПОСЕТИТЕЛЯ}={self._новая_кука}; Path=/; Max-Age=31536000; "
+                f"SameSite=Lax; HttpOnly")
         self.end_headers()
         if self.command != "HEAD":
             self.wfile.write(тело)
 
+    #: Имя cookie, по которой различаются посетители. Внутри — случайная
+    #: строка, никаких данных о человеке: она нужна только чтобы «один голос
+    #: от одного посетителя» работал без учётных записей, которых у витрины
+    #: нет.
+    COOKIE_ПОСЕТИТЕЛЯ = "amd_v"
+
+    def _прочитать_куку(self) -> str:
+        сырое = self.headers.get("Cookie") or ""
+        for кусок in сырое.split(";"):
+            имя, _, значение = кусок.strip().partition("=")
+            if имя == self.COOKIE_ПОСЕТИТЕЛЯ and значение:
+                return значение[:64]
+        return ""
+
+    def _подготовить_посетителя(self) -> None:
+        """Запомнить ключ посетителя для этого запроса и выдать его, если нет."""
+        self._заголовки_запроса = self.headers
+        self._адрес_клиента = (self.client_address or ("",))[0]
+        кука = self._прочитать_куку()
+        self._новая_кука = ""
+        if not кука:
+            кука = secrets.token_urlsafe(16)
+            self._новая_кука = кука
+        self._куки_посетителя = кука
+
     def do_HEAD(self):
         self.do_GET()
 
+    def do_POST(self):
+        """Формы сообщества. Отвечает перенаправлением: повторная отправка при
+        обновлении страницы не должна ставить второй голос."""
+        self._подготовить_посетителя()
+        разбор = urlparse(self.path)
+        путь = unquote(разбор.path).rstrip("/") or "/"
+        if not путь.startswith("/community/"):
+            return self._отдать(b"", код=404, тип="text/plain; charset=utf-8")
+        длина = int(self.headers.get("Content-Length") or 0)
+        сырое = self.rfile.read(длина).decode("utf-8", "replace") if длина else ""
+        поля = {k: (v[0] if v else "") for k, v in parse_qs(сырое, keep_blank_values=True).items()}
+        slug = str(поля.get("slug") or "").strip()
+        назад = str(поля.get("back") or "/").strip() or "/"
+        if not назад.startswith("/"):
+            назад = "/"
+        хранилище = сообщество()
+        if хранилище is None or not хранилище.доступно or not slug:
+            return self._перенаправить(назад + "?community=unavailable")
+        ключ = self._ключ_посетителя_запроса()
+        try:
+            if путь == "/community/vote":
+                значение = int(поля.get("value") or 0)
+                if значение == 0:
+                    хранилище.снять_голос(slug, ключ)
+                else:
+                    хранилище.добавить_голос(slug, значение, ключ)
+            elif путь == "/community/reaction":
+                хранилище.переключить_реакцию(slug, str(поля.get("reaction") or ""), ключ)
+            elif путь == "/community/comment":
+                хранилище.добавить_комментарий(
+                    slug, поля.get("name") or "", поля.get("text") or "", ключ)
+            else:
+                return self._отдать(b"", код=404, тип="text/plain; charset=utf-8")
+        except (ValueError, RuntimeError) as ош:
+            return self._перенаправить(f"{назад}?community=error&why={quote(str(ош)[:80])}")
+        return self._перенаправить(назад + "?community=ok#community")
+
+    def _ключ_посетителя_запроса(self) -> str:
+        кука = getattr(self, "_куки_посетителя", "")
+        if кука:
+            return кука
+        вперёд = (self.headers.get("X-Forwarded-For") or "").split(",")[0].strip()
+        return вперёд or (self.client_address or ("гость",))[0]
+
+    def _перенаправить(self, куда: str) -> None:
+        self.send_response(303)
+        self.send_header("Location", куда)
+        if getattr(self, "_новая_кука", ""):
+            self.send_header(
+                "Set-Cookie",
+                f"{self.COOKIE_ПОСЕТИТЕЛЯ}={self._новая_кука}; Path=/; Max-Age=31536000; "
+                f"SameSite=Lax; HttpOnly")
+        self.send_header("Content-Length", "0")
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+
     def do_GET(self):
+        self._подготовить_посетителя()
         д = self.данные
         разбор = urlparse(self.path)
         путь = unquote(разбор.path)
@@ -6630,6 +7316,12 @@ class Обработчик(BaseHTTPRequestHandler):
             свод["details_catalog_built_at"] = getattr(
                 self.подробности, "catalog_built_at", "") or ""
             свод["details_coverage"] = int(getattr(self.подробности, "покрытие", 0) or 0)
+            # Состояние горячей перезагрузки: по нему видно, что витрина
+            # подхватывает новый снимок сама, а не ждёт перезапуска.
+            свод["snapshot_watch"] = СНИМОК_СОСТОЯНИЕ.get("наблюдение")
+            свод["snapshot_reloads"] = СНИМОК_СОСТОЯНИЕ.get("перезагрузок", 0)
+            свод["snapshot_reloaded_at"] = СНИМОК_СОСТОЯНИЕ.get("последняя")
+            свод["snapshot_reload_errors"] = СНИМОК_СОСТОЯНИЕ.get("ошибок", 0)
             свод["catalog_details_skew"] = bool(
                 свод["catalog_revision"]
                 and свод["details_catalog_revision"]
@@ -6843,6 +7535,10 @@ class Обработчик(BaseHTTPRequestHandler):
         # отвечает на том имени, по которому к ней пришли, и подставлять сюда
         # другое значило бы объявлять канонической чужую страницу.
         экземпляр.хост = (self.headers.get("Host") or "").split(":")[0]
+        # Вид спрашивает у обработчика ключ посетителя: он живёт в cookie
+        # запроса, а не в самом виде.
+        экземпляр._обработчик = self
+        экземпляр._куки_посетителя = getattr(self, "_куки_посетителя", "")
         return экземпляр
 
     def _переход(self, цель: str):
@@ -7207,14 +7903,105 @@ class Обработчик(BaseHTTPRequestHandler):
         return self._отдать(данные, типы.get(цель.suffix, "application/octet-stream"))
 
 
+
+# ----------------------------------------------------------------------
+#  Горячая перезагрузка снимка каталога
+# ----------------------------------------------------------------------
+#
+# Снимок каталога обновляется конвейером содержимого раз в сутки. Витрина
+# читала его один раз при старте, и до перезапуска «Недавно добавленные» и
+# «Новые серии» показывали вчерашний день: измерено — снимок обновился в
+# 04:11, а живой процесс, поднятый накануне, держал прежний.
+#
+# Поэтому файл наблюдается фоновым потоком. Чтение идёт в новые объекты, и
+# только когда они собраны целиком, ссылки подменяются разом: запрос,
+# пришедший во время перечитывания, обслуживается прежними данными, а не
+# половиной новых. Ошибка чтения оставляет прежний снимок — лучше вчерашний
+# каталог, чем пустая витрина.
+
+СНИМОК_ИНТЕРВАЛ_СЕК = float(os.environ.get("ANIMEDIA_SNAPSHOT_POLL_SECONDS", "30"))
+_снимок_замок = threading.Lock()
+_снимок_отпечаток: tuple = ()
+СНИМОК_СОСТОЯНИЕ: dict = {"перезагрузок": 0, "последняя": None, "ошибок": 0,
+                          "последняя_ошибка": None, "наблюдение": "не запущено",
+                          "оригинальных_названий": 0}
+
+
+def _отпечаток_снимка() -> tuple:
+    метки = []
+    for путь in (КАТАЛОГ_ФАЙЛ, ПОДРОБНОСТИ_ФАЙЛ):
+        if not путь:
+            continue
+        try:
+            st = os.stat(путь)
+            метки.append((str(путь), st.st_mtime_ns, st.st_size))
+        except OSError:
+            метки.append((str(путь), 0, 0))
+    return tuple(метки)
+
+
+def освежить_снимок(принудительно: bool = False) -> bool:
+    """Перечитать каталог, если файл на диске сменился. True — перечитали."""
+    global _снимок_отпечаток
+    with _снимок_замок:
+        отпечаток = _отпечаток_снимка()
+        if not принудительно and отпечаток == _снимок_отпечаток:
+            return False
+        try:
+            данные = Данные(КАТАЛОГ_ФАЙЛ)
+            подробности = Подробности(ПОДРОБНОСТИ_ФАЙЛ)
+            # Оригинальные названия живут в подробностях, а искать по ним
+            # витрина обещает на форме поиска. Указатель достраивается здесь,
+            # пока снимок ещё не подменил боевой.
+            данные.обогатить_подробностями(подробности)
+            индекс = построить_индекс(данные, подробности)
+        except (OSError, ValueError, KeyError) as ош:
+            СНИМОК_СОСТОЯНИЕ["ошибок"] += 1
+            СНИМОК_СОСТОЯНИЕ["последняя_ошибка"] = f"{type(ош).__name__}: {ош}"
+            print(f"[nova] снимок не перечитан, остаёмся на прежнем: {ош}", flush=True)
+            return False
+        Обработчик.данные = данные
+        Обработчик.подробности = подробности
+        Обработчик.индекс = индекс
+        Снимок.сбросить()
+        _снимок_отпечаток = отпечаток
+        СНИМОК_СОСТОЯНИЕ["перезагрузок"] += 1
+        СНИМОК_СОСТОЯНИЕ["последняя"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        СНИМОК_СОСТОЯНИЕ["каталог_собран"] = getattr(данные, "built_at", "")
+        СНИМОК_СОСТОЯНИЕ["ревизия"] = getattr(данные, "revision", "")
+        СНИМОК_СОСТОЯНИЕ["записей"] = len(данные.items)
+        СНИМОК_СОСТОЯНИЕ["оригинальных_названий"] = int(
+            getattr(данные, "оригинальных_названий", 0) or 0)
+        print(f"[nova] снимок перечитан: записей {len(данные.items)} "
+              f"ревизия {getattr(данные, 'revision', '')[:12]}", flush=True)
+        return True
+
+
+def _наблюдать_за_снимком() -> None:
+    while True:
+        time.sleep(max(5.0, СНИМОК_ИНТЕРВАЛ_СЕК))
+        try:
+            освежить_снимок()
+        except Exception as ош:  # поток не должен умирать молча
+            СНИМОК_СОСТОЯНИЕ["ошибок"] += 1
+            СНИМОК_СОСТОЯНИЕ["последняя_ошибка"] = f"{type(ош).__name__}: {ош}"
+            print(f"[nova] наблюдение за снимком: {ош}", flush=True)
+
+
+def запустить_наблюдение_за_снимком() -> None:
+    поток = threading.Thread(target=_наблюдать_за_снимком, name="снимок",
+                             daemon=True)
+    поток.start()
+    СНИМОК_СОСТОЯНИЕ["наблюдение"] = f"каждые {max(5.0, СНИМОК_ИНТЕРВАЛ_СЕК):.0f} с"
+
+
 def main() -> int:
     р = argparse.ArgumentParser(description=__doc__)
     р.add_argument("--host", default="127.0.0.1")
     р.add_argument("--port", type=int, required=True)
     args = р.parse_args()
-    Обработчик.данные = Данные(КАТАЛОГ_ФАЙЛ)
-    Обработчик.подробности = Подробности(ПОДРОБНОСТИ_ФАЙЛ)
-    Обработчик.индекс = построить_индекс(Обработчик.данные, Обработчик.подробности)
+    освежить_снимок(принудительно=True)
+    запустить_наблюдение_за_снимком()
     сервер = ThreadingHTTPServer((args.host, args.port), Обработчик)
     import time as _time
     сервер.started_at = _time.strftime("%Y-%m-%dT%H:%M:%SZ", _time.gmtime())

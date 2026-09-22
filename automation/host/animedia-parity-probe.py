@@ -147,9 +147,19 @@ from pathlib import Path
 
   // --- качество: переполнение, обрезка, мелкие цели, фокус ---
   const обрезанные = [];
+  // Элемент, скрытый приёмом «только для читалок» (1px + clip), не обрезан:
+  // он намеренно не показывается глазу и целиком доступен вспомогательным
+  // технологиям. Считать его дефектом — требовать показать то, что спрятано
+  // осознанно.
+  const только_для_читалок = (el) => {
+    const s = cs(el), r = el.getBoundingClientRect();
+    return r.width <= 2 && r.height <= 2
+           && (s.position === 'absolute' || s.position === 'fixed')
+           && (s.clip !== 'auto' || s.clipPath !== 'none' || s.overflow === 'hidden');
+  };
   for (const sel of ['h1', 'h2', 'button', 'a', '.zt__t', '.zpg a', '.ahub__s']) {
     for (const el of document.querySelectorAll(sel)) {
-      if (!видим(el)) continue;
+      if (!видим(el) || только_для_читалок(el)) continue;
       const s = cs(el);
       if (el.scrollWidth - el.clientWidth > 1 &&
           (s.overflow === 'hidden' || s.textOverflow === 'ellipsis')) {

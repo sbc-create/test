@@ -29,6 +29,7 @@ from pathlib import Path
     ("collections", "/collections/", 200),
     ("collection_detail", "/collection/recently_added/", 200),
     ("title", "/title/nelyud-film-2-stolknovenie/", 200),
+    ("season", "/title/master-lda-i-plameni-2/season-2/", 200),
     ("episode", "/title/master-lda-i-plameni-2/season-2/episode-104/", 200),
     ("schedule", "/schedule/", 200),
     ("not_found", "/definitely-absent-route-xyz/", 404),
@@ -56,7 +57,19 @@ from pathlib import Path
     + ' [class*="filt"] a, [data-rl-dot], [data-rl], header a')].filter(видим)
     .filter((el) => { const r = el.getBoundingClientRect();
       return r.width < 44 || r.height < 44; }).length;
+  const крошки = document.querySelector('.zcr, [class*="breadcrumb"]');
+  const оболочка_плеера = document.querySelector('section.zpl, [class*="player"]');
+  const тяжёлые = [...document.querySelectorAll('iframe, video')].filter(видим).length;
+  const авто = [...document.querySelectorAll('video[autoplay], iframe[allow*="autoplay"]')].length;
+  const h1текст = (document.querySelector('h1') || {}).textContent || '';
   return {
+    breadcrumbs_visible: !!(крошки && видим(крошки)),
+    breadcrumbs_links: крошки ? крошки.querySelectorAll('a').length : 0,
+    player_shell: !!оболочка_плеера,
+    heavy_media_before_action: тяжёлые,
+    autoplay_nodes: авто,
+    h1_text: h1текст.trim().slice(0, 60),
+    grid_cards: document.querySelectorAll('.zg a.zt').length,
     overflow_px: Math.round(document.documentElement.scrollWidth - W),
     h1: document.querySelectorAll('h1').length,
     robots: (document.querySelector('meta[name=robots]') || {}).content || null,
@@ -109,17 +122,26 @@ def main() -> int:
                 for ширина in ШИРИНЫ:
                     ctx = b.new_context(viewport={"width": ширина, "height": 900})
                     стр = ctx.new_page()
+                    ошибки: list[str] = []
+                    стр.on("console", lambda с: ошибки.append(f"{с.type}: {с.text[:120]}")
+                           if с.type in ("error", "warning") else None)
+                    стр.on("pageerror", lambda e: ошибки.append(f"pageerror: {str(e)[:120]}"))
                     for имя, путь, ждём in МАРШРУТЫ:
                         о = стр.goto(f"https://{a.domain}{путь}", wait_until="load",
                                      timeout=60000)
                         стр.wait_for_timeout(200)
                         м = стр.evaluate(ОРАКУЛ)
                         з = о.headers if о else {}
+                        было_ошибок = len(ошибки)
                         я = {"route": имя, "width": ширина, "run": прогон,
                              "http": о.status if о else None, "expected": ждём,
                              "build": з.get("x-site-factory-build-id"),
                              "artifact": з.get("x-site-factory-artifact-sha256"),
-                             "x_robots": з.get("x-robots-tag"), **м}
+                             "template_revision": з.get("x-site-factory-template-revision"),
+                             "content_type": з.get("content-type"),
+                             "x_robots": з.get("x-robots-tag"),
+                             "console": list(ошибки), **м}
+                        ошибки.clear()
                         ячейки.append(я)
                         if прогон == 1:
                             стр.screenshot(path=str(вывод / "screenshots"
@@ -156,6 +178,31 @@ def main() -> int:
                             провалы.append(f"{к}: целей меньше 44 — {я['small_targets']}")
                         if я["footer_build_marker"]:
                             провалы.append(f"{к}: знак сборки в подвале")
+                        # На маршруте, который обязан отдать 404, браузер пишет в
+                        # консоль сам этот ответ. Считать его дефектом — значит
+                        # требовать, чтобы отсутствующая страница отвечала 200.
+                        свои = [с for с in я["console"]
+                                if not (ждём == 404 and "status of 404" in с)]
+                        я["console_filtered"] = свои
+                        if свои:
+                            провалы.append(f"{к}: ошибки консоли {свои[:2]}")
+                        if not (я["content_type"] or "").startswith("text/html"):
+                            провалы.append(f"{к}: content-type {я['content_type']}")
+                        if not я["template_revision"]:
+                            провалы.append(f"{к}: нет ревизии шаблона в заголовке")
+                        if я["autoplay_nodes"]:
+                            провалы.append(f"{к}: автозапуск {я['autoplay_nodes']}")
+                        if имя in ("title", "season", "episode") and not я["breadcrumbs_visible"]:
+                            провалы.append(f"{к}: нет видимых хлебных крошек")
+                        if имя == "episode" and not я["player_shell"]:
+                            провалы.append(f"{к}: нет оболочки плеера")
+                        if имя in ("not_found", "page_huge"):
+                            # Мягкая 404 — это страница с обычной выдачей под кодом 404.
+                            if я["grid_cards"] > 0:
+                                провалы.append(f"{к}: мягкая 404 — на странице {я['grid_cards']} карточек")
+                            if "404" not in я["h1_text"] and "не найдена" not in я["h1_text"].lower():
+                                провалы.append(f"{к}: заголовок 404 не говорит об отсутствии: "
+                                               f"{я['h1_text']!r}")
                     ctx.close()
                     print(f"  прогон {прогон} ширина {ширина:>5}: ячеек {len(МАРШРУТЫ)}",
                           flush=True)

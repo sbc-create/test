@@ -18,15 +18,17 @@ repository:
 
 branch:
   allowed_prefix: "claude/animedia-"
-  # Ветка production-подготовки и ветка работы над паритетом.
+  # Ветка production-подготовки, ветка паритета и ветка переработки интерфейса.
   known:
     - claude/animedia-original-parity-01
     - claude/animedia-template-finalization-01
+    - claude/animedia-ux-rebuild-01
 
 worktrees:
   allowed:
     - /home/claude/wt-animedia-original-parity-01
     - /home/claude/wt-animedia-finalization-01
+    - /home/claude/wt-animedia-ux-rebuild-01
   # Запись в чужой worktree запрещена всегда, даже read-only обход не нужен.
   write_outside_allowed_worktrees: forbidden
 
