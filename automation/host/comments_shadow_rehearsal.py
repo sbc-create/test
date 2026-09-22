@@ -73,6 +73,25 @@ LEGACY = "/srv/lords/animedia-01/current/site"
 API_PREFIX = "/api/comments/"
 
 
+def _die_with_parent() -> None:
+    """Ask the kernel to kill this child when its launcher dies.
+
+    `stop()` terminates the contour properly, but it only runs if the launcher
+    survives to run it. When the launcher is SIGKILLed — a timeout, an OOM
+    kill, a stopped background task — the children are reparented to init and
+    stay up. Two of them did exactly that for 3.8 hours, still serving a
+    release that had since been superseded, holding file descriptors on a host
+    where descriptor and inotify pressure is already a known concern.
+
+    PR_SET_PDEATHSIG closes that hole at the kernel, which is the only place
+    that can close it: no amount of care in the parent survives SIGKILL.
+    """
+    import ctypes
+
+    PR_SET_PDEATHSIG = 1
+    ctypes.CDLL("libc.so.6", use_errno=True).prctl(PR_SET_PDEATHSIG, signal.SIGTERM)
+
+
 def free_port() -> int:
     with socket.socket() as s:
         s.bind(("127.0.0.1", 0))
@@ -215,6 +234,7 @@ class Shadow:
              "--port", str(self.site_port)],
             cwd=str(RELEASE), env=env,
             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            preexec_fn=_die_with_parent,
         ))
         self.procs.append(subprocess.Popen(
             [sys.executable, "-m", "factory.comments_platform.gateway",
@@ -225,6 +245,7 @@ class Shadow:
              "--artifact-checksum", "shadow"],
             cwd=str(REPO), env=env,
             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            preexec_fn=_die_with_parent,
         ))
 
         handler = type("_Bound", (_Router,),
@@ -316,6 +337,7 @@ class Shadow:
              "--credentials", str(self.keys), "--artifact-checksum", "shadow"],
             cwd=str(REPO), env=env,
             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            preexec_fn=_die_with_parent,
         )
         deadline = time.time() + 30
         while time.time() < deadline:

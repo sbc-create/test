@@ -706,3 +706,34 @@ class TestRollbackMovesOnlyWhatItApplied:
         # And the release is only reachable behind --full, so the default
         # invocation — the one in the owner's runbook — cannot move it at all.
         assert ROLLBACK_TEXT.index('[ "$FULL" -eq 0 ]') < release_logic
+
+
+class TestShadowContourCannotOutliveItsLauncher:
+    """`stop()` only runs if the launcher survives to run it.
+
+    When the launcher is SIGKILLed — a timeout, an OOM kill, a stopped
+    background task — the contour's children are reparented to init and keep
+    running. Two of them did exactly that for 3.8 hours, still serving a
+    release that had since been superseded, on a host where descriptor and
+    inotify pressure is already a known concern.
+    """
+
+    REHEARSAL_TEXT = (HARNESS / "comments_shadow_rehearsal.py").read_text(encoding="utf-8")
+
+    def test_every_child_is_told_to_die_with_its_parent(self):
+        spawns = self.REHEARSAL_TEXT.count("subprocess.Popen(")
+        guarded = self.REHEARSAL_TEXT.count("preexec_fn=_die_with_parent")
+        assert spawns > 0, "the rehearsal spawns nothing — the test is looking at the wrong file"
+        assert guarded == spawns, (
+            f"{spawns} child processes are spawned but only {guarded} carry PDEATHSIG"
+        )
+
+    def test_the_kernel_is_what_enforces_it(self):
+        """A parent that is SIGKILLed cannot run cleanup, however careful it is."""
+        assert "PR_SET_PDEATHSIG" in self.REHEARSAL_TEXT
+        assert "prctl" in self.REHEARSAL_TEXT
+
+    def test_graceful_teardown_is_still_there(self):
+        """PDEATHSIG is the backstop, not a replacement for stopping properly."""
+        assert "def stop(" in self.REHEARSAL_TEXT
+        assert "signal.SIGTERM" in self.REHEARSAL_TEXT
