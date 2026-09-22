@@ -38,6 +38,9 @@ NODE_PATH=... node tools/yummy/audit.mjs --base http://127.0.0.1:9310 \
   --routes <маршруты> --out <кат> --label after-site
 python3 tools/yummy/search_probe.py --readmodel <снимок>/readmodel.sqlite3 \
   --app http://127.0.0.1:3101 --front http://127.0.0.1:9310 --out <свидетельство>
+python3 tools/yummy/pagemap_probe.py --base http://127.0.0.1:9310 --out <свидетельство>
+python3 tools/yummy/links_probe.py --base http://127.0.0.1:9310 --cards-only \
+  --out <свидетельство>
 ```
 
 Снимки «до» сняты тем же инструментом из выгрузки исходного HEAD
@@ -148,7 +151,8 @@ python3 tools/yummy/search_probe.py --readmodel <снимок>/readmodel.sqlite3
   `tests/unit/test_knowledge_freeze.py` падает на `b9a154c` — воспроизведено
   на чистой выгрузке дерева. Починка (`python3 -m factory knowledge freeze`)
   затрагивает всю фабрику и принадлежит владельцу базы знаний.
-* **Две ссылки из 164 ведут в 404.** Оба адреса объявлены контуром полем
+* **Две ссылки из 134 адресов карточек ведут в 404** (`links-site.json`,
+  воспроизводится `tools/yummy/links_probe.py`). Оба адреса объявлены контуром полем
   `canonical_path`, оба тайтла попали в «Актуальное», и приложение отвечает
   404 на обе формы адреса. Витрина их не отфильтровывает намеренно:
   единственная возможная проверка — полный GET на каждую ссылку, потому что
