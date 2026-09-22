@@ -30,6 +30,7 @@ import json
 import re
 import struct
 import sys
+import urllib.parse
 import zlib
 from pathlib import Path
 
@@ -255,13 +256,20 @@ try {
 """
 
 
-def настроить_маршруты(page) -> dict:
+def настроить_маршруты(page, свой: str = "http://127.0.0.1") -> dict:
+    """Свои запросы пропускаются, чужие — заглушаются.
+
+    «Свой» определяется базовым адресом прогона, а не жёстким loopback: с
+    подменой резолвера витрина открывается по настоящему имени домена, и
+    проверка на `127.0.0.1` отвергала бы собственные страницы сайта.
+    """
     счёт = {"posters": 0, "blocked_scripts": 0}
+    свой_хост = urllib.parse.urlsplit(свой).hostname or "127.0.0.1"
 
     def обработчик(route):
         запрос = route.request
         url = запрос.url
-        if url.startswith("http://127.0.0.1"):
+        if (urllib.parse.urlsplit(url).hostname or "") == свой_хост:
             return route.continue_()
         if запрос.resource_type == "image":
             счёт["posters"] += 1
@@ -403,6 +411,9 @@ def main() -> int:
     р.add_argument("--tag", default="run")
     р.add_argument("--shots", action="store_true", help="сохранять снимки")
     р.add_argument("--slider-on", default="/", help="где проверять слайдер")
+    р.add_argument("--host-map", default="",
+                   help="домен=порт: адреса открываются по настоящему имени, "
+                        "а резолвер направляет его на loopback")
     а = р.parse_args()
 
     from playwright.sync_api import sync_playwright
@@ -423,7 +434,17 @@ def main() -> int:
         # и на пике свободной памяти остаётся около двух гигабайт. Chromium с
         # процессом на вкладку в такой обстановке убивает ядро, и прогон
         # обрывается без единой строки — то есть выглядит как «тесты прошли».
-        браузер = pw.chromium.launch(args=[
+        доп = []
+        if а.host_map:
+            # Витрина различает домены по заголовку Host. Подменять его вручную
+            # Chromium не даёт, поэтому адрес открывается по настоящему имени,
+            # а резолвер направляет имя на loopback: заголовок получается
+            # настоящим, а сеть наружу не идёт.
+            правила = ",".join(
+                f"MAP {д.split('=')[0]} 127.0.0.1:{д.split('=')[1]}"
+                for д in а.host_map.split(",") if "=" in д)
+            доп.append(f"--host-resolver-rules={правила}")
+        браузер = pw.chromium.launch(args=доп + [
             "--no-sandbox", "--disable-dev-shm-usage", "--disable-gpu",
             "--renderer-process-limit=1", "--js-flags=--max-old-space-size=256",
             "--disable-extensions", "--disable-background-networking",
@@ -433,7 +454,7 @@ def main() -> int:
                 viewport={"width": ширина, "height": 900},
                 device_scale_factor=1, has_touch=ширина <= 768)
             page = контекст.new_page()
-            счёт = настроить_маршруты(page)
+            счёт = настроить_маршруты(page, а.base)
             page.add_init_script(CLS_JS)
             for путь in страницы:
                 page.goto(а.base + путь, wait_until="load", timeout=60000)
