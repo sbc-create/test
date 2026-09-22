@@ -1,0 +1,49 @@
+{
+  "canary_flags_before": {
+    "RATINGS_PUBLIC_READ_ANIMEDIA": 1,
+    "RATINGS_PUBLIC_READ_YUMMY": 1,
+    "RATINGS_NATIVE_WRITE_ANIMEDIA": 0,
+    "RATINGS_NATIVE_WRITE_YUMMY": 0,
+    "RATINGS_ADMIN_READ_ENABLED": 1,
+    "RATINGS_ADMIN_MODERATION_WRITE_ENABLED": 0,
+    "COMMENTS_ENABLED": 0,
+    "COMMENTS_PUBLICATION_ENABLED": 0,
+    "COMMENTS_SEO_RENDERING_ENABLED": 0,
+    "COMMENTS_PUBLIC_ROUTES_ENABLED": 0,
+    "COMMENTS_ADMIN_ENABLED": 0
+  },
+  "canary_flags_after": {
+    "RATINGS_PUBLIC_READ_ANIMEDIA": 1,
+    "RATINGS_PUBLIC_READ_YUMMY": 1,
+    "RATINGS_NATIVE_WRITE_ANIMEDIA": 0,
+    "RATINGS_NATIVE_WRITE_YUMMY": 0,
+    "RATINGS_ADMIN_READ_ENABLED": 1,
+    "RATINGS_ADMIN_MODERATION_WRITE_ENABLED": 0,
+    "COMMENTS_ENABLED": 0,
+    "COMMENTS_PUBLICATION_ENABLED": 0,
+    "COMMENTS_SEO_RENDERING_ENABLED": 0,
+    "COMMENTS_PUBLIC_ROUTES_ENABLED": 0,
+    "COMMENTS_ADMIN_ENABLED": 0
+  },
+  "canary_flags_unchanged": true,
+  "legacy_tables_before": {
+    "community_aggregates": 2,
+    "community_display_projection": 1001,
+    "community_vote_events": 57,
+    "community_votes": 0,
+    "rating_current": 325,
+    "rating_observations": 325,
+    "title_source_mappings": 349
+  },
+  "legacy_tables_after": {
+    "community_votes": 0,
+    "community_vote_events": 57,
+    "community_aggregates": 2,
+    "community_display_projection": 1001,
+    "rating_current": 325,
+    "rating_observations": 325,
+    "title_source_mappings": 349
+  },
+  "legacy_tables_unchanged": true,
+  "note": "этап не включал и не выключал раскатку виджета и не изменял данные, которые читает работающий gateway"
+}

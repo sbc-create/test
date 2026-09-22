@@ -1,0 +1,33 @@
+{
+  "MIGRATION": "0007_unified_ratings",
+  "MIGRATION_DRY_RUN": "PASS",
+  "dry_run_target": "/tmp/claude-1001/-home-claude-wt-ratings-ingestion-01/f814fefc-d1b5-47c2-8285-dd16e4f99c93/scratchpad/migration/dryrun.sqlite",
+  "tables_before": 37,
+  "tables_after": 49,
+  "tables_added": [
+    "unified_editorial_audit",
+    "unified_editorial_ratings",
+    "unified_external_current",
+    "unified_external_snapshots",
+    "unified_import_runs",
+    "unified_metrics",
+    "unified_review_queue",
+    "unified_schedule_state",
+    "unified_source_links",
+    "unified_title_tenant_map",
+    "unified_titles",
+    "unified_user_aggregates"
+  ],
+  "tables_removed": [],
+  "destructive": false,
+  "duration_ms": 2181,
+  "preexisting_tables_with_changed_row_counts": {
+    "schema_migrations": [
+      4,
+      5
+    ]
+  },
+  "ROLLBACK_REHEARSED": "PASS",
+  "tables_after_rollback": 37,
+  "rollback_restored_exact_shape": true
+}

@@ -1,0 +1,8 @@
+{
+  "reason": "записи создал дефект адаптера provider_feed: он не объявлял crosswalk_ids, и проверка «источник подтвердил идентификатор» не могла пройти. Это не настоящие карантины, а следы ошибки, и они удалены вместе с ней.",
+  "review_queue_before": 4000,
+  "review_queue_after": 0,
+  "source_links_before": 4000,
+  "source_links_after": 0,
+  "external_snapshots_affected": 0
+}

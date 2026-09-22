@@ -1,0 +1,770 @@
+[
+  {
+    "title_id": "nova:0191511d-f785-7144-a5fa-f22c9e49482c",
+    "title_ru": "Альдноа.Зеро",
+    "year": 2014,
+    "sources_present": 5,
+    "rows": [
+      {
+        "label": "Наша оценка",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "NO_RATING_AT_SOURCE",
+        "reason": "редакция ещё не поставила оценку"
+      },
+      {
+        "label": "Оценка зрителей",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "UNMEASURED",
+        "reason": "агрегат не рассчитывался для этой площадки"
+      },
+      {
+        "label": "AniList",
+        "raw_value": "70",
+        "source_scale": "0–100",
+        "formula": "normalized = raw / 10",
+        "display_value": "7.0",
+        "vote_count": 48849,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Simkl",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "SOURCE_BLOCKED",
+        "reason": "GET https://api.simkl.com/anime/1 без ключа → HTTP 412 {\"error\":\"client_id_failed\"}. Ключа нет ни в secret storage, ни в inventory. Обход блокировки подделкой client_id или разбором страницы запрещён, поэтому источник остаётся BLOCKED_SECRET."
+      },
+      {
+        "label": "Kitsu",
+        "raw_value": "73.15",
+        "source_scale": "0–100",
+        "formula": "normalized = raw / 10",
+        "display_value": "7.3",
+        "vote_count": 21492,
+        "user_count": 46251,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Shikimori",
+        "raw_value": "7.38",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "7.4",
+        "vote_count": 20954,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "IMDb",
+        "raw_value": "7.1",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "7.1",
+        "vote_count": null,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Кинопоиск",
+        "raw_value": "7.304",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "7.3",
+        "vote_count": null,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      }
+    ]
+  },
+  {
+    "title_id": "nova:0191511d-84b5-71de-91aa-9f28e25c0ec7",
+    "title_ru": "Мир по-прежнему красив",
+    "year": 2014,
+    "sources_present": 5,
+    "rows": [
+      {
+        "label": "Наша оценка",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "NO_RATING_AT_SOURCE",
+        "reason": "редакция ещё не поставила оценку"
+      },
+      {
+        "label": "Оценка зрителей",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "UNMEASURED",
+        "reason": "агрегат не рассчитывался для этой площадки"
+      },
+      {
+        "label": "AniList",
+        "raw_value": "72",
+        "source_scale": "0–100",
+        "formula": "normalized = raw / 10",
+        "display_value": "7.2",
+        "vote_count": 24213,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Simkl",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "SOURCE_BLOCKED",
+        "reason": "GET https://api.simkl.com/anime/1 без ключа → HTTP 412 {\"error\":\"client_id_failed\"}. Ключа нет ни в secret storage, ни в inventory. Обход блокировки подделкой client_id или разбором страницы запрещён, поэтому источник остаётся BLOCKED_SECRET."
+      },
+      {
+        "label": "Kitsu",
+        "raw_value": "76.39",
+        "source_scale": "0–100",
+        "formula": "normalized = raw / 10",
+        "display_value": "7.6",
+        "vote_count": 9077,
+        "user_count": 23219,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Shikimori",
+        "raw_value": "7.57",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "7.6",
+        "vote_count": 17775,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "IMDb",
+        "raw_value": "7.2",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "7.2",
+        "vote_count": null,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Кинопоиск",
+        "raw_value": "7.597",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "7.6",
+        "vote_count": null,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      }
+    ]
+  },
+  {
+    "title_id": "nova:0191511d-8eb9-719f-9276-4b5da943060e",
+    "title_ru": "Пожиратель душ: Класс «НОТ»",
+    "year": 2014,
+    "sources_present": 5,
+    "rows": [
+      {
+        "label": "Наша оценка",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "NO_RATING_AT_SOURCE",
+        "reason": "редакция ещё не поставила оценку"
+      },
+      {
+        "label": "Оценка зрителей",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "UNMEASURED",
+        "reason": "агрегат не рассчитывался для этой площадки"
+      },
+      {
+        "label": "AniList",
+        "raw_value": "55",
+        "source_scale": "0–100",
+        "formula": "normalized = raw / 10",
+        "display_value": "5.5",
+        "vote_count": 18502,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Simkl",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "SOURCE_BLOCKED",
+        "reason": "GET https://api.simkl.com/anime/1 без ключа → HTTP 412 {\"error\":\"client_id_failed\"}. Ключа нет ни в secret storage, ни в inventory. Обход блокировки подделкой client_id или разбором страницы запрещён, поэтому источник остаётся BLOCKED_SECRET."
+      },
+      {
+        "label": "Kitsu",
+        "raw_value": "59.33",
+        "source_scale": "0–100",
+        "formula": "normalized = raw / 10",
+        "display_value": "5.9",
+        "vote_count": 7496,
+        "user_count": 17700,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Shikimori",
+        "raw_value": "5.86",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "5.9",
+        "vote_count": 4925,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "IMDb",
+        "raw_value": "5.6",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "5.6",
+        "vote_count": null,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Кинопоиск",
+        "raw_value": "5.056",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "5.1",
+        "vote_count": null,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      }
+    ]
+  },
+  {
+    "title_id": "nova:0191511d-a11d-75ff-81f2-6062049e3ef9",
+    "title_ru": "С места на место",
+    "year": 2012,
+    "sources_present": 5,
+    "rows": [
+      {
+        "label": "Наша оценка",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "NO_RATING_AT_SOURCE",
+        "reason": "редакция ещё не поставила оценку"
+      },
+      {
+        "label": "Оценка зрителей",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "UNMEASURED",
+        "reason": "агрегат не рассчитывался для этой площадки"
+      },
+      {
+        "label": "AniList",
+        "raw_value": "72",
+        "source_scale": "0–100",
+        "formula": "normalized = raw / 10",
+        "display_value": "7.2",
+        "vote_count": 28589,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Simkl",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "SOURCE_BLOCKED",
+        "reason": "GET https://api.simkl.com/anime/1 без ключа → HTTP 412 {\"error\":\"client_id_failed\"}. Ключа нет ни в secret storage, ни в inventory. Обход блокировки подделкой client_id или разбором страницы запрещён, поэтому источник остаётся BLOCKED_SECRET."
+      },
+      {
+        "label": "Kitsu",
+        "raw_value": "75.25",
+        "source_scale": "0–100",
+        "formula": "normalized = raw / 10",
+        "display_value": "7.5",
+        "vote_count": 11117,
+        "user_count": 26904,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Shikimori",
+        "raw_value": "7.47",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "7.5",
+        "vote_count": 8129,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "IMDb",
+        "raw_value": "6.6",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "6.6",
+        "vote_count": null,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Кинопоиск",
+        "raw_value": "6.596",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "6.6",
+        "vote_count": null,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      }
+    ]
+  },
+  {
+    "title_id": "nova:01915131-ce3f-7c7d-baee-69fc10c2df81",
+    "title_ru": "Санка Рэа",
+    "year": 2012,
+    "sources_present": 5,
+    "rows": [
+      {
+        "label": "Наша оценка",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "NO_RATING_AT_SOURCE",
+        "reason": "редакция ещё не поставила оценку"
+      },
+      {
+        "label": "Оценка зрителей",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "UNMEASURED",
+        "reason": "агрегат не рассчитывался для этой площадки"
+      },
+      {
+        "label": "AniList",
+        "raw_value": "70",
+        "source_scale": "0–100",
+        "formula": "normalized = raw / 10",
+        "display_value": "7.0",
+        "vote_count": 52041,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Simkl",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "SOURCE_BLOCKED",
+        "reason": "GET https://api.simkl.com/anime/1 без ключа → HTTP 412 {\"error\":\"client_id_failed\"}. Ключа нет ни в secret storage, ни в inventory. Обход блокировки подделкой client_id или разбором страницы запрещён, поэтому источник остаётся BLOCKED_SECRET."
+      },
+      {
+        "label": "Kitsu",
+        "raw_value": "73.2",
+        "source_scale": "0–100",
+        "formula": "normalized = raw / 10",
+        "display_value": "7.3",
+        "vote_count": 21091,
+        "user_count": 46620,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Shikimori",
+        "raw_value": "7.26",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "7.3",
+        "vote_count": 28994,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "IMDb",
+        "raw_value": "6.7",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "6.7",
+        "vote_count": null,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Кинопоиск",
+        "raw_value": "6.675",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "6.7",
+        "vote_count": null,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      }
+    ]
+  },
+  {
+    "title_id": "nova:0191511e-a2cc-7cb2-9cd4-53d1543b7b58",
+    "title_ru": "У меня мало друзей",
+    "year": 2011,
+    "sources_present": 5,
+    "rows": [
+      {
+        "label": "Наша оценка",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "NO_RATING_AT_SOURCE",
+        "reason": "редакция ещё не поставила оценку"
+      },
+      {
+        "label": "Оценка зрителей",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "UNMEASURED",
+        "reason": "агрегат не рассчитывался для этой площадки"
+      },
+      {
+        "label": "AniList",
+        "raw_value": "67",
+        "source_scale": "0–100",
+        "formula": "normalized = raw / 10",
+        "display_value": "6.7",
+        "vote_count": 77228,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Simkl",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "SOURCE_BLOCKED",
+        "reason": "GET https://api.simkl.com/anime/1 без ключа → HTTP 412 {\"error\":\"client_id_failed\"}. Ключа нет ни в secret storage, ни в inventory. Обход блокировки подделкой client_id или разбором страницы запрещён, поэтому источник остаётся BLOCKED_SECRET."
+      },
+      {
+        "label": "Kitsu",
+        "raw_value": "72.69",
+        "source_scale": "0–100",
+        "formula": "normalized = raw / 10",
+        "display_value": "7.3",
+        "vote_count": 30499,
+        "user_count": 58917,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Shikimori",
+        "raw_value": "7.13",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "7.1",
+        "vote_count": 38502,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "IMDb",
+        "raw_value": "6.9",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "6.9",
+        "vote_count": null,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Кинопоиск",
+        "raw_value": "7.06",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "7.1",
+        "vote_count": null,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      }
+    ]
+  },
+  {
+    "title_id": "nova:01915125-dfc9-7d04-969b-2972f55252e1",
+    "title_ru": "Уж не зомби ли это?",
+    "year": 2011,
+    "sources_present": 5,
+    "rows": [
+      {
+        "label": "Наша оценка",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "NO_RATING_AT_SOURCE",
+        "reason": "редакция ещё не поставила оценку"
+      },
+      {
+        "label": "Оценка зрителей",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "UNMEASURED",
+        "reason": "агрегат не рассчитывался для этой площадки"
+      },
+      {
+        "label": "AniList",
+        "raw_value": "69",
+        "source_scale": "0–100",
+        "formula": "normalized = raw / 10",
+        "display_value": "6.9",
+        "vote_count": 51884,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Simkl",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "SOURCE_BLOCKED",
+        "reason": "GET https://api.simkl.com/anime/1 без ключа → HTTP 412 {\"error\":\"client_id_failed\"}. Ключа нет ни в secret storage, ни в inventory. Обход блокировки подделкой client_id или разбором страницы запрещён, поэтому источник остаётся BLOCKED_SECRET."
+      },
+      {
+        "label": "Kitsu",
+        "raw_value": "74.07",
+        "source_scale": "0–100",
+        "formula": "normalized = raw / 10",
+        "display_value": "7.4",
+        "vote_count": 23217,
+        "user_count": 47095,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Shikimori",
+        "raw_value": "7.32",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "7.3",
+        "vote_count": 19201,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "IMDb",
+        "raw_value": "6.9",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "6.9",
+        "vote_count": null,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Кинопоиск",
+        "raw_value": "6.641",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "6.6",
+        "vote_count": null,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      }
+    ]
+  },
+  {
+    "title_id": "nova:01915150-ee60-7a05-aea9-89348fc024e4",
+    "title_ru": "Юный лорд — мастер побега",
+    "year": 2024,
+    "sources_present": 5,
+    "rows": [
+      {
+        "label": "Наша оценка",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "NO_RATING_AT_SOURCE",
+        "reason": "редакция ещё не поставила оценку"
+      },
+      {
+        "label": "Оценка зрителей",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "UNMEASURED",
+        "reason": "агрегат не рассчитывался для этой площадки"
+      },
+      {
+        "label": "AniList",
+        "raw_value": "77",
+        "source_scale": "0–100",
+        "formula": "normalized = raw / 10",
+        "display_value": "7.7",
+        "vote_count": 25725,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Simkl",
+        "raw_value": null,
+        "source_scale": null,
+        "formula": null,
+        "display_value": null,
+        "vote_count": null,
+        "user_count": null,
+        "availability": "SOURCE_BLOCKED",
+        "reason": "GET https://api.simkl.com/anime/1 без ключа → HTTP 412 {\"error\":\"client_id_failed\"}. Ключа нет ни в secret storage, ни в inventory. Обход блокировки подделкой client_id или разбором страницы запрещён, поэтому источник остаётся BLOCKED_SECRET."
+      },
+      {
+        "label": "Kitsu",
+        "raw_value": "77.98",
+        "source_scale": "0–100",
+        "formula": "normalized = raw / 10",
+        "display_value": "7.8",
+        "vote_count": 1148,
+        "user_count": 3560,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Shikimori",
+        "raw_value": "7.78",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "7.8",
+        "vote_count": 6472,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "IMDb",
+        "raw_value": "7.3",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "7.3",
+        "vote_count": null,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      },
+      {
+        "label": "Кинопоиск",
+        "raw_value": "7.467",
+        "source_scale": "0–10",
+        "formula": "normalized = raw",
+        "display_value": "7.5",
+        "vote_count": null,
+        "user_count": null,
+        "availability": "PRESENT",
+        "reason": ""
+      }
+    ]
+  }
+]

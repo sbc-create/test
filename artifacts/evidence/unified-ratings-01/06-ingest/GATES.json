@@ -1,0 +1,30 @@
+{
+  "anilist": {
+    "pilot_passed": true,
+    "sample_100_passed": true,
+    "false_automatic_matches": 0,
+    "migration_applied": true,
+    "all_passed": true
+  },
+  "kitsu": {
+    "pilot_passed": true,
+    "sample_100_passed": true,
+    "false_automatic_matches": 0,
+    "migration_applied": true,
+    "all_passed": true
+  },
+  "shikimori": {
+    "pilot_passed": true,
+    "sample_100_passed": true,
+    "false_automatic_matches": 0,
+    "migration_applied": true,
+    "all_passed": true
+  },
+  "simkl": {
+    "pilot_passed": false,
+    "sample_100_passed": false,
+    "false_automatic_matches": 0,
+    "migration_applied": true,
+    "all_passed": false
+  }
+}

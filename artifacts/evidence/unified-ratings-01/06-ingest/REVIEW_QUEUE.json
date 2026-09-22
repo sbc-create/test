@@ -1,0 +1,598 @@
+{
+  "total": 84,
+  "by_reason": {
+    "MOVIE_VS_SERIES": 4,
+    "SPECIAL_OVA_VS_MAIN": 30,
+    "YEAR_MISMATCH": 50
+  },
+  "items": [
+    {
+      "title_id": "nova:0191512c-52bd-7ebd-afa1-e76b07c3849d",
+      "title_ru": "Госпожа Кагуя: В любви как на войне. Первый поцелуй никогда не заканчивается",
+      "source_key": "kitsu",
+      "reason_code": "MOVIE_VS_SERIES",
+      "detail": "myanimelist=52198 совпал, но факты расходятся: MOVIE_VS_SERIES"
+    },
+    {
+      "title_id": "nova:019152a6-f3d9-7cf6-b65e-ed334293fd37",
+      "title_ru": "Ошейник и злоба",
+      "source_key": "anilist",
+      "reason_code": "MOVIE_VS_SERIES",
+      "detail": "myanimelist=39905 совпал, но факты расходятся: MOVIE_VS_SERIES"
+    },
+    {
+      "title_id": "nova:01915167-8600-7ed0-a020-ea85366589ea",
+      "title_ru": "Портрет Цзянху: Тяньган",
+      "source_key": "anilist",
+      "reason_code": "MOVIE_VS_SERIES",
+      "detail": "myanimelist=57480 совпал, но факты расходятся: MOVIE_VS_SERIES"
+    },
+    {
+      "title_id": "nova:01915150-19aa-7dca-a148-cd490b290a20",
+      "title_ru": "Пузырь",
+      "source_key": "anilist",
+      "reason_code": "MOVIE_VS_SERIES",
+      "detail": "myanimelist=50549 совпал, но факты расходятся: MOVIE_VS_SERIES"
+    },
+    {
+      "title_id": "nova:01915121-9e5c-7efd-b95a-84066e74e0be",
+      "title_ru": "Алиса в Пограничье",
+      "source_key": "anilist",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=24781 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:01915121-9e5c-7efd-b95a-84066e74e0be",
+      "title_ru": "Алиса в Пограничье",
+      "source_key": "kitsu",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=24781 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:0191511e-6962-7753-b911-7d31966dd9ef",
+      "title_ru": "Арпеджио голубой стали",
+      "source_key": "anilist",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=18893 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:0191511e-6962-7753-b911-7d31966dd9ef",
+      "title_ru": "Арпеджио голубой стали",
+      "source_key": "kitsu",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=18893 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:0191511e-6962-7753-b911-7d31966dd9ef",
+      "title_ru": "Арпеджио голубой стали",
+      "source_key": "shikimori",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=18893 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:01915147-3ba4-75ce-ae83-d762b601d95a",
+      "title_ru": "Волейбол против «Неудачников»!!",
+      "source_key": "anilist",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=35806 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:01915147-3ba4-75ce-ae83-d762b601d95a",
+      "title_ru": "Волейбол против «Неудачников»!!",
+      "source_key": "kitsu",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=35806 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:0191513e-eace-78e0-9458-2a66676e5e9e",
+      "title_ru": "Детройт, город метала",
+      "source_key": "anilist",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=3702 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:0191513e-eace-78e0-9458-2a66676e5e9e",
+      "title_ru": "Детройт, город метала",
+      "source_key": "kitsu",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=3702 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:0191528a-ac17-7a4a-a2d5-8ee4cb9f5894",
+      "title_ru": "Доктор Стоун: Рюсуй",
+      "source_key": "anilist",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=50612 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:0191528a-ac17-7a4a-a2d5-8ee4cb9f5894",
+      "title_ru": "Доктор Стоун: Рюсуй",
+      "source_key": "kitsu",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=50612 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:019154c7-7040-773c-8afd-f3f33c1c2b84",
+      "title_ru": "Дропкик злого духа: Конец века",
+      "source_key": "anilist",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=55237 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:019154c7-7040-773c-8afd-f3f33c1c2b84",
+      "title_ru": "Дропкик злого духа: Конец века",
+      "source_key": "kitsu",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=55237 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:0191513d-85ba-7af2-9f77-1f00db88a170",
+      "title_ru": "Код Гиасс: Вернувшийся Розе",
+      "source_key": "anilist",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=56835 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:0191513d-85ba-7af2-9f77-1f00db88a170",
+      "title_ru": "Код Гиасс: Вернувшийся Розе",
+      "source_key": "kitsu",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=56835 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:01915277-5f25-7c77-8b63-d41596f00af9",
+      "title_ru": "Магия вернувшегося должна быть особенной",
+      "source_key": "anilist",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=54852 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:01915277-5f25-7c77-8b63-d41596f00af9",
+      "title_ru": "Магия вернувшегося должна быть особенной",
+      "source_key": "kitsu",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=54852 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:01915151-262b-70e8-a474-56e5efb1c2eb",
+      "title_ru": "Моя геройская академия: Воспоминания",
+      "source_key": "kitsu",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=57519 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:019154c2-6a07-7a08-8dcd-8efb0aa5f171",
+      "title_ru": "Последний Серафим: Вампир Шахар",
+      "source_key": "anilist",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=31378 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:019154c2-6a07-7a08-8dcd-8efb0aa5f171",
+      "title_ru": "Последний Серафим: Вампир Шахар",
+      "source_key": "kitsu",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=31378 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:0191513e-f4a8-7f55-8437-7afa1b4898c8",
+      "title_ru": "Псы: Вой во тьму",
+      "source_key": "anilist",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=5593 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:0191513e-f4a8-7f55-8437-7afa1b4898c8",
+      "title_ru": "Псы: Вой во тьму",
+      "source_key": "kitsu",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=5593 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:01915121-62a4-73e0-bf69-35314fef9670",
+      "title_ru": "Святой рыцарь",
+      "source_key": "anilist",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=11005 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:01915121-62a4-73e0-bf69-35314fef9670",
+      "title_ru": "Святой рыцарь",
+      "source_key": "kitsu",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=11005 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:01915130-b29b-77e5-aa25-0ae80d98d13b",
+      "title_ru": "Случай",
+      "source_key": "anilist",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=13283 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:01915130-b29b-77e5-aa25-0ae80d98d13b",
+      "title_ru": "Случай",
+      "source_key": "kitsu",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=13283 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:019154c6-3aa3-7632-be8c-f955a3a0fd8f",
+      "title_ru": "Судьба: Странная подделка. Шёпот рассвета",
+      "source_key": "anilist",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=53127 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:019154c6-3aa3-7632-be8c-f955a3a0fd8f",
+      "title_ru": "Судьба: Странная подделка. Шёпот рассвета",
+      "source_key": "kitsu",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=53127 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:0191513e-4913-7873-88b6-db436e97a130",
+      "title_ru": "Цубаса и светлячки",
+      "source_key": "anilist",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=21781 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:0191513e-4913-7873-88b6-db436e97a130",
+      "title_ru": "Цубаса и светлячки",
+      "source_key": "kitsu",
+      "reason_code": "SPECIAL_OVA_VS_MAIN",
+      "detail": "myanimelist=21781 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+    },
+    {
+      "title_id": "nova:01915121-b040-7e0e-92ca-fc6d59e751fe",
+      "title_ru": "Бесконечные небеса",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=18247 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915121-b040-7e0e-92ca-fc6d59e751fe",
+      "title_ru": "Бесконечные небеса",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=18247 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:019152a9-1e91-7f99-8917-456feb765a7e",
+      "title_ru": "Ванпанчмен 2",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=34134 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915278-d458-7c57-a151-bbb4b1bf33bb",
+      "title_ru": "Власть книжного червя 3",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=42429 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915278-d458-7c57-a151-bbb4b1bf33bb",
+      "title_ru": "Власть книжного червя 3",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=42429 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191526f-a2a5-7279-9b90-27444b7fb1bf",
+      "title_ru": "Восхождение героя щита 3",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=40357 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191526f-a2a5-7279-9b90-27444b7fb1bf",
+      "title_ru": "Восхождение героя щита 3",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=40357 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915289-3fb7-70fb-b819-35fb48dedeb7",
+      "title_ru": "Девушка на час 2",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=42963 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915289-3fb7-70fb-b819-35fb48dedeb7",
+      "title_ru": "Девушка на час 2",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=42963 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191527c-30c8-79d6-8f31-2d272b995119",
+      "title_ru": "Добро пожаловать в класс превосходства 2",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=51096 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191527c-30c8-79d6-8f31-2d272b995119",
+      "title_ru": "Добро пожаловать в класс превосходства 2",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=51096 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191526f-ee89-7461-afc8-850f0185e4ac",
+      "title_ru": "Доктор Стоун: Новый мир",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=48549 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191526f-ee89-7461-afc8-850f0185e4ac",
+      "title_ru": "Доктор Стоун: Новый мир",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=48549 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191527e-ff00-76a3-93e4-01b3ebacd9b6",
+      "title_ru": "Забвение бэттери",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=56165 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191527e-ff00-76a3-93e4-01b3ebacd9b6",
+      "title_ru": "Забвение бэттери",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=56165 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191512f-808e-7ab1-9b64-dadf9283099e",
+      "title_ru": "Звучи, эуфониум!",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=39894 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191512f-808e-7ab1-9b64-dadf9283099e",
+      "title_ru": "Звучи, эуфониум!",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=39894 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191513d-9a1d-7e54-ad39-aec62ac3807b",
+      "title_ru": "Лагерь на свежем воздухе 3",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=53410 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191513d-9a1d-7e54-ad39-aec62ac3807b",
+      "title_ru": "Лагерь на свежем воздухе 3",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=53410 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191512f-2385-7f33-926e-09dea6c51d80",
+      "title_ru": "Лунное путешествие приведёт к новому миру",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=49889 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191512f-2385-7f33-926e-09dea6c51d80",
+      "title_ru": "Лунное путешествие приведёт к новому миру",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=49889 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915277-6852-7289-9497-30d35a54f60b",
+      "title_ru": "Может, я встречу тебя в подземелье? 4",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=47164 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915277-6852-7289-9497-30d35a54f60b",
+      "title_ru": "Может, я встречу тебя в подземелье? 4",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=47164 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191513e-455a-7129-8917-30c7ef624c05",
+      "title_ru": "Музыкальные девчонки",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=29511 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191513e-455a-7129-8917-30c7ef624c05",
+      "title_ru": "Музыкальные девчонки",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=29511 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915278-a890-70ff-ad34-0dbea4a101b5",
+      "title_ru": "Не издевайся, Нагаторо: Вторая атака",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=50197 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915278-a890-70ff-ad34-0dbea4a101b5",
+      "title_ru": "Не издевайся, Нагаторо: Вторая атака",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=50197 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:019152b2-ccf9-7987-8d9a-746a065ca0ca",
+      "title_ru": "Невероятное приключение ДжоДжо: Золотой ветер",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=37991 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191527a-03a0-76ff-9deb-5737adeb96aa",
+      "title_ru": "Невеста чародея 2",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=52955 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191527a-03a0-76ff-9deb-5737adeb96aa",
+      "title_ru": "Невеста чародея 2",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=52955 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915139-750f-7be7-bcda-508e1c44071b",
+      "title_ru": "Непризнанный школой владыка демонов! Сильнейший владыка демонов в истории поступает в академию, переродившись своим потомком",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=48418 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915139-750f-7be7-bcda-508e1c44071b",
+      "title_ru": "Непризнанный школой владыка демонов! Сильнейший владыка демонов в истории поступает в академию, переродившись своим потомком",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=48418 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915139-2211-7a7f-878b-7cf721af35b1",
+      "title_ru": "Непутёвый ученик в школе магии",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=50713 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915139-2211-7a7f-878b-7cf721af35b1",
+      "title_ru": "Непутёвый ученик в школе магии",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=50713 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:019154c2-1dfc-79cb-9026-d995a28a903c",
+      "title_ru": "Ох уж этот экстрасенс Сайки Кусуо! 2",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=34612 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915285-64a8-73a2-bcba-2a2b948ce1b4",
+      "title_ru": "Плод эволюции 2",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=51495 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915285-64a8-73a2-bcba-2a2b948ce1b4",
+      "title_ru": "Плод эволюции 2",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=51495 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915130-9ecd-75ff-9e00-cde235add199",
+      "title_ru": "Повесть о конце света 2",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=49618 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915130-9ecd-75ff-9e00-cde235add199",
+      "title_ru": "Повесть о конце света 2",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=49618 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191514f-ec9f-7187-a624-af66cf51755d",
+      "title_ru": "Расколотая битвой синева небес 5",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=51039 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915137-08cf-70dc-a6da-8112a299c879",
+      "title_ru": "Сказания о демонах и богах 8",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=58744 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915145-0471-735a-a546-6135cc84497b",
+      "title_ru": "Смертоносный герцог и его чёрная горничная 3",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=56738 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915145-0471-735a-a546-6135cc84497b",
+      "title_ru": "Смертоносный герцог и его чёрная горничная 3",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=56738 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915137-3fd5-7232-80f6-a9acbad98005",
+      "title_ru": "Страна десяти тысяч чудес",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=49305 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915282-266d-7596-a2f8-467db2530bf6",
+      "title_ru": "Токийские мстители: Рождественская битва",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=50608 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:01915282-266d-7596-a2f8-467db2530bf6",
+      "title_ru": "Токийские мстители: Рождественская битва",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=50608 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191528c-2f1e-7ec5-83b4-abea5934834d",
+      "title_ru": "Унеси меня на луну 2 сезон",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=50307 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191528c-2f1e-7ec5-83b4-abea5934834d",
+      "title_ru": "Унеси меня на луну 2 сезон",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=50307 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191514a-ef01-7064-87ba-c6709112f45a",
+      "title_ru": "Шаман Кинг: Цветы",
+      "source_key": "anilist",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=51673 совпал, но факты расходятся: YEAR_MISMATCH"
+    },
+    {
+      "title_id": "nova:0191514a-ef01-7064-87ba-c6709112f45a",
+      "title_ru": "Шаман Кинг: Цветы",
+      "source_key": "kitsu",
+      "reason_code": "YEAR_MISMATCH",
+      "detail": "myanimelist=51673 совпал, но факты расходятся: YEAR_MISMATCH"
+    }
+  ]
+}

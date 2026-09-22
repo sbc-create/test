@@ -1,0 +1,1134 @@
+{
+  "machine": {
+    "VERDICT": "PASS_WITH_EXTERNAL_BLOCKER",
+    "MODULE": "UNIFIED_RATINGS",
+    "BRANCH": "claude/unified-ratings-1-10-sources-01",
+    "WORKTREE": "/home/claude/wt-unified-ratings-1-10-sources-01",
+    "START_HEAD": "ec29b2c7fa046c9b05537744191c0ade1b6b673e",
+    "FINAL_HEAD": "42ed19291abcb1f64289de0216ab01735891c721",
+    "UPSTREAM": "NONE",
+    "PUSH_PERFORMED": null,
+    "FORCE_USED": "NO",
+    "WORKTREE_CLEAN": "NO",
+    "FOREIGN_FILES_TOUCHED": 0,
+    "PRODUCTION_SITE_DEPLOYED": 0,
+    "FRONTEND_SERVICES_RESTARTED": 0,
+    "DNS_MUTATIONS": 0,
+    "INDEXABILITY_MUTATIONS": 0,
+    "PAID_EXTERNAL_API_CALLS": 0,
+    "DB_BACKUP_CREATED": "YES",
+    "MIGRATION_DRY_RUN": "PASS",
+    "MIGRATION_APPLIED": "PASS",
+    "ROLLBACK_REHEARSED": "PASS",
+    "COMMUNITY_SCALE": "1-10",
+    "EDITORIAL_SCALE": "1-10",
+    "EXTERNAL_NORMALIZED_SCALE": "1-10",
+    "COMMUNITY_CREATE_PASS": "PASS",
+    "COMMUNITY_UPDATE_PASS": "PASS",
+    "COMMUNITY_RETRACT_PASS": "PASS",
+    "EDITORIAL_RBAC_PASS": "PASS",
+    "AGGREGATE_REBUILD_PASS": "PASS",
+    "ANILIST_STATUS": "READY (557 записей)",
+    "SIMKL_STATUS": "BLOCKED_SECRET (0 записей)",
+    "KITSU_STATUS": "READY (447 записей)",
+    "SHIKIMORI_STATUS": "READY (599 записей)",
+    "IMDB_STATUS": "FEED_ONLY (2000 записей)",
+    "KINOPOISK_STATUS": "FEED_ONLY (2000 записей)",
+    "PILOT_TITLES": 60,
+    "SAMPLE_100_TITLES": 600,
+    "EXACT_MATCHES": 5603,
+    "PENDING_REVIEW": 84,
+    "REJECTED_MATCHES": 84,
+    "FALSE_AUTOMATIC_MATCHES": 0,
+    "SOURCE_RECORDS_INSERTED": 5603,
+    "SOURCE_RECORDS_UPDATED": 2,
+    "SOURCE_RECORDS_UNCHANGED": 398,
+    "SOURCE_RECORDS_FAILED": 1,
+    "INGESTION_ENABLED": "YES",
+    "SCHEDULER_ENABLED": "YES",
+    "TESTS_PASSED": 254,
+    "TESTS_FAILED": 0,
+    "DOUBLE_RUN_MATCH": "YES",
+    "FAKE_USER_VOTES_INSERTED": 0,
+    "SYNTHETIC_VOTES_REMAINING": 0,
+    "TEST_TELEMETRY_IN_PRODUCTION": 0,
+    "READY_FOR_WIDGET_INTEGRATION": "YES (схема и API готовы; публичная раскатка — отдельный этап)",
+    "READY_FOR_ADDITIONAL_TENANTS": "YES (площадка добавляется строкой в unified_title_tenant_map)",
+    "NEXT_SAFE_STEP": "получить secret_ref simkl_client_id, повторить Этап A для Simkl; расширять инкрементальный сбор по расписанию"
+  },
+  "report": {
+    "generated_at": "2026-09-22T01:14:32Z",
+    "module_version": "unified-ratings/1.0.0",
+    "db_path": "/srv/site-factory/repo/var/ratings/ratings.sqlite",
+    "schema_applied": true,
+    "counts": {
+      "unified_titles": 53596,
+      "unified_title_tenant_map": 0,
+      "unified_source_links": 5687,
+      "unified_external_snapshots": 5605,
+      "unified_external_current": 5603,
+      "unified_editorial_ratings": 0,
+      "unified_editorial_audit": 0,
+      "unified_user_aggregates": 0,
+      "unified_import_runs": 19,
+      "unified_review_queue": 84,
+      "unified_schedule_state": 1603
+    },
+    "sources": {
+      "anilist": {
+        "ui_label": "AniList",
+        "status": "READY",
+        "access_method": "OFFICIAL_API",
+        "scale": "0–100",
+        "formula": "divide_10_from_0_100",
+        "contract_verified": true,
+        "blocker": "",
+        "records": {
+          "ABSENT": 5,
+          "OK": 552
+        },
+        "total_records": 557
+      },
+      "simkl": {
+        "ui_label": "Simkl",
+        "status": "BLOCKED_SECRET",
+        "access_method": "OFFICIAL_API",
+        "scale": "0–10",
+        "formula": "identity_0_10",
+        "contract_verified": false,
+        "blocker": "GET https://api.simkl.com/anime/1 без ключа → HTTP 412 {\"error\":\"client_id_failed\"}. Ключа нет ни в secret storage, ни в inventory. Обход блокировки подделкой client_id или разбором страницы запрещён, поэтому источник остаётся BLOCKED_SECRET.",
+        "records": {},
+        "total_records": 0
+      },
+      "kitsu": {
+        "ui_label": "Kitsu",
+        "status": "READY",
+        "access_method": "OFFICIAL_API",
+        "scale": "0–100",
+        "formula": "divide_10_from_0_100",
+        "contract_verified": true,
+        "blocker": "",
+        "records": {
+          "ABSENT": 14,
+          "OK": 433
+        },
+        "total_records": 447
+      },
+      "shikimori": {
+        "ui_label": "Shikimori",
+        "status": "READY",
+        "access_method": "EXISTING_PROJECT_CONNECTOR",
+        "scale": "0–10",
+        "formula": "identity_0_10",
+        "contract_verified": true,
+        "blocker": "",
+        "records": {
+          "ABSENT": 2,
+          "OK": 597
+        },
+        "total_records": 599
+      },
+      "provider_feed_imdb": {
+        "ui_label": "IMDb",
+        "status": "FEED_ONLY",
+        "access_method": "EXISTING_PROJECT_CONNECTOR",
+        "scale": "0–10",
+        "formula": "identity_0_10",
+        "contract_verified": true,
+        "blocker": "Новый сбор с imdb.com не запускается: скрапинг IMDb запрещён.",
+        "records": {
+          "ABSENT": 889,
+          "OK": 1111
+        },
+        "total_records": 2000
+      },
+      "provider_feed_kinopoisk": {
+        "ui_label": "Кинопоиск",
+        "status": "FEED_ONLY",
+        "access_method": "EXISTING_PROJECT_CONNECTOR",
+        "scale": "0–10",
+        "formula": "identity_0_10",
+        "contract_verified": true,
+        "blocker": "Новый сбор с kinopoisk.ru не запускается: скрапинг Кинопоиска запрещён.",
+        "records": {
+          "ABSENT": 1040,
+          "OK": 960
+        },
+        "total_records": 2000
+      }
+    },
+    "matching": {
+      "by_status": {
+        "conflict": 84,
+        "exact": 5603
+      },
+      "by_source": {
+        "anilist": {
+          "conflict": 42,
+          "exact": 557
+        },
+        "kitsu": {
+          "conflict": 41,
+          "exact": 447
+        },
+        "provider_feed_imdb": {
+          "exact": 2000
+        },
+        "provider_feed_kinopoisk": {
+          "exact": 2000
+        },
+        "shikimori": {
+          "conflict": 1,
+          "exact": 599
+        }
+      },
+      "exact": 5603,
+      "pending": 0,
+      "conflict": 84,
+      "rejected": 0,
+      "false_automatic_matches": 0
+    },
+    "runs": [
+      {
+        "run_id": "provider_feed_kinopoisk-c3fc308ad745",
+        "source_key": "provider_feed_kinopoisk",
+        "stage": "INGEST",
+        "status": "OK",
+        "dry_run": 0,
+        "started_at": "2026-09-21T22:03:20Z",
+        "finished_at": "2026-09-21T22:04:17Z",
+        "requested": 2000,
+        "received": 2000,
+        "exact_match": 2000,
+        "pending_match": 0,
+        "rejected": 1040,
+        "inserted": 2000,
+        "updated": 0,
+        "unchanged": 0,
+        "not_found": 0,
+        "failed": 0,
+        "rate_limited": 0,
+        "retries": 0,
+        "next_checkpoint": "11313966",
+        "code_version": "unified-ratings/1.0.0"
+      },
+      {
+        "run_id": "provider_feed_imdb-be08446d281e",
+        "source_key": "provider_feed_imdb",
+        "stage": "INGEST",
+        "status": "OK",
+        "dry_run": 0,
+        "started_at": "2026-09-21T22:02:22Z",
+        "finished_at": "2026-09-21T22:03:19Z",
+        "requested": 2000,
+        "received": 2000,
+        "exact_match": 2000,
+        "pending_match": 0,
+        "rejected": 889,
+        "inserted": 2000,
+        "updated": 0,
+        "unchanged": 0,
+        "not_found": 0,
+        "failed": 0,
+        "rate_limited": 0,
+        "retries": 0,
+        "next_checkpoint": "tt7510222",
+        "code_version": "unified-ratings/1.0.0"
+      },
+      {
+        "run_id": "provider_feed_kinopoisk-8977861b4209",
+        "source_key": "provider_feed_kinopoisk",
+        "stage": "INGEST",
+        "status": "OK",
+        "dry_run": 0,
+        "started_at": "2026-09-21T22:00:32Z",
+        "finished_at": "2026-09-21T22:01:48Z",
+        "requested": 2000,
+        "received": 2000,
+        "exact_match": 0,
+        "pending_match": 2000,
+        "rejected": 0,
+        "inserted": 0,
+        "updated": 0,
+        "unchanged": 0,
+        "not_found": 0,
+        "failed": 0,
+        "rate_limited": 0,
+        "retries": 0,
+        "next_checkpoint": "11313966",
+        "code_version": "unified-ratings/1.0.0"
+      },
+      {
+        "run_id": "provider_feed_imdb-3610dfa00303",
+        "source_key": "provider_feed_imdb",
+        "stage": "INGEST",
+        "status": "OK",
+        "dry_run": 0,
+        "started_at": "2026-09-21T21:59:01Z",
+        "finished_at": "2026-09-21T22:00:30Z",
+        "requested": 2000,
+        "received": 2000,
+        "exact_match": 0,
+        "pending_match": 2000,
+        "rejected": 0,
+        "inserted": 0,
+        "updated": 0,
+        "unchanged": 0,
+        "not_found": 0,
+        "failed": 0,
+        "rate_limited": 0,
+        "retries": 0,
+        "next_checkpoint": "tt7510222",
+        "code_version": "unified-ratings/1.0.0"
+      },
+      {
+        "run_id": "kitsu-32add98b1c65",
+        "source_key": "kitsu",
+        "stage": "INGEST",
+        "status": "OK",
+        "dry_run": 0,
+        "started_at": "2026-09-21T21:57:54Z",
+        "finished_at": "2026-09-21T21:58:46Z",
+        "requested": 400,
+        "received": 389,
+        "exact_match": 356,
+        "pending_match": 33,
+        "rejected": 14,
+        "inserted": 356,
+        "updated": 0,
+        "unchanged": 0,
+        "not_found": 11,
+        "failed": 0,
+        "rate_limited": 0,
+        "retries": 0,
+        "next_checkpoint": "59433",
+        "code_version": "unified-ratings/1.0.0"
+      },
+      {
+        "run_id": "shikimori-8382d814e9d6",
+        "source_key": "shikimori",
+        "stage": "INGEST",
+        "status": "OK",
+        "dry_run": 0,
+        "started_at": "2026-09-21T21:57:30Z",
+        "finished_at": "2026-09-21T21:57:49Z",
+        "requested": 500,
+        "received": 500,
+        "exact_match": 500,
+        "pending_match": 0,
+        "rejected": 2,
+        "inserted": 500,
+        "updated": 0,
+        "unchanged": 0,
+        "not_found": 0,
+        "failed": 0,
+        "rate_limited": 0,
+        "retries": 0,
+        "next_checkpoint": "59433",
+        "code_version": "unified-ratings/1.0.0"
+      },
+      {
+        "run_id": "anilist-e8d72121f404",
+        "source_key": "anilist",
+        "stage": "INGEST",
+        "status": "OK",
+        "dry_run": 0,
+        "started_at": "2026-09-21T21:56:15Z",
+        "finished_at": "2026-09-21T21:57:24Z",
+        "requested": 500,
+        "received": 499,
+        "exact_match": 467,
+        "pending_match": 32,
+        "rejected": 5,
+        "inserted": 467,
+        "updated": 0,
+        "unchanged": 0,
+        "not_found": 1,
+        "failed": 0,
+        "rate_limited": 0,
+        "retries": 0,
+        "next_checkpoint": "59433",
+        "code_version": "unified-ratings/1.0.0"
+      },
+      {
+        "run_id": "shikimori-dff881f08d2f",
+        "source_key": "shikimori",
+        "stage": "SAMPLE_100",
+        "status": "OK",
+        "dry_run": 0,
+        "started_at": "2026-09-21T21:55:31Z",
+        "finished_at": "2026-09-21T21:55:34Z",
+        "requested": 100,
+        "received": 100,
+        "exact_match": 99,
+        "pending_match": 1,
+        "rejected": 0,
+        "inserted": 0,
+        "updated": 2,
+        "unchanged": 97,
+        "not_found": 0,
+        "failed": 0,
+        "rate_limited": 0,
+        "retries": 0,
+        "next_checkpoint": "57480",
+        "code_version": "unified-ratings/1.0.0"
+      },
+      {
+        "run_id": "kitsu-580fc69f3ed3",
+        "source_key": "kitsu",
+        "stage": "SAMPLE_100",
+        "status": "OK",
+        "dry_run": 0,
+        "started_at": "2026-09-21T21:55:14Z",
+        "finished_at": "2026-09-21T21:55:30Z",
+        "requested": 100,
+        "received": 99,
+        "exact_match": 91,
+        "pending_match": 8,
+        "rejected": 0,
+        "inserted": 0,
+        "updated": 0,
+        "unchanged": 91,
+        "not_found": 1,
+        "failed": 0,
+        "rate_limited": 0,
+        "retries": 0,
+        "next_checkpoint": "57480",
+        "code_version": "unified-ratings/1.0.0"
+      },
+      {
+        "run_id": "anilist-9ab826277a70",
+        "source_key": "anilist",
+        "stage": "SAMPLE_100",
+        "status": "OK",
+        "dry_run": 0,
+        "started_at": "2026-09-21T21:54:53Z",
+        "finished_at": "2026-09-21T21:55:13Z",
+        "requested": 100,
+        "received": 100,
+        "exact_match": 90,
+        "pending_match": 10,
+        "rejected": 0,
+        "inserted": 0,
+        "updated": 0,
+        "unchanged": 90,
+        "not_found": 0,
+        "failed": 0,
+        "rate_limited": 0,
+        "retries": 0,
+        "next_checkpoint": "57480",
+        "code_version": "unified-ratings/1.0.0"
+      },
+      {
+        "run_id": "shikimori-4ed13019bcfb",
+        "source_key": "shikimori",
+        "stage": "SAMPLE_100",
+        "status": "OK",
+        "dry_run": 0,
+        "started_at": "2026-09-21T21:49:02Z",
+        "finished_at": "2026-09-21T21:49:05Z",
+        "requested": 100,
+        "received": 100,
+        "exact_match": 99,
+        "pending_match": 1,
+        "rejected": 0,
+        "inserted": 79,
+        "updated": 0,
+        "unchanged": 20,
+        "not_found": 0,
+        "failed": 0,
+        "rate_limited": 0,
+        "retries": 0,
+        "next_checkpoint": "57480",
+        "code_version": "unified-ratings/1.0.0"
+      },
+      {
+        "run_id": "kitsu-077c5075871c",
+        "source_key": "kitsu",
+        "stage": "SAMPLE_100",
+        "status": "PARTIAL",
+        "dry_run": 0,
+        "started_at": "2026-09-21T21:48:47Z",
+        "finished_at": "2026-09-21T21:49:02Z",
+        "requested": 100,
+        "received": 99,
+        "exact_match": 91,
+        "pending_match": 8,
+        "rejected": 0,
+        "inserted": 71,
+        "updated": 0,
+        "unchanged": 20,
+        "not_found": 0,
+        "failed": 1,
+        "rate_limited": 0,
+        "retries": 0,
+        "next_checkpoint": "57480",
+        "code_version": "unified-ratings/1.0.0"
+      },
+      {
+        "run_id": "anilist-a9dbd7d7e7d5",
+        "source_key": "anilist",
+        "stage": "SAMPLE_100",
+        "status": "OK",
+        "dry_run": 0,
+        "started_at": "2026-09-21T21:48:36Z",
+        "finished_at": "2026-09-21T21:48:46Z",
+        "requested": 100,
+        "received": 100,
+        "exact_match": 90,
+        "pending_match": 10,
+        "rejected": 0,
+        "inserted": 70,
+        "updated": 0,
+        "unchanged": 20,
+        "not_found": 0,
+        "failed": 0,
+        "rate_limited": 0,
+        "retries": 0,
+        "next_checkpoint": "57480",
+        "code_version": "unified-ratings/1.0.0"
+      },
+      {
+        "run_id": "shikimori-1855f38e4e35",
+        "source_key": "shikimori",
+        "stage": "PILOT_RERUN",
+        "status": "OK",
+        "dry_run": 0,
+        "started_at": "2026-09-21T21:48:25Z",
+        "finished_at": "2026-09-21T21:48:26Z",
+        "requested": 20,
+        "received": 20,
+        "exact_match": 20,
+        "pending_match": 0,
+        "rejected": 0,
+        "inserted": 0,
+        "updated": 0,
+        "unchanged": 20,
+        "not_found": 0,
+        "failed": 0,
+        "rate_limited": 0,
+        "retries": 0,
+        "next_checkpoint": "56553",
+        "code_version": "unified-ratings/1.0.0"
+      },
+      {
+        "run_id": "kitsu-c5d3bb9cec5a",
+        "source_key": "kitsu",
+        "stage": "PILOT_RERUN",
+        "status": "OK",
+        "dry_run": 0,
+        "started_at": "2026-09-21T21:48:22Z",
+        "finished_at": "2026-09-21T21:48:25Z",
+        "requested": 20,
+        "received": 20,
+        "exact_match": 20,
+        "pending_match": 0,
+        "rejected": 0,
+        "inserted": 0,
+        "updated": 0,
+        "unchanged": 20,
+        "not_found": 0,
+        "failed": 0,
+        "rate_limited": 0,
+        "retries": 0,
+        "next_checkpoint": "56553",
+        "code_version": "unified-ratings/1.0.0"
+      },
+      {
+        "run_id": "anilist-2fbbf90123f8",
+        "source_key": "anilist",
+        "stage": "PILOT_RERUN",
+        "status": "OK",
+        "dry_run": 0,
+        "started_at": "2026-09-21T21:48:21Z",
+        "finished_at": "2026-09-21T21:48:22Z",
+        "requested": 20,
+        "received": 20,
+        "exact_match": 20,
+        "pending_match": 0,
+        "rejected": 0,
+        "inserted": 0,
+        "updated": 0,
+        "unchanged": 20,
+        "not_found": 0,
+        "failed": 0,
+        "rate_limited": 0,
+        "retries": 0,
+        "next_checkpoint": "56553",
+        "code_version": "unified-ratings/1.0.0"
+      },
+      {
+        "run_id": "shikimori-3555f079ca18",
+        "source_key": "shikimori",
+        "stage": "PILOT",
+        "status": "OK",
+        "dry_run": 0,
+        "started_at": "2026-09-21T21:45:40Z",
+        "finished_at": "2026-09-21T21:45:42Z",
+        "requested": 20,
+        "received": 20,
+        "exact_match": 20,
+        "pending_match": 0,
+        "rejected": 0,
+        "inserted": 20,
+        "updated": 0,
+        "unchanged": 0,
+        "not_found": 0,
+        "failed": 0,
+        "rate_limited": 0,
+        "retries": 0,
+        "next_checkpoint": "56553",
+        "code_version": "unified-ratings/1.0.0"
+      },
+      {
+        "run_id": "kitsu-914156da96a1",
+        "source_key": "kitsu",
+        "stage": "PILOT",
+        "status": "OK",
+        "dry_run": 0,
+        "started_at": "2026-09-21T21:44:16Z",
+        "finished_at": "2026-09-21T21:44:21Z",
+        "requested": 20,
+        "received": 20,
+        "exact_match": 20,
+        "pending_match": 0,
+        "rejected": 0,
+        "inserted": 20,
+        "updated": 0,
+        "unchanged": 0,
+        "not_found": 0,
+        "failed": 0,
+        "rate_limited": 0,
+        "retries": 0,
+        "next_checkpoint": "56553",
+        "code_version": "unified-ratings/1.0.0"
+      },
+      {
+        "run_id": "anilist-47b5b09f3b8f",
+        "source_key": "anilist",
+        "stage": "PILOT",
+        "status": "OK",
+        "dry_run": 0,
+        "started_at": "2026-09-21T21:43:57Z",
+        "finished_at": "2026-09-21T21:44:07Z",
+        "requested": 20,
+        "received": 20,
+        "exact_match": 20,
+        "pending_match": 0,
+        "rejected": 0,
+        "inserted": 20,
+        "updated": 0,
+        "unchanged": 0,
+        "not_found": 0,
+        "failed": 0,
+        "rate_limited": 0,
+        "retries": 0,
+        "next_checkpoint": "56553",
+        "code_version": "unified-ratings/1.0.0"
+      }
+    ],
+    "review_queue": {
+      "pending_total": 84,
+      "by_reason": {
+        "YEAR_MISMATCH": 50,
+        "SPECIAL_OVA_VS_MAIN": 30,
+        "MOVIE_VS_SERIES": 4
+      },
+      "items": [
+        {
+          "review_id": 1,
+          "title_id": "nova:0191511e-6962-7753-b911-7d31966dd9ef",
+          "source_key": "anilist",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=18893 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 2,
+          "title_id": "nova:0191513e-455a-7129-8917-30c7ef624c05",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=29511 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 3,
+          "title_id": "nova:0191513e-4913-7873-88b6-db436e97a130",
+          "source_key": "anilist",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=21781 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 4,
+          "title_id": "nova:01915147-3ba4-75ce-ae83-d762b601d95a",
+          "source_key": "anilist",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=35806 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 5,
+          "title_id": "nova:01915150-19aa-7dca-a148-cd490b290a20",
+          "source_key": "anilist",
+          "reason_code": "MOVIE_VS_SERIES",
+          "detail": "myanimelist=50549 совпал, но факты расходятся: MOVIE_VS_SERIES"
+        },
+        {
+          "review_id": 6,
+          "title_id": "nova:01915167-8600-7ed0-a020-ea85366589ea",
+          "source_key": "anilist",
+          "reason_code": "MOVIE_VS_SERIES",
+          "detail": "myanimelist=57480 совпал, но факты расходятся: MOVIE_VS_SERIES"
+        },
+        {
+          "review_id": 7,
+          "title_id": "nova:0191528a-ac17-7a4a-a2d5-8ee4cb9f5894",
+          "source_key": "anilist",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=50612 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 8,
+          "title_id": "nova:019154c2-6a07-7a08-8dcd-8efb0aa5f171",
+          "source_key": "anilist",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=31378 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 9,
+          "title_id": "nova:019154c6-3aa3-7632-be8c-f955a3a0fd8f",
+          "source_key": "anilist",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=53127 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 10,
+          "title_id": "nova:019154c7-7040-773c-8afd-f3f33c1c2b84",
+          "source_key": "anilist",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=55237 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 11,
+          "title_id": "nova:0191511e-6962-7753-b911-7d31966dd9ef",
+          "source_key": "kitsu",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=18893 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 12,
+          "title_id": "nova:0191513e-455a-7129-8917-30c7ef624c05",
+          "source_key": "kitsu",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=29511 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 13,
+          "title_id": "nova:0191513e-4913-7873-88b6-db436e97a130",
+          "source_key": "kitsu",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=21781 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 14,
+          "title_id": "nova:01915147-3ba4-75ce-ae83-d762b601d95a",
+          "source_key": "kitsu",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=35806 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 15,
+          "title_id": "nova:0191528a-ac17-7a4a-a2d5-8ee4cb9f5894",
+          "source_key": "kitsu",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=50612 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 16,
+          "title_id": "nova:019154c2-6a07-7a08-8dcd-8efb0aa5f171",
+          "source_key": "kitsu",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=31378 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 17,
+          "title_id": "nova:019154c6-3aa3-7632-be8c-f955a3a0fd8f",
+          "source_key": "kitsu",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=53127 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 18,
+          "title_id": "nova:019154c7-7040-773c-8afd-f3f33c1c2b84",
+          "source_key": "kitsu",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=55237 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 19,
+          "title_id": "nova:0191511e-6962-7753-b911-7d31966dd9ef",
+          "source_key": "shikimori",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=18893 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 39,
+          "title_id": "nova:01915121-62a4-73e0-bf69-35314fef9670",
+          "source_key": "anilist",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=11005 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 40,
+          "title_id": "nova:01915121-9e5c-7efd-b95a-84066e74e0be",
+          "source_key": "anilist",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=24781 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 41,
+          "title_id": "nova:01915121-b040-7e0e-92ca-fc6d59e751fe",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=18247 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 42,
+          "title_id": "nova:0191512f-2385-7f33-926e-09dea6c51d80",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=49889 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 43,
+          "title_id": "nova:0191512f-808e-7ab1-9b64-dadf9283099e",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=39894 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 44,
+          "title_id": "nova:01915130-9ecd-75ff-9e00-cde235add199",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=49618 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 45,
+          "title_id": "nova:01915130-b29b-77e5-aa25-0ae80d98d13b",
+          "source_key": "anilist",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=13283 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 46,
+          "title_id": "nova:01915139-2211-7a7f-878b-7cf721af35b1",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=50713 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 47,
+          "title_id": "nova:01915139-750f-7be7-bcda-508e1c44071b",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=48418 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 48,
+          "title_id": "nova:0191513d-85ba-7af2-9f77-1f00db88a170",
+          "source_key": "anilist",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=56835 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 49,
+          "title_id": "nova:0191513d-9a1d-7e54-ad39-aec62ac3807b",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=53410 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 50,
+          "title_id": "nova:0191513e-eace-78e0-9458-2a66676e5e9e",
+          "source_key": "anilist",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=3702 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 51,
+          "title_id": "nova:0191513e-f4a8-7f55-8437-7afa1b4898c8",
+          "source_key": "anilist",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=5593 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 52,
+          "title_id": "nova:01915145-0471-735a-a546-6135cc84497b",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=56738 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 53,
+          "title_id": "nova:0191514a-ef01-7064-87ba-c6709112f45a",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=51673 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 54,
+          "title_id": "nova:0191526f-a2a5-7279-9b90-27444b7fb1bf",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=40357 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 55,
+          "title_id": "nova:0191526f-ee89-7461-afc8-850f0185e4ac",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=48549 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 56,
+          "title_id": "nova:01915277-5f25-7c77-8b63-d41596f00af9",
+          "source_key": "anilist",
+          "reason_code": "SPECIAL_OVA_VS_MAIN",
+          "detail": "myanimelist=54852 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN"
+        },
+        {
+          "review_id": 57,
+          "title_id": "nova:01915277-6852-7289-9497-30d35a54f60b",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=47164 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 58,
+          "title_id": "nova:01915278-a890-70ff-ad34-0dbea4a101b5",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=50197 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 59,
+          "title_id": "nova:01915278-d458-7c57-a151-bbb4b1bf33bb",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=42429 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 60,
+          "title_id": "nova:0191527a-03a0-76ff-9deb-5737adeb96aa",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=52955 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 61,
+          "title_id": "nova:0191527c-30c8-79d6-8f31-2d272b995119",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=51096 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 62,
+          "title_id": "nova:0191527e-ff00-76a3-93e4-01b3ebacd9b6",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=56165 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 63,
+          "title_id": "nova:01915282-266d-7596-a2f8-467db2530bf6",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=50608 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 64,
+          "title_id": "nova:01915285-64a8-73a2-bcba-2a2b948ce1b4",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=51495 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 65,
+          "title_id": "nova:01915289-3fb7-70fb-b819-35fb48dedeb7",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=42963 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 66,
+          "title_id": "nova:0191528c-2f1e-7ec5-83b4-abea5934834d",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=50307 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 67,
+          "title_id": "nova:019152a6-f3d9-7cf6-b65e-ed334293fd37",
+          "source_key": "anilist",
+          "reason_code": "MOVIE_VS_SERIES",
+          "detail": "myanimelist=39905 совпал, но факты расходятся: MOVIE_VS_SERIES"
+        },
+        {
+          "review_id": 68,
+          "title_id": "nova:019152a9-1e91-7f99-8917-456feb765a7e",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=34134 совпал, но факты расходятся: YEAR_MISMATCH"
+        },
+        {
+          "review_id": 69,
+          "title_id": "nova:019152b2-ccf9-7987-8d9a-746a065ca0ca",
+          "source_key": "anilist",
+          "reason_code": "YEAR_MISMATCH",
+          "detail": "myanimelist=37991 совпал, но факты расходятся: YEAR_MISMATCH"
+        }
+      ],
+      "auto_published": false
+    },
+    "three_kinds_are_separate": {
+      "external_tables": [
+        "unified_external_current",
+        "unified_external_snapshots"
+      ],
+      "community_tables": [
+        "community_vote_events",
+        "community_votes",
+        "unified_user_aggregates"
+      ],
+      "editorial_tables": [
+        "unified_editorial_audit",
+        "unified_editorial_ratings"
+      ],
+      "shared_score_table": null,
+      "note": "общей таблицы оценок нет: у каждого вида собственная таблица и собственный путь записи"
+    },
+    "metrics": {
+      "source_requests": {
+        "state": "MEASURED",
+        "value": 62.0,
+        "samples": 19,
+        "last_observed_at": "2026-09-21T22:04:17Z"
+      },
+      "source_errors": {
+        "state": "UNMEASURED",
+        "value": null,
+        "reason": "метрика не записывалась в этом прогоне"
+      },
+      "source_rate_limits": {
+        "state": "MEASURED",
+        "value": 0.0,
+        "samples": 19,
+        "last_observed_at": "2026-09-21T22:04:17Z"
+      },
+      "imported": {
+        "state": "MEASURED",
+        "value": 5603.0,
+        "samples": 19,
+        "last_observed_at": "2026-09-21T22:04:17Z"
+      },
+      "updated": {
+        "state": "MEASURED",
+        "value": 2.0,
+        "samples": 19,
+        "last_observed_at": "2026-09-21T22:04:17Z"
+      },
+      "unchanged": {
+        "state": "MEASURED",
+        "value": 398.0,
+        "samples": 19,
+        "last_observed_at": "2026-09-21T22:04:17Z"
+      },
+      "rejected": {
+        "state": "MEASURED",
+        "value": 1950.0,
+        "samples": 19,
+        "last_observed_at": "2026-09-21T22:04:17Z"
+      },
+      "pending_review": {
+        "state": "MEASURED",
+        "value": 4103.0,
+        "samples": 19,
+        "last_observed_at": "2026-09-21T22:04:17Z"
+      },
+      "match_confidence": {
+        "state": "UNMEASURED",
+        "value": null,
+        "reason": "метрика не записывалась в этом прогоне"
+      },
+      "ingestion_latency_ms": {
+        "state": "MEASURED",
+        "value": 508200.62999999995,
+        "samples": 19,
+        "last_observed_at": "2026-09-21T22:04:17Z"
+      },
+      "checkpoint_age_seconds": {
+        "state": "UNMEASURED",
+        "value": null,
+        "reason": "метрика не записывалась в этом прогоне"
+      },
+      "votes_created": {
+        "state": "UNMEASURED",
+        "value": null,
+        "reason": "метрика не записывалась в этом прогоне"
+      },
+      "votes_updated": {
+        "state": "UNMEASURED",
+        "value": null,
+        "reason": "метрика не записывалась в этом прогоне"
+      },
+      "votes_retracted": {
+        "state": "UNMEASURED",
+        "value": null,
+        "reason": "метрика не записывалась в этом прогоне"
+      },
+      "duplicate_requests": {
+        "state": "UNMEASURED",
+        "value": null,
+        "reason": "метрика не записывалась в этом прогоне"
+      },
+      "rate_limit_violations": {
+        "state": "UNMEASURED",
+        "value": null,
+        "reason": "метрика не записывалась в этом прогоне"
+      },
+      "aggregate_rebuild_mismatches": {
+        "state": "UNMEASURED",
+        "value": null,
+        "reason": "метрика не записывалась в этом прогоне"
+      },
+      "db_errors": {
+        "state": "UNMEASURED",
+        "value": null,
+        "reason": "метрика не записывалась в этом прогоне"
+      },
+      "api_latency_p50_ms": {
+        "state": "UNMEASURED",
+        "value": null,
+        "reason": "метрика не записывалась в этом прогоне"
+      },
+      "api_latency_p95_ms": {
+        "state": "UNMEASURED",
+        "value": null,
+        "reason": "метрика не записывалась в этом прогоне"
+      },
+      "widget_rendered": {
+        "state": "UNMEASURED",
+        "value": null,
+        "reason": "метрика не записывалась в этом прогоне"
+      },
+      "write_success": {
+        "state": "UNMEASURED",
+        "value": null,
+        "reason": "метрика не записывалась в этом прогоне"
+      },
+      "write_failure": {
+        "state": "UNMEASURED",
+        "value": null,
+        "reason": "метрика не записывалась в этом прогоне"
+      }
+    }
+  }
+}

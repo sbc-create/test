@@ -1,0 +1,62 @@
+{
+  "enrolled": {
+    "anilist": 557,
+    "kitsu": 447,
+    "shikimori": 599
+  },
+  "plan": {
+    "generated_at": "2026-09-21T22:04:48Z",
+    "concurrent_full_sweep": false,
+    "sources": {
+      "anilist": {
+        "tiers": {
+          "ARCHIVE": {
+            "titles": 556,
+            "soonest_due": "2026-10-21T22:04:26Z",
+            "interval_hours": 720
+          },
+          "RECENT_FINISHED": {
+            "titles": 1,
+            "soonest_due": "2026-09-28T22:04:34Z",
+            "interval_hours": 168
+          }
+        },
+        "total": 557,
+        "paused": 0
+      },
+      "kitsu": {
+        "tiers": {
+          "ARCHIVE": {
+            "titles": 447,
+            "soonest_due": "2026-10-21T22:04:35Z",
+            "interval_hours": 720
+          }
+        },
+        "total": 447,
+        "paused": 0
+      },
+      "shikimori": {
+        "tiers": {
+          "ARCHIVE": {
+            "titles": 598,
+            "soonest_due": "2026-10-21T22:04:41Z",
+            "interval_hours": 720
+          },
+          "RECENT_FINISHED": {
+            "titles": 1,
+            "soonest_due": "2026-09-28T22:04:47Z",
+            "interval_hours": 168
+          }
+        },
+        "total": 599,
+        "paused": 0
+      }
+    },
+    "starting_intervals": {
+      "ONGOING": "раз в 24 часа",
+      "RECENT_FINISHED": "раз в 7 дней",
+      "ARCHIVE": "раз в 30 дней",
+      "RETRY": "ограниченные повторы, не более 5 подряд"
+    }
+  }
+}

@@ -1,0 +1,1283 @@
+{
+  "run_id": "anilist-e8d72121f404",
+  "source_key": "anilist",
+  "status": "OK",
+  "counters": {
+    "requested": 500,
+    "received": 499,
+    "exact_match": 467,
+    "pending_match": 32,
+    "rejected": 5,
+    "inserted": 467,
+    "updated": 0,
+    "unchanged": 0,
+    "not_found": 1,
+    "failed": 0,
+    "rate_limited": 0,
+    "retries": 0
+  },
+  "cursor_out": "59433",
+  "next_checkpoint": "59433",
+  "error": "",
+  "review_items": [
+    {
+      "title_id": "nova:01915121-62a4-73e0-bf69-35314fef9670",
+      "title_ru": "Святой рыцарь",
+      "source": "anilist",
+      "external_id": "11005",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=11005 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "11005",
+          "titles": {
+            "romaji": "Holy Knight",
+            "english": "Holy Knight",
+            "native": "Holy Knight (ホーリーナイト)"
+          },
+          "year": 2012,
+          "kind": "OVA",
+          "episodes": 2
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915121-9e5c-7efd-b95a-84066e74e0be",
+      "title_ru": "Алиса в Пограничье",
+      "source": "anilist",
+      "external_id": "24781",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=24781 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "24781",
+          "titles": {
+            "romaji": "Imawa no Kuni no Alice",
+            "english": "Alice in Borderland",
+            "native": "今際の国のアリス"
+          },
+          "year": 2014,
+          "kind": "OVA",
+          "episodes": 3
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915121-b040-7e0e-92ca-fc6d59e751fe",
+      "title_ru": "Бесконечные небеса",
+      "source": "anilist",
+      "external_id": "18247",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=18247 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "18247",
+          "titles": {
+            "romaji": "IS: Infinite Stratos 2",
+            "english": "Infinite Stratos 2",
+            "native": "IS〈インフィニット・ストラトス〉2"
+          },
+          "year": 2013,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191512f-2385-7f33-926e-09dea6c51d80",
+      "title_ru": "Лунное путешествие приведёт к новому миру",
+      "source": "anilist",
+      "external_id": "49889",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=49889 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "49889",
+          "titles": {
+            "romaji": "Tsuki ga Michibiku Isekai Douchuu 2nd Season",
+            "english": "TSUKIMICHI -Moonlit Fantasy- Season 2",
+            "native": "月が導く異世界道中 第二幕"
+          },
+          "year": 2024,
+          "kind": "TV",
+          "episodes": 25
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191512f-808e-7ab1-9b64-dadf9283099e",
+      "title_ru": "Звучи, эуфониум!",
+      "source": "anilist",
+      "external_id": "39894",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=39894 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "39894",
+          "titles": {
+            "romaji": "Hibike! Euphonium 3",
+            "english": "Sound! Euphonium 3",
+            "native": "響け！ユーフォニアム３"
+          },
+          "year": 2024,
+          "kind": "TV",
+          "episodes": 13
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915130-9ecd-75ff-9e00-cde235add199",
+      "title_ru": "Повесть о конце света 2",
+      "source": "anilist",
+      "external_id": "49618",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=49618 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "49618",
+          "titles": {
+            "romaji": "Shuumatsu no Valkyrie II",
+            "english": "Record of Ragnarok II",
+            "native": "終末のワルキューレⅡ"
+          },
+          "year": 2023,
+          "kind": "ONA",
+          "episodes": 10
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915130-b29b-77e5-aa25-0ae80d98d13b",
+      "title_ru": "Случай",
+      "source": "anilist",
+      "external_id": "13283",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=13283 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "13283",
+          "titles": {
+            "romaji": "one off",
+            "english": "",
+            "native": "わんおふ -one off-"
+          },
+          "year": 2012,
+          "kind": "OVA",
+          "episodes": 4
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915139-2211-7a7f-878b-7cf721af35b1",
+      "title_ru": "Непутёвый ученик в школе магии",
+      "source": "anilist",
+      "external_id": "50713",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=50713 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "50713",
+          "titles": {
+            "romaji": "Mahouka Koukou no Rettousei 3rd Season",
+            "english": "The Irregular at Magic High School Season 3",
+            "native": "魔法科高校の劣等生 第3シーズン"
+          },
+          "year": 2024,
+          "kind": "TV",
+          "episodes": 13
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915139-750f-7be7-bcda-508e1c44071b",
+      "title_ru": "Непризнанный школой владыка демонов! Сильнейший владыка демонов в истории поступает в академию, переродившись своим потомком",
+      "source": "anilist",
+      "external_id": "48418",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=48418 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "48418",
+          "titles": {
+            "romaji": "Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e Kayou II Part 2",
+            "english": "The Misfit of Demon King Academy II (Cour 2)",
+            "native": "魔王学院の不適合者 ～史上最強の魔王の始祖、転生して子孫たちの学校へ通う～ Ⅱ 2クール"
+          },
+          "year": 2024,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191513d-85ba-7af2-9f77-1f00db88a170",
+      "title_ru": "Код Гиасс: Вернувшийся Розе",
+      "source": "anilist",
+      "external_id": "56835",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=56835 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "56835",
+          "titles": {
+            "romaji": "Code Geass: Dakkan no Rozé",
+            "english": "Code Geass: Rozé of the Recapture",
+            "native": "コードギアス 奪還のロゼ"
+          },
+          "year": 2024,
+          "kind": "ONA",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191513d-9a1d-7e54-ad39-aec62ac3807b",
+      "title_ru": "Лагерь на свежем воздухе 3",
+      "source": "anilist",
+      "external_id": "53410",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=53410 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "53410",
+          "titles": {
+            "romaji": "Yuru Camp△ SEASON 3",
+            "english": "Laid-Back Camp Season 3",
+            "native": "ゆるキャン△ SEASON３"
+          },
+          "year": 2024,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191513e-eace-78e0-9458-2a66676e5e9e",
+      "title_ru": "Детройт, город метала",
+      "source": "anilist",
+      "external_id": "3702",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=3702 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "3702",
+          "titles": {
+            "romaji": "Detroit Metal City",
+            "english": "",
+            "native": "デトロイト・メタル・シティ"
+          },
+          "year": 2008,
+          "kind": "OVA",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191513e-f4a8-7f55-8437-7afa1b4898c8",
+      "title_ru": "Псы: Вой во тьму",
+      "source": "anilist",
+      "external_id": "5593",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=5593 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "5593",
+          "titles": {
+            "romaji": "Dogs: Bullets & Carnage",
+            "english": "",
+            "native": "ドッグズ／バレッツ＆カーネイジ"
+          },
+          "year": 2009,
+          "kind": "OVA",
+          "episodes": 4
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915145-0471-735a-a546-6135cc84497b",
+      "title_ru": "Смертоносный герцог и его чёрная горничная 3",
+      "source": "anilist",
+      "external_id": "56738",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=56738 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "56738",
+          "titles": {
+            "romaji": "Shinigami Bocchan to Kuro Maid 3rd Season",
+            "english": "The Duke of Death and His Maid Season 3",
+            "native": "死神坊ちゃんと黒メイド 第3期"
+          },
+          "year": 2024,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191514a-ef01-7064-87ba-c6709112f45a",
+      "title_ru": "Шаман Кинг: Цветы",
+      "source": "anilist",
+      "external_id": "51673",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=51673 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "51673",
+          "titles": {
+            "romaji": "SHAMAN KING: FLOWERS",
+            "english": "SHAMAN KING FLOWERS",
+            "native": "SHAMAN KING FLOWERS"
+          },
+          "year": 2024,
+          "kind": "TV",
+          "episodes": 13
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191526f-a2a5-7279-9b90-27444b7fb1bf",
+      "title_ru": "Восхождение героя щита 3",
+      "source": "anilist",
+      "external_id": "40357",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=40357 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "40357",
+          "titles": {
+            "romaji": "Tate no Yuusha no Nariagari Season 3",
+            "english": "The Rising of the Shield Hero Season 3",
+            "native": "盾の勇者の成り上がり Season 3"
+          },
+          "year": 2023,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191526f-ee89-7461-afc8-850f0185e4ac",
+      "title_ru": "Доктор Стоун: Новый мир",
+      "source": "anilist",
+      "external_id": "48549",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=48549 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "48549",
+          "titles": {
+            "romaji": "Dr. STONE: NEW WORLD",
+            "english": "Dr. STONE New World",
+            "native": "Dr.STONE NEW WORLD"
+          },
+          "year": 2023,
+          "kind": "TV",
+          "episodes": 11
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915277-5f25-7c77-8b63-d41596f00af9",
+      "title_ru": "Магия вернувшегося должна быть особенной",
+      "source": "anilist",
+      "external_id": "54852",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=54852 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "54852",
+          "titles": {
+            "romaji": "Kikansha no Mahou wa Tokubetsu desu",
+            "english": "A Returner's Magic Should Be Special",
+            "native": "帰還者の魔法は特別です"
+          },
+          "year": 2023,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915277-6852-7289-9497-30d35a54f60b",
+      "title_ru": "Может, я встречу тебя в подземелье? 4",
+      "source": "anilist",
+      "external_id": "47164",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=47164 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "47164",
+          "titles": {
+            "romaji": "Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka IV: Shin Shou Meikyuu-hen",
+            "english": "Is It Wrong to Try to Pick Up Girls in a Dungeon? IV",
+            "native": "ダンジョンに出会いを求めるのは間違っているだろうかⅣ 新章 迷宮篇"
+          },
+          "year": 2022,
+          "kind": "TV",
+          "episodes": 11
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915278-a890-70ff-ad34-0dbea4a101b5",
+      "title_ru": "Не издевайся, Нагаторо: Вторая атака",
+      "source": "anilist",
+      "external_id": "50197",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=50197 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "50197",
+          "titles": {
+            "romaji": "Ijiranaide, Nagatoro-san 2nd Attack",
+            "english": "DON'T TOY WITH ME, MISS NAGATORO 2nd Attack",
+            "native": "イジらないで、長瀞さん 2nd Attack"
+          },
+          "year": 2023,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915278-d458-7c57-a151-bbb4b1bf33bb",
+      "title_ru": "Власть книжного червя 3",
+      "source": "anilist",
+      "external_id": "42429",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=42429 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "42429",
+          "titles": {
+            "romaji": "Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 3rd Season",
+            "english": "Ascendance of a Bookworm Season 3",
+            "native": "本好きの下剋上 司書になるためには手段を選んでいられません 第3期"
+          },
+          "year": 2022,
+          "kind": "TV",
+          "episodes": 10
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191527a-03a0-76ff-9deb-5737adeb96aa",
+      "title_ru": "Невеста чародея 2",
+      "source": "anilist",
+      "external_id": "52955",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=52955 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "52955",
+          "titles": {
+            "romaji": "Mahoutsukai no Yome SEASON 2",
+            "english": "The Ancient Magus' Bride Season 2",
+            "native": "魔法使いの嫁 SEASON2"
+          },
+          "year": 2023,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191527c-30c8-79d6-8f31-2d272b995119",
+      "title_ru": "Добро пожаловать в класс превосходства 2",
+      "source": "anilist",
+      "external_id": "51096",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=51096 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "51096",
+          "titles": {
+            "romaji": "Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 2nd Season",
+            "english": "Classroom of the Elite Season 2",
+            "native": "ようこそ実力至上主義の教室へ 2nd Season"
+          },
+          "year": 2022,
+          "kind": "TV",
+          "episodes": 13
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191527e-ff00-76a3-93e4-01b3ebacd9b6",
+      "title_ru": "Забвение бэттери",
+      "source": "anilist",
+      "external_id": "56165",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=56165 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "56165",
+          "titles": {
+            "romaji": "Boukyaku Battery (TV)",
+            "english": "Oblivion Battery",
+            "native": "忘却バッテリー (TV)"
+          },
+          "year": 2024,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915282-266d-7596-a2f8-467db2530bf6",
+      "title_ru": "Токийские мстители: Рождественская битва",
+      "source": "anilist",
+      "external_id": "50608",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=50608 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "50608",
+          "titles": {
+            "romaji": "Tokyo Revengers: Seiya Kessen-hen",
+            "english": "Tokyo Revengers Season 2",
+            "native": "東京リベンジャーズ 聖夜決戦編"
+          },
+          "year": 2023,
+          "kind": "TV",
+          "episodes": 13
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915285-64a8-73a2-bcba-2a2b948ce1b4",
+      "title_ru": "Плод эволюции 2",
+      "source": "anilist",
+      "external_id": "51495",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=51495 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "51495",
+          "titles": {
+            "romaji": "Shin Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei",
+            "english": "The Fruit of Evolution: Before I Knew It, My Life Had It Made Season 2",
+            "native": "真・進化の実～知らないうちに勝ち組人生～"
+          },
+          "year": 2023,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915289-3fb7-70fb-b819-35fb48dedeb7",
+      "title_ru": "Девушка на час 2",
+      "source": "anilist",
+      "external_id": "42963",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=42963 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "42963",
+          "titles": {
+            "romaji": "Kanojo, Okarishimasu 2nd Season",
+            "english": "Rent-a-Girlfriend Season 2",
+            "native": "彼女、お借りします 第2期"
+          },
+          "year": 2022,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191528c-2f1e-7ec5-83b4-abea5934834d",
+      "title_ru": "Унеси меня на луну 2 сезон",
+      "source": "anilist",
+      "external_id": "50307",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=50307 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "50307",
+          "titles": {
+            "romaji": "Tonikaku Kawaii Season 2",
+            "english": "TONIKAWA: Over The Moon For You Season 2",
+            "native": "トニカクカワイイ（シーズン2）"
+          },
+          "year": 2023,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:019152a6-f3d9-7cf6-b65e-ed334293fd37",
+      "title_ru": "Ошейник и злоба",
+      "source": "anilist",
+      "external_id": "39905",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "MOVIE_VS_SERIES"
+      ],
+      "detail": "myanimelist=39905 совпал, но факты расходятся: MOVIE_VS_SERIES",
+      "candidates": [
+        {
+          "external_id": "39905",
+          "titles": {
+            "romaji": "Collar×Malice: deep cover",
+            "english": "",
+            "native": "劇場版 Collar×Malice -deep cover-"
+          },
+          "year": 2023,
+          "kind": "MOVIE",
+          "episodes": 2
+        }
+      ]
+    },
+    {
+      "title_id": "nova:019152a9-1e91-7f99-8917-456feb765a7e",
+      "title_ru": "Ванпанчмен 2",
+      "source": "anilist",
+      "external_id": "34134",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=34134 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "34134",
+          "titles": {
+            "romaji": "One Punch Man 2",
+            "english": "One-Punch Man Season 2",
+            "native": "ワンパンマン 2"
+          },
+          "year": 2019,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:019152b2-ccf9-7987-8d9a-746a065ca0ca",
+      "title_ru": "Невероятное приключение ДжоДжо: Золотой ветер",
+      "source": "anilist",
+      "external_id": "37991",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=37991 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "37991",
+          "titles": {
+            "romaji": "JoJo no Kimyou na Bouken: Ougon no Kaze",
+            "english": "JoJo's Bizarre Adventure: Golden Wind",
+            "native": "ジョジョの奇妙な冒険 黄金の風"
+          },
+          "year": 2018,
+          "kind": "TV",
+          "episodes": 39
+        }
+      ]
+    },
+    {
+      "title_id": "nova:019154c2-1dfc-79cb-9026-d995a28a903c",
+      "title_ru": "Ох уж этот экстрасенс Сайки Кусуо! 2",
+      "source": "anilist",
+      "external_id": "34612",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=34612 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "34612",
+          "titles": {
+            "romaji": "Saiki Kusuo no Ψ-nan 2",
+            "english": "The Disastrous Life of Saiki K. Season 2",
+            "native": "斉木楠雄のΨ難 2"
+          },
+          "year": 2018,
+          "kind": "TV",
+          "episodes": 24
+        }
+      ]
+    }
+  ],
+  "samples": [
+    {
+      "title_id": "nova:01915121-406a-7041-b9eb-7f0243f3d5c1",
+      "title_ru": "Восточный Эдем",
+      "year": 2009,
+      "source": "anilist",
+      "external_id": "5630",
+      "raw_score": "74",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.4",
+      "display": "7.4",
+      "vote_count": 39391,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/5630"
+    },
+    {
+      "title_id": "nova:01915121-6352-73af-9f34-637aae6334d9",
+      "title_ru": "Мост в звёздное небо",
+      "year": 2011,
+      "source": "anilist",
+      "external_id": "10079",
+      "raw_score": "62",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.2",
+      "display": "6.2",
+      "vote_count": 14395,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/10079"
+    },
+    {
+      "title_id": "nova:01915121-6d45-7d8f-94bf-966d6507d1ab",
+      "title_ru": "Сад тысячи цветов: Девушки-самураи",
+      "year": 2013,
+      "source": "anilist",
+      "external_id": "15377",
+      "raw_score": "63",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.3",
+      "display": "6.3",
+      "vote_count": 6854,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/15377"
+    },
+    {
+      "title_id": "nova:01915121-768f-7018-8da4-48b59703e868",
+      "title_ru": "Хёка",
+      "year": 2012,
+      "source": "anilist",
+      "external_id": "12189",
+      "raw_score": "79",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.9",
+      "display": "7.9",
+      "vote_count": 132844,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/12189"
+    },
+    {
+      "title_id": "nova:01915121-9420-79ee-9165-281298e09c80",
+      "title_ru": "Идолмастер: Девушки-золушки",
+      "year": 2015,
+      "source": "anilist",
+      "external_id": "23587",
+      "raw_score": "70",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7",
+      "display": "7.0",
+      "vote_count": 8909,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/20693"
+    },
+    {
+      "title_id": "nova:01915121-9f6c-7473-9e1c-aee9ba4820d0",
+      "title_ru": "Моя сестренка последнее время сама не своя",
+      "year": 2014,
+      "source": "anilist",
+      "external_id": "17777",
+      "raw_score": "57",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "5.7",
+      "display": "5.7",
+      "vote_count": 15429,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/17777"
+    },
+    {
+      "title_id": "nova:01915121-a920-7379-af9d-53798c185faf",
+      "title_ru": "Инари, лисицы и волшебная любовь",
+      "year": 2014,
+      "source": "anilist",
+      "external_id": "20457",
+      "raw_score": "69",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.9",
+      "display": "6.9",
+      "vote_count": 12591,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/20488"
+    },
+    {
+      "title_id": "nova:01915121-b9de-7969-b26c-874ff9a95062",
+      "title_ru": "Супербои в повседневности",
+      "year": 2014,
+      "source": "anilist",
+      "external_id": "25159",
+      "raw_score": "67",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.7",
+      "display": "6.7",
+      "vote_count": 40998,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/20646"
+    },
+    {
+      "title_id": "nova:01915121-c379-7907-921a-a0330bca89fb",
+      "title_ru": "Лис из секретной службы и я",
+      "year": 2012,
+      "source": "anilist",
+      "external_id": "11013",
+      "raw_score": "69",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.9",
+      "display": "6.9",
+      "vote_count": 35779,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/11013"
+    },
+    {
+      "title_id": "nova:01915121-e480-7569-905f-9ae8b7b8ce7c",
+      "title_ru": "Друзья на неделю",
+      "year": 2014,
+      "source": "anilist",
+      "external_id": "21327",
+      "raw_score": "73",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.3",
+      "display": "7.3",
+      "vote_count": 29230,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/20527"
+    },
+    {
+      "title_id": "nova:01915121-ec44-7051-abab-5333a19f97b3",
+      "title_ru": "Клест",
+      "year": 2015,
+      "source": "anilist",
+      "external_id": "25429",
+      "raw_score": "54",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "5.4",
+      "display": "5.4",
+      "vote_count": 12067,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/20746"
+    },
+    {
+      "title_id": "nova:01915121-f30a-79b2-9cb5-94f99a3ac89b",
+      "title_ru": "Всесильный Фафнир",
+      "year": 2015,
+      "source": "anilist",
+      "external_id": "24873",
+      "raw_score": "57",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "5.7",
+      "display": "5.7",
+      "vote_count": 14014,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/20758"
+    },
+    {
+      "title_id": "nova:01915125-0522-7978-a60f-5d24fdccb5a2",
+      "title_ru": "Проект Кей: Возвращение Королей",
+      "year": 2015,
+      "source": "anilist",
+      "external_id": "27991",
+      "raw_score": "73",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.3",
+      "display": "7.3",
+      "vote_count": 25293,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/20913"
+    },
+    {
+      "title_id": "nova:01915125-1c70-79fc-a029-5f9c72574428",
+      "title_ru": "Вальврейв Освободитель",
+      "year": 2013,
+      "source": "anilist",
+      "external_id": "16668",
+      "raw_score": "67",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.7",
+      "display": "6.7",
+      "vote_count": 14691,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/16668"
+    },
+    {
+      "title_id": "nova:01915125-38c8-779c-8c8f-3295305b0e95",
+      "title_ru": "Игры богов",
+      "year": 2014,
+      "source": "anilist",
+      "external_id": "21563",
+      "raw_score": "65",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.5",
+      "display": "6.5",
+      "vote_count": 9514,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/20542"
+    },
+    {
+      "title_id": "nova:01915125-40c2-7395-8b4d-7244d1279e29",
+      "title_ru": "Карнавал",
+      "year": 2013,
+      "source": "anilist",
+      "external_id": "16035",
+      "raw_score": "66",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.6",
+      "display": "6.6",
+      "vote_count": 13344,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/16035"
+    },
+    {
+      "title_id": "nova:01915125-4b0e-7f39-8f58-ba534b5031d4",
+      "title_ru": "Истории мечей",
+      "year": 2010,
+      "source": "anilist",
+      "external_id": "6594",
+      "raw_score": "81",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "8.1",
+      "display": "8.1",
+      "vote_count": 42065,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/6594"
+    },
+    {
+      "title_id": "nova:01915125-6e08-7c91-ae9d-b3a072c60d38",
+      "title_ru": "Убить или быть убитым",
+      "year": 2013,
+      "source": "anilist",
+      "external_id": "18679",
+      "raw_score": "79",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.9",
+      "display": "7.9",
+      "vote_count": 181363,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/18679"
+    },
+    {
+      "title_id": "nova:01915125-8b22-7997-af40-bfa095bcc8f9",
+      "title_ru": "Достучаться до тебя",
+      "year": 2009,
+      "source": "anilist",
+      "external_id": "6045",
+      "raw_score": "79",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.9",
+      "display": "7.9",
+      "vote_count": 91489,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/6045"
+    },
+    {
+      "title_id": "nova:01915125-ccaf-745d-a6f1-8a84b068dc0a",
+      "title_ru": "Город, в котором ты живёшь",
+      "year": 2013,
+      "source": "anilist",
+      "external_id": "17741",
+      "raw_score": "64",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.4",
+      "display": "6.4",
+      "vote_count": 10946,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/17741"
+    },
+    {
+      "title_id": "nova:01915125-d67d-74ac-842f-ed29809cbfb0",
+      "title_ru": "Ты и я",
+      "year": 2012,
+      "source": "anilist",
+      "external_id": "11739",
+      "raw_score": "77",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.7",
+      "display": "7.7",
+      "vote_count": 6890,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/11739"
+    },
+    {
+      "title_id": "nova:01915125-dfc9-7d04-969b-2972f55252e1",
+      "title_ru": "Уж не зомби ли это?",
+      "year": 2011,
+      "source": "anilist",
+      "external_id": "8841",
+      "raw_score": "69",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.9",
+      "display": "6.9",
+      "vote_count": 51884,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/8841"
+    },
+    {
+      "title_id": "nova:01915126-023e-71c1-a1ac-841083741a40",
+      "title_ru": "Взор ужаса",
+      "year": 2015,
+      "source": "anilist",
+      "external_id": "30948",
+      "raw_score": "47",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "4.7",
+      "display": "4.7",
+      "vote_count": 3377,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/21224"
+    },
+    {
+      "title_id": "nova:01915126-0b57-7ab4-9986-c99d6ffdf4d3",
+      "title_ru": "Темный дворецкий",
+      "year": 2008,
+      "source": "anilist",
+      "external_id": "4898",
+      "raw_score": "72",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.2",
+      "display": "7.2",
+      "vote_count": 94661,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/4898"
+    },
+    {
+      "title_id": "nova:01915126-2ab1-75d0-885b-d092934642d4",
+      "title_ru": "Темный дворецкий 2",
+      "year": 2010,
+      "source": "anilist",
+      "external_id": "6707",
+      "raw_score": "67",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.7",
+      "display": "6.7",
+      "vote_count": 47318,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://anilist.co/anime/6707"
+    }
+  ]
+}

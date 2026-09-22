@@ -1,0 +1,298 @@
+{
+  "generated_at": "2026-09-21T21:42:45Z",
+  "sources": {
+    "anilist": {
+      "display_name": "AniList",
+      "ui_label": "AniList",
+      "access_method": "OFFICIAL_API",
+      "status": "READY",
+      "requires_credential": false,
+      "credential_ref": "",
+      "documented_rate_limit": "X-RateLimit-Limit: 30 запросов в минуту (наблюдено 2026-09-21)",
+      "our_cap": {
+        "max_rps": 0.4,
+        "max_requests_per_minute": 20
+      },
+      "legal_basis": "публичный официальный GraphQL API без ключа; запросы read-only",
+      "blocker": "",
+      "scale": {
+        "source_scale": "0–100",
+        "formula": "divide_10_from_0_100",
+        "formula_expression": "normalized = raw / 10",
+        "measures": "взвешенная средняя оценка пользователей AniList",
+        "raw_field": "Media.averageScore",
+        "vote_count_field": "Media.stats.scoreDistribution[].amount (сумма)",
+        "user_count_field": "",
+        "verified": true,
+        "verified_evidence": "artifacts/evidence/unified-ratings-01/01-discovery/STAGE_A_DISCOVERY.json: Media(id:1).averageScore=86, stats.scoreDistribution ключи 10..100 шагом 10"
+      },
+      "not_a_rating": [
+        "popularity",
+        "favourites",
+        "rankings",
+        "trending"
+      ],
+      "health": {
+        "source_key": "anilist",
+        "state": "HEALTHY",
+        "probe_id": 1,
+        "rate_limit_headers": {
+          "X-RateLimit-Limit": "30",
+          "X-RateLimit-Remaining": "29"
+        },
+        "usage": {
+          "requests": 1,
+          "retries": 0,
+          "rate_limited": 0,
+          "request_count": 1,
+          "requests_last_minute": 1,
+          "max_per_minute": 20,
+          "max_rps": 0.4
+        }
+      },
+      "capabilities": {
+        "source_key": "anilist",
+        "supports_batch": true,
+        "max_batch_size": 25,
+        "supports_vote_count": true,
+        "supports_user_count": false,
+        "supports_distribution": true,
+        "supports_source_side_incremental": false,
+        "incremental_mode": "локальный checkpoint по нашей очереди тайтлов; источник не отдаёт «что изменилось с момента X» для произвольного набора",
+        "external_id_space": "anilist_media_id; сопоставление через idMal",
+        "requires_credential": false
+      }
+    },
+    "kitsu": {
+      "display_name": "Kitsu",
+      "ui_label": "Kitsu",
+      "access_method": "OFFICIAL_API",
+      "status": "READY",
+      "requires_credential": false,
+      "credential_ref": "",
+      "documented_rate_limit": "лимит в заголовках не объявлен; используем консервативный cap",
+      "our_cap": {
+        "max_rps": 0.5,
+        "max_requests_per_minute": 20
+      },
+      "legal_basis": "публичный официальный JSON:API без ключа; запросы read-only",
+      "blocker": "",
+      "scale": {
+        "source_scale": "0–100",
+        "formula": "divide_10_from_0_100",
+        "formula_expression": "normalized = raw / 10",
+        "measures": "средняя оценка пользователей Kitsu",
+        "raw_field": "data.attributes.averageRating",
+        "vote_count_field": "data.attributes.ratingFrequencies (сумма значений)",
+        "user_count_field": "data.attributes.userCount",
+        "verified": true,
+        "verified_evidence": "artifacts/evidence/unified-ratings-01/01-discovery/STAGE_A_DISCOVERY.json: anime/1 averageRating='82.27' (строка), ratingFrequencies ключи 2..20 — это шкала 1–10 с шагом 0.5, умноженная на 2"
+      },
+      "not_a_rating": [
+        "popularityRank",
+        "ratingRank",
+        "userCount",
+        "favoritesCount"
+      ],
+      "health": {
+        "source_key": "kitsu",
+        "state": "HEALTHY",
+        "usage": {
+          "requests": 1,
+          "retries": 0,
+          "rate_limited": 0,
+          "request_count": 1,
+          "requests_last_minute": 1,
+          "max_per_minute": 20,
+          "max_rps": 0.5
+        }
+      },
+      "capabilities": {
+        "source_key": "kitsu",
+        "supports_batch": true,
+        "max_batch_size": 20,
+        "supports_vote_count": true,
+        "supports_user_count": true,
+        "supports_distribution": true,
+        "supports_source_side_incremental": false,
+        "incremental_mode": "локальный checkpoint по нашей очереди тайтлов; сортировка по updatedAt источником поддерживается, но охватывает весь каталог Kitsu, а не наш",
+        "external_id_space": "kitsu_anime_id; сопоставление через mappings/myanimelist",
+        "requires_credential": false
+      }
+    },
+    "simkl": {
+      "display_name": "Simkl",
+      "ui_label": "Simkl",
+      "access_method": "OFFICIAL_API",
+      "status": "BLOCKED_SECRET",
+      "requires_credential": true,
+      "credential_ref": "secret_ref: simkl_client_id (в secret storage отсутствует)",
+      "documented_rate_limit": "не измерено: до получения ключа запросы не выполняются",
+      "our_cap": {
+        "max_rps": 0.5,
+        "max_requests_per_minute": 20
+      },
+      "legal_basis": "официальный API требует регистрации приложения и client_id",
+      "blocker": "GET https://api.simkl.com/anime/1 без ключа → HTTP 412 {\"error\":\"client_id_failed\"}. Ключа нет ни в secret storage, ни в inventory. Обход блокировки подделкой client_id или разбором страницы запрещён, поэтому источник остаётся BLOCKED_SECRET.",
+      "scale": {
+        "source_scale": "0–10",
+        "formula": "identity_0_10",
+        "formula_expression": "normalized = raw",
+        "measures": "средняя оценка пользователей Simkl",
+        "raw_field": "ratings.simkl.rating",
+        "vote_count_field": "ratings.simkl.votes",
+        "user_count_field": "",
+        "verified": false,
+        "verified_evidence": ""
+      },
+      "not_a_rating": [],
+      "health": {
+        "source_key": "simkl",
+        "state": "BLOCKED",
+        "reason": "CREDENTIAL_MISSING",
+        "blocker": "GET https://api.simkl.com/anime/1 без ключа → HTTP 412 {\"error\":\"client_id_failed\"}. Ключа нет ни в secret storage, ни в inventory. Обход блокировки подделкой client_id или разбором страницы запрещён, поэтому источник остаётся BLOCKED_SECRET.",
+        "network_calls_made": 0,
+        "unblock_action": "выдать secret_ref simkl_client_id"
+      }
+    },
+    "shikimori": {
+      "display_name": "Shikimori",
+      "ui_label": "Shikimori",
+      "access_method": "EXISTING_PROJECT_CONNECTOR",
+      "status": "READY",
+      "requires_credential": false,
+      "credential_ref": "secret_ref: shikimori_api_token (опционально)",
+      "documented_rate_limit": "5 rps / 90 rpm по документации источника",
+      "our_cap": {
+        "max_rps": 2.0,
+        "max_requests_per_minute": 60
+      },
+      "legal_basis": "docs/rights/shikimori-ratings.md; разрешение владельца 2026-09-19, config/rating-sources.yaml → authorization.status=granted",
+      "blocker": "",
+      "scale": {
+        "source_scale": "0–10",
+        "formula": "identity_0_10",
+        "formula_expression": "normalized = raw",
+        "measures": "оценка Shikimori (не оценка MAL)",
+        "raw_field": "animes[].score",
+        "vote_count_field": "animes[].scoresStats[].count (сумма)",
+        "user_count_field": "",
+        "verified": true,
+        "verified_evidence": "docs/rights/shikimori-ratings.md + существующий проверенный адаптер factory/ratings/adapters/shikimori.py (live probe 2026-09-19)"
+      },
+      "not_a_rating": [
+        "malId"
+      ],
+      "health": {
+        "source_key": "shikimori",
+        "state": "HEALTHY",
+        "probe": {
+          "adapter_version": "shikimori-graphql/1.0.0",
+          "endpoint": "https://shikimori.io/api/graphql",
+          "required_fields_present": true,
+          "fields_checked": [
+            "id",
+            "malId",
+            "name",
+            "russian",
+            "score",
+            "scoresStats",
+            "updatedAt",
+            "url"
+          ],
+          "batch_ids_csv": true,
+          "sample_ok": true,
+          "request_headers_redacted": {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "User-Agent": "site-factory-ratings/1.0 (+ratings-ingestion)"
+          },
+          "score_semantics": "shikimori_score_not_mal",
+          "vote_count_from": "sum(scoresStats.count)",
+          "documented_limits": {
+            "rps": 5,
+            "rpm": 90
+          },
+          "operational_cap": {
+            "rps": 2.0,
+            "rpm": 60
+          }
+        }
+      },
+      "capabilities": {
+        "source_key": "shikimori",
+        "supports_batch": true,
+        "max_batch_size": 50,
+        "supports_vote_count": true,
+        "supports_user_count": false,
+        "supports_distribution": true,
+        "supports_source_side_incremental": false,
+        "incremental_mode": "локальный checkpoint по нашей очереди тайтлов",
+        "external_id_space": "shikimori_id; malId — ключ сопоставления, не оценка",
+        "requires_credential": false
+      }
+    },
+    "provider_feed_imdb": {
+      "display_name": "IMDb (договорный фид поставщика)",
+      "ui_label": "IMDb",
+      "access_method": "EXISTING_PROJECT_CONNECTOR",
+      "status": "FEED_ONLY",
+      "requires_credential": false,
+      "credential_ref": "",
+      "documented_rate_limit": "наружу не ходит: значения уже есть в загруженном фиде",
+      "our_cap": {
+        "max_rps": 0.0,
+        "max_requests_per_minute": 0
+      },
+      "legal_basis": "docs/rights/provider-feed-ratings.md; разрешение владельца 2026-09-06",
+      "blocker": "Новый сбор с imdb.com не запускается: скрапинг IMDb запрещён.",
+      "scale": {
+        "source_scale": "0–10",
+        "formula": "identity_0_10",
+        "formula_expression": "normalized = raw",
+        "measures": "оценка IMDb, переданная в договорном фиде поставщика",
+        "raw_field": "catalog_item.imdb_rating",
+        "vote_count_field": "",
+        "user_count_field": "",
+        "verified": true,
+        "verified_evidence": "docs/rights/provider-feed-ratings.md; поле уже приходит в фиде"
+      },
+      "not_a_rating": [],
+      "health": {
+        "state": "UNMEASURED",
+        "reason": "probe не запрашивался"
+      }
+    },
+    "provider_feed_kinopoisk": {
+      "display_name": "Кинопоиск (договорный фид поставщика)",
+      "ui_label": "Кинопоиск",
+      "access_method": "EXISTING_PROJECT_CONNECTOR",
+      "status": "FEED_ONLY",
+      "requires_credential": false,
+      "credential_ref": "",
+      "documented_rate_limit": "наружу не ходит: значения уже есть в загруженном фиде",
+      "our_cap": {
+        "max_rps": 0.0,
+        "max_requests_per_minute": 0
+      },
+      "legal_basis": "docs/rights/provider-feed-ratings.md; разрешение владельца 2026-09-06",
+      "blocker": "Новый сбор с kinopoisk.ru не запускается: скрапинг Кинопоиска запрещён.",
+      "scale": {
+        "source_scale": "0–10",
+        "formula": "identity_0_10",
+        "formula_expression": "normalized = raw",
+        "measures": "оценка Кинопоиска, переданная в договорном фиде поставщика",
+        "raw_field": "catalog_item.kinopoisk_rating",
+        "vote_count_field": "",
+        "user_count_field": "",
+        "verified": true,
+        "verified_evidence": "docs/rights/provider-feed-ratings.md; поле уже приходит в фиде"
+      },
+      "not_a_rating": [],
+      "health": {
+        "state": "UNMEASURED",
+        "reason": "probe не запрашивался"
+      }
+    }
+  }
+}

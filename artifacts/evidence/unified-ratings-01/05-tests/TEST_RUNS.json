@@ -1,0 +1,30 @@
+{
+  "RUN_1": {
+    "passed": 254,
+    "failed": 0,
+    "tail": "254 passed in 164.13s (0:02:44)"
+  },
+  "RUN_2": {
+    "passed": 254,
+    "failed": 0,
+    "tail": "254 passed in 113.60s (0:01:53)"
+  },
+  "TESTS_PASSED": 254,
+  "TESTS_FAILED": 0,
+  "DOUBLE_RUN_MATCH": "YES",
+  "COMMUNITY_CREATE_PASS": "PASS",
+  "COMMUNITY_UPDATE_PASS": "PASS",
+  "COMMUNITY_RETRACT_PASS": "PASS",
+  "EDITORIAL_RBAC_PASS": "PASS",
+  "AGGREGATE_REBUILD_PASS": "PASS",
+  "production_residue": {
+    "community_votes_total": 0,
+    "votes_matching_test_actor_patterns": 0,
+    "unified_titles_from_fixtures": 0,
+    "unified_editorial_ratings": 0,
+    "unified_user_aggregates": 0
+  },
+  "FAKE_USER_VOTES_INSERTED": 0,
+  "SYNTHETIC_VOTES_REMAINING": 0,
+  "TEST_TELEMETRY_IN_PRODUCTION": 0
+}

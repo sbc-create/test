@@ -1,0 +1,667 @@
+{
+  "run_id": "kitsu-580fc69f3ed3",
+  "source_key": "kitsu",
+  "status": "OK",
+  "counters": {
+    "requested": 100,
+    "received": 99,
+    "exact_match": 91,
+    "pending_match": 8,
+    "rejected": 0,
+    "inserted": 0,
+    "updated": 0,
+    "unchanged": 91,
+    "not_found": 1,
+    "failed": 0,
+    "rate_limited": 0,
+    "retries": 0
+  },
+  "cursor_out": "57480",
+  "next_checkpoint": "57480",
+  "error": "",
+  "review_items": [
+    {
+      "title_id": "nova:0191511e-6962-7753-b911-7d31966dd9ef",
+      "title_ru": "Арпеджио голубой стали",
+      "source": "kitsu",
+      "external_id": "7769",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=18893 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "7769",
+          "titles": {
+            "canonical": "Aoki Hagane no Arpeggio: Ars Nova",
+            "en": "Arpeggio of Blue Steel -Ars Nova-",
+            "en_jp": "Aoki Hagane no Arpeggio: Ars Nova",
+            "ja_jp": "蒼き鋼のアルペジオ ‐アルス・ノヴァ‐"
+          },
+          "year": 2013,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191513e-455a-7129-8917-30c7ef624c05",
+      "title_ru": "Музыкальные девчонки",
+      "source": "kitsu",
+      "external_id": "10422",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=29511 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "10422",
+          "titles": {
+            "canonical": "Ongaku Shoujo",
+            "en": "",
+            "en_jp": "Ongaku Shoujo",
+            "ja_jp": "音楽少女"
+          },
+          "year": 2015,
+          "kind": "movie",
+          "episodes": 1
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191513e-4913-7873-88b6-db436e97a130",
+      "title_ru": "Цубаса и светлячки",
+      "source": "kitsu",
+      "external_id": "8164",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=21781 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "8164",
+          "titles": {
+            "canonical": "Tsubasa to Hotaru",
+            "en": "",
+            "en_jp": "Tsubasa to Hotaru",
+            "ja_jp": "つばさとホタル"
+          },
+          "year": 2014,
+          "kind": "special",
+          "episodes": 1
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915147-3ba4-75ce-ae83-d762b601d95a",
+      "title_ru": "Волейбол против «Неудачников»!!",
+      "source": "kitsu",
+      "external_id": "11374",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=35806 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "11374",
+          "titles": {
+            "canonical": "Haikyuu!!: vs. Akaten",
+            "en": "Haikyuu!!: vs. Failing Marks",
+            "en_jp": "Haikyuu!!: vs. Akaten",
+            "ja_jp": "ハイキュー!! VS赤点"
+          },
+          "year": 2016,
+          "kind": "OVA",
+          "episodes": 1
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191528a-ac17-7a4a-a2d5-8ee4cb9f5894",
+      "title_ru": "Доктор Стоун: Рюсуй",
+      "source": "kitsu",
+      "external_id": "45615",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=50612 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "45615",
+          "titles": {
+            "canonical": "Dr. STONE: Ryuusui",
+            "en": "Dr. STONE: Ryusui",
+            "en_jp": "Dr. STONE: Ryuusui",
+            "ja_jp": "Dr.STONE 龍水"
+          },
+          "year": 2022,
+          "kind": "special",
+          "episodes": 1
+        }
+      ]
+    },
+    {
+      "title_id": "nova:019154c2-6a07-7a08-8dcd-8efb0aa5f171",
+      "title_ru": "Последний Серафим: Вампир Шахар",
+      "source": "kitsu",
+      "external_id": "11342",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=31378 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "11342",
+          "titles": {
+            "canonical": "Owari no Seraph: Kyuuketsuki Shahar",
+            "en": "",
+            "en_jp": "Owari no Seraph: Kyuuketsuki Shahar",
+            "ja_jp": "終わりのセラフ 吸血鬼シャハル"
+          },
+          "year": 2016,
+          "kind": "OVA",
+          "episodes": 1
+        }
+      ]
+    },
+    {
+      "title_id": "nova:019154c6-3aa3-7632-be8c-f955a3a0fd8f",
+      "title_ru": "Судьба: Странная подделка. Шёпот рассвета",
+      "source": "kitsu",
+      "external_id": "46527",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=53127 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "46527",
+          "titles": {
+            "canonical": "Fate/strange Fake: Whispers of Dawn",
+            "en": "Fate/strange Fake: Whispers of Dawn",
+            "en_jp": "Fate/strange Fake: Whispers of Dawn",
+            "ja_jp": "Fate/strange Fake -Whispers of Dawn-"
+          },
+          "year": 2023,
+          "kind": "special",
+          "episodes": 1
+        }
+      ]
+    },
+    {
+      "title_id": "nova:019154c7-7040-773c-8afd-f3f33c1c2b84",
+      "title_ru": "Дропкик злого духа: Конец века",
+      "source": "kitsu",
+      "external_id": "48357",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=55237 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "48357",
+          "titles": {
+            "canonical": "Jashin-chan Dropkick \"Seikimatsu-hen\"",
+            "en": "Dropkick on My Devil!!: End of Century Edition",
+            "en_jp": "Jashin-chan Dropkick \"Seikimatsu-hen\"",
+            "ja_jp": "邪神ちゃんドロップキック【世紀末編】"
+          },
+          "year": 2023,
+          "kind": "special",
+          "episodes": 1
+        }
+      ]
+    }
+  ],
+  "samples": [
+    {
+      "title_id": "nova:0191511d-3648-7224-989d-5ef91f2efaa6",
+      "title_ru": "Истребитель демонов: Собрание высших лун и деревня кузнецов",
+      "year": 2023,
+      "source": "kitsu",
+      "external_id": "45866",
+      "raw_score": "85.07",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "8.507",
+      "display": "8.5",
+      "vote_count": 19458,
+      "user_count": 32545,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/kimetsu-no-yaiba-katanakaji-no-satohen"
+    },
+    {
+      "title_id": "nova:01915120-00e8-7b1a-a805-829b71a4d46b",
+      "title_ru": "Восточный Эдем 2",
+      "year": 2010,
+      "source": "kitsu",
+      "external_id": "4646",
+      "raw_score": "75.3",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.53",
+      "display": "7.5",
+      "vote_count": 8681,
+      "user_count": 16365,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/eden-of-the-east-movie-ii-paradise-lost"
+    },
+    {
+      "title_id": "nova:0191511d-84b5-71de-91aa-9f28e25c0ec7",
+      "title_ru": "Мир по-прежнему красив",
+      "year": 2014,
+      "source": "kitsu",
+      "external_id": "8258",
+      "raw_score": "76.39",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.639",
+      "display": "7.6",
+      "vote_count": 9077,
+      "user_count": 23219,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/soredemo-sekai-wa-utsukushii"
+    },
+    {
+      "title_id": "nova:01915120-011d-7f94-b807-f87968d8819b",
+      "title_ru": "Восточный Эдем",
+      "year": 2009,
+      "source": "kitsu",
+      "external_id": "4534",
+      "raw_score": "75.28",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.528",
+      "display": "7.5",
+      "vote_count": 10354,
+      "user_count": 18809,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/eden-of-the-east-movie-i-the-king-of-eden"
+    },
+    {
+      "title_id": "nova:0191511d-8eb9-719f-9276-4b5da943060e",
+      "title_ru": "Пожиратель душ: Класс «НОТ»",
+      "year": 2014,
+      "source": "kitsu",
+      "external_id": "8151",
+      "raw_score": "59.33",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "5.933",
+      "display": "5.9",
+      "vote_count": 7496,
+      "user_count": 17700,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/soul-eater-not"
+    },
+    {
+      "title_id": "nova:01915125-d649-728d-be4b-581b8e672a10",
+      "title_ru": "Город, в котором ты живёшь OVA-2",
+      "year": 2014,
+      "source": "kitsu",
+      "external_id": "8185",
+      "raw_score": "68.51",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.851",
+      "display": "6.9",
+      "vote_count": 778,
+      "user_count": 1951,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/kimi-no-iru-machi-ova"
+    },
+    {
+      "title_id": "nova:0191511d-978d-7885-b03a-0f34a36499cb",
+      "title_ru": "Абсолютный дуэт",
+      "year": 2015,
+      "source": "kitsu",
+      "external_id": "8641",
+      "raw_score": "63.97",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.397",
+      "display": "6.4",
+      "vote_count": 17104,
+      "user_count": 34867,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/absolute-duo"
+    },
+    {
+      "title_id": "nova:0191512d-5533-7122-b7fa-e67a09d3676c",
+      "title_ru": "Фабрика иллюзий Алисы и Терезы",
+      "year": 2023,
+      "source": "kitsu",
+      "external_id": "44823",
+      "raw_score": "72.53",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.253",
+      "display": "7.3",
+      "vote_count": 570,
+      "user_count": 3552,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/alice-to-therese-no-maboroshi-koujou"
+    },
+    {
+      "title_id": "nova:0191511d-a11d-75ff-81f2-6062049e3ef9",
+      "title_ru": "С места на место",
+      "year": 2012,
+      "source": "kitsu",
+      "external_id": "6701",
+      "raw_score": "75.25",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.525",
+      "display": "7.5",
+      "vote_count": 11117,
+      "user_count": 26904,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/acchi-kocchi"
+    },
+    {
+      "title_id": "nova:0191512f-234c-7e2f-ad51-6a70807dd206",
+      "title_ru": "Кураюкаба",
+      "year": 2024,
+      "source": "kitsu",
+      "external_id": "48653",
+      "raw_score": "69.09",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.909",
+      "display": "6.9",
+      "vote_count": 60,
+      "user_count": 278,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/kurayukaba"
+    },
+    {
+      "title_id": "nova:0191511d-ebda-7742-a015-496357cfb2ec",
+      "title_ru": "Цветы зла",
+      "year": 2013,
+      "source": "kitsu",
+      "external_id": "7387",
+      "raw_score": "69.36",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.936",
+      "display": "6.9",
+      "vote_count": 7145,
+      "user_count": 19890,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/aku-no-hana"
+    },
+    {
+      "title_id": "nova:0191512f-b145-7b5c-9265-cf414be50a7f",
+      "title_ru": "Тоннель в лето, выход прощаний",
+      "year": 2022,
+      "source": "kitsu",
+      "external_id": "45598",
+      "raw_score": "79.13",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.913",
+      "display": "7.9",
+      "vote_count": 1538,
+      "user_count": 5415,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/natsu-e-no-tunnel-sayonara-no-deguchi"
+    },
+    {
+      "title_id": "nova:0191511d-f785-7144-a5fa-f22c9e49482c",
+      "title_ru": "Альдноа.Зеро",
+      "year": 2014,
+      "source": "kitsu",
+      "external_id": "8297",
+      "raw_score": "73.15",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.315",
+      "display": "7.3",
+      "vote_count": 21492,
+      "user_count": 46251,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/aldnoah-zero"
+    },
+    {
+      "title_id": "nova:01915133-653e-72ae-a0f0-9ec2c864b22a",
+      "title_ru": "Обитель зла: Остров смерти",
+      "year": 2023,
+      "source": "kitsu",
+      "external_id": "47079",
+      "raw_score": "69.65",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.965",
+      "display": "7.0",
+      "vote_count": 133,
+      "user_count": 328,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/biohazard-death-island"
+    },
+    {
+      "title_id": "nova:0191511e-21f4-786e-8907-b4f7f91d80e3",
+      "title_ru": "Нежный укус",
+      "year": 2010,
+      "source": "kitsu",
+      "external_id": "5435",
+      "raw_score": "72.93",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.293",
+      "display": "7.3",
+      "vote_count": 10904,
+      "user_count": 27959,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/amagami-ss"
+    },
+    {
+      "title_id": "nova:01915139-4954-788a-932f-c2d6e27dbc7b",
+      "title_ru": "Магическая битва 0. Фильм",
+      "year": 2021,
+      "source": "kitsu",
+      "external_id": "44212",
+      "raw_score": "83.06",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "8.306",
+      "display": "8.3",
+      "vote_count": 18553,
+      "user_count": 35090,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/jujutsu-kaisen-movie-0"
+    },
+    {
+      "title_id": "nova:0191511e-415b-7573-ae14-3dcd47d59484",
+      "title_ru": "Амнезия",
+      "year": 2013,
+      "source": "kitsu",
+      "external_id": "7209",
+      "raw_score": "57.77",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "5.777",
+      "display": "5.8",
+      "vote_count": 8900,
+      "user_count": 20933,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/amnesia"
+    },
+    {
+      "title_id": "nova:0191513e-40a1-7e27-b27d-0adc54d5ece9",
+      "title_ru": "Музыка Аки",
+      "year": 2015,
+      "source": "kitsu",
+      "external_id": "10369",
+      "raw_score": "68.87",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.887",
+      "display": "6.9",
+      "vote_count": 1199,
+      "user_count": 2512,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/aki-no-kanade"
+    },
+    {
+      "title_id": "nova:0191511e-4b7b-7f58-bddf-1e7fc85306f4",
+      "title_ru": "Иная",
+      "year": 2012,
+      "source": "kitsu",
+      "external_id": "6462",
+      "raw_score": "75.37",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.537",
+      "display": "7.5",
+      "vote_count": 55480,
+      "user_count": 105994,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/another"
+    },
+    {
+      "title_id": "nova:0191513e-4119-7930-98dd-011bfe73956f",
+      "title_ru": "Чей-то пристальный взор",
+      "year": 2013,
+      "source": "kitsu",
+      "external_id": "7588",
+      "raw_score": "73.03",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.303",
+      "display": "7.3",
+      "vote_count": 4176,
+      "user_count": 7486,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/dareka-no-manazashi"
+    },
+    {
+      "title_id": "nova:0191511e-55e0-7ba3-89a5-65e1335f3099",
+      "title_ru": "Дорога юности",
+      "year": 2014,
+      "source": "kitsu",
+      "external_id": "8246",
+      "raw_score": "77.34",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.734",
+      "display": "7.7",
+      "vote_count": 24664,
+      "user_count": 54585,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/ao-haru-ride"
+    },
+    {
+      "title_id": "nova:0191513e-4148-7fa1-9767-03190fbfbfa8",
+      "title_ru": "Невиданный цветок",
+      "year": 2013,
+      "source": "kitsu",
+      "external_id": "7200",
+      "raw_score": "79.59",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.959",
+      "display": "8.0",
+      "vote_count": 11059,
+      "user_count": 26711,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/ano-hi-mita-hana-no-namae-wo-bokutachi-wa-mada-shiranai-movie"
+    },
+    {
+      "title_id": "nova:0191511e-5fbd-78e4-a412-d5ec28c4ce18",
+      "title_ru": "Юность и пулемет",
+      "year": 2015,
+      "source": "kitsu",
+      "external_id": "10716",
+      "raw_score": "70.36",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.036",
+      "display": "7.0",
+      "vote_count": 7445,
+      "user_count": 18267,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/aoharu-x-kikanjuu"
+    },
+    {
+      "title_id": "nova:0191513e-41ab-728c-85d3-f513cb6fb3ac",
+      "title_ru": "Хината и Аосигурэ",
+      "year": 2013,
+      "source": "kitsu",
+      "external_id": "8080",
+      "raw_score": "69.95",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.995",
+      "display": "7.0",
+      "vote_count": 1060,
+      "user_count": 2885,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/hinata-no-aoshigure"
+    },
+    {
+      "title_id": "nova:0191511e-722f-74dc-904c-10cba232ac9a",
+      "title_ru": "Баракамон",
+      "year": 2014,
+      "source": "kitsu",
+      "external_id": "8026",
+      "raw_score": "81.96",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "8.196",
+      "display": "8.2",
+      "vote_count": 28968,
+      "user_count": 58957,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://kitsu.io/anime/barakamon"
+    }
+  ]
+}

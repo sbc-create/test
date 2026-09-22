@@ -1,0 +1,711 @@
+{
+  "run_id": "anilist-9ab826277a70",
+  "source_key": "anilist",
+  "status": "OK",
+  "counters": {
+    "requested": 100,
+    "received": 100,
+    "exact_match": 90,
+    "pending_match": 10,
+    "rejected": 0,
+    "inserted": 0,
+    "updated": 0,
+    "unchanged": 90,
+    "not_found": 0,
+    "failed": 0,
+    "rate_limited": 0,
+    "retries": 0
+  },
+  "cursor_out": "57480",
+  "next_checkpoint": "57480",
+  "error": "",
+  "review_items": [
+    {
+      "title_id": "nova:0191511e-6962-7753-b911-7d31966dd9ef",
+      "title_ru": "Арпеджио голубой стали",
+      "source": "anilist",
+      "external_id": "18893",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=18893 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "18893",
+          "titles": {
+            "romaji": "Aoki Hagane no Arpeggio: Ars Nova",
+            "english": "Arpeggio of Blue Steel",
+            "native": "蒼き鋼のアルペジオ"
+          },
+          "year": 2013,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191513e-455a-7129-8917-30c7ef624c05",
+      "title_ru": "Музыкальные девчонки",
+      "source": "anilist",
+      "external_id": "29511",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=29511 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "29511",
+          "titles": {
+            "romaji": "Ongaku Shoujo",
+            "english": "",
+            "native": "音楽少女"
+          },
+          "year": 2015,
+          "kind": "MOVIE",
+          "episodes": 1
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191513e-4913-7873-88b6-db436e97a130",
+      "title_ru": "Цубаса и светлячки",
+      "source": "anilist",
+      "external_id": "21781",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=21781 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "21781",
+          "titles": {
+            "romaji": "Tsubasa to Hotaru",
+            "english": "",
+            "native": "つばさとホタル"
+          },
+          "year": 2014,
+          "kind": "SPECIAL",
+          "episodes": 1
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915147-3ba4-75ce-ae83-d762b601d95a",
+      "title_ru": "Волейбол против «Неудачников»!!",
+      "source": "anilist",
+      "external_id": "35806",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=35806 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "35806",
+          "titles": {
+            "romaji": "Haikyuu!!: VS Akaten",
+            "english": "HAIKYU!!: VS Failing Marks",
+            "native": "ハイキュー!! VS赤点"
+          },
+          "year": 2015,
+          "kind": "SPECIAL",
+          "episodes": 1
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915150-19aa-7dca-a148-cd490b290a20",
+      "title_ru": "Пузырь",
+      "source": "anilist",
+      "external_id": "50549",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "MOVIE_VS_SERIES"
+      ],
+      "detail": "myanimelist=50549 совпал, но факты расходятся: MOVIE_VS_SERIES",
+      "candidates": [
+        {
+          "external_id": "50549",
+          "titles": {
+            "romaji": "Bubble",
+            "english": "Bubble",
+            "native": "バブル"
+          },
+          "year": 2022,
+          "kind": "ONA",
+          "episodes": 1
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915167-8600-7ed0-a020-ea85366589ea",
+      "title_ru": "Портрет Цзянху: Тяньган",
+      "source": "anilist",
+      "external_id": "57480",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "MOVIE_VS_SERIES"
+      ],
+      "detail": "myanimelist=57480 совпал, но факты расходятся: MOVIE_VS_SERIES",
+      "candidates": [
+        {
+          "external_id": "57480",
+          "titles": {
+            "romaji": "Hua Jianghu: Tiangang",
+            "english": "",
+            "native": "画江湖之天罡"
+          },
+          "year": null,
+          "kind": "ONA",
+          "episodes": 1
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191528a-ac17-7a4a-a2d5-8ee4cb9f5894",
+      "title_ru": "Доктор Стоун: Рюсуй",
+      "source": "anilist",
+      "external_id": "50612",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=50612 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "50612",
+          "titles": {
+            "romaji": "Dr. STONE: Ryuusui",
+            "english": "Dr. STONE Special Episode – RYUSUI",
+            "native": "Dr.STONE 龍水"
+          },
+          "year": 2022,
+          "kind": "SPECIAL",
+          "episodes": 1
+        }
+      ]
+    },
+    {
+      "title_id": "nova:019154c2-6a07-7a08-8dcd-8efb0aa5f171",
+      "title_ru": "Последний Серафим: Вампир Шахар",
+      "source": "anilist",
+      "external_id": "31378",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=31378 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "31378",
+          "titles": {
+            "romaji": "Owari no Seraph: Kyuuketsuki Shahal",
+            "english": "Seraph of the End: Kyuuketsuki Shahal",
+            "native": "終わりのセラフ 吸血鬼シャハル"
+          },
+          "year": 2016,
+          "kind": "OVA",
+          "episodes": 1
+        }
+      ]
+    },
+    {
+      "title_id": "nova:019154c6-3aa3-7632-be8c-f955a3a0fd8f",
+      "title_ru": "Судьба: Странная подделка. Шёпот рассвета",
+      "source": "anilist",
+      "external_id": "53127",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=53127 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "53127",
+          "titles": {
+            "romaji": "Fate/strange Fake: Whispers of Dawn",
+            "english": "Fate/strange Fake -Whispers of Dawn-",
+            "native": "Fate/strange Fake -Whispers of Dawn-"
+          },
+          "year": 2023,
+          "kind": "SPECIAL",
+          "episodes": 1
+        }
+      ]
+    },
+    {
+      "title_id": "nova:019154c7-7040-773c-8afd-f3f33c1c2b84",
+      "title_ru": "Дропкик злого духа: Конец века",
+      "source": "anilist",
+      "external_id": "55237",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=55237 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "55237",
+          "titles": {
+            "romaji": "Jashin-chan Dropkick [Seikimatsu-hen]",
+            "english": "Dropkick on My Devil!!: Apocalypse Day",
+            "native": "邪神ちゃんドロップキック【世紀末編】"
+          },
+          "year": 2023,
+          "kind": "SPECIAL",
+          "episodes": 1
+        }
+      ]
+    }
+  ],
+  "samples": [
+    {
+      "title_id": "nova:0191511d-3648-7224-989d-5ef91f2efaa6",
+      "title_ru": "Истребитель демонов: Собрание высших лун и деревня кузнецов",
+      "year": 2023,
+      "source": "anilist",
+      "external_id": "51019",
+      "raw_score": "80",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "8",
+      "display": "8.0",
+      "vote_count": 174726,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/145139"
+    },
+    {
+      "title_id": "nova:01915120-00e8-7b1a-a805-829b71a4d46b",
+      "title_ru": "Восточный Эдем 2",
+      "year": 2010,
+      "source": "anilist",
+      "external_id": "6637",
+      "raw_score": "72",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.2",
+      "display": "7.2",
+      "vote_count": 14754,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/6637"
+    },
+    {
+      "title_id": "nova:0191511d-84b5-71de-91aa-9f28e25c0ec7",
+      "title_ru": "Мир по-прежнему красив",
+      "year": 2014,
+      "source": "anilist",
+      "external_id": "22101",
+      "raw_score": "72",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.2",
+      "display": "7.2",
+      "vote_count": 24213,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/20599"
+    },
+    {
+      "title_id": "nova:01915120-011d-7f94-b807-f87968d8819b",
+      "title_ru": "Восточный Эдем",
+      "year": 2009,
+      "source": "anilist",
+      "external_id": "6372",
+      "raw_score": "72",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.2",
+      "display": "7.2",
+      "vote_count": 17467,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/6372"
+    },
+    {
+      "title_id": "nova:0191511d-8eb9-719f-9276-4b5da943060e",
+      "title_ru": "Пожиратель душ: Класс «НОТ»",
+      "year": 2014,
+      "source": "anilist",
+      "external_id": "21507",
+      "raw_score": "55",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "5.5",
+      "display": "5.5",
+      "vote_count": 18502,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/20547"
+    },
+    {
+      "title_id": "nova:01915125-d649-728d-be4b-581b8e672a10",
+      "title_ru": "Город, в котором ты живёшь OVA-2",
+      "year": 2014,
+      "source": "anilist",
+      "external_id": "20649",
+      "raw_score": "65",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.5",
+      "display": "6.5",
+      "vote_count": 1861,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/20715"
+    },
+    {
+      "title_id": "nova:0191511d-978d-7885-b03a-0f34a36499cb",
+      "title_ru": "Абсолютный дуэт",
+      "year": 2015,
+      "source": "anilist",
+      "external_id": "25397",
+      "raw_score": "60",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6",
+      "display": "6.0",
+      "vote_count": 57492,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/20785"
+    },
+    {
+      "title_id": "nova:0191512d-5533-7122-b7fa-e67a09d3676c",
+      "title_ru": "Фабрика иллюзий Алисы и Терезы",
+      "year": 2023,
+      "source": "anilist",
+      "external_id": "49303",
+      "raw_score": "72",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.2",
+      "display": "7.2",
+      "vote_count": 10885,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/136149"
+    },
+    {
+      "title_id": "nova:0191511d-a11d-75ff-81f2-6062049e3ef9",
+      "title_ru": "С места на место",
+      "year": 2012,
+      "source": "anilist",
+      "external_id": "12291",
+      "raw_score": "72",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.2",
+      "display": "7.2",
+      "vote_count": 28589,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/12291"
+    },
+    {
+      "title_id": "nova:0191512f-234c-7e2f-ad51-6a70807dd206",
+      "title_ru": "Кураюкаба",
+      "year": 2024,
+      "source": "anilist",
+      "external_id": "56553",
+      "raw_score": "62",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.2",
+      "display": "6.2",
+      "vote_count": 821,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/169778"
+    },
+    {
+      "title_id": "nova:0191511d-ebda-7742-a015-496357cfb2ec",
+      "title_ru": "Цветы зла",
+      "year": 2013,
+      "source": "anilist",
+      "external_id": "16201",
+      "raw_score": "68",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.8",
+      "display": "6.8",
+      "vote_count": 16901,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/16201"
+    },
+    {
+      "title_id": "nova:0191512f-b145-7b5c-9265-cf414be50a7f",
+      "title_ru": "Тоннель в лето, выход прощаний",
+      "year": 2022,
+      "source": "anilist",
+      "external_id": "50593",
+      "raw_score": "80",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "8",
+      "display": "8.0",
+      "vote_count": 33147,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/142769"
+    },
+    {
+      "title_id": "nova:0191511d-f785-7144-a5fa-f22c9e49482c",
+      "title_ru": "Альдноа.Зеро",
+      "year": 2014,
+      "source": "anilist",
+      "external_id": "22729",
+      "raw_score": "70",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7",
+      "display": "7.0",
+      "vote_count": 48849,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/20632"
+    },
+    {
+      "title_id": "nova:01915133-653e-72ae-a0f0-9ec2c864b22a",
+      "title_ru": "Обитель зла: Остров смерти",
+      "year": 2023,
+      "source": "anilist",
+      "external_id": "54398",
+      "raw_score": "64",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.4",
+      "display": "6.4",
+      "vote_count": 1417,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/161441"
+    },
+    {
+      "title_id": "nova:0191511e-21f4-786e-8907-b4f7f91d80e3",
+      "title_ru": "Нежный укус",
+      "year": 2010,
+      "source": "anilist",
+      "external_id": "8676",
+      "raw_score": "69",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.9",
+      "display": "6.9",
+      "vote_count": 28188,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/8676"
+    },
+    {
+      "title_id": "nova:01915139-4954-788a-932f-c2d6e27dbc7b",
+      "title_ru": "Магическая битва 0. Фильм",
+      "year": 2021,
+      "source": "anilist",
+      "external_id": "48561",
+      "raw_score": "83",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "8.3",
+      "display": "8.3",
+      "vote_count": 219555,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/131573"
+    },
+    {
+      "title_id": "nova:0191511e-415b-7573-ae14-3dcd47d59484",
+      "title_ru": "Амнезия",
+      "year": 2013,
+      "source": "anilist",
+      "external_id": "15085",
+      "raw_score": "54",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "5.4",
+      "display": "5.4",
+      "vote_count": 21128,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/15085"
+    },
+    {
+      "title_id": "nova:0191513e-40a1-7e27-b27d-0adc54d5ece9",
+      "title_ru": "Музыка Аки",
+      "year": 2015,
+      "source": "anilist",
+      "external_id": "29513",
+      "raw_score": "65",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.5",
+      "display": "6.5",
+      "vote_count": 2846,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/21069"
+    },
+    {
+      "title_id": "nova:0191511e-4b7b-7f58-bddf-1e7fc85306f4",
+      "title_ru": "Иная",
+      "year": 2012,
+      "source": "anilist",
+      "external_id": "11111",
+      "raw_score": "71",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.1",
+      "display": "7.1",
+      "vote_count": 179264,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/11111"
+    },
+    {
+      "title_id": "nova:0191513e-4119-7930-98dd-011bfe73956f",
+      "title_ru": "Чей-то пристальный взор",
+      "year": 2013,
+      "source": "anilist",
+      "external_id": "17121",
+      "raw_score": "70",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7",
+      "display": "7.0",
+      "vote_count": 10299,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/17121"
+    },
+    {
+      "title_id": "nova:0191511e-55e0-7ba3-89a5-65e1335f3099",
+      "title_ru": "Дорога юности",
+      "year": 2014,
+      "source": "anilist",
+      "external_id": "21995",
+      "raw_score": "75",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.5",
+      "display": "7.5",
+      "vote_count": 105005,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/20596"
+    },
+    {
+      "title_id": "nova:0191513e-4148-7fa1-9767-03190fbfbfa8",
+      "title_ru": "Невиданный цветок",
+      "year": 2013,
+      "source": "anilist",
+      "external_id": "15039",
+      "raw_score": "75",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.5",
+      "display": "7.5",
+      "vote_count": 30641,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/15039"
+    },
+    {
+      "title_id": "nova:0191511e-5fbd-78e4-a412-d5ec28c4ce18",
+      "title_ru": "Юность и пулемет",
+      "year": 2015,
+      "source": "anilist",
+      "external_id": "30205",
+      "raw_score": "66",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.6",
+      "display": "6.6",
+      "vote_count": 17778,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/21078"
+    },
+    {
+      "title_id": "nova:0191513e-41ab-728c-85d3-f513cb6fb3ac",
+      "title_ru": "Хината и Аосигурэ",
+      "year": 2013,
+      "source": "anilist",
+      "external_id": "20673",
+      "raw_score": "65",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.5",
+      "display": "6.5",
+      "vote_count": 3173,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/20471"
+    },
+    {
+      "title_id": "nova:0191511e-722f-74dc-904c-10cba232ac9a",
+      "title_ru": "Баракамон",
+      "year": 2014,
+      "source": "anilist",
+      "external_id": "22789",
+      "raw_score": "82",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "8.2",
+      "display": "8.2",
+      "vote_count": 64648,
+      "user_count": null,
+      "state": "OK",
+      "outcome": "unchanged",
+      "provenance_url": "https://anilist.co/anime/20722"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "MIGRATION_APPLIED": "PASS",
+  "target": "/srv/site-factory/repo/var/ratings/ratings.sqlite",
+  "first_apply": true,
+  "destructive": false,
+  "duration_ms": 1172,
+  "tables_before": 37,
+  "tables_after": 49,
+  "tables_added": [
+    "unified_editorial_audit",
+    "unified_editorial_ratings",
+    "unified_external_current",
+    "unified_external_snapshots",
+    "unified_import_runs",
+    "unified_metrics",
+    "unified_review_queue",
+    "unified_schedule_state",
+    "unified_source_links",
+    "unified_title_tenant_map",
+    "unified_titles",
+    "unified_user_aggregates"
+  ],
+  "tables_removed": [],
+  "canary_row_counts_before": {
+    "community_votes": 0,
+    "community_vote_events": 57,
+    "community_aggregates": 2,
+    "community_feature_flags": 11,
+    "community_display_projection": 1001,
+    "rating_current": 325,
+    "rating_observations": 325,
+    "title_source_mappings": 349,
+    "rating_sources": 5
+  },
+  "canary_row_counts_after": {
+    "community_votes": 0,
+    "community_vote_events": 57,
+    "community_aggregates": 2,
+    "community_feature_flags": 11,
+    "community_display_projection": 1001,
+    "rating_current": 325,
+    "rating_observations": 325,
+    "title_source_mappings": 349,
+    "rating_sources": 5
+  },
+  "canary_row_counts_unchanged": true,
+  "schema_migrations_before": [
+    [
+      "0002",
+      "ratings ingestion: registry, mappings, observations, queue, runs"
+    ],
+    [
+      "0003",
+      "amd local votes combined daily ratings"
+    ],
+    [
+      "0004",
+      "rating_source_absence for zero-score/no-vote deferred retry"
+    ],
+    [
+      "0006",
+      "community ratings ledger display projection flags (expand-only)"
+    ]
+  ],
+  "schema_migrations_after": [
+    [
+      "0002",
+      "ratings ingestion: registry, mappings, observations, queue, runs"
+    ],
+    [
+      "0003",
+      "amd local votes combined daily ratings"
+    ],
+    [
+      "0004",
+      "rating_source_absence for zero-score/no-vote deferred retry"
+    ],
+    [
+      "0006",
+      "community ratings ledger display projection flags (expand-only)"
+    ],
+    [
+      "0007",
+      "unified ratings 1-10: titles, source links, external snapshots, editorial, aggregates"
+    ]
+  ]
+}

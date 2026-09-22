@@ -1,0 +1,1342 @@
+{
+  "run_id": "kitsu-32add98b1c65",
+  "source_key": "kitsu",
+  "status": "OK",
+  "counters": {
+    "requested": 400,
+    "received": 389,
+    "exact_match": 356,
+    "pending_match": 33,
+    "rejected": 14,
+    "inserted": 356,
+    "updated": 0,
+    "unchanged": 0,
+    "not_found": 11,
+    "failed": 0,
+    "rate_limited": 0,
+    "retries": 0
+  },
+  "cursor_out": "59433",
+  "next_checkpoint": "59433",
+  "error": "",
+  "review_items": [
+    {
+      "title_id": "nova:01915121-62a4-73e0-bf69-35314fef9670",
+      "title_ru": "Святой рыцарь",
+      "source": "kitsu",
+      "external_id": "6437",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=11005 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "6437",
+          "titles": {
+            "canonical": "Holy Knight",
+            "en": "Holy Knight",
+            "en_jp": "Holy Knight",
+            "ja_jp": "Holy Knight (ホーリーナイト)"
+          },
+          "year": 2012,
+          "kind": "OVA",
+          "episodes": 2
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915121-9e5c-7efd-b95a-84066e74e0be",
+      "title_ru": "Алиса в Пограничье",
+      "source": "kitsu",
+      "external_id": "8643",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=24781 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "8643",
+          "titles": {
+            "canonical": "Imawa no Kuni no Alice (OVA)",
+            "en": "",
+            "en_jp": "Imawa no Kuni no Alice (OVA)",
+            "ja_jp": "今際の国のアリス"
+          },
+          "year": 2014,
+          "kind": "OVA",
+          "episodes": 3
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915121-b040-7e0e-92ca-fc6d59e751fe",
+      "title_ru": "Бесконечные небеса",
+      "source": "kitsu",
+      "external_id": "7733",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=18247 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "7733",
+          "titles": {
+            "canonical": "IS: Infinite Stratos 2",
+            "en": "Infinite Stratos 2",
+            "en_jp": "IS: Infinite Stratos 2",
+            "ja_jp": "IS〈インフィニット・ストラトス〉2"
+          },
+          "year": 2013,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191512c-52bd-7ebd-afa1-e76b07c3849d",
+      "title_ru": "Госпожа Кагуя: В любви как на войне. Первый поцелуй никогда не заканчивается",
+      "source": "kitsu",
+      "external_id": "46206",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "MOVIE_VS_SERIES"
+      ],
+      "detail": "myanimelist=52198 совпал, но факты расходятся: MOVIE_VS_SERIES",
+      "candidates": [
+        {
+          "external_id": "46206",
+          "titles": {
+            "canonical": "Kaguya-sama wa Kokurasetai: First Kiss wa Owaranai",
+            "en": "Kaguya-sama: Love is War - The First Kiss Never Ends",
+            "en_jp": "Kaguya-sama wa Kokurasetai: First Kiss wa Owaranai",
+            "ja_jp": "かぐや様は告らせたい -ファーストキッスは終わらない-"
+          },
+          "year": 2022,
+          "kind": "movie",
+          "episodes": 1
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191512f-2385-7f33-926e-09dea6c51d80",
+      "title_ru": "Лунное путешествие приведёт к новому миру",
+      "source": "kitsu",
+      "external_id": "45235",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=49889 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "45235",
+          "titles": {
+            "canonical": "Tsuki ga Michibiku Isekai Douchuu 2",
+            "en": "Tsukimichi -Moonlit Fantasy- 2",
+            "en_jp": "Tsuki ga Michibiku Isekai Douchuu 2",
+            "ja_jp": "月が導く異世界道中２"
+          },
+          "year": 2024,
+          "kind": "TV",
+          "episodes": 25
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191512f-808e-7ab1-9b64-dadf9283099e",
+      "title_ru": "Звучи, эуфониум!",
+      "source": "kitsu",
+      "external_id": "42372",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=39894 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "42372",
+          "titles": {
+            "canonical": "Hibike! Euphonium: Kumiko 3 Nensei-hen",
+            "en": "Sound! Euphonium 3",
+            "en_jp": "Hibike! Euphonium: Kumiko 3 Nensei-hen",
+            "ja_jp": "響け！ユーフォニアム3"
+          },
+          "year": 2024,
+          "kind": "TV",
+          "episodes": 13
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915130-9ecd-75ff-9e00-cde235add199",
+      "title_ru": "Повесть о конце света 2",
+      "source": "kitsu",
+      "external_id": "44988",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=49618 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "44988",
+          "titles": {
+            "canonical": "Shuumatsu no Walküre Season 2",
+            "en": "Record of Ragnarok Season 2",
+            "en_jp": "Shuumatsu no Walküre Season 2",
+            "ja_jp": "終末のワルキューレ Season 2"
+          },
+          "year": 2023,
+          "kind": "ONA",
+          "episodes": 10
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915130-b29b-77e5-aa25-0ae80d98d13b",
+      "title_ru": "Случай",
+      "source": "kitsu",
+      "external_id": "6932",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=13283 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "6932",
+          "titles": {
+            "canonical": "One Off",
+            "en": "",
+            "en_jp": "One Off",
+            "ja_jp": "わんおふ -one off-"
+          },
+          "year": 2012,
+          "kind": "OVA",
+          "episodes": 4
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915137-08cf-70dc-a6da-8112a299c879",
+      "title_ru": "Сказания о демонах и богах 8",
+      "source": "kitsu",
+      "external_id": "49159",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=58744 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "49159",
+          "titles": {
+            "canonical": "Yao Shen Ji 8",
+            "en": "",
+            "en_jp": "",
+            "ja_jp": ""
+          },
+          "year": 2024,
+          "kind": "ONA",
+          "episodes": 52
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915137-3fd5-7232-80f6-a9acbad98005",
+      "title_ru": "Страна десяти тысяч чудес",
+      "source": "kitsu",
+      "external_id": "45036",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=49305 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "45036",
+          "titles": {
+            "canonical": "Wan Jie Xian Zong 5",
+            "en": "",
+            "en_jp": "",
+            "ja_jp": ""
+          },
+          "year": 2021,
+          "kind": "ONA",
+          "episodes": 288
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915139-2211-7a7f-878b-7cf721af35b1",
+      "title_ru": "Непутёвый ученик в школе магии",
+      "source": "kitsu",
+      "external_id": "48389",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=50713 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "48389",
+          "titles": {
+            "canonical": "Mahouka Koukou no Rettousei 3rd Season",
+            "en": "The Irregular at Magic High School Season 3",
+            "en_jp": "Mahouka Koukou no Rettousei 3rd Season",
+            "ja_jp": "魔法科高校の劣等生 第3シーズン"
+          },
+          "year": 2024,
+          "kind": "TV",
+          "episodes": 13
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915139-750f-7be7-bcda-508e1c44071b",
+      "title_ru": "Непризнанный школой владыка демонов! Сильнейший владыка демонов в истории поступает в академию, переродившись своим потомком",
+      "source": "kitsu",
+      "external_id": "45081",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=48418 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "45081",
+          "titles": {
+            "canonical": "Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e Kayou 2nd Season Part 2",
+            "en": "The Misfit of Demon King Academy Ⅱ: History's Strongest Demon King Reincarnates and Goes to School with His Descendants Part 2",
+            "en_jp": "Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e Kayou 2nd Season Part 2",
+            "ja_jp": "魔王学院の不適合者 ～史上最強の魔王の始祖、転生して子孫たちの学校へ通う～ Ⅱ 2クール"
+          },
+          "year": 2024,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191513d-85ba-7af2-9f77-1f00db88a170",
+      "title_ru": "Код Гиасс: Вернувшийся Розе",
+      "source": "kitsu",
+      "external_id": "43855",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=56835 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "43855",
+          "titles": {
+            "canonical": "Code Geass: Dakkan no Rozé",
+            "en": "Code Geass: Rozé of the Recapture",
+            "en_jp": "Code Geass: Dakkan no Rozé",
+            "ja_jp": "コードギアス 奪還のロゼ"
+          },
+          "year": 2024,
+          "kind": "OVA",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191513d-9a1d-7e54-ad39-aec62ac3807b",
+      "title_ru": "Лагерь на свежем воздухе 3",
+      "source": "kitsu",
+      "external_id": "46649",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=53410 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "46649",
+          "titles": {
+            "canonical": "Yuru Camp△ 3",
+            "en": "Laid-Back Camp 3",
+            "en_jp": "Yuru Camp△ 3",
+            "ja_jp": "ゆるキャン△ 3"
+          },
+          "year": 2024,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191513e-eace-78e0-9458-2a66676e5e9e",
+      "title_ru": "Детройт, город метала",
+      "source": "kitsu",
+      "external_id": "3202",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=3702 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "3202",
+          "titles": {
+            "canonical": "Detroit Metal City",
+            "en": "Detroit Metal City: The Animated Series",
+            "en_jp": "Detroit Metal City",
+            "ja_jp": "デトロイト・メタル・シティ"
+          },
+          "year": 2008,
+          "kind": "OVA",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191513e-f4a8-7f55-8437-7afa1b4898c8",
+      "title_ru": "Псы: Вой во тьму",
+      "source": "kitsu",
+      "external_id": "4188",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=5593 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "4188",
+          "titles": {
+            "canonical": "Dogs: Bullets & Carnage",
+            "en": "",
+            "en_jp": "Dogs: Bullets & Carnage",
+            "ja_jp": "ドッグズ／バレッツ＆カーネイジ"
+          },
+          "year": 2009,
+          "kind": "OVA",
+          "episodes": 4
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915145-0471-735a-a546-6135cc84497b",
+      "title_ru": "Смертоносный герцог и его чёрная горничная 3",
+      "source": "kitsu",
+      "external_id": "47984",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=56738 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "47984",
+          "titles": {
+            "canonical": "Shinigami Bocchan to Kuro Maid 3rd Season",
+            "en": "The Duke of Death and His Maid Season 3",
+            "en_jp": "Shinigami Bocchan to Kuro Maid 3rd Season",
+            "ja_jp": "死神坊ちゃんと黒メイド 第3期"
+          },
+          "year": 2024,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191514a-ef01-7064-87ba-c6709112f45a",
+      "title_ru": "Шаман Кинг: Цветы",
+      "source": "kitsu",
+      "external_id": "46079",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=51673 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "46079",
+          "titles": {
+            "canonical": "SHAMAN KING FLOWERS",
+            "en": "Shaman King: Flowers",
+            "en_jp": "SHAMAN KING FLOWERS",
+            "ja_jp": "シャーマンキング フラワーズ"
+          },
+          "year": 2024,
+          "kind": "TV",
+          "episodes": 13
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191514f-ec9f-7187-a624-af66cf51755d",
+      "title_ru": "Расколотая битвой синева небес 5",
+      "source": "kitsu",
+      "external_id": "45946",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=51039 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "45946",
+          "titles": {
+            "canonical": "Dou Po Cangqiong: Nian Fan",
+            "en": "",
+            "en_jp": "",
+            "ja_jp": ""
+          },
+          "year": 2022,
+          "kind": "ONA",
+          "episodes": 52
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915151-262b-70e8-a474-56e5efb1c2eb",
+      "title_ru": "Моя геройская академия: Воспоминания",
+      "source": "kitsu",
+      "external_id": "48700",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=57519 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "48700",
+          "titles": {
+            "canonical": "Boku no Hero Academia: Memories",
+            "en": "My Hero Academia: Memories",
+            "en_jp": "Boku no Hero Academia: Memories",
+            "ja_jp": "僕のヒーローアカデミア Memories"
+          },
+          "year": 2024,
+          "kind": "special",
+          "episodes": 4
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191526f-a2a5-7279-9b90-27444b7fb1bf",
+      "title_ru": "Восхождение героя щита 3",
+      "source": "kitsu",
+      "external_id": "42531",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=40357 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "42531",
+          "titles": {
+            "canonical": "Tate no Yuusha no Nariagari Season 3",
+            "en": "The Rising of the Shield Hero Season 3",
+            "en_jp": "Tate no Yuusha no Nariagari Season 3",
+            "ja_jp": "盾の勇者の成り上がり Season3"
+          },
+          "year": 2023,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191526f-ee89-7461-afc8-850f0185e4ac",
+      "title_ru": "Доктор Стоун: Новый мир",
+      "source": "kitsu",
+      "external_id": "44289",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=48549 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "44289",
+          "titles": {
+            "canonical": "Dr.STONE: NEW WORLD",
+            "en": "Dr. Stone: New World",
+            "en_jp": "Dr.STONE: NEW WORLD",
+            "ja_jp": "Dr.STONE: NEW WORLD"
+          },
+          "year": 2023,
+          "kind": "TV",
+          "episodes": 11
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915277-5f25-7c77-8b63-d41596f00af9",
+      "title_ru": "Магия вернувшегося должна быть особенной",
+      "source": "kitsu",
+      "external_id": "47240",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "SPECIAL_OVA_VS_MAIN"
+      ],
+      "detail": "myanimelist=54852 совпал, но факты расходятся: SPECIAL_OVA_VS_MAIN",
+      "candidates": [
+        {
+          "external_id": "47240",
+          "titles": {
+            "canonical": "Kikansha no Mahou wa Tokubetsu desu",
+            "en": "A Returner's Magic Should Be Special",
+            "en_jp": "Kikansha no Mahou wa Tokubetsu desu",
+            "ja_jp": ""
+          },
+          "year": 2023,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915277-6852-7289-9497-30d35a54f60b",
+      "title_ru": "Может, я встречу тебя в подземелье? 4",
+      "source": "kitsu",
+      "external_id": "44031",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=47164 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "44031",
+          "titles": {
+            "canonical": "Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka IV",
+            "en": "Is It Wrong to Try to Pick Up Girls in a Dungeon? IV",
+            "en_jp": "Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka IV",
+            "ja_jp": "ダンジョンに出会いを求めるのは間違っているだろうかⅣ"
+          },
+          "year": 2022,
+          "kind": "TV",
+          "episodes": 11
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915278-a890-70ff-ad34-0dbea4a101b5",
+      "title_ru": "Не издевайся, Нагаторо: Вторая атака",
+      "source": "kitsu",
+      "external_id": "45355",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=50197 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "45355",
+          "titles": {
+            "canonical": "Ijiranaide, Nagatoro-san 2nd Attack",
+            "en": "Don’t Toy With Me, Miss Nagatoro: 2nd Attack",
+            "en_jp": "Ijiranaide, Nagatoro-san 2nd Attack",
+            "ja_jp": "イジらないで、長瀞さん 2nd Attack"
+          },
+          "year": 2023,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915278-d458-7c57-a151-bbb4b1bf33bb",
+      "title_ru": "Власть книжного червя 3",
+      "source": "kitsu",
+      "external_id": "43607",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=42429 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "43607",
+          "titles": {
+            "canonical": "Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 3rd Season",
+            "en": "Ascendance of a Bookworm 3rd Season",
+            "en_jp": "Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 3rd Season",
+            "ja_jp": "本好きの下剋上 ～司書になるためには手段を選んでいられません～"
+          },
+          "year": 2022,
+          "kind": "TV",
+          "episodes": 10
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191527a-03a0-76ff-9deb-5737adeb96aa",
+      "title_ru": "Невеста чародея 2",
+      "source": "kitsu",
+      "external_id": "46436",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=52955 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "46436",
+          "titles": {
+            "canonical": "Mahoutsukai no Yome SEASON 2",
+            "en": "The Ancient Magus' Bride Season 2",
+            "en_jp": "Mahoutsukai no Yome SEASON 2",
+            "ja_jp": "魔法使いの嫁 SEASON2"
+          },
+          "year": 2023,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191527c-30c8-79d6-8f31-2d272b995119",
+      "title_ru": "Добро пожаловать в класс превосходства 2",
+      "source": "kitsu",
+      "external_id": "45925",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=51096 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "45925",
+          "titles": {
+            "canonical": "Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 2nd Season",
+            "en": "Classroom of the Elite 2",
+            "en_jp": "Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 2nd Season",
+            "ja_jp": "ようこそ実力至上主義の教室へ (続編)"
+          },
+          "year": 2022,
+          "kind": "TV",
+          "episodes": 13
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191527e-ff00-76a3-93e4-01b3ebacd9b6",
+      "title_ru": "Забвение бэттери",
+      "source": "kitsu",
+      "external_id": "48388",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=56165 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "48388",
+          "titles": {
+            "canonical": "Boukyaku Battery (TV)",
+            "en": "Oblivion Battery",
+            "en_jp": "Boukyaku Battery (TV)",
+            "ja_jp": "忘却バッテリー (TV)"
+          },
+          "year": 2024,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915282-266d-7596-a2f8-467db2530bf6",
+      "title_ru": "Токийские мстители: Рождественская битва",
+      "source": "kitsu",
+      "external_id": "45607",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=50608 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "45607",
+          "titles": {
+            "canonical": "Tokyo Revengers: Seiya Kessen-hen",
+            "en": "Tokyo Revengers: Christmas Showdown",
+            "en_jp": "Tokyo Revengers: Seiya Kessen-hen",
+            "ja_jp": "東京リベンジャーズ 聖夜決戦編"
+          },
+          "year": 2023,
+          "kind": "TV",
+          "episodes": 13
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915285-64a8-73a2-bcba-2a2b948ce1b4",
+      "title_ru": "Плод эволюции 2",
+      "source": "kitsu",
+      "external_id": "46033",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=51495 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "46033",
+          "titles": {
+            "canonical": "Shin Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei",
+            "en": "The Fruit of Evolution: Before I Knew It, My Life Had It Made Season 2",
+            "en_jp": "Shin Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei",
+            "ja_jp": "真・進化の実～知らないうちに勝ち組人生～"
+          },
+          "year": 2023,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:01915289-3fb7-70fb-b819-35fb48dedeb7",
+      "title_ru": "Девушка на час 2",
+      "source": "kitsu",
+      "external_id": "43588",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=42963 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "43588",
+          "titles": {
+            "canonical": "Kanojo, Okarishimasu Season 2",
+            "en": "Rent-a-Girlfriend Season 2",
+            "en_jp": "Kanojo, Okarishimasu Season 2",
+            "ja_jp": "彼女、お借りします"
+          },
+          "year": 2022,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    },
+    {
+      "title_id": "nova:0191528c-2f1e-7ec5-83b4-abea5934834d",
+      "title_ru": "Унеси меня на луну 2 сезон",
+      "source": "kitsu",
+      "external_id": "45415",
+      "status": "conflict",
+      "method": "exact_external_id",
+      "confidence": 0.0,
+      "reasons": [
+        "YEAR_MISMATCH"
+      ],
+      "detail": "myanimelist=50307 совпал, но факты расходятся: YEAR_MISMATCH",
+      "candidates": [
+        {
+          "external_id": "45415",
+          "titles": {
+            "canonical": "Tonikaku Kawaii 2",
+            "en": "TONIKAWA: Over the Moon For You 2",
+            "en_jp": "Tonikaku Kawaii 2",
+            "ja_jp": "トニカクカワイイ2"
+          },
+          "year": 2023,
+          "kind": "TV",
+          "episodes": 12
+        }
+      ]
+    }
+  ],
+  "samples": [
+    {
+      "title_id": "nova:01915121-406a-7041-b9eb-7f0243f3d5c1",
+      "title_ru": "Восточный Эдем",
+      "year": 2009,
+      "source": "kitsu",
+      "external_id": "4211",
+      "raw_score": "78.65",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.865",
+      "display": "7.9",
+      "vote_count": 23127,
+      "user_count": 51502,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/eden-of-the-east"
+    },
+    {
+      "title_id": "nova:01915121-6352-73af-9f34-637aae6334d9",
+      "title_ru": "Мост в звёздное небо",
+      "year": 2011,
+      "source": "kitsu",
+      "external_id": "6025",
+      "raw_score": "66.47",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.647",
+      "display": "6.6",
+      "vote_count": 6632,
+      "user_count": 14325,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/hoshizora-e-kakaru-hashi"
+    },
+    {
+      "title_id": "nova:01915121-6d45-7d8f-94bf-966d6507d1ab",
+      "title_ru": "Сад тысячи цветов: Девушки-самураи",
+      "year": 2013,
+      "source": "kitsu",
+      "external_id": "7244",
+      "raw_score": "65.67",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.567",
+      "display": "6.6",
+      "vote_count": 3338,
+      "user_count": 8775,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/hyakka-ryouran-samurai-bride"
+    },
+    {
+      "title_id": "nova:01915121-768f-7018-8da4-48b59703e868",
+      "title_ru": "Хёка",
+      "year": 2012,
+      "source": "kitsu",
+      "external_id": "6686",
+      "raw_score": "81.38",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "8.138",
+      "display": "8.1",
+      "vote_count": 41957,
+      "user_count": 97545,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/hyouka"
+    },
+    {
+      "title_id": "nova:01915121-9420-79ee-9165-281298e09c80",
+      "title_ru": "Идолмастер: Девушки-золушки",
+      "year": 2015,
+      "source": "kitsu",
+      "external_id": "8777",
+      "raw_score": "70.41",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.041",
+      "display": "7.0",
+      "vote_count": 2832,
+      "user_count": 7722,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/the-idolm-ster-cinderella-girls"
+    },
+    {
+      "title_id": "nova:01915121-9f6c-7473-9e1c-aee9ba4820d0",
+      "title_ru": "Моя сестренка последнее время сама не своя",
+      "year": 2014,
+      "source": "kitsu",
+      "external_id": "8060",
+      "raw_score": "59.59",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "5.959",
+      "display": "6.0",
+      "vote_count": 6178,
+      "user_count": 15022,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/saikin-imouto-no-yousu-ga-chotto-okashiin-da-ga"
+    },
+    {
+      "title_id": "nova:01915121-a920-7379-af9d-53798c185faf",
+      "title_ru": "Инари, лисицы и волшебная любовь",
+      "year": 2014,
+      "source": "kitsu",
+      "external_id": "7988",
+      "raw_score": "71.07",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.107",
+      "display": "7.1",
+      "vote_count": 5284,
+      "user_count": 14118,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/inari-konkon-koi-iroha"
+    },
+    {
+      "title_id": "nova:01915121-b9de-7969-b26c-874ff9a95062",
+      "title_ru": "Супербои в повседневности",
+      "year": 2014,
+      "source": "kitsu",
+      "external_id": "8452",
+      "raw_score": "70.62",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.062",
+      "display": "7.1",
+      "vote_count": 13479,
+      "user_count": 31815,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/inou-battle-wa-nichijou-kei-no-naka-de"
+    },
+    {
+      "title_id": "nova:01915121-c379-7907-921a-a0330bca89fb",
+      "title_ru": "Лис из секретной службы и я",
+      "year": 2012,
+      "source": "kitsu",
+      "external_id": "6439",
+      "raw_score": "74.31",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.431",
+      "display": "7.4",
+      "vote_count": 15834,
+      "user_count": 38089,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/inu-x-boku-ss"
+    },
+    {
+      "title_id": "nova:01915121-e480-7569-905f-9ae8b7b8ce7c",
+      "title_ru": "Друзья на неделю",
+      "year": 2014,
+      "source": "kitsu",
+      "external_id": "8096",
+      "raw_score": "76.09",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.609",
+      "display": "7.6",
+      "vote_count": 12187,
+      "user_count": 28310,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/isshuukan-friends"
+    },
+    {
+      "title_id": "nova:01915121-ec44-7051-abab-5333a19f97b3",
+      "title_ru": "Клест",
+      "year": 2015,
+      "source": "kitsu",
+      "external_id": "8645",
+      "raw_score": "58.06",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "5.806",
+      "display": "5.8",
+      "vote_count": 4769,
+      "user_count": 12294,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/isuca"
+    },
+    {
+      "title_id": "nova:01915121-f30a-79b2-9cb5-94f99a3ac89b",
+      "title_ru": "Всесильный Фафнир",
+      "year": 2015,
+      "source": "kitsu",
+      "external_id": "8649",
+      "raw_score": "60.76",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.076",
+      "display": "6.1",
+      "vote_count": 4741,
+      "user_count": 11808,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/juuou-mujin-no-fafnir"
+    },
+    {
+      "title_id": "nova:01915125-0522-7978-a60f-5d24fdccb5a2",
+      "title_ru": "Проект Кей: Возвращение Королей",
+      "year": 2015,
+      "source": "kitsu",
+      "external_id": "9964",
+      "raw_score": "75.55",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.555",
+      "display": "7.6",
+      "vote_count": 8867,
+      "user_count": 21637,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/k-2015"
+    },
+    {
+      "title_id": "nova:01915125-1c70-79fc-a029-5f9c72574428",
+      "title_ru": "Вальврейв Освободитель",
+      "year": 2013,
+      "source": "kitsu",
+      "external_id": "7487",
+      "raw_score": "69.64",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.964",
+      "display": "7.0",
+      "vote_count": 8313,
+      "user_count": 17878,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/kakumeiki-valvrave"
+    },
+    {
+      "title_id": "nova:01915125-38c8-779c-8c8f-3295305b0e95",
+      "title_ru": "Игры богов",
+      "year": 2014,
+      "source": "kitsu",
+      "external_id": "8160",
+      "raw_score": "69.71",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.971",
+      "display": "7.0",
+      "vote_count": 3724,
+      "user_count": 10615,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/kamigami-no-asobi"
+    },
+    {
+      "title_id": "nova:01915125-40c2-7395-8b4d-7244d1279e29",
+      "title_ru": "Карнавал",
+      "year": 2013,
+      "source": "kitsu",
+      "external_id": "7364",
+      "raw_score": "69.23",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.923",
+      "display": "6.9",
+      "vote_count": 6391,
+      "user_count": 17066,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/karneval-tv"
+    },
+    {
+      "title_id": "nova:01915125-4b0e-7f39-8f58-ba534b5031d4",
+      "title_ru": "Истории мечей",
+      "year": 2010,
+      "source": "kitsu",
+      "external_id": "4630",
+      "raw_score": "81.53",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "8.153",
+      "display": "8.2",
+      "vote_count": 19375,
+      "user_count": 52852,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/katanagatari"
+    },
+    {
+      "title_id": "nova:01915125-6e08-7c91-ae9d-b3a072c60d38",
+      "title_ru": "Убить или быть убитым",
+      "year": 2013,
+      "source": "kitsu",
+      "external_id": "7712",
+      "raw_score": "81.17",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "8.117",
+      "display": "8.1",
+      "vote_count": 62086,
+      "user_count": 125654,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/kill-la-kill"
+    },
+    {
+      "title_id": "nova:01915125-8b22-7997-af40-bfa095bcc8f9",
+      "title_ru": "Достучаться до тебя",
+      "year": 2009,
+      "source": "kitsu",
+      "external_id": "4397",
+      "raw_score": "81.27",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "8.127",
+      "display": "8.1",
+      "vote_count": 28216,
+      "user_count": 65801,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/kimi-ni-todoke"
+    },
+    {
+      "title_id": "nova:01915125-ccaf-745d-a6f1-8a84b068dc0a",
+      "title_ru": "Город, в котором ты живёшь",
+      "year": 2013,
+      "source": "kitsu",
+      "external_id": "7672",
+      "raw_score": "66.71",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "6.671",
+      "display": "6.7",
+      "vote_count": 4484,
+      "user_count": 12239,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/kimi-no-iru-machi"
+    },
+    {
+      "title_id": "nova:01915125-d67d-74ac-842f-ed29809cbfb0",
+      "title_ru": "Ты и я",
+      "year": 2012,
+      "source": "kitsu",
+      "external_id": "6581",
+      "raw_score": "80.42",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "8.042",
+      "display": "8.0",
+      "vote_count": 4303,
+      "user_count": 10030,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/kimi-to-boku-2"
+    },
+    {
+      "title_id": "nova:01915125-dfc9-7d04-969b-2972f55252e1",
+      "title_ru": "Уж не зомби ли это?",
+      "year": 2011,
+      "source": "kitsu",
+      "external_id": "5507",
+      "raw_score": "74.07",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.407",
+      "display": "7.4",
+      "vote_count": 23217,
+      "user_count": 47095,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/kore-wa-zombie-desu-ka"
+    },
+    {
+      "title_id": "nova:01915126-023e-71c1-a1ac-841083741a40",
+      "title_ru": "Взор ужаса",
+      "year": 2015,
+      "source": "kitsu",
+      "external_id": "11052",
+      "raw_score": "50.94",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "5.094",
+      "display": "5.1",
+      "vote_count": 1496,
+      "user_count": 4213,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/kowabon"
+    },
+    {
+      "title_id": "nova:01915126-0b57-7ab4-9986-c99d6ffdf4d3",
+      "title_ru": "Темный дворецкий",
+      "year": 2008,
+      "source": "kitsu",
+      "external_id": "3840",
+      "raw_score": "77.37",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.737",
+      "display": "7.7",
+      "vote_count": 32729,
+      "user_count": 78952,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/black-butler"
+    },
+    {
+      "title_id": "nova:01915126-2ab1-75d0-885b-d092934642d4",
+      "title_ru": "Темный дворецкий 2",
+      "year": 2010,
+      "source": "kitsu",
+      "external_id": "4678",
+      "raw_score": "70.64",
+      "source_scale": "0–100",
+      "formula": "divide_10_from_0_100",
+      "normalized": "7.064",
+      "display": "7.1",
+      "vote_count": 16568,
+      "user_count": 34106,
+      "state": "OK",
+      "outcome": "inserted",
+      "provenance_url": "https://kitsu.io/anime/black-butler-ii"
+    }
+  ]
+}
