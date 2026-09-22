@@ -1,0 +1,412 @@
+{
+ "runtime_before": "/tmp/claude-1001/-home-claude-wt-zona-real-slider-01/3bd2676e-1ba6-48ed-88ba-b9d6aba75f4a/scratchpad/base-head/automation/host/lords-frontend.py",
+ "runtime_after": "automation/host/lords-frontend.py",
+ "families": [
+  {
+   "family": "lords",
+   "design_version": "1.1.0",
+   "routes": [
+    {
+     "route": "/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "dcbe7e22c01f18efeccfe0f7ed3fea5b8bff842dd35119568b912eb8ad69c3f2",
+     "sha256_after": "dcbe7e22c01f18efeccfe0f7ed3fea5b8bff842dd35119568b912eb8ad69c3f2",
+     "identical": true,
+     "bytes": 23330
+    },
+    {
+     "route": "/catalog/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "4265dc747a7edd88bd15787d44bbb5ba21248da83a8a0ccce9f08d8fd98b4d90",
+     "sha256_after": "4265dc747a7edd88bd15787d44bbb5ba21248da83a8a0ccce9f08d8fd98b4d90",
+     "identical": true,
+     "bytes": 40290
+    },
+    {
+     "route": "/new/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "30aaf522d7d71293535941d220e924620eb23302d2941447d9974aa4988acfe6",
+     "sha256_after": "30aaf522d7d71293535941d220e924620eb23302d2941447d9974aa4988acfe6",
+     "identical": true,
+     "bytes": 24142
+    },
+    {
+     "route": "/movies/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "a66855339b1037dcd8bf360f918c5cc998a898741c993525368cd7128eef1a24",
+     "sha256_after": "a66855339b1037dcd8bf360f918c5cc998a898741c993525368cd7128eef1a24",
+     "identical": true,
+     "bytes": 40645
+    },
+    {
+     "route": "/series/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "2a171b029084c17edd3b222d6290c27db1ec4a50212a225faaae5f22f34da84c",
+     "sha256_after": "2a171b029084c17edd3b222d6290c27db1ec4a50212a225faaae5f22f34da84c",
+     "identical": true,
+     "bytes": 40401
+    },
+    {
+     "route": "/animation/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "745c9d791291fcf95f286c149cc562272d5e690e28879c6ce023267cc4fa2a6c",
+     "sha256_after": "745c9d791291fcf95f286c149cc562272d5e690e28879c6ce023267cc4fa2a6c",
+     "identical": true,
+     "bytes": 44361
+    },
+    {
+     "route": "/search/?q=%D0%B0",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "dcb2a110c807bd64e0a79cfbfc9914d3e3e29131371a5a00ce7700e0cc88a621",
+     "sha256_after": "dcb2a110c807bd64e0a79cfbfc9914d3e3e29131371a5a00ce7700e0cc88a621",
+     "identical": true,
+     "bytes": 46088
+    },
+    {
+     "route": "/search/?q=zzzzzzzzzz",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "5b760fd327e5bf18c1299fa32c40b1aeaef186fd747855f7c9964dcb42c962ca",
+     "sha256_after": "5b760fd327e5bf18c1299fa32c40b1aeaef186fd747855f7c9964dcb42c962ca",
+     "identical": true,
+     "bytes": 20045
+    },
+    {
+     "route": "/collections/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "feb36d7fe407955a2f7a1adde526bc07f2ce2d39fed70777cca8185c906fe606",
+     "sha256_after": "feb36d7fe407955a2f7a1adde526bc07f2ce2d39fed70777cca8185c906fe606",
+     "identical": true,
+     "bytes": 21033
+    },
+    {
+     "route": "/title/poteryannyy-v-momente/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "abd6d00e9a2d545c45e752fbb7603858734d9b9a8288415a7a0d61a2d24f0511",
+     "sha256_after": "abd6d00e9a2d545c45e752fbb7603858734d9b9a8288415a7a0d61a2d24f0511",
+     "identical": true,
+     "bytes": 31931
+    },
+    {
+     "route": "/title/troe-papash/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "162e67d3fef9b5b3d6169c13aa301aac9822d2f3312d414acec346cbd651e6f8",
+     "sha256_after": "162e67d3fef9b5b3d6169c13aa301aac9822d2f3312d414acec346cbd651e6f8",
+     "identical": true,
+     "bytes": 33544
+    },
+    {
+     "route": "/title/troe-papash/season-1/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "26dc080fda26077b9d84c80a4b621e4414724ed50e5e8358497f758856c8e5d0",
+     "sha256_after": "26dc080fda26077b9d84c80a4b621e4414724ed50e5e8358497f758856c8e5d0",
+     "identical": true,
+     "bytes": 22337
+    },
+    {
+     "route": "/title/troe-papash/season-1/episode-1/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "312163f909ca17bd1613aa4ee39ebb33afde51226973a53236f9cc718efb4c3f",
+     "sha256_after": "312163f909ca17bd1613aa4ee39ebb33afde51226973a53236f9cc718efb4c3f",
+     "identical": true,
+     "bytes": 23455
+    },
+    {
+     "route": "/takogo-adresa-net/",
+     "status_before": 404,
+     "status_after": 404,
+     "sha256_before": "21e457667e55409e659873f2dc00649bd43f989aba9281c9c3432edb231a0860",
+     "sha256_after": "21e457667e55409e659873f2dc00649bd43f989aba9281c9c3432edb231a0860",
+     "identical": true,
+     "bytes": 19972
+    }
+   ],
+   "identical_routes": 14,
+   "total_routes": 14,
+   "diverged": []
+  },
+  {
+   "family": "animedia",
+   "design_version": "1.2.1",
+   "routes": [
+    {
+     "route": "/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "23d274634479c79749a7c26eb4e8f70405ac1386aadaf4e5a0d82a149fd6483d",
+     "sha256_after": "23d274634479c79749a7c26eb4e8f70405ac1386aadaf4e5a0d82a149fd6483d",
+     "identical": true,
+     "bytes": 30555
+    },
+    {
+     "route": "/catalog/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "84d467de51d9a66de2311089038e97c35d79e0f76c2ed23c99330a5aca9bd6b3",
+     "sha256_after": "84d467de51d9a66de2311089038e97c35d79e0f76c2ed23c99330a5aca9bd6b3",
+     "identical": true,
+     "bytes": 43006
+    },
+    {
+     "route": "/new/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "0c5db7f42d6e75982c736ad5eb65699343dcae07c1c137e7dbfd6ad490175900",
+     "sha256_after": "0c5db7f42d6e75982c736ad5eb65699343dcae07c1c137e7dbfd6ad490175900",
+     "identical": true,
+     "bytes": 42740
+    },
+    {
+     "route": "/movies/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "9b3b4deabed664e90c698381e6c61fd847da10397607e3d21351c02b24769640",
+     "sha256_after": "9b3b4deabed664e90c698381e6c61fd847da10397607e3d21351c02b24769640",
+     "identical": true,
+     "bytes": 43128
+    },
+    {
+     "route": "/series/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "5d5872f6afb3afb9d68918660c2f004d4819b1f72227be7ccf8a04c79f90a364",
+     "sha256_after": "5d5872f6afb3afb9d68918660c2f004d4819b1f72227be7ccf8a04c79f90a364",
+     "identical": true,
+     "bytes": 43136
+    },
+    {
+     "route": "/animation/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "b26da2d1daa0c09bfdb4050dfaeb95eda523cd46bd72fcaaab18fe3865f97181",
+     "sha256_after": "b26da2d1daa0c09bfdb4050dfaeb95eda523cd46bd72fcaaab18fe3865f97181",
+     "identical": true,
+     "bytes": 43609
+    },
+    {
+     "route": "/search/?q=%D0%B0",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "860363b02dc460c03c4d8fbd28ba8226af0b7f4037321c43f4409e7f933f9060",
+     "sha256_after": "860363b02dc460c03c4d8fbd28ba8226af0b7f4037321c43f4409e7f933f9060",
+     "identical": true,
+     "bytes": 28689
+    },
+    {
+     "route": "/search/?q=zzzzzzzzzz",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "053b42ffd72a1995bb4319b1ffdbff70e0cf4f92b00ab9fa7ac1d32d318aa926",
+     "sha256_after": "053b42ffd72a1995bb4319b1ffdbff70e0cf4f92b00ab9fa7ac1d32d318aa926",
+     "identical": true,
+     "bytes": 28729
+    },
+    {
+     "route": "/collections/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "122eaffd5dbd6f2d4b93a4630dc32600f06c961877dbe4e6a4e15f4ab65e3705",
+     "sha256_after": "122eaffd5dbd6f2d4b93a4630dc32600f06c961877dbe4e6a4e15f4ab65e3705",
+     "identical": true,
+     "bytes": 28992
+    },
+    {
+     "route": "/title/poteryannyy-v-momente/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "10a61ccac13883b0380d66f8710759c4a6fe759a346e4848d4929642cc85306d",
+     "sha256_after": "10a61ccac13883b0380d66f8710759c4a6fe759a346e4848d4929642cc85306d",
+     "identical": true,
+     "bytes": 32780
+    },
+    {
+     "route": "/title/troe-papash/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "f7ff93a2c4f1a14a5dc5d19ab55058c37fb959286a72080fcd582434ea0d8054",
+     "sha256_after": "f7ff93a2c4f1a14a5dc5d19ab55058c37fb959286a72080fcd582434ea0d8054",
+     "identical": true,
+     "bytes": 34553
+    },
+    {
+     "route": "/title/troe-papash/season-1/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "4e4958f442b17a393b67c3dc568a31be644286bc0020c995eec90feef8a9fa43",
+     "sha256_after": "4e4958f442b17a393b67c3dc568a31be644286bc0020c995eec90feef8a9fa43",
+     "identical": true,
+     "bytes": 30003
+    },
+    {
+     "route": "/title/troe-papash/season-1/episode-1/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "28ed100f096d66231f2b6853f0500241353cb30885551e1323f94dc19b0b9a67",
+     "sha256_after": "28ed100f096d66231f2b6853f0500241353cb30885551e1323f94dc19b0b9a67",
+     "identical": true,
+     "bytes": 31839
+    },
+    {
+     "route": "/takogo-adresa-net/",
+     "status_before": 404,
+     "status_after": 404,
+     "sha256_before": "6c2f8de06aa61339508ef776d51a79afe9e50b59c93c2add1a4297c09ba830e3",
+     "sha256_after": "6c2f8de06aa61339508ef776d51a79afe9e50b59c93c2add1a4297c09ba830e3",
+     "identical": true,
+     "bytes": 27821
+    }
+   ],
+   "identical_routes": 14,
+   "total_routes": 14,
+   "diverged": []
+  },
+  {
+   "family": "animedia",
+   "design_version": "1.2.0",
+   "routes": [
+    {
+     "route": "/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "d58e5a53f5ecb21a47257a7beffd3adf500ec93025e2d2b0fec9d9255909a892",
+     "sha256_after": "d58e5a53f5ecb21a47257a7beffd3adf500ec93025e2d2b0fec9d9255909a892",
+     "identical": true,
+     "bytes": 30555
+    },
+    {
+     "route": "/catalog/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "f6493410bb710e48bb5a9e4221cdcfd95f1bca58fcb1e0db414d7d22bb34d8b5",
+     "sha256_after": "f6493410bb710e48bb5a9e4221cdcfd95f1bca58fcb1e0db414d7d22bb34d8b5",
+     "identical": true,
+     "bytes": 43006
+    },
+    {
+     "route": "/new/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "696c1bdf2c7a4dde92959ca309f6da0c9a162f06550dbc6ec1c820e184798cb2",
+     "sha256_after": "696c1bdf2c7a4dde92959ca309f6da0c9a162f06550dbc6ec1c820e184798cb2",
+     "identical": true,
+     "bytes": 42740
+    },
+    {
+     "route": "/movies/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "567d69a535995d0381787e77f1cbfeeac9ca85ea62f255205e81d00bdd4c760e",
+     "sha256_after": "567d69a535995d0381787e77f1cbfeeac9ca85ea62f255205e81d00bdd4c760e",
+     "identical": true,
+     "bytes": 43128
+    },
+    {
+     "route": "/series/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "6acfbbef2a15496411184bf3dac7846985ba90dc03b40564fbcb510b14af02d4",
+     "sha256_after": "6acfbbef2a15496411184bf3dac7846985ba90dc03b40564fbcb510b14af02d4",
+     "identical": true,
+     "bytes": 43136
+    },
+    {
+     "route": "/animation/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "70102dd10843ab820be81091e57d3cad01aa3efef64d000e02a9c857c5da8763",
+     "sha256_after": "70102dd10843ab820be81091e57d3cad01aa3efef64d000e02a9c857c5da8763",
+     "identical": true,
+     "bytes": 43609
+    },
+    {
+     "route": "/search/?q=%D0%B0",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "ef258815970dfc2850afc03a57979ca94df6b42e2b1fa31f3e56e22dd7e9743d",
+     "sha256_after": "ef258815970dfc2850afc03a57979ca94df6b42e2b1fa31f3e56e22dd7e9743d",
+     "identical": true,
+     "bytes": 28689
+    },
+    {
+     "route": "/search/?q=zzzzzzzzzz",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "ee720a10eea53023ebe8396b71cdd4a1ae8f2e180093aaaa378708da7505cbd2",
+     "sha256_after": "ee720a10eea53023ebe8396b71cdd4a1ae8f2e180093aaaa378708da7505cbd2",
+     "identical": true,
+     "bytes": 28729
+    },
+    {
+     "route": "/collections/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "b315982a1ffc925505df810dc1ca7deae3be633fc064c531f72580800790ce18",
+     "sha256_after": "b315982a1ffc925505df810dc1ca7deae3be633fc064c531f72580800790ce18",
+     "identical": true,
+     "bytes": 28992
+    },
+    {
+     "route": "/title/poteryannyy-v-momente/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "2d2633db0b3d64ac6b8075b57171d00199d14de5e90dbd63c0981c85b9c82d30",
+     "sha256_after": "2d2633db0b3d64ac6b8075b57171d00199d14de5e90dbd63c0981c85b9c82d30",
+     "identical": true,
+     "bytes": 32780
+    },
+    {
+     "route": "/title/troe-papash/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "77742353ebacbaec2e2e088e542a73e918041e70821e12391f5385f32ca08e62",
+     "sha256_after": "77742353ebacbaec2e2e088e542a73e918041e70821e12391f5385f32ca08e62",
+     "identical": true,
+     "bytes": 34553
+    },
+    {
+     "route": "/title/troe-papash/season-1/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "17ea451639584e5702c9e0f627d612dd225f0a771119e368269f063e1665ffe3",
+     "sha256_after": "17ea451639584e5702c9e0f627d612dd225f0a771119e368269f063e1665ffe3",
+     "identical": true,
+     "bytes": 30003
+    },
+    {
+     "route": "/title/troe-papash/season-1/episode-1/",
+     "status_before": 200,
+     "status_after": 200,
+     "sha256_before": "d91271b72e0be5a51db7f7c02fb9f4e08dd8b7edebb88885fb322acece3fedc8",
+     "sha256_after": "d91271b72e0be5a51db7f7c02fb9f4e08dd8b7edebb88885fb322acece3fedc8",
+     "identical": true,
+     "bytes": 31839
+    },
+    {
+     "route": "/takogo-adresa-net/",
+     "status_before": 404,
+     "status_after": 404,
+     "sha256_before": "779faf80e569ab8a8677fff95f3f6cb536d73c52a74af03069b17aa1e1c62390",
+     "sha256_after": "779faf80e569ab8a8677fff95f3f6cb536d73c52a74af03069b17aa1e1c62390",
+     "identical": true,
+     "bytes": 27821
+    }
+   ],
+   "identical_routes": 14,
+   "total_routes": 14,
+   "diverged": []
+  }
+ ],
+ "all_identical": true
+}
