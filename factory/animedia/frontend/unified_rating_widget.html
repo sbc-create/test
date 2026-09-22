@@ -1,0 +1,77 @@
+<!-- Блок оценок animedia.icu. Монтируется только когда adapter.widget_context
+     вернул контекст: нет данных — нет блока, карточка не меняется.
+
+     Разметка отдаётся сервером целиком, поэтому блок виден и без
+     JavaScript, и без запроса к API. Скрипт добавляет только то, чего
+     нельзя сделать разметкой: отправку собственной оценки.
+
+     Высота блока задана заранее (min-height), иначе появление оценок
+     после загрузки сдвигало бы описание под ним. -->
+<section class="ur-block" data-unified-ratings
+         data-space="{{ ctx.space }}"
+         data-subject="{{ ctx.subject_id }}"
+         data-api="{{ ctx.api_base }}"
+         data-write-enabled="{{ '1' if ctx.write_enabled else '0' }}"
+         aria-labelledby="ur-heading">
+  <h2 id="ur-heading" class="ur-heading">Оценки</h2>
+
+  {% if ctx.composite %}
+  <div class="ur-composite">
+    <span class="ur-composite-label">{{ ctx.composite.label }}</span>
+    <strong class="ur-composite-value">{{ ctx.composite.value }}</strong>
+    <span class="ur-composite-basis">На основе {{ ctx.composite.source_count }} источников</span>
+    <details class="ur-composite-detail">
+      <summary>Какие источники учтены</summary>
+      <ul class="ur-composite-sources">
+        {% for source in ctx.composite.sources %}<li>{{ source }}</li>{% endfor %}
+      </ul>
+    </details>
+  </div>
+  {% endif %}
+
+  {% if ctx.external %}
+  <ul class="ur-sources" aria-label="Оценки внешних источников">
+    {% for source in ctx.external %}
+    <li class="ur-source">
+      <span class="ur-source-name">{{ source.label }}</span>
+      <span class="ur-source-value">{{ source.score }}</span>
+      {% if source.votes %}<span class="ur-source-votes">{{ source.votes }} голосов</span>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if ctx.editorial %}
+  <p class="ur-editorial"><span>{{ ctx.editorial.label }}</span>
+     <strong>{{ ctx.editorial.value }}/10</strong></p>
+  {% endif %}
+
+  <div class="ur-community">
+    {% if ctx.community %}
+    <p class="ur-community-summary">
+      <span>{{ ctx.community.label }}</span>
+      <strong data-role="community-average">{{ ctx.community.average }}</strong>
+      <span data-role="community-votes">{{ ctx.community.votes }} голосов</span>
+    </p>
+    {% else %}
+    <p class="ur-community-summary" data-role="community-empty">
+      <span>Оценка зрителей</span> <span data-role="community-average">Пока нет оценок</span>
+    </p>
+    {% endif %}
+
+    {% if ctx.write_enabled %}
+    <fieldset class="ur-vote" data-role="vote">
+      <legend class="ur-vote-legend">Ваша оценка</legend>
+      <div class="ur-scale" role="radiogroup" aria-label="Оценка от 1 до 10">
+        {% for value in [1,2,3,4,5,6,7,8,9,10] %}
+        <button type="button" class="ur-star" role="radio" aria-checked="false"
+                data-score="{{ value }}" aria-label="Поставить оценку {{ value }} из 10">{{ value }}</button>
+        {% endfor %}
+      </div>
+      <p class="ur-my" data-role="my-score" aria-live="polite">Вы ещё не оценили</p>
+      <button type="button" class="ur-retract" data-role="retract" hidden>Убрать мою оценку</button>
+      <p class="ur-status" data-role="status" role="status" aria-live="polite"></p>
+    </fieldset>
+    {% endif %}
+  </div>
+</section>
