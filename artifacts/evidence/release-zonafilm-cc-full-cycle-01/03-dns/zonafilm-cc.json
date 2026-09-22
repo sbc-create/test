@@ -1,0 +1,845 @@
+{
+  "apex": "zonafilm.cc",
+  "www": "www.zonafilm.cc",
+  "expected_ns": [
+    "paris.ns.cloudflare.com",
+    "piers.ns.cloudflare.com"
+  ],
+  "expected_a": "45.131.182.225",
+  "checked_at": "2026-09-22T11:39:18Z",
+  "public": {
+    "cloudflare": {
+      "resolver": "1.1.1.1",
+      "ns": {
+        "server": "1.1.1.1",
+        "rcode": "NOERROR",
+        "authoritative": false,
+        "elapsed_ms": 29.6,
+        "answers": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "NS",
+            "ttl": 86400,
+            "value": "paris.ns.cloudflare.com"
+          },
+          {
+            "owner": "zonafilm.cc",
+            "type": "NS",
+            "ttl": 86400,
+            "value": "piers.ns.cloudflare.com"
+          }
+        ],
+        "authority": [],
+        "additional": []
+      },
+      "soa": {
+        "server": "1.1.1.1",
+        "rcode": "NOERROR",
+        "authoritative": false,
+        "elapsed_ms": 22.0,
+        "answers": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "authority": [],
+        "additional": []
+      },
+      "a_apex": {
+        "server": "1.1.1.1",
+        "rcode": "NOERROR",
+        "authoritative": false,
+        "elapsed_ms": 24.8,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "aaaa_apex": {
+        "server": "1.1.1.1",
+        "rcode": "NOERROR",
+        "authoritative": false,
+        "elapsed_ms": 5.1,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "a_www": {
+        "server": "1.1.1.1",
+        "rcode": "NXDOMAIN",
+        "authoritative": false,
+        "elapsed_ms": 21.7,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "aaaa_www": {
+        "server": "1.1.1.1",
+        "rcode": "NXDOMAIN",
+        "authoritative": false,
+        "elapsed_ms": 29.9,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "cname_www": {
+        "server": "1.1.1.1",
+        "rcode": "NXDOMAIN",
+        "authoritative": false,
+        "elapsed_ms": 27.9,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      }
+    },
+    "google": {
+      "resolver": "8.8.8.8",
+      "ns": {
+        "server": "8.8.8.8",
+        "rcode": "NOERROR",
+        "authoritative": false,
+        "elapsed_ms": 16.3,
+        "answers": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "NS",
+            "ttl": 21600,
+            "value": "paris.ns.cloudflare.com"
+          },
+          {
+            "owner": "zonafilm.cc",
+            "type": "NS",
+            "ttl": 21600,
+            "value": "piers.ns.cloudflare.com"
+          }
+        ],
+        "authority": [],
+        "additional": []
+      },
+      "soa": {
+        "server": "8.8.8.8",
+        "rcode": "NOERROR",
+        "authoritative": false,
+        "elapsed_ms": 15.4,
+        "answers": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "authority": [],
+        "additional": []
+      },
+      "a_apex": {
+        "server": "8.8.8.8",
+        "rcode": "NOERROR",
+        "authoritative": false,
+        "elapsed_ms": 7.9,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "aaaa_apex": {
+        "server": "8.8.8.8",
+        "rcode": "NOERROR",
+        "authoritative": false,
+        "elapsed_ms": 15.8,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "a_www": {
+        "server": "8.8.8.8",
+        "rcode": "NXDOMAIN",
+        "authoritative": false,
+        "elapsed_ms": 41.7,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "aaaa_www": {
+        "server": "8.8.8.8",
+        "rcode": "NXDOMAIN",
+        "authoritative": false,
+        "elapsed_ms": 19.8,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "cname_www": {
+        "server": "8.8.8.8",
+        "rcode": "NXDOMAIN",
+        "authoritative": false,
+        "elapsed_ms": 29.8,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      }
+    },
+    "quad9": {
+      "resolver": "9.9.9.9",
+      "ns": {
+        "server": "9.9.9.9",
+        "rcode": "NOERROR",
+        "authoritative": false,
+        "elapsed_ms": 13.5,
+        "answers": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "NS",
+            "ttl": 43200,
+            "value": "paris.ns.cloudflare.com"
+          },
+          {
+            "owner": "zonafilm.cc",
+            "type": "NS",
+            "ttl": 43200,
+            "value": "piers.ns.cloudflare.com"
+          }
+        ],
+        "authority": [],
+        "additional": []
+      },
+      "soa": {
+        "server": "9.9.9.9",
+        "rcode": "NOERROR",
+        "authoritative": false,
+        "elapsed_ms": 26.4,
+        "answers": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "authority": [],
+        "additional": []
+      },
+      "a_apex": {
+        "server": "9.9.9.9",
+        "rcode": "NOERROR",
+        "authoritative": false,
+        "elapsed_ms": 15.9,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "aaaa_apex": {
+        "server": "9.9.9.9",
+        "rcode": "NOERROR",
+        "authoritative": false,
+        "elapsed_ms": 6.8,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "a_www": {
+        "server": "9.9.9.9",
+        "rcode": "NXDOMAIN",
+        "authoritative": false,
+        "elapsed_ms": 21.7,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "aaaa_www": {
+        "server": "9.9.9.9",
+        "rcode": "NXDOMAIN",
+        "authoritative": false,
+        "elapsed_ms": 46.8,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "cname_www": {
+        "server": "9.9.9.9",
+        "rcode": "NXDOMAIN",
+        "authoritative": false,
+        "elapsed_ms": 27.5,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      }
+    },
+    "opendns": {
+      "resolver": "208.67.222.222",
+      "ns": {
+        "server": "208.67.222.222",
+        "rcode": "NOERROR",
+        "authoritative": false,
+        "elapsed_ms": 19.2,
+        "answers": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "NS",
+            "ttl": 86400,
+            "value": "paris.ns.cloudflare.com"
+          },
+          {
+            "owner": "zonafilm.cc",
+            "type": "NS",
+            "ttl": 86400,
+            "value": "piers.ns.cloudflare.com"
+          }
+        ],
+        "authority": [],
+        "additional": []
+      },
+      "soa": {
+        "server": "208.67.222.222",
+        "rcode": "NOERROR",
+        "authoritative": false,
+        "elapsed_ms": 19.2,
+        "answers": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "authority": [],
+        "additional": []
+      },
+      "a_apex": {
+        "server": "208.67.222.222",
+        "rcode": "NOERROR",
+        "authoritative": false,
+        "elapsed_ms": 14.9,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "aaaa_apex": {
+        "server": "208.67.222.222",
+        "rcode": "NOERROR",
+        "authoritative": false,
+        "elapsed_ms": 21.0,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "a_www": {
+        "server": "208.67.222.222",
+        "rcode": "NXDOMAIN",
+        "authoritative": false,
+        "elapsed_ms": 12.7,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "aaaa_www": {
+        "server": "208.67.222.222",
+        "rcode": "NXDOMAIN",
+        "authoritative": false,
+        "elapsed_ms": 21.5,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "cname_www": {
+        "server": "208.67.222.222",
+        "rcode": "NXDOMAIN",
+        "authoritative": false,
+        "elapsed_ms": 14.0,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      }
+    }
+  },
+  "authoritative": {
+    "paris.ns.cloudflare.com": {
+      "address": "162.159.38.113",
+      "a_apex": {
+        "server": "162.159.38.113",
+        "rcode": "NOERROR",
+        "authoritative": true,
+        "elapsed_ms": 12.4,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "aaaa_apex": {
+        "server": "162.159.38.113",
+        "rcode": "NOERROR",
+        "authoritative": true,
+        "elapsed_ms": 12.6,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "a_www": {
+        "server": "162.159.38.113",
+        "rcode": "NXDOMAIN",
+        "authoritative": true,
+        "elapsed_ms": 12.6,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "aaaa_www": {
+        "server": "162.159.38.113",
+        "rcode": "NXDOMAIN",
+        "authoritative": true,
+        "elapsed_ms": 13.7,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "cname_www": {
+        "server": "162.159.38.113",
+        "rcode": "NXDOMAIN",
+        "authoritative": true,
+        "elapsed_ms": 13.6,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "soa": {
+        "server": "162.159.38.113",
+        "rcode": "NOERROR",
+        "authoritative": true,
+        "elapsed_ms": 11.9,
+        "answers": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "authority": [],
+        "additional": []
+      }
+    },
+    "piers.ns.cloudflare.com": {
+      "address": "172.64.35.16",
+      "a_apex": {
+        "server": "172.64.35.16",
+        "rcode": "NOERROR",
+        "authoritative": true,
+        "elapsed_ms": 4.1,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "aaaa_apex": {
+        "server": "172.64.35.16",
+        "rcode": "NOERROR",
+        "authoritative": true,
+        "elapsed_ms": 3.9,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "a_www": {
+        "server": "172.64.35.16",
+        "rcode": "NXDOMAIN",
+        "authoritative": true,
+        "elapsed_ms": 4.1,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "aaaa_www": {
+        "server": "172.64.35.16",
+        "rcode": "NXDOMAIN",
+        "authoritative": true,
+        "elapsed_ms": 3.9,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "cname_www": {
+        "server": "172.64.35.16",
+        "rcode": "NXDOMAIN",
+        "authoritative": true,
+        "elapsed_ms": 5.3,
+        "answers": [],
+        "authority": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "additional": []
+      },
+      "soa": {
+        "server": "172.64.35.16",
+        "rcode": "NOERROR",
+        "authoritative": true,
+        "elapsed_ms": 4.1,
+        "answers": [
+          {
+            "owner": "zonafilm.cc",
+            "type": "SOA",
+            "ttl": 1800,
+            "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+          }
+        ],
+        "authority": [],
+        "additional": []
+      }
+    }
+  },
+  "findings": [
+    {
+      "id": "NS_DELEGATION",
+      "status": "MATCH",
+      "observed": [
+        "paris.ns.cloudflare.com",
+        "piers.ns.cloudflare.com"
+      ]
+    },
+    {
+      "id": "APEX_A",
+      "status": "ABSENT"
+    },
+    {
+      "id": "WWW_A",
+      "status": "ABSENT"
+    }
+  ],
+  "delegation_trace": {
+    "tld": "cc",
+    "steps": [
+      {
+        "asked": "198.41.0.4",
+        "for": "cc",
+        "result": {
+          "server": "198.41.0.4",
+          "rcode": "NOERROR",
+          "authoritative": false,
+          "elapsed_ms": 8.1,
+          "answers": [],
+          "authority": [
+            {
+              "owner": "cc",
+              "type": "NS",
+              "ttl": 172800,
+              "value": "ac3.nstld.com"
+            },
+            {
+              "owner": "cc",
+              "type": "NS",
+              "ttl": 172800,
+              "value": "ac1.nstld.com"
+            },
+            {
+              "owner": "cc",
+              "type": "NS",
+              "ttl": 172800,
+              "value": "ac4.nstld.com"
+            },
+            {
+              "owner": "cc",
+              "type": "NS",
+              "ttl": 172800,
+              "value": "ac2.nstld.com"
+            }
+          ],
+          "additional": [
+            {
+              "owner": "ac3.nstld.com",
+              "type": "A",
+              "ttl": 172800,
+              "value": "192.42.175.30"
+            },
+            {
+              "owner": "ac3.nstld.com",
+              "type": "AAAA",
+              "ttl": 172800,
+              "value": "2001:500:122::30"
+            },
+            {
+              "owner": "ac1.nstld.com",
+              "type": "A",
+              "ttl": 172800,
+              "value": "192.42.173.30"
+            },
+            {
+              "owner": "ac1.nstld.com",
+              "type": "AAAA",
+              "ttl": 172800,
+              "value": "2001:500:120::30"
+            },
+            {
+              "owner": "ac4.nstld.com",
+              "type": "A",
+              "ttl": 172800,
+              "value": "192.42.176.30"
+            },
+            {
+              "owner": "ac4.nstld.com",
+              "type": "AAAA",
+              "ttl": 172800,
+              "value": "2001:500:123::30"
+            },
+            {
+              "owner": "ac2.nstld.com",
+              "type": "A",
+              "ttl": 172800,
+              "value": "192.42.174.30"
+            },
+            {
+              "owner": "ac2.nstld.com",
+              "type": "AAAA",
+              "ttl": 172800,
+              "value": "2001:500:121::30"
+            }
+          ]
+        }
+      },
+      {
+        "asked": "192.42.173.30",
+        "for": "zonafilm.cc",
+        "result": {
+          "server": "192.42.173.30",
+          "rcode": "NOERROR",
+          "authoritative": false,
+          "elapsed_ms": 117.0,
+          "answers": [],
+          "authority": [
+            {
+              "owner": "zonafilm.cc",
+              "type": "NS",
+              "ttl": 172800,
+              "value": "paris.ns.cloudflare.com"
+            },
+            {
+              "owner": "zonafilm.cc",
+              "type": "NS",
+              "ttl": 172800,
+              "value": "piers.ns.cloudflare.com"
+            }
+          ],
+          "additional": []
+        }
+      }
+    ],
+    "tld_servers": [
+      "192.42.173.30",
+      "192.42.174.30",
+      "192.42.175.30",
+      "192.42.176.30"
+    ],
+    "zone_nameservers": [
+      "paris.ns.cloudflare.com",
+      "piers.ns.cloudflare.com"
+    ]
+  },
+  "observed_a_apex": [],
+  "observed_a_www": [],
+  "verdict": "DELEGATED_NO_RECORDS"
+}
