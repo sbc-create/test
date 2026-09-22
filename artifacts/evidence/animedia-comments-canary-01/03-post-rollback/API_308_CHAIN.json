@@ -1,0 +1,261 @@
+{
+  "schema_version": "ANIMEDIA_COMMENTS_308_CHAIN_V1",
+  "probes": [
+    {
+      "case": "public https  no-slash",
+      "method": "GET",
+      "no_follow": {
+        "code": "308",
+        "location": "https://animedia.icu/api/comments/",
+        "effective": "https://animedia.icu/api/comments",
+        "redirects": "0"
+      },
+      "followed": {
+        "code": "404",
+        "location": "https://animedia.icu/api/comments/",
+        "effective": "1",
+        "redirects": "-"
+      }
+    },
+    {
+      "case": "public https  no-slash",
+      "method": "POST",
+      "no_follow": {
+        "code": "501",
+        "location": "https://animedia.icu/api/comments",
+        "effective": "0",
+        "redirects": "-"
+      },
+      "followed": {
+        "code": "501",
+        "location": "https://animedia.icu/api/comments",
+        "effective": "0",
+        "redirects": "-"
+      }
+    },
+    {
+      "case": "public https  slash",
+      "method": "GET",
+      "no_follow": {
+        "code": "404",
+        "location": "https://animedia.icu/api/comments/",
+        "effective": "0",
+        "redirects": "-"
+      },
+      "followed": {
+        "code": "404",
+        "location": "https://animedia.icu/api/comments/",
+        "effective": "0",
+        "redirects": "-"
+      }
+    },
+    {
+      "case": "public https  slash",
+      "method": "POST",
+      "no_follow": {
+        "code": "501",
+        "location": "https://animedia.icu/api/comments/",
+        "effective": "0",
+        "redirects": "-"
+      },
+      "followed": {
+        "code": "501",
+        "location": "https://animedia.icu/api/comments/",
+        "effective": "0",
+        "redirects": "-"
+      }
+    },
+    {
+      "case": "public https  v1 path",
+      "method": "GET",
+      "no_follow": {
+        "code": "308",
+        "location": "https://animedia.icu/api/comments/v1/healthz/",
+        "effective": "https://animedia.icu/api/comments/v1/healthz",
+        "redirects": "0"
+      },
+      "followed": {
+        "code": "404",
+        "location": "https://animedia.icu/api/comments/v1/healthz/",
+        "effective": "1",
+        "redirects": "-"
+      }
+    },
+    {
+      "case": "public https  v1 path",
+      "method": "POST",
+      "no_follow": {
+        "code": "501",
+        "location": "https://animedia.icu/api/comments/v1/healthz",
+        "effective": "0",
+        "redirects": "-"
+      },
+      "followed": {
+        "code": "501",
+        "location": "https://animedia.icu/api/comments/v1/healthz",
+        "effective": "0",
+        "redirects": "-"
+      }
+    },
+    {
+      "case": "public http   no-slash",
+      "method": "GET",
+      "no_follow": {
+        "code": "308",
+        "location": "http://animedia.icu/api/comments/",
+        "effective": "http://animedia.icu/api/comments",
+        "redirects": "0"
+      },
+      "followed": {
+        "code": "404",
+        "location": "http://animedia.icu/api/comments/",
+        "effective": "1",
+        "redirects": "-"
+      }
+    },
+    {
+      "case": "public http   no-slash",
+      "method": "POST",
+      "no_follow": {
+        "code": "501",
+        "location": "http://animedia.icu/api/comments",
+        "effective": "0",
+        "redirects": "-"
+      },
+      "followed": {
+        "code": "501",
+        "location": "http://animedia.icu/api/comments",
+        "effective": "0",
+        "redirects": "-"
+      }
+    },
+    {
+      "case": "public http   slash",
+      "method": "GET",
+      "no_follow": {
+        "code": "404",
+        "location": "http://animedia.icu/api/comments/",
+        "effective": "0",
+        "redirects": "-"
+      },
+      "followed": {
+        "code": "404",
+        "location": "http://animedia.icu/api/comments/",
+        "effective": "0",
+        "redirects": "-"
+      }
+    },
+    {
+      "case": "public http   slash",
+      "method": "POST",
+      "no_follow": {
+        "code": "501",
+        "location": "http://animedia.icu/api/comments/",
+        "effective": "0",
+        "redirects": "-"
+      },
+      "followed": {
+        "code": "501",
+        "location": "http://animedia.icu/api/comments/",
+        "effective": "0",
+        "redirects": "-"
+      }
+    },
+    {
+      "case": "origin  host  no-slash",
+      "method": "GET",
+      "no_follow": {
+        "code": "308",
+        "location": "http://127.0.0.1:9121/api/comments/",
+        "effective": "http://127.0.0.1:9121/api/comments",
+        "redirects": "0"
+      },
+      "followed": {
+        "code": "404",
+        "location": "http://127.0.0.1:9121/api/comments/",
+        "effective": "1",
+        "redirects": "-"
+      }
+    },
+    {
+      "case": "origin  host  no-slash",
+      "method": "POST",
+      "no_follow": {
+        "code": "501",
+        "location": "http://127.0.0.1:9121/api/comments",
+        "effective": "0",
+        "redirects": "-"
+      },
+      "followed": {
+        "code": "501",
+        "location": "http://127.0.0.1:9121/api/comments",
+        "effective": "0",
+        "redirects": "-"
+      }
+    },
+    {
+      "case": "origin  host  slash",
+      "method": "GET",
+      "no_follow": {
+        "code": "404",
+        "location": "http://127.0.0.1:9121/api/comments/",
+        "effective": "0",
+        "redirects": "-"
+      },
+      "followed": {
+        "code": "404",
+        "location": "http://127.0.0.1:9121/api/comments/",
+        "effective": "0",
+        "redirects": "-"
+      }
+    },
+    {
+      "case": "origin  host  slash",
+      "method": "POST",
+      "no_follow": {
+        "code": "501",
+        "location": "http://127.0.0.1:9121/api/comments/",
+        "effective": "0",
+        "redirects": "-"
+      },
+      "followed": {
+        "code": "501",
+        "location": "http://127.0.0.1:9121/api/comments/",
+        "effective": "0",
+        "redirects": "-"
+      }
+    },
+    {
+      "case": "origin  host  v1 path",
+      "method": "GET",
+      "no_follow": {
+        "code": "308",
+        "location": "http://127.0.0.1:9121/api/comments/v1/healthz/",
+        "effective": "http://127.0.0.1:9121/api/comments/v1/healthz",
+        "redirects": "0"
+      },
+      "followed": {
+        "code": "404",
+        "location": "http://127.0.0.1:9121/api/comments/v1/healthz/",
+        "effective": "1",
+        "redirects": "-"
+      }
+    },
+    {
+      "case": "origin  host  v1 path",
+      "method": "POST",
+      "no_follow": {
+        "code": "501",
+        "location": "http://127.0.0.1:9121/api/comments/v1/healthz",
+        "effective": "0",
+        "redirects": "-"
+      },
+      "followed": {
+        "code": "501",
+        "location": "http://127.0.0.1:9121/api/comments/v1/healthz",
+        "effective": "0",
+        "redirects": "-"
+      }
+    }
+  ]
+}

@@ -1,65 +1,90 @@
 #!/usr/bin/env bash
 # Undo Stage 1 on animedia.icu, reading the state the apply script recorded.
 #
-# Four levels, cheapest first. By default it runs level 1 and 2 — the ones that
-# stop comments without moving the site release — because that is what an
-# incident usually needs. `--full` also restores the previous release and
-# removes the gateway.
+# Every step is guarded, so running this twice is a no-op rather than an error.
+# The apply script calls it automatically the moment live verification fails;
+# an operator can also run it by hand at any time.
+#
+# Four levels, cheapest first. Without arguments it runs 1 and 2 — stop
+# comments, leave the site release alone. `--full` also restores the previous
+# release, the template manifest, the vhost and removes the gateway.
 #
 #   1. kill switch: comments refuse immediately, the page is untouched
 #   2. unmount: the drop-in goes, the title page loses its container
-#   3. release: the symlink returns to the recorded previous release
+#   3. release and manifest: both return to what apply recorded
 #   4. remove: gateway unit and nginx include go away
 #
-# It does not drop the comments database. Data written during the pilot is the
-# owner's; a rollback that destroys it cannot be undone, and nothing here needs
-# it gone.
+# THE DATABASE IS NEVER DELETED, at any level. Comments written during the
+# pilot are the owner's. A rollback that destroys them cannot be undone, and
+# nothing here needs them gone. The path is printed at the end so it is a
+# stated fact rather than an assumption.
 #
-# It never touches animedia.space, the ratings gateway, DNS, TLS or robots.
+# It never touches animedia.space, zona, lords, yummy, the ratings gateway,
+# DNS, TLS, robots, canonical or sitemap.
 set -euo pipefail
 
-STATE_FILE=/srv/site-factory/var/comments/stage1-state.json
+REPO=/home/claude/wt-community-comments-platform-01
+STATE_DIR=/srv/site-factory/var/comments
+STATE_FILE="$STATE_DIR/stage1-state.json"
+BACKUP_DIR="$STATE_DIR/backups"
+DB="$STATE_DIR/comments.sqlite"
 VHOST=/etc/nginx/lords/animedia-01.conf
 SNIPPET=/etc/nginx/snippets/animedia-comments.conf
 UNIT=/etc/systemd/system/comments-gateway.service
 SITE_UNIT=nova-animedia-01.service
-HOSTHDR="Host: animedia.icu"
-ORIGIN=http://127.0.0.1:9121
+MANIFEST=/srv/lords/.frontend/template-manifest-animedia-01.json
+CHECK="$REPO/automation/host/comments_endpoint_check.py"
+RESOLVE="animedia.icu:443:127.0.0.1"
+SITE=https://animedia.icu
 
 FULL=0
 [ "${1:-}" = "--full" ] && FULL=1
 
-say() { printf '\n== %s\n' "$*"; }
-die() { printf '\nREFUSED: %s\n' "$*" >&2; exit 1; }
+say()  { printf '\n== %s\n' "$*"; }
+note() { printf '   %s\n' "$*"; }
+die()  { printf '\nREFUSED: %s\n' "$*" >&2; exit 1; }
 
 [ "$(id -u)" -eq 0 ] || die "must run as root"
-[ -f "$STATE_FILE" ] || die "no state file at $STATE_FILE — nothing recorded to roll back to"
 
-read_state() { python3 -c "import json,sys;print(json.load(open('$STATE_FILE')).get('$1',''))"; }
+if [ ! -f "$STATE_FILE" ]; then
+  # Nothing was recorded, so nothing was applied by this harness. Removing what
+  # is not there is still safe, but restoring a release is not: without the
+  # recorded previous target there is nothing to restore it to.
+  note "no state file at $STATE_FILE — treating this as 'nothing to roll back'"
+  note "database, if any, is at $DB and is left alone"
+  exit 0
+fi
+
+read_state() {
+  python3 -c "import json;print(json.load(open('$STATE_FILE')).get('$1',''))" 2>/dev/null || true
+}
 
 LINK=$(read_state symlink_path)
 LINK_BEFORE=$(read_state symlink_before)
 BUILD_BEFORE=$(read_state build_id_before)
 PID_BEFORE=$(read_state pid_before)
+MANIFEST_BACKUP=$(read_state manifest_backup)
+VHOST_BACKUP=$(read_state vhost_backup)
 
-echo "recorded previous release : $LINK_BEFORE"
-echo "recorded previous build   : $BUILD_BEFORE"
-echo "recorded previous pid     : $PID_BEFORE"
+note "recorded previous release : $LINK_BEFORE"
+note "recorded previous build   : $BUILD_BEFORE"
+note "recorded previous pid     : $PID_BEFORE"
 
 # --- level 1: stop comments now --------------------------------------------
 
 say "level 1 — kill switch"
-if systemctl is-active --quiet comments-gateway.service; then
+if systemctl list-unit-files comments-gateway.service >/dev/null 2>&1 \
+   && systemctl is-active --quiet comments-gateway.service; then
   install -d -m 0755 /etc/systemd/system/comments-gateway.service.d
   cat > /etc/systemd/system/comments-gateway.service.d/killswitch.conf <<'DROPIN'
 [Service]
 Environment=COMMENTS_KILL_SWITCH=1
 DROPIN
   systemctl daemon-reload
-  systemctl restart comments-gateway.service
-  echo "  comments now refuse every request (503); the site is untouched"
+  systemctl restart comments-gateway.service || true
+  note "comments now refuse every request; the site is untouched"
 else
-  echo "  gateway is not running — nothing to switch off"
+  note "gateway is not running — nothing to switch off"
 fi
 
 # --- level 2: unmount the widget -------------------------------------------
@@ -67,66 +92,103 @@ fi
 say "level 2 — unmount from the title page"
 if [ -f /etc/systemd/system/"$SITE_UNIT".d/comments.conf ]; then
   rm -f /etc/systemd/system/"$SITE_UNIT".d/comments.conf
-  rmdir --ignore-fail-on-non-empty /etc/systemd/system/"$SITE_UNIT".d
+  rmdir --ignore-fail-on-non-empty /etc/systemd/system/"$SITE_UNIT".d 2>/dev/null || true
   systemctl daemon-reload
-  systemctl restart "$SITE_UNIT"
+  systemctl restart "$SITE_UNIT" || true
   sleep 3
-  echo "  ANIMEDIA_COMMENTS_MOUNT removed; the release is inert again"
+  note "ANIMEDIA_COMMENTS_MOUNT removed; the release is inert again"
 else
-  echo "  no mount drop-in present"
+  note "no mount drop-in present — already unmounted"
 fi
 
 if [ "$FULL" -eq 0 ]; then
   say "stopped after level 2"
-  echo "Comments are off and the page is back to its unmodified output."
-  echo "The site is still running the Stage 1 release, which is inert without"
-  echo "the mount switch. Run with --full to restore the previous release and"
-  echo "remove the gateway."
+  note "Comments are off and the page output is unmodified."
+  note "The site may still be running the Stage 1 release, which is inert"
+  note "without the mount switch. Run with --full to restore the previous one."
+  note "Database preserved at $DB"
   exit 0
 fi
 
-# --- level 3: previous release ---------------------------------------------
+# --- level 3: previous release and manifest --------------------------------
 
-say "level 3 — previous release"
-[ -n "$LINK_BEFORE" ] || die "no previous symlink recorded"
-ln -sfn "$LINK_BEFORE" "$LINK"
-systemctl restart "$SITE_UNIT"
+say "level 3 — previous release and template manifest"
+if [ -n "$LINK_BEFORE" ] && [ -L "$LINK" ]; then
+  if [ "$(readlink "$LINK")" = "$LINK_BEFORE" ]; then
+    note "symlink already at the recorded previous release"
+  else
+    ln -sfn "$LINK_BEFORE" "$LINK"
+    note "symlink -> $(readlink "$LINK")"
+  fi
+else
+  note "no previous symlink recorded or no symlink present — left alone"
+fi
+
+# The public build id lives in this file, not in the release directory. Leaving
+# it behind would leave the site announcing a release it is no longer running.
+if [ -n "$MANIFEST_BACKUP" ] && [ -f "$MANIFEST_BACKUP" ]; then
+  cp -a "$MANIFEST_BACKUP" "$MANIFEST"
+  note "template-manifest restored from $MANIFEST_BACKUP"
+else
+  note "no template-manifest backup recorded — left as is"
+fi
+
+systemctl restart "$SITE_UNIT" || true
 sleep 3
-BUILD_NOW=$(curl -sS -m 10 -D - -o /dev/null -H "$HOSTHDR" "$ORIGIN/" \
-  | awk 'tolower($1)=="x-site-factory-build-id:"{print $2}' | tr -d '\r')
-echo "  symlink -> $(readlink "$LINK")"
-echo "  build now: $BUILD_NOW (recorded before: $BUILD_BEFORE)"
-[ "$BUILD_NOW" = "$BUILD_BEFORE" ] || echo "  WARNING: build id does not match what was recorded"
+BUILD_NOW=$(curl -sS -m 10 --resolve "$RESOLVE" -D - -o /dev/null "$SITE/" \
+  | awk 'tolower($1)=="x-site-factory-build-id:"{print $2}' | tr -d '\r' || true)
+note "build now: ${BUILD_NOW:-unknown} (recorded before: $BUILD_BEFORE)"
+if [ -n "$BUILD_BEFORE" ] && [ "$BUILD_NOW" != "$BUILD_BEFORE" ]; then
+  note "WARNING: build id does not match what was recorded"
+fi
 
 # --- level 4: remove the gateway and the nginx include ---------------------
 
 say "level 4 — remove gateway and nginx include"
-systemctl disable --now comments-gateway.service 2>/dev/null || true
+if systemctl list-unit-files comments-gateway.service >/dev/null 2>&1; then
+  systemctl disable --now comments-gateway.service 2>/dev/null || true
+fi
 rm -f "$UNIT"
 rm -rf /etc/systemd/system/comments-gateway.service.d
 systemctl daemon-reload
 
-if [ -f "$VHOST.before-comments-stage1" ]; then
-  cp -a "$VHOST.before-comments-stage1" "$VHOST"
-  echo "  vhost restored from backup"
-else
+if [ -n "$VHOST_BACKUP" ] && [ -f "$VHOST_BACKUP" ]; then
+  cp -a "$VHOST_BACKUP" "$VHOST"
+  note "vhost restored from $VHOST_BACKUP (kept outside every nginx include glob)"
+elif grep -q 'animedia-comments.conf' "$VHOST" 2>/dev/null; then
   sed -i '/animedia-comments.conf/d' "$VHOST"
-  echo "  include line removed (no backup was present)"
+  note "include line removed (no backup was recorded)"
+else
+  note "vhost has no comments include — already clean"
 fi
 rm -f "$SNIPPET"
 nginx -t && systemctl reload nginx
 
+# --- verification ----------------------------------------------------------
+
 say "verification"
-for path in / /catalog/ /title/master-lda-i-plameni-2/ /nope-xyz/; do
-  headers=$(curl -sS -m 10 -D - -o /dev/null -H "$HOSTHDR" "$ORIGIN$path" || true)
+for path in / /catalog/ /title/master-lda-i-plameni-2/ /definitely-not-real-9d2f/; do
+  headers=$(curl -sS -m 10 --resolve "$RESOLVE" -D - -o /dev/null "$SITE$path" || true)
   code=$(printf '%s' "$headers" | head -1 | awk '{print $2}')
   noindex=no
   printf '%s' "$headers" | grep -qi '^X-Robots-Tag:.*noindex' && noindex=yes
-  echo "  $path -> $code noindex=$noindex"
+  note "$path -> $code noindex=$noindex"
 done
-api=$(curl -sS -m 10 -o /dev/null -w '%{http_code}' -H "$HOSTHDR" \
-  "$ORIGIN/api/comments/v1/healthz" || true)
-echo "  /api/comments/ now answers $api (404 expected once the include is gone)"
+
+# A 308 here is the site's own trailing-slash rule and is fine; what must hold
+# is that no hop was answered by the comments gateway and the chain ends
+# closed. Comparing a single status code cannot tell those apart, which is how
+# the first attempt reported a problem that was not there.
+if python3 "$CHECK" "$SITE/api/comments/v1/healthz" --resolve "$RESOLVE" \
+     --expect no-gateway | grep -q '"ok": true'; then
+  note "no comments gateway on /api/comments/ — rollback confirmed"
+else
+  note "WARNING: something still answers on /api/comments/"
+  python3 "$CHECK" "$SITE/api/comments/v1/healthz" --resolve "$RESOLVE" --expect no-gateway || true
+fi
+
+note "animedia-02 -> $(readlink /srv/lords/.frontend/sites/animedia-02/current)"
 
 say "ROLLED_BACK"
-echo "The comments database at /srv/site-factory/var/comments was left in place."
+note "Database preserved at $DB — no rollback level deletes it."
+note "Backups kept in $BACKUP_DIR"

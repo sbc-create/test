@@ -1,0 +1,117 @@
+{
+  "schema_version": "ANIMEDIA_COMMENTS_POST_ROLLBACK_V1",
+  "checked_at_utc": "2026-09-22T11:39:49Z",
+  "rollback_confirmation": {
+    "symlink_animedia_01": "../../releases/20260921T214937Z-fac5643-animedia-parity",
+    "symlink_animedia_02": "../../releases/20260921T214937Z-fac5643-animedia-parity",
+    "template_manifest_build_id": "20260921T214937Z-fac5643-animedia-parity",
+    "template_manifest_artifact_sha256": "826f54a2c8a743fb517852917aa713c579d1be38848d2c0ee3c26cc82e0e425f",
+    "running_processes": {
+      "9341": {
+        "pid": "239411",
+        "release": null
+      },
+      "9342": {
+        "pid": "343290",
+        "release": null
+      },
+      "9343": {
+        "pid": "354184",
+        "release": null
+      },
+      "9344": {
+        "pid": "456286",
+        "release": null
+      },
+      "9345": {
+        "pid": "533058",
+        "release": null
+      },
+      "9346": {
+        "pid": "559636",
+        "release": null
+      },
+      "9348": {
+        "pid": "691273",
+        "release": null
+      },
+      "9121": {
+        "pid": "714982",
+        "release": "20260921T214937Z-fac5643-animedia-parity"
+      },
+      "9350": {
+        "pid": "817242",
+        "release": null
+      },
+      "9351": {
+        "pid": "902832",
+        "release": null
+      },
+      "9352": {
+        "pid": "962078",
+        "release": null
+      },
+      "9122": {
+        "pid": "1663001",
+        "release": "20260921T214937Z-fac5643-animedia-parity"
+      }
+    },
+    "comments_mount_dropin": false,
+    "nginx_include_present": false,
+    "nginx_snippet_file": false,
+    "gateway_unit": false,
+    "gateway_port_9150_answers": "000",
+    "comments_database_preserved": true,
+    "keys_dir_left_in_place": true,
+    "cross_tenant_mutations": 0
+  },
+  "the_308_explained": {
+    "question": "was the 308 a leftover comments include or a routine redirect?",
+    "answer": "a routine same-host trailing-slash redirect from the Animedia site runtime",
+    "proof": [
+      "the same 308 appears on http://127.0.0.1:9121 with a Host header, where nginx is not involved at all",
+      "the vhost contains no comments include and the snippet file is absent",
+      "the chain ends 404 and no hop carries the gateway's X-Comments-Module-Version header",
+      "POST answers 501 (the site runtime implements GET/HEAD only), not a gateway refusal"
+    ],
+    "chain_no_slash": "308 -> 404",
+    "chain_with_slash": "404",
+    "final_target_is_gateway": false
+  },
+  "why_the_first_apply_failed": {
+    "root_cause": "the visitor check probed http://127.0.0.1:9121, the Animedia site runtime. The comments API is an nginx location; a request that bypasses nginx can never reach it. The probe saw the site's own trailing-slash 308 and compared it against a literal 503.",
+    "second_defect": "the build-id check compared X-Site-Factory-Build-Id, which the runtime reads from template-manifest-animedia-01.json — a file the release symlink does not touch. It could not change, so 'build unchanged' proved nothing about which artifact was running.",
+    "third_defect": "verification failed after four mutations and left all four in place; the owner had to roll back by hand."
+  },
+  "file_descriptors": {
+    "fs_file_nr_allocated": 29952,
+    "fs_file_max": 9223372036854775807,
+    "shell_rlimit_nofile": "1048576",
+    "inotify": {
+      "max_user_watches": 234322,
+      "max_user_instances": 128,
+      "max_queued_events": 16384
+    },
+    "visible_processes": 116,
+    "visible_open_fds": 1385,
+    "visible_inotify_instances": 21,
+    "root_cause": "INOTIFY_MAX_USER_INSTANCES",
+    "reasoning": [
+      "fs.file-max is effectively unbounded and only ~29k handles are allocated, so this is not system-wide FD exhaustion",
+      "RLIMIT_NOFILE is 1048576 soft and hard, so it is not a per-shell or per-user file limit",
+      "fs.inotify.max_user_instances is 128, the kernel default",
+      "'Failed to allocate directory watch' is systemd's message when it cannot create an inotify instance for a unit directory",
+      "root's own consumption is not measurable without root; the visible count covers only this user's processes",
+      "leftover headless-chromium processes from the browser suite each hold one instance and contribute"
+    ],
+    "owner_fix_prepared": true,
+    "applied_here": false
+  },
+  "foreign_nginx_warnings": {
+    "recorded_only": true,
+    "cause": "include /etc/nginx/sites-enabled/* has no extension filter, so .bak copies load as duplicate server blocks",
+    "affected": "yummyani.biz / yummyani.org / yummyani.site backups in sites-enabled",
+    "action": "none — out of scope for this branch",
+    "harness_consequence": "the deploy harness now writes its own backups to /srv/site-factory/var/comments/backups, outside every nginx include glob, so it cannot reproduce this pattern"
+  }
+}
