@@ -1,19 +1,22 @@
 {
  "site": "zona-01",
  "domain": "zonafilm.space",
- "build_id": "zona-01-fca1d54eeeb7",
- "source_commit": "fca1d54eeeb7513a90b3bcad43bead4db29f69ec",
- "installed_sha256": "b23d4c64933e72f26b688614db15cd6b7fb47919bb1732031642d3eec901857a",
- "previous_sha256": "bbd6467f7ee9012694020f2cb102e04e5a458bbc5b7c4759662b830987194ff5",
- "release_dir": "/srv/lords/.frontend/releases/zona-01-fca1d54eeeb7",
- "release_link": "sites/zona-01/current -> ../../releases/zona-01-fca1d54eeeb7",
+ "build_id": "zona-01-a0209877e1db",
+ "source_commit": "a0209877e1dbe3276487720c8785cb6a2c3456f8",
+ "installed_sha256": "ba33083e904cb721aa37b0fae1954de91f8a74582d0f4b283f5a9bfbd831b251",
+ "previous_sha256": "b23d4c64933e72f26b688614db15cd6b7fb47919bb1732031642d3eec901857a",
+ "release_dir": "/srv/lords/.frontend/releases/zona-01-a0209877e1db",
+ "release_link": "sites/zona-01/current -> ../../releases/zona-01-a0209877e1db",
  "flat_artifact": "/srv/lords/.frontend/zona-01-frontend.py",
- "rollback_file": "/srv/lords/.frontend/.rollback/20260922T122428Z-zona-01-frontend-bbd6467f7ee9.py",
- "rollback_sha256": "bbd6467f7ee9012694020f2cb102e04e5a458bbc5b7c4759662b830987194ff5",
+ "rollback_file": "/srv/lords/.frontend/.rollback/20260922T145219Z-zona-01-frontend-b23d4c64933e.py",
+ "rollback_sha256": "b23d4c64933e72f26b688614db15cd6b7fb47919bb1732031642d3eec901857a",
  "manifest_design_version": "1.3.0",
- "preactivation": "полный боевой снимок 53573 записи, стенд поднят за 487с, приёмка PASS",
+ "adds": "точка подключения комментариев на странице произведения",
  "restart_performed": 0,
- "restart_blocked_by": "systemctl: Interactive authentication required; sudo закрыт factory-guard G-PRIV",
- "owner_command": "sudo systemctl restart nova-zona-01.service",
- "do_not": "не выполнять daemon-reload отдельно — обе дороги активации уже ведут на один релиз"
+ "activation": {
+  "automatic": "nova-daily-refresh.timer → 2026-09-23 03:30:59 UTC (перезапуск только при успешной публикации)",
+  "manual": "sudo systemctl restart nova-zona-01.service",
+  "verify": "python3 automation/host/zona-post-restart-verify.py"
+ },
+ "note_correction": "первый прогон установщика получил выдуманный полный SHA коммита; манифест и RELEASE.json исправлены на настоящий a0209877e1dbe3276487720c8785cb6a2c3456f8, байты не менялись"
 }

@@ -1,9 +1,9 @@
 {
  "domain": "zonafilm.space",
  "site": "zona-01",
- "manifest_build": "zona-01-fca1d54eeeb7",
- "manifest_code_sha256": "b23d4c64933e72f26b688614db15cd6b7fb47919bb1732031642d3eec901857a",
- "artifact_sha256_on_disk": "b23d4c64933e72f26b688614db15cd6b7fb47919bb1732031642d3eec901857a",
+ "manifest_build": "zona-01-a0209877e1db",
+ "manifest_code_sha256": "ba33083e904cb721aa37b0fae1954de91f8a74582d0f4b283f5a9bfbd831b251",
+ "artifact_sha256_on_disk": "ba33083e904cb721aa37b0fae1954de91f8a74582d0f4b283f5a9bfbd831b251",
  "home_status": 200,
  "h1_count": 0,
  "slides": 0,
@@ -68,8 +68,8 @@
  "issues": [
   "H1 на главной: 0",
   "в героe 0 слайд(ов) — это картинка, а не слайдер",
-  "витрина объявляет сборку 'zona-slider-6513e7e7f34b', манифест — 'zona-01-fca1d54eeeb7'",
+  "витрина объявляет сборку 'zona-slider-6513e7e7f34b', манифест — 'zona-01-a0209877e1db'",
   "страниц произведений с ошибкой: 12 из 12"
  ],
- "rollback": "cp /srv/lords/.frontend/.rollback/20260922T122428Z-zona-01-frontend-bbd6467f7ee9.py /srv/lords/.frontend/zona-01-frontend.py && sudo systemctl restart nova-zona-01.service"
+ "rollback": "cp /srv/lords/.frontend/.rollback/20260922T145219Z-zona-01-frontend-b23d4c64933e.py /srv/lords/.frontend/zona-01-frontend.py && sudo systemctl restart nova-zona-01.service"
 }
