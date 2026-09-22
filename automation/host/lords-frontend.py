@@ -2342,6 +2342,11 @@ padding-top:2px;flex-wrap:nowrap;min-height:1.25em;max-height:1.25em;align-items
 overflow:hidden}
 .zt__r b{color:@WARM@;font-weight:700}
 .zt__r i{color:@WARM@;font-style:normal;font-weight:700}
+/* Оценка карточки: источник приглушён, число выделено. Ряд не переносится —
+   его высота зафиксирована выше, и перенос сдвинул бы низ карточки. */
+.zt__ri{display:inline-flex;gap:4px;align-items:baseline;white-space:nowrap}
+.zt__rs{color:@DIM@}
+.zt__rn{color:@WARM@;font-weight:700;font-variant-numeric:tabular-nums}
 .zt__play{display:inline-block;font-size:10px;font-weight:700;color:@ACC@;margin-left:auto}
 
 /* Строка списка: постер слева. Это не сетка главной. */
@@ -5126,13 +5131,8 @@ class ВидЗона(Вид):
         мета1 = " · ".join(meta1_parts)
         мета2 = " · ".join(meta2_parts)
         # Card bodies stay metadata-only: plot text belongs on the title page.
-        кп = _число(деталь.get("kinopoisk_rating"))
-        им = _число(деталь.get("imdb_rating"))
-        части = []
-        if кп:
-            части.append(f'<span title="{html.escape(str(деталь.get("kinopoisk_rating") or кп))}">КП <b>{кп}</b></span>')
-        if им:
-            части.append(f'<span title="{html.escape(str(деталь.get("imdb_rating") or им))}">IMDb <i>{им}</i></span>')
+        оценки_карточки, состояние_оценки = self._оценки_плитки(деталь)
+        части = list(оценки_карточки)
         playable = деталь.get("playable") is True
         if show_play is False:
             show_badge = False
@@ -5157,11 +5157,62 @@ class ВидЗона(Вид):
         # иначе объявлять было бы нечего: обрезка допустима только тогда,
         # когда текст целиком остаётся доступен.
         return (f'<a class="zt" data-testid="title-card" href="{запись["url"]}" '
+                f'data-rating="{html.escape(состояние_оценки)}" '
                 f'title="{html.escape(заголовок)}" aria-label="{html.escape(заголовок)}">'
                 f'<span class="zt__p">{изо}</span>'
                 f'<span class="zt__b"><span class="zt__t" data-clamp-allowed="2">'
                 f'{html.escape(заголовок)}</span>'
                 f'{meta_html}</span>{оценка}</a>')
+
+    #: Сколько внешних источников показывает карточка. Два — та же плотность,
+    #: что была до правки; третий источник ломал бы строку на узкой карточке.
+    #: Страница произведения показывает все: там есть место.
+    ОЦЕНОК_НА_КАРТОЧКЕ = 2
+
+    def _оценки_плитки(self, деталь: dict) -> tuple[list, str]:
+        """Оценки карточки из ТОГО ЖЕ разбора, что и страница произведения.
+
+        До этой правки карточка читала `kinopoisk_rating` и `imdb_rating`
+        напрямую. Из-за этого Shikimori, который витрина показывает на странице
+        произведения, на карточке пропадал, а число печаталось в другом виде —
+        «IMDb 7.8» против «IMDb 7.8 из 10». Второе место чтения оценок убрано:
+        расхождение двух копий логики — вопрос времени, а не возможности.
+
+        Возвращает разметку и состояние для `data-rating`:
+
+        * ``"none"`` — оценок у витрины действительно нет. Ноль и `null`
+          оценкой не считаются и сюда попадают именно как «нет».
+        * ``"unavailable"`` — разбор оценок недоступен. Карточка остаётся
+          рабочей, но честное «нет» и сбой различимы машиной.
+        * число — значение первой показанной оценки.
+
+        Ряд по-прежнему схлопывается, когда показывать нечего: пустая строка,
+        зарезервированная под оценку, — дефект, чинённый в этой витрине ранее.
+        Поэтому отсутствие объявлено атрибутом, а не пустым местом.
+        """
+        try:
+            оценки = оценки_по_источникам(деталь)
+        except Exception as ош:  # noqa: BLE001 — витрина важнее оценки
+            print(f"[zona] разбор оценок недоступен: {ош!r}",
+                  file=sys.stderr, flush=True)
+            return [], "unavailable"
+        внешние = [о for о in оценки if not о["пользовательская"]]
+        if not внешние:
+            return [], "none"
+        части = []
+        for о in внешние[:self.ОЦЕНОК_НА_КАРТОЧКЕ]:
+            вслух = f'{о["подпись"]} {о["значение"]} из {о["шкала"]}'
+            части.append(
+                f'<span class="zt__ri" data-source="{о["ключ"]}" '
+                f'title="{html.escape(вслух)}">'
+                f'<span class="vh">{html.escape(вслух)}</span>'
+                # Шкала на карточке не печатается видимо намеренно: «/10»
+                # дважды в ряду удлиняет строку и на узкой карточке толкает её
+                # в перенос. Вслух и в подсказке шкала названа полностью — тем
+                # же текстом, что на странице произведения.
+                f'<span class="zt__rs" aria-hidden="true">{html.escape(о["подпись"])}</span>'
+                f'<span class="zt__rn" aria-hidden="true">{о["значение"]}</span></span>')
+        return части, внешние[0]["значение"]
 
     def строка(self, запись: dict) -> str:
         деталь = self.деталь(запись["slug"])
