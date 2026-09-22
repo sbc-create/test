@@ -4,7 +4,7 @@
   "slug": "genre-quickpick",
   "version": "1.0.0",
   "family": "genre",
-  "package_digest": "6d04646bb8a6af3be005e74934b9a9977dd5b95888f760c5ff797624695c915c",
+  "package_digest": "3110b54548d67b1c10fc27574a875341bef52d63043fb5dbe03a3bd12e22512e",
   "declared": {
     "design_intent": "Сразу выбор действия, потом лента и витрина.",
     "primary_user_journey": "выбрать намерение → получить список",
@@ -79,7 +79,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -91,14 +96,14 @@
     ]
   },
   "review_screenshots": [
-    "T025-genre-quickpick-1024.png",
-    "T025-genre-quickpick-1440.png",
-    "T025-genre-quickpick-1920.png",
-    "T025-genre-quickpick-320.png",
-    "T025-genre-quickpick-390.png",
-    "T025-genre-quickpick-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.684318+00:00"
+  "issued_at_utc": "2026-09-22T07:14:06.000175+00:00"
 }

@@ -70,7 +70,9 @@
     "catalog": "board",
     "title": "editorial",
     "discovery": "rail",
-    "rail": "discovery"
+    "rail": "discovery",
+    "catalog_variant": 0,
+    "catalog_layout": "tools-top"
   },
   "routes": {
     "catalog": [
@@ -107,6 +109,13 @@
           2,
           3
         ]
+      },
+      {
+        "тип": "rail",
+        "заголовок": "Ещё разделы",
+        "грамматика": "poster",
+        "максимум": 12,
+        "минимум": 4
       }
     ],
     "new": [

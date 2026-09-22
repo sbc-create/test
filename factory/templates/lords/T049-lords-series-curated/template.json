@@ -74,7 +74,9 @@
     "catalog": "split",
     "title": "data-first",
     "discovery": "rail",
-    "rail": "similar"
+    "rail": "similar",
+    "catalog_variant": 10,
+    "catalog_layout": "tools-top"
   },
   "routes": {
     "catalog": [
@@ -94,8 +96,9 @@
       {
         "тип": "split",
         "заголовок": "Чем открыть каталог",
-        "грамматика": "compact",
-        "максимум": 6,
+        "грамматика": "tile",
+        "класс": "split--flip",
+        "максимум": 7,
         "минимум": 4
       },
       {
@@ -108,6 +111,13 @@
           2,
           4
         ]
+      },
+      {
+        "тип": "rail",
+        "заголовок": "Ещё разделы",
+        "грамматика": "poster",
+        "максимум": 12,
+        "минимум": 4
       }
     ],
     "new": [

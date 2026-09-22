@@ -4,7 +4,7 @@
   "slug": "graphite-signal",
   "version": "1.0.0",
   "family": "modern",
-  "package_digest": "21311862c17893f28cb5ce67a585199846435be52f0c0644ea9d8f45d38b44bd",
+  "package_digest": "1178df02bd605f82cbf51586af57ef44f26f52d0bfbc53979ff6e1236e14a761",
   "declared": {
     "design_intent": "Лента-сигналы, порядок, витрина, разделы.",
     "primary_user_journey": "считывать сигналы сверху вниз",
@@ -75,7 +75,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -87,14 +92,14 @@
     ]
   },
   "review_screenshots": [
-    "T044-graphite-signal-1024.png",
-    "T044-graphite-signal-1440.png",
-    "T044-graphite-signal-1920.png",
-    "T044-graphite-signal-320.png",
-    "T044-graphite-signal-390.png",
-    "T044-graphite-signal-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.847689+00:00"
+  "issued_at_utc": "2026-09-22T07:14:08.955008+00:00"
 }

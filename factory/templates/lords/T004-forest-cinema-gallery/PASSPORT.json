@@ -4,7 +4,7 @@
   "slug": "forest-cinema-gallery",
   "version": "1.0.0",
   "family": "forest-cinema",
-  "package_digest": "235ec410353d80c55b52625b1dab682f9e3e438bada19e3c907aa6146acfa4df",
+  "package_digest": "ccbd04c4ce28a128d211db51ba0ddde844777fca6217ab5255579ce200d12852",
   "declared": {
     "design_intent": "Галерея: три редакционные карточки во главе, ниже разреженная сетка с крупными полями.",
     "primary_user_journey": "прочитать отбор → уйти в галерею каталога",
@@ -79,7 +79,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -91,14 +96,14 @@
     ]
   },
   "review_screenshots": [
-    "T004-forest-cinema-gallery-1024.png",
-    "T004-forest-cinema-gallery-1440.png",
-    "T004-forest-cinema-gallery-1920.png",
-    "T004-forest-cinema-gallery-320.png",
-    "T004-forest-cinema-gallery-390.png",
-    "T004-forest-cinema-gallery-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.508713+00:00"
+  "issued_at_utc": "2026-09-22T07:14:03.566560+00:00"
 }

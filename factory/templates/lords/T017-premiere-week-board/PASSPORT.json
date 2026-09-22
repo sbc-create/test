@@ -4,7 +4,7 @@
   "slug": "premiere-week-board",
   "version": "1.0.0",
   "family": "premiere",
-  "package_digest": "3ecc9e87dfb1e4b9aafdc5592f7535beacb896c07849dfd2cd0e7131e74d15a1",
+  "package_digest": "430cb5bb6215a273b1bcd9c74a7396a0a247720e161b2b48f1de6912d646f9c6",
   "declared": {
     "design_intent": "Доска: разделы столбцами, лента и витрина под ними.",
     "primary_user_journey": "окинуть доску → углубиться в раздел",
@@ -72,7 +72,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -84,14 +89,14 @@
     ]
   },
   "review_screenshots": [
-    "T017-premiere-week-board-1024.png",
-    "T017-premiere-week-board-1440.png",
-    "T017-premiere-week-board-1920.png",
-    "T017-premiere-week-board-320.png",
-    "T017-premiere-week-board-390.png",
-    "T017-premiere-week-board-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.614632+00:00"
+  "issued_at_utc": "2026-09-22T07:14:04.118046+00:00"
 }

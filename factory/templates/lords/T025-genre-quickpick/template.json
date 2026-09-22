@@ -66,7 +66,9 @@
     "catalog": "mosaic",
     "title": "data-first",
     "discovery": "filters",
-    "rail": "similar"
+    "rail": "similar",
+    "catalog_variant": 5,
+    "catalog_layout": "tools-top"
   },
   "routes": {
     "catalog": [
@@ -109,6 +111,12 @@
           5,
           8
         ]
+      },
+      {
+        "тип": "taxonomy",
+        "заголовок": "Ещё разделы",
+        "источник": "genres",
+        "максимум": 12
       }
     ],
     "new": [

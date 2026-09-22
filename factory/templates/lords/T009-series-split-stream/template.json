@@ -69,7 +69,9 @@
     "catalog": "split",
     "title": "panel",
     "discovery": "index",
-    "rail": "discovery"
+    "rail": "discovery",
+    "catalog_variant": 0,
+    "catalog_layout": "tools-top"
   },
   "routes": {
     "catalog": [
@@ -90,6 +92,7 @@
         "тип": "split",
         "заголовок": "Чем открыть каталог",
         "грамматика": "compact",
+        "класс": "",
         "максимум": 6,
         "минимум": 4
       },
@@ -105,6 +108,11 @@
           4,
           5
         ]
+      },
+      {
+        "тип": "index",
+        "заголовок": "Ещё разделы",
+        "минимум": 4
       }
     ],
     "new": [

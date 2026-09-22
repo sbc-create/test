@@ -4,7 +4,7 @@
   "slug": "premiere-minimal",
   "version": "1.0.0",
   "family": "premiere",
-  "package_digest": "304aa1346f2136c2a869374074ee1e935a35cb3cbbfb5debe331905a16111df4",
+  "package_digest": "1c187051aa7021ac7f0f7370aa5c0a55cc85fa8702c99b3501c4579cbb1cacca",
   "declared": {
     "design_intent": "Без героя: сразу указатель дат и очень плотная витрина. Навигация — буквенный указатель, а не чипы: это другой способ искать.",
     "primary_user_journey": "сразу к спискам",
@@ -79,7 +79,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -91,14 +96,14 @@
     ]
   },
   "review_screenshots": [
-    "T019-premiere-minimal-1024.png",
-    "T019-premiere-minimal-1440.png",
-    "T019-premiere-minimal-1920.png",
-    "T019-premiere-minimal-320.png",
-    "T019-premiere-minimal-390.png",
-    "T019-premiere-minimal-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.637327+00:00"
+  "issued_at_utc": "2026-09-22T07:14:04.550445+00:00"
 }

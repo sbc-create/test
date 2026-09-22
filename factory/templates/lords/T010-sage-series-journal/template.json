@@ -75,7 +75,9 @@
     "catalog": "magazine",
     "title": "hero-wide",
     "discovery": "filters",
-    "rail": "similar"
+    "rail": "similar",
+    "catalog_variant": 0,
+    "catalog_layout": "tools-top"
   },
   "routes": {
     "catalog": [
@@ -111,6 +113,12 @@
           4,
           6
         ]
+      },
+      {
+        "тип": "taxonomy",
+        "заголовок": "Ещё разделы",
+        "источник": "genres",
+        "максимум": 12
       }
     ],
     "new": [

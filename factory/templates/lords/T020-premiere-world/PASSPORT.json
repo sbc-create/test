@@ -4,7 +4,7 @@
   "slug": "premiere-world",
   "version": "1.0.0",
   "family": "premiere",
-  "package_digest": "e91ec8f93238ba3c8f9bc995f64fc1d100f00cd833ee2d4ff6ee7e73ccc27917",
+  "package_digest": "c987f923eea67299379d0f45fb18fdb3a0f8b5c444ac3296feb068b0c6d52a84",
   "declared": {
     "design_intent": "Годы ведут навигацию, разворот и витрина следуют.",
     "primary_user_journey": "выбрать год → уйти в список",
@@ -76,7 +76,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -88,14 +93,14 @@
     ]
   },
   "review_screenshots": [
-    "T020-premiere-world-1024.png",
-    "T020-premiere-world-1440.png",
-    "T020-premiere-world-1920.png",
-    "T020-premiere-world-320.png",
-    "T020-premiere-world-390.png",
-    "T020-premiere-world-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.645952+00:00"
+  "issued_at_utc": "2026-09-22T07:14:04.732408+00:00"
 }

@@ -77,7 +77,9 @@
     "catalog": "grid",
     "title": "data-first",
     "discovery": "filters",
-    "rail": "discovery"
+    "rail": "discovery",
+    "catalog_variant": 10,
+    "catalog_layout": "tools-top"
   },
   "routes": {
     "catalog": [
@@ -95,6 +97,12 @@
         "максимум": 8
       },
       {
+        "тип": "ranked",
+        "заголовок": "Первые в каталоге",
+        "максимум": 10,
+        "минимум": 3
+      },
+      {
         "тип": "listing",
         "заголовок": "Все записи",
         "грамматика": "poster",
@@ -106,6 +114,12 @@
           7,
           10
         ]
+      },
+      {
+        "тип": "taxonomy",
+        "заголовок": "Ещё разделы",
+        "источник": "genres",
+        "максимум": 12
       }
     ],
     "new": [

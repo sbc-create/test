@@ -4,7 +4,7 @@
   "slug": "forest-cinema-columns",
   "version": "1.0.0",
   "family": "forest-cinema",
-  "package_digest": "3a8578911dbeb60a09554bf4043ffcf5081d889cdcefdfaded7820814c6cfb48",
+  "package_digest": "dbdc597c879155ad7394dd48a378fdc53c575c23fe1c2d8779f06aa1c2741a35",
   "declared": {
     "design_intent": "Асимметричные колонки: узкая лента новых поступлений ведёт, широкая сетка поддерживает.",
     "primary_user_journey": "увидеть свежее → перейти в каталог",
@@ -77,7 +77,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -89,14 +94,14 @@
     ]
   },
   "review_screenshots": [
-    "T002-forest-cinema-columns-1024.png",
-    "T002-forest-cinema-columns-1440.png",
-    "T002-forest-cinema-columns-1920.png",
-    "T002-forest-cinema-columns-320.png",
-    "T002-forest-cinema-columns-390.png",
-    "T002-forest-cinema-columns-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.494677+00:00"
+  "issued_at_utc": "2026-09-22T07:14:03.255150+00:00"
 }

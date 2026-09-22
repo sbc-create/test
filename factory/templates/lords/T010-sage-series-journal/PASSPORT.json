@@ -4,7 +4,7 @@
   "slug": "sage-series-journal",
   "version": "1.0.0",
   "family": "series-feed",
-  "package_digest": "a1423d1799b381a97ffd9df45f712c1cb5e833dfdb823863fecac48f251717bb",
+  "package_digest": "58e0d292b94da38b50a3ba29367ab5968e5a44d25e40bd2c43a212a2ee2bd5ff",
   "declared": {
     "design_intent": "Журнал: мозаика с ведущей записью, под ней лента-тетрадь и разрежённая витрина.",
     "primary_user_journey": "прочитать разворот журнала → уйти в ленту",
@@ -90,7 +90,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -102,14 +107,14 @@
     ]
   },
   "review_screenshots": [
-    "T010-sage-series-journal-1024.png",
-    "T010-sage-series-journal-1440.png",
-    "T010-sage-series-journal-1920.png",
-    "T010-sage-series-journal-320.png",
-    "T010-sage-series-journal-390.png",
-    "T010-sage-series-journal-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.555853+00:00"
+  "issued_at_utc": "2026-09-22T07:14:03.768386+00:00"
 }

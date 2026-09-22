@@ -4,7 +4,7 @@
   "slug": "forest-cinema-stage",
   "version": "1.0.0",
   "family": "forest-cinema",
-  "package_digest": "8760fe7dce666761ba782b81afc5788300b557f2778689dc58293514b1348770",
+  "package_digest": "3d43168929aeca5c809fb1e1d896d83347dd3fa1961b72319a8be8b1b143cefb",
   "declared": {
     "design_intent": "Театральная сцена: широкий центрированный герой, под ним плотный зал постеров.",
     "primary_user_journey": "посмотреть, что идёт сейчас → уйти в каталог",
@@ -81,7 +81,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -93,14 +98,14 @@
     ]
   },
   "review_screenshots": [
-    "T001-forest-cinema-stage-1024.png",
-    "T001-forest-cinema-stage-1440.png",
-    "T001-forest-cinema-stage-1920.png",
-    "T001-forest-cinema-stage-320.png",
-    "T001-forest-cinema-stage-390.png",
-    "T001-forest-cinema-stage-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.482454+00:00"
+  "issued_at_utc": "2026-09-22T07:14:03.172181+00:00"
 }

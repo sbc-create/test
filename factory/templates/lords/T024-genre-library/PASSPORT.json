@@ -4,7 +4,7 @@
   "slug": "genre-library",
   "version": "1.0.0",
   "family": "genre",
-  "package_digest": "7c249d894368d748d7605350da6ae5baf9418c6082c165378f547d245109bcd2",
+  "package_digest": "7b5035e4ad020637e21dedf7434650a00cd766e66d8e3ca4643dcb773a040f35",
   "declared": {
     "design_intent": "Библиотека: указатель, полки, разворот.",
     "primary_user_journey": "найти полку → снять запись",
@@ -49,7 +49,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -61,14 +66,14 @@
     ]
   },
   "review_screenshots": [
-    "T024-genre-library-1024.png",
-    "T024-genre-library-1440.png",
-    "T024-genre-library-1920.png",
-    "T024-genre-library-320.png",
-    "T024-genre-library-390.png",
-    "T024-genre-library-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.676562+00:00"
+  "issued_at_utc": "2026-09-22T07:14:05.912098+00:00"
 }

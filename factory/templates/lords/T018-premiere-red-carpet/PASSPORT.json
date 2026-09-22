@@ -4,7 +4,7 @@
   "slug": "premiere-red-carpet",
   "version": "1.0.0",
   "family": "premiere",
-  "package_digest": "d2f82ffabb025c30de0ce45c7312c02d91adaeb0158bb53c31f94abf716ff273",
+  "package_digest": "fd032f42fe8297f0c4772cef4a334b8799cfef0581d1e08746bdbc80bdac3398",
   "declared": {
     "design_intent": "Большой кадр сверху, под ним ранжированный порядок и витрина.",
     "primary_user_journey": "задержаться на кадре → пройти список",
@@ -75,7 +75,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -87,14 +92,14 @@
     ]
   },
   "review_screenshots": [
-    "T018-premiere-red-carpet-1024.png",
-    "T018-premiere-red-carpet-1440.png",
-    "T018-premiere-red-carpet-1920.png",
-    "T018-premiere-red-carpet-320.png",
-    "T018-premiere-red-carpet-390.png",
-    "T018-premiere-red-carpet-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.629255+00:00"
+  "issued_at_utc": "2026-09-22T07:14:04.298334+00:00"
 }

@@ -4,7 +4,7 @@
   "slug": "curated-index",
   "version": "1.0.0",
   "family": "curated",
-  "package_digest": "fc1bde377da1dc9ff8326f2487fa1ff3c5dae0257da8ae5031ea295c714b5ac6",
+  "package_digest": "e4b56172bfca2d1f349a07df5c2a2fdc2d1998d1f9bf812c1c9c8ef14685cfa1",
   "declared": {
     "design_intent": "Указатель: навигация по буквам и видам ведёт, изображения второстепенны.",
     "primary_user_journey": "найти по букве → уйти в список",
@@ -85,7 +85,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -97,14 +102,14 @@
     ]
   },
   "review_screenshots": [
-    "T012-curated-index-1024.png",
-    "T012-curated-index-1440.png",
-    "T012-curated-index-1920.png",
-    "T012-curated-index-320.png",
-    "T012-curated-index-390.png",
-    "T012-curated-index-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.571226+00:00"
+  "issued_at_utc": "2026-09-22T07:14:03.818553+00:00"
 }

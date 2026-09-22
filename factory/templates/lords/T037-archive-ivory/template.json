@@ -67,7 +67,9 @@
     "catalog": "index",
     "title": "editorial",
     "discovery": "index",
-    "rail": "similar"
+    "rail": "similar",
+    "catalog_variant": 0,
+    "catalog_layout": "tools-inline"
   },
   "routes": {
     "catalog": [
@@ -79,15 +81,20 @@
         "заголовок": ""
       },
       {
-        "тип": "filters",
-        "заголовок": "Отбор",
-        "источник": "genres",
-        "максимум": 8
+        "тип": "index",
+        "заголовок": "Разделы",
+        "минимум": 4
       },
       {
         "тип": "index",
         "заголовок": "По алфавиту",
         "минимум": 4
+      },
+      {
+        "тип": "filters",
+        "заголовок": "Отбор",
+        "источник": "genres",
+        "максимум": 8
       },
       {
         "тип": "listing",

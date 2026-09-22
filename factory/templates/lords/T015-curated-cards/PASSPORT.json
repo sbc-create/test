@@ -4,7 +4,7 @@
   "slug": "curated-cards",
   "version": "1.0.0",
   "family": "curated",
-  "package_digest": "cd225629bfb210cec584e192a14ae17a0f8517d270a24218b4a661299daae12c",
+  "package_digest": "a49e73da5face9136a18c47508fb61a0655046b3ae523b3f0fda3874f962c1cb",
   "declared": {
     "design_intent": "Доска подборок впереди всего: вход в каталог идёт через раздел, а не через витрину.",
     "primary_user_journey": "выбрать подборку → уйти в её список",
@@ -76,7 +76,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -88,14 +93,14 @@
     ]
   },
   "review_screenshots": [
-    "T015-curated-cards-1024.png",
-    "T015-curated-cards-1440.png",
-    "T015-curated-cards-1920.png",
-    "T015-curated-cards-320.png",
-    "T015-curated-cards-390.png",
-    "T015-curated-cards-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.594380+00:00"
+  "issued_at_utc": "2026-09-22T07:14:03.933253+00:00"
 }

@@ -4,7 +4,7 @@
   "slug": "series-split-stream",
   "version": "1.0.0",
   "family": "series-feed",
-  "package_digest": "df7561721e77abf675644e5783da4b40c2b4ef3baa92c86391e906ba0d042ce8",
+  "package_digest": "c489e20149c10793b05ec2ec28f3640f9884edc7bee46834ad8068130625c6c7",
   "declared": {
     "design_intent": "Разворот впереди потока: сначала одна запись крупно, потом поток остальных.",
     "primary_user_journey": "зацепиться за разворот → просмотреть поток",
@@ -79,7 +79,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -91,14 +96,14 @@
     ]
   },
   "review_screenshots": [
-    "T009-series-split-stream-1024.png",
-    "T009-series-split-stream-1440.png",
-    "T009-series-split-stream-1920.png",
-    "T009-series-split-stream-320.png",
-    "T009-series-split-stream-390.png",
-    "T009-series-split-stream-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.548524+00:00"
+  "issued_at_utc": "2026-09-22T07:14:03.736621+00:00"
 }

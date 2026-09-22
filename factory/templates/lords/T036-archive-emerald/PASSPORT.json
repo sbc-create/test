@@ -4,7 +4,7 @@
   "slug": "archive-emerald",
   "version": "1.0.0",
   "family": "archive",
-  "package_digest": "91e8e33421e27d723952a0e3b913a91298b27cac8eb98fcd796404f4b0ceda5c",
+  "package_digest": "fd1c8a2b3c7bff6802825b6359d4cfd10039ae4dbfd1e3191c3359c3e511f5f0",
   "declared": {
     "design_intent": "Самая плотная витрина семейства, навигация компактная. Навигация — буквенный указатель, а не чипы: это другой способ искать.",
     "primary_user_journey": "охватить взглядом весь каталог",
@@ -79,7 +79,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -91,14 +96,14 @@
     ]
   },
   "review_screenshots": [
-    "T036-archive-emerald-1024.png",
-    "T036-archive-emerald-1440.png",
-    "T036-archive-emerald-1920.png",
-    "T036-archive-emerald-320.png",
-    "T036-archive-emerald-390.png",
-    "T036-archive-emerald-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.783106+00:00"
+  "issued_at_utc": "2026-09-22T07:14:08.451713+00:00"
 }

@@ -4,7 +4,7 @@
   "slug": "premiere-calendar-green",
   "version": "1.0.0",
   "family": "premiere",
-  "package_digest": "a78d3d46c7ec39ec909462254ab6900f8b229da2238271f0d4d8e1f14e05ff22",
+  "package_digest": "24fe8eba49ad970600995750999c7b23de61f7b3d521daf37bb210bcd7cea348",
   "declared": {
     "design_intent": "Календарь: хронология ведёт, под ней разделы и витрина.",
     "primary_user_journey": "пройти по датам → уйти в раздел",
@@ -75,7 +75,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -87,14 +92,14 @@
     ]
   },
   "review_screenshots": [
-    "T016-premiere-calendar-green-1024.png",
-    "T016-premiere-calendar-green-1440.png",
-    "T016-premiere-calendar-green-1920.png",
-    "T016-premiere-calendar-green-320.png",
-    "T016-premiere-calendar-green-390.png",
-    "T016-premiere-calendar-green-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.603357+00:00"
+  "issued_at_utc": "2026-09-22T07:14:03.977804+00:00"
 }

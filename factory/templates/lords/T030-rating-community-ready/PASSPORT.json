@@ -4,7 +4,7 @@
   "slug": "rating-community-ready",
   "version": "1.0.0",
   "family": "rating",
-  "package_digest": "d3755a01e7b8967a3b7fc351813fa9861d7871bb0e9236ebc3e361e4b5b5f2e7",
+  "package_digest": "69b5ffe179c0c34596068fdfdc97d5110f57ea1f3cbb094bfc2742598ca023e0",
   "declared": {
     "design_intent": "Честная пустота там, где оценок нет: витрина и порядок без обещаний.",
     "primary_user_journey": "смотреть каталог как есть",
@@ -79,7 +79,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -91,14 +96,14 @@
     ]
   },
   "review_screenshots": [
-    "T030-rating-community-ready-1024.png",
-    "T030-rating-community-ready-1440.png",
-    "T030-rating-community-ready-1920.png",
-    "T030-rating-community-ready-320.png",
-    "T030-rating-community-ready-390.png",
-    "T030-rating-community-ready-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.731806+00:00"
+  "issued_at_utc": "2026-09-22T07:14:07.729707+00:00"
 }

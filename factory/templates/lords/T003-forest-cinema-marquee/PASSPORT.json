@@ -4,7 +4,7 @@
   "slug": "forest-cinema-marquee",
   "version": "1.0.0",
   "family": "forest-cinema",
-  "package_digest": "e917901eeb3688681be54221be6d8016922b5d23f258bb21548613685cd4f713",
+  "package_digest": "075ca002cd91be7ce38e1c5895956964c467817b6e6dc8f15d65cace26eb3d8a",
   "declared": {
     "design_intent": "Афиша: таксономия ведёт, под ней три равных раздела вместо одной длинной сетки.",
     "primary_user_journey": "выбрать раздел → смотреть подборку раздела",
@@ -79,7 +79,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -91,14 +96,14 @@
     ]
   },
   "review_screenshots": [
-    "T003-forest-cinema-marquee-1024.png",
-    "T003-forest-cinema-marquee-1440.png",
-    "T003-forest-cinema-marquee-1920.png",
-    "T003-forest-cinema-marquee-320.png",
-    "T003-forest-cinema-marquee-390.png",
-    "T003-forest-cinema-marquee-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.501702+00:00"
+  "issued_at_utc": "2026-09-22T07:14:03.412489+00:00"
 }

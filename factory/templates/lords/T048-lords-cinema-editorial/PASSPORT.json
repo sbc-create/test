@@ -4,7 +4,7 @@
   "slug": "lords-cinema-editorial",
   "version": "1.0.0",
   "family": "hybrid",
-  "package_digest": "7fcf0556fa9fb9b4c90013362e14837875b7afce460294f30ad64be863a31f33",
+  "package_digest": "86fd4c5b8ce4bec9f7fbd4a294704e6c3706fa1bd2c9ff043dbd70b6b452b30d",
   "declared": {
     "design_intent": "Редакционная полоса из равных карточек, под ней плотная витрина и порядок.",
     "primary_user_journey": "прочитать обложку → пройти витрину",
@@ -99,7 +99,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -111,14 +116,14 @@
     ]
   },
   "review_screenshots": [
-    "T048-lords-cinema-editorial-1024.png",
-    "T048-lords-cinema-editorial-1440.png",
-    "T048-lords-cinema-editorial-1920.png",
-    "T048-lords-cinema-editorial-320.png",
-    "T048-lords-cinema-editorial-390.png",
-    "T048-lords-cinema-editorial-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.897758+00:00"
+  "issued_at_utc": "2026-09-22T07:14:09.096076+00:00"
 }

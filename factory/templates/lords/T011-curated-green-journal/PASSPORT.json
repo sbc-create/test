@@ -4,7 +4,7 @@
   "slug": "curated-green-journal",
   "version": "1.0.0",
   "family": "curated",
-  "package_digest": "674723a0df82a7df09ffd492909f638103e61c2a6093859cbff6c1f872ddb973",
+  "package_digest": "8a4cab420ae17f757dd10457a5025d51419cddbce1d361b2299a8f2b6dfa9eaa",
   "declared": {
     "design_intent": "Обложка: одна запись занимает разворот, остальные идут полосами разной плотности.",
     "primary_user_journey": "прочитать обложку → спуститься по полосам",
@@ -93,7 +93,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -105,14 +110,14 @@
     ]
   },
   "review_screenshots": [
-    "T011-curated-green-journal-1024.png",
-    "T011-curated-green-journal-1440.png",
-    "T011-curated-green-journal-1920.png",
-    "T011-curated-green-journal-320.png",
-    "T011-curated-green-journal-390.png",
-    "T011-curated-green-journal-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.564070+00:00"
+  "issued_at_utc": "2026-09-22T07:14:03.792778+00:00"
 }

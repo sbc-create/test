@@ -4,7 +4,7 @@
   "slug": "collection-quilt",
   "version": "1.0.0",
   "family": "collection",
-  "package_digest": "2e3c903411076ab0dd14a7748177cb66483f5227d08b4c672ed540e90e0c6076",
+  "package_digest": "823f605c34c8c0d459e3a51fd0efd31f9a6cdb4ef20199614c115c9ff9d41ff0",
   "declared": {
     "design_intent": "Лоскут из текстовых плиток: ритм задаётся пролётами и типографикой, а не постерами.",
     "primary_user_journey": "скользить по лоскуту",
@@ -57,7 +57,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -69,14 +74,14 @@
     ]
   },
   "review_screenshots": [
-    "T034-collection-quilt-1024.png",
-    "T034-collection-quilt-1440.png",
-    "T034-collection-quilt-1920.png",
-    "T034-collection-quilt-320.png",
-    "T034-collection-quilt-390.png",
-    "T034-collection-quilt-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.767873+00:00"
+  "issued_at_utc": "2026-09-22T07:14:08.335685+00:00"
 }

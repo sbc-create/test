@@ -4,7 +4,7 @@
   "slug": "curated-mosaic",
   "version": "1.0.0",
   "family": "curated",
-  "package_digest": "2698f99e92420610f593f9988dfab3f8a8633b3e5a0eb6512c7d2ec0eca76319",
+  "package_digest": "aa71ac4f3662bb14eabb78767b2e551710811f668d688e7a21b6c049ce5cc3b9",
   "declared": {
     "design_intent": "Мозаика ведёт и повторяется внизу в другой плотности: ритм страницы задаётся пролётами.",
     "primary_user_journey": "скользить по мозаике → выбрать крупное",
@@ -57,7 +57,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -69,14 +74,14 @@
     ]
   },
   "review_screenshots": [
-    "T013-curated-mosaic-1024.png",
-    "T013-curated-mosaic-1440.png",
-    "T013-curated-mosaic-1920.png",
-    "T013-curated-mosaic-320.png",
-    "T013-curated-mosaic-390.png",
-    "T013-curated-mosaic-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.579097+00:00"
+  "issued_at_utc": "2026-09-22T07:14:03.847032+00:00"
 }

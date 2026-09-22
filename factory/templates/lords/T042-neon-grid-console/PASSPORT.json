@@ -4,7 +4,7 @@
   "slug": "neon-grid-console",
   "version": "1.0.0",
   "family": "modern",
-  "package_digest": "5095d67426b8042a465862e2ba825080997ff6cefda29b8ff07a8d878736a76a",
+  "package_digest": "8aa4f22311cf6354eff94335b072301d4c2a3081eb7ffdf89dd7c3366f7a9149",
   "declared": {
     "design_intent": "Доска-консоль впереди, витрина и перечень следом.",
     "primary_user_journey": "окинуть консоль → углубиться",
@@ -75,7 +75,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -87,14 +92,14 @@
     ]
   },
   "review_screenshots": [
-    "T042-neon-grid-console-1024.png",
-    "T042-neon-grid-console-1440.png",
-    "T042-neon-grid-console-1920.png",
-    "T042-neon-grid-console-320.png",
-    "T042-neon-grid-console-390.png",
-    "T042-neon-grid-console-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.829449+00:00"
+  "issued_at_utc": "2026-09-22T07:14:08.883684+00:00"
 }

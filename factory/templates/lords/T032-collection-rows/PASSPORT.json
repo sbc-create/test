@@ -4,7 +4,7 @@
   "slug": "collection-rows",
   "version": "1.0.0",
   "family": "collection",
-  "package_digest": "bb7ea315f651d8d4d3dbac6ace7c625c143cde3f5962ebc623e0ae954e2295f4",
+  "package_digest": "af955ae8d4ecdb36e2d716a90a81ae65902f699716f6d6bda14604b33c3608b7",
   "declared": {
     "design_intent": "Три витрины подряд разной плотности вместо одной длинной. Карусели нет и не заявляется: страница статическая, скриптов ноль.",
     "primary_user_journey": "скользить по рядам",
@@ -57,7 +57,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -69,14 +74,14 @@
     ]
   },
   "review_screenshots": [
-    "T032-collection-rows-1024.png",
-    "T032-collection-rows-1440.png",
-    "T032-collection-rows-1920.png",
-    "T032-collection-rows-320.png",
-    "T032-collection-rows-390.png",
-    "T032-collection-rows-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.746890+00:00"
+  "issued_at_utc": "2026-09-22T07:14:08.224644+00:00"
 }

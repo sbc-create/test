@@ -4,7 +4,7 @@
   "slug": "series-dashboard",
   "version": "1.0.0",
   "family": "series-feed",
-  "package_digest": "c0f8fc2699e80be16657b0ed6a38b6458a07c4ba6b9eabdc4baf00238ae454ac",
+  "package_digest": "6ed15db5a2b87a635b0cd5d8af593262b6b388bb6ebf37ebacdc72ccdc46b55d",
   "declared": {
     "design_intent": "Панель: каждый вид получает свой столбец, а не место в общей сетке.",
     "primary_user_journey": "выбрать раздел на панели → уйти в его список",
@@ -94,7 +94,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -106,14 +111,14 @@
     ]
   },
   "review_screenshots": [
-    "T008-series-dashboard-1024.png",
-    "T008-series-dashboard-1440.png",
-    "T008-series-dashboard-1920.png",
-    "T008-series-dashboard-320.png",
-    "T008-series-dashboard-390.png",
-    "T008-series-dashboard-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.540154+00:00"
+  "issued_at_utc": "2026-09-22T07:14:03.709146+00:00"
 }

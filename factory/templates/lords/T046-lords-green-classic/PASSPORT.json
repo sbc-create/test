@@ -4,7 +4,7 @@
   "slug": "lords-green-classic",
   "version": "1.0.0",
   "family": "hybrid",
-  "package_digest": "d273b4e6cf53de3a66ef611b695aee2da49a01f9f149ad67cdfb72d7ca5f5c8b",
+  "package_digest": "416702a650de6e07fbcd81a7ebbe079cd9e209881feb579e1b052d589f181bb0",
   "declared": {
     "design_intent": "Классическая последовательность: кадр, витрина, разделы, лента.",
     "primary_user_journey": "привычный путь по витрине",
@@ -85,7 +85,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -97,14 +102,14 @@
     ]
   },
   "review_screenshots": [
-    "T046-lords-green-classic-1024.png",
-    "T046-lords-green-classic-1440.png",
-    "T046-lords-green-classic-1920.png",
-    "T046-lords-green-classic-320.png",
-    "T046-lords-green-classic-390.png",
-    "T046-lords-green-classic-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.872092+00:00"
+  "issued_at_utc": "2026-09-22T07:14:09.034253+00:00"
 }

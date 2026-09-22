@@ -1,0 +1,201 @@
+#!/usr/bin/env python3
+"""Развод похожих страниц каталога по измерению, а не по догадке.
+
+## Зачем отдельный инструмент
+
+Генератор умеет считать «подпись открытия» — тип, грамматику и плотность
+первых блоков. Это приближение: две страницы с разной подписью могут выглядеть
+одинаково, потому что разница в плотности не пережила перенос строки, а
+разница в источнике данных меняет слова, а не форму.
+
+Мерой истины остаётся перцептивный отпечаток первого экрана. Поэтому здесь
+замкнута петля: отрисовать → снять → найти близкие пары → сменить композицию у
+одного из пары → повторить. Композиция берётся из того же набора, что и у
+генератора: это по-прежнему объявленные варианты, а не подгонка под снимок.
+
+## Чего инструмент не делает
+
+Не трогает порог и не исключает пары из проверки. Если набор композиций
+исчерпан, он честно останавливается и называет пары, которые развести не
+удалось: нерешённая пара обязана остаться видимой, а не исчезнуть из отчёта.
+
+    lords-diversify --route catalog --threshold 6
+"""
+
+from __future__ import annotations
+
+import argparse
+import importlib.util
+import itertools
+import json
+import pathlib
+import subprocess
+import sys
+
+КОРЕНЬ = pathlib.Path(__file__).resolve().parents[1]
+ЯДРО = КОРЕНЬ / "factory" / "templates" / "lords" / "shared"
+ПАКЕТЫ = КОРЕНЬ / "factory" / "templates" / "lords"
+
+
+def _модуль(имя: str, файл: pathlib.Path):
+    spec = importlib.util.spec_from_file_location(имя, файл)
+    м = importlib.util.module_from_spec(spec)
+    sys.modules[имя] = м
+    spec.loader.exec_module(м)
+    return м
+
+
+routes = _модуль("routes", ЯДРО / "routes.py")
+fingerprints = _модуль("lords_fingerprints", ЯДРО / "fingerprints.py")
+
+
+def пакеты() -> list[pathlib.Path]:
+    return sorted(п for п in ПАКЕТЫ.iterdir()
+                  if п.is_dir() and (п / "template.json").is_file())
+
+
+def отрисовать(пакет: pathlib.Path, превью: pathlib.Path) -> None:
+    subprocess.run([sys.executable, str(КОРЕНЬ / "bin" / "lords-template-preview"),
+                    "--package", str(пакет), "--out", str(превью)],
+                   capture_output=True, check=True, cwd=str(КОРЕНЬ))
+
+
+def снять(страницы: list[tuple[str, pathlib.Path]], снимки: pathlib.Path,
+          ширина: int = 1440) -> dict[str, str]:
+    from playwright.sync_api import sync_playwright
+    снимки.mkdir(parents=True, exist_ok=True)
+    итог = {}
+    with sync_playwright() as pw:
+        браузер = pw.chromium.launch(args=["--disable-dev-shm-usage"])
+        контекст = браузер.new_context(viewport={"width": ширина, "height": 900})
+        стр = контекст.new_page()
+        try:
+            for tid, страница in страницы:
+                стр.goto(страница.resolve().as_uri(), wait_until="load", timeout=45000)
+                стр.wait_for_timeout(120)
+                файл = снимки / f"{tid}.png"
+                стр.screenshot(path=str(файл))
+                итог[tid] = fingerprints.снимок_отпечаток(файл)
+        finally:
+            стр.close()
+            контекст.close()
+            браузер.close()
+    return итог
+
+
+def сменить_композицию(пакет: pathlib.Path, занятые: dict) -> dict | None:
+    """Следующая свободная композиция каталога для этого пакета.
+
+    Перебор идёт по тому же набору, что и у генератора. Композиция считается
+    пригодной, если её подпись открытия ещё не занята другим пакетом и если
+    состав проходит композиционные запреты — одинокий хвост и узкую колонку
+    для строки-карточки.
+    """
+    манифест = json.loads((пакет / "template.json").read_text(encoding="utf-8"))
+    модель = dict(манифест["route_model"])
+    лестницы = routes.лестницы_из_css((пакет / "layout.css").read_text(encoding="utf-8"))
+    текущий = (модель.get("catalog_variant", 0), модель.get("catalog_layout"))
+    порядок = [(в, р) for р in routes.РАСКЛАДКИ_КАТАЛОГА for в in range(15)]
+    начало = порядок.index(текущий) if текущий in порядок else 0
+    for сдвиг in range(1, len(порядок) + 1):
+        вариант, раскладка = порядок[(начало + сдвиг) % len(порядок)]
+        проба = dict(модель, catalog_variant=вариант, catalog_layout=раскладка)
+        состав = routes.развернуть(проба, лестницы, манифест["card_grammar"])
+        подпись = routes.подпись_открытия(состав["catalog"])
+        # Подпись занята другим пакетом — берём следующую. Своя собственная
+        # подпись помехой не является: пакет имеет право вернуться к ней.
+        if занятые.get(подпись) not in (None, манифест["template_id"]):
+            continue
+        if routes.проверить(состав, лестницы):
+            continue
+        прежняя = routes.подпись_открытия(манифест["routes"]["catalog"])
+        if занятые.get(прежняя) == манифест["template_id"]:
+            занятые.pop(прежняя, None)
+        манифест["route_model"] = проба
+        манифест["routes"] = состав
+        (пакет / "template.json").write_text(
+            json.dumps(манифест, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        return {"template_id": манифест["template_id"], "variant": вариант,
+                "layout": раскладка, "signature": подпись}
+    return None
+
+
+def главное() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--route", default="catalog")
+    parser.add_argument("--threshold", type=int, default=fingerprints.ПОРОГ_СНИМКА)
+    parser.add_argument("--iterations", type=int, default=6)
+    parser.add_argument("--preview", default="var/preview")
+    parser.add_argument("--shots", default="var/diversify")
+    parser.add_argument("--record", default="var/review/DIVERSIFY.json")
+    args = parser.parse_args()
+
+    превью = pathlib.Path(args.preview)
+    снимки = pathlib.Path(args.shots)
+    все = пакеты()
+    по_id = {п.name[:4]: п for п in все}
+
+    for пакет in все:
+        отрисовать(пакет, превью)
+    отпечатки = снять([(п.name[:4], превью / п.name / f"{args.route}.html")
+                       for п in все], снимки)
+
+    занятые = {}
+    for пакет in все:
+        манифест = json.loads((пакет / "template.json").read_text(encoding="utf-8"))
+        занятые[routes.подпись_открытия(манифест["routes"]["catalog"])] = \
+            манифест["template_id"]
+
+    журнал = {"route": args.route, "threshold": args.threshold, "iterations": []}
+    for шаг in range(args.iterations):
+        пары = [{"pair": [a, b], "hamming": fingerprints.расстояние(x, y)}
+                for (a, x), (b, y) in itertools.combinations(отпечатки.items(), 2)
+                if fingerprints.расстояние(x, y) <= args.threshold]
+        запись = {"step": шаг, "close_pairs": len(пары), "pairs": пары, "changed": []}
+        if not пары:
+            журнал["iterations"].append(запись)
+            break
+        # Правится тот, у кого больше номер: правило произвольное, но
+        # постоянное, иначе два прогона дадут разные пакеты.
+        цели = sorted({max(п["pair"]) for п in пары})
+        изменённые = []
+        for tid in цели:
+            смена = сменить_композицию(по_id[tid], занятые)
+            if смена is None:
+                запись.setdefault("exhausted", []).append(tid)
+                continue
+            занятые[смена["signature"]] = tid
+            запись["changed"].append(смена)
+            изменённые.append(по_id[tid])
+        журнал["iterations"].append(запись)
+        if not изменённые:
+            break
+        for пакет in изменённые:
+            отрисовать(пакет, превью)
+        обновлённые = снять([(п.name[:4], превью / п.name / f"{args.route}.html")
+                             for п in изменённые], снимки)
+        отпечатки.update(обновлённые)
+
+    расстояния = sorted(fingerprints.расстояние(x, y)
+                        for (a, x), (b, y) in itertools.combinations(отпечатки.items(), 2))
+    остались = [{"pair": [a, b], "hamming": fingerprints.расстояние(x, y)}
+                for (a, x), (b, y) in itertools.combinations(отпечатки.items(), 2)
+                if fingerprints.расстояние(x, y) <= args.threshold]
+    журнал.update({
+        "CLOSE_PAIRS_AFTER": len(остались),
+        "PIXEL_IDENTICAL_AFTER": sum(1 for д in расстояния if д == 0),
+        "min": расстояния[0], "median": расстояния[len(расстояния) // 2],
+        "unresolved": остались,
+    })
+    pathlib.Path(args.record).parent.mkdir(parents=True, exist_ok=True)
+    pathlib.Path(args.record).write_text(
+        json.dumps(журнал, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(json.dumps({к: журнал[к] for к in
+                      ("route", "threshold", "CLOSE_PAIRS_AFTER",
+                       "PIXEL_IDENTICAL_AFTER", "min", "median", "unresolved")},
+                     ensure_ascii=False, indent=2))
+    return 0 if not остались else 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(главное())

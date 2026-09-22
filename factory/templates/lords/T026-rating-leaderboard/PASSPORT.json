@@ -4,7 +4,7 @@
   "slug": "rating-leaderboard",
   "version": "1.0.0",
   "family": "rating",
-  "package_digest": "1c916cd2ae0c8c8a913c6be970e37651e3bfba410a305e7ae5cda5751b9bf374",
+  "package_digest": "a4ed6829470835f78827d71fa06c5773632c9f843eed4c579cc49850e81c1367",
   "declared": {
     "design_intent": "Ранжированный список ведёт страницу, витрина поддерживает.",
     "primary_user_journey": "пройти список сверху вниз",
@@ -75,7 +75,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -87,14 +92,14 @@
     ]
   },
   "review_screenshots": [
-    "T026-rating-leaderboard-1024.png",
-    "T026-rating-leaderboard-1440.png",
-    "T026-rating-leaderboard-1920.png",
-    "T026-rating-leaderboard-320.png",
-    "T026-rating-leaderboard-390.png",
-    "T026-rating-leaderboard-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.697195+00:00"
+  "issued_at_utc": "2026-09-22T07:14:06.096533+00:00"
 }

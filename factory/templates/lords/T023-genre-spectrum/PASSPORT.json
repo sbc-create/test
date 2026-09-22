@@ -4,7 +4,7 @@
   "slug": "genre-spectrum",
   "version": "1.0.0",
   "family": "genre",
-  "package_digest": "16d068a59a4dff1eab150153c9217b762a6aad8d871aa3255bdf9091eea975dd",
+  "package_digest": "53ef49f70f01120f99b2dc881d0935fd905973862f71f08959a277bcc2955f85",
   "declared": {
     "design_intent": "Доска разделов, затем две витрины разной плотности.",
     "primary_user_journey": "сравнить разделы → выбрать",
@@ -46,7 +46,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -58,14 +63,14 @@
     ]
   },
   "review_screenshots": [
-    "T023-genre-spectrum-1024.png",
-    "T023-genre-spectrum-1440.png",
-    "T023-genre-spectrum-1920.png",
-    "T023-genre-spectrum-320.png",
-    "T023-genre-spectrum-390.png",
-    "T023-genre-spectrum-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.668411+00:00"
+  "issued_at_utc": "2026-09-22T07:14:05.459978+00:00"
 }

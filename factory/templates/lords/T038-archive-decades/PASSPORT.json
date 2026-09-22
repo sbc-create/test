@@ -4,7 +4,7 @@
   "slug": "archive-decades",
   "version": "1.0.0",
   "family": "archive",
-  "package_digest": "55fe0e42cc1228a2c7972764eebfd92530e755634d7bf47babf50a898beda415",
+  "package_digest": "43edbb427ccd350404c44e072dc791bebf23993a9587d61533d78d96b480b3c0",
   "declared": {
     "design_intent": "Годы ведут, витрина и перечень следуют.",
     "primary_user_journey": "выбрать период → пройти список",
@@ -90,7 +90,12 @@
       "UNINTENDED_GAP_OVER_96PX_COUNT": 0,
       "SMALL_TOUCH_TARGET_COUNT": 0,
       "HEADING_ORDER_SKIPS": 0,
-      "LOW_CONTRAST_COUNT": 0
+      "LOW_CONTRAST_COUNT": 0,
+      "UNLABELLED_CONTROL_COUNT": 0,
+      "DEAD_CONTROL_COUNT": 0,
+      "DEAD_LINK_COUNT": 0,
+      "REDUCED_MOTION_VIOLATIONS": 0,
+      "AUTOPLAY_COUNT": 0
     },
     "viewports": [
       320,
@@ -102,14 +107,14 @@
     ]
   },
   "review_screenshots": [
-    "T038-archive-decades-1024.png",
-    "T038-archive-decades-1440.png",
-    "T038-archive-decades-1920.png",
-    "T038-archive-decades-320.png",
-    "T038-archive-decades-390.png",
-    "T038-archive-decades-768.png"
+    "catalog-1440.png",
+    "catalog-390.png",
+    "episode-1440.png",
+    "home-1440.png",
+    "home-390.png",
+    "title-series-1440.png"
   ],
   "owner_visual_accepted": null,
   "owner_note": "",
-  "issued_at_utc": "2026-09-21T21:27:15.797903+00:00"
+  "issued_at_utc": "2026-09-22T07:14:08.525938+00:00"
 }
