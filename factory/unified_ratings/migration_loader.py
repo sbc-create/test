@@ -17,10 +17,15 @@ _CACHE: dict[str, ModuleType] = {}
 
 MIGRATION_FILENAME = "0007_unified_ratings.py"
 MIGRATION_0008_FILENAME = "0008_import_not_found.py"
+MIGRATION_0009_FILENAME = "0009_composite_rating.py"
 
 #: Все миграции модуля по порядку. Применяются одной последовательностью,
 #: чтобы «схема применена» означало одно и то же везде.
-MIGRATION_FILES: tuple[str, ...] = (MIGRATION_FILENAME, MIGRATION_0008_FILENAME)
+MIGRATION_FILES: tuple[str, ...] = (
+    MIGRATION_FILENAME,
+    MIGRATION_0008_FILENAME,
+    MIGRATION_0009_FILENAME,
+)
 
 
 def _load(filename: str, module_name: str) -> ModuleType:
@@ -45,5 +50,9 @@ def load_migration_0008() -> ModuleType:
     return _load(MIGRATION_0008_FILENAME, "unified_ratings_migration_0008")
 
 
+def load_migration_0009() -> ModuleType:
+    return _load(MIGRATION_0009_FILENAME, "unified_ratings_migration_0009")
+
+
 def load_all() -> list[ModuleType]:
-    return [load_migration_0007(), load_migration_0008()]
+    return [load_migration_0007(), load_migration_0008(), load_migration_0009()]
