@@ -86,6 +86,28 @@ OSError: could not create numbered dir with prefix zona-declared
 * неизвестное имя шаблона;
 * протечка правок Zona в карточку Animedia.
 
+## Остальные наборы фабрики
+
+```
+python3 -m pytest tests/unit tests/zone -q -p no:randomly --basetemp=<свой каталог>
+→ 30 failed, 5557 passed, 93 skipped, 1 xfailed, 62 errors за 40 мин 16 с
+```
+
+Все 92 падения и ошибки — вне витрины Zona, и это проверено механически, а не
+на глаз: ни один из упавших файлов не ссылается ни на `lords-frontend.py`, ни
+на новые инструменты Zona, ни на `zona_kit`.
+
+| Где | Падений/ошибок | Чем занят набор |
+| --- | --- | --- |
+| `test_secret_hub_*` | 84 | хранилище секретов: сокет, права, панель — окружение |
+| `test_templates_control_plane` | 2 | управляющий слой шаблонов фабрики |
+| `test_site_engine_openapi` | 1 | описание управляющих маршрутов |
+| `test_site_provision` | 1 | выдача нового сайта |
+| `tests/zone/test_suite3_full_catalog_route_policy` | 1 | расхождение закреплённого журнала адресов `data/lords/previous-routes.json` с текущим снимком каталога — дрейф данных, импортируются только `factory.lords.*` |
+
+Ни один из этих наборов не участвует в отдаче витрины Zona: Zona-набор —
+`tests/lords/test_zona_*`, и он зелёный в обоих прогонах.
+
 ## Браузерная матрица
 
 `automation/host/zona-candidate-run.py` → `zona-visual-audit.py`, шесть ширин
