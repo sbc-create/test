@@ -1,0 +1,23 @@
+{
+  "added": [
+    "/srv/lords/.frontend/lords-runtime-registry.json.before-zona-02.20260922T124818Z"
+  ],
+  "removed": [],
+  "changed": [
+    "/srv/lords/.frontend/lords-runtime-registry.json",
+    "/srv/lords/.frontend/releases/zona-02-1015c650d8be/RELEASE.json",
+    "/srv/lords/.frontend/template-manifest-zona-02.json"
+  ],
+  "added_outside_tenant": [],
+  "removed_outside_tenant": [],
+  "changed_outside_tenant": [],
+  "added_foreign_known": [],
+  "added_unexplained": [],
+  "removed_foreign_known": [],
+  "removed_unexplained": [],
+  "changed_foreign_known": [],
+  "changed_unexplained": [],
+  "cross_tenant_writes": 0,
+  "foreign_known_total": 0,
+  "changed_detail": {}
+}

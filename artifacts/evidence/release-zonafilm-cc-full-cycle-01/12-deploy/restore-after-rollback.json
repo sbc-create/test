@@ -37,15 +37,15 @@
     "seo_layer.py": "8fb0a0bac3f88dde2c8d44ef352914255ccb7ffbaa4a308d07bf7499ef7c19f0"
   },
   "manifest_path": "/srv/lords/.frontend/template-manifest-zona-02.json",
-  "manifest_sha256": "be4bb7f73c9c326e1e46ec00da43761c48f574e2f5f5e724ac8362e853756d39",
+  "manifest_sha256": "948c6bb9e9fe8883b1cae03bed21b79d97c1757bc7e95b456c6d106dcd74a593",
   "current_link": "/srv/lords/.frontend/sites/zona-02/current",
   "current_target": "../../releases/zona-02-1015c650d8be",
-  "previous_target": "../../releases/zona-02-1015c650d8be",
+  "previous_target": null,
   "dispatcher_registry": {
     "neighbours_unchanged": true,
     "added_key": "zona-02",
-    "before_sha256": "98a2eef6b08aad469b42ede32ba73a2b76f37ae9f30ca0eacedca1364badcd55",
-    "backup": "/srv/lords/.frontend/lords-runtime-registry.json.before-zona-02.20260922T124844Z",
+    "before_sha256": "267db34070c18126373c62b89d6b16b22ee36a26270f51f20d5d73e067414f02",
+    "backup": "/srv/lords/.frontend/lords-runtime-registry.json.before-zona-02.20260922T125101Z",
     "after_sha256": "98a2eef6b08aad469b42ede32ba73a2b76f37ae9f30ca0eacedca1364badcd55"
   }
 }

@@ -81,9 +81,26 @@ def walk(roots: list[str], hash_limit: int) -> dict:
     return out
 
 
-def compare(before: dict, after: dict, allow_prefixes: list[str]) -> dict:
+def compare(before: dict, after: dict, allow_prefixes: list[str],
+            foreign_prefixes: list[str] | None = None) -> dict:
+    """Три корзины вместо двух.
+
+    На этом стенде параллельно работают другие терминалы, и за большое окно в
+    диф неизбежно попадают их файлы. Записать их в «нарушения изоляции» было бы
+    неправдой в свою пользу наоборот — но и молча выбросить нельзя.
+
+    Поэтому: `*_outside_tenant` — всё, что вне моих путей; из него отдельно
+    выделяется `*_foreign_known` — пути, объявленные чужими контурами. Вывод
+    `cross_tenant_writes` считается по остатку: по тому, что нельзя объяснить
+    ни своим контуром, ни названным чужим.
+    """
+    foreign_prefixes = foreign_prefixes or []
+
     def allowed(path: str) -> bool:
         return any(path.startswith(prefix) for prefix in allow_prefixes)
+
+    def foreign(path: str) -> bool:
+        return any(path.startswith(prefix) for prefix in foreign_prefixes)
 
     added = sorted(set(after) - set(before))
     removed = sorted(set(before) - set(after))
@@ -97,14 +114,23 @@ def compare(before: dict, after: dict, allow_prefixes: list[str]) -> dict:
         "removed_outside_tenant": [p for p in removed if not allowed(p)],
         "changed_outside_tenant": [p for p in changed if not allowed(p)],
     }
+    for ключ in ("added", "removed", "changed"):
+        вне = report[f"{ключ}_outside_tenant"]
+        report[f"{ключ}_foreign_known"] = [p for p in вне if foreign(p)]
+        report[f"{ключ}_unexplained"] = [p for p in вне if not foreign(p)]
     report["cross_tenant_writes"] = (
-        len(report["added_outside_tenant"])
-        + len(report["removed_outside_tenant"])
-        + len(report["changed_outside_tenant"])
+        len(report["added_unexplained"])
+        + len(report["removed_unexplained"])
+        + len(report["changed_unexplained"])
+    )
+    report["foreign_known_total"] = (
+        len(report["added_foreign_known"])
+        + len(report["removed_foreign_known"])
+        + len(report["changed_foreign_known"])
     )
     report["changed_detail"] = {
         p: {"before": before[p], "after": after[p]}
-        for p in report["changed_outside_tenant"][:50]
+        for p in report["changed_unexplained"][:50]
     }
     return report
 
@@ -115,6 +141,10 @@ def main() -> int:
     parser.add_argument("--compare-to", type=Path, help="сравнить текущее состояние с этим снимком")
     parser.add_argument("--allow-prefix", action="append", default=[],
                         help="путь, запись в который разрешена этому контуру")
+    parser.add_argument("--foreign-prefix", action="append", default=[],
+                        help="путь чужого контура, работающего параллельно: его "
+                             "изменения выносятся в отдельную корзину, а не "
+                             "приписываются этому контуру и не прячутся")
     parser.add_argument("--root", action="append", default=[])
     parser.add_argument("--hash-limit", type=int, default=4 << 20)
     args = parser.parse_args()
@@ -133,7 +163,7 @@ def main() -> int:
 
     if args.compare_to:
         before = json.loads(args.compare_to.read_text(encoding="utf-8"))["files"]
-        report = compare(before, current, args.allow_prefix)
+        report = compare(before, current, args.allow_prefix, args.foreign_prefix)
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 1 if report["cross_tenant_writes"] else 0
     return 0

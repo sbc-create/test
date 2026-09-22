@@ -343,17 +343,41 @@ class Приёмка:
                           added=len(добавленные), episodes=len(серии))
             итог["added_vs_episodes_overlap"] = совпало
 
+        # «С видео» обещает просмотр. Проверяется не наличие iframe, а состояние
+        # плеера: `noaccess` означает, что витрине не выдан Publisher ID, и это
+        # внешний блокер, а не ошибка подборки. Смешивать их нельзя — иначе
+        # отсутствие учётных данных читалось бы как враньё витрины о контенте,
+        # а настоящее враньё потерялось бы среди него.
         с_видео = наборы.get("/collection/video_available/", [])
-        проверено, без_плеера = 0, []
+        состояния: dict[str, int] = {}
+        без_блока, пустой_iframe = [], []
         for href in с_видео[:12]:
             о = self.к.get(href)
-            проверено += 1
-            if not счёт(r"<iframe", о.body):
-                без_плеера.append(href)
-        self.добавить("collection.video_available_is_watchable", not без_плеера,
-                      checked=проверено, without_player=без_плеера[:5])
-        итог["video_available_probe"] = {"checked": проверено,
-                                         "without_player": без_плеера}
+            состояние = (найти_все(r'data-player[^>]*data-state="([a-z]+)"', о.body)
+                         or найти_все(r'data-state="([a-z]+)"[^>]*data-player', о.body))
+            ключ = состояние[0] if состояние else "нет-блока"
+            состояния[ключ] = состояния.get(ключ, 0) + 1
+            if not состояние:
+                без_блока.append(href)
+            кадры = атрибут(о.body, r"<iframe[^>]*>", "src")
+            if счёт(r"<iframe", о.body) and not [s for s in кадры if s]:
+                пустой_iframe.append(href)
+        только_noaccess = set(состояния) <= {"noaccess"}
+        self.добавить("collection.video_available_has_player_block", not без_блока,
+                      checked=len(с_видео[:12]), states=состояния, without_block=без_блока[:5])
+        self.добавить("collection.video_available_no_empty_iframe", not пустой_iframe,
+                      empty=пустой_iframe[:5])
+        self.добавить(
+            "collection.video_available_is_watchable",
+            bool(состояния) and not только_noaccess,
+            states=состояния,
+            note=("BLOCKED_EXTERNAL_CREDENTIAL: все записи в состоянии noaccess — "
+                  "витрине не выдан Publisher ID провайдера (player-zona-02.json)"
+                  if только_noaccess else ""))
+        итог["video_available_probe"] = {"checked": len(с_видео[:12]),
+                                         "player_states": состояния,
+                                         "without_block": без_блока,
+                                         "empty_iframe": пустой_iframe}
         return итог
 
     # -- 4. каталог --------------------------------------------------------
