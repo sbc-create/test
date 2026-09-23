@@ -111,8 +111,17 @@ def cmd_build(args) -> int:
 
 
 def cmd_deploy(args) -> int:
-    outcome = pipeline.run_job(args.site, environment=args.environment, dry_run=args.dry_run,
-                               skip_browser=args.skip_browser, allow_production=args.allow_production)
+    try:
+        outcome = pipeline.run_job(args.site, environment=args.environment, dry_run=args.dry_run,
+                                   skip_browser=args.skip_browser,
+                                   allow_production=args.allow_production)
+    except FactoryError as exc:
+        # Отказ до создания задания — это не сбой команды, а её результат:
+        # он обязан выглядеть как блокер со статусом, а не как трассировка.
+        _print({"status": exc.status, "blocker": exc.as_blocker()}, args.json)
+        if not args.json:
+            print(f"[{exc.status}] {exc.reason}\n нужно: {exc.required_input}")
+        return EXIT_BLOCKED
     _print({"status": outcome.status, "job_id": outcome.job_id, "base_url": outcome.base_url,
             "result": str(outcome.result_path) if outcome.result_path else None,
             "blockers": outcome.blockers, "notes": outcome.notes}, args.json)

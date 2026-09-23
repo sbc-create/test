@@ -19,6 +19,7 @@ from factory.errors import (
     BlockedAccess,
     BlockedAuthorization,
     FactoryError,
+    SiteExtracted,
 )
 from factory.locks import LockBusy, site_lock
 from factory.paths import PATHS
@@ -52,10 +53,35 @@ def _now() -> str:
     return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
 
+def _отказать_выделенному(site_id: str, action: str) -> None:
+    """Общий конвейер не трогает сайт, у которого есть собственный репозиторий.
+
+    Реестр ячеек может быть недоступен (свежая установка, урезанная копия) — и
+    тогда проверка молчит. Это осознанно: она защищает от повторной публикации
+    уже выделенного сайта, а не заменяет собой валидацию пакета.
+    """
+    try:
+        from factory.cell import registry as cell_registry
+    except ImportError:
+        return
+    try:
+        cell_registry.require_not_extracted(site_id, action=f"{action} сайта")
+    except cell_registry.SiteAlreadyExtracted as exc:
+        raise SiteExtracted(str(exc), field="site_id",
+                            required_input="выкладка из репозитория сайта",
+                            blocks_stage="RECEIVED") from exc
+    except cell_registry.RegistryError:
+        return
+
+
 def run_job(site_id: str, *, environment: str | None = None, job_id: str | None = None,
             action: str = "create", dry_run: bool = False, skip_browser: bool = False,
             allow_production: bool = False) -> RunOutcome:
     started = _now()
+    # Отказ выделенному сайту стоит первой строкой — до чтения пакета, создания
+    # задания и любой записи на диск. Иначе «ничего не произошло» перестало бы
+    # быть правдой: задание уже завело бы состояние и блокировку.
+    _отказать_выделенному(site_id, action)
     steps: list[dict] = []
     checks: list[dict] = []
     mutations: list[dict] = []

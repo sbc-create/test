@@ -18,6 +18,15 @@ set -Eeuo pipefail
 
 REPO="${FACTORY_REPO:-/srv/site-factory/repo}"
 PYTHON="${FACTORY_PYTHON:-${REPO}/.venv/bin/python}"
+# ВЫДЕЛЕННЫЕ САЙТЫ ЗДЕСЬ НЕ ИСКЛЮЧАЮТСЯ — И ЭТО РЕШЕНИЕ, А НЕ УПУЩЕНИЕ.
+# Сценарий доставляет данные: снимок каталога, оценки, метаданные. Данные по
+# устройству ячейки живут вне выпуска и вне репозитория сайта — в пакет они не
+# входят, что прямо объявлено в release-manifest (`contains.catalog_snapshot:
+# false`). Отказать здесь значило бы заморозить каталог живого сайта, причём
+# заметно это стало бы только через сутки.
+#
+# Запрет касается кода, шаблона и конфигурации выпуска: их переписывают
+# finalize-public-sites.sh и lords-staging-apply.sh, и там проверка стоит.
 SITES=(lords-01 lords-02 lords-03)
 STATE_DIR="${LORDS_REFRESH_STATE:-/var/lib/lords-content-refresh}"
 KEEP_RELEASES="${LORDS_KEEP_RELEASES:-4}"

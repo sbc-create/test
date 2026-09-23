@@ -24,6 +24,7 @@ from factory.errors import (
     BlockedRights,
     BlockedSecret,
     BlockedSeo,
+    SiteExtracted,
 )
 
 #: Статус валидации → класс ошибки. Общего «failed» не существует.
@@ -185,7 +186,28 @@ POST_BUILD_STAGES = frozenset({
 })
 
 
+def _отказать_выделенному(site_id: str) -> None:
+    """Сборка выделенного сайта идёт только в его собственном репозитории."""
+    try:
+        from factory.cell import registry as cell_registry
+    except ImportError:
+        return
+    try:
+        cell_registry.require_not_extracted(site_id, action="сборка")
+    except cell_registry.SiteAlreadyExtracted as exc:
+        raise SiteExtracted(str(exc), field="site_id",
+                            required_input="сборка в репозитории сайта",
+                            blocks_stage="BUILDING") from exc
+    except cell_registry.RegistryError:
+        return
+
+
 def build(site_id: str, *, environment: str | None = None, force: bool = False) -> BuildResult:
+    # Сборка — это место, где появляются байты. Собрать выделенный сайт из
+    # монорепозитория значит изготовить правдоподобный артефакт чужого
+    # выпуска: поставить его потом можно и руками, и никакой отказ на выкладке
+    # этого уже не догонит.
+    _отказать_выделенному(site_id)
     result = validation.validate(site_id)
     if not result.ok:
         # Точный статус, а не общий QUARANTINED: иначе отсутствие прав или лицензии

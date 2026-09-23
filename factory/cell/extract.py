@@ -594,6 +594,10 @@ check "pins-match-sources" python3 checks/verify_pins.py
 check "no-secrets-in-git"  python3 checks/no_secrets.py
 check "shell-ascii-names"  python3 checks/ascii_shell_identifiers.py
 check "launcher-refuses"   python3 checks/fails_closed.py
+check "shell-syntax"       bash -n deploy/activate.sh
+# Сценарии именно выполняются: `bash -n` пропустил ошибку, валившую скрипт на
+# третьей строке, и обнаружилась она только на боевой активации.
+check "activate-scenarios" python3 checks/activate_scenarios.py
 
 exit "$fail"
 '''
@@ -853,10 +857,29 @@ def main() -> int:
     dirty = subprocess.run(["git", "-C", str(ROOT), "status", "--porcelain"],
                            capture_output=True, text=True, check=True).stdout.strip()
 
+    # Манифест штампуется коммитом ЭТОЙ репы: иначе живой сайт объявлял бы
+    # build_id чужой сборки, и связь commit → CI → digest → живой сайт
+    # обрывалась бы на последнем звене. Отметки времени нет намеренно — она
+    # сделала бы digest невоспроизводимым.
+    manifest_path = "config/template-manifest.json"
+    stamped = None
+    if (ROOT / manifest_path).is_file():
+        stamped = json.loads((ROOT / manifest_path).read_text(encoding="utf-8"))
+        stamped["site_repo_commit"] = commit
+        stamped["build_id"] = f"{commit[:12]}-{cfg['site_id']}"
+        stamped_bytes = (json.dumps(stamped, ensure_ascii=False, indent=1) + "\\n").encode()
+
     raw = io.BytesIO()
     with tarfile.open(fileobj=raw, mode="w") as tar:
         for p in files():
-            tar.add(p, arcname=str(p.relative_to(ROOT)), filter=anonymise)
+            arc = str(p.relative_to(ROOT))
+            if stamped is not None and arc == manifest_path:
+                info = tarfile.TarInfo(arc)
+                info.size = len(stamped_bytes)
+                info.mode = 0o644
+                tar.addfile(anonymise(info), io.BytesIO(stamped_bytes))
+                continue
+            tar.add(p, arcname=arc, filter=anonymise)
     artifact = out / f"{cfg['site_id']}-{commit[:12]}.tar.gz"
     with artifact.open("wb") as fh, gzip.GzipFile(fileobj=fh, mode="wb", mtime=0) as gz:
         gz.write(raw.getvalue())
@@ -873,6 +896,7 @@ def main() -> int:
         "source_dirty": bool(dirty),
         "pins": json.loads((ROOT / "pins.lock.json").read_text(encoding="utf-8"))["pins"],
         "built_at": datetime.now(timezone.utc).isoformat(),
+        "live_build_id": stamped["build_id"] if stamped else None,
         "contains": {"code": True, "config": True, "database": False,
                      "media": False, "secrets": False, "catalog_snapshot": False},
     }
@@ -898,6 +922,13 @@ def add_tooling(destination: Path, site_id: str, domain: str) -> None:
     run = checks / "run.sh"
     run.write_text(CHECKS_RUN, encoding="utf-8")
     run.chmod(0o755)
+    # Сценарный тест активации лежит файлом рядом с генератором: встроенный в
+    # строку, он однажды уже приехал в репозиторий сайта с разъехавшимися
+    # escape-последовательностями и не компилировался.
+    сценарии = Path(__file__).resolve().parent / "site_checks" / "activate_scenarios.py"
+    (checks / "activate_scenarios.py").write_text(
+        сценарии.read_text(encoding="utf-8"), encoding="utf-8")
+
     for имя, текст in (("entrypoint_present.py", CHECK_ENTRYPOINT),
                        ("compiles.py", CHECK_COMPILES),
                        ("verify_pins.py", CHECK_VERIFY_PINS),
@@ -933,7 +964,16 @@ ACTIVATE = '''#!/usr/bin/env bash
 set -euo pipefail
 
 dry_run=0
-[ "${{1:-}}" = "--dry-run" ] && dry_run=1
+artifact=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --dry-run) dry_run=1 ;;
+    --artifact) artifact="${{2:-}}"; shift ;;
+    --artifact=*) artifact="${{1#*=}}" ;;
+    *) echo "неизвестный аргумент: $1" >&2; exit 2 ;;
+  esac
+  shift
+done
 
 project="$(cd "$(dirname "$0")/.." && pwd)"
 site_id="{site_id}"
@@ -975,12 +1015,19 @@ fi
 lock_file="$shared_dir/.deploy.lock"
 if [ -e "$lock_file" ]; then
   lock_age=$(( $(date +%s) - $(stat -c %Y "$lock_file") ))
-  if [ "$lock_age" -lt 900 ]; then
-    echo "рядом идёт выкладка (замок $lock_file, $lock_age с назад):" >&2
-    cat "$lock_file" >&2
-    echo "дождитесь её окончания; чужой замок снимать нельзя" >&2
+  # Возраст замка НЕ доказывает смерть владельца: долгая миграция живёт часами.
+  lock_pid=$(python3 -c "import json,sys
+try: print(json.load(open(sys.argv[1])).get('pid') or '')
+except Exception: print('')" "$lock_file")
+  if [ -n "$lock_pid" ] && kill -0 "$lock_pid" 2>/dev/null; then
+    echo "выкладку держит живой процесс $lock_pid (замок $lock_file)" >&2
     exit 1
   fi
+  if [ -z "$lock_pid" ]; then
+    echo "в замке $lock_file нет pid владельца — снимать его автоматически нельзя" >&2
+    exit 1
+  fi
+  echo "   владелец замка (pid $lock_pid) не существует — замок брошен"
 fi
 
 # Замок направления ненадёжен (наблюдался возраст 72 ч при активной работе
@@ -995,11 +1042,14 @@ fi
 own_lock="$root_dir/.activate.lock"
 if [ "$dry_run" = 0 ]; then
   mkdir -p "$root_dir"
-  if ! mkdir "$own_lock" 2>/dev/null; then
+  if mkdir "$own_lock" 2>/dev/null; then
+    printf '{{"pid": %d, "site": "%s", "at": "%s"}}\\n' "$$" "$site_id" "$(date -Is)" \\
+      > "$own_lock/owner.json"
+  else
     echo "активация $site_id уже идёт ($own_lock); второй запуск отклонён" >&2
     exit 1
   fi
-  trap 'rmdir "$own_lock" 2>/dev/null || true' EXIT
+  trap 'rm -rf "$own_lock" 2>/dev/null || true' EXIT
 fi
 
 if "$systemctl_cmd" is-active --quiet "$unit"; then
@@ -1020,9 +1070,30 @@ run_step install -d $(own) -m 0755 "$root_dir" "$app_dir" "$data_dir"
 # shellcheck disable=SC2046
 run_step install -d $(own) -m 0700 "$data_dir/site-data"
 
-step "код из репозитория сайта"
-run_step rsync -a --delete --exclude .git --exclude config/player.json \\
-    --exclude dist --exclude data "$project/" "$app_dir/"
+step "код из проверенного артефакта"
+# rsync рабочего каталога ставил то, что лежит на диске, а не то, что прошло
+# CI: успешный прогон не доказывал, что в production попали именно его байты.
+if [ -z "${{artifact:-}}" ]; then
+  echo "не задан --artifact: установка из рабочего каталога запрещена" >&2
+  exit 2
+fi
+[ -r "$artifact" ] || {{ echo "артефакт не читается: $artifact" >&2; exit 2; }}
+manifest="${{artifact%.tar.gz}}.release-manifest.json"
+[ -r "$manifest" ] || manifest="$(dirname "$artifact")/release-manifest.json"
+[ -r "$manifest" ] || {{ echo "нет release-manifest рядом с артефактом" >&2; exit 2; }}
+expected=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1]))['digest'])" "$manifest")
+actual="sha256:$(sha256sum "$artifact" | cut -d' ' -f1)"
+if [ "$expected" != "$actual" ]; then
+  echo "digest артефакта $actual не совпал с манифестом $expected" >&2
+  exit 2
+fi
+echo "   digest подтверждён: $actual"
+run_step rm -rf "$app_dir.new"
+run_step mkdir -p "$app_dir.new"
+run_step tar -xzf "$artifact" -C "$app_dir.new"
+run_step rm -rf "$app_dir.prev"
+[ -d "$app_dir" ] && run_step mv "$app_dir" "$app_dir.prev"
+run_step mv "$app_dir.new" "$app_dir"
 
 step "секрет плеера (вне Git)"
 if [ -r "$shared_dir/player-$site_id.json" ]; then
@@ -1050,6 +1121,9 @@ step "короткая пауза записи и перенос последн�
 # Старая служба останавливается ДО копирования пользовательских записей:
 # иначе два экземпляра писали бы одновременно и дельта потерялась бы.
 run_step "$systemctl_cmd" stop "$old_unit"
+# Отключение автозапуска входит в миграцию: иначе перезагрузка вернула бы
+# прежний экземпляр на занятый порт.
+run_step "$systemctl_cmd" disable "$old_unit"
 if [ -r "$old_root/data/animedia-community.json" ]; then
   # shellcheck disable=SC2046
   run_step install $(own) -m 0600 \\
@@ -1150,6 +1224,22 @@ RestrictSUIDSGID=true
 [Install]
 WantedBy=multi-user.target
 '''
+
+
+def account_for(slug: str) -> str:
+    """Имя системной учётной записи сайта по его слагу.
+
+    Соглашение об именах пользователей — `^[a-z][-a-z0-9_]*$` (см. NAME_REGEX в
+    `/etc/adduser.conf`). Домен `1lordserials1.online` даёт слаг, начинающийся с
+    цифры, и такое имя создать нельзя. Обнаружить это на активации боевого
+    сайта — значит обнаружить в самый дорогой момент, поэтому правило
+    детерминированное и применяется при сборке репозитория.
+
+    Префикс, а не удаление цифры: имя обязано оставаться узнаваемым и
+    однозначно обратимым к домену.
+    """
+    очищенный = slug.lower().replace(".", "-")
+    return очищенный if очищенный[:1].isalpha() else f"site-{очищенный}"
 
 
 def add_deploy(destination: Path, *, site_id: str, domain: str, account: str,

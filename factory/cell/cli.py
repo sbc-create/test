@@ -186,6 +186,51 @@ def cmd_onboarding(args) -> int:
     return 0 if progress.complete else 1
 
 
+def cmd_extracted(args) -> int:
+    """Перечислить выделенные сайты либо отказать старому пути выкладки.
+
+    Нужна старым сценариям хоста: они написаны на shell и работают списком
+    витрин, а знание о том, кто уже уехал в свой репозиторий, обязано быть в
+    одном месте, а не продублировано в каждом сценарии своим списком.
+
+    Отказ — на весь запуск, а не на одну витрину: сценарий, тронувший две из
+    трёх, оставляет контур в состоянии, которого нет ни в одном отчёте.
+    """
+    выделенные = registry.extracted_sites()
+    проверяемые = [s for s in (args.modules or []) if s]
+    if not проверяемые:
+        _print({"extracted": выделенные, "total": len(выделенные)})
+        return 0
+    конфликты = {s: выделенные[s] for s in проверяемые if s in выделенные}
+    if конфликты:
+        for сайт, remote in sorted(конфликты.items()):
+            print(f"BLOCKED_SITE_EXTRACTED: {сайт} выделен в {remote}; "
+                  "общий путь выкладки его не трогает", file=sys.stderr)
+        return 3
+    return 0
+
+
+def cmd_activate(args) -> int:
+    """Активация зарегистрированного сайта из коммита его репозитория.
+
+    Никакого пути к скрипту или артефакту команда не принимает: это и есть
+    граница. Подробности — `factory/cell/admin_exec.py`.
+    """
+    from factory.cell import admin_exec
+    if not args.site or not args.commit:
+        print("нужны --site и --commit", file=sys.stderr)
+        return 2
+    try:
+        итог = admin_exec.активировать(
+            args.site, commit=args.commit, dry_run=args.dry_run,
+            expect_digest=args.expect_digest or None)
+    except admin_exec.ExecutorRefused as exc:
+        print(f"BLOCKED_INPUT: {exc}", file=sys.stderr)
+        return 2
+    _print(итог)
+    return 0 if итог["status"] in ("dry-run", "activated") else 1
+
+
 ACTIONS = {
     "registry": cmd_registry,
     "templates": cmd_templates,
@@ -199,6 +244,8 @@ ACTIONS = {
     "rollback": cmd_rollback,
     "freshness": cmd_freshness,
     "onboarding": cmd_onboarding,
+    "extracted": cmd_extracted,
+    "activate": cmd_activate,
 }
 
 
@@ -216,11 +263,13 @@ def register(subparsers) -> None:
     parser.add_argument("--artifact", help="путь к артефакту релиза")
     parser.add_argument("--manifest", help="путь к release-manifest.json")
     parser.add_argument("--expect-digest", help="ожидаемый digest артефакта")
+    parser.add_argument("--commit", help="коммит репозитория сайта для activate")
     parser.add_argument("--root", help="корень размещения сайта на этой машине")
     parser.add_argument("--target", help="корень целевого размещения для cutover")
     parser.add_argument("--route", action="append",
                         help="ожидаемый маршрут для verify (можно повторять)")
-    parser.add_argument("--modules", nargs="*", help="модули профиля")
+    parser.add_argument("--modules", nargs="*",
+                        help="модули профиля; для extracted — проверяемые site_id")
     parser.add_argument("--reason", default="", help="причина операции для журнала")
     parser.add_argument("--force", action="store_true", help="перезаписать проект сайта")
     parser.add_argument("--dry-run", action="store_true",

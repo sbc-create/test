@@ -152,9 +152,9 @@
       ],
       "status": "not_extracted",
       "repo": {
-        "kind": null,
-        "path": null,
-        "remote": null
+        "kind": "remote",
+        "path": "var/site-repos/lordserial33-biz",
+        "remote": "https://github.com/sbc-create/site-lordserial33-biz"
       },
       "template": {
         "template_id": "lords-new",
@@ -195,9 +195,9 @@
       ],
       "status": "not_extracted",
       "repo": {
-        "kind": null,
-        "path": null,
-        "remote": null
+        "kind": "remote",
+        "path": "var/site-repos/1lordserials1-online",
+        "remote": "https://github.com/sbc-create/site-1lordserials1-online"
       },
       "template": {
         "template_id": "lords-curated",

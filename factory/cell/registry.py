@@ -356,3 +356,47 @@ def require_own_repo(cell: Cell) -> str:
                 f"({remote}); у сайта обязан быть собственный проект"
             )
     return str(remote)
+
+
+class SiteAlreadyExtracted(RegistryError):
+    """Сайт выделен в собственный репозиторий: публиковать его отсюда нельзя."""
+
+
+def extracted_sites(path: Path | None = None) -> dict[str, str]:
+    """Сайты, у которых уже есть собственный репозиторий: site_id -> remote.
+
+    Единственный источник истины для вопроса «кому принадлежит публикация
+    этого домена». Раньше ответ приходилось собирать по фактам — есть ли
+    каталог, отвечает ли служба, лежит ли где-то артефакт, — и каждый такой
+    признак врал хотя бы в одном состоянии.
+    """
+    выделенные = {}
+    for cell in all_cells(path):
+        remote = (cell.repo or {}).get("remote")
+        if not remote or not str(remote).strip():
+            continue
+        try:
+            выделенные[cell.site_id] = require_own_repo(cell)
+        except OwnRepositoryMissing:
+            # remote есть, но это монорепо — сайт не выделен.
+            continue
+    return выделенные
+
+
+def require_not_extracted(site_id: str, *, action: str,
+                          path: Path | None = None) -> None:
+    """Отказать старому пути публикации ДО первой мутации.
+
+    Проверка стоит именно перед действием, а не после: «выложили, потом
+    заметили» для живого домена означает, что чужой выпуск уже отдан
+    посетителям, а откатывать его нужно из другого репозитория.
+    """
+    выделенные = extracted_sites(path)
+    remote = выделенные.get(site_id)
+    if remote is None:
+        return
+    raise SiteAlreadyExtracted(
+        f"{site_id}: {action} через общий путь запрещена — сайт выделен в "
+        f"собственный репозиторий {remote}. Правьте и выкладывайте его там; "
+        "два источника изменений для одного домена дают гонку, а не запас."
+    )
