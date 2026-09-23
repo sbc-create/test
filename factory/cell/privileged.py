@@ -22,6 +22,7 @@ root-овой копии пакета, и меняются только пере
 """
 from __future__ import annotations
 
+import contextlib
 import json
 import os
 import pwd
@@ -295,6 +296,68 @@ def install_release(site_id: str, артефакт: Path, digest: str, *,
             "local_config": перенесено}
 
 
+def _каталог_юнитов() -> Path:
+    return Path(os.environ.get("SITE_UNIT_DIR", "/etc/systemd/system"))
+
+
+def _дропин_прежнего(п: Площадка) -> Path:
+    return _каталог_юнитов() / f"{п.previous_unit}.d" / "cell-port-owner.conf"
+
+
+def погасить_прежнюю(п: Площадка) -> list[str]:
+    """Освободить основной порт от прежней службы.
+
+    Новый юнит слушает ТОТ ЖЕ порт. Пока прежняя служба жива, она держит сокет,
+    а новая либо не встаёт, либо отвечает второй — и повышение получает старый
+    build-id при честном 200. Ровно это и случилось на lords-01: на порту 9110
+    оказались два процесса, приёмка увидела `20260921T134330Z-515fcf0-cardfix`
+    вместо `c323e1822308-lords-01` и откатилась.
+
+    Момент выбран не случайно: к повышению трафик уже на кандидате, и на
+    основном порту никого нет — остановка никому не видна.
+
+    Drop-in `RefuseManualStart` нужен потому, что конвейеры содержимого зовут
+    `systemctl restart` по своему расписанию: без него прежняя служба вернулась
+    бы на порт через несколько минут после успешного выпуска.
+    """
+    if not п.previous_unit:
+        return []
+    шаги = [f"stop {п.previous_unit}", f"disable {п.previous_unit}"]
+    _systemctl("stop", п.previous_unit, проверять=False)
+    _systemctl("disable", п.previous_unit, проверять=False)
+    дропин = _дропин_прежнего(п)
+    дропин.parent.mkdir(parents=True, exist_ok=True)
+    дропин.write_text(ЗАЩИТА_ШАБЛОН.format(port=п.port, account=п.account),
+                      encoding="utf-8")
+    _systemctl("daemon-reload")
+    шаги.append(f"{дропин.name}: RefuseManualStart")
+    return шаги
+
+
+def вернуть_прежнюю(п: Площадка, *, предел: int) -> dict[str, Any]:
+    """Поднять прежнюю службу обратно — откат после погашения.
+
+    Без этого откат вернул бы маршрут на порт, где уже никого нет: прежнюю
+    службу остановили, новая не прошла приёмку. Поэтому сначала она отвечает,
+    и только потом трафик идёт обратно.
+    """
+    if not п.previous_unit:
+        return {"restored": False, "reason": "прежней службы нет"}
+    дропин = _дропин_прежнего(п)
+    if дропин.exists():
+        дропин.unlink()
+        with contextlib.suppress(OSError):
+            дропин.parent.rmdir()
+    _systemctl("daemon-reload")
+    _systemctl("enable", п.previous_unit, проверять=False)
+    _systemctl("start", п.previous_unit, проверять=False)
+    состояние = готов(п.port, предел=предел,
+                      жив=lambda: _systemctl("is-active", "--quiet",
+                                             п.previous_unit,
+                                             проверять=False).returncode == 0)
+    return {"restored": True, "unit": п.previous_unit, "ready": состояние}
+
+
 def promote(site_id: str, *, dry_run: bool = True, предел: int = 600,
             ожидаемый_build: str = "", path: Path | None = None) -> dict[str, Any]:
     """Перевести основную службу на выпуск кандидата и вернуть ей трафик.
@@ -329,13 +392,14 @@ def promote(site_id: str, *, dry_run: bool = True, предел: int = 600,
         ЮНИТ_ШАБЛОН.format(domain=runtime.размещение(site_id, path=path).domain,
                            site_id=site_id, account=п.account, link=п.current,
                            data=п.data, port=п.port), encoding="utf-8")
+    шаги_прежней = погасить_прежнюю(п)
     _systemctl("daemon-reload")
     _systemctl("restart", п.unit)
     состояние = готов(п.port, предел=предел,
                       жив=lambda: _systemctl("is-active", "--quiet", п.unit,
                                              проверять=False).returncode == 0)
     итог = {"operation": "promote", "site_id": site_id, "dry_run": False,
-            "steps": шаги, "ready": состояние, "release": str(цель)}
+            "steps": шаги + шаги_прежней, "ready": состояние, "release": str(цель)}
     if not состояние.get("ready"):
         return итог
     итог["verify"] = verify(site_id, ожидаемый_build=ожидаемый_build,
@@ -538,13 +602,16 @@ def rollback(site_id: str, *, dry_run: bool = True, предел: int = 600,
                 "steps": шаги}
 
     _нужен_root()
+    # Сначала прежняя служба отвечает, и только потом трафик идёт обратно.
+    # Обратный порядок вернул бы посетителей на порт, где уже никого нет.
+    восстановление = вернуть_прежнюю(п, предел=предел)
     switch_route(site_id, п.port, dry_run=False, path=path)
     _systemctl("stop", п.candidate_unit, проверять=False)
     состояние = готов(п.port, предел=предел,
                       жив=lambda: _systemctl("is-active", "--quiet", п.unit,
                                              проверять=False).returncode == 0)
     итог = {"operation": "rollback", "site_id": site_id, "dry_run": False,
-            "steps": шаги, "ready": состояние}
+            "steps": шаги, "ready": состояние, "previous_unit": восстановление}
     итог["verify"] = verify(site_id, порт=п.port, path=path)
     return итог
 

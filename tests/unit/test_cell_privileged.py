@@ -215,3 +215,62 @@ def test_настройка_из_артефакта_не_подменяется(
     (выпуск / "config" / "player.json").write_text("своё", encoding="utf-8")
     assert privileged._перенести_локальную_настройку(выпуск, п) == []
     assert (выпуск / "config" / "player.json").read_text(encoding="utf-8") == "своё"
+
+
+def _площадка_с_прежней(tmp_path, monkeypatch):
+    корень = tmp_path / "srv" / "site"
+    (корень / "app").mkdir(parents=True)
+    monkeypatch.setenv("SITE_UNIT_DIR", str(tmp_path / "units"))
+    (tmp_path / "units").mkdir()
+    return privileged.Площадка(
+        site_id="lords-01", account="lordfilm47-space", root=корень,
+        app=корень / "app", data=корень / "data", unit="nova-new.service",
+        previous_unit="lords-nova-01.service", port=9110)
+
+
+def test_прежняя_служба_гасится_и_не_поднимается_сама(tmp_path, monkeypatch):
+    """Новый юнит слушает ТОТ ЖЕ порт, и пока прежняя жива — она держит сокет.
+
+    На lords-01 на порту 9110 оказались два процесса: приёмка увидела
+    `20260921T134330Z-515fcf0-cardfix` вместо `c323e1822308-lords-01` при
+    честном 200 и откатилась.
+    """
+    п = _площадка_с_прежней(tmp_path, monkeypatch)
+    звали = []
+    monkeypatch.setattr(privileged, "_systemctl",
+                        lambda *a, **k: звали.append(" ".join(a)) or type(
+                            "Р", (), {"returncode": 0})())
+    шаги = privileged.погасить_прежнюю(п)
+    assert "stop lords-nova-01.service" in звали
+    assert "disable lords-nova-01.service" in звали
+    дропин = tmp_path / "units" / "lords-nova-01.service.d" / "cell-port-owner.conf"
+    assert дропин.is_file(), "без drop-in конвейер содержимого вернёт службу на порт"
+    assert "RefuseManualStart=yes" in дропин.read_text(encoding="utf-8")
+    assert any("RefuseManualStart" in ш for ш in шаги)
+
+
+def test_откат_поднимает_прежнюю_до_возврата_маршрута(tmp_path, monkeypatch):
+    """Обратный порядок вернул бы посетителей на порт, где уже никого нет."""
+    п = _площадка_с_прежней(tmp_path, monkeypatch)
+    дропин = tmp_path / "units" / "lords-nova-01.service.d" / "cell-port-owner.conf"
+    дропин.parent.mkdir(parents=True)
+    дропин.write_text("[Unit]\nRefuseManualStart=yes\n", encoding="utf-8")
+    звали = []
+    monkeypatch.setattr(privileged, "_systemctl",
+                        lambda *a, **k: звали.append(" ".join(a)) or type(
+                            "Р", (), {"returncode": 0})())
+    monkeypatch.setattr(privileged, "готов", lambda *a, **k: {"ready": True})
+    итог = privileged.вернуть_прежнюю(п, предел=5)
+    assert итог["restored"] is True
+    assert not дропин.exists(), "запрет ручного пуска обязан сниматься"
+    assert "start lords-nova-01.service" in звали
+
+
+def test_витрина_без_прежней_службы_не_ломается(tmp_path, monkeypatch):
+    """Не у каждой витрины есть прежний юнит — это не повод падать."""
+    п = _площадка_с_прежней(tmp_path, monkeypatch)
+    п = privileged.Площадка(site_id=п.site_id, account=п.account, root=п.root,
+                            app=п.app, data=п.data, unit=п.unit,
+                            previous_unit=None, port=п.port)
+    assert privileged.погасить_прежнюю(п) == []
+    assert privileged.вернуть_прежнюю(п, предел=5)["restored"] is False
