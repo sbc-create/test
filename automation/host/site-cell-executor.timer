@@ -1,0 +1,14 @@
+# Раз в минуту. Чаще не нужно: заявка появляется после успешного CI, а он идёт
+# минуту и дольше. Persistent=true — пропущенный из-за перезагрузки разбор
+# состоится сразу после старта, иначе выпуск повис бы до следующего срабатывания.
+[Unit]
+Description=site-factory: опрос очереди заявок на выпуск
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=1min
+Persistent=true
+Unit=site-cell-executor.service
+
+[Install]
+WantedBy=timers.target

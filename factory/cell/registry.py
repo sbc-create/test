@@ -86,6 +86,8 @@ class Cell:
     #: знали про службы по собственным спискам и после переноса сайта звали
     #: прежний unit по имени.
     runtime: dict[str, Any] = field(default_factory=dict)
+    #: Правила выпуска: удержание, если сайтом занят кто-то другой.
+    release: dict[str, Any] = field(default_factory=dict)
     status: str = "planned"
 
     @property
@@ -118,6 +120,7 @@ class Cell:
             "backup": dict(self.backup),
             "resources": dict(self.resources),
             "runtime": dict(self.runtime),
+            "release": dict(self.release),
         }
 
 
@@ -138,6 +141,7 @@ def _cell(raw: dict[str, Any]) -> Cell:
         backup=raw.get("backup") or {},
         resources=raw.get("resources") or {},
         runtime=raw.get("runtime") or {},
+        release=raw.get("release") or {},
         status=raw.get("status", "planned"),
     )
 

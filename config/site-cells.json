@@ -56,6 +56,11 @@
         "reload": "unknown",
         "managed_by": "monolith",
         "data_owner": "pipeline"
+      },
+      "release": {
+        "hold": true,
+        "hold_reason": "активная работа над модулем сообщества (ветка claude/community-comments-platform-01)",
+        "branch": null
       }
     },
     {
@@ -122,6 +127,11 @@
         "reload": "unknown",
         "managed_by": "cell",
         "data_owner": "site_timer"
+      },
+      "release": {
+        "hold": true,
+        "hold_reason": "отдельная визуальная задача (ветка claude/animedia-space-visual-01); выпуск ведёт другой терминал, автоматический триггер её не касается",
+        "branch": null
       }
     },
     {
@@ -732,6 +742,11 @@
         "reload": "unknown",
         "managed_by": "monolith",
         "data_owner": "pipeline"
+      },
+      "release": {
+        "hold": true,
+        "hold_reason": "выкладку ведёт терминал ZONA-02; публичного DNS ещё нет",
+        "branch": null
       }
     }
   ]

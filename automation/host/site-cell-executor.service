@@ -1,0 +1,34 @@
+# Исполнитель заявок на выпуск выделенных сайтов.
+#
+# Запускается по таймеру, разбирает накопившиеся заявки и завершается. Демон с
+# бесконечным циклом здесь не нужен и вреден: операция длится минуты, и упавший
+# посреди неё демон не оставил бы следа. Разбор по таймеру плюс журнал переходов
+# на диске дают восстановление после гибели процесса и после перезагрузки.
+[Unit]
+Description=site-factory: разбор заявок на выпуск выделенных сайтов
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# Активация витрины длится минуты: она читает снимки каталога. Предел времени
+# здесь означал бы убийство выкладки на середине.
+TimeoutStartSec=0
+WorkingDirectory=/usr/local/lib/site-factory-cell
+Environment=PYTHONPATH=/usr/local/lib/site-factory-cell
+Environment=SITE_CELL_QUEUE=/var/lib/site-cells
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/usr/bin/python3 -m factory cell serve --confirm-activation
+
+# Исполнитель обязан быть root: он ставит службы и переключает маршрут. Всё
+# остальное урезано — он не должен уметь ничего сверх своей задачи.
+NoNewPrivileges=no
+ProtectHome=read-only
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+LockPersonality=yes
+
+[Install]
+WantedBy=multi-user.target

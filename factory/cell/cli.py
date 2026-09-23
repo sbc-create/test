@@ -251,6 +251,61 @@ def cmd_deliver(args) -> int:
     return 0
 
 
+def cmd_runtime(args) -> int:
+    """Где витрина живёт: ответ для производителей содержимого."""
+    from factory.cell import runtime as rt
+    if args.site:
+        try:
+            _print(rt.размещение(args.site).as_dict())
+        except (rt.RuntimeUnknown, registry.RegistryError) as exc:
+            print(f"BLOCKED_INPUT: {exc}", file=sys.stderr)
+            return 2
+        return 0
+    _print(rt.для_производителя())
+    return 0
+
+
+def cmd_submit(args) -> int:
+    """Подать заявку на выпуск. SHA и digest приходят из проверенной сборки."""
+    from factory.cell import queue as q
+    if not (args.site and args.commit and args.expect_digest):
+        print("нужны --site, --commit и --expect-digest", file=sys.stderr)
+        return 2
+    try:
+        заявка = q.собрать(args.site, args.commit, args.expect_digest,
+                           operation=args.cell_operation, ci_run=args.ci_run or "",
+                           repo=args.repo or "", note=args.reason)
+        итог = q.подать(заявка)
+    except q.RequestRejected as exc:
+        print(f"BLOCKED_INPUT: {exc}", file=sys.stderr)
+        return 2
+    _print(итог)
+    return 0
+
+
+def cmd_trigger(args) -> int:
+    """Опросить GitHub и подать заявки на невыложенные выпуски."""
+    from factory.cell import trigger as tr
+    if args.site:
+        try:
+            итоги = [tr.проверить_сайт(args.site, submit=args.confirm_activation)]
+        except (tr.TriggerError, registry.RegistryError) as exc:
+            print(f"BLOCKED_INPUT: {exc}", file=sys.stderr)
+            return 2
+    else:
+        итоги = tr.обойти(submit=args.confirm_activation)
+    _print({"submitted": args.confirm_activation, "sites": итоги})
+    return 0
+
+
+def cmd_serve(args) -> int:
+    """Разобрать очередь заявок. Привилегированная сторона."""
+    from factory.cell import executor
+    итоги = executor.обслужить_очередь(dry_run=not args.confirm_activation)
+    _print({"processed": len(итоги), "results": итоги})
+    return 0 if all(и.get("status") == "ok" for и in итоги) else 1
+
+
 ACTIONS = {
     "registry": cmd_registry,
     "templates": cmd_templates,
@@ -267,6 +322,10 @@ ACTIONS = {
     "extracted": cmd_extracted,
     "activate": cmd_activate,
     "deliver": cmd_deliver,
+    "runtime": cmd_runtime,
+    "submit": cmd_submit,
+    "serve": cmd_serve,
+    "trigger": cmd_trigger,
 }
 
 
@@ -285,6 +344,9 @@ def register(subparsers) -> None:
     parser.add_argument("--manifest", help="путь к release-manifest.json")
     parser.add_argument("--expect-digest", help="ожидаемый digest артефакта")
     parser.add_argument("--commit", help="коммит репозитория сайта для activate")
+    parser.add_argument("--ci-run", help="номер прогона CI для submit")
+    parser.add_argument("--cell-operation", default="activate",
+                        help="операция заявки: activate|update|deliver|rollback")
     parser.add_argument("--confirm-activation", action="store_true",
                         help="выполнить активацию на самом деле; без него activate только показывает план")
     parser.add_argument("--root", help="корень размещения сайта на этой машине")
