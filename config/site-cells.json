@@ -44,7 +44,19 @@
       "content_revision": null,
       "last_update": "2026-09-22T23:41:04.158516+00:00",
       "backup": {},
-      "resources": {}
+      "resources": {},
+      "runtime": {
+        "unit": "nova-animedia-01.service",
+        "previous_unit": null,
+        "port": 9121,
+        "account": "animedia-icu",
+        "app_dir": null,
+        "data_dir": null,
+        "legacy_root": "/srv/lords/animedia-01/current/site",
+        "reload": "unknown",
+        "managed_by": "monolith",
+        "data_owner": "pipeline"
+      }
     },
     {
       "site_id": "animedia-02",
@@ -98,7 +110,19 @@
       "content_revision": null,
       "last_update": "2026-09-22T22:52:57.839749+00:00",
       "backup": {},
-      "resources": {}
+      "resources": {},
+      "runtime": {
+        "unit": "nova-animedia-space.service",
+        "previous_unit": "nova-animedia-02.service",
+        "port": 9122,
+        "account": "animedia-space",
+        "app_dir": "/srv/animedia-space/app",
+        "data_dir": "/srv/animedia-space/data",
+        "legacy_root": null,
+        "reload": "unknown",
+        "managed_by": "cell",
+        "data_owner": "site_timer"
+      }
     },
     {
       "site_id": "lords-01",
@@ -142,7 +166,19 @@
       "content_revision": null,
       "last_update": "2026-09-22T23:41:04.180174+00:00",
       "backup": {},
-      "resources": {}
+      "resources": {},
+      "runtime": {
+        "unit": "lords-nova-01.service",
+        "previous_unit": null,
+        "port": 9110,
+        "account": "lordfilm47-space",
+        "app_dir": null,
+        "data_dir": null,
+        "legacy_root": "/srv/lords/lords-01/current/site",
+        "reload": "unknown",
+        "managed_by": "monolith",
+        "data_owner": "pipeline"
+      }
     },
     {
       "site_id": "lords-02",
@@ -185,7 +221,19 @@
       "content_revision": null,
       "last_update": null,
       "backup": {},
-      "resources": {}
+      "resources": {},
+      "runtime": {
+        "unit": "nova-lords-02.service",
+        "previous_unit": null,
+        "port": 9111,
+        "account": "lordserial33-biz",
+        "app_dir": null,
+        "data_dir": null,
+        "legacy_root": "/srv/lords/lords-02/current/site",
+        "reload": "unknown",
+        "managed_by": "monolith",
+        "data_owner": "pipeline"
+      }
     },
     {
       "site_id": "lords-03",
@@ -228,7 +276,19 @@
       "content_revision": null,
       "last_update": null,
       "backup": {},
-      "resources": {}
+      "resources": {},
+      "runtime": {
+        "unit": "nova-lords-03.service",
+        "previous_unit": null,
+        "port": 9112,
+        "account": "site-1lordserials1-online",
+        "app_dir": null,
+        "data_dir": null,
+        "legacy_root": "/srv/lords/lords-03/current/site",
+        "reload": "unknown",
+        "managed_by": "monolith",
+        "data_owner": "pipeline"
+      }
     },
     {
       "site_id": "pilot-local",
@@ -436,7 +496,19 @@
       "content_revision": null,
       "last_update": "2026-09-22T23:41:04.245746+00:00",
       "backup": {},
-      "resources": {}
+      "resources": {},
+      "runtime": {
+        "unit": "nova-yummy-biz.service",
+        "previous_unit": null,
+        "port": 9130,
+        "account": "yummyani-biz",
+        "app_dir": null,
+        "data_dir": null,
+        "legacy_root": null,
+        "reload": "unknown",
+        "managed_by": "monolith",
+        "data_owner": "pipeline"
+      }
     },
     {
       "site_id": "yummy-org",
@@ -480,7 +552,19 @@
       "content_revision": null,
       "last_update": "2026-09-22T23:41:04.227938+00:00",
       "backup": {},
-      "resources": {}
+      "resources": {},
+      "runtime": {
+        "unit": "nova-yummy-org.service",
+        "previous_unit": null,
+        "port": 9131,
+        "account": "yummyani-org",
+        "app_dir": null,
+        "data_dir": null,
+        "legacy_root": null,
+        "reload": "unknown",
+        "managed_by": "monolith",
+        "data_owner": "pipeline"
+      }
     },
     {
       "site_id": "yummy-site",
@@ -524,7 +608,19 @@
       "content_revision": null,
       "last_update": "2026-09-22T23:41:04.205052+00:00",
       "backup": {},
-      "resources": {}
+      "resources": {},
+      "runtime": {
+        "unit": "nova-yummy-site.service",
+        "previous_unit": null,
+        "port": 9132,
+        "account": "yummyani-site",
+        "app_dir": null,
+        "data_dir": null,
+        "legacy_root": null,
+        "reload": "unknown",
+        "managed_by": "monolith",
+        "data_owner": "pipeline"
+      }
     },
     {
       "site_id": "zona-01",
@@ -568,7 +664,19 @@
       "content_revision": null,
       "last_update": "2026-09-22T23:41:04.126983+00:00",
       "backup": {},
-      "resources": {}
+      "resources": {},
+      "runtime": {
+        "unit": "nova-zonafilm-space.service",
+        "previous_unit": "nova-zona-01.service",
+        "port": 9120,
+        "account": "zonafilm-space",
+        "app_dir": "/srv/zonafilm-space/app",
+        "data_dir": "/srv/zonafilm-space/data",
+        "legacy_root": "<data>/site",
+        "reload": "mtime",
+        "managed_by": "cell",
+        "data_owner": "pipeline"
+      }
     },
     {
       "site_id": "zona-02",
@@ -612,7 +720,19 @@
       "content_revision": null,
       "last_update": "2026-09-22T23:41:04.126983+00:00",
       "backup": {},
-      "resources": {}
+      "resources": {},
+      "runtime": {
+        "unit": "nova-zona-02.service",
+        "previous_unit": null,
+        "port": 9123,
+        "account": "lords",
+        "app_dir": "/srv/lords/.frontend/sites/zona-02/releases/a9fd36d5a22c",
+        "data_dir": null,
+        "legacy_root": null,
+        "reload": "unknown",
+        "managed_by": "monolith",
+        "data_owner": "pipeline"
+      }
     }
   ]
 }

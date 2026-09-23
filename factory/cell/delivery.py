@@ -69,13 +69,18 @@ class Итог:
     #: Пути из окружения ячейки, которые эта доставка не обслуживает (каталоги).
     #: Пустой список означал бы «всё покрыто», а это было бы неправдой.
     not_covered: list[str] = field(default_factory=list)
+    #: Может ли этот процесс писать в каталог данных. Проверяется всегда, а не
+    #: только когда есть что доставлять: при совпадающем содержимом доставка
+    #: молча отчиталась бы «без изменений» и выглядела бы работающей ровно до
+    #: первого расхождения — то есть до того дня, когда она понадобится.
+    writable: bool = True
     skipped_reason: str = ""
 
     def as_dict(self) -> dict[str, Any]:
         return {"site_id": self.site_id, "data_dir": self.data_dir,
                 "delivered": self.delivered, "unchanged": self.unchanged,
                 "missing": self.missing, "not_covered": self.not_covered,
-                "skipped_reason": self.skipped_reason}
+                "writable": self.writable, "skipped_reason": self.skipped_reason}
 
 
 def _хеш(путь: Path) -> str:
@@ -160,6 +165,16 @@ def доставить(site_id: str, *, общий: Path = ОБЩИЙ, dry_run: 
         return Итог(site_id=cell.site_id, data_dir=None, delivered=[], unchanged=[],
                     missing=[], skipped_reason="ячейка не активирована: каталога данных нет")
 
+    # Проба записи до всего остального: каталог данных ячейки принадлежит
+    # учётной записи сайта, и общий процесс в него не пишет. Узнать об этом
+    # надо сейчас, а не в первый день, когда содержимое разойдётся.
+    можно_писать = True
+    try:
+        with tempfile.NamedTemporaryFile(dir=цель, delete=True):
+            pass
+    except OSError:
+        можно_писать = False
+
     доставлено, без_изменений, нет_источника = [], [], []
     for имя in что_читает(cell):
         источник = общий / имя
@@ -170,7 +185,7 @@ def доставить(site_id: str, *, общий: Path = ОБЩИЙ, dry_run: 
         if назначение.is_file() and _хеш(назначение) == _хеш(источник):
             без_изменений.append(имя)
             continue
-        if dry_run:
+        if dry_run or not можно_писать:
             доставлено.append(имя)
             continue
         # Временный файл создаётся РЯДОМ с назначением: os.replace атомарен
@@ -187,9 +202,15 @@ def доставить(site_id: str, *, общий: Path = ОБЩИЙ, dry_run: 
             raise DeliveryError(f"{cell.site_id}: {имя} не доставлен: {exc}") from exc
         доставлено.append(имя)
 
-    return Итог(site_id=cell.site_id, data_dir=str(цель), delivered=доставлено,
+    итог = Итог(site_id=cell.site_id, data_dir=str(цель), delivered=доставлено,
                 unchanged=без_изменений, missing=нет_источника,
-                not_covered=не_обслуживается(cell))
+                not_covered=не_обслуживается(cell), writable=можно_писать)
+    if not можно_писать:
+        итог.skipped_reason = (
+            f"каталог {цель} принадлежит учётной записи сайта: этот процесс в него "
+            "не пишет. Доставка выделенной ячейки выполняется привилегированным "
+            "исполнителем или таймером от имени сайта")
+    return итог
 
 
 def доставить_всем(*, общий: Path = ОБЩИЙ, dry_run: bool = False) -> list[Итог]:

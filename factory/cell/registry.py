@@ -81,6 +81,11 @@ class Cell:
     last_update: str | None = None
     backup: dict[str, Any] = field(default_factory=dict)
     resources: dict[str, Any] = field(default_factory=dict)
+    #: Фактическое размещение на хосте: служба, порт, каталог данных, режим
+    #: подхвата снимка. Читают производители содержимого — до этого поля они
+    #: знали про службы по собственным спискам и после переноса сайта звали
+    #: прежний unit по имени.
+    runtime: dict[str, Any] = field(default_factory=dict)
     status: str = "planned"
 
     @property
@@ -112,6 +117,7 @@ class Cell:
             "last_update": self.last_update,
             "backup": dict(self.backup),
             "resources": dict(self.resources),
+            "runtime": dict(self.runtime),
         }
 
 
@@ -131,6 +137,7 @@ def _cell(raw: dict[str, Any]) -> Cell:
         last_update=raw.get("last_update"),
         backup=raw.get("backup") or {},
         resources=raw.get("resources") or {},
+        runtime=raw.get("runtime") or {},
         status=raw.get("status", "planned"),
     )
 
