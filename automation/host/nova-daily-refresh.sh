@@ -119,7 +119,25 @@ if "$PYTHON" "${TOOLS}/nova-catalog-publish.py" --apply \
      --run-id "$RUN_ID" --min-catalog "$MIN_CATALOG" \
      > "${STATE}/last-publish.json" 2>&1; then
   STATUS_PUBLISH="ok"
-  systemctl restart lords-nova-01.service nova-zona-01.service || true
+  # Перезапуск идёт по реестру, а не по списку имён.
+  #
+  # Два отказа, которые этот список давал. Первый: после переноса витрины в
+  # свою ячейку прежний unit закрыт от ручного запуска (RefuseManualStart), и
+  # `restart` возвращал отказ, спрятанный за `|| true`. Второй тише и хуже: в
+  # редкий момент перезапуска новой службы прежняя успевала занять порт и
+  # вернуть посетителям прежний код.
+  #
+  # Витрина, перечитывающая снимок по mtime, в перезапуске не нуждается вовсе:
+  # она подхватит каталог на ближайшем запросе, а перезапуск стоит минут —
+  # читаются 16.7 МБ каталога и 78.3 МБ подробностей.
+  restart_units=$("$PYTHON" "${NOVA_TOOLS}/nova-units-to-restart.py" \
+      lords-01 zona-01 2>/dev/null || echo "lords-nova-01.service")
+  if [ -n "${restart_units}" ]; then
+    # shellcheck disable=SC2086
+    systemctl restart ${restart_units} || true
+  else
+    log "перезапуск не нужен: витрины подхватывают снимок сами"
+  fi
 else
   STATUS_PUBLISH="refused"
   CODE=1
