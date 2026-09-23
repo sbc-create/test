@@ -11,7 +11,7 @@
 set -uo pipefail
 
 SCRIPT="$(cd "$(dirname "$0")" && pwd)/animedia-community-public-deploy.sh"
-RELEASE_ID="20260923T074500Z-community-one-vote-06"
+RELEASE_ID="20260923T090000Z-community-one-vote-07"
 ROOT=$(mktemp -d)
 trap 'rm -rf "$ROOT"' EXIT
 

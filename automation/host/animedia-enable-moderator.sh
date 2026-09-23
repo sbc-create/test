@@ -25,7 +25,7 @@
 set -euo pipefail
 
 UNIT=nova-animedia-01.service
-RELEASE_ID="20260923T074500Z-community-one-vote-06"
+RELEASE_ID="20260923T090000Z-community-one-vote-07"
 
 : "${ETC_SYSTEMD:=/etc/systemd/system}"
 : "${KEYFILE:=/etc/animedia/community-moderator.key}"

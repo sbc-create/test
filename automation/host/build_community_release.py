@@ -25,7 +25,7 @@ import sys
 REPO = pathlib.Path(__file__).resolve().parents[2]
 RELEASES = pathlib.Path("/srv/lords/.frontend/releases")
 BASE_ID = "20260922T143111Z-efdef56-animedia-parity"
-NEW_ID = "20260923T074500Z-community-one-vote-06"
+NEW_ID = "20260923T090000Z-community-one-vote-07"
 BASE, NEW = RELEASES / BASE_ID, RELEASES / NEW_ID
 
 

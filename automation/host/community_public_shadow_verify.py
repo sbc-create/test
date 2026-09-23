@@ -22,7 +22,7 @@ import urllib.parse
 import urllib.request
 
 RELEASES = pathlib.Path("/srv/lords/.frontend/releases")
-NEW = RELEASES / "20260923T074500Z-community-one-vote-06"
+NEW = RELEASES / "20260923T090000Z-community-one-vote-07"
 BASE = RELEASES / "20260922T143111Z-efdef56-animedia-parity"
 TITLE = "/title/master-lda-i-plameni-2/"
 MOD_KEY = "shadow-moderator-key"
@@ -139,7 +139,9 @@ def main() -> int:
         проверить("amd_v=" in (заг.get("Set-Cookie") or ""),
                   "кука посетителя выдана на обычном GET",
                   заг.get("Set-Cookie", "нет"))
-        for путь in ("/", "/catalog/"):
+        # /lists/ здесь не для галочки: именно эта страница падала с NameError
+        # в 2.0 — `списки_посетителя` звала account_id, которого у неё не было.
+        for путь in ("/", "/catalog/", "/lists/"):
             к, _, _ = гость.get(путь)
             проверить(к == 200, f"{путь} отвечает 200", str(к))
 
