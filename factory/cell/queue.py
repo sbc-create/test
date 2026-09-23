@@ -125,14 +125,25 @@ def разобрать(сырое: dict[str, Any]) -> Заявка:
     return заявка
 
 
-def новый_идентификатор(site_id: str, commit: str) -> str:
+def новый_идентификатор(site_id: str, commit: str, *, operation: str = "activate",
+                        snapshot: str = "") -> str:
     """Устойчивый идентификатор заявки.
 
-    Выводится из сайта и коммита, поэтому повторная подача того же выпуска даёт
-    тот же идентификатор и не заводит вторую операцию. Случайная часть добавлена
-    бы только ради красоты и сломала бы это свойство.
+    Выводится из того, ЧТО выкладывается, поэтому повтор той же работы даёт тот
+    же идентификатор и не заводит вторую операцию.
+
+    Операция входит в идентификатор обязательно. Без неё обновление данных на
+    том же коммите сталкивалось с уже выполненным выпуском кода: заявка
+    возвращала `already-finished`, и снимок молча не доезжал.
+
+    Для обновления данных к идентификатору добавляется отпечаток снимка: тот же
+    коммит с НОВЫМ снимком — это новая работа, а тот же снимок — повтор,
+    который обязан ничего не менять.
     """
-    return f"{site_id}-{commit[:12]}"[:64].lower()
+    хвост = (snapshot or commit)[:12]
+    краткая = {"activate": "code", "update": "code", "deliver": "data",
+               "rollback": "back"}.get(operation, operation[:4])
+    return f"{site_id}-{краткая}-{хвост}"[:64].lower()
 
 
 def записать_атомарно(путь: Path, данные: dict[str, Any]) -> None:
@@ -206,10 +217,12 @@ def _сейчас() -> str:
 
 
 def собрать(site_id: str, commit: str, digest: str, *, operation: str = "activate",
-            ci_run: str = "", repo: str = "", note: str = "") -> Заявка:
+            ci_run: str = "", repo: str = "", note: str = "",
+            snapshot: str = "") -> Заявка:
     """Заявка из результата проверенной сборки, а не из рук человека."""
     return разобрать({
-        "request_id": новый_идентификатор(site_id, commit),
+        "request_id": новый_идентификатор(site_id, commit, operation=operation,
+                                          snapshot=snapshot),
         "operation": operation, "site_id": site_id, "commit": commit,
         "digest": digest, "ci_run": ci_run, "repo": repo,
         "submitted_at": _сейчас(),

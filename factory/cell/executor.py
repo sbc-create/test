@@ -247,6 +247,58 @@ def активировать(заявка: queue.Заявка, *, файл: Path
             "steps": шаги, "digest": заявка.digest, "build_id": build_id}
 
 
+def обновить_данные(заявка: queue.Заявка, *, файл: Path,
+                    dry_run: bool = True) -> dict[str, Any]:
+    """Обновление каталога тем же прогревом, что и выпуск кода.
+
+    Работающий процесс отдаёт ПРЕЖНИЙ снимок, пока кандидат читает и
+    индексирует новый. Раньше снимок подменялся под живым процессом, и на
+    время перестроения запросы ждали секундами.
+
+    Повтор того же снимка не делает ничего: «данные не изменились» — это
+    законный исход, а не повод поднимать кандидата на четыре минуты.
+    """
+    from factory.cell import delivery
+
+    размещение = runtime.размещение(заявка.site_id)
+    шаги: dict[str, Any] = {}
+    источник = Path(delivery.ОБЩИЙ)
+
+    шаги["stage_snapshot"] = privileged.stage_snapshot(
+        заявка.site_id, источник, dry_run=dry_run)
+    if шаги["stage_snapshot"].get("unchanged"):
+        return {"status": "unchanged", "stage": "live_verified", "steps": шаги}
+
+    п = privileged.Площадка.из_реестра(заявка.site_id)
+    шаги["warm_up"] = privileged.warm_up(
+        заявка.site_id, dry_run=dry_run, данные=п.data_candidate)
+    прогрет = dry_run or (шаги["warm_up"].get("ready") or {}).get("ready")
+    if not прогрет:
+        шаги["rollback"] = privileged.rollback(заявка.site_id, dry_run=dry_run)
+        return {"status": "candidate-failed", "stage": "failed", "steps": шаги}
+    if файл.is_file():
+        queue.отметить(файл, "candidate_ready", {"data": True})
+
+    шаги["switch_route"] = privileged.switch_route(
+        заявка.site_id, п.candidate_port, dry_run=dry_run)
+    шаги["promote_snapshot"] = privileged.promote_snapshot(
+        заявка.site_id, dry_run=dry_run)
+    шаги["promote"] = privileged.promote(
+        заявка.site_id, dry_run=dry_run,
+        ожидаемый_build=(размещение.as_dict().get("build_id") or ""))
+    повышено = dry_run or (шаги["promote"].get("ready") or {}).get("ready")
+    if not повышено:
+        шаги["rollback"] = privileged.rollback(заявка.site_id, dry_run=dry_run)
+        return {"status": "rolled-back", "stage": "rolled_back", "steps": шаги}
+
+    шаги["verify"] = privileged.verify(заявка.site_id)
+    if not dry_run and not шаги["verify"].get("ok"):
+        шаги["rollback"] = privileged.rollback(заявка.site_id, dry_run=False)
+        return {"status": "rolled-back", "stage": "rolled_back", "steps": шаги}
+    return {"status": "dry-run" if dry_run else "delivered",
+            "stage": "validated" if dry_run else "live_verified", "steps": шаги}
+
+
 def выполнить(заявка: queue.Заявка, *, база: Path, dry_run: bool = True) -> dict[str, Any]:
     """Одна операция целиком, с журналом переходов."""
     файл = база / "requests" / f"{заявка.request_id}.json"
@@ -273,10 +325,9 @@ def выполнить(заявка: queue.Заявка, *, база: Path, dry_
             результат["outcome"] = итог
             этап = итог["stage"]
         elif заявка.operation == "deliver":
-            from factory.cell import delivery
-            итог = delivery.доставить(заявка.site_id, dry_run=dry_run)
-            результат["outcome"] = итог.as_dict()
-            этап = "live_verified" if итог.writable else "failed"
+            итог = обновить_данные(заявка, файл=файл, dry_run=dry_run)
+            результат["outcome"] = итог
+            этап = итог["stage"]
         else:
             raise ExecutorError(
                 f"операция {заявка.operation} ещё не реализована исполнителем; "

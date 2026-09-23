@@ -36,8 +36,9 @@ from typing import Any
 from factory.cell import runtime
 
 #: Закрытый набор. Расширяется только правкой этого файла и переустановкой.
-ОПЕРАЦИИ = ("prepare", "install_release", "warm_up", "switch_route",
-            "promote", "verify", "rollback")
+ОПЕРАЦИИ = ("prepare", "install_release", "stage_snapshot", "warm_up",
+            "switch_route", "promote", "promote_snapshot", "verify",
+            "rollback")
 
 #: Куда разрешено раскладывать сайты. Любой путь вне этого корня — отказ.
 КОРЕНЬ_САЙТОВ = Path("/srv")
@@ -79,6 +80,17 @@ class Площадка:
     def candidate(self) -> Path:
         """Ссылка на прогреваемый выпуск."""
         return self.root / "candidate"
+
+    @property
+    def data_candidate(self) -> Path:
+        """Хранилище данных кандидата.
+
+        Отдельное, потому что прогрев на новом снимке обязан идти, пока
+        работающий процесс отдаёт прежний: один каталог на двоих означал бы,
+        что новый снимок виден действующей версии сразу, и прогрев ничего бы
+        не значил.
+        """
+        return self.root / "data-candidate"
 
     @property
     def candidate_unit(self) -> str:
@@ -260,7 +272,14 @@ def promote(site_id: str, *, dry_run: bool = True, предел: int = 600,
     if not итог["verify"].get("ok"):
         return итог
     switch_route(site_id, п.port, dry_run=False, path=path)
+    # Дренаж перед остановкой кандидата. При `nginx -s reload` прежние воркеры
+    # дорабатывают уже принятые соединения СО СТАРОЙ конфигурацией — это
+    # документированное поведение. Кандидат, погашенный сразу, обрывал бы их:
+    # на стенде это дало 4 отказа из 244 запросов, по одному на маршрут.
+    дренаж = float(os.environ.get("SITE_DRAIN_SEC", "5"))
+    time.sleep(дренаж)
     _systemctl("stop", п.candidate_unit, проверять=False)
+    итог["drain_sec"] = дренаж
     итог["traffic_on"] = п.port
     return итог
 
@@ -460,7 +479,8 @@ def порт_кандидата(основной: int) -> int:
 
 
 def warm_up(site_id: str, *, dry_run: bool = True, предел: int = 600,
-            ожидаемый_build: str = "", path: Path | None = None) -> dict[str, Any]:
+            ожидаемый_build: str = "", данные: Path | None = None,
+            path: Path | None = None) -> dict[str, Any]:
     """Поднять кандидата НА ОТДЕЛЬНОМ порту и дождаться его готовности.
 
     Действующая версия всё это время обслуживает посетителей: её никто не
@@ -473,7 +493,8 @@ def warm_up(site_id: str, *, dry_run: bool = True, предел: int = 600,
     каталог = Path(os.environ.get("SITE_UNIT_DIR", "/etc/systemd/system"))
     текст = ЮНИТ_ШАБЛОН.format(
         domain=runtime.размещение(site_id, path=path).domain, site_id=site_id,
-        account=п.account, link=п.candidate, data=п.data, port=кандидат)
+        account=п.account, link=п.candidate, data=данные or п.data,
+        port=кандидат)
     if dry_run:
         return {"operation": "warm_up", "site_id": site_id, "dry_run": True,
                 "candidate_unit": юнит, "candidate_port": кандидат}
@@ -554,3 +575,127 @@ def switch_route(site_id: str, порт: int, *, dry_run: bool = True,
             f"nginx reload отказал: {перезагрузка.stderr.strip()[-300:]}")
     return {"operation": "switch_route", "site_id": site_id, "dry_run": False,
             "upstream_file": str(файл), "port": порт, "previous": прежний}
+
+
+#: Файлы согласованного снимка. Каталог и подробности — одно целое: витрина
+#: читает их вместе, и новый каталог со старыми подробностями показал бы
+#: карточки без описаний.
+СНИМОК = ("{site}-catalog.json", "{site}-details.json")
+
+#: Каталог пользовательских записей. Он ОДИН на сайт и между версиями не
+#: копируется: две копии означали бы, что часть комментариев и голосов
+#: останется в той, которую выбросят.
+ПОЛЬЗОВАТЕЛЬСКИЕ = "site-data"
+
+
+def снимок_совпадает(источник: Path, цель: Path, site_id: str) -> bool:
+    """Тот же снимок уже стоит. Повтор не должен ничего менять."""
+    import hashlib
+
+    for шаблон in СНИМОК:
+        имя = шаблон.format(site=site_id)
+        a, b = источник / имя, цель / имя
+        if not a.is_file():
+            continue
+        if not b.is_file():
+            return False
+        if (hashlib.sha256(a.read_bytes()).hexdigest()
+                != hashlib.sha256(b.read_bytes()).hexdigest()):
+            return False
+    return True
+
+
+def stage_snapshot(site_id: str, источник: Path, *, dry_run: bool = True,
+                   path: Path | None = None) -> dict[str, Any]:
+    """Собрать хранилище кандидата: новый снимок плюс общие пользовательские данные.
+
+    Пользовательские записи не копируются, а подключаются ссылкой на тот же
+    каталог: копия означала бы, что комментарии и голоса, принятые во время
+    прогрева, окажутся в хранилище, которое потом выбросят.
+    """
+    п = Площадка.из_реестра(site_id, path=path)
+    источник = Path(источник)
+    имена = [ш.format(site=site_id) for ш in СНИМОК]
+    отсутствуют = [и for и in имена if not (источник / и).is_file()]
+    if отсутствуют:
+        raise PrivilegedRefused(
+            f"{site_id}: в источнике нет файлов снимка {отсутствуют}; "
+            "половина снимка хуже прежнего целого")
+
+    если_тот_же = снимок_совпадает(источник, п.data, site_id)
+    if dry_run:
+        return {"operation": "stage_snapshot", "site_id": site_id, "dry_run": True,
+                "unchanged": если_тот_же, "files": имена,
+                "data_candidate": str(п.data_candidate)}
+    if если_тот_же:
+        return {"operation": "stage_snapshot", "site_id": site_id, "dry_run": False,
+                "unchanged": True, "files": имена}
+
+    _нужен_root()
+    if п.data_candidate.exists():
+        shutil.rmtree(п.data_candidate)
+    п.data_candidate.mkdir(parents=True)
+    # Всё, что витрина читает из хранилища, кроме снимка и пользовательских
+    # записей, переносится как есть: страницы прежнего релиза, манифест и т. п.
+    for запись in п.data.iterdir():
+        if запись.name in имена or запись.name == ПОЛЬЗОВАТЕЛЬСКИЕ:
+            continue
+        цель = п.data_candidate / запись.name
+        if запись.is_dir():
+            цель.symlink_to(запись)
+        else:
+            shutil.copy2(запись, цель)
+    for имя in имена:
+        shutil.copy2(источник / имя, п.data_candidate / имя)
+    общие = п.data / ПОЛЬЗОВАТЕЛЬСКИЕ
+    if общие.exists():
+        (п.data_candidate / ПОЛЬЗОВАТЕЛЬСКИЕ).symlink_to(общие)
+    for путь in [п.data_candidate, *п.data_candidate.rglob("*")]:
+        if not путь.is_symlink():
+            shutil.chown(путь, п.account, п.account)
+    return {"operation": "stage_snapshot", "site_id": site_id, "dry_run": False,
+            "unchanged": False, "files": имена,
+            "data_candidate": str(п.data_candidate)}
+
+
+def promote_snapshot(site_id: str, *, dry_run: bool = True,
+                     path: Path | None = None) -> dict[str, Any]:
+    """Перенести проверенный снимок в рабочее хранилище.
+
+    Делается после того, как кандидат принял трафик: действующий процесс в
+    этот момент никого не обслуживает, и подмена файлов под ним никому не
+    видна. Пользовательские записи не трогаются вовсе — они лежат в общем
+    каталоге, на который обе версии смотрят одной и той же ссылкой.
+    """
+    п = Площадка.из_реестра(site_id, path=path)
+    имена = [ш.format(site=site_id) for ш in СНИМОК]
+    if dry_run:
+        return {"operation": "promote_snapshot", "site_id": site_id,
+                "dry_run": True, "files": имена}
+    _нужен_root()
+    for имя in имена:
+        источник = п.data_candidate / имя
+        if not источник.is_file():
+            continue
+        врем = п.data / f".{имя}.new"
+        shutil.copy2(источник, врем)
+        shutil.chown(врем, п.account, п.account)
+        os.replace(врем, п.data / имя)
+    return {"operation": "promote_snapshot", "site_id": site_id,
+            "dry_run": False, "files": имена}
+
+
+def отпечаток_снимка(источник: Path, site_id: str) -> str:
+    """Отпечаток согласованной пары «каталог + подробности».
+
+    Считается по обоим файлам сразу: снимок — это пара, и изменение одного из
+    них означает новый снимок целиком.
+    """
+    import hashlib
+
+    h = hashlib.sha256()
+    for шаблон in СНИМОК:
+        путь = Path(источник) / шаблон.format(site=site_id)
+        if путь.is_file():
+            h.update(путь.read_bytes())
+    return h.hexdigest()
