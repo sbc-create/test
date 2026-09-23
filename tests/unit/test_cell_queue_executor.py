@@ -408,8 +408,16 @@ def test_первый_выпуск_засевает_хранилище(tmp_path,
     итог = executor._засеять_хранилище("lords-01", dry_run=True)
     assert итог["seeded"] is True and звали == ["stage", "promote"]
 
-    # Хранилище наполнено — выпуск кода данных не касается.
+    # Один каталог наполненным хранилищем не считается: пятиминутный конвейер
+    # кладёт в ячейку только его, и по нему витрина выложилась бы обеднённой —
+    # 12 карточек вместо 48 и ноль ссылок на серии.
     (tmp_path / "data" / "lords-01-catalog.json").write_text("{}", encoding="utf-8")
+    звали.clear()
+    итог = executor._засеять_хранилище("lords-01", dry_run=True)
+    assert итог["seeded"] is True and итог["missing"] == ["lords-01-details.json"]
+
+    # Весь снимок на месте — выпуск кода данных не касается.
+    (tmp_path / "data" / "lords-01-details.json").write_text("{}", encoding="utf-8")
     звали.clear()
     итог = executor._засеять_хранилище("lords-01", dry_run=True)
     assert итог["seeded"] is False and звали == []

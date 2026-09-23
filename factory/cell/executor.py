@@ -284,12 +284,21 @@ def _засеять_хранилище(site_id: str, *, dry_run: bool) -> dict[s
     from factory.cell import delivery
 
     п = privileged.Площадка.из_реестра(site_id)
-    каталог = п.data / f"{site_id}-catalog.json"
-    if каталог.is_file():
+    # Проверяется ВЕСЬ снимок, а не один каталог. Пятиминутный конвейер
+    # доставляет в хранилище ячейки только каталог, как только витрина
+    # объявлена управляемой; подробностей он не кладёт. По наличию каталога
+    # витрина выглядела бы наполненной, а выложилась бы обеднённой: замерено на
+    # сборке lords-01 — с каталогом и подробностями главная отдаёт 48 карточек
+    # и 8 ссылок на серии, с одним каталогом 12 карточек и НОЛЬ ссылок на серии.
+    # Для посетителя это пропавшие серии, а не «частичные данные».
+    нехватка = [и for и in (ш.format(site=site_id) for ш in privileged.СНИМОК)
+                if not (п.data / и).is_file()]
+    if not нехватка:
         return {"seeded": False, "reason": "хранилище уже наполнено"}
     снимок = privileged.stage_snapshot(site_id, Path(delivery.ОБЩИЙ), dry_run=dry_run)
     повышение = privileged.promote_snapshot(site_id, dry_run=dry_run)
-    return {"seeded": True, "stage_snapshot": снимок, "promote_snapshot": повышение}
+    return {"seeded": True, "missing": нехватка,
+            "stage_snapshot": снимок, "promote_snapshot": повышение}
 
 
 def активировать(заявка: queue.Заявка, *, файл: Path,
