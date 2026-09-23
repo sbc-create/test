@@ -96,11 +96,31 @@ def test_несовпадение_digest_отменяет_активацию(р�
     assert "CI" in str(ош.value)
 
 
+#: Оба исхода сухого прогона. Он ЗАПУСКАЕТ сценарий, поэтому его предусловия
+#: (root, замок направления, занятый порт) могут его же и остановить — и это
+#: правильный результат проверки, а не поломка теста.
+СУХИЕ = {"dry-run", "dry-run-failed"}
+
+
 def test_по_умолчанию_сухой_прогон(репозиторий_сайта):
     """Команда, по умолчанию меняющая боевой сайт, однажды сработает случайно."""
     head = _git(репозиторий_сайта, "rev-parse", "HEAD")
     итог = admin_exec.активировать(ЗАРЕГИСТРИРОВАННЫЙ, commit=head)
-    assert итог["status"] == "dry-run"
+    assert итог["status"] in СУХИЕ
+    assert итог["dry_run"] is True
+
+
+def test_сухой_прогон_доходит_до_предусловий_сценария(репозиторий_сайта):
+    """Проверка обязана выполнить сам сценарий, а не остановиться перед ним.
+
+    Раньше сухой прогон возвращал план, не запуская activate.sh: он объявлял
+    готовым то, что у владельца падало на первой же строке — на root и на
+    замке направления.
+    """
+    head = _git(репозиторий_сайта, "rev-parse", "HEAD")
+    итог = admin_exec.активировать(ЗАРЕГИСТРИРОВАННЫЙ, commit=head)
+    assert "exit_code" in итог, "сценарий не запускался"
+    assert "проверка предусловий" in итог["stdout"]
 
 
 def test_cli_не_принимает_пути(репозиторий_сайта):
@@ -112,9 +132,8 @@ def test_cli_не_принимает_пути(репозиторий_сайта)
         cwd=str(КОРЕНЬ), capture_output=True, text=True)
     # --artifact у команды cell есть (его использует install), но activate его
     # игнорирует: артефакт собирается из коммита и больше ниоткуда.
-    assert готово.returncode == 0, готово.stderr
     итог = json.loads(готово.stdout)
-    assert итог["status"] == "dry-run"
+    assert итог["status"] in СУХИЕ
     assert "чужое.tar.gz" not in json.dumps(итог, ensure_ascii=False)
 
 
@@ -130,5 +149,6 @@ def test_команда_без_подтверждения_не_активиру�
         [sys.executable, "-m", "factory", "cell", "activate",
          "--site", ЗАРЕГИСТРИРОВАННЫЙ, "--commit", head],
         cwd=str(КОРЕНЬ), capture_output=True, text=True)
-    assert готово.returncode == 0, готово.stderr
-    assert json.loads(готово.stdout)["status"] == "dry-run"
+    итог = json.loads(готово.stdout)
+    assert итог["status"] in СУХИЕ
+    assert итог["dry_run"] is True

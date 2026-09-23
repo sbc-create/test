@@ -224,22 +224,28 @@ def активировать(site_id: str, *, commit: str, dry_run: bool = True,
             "Расхождение означает, что выкладывается не тот выпуск, который "
             "проверял CI")
     решение.dry_run = dry_run
-    if dry_run:
-        return {"status": "dry-run", **решение.as_dict()}
 
     repo = Path(решение.repo_path)
     with tempfile.TemporaryDirectory() as tmp:
         артефакт, _ = _собрать(repo, Path(tmp))
+        аргументы = ["bash", str(repo / СЦЕНАРИЙ), "--artifact", str(артефакт)]
+        if dry_run:
+            # Сухой прогон ЗАПУСКАЕТ сценарий с --dry-run, а не обходит его.
+            # Проверка, не дошедшая до предусловий самого сценария (root, замок
+            # направления, свободный порт), объявляла бы готовым то, что упадёт
+            # на первой же строке у владельца.
+            аргументы.append("--dry-run")
         окружение = _окружение_git(repo)
         # Сценарий сайта сам решает, что делать; исполнитель не передаёт ему ни
         # одной переменной, меняющей поведение, кроме уже имеющихся в среде.
-        готово = subprocess.run(["bash", str(repo / СЦЕНАРИЙ), "--artifact", str(артефакт)],
-                                cwd=str(repo), env=окружение, text=True,
+        готово = subprocess.run(аргументы, cwd=str(repo), env=окружение, text=True,
                                 capture_output=True)
-    итог = {"status": "activated" if готово.returncode == 0 else "failed",
-            "exit_code": готово.returncode,
+
+    удача = готово.returncode == 0
+    if dry_run:
+        состояние = "dry-run" if удача else "dry-run-failed"
+    else:
+        состояние = "activated" if удача else "failed"
+    return {"status": состояние, "exit_code": готово.returncode,
             "stdout": готово.stdout[-4000:], "stderr": готово.stderr[-4000:],
             **решение.as_dict()}
-    if готово.returncode != 0:
-        итог["status"] = "failed"
-    return итог
