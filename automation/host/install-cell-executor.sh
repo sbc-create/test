@@ -83,6 +83,47 @@ run install -m 0644 "$SRC_ROOT/automation/host/$TIMER" "$UNIT_DIR/$TIMER"
 run systemctl daemon-reload
 run systemctl enable --now "$TIMER"
 
+log "управляемый upstream для зарегистрированных витрин"
+# Без этого переключение трафика — молчаливое бездействие: исполнитель пишет
+# файл upstream, которого никто не читает. Каждая витрина подключается
+# отдельно; отсутствие её конфигурации не останавливает остальные.
+for site in $("$PY" -c "
+import sys; sys.path.insert(0, '$SRC_ROOT')
+from factory.cell import registry
+print(' '.join(sorted(registry.extracted_sites())))
+" 2>/dev/null); do
+  if [ "$dry_run" = 1 ]; then
+    printf '   [сухой прогон] подключить upstream %s\n' "$site"
+  elif bash "$SRC_ROOT/automation/host/wire-nginx-upstream.sh" --site "$site"; then
+    log "  $site: подключён"
+  else
+    log "  $site: пропущен (см. вывод выше) — остальные продолжаются"
+  fi
+done
+
+log "проверка чтения результата подающим"
+# Числовой режим сам по себе ничего не доказывает: важно, что файл ДЕЙСТВИТЕЛЬНО
+# читается тем, кто подал заявку. Пишем пробу от root и читаем от него.
+probe_file="$QUEUE/results/.install-probe.json"
+if [ "$dry_run" = 0 ]; then
+  "$PY" -c "
+import sys; sys.path.insert(0, '$SRC_ROOT')
+from pathlib import Path
+from factory.cell import queue
+queue.записать_атомарно(Path('$probe_file'), {'probe': True})
+"
+  if runuser -u "$SUBMITTER" -- cat "$probe_file" >/dev/null 2>&1; then
+    log "  результат читается пользователем $SUBMITTER"
+  else
+    rm -f "$probe_file"
+    die "пользователь $SUBMITTER не может прочитать результат операции: "\
+"обратная связь исполнителя не работает"
+  fi
+  rm -f "$probe_file"
+else
+  printf '   [сухой прогон] записать пробу и прочитать её от %s\n' "$SUBMITTER"
+fi
+
 log "проверка после установки"
 run systemctl list-timers "$TIMER" --no-pager
 run "$PY" -c "import sys; sys.path.insert(0, '$DEST'); from factory.cell import queue; print('   корневая копия импортируется')"

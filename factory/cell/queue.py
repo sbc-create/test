@@ -174,9 +174,24 @@ def подать(заявка: Заявка, *, база: Path | None = None) ->
     готовый = результаты / f"{заявка.request_id}.json"
 
     if готовый.is_file():
-        итог = json.loads(готовый.read_text(encoding="utf-8"))
-        return {"status": "already-finished", "request_id": заявка.request_id,
-                "result": итог}
+        try:
+            итог = json.loads(готовый.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            итог = {"status": "нечитаем"}
+        # Повторять нельзя только УСПЕШНУЮ операцию: она уже применена, и второй
+        # прогон стал бы повторной выкладкой. Неудачная — наоборот, обязана быть
+        # повторяемой: причина отказа устраняется, и заявка подаётся снова. Иначе
+        # один сбой запирал бы выпуск этого коммита навсегда.
+        if итог.get("status") == "ok":
+            return {"status": "already-finished", "request_id": заявка.request_id,
+                    "result": итог}
+        предыдущий = итог.get("status")
+        готовый.unlink(missing_ok=True)
+        заявка.stages = [{"stage": "received", "at": заявка.submitted_at,
+                          "retry_after": предыдущий}]
+        записать_атомарно(файл, заявка.as_dict())
+        return {"status": "requeued-after-failure", "request_id": заявка.request_id,
+                "previous_status": предыдущий, "path": str(файл)}
     if файл.is_file():
         существующая = json.loads(файл.read_text(encoding="utf-8"))
         if (существующая.get("commit") != заявка.commit

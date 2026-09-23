@@ -94,6 +94,30 @@ def test_результат_пишется_раньше_снятия_заявк�
     executor.обслужить_очередь(база=tmp_path, dry_run=True)
     assert (tmp_path / "results" / f"{з.request_id}.json").is_file()
     assert not (tmp_path / "requests" / f"{з.request_id}.json").exists()
+
+
+def test_неудавшаяся_заявка_подаётся_снова(tmp_path):
+    """Один сбой не должен запирать выпуск этого коммита навсегда.
+
+    Причина отказа устраняется, и заявка обязана быть повторяемой. Иначе
+    единственным выходом стал бы новый коммит ради нового идентификатора.
+    """
+    з = queue.собрать("net-takogo", КОММИТ, ДАЙДЖЕСТ)
+    queue.подать(з, база=tmp_path)
+    executor.обслужить_очередь(база=tmp_path, dry_run=True)
+    повтор = queue.подать(з, база=tmp_path)
+    assert повтор["status"] == "requeued-after-failure"
+    assert повтор["previous_status"] == "rejected"
+    assert (tmp_path / "requests" / f"{з.request_id}.json").is_file()
+
+
+def test_успешная_заявка_повторно_не_выкладывается(tmp_path):
+    """Успех уже применён: второй прогон стал бы повторной выкладкой."""
+    з = queue.собрать("zona-01", КОММИТ, ДАЙДЖЕСТ)
+    queue.подать(з, база=tmp_path)
+    queue.записать_атомарно(tmp_path / "results" / f"{з.request_id}.json",
+                            {"request_id": з.request_id, "status": "ok"})
+    (tmp_path / "requests" / f"{з.request_id}.json").unlink()
     assert queue.подать(з, база=tmp_path)["status"] == "already-finished"
 
 
