@@ -213,16 +213,117 @@ def test_грязное_дерево_не_выкладывается(monkeypatch
     assert "несохранённые" in str(ош.value)
 
 
-def test_непроверяемое_происхождение_можно_сделать_отказом(monkeypatch):
-    """`checked: false` без возможности сделать его отказом — не проверка.
+def test_непроверяемое_происхождение_это_отказ(monkeypatch):
+    """`checked: false` рядом с успешным выпуском — не проверка, а её вид.
 
-    У root нет входа в gh, и проверка «этот коммит прошёл этот прогон» тихо
-    выключалась. Отчёт при этом выглядел так же, как при успешной проверке.
+    У root нет входа в gh, и связка «этот коммит прошёл этот прогон» тихо
+    выключалась: результат выглядел одинаково и когда происхождение доказано,
+    и когда его не спросили.
     """
     з = queue.собрать("zona-01", КОММИТ, ДАЙДЖЕСТ)  # без ci_run
-    monkeypatch.delenv(executor.СРЕДА_ТРЕБОВАТЬ_CI, raising=False)
-    assert executor.проверить_ci(з, remote="https://x/y/z")["checked"] is False
+    with pytest.raises(executor.ПроисхождениеНеПодтверждено, match="не называет прогон"):
+        executor.проверить_ci(з, remote="https://github.com/o/r")
 
-    monkeypatch.setenv(executor.СРЕДА_ТРЕБОВАТЬ_CI, "1")
-    with pytest.raises(executor.ExecutorError, match="происхождение"):
-        executor.проверить_ci(з, remote="https://x/y/z")
+
+def test_молчание_github_не_пропускает_выпуск(monkeypatch):
+    """Недоступный GitHub обязан останавливать, а не разрешать по умолчанию."""
+    def нет_связи(*a, **k):
+        class Р:
+            returncode, stdout, stderr = 1, "", "gh: not logged in"
+        return Р()
+    monkeypatch.setattr(executor.subprocess, "run", нет_связи)
+    з = queue.собрать("zona-01", КОММИТ, ДАЙДЖЕСТ, ci_run="123")
+    with pytest.raises(executor.ПроисхождениеНеПодтверждено, match="GitHub не ответил"):
+        executor.проверить_ci(з, remote="https://github.com/o/r")
+
+
+@pytest.mark.parametrize("ответ,ожидание", [
+    ({"status": "in_progress", "conclusion": None}, "ещё не завершён"),
+    ({"status": "completed", "conclusion": "failure"}, "завершился как"),
+    ({"status": "completed", "conclusion": "success", "headSha": "c" * 40},
+     "ничего не доказывает"),
+    ({"status": "completed", "conclusion": "success", "headSha": КОММИТ,
+      "headBranch": "claude/experiment"}, "разрешён только с"),
+])
+def test_каждое_звено_связки_обязательно(monkeypatch, ответ, ожидание):
+    """Репозиторий, ветка, точный коммит и успешный прогон — все четыре."""
+    полный = {"headSha": КОММИТ, "headBranch": "main", "databaseId": 1,
+              "workflowName": "release", **ответ}
+
+    def ответил(*a, **k):
+        class Р:
+            returncode, stderr = 0, ""
+            stdout = json.dumps(полный)
+        return Р()
+    monkeypatch.setattr(executor.subprocess, "run", ответил)
+    з = queue.собрать("zona-01", КОММИТ, ДАЙДЖЕСТ, ci_run="123")
+    with pytest.raises(executor.ExecutorError, match=ожидание):
+        executor.проверить_ci(з, remote="https://github.com/o/r")
+
+
+def test_проверка_спрашивает_репозиторий_из_реестра(monkeypatch):
+    """Иначе прогон чужого проекта с подходящим SHA прошёл бы проверку."""
+    снято = {}
+
+    def ответил(cmd, *a, **k):
+        снято["cmd"] = cmd
+        class Р:
+            returncode, stderr = 0, ""
+            stdout = json.dumps({"headSha": КОММИТ, "headBranch": "main",
+                                 "status": "completed", "conclusion": "success",
+                                 "databaseId": 7, "workflowName": "release"})
+        return Р()
+    monkeypatch.setattr(executor.subprocess, "run", ответил)
+    з = queue.собрать("zona-01", КОММИТ, ДАЙДЖЕСТ, ci_run="123")
+    итог = executor.проверить_ci(з, remote="https://github.com/sbc-create/site-x.git")
+    assert "-R" in снято["cmd"]
+    assert снято["cmd"][снято["cmd"].index("-R") + 1] == "sbc-create/site-x"
+    assert итог == {"checked": True, "repo": "sbc-create/site-x", "branch": "main",
+                    "run": "7", "workflow": "release", "conclusion": "success"}
+
+
+def test_отказ_наступает_до_замка_и_до_мутаций(tmp_path, monkeypatch):
+    """Главное свойство: работающий сайт не трогают, пока связка не доказана."""
+    def нет_связи(*a, **k):
+        class Р:
+            returncode, stdout, stderr = 1, "", "gh: not logged in"
+        return Р()
+    monkeypatch.setattr(executor.subprocess, "run", нет_связи)
+    з = queue.собрать("zona-01", КОММИТ, ДАЙДЖЕСТ, ci_run="123")
+    queue.подать(з, база=tmp_path)
+    итог = executor.обслужить_очередь(база=tmp_path, dry_run=False)[0]
+    assert итог["status"] == "rejected"
+    assert "GitHub не ответил" in итог["error"]
+    # Замка не было, значит не было и ни одной операции над витриной.
+    assert not (tmp_path / "locks").exists()
+    assert "outcome" not in итог
+
+
+def test_ручная_активация_от_root_закрыта():
+    """Второй путь выкладки — тот, что не спрашивает GitHub ни о чём.
+
+    Он исполняет сценарий репозитория от root. Пока он оставался проходимым,
+    «выкладка без доказанного происхождения» требовала одного лишнего флага.
+    """
+    from factory.cell import admin_exec
+    with pytest.raises(admin_exec.ExecutorRefused, match="закрыта"):
+        admin_exec.активировать("zona-01", commit=КОММИТ, dry_run=False)
+
+
+def test_очередь_остаётся_единственным_путём_выпуска():
+    """Ни одно место не должно звать активацию в обход проверки происхождения."""
+    import ast
+    корень = КОРЕНЬ / "factory" / "cell"
+    # cli.py зовёт её ради сухого прогона; сам отказ живёт внутри
+    # admin_exec.активировать, и проверяется он отдельным тестом. Здесь
+    # сторожится появление НОВОГО вызывающего.
+    разрешено = {"executor.py", "admin_exec.py", "cli.py"}
+    for файл in sorted(корень.glob("*.py")):
+        if файл.name in разрешено:
+            continue
+        дерево = ast.parse(файл.read_text(encoding="utf-8"))
+        for узел in ast.walk(дерево):
+            if (isinstance(узел, ast.Attribute) and узел.attr == "активировать"
+                    and isinstance(узел.value, ast.Name)
+                    and узел.value.id == "admin_exec"):
+                raise AssertionError(f"{файл.name}: зовёт admin_exec.активировать")

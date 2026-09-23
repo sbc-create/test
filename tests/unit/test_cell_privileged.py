@@ -53,9 +53,6 @@ def test_модуль_не_запускает_ничего_из_репозито
                        .read_text(encoding="utf-8"))
     # Смотрим на КОД, а не на текст: в документации имя сценария упомянуто
     # намеренно — там объясняется, почему его больше не запускают.
-    строки = [у.value for у in ast.walk(дерево)
-              if isinstance(у, ast.Constant) and isinstance(у.value, str)
-              and not isinstance(getattr(у, "parent", None), ast.Expr)]
     вызовы = [у for у in ast.walk(дерево)
               if isinstance(у, ast.Call) and isinstance(у.func, ast.Attribute)
               and у.func.attr in {"run", "Popen", "call", "check_output", "system"}]

@@ -306,6 +306,19 @@ def cmd_serve(args) -> int:
     return 0 if all(и.get("status") == "ok" for и in итоги) else 1
 
 
+def cmd_ci_ready(args) -> int:
+    """Готов ли исполнитель проверять происхождение выпуска.
+
+    Печатает состояние по каждому репозиторию и возвращает ненулевой код, если
+    хотя бы один недоступен: «установлен» и «готов к выпуску» — разные вещи, и
+    сценарий установки обязан их различать.
+    """
+    from factory.cell import executor
+    итог = executor.готовность_проверки()
+    print(json.dumps(итог, ensure_ascii=False, indent=2))
+    return 0 if итог["ready"] else 1
+
+
 ACTIONS = {
     "registry": cmd_registry,
     "templates": cmd_templates,
@@ -326,6 +339,7 @@ ACTIONS = {
     "submit": cmd_submit,
     "serve": cmd_serve,
     "trigger": cmd_trigger,
+    "ci-ready": cmd_ci_ready,
 }
 
 

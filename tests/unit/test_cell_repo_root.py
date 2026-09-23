@@ -64,7 +64,7 @@ def test_путь_за_пределы_основания_отвергается(
     """Реестр — файл; запись `../../etc` в нём не должна уводить наружу."""
     monkeypatch.setenv(registry.СРЕДА_РЕПОЗИТОРИЕВ, str(tmp_path / "base"))
     with pytest.raises(registry.RegistryError, match="за пределы"):
-        _ячейка("../../etc").repo_path
+        assert _ячейка("../../etc").repo_path
 
 
 def test_абсолютный_путь_остаётся_собой(tmp_path, monkeypatch):

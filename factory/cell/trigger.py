@@ -34,8 +34,10 @@ from typing import Any
 
 from factory.cell import admin_exec, queue, registry
 
-#: Ветки, с которых выпуск разрешён. Эксперименты и форки сюда не попадают.
-РАЗРЕШЁННЫЕ_ВЕТКИ = ("main", "claude/extract-*", "release/*")
+#: Ветки, с которых выпуск разрешён. Один список на обе стороны: если бы
+#: триггер держал свой, расхождение выглядело бы как «CI зелёный, а выпуска
+#: нет» — и искали бы его в последнюю очередь.
+РАЗРЕШЁННЫЕ_ВЕТКИ = registry.ВЕТКИ_ВЫПУСКА
 
 
 class TriggerError(Exception):
@@ -43,8 +45,7 @@ class TriggerError(Exception):
 
 
 def _подходит(ref: str) -> bool:
-    from fnmatch import fnmatch
-    return any(fnmatch(ref, шаблон) for шаблон in РАЗРЕШЁННЫЕ_ВЕТКИ)
+    return registry.ветка_разрешена(ref)
 
 
 def проект(remote: str) -> str:

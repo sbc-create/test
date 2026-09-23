@@ -184,27 +184,21 @@ fi
 
 log "юнит и таймер"
 run install -m 0644 "$SRC_ROOT/automation/host/$SERVICE" "$UNIT_DIR/$SERVICE"
-# Учётные данные GitHub для root. Без них проверка «этот коммит прошёл этот
-# прогон» молча возвращает `checked: false`, и происхождение выпуска ничем не
-# подтверждено. Секрет остаётся файлом root и передаётся юниту systemd'ом;
-# в сценарий, журнал и отчёт он не попадает.
-GH_TOKEN_FILE=/etc/site-factory/gh-token
-if [ -f "$GH_TOKEN_FILE" ]; then
-  run install -d -m 0755 "$UNIT_DIR/$SERVICE.d"
-  if [ "$dry_run" = 0 ]; then
-    printf '[Service]\nLoadCredential=gh-token:%s\nEnvironment=%s=1\n' \
-        "$GH_TOKEN_FILE" "CELL_REQUIRE_CI" > "$UNIT_DIR/$SERVICE.d/gh.conf"
-    chmod 0644 "$UNIT_DIR/$SERVICE.d/gh.conf"
+# Учётные данные GitHub. Без них исполнитель не может доказать происхождение
+# выпуска и отвергает заявки — это исправное поведение, а не деградация.
+# Подключение вынесено в отдельный сценарий: токен не должен приходить сюда ни
+# аргументом, ни переменной окружения.
+GH_TOKEN_FILE="${CELL_GH_TOKEN_FILE:-/etc/site-factory/gh-token}"
+release_ready=0
+if [ "$dry_run" = 1 ]; then
+  printf '   [сухой прогон] проверить учётные данные GitHub\n'
+elif [ -f "$GH_TOKEN_FILE" ]; then
+  if bash "$SRC_ROOT/automation/host/install-gh-credential.sh" --check; then
+    release_ready=1
   fi
-  log "  происхождение выпуска проверяется у GitHub (учётные данные из $GH_TOKEN_FILE)"
 else
-  log "  [!] $GH_TOKEN_FILE нет: связка «коммит → прогон CI» не проверяется,"
-  log "      результат будет содержать ci.checked=false. Положите туда токен с"
-  log "      правом чтения Actions и повторите установку, чтобы включить проверку."
+  log "  [!] $GH_TOKEN_FILE нет"
 fi
-run install -m 0644 "$SRC_ROOT/automation/host/$TIMER" "$UNIT_DIR/$TIMER"
-run systemctl daemon-reload
-run systemctl enable --now "$TIMER"
 
 log "управляемый upstream для зарегистрированных витрин"
 # Без этого переключение трафика — молчаливое бездействие: исполнитель пишет
@@ -240,12 +234,15 @@ if [ "$dry_run" = 1 ]; then
   exit 0
 fi
 
-cat <<'ГОТОВО'
+if [ "$release_ready" = 1 ]; then
+  cat <<'ГОТОВО'
 
-Исполнитель установлен. Дальше выпуски идут без команд владельца:
+ГОТОВ К ВЫПУСКУ. Дальше выпуски идут без команд владельца:
 
-  CI репозитория сайта после успешной сборки кладёт заявку в
-  /var/lib/site-cells/requests/, исполнитель разбирает её раз в минуту.
+  триггер кладёт заявку в /var/lib/site-cells/requests/, исполнитель
+  разбирает её раз в минуту и перед каждой выкладкой доказывает у GitHub
+  связку «разрешённый репозиторий → разрешённая ветка → этот коммит →
+  успешный прогон».
 
 Посмотреть состояние:
   systemctl status site-cell-executor.service
@@ -254,3 +251,28 @@ cat <<'ГОТОВО'
 Остановить приём:
   systemctl disable --now site-cell-executor.timer
 ГОТОВО
+  exit 0
+fi
+
+cat <<ГОТОВО
+
+УСТАНОВЛЕН, ВЫПУСК ЗАБЛОКИРОВАН.
+
+Исполнитель, очередь и таймер на месте. Учётных данных GitHub у службы нет,
+поэтому происхождение выпуска доказать нечем, и КАЖДАЯ заявка будет отвергнута
+до единой операции над витриной. Живые сайты при этом не меняются.
+
+Разблокировать (токен вводится без эха и не попадает в историю команд):
+
+  sudo bash $SRC_ROOT/automation/host/install-gh-credential.sh
+
+Какой токен нужен: fine-grained personal access token владельца sbc-create,
+Only select repositories — только site-* из реестра, права Repository
+permissions: Actions Read-only и Metadata Read-only. Больше ничего.
+
+Если подходящий токен уже лежит файлом:
+
+  sudo bash $SRC_ROOT/automation/host/install-gh-credential.sh --from-file <путь>
+
+ГОТОВО
+exit 3
