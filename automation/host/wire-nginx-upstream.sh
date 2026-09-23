@@ -72,8 +72,13 @@ upstream_file="${CELLS}/${site}.upstream"
 
 # Конфигурация сайта — та, где этот порт назван. Ищем по факту, а не по
 # соглашению об именах: имена файлов в этом контуре не единообразны.
+# Ищем ТОЛЬКО там, откуда nginx читает: sites-available он не включает
+# (в nginx.conf стоит `include sites-enabled/*`), и правка там меняла бы файл,
+# который никто не исполняет, зато разводила бы копии. На этом хосте
+# sites-enabled — обычные файлы, а не ссылки, поэтому расхождение реально.
 mapfile -t configs < <(grep -rl "proxy_pass http://127\.0\.0\.1:${port}\b" \
-    "${NGINX_DIR}" --include='*.conf' 2>/dev/null | grep -v '\.bak' || true)
+    "${NGINX_DIR}/sites-enabled" "${NGINX_DIR}/conf.d" "${NGINX_DIR}/lords" \
+    --include='*.conf' 2>/dev/null | grep -v -e '\.bak' -e '\.before' || true)
 if [ "${#configs[@]}" -eq 0 ]; then
   if grep -rqs "proxy_pass http://${upstream_name}\b" "${NGINX_DIR}"; then
     log "уже подключено: конфигурация ссылается на ${upstream_name}"

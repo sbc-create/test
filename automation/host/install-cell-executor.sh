@@ -73,9 +73,53 @@ run install -d -o root -g root -m 0755 "$QUEUE"
 # Заявки кладёт непривилегированная сторона. Липкий бит: удалить чужую заявку
 # нельзя, а значит нельзя и подменить её между проверкой и исполнением.
 run install -d -o "$SUBMITTER" -g root -m 1730 "$QUEUE/requests"
-run install -d -o root -g "$SUBMITTER" -m 0750 "$QUEUE/results"
+# setgid: файлы, созданные root, наследуют группу каталога, а не первичную
+# группу процесса. Без него результат выходил `root:root` — режим верный, а
+# читать некому. Писатель ставит группу и сам, но полагаться на один механизм
+# там, где отказ выглядит как молчание, нельзя.
+run install -d -o root -g "$SUBMITTER" -m 2750 "$QUEUE/results"
 run install -d -o root -g root -m 0700 "$QUEUE/locks"
 run install -d -o root -g root -m 0700 "$QUEUE/state"
+
+log "починка ранее записанных результатов"
+# Файлы, записанные до исправления, остались `rw------- root:root`. Правим
+# ТОЧЕЧНО: только .json в каталоге результатов, только группа и режим. Никакой
+# рекурсивной передачи каталогов и никакого 777.
+if [ "$dry_run" = 0 ]; then
+  fixed_count=0
+  for f in "$QUEUE"/results/*.json; do
+    [ -e "$f" ] || continue
+    chgrp "$SUBMITTER" "$f"
+    chmod 0640 "$f"
+    fixed_count=$((fixed_count + 1))
+  done
+  log "  приведено в читаемый вид: $fixed_count"
+else
+  printf '   [сухой прогон] chgrp %s + chmod 0640 для %s/results/*.json\n' "$SUBMITTER" "$QUEUE"
+fi
+
+log "проверка чтения результата подающим"
+# Числовой режим сам по себе ничего не доказывает: важно, что файл ДЕЙСТВИТЕЛЬНО
+# читается тем, кто подал заявку. Пишем пробу от root и читаем от него.
+probe_file="$QUEUE/results/.install-probe.json"
+if [ "$dry_run" = 0 ]; then
+  "$PY" -c "
+import sys; sys.path.insert(0, '$SRC_ROOT')
+from pathlib import Path
+from factory.cell import queue
+queue.записать_атомарно(Path('$probe_file'), {'probe': True})
+"
+  if runuser -u "$SUBMITTER" -- cat "$probe_file" >/dev/null 2>&1; then
+    log "  результат читается пользователем $SUBMITTER"
+  else
+    rm -f "$probe_file"
+    die "пользователь $SUBMITTER не может прочитать результат операции: "\
+"обратная связь исполнителя не работает"
+  fi
+  rm -f "$probe_file"
+else
+  printf '   [сухой прогон] записать пробу и прочитать её от %s\n' "$SUBMITTER"
+fi
 
 log "юнит и таймер"
 run install -m 0644 "$SRC_ROOT/automation/host/$SERVICE" "$UNIT_DIR/$SERVICE"
@@ -100,29 +144,6 @@ print(' '.join(sorted(registry.extracted_sites())))
     log "  $site: пропущен (см. вывод выше) — остальные продолжаются"
   fi
 done
-
-log "проверка чтения результата подающим"
-# Числовой режим сам по себе ничего не доказывает: важно, что файл ДЕЙСТВИТЕЛЬНО
-# читается тем, кто подал заявку. Пишем пробу от root и читаем от него.
-probe_file="$QUEUE/results/.install-probe.json"
-if [ "$dry_run" = 0 ]; then
-  "$PY" -c "
-import sys; sys.path.insert(0, '$SRC_ROOT')
-from pathlib import Path
-from factory.cell import queue
-queue.записать_атомарно(Path('$probe_file'), {'probe': True})
-"
-  if runuser -u "$SUBMITTER" -- cat "$probe_file" >/dev/null 2>&1; then
-    log "  результат читается пользователем $SUBMITTER"
-  else
-    rm -f "$probe_file"
-    die "пользователь $SUBMITTER не может прочитать результат операции: "\
-"обратная связь исполнителя не работает"
-  fi
-  rm -f "$probe_file"
-else
-  printf '   [сухой прогон] записать пробу и прочитать её от %s\n' "$SUBMITTER"
-fi
 
 log "проверка после установки"
 run systemctl list-timers "$TIMER" --no-pager
