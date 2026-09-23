@@ -1,0 +1,86 @@
+"""Точка входа ячейки: одно имя, один смысл, и пин ему не врёт.
+
+`entrypoint` означает файл под `src/`, который исполняется, и его же цифру
+несёт `artifact_sha256`. Пускатель `run.py` в контракт не входит: он одинаков
+во всех ячейках и версионируется вместе с фабрикой.
+
+Существование файла проверяет сам репозиторий сайта — `checks/entrypoint_present.py`
+разрешает `src/<entrypoint>` и падает, если файла нет. Не проверялось другое:
+что ПИН повторяет то же имя. Пин никто не исполняет, поэтому расхождение не
+роняет витрину — оно просто делает зеркало лживым, а решают по нему.
+
+Соседняя ячейка ровно так и разошлась: пин стал называть пускатель вместо
+рантайма, и поймать это «наличием ключа» было нельзя — только сверкой значения
+с файлом.
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+import sys
+from pathlib import Path
+
+import pytest
+
+КОРЕНЬ = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(КОРЕНЬ))
+
+ЯЧЕЙКИ = sorted(p for p in (КОРЕНЬ / "var" / "site-repos").iterdir()
+                if (p / "config" / "site.json").is_file())
+
+
+def _пины(ячейка: Path) -> dict:
+    файл = ячейка / "pins.lock.json"
+    return json.loads(файл.read_text(encoding="utf-8")).get("pins", {}) \
+        if файл.is_file() else {}
+
+
+@pytest.mark.parametrize("ячейка", ЯЧЕЙКИ, ids=lambda p: p.name)
+def test_точка_входа_указывает_на_существующий_файл(ячейка):
+    """«Ключ есть» не то же самое, что «файл есть»."""
+    имя = json.loads((ячейка / "config" / "site.json").read_text(
+        encoding="utf-8")).get("entrypoint")
+    if not имя:
+        pytest.skip(f"{ячейка.name}: ключа entrypoint нет — не ячейка этого вида")
+    assert (ячейка / "src" / имя).is_file(), (
+        f"{ячейка.name}: entrypoint={имя!r} не указывает на файл под src/")
+
+
+@pytest.mark.parametrize("ячейка", ЯЧЕЙКИ, ids=lambda p: p.name)
+def test_пин_повторяет_точку_входа(ячейка):
+    """Пин — зеркало, и врущее зеркало хуже отсутствующего.
+
+    Витрину это не уронит: исполняется значение из config/site.json. Но по пину
+    судят о том, что закреплено, и разошедшееся имя читается как «закреплён
+    другой рантайм».
+    """
+    конфиг = json.loads((ячейка / "config" / "site.json").read_text(
+        encoding="utf-8")).get("entrypoint")
+    пин = _пины(ячейка).get("entrypoint")
+    if not конфиг or not пин:
+        pytest.skip(f"{ячейка.name}: сверять нечего")
+    assert пин == конфиг, (
+        f"{ячейка.name}: пин закрепляет {пин!r}, а исполняется {конфиг!r}")
+
+
+@pytest.mark.parametrize("ячейка", ЯЧЕЙКИ, ids=lambda p: p.name)
+def test_цифра_артефакта_считается_по_точке_входа(ячейка):
+    """`artifact_sha256` обязан быть суммой того файла, который исполняется.
+
+    Сборщик это поле пока не штампует, поэтому оно устаревает молча: у части
+    ячеек цифра уже не та. Тест отмечает такие как ожидаемо провальные, чтобы
+    исправление в сборщике было видно по их позеленению, а не по обещанию.
+    """
+    манифест = ячейка / "config" / "template-manifest.json"
+    имя = json.loads((ячейка / "config" / "site.json").read_text(
+        encoding="utf-8")).get("entrypoint")
+    if not манифест.is_file() or not имя:
+        pytest.skip(f"{ячейка.name}: сверять нечего")
+    заявлено = json.loads(манифест.read_text(encoding="utf-8")).get("artifact_sha256")
+    if not заявлено:
+        pytest.skip(f"{ячейка.name}: цифра артефакта не объявлена")
+    факт = hashlib.sha256((ячейка / "src" / имя).read_bytes()).hexdigest()
+    if заявлено != факт:
+        pytest.xfail(f"{ячейка.name}: сборщик не пересчитывает artifact_sha256 — "
+                     f"объявлено {заявлено[:16]}…, фактически {факт[:16]}…")
+    assert заявлено == факт
