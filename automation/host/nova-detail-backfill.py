@@ -65,6 +65,35 @@ def токен() -> str:
     return путь.read_text(encoding="utf-8").strip()
 
 
+def _продолжающиеся(идентификаторы: list[str], кэш: Path) -> list[str]:
+    """Тайтлы, у которых доступно меньше заявленного, — по кэшу.
+
+    Определяется по уже известным данным, а не запросом к источнику:
+    спрашивать источник о том, кого спрашивать, значило бы потратить тот
+    самый бюджет, который здесь экономится.
+    """
+    идущие = []
+    for ид in идентификаторы:
+        путь = кэш / f"{ид}.json"
+        if not путь.is_file():
+            continue
+        try:
+            деталь = (json.loads(путь.read_text(encoding="utf-8")).get("detail")
+                      or {})
+        except (OSError, ValueError):
+            continue
+        for сезон in (деталь.get("seasons") or []):
+            try:
+                доступно = int(сезон.get("available_episodes_count"))
+                всего = int(сезон.get("episodes_count"))
+            except (TypeError, ValueError):
+                continue
+            if доступно < всего:
+                идущие.append(ид)
+                break
+    return идущие
+
+
 def покрытие_кэша(идентификаторы: list[str], кэш: Path) -> dict:
     есть = сописанием = 0
     for ид in идентификаторы:
@@ -93,6 +122,11 @@ def main(argv=None) -> int:
     ap.add_argument("--budget", type=int, default=2000,
                     help="предел сетевых запросов за прогон")
     ap.add_argument("--report", type=Path, default=ОТЧЁТ)
+    ap.add_argument("--ongoing-ttl", type=int, default=6 * 3600,
+                    help="срок годности записи продолжающегося тайтла, с; "
+                         "0 выключает отдельный проход")
+    ap.add_argument("--ongoing-budget", type=int, default=1000,
+                    help="предел запросов на проход по продолжающимся")
     ap.add_argument("--order", choices=("uncached-first", "catalog"),
                     default="uncached-first",
                     help="кого спрашивать первым")
@@ -127,6 +161,36 @@ def main(argv=None) -> int:
     #
     # Поэтому сначала спрашиваются те, кого в кэше нет. Обновление устаревшего
     # никуда не девается — оно идёт следом, когда добирать уже нечего.
+    # ПРОДОЛЖАЮЩИЕСЯ СПРАШИВАЮТСЯ ОТДЕЛЬНО И ЧАЩЕ.
+    #
+    # `available_episodes_count` — единственное поле, которое меняется не раз
+    # в месяц, а каждую неделю выхода серии. Оно приезжает тем же кэшем, у
+    # которого TTL семь суток, и при бюджете 6000 записей на 53688 запись
+    # перечитывается примерно раз в девять суток. Для описания и постера это
+    # нормально; для числа вышедших серий — нет: витрина показывала на серию
+    # меньше, чем поставщик, и ошибки при этом не возникало нигде — ни у
+    # производителя, ни у витрины. Так «Новые серии» на animedia.space
+    # простояли на тринадцати событиях при зелёном таймере.
+    #
+    # Измерено: продолжающихся (доступно меньше заявленного) во всём каталоге
+    # 403 из 53688 — 0.8 %. При трёх секундах на запись это около двадцати
+    # минут, то есть теряется в существующем шестичасовом пределе юнита.
+    # Обход всего каталога чаще не нужен и источнику не полезен.
+    продолжающиеся = _продолжающиеся(идентификаторы, a.cache)
+    if продолжающиеся and a.ongoing_ttl > 0:
+        print(f"[продолжающиеся] {len(продолжающиеся)} из {len(идентификаторы)},"
+              f" TTL {a.ongoing_ttl} с", file=sys.stderr)
+        быстрый = detail_enrichment.DetailCache(a.cache, ttl=a.ongoing_ttl)
+        идущие_записи = [з for з in записи
+                         if str(з.get("external_id")) in set(продолжающиеся)]
+        _, отчёт_идущих = detail_enrichment.enrich_items(
+            идущие_записи, fetcher=fetcher, contract=contract, cache=быстрый,
+            budget=min(len(продолжающиеся), a.ongoing_budget),
+            order=продолжающиеся)
+    else:
+        отчёт_идущих = {"skipped": ("продолжающихся нет" if not продолжающиеся
+                                    else "выключено ongoing-ttl=0")}
+
     порядок = None
     if a.order == "uncached-first":
         нет_в_кэше, есть_в_кэше = [], []
@@ -146,6 +210,8 @@ def main(argv=None) -> int:
         "finished_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "duration_sec": round(time.time() - начало, 1),
         "budget": a.budget,
+        "ongoing": {"count": len(продолжающиеся), "ttl": a.ongoing_ttl,
+                    "report": отчёт_идущих},
         "requests_made": getattr(fetcher, "requests_made", None),
         "retries_made": getattr(fetcher, "retries_made", None),
         "enrichment": {k: v for k, v in vars(отчёт).items()
