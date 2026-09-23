@@ -2124,6 +2124,12 @@ border:1px solid var(--a-line);background:var(--a-alt);color:var(--a-ink)}
 .acomm__flash--err{border-color:var(--a-acc);color:var(--a-acc)}
 .acomm__hint{flex:1 0 100%;margin:2px 0 0;font-size:12px;color:var(--a-mute);line-height:1.35}
 .acomm__none{color:var(--a-mute);font-size:13px;margin:0}
+.acomm__decide{display:flex;gap:8px;margin:8px 0 0}
+.acomm__decide button{min-height:32px;padding:0 12px;border-radius:999px;
+border:1px solid var(--a-line);background:var(--a-page);color:var(--a-dim);
+font:inherit;font-size:12px;cursor:pointer}
+.acomm__ok:hover{border-color:var(--a-acc);color:var(--a-acc)}
+.acomm__no:hover{border-color:var(--a-line);color:var(--a-ink)}
 /* Шкала — ровная сетка на десять клеток, а не строка кнопок вразнобой. */
 /* Шкала звёзд. Один компонент на карточку произведения и на обсуждение.
    Разметка идёт от десятой звезды к первой, видимый порядок разворачивает
@@ -4883,6 +4889,7 @@ class ВидОснова(Вид):
         # Отказ по токену. Молчаливое «ничего не произошло» посетитель читает
         # как поломку формы и повторяет отправку; здесь сказано, что делать.
         "csrf": ("err", "Форма устарела — обновите страницу и повторите."),
+        "forbidden": ("err", "Это действие доступно только модератору."),
     }
 
     def _итог_сообщества(self) -> str:
@@ -5024,6 +5031,12 @@ class ВидОснова(Вид):
         except (OSError, AttributeError):
             return None
 
+    def _я_модератор(self) -> bool:
+        обработчик = getattr(self, "_обработчик", None)
+        if обработчик is not None and hasattr(обработчик, "_модератор"):
+            return обработчик._модератор()
+        return False
+
     def _состояние_сообщества(self, запись: dict):
         """Хранилище и состояние темы или None, если раздел выключен."""
         хранилище = сообщество()
@@ -5032,7 +5045,8 @@ class ВидОснова(Вид):
         slug = запись["slug"]
         тема = тема_сообщества(self.п, slug)
         return хранилище, тема, хранилище.состояние(
-            тема, self._ключ_посетителя(), slug=slug)
+            тема, self._ключ_посетителя(), модератор=self._я_модератор(),
+            slug=slug)
 
     def _сообщество_выключено(self, запись: dict) -> str:
         хранилище = сообщество()
@@ -5162,10 +5176,31 @@ class ВидОснова(Вид):
         slug = запись["slug"]
         путь = возврат or f"/title/{slug}/"
 
+        модератор = self._я_модератор()
+
         def строка_сообщения(к: dict) -> str:
             ждёт = str(к.get("status") or "") == СООБЩЕСТВО.СТАТУС_ОЖИДАЕТ
             метка = ('<span class="acomm__pending">на проверке</span>'
                      if ждёт else "")
+            # Дверь у очереди. Премодерация без неё — это не строгость, а
+            # тупик: сообщение уходит в ожидание, видит его только автор, и
+            # одобрить его некому. Кнопки показываются, только когда
+            # модератор на этой витрине НАЗНАЧЕН: пустой ключ означает, что
+            # модератора нет, а не что им является любой.
+            решение = ""
+            if ждёт and модератор:
+                решение = (
+                    f'<form class="acomm__decide" method="post" '
+                    f'action="/community/comment/decide">'
+                    f'{self._csrf_поле()}'
+                    f'<input type="hidden" name="slug" value="{html.escape(slug)}">'
+                    f'<input type="hidden" name="back" value="{html.escape(путь)}">'
+                    f'<input type="hidden" name="id" '
+                    f'value="{html.escape(str(к.get("id") or ""))}">'
+                    f'<button class="acomm__ok" type="submit" name="decision" '
+                    f'value="approved">Одобрить</button>'
+                    f'<button class="acomm__no" type="submit" name="decision" '
+                    f'value="rejected">Отклонить</button></form>')
             классы = "acomm__item" + (" acomm__item--pending" if ждёт else "")
             дата = str(к.get("created_at") or "")
             имя_автора = str(к.get("name") or "Гость")
@@ -5180,6 +5215,7 @@ class ВидОснова(Вид):
                 f'{html.escape(_аниме_формат_времени_анонса(дата, "datetime"))}'
                 f'</time>{метка}</div>'
                 f'<p class="acomm__text">{html.escape(str(к.get("text") or ""))}</p>'
+                f'{решение}'
                 f'</div></li>')
 
         лента = "".join(строка_сообщения(к) for к in с.комментарии[:20])
@@ -9521,6 +9557,16 @@ class Обработчик(BaseHTTPRequestHandler):
                     тема, поля.get("name") or "", поля.get("text") or "", ключ,
                     slug=slug)
                 return self._перенаправить(назад + "?community=pending#community")
+            elif путь == "/community/comment/decide":
+                # Решение по ожидающему сообщению. Право проверяется здесь, а
+                # не только скрытыми кнопками: кнопки решают, что ПОКАЗАТЬ, а
+                # не что РАЗРЕШИТЬ, и форму можно отправить мимо страницы.
+                if not self._модератор():
+                    return self._перенаправить(назад + "?community=forbidden")
+                хранилище.решить_комментарий(
+                    тема, str(поля.get("id") or ""),
+                    str(поля.get("decision") or ""), ключ, slug=slug)
+                return self._перенаправить(назад + "?community=ok#community")
             elif путь == "/community/list":
                 # Пустое значение — «убрать из списков»: у кнопки, которая
                 # умеет только добавлять, нет обратного хода.
@@ -9578,6 +9624,23 @@ class Обработчик(BaseHTTPRequestHandler):
             return ""
         return hashlib.sha256(
             ("animedia-community-csrf/1:" + кука).encode("utf-8")).hexdigest()[:32]
+
+    #: Кука модератора. Значение сравнивается с ключом из окружения: ПУСТОЙ
+    #: ключ означает, что модератора на этой витрине нет вовсе, а не что им
+    #: является любой. Ошибиться здесь в обратную сторону — отдать очередь
+    #: премодерации первому встречному.
+    COOKIE_МОДЕРАТОРА = "amd_mod"
+
+    def _модератор(self) -> bool:
+        ключ = os.environ.get("ANIMEDIA_COMMUNITY_MODERATOR_KEY", "")
+        if not ключ:
+            return False
+        сырое = self.headers.get("Cookie") or ""
+        for кусок in сырое.split(";"):
+            имя, _, значение = кусок.strip().partition("=")
+            if имя == self.COOKIE_МОДЕРАТОРА and значение:
+                return secrets.compare_digest(ключ, значение[:128])
+        return False
 
     def _csrf_совпал(self, присланный: str) -> bool:
         свой = self._csrf()
