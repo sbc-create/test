@@ -492,7 +492,11 @@ def выполнить(заявка: queue.Заявка, *, база: Path, dry_
 
         if файл.is_file():
             queue.отметить(файл, этап, {"dry_run": dry_run})
-        результат["status"] = "ok" if этап != "failed" else "failed"
+        # Откат отрабатывает без исключения, но выпуска не было. Называть это
+        # `ok` значит объявить применённым то, что откатили.
+        применено = (итог.get("status") in queue.ПРИМЕНЁННЫЕ_ИСХОДЫ
+                     if isinstance(итог, dict) else False)
+        результат["status"] = "ok" if применено else "failed"
     except (ExecutorError, privileged.PrivilegedRefused,
             registry.RegistryError) as exc:
         результат["status"] = "rejected"
