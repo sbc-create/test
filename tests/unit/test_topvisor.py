@@ -257,14 +257,29 @@ def test_spend_ceiling_is_zero():
 
 # -- манифест ----------------------------------------------------------------
 
-def test_six_projects_are_genuinely_different():
-    assert len({s.domain for s in MANIFEST}) == 6
-    assert len({s.name for s in MANIFEST}) == 6
-    assert len({s.profile for s in MANIFEST}) == 6
-    assert len({s.metrika_counter for s in MANIFEST}) == 6
+def test_projects_are_genuinely_different():
+    """Каждый проект измеряет своё, а не копию чужого.
+
+    Число проектов из проверки убрано: оно менялось и будет меняться, а
+    инвариант — различность — от него не зависит. Прежняя форма (`== 6`)
+    падала при добавлении седьмого сайта, хотя ничего из того, ради чего
+    тест написан, при этом не нарушалось. Проверка при этом не ослаблена:
+    уникальность требуется от каждого поля, а не от их количества.
+    """
+    сколько = len(MANIFEST)
+    assert сколько >= 2, "сравнивать нечего"
+    assert len({s.domain for s in MANIFEST}) == сколько
+    assert len({s.name for s in MANIFEST}) == сколько
+    assert len({s.profile for s in MANIFEST}) == сколько
+    assert len({s.focus for s in MANIFEST}) == сколько
+    # Счётчик: у двух доменов один счётчик означал бы, что отчёт одного —
+    # это числа другого. `None` (счётчик ещё не создан) законно и может
+    # повторяться, поэтому из сравнения исключается.
+    счётчики = [s.metrika_counter for s in MANIFEST if s.metrika_counter is not None]
+    assert len(set(счётчики)) == len(счётчики), "один счётчик на два домена"
     every_group = [g.name for s in MANIFEST for g in s.groups]
     every_keyword = [k for s in MANIFEST for g in s.groups for k in g.keywords]
-    assert len(set(every_keyword)) == len(every_keyword), "одинаковые запросы на разных сайтах — шесть копий одного измерения"
+    assert len(set(every_keyword)) == len(every_keyword), "одинаковые запросы на разных сайтах — копии одного измерения"
     assert len(every_group) == len(MANIFEST) * 3
 
 
@@ -280,11 +295,30 @@ def test_keywords_are_plain_russian_text():
 
 
 def test_every_manifest_counter_matches_the_domain():
-    expected = {
-        "yummyani.site": 111881037, "yummyani.org": 111881038, "yummyani.biz": 111881039,
-        "lordfilm47.space": 112010269, "lordserial33.biz": 112010274, "1lordserials1.online": 112010277,
-    }
-    assert {s.domain: s.metrika_counter for s in MANIFEST} == expected
+    """Счётчик в манифесте — счётчик своего домена, а не соседнего.
+
+    Раньше здесь лежал список из шести пар, и он проверял две вещи сразу:
+    что счётчик не подменён чужим и что доменов ровно шесть. Второе к делу
+    не относится и ломалось при добавлении сайта. Теперь манифест
+    сверяется с реестром аналитики — источником, который заполняет сам
+    провайдер. Это строже прежнего: список из пар устаревал молча, а
+    расхождение с реестром видно сразу.
+    """
+    import json
+    from pathlib import Path
+
+    корень = Path(__file__).resolve().parents[2]
+    реестр = json.loads((корень / "config" / "analytics.json").read_text(encoding="utf-8"))
+    по_домену = {з["domain"]: з.get("counter_id") for з in реестр["properties"]}
+
+    for spec in MANIFEST:
+        assert spec.domain in по_домену, (
+            f"{spec.domain} есть в манифесте Topvisor, но его нет в реестре аналитики: "
+            "проект без записи о домене некуда привязать")
+        ожидаемый = по_домену[spec.domain]
+        assert spec.metrika_counter == ожидаемый, (
+            f"{spec.domain}: в манифесте счётчик {spec.metrika_counter}, "
+            f"в реестре аналитики {ожидаемый}")
 
 
 def test_undefined_method_code_is_terminal_not_retried():

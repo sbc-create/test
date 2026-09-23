@@ -3,7 +3,7 @@
   "provider": "yandex",
   "note": "Реестр аналитики. Здесь хранятся ТОЛЬКО публичные идентификаторы счётчиков и проверяемые статусы; OAuth-токен и client secret сюда не попадают ни при каких условиях. Заполняется командой `python3 -m factory --json analytics apply --confirm-writes`; вручную не редактируется. Три домена YummyAnime — три независимых счётчика, зеркалами их объединять запрещено: у каждого сайта собственная аудитория и собственный отчёт.",
   "seo_indexing_enabled": false,
-  "updated_at": "2026-08-27T14:09:14Z",
+  "updated_at": "2026-09-23T06:38:36Z",
   "properties": [
     {
       "domain": "yummyani.site",
@@ -274,6 +274,34 @@
         "season_select": 602711760,
         "title_view": 602711759
       }
+    },
+    {
+      "domain": "zonafilm.cc",
+      "site_id": "zona-02",
+      "counter_name": "Zona — zonafilm.cc",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "zonafilm.cc"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": true,
+        "host_id": null,
+        "verification_status": "BLOCKED_DEPLOYMENT",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": null,
+      "problems": [
+        "BLOCKED_SECRET: /etc/site-factory/secrets/yandex_oauth_token имеет режим 0600 root:root и не читается учётной записью сессии. Счётчик создаётся командой `factory analytics apply --domain zonafilm.cc --confirm-writes`, запущенной под сервисной учётной записью.",
+        "BLOCKED_DEPLOYMENT: домен не отвечает по HTTPS — записи A нет, регистрация в Вебмастере отложена."
+      ],
+      "goal_ids": {}
     }
   ]
 }

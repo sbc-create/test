@@ -1,0 +1,30 @@
+{
+  "instance": "127.0.0.1:9123",
+  "counter_in_config": null,
+  "pages": {
+    "/": {
+      "mc_yandex_mentions": 0,
+      "ym_init_calls": 0,
+      "data_metrika_counter": [],
+      "noscript_pixels": [],
+      "bytes": 53280
+    },
+    "/catalog/": {
+      "mc_yandex_mentions": 0,
+      "ym_init_calls": 0,
+      "data_metrika_counter": [],
+      "noscript_pixels": [],
+      "bytes": 92888
+    },
+    "/new/": {
+      "mc_yandex_mentions": 0,
+      "ym_init_calls": 0,
+      "data_metrika_counter": [],
+      "noscript_pixels": [],
+      "bytes": 95800
+    }
+  },
+  "verdict": "PASS",
+  "failures": [],
+  "note": "Счётчик витрине не выдан, и страница не содержит тега вовсе — ни скрипта, ни noscript-пикселя, ни атрибута. Это и есть разница между «счётчика нет» и «тег, который молчит»."
+}

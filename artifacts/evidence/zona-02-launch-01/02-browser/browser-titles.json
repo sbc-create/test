@@ -1,0 +1,225 @@
+{
+  "origin": "http://zonafilm.cc:9123",
+  "host": "zonafilm.cc",
+  "widths": [
+    390,
+    1440
+  ],
+  "routes": [
+    "/title/neprimetnyy/",
+    "/title/40-dney-2/"
+  ],
+  "pages": {
+    "/title/neprimetnyy/": {
+      "390": {
+        "width": 390,
+        "status": 200,
+        "metrics": {
+          "lcp": 1668,
+          "cls": 0,
+          "longtasks": 4,
+          "ttfb": 1165.1999999955297,
+          "domContentLoaded": 1484.3999999985099,
+          "transferSize": 67742
+        },
+        "inspect": {
+          "overflow_px": 0,
+          "wide_elements": [],
+          "images": 14,
+          "broken_images": [],
+          "links": 34,
+          "small_targets": 2,
+          "controls_without_label": 0,
+          "h1": 1,
+          "title": "Неприметный — смотреть онлайн — Zona",
+          "robots": "noindex, nofollow",
+          "canonical": "https://zonafilm.cc/title/neprimetnyy/"
+        },
+        "keyboard": {
+          "focused": "A.skip",
+          "outline": "solid 3px",
+          "boxShadow": "none",
+          "visible": true,
+          "inViewport": true
+        },
+        "interaction_ms": 138.8,
+        "screenshot": "title-neprimetnyy-390.png",
+        "console_errors": [],
+        "failed_requests": [
+          {
+            "url": "https://plapi.cdnvideohub.com/",
+            "failure": "net::ERR_ABORTED"
+          }
+        ],
+        "response_codes": {
+          "200": 33,
+          "302": 4
+        }
+      },
+      "1440": {
+        "width": 1440,
+        "status": 200,
+        "metrics": {
+          "lcp": 1412,
+          "cls": 6.858543113425926e-05,
+          "longtasks": 3,
+          "ttfb": 1124.6000000014901,
+          "domContentLoaded": 1151,
+          "transferSize": 67742
+        },
+        "inspect": {
+          "overflow_px": 0,
+          "wide_elements": [],
+          "images": 14,
+          "broken_images": [],
+          "links": 34,
+          "small_targets": 2,
+          "controls_without_label": 0,
+          "h1": 1,
+          "title": "Неприметный — смотреть онлайн — Zona",
+          "robots": "noindex, nofollow",
+          "canonical": "https://zonafilm.cc/title/neprimetnyy/"
+        },
+        "keyboard": {
+          "focused": "A.skip",
+          "outline": "solid 3px",
+          "boxShadow": "none",
+          "visible": true,
+          "inViewport": true
+        },
+        "interaction_ms": null,
+        "interaction_error": "TimeoutError",
+        "screenshot": "title-neprimetnyy-1440.png",
+        "console_errors": [],
+        "failed_requests": [
+          {
+            "url": "https://plapi.cdnvideohub.com/",
+            "failure": "net::ERR_ABORTED"
+          },
+          {
+            "url": "https://api.mycdn.me/fb.do",
+            "failure": "net::ERR_ABORTED"
+          }
+        ],
+        "response_codes": {
+          "200": 39,
+          "302": 4
+        }
+      }
+    },
+    "/title/40-dney-2/": {
+      "390": {
+        "width": 390,
+        "status": 200,
+        "metrics": {
+          "lcp": 2084,
+          "cls": 0,
+          "longtasks": 3,
+          "ttfb": 1767.8999999985099,
+          "domContentLoaded": 1820.2000000029802,
+          "transferSize": 67155
+        },
+        "inspect": {
+          "overflow_px": 0,
+          "wide_elements": [],
+          "images": 14,
+          "broken_images": [],
+          "links": 34,
+          "small_targets": 2,
+          "controls_without_label": 0,
+          "h1": 1,
+          "title": "40 дней — смотреть онлайн — Zona",
+          "robots": "noindex, nofollow",
+          "canonical": "https://zonafilm.cc/title/40-dney-2/"
+        },
+        "keyboard": {
+          "focused": "A.skip",
+          "outline": "solid 3px",
+          "boxShadow": "none",
+          "visible": true,
+          "inViewport": true
+        },
+        "interaction_ms": 134.2,
+        "screenshot": "title-40-dney-2-390.png",
+        "console_errors": [],
+        "failed_requests": [
+          {
+            "url": "https://plapi.cdnvideohub.com/",
+            "failure": "net::ERR_ABORTED"
+          }
+        ],
+        "response_codes": {
+          "200": 33,
+          "302": 4
+        }
+      },
+      "1440": {
+        "width": 1440,
+        "status": 200,
+        "metrics": {
+          "lcp": 1492,
+          "cls": 6.858543113425926e-05,
+          "longtasks": 4,
+          "ttfb": 1192.1000000014901,
+          "domContentLoaded": 1269,
+          "transferSize": 67155
+        },
+        "inspect": {
+          "overflow_px": 0,
+          "wide_elements": [],
+          "images": 14,
+          "broken_images": [],
+          "links": 34,
+          "small_targets": 2,
+          "controls_without_label": 0,
+          "h1": 1,
+          "title": "40 дней — смотреть онлайн — Zona",
+          "robots": "noindex, nofollow",
+          "canonical": "https://zonafilm.cc/title/40-dney-2/"
+        },
+        "keyboard": {
+          "focused": "A.skip",
+          "outline": "solid 3px",
+          "boxShadow": "none",
+          "visible": true,
+          "inViewport": true
+        },
+        "interaction_ms": null,
+        "interaction_error": "TimeoutError",
+        "screenshot": "title-40-dney-2-1440.png",
+        "console_errors": [],
+        "failed_requests": [
+          {
+            "url": "https://plapi.cdnvideohub.com/",
+            "failure": "net::ERR_ABORTED"
+          },
+          {
+            "url": "https://api.mycdn.me/fb.do",
+            "failure": "net::ERR_ABORTED"
+          }
+        ],
+        "response_codes": {
+          "200": 40,
+          "302": 4
+        }
+      }
+    }
+  },
+  "started_at": "2026-09-23T06:44:06Z",
+  "host_resolver_rules": "MAP zonafilm.cc 127.0.0.1, MAP www.zonafilm.cc 127.0.0.1",
+  "summary": {
+    "pages_measured": 4,
+    "console_errors": 0,
+    "failed_requests": 6,
+    "broken_images": 0,
+    "horizontal_overflow_pages": [],
+    "http_5xx": 0,
+    "http_4xx": 0,
+    "lcp_p75_ms": 2084,
+    "cls_max": 0.0001,
+    "keyboard_focus_visible_pages": 4,
+    "controls_without_label": 0,
+    "errors": []
+  },
+  "finished_at": "2026-09-23T06:44:40Z"
+}

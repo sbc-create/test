@@ -150,20 +150,76 @@ echo
 echo "== Шаг 1. Юнит витрины =="
 
 # Собственный проверочный процесс сессии, если он ещё жив, обязан уйти:
-# иначе юнит не получит порт. Ищется ровно процесс этой витрины.
-PIDS=$(pgrep -f "sites/$SITE_ID/releases/.*lords-frontend.py --port $PORT" || true)
+# иначе юнит не получит порт.
+#
+# Поиск идёт по argv, а не подстрокой командной строки. Прежняя форма
+# (`pgrep -f "sites/…/releases/.*lords-frontend.py --port 9123"`) находила
+# лишнее: под шаблон попадал любой процесс, в чьей командной строке эта
+# строка просто встретилась — например оболочка, которая его же и ищет.
+# `kill` по такому списку убивает не витрину. Проверено прямо: шаблон дал
+# два совпадения там, где витрина одна.
+#
+# Здесь совпадение требует структуры: argv[1] оканчивается на
+# lords-frontend.py и лежит в каталоге релизов ЭТОЙ витрины, argv[2] это
+# --port, argv[3] это её порт. Соседние витрины и репетиционные экземпляры
+# на других портах под это не подходят.
+find_own_process() {
+  python3 - "$SITE_ID" "$PORT" <<'PYEOF'
+import sys
+from pathlib import Path
+
+site_id, port = sys.argv[1], sys.argv[2]
+marker = f"/sites/{site_id}/releases/"
+for entry in Path("/proc").iterdir():
+    if not entry.name.isdigit():
+        continue
+    try:
+        argv = (entry / "cmdline").read_bytes().decode("utf-8", "replace").split("\0")
+    except OSError:
+        continue
+    argv = [a for a in argv if a]
+    if (len(argv) >= 4 and argv[1].endswith("lords-frontend.py")
+            and marker in argv[1] and argv[2] == "--port" and argv[3] == port):
+        print(entry.name)
+PYEOF
+}
+
+PIDS=$(find_own_process || true)
 if [ -n "$PIDS" ]; then
   say "проверочный процесс сессии" "останавливается: $PIDS"
+  # shellcheck disable=SC2086
   kill $PIDS || true
-  for _ in $(seq 1 40); do sleep 0.5; pgrep -f "sites/$SITE_ID/releases/.*--port $PORT" >/dev/null || break; done
+  for _ in $(seq 1 60); do
+    sleep 0.5
+    [ -z "$(find_own_process || true)" ] && break
+  done
+  if [ -n "$(find_own_process || true)" ]; then
+    fail "проверочный процесс не остановился: порт $PORT останется занят, и юнит его не получит"
+  fi
+  say "порт $PORT" "освобождён"
 fi
 
+# Повторный запуск — штатное событие: первый мог остановиться на записи DNS.
+# Поэтому отслеживается, что именно сделал ИМЕННО ЭТОТ запуск: откатывать
+# чужую установку он не вправе.
+UNIT_WAS_PRESENT=0
+[ -f "$UNIT_DST" ] && UNIT_WAS_PRESENT=1
+UNIT_WAS_ACTIVE=0
+systemctl is-active --quiet "$UNIT" && UNIT_WAS_ACTIVE=1
+
 install -m 0644 -o root -g root "$UNIT_SRC" "$UNIT_DST"
-DID_INSTALL_UNIT=1
+[ "$UNIT_WAS_PRESENT" = 0 ] && DID_INSTALL_UNIT=1
 systemctl daemon-reload
 systemctl enable --now "$UNIT"
-DID_ENABLE_UNIT=1
-say "юнит" "установлен и запущен"
+[ "$UNIT_WAS_ACTIVE" = 0 ] && DID_ENABLE_UNIT=1
+if [ "$UNIT_WAS_ACTIVE" = 1 ]; then
+  # Файл юнита мог смениться вместе с релизом — перечитать и перезапустить,
+  # иначе служба продолжит исполнять прежний ExecStart.
+  systemctl restart "$UNIT"
+  say "юнит" "уже работал: обновлён и перезапущен"
+else
+  say "юнит" "установлен и запущен"
+fi
 
 echo "Ожидание готовности (до ${START_TIMEOUT} с; старт читает 89 МиБ данных)…"
 READY=0
@@ -182,6 +238,14 @@ EXPECT=$(python3 -c "import json;print(json.load(open('$RELEASE/template-manifes
 [ "$BUILD" = "$EXPECT" ] || fail "витрина отдаёт build-id '$BUILD', а релиз объявляет '$EXPECT'"
 say "X-Site-Factory-Build-Id" "$BUILD"
 
+# Служба поднята и проверена. Это самостоятельный результат, и он не
+# откатывается из-за того, что следующий шаг ещё невозможен: витрина с
+# автозапуском — ровно то, что требовалось, а сертификат и vhost зависят от
+# записи DNS, которой распоряжается не этот хост.
+DID_INSTALL_UNIT=0
+DID_ENABLE_UNIT=0
+say "служба" "установлена, включена в автозапуск, проверена"
+
 echo
 echo "== Шаг 2. Сертификат =="
 if [ -f "$CERT" ]; then
@@ -191,13 +255,30 @@ elif [ "$DNS_OK" = 1 ]; then
   [ -f "$CERT" ] || fail "certbot отработал, но $CERT не появился"
   say "сертификат" "выпущен"
 else
-  fail "записи A нет: HTTP-01 не пройдёт. Создайте A для $DOMAIN и $WWW на $ORIGIN_IPV4 (DNS only) и запустите снова — юнит уже поднят и повторный запуск его не тронет"
+  echo
+  echo "Записи A для $DOMAIN нет, и на этом остановимся — но не откатимся."
+  echo
+  echo "Сделано и остаётся сделанным:"
+  echo "  * $UNIT установлен, включён в автозапуск и отвечает 200 на /healthz;"
+  echo "  * витрина исполняет релиз $(basename "$RELEASE");"
+  echo "  * данные на месте, индексация закрыта."
+  echo
+  echo "Не сделано: сертификат и vhost. Оба зависят от записи DNS:"
+  echo "  A    $DOMAIN       $ORIGIN_IPV4   Proxy status: DNS only"
+  echo "  A    $WWW   $ORIGIN_IPV4   Proxy status: DNS only"
+  echo
+  echo "Создайте записи и запустите эту же команду снова. Повтор не тронет"
+  echo "поднятый юнит и продолжит с сертификата."
+  trap - EXIT
+  exit 0
 fi
 
 echo
 echo "== Шаг 3. vhost =="
+VHOST_WAS_PRESENT=0
+[ -f "$VHOST_DST" ] && VHOST_WAS_PRESENT=1
 install -m 0644 -o root -g root "$VHOST_SRC" "$VHOST_DST"
-DID_INSTALL_VHOST=1
+[ "$VHOST_WAS_PRESENT" = 0 ] && DID_INSTALL_VHOST=1
 nginx -t
 systemctl reload nginx
 say "nginx" "конфигурация принята, перечитана"

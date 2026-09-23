@@ -1,0 +1,87 @@
+{
+  "origin": "http://zonafilm.cc:9425",
+  "host": "zonafilm.cc",
+  "expected_counter": "99999999",
+  "pages": {
+    "/": {
+      "metrika_requests": [
+        "https://mc.yandex.ru/metrika/tag.js"
+      ],
+      "metrika_request_count": 1,
+      "counter_ids_in_requests": [],
+      "counter_ids_in_markup": [
+        "99999999"
+      ],
+      "counter_ids_in_browser_queue": [
+        "99999999"
+      ],
+      "queue_calls": [
+        [
+          99999999,
+          "init",
+          {
+            "trackLinks": true,
+            "accurateTrackBounce": true,
+            "webvisor": false
+          }
+        ]
+      ],
+      "noscript_pixel": [
+        "https://mc.yandex.ru/watch/99999999"
+      ],
+      "counter_ids_in_noscript": [
+        "99999999"
+      ],
+      "init_calls": 1,
+      "foreign_counter_anywhere": [],
+      "other_external_requests": [
+        "https://poster.cdnvideohub.com/01a0c2da-6f92-7526-a1cd-5c07cc7f2f1c.webp",
+        "https://poster.cdnvideohub.com/01a0c2dc-3806-7526-8c48-49027383dd62.webp",
+        "https://poster.cdnvideohub.com/01a0c2de-6e3b-7526-878a-cf52b98bca17.webp",
+        "https://poster.cdnvideohub.com/01a0c2e0-09a6-7526-922f-de7d6b7214db.webp",
+        "https://poster.cdnvideohub.com/01a0c40c-a469-71fc-8b4d-2296910ca083.webp"
+      ]
+    },
+    "/catalog/": {
+      "metrika_requests": [
+        "https://mc.yandex.ru/metrika/tag.js"
+      ],
+      "metrika_request_count": 1,
+      "counter_ids_in_requests": [],
+      "counter_ids_in_markup": [
+        "99999999"
+      ],
+      "counter_ids_in_browser_queue": [
+        "99999999"
+      ],
+      "queue_calls": [
+        [
+          99999999,
+          "init",
+          {
+            "trackLinks": true,
+            "accurateTrackBounce": true,
+            "webvisor": false
+          }
+        ]
+      ],
+      "noscript_pixel": [
+        "https://mc.yandex.ru/watch/99999999"
+      ],
+      "counter_ids_in_noscript": [
+        "99999999"
+      ],
+      "init_calls": 1,
+      "foreign_counter_anywhere": [],
+      "other_external_requests": [
+        "https://poster.cdnvideohub.com/019baed3-9666-7cf4-a608-1240f5f88313.webp",
+        "https://poster.cdnvideohub.com/019bfaaf-b168-7b53-82c1-d235d2bb900d.webp",
+        "https://poster.cdnvideohub.com/019c18b2-7799-77c7-8797-ba685c721100.webp",
+        "https://poster.cdnvideohub.com/019c2cab-4f9e-718f-bd34-dfb2a3423fd5.webp",
+        "https://poster.cdnvideohub.com/019d1441-d17a-78d8-acb2-baedb1a7c79a.webp"
+      ]
+    }
+  },
+  "failures": [],
+  "verdict": "PASS"
+}
