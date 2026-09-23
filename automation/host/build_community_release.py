@@ -25,7 +25,7 @@ import sys
 REPO = pathlib.Path(__file__).resolve().parents[2]
 RELEASES = pathlib.Path("/srv/lords/.frontend/releases")
 BASE_ID = "20260922T143111Z-efdef56-animedia-parity"
-NEW_ID = "20260923T090000Z-community-one-vote-07"
+NEW_ID = "20260923T104500Z-community-main-score-11"
 BASE, NEW = RELEASES / BASE_ID, RELEASES / NEW_ID
 
 
@@ -485,6 +485,176 @@ RAIL_KEY_PATCH = '''        свои_голоса = 0
             свои_средняя = с.средняя'''
 
 
+# --- 9. единый главный рейтинг ---------------------------------------------
+# Одна функция на главную карточку, обсуждение и карточки каталога. Три
+# независимых вычисления одного и того же неизбежно разойдутся, и посетитель
+# увидит на соседних экранах разные числа про одно кино.
+EXT_HELPER_ANCHOR = '''def сводная_оценка(деталь: dict) -> dict | None:'''
+EXT_HELPER_PATCH = '''def внешние_для_базы(деталь: dict) -> dict:
+    """Внешние оценки как {ключ: {"value", "scale"}} для выбора базы.
+
+    Оценка самой витрины сюда не попадает: база обязана быть ВНЕШНЕЙ, иначе
+    мнение наших же зрителей вошло бы в формулу дважды — и базой, и голосами.
+    Исходные значения источников не изменяются, только читаются.
+    """
+    итог = {}
+    for о in оценки_по_источникам(деталь):
+        if о.get("пользовательская"):
+            continue
+        итог[о["ключ"]] = {"value": о["значение"], "scale": о["шкала"]}
+    return итог
+
+
+def главный_рейтинг_тайтла(деталь: dict) -> dict | None:
+    """Единый результат расчёта для этой записи, или None если считать нечем."""
+    ключ = str(деталь.get("id") or "").strip()
+    if not ключ:
+        return None
+    try:
+        хранилище = сообщество()
+        if хранилище is None or not getattr(хранилище, "доступно", False):
+            return None
+        return хранилище.главный_рейтинг(ключ, внешние_для_базы(деталь))
+    except Exception:
+        return None
+
+
+def сводная_оценка(деталь: dict) -> dict | None:'''
+
+# Главная карточка: крупное число — главный рейтинг, личная оценка отдельно.
+RAIL_MAIN_ANCHOR = '''        сводная = сводная_оценка(деталь)
+        if сводная:'''
+RAIL_MAIN_PATCH = '''        главный = главный_рейтинг_тайтла(деталь)
+        сводная = сводная_оценка(деталь)
+        if главный and главный.get("значение") is not None:
+            число = (f'<span class="ztitle__score-val">'
+                     f'{главный["значение"]:g}</span>')
+            состав = {
+                "base+votes": f'внешняя база и {главный["голосов"]} '
+                              f'{"голос" if главный["голосов"] == 1 else "голосов"} зрителей',
+                "base-only": "внешняя база, зрители ещё не голосовали",
+                "votes-only": f'{главный["голосов"]} '
+                              f'{"голос" if главный["голосов"] == 1 else "голосов"} зрителей',
+            }.get(главный["состояние"], "")
+            строка = f'{АНИМЕДИА_СВОДНАЯ_ПОДПИСЬ} · {состав}'
+            основа = главный.get("база") or {}
+            атрибуты = (
+                ' data-main-score="1"'
+                f' data-main-value="{главный["значение"]:g}"'
+                f' data-main-state="{html.escape(главный["состояние"])}"'
+                f' data-main-formula="{html.escape(главный["формула"])}"'
+                f' data-main-weight="{главный["вес"]}"'
+                f' data-native-count="{главный["голосов"]}"'
+                + (f' data-base-value="{основа.get("value")}"'
+                   f' data-base-source="{html.escape(str(основа.get("source") or ""))}"'
+                   if основа else "")
+                + (' data-base-drifted="1"' if главный.get("база_разошлась") else "")
+                + (' data-base-provisional="1"' if главный.get("база_предварительная") else ""))
+        elif сводная:'''
+
+# Расхождение закреплённой базы с текущей внешней — отдельной строкой.
+RAIL_DRIFT_ANCHOR = '''        return (
+            f'<aside class="ztitle__rail" data-b07="ratings">\''''
+RAIL_DRIFT_PATCH = '''        дрейф = ""
+        if главный and главный.get("база_разошлась"):
+            сейчас = главный.get("внешняя_сейчас") or {}
+            была = главный.get("база") or {}
+            дрейф = (
+                f'<p class="ztitle__basedrift" data-base-drift="1">'
+                f'База рейтинга закреплена при первом голосе: '
+                f'{html.escape(str(была.get("source") or ""))} '
+                f'{была.get("value")}. Сейчас источник даёт '
+                f'{сейчас.get("value")} — это показано отдельно и '
+                f'закреплённую базу не меняет.</p>')
+        return (
+            f'<aside class="ztitle__rail" data-b07="ratings">\''''
+
+RAIL_DRIFT_INSERT_ANCHOR = '''            f'{своя_строка}\''''
+RAIL_DRIFT_INSERT_PATCH = '''            f'{своя_строка}{дрейф}\''''
+
+# Обсуждение: то же число, что на карточке.
+DISCUSS_ANCHOR = '''        проголосовал = с.мой_голос is not None'''
+DISCUSS_PATCH = '''        главный_в_обсуждении = главный_рейтинг_тайтла(деталь)
+        проголосовал = с.мой_голос is not None'''
+
+DISCUSS_SHOW_ANCHOR = '''        свод = (f'<b>{с.средняя:g}</b><span>из 10 · {с.голосов} '
+                f'{"голос" if с.голосов == 1 else "голосов"}</span>'
+                if с.средняя is not None else
+                '<span class="acomm__none">Оценок посетителей пока нет</span>')'''
+DISCUSS_SHOW_PATCH = '''        # Главный рейтинг сайта — тот же, что на карточке и в каталоге.
+        # Рядом, но отдельно, среднее самих посетителей: это разные величины,
+        # и показывать одну вместо другой значит путать их между собой.
+        if главный_в_обсуждении and главный_в_обсуждении.get("значение") is not None:
+            г = главный_в_обсуждении
+            своё = (f' · зрители {с.средняя:g} по {с.голосов}'
+                    if с.средняя is not None else "")
+            свод = (f'<b data-main-value="{г["значение"]:g}">{г["значение"]:g}</b>'
+                    f'<span data-main-state="{html.escape(г["состояние"])}">'
+                    f'рейтинг сайта{своё}</span>')
+        else:
+            свод = (f'<b>{с.средняя:g}</b><span>из 10 · {с.голосов} '
+                    f'{"голос" if с.голосов == 1 else "голосов"}</span>'
+                    if с.средняя is not None else
+                    '<span class="acomm__none">Оценок посетителей пока нет</span>')'''
+
+# Карточка каталога: то же число.
+CARD_ANCHOR = '''    свод = сводная_оценка(деталь)
+    класс = "zt__score" + (" zt__score--row" if строкой else "")'''
+CARD_PATCH = '''    # Тот же главный рейтинг, что на странице произведения. Иначе посетитель
+    # видит в каталоге одно число, а внутри другое — про одно и то же кино.
+    главный_к = главный_рейтинг_тайтла(деталь)
+    свод = сводная_оценка(деталь)
+    класс = "zt__score" + (" zt__score--row" if строкой else "")
+    if главный_к and главный_к.get("значение") is not None:
+        состав = {
+            "base+votes": f\'внешняя база и {главный_к["голосов"]} зрит.\',
+            "base-only": "внешняя база",
+            "votes-only": f\'{главный_к["голосов"]} зрит.\',
+        }.get(главный_к["состояние"], "")
+        подсказка_г = (f\'Рейтинг Animedia {главный_к["значение"]:g} из 10 · \'
+                       f\'{состав}\')
+        return (f\'<span class="{класс}" data-score-state="value" \'
+                f\'data-main-score="1" \'
+                f\'data-score="{главный_к["значение"]:g}" \'
+                f\'data-main-value="{главный_к["значение"]:g}" \'
+                f\'data-main-state="{html.escape(главный_к["состояние"])}" \'
+                f\'data-native-count="{главный_к["голосов"]}" \'
+                f\'data-score-method="{html.escape(главный_к["формула"])}" \'
+                f\'title="{html.escape(подсказка_г)}">\'
+                f\'<b aria-hidden="true">{главный_к["значение"]:g}</b>\'
+                f\'<span class="vh">{html.escape(подсказка_г)}</span></span>\')'''
+
+# Голос фиксирует базу: обработчику нужны внешние оценки этой записи.
+VOTE_EXT_ANCHOR = '''                if значение == 0:
+                    хранилище.снять_голос(subject, ключ, slug=slug)
+                else:
+                    хранилище.добавить_голос(subject, значение, ключ, slug=slug)'''
+VOTE_EXT_PATCH = '''                if значение == 0:
+                    хранилище.снять_голос(subject, ключ, slug=slug)
+                else:
+                    # Внешние оценки передаются в момент голоса: база
+                    # закрепляется первым голосом и потом не меняется.
+                    хранилище.добавить_голос(
+                        subject, значение, ключ, slug=slug,
+                        внешние=внешние_для_базы(self.вид().деталь(slug) or {}))'''
+
+# Описание методики в раскрытии осталось от прежней сводной и теперь неверно:
+# главное число включает голоса зрителей, а текст утверждает обратное. Текст,
+# расходящийся с формулой, хуже отсутствующего — на него ссылаются.
+METHOD_TEXT_ANCHOR = '''            f\'<p class="ztitle__method">Сводная считается по подтверждённым \'
+            f\'источникам с весом по числу голосов. Оценки посетителей витрины \'
+            f\'в неё не входят.</p>\''''
+METHOD_TEXT_PATCH = '''            f\'<p class="ztitle__method">Главный рейтинг считается по формуле \'
+            f\'(вес×база + сумма оценок зрителей) / (вес + число зрителей). \'
+            f\'База — внешняя оценка, выбранная по подтверждённому приоритету \'
+            f\'источников и закреплённая при первом голосе зрителя; позже она \'
+            f\'не меняется, а обновления источников показываются отдельно. \'
+            f\'Вес базы — {СООБЩЕСТВО.ВЕС_БАЗЫ}, и это настройка формулы, \'
+            f\'а не голоса: отдельно посчитанных зрителей столько, сколько их \'
+            f\'есть на самом деле. Список источников ниже — исходные значения, \'
+            f\'они не изменяются.</p>\''''
+
+
 def main() -> int:
     if not BASE.is_dir():
         die(f"base release missing: {BASE}")
@@ -536,6 +706,17 @@ def main() -> int:
     src = replace_once(src, RENDER_ERR_ANCHOR, RENDER_ERR_PATCH, "vote error reason")
     src = replace_once(src, VOTE_ERR_ANCHOR, VOTE_ERR_PATCH, "vote error state")
     src = replace_once(src, VOTE_UI_ANCHOR, VOTE_UI_PATCH, "one vote UI")
+
+    # Единый главный рейтинг на карточке, в обсуждении и в каталоге.
+    src = replace_once(src, EXT_HELPER_ANCHOR, EXT_HELPER_PATCH, "main score helpers")
+    src = replace_once(src, RAIL_MAIN_ANCHOR, RAIL_MAIN_PATCH, "main card score")
+    src = replace_once(src, RAIL_DRIFT_ANCHOR, RAIL_DRIFT_PATCH, "base drift notice")
+    src = replace_once(src, RAIL_DRIFT_INSERT_ANCHOR, RAIL_DRIFT_INSERT_PATCH, "drift slot")
+    src = replace_once(src, DISCUSS_ANCHOR, DISCUSS_PATCH, "discussion main score")
+    src = replace_once(src, DISCUSS_SHOW_ANCHOR, DISCUSS_SHOW_PATCH, "discussion summary")
+    src = replace_once(src, CARD_ANCHOR, CARD_PATCH, "catalog card score")
+    src = replace_once(src, VOTE_EXT_ANCHOR, VOTE_EXT_PATCH, "vote fixes base")
+    src = replace_once(src, METHOD_TEXT_ANCHOR, METHOD_TEXT_PATCH, "method text")
 
     # Колонка рейтингов витрины уже отделяет голоса посетителей от импорта и
     # не пускает их в сводную. Сломан был только ключ: она искала их по адресу.
