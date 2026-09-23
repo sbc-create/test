@@ -22,6 +22,7 @@ root-овой копии пакета, и меняются только пере
 """
 from __future__ import annotations
 
+import json
 import os
 import pwd
 import shutil
@@ -172,6 +173,74 @@ def prepare(site_id: str, *, dry_run: bool = True) -> dict[str, Any]:
             "account_existed": есть, "steps": шаги}
 
 
+#: Настройка МЕСТА: в артефакте её нет намеренно, а без неё витрина не стартует.
+#:
+#: `config/player.json` содержит publisher_id витрины, поэтому сборщик исключает
+#: его явно (`SKIP_FILES`), а `run.py` отказывается стартовать, если сайт объявил
+#: ожидаемый publisher_id. Первый настоящий выпуск из-за этого развернулся, но
+#: кандидат не поднялся: «нет config/player.json: плеер без publisher_id не
+#: заработает». Это не ошибка сборщика и не ошибка витрины — это настройка места,
+#: и переносить её обязан тот, кто ставит выпуск.
+ФАЙЛ_ПЛЕЕРА = "config/player.json"
+
+#: Каталог производителя, где лежит plеер каждой витрины. Нужен для ПЕРВОГО
+#: выпуска, когда действующего ещё нет и переносить неоткуда.
+#:
+#: Подмену это не открывает: сайт сам сверяет publisher_id из этого файла с
+#: `publisher_id_expected`, а тот приходит в артефакте, чей digest уже проверен
+#: по прогону CI. Не совпало — кандидат не проходит проверку готовности и
+#: трафик не получает.
+ПЛЕЕР_ПРОИЗВОДИТЕЛЯ = Path("/srv/lords/.frontend")
+
+
+def _плеер_обязателен(выпуск: Path) -> bool:
+    """Требует ли витрина файла плеера.
+
+    У витрин Yummy воспроизведением занимается верхний поток Next.js, своего
+    `player.json` у них нет и не должно быть. Требовать его со всех значило бы
+    заваливать исправную конфигурацию, поэтому вопрос задаётся конфигурации
+    САМОЙ ВИТРИНЫ, а не семейству по имени.
+    """
+    конфиг = выпуск / "config" / "site.json"
+    if not конфиг.is_file():
+        return False
+    try:
+        данные = json.loads(конфиг.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return False
+    return bool(str(данные.get("publisher_id_expected") or "").strip())
+
+
+def _перенести_локальную_настройку(выпуск: Path, п: Площадка) -> list[str]:
+    """Взять настройку места в новый выпуск.
+
+    Источники строго перечислены и все — root-side константы: действующий
+    выпуск площадки, её рабочий каталог, каталог производителя. Ни одного пути
+    из заявки или из манифеста репозитория: иначе «перенести настройку»
+    означало бы «прочитать любой файл от root и положить его на сайт».
+    """
+    if not _плеер_обязателен(выпуск):
+        return []
+    цель = выпуск / ФАЙЛ_ПЛЕЕРА
+    if цель.exists():
+        return []
+    источники = [п.current / ФАЙЛ_ПЛЕЕРА, п.app / ФАЙЛ_ПЛЕЕРА,
+                 ПЛЕЕР_ПРОИЗВОДИТЕЛЯ / f"player-{п.site_id}.json"]
+    for откуда in источники:
+        # Ссылку не берём: она увела бы за пределы перечисленных источников.
+        if not откуда.is_file() or откуда.is_symlink():
+            continue
+        цель.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(откуда, цель)
+        shutil.chown(цель, п.account, п.account)
+        os.chmod(цель, 0o600)
+        return [ФАЙЛ_ПЛЕЕРА]
+    raise PrivilegedRefused(
+        f"{п.site_id}: витрина объявляет publisher_id, но {ФАЙЛ_ПЛЕЕРА} не найден "
+        f"ни в действующем выпуске, ни у производителя. Без него витрина не "
+        "стартует — выкладывать нечего")
+
+
 def install_release(site_id: str, артефакт: Path, digest: str, *,
                     commit: str = "", dry_run: bool = True,
                     path: Path | None = None) -> dict[str, Any]:
@@ -210,6 +279,7 @@ def install_release(site_id: str, артефакт: Path, digest: str, *,
     for путь in временный.rglob("*"):
         shutil.chown(путь, п.account, п.account)
     shutil.chown(временный, п.account, п.account)
+    перенесено = _перенести_локальную_настройку(временный, п)
     if выпуск.exists():
         shutil.rmtree(выпуск)
     временный.rename(выпуск)
@@ -221,7 +291,8 @@ def install_release(site_id: str, артефакт: Path, digest: str, *,
     врем_ссылка.symlink_to(выпуск)
     os.replace(врем_ссылка, п.candidate)
     return {"operation": "install_release", "site_id": site_id, "dry_run": False,
-            "digest": факт, "release": str(выпуск), "candidate_link": str(п.candidate)}
+            "digest": факт, "release": str(выпуск), "candidate_link": str(п.candidate),
+            "local_config": перенесено}
 
 
 def promote(site_id: str, *, dry_run: bool = True, предел: int = 600,

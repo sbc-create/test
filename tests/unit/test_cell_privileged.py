@@ -13,6 +13,7 @@ root. Проверки коммита, чистого дерева и CI это�
 from __future__ import annotations
 
 import io
+import json
 import sys
 import tarfile
 from pathlib import Path
@@ -140,3 +141,77 @@ def test_мутация_требует_root(tmp_path):
     with pytest.raises(privileged.PrivilegedRefused) as ош:
         privileged.install_release("zona-01", архив, digest, dry_run=False)
     assert "root" in str(ош.value)
+
+
+def _площадка(tmp_path, site_id="zona-01"):
+    корень = tmp_path / "srv" / "site"
+    (корень / "app" / "config").mkdir(parents=True)
+    return privileged.Площадка(site_id=site_id, account="nobody", root=корень,
+                               app=корень / "app", data=корень / "data",
+                               unit="u.service", previous_unit="", port=9000)
+
+
+def _выпуск(tmp_path, *, publisher="777"):
+    выпуск = tmp_path / "release"
+    (выпуск / "config").mkdir(parents=True)
+    (выпуск / "config" / "site.json").write_text(
+        json.dumps({"site_id": "zona-01", "publisher_id_expected": publisher}),
+        encoding="utf-8")
+    return выпуск
+
+
+def test_настройка_места_переносится_из_действующего_выпуска(tmp_path, monkeypatch):
+    """`config/player.json` в артефакт не входит намеренно, а без него не стартуют.
+
+    Сборщик исключает его явно: он содержит publisher_id витрины и не живёт в
+    репозитории. Первый настоящий выпуск из-за этого развернулся, но кандидат
+    не поднялся — «плеер без publisher_id не заработает».
+    """
+    п = _площадка(tmp_path)
+    (п.app / "config" / "player.json").write_text("{}", encoding="utf-8")
+    выпуск = _выпуск(tmp_path)
+    monkeypatch.setattr(privileged.shutil, "chown", lambda *a, **k: None)
+    assert privileged._перенести_локальную_настройку(выпуск, п) == ["config/player.json"]
+    перенесённый = выпуск / "config" / "player.json"
+    assert перенесённый.is_file()
+    assert перенесённый.stat().st_mode & 0o777 == 0o600, "режим настройки не ослабляется"
+
+
+def test_первый_выпуск_берёт_плеер_у_производителя(tmp_path, monkeypatch):
+    """Действующего выпуска ещё нет — переносить неоткуда, но файл существует."""
+    п = _площадка(tmp_path)
+    произв = tmp_path / "frontend"
+    произв.mkdir()
+    (произв / "player-zona-01.json").write_text("{}", encoding="utf-8")
+    monkeypatch.setattr(privileged, "ПЛЕЕР_ПРОИЗВОДИТЕЛЯ", произв)
+    monkeypatch.setattr(privileged.shutil, "chown", lambda *a, **k: None)
+    assert privileged._перенести_локальную_настройку(_выпуск(tmp_path), п) == [
+        "config/player.json"]
+
+
+def test_витрина_без_плеера_не_требует_его(tmp_path):
+    """У Yummy воспроизведением занимается верхний поток: своего плеера нет.
+
+    Требовать его со всех значило бы заваливать исправную конфигурацию.
+    """
+    п = _площадка(tmp_path, site_id="yummy-biz")
+    assert privileged._перенести_локальную_настройку(
+        _выпуск(tmp_path, publisher=""), п) == []
+
+
+def test_отсутствие_настройки_места_это_отказ(tmp_path, monkeypatch):
+    """Молча поставить выпуск, который не стартует, хуже отказа."""
+    п = _площадка(tmp_path)
+    monkeypatch.setattr(privileged, "ПЛЕЕР_ПРОИЗВОДИТЕЛЯ", tmp_path / "нет")
+    with pytest.raises(privileged.PrivilegedRefused, match="витрина не стартует"):
+        privileged._перенести_локальную_настройку(_выпуск(tmp_path), п)
+
+
+def test_настройка_из_артефакта_не_подменяется(tmp_path):
+    """Если выпуск принёс файл сам — он и остаётся; перенос ничего не затирает."""
+    п = _площадка(tmp_path)
+    (п.app / "config" / "player.json").write_text("старое", encoding="utf-8")
+    выпуск = _выпуск(tmp_path)
+    (выпуск / "config" / "player.json").write_text("своё", encoding="utf-8")
+    assert privileged._перенести_локальную_настройку(выпуск, п) == []
+    assert (выпуск / "config" / "player.json").read_text(encoding="utf-8") == "своё"

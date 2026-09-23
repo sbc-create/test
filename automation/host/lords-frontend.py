@@ -912,7 +912,7 @@ place-items:center;border-radius:0 0 4px 4px;overflow:hidden}
 border-radius:3px;font-size:13px;font-weight:600;background:#fff;color:#3f4750}
 .eps a:hover{border-color:@ACC@;color:@ACCDK@}
 .eps a[aria-current]{background:@ACC@;border-color:@ACC@;color:#fff}
-.eps a[data-off]{color:@MUTE@;background:#f3f5f7}
+.eps [data-off]{color:@MUTE@;background:#f3f5f7;cursor:default}
 .epnav{display:flex;justify-content:space-between;gap:10px;margin:14px 0 0;flex-wrap:wrap}
 .epnav a,.epnav span{padding:9px 14px;border:1px solid @LINE@;border-radius:4px;
 font-size:13px;font-weight:600;background:#fff;color:#3f4750}
@@ -1118,7 +1118,7 @@ background:@ALT@;padding:12px 16px;font-family:system-ui,sans-serif}
 border:1px solid @LINE@;border-radius:8px;color:@ACC@}
 .zeps a:hover{background:@ALT@;border-color:@ACC@}
 .zeps a[aria-current]{background:@ACC@;color:#fff;border-color:@ACC@}
-.zeps a[data-off]{color:@MUTE@}
+.zeps [data-off]{color:@MUTE@;cursor:default}
 .zepnav{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:18px 0 0;
 font-family:system-ui,sans-serif;font-size:14px}
 .zepnav a{padding:10px 16px;border:1px solid @LINE@;border-radius:8px;font-weight:600;color:@ACC@}
@@ -2523,10 +2523,22 @@ class ВидЛордс(Вид):
             for н in сезон["номера"]:
                 доступна = н <= сезон["avail"]
                 текущая = (текущий == (сезон["n"], н))
-                атрибуты = ' aria-current="page"' if текущая else (
-                    "" if доступна else ' data-off title="Серия заявлена, дорожки ещё нет"')
-                ссылки.append(
-                    f'<a href="{self.адрес_эпизода(запись["slug"], сезон["n"], н)}"{атрибуты}>{н}</a>')
+                # Заявленная, но недоступная серия — НЕ ссылка. Раньше она
+                # получала только `data-off` и приглушённый цвет, оставаясь
+                # `<a href>`: мышью она выглядела неактивной, а клавиатурой,
+                # читалкой экрана, поисковым обходом и прямым адресом
+                # открывалась и отвечала 200 — на странице, где смотреть нечего.
+                # Номер остаётся видимым: иначе пропадает разница между
+                # «сезон из 12 серий» и «вышло 12 из 46».
+                if доступна or текущая:
+                    атрибуты = ' aria-current="page"' if текущая else ""
+                    ссылки.append(
+                        f'<a href="{self.адрес_эпизода(запись["slug"], сезон["n"], н)}"'
+                        f'{атрибуты}>{н}</a>')
+                else:
+                    ссылки.append(
+                        '<span data-off aria-disabled="true"'
+                        f' title="Серия заявлена, дорожки ещё нет">{н}</span>')
             хвост = ("" if сезон["avail"] >= сезон["eps"]
                      else f", доступно {сезон['avail']}")
             блоки.append(
@@ -3030,11 +3042,17 @@ class ВидЗона(Вид):
             for н in сезон["номера"]:
                 доступна = н <= сезон["avail"]
                 текущая = (текущий == (сезон["n"], н))
-                атрибуты = ' aria-current="page"' if текущая else (
-                    "" if доступна else ' data-off title="Серия заявлена, дорожки ещё нет"')
-                ссылки.append(
-                    f'<a href="{self.адрес_эпизода(запись["slug"], сезон["n"], н)}"{атрибуты}>'
-                    f"Серия {н}</a>")
+                # То же и здесь: недоступная серия не должна быть достижима
+                # ни мышью, ни клавиатурой, ни обходом.
+                if доступна or текущая:
+                    атрибуты = ' aria-current="page"' if текущая else ""
+                    ссылки.append(
+                        f'<a href="{self.адрес_эпизода(запись["slug"], сезон["n"], н)}"'
+                        f'{атрибуты}>Серия {н}</a>')
+                else:
+                    ссылки.append(
+                        '<span data-off aria-disabled="true"'
+                        f' title="Серия заявлена, дорожки ещё нет">Серия {н}</span>')
             хвост = ("" if сезон["avail"] >= сезон["eps"]
                      else f" · доступно {сезон['avail']}")
             блоки.append(
