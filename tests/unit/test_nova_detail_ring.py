@@ -27,6 +27,24 @@ nb = importlib.util.module_from_spec(_спец)
 _спец.loader.exec_module(nb)
 
 
+@pytest.fixture(autouse=True)
+def _позиции_в_песочнице(tmp_path, monkeypatch):
+    """Ни один тест не должен доставать до боевых файлов позиции.
+
+    Один забытый monkeypatch записал `after: "b"` в рабочее состояние —
+    суточный прогон начал бы круг с середины алфавита. Изоляция обязана быть
+    свойством набора, а не внимательностью автора теста.
+    """
+    monkeypatch.setattr(nb, "ПОЗИЦИЯ", tmp_path / "ring-position.json")
+    monkeypatch.setattr(nb, "ПОЗИЦИЯ_СВЕЖИХ", tmp_path / "hot-position.json")
+
+
+def test_боевые_пути_позиции_не_трогаются():
+    """Страховка от того, что фикстуру однажды снимут."""
+    assert nb.ПОЗИЦИЯ.name == "ring-position.json", (
+        "фикстура изоляции не сработала — тест писал бы в боевое состояние")
+
+
 def _кэш(tmp_path: Path, записи: dict[str, list[dict]]) -> Path:
     кэш = tmp_path / "detail-cache"
     кэш.mkdir()
@@ -53,10 +71,9 @@ def test_кино_в_круг_не_берётся(tmp_path):
     assert nb._сериалы(["film", "serial"], кэш) == ["serial"]
 
 
-def test_круг_проворачивается_и_замыкается(tmp_path, monkeypatch):
+def test_круг_проворачивается_и_замыкается(tmp_path):
     сезон = [{"season_number": 1, "available_episodes_count": 5, "episodes_count": 5}]
     кэш = _кэш(tmp_path, {и: сезон for и in ("a", "b", "c", "d")})
-    monkeypatch.setattr(nb, "ПОЗИЦИЯ", tmp_path / "pos.json")
 
     первый = nb._круг(["d", "b", "a", "c"], кэш, кроме=set(), сколько=2)
     assert первый == ["a", "b"], "порядок обязан быть устойчивым, а не как в каталоге"
@@ -70,20 +87,18 @@ def test_круг_проворачивается_и_замыкается(tmp_pat
     assert nb._круг(["d", "b", "a", "c"], кэш, кроме=set(), сколько=2) == ["a", "b"]
 
 
-def test_исчезнувшая_позиция_не_останавливает_круг(tmp_path, monkeypatch):
+def test_исчезнувшая_позиция_не_останавливает_круг(tmp_path):
     """Позиция хранится идентификатором, и он может пропасть из каталога."""
     сезон = [{"season_number": 1, "available_episodes_count": 5, "episodes_count": 5}]
     кэш = _кэш(tmp_path, {и: сезон for и in ("a", "c", "d")})
-    monkeypatch.setattr(nb, "ПОЗИЦИЯ", tmp_path / "pos.json")
     nb._записать_позицию("b", 1)          # «b» больше нет в каталоге
     assert nb._круг(["a", "c", "d"], кэш, кроме=set(), сколько=1) == ["c"]
 
 
-def test_срочные_в_круг_не_попадают(tmp_path, monkeypatch):
+def test_срочные_в_круг_не_попадают(tmp_path):
     """Второй запрос в том же прогоне им не нужен — бюджет уходит на круг."""
     сезон = [{"season_number": 1, "available_episodes_count": 5, "episodes_count": 5}]
     кэш = _кэш(tmp_path, {и: сезон for и in ("a", "b", "c")})
-    monkeypatch.setattr(nb, "ПОЗИЦИЯ", tmp_path / "pos.json")
     assert nb._круг(["a", "b", "c"], кэш, кроме={"a"}, сколько=2) == ["b", "c"]
 
 
@@ -125,12 +140,37 @@ def test_круг_выключается_только_нулём(tmp_path):
     assert nb._круг(["a", "b", "c"], кэш, кроме=set(), сколько=-1) == ["a", "b", "c"]
 
 
-def test_весь_круг_не_дублирует_записи(tmp_path, monkeypatch):
+def test_весь_круг_не_дублирует_записи(tmp_path):
     """Замыкание не должно добавлять те же идентификаторы второй раз."""
     сезон = [{"season_number": 1, "available_episodes_count": 1, "episodes_count": 2}]
     кэш = _кэш(tmp_path, {и: сезон for и in ("a", "b", "c")})
-    monkeypatch.setattr(nb, "ПОЗИЦИЯ", tmp_path / "pos.json")
     nb._записать_позицию("b", 1)
     отрезок = nb._круг(["a", "b", "c"], кэш, кроме=set(), сколько=-1)
     assert sorted(отрезок) == ["a", "b", "c"]
     assert len(отрезок) == len(set(отрезок))
+
+
+def test_свежие_отбираются_по_году_из_списка():
+    """Год приходит со списком и не стоит ни одного запроса к источнику."""
+    записи = [
+        {"external_id": "s-new", "is_series": True, "year": 2026},
+        {"external_id": "s-old", "is_series": True, "year": 2015},
+        {"external_id": "film", "is_series": False, "year": 2026},
+        {"is_series": True, "year": 2026},                    # без идентификатора
+    ]
+    assert nb._свежие_сериалы(записи, 2025) == ["s-new"]
+
+
+def test_два_круга_идут_по_своим_позициям(tmp_path):
+    """Общая позиция на два круга означала бы, что один тянет другой назад."""
+    свежие = ["h1", "h2", "h3"]
+    все = ["a1", "a2", "a3"]
+    первый_свежий = nb._круг(свежие, кроме=set(), сколько=1,
+                             позиция=nb.ПОЗИЦИЯ_СВЕЖИХ)
+    nb._записать_позицию(первый_свежий[-1], 1, nb.ПОЗИЦИЯ_СВЕЖИХ)
+    assert первый_свежий == ["h1"]
+    # Полный круг не сдвинулся от чужой позиции.
+    assert nb._круг(все, кроме=set(), сколько=1, позиция=nb.ПОЗИЦИЯ) == ["a1"]
+    # И свежий продолжает со своей.
+    assert nb._круг(свежие, кроме=set(), сколько=1,
+                    позиция=nb.ПОЗИЦИЯ_СВЕЖИХ) == ["h2"]

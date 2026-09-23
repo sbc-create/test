@@ -1,0 +1,15 @@
+# Каждые 15 минут. OnCalendar, а не OnUnitActiveSec: последний отсчитывается от
+# активации СЛУЖБЫ, которой на свежей машине ещё не было, и таймер тогда не
+# планирует ничего — `NEXT: n/a` при `enabled` и `active`. Этот контур уже
+# наступал на это с исполнителем заявок.
+[Unit]
+Description=nova: опрос новых серий каждые 15 минут
+
+[Timer]
+OnCalendar=*:0/15
+AccuracySec=30s
+Persistent=true
+Unit=nova-episode-poll.service
+
+[Install]
+WantedBy=timers.target
