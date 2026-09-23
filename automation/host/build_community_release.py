@@ -25,7 +25,7 @@ import sys
 REPO = pathlib.Path(__file__).resolve().parents[2]
 RELEASES = pathlib.Path("/srv/lords/.frontend/releases")
 BASE_ID = "20260922T143111Z-efdef56-animedia-parity"
-NEW_ID = "20260923T001500Z-community-public-03"
+NEW_ID = "20260923T074500Z-community-one-vote-06"
 BASE, NEW = RELEASES / BASE_ID, RELEASES / NEW_ID
 
 
@@ -366,6 +366,125 @@ ROUTE_LIST_ANCHOR = '''                хранилище.выбрать_спи�
 ROUTE_LIST_PATCH = '''                хранилище.выбрать_список(subject, выбор, ключ, slug=slug)'''
 
 
+# --- 7. один посетитель — один голос: интерфейс ----------------------------
+# Кнопки после сохранения не просто «выглядят нажатыми»: они disabled, а формы
+# нет вовсе. Сервер всё равно отказал бы, но предлагать действие, которое
+# заведомо будет отклонено, — это обещание, которого интерфейс не держит.
+VOTE_UI_ANCHOR = '''        кнопки = "".join(
+            f'<button class="acomm__vote{" is-on" if с.мой_голос == n else ""}" '
+            f'type="submit" name="value" value="{n}" '
+            f'aria-pressed="{"true" if с.мой_голос == n else "false"}">{n}</button>'
+            for n in range(СООБЩЕСТВО.ОЦЕНКА_МИН, СООБЩЕСТВО.ОЦЕНКА_МАКС + 1))
+        свод = (f'<b>{с.средняя:g}</b><span>из 10 · {с.голосов} '
+                f'{"голос" if с.голосов == 1 else "голосов"}</span>'
+                if с.средняя is not None else
+                '<span class="acomm__none">Оценок посетителей пока нет</span>')
+        снять = (f'<button class="acomm__clear" type="submit" name="value" value="0">'
+                 f'Снять свою оценку</button>' if с.мой_голос else "")
+        голосование = (
+            f'<form class="acomm__votes" method="post" action="/community/vote">'
+            f'<input type="hidden" name="slug" value="{html.escape(slug)}">'
+            f'<input type="hidden" name="back" value="{html.escape(путь)}">'
+            f'{csrf_поле}'
+            f'<input type="hidden" name="subject" value="{html.escape(subject)}">'
+            f'<div class="acomm__score" data-user-score="{с.средняя if с.средняя is not None else ""}"'
+            f' data-user-votes="{с.голосов}">{свод}</div>'
+            f'<div class="acomm__scale" role="group" aria-label="Поставить оценку">'
+            f'{кнопки}</div>{снять}</form>')'''
+
+VOTE_UI_PATCH = '''        проголосовал = с.мой_голос is not None
+        кнопки = "".join(
+            f'<button class="acomm__vote{" is-on" if с.мой_голос == n else ""}" '
+            f'type="submit" name="value" value="{n}" '
+            f'{"disabled " if проголосовал else ""}'
+            f'aria-pressed="{"true" if с.мой_голос == n else "false"}">{n}</button>'
+            for n in range(СООБЩЕСТВО.ОЦЕНКА_МИН, СООБЩЕСТВО.ОЦЕНКА_МАКС + 1))
+        свод = (f'<b>{с.средняя:g}</b><span>из 10 · {с.голосов} '
+                f'{"голос" if с.голосов == 1 else "голосов"}</span>'
+                if с.средняя is not None else
+                '<span class="acomm__none">Оценок посетителей пока нет</span>')
+        # Своя оценка названа словами и восстанавливается при каждом открытии
+        # страницы: она хранится на сервере, а не в этой вкладке.
+        моя = (f'<p class="acomm__mine" data-my-score="{с.мой_голос}">'
+               f'Ваша оценка: <b>{с.мой_голос}</b>'
+               f'<span class="acomm__final"> — оценка ставится один раз '
+               f'и не меняется</span></p>' if проголосовал else "")
+        # Ошибка сохранения не должна запирать посетителя: пока голос не
+        # сохранён, форма остаётся рабочей и попытку можно повторить.
+        сбой = ""
+        if не_сохранилось and not проголосовал:
+            сбой = (f'<p class="acomm__retry" data-vote-error="1">'
+                    f'{html.escape(не_сохранилось)} Попробуйте ещё раз.</p>')
+        счёт = (f'<div class="acomm__score" '
+                f'data-user-score="{с.средняя if с.средняя is not None else ""}"'
+                f' data-user-votes="{с.голосов}">{свод}</div>')
+        if проголосовал:
+            # Формы нет: голос окончателен, отправлять нечего.
+            голосование = (
+                f'<div class="acomm__votes is-final" data-vote-locked="1">'
+                f'{счёт}{моя}'
+                f'<div class="acomm__scale" role="group" '
+                f'aria-label="Ваша оценка" aria-disabled="true">{кнопки}</div></div>')
+        else:
+            голосование = (
+                f'<form class="acomm__votes" method="post" action="/community/vote">'
+                f'<input type="hidden" name="slug" value="{html.escape(slug)}">'
+                f'<input type="hidden" name="back" value="{html.escape(путь)}">'
+                f'{csrf_поле}'
+                f'<input type="hidden" name="subject" value="{html.escape(subject)}">'
+                f'{счёт}{сбой}'
+                f'<div class="acomm__scale" role="group" aria-label="Поставить оценку">'
+                f'{кнопки}</div></form>')'''
+
+# Причина отказа приходит в адресе (?community=error&why=...) — её надо показать
+# там, где посетитель нажимал, а не потерять.
+VOTE_ERR_ANCHOR = '''        модератор = self._я_модератор()'''
+VOTE_ERR_PATCH = '''        не_сохранилось = self._причина_отказа()
+        модератор = self._я_модератор()'''
+
+RENDER_ERR_ANCHOR = '''    def _csrf_токен(self) -> str:'''
+RENDER_ERR_PATCH = '''    def _причина_отказа(self) -> str:
+        """Текст ошибки последнего действия сообщества, если он пришёл в адресе."""
+        # Адрес запроса: отрисовка и обработчик — один объект, но запасной
+        # путь через _обработчик оставлен, чтобы правка не зависела от этого.
+        запрос = getattr(self, "path", "") or ""
+        if not запрос:
+            обработчик = getattr(self, "_обработчик", None)
+            запрос = getattr(обработчик, "path", "") or ""
+        if "community=error" not in запрос:
+            return ""
+        for кусок in запрос.replace("?", "&").split("&"):
+            if кусок.startswith("why="):
+                return unquote(кусок[4:])[:160]
+        return "Не удалось сохранить."
+
+    def _csrf_токен(self) -> str:'''
+
+
+# --- 8. колонка рейтингов ищет голоса по постоянному ключу ------------------
+# `_рейтинги_колонка_b07` уже показывает среднюю посетителей и число голосов
+# отдельной строкой и явно не пускает их в сводную — это ровно то поведение,
+# которого требует задача. Но искала она их по адресу, а записи переехали под
+# постоянный идентификатор: колонка показывала «ещё не голосовали» при живых
+# голосах. Ключ тот же, что у раздела обсуждения; адрес остаётся подсказкой
+# для переноса.
+RAIL_KEY_ANCHOR = '''        свои_голоса = 0
+        свои_средняя = None
+        хранилище = сообщество()
+        if slug and хранилище is not None and getattr(хранилище, "доступно", False):
+            с = хранилище.состояние(slug)
+            свои_голоса = int(с.голосов or 0)
+            свои_средняя = с.средняя'''
+RAIL_KEY_PATCH = '''        свои_голоса = 0
+        свои_средняя = None
+        хранилище = сообщество()
+        ключ_темы = str(деталь.get("id") or "").strip()
+        if ключ_темы and хранилище is not None and getattr(хранилище, "доступно", False):
+            с = хранилище.состояние(ключ_темы, slug=slug)
+            свои_голоса = int(с.голосов or 0)
+            свои_средняя = с.средняя'''
+
+
 def main() -> int:
     if not BASE.is_dir():
         die(f"base release missing: {BASE}")
@@ -411,6 +530,16 @@ def main() -> int:
     if n < 4:
         die(f"expected every community form to carry the subject, found {n}")
     src = src.replace(SUBJECT_FIELD_ANCHOR, SUBJECT_FIELD_PATCH)
+
+    # Правка формы голосования — последней: её якорь описывает форму уже с
+    # токеном и постоянным ключом, то есть после всех предыдущих вставок.
+    src = replace_once(src, RENDER_ERR_ANCHOR, RENDER_ERR_PATCH, "vote error reason")
+    src = replace_once(src, VOTE_ERR_ANCHOR, VOTE_ERR_PATCH, "vote error state")
+    src = replace_once(src, VOTE_UI_ANCHOR, VOTE_UI_PATCH, "one vote UI")
+
+    # Колонка рейтингов витрины уже отделяет голоса посетителей от импорта и
+    # не пускает их в сводную. Сломан был только ключ: она искала их по адресу.
+    src = replace_once(src, RAIL_KEY_ANCHOR, RAIL_KEY_PATCH, "rail votes key")
 
     try:
         compile(src, "animedia-frontend.py", "exec")

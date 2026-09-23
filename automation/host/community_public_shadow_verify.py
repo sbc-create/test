@@ -22,7 +22,7 @@ import urllib.parse
 import urllib.request
 
 RELEASES = pathlib.Path("/srv/lords/.frontend/releases")
-NEW = RELEASES / "20260923T001500Z-community-public-03"
+NEW = RELEASES / "20260923T074500Z-community-one-vote-06"
 BASE = RELEASES / "20260922T143111Z-efdef56-animedia-parity"
 TITLE = "/title/master-lda-i-plameni-2/"
 MOD_KEY = "shadow-moderator-key"
@@ -146,31 +146,84 @@ def main() -> int:
         токен = гость.csrf(стр)
         проверить(bool(токен), "CSRF-токен в форме есть")
 
-        print("\n== оценка 1–10")
+        print("\n== оценка 1–10: первый голос")
         код, куда = гость.post("/community/vote", {
-            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID, "back": TITLE, "value": "8",
-            "csrf": токен})
-        проверить("community=ok" in (куда or ""), "голос принят", куда or str(код))
+            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID, "back": TITLE,
+            "value": "8", "csrf": токен})
+        проверить("community=ok" in (куда or ""), "первый голос принят", куда or str(код))
         _, стр, _ = гость.get(TITLE)
         проверить('data-user-votes="1"' in стр, "голос посчитан")
         проверить('data-user-score="8.0"' in стр, "среднее 8.0")
-        проверить('value="8" aria-pressed="true"' in стр, "своя оценка показана")
 
-        гость.post_ok("/community/vote", {
-            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID,
-            "back": TITLE, "value": "5", "csrf": токен})
+        print("\n== интерфейс после сохранения")
+        проверить("Ваша оценка:" in стр, "показано «Ваша оценка: N»")
+        проверить('data-my-score="8"' in стр, "названа именно своя оценка")
+        проверить('data-vote-locked="1"' in стр, "повторный выбор заблокирован")
+        проверить('action="/community/vote"' not in стр,
+                  "формы голосования больше нет — отправлять нечего")
+        проверить(стр.count("acomm__vote") >= 10 and "disabled" in стр,
+                  "кнопки показаны, но неактивны")
+
+        print("\n== повтор той же оценки")
+        код, куда = гость.post("/community/vote", {
+            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID, "back": TITLE,
+            "value": "8", "csrf": токен})
+        проверить("community=ok" in (куда or ""),
+                  "повтор той же оценки принят без ошибки", куда or str(код))
         _, стр, _ = гость.get(TITLE)
-        проверить('data-user-votes="1"' in стр, "смена оценки не добавила второй голос")
-        проверить('data-user-score="5.0"' in стр, "среднее пересчитано на 5.0")
+        проверить('data-user-votes="1"' in стр, "второго голоса не появилось")
+        проверить('data-user-score="8.0"' in стр, "среднее не изменилось")
 
+        print("\n== попытка изменить оценку (старый клиент не должен обойти правило)")
+        код, куда = гость.post("/community/vote", {
+            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID, "back": TITLE,
+            "value": "2", "csrf": токен})
+        проверить("community=error" in (куда or ""),
+                  "другая оценка отклонена сервером", куда or str(код))
+        _, стр, _ = гость.get(TITLE)
+        проверить('data-my-score="8"' in стр, "первоначальный голос сохранён")
+        проверить('data-user-votes="1"' in стр, "счётчик не изменился")
+        проверить('data-user-score="8.0"' in стр, "среднее не изменилось")
+
+        print("\n== снятие голоса больше не предлагается и не работает")
+        # Искать надо кнопку, а не имя класса: правило .acomm__clear остаётся
+        # в таблице стилей и само по себе ничего не предлагает нажать.
+        проверить('class="acomm__clear"' not in стр, "кнопки «снять оценку» нет")
+        код, куда = гость.post("/community/vote", {
+            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID, "back": TITLE,
+            "value": "0", "csrf": токен})
+        проверить("community=error" in (куда or ""), "снятие отклонено", куда or str(код))
+        _, стр, _ = гость.get(TITLE)
+        проверить('data-user-votes="1"' in стр, "голос на месте после попытки снять")
+
+        print("\n== состояние восстанавливается в новой вкладке")
+        новая = Посетитель(9191)
+        новая.jar = гость.jar          # та же кука — тот же посетитель
+        новая.opener = гость.opener
+        _, вкладка, _ = новая.get(TITLE)
+        проверить('data-my-score="8"' in вкладка, "своя оценка видна при новом открытии")
+        проверить('data-vote-locked="1"' in вкладка, "и по-прежнему заблокирована")
+
+        print("\n== главный блок рейтинга")
+        проверить('data-our-votes="1"' in стр,
+                  "голоса посетителей показаны в колонке рейтинга")
+        проверить('data-our-average="8.0"' in стр, "с настоящим средним")
+        проверить("Посетители ещё не голосовали" not in стр,
+                  "при живых голосах колонка не утверждает обратного")
+        проверить("в неё не входят" in стр,
+                  "сказано, что голоса посетителей не входят в сводную")
+        проверить('data-aggregate' in стр, "внешняя сводная показана отдельно")
+
+        print("\n== второй посетитель считается отдельно")
         _, стр2, _ = второй.get(TITLE)
         т2 = второй.csrf(стр2)
         второй.post_ok("/community/vote", {
-            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID,
-            "back": TITLE, "value": "9", "csrf": т2})
+            "slug": "master-lda-i-plameni-2", "subject": CONTENT_ID, "back": TITLE,
+            "value": "9", "csrf": т2})
         _, стр, _ = гость.get(TITLE)
-        проверить('data-user-votes="2"' in стр, "второй посетитель посчитан отдельно")
-        проверить('data-user-score="7.0"' in стр, "среднее по двоим 7.0")
+        проверить('data-user-votes="2"' in стр, "второй голос посчитан")
+        проверить('data-user-score="8.5"' in стр, "среднее по двоим 8.5")
+        проверить('data-my-score="8"' in стр, "чужой голос не изменил свой")
 
         print("\n== CSRF")
         код, куда = гость.post("/community/comment", {
