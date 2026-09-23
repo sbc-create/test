@@ -11,8 +11,8 @@
 cd /home/claude/wt-portable-site-cell-01 && \
 sudo /home/claude/wt-portable-site-cell-01/.venv/bin/python -m factory cell activate \
   --site zona-01 \
-  --commit 9d7b880ffd726ebe8b35e28dd61e674d20be4912 \
-  --expect-digest sha256:b9950afd5fb49b3125b2d15f7ca7015b3bf777f7fb852cf85194178a1f3a4c94
+  --commit 93a7106af2e0aed01cf98ecb9289487945914052 \
+  --expect-digest sha256:562fe81b3c287085caf6946a5b573f39177c8a30f3178d1a429430337c89bdf4
 ```
 
 `cd` обязателен: из другого каталога `python -m factory` подхватывает другую
@@ -28,8 +28,8 @@ sudo /home/claude/wt-portable-site-cell-01/.venv/bin/python -m factory cell acti
 cd /home/claude/wt-portable-site-cell-01 && \
 sudo /home/claude/wt-portable-site-cell-01/.venv/bin/python -m factory cell activate \
   --site zona-01 \
-  --commit 9d7b880ffd726ebe8b35e28dd61e674d20be4912 \
-  --expect-digest sha256:b9950afd5fb49b3125b2d15f7ca7015b3bf777f7fb852cf85194178a1f3a4c94 \
+  --commit 93a7106af2e0aed01cf98ecb9289487945914052 \
+  --expect-digest sha256:562fe81b3c287085caf6946a5b573f39177c8a30f3178d1a429430337c89bdf4 \
   --confirm-activation
 ```
 
@@ -72,14 +72,25 @@ sudo /home/claude/wt-portable-site-cell-01/.venv/bin/python -m factory cell acti
 окружение задаёт `run.py` из `config/site.json`, поэтому этот класс ошибки там
 невозможен.
 
-**Прежняя служба маскируется, а не только отключается.** `systemctl restart`
+**Прежняя служба закрывается от ручного запуска, а не только отключается.**
+`systemctl restart`
 поднимает и отключённый юнит, а `automation/host/nova-daily-refresh.sh`
 (таймер включён, 03:30 UTC, `Persistent=true`) после публикации выполняет
 `systemctl restart lords-nova-01.service nova-zona-01.service || true`. На
 следующие сутки после переноса прежняя служба попыталась бы занять порт 9120 под
 новой — обычно ушла бы в failed незаметно, а в момент перезапуска новой заняла
-бы порт и вернула прежний код. Маска (`systemctl mask`) отказывает явно; откат
-снимает её первым действием.
+бы порт и вернула прежний код. Закрывает это drop-in
+`/etc/systemd/system/nova-zona-01.service.d/10-zonafilm-space-port-guard.conf`
+с `[Unit] RefuseManualStart=yes`: `start` и `restart` отказывают явно, файл юнита
+остаётся на месте. Откат удаляет drop-in первым действием — иначе `enable --now`
+отказал бы и сайт остался бы без обеих служб.
+
+`systemctl mask` для этого не годится и был бы опаснее болезни: он кладёт ссылку
+на `/dev/null` по пути юнита, а `/etc/systemd/system/nova-zona-01.service`
+существует как обычный файл — systemd отвечает «File … already exists». Под
+`set -e` это оборвало бы активацию между «прежняя остановлена» и «новая
+установлена». Способ подсказан сессией animedia.space, где mask отказал на живом
+хосте.
 
 **Остаётся для владельца:** строку `systemctl restart … nova-zona-01.service`
 в `nova-daily-refresh.sh` нужно поправить — файл принадлежит ветке
@@ -90,8 +101,8 @@ sudo /home/claude/wt-portable-site-cell-01/.venv/bin/python -m factory cell acti
 
 | Что | Факт |
 | --- | --- |
-| Коммит | `9d7b880ffd72`, дерево чистое, отправлен |
-| CI | success, run 35837465108, ровно на этом коммите |
+| Коммит | `93a7106af2e0`, дерево чистое, отправлен |
+| CI | success, run 35838438711, ровно на этом коммите |
 | Сайт сейчас | публично 200, build-id `zona-01-a0209877e1db` |
 | Прежняя служба | `nova-zona-01.service` включена и работает |
 | Новая служба | отключена после отката, файл юнита на месте |
@@ -109,7 +120,7 @@ curl -s https://zonafilm.space/ | grep -o 'site-factory-build-id" content="[^"]*
 curl -s -o /dev/null -w '%{http_code}\n' https://zonafilm.space/
 ```
 
-Ожидаемый публичный build-id: `9d7b880ffd72-zona-01`.
+Ожидаемый публичный build-id: `93a7106af2e0-zona-01`.
 Базовый слепок для сравнения — `var/базовый-слепок.json`: главная 200 /
 123 922 байта, `/catalog` и `/search` — 308, robots.txt закрыт,
 `X-Robots-Tag: noindex, nofollow`.
