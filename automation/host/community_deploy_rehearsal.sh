@@ -147,5 +147,15 @@ report "откат по записанной точке" \
 report "записи посетителей целы" "$([ "$(data_now)" = "$BASE_DATA" ] && echo yes || echo no)"
 
 echo
+echo "== сценарий 5: релиз помечен как бракованный — выкладка обязана отказать"
+make_sandbox
+printf 'дефект\n' > "$ROOT/box/front/releases/$RELEASE_ID/DO_NOT_DEPLOY.txt"
+rc=$(run_deploy 0)
+report "код возврата ненулевой" "$([ "$rc" != "0" ] && echo yes || echo no)"
+report "витрина не тронута" "$([ "$(link_now)" = "old-release" ] && echo yes || echo no)"
+report "названа причина" \
+  "$(grep -q 'помечен как бракованный' "$ROOT/box/out.txt" && echo yes || echo no)"
+
+echo
 if [ "$fails" -eq 0 ]; then echo "REHEARSAL=PASS"; else echo "REHEARSAL=FAIL ($fails)"; fi
 exit "$fails"

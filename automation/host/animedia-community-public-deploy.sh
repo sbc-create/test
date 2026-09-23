@@ -59,6 +59,13 @@ if [ "$REQUIRE_ROOT" = "1" ] && [ "$(id -u)" -ne 0 ]; then
   die "нужен root: переставить ссылку и перезапустить юнит"
 fi
 [ -d "$RELEASE_DIR" ] || die "релиз не найден: $RELEASE_DIR"
+
+# Бракованный релиз не выкладывается, даже если на него указали руками.
+# Метку ставит тот, кто нашёл дефект; снимать её выкладкой — не её дело.
+if [ -f "$RELEASE_DIR/DO_NOT_DEPLOY.txt" ]; then
+  sed 's/^/   /' "$RELEASE_DIR/DO_NOT_DEPLOY.txt" >&2
+  die "релиз помечен как бракованный: $RELEASE_DIR/DO_NOT_DEPLOY.txt"
+fi
 [ -L "$LINK" ] || die "ожидалась символическая ссылка: $LINK"
 
 say "состояние до"
