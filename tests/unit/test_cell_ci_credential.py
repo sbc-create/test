@@ -27,7 +27,7 @@ from factory.cell import executor, registry  # noqa: E402
 def test_имя_учётных_данных_совпадает_у_юнита_и_кода():
     """Расхождение здесь выглядит как «токен есть, а gh не видит его»."""
     текст = СЦЕНАРИЙ.read_text(encoding="utf-8")
-    assert f"LoadCredential=gh-token:" in текст
+    assert f"LoadCredential={executor.ФАЙЛ_ТОКЕНА}:" in текст
     assert executor.ФАЙЛ_ТОКЕНА == "gh-token"
 
 
