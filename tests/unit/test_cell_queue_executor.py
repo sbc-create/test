@@ -381,3 +381,35 @@ def test_повтор_не_требует_удаления_прежнего_ре
     assert итог["previous_status"] == "rejected"
     assert (tmp_path / "requests" / f"{з.request_id}.json").is_file()
     assert результат.is_file(), "прежний результат должен уцелеть до перезаписи"
+
+
+def test_первый_выпуск_засевает_хранилище(tmp_path, monkeypatch):
+    """Выделенная ячейка начинает с пустым хранилищем, и кандидат в нём не встаёт.
+
+    Витрина под монолитом читает общий каталог производителя; у ячейки он свой.
+    Проверено сборкой lords-01 на пустом каталоге данных: «нет снимка каталога
+    …: витрине нечего показывать» — отказ до первого запроса.
+    """
+    from factory.cell import privileged
+
+    площадка = privileged.Площадка(
+        site_id="lords-01", account="nobody", root=tmp_path,
+        app=tmp_path / "app", data=tmp_path / "data", unit="u.service",
+        previous_unit="p.service", port=9110)
+    (tmp_path / "data").mkdir()
+    monkeypatch.setattr(privileged.Площадка, "из_реестра",
+                        staticmethod(lambda *a, **k: площадка))
+    звали = []
+    monkeypatch.setattr(privileged, "stage_snapshot",
+                        lambda *a, **k: звали.append("stage") or {"ok": True})
+    monkeypatch.setattr(privileged, "promote_snapshot",
+                        lambda *a, **k: звали.append("promote") or {"ok": True})
+
+    итог = executor._засеять_хранилище("lords-01", dry_run=True)
+    assert итог["seeded"] is True and звали == ["stage", "promote"]
+
+    # Хранилище наполнено — выпуск кода данных не касается.
+    (tmp_path / "data" / "lords-01-catalog.json").write_text("{}", encoding="utf-8")
+    звали.clear()
+    итог = executor._засеять_хранилище("lords-01", dry_run=True)
+    assert итог["seeded"] is False and звали == []

@@ -321,6 +321,11 @@ def update(site_id: str, changes: dict[str, Any], *, path: Path | None = None) -
     """Точечно обновить поля паспорта: релиз, ревизию содержимого, бэкап."""
     target = path or registry_path()
     result: dict[str, Any] = {}
+    # `runtime` — размещение витрины: учётная запись, юнит, порт, каталоги.
+    # Правка через этот путь, а не руками, потому что размещение единственное,
+    # чему доверяет привилегированный исполнитель: пути он берёт отсюда и
+    # никогда из заявки. Ручная правка JSON обходит и проверку формы, и отметку
+    # времени, по которой потом видно, когда витрина стала управляемой ячейкой.
     # `release` держит удержание выпуска и его причину. До сих пор оно только
     # читалось триггером, а ставилось правкой JSON руками — то есть в обход
     # проверок этого модуля. Причина удержания устаревает быстрее всего
@@ -329,7 +334,7 @@ def update(site_id: str, changes: dict[str, Any], *, path: Path | None = None) -
     # уже выкладывать.
     allowed = {"status", "deployed", "content_revision", "last_update", "backup",
                "resources", "pins", "deploy_target", "repo", "data", "publisher",
-               "template", "aliases", "release"}
+               "template", "aliases", "release", "runtime"}
     unknown = set(changes) - allowed
     if unknown:
         raise RegistryError(f"эти поля паспорта не обновляются точечно: {sorted(unknown)}")

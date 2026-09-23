@@ -267,6 +267,31 @@ def готовность_проверки() -> dict[str, Any]:
     return итог
 
 
+def _засеять_хранилище(site_id: str, *, dry_run: bool) -> dict[str, Any]:
+    """Первый выпуск витрины: положить каталог в ЕЁ хранилище.
+
+    Витрина под монолитом читает общий каталог производителя; у выделенной
+    ячейки хранилище своё, и при первом выпуске оно пустое. Кандидат в таком
+    хранилище не поднимается вовсе — отказывается до первого запроса: «нет
+    снимка каталога …: витрине нечего показывать». Проверено сборкой lords-01
+    на пустом каталоге данных.
+
+    Прежний сценарий активации делал это копированием из общего каталога; здесь
+    то же самое, но проверенным путём снимка. Шаг выполняется ТОЛЬКО когда
+    каталога нет: у витрины с наполненным хранилищем данные обновляются
+    отдельной операцией, и трогать их выпуском кода нельзя.
+    """
+    from factory.cell import delivery
+
+    п = privileged.Площадка.из_реестра(site_id)
+    каталог = п.data / f"{site_id}-catalog.json"
+    if каталог.is_file():
+        return {"seeded": False, "reason": "хранилище уже наполнено"}
+    снимок = privileged.stage_snapshot(site_id, Path(delivery.ОБЩИЙ), dry_run=dry_run)
+    повышение = privileged.promote_snapshot(site_id, dry_run=dry_run)
+    return {"seeded": True, "stage_snapshot": снимок, "promote_snapshot": повышение}
+
+
 def активировать(заявка: queue.Заявка, *, файл: Path,
                  dry_run: bool = True) -> dict[str, Any]:
     """Выпуск без остановки работающего сайта и без кода репозитория от root.
@@ -322,6 +347,7 @@ def активировать(заявка: queue.Заявка, *, файл: Path
             queue.отметить(файл, "artifact_verified", {"digest": заявка.digest})
 
         шаги["prepare"] = privileged.prepare(заявка.site_id, dry_run=dry_run)
+        шаги["seed_data"] = _засеять_хранилище(заявка.site_id, dry_run=dry_run)
         шаги["install_release"] = privileged.install_release(
             заявка.site_id, артефакт, заявка.digest,
             commit=заявка.commit, dry_run=dry_run)
