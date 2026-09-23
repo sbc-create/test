@@ -221,14 +221,34 @@ def cmd_activate(args) -> int:
         print("нужны --site и --commit", file=sys.stderr)
         return 2
     try:
+        # Сухой прогон — умолчание КОМАНДЫ, а не только модуля. Флаг
+        # `--dry-run` как единственная защита означал бы, что забытый флаг
+        # переключает боевую витрину: команда без аргументов обязана быть
+        # безопасной.
         итог = admin_exec.активировать(
-            args.site, commit=args.commit, dry_run=args.dry_run,
+            args.site, commit=args.commit,
+            dry_run=not args.confirm_activation,
             expect_digest=args.expect_digest or None)
     except admin_exec.ExecutorRefused as exc:
         print(f"BLOCKED_INPUT: {exc}", file=sys.stderr)
         return 2
     _print(итог)
     return 0 if итог["status"] in ("dry-run", "activated") else 1
+
+
+def cmd_deliver(args) -> int:
+    """Опубликовать обновлённый контент в хранилища выделенных ячеек."""
+    from factory.cell import delivery
+    if args.site:
+        try:
+            итоги = [delivery.доставить(args.site, dry_run=args.dry_run)]
+        except delivery.DeliveryError as exc:
+            print(f"BLOCKED_INPUT: {exc}", file=sys.stderr)
+            return 2
+    else:
+        итоги = delivery.доставить_всем(dry_run=args.dry_run)
+    _print({"dry_run": args.dry_run, "sites": [и.as_dict() for и in итоги]})
+    return 0
 
 
 ACTIONS = {
@@ -246,6 +266,7 @@ ACTIONS = {
     "onboarding": cmd_onboarding,
     "extracted": cmd_extracted,
     "activate": cmd_activate,
+    "deliver": cmd_deliver,
 }
 
 
@@ -264,6 +285,8 @@ def register(subparsers) -> None:
     parser.add_argument("--manifest", help="путь к release-manifest.json")
     parser.add_argument("--expect-digest", help="ожидаемый digest артефакта")
     parser.add_argument("--commit", help="коммит репозитория сайта для activate")
+    parser.add_argument("--confirm-activation", action="store_true",
+                        help="выполнить активацию на самом деле; без него activate только показывает план")
     parser.add_argument("--root", help="корень размещения сайта на этой машине")
     parser.add_argument("--target", help="корень целевого размещения для cutover")
     parser.add_argument("--route", action="append",

@@ -1,0 +1,208 @@
+"""Доставка обновлённого контента в хранилище выделенной ячейки.
+
+Зачем
+-----
+
+Скрипт активации копирует снимок каталога один раз — в момент переключения.
+Дальше обновления продолжают идти туда, где их ждут производители: в общий
+каталог `/srv/lords/.frontend`. Выделенная витрина читает уже своё хранилище и
+потому замирает на той версии, что была при активации. Снаружи это выглядит не
+как поломка, а как сайт, который «почему-то перестал пополняться», и замечают
+это через сутки.
+
+Здесь закрывается ровно этот разрыв: после того как производитель обновил общие
+артефакты, они публикуются в хранилище каждой активированной ячейки.
+
+Границы
+-------
+
+* Пишем только в каталог данных зарегистрированной ячейки. Имя каталога берётся
+  из реестра, а не из аргумента: аргументом можно попросить что угодно.
+* Ячейка, которая ещё не активирована (каталога данных нет), пропускается — это
+  не ошибка, а её нормальное состояние до переключения.
+* Запись атомарна: `os.replace` поверх временного файла рядом. Половина JSON,
+  прочитанная витриной, хуже устаревшего целого файла.
+* Ни одной операции над чужим сайтом: список файлов строится по `site_id`, и
+  файл соседа просто не попадает в перечень.
+
+Чего здесь нет: рендера, обращений к провайдеру и решений о том, что считать
+свежим. Это работа производителей; доставка только переносит готовое.
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+import os
+import shutil
+import tempfile
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any
+
+from factory.cell import registry
+from factory.paths import PATHS
+
+#: Общий каталог, куда пишут производители обновлений.
+ОБЩИЙ = Path("/srv/lords/.frontend")
+
+#: Запасной перечень на случай, если конфигурации ячейки нет под рукой.
+#: `{site}` — идентификатор витрины, поэтому перечень физически не может
+#: захватить файл соседа.
+АРТЕФАКТЫ = (
+    "{site}-catalog.json",
+    "{site}-details.json",
+    "{site}-ratings-top.json",
+)
+
+
+class DeliveryError(Exception):
+    """Доставка не выполнена. Витрина осталась на прежнем содержимом."""
+
+
+@dataclass
+class Итог:
+    site_id: str
+    data_dir: str | None
+    delivered: list[str]
+    unchanged: list[str]
+    missing: list[str]
+    #: Пути из окружения ячейки, которые эта доставка не обслуживает (каталоги).
+    #: Пустой список означал бы «всё покрыто», а это было бы неправдой.
+    not_covered: list[str] = field(default_factory=list)
+    skipped_reason: str = ""
+
+    def as_dict(self) -> dict[str, Any]:
+        return {"site_id": self.site_id, "data_dir": self.data_dir,
+                "delivered": self.delivered, "unchanged": self.unchanged,
+                "missing": self.missing, "not_covered": self.not_covered,
+                "skipped_reason": self.skipped_reason}
+
+
+def _хеш(путь: Path) -> str:
+    h = hashlib.sha256()
+    with путь.open("rb") as fh:
+        for кусок in iter(lambda: fh.read(1 << 20), b""):
+            h.update(кусок)
+    return h.hexdigest()
+
+
+def каталог_данных(cell: registry.Cell) -> Path | None:
+    """Каталог данных активированной ячейки или None, если её ещё нет.
+
+    Путь выводится из учётной записи витрины, а она — из домена. Принимать путь
+    аргументом значило бы позволить назвать любой каталог на машине.
+    """
+    from factory.cell.extract import account_for
+
+    account = account_for(cell.domain.replace(".", "-"))
+    корень = Path("/srv") / account / "data"
+    return корень if корень.is_dir() else None
+
+
+def что_читает(cell: registry.Cell) -> list[str]:
+    """Имена файлов, которые витрина действительно читает из своего хранилища.
+
+    Перечень берётся из `config/site.json` самой ячейки: значения окружения,
+    начинающиеся с `<data>/`. Фиксированный список доставлял бы и то, что
+    витрина давно не читает, — например манифест шаблона, переехавший в
+    репозиторий. Лишняя запись в чужое хранилище не безобидна: это изменение
+    данных живого сайта без причины.
+    """
+    путь = (cell.repo or {}).get("path")
+    if путь:
+        конфиг = Path(путь) / "config" / "site.json"
+        if not конфиг.is_absolute():
+            конфиг = PATHS.root / конфиг
+        if конфиг.is_file():
+            данные = json.loads(конфиг.read_text(encoding="utf-8"))
+            хвосты = [v[7:] for v in (данные.get("environment") or {}).values()
+                      if isinstance(v, str) and v.startswith("<data>/")]
+            # Только одиночные файлы. `<data>/site` — каталог отрендеренных
+            # страниц: это тоже контент, но копируется он деревом и с другими
+            # гарантиями, поэтому здесь он не обслуживается. Молча пропустить
+            # его нельзя — он попадает в `not_covered` отчёта.
+            имена = [х for х in хвосты if "/" not in х and Path(х).suffix]
+            if имена:
+                return sorted(set(имена))
+    return [ш.format(site=cell.site_id) for ш in АРТЕФАКТЫ]
+
+
+def не_обслуживается(cell: registry.Cell) -> list[str]:
+    """Пути хранилища, которых эта доставка не касается.
+
+    Существует ради честности отчёта: «доставлено три файла» без упоминания
+    непокрытого каталога читается как «контент доставлен целиком».
+    """
+    путь = (cell.repo or {}).get("path")
+    if not путь:
+        return []
+    конфиг = Path(путь) / "config" / "site.json"
+    if not конфиг.is_absolute():
+        конфиг = PATHS.root / конфиг
+    if not конфиг.is_file():
+        return []
+    данные = json.loads(конфиг.read_text(encoding="utf-8"))
+    хвосты = [v[7:] for v in (данные.get("environment") or {}).values()
+              if isinstance(v, str) and v.startswith("<data>/")]
+    return sorted({х for х in хвосты if "/" in х or not Path(х).suffix})
+
+
+def доставить(site_id: str, *, общий: Path = ОБЩИЙ, dry_run: bool = False) -> Итог:
+    """Опубликовать общие артефакты контента в хранилище одной ячейки."""
+    try:
+        cell = registry.resolve(site_id)
+    except registry.RegistryError as exc:
+        raise DeliveryError(f"{site_id}: сайта нет в реестре ячеек") from exc
+    registry.require_own_repo(cell)
+
+    цель = каталог_данных(cell)
+    if цель is None:
+        return Итог(site_id=cell.site_id, data_dir=None, delivered=[], unchanged=[],
+                    missing=[], skipped_reason="ячейка не активирована: каталога данных нет")
+
+    доставлено, без_изменений, нет_источника = [], [], []
+    for имя in что_читает(cell):
+        источник = общий / имя
+        if not источник.is_file():
+            нет_источника.append(имя)
+            continue
+        назначение = цель / имя
+        if назначение.is_file() and _хеш(назначение) == _хеш(источник):
+            без_изменений.append(имя)
+            continue
+        if dry_run:
+            доставлено.append(имя)
+            continue
+        # Временный файл создаётся РЯДОМ с назначением: os.replace атомарен
+        # только в пределах одной файловой системы, а /tmp у службы — другое
+        # монтирование.
+        with tempfile.NamedTemporaryFile(dir=цель, delete=False) as врем:
+            временный = Path(врем.name)
+        try:
+            shutil.copyfile(источник, временный)
+            os.chmod(временный, 0o644)
+            os.replace(временный, назначение)
+        except OSError as exc:
+            временный.unlink(missing_ok=True)
+            raise DeliveryError(f"{cell.site_id}: {имя} не доставлен: {exc}") from exc
+        доставлено.append(имя)
+
+    return Итог(site_id=cell.site_id, data_dir=str(цель), delivered=доставлено,
+                unchanged=без_изменений, missing=нет_источника,
+                not_covered=не_обслуживается(cell))
+
+
+def доставить_всем(*, общий: Path = ОБЩИЙ, dry_run: bool = False) -> list[Итог]:
+    """Пройти по всем выделенным сайтам. Отказ одного не отменяет остальных.
+
+    Иначе одна неактивированная витрина останавливала бы доставку соседям — а
+    именно соседи в этот момент и работают.
+    """
+    итоги = []
+    for site_id in sorted(registry.extracted_sites()):
+        try:
+            итоги.append(доставить(site_id, общий=общий, dry_run=dry_run))
+        except DeliveryError as exc:
+            итоги.append(Итог(site_id=site_id, data_dir=None, delivered=[], unchanged=[],
+                              missing=[], skipped_reason=str(exc)))
+    return итоги

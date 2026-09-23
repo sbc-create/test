@@ -116,3 +116,19 @@ def test_cli_не_принимает_пути(репозиторий_сайта)
     итог = json.loads(готово.stdout)
     assert итог["status"] == "dry-run"
     assert "чужое.tar.gz" not in json.dumps(итог, ensure_ascii=False)
+
+
+def test_команда_без_подтверждения_не_активирует(репозиторий_сайта):
+    """Забытый флаг не должен переключать боевую витрину.
+
+    Первая версия команды делала сухой прогон только по `--dry-run`: модуль был
+    безопасен по умолчанию, а команда — нет, и расхождение заметно ровно один
+    раз.
+    """
+    head = _git(репозиторий_сайта, "rev-parse", "HEAD")
+    готово = subprocess.run(
+        [sys.executable, "-m", "factory", "cell", "activate",
+         "--site", ЗАРЕГИСТРИРОВАННЫЙ, "--commit", head],
+        cwd=str(КОРЕНЬ), capture_output=True, text=True)
+    assert готово.returncode == 0, готово.stderr
+    assert json.loads(готово.stdout)["status"] == "dry-run"

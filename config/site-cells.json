@@ -569,6 +569,50 @@
       "last_update": "2026-09-22T23:41:04.126983+00:00",
       "backup": {},
       "resources": {}
+    },
+    {
+      "site_id": "zona-02",
+      "domain": "zonafilm.cc",
+      "aliases": [],
+      "status": "staged",
+      "repo": {
+        "kind": "remote",
+        "path": null,
+        "remote": "https://github.com/sbc-create/site-zonafilm-cc"
+      },
+      "template": {
+        "template_id": "zona-nova",
+        "order_id": "bootstrap-zona-02",
+        "note": "репозиторий заведён терминалом ZONA-02; здесь только запись факта"
+      },
+      "pins": {
+        "common_core": null,
+        "template": "zona-nova",
+        "modules": {},
+        "schemas": {
+          "site_config": "1"
+        }
+      },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id": "10238"
+      },
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {
+        "source_commit": null,
+        "note": "Владелец выкладки — терминал ZONA-02 (ветка claude/bootstrap-zona-02). Наблюдён процесс на порту 9123 и релиз zona-02-1015c650d8be. Публичной конфигурации nginx нет. Отсюда не выкладывается."
+      },
+      "content_revision": null,
+      "last_update": "2026-09-22T23:41:04.126983+00:00",
+      "backup": {},
+      "resources": {}
     }
   ]
 }
