@@ -93,9 +93,26 @@ def _проверить_коммит(значение: str) -> str:
     return очищенный
 
 
+def _окружение_git(repo: Path) -> dict[str, str]:
+    """Окружение, в котором git согласится работать с чужим по владельцу репо.
+
+    Активация идёт от root, а репозиторий ячейки принадлежит обычной учётной
+    записи. С Git 2.35.2 это «dubious ownership», и обе команды — и `rev-parse`,
+    и сборщик релиза — отказали бы на первом же запуске у владельца. Путь берётся
+    из реестра и уже проверен на выход за пределы фабрики, поэтому доверие здесь
+    не шире, чем у самой операции.
+    """
+    окружение = dict(os.environ)
+    существующих = int(окружение.get("GIT_CONFIG_COUNT", "0") or 0)
+    окружение["GIT_CONFIG_COUNT"] = str(существующих + 1)
+    окружение[f"GIT_CONFIG_KEY_{существующих}"] = "safe.directory"
+    окружение[f"GIT_CONFIG_VALUE_{существующих}"] = str(repo)
+    return окружение
+
+
 def _git(repo: Path, *args: str) -> subprocess.CompletedProcess:
     return subprocess.run(["git", "-C", str(repo), *args],
-                          capture_output=True, text=True)
+                          capture_output=True, text=True, env=_окружение_git(repo))
 
 
 def _репозиторий(site_id: str) -> tuple[registry.Cell, Path]:
@@ -152,7 +169,8 @@ def _коммит_существует(repo: Path, commit: str) -> str:
 
 def _собрать(repo: Path, куда: Path) -> tuple[Path, dict[str, Any]]:
     готово = subprocess.run([sys.executable, str(repo / СБОРЩИК), "--output", str(куда)],
-                            cwd=str(repo), capture_output=True, text=True)
+                            cwd=str(repo), capture_output=True, text=True,
+                            env=_окружение_git(repo))
     if готово.returncode != 0:
         raise ExecutorRefused(
             f"{repo}: сборка релиза не удалась:\n{готово.stderr.strip()[-800:]}")
@@ -212,7 +230,7 @@ def активировать(site_id: str, *, commit: str, dry_run: bool = True,
     repo = Path(решение.repo_path)
     with tempfile.TemporaryDirectory() as tmp:
         артефакт, _ = _собрать(repo, Path(tmp))
-        окружение = dict(os.environ)
+        окружение = _окружение_git(repo)
         # Сценарий сайта сам решает, что делать; исполнитель не передаёт ему ни
         # одной переменной, меняющей поведение, кроме уже имеющихся в среде.
         готово = subprocess.run(["bash", str(repo / СЦЕНАРИЙ), "--artifact", str(артефакт)],
