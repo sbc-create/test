@@ -998,13 +998,60 @@ install_owner="${{SITE_INSTALL_OWNER:-1}}"
 # Двоеточия нет намеренно: `${{X:-...}}` подставил бы умолчание и для пустого
 # значения, то есть явная попытка отключить префикс молча вернула бы sudo.
 run_as="${{SITE_RUN_AS-sudo -u $account}}"
-health_tries="${{SITE_HEALTH_TRIES:-20}}"
+# Ожидание готовности. 40 секунд (прежнее умолчание) оказалось втрое короче
+# реальной загрузки витрины: боевая активация zonafilm.space 2026-09-23
+# откатилась не из-за поломки, а не успев, — прежняя служба после отката
+# поднималась 252 секунды. Короткий предел не ускоряет проверку, он превращает
+# нормальный запуск в ложный отказ, и сайт лежит дольше.
+health_timeout="${{SITE_HEALTH_TIMEOUT:-600}}"
+health_interval="${{SITE_HEALTH_INTERVAL:-3}}"
+# Без --max-time одно зависшее соединение съедает весь бюджет ожидания.
+http_timeout="${{SITE_HTTP_TIMEOUT:-5}}"
+journalctl_cmd="${{SITE_JOURNALCTL:-journalctl}}"
 
 step() {{ printf '\\n== %s\\n' "$1"; }}
 run_step() {{
   if [ "$dry_run" = 1 ]; then printf '   [сухой прогон] %s\\n' "$*"; else "$@"; fi
 }}
 own() {{ if [ "$install_owner" = 1 ]; then printf '%s' "-o $account -g $account"; fi; }}
+
+diagnose() {{
+  local unit_name="$1"
+  echo "--- диагностика $unit_name ---" >&2
+  "$systemctl_cmd" status "$unit_name" --no-pager 2>&1 | head -12 >&2 || true
+  if command -v "$journalctl_cmd" >/dev/null 2>&1; then
+    "$journalctl_cmd" -u "$unit_name" -n 40 --no-pager 2>&1 | tail -40 >&2 || true
+  fi
+}}
+
+# Три различимых исхода: 0 отвечает, 1 не успел при живом процессе,
+# 2 процесс не работает. `systemctl is-active` готовностью не считается:
+# служба типа simple активна с первой миллисекунды, задолго до первого ответа.
+wait_ready() {{
+  local unit_name="$1" limit="$2" what="$3"
+  local start now elapsed
+  start=$(date +%s)
+  while :; do
+    if curl -fsS --max-time "$http_timeout" -o /dev/null "http://127.0.0.1:$port/healthz"; then
+      now=$(date +%s); elapsed=$(( now - start ))
+      echo "   $what: healthz ответил через ${{elapsed}} с"
+      return 0
+    fi
+    now=$(date +%s); elapsed=$(( now - start ))
+    if ! "$systemctl_cmd" is-active --quiet "$unit_name"; then
+      echo "   $what: служба $unit_name не работает (через ${{elapsed}} с)" >&2
+      diagnose "$unit_name"
+      return 2
+    fi
+    if [ "$elapsed" -ge "$limit" ]; then
+      echo "   $what: healthz не ответил за ${{elapsed}} с при пределе ${{limit}} с" >&2
+      diagnose "$unit_name"
+      return 1
+    fi
+    printf '   %s: загружается, %s с из %s\\n' "$what" "$elapsed" "$limit"
+    sleep "$health_interval"
+  done
+}}
 
 step "проверка предусловий"
 if [ "$require_root" = 1 ] && [ "$(id -u)" != 0 ]; then
@@ -1142,23 +1189,29 @@ if [ "$dry_run" = 1 ]; then
   exit 0
 fi
 
-for _ in $(seq 1 "$health_tries"); do
-  if curl -fsS -o /dev/null "http://127.0.0.1:$port/healthz"; then
-    echo "healthz отвечает"
-    "$systemctl_cmd" is-active "$unit"
-    echo
-    echo "ГОТОВО. Проверьте публично и, если что-то не так:"
-    echo "  sudo $project/deploy/rollback.sh"
-    exit 0
-  fi
-  sleep 2
-done
+echo "   жду готовности до $health_timeout с; загрузка снимков каталога занимает минуты"
+if wait_ready "$unit" "$health_timeout" "новая служба"; then
+  "$systemctl_cmd" is-active "$unit" || true
+  echo
+  echo "ГОТОВО. Проверьте публично и, если что-то не так:"
+  echo "  sudo $project/deploy/rollback.sh"
+  exit 0
+fi
 
-echo "healthz не ответил за $(( health_tries * 2 )) с — откатываюсь" >&2
+echo "новая служба не вышла на готовность — откатываюсь" >&2
 "$systemctl_cmd" disable --now "$unit" || true
 "$systemctl_cmd" enable --now "$old_unit"
-echo "прежняя служба возвращена; данные в $data_dir не трогались" >&2
-exit 1
+
+# Возврат проверяется тем же ожиданием: объявить восстановление по `enable --now`
+# значило бы сказать «сайт работает», пока он ещё читает снимки каталога.
+if wait_ready "$old_unit" "$health_timeout" "прежняя служба"; then
+  echo "откат завершён: прежняя служба отвечает; данные в $data_dir не трогались" >&2
+  exit 1
+fi
+
+# Отдельный код: «откатились, но сайт не отвечает» — требует человека немедленно.
+echo "ВНИМАНИЕ: после отката прежняя служба не отвечает — сайт недоступен" >&2
+exit 3
 '''
 
 ROLLBACK = '''#!/usr/bin/env bash
