@@ -35,7 +35,8 @@ from typing import Any
 from factory.cell import runtime
 
 #: Закрытый набор. Расширяется только правкой этого файла и переустановкой.
-ОПЕРАЦИИ = ("prepare", "install_release", "switch", "verify", "rollback")
+ОПЕРАЦИИ = ("prepare", "install_release", "warm_up", "switch_route",
+            "switch", "verify", "rollback")
 
 #: Куда разрешено раскладывать сайты. Любой путь вне этого корня — отказ.
 КОРЕНЬ_САЙТОВ = Path("/srv")
@@ -59,8 +60,8 @@ class Площадка:
     port: int
 
     @classmethod
-    def из_реестра(cls, site_id: str) -> Площадка:
-        р = runtime.размещение(site_id)
+    def из_реестра(cls, site_id: str, *, path: Path | None = None) -> Площадка:
+        р = runtime.размещение(site_id, path=path)
         if not р.account or not р.port:
             raise PrivilegedRefused(
                 f"{site_id}: в реестре нет учётной записи или порта — "
@@ -194,17 +195,20 @@ def готов(port: int, *, предел: int = 600, шаг: float = 3.0,
         time.sleep(шаг)
 
 
-def verify(site_id: str, *, ожидаемый_build: str = "",
+def verify(site_id: str, *, ожидаемый_build: str = "", порт: int | None = None,
+           path: Path | None = None,
            маршруты: tuple[str, ...] = ("/", "/healthz")) -> dict[str, Any]:
     """Приёмка по ответу, а не по состоянию юнита."""
     import re
     import urllib.request
 
-    п = Площадка.из_реестра(site_id)
-    итог: dict[str, Any] = {"operation": "verify", "site_id": site_id, "routes": {}}
+    п = Площадка.из_реестра(site_id, path=path)
+    цель = порт or п.port
+    итог: dict[str, Any] = {"operation": "verify", "site_id": site_id,
+                            "port": цель, "routes": {}}
     for м in маршруты:
         try:
-            with urllib.request.urlopen(f"http://127.0.0.1:{п.port}{м}", timeout=30) as r:
+            with urllib.request.urlopen(f"http://127.0.0.1:{цель}{м}", timeout=30) as r:
                 тело = r.read(400000)
                 итог["routes"][м] = {"status": r.status, "bytes": len(тело)}
                 if м == "/":
@@ -384,3 +388,95 @@ def rollback(site_id: str, *, dry_run: bool = True,
                                              проверять=False).returncode == 0)
     return {"operation": "rollback", "site_id": site_id, "dry_run": False,
             "steps": шаги, "ready": состояние}
+
+
+#: Файл upstream целевого сайта. Переключение трафика — атомарная замена
+#: ОДНОГО этого файла: правка общей конфигурации nginx задела бы соседей.
+UPSTREAM_КАТАЛОГ = Path(os.environ.get("SITE_NGINX_UPSTREAMS", "/etc/nginx/cells"))
+
+
+def порт_кандидата(основной: int) -> int:
+    """Порт для прогрева. Рядом с основным, но заведомо не его.
+
+    Кандидат обязан подниматься, пока действующая версия отвечает: один порт на
+    двоих означает, что старую надо остановить до старта новой, а старт стоит
+    минут. Смещение фиксировано, чтобы порт был предсказуем и в отчёте, и в
+    правиле firewall.
+    """
+    return основной + 1000
+
+
+def warm_up(site_id: str, *, dry_run: bool = True, предел: int = 600,
+            ожидаемый_build: str = "", path: Path | None = None) -> dict[str, Any]:
+    """Поднять кандидата НА ОТДЕЛЬНОМ порту и дождаться его готовности.
+
+    Действующая версия всё это время обслуживает посетителей: её никто не
+    останавливал. Переключение произойдёт только после того, как кандидат
+    ответит и назовёт ожидаемый выпуск.
+    """
+    п = Площадка.из_реестра(site_id, path=path)
+    кандидат = порт_кандидата(п.port)
+    юнит = f"{п.unit.removesuffix('.service')}-candidate.service"
+    каталог = Path(os.environ.get("SITE_UNIT_DIR", "/etc/systemd/system"))
+    текст = ЮНИТ_ШАБЛОН.format(
+        domain=runtime.размещение(site_id, path=path).domain, site_id=site_id,
+        account=п.account, app=п.app, data=п.data, port=кандидат)
+    if dry_run:
+        return {"operation": "warm_up", "site_id": site_id, "dry_run": True,
+                "candidate_unit": юнит, "candidate_port": кандидат}
+
+    _нужен_root()
+    (каталог / юнит).write_text(текст, encoding="utf-8")
+    _systemctl("daemon-reload")
+    _systemctl("restart", юнит)
+    состояние = готов(кандидат, предел=предел,
+                      жив=lambda: _systemctl("is-active", "--quiet", юнит,
+                                             проверять=False).returncode == 0)
+    итог = {"operation": "warm_up", "site_id": site_id, "dry_run": False,
+            "candidate_unit": юнит, "candidate_port": кандидат, "ready": состояние}
+    if not состояние.get("ready"):
+        return итог
+    # Готовность — это ответ, а не состояние юнита. Но и ответа мало: кандидат
+    # обязан назвать ТОТ выпуск, ради которого его поднимали.
+    итог["verify"] = verify(site_id, ожидаемый_build=ожидаемый_build,
+                            порт=кандидат)
+    return итог
+
+
+def switch_route(site_id: str, порт: int, *, dry_run: bool = True,
+                 path: Path | None = None) -> dict[str, Any]:
+    """Перевести трафик на указанный порт: один upstream, nginx -t, reload."""
+    # Площадка запрашивается ради проверки: сайт обязан быть зарегистрирован,
+    # иначе маршрут можно было бы перевести на что угодно.
+    Площадка.из_реестра(site_id, path=path)
+    файл = UPSTREAM_КАТАЛОГ / f"{site_id}.upstream"
+    текст = f"server 127.0.0.1:{порт};\n"
+    if dry_run:
+        return {"operation": "switch_route", "site_id": site_id, "dry_run": True,
+                "upstream_file": str(файл), "port": порт}
+
+    _нужен_root()
+    файл.parent.mkdir(parents=True, exist_ok=True)
+    прежний = файл.read_text(encoding="utf-8") if файл.is_file() else None
+    врем = файл.with_suffix(".upstream.new")
+    врем.write_text(текст, encoding="utf-8")
+    os.replace(врем, файл)
+
+    nginx = os.environ.get("SITE_NGINX", "nginx")
+    проверка = subprocess.run([nginx, "-t"], capture_output=True, text=True)
+    if проверка.returncode != 0:
+        # Конфигурация не прошла проверку — возвращаем прежнюю и не перезагружаем:
+        # reload со сломанным конфигом оставил бы nginx на старом, но следующий
+        # чужой reload уронил бы его целиком.
+        if прежний is not None:
+            файл.write_text(прежний, encoding="utf-8")
+        else:
+            файл.unlink(missing_ok=True)
+        raise PrivilegedRefused(
+            f"nginx -t отказал, маршрут не переключён: {проверка.stderr.strip()[-300:]}")
+    перезагрузка = subprocess.run([nginx, "-s", "reload"], capture_output=True, text=True)
+    if перезагрузка.returncode != 0:
+        raise PrivilegedRefused(
+            f"nginx reload отказал: {перезагрузка.stderr.strip()[-300:]}")
+    return {"operation": "switch_route", "site_id": site_id, "dry_run": False,
+            "upstream_file": str(файл), "port": порт, "previous": прежний}

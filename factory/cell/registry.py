@@ -18,6 +18,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -60,6 +61,15 @@ def utc_now() -> str:
 
 
 def registry_path() -> Path:
+    """Путь к реестру ячеек.
+
+    Переменная `SITE_CELLS_REGISTRY` нужна изолированному стенду и
+    производителям содержимого: у стенда свой реестр, и подменять боевой файл
+    ради проверки нельзя. В обычном прогоне переменной нет и путь обычный.
+    """
+    из_среды = os.environ.get("SITE_CELLS_REGISTRY")
+    if из_среды:
+        return Path(из_среды)
     return PATHS.root / REGISTRY_PATH
 
 
