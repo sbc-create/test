@@ -423,6 +423,12 @@ def собрать_без_прав(repo: Path, куда: Path, account: str) -> 
     окружение[f"GIT_CONFIG_KEY_{было}"] = "safe.directory"
     окружение[f"GIT_CONFIG_VALUE_{было}"] = str(repo)
     окружение["HOME"] = str(куда)
+    # Сборка идёт под учётной записью САЙТА, а рабочая копия принадлежит другой
+    # учётной записи и под `ProtectHome=read-only` ещё и смонтирована только на
+    # чтение. `git status` при этом пытается освежить индекс, то есть записать в
+    # чужой каталог. Без этого выпуск зависел бы от того, успел ли кто-то
+    # тронуть файлы репозитория после последнего `git status`.
+    окружение["GIT_OPTIONAL_LOCKS"] = "0"
     готово = subprocess.run(
         ["/usr/bin/python3", str(сборщик), "--output", str(куда)],
         cwd=str(repo), capture_output=True, text=True, preexec_fn=подготовка,

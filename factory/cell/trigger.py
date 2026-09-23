@@ -110,10 +110,10 @@ def не_откат(cell: registry.Cell, commit: str) -> None:
     живой = живой_коммит(cell)
     if not живой:
         return
-    путь = (cell.repo or {}).get("path")
-    if not путь:
+    try:
+        repo = cell.repo_path
+    except registry.RegistryError:
         return
-    repo = Path(путь)
     свежий, текущий = дата_коммита(repo, commit), дата_коммита(repo, живой)
     if текущий and свежий and свежий < текущий:
         raise TriggerError(

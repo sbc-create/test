@@ -49,11 +49,20 @@ PY="${REPO}/.venv/bin/python"
 NGINX_DIR=/etc/nginx
 CELLS="${NGINX_DIR}/cells"
 UPSTREAMS="${NGINX_DIR}/conf.d/site-cells-upstreams.conf"
+# Копия ОБЯЗАНА лежать вне /etc/nginx. В sites-enabled стоит `include …/*` без
+# фильтра по расширению, и копия рядом с оригиналом стала бы вторым живым
+# блоком с теми же server_name. Проверка здесь, а не в обзоре: путь правят
+# редко, и правка попадёт в загрузку раньше, чем кто-нибудь это заметит.
 BACKUP_ROOT=/var/backups/site-cells-nginx
 
 log()  { printf '\033[1m==>\033[0m %s\n' "$*"; }
 die()  { printf '\033[31m[x]\033[0m %s\n' "$*" >&2; exit 1; }
 run()  { if [ "$dry_run" = 1 ]; then printf '   [сухой прогон] %s\n' "$*"; else "$@"; fi; }
+
+case "$BACKUP_ROOT/" in
+  "$NGINX_DIR"/*) die "копии конфигураций нельзя хранить внутри $NGINX_DIR: "\
+"include без фильтра по расширению загрузил бы их как вторую конфигурацию" ;;
+esac
 
 [ "$dry_run" = 1 ] || [ "$(id -u)" = 0 ] || die "нужен root"
 

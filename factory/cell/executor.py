@@ -130,6 +130,40 @@ def проверить_заявку(заявка: queue.Заявка) -> dict[st
     return {"remote": remote, "runtime": размещение.as_dict()}
 
 
+#: Пока не задана, невозможность спросить GitHub не отменяет выпуск: так
+#: работало до сих пор, и включать отказ молча — значит остановить перенос
+#: восьми сайтов без предупреждения. Владелец включает её осознанно.
+СРЕДА_ТРЕБОВАТЬ_CI = "CELL_REQUIRE_CI"
+
+
+def _окружение_gh() -> dict[str, str]:
+    """Учётные данные GitHub для root — из systemd, а не из чьего-то HOME.
+
+    Исполнитель работает от root, у root нет входа в gh, и проверка «этот
+    коммит прошёл этот прогон» тихо превращалась в `checked: false`. Проверка
+    происхождения, которая отключается сама и никого не останавливает, хуже
+    отсутствующей: отчёт выглядит одинаково в обоих случаях.
+
+    Значение читается из каталога учётных данных юнита и никуда не пишется:
+    ни в результат, ни в журнал, ни в отчёт.
+    """
+    окружение = dict(os.environ)
+    каталог = окружение.get("CREDENTIALS_DIRECTORY")
+    if каталог and not окружение.get("GH_TOKEN"):
+        файл = Path(каталог) / "gh-token"
+        if файл.is_file():
+            окружение["GH_TOKEN"] = файл.read_text(encoding="utf-8").strip()
+    return окружение
+
+
+def _без_проверки(причина: str) -> dict[str, Any]:
+    if os.environ.get(СРЕДА_ТРЕБОВАТЬ_CI):
+        raise ExecutorError(
+            f"происхождение выпуска не подтверждено ({причина}), а "
+            f"{СРЕДА_ТРЕБОВАТЬ_CI} требует подтверждения")
+    return {"checked": False, "reason": причина}
+
+
 def проверить_ci(заявка: queue.Заявка, *, remote: str) -> dict[str, Any]:
     """Прогон CI обязан относиться именно к этому коммиту.
 
@@ -138,15 +172,14 @@ def проверить_ci(заявка: queue.Заявка, *, remote: str) -> d
     этот успешный прогон», и проверяется она у GitHub, а не по словам заявки.
     """
     if not заявка.ci_run:
-        return {"checked": False, "reason": "прогон не назван в заявке"}
+        return _без_проверки("прогон не назван в заявке")
     проект = "/".join(remote.rstrip("/").split("/")[-2:]).removesuffix(".git")
     готово = subprocess.run(
         ["gh", "run", "view", заявка.ci_run, "-R", проект,
          "--json", "headSha,conclusion,workflowName"],
-        capture_output=True, text=True)
+        capture_output=True, text=True, env=_окружение_gh())
     if готово.returncode != 0:
-        return {"checked": False,
-                "reason": f"gh не ответил: {готово.stderr.strip()[:200]}"}
+        return _без_проверки(f"gh не ответил: {готово.stderr.strip()[:200]}")
     данные = json.loads(готово.stdout or "{}")
     if данные.get("conclusion") != "success":
         raise ExecutorError(
@@ -181,13 +214,15 @@ def активировать(заявка: queue.Заявка, *, файл: Path
     Любой отказ после шага 5 — откат маршрута с проверкой ответом.
     """
     cell = registry.resolve(заявка.site_id)
-    путь_репо = (cell.repo or {}).get("path")
-    if not путь_репо:
-        raise ExecutorError(f"{заявка.site_id}: в реестре нет локального пути репозитория")
-    repo = Path(путь_репо)
-    if not repo.is_absolute():
-        from factory.paths import PATHS
-        repo = PATHS.root / repo
+    try:
+        repo = cell.repo_path
+    except registry.RegistryError as exc:
+        raise ExecutorError(f"{заявка.site_id}: {exc}") from exc
+    if not (repo / "tools" / "build_release.py").is_file():
+        # Отказ здесь, а не внутри сборки: понятно, что искали и где.
+        raise ExecutorError(
+            f"{заявка.site_id}: рабочей копии репозитория нет по пути {repo}. "
+            f"Основание путей — {registry.корень_репозиториев()}")
     размещение = runtime.размещение(заявка.site_id)
     шаги: dict[str, Any] = {}
 
@@ -198,6 +233,13 @@ def активировать(заявка: queue.Заявка, *, файл: Path
             raise ExecutorError(
                 f"собран коммит {манифест.get('source_commit', '')[:12]}, "
                 f"а заявка о {заявка.commit[:12]}")
+        if манифест.get("source_dirty"):
+            # Совпадение digest здесь ничего не доказывает: и заявку, и дерево
+            # правит одна и та же непривилегированная сторона. Выложить дерево
+            # с несохранённой правкой значит выложить то, чего нет в коммите.
+            raise ExecutorError(
+                f"{заявка.site_id}: рабочая копия {repo} содержит несохранённые "
+                f"изменения; выкладывается коммит, а не рабочий стол")
         if манифест.get("digest") != заявка.digest:
             raise ExecutorError(
                 f"digest сборки {манифест.get('digest')} не совпал с заявленным "

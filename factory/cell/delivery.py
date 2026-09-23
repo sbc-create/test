@@ -40,7 +40,6 @@ from pathlib import Path
 from typing import Any
 
 from factory.cell import registry
-from factory.paths import PATHS
 
 #: Общий каталог, куда пишут производители обновлений.
 ОБЩИЙ = Path("/srv/lords/.frontend")
@@ -113,23 +112,27 @@ def что_читает(cell: registry.Cell) -> list[str]:
     репозиторий. Лишняя запись в чужое хранилище не безобидна: это изменение
     данных живого сайта без причины.
     """
-    путь = (cell.repo or {}).get("path")
-    if путь:
-        конфиг = Path(путь) / "config" / "site.json"
-        if not конфиг.is_absolute():
-            конфиг = PATHS.root / конфиг
-        if конфиг.is_file():
-            данные = json.loads(конфиг.read_text(encoding="utf-8"))
-            хвосты = [v[7:] for v in (данные.get("environment") or {}).values()
-                      if isinstance(v, str) and v.startswith("<data>/")]
-            # Только одиночные файлы. `<data>/site` — каталог отрендеренных
-            # страниц: это тоже контент, но копируется он деревом и с другими
-            # гарантиями, поэтому здесь он не обслуживается. Молча пропустить
-            # его нельзя — он попадает в `not_covered` отчёта.
-            имена = [х for х in хвосты if "/" not in х and Path(х).suffix]
-            if имена:
-                return sorted(set(имена))
+    конфиг = _конфиг_ячейки(cell)
+    if конфиг is not None and конфиг.is_file():
+        данные = json.loads(конфиг.read_text(encoding="utf-8"))
+        хвосты = [v[7:] for v in (данные.get("environment") or {}).values()
+                  if isinstance(v, str) and v.startswith("<data>/")]
+        # Только одиночные файлы. `<data>/site` — каталог отрендеренных
+        # страниц: это тоже контент, но копируется он деревом и с другими
+        # гарантиями, поэтому здесь он не обслуживается. Молча пропустить
+        # его нельзя — он попадает в `not_covered` отчёта.
+        имена = [х for х in хвосты if "/" not in х and Path(х).suffix]
+        if имена:
+            return sorted(set(имена))
     return [ш.format(site=cell.site_id) for ш in АРТЕФАКТЫ]
+
+
+def _конфиг_ячейки(cell: registry.Cell) -> Path | None:
+    """`config/site.json` рабочей копии репозитория сайта, если она известна."""
+    try:
+        return cell.repo_path / "config" / "site.json"
+    except registry.RegistryError:
+        return None
 
 
 def не_обслуживается(cell: registry.Cell) -> list[str]:
@@ -138,13 +141,8 @@ def не_обслуживается(cell: registry.Cell) -> list[str]:
     Существует ради честности отчёта: «доставлено три файла» без упоминания
     непокрытого каталога читается как «контент доставлен целиком».
     """
-    путь = (cell.repo or {}).get("path")
-    if not путь:
-        return []
-    конфиг = Path(путь) / "config" / "site.json"
-    if not конфиг.is_absolute():
-        конфиг = PATHS.root / конфиг
-    if not конфиг.is_file():
+    конфиг = _конфиг_ячейки(cell)
+    if конфиг is None or not конфиг.is_file():
         return []
     данные = json.loads(конфиг.read_text(encoding="utf-8"))
     хвосты = [v[7:] for v in (данные.get("environment") or {}).values()

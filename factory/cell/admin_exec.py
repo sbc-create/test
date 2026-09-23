@@ -39,7 +39,6 @@ from pathlib import Path
 from typing import Any
 
 from factory.cell import registry
-from factory.paths import PATHS
 
 #: Единственный исполняемый файл, который исполнитель готов запустить, и только
 #: внутри репозитория сайта. Имя фиксировано намеренно: параметр «какой скрипт
@@ -124,15 +123,12 @@ def _репозиторий(site_id: str) -> tuple[registry.Cell, Path]:
             "только с зарегистрированными сайтами") from exc
     registry.require_own_repo(cell)
 
-    путь = (cell.repo or {}).get("path")
-    if not путь:
-        raise ExecutorRefused(
-            f"{site_id}: в реестре нет локального пути репозитория (repo.path)")
-    корень = (PATHS.root / путь).resolve()
-    # Путь берётся из реестра, но проверяется всё равно: реестр — файл, и
-    # запись вида `../../etc` в нём не должна уводить исполнителя наружу.
-    if not str(корень).startswith(str(PATHS.root.resolve())):
-        raise ExecutorRefused(f"{site_id}: repo.path уводит за пределы фабрики: {корень}")
+    # Путь берётся из реестра и разрешается там же: основание одно на всю
+    # фабрику, и выход за его пределы реестром не разрешён.
+    try:
+        корень = cell.repo_path
+    except registry.RegistryError as exc:
+        raise ExecutorRefused(f"{site_id}: {exc}") from exc
     if not (корень / ПРИЗНАК_РЕПОЗИТОРИЯ).is_dir():
         raise ExecutorRefused(f"{site_id}: {корень} не похож на репозиторий сайта")
     for обязательный in (СЦЕНАРИЙ, СБОРЩИК):

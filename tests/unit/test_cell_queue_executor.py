@@ -183,3 +183,46 @@ def test_неизвестный_этап_не_записывается(tmp_path)
     файл = tmp_path / "requests" / f"{з.request_id}.json"
     with pytest.raises(queue.RequestRejected):
         queue.отметить(файл, "почти_готово")
+
+
+def test_грязное_дерево_не_выкладывается(monkeypatch, tmp_path):
+    """Совпадение digest ничего не доказывает, если дерево правит подающий.
+
+    И заявку, и рабочую копию правит одна непривилегированная сторона. Без
+    этой проверки выложилось бы дерево с несохранённой правкой, а отчёт назвал
+    бы коммит, которого на сайте нет.
+    """
+    from factory.cell import privileged, registry, runtime
+
+    репо = tmp_path / "repo"
+    (репо / "tools").mkdir(parents=True)
+    (репо / "tools" / "build_release.py").write_text("", encoding="utf-8")
+    monkeypatch.setattr(registry.Cell, "repo_path", property(lambda self: репо))
+    monkeypatch.setattr(runtime, "размещение", lambda *a, **k: runtime.Размещение(
+        site_id="zona-01", domain="zonafilm.space", data_dir="/srv/x/data",
+        unit="u.service", previous_unit="p.service", port=9120,
+        account="nobody", reload="mtime", managed_by="cell"))
+    monkeypatch.setattr(privileged, "собрать_без_прав", lambda *a, **k: (
+        tmp_path / "a.tar.gz",
+        {"source_commit": КОММИТ, "digest": ДАЙДЖЕСТ, "source_dirty": True,
+         "live_build_id": "aaaaaaaaaaaa-zona-01"}))
+
+    з = queue.собрать("zona-01", КОММИТ, ДАЙДЖЕСТ)
+    with pytest.raises(executor.ExecutorError) as ош:
+        executor.активировать(з, файл=tmp_path / "нет.json", dry_run=True)
+    assert "несохранённые" in str(ош.value)
+
+
+def test_непроверяемое_происхождение_можно_сделать_отказом(monkeypatch):
+    """`checked: false` без возможности сделать его отказом — не проверка.
+
+    У root нет входа в gh, и проверка «этот коммит прошёл этот прогон» тихо
+    выключалась. Отчёт при этом выглядел так же, как при успешной проверке.
+    """
+    з = queue.собрать("zona-01", КОММИТ, ДАЙДЖЕСТ)  # без ci_run
+    monkeypatch.delenv(executor.СРЕДА_ТРЕБОВАТЬ_CI, raising=False)
+    assert executor.проверить_ci(з, remote="https://x/y/z")["checked"] is False
+
+    monkeypatch.setenv(executor.СРЕДА_ТРЕБОВАТЬ_CI, "1")
+    with pytest.raises(executor.ExecutorError, match="происхождение"):
+        executor.проверить_ci(з, remote="https://x/y/z")

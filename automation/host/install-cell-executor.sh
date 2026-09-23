@@ -68,6 +68,50 @@ run rm -rf "$DEST.prev"
 [ -d "$DEST" ] && run mv "$DEST" "$DEST.prev"
 run mv "$DEST.new" "$DEST"
 
+log "запись абсолютных путей установки"
+# Корневая копия лежит в /usr/local/lib, рабочие копии репозиториев сайтов — в
+# рабочем каталоге фабрики. Вывести второе из первого нельзя, и попытка вывести
+# стоила первой настоящей заявки: исполнитель искал tools/build_release.py рядом
+# с собой и отверг выпуск. Значение пишет root, оно недоступно на запись
+# подающей стороне, и код репозитория root всё равно не исполняет.
+if [ "$dry_run" = 0 ]; then
+  printf '{\n  "site_repos_root": "%s",\n  "installed_at": "%s"\n}\n' \
+      "$SRC_ROOT" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > "$DEST/cell-install.json"
+  chown root:root "$DEST/cell-install.json"
+  chmod 0644 "$DEST/cell-install.json"
+  log "  основание путей репозиториев: $SRC_ROOT"
+else
+  printf '   [сухой прогон] %s/cell-install.json <- site_repos_root=%s\n' "$DEST" "$SRC_ROOT"
+fi
+
+log "проверка достижимости рабочих копий репозиториев"
+# Установка обязана падать здесь, а не молча оставлять исполнителя, который
+# отвергнет первую же заявку. Отсутствие ОДНОЙ копии не останавливает остальные.
+if [ "$dry_run" = 0 ]; then
+  "$PY" - <<PYCHECK || die "ни одна рабочая копия репозитория не доступна корневой копии исполнителя"
+import sys
+sys.path.insert(0, "$DEST")
+from factory.cell import registry
+
+доступно = 0
+for site_id in sorted(registry.extracted_sites()):
+    try:
+        repo = registry.resolve(site_id).repo_path
+    except Exception as exc:
+        print(f"   [!] {site_id}: {exc}")
+        continue
+    if (repo / "tools" / "build_release.py").is_file():
+        доступно += 1
+        print(f"   {site_id}: {repo}")
+    else:
+        print(f"   [!] {site_id}: нет {repo}/tools/build_release.py")
+print(f"   доступно рабочих копий: {доступно}")
+sys.exit(0 if доступно else 1)
+PYCHECK
+else
+  printf '   [сухой прогон] проверить repo_path каждой выделенной витрины\n'
+fi
+
 log "каталоги очереди"
 run install -d -o root -g root -m 0755 "$QUEUE"
 # Заявки кладёт непривилегированная сторона. Липкий бит: удалить чужую заявку
@@ -123,6 +167,24 @@ fi
 
 log "юнит и таймер"
 run install -m 0644 "$SRC_ROOT/automation/host/$SERVICE" "$UNIT_DIR/$SERVICE"
+# Учётные данные GitHub для root. Без них проверка «этот коммит прошёл этот
+# прогон» молча возвращает `checked: false`, и происхождение выпуска ничем не
+# подтверждено. Секрет остаётся файлом root и передаётся юниту systemd'ом;
+# в сценарий, журнал и отчёт он не попадает.
+GH_TOKEN_FILE=/etc/site-factory/gh-token
+if [ -f "$GH_TOKEN_FILE" ]; then
+  run install -d -m 0755 "$UNIT_DIR/$SERVICE.d"
+  if [ "$dry_run" = 0 ]; then
+    printf '[Service]\nLoadCredential=gh-token:%s\nEnvironment=%s=1\n' \
+        "$GH_TOKEN_FILE" "CELL_REQUIRE_CI" > "$UNIT_DIR/$SERVICE.d/gh.conf"
+    chmod 0644 "$UNIT_DIR/$SERVICE.d/gh.conf"
+  fi
+  log "  происхождение выпуска проверяется у GitHub (учётные данные из $GH_TOKEN_FILE)"
+else
+  log "  [!] $GH_TOKEN_FILE нет: связка «коммит → прогон CI» не проверяется,"
+  log "      результат будет содержать ci.checked=false. Положите туда токен с"
+  log "      правом чтения Actions и повторите установку, чтобы включить проверку."
+fi
 run install -m 0644 "$SRC_ROOT/automation/host/$TIMER" "$UNIT_DIR/$TIMER"
 run systemctl daemon-reload
 run systemctl enable --now "$TIMER"
@@ -144,6 +206,12 @@ print(' '.join(sorted(registry.extracted_sites())))
     log "  $site: пропущен (см. вывод выше) — остальные продолжаются"
   fi
 done
+
+log "теневые копии конфигураций в загрузке nginx"
+# Не входит в установку и ничего не меняет: сообщает о копиях, которые nginx
+# загружает как вторую конфигурацию. Их делал не этот контур, и убирать их —
+# отдельное решение. Отказ здесь не останавливает установку.
+run bash "$SRC_ROOT/automation/host/nginx-shadow-configs.sh" || true
 
 log "проверка после установки"
 run systemctl list-timers "$TIMER" --no-pager
