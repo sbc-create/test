@@ -413,9 +413,20 @@ def собрать_без_прав(repo: Path, куда: Path, account: str) -> 
             os.setgid(запись.pw_gid)
             os.setuid(запись.pw_uid)
 
+    # Репозиторий принадлежит другой учётной записи, а сборка идёт под учётной
+    # записью сайта: с Git 2.35.2 это «dubious ownership», и сборщик падает на
+    # первом же `git rev-parse`. Путь берётся из реестра и уже проверен, поэтому
+    # доверие здесь не шире самой операции.
+    окружение = dict(os.environ)
+    было = int(окружение.get("GIT_CONFIG_COUNT", "0") or 0)
+    окружение["GIT_CONFIG_COUNT"] = str(было + 1)
+    окружение[f"GIT_CONFIG_KEY_{было}"] = "safe.directory"
+    окружение[f"GIT_CONFIG_VALUE_{было}"] = str(repo)
+    окружение["HOME"] = str(куда)
     готово = subprocess.run(
         ["/usr/bin/python3", str(сборщик), "--output", str(куда)],
-        cwd=str(repo), capture_output=True, text=True, preexec_fn=подготовка)
+        cwd=str(repo), capture_output=True, text=True, preexec_fn=подготовка,
+        env=окружение)
     if готово.returncode != 0:
         raise PrivilegedRefused(
             f"сборка не удалась под {account}: {готово.stderr.strip()[-600:]}")
@@ -538,6 +549,27 @@ def warm_up(site_id: str, *, dry_run: bool = True, предел: int = 600,
     return итог
 
 
+def _upstream_включён(файл: Path) -> bool:
+    """Ссылается ли конфигурация nginx на этот файл.
+
+    Ищем буквальное упоминание пути в конфигурации: точный разбор include с
+    подстановками дороже и здесь не нужен — нам достаточно знать, что файл
+    кто-то читает.
+    """
+    корень = Path(os.environ.get("SITE_NGINX_CONF", "/etc/nginx"))
+    if not корень.is_dir():
+        return False
+    for путь in корень.rglob("*"):
+        if not путь.is_file() or путь.suffix in {".bak", ".old"}:
+            continue
+        try:
+            if str(файл) in путь.read_text(encoding="utf-8", errors="replace"):
+                return True
+        except OSError:
+            continue
+    return False
+
+
 def switch_route(site_id: str, порт: int, *, dry_run: bool = True,
                  path: Path | None = None) -> dict[str, Any]:
     """Перевести трафик на указанный порт: один upstream, nginx -t, reload."""
@@ -551,6 +583,15 @@ def switch_route(site_id: str, порт: int, *, dry_run: bool = True,
                 "upstream_file": str(файл), "port": порт}
 
     _нужен_root()
+    # Файл upstream обязан быть ВКЛЮЧЁН в конфигурацию nginx. Иначе запись в
+    # него проходит, `nginx -t` доволен, reload выполняется — и трафик не
+    # двигается. Это худший исход из возможных: операция выглядит успешной, а
+    # посетители остаются на прежней версии.
+    if not _upstream_включён(файл):
+        raise PrivilegedRefused(
+            f"{файл} не включён ни в одну конфигурацию nginx: переключение "
+            "маршрута ничего бы не изменило. Добавьте в server-блок сайта "
+            f"`upstream` с `include {файл};` и повторите")
     файл.parent.mkdir(parents=True, exist_ok=True)
     прежний = файл.read_text(encoding="utf-8") if файл.is_file() else None
     врем = файл.with_suffix(".upstream.new")

@@ -146,13 +146,22 @@ def новый_идентификатор(site_id: str, commit: str, *, operatio
     return f"{site_id}-{краткая}-{хвост}"[:64].lower()
 
 
-def записать_атомарно(путь: Path, данные: dict[str, Any]) -> None:
+def записать_атомарно(путь: Path, данные: dict[str, Any], *,
+                      режим: int = 0o640) -> None:
+    """Атомарная запись с явным режимом.
+
+    Режим задаётся явно, потому что NamedTemporaryFile создаёт файл 0600, и
+    результат операции оказывался нечитаемым для того, кто её подал. Снаружи
+    это выглядит как молчание исполнителя: заявка исчезла, ответа нет, причину
+    отказа узнать нечем.
+    """
     путь.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile("w", dir=путь.parent, delete=False,
                                      encoding="utf-8") as врем:
         json.dump(данные, врем, ensure_ascii=False, indent=2)
         врем.write("\n")
         временный = Path(врем.name)
+    os.chmod(временный, режим)
     os.replace(временный, путь)
 
 
