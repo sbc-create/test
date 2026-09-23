@@ -88,26 +88,43 @@ log "проверка достижимости рабочих копий реп�
 # Установка обязана падать здесь, а не молча оставлять исполнителя, который
 # отвергнет первую же заявку. Отсутствие ОДНОЙ копии не останавливает остальные.
 if [ "$dry_run" = 0 ]; then
-  "$PY" - <<PYCHECK || die "ни одна рабочая копия репозитория не доступна корневой копии исполнителя"
+  reachable=0
+  while IFS=$'\t' read -r site_id account repo; do
+    if [ -z "$repo" ]; then
+      log "  [!] $site_id: $account"
+      continue
+    fi
+    if [ ! -f "$repo/tools/build_release.py" ]; then
+      log "  [!] $site_id: нет $repo/tools/build_release.py"
+      continue
+    fi
+    # Сборка идёт НЕ от root, а под учётной записью сайта. Права root здесь
+    # ничего не доказывают: каталог принадлежит другой учётной записи, и путь к
+    # нему лежит через чужой домашний каталог. Проверяется тем, кто будет читать.
+    if id "$account" >/dev/null 2>&1 \
+       && ! runuser -u "$account" -- test -r "$repo/tools/build_release.py" 2>/dev/null; then
+      log "  [!] $site_id: $account не может прочитать $repo/tools/build_release.py"
+      continue
+    fi
+    reachable=$((reachable + 1))
+    log "  $site_id: $repo"
+  done < <("$PY" - <<PYCHECK
 import sys
 sys.path.insert(0, "$DEST")
-from factory.cell import registry
+from factory.cell import registry, runtime
 
-доступно = 0
 for site_id in sorted(registry.extracted_sites()):
     try:
         repo = registry.resolve(site_id).repo_path
+        account = runtime.размещение(site_id).account or "root"
     except Exception as exc:
-        print(f"   [!] {site_id}: {exc}")
+        print(f"{site_id}\t{exc}\t")
         continue
-    if (repo / "tools" / "build_release.py").is_file():
-        доступно += 1
-        print(f"   {site_id}: {repo}")
-    else:
-        print(f"   [!] {site_id}: нет {repo}/tools/build_release.py")
-print(f"   доступно рабочих копий: {доступно}")
-sys.exit(0 if доступно else 1)
+    print(f"{site_id}\t{account}\t{repo}")
 PYCHECK
+)
+  log "  доступно рабочих копий: $reachable"
+  [ "$reachable" -gt 0 ] || die "ни одна рабочая копия репозитория не доступна исполнителю"
 else
   printf '   [сухой прогон] проверить repo_path каждой выделенной витрины\n'
 fi
