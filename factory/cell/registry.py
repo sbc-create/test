@@ -321,9 +321,15 @@ def update(site_id: str, changes: dict[str, Any], *, path: Path | None = None) -
     """Точечно обновить поля паспорта: релиз, ревизию содержимого, бэкап."""
     target = path or registry_path()
     result: dict[str, Any] = {}
+    # `release` держит удержание выпуска и его причину. До сих пор оно только
+    # читалось триггером, а ставилось правкой JSON руками — то есть в обход
+    # проверок этого модуля. Причина удержания устаревает быстрее всего
+    # остального в паспорте: она называет чужую ветку, чужой релиз или чужой
+    # дефект, и неверная причина хуже отсутствующей — по ней решают, можно ли
+    # уже выкладывать.
     allowed = {"status", "deployed", "content_revision", "last_update", "backup",
                "resources", "pins", "deploy_target", "repo", "data", "publisher",
-               "template", "aliases"}
+               "template", "aliases", "release"}
     unknown = set(changes) - allowed
     if unknown:
         raise RegistryError(f"эти поля паспорта не обновляются точечно: {sorted(unknown)}")

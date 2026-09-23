@@ -88,3 +88,26 @@ def test_никто_не_выводит_путь_сам(модуль, функц
     assert функция in текст
     assert '(cell.repo or {}).get("path")' not in текст, (
         f"{модуль}: путь репозитория выводится в обход registry.repo_path")
+
+
+def test_удержание_правится_через_реестр(tmp_path, monkeypatch):
+    """Причина удержания обязана быть правимой санкционированным путём.
+
+    Пока `release` не обновлялся точечно, удержания ставили правкой JSON
+    руками — в обход проверок модуля. Причина при этом устаревает быстрее
+    всего остального: она называет чужую ветку и чужой релиз, а решают по ней,
+    можно ли уже выкладывать.
+    """
+    import json as _json
+    реестр = tmp_path / "site-cells.json"
+    реестр.write_text(_json.dumps({"schema_version": registry.SCHEMA_VERSION, "cells": [
+        {"site_id": "zona-01", "domain": "zonafilm.space", "status": "staged",
+         "release": {"hold": True, "hold_reason": "устаревшая причина"}}]}),
+        encoding="utf-8")
+    ячейка = registry.update("zona-01", {"release": {"hold": True,
+                                                     "hold_reason": "проверенная причина"}},
+                             path=реестр)
+    assert ячейка.release["hold_reason"] == "проверенная причина"
+    заново = _json.loads(реестр.read_text(encoding="utf-8"))["cells"][0]
+    assert заново["release"]["hold"] is True
+    assert заново["last_update"], "правка обязана отмечаться временем"
