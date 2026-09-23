@@ -274,3 +274,40 @@ def test_витрина_без_прежней_службы_не_ломается
                             previous_unit=None, port=п.port)
     assert privileged.погасить_прежнюю(п) == []
     assert privileged.вернуть_прежнюю(п, предел=5)["restored"] is False
+
+
+def test_недельный_снимок_переносится_но_не_обязателен(tmp_path, monkeypatch):
+    """Витрина ищет его РЯДОМ С КАТАЛОГОМ, то есть в своём хранилище.
+
+    Производитель кладёт его в общий каталог, и у выделенной витрины он туда
+    не попадал вовсе: блок недельного выбора оставался пустым без единой
+    ошибки — страница отвечала 200, раздела просто не было.
+
+    Обязательным его делать нельзя: у части витрин такого файла нет в
+    принципе, и требование уронило бы им обновление каталога целиком.
+    """
+    источник = tmp_path / "front"; источник.mkdir()
+    for имя in ("zona-01-catalog.json", "zona-01-details.json",
+                "zona-01-popular-weekly.json"):
+        (источник / имя).write_text("{}", encoding="utf-8")
+    корень = tmp_path / "srv"
+    (корень / "data").mkdir(parents=True)
+    п = privileged.Площадка(site_id="zona-01", account="nobody", root=корень,
+                            app=корень / "app", data=корень / "data",
+                            unit="u.service", previous_unit=None, port=9120)
+    monkeypatch.setattr(privileged.Площадка, "из_реестра",
+                        staticmethod(lambda *a, **k: п))
+    monkeypatch.setattr(privileged, "_нужен_root", lambda: None)
+    monkeypatch.setattr(privileged.shutil, "chown", lambda *a, **k: None)
+
+    privileged.stage_snapshot("zona-01", источник, dry_run=False)
+    assert (п.data_candidate / "zona-01-popular-weekly.json").is_file()
+
+    # Без дополнения снимок всё равно собирается: обновление каталога важнее
+    # одного блока.
+    (источник / "zona-01-popular-weekly.json").unlink()
+    if п.data_candidate.exists():
+        import shutil as _sh; _sh.rmtree(п.data_candidate)
+    итог = privileged.stage_snapshot("zona-01", источник, dry_run=False)
+    assert итог["operation"] == "stage_snapshot"
+    assert not (п.data_candidate / "zona-01-popular-weekly.json").exists()
