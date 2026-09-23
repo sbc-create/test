@@ -3,8 +3,8 @@
   "note": "Текущая версия шаблона семейства animedia и его выбираемые варианты. Читается сборщиком релиза (automation/host/animedia_release_build.py) и попадает в RELEASE.json. Файл существует затем, чтобы версия нового сайта бралась из репозитория, а не набиралась руками в аргументе выкладки: набранная руками версия расходится с кодом молча, и по манифесту витрины уже нельзя сказать, что она показывает.",
   "template_family": "animedia",
   "template_id": "animedia-nova",
-  "design_version": "1.2.9",
-  "design_version_changed_because": "ANIMEDIA-MODERATION-02: очередь модерации разделена на ожидающие и отклонённые, автору сказано, что его сообщение видно только ему. Под 1.2.8 счётчик расходился со списком, а «Отклонить» предлагалось уже отклонённому.",
+  "design_version": "1.2.10",
+  "design_version_changed_because": "ANIMEDIA-MODERATION-03: ключ модератора читается из credential systemd, а не из окружения.",
   "community_module": {
     "version": "2.1",
     "path_in_release": "community.py",

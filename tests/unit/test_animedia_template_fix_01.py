@@ -473,3 +473,27 @@ def test_автор_знает_что_его_сообщение_ещё_не_ви
     """Дефект: своё ожидающее приходит В ЛЕНТЕ и выглядит опубликованным."""
     текст = РАНТАЙМ.read_text(encoding="utf-8")
     assert "видно только вам" in текст
+
+
+def test_ключ_модератора_приходит_credential_а_не_окружением(рантайм):
+    """Дефект: секрет в `Environment=` виден в systemctl show и /proc/environ.
+
+    Правило контура: секрет приходит файлом, который systemd кладёт в
+    приватный каталог службы. Переменная окружения оставлена запасным путём
+    для стендов без systemd.
+    """
+    import inspect
+    исходник = inspect.getsource(рантайм.Обработчик._ключ_модератора)
+    assert "CREDENTIALS_DIRECTORY" in исходник
+    # Файл читается ПЕРЕД тем, как смотреть в окружение.
+    assert исходник.index("CREDENTIALS_DIRECTORY") < исходник.index(
+        "ANIMEDIA_COMMUNITY_MODERATOR_KEY")
+
+
+def test_настройка_ключа_не_содержит_значения():
+    """Дефект: секрет в репозитории. Файл несёт путь, а не значение."""
+    п = ROOT / "config/animedia/units/10-community-moderator.conf"
+    текст = п.read_text(encoding="utf-8")
+    assert "LoadCredential=" in текст
+    assert "/etc/site-factory/secrets/" in текст
+    assert "Environment=ANIMEDIA_COMMUNITY_MODERATOR_KEY" not in текст
