@@ -11,8 +11,8 @@
 cd /home/claude/wt-portable-site-cell-01 && \
 sudo /home/claude/wt-portable-site-cell-01/.venv/bin/python -m factory cell activate \
   --site zona-01 \
-  --commit 8d2bc9ad004460befe639ee371d0968b8f7bae97 \
-  --expect-digest sha256:35515496c1cd3f13e68641f62a9f7318663d133e1cefcadf7cfcba9ba015de7d
+  --commit 9d7b880ffd726ebe8b35e28dd61e674d20be4912 \
+  --expect-digest sha256:b9950afd5fb49b3125b2d15f7ca7015b3bf777f7fb852cf85194178a1f3a4c94
 ```
 
 `cd` обязателен: из другого каталога `python -m factory` подхватывает другую
@@ -28,8 +28,8 @@ sudo /home/claude/wt-portable-site-cell-01/.venv/bin/python -m factory cell acti
 cd /home/claude/wt-portable-site-cell-01 && \
 sudo /home/claude/wt-portable-site-cell-01/.venv/bin/python -m factory cell activate \
   --site zona-01 \
-  --commit 8d2bc9ad004460befe639ee371d0968b8f7bae97 \
-  --expect-digest sha256:35515496c1cd3f13e68641f62a9f7318663d133e1cefcadf7cfcba9ba015de7d \
+  --commit 9d7b880ffd726ebe8b35e28dd61e674d20be4912 \
+  --expect-digest sha256:b9950afd5fb49b3125b2d15f7ca7015b3bf777f7fb852cf85194178a1f3a4c94 \
   --confirm-activation
 ```
 
@@ -72,12 +72,26 @@ sudo /home/claude/wt-portable-site-cell-01/.venv/bin/python -m factory cell acti
 окружение задаёт `run.py` из `config/site.json`, поэтому этот класс ошибки там
 невозможен.
 
+**Прежняя служба маскируется, а не только отключается.** `systemctl restart`
+поднимает и отключённый юнит, а `automation/host/nova-daily-refresh.sh`
+(таймер включён, 03:30 UTC, `Persistent=true`) после публикации выполняет
+`systemctl restart lords-nova-01.service nova-zona-01.service || true`. На
+следующие сутки после переноса прежняя служба попыталась бы занять порт 9120 под
+новой — обычно ушла бы в failed незаметно, а в момент перезапуска новой заняла
+бы порт и вернула прежний код. Маска (`systemctl mask`) отказывает явно; откат
+снимает её первым действием.
+
+**Остаётся для владельца:** строку `systemctl restart … nova-zona-01.service`
+в `nova-daily-refresh.sh` нужно поправить — файл принадлежит ветке
+`claude/players-only-production-009`, отсюда не правится. Иначе производитель
+будет ежесуточно получать отказ на замаскированной службе.
+
 ## Состояние перед запуском
 
 | Что | Факт |
 | --- | --- |
-| Коммит | `8d2bc9ad0044`, дерево чистое, отправлен |
-| CI | success, run 35836428815, ровно на этом коммите |
+| Коммит | `9d7b880ffd72`, дерево чистое, отправлен |
+| CI | success, run 35837465108, ровно на этом коммите |
 | Сайт сейчас | публично 200, build-id `zona-01-a0209877e1db` |
 | Прежняя служба | `nova-zona-01.service` включена и работает |
 | Новая служба | отключена после отката, файл юнита на месте |
@@ -95,7 +109,7 @@ curl -s https://zonafilm.space/ | grep -o 'site-factory-build-id" content="[^"]*
 curl -s -o /dev/null -w '%{http_code}\n' https://zonafilm.space/
 ```
 
-Ожидаемый публичный build-id: `8d2bc9ad0044-zona-01`.
+Ожидаемый публичный build-id: `9d7b880ffd72-zona-01`.
 Базовый слепок для сравнения — `var/базовый-слепок.json`: главная 200 /
 123 922 байта, `/catalog` и `/search` — 308, robots.txt закрыт,
 `X-Robots-Tag: noindex, nofollow`.
