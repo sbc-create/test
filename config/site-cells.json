@@ -42,7 +42,7 @@
         "note": "Выделено, CI зелёный, сценарии активации проверены исполнением. НЕ активировано: нужен root."
       },
       "content_revision": null,
-      "last_update": "2026-09-23T16:58:22.226264+00:00",
+      "last_update": "2026-09-23T19:27:10.603751+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -50,11 +50,11 @@
         "previous_unit": null,
         "port": 9121,
         "account": "animedia-icu",
-        "app_dir": null,
-        "data_dir": null,
+        "app_dir": "/srv/animedia-icu/app",
+        "data_dir": "/srv/animedia-icu/data",
         "legacy_root": "/srv/lords/animedia-01/current/site",
-        "reload": "unknown",
-        "managed_by": "monolith",
+        "reload": "mtime",
+        "managed_by": "cell",
         "data_owner": "pipeline"
       },
       "release": {
