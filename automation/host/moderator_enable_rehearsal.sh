@@ -11,7 +11,7 @@ set -uo pipefail
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 SCRIPT="$HERE/animedia-enable-moderator.sh"
-RELEASE_ID="20260923T001500Z-community-public-03"
+RELEASE_ID="20260923T074500Z-community-one-vote-06"
 ROOT=$(mktemp -d)
 trap 'rm -rf "$ROOT"' EXIT
 
