@@ -55,6 +55,7 @@ class Размещение:
     #: Служба до переноса. Её звать нельзя: она закрыта от ручного запуска.
     previous_unit: str | None
     port: int | None
+    account: str | None
     reload: str
     managed_by: str
 
@@ -67,6 +68,7 @@ class Размещение:
         return {"site_id": self.site_id, "domain": self.domain,
                 "data_dir": self.data_dir, "unit": self.unit,
                 "previous_unit": self.previous_unit, "port": self.port,
+                "account": self.account,
                 "reload": self.reload, "managed_by": self.managed_by,
                 "restart_required": self.нужен_перезапуск}
 
@@ -84,6 +86,7 @@ def размещение(site_id: str, *, path: Path | None = None) -> Разм�
         site_id=cell.site_id, domain=cell.domain,
         data_dir=блок.get("data_dir"), unit=блок.get("unit"),
         previous_unit=блок.get("previous_unit"), port=блок.get("port"),
+        account=блок.get("account"),
         reload=блок.get("reload") or РЕЖИМ_ПО_УМОЛЧАНИЮ,
         managed_by=блок.get("managed_by") or "monolith",
     )
@@ -127,7 +130,7 @@ def прочитать_реестр_файлом(путь: str | Path) -> dict[s
             "site_id": c["site_id"], "domain": c.get("domain"),
             "data_dir": блок.get("data_dir"), "unit": блок.get("unit"),
             "previous_unit": блок.get("previous_unit"), "port": блок.get("port"),
-            "reload": режим, "managed_by": блок.get("managed_by") or "monolith",
+            "account": блок.get("account"), "reload": режим, "managed_by": блок.get("managed_by") or "monolith",
             "restart_required": режим != "mtime",
         }
     return итог
