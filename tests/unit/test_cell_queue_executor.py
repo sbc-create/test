@@ -413,3 +413,38 @@ def test_первый_выпуск_засевает_хранилище(tmp_path,
     звали.clear()
     итог = executor._засеять_хранилище("lords-01", dry_run=True)
     assert итог["seeded"] is False and звали == []
+
+
+def test_площадка_готовится_до_сборки():
+    """Сборщик запускается под учётной записью САЙТА, а создаёт её prepare.
+
+    При первом выпуске витрины учётной записи ещё нет, и сборка падала на
+    getpwnam раньше, чем что-либо происходило. Проверено на lords-01:
+    учётной записи lordfilm47-space не существовало, заявка уходила в
+    бесконечный повтор по таймеру.
+    """
+    import inspect
+    текст = inspect.getsource(executor.активировать)
+    assert текст.index('шаги["prepare"]') < текст.index("собрать_без_прав"), (
+        "сборка под учётной записью сайта не может идти раньше её создания")
+    assert текст.index('шаги["seed_data"]') < текст.index("собрать_без_прав")
+
+
+def test_непредвиденный_отказ_оставляет_результат(tmp_path, monkeypatch):
+    """Заявка без результата повторяется таймером вечно.
+
+    Снаружи это выглядит как «операция идёт»: заявка на месте, результата
+    нет, в журнале службы раз в минуту одно и то же исключение.
+    """
+    def падает(*a, **k):
+        raise KeyError("getpwnam(): name not found: lordfilm47-space")
+    monkeypatch.setattr(executor, "проверить_заявку", падает)
+
+    з = queue.собрать("zona-01", КОММИТ, ДАЙДЖЕСТ, ci_run="1")
+    queue.подать(з, база=tmp_path)
+    итог = executor.обслужить_очередь(база=tmp_path, dry_run=True)[0]
+    assert итог["status"] == "rejected"
+    assert "непредвиденный отказ KeyError" in итог["error"]
+    # Заявка снята, результат на месте: повтора по таймеру не будет.
+    assert not (tmp_path / "requests" / f"{з.request_id}.json").exists()
+    assert (tmp_path / "results" / f"{з.request_id}.json").is_file()
