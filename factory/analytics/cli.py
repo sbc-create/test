@@ -11,6 +11,7 @@
 from __future__ import annotations
 
 import json
+import sys
 import time
 
 from factory.analytics import client_codegen, events, registry, snippet
@@ -35,8 +36,25 @@ def _provider(args) -> YandexAnalyticsProvider:
     return YandexAnalyticsProvider(dry_run=not getattr(args, "confirm_writes", False))
 
 
+def _planned_and_off(entry: dict) -> bool:
+    """Домен заведён, но сбор выключен и счётчика нет."""
+    return not entry.get("counter_id") and not entry.get("analytics_enabled", False)
+
+
 def _selected(args) -> list[dict]:
-    """Записи реестра, к которым относится команда."""
+    """Записи реестра, к которым относится команда.
+
+    Про сплошной прогон. Домен, у которого в реестре нет счётчика и сбор
+    объявлен выключенным, в сплошную выборку не попадает. Причина не в
+    аккуратности: создание счётчика — внешнее необратимое действие, и делать
+    его побочным эффектом команды «пройтись по всем» нельзя. Такая запись
+    означает «решение ещё не принято», и починочный прогон не вправе принять
+    его за оператора.
+
+    Названный явно домен обрабатывается всегда: `--domain zonafilm.cc` — это и
+    есть принятое решение. Пропуск не молчит: он печатается, иначе «прошли по
+    всем» читалось бы как «сделали всем».
+    """
     entries = registry.load()["properties"]
     domain = getattr(args, "domain", None)
     if domain:
@@ -51,7 +69,15 @@ def _selected(args) -> list[dict]:
         if not chosen:
             raise SystemExit(f"сайт {site} не связан ни с одним доменом в {registry.REGISTRY_PATH}")
         return chosen
-    return entries
+    skipped = [e["domain"] for e in entries if _planned_and_off(e)]
+    if skipped:
+        print(
+            "пропущены домены без счётчика и с выключенным сбором: "
+            + ", ".join(sorted(skipped))
+            + " (обработать явно: --domain <домен>)",
+            file=sys.stderr,
+        )
+    return [e for e in entries if not _planned_and_off(e)]
 
 
 # --------------------------------------------------------------- команды

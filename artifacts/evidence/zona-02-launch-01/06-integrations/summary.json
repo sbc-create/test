@@ -1,0 +1,42 @@
+{
+  "generated_at": "2026-09-23",
+  "site_id": "zona-02",
+  "domain": "zonafilm.cc",
+  "metrika": {
+    "existing_counter_found": null,
+    "search_scope": [
+      "config/analytics.json",
+      "все *.json/*.yaml/*.md репозитория"
+    ],
+    "search_result": "счётчика для zonafilm.cc не существует ни в одном реестре",
+    "registry_entry": "создана через factory.analytics.registry.upsert; counter_state=planned, counter_id=null",
+    "duplicate_protection": "ensure_metrica_counter ищет счётчик домена в аккаунте и переиспользует найденный; при двух счётчиках на домен останавливается",
+    "wiring_proven": true,
+    "wiring_evidence": "04-metrika/rehearsal.json (контрольное значение) + 04-metrika/absent-counter.json",
+    "counter_created": false,
+    "blocked_by": "BLOCKED_SECRET: /etc/site-factory/secrets/yandex_oauth_token, режим 0600 root:root",
+    "owner_command": "zonafilm-cc-integrations.sh --metrika-apply под учётной записью с доступом"
+  },
+  "topvisor": {
+    "existing_project_found": null,
+    "search_result": "проекта для zonafilm.cc не существует ни в одном реестре фабрики",
+    "manifest_entry": "factory/topvisor/manifest.py: zonafilm.cc, 3 группы запросов, регион 213",
+    "keywords_unique_vs_other_projects": true,
+    "schedule": "вручную, после отдельного разрешения владельца",
+    "technical_audit": "запланирован, не запускался: платная операция",
+    "duplicate_protection": "plan.build сверяет проекты аккаунта по домену и отключает создание целиком, если хоть одну запись не удалось прочитать",
+    "project_created": false,
+    "blocked_by": "BLOCKED_SECRET: /etc/site-factory/secrets/topvisor/, 0440 root:ubuntu — сессия не в группе",
+    "paid_operation": true
+  },
+  "playback": {
+    "desktop": "REAL_PLAYBACK_OK 6/6",
+    "mobile": "REAL_PLAYBACK_OK 6/6",
+    "publisher_id": "10238",
+    "evidence": "05-playback/desktop.json, 05-playback/mobile.json"
+  },
+  "public": {
+    "https": "NOT_RUN",
+    "reason": "записи A для zonafilm.cc не существует"
+  }
+}

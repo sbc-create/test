@@ -391,13 +391,13 @@
         "media": "/srv/lords/.frontend/sites/zona-02/data/media"
       },
       "deployed": {
-        "release_digest": "sha256:9ed1bdb728e575d9475fbefd72f5147e6931b7476cd1993c9c0f8aea5a3c1039",
-        "source_commit": "98232b6f7edb3652228921ffc7994c24cf7234fb",
-        "artifact": "/home/claude/wt-zona-02-launch-01/artifacts/cells/zona-02/zona-02-98232b6f7edb.tar.gz",
-        "built_at": "2026-09-22T23:14:33.543561+00:00"
+        "release_digest": "sha256:c14fc8c2511e5d0a391501b3d5c5dc23d4a8e5c31b14d7ef37f781e7828b4067",
+        "source_commit": "a9fd36d5a22cac2e8c02232f8dcf98d4c45bfe4b",
+        "artifact": "/home/claude/wt-zona-02-launch-01/artifacts/cells/zona-02/zona-02-a9fd36d5a22c.tar.gz",
+        "built_at": "2026-09-23T06:55:57.382196+00:00"
       },
       "content_revision": null,
-      "last_update": "2026-09-22T23:14:33.544352+00:00",
+      "last_update": "2026-09-23T06:55:57.383042+00:00",
       "backup": {},
       "resources": {}
     }

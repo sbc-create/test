@@ -1,82 +1,34 @@
 {
   "http": {
     "lords-01": {
-      "port": 9110,
       "status": 200,
-      "bytes": 68334,
+      "bytes": 67743,
       "build_id": "20260921T134330Z-515fcf0-cardfix"
     },
     "lords-02": {
-      "port": 9111,
       "status": 200,
-      "bytes": 71508,
+      "bytes": 70784,
       "build_id": "20260921T134330Z-515fcf0-cardfix"
     },
     "lords-03": {
-      "port": 9112,
       "status": 200,
-      "bytes": 61122,
+      "bytes": 60709,
       "build_id": "20260921T134330Z-515fcf0-cardfix"
     },
     "zona-01": {
-      "port": 9120,
       "status": 200,
-      "bytes": 123917,
+      "bytes": 123922,
       "build_id": "zona-01-a0209877e1db"
     },
     "animedia-01": {
-      "port": 9121,
       "status": 200,
-      "bytes": 219062,
+      "bytes": 218084,
       "build_id": "20260922T143111Z-efdef56-animedia-parity"
     },
     "animedia-02": {
-      "port": 9122,
       "status": 200,
-      "bytes": 194539,
+      "bytes": 194085,
       "build_id": "20260922T143111Z-efdef56-animedia-parity"
-    }
-  },
-  "files": {
-    "animedia-01-catalog.json": {
-      "size": 2516554,
-      "mtime": 1790050303
-    },
-    "animedia-02-catalog.json": {
-      "size": 2516554,
-      "mtime": 1790050303
-    },
-    "lords-01-catalog.json": {
-      "size": 16754609,
-      "mtime": 1790050304
-    },
-    "lords-02-catalog.json": {
-      "size": 16754609,
-      "mtime": 1790117443
-    },
-    "lords-03-catalog.json": {
-      "size": 16754609,
-      "mtime": 1790117471
-    },
-    "yummy-biz-catalog.json": {
-      "size": 3422807,
-      "mtime": 1789073693
-    },
-    "yummy-org-catalog.json": {
-      "size": 3422807,
-      "mtime": 1789073705
-    },
-    "yummy-site-catalog.json": {
-      "size": 3422807,
-      "mtime": 1789073682
-    },
-    "zona-01-catalog.json": {
-      "size": 16754608,
-      "mtime": 1790050311
-    },
-    "zona-02-catalog.json": {
-      "size": 16754608,
-      "mtime": 1790087660
     }
   },
   "releases": {

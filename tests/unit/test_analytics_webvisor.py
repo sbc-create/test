@@ -342,6 +342,14 @@ def test_registry_records_the_real_state_including_problems():
 
     for entry in registry.properties():
         raw = entry.raw
+        if not raw["counter_id"]:
+            # Запись без счётчика — не «потеряли», а «ещё не создан». Требовать
+            # от неё боевого состояния значит требовать доказательства того,
+            # чего пока нет. Честность такой записи проверяется отдельно:
+            # test_a_domain_without_a_counter_says_so_honestly.
+            assert raw.get("counter_state") in ("planned", "blocked"), (
+                f"{entry.domain}: счётчика нет, а состояние {raw.get('counter_state')!r}")
+            continue
         assert raw["counter_id"], f"{entry.domain}: боевой counter_id не записан"
         if raw["webvisor"]:
             assert any("сесси" in p or "Вебвизор" in p for p in raw["problems"]), (

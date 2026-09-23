@@ -188,6 +188,13 @@ def test_repair_run_records_counter_ids_and_a_goal_id_for_every_event(
     data = registry.load()
     total = 0
     for entry in data["properties"]:
+        if entry["domain"] not in LIVE:
+            # Домен без счётчика и с выключенным сбором в сплошную выборку не
+            # попадает: создание счётчика — внешнее необратимое действие, и
+            # побочным эффектом «пройтись по всем» оно быть не может.
+            assert entry["counter_id"] is None, (
+                f"{entry['domain']}: починочный прогон создал счётчик сам")
+            continue
         assert entry["counter_id"] == LIVE[entry["domain"]]
         assert entry["counter_state"] == "reused"
         assert entry["webvisor"] is False
@@ -217,7 +224,7 @@ def test_dry_run_writes_nothing_at_all(provider, scoped_registry, monkeypatch, c
     analytics_cli.cmd_apply(Args(confirm_writes=False, json=True))
     capsys.readouterr()
     assert provider.writes() == []
-    assert all(entry["counter_id"] == LIVE[entry["domain"]]
+    assert all(entry["counter_id"] == LIVE.get(entry["domain"])
                for entry in registry.load()["properties"])
 
 

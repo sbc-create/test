@@ -322,9 +322,55 @@ LIVE_COUNTERS = {
 }
 
 
+# --- живые счётчики против запланированных ------------------------------------
+#
+# В реестре могут быть две разные вещи: домен с подтверждённым счётчиком и
+# домен, который заведён, но счётчика ещё не получил. Проверки ниже написаны
+# про первое — их названия так и говорят, «live counters». Прогонять их по
+# второму бессмысленно: у записи без счётчика нет ни целей, ни состояния
+# «reused», и падение означало бы не дефект, а то, что счётчик пока не создан.
+#
+# Чтобы запланированная запись не стала лазейкой, для неё есть собственная
+# проверка ниже: она обязана честно называть себя и причину.
+
+
+def _живые():
+    return [p for p in registry.properties() if p.counter_id]
+
+
+def _запланированные():
+    return [p for p in registry.properties() if not p.counter_id]
+
+
 def test_registry_holds_exactly_the_known_domains():
-    domains = [p.domain for p in registry.properties()]
-    assert domains == list(LIVE_COUNTERS)
+    """Ни одного неизвестного ЖИВОГО счётчика в реестре нет.
+
+    Прежняя форма сравнивала весь список доменов со списком известных и
+    запрещала тем самым любое пополнение реестра — включая намеренное.
+    Ловить надо другое: счётчик, появившийся сам по себе. Поэтому сверяются
+    домены с подтверждённым счётчиком, а запланированные разбираются
+    отдельной проверкой, которая требует от них назвать причину.
+    """
+    живые = [p.domain for p in _живые()]
+    assert живые == list(LIVE_COUNTERS), (
+        f"домены с живым счётчиком: {живые}, известные: {list(LIVE_COUNTERS)}")
+
+
+def test_a_domain_without_a_counter_says_so_honestly():
+    """Запись без счётчика обязана назвать себя и причину.
+
+    Иначе она неотличима от настроенной, у которой счётчик просто потеряли.
+    """
+    for entry in _запланированные():
+        состояние = entry.raw.get("counter_state")
+        assert состояние in ("planned", "blocked"), (
+            f"{entry.domain}: счётчика нет, а состояние {состояние!r}")
+        assert entry.raw.get("analytics_enabled") is False, (
+            f"{entry.domain}: счётчика нет, а сбор объявлен включённым")
+        причины = entry.raw.get("problems") or []
+        assert причины, f"{entry.domain}: счётчика нет, а причина не названа"
+        assert any(("BLOCKED" in str(с)) for с in причины), (
+            f"{entry.domain}: причины есть, но ни одна не названа кодом блокировки: {причины}")
 
 
 def test_each_domain_is_independent():
@@ -333,7 +379,8 @@ def test_each_domain_is_independent():
     hosts = [tuple(e.allowed_hosts) for e in entries]
     assert len(set(hosts)) == len(entries)
     # Счётчик, попавший на два домена, собирал бы чужие визиты в чужой отчёт.
-    counters = [e.counter_id for e in entries]
+    # None повторяется законно: это «счётчика ещё нет», а не «тот же счётчик».
+    counters = [e.counter_id for e in entries if e.counter_id]
     assert len(set(counters)) == len(counters), f"счётчик повторяется: {counters}"
     for entry in entries:
         assert entry.allowed_hosts == [entry.domain]
@@ -438,7 +485,7 @@ def test_registry_refuses_data_that_breaks_the_schema(tmp_path):
 #: продакшена: расхождение означает, что счётчик подменили или пересоздали, и
 #: заметить это должен тест, а не отчёт Метрики через месяц.
 def test_registry_records_the_live_counters():
-    for entry in registry.properties():
+    for entry in _живые():
         assert entry.counter_id == LIVE_COUNTERS[entry.domain], entry.domain
         # `created` допустим только для счётчиков, заведённых в этом же цикле;
         # повторный прогон обязан их переиспользовать, а не завести второй.
@@ -453,7 +500,7 @@ def test_every_counter_has_all_nine_goals_with_numeric_ids():
     from factory.analytics import events
 
     total = 0
-    for entry in registry.properties():
+    for entry in _живые():
         goals = entry.raw["goals"]
         goal_ids = entry.raw["goal_ids"]
         assert set(goals) == set(events.EVENT_IDS), entry.domain
@@ -469,7 +516,7 @@ def test_every_counter_has_all_nine_goals_with_numeric_ids():
 
 def test_session_recording_is_off_on_every_live_counter():
     """Требование задания, дважды нарушенное по дороге. Теперь оно под тестом."""
-    for entry in registry.properties():
+    for entry in _живые():
         assert entry.raw["webvisor"] is False, entry.domain
         assert entry.raw["problems"] == [], (
             f"{entry.domain}: настройка завершена, а в problems что-то осталось: "
