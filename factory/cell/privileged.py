@@ -229,3 +229,158 @@ def описать_границу() -> dict[str, Any]:
         "unit_template_source": "root-owned package copy",
         "artifact_members_checked": ["traversal", "symlink escape", "member type"],
     }
+
+
+#: Шаблон юнита живёт ЗДЕСЬ, в root-овой копии пакета, а не в репозитории сайта.
+#: Юнит, собранный из строк репозитория, означал бы, что право писать в
+#: репозиторий — это право задать ExecStart, User и всё остальное от root.
+ЮНИТ_ШАБЛОН = """# Служба {domain} ({site_id}). Собрана исполнителем, не репозиторием.
+[Unit]
+Description={domain} ({site_id}), выделенная ячейка
+After=network-online.target
+
+[Service]
+Type=simple
+User={account}
+Group={account}
+WorkingDirectory={app}
+ExecStart=/usr/bin/python3 {app}/run.py --port {port} --data-dir {data}
+Restart=on-failure
+RestartSec=2
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths={data}
+ProtectKernelTunables=true
+RestrictSUIDSGID=true
+
+[Install]
+WantedBy=multi-user.target
+"""
+
+#: Drop-in, закрывающий прежнюю службу от ручного запуска. `systemctl mask`
+#: здесь не годится: он кладёт ссылку на /dev/null по пути юнита, а файл юнита
+#: существует — systemd отвечает «File ... already exists».
+ЗАЩИТА_ШАБЛОН = """# Порт {port} принадлежит {account}. Прежняя служба не поднимается вручную:
+# конвейеры содержимого вызывают `systemctl restart` и заняли бы порт.
+[Unit]
+RefuseManualStart=yes
+"""
+
+
+def собрать_без_прав(repo: Path, куда: Path, account: str) -> tuple[Path, dict[str, Any]]:
+    """Собрать артефакт из репозитория ПОД НЕПРИВИЛЕГИРОВАННОЙ учётной записью.
+
+    Сборщик — код репозитория, а репозиторий доступен на запись обычной учётной
+    записи. Запустить его от root значит отдать root тому, кто может туда
+    писать. Поэтому привилегии сбрасываются до сборки, а root получает только
+    готовый файл, который потом сверяется по digest.
+    """
+    import json as _json
+    import pwd as _pwd
+
+    сборщик = repo / "tools" / "build_release.py"
+    if not сборщик.is_file():
+        raise PrivilegedRefused(f"в репозитории нет {сборщик}")
+    куда.mkdir(parents=True, exist_ok=True)
+
+    подготовка = None
+    if os.geteuid() == 0:
+        запись = _pwd.getpwnam(account)
+        shutil.chown(куда, account, account)
+
+        def подготовка():  # noqa: F811 — назначается только под root
+            os.setgid(запись.pw_gid)
+            os.setuid(запись.pw_uid)
+
+    готово = subprocess.run(
+        ["/usr/bin/python3", str(сборщик), "--output", str(куда)],
+        cwd=str(repo), capture_output=True, text=True, preexec_fn=подготовка)
+    if готово.returncode != 0:
+        raise PrivilegedRefused(
+            f"сборка не удалась под {account}: {готово.stderr.strip()[-600:]}")
+    манифест = _json.loads((куда / "release-manifest.json").read_text(encoding="utf-8"))
+    артефакт = куда / манифест["artifact"]
+    if not артефакт.is_file():
+        raise PrivilegedRefused(f"сборщик не оставил артефакта {артефакт}")
+    return артефакт, манифест
+
+
+def _systemctl(*args: str, проверять: bool = True) -> subprocess.CompletedProcess:
+    команда = os.environ.get("SITE_SYSTEMCTL", "systemctl")
+    готово = subprocess.run([команда, *args], capture_output=True, text=True)
+    if проверять and готово.returncode != 0:
+        raise PrivilegedRefused(
+            f"systemctl {' '.join(args)} отказал: {готово.stderr.strip()[:300]}")
+    return готово
+
+
+def switch(site_id: str, *, dry_run: bool = True,
+           предел: int = 600) -> dict[str, Any]:
+    """Поставить юнит, остановить прежний, запустить новый, дождаться готовности."""
+    п = Площадка.из_реестра(site_id)
+    каталог_юнитов = Path(os.environ.get("SITE_UNIT_DIR", "/etc/systemd/system"))
+    текст = ЮНИТ_ШАБЛОН.format(domain=runtime.размещение(site_id).domain,
+                               site_id=site_id, account=п.account,
+                               app=п.app, data=п.data, port=п.port)
+    шаги = [f"юнит {каталог_юнитов / п.unit}"]
+    if п.previous_unit:
+        шаги += [f"stop {п.previous_unit}", f"disable {п.previous_unit}",
+                 f"drop-in RefuseManualStart для {п.previous_unit}"]
+    шаги += [f"enable --now {п.unit}", f"ждать готовности до {предел} с"]
+    if dry_run:
+        return {"operation": "switch", "site_id": site_id, "dry_run": True,
+                "steps": шаги, "unit_text_sha": __import__("hashlib").sha256(
+                    текст.encode()).hexdigest()[:16]}
+
+    _нужен_root()
+    (каталог_юнитов / п.unit).write_text(текст, encoding="utf-8")
+    if п.previous_unit:
+        _systemctl("stop", п.previous_unit, проверять=False)
+        _systemctl("disable", п.previous_unit, проверять=False)
+        защита = каталог_юнитов / f"{п.previous_unit}.d"
+        защита.mkdir(parents=True, exist_ok=True)
+        (защита / f"10-{п.account}-port-guard.conf").write_text(
+            ЗАЩИТА_ШАБЛОН.format(port=п.port, account=п.account), encoding="utf-8")
+    _systemctl("daemon-reload")
+    _systemctl("enable", "--now", п.unit)
+    состояние = готов(п.port, предел=предел,
+                      жив=lambda: _systemctl("is-active", "--quiet", п.unit,
+                                             проверять=False).returncode == 0)
+    return {"operation": "switch", "site_id": site_id, "dry_run": False,
+            "steps": шаги, "ready": состояние}
+
+
+def rollback(site_id: str, *, dry_run: bool = True,
+             предел: int = 600) -> dict[str, Any]:
+    """Вернуть прежнюю службу. Снятие защиты — первым действием."""
+    п = Площадка.из_реестра(site_id)
+    каталог_юнитов = Path(os.environ.get("SITE_UNIT_DIR", "/etc/systemd/system"))
+    шаги = [f"disable --now {п.unit}"]
+    if п.previous_unit:
+        шаги += ["снять drop-in RefuseManualStart",
+                 f"enable --now {п.previous_unit}", "дождаться ответа"]
+    if dry_run:
+        return {"operation": "rollback", "site_id": site_id, "dry_run": True,
+                "steps": шаги}
+
+    _нужен_root()
+    _systemctl("disable", "--now", п.unit, проверять=False)
+    if not п.previous_unit:
+        return {"operation": "rollback", "site_id": site_id, "dry_run": False,
+                "steps": шаги, "ready": {"ready": False,
+                                         "reason": "прежней службы нет"}}
+    защита = каталог_юнитов / f"{п.previous_unit}.d" / f"10-{п.account}-port-guard.conf"
+    # Снять ДО enable: с RefuseManualStart запуск отказывает, и сайт остался бы
+    # без обеих служб — то есть откат сделал бы ровно то, от чего защищает.
+    if защита.is_file():
+        защита.unlink()
+    _systemctl("daemon-reload", проверять=False)
+    _systemctl("enable", "--now", п.previous_unit)
+    состояние = готов(п.port, предел=предел,
+                      жив=lambda: _systemctl("is-active", "--quiet", п.previous_unit,
+                                             проверять=False).returncode == 0)
+    return {"operation": "rollback", "site_id": site_id, "dry_run": False,
+            "steps": шаги, "ready": состояние}

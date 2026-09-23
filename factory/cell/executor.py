@@ -28,13 +28,14 @@ import contextlib
 import json
 import os
 import subprocess
+import tempfile
 import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from factory.cell import admin_exec, queue, registry, runtime
+from factory.cell import privileged, queue, registry, runtime
 
 
 class ExecutorError(Exception):
@@ -160,6 +161,69 @@ def проверить_ci(заявка: queue.Заявка, *, remote: str) -> d
             "conclusion": данные.get("conclusion")}
 
 
+def активировать(заявка: queue.Заявка, *, файл: Path,
+                 dry_run: bool = True) -> dict[str, Any]:
+    """Активация без единой строки, исполненной от root из репозитория.
+
+    Порядок намеренный. Сборка идёт ПОД УЧЁТНОЙ ЗАПИСЬЮ САЙТА: сборщик — код
+    репозитория, а репозиторий доступен на запись обычной учётной записи.
+    Запустить его от root значило бы отдать root тому, кто может туда писать.
+    Root получает только готовый файл и сверяет его по digest из заявки.
+
+    Дальше — только операции из `privileged.ОПЕРАЦИИ`. Ни `deploy/activate.sh`,
+    ни любого другого файла репозитория здесь не исполняется.
+    """
+    cell = registry.resolve(заявка.site_id)
+    путь_репо = (cell.repo or {}).get("path")
+    if not путь_репо:
+        raise ExecutorError(f"{заявка.site_id}: в реестре нет локального пути репозитория")
+    repo = Path(путь_репо)
+    if not repo.is_absolute():
+        from factory.paths import PATHS
+        repo = PATHS.root / repo
+    размещение = runtime.размещение(заявка.site_id)
+
+    with tempfile.TemporaryDirectory() as tmp:
+        артефакт, манифест = privileged.собрать_без_прав(
+            repo, Path(tmp), размещение.account or "nobody")
+        if манифест.get("source_commit") != заявка.commit:
+            raise ExecutorError(
+                f"собран коммит {манифест.get('source_commit', '')[:12]}, "
+                f"а заявка о {заявка.commit[:12]}")
+        if манифест.get("digest") != заявка.digest:
+            raise ExecutorError(
+                f"digest сборки {манифест.get('digest')} не совпал с заявленным "
+                f"{заявка.digest}; выкладывается проверенный выпуск или никакой")
+        if файл.is_file():
+            queue.отметить(файл, "artifact_verified", {"digest": заявка.digest})
+
+        шаги = {"prepare": privileged.prepare(заявка.site_id, dry_run=dry_run)}
+        шаги["install_release"] = privileged.install_release(
+            заявка.site_id, артефакт, заявка.digest, dry_run=dry_run)
+        if файл.is_file():
+            queue.отметить(файл, "candidate_ready")
+        шаги["switch"] = privileged.switch(заявка.site_id, dry_run=dry_run)
+
+    готово = (шаги["switch"].get("ready") or {}).get("ready", dry_run)
+    if not dry_run and not готово:
+        шаги["rollback"] = privileged.rollback(заявка.site_id, dry_run=False)
+        return {"status": "rolled-back", "stage": "rolled_back", "steps": шаги,
+                "build_id": манифест.get("live_build_id")}
+
+    if файл.is_file() and not dry_run:
+        queue.отметить(файл, "switched")
+    шаги["verify"] = privileged.verify(
+        заявка.site_id, ожидаемый_build=манифест.get("live_build_id") or "")
+    if not dry_run and not шаги["verify"].get("ok"):
+        шаги["rollback"] = privileged.rollback(заявка.site_id, dry_run=False)
+        return {"status": "rolled-back", "stage": "rolled_back", "steps": шаги,
+                "build_id": манифест.get("live_build_id")}
+    return {"status": "dry-run" if dry_run else "activated",
+            "stage": "live_verified" if not dry_run else "validated",
+            "steps": шаги, "digest": заявка.digest,
+            "build_id": манифест.get("live_build_id")}
+
+
 def выполнить(заявка: queue.Заявка, *, база: Path, dry_run: bool = True) -> dict[str, Any]:
     """Одна операция целиком, с журналом переходов."""
     файл = база / "requests" / f"{заявка.request_id}.json"
@@ -182,12 +246,9 @@ def выполнить(заявка: queue.Заявка, *, база: Path, dry_
         результат["lock"] = замок.владелец
 
         if заявка.operation == "activate":
-            итог = admin_exec.активировать(
-                заявка.site_id, commit=заявка.commit, dry_run=dry_run,
-                expect_digest=заявка.digest)
+            итог = активировать(заявка, файл=файл, dry_run=dry_run)
             результат["outcome"] = итог
-            этап = "live_verified" if итог.get("status") == "activated" else (
-                "failed" if итог.get("status") in ("failed", "dry-run-failed") else "switched")
+            этап = итог["stage"]
         elif заявка.operation == "deliver":
             from factory.cell import delivery
             итог = delivery.доставить(заявка.site_id, dry_run=dry_run)
@@ -201,7 +262,8 @@ def выполнить(заявка: queue.Заявка, *, база: Path, dry_
         if файл.is_file():
             queue.отметить(файл, этап, {"dry_run": dry_run})
         результат["status"] = "ok" if этап != "failed" else "failed"
-    except (ExecutorError, admin_exec.ExecutorRefused, registry.RegistryError) as exc:
+    except (ExecutorError, privileged.PrivilegedRefused,
+            registry.RegistryError) as exc:
         результат["status"] = "rejected"
         результат["error"] = str(exc)
         if файл.is_file():
