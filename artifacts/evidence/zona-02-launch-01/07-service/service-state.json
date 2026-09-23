@@ -1,0 +1,38 @@
+{
+  "checked_at": "2026-09-23",
+  "source": "владелец выполнил zonafilm-cc-activate.sh --apply",
+  "unit": {
+    "installed": true,
+    "sha256": "7636642d0e40473c284c893bc9b2775b",
+    "matches_release_copy": true,
+    "autostart_enabled": true,
+    "exec_start": "ExecStart=/srv/site-factory/repo/.venv/bin/python3 /srv/lords/.frontend/sites/zona-02/current/run.py --port 9123"
+  },
+  "process": {
+    "count": 1,
+    "exactly_one": true,
+    "detail": [
+      {
+        "pid": 2145156,
+        "ppid": 1,
+        "user": "lords",
+        "executing": "/srv/lords/.frontend/sites/zona-02/releases/a9fd36d5a22c/template/zona-02-1015c650d8be/lords-frontend.py"
+      }
+    ]
+  },
+  "no_temp_process_alongside_service": true,
+  "http": {
+    "status": 200,
+    "bytes": 58134,
+    "build_id": "zona-02-1015c650d8be",
+    "robots": "noindex, nofollow"
+  },
+  "data": {
+    "player-zona-02.json": "e0ebcc0161acbcb7",
+    "zona-02-catalog.json": "5cd67cf22cd00b4f",
+    "zona-02-details.json": "633be4b18c60a65c"
+  },
+  "data_unchanged_since_earlier_snapshot": true,
+  "vhost_installed": false,
+  "public_https": "NOT_RUN: записи A для zonafilm.cc не существует"
+}

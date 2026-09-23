@@ -1,42 +1,29 @@
 {
+  "checked_at": "2026-09-23 (после установки службы zona-02)",
   "http": {
     "lords-01": {
       "status": 200,
-      "bytes": 67743,
       "build_id": "20260921T134330Z-515fcf0-cardfix"
     },
     "lords-02": {
       "status": 200,
-      "bytes": 70784,
       "build_id": "20260921T134330Z-515fcf0-cardfix"
     },
     "lords-03": {
       "status": 200,
-      "bytes": 60709,
       "build_id": "20260921T134330Z-515fcf0-cardfix"
     },
     "zona-01": {
       "status": 200,
-      "bytes": 123922,
       "build_id": "zona-01-a0209877e1db"
     },
     "animedia-01": {
       "status": 200,
-      "bytes": 218084,
       "build_id": "20260922T143111Z-efdef56-animedia-parity"
     },
     "animedia-02": {
       "status": 200,
-      "bytes": 194085,
-      "build_id": "20260922T143111Z-efdef56-animedia-parity"
+      "build_id": "f9bf2b48ec66-animedia-space"
     }
-  },
-  "releases": {
-    "lords-01": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix",
-    "lords-02": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix",
-    "lords-03": "/srv/lords/.frontend/releases/20260921T134330Z-515fcf0-cardfix",
-    "zona-01": "/srv/lords/.frontend/releases/zona-01-a0209877e1db",
-    "animedia-01": "/srv/lords/.frontend/releases/20260923T001500Z-community-public-03",
-    "animedia-02": "/srv/lords/.frontend/releases/20260922T143111Z-efdef56-animedia-parity"
   }
 }

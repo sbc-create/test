@@ -31,7 +31,7 @@
           "A-запись apex и www отсутствуют; зона Cloudflare, учётных данных нет"
         ]
       },
-      "at": "2026-09-23T06:58:05.216532+00:00"
+      "at": "2026-09-23T07:37:12.064226+00:00"
     },
     {
       "name": "site_id_assigned",
@@ -53,7 +53,7 @@
         "allocated": false,
         "reused": true
       },
-      "at": "2026-09-23T06:58:05.257390+00:00"
+      "at": "2026-09-23T07:37:12.187079+00:00"
     },
     {
       "name": "template_reserved",
@@ -103,7 +103,7 @@
         "match": true,
         "repository": "sbc-create/site-zonafilm-cc"
       },
-      "at": "2026-09-23T06:58:06.049008+00:00"
+      "at": "2026-09-23T07:37:13.016950+00:00"
     },
     {
       "name": "ci_verified",
@@ -118,7 +118,7 @@
           }
         ]
       },
-      "at": "2026-09-23T06:58:06.875380+00:00"
+      "at": "2026-09-23T07:37:13.825042+00:00"
     },
     {
       "name": "release_ready",
@@ -129,7 +129,7 @@
         "artifact": "/home/claude/wt-zona-02-launch-01/artifacts/cells/zona-02/zona-02-a9fd36d5a22c.tar.gz",
         "verified_digest": "sha256:c14fc8c2511e5d0a391501b3d5c5dc23d4a8e5c31b14d7ef37f781e7828b4067"
       },
-      "at": "2026-09-23T06:58:06.908522+00:00"
+      "at": "2026-09-23T07:37:13.954566+00:00"
     },
     {
       "name": "server_staged",
@@ -137,13 +137,13 @@
       "detail": {
         "current": "/srv/lords/.frontend/sites/zona-02/releases/a9fd36d5a22c",
         "previous": "/srv/lords/.frontend/sites/zona-02/releases/95707b461f6d",
-        "pid": 1990454,
+        "pid": 2145156,
         "executing": "/srv/lords/.frontend/sites/zona-02/releases/a9fd36d5a22c/template/zona-02-1015c650d8be/lords-frontend.py",
         "port": 9123,
         "healthz": 200,
-        "unit_installed": false
+        "unit_installed": true
       },
-      "at": "2026-09-23T06:58:06.968709+00:00"
+      "at": "2026-09-23T07:37:14.180437+00:00"
     },
     {
       "name": "data_verified",
@@ -159,7 +159,7 @@
         "rollback_evidence": "artifacts/evidence/zona-02-launch-01/01-local/rollback.json",
         "data_unchanged_across_rollback": true
       },
-      "at": "2026-09-23T06:58:06.988352+00:00"
+      "at": "2026-09-23T07:37:14.358848+00:00"
     },
     {
       "name": "sync_verified",
@@ -179,7 +179,7 @@
         },
         "evidence": "artifacts/evidence/zona-02-launch-01/01-local/sync.json"
       },
-      "at": "2026-09-23T06:58:07.038073+00:00"
+      "at": "2026-09-23T07:37:14.467736+00:00"
     },
     {
       "name": "seo_verified",
@@ -203,15 +203,15 @@
         "note": "индексация закрыта намеренно; открытие — отдельная команда владельца",
         "evidence": "artifacts/evidence/zona-02-launch-01/01-local/acceptance-own-release.json"
       },
-      "at": "2026-09-23T06:58:07.063129+00:00"
+      "at": "2026-09-23T07:37:14.531610+00:00"
     },
     {
       "name": "deployed",
       "status": "blocked",
       "detail": {
-        "reason": "BLOCKED_ACCESS: не установлены /etc/systemd/system/nova-zona-02.service, /etc/nginx/lords/zona-02.conf; установка требует root, профиль UNATTENDED_SAFE его не даёт. Команды — docs/zona-02/OWNER_COMMANDS.md"
+        "reason": "BLOCKED_ACCESS: не установлены /etc/nginx/lords/zona-02.conf; установка требует root, профиль UNATTENDED_SAFE его не даёт. Команды — docs/zona-02/OWNER_COMMANDS.md"
       },
-      "at": "2026-09-23T06:58:07.088789+00:00"
+      "at": "2026-09-23T07:37:14.732701+00:00"
     },
     {
       "name": "publicly_accepted",
@@ -221,5 +221,5 @@
     }
   ],
   "created_at": "2026-09-22T22:26:52.117882+00:00",
-  "updated_at": "2026-09-23T06:58:07.088789+00:00"
+  "updated_at": "2026-09-23T07:37:14.732701+00:00"
 }
