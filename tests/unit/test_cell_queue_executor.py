@@ -327,3 +327,33 @@ def test_очередь_остаётся_единственным_путём_в�
                     and isinstance(узел.value, ast.Name)
                     and узел.value.id == "admin_exec"):
                 raise AssertionError(f"{файл.name}: зовёт admin_exec.активировать")
+
+
+def test_доставка_данных_не_требует_прогона_ci(monkeypatch):
+    """Данные — не код. Требовать от них прогон значило бы остановить каталог.
+
+    Подмены здесь нет: заявка на доставку не зовёт install_release вовсе, то
+    есть операцией `deliver` нового исполняемого кода на сайт не поставить.
+    """
+    def не_должен_звать(*a, **k):
+        raise AssertionError("доставка спрашивала GitHub")
+    monkeypatch.setattr(executor.subprocess, "run", не_должен_звать)
+    з = queue.собрать("zona-01", КОММИТ, ДАЙДЖЕСТ, operation="deliver")
+    итог = executor.проверить_ci(з, remote="https://github.com/o/r", операция="deliver")
+    assert итог == {"checked": False, "applicable": False,
+                    "reason": "операция deliver не ставит новый код"}
+
+
+def test_доставка_не_ставит_код():
+    """Основание предыдущего теста, а не допущение: проверяется по исходнику."""
+    import ast
+    дерево = ast.parse((КОРЕНЬ / "factory" / "cell" / "executor.py")
+                       .read_text(encoding="utf-8"))
+    for узел in ast.walk(дерево):
+        if isinstance(узел, ast.FunctionDef) and узел.name == "обновить_данные":
+            вызовы = {у.func.attr for у in ast.walk(узел)
+                      if isinstance(у, ast.Call) and isinstance(у.func, ast.Attribute)}
+            assert "install_release" not in вызовы
+            break
+    else:
+        raise AssertionError("обновить_данные не найдена")
