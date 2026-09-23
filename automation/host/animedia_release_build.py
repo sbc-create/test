@@ -40,6 +40,12 @@ from pathlib import Path
     # без этого файла, были бы «недоступны» — ровно там, где владелец их и
     # смотрит.
     "factory/animedia/community.py": "community.py",
+    # Регулярное обновление данных едет вместе с витриной, а не ставится
+    # потом руками. Без него новый сайт поднимается на снимке, застывшем в
+    # момент сборки: «Новые серии» и «Расписание» остаются пустыми навсегда,
+    # и по зелёному healthz этого не видно. Обработчик шаблонный — витрину и
+    # каталог данных он получает аргументами запуска.
+    "automation/host/animedia-data-update.py": "animedia-data-update.py",
 }
 
 #: Артефакт, по цифре которого даётся разрешение на выкат.
@@ -101,6 +107,29 @@ def main() -> int:
     совпало = (в_git.returncode == 0
                and hashlib.sha256(в_git.stdout).hexdigest() == артефакт)
 
+    # Версия оформления и выбираемые варианты берутся из файла версии
+    # семейства. Fail closed: без него релиз не собирается вовсе. Набранная
+    # руками версия расходится с кодом молча — и по манифесту витрины уже
+    # нельзя сказать, какое оформление она показывает.
+    файл_версии = КОРЕНЬ / "config" / "animedia" / "TEMPLATE_VERSION.json"
+    if not файл_версии.is_file():
+        raise SystemExit(f"нет файла версии шаблона: {файл_версии}")
+    версия = json.loads(файл_версии.read_text(encoding="utf-8"))
+    оформление = str(версия.get("design_version") or "")
+    if not оформление:
+        raise SystemExit(f"design_version пуст в {файл_версии}")
+    # Код обязан уметь исполнять объявленную версию: иначе витрина молча
+    # уедет на прежние ветки оформления, отвечая при этом 200.
+    исходник = (КОРЕНЬ / ГЛАВНЫЙ).read_text(encoding="utf-8")
+    if f'"{оформление}"' not in исходник:
+        raise SystemExit(
+            f"рантайм не объявляет версию {оформление}: "
+            f"добавьте её в ОФОРМЛЕНИЕ_ВЕРСИИ и ПЕРЕРАБОТАНО_С")
+    выбираемые = [в["profile"] for в in версия.get("variants") or []
+                  if в.get("selectable")]
+    if not выбираемые:
+        raise SystemExit(f"в {файл_версии} нет ни одного выбираемого варианта")
+
     метка = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     build_id = f"{метка}-{head[:7]}-animedia-parity"
     каталог = Path(a.out_dir) / build_id
@@ -119,6 +148,10 @@ def main() -> int:
         "release_dir": str(каталог),
         "artifact": "animedia-frontend.py",
         "artifact_sha256": артефакт,
+        "template_id": версия.get("template_id"),
+        "design_version": оформление,
+        "selectable_profiles": выбираемые,
+        "community_module": версия.get("community_module"),
         "files": цифры,
         "loader_shim": {
             "name": "lords-frontend.py",

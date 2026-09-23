@@ -360,6 +360,10 @@ def оценки_по_источникам(деталь: dict) -> list:
     "recommendation": {"бейджи": True, "название": True, "мета": True, "оценок": 2},
     "compact":       {"бейджи": False, "название": True, "мета": False, "оценок": 0},
     "top-shelf":     {"бейджи": False, "название": True, "мета": False, "оценок": 0},
+    #: Лента первого экрана: у оригинала под постером только короткое белое
+    #: название. Ни бейджей, ни строки «тип · год» там нет — они спорят с
+    #: красной подложкой и превращают ленту в сетку каталога.
+    "hero":          {"бейджи": False, "название": True, "мета": False, "оценок": 0},
     #: Нижний блок страницы произведения у оригинала — не сетка постеров, а
     #: строка: миниатюра слева, справа название, оригинальное название и
     #: оценка с числом голосов. Состав отличается, поэтому и вариант свой.
@@ -411,14 +415,128 @@ _сообщество_хранилище = None
 
 
 def сообщество():
-    """Хранилище сообщества или None, если модуль не подключён."""
+    """Хранилище сообщества или None, если модуль не подключён.
+
+    Витрина называется явно. Семейство границей данных не является:
+    animedia.icu и animedia.space — разные публичные сайты, и хранилище,
+    открытое без имени сайта, показало бы записи одного на другом. Модуль 2.0
+    запоминает владельца файла и чужой не обслуживает.
+    """
     global _сообщество_хранилище
     if _сообщество_хранилище is None and СООБЩЕСТВО is not None:
-        _сообщество_хранилище = СООБЩЕСТВО.открыть(АНИМЕДИА_СООБЩЕСТВО_ПУТЬ)
+        _сообщество_хранилище = СООБЩЕСТВО.открыть(
+            АНИМЕДИА_СООБЩЕСТВО_ПУТЬ, витрина=САЙТ_ID)
     return _сообщество_хранилище
 
 
-АНИМЕДИА_СВОДНАЯ_ПОДПИСЬ = "Сводная"
+#: Счётчик реальных запусков плеера. Лежит рядом со снимком каталога и
+#: обновляется витриной; обработчик обновления читает его и, когда запусков
+#: набирается достаточно, переводит «Популярное» на собственную статистику.
+#:
+#: Открытие страницы просмотром НЕ считается. Событие присылает сам плеер,
+#: когда началось воспроизведение (`timeupdate`), — то есть когда зритель
+#: действительно смотрит, а не когда страница отрисовалась.
+АНИМЕДИА_ПРОСМОТРЫ_ПУТЬ = os.environ.get(
+    "ANIMEDIA_VIEWS", str(_КОРЕНЬ_РАНТАЙМА / f"{САЙТ_ID}-views.json"))
+_ПРОСМОТРЫ_ЗАМОК = threading.Lock()
+
+
+def засчитать_просмотр(content_id: str, ключ_посетителя: str) -> bool:
+    """Один запуск плеера. Повторы того же зрителя за сутки не считаются.
+
+    Дедупликация нужна не ради точности статистики, а против самого дешёвого
+    способа её накрутить: перезагрузить страницу сто раз. Ключ дедупликации —
+    отпечаток «зритель + произведение + день», и хранится только сегодняшний
+    набор: вчерашние отпечатки завтра не нужны, а неограниченный набор рос бы
+    вечно.
+    """
+    content_id = str(content_id or "").strip()
+    if not content_id:
+        return False
+    день = datetime.now(АНИМЕДИА_TZ).strftime("%Y-%m-%d")
+    отпечаток = hashlib.sha256(
+        f"{ключ_посетителя}|{content_id}|{день}".encode("utf-8")).hexdigest()[:16]
+    путь = Path(АНИМЕДИА_ПРОСМОТРЫ_ПУТЬ)
+    with _ПРОСМОТРЫ_ЗАМОК:
+        try:
+            данные = json.loads(путь.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            данные = {}
+        if not isinstance(данные, dict):
+            данные = {}
+        if данные.get("day") != день:
+            данные["day"] = день
+            данные["seen"] = []
+        видели = set(данные.get("seen") or [])
+        if отпечаток in видели:
+            return False
+        видели.add(отпечаток)
+        счёт = данные.get("by_content_id")
+        if not isinstance(счёт, dict):
+            счёт = {}
+        счёт[content_id] = int(счёт.get(content_id) or 0) + 1
+        данные.update({
+            "schema_version": 1, "site_id": САЙТ_ID,
+            "timezone": "Europe/Moscow",
+            "semantics": "playback_started; страница, открытая без запуска, не считается",
+            "updated_at": datetime.now(АНИМЕДИА_TZ).isoformat(timespec="seconds"),
+            "seen": sorted(видели), "by_content_id": счёт,
+        })
+        врем = путь.with_suffix(путь.suffix + ".tmp")
+        try:
+            врем.write_text(json.dumps(данные, ensure_ascii=False), encoding="utf-8")
+            os.replace(врем, путь)
+        except OSError:
+            врем.unlink(missing_ok=True)
+            return False
+    return True
+
+
+#: Разрешённые источники стартовой оценки ЭТОЙ витрины, по порядку.
+#: Берётся первый годный, а не наибольший: выбор «где больше» брал бы каждый
+#: раз другой источник, и происхождение числа стало бы неназываемым. Оценка
+#: самой витрины (`amd`) в списке отсутствует намеренно — иначе мнение наших
+#: зрителей вошло бы в главный рейтинг дважды.
+АНИМЕДИА_ПРИОРИТЕТ_БАЗЫ: tuple[str, ...] = ("shikimori", "kp", "imdb", "mal")
+
+
+def внешние_для_базы(деталь: dict) -> dict:
+    """Внешние оценки записи в том виде, в каком их ждёт модуль рейтинга.
+
+    Значение и шкала передаются как есть: приведение к десятке — забота
+    модуля, и делать его здесь во второй раз значило бы завести вторую
+    методику. Оценка витрины отбрасывается: она не может быть базой.
+    """
+    итог: dict = {}
+    for о in оценки_по_источникам(деталь):
+        if о.get("пользовательская"):
+            continue
+        ключ = str(о.get("ключ") or "")
+        if not ключ:
+            continue
+        итог[ключ] = {"value": о.get("значение"), "scale": о.get("шкала")}
+    return итог
+
+
+def тема_сообщества(подробности, slug: str) -> str:
+    """Постоянный ключ темы обсуждения: `details[<slug>].id`.
+
+    Ключом обсуждения служит идентификатор записи, а не её адрес. Адрес
+    меняется — при переименовании тайтла голоса и сообщения осиротели бы, и
+    ровно этот дефект на соседней витрине показывал «посетители ещё не
+    голосовали» при живых голосах.
+
+    Запасной вариант — сам slug: он же остаётся подсказкой для переноса
+    записи под постоянный ключ, поэтому уже накопленное не теряется.
+    """
+    slug = str(slug or "").strip()
+    if not slug:
+        return ""
+    try:
+        деталь = подробности.get(slug) or {}
+    except Exception:  # noqa: BLE001 — снимок подробностей может быть не готов
+        деталь = {}
+    return str(деталь.get("id") or "").strip() or slug
 
 
 def сводная_оценка(деталь: dict) -> dict | None:
@@ -492,39 +610,46 @@ def _счётчик_серий(деталь: dict) -> tuple[int, int] | None:
 АНИМЕДИА_ОЦЕНКА_НЕТ = "—"
 
 
-def фирменный_знак_оценки(деталь: dict, *, строкой: bool = False) -> str:
-    """Одна оценка Animedia на карточке вместо набора чужих плашек.
+def фирменный_знак_оценки(деталь: dict, *, строкой: bool = False,
+                          рейтинг: dict | None = None) -> str:
+    """Одна оценка на карточке вместо набора чужих плашек.
 
     Раньше на постере висели подписи источников — IMDb, Кинопоиск, Shikimori —
-    по две-три на карточку. В ряду из семи карточек это двадцать мелких надписей
-    поверх постеров, и ни одна из них не отвечает на вопрос «стоит ли смотреть»
-    быстрее, чем одно число.
+    по две-три на карточку. В ряду из шести карточек это полтора десятка
+    мелких надписей поверх постеров, и ни одна не отвечает на вопрос «стоит ли
+    смотреть» быстрее, чем одно число.
 
-    Число берётся из сводной оценки: при двух и более подтверждённых источниках
-    это взвешенная сводная, при одном — его значение, приведённое к десяти.
-    Ничего не выдумывается: когда источников нет, знак остаётся на месте и
-    показывает прочерк. Состав сводной посетитель по-прежнему может увидеть —
-    на странице произведения, в раскрытии «Подробнее», а не поверх постера.
+    Число приходит готовым из модуля рейтинга: это ровно то же значение, что
+    на странице произведения и в обсуждении. Считать его здесь ещё раз значило
+    бы завести вторую методику, и рано или поздно соседние экраны показали бы
+    разные числа про одно кино.
+
+    Когда модуль недоступен или у записи нет ни базы, ни голосов, знак
+    остаётся на месте и показывает прочерк: пустота ломает ряд карточек, а
+    ноль был бы утверждением о качестве, которого никто не делал.
     """
-    свод = сводная_оценка(деталь)
     класс = "zt__score" + (" zt__score--row" if строкой else "")
-    if not свод:
+    состояние = str((рейтинг or {}).get("состояние") or "empty")
+    значение = (рейтинг or {}).get("значение")
+    if значение is None:
         return (f'<span class="{класс} zt__score--none" data-score-state="none" '
+                f'data-score-kind="none" '
                 f'title="Оценка появится, когда придут данные">'
                 f'<b aria-hidden="true">{АНИМЕДИА_ОЦЕНКА_НЕТ}</b>'
                 f'<span class="vh">Оценка пока неизвестна</span></span>')
-    источников = int(свод.get("источников") or 0)
-    голосов = свод.get("всего_голосов") or 0
-    подсказка = f"Оценка Animedia {свод['значение']} из 10 · источников: {источников}"
+    голосов = int((рейтинг or {}).get("голосов") or 0)
+    показ = f"{float(значение):g}"
+    подсказка = f"Рейтинг {показ} из 10"
     if голосов:
-        подсказка += f" · голосов: {голосов}"
+        подсказка += f" · {голосов} {склонение_голосов(голосов)} зрителей"
+    вид = "viewers" if состояние == "votes-only" else "main"
     return (f'<span class="{класс}" data-score-state="value" '
-            f'data-score="{html.escape(str(свод["значение"]))}" '
-            f'data-score-sources="{источников}" '
+            f'data-score-kind="{вид}" '
+            f'data-score="{html.escape(показ)}" '
+            f'data-score-formula="{html.escape(str((рейтинг or {}).get("формула") or ""))}" '
             + (f'data-score-votes="{голосов}" ' if голосов else "")
-            + f'data-score-method="{html.escape(str(свод.get("методика") or ""))}" '
-              f'title="{html.escape(подсказка)}">'
-              f'<b aria-hidden="true">{html.escape(str(свод["значение"]))}</b>'
+            + f'title="{html.escape(подсказка)}">'
+              f'<b aria-hidden="true">{html.escape(показ)}</b>'
               f'<span class="vh">{html.escape(подсказка)}</span></span>')
 
 
@@ -737,6 +862,128 @@ def транслит(с: str) -> str:
     return "".join(_ТРАНСЛИТ.get(ch, ch) for ch in (с or "").lower().replace("ё", "е"))
 
 
+#: Значки реакций рисуются разметкой, а не знаками шрифта.
+#:
+#: Текстовые подписи «огонь», «сердце», «смех» посетитель читал как набор слов,
+#: а замена их на emoji означала бы зависимость от системного шрифта:
+#: недостающий знак браузер рисует коробкой с шестнадцатеричным кодом — ровно
+#: так на этой витрине уже появлялся мусор «Подробнее ВЕ». Поэтому здесь
+#: собственные контуры: они выглядят одинаково на любой машине и не зависят ни
+#: от шрифта, ни от внешнего файла.
+#:
+#: Стиль у всех пяти один: круг-подложка своего цвета, поверх — простые черты
+#: лица или фигура. Разнобой рисунков («один контурный, другой залитый»)
+#: читается как случайный набор, а не как ряд одного смысла.
+#:
+#: Название реакции никуда не делось: оно в `title`, в скрытом тексте и в
+#: `aria-label`. Значок без имени нельзя ни прочитать вслух, ни понять
+#: однозначно — «грусть» и «вау» отличаются одной дугой.
+ЛИЦО_ГЛАЗА = ('<circle cx="9" cy="10.4" r="1.35" fill="#2b2118"/>'
+              '<circle cx="15" cy="10.4" r="1.35" fill="#2b2118"/>')
+ЗНАЧКИ_РЕАКЦИЙ: dict[str, str] = {
+    "огонь": (
+        '<path d="M12 2.4c.5 3.1-1.1 4.4-2.6 5.8C7.7 9.8 6 11.5 6 14.3a6 6 0 0 0 12 0'
+        'c0-2.4-1-4-2.3-5.4-.5 1-1.2 1.5-2 1.8.6-3.4-.8-6.5-1.7-8.3Z" fill="#ff6b1a"/>'
+        '<path d="M12 21.2a3.2 3.2 0 0 1-3.2-3.2c0-1.7 1.4-2.7 2.1-3.9.5 .9 1.3 1.3 2 1.7'
+        '.8-.5 1.2-1.1 1.2-2 .7 1 1.1 2.1 1.1 3.2a3.2 3.2 0 0 1-3.2 3.2Z" fill="#ffd23f"/>'),
+    "сердце": (
+        '<path d="M12 20.6 4.4 13a4.7 4.7 0 0 1 0-6.7 4.7 4.7 0 0 1 6.7 0l.9 .9 .9-.9'
+        'a4.7 4.7 0 0 1 6.7 0 4.7 4.7 0 0 1 0 6.7Z" fill="#e8174a"/>'
+        '<path d="M7.4 7.2c-1 .6-1.5 1.7-1.3 2.8.5-1 1.3-1.8 2.4-2.2.5-.2.6-.9 .1-1'
+        '-.4-.1-.8 0-1.2 .4Z" fill="#ff7a9c"/>'),
+    "смех": (
+        '<circle cx="12" cy="12" r="9.4" fill="#ffc83d"/>'
+        '<path d="M6.9 13.4h10.2a5.1 5.1 0 0 1-10.2 0Z" fill="#7a3b18"/>'
+        '<path d="M8.6 18.2a5.1 5.1 0 0 0 6.8 0 4 4 0 0 0-6.8 0Z" fill="#ff5c7a"/>'
+        '<path d="M6.9 9.5c.8-1.1 2.4-1.1 3.2 0M13.9 9.5c.8-1.1 2.4-1.1 3.2 0" '
+        'fill="none" stroke="#2b2118" stroke-width="1.7" stroke-linecap="round"/>'),
+    "грусть": (
+        '<circle cx="12" cy="12" r="9.4" fill="#8fbcff"/>'
+        + ЛИЦО_ГЛАЗА +
+        '<path d="M8.4 16.8a4.6 4.6 0 0 1 7.2 0" fill="none" stroke="#2b2118" '
+        'stroke-width="1.7" stroke-linecap="round"/>'
+        '<path d="M16.6 12.2c.8 1.4 1.2 2.3 1.2 3a1.2 1.2 0 0 1-2.4 0'
+        'c0-.7 .4-1.6 1.2-3Z" fill="#2f7ae5"/>'),
+    "вау": (
+        '<circle cx="12" cy="12" r="9.4" fill="#ffc83d"/>'
+        '<circle cx="8.9" cy="9.9" r="1.45" fill="#2b2118"/>'
+        '<circle cx="15.1" cy="9.9" r="1.45" fill="#2b2118"/>'
+        '<ellipse cx="12" cy="15.6" rx="2.4" ry="3" fill="#7a3b18"/>'),
+}
+
+
+#: Смайлики формы сообщения. Хранятся кодовыми точками, а не знаками: так
+#: исходник остаётся читаемым в любом редакторе и в отчётах, а на странице
+#: получается обычный текст.
+#:
+#: Это именно ТЕКСТ сообщения, а не реакция. Реакции рисуются своими цветными
+#: контурами и от шрифта не зависят; вставленный в сообщение знак — часть
+#: пользовательского текста и экранируется на выводе наравне со всем остальным.
+СМАЙЛИКИ: tuple[tuple[str, str], ...] = tuple(
+    (chr(код), имя) for код, имя in (
+        (0x1F642, "улыбка"), (0x1F600, "радость"), (0x1F602, "смех"),
+        (0x1F60D, "восторг"), (0x1F609, "подмигивание"), (0x1F914, "раздумье"),
+        (0x1F62E, "удивление"), (0x1F622, "грусть"), (0x1F621, "злость"),
+        (0x1F44D, "палец вверх"), (0x1F44E, "палец вниз"), (0x1F525, "огонь"),
+        (0x2764, "сердце"), (0x1F44F, "аплодисменты"), (0x1F389, "праздник"),
+        (0x1F440, "смотрю"),
+    )
+)
+
+
+#: Палитра аватаров. Цвет выбирается по имени автора и потому постоянен: один
+#: и тот же гость в ленте всегда одного цвета, и глаз отличает собеседников,
+#: не перечитывая подписи. Внешних картинок здесь нет и не будет — аватар по
+#: чужому адресу означал бы, что каждый читатель ленты объявляет себя чужому
+#: серверу.
+ЦВЕТА_АВАТАРА = ("#e8174a", "#2f7ae5", "#1a9c5b", "#b5561f", "#7a4bd0",
+                 "#0f8f9e", "#c2185b", "#5a6f8a")
+
+
+def аватар(имя: str) -> str:
+    """Кружок с первой буквой имени. Цвет постоянен для одного имени."""
+    имя = (имя or "").strip() or "Гость"
+    первая = html.escape(имя[:1].upper())
+    цвет = ЦВЕТА_АВАТАРА[
+        int(hashlib.sha256(имя.casefold().encode("utf-8")).hexdigest(), 16)
+        % len(ЦВЕТА_АВАТАРА)]
+    return (f'<span class="acomm__ava" style="background:{цвет}" aria-hidden="true">'
+            f'{первая}</span>')
+
+
+def значок_реакции(имя: str) -> str:
+    """Контур реакции. Неизвестное имя даёт пустую строку, а не крестик."""
+    путь = ЗНАЧКИ_РЕАКЦИЙ.get(имя)
+    if not путь:
+        return ""
+    return (f'<svg class="areact__i" viewBox="0 0 24 24" width="22" height="22" '
+            f'aria-hidden="true" focusable="false">{путь}</svg>')
+
+
+#: Контур звезды. Одна фигура на все состояния: пустая, наведённая и
+#: сохранённая различаются цветом, а не разной геометрией.
+ЗВЕЗДА_ПУТЬ = ("M12 3.2l2.62 5.31 5.86.85-4.24 4.13 1 5.84L12 16.6l-5.24 2.76"
+               " 1-5.84L3.52 9.36l5.86-.85Z")
+
+
+def звезда_svg(класс: str = "astar__i") -> str:
+    return (f'<svg class="{класс}" viewBox="0 0 24 24" width="22" height="22" '
+            f'aria-hidden="true" focusable="false"><path d="{ЗВЕЗДА_ПУТЬ}"/></svg>')
+
+
+def склонение_голосов(n: int) -> str:
+    """«1 голос», «2 голоса», «5 голосов». Число рядом с оценкой читают вслух."""
+    n = abs(int(n))
+    if 11 <= n % 100 <= 14:
+        return "голосов"
+    остаток = n % 10
+    if остаток == 1:
+        return "голос"
+    if 2 <= остаток <= 4:
+        return "голоса"
+    return "голосов"
+
+
 def склонение_записей(n: int) -> str:
     """«1 запись», «2 записи», «5 записей» — подпись счётчика рядом с числом.
 
@@ -799,12 +1046,20 @@ def из_раскладки(с: str) -> str:
 
 
 def закодировать_запрос(url: str) -> str:
-    """Percent-encode query values in an already-built path (?kind=Фильм)."""
-    if "?" not in (url or ""):
-        return url
+    """Percent-encode query values in an already-built path (?kind=Фильм).
+
+    Якорь отрезается до разбора и возвращается на место. Без этого
+    «/?genre=boevik#catalog» разбирался как жанр «boevik#catalog» — ссылка
+    фильтра вела в пустую выдачу ровно там, где к сетке добавили якорь.
+    """
+    url = url or ""
+    url, решётка, якорь = url.partition("#")
+    хвост_якоря = (решётка + якорь) if решётка else ""
+    if "?" not in url:
+        return url + хвост_якоря
     путь, _, хвост = url.partition("?")
     пары = parse_qsl(хвост, keep_blank_values=True)
-    return путь + (("?" + urlencode(пары, quote_via=quote)) if пары else "")
+    return путь + (("?" + urlencode(пары, quote_via=quote)) if пары else "") + хвост_якоря
 
 
 #: Слова, которые в запросе несут форму издания, а не название. По ним нельзя
@@ -943,6 +1198,14 @@ class Данные:
                     заявлено += int(с.get("eps") or 0)
             з["_avail"], з["_eps"] = доступно, заявлено
             з["_ongoing"] = 1 if (заявлено and 0 < доступно < заявлено) else 0
+            # Постоянный идентификатор записи живёт в подробностях, а нужен он
+            # в каталоге: по нему связываются снимок популярности, реестр
+            # серий и расписание. Без этого снимок, собранный по постоянным
+            # ключам, не сопоставлялся с каталогом вовсе — ноль позиций при
+            # восьми найденных.
+            ид = str(деталь.get("id") or "").strip()
+            if ид:
+                з["id"] = ид
             оригинал = str(деталь.get("original_name") or "").strip()
             if not оригинал or оригинал == (з.get("title") or ""):
                 continue
@@ -1183,11 +1446,20 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 ОФОРМЛЕНИЕ_1_2_3 = "1.2.3"
 ОФОРМЛЕНИЕ_1_2_4 = "1.2.4"
 
+#: ANIMEDIA-TEMPLATE-FIX-01: принятые владельцем правки animedia.space,
+#: перенесённые в шаблон семейства. Отдельный номер нужен потому, что версия
+#: обязана называть оформление: под 1.2.4 уже выпущено ПРЕЖНЕЕ расположение
+#: — двухколоночная коробка оценок под всеми блоками, реакции-таблетки в её
+#: углу, вторая шкала голосования в боковой колонке. Оставить тот же номер
+#: значило бы, что по манифесту витрины больше нельзя сказать, что она
+#: показывает.
+ОФОРМЛЕНИЕ_1_2_5 = "1.2.5"
+
 #: Версии, несущие оформление 1.1+. Набор, а не одно значение: витрина
 #: включает оформление СВОИМ манифестом, и добавление следующей версии не
 #: должно переводить на неё соседей. Свойство «переход по одной витрине»
 #: сохраняется — меняется только то, сколько версий код умеет исполнять.
-ОФОРМЛЕНИЕ_ВЕРСИИ = {ОФОРМЛЕНИЕ_1_1, ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1, ОФОРМЛЕНИЕ_1_2_2, ОФОРМЛЕНИЕ_1_2_3, ОФОРМЛЕНИЕ_1_2_4}
+ОФОРМЛЕНИЕ_ВЕРСИИ = {ОФОРМЛЕНИЕ_1_1, ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1, ОФОРМЛЕНИЕ_1_2_2, ОФОРМЛЕНИЕ_1_2_3, ОФОРМЛЕНИЕ_1_2_4, ОФОРМЛЕНИЕ_1_2_5}
 
 #: Семейства, переработанные по измеренным эталонам, и версии, с которых
 #: переработка включается. Ниже этого набора витрина исполняет прежние ветки.
@@ -1198,7 +1470,7 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 #: «переход делается по одной витрине». Здесь оформление 1.2.x достаётся
 #: только той витрине, чей манифест его объявил.
 ПЕРЕРАБОТАНО_С = {
-    "animedia": frozenset({ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1, ОФОРМЛЕНИЕ_1_2_2, ОФОРМЛЕНИЕ_1_2_3, ОФОРМЛЕНИЕ_1_2_4}),
+    "animedia": frozenset({ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1, ОФОРМЛЕНИЕ_1_2_2, ОФОРМЛЕНИЕ_1_2_3, ОФОРМЛЕНИЕ_1_2_4, ОФОРМЛЕНИЕ_1_2_5}),
 }
 
 #: Исполняет ли ЭТА витрина переработанное оформление своего семейства.
@@ -1414,14 +1686,26 @@ max-height:89px;padding-block:0}
 line-height:1;min-height:44px;min-width:120px;max-width:155px;width:max-content;
 display:inline-flex;align-items:center}
 .zhd__logo b{color:var(--a-acc)}
-.zhd__n{display:none;align-items:center;gap:2px;flex:0 1 auto;min-width:0}
-@media(min-width:1100px){.zhd__n{display:flex}}
-.zhd__n a{padding:8px 10px;border-radius:8px;font-size:13px;font-weight:700;color:var(--a-ink);
+/* Меню шапки. Оно одно.
+   Прежде рядом с ним стояла вторая навигация — «Жанр / Тип / Списки / Ещё», —
+   и обе были `nowrap` при `flex-wrap:nowrap` у строки. Строка ужимала их
+   боксы, а текст внутри ужиматься не умел и вылезал наружу: на 1363 читалось
+   «Жанры Типы ЖАНРЫ ТИПЫ Списки ТОП СПИСКИ ЕЩЁ», и поверх этого налезало поле
+   поиска. Второй ряд кнопок убран из шапки целиком; его содержимое никуда не
+   делось — оно в ящике меню, на страницах «Жанры» и «Типы» и в фильтре
+   каталога, который теперь стоит над сеткой.
+   Порог показа поднят до 1200: на 1100 девять пунктов, логотип, поиск и две
+   кнопки в строку не помещались даже без второй навигации. Ниже порога
+   работает кнопка ящика. */
+.zhd__n{display:none;align-items:center;gap:2px;flex:0 1 auto;min-width:0;overflow:hidden}
+@media(min-width:1200px){.zhd__n{display:flex}}
+.zhd__n a{padding:8px 9px;border-radius:8px;font-size:13px;font-weight:700;color:var(--a-ink);
 text-decoration:none;min-height:44px;display:inline-flex;align-items:center;white-space:nowrap}
 .zhd__n a:hover{color:var(--a-acc);background:var(--a-alt)}
 .zhd__n a[aria-current]{color:var(--a-acc);box-shadow:inset 0 -2px 0 var(--a-acc)}
-.zhd__tax{display:none;align-items:center;gap:2px;flex:1 1 auto;min-width:0}
-@media(min-width:1100px){.zhd__tax{display:flex}}
+/* Таксономия осталась только в ящике меню: в строке шапки её больше нет. */
+.zhd__tax{display:none}
+.zhd__drawer .zhd__tax{display:flex}
 .zhd__dd{position:relative}
 .zhd__dd-btn{appearance:none;border:0;background:transparent;color:var(--a-ink);font:inherit;
 font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:8px 10px;
@@ -1443,21 +1727,23 @@ text-decoration:none;min-height:44px}
 .zhd__menu{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;
 min-width:44px;min-height:44px;flex:0 0 44px;border:1px solid var(--a-line);border-radius:8px;
 background:var(--a-page);color:var(--a-ink);font-size:20px;cursor:pointer;margin-left:0}
-@media(min-width:1100px){.zhd__menu{display:none}}
+@media(min-width:1200px){.zhd__menu{display:none}}
 .zhd__theme{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;
 min-width:44px;min-height:44px;flex:0 0 44px;border:1px solid var(--a-line);border-radius:8px;
 background:var(--a-page);color:var(--a-ink);font-size:16px;cursor:pointer}
 .zhd__theme:focus-visible,.zhd__menu:focus-visible,.zhd__s button:focus-visible,.zhd__drawer a:focus-visible,
 .zhd__drawer-x:focus-visible,.zhd__n a:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
-.zhd__s{display:flex;flex:0 1 320px;min-width:280px;max-width:360px;height:48px;border:1px solid var(--a-line);
+/* Поиск в шапке — компактный. Он умеет сжиматься (min-width заметно меньше
+   основной ширины), поэтому строка шапки ужимает поле, а не наезжает на меню. */
+.zhd__s{display:flex;flex:0 1 280px;min-width:190px;max-width:320px;height:44px;border:1px solid var(--a-line);
 border-radius:999px;overflow:hidden;background:var(--a-page);align-items:stretch}
-@media(max-width:1099px){
-  .zhd__s{flex:1 1 calc(100% - 108px);min-width:120px;max-width:none;order:0;border-radius:10px;height:48px}
+@media(max-width:1199px){
+  .zhd__s{flex:1 1 calc(100% - 108px);min-width:120px;max-width:none;order:0;border-radius:10px;height:44px}
   .zhd__actions{order:0}
 }
-.zhd__s input{flex:1;min-width:0;border:0;padding:0 12px;font-size:14px;background:transparent;color:var(--a-ink);height:100%;min-height:48px}
+.zhd__s input{flex:1;min-width:0;border:0;padding:0 12px;font-size:14px;background:transparent;color:var(--a-ink);height:100%;min-height:44px}
 .zhd__s button{border:0;background:var(--a-acc);color:#fff;padding:0 14px;font-weight:700;cursor:pointer;
-min-width:48px;min-height:48px;height:100%;flex:0 0 auto}
+min-width:44px;min-height:44px;height:100%;flex:0 0 auto}
 /* B12 on-page search block */
 .asearch{margin:0 0 18px;padding:14px 16px;border:1px solid var(--a-line);border-radius:12px;
 background:var(--a-alt);min-height:130px;max-height:160px;box-sizing:border-box;
@@ -1528,73 +1814,42 @@ text-transform:uppercase;letter-spacing:.06em;text-align:center}
 display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .zsec{margin:0 0 var(--a-section-gap);max-height:none;overflow:visible}
 .zsec__h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 12px}
+@media(max-width:519px){
+  .zsec__h{flex-direction:column;align-items:flex-start;gap:4px}
+  .zsec__h a{min-height:36px;display:inline-flex;align-items:center}
+}
 .zsec__h h2{font-size:clamp(20px,1.6vw,26px);font-weight:700;margin:0}
 .zsec__h a{font-size:14px;color:var(--a-acc);font-weight:700;white-space:nowrap}
-/* Слайдер первого экрана.
-   Была сплошная красная подложка во всю ширину, а на ней ряд обычных
-   постеров: большая цветная площадь, которая ничего не сообщает. Стало —
-   один слайд за раз: постер, название, короткая информация, оценка и кнопка
-   перехода. Красный остался на кнопке и на знаке оценки, то есть там, где он
-   что-то значит. Высота ограничена: первый экран не должен съедать страницу. */
-.ahero{margin:8px 0 18px;padding:0;border-radius:var(--a-radius-shell);
-background:var(--a-card);color:var(--a-ink);overflow:hidden;box-sizing:border-box;
-border:1px solid var(--a-line);contain:paint}
+/* Лента первого экрана.
+   Был одиночный герой: постер, абзац описания и кнопка — один тайтл на весь
+   экран. У оригинала здесь красная полоса с рядом вертикальных постеров и
+   стрелками по краям, и именно она сообщает «вот что на сайте есть».
+   Красная подложка — не украшение: по ней первый экран и узнаётся. */
+/* Ширина ленты — ровно ширина содержимого страницы. Была `min(100%,1180px)`:
+   на широком экране красная полоса оказывалась уже всего остального, и её
+   края не совпадали с краями блока «Новые серии» под ней. Совпадение краёв
+   здесь не придирка — по нему глаз и читает, что это один столбец. */
+.ahero{margin:0 0 18px;padding:10px 0 8px;border-radius:var(--a-radius-shell);
+background:var(--a-acc);color:#fff;overflow:hidden;box-sizing:border-box;
+border:0;contain:paint;position:relative;width:100%}
 /* `contain:paint` здесь не украшение. Одного `overflow:hidden` не хватило:
-   дорожка слайдера шире окна, и страница получала горизонтальную прокрутку —
+   дорожка ленты шире окна, и страница получала горизонтальную прокрутку —
    измерено, 2214px на 390. Ширина тела при этом оставалась правильной, то
    есть прокрутку давал корень документа, а не вёрстка полосы. Ограничение
-   отрисовки закрывает это: прокрутка страницы 0 на всех шести ширинах. */
-.ahero__vp{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;
-scrollbar-width:none;container-type:inline-size;max-width:100%}
-.ahero__vp::-webkit-scrollbar{display:none}
-.ahero__track{display:flex;margin:0;padding:0;list-style:none}
-/* Ширина слайда считается от окна прокрутки, а не от дорожки. Проценты в
-   дорожке разрешаются относительно самой дорожки, а её ширина задана
-   содержимым — получается круг, и браузер берёт ширину слайда по контенту.
-   Измерено: на 320 слайд выходил 274px, восемь таких давали 1759px
-   горизонтальной прокрутки всей странице. */
-.ahero__s{flex:0 0 100cqw;width:100cqw;min-width:0;scroll-snap-align:start;
-display:grid;grid-template-columns:200px minmax(0,1fr);gap:22px;
-padding:22px;box-sizing:border-box;align-items:center}
-.ahero__p{display:block;position:relative;width:200px;aspect-ratio:5/7;border-radius:12px;
-overflow:hidden;background:var(--a-line)}
-.ahero__p img,.ahero__img{width:100%;height:100%;object-fit:cover;display:block}
-.ahero__none{display:flex;align-items:center;justify-content:center;width:100%;height:100%;
-color:var(--a-mute);font-size:40px;font-weight:700}
-.ahero__c{min-width:0}
-.ahero__t{margin:0 0 6px;font-size:clamp(20px,2vw,28px);line-height:1.2;font-weight:700}
-.ahero__t a{color:inherit;text-decoration:none}
-.ahero__t a:hover,.ahero__t a:focus-visible{color:var(--a-acc)}
-.ahero__m{margin:0 0 10px;color:var(--a-dim);font-size:14px}
-.ahero__d{margin:0 0 14px;color:var(--a-dim);font-size:14px;line-height:1.5;
-display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.ahero__r{margin:0 0 14px}
-/* Знак оценки внутри слайда стоит в потоке, а не в углу постера. */
-.ahero__r .zt__score{position:static;width:44px;height:44px}
-.ahero__r .zt__score b{font-size:16px}
-.ahero__cta{display:inline-flex;align-items:center;min-height:46px;padding:0 26px;
-border-radius:12px;background:var(--a-acc);color:#fff;font-weight:700;text-decoration:none}
-.ahero__cta:focus-visible{outline:2px solid var(--a-acc);outline-offset:3px}
-.ahero__nav{display:flex;align-items:center;justify-content:center;gap:10px;
-padding:0 16px 14px}
-.ahero__arr,.ahero__play{display:inline-flex;align-items:center;justify-content:center;
-width:40px;height:40px;border:1px solid var(--a-line);border-radius:50%;
-background:var(--a-card);color:var(--a-ink);font-size:20px;line-height:1;cursor:pointer}
-.ahero__arr:hover,.ahero__play:hover,.ahero__arr:focus-visible,.ahero__play:focus-visible{
-border-color:var(--a-acc);color:var(--a-acc)}
-.ahero__dots{display:flex;gap:8px;align-items:center}
-.ahero__dot{width:10px;height:10px;padding:0;border:0;border-radius:50%;
-background:var(--a-line);cursor:pointer}
-.ahero__dot[aria-current="true"]{background:var(--a-acc);width:24px;border-radius:999px}
-.ahero__dot:focus-visible{outline:2px solid var(--a-acc);outline-offset:3px}
-@media(max-width:767px){
-  .ahero__s{grid-template-columns:1fr;gap:14px;padding:16px;justify-items:center;
-  text-align:center}
-  .ahero__p{width:150px}
-  .ahero__r{display:flex;justify-content:center}
-  .ahero__d{-webkit-line-clamp:2}
-}
-@media(prefers-reduced-motion:reduce){.ahero__vp{scroll-behavior:auto}}
+   отрисовки закрывает это: прокрутка страницы 0 на всех контрольных ширинах. */
+.ahero__rl{padding:0 14px}
+@media(max-width:767px){.ahero{padding:8px 0 6px}.ahero__rl{padding:0 8px}}
+/* Стрелки ленты видны всегда, а не по наведению: у оригинала они стоят по
+   краям полосы постоянно, и на планшете наведения попросту нет.
+   Рисуются рамкой, а не знаком шрифта: «‹» и «›» есть не в каждом наборе, и
+   недостающий знак браузер показывает коробкой с шестнадцатеричным кодом —
+   ровно так на странице произведения и появился мусор «Подробнее ВЕ». */
+.ahero .zrl__btn{display:inline-flex;top:50%;transform:translateY(-50%)}
+.ahero__chev{display:block;width:10px;height:10px;border-style:solid;
+border-color:var(--a-acc);border-width:2px 2px 0 0}
+.ahero__chev--p{transform:rotate(-135deg);margin-left:3px}
+.ahero__chev--n{transform:rotate(45deg);margin-right:3px}
+@media(prefers-reduced-motion:reduce){.ahero .zrl__vp{scroll-behavior:auto}}
 .ahero[hidden],.ahero--gap{display:none !important;height:0 !important;min-height:0 !important;
 max-height:0 !important;margin:0 !important;padding:0 !important;border:0 !important;overflow:hidden}
 .zh--home{font-size:clamp(18px,1.5vw,22px);margin:8px 0 4px;font-weight:700}
@@ -1604,7 +1859,7 @@ max-height:0 !important;margin:0 !important;padding:0 !important;border:0 !impor
 .ahero .zrl__vp::-webkit-scrollbar{display:none}
 /* Ритм карусели тот же, что у сетки: у оригинала на первом экране семь
    постеров той же ширины, что и в каталоге, а не десять мелких. */
-.ahero .zrl__track{gap:33px;align-items:flex-start}
+.ahero .zrl__track{gap:14px;align-items:flex-start}
 /* Ширина плитки считается от окна прокрутки, а не от ленты.
    Измерено: проценты в дорожке разрешаются относительно самой дорожки, а она
    шире экрана ровно настолько, насколько лента листается, — поэтому на 768
@@ -1616,9 +1871,9 @@ max-height:0 !important;margin:0 !important;padding:0 !important;border:0 !impor
 min-width:0;max-width:none;scroll-snap-align:start}
 .ahero .zt{max-width:none;flex:0 0 auto}
 @supports (width:1cqw){
-  .ahero .zrl__track>*{flex:0 0 calc((100cqw - 198px)/7);width:calc((100cqw - 198px)/7)}
+  .ahero .zrl__track>*{flex:0 0 calc((100cqw - 84px)/7);width:calc((100cqw - 84px)/7)}
   @media(max-width:1279px){
-    .ahero .zrl__track>*{flex:0 0 calc((100cqw - 132px)/5);width:calc((100cqw - 132px)/5)}
+    .ahero .zrl__track>*{flex:0 0 calc((100cqw - 56px)/5);width:calc((100cqw - 56px)/5)}
   }
   @media(max-width:767px){
     .ahero .zrl__track>*{flex:0 0 112px;width:112px;min-width:112px;max-width:112px}
@@ -1636,8 +1891,8 @@ min-width:0;max-width:none;scroll-snap-align:start}
    первого экрана и постер каталога одного размера, 163x228. */
 .ahero .zt__p{border-radius:10px;width:100%;aspect-ratio:5/7;height:auto;background:rgba(0,0,0,.18);flex:0 0 auto}
 @media(max-width:767px){.ahero .zt__p{width:112px;height:157px;aspect-ratio:auto}}
-.ahero .zt__b{padding:6px 2px 0;min-height:44px;max-height:52px}
-.ahero .zt__t{color:#fff;font-size:13px;-webkit-line-clamp:2;min-height:0;line-height:1.25}
+.ahero .zt__b{padding:5px 2px 0;min-height:0;max-height:34px}
+.ahero .zt__t{color:#fff;font-size:12px;-webkit-line-clamp:1;min-height:0;line-height:1.3}
 /* Прятать поля стилем больше не нужно: лента рисует компактную карточку,
    в которой их нет по контракту. Прятать то, что отдано в разметке, — способ
    разойтись между обещанием и видимым. */
@@ -1656,6 +1911,26 @@ overflow:hidden;border-radius:8px}
 -webkit-overflow-scrolling:touch;padding:2px 0 6px;scrollbar-width:none}
 .zrl__vp::-webkit-scrollbar{display:none}
 .zrl__track{display:flex;gap:12px;min-width:min-content;align-items:flex-start}
+/* Ширина плитки ленты задаётся лентой, а не содержимым.
+   Без этого правила карточки вне первого экрана растягивались каждая по
+   своему тексту: ряд «Недавно добавленные» выходил из плиток разной ширины и
+   разной высоты — измерено на 1363. Единицы контейнера считают от окна
+   прокрутки, запасное значение — для браузеров, которые их не знают. */
+.zrl__vp{container-type:inline-size}
+.zrl__track>*{flex:0 0 150px;width:150px;min-width:0;max-width:none;scroll-snap-align:start}
+@supports (width:1cqw){
+  .zrl__track>*{flex:0 0 calc((100cqw - 5*12px)/6);width:calc((100cqw - 5*12px)/6)}
+  @media(max-width:1199px){
+    .zrl__track>*{flex:0 0 calc((100cqw - 3*12px)/4);width:calc((100cqw - 3*12px)/4)}
+  }
+  @media(max-width:767px){
+    .zrl__track>*{flex:0 0 132px;width:132px}
+  }
+}
+/* Карточка ленты одной высоты по всему ряду: разнобой высот и был тем, что
+   владелец увидел как «незаполненный ряд». */
+.zrl__track .zt{height:100%;max-height:none}
+.zrl__track .zt__b{min-height:44px}
 .zrl__btn{position:absolute;top:36%;transform:translateY(-50%);z-index:5;width:36px;height:48px;
 border:0;border-radius:10px;cursor:pointer;background:rgba(255,255,255,.96);color:var(--a-acc);
 font-size:18px;display:none;align-items:center;justify-content:center;box-shadow:var(--a-shadow-soft)}
@@ -1678,17 +1953,24 @@ justify-items:stretch}
 /* На телефоне у оригинала две колонки по ~180 при промежутке около 10:
    измерено на полностраничном снимке 390. Промежуток 33 сужал карточку до
    163 и оставлял пустую полосу между колонками. */
+/* Колонок 2 / 4 / 6, а не 2 / 5 / 7.
+   Обрывок последнего ряда владелец увидел не потому, что записей не хватило,
+   а потому, что число колонок и размер выборки были несовместимы: при пяти и
+   семи колонках любая выборка, кратная двенадцати, оставляет хвост, а прятать
+   настоящие карточки стилем нельзя. Двойка, четвёрка и шестёрка — делители
+   двенадцати, поэтому полка на 12 и страница на 24 ложатся целыми рядами на
+   всех контрольных ширинах разом. Постер при этом не мельчает: при
+   содержимом 1340 шесть колонок с промежутком 33 дают 196 вместо 163. */
 @media(max-width:767px){.zg{gap:10px}}
-@media(min-width:768px){.zg{grid-template-columns:repeat(5,minmax(0,1fr));gap:33px}}
-@media(min-width:1024px){.zg{grid-template-columns:repeat(5,minmax(0,1fr));gap:33px}}
-@media(min-width:1200px){.zg{grid-template-columns:repeat(7,minmax(0,1fr));gap:33px}}
+@media(min-width:768px){.zg{grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}}
+@media(min-width:1200px){.zg{grid-template-columns:repeat(6,minmax(0,1fr));gap:28px}}
 /* Каталог держит тот же ритм, что и остальные сетки витрины: у оригинала
    карточка одного размера на главной, в подборках и в рекомендациях, и делать
    её на каталоге шире незачем. Прежние шесть колонок с промежутком 14 давали
    198 вместо измеренных 163. */
 .zwrap--catalog .zg,.zcat .zg{grid-template-columns:repeat(2,minmax(0,1fr))}
-@media(min-width:768px){.zwrap--catalog .zg,.zcat .zg{grid-template-columns:repeat(5,minmax(0,1fr));gap:33px}}
-@media(min-width:1200px){.zwrap--catalog .zg,.zcat .zg{grid-template-columns:repeat(7,minmax(0,1fr));gap:33px}}
+@media(min-width:768px){.zwrap--catalog .zg,.zcat .zg{grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}}
+@media(min-width:1200px){.zwrap--catalog .zg,.zcat .zg{grid-template-columns:repeat(6,minmax(0,1fr));gap:28px}}
 .afilt--closed{max-height:112px}
 .afilt--closed:not(.is-open):not(:has(details[open])){overflow:hidden}
 .afilt--closed.is-open,.afilt--closed:has(details[open]){overflow:visible;max-height:none}
@@ -1700,9 +1982,18 @@ transition:transform .14s,box-shadow .14s}
 /* Кнопки ленты: цель 44x44 — меньше на телефоне в них не попасть. Точки
    показывают, сколько страниц у ленты и где мы сейчас; при одной странице
    они не рисуются вовсе, чтобы не обещать листание там, где его нет. */
-.ahero .zrl__btn,.zsec .zrl__btn{width:44px;height:44px;border-radius:50%;
+.zsec .zrl__btn{width:44px;height:44px;border-radius:50%;
 font-size:20px;line-height:1;display:inline-flex;align-items:center;justify-content:center;
 background:rgba(16,21,26,.86);color:#fff;top:38%}
+/* На красной полосе стрелка своя: белый круг с красным шевроном — тёмный
+   круг на красном не читается. */
+.ahero .zrl__btn{width:44px;height:44px;border-radius:50%;
+background:#fff;color:var(--a-acc);border:0;box-shadow:0 2px 10px rgba(0,0,0,.22);
+align-items:center;justify-content:center}
+.ahero .zrl__btn:hover{background:#fff;filter:brightness(.96)}
+.ahero .zrl__btn:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.ahero .zrl__btn--p{left:6px}
+.ahero .zrl__btn--n{right:6px}
 .zrl__dots{display:flex;gap:8px;justify-content:center;align-items:center;
 margin:10px 0 0;padding:0;flex-wrap:wrap}
 .zrl__dots[hidden]{display:none !important}
@@ -1712,6 +2003,10 @@ cursor:pointer;position:relative;border-radius:50%}
 width:8px;height:8px;border-radius:50%;background:var(--a-line);transition:background .15s}
 .zrl__dot[aria-current="true"]::after{background:var(--a-acc);width:10px;height:10px}
 .zrl__dot:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
+/* На телефоне восемь точек по 44px не помещались в ряд и переносились —
+   последняя выглядела случайной кляксой под лентой. Ширину ужимаем, высоту
+   цели нажатия (44) оставляем. */
+@media(max-width:520px){.zrl__dots{gap:0}.zrl__dot{width:34px;min-width:34px}}
 .ahero .zrl__dot::after{background:rgba(255,255,255,.45)}
 .ahero .zrl__dot[aria-current="true"]::after{background:#fff}
 /* Нижний блок страницы произведения. Измерено на эталоне 1440: три колонки,
@@ -1755,62 +2050,232 @@ align-self:flex-start}
   .zt--row .zt__p{flex:0 0 76px;width:76px}
   .zt--row .zt__t{font-size:14px}
 }
-/* Раздел сообщества: оценка посетителей, реакции и обсуждение. Кнопки шкалы и
-   реакций — настоящие цели нажатия 44x44: пальцем по цифре «7» иначе не
-   попасть. Оценка посетителей стоит рядом со сводной, но отдельной величиной:
-   смешивать её с внешними источниками нельзя. */
-.acomm{margin:24px 0 0}
+/* Панель действий под плеером. Одна строка: десять звёзд и пять кнопок
+   списков. Ширина та же, что у плеера, — иначе она читается как чужой блок,
+   приехавший со стороны.
+   На компьютере всё помещается в строку: звезда 26px даёт шкале ~270, пять
+   кнопок ещё ~430 — это меньше 1200 даже с промежутками. На телефоне строка
+   переносится, и цель нажатия при этом не уменьшается: высота остаётся 44. */
+.apanel{display:flex;align-items:center;justify-content:space-between;gap:12px 18px;
+flex-wrap:wrap;margin:14px auto 0;width:min(100%,1200px);padding:10px 14px;
+border:1px solid var(--a-line);border-radius:14px;background:var(--a-alt);
+box-sizing:border-box}
+.apanel__stars{margin:0;display:flex;align-items:center;gap:10px;flex:0 0 auto}
+.apanel__stars .astar__row{gap:1px}
+.apanel__stars .astar__b{min-width:26px;min-height:44px;padding:0}
+.apanel__stars .astar__i,.apanel__stars .astar__s svg{width:26px;height:26px}
+.apanel__stars .astar__s{padding:0 1px}
+.apanel__mine{font-size:13px;color:var(--a-ink);white-space:nowrap}
+.apanel__mine b{color:var(--a-acc);font-size:15px}
+.apanel__lists{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0;
+flex:1 1 auto;justify-content:flex-end}
+@media(max-width:899px){
+  .apanel{justify-content:center}
+  .apanel__stars{flex:1 1 100%;justify-content:center}
+  .apanel__lists{justify-content:center;flex:1 1 100%}
+  .apanel__stars .astar__b{min-width:28px}
+}
+/* Реакции — полоса во всю ширину плеера: крупный значок, счётчик под ним,
+   равные доли. Прежде это был ряд мелких «таблеток» в углу коробки. */
+.areacts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;
+margin:16px auto 0;width:min(100%,1200px)}
+.areact{display:flex;flex-direction:column;align-items:center;justify-content:center;
+gap:4px;min-height:74px;padding:10px 6px;border:1px solid var(--a-line);
+border-radius:14px;background:var(--a-page);color:var(--a-dim);font:inherit;
+cursor:pointer;transition:border-color .12s,background .12s,transform .12s}
+.areact .areact__i{width:30px;height:30px;transition:transform .12s}
+.areact b{font-size:14px;font-weight:700;color:var(--a-ink);
+font-variant-numeric:tabular-nums}
+.areact:hover{border-color:var(--a-acc);transform:translateY(-1px)}
+.areact:hover .areact__i{transform:scale(1.1)}
+.areact.is-on{border-color:var(--a-acc);background:var(--a-alt);
+box-shadow:inset 0 0 0 1px var(--a-acc)}
+.areact.is-on b{color:var(--a-acc)}
+.areact:focus-visible{outline:3px solid var(--a-acc);outline-offset:2px}
+@media(max-width:519px){
+  .areacts{gap:6px}
+  .areact{min-height:66px;padding:8px 2px}
+  .areact .areact__i{width:26px;height:26px}
+}
+/* Раздел сообщества: оценка зрителей, списки, реакции и обсуждение.
+   Было три полосы во всю ширину подряд — оценка, списки, реакции, — каждая с
+   огромным пустым полем посередине, и форма сообщения во всю ширину экрана
+   под ними. Стало: слева оценка, справа списки и реакции, ниже обсуждение в
+   читаемой колонке. Цели нажатия остались настоящими, 44x44: пальцем по
+   цифре «7» иначе не попасть. */
+.acomm{margin:28px 0 0}
 .acomm__off{color:var(--a-dim);margin:0 0 6px;max-width:72ch}
-.acomm__why{margin:0;color:var(--a-mute);font-size:12px}
-.acomm__why code{background:var(--a-alt);padding:2px 6px;border-radius:6px}
-.acomm__votes{display:flex;flex-direction:column;gap:10px;align-items:center;
-padding:14px;border:1px solid var(--a-line);border-radius:12px;background:var(--a-alt)}
-.acomm__score{display:flex;align-items:baseline;gap:8px;font-size:14px;color:var(--a-dim)}
-.acomm__score b{font-size:26px;font-weight:800;color:var(--a-acc);line-height:1}
+/* Итог отправки формы. Молчание после сохранения — это интерфейс, по которому
+   нельзя понять, применилось ли действие. */
+.acomm__flash{margin:0 0 14px;padding:10px 14px;border-radius:10px;font-size:14px;
+border:1px solid var(--a-line);background:var(--a-alt);color:var(--a-ink)}
+.acomm__flash--ok{border-color:#1a7f37;color:#1a7f37}
+.acomm__flash--warn{border-color:#9a6700;color:#9a6700}
+.acomm__flash--err{border-color:var(--a-acc);color:var(--a-acc)}
+.acomm__hint{flex:1 0 100%;margin:2px 0 0;font-size:12px;color:var(--a-mute);line-height:1.35}
 .acomm__none{color:var(--a-mute);font-size:13px;margin:0}
-.acomm__scale{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
-.acomm__vote{min-width:44px;min-height:44px;border-radius:10px;border:1px solid var(--a-line);
-background:var(--a-page);color:var(--a-ink);font:inherit;font-weight:700;cursor:pointer}
-.acomm__vote:hover{border-color:var(--a-acc);color:var(--a-acc)}
-.acomm__vote.is-on{background:var(--a-acc);border-color:var(--a-acc);color:#fff}
-.acomm__vote:focus-visible,.acomm__react:focus-visible,.acomm__form button:focus-visible{
-outline:3px solid var(--a-acc);outline-offset:2px}
-.acomm__clear{min-height:44px;padding:0 14px;border:0;background:none;color:var(--a-mute);
-font:inherit;font-size:13px;cursor:pointer;text-decoration:underline}
-.acomm__reactions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0;justify-content:center}
-.acomm__react{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 14px;
-border:1px solid var(--a-line);border-radius:999px;background:var(--a-page);color:var(--a-ink);
-font:inherit;font-size:13px;cursor:pointer}
-.acomm__react.is-on{border-color:var(--a-acc);color:var(--a-acc);background:var(--a-alt)}
-.acomm__react b{font-weight:700;color:var(--a-mute)}
-.acomm__react.is-on b{color:var(--a-acc)}
-.acomm__list-wrap{margin:16px 0 0}
+/* Шкала — ровная сетка на десять клеток, а не строка кнопок вразнобой. */
+/* Шкала звёзд. Один компонент на карточку произведения и на обсуждение.
+   Разметка идёт от десятой звезды к первой, видимый порядок разворачивает
+   `row-reverse`: тогда `:hover ~ *` — это ровно звёзды левее наведённой, и
+   подсветка «до сюда» работает без единой строки скрипта. */
+.astar{margin:0}
+.astar__row{display:flex;flex-direction:row-reverse;justify-content:flex-end;
+gap:2px;flex-wrap:nowrap;min-width:0}
+.astar__b{appearance:none;border:0;background:none;padding:4px 1px;margin:0;
+cursor:pointer;line-height:0;color:var(--a-line);border-radius:6px;
+min-width:28px;min-height:44px;display:inline-flex;align-items:center;
+justify-content:center;transition:color .1s,transform .1s}
+.astar__i{display:block;fill:currentColor}
+/* Наведение и фокус ТОЛЬКО показывают предполагаемый выбор. Сохраняет его
+   нажатие: при правиле «один голос навсегда» оценка по наведению превратила
+   бы случайное движение мыши в необратимое действие. */
+.astar__row:hover .astar__b:hover,
+.astar__row:hover .astar__b:hover ~ .astar__b,
+.astar__row:focus-within .astar__b:focus-visible,
+.astar__row:focus-within .astar__b:focus-visible ~ .astar__b{
+color:var(--a-acc);transform:scale(1.06)}
+.astar__b:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
+/* Сохранённая оценка: те же звёзды, но не кнопки — нажимать нечего. */
+.astar--fixed .astar__row{flex-direction:row}
+.astar__s{color:var(--a-line);line-height:0;padding:2px 1px;display:inline-flex}
+.astar__s.is-on{color:var(--a-acc)}
+.areact__i{display:block;flex:0 0 auto}
+.areact__i{transition:transform .12s}
+/* Обсуждение — колонка чтения, а не полотно во всю ширину: строка в 200
+   знаков читается глазами по одному разу и не с первого раза. */
+.acomm__talk{margin:18px 0 0;max-width:72ch}
+.acomm__list-wrap{margin:14px 0 0}
 .acomm__list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
-.acomm__item{padding:12px 14px;border-radius:12px;background:var(--a-alt);
+/* Сообщение: аватар слева, содержимое справа. Аватар даёт ленте ритм — без
+   него подряд идущие реплики сливаются в один абзац. */
+.acomm__item{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;
+padding:12px 14px;border-radius:12px;background:var(--a-alt);
 border:1px solid var(--a-line)}
-.acomm__item p{margin:6px 0 0;color:var(--a-ink);line-height:1.45;overflow-wrap:anywhere}
-.acomm__name{font-weight:700;color:var(--a-ink);margin-right:8px}
-.acomm__item time{color:var(--a-mute);font-size:12px}
-.acomm__form{display:flex;flex-direction:column;gap:6px;margin:16px 0 0}
+.acomm__ava{display:inline-flex;align-items:center;justify-content:center;
+width:38px;height:38px;border-radius:50%;color:#fff;font-weight:700;font-size:16px;
+line-height:1;flex:0 0 auto;user-select:none}
+.acomm__body{min-width:0}
+.acomm__item-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px}
+.acomm__text{margin:6px 0 0;color:var(--a-ink);line-height:1.45;overflow-wrap:anywhere}
+.acomm__name{font-weight:700;color:var(--a-ink)}
+/* Метка «на проверке» стоит у своего же сообщения: без неё автор решит, что
+   отправка не сработала, и напишет ещё раз. */
+.acomm__pending{margin-left:auto;font-size:11px;font-weight:700;letter-spacing:.04em;
+text-transform:uppercase;color:#9a6700;border:1px solid currentColor;border-radius:999px;
+padding:2px 8px}
+.acomm__item--pending{border-style:dashed}
+.acomm__date{color:var(--a-mute);font-size:12px}
+.acomm__form{display:flex;flex-direction:column;gap:10px;margin:0}
+.acomm__field{display:flex;flex-direction:column;gap:4px}
+@media(min-width:560px){.acomm__field--name{max-width:280px}}
 .acomm__form label{font-size:12px;color:var(--a-mute);text-transform:uppercase;
 letter-spacing:.04em}
 .acomm__form input,.acomm__form textarea{font:inherit;padding:10px 12px;min-height:44px;
-border:1px solid var(--a-line);border-radius:10px;background:var(--a-page);color:var(--a-ink)}
+border:1px solid var(--a-line);border-radius:10px;background:var(--a-page);color:var(--a-ink);
+width:100%;box-sizing:border-box}
 .acomm__form textarea{min-height:88px;resize:vertical}
-.acomm__form button{align-self:flex-start;min-height:44px;padding:0 20px;border:0;
-border-radius:10px;background:var(--a-acc);color:#fff;font:inherit;font-weight:700;cursor:pointer}
-@media(min-width:768px){
-  .acomm__votes{flex-direction:row;justify-content:space-between}
-  .acomm__scale{justify-content:flex-end}
+/* Панель смайликов. Свёрнута по умолчанию: шестнадцать кнопок под каждым
+   полем ввода — это шум, а не помощь. */
+/* Расписание: переключатели дней, две колонки на компьютере, одна на
+   телефоне. Время выделено акцентом — за ним сюда и приходят. */
+.asch__tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px}
+.asch__tab{appearance:none;display:inline-flex;align-items:center;gap:6px;
+min-height:44px;padding:0 14px;border:1px solid var(--a-line);border-radius:999px;
+background:var(--a-page);color:var(--a-ink);font:inherit;font-size:14px;
+font-weight:600;cursor:pointer}
+.asch__tab b{font-weight:700;font-size:12px;color:var(--a-mute);
+font-variant-numeric:tabular-nums}
+.asch__tab:hover{border-color:var(--a-acc);color:var(--a-acc)}
+.asch__tab[aria-selected="true"]{background:var(--a-acc);border-color:var(--a-acc);color:#fff}
+.asch__tab[aria-selected="true"] b{color:rgba(255,255,255,.8)}
+.asch__tab:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
+.asch__tab-s{display:none}
+@media(max-width:519px){
+  .asch__tab-l{display:none}.asch__tab-s{display:inline}
+  .asch__tab{padding:0 12px}
 }
+.asch__day[hidden]{display:none !important}
+.asch__grid{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:768px){.asch__grid{grid-template-columns:repeat(2,minmax(0,1fr));
+column-gap:clamp(16px,2vw,28px)}}
+.asch__row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;
+gap:12px;min-height:72px;padding:0 14px 0 0;background:var(--a-alt);border-radius:12px;
+text-decoration:none;color:inherit;overflow:hidden}
+.asch__row:hover{background:var(--a-surf)}
+.asch__row:focus-visible{outline:3px solid var(--a-acc);outline-offset:2px}
+.asch__thumb{position:relative;width:54px;aspect-ratio:2/3;overflow:hidden;
+background:var(--a-surf);border-radius:12px 0 0 12px;flex:0 0 auto}
+.asch__thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.asch__none-p{display:flex;align-items:center;justify-content:center;width:100%;
+height:100%;color:var(--a-mute);font-weight:700}
+.asch__body{min-width:0;display:flex;flex-direction:column;gap:3px;padding:8px 0}
+.asch__t{font-size:14px;font-weight:600;line-height:1.25;color:var(--a-ink);
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.asch__ep{font-size:12px;color:var(--a-dim);display:flex;align-items:center;gap:6px}
+.asch__out{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;
+color:#1a7f37;border:1px solid currentColor;border-radius:999px;padding:1px 6px}
+.asch__time{font-size:19px;font-weight:800;color:var(--a-acc);white-space:nowrap;
+font-variant-numeric:tabular-nums}
+.asch__time--soon{font-size:12px;font-weight:600;color:var(--a-mute);
+max-width:96px;white-space:normal;text-align:right;line-height:1.25}
+.asch__time--out{font-size:13px;font-weight:700;color:var(--a-mute)}
+.asch__none{margin:0;padding:28px 16px;text-align:center;color:var(--a-dim);
+background:var(--a-alt);border-radius:12px}
+/* «Расписание уточняется» — не то же, что «релизов нет». Первое означает, что
+   мы не знаем, второе — что знаем и релизов нет. Разный текст и разный вид. */
+.asch__none--wait{color:var(--a-mute);border:1px dashed var(--a-line);background:transparent}
+.asch__stale{margin:0 0 14px;padding:10px 14px;border-radius:10px;font-size:13px;
+border:1px solid #9a6700;color:#9a6700;background:var(--a-alt)}
+/* «Моё аниме»: оглавление разделов с числом отмеченного. */
+.amine__tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+.amine__tab{display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:0 14px;
+border:1px solid var(--a-line);border-radius:999px;background:var(--a-page);
+color:var(--a-ink);font-size:14px;font-weight:600;text-decoration:none}
+.amine__tab b{font-size:12px;color:var(--a-mute);font-variant-numeric:tabular-nums}
+.amine__tab:hover{border-color:var(--a-acc);color:var(--a-acc)}
+.amine__tab.is-empty{opacity:.55;pointer-events:none}
+.aemo{margin:6px 0 0}
+.aemo__open{appearance:none;border:1px solid var(--a-line);background:var(--a-page);
+color:var(--a-dim);font:inherit;font-size:12px;font-weight:700;cursor:pointer;
+border-radius:999px;min-height:32px;padding:0 12px}
+.aemo__open:hover,.aemo__open[aria-expanded="true"]{border-color:var(--a-acc);color:var(--a-acc)}
+.aemo__open:focus-visible,.aemo__b:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
+.aemo__panel{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px;
+margin:8px 0 0;padding:10px;border:1px solid var(--a-line);border-radius:12px;
+background:var(--a-page);max-width:360px;box-shadow:var(--a-shadow-soft)}
+@media(max-width:519px){.aemo__panel{grid-template-columns:repeat(6,minmax(0,1fr))}}
+.aemo__panel[hidden]{display:none !important}
+.aemo__b{appearance:none;border:0;background:none;cursor:pointer;font-size:20px;
+line-height:1;min-width:38px;min-height:38px;border-radius:10px;padding:0}
+.aemo__b:hover{background:var(--a-alt);transform:scale(1.1)}
+.acomm__send{align-self:flex-start;min-height:44px;padding:0 20px;border:0;
+border-radius:10px;background:var(--a-acc);color:#fff;font:inherit;font-weight:700;cursor:pointer}
 /* Сводная оценка: крупное число и подпись, из чего она сложилась. Без подписи
    посетитель принял бы нашу арифметику за оценку конкретного сайта. */
+/* Иерархия колонки сверху вниз: главный рейтинг, шкала, личная оценка.
+   Вложенной рамки у главного рейтинга больше нет — он внутри карточки, и
+   вторая рамка вокруг числа только дробила колонку на коробки. */
 .ztitle__score{display:flex;flex-direction:column;align-items:center;gap:2px;
-padding:10px 12px;margin:0 0 10px;border-radius:12px;background:var(--a-alt);
-border:1px solid var(--a-line)}
-.ztitle__score-val{font-size:28px;font-weight:800;line-height:1;color:var(--a-acc)}
+padding:0;margin:0}
+.ztitle__score-val{font-size:34px;font-weight:800;line-height:1;color:var(--a-acc)}
 .ztitle__score-lab{font-size:11px;color:var(--a-mute);text-transform:uppercase;
 letter-spacing:.04em;text-align:center}
+/* Подсказка про стартовую оценку — одна фраза мелким кеглем, а не абзац:
+   посетителю нужно понять, почему первая же девятка не делает рейтинг
+   девяткой, а не прочитать описание методики. */
+.ztitle__hint{margin:0;font-size:12px;line-height:1.4;color:var(--a-mute)}
+.ztitle__drift{margin:0;font-size:12px;line-height:1.4;color:#9a6700}
+/* Внешние источники — справочная строка под главным числом. Это не участники
+   расчёта по отдельности (база берётся одна), но посетителю важно видеть,
+   откуда она взялась; источник базы помечен. */
+.ztitle__srcs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.ztitle__srcs li{display:flex;align-items:baseline;justify-content:space-between;
+gap:8px;font-size:12px;color:var(--a-dim)}
+.ztitle__srcs .lab{font-weight:600}
+.ztitle__srcs .val{font-weight:700;color:var(--a-ink);font-variant-numeric:tabular-nums}
+.ztitle__srcs li[data-base="1"] .lab::after{content:" · старт";color:var(--a-mute);
+font-weight:600;font-size:11px}
 /* Бейджи карточки — как у оригинала: слева сверху сколько серий доступно из
    заявленных, справа сверху до двух оценок с названным источником. Подпись
    источника обязательна: цифра без источника ничего не значит, а сводить
@@ -1824,28 +2289,27 @@ align-items:flex-start;gap:6px;pointer-events:none;z-index:2;flex-wrap:wrap;max-
 .zt__eps{background:#fff;color:var(--a-acc);font-size:11px;font-weight:700;line-height:1;
 padding:5px 7px;border-radius:6px;box-shadow:var(--a-shadow-soft);white-space:nowrap;
 max-width:100%;overflow-wrap:anywhere}
-/* Списки посетителя на странице произведения: строка кнопок, выбранная
-   подсвечена. Повторное нажатие снимает выбор — у кнопки, которая умеет
-   только добавлять, нет обратного хода. */
-.acomm__lists{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 16px}
-.acomm__lists-lab{color:var(--a-dim);font-size:13px;margin-right:2px}
-.acomm__list{display:inline-flex;align-items:center;min-height:38px;padding:0 14px;
+/* Списки посетителя: строка кнопок, выбранная подсвечена. Повторное нажатие
+   снимает выбор — у кнопки, которая умеет только добавлять, нет обратного
+   хода. Класс свой: прежде кнопка списка и список сообщений назывались одним
+   именем `.acomm__list`, и правила накладывались друг на друга — лента
+   комментариев получала `display:inline-flex` от кнопки. */
+
+.acomm__list-btn{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;
 border:1px solid var(--a-line);border-radius:999px;background:var(--a-card);
 color:var(--a-ink);font:inherit;font-size:14px;cursor:pointer}
-.acomm__list:hover{border-color:var(--a-acc);color:var(--a-acc)}
-.acomm__list.is-on{background:var(--a-acc);border-color:var(--a-acc);color:#fff}
-.acomm__list:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
-/* Состав сводной — в раскрытии, а не столбиком поверх первого экрана. */
-.ztitle__ourvotes{margin:8px 0 10px;color:var(--a-dim);font-size:13px}
-.ztitle__ourvotes b{color:var(--a-ink);font-size:15px}
-.ztitle__more{margin:0}
-.ztitle__more summary{cursor:pointer;color:var(--a-acc);font-size:13px;
-list-style:none;min-height:32px;display:inline-flex;align-items:center}
-.ztitle__more summary::-webkit-details-marker{display:none}
-.ztitle__more summary::after{content:" \25BE";font-size:11px}
-.ztitle__more[open] summary::after{content:" \25B4"}
-.ztitle__more summary:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
-.ztitle__method{margin:8px 0 10px;color:var(--a-dim);font-size:12px;line-height:1.45}
+.acomm__list-btn:hover{border-color:var(--a-acc);color:var(--a-acc)}
+.acomm__list-btn.is-on{background:var(--a-acc);border-color:var(--a-acc);color:#fff}
+/* Оценка зрителей рядом с внешней — отдельной строкой и с подписью: без
+   подписи два числа подряд читаются как одно и то же, посчитанное дважды. */
+.ztitle__ourvotes{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;
+margin:8px 0 10px;color:var(--a-dim);font-size:13px}
+.ztitle__ourvotes-l{flex:1 0 100%;font-size:11px;letter-spacing:.04em;
+text-transform:uppercase;color:var(--a-mute);font-weight:700}
+.ztitle__ourvotes b{color:var(--a-ink);font-size:18px;font-weight:800}
+.ztitle__ourvotes-n{font-size:12px;color:var(--a-mute)}
+.ztitle__ourvotes a{color:var(--a-acc);font-weight:700;min-height:44px;
+display:inline-flex;align-items:center}
 .ztitle__score-val--none{color:var(--a-mute)}
 /* Боковая лента новых серий на внутренних страницах. */
 .awrap-side{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px;
@@ -1855,34 +2319,18 @@ align-items:start}
   .awrap-side{grid-template-columns:minmax(0,1fr)}
   .aside-eps{position:static}
 }
-/* Крупный поиск на главной. Красный здесь — тонкая рамка и кнопка, а не
-   заливка во весь экран: большая красная плоскость съедает первый экран и
-   ничего не сообщает. Поле высокое, потому что в него целятся пальцем. */
-.ahero-s{margin:0 0 22px;padding:26px 0 24px;border-bottom:1px solid var(--a-line)}
-.ahero-s__in{max-width:720px;margin:0 auto;padding:0 4px;text-align:center}
-.ahero-s__t{margin:0 0 6px;font-size:26px;line-height:1.2;font-weight:700}
-.ahero-s__p{margin:0 0 16px;color:var(--a-dim);font-size:14px;line-height:1.4}
-.ahero-s__f{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
-.ahero-s__f input{flex:1 1 260px;min-width:0;height:56px;padding:0 18px;font:inherit;
-font-size:16px;border:2px solid var(--a-line);border-radius:14px;background:var(--a-card);
-color:var(--a-ink)}
-.ahero-s__f input:focus-visible{outline:none;border-color:var(--a-acc)}
-.ahero-s__f button{flex:0 0 auto;height:56px;padding:0 28px;border:0;border-radius:14px;
-background:var(--a-acc);color:#fff;font:inherit;font-size:16px;font-weight:700;cursor:pointer}
-.ahero-s__f button:focus-visible{outline:2px solid var(--a-acc);outline-offset:3px}
-.ahero-s__chips{margin:14px 0 0;display:flex;gap:8px;flex-wrap:wrap;
-align-items:center;justify-content:center}
-.ahero-s__lab{color:var(--a-dim);font-size:13px}
-.ahero-s__chip{display:inline-flex;align-items:center;min-height:32px;padding:0 12px;
-border:1px solid var(--a-line);border-radius:999px;font-size:13px;color:var(--a-ink);
-text-decoration:none;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ahero-s__chip:hover,.ahero-s__chip:focus-visible{border-color:var(--a-acc);color:var(--a-acc)}
-@media(max-width:767px){
-  .ahero-s{padding:18px 0 16px;margin-bottom:16px}
-  .ahero-s__t{font-size:21px}
-  .ahero-s__f input,.ahero-s__f button{height:50px}
-  .ahero-s__f button{width:100%}
-}
+/* Отбор над сеткой каталога. У оригинала это одна компактная полоса:
+   поиск, раскрывающиеся списки и «Очистить» — а не панель в полстраницы. */
+.afilt__q{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 10px}
+.afilt__q input{flex:1 1 220px;min-width:0;max-width:340px;min-height:44px;padding:0 14px;
+font:inherit;font-size:14px;border:1px solid var(--a-line);border-radius:10px;
+background:var(--a-page);color:var(--a-ink)}
+.afilt__q button{min-height:44px;padding:0 18px;border:0;border-radius:10px;
+background:var(--a-acc);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.afilt__q input:focus-visible,.afilt__q button:focus-visible{
+outline:2px solid var(--a-acc);outline-offset:2px}
+.zsec--home-catalog .afilt{margin:0 0 6px}
+.zsec--home-catalog .zsub{margin:6px 0 14px}
 /* Хабы жанров и типов: одинаковые карточки-ссылки, счётчик под названием. */
 .ahub{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
 margin:18px 0 8px}
@@ -1901,20 +2349,6 @@ text-decoration:none}
 .atabs__t.is-on{background:var(--a-acc);border-color:var(--a-acc);color:#fff}
 .atabs__t:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
 .atop__method{margin:0 0 12px;color:var(--a-dim)}
-/* Расписание: строка с полосой доступности серий. */
-.asch{display:flex;flex-direction:column;gap:8px;margin:16px 0}
-.asch__row{display:grid;grid-template-columns:minmax(0,1fr) 120px auto;gap:14px;
-align-items:center;min-height:52px;padding:8px 14px;border:1px solid var(--a-line);
-border-radius:10px;background:var(--a-card);color:var(--a-ink);text-decoration:none}
-.asch__row:hover,.asch__row:focus-visible{border-color:var(--a-acc)}
-.asch__t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:15px}
-.asch__p{height:6px;border-radius:999px;background:var(--a-line);overflow:hidden}
-.asch__bar{display:block;height:100%;background:var(--a-acc)}
-.asch__k{color:var(--a-dim);font-size:13px;white-space:nowrap}
-@media(max-width:767px){
-  .asch__row{grid-template-columns:minmax(0,1fr) auto;gap:8px}
-  .asch__p{grid-column:1 / -1}
-}
 /* Фирменный знак оценки. Один на карточку, один и тот же размер везде:
    именно постоянство размера и места делает ряд карточек читаемым — глаз
    находит число, не перечитывая каждую плитку. Красный здесь работает как
@@ -2006,10 +2440,32 @@ margin:0 !important;padding:0 !important;border:0 !important;overflow:hidden !im
 .ahome-editorial,.ahome-comments{display:none;height:0;margin:0;padding:0;overflow:hidden}.ahome-eps__empty{margin:0;padding:10px 12px;border-radius:8px;background:var(--a-alt);
 border:1px solid var(--a-line);color:var(--a-dim);font-size:13px;line-height:1.35;
 max-height:56px;overflow:hidden}
-.ahome-eps .aeps,.zsec--eps.ahome-eps .zl{display:grid;gap:14px;grid-template-columns:1fr}
+/* Честная сноска о недостающем времени: обычный текст над лентой, не
+   плашка-предупреждение. */
+/* Листалка ленты: кнопки по центру, выбранная — красная. */
+.aeps__pages{display:flex;gap:8px;justify-content:center;margin:16px 0 0;flex-wrap:wrap}
+.aeps__pg{display:inline-flex;align-items:center;justify-content:center;
+min-width:44px;min-height:44px;padding:0 12px;border-radius:10px;
+border:1px solid var(--a-line);background:var(--a-page);color:var(--a-ink);
+font-size:15px;font-weight:700;text-decoration:none;font-variant-numeric:tabular-nums}
+.aeps__pg:hover{border-color:var(--a-acc);color:var(--a-acc)}
+.aeps__pg.is-on{background:var(--a-acc);border-color:var(--a-acc);color:#fff}
+/* Страница, для которой событий ещё нет, видна, но не обещает содержимого. */
+.aeps__pg.is-off{opacity:.4;cursor:default;pointer-events:none}
+.aeps__pg:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
+.aeps__short{margin:12px 0 0;font-size:13px;line-height:1.45;color:var(--a-dim);
+text-align:center;max-width:72ch;margin-inline:auto}
+.aeps[hidden]{display:none !important}
+.aeps__gap{margin:0 0 12px;font-size:13px;line-height:1.45;color:var(--a-dim);max-width:78ch}
+/* Страница ленты: одна колонка на телефоне, две по пять строк на компьютере.
+   Порядок заполнения — по колонкам сверху вниз (`grid-auto-flow:column` с
+   пятью строками), как у оригинала: иначе свежие пять оказались бы размазаны
+   через строку по обеим колонкам. */
+.ahome-eps .aeps,.zsec--eps.ahome-eps .zl{display:grid;gap:12px;grid-template-columns:1fr}
 @media(min-width:900px){
   .ahome-eps .aeps,.zsec--eps.ahome-eps .zl{
-    grid-template-columns:1fr 1fr;column-gap:clamp(24px,2vw,32px);row-gap:14px}
+    grid-template-columns:1fr 1fr;grid-template-rows:repeat(5,auto);
+    grid-auto-flow:column;column-gap:clamp(24px,2vw,32px);row-gap:12px}
   .ahome-eps .aeps__row{height:76px;gap:10px;padding:0 12px 0 0;border-radius:10px}
   .ahome-eps .aeps__thumb{width:60px;border-radius:8px 0 0 8px}
   .ahome-eps .aeps__body{padding:8px 0}
@@ -2052,6 +2508,29 @@ font-variant-numeric:tabular-nums}
 }
 @media(max-width:389px){.ahome-eps .aeps__row{height:70px}}
 .aeps:not(.ahome-eps .aeps){display:grid;gap:12px;grid-template-columns:1fr}
+/* Базовая строка серии. Прежде размечена была только лента главной
+   (`.ahome-eps .aeps__row`), а та же строка в боковой колонке каталога
+   оставалась обычной ссылкой: спаны ложились друг на друга, и номер серии
+   печатался поверх названия — измерено на 390, 1363 и 1920. Раскладка теперь
+   у самой строки, а лента главной лишь уточняет размеры. */
+.aeps__row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;
+gap:10px;min-height:64px;padding:0 10px 0 0;background:var(--a-alt);border-radius:10px;
+text-decoration:none;color:inherit;overflow:hidden}
+.aeps__row:hover{background:var(--a-surf)}
+.aeps__row:focus-visible{outline:3px solid var(--a-acc);outline-offset:2px}
+.aeps__thumb{position:relative;flex:0 0 auto;width:52px;aspect-ratio:2/3;overflow:hidden;
+background:var(--a-surf);border-radius:10px 0 0 10px}
+.aeps__thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.aeps__none{display:flex;align-items:center;justify-content:center;width:100%;height:100%;
+color:var(--a-mute);font-weight:700}
+.aeps__body{min-width:0;display:flex;flex-direction:column;gap:2px;padding:8px 0}
+.aeps__title{font-size:14px;font-weight:600;line-height:1.25;color:var(--a-ink);
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.aeps__meta{font-size:12px;color:var(--a-dim);line-height:1.3}
+.aeps__ep{display:flex;flex-direction:column;align-items:center;justify-content:center;
+min-width:44px;color:var(--a-acc);line-height:1}
+.aeps__num{font-size:22px;font-weight:800}
+.aeps__lab{font-size:11px;color:var(--a-mute);text-transform:uppercase;letter-spacing:.03em}
 .zfilt,.zgenres__nav,.zstrip{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;align-items:center}
 .zfilt a,.zgenres__nav a,.zstrip a,.zfilt__y a{display:inline-flex;align-items:center;
 min-height:44px;padding:0 12px;border-radius:var(--a-radius-chip);border:1px solid var(--a-line);
@@ -2107,9 +2586,9 @@ line-height:1.4;font-size:14px}
 .ztitle{display:grid;grid-template-columns:1fr;gap:16px;margin:12px 0 8px;
 padding:clamp(16px,2vw,32px);background:var(--a-page);border-radius:var(--a-radius-shell);
 box-shadow:var(--a-shadow-soft);align-items:start;max-height:none;min-height:0}
-@media(min-width:900px){.ztitle{grid-template-columns:180px minmax(0,1fr) 160px;
-column-gap:clamp(20px,2vw,32px)}}
-@media(min-width:1200px){.ztitle{grid-template-columns:240px minmax(0,1fr) 170px;
+@media(min-width:900px){.ztitle{grid-template-columns:180px minmax(0,1fr) 208px;
+column-gap:clamp(20px,2vw,28px)}}
+@media(min-width:1200px){.ztitle{grid-template-columns:240px minmax(0,1fr) 216px;
 column-gap:28px;padding:28px 32px}}
 .ztitle__poster{aspect-ratio:240/351;border-radius:12px;overflow:hidden;
 background:var(--a-surf);position:relative;width:100%;max-width:240px;margin:0 auto;
@@ -2159,17 +2638,17 @@ text-decoration:none;width:fit-content}
    на телефоне страница произведения оставалась вообще без оценки — то есть
    без ответа на вопрос, ради которого её и открывают. На узком экране
    колонка идёт строкой над содержимым, на широком — боковой колонкой. */
-.ztitle__rail{display:flex;flex-direction:column;gap:12px;min-width:0;width:100%;
-max-width:none;margin:0 0 12px}
+/* Колонка рейтинга — карточка с внутренним полем, а не текст, прижатый к
+   краю. Прежде ширина была 160–170, а в неё складывали десять звёзд и абзац
+   пояснения: последняя звезда и текст упирались в границу колонки, потому что
+   поля не было вовсе. Теперь колонка шире, у неё есть поле, и шкала считает
+   свой размер от доступного места, а не наоборот. */
+.ztitle__rail{display:flex;flex-direction:column;gap:10px;min-width:0;width:100%;
+max-width:none;margin:0 0 12px;padding:14px;border:1px solid var(--a-line);
+border-radius:14px;background:var(--a-alt);box-sizing:border-box}
 @media(min-width:900px){
-  .ztitle__rail{max-width:180px;margin:0}
+  .ztitle__rail{max-width:none;margin:0}
 }
-.ztitle__rail-ratings{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
-.ztitle__rail-ratings li{display:flex;flex-direction:column;gap:2px;min-height:0}
-.ztitle__rail-ratings .lab{font-size:11px;letter-spacing:.04em;text-transform:uppercase;
-color:var(--a-dim);font-weight:700}
-.ztitle__rail-ratings .val{font-size:20px;font-weight:800;color:var(--a-ink);line-height:1.1}
-.ztitle__rail-ratings .val[data-missing="1"]{color:var(--a-mute);font-weight:600;font-size:16px}
 /* Прежде здесь стояло `.ztitle__score{display:none}` — наследство оформления,
    в котором крупной сводной не было. Правило шло ниже объявления и гасило её
    насмерть: разметка с числом отдавалась, но не отрисовывалась ни на одной
@@ -2186,7 +2665,11 @@ border-radius:10px;border:1px solid var(--a-line);background:var(--a-alt);font-s
 @media(min-width:900px){.ztitle-gap{height:20px}}
 /* B08 player shell: status beside heading; 16:9 media only; no fixed 640×360 */
 .zpl[data-b08="player"]{margin:0 auto;width:min(100%,1200px);max-width:1200px}
-.zpl[data-b08="player"] .zpl__h{margin:0 0 16px;max-height:40px}
+/* Без `max-height`. Заголовок «Смотреть» — это h2 с полями браузера по
+   умолчанию и размером 1.5em от 30px родителя; в сорокапиксельную коробку он
+   не влезал и печатался поверх плеера — видно на снимке владельца. Высоту
+   теперь задаёт сам заголовок, а его поля обнулены явно. */
+.zpl[data-b08="player"] .zpl__h{margin:0 0 16px}
 @media(min-width:900px){.zpl[data-b08="player"] .zpl__h{margin:0 0 20px}}
 .zpl[data-b08="player"] .zpl__f{aspect-ratio:16/9;width:100%;max-width:100%;
 min-height:0;height:auto}
@@ -2222,6 +2705,7 @@ display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hi
 .zpl__h{font-size:clamp(22px,2vw,30px);font-weight:700;margin:0 0 16px;
 display:flex;align-items:baseline;justify-content:flex-start;gap:12px;flex-wrap:wrap}
 .zpl__h span{font-size:13px;font-weight:600;color:var(--a-dim)}
+.zpl__h h2{margin:0;font-size:inherit;font-weight:inherit;line-height:1.2}
 .zpl__f{position:relative;width:100%;aspect-ratio:16/9;background:#101010;border:0;
 border-radius:14px;overflow:hidden;max-height:none}
 .zpl__f[data-player-host],.zpl__f [data-player-host]{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -2332,13 +2816,15 @@ def _подставить(шаблон: str, токены: dict) -> str:
         # Навигация обязательного каркаса. Каждый пункт ведёт на страницу с
         # содержимым: пункт, открывающий пустой раздел или объяснение про
         # неподключённый источник, хуже отсутствующего пункта.
+        # «Типы» из меню убраны: отбор по типу живёт в фильтре каталога, где
+        # он и применяется, а страница /types/ остаётся на месте и по прямой
+        # ссылке открывается — пункт меню ей не нужен.
         "нав": [("/", "Главная"), ("/catalog/", "Каталог"),
                 ("/new/", "Новое"),
                 ("/collections/", "Подборки"),
                 ("/schedule/", "Расписание"),
                 ("/genres/", "Жанры"),
-                ("/types/", "Типы"),
-                ("/lists/", "Списки"),
+                ("/lists/", "Моё аниме"),
                 ("/top/", "Топ")],
         "поиск": "Поиск аниме",
         "полосы": [],
@@ -2656,6 +3142,34 @@ def разметка_плеера(вид, запись: dict, деталь: dict
         "доступны без него.</p></div></noscript>"
     )
 
+
+#: Маячок реального запуска воспроизведения.
+#:
+#: Открытие страницы просмотром не считается — и это не формальность: по
+#: открытиям «популярным» становится то, на что чаще нажимают в ленте, а не
+#: то, что смотрят. Поэтому событие шлёт сам плеер: он присылает `timeupdate`
+#: только когда картинка пошла. Один маячок на открытие страницы; повторы того
+#: же зрителя за сутки отсекает сервер.
+СКРИПТ_СОБЫТИЯ_ПРОСМОТРА = (
+    "(function(){"
+    "var узел=document.querySelector('[data-play-beacon]');if(!узел)return;"
+    "var ид=узел.getAttribute('data-play-beacon');if(!ид)return;"
+    "var послано=false;"
+    "function послать(){if(послано)return;послано=true;"
+    "try{var т=new FormData();т.append('id',ид);"
+    "if(navigator.sendBeacon){navigator.sendBeacon('/event/play',"
+    "new Blob(['id='+encodeURIComponent(ид)],"
+    "{type:'application/x-www-form-urlencoded'}));}"
+    "else{var x=new XMLHttpRequest();x.open('POST','/event/play',true);"
+    "x.setRequestHeader('Content-Type','application/x-www-form-urlencoded');"
+    "x.send('id='+encodeURIComponent(ид));}}catch(e){}}"
+    "window.addEventListener('message',function(e){"
+    "if(!e.origin||e.origin.indexOf('cdnvideohub')<0)return;"
+    "var d=e.data;try{if(typeof d==='string')d=JSON.parse(d);}catch(err){return;}"
+    "if(!d||!d.eventType)return;"
+    "if(d.eventType==='timeupdate'||d.eventType==='started')послать();});"
+    "})();"
+)
 
 СКРИПТ_ПЛЕЕРА_КЛИЕНТ = """
 (function(){
@@ -2992,58 +3506,6 @@ def заглушка_постера(запись: dict, класс_заглуш�
     "r.setAttribute('data-theme',t);r.style.colorScheme=t;}catch(e){document.documentElement.setAttribute('data-theme','light');}})();"
 )
 
-#: Слайдер первого экрана: стрелки, точки, автопрокрутка с кнопкой остановки,
-#: клавиатура и свайп. Свайп и прокрутка нативные — их даёт `scroll-snap`, и
-#: без скрипта слайдер всё равно листается пальцем и колесом. Автопрокрутка
-#: останавливается сама при наведении, при фокусе внутри слайдера и при
-#: настройке «меньше движения»: карусель, которая уезжает из-под читающего, —
-#: это не оживление страницы, а помеха.
-СКРИПТ_СЛАЙДЕРА = (
-    "(function(){"
-    "var s=document.querySelector('[data-hero]');if(!s)return;"
-    "var vp=s.querySelector('.ahero__vp'),tr=s.querySelector('.ahero__track');"
-    "if(!vp||!tr)return;"
-    "var сл=[].slice.call(s.querySelectorAll('[data-hero-slide]'));"
-    "var то=[].slice.call(s.querySelectorAll('[data-hero-dot]'));"
-    "if(сл.length<2){var n=s.querySelector('.ahero__nav');if(n)n.hidden=true;return;}"
-    "var i=0,таймер=null,идёт=true;"
-    "function тихо(){try{return window.matchMedia("
-    "'(prefers-reduced-motion: reduce)').matches;}catch(e){return false;}}"
-    "function показать(н,гладко){i=(н+сл.length)%сл.length;"
-    "vp.scrollTo({left:i*vp.clientWidth,behavior:(гладко&&!тихо())?'smooth':'auto'});"
-    "то.forEach(function(д,j){if(j===i)д.setAttribute('aria-current','true');"
-    "else д.removeAttribute('aria-current');});}"
-    "function пуск(){if(таймер||тихо())return;таймер=setInterval(function(){"
-    "показать(i+1,true);},7000);}"
-    "function стоп(){if(таймер!==null)clearInterval(таймер);таймер=null;}"
-    "s.querySelector('[data-hero-next]').addEventListener('click',function(){"
-    "показать(i+1,true);});"
-    "s.querySelector('[data-hero-prev]').addEventListener('click',function(){"
-    "показать(i-1,true);});"
-    "то.forEach(function(д,j){д.addEventListener('click',function(){показать(j,true);});});"
-    "var кн=s.querySelector('[data-hero-play]');"
-    "кн.addEventListener('click',function(){идёт=!идёт;"
-    "кн.setAttribute('aria-pressed',идёт?'true':'false');"
-    "кн.firstChild.textContent=идёт?'\\u23F8':'\\u25B6';"
-    "кн.querySelector('.vh').textContent=идёт?'Остановить автопрокрутку':'Включить автопрокрутку';"
-    "if(идёт)пуск();else стоп();});"
-    "s.addEventListener('keydown',function(e){"
-    "if(e.key==='ArrowRight'){e.preventDefault();показать(i+1,true);}"
-    "else if(e.key==='ArrowLeft'){e.preventDefault();показать(i-1,true);}});"
-    "s.addEventListener('mouseenter',стоп);"
-    "s.addEventListener('mouseleave',function(){if(идёт)пуск();});"
-    "s.addEventListener('focusin',стоп);"
-    "s.addEventListener('focusout',function(e){"
-    "if(!s.contains(e.relatedTarget)&&идёт)пуск();});"
-    "var ждём=null;"
-    "vp.addEventListener('scroll',function(){if(ждём)clearTimeout(ждём);"
-    "ждём=setTimeout(function(){var н=Math.round(vp.scrollLeft/vp.clientWidth);"
-    "if(н!==i)показать(н,false);},120);});"
-    "window.addEventListener('resize',function(){показать(i,false);});"
-    "показать(0,false);пуск();"
-    "})();"
-)
-
 #: Карусель первого экрана: точки-страницы, цикличность и уважение к
 #: настройке «меньше движения». Прокрутка и свайп остаются нативными — скрипт
 #: только добавляет то, чего без него нет, и при его отсутствии лента
@@ -3084,6 +3546,19 @@ def заглушка_постера(запись: dict, класс_заглуш�
     # ленту спорит с обязательной привязкой (scroll-snap: mandatory) и
     # обрывается на середине: измерено, лента останавливалась где попало.
     "v.scrollTo({left:цель,behavior:(перескок||!плавно())?'auto':'smooth'});});"
+    # Клавиатура. Полоса прокрутки с tabindex листается стрелками и так, но
+    # шагом в несколько пикселей: попасть на соседний постер этим нельзя.
+    # Здесь шаг тот же, что у кнопок, плюс Home/End на края ленты.
+    "document.addEventListener('keydown',function(e){"
+    "var v=e.target;if(!v||!v.classList||!v.classList.contains('zrl__vp'))return;"
+    "var шаг=Math.max(160,Math.round(v.clientWidth*0.86));"
+    "var предел=v.scrollWidth-v.clientWidth;var цель=null;"
+    "if(e.key==='ArrowRight')цель=Math.min(предел,v.scrollLeft+шаг);"
+    "else if(e.key==='ArrowLeft')цель=Math.max(0,v.scrollLeft-шаг);"
+    "else if(e.key==='Home')цель=0;"
+    "else if(e.key==='End')цель=предел;"
+    "else return;"
+    "e.preventDefault();прокрутить(v,цель);});"
     "function обновить(){var р=document.querySelectorAll('.zrl');"
     "for(var i=0;i<р.length;i++){var v=р[i].querySelector('.zrl__vp');"
     "if(v)точки(р[i],v);}}"
@@ -3146,6 +3621,50 @@ def заглушка_постера(запись: dict, класс_заглуш�
     "if(db){var e2=drawerEls();if(e2.d&&!e2.d.hidden)closeDrawer();else openDrawer(db);return;}"
     "if(e.target.closest('[data-drawer-close]')||e.target.closest('[data-drawer-backdrop]')){"
     "closeDrawer();return;}"
+    # Смайлики формы сообщения. Вставка — обычный текст в поле: ни разметки,
+    # ни HTML посетитель через панель не передаёт. Знак встаёт на место
+    # курсора, а не в конец, и курсор остаётся после вставленного.
+    # Страницы ленты новых серий. Переключение на месте: страница не
+    # перезагружается и не прыгает вверх, выбор уезжает в адрес через
+    # replaceState и потому переживает обновление браузера. Без скрипта
+    # кнопки остаются обычными ссылками и работают перезагрузкой.
+    "var ep=e.target.closest('[data-eps-page]');"
+    "if(ep){if(ep.getAttribute('aria-disabled')==='true'){e.preventDefault();return;}"
+    "e.preventDefault();var н=ep.getAttribute('data-eps-page');"
+    "var сек=ep.closest('.ahome-eps');if(!сек)return;"
+    "сек.querySelectorAll('[data-eps-panel]').forEach(function(p){"
+    "p.hidden=(p.getAttribute('data-eps-panel')!==н);});"
+    "сек.querySelectorAll('[data-eps-page]').forEach(function(a){"
+    "var сам=a===ep;a.classList.toggle('is-on',сам);"
+    "if(сам)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});"
+    "сек.setAttribute('data-eps-current',н);"
+    "try{var u=new URL(window.location.href);u.searchParams.set('eps',н);"
+    "u.hash='';history.replaceState(null,'',u.pathname+u.search);}catch(err){}"
+    "return;}"
+    # Дни расписания. Переключение без перезагрузки; при выключенном
+    # JavaScript видимым остаётся текущий день — он же открыт по умолчанию.
+    "var sd=e.target.closest('[data-day]');"
+    "if(sd){var д=sd.getAttribute('data-day');"
+    "document.querySelectorAll('[data-day]').forEach(function(t){"
+    "t.setAttribute('aria-selected',t===sd?'true':'false');});"
+    "document.querySelectorAll('.asch__day').forEach(function(p){"
+    "p.hidden=(p.id!=='sch-day-'+д);});return;}"
+    "var et=e.target.closest('[data-emoji-toggle]');"
+    "if(et){var box=et.parentElement,p=box.querySelector('.aemo__panel');"
+    "var on=p.hidden;p.hidden=!on;et.setAttribute('aria-expanded',on?'true':'false');"
+    "return;}"
+    "var eb=e.target.closest('[data-emoji]');"
+    "if(eb){var f=eb.closest('form');var ta=f&&f.querySelector('textarea');"
+    "if(ta){var z=eb.getAttribute('data-emoji');"
+    "var a=ta.selectionStart==null?ta.value.length:ta.selectionStart;"
+    "var b=ta.selectionEnd==null?a:ta.selectionEnd;"
+    "ta.value=ta.value.slice(0,a)+z+ta.value.slice(b);"
+    "var к=a+z.length;try{ta.setSelectionRange(к,к);}catch(err){}ta.focus();}"
+    "return;}"
+    "if(!e.target.closest('[data-emoji-picker]')){"
+    "document.querySelectorAll('[data-emoji-picker]').forEach(function(x){"
+    "var p=x.querySelector('.aemo__panel'),t=x.querySelector('[data-emoji-toggle]');"
+    "if(p&&!p.hidden){p.hidden=true;if(t)t.setAttribute('aria-expanded','false');}});}"
     "var af=e.target.closest('[data-afilt-open]');"
     "if(af){var box=af.closest('[data-afilt]');if(box){"
     "var on=!box.classList.contains('is-open');box.classList.toggle('is-open',on);"
@@ -3330,7 +3849,7 @@ class Вид:
     def оболочка(self, **кв) -> str:
         raise NotImplementedError
 
-    def главная(self) -> str:
+    def главная(self, зпр: dict | None = None) -> str:
         raise NotImplementedError
 
     def коллекция(self, данные) -> str:
@@ -3798,7 +4317,7 @@ class ВидОснова(Вид):
         return f'<nav class="zcr" aria-label="Хлебные крошки">{" / ".join(куски)}</nav>'
 
     # --- страницы -----------------------------------------------------
-    def главная(self) -> str:
+    def главная(self, зпр: dict | None = None) -> str:
         """Пять горизонтальных лент, и ни одна не повторяет выборку другой.
 
         Повтор одной выборки под тремя заголовками — дефект, который витрина
@@ -4317,107 +4836,373 @@ class ВидОснова(Вид):
             адрес = (заголовки.get("X-Forwarded-For") or "").split(",")[0].strip()
         return адрес or getattr(self, "_адрес_клиента", "") or "гость"
 
-    def блок_сообщества(self, запись: dict, деталь: dict) -> str:
-        """Голоса, реакции и комментарии — или честная причина их отсутствия."""
+    def _csrf_поле(self) -> str:
+        """Скрытое поле формы с токеном двойной отправки.
+
+        Токен берётся у обработчика запроса, а не считается здесь заново:
+        обработчик знает куку, которую он сам же и выдал этим ответом, а вид
+        — только ту, что пришла. У первого посетителя куки во входящем
+        запросе ещё нет, и вид без обработчика вернул бы пустой токен, то
+        есть форму, которую сервер потом отвергнет.
+        """
+        обработчик = getattr(self, "_обработчик", None)
+        токен = ""
+        if обработчик is not None and hasattr(обработчик, "_csrf"):
+            токен = обработчик._csrf()
+        if not токен:
+            кука = getattr(self, "_куки_посетителя", "") or ""
+            if кука:
+                токен = hashlib.sha256(
+                    ("animedia-community-csrf/1:" + кука).encode("utf-8")
+                ).hexdigest()[:32]
+        return (f'<input type="hidden" name="csrf" value="{html.escape(токен)}">'
+                if токен else "")
+
+    #: Что показать после отправки формы. Ключ — значение `?community=`,
+    #: которым обработчик отвечает на POST. Молчание после сохранения — это
+    #: интерфейс, по которому нельзя понять, применилось действие или нет.
+    СООБЩЕНИЯ_СООБЩЕСТВА = {
+        "ok": ("ok", "Сохранено."),
+        "vote-ok": ("ok", "Оценка сохранена. Она ставится один раз и не меняется."),
+        "voted": ("warn", "Оценка уже стоит и не меняется — она ставится один раз."),
+        "pending": ("ok", "Сообщение отправлено и появится в ленте после проверки. "
+                          "Пока оно видно только вам."),
+        "error": ("err", "Не удалось сохранить."),
+        "unavailable": ("err", "Раздел сейчас недоступен: сохранить не получится."),
+        # Отказ по токену. Молчаливое «ничего не произошло» посетитель читает
+        # как поломку формы и повторяет отправку; здесь сказано, что делать.
+        "csrf": ("err", "Форма устарела — обновите страницу и повторите."),
+    }
+
+    def _итог_сообщества(self) -> str:
+        """Полоса итога последней отправки — успех, отказ или ошибка."""
+        зпр = getattr(self, "_зпр", None) or {}
+        код = ((зпр.get("community") or [""])[0] or "").strip()
+        что = self.СООБЩЕНИЯ_СООБЩЕСТВА.get(код)
+        if что is None:
+            return ""
+        вид, текст = что
+        if код == "error":
+            почему = ((зпр.get("why") or [""])[0] or "").strip()
+            if почему:
+                текст = f"Не удалось сохранить: {почему}"
+        elif код in ("voted", "vote-ok"):
+            моя = ((зпр.get("mine") or [""])[0] or "").strip()
+            if моя.isdigit():
+                текст = (f"Ваша оценка: {моя}. "
+                         "Оценка ставится один раз и не меняется.")
+        роль = "alert" if вид == "err" else "status"
+        return (f'<p class="acomm__flash acomm__flash--{вид}" role="{роль}" '
+                f'data-community-result="{html.escape(код)}">{html.escape(текст)}</p>')
+
+    def _код_жанра(self, имя: str) -> str:
+        """Код жанра по его русскому имени — тот же, по которому идёт отбор.
+
+        Сначала ищем в указателе (там имя и код уже связаны снимком), затем
+        считаем код тем же правилом, каким его считает построение указателя.
+        Придумывать третий вид кода нельзя: ссылка ушла бы в пустую выдачу.
+        """
+        цель = имя.strip().casefold()
+        for код, подпись in (self.индекс.get("genre_names") or []):
+            if str(подпись).strip().casefold() == цель:
+                return код
+        return нормализовать(транслит(имя))
+
+    def _ссылка_факта(self, текст: str, адрес: str, *, годен: bool) -> str:
+        """Значение факта: ссылка, если переход осмыслен, иначе просто текст."""
+        if not годен:
+            return html.escape(текст)
+        return (f'<a href="{html.escape(закодировать_запрос(адрес), quote=True)}">'
+                f'{html.escape(текст)}</a>')
+
+    def _маячок_просмотра(self, деталь: dict) -> str:
+        """Узел и скрипт, отправляющие событие реального запуска плеера."""
+        ид = str((деталь or {}).get("id") or "").strip()
+        if not ид:
+            return ""
+        return (f'<span data-play-beacon="{html.escape(ид)}" hidden></span>'
+                f'<script>{СКРИПТ_СОБЫТИЯ_ПРОСМОТРА}</script>')
+
+    def _смайлики(self) -> str:
+        """Панель смайликов формы сообщения.
+
+        Вставка — обычный текст в поле, поэтому ничего в обработке не меняется:
+        сообщение по-прежнему экранируется на выводе, проходит проверку длины,
+        антиспам и премодерацию. Никакой разметки посетитель через панель не
+        передаёт — кнопки подставляют ровно один знак.
+
+        Панель раскрывается по нажатию и по умолчанию свёрнута: шестнадцать
+        кнопок под каждым полем ввода — это шум, а не помощь.
+        """
+        кнопки = "".join(
+            f'<button type="button" class="aemo__b" data-emoji="{html.escape(знак)}" '
+            f'title="{html.escape(имя)}" tabindex="-1">'
+            f'<span aria-hidden="true">{html.escape(знак)}</span>'
+            f'<span class="vh">{html.escape(имя)}</span></button>'
+            for знак, имя in СМАЙЛИКИ)
+        return (
+            '<div class="aemo" data-emoji-picker>'
+            '<button type="button" class="aemo__open" data-emoji-toggle '
+            'aria-expanded="false" aria-controls="aemo-panel">Смайлики</button>'
+            f'<div class="aemo__panel" id="aemo-panel" hidden>{кнопки}</div>'
+            '</div>')
+
+    def освежить_оценки_каталога(self) -> int:
+        """Подтянуть `_rating` у записей, за которые голосовали наши зрители.
+
+        Поле `_rating` заполняется при перечитывании снимка и служит ключом
+        сортировки «по оценке» и порога «оценка от N». Главный рейтинг от
+        внешней базы отличается ТОЛЬКО там, где есть наши голоса: в остальных
+        записях это одно и то же число. Значит, освежать весь каталог не нужно
+        — достаточно тех тем, где голоса есть.
+
+        Почему не весь: измерено, 7435 вызовов главного рейтинга занимают
+        368 мс. Платить их на каждый запрос каталога ради нескольких
+        изменившихся записей — плохая сделка. Проголосованных тем на порядки
+        меньше, и стоимость растёт вместе с ними, а не с каталогом.
+
+        Без этого сортировка «по оценке» расходилась бы с числами на плитках:
+        порядок по одной величине, подписи по другой.
+        """
         хранилище = сообщество()
+        if хранилище is None or not getattr(хранилище, "доступно", False):
+            return 0
+        if not hasattr(хранилище, "главный_рейтинг"):
+            return 0
+        try:
+            темы = хранилище._прочитать().get("titles") or {}
+        except (OSError, AttributeError):
+            return 0
+        с_голосами = {ид for ид, з in темы.items()
+                      if isinstance(з, dict) and (з.get("votes") or {})}
+        if not с_голосами:
+            return 0
+        освежено = 0
+        for з in self.д.items:
+            ид = str(з.get("id") or "")
+            if ид not in с_голосами and str(з.get("slug") or "") not in с_голосами:
+                continue
+            r = self.рейтинг(з.get("slug") or "")
+            if r and r.get("значение") is not None:
+                з["_rating"] = float(r["значение"])
+                з["_votes"] = int(r.get("голосов") or 0)
+                освежено += 1
+        return освежено
+
+    def рейтинг(self, slug: str, деталь: dict | None = None) -> dict | None:
+        """Главный рейтинг записи. Одна точка входа на всю витрину.
+
+        Считает модуль, а не шаблон: карточка произведения, обсуждение и
+        плитки каталога обязаны показывать ОДНО число, а три независимых
+        вычисления одного и того же неизбежно разойдутся. Поэтому здесь нет
+        ни формулы, ни округления — только вызов и передача внешних оценок.
+        """
+        хранилище = сообщество()
+        if not slug or хранилище is None or not getattr(хранилище, "доступно", False):
+            return None
+        if not hasattr(СООБЩЕСТВО, "главный_рейтинг") and not hasattr(
+                хранилище, "главный_рейтинг"):
+            return None
+        деталь = деталь if деталь is not None else (self.деталь(slug) or {})
+        try:
+            return хранилище.главный_рейтинг(
+                тема_сообщества(self.п, slug),
+                внешние_для_базы(деталь),
+                АНИМЕДИА_ПРИОРИТЕТ_БАЗЫ,
+                slug=slug)
+        except (OSError, AttributeError):
+            return None
+
+    def _состояние_сообщества(self, запись: dict):
+        """Хранилище и состояние темы или None, если раздел выключен."""
+        хранилище = сообщество()
+        if хранилище is None or not getattr(хранилище, "доступно", False):
+            return None, None, None
         slug = запись["slug"]
-        путь = f"/title/{slug}/"
-        if хранилище is None or not хранилище.доступно:
-            причина = ("модуль сообщества не подключён" if хранилище is None
-                       else хранилище.причина)
-            return (
-                f'<section class="zsec acomm acomm--off" data-community="unavailable" '
-                f'data-community-reason="{html.escape(причина[:120])}">'
-                f'<h2 class="zh zh--sm">Оценки и обсуждение</h2>'
-                f'<p class="acomm__off">Сейчас нельзя оставить оценку или '
-                f'сообщение. Придуманных вместо них здесь не будет: как только '
-                f'раздел заработает, тут появятся настоящие отзывы '
-                f'посетителей.</p>'
-                f'</section>')
-        с = хранилище.состояние(slug, self._ключ_посетителя())
-        # --- списки посетителя ---
-        # Кнопка «в список» стоит первой: это самое частое действие на
-        # странице произведения, и ради него не нужно ни регистрации, ни
-        # выдуманной учётной записи.
-        кнопки_списков = "".join(
-            f'<button class="acomm__list{" is-on" if с.мой_список == ключ else ""}" '
+        тема = тема_сообщества(self.п, slug)
+        return хранилище, тема, хранилище.состояние(
+            тема, self._ключ_посетителя(), slug=slug)
+
+    def _сообщество_выключено(self, запись: dict) -> str:
+        хранилище = сообщество()
+        причина = ("модуль сообщества не подключён" if хранилище is None
+                   else getattr(хранилище, "причина", ""))
+        return (
+            f'<section class="zsec acomm acomm--off" id="community" '
+            f'data-community="unavailable" '
+            f'data-community-reason="{html.escape(str(причина)[:120])}">'
+            f'<p class="acomm__off">Сейчас нельзя оставить оценку или '
+            f'сообщение. Придуманных вместо них здесь не будет: как только '
+            f'раздел заработает, тут появятся настоящие отзывы посетителей.</p>'
+            f'</section>')
+
+    def панель_действий(self, запись: dict, *, возврат: str = "") -> str:
+        """Одна горизонтальная полоса сразу под плеером: оценка и списки.
+
+        Раньше это была двухколоночная коробка с заголовком «Оценки и
+        обсуждение», подзаголовками «В список» и «Реакция» и абзацем про
+        однократное голосование — и стояла она под всем остальным. Посетитель,
+        досмотревший серию, до неё не доходил.
+
+        Здесь ровно то, что делают сразу после просмотра: поставить оценку и
+        отметить себе. Пояснение про однократность ушло в подсказку звёзд —
+        на экране оно занимало три строки ради правила, которое касается
+        одного нажатия.
+
+        Наведение и фокус только ПОКАЗЫВАЮТ предполагаемый выбор — сохраняет
+        его явное нажатие. Это не придирка: шкала, ставящая оценку по
+        наведению, при правиле «один голос навсегда» превращает случайное
+        движение мыши в необратимое действие.
+
+        Подсветка «до наведённой звезды» сделана порядком в разметке, а не
+        скриптом: звёзды идут от десятой к первой, а видимый порядок
+        разворачивает CSS (`row-reverse`). Тогда `:hover ~ *` — это ровно
+        звёзды левее наведённой, и шкала работает при выключенном JavaScript.
+        Отсюда и обратный range ниже: менять его местами нельзя, не поменяв
+        правило подсветки.
+
+        Проголосовавшему кнопок нет вовсе: сервер всё равно откажет, и
+        предлагать нажатие значило бы обещать то, чего интерфейс не держит.
+        На их месте — его собственная оценка теми же звёздами.
+        """
+        хранилище, тема, с = self._состояние_сообщества(запись)
+        if с is None:
+            return ""
+        slug = запись["slug"]
+        путь = возврат or f"/title/{slug}/"
+        проголосовал = с.мой_голос is not None
+
+        if проголосовал:
+            шкала = "".join(
+                '<span class="astar__s' + (' is-on' if n <= с.мой_голос else '') + '">'
+                + звезда_svg() + '</span>'
+                for n in range(СООБЩЕСТВО.ОЦЕНКА_МИН, СООБЩЕСТВО.ОЦЕНКА_МАКС + 1))
+            оценка = (
+                f'<div class="apanel__stars astar astar--fixed" data-stars="panel" '
+                f'data-my-vote="{с.мой_голос}" data-vote-locked="1">'
+                f'<div class="astar__row" role="img" '
+                f'aria-label="Ваша оценка {с.мой_голос} из 10">{шкала}</div>'
+                f'<span class="apanel__mine">Ваша оценка: '
+                f'<b>{с.мой_голос}</b></span></div>')
+        else:
+            подсказка = ("Оценка ставится один раз и потом не меняется. "
+                         "Наведение только показывает выбор — сохраняет нажатие.")
+            кнопки = "".join(
+                f'<button class="astar__b" type="submit" name="value" value="{n}" '
+                f'title="Оценка {n} из 10">{звезда_svg()}'
+                f'<span class="vh">Поставить оценку {n} из 10</span></button>'
+                for n in range(СООБЩЕСТВО.ОЦЕНКА_МАКС, СООБЩЕСТВО.ОЦЕНКА_МИН - 1, -1))
+            оценка = (
+                f'<form class="apanel__stars astar" method="post" '
+                f'action="/community/vote" data-stars="panel" data-vote-locked="0">'
+                f'{self._csrf_поле()}'
+                f'<input type="hidden" name="slug" value="{html.escape(slug)}">'
+                f'<input type="hidden" name="back" value="{html.escape(путь)}">'
+                f'<div class="astar__row" role="group" title="{html.escape(подсказка)}" '
+                f'aria-label="Поставить оценку от 1 до 10. {html.escape(подсказка)}">'
+                f'{кнопки}</div></form>')
+
+        списки = "".join(
+            f'<button class="acomm__list-btn{" is-on" if с.мой_список == ключ else ""}" '
             f'type="submit" name="list" value="{ключ if с.мой_список != ключ else ""}" '
             f'aria-pressed="{"true" if с.мой_список == ключ else "false"}">'
             f'{html.escape(подпись)}</button>'
             for ключ, подпись in СООБЩЕСТВО.СПИСКИ)
-        блок_списков = (
-            f'<form class="acomm__lists" method="post" action="/community/list" '
-            f'data-lists-widget="1" '
-            f'data-my-list="{html.escape(с.мой_список or "")}">'
-            f'<input type="hidden" name="slug" value="{html.escape(slug)}">'
+        return (
+            f'<section class="apanel" data-actions="1" '
+            f'data-voted="{"1" if проголосовал else "0"}">'
+            f'{оценка}'
+            f'<form class="apanel__lists" method="post" action="/community/list" '
+            f'data-lists-widget="1" aria-label="Списки">'
+            f'{self._csrf_поле()}'
+                f'<input type="hidden" name="slug" value="{html.escape(slug)}">'
             f'<input type="hidden" name="back" value="{html.escape(путь)}">'
-            f'<span class="acomm__lists-lab">В список:</span>{кнопки_списков}'
-            f'</form>')
-        # --- голосование ---
+            f'{списки}</form></section>')
+
+    def полоса_реакций(self, запись: dict, *, возврат: str = "") -> str:
+        """Реакции одной полосой во всю ширину: крупный значок, счёт под ним."""
+        хранилище, тема, с = self._состояние_сообщества(запись)
+        if с is None:
+            return ""
+        slug = запись["slug"]
+        путь = возврат or f"/title/{slug}/"
         кнопки = "".join(
-            f'<button class="acomm__vote{" is-on" if с.мой_голос == n else ""}" '
-            f'type="submit" name="value" value="{n}" '
-            f'aria-pressed="{"true" if с.мой_голос == n else "false"}">{n}</button>'
-            for n in range(СООБЩЕСТВО.ОЦЕНКА_МИН, СООБЩЕСТВО.ОЦЕНКА_МАКС + 1))
-        свод = (f'<b>{с.средняя:g}</b><span>из 10 · {с.голосов} '
-                f'{"голос" if с.голосов == 1 else "голосов"}</span>'
-                if с.средняя is not None else
-                '<span class="acomm__none">Оценок посетителей пока нет</span>')
-        снять = (f'<button class="acomm__clear" type="submit" name="value" value="0">'
-                 f'Снять свою оценку</button>' if с.мой_голос else "")
-        голосование = (
-            f'<form class="acomm__votes" method="post" action="/community/vote">'
-            f'<input type="hidden" name="slug" value="{html.escape(slug)}">'
-            f'<input type="hidden" name="back" value="{html.escape(путь)}">'
-            f'<div class="acomm__score" data-user-score="{с.средняя if с.средняя is not None else ""}"'
-            f' data-user-votes="{с.голосов}">{свод}</div>'
-            f'<div class="acomm__scale" role="group" aria-label="Поставить оценку">'
-            f'{кнопки}</div>{снять}</form>')
-        # --- реакции ---
-        реакции = "".join(
-            f'<button class="acomm__react{" is-on" if с.моя_реакция == р else ""}" '
+            f'<button class="areact{" is-on" if с.моя_реакция == р else ""}" '
             f'type="submit" name="reaction" value="{html.escape(р)}" '
+            f'title="{html.escape(р)}" '
             f'aria-pressed="{"true" if с.моя_реакция == р else "false"}">'
-            f'<span>{html.escape(р)}</span>'
+            f'{значок_реакции(р)}'
             f'<b data-reaction-count="{с.реакции.get(р, 0)}">{с.реакции.get(р, 0)}</b>'
-            f'</button>' for р in СООБЩЕСТВО.РЕАКЦИИ)
-        блок_реакций = (
-            f'<form class="acomm__reactions" method="post" action="/community/reaction">'
-            f'<input type="hidden" name="slug" value="{html.escape(slug)}">'
+            f'<span class="vh">{html.escape(р)}</span></button>'
+            for р in СООБЩЕСТВО.РЕАКЦИИ)
+        return (
+            f'<form class="areacts" method="post" action="/community/reaction" '
+            f'data-reactions="1" aria-label="Реакции">'
+            f'{self._csrf_поле()}'
+                f'<input type="hidden" name="slug" value="{html.escape(slug)}">'
             f'<input type="hidden" name="back" value="{html.escape(путь)}">'
-            f'{реакции}</form>')
-        # --- комментарии ---
-        лента = "".join(
-            f'<li class="acomm__item"><span class="acomm__name">'
-            f'{html.escape(str(к.get("name") or "Гость"))}</span>'
-            f'<time datetime="{html.escape(str(к.get("created_at") or ""))}">'
-            f'{html.escape(_аниме_формат_времени_анонса(str(к.get("created_at") or ""), "datetime"))}'
-            f'</time><p>{html.escape(str(к.get("text") or ""))}</p></li>'
-            for к in с.комментарии[:20])
-        пусто = ('<p class="acomm__none">Обсуждения пока нет. Первое сообщение '
-                 'появится здесь сразу после отправки.</p>')
-        список_сообщений = (f'<ul class="acomm__list">{лента}</ul>'
-                            if лента else пусто)
+            f'{кнопки}</form>')
+
+    def блок_обсуждения(self, запись: dict, *, возврат: str = "") -> str:
+        """Комментарии отдельным блоком: форма, панель смайликов, лента."""
+        хранилище, тема, с = self._состояние_сообщества(запись)
+        if с is None:
+            return self._сообщество_выключено(запись)
+        slug = запись["slug"]
+        путь = возврат or f"/title/{slug}/"
+
+        def строка_сообщения(к: dict) -> str:
+            ждёт = str(к.get("status") or "") == СООБЩЕСТВО.СТАТУС_ОЖИДАЕТ
+            метка = ('<span class="acomm__pending">на проверке</span>'
+                     if ждёт else "")
+            классы = "acomm__item" + (" acomm__item--pending" if ждёт else "")
+            дата = str(к.get("created_at") or "")
+            имя_автора = str(к.get("name") or "Гость")
+            return (
+                f'<li class="{классы}" data-comment-status='
+                f'"{html.escape(str(к.get("status") or "approved"))}">'
+                f'{аватар(имя_автора)}'
+                f'<div class="acomm__body">'
+                f'<div class="acomm__item-h">'
+                f'<span class="acomm__name">{html.escape(имя_автора)}</span>'
+                f'<time class="acomm__date" datetime="{html.escape(дата)}">'
+                f'{html.escape(_аниме_формат_времени_анонса(дата, "datetime"))}'
+                f'</time>{метка}</div>'
+                f'<p class="acomm__text">{html.escape(str(к.get("text") or ""))}</p>'
+                f'</div></li>')
+
+        лента = "".join(строка_сообщения(к) for к in с.комментарии[:20])
+        пусто = ('<p class="acomm__none">Обсуждения пока нет. '
+                 'Ваше сообщение появится здесь после проверки.</p>')
+        список_сообщений = (f'<ul class="acomm__list">{лента}</ul>' if лента else пусто)
         форма = (
             f'<form class="acomm__form" method="post" action="/community/comment">'
-            f'<input type="hidden" name="slug" value="{html.escape(slug)}">'
+            f'{self._csrf_поле()}'
+                f'<input type="hidden" name="slug" value="{html.escape(slug)}">'
             f'<input type="hidden" name="back" value="{html.escape(путь)}">'
+            f'<div class="acomm__field acomm__field--name">'
             f'<label for="acomm-name">Имя</label>'
-            f'<input id="acomm-name" name="name" maxlength="40" placeholder="Гость">'
+            f'<input id="acomm-name" name="name" maxlength="40" placeholder="Гость"></div>'
+            f'<div class="acomm__field">'
             f'<label for="acomm-text">Сообщение</label>'
             f'<textarea id="acomm-text" name="text" rows="3" required '
             f'maxlength="{СООБЩЕСТВО.ДЛИНА_КОММЕНТАРИЯ}" '
             f'placeholder="Что скажете об этом аниме?"></textarea>'
-            f'<button type="submit">Отправить</button></form>')
+            f'{self._смайлики()}</div>'
+            f'<button class="acomm__send" type="submit">Отправить</button>'
+            f'<p class="acomm__hint">Сообщения проходят проверку и появляются '
+            f'в общей ленте после неё.</p></form>')
         return (
-            f'<section class="zsec acomm" data-community="on" '
+            f'<section class="zsec acomm" id="community" data-community="on" '
             f'data-community-votes="{с.голосов}" '
             f'data-community-comments="{len(с.комментарии)}" '
+            f'data-community-slug="{html.escape(slug)}" '
             f'data-my-list="{html.escape(с.мой_список or "")}">'
-            f'<h2 class="zh zh--sm">Оценки и обсуждение</h2>'
-            f'{блок_списков}{голосование}{блок_реакций}'
-            f'<div class="acomm__list-wrap">{список_сообщений}</div>'
-            f'{форма}</section>')
+            f'<h2 class="zh zh--sm">Обсуждение</h2>'
+            f'{self._итог_сообщества()}'
+            f'<div class="acomm__talk">{форма}'
+            f'<div class="acomm__list-wrap">{список_сообщений}</div></div>'
+            f'</section>')
 
     def серия(self, запись: dict, деталь: dict, сезон: int, эпизод: int) -> str:
         имя = запись["title"]
@@ -4555,7 +5340,7 @@ def _мета_версии() -> str:
 # B03: provider_became_playable ledger absent → compact empty, no catalog fallback.
 АНИМЕДИА_EPISODE_EVENT_DATA_GAP = 1
 TRUE_PROVIDER_PLAYABLE_EVENT_COUNT = 0
-АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК = "Новые серии аниме"
+АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК = "Новые серии"
 АНИМЕДИА_ЭПИЗОД_EMPTY_COPY = (
     "Лента новых серий пока недоступна: источник событий ещё не подключён"
 )
@@ -4592,7 +5377,7 @@ TRUE_PROVIDER_PLAYABLE_EVENT_COUNT = 0
     "Пока нечего показать — вернитесь чуть позже"
 )
 CATALOG_FRESHNESS_DATA_GAP = 1
-АНИМЕДИА_CATALOG_ADDED_HOME_LIMIT = 16
+АНИМЕДИА_CATALOG_ADDED_HOME_LIMIT = 18
 #: Сколько записей показывает раздел «Недавно добавленные» на своей странице.
 АНИМЕДИА_CATALOG_ADDED_PAGE_LIMIT = 48
 
@@ -4712,7 +5497,12 @@ def загрузить_топ_по_оценкам(*, site_id: str = "",
 #: это и есть «пустая витрина», которую видел владелец. Восемь набирают
 #: объём оригинала настоящими записями, без выдуманных блоков; ленты
 #: без данных по-прежнему не рисуются вовсе.
-АНИМЕДИА_HOME_MAX_CATALOG_SHELVES = 8
+#: Сколько тематических полок показывает главная.
+#: Было восемь: страница уходила на семь с половиной тысяч пикселей, и до
+#: отбора с сеткой каталога посетитель просто не доходил. У оригинала между
+#: лентой первого экрана и сеткой стоит несколько полок, а не весь каталог,
+#: разложенный по жанрам.
+АНИМЕДИА_HOME_MAX_CATALOG_SHELVES = 4
 АНИМЕДИА_TOP100_HOME_LIMIT = 12
 АНИМЕДИА_TOP100_REQUIRED_FIELDS = (
     "schema_version", "site_id", "ordered_title_ids", "snapshot_revision",
@@ -4744,9 +5534,13 @@ RECOMMENDATIONS_DATA_GAP = int(not Path(АНИМЕДИА_RECOMMENDATIONS_PATH).i
 # Template must not rank catalog ratings into a public «Популярное за неделю».
 АНИМЕДИА_POPULAR_WINDOW = "weekly"
 АНИМЕДИА_POPULAR_REFRESH_ON_EVERY_REQUEST = 0
+#: Снимок популярности лежит рядом с каталогом, а не внутри релиза.
+#: Путь от `__file__` указывал внутрь неизменяемого каталога выпуска — туда,
+#: где обновляемым данным взяться неоткуда: снимок нельзя было бы освежить, не
+#: пересобрав интерфейс. Ровно та же ошибка уже была у реестра серий.
 АНИМЕДИА_WEEKLY_POPULAR_PATH = os.environ.get(
     "ANIMEDIA_WEEKLY_POPULAR_SNAPSHOT",
-    str(Path(__file__).resolve().parents[2] / "config" / "animedia-weekly-popular.json"),
+    str(_КОРЕНЬ_РАНТАЙМА / f"{САЙТ_ID}-popular.json"),
 )
 _АНИМЕДИА_POPULAR_CACHE: dict[str, dict] = {}
 АНИМЕДИА_WEEKLY_REQUIRED_FIELDS = (
@@ -4881,12 +5675,24 @@ def аниме_weekly_shelf_from_approved(
     """Resolve approved ordered IDs against catalog; enforce ≥ min_items."""
     if not approved or not approved.get("display_approved"):
         return [], None
+    # Ключом снимка может быть и постоянный идентификатор записи, и её адрес.
+    # Постоянный вернее: адрес меняется при переименовании, и тогда позиция
+    # молча выпадала бы из ленты. Адрес остаётся понятным запасным вариантом.
     by_slug = {з.get("slug"): з for з in items if з.get("slug")}
+    by_id: dict[str, dict] = {}
+    for з in items:
+        for поле in ("id", "canonical_title_id", "title_id"):
+            ключ = str(з.get(поле) or "").strip()
+            if ключ:
+                by_id.setdefault(ключ, з)
+    видели: set[str] = set()
     out = []
-    for slug in approved.get("slugs") or []:
-        з = by_slug.get(slug)
-        if з is None:
+    for ключ in approved.get("slugs") or []:
+        ключ = str(ключ or "").strip()
+        з = by_id.get(ключ) or by_slug.get(ключ)
+        if з is None or з.get("slug") in видели:
             continue
+        видели.add(з.get("slug"))
         out.append(з)
         if len(out) >= limit:
             break
@@ -5391,7 +6197,8 @@ class ВидАнимедиа(ВидОснова):
                 доступно, заявлено = счёт
                 слева = (f'<span class="zt__eps" data-eps-avail="{доступно}" '
                          f'data-eps-total="{заявлено}">{доступно} из {заявлено}</span>')
-            знак = фирменный_знак_оценки(деталь)
+            знак = фирменный_знак_оценки(
+                деталь, рейтинг=self.рейтинг(запись["slug"], деталь))
             if слева or знак:
                 бейджи = (f'<span class="zt__badges">{слева}{знак}</span>')
         подпись = (f'<span class="zt__t">{html.escape(запись["title"])}</span>'
@@ -5423,7 +6230,9 @@ class ВидАнимедиа(ВидОснова):
         мета = " · ".join(str(ч) for ч in (запись.get("kind"), запись.get("year")) if ч)
         строка_меты = (f'<span class="zt__m">{html.escape(мета)}</span>'
                        if состав.get("мета") and мета else "")
-        строка_оценки = фирменный_знак_оценки(деталь, строкой=True)
+        строка_оценки = фирменный_знак_оценки(
+            деталь, строкой=True,
+            рейтинг=self.рейтинг(запись.get("slug") or "", деталь))
         return (f'<a class="zt zt--row" data-card-variant="{html.escape(вариант)}"'
                 f' href="{запись["url"]}" title="{html.escape(запись["title"])}">'
                 f'<span class="zt__p">{изо}</span>'
@@ -5578,87 +6387,129 @@ class ВидАнимедиа(ВидОснова):
                 f'{badge}</a>')
 
     def _рейтинги_колонка_b07(self, деталь: dict, slug: str = "") -> str:
-        """Оценка произведения: крупная сводная, состав — в раскрытии.
+        """Колонка «Рейтинг»: одно число, под ним — из чего оно сложилось.
 
-        Прежде колонка перечисляла источники столбиком, и посетитель первым
-        делом читал три чужих названия, а не ответ на свой вопрос. Теперь
-        первым идёт одно число и то, из чего оно сложилось: сколько
-        источников и сколько голосов оставили посетители этой витрины. Состав
-        никуда не делся — он в раскрытии «Подробнее», где ему и место.
+        Считает модуль сообщества, а не шаблон. Здесь нет ни формулы, ни
+        весов, ни округления: главный рейтинг обязан совпадать с тем, что
+        показывают плитки каталога и обсуждение, а совпадение достигается
+        одним расчётом, а не тремя одинаковыми на вид.
 
-        Голоса посетителей стоят рядом, но в сводную не входят: смешивать
-        внешнюю оценку с оценкой своей аудитории — значит получить число, о
-        котором нельзя сказать, что оно означает.
+        Что видит посетитель сверху вниз: слово «Рейтинг» и число, под ним —
+        сколько наших зрителей проголосовало, ниже — внешние источники
+        справочной строкой, затем шкала и личная оценка.
+
+        Счётчик считает ТОЛЬКО наши голоса. Вес стартовой оценки живёт в
+        формуле и фиктивными голосами не изображается: написать «5 голосов»
+        там, где их ноль, значило бы соврать числом, которое посетитель
+        принимает за людей.
         """
-        by_key = {о["ключ"]: о for о in оценки_по_источникам(деталь)}
-        order = (
-            ("shikimori", "Shikimori"),
-            ("kp", "Кинопоиск"),
-            ("imdb", "IMDb"),
-        )
-        items = []
-        for key, label in order:
-            о = by_key.get(key)
-            if о:
-                items.append(
-                    f'<li data-rating-source="{html.escape(key)}">'
-                    f'<span class="lab">{html.escape(label)}</span>'
-                    f'<span class="val">{html.escape(о["значение"])}</span></li>'
-                )
-            else:
-                items.append(
-                    f'<li data-rating-source="{html.escape(key)}" data-rating-missing="1">'
-                    f'<span class="lab">{html.escape(label)}</span>'
-                    f'<span class="val" data-missing="1">—</span></li>'
-                )
-        свои_голоса = 0
-        свои_средняя = None
-        хранилище = сообщество()
-        if slug and хранилище is not None and getattr(хранилище, "доступно", False):
-            с = хранилище.состояние(slug)
-            свои_голоса = int(с.голосов or 0)
-            свои_средняя = с.средняя
-        сводная = сводная_оценка(деталь)
-        if сводная:
-            подписи = {1: "источник", 2: "источника", 3: "источника", 4: "источника"}
-            число = (f'<span class="ztitle__score-val">'
-                     f'{html.escape(сводная["значение"])}</span>')
-            строка = (f'{АНИМЕДИА_СВОДНАЯ_ПОДПИСЬ} · {сводная["источников"]} '
-                      f'{подписи.get(сводная["источников"], "источников")}')
-            атрибуты = (
-                ' data-aggregate="1"'
-                f' data-aggregate-method="{html.escape(сводная["методика"])}"'
-                f' data-aggregate-sources="{сводная["источников"]}"'
-                + (f' data-aggregate-votes="{сводная["всего_голосов"]}"'
-                   if сводная["всего_голосов"] else ""))
-        else:
+        внешние = [о for о in оценки_по_источникам(деталь)
+                   if not о["пользовательская"]]
+        r = self.рейтинг(slug, деталь) if slug else None
+
+        # Справочная строка источников: что именно знают о произведении
+        # снаружи. Это не участники расчёта по отдельности — база берётся
+        # одна, — но посетителю важно видеть, откуда она вообще взялась.
+        база = (r or {}).get("база") or {}
+        источник_базы = str(база.get("source") or "")
+        подписи = {к: п for к, (п, _ш, _с) in ИСТОЧНИКИ_ОЦЕНОК.items()}
+        строки_источников = "".join(
+            f'<li data-rating-source="{html.escape(о["ключ"])}"'
+            + (' data-base="1"' if о["ключ"] == источник_базы else "")
+            + f'><span class="lab">{html.escape(о["подпись"])}</span>'
+            f'<span class="val">{html.escape(о["значение"])}</span></li>'
+            for о in внешние)
+        блок_источников = (
+            f'<ul class="ztitle__srcs" aria-label="Оценки внешних источников">'
+            f'{строки_источников}</ul>' if строки_источников else "")
+
+        if r is None or r.get("значение") is None:
             число = (f'<span class="ztitle__score-val ztitle__score-val--none">'
                      f'{АНИМЕДИА_ОЦЕНКА_НЕТ}</span>')
-            строка = "Оценка появится, когда придут данные"
-            атрибуты = ' data-aggregate="0" data-aggregate-sources="0"'
-        if свои_голоса:
-            слово = ("голос" if свои_голоса % 10 == 1 and свои_голоса % 100 != 11
-                     else "голосов")
-            своя_строка = (
-                f'<p class="ztitle__ourvotes" data-our-votes="{свои_голоса}"'
-                f' data-our-average="{свои_средняя}">'
-                f'Посетители: <b>{свои_средняя}</b> · {свои_голоса} {слово}</p>')
+            подпись = "Оценок пока нет"
+            атрибуты = ' data-rating-state="empty" data-our-votes="0"'
+            пояснение = ('<p class="ztitle__hint">Оценку ставят зрители — '
+                         'ваша будет первой.</p>')
         else:
-            своя_строка = ('<p class="ztitle__ourvotes" data-our-votes="0">'
-                           'Посетители ещё не голосовали</p>')
+            голосов = int(r.get("голосов") or 0)
+            показ = f"{float(r['значение']):g}"
+            число = (f'<span class="ztitle__score-val">'
+                     f'{html.escape(показ)}</span>')
+            подпись = "Рейтинг"
+            атрибуты = (
+                f' data-rating-state="{html.escape(str(r.get("состояние") or ""))}"'
+                f' data-rating-formula="{html.escape(str(r.get("формула") or ""))}"'
+                f' data-our-votes="{голосов}"'
+                + (f' data-base-source="{html.escape(источник_базы)}"'
+                   if источник_базы else "")
+                + (' data-base-provisional="1"'
+                   if r.get("база_предварительная") else ""))
+            пояснение = self._пояснение_рейтинга(r, подписи)
+
+        if r and int(r.get("голосов") or 0):
+            голосов = int(r["голосов"])
+            строка_зрителей = (
+                f'<p class="ztitle__ourvotes" data-our-votes="{голосов}">'
+                f'<span class="ztitle__ourvotes-n">{голосов} '
+                f'{склонение_голосов(голосов)} зрителей</span></p>')
+        else:
+            строка_зрителей = ('<p class="ztitle__ourvotes" data-our-votes="0">'
+                               '<span class="ztitle__ourvotes-n">Зрители ещё '
+                               'не голосовали</span></p>')
+
+        расхождение = ""
+        if r and r.get("база_разошлась"):
+            сейчас = r.get("внешняя_сейчас") or {}
+            имя = подписи.get(str(сейчас.get("source") or ""),
+                              str(сейчас.get("source") or ""))
+            try:
+                сейчас_показ = f"{float(сейчас.get('value') or 0):g}"
+            except (TypeError, ValueError):
+                сейчас_показ = ""
+            расхождение = (
+                f'<p class="ztitle__drift" data-base-drift="1">'
+                f'{html.escape(имя)} сейчас показывает '
+                f'{html.escape(сейчас_показ)}. '
+                f'Стартовая оценка закреплена и не меняется.</p>')
+
         return (
             f'<aside class="ztitle__rail" data-b07="ratings">'
             f'<div class="ztitle__score"{атрибуты}>{число}'
-            f'<span class="ztitle__score-lab">{html.escape(строка)}</span></div>'
-            f'{своя_строка}'
-            f'<details class="ztitle__more" data-rating-details="1">'
-            f'<summary>Подробнее</summary>'
-            f'<p class="ztitle__method">Сводная считается по подтверждённым '
-            f'источникам с весом по числу голосов. Оценки посетителей витрины '
-            f'в неё не входят.</p>'
-            f'<ul class="ztitle__rail-ratings">{"".join(items)}</ul>'
-            f'</details></aside>'
+            f'<span class="ztitle__score-lab">{html.escape(подпись)}</span></div>'
+            f'{строка_зрителей}{пояснение}{расхождение}{блок_источников}</aside>'
         )
+
+    def _пояснение_рейтинга(self, r: dict, подписи: dict) -> str:
+        """Короткая подсказка: откуда взялось число и при чём тут стартовая оценка.
+
+        Одна фраза, а не абзац про методику: посетителю нужно понять, почему
+        первая же зрительская девятка не превращает рейтинг в девятку, а не
+        прочитать описание алгоритма.
+        """
+        состояние = str(r.get("состояние") or "")
+        база = r.get("база") or {}
+        имя = подписи.get(str(база.get("source") or ""), str(база.get("source") or ""))
+        если_предварительная = r.get("база_предварительная")
+        if состояние == "base+votes":
+            текст = (f"Считается от стартовой оценки {имя} и голосов зрителей: "
+                     f"пока голосов немного, стартовая весит больше.")
+        elif состояние == "base-only":
+            если_имя = имя.strip()
+            if если_предварительная:
+                текст = (f"Пока это стартовая оценка {если_имя}: она закрепится "
+                         f"с первым голосом зрителей." if если_имя else
+                         "Пока это стартовая внешняя оценка: она закрепится "
+                         "с первым голосом зрителей.")
+            else:
+                текст = (f"Пока это стартовая оценка {если_имя}. "
+                         f"С голосами зрителей число начнёт меняться."
+                         if если_имя else
+                         "Пока это стартовая внешняя оценка.")
+        elif состояние == "votes-only":
+            текст = "Считается только по голосам зрителей: внешней оценки нет."
+        else:
+            return ""
+        return f'<p class="ztitle__hint">{html.escape(текст)}</p>'
 
     def тайтл(self, запись: dict, деталь: dict) -> str:
         """B07 passport: poster | text | ratings; verified description or true gap."""
@@ -5693,21 +6544,62 @@ class ВидАнимедиа(ВидОснова):
         rail = self._рейтинги_колонка_b07(деталь, запись.get("slug") or "")
         orig = html.escape(str(деталь.get("original_name") or деталь.get("original_title") or ""))
         orig_html = f'<p class="ztitle__o">{orig}</p>' if orig else ""
+        # Жанры — настоящие ссылки в каталог, а не серые плашки.
+        # Плашка, которая выглядит кликабельной и не ведёт никуда, хуже
+        # обычного текста: посетитель жмёт по ней и получает ничего.
         pills = ""
         жанры = деталь.get("genres") or []
-        if жанры:
-            pills = ('<div class="ztitle__pills">' + "".join(
-                f"<span>{html.escape(str(г))}</span>" for г in жанры[:10]) + "</div>")
+        коды_жанров = list(деталь.get("genre_codes") or [])
+        звенья_жанров = []
+        # Имя переменной здесь не `имя`: так зовут название произведения, и
+        # затенение в цикле уводило его в заголовок страницы — H1 показывал
+        # «Япония» вместо «Хори-сан и Миямура-кун».
+        for н, г in enumerate(жанры[:10]):
+            имя_жанра = str(г).strip()
+            if not имя_жанра:
+                continue
+            код = (str(коды_жанров[н]).strip() if н < len(коды_жанров) else "")
+            if not код:
+                код = self._код_жанра(имя_жанра)
+            if код and (self.индекс.get("genre") or {}).get(код):
+                адрес = закодировать_запрос(f"/catalog/?genre={код}")
+                звенья_жанров.append(
+                    f'<a href="{html.escape(адрес, quote=True)}">'
+                    f'{html.escape(имя_жанра)}</a>')
+            else:
+                # Жанра нет в указателе — ссылка вела бы в пустую выдачу.
+                звенья_жанров.append(f"<span>{html.escape(имя_жанра)}</span>")
+        if звенья_жанров:
+            pills = ('<div class="ztitle__pills">'
+                     + "".join(звенья_жанров) + "</div>")
+        # Значение факта либо обычный текст, либо ссылка — и тогда переход
+        # ведёт ровно туда, куда обещает подпись. Промежуточного вида
+        # «похоже на ссылку, но не ссылка» здесь нет.
         факты = []
         год = запись.get("year") or деталь.get("year")
         if год:
-            факты.append(("Год", str(год)))
+            факты.append(("Год", self._ссылка_факта(
+                str(год), f"/catalog/?year={год}",
+                годен=str(год).isdigit())))
         тип = запись.get("kind") or деталь.get("type")
         if тип:
-            факты.append(("Тип", str(тип)))
+            есть_вид = any(з.get("kind") == str(тип) for з in self.д.items)
+            факты.append(("Тип", self._ссылка_факта(
+                str(тип), "/catalog/" + запрос_строкой({"kind": str(тип)}),
+                годен=есть_вид)))
         страны = деталь.get("countries") or []
         if страны:
-            факты.append(("Страна", ", ".join(str(с) for с in страны[:3])))
+            звенья_стран = []
+            for страна in страны[:3]:
+                имя_страны = str(страна).strip()
+                if not имя_страны:
+                    continue
+                код = нормализовать(имя_страны)
+                годен = bool((self.индекс.get("country") or {}).get(код))
+                звенья_стран.append(self._ссылка_факта(
+                    имя_страны, f"/catalog/?country={код}", годен=годен))
+            if звенья_стран:
+                факты.append(("Страна", ", ".join(звенья_стран)))
         статус = деталь.get("status") or деталь.get("release_status")
         avail = sum(int(с.get("avail") or 0) for с in сезоны) if сезоны else 0
         total = sum(int(с.get("eps") or 0) for с in сезоны) if сезоны else 0
@@ -5717,23 +6609,26 @@ class ВидАнимедиа(ВидОснова):
             elif avail:
                 статус = "Онгоинг"
         if статус:
-            факты.append(("Статус", str(статус)))
+            факты.append(("Статус", html.escape(str(статус))))
         if avail > 0:
-            факты.append(("Доступно серий", str(avail)))
+            факты.append(("Доступно серий", html.escape(str(avail))))
         if total > 0 and total != avail:
-            факты.append(("Вышло серий", str(total)))
+            факты.append(("Вышло серий", html.escape(str(total))))
         длит = деталь.get("duration") or деталь.get("episode_duration") or деталь.get("runtime")
         if длит:
-            факты.append(("Продолжительность", str(длит)))
+            факты.append(("Продолжительность", html.escape(str(длит))))
         студии = деталь.get("studios") or деталь.get("studio") or деталь.get("voice_studios") or []
         if isinstance(студии, str):
             студии = [студии]
         if студии:
-            факты.append(("Студия", ", ".join(str(с) for с in студии[:2])))
+            факты.append(("Студия",
+                          html.escape(", ".join(str(с) for с in студии[:2]))))
         meta_html = ""
         if факты:
+            # Значение приходит готовой разметкой (ссылка или экранированный
+            # текст): экранировать его второй раз значило бы показать теги.
             rows = "".join(
-                f"<div><dt>{html.escape(k)}</dt><dd>{html.escape(v)}</dd></div>"
+                f"<div><dt>{html.escape(k)}</dt><dd>{v}</dd></div>"
                 for k, v in факты)
             meta_html = f'<dl class="ztitle__facts">{rows}</dl>'
         сезон_старт, эпизод_старт = выбрать_доступную_серию(деталь) if сезоны else (1, None)
@@ -5750,6 +6645,7 @@ class ВидАнимедиа(ВидОснова):
             f'<span data-player-status="{html.escape(код)}">'
             f'{html.escape(_подпись_плеера(код))}</span></div>'
             f'<div class="zpl__f" data-player data-state="{код}">{внутри}</div>'
+            f'{self._маячок_просмотра(деталь)}'
             f"{_скрипты_плеера(код)}</section>")
         текущий = (сезон_старт, эпизод_старт) if эпизод_старт is not None else None
         блок_серий = (self._серии(запись, сезоны, текущий=текущий) if сериал else "")
@@ -5769,8 +6665,14 @@ class ВидАнимедиа(ВидОснова):
             f'<div class="ztitle__head-text"><h1>{html.escape(имя)}</h1>{orig_html}</div>'
             f'</div>{pills}{meta_html}{описание_html}{блок_связей}'
             f'<div class="ztitle__actions"><a class="ztitle__cta" href="#watch">Смотреть</a></div>'
-            f'</div>{rail}</div>{ad_title}{плеер}{блок_серий}'
-            f'{self.блок_сообщества(запись, деталь)}{блок_похожих}'
+            # Порядок: плеер → действия → серии → реакции → обсуждение.
+            # Оценка и списки стоят сразу под плеером, потому что именно их
+            # делают, досмотрев; прежде они лежали под всеми блоками, и
+            # посетитель до них не доходил.
+            f'</div>{rail}</div>{ad_title}{плеер}'
+            f'{self.панель_действий(запись)}{блок_серий}'
+            f'{self.полоса_реакций(запись)}'
+            f'{self.блок_обсуждения(запись)}{блок_похожих}'
             f'{блок_рекомендуем}</div>')
         разметка = self.schema_тайтла(запись, деталь, путь)
         # Gap copy must never become meta description.
@@ -5808,6 +6710,7 @@ class ВидАнимедиа(ВидОснова):
             f'{html.escape(_подпись_плеера(код))}</span></div>'
             f'<div class="zpl__f" data-player data-state="{код}" '
             f'data-season="{int(сезон)}" data-episode="{int(эпизод)}">{внутри}</div>'
+            f'{self._маячок_просмотра(деталь)}'
             f"{_скрипты_плеера(код)}</section>")
         пред, след = границы_серии(деталь, сезон, эпизод)
         переход = ('<nav class="zepnav" aria-label="Соседние серии">'
@@ -5836,12 +6739,23 @@ class ВидАнимедиа(ВидОснова):
             f'{orig_html}{counts_html}{desc_html}'
             f'</div></aside>')
         блок_похожих = self._блок_похожих(запись, деталь, extra_attrs=' data-b09="recs"')
+        # Обсуждение произведения доступно и со страницы серии.
+        # Ветка одна: ключ — slug произведения, а не адрес страницы, поэтому
+        # переход между сериями не создаёт вторую ветку и не теряет уже
+        # написанное. Формы возвращают посетителя на страницу произведения,
+        # где этот раздел — основной.
+        действия = self.панель_действий(запись, возврат=путь)
+        реакции = self.полоса_реакций(запись, возврат=путь)
+        обсуждение = self.блок_обсуждения(запись, возврат=путь)
         тело = (
             f'<div class="zwrap aep-page" data-b09="exact">'
             f'<h1 class="zh zh--ep">{html.escape(заголовок)}</h1>'
-            f'{плеер}{переход}'
+            # «Контекст тайтла» уехал ниже действий: он отделял плеер от
+            # оценки и списков, то есть стоял ровно между просмотром и тем,
+            # что делают сразу после него.
+            f'{плеер}{действия}{переход}'
             f'{self._серии(запись, сезоны, текущий=(сезон, эпизод))}'
-            f'{ctx}{блок_похожих}</div>')
+            f'{реакции}{ctx}{обсуждение}{блок_похожих}</div>')
         разметка = self.schema_эпизода(запись, деталь, сезон, эпизод, путь)
         return self.оболочка(
             тело, f"{заголовок} — {self.имя}", путь,
@@ -5875,23 +6789,34 @@ class ВидАнимедиа(ВидОснова):
                 + "".join(ссылки) + "</nav>")
 
     def верхняя_карусель(self, набор, *, snapshot: dict | None = None,
-                         подпись: str = "Популярное за неделю",
+                         подпись: str = "Популярное",
                          источник: str = "weekly-popular") -> str:
-        """Карусель первого экрана — как у оригинала, но только из своих данных.
+        """Первый экран — горизонтальная лента вертикальных постеров.
 
-        У оригинала первый экран — карусель отобранного каталога, а не заголовок
-        с лидом. Композиция воспроизводится; содержимое берётся из уже
-        утверждённых источников и подписывается тем, чем оно является:
+        Прежде здесь стоял одиночный герой: большой постер, абзац описания,
+        оценка и кнопка — один тайтл на весь экран, а остальные семь прятались
+        за точками. У оригинала первый экран устроен иначе: красная полоса, на
+        ней ряд вертикальных постеров с короткими белыми названиями и стрелки
+        по краям. Семь постерами на широком экране, меньше — на узком. Ровно
+        это здесь и собирается.
 
-        * есть утверждённый недельный снимок — «Популярное за неделю»;
-        * нет — лента проверенного реестра добавлений с её собственным
-          названием;
-        * нет и её — карусель не рисуется вовсе.
+        Содержимое берётся из уже утверждённых источников и подписывается тем,
+        чем оно является: есть утверждённый недельный снимок — «Популярное за
+        неделю»; нет — лента проверенного реестра добавлений со своим
+        названием; нет и её — ленты нет вовсе. Подписывать одну выборку
+        названием другой нельзя: это и была бы выдуманная популярность.
 
-        Подписывать одну выборку названием другой нельзя: это и была бы
-        выдуманная популярность.
+        Тайтл без постера в ленту не берётся: полоса из букв-заглушек —
+        не промоблок. Из каталога такой тайтл при этом никуда не девается,
+        его место в ленте занимает следующий подходящий.
         """
         if not набор:
+            return ""
+        отобрано = [з for з in набор
+                    if з.get("slug") and з.get("title") and з.get("url")
+                    and str(з.get("poster") or "").strip()][:16]
+        if len(отобрано) < 4:
+            # Меньше четырёх постеров — это не лента, а обрывок.
             return ""
         extra = f' data-carousel-source="{html.escape(источник)}"'
         if источник == "weekly-popular":
@@ -5904,63 +6829,24 @@ class ВидАнимедиа(ВидОснова):
                 f' data-popular-updated="{html.escape(str(snapshot.get("updated_at") or snapshot.get("generated_at") or ""))}"'
                 f' data-popular-algo="{html.escape(str(snapshot.get("algorithm_version") or ""))}"'
             )
-        слайды = []
-        точки = []
-        отобрано = [з for з in набор if з.get("slug") and з.get("title")][:8]
-        for н, з in enumerate(отобрано):
-            деталь = self.деталь(з["slug"]) or {}
-            изо = заглушка_постера(з, "ahero__none", "ahero__img", 240, 351)
-            знак = фирменный_знак_оценки(деталь)
-            мета = " · ".join(str(ч) for ч in (
-                з.get("kind"), з.get("year"),
-                ", ".join((деталь.get("genres") or [])[:2]) or None) if ч)
-            описание = str(деталь.get("description") or "").strip()
-            # Короткая информация, а не полстраницы текста: слайд читают
-            # мельком, и обрезанный абзац здесь честнее полного.
-            if len(описание) > 210:
-                описание = описание[:207].rsplit(" ", 1)[0] + "…"
-            текущая_точка = ' aria-current="true"' if н == 0 else ""
-            # Слайды не прячутся от читалки через aria-hidden: внутри каждого
-            # есть ссылки, а фокусируемая ссылка внутри скрытого блока — это
-            # ловушка, из которой пользователь клавиатуры не понимает, куда
-            # попал. Слайдер — обычный контейнер прокрутки, и всё его
-            # содержимое доступно; текущий слайд показывают точки.
-            #
-            # Название слайда — не заголовок раздела: восемь h2 подряд
-            # заставляют читалку перечислять карусель как восемь разделов
-            # страницы. Имя слайду даёт ссылка.
-            слайды.append(
-                f'<li class="ahero__s" data-hero-slide="{н}">'
-                f'<a class="ahero__p" href="{html.escape(з["url"])}" tabindex="-1" '
-                f'aria-hidden="true">{изо}</a>'
-                f'<div class="ahero__c">'
-                f'<p class="ahero__t"><a href="{html.escape(з["url"])}">'
-                f'{html.escape(з["title"])}</a></p>'
-                + (f'<p class="ahero__m">{html.escape(мета)}</p>' if мета else "")
-                + (f'<p class="ahero__d">{html.escape(описание)}</p>' if описание else "")
-                + f'<div class="ahero__r">{знак}</div>'
-                f'<a class="ahero__cta" href="{html.escape(з["url"])}">Смотреть</a>'
-                f'</div></li>')
-            точки.append(
-                f'<button class="ahero__dot" type="button" data-hero-dot="{н}"'
-                f'{текущая_точка}>'
-                f'<span class="vh">Слайд {н + 1}</span></button>')
-        if not слайды:
-            return ""
+        плитки = "".join(self.плитка(з, вариант="hero") for з in отобрано)
         return (
             f'<section class="ahero" aria-roledescription="carousel" '
             f'aria-label="{html.escape(подпись)}" data-hero="1" '
-            f'data-hero-count="{len(слайды)}"{extra}>'
-            f'<div class="ahero__vp"><ul class="ahero__track">{"".join(слайды)}</ul></div>'
-            f'<div class="ahero__nav">'
-            f'<button class="ahero__arr" type="button" data-hero-prev>'
-            f'<span aria-hidden="true">‹</span><span class="vh">Предыдущий слайд</span></button>'
-            f'<div class="ahero__dots" role="tablist">{"".join(точки)}</div>'
-            f'<button class="ahero__play" type="button" data-hero-play aria-pressed="true">'
-            f'<span aria-hidden="true">⏸</span>'
-            f'<span class="vh">Остановить автопрокрутку</span></button>'
-            f'<button class="ahero__arr" type="button" data-hero-next>'
-            f'<span aria-hidden="true">›</span><span class="vh">Следующий слайд</span></button>'
+            f'data-hero-count="{len(отобрано)}"{extra}>'
+            f'<h2 class="vh">{html.escape(подпись)}</h2>'
+            f'<div class="zrl ahero__rl">'
+            f'<button class="zrl__btn zrl__btn--p" type="button" data-rl="prev" '
+            f'aria-controls="hero-rail">'
+            f'<span class="ahero__chev ahero__chev--p" aria-hidden="true"></span>'
+            f'<span class="vh">Предыдущие</span></button>'
+            f'<div class="zrl__vp" id="hero-rail" tabindex="0" role="group" '
+            f'aria-label="{html.escape(подпись)}: лента постеров, листается стрелками">'
+            f'<div class="zrl__track">{плитки}</div></div>'
+            f'<button class="zrl__btn zrl__btn--n" type="button" data-rl="next" '
+            f'aria-controls="hero-rail">'
+            f'<span class="ahero__chev ahero__chev--n" aria-hidden="true"></span>'
+            f'<span class="vh">Следующие</span></button>'
             f'</div></section>')
 
     def секция(self, ключ: str, титул: str, ссылка: str, набор, пусто: str) -> str:
@@ -6095,8 +6981,7 @@ class ВидАнимедиа(ВидОснова):
             f'data-suggest-basis="quality-freshness" '
             f'data-suggest-count="{len(набор)}">'
             f'<h2 class="zh zh--sm">Рекомендуем посмотреть</h2>'
-            f'<p class="zsub">Высокие оценки, свежее — выше. Не персональная '
-            f'подборка: витрина не собирает историю просмотров.</p>'
+            f'<p class="zsub">Высокие оценки, свежее — выше.</p>'
             f'{self.плитки(набор, вариант="catalog-title")}</section>')
 
     def похожие(self, запись: dict, деталь: dict, сколько: int = АНИМЕДИА_REC_MAX_ITEMS) -> list:
@@ -6230,14 +7115,13 @@ class ВидАнимедиа(ВидОснова):
 <style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}
 {СКРИПТ_КАРУСЕЛИ}
 {СКРИПТ_АНИМЕДИА_ШАПКА}</script>
-<script defer>document.addEventListener('DOMContentLoaded',function(){{{СКРИПТ_СЛАЙДЕРА}}});</script></head>
+</head>
 <body><a class="skip" href="#main">Перейти к содержимому</a>
 <div class="zs">
 <header class="zhd">
 <div class="zhd__in">
 {self.логотип()}
 <nav id="zhd-nav" class="zhd__n" aria-label="Разделы">{нав}</nav>
-{self.таксономия()}
 <form class="zhd__s" action="/search/" method="get" role="search">
 <label class="vh" for="q">Поиск по каталогу аниме</label>
 <input id="q" name="q" placeholder="{html.escape(self.се["поиск"])}" autocomplete="off">
@@ -6266,7 +7150,8 @@ class ВидАнимедиа(ВидОснова):
 </div></div></div>{схемы}</body></html>"""
 
     # --- главная -------------------------------------------------------
-    def главная(self) -> str:
+    def главная(self, зпр: dict | None = None) -> str:
+        зпр = dict(зпр or {})
         занято: set = set()
         #: Что уже показано каруселью первого экрана: ниже эти записи не
         #: повторяются, иначе первый экран и первая лента дублируют друг друга.
@@ -6367,9 +7252,13 @@ class ВидАнимедиа(ВидОснова):
         # у оригинала первый экран начинается каруселью, и крупного заголовка
         # там нет, но документ без H1 в начале заставляет читалку идти по H2
         # до самого низа. Композиция сохраняется, семантика становится верной.
+        # Блока «Найдите аниме за секунду» здесь больше нет. Он занимал верх
+        # первого экрана целиком — заголовок, абзац, поле во всю ширину и ряд
+        # ссылок-подсказок — и отодвигал витрину ниже сгиба. Поиск остался
+        # компактным в шапке, он есть на каждой странице; расширенный отбор
+        # переехал вниз, к сетке каталога, как у оригинала.
         куски = [f'<h1 class="vh">{html.escape(домен["title_home"])}</h1>',
-                 self.полоса_готовности(),
-                 self._крупный_поиск()]
+                 self.полоса_готовности()]
 
         # Первый экран оригинала — карусель, а не заголовок с лидом. Источник
         # выбирается по убыванию доказанности и подписывается собой.
@@ -6386,6 +7275,8 @@ class ВидАнимедиа(ВидОснова):
             if запасная is not None:
                 ключ, коллекция = запасная
                 титул, _ = ПРИЧИНЫ.get(ключ, (коллекция.title, ""))
+                # Запасная лента подписывается тем, чем она является, — и
+                # «Популярным» её называть нельзя: это другая выборка.
                 куски.append(self.верхняя_карусель(
                     [к.raw for к in коллекция.items[:24]],
                     подпись=титул, источник=ключ.replace("_", "-")))
@@ -6397,14 +7288,15 @@ class ВидАнимедиа(ВидОснова):
         куски.append(_аниме_telegram_promo_html())
         # Empty ad slots must collapse to 0px (no Telegram/premium invent).
         куски.append('<div class="zad-home" data-ad-slot="home-after-hero" data-ad-enabled="0"></div>')
-        # Порядок каркаса: сначала «Недавно добавленные» — это ответ на вопрос
-        # «что нового на сайте», ради которого на главную и заходят, — и только
-        # потом лента серий.
-        куски.append(self._блок_нового_в_каталоге_b05())
-        куски.append(self._блок_новых_серий_b03())
+        # Ряда «Недавно добавленные» на главной больше нет. Он повторял ленту
+        # первого экрана: та же карточка, тот же размер, часто те же тайтлы —
+        # два одинаковых ряда подряд, и второй ничего не добавлял. Раздел
+        # никуда не делся: он открывается по «Новое» в меню и по /new/, а
+        # свежесть каталога видна в сетке ниже, где сортировка по умолчанию —
+        # именно по свежести.
+        куски.append(self._блок_новых_серий_b03(зпр))
         куски.append('<div class="zad-mid" data-ad-slot="home-mid-content" data-ad-enabled="0"></div>')
-        # B06.1 compact filters (before remaining shelves).
-        куски.append(self._блок_компактных_фильтров_b06())
+
         # B06.2 Top-100 — approved snapshot only.
         куски.append(self._блок_top100_b06())
         # Топ по оценкам стоит после пробела «Топ‑100», а не вместо него:
@@ -6444,6 +7336,9 @@ class ВидАнимедиа(ВидОснова):
         куски += [self.секция(*л) for л in очищенные]
         # B06.4 collections home shelf (real specs only).
         куски.append(self._блок_подборок_home_b06())
+        # Отбор и сетка каталога — внизу, над листалкой, как у оригинала.
+        # Наверху им не место: там витрина, а не форма.
+        куски.append(self._блок_каталога_главной(зпр))
         # B06.5/6: news/reviews/comments absent from registry → 0 px placeholders.
         куски.append(
             '<div class="ahome-editorial" data-b06="editorial" data-editorial="0" '
@@ -6470,6 +7365,7 @@ class ВидАнимедиа(ВидОснова):
             return self._страница_новых_эпизодов(зпр)
         if разд == "/collections":
             return self.страница_коллекций(зпр)
+        self.освежить_оценки_каталога()
         набор, выбрано = отбор(self.д, self.индекс, зпр, разд)
         raw_page = (зпр.get("page") or ["1"])[0]
         try:
@@ -6544,9 +7440,16 @@ class ВидАнимедиа(ВидОснова):
             return f"Сериалы{(' ' + str(год) + ' года') if год else ''}"
         return "Каталог"
 
-    def _фильтры_каталога(self, разд: str, выбрано: dict, total: int | None = None) -> str:
-        """Compact disclosure filters + chips (no year/genre button wall)."""
+    def _фильтры_каталога(self, разд: str, выбрано: dict, total: int | None = None,
+                          *, база: str | None = None, якорь: str = "") -> str:
+        """Панель отбора: раскрывающиеся списки и снятие выбранного.
+
+        `база` — адрес, на который ведут ссылки фильтра. По умолчанию это сам
+        раздел; главная передаёт свой «/», чтобы один и тот же фильтр правил
+        сетку там, где он стоит, а не уводил на другую страницу.
+        """
         idx = self.индекс or {}
+        корень = база if база is not None else (разд + "/")
         набор_для_счёта = self.д.items
         chips = []
         active_keys = ("kind", "type", "year", "genre", "country", "sort",
@@ -6555,7 +7458,7 @@ class ВидАнимедиа(ВидОснова):
         def chip(label: str, clear_key: str) -> str:
             cleared = dict(выбрано)
             cleared[clear_key] = None
-            href = разд + "/" + запрос_строкой(cleared, page=None)
+            href = корень + запрос_строкой(cleared, page=None) + якорь
             return (f'<a class="afilt__chip" href="{закодировать_запрос(href)}">'
                     f'{html.escape(label)} <span aria-hidden="true">×</span></a>')
 
@@ -6602,7 +7505,7 @@ class ВидАнимедиа(ВидОснова):
                 return ""
             links = []
             for value, label, count in pairs:
-                href = разд + "/" + запрос_строкой(выбрано, **{param: value, "page": None})
+                href = корень + запрос_строкой(выбрано, **{param: value, "page": None}) + якорь
                 cur = ТЕКУЩАЯ_СТРАНИЦА if str(выбрано.get(param) or "") == str(value) else ""
                 links.append(
                     f'<a href="{закодировать_запрос(href)}"{cur}>{html.escape(label)}'
@@ -6631,7 +7534,7 @@ class ВидАнимедиа(ВидОснова):
 
         reset = ""
         if any(выбрано.get(k) for k in active_keys):
-            reset = f'<a class="afilt__reset" href="{разд}/">Сбросить фильтры</a>'
+            reset = f'<a class="afilt__reset" href="{корень}{якорь}">Очистить</a>'
         chips_html = (f'<div class="afilt__chips" aria-label="Активные фильтры">'
                       f'{"".join(chips)}{reset}</div>' if (chips or reset) else "")
         # Порог оценки: ступени, а не свободное число. Свободное поле здесь
@@ -6738,8 +7641,26 @@ class ВидАнимедиа(ВидОснова):
         )
         return out
 
-    def _блок_новых_серий_b03(self) -> str:
-        """Home B03: populated provider feed or compact empty ≤96px."""
+    #: Страниц в ленте новых серий и записей на странице. Пять по десять —
+    #: композиция оригинала: на компьютере это две колонки по пять строк.
+    ЭПИЗОДЫ_СТРАНИЦ = 5
+    ЭПИЗОДЫ_НА_СТРАНИЦЕ = 10
+
+    def _блок_новых_серий_b03(self, зпр: dict | None = None) -> str:
+        """Лента «Новые серии» с листалкой на пять страниц.
+
+        Записи — настоящие события реестра, свежие сверху. Страницы не
+        добиваются повторами и выдуманными событиями: если подтверждённых
+        записей меньше пятидесяти, лишние кнопки видны неактивными, а нехватка
+        названа числом. Заполнить пять страниц дублями значило бы соврать о
+        том, сколько на сайте вышло серий.
+
+        Кнопки — настоящие ссылки, поэтому листалка работает и без
+        JavaScript. Со скриптом переключение идёт на месте: страница не
+        перезагружается и не прыгает вверх, а выбор уезжает в адрес через
+        `replaceState` — и потому переживает обновление браузера.
+        """
+        зпр = зпр or {}
         events = self._provider_playable_events()
         self._provider_playable_count = len(events)
         источник = "provider"
@@ -6753,21 +7674,76 @@ class ВидАнимедиа(ВидОснова):
         if not events:
             # Событий выхода серий ещё не накоплено: реестр выводит их
             # сравнением соседних снимков и до второго снимка знать их не
-            # может. Показывать вместо ленты объяснение про источник —
-            # значит отдать посетителю внутреннюю кухню вместо продукта.
-            # Поэтому здесь стоит соседний блок из настоящих данных: что
-            # сейчас выходит и сколько серий уже доступно.
+            # может. Показывать вместо ленты объяснение про источник — значит
+            # отдать посетителю внутреннюю кухню вместо продукта.
             return self._блок_сейчас_выходит()
-        per = АНИМЕДИА_ЭПИЗОД_НА_СТРАНИЦЕ
-        rows = events[:per]
-        feed = '<div class="aeps">' + "".join(
-            self._разметка_эпизод_ряда(r) for r in rows) + "</div>"
+
+        на = self.ЭПИЗОДЫ_НА_СТРАНИЦЕ
+        всего_страниц = self.ЭПИЗОДЫ_СТРАНИЦ
+        вместимость = на * всего_страниц
+        # Дубли по событию исключены на входе: один event_id — одна строка на
+        # всю ленту, поэтому одна и та же серия не может попасть на две
+        # страницы.
+        видели: set[str] = set()
+        отобрано = []
+        for р in events:
+            ключ = str(р.get("event_id") or "")
+            if ключ and ключ in видели:
+                continue
+            видели.add(ключ)
+            отобрано.append(р)
+            if len(отобрано) >= вместимость:
+                break
+        заполнено = (len(отобрано) + на - 1) // на
+
+        try:
+            текущая = int((зпр.get("eps") or ["1"])[0] or 1)
+        except (TypeError, ValueError):
+            текущая = 1
+        if текущая < 1 or текущая > max(заполнено, 1):
+            текущая = 1
+
+        панели = []
+        for н in range(1, всего_страниц + 1):
+            кусок = отобрано[(н - 1) * на: н * на]
+            if not кусок:
+                continue
+            ряды = "".join(self._разметка_эпизод_ряда(р) for р in кусок)
+            панели.append(
+                f'<div class="aeps" data-eps-panel="{н}"'
+                f'{"" if н == текущая else " hidden"}>{ряды}</div>')
+
+        кнопки = "".join(
+            f'<a class="aeps__pg{" is-on" if н == текущая else ""}'
+            f'{"" if н <= заполнено else " is-off"}" '
+            f'href="/?eps={н}#new-episodes" data-eps-page="{н}"'
+            + (' aria-current="page"' if н == текущая else "")
+            + (' aria-disabled="true" tabindex="-1"' if н > заполнено else "")
+            + f'>{н}</a>'
+            for н in range(1, всего_страниц + 1))
+
+        нехватка = ""
+        if len(отобрано) < вместимость:
+            нехватка = (
+                f'<p class="aeps__short" data-events-confirmed="{len(отобрано)}" '
+                f'data-events-capacity="{вместимость}">'
+                f'Подтверждённых событий пока {len(отобрано)} из {вместимость}: '
+                f'страницы заполняются по мере выхода новых серий. '
+                f'Повторами и выдуманными записями места здесь не занимаются.'
+                f'</p>')
+
         return (
-            f'<section class="zsec zsec--eps ahome-eps" data-b03="populated" '
+            f'<section class="zsec zsec--eps ahome-eps" id="new-episodes" '
+            f'data-b03="populated" '
             f'data-provider-playable-count="{self._provider_playable_count}" '
-            f'data-episode-feed-source="{html.escape(источник)}">'
-            f'<div class="zsec__h"><h2>{АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК}</h2></div>'
-            f'{feed}</section>'
+            f'data-episode-feed-source="{html.escape(источник)}" '
+            f'data-eps-pages="{заполнено}" data-eps-current="{текущая}" '
+            f'data-eps-total="{len(отобрано)}">'
+            f'<div class="zsec__h"><h2>{АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК}</h2>'
+            f'<a href="/new/">Весь раздел</a></div>'
+            f'{"".join(панели)}'
+            f'<nav class="aeps__pages" aria-label="Страницы новых серий">'
+            f'{кнопки}</nav>{нехватка}</section>'
         )
 
     def онгоинги(self, предел: int = 0) -> list[tuple]:
@@ -6811,24 +7787,39 @@ class ВидАнимедиа(ВидОснова):
         ряды = []
         for з, доступно, заявлено in строки:
             изо = заглушка_постера(з, "aeps__none", "aeps__img", 60, 90)
+            # Справа — номер последней доступной серии, а не общее их число:
+            # «16» здесь означает шестнадцатую серию, потому что серии
+            # нумеруются подряд и доступны с первой по `avail`. Прежде тут
+            # стояло то же число с подписью «серий», и общий счётчик выдавался
+            # за событие выхода.
             ряды.append(
                 f'<a class="aeps__row" data-card-variant="episode-row" '
                 f'href="{html.escape(з["url"])}" data-event-kind="ongoing" '
-                f'data-eps-avail="{доступно}" data-eps-total="{заявлено}">'
+                f'data-eps-avail="{доступно}" data-eps-total="{заявлено}" '
+                f'data-episode-number="{доступно}" data-episode-time="">'
                 f'<span class="aeps__thumb">{изо}</span>'
                 f'<span class="aeps__body">'
                 f'<span class="aeps__title">{html.escape(з["title"])}</span>'
-                f'<span class="aeps__meta">Доступно {доступно} из {заявлено} серий</span>'
+                f'<span class="aeps__meta">Вышло {доступно} из {заявлено} серий</span>'
                 f'</span>'
                 f'<span class="aeps__ep"><span class="aeps__num">{доступно}</span>'
-                f'<span class="aeps__lab">серий</span></span></a>')
+                f'<span class="aeps__lab">серия</span></span></a>')
         класс = "aside-eps" if сбоку else "ahome-eps"
+        # Ленты событий здесь нет, и блок ею не притворяется: это перечень
+        # незавершённых тайтлов из снимка. Времени появления серий в нём нет,
+        # и оно не выдумывается — сказано прямо, каким полем и откуда оно
+        # придёт. Реестр сравнения снимков уже заведён и ждёт второго снимка.
+        # Технического абзаца про снимки и реестр здесь больше нет: это
+        # внутренняя кухня, а не то, ради чего открывают главную.
+        сноска = ""
         return (
             f'<section class="zsec zsec--eps {класс}" data-b03="ongoing" '
             f'data-episode-feed-source="ongoing-counters" '
+            f'data-episode-time-gap="1" '
             f'data-ongoing-count="{len(строки)}">'
             f'<div class="zsec__h"><h2>Сейчас выходит</h2>'
-            f'<a href="/catalog/?sort=date">Весь каталог</a></div>'
+            f'<a href="/catalog/?ongoing=1">Все незавершённые</a></div>'
+            f'{сноска}'
             f'<div class="aeps">{"".join(ряды)}</div></section>'
         )
 
@@ -6981,64 +7972,114 @@ class ВидАнимедиа(ВидОснова):
             f'data-catalog-added-count="{len(записи)}">'
             f'<div class="zsec__h"><h2>{АНИМЕДИА_CATALOG_ADDED_H1}</h2>'
             f'<a href="/new/">Весь раздел</a></div>'
-            f'{self.плитки(записи, вариант="catalog-title")}</section>'
+            # Один горизонтальный ряд, а не сетка на две-три строки. Сеткой
+            # этот раздел раздувал верх главной и повторял то, что и так
+            # открывается по «Весь раздел»; остальное доступно прокруткой,
+            # стрелками и этой ссылкой.
+            f'{self.карусель("b05-added", записи)}</section>'
         )
 
-    def _крупный_поиск(self) -> str:
-        """Главный поиск на первом экране — центральный элемент, а не строчка.
+    #: Сколько карточек в сетке главной на страницу. Кратно и двум, и четырём,
+    #: и шести — числу колонок на телефоне, планшете и широком экране, — чтобы
+    #: последний ряд не обрывался ни на одной контрольной ширине.
+    ГЛАВНАЯ_НА_СТРАНИЦЕ = 24
 
-        В шапке поиск остаётся компактным: на внутренних страницах посетитель
-        уже знает, куда идти. На главной он приходит с названием в голове, и
-        поле должно быть первым, на что падает взгляд.
+    def _блок_каталога_главной(self, зпр: dict) -> str:
+        """Отбор и сетка «Новые аниме на сайте» — как у оригинала, внизу главной.
 
-        Подсказки работают без сети: рядом лежат несколько живых примеров
-        каталога, и любой из них — настоящая ссылка на произведение, а не
-        нарисованная строка. Обещание «ищем по оригинальному написанию»
-        подтверждено указателем, в который оригинальные названия загружены.
+        Расширенный отбор стоял вверху шапки второй строкой кнопок и оттеснял
+        витрину. У оригинала он ниже, прямо над сеткой, которой управляет.
+        Здесь так же: панель, счётчик, сетка, листалка.
+
+        Каждый показанный контрол правит именно эту выдачу. Выбор живёт в
+        адресе страницы, поэтому ссылку можно послать и вернуться по ней;
+        листалка выбор не сбрасывает, а «Очистить» возвращает исходное
+        состояние. Нерабочих переключателей здесь нет: панель собирается из
+        тех же указателей, по которым идёт отбор.
         """
-        примеры = []
-        for з in недавно_добавленные(self.д.items, 6):
-            примеры.append(
-                f'<a class="ahero-s__chip" href="{html.escape(з["url"])}">'
-                f'{html.escape(з["title"])}</a>')
-        подсказки = (f'<div class="ahero-s__chips"><span class="ahero-s__lab">'
-                     f'Недавно добавили:</span>{"".join(примеры)}</div>'
-                     if примеры else "")
+        self.освежить_оценки_каталога()
+        набор, выбрано = отбор(self.д, self.индекс, зпр, "/catalog")
+        q = ((зпр.get("q") or [""])[0] or "").strip()
+        if q:
+            # Поиск сужает уже отобранное, а не заменяет его: «боевик» плюс
+            # слово в названии — обычный запрос, и терять при нём жанр незачем.
+            попавшие = {з.get("slug") for з in self.д.искать(q, предел=2000)}
+            набор = [з for з in набор if з.get("slug") in попавшие]
+        выбрано = dict(выбрано)
+        выбрано["q"] = q or None
+        try:
+            стр = max(1, int((зпр.get("page") or ["1"])[0] or 1))
+        except (TypeError, ValueError):
+            стр = 1
+        на_странице = self.ГЛАВНАЯ_НА_СТРАНИЦЕ
+        всего_страниц = (len(набор) + на_странице - 1) // на_странице
+        if всего_страниц and стр > всего_страниц:
+            стр = всего_страниц
+        кусок = набор[(стр - 1) * на_странице: стр * на_странице]
+        фильтр = self._фильтры_каталога(
+            "/catalog", выбрано, total=len(набор), база="/", якорь="#catalog")
+        активен = any(выбрано.get(к) for к in
+                      ("kind", "type", "year", "genre", "country", "sort",
+                       "exclude", "rating", "ongoing", "q"))
+        заголовок = "Новые аниме на сайте" if not активен else "Отобрано в каталоге"
+        сетка = (self.плитки(кусок, вариант="catalog-title") if кусок else
+                 '<div class="zempty"><b>Ничего не подошло</b>'
+                 '<p>Под выбранные условия не попала ни одна запись. '
+                 '<a href="/#catalog">Очистить отбор</a>.</p></div>')
+        листалка = (self._листалка_главной(выбрано, стр, всего_страниц)
+                    if всего_страниц > 1 else "")
         return (
-            '<section class="ahero-s" data-home="search" aria-labelledby="hs-t">'
-            '<div class="ahero-s__in">'
-            '<h2 class="ahero-s__t" id="hs-t">Найдите аниме за секунду</h2>'
-            '<p class="ahero-s__p">Ищем по русскому и оригинальному написанию, '
-            'по части слова и с опечатками.</p>'
-            '<form class="ahero-s__f" action="/search/" method="get" role="search">'
-            '<label class="vh" for="home-q">Поиск по каталогу аниме</label>'
-            '<input id="home-q" name="q" type="search" autocomplete="off" '
-            'placeholder="Например: Наруто, One Piece, cvetuschaya">'
-            '<button type="submit">Найти</button>'
-            '</form>'
-            f'{подсказки}'
-            '</div></section>')
+            f'<section class="zsec zsec--home-catalog" id="catalog" '
+            f'data-home-catalog="1" data-home-catalog-total="{len(набор)}" '
+            f'data-home-catalog-page="{стр}" data-home-catalog-pages="{всего_страниц}">'
+            f'<div class="zsec__h"><h2>{html.escape(заголовок)}</h2>'
+            f'<a href="/catalog/">Весь каталог</a></div>'
+            f'{self._поиск_в_фильтре(q, выбрано)}{фильтр}'
+            f'<p class="zsub" data-home-catalog-count="{len(набор)}">'
+            f'Найдено {len(набор)} · страница {стр} из {max(всего_страниц, 1)}</p>'
+            f'{сетка}{листалка}</section>')
 
-    def _блок_компактных_фильтров_b06(self) -> str:
-        """Home compact facet strip → catalog routes (no invented facets)."""
-        links = [
-            ('/catalog/', 'Весь каталог'),
-            ('/catalog/?kind=Аниме', 'Сериалы'),
-            ('/catalog/?kind=Аниме-фильм', 'Фильмы'),
-        ]
-        years = list(self.д.years or [])[:4]
-        for г in years:
-            links.append((f'/catalog/?year={г}', str(г)))
-        genres = list(self.индекс.get("genre_names") or [])[:4]
-        for код, имя in genres:
-            links.append((f'/catalog/?genre={код}', имя))
-        chips = "".join(
-            f'<a href="{html.escape(href, quote=True)}">{html.escape(label)}</a>'
-            for href, label in links)
+    def _поиск_в_фильтре(self, q: str, выбрано: dict) -> str:
+        """Строка поиска внутри панели отбора — как у оригинала.
+
+        Отправляется на главную же: поле сужает ту сетку, рядом с которой
+        стоит, а не уводит на отдельную страницу выдачи. Остальной выбор
+        уезжает скрытыми полями, иначе поиск молча снимал бы жанр и год.
+        """
+        скрытые = "".join(
+            f'<input type="hidden" name="{html.escape(к)}" value="{html.escape(str(з))}">'
+            for к, з in выбрано.items()
+            if з and к not in ("q", "page") and not str(к).startswith("_"))
+        очистка = ('<a class="afilt__reset" href="/#catalog">Очистить</a>'
+                   if (q or скрытые) else "")
         return (
-            f'<nav class="ahome-filt" data-b06="filters" aria-label="Быстрые фильтры">'
-            f'<div class="zstrip">{chips}</div></nav>'
-        )
+            '<form class="afilt__q" action="/" method="get" role="search">'
+            f'{скрытые}'
+            '<label class="vh" for="home-cat-q">Поиск по каталогу аниме</label>'
+            f'<input id="home-cat-q" name="q" type="search" autocomplete="off" '
+            f'value="{html.escape(q)}" placeholder="Название аниме">'
+            '<button type="submit">Найти</button>'
+            f'{очистка}</form>')
+
+    def _листалка_главной(self, выбрано: dict, стр: int, всего: int) -> str:
+        """Листалка сетки главной. Выбор фильтра переносится на каждую страницу."""
+        def адрес(н: int) -> str:
+            return закодировать_запрос(
+                "/" + запрос_строкой(выбрано, page=(н if н > 1 else None)) + "#catalog")
+        куски = []
+        if стр > 1:
+            куски.append(f'<a href="{адрес(стр - 1)}" rel="prev">Назад</a>')
+        for н in страницы(стр, всего):
+            if н is None:
+                куски.append('<span class="zpg__gap">…</span>')
+            elif н == стр:
+                куски.append(f'<span aria-current="page">{н}</span>')
+            else:
+                куски.append(f'<a href="{адрес(н)}">{н}</a>')
+        if стр < всего:
+            куски.append(f'<a href="{адрес(стр + 1)}" rel="next">Вперёд</a>')
+        return (f'<nav class="zpg" aria-label="Страницы каталога">'
+                f'{"".join(куски)}</nav>')
 
     def _блок_top100_b06(self) -> str:
         """Home Top-100 shelf from approved TopSnapshot only."""
@@ -7086,9 +8127,10 @@ class ВидАнимедиа(ВидОснова):
             # Меньше четырёх — это не полка, а обрывок. Лучше ничего.
             return ""
         порог = int(топ.get("threshold_votes") or 0)
-        подпись = (f"Порядок по сводной оценке ({html.escape(str(топ.get('method') or ''))}), "
-                   f"от {порог} голосов и выше. Не популярность: данных о просмотрах "
-                   f"в снимке нет.")
+        # Подпись говорит посетителю, что перед ним, и ничего больше. Название
+        # формулы и порог голосов остались в data-атрибутах: приёмке они нужны,
+        # зрителю — нет, и владелец просил убрать внутреннюю кухню с экрана.
+        подпись = "Высокие оценки внешних источников. Не популярность."
         return (
             f'<section class="zsec zsec--toprated" data-top-basis="ratings-aggregate" '
             f'data-top-method="{html.escape(str(топ.get("method") or ""))}" '
@@ -7249,12 +8291,15 @@ class ВидАнимедиа(ВидОснова):
         return f'<nav class="zpg" aria-label="Страницы новинок">{"".join(куски)}</nav>'
 
     def _episode_ledger_events(self) -> list[dict]:
-        """События из собственного реестра сравнения снимков.
+        """События «появилась новая серия» из реестра этого сайта.
 
-        Это не подмена ленты провайдера: когда придёт настоящий источник
-        событий, он останется первым, а реестр — запасным. Провенанс у каждой
-        строки виден в разметке (`data-event-kind="snapshot_diff"`), чтобы
-        никто не принял вывод сравнения за сообщение провайдера.
+        Реестр ведёт обработчик обновления: он сравнивает соседние снимки
+        подробностей по ПОСТОЯННЫМ идентификаторам записей и пишет по событию
+        на каждую появившуюся серию. Здесь событие только читается и
+        связывается с текущим каталогом — ничего не досчитывается.
+
+        Отметка времени в реестре — момент, когда серия стала доступна НА
+        ЭТОМ САЙТЕ. Это не эфирная дата выхода, и подписана она соответственно.
         """
         путь = Path(АНИМЕДИА_EPISODE_LEDGER_PATH)
         if not путь.is_file():
@@ -7267,80 +8312,76 @@ class ВидАнимедиа(ВидОснова):
         if not isinstance(события, list):
             return []
         по_slug = {з.get("slug"): з for з in self.д.items if з.get("slug")}
+        по_ид: dict[str, dict] = {}
+        for з in self.д.items:
+            ид = str((self.деталь(з.get("slug") or "") or {}).get("id") or "").strip()
+            if ид:
+                по_ид.setdefault(ид, з)
         строки = []
         for с in события:
             if not isinstance(с, dict):
                 continue
             slug = str(с.get("slug") or "")
-            запись = по_slug.get(slug)
+            ид = str(с.get("content_id") or "")
+            запись = по_ид.get(ид) or по_slug.get(slug)
             if запись is None:
                 # Тайтл ушёл из каталога — строка без страницы не нужна.
                 continue
+            сезон = int(с.get("season") or 0)
+            эпизод = int(с.get("episode") or с.get("episode_to") or 0)
+            если_есть = с.get("first_seen_at") or с.get("episode_published_at") or ""
             строки.append({
-                "slug": slug,
+                "slug": запись.get("slug") or slug,
+                "content_id": ид,
                 "title": запись.get("title") or с.get("title") or slug,
-                "url": запись.get("url") or с.get("url") or f"/title/{slug}/",
+                "url": (с.get("url")
+                        or self.адрес_эпизода(запись.get("slug") or slug, сезон, эпизод)),
                 "poster": запись.get("poster"),
-                "event_kind": "snapshot_diff",
-                "event_id": f"{slug}-s{с.get('season')}-e{с.get('episode_to')}",
-                "season": int(с.get("season") or 0),
-                "episode_number": int(с.get("episode_to") or 0),
-                "episode_from": int(с.get("episode_from") or 0),
+                "event_kind": "appeared_on_site",
+                "event_id": str(с.get("event_id") or f"{ид}:s{сезон}:e{эпизод}"),
+                "season": сезон,
+                "episode_number": эпизод,
                 "episodes_total": int(с.get("episodes_total") or 0),
-                "episode_published_at": str(с.get("episode_published_at") or ""),
-                "published_at": str(с.get("episode_published_at") or ""),
+                "appeared_at": str(если_есть),
+                "published_at": str(если_есть),
                 "published_at_precision": "datetime",
             })
-        if ХРОНОЛОГИЯ is not None:
-            строки = ХРОНОЛОГИЯ.по_эпизодам(строки)
         return строки
 
     def _разметка_эпизод_ряда(self, row: dict) -> str:
-        """Provider-playable row only — episode number is a real episode, not avail total."""
+        """Строка ленты «Новые серии».
+
+        Слева мини-постер, посередине название и когда серия появилась,
+        справа НОМЕР КОНКРЕТНОЙ СЕРИИ. Ссылка ведёт на эту серию, а не на
+        карточку произведения: посетитель, пришедший за новой серией, хочет
+        открыть именно её.
+
+        Подпись времени — «Добавлено», а не «Вышло». Реестр знает момент, когда
+        серия появилась на этом сайте; эфирной даты выхода источник не
+        передаёт, и назвать одно другим значило бы соврать точной цифрой.
+        """
         изо = заглушка_постера(
             {"title": row["title"], "poster": row.get("poster"), "url": row["url"]},
-            "zr__none", "zr__img", 64, 80)
-        kind = row.get("event_kind") or ""
-        if kind == "provider_became_playable":
-            ts = _аниме_формат_времени_анонса(
-                row.get("provider_available_at") or row.get("published_at") or "",
-                row.get("published_at_precision") or "datetime")
-            meta = f"Доступно · {ts}" if ts else "Доступно у провайдера"
-            season = int(row.get("season_number") or row.get("season") or 0)
-            episode = int(row.get("episode_number") or row.get("episode") or 0)
-            ep_lab = f"с{season} · серия" if season else "серия"
-        elif kind == "snapshot_diff":
-            # Сравнение снимков знает, что серий стало больше, и не знает, какая
-            # именно вышла. Подпись говорит ровно это.
-            ts = _аниме_формат_времени_анонса(
-                row.get("episode_published_at") or row.get("published_at") or "",
-                "datetime")
-            было_ = int(row.get("episode_from") or 0)
-            стало_ = int(row.get("episode_number") or 0)
-            прибавка = max(0, стало_ - было_)
-            сезон = int(row.get("season") or 0)
-            meta = (f"Доступно серий: {стало_}"
-                    + (f" из {row['episodes_total']}" if row.get("episodes_total") else "")
-                    + (f" · {ts}" if ts else ""))
-            episode = прибавка or стало_
-            ep_lab = (f"с{сезон} · новых" if сезон else "новых")
-        else:
-            # Must not surface catalog_publish as an episode air event.
-            ts = _аниме_формат_времени_анонса(
-                row.get("published_at") or "",
-                row.get("published_at_precision") or "none")
-            meta = f"Каталог · {ts}" if ts else "Каталог"
-            episode = int(row.get("episode_number") or 0)
-            ep_lab = "серия"
+            "aeps__none", "aeps__img", 60, 90)
+        сезон = int(row.get("season") or 0)
+        эпизод = int(row.get("episode_number") or 0)
+        когда = _аниме_формат_времени_анонса(
+            row.get("appeared_at") or row.get("published_at") or "", "datetime")
+        мета = f"Добавлено: {когда}" if когда else "Добавлено на сайт"
+        подпись = f"с{сезон} · серия" if сезон > 1 else "серия"
         return (
-            f'<a class="aeps__row" data-card-variant="episode-row" href="{html.escape(row["url"])}" '
+            f'<a class="aeps__row" data-card-variant="episode-row" '
+            f'href="{html.escape(row["url"])}" '
             f'data-event-id="{html.escape(row.get("event_id") or "")}" '
-            f'data-event-kind="{html.escape(kind or "catalog_publish")}">'
+            f'data-event-kind="{html.escape(row.get("event_kind") or "appeared_on_site")}" '
+            f'data-episode-number="{эпизод}" '
+            f'data-appeared-at="{html.escape(str(row.get("appeared_at") or ""))}">'
             f'<span class="aeps__thumb">{изо}</span>'
-            f'<span class="aeps__body"><span class="aeps__title">{html.escape(row["title"])}</span>'
-            f'<span class="aeps__meta">{html.escape(meta)}</span></span>'
-            f'<span class="aeps__ep"><span class="aeps__num">{episode}</span>'
-            f'<span class="aeps__lab">{html.escape(ep_lab)}</span></span></a>')
+            f'<span class="aeps__body">'
+            f'<span class="aeps__title">{html.escape(row["title"])}</span>'
+            f'<span class="aeps__meta">{html.escape(мета)}</span></span>'
+            f'<span class="aeps__ep"><span class="aeps__num">{эпизод}</span>'
+            f'<span class="aeps__lab">{html.escape(подпись)}</span></span></a>')
 
     def _страница_новых_эпизодов(self, зпр: dict) -> str:
         """Раздел «Недавно добавленные»: полноценная страница, а не объяснение.
@@ -7928,99 +8969,282 @@ class ВидАнимедиа(ВидОснова):
 
     # --- списки посетителя -------------------------------------------------
 
-    def страница_списков(self, зпр: dict) -> str:
-        """«Списки»: что посетитель отложил себе, а не редакционные подборки.
+    #: Порядок разделов «Моего аниме». Он не алфавитный и не такой, как в
+    #: хранилище: сверху то, что открывают чаще, — что смотрю сейчас и что
+    #: собираюсь. «Брошено» внизу: этот раздел открывают реже всего.
+    ПОРЯДОК_МОЕГО = ("watching", "planned", "watched", "favorite", "dropped")
 
-        Раздел раньше отвечал 404, хотя пункт навигации на него ссылался.
-        Списки держатся в том же хранилище сообщества и привязаны к
-        обезличенному отпечатку посетителя: учётных записей у витрины нет, и
-        выдумывать их ради раздела не нужно.
+    def страница_списков(self, зпр: dict) -> str:
+        """«Моё аниме»: что посетитель отметил сам.
+
+        Это ручные отметки, а не история просмотров: витрина не считает, что
+        человек посмотрел, и называть эти разделы историей было бы неправдой.
+        Хранятся они в том же хранилище сообщества и привязаны к обезличенному
+        отпечатку посетителя — учётных записей у витрины нет.
+
+        Адрес раздела не меняется: /lists/ остаётся, потому что на него уже
+        могли сослаться. Меняется только то, как он называется и выглядит.
         """
         хранилище = сообщество()
         self._http_status = 200
+        ЗАГОЛОВОК = "Моё аниме"
         if хранилище is None or not getattr(хранилище, "доступно", False):
             причина = getattr(хранилище, "причина", "") if хранилище else "модуль не подключён"
             тело = (
                 '<div class="zwrap alists-page" data-lists="unavailable" '
                 f'data-lists-reason="{html.escape(причина[:120])}">'
-                '<h1 class="zh">Списки</h1>'
-                '<div class="zempty"><b>Списки временно недоступны</b>'
-                '<p>Сейчас их нельзя сохранить. '
+                f'<h1 class="zh">{ЗАГОЛОВОК}</h1>'
+                '<div class="zempty"><b>Раздел временно недоступен</b>'
+                '<p>Сейчас отметки нельзя сохранить. '
                 '<a href="/catalog/">Открыть каталог</a>.</p></div></div>')
-            return self.оболочка(тело, f"Списки — {self.имя}", "/lists/",
-                                 актив="/lists/", описание="Списки посетителя.")
+            return self.оболочка(тело, f"{ЗАГОЛОВОК} — {self.имя}", "/lists/",
+                                 актив="/lists/",
+                                 описание="Личные отметки посетителя.")
         разложено = хранилище.списки_посетителя(self._ключ_посетителя())
         по_slug = {з.get("slug"): з for з in self.д.items if з.get("slug")}
-        всего = sum(len(v) for v in разложено.values())
-        блоки = []
-        for ключ, подпись in СООБЩЕСТВО.СПИСКИ:
-            записи = [по_slug[s] for s in разложено.get(ключ, []) if s in по_slug]
+        по_ид: dict[str, dict] = {}
+        for з in self.д.items:
+            ид = str(з.get("id") or "").strip()
+            if ид:
+                по_ид.setdefault(ид, з)
+        подписи = dict(СООБЩЕСТВО.СПИСКИ)
+        всего = 0
+        оглавление, блоки = [], []
+        for ключ in self.ПОРЯДОК_МОЕГО:
+            подпись = подписи.get(ключ)
+            if подпись is None:
+                continue
+            записи = []
+            for ссылка in разложено.get(ключ, []):
+                # Ключом списка может быть и постоянный идентификатор, и адрес:
+                # записи, сделанные до перехода на постоянный ключ, никуда не
+                # делись и обязаны находиться.
+                з = по_ид.get(str(ссылка)) or по_slug.get(str(ссылка))
+                if з is not None and з not in записи:
+                    записи.append(з)
+            всего += len(записи)
+            якорь = f"list-{ключ}"
+            оглавление.append(
+                f'<a class="amine__tab{" is-empty" if not записи else ""}" '
+                f'href="#{якорь}">{html.escape(подпись)}'
+                f'<b>{len(записи)}</b></a>')
             if not записи:
                 continue
             блоки.append(
-                f'<section class="zsec" data-list="{ключ}" '
+                f'<section class="zsec" id="{якорь}" data-list="{ключ}" '
                 f'data-list-count="{len(записи)}">'
-                f'<div class="zsec__h"><h2>{html.escape(подпись)}</h2></div>'
+                f'<div class="zsec__h"><h2>{html.escape(подпись)}</h2>'
+                f'<a href="/catalog/">В каталог</a></div>'
                 f'{self.плитки(записи, вариант="catalog-title")}</section>')
         if not блоки:
             содержимое = (
-                '<div class="zempty" data-lists="empty"><b>Списки пока пусты</b>'
-                '<p>Откройте любое произведение и выберите список — '
-                '«Смотрю», «Буду смотреть» или «Любимое». '
-                '<a href="/catalog/">Перейти в каталог</a>.</p></div>')
+                '<div class="zempty" data-lists="empty"><b>Здесь пока пусто</b>'
+                '<p>Откройте любое аниме и отметьте его — «Смотрю», '
+                '«Буду смотреть» или «Любимое». Отметки появятся в этом '
+                'разделе. <a href="/catalog/">Перейти в каталог</a>.</p></div>')
         else:
             содержимое = "".join(блоки)
         тело = (
             f'<div class="zwrap alists-page" data-lists="on" '
             f'data-lists-total="{всего}">'
-            f'<h1 class="zh">Списки</h1>'
-            f'<p class="zsub">Списки хранятся в этом браузере и видны только '
-            f'вам. Всего отложено: {всего}.</p>{содержимое}</div>')
-        return self.оболочка(тело, f"Списки — {self.имя}", "/lists/",
+            f'<h1 class="zh">{ЗАГОЛОВОК}</h1>'
+            f'<p class="zsub">Ваши отметки. Они сохраняются в этом браузере и '
+            f'видны только вам; историю просмотров витрина не ведёт. '
+            f'Всего отмечено: {всего}.</p>'
+            f'<nav class="amine__tabs" aria-label="Разделы моего аниме">'
+            f'{"".join(оглавление)}</nav>'
+            f'{содержимое}</div>')
+        return self.оболочка(тело, f"{ЗАГОЛОВОК} — {self.имя}", "/lists/",
                              актив="/lists/",
-                             описание=f"Личные списки на витрине {self.имя}.")
+                             описание=f"Личные отметки на витрине {self.имя}.")
+
+    #: Путь к наблюдениям расписания. Как и реестр серий, файл лежит рядом со
+    #: снимком каталога: его обновляет обработчик, а не пересборка релиза.
+    #: Имя переменной задаёт `run.py`.
+
+    ДНИ_НЕДЕЛИ = ("Понедельник", "Вторник", "Среда", "Четверг",
+                  "Пятница", "Суббота", "Воскресенье")
+    ДНИ_КОРОТКО = ("Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс")
+
+    def _наблюдения_расписания(self) -> dict:
+        путь = Path(os.environ.get(
+            "ANIMEDIA_SCHEDULE",
+            str(_КОРЕНЬ_РАНТАЙМА / f"{САЙТ_ID}-schedule.json")))
+        if not путь.is_file():
+            return {}
+        try:
+            сырое = json.loads(путь.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return {}
+        return сырое if isinstance(сырое, dict) else {}
 
     def расписание(self) -> str:
-        """Расписание: что сейчас выходит, с честным словом о датах.
+        """Недельное расписание эфира.
 
-        Плановых дат выхода источник не передаёт, и выдумывать сетку по дням
-        нельзя. Но «расписание» для посетителя — это прежде всего ответ на
-        вопрос «что сейчас идёт и сколько уже вышло», и на него данные есть:
-        число доступных серий против заявленных. Раздел отвечает на него, а
-        про отсутствующие даты говорит одной строкой, без внутренних имён.
+        Источник отдаёт окно целиком — семь суток от сегодняшнего дня по
+        Москве, — поэтому неделя показывается полностью, а не копится по
+        одному дню. Окно перезабирается каждым обновлением, и перенос или
+        отмена показа видны: пропавшее событие исчезает, сдвинутое встаёт на
+        новое место.
+
+        Три состояния дня различаются и НЕ сливаются в ноль:
+
+        * день попал в загруженное окно, событий нет — «В этот день релизов
+          нет». Это ответ, а не пустота;
+        * день в окно не попал или данных ещё нет — «Расписание уточняется»;
+        * источник отказал — показывается последнее корректное расписание с
+          пометкой, а не пустой экран.
+
+        Время здесь — время ЭФИРА. Время появления серии на нашем сайте живёт
+        в ленте «Новые серии» и подписано «Добавлено»: это разные события, и
+        подставлять одно вместо другого нельзя.
         """
-        строки = self.онгоинги(96)
-        if not строки:
+        снимок = self._наблюдения_расписания()
+        события = [з for з in (снимок.get("events") or []) if isinstance(з, dict)]
+        покрытые = {str(д) for д in (снимок.get("covered_days") or [])}
+        устарело = bool(снимок.get("stale"))
+        сегодня = datetime.now(АНИМЕДИА_TZ)
+        текущий = сегодня.weekday()
+
+        по_ид: dict[str, dict] = {}
+        по_slug = {з.get("slug"): з for з in self.д.items if з.get("slug")}
+        for з in self.д.items:
+            ид = str(з.get("id") or "").strip()
+            if ид:
+                по_ид.setdefault(ид, з)
+
+        # Каждой вкладке — конкретная дата: ближайшее наступление этого дня
+        # недели внутри окна. Без даты «вторник» на переходе недели означал бы
+        # то прошедший вторник, то будущий.
+        даты: dict[int, str] = {}
+        for н in range(7):
+            д = сегодня + timedelta(days=(н - текущий) % 7)
+            даты[н] = д.strftime("%Y-%m-%d")
+
+        по_дням: dict[int, list] = {н: [] for н in range(7)}
+        показано = 0
+        for с in события:
+            запись = по_ид.get(str(с.get("content_id") or "")) or по_slug.get(
+                str(с.get("slug") or ""))
+            if запись is None:
+                continue
+            дата = str(с.get("date") or "")
+            день = None
+            for н, d in даты.items():
+                if d == дата:
+                    день = н
+                    break
+            if день is None:
+                continue
+            деталь = self.деталь(запись["slug"]) or {}
+            доступно = sum(int(к.get("avail") or 0)
+                           for к in (деталь.get("seasons") or []) if isinstance(к, dict))
+            эпизод = int(с.get("episode") or 0)
+            по_дням[день].append({
+                "запись": запись,
+                "время": str(с.get("time_local") or ""),
+                "эпизод": эпизод,
+                "вышла": bool(эпизод and доступно >= эпизод),
+                "доступно": доступно,
+            })
+            показано += 1
+
+        вкладки = "".join(
+            f'<button type="button" class="asch__tab" data-day="{н}" '
+            f'role="tab" aria-selected="{"true" if н == текущий else "false"}" '
+            f'aria-controls="sch-day-{н}" id="sch-tab-{н}">'
+            f'<span class="asch__tab-l">{self.ДНИ_НЕДЕЛИ[н]}</span>'
+            f'<span class="asch__tab-s" aria-hidden="true">{self.ДНИ_КОРОТКО[н]}</span>'
+            f'<b>{len(по_дням[н])}</b></button>'
+            for н in range(7))
+
+        панели = []
+        нет_данных = 0
+        for н in range(7):
+            строки = sorted(по_дням[н], key=lambda з: (з["время"] or "99:99"))
+            загружен = даты[н] in покрытые
+            if строки:
+                тело_дня = ('<div class="asch__grid">'
+                            + "".join(self._ряд_расписания(з) for з in строки)
+                            + "</div>")
+                состояние = "loaded"
+            elif загружен:
+                тело_дня = ('<p class="asch__none">В этот день релизов нет.</p>')
+                состояние = "empty"
+            else:
+                нет_данных += 1
+                тело_дня = ('<p class="asch__none asch__none--wait">'
+                            'Расписание уточняется.</p>')
+                состояние = "unknown"
+            панели.append(
+                f'<div class="asch__day" id="sch-day-{н}" role="tabpanel" '
+                f'data-day-state="{состояние}" data-day-date="{даты[н]}" '
+                f'aria-labelledby="sch-tab-{н}"{"" if н == текущий else " hidden"}>'
+                f'{тело_дня}</div>')
+
+        # Ни одного дня с данными — значит источник ещё не отвечал ни разу.
+        # Это не «релизов нет на неделе», и говорить так нельзя.
+        if not покрытые:
             тело = (
-                '<div class="zwrap"><h1 class="zh">Расписание</h1>'
-                '<div class="zempty" data-b04="empty">'
-                '<b>Сейчас ничего не выходит</b>'
-                '<p>Незавершённых произведений в каталоге нет. '
-                '<a href="/new/">Недавно добавленные</a> · '
-                '<a href="/catalog/">Каталог</a>.</p></div></div>')
+                '<div class="zwrap asch-page" data-b04="nodata">'
+                '<h1 class="zh">Расписание</h1>'
+                '<p class="zsub">Расписание уточняется: данные ещё не '
+                'получены.</p>'
+                '<div class="zempty"><b>Расписание уточняется</b>'
+                '<p><a href="/catalog/?ongoing=1">Что сейчас выходит</a> · '
+                '<a href="/new/">Новое в каталоге</a>.</p></div></div>')
             return self.оболочка(тело, f"Расписание — {self.имя}", "/schedule/",
                                  актив="/schedule/",
-                                 описание="Что сейчас выходит на витрине.")
-        ряды = "".join(
-            f'<a class="asch__row" href="{html.escape(з["url"])}" '
-            f'data-eps-avail="{д}" data-eps-total="{в}">'
-            f'<span class="asch__t">{html.escape(з["title"])}</span>'
-            f'<span class="asch__p"><span class="asch__bar" '
-            f'style="width:{min(100, round(д * 100 / в))}%"></span></span>'
-            f'<span class="asch__k">{д} из {в}</span></a>'
-            for з, д, в in строки)
+                                 описание="Расписание выхода серий.")
+
+        предупреждение = ""
+        if устарело:
+            предупреждение = (
+                '<p class="asch__stale" data-schedule-stale="1">'
+                'Источник расписания сейчас недоступен — показано последнее '
+                'полученное расписание.</p>')
+
         тело = (
-            f'<div class="zwrap asch-page" data-b04="ongoing" '
-            f'data-ongoing-count="{len(строки)}">'
+            f'<div class="zwrap asch-page" data-b04="weekly" '
+            f'data-schedule-events="{показано}" data-schedule-today="{текущий}" '
+            f'data-schedule-days-known="{7 - нет_данных}" '
+            f'data-schedule-stale="{"1" if устарело else "0"}" '
+            f'data-schedule-tz="{html.escape(str(снимок.get("timezone") or "Europe/Moscow"))}">'
             f'<h1 class="zh">Расписание</h1>'
-            f'<p class="zsub">Сейчас выходит: {len(строки)}. '
-            f'Показано, сколько серий уже доступно из заявленных. '
-            f'Точные даты выхода источник не передаёт, поэтому сетки по дням '
-            f'здесь нет.</p>'
-            f'<div class="asch">{ряды}</div></div>')
+            f'<p class="zsub">Время выхода новых серий. '
+            f'Время московское (UTC+3).</p>'
+            f'{предупреждение}'
+            f'<div class="asch__tabs" role="tablist" '
+            f'aria-label="Дни недели">{вкладки}</div>'
+            f'{"".join(панели)}</div>')
         return self.оболочка(тело, f"Расписание — {self.имя}", "/schedule/",
                              актив="/schedule/",
-                             описание=f"Что сейчас выходит на витрине {self.имя}.")
+                             описание=f"Расписание выхода серий на витрине {self.имя}.")
+
+    def _ряд_расписания(self, з: dict) -> str:
+        """Строка дня: мини-постер, название, номер серии, время эфира."""
+        запись = з["запись"]
+        изо = заглушка_постера(запись, "asch__none-p", "asch__img", 54, 81)
+        эпизод = int(з.get("эпизод") or 0)
+        if з["вышла"]:
+            адрес = self.адрес_эпизода(запись["slug"], 1, min(эпизод, з["доступно"]))
+            метка = '<span class="asch__out">уже доступна</span>'
+        else:
+            адрес = запись["url"]
+            метка = ""
+        время = (f'<span class="asch__time">{html.escape(з["время"])}</span>'
+                 if з["время"] else
+                 '<span class="asch__time asch__time--soon">Время уточняется</span>')
+        подпись_серии = f"Серия {эпизод}" if эпизод else "Новая серия"
+        return (
+            f'<a class="asch__row" href="{html.escape(адрес)}" '
+            f'data-expected-episode="{эпизод}" '
+            f'data-aired="{"1" if з["вышла"] else "0"}">'
+            f'<span class="asch__thumb">{изо}</span>'
+            f'<span class="asch__body">'
+            f'<span class="asch__t">{html.escape(запись["title"])}</span>'
+            f'<span class="asch__ep">{подпись_серии}{метка}</span></span>'
+            f'{время}</a>')
 
 
 #: Вид Animedia появляется только у витрины, объявившей переработанное
@@ -8173,6 +9397,8 @@ class Обработчик(BaseHTTPRequestHandler):
         self._подготовить_посетителя()
         разбор = urlparse(self.path)
         путь = unquote(разбор.path).rstrip("/") or "/"
+        if путь == "/event/play":
+            return self._событие_просмотра()
         if not путь.startswith("/community/"):
             return self._отдать(b"", код=404, тип="text/plain; charset=utf-8")
         длина = int(self.headers.get("Content-Length") or 0)
@@ -8186,28 +9412,80 @@ class Обработчик(BaseHTTPRequestHandler):
         if хранилище is None or not хранилище.доступно or not slug:
             return self._перенаправить(назад + "?community=unavailable")
         ключ = self._ключ_посетителя_запроса()
+        # CSRF до любой записи. Токен выводится из куки посетителя, а куку
+        # чужой сайт прочитать не может: значит, не может и вычислить токен.
+        # `SameSite=Lax` на куке уже не пустит чужую форму, но одна защита —
+        # это ноль защит, когда она отключится. Правило одного голоса делает
+        # цену промаха необратимой: чужая форма поставила бы оценку, которую
+        # посетитель потом не сможет изменить.
+        if not self._csrf_совпал(поля.get("csrf") or ""):
+            return self._перенаправить(назад + "?community=csrf")
+        # Ключ темы вычисляет сервер по своему снимку подробностей, а не
+        # принимает из формы: присланный клиентом идентификатор позволил бы
+        # писать в чужую тему.
+        тема = тема_сообщества(self.подробности, slug)
+        if not тема:
+            return self._перенаправить(назад + "?community=error&why=unknown-title")
         try:
             if путь == "/community/vote":
+                # Первая сохранённая оценка окончательна — решает хранилище,
+                # под той же блокировкой, под которой пишет. Снятия больше нет.
                 значение = int(поля.get("value") or 0)
-                if значение == 0:
-                    хранилище.снять_голос(slug, ключ)
-                else:
-                    хранилище.добавить_голос(slug, значение, ключ)
+                # Внешние оценки передаются вместе с голосом: стартовая база
+                # закрепляется ПЕРВЫМ голосом, и без них она не закрепится
+                # вовсе — запись навсегда осталась бы считаться по другому
+                # правилу, чем соседние.
+                деталь = self.подробности.get(slug) or {}
+                хранилище.добавить_голос(
+                    тема, значение, ключ, slug=slug,
+                    внешние=внешние_для_базы(деталь),
+                    приоритет=АНИМЕДИА_ПРИОРИТЕТ_БАЗЫ)
+                return self._перенаправить(
+                    f"{назад}?community=vote-ok&mine={значение}#community")
             elif путь == "/community/reaction":
-                хранилище.переключить_реакцию(slug, str(поля.get("reaction") or ""), ключ)
+                хранилище.переключить_реакцию(
+                    тема, str(поля.get("reaction") or ""), ключ, slug=slug)
             elif путь == "/community/comment":
                 хранилище.добавить_комментарий(
-                    slug, поля.get("name") or "", поля.get("text") or "", ключ)
+                    тема, поля.get("name") or "", поля.get("text") or "", ключ,
+                    slug=slug)
+                return self._перенаправить(назад + "?community=pending#community")
             elif путь == "/community/list":
                 # Пустое значение — «убрать из списков»: у кнопки, которая
                 # умеет только добавлять, нет обратного хода.
                 выбор = str(поля.get("list") or "").strip() or None
-                хранилище.выбрать_список(slug, выбор, ключ)
+                хранилище.выбрать_список(тема, выбор, ключ, slug=slug)
             else:
                 return self._отдать(b"", код=404, тип="text/plain; charset=utf-8")
+        except СООБЩЕСТВО.ГолосЗакреплён as закреплён:
+            # Не ошибка ввода: посетитель уже голосовал, и ему показывается
+            # его собственная оценка, а не сообщение о сбое.
+            return self._перенаправить(
+                f"{назад}?community=voted&mine={закреплён.сохранённая}#community")
         except (ValueError, RuntimeError) as ош:
             return self._перенаправить(f"{назад}?community=error&why={quote(str(ош)[:80])}")
         return self._перенаправить(назад + "?community=ok#community")
+
+    def _событие_просмотра(self):
+        """Плеер сообщил, что воспроизведение началось.
+
+        Принимается только идентификатор записи, и только существующий: без
+        проверки по каталогу endpoint стал бы счётчиком произвольных строк.
+        Ответ короткий и без тела — это маячок, а не запрос данных.
+        """
+        длина = int(self.headers.get("Content-Length") or 0)
+        if длина > 512:
+            return self._отдать(b"", код=413, тип="text/plain; charset=utf-8")
+        сырое = self.rfile.read(длина).decode("utf-8", "replace") if длина else ""
+        поля = {k: (v[0] if v else "")
+                for k, v in parse_qs(сырое, keep_blank_values=True).items()}
+        ид = str(поля.get("id") or "").strip()[:64]
+        подр = getattr(self.подробности, "записи", None) or {}
+        известен = any(str((з or {}).get("id") or "") == ид for з in подр.values())
+        if not ид or not известен:
+            return self._отдать(b"", код=204, тип="text/plain; charset=utf-8")
+        засчитать_просмотр(ид, self._ключ_посетителя_запроса())
+        return self._отдать(b"", код=204, тип="text/plain; charset=utf-8")
 
     def _ключ_посетителя_запроса(self) -> str:
         кука = getattr(self, "_куки_посетителя", "")
@@ -8215,6 +9493,26 @@ class Обработчик(BaseHTTPRequestHandler):
             return кука
         вперёд = (self.headers.get("X-Forwarded-For") or "").split(",")[0].strip()
         return вперёд or (self.client_address or ("гость",))[0]
+
+    def _csrf(self) -> str:
+        """Токен двойной отправки, выведенный из куки посетителя.
+
+        Куку нельзя прочитать со стороннего сайта (HttpOnly), значит нельзя и
+        вычислить токен. Посетителю без куки токен не выдаётся и записи не
+        разрешаются: кука ставится первым же ответом, поэтому пустой токен
+        означает не «новый посетитель», а запрос мимо страницы.
+        """
+        кука = getattr(self, "_куки_посетителя", "") or getattr(self, "_новая_кука", "")
+        if not кука:
+            return ""
+        return hashlib.sha256(
+            ("animedia-community-csrf/1:" + кука).encode("utf-8")).hexdigest()[:32]
+
+    def _csrf_совпал(self, присланный: str) -> bool:
+        свой = self._csrf()
+        if not свой or not присланный:
+            return False
+        return secrets.compare_digest(свой, str(присланный))
 
     def _перенаправить(self, куда: str) -> None:
         self.send_response(303)
@@ -8499,6 +9797,10 @@ class Обработчик(BaseHTTPRequestHandler):
 
     def маршрут_1_1(self, путь: str, зпр: dict):
         в = self.вид()
+        # Итог отправки формы приходит параметром адреса (303 → GET). Без него
+        # страница после сохранения выглядит точно так же, как до него, и
+        # посетитель не знает, применилось ли действие и не отказано ли в нём.
+        в._зпр = зпр
         # Расписание — собственный раздел семейства, а не синоним новинок.
         # Переход на /new/ остаётся для тех семейств, у которых своего
         # расписания нет: подменять раздел соседним честнее, чем отдавать 404,
@@ -8509,7 +9811,7 @@ class Обработчик(BaseHTTPRequestHandler):
             return self._переход(self.ПРЕЖНИЕ_АДРЕСА[путь])
         обрезанный = путь.rstrip("/") or "/"
         if обрезанный == "/":
-            return self._отдать(в.главная().encode("utf-8"))
+            return self._отдать(в.главная(зпр).encode("utf-8"))
         # Clean kind routes (базу profile surfaces). Canonical = own path
         # (/movies/, /series/, /animation/), not a silent rewrite to /catalog/.
         if обрезанный in self.ПЕРЕХОДЫ_РАЗДЕЛОВ:

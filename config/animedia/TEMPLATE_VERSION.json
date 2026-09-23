@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "note": "Текущая версия шаблона семейства animedia и его выбираемые варианты. Читается сборщиком релиза (automation/host/animedia_release_build.py) и попадает в RELEASE.json. Файл существует затем, чтобы версия нового сайта бралась из репозитория, а не набиралась руками в аргументе выкладки: набранная руками версия расходится с кодом молча, и по манифесту витрины уже нельзя сказать, что она показывает.",
+  "template_family": "animedia",
+  "template_id": "animedia-nova",
+  "design_version": "1.2.5",
+  "design_version_changed_because": "ANIMEDIA-TEMPLATE-FIX-01: принятые владельцем правки animedia.space (коммит 840cf2435e6984a6943a7d61e2316a51ee6cfb6b) перенесены в шаблон семейства. Под прежним номером 1.2.4 выпущено ДРУГОЕ расположение — двухколоночная коробка оценок под всеми блоками, реакции-таблетками в её углу, вторая шкала голосования в боковой колонке.",
+  "community_module": {
+    "version": "2.1",
+    "path_in_release": "community.py",
+    "repo_path": "factory/animedia/community.py",
+    "source_repo": "sbc-create/test",
+    "source_branch": "claude/community-comments-platform-01",
+    "source_commit": "da20a290c9606c7189c21375fc428650f44fae46",
+    "handoff_file": "docs/community_comments/handoff/community.py.v2.1",
+    "sha256": "f82555e8e8812c9bb3e5d3d980e32438835689d6a9dbb623da885169e8647517",
+    "bytes": 52743,
+    "contract": "docs/community_comments/MODULE_MAIN_SCORE_2_1.md"
+  },
+  "variants": [
+    {
+      "profile": "animedia-space",
+      "selectable": true,
+      "host_key": "animedia.space",
+      "assigned_site": "animedia-02"
+    },
+    {
+      "profile": "animedia-icu",
+      "selectable": true,
+      "host_key": "animedia.icu",
+      "assigned_site": "animedia-01"
+    }
+  ],
+  "archived_template_ids": [
+    {
+      "template_id": "animedia-original-parity",
+      "why": "изолированный пакет стадии паритета; рантайм старше выложенного, при новом выпуске не выбирается"
+    },
+    {
+      "template_id": "animedia-ux-rebuild",
+      "why": "изолированный пакет стадии переработки интерфейса; заменён этим переносом, при новом выпуске не выбирается"
+    }
+  ]
+}

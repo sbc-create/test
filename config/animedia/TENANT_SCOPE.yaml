@@ -23,12 +23,15 @@ branch:
     - claude/animedia-original-parity-01
     - claude/animedia-template-finalization-01
     - claude/animedia-ux-rebuild-01
+    # Перенос принятых исправлений animedia.space в шаблон семейства.
+    - claude/animedia-template-fix-01
 
 worktrees:
   allowed:
     - /home/claude/wt-animedia-original-parity-01
     - /home/claude/wt-animedia-finalization-01
     - /home/claude/wt-animedia-ux-rebuild-01
+    - /home/claude/wt-animedia-template-fix-01
   # Запись в чужой worktree запрещена всегда, даже read-only обход не нужен.
   write_outside_allowed_worktrees: forbidden
 
@@ -82,6 +85,21 @@ template_ids:
     - animedia-nova            # действующая семья шаблона на витринах
     - animedia-original-parity # изолированный пакет стадии паритета
     - animedia-ux-rebuild      # изолированный пакет переработки интерфейса
+    - animedia-template-fix    # перенос принятых исправлений в шаблон семейства
+
+acceptance_instances:
+  # Приёмка шаблона проверяется НОВЫМ экземпляром, а не уже исправленной
+  # витриной: исправленный сайт ничего не говорит об исходниках, из которых
+  # его собрали. Экземпляр приёмки — не витрина: домена, юнита, записи в
+  # nginx и доступа извне у него нет.
+  allowed_bind: 127.0.0.1
+  allowed_ports: [9431, 9432]
+  data_root: /tmp/claude-1001/-home-claude-wt-animedia-space-visual-01/12661334-e045-421c-92a0-7c8458d2424e/scratchpad/acceptance
+  # Голоса, реакции и комментарии приёмки живут только здесь.
+  community_store_isolated: required
+  systemd: forbidden
+  nginx: forbidden
+  public_dns: forbidden
 
 runtime_paths:
   # Корень рантайма носит имя соседнего контура по историческим причинам и

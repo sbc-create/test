@@ -1,0 +1,210 @@
+"""Регрессии ANIMEDIA-TEMPLATE-FIX-01: принятые правки живут в ШАБЛОНЕ.
+
+Проверяется исходник шаблона семейства, а не уже исправленная витрина:
+исправленный сайт ничего не говорит об исходниках, из которых его собрали, —
+ровно на этом разрыве задача и возникла.
+
+Каждая проверка названа дефектом, который она держит закрытым. Общего счёта
+тестов здесь нет: он не связан ни с одним требованием.
+"""
+from __future__ import annotations
+
+import importlib.util
+import json
+import os
+import sys
+from pathlib import Path
+
+import pytest
+
+ROOT = Path(__file__).resolve().parents[2]
+РАНТАЙМ = ROOT / "automation/host/animedia-frontend.py"
+ВЕРСИЯ_ФАЙЛ = ROOT / "config/animedia/TEMPLATE_VERSION.json"
+СБОРЩИК = ROOT / "automation/host/animedia_release_build.py"
+
+
+@pytest.fixture(scope="module")
+def версия() -> dict:
+    return json.loads(ВЕРСИЯ_ФАЙЛ.read_text(encoding="utf-8"))
+
+
+@pytest.fixture(scope="module")
+def исходник() -> str:
+    return РАНТАЙМ.read_text(encoding="utf-8")
+
+
+@pytest.fixture(scope="module")
+def рантайм():
+    """Шаблон, поднятый с подставным манифестом: он нужен ему при импорте."""
+    манифест = ROOT / "artifacts/evidence/animedia-template-fix-01/_манифест-теста.json"
+    манифест.parent.mkdir(parents=True, exist_ok=True)
+    манифест.write_text(json.dumps({
+        "schema_version": 1, "template_family": "animedia",
+        "design_version": "1.2.5", "source_commit": "0" * 40, "build_id": "test",
+        "artifact_sha256": "0" * 64, "profile": "animedia-space",
+        "built_at": "2026-09-23T00:00:00Z"}), encoding="utf-8")
+    прежние = {k: os.environ.get(k) for k in
+               ("ANIMEDIA_TEMPLATE_MANIFEST", "LORDS_TEMPLATE_MANIFEST")}
+    os.environ["ANIMEDIA_TEMPLATE_MANIFEST"] = str(манифест)
+    os.environ.pop("LORDS_TEMPLATE_MANIFEST", None)
+    спец = importlib.util.spec_from_file_location(
+        "animedia_template_fix_01_рантайм", РАНТАЙМ)
+    модуль = importlib.util.module_from_spec(спец)
+    sys.modules[спец.name] = модуль
+    спец.loader.exec_module(модуль)
+    yield модуль
+    for k, v in прежние.items():
+        os.environ.pop(k, None) if v is None else os.environ.__setitem__(k, v)
+    манифест.unlink(missing_ok=True)
+
+
+# --- оформление объявлено и исполнимо ----------------------------------------
+
+def test_объявленную_версию_рантайм_умеет_исполнять(рантайм, версия):
+    """Дефект: витрина молча уезжает на прежние ветки, отвечая при этом 200.
+
+    Версия объявляется манифестом витрины, а исполняется только если код её
+    знает. Разошлись — и сайт показывает прежнее оформление, не сообщая об
+    этом ничем.
+    """
+    объявлена = версия["design_version"]
+    assert объявлена in рантайм.ОФОРМЛЕНИЕ_ВЕРСИИ
+    assert объявлена in рантайм.ПЕРЕРАБОТАНО_С["animedia"]
+
+
+def test_версия_шаблона_отличается_от_прежнего_расположения(версия):
+    """Дефект: под одним номером выпущены два разных расположения.
+
+    1.2.4 уже выпущена с двухколоночной коробкой оценок под всеми блоками.
+    Оставить номер значило бы, что по манифесту нельзя сказать, что витрина
+    показывает.
+    """
+    assert версия["design_version"] != "1.2.4"
+
+
+# --- расположение у плеера ----------------------------------------------------
+
+def test_полоса_действий_и_полоса_реакций_есть_в_шаблоне(рантайм):
+    """Дефект: оценка и списки стояли под всем остальным, за «Контекстом»."""
+    for имя in ("панель_действий", "полоса_реакций", "блок_обсуждения"):
+        assert hasattr(рантайм.ВидАнимедиа, имя), имя
+
+
+def test_прежней_двухколоночной_коробки_не_осталось(рантайм, исходник):
+    """Дефект: возврат громоздкой коробки и служебных подзаголовков."""
+    assert not hasattr(рантайм.ВидАнимедиа, "блок_сообщества")
+    for мёртвое in ("acomm__top", "acomm__side", "acomm__lists-lab",
+                    "acomm__react-lab", "acomm__reactions"):
+        assert мёртвое not in исходник, мёртвое
+
+
+def test_шкала_голосования_на_странице_одна(рантайм):
+    """Дефект: вторая, пустая шкала в боковой колонке.
+
+    Проголосовав в одной, посетитель видел вторую пустой и делал вывод, что
+    оценка не сохранилась, — а изменить её уже нельзя.
+    """
+    import inspect
+    колонка = inspect.getsource(рантайм.ВидАнимедиа._рейтинги_колонка_b07)
+    assert "self.звёзды" not in колонка
+    assert not hasattr(рантайм.ВидАнимедиа, "звёзды")
+
+
+def test_убранные_блоки_не_вернулись(рантайм):
+    """Дефект: «Найдите аниме за секунду» и дублирующая лента добавлений."""
+    for убрано in ("_крупный_поиск", "_блок_компактных_фильтров_b06"):
+        assert not hasattr(рантайм.ВидАнимедиа, убрано), убрано
+
+
+# --- запись сообщества --------------------------------------------------------
+
+def test_запись_сообщества_закрыта_токеном(рантайм, исходник):
+    """Дефект: перенос отбросил бы защиту, которая уже была на animedia.icu.
+
+    Правило одного голоса делает промах необратимым: чужая форма поставила бы
+    оценку, которую посетитель потом не сможет изменить.
+    """
+    assert hasattr(рантайм.Обработчик, "_csrf")
+    assert hasattr(рантайм.Обработчик, "_csrf_совпал")
+    import inspect
+    post = inspect.getsource(рантайм.Обработчик.do_POST)
+    # Проверка обязана стоять ДО первой записи в хранилище.
+    assert "_csrf_совпал" in post
+    assert post.index("_csrf_совпал") < post.index("добавить_голос")
+    # Все формы сообщества несут поле токена.
+    assert исходник.count("self._csrf_поле()") >= 4
+
+
+def test_отказ_по_токену_объясняется(рантайм):
+    """Дефект: молчаливое «ничего не произошло» читается как поломка формы."""
+    assert "csrf" in рантайм.ВидАнимедиа.СООБЩЕНИЯ_СООБЩЕСТВА
+
+
+# --- варианты семейства -------------------------------------------------------
+
+def test_оба_варианта_сохранены_и_различимы(рантайм, версия):
+    """Дефект: перенос обезличил бы витрины до одного оформления."""
+    выбираемые = {в["profile"] for в in версия["variants"] if в["selectable"]}
+    assert выбираемые == {"animedia-space", "animedia-icu"}
+    хосты = рантайм.АНИМЕДИА_ДОМЕНЫ
+    assert set(хосты) == {"animedia.space", "animedia.icu"}
+    a, b = хосты["animedia.space"], хосты["animedia.icu"]
+    # Различия обязаны быть содержательными, а не только в имени профиля.
+    for поле in ("og_site_name", "title_home", "h1", "description",
+                 "footer_about", "home_shelves"):
+        assert a[поле] != b[поле], поле
+
+
+# --- расчёт рейтинга ----------------------------------------------------------
+
+def test_модуль_сообщества_тот_самый(версия):
+    """Дефект: молча подменённый модуль меняет формулу и хранилище."""
+    м = версия["community_module"]
+    файл = ROOT / м["repo_path"]
+    import hashlib
+    цифра = hashlib.sha256(файл.read_bytes()).hexdigest()
+    assert цифра == м["sha256"], f"{файл}: {цифра}"
+    assert файл.stat().st_size == м["bytes"]
+
+
+def test_формула_и_приоритет_базы_не_переписаны_витриной(рантайм):
+    """Дефект: три одинаковых на вид расчёта неизбежно разойдутся."""
+    import importlib.util as iu
+    спец = iu.spec_from_file_location(
+        "community_для_теста", ROOT / "factory/animedia/community.py")
+    модуль = iu.module_from_spec(спец)
+    sys.modules[спец.name] = модуль
+    спец.loader.exec_module(модуль)
+    assert модуль.ВЕС_БАЗЫ == 5
+    assert модуль.ВЕРСИЯ_РАСЧЁТА == "main-score/1.0"
+    # Витрина передаёт приоритет, но не считает сама.
+    assert рантайм.АНИМЕДИА_ПРИОРИТЕТ_БАЗЫ == ("shikimori", "kp", "imdb", "mal")
+    assert "amd" not in рантайм.АНИМЕДИА_ПРИОРИТЕТ_БАЗЫ
+
+
+# --- генератор ----------------------------------------------------------------
+
+def test_релиз_везёт_обновление_данных():
+    """Дефект: новый сайт поднимался на снимке, застывшем в момент сборки.
+
+    «Новые серии» и «Расписание» оставались пустыми навсегда, и по зелёному
+    healthz этого было не видно.
+    """
+    состав = СБОРЩИК.read_text(encoding="utf-8")
+    assert "animedia-data-update.py" in состав
+    assert (ROOT / "automation/host/animedia-data-update.py").is_file()
+
+
+def test_обновление_данных_не_знает_витрину_заранее():
+    """Дефект: зашитый site_id — новый сайт писал бы в чужие файлы."""
+    текст = (ROOT / "automation/host/animedia-data-update.py").read_text(encoding="utf-8")
+    assert 'САЙТ = ""' in текст
+    assert '--site", required=True' in текст
+    assert '--data-dir", required=True' in текст
+
+
+def test_сборщик_берёт_версию_из_репозитория():
+    """Дефект: версия, набранная руками, расходится с кодом молча."""
+    текст = СБОРЩИК.read_text(encoding="utf-8")
+    assert "TEMPLATE_VERSION.json" in текст
+    assert "рантайм не объявляет версию" in текст
