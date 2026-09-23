@@ -25,6 +25,7 @@ from __future__ import annotations
 import os
 import pwd
 import shutil
+import socket
 import subprocess
 import tarfile
 import time
@@ -36,7 +37,7 @@ from factory.cell import runtime
 
 #: Закрытый набор. Расширяется только правкой этого файла и переустановкой.
 ОПЕРАЦИИ = ("prepare", "install_release", "warm_up", "switch_route",
-            "switch", "verify", "rollback")
+            "promote", "verify", "rollback")
 
 #: Куда разрешено раскладывать сайты. Любой путь вне этого корня — отказ.
 КОРЕНЬ_САЙТОВ = Path("/srv")
@@ -58,6 +59,34 @@ class Площадка:
     unit: str
     previous_unit: str | None
     port: int
+
+    @property
+    def releases(self) -> Path:
+        """Каталог выпусков. Каждый распакованный артефакт — отдельная папка.
+
+        Кандидат и действующая версия обязаны исполнять РАЗНЫЙ код
+        одновременно. Один каталог `app` на двоих означал бы, что распаковка
+        нового выпуска меняет код действующей службы под ней.
+        """
+        return self.root / "releases"
+
+    @property
+    def current(self) -> Path:
+        """Ссылка на выпуск, который обслуживает посетителей."""
+        return self.root / "current"
+
+    @property
+    def candidate(self) -> Path:
+        """Ссылка на прогреваемый выпуск."""
+        return self.root / "candidate"
+
+    @property
+    def candidate_unit(self) -> str:
+        return f"{self.unit.removesuffix('.service')}-candidate.service"
+
+    @property
+    def candidate_port(self) -> int:
+        return порт_кандидата(self.port)
 
     @classmethod
     def из_реестра(cls, site_id: str, *, path: Path | None = None) -> Площадка:
@@ -132,11 +161,17 @@ def prepare(site_id: str, *, dry_run: bool = True) -> dict[str, Any]:
 
 
 def install_release(site_id: str, артефакт: Path, digest: str, *,
-                    dry_run: bool = True) -> dict[str, Any]:
-    """Распаковать проверенный артефакт. Ни одной строки из репозитория."""
+                    commit: str = "", dry_run: bool = True,
+                    path: Path | None = None) -> dict[str, Any]:
+    """Распаковать проверенный артефакт в ОТДЕЛЬНЫЙ выпуск.
+
+    Не поверх работающего кода: действующая служба продолжает исполнять свой
+    выпуск, а кандидат получает свой. Ссылка `candidate` переводится на него —
+    ссылка, а не копия, потому что подмена ссылки атомарна.
+    """
     import hashlib
 
-    п = Площадка.из_реестра(site_id)
+    п = Площадка.из_реестра(site_id, path=path)
     артефакт = Path(артефакт)
     if not артефакт.is_file():
         raise PrivilegedRefused(f"артефакта нет: {артефакт}")
@@ -145,29 +180,89 @@ def install_release(site_id: str, артефакт: Path, digest: str, *,
         raise PrivilegedRefused(
             f"digest артефакта {факт} не совпал с заявленным {digest}")
 
-    новый = п.root / "app.new"
+    имя = (commit or факт.split(":")[1])[:12]
+    выпуск = п.releases / имя
     if dry_run:
         with tarfile.open(артефакт) as tf:
-            имена = [ч.name for ч in безопасные_члены(tf, новый)]
+            имена = [ч.name for ч in безопасные_члены(tf, выпуск)]
         return {"operation": "install_release", "site_id": site_id, "dry_run": True,
-                "digest": факт, "members": len(имена)}
+                "digest": факт, "release": str(выпуск), "members": len(имена)}
 
     _нужен_root()
-    if новый.exists():
-        shutil.rmtree(новый)
-    новый.mkdir(parents=True)
+    временный = п.releases / f".{имя}.new"
+    if временный.exists():
+        shutil.rmtree(временный)
+    временный.mkdir(parents=True)
     with tarfile.open(артефакт) as tf:
-        tf.extractall(новый, members=безопасные_члены(tf, новый))
-    for путь in новый.rglob("*"):
+        tf.extractall(временный, members=безопасные_члены(tf, временный))
+    for путь in временный.rglob("*"):
         shutil.chown(путь, п.account, п.account)
-    прежний = п.root / "app.prev"
-    if прежний.exists():
-        shutil.rmtree(прежний)
-    if п.app.exists():
-        п.app.rename(прежний)
-    новый.rename(п.app)
+    shutil.chown(временный, п.account, п.account)
+    if выпуск.exists():
+        shutil.rmtree(выпуск)
+    временный.rename(выпуск)
+
+    # Ссылка подменяется через os.replace: окна без ссылки не возникает.
+    врем_ссылка = п.root / ".candidate.new"
+    if врем_ссылка.exists() or врем_ссылка.is_symlink():
+        врем_ссылка.unlink()
+    врем_ссылка.symlink_to(выпуск)
+    os.replace(врем_ссылка, п.candidate)
     return {"operation": "install_release", "site_id": site_id, "dry_run": False,
-            "digest": факт, "app": str(п.app), "previous": str(прежний)}
+            "digest": факт, "release": str(выпуск), "candidate_link": str(п.candidate)}
+
+
+def promote(site_id: str, *, dry_run: bool = True, предел: int = 600,
+            ожидаемый_build: str = "", path: Path | None = None) -> dict[str, Any]:
+    """Перевести основную службу на выпуск кандидата и вернуть ей трафик.
+
+    Делается ПОСЛЕ того, как кандидат принял трафик: основная служба в этот
+    момент никого не обслуживает, и её перезапуск ничего не стоит. Конечное
+    состояние всегда одно — трафик на основном порту, — иначе следующий выпуск
+    не знал бы, откуда начинать.
+    """
+    п = Площадка.из_реестра(site_id, path=path)
+    шаги = ["current -> выпуск кандидата", f"restart {п.unit}",
+            f"ждать готовности {п.port}", f"вернуть маршрут на {п.port}",
+            f"stop {п.candidate_unit}"]
+    if dry_run:
+        return {"operation": "promote", "site_id": site_id, "dry_run": True,
+                "steps": шаги}
+
+    _нужен_root()
+    цель = п.candidate.resolve()
+    врем = п.root / ".current.new"
+    if врем.exists() or врем.is_symlink():
+        врем.unlink()
+    врем.symlink_to(цель)
+    os.replace(врем, п.current)
+
+    # Юнит основной службы переписывается ЗДЕСЬ, из шаблона исполнителя.
+    # Без этого перезапуск поднимал бы прежний ExecStart: служба стартовала бы
+    # успешно и отвечала бы старым выпуском, а приёмка объявляла бы расхождение
+    # версий, не назвав причины.
+    каталог = Path(os.environ.get("SITE_UNIT_DIR", "/etc/systemd/system"))
+    (каталог / п.unit).write_text(
+        ЮНИТ_ШАБЛОН.format(domain=runtime.размещение(site_id, path=path).domain,
+                           site_id=site_id, account=п.account, link=п.current,
+                           data=п.data, port=п.port), encoding="utf-8")
+    _systemctl("daemon-reload")
+    _systemctl("restart", п.unit)
+    состояние = готов(п.port, предел=предел,
+                      жив=lambda: _systemctl("is-active", "--quiet", п.unit,
+                                             проверять=False).returncode == 0)
+    итог = {"operation": "promote", "site_id": site_id, "dry_run": False,
+            "steps": шаги, "ready": состояние, "release": str(цель)}
+    if not состояние.get("ready"):
+        return итог
+    итог["verify"] = verify(site_id, ожидаемый_build=ожидаемый_build,
+                            порт=п.port, path=path)
+    if not итог["verify"].get("ok"):
+        return итог
+    switch_route(site_id, п.port, dry_run=False, path=path)
+    _systemctl("stop", п.candidate_unit, проверять=False)
+    итог["traffic_on"] = п.port
+    return итог
 
 
 def готов(port: int, *, предел: int = 600, шаг: float = 3.0,
@@ -247,8 +342,8 @@ After=network-online.target
 Type=simple
 User={account}
 Group={account}
-WorkingDirectory={app}
-ExecStart=/usr/bin/python3 {app}/run.py --port {port} --data-dir {data}
+WorkingDirectory={link}
+ExecStart=/usr/bin/python3 {link}/run.py --port {port} --data-dir {data}
 Restart=on-failure
 RestartSec=2
 
@@ -321,73 +416,31 @@ def _systemctl(*args: str, проверять: bool = True) -> subprocess.Comple
     return готово
 
 
-def switch(site_id: str, *, dry_run: bool = True,
-           предел: int = 600) -> dict[str, Any]:
-    """Поставить юнит, остановить прежний, запустить новый, дождаться готовности."""
-    п = Площадка.из_реестра(site_id)
-    каталог_юнитов = Path(os.environ.get("SITE_UNIT_DIR", "/etc/systemd/system"))
-    текст = ЮНИТ_ШАБЛОН.format(domain=runtime.размещение(site_id).domain,
-                               site_id=site_id, account=п.account,
-                               app=п.app, data=п.data, port=п.port)
-    шаги = [f"юнит {каталог_юнитов / п.unit}"]
-    if п.previous_unit:
-        шаги += [f"stop {п.previous_unit}", f"disable {п.previous_unit}",
-                 f"drop-in RefuseManualStart для {п.previous_unit}"]
-    шаги += [f"enable --now {п.unit}", f"ждать готовности до {предел} с"]
-    if dry_run:
-        return {"operation": "switch", "site_id": site_id, "dry_run": True,
-                "steps": шаги, "unit_text_sha": __import__("hashlib").sha256(
-                    текст.encode()).hexdigest()[:16]}
+def rollback(site_id: str, *, dry_run: bool = True, предел: int = 600,
+             path: Path | None = None) -> dict[str, Any]:
+    """Вернуть трафик действующей версии и погасить кандидата.
 
-    _нужен_root()
-    (каталог_юнитов / п.unit).write_text(текст, encoding="utf-8")
-    if п.previous_unit:
-        _systemctl("stop", п.previous_unit, проверять=False)
-        _systemctl("disable", п.previous_unit, проверять=False)
-        защита = каталог_юнитов / f"{п.previous_unit}.d"
-        защита.mkdir(parents=True, exist_ok=True)
-        (защита / f"10-{п.account}-port-guard.conf").write_text(
-            ЗАЩИТА_ШАБЛОН.format(port=п.port, account=п.account), encoding="utf-8")
-    _systemctl("daemon-reload")
-    _systemctl("enable", "--now", п.unit)
-    состояние = готов(п.port, предел=предел,
-                      жив=lambda: _systemctl("is-active", "--quiet", п.unit,
-                                             проверять=False).returncode == 0)
-    return {"operation": "switch", "site_id": site_id, "dry_run": False,
-            "steps": шаги, "ready": состояние}
-
-
-def rollback(site_id: str, *, dry_run: bool = True,
-             предел: int = 600) -> dict[str, Any]:
-    """Вернуть прежнюю службу. Снятие защиты — первым действием."""
-    п = Площадка.из_реестра(site_id)
-    каталог_юнитов = Path(os.environ.get("SITE_UNIT_DIR", "/etc/systemd/system"))
-    шаги = [f"disable --now {п.unit}"]
-    if п.previous_unit:
-        шаги += ["снять drop-in RefuseManualStart",
-                 f"enable --now {п.previous_unit}", "дождаться ответа"]
+    Порядок именно такой: сначала маршрут, потом остановка. Обратный порядок
+    оставил бы посетителей на порту, где уже никого нет.
+    """
+    п = Площадка.из_реестра(site_id, path=path)
+    шаги = [f"маршрут -> {п.port}", f"stop {п.candidate_unit}",
+            "проверить ответом"]
     if dry_run:
         return {"operation": "rollback", "site_id": site_id, "dry_run": True,
                 "steps": шаги}
 
     _нужен_root()
-    _systemctl("disable", "--now", п.unit, проверять=False)
-    if not п.previous_unit:
-        return {"operation": "rollback", "site_id": site_id, "dry_run": False,
-                "steps": шаги, "ready": {"ready": False,
-                                         "reason": "прежней службы нет"}}
-    защита = каталог_юнитов / f"{п.previous_unit}.d" / f"10-{п.account}-port-guard.conf"
-    # Снять ДО enable: с RefuseManualStart запуск отказывает, и сайт остался бы
-    # без обеих служб — то есть откат сделал бы ровно то, от чего защищает.
-    if защита.is_file():
-        защита.unlink()
-    _systemctl("daemon-reload", проверять=False)
-    _systemctl("enable", "--now", п.previous_unit)
+    switch_route(site_id, п.port, dry_run=False, path=path)
+    _systemctl("stop", п.candidate_unit, проверять=False)
     состояние = готов(п.port, предел=предел,
-                      жив=lambda: _systemctl("is-active", "--quiet", п.previous_unit,
+                      жив=lambda: _systemctl("is-active", "--quiet", п.unit,
                                              проверять=False).returncode == 0)
-    return {"operation": "rollback", "site_id": site_id, "dry_run": False,
+    итог = {"operation": "rollback", "site_id": site_id, "dry_run": False,
             "steps": шаги, "ready": состояние}
+    итог["verify"] = verify(site_id, порт=п.port, path=path)
+    return итог
+
 
 
 #: Файл upstream целевого сайта. Переключение трафика — атомарная замена
@@ -415,17 +468,38 @@ def warm_up(site_id: str, *, dry_run: bool = True, предел: int = 600,
     ответит и назовёт ожидаемый выпуск.
     """
     п = Площадка.из_реестра(site_id, path=path)
-    кандидат = порт_кандидата(п.port)
-    юнит = f"{п.unit.removesuffix('.service')}-candidate.service"
+    кандидат = п.candidate_port
+    юнит = п.candidate_unit
     каталог = Path(os.environ.get("SITE_UNIT_DIR", "/etc/systemd/system"))
     текст = ЮНИТ_ШАБЛОН.format(
         domain=runtime.размещение(site_id, path=path).domain, site_id=site_id,
-        account=п.account, app=п.app, data=п.data, port=кандидат)
+        account=п.account, link=п.candidate, data=п.data, port=кандидат)
     if dry_run:
         return {"operation": "warm_up", "site_id": site_id, "dry_run": True,
                 "candidate_unit": юнит, "candidate_port": кандидат}
 
     _нужен_root()
+    # Прежний кандидат гасится ДО записи юнита и старта. Без этого порт
+    # оставался занят предыдущей попыткой, новый процесс падал на bind, и
+    # прогрев объявлял «процесс не работает» — то есть выпуск отвергался по
+    # следу прошлой операции, а не по своему состоянию.
+    _systemctl("stop", юнит, проверять=False)
+    свободен = False
+    for _ in range(50):
+        проба = socket.socket()
+        проба.settimeout(0.2)
+        try:
+            проба.connect(("127.0.0.1", кандидат))
+        except OSError:
+            свободен = True
+            break
+        finally:
+            проба.close()
+        time.sleep(0.2)
+    if not свободен:
+        raise PrivilegedRefused(
+            f"порт кандидата {кандидат} занят и не освободился за 10 с; "
+            "прогрев не начат")
     (каталог / юнит).write_text(текст, encoding="utf-8")
     _systemctl("daemon-reload")
     _systemctl("restart", юнит)

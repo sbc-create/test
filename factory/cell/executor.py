@@ -163,15 +163,22 @@ def проверить_ci(заявка: queue.Заявка, *, remote: str) -> d
 
 def активировать(заявка: queue.Заявка, *, файл: Path,
                  dry_run: bool = True) -> dict[str, Any]:
-    """Активация без единой строки, исполненной от root из репозитория.
+    """Выпуск без остановки работающего сайта и без кода репозитория от root.
 
-    Порядок намеренный. Сборка идёт ПОД УЧЁТНОЙ ЗАПИСЬЮ САЙТА: сборщик — код
-    репозитория, а репозиторий доступен на запись обычной учётной записи.
-    Запустить его от root значило бы отдать root тому, кто может туда писать.
-    Root получает только готовый файл и сверяет его по digest из заявки.
+    Порядок проверен на стенде с настоящими systemd и nginx:
 
-    Дальше — только операции из `privileged.ОПЕРАЦИИ`. Ни `deploy/activate.sh`,
-    ни любого другого файла репозитория здесь не исполняется.
+      1. сборка ПОД УЧЁТНОЙ ЗАПИСЬЮ САЙТА — сборщик это код репозитория, и
+         запускать его от root значило бы отдать root тому, кто может туда
+         писать; root получает файл и сверяет digest;
+      2. распаковка в отдельный выпуск — действующая версия продолжает
+         исполнять свой;
+      3. прогрев кандидата на отдельном порту, пока старая версия отвечает;
+      4. кандидат обязан не просто ответить, а назвать ожидаемый выпуск;
+      5. переключение трафика — замена одного файла upstream, nginx -t, reload;
+      6. повышение: основная служба переводится на тот же выпуск и забирает
+         трафик обратно, кандидат гасится.
+
+    Любой отказ после шага 5 — откат маршрута с проверкой ответом.
     """
     cell = registry.resolve(заявка.site_id)
     путь_репо = (cell.repo or {}).get("path")
@@ -182,6 +189,7 @@ def активировать(заявка: queue.Заявка, *, файл: Path
         from factory.paths import PATHS
         repo = PATHS.root / repo
     размещение = runtime.размещение(заявка.site_id)
+    шаги: dict[str, Any] = {}
 
     with tempfile.TemporaryDirectory() as tmp:
         артефакт, манифест = privileged.собрать_без_прав(
@@ -194,34 +202,49 @@ def активировать(заявка: queue.Заявка, *, файл: Path
             raise ExecutorError(
                 f"digest сборки {манифест.get('digest')} не совпал с заявленным "
                 f"{заявка.digest}; выкладывается проверенный выпуск или никакой")
+        build_id = манифест.get("live_build_id") or ""
         if файл.is_file():
             queue.отметить(файл, "artifact_verified", {"digest": заявка.digest})
 
-        шаги = {"prepare": privileged.prepare(заявка.site_id, dry_run=dry_run)}
+        шаги["prepare"] = privileged.prepare(заявка.site_id, dry_run=dry_run)
         шаги["install_release"] = privileged.install_release(
-            заявка.site_id, артефакт, заявка.digest, dry_run=dry_run)
-        if файл.is_file():
-            queue.отметить(файл, "candidate_ready")
-        шаги["switch"] = privileged.switch(заявка.site_id, dry_run=dry_run)
+            заявка.site_id, артефакт, заявка.digest,
+            commit=заявка.commit, dry_run=dry_run)
 
-    готово = (шаги["switch"].get("ready") or {}).get("ready", dry_run)
-    if not dry_run and not готово:
-        шаги["rollback"] = privileged.rollback(заявка.site_id, dry_run=False)
-        return {"status": "rolled-back", "stage": "rolled_back", "steps": шаги,
-                "build_id": манифест.get("live_build_id")}
+    шаги["warm_up"] = privileged.warm_up(
+        заявка.site_id, dry_run=dry_run, ожидаемый_build=build_id)
+    прогрет = dry_run or (шаги["warm_up"].get("ready") or {}).get("ready")
+    проверен = dry_run or (шаги["warm_up"].get("verify") or {}).get("ok")
+    if not (прогрет and проверен):
+        # Трафик не переключался: действующая версия и не переставала отвечать.
+        шаги["rollback"] = privileged.rollback(заявка.site_id, dry_run=dry_run)
+        return {"status": "candidate-failed", "stage": "failed", "steps": шаги,
+                "build_id": build_id}
+    if файл.is_file():
+        queue.отметить(файл, "candidate_ready", {"build_id": build_id})
 
+    порт_кандидата = privileged.Площадка.из_реестра(заявка.site_id).candidate_port
+    шаги["switch_route"] = privileged.switch_route(
+        заявка.site_id, порт_кандидата, dry_run=dry_run)
     if файл.is_file() and not dry_run:
         queue.отметить(файл, "switched")
-    шаги["verify"] = privileged.verify(
-        заявка.site_id, ожидаемый_build=манифест.get("live_build_id") or "")
+
+    шаги["promote"] = privileged.promote(
+        заявка.site_id, dry_run=dry_run, ожидаемый_build=build_id)
+    повышено = dry_run or (шаги["promote"].get("verify") or {}).get("ok")
+    if not повышено:
+        шаги["rollback"] = privileged.rollback(заявка.site_id, dry_run=dry_run)
+        return {"status": "rolled-back", "stage": "rolled_back", "steps": шаги,
+                "build_id": build_id}
+
+    шаги["verify"] = privileged.verify(заявка.site_id, ожидаемый_build=build_id)
     if not dry_run and not шаги["verify"].get("ok"):
         шаги["rollback"] = privileged.rollback(заявка.site_id, dry_run=False)
         return {"status": "rolled-back", "stage": "rolled_back", "steps": шаги,
-                "build_id": манифест.get("live_build_id")}
+                "build_id": build_id}
     return {"status": "dry-run" if dry_run else "activated",
-            "stage": "live_verified" if not dry_run else "validated",
-            "steps": шаги, "digest": заявка.digest,
-            "build_id": манифест.get("live_build_id")}
+            "stage": "validated" if dry_run else "live_verified",
+            "steps": шаги, "digest": заявка.digest, "build_id": build_id}
 
 
 def выполнить(заявка: queue.Заявка, *, база: Path, dry_run: bool = True) -> dict[str, Any]:

@@ -40,7 +40,7 @@ def test_набор_операций_закрыт():
     """«Выполнить команду» отсутствует как понятие, а не запрещено проверкой."""
     assert set(privileged.ОПЕРАЦИИ) == {
         "prepare", "install_release", "warm_up", "switch_route",
-        "switch", "verify", "rollback"}
+        "promote", "verify", "rollback"}
     описание = privileged.описать_границу()
     assert описание["runs_repository_scripts"] is False
     assert описание["accepts_paths_from_request"] is False

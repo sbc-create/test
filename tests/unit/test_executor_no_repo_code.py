@@ -87,12 +87,12 @@ def test_юнит_собирается_из_шаблона_исполнител�
     from factory.cell import privileged
 
     шаблон = privileged.ЮНИТ_ШАБЛОН
-    assert "ExecStart=/usr/bin/python3 {app}/run.py" in шаблон
+    assert "ExecStart=/usr/bin/python3 {link}/run.py" in шаблон
     assert "User={account}" in шаблон
     # В шаблоне нет ни одного места, куда репозиторий мог бы подставить строку:
     # все поля заполняются из реестра.
     поля = set(re.findall(r"\{(\w+)\}", шаблон))
-    assert поля <= {"domain", "site_id", "account", "app", "data", "port"}
+    assert поля <= {"domain", "site_id", "account", "link", "data", "port"}
 
 
 def test_установщик_кладёт_корневую_копию_а_не_ссылается_на_рабочий_каталог():
