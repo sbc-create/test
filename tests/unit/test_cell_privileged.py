@@ -313,3 +313,29 @@ def test_недельный_снимок_переносится_но_не_обя
     итог = privileged.stage_snapshot("zona-01", источник, dry_run=False)
     assert итог["operation"] == "stage_snapshot"
     assert not (п.data_candidate / "zona-01-popular-weekly.json").exists()
+
+
+def test_появившееся_дополнение_не_считается_неизменным(tmp_path):
+    """Повтор ошибки, уже исправленной в засеве: «не изменилось» про часть.
+
+    Там «наполнено» считалось по одному каталогу — витрина выкладывалась без
+    подробностей. Здесь тот же просчёт дал другой симптом: доставка отвечала
+    `unchanged` и не привозила недельный снимок, появившийся у производителя
+    впервые, потому что каталог не менялся. Наблюдалось на zona-01.
+    """
+    источник = tmp_path / "front"
+    цель = tmp_path / "data"
+    источник.mkdir()
+    цель.mkdir()
+    for имя in ("zona-01-catalog.json", "zona-01-details.json"):
+        (источник / имя).write_text("{}", encoding="utf-8")
+        (цель / имя).write_text("{}", encoding="utf-8")
+    # Пара совпадает — до появления дополнения это и есть «не изменилось».
+    assert privileged.снимок_совпадает(источник, цель, "zona-01") is True
+
+    (источник / "zona-01-popular-weekly.json").write_text("[]", encoding="utf-8")
+    assert privileged.снимок_совпадает(источник, цель, "zona-01") is False, (
+        "появившееся дополнение обязано считаться изменением")
+
+    (цель / "zona-01-popular-weekly.json").write_text("[]", encoding="utf-8")
+    assert privileged.снимок_совпадает(источник, цель, "zona-01") is True
