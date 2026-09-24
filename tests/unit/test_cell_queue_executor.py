@@ -456,3 +456,44 @@ def test_непредвиденный_отказ_оставляет_резуль
     # Заявка снята, результат на месте: повтора по таймеру не будет.
     assert not (tmp_path / "requests" / f"{з.request_id}.json").exists()
     assert (tmp_path / "results" / f"{з.request_id}.json").is_file()
+
+
+def test_обход_очереди_виден_а_откат_обходом_не_считается(tmp_path, monkeypatch):
+    """Выпуск, поставленный мимо очереди, обязан быть видимым.
+
+    В репозитории каждой витрины остались `deploy/activate.sh` и
+    `deploy/rollback.sh`: запуск от root кладёт выпуск мимо исполнителя, и ни
+    ветка, ни коммит, ни прогон при этом не проверяются. Снаружи это
+    неотличимо от штатного выпуска — сайт отвечает 200 и называет ожидаемый
+    build-id.
+
+    Отдельно сторожится ложное срабатывание: выпуск, который исполнитель
+    развернул в попытке, ЗАКОНЧИВШЕЙСЯ ОТКАТОМ, остаётся в releases/ и обходом
+    не является. На первом прогоне проверка назвала таким обходом zona-01.
+    """
+    from factory.cell import privileged
+    from factory.cell import registry as рег
+
+    корень = tmp_path / "srv"
+    (корень / "releases" / "aaaaaaaaaaaa").mkdir(parents=True)   # успешный
+    (корень / "releases" / "bbbbbbbbbbbb").mkdir()               # откат
+    (корень / "releases" / "cccccccccccc").mkdir()               # мимо очереди
+    (корень / "current").symlink_to(корень / "releases" / "cccccccccccc")
+    п = privileged.Площадка(site_id="lords-02", account="nobody", root=корень,
+                            app=корень / "app", data=корень / "data",
+                            unit="u.service", previous_unit=None, port=9111)
+    monkeypatch.setattr(privileged.Площадка, "из_реестра", staticmethod(lambda *a, **k: п))
+    monkeypatch.setattr(рег, "extracted_sites", lambda: ["lords-02"])
+
+    результаты = tmp_path / "results"
+    результаты.mkdir()
+    queue.записать_атомарно(результаты / "lords-02-code-aaaaaaaaaaaa.json",
+                            {"commit": "a" * 40, "status": "ok"})
+    queue.записать_атомарно(результаты / "lords-02-code-bbbbbbbbbbbb.json",
+                            {"commit": "b" * 40, "status": "failed"})
+
+    итог = executor.происхождение_выпусков(база=tmp_path)
+    место = итог["sites"][0]
+    assert место["outside_queue"] == ["cccccccccccc"], "откат обходом не считается"
+    assert место["by_executor"] is False, "исполняется выпуск, которого нет в результатах"
+    assert итог["bypassed"] == ["lords-02"]

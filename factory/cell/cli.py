@@ -319,6 +319,14 @@ def cmd_ci_ready(args) -> int:
     return 0 if итог["ready"] else 1
 
 
+def cmd_provenance(args) -> int:
+    """Какой выпуск исполняется и кем установлен. Обход очереди виден сразу."""
+    from factory.cell import executor
+    итог = executor.происхождение_выпусков()
+    print(json.dumps(итог, ensure_ascii=False, indent=2))
+    return 1 if итог["bypassed"] else 0
+
+
 ACTIONS = {
     "registry": cmd_registry,
     "templates": cmd_templates,
@@ -340,6 +348,7 @@ ACTIONS = {
     "serve": cmd_serve,
     "trigger": cmd_trigger,
     "ci-ready": cmd_ci_ready,
+    "provenance": cmd_provenance,
 }
 
 

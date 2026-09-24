@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import io
 import json
+import shutil
 import sys
 import tarfile
 from pathlib import Path
@@ -286,7 +287,8 @@ def test_недельный_снимок_переносится_но_не_обя
     Обязательным его делать нельзя: у части витрин такого файла нет в
     принципе, и требование уронило бы им обновление каталога целиком.
     """
-    источник = tmp_path / "front"; источник.mkdir()
+    источник = tmp_path / "front"
+    источник.mkdir()
     for имя in ("zona-01-catalog.json", "zona-01-details.json",
                 "zona-01-popular-weekly.json"):
         (источник / имя).write_text("{}", encoding="utf-8")
@@ -307,7 +309,7 @@ def test_недельный_снимок_переносится_но_не_обя
     # одного блока.
     (источник / "zona-01-popular-weekly.json").unlink()
     if п.data_candidate.exists():
-        import shutil as _sh; _sh.rmtree(п.data_candidate)
+        shutil.rmtree(п.data_candidate)
     итог = privileged.stage_snapshot("zona-01", источник, dry_run=False)
     assert итог["operation"] == "stage_snapshot"
     assert not (п.data_candidate / "zona-01-popular-weekly.json").exists()
