@@ -103,8 +103,9 @@ fi
 log "шаг 5: издателю каталога — право писать в хранилища ячеек"
 if [ "$dry_run" = 1 ]; then
   printf '   [сухой прогон] bash automation/host/install-publisher-cell-paths.sh\n'
-elif [ -f /etc/systemd/system/nova-daily-refresh.service.d/10-cell-data-paths.conf ]; then
-  step_ok "пути ячеек уже объявлены издателю"
+elif grep -qs '^ReadWritePaths=/srv/zonafilm-space/data' \
+       /etc/systemd/system/nova-daily-refresh.service.d/*.conf 2>/dev/null; then
+  step_ok "пути ячеек уже объявлены издателю (drop-in на месте)"
 elif bash "${SRC_ROOT}/automation/host/install-publisher-cell-paths.sh"; then
   step_ok "издатель может писать в хранилища ячеек"
 else

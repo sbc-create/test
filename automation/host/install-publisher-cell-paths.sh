@@ -68,6 +68,20 @@ PYPATHS
 log "каталоги данных ячеек из реестра: ${#paths[@]}"
 printf '   %s\n' "${paths[@]}"
 
+# Проверяется не имя файла, а ФАКТ: объявлены ли уже эти пути кем-нибудь.
+# Свой drop-in по своему имени — способ поставить второй такой же рядом с
+# чужим: список сложится, но два файла об одном будут расходиться при
+# следующей правке, и никто не узнает, какой из них главный.
+missing=0
+for p in "${paths[@]}"; do
+  grep -qs -- "^ReadWritePaths=.*${p}\b" "$DROPIN_DIR"/*.conf 2>/dev/null || missing=1
+done
+if [ "$missing" = 0 ] && [ -d "$DROPIN_DIR" ]; then
+  log "все пути уже объявлены существующими drop-in — ничего не меняю"
+  ls -1 "$DROPIN_DIR" | sed 's/^/   /'
+  exit 0
+fi
+
 if [ "$dry_run" = 1 ]; then
   printf '   [сухой прогон] %s <- ReadWritePaths для перечисленных\n' "$DROPIN"
   exit 0
