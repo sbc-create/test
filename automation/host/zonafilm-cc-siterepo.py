@@ -835,6 +835,7 @@ check "activate-sh-syntax"   bash -n deploy/activate.sh
 check "deactivate-sh-syntax" bash -n deploy/deactivate.sh
 check "deploy-rollback-smoke" python3 checks/deploy_smoke.py
 check "home-categories"      python3 checks/home_categories.py
+check "ratings-visible"      python3 checks/ratings_visible.py
 check "site-modules-compile" python3 -m compileall -q src
 
 exit "$fail"
