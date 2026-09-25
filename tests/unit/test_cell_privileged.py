@@ -339,3 +339,80 @@ def test_появившееся_дополнение_не_считается_н�
 
     (цель / "zona-01-popular-weekly.json").write_text("[]", encoding="utf-8")
     assert privileged.снимок_совпадает(источник, цель, "zona-01") is True
+
+
+def test_происхождение_выпуска_лежит_рядом_с_кодом(tmp_path):
+    """Каталог выпуска обязан сам отвечать, откуда он.
+
+    `releases/<commit12>` называет двенадцать знаков коммита и больше ничего:
+    ни digest, ни времени установки, ни метки, которую витрина объявит. Кто
+    смотрит на сайт, а не в /var/lib/site-cells, проверить происхождение
+    исполняемого выпуска не мог.
+
+    Отдельная причина — затворы активации. Подтверждать выпуск заголовком
+    `X-Site-Factory-Build-Id` нельзя там, где build_id берётся из манифеста
+    ЗАКРЕПЛЁННОГО шаблона: это значение одинаково у всех выпусков витрины и
+    даже у соседей семейства, то есть не различает то, что должно различать.
+    Поэтому `live_build_id` читается из манифеста ЭТОГО дерева, а не собирается
+    по правилу: правило может разойтись со сборщиком, манифест — нет.
+    """
+    import json
+
+    выпуск = tmp_path / "выпуск"
+    (выпуск / "config").mkdir(parents=True)
+    (выпуск / "config" / "template-manifest.json").write_text(
+        json.dumps({"build_id": "aaaaaaaaaaaa-zona-01"}), encoding="utf-8")
+    (выпуск / "config" / "site.json").write_text(
+        json.dumps({"entrypoint": "lords-frontend.py"}), encoding="utf-8")
+
+    итог = privileged._записать_происхождение(
+        выпуск, site_id="zona-01", commit="a" * 40,
+        digest="sha256:" + "b" * 64, account="nobody")
+
+    assert итог["file"] == privileged.ФАЙЛ_ПРОИСХОЖДЕНИЯ
+    запись = json.loads((выпуск / итог["file"]).read_text(encoding="utf-8"))
+    assert запись["commit"] == "a" * 40
+    assert запись["digest"] == "sha256:" + "b" * 64
+    assert запись["live_build_id"] == "aaaaaaaaaaaa-zona-01", (
+        "метка выпуска обязана приходить из манифеста этого дерева")
+    assert запись["entrypoint"] == "lords-frontend.py"
+    assert запись["installed_by"] == "cell-executor"
+
+
+def test_свой_манифест_не_затирает_чужой(tmp_path):
+    """Артефакт мог принести файл с тем же именем — его данные не наши."""
+    import json
+
+    выпуск = tmp_path / "выпуск"
+    выпуск.mkdir()
+    чужой = {"это": "из артефакта"}
+    (выпуск / privileged.ФАЙЛ_ПРОИСХОЖДЕНИЯ).write_text(
+        json.dumps(чужой), encoding="utf-8")
+
+    итог = privileged._записать_происхождение(
+        выпуск, site_id="zona-01", commit="c" * 40,
+        digest="sha256:" + "d" * 64, account="nobody")
+
+    assert итог["file"] == privileged.ФАЙЛ_ПРОИСХОЖДЕНИЯ_ЗАПАСНОЙ
+    assert json.loads((выпуск / privileged.ФАЙЛ_ПРОИСХОЖДЕНИЯ).read_text(
+        encoding="utf-8")) == чужой, "файл из артефакта затёрт"
+    своё = json.loads((выпуск / итог["file"]).read_text(encoding="utf-8"))
+    assert своё["commit"] == "c" * 40
+
+
+def test_происхождение_без_манифеста_шаблона_не_падает(tmp_path):
+    """Не у каждого семейства есть манифест шаблона: Yummy обходится без него.
+
+    Отказ здесь означал бы, что выпуск не установится вовсе из-за отсутствия
+    необязательного файла.
+    """
+    import json
+
+    выпуск = tmp_path / "выпуск"
+    выпуск.mkdir()
+    итог = privileged._записать_происхождение(
+        выпуск, site_id="yummy-biz", commit="e" * 40,
+        digest="sha256:" + "f" * 64, account="nobody")
+    запись = json.loads((выпуск / итог["file"]).read_text(encoding="utf-8"))
+    assert запись["live_build_id"] == ""
+    assert запись["entrypoint"] == ""

@@ -281,6 +281,8 @@ def install_release(site_id: str, артефакт: Path, digest: str, *,
         shutil.chown(путь, п.account, п.account)
     shutil.chown(временный, п.account, п.account)
     перенесено = _перенести_локальную_настройку(временный, п)
+    происхождение = _записать_происхождение(
+        временный, site_id=site_id, commit=commit, digest=факт, account=п.account)
     if выпуск.exists():
         shutil.rmtree(выпуск)
     временный.rename(выпуск)
@@ -293,7 +295,81 @@ def install_release(site_id: str, артефакт: Path, digest: str, *,
     os.replace(врем_ссылка, п.candidate)
     return {"operation": "install_release", "site_id": site_id, "dry_run": False,
             "digest": факт, "release": str(выпуск), "candidate_link": str(п.candidate),
-            "local_config": перенесено}
+            "local_config": перенесено, "provenance": происхождение}
+
+
+#: Имя файла происхождения внутри каталога выпуска. Оно же читают затворы
+#: активации соседних витрин, поэтому меняться не должно.
+ФАЙЛ_ПРОИСХОЖДЕНИЯ = "release-manifest.json"
+ФАЙЛ_ПРОИСХОЖДЕНИЯ_ЗАПАСНОЙ = "release-installed.json"
+
+
+def _записать_происхождение(выпуск: Path, *, site_id: str, commit: str,
+                            digest: str, account: str) -> dict[str, Any]:
+    """Положить рядом с кодом ответ на вопрос «откуда этот выпуск».
+
+    Без этого файла происхождение выпуска знает только очередь: каталог
+    `releases/<commit12>` называет двенадцать знаков коммита и больше ничего —
+    ни прогона CI, ни digest, ни времени установки. Проверить постфактум, что
+    исполняемый выпуск пришёл штатным путём, можно было только сверкой с
+    результатами в /var/lib/site-cells, а они живут отдельно от сайта и могут
+    быть недоступны тому, кто смотрит на сайт.
+
+    Отдельная причина — затворы активации. Подтверждать выпуск по заголовку
+    `X-Site-Factory-Build-Id` нельзя там, где build_id берётся из манифеста
+    ЗАКРЕПЛЁННОГО шаблона: такое значение одинаково у всех выпусков витрины и
+    даже у соседей семейства, то есть не различает то, что должно различать.
+    Здесь лежит метка именно этого выпуска.
+
+    Файл пишется ВНУТРЬ каталога выпуска и потому не входит в артефакт: digest
+    артефакта от него не меняется. Если артефакт уже содержит файл с таким
+    именем, он не затирается — своё уходит под запасное имя.
+    """
+    import json as _json
+    from datetime import datetime, timezone
+
+    живой = ""
+    манифест_шаблона = выпуск / "config" / "template-manifest.json"
+    if манифест_шаблона.is_file():
+        try:
+            живой = str(_json.loads(манифест_шаблона.read_text(encoding="utf-8"))
+                        .get("build_id") or "")
+        except (OSError, ValueError):
+            живой = ""
+
+    точка = ""
+    конфиг = выпуск / "config" / "site.json"
+    if конфиг.is_file():
+        try:
+            точка = str(_json.loads(конфиг.read_text(encoding="utf-8"))
+                        .get("entrypoint") or "")
+        except (OSError, ValueError):
+            точка = ""
+
+    запись = {
+        "schema_version": 1,
+        "site_id": site_id,
+        "commit": commit,
+        "digest": digest,
+        "release": выпуск.name,
+        # Метка, которую витрина объявит в ответах. Берётся из манифеста
+        # ЭТОГО дерева, а не собирается по правилу: правило может разойтись
+        # со сборщиком, а манифест — то, что рантайм действительно прочитает.
+        "live_build_id": живой,
+        "entrypoint": точка,
+        "installed_at": datetime.now(timezone.utc).isoformat(),
+        "installed_by": "cell-executor",
+    }
+    имя = (ФАЙЛ_ПРОИСХОЖДЕНИЯ if not (выпуск / ФАЙЛ_ПРОИСХОЖДЕНИЯ).exists()
+           else ФАЙЛ_ПРОИСХОЖДЕНИЯ_ЗАПАСНОЙ)
+    файл = выпуск / имя
+    файл.write_text(_json.dumps(запись, ensure_ascii=False, indent=1) + "\n",
+                    encoding="utf-8")
+    try:
+        shutil.chown(файл, account, account)
+    except (LookupError, PermissionError):
+        pass
+    return {"file": имя, "live_build_id": живой, "entrypoint": точка}
 
 
 def _каталог_юнитов() -> Path:
