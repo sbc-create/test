@@ -1,0 +1,64 @@
+{
+  "поиск": {
+    "status": 200,
+    "карточек": 9
+  },
+  "переход_с_главной": {
+    "slug": "serdce-zverya",
+    "status": 200,
+    "плеер": true,
+    "оценки": 6
+  },
+  "смена_серии": {
+    "slug": "ya-hochu-zakonchit-etu-igru-lyubvi",
+    "серии": [
+      {
+        "путь": "/title/ya-hochu-zakonchit-etu-igru-lyubvi/season-1/episode-1/",
+        "status": 200,
+        "плеер": true,
+        "номер_в_плеере": [
+          "1"
+        ]
+      },
+      {
+        "путь": "/title/ya-hochu-zakonchit-etu-igru-lyubvi/season-1/episode-2/",
+        "status": 200,
+        "плеер": true,
+        "номер_в_плеере": [
+          "2"
+        ]
+      },
+      {
+        "путь": "/title/ya-hochu-zakonchit-etu-igru-lyubvi/season-1/episode-3/",
+        "status": 200,
+        "плеер": true,
+        "номер_в_плеере": [
+          "3"
+        ]
+      }
+    ]
+  },
+  "каталог": {
+    "status": 200,
+    "карточек": 28
+  },
+  "фильтр_жанр": {
+    "status": 200,
+    "карточек": 28
+  },
+  "фильтр_год": {
+    "status": 200,
+    "карточек": 28
+  },
+  "фильмы": {
+    "status": 200,
+    "карточек": 28
+  },
+  "сериалы": {
+    "status": 200,
+    "карточек": 28
+  },
+  "404": {
+    "status": 404
+  }
+}

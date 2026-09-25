@@ -140,10 +140,16 @@ def main() -> int:
         "LORDS_TEMPLATE_MANIFEST": окружение["LORDS_TEMPLATE_MANIFEST"],
         "LORDS_CATALOG": окружение["LORDS_CATALOG"],
         "release": str(релиз / "lords-frontend.py"),
+        "site_entry": str(КОРЕНЬ / "src" / "serve.py"),
     }})
 
     os.environ.update(окружение)
-    точка = str(релиз / "lords-frontend.py")
+    # Точка входа — файл сайта, а не артефакт шаблона напрямую. Он импортирует
+    # закреплённый артефакт (тот защищён `if __name__ == "__main__"` и при
+    # импорте ничего не запускает) и ставит поверх правки этой витрины:
+    # главную, оценку на карточке, стиль. Артефакт остаётся байт в байт тем,
+    # что записан в pins.lock.json, и проверка sha256 продолжает работать.
+    точка = str(КОРЕНЬ / "src" / "serve.py")
     аргументы = sys.argv[1:] or ["--port", str(cfg["port"])]
     # execv, а не import: `__file__` работающего процесса становится путём
     # неизменяемого релиза, и вопрос «какой релиз исполняется» перестаёт быть
@@ -817,6 +823,8 @@ check "rollback-sh-syntax"   bash -n deploy/rollback.sh
 check "activate-sh-syntax"   bash -n deploy/activate.sh
 check "deactivate-sh-syntax" bash -n deploy/deactivate.sh
 check "deploy-rollback-smoke" python3 checks/deploy_smoke.py
+check "home-categories"      python3 checks/home_categories.py
+check "site-modules-compile" python3 -m compileall -q src
 
 exit "$fail"
 '''

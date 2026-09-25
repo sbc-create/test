@@ -1,0 +1,11 @@
+{
+  "public_url": "https://zonafilm.cc/",
+  "status": 200,
+  "build_id": "zona-02-1015c650d8be",
+  "robots": "noindex, nofollow, noindex, nofollow",
+  "новый_вид_на_публике": false,
+  "старый_баннер_на_публике": true,
+  "служба_исполняет": "/srv/lords/.frontend/sites/zona-02/releases/a9fd36d5a22c/template/zona-02-1015c650d8be/lords-frontend.py",
+  "current": "/srv/lords/.frontend/sites/zona-02/releases/8c884b43f6ec",
+  "нужен_перезапуск": true
+}

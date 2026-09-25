@@ -1,0 +1,82 @@
+{
+  "origin": "http://zonafilm.cc:9425",
+  "viewports": {
+    "1440": {
+      "h2": [
+        "Фильмы в каталоге",
+        "Новые фильмы",
+        "Новые сериалы",
+        "Обновления серий",
+        "Анонсы",
+        "Фильмы с высокими оценками",
+        "Сериалы с высокими оценками",
+        "Подборки",
+        "Разделы"
+      ],
+      "posters_total": 78,
+      "collections": 8,
+      "collection_images": 32,
+      "ratings": 78,
+      "no_rating": 1,
+      "slider_visible": {
+        "fully": 7,
+        "itemW": 170,
+        "railW": 1376,
+        "scrollW": 4356
+      },
+      "arrows_visible": true,
+      "arrow_scrolled": {
+        "before": 0,
+        "after": 1274,
+        "moved": true
+      },
+      "keyboard_scrolled": {
+        "before": 0,
+        "after": 1274,
+        "moved": true
+      },
+      "autoplay_off": true,
+      "page_overflow": false,
+      "page_height": 6284,
+      "images_total": 119,
+      "images_loaded": 110,
+      "broken_images": 0
+    },
+    "390": {
+      "h2": [
+        "Фильмы в каталоге",
+        "Новые фильмы",
+        "Новые сериалы",
+        "Обновления серий",
+        "Анонсы",
+        "Фильмы с высокими оценками",
+        "Сериалы с высокими оценками",
+        "Подборки",
+        "Разделы"
+      ],
+      "posters_total": 78,
+      "collections": 8,
+      "collection_images": 32,
+      "ratings": 78,
+      "no_rating": 1,
+      "slider_visible": {
+        "fully": 2,
+        "itemW": 148,
+        "railW": 366,
+        "scrollW": 3828
+      },
+      "arrows_visible": false,
+      "keyboard_scrolled": {
+        "before": 0,
+        "after": 160,
+        "moved": true
+      },
+      "autoplay_off": true,
+      "page_overflow": false,
+      "page_height": 15690,
+      "images_total": 119,
+      "images_loaded": 99,
+      "broken_images": 0
+    }
+  }
+}
