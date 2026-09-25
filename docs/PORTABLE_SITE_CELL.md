@@ -198,6 +198,78 @@ HOME и другой источник учётных данных. Устано�
 Копии, которые снимает `wire-nginx-upstream.sh`, лежат вне `/etc/nginx`, и это
 проверяется в самом сценарии.
 
+## Проверенные приёмы эксплуатации
+
+Собрано по фактически выполненным проверкам этой работы. Команды приведены в том
+виде, в каком они давали ответ; секретов здесь нет.
+
+### Что исполняется на самом деле
+
+Метке страницы и `/__template_version` верить нельзя: обе берут значение из
+манифеста, прочитанного процессом ПРИ СТАРТЕ. После замены манифеста или
+переключения ссылки без перезапуска витрина объявляет прежний выпуск. Дважды
+приводило к неверным выводам — у animedia.icu и у zona-02.
+
+    # какой файл исполняет служба на порту
+    python3 -c "import os
+    for pid in sorted(os.listdir('/proc')):
+        if not pid.isdigit(): continue
+        try: cl=open(f'/proc/{pid}/cmdline','rb').read().decode().split(chr(0))
+        except OSError: continue
+        s=' '.join(a for a in cl if a)
+        if '--port 9123' in s and '.py' in s: print(pid, s)"
+
+    # кто держит слушающий сокет (uid, без root)
+    python3 -c "import pwd
+    цель=format(9120,'04X')
+    for l in open('/proc/net/tcp').read().splitlines()[1:]:
+        p=l.split()
+        if p[3]=='0A' and p[1].endswith(':'+цель):
+            print('uid', p[7], pwd.getpwuid(int(p[7])).pw_name)"
+
+### Кем поставлен выпуск
+
+    python3 -m factory cell provenance     # обход очереди виден сразу
+
+Отвечает, какой выпуск исполняется у каждой витрины и есть ли у него результат
+исполнителя. Различает «исполнитель разворачивал» и «дошло до успеха»: выпуск
+из откатившейся попытки обходом не является.
+
+### Готовность проверки происхождения
+
+    python3 -m factory cell ci-ready       # по каждому репозиторию отдельно
+
+Запускать имеет смысл из контекста службы, а не из своей оболочки: у неё другой
+пользователь и другой источник учётных данных.
+
+    systemd-run --property=LoadCredential=gh-token:<путь> \
+                --property=WorkingDirectory=/usr/local/lib/site-factory-cell \
+                /usr/bin/python3 -m factory cell ci-ready
+
+### Выпуск через штатную очередь
+
+Исполнитель принимает только разрешённые ветки (`main`, `claude/extract-*`,
+`release/*`). Если сессия сайта работает в своей ветке, релизная переводится
+перемоткой без слияния — история не переписывается и чужие коммиты не
+трогаются:
+
+    git -C var/site-repos/<сайт> checkout claude/extract-<сайт>
+    git -C var/site-repos/<сайт> merge --ff-only <коммит>
+    git -C var/site-repos/<сайт> push origin claude/extract-<сайт>
+    python3 -m factory cell trigger --site <site_id> --confirm-activation
+
+Перемотка запускает прогон CI на разрешённой ветке с тем же SHA — именно его
+исполнитель и требует.
+
+### Настоящая проверка воспроизведения
+
+HTTP 200 работу плеера не подтверждает. Проверяется браузером:
+
+    node automation/host/nova-player-playback-check.js \
+         --urls <файл со списком {url,kind,group}> --viewport desktop --out <файл>
+
+Успех — `REAL_PLAYBACK_OK=N/N`: медиа дошло до `readyState>=2` и время росло.
+
 ## Названные зависимости, ожидающие чужой стороны
 
 Фиксируются здесь, а не в переписке: сообщения между сессиями бывают удержаны
