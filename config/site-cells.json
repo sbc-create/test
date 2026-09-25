@@ -729,24 +729,24 @@
         "note": "Владелец выкладки — терминал ZONA-02 (ветка claude/bootstrap-zona-02). Наблюдён процесс на порту 9123 и релиз zona-02-1015c650d8be. Публичной конфигурации nginx нет. Отсюда не выкладывается."
       },
       "content_revision": null,
-      "last_update": "2026-09-25T21:44:56.010673+00:00",
+      "last_update": "2026-09-25T21:54:29.825297+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
-        "unit": "nova-zona-02.service",
-        "previous_unit": null,
+        "unit": "nova-zonafilm-cc.service",
+        "previous_unit": "nova-zona-02.service",
         "port": 9123,
-        "account": "lords",
-        "app_dir": "/srv/lords/.frontend/sites/zona-02/releases/a9fd36d5a22c",
-        "data_dir": null,
-        "legacy_root": null,
-        "reload": "unknown",
-        "managed_by": "monolith",
+        "account": "zonafilm-cc",
+        "app_dir": "/srv/zonafilm-cc/app",
+        "data_dir": "/srv/zonafilm-cc/data",
+        "legacy_root": "<data>/site",
+        "reload": "mtime",
+        "managed_by": "cell",
         "data_owner": "pipeline"
       },
       "release": {
-        "hold": true,
-        "hold_reason": "выкладку ведёт терминал ZONA-02; публичного DNS ещё нет",
+        "hold": false,
+        "hold_reason": "снято 25.09: основание отпало. DNS zonafilm.cc и www разрешаются в 45.131.182.225 (проверено), сессия zona-02-launch письменно просила провести выпуск штатной очередью, репозиторий выделен (sbc-create/site-zonafilm-cc, ветка claude/extract-zonafilm-cc). Прежняя причина — «нет публичного DNS» — больше не верна.",
         "branch": null
       }
     }
