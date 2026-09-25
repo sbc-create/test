@@ -99,6 +99,40 @@ else
   fi
 fi
 
+# ------------------------------------------- 5. песочница издателя каталога
+log "шаг 5: издателю каталога — право писать в хранилища ячеек"
+if [ "$dry_run" = 1 ]; then
+  printf '   [сухой прогон] bash automation/host/install-publisher-cell-paths.sh\n'
+elif [ -f /etc/systemd/system/nova-daily-refresh.service.d/10-cell-data-paths.conf ]; then
+  step_ok "пути ячеек уже объявлены издателю"
+elif bash "${SRC_ROOT}/automation/host/install-publisher-cell-paths.sh"; then
+  step_ok "издатель может писать в хранилища ячеек"
+else
+  step_fail "песочница издателя" "см. вывод выше"
+fi
+
+# ----------------------------------------- 6. сборщик недельного снимка Zona
+log "шаг 6: сборщик недельного снимка zona-01"
+WEEKLY_SRC=/srv/zonafilm-space/current/deploy
+if [ "$dry_run" = 1 ]; then
+  printf '   [сухой прогон] поставить zonafilm-space-popular-weekly.{service,timer}\n'
+elif [ -f /etc/systemd/system/zonafilm-space-popular-weekly.timer ]; then
+  step_ok "сборщик недельного снимка уже стоит"
+elif [ ! -f "${WEEKLY_SRC}/zonafilm-space-popular-weekly.service" ]; then
+  step_fail "сборщик снимка" "нет ${WEEKLY_SRC}/zonafilm-space-popular-weekly.service — выпуск с ним ещё не переключён"
+else
+  install -m 0644 "${WEEKLY_SRC}/zonafilm-space-popular-weekly.service" /etc/systemd/system/
+  install -m 0644 "${WEEKLY_SRC}/zonafilm-space-popular-weekly.timer" /etc/systemd/system/
+  systemctl daemon-reload
+  systemctl enable --now zonafilm-space-popular-weekly.timer
+  if systemctl start zonafilm-space-popular-weekly.service \
+     && [ -f /srv/zonafilm-space/data/zona-01-popular-weekly.json ]; then
+    step_ok "сборщик снимка поставлен, первый снимок собран"
+  else
+    step_fail "сборщик снимка" "юнит поставлен, но снимок не появился: journalctl -u zonafilm-space-popular-weekly.service -n 30"
+  fi
+fi
+
 echo
 log "итог"
 printf '   %s\n' "${results[@]:-нечего делать}"
