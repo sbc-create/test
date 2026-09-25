@@ -696,7 +696,7 @@
       "status": "staged",
       "repo": {
         "kind": "remote",
-        "path": null,
+        "path": "var/site-repos/zonafilm-cc",
         "remote": "https://github.com/sbc-create/site-zonafilm-cc"
       },
       "template": {
@@ -729,7 +729,7 @@
         "note": "Владелец выкладки — терминал ZONA-02 (ветка claude/bootstrap-zona-02). Наблюдён процесс на порту 9123 и релиз zona-02-1015c650d8be. Публичной конфигурации nginx нет. Отсюда не выкладывается."
       },
       "content_revision": null,
-      "last_update": "2026-09-22T23:41:04.126983+00:00",
+      "last_update": "2026-09-25T21:44:56.010673+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
