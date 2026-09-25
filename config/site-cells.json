@@ -738,11 +738,13 @@
         "port": 9123,
         "account": "zonafilm-cc",
         "app_dir": "/srv/zonafilm-cc/app",
-        "data_dir": "/srv/zonafilm-cc/data",
+        "data_dir": "/srv/lords/.frontend/sites/zona-02/data",
         "legacy_root": "<data>/site",
         "reload": "mtime",
         "managed_by": "cell",
-        "data_owner": "pipeline"
+        "data_owner": "pipeline",
+        "data_dir_after_relocation": "/srv/zonafilm-cc/data",
+        "data_dir_note": "Каталог данных назван ТЕКУЩИЙ, а не будущий. Витрина читает /srv/lords/.frontend/sites/zona-02/data — это видно по её юниту (SITE_ROOT=/srv/lords/.frontend/sites/zona-02) и по файлу, который она объявляет ревизией. Пока здесь стоял /srv/zonafilm-cc/data, издатель докладывал «каталога данных не существует» и пропускал витрину: сайт четвёртые сутки показывал снимок от 22.09 при источнике от 25.09, и ошибки при этом не возникало ни у кого. Реестр обязан описывать, где сайт живёт СЕЙЧАС, иначе производитель кладёт снимок мимо живого сайта. Значение меняется на data_dir_after_relocation в том же шаге, в котором витрина переезжает в /srv/zonafilm-cc."
       },
       "release": {
         "hold": false,

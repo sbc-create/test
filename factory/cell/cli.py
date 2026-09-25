@@ -167,6 +167,14 @@ def cmd_rollback(args) -> int:
     return 0
 
 
+def cmd_content(args) -> int:
+    """Свежесть содержимого витрин: расхождение ревизий с названной причиной."""
+    from factory.cell import content
+    итог = content.свежесть(сайты=[args.site] if args.site else None)
+    _print(итог)
+    return 0 if итог["ok"] else 1
+
+
 def cmd_freshness(args) -> int:
     cell = registry.resolve(args.site)
     path = _layout(args).data / "sync-checkpoint.json"
@@ -342,6 +350,7 @@ ACTIONS = {
     "onboarding": cmd_onboarding,
     "extracted": cmd_extracted,
     "activate": cmd_activate,
+    "content": cmd_content,
     "deliver": cmd_deliver,
     "runtime": cmd_runtime,
     "submit": cmd_submit,
