@@ -60,7 +60,9 @@ for доп in ДОБАВКА:
              доп.get("year", 2026), доп.get("rating", 8.5), доп["published_at"],
              сезоны=доп.get("seasons", ()), играет=доп.get("playable", True))
 
-site = "lords-90"
+# Идентификатор витрины берётся из имени каталога данных, если он назван
+# явно четвёртым аргументом: один засев обслуживает все проверочные экземпляры.
+site = sys.argv[4] if len(sys.argv) > 4 else "lords-90"
 (КУДА / f"{site}-catalog.json").write_text(json.dumps({
     "revision": ПОКОЛЕНИЕ, "built_at": "2026-09-26T03:30:00+00:00", "items": записи,
 }, ensure_ascii=False), encoding="utf-8")

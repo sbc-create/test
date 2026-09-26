@@ -10,10 +10,21 @@
     "automation/host/lords_sections.py",
     "automation/host/community_http.py"
   ],
-  "profiles": ["lords-general", "lords-new", "lords-curated", "lords-genre"],
-  "themes": ["светлая", "тёмная"],
+  "profiles": [
+    "lords-general",
+    "lords-new",
+    "lords-curated"
+  ],
+  "themes": [
+    "светлая",
+    "тёмная"
+  ],
   "delivered_separately": {
     "community.py": "20260923T190000Z-community-2-2-12"
   },
-  "previous_version": "1.0.2"
+  "previous_version": "1.0.2",
+  "profiles_unsupported": {
+    "lords-genre": "Профиль есть в пуле и закреплён за lords-04, но шаблон 1.1.0 его не поддерживает, и объявлять поддержку было бы обещанием без содержания. Не хватает двух вещей. Первая: в рантайме нет записи в ДИЗАЙН_ПО_ПРОФИЛЮ, поэтому витрина отдаёт общий лист lords-sheet — она неотличима от lords-general, а профиль обязан различаться. Вторая: профиль владеет фасетами genres_index, years_index и countries_index, а рантайм их как самостоятельные страницы не отдаёт: /years/ и /countries/ отвечают 404, /genres/ уводит переходом на /catalog/. Проверено на свежем экземпляре 2026-09-26; то же поведение у всех профилей, но для lords-genre это и есть его содержание."
+  },
+  "profiles_note": "profiles — то, что шаблон умеет и что проверено на свежем экземпляре. profiles_unsupported — то, что объявлено пулом, но шаблоном пока не поддержано, с причиной. Профиль не может отсутствовать в обоих списках: это сторожит tests/unit/test_lords_template_single_source.py."
 }
