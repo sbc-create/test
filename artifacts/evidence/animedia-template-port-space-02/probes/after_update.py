@@ -8,6 +8,7 @@ e7cd4829fadb, витрина перечитала его сама), релиз �
 import json
 import os, re, sys, urllib.request
 from pathlib import Path
+САЙТ = os.environ.get("ANIMEDIA_PROBE_SITE", "animedia-verify")
 V = Path(sys.argv[1]); БАЗА = os.environ.get("ANIMEDIA_PROBE_BASE", "http://127.0.0.1:9310")
 # Произведение берётся из того, что выбрал шаг с голосом, а не из аргумента:
 # аргумент расходится с данными молча.
@@ -95,7 +96,7 @@ if лента:
     п("история ленты не стёрта обновлением", len(адреса) >= 10, f"карточек {len(адреса)}")
     п("одно произведение — одна карточка", len(тайтлы) == len(адреса))
 реестр = json.loads(
-    (V / "data" / "animedia-verify-episode-events.json").read_text(encoding="utf-8"))
+    (V / "data" / f"{САЙТ}-episode-events.json").read_text(encoding="utf-8"))
 п("реестр событий уцелел", len(реестр.get("events") or []) >= 60,
   str(len(реестр.get("events") or [])))
 
