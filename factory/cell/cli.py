@@ -355,7 +355,10 @@ def cmd_newsite(args) -> int:
                 "profile": заказ.profile,
                 "runtime_files": list(newsite.РАНТАЙМ_LORDS)})
         return 0
-    итог = newsite.создать(заказ, корень=PATHS.root, куда=куда, force=args.force)
+    реестр = Path(args.registry) if getattr(args, "registry", None) else None
+    итог = newsite.создать(заказ, корень=PATHS.root, куда=куда, force=args.force,
+                           реестр=реестр,
+                           регистрировать=not getattr(args, "no_register", False))
     _print(итог)
     return 0
 
@@ -400,6 +403,11 @@ def register(subparsers) -> None:
     parser.add_argument("--port", help="порт витрины для newsite")
     parser.add_argument("--site-name", dest="site_name",
                         help="видимое имя витрины для newsite")
+    parser.add_argument("--registry",
+                        help="файл реестра ячеек (по умолчанию config/site-cells.json)")
+    parser.add_argument("--no-register", dest="no_register", action="store_true",
+                        help="не записывать ячейку в реестр: сайт не будет "
+                             "получать доставку содержимого")
     parser.add_argument("--output", help="куда положить результат")
     parser.add_argument("--artifact", help="путь к артефакту релиза")
     parser.add_argument("--manifest", help="путь к release-manifest.json")

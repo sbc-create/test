@@ -40,7 +40,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from factory.cell import extract
+from factory.cell import extract, registry
 
 #: Файлы рантайма семейства. Порядок не важен, состав — важен: недостающий
 #: модуль означает витрину, которая молча теряет половину поведения.
@@ -130,8 +130,47 @@ def _настройка_сообщества(корень: Path, заказ: З�
         sys.modules.pop(имя, None)
 
 
+def паспорт_ячейки(заказ: Заказ, *, куда: Path, аккаунт: str,
+                   корень_сайта: str) -> registry.Cell:
+    """Паспорт новой ячейки для реестра.
+
+    Без записи в реестре сайт для производителей содержимого НЕ СУЩЕСТВУЕТ:
+    `factory.cell.delivery` берёт каталог данных из реестра и отказывает
+    словами «сайта нет в реестре ячеек», а `factory.cell.runtime` не может
+    ответить, кого перезапускать после доставки. Сайт поднялся бы, показал
+    засеянный каталог и больше никогда не обновился — снаружи это выглядит не
+    как поломка, а как витрина, которая «почему-то не пополняется».
+
+    `reload: "restart"` — осознанное умолчание, а не заглушка. Витрина читает
+    снимок при старте; перечитывания по mtime у неё нет, и объявить его
+    значило бы пообещать производителю поведение, которого нет. Пропущенный
+    перезапуск незаметен и оставляет сайт на вчерашнем каталоге, лишний —
+    заметен и дорог, поэтому умолчание осторожное.
+    """
+    return registry.Cell(
+        site_id=заказ.site_id,
+        domain=заказ.domain,
+        status="planned",
+        repo={"kind": "local", "path": str(куда)},
+        template={"template_id": заказ.profile, "family": заказ.family},
+        runtime={
+            "unit": f"nova-{аккаунт}.service",
+            "previous_unit": None,
+            "port": заказ.port,
+            "account": аккаунт,
+            "app_dir": f"{корень_сайта}/current",
+            "data_dir": f"{корень_сайта}/data",
+            "legacy_root": "<data>/site",
+            "reload": "restart",
+            "managed_by": "cell",
+            "data_owner": "pipeline",
+        },
+    )
+
+
 def создать(заказ: Заказ, *, корень: Path, куда: Path,
-            force: bool = False) -> dict[str, Any]:
+            force: bool = False, реестр: Path | None = None,
+            регистрировать: bool = True) -> dict[str, Any]:
     """Собрать проект нового сайта из шаблона этого репозитория."""
     пробелы = заказ.пробелы()
     if пробелы:
@@ -320,9 +359,29 @@ def создать(заказ: Заказ, *, корень: Path, куда: Path
         "5. Данные и секреты не коммитятся.\n"
         "6. Живой код по SSH не правится.\n", encoding="utf-8")
 
+    # --- реестр: без него производитель о сайте не узнает --------------------
+    запись = None
+    if регистрировать:
+        паспорт = паспорт_ячейки(заказ, куда=куда, аккаунт=аккаунт,
+                                 корень_сайта=корень_сайта)
+        try:
+            ячейка = registry.register(паспорт, path=реестр, replace=force)
+            запись = {"registry": str(реестр or registry.registry_path()),
+                      "status": ячейка.status,
+                      "data_dir": ячейка.runtime.get("data_dir"),
+                      "unit": ячейка.runtime.get("unit"),
+                      "reload": ячейка.runtime.get("reload")}
+        except registry.RegistryError as ош:
+            # Домен уже за кем-то закреплён или паспорт не прошёл форму.
+            # Проект при этом собран: удалять его молча нельзя, а делать вид,
+            # что сайт зарегистрирован, — тем более.
+            запись = {"registry": str(реестр or registry.registry_path()),
+                      "error": str(ош)}
+
     return {
         "site_id": заказ.site_id,
         "domain": заказ.domain,
+        "cell": запись,
         "community": {
             "storage_env": настройка_сообщества.путь_env,
             "moderator_key_env": настройка_сообщества.ключ_модератора_env,

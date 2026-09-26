@@ -387,10 +387,32 @@ def check_player(config: dict, env: dict) -> list:
 
 
 def check_data(env: dict) -> list:
+    """Снимок каталога есть И читается.
+
+    Проверялось только наличие файла. Битый снимок — доставленный мусор,
+    оборванная запись, пустой файл — проходил проверку и ронял витрину уже на
+    разборе, то есть ПОСЛЕ того, как выпуск объявил себя исправным. Отличить
+    «нечего показывать» от «показывать нечем» снаружи было нельзя.
+    """
     bad = []
     catalog = env.get("LORDS_CATALOG") or env.get("ANIMEDIA_CATALOG")
-    if catalog and not Path(catalog).is_file():
+    if not catalog:
+        return bad
+    path = Path(catalog)
+    if not path.is_file():
         bad.append(f"нет снимка каталога {{catalog}}: витрине нечего показывать")
+        return bad
+    try:
+        with path.open("rb") as fh:
+            snapshot = json.load(fh)
+    except ValueError as err:
+        bad.append(f"снимок каталога {{catalog}} не читается как JSON: {{err}}")
+        return bad
+    except OSError as err:
+        bad.append(f"снимок каталога {{catalog}} не открывается: {{err}}")
+        return bad
+    if not isinstance(snapshot, dict) or not isinstance(snapshot.get("items"), list):
+        bad.append(f"в снимке {{catalog}} нет списка items: это не снимок каталога")
     return bad
 
 
