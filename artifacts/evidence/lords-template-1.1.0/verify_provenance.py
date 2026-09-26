@@ -4,7 +4,13 @@
 Три звена, и каждое проверяется отдельно. Обрыв любого означает, что по цифрам
 витрины нельзя сказать, какой код работает, — а решают именно по ним.
 """
-import hashlib, json, subprocess, sys, tarfile, tempfile, urllib.request
+import hashlib
+import json
+import subprocess
+import sys
+import tarfile
+import tempfile
+import urllib.request
 from pathlib import Path
 
 N = Path("/tmp/claude-1001/-home-claude/9e5d5d7c-1b72-454b-9239-dbb120e73b48/scratchpad/new-lords-90")
