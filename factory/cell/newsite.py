@@ -150,9 +150,16 @@ def паспорт_ячейки(заказ: Заказ, *, куда: Path, ак�
     return registry.Cell(
         site_id=заказ.site_id,
         domain=заказ.domain,
+        aliases=(),
         status="planned",
         repo={"kind": "local", "path": str(куда)},
         template={"template_id": заказ.profile, "family": заказ.family},
+        pins={},
+        deploy_target={},
+        # publisher_id сюда не выдумывается: он приходит из Secret Hub и
+        # проверяется отдельно. Пустое поле — это BLOCKED_INPUT, а не ноль.
+        publisher={},
+        data={"database": None, "media": None},
         runtime={
             "unit": f"nova-{аккаунт}.service",
             "previous_unit": None,
