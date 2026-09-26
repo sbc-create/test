@@ -756,6 +756,58 @@
         "hold_reason": "снято 25.09: основание отпало. DNS zonafilm.cc и www разрешаются в 45.131.182.225 (проверено), сессия zona-02-launch письменно просила провести выпуск штатной очередью, репозиторий выделен (sbc-create/site-zonafilm-cc, ветка claude/extract-zonafilm-cc). Прежняя причина — «нет публичного DNS» — больше не верна.",
         "branch": null
       }
+    },
+    {
+      "site_id": "zona-03",
+      "domain": "zonafilm12.site",
+      "aliases": [
+        "www.zonafilm12.site"
+      ],
+      "status": "planned",
+      "repo": {
+        "kind": "remote",
+        "path": "var/site-repos/zonafilm12-site",
+        "remote": "https://github.com/sbc-create/site-zonafilm12-site"
+      },
+      "template": {
+        "template_id": "zona-nova",
+        "order_id": "launch-zonafilm12-site",
+        "family": "zona",
+        "note": "Экземпляр из site-zonafilm-space@75a33eaf46ea — выпуска, проверенного публично. Из свободного пула не выдавался: пул пуст, пополнение — вход владельца."
+      },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
+      "pins": {
+        "template": "zona-nova",
+        "modules": {},
+        "schemas": {
+          "site_config": "1"
+        }
+      },
+      "runtime": {
+        "unit": "nova-zonafilm12-site.service",
+        "previous_unit": null,
+        "port": 9124,
+        "account": "zonafilm12-site",
+        "app_dir": "/srv/zonafilm12-site/app",
+        "data_dir": "/srv/zonafilm12-site/data",
+        "legacy_root": "<data>/site",
+        "reload": "mtime",
+        "managed_by": "cell",
+        "data_owner": "pipeline",
+        "unit_note": "Новый домен: прежней установки нет, поэтому previous_unit пуст и гасить при повышении нечего. managed_by сразу cell — монолита у этого сайта не существовало ни дня, и выбирать между двумя значениями enum не приходится: витрина принадлежит ячейке по построению. Состояние запуска живёт в status: planned до первого выпуска."
+      },
+      "release": {
+        "hold": false,
+        "hold_reason": null,
+        "branch": "release/zonafilm12-site"
+      },
+      "indexing": {
+        "desired_state": "CLOSED",
+        "reason": "Тестовый запуск новой партии. noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца."
+      }
     }
   ]
 }
