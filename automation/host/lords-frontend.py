@@ -1308,7 +1308,11 @@ padding:2px 0 10px;scrollbar-width:none;-ms-overflow-style:none}
 .zrl__vp::-webkit-scrollbar{display:none}
 .zrl__vp:focus-visible{outline:3px solid var(--t-acc);outline-offset:3px;border-radius:4px}
 .zrl__track{display:flex;column-gap:12px;min-width:min-content;align-items:stretch}
-.zrl__track>*{flex:0 0 42vw;scroll-snap-align:start;min-width:0}
+/* Ширина карточки на телефоне подобрана так, чтобы следующая была видна
+   ЗАМЕТНО, а не на несколько пикселей: это подсказка, что лента
+   прокручивается, и при 42vw от неё оставалась полоска в 10 px — измерено
+   браузером на 390 px, видно было 2.06 карточки. При 36vw видно 2.38. */
+.zrl__track>*{flex:0 0 36vw;scroll-snap-align:start;min-width:0}
 @media(min-width:480px){.zrl__track>*{flex-basis:30vw}}
 @media(min-width:768px){.zrl__track>*{flex-basis:22vw}}
 @media(min-width:1024px){.zrl__track>*{flex-basis:17.5vw}}
