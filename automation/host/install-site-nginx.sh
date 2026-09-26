@@ -21,9 +21,11 @@ set -Eeuo pipefail
 
 site=""
 dry_run=0
+new_site=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --site) site="${2:-}"; shift ;;
+    --new-site) new_site=1 ;;
     --dry-run) dry_run=1 ;;
     *) echo "неизвестный аргумент: $1" >&2; exit 2 ;;
   esac
@@ -71,7 +73,35 @@ fi
 
 # Витрина обязана отвечать ДО того, как на неё направят маршрут: иначе первый
 # же посетитель получит 502, а причина будет выглядеть как ошибка nginx.
-"$PY" -c "
+#
+# У ПЕРВОГО запуска домена это требование невыполнимо, и не по недосмотру, а
+# по кругу в зависимостях: служба не поднимется, пока в хранилище витрины
+# ничего нет; положить туда выпуск может только исполнитель; а его
+# `switch_route` отказывает, пока файл upstream не включён в конфигурацию
+# nginx — то есть пока не выполнен этот сценарий. Круг размыкается здесь,
+# потому что терять на новом домене нечего: он никогда ничего не отдавал.
+#
+# Исключение узкое, и каждое из условий проверяется:
+#   * запрошено явно (--new-site);
+#   * конфигурации этого домена в nginx ещё нет;
+#   * в реестре витрина числится planned, то есть не работает;
+#   * файла upstream нет либо он пуст.
+# На действующей витрине ни одно из них не выполнится, и проверка останется.
+if [ "$new_site" = 1 ]; then
+  [ ! -f "${TARGET_DIR}/${site}.conf" ] \
+    || die "--new-site, но конфигурация ${TARGET_DIR}/${site}.conf уже есть: это не первый запуск"
+  [ ! -s "$upstream_file" ] \
+    || die "--new-site, но ${upstream_file} уже заполнен: маршрут существует"
+  status="$("$PY" -c "
+import json, sys
+d = json.load(open('$SRC_ROOT/config/site-cells.json', encoding='utf-8'))
+print(next((c.get('status') or '') for c in d.get('cells') or [] if c['site_id'] == '$site'), end='')
+")"
+  [ "$status" = "planned" ] \
+    || die "--new-site, но в реестре $site числится '$status', а не 'planned'"
+  log "  первый запуск домена: проверка отклика пропущена, до выпуска будет 502"
+else
+  "$PY" -c "
 import sys, urllib.request
 try:
     r = urllib.request.urlopen('http://127.0.0.1:$port/healthz', timeout=10)
@@ -79,7 +109,8 @@ try:
 except Exception:
     sys.exit(1)
 " || die "витрина не отвечает на 127.0.0.1:${port}/healthz — подключать нечего"
-log "  витрина отвечает на ${port}"
+  log "  витрина отвечает на ${port}"
+fi
 
 install -d -m 0755 "$CELLS"
 printf 'server 127.0.0.1:%s;\n' "$port" > "$upstream_file"

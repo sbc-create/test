@@ -37,16 +37,22 @@ bad() { printf '   \033[31m[нет]\033[0m %s\n' "$*"; }
 
 [ -n "$dry_run" ] || [ "$(id -u)" = 0 ] || { echo "нужен root" >&2; exit 1; }
 
-unit="$(python3 - "$site" <<'PY'
+
+# Реестр читается по АБСОЛЮТНОМУ пути от корня пакета. Раньше здесь стояло
+# относительное "config/site-cells.json", и запуск из любого каталога, кроме
+# корня репозитория, падал бы на «в реестре нет юнита» — сообщение, которое
+# указывает не на ту причину. Владелец запускает команду из своего каталога,
+# так что дефект сработал бы при первом же применении.
+unit="$(python3 - "$REPO" "$site" <<'PYUNIT'
 import json, sys
 from pathlib import Path
-корень = Path(__file__).resolve() if False else None
-д = json.loads(Path("config/site-cells.json").read_text(encoding="utf-8"))
+реестр = Path(sys.argv[1]) / "config" / "site-cells.json"
+д = json.loads(реестр.read_text(encoding="utf-8"))
 for c in д.get("cells") or []:
-    if c["site_id"] == sys.argv[1]:
+    if c["site_id"] == sys.argv[2]:
         print((c.get("runtime") or {}).get("unit") or "")
         break
-PY
+PYUNIT
 )"
 [ -n "$unit" ] || { echo "в реестре нет юнита для $site" >&2; exit 2; }
 
@@ -57,7 +63,23 @@ if [ -z "$dry_run" ]; then
 fi
 
 log "шаг 2: nginx для домена"
-bash "$REPO/automation/host/install-site-nginx.sh" --site "$site" $dry_run
+# Первый запуск домена: в nginx его ещё нет вовсе. Тогда маршрут
+# подключается ДО того, как витрина отвечает, — иначе зависимости замкнуты
+# в круг (разбор в install-site-nginx.sh). Условие определяется по факту, а
+# не флагом от меня: конфигурация домена либо есть, либо её нет.
+new_site=""
+if [ ! -f "/etc/nginx/lords/$site.conf" ]; then
+  new_site="--new-site"
+  log "   домена в nginx нет: подключаю как первый запуск (до выпуска будет 502)"
+fi
+bash "$REPO/automation/host/install-site-nginx.sh" --site "$site" $new_site $dry_run
+
+log "шаг 3: HTTPS"
+if [ -f "$REPO/automation/host/nginx-site/$site-tls.conf" ]; then
+  bash "$REPO/automation/host/install-site-tls.sh" --site "$site" $dry_run
+else
+  echo "   заготовки $site-tls.conf нет: домен останется на HTTP"
+fi
 
 log "итог"
 if [ -n "$dry_run" ]; then
