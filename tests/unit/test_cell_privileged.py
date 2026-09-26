@@ -606,3 +606,69 @@ def test_контракт_находит_репозиторий_сам_на_пе
         f"{к}")
     assert "yummy-readmodel.sqlite3" in к["user_writable"]
     assert str(репо) in к["source"]
+
+
+def test_приёмка_читает_build_id_у_семейства_без_мета_тега(tmp_path, monkeypatch):
+    """Заголовок отдают все семейства, мета-тег — только пишущие разметку.
+
+    Поймано на первом переносе yummy-biz: кандидат поднялся за 3 с, `/` отдал
+    200 (274 973 байта), `/healthz` 200 — и приёмка всё равно откатила выпуск,
+    потому что `build_id` оказался `null`. Причина не в витрине: Yummy ставит
+    перед собой прокси над сторонним приложением, разметку не пишет и мета-тега
+    не имеет. Проверка умела читать только мета-тег, то есть предполагала
+    разметку одного семейства.
+
+    Ослаблять сверку нельзя: именно она отличает «ответ 200» от «работает
+    нужный выпуск». Поэтому источник расширен, а не требование снято.
+    """
+    import threading
+    from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+    def поднять(обработчик):
+        сервер = ThreadingHTTPServer(("127.0.0.1", 0), обработчик)
+        threading.Thread(target=сервер.serve_forever, daemon=True).start()
+        return сервер
+
+    class ТолькоЗаголовок(BaseHTTPRequestHandler):
+        def do_GET(self):  # noqa: N802
+            тело = "<html><body>прокси без мета-тега</body></html>".encode("utf-8")
+            self.send_response(200)
+            self.send_header("X-Site-Factory-Build-Id", "9d25994c1762-yummy-biz")
+            self.send_header("Content-Length", str(len(тело)))
+            self.end_headers()
+            self.wfile.write(тело)
+
+        def log_message(self, *a):
+            pass
+
+    class ТолькоМетаТег(BaseHTTPRequestHandler):
+        def do_GET(self):  # noqa: N802
+            тело = '<meta name="site-factory-build-id" content="abc123-zona-01">'.encode('utf-8')
+            self.send_response(200)
+            self.send_header("Content-Length", str(len(тело)))
+            self.end_headers()
+            self.wfile.write(тело)
+
+        def log_message(self, *a):
+            pass
+
+    for обработчик, ожидаемый, источник in (
+            (ТолькоЗаголовок, "9d25994c1762-yummy-biz", "заголовок"),
+            (ТолькоМетаТег, "abc123-zona-01", "мета-тег")):
+        сервер = поднять(обработчик)
+        порт = сервер.server_address[1]
+        п = privileged.Площадка(site_id="проверка", account="nobody",
+                                root=tmp_path, app=tmp_path / "app",
+                                data=tmp_path / "data", unit="u.service",
+                                previous_unit=None, port=порт)
+        monkeypatch.setattr(privileged.Площадка, "из_реестра",
+                            staticmethod(lambda *a, **k: п))
+        try:
+            итог = privileged.verify("проверка", ожидаемый_build=ожидаемый,
+                                     маршруты=("/",))
+        finally:
+            сервер.shutdown()
+        assert итог["build_id"] == ожидаемый, итог
+        assert итог["build_id_source"] == источник, итог
+        assert итог["build_matches"] is True, итог
+        assert итог["ok"] is True, итог

@@ -582,8 +582,21 @@ def verify(site_id: str, *, ожидаемый_build: str = "", порт: int | 
                 тело = r.read(400000)
                 итог["routes"][м] = {"status": r.status, "bytes": len(тело)}
                 if м == "/":
-                    найдено = re.search(rb'site-factory-build-id" content="([^"]+)"', тело)
-                    итог["build_id"] = найдено.group(1).decode() if найдено else None
+                    # Сначала ЗАГОЛОВОК, потом мета-тег. Заголовок отдают все
+                    # семейства, мета-тег — только те, что сами собирают
+                    # разметку. Yummy ставит перед собой прокси над сторонним
+                    # приложением, разметку не пишет и мета-тега не имеет:
+                    # приёмка получала build_id = null, `build_matches` = false
+                    # и откатывала исправный кандидат, у которого `/` и
+                    # `/healthz` отвечали 200. Это был отказ проверки, а не
+                    # витрины, и цена ему — откат вместо переноса.
+                    итог["build_id"] = r.headers.get("X-Site-Factory-Build-Id") or None
+                    итог["build_id_source"] = "заголовок" if итог["build_id"] else ""
+                    if not итог["build_id"]:
+                        найдено = re.search(
+                            rb'site-factory-build-id" content="([^"]+)"', тело)
+                        итог["build_id"] = найдено.group(1).decode() if найдено else None
+                        итог["build_id_source"] = "мета-тег" if итог["build_id"] else "нет"
         except Exception as exc:  # noqa: BLE001 — любой отказ это отказ приёмки
             итог["routes"][м] = {"error": type(exc).__name__}
     итог["ok"] = all(о.get("status") == 200 for о in итог["routes"].values())
