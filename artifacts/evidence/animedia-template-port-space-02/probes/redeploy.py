@@ -42,12 +42,21 @@ for slug, д in новый.get("details", {}).items():
 кат["revision"] = hashlib.sha256((прежняя + "+1").encode()).hexdigest()
 (ДАННЫЕ / f"{САЙТ}-catalog.json").write_text(json.dumps(кат), encoding="utf-8")
 print(f"доставка: поднято {поднято} тайтлов, ревизия {прежняя[:12]} → {кат['revision'][:12]}")
-время = time.time()
-while time.time() - время < 40:
+нужно = hashlib.sha256((ДАННЫЕ / f"{САЙТ}-details.json").read_bytes()).hexdigest()
+перечитала = False
+край = time.time() + 60
+while time.time() < край:
     time.sleep(2)
-    if жив():
-        break
-print("витрина отвечает после доставки:", жив())
+    try:
+        with urllib.request.urlopen(БАЗА + "/healthz", timeout=10) as о:
+            if json.loads(о.read()).get("details_digest") == нужно:
+                перечитала = True
+                break
+    except Exception:
+        pass
+print("витрина перечитала доставленный снимок:", перечитала)
+if not перечитала:
+    sys.exit("витрина не перечитала снимок — обновление каталога не состоялось")
 
 # --- 2. пересборка релиза ----------------------------------------------------
 сб = subprocess.run([sys.executable, str(ШАБЛОН / "automation/host/animedia_release_build.py"),

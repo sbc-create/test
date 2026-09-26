@@ -83,6 +83,14 @@ for а in ссылки:
 п("плеер смонтирован", 'data-b08="player"' in серия and "zpl" in серия)
 п("недоступная серия не ссылка", 'class="zeps__off"' in серия or True)
 
+# Slug выбирается по данным, а не задаётся руками, поэтому следующий шаг
+# получает его файлом. Прежде он передавался аргументом, и после смены снимка
+# проверка «голос уцелел» смотрела на ДРУГОЕ произведение — то есть честно не
+# находила голос там, где его никогда не ставили.
+import pathlib
+pathlib.Path(__file__).with_name("chosen.json").write_text(
+    json.dumps({"slug": slug, "episode": адрес_серии}, ensure_ascii=False),
+    encoding="utf-8")
 print(json.dumps({"slug": slug, "episode": адрес_серии}, ensure_ascii=False))
 print(f"\nОК: {len(ок)}   ПЛОХО: {len(плохо)}")
 for с in ок: print("  ·", с)

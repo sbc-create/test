@@ -1,0 +1,7 @@
+$ python3 redeploy.py /tmp/claude-1001/-home-claude/bd91216b-119b-4b26-8e51-8927be9b7ecf/scratchpad/verify
+доставка: поднято 25 тайтлов, ревизия e2c18b52546c → 5dbaddbb40a1
+витрина отвечает после доставки: True
+дерево грязное, релиз не собирается:
+?? artifacts/evidence/animedia-template-port-space-02/logs/
+сборка релиза не удалась: 1
+exit=1

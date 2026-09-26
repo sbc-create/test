@@ -7,7 +7,12 @@ e7cd4829fadb, витрина перечитала его сама), релиз �
 """
 import json, re, sys, urllib.request
 from pathlib import Path
-V = Path(sys.argv[1]); SLUG = sys.argv[2]; БАЗА = "http://127.0.0.1:9310"
+V = Path(sys.argv[1]); БАЗА = "http://127.0.0.1:9310"
+# Произведение берётся из того, что выбрал шаг с голосом, а не из аргумента:
+# аргумент расходится с данными молча.
+выбор = Path(__file__).with_name("chosen.json")
+SLUG = (json.loads(выбор.read_text(encoding="utf-8"))["slug"]
+        if выбор.is_file() else sys.argv[2])
 ок, плохо = [], []
 def п(имя, усл, подр=""):
     (ок if усл else плохо).append(f"{имя}{(' — ' + подр) if подр else ''}")
