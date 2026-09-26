@@ -1,10 +1,13 @@
 $ python3 redeploy.py /tmp/claude-1001/-home-claude/bd91216b-119b-4b26-8e51-8927be9b7ecf/scratchpad/new
-доставка: поднято 25 тайтлов, ревизия port02-18d40 → fdf9d4e13f49
+доставка: поднято 25 тайтлов, ревизия fdf9d4e13f49 → d7a84eaa94f6
 витрина перечитала доставленный снимок: True
-релиз собран: /tmp/claude-1001/-home-claude/bd91216b-119b-4b26-8e51-8927be9b7ecf/scratchpad/new/releases/20260926T191133Z-bab7849-animedia-parity
-build_id: 20260926T191133Z-bab7849-animedia-parity
+релиз собран: /tmp/claude-1001/-home-claude/bd91216b-119b-4b26-8e51-8927be9b7ecf/scratchpad/new/releases/20260926T191519Z-6099a55-animedia-parity
+build_id: 20260926T191519Z-6099a55-animedia-parity
 artifact_sha256: 65459ab6949f413d1c478c58f476275fefa7030b5f276e3efb70f57beb919f51
 файлы: animedia-data-update.py, animedia-frontend.py, chronology.py, collection_contract.py, community.py, lords-frontend.py, seo_layer.py
 CODE_TREE_MATCH: YES | ARTIFACT_SOURCE_MATCH: YES
-код обновлён: релиз 20260926T191133Z-bab7849-animedia-parity, витрина отвечает: True
+манифест витрины: /tmp/claude-1001/-home-claude/bd91216b-119b-4b26-8e51-8927be9b7ecf/scratchpad/new/data/template-manifest-animedia-new.json | профиль: animedia-space
+код обновлён: релиз 20260926T191519Z-6099a55-animedia-parity, витрина отвечает: True
+  release_id=20260926T191519Z-6099a55-animedia-parity
+  identity_match=True runtime_digest_match=True
 exit=0
