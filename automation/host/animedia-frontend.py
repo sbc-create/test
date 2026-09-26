@@ -90,6 +90,32 @@ def _манифест() -> dict:
 
 
 МАНИФЕСТ = _манифест()
+
+
+def _паспорт_релиза() -> dict:
+    """`RELEASE.json`, лежащий рядом с исполняемым артефактом.
+
+    Манифест витрины пишется отдельно от сборки и отстаёт от неё молча: после
+    пересборки артефакт новый, а `build_id` в манифесте прежний — и витрина
+    честно называет себя не тем выпуском, который исполняет. Признак, по
+    которому это видно снаружи, обязан браться из САМОГО релиза, а не из
+    файла, который о релизе только рассказывает.
+
+    Релиза может не быть вовсе: рантайм запускают и прямо из дерева ветки.
+    Тогда паспорт пуст, и витрина называет выпуск по манифесту, честно
+    сообщая, откуда взяла.
+    """
+    рядом = Path(__file__).resolve().parent / "RELEASE.json"
+    if not рядом.is_file():
+        return {}
+    try:
+        сырое = json.loads(рядом.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    return сырое if isinstance(сырое, dict) else {}
+
+
+РЕЛИЗ = _паспорт_релиза()
 if МАНИФЕСТ["template_family"] != "animedia":
     # Fail closed. Этот рантайм принадлежит одному контуру, и отдать
     # чужое семейство своим оформлением он не имеет права.
@@ -98,7 +124,14 @@ if МАНИФЕСТ["template_family"] != "animedia":
         f"манифест объявляет {МАНИФЕСТ['template_family']!r}")
 ВЕРСИЯ = МАНИФЕСТ["design_version"]
 СЕМЕЙСТВО = МАНИФЕСТ["template_family"]
-СБОРКА = МАНИФЕСТ["build_id"]
+#: Идентификатор выпуска. Приоритет у `RELEASE.json` рядом с артефактом:
+#: манифест витрины отстаёт от пересборки молча, а релиз лежит в том же
+#: каталоге, что и исполняемый файл, и разойтись с ним не может.
+СБОРКА = str(РЕЛИЗ.get("build_id") or МАНИФЕСТ["build_id"])
+#: Что об этом говорит манифест — отдельным полем, чтобы расхождение было
+#: видно, а не замазано.
+СБОРКА_МАНИФЕСТА = str(МАНИФЕСТ.get("build_id") or "")
+ИСТОЧНИК_ВЫПУСКА = "release.json" if РЕЛИЗ.get("build_id") else "manifest"
 ПРОФИЛЬ = МАНИФЕСТ.get("profile") or "unknown"
 
 #: Имя общего рантайма. Один артефакт обслуживает все семейства, и это честно —
@@ -1148,7 +1181,15 @@ def _слова_записи(запись: dict) -> set[str]:
 
 class Данные:
     def __init__(self, путь: str):
-        сырое = json.loads(Path(путь).read_text(encoding="utf-8"))
+        #: Цифра ИМЕННО ТЕХ байт, которые разобраны в этот объект. Цифра файла
+        #: на диске о загруженном снимке не говорит ничего: файл меняется
+        #: раньше, чем витрина его перечитает, и сравнение «файл изменился»
+        #: проходит мгновенно. Здесь же видно, что именно сейчас в памяти.
+        сырой_текст = Path(путь).read_text(encoding="utf-8")
+        self.цифра_загруженного = hashlib.sha256(
+            сырой_текст.encode("utf-8")).hexdigest()
+        self.загружено_в = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        сырое = json.loads(сырой_текст)
         self.items = сырое["items"]
         self.absent = сырое.get("fields_absent", [])
         self.revision = str(сырое.get("revision") or "")
@@ -1477,11 +1518,18 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 #: ANIMEDIA-MODERATION-03: ключ модератора из credential systemd.
 ОФОРМЛЕНИЕ_1_2_10 = "1.2.10"
 
+#: ANIMEDIA-TEMPLATE-PORT-SPACE-02: принятые правки animedia.space (ТОП-100 с
+#: нумерацией, приоритет постеров по блоку первого экрана, одна открытая панель
+#: фильтров, собранная карточка произведения на странице серии, подборки по
+#: календарю витрины). Номер поднят потому, что под 1.2.10 уже выпущено ДРУГОЕ
+#: расположение: топ на 48 мест без номеров и страница серии без карточки.
+ОФОРМЛЕНИЕ_1_2_11 = "1.2.11"
+
 #: Версии, несущие оформление 1.1+. Набор, а не одно значение: витрина
 #: включает оформление СВОИМ манифестом, и добавление следующей версии не
 #: должно переводить на неё соседей. Свойство «переход по одной витрине»
 #: сохраняется — меняется только то, сколько версий код умеет исполнять.
-ОФОРМЛЕНИЕ_ВЕРСИИ = {ОФОРМЛЕНИЕ_1_1, ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1, ОФОРМЛЕНИЕ_1_2_2, ОФОРМЛЕНИЕ_1_2_3, ОФОРМЛЕНИЕ_1_2_4, ОФОРМЛЕНИЕ_1_2_5, ОФОРМЛЕНИЕ_1_2_6, ОФОРМЛЕНИЕ_1_2_7, ОФОРМЛЕНИЕ_1_2_8, ОФОРМЛЕНИЕ_1_2_9, ОФОРМЛЕНИЕ_1_2_10}
+ОФОРМЛЕНИЕ_ВЕРСИИ = {ОФОРМЛЕНИЕ_1_1, ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1, ОФОРМЛЕНИЕ_1_2_2, ОФОРМЛЕНИЕ_1_2_3, ОФОРМЛЕНИЕ_1_2_4, ОФОРМЛЕНИЕ_1_2_5, ОФОРМЛЕНИЕ_1_2_6, ОФОРМЛЕНИЕ_1_2_7, ОФОРМЛЕНИЕ_1_2_8, ОФОРМЛЕНИЕ_1_2_9, ОФОРМЛЕНИЕ_1_2_10, ОФОРМЛЕНИЕ_1_2_11}
 
 #: Семейства, переработанные по измеренным эталонам, и версии, с которых
 #: переработка включается. Ниже этого набора витрина исполняет прежние ветки.
@@ -1492,7 +1540,7 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 #: «переход делается по одной витрине». Здесь оформление 1.2.x достаётся
 #: только той витрине, чей манифест его объявил.
 ПЕРЕРАБОТАНО_С = {
-    "animedia": frozenset({ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1, ОФОРМЛЕНИЕ_1_2_2, ОФОРМЛЕНИЕ_1_2_3, ОФОРМЛЕНИЕ_1_2_4, ОФОРМЛЕНИЕ_1_2_5, ОФОРМЛЕНИЕ_1_2_6, ОФОРМЛЕНИЕ_1_2_7, ОФОРМЛЕНИЕ_1_2_8, ОФОРМЛЕНИЕ_1_2_9, ОФОРМЛЕНИЕ_1_2_10}),
+    "animedia": frozenset({ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1, ОФОРМЛЕНИЕ_1_2_2, ОФОРМЛЕНИЕ_1_2_3, ОФОРМЛЕНИЕ_1_2_4, ОФОРМЛЕНИЕ_1_2_5, ОФОРМЛЕНИЕ_1_2_6, ОФОРМЛЕНИЕ_1_2_7, ОФОРМЛЕНИЕ_1_2_8, ОФОРМЛЕНИЕ_1_2_9, ОФОРМЛЕНИЕ_1_2_10, ОФОРМЛЕНИЕ_1_2_11}),
 }
 
 #: Исполняет ли ЭТА витрина переработанное оформление своего семейства.
@@ -1527,12 +1575,17 @@ class Подробности:
         self.покрытие = 0
         self.catalog_revision = ""
         self.catalog_built_at = ""
+        #: Цифра загруженных байт — см. `Данные.цифра_загруженного`.
+        self.цифра_загруженного = ""
         if not путь:
             return
         try:
-            сырое = json.loads(Path(путь).read_text(encoding="utf-8"))
+            сырой_текст = Path(путь).read_text(encoding="utf-8")
+            сырое = json.loads(сырой_текст)
         except (OSError, ValueError):
             return
+        self.цифра_загруженного = hashlib.sha256(
+            сырой_текст.encode("utf-8")).hexdigest()
         записи = сырое.get("details")
         if isinstance(записи, dict):
             self.записи = записи
@@ -2317,6 +2370,15 @@ align-items:flex-start;gap:6px;pointer-events:none;z-index:2;flex-wrap:wrap;max-
 .zt__eps{background:#fff;color:var(--a-acc);font-size:11px;font-weight:700;line-height:1;
 padding:5px 7px;border-radius:6px;box-shadow:var(--a-shadow-soft);white-space:nowrap;
 max-width:100%;overflow-wrap:anywhere}
+/* Номер места в топе. Внизу слева: верх постера занят бейджами серий и
+   оценки, и третий значок там встал бы поверх них. Номер не «декор»: по нему
+   посетитель понимает, что видит 47-е место, а не начало списка. */
+.zt__rank{position:absolute;left:6px;bottom:6px;z-index:3;min-width:26px;text-align:center;
+background:var(--a-acc);color:#fff;font-size:12px;font-weight:800;line-height:1;
+padding:5px 6px;border-radius:6px;box-shadow:var(--a-shadow-soft);pointer-events:none;
+font-variant-numeric:tabular-nums}
+.zt--row .zt__rank{left:4px;bottom:4px;font-size:11px;min-width:22px}
+@media(max-width:599px){.zt__rank{left:4px;bottom:4px;font-size:11px;min-width:22px}}
 /* Списки посетителя: строка кнопок, выбранная подсвечена. Повторное нажатие
    снимает выбор — у кнопки, которая умеет только добавлять, нет обратного
    хода. Класс свой: прежде кнопка списка и список сообщений назывались одним
@@ -2460,8 +2522,10 @@ grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(max-width:767px){.ahome-filt{max-height:48px}}
 .zsec--top100[hidden],.zsec--top100-gap{display:none !important;height:0 !important;min-height:0 !important;
 margin:0 !important;padding:0 !important;border:0 !important;overflow:hidden !important}
-.zsec--home-cols .zhub--home{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
-@media(min-width:900px){.zsec--home-cols .zhub--home{grid-template-columns:repeat(4,minmax(0,1fr))}}
+/* Полка подборок на главной раскладывается общим правилом `.zhub`: число
+   колонок определяет само число карточек. Прежнее правило жёстко просило
+   четыре колонки, и две подборки выглядели недозаполненной сеткой. */
+.zsec--home-cols .zhub{margin-top:12px}
 .zseo{margin:28px 0 8px;max-width:1000px}
 .zseo h2{font-size:18px;margin:0 0 8px}
 .zseo p{font-size:14px;line-height:1.5;color:var(--a-dim);margin:0}
@@ -2582,9 +2646,18 @@ border:1px solid var(--a-line);background:var(--a-page);font-size:13px;font-weig
 display:inline-flex;align-items:center;gap:6px}
 .afilt__dd>summary::-webkit-details-marker{display:none}
 .afilt__dd[open]>summary{border-color:var(--a-acc);color:var(--a-acc)}
-.afilt__opts{position:absolute;z-index:40;top:calc(100% + 4px);left:0;min-width:220px;max-height:280px;overflow:auto;
+.afilt__opts{position:absolute;z-index:40;top:calc(100% + 4px);left:0;right:auto;min-width:220px;
+max-width:min(340px,calc(100vw - 32px));max-height:min(280px,60vh);overflow:auto;overscroll-behavior:contain;
 padding:8px;border-radius:12px;border:1px solid var(--a-line);background:var(--a-page);box-shadow:var(--a-shadow-soft);
 display:flex;flex-direction:column;gap:2px}
+/* Панель у правого края открывается влево. Без этого список «Страна» уезжал
+   за пределы экрана и тянул горизонтальную прокрутку всей страницы. */
+.afilt__opts--right{left:auto;right:0}
+/* Точка у названия панели: фильтр по этому признаку применён. Раскрывать
+   такую панель при загрузке нельзя — иначе несколько применённых фильтров
+   снова дают несколько открытых списков. */
+.afilt__dd>summary[data-afilt-chosen]{border-color:var(--a-acc);color:var(--a-acc)}
+.afilt__on{color:var(--a-acc);font-size:16px;line-height:1}
 .afilt__opts a{display:flex;justify-content:space-between;gap:12px;min-height:44px;padding:8px 10px;border-radius:8px;
 color:var(--a-ink);font-size:13px;text-decoration:none}
 .afilt__opts a:hover,.afilt__opts a[aria-current]{background:var(--a-alt);color:var(--a-acc)}
@@ -2593,7 +2666,12 @@ color:var(--a-ink);font-size:13px;text-decoration:none}
   .afilt__open{display:inline-flex;align-items:center;margin-bottom:8px}
   .afilt__panel{display:none;padding:12px;border:1px solid var(--a-line);border-radius:12px;background:var(--a-page)}
   .afilt.is-open .afilt__panel{display:block}
-  .afilt__opts{position:static;max-height:none;box-shadow:none;border:0;padding:6px 0 0}
+  /* На телефоне список раскрывается в потоке панели, но со своей прокруткой:
+     без предела «Год» или «Жанр» растягивали страницу на несколько экранов, и
+     кнопки «Применить»/«Очистить» уезжали из виду. */
+  .afilt__opts{position:static;max-width:100%;max-height:44vh;overflow:auto;
+  box-shadow:none;border:0;padding:6px 0 0}
+  .afilt__opts--right{left:auto;right:auto}
   .afilt__dd{width:100%}
   .afilt__dd>summary{width:100%;justify-content:space-between}
 }
@@ -2721,13 +2799,40 @@ align-items:start;max-width:100%}
 .aep-ctx__meta{font-size:13px;color:var(--a-dim);margin:0;line-height:1.4}
 .aep-ctx__desc{font-size:14px;line-height:1.45;color:var(--a-ink);margin:0;max-width:70ch;
 display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.aep-ctx__back{font-size:13px;font-weight:700;color:var(--a-acc);width:fit-content}
+.aep-ctx__back{font-size:15px;font-weight:800;color:var(--a-acc);width:fit-content;line-height:1.25}
+.aep-ctx__all{font-size:13px;font-weight:700;color:var(--a-acc);width:fit-content}
+/* Подпись области оценки в полосе действий: чей это голос — произведения. */
+.apanel__scope{font-size:12px;font-weight:700;color:var(--a-dim);
+text-transform:uppercase;letter-spacing:.04em;flex:0 0 auto;align-self:center}
+/* Оценка произведения одной строкой: подпись, число, шкала. Подпись
+   обязательна — «8.1» без слов на странице серии читается как оценка серии,
+   которой у нас нет и не может быть. */
+.aep-ctx__score{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:0}
+.aep-ctx__score-lab{font-size:12px;font-weight:700;color:var(--a-dim);
+text-transform:uppercase;letter-spacing:.04em}
+.aep-ctx__score b{font-size:20px;font-weight:800;color:var(--a-acc);line-height:1;
+font-variant-numeric:tabular-nums}
+.aep-ctx__score small{font-size:12px;color:var(--a-dim)}
+.aep-ctx__score--none b{color:var(--a-dim)}
+/* Раскрытие описания: тот же абзац, снимается обрезка. Второго экземпляра
+   текста в разметке нет — иначе при правке они разойдутся. */
+.aep-ctx__more{margin:0}
+.aep-ctx__more>summary{list-style:none;cursor:pointer;display:block}
+.aep-ctx__more>summary::-webkit-details-marker{display:none}
+.aep-ctx__more>summary::after{content:"Читать полностью";display:inline-block;
+margin-top:6px;font-size:13px;font-weight:700;color:var(--a-acc)}
+.aep-ctx__more[open]>summary::after{content:"Свернуть"}
+.aep-ctx__more[open] .aep-ctx__desc{-webkit-line-clamp:none;display:block;overflow:visible}
 .aep-ctx .rbs{margin:2px 0 0}
+.aep-ctx .rbs__i{padding:4px 8px;font-size:12px}
 .aep-ctx + .zpl{margin-top:8px}
 .aep-page .zh--ep{font-size:clamp(20px,1.8vw,28px);line-height:1.25;margin:8px 0 12px;font-weight:800}
 .aep-page .zpl{margin-top:0}
 .aep-page .zepnav{margin:12px 0 16px}
-.aep-page .aep-ctx{margin-top:20px}
+/* Карточка произведения стоит между переходом по сериям и списком серий.
+   Отступ сверху отделяет её от кнопок «предыдущая/следующая», не превращая
+   в новый заголовок страницы. */
+.aep-page .aep-ctx{margin-top:16px;margin-bottom:20px}
 @media(max-width:599px){.aep-ctx{grid-template-columns:72px minmax(0,1fr);gap:10px 12px;padding:10px}}
 .zpl{margin:0 auto;width:min(100%,1200px);max-width:1200px}
 .zpl__h{font-size:clamp(22px,2vw,30px);font-weight:700;margin:0 0 16px;
@@ -2762,18 +2867,51 @@ border:1px solid var(--a-line);background:var(--a-page);font-size:13px;font-weig
 .zsea__h{display:flex;justify-content:space-between;gap:10px;margin:0 0 10px;flex-wrap:wrap}
 .zepnav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
 .zepnav a{background:var(--a-alt);border-radius:10px;padding:8px 12px;font-size:13px;color:var(--a-acc);font-weight:700;min-height:44px}
+/* Карточка подборки. Колонок не больше, чем карточек: две карточки в сетке
+   на четыре колонки читаются как незагрузившаяся страница. */
 .zhub{display:grid;gap:14px;margin:14px 0;grid-template-columns:1fr}
-@media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:1000px){.zhub{grid-template-columns:repeat(3,1fr)}}
-.zhub__c{display:block;padding:14px;border-radius:var(--a-radius-card);background:var(--a-page);
-box-shadow:var(--a-shadow-soft);color:inherit;text-decoration:none}
-.zhub__c:hover,.zhub__c:focus-visible{box-shadow:var(--a-shadow);outline:none}
-.zhub__g{display:flex;gap:4px;margin-bottom:10px}
-.zhub__p{flex:1 1 0;aspect-ratio:2/3;overflow:hidden;border-radius:8px;background:var(--a-alt)}
+@media(min-width:620px){
+  .zhub{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .zhub--cols-1{grid-template-columns:minmax(0,1fr)}
+}
+@media(min-width:1000px){
+  .zhub{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .zhub--cols-1{grid-template-columns:minmax(0,1fr)}
+  .zhub--cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+.zhub__c{display:flex;flex-direction:column;gap:2px;padding:14px;
+border-radius:var(--a-radius-card);background:var(--a-page);
+box-shadow:var(--a-shadow-soft);color:inherit;min-width:0}
+.zhub__c:hover,.zhub__c:focus-within{box-shadow:var(--a-shadow)}
+/* Превью: равные колонки, поэтому обложки и подписи выровнены по сетке, а не
+   по случайной высоте текста. */
+.zhub__g{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;
+list-style:none;margin:10px 0 0;padding:0}
+.zhub__i{min-width:0}
+.zhub__l{display:flex;flex-direction:column;gap:5px;color:inherit;text-decoration:none;
+border-radius:8px}
+.zhub__l:hover .zhub__n,.zhub__l:focus-visible .zhub__n{color:var(--a-acc)}
+.zhub__l:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
+.zhub__p{display:block;aspect-ratio:2/3;overflow:hidden;border-radius:8px;
+background:var(--a-alt);width:100%}
 .zhub__img{width:100%;height:100%;object-fit:cover;display:block}
-.zhub__t{display:block;font-weight:700;font-size:16px}
-.zhub__m{display:block;font-size:12px;color:var(--a-dim);font-weight:600;margin:2px 0 4px}
-.zhub__d{display:block;font-size:13px;color:var(--a-dim);line-height:1.45}
+/* Подпись видна всегда, а не по наведению: на телефоне наведения нет.
+   Две строки — потолок, дальше многоточие, иначе карточки разной высоты. */
+.zhub__n{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+overflow:hidden;font-size:11px;line-height:1.25;color:var(--a-ink);font-weight:600;
+min-height:calc(2 * 1.25em)}
+.zhub__t{display:block;font-weight:800;font-size:16px;line-height:1.25;
+color:var(--a-ink);text-decoration:none}
+.zhub__t:hover,.zhub__t:focus-visible{color:var(--a-acc)}
+.zhub__m{display:block;font-size:12px;color:var(--a-dim);font-weight:600}
+.zhub__d{display:block;font-size:13px;color:var(--a-dim);line-height:1.4;margin-top:8px;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* Подборка без единой обложки остаётся компактной, а не зияет пустотой. */
+.zhub__c--plain{gap:4px}
+@media(max-width:479px){
+  .zhub__g{gap:5px}
+  .zhub__n{font-size:10px}
+}
 /* B13 collections hub: order switch. Touch targets 44px, no clipped labels. */
 .ahub__sorts{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
 .ahub__s{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;
@@ -3495,12 +3633,28 @@ def _адрес_постера(адрес: str | None) -> str | None:
 
 
 def заглушка_постера(запись: dict, класс_заглушки: str, класс_картинки: str,
-                     ширина: int = 300, высота: int = 450) -> str:
+                     ширина: int = 300, высота: int = 450, *,
+                     срочно: str | bool = "") -> str:
     """Постер с заглушкой ПОД ним, а не вместо него.
 
     Заглушка рисуется всегда и лежит слоем ниже изображения. Alt у значимого
     постера — название тайтла; декоративная заглушка без изображения не
     объявляет зрителю внутреннюю диагностику («постер не открылся»).
+
+    `срочно` — режим загрузки: "high" (сразу и с высоким приоритетом),
+    "eager" (сразу, приоритет выбирает браузер) или "" (лениво).
+
+    Раньше `loading="lazy"` стояло у всех карточек страницы, и первый экран
+    тоже ждал решения браузера: посетитель видел ряд серых букв на месте
+    постеров, которые на самом деле отдаются за две сотни миллисекунд. Это и
+    есть «пропавшие постеры» — не отсутствие картинки, а отложенный запрос.
+    Ленивая загрузка ниже сгиба остаётся: грузить все семь десятков карточек
+    сразу — другая крайность.
+
+    Постера может не быть вовсе: поставщик отдаёт `poster_url: ""` — проверено
+    прямым запросом по трём записям каталога. Тогда рисуется только заглушка,
+    БЕЗ `<img>`: пустой `src` дал бы сломанную картинку, а размер карточки
+    держит `aspect-ratio` контейнера, поэтому скачка раскладки нет.
     """
     название = (запись.get("title") or "").strip() or "Без названия"
     первая = html.escape(название[:1].upper())
@@ -3509,9 +3663,14 @@ def заглушка_постера(запись: dict, класс_заглуш�
                 f"<b>{первая}</b></span>")
     if not постер:
         return заглушка
+    режим = "high" if срочно is True else ("" if срочно is False else str(срочно))
+    загрузка = {"high": 'loading="eager" fetchpriority="high"',
+                "eager": 'loading="eager"'}.get(
+                    режим, 'loading="lazy" fetchpriority="low"')
     картинка = (
         f'<img class="{класс_картинки}" src="{html.escape(постер)}" '
-        f'alt="{html.escape(название)}" loading="lazy" width="{ширина}" '
+        f'alt="{html.escape(название)}" {загрузка} decoding="async" '
+        f'width="{ширина}" '
         f'height="{высота}" data-poster>')
     return заглушка + картинка
 
@@ -3710,6 +3869,55 @@ def заглушка_постера(запись: dict, класс_заглуш�
 
 
 
+#: Фильтры каталога: одна открытая панель, а не семь наложенных.
+#:
+#: Раньше панели были нативными `<details>` без всякого управления: формат,
+#: год, жанр, исключение жанра, оценка, статус и страна открывались
+#: одновременно и налезали друг на друга. Поднять z-index не помогло бы —
+#: наложение было следствием, а причина в том, что открытыми панелями никто
+#: не управлял.
+#:
+#: `toggle` не всплывает, поэтому слушатель стоит на фазе перехвата: один на
+#: документ вместо девяти обработчиков. Закрытие панели НЕ меняет выбранных
+#: значений: фильтр живёт в адресе страницы, а не в состоянии панели, поэтому
+#: закрыть панель и потерять фильтр здесь физически нельзя.
+СКРИПТ_ФИЛЬТРОВ = (
+    "(function(){"
+    "function сумма(d){return d.querySelector(':scope>summary');}"
+    "function закрыть(d){if(!d.open)return;d.open=false;"
+    "var s=сумма(d);if(s)s.setAttribute('aria-expanded','false');}"
+    "function всеПанели(){return document.querySelectorAll('details.afilt__dd');}"
+    "function закрытьВсе(кроме){всеПанели().forEach(function(d){"
+    "if(d!==кроме)закрыть(d);});}"
+    # Панель у правого края уезжала за экран: список открывается влево,
+    # когда справа места нет. Меряется после открытия : до него ширины нет.
+    "function уместить(d){var o=d.querySelector('.afilt__opts');if(!o)return;"
+    "o.classList.remove('afilt__opts--right');"
+    "var r=o.getBoundingClientRect();"
+    "if(r.right>document.documentElement.clientWidth-8)"
+    "o.classList.add('afilt__opts--right');}"
+    "document.addEventListener('toggle',function(e){"
+    "var d=e.target;"
+    "if(!d||!d.classList||!d.classList.contains('afilt__dd'))return;"
+    "var s=сумма(d);if(s)s.setAttribute('aria-expanded',d.open?'true':'false');"
+    "if(d.open){закрытьВсе(d);уместить(d);}"
+    "},true);"
+    # Клик вне панели закрывает её и ничего не выбирает.
+    "document.addEventListener('click',function(e){"
+    "if(e.target.closest('details.afilt__dd'))return;"
+    "закрытьВсе(null);},true);"
+    # Escape закрывает открытую панель и возвращает фокус на её кнопку:
+    # без возврата фокус остаётся в исчезнувшем списке.
+    "document.addEventListener('keydown',function(e){"
+    "if(e.key!=='Escape')return;"
+    "var открытая=null;всеПанели().forEach(function(d){if(d.open)открытая=d;});"
+    "if(!открытая)return;"
+    "var s=сумма(открытая);закрыть(открытая);if(s)s.focus();"
+    "e.stopPropagation();});"
+    "})();"
+)
+
+
 def _склеить(части) -> str:
     return "".join(ч for ч in части if ч)
 
@@ -3809,6 +4017,46 @@ class Вид:
             видели.add(сосед["slug"])
             собрано.append(сосед)
         return собрано
+
+    #: Сколько постеров страницы грузятся сразу, без ожидания прокрутки.
+    #: Двенадцать — ряд каталога на широком экране плюс запас на ленту
+    #: главной; больше означало бы тянуть всю страницу разом и отбирать
+    #: полосу у того, что видно.
+    СРОЧНЫХ_ПОСТЕРОВ = 12
+
+    #: Сколько из них объявляются высокоприоритетными. На телефоне в первом
+    #: экране сетки помещается четыре карточки, на широком — двенадцать.
+    #: Ширину экрана сервер не знает, поэтому `fetchpriority="high"`
+    #: получают только те четыре, что видны на ЛЮБОМ экране: на узком иначе
+    #: восемь высокоприоритетных запросов уходят за картинками, которых не
+    #: видно. Остальные грузятся сразу, но приоритет им назначает браузер,
+    #: уже зная раскладку.
+    ПРИОРИТЕТНЫХ_ПОСТЕРОВ = 4
+
+    def _постер_срочно(self) -> str:
+        """Режим загрузки следующего постера: "high", "eager" или "".
+
+        Бюджет живёт на экземпляре вида, а вид создаётся на каждый запрос:
+        «первый экран» считается по странице, а не по каждому блоку.
+
+        Просят бюджет ТОЛЬКО блоки, которые могут оказаться на первом экране.
+        Прежде его тратил любой постер в порядке разметки, и это давало ровно
+        обратный эффект: на странице серии двенадцать высокоприоритетных
+        запросов уходили за постерами блока «Похожее аниме», которого на
+        первом экране нет вовсе, — 791 кБ, и все тринадцать успевали прийти
+        РАНЬШЕ скрипта плеера (измерено: плеер готов на 1946 мс, постеров до
+        него 13 из 13, видимых на первом экране 0). Посетитель пришёл
+        смотреть, а полосу занимали картинки, которых он не видит.
+        """
+        остаток = getattr(self, "_бюджет_постеров", None)
+        if остаток is None:
+            остаток = self.СРОЧНЫХ_ПОСТЕРОВ
+        if остаток <= 0:
+            self._бюджет_постеров = 0
+            return ""
+        self._бюджет_постеров = остаток - 1
+        потрачено = self.СРОЧНЫХ_ПОСТЕРОВ - остаток
+        return "high" if потрачено < self.ПРИОРИТЕТНЫХ_ПОСТЕРОВ else "eager"
 
     # --- разметка ----------------------------------------------------
     def schema_тайтла(self, запись: dict, деталь: dict, путь: str) -> str:
@@ -4242,7 +4490,8 @@ class ВидОснова(Вид):
     # --- составные части ---------------------------------------------
     def плитка(self, запись: dict) -> str:
         деталь = self.деталь(запись["slug"])
-        изо = заглушка_постера(запись, "zt__none", "zt__img")
+        изо = заглушка_постера(запись, "zt__none", "zt__img",
+                               срочно=self._постер_срочно())
         мета = " · ".join(str(ч) for ч in (запись.get("kind"), запись.get("year")) if ч)
         кп = _число(деталь.get("kinopoisk_rating"))
         им = _число(деталь.get("imdb_rating"))
@@ -4262,7 +4511,8 @@ class ВидОснова(Вид):
 
     def строка(self, запись: dict) -> str:
         деталь = self.деталь(запись["slug"])
-        изо = заглушка_постера(запись, "zr__none", "zr__img", 184, 276)
+        изо = заглушка_постера(запись, "zr__none", "zr__img", 184, 276,
+                               срочно=self._постер_срочно())
         части = [запись.get("kind"), запись.get("year")]
         части += (деталь.get("countries") or [])[:1]
         части += (деталь.get("genres") or [])[:2]
@@ -4448,28 +4698,19 @@ class ВидОснова(Вид):
             if карточки:
                 жанры_лента.append(
                     (f"genre-{код}", имя, f"/catalog/?genre={код}", карточки, ""))
+        # Тот же компонент, что в разделе. Прежде здесь лежала своя копия
+        # карточки: она спрашивала у контракта ОДНУ запись и рисовала только
+        # название со счётчиком — подборки на главной выглядели текстовыми
+        # плитками, хотя в разделе были с обложками.
         коллекции_html = ""
-        снимок = Снимок.получить(self.д, self.п)
-        if КОЛЛЕКЦИИ is not None and снимок is not None:
-            кол_карточки = []
-            for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО)[:4]:
-                if not спец.доступна:
-                    continue
-                данные = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО,
-                                             предел=1)
-                if данные is None or not данные.items:
-                    continue
-                кол_карточки.append(
-                    f'<a class="zhub__c" data-card-variant="collection-card" href="{html.escape(спец.canonical_path)}">'
-                    f'<span class="zhub__t">{html.escape(данные.title)}</span>'
-                    f'<span class="zhub__m">{данные.total} записей</span></a>')
-            if кол_карточки:
-                коллекции_html = (
-                    '<section class="zsec"><div class="zsec__h">'
-                    "<h2>Подборки</h2>"
-                    '<a href="/collections/">Весь раздел</a></div>'
-                    f'<div class="zhub zhub--home">{"".join(кол_карточки)}</div>'
-                    "</section>")
+        подборки = self.подборки_для_показа(предел=4)
+        if подборки:
+            коллекции_html = (
+                '<section class="zsec"><div class="zsec__h">'
+                "<h2>Подборки</h2>"
+                '<a href="/collections/">Весь раздел</a></div>'
+                + self.сетка_подборок(подборки)
+                + "</section>")
         жанр_навигация = "".join(
             f'<a href="/catalog/{запрос_строкой({"genre": код})}">{html.escape(имя)}</a>'
             for код, имя in ZONA_GENRE_NAV)
@@ -4539,77 +4780,185 @@ class ВидОснова(Вид):
                              данные.canonical_path, актив="/collections/",
                              описание=данные.description)
 
+    #: Сколько произведений показывает превью подборки.
+    ПРЕВЬЮ_ПОДБОРКИ = 4
+
+    def подборки_для_показа(self, предел: int | None = None) -> list[dict]:
+        """Данные карточек подборок: название, состав превью, размер.
+
+        ОДИН сборщик на весь сайт. До этого их было четыре — свой на главной
+        переработанного оформления, свой на главной базового, свой в хабе
+        базового и свой в хабе переработанного, — и два из них не умели
+        показывать изображения вовсе: они спрашивали у контракта одну запись
+        (`предел=1`) и рисовали только название со счётчиком. Снаружи это
+        выглядело как «подборки на главной сломались», хотя в разделе они
+        были с обложками. Копия компонента и есть дефект: расходятся не
+        когда-нибудь, а сразу.
+
+        Превью собирается из ФАКТИЧЕСКОГО состава подборки в текущем снимке и
+        пересобирается после каждой доставки каталога — ничего не закреплено
+        руками. Записи без постера пропускаются, берутся следующие подходящие;
+        внутри одной подборки постер не повторяется. Между подборками обложки
+        по возможности тоже не повторяются: одинаковые превью у разных правил
+        отбора — это подсказка «здесь одно и то же», которая была бы ложной.
+        """
+        снимок = Снимок.получить(self.д, self.п)
+        if КОЛЛЕКЦИИ is None or снимок is None:
+            return []
+        сколько = self.ПРЕВЬЮ_ПОДБОРКИ
+        занятые: set[str] = set()
+        карточки: list[dict] = []
+        видели: set[str] = set()
+        for порядок, спец in enumerate(КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО)):
+            if not спец.доступна or спец.collection_key in видели:
+                continue
+            коллекция = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок,
+                                            СЕМЕЙСТВО, предел=48)
+            if коллекция is None or not коллекция.items:
+                continue
+            видели.add(спец.collection_key)
+            выбранные: list = []
+            свои: set[str] = set()
+
+            def взять(к, свои=свои, выбранные=выбранные) -> bool:
+                постер = str(getattr(к, "poster", "") or "")
+                if not постер or постер in свои:
+                    return False
+                свои.add(постер)
+                выбранные.append(к)
+                return True
+
+            # ПЕРВАЯ запись превью — всегда первая запись подборки с
+            # обложкой, без оглядки на другие подборки. Иначе превью начинало
+            # бы врать о порядке самой подборки ради несовпадения картинок.
+            for к in коллекция.items:
+                if взять(к):
+                    break
+            # Дальше предпочитаем обложки, ещё не занятые другими подборками:
+            # два разных правила отбора с одинаковым превью читаются как одна
+            # и та же подборка, и это была бы ложная подсказка.
+            for к in коллекция.items:
+                if len(выбранные) >= сколько:
+                    break
+                if str(getattr(к, "poster", "") or "") in занятые:
+                    continue
+                взять(к)
+            # И добираем из той же подборки, даже если обложка уже где-то
+            # мелькала: прятать существующую подборку или показывать её
+            # неполной из-за совпадения картинок нельзя.
+            for к in коллекция.items:
+                if len(выбранные) >= сколько:
+                    break
+                взять(к)
+            for к in выбранные:
+                занятые.add(str(getattr(к, "poster", "") or ""))
+            карточки.append({
+                "key": спец.collection_key,
+                "order": порядок,
+                "title": коллекция.title,
+                "description": коллекция.description,
+                "total": коллекция.total,
+                "path": спец.canonical_path,
+                "works": [{"title": str(к.title or ""),
+                           "url": str(к.canonical_path or ""),
+                           "poster": str(к.poster or "")}
+                          for к in выбранные],
+            })
+            if предел and len(карточки) >= предел:
+                break
+        return карточки
+
+    def карточка_подборки(self, к: dict, *, первый_экран: bool = False) -> str:
+        """Одна карточка подборки: название, превью с подписями, размер.
+
+        Карточка НЕ обёрнута в общую ссылку. Ссылок здесь две по смыслу —
+        в подборку и на произведение, — а вложенные `<a>` разметкой не
+        бывают: браузер их разрывает, и часть подписей перестаёт быть
+        кликабельной именно там, где посетитель целится.
+
+        Подпись произведения видна всегда, а не по наведению: на телефоне
+        наведения нет вовсе, и подпись «по hover» там равна её отсутствию.
+        """
+        имя = html.escape(str(к.get("title") or ""))
+        адрес = html.escape(str(к.get("path") or ""), quote=True)
+        всего = int(к.get("total") or 0)
+        работы = [р for р in (к.get("works") or []) if р.get("poster")]
+        плитки = []
+        for р in работы[: self.ПРЕВЬЮ_ПОДБОРКИ]:
+            постер = _адрес_постера(р.get("poster")) or ""
+            срочно = self._постер_срочно() if первый_экран else ""
+            # Ниже сгиба — лениво, но БЕЗ `fetchpriority="low"`. Обложки
+            # превью весят по 120x180 и появляются ровно там, куда посетитель
+            # долистал; понижать им приоритет значит ставить их в очередь за
+            # сотней крупных постеров каталога на той же странице. Измерено на
+            # публичной главной: превью догружалось 7,9 с при 134 постерах на
+            # странице.
+            загрузка = {"high": 'loading="eager" fetchpriority="high"',
+                        "eager": 'loading="eager"'}.get(
+                            срочно, 'loading="lazy"')
+            плитки.append(
+                f'<li class="zhub__i">'
+                f'<a class="zhub__l" href="{html.escape(str(р.get("url") or ""), quote=True)}">'
+                f'<span class="zhub__p">'
+                f'<img class="zhub__img" src="{html.escape(постер)}" alt="" '
+                f'{загрузка} decoding="async" width="120" height="180"></span>'
+                f'<span class="zhub__n">{html.escape(str(р.get("title") or ""))}</span>'
+                f'</a></li>')
+        превью = (f'<ul class="zhub__g" aria-label="Из этой подборки">'
+                  f'{"".join(плитки)}</ul>' if плитки else "")
+        # Подборка без единой обложки не прячется и не рисует битых картинок:
+        # у неё остаётся честная компактная карточка с названием и размером.
+        без_картинок = "" if плитки else " zhub__c--plain"
+        описание = str(к.get("description") or "")
+        return (
+            f'<article class="zhub__c{без_картинок}" '
+            f'data-card-variant="collection-card" '
+            f'data-collection-key="{html.escape(str(к.get("key") or ""))}" '
+            f'data-collection-preview="{len(плитки)}">'
+            f'<a class="zhub__t" href="{адрес}">{имя}</a>'
+            f'<span class="zhub__m">{всего} {склонение_записей(всего)}</span>'
+            f'{превью}'
+            + (f'<span class="zhub__d">{html.escape(описание)}</span>'
+               if описание else "")
+            + "</article>")
+
+    def сетка_подборок(self, карточки: list[dict], *,
+                       первый_экран: bool = False) -> str:
+        """Сетка подборок. Число колонок — от фактического числа карточек.
+
+        Две карточки в сетке на четыре колонки выглядят как незагрузившаяся
+        страница, а не как две подборки. Колонок не больше, чем карточек.
+        """
+        if not карточки:
+            return ""
+        колонок = max(1, min(len(карточки), 3))
+        плитки = "".join(self.карточка_подборки(к, первый_экран=первый_экран)
+                         for к in карточки)
+        return (f'<div class="zhub zhub--cols-{колонок}" data-b13="hub" '
+                f'data-collections-count="{len(карточки)}">{плитки}</div>')
+
     def хаб_коллекций(self) -> str:
         """Перечень коллекций со ссылками на их собственные страницы.
 
         До этого `/collections/` отдавал тот же каталог, что и `/catalog/`, —
         то есть обещал подборки, а показывал общий список. Здесь страница
-        собирается из тех же спецификаций, что и ленты главной: заголовок,
-        описание, размер и адрес берутся из контракта, второго перечня нет.
+        собирается из тех же спецификаций, что и ленты главной, тем же
+        компонентом карточки: второго перечня и второй разметки нет.
 
         Недоступные коллекции не показываются: контракт объявляет их с
         политикой «скрыть», и рисовать пустую карточку значило бы обещать
         раздел, которого нет.
         """
-        снимок = Снимок.получить(self.д, self.п)
-        if КОЛЛЕКЦИИ is None or снимок is None:
+        if КОЛЛЕКЦИИ is None or Снимок.получить(self.д, self.п) is None:
             return ('<div class="zempty"><b>Подборки недоступны</b>'
                     "<p>Контракт коллекций витрине не передан.</p></div>")
-        карточки = []
-        занятые_постеры: set[str] = set()
-        сигнатуры: list[tuple[str, ...]] = []
-        for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО):
-            if not спец.доступна:
-                continue
-            коллекция = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО,
-                                            предел=48)
-            if коллекция is None or not коллекция.items:
-                continue
-            выбранные = []
-            for к in коллекция.items:
-                постер = к.poster or ""
-                if not постер:
-                    continue
-                if постер in занятые_постеры and len(выбранные) < 4:
-                    # Prefer unique collage posters across hub tiles.
-                    continue
-                выбранные.append(к)
-                if len(выбранные) >= 4:
-                    break
-            if len(выбранные) < 4:
-                for к in коллекция.items:
-                    if к in выбранные or not к.poster:
-                        continue
-                    выбранные.append(к)
-                    if len(выбранные) >= 4:
-                        break
-            sig = tuple(к.poster for к in выбранные[:4])
-            if sig and sig in сигнатуры:
-                # Exact duplicate collage — skip tile; full page still exists.
-                continue
-            if sig:
-                сигнатуры.append(sig)
-            for к in выбранные[:4]:
-                if к.poster:
-                    занятые_постеры.add(к.poster)
-            обложки = "".join(
-                f'<span class="zhub__p">'
-                f'<img class="zhub__img" src="{html.escape(_адрес_постера(к.poster) or "")}"'
-                f' alt="" loading="lazy" width="120" height="180"></span>'
-                for к in выбранные[:4] if к.poster)
-            карточки.append(
-                f'<a class="zhub__c" data-card-variant="collection-card" href="{html.escape(спец.canonical_path)}">'
-                f'<span class="zhub__g">{обложки}</span>'
-                f'<span class="zhub__t">{html.escape(коллекция.title)}</span>'
-                f'<span class="zhub__m">{коллекция.total}</span>'
-                f'<span class="zhub__d">{html.escape(коллекция.description)}</span>'
-                f'</a>')
+        карточки = self.подборки_для_показа()
         if not карточки:
             return ('<div class="zempty"><b>Подборок пока нет</b>'
                     "<p>Ни одна коллекция контура не набрала записей в текущем снимке. "
                     "Наполнять их похожими тайтлами нельзя: подборка без источника — "
                     "это выдумка.</p></div>")
-        return f'<div class="zhub">{"".join(карточки)}</div>'
+        return self.сетка_подборок(карточки)
 
     def список(self, разд: str, зпр: dict) -> str:
         имена = {
@@ -4716,7 +5065,8 @@ class ВидОснова(Вид):
         звенья = [("/", self.имя),
                   ("/series/", "Сериалы") if сериал else ("/movies/", "Кино"),
                   ("", имя)]
-        изо = заглушка_постера(запись, "zt__none", "zhead__img", 372, 558)
+        изо = заглушка_постера(запись, "zt__none", "zhead__img", 372, 558,
+                               срочно=self._постер_срочно())
         описание = деталь.get("description") or деталь.get("short_description") or ""
         краткий = описание.strip()
         if len(краткий) > 420:
@@ -5073,7 +5423,8 @@ class ВидОснова(Вид):
             f'раздел заработает, тут появятся настоящие отзывы посетителей.</p>'
             f'</section>')
 
-    def панель_действий(self, запись: dict, *, возврат: str = "") -> str:
+    def панель_действий(self, запись: dict, *, возврат: str = "",
+                        область: str = "") -> str:
         """Одна горизонтальная полоса сразу под плеером: оценка и списки.
 
         Раньше это была двухколоночная коробка с заголовком «Оценки и
@@ -5145,10 +5496,19 @@ class ВидОснова(Вид):
             f'aria-pressed="{"true" if с.мой_список == ключ else "false"}">'
             f'{html.escape(подпись)}</button>'
             for ключ, подпись in СООБЩЕСТВО.СПИСКИ)
+        # На странице серии звёзды подписаны явно: голос ставится
+        # ПРОИЗВЕДЕНИЮ, а не этой серии. Он и привязан к постоянному
+        # идентификатору произведения — отдельных оценок у серий нет, и
+        # неподписанная шкала на странице «13 серия» обещала бы обратное.
+        подпись_области = (
+            f'<span class="apanel__scope" data-rating-scope="title">'
+            f'{html.escape(область)}</span>' if область else "")
         return (
             f'<section class="apanel" data-actions="1" '
-            f'data-voted="{"1" if проголосовал else "0"}">'
-            f'{оценка}'
+            f'data-voted="{"1" if проголосовал else "0"}"'
+            + (f' data-rating-scope="title"' if область else "")
+            + f'>'
+            f'{подпись_области}{оценка}'
             f'<form class="apanel__lists" method="post" action="/community/list" '
             f'data-lists-widget="1" aria-label="Списки">'
             f'{self._csrf_поле()}'
@@ -6286,7 +6646,8 @@ class ВидАнимедиа(ВидОснова):
             свой_срез.kinds = sorted({з["kind"] for з in свои if з.get("kind")})
             self.д = свой_срез
 
-    def плитка(self, запись: dict, *, вариант: str = "catalog-title") -> str:
+    def плитка(self, запись: dict, *, вариант: str = "catalog-title",
+               номер: int | None = None, первый_экран: bool = False) -> str:
         """Карточка по единому контракту: постер, бейджи, название, мета.
 
         Состав определяется вариантом, а не местом вызова, — иначе «похожее
@@ -6308,7 +6669,9 @@ class ВидАнимедиа(ВидОснова):
             return ""
         деталь = self.деталь(запись["slug"])
         состав = АНИМЕДИА_ВАРИАНТЫ_КАРТОЧКИ.get(вариант, АНИМЕДИА_ВАРИАНТ_ПО_УМОЛЧАНИЮ)
-        изо = заглушка_постера(запись, "zt__none", "zt__img", 190, 285)
+        изо = заглушка_постера(запись, "zt__none", "zt__img", 190, 285,
+                               срочно=(self._постер_срочно()
+                                       if первый_экран else ""))
 
         бейджи = ""
         данные = ""
@@ -6329,15 +6692,26 @@ class ВидАнимедиа(ВидОснова):
         строка_меты = (f'<span class="zt__m">{html.escape(мета)}</span>'
                        if состав["мета"] and мета else "")
         if состав.get("строкой"):
-            return self._плитка_строкой(запись, деталь, состав, изо, вариант)
+            return self._плитка_строкой(запись, деталь, состав, изо, вариант,
+                                        номер=номер)
         тело = (f'<span class="zt__b">{подпись}{строка_меты}</span>'
                 if (подпись or строка_меты) else "")
+        # Номер места рисуется только там, где место есть смысл называть
+        # (топ). Он часть карточки, а не подпись рядом: иначе при переносе
+        # строки номер и карточка расходятся.
+        место = (f'<b class="zt__rank" aria-hidden="true">{int(номер)}</b>'
+                 if номер else "")
+        подпись_места = (f'<span class="vh">Место {int(номер)}. </span>'
+                         if номер else "")
         return (f'<a class="zt" data-card-variant="{html.escape(вариант)}"'
-                f' href="{запись["url"]}" title="{html.escape(запись["title"])}">'
-                f'<span class="zt__p">{изо}{бейджи}</span>{тело}{данные}</a>')
+                + (f' data-rank="{int(номер)}"' if номер else "")
+                + f' href="{запись["url"]}" title="{html.escape(запись["title"])}">'
+                f'{подпись_места}'
+                f'<span class="zt__p">{изо}{бейджи}{место}</span>{тело}{данные}</a>')
 
     def _плитка_строкой(self, запись: dict, деталь: dict, состав: dict,
-                        изо: str, вариант: str) -> str:
+                        изо: str, вариант: str, *,
+                        номер: int | None = None) -> str:
         """Строчная карточка нижнего блока: миниатюра, название, оценка.
 
         Оригинальное название показывается только если оно есть и отличается от
@@ -6355,14 +6729,18 @@ class ВидАнимедиа(ВидОснова):
         строка_оценки = фирменный_знак_оценки(
             деталь, строкой=True,
             рейтинг=self.рейтинг(запись.get("slug") or "", деталь))
+        место = (f'<b class="zt__rank" aria-hidden="true">{int(номер)}</b>'
+                 if номер else "")
         return (f'<a class="zt zt--row" data-card-variant="{html.escape(вариант)}"'
-                f' href="{запись["url"]}" title="{html.escape(запись["title"])}">'
-                f'<span class="zt__p">{изо}</span>'
+                + (f' data-rank="{int(номер)}"' if номер else "")
+                + f' href="{запись["url"]}" title="{html.escape(запись["title"])}">'
+                + (f'<span class="vh">Место {int(номер)}. </span>' if номер else "")
+                + f'<span class="zt__p">{изо}{место}</span>'
                 f'<span class="zt__b">'
                 f'<span class="zt__t">{html.escape(запись["title"])}</span>'
                 f'{подзаголовок}{строка_меты}{строка_оценки}</span></a>')
 
-    def карусель(self, ключ: str, набор) -> str:
+    def карусель(self, ключ: str, набор, *, первый_экран: bool = False) -> str:
         """Лента первого экрана — компактная карточка, остальные ленты обычные.
 
         У оригинала под постером ленты только название; состав карточки задаёт
@@ -6371,7 +6749,9 @@ class ВидАнимедиа(ВидОснова):
         видно было другое.
         """
         вариант = "compact" if ключ == "hero" else "catalog-title"
-        плитки = "".join(self.плитка(з, вариант=вариант) for з in набор)
+        плитки = "".join(self.плитка(з, вариант=вариант,
+                                     первый_экран=первый_экран)
+                         for з in набор)
         ид = f"rl-{ключ}"
         return (f'<div class="zrl">'
                 f'<button class="zrl__btn zrl__btn--p" type="button" data-rl="prev"'
@@ -6385,12 +6765,24 @@ class ВидАнимедиа(ВидОснова):
                 f' hidden></div>'
                 f'</div>')
 
-    def плитки(self, набор, *, вариант: str = "catalog-title") -> str:
+    def плитки(self, набор, *, вариант: str = "catalog-title",
+               нумерация: int | None = None, первый_экран: bool = False) -> str:
+        """Сетка карточек. `нумерация` — номер первой карточки сквозного списка.
+
+        Номер приходит снаружи и продолжается через страницы: считать его от
+        начала страницы значило бы получить «1» на каждой странице топа.
+        """
         extra = " zg--recommendation" if вариант == "recommendation" else ""
         if вариант == "related-row":
             extra = " zg--related-row"
+        набор = list(набор)
+        куски = []
+        for сдвиг, з in enumerate(набор):
+            куски.append(self.плитка(
+                з, вариант=вариант, первый_экран=первый_экран,
+                номер=(нумерация + сдвиг) if нумерация else None))
         return (f'<div class="zg{extra}" data-card-grid="' + html.escape(вариант) + '">'
-                + "".join(self.плитка(з, вариант=вариант) for з in набор) + "</div>")
+                + "".join(куски) + "</div>")
 
     def логотип(self) -> str:
         """Логотип: «Ani» акцентом + «media», без чужой иконки/Premium."""
@@ -6646,7 +7038,8 @@ class ВидАнимедиа(ВидОснова):
         сезоны = список_серий(деталь)
         сериал = bool(сезоны) or запись.get("kind") == "Сериал"
         звенья = [("/", self.имя), ("/catalog/", "Каталог"), ("", имя)]
-        изо = заглушка_постера(запись, "zt__none", "zhead__img", 240, 360)
+        изо = заглушка_постера(запись, "zt__none", "zhead__img", 240, 360,
+                               срочно=self._постер_срочно())
         описание = ""
         if join_ok:
             описание = (деталь.get("description") or деталь.get("short_description") or "").strip()
@@ -6816,14 +7209,29 @@ class ВидАнимедиа(ВидОснова):
         заголовок = f"{имя} — {сезон} сезон, {эпизод} серия"
         звенья = [("/", self.имя), ("/catalog/", "Каталог"),
                   (title_path, имя), ("", f"S{сезон}E{эпизод}")]
-        изо = заглушка_постера(запись, "zt__none", "zhead__img", 96, 144)
+        изо = заглушка_постера(запись, "zt__none", "zhead__img", 96, 144,
+                               срочно=self._постер_срочно())
         orig = str(деталь.get("original_name") or деталь.get("original_title") or "").strip()
         orig_html = f'<p class="aep-ctx__o">{html.escape(orig)}</p>' if orig else ""
         описание = (деталь.get("description") or деталь.get("short_description") or "").strip()
         desc_html = ""
         if описание:
-            short = описание if len(описание) <= 220 else описание[:217].rstrip() + "…"
-            desc_html = f'<p class="aep-ctx__desc">{html.escape(short)}</p>'
+            # Описание — произведения, а не серии: синопсисов отдельных серий
+            # источник не передаёт, и выдавать одно за другое нельзя. Отсюда
+            # и подпись «О произведении» над текстом.
+            #
+            # Короткий вид и полный — один и тот же текст, а не два: раскрытие
+            # снимает обрезку в CSS. Второй экземпляр того же абзаца в
+            # разметке разошёлся бы с первым при любой правке.
+            тело_описания = (
+                f'<p class="aep-ctx__desc" data-episode-desc="title">'
+                f'{html.escape(описание)}</p>')
+            if len(описание) > 260:
+                desc_html = (
+                    f'<details class="aep-ctx__more">'
+                    f'<summary>{тело_описания}</summary></details>')
+            else:
+                desc_html = тело_описания
         код, внутри = разметка_плеера(self, запись, деталь, сезон, эпизод)
         плеер = (
             f'<section class="zpl" id="watch" data-b08="player" data-b09="player">'
@@ -6849,16 +7257,62 @@ class ВидАнимедиа(ВидОснова):
             counts.append(f"Доступно {avail} серий")
         if total > 0:
             counts.append(f"Вышло {total} серий")
+        # Ключевые факты каталога — те, что уже есть в снимке: тип, год,
+        # жанры, страна. Поля, которого источник не передал, здесь не
+        # появится: пустая строка честнее выдуманной.
+        факты = [str(з) for з in (запись.get("kind"), запись.get("year")) if з]
+        жанры = [str(ж) for ж in (деталь.get("genres") or []) if ж][:3]
+        if жанры:
+            факты.append(", ".join(жанры))
+        страны = [str(к) for к in (деталь.get("countries") or []) if к][:2]
+        if страны:
+            факты.append(", ".join(страны))
+        факты_html = (f'<p class="aep-ctx__meta" data-episode-facts="1">'
+                      f'{html.escape(" · ".join(факты))}</p>' if факты else "")
         counts_html = (f'<p class="aep-ctx__meta">{html.escape(" · ".join(counts))}</p>'
                        if counts else "")
-        # Compact parent context AFTER player/nav/seasons — not a second hero.
+        # Оценка здесь — оценка ПРОИЗВЕДЕНИЯ, и так и подписана. Отдельного
+        # голосования за серию нет: голос привязан к постоянному
+        # идентификатору произведения, поэтому число на странице тринадцатой
+        # серии и на карточке — одно и то же, а не два разных.
+        оценки_html = разметка_оценок(деталь, "rbs", пусто=False)
+        r = self.рейтинг(запись["slug"], деталь)
+        подпись_оценки = ('<span class="aep-ctx__score-lab">'
+                          'Рейтинг произведения</span>')
+        if r and r.get("значение") is not None:
+            голосов = int(r.get("голосов") or 0)
+            хвост = (f" · {голосов} {склонение_голосов(голосов)} зрителей витрины"
+                     if голосов else "")
+            показ = f"{float(r['значение']):g}"
+            главная_оценка = (
+                f'<p class="aep-ctx__score" data-episode-rating="title"'
+                f' data-rating-scope="title"'
+                f' data-rating-state="{html.escape(str(r.get("состояние") or ""))}">'
+                f'{подпись_оценки}<b>{html.escape(показ)}</b>'
+                f'<small>из 10{html.escape(хвост)}</small></p>')
+        else:
+            главная_оценка = (
+                f'<p class="aep-ctx__score aep-ctx__score--none"'
+                f' data-episode-rating="title" data-rating-scope="title"'
+                f' data-rating-state="empty">'
+                f'{подпись_оценки}<b>{АНИМЕДИА_ОЦЕНКА_НЕТ}</b>'
+                f'<small>оценок пока нет</small></p>')
+        # Компактная карточка произведения — сразу под плеером и переходом
+        # между сериями. Прежде она стояла под реакциями, ниже всей страницы:
+        # с серии было не видно ни постера, ни оценки, ни описания, хотя
+        # именно за этим приходят по ссылке на конкретную серию. Перед плеером
+        # её ставить тоже нельзя — плеер обязан остаться первым, что видно.
         ctx = (
             f'<aside class="aep-ctx" data-episode-context="1" data-b09="parent">'
             f'<div class="aep-ctx__poster">{изо}</div>'
             f'<div class="aep-ctx__main">'
-            f'<p class="aep-ctx__ep">Контекст тайтла</p>'
+            f'<p class="aep-ctx__ep">О произведении &middot; {сезон} сезон, '
+            f'{эпизод} серия</p>'
             f'<a class="aep-ctx__back" href="{title_path}">{html.escape(имя)}</a>'
-            f'{orig_html}{counts_html}{desc_html}'
+            f'{orig_html}{факты_html}{counts_html}{главная_оценка}{оценки_html}'
+            f'{desc_html}'
+            f'<a class="aep-ctx__all" href="{title_path}">'
+            f'Всё о произведении &#8594;</a>'
             f'</div></aside>')
         блок_похожих = self._блок_похожих(запись, деталь, extra_attrs=' data-b09="recs"')
         # Обсуждение произведения доступно и со страницы серии.
@@ -6866,7 +7320,8 @@ class ВидАнимедиа(ВидОснова):
         # переход между сериями не создаёт вторую ветку и не теряет уже
         # написанное. Формы возвращают посетителя на страницу произведения,
         # где этот раздел — основной.
-        действия = self.панель_действий(запись, возврат=путь)
+        действия = self.панель_действий(запись, возврат=путь,
+                                        область="Оценка произведения")
         реакции = self.полоса_реакций(запись, возврат=путь)
         обсуждение = self.блок_обсуждения(запись, возврат=путь)
         тело = (
@@ -6875,18 +7330,25 @@ class ВидАнимедиа(ВидОснова):
             # «Контекст тайтла» уехал ниже действий: он отделял плеер от
             # оценки и списков, то есть стоял ровно между просмотром и тем,
             # что делают сразу после него.
-            f'{плеер}{действия}{переход}'
+            f'{плеер}{действия}{переход}{ctx}'
             f'{self._серии(запись, сезоны, текущий=(сезон, эпизод))}'
-            f'{реакции}{ctx}{обсуждение}{блок_похожих}</div>')
+            f'{реакции}{обсуждение}{блок_похожих}</div>')
         разметка = self.schema_эпизода(запись, деталь, сезон, эпизод, путь)
+        # Описание страницы серии собирается из фактов этой серии. Раньше
+        # сюда подставлялся синопсис сериала: тринадцать серий получали одно
+        # и то же описание, выданное за описание каждой. Синопсиса серии
+        # источник не передаёт — значит, его здесь и не будет.
+        мета_описание = f"{имя}: {сезон} сезон, {эпизод} серия."
+        if avail > 0:
+            мета_описание += f" Доступно {avail} серий."
+        мета_описание += f" Смотреть онлайн на витрине {self.имя}."
         return self.оболочка(
             тело, f"{заголовок} — {self.имя}", путь,
-            описание=(описание[:180] if описание else
-                      f"{заголовок}: смотреть онлайн на витрине {self.имя}."),
+            описание=мета_описание,
             разметка=разметка, крошки=self.крошки(звенья),
             og=self.карточка_графа(
                 тип="video.episode", титул=заголовок,
-                описание=f"{заголовок}: смотреть онлайн на витрине {self.имя}.",
+                описание=мета_описание,
                 путь=путь, изображение=запись.get("poster") or ""))
 
     def _франшиза(self, деталь: dict) -> str:
@@ -6951,7 +7413,9 @@ class ВидАнимедиа(ВидОснова):
                 f' data-popular-updated="{html.escape(str(snapshot.get("updated_at") or snapshot.get("generated_at") or ""))}"'
                 f' data-popular-algo="{html.escape(str(snapshot.get("algorithm_version") or ""))}"'
             )
-        плитки = "".join(self.плитка(з, вариант="hero") for з in отобрано)
+        # Единственный блок главной, который гарантированно выше сгиба.
+        плитки = "".join(self.плитка(з, вариант="hero", первый_экран=True)
+                         for з in отобрано)
         return (
             f'<section class="ahero" aria-roledescription="carousel" '
             f'aria-label="{html.escape(подпись)}" data-hero="1" '
@@ -7245,7 +7709,8 @@ class ВидАнимедиа(ВидОснова):
 <script>{СКРИПТ_АНИМЕДИА_ТЕМА_BOOT}</script>
 <style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}
 {СКРИПТ_КАРУСЕЛИ}
-{СКРИПТ_АНИМЕДИА_ШАПКА}</script>
+{СКРИПТ_АНИМЕДИА_ШАПКА}
+{СКРИПТ_ФИЛЬТРОВ}</script>
 </head>
 <body><a class="skip" href="#main">Перейти к содержимому</a>
 <div class="zs">
@@ -7527,7 +7992,7 @@ class ВидАнимедиа(ВидОснова):
             f'<h1 class="zh">{html.escape(титул)}</h1>'
             f'<p class="zsub" data-b11-count="1">Найдено {len(набор)} · {pages_label}</p>'
             + фильтры
-            + (self.плитки(кусок) if кусок else
+            + (self.плитки(кусок, первый_экран=True) if кусок else
                '<div class="zempty" data-b11-empty="1"><b>Ничего не подошло</b>'
                "<p>Под выбранные условия не попала ни одна запись. "
                f'<a href="{разд}/">Сбросить фильтры</a>.</p></div>')
@@ -7641,7 +8106,21 @@ class ВидАнимедиа(ВидОснова):
                 links.append(
                     f'<a href="{закодировать_запрос(href)}"{cur}>{html.escape(label)}'
                     f' <small>{count}</small></a>')
-            return (f'<details class="afilt__dd"><summary>{html.escape(title)}</summary>'
+            # Панель объявляет своё состояние сама: без aria-expanded
+            # экранный диктор читает «Год» как обычную кнопку и не сообщает,
+            # раскрылся список или нет.
+            # Ни одна панель не открыта при загрузке: применённых фильтров
+            # бывает несколько, и «раскрыть выбранные» вернуло бы ровно ту же
+            # кашу из семи наложенных списков. Что выбрано — видно строкой
+            # активных фильтров выше, а не раскрытой панелью.
+            выбор = str(выбрано.get(param) or "")
+            метка = html.escape(title)
+            if выбор:
+                метка += ' <span class="afilt__on" aria-hidden="true">&#8226;</span>'
+            return (f'<details class="afilt__dd" data-afilt-dd="{html.escape(param)}">'
+                    f'<summary aria-expanded="false"'
+                    + (' data-afilt-chosen="1"' if выбор else "")
+                    + f'>{метка}</summary>'
                     f'<div class="afilt__opts">{"".join(links)}</div></details>')
 
         kind_pairs = [(к, к, sum(1 for з in self.д.items if з.get("kind") == к))
@@ -7891,12 +8370,20 @@ class ВидАнимедиа(ВидОснова):
 
         нехватка = ""
         if len(отобрано) < вместимость:
+            # Нехватка называется числом И причиной. «Событий мало» и «история
+            # помнит мало разных тайтлов» — разные неисправности, и посетитель
+            # (как и владелец) должен видеть, какая из них перед ним: лента
+            # показывает по одной карточке на произведение, поэтому страницы
+            # ограничены числом РАЗНЫХ обновившихся тайтлов в реестре.
             нехватка = (
                 f'<p class="aeps__short" data-events-confirmed="{len(отобрано)}" '
-                f'data-events-capacity="{вместимость}">'
-                f'Подтверждённых событий пока {len(отобрано)} из {вместимость}: '
-                f'страницы заполняются по мере выхода новых серий. '
-                f'Повторами и выдуманными записями места здесь не занимаются.'
+                f'data-events-capacity="{вместимость}" '
+                f'data-events-titles="{len(сгруппировано)}">'
+                f'Разных обновившихся произведений в истории пока '
+                f'{len(сгруппировано)}, а на пять страниц нужно {вместимость}: '
+                f'каждое произведение занимает здесь одну карточку, и страницы '
+                f'заполняются по мере выхода новых серий. Повторами, новыми '
+                f'озвучками и выдуманными записями места здесь не занимаются.'
                 f'</p>')
 
         return (
@@ -7906,8 +8393,12 @@ class ВидАнимедиа(ВидОснова):
             f'data-episode-feed-source="{html.escape(источник)}" '
             f'data-eps-pages="{заполнено}" data-eps-current="{текущая}" '
             f'data-eps-total="{len(отобрано)}">'
+            # Ссылка названа по тому, КУДА ведёт. «Весь раздел» обещал
+            # продолжение этой же ленты, а /new/ — другой раздел: поступления
+            # в каталог, а не выход серий. Продолжения у ленты нет: все её
+            # события помещаются на эти пять страниц.
             f'<div class="zsec__h"><h2>{АНИМЕДИА_ЭПИЗОД_ЗАГОЛОВОК}</h2>'
-            f'<a href="/new/">Весь раздел</a></div>'
+            f'<a href="/new/">Недавно добавленные в каталог</a></div>'
             f'{"".join(панели)}'
             f'<nav class="aeps__pages" aria-label="Страницы новых серий">'
             f'{кнопки}</nav>{нехватка}</section>'
@@ -8076,7 +8567,9 @@ class ВидАнимедиа(ВидОснова):
             "kind": row.get("kind"),
             "year": row.get("year"),
         }
-        изо = заглушка_постера(запись, "zt__none", "zt__img", 190, 285)
+        изо = заглушка_постера(запись, "zt__none", "zt__img", 190, 285,
+                               срочно=(self._постер_срочно()
+                                       if первый_экран else ""))
         мета = " · ".join(
             str(ч) for ч in (row.get("kind"), row.get("year")) if ч)
         ts = _аниме_формат_времени_анонса(
@@ -8310,33 +8803,31 @@ class ВидАнимедиа(ВидОснова):
             f'{self.плитки(записи, вариант="top100-shelf")}</section>'
         )
 
+    #: Сколько подборок показывает главная. Три, а не четыре: колонок в сетке
+    #: не больше трёх, и четвёртая карточка вставала бы одна во втором ряду —
+    #: ровно тот вид «недозаполненной сетки», из-за которого правило колонок и
+    #: переписано. Остальные подборки открывает «Весь раздел».
+    ПОДБОРОК_НА_ГЛАВНОЙ = 3
+
     def _блок_подборок_home_b06(self) -> str:
-        """Home collections shelf — real collection specs only."""
-        if КОЛЛЕКЦИИ is None:
-            return ""
-        снимок = Снимок.получить(self.д, self.п)
-        if снимок is None:
-            return ""
-        карточки = []
-        for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО)[:4]:
-            if not спец.доступна:
-                continue
-            данные = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО,
-                                         предел=1)
-            if данные is None or not данные.items:
-                continue
-            карточки.append(
-                f'<a class="zhub__c" data-card-variant="collection-card" '
-                f'href="{html.escape(спец.canonical_path)}">'
-                f'<span class="zhub__t">{html.escape(данные.title)}</span>'
-                f'<span class="zhub__m">{данные.total} записей</span></a>')
-        if not карточки:
+        """Полка подборок на главной — тем же компонентом, что и раздел.
+
+        ПРИЧИНА ПРАВКИ. Здесь лежала своя копия карточки: она спрашивала у
+        контракта ОДНУ запись (`предел=1`) и рисовала только название со
+        счётчиком. Собрать превью из одной записи нельзя в принципе, поэтому
+        подборки на главной были текстовыми плитками — и оставались ими, пока
+        в разделе `/collections/` те же подборки показывались с обложками.
+        Дефект жил не в данных, а в том, что «карточка подборки» была не
+        компонентом, а четырьмя независимыми копиями разметки.
+        """
+        подборки = self.подборки_для_показа(предел=self.ПОДБОРОК_НА_ГЛАВНОЙ)
+        if not подборки:
             return ""
         return (
             '<section class="zsec zsec--home-cols" data-b06="collections">'
             '<div class="zsec__h"><h2>Подборки</h2>'
             '<a href="/collections/">Весь раздел</a></div>'
-            f'<div class="zhub zhub--home">{"".join(карточки)}</div></section>'
+            + self.сетка_подборок(подборки) + "</section>"
         )
 
     def _эпизод_события(self) -> list[dict]:
@@ -8504,20 +8995,55 @@ class ВидАнимедиа(ВидОснова):
             # значит обещать страницу, где нечего смотреть. Измерено на боевых
             # данных: у трёх тайтлов из первой десятки событие было выше
             # доступного, и ссылки отвечали 404.
-            доступно = 0
-            for сез in список_серий(self.деталь(запись.get("slug") or slug) or {}):
+            # Пачка приезжает диапазоном `episode_from..episode_to`. Если
+            # верхняя серия пачки уже недоступна, это не причина выбрасывать
+            # всё событие: остальная пачка на месте. Карточка опускается до
+            # самой свежей ДЕЙСТВИТЕЛЬНО доступной серии этой пачки, время
+            # события не меняется, и ссылка ведёт ровно на ту серию, которая
+            # на карточке названа.
+            #
+            # Измерено на боевом реестре: из 38 событий фильтр «выше
+            # доступного» отбрасывал 23 — то есть шесть седьмых ленты, — а
+            # разница в большинстве случаев составляла одну серию.
+            #
+            # Доступность решает ОДИН предикат на всю витрину —
+            # `серия_с_дорожкой`. Пересчитывать её здесь по `avail` значило бы
+            # завести второе определение доступной серии: сегодня они
+            # совпадают (снимок знает только счётчик, и доступным считается
+            # префикс 1..avail), но счётчик САМ ПО СЕБЕ не доказывает состав
+            # эпизодов. Первый же снимок с пропуском или перенумерацией
+            # развёл бы ленту и страницу серии, а снаружи это выглядит как
+            # «карточка ведёт в пустоту» — ровно тот дефект, который здесь и
+            # лечится. Поэтому счётчик только сужает поиск, а последнее слово
+            # за предикатом, и спуск идёт до нижней границы пачки.
+            деталь_записи = self.деталь(запись.get("slug") or slug) or {}
+            снизу = int(с.get("episode_from") or эпизод)
+            if снизу < 1:
+                снизу = эпизод
+            верх = 0
+            for сез in список_серий(деталь_записи):
                 if int(сез.get("n") or 0) == сезон:
-                    доступно = int(сез.get("avail") or 0)
+                    верх = min(эпизод, int(сез.get("avail") or 0))
                     break
-            if not доступно or эпизод > доступно:
+            факт = 0
+            кандидат = верх
+            while кандидат >= снизу:
+                if серия_с_дорожкой(деталь_записи, сезон, кандидат):
+                    факт = кандидат
+                    break
+                кандидат -= 1
+            if not факт:
                 continue
+            эпизод = факт
             если_есть = с.get("first_seen_at") or с.get("episode_published_at") or ""
             строки.append({
                 "slug": запись.get("slug") or slug,
                 "content_id": ид,
                 "title": запись.get("title") or с.get("title") or slug,
-                "url": (с.get("url")
-                        or self.адрес_эпизода(запись.get("slug") or slug, сезон, эпизод)),
+                # Адрес строится по фактическому номеру, а не берётся из
+                # реестра: после понижения адрес реестра вёл бы на серию,
+                # которой нет.
+                "url": self.адрес_эпизода(запись.get("slug") or slug, сезон, эпизод),
                 "poster": запись.get("poster"),
                 "event_kind": "appeared_on_site",
                 "event_id": str(с.get("event_id") or f"{ид}:s{сезон}:e{эпизод}"),
@@ -8549,7 +9075,12 @@ class ВидАнимедиа(ВидОснова):
         эпизод = int(row.get("episode_number") or 0)
         когда = _аниме_формат_времени_анонса(
             row.get("appeared_at") or row.get("published_at") or "", "datetime")
-        мета = f"Добавлено: {когда}" if когда else "Добавлено на сайт"
+        # «Добавлено» посетитель читал как дату выхода серии. Здесь же —
+        # момент, когда серия стала доступна НА ЭТОМ САЙТЕ: эфирной даты
+        # источник не передаёт, и мировая премьера могла быть раньше. Подпись
+        # говорит именно это, без «вышло» и без «премьера».
+        мета = (f"Появилось на сайте: {когда}" if когда
+                else "Появилось на сайте")
         подпись = f"с{сезон} · серия" if сезон > 1 else "серия"
         return (
             f'<a class="aeps__row" data-card-variant="episode-row" '
@@ -8609,7 +9140,8 @@ class ВидАнимедиа(ВидОснова):
             f'<h1 class="zh">{АНИМЕДИА_CATALOG_ADDED_H1}</h1>'
             f'<p class="zsub">Всего {len(записи)} · страница {стр} из {всего}. '
             f'Порядок — от самого свежего поступления.</p>'
-            + self.плитки(кусок, вариант="catalog-title") + листалка + "</div>"
+            + self.плитки(кусок, вариант="catalog-title", первый_экран=True)
+            + листалка + "</div>"
         )
         return self.оболочка(
             тело, f"{АНИМЕДИА_CATALOG_ADDED_H1} — {self.имя}", канон,
@@ -8743,7 +9275,7 @@ class ВидАнимедиа(ВидОснова):
             f'<p class="zsub">Совпадений: {len(набор)}'
             + (f" · страница {стр} из {всего_страниц}" if всего_страниц > 1 else "")
             + "</p>"
-            + self.плитки(кусок)
+            + self.плитки(кусок, первый_экран=True)
             + self._листалка_поиска(q, стр, всего_страниц)
             + "</div>")
         return self._страница_поиска(
@@ -8756,49 +9288,12 @@ class ВидАнимедиа(ВидОснова):
     COLLECTION_STRICT_PAGING = True
 
     def _карточки_коллекций(self) -> list[dict]:
-        """Доступные коллекции контракта — по одной карточке на коллекцию.
+        """Данные карточек подборок. Сборщик один на весь сайт.
 
-        Коллекция, у которой в снимке нет записей, не показывается: так велит
-        её `empty_policy`, и обещать раздел без содержимого нельзя. А вот
-        прятать существующую коллекцию из-за совпадения коллажа нельзя тоже —
-        тогда до неё не доведёт ни одна ссылка. Поэтому коллаж по возможности
-        собирается из ещё не занятых постеров, а сама плитка остаётся.
+        Своя копия здесь и была половиной дефекта: главная и раздел собирали
+        карточку по-разному, и расходились они молча.
         """
-        снимок = Снимок.получить(self.д, self.п)
-        if КОЛЛЕКЦИИ is None or снимок is None:
-            return []
-        занятые: set[str] = set()
-        карточки: list[dict] = []
-        видели: set[str] = set()
-        for порядок, спец in enumerate(КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО)):
-            if not спец.доступна or спец.collection_key in видели:
-                continue
-            коллекция = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО,
-                                            предел=48)
-            if коллекция is None or not коллекция.items:
-                continue
-            видели.add(спец.collection_key)
-            свежие = [к for к in коллекция.items
-                      if к.poster and к.poster not in занятые][:4]
-            if len(свежие) < 4:
-                for к in коллекция.items:
-                    if к in свежие or not к.poster:
-                        continue
-                    свежие.append(к)
-                    if len(свежие) >= 4:
-                        break
-            for к in свежие:
-                занятые.add(к.poster)
-            карточки.append({
-                "key": спец.collection_key,
-                "order": порядок,
-                "title": коллекция.title,
-                "description": коллекция.description,
-                "total": коллекция.total,
-                "path": спец.canonical_path,
-                "posters": [к.poster for к in свежие[:4] if к.poster],
-            })
-        return карточки
+        return self.подборки_для_показа()
 
     @staticmethod
     def _сортировать_коллекции(карточки: list[dict], режим: str) -> list[dict]:
@@ -8841,7 +9336,11 @@ class ВидАнимедиа(ВидОснова):
         return f'<nav class="zpg" aria-label="Страницы подборок">{"".join(куски)}</nav>'
 
     def _переключатель_сортировки(self, режим: str) -> str:
-        подписи = (("contract", "По контуру"), ("size", "По размеру"),
+        # «По контуру» было внутренним словом: посетитель не знает, что такое
+        # контур, и выбирает порядок наугад. Фактически этот режим — заданный
+        # порядок разделов витрины, так он и называется.
+        подписи = (("contract", "В порядке разделов"),
+                   ("size", "По числу записей"),
                    ("name", "По названию"))
         кнопки = "".join(
             (f'<span class="ahub__s is-on" aria-current="true">{html.escape(t)}</span>'
@@ -8851,28 +9350,9 @@ class ВидАнимедиа(ВидОснова):
         return ('<div class="ahub__sorts" data-b13="sort" role="group" '
                 f'aria-label="Порядок подборок">{кнопки}</div>')
 
-    @staticmethod
-    def _сетка_коллекций(карточки: list[dict]) -> str:
-        """Сетка из уже отобранных карточек. Пустых ячеек в ней не бывает."""
-        плитки = "".join(
-            f'<a class="zhub__c" data-card-variant="collection-card" '
-            f'data-collection-key="{html.escape(к["key"])}" '
-            f'href="{html.escape(к["path"])}">'
-            # Название стоит над коллажем — так у оригинала: сначала читаешь,
-            # о чём подборка, потом смотришь, что в ней.
-            f'<span class="zhub__t">{html.escape(к["title"])}</span>'
-            f'<span class="zhub__g">'
-            + "".join(
-                f'<span class="zhub__p">'
-                f'<img class="zhub__img" src="{html.escape(_адрес_постера(п) or "")}"'
-                f' alt="" loading="lazy" width="120" height="180"></span>'
-                for п in к["posters"])
-            + "</span>"
-            f'<span class="zhub__m">{к["total"]} записей</span>'
-            f'<span class="zhub__d">{html.escape(к["description"])}</span>'
-            "</a>"
-            for к in карточки)
-        return f'<div class="zhub" data-b13="hub">{плитки}</div>'
+    def _сетка_коллекций(self, карточки: list[dict]) -> str:
+        """Сетка подборок раздела — тем же компонентом, что и на главной."""
+        return self.сетка_подборок(карточки)
 
     def хаб_коллекций(self, зпр: dict | None = None) -> str:
         """B13.1 хаб: сетка 3/2/1, объявленный порядок, честная пустота."""
@@ -8936,6 +9416,44 @@ class ВидАнимедиа(ВидОснова):
                              актив="/collections/",
                              описание=f"Подборки витрины {self.имя}.")
 
+    #: Человеческие имена полей, по которым сортируются подборки. Название
+    #: поля хранилища на экране посетителю ничего не говорит.
+    ИМЕНА_ПОРЯДКА = {
+        "published_at": "по дате появления в каталоге",
+        "episode_published_at": "по дате появления серии",
+        "rating": "по оценке источника",
+        "year": "по году выпуска",
+        "title": "по названию",
+    }
+
+    def _паспорт_подборки(self, данные) -> str:
+        """Как подборка собрана и на каких данных: правило, порядок, момент.
+
+        «Новый файл с тем же содержимым» доказательством актуальности не
+        является, поэтому здесь стоит время сборки СНИМКА КАТАЛОГА, из
+        которого подборка считается, и отпечаток его состава. Если содержимое
+        не менялось, отпечаток тот же — и это видно, а не спрятано.
+        """
+        части = []
+        порядок = self.ИМЕНА_ПОРЯДКА.get(
+            str((данные.sort_spec or {}).get("field") or ""), "")
+        if порядок:
+            убыв = str((данные.sort_spec or {}).get("order") or "") == "desc"
+            части.append("Порядок: " + порядок
+                         + (" — сначала новое" if убыв else " — по возрастанию"))
+        собран = _аниме_формат_времени_анонса(
+            getattr(self.д, "built_at", "") or "", "datetime")
+        if собран:
+            части.append(f"Данные снимка каталога от {собран}")
+        if not части:
+            return ""
+        отпечаток = html.escape(str(данные.data_revision or "")[:12])
+        return (f'<p class="zsub acol__spec" data-collection-rule="1"'
+                f' data-collection-source="{html.escape(str(данные.source or ""))}"'
+                f' data-collection-revision="{отпечаток}"'
+                f' data-collection-built="{html.escape(str(getattr(self.д, "built_at", "") or ""))}">'
+                + html.escape(". ".join(части)) + ".</p>")
+
     def коллекция(self, данные) -> str:
         """B13.2 страница коллекции: H1, счётчик, 24 на страницу, дедупликация."""
         на_странице = АНИМЕДИА_COLLECTION_DETAIL_PAGE_SIZE
@@ -8975,7 +9493,8 @@ class ВидАнимедиа(ВидОснова):
             + (f' · страница {данные.page} из {всего_страниц}'
                if всего_страниц > 1 else "")
             + "</p>"
-            + (self.плитки(записи) if записи else
+            + self._паспорт_подборки(данные)
+            + (self.плитки(записи, первый_экран=True) if записи else
                f'<div class="zempty" data-b13-state="empty">'
                f'<b>{html.escape(данные.title)}: пока пусто</b>'
                "<p>В текущем снимке под эту коллекцию не попала ни одна "
@@ -9057,7 +9576,9 @@ class ВидАнимедиа(ВидОснова):
     СРЕЗЫ_ТОПА = (
         ("rating", "По сводной оценке",
          "Порядок по сводной оценке Animedia, собранной из подтверждённых "
-         "источников. Записи с малым числом голосов не участвуют."),
+         "источников. Записи с малым числом голосов не участвуют. При равной "
+         "оценке выше стоит запись с большим числом голосов, при равенстве и "
+         "в нём — по адресу записи, поэтому список не меняется сам собой."),
         ("votes", "По голосам посетителей",
          "Порядок по средней оценке посетителей этой витрины. Внешние "
          "источники в этот срез не входят."),
@@ -9066,13 +9587,40 @@ class ВидАнимедиа(ВидОснова):
          "свежей. Это срез по дате добавления, а не по популярности."),
     )
 
+    #: Сколько мест в полном разделе топа. Раздел называется «ТОП-100», и
+    #: число здесь одно: показывать 48 мест под этим именем — это обрезанный
+    #: список, а не короткий. Разбивки на страницы нет намеренно: сквозная
+    #: нумерация 1..100 на одной странице не может ни потерять место на стыке
+    #: страниц, ни повторить его.
+    ПРЕДЕЛ_ТОПА = 100
+
+    @staticmethod
+    def _без_повторов(записи: list) -> list:
+        """Одно произведение — одно место. Повтор в топе крадёт чужое место."""
+        видели = set()
+        готово = []
+        for з in записи:
+            slug = з.get("slug")
+            if not slug or slug in видели:
+                continue
+            видели.add(slug)
+            готово.append(з)
+        return готово
+
     def _топ_по_оценке(self, предел: int) -> list:
         топ = загрузить_топ_по_оценкам()
         if not топ:
             return []
         по_slug = {з.get("slug"): з for з in self.д.items if з.get("slug")}
-        записи = [по_slug[м["slug"]] for м in (топ.get("places") or [])
-                  if м.get("slug") in по_slug]
+        # Порядок задаётся явно здесь, а не порядком строк в файле: место в
+        # списке обязано быть объяснимым. Ведёт сводная оценка (`value`),
+        # равенства решает число голосов, полное равенство — адрес записи.
+        # Тогда повторное открытие неизменённых данных даёт тот же список.
+        места = [м for м in (топ.get("places") or []) if м.get("slug") in по_slug]
+        места.sort(key=lambda м: (-float(м.get("value") or 0),
+                                 -int(м.get("votes") or 0),
+                                 str(м.get("slug") or "")))
+        записи = self._без_повторов([по_slug[м["slug"]] for м in места])
         return записи[:предел]
 
     def _топ_по_голосам(self, предел: int) -> list:
@@ -9091,7 +9639,8 @@ class ВидАнимедиа(ВидОснова):
                 continue
             собрано.append((sum(голоса) / len(голоса), len(голоса), slug))
         собрано.sort(key=lambda т: (-т[0], -т[1], т[2]))
-        return [по_slug[slug] for _, _, slug in собрано[:предел]]
+        return self._без_повторов(
+            [по_slug[slug] for _, _, slug in собрано])[:предел]
 
     def _топ_свежего(self, предел: int) -> list:
         порог = datetime.now(timezone.utc) - timedelta(days=30)
@@ -9104,7 +9653,47 @@ class ВидАнимедиа(ВидОснова):
             свежие.append(з)
             if len(свежие) >= предел:
                 break
-        return свежие
+        return self._без_повторов(свежие)
+
+    def _счёт_топа(self, срез: str, сколько: int, предел: int) -> str:
+        """Сколько мест показано и почему не больше.
+
+        Раздел обещает сто мест. Если их меньше, причину называет витрина, а
+        не посетитель догадкой: недобор кандидатов и обрезанный список
+        выглядят на экране одинаково, а это разные неисправности. Поэтому
+        числа берутся из сводки самого файла топа, а не из длины показанного.
+        """
+        строки = [f'Мест в списке: {сколько} из {предел}.']
+        if сколько >= предел:
+            строки.append("Каждое место — отдельное произведение, номера "
+                          f"сквозные с 1 по {предел}.")
+            return ('<p class="zsub atop__count" data-top-full="1">'
+                    + html.escape(" ".join(строки)) + "</p>")
+        причина = ""
+        if срез == "rating":
+            топ = загрузить_топ_по_оценкам() or {}
+            сводка = топ.get("summary") or {}
+            мест_в_файле = int(сводка.get("places") or len(топ.get("places") or []))
+            кандидатов = int(сводка.get("candidates") or 0)
+            порог = int(сводка.get("threshold_votes") or 0)
+            if мест_в_файле < предел:
+                причина = (f"Подходящих кандидатов набралось {кандидатов}"
+                           + (f" при пороге {порог} голосов" if порог else "")
+                           + f", мест в подборке — {мест_в_файле}.")
+            elif сколько < мест_в_файле:
+                причина = (f"В подборке {мест_в_файле} мест, но "
+                           f"{мест_в_файле - сколько} из них нет в текущем "
+                           f"снимке каталога — выдуманными записями место не "
+                           f"занимается.")
+        elif срез == "votes":
+            причина = ("Столько произведений этой витрины получили хотя бы "
+                       "один голос посетителя.")
+        else:
+            причина = "Столько записей добавлено в каталог за последние 30 дней."
+        if причина:
+            строки.append(причина)
+        return ('<p class="zsub atop__count" data-top-full="0">'
+                + html.escape(" ".join(строки)) + "</p>")
 
     def страница_топа(self, зпр: dict) -> str:
         """Страница «Топ» с названным методом у каждого среза."""
@@ -9113,7 +9702,7 @@ class ВидАнимедиа(ВидОснова):
         if срез not in известные:
             self._http_status = 404
             return self.не_найдено("/top/")
-        предел = 48
+        предел = self.ПРЕДЕЛ_ТОПА
         if срез == "rating":
             записи = self._топ_по_оценке(предел)
         elif срез == "votes":
@@ -9128,8 +9717,9 @@ class ВидАнимедиа(ВидОснова):
             f'{html.escape(имя)}</a>'
             for к, имя, _ in self.СРЕЗЫ_ТОПА)
         if записи:
-            содержимое = self.плитки(записи, вариант="catalog-title")
-            счёт = f'<p class="zsub">Мест в списке: {len(записи)}.</p>'
+            содержимое = self.плитки(записи, вариант="catalog-title",
+                                     нумерация=1, первый_экран=True)
+            счёт = self._счёт_топа(срез, len(записи), предел)
         else:
             содержимое = (
                 '<div class="zempty" data-top-state="empty">'
@@ -9138,13 +9728,37 @@ class ВидАнимедиа(ВидОснова):
                 '<a href="/catalog/">Открыть каталог</a>.</p></div>')
             счёт = ""
         self._http_status = 200
+        # Какая именно оценка задаёт порядок — сказано на странице, а не
+        # оставлено на догадку. Порядок берётся из снимка сводной оценки, а
+        # число на карточке — живое: оно пересчитывается голосами зрителей,
+        # поэтому у произведения с новыми голосами карточка может показать
+        # значение, немного отличающееся от того, что дало место. Умолчать об
+        # этом значило бы оставить посетителя с двумя числами без объяснения.
+        источник_порядка = ""
+        if срез == "rating":
+            топ = загрузить_топ_по_оценкам() or {}
+            когда = _аниме_формат_времени_анонса(
+                str(топ.get("generated_at") or ""), "datetime")
+            метод = str(топ.get("method") or "")
+            части = ["Порядок задаёт сводная оценка Animedia"]
+            if метод:
+                части.append(f"(методика {метод})")
+            if когда:
+                части.append(f"по снимку от {когда}")
+            источник_порядка = (
+                '<p class="zsub atop__order" data-top-order="summary-score">'
+                + html.escape(" ".join(части))
+                + ". На карточке показана та же сводная оценка; она "
+                  "пересчитывается новыми голосами зрителей.</p>")
+        заголовок = f"Топ-{предел}" if срез == "rating" else "Топ"
         тело = (
             f'<div class="zwrap atop-page" data-top-slice="{html.escape(срез)}" '
-            f'data-top-count="{len(записи)}">'
-            f'<h1 class="zh">Топ</h1>'
+            f'data-top-count="{len(записи)}" data-top-limit="{предел}" '
+            f'data-top-unique="{len({з.get("slug") for з in записи})}">'
+            f'<h1 class="zh">{html.escape(заголовок)}</h1>'
             f'<nav class="atabs" aria-label="Срезы топа">{вкладки}</nav>'
             f'<p class="zsub atop__method">{html.escape(подпись)}</p>'
-            f'{счёт}{содержимое}</div>')
+            f'{источник_порядка}{счёт}{содержимое}</div>')
         канон = "/top/" if срез == "rating" else f"/top/?by={срез}"
         return self.оболочка(тело, f"Топ — {self.имя}", канон, актив="/top/",
                              описание=f"Топ аниме на витрине {self.имя}: {подпись}")
@@ -9861,8 +10475,18 @@ class Обработчик(BaseHTTPRequestHandler):
                 "assets_sha256": runtime_sha,
                 "build_id": СБОРКА,
                 "release_id": СБОРКА,
-                "source_commit": МАНИФЕСТ.get("source_commit", ""),
-                "runtime_commit": МАНИФЕСТ.get("runtime_commit", ""),
+                # Откуда взят выпуск и что о нём говорит манифест. Без этих
+                # двух полей расхождение «пересобрали артефакт, манифест
+                # прежний» не отличить от «всё совпало»: снаружи оба выглядят
+                # как обычный ответ с каким-то build_id.
+                "release_identity_source": ИСТОЧНИК_ВЫПУСКА,
+                "manifest_build_id": СБОРКА_МАНИФЕСТА,
+                "release_artifact_sha256": str(РЕЛИЗ.get("artifact_sha256") or ""),
+                "release_source_commit": str(РЕЛИЗ.get("source_commit") or ""),
+                "source_commit": str(РЕЛИЗ.get("source_commit")
+                                     or МАНИФЕСТ.get("source_commit", "")),
+                "runtime_commit": str(РЕЛИЗ.get("source_commit")
+                                      or МАНИФЕСТ.get("runtime_commit", "")),
                 "profile": ПРОФИЛЬ,
                 "profile_digest": hashlib.sha256(profile_blob).hexdigest(),
                 "catalog_path": str(cat_path),
@@ -9875,11 +10499,44 @@ class Обработчик(BaseHTTPRequestHandler):
                 "template_manifest_digest": _dig(tmpl_path) if tmpl_path else "",
                 "catalog_revision": getattr(self.данные, "revision", "") or "",
                 "details_revision": getattr(self.подробности, "catalog_revision", "") or "",
+                # Цифры ЗАГРУЖЕННЫХ байт. Соседние `*_digest` считаются по
+                # файлу на диске в момент запроса и совпадают сразу после
+                # записи — по ним нельзя сказать, перечитала ли витрина
+                # снимок. Эти два поля отвечают именно на этот вопрос, а
+                # `snapshot_up_to_date` сводит ответ к одному биту.
+                "catalog_digest_loaded": getattr(
+                    self.данные, "цифра_загруженного", "") or "",
+                "details_digest_loaded": getattr(
+                    self.подробности, "цифра_загруженного", "") or "",
+                "catalog_loaded_at": getattr(self.данные, "загружено_в", "") or "",
+                "catalog_items_loaded": len(getattr(self.данные, "items", ()) or ()),
+                "details_entries_loaded": len(
+                    getattr(self.подробности, "записи", {}) or {}),
+                "snapshot_reloads": СНИМОК_СОСТОЯНИЕ.get("перезагрузок", 0),
+                "snapshot_reloaded_at": СНИМОК_СОСТОЯНИЕ.get("последняя") or "",
+                "snapshot_up_to_date": bool(
+                    getattr(self.данные, "цифра_загруженного", "") == _dig(cat_path)
+                    and (not det_path
+                         or getattr(self.подробности, "цифра_загруженного", "")
+                         == _dig(det_path))
+                ),
                 "artifact_sha256": МАНИФЕСТ.get("artifact_sha256", ""),
                 "runtime_digest_match": bool(
                     МАНИФЕСТ.get("artifact_sha256")
                     and runtime_sha
                     and МАНИФЕСТ.get("artifact_sha256") == runtime_sha
+                ),
+                # Один бит на вопрос «называет ли витрина тот выпуск, который
+                # исполняет»: паспорт релиза, манифест и цифра файла на диске
+                # обязаны говорить одно.
+                "identity_match": bool(
+                    runtime_sha
+                    and (not РЕЛИЗ.get("artifact_sha256")
+                         or РЕЛИЗ.get("artifact_sha256") == runtime_sha)
+                    and (not МАНИФЕСТ.get("artifact_sha256")
+                         or МАНИФЕСТ.get("artifact_sha256") == runtime_sha)
+                    and (not СБОРКА_МАНИФЕСТА or not РЕЛИЗ.get("build_id")
+                         or СБОРКА_МАНИФЕСТА == РЕЛИЗ.get("build_id"))
                 ),
             }
             return self._отдать(json.dumps(тело, ensure_ascii=False).encode("utf-8"),
