@@ -347,7 +347,8 @@ def cmd_newsite(args) -> int:
     заказ = newsite.Заказ(
         site_id=args.site, domain=args.domain, profile=args.template,
         port=int(args.port), family=args.family or "lords",
-        site_name=getattr(args, "site_name", "") or "")
+        site_name=getattr(args, "site_name", "") or "",
+        remote=getattr(args, "remote", "") or "")
     куда = Path(args.destination) if args.destination else (
         PATHS.root / "var" / "new-sites" / заказ.site_id)
     if args.dry_run:
@@ -403,6 +404,9 @@ def register(subparsers) -> None:
     parser.add_argument("--port", help="порт витрины для newsite")
     parser.add_argument("--site-name", dest="site_name",
                         help="видимое имя витрины для newsite")
+    parser.add_argument("--remote",
+                        help="адрес собственного репозитория сайта; без него "
+                             "доставка содержимого в ячейку отказывает")
     parser.add_argument("--registry",
                         help="файл реестра ячеек (по умолчанию config/site-cells.json)")
     parser.add_argument("--no-register", dest="no_register", action="store_true",

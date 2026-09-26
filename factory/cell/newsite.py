@@ -77,6 +77,12 @@ class Заказ:
     port: int
     family: str = "lords"
     site_name: str = ""
+    #: Собственный репозиторий сайта. Пока его нет, доставка содержимого
+    #: отказывает (`registry.require_own_repo`), и это правильно: сайт без
+    #: своей истории нельзя ни изменить, ни откатить. Поле необязательное —
+    #: проект собирается и до создания репозитория, — но пустым оно означает
+    #: «ячейка ещё не обслуживается», а не «обслуживается молча».
+    remote: str = ""
 
     def пробелы(self) -> list[str]:
         нет = [имя for имя in ("site_id", "domain", "profile", "port")
@@ -152,7 +158,8 @@ def паспорт_ячейки(заказ: Заказ, *, куда: Path, ак�
         domain=заказ.domain,
         aliases=(),
         status="planned",
-        repo={"kind": "local", "path": str(куда)},
+        repo=({"kind": "remote", "path": str(куда), "remote": заказ.remote}
+              if заказ.remote else {"kind": "local", "path": str(куда)}),
         template={"template_id": заказ.profile, "family": заказ.family},
         pins={},
         deploy_target={},
@@ -377,7 +384,12 @@ def создать(заказ: Заказ, *, корень: Path, куда: Path
                       "status": ячейка.status,
                       "data_dir": ячейка.runtime.get("data_dir"),
                       "unit": ячейка.runtime.get("unit"),
-                      "reload": ячейка.runtime.get("reload")}
+                      "reload": ячейка.runtime.get("reload"),
+                      "remote": (ячейка.repo or {}).get("remote") or None,
+                      "content_delivery": (
+                          "готова" if (ячейка.repo or {}).get("remote") else
+                          "ОТКАЗ до создания репозитория сайта: доставка "
+                          "содержимого требует repo.remote")}
         except registry.RegistryError as ош:
             # Домен уже за кем-то закреплён или паспорт не прошёл форму.
             # Проект при этом собран: удалять его молча нельзя, а делать вид,
