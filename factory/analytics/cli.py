@@ -121,8 +121,27 @@ def cmd_apply(args) -> int:
     results = []
     exit_code = EXIT_OK
 
+    поимённо = bool(getattr(args, "domain", None) or getattr(args, "site", None))
     for entry in _selected(args):
         domain = entry["domain"]
+        # Домен, счётчика у которого ещё нет по решению, а не по недосмотру.
+        # Без этой проверки сплошной прогон завёл бы счётчик КАЖДОМУ такому
+        # домену: `ensure_metrica_counter` не находит счётчика и создаёт его.
+        # Счётчик, заведённый до запуска сайта, собирает пустоту, выглядит
+        # рабочим и мешает заметить настоящий — в самом реестре это записано
+        # причиной. Поимённый вызов (--domain/--site) остаётся способом
+        # завести счётчик осознанно, когда домен действительно запущен.
+        if entry.get("counter_state") == "planned" and not entry.get("counter_id"):
+            if not поимённо:
+                results.append({
+                    "domain": domain,
+                    "status": "skipped",
+                    "reason": "счётчик не заводится до запуска домена: "
+                              "counter_state=planned. Для осознанного создания "
+                              f"вызови с --domain {domain}",
+                })
+                continue
+
         try:
             state = provider.ensure_metrica_counter(domain, entry["counter_name"])
             # Счётчик, уже записанный в реестр, обязан совпасть. Иначе это либо
