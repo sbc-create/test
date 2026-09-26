@@ -516,11 +516,11 @@ def test_пользовательское_засевается_один_раз(t
     assert not (п.data / "yummy-readmodel.sqlite3").exists(), "сухой прогон записал файл"
 
     # Настоящий засев требует root; поведение «уже на месте» проверяется без него.
-    (п.data / "yummy-readmodel.sqlite3").write_bytes("уже принятые оценки".encode("utf-8"))
+    (п.data / "yummy-readmodel.sqlite3").write_bytes("уже принятые оценки".encode())
     повтор = privileged.засеять_пользовательское(
         "yummy-site", источник, dry_run=False, площадка=п)
     assert повтор["entries"][0]["skipped"] == "уже на месте"
-    assert (п.data / "yummy-readmodel.sqlite3").read_bytes() == "уже принятые оценки".encode("utf-8"), (
+    assert (п.data / "yummy-readmodel.sqlite3").read_bytes() == "уже принятые оценки".encode(), (
         "повторный засев затёр пользовательские данные")
 
 
@@ -540,7 +540,7 @@ def test_база_оценок_подключается_ссылкой_а_не_�
                           "user_writable": ["site-data", "yummy-readmodel.sqlite3"]},
     }), encoding="utf-8")
     (п.data / "yummy-site-catalog.json").write_text('{"items": []}', encoding="utf-8")
-    (п.data / "yummy-readmodel.sqlite3").write_bytes("оценки".encode("utf-8"))
+    (п.data / "yummy-readmodel.sqlite3").write_bytes("оценки".encode())
     (п.data / "site-data").mkdir()
 
     источник = tmp_path / "front"
@@ -631,7 +631,7 @@ def test_приёмка_читает_build_id_у_семейства_без_ме�
 
     class ТолькоЗаголовок(BaseHTTPRequestHandler):
         def do_GET(self):  # noqa: N802
-            тело = "<html><body>прокси без мета-тега</body></html>".encode("utf-8")
+            тело = "<html><body>прокси без мета-тега</body></html>".encode()
             self.send_response(200)
             self.send_header("X-Site-Factory-Build-Id", "9d25994c1762-yummy-biz")
             self.send_header("Content-Length", str(len(тело)))
@@ -643,7 +643,7 @@ def test_приёмка_читает_build_id_у_семейства_без_ме�
 
     class ТолькоМетаТег(BaseHTTPRequestHandler):
         def do_GET(self):  # noqa: N802
-            тело = '<meta name="site-factory-build-id" content="abc123-zona-01">'.encode('utf-8')
+            тело = b'<meta name="site-factory-build-id" content="abc123-zona-01">'
             self.send_response(200)
             self.send_header("Content-Length", str(len(тело)))
             self.end_headers()
@@ -662,7 +662,7 @@ def test_приёмка_читает_build_id_у_семейства_без_ме�
                                 data=tmp_path / "data", unit="u.service",
                                 previous_unit=None, port=порт)
         monkeypatch.setattr(privileged.Площадка, "из_реестра",
-                            staticmethod(lambda *a, **k: п))
+                            staticmethod(lambda *a, _п=п, **k: _п))
         try:
             итог = privileged.verify("проверка", ожидаемый_build=ожидаемый,
                                      маршруты=("/",))

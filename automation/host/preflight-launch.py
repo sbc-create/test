@@ -16,9 +16,8 @@ from __future__ import annotations
 import argparse
 import json
 import re
-import socket
 import shutil
-import sys
+import socket
 from pathlib import Path
 
 КОРЕНЬ = Path(__file__).resolve().parent.parent.parent
