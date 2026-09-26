@@ -30,7 +30,8 @@ node browser.js                   # Chromium: темы, лента, плеер
 | Файл | Прогон | Итог |
 | --- | --- | --- |
 | `new-instance-checks.txt` | `checks/run.sh` в сгенерированном проекте | 12 из 12 |
-| `http-surfaces-and-community.txt` | поверхности и сообщество | 54 из 54, 22 из 22 |
+| `http-surfaces.txt` | поверхности, фильтры, поиск | 60 из 60 |
+| `http-surfaces-and-community.txt` | тот же прогон вместе с сообществом | 54 из 54, 22 из 22 |
 | `http-redelivery.txt` | доставка каталога, три поколения | 15 из 15 |
 | `profiles.txt` | три профиля семейства | по 54 из 54, дизайны и меню различны |
 | `browser.txt` | Chromium 390 и 1440 px, обе темы | 45 из 45 |
