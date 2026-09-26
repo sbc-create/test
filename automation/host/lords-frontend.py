@@ -1532,6 +1532,22 @@ color:inherit;text-decoration:none;min-height:120px}
 .hub__c b{display:block;font-size:15px;margin-bottom:6px;color:@INK@}
 .hub__c p{margin:0;font-size:12.5px;color:#5b6470;line-height:1.45}
 .hub__c span{display:block;margin-top:10px;font-size:12px;color:@ACCDK@;font-weight:700}
+/* Карточка подборки показывает, что внутри.
+   Раньше это была текстовая плитка: заголовок, два предложения и «Открыть
+   подборку →». По ней нельзя было понять состав, и все подборки выглядели
+   одинаково. Четыре настоящих постера и читаемые названия под ними отвечают
+   на вопрос «что там» без наведения мыши и без перехода. */
+.hub__g{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0 0}
+.hub__i{min-width:0;display:block}
+.hub__p{display:block;position:relative;aspect-ratio:2/3;overflow:hidden;border-radius:4px;
+background:@ALT@}
+.hub__p img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+/* Постера может не быть. Пустой <img> даёт значок битой картинки и прыжок
+   раскладки; место под постер занимает заглушка тех же пропорций. */
+.hub__ph{position:absolute;inset:0;display:grid;place-items:center;padding:4px;text-align:center;
+font-size:16px;font-weight:800;color:@MUTE@}
+.hub__n{display:block;margin-top:4px;font-size:11.5px;line-height:1.3;color:@INK@;
+overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 
 img[hidden]{display:none}
 
@@ -4317,28 +4333,88 @@ class ВидЛордс(Вид):
             return "Свежие поступления в каталог по дате добавления."
         return t
 
-    def _полоса_подборок(self) -> str:
+    #: Сколько постеров показывает карточка подборки.
+    ПОСТЕРОВ_В_ПОДБОРКЕ = 4
+
+    def _карточка_подборки(self, данные) -> str:
+        """Одна карточка подборки: настоящие постеры и читаемые названия.
+
+        Карточка, её страница, число записей, порядок и обложки строятся из
+        ОДНОГО определения — `данные`, результат `КОЛЛЕКЦИИ.разрешить`. До
+        этого карточка и страница считались по отдельности, и на живом сайте
+        карточка «Боевики» обещала 5 439 записей по убыванию оценки, а
+        переход вёл на выборку из 9 533 записей по дате и под другим
+        заголовком.
+
+        Постеры берутся из первых записей ТОГО ЖЕ состава и в том же порядке,
+        поэтому превью не может показать запись, которой на странице нет, и
+        обновляется вместе с составом.
+        """
+        плитки = []
+        видели: set[str] = set()
+        for карточка in данные.items[:self.ПОСТЕРОВ_В_ПОДБОРКЕ]:
+            # Внутри одного превью повторов нет: одна запись — одна плитка.
+            ключ = карточка.canonical_path or карточка.title
+            if ключ in видели:
+                continue
+            видели.add(ключ)
+            имя = html.escape(карточка.title or "")
+            if карточка.poster:
+                изо = (f'<img src="{html.escape(карточка.poster, quote=True)}" alt="" '
+                       f'loading="lazy" decoding="async" data-poster>')
+            else:
+                буква = html.escape((карточка.title or "?")[:1].upper())
+                изо = f'<span class="hub__ph" aria-hidden="true">{буква}</span>'
+            плитки.append(
+                f'<span class="hub__i">'
+                f'<span class="hub__p">{изо}</span>'
+                f'<span class="hub__n">{имя}</span></span>')
+        сетка = f'<span class="hub__g">{"".join(плитки)}</span>' if плитки else ""
+        desc = self._описание_подборки(данные.description or "")
+        хвост = f"{данные.total} записей" if данные.total else ""
+        return (
+            f'<a class="hub__c" href="{html.escape(данные.canonical_path)}"'
+            f' data-collection="{html.escape(данные.collection_key)}"'
+            f' data-collection-total="{данные.total}"'
+            f' data-collection-previews="{len(плитки)}">'
+            f"<b>{html.escape(данные.title)}</b>"
+            f"<p>{html.escape(desc[:200])}</p>"
+            f"{сетка}"
+            f"<span>{html.escape(хвост) if хвост else 'Открыть подборку →'}</span></a>")
+
+    def _подборки_витрины(self, сколько: int | None = None) -> list:
+        """Непустые подборки семейства в порядке контракта.
+
+        Предел равен числу постеров: карточке нужны первые записи СОСТАВА, а
+        не одна запись и отдельно посчитанное число. Пустая подборка не
+        показывается — это правило контракта (`empty_policy`), а не выбор
+        оформления.
+        """
         снимок = Снимок.получить(self.д, self.п) if КОЛЛЕКЦИИ else None
         if снимок is None:
-            return ""
-        карточки = []
-        for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО)[:6]:
-            данные = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО, предел=1)
+            return []
+        готово = []
+        for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО):
+            данные = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО,
+                                         предел=self.ПОСТЕРОВ_В_ПОДБОРКЕ)
             if данные is None or not данные.items:
                 continue
-            desc = self._описание_подборки(данные.description or "")
-            карточки.append(
-                f'<a class="hub__c" href="{html.escape(данные.canonical_path)}">'
-                f"<b>{html.escape(данные.title)}</b>"
-                f"<p>{html.escape(desc[:160])}</p>"
-                f"<span>Открыть подборку →</span></a>")
-        if not карточки:
+            готово.append(данные)
+            if сколько is not None and len(готово) >= сколько:
+                break
+        return готово
+
+    def _полоса_подборок(self) -> str:
+        подборки = self._подборки_витрины(6)
+        if not подборки:
             return ""
+        карточки = "".join(self._карточка_подборки(д) for д in подборки)
         return (
-            '<section class="sec-rail"><div class="sec-rail__h">'
+            '<section class="sec-rail" data-collections="strip">'
+            '<div class="sec-rail__h">'
             '<h2><a href="/collections/">Подборки</a></h2>'
             '<a class="sec-rail__all" href="/collections/">Весь раздел</a></div>'
-            f'<div class="hub">{"".join(карточки)}</div></section>')
+            f'<div class="hub">{карточки}</div></section>')
 
     def _полоса_жанров(self) -> str:
         имена = _уникальные_опции(self.индекс.get("genre_names") or [])
@@ -4383,22 +4459,13 @@ class ВидЛордс(Вид):
             f'<div class="tabs">{"".join(ссылки)}</div></section>')
 
     def хаб_подборок(self) -> str:
-        """`/collections/` — список контрактных подборок, не копия каталога."""
-        снимок = Снимок.получить(self.д, self.п) if КОЛЛЕКЦИИ else None
-        карточки = []
-        if снимок is not None and КОЛЛЕКЦИИ is not None:
-            for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО):
-                данные = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО, предел=1)
-                if данные is None or not данные.items:
-                    continue
-                n = данные.total
-                хвост = f"{n} записей" if n else ""
-                desc = self._описание_подборки(данные.description or "")
-                карточки.append(
-                    f'<a class="hub__c" href="{html.escape(данные.canonical_path)}">'
-                    f"<b>{html.escape(данные.title)}</b>"
-                    f"<p>{html.escape(desc)}</p>"
-                    f"<span>{html.escape(хвост)} →</span></a>")
+        """`/collections/` — список контрактных подборок, не копия каталога.
+
+        Карточки строятся тем же `_карточка_подборки`, что и на главной:
+        одно определение — один состав, одно число, один порядок обложек.
+        Две отдельные сборки разошлись бы, и это уже происходило.
+        """
+        карточки = [self._карточка_подборки(д) for д in self._подборки_витрины()]
         if not карточки:
             тело = ('<h1 class="lead">Подборки</h1>'
                     '<div class="empty"><b>Подборки пока пусты</b>'
