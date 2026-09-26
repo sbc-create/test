@@ -114,12 +114,20 @@ def _настройка_сообщества(корень: Path, заказ: З�
     частью пакета фабрики не является.
     """
     import importlib.util
+    import sys
 
+    имя = "_community_http_для_заказа"
     путь = корень / "automation" / "host" / "community_http.py"
-    spec = importlib.util.spec_from_file_location("_community_http_для_заказа", путь)
+    spec = importlib.util.spec_from_file_location(имя, путь)
     модуль = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(модуль)
-    return модуль.Настройка.для(заказ.site_id, заказ.domain)
+    # Модуль обязан лежать в sys.modules ДО исполнения: `@dataclass` ищет там
+    # собственный модуль класса и падает на None.
+    sys.modules[имя] = модуль
+    try:
+        spec.loader.exec_module(модуль)
+        return модуль.Настройка.для(заказ.site_id, заказ.domain)
+    finally:
+        sys.modules.pop(имя, None)
 
 
 def создать(заказ: Заказ, *, корень: Path, куда: Path,
