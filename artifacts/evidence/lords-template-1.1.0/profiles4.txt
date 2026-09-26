@@ -1,0 +1,32 @@
+профиль         проверка                итог      подробность
+----------------------------------------------------------------------------------------------------
+lords-general   главная 200             PASS      
+lords-general   оформление              PASS      lords-cinema-v2
+lords-general   меню                    PASS      Фильмы · Сериалы · Мультфильмы · Аниме · Дорамы · Новое в каталоге · Подборки · Каталог
+lords-general   раздел /movies/         PASS      200
+lords-general   раздел /series/         PASS      200
+lords-general   фасетные разделы        ИЗВЕСТНО  /genres/=308 /years/=404 /countries/=404
+lords-general   приёмка поверхностей    PASS      всего 60, провалов 0
+lords-new       главная 200             PASS      
+lords-new       оформление              PASS      lords-series-feed-v2
+lords-new       меню                    PASS      Сериалы · Обновления · Фильмы · Мультфильмы · Аниме · Дорамы · Подборки · Каталог
+lords-new       раздел /movies/         PASS      200
+lords-new       раздел /series/         PASS      200
+lords-new       фасетные разделы        ИЗВЕСТНО  /genres/=308 /years/=404 /countries/=404
+lords-new       приёмка поверхностей    PASS      всего 60, провалов 0
+lords-curated   главная 200             PASS      
+lords-curated   оформление              PASS      lords-curated-v2
+lords-curated   меню                    PASS      Подборки · Каталог · Фильмы · Сериалы · Мультфильмы · Аниме · Дорамы · Новое
+lords-curated   раздел /movies/         PASS      200
+lords-curated   раздел /series/         PASS      200
+lords-curated   фасетные разделы        ИЗВЕСТНО  /genres/=308 /years/=404 /countries/=404
+lords-curated   приёмка поверхностей    PASS      всего 60, провалов 0
+lords-genre     главная 200             PASS      
+lords-genre     оформление              PASS      lords-sheet  (объявлен неподдержанным: общий лист — ожидаемо)
+lords-genre     меню                    PASS      Фильмы · Сериалы · Мультфильмы · Аниме · Дорамы · Новое в каталоге · Подборки · Каталог
+lords-genre     раздел /movies/         PASS      200
+lords-genre     раздел /series/         PASS      200
+lords-genre     фасетные разделы        ИЗВЕСТНО  /genres/=308 /years/=404 /countries/=404  <= содержание профиля
+lords-genre     приёмка поверхностей    PASS      всего 60, провалов 0
+----------------------------------------------------------------------------------------------------
+строк 28, провалов 0
