@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Сообщество на живом экземпляре: голос, комментарий, модерация."""
-import http.cookiejar, json, re, sys, urllib.error, urllib.parse, urllib.request
+import http.cookiejar
+import re
+import sys
+import urllib.error
+import urllib.parse
+import urllib.request
 
 БАЗА = "http://127.0.0.1:9190"
 СТРАНИЦА = "/title/kino-000/"
@@ -56,7 +61,10 @@ def скрытые(html):
 # Проверка создаёт свои голоса и сообщения, поэтому начинает с пустого
 # ИЗОЛИРОВАННОГО хранилища этого экземпляра. Живых файлов сообщества здесь
 # не открывается ни одного.
-import os, signal, subprocess, time
+import os
+import signal
+import subprocess
+import time
 ХРАНИЛИЩЕ = ("/tmp/claude-1001/-home-claude/9e5d5d7c-1b72-454b-9239-dbb120e73b48"
              "/scratchpad/lords-90-data/lords-90-community.json")
 assert "/scratchpad/" in ХРАНИЛИЩЕ, "хранилище не изолировано"
@@ -86,7 +94,7 @@ if os.path.exists(ХРАНИЛИЩЕ):
 A, jarA = клиент()
 код, стр = get(A, СТРАНИЦА)
 проверка("страница отдана", код == 200)
-проверка("кука посетителя выдана", any(c.name == "lords_90_v" for c in jarA), 
+проверка("кука посетителя выдана", any(c.name == "lords_90_v" for c in jarA),
          str([c.name for c in jarA]))
 поля = скрытые(стр)
 проверка("тема — постоянный идентификатор", поля["subject"] == "cvh-kino-000", поля["subject"])
