@@ -24,9 +24,9 @@ from __future__ import annotations
 
 import contextlib
 import json
+import json as _json
 import os
 import pwd
-import json as _json
 import shutil
 import socket
 import subprocess
@@ -366,16 +366,16 @@ def _записать_происхождение(выпуск: Path, *, site_id:
     файл = выпуск / имя
     файл.write_text(_json.dumps(запись, ensure_ascii=False, indent=1) + "\n",
                     encoding="utf-8")
-    try:
+    # Смена владельца необязательна: учётной записи может не быть (стенд), а
+    # прав на chown — не хватать. Файл при этом записан, и это главное.
+    with contextlib.suppress(LookupError, PermissionError):
         shutil.chown(файл, account, account)
-    except (LookupError, PermissionError):
-        pass
     return {"file": имя, "live_build_id": живой, "entrypoint": точка}
 
 
 def применить_правки(site_id: str, содержимое: dict[str, Any], *,
                      dry_run: bool = True,
-                     площадка: "Площадка | None" = None) -> dict[str, Any]:
+                     площадка: Площадка | None = None) -> dict[str, Any]:
     """Положить правки редактора в хранилище витрины.
 
     Пишет ИСПОЛНИТЕЛЬ, а не управляющий слой: у админки нет и не должно быть
@@ -924,7 +924,7 @@ def switch_route(site_id: str, порт: int, *, dry_run: bool = True,
 
 def засеять_пользовательское(site_id: str, источник: Path, *,
                              dry_run: bool = True,
-                             площадка: "Площадка | None" = None,
+                             площадка: Площадка | None = None,
                              репозиторий: Path | None = None) -> dict[str, Any]:
     """Положить в хранилище ячейки то, что дальше принадлежит посетителям.
 
@@ -984,7 +984,7 @@ def засеять_пользовательское(site_id: str, источни
             "dry_run": dry_run, "contract": контракт["source"], "entries": итоги}
 
 
-def контракт_данных(site_id: str, *, площадка: "Площадка | None" = None,
+def контракт_данных(site_id: str, *, площадка: Площадка | None = None,
                     репозиторий: Path | None = None) -> dict[str, tuple[str, ...]]:
     """Что для этого сайта доставляется, а что принадлежит посетителям.
 
@@ -1122,9 +1122,7 @@ def stage_snapshot(site_id: str, источник: Path, *, dry_run: bool = True
         # во время прогрева кандидата, останутся в хранилище, которое потом
         # выбросят. Причина та же, что у `site-data`, — значит и обращение
         # должно быть тем же.
-        if запись.name in свои:
-            цель.symlink_to(запись)
-        elif запись.is_dir():
+        if запись.name in свои or запись.is_dir():
             цель.symlink_to(запись)
         else:
             shutil.copy2(запись, цель)

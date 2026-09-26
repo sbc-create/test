@@ -540,7 +540,7 @@ def test_каждый_успешный_исход_исполнителя_наз�
             if not isinstance(внутри, ast.Return) or not isinstance(внутри.value, ast.Dict):
                 continue
             поля: dict[str, list] = {}
-            for ключ, значение in zip(внутри.value.keys, внутри.value.values):
+            for ключ, значение in zip(внутри.value.keys, внутри.value.values, strict=False):
                 if isinstance(ключ, ast.Constant) and ключ.value in ("status", "stage"):
                     поля[ключ.value] = значения(значение)
             статусы, этапы = поля.get("status", []), поля.get("stage", [])

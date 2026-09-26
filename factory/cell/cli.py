@@ -335,7 +335,45 @@ def cmd_provenance(args) -> int:
     return 1 if итог["bypassed"] else 0
 
 
+def cmd_newsite(args) -> int:
+    """Новый сайт семейства ИЗ ШАБЛОНА, а не с чужого домена.
+
+    Отличие от `repo`: тот выделяет действующий сайт и берёт рантайм из его
+    релиза на хосте. Здесь исходник — сам репозиторий шаблона, и закрепление
+    называет его коммит. Иначе исправление, внесённое в шаблон, до новых
+    витрин не доезжает.
+    """
+    from factory.cell import newsite
+
+    пробелы = [имя for имя, значение in (
+        ("--site", args.site), ("--domain", args.domain),
+        ("--template", getattr(args, "template", None)),
+        ("--port", getattr(args, "port", None))) if not значение]
+    if пробелы:
+        _print({"status": "BLOCKED_INPUT", "missing": пробелы})
+        return 2
+    заказ = newsite.Заказ(
+        site_id=args.site, domain=args.domain, profile=args.template,
+        port=int(args.port), family=args.family or "lords",
+        site_name=getattr(args, "site_name", "") or "",
+        remote=getattr(args, "remote", "") or "")
+    куда = Path(args.destination) if args.destination else (
+        PATHS.root / "var" / "new-sites" / заказ.site_id)
+    if args.dry_run:
+        _print({"status": "plan", "site_id": заказ.site_id, "destination": str(куда),
+                "profile": заказ.profile,
+                "runtime_files": list(newsite.РАНТАЙМ_LORDS)})
+        return 0
+    реестр = Path(args.registry) if getattr(args, "registry", None) else None
+    итог = newsite.создать(заказ, корень=PATHS.root, куда=куда, force=args.force,
+                           реестр=реестр,
+                           регистрировать=not getattr(args, "no_register", False))
+    _print(итог)
+    return 0
+
+
 ACTIONS = {
+    "newsite": cmd_newsite,
     "registry": cmd_registry,
     "templates": cmd_templates,
     "reserve": cmd_reserve,
@@ -371,6 +409,18 @@ def register(subparsers) -> None:
     parser.add_argument("--family", help="семейство шаблонов")
     parser.add_argument("--repo", help="путь к проекту сайта")
     parser.add_argument("--destination", help="куда создать проект сайта")
+    parser.add_argument("--template", help="профиль шаблона для newsite")
+    parser.add_argument("--port", help="порт витрины для newsite")
+    parser.add_argument("--site-name", dest="site_name",
+                        help="видимое имя витрины для newsite")
+    parser.add_argument("--remote",
+                        help="адрес собственного репозитория сайта; без него "
+                             "доставка содержимого в ячейку отказывает")
+    parser.add_argument("--registry",
+                        help="файл реестра ячеек (по умолчанию config/site-cells.json)")
+    parser.add_argument("--no-register", dest="no_register", action="store_true",
+                        help="не записывать ячейку в реестр: сайт не будет "
+                             "получать доставку содержимого")
     parser.add_argument("--output", help="куда положить результат")
     parser.add_argument("--artifact", help="путь к артефакту релиза")
     parser.add_argument("--manifest", help="путь к release-manifest.json")
