@@ -1,7 +1,10 @@
 $ python3 redeploy.py /tmp/claude-1001/-home-claude/bd91216b-119b-4b26-8e51-8927be9b7ecf/scratchpad/verify
-доставка: поднято 25 тайтлов, ревизия e2c18b52546c → 5dbaddbb40a1
-витрина отвечает после доставки: True
-дерево грязное, релиз не собирается:
-?? artifacts/evidence/animedia-template-port-space-02/logs/
-сборка релиза не удалась: 1
-exit=1
+доставка: поднято 25 тайтлов, ревизия port02-18d40 → fdf9d4e13f49
+витрина перечитала доставленный снимок: True
+релиз собран: /tmp/claude-1001/-home-claude/bd91216b-119b-4b26-8e51-8927be9b7ecf/scratchpad/verify/releases/20260926T142915Z-880d5ed-animedia-parity
+build_id: 20260926T142915Z-880d5ed-animedia-parity
+artifact_sha256: 56e922a66237a24888b7ccf2a8841db029480111e925270a0615653b40b8c546
+файлы: animedia-data-update.py, animedia-frontend.py, chronology.py, collection_contract.py, community.py, lords-frontend.py, seo_layer.py
+CODE_TREE_MATCH: YES | ARTIFACT_SOURCE_MATCH: YES
+код обновлён: релиз 20260926T142915Z-880d5ed-animedia-parity, витрина отвечает: True
+exit=0
