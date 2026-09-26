@@ -509,16 +509,17 @@
       "backup": {},
       "resources": {},
       "runtime": {
-        "unit": "nova-yummy-biz.service",
-        "previous_unit": null,
+        "unit": "nova-yummyani-biz.service",
+        "previous_unit": "nova-yummy-biz.service",
         "port": 9130,
         "account": "yummyani-biz",
-        "app_dir": null,
-        "data_dir": null,
+        "app_dir": "/srv/yummyani-biz/app",
+        "data_dir": "/srv/yummyani-biz/data",
         "legacy_root": "<data>/site",
-        "reload": "unknown",
+        "reload": "restart",
         "managed_by": "monolith",
-        "data_owner": "pipeline"
+        "data_owner": "pipeline",
+        "unit_note": "unit назван ЯЧЕЙКИН, а не монолитный. Пока здесь стоял nova-yummy-biz.service, повышение перезапускало бы монолитную службу, а её ExecStart ведёт в /srv/lords/.frontend — выпуск прошёл бы успешно, ничего не переключив, и снаружи это неотличимо от настоящего: сайт отвечает 200 и показывает прежний код. Файлы ячейкиных юнитов ставит automation/host/install-yummy-cell-units.sh; managed_by переводится в cell ПОСЛЕ фактического перехода, иначе издатель начнёт возить каталог в хранилище, из которого витрина ещё не читает."
       }
     },
     {
@@ -565,16 +566,17 @@
       "backup": {},
       "resources": {},
       "runtime": {
-        "unit": "nova-yummy-org.service",
-        "previous_unit": null,
+        "unit": "nova-yummyani-org.service",
+        "previous_unit": "nova-yummy-org.service",
         "port": 9131,
         "account": "yummyani-org",
-        "app_dir": null,
-        "data_dir": null,
+        "app_dir": "/srv/yummyani-org/app",
+        "data_dir": "/srv/yummyani-org/data",
         "legacy_root": "<data>/site",
-        "reload": "unknown",
+        "reload": "restart",
         "managed_by": "monolith",
-        "data_owner": "pipeline"
+        "data_owner": "pipeline",
+        "unit_note": "unit назван ЯЧЕЙКИН, а не монолитный. Пока здесь стоял nova-yummy-org.service, повышение перезапускало бы монолитную службу, а её ExecStart ведёт в /srv/lords/.frontend — выпуск прошёл бы успешно, ничего не переключив, и снаружи это неотличимо от настоящего: сайт отвечает 200 и показывает прежний код. Файлы ячейкиных юнитов ставит automation/host/install-yummy-cell-units.sh; managed_by переводится в cell ПОСЛЕ фактического перехода, иначе издатель начнёт возить каталог в хранилище, из которого витрина ещё не читает."
       }
     },
     {
@@ -621,16 +623,17 @@
       "backup": {},
       "resources": {},
       "runtime": {
-        "unit": "nova-yummy-site.service",
-        "previous_unit": null,
+        "unit": "nova-yummyani-site.service",
+        "previous_unit": "nova-yummy-site.service",
         "port": 9132,
         "account": "yummyani-site",
-        "app_dir": null,
-        "data_dir": null,
+        "app_dir": "/srv/yummyani-site/app",
+        "data_dir": "/srv/yummyani-site/data",
         "legacy_root": "<data>/site",
-        "reload": "unknown",
+        "reload": "restart",
         "managed_by": "monolith",
-        "data_owner": "pipeline"
+        "data_owner": "pipeline",
+        "unit_note": "unit назван ЯЧЕЙКИН, а не монолитный. Пока здесь стоял nova-yummy-site.service, повышение перезапускало бы монолитную службу, а её ExecStart ведёт в /srv/lords/.frontend — выпуск прошёл бы успешно, ничего не переключив, и снаружи это неотличимо от настоящего: сайт отвечает 200 и показывает прежний код. Файлы ячейкиных юнитов ставит automation/host/install-yummy-cell-units.sh; managed_by переводится в cell ПОСЛЕ фактического перехода, иначе издатель начнёт возить каталог в хранилище, из которого витрина ещё не читает."
       }
     },
     {
