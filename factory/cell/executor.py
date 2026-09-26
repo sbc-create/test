@@ -540,6 +540,36 @@ def обновить_данные(заявка: queue.Заявка, *, файл:
             "stage": "validated" if dry_run else "live_verified", "steps": шаги}
 
 
+def применить_правки(заявка: queue.Заявка, *, dry_run: bool = True) -> dict[str, Any]:
+    """Правки редактора: подготовлены управляющим слоем, применяет исполнитель.
+
+    Заявка не несёт ни путей, ни содержимого — схема закрытая. Путь
+    подготовленного выводится из `site_id` обеими сторонами по одному правилу,
+    а `digest` доказывает, что применено ИМЕННО подготовленное: не «файл по
+    такому-то пути», а конкретное содержимое. Расхождение — отказ до записи.
+
+    Перезапуск витрины не нужен: файл перечитывается по mtime тем же способом,
+    что снимок каталога. Поэтому здесь нет ни прогрева кандидата, ни
+    переключения маршрута — их отсутствие не упрощение, а следствие того, что
+    код не меняется.
+    """
+    from factory.cell import editorial_store
+
+    try:
+        содержимое = editorial_store.прочитать_подготовленное(заявка.site_id)
+    except editorial_store.StoreRejected as ош:
+        raise ExecutorError(f"{заявка.site_id}: {ош}") from None
+    факт = editorial_store.отпечаток(содержимое)
+    if факт != заявка.digest:
+        raise ExecutorError(
+            f"{заявка.site_id}: digest подготовленных правок {факт} не совпал "
+            f"с заявленным {заявка.digest}; применено не будет")
+    шаг = privileged.применить_правки(заявка.site_id, содержимое, dry_run=dry_run)
+    return {"status": "dry-run" if dry_run else "edited",
+            "stage": "validated" if dry_run else "live_verified",
+            "steps": {"apply_overrides": шаг}}
+
+
 def выполнить(заявка: queue.Заявка, *, база: Path, dry_run: bool = True) -> dict[str, Any]:
     """Одна операция целиком, с журналом переходов."""
     файл = база / "requests" / f"{заявка.request_id}.json"
@@ -568,6 +598,10 @@ def выполнить(заявка: queue.Заявка, *, база: Path, dry_
             этап = итог["stage"]
         elif заявка.operation == "deliver":
             итог = обновить_данные(заявка, файл=файл, dry_run=dry_run)
+            результат["outcome"] = итог
+            этап = итог["stage"]
+        elif заявка.operation == "editorial":
+            итог = применить_правки(заявка, dry_run=dry_run)
             результат["outcome"] = итог
             этап = итог["stage"]
         else:

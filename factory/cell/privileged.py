@@ -373,6 +373,50 @@ def _записать_происхождение(выпуск: Path, *, site_id:
     return {"file": имя, "live_build_id": живой, "entrypoint": точка}
 
 
+def применить_правки(site_id: str, содержимое: dict[str, Any], *,
+                     dry_run: bool = True,
+                     площадка: "Площадка | None" = None) -> dict[str, Any]:
+    """Положить правки редактора в хранилище витрины.
+
+    Пишет ИСПОЛНИТЕЛЬ, а не управляющий слой: у админки нет и не должно быть
+    доступа к данным витрин — её ошибка обязана остаться ошибкой планирования,
+    а не порчей чужого состояния. То же решение уже принято для инвалидации
+    кэша, и здесь оно не изобретается заново.
+
+    Файл объявлен `user_writable`, поэтому доставка каталога его не
+    перезаписывает: правка переживает импорт по построению, а не по удаче.
+
+    Владелец — учётная запись сайта: витрина читает файл своим пользователем,
+    и файл, принадлежащий кому-то ещё, она прочитать не сможет.
+    """
+    п = площадка or Площадка.из_реестра(site_id)
+    контракт = контракт_данных(site_id, площадка=п)
+    имя = ИМЯ_ПРАВОК
+    if имя not in [ш.format(site=site_id) for ш in контракт["user_writable"]]:
+        raise PrivilegedRefused(
+            f"{site_id}: {имя} не объявлен `user_writable` в контракте сайта — "
+            "доставка каталога затирала бы правки на первом же обновлении")
+    if содержимое.get("site_id") != site_id:
+        raise PrivilegedRefused(
+            f"правки подготовлены для {содержимое.get('site_id')!r}, "
+            f"а применяются к {site_id!r}")
+    цель = п.data / имя
+    записей = len(содержимое.get("overrides") or {})
+    if dry_run:
+        return {"operation": "editorial", "site_id": site_id, "dry_run": True,
+                "path": str(цель), "entries": записей}
+    _нужен_root()
+    из_хранилища = json.dumps(содержимое, ensure_ascii=False, sort_keys=True,
+                              separators=(",", ":")) + "\n"
+    врем = цель.with_suffix(".json.new")
+    врем.write_text(из_хранилища, encoding="utf-8")
+    shutil.chown(врем, п.account, п.account)
+    врем.chmod(0o644)
+    os.replace(врем, цель)
+    return {"operation": "editorial", "site_id": site_id, "dry_run": False,
+            "path": str(цель), "entries": записей, "owner": п.account}
+
+
 def _каталог_юнитов() -> Path:
     return Path(os.environ.get("SITE_UNIT_DIR", "/etc/systemd/system"))
 
@@ -860,6 +904,9 @@ def switch_route(site_id: str, порт: int, *, dry_run: bool = True,
 #: копируется: две копии означали бы, что часть комментариев и голосов
 #: останется в той, которую выбросят.
 ПОЛЬЗОВАТЕЛЬСКИЕ = "site-data"
+
+#: Имя файла правок редактора в хранилище витрины.
+ИМЯ_ПРАВОК = "editorial-overrides.json"
 
 
 def засеять_пользовательское(site_id: str, источник: Path, *,

@@ -55,7 +55,7 @@ from typing import Any
 
 #: Что исполнителю разрешено делать. Список закрытый: «выполнить произвольную
 #: операцию» отсутствует как понятие, а не запрещено проверкой.
-ОПЕРАЦИИ = ("activate", "update", "deliver", "rollback")
+ОПЕРАЦИИ = ("activate", "update", "deliver", "rollback", "editorial")
 
 #: Этапы операции. Расширение уже существующей схемы онбординга, не вторая.
 ЭТАПЫ = ("received", "validated", "artifact_verified", "candidate_ready",
@@ -142,7 +142,7 @@ def новый_идентификатор(site_id: str, commit: str, *, operatio
     """
     хвост = (snapshot or commit)[:12]
     краткая = {"activate": "code", "update": "code", "deliver": "data",
-               "rollback": "back"}.get(operation, operation[:4])
+               "rollback": "back", "editorial": "edit"}.get(operation, operation[:4])
     return f"{site_id}-{краткая}-{хвост}"[:64].lower()
 
 
@@ -192,7 +192,7 @@ def записать_атомарно(путь: Path, данные: dict[str, An
 #: «не применено», а заявка считается неповторённой и подаётся снова.
 #: Тот же род ошибки, что и с откатом выше: судить об успехе по перечню, в
 #: который забыли внести исход.
-ПРИМЕНЁННЫЕ_ИСХОДЫ = ("activated", "delivered", "unchanged", "dry-run")
+ПРИМЕНЁННЫЕ_ИСХОДЫ = ("activated", "delivered", "edited", "unchanged", "dry-run")
 
 
 def _применено(итог: dict[str, Any]) -> bool:

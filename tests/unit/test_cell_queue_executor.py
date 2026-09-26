@@ -565,3 +565,62 @@ def test_каждый_успешный_исход_исполнителя_наз�
     assert not лишние, (
         "исход откачен или провален, но назван применённым: "
         + ", ".join(f"{с} (из {ф})" for с, ф in sorted(лишние.items())))
+
+
+def test_правки_применяются_только_те_что_подготовлены(tmp_path, monkeypatch):
+    """Заявка не несёт содержимого — значит `digest` обязан его доказывать.
+
+    Схема заявки закрытая: ни путей, ни правок в ней нет, и путь
+    подготовленного обе стороны выводят из `site_id`. Единственное, что
+    связывает решение админки с тем, что записал исполнитель, — отпечаток
+    содержимого. Без сверки подмена подготовленного файла между подачей заявки
+    и её исполнением прошла бы незамеченной.
+    """
+    from factory.cell import editorial_store, privileged
+
+    monkeypatch.setattr(editorial_store, "БАЗА", tmp_path / "staging")
+    готово = editorial_store.подготовить(
+        "zona-01", {"01a0-a": {"fields": {"description": "Правка редактора"}}},
+        actor="editor@example", reason="уточнение по просьбе владельца")
+
+    записано = {}
+    monkeypatch.setattr(privileged, "применить_правки",
+                        lambda site_id, содержимое, **k: записано.update(
+                            {"site": site_id, "entries": len(содержимое["overrides"])})
+                        or {"operation": "editorial", "dry_run": k.get("dry_run")})
+
+    з = queue.собрать("zona-01", КОММИТ, готово["digest"], operation="editorial")
+    итог = executor.применить_правки(з, dry_run=True)
+    assert итог["status"] == "dry-run"
+    assert записано == {"site": "zona-01", "entries": 1}
+
+    # Подмена подготовленного после подачи заявки: digest перестаёт сходиться.
+    editorial_store.подготовить(
+        "zona-01", {"01a0-a": {"fields": {"description": "ПОДМЕНА"}}},
+        actor="chuzhoy@example", reason="подмена")
+    with pytest.raises(executor.ExecutorError) as ош:
+        executor.применить_правки(з, dry_run=True)
+    assert "не совпал" in str(ош.value)
+
+
+def test_правки_чужого_сайта_не_применяются(tmp_path, monkeypatch):
+    """Область сайта входит в содержимое, а не проверяется где-то потом."""
+    from factory.cell import editorial_store
+
+    monkeypatch.setattr(editorial_store, "БАЗА", tmp_path / "staging")
+    editorial_store.подготовить("lords-02", {"x": {"fields": {"name": "Чужое"}}},
+                                actor="a@b", reason="проверка")
+    # Файл lords-02 подсунут под именем zona-01.
+    (tmp_path / "staging" / "zona-01.json").write_text(
+        (tmp_path / "staging" / "lords-02.json").read_text(encoding="utf-8"),
+        encoding="utf-8")
+    with pytest.raises(executor.ExecutorError) as ош:
+        executor.применить_правки(
+            queue.собрать("zona-01", КОММИТ, "sha256:" + "0" * 64,
+                          operation="editorial"), dry_run=True)
+    assert "подготовлено для сайта" in str(ош.value)
+
+
+def test_исход_правок_назван_применённым():
+    """`edited` обязан значиться применённым — иначе успех запишется отказом."""
+    assert "edited" in queue.ПРИМЕНЁННЫЕ_ИСХОДЫ
