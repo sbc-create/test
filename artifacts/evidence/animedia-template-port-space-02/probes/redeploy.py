@@ -61,9 +61,16 @@ if not перечитала:
     sys.exit("витрина не перечитала снимок — обновление каталога не состоялось")
 
 # --- 2. пересборка релиза ----------------------------------------------------
+# Манифест витрины пересоздаётся ТОЙ ЖЕ сборкой. Пересобрать артефакт и
+# оставить прежний манифест — это и есть расхождение, которое ловит
+# `identity_match`: витрина исполняет новый выпуск и называет старый.
+манифест = os.environ.get("ANIMEDIA_PROBE_MANIFEST") or str(
+    ДАННЫЕ / f"template-manifest-{САЙТ}.json")
+профиль = os.environ.get("ANIMEDIA_PROBE_PROFILE", "animedia-space")
 сб = subprocess.run([sys.executable, str(ШАБЛОН / "automation/host/animedia_release_build.py"),
                      "--out-dir", str(V / "releases"),
-                     "--stage", "ANIMEDIA-TEMPLATE-PORT-SPACE-02-VERIFY"],
+                     "--stage", "ANIMEDIA-TEMPLATE-PORT-SPACE-02-VERIFY",
+                     "--profile", профиль, "--emit-manifest", манифест],
                     capture_output=True, text=True, cwd=str(ШАБЛОН))
 print(сб.stdout.strip() or сб.stderr.strip()[-400:])
 if сб.returncode != 0:
@@ -103,5 +110,15 @@ while time.time() - время < 60:
     time.sleep(1)
     if жив():
         break
+свод = {}
+if жив():
+    with urllib.request.urlopen(БАЗА + "/healthz", timeout=10) as о:
+        свод = json.loads(о.read())
 print(f"код обновлён: релиз {новейший.name}, витрина отвечает: {жив()}")
+print(f"  release_id={свод.get('release_id')}")
+print(f"  identity_match={свод.get('identity_match')} "
+      f"runtime_digest_match={свод.get('runtime_digest_match')}")
+if not свод.get("identity_match"):
+    sys.exit("после пересборки витрина называет не тот выпуск, который исполняет: "
+             f"манифест {свод.get('manifest_build_id')}, релиз {свод.get('release_id')}")
 sys.exit(0 if жив() else 1)
