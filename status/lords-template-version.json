@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "template_family": "lords",
+  "version": "1.1.0",
+  "note": "Версия оформления семейства Lords. Её объявляет манифест каждой витрины полем design_version; новые сайты получают её из этого файла через factory.cell.newsite. Журнал — docs/LORDS_TEMPLATE_CHANGELOG.md.",
+  "runtime_files": [
+    "automation/host/lords-frontend.py",
+    "automation/host/collection_contract.py",
+    "automation/host/seo_layer.py",
+    "automation/host/lords_sections.py",
+    "automation/host/community_http.py"
+  ],
+  "profiles": ["lords-general", "lords-new", "lords-curated", "lords-genre"],
+  "themes": ["светлая", "тёмная"],
+  "delivered_separately": {
+    "community.py": "20260923T190000Z-community-2-2-12"
+  },
+  "previous_version": "1.0.2"
+}
