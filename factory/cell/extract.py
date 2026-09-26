@@ -48,7 +48,7 @@ RETIRED_PUBLISHER_IDS = frozenset({"10331", "10332", "10333"})
 #: они пусты намеренно: заполненное здесь значение пережило бы свой выпуск и
 #: продолжило бы называть его цифры.
 #:
-#: Тот же кортеж повторён внутри шаблона `BUILD_RELEASE`: сборщик уезжает в
+#: Тот же кортеж повторён в `site_checks/build_release.py`: сборщик уезжает в
 #: репозиторий сайта отдельным файлом и импортировать фабрику не может. Чтобы
 #: копии не разошлись, их совпадение сторожит
 #: `tests/unit/test_cell_manifest_fields.py`.
@@ -643,222 +643,12 @@ def build_repo(site_id: str, *, domain: str, destination: Path, repo_root: Path,
                 for v in prov.values()}}
 
 
-CHECKS_RUN = '''#!/usr/bin/env bash
-# Проверки проекта сайта. Падение любой — причина не выпускать релиз.
-# Имена переменных только ASCII: bash считает именем лишь [A-Za-z_][A-Za-z0-9_]*,
-# и строка вида `СУХОЙ=0` для него не присваивание, а вызов команды. `bash -n`
-# такую строку пропускает.
-set -uo pipefail
-cd "$(dirname "$0")/.."
 
-fail=0
-say() { printf '%-30s %s\\n' "$1" "$2"; }
-# Вывод упавшей проверки печатается. Молчащий FAIL приходится воспроизводить
-# вручную, а воспроизводится он не всегда: проверка падала на раннере и
-# проходила в чистом клоне на той же машине — искать было нечего.
-check() {
-  local name="$1"; shift
-  local out
-  if out="$("$@" 2>&1)"; then
-    say "$name" "PASS"
-  else
-    say "$name" "FAIL"
-    printf '%s\\n' "$out" | sed 's/^/    | /'
-    fail=1
-  fi
-}
 
-check "site-config-json"   python3 -c "import json;json.load(open('config/site.json'))"
-check "pins-json"          python3 -c "import json;json.load(open('pins.lock.json'))"
-check "entrypoint-present" python3 checks/entrypoint_present.py
-check "runtime-compiles"   python3 checks/compiles.py
-check "pins-match-sources" python3 checks/verify_pins.py
-check "no-secrets-in-git"  python3 checks/no_secrets.py
-check "shell-ascii-names"  python3 checks/ascii_shell_identifiers.py
-check "launcher-refuses"   python3 checks/fails_closed.py
-check "shell-syntax"       bash -c 'bash -n deploy/activate.sh && bash -n deploy/rollback.sh'
-check "manifest-stamp"     python3 checks/manifest_stamp.py
-check "artifact-contents"  python3 checks/artifact_contents.py
-# Сценарии именно выполняются: `bash -n` пропустил ошибку, валившую скрипт на
-# третьей строке, и обнаружилась она только на боевой активации.
-check "activate-scenarios" python3 checks/activate_scenarios.py
 
-exit "$fail"
-'''
 
-CHECK_ENTRYPOINT = '''"""Точка входа существует и названа в конфигурации."""
-import json
-import sys
-from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-cfg = json.loads((ROOT / "config" / "site.json").read_text(encoding="utf-8"))
-entry = ROOT / "src" / cfg["entrypoint"]
-if not entry.is_file():
-    print(f"нет точки входа {entry}", file=sys.stderr)
-    sys.exit(1)
-'''
 
-CHECK_COMPILES = '''"""Весь перенесённый рантайм компилируется.
-
-Артефакт снят с работающего сайта, но это не освобождает от проверки: файл мог
-не доехать целиком.
-"""
-import py_compile
-import sys
-import tempfile
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parent.parent
-bad = []
-# cfile во временный файл: py_compile отказывается писать в /dev/null, а без
-# cfile он засорил бы проект каталогами __pycache__.
-with tempfile.TemporaryDirectory() as tmp:
-    for i, p in enumerate(sorted((ROOT / "src").glob("*.py"))):
-        try:
-            py_compile.compile(str(p), doraise=True, cfile=f"{tmp}/{i}.pyc")
-        except py_compile.PyCompileError as exc:
-            bad.append(f"{p.name}: {exc}")
-if bad:
-    print("не компилируется:", *bad, sep="\\n  ", file=sys.stderr)
-    sys.exit(1)
-'''
-
-CHECK_VERIFY_PINS = '''"""Файлы совпадают с тем, что закреплено в pins.lock.json.
-
-Без этого закрепление — запись о намерении, а не о факте.
-"""
-import hashlib
-import json
-import sys
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parent.parent
-pins = json.loads((ROOT / "pins.lock.json").read_text(encoding="utf-8"))
-bad = []
-pending = []
-for name, meta in pins["files"].items():
-    p = ROOT / "src" / name
-    # Файл без объявленной суммы поставляется ОТДЕЛЬНЫМ выпуском (у него свой
-    # владелец), и его отсутствие в проекте — законное состояние, а не
-    # расхождение с замком. Но и молчать о нём нельзя: пока он не приехал,
-    # соответствующий раздел витрины выключен, и это должно быть видно.
-    if not meta.get("sha256"):
-        if not p.is_file():
-            pending.append(f"{name}: поставляется отдельным выпуском, ещё не доставлен")
-        continue
-    if not p.is_file():
-        bad.append(f"{name}: файла нет")
-        continue
-    actual = hashlib.sha256(p.read_bytes()).hexdigest()
-    if actual != meta["sha256"]:
-        bad.append(f"{name}: sha256 {actual[:12]} вместо {meta['sha256'][:12]}")
-if pending:
-    print("ожидают доставки:", *pending, sep="\n  ")
-if bad:
-    print("исходники разошлись с замком:", *bad, sep="\\n  ", file=sys.stderr)
-    sys.exit(1)
-'''
-
-CHECK_NO_SECRETS = '''"""Ни данных, ни секретов среди файлов, которые Git действительно хранит.
-
-Проверяется индекс, а не рабочий каталог: `config/player.json` обязан лежать
-рядом с работающим сайтом и обязан отсутствовать в Git. Отдельно сверяется, что
-git отвечает про ЭТОТ проект, иначе распакованное дерево опросило бы
-объемлющий репозиторий и прошло проверку, ничего не проверив.
-"""
-import fnmatch
-import subprocess
-import sys
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parent.parent
-FORBIDDEN = ("*.sqlite3", "*.db", "*.dump", "*.sql", ".env", "*.pem", "*.key",
-             "player.json", "*-catalog.json", "*-details.json", "*community*.json")
-
-top = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True,
-                     text=True, check=False, cwd=ROOT)
-if top.returncode != 0 or Path(top.stdout.strip()).resolve() != ROOT:
-    print("git отвечает не про этот проект: проверка прошла бы впустую",
-          file=sys.stderr)
-    sys.exit(1)
-
-tracked = subprocess.run(["git", "ls-files"], capture_output=True, text=True,
-                         check=False, cwd=ROOT).stdout.split()
-bad = [p for p in tracked
-       if not p.endswith(".example")
-       and any(fnmatch.fnmatch(p.rsplit("/", 1)[-1], pat) for pat in FORBIDDEN)]
-if bad:
-    print("эти файлы не должны быть в Git:", ", ".join(sorted(bad)), file=sys.stderr)
-    sys.exit(1)
-'''
-
-CHECK_FAILS_CLOSED = '''"""Запуск отказывает, а не подставляет чужое."""
-import json
-import subprocess
-import sys
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parent.parent
-
-r = subprocess.run([sys.executable, str(ROOT / "run.py"), "--check"],
-                   capture_output=True, text=True, cwd=ROOT)
-if r.returncode == 0:
-    print("запуск без --data-dir не отказал", file=sys.stderr)
-    sys.exit(1)
-
-cfg = json.loads((ROOT / "config" / "site.json").read_text(encoding="utf-8"))
-if "neighbour_site_ids" not in cfg:
-    print("в config/site.json нет поля neighbour_site_ids", file=sys.stderr)
-    sys.exit(1)
-
-# Отказ проверяется ИСПОЛНЕНИЕМ, а не наличием списка соседей.
-#
-# Раньше требовался непустой список — и у сайта, заведённого из шаблона, его
-# взяться неоткуда: соседей на машине ещё нет. Но защита нужна ему ровно так
-# же: умолчания рантайма этого семейства указывают на чужую ячейку, и одна
-# незаданная переменная означала бы витрину, молча отдающую каталог соседа.
-# Поэтому проверяется то, ради чего защита написана: запуск с каталогом
-# данных ЧУЖОГО сайта обязан отказать.
-чужой = cfg.get("neighbour_site_ids") or ["lords-01"]
-подстава = f"/srv/{чужой[0]}/data"
-if cfg["site_id"] in подстава:
-    подстава = "/srv/chuzhoy-sayt/data"
-r = subprocess.run([sys.executable, str(ROOT / "run.py"), "--check",
-                    "--data-dir", подстава],
-                   capture_output=True, text=True, cwd=ROOT)
-if r.returncode == 0:
-    print(f"запуск с чужим каталогом данных {подстава} не отказал", file=sys.stderr)
-    sys.exit(1)
-'''
-
-CHECK_ASCII = '''"""Имена переменных и функций в shell — только ASCII.
-
-Bash считает именем лишь [A-Za-z_][A-Za-z0-9_]*. `СУХОЙ=0` для него не
-присваивание, а вызов команды; падает только при запуске. `bash -n` пропускает.
-"""
-import re
-import sys
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parent.parent
-ASSIGN = re.compile(r"^\\s*(?:export\\s+|local\\s+)?([^\\s=]*[^\\x00-\\x7F][^\\s=]*)=")
-REF = re.compile(r"\\$\\{?([A-Za-z_]*[^\\x00-\\x7F][^\\s}/:\\-]*)")
-FUNC = re.compile(r"^\\s*(?:function\\s+)?([^\\s()]*[^\\x00-\\x7F][^\\s()]*)\\s*\\(\\s*\\)")
-
-bad = []
-for path in sorted(ROOT.rglob("*.sh")):
-    if ".git" in path.parts:
-        continue
-    for n, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
-        code = line.split("#", 1)[0]
-        for rule, what in ((ASSIGN, "присваивание"), (REF, "обращение"), (FUNC, "функция")):
-            for name in rule.findall(code):
-                bad.append(f"{path.relative_to(ROOT)}:{n}: {what} к не-ASCII имени {name!r}")
-if bad:
-    print("не-ASCII имена в shell:", *bad, sep="\\n  ", file=sys.stderr)
-    sys.exit(1)
-'''
 
 CI_WORKFLOW = '''# Выпуск {domain}. Меняет только этот сайт.
 name: release
@@ -911,211 +701,6 @@ jobs:
 '''
 
 
-BUILD_RELEASE = '''#!/usr/bin/env python3
-"""Сборка установочного пакета с воспроизводимым digest.
-
-В архив не попадает ничего переменного: порядок файлов задан, времена обнулены,
-владелец обезличен, режим канонизирован. Git хранит у файла ровно один бит прав;
-остальное берётся из umask сборщика, и без нормализации один коммит давал разный
-digest у разработчика и на раннере CI — digest отвечал бы на вопрос «кто
-собирал», а не «то же ли это самое».
-"""
-from __future__ import annotations
-
-import argparse
-import gzip
-import hashlib
-import io
-import json
-import subprocess
-import tarfile
-from datetime import datetime, timezone
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parent.parent
-SKIP_DIRS = {".git", "__pycache__", "dist", "data", "var"}
-SKIP_FILES = {"config/player.json"}
-
-
-def files() -> list:
-    """Файлы артефакта — те, что ведёт Git, и только они.
-
-    Обход файловой системы клал в артефакт всё, что лежит в рабочем каталоге:
-    не только отслеживаемое, но и игнорируемое. Два следствия, оба живые.
-
-    Первое: digest переставал быть функцией коммита. Один и тот же коммит,
-    собранный в рабочем каталоге и в рабочей копии исполнителя, дал
-    `0e068b87d274` и `e8976b9ca670` — разница была в каталоге `.claude/`,
-    который Git игнорирует. Исполнитель сверяет digest заявки со своей
-    пересборкой, то есть такой выпуск он бы отверг, и правильно.
-
-    Второе, тише и хуже: `checks/no_secrets.py` проверяет ИНДЕКС Git, а
-    сборщик паковал РАБОЧИЙ КАТАЛОГ. Проверка и артефакт говорили о разном, и
-    любой посторонний файл рядом с проектом уезжал в выпуск; единственным
-    исключением был `config/player.json`, названный поимённо, — то есть
-    защита держалась на списке известных имён.
-    """
-    вывод = subprocess.run(["git", "-C", str(ROOT), "ls-files", "-z", "--cached"],
-                           capture_output=True, check=True).stdout
-    out = []
-    for имя in вывод.split(b"\0"):
-        rel = имя.decode("utf-8")
-        if not rel or rel in SKIP_FILES:
-            continue
-        if any(part in SKIP_DIRS for part in Path(rel).parts):
-            continue
-        p = ROOT / rel
-        if p.is_file():
-            out.append(p)
-    return sorted(out, key=lambda p: str(p.relative_to(ROOT)))
-
-
-#: Поля манифеста, которые обязана проставить СБОРКА. В репозитории они пусты
-#: намеренно: заполненное здесь значение пережило бы свой выпуск и продолжило
-#: бы называть его цифры.
-#:
-#: Каждое отвечает на свой вопрос, и подменять один ответ другим нельзя:
-#:
-#:   source_commit      откуда взят ЗАКРЕПЛЁННЫЙ РАНТАЙМ (репозиторий-
-#:                      производитель). Берётся из pins.lock.json, а не из
-#:                      манифеста: тогда объявленное происхождение не может
-#:                      разойтись с тем, что проверяет verify_pins.
-#:   site_repo_commit   коммит ЭТОГО репозитория — версия самого сайта.
-#:   runtime_commit     какой выпуск сайта исполняется.
-#:   artifact_sha256    сумма ФАЙЛА РАНТАЙМА: по ней судят, какой код работает.
-#:   built_at           время КОММИТА выпуска.
-#:   release_dir        куда выпуск ставится на боевой машине.
-#:   bound_release_link ссылка, которой он привязан.
-#:
-#: `release_dir` и `bound_release_link` до этой правки указывали в дерево
-#: ОБЩЕЙ фабрики `/srv/lords/.frontend/…`, потому что родословная у сборщиков
-#: общая. Каждая выделенная ячейка объявляла своей раскладкой чужую.
-ПОЛЯ_ВЫПУСКА = ("build_id", "artifact_sha256", "runtime_commit", "site_repo_commit",
-                "site_repo_dirty", "built_at", "built_from", "release_dir",
-                "bound_release_link", "source_commit", "source_dirty")
-
-#: Поле, которое сборка НЕ трогает: происхождение шаблона неподвижно.
-ПОЛЕ_ПРОИСХОЖДЕНИЯ = "template_origin"
-
-
-def commit_time(commit: str) -> str:
-    """Время коммита в UTC. Детерминировано: один коммит — одно значение.
-
-    Берётся `%ct` — секунды эпохи, а не `%cI`. Форматирование отдано Python
-    намеренно: `%cI` у git на раннере даёт `2026-09-26T10:44:55Z`, а
-    `datetime.fromisoformat` в Python 3.10 такую строку не принимает. Отсюда
-    проверка проходила в чистом клоне и падала в CI. Число секунд не зависит
-    ни от версии git, ни от локали, ни от часового пояса машины.
-    """
-    out = subprocess.run(["git", "-C", str(ROOT), "show", "-s", "--format=%ct", commit],
-                         capture_output=True, text=True, check=True).stdout.strip()
-    return datetime.fromtimestamp(int(out), timezone.utc).isoformat()
-
-
-def штамп(manifest: dict, cfg: dict, pins: dict, commit: str, dirty: bool) -> dict:
-    """Проставить сведения о выпуске поверх сведений о шаблоне.
-
-    Функция вынесена, чтобы проверка сверяла ровно то, что кладётся в
-    артефакт, а не свою копию правил: расхождение проверки и сборки — это и
-    есть тот случай, когда CI зеленеет, а витрина называет чужие цифры.
-    """
-    dep = cfg.get("deployment") or {}
-    короткий = commit[:12]
-    out = dict(manifest)
-    out["source_commit"] = pins["pins"]["source_commit"]
-    out["source_dirty"] = False
-    out["site_repo_commit"] = commit
-    out["site_repo_dirty"] = bool(dirty)
-    out["runtime_commit"] = commit
-    out["build_id"] = f"{короткий}-{cfg['site_id']}"
-    out["artifact_sha256"] = hashlib.sha256(
-        (ROOT / "src" / cfg["entrypoint"]).read_bytes()).hexdigest()
-    out["built_at"] = commit_time(commit)
-    out["built_from"] = "site-repo git commit"
-    if dep.get("release_parent"):
-        out["release_dir"] = f"{dep['release_parent'].rstrip('/')}/{короткий}"
-    if dep.get("current_link"):
-        out["bound_release_link"] = dep["current_link"]
-    return out
-
-
-def anonymise(info: tarfile.TarInfo) -> tarfile.TarInfo:
-    info.uid = info.gid = 0
-    info.uname = info.gname = ""
-    info.mtime = 0
-    info.mode = 0o755 if info.mode & 0o111 else 0o644
-    return info
-
-
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--output", default="dist")
-    args = parser.parse_args()
-    out = ROOT / args.output
-    out.mkdir(parents=True, exist_ok=True)
-
-    cfg = json.loads((ROOT / "config" / "site.json").read_text(encoding="utf-8"))
-    commit = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "HEAD"],
-                            capture_output=True, text=True, check=True).stdout.strip()
-    dirty = subprocess.run(["git", "-C", str(ROOT), "status", "--porcelain"],
-                           capture_output=True, text=True, check=True).stdout.strip()
-
-    # Манифест штампуется коммитом ЭТОЙ репы: иначе живой сайт объявлял бы
-    # build_id чужой сборки, и связь commit → CI → digest → живой сайт
-    # обрывалась бы на последнем звене. Отметки ВРЕМЕНИ СБОРКИ нет намеренно —
-    # она сделала бы digest невоспроизводимым; built_at берётся от коммита.
-    manifest_path = "config/template-manifest.json"
-    pins = json.loads((ROOT / "pins.lock.json").read_text(encoding="utf-8"))
-    stamped = None
-    if (ROOT / manifest_path).is_file():
-        stamped = штамп(json.loads((ROOT / manifest_path).read_text(encoding="utf-8")),
-                        cfg, pins, commit, bool(dirty))
-        stamped_bytes = (json.dumps(stamped, ensure_ascii=False, indent=1) + "\\n").encode()
-
-    raw = io.BytesIO()
-    with tarfile.open(fileobj=raw, mode="w") as tar:
-        for p in files():
-            arc = str(p.relative_to(ROOT))
-            if stamped is not None and arc == manifest_path:
-                info = tarfile.TarInfo(arc)
-                info.size = len(stamped_bytes)
-                info.mode = 0o644
-                tar.addfile(anonymise(info), io.BytesIO(stamped_bytes))
-                continue
-            tar.add(p, arcname=arc, filter=anonymise)
-    artifact = out / f"{cfg['site_id']}-{commit[:12]}.tar.gz"
-    with artifact.open("wb") as fh, gzip.GzipFile(fileobj=fh, mode="wb", mtime=0) as gz:
-        gz.write(raw.getvalue())
-
-    digest = "sha256:" + hashlib.sha256(artifact.read_bytes()).hexdigest()
-    manifest = {
-        "schema_version": 1,
-        "site_id": cfg["site_id"],
-        "domain": cfg["domain"],
-        "artifact": artifact.name,
-        "digest": digest,
-        "size_bytes": artifact.stat().st_size,
-        "source_commit": commit,
-        "source_dirty": bool(dirty),
-        "pins": pins["pins"],
-        "built_at": datetime.now(timezone.utc).isoformat(),
-        "live_build_id": stamped["build_id"] if stamped else None,
-        "contains": {"code": True, "config": True, "database": False,
-                     "media": False, "secrets": False, "catalog_snapshot": False},
-    }
-    (out / "release-manifest.json").write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
-    print(f"артефакт: {artifact}")
-    print(f"digest:   {digest}")
-    print(f"коммит:   {commit}")
-    if dirty:
-        print("ВНИМАНИЕ: дерево грязное, артефакт не воспроизводим из коммита")
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
-'''
 
 
 def add_tooling(destination: Path, site_id: str, domain: str) -> None:
@@ -1123,40 +708,53 @@ def add_tooling(destination: Path, site_id: str, domain: str) -> None:
     checks = destination / "checks"
     checks.mkdir(exist_ok=True)
     run = checks / "run.sh"
-    run.write_text(CHECKS_RUN, encoding="utf-8")
+    run.write_text(_оснастка("run.sh"), encoding="utf-8")
     run.chmod(0o755)
-    # Сценарный тест активации лежит файлом рядом с генератором: встроенный в
-    # строку, он однажды уже приехал в репозиторий сайта с разъехавшимися
-    # escape-последовательностями и не компилировался.
-    сценарии = Path(__file__).resolve().parent / "site_checks" / "activate_scenarios.py"
-    (checks / "activate_scenarios.py").write_text(
-        сценарии.read_text(encoding="utf-8"), encoding="utf-8")
-
-    for имя, текст in (("entrypoint_present.py", CHECK_ENTRYPOINT),
-                       ("compiles.py", CHECK_COMPILES),
-                       ("verify_pins.py", CHECK_VERIFY_PINS),
-                       ("no_secrets.py", CHECK_NO_SECRETS),
-                       ("fails_closed.py", CHECK_FAILS_CLOSED),
-                       ("ascii_shell_identifiers.py", CHECK_ASCII)):
-        (checks / имя).write_text(текст, encoding="utf-8")
-
-    # Проверки, которые сами разбирают Python, живут ФАЙЛАМИ рядом с
-    # генератором, а не строками в нём. Встроенные в строку, они приехали в
-    # проект сайта с разъехавшимися escape-последовательностями и не
-    # скомпилировались; то же однажды случилось с activate_scenarios.py.
-    рядом = Path(__file__).resolve().parent / "site_checks"
-    for имя in ("manifest_stamp.py", "artifact_contents.py"):
-        (checks / имя).write_text((рядом / имя).read_text(encoding="utf-8"),
-                                  encoding="utf-8")
+    for имя in ФАЙЛЫ_ПРОВЕРОК:
+        (checks / имя).write_text(_оснастка(имя), encoding="utf-8")
 
     tools = destination / "tools"
     tools.mkdir(exist_ok=True)
-    (tools / "build_release.py").write_text(BUILD_RELEASE, encoding="utf-8")
+    (tools / "build_release.py").write_text(_оснастка("build_release.py"),
+                                            encoding="utf-8")
 
     wf = destination / ".github" / "workflows"
     wf.mkdir(parents=True, exist_ok=True)
     (wf / "release.yml").write_text(
         CI_WORKFLOW.format(domain=domain, site_id=site_id), encoding="utf-8")
+
+
+#: Оснастка проекта сайта лежит ФАЙЛАМИ рядом с генератором, а не строками в
+#: нём.
+#:
+#: Причина не в стиле. Python-исходник, встроенный в строковый литерал, теряет
+#: свои escape-последовательности: `\\n` превращается в перенос строки, `\\0` — в
+#: нулевой байт, и в проект сайта уезжает файл, который не компилируется.
+#: Это случалось трижды: с `activate_scenarios.py`, затем с `manifest_stamp.py`
+#: и `artifact_contents.py`, затем с `build_release.py` и `verify_pins.py`.
+#: Каждый раз отказ обнаруживался только на прогоне проверок в новом проекте.
+#:
+#: Шаблоны, которым НУЖНА подстановка (`LAUNCHER`, `ACTIVATE`, `ROLLBACK`,
+#: `UNIT_TEMPLATE`, `CI_WORKFLOW`), остаются строками: в них есть `{поле}`.
+#: Все они на shell и YAML, и их синтаксис проверяется исполнением.
+ОСНАСТКА = Path(__file__).resolve().parent / "site_checks"
+
+#: Что попадает в `checks/` проекта сайта.
+ФАЙЛЫ_ПРОВЕРОК = (
+    "entrypoint_present.py",
+    "compiles.py",
+    "verify_pins.py",
+    "no_secrets.py",
+    "fails_closed.py",
+    "ascii_shell_identifiers.py",
+    "manifest_stamp.py",
+    "artifact_contents.py",
+    "activate_scenarios.py",
+)
+
+
+def _оснастка(имя: str) -> str:
+    return (ОСНАСТКА / имя).read_text(encoding="utf-8")
 
 
 ACTIVATE = '''#!/usr/bin/env bash
