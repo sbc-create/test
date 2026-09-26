@@ -26,6 +26,7 @@ import contextlib
 import json
 import os
 import pwd
+import json as _json
 import shutil
 import socket
 import subprocess
@@ -281,6 +282,8 @@ def install_release(site_id: str, артефакт: Path, digest: str, *,
         shutil.chown(путь, п.account, п.account)
     shutil.chown(временный, п.account, п.account)
     перенесено = _перенести_локальную_настройку(временный, п)
+    происхождение = _записать_происхождение(
+        временный, site_id=site_id, commit=commit, digest=факт, account=п.account)
     if выпуск.exists():
         shutil.rmtree(выпуск)
     временный.rename(выпуск)
@@ -293,7 +296,125 @@ def install_release(site_id: str, артефакт: Path, digest: str, *,
     os.replace(врем_ссылка, п.candidate)
     return {"operation": "install_release", "site_id": site_id, "dry_run": False,
             "digest": факт, "release": str(выпуск), "candidate_link": str(п.candidate),
-            "local_config": перенесено}
+            "local_config": перенесено, "provenance": происхождение}
+
+
+#: Имя файла происхождения внутри каталога выпуска. Оно же читают затворы
+#: активации соседних витрин, поэтому меняться не должно.
+ФАЙЛ_ПРОИСХОЖДЕНИЯ = "release-manifest.json"
+ФАЙЛ_ПРОИСХОЖДЕНИЯ_ЗАПАСНОЙ = "release-installed.json"
+
+
+def _записать_происхождение(выпуск: Path, *, site_id: str, commit: str,
+                            digest: str, account: str) -> dict[str, Any]:
+    """Положить рядом с кодом ответ на вопрос «откуда этот выпуск».
+
+    Без этого файла происхождение выпуска знает только очередь: каталог
+    `releases/<commit12>` называет двенадцать знаков коммита и больше ничего —
+    ни прогона CI, ни digest, ни времени установки. Проверить постфактум, что
+    исполняемый выпуск пришёл штатным путём, можно было только сверкой с
+    результатами в /var/lib/site-cells, а они живут отдельно от сайта и могут
+    быть недоступны тому, кто смотрит на сайт.
+
+    Отдельная причина — затворы активации. Подтверждать выпуск по заголовку
+    `X-Site-Factory-Build-Id` нельзя там, где build_id берётся из манифеста
+    ЗАКРЕПЛЁННОГО шаблона: такое значение одинаково у всех выпусков витрины и
+    даже у соседей семейства, то есть не различает то, что должно различать.
+    Здесь лежит метка именно этого выпуска.
+
+    Файл пишется ВНУТРЬ каталога выпуска и потому не входит в артефакт: digest
+    артефакта от него не меняется. Если артефакт уже содержит файл с таким
+    именем, он не затирается — своё уходит под запасное имя.
+    """
+    import json as _json
+    from datetime import datetime, timezone
+
+    живой = ""
+    манифест_шаблона = выпуск / "config" / "template-manifest.json"
+    if манифест_шаблона.is_file():
+        try:
+            живой = str(_json.loads(манифест_шаблона.read_text(encoding="utf-8"))
+                        .get("build_id") or "")
+        except (OSError, ValueError):
+            живой = ""
+
+    точка = ""
+    конфиг = выпуск / "config" / "site.json"
+    if конфиг.is_file():
+        try:
+            точка = str(_json.loads(конфиг.read_text(encoding="utf-8"))
+                        .get("entrypoint") or "")
+        except (OSError, ValueError):
+            точка = ""
+
+    запись = {
+        "schema_version": 1,
+        "site_id": site_id,
+        "commit": commit,
+        "digest": digest,
+        "release": выпуск.name,
+        # Метка, которую витрина объявит в ответах. Берётся из манифеста
+        # ЭТОГО дерева, а не собирается по правилу: правило может разойтись
+        # со сборщиком, а манифест — то, что рантайм действительно прочитает.
+        "live_build_id": живой,
+        "entrypoint": точка,
+        "installed_at": datetime.now(timezone.utc).isoformat(),
+        "installed_by": "cell-executor",
+    }
+    имя = (ФАЙЛ_ПРОИСХОЖДЕНИЯ if not (выпуск / ФАЙЛ_ПРОИСХОЖДЕНИЯ).exists()
+           else ФАЙЛ_ПРОИСХОЖДЕНИЯ_ЗАПАСНОЙ)
+    файл = выпуск / имя
+    файл.write_text(_json.dumps(запись, ensure_ascii=False, indent=1) + "\n",
+                    encoding="utf-8")
+    try:
+        shutil.chown(файл, account, account)
+    except (LookupError, PermissionError):
+        pass
+    return {"file": имя, "live_build_id": живой, "entrypoint": точка}
+
+
+def применить_правки(site_id: str, содержимое: dict[str, Any], *,
+                     dry_run: bool = True,
+                     площадка: "Площадка | None" = None) -> dict[str, Any]:
+    """Положить правки редактора в хранилище витрины.
+
+    Пишет ИСПОЛНИТЕЛЬ, а не управляющий слой: у админки нет и не должно быть
+    доступа к данным витрин — её ошибка обязана остаться ошибкой планирования,
+    а не порчей чужого состояния. То же решение уже принято для инвалидации
+    кэша, и здесь оно не изобретается заново.
+
+    Файл объявлен `user_writable`, поэтому доставка каталога его не
+    перезаписывает: правка переживает импорт по построению, а не по удаче.
+
+    Владелец — учётная запись сайта: витрина читает файл своим пользователем,
+    и файл, принадлежащий кому-то ещё, она прочитать не сможет.
+    """
+    п = площадка or Площадка.из_реестра(site_id)
+    контракт = контракт_данных(site_id, площадка=п)
+    имя = ИМЯ_ПРАВОК
+    if имя not in [ш.format(site=site_id) for ш in контракт["user_writable"]]:
+        raise PrivilegedRefused(
+            f"{site_id}: {имя} не объявлен `user_writable` в контракте сайта — "
+            "доставка каталога затирала бы правки на первом же обновлении")
+    if содержимое.get("site_id") != site_id:
+        raise PrivilegedRefused(
+            f"правки подготовлены для {содержимое.get('site_id')!r}, "
+            f"а применяются к {site_id!r}")
+    цель = п.data / имя
+    записей = len(содержимое.get("overrides") or {})
+    if dry_run:
+        return {"operation": "editorial", "site_id": site_id, "dry_run": True,
+                "path": str(цель), "entries": записей}
+    _нужен_root()
+    из_хранилища = json.dumps(содержимое, ensure_ascii=False, sort_keys=True,
+                              separators=(",", ":")) + "\n"
+    врем = цель.with_suffix(".json.new")
+    врем.write_text(из_хранилища, encoding="utf-8")
+    shutil.chown(врем, п.account, п.account)
+    врем.chmod(0o644)
+    os.replace(врем, цель)
+    return {"operation": "editorial", "site_id": site_id, "dry_run": False,
+            "path": str(цель), "entries": записей, "owner": п.account}
 
 
 def _каталог_юнитов() -> Path:
@@ -461,8 +582,21 @@ def verify(site_id: str, *, ожидаемый_build: str = "", порт: int | 
                 тело = r.read(400000)
                 итог["routes"][м] = {"status": r.status, "bytes": len(тело)}
                 if м == "/":
-                    найдено = re.search(rb'site-factory-build-id" content="([^"]+)"', тело)
-                    итог["build_id"] = найдено.group(1).decode() if найдено else None
+                    # Сначала ЗАГОЛОВОК, потом мета-тег. Заголовок отдают все
+                    # семейства, мета-тег — только те, что сами собирают
+                    # разметку. Yummy ставит перед собой прокси над сторонним
+                    # приложением, разметку не пишет и мета-тега не имеет:
+                    # приёмка получала build_id = null, `build_matches` = false
+                    # и откатывала исправный кандидат, у которого `/` и
+                    # `/healthz` отвечали 200. Это был отказ проверки, а не
+                    # витрины, и цена ему — откат вместо переноса.
+                    итог["build_id"] = r.headers.get("X-Site-Factory-Build-Id") or None
+                    итог["build_id_source"] = "заголовок" if итог["build_id"] else ""
+                    if not итог["build_id"]:
+                        найдено = re.search(
+                            rb'site-factory-build-id" content="([^"]+)"', тело)
+                        итог["build_id"] = найдено.group(1).decode() if найдено else None
+                        итог["build_id_source"] = "мета-тег" if итог["build_id"] else "нет"
         except Exception as exc:  # noqa: BLE001 — любой отказ это отказ приёмки
             итог["routes"][м] = {"error": type(exc).__name__}
     итог["ok"] = all(о.get("status") == 200 for о in итог["routes"].values())
@@ -784,8 +918,139 @@ def switch_route(site_id: str, порт: int, *, dry_run: bool = True,
 #: останется в той, которую выбросят.
 ПОЛЬЗОВАТЕЛЬСКИЕ = "site-data"
 
+#: Имя файла правок редактора в хранилище витрины.
+ИМЯ_ПРАВОК = "editorial-overrides.json"
 
-def снимок_совпадает(источник: Path, цель: Path, site_id: str) -> bool:
+
+def засеять_пользовательское(site_id: str, источник: Path, *,
+                             dry_run: bool = True,
+                             площадка: "Площадка | None" = None,
+                             репозиторий: Path | None = None) -> dict[str, Any]:
+    """Положить в хранилище ячейки то, что дальше принадлежит посетителям.
+
+    Делается РОВНО ОДИН РАЗ, при первом выпуске: дальше файл живёт своей
+    жизнью, и доставка каталога его не трогает (она подключает его ссылкой).
+    Повторный засев затёр бы принятые оценки.
+
+    Базу SQLite нельзя копировать как файл: рядом могут лежать `-wal` и
+    `-shm`, и побайтовая копия под запись отдаёт либо устаревшее состояние,
+    либо испорченное. Поэтому используется штатное резервное копирование
+    SQLite — `Connection.backup()`, которое отдаёт согласованный снимок и на
+    открытой под запись базе.
+
+    Владелец меняется на учётную запись сайта. Это не косметика: сейчас
+    `/srv/lords/.frontend/yummy-readmodel.sqlite3` принадлежит root в каталоге
+    claude, а служба работает под `lords` — то есть путь записи оценок мёртв,
+    и в таблице `user_rating` ноль строк. После засева он впервые становится
+    рабочим, и это изменение поведения, а не побочный эффект: записано здесь и
+    названо в отчёте.
+    """
+    п = площадка or Площадка.из_реестра(site_id)
+    контракт = контракт_данных(site_id, площадка=п, репозиторий=репозиторий)
+    итоги: list[dict[str, Any]] = []
+    for шаблон in контракт["user_writable"]:
+        имя = шаблон.format(site=site_id)
+        цель = п.data / имя
+        откуда = Path(источник) / имя
+        если = ("уже на месте" if цель.exists() or цель.is_symlink()
+                else "в источнике нет" if not откуда.exists() else None)
+        if если:
+            итоги.append({"name": имя, "skipped": если})
+            continue
+        if dry_run:
+            итоги.append({"name": имя, "would_seed": str(откуда)})
+            continue
+        _нужен_root()
+        if откуда.is_dir():
+            shutil.copytree(откуда, цель)
+        elif имя.endswith((".sqlite3", ".sqlite", ".db")):
+            import sqlite3
+            источник_бд = sqlite3.connect(f"file:{откуда}?mode=ro", uri=True)
+            цель_бд = sqlite3.connect(str(цель))
+            try:
+                источник_бд.backup(цель_бд)
+            finally:
+                цель_бд.close()
+                источник_бд.close()
+        else:
+            shutil.copy2(откуда, цель)
+        for путь in ([цель, *цель.rglob("*")] if цель.is_dir() else [цель]):
+            shutil.chown(путь, п.account, п.account)
+        итоги.append({"name": имя, "seeded": True, "from": str(откуда),
+                      "method": "sqlite backup" if имя.endswith(
+                          (".sqlite3", ".sqlite", ".db")) else "copy",
+                      "owner": п.account})
+    return {"operation": "seed_user_writable", "site_id": site_id,
+            "dry_run": dry_run, "contract": контракт["source"], "entries": итоги}
+
+
+def контракт_данных(site_id: str, *, площадка: "Площадка | None" = None,
+                    репозиторий: Path | None = None) -> dict[str, tuple[str, ...]]:
+    """Что для этого сайта доставляется, а что принадлежит посетителям.
+
+    Набор файлов был ОДИН на всю фабрику: каталог плюс подробности
+    обязательно, `site-data` — пользовательское. Для семейства Yummy он не
+    подходит ни одной из трёх частей:
+
+      * подробностей у него нет в природе, и требование обязательного
+        `{site}-details.json` отказало бы выпуску на отсутствии файла, которого
+        никто не производит;
+      * витрина читает `yummy-readmodel.sqlite3`, и это не снимок: в нём
+        таблица `user_rating`, куда сам слой витрины ПИШЕТ
+        (`yummy_readmodel.py`, INSERT ... ON CONFLICT DO UPDATE);
+      * значит копировать его при каждой доставке нельзя ровно по той причине,
+        по которой не копируется `site-data`: оценки, принятые во время
+        прогрева кандидата, остались бы в хранилище, которое потом выбросят.
+
+    Поэтому контракт объявляет сам сайт — в `config/site.json`, ключом
+    `data_contract` с полями `delivered` и `user_writable`. Источник истины
+    здесь тот же, что у всей фабрики: файлы конкретного сайта, а не таблица в
+    общем коде, которую пришлось бы править из-за каждого нового семейства.
+
+    Читается сначала из УСТАНОВЛЕННОГО выпуска (то, что исполняется), затем из
+    репозитория (первый выпуск, когда установленного ещё нет), и лишь потом
+    берётся прежний общий набор. Порядок именно такой: доставка обязана
+    следовать контракту работающего кода, а не того, который только собираются
+    выложить.
+    """
+    источники: list[Path] = []
+    if площадка is not None:
+        источники += [площадка.current / "config" / "site.json",
+                      площадка.app / "config" / "site.json"]
+    if репозиторий is None:
+        # Репозиторий ищется сам, а не ждёт, пока его передадут. Без этого
+        # ПЕРВЫЙ выпуск ячейки читал контракт из установленного релиза,
+        # которого ещё нет, и брал умолчание фабрики. Поймано первым же
+        # настоящим переносом Yummy: `stage_snapshot` вызывается из засева, но
+        # контракт разрешает заново и путь репозитория до него не доезжал —
+        # отказ «в источнике нет файлов снимка ['yummy-biz-details.json']».
+        # Параметр остаётся: он нужен проверкам и вызову с чужим деревом.
+        try:
+            from factory.cell import registry as _registry
+            репозиторий = _registry.resolve(site_id).repo_path
+        except Exception:  # noqa: BLE001 — нет реестра, нет и подсказки
+            репозиторий = None
+    if репозиторий is not None:
+        источники.append(Path(репозиторий) / "config" / "site.json")
+    for путь in источники:
+        try:
+            объявлено = _json.loads(путь.read_text(encoding="utf-8")).get("data_contract")
+        except (OSError, ValueError):
+            continue
+        if not isinstance(объявлено, dict):
+            continue
+        доставляемые = tuple(объявлено.get("delivered") or ())
+        пользовательские = tuple(объявлено.get("user_writable") or ())
+        if доставляемые:
+            return {"delivered": доставляемые,
+                    "user_writable": пользовательские or (ПОЛЬЗОВАТЕЛЬСКИЕ,),
+                    "source": str(путь)}
+    return {"delivered": СНИМОК, "user_writable": (ПОЛЬЗОВАТЕЛЬСКИЕ,),
+            "source": "умолчание фабрики"}
+
+
+def снимок_совпадает(источник: Path, цель: Path, site_id: str,
+                     доставляемые: tuple[str, ...] | None = None) -> bool:
     """Тот же снимок уже стоит. Повтор не должен ничего менять.
 
     Сравниваются и ДОПОЛНЕНИЯ, а не только пара «каталог + подробности».
@@ -800,7 +1065,7 @@ def снимок_совпадает(источник: Path, цель: Path, site
     """
     import hashlib
 
-    for шаблон in (*СНИМОК, *ДОПОЛНЕНИЯ):
+    for шаблон in (*(доставляемые or СНИМОК), *ДОПОЛНЕНИЯ):
         имя = шаблон.format(site=site_id)
         a, b = источник / имя, цель / имя
         if not a.is_file():
@@ -823,14 +1088,17 @@ def stage_snapshot(site_id: str, источник: Path, *, dry_run: bool = True
     """
     п = Площадка.из_реестра(site_id, path=path)
     источник = Path(источник)
-    имена = [ш.format(site=site_id) for ш in СНИМОК]
+    контракт = контракт_данных(site_id, площадка=п)
+    имена = [ш.format(site=site_id) for ш in контракт["delivered"]]
+    свои = [ш.format(site=site_id) for ш in контракт["user_writable"]]
     отсутствуют = [и for и in имена if not (источник / и).is_file()]
     if отсутствуют:
         raise PrivilegedRefused(
             f"{site_id}: в источнике нет файлов снимка {отсутствуют}; "
             "половина снимка хуже прежнего целого")
 
-    если_тот_же = снимок_совпадает(источник, п.data, site_id)
+    если_тот_же = снимок_совпадает(источник, п.data, site_id,
+                                   контракт["delivered"])
     if dry_run:
         return {"operation": "stage_snapshot", "site_id": site_id, "dry_run": True,
                 "unchanged": если_тот_же, "files": имена,
@@ -846,10 +1114,17 @@ def stage_snapshot(site_id: str, источник: Path, *, dry_run: bool = True
     # Всё, что витрина читает из хранилища, кроме снимка и пользовательских
     # записей, переносится как есть: страницы прежнего релиза, манифест и т. п.
     for запись in п.data.iterdir():
-        if запись.name in имена or запись.name == ПОЛЬЗОВАТЕЛЬСКИЕ:
+        if запись.name in имена:
             continue
         цель = п.data_candidate / запись.name
-        if запись.is_dir():
+        # Пользовательское — ссылкой, и файл тоже, а не только каталог. База
+        # оценок Yummy это файл, и копия её означала бы, что оценки, принятые
+        # во время прогрева кандидата, останутся в хранилище, которое потом
+        # выбросят. Причина та же, что у `site-data`, — значит и обращение
+        # должно быть тем же.
+        if запись.name in свои:
+            цель.symlink_to(запись)
+        elif запись.is_dir():
             цель.symlink_to(запись)
         else:
             shutil.copy2(запись, цель)
@@ -859,9 +1134,11 @@ def stage_snapshot(site_id: str, источник: Path, *, dry_run: bool = True
     for имя in (ш.format(site=site_id) for ш in ДОПОЛНЕНИЯ):
         if (источник / имя).is_file():
             shutil.copy2(источник / имя, п.data_candidate / имя)
-    общие = п.data / ПОЛЬЗОВАТЕЛЬСКИЕ
-    if общие.exists():
-        (п.data_candidate / ПОЛЬЗОВАТЕЛЬСКИЕ).symlink_to(общие)
+    for имя in свои:
+        общие = п.data / имя
+        ссылка = п.data_candidate / имя
+        if общие.exists() and not ссылка.exists() and not ссылка.is_symlink():
+            ссылка.symlink_to(общие)
     for путь in [п.data_candidate, *п.data_candidate.rglob("*")]:
         if not путь.is_symlink():
             shutil.chown(путь, п.account, п.account)

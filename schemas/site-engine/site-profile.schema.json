@@ -361,6 +361,44 @@
           "minLength": 1
         }
       }
+    },
+    "player": {
+      "type": "object",
+      "description": "Привязка витрины к паре учётных данных провайдера плеера. Блок появился в профилях вместе с операцией PLAYER_CONFIGURE, а в схему добавлен не был: additionalProperties=false отвергала ВСЕ шесть живых профилей, и ворота движка падали целиком. Значение Publisher ID здесь не хранится — только ссылка на Secret Hub.",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "credential_profile",
+        "publisher_id_ref"
+      ],
+      "properties": {
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "credential_profile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "publisher_id_ref": {
+          "type": "string",
+          "pattern": "^secret://"
+        },
+        "sidecar": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_mode": {
+          "type": "string",
+          "enum": [
+            "provider-id",
+            "catalog-id"
+          ]
+        },
+        "note": {
+          "type": "string"
+        }
+      }
     }
   },
   "anyOf": [

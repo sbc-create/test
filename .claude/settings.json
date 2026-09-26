@@ -170,7 +170,9 @@
       "Bash(git reset --hard*)",
       "Bash(git clean *)",
       "Bash(git filter-branch*)",
+      "Bash(sudo *)",
       "Bash(certbot *)",
+      "Bash(systemctl *)",
       "Read(.env)",
       "Read(**/.env)",
       "Read(**/.env.*)",
@@ -216,7 +218,11 @@
       "Bash(gh repo delete:*)",
       "Bash(aws ec2 terminate-instances:*)",
       "Bash(aws route53 delete-hosted-zone:*)",
-      "Bash(eval:*)"
+      "Bash(eval:*)",
+      "Bash(git push:* --delete*)",
+      "Bash(git push:* -d *)",
+      "Bash(git push:* main)",
+      "Bash(gh api:* -X DELETE*)"
     ],
     "ask": [
       "Bash(python3 -m factory deploy *)",

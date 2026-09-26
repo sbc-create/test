@@ -354,13 +354,35 @@ def _засеять_хранилище(site_id: str, *, dry_run: bool) -> dict[s
     # сборке lords-01 — с каталогом и подробностями главная отдаёт 48 карточек
     # и 8 ссылок на серии, с одним каталогом 12 карточек и НОЛЬ ссылок на серии.
     # Для посетителя это пропавшие серии, а не «частичные данные».
-    нехватка = [и for и in (ш.format(site=site_id) for ш in privileged.СНИМОК)
+    # Набор обязательных файлов берётся из контракта САЙТА, а не из общей
+    # таблицы. У семейства Yummy подробностей нет в природе, и общий набор
+    # отказал бы выпуску на отсутствии файла, которого никто не производит.
+    # Путь репозитория — через реестр: он единственный знает, где лежит проект
+    # сайта, и `repo_path` уже разрешает его относительно корня установки.
+    try:
+        репозиторий = registry.resolve(site_id).repo_path
+    except (registry.RegistryError, AttributeError):
+        репозиторий = None
+    контракт = privileged.контракт_данных(
+        site_id, площадка=п, репозиторий=репозиторий)
+    нехватка = [и for и in (ш.format(site=site_id) for ш in контракт["delivered"])
                 if not (п.data / и).is_file()]
+
+    # Пользовательское засевается ОТДЕЛЬНО и независимо от снимка: у витрины
+    # может быть наполненный каталог и при этом ни разу не созданная база
+    # оценок. Засев идёт один раз и не повторяется — иначе он затирал бы
+    # принятые оценки.
+    своё = privileged.засеять_пользовательское(
+        site_id, Path(delivery.ОБЩИЙ), dry_run=dry_run, площадка=п,
+        репозиторий=репозиторий)
+
     if not нехватка:
-        return {"seeded": False, "reason": "хранилище уже наполнено"}
+        return {"seeded": False, "reason": "хранилище уже наполнено",
+                "contract": контракт["source"], "user_writable": своё}
     снимок = privileged.stage_snapshot(site_id, Path(delivery.ОБЩИЙ), dry_run=dry_run)
     повышение = privileged.promote_snapshot(site_id, dry_run=dry_run)
-    return {"seeded": True, "missing": нехватка,
+    return {"seeded": True, "missing": нехватка, "contract": контракт["source"],
+            "user_writable": своё,
             "stage_snapshot": снимок, "promote_snapshot": повышение}
 
 
@@ -518,6 +540,36 @@ def обновить_данные(заявка: queue.Заявка, *, файл:
             "stage": "validated" if dry_run else "live_verified", "steps": шаги}
 
 
+def применить_правки(заявка: queue.Заявка, *, dry_run: bool = True) -> dict[str, Any]:
+    """Правки редактора: подготовлены управляющим слоем, применяет исполнитель.
+
+    Заявка не несёт ни путей, ни содержимого — схема закрытая. Путь
+    подготовленного выводится из `site_id` обеими сторонами по одному правилу,
+    а `digest` доказывает, что применено ИМЕННО подготовленное: не «файл по
+    такому-то пути», а конкретное содержимое. Расхождение — отказ до записи.
+
+    Перезапуск витрины не нужен: файл перечитывается по mtime тем же способом,
+    что снимок каталога. Поэтому здесь нет ни прогрева кандидата, ни
+    переключения маршрута — их отсутствие не упрощение, а следствие того, что
+    код не меняется.
+    """
+    from factory.cell import editorial_store
+
+    try:
+        содержимое = editorial_store.прочитать_подготовленное(заявка.site_id)
+    except editorial_store.StoreRejected as ош:
+        raise ExecutorError(f"{заявка.site_id}: {ош}") from None
+    факт = editorial_store.отпечаток(содержимое)
+    if факт != заявка.digest:
+        raise ExecutorError(
+            f"{заявка.site_id}: digest подготовленных правок {факт} не совпал "
+            f"с заявленным {заявка.digest}; применено не будет")
+    шаг = privileged.применить_правки(заявка.site_id, содержимое, dry_run=dry_run)
+    return {"status": "dry-run" if dry_run else "edited",
+            "stage": "validated" if dry_run else "live_verified",
+            "steps": {"apply_overrides": шаг}}
+
+
 def выполнить(заявка: queue.Заявка, *, база: Path, dry_run: bool = True) -> dict[str, Any]:
     """Одна операция целиком, с журналом переходов."""
     файл = база / "requests" / f"{заявка.request_id}.json"
@@ -546,6 +598,10 @@ def выполнить(заявка: queue.Заявка, *, база: Path, dry_
             этап = итог["stage"]
         elif заявка.operation == "deliver":
             итог = обновить_данные(заявка, файл=файл, dry_run=dry_run)
+            результат["outcome"] = итог
+            этап = итог["stage"]
+        elif заявка.operation == "editorial":
+            итог = применить_правки(заявка, dry_run=dry_run)
             результат["outcome"] = итог
             этап = итог["stage"]
         else:

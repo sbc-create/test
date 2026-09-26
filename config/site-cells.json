@@ -51,11 +51,13 @@
         "port": 9121,
         "account": "animedia-icu",
         "app_dir": "/srv/animedia-icu/app",
-        "data_dir": "/srv/animedia-icu/data",
+        "data_dir": null,
         "legacy_root": "/srv/lords/animedia-01/current/site",
         "reload": "mtime",
-        "managed_by": "cell",
-        "data_owner": "pipeline"
+        "managed_by": "monolith",
+        "data_owner": "pipeline",
+        "data_dir_after_relocation": "/srv/animedia-icu/data",
+        "data_dir_note": "Ячейкой витрина ещё НЕ стала: каталогов /srv/animedia-icu нет, исполняется выпуск из общего дерева (/srv/lords/.frontend/releases/20260923T001500Z-community-public-03), снимок читается из общего хранилища. `managed_by: cell` был выставлен до фактического перехода — это прямо запрещено правилом, и цена оказалась не теоретической: несуществующий /srv/animedia-icu/data попадал в ReadWritePaths издателя и вместе с тремя такими же путями Yummy давал 226/NAMESPACE, то есть суточное обновление не запускалось вовсе у ВСЕХ семи витрин. Значение вернётся в data_dir тем же шагом, которым витрина переедет."
       },
       "release": {
         "hold": true,
@@ -509,16 +511,17 @@
       "backup": {},
       "resources": {},
       "runtime": {
-        "unit": "nova-yummy-biz.service",
-        "previous_unit": null,
+        "unit": "nova-yummyani-biz.service",
+        "previous_unit": "nova-yummy-biz.service",
         "port": 9130,
         "account": "yummyani-biz",
-        "app_dir": null,
-        "data_dir": null,
+        "app_dir": "/srv/yummyani-biz/app",
+        "data_dir": "/srv/yummyani-biz/data",
         "legacy_root": "<data>/site",
-        "reload": "unknown",
+        "reload": "restart",
         "managed_by": "monolith",
-        "data_owner": "pipeline"
+        "data_owner": "pipeline",
+        "unit_note": "unit назван ЯЧЕЙКИН, а не монолитный. Пока здесь стоял nova-yummy-biz.service, повышение перезапускало бы монолитную службу, а её ExecStart ведёт в /srv/lords/.frontend — выпуск прошёл бы успешно, ничего не переключив, и снаружи это неотличимо от настоящего: сайт отвечает 200 и показывает прежний код. Файлы ячейкиных юнитов ставит automation/host/install-yummy-cell-units.sh; managed_by переводится в cell ПОСЛЕ фактического перехода, иначе издатель начнёт возить каталог в хранилище, из которого витрина ещё не читает."
       }
     },
     {
@@ -565,16 +568,17 @@
       "backup": {},
       "resources": {},
       "runtime": {
-        "unit": "nova-yummy-org.service",
-        "previous_unit": null,
+        "unit": "nova-yummyani-org.service",
+        "previous_unit": "nova-yummy-org.service",
         "port": 9131,
         "account": "yummyani-org",
-        "app_dir": null,
-        "data_dir": null,
+        "app_dir": "/srv/yummyani-org/app",
+        "data_dir": "/srv/yummyani-org/data",
         "legacy_root": "<data>/site",
-        "reload": "unknown",
+        "reload": "restart",
         "managed_by": "monolith",
-        "data_owner": "pipeline"
+        "data_owner": "pipeline",
+        "unit_note": "unit назван ЯЧЕЙКИН, а не монолитный. Пока здесь стоял nova-yummy-org.service, повышение перезапускало бы монолитную службу, а её ExecStart ведёт в /srv/lords/.frontend — выпуск прошёл бы успешно, ничего не переключив, и снаружи это неотличимо от настоящего: сайт отвечает 200 и показывает прежний код. Файлы ячейкиных юнитов ставит automation/host/install-yummy-cell-units.sh; managed_by переводится в cell ПОСЛЕ фактического перехода, иначе издатель начнёт возить каталог в хранилище, из которого витрина ещё не читает."
       }
     },
     {
@@ -621,16 +625,17 @@
       "backup": {},
       "resources": {},
       "runtime": {
-        "unit": "nova-yummy-site.service",
-        "previous_unit": null,
+        "unit": "nova-yummyani-site.service",
+        "previous_unit": "nova-yummy-site.service",
         "port": 9132,
         "account": "yummyani-site",
-        "app_dir": null,
-        "data_dir": null,
+        "app_dir": "/srv/yummyani-site/app",
+        "data_dir": "/srv/yummyani-site/data",
         "legacy_root": "<data>/site",
-        "reload": "unknown",
+        "reload": "restart",
         "managed_by": "monolith",
-        "data_owner": "pipeline"
+        "data_owner": "pipeline",
+        "unit_note": "unit назван ЯЧЕЙКИН, а не монолитный. Пока здесь стоял nova-yummy-site.service, повышение перезапускало бы монолитную службу, а её ExecStart ведёт в /srv/lords/.frontend — выпуск прошёл бы успешно, ничего не переключив, и снаружи это неотличимо от настоящего: сайт отвечает 200 и показывает прежний код. Файлы ячейкиных юнитов ставит automation/host/install-yummy-cell-units.sh; managed_by переводится в cell ПОСЛЕ фактического перехода, иначе издатель начнёт возить каталог в хранилище, из которого витрина ещё не читает."
       }
     },
     {
@@ -738,16 +743,70 @@
         "port": 9123,
         "account": "zonafilm-cc",
         "app_dir": "/srv/zonafilm-cc/app",
-        "data_dir": "/srv/zonafilm-cc/data",
+        "data_dir": "/srv/lords/.frontend/sites/zona-02/data",
         "legacy_root": "<data>/site",
         "reload": "mtime",
         "managed_by": "cell",
-        "data_owner": "pipeline"
+        "data_owner": "pipeline",
+        "data_dir_after_relocation": "/srv/zonafilm-cc/data",
+        "data_dir_note": "Каталог данных назван ТЕКУЩИЙ, а не будущий. Витрина читает /srv/lords/.frontend/sites/zona-02/data — это видно по её юниту (SITE_ROOT=/srv/lords/.frontend/sites/zona-02) и по файлу, который она объявляет ревизией. Пока здесь стоял /srv/zonafilm-cc/data, издатель докладывал «каталога данных не существует» и пропускал витрину: сайт четвёртые сутки показывал снимок от 22.09 при источнике от 25.09, и ошибки при этом не возникало ни у кого. Реестр обязан описывать, где сайт живёт СЕЙЧАС, иначе производитель кладёт снимок мимо живого сайта. Значение меняется на data_dir_after_relocation в том же шаге, в котором витрина переезжает в /srv/zonafilm-cc."
       },
       "release": {
         "hold": false,
         "hold_reason": "снято 25.09: основание отпало. DNS zonafilm.cc и www разрешаются в 45.131.182.225 (проверено), сессия zona-02-launch письменно просила провести выпуск штатной очередью, репозиторий выделен (sbc-create/site-zonafilm-cc, ветка claude/extract-zonafilm-cc). Прежняя причина — «нет публичного DNS» — больше не верна.",
         "branch": null
+      }
+    },
+    {
+      "site_id": "zona-03",
+      "domain": "zonafilm12.site",
+      "aliases": [
+        "www.zonafilm12.site"
+      ],
+      "status": "planned",
+      "repo": {
+        "kind": "remote",
+        "path": "var/site-repos/zonafilm12-site",
+        "remote": "https://github.com/sbc-create/site-zonafilm12-site"
+      },
+      "template": {
+        "template_id": "zona-nova",
+        "order_id": "launch-zonafilm12-site",
+        "family": "zona",
+        "note": "Экземпляр из site-zonafilm-space@75a33eaf46ea — выпуска, проверенного публично. Из свободного пула не выдавался: пул пуст, пополнение — вход владельца."
+      },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
+      "pins": {
+        "template": "zona-nova",
+        "modules": {},
+        "schemas": {
+          "site_config": "1"
+        }
+      },
+      "runtime": {
+        "unit": "nova-zonafilm12-site.service",
+        "previous_unit": null,
+        "port": 9124,
+        "account": "zonafilm12-site",
+        "app_dir": "/srv/zonafilm12-site/app",
+        "data_dir": "/srv/zonafilm12-site/data",
+        "legacy_root": "<data>/site",
+        "reload": "mtime",
+        "managed_by": "cell",
+        "data_owner": "pipeline",
+        "unit_note": "Новый домен: прежней установки нет, поэтому previous_unit пуст и гасить при повышении нечего. managed_by сразу cell — монолита у этого сайта не существовало ни дня, и выбирать между двумя значениями enum не приходится: витрина принадлежит ячейке по построению. Состояние запуска живёт в status: planned до первого выпуска."
+      },
+      "release": {
+        "hold": false,
+        "hold_reason": null,
+        "branch": "release/zonafilm12-site"
+      },
+      "indexing": {
+        "desired_state": "CLOSED",
+        "reason": "Тестовый запуск новой партии. noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца."
       }
     }
   ]

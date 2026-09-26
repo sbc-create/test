@@ -32,6 +32,11 @@ dry_run=0
 [ "${1:-}" = "--dry-run" ] && dry_run=1
 
 SRC_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
+# Опись зафиксированного пакета лежит на уровень выше дерева: <пакет>/manifest.json,
+# <пакет>/tree/ = SRC_ROOT. Если сценарий запущен из пакета, источник кода
+# неизменен, а корень рабочих копий репозиториев берётся из описи, а не из
+# места сценария: это разные вещи, и раньше они совпадали лишь случайно.
+MANIFEST="$SRC_ROOT/../manifest.json"
 DEST=/usr/local/lib/site-factory-cell
 QUEUE=/var/lib/site-cells
 UNIT_DIR=/etc/systemd/system
@@ -74,14 +79,43 @@ log "запись абсолютных путей установки"
 # стоила первой настоящей заявки: исполнитель искал tools/build_release.py рядом
 # с собой и отверг выпуск. Значение пишет root, оно недоступно на запись
 # подающей стороне, и код репозитория root всё равно не исполняет.
+PKG_ID=""; PKG_DIGEST=""; PKG_COMMIT=""; REPOS_ROOT="$SRC_ROOT"
+if [ -f "$MANIFEST" ]; then
+  eval "$("$PY" - "$MANIFEST" <<'PYMANIFEST'
+import json, shlex, sys
+m = json.load(open(sys.argv[1], encoding="utf-8"))
+for name, key in (("PKG_ID", "package_id"), ("PKG_DIGEST", "digest"),
+                  ("PKG_COMMIT", "commit"), ("REPOS_ROOT", "site_repos_root")):
+    print(f"{name}={shlex.quote(str(m.get(key) or ''))}")
+PYMANIFEST
+)"
+  [ -n "$REPOS_ROOT" ] || die "в описи пакета нет site_repos_root"
+  [ -f "$REPOS_ROOT/factory/cell/executor.py" ] || die "site_repos_root описи не похож на репозиторий: $REPOS_ROOT"
+  log "пакет $PKG_ID, коммит ${PKG_COMMIT:0:12}; рабочие копии репозиториев: $REPOS_ROOT"
+else
+  log "[!] описи пакета нет: код берётся из $SRC_ROOT как есть"
+fi
+
 if [ "$dry_run" = 0 ]; then
-  printf '{\n  "site_repos_root": "%s",\n  "installed_at": "%s"\n}\n' \
-      "$SRC_ROOT" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > "$DEST/cell-install.json"
+  "$PY" - "$DEST/cell-install.json" "$REPOS_ROOT" "$PKG_ID" "$PKG_DIGEST" "$PKG_COMMIT" "$SRC_ROOT" <<'PYWRITE'
+import json, sys
+from datetime import datetime, timezone
+путь, repos, pid, digest, commit, src = sys.argv[1:7]
+json.dump({
+    "site_repos_root": repos,
+    "installed_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+    "package_id": pid or None,
+    "package_digest": digest or None,
+    "package_commit": commit or None,
+    "code_source": src,
+}, open(путь, "w", encoding="utf-8"), ensure_ascii=False, indent=2, sort_keys=True)
+open(путь, "a", encoding="utf-8").write("\n")
+PYWRITE
   chown root:root "$DEST/cell-install.json"
   chmod 0644 "$DEST/cell-install.json"
-  log "  основание путей репозиториев: $SRC_ROOT"
+  log "  основание путей репозиториев: $REPOS_ROOT"
 else
-  printf '   [сухой прогон] %s/cell-install.json <- site_repos_root=%s\n' "$DEST" "$SRC_ROOT"
+  printf '   [сухой прогон] %s/cell-install.json <- site_repos_root=%s package_id=%s\n' "$DEST" "$REPOS_ROOT" "${PKG_ID:-нет}"
 fi
 
 log "проверка достижимости рабочих копий репозиториев"

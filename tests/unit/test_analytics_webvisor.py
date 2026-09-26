@@ -342,7 +342,15 @@ def test_registry_records_the_real_state_including_problems():
 
     for entry in registry.properties():
         raw = entry.raw
-        assert raw["counter_id"], f"{entry.domain}: боевой counter_id не записан"
+        # Домен, ещё не запущенный, счётчика не имеет — и не должен: счётчик,
+        # заведённый до активации, собирал бы пустоту и выглядел бы рабочим.
+        # Требовать counter_id от всех значило бы требовать именно этого.
+        if raw["counter_state"] == "planned":
+            assert raw["counter_id"] is None, (
+                f"{entry.domain}: состояние planned, а счётчик назначен")
+            assert raw["analytics_enabled"] is False, entry.domain
+        else:
+            assert raw["counter_id"], f"{entry.domain}: боевой counter_id не записан"
         if raw["webvisor"]:
             assert any("сесси" in p or "Вебвизор" in p for p in raw["problems"]), (
                 f"{entry.domain}: запись сессий включена, но в problems об этом ни слова"

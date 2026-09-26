@@ -339,3 +339,336 @@ def test_появившееся_дополнение_не_считается_н�
 
     (цель / "zona-01-popular-weekly.json").write_text("[]", encoding="utf-8")
     assert privileged.снимок_совпадает(источник, цель, "zona-01") is True
+
+
+def test_происхождение_выпуска_лежит_рядом_с_кодом(tmp_path):
+    """Каталог выпуска обязан сам отвечать, откуда он.
+
+    `releases/<commit12>` называет двенадцать знаков коммита и больше ничего:
+    ни digest, ни времени установки, ни метки, которую витрина объявит. Кто
+    смотрит на сайт, а не в /var/lib/site-cells, проверить происхождение
+    исполняемого выпуска не мог.
+
+    Отдельная причина — затворы активации. Подтверждать выпуск заголовком
+    `X-Site-Factory-Build-Id` нельзя там, где build_id берётся из манифеста
+    ЗАКРЕПЛЁННОГО шаблона: это значение одинаково у всех выпусков витрины и
+    даже у соседей семейства, то есть не различает то, что должно различать.
+    Поэтому `live_build_id` читается из манифеста ЭТОГО дерева, а не собирается
+    по правилу: правило может разойтись со сборщиком, манифест — нет.
+    """
+    import json
+
+    выпуск = tmp_path / "выпуск"
+    (выпуск / "config").mkdir(parents=True)
+    (выпуск / "config" / "template-manifest.json").write_text(
+        json.dumps({"build_id": "aaaaaaaaaaaa-zona-01"}), encoding="utf-8")
+    (выпуск / "config" / "site.json").write_text(
+        json.dumps({"entrypoint": "lords-frontend.py"}), encoding="utf-8")
+
+    итог = privileged._записать_происхождение(
+        выпуск, site_id="zona-01", commit="a" * 40,
+        digest="sha256:" + "b" * 64, account="nobody")
+
+    assert итог["file"] == privileged.ФАЙЛ_ПРОИСХОЖДЕНИЯ
+    запись = json.loads((выпуск / итог["file"]).read_text(encoding="utf-8"))
+    assert запись["commit"] == "a" * 40
+    assert запись["digest"] == "sha256:" + "b" * 64
+    assert запись["live_build_id"] == "aaaaaaaaaaaa-zona-01", (
+        "метка выпуска обязана приходить из манифеста этого дерева")
+    assert запись["entrypoint"] == "lords-frontend.py"
+    assert запись["installed_by"] == "cell-executor"
+
+
+def test_свой_манифест_не_затирает_чужой(tmp_path):
+    """Артефакт мог принести файл с тем же именем — его данные не наши."""
+    import json
+
+    выпуск = tmp_path / "выпуск"
+    выпуск.mkdir()
+    чужой = {"это": "из артефакта"}
+    (выпуск / privileged.ФАЙЛ_ПРОИСХОЖДЕНИЯ).write_text(
+        json.dumps(чужой), encoding="utf-8")
+
+    итог = privileged._записать_происхождение(
+        выпуск, site_id="zona-01", commit="c" * 40,
+        digest="sha256:" + "d" * 64, account="nobody")
+
+    assert итог["file"] == privileged.ФАЙЛ_ПРОИСХОЖДЕНИЯ_ЗАПАСНОЙ
+    assert json.loads((выпуск / privileged.ФАЙЛ_ПРОИСХОЖДЕНИЯ).read_text(
+        encoding="utf-8")) == чужой, "файл из артефакта затёрт"
+    своё = json.loads((выпуск / итог["file"]).read_text(encoding="utf-8"))
+    assert своё["commit"] == "c" * 40
+
+
+def test_происхождение_без_манифеста_шаблона_не_падает(tmp_path):
+    """Не у каждого семейства есть манифест шаблона: Yummy обходится без него.
+
+    Отказ здесь означал бы, что выпуск не установится вовсе из-за отсутствия
+    необязательного файла.
+    """
+    import json
+
+    выпуск = tmp_path / "выпуск"
+    выпуск.mkdir()
+    итог = privileged._записать_происхождение(
+        выпуск, site_id="yummy-biz", commit="e" * 40,
+        digest="sha256:" + "f" * 64, account="nobody")
+    запись = json.loads((выпуск / итог["file"]).read_text(encoding="utf-8"))
+    assert запись["live_build_id"] == ""
+    assert запись["entrypoint"] == ""
+
+
+def _площадка_для_контракта(tmp_path, account="nobody"):
+    корень = tmp_path / "srv"
+    (корень / "data").mkdir(parents=True)
+    (корень / "app").mkdir(parents=True)
+    return privileged.Площадка(
+        site_id="yummy-site", account=account, root=корень,
+        app=корень / "app", data=корень / "data",
+        unit="u.service", previous_unit=None, port=9132)
+
+
+def test_контракт_данных_объявляется_сайтом(tmp_path):
+    """Набор файлов принадлежит сайту, а не общей таблице фабрики.
+
+    У семейства Yummy нет файла подробностей в природе. Общий набор
+    (`{site}-catalog.json` + `{site}-details.json`) отказал бы выпуску на
+    отсутствии файла, которого никто не производит, — то есть требование
+    полноты снимка сработало бы против витрины, у которой снимок полон.
+    """
+    import json
+
+    репо = tmp_path / "repo" / "config"
+    репо.mkdir(parents=True)
+    (репо / "site.json").write_text(json.dumps({
+        "site_id": "yummy-site",
+        "data_contract": {"delivered": ["{site}-catalog.json"],
+                          "user_writable": ["site-data", "yummy-readmodel.sqlite3"]},
+    }), encoding="utf-8")
+
+    к = privileged.контракт_данных("yummy-site", репозиторий=репо.parent)
+    assert к["delivered"] == ("{site}-catalog.json",)
+    assert "yummy-readmodel.sqlite3" in к["user_writable"]
+
+    # Без объявления действует прежний общий набор. Пример берётся заведомо
+    # несуществующий: у настоящих витрин объявление уже появилось, и проверять
+    # умолчание на них значило бы проверять их конфигурацию, а не умолчание.
+    по_умолчанию = privileged.контракт_данных("нет-такой-витрины")
+    assert по_умолчанию["delivered"] == privileged.СНИМОК
+    assert по_умолчанию["user_writable"] == (privileged.ПОЛЬЗОВАТЕЛЬСКИЕ,)
+
+
+def test_установленный_выпуск_важнее_репозитория(tmp_path):
+    """Доставка следует контракту РАБОТАЮЩЕГО кода, а не будущего.
+
+    Иначе правка контракта в репозитории меняла бы доставку до того, как этот
+    код выложен, — то есть данные приезжали бы по описанию, которого на сайте
+    ещё нет.
+    """
+    import json
+
+    п = _площадка_для_контракта(tmp_path)
+    выпуск = tmp_path / "srv" / "releases" / "aaaaaaaaaaaa"
+    (выпуск / "config").mkdir(parents=True)
+    (выпуск / "config" / "site.json").write_text(json.dumps({
+        "data_contract": {"delivered": ["живой-{site}.json"], "user_writable": ["site-data"]},
+    }), encoding="utf-8")
+    п.current.symlink_to(выпуск)
+
+    репо = tmp_path / "repo" / "config"
+    репо.mkdir(parents=True)
+    (репо / "site.json").write_text(json.dumps({
+        "data_contract": {"delivered": ["будущий-{site}.json"], "user_writable": ["site-data"]},
+    }), encoding="utf-8")
+
+    к = privileged.контракт_данных("yummy-site", площадка=п, репозиторий=репо.parent)
+    assert к["delivered"] == ("живой-{site}.json",), к
+
+
+def test_пользовательское_засевается_один_раз(tmp_path):
+    """Повторный засев затёр бы принятые оценки.
+
+    База оценок Yummy — не снимок: слой витрины в неё пишет. Значит второй
+    засев означает потерю того, что посетители успели поставить.
+    """
+    import json
+    import sqlite3
+
+    п = _площадка_для_контракта(tmp_path)
+    (п.app / "config").mkdir(parents=True, exist_ok=True)
+    (п.app / "config" / "site.json").write_text(json.dumps({
+        "data_contract": {"delivered": ["{site}-catalog.json"],
+                          "user_writable": ["yummy-readmodel.sqlite3"]},
+    }), encoding="utf-8")
+
+    источник = tmp_path / "front"
+    источник.mkdir()
+    бд = источник / "yummy-readmodel.sqlite3"
+    соед = sqlite3.connect(str(бд))
+    соед.execute("create table user_rating(user_id text, value int)")
+    соед.execute("insert into user_rating values ('u1', 7)")
+    соед.commit()
+    соед.close()
+
+    итог = privileged.засеять_пользовательское(
+        "yummy-site", источник, dry_run=True, площадка=п)
+    assert итог["entries"][0]["would_seed"].endswith("yummy-readmodel.sqlite3")
+    assert not (п.data / "yummy-readmodel.sqlite3").exists(), "сухой прогон записал файл"
+
+    # Настоящий засев требует root; поведение «уже на месте» проверяется без него.
+    (п.data / "yummy-readmodel.sqlite3").write_bytes("уже принятые оценки".encode("utf-8"))
+    повтор = privileged.засеять_пользовательское(
+        "yummy-site", источник, dry_run=False, площадка=п)
+    assert повтор["entries"][0]["skipped"] == "уже на месте"
+    assert (п.data / "yummy-readmodel.sqlite3").read_bytes() == "уже принятые оценки".encode("utf-8"), (
+        "повторный засев затёр пользовательские данные")
+
+
+def test_база_оценок_подключается_ссылкой_а_не_копией(tmp_path, monkeypatch):
+    """Копия означала бы потерю оценок, принятых во время прогрева.
+
+    `site-data` не копируется именно по этой причине; база оценок Yummy — тот
+    же случай, только это файл, а не каталог. Проверка сторожит, что различие
+    «файл или каталог» на решение не влияет.
+    """
+    import json
+
+    п = _площадка_для_контракта(tmp_path)
+    (п.app / "config").mkdir(parents=True, exist_ok=True)
+    (п.app / "config" / "site.json").write_text(json.dumps({
+        "data_contract": {"delivered": ["{site}-catalog.json"],
+                          "user_writable": ["site-data", "yummy-readmodel.sqlite3"]},
+    }), encoding="utf-8")
+    (п.data / "yummy-site-catalog.json").write_text('{"items": []}', encoding="utf-8")
+    (п.data / "yummy-readmodel.sqlite3").write_bytes("оценки".encode("utf-8"))
+    (п.data / "site-data").mkdir()
+
+    источник = tmp_path / "front"
+    источник.mkdir()
+    (источник / "yummy-site-catalog.json").write_text('{"items": [1]}', encoding="utf-8")
+
+    monkeypatch.setattr(privileged.Площадка, "из_реестра",
+                        staticmethod(lambda *a, **k: п))
+    monkeypatch.setattr(privileged, "_нужен_root", lambda: None)
+    monkeypatch.setattr(privileged.shutil, "chown", lambda *a, **k: None)
+
+    итог = privileged.stage_snapshot("yummy-site", источник, dry_run=False)
+    assert итог["unchanged"] is False, итог
+    кандидат = п.data_candidate
+    assert (кандидат / "yummy-readmodel.sqlite3").is_symlink(), (
+        "база оценок скопирована, а не подключена ссылкой")
+    assert (кандидат / "site-data").is_symlink()
+    assert not (кандидат / "yummy-site-catalog.json").is_symlink(), (
+        "снимок обязан быть копией: кандидат не должен править живые данные")
+
+
+def test_контракт_находит_репозиторий_сам_на_первом_выпуске(tmp_path, monkeypatch):
+    """У первого выпуска нет установленного релиза — контракт брать неоткуда.
+
+    Поймано первым же настоящим переносом Yummy, а не рассуждением. Исполнитель
+    отказал: «yummy-biz: в источнике нет файлов снимка
+    ['yummy-biz-details.json']; половина снимка хуже прежнего целого» — то есть
+    взял умолчание фабрики вместо контракта сайта.
+
+    Причина: `stage_snapshot` разрешает контракт заново и путь репозитория до
+    него не доезжал. `_засеять_хранилище` передавал его, а вызванный из засева
+    `stage_snapshot` — нет, и на первом выпуске (когда `current` и `app` пусты)
+    оставалось только умолчание. Поэтому контракт ищет репозиторий сам, а
+    параметр остаётся для проверок и вызова с чужим деревом.
+    """
+    import json
+
+    репо = tmp_path / "repo"
+    (репо / "config").mkdir(parents=True)
+    (репо / "config" / "site.json").write_text(json.dumps({
+        "site_id": "yummy-biz",
+        "data_contract": {"delivered": ["{site}-catalog.json"],
+                          "user_writable": ["site-data", "yummy-readmodel.sqlite3"]},
+    }), encoding="utf-8")
+
+    class ФиктивнаяЯчейка:
+        repo_path = репо
+
+    from factory.cell import registry as рег
+    monkeypatch.setattr(рег, "resolve", lambda site_id: ФиктивнаяЯчейка())
+
+    # Площадка первого выпуска: ни current, ни app ещё не заполнены.
+    корень = tmp_path / "srv"
+    (корень / "data").mkdir(parents=True)
+    (корень / "app").mkdir(parents=True)
+    п = privileged.Площадка(site_id="yummy-biz", account="nobody", root=корень,
+                            app=корень / "app", data=корень / "data",
+                            unit="u.service", previous_unit=None, port=9130)
+
+    к = privileged.контракт_данных("yummy-biz", площадка=п)
+    assert к["delivered"] == ("{site}-catalog.json",), (
+        "на первом выпуске взято умолчание фабрики вместо контракта сайта: "
+        f"{к}")
+    assert "yummy-readmodel.sqlite3" in к["user_writable"]
+    assert str(репо) in к["source"]
+
+
+def test_приёмка_читает_build_id_у_семейства_без_мета_тега(tmp_path, monkeypatch):
+    """Заголовок отдают все семейства, мета-тег — только пишущие разметку.
+
+    Поймано на первом переносе yummy-biz: кандидат поднялся за 3 с, `/` отдал
+    200 (274 973 байта), `/healthz` 200 — и приёмка всё равно откатила выпуск,
+    потому что `build_id` оказался `null`. Причина не в витрине: Yummy ставит
+    перед собой прокси над сторонним приложением, разметку не пишет и мета-тега
+    не имеет. Проверка умела читать только мета-тег, то есть предполагала
+    разметку одного семейства.
+
+    Ослаблять сверку нельзя: именно она отличает «ответ 200» от «работает
+    нужный выпуск». Поэтому источник расширен, а не требование снято.
+    """
+    import threading
+    from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+    def поднять(обработчик):
+        сервер = ThreadingHTTPServer(("127.0.0.1", 0), обработчик)
+        threading.Thread(target=сервер.serve_forever, daemon=True).start()
+        return сервер
+
+    class ТолькоЗаголовок(BaseHTTPRequestHandler):
+        def do_GET(self):  # noqa: N802
+            тело = "<html><body>прокси без мета-тега</body></html>".encode("utf-8")
+            self.send_response(200)
+            self.send_header("X-Site-Factory-Build-Id", "9d25994c1762-yummy-biz")
+            self.send_header("Content-Length", str(len(тело)))
+            self.end_headers()
+            self.wfile.write(тело)
+
+        def log_message(self, *a):
+            pass
+
+    class ТолькоМетаТег(BaseHTTPRequestHandler):
+        def do_GET(self):  # noqa: N802
+            тело = '<meta name="site-factory-build-id" content="abc123-zona-01">'.encode('utf-8')
+            self.send_response(200)
+            self.send_header("Content-Length", str(len(тело)))
+            self.end_headers()
+            self.wfile.write(тело)
+
+        def log_message(self, *a):
+            pass
+
+    for обработчик, ожидаемый, источник in (
+            (ТолькоЗаголовок, "9d25994c1762-yummy-biz", "заголовок"),
+            (ТолькоМетаТег, "abc123-zona-01", "мета-тег")):
+        сервер = поднять(обработчик)
+        порт = сервер.server_address[1]
+        п = privileged.Площадка(site_id="проверка", account="nobody",
+                                root=tmp_path, app=tmp_path / "app",
+                                data=tmp_path / "data", unit="u.service",
+                                previous_unit=None, port=порт)
+        monkeypatch.setattr(privileged.Площадка, "из_реестра",
+                            staticmethod(lambda *a, **k: п))
+        try:
+            итог = privileged.verify("проверка", ожидаемый_build=ожидаемый,
+                                     маршруты=("/",))
+        finally:
+            сервер.shutdown()
+        assert итог["build_id"] == ожидаемый, итог
+        assert итог["build_id_source"] == источник, итог
+        assert итог["build_matches"] is True, итог
+        assert итог["ok"] is True, итог

@@ -6,15 +6,15 @@
   "updated_at": "2026-08-27T14:09:14Z",
   "properties": [
     {
-      "domain": "yummyani.site",
-      "site_id": null,
-      "counter_name": "YummyAnime — yummyani.site",
-      "counter_id": 111881037,
-      "counter_state": "reused",
+      "domain": "1lordserials1.online",
+      "site_id": "lords-03",
+      "counter_name": "Lords — 1lordserials1.online",
+      "counter_id": 112010277,
+      "counter_state": "created",
       "analytics_enabled": true,
       "webvisor": false,
       "allowed_hosts": [
-        "yummyani.site"
+        "1lordserials1.online"
       ],
       "goals": [
         "comment_submit",
@@ -36,30 +36,30 @@
         "sitemap_submitted": false
       },
       "seo_indexing_enabled": false,
-      "last_checked_at": "2026-08-27T14:08:59Z",
+      "last_checked_at": "2026-08-27T14:09:14Z",
       "problems": [],
       "goal_ids": {
-        "comment_submit": 601108539,
-        "episode_select": 601108535,
-        "filter_apply": 601108532,
-        "player_error": 601108538,
-        "player_ready": 601108537,
-        "player_start": 601108536,
-        "search": 601108531,
-        "season_select": 601108534,
-        "title_view": 601108533
+        "comment_submit": 602711797,
+        "episode_select": 602711777,
+        "filter_apply": 602711758,
+        "player_error": 602711796,
+        "player_ready": 602711795,
+        "player_start": 602711786,
+        "search": 602711757,
+        "season_select": 602711760,
+        "title_view": 602711759
       }
     },
     {
-      "domain": "yummyani.org",
-      "site_id": null,
-      "counter_name": "YummyAnime — yummyani.org",
-      "counter_id": 111881038,
-      "counter_state": "reused",
-      "analytics_enabled": true,
+      "domain": "animedia.space",
+      "site_id": "animedia-02",
+      "counter_name": "Animedia — animedia.space",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
       "webvisor": false,
       "allowed_hosts": [
-        "yummyani.org"
+        "animedia.space"
       ],
       "goals": [
         "comment_submit",
@@ -73,7 +73,7 @@
         "title_view"
       ],
       "webmaster": {
-        "enabled": true,
+        "enabled": false,
         "host_id": null,
         "verification_status": "BLOCKED_DEPLOYMENT",
         "verification_type": "META_TAG",
@@ -81,64 +81,10 @@
         "sitemap_submitted": false
       },
       "seo_indexing_enabled": false,
-      "last_checked_at": "2026-08-27T14:09:00Z",
-      "problems": [],
-      "goal_ids": {
-        "comment_submit": 601108548,
-        "episode_select": 601108544,
-        "filter_apply": 601108541,
-        "player_error": 601108547,
-        "player_ready": 601108546,
-        "player_start": 601108545,
-        "search": 601108540,
-        "season_select": 601108543,
-        "title_view": 601108542
-      }
-    },
-    {
-      "domain": "yummyani.biz",
-      "site_id": null,
-      "counter_name": "YummyAnime — yummyani.biz",
-      "counter_id": 111881039,
-      "counter_state": "reused",
-      "analytics_enabled": true,
-      "webvisor": false,
-      "allowed_hosts": [
-        "yummyani.biz"
-      ],
-      "goals": [
-        "comment_submit",
-        "episode_select",
-        "filter_apply",
-        "player_error",
-        "player_ready",
-        "player_start",
-        "search",
-        "season_select",
-        "title_view"
-      ],
-      "webmaster": {
-        "enabled": true,
-        "host_id": null,
-        "verification_status": "BLOCKED_DEPLOYMENT",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "last_checked_at": "2026-08-27T14:09:01Z",
-      "problems": [],
-      "goal_ids": {
-        "comment_submit": 601108557,
-        "episode_select": 601108553,
-        "filter_apply": 601108550,
-        "player_error": 601108556,
-        "player_ready": 601108555,
-        "player_start": 601108554,
-        "search": 601108549,
-        "season_select": 601108552,
-        "title_view": 601108551
-      }
+      "last_checked_at": null,
+      "problems": [
+        "Счётчик не заведён: сайт ещё не активирован, создавать счётчик до активации значит завести пустой счётчик без данных."
+      ]
     },
     {
       "domain": "lordfilm47.space",
@@ -231,15 +177,90 @@
       }
     },
     {
-      "domain": "1lordserials1.online",
-      "site_id": "lords-03",
-      "counter_name": "Lords — 1lordserials1.online",
-      "counter_id": 112010277,
-      "counter_state": "created",
+      "domain": "lordserials22.info",
+      "site_id": null,
+      "counter_name": "новый домен без счётчика — lordserials22.info",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordserials22.info"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "problems": [
+        "счётчик не создан: чужой идентификатор не переносится, создание — вход владельца"
+      ]
+    },
+    {
+      "domain": "lordserials22.site",
+      "site_id": null,
+      "counter_name": "новый домен без счётчика — lordserials22.site",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordserials22.site"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "problems": [
+        "счётчик не создан: чужой идентификатор не переносится, создание — вход владельца"
+      ]
+    },
+    {
+      "domain": "lordserials22.space",
+      "site_id": null,
+      "counter_name": "новый домен без счётчика — lordserials22.space",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordserials22.space"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "problems": [
+        "счётчик не создан: чужой идентификатор не переносится, создание — вход владельца"
+      ]
+    },
+    {
+      "domain": "yummyani.biz",
+      "site_id": null,
+      "counter_name": "YummyAnime — yummyani.biz",
+      "counter_id": 111881039,
+      "counter_state": "reused",
       "analytics_enabled": true,
       "webvisor": false,
       "allowed_hosts": [
-        "1lordserials1.online"
+        "yummyani.biz"
       ],
       "goals": [
         "comment_submit",
@@ -261,30 +282,30 @@
         "sitemap_submitted": false
       },
       "seo_indexing_enabled": false,
-      "last_checked_at": "2026-08-27T14:09:14Z",
+      "last_checked_at": "2026-08-27T14:09:01Z",
       "problems": [],
       "goal_ids": {
-        "comment_submit": 602711797,
-        "episode_select": 602711777,
-        "filter_apply": 602711758,
-        "player_error": 602711796,
-        "player_ready": 602711795,
-        "player_start": 602711786,
-        "search": 602711757,
-        "season_select": 602711760,
-        "title_view": 602711759
+        "comment_submit": 601108557,
+        "episode_select": 601108553,
+        "filter_apply": 601108550,
+        "player_error": 601108556,
+        "player_ready": 601108555,
+        "player_start": 601108554,
+        "search": 601108549,
+        "season_select": 601108552,
+        "title_view": 601108551
       }
     },
     {
-      "domain": "animedia.space",
-      "site_id": "animedia-02",
-      "counter_name": "Animedia — animedia.space",
-      "counter_id": null,
-      "counter_state": "planned",
-      "analytics_enabled": false,
+      "domain": "yummyani.org",
+      "site_id": null,
+      "counter_name": "YummyAnime — yummyani.org",
+      "counter_id": 111881038,
+      "counter_state": "reused",
+      "analytics_enabled": true,
       "webvisor": false,
       "allowed_hosts": [
-        "animedia.space"
+        "yummyani.org"
       ],
       "goals": [
         "comment_submit",
@@ -298,7 +319,7 @@
         "title_view"
       ],
       "webmaster": {
-        "enabled": false,
+        "enabled": true,
         "host_id": null,
         "verification_status": "BLOCKED_DEPLOYMENT",
         "verification_type": "META_TAG",
@@ -306,9 +327,164 @@
         "sitemap_submitted": false
       },
       "seo_indexing_enabled": false,
-      "last_checked_at": null,
+      "last_checked_at": "2026-08-27T14:09:00Z",
+      "problems": [],
+      "goal_ids": {
+        "comment_submit": 601108548,
+        "episode_select": 601108544,
+        "filter_apply": 601108541,
+        "player_error": 601108547,
+        "player_ready": 601108546,
+        "player_start": 601108545,
+        "search": 601108540,
+        "season_select": 601108543,
+        "title_view": 601108542
+      }
+    },
+    {
+      "domain": "yummyani.site",
+      "site_id": null,
+      "counter_name": "YummyAnime — yummyani.site",
+      "counter_id": 111881037,
+      "counter_state": "reused",
+      "analytics_enabled": true,
+      "webvisor": false,
+      "allowed_hosts": [
+        "yummyani.site"
+      ],
+      "goals": [
+        "comment_submit",
+        "episode_select",
+        "filter_apply",
+        "player_error",
+        "player_ready",
+        "player_start",
+        "search",
+        "season_select",
+        "title_view"
+      ],
+      "webmaster": {
+        "enabled": true,
+        "host_id": null,
+        "verification_status": "BLOCKED_DEPLOYMENT",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": "2026-08-27T14:08:59Z",
+      "problems": [],
+      "goal_ids": {
+        "comment_submit": 601108539,
+        "episode_select": 601108535,
+        "filter_apply": 601108532,
+        "player_error": 601108538,
+        "player_ready": 601108537,
+        "player_start": 601108536,
+        "search": 601108531,
+        "season_select": 601108534,
+        "title_view": 601108533
+      }
+    },
+    {
+      "domain": "yummyani7.info",
+      "site_id": null,
+      "counter_name": "новый домен без счётчика — yummyani7.info",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "yummyani7.info"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
       "problems": [
-        "Счётчик не заведён: сайт ещё не активирован, создавать счётчик до активации значит завести пустой счётчик без данных."
+        "счётчик не создан: чужой идентификатор не переносится, создание — вход владельца"
+      ]
+    },
+    {
+      "domain": "yummyani7.site",
+      "site_id": null,
+      "counter_name": "новый домен без счётчика — yummyani7.site",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "yummyani7.site"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "problems": [
+        "счётчик не создан: чужой идентификатор не переносится, создание — вход владельца"
+      ]
+    },
+    {
+      "domain": "zonafilm.space",
+      "site_id": "zona-01",
+      "counter_name": "Zona — zonafilm.space",
+      "counter_id": 112582938,
+      "counter_state": "reused",
+      "analytics_enabled": true,
+      "webvisor": false,
+      "allowed_hosts": [
+        "zonafilm.space"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "problems": [
+        "девять целей не заведены: счётчик перенесён из монолитной установки, цели в нём не создавались",
+        "поступление данных не подтверждено: доступа к кабинету Метрики нет, разметка на странице доказывает только отправку"
+      ]
+    },
+    {
+      "domain": "zonafilm12.site",
+      "site_id": "zona-03",
+      "counter_name": "новый домен без счётчика — zonafilm12.site",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "zonafilm12.site"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "problems": [
+        "счётчик не создан: чужой идентификатор не переносится, создание — вход владельца"
       ]
     }
   ]
