@@ -136,27 +136,43 @@ for (const э of экраны) {
     п(`${метка} панелей фильтров`, сколько >= 5, `${сколько}`);
     const открытых = async () => стр.evaluate(() =>
       [...document.querySelectorAll('details.afilt__dd')].filter(d => d.open).length);
+    // `toggle` — асинхронное событие: браузер шлёт его ПОСЛЕ того, как клик
+    // уже вернул управление. Читать число открытых панелей сразу после клика
+    // значит иногда застать состояние до того, как слушатель закрыл соседнюю,
+    // и объявить дефектом собственную спешку. Поэтому ждём значение, а не
+    // выбираем момент: если оно так и не наступит, ожидание истечёт и
+    // проверка упадёт — уже по делу.
+    const ждать = async (сколько) => {
+      try {
+        await стр.waitForFunction(
+          н => [...document.querySelectorAll('details.afilt__dd')]
+                 .filter(d => d.open).length === н,
+          сколько, { timeout: 4000 });
+      } catch (e) { /* не дождались — ниже это увидит проверка */ }
+      return открытых();
+    };
     п(`${метка} при загрузке открытых панелей нет`, (await открытых()) === 0);
     await панели.nth(0).locator('summary').click();
-    п(`${метка} панель открылась`, (await открытых()) === 1, `${await открытых()}`);
+    п(`${метка} панель открылась`, (await ждать(1)) === 1, `${await открытых()}`);
     п(`${метка} aria-expanded объявлен`,
       (await панели.nth(0).locator('summary').getAttribute('aria-expanded')) === 'true');
     await панели.nth(2).locator('summary').click();
-    const после2 = await открытых();
+    const после2 = await ждать(1);
     п(`${метка} вторая панель закрыла первую`, после2 === 1, `открыто ${после2}`);
     await панели.nth(2).locator('summary').click();
-    п(`${метка} повторное нажатие закрывает свою`, (await открытых()) === 0);
+    п(`${метка} повторное нажатие закрывает свою`, (await ждать(0)) === 0);
     await панели.nth(1).locator('summary').click();
     await стр.mouse.click(5, 5);
-    п(`${метка} клик снаружи закрывает`, (await открытых()) === 0);
+    п(`${метка} клик снаружи закрывает`, (await ждать(0)) === 0);
     await панели.nth(1).locator('summary').click();
     await стр.keyboard.press('Escape');
-    п(`${метка} Escape закрывает`, (await открытых()) === 0);
+    п(`${метка} Escape закрывает`, (await ждать(0)) === 0);
     const фокус = await стр.evaluate(() =>
       document.activeElement?.closest('details.afilt__dd')?.dataset.afiltDd || '');
     п(`${метка} Escape вернул фокус на кнопку`, фокус !== '', `фокус на ${фокус || 'неизвестно'}`);
     // панель не уезжает за экран
     await панели.nth(сколько - 1).locator('summary').click();
+    await ждать(1);
     const уехало = await стр.evaluate(() => {
       const o = [...document.querySelectorAll('details.afilt__dd')].find(d => d.open)
         ?.querySelector('.afilt__opts');
@@ -172,7 +188,7 @@ for (const э of экраны) {
     await стр.keyboard.press('Escape');
     await панели.nth(0).locator('summary').focus();
     await стр.keyboard.press('Enter');
-    п(`${метка} панель открывается с клавиатуры`, (await открытых()) === 1);
+    п(`${метка} панель открывается с клавиатуры`, (await ждать(1)) === 1);
     // выбранное значение остаётся после закрытия панели
     await стр.goto(БАЗА + '/catalog/?year=2024', { waitUntil: 'load' });
     if (э.имя === 'телефон') await стр.click('[data-afilt-open]');
