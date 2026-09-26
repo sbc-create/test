@@ -2476,8 +2476,10 @@ grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(max-width:767px){.ahome-filt{max-height:48px}}
 .zsec--top100[hidden],.zsec--top100-gap{display:none !important;height:0 !important;min-height:0 !important;
 margin:0 !important;padding:0 !important;border:0 !important;overflow:hidden !important}
-.zsec--home-cols .zhub--home{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
-@media(min-width:900px){.zsec--home-cols .zhub--home{grid-template-columns:repeat(4,minmax(0,1fr))}}
+/* Полка подборок на главной раскладывается общим правилом `.zhub`: число
+   колонок определяет само число карточек. Прежнее правило жёстко просило
+   четыре колонки, и две подборки выглядели недозаполненной сеткой. */
+.zsec--home-cols .zhub{margin-top:12px}
 .zseo{margin:28px 0 8px;max-width:1000px}
 .zseo h2{font-size:18px;margin:0 0 8px}
 .zseo p{font-size:14px;line-height:1.5;color:var(--a-dim);margin:0}
@@ -2819,18 +2821,51 @@ border:1px solid var(--a-line);background:var(--a-page);font-size:13px;font-weig
 .zsea__h{display:flex;justify-content:space-between;gap:10px;margin:0 0 10px;flex-wrap:wrap}
 .zepnav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
 .zepnav a{background:var(--a-alt);border-radius:10px;padding:8px 12px;font-size:13px;color:var(--a-acc);font-weight:700;min-height:44px}
+/* Карточка подборки. Колонок не больше, чем карточек: две карточки в сетке
+   на четыре колонки читаются как незагрузившаяся страница. */
 .zhub{display:grid;gap:14px;margin:14px 0;grid-template-columns:1fr}
-@media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:1000px){.zhub{grid-template-columns:repeat(3,1fr)}}
-.zhub__c{display:block;padding:14px;border-radius:var(--a-radius-card);background:var(--a-page);
-box-shadow:var(--a-shadow-soft);color:inherit;text-decoration:none}
-.zhub__c:hover,.zhub__c:focus-visible{box-shadow:var(--a-shadow);outline:none}
-.zhub__g{display:flex;gap:4px;margin-bottom:10px}
-.zhub__p{flex:1 1 0;aspect-ratio:2/3;overflow:hidden;border-radius:8px;background:var(--a-alt)}
+@media(min-width:620px){
+  .zhub{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .zhub--cols-1{grid-template-columns:minmax(0,1fr)}
+}
+@media(min-width:1000px){
+  .zhub{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .zhub--cols-1{grid-template-columns:minmax(0,1fr)}
+  .zhub--cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+.zhub__c{display:flex;flex-direction:column;gap:2px;padding:14px;
+border-radius:var(--a-radius-card);background:var(--a-page);
+box-shadow:var(--a-shadow-soft);color:inherit;min-width:0}
+.zhub__c:hover,.zhub__c:focus-within{box-shadow:var(--a-shadow)}
+/* Превью: равные колонки, поэтому обложки и подписи выровнены по сетке, а не
+   по случайной высоте текста. */
+.zhub__g{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;
+list-style:none;margin:10px 0 0;padding:0}
+.zhub__i{min-width:0}
+.zhub__l{display:flex;flex-direction:column;gap:5px;color:inherit;text-decoration:none;
+border-radius:8px}
+.zhub__l:hover .zhub__n,.zhub__l:focus-visible .zhub__n{color:var(--a-acc)}
+.zhub__l:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
+.zhub__p{display:block;aspect-ratio:2/3;overflow:hidden;border-radius:8px;
+background:var(--a-alt);width:100%}
 .zhub__img{width:100%;height:100%;object-fit:cover;display:block}
-.zhub__t{display:block;font-weight:700;font-size:16px}
-.zhub__m{display:block;font-size:12px;color:var(--a-dim);font-weight:600;margin:2px 0 4px}
-.zhub__d{display:block;font-size:13px;color:var(--a-dim);line-height:1.45}
+/* Подпись видна всегда, а не по наведению: на телефоне наведения нет.
+   Две строки — потолок, дальше многоточие, иначе карточки разной высоты. */
+.zhub__n{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+overflow:hidden;font-size:11px;line-height:1.25;color:var(--a-ink);font-weight:600;
+min-height:calc(2 * 1.25em)}
+.zhub__t{display:block;font-weight:800;font-size:16px;line-height:1.25;
+color:var(--a-ink);text-decoration:none}
+.zhub__t:hover,.zhub__t:focus-visible{color:var(--a-acc)}
+.zhub__m{display:block;font-size:12px;color:var(--a-dim);font-weight:600}
+.zhub__d{display:block;font-size:13px;color:var(--a-dim);line-height:1.4;margin-top:8px;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* Подборка без единой обложки остаётся компактной, а не зияет пустотой. */
+.zhub__c--plain{gap:4px}
+@media(max-width:479px){
+  .zhub__g{gap:5px}
+  .zhub__n{font-size:10px}
+}
 /* B13 collections hub: order switch. Touch targets 44px, no clipped labels. */
 .ahub__sorts{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
 .ahub__s{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;
@@ -4617,28 +4652,19 @@ class ВидОснова(Вид):
             if карточки:
                 жанры_лента.append(
                     (f"genre-{код}", имя, f"/catalog/?genre={код}", карточки, ""))
+        # Тот же компонент, что в разделе. Прежде здесь лежала своя копия
+        # карточки: она спрашивала у контракта ОДНУ запись и рисовала только
+        # название со счётчиком — подборки на главной выглядели текстовыми
+        # плитками, хотя в разделе были с обложками.
         коллекции_html = ""
-        снимок = Снимок.получить(self.д, self.п)
-        if КОЛЛЕКЦИИ is not None and снимок is not None:
-            кол_карточки = []
-            for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО)[:4]:
-                if not спец.доступна:
-                    continue
-                данные = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО,
-                                             предел=1)
-                if данные is None or not данные.items:
-                    continue
-                кол_карточки.append(
-                    f'<a class="zhub__c" data-card-variant="collection-card" href="{html.escape(спец.canonical_path)}">'
-                    f'<span class="zhub__t">{html.escape(данные.title)}</span>'
-                    f'<span class="zhub__m">{данные.total} записей</span></a>')
-            if кол_карточки:
-                коллекции_html = (
-                    '<section class="zsec"><div class="zsec__h">'
-                    "<h2>Подборки</h2>"
-                    '<a href="/collections/">Весь раздел</a></div>'
-                    f'<div class="zhub zhub--home">{"".join(кол_карточки)}</div>'
-                    "</section>")
+        подборки = self.подборки_для_показа(предел=4)
+        if подборки:
+            коллекции_html = (
+                '<section class="zsec"><div class="zsec__h">'
+                "<h2>Подборки</h2>"
+                '<a href="/collections/">Весь раздел</a></div>'
+                + self.сетка_подборок(подборки)
+                + "</section>")
         жанр_навигация = "".join(
             f'<a href="/catalog/{запрос_строкой({"genre": код})}">{html.escape(имя)}</a>'
             for код, имя in ZONA_GENRE_NAV)
@@ -4708,77 +4734,185 @@ class ВидОснова(Вид):
                              данные.canonical_path, актив="/collections/",
                              описание=данные.description)
 
+    #: Сколько произведений показывает превью подборки.
+    ПРЕВЬЮ_ПОДБОРКИ = 4
+
+    def подборки_для_показа(self, предел: int | None = None) -> list[dict]:
+        """Данные карточек подборок: название, состав превью, размер.
+
+        ОДИН сборщик на весь сайт. До этого их было четыре — свой на главной
+        переработанного оформления, свой на главной базового, свой в хабе
+        базового и свой в хабе переработанного, — и два из них не умели
+        показывать изображения вовсе: они спрашивали у контракта одну запись
+        (`предел=1`) и рисовали только название со счётчиком. Снаружи это
+        выглядело как «подборки на главной сломались», хотя в разделе они
+        были с обложками. Копия компонента и есть дефект: расходятся не
+        когда-нибудь, а сразу.
+
+        Превью собирается из ФАКТИЧЕСКОГО состава подборки в текущем снимке и
+        пересобирается после каждой доставки каталога — ничего не закреплено
+        руками. Записи без постера пропускаются, берутся следующие подходящие;
+        внутри одной подборки постер не повторяется. Между подборками обложки
+        по возможности тоже не повторяются: одинаковые превью у разных правил
+        отбора — это подсказка «здесь одно и то же», которая была бы ложной.
+        """
+        снимок = Снимок.получить(self.д, self.п)
+        if КОЛЛЕКЦИИ is None or снимок is None:
+            return []
+        сколько = self.ПРЕВЬЮ_ПОДБОРКИ
+        занятые: set[str] = set()
+        карточки: list[dict] = []
+        видели: set[str] = set()
+        for порядок, спец in enumerate(КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО)):
+            if not спец.доступна or спец.collection_key in видели:
+                continue
+            коллекция = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок,
+                                            СЕМЕЙСТВО, предел=48)
+            if коллекция is None or not коллекция.items:
+                continue
+            видели.add(спец.collection_key)
+            выбранные: list = []
+            свои: set[str] = set()
+
+            def взять(к, свои=свои, выбранные=выбранные) -> bool:
+                постер = str(getattr(к, "poster", "") or "")
+                if not постер or постер in свои:
+                    return False
+                свои.add(постер)
+                выбранные.append(к)
+                return True
+
+            # ПЕРВАЯ запись превью — всегда первая запись подборки с
+            # обложкой, без оглядки на другие подборки. Иначе превью начинало
+            # бы врать о порядке самой подборки ради несовпадения картинок.
+            for к in коллекция.items:
+                if взять(к):
+                    break
+            # Дальше предпочитаем обложки, ещё не занятые другими подборками:
+            # два разных правила отбора с одинаковым превью читаются как одна
+            # и та же подборка, и это была бы ложная подсказка.
+            for к in коллекция.items:
+                if len(выбранные) >= сколько:
+                    break
+                if str(getattr(к, "poster", "") or "") in занятые:
+                    continue
+                взять(к)
+            # И добираем из той же подборки, даже если обложка уже где-то
+            # мелькала: прятать существующую подборку или показывать её
+            # неполной из-за совпадения картинок нельзя.
+            for к in коллекция.items:
+                if len(выбранные) >= сколько:
+                    break
+                взять(к)
+            for к in выбранные:
+                занятые.add(str(getattr(к, "poster", "") or ""))
+            карточки.append({
+                "key": спец.collection_key,
+                "order": порядок,
+                "title": коллекция.title,
+                "description": коллекция.description,
+                "total": коллекция.total,
+                "path": спец.canonical_path,
+                "works": [{"title": str(к.title or ""),
+                           "url": str(к.canonical_path or ""),
+                           "poster": str(к.poster or "")}
+                          for к in выбранные],
+            })
+            if предел and len(карточки) >= предел:
+                break
+        return карточки
+
+    def карточка_подборки(self, к: dict, *, первый_экран: bool = False) -> str:
+        """Одна карточка подборки: название, превью с подписями, размер.
+
+        Карточка НЕ обёрнута в общую ссылку. Ссылок здесь две по смыслу —
+        в подборку и на произведение, — а вложенные `<a>` разметкой не
+        бывают: браузер их разрывает, и часть подписей перестаёт быть
+        кликабельной именно там, где посетитель целится.
+
+        Подпись произведения видна всегда, а не по наведению: на телефоне
+        наведения нет вовсе, и подпись «по hover» там равна её отсутствию.
+        """
+        имя = html.escape(str(к.get("title") or ""))
+        адрес = html.escape(str(к.get("path") or ""), quote=True)
+        всего = int(к.get("total") or 0)
+        работы = [р for р in (к.get("works") or []) if р.get("poster")]
+        плитки = []
+        for р in работы[: self.ПРЕВЬЮ_ПОДБОРКИ]:
+            постер = _адрес_постера(р.get("poster")) or ""
+            срочно = self._постер_срочно() if первый_экран else ""
+            # Ниже сгиба — лениво, но БЕЗ `fetchpriority="low"`. Обложки
+            # превью весят по 120x180 и появляются ровно там, куда посетитель
+            # долистал; понижать им приоритет значит ставить их в очередь за
+            # сотней крупных постеров каталога на той же странице. Измерено на
+            # публичной главной: превью догружалось 7,9 с при 134 постерах на
+            # странице.
+            загрузка = {"high": 'loading="eager" fetchpriority="high"',
+                        "eager": 'loading="eager"'}.get(
+                            срочно, 'loading="lazy"')
+            плитки.append(
+                f'<li class="zhub__i">'
+                f'<a class="zhub__l" href="{html.escape(str(р.get("url") or ""), quote=True)}">'
+                f'<span class="zhub__p">'
+                f'<img class="zhub__img" src="{html.escape(постер)}" alt="" '
+                f'{загрузка} decoding="async" width="120" height="180"></span>'
+                f'<span class="zhub__n">{html.escape(str(р.get("title") or ""))}</span>'
+                f'</a></li>')
+        превью = (f'<ul class="zhub__g" aria-label="Из этой подборки">'
+                  f'{"".join(плитки)}</ul>' if плитки else "")
+        # Подборка без единой обложки не прячется и не рисует битых картинок:
+        # у неё остаётся честная компактная карточка с названием и размером.
+        без_картинок = "" if плитки else " zhub__c--plain"
+        описание = str(к.get("description") or "")
+        return (
+            f'<article class="zhub__c{без_картинок}" '
+            f'data-card-variant="collection-card" '
+            f'data-collection-key="{html.escape(str(к.get("key") or ""))}" '
+            f'data-collection-preview="{len(плитки)}">'
+            f'<a class="zhub__t" href="{адрес}">{имя}</a>'
+            f'<span class="zhub__m">{всего} {склонение_записей(всего)}</span>'
+            f'{превью}'
+            + (f'<span class="zhub__d">{html.escape(описание)}</span>'
+               if описание else "")
+            + "</article>")
+
+    def сетка_подборок(self, карточки: list[dict], *,
+                       первый_экран: bool = False) -> str:
+        """Сетка подборок. Число колонок — от фактического числа карточек.
+
+        Две карточки в сетке на четыре колонки выглядят как незагрузившаяся
+        страница, а не как две подборки. Колонок не больше, чем карточек.
+        """
+        if not карточки:
+            return ""
+        колонок = max(1, min(len(карточки), 3))
+        плитки = "".join(self.карточка_подборки(к, первый_экран=первый_экран)
+                         for к in карточки)
+        return (f'<div class="zhub zhub--cols-{колонок}" data-b13="hub" '
+                f'data-collections-count="{len(карточки)}">{плитки}</div>')
+
     def хаб_коллекций(self) -> str:
         """Перечень коллекций со ссылками на их собственные страницы.
 
         До этого `/collections/` отдавал тот же каталог, что и `/catalog/`, —
         то есть обещал подборки, а показывал общий список. Здесь страница
-        собирается из тех же спецификаций, что и ленты главной: заголовок,
-        описание, размер и адрес берутся из контракта, второго перечня нет.
+        собирается из тех же спецификаций, что и ленты главной, тем же
+        компонентом карточки: второго перечня и второй разметки нет.
 
         Недоступные коллекции не показываются: контракт объявляет их с
         политикой «скрыть», и рисовать пустую карточку значило бы обещать
         раздел, которого нет.
         """
-        снимок = Снимок.получить(self.д, self.п)
-        if КОЛЛЕКЦИИ is None or снимок is None:
+        if КОЛЛЕКЦИИ is None or Снимок.получить(self.д, self.п) is None:
             return ('<div class="zempty"><b>Подборки недоступны</b>'
                     "<p>Контракт коллекций витрине не передан.</p></div>")
-        карточки = []
-        занятые_постеры: set[str] = set()
-        сигнатуры: list[tuple[str, ...]] = []
-        for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО):
-            if not спец.доступна:
-                continue
-            коллекция = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО,
-                                            предел=48)
-            if коллекция is None or not коллекция.items:
-                continue
-            выбранные = []
-            for к in коллекция.items:
-                постер = к.poster or ""
-                if not постер:
-                    continue
-                if постер in занятые_постеры and len(выбранные) < 4:
-                    # Prefer unique collage posters across hub tiles.
-                    continue
-                выбранные.append(к)
-                if len(выбранные) >= 4:
-                    break
-            if len(выбранные) < 4:
-                for к in коллекция.items:
-                    if к in выбранные or not к.poster:
-                        continue
-                    выбранные.append(к)
-                    if len(выбранные) >= 4:
-                        break
-            sig = tuple(к.poster for к in выбранные[:4])
-            if sig and sig in сигнатуры:
-                # Exact duplicate collage — skip tile; full page still exists.
-                continue
-            if sig:
-                сигнатуры.append(sig)
-            for к in выбранные[:4]:
-                if к.poster:
-                    занятые_постеры.add(к.poster)
-            обложки = "".join(
-                f'<span class="zhub__p">'
-                f'<img class="zhub__img" src="{html.escape(_адрес_постера(к.poster) or "")}"'
-                f' alt="" loading="lazy" width="120" height="180"></span>'
-                for к in выбранные[:4] if к.poster)
-            карточки.append(
-                f'<a class="zhub__c" data-card-variant="collection-card" href="{html.escape(спец.canonical_path)}">'
-                f'<span class="zhub__g">{обложки}</span>'
-                f'<span class="zhub__t">{html.escape(коллекция.title)}</span>'
-                f'<span class="zhub__m">{коллекция.total}</span>'
-                f'<span class="zhub__d">{html.escape(коллекция.description)}</span>'
-                f'</a>')
+        карточки = self.подборки_для_показа()
         if not карточки:
             return ('<div class="zempty"><b>Подборок пока нет</b>'
                     "<p>Ни одна коллекция контура не набрала записей в текущем снимке. "
                     "Наполнять их похожими тайтлами нельзя: подборка без источника — "
                     "это выдумка.</p></div>")
-        return f'<div class="zhub">{"".join(карточки)}</div>'
+        return self.сетка_подборок(карточки)
 
     def список(self, разд: str, зпр: dict) -> str:
         имена = {
@@ -8623,33 +8757,31 @@ class ВидАнимедиа(ВидОснова):
             f'{self.плитки(записи, вариант="top100-shelf")}</section>'
         )
 
+    #: Сколько подборок показывает главная. Три, а не четыре: колонок в сетке
+    #: не больше трёх, и четвёртая карточка вставала бы одна во втором ряду —
+    #: ровно тот вид «недозаполненной сетки», из-за которого правило колонок и
+    #: переписано. Остальные подборки открывает «Весь раздел».
+    ПОДБОРОК_НА_ГЛАВНОЙ = 3
+
     def _блок_подборок_home_b06(self) -> str:
-        """Home collections shelf — real collection specs only."""
-        if КОЛЛЕКЦИИ is None:
-            return ""
-        снимок = Снимок.получить(self.д, self.п)
-        if снимок is None:
-            return ""
-        карточки = []
-        for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО)[:4]:
-            if not спец.доступна:
-                continue
-            данные = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО,
-                                         предел=1)
-            if данные is None or not данные.items:
-                continue
-            карточки.append(
-                f'<a class="zhub__c" data-card-variant="collection-card" '
-                f'href="{html.escape(спец.canonical_path)}">'
-                f'<span class="zhub__t">{html.escape(данные.title)}</span>'
-                f'<span class="zhub__m">{данные.total} записей</span></a>')
-        if not карточки:
+        """Полка подборок на главной — тем же компонентом, что и раздел.
+
+        ПРИЧИНА ПРАВКИ. Здесь лежала своя копия карточки: она спрашивала у
+        контракта ОДНУ запись (`предел=1`) и рисовала только название со
+        счётчиком. Собрать превью из одной записи нельзя в принципе, поэтому
+        подборки на главной были текстовыми плитками — и оставались ими, пока
+        в разделе `/collections/` те же подборки показывались с обложками.
+        Дефект жил не в данных, а в том, что «карточка подборки» была не
+        компонентом, а четырьмя независимыми копиями разметки.
+        """
+        подборки = self.подборки_для_показа(предел=self.ПОДБОРОК_НА_ГЛАВНОЙ)
+        if not подборки:
             return ""
         return (
             '<section class="zsec zsec--home-cols" data-b06="collections">'
             '<div class="zsec__h"><h2>Подборки</h2>'
             '<a href="/collections/">Весь раздел</a></div>'
-            f'<div class="zhub zhub--home">{"".join(карточки)}</div></section>'
+            + self.сетка_подборок(подборки) + "</section>"
         )
 
     def _эпизод_события(self) -> list[dict]:
@@ -9110,49 +9242,12 @@ class ВидАнимедиа(ВидОснова):
     COLLECTION_STRICT_PAGING = True
 
     def _карточки_коллекций(self) -> list[dict]:
-        """Доступные коллекции контракта — по одной карточке на коллекцию.
+        """Данные карточек подборок. Сборщик один на весь сайт.
 
-        Коллекция, у которой в снимке нет записей, не показывается: так велит
-        её `empty_policy`, и обещать раздел без содержимого нельзя. А вот
-        прятать существующую коллекцию из-за совпадения коллажа нельзя тоже —
-        тогда до неё не доведёт ни одна ссылка. Поэтому коллаж по возможности
-        собирается из ещё не занятых постеров, а сама плитка остаётся.
+        Своя копия здесь и была половиной дефекта: главная и раздел собирали
+        карточку по-разному, и расходились они молча.
         """
-        снимок = Снимок.получить(self.д, self.п)
-        if КОЛЛЕКЦИИ is None or снимок is None:
-            return []
-        занятые: set[str] = set()
-        карточки: list[dict] = []
-        видели: set[str] = set()
-        for порядок, спец in enumerate(КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО)):
-            if not спец.доступна or спец.collection_key in видели:
-                continue
-            коллекция = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО,
-                                            предел=48)
-            if коллекция is None or not коллекция.items:
-                continue
-            видели.add(спец.collection_key)
-            свежие = [к for к in коллекция.items
-                      if к.poster and к.poster not in занятые][:4]
-            if len(свежие) < 4:
-                for к in коллекция.items:
-                    if к in свежие or not к.poster:
-                        continue
-                    свежие.append(к)
-                    if len(свежие) >= 4:
-                        break
-            for к in свежие:
-                занятые.add(к.poster)
-            карточки.append({
-                "key": спец.collection_key,
-                "order": порядок,
-                "title": коллекция.title,
-                "description": коллекция.description,
-                "total": коллекция.total,
-                "path": спец.canonical_path,
-                "posters": [к.poster for к in свежие[:4] if к.poster],
-            })
-        return карточки
+        return self.подборки_для_показа()
 
     @staticmethod
     def _сортировать_коллекции(карточки: list[dict], режим: str) -> list[dict]:
@@ -9209,28 +9304,9 @@ class ВидАнимедиа(ВидОснова):
         return ('<div class="ahub__sorts" data-b13="sort" role="group" '
                 f'aria-label="Порядок подборок">{кнопки}</div>')
 
-    @staticmethod
-    def _сетка_коллекций(карточки: list[dict]) -> str:
-        """Сетка из уже отобранных карточек. Пустых ячеек в ней не бывает."""
-        плитки = "".join(
-            f'<a class="zhub__c" data-card-variant="collection-card" '
-            f'data-collection-key="{html.escape(к["key"])}" '
-            f'href="{html.escape(к["path"])}">'
-            # Название стоит над коллажем — так у оригинала: сначала читаешь,
-            # о чём подборка, потом смотришь, что в ней.
-            f'<span class="zhub__t">{html.escape(к["title"])}</span>'
-            f'<span class="zhub__g">'
-            + "".join(
-                f'<span class="zhub__p">'
-                f'<img class="zhub__img" src="{html.escape(_адрес_постера(п) or "")}"'
-                f' alt="" loading="lazy" width="120" height="180"></span>'
-                for п in к["posters"])
-            + "</span>"
-            f'<span class="zhub__m">{к["total"]} записей</span>'
-            f'<span class="zhub__d">{html.escape(к["description"])}</span>'
-            "</a>"
-            for к in карточки)
-        return f'<div class="zhub" data-b13="hub">{плитки}</div>'
+    def _сетка_коллекций(self, карточки: list[dict]) -> str:
+        """Сетка подборок раздела — тем же компонентом, что и на главной."""
+        return self.сетка_подборок(карточки)
 
     def хаб_коллекций(self, зпр: dict | None = None) -> str:
         """B13.1 хаб: сетка 3/2/1, объявленный порядок, честная пустота."""
