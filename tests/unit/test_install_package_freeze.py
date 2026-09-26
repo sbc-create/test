@@ -100,6 +100,28 @@ def test_дерево_пакета_только_для_чтения(репо: Pa
     assert not (файл.stat().st_mode & 0o222), "файл пакета доступен на запись"
 
 
+def test_коммит_в_стороне_не_меняет_пакет(репо: Path) -> None:
+    """Правка вне путей пакета не обязана давать новый пакет.
+
+    Сначала коммит входил в digest, и любая запись в журнал меняла
+    идентификатор при неизменном составе: пакет пришлось бы фиксировать и
+    передавать владельцу заново без единого изменения в том, что ставится.
+    """
+    окр = {**os.environ, "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t",
+           "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t"}
+    assert прогнать(ФИКС, cwd=репо).returncode == 0
+    первый = next((репо / "var" / "install-packages").glob("pkg-*")).name
+
+    (репо / "ЖУРНАЛ.md").write_text("запись вне путей пакета\n", encoding="utf-8")
+    subprocess.run(["git", "add", "-A"], cwd=репо, check=True, env=окр)
+    subprocess.run(["git", "commit", "-qm", "журнал"], cwd=репо, check=True, env=окр)
+
+    гот = прогнать(ФИКС, cwd=репо)
+    assert гот.returncode == 0, гот.stdout + гот.stderr
+    имена = {п.name for п in (репо / "var" / "install-packages").glob("pkg-*")}
+    assert имена == {первый}, f"коммит в стороне развёл пакеты: {имена}"
+
+
 def test_одинаковый_состав_даёт_тот_же_идентификатор(репо: Path) -> None:
     assert прогнать(ФИКС, cwd=репо).returncode == 0
     первый = next((репо / "var" / "install-packages").glob("pkg-*")).name

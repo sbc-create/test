@@ -88,9 +88,17 @@ def опись_дерева(дерево: Path) -> dict[str, str]:
     return итог
 
 
-def общий_digest(коммит: str, файлы: dict[str, str]) -> str:
-    канон = json.dumps({"commit": коммит, "files": файлы},
-                       ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+def общий_digest(файлы: dict[str, str]) -> str:
+    """Только содержимое. Коммит в digest НЕ входит.
+
+    Сначала входил — и любой коммит в стороне от путей пакета (журнал, тесты,
+    настройки) давал новый идентификатор при неизменном составе. Пакет
+    приходилось фиксировать и передавать заново без единого изменения в том,
+    что ставится. Коммит остаётся в описи как происхождение, но тождество
+    пакета — это его файлы.
+    """
+    канон = json.dumps({"files": файлы}, ensure_ascii=False,
+                       sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(канон.encode("utf-8")).hexdigest()
 
 
@@ -162,7 +170,7 @@ def зафиксировать(ссылка: str, принудительно: bo
     if пропали:
         raise SystemExit("git archive не выдал файлы коммита: " + ", ".join(пропали[:5]))
 
-    digest = общий_digest(коммит, файлы)
+    digest = общий_digest(файлы)
     иден = "pkg-" + digest[:12]
     готовый = ХРАНИЛИЩЕ / иден
     if готовый.exists():
@@ -211,7 +219,7 @@ def сверить(пакет: Path) -> int:
     изменились = sorted(и for и in факт.keys() & ожид.keys() if факт[и] != ожид[и])
     лишние = sorted(факт.keys() - ожид.keys())
     пропали = sorted(ожид.keys() - факт.keys())
-    digest = общий_digest(опись["commit"], факт)
+    digest = общий_digest(факт)
     print(f"пакет {опись['package_id']}  коммит {опись['commit'][:12]}  файлов {len(факт)}")
     if digest == опись["digest"] and not (изменились or лишние or пропали):
         print("состав совпадает с описью, digest совпадает")
