@@ -32,8 +32,13 @@ def sandbox(tmp: Path, repo: Path, site_id: str, port: int):
     journal = tmp/'systemctl.log'
     for d in ((old_root/'data'), (old_root/'current'/'site'), shared, units, binx):
         d.mkdir(parents=True, exist_ok=True)
-    for name in (f'{site_id}-catalog.json', f'{site_id}-details.json',
-                 f'template-manifest-{site_id}.json'):
+    # Каталог песочницы обязан быть НАСТОЯЩИМ снимком: пусковой скрипт
+    # проверяет его разбором, и заглушка '{}' отказом оборачивалась в отказ
+    # сценария. Пустой список items — это «показывать нечего», а не «битый
+    # снимок», и именно на нём сценарий активации и должен проходить.
+    (shared/f'{site_id}-catalog.json').write_text(
+        json.dumps({'revision': 'sandbox', 'items': []}), encoding='utf-8')
+    for name in (f'{site_id}-details.json', f'template-manifest-{site_id}.json'):
         (shared/name).write_text('{}', encoding='utf-8')
     # PUB берётся из конфигурации самого сайта: фиксированное значение
     # заваливало бы проверку у другого семейства, и падал бы тест, а не скрипт.
