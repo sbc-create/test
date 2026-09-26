@@ -252,6 +252,56 @@ try:
 except ImportError:
     КОЛЛЕКЦИИ = None
 
+# Разделы семейства Lords: нормализованная классификация вместо одного поля
+# `kind`. Отсутствие файла не роняет витрину — она возвращается к прежнему
+# отбору по `kind`, и это видно в /healthz полем `sections_index`.
+try:
+    import lords_sections as РАЗДЕЛЫ_МОД  # noqa: E402
+except ImportError:
+    РАЗДЕЛЫ_МОД = None
+
+#: Классификация всего снимка, посчитанная один раз на ПОКОЛЕНИЕ каталога.
+#: Ключ — ревизия снимка: поколений больше одного, и кэш «раз на процесс»
+#: отдал бы следующему поколению вчерашний разбор.
+_РАЗДЕЛЫ_КЭШ: dict[str, object] = {}
+
+
+#: Прежнее значение `?kind=` → ключ раздела. Нужно, чтобы сохранённые ссылки и
+#: фильтр каталога продолжали работать, отбирая при этом по разделу.
+_РАЗДЕЛ_ПО_ВИДУ: dict[str, str] = (
+    {v: k for k, v in РАЗДЕЛЫ_МОД.ПРЕЖНИЙ_ВИД.items()} if РАЗДЕЛЫ_МОД else {})
+
+
+#: Сколько карточек набирает полка главной.
+#:
+#: Число выведено из САМОЙ ШИРОКОЙ сетки, а не записано от руки: колонок у
+#: карточных сеток семь на 1600 px и выше, и 14 — первое, что закрывает два
+#: полных ряда. Прежние «12» были свойством одного экрана: на шести колонках
+#: это два ряда, а на семи — 7 + 5, то есть дырявый последний ряд на КАЖДОЙ
+#: витрине семейства.
+#:
+#: Хвост на более узких экранах снимается таблицей стилей по числу колонок
+#: текущего экрана (`[data-rows="full"]`), а не выдумыванием карточек.
+РЯД_ПОЛКИ = 14
+
+РАЗДЕЛ_ФИЛЬМЫ = РАЗДЕЛЫ_МОД.ФИЛЬМЫ if РАЗДЕЛЫ_МОД else "movies"
+РАЗДЕЛ_СЕРИАЛЫ = РАЗДЕЛЫ_МОД.СЕРИАЛЫ if РАЗДЕЛЫ_МОД else "series"
+
+
+def разделы_снимка(данные, подробности):
+    """Индекс разделов текущего поколения снимка. None — модуля нет."""
+    if РАЗДЕЛЫ_МОД is None:
+        return None
+    ключ = (f"{getattr(данные, 'revision', '') or ''}|"
+            f"{getattr(подробности, 'catalog_revision', '') or ''}|"
+            f"{len(getattr(данные, 'items', ()) or ())}")
+    готово = _РАЗДЕЛЫ_КЭШ.get(ключ)
+    if готово is None:
+        готово = РАЗДЕЛЫ_МОД.Разделы(данные, подробности)
+        _РАЗДЕЛЫ_КЭШ.clear()
+        _РАЗДЕЛЫ_КЭШ[ключ] = готово
+    return готово
+
 #: Каталог готовых файлов карты сайта. Пусто — карта не отдаётся.
 SITEMAP_DIR = os.environ.get("LORDS_SITEMAP_DIR", "").strip()
 #: Счётчик Яндекс Метрики этой витрины. Публичное число, не секрет: оно и так
@@ -1037,16 +1087,20 @@ def _лорды_нав() -> list[tuple[str, str]]:
     """Profile-distinct primary nav (not palette-only)."""
     if ДИЗАЙН_ID == "lords-series-feed-v2":
         return [("/series/", "Сериалы"), ("/new/", "Обновления"),
-                ("/movies/", "Фильмы"), ("/collections/", "Подборки"),
-                ("/animation/", "Мультфильмы"), ("/catalog/", "Каталог")]
+                ("/movies/", "Фильмы"), ("/animation/", "Мультфильмы"),
+                ("/anime/", "Аниме"), ("/dorama/", "Дорамы"),
+                ("/collections/", "Подборки"), ("/catalog/", "Каталог")]
     if ДИЗАЙН_ID == "lords-curated-v2":
         return [("/collections/", "Подборки"), ("/catalog/", "Каталог"),
                 ("/movies/", "Фильмы"), ("/series/", "Сериалы"),
-                ("/new/", "Новое"), ("/animation/", "Мультфильмы")]
+                ("/animation/", "Мультфильмы"),
+                ("/anime/", "Аниме"), ("/dorama/", "Дорамы"),
+                ("/new/", "Новое")]
     return [("/movies/", "Фильмы"), ("/series/", "Сериалы"),
+            ("/animation/", "Мультфильмы"),
+            ("/anime/", "Аниме"), ("/dorama/", "Дорамы"),
             ("/new/", "Новое в каталоге"),
             ("/collections/", "Подборки"),
-            ("/animation/", "Мультфильмы"),
             ("/catalog/", "Каталог")]
 
 
@@ -1229,12 +1283,36 @@ background:@ACC@;color:#fff;font-size:12px;font-weight:700;border:0}
 @media(min-width:768px){.grid,.grid--poster{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}}
 @media(min-width:1024px){.grid,.grid--poster{grid-template-columns:repeat(5,minmax(0,1fr));gap:18px}}
 @media(min-width:1280px){.grid,.grid--poster{grid-template-columns:repeat(6,minmax(0,1fr));gap:20px}}
+@media(min-width:1600px){.grid,.grid--poster{grid-template-columns:repeat(7,minmax(0,1fr))}}
 .grid--episode{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
 @media(min-width:768px){.grid--episode{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}}
 @media(min-width:1200px){.grid--episode{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}}
+/* Сетка редакторских карточек упиралась в четыре колонки на ЛЮБОЙ ширине,
+   тогда как соседняя `grid--poster` доходила до шести. На 1440 и 1920 обе
+   ширины давали одинаковые четыре колонки: первый экран занимали четыре
+   постера. Это решение реестра карточек, а не профиля, поэтому лестница
+   колонок у карточных сеток теперь общая. */
 .grid--editorial{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
-@media(min-width:768px){.grid--editorial{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}
-@media(min-width:1024px){.grid--editorial{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}}
+@media(min-width:480px){.grid--editorial{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:768px){.grid--editorial{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}}
+@media(min-width:1024px){.grid--editorial{grid-template-columns:repeat(5,minmax(0,1fr));gap:18px}}
+@media(min-width:1280px){.grid--editorial{grid-template-columns:repeat(6,minmax(0,1fr));gap:20px}}
+@media(min-width:1600px){.grid--editorial{grid-template-columns:repeat(7,minmax(0,1fr))}}
+/* Ровный ряд без выдумывания карточек.
+   Полка набирает РЯД_ПОЛКИ = 14 записей — два полных ряда по семи колонкам,
+   самой широкой лестнице сетки. На более узких экранах хвост неполного ряда
+   снимается СТИЛЯМИ по числу колонок ТЕКУЩЕГО экрана, и только у блоков,
+   помеченных `data-rows="full"`.
+   Пометка обязательна: на странице каталога и подборки прятать карточки
+   нельзя — их число обещано листалкой, и сокрытие означало бы потерю
+   содержимого, о которой посетителю не сказали.
+   Медиазапросы min-width действуют накопительно, поэтому каждый следующий
+   порог ЯВНО возвращает то, что спрятал предыдущий. Без этого на 1920
+   оставалось бы 10 карточек при семи колонках. */
+@media(min-width:480px){[data-rows="full"] > :nth-child(n+13){display:none}}
+@media(min-width:1024px){[data-rows="full"] > :nth-child(n+11){display:none}}
+@media(min-width:1280px){[data-rows="full"] > :nth-child(n+11):nth-child(-n+12){display:block}}
+@media(min-width:1600px){[data-rows="full"] > :nth-child(n+13){display:block}}
 .grid--search{display:grid;gap:18px;grid-template-columns:repeat(2,minmax(0,1fr));
 max-width:720px;margin:0 auto}
 @media(min-width:768px){.grid--search{grid-template-columns:repeat(3,minmax(0,1fr))}}
@@ -3109,15 +3187,84 @@ def заглушка_постера(запись: dict, класс_заглуш�
 
 #: Скрипт горизонтальных лент. Отдельная константа, а не дополнение к
 #: СКРИПТ_ПОСТЕРОВ: тот подключают обе витрины, и дописывание в него изменило
-#: бы байты, которые отдаёт Lords. Здесь ровно кнопочная прокрутка; свайп,
-#: колесо и клавиатура работают нативно и без скрипта.
+#: бы байты, которые отдаёт Lords. Свайп и колесо работают нативно; клавиатура
+#: и кнопки — здесь.
+#:
+#: Шаг листания. Раньше он был `clientWidth * 0.86` — доля ширины окна, не
+#: связанная ни с шириной карточки, ни с промежутком между ними. Отсюда всё
+#: сразу: страницы налезали друг на друга, «последняя» оказывалась не
+#: последней, а число страниц не совпадало ни с чем. Замер lords-03
+#: 2026-09-26: при шести видимых карточках лента листала по пять, и страницы
+#: перекрывались на одну карточку, а последняя — на три.
+#:
+#: Теперь шаг считается из действительности: ширина первой карточки
+#: (`getBoundingClientRect`, то есть после всех `clamp` и `flex-basis`) плюс
+#: промежуток, прочитанный у самой ленты из `columnGap`. Промежуток НЕ
+#: записывается числом: он объявлен в таблице стилей и там же меняется, а
+#: зашитая константа осталась бы прежней и разошлась бы молча.
+#:
+#: Видимых карточек — `floor((ширина_окна + зазор) / шаг)`. Зазор прибавляется
+#: потому, что ПОСЛЕДНЕЙ видимой карточке хвостовой промежуток не нужен; без
+#: этого слагаемого floor давал на единицу меньше.
+#:
+#: Чего здесь намеренно НЕТ: сокрытия хвоста ленты правилом вида
+#: `:nth-child(n+25){display:none}`. На одной ширине оно даёт ровное число
+#: страниц, на следующей — отнимает карточки, и его приходится отменять вторым
+#: медиазапросом. Неполная последняя страница — нормальное состояние ленты:
+#: прокрутка упирается в конец, кнопка гаснет, ни одна запись не пропадает.
+#: На телефоне частично видимая следующая карточка остаётся намеренно — это
+#: подсказка, что лента прокручивается.
 СКРИПТ_ЛЕНТ = (
+    "(function(){"
+    "function лента(v){return v.querySelector('[data-rl-track]')||v.firstElementChild||v;}"
+    "function шаг(v){"
+    "var t=лента(v),к=t.firstElementChild;"
+    "if(!к)return Math.max(160,v.clientWidth);"
+    "var з=parseFloat(getComputedStyle(t).columnGap)||0;"
+    "var ш=к.getBoundingClientRect().width+з;"
+    "if(!(ш>1))return Math.max(160,v.clientWidth);"
+    "var видно=Math.max(1,Math.floor((v.clientWidth+з)/ш));"
+    "return ш*видно;}"
+    "function края(v){"
+    "var max=v.scrollWidth-v.clientWidth-1,ид=v.id;"
+    "if(!ид)return;"
+    "var p=document.querySelector('[data-rl=\"prev\"][aria-controls=\"'+ид+'\"]');"
+    "var n=document.querySelector('[data-rl=\"next\"][aria-controls=\"'+ид+'\"]');"
+    "if(p)p.disabled=v.scrollLeft<=0;"
+    "if(n)n.disabled=max<=0||v.scrollLeft>=max;}"
+    "function двигать(v,dir){v.scrollBy({left:dir*шаг(v),behavior:'smooth'});}"
     "document.addEventListener('click',function(e){"
-    "var b=e.target.closest('[data-rl]');if(!b)return;"
+    "var b=e.target.closest?e.target.closest('[data-rl]'):null;if(!b)return;"
     "var v=document.getElementById(b.getAttribute('aria-controls'));if(!v)return;"
-    "var d=Math.max(160,Math.round(v.clientWidth*0.86));"
-    "v.scrollBy({left:b.getAttribute('data-rl')==='next'?d:-d,behavior:'smooth'});"
-    "});"
+    "двигать(v,b.getAttribute('data-rl')==='next'?1:-1);});"
+    "document.addEventListener('keydown',function(e){"
+    "var v=e.target&&e.target.closest?e.target.closest('[data-rl-vp]'):null;if(!v)return;"
+    "if(e.key==='ArrowRight'){e.preventDefault();двигать(v,1);}"
+    "else if(e.key==='ArrowLeft'){e.preventDefault();двигать(v,-1);}"
+    "else if(e.key==='Home'){e.preventDefault();v.scrollTo({left:0,behavior:'smooth'});}"
+    "else if(e.key==='End'){e.preventDefault();"
+    "v.scrollTo({left:v.scrollWidth,behavior:'smooth'});}});"
+    "function все(){return document.querySelectorAll('[data-rl-vp]');}"
+    "function обновить(){var с=все();for(var i=0;i<с.length;i++)края(с[i]);}"
+    "document.addEventListener('scroll',function(e){"
+    "var v=e.target;if(v&&v.hasAttribute&&v.hasAttribute('data-rl-vp'))края(v);},true);"
+    "window.addEventListener('resize',обновить);"
+    # Перелистывание пальцем или мышью не должно открывать карточку под пальцем.
+    "var x0=0,y0=0,тянем=false;"
+    "document.addEventListener('pointerdown',function(e){"
+    "if(!e.target.closest||!e.target.closest('[data-rl-vp]'))return;"
+    "x0=e.clientX;y0=e.clientY;тянем=false;},true);"
+    "document.addEventListener('pointermove',function(e){"
+    "if(e.buttons===0&&e.pointerType==='mouse')return;"
+    "if(!e.target.closest||!e.target.closest('[data-rl-vp]'))return;"
+    "if(Math.abs(e.clientX-x0)>8||Math.abs(e.clientY-y0)>8)тянем=true;},true);"
+    "document.addEventListener('click',function(e){"
+    "if(!тянем)return;"
+    "if(!e.target.closest||!e.target.closest('[data-rl-vp]'))return;"
+    "e.preventDefault();e.stopPropagation();тянем=false;},true);"
+    "if(document.readyState==='loading')"
+    "document.addEventListener('DOMContentLoaded',обновить);else обновить();"
+    "})();"
 )
 
 #: Только Animedia: на узком экране пункты меню открываются кнопкой.
@@ -3539,12 +3686,17 @@ def _уникальные_опции(пары) -> list[tuple[str, str]]:
     return итог
 
 
-def отбор(данные: "Данные", индекс: dict, зпр: dict, раздел: str) -> tuple[list, dict]:
+def отбор(данные: "Данные", индекс: dict, зпр: dict, раздел: str,
+          подробности: "Подробности | None" = None) -> tuple[list, dict]:
     """Выборка каталога по параметрам запроса. Возвращает (набор, выбранное).
 
     Неизвестные country/genre/sort не игнорируются молча: пустая выдача или
     явная сортировка по умолчанию. `/new` ограничен свежим хвостом снимка —
     весь каталог в другом порядке «новинками» не выдаём.
+
+    Отбор раздела выполняется ПЕРВЫМ — до сортировки, предела и пагинации.
+    Порядок здесь не косметика: срезав хвост после предела, мы показали бы
+    предел неподходящих записей и ноль подходящих.
     """
     набор = list(данные.items)
     вид = (зпр.get("kind") or [None])[0]
@@ -3553,7 +3705,24 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
     страна = (зпр.get("country") or [None])[0]
     сорт = (зпр.get("sort") or [None])[0]
     неизвестный_фильтр = False
-    if вид:
+    # Раздел, а не одно поле `kind`. У семейства Lords `kind="Сериал"` стоит
+    # у игрового сериала, у дорамы и у дунхуа одинаково: это `type=tv`
+    # источника, а не решение витрины. Пока фильтр смотрел только сюда,
+    # «Сериалы» на 59 % состояли из аниме и дорам (замер lords-02, снимок
+    # 2026-09-23: 17 664 записи с kind="Сериал", из них игровых 7 730).
+    #
+    # Адрес и подпись фильтра остаются прежними: меняется признак, а не
+    # контракт страницы.
+    ключ_раздела = (зпр.get("section") or [None])[0]
+    индекс_разделов = (разделы_снимка(данные, подробности)
+                       if (СЕМЕЙСТВО == "lords" and подробности is not None) else None)
+    if not ключ_раздела and вид and индекс_разделов is not None:
+        ключ_раздела = _РАЗДЕЛ_ПО_ВИДУ.get(вид)
+    if ключ_раздела and индекс_разделов is not None:
+        набор = индекс_разделов.отфильтровать(набор, ключ_раздела)
+        if not вид:
+            вид = РАЗДЕЛЫ_МОД.ПРЕЖНИЙ_ВИД.get(ключ_раздела) if РАЗДЕЛЫ_МОД else None
+    elif вид:
         набор = [з for з in набор if з.get("kind") == вид]
     if год:
         if str(год).isdigit():
@@ -3622,6 +3791,8 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
         набор = sorted(набор, key=lambda з: (з.get("_n") or нормализовать(з["title"]),
                                              з["slug"]))
     выбрано = {"kind": вид, "year": год, "genre": жанр, "country": страна, "sort": сорт}
+    if ключ_раздела:
+        выбрано["section"] = ключ_раздела
     if неизвестный_фильтр:
         выбрано["_unknown"] = "1"
     return набор, выбрано
@@ -3895,9 +4066,19 @@ class ВидЛордс(Вид):
     def _класс_карточки(self) -> str:
         return f"c c--{self._тип_карточки()}"
 
-    def сетка(self, набор, класс="grid", *, показать_добавлено: bool = False) -> str:
+    def сетка(self, набор, класс="grid", *, показать_добавлено: bool = False,
+              полный_ряд: bool = False) -> str:
+        """Сетка карточек. `полный_ряд` разрешает снять хвост неполного ряда.
+
+        Разрешается только полкам главной: там число карточек ничем не
+        обещано, и ровный ряд — оформление. На странице каталога и подборки
+        пометка не ставится никогда: число записей там названо листалкой, и
+        спрятанная карточка — это потерянное содержимое, а не ровный край.
+        """
         css = _лорды_класс_сетки(класс)
-        return (f'<div class="{css}" data-card-grid="{html.escape(self._тип_карточки())}">'
+        ряд = ' data-rows="full"' if полный_ряд else ""
+        return (f'<div class="{css}" data-card-grid="{html.escape(self._тип_карточки())}"'
+                f'{ряд} data-cards="{len(набор)}">'
                 + "".join(self.карточка(з, показать_добавлено=показать_добавлено)
                           for з in набор)
                 + "</div>")
@@ -3928,9 +4109,40 @@ class ВидЛордс(Вид):
     def главная(self) -> str:
         полосы = []
         занято: set = set()
-        готовые = новинки_с_источником(self.д, self.п, 10_000)
+        # Кандидаты главной: записи, у которых есть источник, то есть их
+        # действительно можно смотреть. Проверка доступности выполняется ДО
+        # ограничения количества — иначе полка обещала бы двенадцать и
+        # показывала бы девять.
+        все_готовые = новинки_с_источником(self.д, self.п, 10_000)
+        разделы = разделы_снимка(self.д, self.п)
 
-        def взять(набор, сколько=12):
+        # Главная профиля Lords — это его фильмы и ИГРОВЫЕ сериалы. Аниме,
+        # дорамы и прочая анимация имеют собственные разделы и попадали сюда
+        # только потому, что у них общий с сериалами тип источника `type=tv`.
+        # Это не решение оформления: раздел считается нормализованной
+        # классификацией (`lords_sections`), и профиль не вправе его угадывать.
+        if разделы is not None:
+            готовые = [з for з in все_готовые
+                       if разделы.ключ(з) not in РАЗДЕЛЫ_МОД.НЕ_НА_ГЛАВНОЙ_LORDS]
+        else:
+            готовые = все_готовые
+
+        def раздела(ключ: str) -> list:
+            """Записи раздела в порядке снимка, отбор до предела."""
+            if разделы is None:
+                прежний = (РАЗДЕЛЫ_МОД.ПРЕЖНИЙ_ВИД.get(ключ) if РАЗДЕЛЫ_МОД else None)
+                return [з for з in готовые if not прежний or з.get("kind") == прежний]
+            return разделы.отфильтровать(готовые, ключ)
+
+        def взять(набор, сколько=РЯД_ПОЛКИ, добор=None):
+            """Набрать полку: категория, доступность и дубли — до предела.
+
+            Прежняя версия брала первые N из готового списка и не добирала:
+            если из двенадцати кандидатов три оказались аниме, полка «кино»
+            показывала девять карточек и молчала об этом.
+            """
+            if РАЗДЕЛЫ_МОД is not None:
+                return РАЗДЕЛЫ_МОД.набрать(набор, сколько, занято=занято, добор=добор)
             out = []
             for з in набор:
                 if з["slug"] in занято:
@@ -3950,19 +4162,18 @@ class ВидЛордс(Вид):
         дизайн = ДИЗАЙН_ID
         if дизайн == "lords-series-feed-v2":
             # Series feed: series/updates first. No "ongoing" claim without provenance.
-            сериалы = взять([з for з in готовые if з.get("kind") == "Сериал"], 12)
+            сериалы = взять(раздела(РАЗДЕЛ_СЕРИАЛЫ))
             if сериалы:
                 полосы.append(self._полоса("Сериалы в каталоге", "/series/", сериалы))
-            нов = взять([з for з in готовые if з.get("kind") == "Сериал"], 12)
+            нов = взять(раздела(РАЗДЕЛ_СЕРИАЛЫ), добор=готовые)
             if not нов:
-                нов = взять(готовые, 12)
+                нов = взять(готовые)
             if нов:
                 полосы.append(self._полоса("Недавно добавлено", "/new/", нов,
                                            показать_добавлено=True))
             популяр, week, dig = популярные_недельный(
-                [з for з in self.д.items if з.get("kind") == "Сериал"] or list(self.д.items),
-                _оценка_полки, сколько=12)
-            показ = взять(популяр, 12)
+                раздела(РАЗДЕЛ_СЕРИАЛЫ) or готовые, _оценка_полки, сколько=РЯД_ПОЛКИ * 5)
+            показ = взять(популяр, добор=готовые)
             if показ:
                 полосы.append(self._полоса(
                     "Популярное за неделю", "/collection/top_rated/", показ,
@@ -3973,14 +4184,14 @@ class ВидЛордс(Вид):
                 под = self._полоса_подборок()
                 if под:
                     полосы.append(под)
-            фильмы = взять([з for з in готовые if з.get("kind") == "Фильм"], 12)
+            фильмы = взять(раздела(РАЗДЕЛ_ФИЛЬМЫ))
             if фильмы:
                 полосы.append(self._полоса("Фильмы в каталоге", "/movies/", фильмы))
         elif дизайн == "lords-curated-v2":
             # Honest algorithmic label — no editorial claim without ledger.
             популяр, week, dig = популярные_недельный(
-                list(self.д.items), _оценка_полки, сколько=12)
-            показ = взять(популяр, 12)
+                готовые, _оценка_полки, сколько=РЯД_ПОЛКИ * 5)
+            показ = взять(популяр, добор=готовые)
             if показ:
                 полосы.append(self._полоса(
                     "Высокие оценки", "/collection/top_rated/", показ,
@@ -3995,10 +4206,10 @@ class ВидЛордс(Вид):
                                   .replace(">Подборки</h2>",
                                            ">Тематические подборки</h2>", 1)
                                   if "Подборки" in под else под)
-            смотреть = взять(готовые, 12)
+            смотреть = взять(готовые)
             if смотреть:
                 полосы.append(self._полоса("Что посмотреть", "/catalog/", смотреть))
-            нов = взять(готовые, 12)
+            нов = взять(готовые)
             if нов:
                 полосы.append(self._полоса("Недавно добавлено", "/new/", нов,
                                            показать_добавлено=True))
@@ -4010,16 +4221,16 @@ class ВидЛордс(Вид):
                 полосы.append(страны)
         else:
             # Cinema IA: films → new-in-catalog → popular → genres → collections.
-            фильмы = взять([з for з in готовые if з.get("kind") == "Фильм"], 12)
+            фильмы = взять(раздела(РАЗДЕЛ_ФИЛЬМЫ))
             if фильмы:
                 полосы.append(self._полоса("Фильмы", "/movies/", фильмы))
-            нов = взять(готовые, 12)
+            нов = взять(готовые)
             if нов:
                 полосы.append(self._полоса("Недавно добавлено", "/new/", нов,
                                            показать_добавлено=True))
             популяр, week, dig = популярные_недельный(
-                list(self.д.items), _оценка_полки, сколько=60)
-            показ = взять(популяр, 12)
+                готовые, _оценка_полки, сколько=РЯД_ПОЛКИ * 5)
+            показ = взять(популяр, добор=готовые)
             if показ:
                 полосы.append(self._полоса(
                     "Популярное", "/collection/top_rated/", показ,
@@ -4033,7 +4244,7 @@ class ВидЛордс(Вид):
                 под = self._полоса_подборок()
                 if под:
                     полосы.append(под)
-            сериалы = взять([з for з in готовые if з.get("kind") == "Сериал"], 12)
+            сериалы = взять(раздела(РАЗДЕЛ_СЕРИАЛЫ))
             if сериалы:
                 полосы.append(self._полоса("Сериалы", "/series/", сериалы))
 
@@ -4079,13 +4290,22 @@ class ВидЛордс(Вид):
 
     def _полоса(self, титул: str, ссылка: str, набор, attrs: str = "",
                 показать_добавлено: bool = False) -> str:
+        """Полка главной. Пустая полка не выводится вовсе.
+
+        Когда подходящих записей меньше ряда, полка показывает столько,
+        сколько есть, и называет это число в `data-cards`. Ни добора чужой
+        категорией, ни повторов, ни выдуманных новинок ради ровного края
+        здесь не происходит.
+        """
         if not набор:
             return ""
         return (
-            f'<section class="sec-rail"{attrs}><div class="sec-rail__h">'
+            f'<section class="sec-rail"{attrs} data-shelf-size="{len(набор)}">'
+            f'<div class="sec-rail__h">'
             f'<h2><a href="{закодировать_запрос(ссылка)}">{html.escape(титул)}</a></h2>'
             f'<a class="sec-rail__all" href="{закодировать_запрос(ссылка)}">Весь раздел</a>'
-            f"</div>{self.сетка(набор, показать_добавлено=показать_добавлено)}</section>")
+            f"</div>{self.сетка(набор, показать_добавлено=показать_добавлено, полный_ряд=True)}"
+            f"</section>")
 
     def _описание_подборки(self, текст: str) -> str:
         """Strip Animedia wording that must never appear on Lords shelves."""
@@ -4319,7 +4539,7 @@ class ВидЛордс(Вид):
         if выбрано_kind := (зпр.get("kind") or [None])[0]:
             титул = {"Фильм": "Фильмы", "Сериал": "Сериалы",
                      "Мультфильм": "Мультфильмы"}.get(выбрано_kind, титул)
-        набор, выбрано = отбор(self.д, self.индекс, зпр, разд)
+        набор, выбрано = отбор(self.д, self.индекс, зпр, разд, self.п)
         всего = max(1, (len(набор) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1) if набор else 1
         стр = номер_страницы(зпр, всего)
         if стр is None:
@@ -4730,8 +4950,8 @@ class ВидЗона(Вид):
                 f'<button class="zrl__btn zrl__btn--p" type="button" data-rl="prev"'
                 f' aria-controls="{ид}" aria-label="Пролистать назад">&#8249;</button>'
                 f'<div class="zrl__vp" id="{ид}" tabindex="0" role="group"'
-                f' aria-label="Лента произведений">'
-                f'<div class="zrl__track">{плитки}</div></div>'
+                f' data-rl-vp aria-label="Лента произведений">'
+                f'<div class="zrl__track" data-rl-track>{плитки}</div></div>'
                 f'<button class="zrl__btn zrl__btn--n" type="button" data-rl="next"'
                 f' aria-controls="{ид}" aria-label="Пролистать вперёд">&#8250;</button>'
                 f'</div>')
@@ -5070,7 +5290,7 @@ class ВидЗона(Вид):
             return self.оболочка(тело, f"{титул} — {self.имя}", "/collections/",
                                  актив="/collections/",
                                  описание=f"Подборки витрины {self.имя}.")
-        набор, выбрано = отбор(self.д, self.индекс, зпр, разд)
+        набор, выбрано = отбор(self.д, self.индекс, зпр, разд, self.п)
         всего = max(1, (len(набор) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1) if набор else 1
         стр = номер_страницы(зпр, всего)
         if стр is None:
@@ -6001,7 +6221,7 @@ class ВидАнимедиа(ВидЗона):
             return self.оболочка(тело, f"Подборки — {self.имя}", "/collections/",
                                  актив="/collections/",
                                  описание=f"Подборки витрины {self.имя}.")
-        набор, выбрано = отбор(self.д, self.индекс, зпр, разд)
+        набор, выбрано = отбор(self.д, self.индекс, зпр, разд, self.п)
         всего = max(1, (len(набор) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1) if набор else 1
         стр = номер_страницы(зпр, всего)
         if стр is None:
@@ -6342,18 +6562,29 @@ class Обработчик(BaseHTTPRequestHandler):
                                 )
             except (OSError, TypeError, ValueError, json.JSONDecodeError):
                 pass
-            player_cfg = None  # reserved; site player json resolved below
-            # Prefer site player json next to catalog naming convention.
-            site_hint = ""
-            try:
-                # e.g. /srv/lords/.frontend/animedia-01-catalog.json → animedia-01
-                name = cat_path.name
-                if name.endswith("-catalog.json"):
-                    site_hint = name[: -len("-catalog.json")]
-            except Exception:
-                site_hint = ""
-            player_path = Path(f"/srv/lords/.frontend/player-{site_hint}.json") if site_hint else None
-            tmpl_path = Path(f"/srv/lords/.frontend/template-manifest-{site_hint}.json") if site_hint else None
+            # Пути ОБЕИХ диагностических сумм — те, что витрина читает на самом
+            # деле, а не соглашение общей фабрики.
+            #
+            # Здесь считалось по `/srv/lords/.frontend/template-manifest-<site>.json`
+            # и `player-<site>.json`. Выделенная ячейка ни того, ни другого не
+            # читает: манифест приходит из `LORDS_TEMPLATE_MANIFEST`
+            # (`<app>/config/template-manifest.json`), настройка плеера — из
+            # `LORDS_PLAYER_CONFIG` (`<app>/config/player.json`). Отсюда у
+            # lords-01 сумма манифеста была ПУСТА (файла по общему пути нет
+            # вовсе), а сумма плеера считалась по файлу, который не исполняется.
+            #
+            # Диагностическое поле, отвечающее про чужой файл, хуже
+            # отсутствующего: пустое поле видно, а совпавшая с соседом сумма
+            # выглядит как доказательство. Класть копию манифеста обратно в
+            # общий каталог нельзя — он оттуда и переехал, чтобы у файла был
+            # владелец.
+            #
+            # Имена берутся у тех же выражений, которыми пользуется рантайм:
+            # МАНИФЕСТ_ФАЙЛ и `_конфиг_плеера`. Разойтись им теперь нечем.
+            tmpl_path = Path(МАНИФЕСТ_ФАЙЛ) if МАНИФЕСТ_ФАЙЛ else None
+            _плеер_путь = (os.environ.get("LORDS_PLAYER_CONFIG")
+                           or _рядом_с_каталогом("player-{site}.json"))
+            player_path = Path(_плеер_путь) if _плеер_путь else None
 
             def _dig(p):
                 try:
@@ -6381,7 +6612,9 @@ class Обработчик(BaseHTTPRequestHandler):
                 "provider_projection_digest": provider_h.hexdigest(),
                 "ratings_snapshot_digest": ratings_h.hexdigest(),
                 "player_config_digest": _dig(player_path) if player_path else "",
+                "player_config_path": str(player_path) if player_path else "",
                 "template_manifest_digest": _dig(tmpl_path) if tmpl_path else "",
+                "template_manifest_path": str(tmpl_path) if tmpl_path else "",
                 "catalog_revision": getattr(self.данные, "revision", "") or "",
                 "details_revision": getattr(self.подробности, "catalog_revision", "") or "",
                 "artifact_sha256": МАНИФЕСТ.get("artifact_sha256", ""),
@@ -6496,10 +6729,20 @@ class Обработчик(BaseHTTPRequestHandler):
     }
 
     #: Чистые kind-маршруты (Lords). Query остаётся каноном для комбинаций.
+    #: Адрес раздела → ключ раздела. Ключ, а не значение `kind`: у Lords
+    #: «Сериал» — это тип источника, а не раздел витрины, и по нему в
+    #: «Сериалы» приезжали аниме и дорамы.
+    #:
+    #: `/anime/` и `/dorama/` объявлены `blueprints/lords/blueprint.yaml`
+    #: (`anime_index`, `dorama_index`), а рантайм их не отдавал: записи этих
+    #: разделов существовали только внутри «Сериалов». Раздел, которого нет,
+    #: и раздел, полный чужого, — две стороны одного дефекта.
     МАРШРУТЫ_ВИДА = {
-        "/movies": "Фильм",
-        "/series": "Сериал",
-        "/animation": "Мультфильм",
+        "/movies": "movies",
+        "/series": "series",
+        "/animation": "animation",
+        "/anime": "anime",
+        "/dorama": "dorama",
     }
 
     #: Исторические slug → канонический. 301 с сохранением season/episode.
@@ -6542,9 +6785,9 @@ class Обработчик(BaseHTTPRequestHandler):
         # Clean kind routes (Lords profile surfaces). Canonical = own path
         # (/movies/, /series/, /animation/), not a silent rewrite to /catalog/.
         if обрезанный in self.МАРШРУТЫ_ВИДА:
-            kind = self.МАРШРУТЫ_ВИДА[обрезанный]
+            ключ = self.МАРШРУТЫ_ВИДА[обрезанный]
             зпр = dict(зпр)
-            зпр["kind"] = [kind]
+            зпр["section"] = [ключ]
             return self._отдать_список(в, обрезанный, зпр, путь)
         if обрезанный in ("/catalog", "/new"):
             return self._отдать_список(в, обрезанный, зпр, путь)
