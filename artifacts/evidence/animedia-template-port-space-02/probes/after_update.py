@@ -45,11 +45,14 @@ def сколько(поле):
 # `data-voted` привязан к КУКЕ посетителя, и у безымянного запроса его быть не
 # должно. Проверяется то, что видно всем: голос учтён в главной оценке, и
 # витрина говорит, из чего эта оценка собрана.
+наши = re.search(r'data-our-votes="(\d+)"', стр)
+состояние_оценки = re.search(r'data-rating-state="[^"]*"', стр)
 п("голос учтён в главной оценке и это объявлено",
-  'data-our-votes="1"' in стр and 'data-rating-state="base+votes"' in стр,
-  (re.search(r'data-rating-state="[^"]*"', стр) or ["нет"])[0]
-  if not isinstance(re.search(r'data-rating-state="[^"]*"', стр), re.Match)
-  else re.search(r'data-rating-state="[^"]*"', стр).group(0))
+  bool(наши) and int(наши.group(1)) == сколько("votes")
+  and 'data-rating-state="base+votes"' in стр,
+  f'витрина объявляет {наши.group(1) if наши else "нет"} голосов, '
+  f'хранилище знает {сколько("votes")}; состояние '
+  + (состояние_оценки.group(0) if состояние_оценки else "нет"))
 п("оценка считается общим модулем, а не своей формулой шаблона",
   'data-rating-formula="main-score/1.0"' in стр)
 версия = re.search(r'name="site-factory-design-version" content="([^"]*)"', стр)
