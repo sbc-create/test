@@ -21,6 +21,7 @@ cd <проект> && LORDS_90_COMMUNITY_MODERATOR_KEY=<ключ> \
 python3 verify.py                 # поверхности по адресу
 python3 verify_community.py       # звёзды, комментарии, модерация
 python3 verify_redelivery.py      # три поколения каталога
+python3 verify_provenance.py      # коммит → артефакт → исполняемый код
 node browser.js                   # Chromium: темы, лента, плеер
 ```
 
@@ -33,6 +34,7 @@ node browser.js                   # Chromium: темы, лента, плеер
 | `http-redelivery.txt` | доставка каталога, три поколения | 15 из 15 |
 | `profiles.txt` | три профиля семейства | по 54 из 54, дизайны и меню различны |
 | `browser.txt` | Chromium 390 и 1440 px, обе темы | 45 из 45 |
+| `provenance.txt` | происхождение: коммит → артефакт → исполняемый код | 18 из 18 |
 | `newsite.json` | паспорт созданного экземпляра | коммит шаблона и состав рантайма |
 
 ## Чего в этих материалах нет
