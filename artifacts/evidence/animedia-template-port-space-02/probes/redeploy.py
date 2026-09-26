@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+"""Обновление каталога и обновление кода на проверочном экземпляре.
+
+Доставляет новый снимок (витрина перечитывает его сама), пересобирает релиз из
+дерева ветки и перезапускает витрину на новом каталоге релиза. Данные
+сообщества лежат вне каталога релиза и здесь не трогаются — что и проверяется
+следующим шагом.
+
+Перезапуск идёт по ПИДУ из файла, а не по `pkill -f`: шаблон командной строки
+совпадал с командной строкой самой проверки, и она убивала себя.
+"""
+import copy, hashlib, json, os, signal, subprocess, sys, time
+import urllib.request
+from pathlib import Path
+
+V = Path(sys.argv[1]); ДАННЫЕ = V / "data"; САЙТ = "animedia-verify"
+ШАБЛОН = Path("/home/claude/wt-animedia-template-port-02")
+БАЗА = "http://127.0.0.1:9310"
+пид_файл = V / "server.pid"
+
+def жив():
+    try:
+        with urllib.request.urlopen(БАЗА + "/healthz", timeout=10) as о:
+            return о.status == 200
+    except Exception:
+        return False
+
+# --- 1. доставка нового снимка каталога --------------------------------------
+подр = json.loads((ДАННЫЕ / f"{САЙТ}-details.json").read_text(encoding="utf-8"))
+новый = copy.deepcopy(подр)
+поднято = 0
+for slug, д in новый.get("details", {}).items():
+    сез = [с for с in (д.get("seasons") or []) if isinstance(с, dict)]
+    if сез and int(сез[0].get("avail") or 0) > 0 and поднято < 25:
+        сез[0]["avail"] = int(сез[0]["avail"]) + 1
+        сез[0]["eps"] = max(int(сез[0].get("eps") or 0), int(сез[0]["avail"]))
+        поднято += 1
+новый["catalog_built_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+(ДАННЫЕ / f"{САЙТ}-details.json").write_text(json.dumps(новый), encoding="utf-8")
+кат = json.loads((ДАННЫЕ / f"{САЙТ}-catalog.json").read_text(encoding="utf-8"))
+прежняя = str(кат.get("revision") or "")
+кат["revision"] = hashlib.sha256((прежняя + "+1").encode()).hexdigest()
+(ДАННЫЕ / f"{САЙТ}-catalog.json").write_text(json.dumps(кат), encoding="utf-8")
+print(f"доставка: поднято {поднято} тайтлов, ревизия {прежняя[:12]} → {кат['revision'][:12]}")
+время = time.time()
+while time.time() - время < 40:
+    time.sleep(2)
+    if жив():
+        break
+print("витрина отвечает после доставки:", жив())
+
+# --- 2. пересборка релиза ----------------------------------------------------
+сб = subprocess.run([sys.executable, str(ШАБЛОН / "automation/host/animedia_release_build.py"),
+                     "--out-dir", str(V / "releases"),
+                     "--stage", "ANIMEDIA-TEMPLATE-PORT-SPACE-02-VERIFY"],
+                    capture_output=True, text=True, cwd=str(ШАБЛОН))
+print(сб.stdout.strip() or сб.stderr.strip()[-400:])
+if сб.returncode != 0:
+    sys.exit(f"сборка релиза не удалась: {сб.returncode}")
+релизы = sorted(p for p in (V / "releases").iterdir() if p.is_dir())
+новейший = релизы[-1]
+
+# --- 3. перезапуск на новом релизе ------------------------------------------
+if пид_файл.is_file():
+    try:
+        os.kill(int(пид_файл.read_text().strip()), signal.SIGTERM)
+    except (OSError, ValueError):
+        pass
+else:
+    # первый перезапуск: ищем по порту, а не по шаблону командной строки
+    вывод = subprocess.run(["bash", "-lc",
+                            "ss -lptn 'sport = :9310' 2>/dev/null | grep -oE 'pid=[0-9]+'"],
+                           capture_output=True, text=True).stdout
+    for кусок in set(вывод.split()):
+        try:
+            os.kill(int(кусок.split("=")[1]), signal.SIGTERM)
+        except (OSError, ValueError, IndexError):
+            pass
+time.sleep(3)
+запуск = V / "run.sh"
+текст = запуск.read_text(encoding="utf-8")
+import re as _re
+текст = _re.sub(r'exec python3 "[^"]*/animedia-frontend\.py"',
+                f'exec python3 "{новейший}/animedia-frontend.py"', текст)
+запуск.write_text(текст, encoding="utf-8")
+проц = subprocess.Popen(["bash", str(запуск)],
+                        stdout=open(V / "server.log", "ab"),
+                        stderr=subprocess.STDOUT, start_new_session=True)
+пид_файл.write_text(str(проц.pid), encoding="utf-8")
+время = time.time()
+while time.time() - время < 60:
+    time.sleep(1)
+    if жив():
+        break
+print(f"код обновлён: релиз {новейший.name}, витрина отвечает: {жив()}")
+sys.exit(0 if жив() else 1)
