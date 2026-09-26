@@ -181,15 +181,21 @@ def создать(заказ: Заказ, *, корень: Path, куда: Path
         "template": {"template_id": заказ.profile},
         "publisher_id_ref": f"secret://cdnvideohub/{заказ.family}/publisher-id",
         "publisher_id_expected": None,
+        # Метки `<app>` и `<data>` подставляет run.py при запуске: репозиторий
+        # не несёт в себе путь конкретной машины. Имена меток заданы
+        # генератором запуска, и написать здесь `{app}` значило бы передать
+        # витрине несуществующий путь — она бы отказалась стартовать.
         "environment": {
             "LORDS_SITE_ID": заказ.site_id,
             "LORDS_SITE_DOMAIN": заказ.domain,
             "LORDS_SITE_NAME": заказ.site_name or заказ.domain,
-            "LORDS_TEMPLATE_MANIFEST": "{app}/config/template-manifest.json",
-            "LORDS_PLAYER_CONFIG": "{app}/config/player.json",
-            "LORDS_CATALOG": "{data}/" + f"{заказ.site_id}-catalog.json",
-            "LORDS_DETAILS": "{data}/" + f"{заказ.site_id}-details.json",
-            "LORDS_LEGACY_ROOT": "{data}/site",
+            "LORDS_TEMPLATE_MANIFEST": "<app>/config/template-manifest.json",
+            "LORDS_PLAYER_CONFIG": "<app>/config/player.json",
+            "LORDS_CATALOG": f"<data>/{заказ.site_id}-catalog.json",
+            "LORDS_DETAILS": f"<data>/{заказ.site_id}-details.json",
+            "LORDS_LEGACY_ROOT": "<data>/site",
+            f"{заказ.family.upper()}_COMMUNITY":
+                f"<data>/{заказ.site_id}-community.json",
         },
         "neighbour_site_ids": [],
         "neighbour_note": (
