@@ -21,9 +21,8 @@ from __future__ import annotations
 import hashlib
 import json
 
-import pytest
-
 import lords_runtime_harness as h
+import pytest
 
 
 @pytest.fixture()

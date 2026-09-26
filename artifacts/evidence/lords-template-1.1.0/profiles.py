@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 """Приёмка всех профилей Lords на новом экземпляре: по одному, до конца."""
-import json, os, signal, subprocess, sys, time, urllib.request
+import json
+import os
+import signal
+import subprocess
+import sys
+import time
+import urllib.request
 
 S = "/tmp/claude-1001/-home-claude/9e5d5d7c-1b72-454b-9239-dbb120e73b48/scratchpad"
 W = "/home/claude/wt-lords-template-consolidation-01"

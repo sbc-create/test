@@ -28,9 +28,8 @@ from __future__ import annotations
 
 import sys
 
-import pytest
-
 import lords_runtime_harness as h
+import pytest
 
 sys.path.insert(0, str(h.КОРЕНЬ / "automation" / "host"))
 import collection_contract as контракт  # noqa: E402

@@ -3,6 +3,7 @@
 Не оценка и не план — измерение. Граф строится разбором AST, а не поиском по
 тексту: строка со словом «import» в комментарии не должна попадать в граф.
 """
+
 import ast
 import json
 import sys
@@ -12,6 +13,7 @@ from pathlib import Path
 ROOT = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
 PKG = "factory"
 
+
 def module_name(path: Path) -> str:
     rel = path.relative_to(ROOT).with_suffix("")
     parts = list(rel.parts)
@@ -19,10 +21,12 @@ def module_name(path: Path) -> str:
         parts.pop()
     return ".".join(parts)
 
+
 def top_area(name: str) -> str:
     """Область — второй уровень: factory.lords.render -> lords."""
     parts = name.split(".")
     return parts[1] if len(parts) > 1 else "(корень)"
+
 
 edges = defaultdict(set)
 files = {}
@@ -89,7 +93,5 @@ out = {
 # ссылается DEPENDENCY-MAP.md, и он должен пережить перезагрузку.
 target = ROOT / "artifacts" / "site-engine" / "dependency-graph.json"
 target.parent.mkdir(parents=True, exist_ok=True)
-target.write_text(
-    json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-)
+target.write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 print(f"\nграф сохранён: {target}")

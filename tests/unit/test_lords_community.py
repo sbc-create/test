@@ -13,14 +13,11 @@
 """
 from __future__ import annotations
 
-import importlib.util
 import re
 import sys
-from urllib.parse import urlencode
-
-import pytest
 
 import lords_runtime_harness as h
+import pytest
 
 МОДУЛЬ_ПУТЬ = h.канонический_модуль_сообщества()
 нет_модуля = pytest.mark.skipif(

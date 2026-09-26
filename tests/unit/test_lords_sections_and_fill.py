@@ -16,10 +16,8 @@ from __future__ import annotations
 
 import re
 
-import pytest
-
 import lords_runtime_harness as h
-
+import pytest
 
 # Снимок нарочно повторяет форму живых данных: у дорамы и у дунхуа `type=tv` и
 # `kind="Сериал"`, ровно как у игрового сериала. Различить их можно ТОЛЬКО по
