@@ -90,6 +90,32 @@ def _манифест() -> dict:
 
 
 МАНИФЕСТ = _манифест()
+
+
+def _паспорт_релиза() -> dict:
+    """`RELEASE.json`, лежащий рядом с исполняемым артефактом.
+
+    Манифест витрины пишется отдельно от сборки и отстаёт от неё молча: после
+    пересборки артефакт новый, а `build_id` в манифесте прежний — и витрина
+    честно называет себя не тем выпуском, который исполняет. Признак, по
+    которому это видно снаружи, обязан браться из САМОГО релиза, а не из
+    файла, который о релизе только рассказывает.
+
+    Релиза может не быть вовсе: рантайм запускают и прямо из дерева ветки.
+    Тогда паспорт пуст, и витрина называет выпуск по манифесту, честно
+    сообщая, откуда взяла.
+    """
+    рядом = Path(__file__).resolve().parent / "RELEASE.json"
+    if not рядом.is_file():
+        return {}
+    try:
+        сырое = json.loads(рядом.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    return сырое if isinstance(сырое, dict) else {}
+
+
+РЕЛИЗ = _паспорт_релиза()
 if МАНИФЕСТ["template_family"] != "animedia":
     # Fail closed. Этот рантайм принадлежит одному контуру, и отдать
     # чужое семейство своим оформлением он не имеет права.
@@ -98,7 +124,14 @@ if МАНИФЕСТ["template_family"] != "animedia":
         f"манифест объявляет {МАНИФЕСТ['template_family']!r}")
 ВЕРСИЯ = МАНИФЕСТ["design_version"]
 СЕМЕЙСТВО = МАНИФЕСТ["template_family"]
-СБОРКА = МАНИФЕСТ["build_id"]
+#: Идентификатор выпуска. Приоритет у `RELEASE.json` рядом с артефактом:
+#: манифест витрины отстаёт от пересборки молча, а релиз лежит в том же
+#: каталоге, что и исполняемый файл, и разойтись с ним не может.
+СБОРКА = str(РЕЛИЗ.get("build_id") or МАНИФЕСТ["build_id"])
+#: Что об этом говорит манифест — отдельным полем, чтобы расхождение было
+#: видно, а не замазано.
+СБОРКА_МАНИФЕСТА = str(МАНИФЕСТ.get("build_id") or "")
+ИСТОЧНИК_ВЫПУСКА = "release.json" if РЕЛИЗ.get("build_id") else "manifest"
 ПРОФИЛЬ = МАНИФЕСТ.get("profile") or "unknown"
 
 #: Имя общего рантайма. Один артефакт обслуживает все семейства, и это честно —
@@ -1148,7 +1181,15 @@ def _слова_записи(запись: dict) -> set[str]:
 
 class Данные:
     def __init__(self, путь: str):
-        сырое = json.loads(Path(путь).read_text(encoding="utf-8"))
+        #: Цифра ИМЕННО ТЕХ байт, которые разобраны в этот объект. Цифра файла
+        #: на диске о загруженном снимке не говорит ничего: файл меняется
+        #: раньше, чем витрина его перечитает, и сравнение «файл изменился»
+        #: проходит мгновенно. Здесь же видно, что именно сейчас в памяти.
+        сырой_текст = Path(путь).read_text(encoding="utf-8")
+        self.цифра_загруженного = hashlib.sha256(
+            сырой_текст.encode("utf-8")).hexdigest()
+        self.загружено_в = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        сырое = json.loads(сырой_текст)
         self.items = сырое["items"]
         self.absent = сырое.get("fields_absent", [])
         self.revision = str(сырое.get("revision") or "")
@@ -1534,12 +1575,17 @@ class Подробности:
         self.покрытие = 0
         self.catalog_revision = ""
         self.catalog_built_at = ""
+        #: Цифра загруженных байт — см. `Данные.цифра_загруженного`.
+        self.цифра_загруженного = ""
         if not путь:
             return
         try:
-            сырое = json.loads(Path(путь).read_text(encoding="utf-8"))
+            сырой_текст = Path(путь).read_text(encoding="utf-8")
+            сырое = json.loads(сырой_текст)
         except (OSError, ValueError):
             return
+        self.цифра_загруженного = hashlib.sha256(
+            сырой_текст.encode("utf-8")).hexdigest()
         записи = сырое.get("details")
         if isinstance(записи, dict):
             self.записи = записи
@@ -10429,8 +10475,18 @@ class Обработчик(BaseHTTPRequestHandler):
                 "assets_sha256": runtime_sha,
                 "build_id": СБОРКА,
                 "release_id": СБОРКА,
-                "source_commit": МАНИФЕСТ.get("source_commit", ""),
-                "runtime_commit": МАНИФЕСТ.get("runtime_commit", ""),
+                # Откуда взят выпуск и что о нём говорит манифест. Без этих
+                # двух полей расхождение «пересобрали артефакт, манифест
+                # прежний» не отличить от «всё совпало»: снаружи оба выглядят
+                # как обычный ответ с каким-то build_id.
+                "release_identity_source": ИСТОЧНИК_ВЫПУСКА,
+                "manifest_build_id": СБОРКА_МАНИФЕСТА,
+                "release_artifact_sha256": str(РЕЛИЗ.get("artifact_sha256") or ""),
+                "release_source_commit": str(РЕЛИЗ.get("source_commit") or ""),
+                "source_commit": str(РЕЛИЗ.get("source_commit")
+                                     or МАНИФЕСТ.get("source_commit", "")),
+                "runtime_commit": str(РЕЛИЗ.get("source_commit")
+                                      or МАНИФЕСТ.get("runtime_commit", "")),
                 "profile": ПРОФИЛЬ,
                 "profile_digest": hashlib.sha256(profile_blob).hexdigest(),
                 "catalog_path": str(cat_path),
@@ -10443,11 +10499,44 @@ class Обработчик(BaseHTTPRequestHandler):
                 "template_manifest_digest": _dig(tmpl_path) if tmpl_path else "",
                 "catalog_revision": getattr(self.данные, "revision", "") or "",
                 "details_revision": getattr(self.подробности, "catalog_revision", "") or "",
+                # Цифры ЗАГРУЖЕННЫХ байт. Соседние `*_digest` считаются по
+                # файлу на диске в момент запроса и совпадают сразу после
+                # записи — по ним нельзя сказать, перечитала ли витрина
+                # снимок. Эти два поля отвечают именно на этот вопрос, а
+                # `snapshot_up_to_date` сводит ответ к одному биту.
+                "catalog_digest_loaded": getattr(
+                    self.данные, "цифра_загруженного", "") or "",
+                "details_digest_loaded": getattr(
+                    self.подробности, "цифра_загруженного", "") or "",
+                "catalog_loaded_at": getattr(self.данные, "загружено_в", "") or "",
+                "catalog_items_loaded": len(getattr(self.данные, "items", ()) or ()),
+                "details_entries_loaded": len(
+                    getattr(self.подробности, "записи", {}) or {}),
+                "snapshot_reloads": СНИМОК_СОСТОЯНИЕ.get("перезагрузок", 0),
+                "snapshot_reloaded_at": СНИМОК_СОСТОЯНИЕ.get("последняя") or "",
+                "snapshot_up_to_date": bool(
+                    getattr(self.данные, "цифра_загруженного", "") == _dig(cat_path)
+                    and (not det_path
+                         or getattr(self.подробности, "цифра_загруженного", "")
+                         == _dig(det_path))
+                ),
                 "artifact_sha256": МАНИФЕСТ.get("artifact_sha256", ""),
                 "runtime_digest_match": bool(
                     МАНИФЕСТ.get("artifact_sha256")
                     and runtime_sha
                     and МАНИФЕСТ.get("artifact_sha256") == runtime_sha
+                ),
+                # Один бит на вопрос «называет ли витрина тот выпуск, который
+                # исполняет»: паспорт релиза, манифест и цифра файла на диске
+                # обязаны говорить одно.
+                "identity_match": bool(
+                    runtime_sha
+                    and (not РЕЛИЗ.get("artifact_sha256")
+                         or РЕЛИЗ.get("artifact_sha256") == runtime_sha)
+                    and (not МАНИФЕСТ.get("artifact_sha256")
+                         or МАНИФЕСТ.get("artifact_sha256") == runtime_sha)
+                    and (not СБОРКА_МАНИФЕСТА or not РЕЛИЗ.get("build_id")
+                         or СБОРКА_МАНИФЕСТА == РЕЛИЗ.get("build_id"))
                 ),
             }
             return self._отдать(json.dumps(тело, ensure_ascii=False).encode("utf-8"),
