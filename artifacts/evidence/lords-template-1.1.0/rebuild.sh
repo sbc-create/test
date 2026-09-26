@@ -10,9 +10,13 @@ for pid in $(pgrep -f "lords-frontend.py --port 9190" || true); do kill "$pid" |
 sleep 1
 
 cd "$W"
+# Реестр — ИЗОЛИРОВАННЫЙ: боевой config/site-cells.json проверкой не трогается.
+# --remote обязателен: без адреса собственного репозитория доставка содержимого
+# в ячейку отказывает, и это правильно.
 python3 -m factory cell newsite --site lords-90 --domain lords90.example \
   --template "${1:-lords-general}" --port 9190 --site-name "Проверочная витрина" \
-  --destination "$N" --force > "$S/newsite.json"
+  --destination "$N" --registry "$S/registry-test.json" \
+  --remote git@example.invalid:lords-90.git > "$S/newsite.json"
 
 # Настройка места и канонический модуль приезжают ОТДЕЛЬНО — так же, как на
 # боевой ячейке: в артефакте их нет и быть не должно.
