@@ -736,14 +736,25 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 pins = json.loads((ROOT / "pins.lock.json").read_text(encoding="utf-8"))
 bad = []
+pending = []
 for name, meta in pins["files"].items():
     p = ROOT / "src" / name
+    # Файл без объявленной суммы поставляется ОТДЕЛЬНЫМ выпуском (у него свой
+    # владелец), и его отсутствие в проекте — законное состояние, а не
+    # расхождение с замком. Но и молчать о нём нельзя: пока он не приехал,
+    # соответствующий раздел витрины выключен, и это должно быть видно.
+    if not meta.get("sha256"):
+        if not p.is_file():
+            pending.append(f"{name}: поставляется отдельным выпуском, ещё не доставлен")
+        continue
     if not p.is_file():
         bad.append(f"{name}: файла нет")
         continue
     actual = hashlib.sha256(p.read_bytes()).hexdigest()
     if actual != meta["sha256"]:
         bad.append(f"{name}: sha256 {actual[:12]} вместо {meta['sha256'][:12]}")
+if pending:
+    print("ожидают доставки:", *pending, sep="\n  ")
 if bad:
     print("исходники разошлись с замком:", *bad, sep="\\n  ", file=sys.stderr)
     sys.exit(1)
@@ -797,8 +808,27 @@ if r.returncode == 0:
     sys.exit(1)
 
 cfg = json.loads((ROOT / "config" / "site.json").read_text(encoding="utf-8"))
-if not cfg.get("neighbour_site_ids"):
-    print("в config/site.json не перечислены соседние site_id", file=sys.stderr)
+if "neighbour_site_ids" not in cfg:
+    print("в config/site.json нет поля neighbour_site_ids", file=sys.stderr)
+    sys.exit(1)
+
+# Отказ проверяется ИСПОЛНЕНИЕМ, а не наличием списка соседей.
+#
+# Раньше требовался непустой список — и у сайта, заведённого из шаблона, его
+# взяться неоткуда: соседей на машине ещё нет. Но защита нужна ему ровно так
+# же: умолчания рантайма этого семейства указывают на чужую ячейку, и одна
+# незаданная переменная означала бы витрину, молча отдающую каталог соседа.
+# Поэтому проверяется то, ради чего защита написана: запуск с каталогом
+# данных ЧУЖОГО сайта обязан отказать.
+чужой = cfg.get("neighbour_site_ids") or ["lords-01"]
+подстава = f"/srv/{чужой[0]}/data"
+if cfg["site_id"] in подстава:
+    подстава = "/srv/chuzhoy-sayt/data"
+r = subprocess.run([sys.executable, str(ROOT / "run.py"), "--check",
+                    "--data-dir", подстава],
+                   capture_output=True, text=True, cwd=ROOT)
+if r.returncode == 0:
+    print(f"запуск с чужим каталогом данных {подстава} не отказал", file=sys.stderr)
     sys.exit(1)
 '''
 
@@ -1107,10 +1137,17 @@ def add_tooling(destination: Path, site_id: str, domain: str) -> None:
                        ("verify_pins.py", CHECK_VERIFY_PINS),
                        ("no_secrets.py", CHECK_NO_SECRETS),
                        ("fails_closed.py", CHECK_FAILS_CLOSED),
-                       ("ascii_shell_identifiers.py", CHECK_ASCII),
-                       ("manifest_stamp.py", CHECK_MANIFEST_STAMP),
-                       ("artifact_contents.py", CHECK_ARTIFACT_CONTENTS)):
+                       ("ascii_shell_identifiers.py", CHECK_ASCII)):
         (checks / имя).write_text(текст, encoding="utf-8")
+
+    # Проверки, которые сами разбирают Python, живут ФАЙЛАМИ рядом с
+    # генератором, а не строками в нём. Встроенные в строку, они приехали в
+    # проект сайта с разъехавшимися escape-последовательностями и не
+    # скомпилировались; то же однажды случилось с activate_scenarios.py.
+    рядом = Path(__file__).resolve().parent / "site_checks"
+    for имя in ("manifest_stamp.py", "artifact_contents.py"):
+        (checks / имя).write_text((рядом / имя).read_text(encoding="utf-8"),
+                                  encoding="utf-8")
 
     tools = destination / "tools"
     tools.mkdir(exist_ok=True)
@@ -1120,196 +1157,6 @@ def add_tooling(destination: Path, site_id: str, domain: str) -> None:
     wf.mkdir(parents=True, exist_ok=True)
     (wf / "release.yml").write_text(
         CI_WORKFLOW.format(domain=domain, site_id=site_id), encoding="utf-8")
-
-
-CHECK_MANIFEST_STAMP = '''"""Манифест шаблона говорит о выпуске правду.
-
-Ловится один класс отказа, случившийся здесь трижды: поле манифеста пишется
-один раз и переживает свой выпуск. Витрина отвечает 200, build_id верен, а
-рядом стоит цифра или путь чужого релиза — и по ним судят, какой код работает.
-
-Что проверяется:
-
-1. В репозитории сведения о выпуске ПУСТЫ. Заполненное значение здесь и есть
-   тот самый пережиток: сборка его перезапишет, но если сборку обойдут, оно
-   уедет на сайт как настоящее.
-2. Штамп сборки согласован с `config/site.json`: каталог выпуска лежит под
-   объявленным корнем размещения, ссылка совпадает с объявленной.
-3. `artifact_sha256` — сумма файла рантайма, а не архива и не перенос.
-4. Происхождение шаблона не подменено версией сайта: `source_commit` равен
-   закреплённому в `pins.lock.json`, и он НЕ равен коммиту этого репозитория.
-5. Все поля, которых рантайм требует от манифеста, на месте.
-
-Проверка вызывает ту же функцию `штамп`, которой пользуется сборка: своя копия
-правил разошлась бы с артефактом, а это ровно тот случай, ради которого
-проверка и написана.
-"""
-import hashlib
-import json
-import subprocess
-import sys
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "tools"))
-
-import build_release  # noqa: E402
-
-#: Поля, без которых рантайм не поднимается (_манифест в lords-frontend.py).
-ТРЕБУЕТ_РАНТАЙМ = ("schema_version", "template_family", "design_version",
-                   "source_commit", "build_id", "artifact_sha256", "profile",
-                   "built_at")
-
-#: Происхождение шаблона: неподвижно, сборкой не меняется.
-ПОЛЕ_ПРОИСХОЖДЕНИЯ = "template_origin"
-
-#: Сведения о выпуске: в репозитории они обязаны быть пусты.
-ПУСТЫЕ_В_РЕПО = ("artifact_sha256", "runtime_commit", "site_repo_commit",
-                 "built_at", "release_dir", "bound_release_link")
-
-cfg = json.loads((ROOT / "config" / "site.json").read_text(encoding="utf-8"))
-pins = json.loads((ROOT / "pins.lock.json").read_text(encoding="utf-8"))
-сырой = json.loads((ROOT / "config" / "template-manifest.json").read_text(encoding="utf-8"))
-
-плохо = []
-
-for поле in ТРЕБУЕТ_РАНТАЙМ:
-    if поле not in сырой:
-        плохо.append(f"манифест без поля {поле}: рантайм не поднимется")
-
-for поле in ПУСТЫЕ_В_РЕПО:
-    if сырой.get(поле):
-        плохо.append(f"{поле} заполнено в репозитории ({сырой[поле]!r}): "
-                     "значение переживёт свой выпуск")
-происхождение = сырой.get(ПОЛЕ_ПРОИСХОЖДЕНИЯ)
-if not isinstance(происхождение, dict) or not происхождение.get("source_commit"):
-    плохо.append(f"нет {ПОЛЕ_ПРОИСХОЖДЕНИЯ}.source_commit: происхождение шаблона "
-                 "не отделено от версии сайта")
-elif происхождение["source_commit"] != pins["pins"]["source_commit"]:
-    плохо.append(f"{ПОЛЕ_ПРОИСХОЖДЕНИЯ}.source_commit разошёлся с замком")
-
-if сырой.get("build_id") != "worktree-unbuilt":
-    плохо.append(f"build_id в репозитории {сырой.get('build_id')!r}, "
-                 "ожидалось 'worktree-unbuilt'")
-
-commit = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "HEAD"],
-                        capture_output=True, text=True, check=True).stdout.strip()
-готовый = build_release.штамп(сырой, cfg, pins, commit, dirty=False)
-
-dep = cfg.get("deployment") or {}
-корень = (dep.get("root") or "").rstrip("/")
-if not корень:
-    плохо.append("config/site.json без deployment.root: "
-                 "сборке неоткуда взять каталог выпуска")
-else:
-    if not готовый["release_dir"].startswith(корень + "/"):
-        плохо.append(f"release_dir {готовый['release_dir']} вне корня размещения {корень}")
-    if not готовый["release_dir"].endswith("/" + commit[:12]):
-        плохо.append(f"release_dir {готовый['release_dir']} не назван коммитом {commit[:12]}")
-    if готовый["bound_release_link"] != dep.get("current_link"):
-        плохо.append("bound_release_link разошёлся с deployment.current_link")
-
-рантайм = ROOT / "src" / cfg["entrypoint"]
-сумма = hashlib.sha256(рантайм.read_bytes()).hexdigest()
-if готовый["artifact_sha256"] != сумма:
-    плохо.append(f"artifact_sha256 {готовый['artifact_sha256'][:12]} "
-                 f"не сумма {cfg['entrypoint']} ({сумма[:12]})")
-
-закреплён = pins["pins"]["source_commit"]
-if готовый["source_commit"] != закреплён:
-    плохо.append(f"source_commit {готовый['source_commit'][:12]} "
-                 f"разошёлся с замком {закреплён[:12]}")
-if готовый["source_commit"] == commit:
-    плохо.append("source_commit равен коммиту этого репозитория: "
-                 "происхождение шаблона подменено версией сайта")
-for поле in ("runtime_commit", "site_repo_commit"):
-    if готовый[поле] != commit:
-        плохо.append(f"{поле} не равен HEAD {commit[:12]}")
-if готовый["built_at"] != build_release.commit_time(commit):
-    плохо.append("built_at не равен времени коммита выпуска")
-
-# Ни одно поле выпуска не смеет указывать в дерево ОБЩЕЙ фабрики: именно так
-# каждая выделенная ячейка объявляла своей раскладкой чужую.
-ОБЩАЯ_ФАБРИКА = "/srv/lords/.frontend"
-for поле, значение in готовый.items():
-    if поле == ПОЛЕ_ПРОИСХОЖДЕНИЯ:
-        continue
-    if isinstance(значение, str) and значение.startswith(ОБЩАЯ_ФАБРИКА):
-        плохо.append(f"{поле} указывает в общую фабрику: {значение}")
-
-if плохо:
-    print("манифест выпуска недостоверен:", *плохо, sep="\n  ", file=sys.stderr)
-    sys.exit(1)
-'''
-
-
-CHECK_ARTIFACT_CONTENTS = '''"""В артефакте ровно то, что ведёт Git, и ничего сверх того.
-
-Пока сборщик обходил файловую систему, в выпуск уезжало и то, что Git
-игнорирует. Два следствия, оба наблюдались:
-
-* digest переставал быть функцией коммита — один коммит давал разные суммы на
-  разных машинах, и исполнитель такую заявку отвергает;
-* `checks/no_secrets.py` смотрит в ИНДЕКС, а паковался РАБОЧИЙ КАТАЛОГ:
-  проверка и артефакт говорили о разном.
-
-Проверяется поведением, а не чтением кода: рядом с проектом кладётся
-игнорируемый файл, и он не должен оказаться в архиве.
-"""
-import subprocess
-import sys
-import tarfile
-import tempfile
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "tools"))
-
-import build_release  # noqa: E402
-
-#: Кладётся в корень проекта намеренно: каталоги вроде var/ сборщик
-#: пропускает и без разбора индекса, и подкидыш в них ничего не проверил бы.
-ПОДКИДЫШ = ROOT / "podkidysh-proverki.txt"
-
-
-def состав(куда: Path) -> set:
-    subprocess.run([sys.executable, str(ROOT / "tools" / "build_release.py"),
-                    "--output", str(куда)], check=True, capture_output=True, cwd=str(ROOT))
-    архив = next(куда.glob("*.tar.gz"))
-    with tarfile.open(архив, "r:gz") as t:
-        return {и.name for и in t.getmembers() if и.isfile()}
-
-
-ожидалось = set()
-вывод = subprocess.run(["git", "-C", str(ROOT), "ls-files", "--cached"],
-                       capture_output=True, text=True, check=True).stdout.split("\n")
-for rel in вывод:
-    rel = rel.strip()
-    if not rel or rel in build_release.SKIP_FILES:
-        continue
-    if any(часть in build_release.SKIP_DIRS for часть in Path(rel).parts):
-        continue
-    ожидалось.add(rel)
-
-плохо = []
-ПОДКИДЫШ.write_text("этого файла не должно быть в выпуске\n", encoding="utf-8")
-try:
-    with tempfile.TemporaryDirectory() as tmp:
-        собрано = состав(Path(tmp))
-finally:
-    ПОДКИДЫШ.unlink(missing_ok=True)
-
-лишнее = собрано - ожидалось
-нет = ожидалось - собрано
-if лишнее:
-    плохо.append("в артефакте есть лишнее: " + ", ".join(sorted(лишнее)))
-if нет:
-    плохо.append("в артефакте нет отслеживаемого: " + ", ".join(sorted(нет)))
-
-if плохо:
-    print("состав артефакта не совпал с индексом Git:", *плохо, sep="\n  ", file=sys.stderr)
-    sys.exit(1)
-'''
 
 
 ACTIVATE = '''#!/usr/bin/env bash
