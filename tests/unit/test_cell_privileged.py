@@ -450,9 +450,10 @@ def test_контракт_данных_объявляется_сайтом(tmp_p
     assert к["delivered"] == ("{site}-catalog.json",)
     assert "yummy-readmodel.sqlite3" in к["user_writable"]
 
-    # Без объявления действует прежний общий набор: ни одна из существующих
-    # витрин не должна изменить поведение от появления этой возможности.
-    по_умолчанию = privileged.контракт_данных("zona-01")
+    # Без объявления действует прежний общий набор. Пример берётся заведомо
+    # несуществующий: у настоящих витрин объявление уже появилось, и проверять
+    # умолчание на них значило бы проверять их конфигурацию, а не умолчание.
+    по_умолчанию = privileged.контракт_данных("нет-такой-витрины")
     assert по_умолчанию["delivered"] == privileged.СНИМОК
     assert по_умолчанию["user_writable"] == (privileged.ПОЛЬЗОВАТЕЛЬСКИЕ,)
 
@@ -559,3 +560,49 @@ def test_база_оценок_подключается_ссылкой_а_не_�
     assert (кандидат / "site-data").is_symlink()
     assert not (кандидат / "yummy-site-catalog.json").is_symlink(), (
         "снимок обязан быть копией: кандидат не должен править живые данные")
+
+
+def test_контракт_находит_репозиторий_сам_на_первом_выпуске(tmp_path, monkeypatch):
+    """У первого выпуска нет установленного релиза — контракт брать неоткуда.
+
+    Поймано первым же настоящим переносом Yummy, а не рассуждением. Исполнитель
+    отказал: «yummy-biz: в источнике нет файлов снимка
+    ['yummy-biz-details.json']; половина снимка хуже прежнего целого» — то есть
+    взял умолчание фабрики вместо контракта сайта.
+
+    Причина: `stage_snapshot` разрешает контракт заново и путь репозитория до
+    него не доезжал. `_засеять_хранилище` передавал его, а вызванный из засева
+    `stage_snapshot` — нет, и на первом выпуске (когда `current` и `app` пусты)
+    оставалось только умолчание. Поэтому контракт ищет репозиторий сам, а
+    параметр остаётся для проверок и вызова с чужим деревом.
+    """
+    import json
+
+    репо = tmp_path / "repo"
+    (репо / "config").mkdir(parents=True)
+    (репо / "config" / "site.json").write_text(json.dumps({
+        "site_id": "yummy-biz",
+        "data_contract": {"delivered": ["{site}-catalog.json"],
+                          "user_writable": ["site-data", "yummy-readmodel.sqlite3"]},
+    }), encoding="utf-8")
+
+    class ФиктивнаяЯчейка:
+        repo_path = репо
+
+    from factory.cell import registry as рег
+    monkeypatch.setattr(рег, "resolve", lambda site_id: ФиктивнаяЯчейка())
+
+    # Площадка первого выпуска: ни current, ни app ещё не заполнены.
+    корень = tmp_path / "srv"
+    (корень / "data").mkdir(parents=True)
+    (корень / "app").mkdir(parents=True)
+    п = privileged.Площадка(site_id="yummy-biz", account="nobody", root=корень,
+                            app=корень / "app", data=корень / "data",
+                            unit="u.service", previous_unit=None, port=9130)
+
+    к = privileged.контракт_данных("yummy-biz", площадка=п)
+    assert к["delivered"] == ("{site}-catalog.json",), (
+        "на первом выпуске взято умолчание фабрики вместо контракта сайта: "
+        f"{к}")
+    assert "yummy-readmodel.sqlite3" in к["user_writable"]
+    assert str(репо) in к["source"]
