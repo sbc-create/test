@@ -1,6 +1,10 @@
 {
   "site_id": "lords-90",
   "domain": "lords90.example",
+  "cell": {
+    "registry": "/tmp/claude-1001/-home-claude/9e5d5d7c-1b72-454b-9239-dbb120e73b48/scratchpad/registry-test.json",
+    "error": "ячейка lords-90 уже зарегистрирована; для изменения используйте update() или replace=True"
+  },
   "community": {
     "storage_env": "LORDS_90_COMMUNITY",
     "moderator_key_env": "LORDS_90_COMMUNITY_MODERATOR_KEY",
@@ -10,7 +14,7 @@
   },
   "profile": "lords-general",
   "path": "/tmp/claude-1001/-home-claude/9e5d5d7c-1b72-454b-9239-dbb120e73b48/scratchpad/new-lords-90",
-  "template_commit": "b61f084c173e10bf9150655d316236c094bb3141",
+  "template_commit": "549e1a9c413db84762324bba54174b1de367fc18",
   "design_version": "1.1.0",
   "runtime_files": [
     "lords-frontend.py",
