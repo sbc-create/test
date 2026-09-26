@@ -1,15 +1,7 @@
 #!/usr/bin/env python3
 """Повторная доставка каталога: сохранность записей и честность «новинок»."""
-import json
-import os
-import re
-import signal
-import subprocess
-import sys
-import time
-import urllib.error
-import urllib.parse
-import urllib.request
+import json, re, subprocess, sys, time, urllib.parse, urllib.request, urllib.error
+import http.cookiejar, os, signal
 
 S = "/tmp/claude-1001/-home-claude/9e5d5d7c-1b72-454b-9239-dbb120e73b48/scratchpad"
 БАЗА = "http://127.0.0.1:9190"
@@ -80,7 +72,7 @@ for _ in range(40):
 проверка("хранилище сообщества не тронуто доставкой",
          json.dumps(стало, ensure_ascii=False, sort_keys=True) == слепок_до)
 стр = get("/title/kino-000/")
-проверка("средняя оценка пережила доставку", 'data-community-score="8,0"' in стр,
+проверка("средняя оценка пережила доставку", 'data-community-score="8,0"' in стр, 
          re.search(r'data-community-score="[^"]*"', стр).group(0) if 'data-community-score' in стр else "нет")
 проверка("комментарий пережил доставку", "Первое сообщение проверки" in стр)
 

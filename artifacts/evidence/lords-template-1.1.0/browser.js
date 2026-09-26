@@ -95,6 +95,9 @@ const пров = (имя, ок, подр = '') => { итог.push([имя, ок,
   пров('лента: начало — левая кнопка погашена',
        await page.evaluate(() => document.querySelector('[data-rl="prev"]').disabled));
 
+  // Стрелки показываются при наведении на ленту: это правило ядра для
+  // широких экранов, а не дефект. Наводимся, как это делает посетитель.
+  await page.hover('.zrl');
   await page.click('[data-rl="next"]');
   await page.waitForTimeout(700);
   const м1 = await измерить();
@@ -108,6 +111,9 @@ const пров = (имя, ок, подр = '') => { итог.push([имя, ок,
   let шагов = 1, предыдущий = м1.left;
   for (let i = 0; i < 20; i++) {
     const before = (await измерить()).left;
+    // Кнопка гаснет на краю — это и есть искомое состояние, а не помеха.
+    if (await page.evaluate(() => document.querySelector('[data-rl="next"]').disabled)) break;
+    await page.hover('.zrl');
     await page.click('[data-rl="next"]');
     await page.waitForTimeout(600);
     const m = await измерить();
@@ -125,28 +131,41 @@ const пров = (имя, ок, подр = '') => { итог.push([имя, ок,
        `шагов ${шагов}+1, расчёт ${страниц} (видно ${м0.видно}, карточек ${мк.карточек})`);
 
   // --- клавиатура ----------------------------------------------------------
-  await page.evaluate(() => { const v = document.querySelector('[data-rl-vp]'); v.scrollLeft = 0; v.focus(); });
-  await page.waitForTimeout(200);
+  await page.evaluate(() => {
+    const v = document.querySelector('[data-rl-vp]');
+    v.scrollTo({left: 0, behavior: 'instant'});
+    v.focus();
+  });
+  await page.waitForTimeout(400);
   await page.keyboard.press('ArrowRight');
-  await page.waitForTimeout(600);
+  await page.waitForTimeout(1200);
   const мкл = await измерить();
   пров('лента: стрелка вправо листает', мкл.left > 1, String(Math.round(мкл.left)));
   await page.keyboard.press('End');
-  await page.waitForTimeout(700);
+  await page.waitForTimeout(1500);
   пров('лента: End доводит до конца',
        Math.abs((await измерить()).left - мк.max) <= 2);
   await page.keyboard.press('Home');
-  await page.waitForTimeout(700);
+  await page.waitForTimeout(1500);
   пров('лента: Home возвращает в начало', (await измерить()).left <= 1);
 
   // --- изменение ширины окна ------------------------------------------------
   await page.setViewportSize({width: 900, height: 900});
+  // Ширина карточки задана в vw: после смены размера окна раскладке нужно
+  // успеть пересчитаться, иначе измеряется прежняя геометрия.
+  await page.waitForTimeout(800);
+  await page.evaluate(() => document.querySelector('[data-rl-vp]')
+    .scrollTo({left: 0, behavior: 'instant'}));
   await page.waitForTimeout(300);
   const муз = await измерить();
   пров('лента: на узком экране шаг пересчитан', муз.видно < м0.видно,
        `${м0.видно} → ${муз.видно}`);
-  await page.click('[data-rl="next"]');
-  await page.waitForTimeout(700);
+  // На 900 px стрелки скрыты правилом ядра (они появляются от 1024 px), и
+  // листание там — свайп и клавиатура. Проверяем тем способом, который на
+  // этой ширине действительно доступен.
+  await page.evaluate(() => document.querySelector('[data-rl-vp]').focus());
+  await page.keyboard.press('ArrowRight');
+  await page.waitForTimeout(1200);
   const муз2 = await измерить();
   пров('лента: шаг на узком равен видимым',
        Math.abs((муз2.left - муз.left) - муз.шагКарточки * муз.видно) <= 2,
@@ -154,7 +173,7 @@ const пров = (имя, ок, подр = '') => { итог.push([имя, ок,
 
   // --- телефон: следующая карточка видна частично ---------------------------
   await page.setViewportSize({width: 390, height: 844});
-  await page.waitForTimeout(300);
+  await page.waitForTimeout(800);
   const мт = await измерить();
   const дробная = мт.окно / мт.шагКарточки;
   пров('телефон: следующая карточка видна частично',

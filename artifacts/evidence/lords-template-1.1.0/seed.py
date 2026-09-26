@@ -4,8 +4,7 @@
 Данные синтетические и живут только в каталоге проверки. Ни один живой снимок
 не читается и не пишется.
 """
-import json
-import sys
+import json, sys
 from pathlib import Path
 
 КУДА = Path(sys.argv[1])
