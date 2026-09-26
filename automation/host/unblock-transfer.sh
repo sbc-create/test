@@ -25,7 +25,15 @@
 set -Eeuo pipefail
 
 dry_run=""
-[ "${1:-}" = "--dry-run" ] && dry_run="--dry-run"
+launch=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --dry-run) dry_run="--dry-run" ;;
+    --with-launch) launch="${2:-}"; shift ;;
+    *) echo "неизвестный аргумент: $1" >&2; exit 2 ;;
+  esac
+  shift
+done
 
 REPO="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
 INSTALLED=/usr/local/lib/site-factory-cell
@@ -70,6 +78,11 @@ if [ -z "$dry_run" ]; then
     bad "в drop-in нет ни одного пути с дефисом: 226/NAMESPACE вернётся"
     exit 3
   fi
+fi
+
+if [ -n "$launch" ]; then
+  log "шаг 4: подключение нового домена $launch к хосту"
+  bash "$REPO/automation/host/launch-new-site.sh" --site "$launch" $dry_run
 fi
 
 log "итог"
