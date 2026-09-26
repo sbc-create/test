@@ -1049,7 +1049,11 @@ def сезон_по_номеру(деталь: dict, номер: int) -> dict | 
     "ink": "#1f2329", "dim": "#5b6470", "page": "#111111", "sheet": "#eef1f4",
     "card": "#ffffff", "line": "#d7dde3", "acc": "#3F7D26", "accdk": "#2F641C",
     "kp": "#b34700", "imdb": "#f5c518", "bar": "#171a1e",
-    "mute": "#5f6874", "onbar": "#8a939e",
+    # `onbar` на тёмно-зелёной полосе профилей cinema и curated (`#173319`)
+    # давал 4.43:1 — ниже AA. Нашлось проверкой контраста пар, а не глазом:
+    # на базовой полосе `#171a1e` тот же цвет читался (5.61), и дефект был
+    # виден только на двух профилях из трёх.
+    "mute": "#5f6874", "onbar": "#949eab",
     "soft": "#EAF3E4", "greendark": "#173319", "accent2": "#3F7D26",
 }
 
@@ -1071,6 +1075,83 @@ def сезон_по_номеру(деталь: dict, номер: int) -> dict | 
     "page": "#0e1512", "sheet": "#f4f1e9", "acc": "#3F7D26", "accdk": "#2F641C",
     "bar": "#173319", "accent2": "#5c4a6e", "soft": "#EAF3E4",
 }
+
+
+#: Тёмная палитра семейства.
+#:
+#: Пока токены подставлялись в таблицу стилей ЛИТЕРАЛАМИ, вторая тема была
+#: невозможна без ручного перечисления каждой поверхности — что и пришлось
+#: сделать двум сайтам по отдельности. Переключатель когда-то существовал и
+#: был убран именно потому, что светлая ветка задавала лишь часть переменных,
+#: и из неё выходил нечитаемый текст. Корень был не в переключателе, а в
+#: литералах; с переменными `:root` тема появляется у всего семейства одним
+#: правилом, а не семью копиями этого файла.
+#:
+#: Правило контраста, ради которого палитра не выводится из светлой
+#: арифметически: акцент как ТЕКСТ и акцент как ЗАЛИВКА — две разные роли.
+#: `#3F7D26` даёт 5.03:1 под белым текстом (заливка кнопки — годится) и 2.31:1
+#: как текст на тёмной карточке `#1b2026` — вдвое ниже требуемого. Поэтому у
+#: `accdk`, который и есть «акцент как текст», в тёмной теме своё значение:
+#: `#7FC95C` даёт 8.13:1. Числа сверяются `test_lords_theme.py`, а не
+#: подбираются на глаз.
+ЛОРДС_ТОКЕНЫ_ТЁМНЫЕ = {
+    "ink": "#e8edf3", "dim": "#a7b2be", "page": "#07090b", "sheet": "#14181d",
+    "card": "#1b2026", "line": "#2b323a", "acc": "#3F7D26", "accdk": "#7FC95C",
+    "kp": "#ff8a3d", "imdb": "#f5c518", "bar": "#0f1216",
+    "mute": "#9aa5b1", "onbar": "#9aa5b1",
+    "soft": "#1e2a1c", "greendark": "#0d1a0f", "accent2": "#7FC95C",
+}
+
+
+def _тёмные_для(светлые: dict) -> dict:
+    """Тёмная палитра профиля: общая тёмная база плюс его собственный акцент.
+
+    Профили Lords различаются вторым акцентом и подложкой; в тёмной теме это
+    различие обязано сохраниться, иначе три витрины станут одной.
+    """
+    готово = dict(ЛОРДС_ТОКЕНЫ_ТЁМНЫЕ)
+    if светлые.get("accent2") and светлые["accent2"] != ЛОРДС_ТОКЕНЫ["accent2"]:
+        готово["accent2"] = светлые["accent2"]
+    return готово
+
+
+def _строки_токенов(токены: dict) -> str:
+    return "".join(f"--t-{имя}:{значение};" for имя, значение in sorted(токены.items()))
+
+
+def _корень_темы(светлые: dict, тёмные: dict) -> str:
+    """Обе палитры переменными `:root`.
+
+    `color-scheme` объявляется вместе с палитрой намеренно: без него нативные
+    элементы браузера — поле ввода комментария, ползунок прокрутки, выпадающий
+    список фильтра — остаются светлыми на тёмной странице. Это ровно тот
+    случай, когда «тема переключилась» и «всё читается» — разные утверждения.
+
+    Системная тема действует, пока выбор не сделан вручную: правило под
+    `prefers-color-scheme` защищено `:root:not([data-theme="light"])`, а
+    явный выбор задаётся атрибутом и перекрывает оба.
+    """
+    св, тм = _строки_токенов(светлые), _строки_токенов(тёмные)
+    return (
+        f":root{{color-scheme:light;{св}}}\n"
+        f"@media (prefers-color-scheme: dark){{"
+        f":root:not([data-theme=\"light\"]){{color-scheme:dark;{тм}}}}}\n"
+        f":root[data-theme=\"dark\"]{{color-scheme:dark;{тм}}}\n"
+        f":root[data-theme=\"light\"]{{color-scheme:light;{св}}}\n"
+    )
+
+
+def _переменными(шаблон: str, токены: dict) -> str:
+    """Подставить токены ССЫЛКАМИ на переменные, а не значениями.
+
+    Одно значение — одно объявление. Пока подстановка была литеральной, смена
+    палитры означала пересборку всей таблицы стилей, то есть вторая тема
+    существовать не могла.
+    """
+    готово = шаблон
+    for имя in токены:
+        готово = готово.replace(f"@{имя.upper()}@", f"var(--t-{имя})")
+    return готово
 
 
 def _лорды_токены_для_дизайна() -> dict:
@@ -1182,6 +1263,36 @@ clip:rect(0 0 0 0);white-space:nowrap;border:0}
 def _общее(токены: dict) -> str:
     return ОБЩЕЕ_1_1.replace("@ACC@", токены["acc"])
 
+
+#: Стили, которые обязаны идти ПОСЛЕ основной таблицы: переключатель темы и
+#: приведение нативных элементов к активной палитре.
+#:
+#: Нативные элементы вынесены отдельно не для красоты. `color-scheme` решает
+#: ползунок прокрутки и стрелки `select`, но поле ввода и `textarea` браузер
+#: раскрашивает своими умолчаниями, если сайт задал им фон и не задал цвет
+#: текста (или наоборот). На тёмной теме это давало светлое поле комментария
+#: и невидимый ввод — «тема переключилась» и «всё читается» оказались разными
+#: утверждениями.
+ЛОРДС_СТИЛЬ_ТЕМЫ = """
+.hd__theme{flex:0 0 auto;width:36px;height:36px;display:grid;place-items:center;
+border:1px solid var(--t-line);border-radius:6px;background:var(--t-card);
+color:var(--t-accdk);cursor:pointer;font-size:15px;line-height:1;padding:0}
+.hd__theme:hover{border-color:var(--t-acc)}
+.hd__theme:focus-visible{outline:3px solid var(--t-acc);outline-offset:2px}
+.hd__theme .t-dark{display:none}
+:root[data-theme="dark"] .hd__theme .t-dark{display:inline}
+:root[data-theme="dark"] .hd__theme .t-light{display:none}
+@media (prefers-color-scheme: dark){
+:root:not([data-theme="light"]) .hd__theme .t-dark{display:inline}
+:root:not([data-theme="light"]) .hd__theme .t-light{display:none}}
+/* Нативные элементы следуют активной теме. */
+input,textarea,select,button{font:inherit}
+input,textarea,select{background:var(--t-card);color:var(--t-ink);
+border:1px solid var(--t-line);border-radius:4px}
+input::placeholder,textarea::placeholder{color:var(--t-mute);opacity:1}
+input:focus-visible,textarea:focus-visible,select:focus-visible{
+outline:3px solid var(--t-acc);outline-offset:1px}
+"""
 
 ЛОРДС_СТИЛЬ = """
 body{background:@PAGE@;color:@INK@;
@@ -2406,7 +2517,10 @@ def _подставить(шаблон: str, токены: dict) -> str:
         "вид": "lords",
         "токены": ЛОРДС_ТОКЕНЫ,
         "стиль": lambda: (
-            (lambda т: _общее(т) + _подставить(ЛОРДС_СТИЛЬ, т))(_лорды_токены_для_дизайна())
+            (lambda т: (_корень_темы(т, _тёмные_для(т))
+                        + _переменными(ОБЩЕЕ_1_1, т)
+                        + _переменными(ЛОРДС_СТИЛЬ, т)
+                        + ЛОРДС_СТИЛЬ_ТЕМЫ))(_лорды_токены_для_дизайна())
         ),
         "нав": _лорды_нав,
         "поиск": "Введите название",
@@ -3157,12 +3271,21 @@ def _адрес_постера(адрес: str | None) -> str | None:
 
 
 def заглушка_постера(запись: dict, класс_заглушки: str, класс_картинки: str,
-                     ширина: int = 300, высота: int = 450) -> str:
+                     ширина: int = 300, высота: int = 450, *,
+                     срочно: bool = False) -> str:
     """Постер с заглушкой ПОД ним, а не вместо него.
 
     Заглушка рисуется всегда и лежит слоем ниже изображения. Alt у значимого
     постера — название тайтла; декоративная заглушка без изображения не
     объявляет зрителю внутреннюю диагностику («постер не открылся»).
+
+    `срочно` снимает отложенную загрузку у тех карточек, которые заведомо
+    попадают в первый экран. Раньше `loading="lazy"` стоял у ВСЕХ постеров, и
+    первый экран ждал, пока браузер решит, что картинки понадобились: на
+    lords-02 это было видно как пустая сетка в первые доли секунды. Обратная
+    крайность не лучше: высокий приоритет у нижних блоков отбирает полосу у
+    того, что видно сразу, — поэтому срочность назначается поимённо, а не
+    целой странице.
     """
     название = (запись.get("title") or "").strip() or "Без названия"
     первая = html.escape(название[:1].upper())
@@ -3171,9 +3294,11 @@ def заглушка_постера(запись: dict, класс_заглуш�
                 f"<b>{первая}</b></span>")
     if not постер:
         return заглушка
+    режим = ('loading="eager" fetchpriority="high"' if срочно
+             else 'loading="lazy" fetchpriority="low" decoding="async"')
     картинка = (
         f'<img class="{класс_картинки}" src="{html.escape(постер)}" '
-        f'alt="{html.escape(название)}" loading="lazy" width="{ширина}" '
+        f'alt="{html.escape(название)}" {режим} width="{ширина}" '
         f'height="{высота}" data-poster>')
     return заглушка + картинка
 
@@ -3331,6 +3456,58 @@ def заглушка_постера(запись: dict, класс_заглуш�
     "var n=document.getElementById('hd-nav');var b=document.querySelector('[data-nav-toggle]');"
     "if(n&&n.classList.contains('is-open'))close(n,b);"
     "});"
+    "})();"
+)
+
+
+#: Переключатель светлой и тёмной темы.
+#:
+#: Выбор хранится в `localStorage` и переживает переход между страницами. Пока
+#: выбор не сделан, действует системная тема — и МЕНЯЕТСЯ НА ЛЕТУ: посетитель,
+#: у которого система переключается по расписанию, иначе остался бы до конца
+#: сессии в теме, которую больше не хочет.
+#:
+#: Раньше переключателя не было вовсе, и это записывалось как решение: светлая
+#: ветка задавала лишь часть переменных, и из неё выходил нечитаемый текст.
+#: Причина была в литеральной подстановке палитры, а не в самом переключателе;
+#: с переменными `:root` обе темы объявлены целиком, и читаемость каждой пары
+#: проверяется числом (`test_lords_theme.py`).
+СКРИПТ_ТЕМЫ = (
+    "(function(){"
+    "var K='lords-theme';"
+    "function отметить(v){"
+    "var b=document.querySelector('[data-theme-toggle]');if(!b)return;"
+    "b.setAttribute('aria-pressed',v==='dark'?'true':'false');"
+    "b.setAttribute('title',v==='dark'?'Включить светлую тему':'Включить тёмную тему');}"
+    "function система(){try{return window.matchMedia"
+    "&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}"
+    "catch(e){return 'light'}}"
+    "function сохранён(){try{var v=localStorage.getItem(K);"
+    "return v==='dark'||v==='light'?v:null}catch(e){return null}}"
+    "function применить(v,сохранять){"
+    "document.documentElement.setAttribute('data-theme',v);"
+    "if(сохранять){try{localStorage.setItem(K,v)}catch(e){}}"
+    "отметить(v);}"
+    "function текущая(){return document.documentElement.getAttribute('data-theme')"
+    "==='dark'?'dark':'light';}"
+    "var выбор=сохранён();"
+    "if(выбор)применить(выбор,false);else отметить(система());"
+    "document.addEventListener('click',function(e){"
+    "var b=e.target&&e.target.closest?e.target.closest('[data-theme-toggle]'):null;"
+    "if(!b)return;e.preventDefault();"
+    "var было=сохранён()||система();"
+    "применить(было==='dark'?'light':'dark',true);});"
+    # Системная тема меняется на лету — но только пока выбор не сделан вручную.
+    "try{var m=window.matchMedia('(prefers-color-scheme: dark)');"
+    "var ф=function(ev){if(!сохранён()){"
+    "document.documentElement.removeAttribute('data-theme');"
+    "отметить(ev.matches?'dark':'light');}};"
+    "if(m.addEventListener)m.addEventListener('change',ф);"
+    "else if(m.addListener)m.addListener(ф);}catch(e){}"
+    # Другая вкладка того же сайта: выбор общий, а не на страницу.
+    "window.addEventListener('storage',function(e){"
+    "if(e.key===K&&(e.newValue==='dark'||e.newValue==='light'))"
+    "применить(e.newValue,false);});"
     "})();"
 )
 
@@ -3964,8 +4141,10 @@ class ВидЛордс(Вид):
 {_открытый_граф(og or {})}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {_мета_версии()}
-<style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}
+<style>{self.се["стиль"]()}</style><script>{СКРИПТ_ТЕМЫ}
+{СКРИПТ_ПОСТЕРОВ}
 {СКРИПТ_ЛОРДС_ШАПКА}
+{СКРИПТ_ЛЕНТ}
 {СКРИПТ_КЛАССИФИКАТОР_ИЗОБРАЖЕНИЙ}</script></head>
 <body><div class="backdrop"></div>
 <a class="skip" href="#main">Перейти к содержимому</a>
@@ -3976,6 +4155,10 @@ class ВидЛордс(Вид):
 <label class="vh" for="q">Поиск по каталогу</label>
 <input id="q" name="q" placeholder="{html.escape(self.се["поиск"])}"{q_attr}>
 <button type="submit" aria-label="Найти"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></form>
+<button class="hd__theme" type="button" data-theme-toggle aria-pressed="false"
+ title="Включить тёмную тему"><span class="vh">Сменить оформление</span><span
+ class="t-light" aria-hidden="true">&#9790;</span><span class="t-dark"
+ aria-hidden="true">&#9728;</span></button>
 <button class="hd__menu" type="button" data-nav-toggle aria-controls="hd-nav"
  aria-expanded="false" aria-label="Меню разделов">&#9776;</button>
 <nav id="hd-nav" class="hd__nav" aria-label="Разделы">{нав}</nav>
@@ -4023,13 +4206,14 @@ class ВидЛордс(Вид):
             "</footer>")
 
     # --- составные части ---------------------------------------------
-    def карточка(self, запись: dict, *, показать_добавлено: bool = False) -> str:
+    def карточка(self, запись: dict, *, показать_добавлено: bool = False,
+                 срочно: bool = False) -> str:
         деталь = self.деталь(запись["slug"])
         тип = self._тип_карточки()
         if тип == "episode":
-            изо = заглушка_постера(запись, "c__none", "c__img", 112, 168)
+            изо = заглушка_постера(запись, "c__none", "c__img", 112, 168, срочно=срочно)
         else:
-            изо = заглушка_постера(запись, "c__none", "c__img", 300, 450)
+            изо = заглушка_постера(запись, "c__none", "c__img", 300, 450, срочно=срочно)
         значок = ""
         бейджи_мета = ""
         сезоны = деталь.get("seasons") or []
@@ -4082,8 +4266,14 @@ class ВидЛордс(Вид):
     def _класс_карточки(self) -> str:
         return f"c c--{self._тип_карточки()}"
 
+    #: Сколько постеров грузятся без отсрочки. Верхний ряд самой узкой сетки:
+    #: на телефоне видно две карточки, и это ровно то, что успевает попасть в
+    #: первый экран на любой ширине. Больше — значит отобрать полосу у того же
+    #: первого экрана.
+    СРОЧНЫХ_ПОСТЕРОВ = 2
+
     def сетка(self, набор, класс="grid", *, показать_добавлено: bool = False,
-              полный_ряд: bool = False) -> str:
+              полный_ряд: bool = False, срочных: int | None = None) -> str:
         """Сетка карточек. `полный_ряд` разрешает снять хвост неполного ряда.
 
         Разрешается только полкам главной: там число карточек ничем не
@@ -4092,11 +4282,19 @@ class ВидЛордс(Вид):
         спрятанная карточка — это потерянное содержимое, а не ровный край.
         """
         css = _лорды_класс_сетки(класс)
+        # Срочность достаётся ПЕРВОЙ сетке страницы, какой бы она ни была:
+        # полкой главной, списком каталога или выдачей поиска. Решать это
+        # списком страниц значило бы забыть страницу при следующей правке.
+        if срочных is None:
+            срочных = (0 if getattr(self, "_срочные_выданы", False)
+                       else self.СРОЧНЫХ_ПОСТЕРОВ)
+            self._срочные_выданы = True
         ряд = ' data-rows="full"' if полный_ряд else ""
         return (f'<div class="{css}" data-card-grid="{html.escape(self._тип_карточки())}"'
                 f'{ряд} data-cards="{len(набор)}">'
-                + "".join(self.карточка(з, показать_добавлено=показать_добавлено)
-                          for з in набор)
+                + "".join(self.карточка(з, показать_добавлено=показать_добавлено,
+                                        срочно=(i < срочных))
+                          for i, з in enumerate(набор))
                 + "</div>")
 
     def листалка(self, разд: str, выбрано: dict, стр: int, всего: int) -> str:
@@ -4361,7 +4559,8 @@ class ВидЛордс(Вид):
             имя = html.escape(карточка.title or "")
             if карточка.poster:
                 изо = (f'<img src="{html.escape(карточка.poster, quote=True)}" alt="" '
-                       f'loading="lazy" decoding="async" data-poster>')
+                       f'loading="lazy" fetchpriority="low" decoding="async" '
+                       f'width="200" height="300" data-poster>')
             else:
                 буква = html.escape((карточка.title or "?")[:1].upper())
                 изо = f'<span class="hub__ph" aria-hidden="true">{буква}</span>'
@@ -4686,7 +4885,10 @@ class ВидЛордс(Вид):
                       ("/catalog/?kind=Фильм", "Фильмы")
         звенья = [("/", self.имя), раздел_вида, ("", имя)]
 
-        изо = заглушка_постера(запись, "c__none", "tw__img", 360, 540)
+        # Постер произведения — главное изображение первого экрана этой
+        # страницы, и ждать отсрочки ему незачем.
+        изо = заглушка_постера(запись, "c__none", "tw__img", 360, 540, срочно=True)
+        self._срочные_выданы = True
 
         описание = деталь.get("description") or деталь.get("short_description") or ""
         сюжет = (f'<div class="plot"><p>{html.escape(описание)}</p></div>' if описание else
