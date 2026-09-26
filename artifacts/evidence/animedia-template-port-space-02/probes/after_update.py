@@ -12,8 +12,16 @@ V = Path(sys.argv[1]); БАЗА = os.environ.get("ANIMEDIA_PROBE_BASE", "http://
 # Произведение берётся из того, что выбрал шаг с голосом, а не из аргумента:
 # аргумент расходится с данными молча.
 выбор = Path(__file__).with_name("chosen.json")
-SLUG = (json.loads(выбор.read_text(encoding="utf-8"))["slug"]
-        if выбор.is_file() else sys.argv[2])
+if выбор.is_file():
+    SLUG = json.loads(выбор.read_text(encoding="utf-8"))["slug"]
+elif len(sys.argv) > 2:
+    SLUG = sys.argv[2]
+else:
+    # Шаг с голосом выбирает произведение по данным и записывает выбор рядом.
+    # Без него проверять «голос уцелел» не на чем, и молчать об этом нельзя:
+    # пустая проверка выглядит как пройденная.
+    raise SystemExit("нет chosen.json — сначала выполните community.py "
+                     "(или передайте slug вторым аргументом)")
 ок, плохо = [], []
 def п(имя, усл, подр=""):
     (ок if усл else плохо).append(f"{имя}{(' — ' + подр) if подр else ''}")

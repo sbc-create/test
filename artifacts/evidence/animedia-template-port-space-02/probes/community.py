@@ -5,7 +5,7 @@
 двойной отправки. Никаких прямых записей в хранилище — иначе проверка
 доказывала бы согласие теста с собой.
 """
-import http.cookiejar, json, re, sys, urllib.parse, urllib.request
+import http.cookiejar, json, os, re, sys, urllib.parse, urllib.request
 БАЗА = os.environ.get("ANIMEDIA_PROBE_BASE", "http://127.0.0.1:9310")
 куки = http.cookiejar.CookieJar()
 бр = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(куки))
