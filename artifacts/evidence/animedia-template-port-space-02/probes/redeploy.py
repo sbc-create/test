@@ -42,14 +42,16 @@ for slug, д in новый.get("details", {}).items():
 кат["revision"] = hashlib.sha256((прежняя + "+1").encode()).hexdigest()
 (ДАННЫЕ / f"{САЙТ}-catalog.json").write_text(json.dumps(кат), encoding="utf-8")
 print(f"доставка: поднято {поднято} тайтлов, ревизия {прежняя[:12]} → {кат['revision'][:12]}")
-нужно = hashlib.sha256((ДАННЫЕ / f"{САЙТ}-details.json").read_bytes()).hexdigest()
+# Ждём по `catalog_revision`: только оно берётся из ЗАГРУЖЕННОГО каталога.
+# `details_digest` в `/healthz` считается по файлу на диске в момент запроса и
+# совпадает сразу после записи — как признак перечитывания он бесполезен.
 перечитала = False
-край = time.time() + 60
+край = time.time() + 90
 while time.time() < край:
     time.sleep(2)
     try:
         with urllib.request.urlopen(БАЗА + "/healthz", timeout=10) as о:
-            if json.loads(о.read()).get("details_digest") == нужно:
+            if json.loads(о.read()).get("catalog_revision") == кат["revision"]:
                 перечитала = True
                 break
     except Exception:
