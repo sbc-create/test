@@ -157,13 +157,20 @@ def main() -> int:
         проверка(str(ожид) not in другие, f"publisher_id {ожид} не принадлежит другой ячейке")
         проверка(str(окр.get("SITE_ID") or конфиг.get("site_id") or сайт) == сайт,
                  "site_id в конфигурации репозитория совпадает с реестром")
-    robots = путь_репо / "static" / "robots.txt"
-    if not robots.is_file():
-        найдено = list(путь_репо.rglob("robots.txt"))
-        robots = найдено[0] if найдено else robots
-    if проверка(robots.is_file(), "robots.txt в репозитории найден"):
-        т = robots.read_text(encoding="utf-8")
+    # Закрытая индексация проверяется по РАНТАЙМУ, а не по наличию файла:
+    # robots.txt у этого шаблона не лежит на диске, его отдаёт обработчик.
+    # Первая версия проверки искала static/robots.txt и объявила «не готово»
+    # исправный репозиторий — искать надо было то, что действительно есть.
+    рантайм = next((п for п in (путь_репо / "src").glob("*frontend*.py")), None)
+    if проверка(рантайм is not None, "рантайм витрины найден в src/"):
+        т = рантайм.read_text(encoding="utf-8")
+        проверка('if путь == "/robots.txt"' in т, "рантайм отдаёт /robots.txt сам")
         проверка("Disallow: /" in т, "robots.txt закрывает обход целиком")
+        проверка('name="robots" content="noindex, nofollow"' in т,
+                 "страницы несут meta robots noindex, nofollow")
+    состояние = (я.get("indexing") or {}).get("desired_state")
+    проверка(состояние == "CLOSED",
+             f"индексация в реестре закрыта: desired_state={состояние!r}")
 
     # 7. DNS: домен и псевдонимы указывают туда же, куда работающая витрина
     образец = "zonafilm.space"
