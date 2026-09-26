@@ -5,9 +5,10 @@
 e7cd4829fadb, витрина перечитала его сама), релиз пересобран и витрина
 перезапущена на новом каталоге релиза. Здесь проверяется, что уцелело.
 """
-import json, re, sys, urllib.request
+import json
+import os, re, sys, urllib.request
 from pathlib import Path
-V = Path(sys.argv[1]); БАЗА = "http://127.0.0.1:9310"
+V = Path(sys.argv[1]); БАЗА = os.environ.get("ANIMEDIA_PROBE_BASE", "http://127.0.0.1:9310")
 # Произведение берётся из того, что выбрал шаг с голосом, а не из аргумента:
 # аргумент расходится с данными молча.
 выбор = Path(__file__).with_name("chosen.json")

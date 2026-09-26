@@ -10,7 +10,9 @@ from pathlib import Path
 V = Path(sys.argv[1])
 ДАННЫЕ = V / "data"
 РЕЛИЗ = sorted((V / "releases").iterdir())[-1]
-САЙТ = "animedia-verify"
+import os as _os
+_БАЗА = _os.environ.get("ANIMEDIA_PROBE_BASE", "http://127.0.0.1:9310")
+САЙТ = _os.environ.get("ANIMEDIA_PROBE_SITE", "animedia-verify")
 
 спец = importlib.util.spec_from_file_location("upd", РЕЛИЗ / "animedia-data-update.py")
 upd = importlib.util.module_from_spec(спец); sys.modules["upd"] = спец.name and upd
@@ -52,7 +54,7 @@ def дождаться_снимка(каталог_файл, метка: str, т
     край = time.time() + таймаут
     while time.time() < край:
         try:
-            with urllib.request.urlopen("http://127.0.0.1:9310/healthz", timeout=10) as о:
+            with urllib.request.urlopen(_БАЗА + "/healthz", timeout=10) as о:
                 if _json.loads(о.read()).get("catalog_revision") == метка:
                     return True
         except Exception:

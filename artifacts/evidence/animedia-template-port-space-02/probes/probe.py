@@ -4,8 +4,9 @@
 Смотрит на СОБРАННУЮ разметку настоящего рантайма и на настоящий снимок
 каталога (7446 записей, 100 мест топа), а не на строки в исходнике.
 """
-import json, re, sys, urllib.request
-БАЗА = "http://127.0.0.1:9310"
+import json
+import os, re, sys, urllib.request
+БАЗА = os.environ.get("ANIMEDIA_PROBE_BASE", "http://127.0.0.1:9310")
 ок, плохо = [], []
 
 def дай(путь):

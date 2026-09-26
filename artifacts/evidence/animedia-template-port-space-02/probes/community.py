@@ -6,7 +6,7 @@
 доказывала бы согласие теста с собой.
 """
 import http.cookiejar, json, re, sys, urllib.parse, urllib.request
-БАЗА = "http://127.0.0.1:9310"
+БАЗА = os.environ.get("ANIMEDIA_PROBE_BASE", "http://127.0.0.1:9310")
 куки = http.cookiejar.CookieJar()
 бр = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(куки))
 ок, плохо = [], []

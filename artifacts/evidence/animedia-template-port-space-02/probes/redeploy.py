@@ -15,7 +15,7 @@ from pathlib import Path
 
 V = Path(sys.argv[1]); ДАННЫЕ = V / "data"; САЙТ = "animedia-verify"
 ШАБЛОН = Path("/home/claude/wt-animedia-template-port-02")
-БАЗА = "http://127.0.0.1:9310"
+БАЗА = os.environ.get("ANIMEDIA_PROBE_BASE", "http://127.0.0.1:9310")
 пид_файл = V / "server.pid"
 
 def жив():
