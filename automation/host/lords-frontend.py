@@ -252,6 +252,15 @@ try:
 except ImportError:
     КОЛЛЕКЦИИ = None
 
+# Обвязка HTTP канонического модуля сообщества. Сам модуль (`community.py`)
+# приезжает в ячейку отдельным выпуском и закрепляется по версии; обвязка —
+# часть шаблона, потому что у Animedia она заперта внутри её артефакта, и без
+# выноса каждая витрина Lords воспроизводила бы её у себя заново.
+try:
+    import community_http as СООБЩЕСТВО  # noqa: E402
+except ImportError:
+    СООБЩЕСТВО = None
+
 # Разделы семейства Lords: нормализованная классификация вместо одного поля
 # `kind`. Отсутствие файла не роняет витрину — она возвращается к прежнему
 # отбору по `kind`, и это видно в /healthz полем `sections_index`.
@@ -270,6 +279,19 @@ _РАЗДЕЛЫ_КЭШ: dict[str, object] = {}
 #: фильтр каталога продолжали работать, отбирая при этом по разделу.
 _РАЗДЕЛ_ПО_ВИДУ: dict[str, str] = (
     {v: k for k, v in РАЗДЕЛЫ_МОД.ПРЕЖНИЙ_ВИД.items()} if РАЗДЕЛЫ_МОД else {})
+
+
+#: Идентификатор ячейки. Имена куки, соли токена и ключа модератора выводятся
+#: из него: забытая правка одного из четырёх имён при заведении следующего
+#: сайта означала бы общую куку на два домена, то есть один голос на две
+#: витрины.
+SITE_ID = os.environ.get("LORDS_SITE_ID", "").strip()
+ДОМЕН_ВИТРИНЫ = os.environ.get("LORDS_SITE_DOMAIN", "").strip()
+
+if СООБЩЕСТВО is not None and SITE_ID:
+    СООБЩЕСТВО.подключить(
+        sys.modules[__name__],
+        СООБЩЕСТВО.Настройка.для(SITE_ID, ДОМЕН_ВИТРИНЫ))
 
 
 #: Сколько карточек набирает полка главной.
@@ -1055,6 +1077,10 @@ def сезон_по_номеру(деталь: dict, номер: int) -> dict | 
     # виден только на двух профилях из трёх.
     "mute": "#5f6874", "onbar": "#949eab",
     "soft": "#EAF3E4", "greendark": "#173319", "accent2": "#3F7D26",
+    # Звёзды оценки: погашенная и зажжённая. Отдельные токены, потому что в
+    # тёмной теме «погашенная» обязана оставаться различимой на тёмном фоне,
+    # а в светлой — не сливаться с белой карточкой.
+    "staroff": "#c8cfd7", "star": "#e8a417",
 }
 
 # Cinema: forest/olive green + warm ivory; gold ratings. Green CTA preserved.
@@ -1100,6 +1126,7 @@ def сезон_по_номеру(деталь: dict, номер: int) -> dict | 
     "kp": "#ff8a3d", "imdb": "#f5c518", "bar": "#0f1216",
     "mute": "#9aa5b1", "onbar": "#9aa5b1",
     "soft": "#1e2a1c", "greendark": "#0d1a0f", "accent2": "#7FC95C",
+    "staroff": "#3b444e", "star": "#f5c518",
 }
 
 
@@ -1263,6 +1290,158 @@ clip:rect(0 0 0 0);white-space:nowrap;border:0}
 def _общее(токены: dict) -> str:
     return ОБЩЕЕ_1_1.replace("@ACC@", токены["acc"])
 
+
+#: Раздел сообщества: оценка звёздами и комментарии.
+#:
+#: Перенесено из lordserial33.biz как есть: там этот интерфейс собран,
+#: проверен браузером и принят владельцем. Токены оставлены в форме
+#: `@X@` — их подставляет `_переменными` вместе со всей таблицей, то есть
+#: раздел следует активной теме тем же правилом, что и остальная витрина,
+#: а не второй копией палитры.
+ЛОРДС_СТИЛЬ_СООБЩЕСТВА = """
+.cm{background:@CARD@;border:1px solid @LINE@;border-radius:3px;padding:16px 18px;margin:18px 0}
+.cm h2{margin:0 0 4px;font-size:17px;color:@INK@}
+.cm__sub{margin:0 0 14px;font-size:12.5px;color:@DIM@}
+.cm__cnt{font-size:12px;color:@DIM@}
+.cm__btn{background:@ACC@;color:#fff;border:0;border-radius:3px;padding:9px 18px;
+font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.cm__btn:hover{background:@ACCDK@}
+.cm__btn--q{background:transparent;color:@ACCDK@;border:1px solid @LINE@;
+padding:7px 12px;font-weight:600}
+.cm__msg{margin:0 0 12px;padding:9px 12px;border-radius:3px;font-size:13px}
+.cm__msg--ok{background:@SOFT@;color:@GREENDARK@}
+.cm__msg--err{background:#f6dada;color:#8a1f1f}
+.cm--off{background:@SOFT@}
+
+/* Оценка звёздами.
+   Шкала 1–10 сохранена; звёзды — радиокнопки, поэтому выбор работает мышью,
+   касанием и клавиатурой без скрипта, а сам `<input>` ничего не отправляет:
+   голос уходит только кнопкой. */
+.rt{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;margin:0 0 16px;
+padding:13px 14px;background:@SOFT@;border-radius:3px}
+.rt__defs{position:absolute;width:0;height:0;overflow:hidden}
+.rt__avg{display:flex;align-items:baseline;gap:6px;margin:0;white-space:nowrap}
+.rt__avgv{font-size:26px;font-weight:800;color:@GREENDARK@;line-height:1}
+.rt__avgs{font-size:12px;font-weight:600;color:@MUTE@}
+.rt__avgn{font-size:12px;color:@DIM@}
+.rt__avg--none{font-size:13px;color:@DIM@}
+.rt__f{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:0;
+min-width:0}
+.rt__set{border:0;margin:0;padding:0;min-width:0}
+.rt__lg{padding:0;font-size:12px;color:@DIM@}
+.rt__out{display:block;margin-top:4px;font-size:12.5px;font-weight:700;color:@INK@}
+.rt__done{margin:0;font-size:14px;color:@INK@}
+.rt__done b{font-size:17px;color:@GREENDARK@}
+.rt__hint{flex-basis:100%;margin:0;font-size:12px;color:@DIM@}
+
+/* Десять звёзд на телефоне не должны ни обрезаться, ни переноситься: они
+   сжимаются по ширине экрана. 22px — нижняя граница, при которой попасть
+   пальцем ещё можно; поле нажатия добавляют отступы `.rt__s`. */
+.rt__stars{display:flex;gap:2px;margin:3px 0 0;max-width:100%}
+.rt__s{display:inline-flex;align-items:center;justify-content:center;padding:4px 1px;
+cursor:pointer;line-height:0;border-radius:3px;flex:0 1 auto}
+.rt__stars--static .rt__s{cursor:default}
+.rt__i{width:clamp(22px,7.2vw,28px);height:clamp(22px,7.2vw,28px);display:block;
+color:var(--t-staroff);transition:color .08s linear}
+.rt__r{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.rt__r:focus-visible~.rt__i{outline:2px solid @ACC@;outline-offset:2px;border-radius:2px}
+
+/* Выбранная звезда и все, что левее. Правило с `:has()` отдельное: в списке
+   селекторов неизвестный селектор губит правило целиком, и запасной путь
+   ниже перестал бы работать там, где `:has()` не поддержан. */
+.rt__s:has(input:checked) .rt__i,
+.rt__s:has(~ .rt__s input:checked) .rt__i{color:var(--t-star)}
+.rt__stars[data-value="1"] .rt__s:nth-child(-n+1) .rt__i,
+.rt__stars[data-value="2"] .rt__s:nth-child(-n+2) .rt__i,
+.rt__stars[data-value="3"] .rt__s:nth-child(-n+3) .rt__i,
+.rt__stars[data-value="4"] .rt__s:nth-child(-n+4) .rt__i,
+.rt__stars[data-value="5"] .rt__s:nth-child(-n+5) .rt__i,
+.rt__stars[data-value="6"] .rt__s:nth-child(-n+6) .rt__i,
+.rt__stars[data-value="7"] .rt__s:nth-child(-n+7) .rt__i,
+.rt__stars[data-value="8"] .rt__s:nth-child(-n+8) .rt__i,
+.rt__stars[data-value="9"] .rt__s:nth-child(-n+9) .rt__i,
+.rt__stars[data-value="10"] .rt__s .rt__i{color:var(--t-star)}
+
+/* Наведение: показывается то, что будет выбрано, а не то, что выбрано. */
+.rt__stars[data-hover] :where(.rt__s) .rt__i{color:var(--t-staroff)}
+.rt__stars[data-hover="1"] .rt__s:nth-child(-n+1) .rt__i,
+.rt__stars[data-hover="2"] .rt__s:nth-child(-n+2) .rt__i,
+.rt__stars[data-hover="3"] .rt__s:nth-child(-n+3) .rt__i,
+.rt__stars[data-hover="4"] .rt__s:nth-child(-n+4) .rt__i,
+.rt__stars[data-hover="5"] .rt__s:nth-child(-n+5) .rt__i,
+.rt__stars[data-hover="6"] .rt__s:nth-child(-n+6) .rt__i,
+.rt__stars[data-hover="7"] .rt__s:nth-child(-n+7) .rt__i,
+.rt__stars[data-hover="8"] .rt__s:nth-child(-n+8) .rt__i,
+.rt__stars[data-hover="9"] .rt__s:nth-child(-n+9) .rt__i,
+.rt__stars[data-hover="10"] .rt__s .rt__i{color:var(--t-star)}
+
+/* Комментарии: отдельный подблок в той же сетке. */
+.cmt{border-top:1px solid @LINE@;padding-top:14px;min-width:0}
+.cmt__h{margin:0 0 10px;font-size:15px;color:@INK@;display:flex;align-items:center;gap:7px}
+.cmt__n{font-size:12px;font-weight:700;color:@DIM@;background:@SOFT@;
+border-radius:10px;padding:1px 8px}
+.cmt__f{margin:0 0 16px;min-width:0}
+.cmt__f--reply{margin:8px 0 0}
+.cmt__rep{margin-top:7px}
+.cmt__rep>summary{display:inline-block;font-size:12px;font-weight:700;
+color:@ACCDK@;cursor:pointer;list-style:none;padding:3px 0}
+.cmt__rep>summary::-webkit-details-marker{display:none}
+.cmt__rep>summary:focus-visible{outline:2px solid @ACC@;outline-offset:2px}
+.cmt__lb{display:block;margin:0 0 5px;font-size:12px;font-weight:700;color:@DIM@}
+.cmt__lb2{display:block;margin:0 0 5px;font-size:12px;color:@DIM@}
+.cmt__ta{display:block;width:100%;box-sizing:border-box;min-height:128px;
+resize:vertical;border:1px solid @LINE@;border-radius:3px;padding:10px 12px;
+font:inherit;font-size:13.5px;line-height:1.5;background:@CARD@;color:@INK@}
+.cmt__ta--reply{min-height:74px}
+.cmt__ta:focus,.cmt__in:focus{outline:2px solid @ACC@;outline-offset:1px;
+border-color:@ACC@}
+.cmt__row{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px;margin-top:10px}
+.cmt__field{display:block;flex:1 1 220px;min-width:0}
+.cmt__in{display:block;width:100%;box-sizing:border-box;border:1px solid @LINE@;
+border-radius:3px;padding:9px 11px;font:inherit;font-size:13px;
+background:@CARD@;color:@INK@}
+.cmt__go{flex:0 0 auto;padding:10px 18px}
+.cmt__note{margin:9px 0 0;font-size:12px;color:@DIM@}
+.cmt__empty{margin:0;font-size:13px;color:@DIM@}
+.cmt__mod{margin-top:16px;padding-top:12px;border-top:1px dashed @LINE@}
+.cmt__modh{margin:0 0 8px;font-size:13px;color:@DIM@}
+
+.cm__l{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.cm__i{border-top:1px solid @LINE@;padding:11px 0 0;margin-top:11px;min-width:0}
+.cm__l>.cm__i:first-child{border-top:0;margin-top:0;padding-top:0}
+.cm__i--reply{margin-left:18px;border-top:0;border-left:2px solid @LINE@;
+padding:0 0 0 12px;margin-top:10px}
+.cm__i--pending{border-left:2px solid @IMDB@;padding-left:10px;margin-left:0}
+.cm__hd{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;font-size:12px;
+color:@MUTE@}
+.cm__who{font-weight:700;color:@INK@;font-size:13px;overflow-wrap:anywhere}
+.cm__dt{font-size:11.5px;color:@MUTE@;white-space:nowrap}
+.cm__st{font-size:11px;font-weight:700;border-radius:2px;padding:1px 6px}
+.cm__st--pending{background:#fdf0d5;color:#7a5200}
+.cm__st--rejected{background:#f6dada;color:#8a1f1f}
+.cm__tx{margin:5px 0 0;font-size:13.5px;line-height:1.55;color:@INK@;
+white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word}
+.cm__row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.cm__row--act{margin-top:7px}
+.cm__act{display:inline}
+.cm__note{margin:10px 0 0;font-size:12.5px;color:@DIM@}
+
+@media (max-width:520px){
+  /* На телефоне поле имени и кнопка идут друг за другом, а не в строку:
+     иначе кнопка ужимается до нечитаемой или наезжает на поле.
+     `flex-basis` обязан обнулиться вместе со сменой направления: в колонке
+     основной размер — это ВЫСОТА, и 220px превращались в пустую полосу между
+     полем и кнопкой. Видно было только на телефоне. */
+  .cmt__row{flex-direction:column;align-items:stretch}
+  .cmt__field{flex:0 0 auto}
+  .cmt__go{width:100%}
+  .rt{gap:10px 12px}
+  .rt__f{gap:8px 10px}
+  .rt__go{width:100%}
+}
+.cm--off{background:@SOFT@}
+"""
 
 #: Стили, которые обязаны идти ПОСЛЕ основной таблицы: переключатель темы и
 #: приведение нативных элементов к активной палитре.
@@ -2520,6 +2699,7 @@ def _подставить(шаблон: str, токены: dict) -> str:
             (lambda т: (_корень_темы(т, _тёмные_для(т))
                         + _переменными(ОБЩЕЕ_1_1, т)
                         + _переменными(ЛОРДС_СТИЛЬ, т)
+                        + _переменными(ЛОРДС_СТИЛЬ_СООБЩЕСТВА, т)
                         + ЛОРДС_СТИЛЬ_ТЕМЫ))(_лорды_токены_для_дизайна())
         ),
         "нав": _лорды_нав,
@@ -3512,6 +3692,11 @@ def заглушка_постера(запись: dict, класс_заглуш�
 )
 
 
+def _скрипт_звёзд() -> str:
+    """Скрипт звёзд подключается только там, где обвязка вообще есть."""
+    return СООБЩЕСТВО.СКРИПТ_ЗВЁЗД if СООБЩЕСТВО is not None else ""
+
+
 def _склеить(части) -> str:
     return "".join(ч for ч in части if ч)
 
@@ -4142,6 +4327,7 @@ class ВидЛордс(Вид):
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {_мета_версии()}
 <style>{self.се["стиль"]()}</style><script>{СКРИПТ_ТЕМЫ}
+{_скрипт_звёзд()}
 {СКРИПТ_ПОСТЕРОВ}
 {СКРИПТ_ЛОРДС_ШАПКА}
 {СКРИПТ_ЛЕНТ}
@@ -4926,9 +5112,15 @@ class ВидЛордс(Вид):
         заявка = (f'<p class="claim">Смотреть {html.escape(имя)} онлайн'
                   f'{" — все серии" if сериал else ""}</p>')
 
+        # Оценка зрителей и комментарии — каноническим модулем. Раздел стоит
+        # ПОСЛЕ серий и ПЕРЕД похожим: он относится к этому произведению, а не
+        # к подборке рядом.
+        сообщество = (СООБЩЕСТВО.блок(self, запись, деталь)
+                      if СООБЩЕСТВО is not None and СООБЩЕСТВО.подключён() else "")
+
         тело = (f'<div class="tw"><div class="tw__ps">{изо}</div><div>'
                 f"<h1>{html.escape(имя)}</h1>{сюжет}{таблица}{плитки}</div></div>"
-                f"{заявка}{плеер}{блок_серий}{блок_похожих}")
+                f"{заявка}{плеер}{блок_серий}{сообщество}{блок_похожих}")
         разметка = self.schema_тайтла(запись, деталь, путь)
         краткое = (описание[:180] if описание else
                    f"{имя}: {запись.get('kind') or ''} {запись.get('year') or ''}".strip())
@@ -6754,9 +6946,39 @@ class Обработчик(BaseHTTPRequestHandler):
         self.send_header("X-Site-Factory-Build-Id", СБОРКА)
         self.send_header("X-Site-Factory-Artifact-Sha256", МАНИФЕСТ["artifact_sha256"])
         self.send_header("Cache-Control", "no-store")
+        # Кука посетителя выдаётся на ЛЮБОМ ответе, а не только на
+        # перенаправлении: иначе пришедший сразу на страницу произведения
+        # получал форму с пустым токеном, и первая отправка отбивалась как
+        # подделка.
+        for кука in self._куки_ответа():
+            self.send_header("Set-Cookie", кука)
         self.end_headers()
         if self.command != "HEAD":
             self.wfile.write(тело)
+
+    def _куки_ответа(self) -> list:
+        если = []
+        if СООБЩЕСТВО is not None:
+            основная = СООБЩЕСТВО.заголовок_куки(self)
+            if основная:
+                если.append(основная)
+        если.extend(getattr(self, "_доп_куки", None) or [])
+        return если
+
+    def _перенаправить_сообщества(self, цель: str):
+        """Ответ формы сообщества — 303 на ту же страницу.
+
+        Именно перезагрузка, а не отправка «на месте»: обновление страницы
+        после POST иначе поставило бы второй голос. Выдавать это за отправку
+        без перезагрузки нельзя, и в отчётах так и записано.
+        """
+        self.send_response(303)
+        self.send_header("Location", цель)
+        self.send_header("Content-Length", "0")
+        self.send_header("Cache-Control", "no-store")
+        for кука in self._куки_ответа():
+            self.send_header("Set-Cookie", кука)
+        self.end_headers()
 
     def _отдать_список(self, в, разд: str, зпр: dict, путь_404: str):
         """Render a catalog-like list; invalid ``page`` → real HTTP 404."""
@@ -6768,11 +6990,34 @@ class Обработчик(BaseHTTPRequestHandler):
     def do_HEAD(self):
         self.do_GET()
 
+    def do_POST(self):
+        """Формы сообщества. Других POST у витрины нет.
+
+        Тело читается по `Content-Length` и ограничено: неограниченное чтение
+        из сети — это способ занять процесс витрины одним запросом.
+        """
+        разбор = urlparse(self.path)
+        путь = unquote(разбор.path)
+        if СООБЩЕСТВО is None or путь not in СООБЩЕСТВО.МАРШРУТЫ:
+            return self._отдать(b"", "text/plain; charset=utf-8", 404)
+        СООБЩЕСТВО.подготовить_посетителя(self)
+        try:
+            длина = int(self.headers.get("Content-Length") or 0)
+        except ValueError:
+            длина = 0
+        if длина < 0 or длина > 64 * 1024:
+            return self._отдать(b"", "text/plain; charset=utf-8", 413)
+        сырое = self.rfile.read(длина).decode("utf-8", "replace") if длина else ""
+        поля = {к: з[0] for к, з in parse_qs(сырое, keep_blank_values=True).items()}
+        return СООБЩЕСТВО.обработать_post(self, путь, поля)
+
     def do_GET(self):
         д = self.данные
         разбор = urlparse(self.path)
         путь = unquote(разбор.path)
         зпр = parse_qs(разбор.query)
+        if СООБЩЕСТВО is not None:
+            СООБЩЕСТВО.подготовить_посетителя(self)
 
         if путь == "/__template_version":
             # Ядро, семейство, профиль и версия называются по отдельности:
@@ -7030,6 +7275,11 @@ class Обработчик(BaseHTTPRequestHandler):
         # отвечает на том имени, по которому к ней пришли, и подставлять сюда
         # другое значило бы объявлять канонической чужую страницу.
         экземпляр.хост = (self.headers.get("Host") or "").split(":")[0]
+        # Раздел сообщества читает куку посетителя и параметры ответа формы:
+        # они есть только у обработчика запроса, и передавать их по цепочке
+        # вызовов через шесть уровней разметки было бы хуже.
+        экземпляр.обработчик = self
+        экземпляр.запрос = parse_qs(urlparse(self.path).query)
         return экземпляр
 
     def _переход(self, цель: str):
