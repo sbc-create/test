@@ -354,13 +354,35 @@ def _засеять_хранилище(site_id: str, *, dry_run: bool) -> dict[s
     # сборке lords-01 — с каталогом и подробностями главная отдаёт 48 карточек
     # и 8 ссылок на серии, с одним каталогом 12 карточек и НОЛЬ ссылок на серии.
     # Для посетителя это пропавшие серии, а не «частичные данные».
-    нехватка = [и for и in (ш.format(site=site_id) for ш in privileged.СНИМОК)
+    # Набор обязательных файлов берётся из контракта САЙТА, а не из общей
+    # таблицы. У семейства Yummy подробностей нет в природе, и общий набор
+    # отказал бы выпуску на отсутствии файла, которого никто не производит.
+    # Путь репозитория — через реестр: он единственный знает, где лежит проект
+    # сайта, и `repo_path` уже разрешает его относительно корня установки.
+    try:
+        репозиторий = registry.resolve(site_id).repo_path
+    except (registry.RegistryError, AttributeError):
+        репозиторий = None
+    контракт = privileged.контракт_данных(
+        site_id, площадка=п, репозиторий=репозиторий)
+    нехватка = [и for и in (ш.format(site=site_id) for ш in контракт["delivered"])
                 if not (п.data / и).is_file()]
+
+    # Пользовательское засевается ОТДЕЛЬНО и независимо от снимка: у витрины
+    # может быть наполненный каталог и при этом ни разу не созданная база
+    # оценок. Засев идёт один раз и не повторяется — иначе он затирал бы
+    # принятые оценки.
+    своё = privileged.засеять_пользовательское(
+        site_id, Path(delivery.ОБЩИЙ), dry_run=dry_run, площадка=п,
+        репозиторий=репозиторий)
+
     if not нехватка:
-        return {"seeded": False, "reason": "хранилище уже наполнено"}
+        return {"seeded": False, "reason": "хранилище уже наполнено",
+                "contract": контракт["source"], "user_writable": своё}
     снимок = privileged.stage_snapshot(site_id, Path(delivery.ОБЩИЙ), dry_run=dry_run)
     повышение = privileged.promote_snapshot(site_id, dry_run=dry_run)
-    return {"seeded": True, "missing": нехватка,
+    return {"seeded": True, "missing": нехватка, "contract": контракт["source"],
+            "user_writable": своё,
             "stage_snapshot": снимок, "promote_snapshot": повышение}
 
 

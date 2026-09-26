@@ -416,3 +416,146 @@ def test_происхождение_без_манифеста_шаблона_н�
     запись = json.loads((выпуск / итог["file"]).read_text(encoding="utf-8"))
     assert запись["live_build_id"] == ""
     assert запись["entrypoint"] == ""
+
+
+def _площадка_для_контракта(tmp_path, account="nobody"):
+    корень = tmp_path / "srv"
+    (корень / "data").mkdir(parents=True)
+    (корень / "app").mkdir(parents=True)
+    return privileged.Площадка(
+        site_id="yummy-site", account=account, root=корень,
+        app=корень / "app", data=корень / "data",
+        unit="u.service", previous_unit=None, port=9132)
+
+
+def test_контракт_данных_объявляется_сайтом(tmp_path):
+    """Набор файлов принадлежит сайту, а не общей таблице фабрики.
+
+    У семейства Yummy нет файла подробностей в природе. Общий набор
+    (`{site}-catalog.json` + `{site}-details.json`) отказал бы выпуску на
+    отсутствии файла, которого никто не производит, — то есть требование
+    полноты снимка сработало бы против витрины, у которой снимок полон.
+    """
+    import json
+
+    репо = tmp_path / "repo" / "config"
+    репо.mkdir(parents=True)
+    (репо / "site.json").write_text(json.dumps({
+        "site_id": "yummy-site",
+        "data_contract": {"delivered": ["{site}-catalog.json"],
+                          "user_writable": ["site-data", "yummy-readmodel.sqlite3"]},
+    }), encoding="utf-8")
+
+    к = privileged.контракт_данных("yummy-site", репозиторий=репо.parent)
+    assert к["delivered"] == ("{site}-catalog.json",)
+    assert "yummy-readmodel.sqlite3" in к["user_writable"]
+
+    # Без объявления действует прежний общий набор: ни одна из существующих
+    # витрин не должна изменить поведение от появления этой возможности.
+    по_умолчанию = privileged.контракт_данных("zona-01")
+    assert по_умолчанию["delivered"] == privileged.СНИМОК
+    assert по_умолчанию["user_writable"] == (privileged.ПОЛЬЗОВАТЕЛЬСКИЕ,)
+
+
+def test_установленный_выпуск_важнее_репозитория(tmp_path):
+    """Доставка следует контракту РАБОТАЮЩЕГО кода, а не будущего.
+
+    Иначе правка контракта в репозитории меняла бы доставку до того, как этот
+    код выложен, — то есть данные приезжали бы по описанию, которого на сайте
+    ещё нет.
+    """
+    import json
+
+    п = _площадка_для_контракта(tmp_path)
+    выпуск = tmp_path / "srv" / "releases" / "aaaaaaaaaaaa"
+    (выпуск / "config").mkdir(parents=True)
+    (выпуск / "config" / "site.json").write_text(json.dumps({
+        "data_contract": {"delivered": ["живой-{site}.json"], "user_writable": ["site-data"]},
+    }), encoding="utf-8")
+    п.current.symlink_to(выпуск)
+
+    репо = tmp_path / "repo" / "config"
+    репо.mkdir(parents=True)
+    (репо / "site.json").write_text(json.dumps({
+        "data_contract": {"delivered": ["будущий-{site}.json"], "user_writable": ["site-data"]},
+    }), encoding="utf-8")
+
+    к = privileged.контракт_данных("yummy-site", площадка=п, репозиторий=репо.parent)
+    assert к["delivered"] == ("живой-{site}.json",), к
+
+
+def test_пользовательское_засевается_один_раз(tmp_path):
+    """Повторный засев затёр бы принятые оценки.
+
+    База оценок Yummy — не снимок: слой витрины в неё пишет. Значит второй
+    засев означает потерю того, что посетители успели поставить.
+    """
+    import json
+    import sqlite3
+
+    п = _площадка_для_контракта(tmp_path)
+    (п.app / "config").mkdir(parents=True, exist_ok=True)
+    (п.app / "config" / "site.json").write_text(json.dumps({
+        "data_contract": {"delivered": ["{site}-catalog.json"],
+                          "user_writable": ["yummy-readmodel.sqlite3"]},
+    }), encoding="utf-8")
+
+    источник = tmp_path / "front"
+    источник.mkdir()
+    бд = источник / "yummy-readmodel.sqlite3"
+    соед = sqlite3.connect(str(бд))
+    соед.execute("create table user_rating(user_id text, value int)")
+    соед.execute("insert into user_rating values ('u1', 7)")
+    соед.commit()
+    соед.close()
+
+    итог = privileged.засеять_пользовательское(
+        "yummy-site", источник, dry_run=True, площадка=п)
+    assert итог["entries"][0]["would_seed"].endswith("yummy-readmodel.sqlite3")
+    assert not (п.data / "yummy-readmodel.sqlite3").exists(), "сухой прогон записал файл"
+
+    # Настоящий засев требует root; поведение «уже на месте» проверяется без него.
+    (п.data / "yummy-readmodel.sqlite3").write_bytes("уже принятые оценки".encode("utf-8"))
+    повтор = privileged.засеять_пользовательское(
+        "yummy-site", источник, dry_run=False, площадка=п)
+    assert повтор["entries"][0]["skipped"] == "уже на месте"
+    assert (п.data / "yummy-readmodel.sqlite3").read_bytes() == "уже принятые оценки".encode("utf-8"), (
+        "повторный засев затёр пользовательские данные")
+
+
+def test_база_оценок_подключается_ссылкой_а_не_копией(tmp_path, monkeypatch):
+    """Копия означала бы потерю оценок, принятых во время прогрева.
+
+    `site-data` не копируется именно по этой причине; база оценок Yummy — тот
+    же случай, только это файл, а не каталог. Проверка сторожит, что различие
+    «файл или каталог» на решение не влияет.
+    """
+    import json
+
+    п = _площадка_для_контракта(tmp_path)
+    (п.app / "config").mkdir(parents=True, exist_ok=True)
+    (п.app / "config" / "site.json").write_text(json.dumps({
+        "data_contract": {"delivered": ["{site}-catalog.json"],
+                          "user_writable": ["site-data", "yummy-readmodel.sqlite3"]},
+    }), encoding="utf-8")
+    (п.data / "yummy-site-catalog.json").write_text('{"items": []}', encoding="utf-8")
+    (п.data / "yummy-readmodel.sqlite3").write_bytes("оценки".encode("utf-8"))
+    (п.data / "site-data").mkdir()
+
+    источник = tmp_path / "front"
+    источник.mkdir()
+    (источник / "yummy-site-catalog.json").write_text('{"items": [1]}', encoding="utf-8")
+
+    monkeypatch.setattr(privileged.Площадка, "из_реестра",
+                        staticmethod(lambda *a, **k: п))
+    monkeypatch.setattr(privileged, "_нужен_root", lambda: None)
+    monkeypatch.setattr(privileged.shutil, "chown", lambda *a, **k: None)
+
+    итог = privileged.stage_snapshot("yummy-site", источник, dry_run=False)
+    assert итог["unchanged"] is False, итог
+    кандидат = п.data_candidate
+    assert (кандидат / "yummy-readmodel.sqlite3").is_symlink(), (
+        "база оценок скопирована, а не подключена ссылкой")
+    assert (кандидат / "site-data").is_symlink()
+    assert not (кандидат / "yummy-site-catalog.json").is_symlink(), (
+        "снимок обязан быть копией: кандидат не должен править живые данные")

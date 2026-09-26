@@ -26,6 +26,7 @@ import contextlib
 import json
 import os
 import pwd
+import json as _json
 import shutil
 import socket
 import subprocess
@@ -861,7 +862,122 @@ def switch_route(site_id: str, порт: int, *, dry_run: bool = True,
 ПОЛЬЗОВАТЕЛЬСКИЕ = "site-data"
 
 
-def снимок_совпадает(источник: Path, цель: Path, site_id: str) -> bool:
+def засеять_пользовательское(site_id: str, источник: Path, *,
+                             dry_run: bool = True,
+                             площадка: "Площадка | None" = None,
+                             репозиторий: Path | None = None) -> dict[str, Any]:
+    """Положить в хранилище ячейки то, что дальше принадлежит посетителям.
+
+    Делается РОВНО ОДИН РАЗ, при первом выпуске: дальше файл живёт своей
+    жизнью, и доставка каталога его не трогает (она подключает его ссылкой).
+    Повторный засев затёр бы принятые оценки.
+
+    Базу SQLite нельзя копировать как файл: рядом могут лежать `-wal` и
+    `-shm`, и побайтовая копия под запись отдаёт либо устаревшее состояние,
+    либо испорченное. Поэтому используется штатное резервное копирование
+    SQLite — `Connection.backup()`, которое отдаёт согласованный снимок и на
+    открытой под запись базе.
+
+    Владелец меняется на учётную запись сайта. Это не косметика: сейчас
+    `/srv/lords/.frontend/yummy-readmodel.sqlite3` принадлежит root в каталоге
+    claude, а служба работает под `lords` — то есть путь записи оценок мёртв,
+    и в таблице `user_rating` ноль строк. После засева он впервые становится
+    рабочим, и это изменение поведения, а не побочный эффект: записано здесь и
+    названо в отчёте.
+    """
+    п = площадка or Площадка.из_реестра(site_id)
+    контракт = контракт_данных(site_id, площадка=п, репозиторий=репозиторий)
+    итоги: list[dict[str, Any]] = []
+    for шаблон in контракт["user_writable"]:
+        имя = шаблон.format(site=site_id)
+        цель = п.data / имя
+        откуда = Path(источник) / имя
+        если = ("уже на месте" if цель.exists() or цель.is_symlink()
+                else "в источнике нет" if not откуда.exists() else None)
+        if если:
+            итоги.append({"name": имя, "skipped": если})
+            continue
+        if dry_run:
+            итоги.append({"name": имя, "would_seed": str(откуда)})
+            continue
+        _нужен_root()
+        if откуда.is_dir():
+            shutil.copytree(откуда, цель)
+        elif имя.endswith((".sqlite3", ".sqlite", ".db")):
+            import sqlite3
+            источник_бд = sqlite3.connect(f"file:{откуда}?mode=ro", uri=True)
+            цель_бд = sqlite3.connect(str(цель))
+            try:
+                источник_бд.backup(цель_бд)
+            finally:
+                цель_бд.close()
+                источник_бд.close()
+        else:
+            shutil.copy2(откуда, цель)
+        for путь in ([цель, *цель.rglob("*")] if цель.is_dir() else [цель]):
+            shutil.chown(путь, п.account, п.account)
+        итоги.append({"name": имя, "seeded": True, "from": str(откуда),
+                      "method": "sqlite backup" if имя.endswith(
+                          (".sqlite3", ".sqlite", ".db")) else "copy",
+                      "owner": п.account})
+    return {"operation": "seed_user_writable", "site_id": site_id,
+            "dry_run": dry_run, "contract": контракт["source"], "entries": итоги}
+
+
+def контракт_данных(site_id: str, *, площадка: "Площадка | None" = None,
+                    репозиторий: Path | None = None) -> dict[str, tuple[str, ...]]:
+    """Что для этого сайта доставляется, а что принадлежит посетителям.
+
+    Набор файлов был ОДИН на всю фабрику: каталог плюс подробности
+    обязательно, `site-data` — пользовательское. Для семейства Yummy он не
+    подходит ни одной из трёх частей:
+
+      * подробностей у него нет в природе, и требование обязательного
+        `{site}-details.json` отказало бы выпуску на отсутствии файла, которого
+        никто не производит;
+      * витрина читает `yummy-readmodel.sqlite3`, и это не снимок: в нём
+        таблица `user_rating`, куда сам слой витрины ПИШЕТ
+        (`yummy_readmodel.py`, INSERT ... ON CONFLICT DO UPDATE);
+      * значит копировать его при каждой доставке нельзя ровно по той причине,
+        по которой не копируется `site-data`: оценки, принятые во время
+        прогрева кандидата, остались бы в хранилище, которое потом выбросят.
+
+    Поэтому контракт объявляет сам сайт — в `config/site.json`, ключом
+    `data_contract` с полями `delivered` и `user_writable`. Источник истины
+    здесь тот же, что у всей фабрики: файлы конкретного сайта, а не таблица в
+    общем коде, которую пришлось бы править из-за каждого нового семейства.
+
+    Читается сначала из УСТАНОВЛЕННОГО выпуска (то, что исполняется), затем из
+    репозитория (первый выпуск, когда установленного ещё нет), и лишь потом
+    берётся прежний общий набор. Порядок именно такой: доставка обязана
+    следовать контракту работающего кода, а не того, который только собираются
+    выложить.
+    """
+    источники: list[Path] = []
+    if площадка is not None:
+        источники += [площадка.current / "config" / "site.json",
+                      площадка.app / "config" / "site.json"]
+    if репозиторий is not None:
+        источники.append(Path(репозиторий) / "config" / "site.json")
+    for путь in источники:
+        try:
+            объявлено = _json.loads(путь.read_text(encoding="utf-8")).get("data_contract")
+        except (OSError, ValueError):
+            continue
+        if not isinstance(объявлено, dict):
+            continue
+        доставляемые = tuple(объявлено.get("delivered") or ())
+        пользовательские = tuple(объявлено.get("user_writable") or ())
+        if доставляемые:
+            return {"delivered": доставляемые,
+                    "user_writable": пользовательские or (ПОЛЬЗОВАТЕЛЬСКИЕ,),
+                    "source": str(путь)}
+    return {"delivered": СНИМОК, "user_writable": (ПОЛЬЗОВАТЕЛЬСКИЕ,),
+            "source": "умолчание фабрики"}
+
+
+def снимок_совпадает(источник: Path, цель: Path, site_id: str,
+                     доставляемые: tuple[str, ...] | None = None) -> bool:
     """Тот же снимок уже стоит. Повтор не должен ничего менять.
 
     Сравниваются и ДОПОЛНЕНИЯ, а не только пара «каталог + подробности».
@@ -876,7 +992,7 @@ def снимок_совпадает(источник: Path, цель: Path, site
     """
     import hashlib
 
-    for шаблон in (*СНИМОК, *ДОПОЛНЕНИЯ):
+    for шаблон in (*(доставляемые or СНИМОК), *ДОПОЛНЕНИЯ):
         имя = шаблон.format(site=site_id)
         a, b = источник / имя, цель / имя
         if not a.is_file():
@@ -899,14 +1015,17 @@ def stage_snapshot(site_id: str, источник: Path, *, dry_run: bool = True
     """
     п = Площадка.из_реестра(site_id, path=path)
     источник = Path(источник)
-    имена = [ш.format(site=site_id) for ш in СНИМОК]
+    контракт = контракт_данных(site_id, площадка=п)
+    имена = [ш.format(site=site_id) for ш in контракт["delivered"]]
+    свои = [ш.format(site=site_id) for ш in контракт["user_writable"]]
     отсутствуют = [и for и in имена if not (источник / и).is_file()]
     if отсутствуют:
         raise PrivilegedRefused(
             f"{site_id}: в источнике нет файлов снимка {отсутствуют}; "
             "половина снимка хуже прежнего целого")
 
-    если_тот_же = снимок_совпадает(источник, п.data, site_id)
+    если_тот_же = снимок_совпадает(источник, п.data, site_id,
+                                   контракт["delivered"])
     if dry_run:
         return {"operation": "stage_snapshot", "site_id": site_id, "dry_run": True,
                 "unchanged": если_тот_же, "files": имена,
@@ -922,10 +1041,17 @@ def stage_snapshot(site_id: str, источник: Path, *, dry_run: bool = True
     # Всё, что витрина читает из хранилища, кроме снимка и пользовательских
     # записей, переносится как есть: страницы прежнего релиза, манифест и т. п.
     for запись in п.data.iterdir():
-        if запись.name in имена or запись.name == ПОЛЬЗОВАТЕЛЬСКИЕ:
+        if запись.name in имена:
             continue
         цель = п.data_candidate / запись.name
-        if запись.is_dir():
+        # Пользовательское — ссылкой, и файл тоже, а не только каталог. База
+        # оценок Yummy это файл, и копия её означала бы, что оценки, принятые
+        # во время прогрева кандидата, останутся в хранилище, которое потом
+        # выбросят. Причина та же, что у `site-data`, — значит и обращение
+        # должно быть тем же.
+        if запись.name in свои:
+            цель.symlink_to(запись)
+        elif запись.is_dir():
             цель.symlink_to(запись)
         else:
             shutil.copy2(запись, цель)
@@ -935,9 +1061,11 @@ def stage_snapshot(site_id: str, источник: Path, *, dry_run: bool = True
     for имя in (ш.format(site=site_id) for ш in ДОПОЛНЕНИЯ):
         if (источник / имя).is_file():
             shutil.copy2(источник / имя, п.data_candidate / имя)
-    общие = п.data / ПОЛЬЗОВАТЕЛЬСКИЕ
-    if общие.exists():
-        (п.data_candidate / ПОЛЬЗОВАТЕЛЬСКИЕ).symlink_to(общие)
+    for имя in свои:
+        общие = п.data / имя
+        ссылка = п.data_candidate / имя
+        if общие.exists() and not ссылка.exists() and not ссылка.is_symlink():
+            ссылка.symlink_to(общие)
     for путь in [п.data_candidate, *п.data_candidate.rglob("*")]:
         if not путь.is_symlink():
             shutil.chown(путь, п.account, п.account)
