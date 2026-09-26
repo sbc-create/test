@@ -1291,6 +1291,56 @@ def _общее(токены: dict) -> str:
     return ОБЩЕЕ_1_1.replace("@ACC@", токены["acc"])
 
 
+#: Горизонтальная лента поступлений на главной Lords.
+#:
+#: Ширина карточки задана `flex-basis` и меняется по ширинам; шаг прокрутки
+#: скрипт СЧИТАЕТ по фактической ширине и `column-gap` этой самой ленты, а не
+#: по числу рядом. Поэтому менять размеры здесь безопасно: шаг поедет следом.
+#:
+#: На телефоне следующая карточка видна частично — намеренно: это подсказка,
+#: что лента прокручивается. Прятать хвост правилом `:nth-child` нельзя, см.
+#: СКРИПТ_ЛЕНТ.
+ЛОРДС_СТИЛЬ_ЛЕНТЫ = """
+.zrl{position:relative;margin:0 0 6px}
+.zrl__vp{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;
+scroll-snap-type:x proximity;overscroll-behavior-x:contain;
+padding:2px 0 10px;scrollbar-width:none;-ms-overflow-style:none}
+.zrl__vp::-webkit-scrollbar{display:none}
+.zrl__vp:focus-visible{outline:3px solid var(--t-acc);outline-offset:3px;border-radius:4px}
+.zrl__track{display:flex;column-gap:12px;min-width:min-content;align-items:stretch}
+.zrl__track>*{flex:0 0 42vw;scroll-snap-align:start;min-width:0}
+@media(min-width:480px){.zrl__track>*{flex-basis:30vw}}
+@media(min-width:768px){.zrl__track>*{flex-basis:22vw}}
+@media(min-width:1024px){.zrl__track>*{flex-basis:17.5vw}}
+@media(min-width:1280px){.zrl__track{column-gap:16px}.zrl__track>*{flex-basis:15vw}}
+@media(min-width:1600px){.zrl__track>*{flex-basis:12.6vw}}
+.zrl__btn{position:absolute;top:34%;transform:translateY(-50%);z-index:5;
+width:34px;height:34px;display:none;place-items:center;border:1px solid var(--t-line);
+border-radius:50%;background:var(--t-card);color:var(--t-accdk);cursor:pointer;
+font-size:18px;line-height:1;padding:0}
+@media(min-width:1024px){.zrl:hover .zrl__btn,.zrl__btn:focus-visible{display:grid}}
+.zrl__btn--p{left:-8px}
+.zrl__btn--n{right:-8px}
+.zrl__btn[disabled]{opacity:.3;cursor:default}
+.zt{display:flex;flex-direction:column;background:var(--t-card);
+border:1px solid var(--t-line);border-radius:3px;overflow:hidden;height:100%;
+color:inherit;text-decoration:none}
+.zt:hover{border-color:var(--t-acc)}
+.zt:focus-visible{outline:3px solid var(--t-acc);outline-offset:2px}
+.zt__p{display:block;position:relative;aspect-ratio:2/3;overflow:hidden;
+background:var(--t-alt,var(--t-soft))}
+.zt__p img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+.zt__none{position:absolute;inset:0;display:grid;place-items:center;
+font-size:26px;font-weight:800;color:var(--t-mute)}
+.zt__b{display:block;padding:7px 8px 4px}
+.zt__t{display:block;font-size:12.5px;line-height:1.3;font-weight:600;color:var(--t-ink);
+overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.zt__m{display:block;margin-top:2px;font-size:11.5px;color:var(--t-mute)}
+.zt__r{display:flex;gap:8px;padding:0 8px 8px;font-size:11.5px;color:var(--t-dim)}
+.zt__r b{color:var(--t-kp)}
+.zt__r i{font-style:normal;color:var(--t-imdb)}
+"""
+
 #: Раздел сообщества: оценка звёздами и комментарии.
 #:
 #: Перенесено из lordserial33.biz как есть: там этот интерфейс собран,
@@ -2699,6 +2749,7 @@ def _подставить(шаблон: str, токены: dict) -> str:
             (lambda т: (_корень_темы(т, _тёмные_для(т))
                         + _переменными(ОБЩЕЕ_1_1, т)
                         + _переменными(ЛОРДС_СТИЛЬ, т)
+                        + _переменными(ЛОРДС_СТИЛЬ_ЛЕНТЫ, т)
                         + _переменными(ЛОРДС_СТИЛЬ_СООБЩЕСТВА, т)
                         + ЛОРДС_СТИЛЬ_ТЕМЫ))(_лорды_токены_для_дизайна())
         ),
@@ -3943,6 +3994,46 @@ class Вид:
             "site_name": self.имя, "locale": "ru_RU",
         }
 
+    def карусель(self, ключ: str, набор) -> str:
+        """Горизонтальная лента: мышь, клавиатура и свайп.
+
+        Прокрутка нативная, поэтому свайп и колесо работают без единой строки
+        скрипта, а клавиатура — потому что область получает фокус. Кнопки
+        добавляют мышиный способ и ничего не заменяют: при выключенном
+        JavaScript лента остаётся прокручиваемой.
+        """
+        плитки = "".join(self.плитка(з) for з in набор)
+        ид = f"rl-{ключ}"
+        return (f'<div class="zrl">'
+                f'<button class="zrl__btn zrl__btn--p" type="button" data-rl="prev"'
+                f' aria-controls="{ид}" aria-label="Пролистать назад">&#8249;</button>'
+                f'<div class="zrl__vp" id="{ид}" tabindex="0" role="group"'
+                f' data-rl-vp aria-label="Лента произведений">'
+                f'<div class="zrl__track" data-rl-track>{плитки}</div></div>'
+                f'<button class="zrl__btn zrl__btn--n" type="button" data-rl="next"'
+                f' aria-controls="{ид}" aria-label="Пролистать вперёд">&#8250;</button>'
+                f'</div>')
+
+    def плитка(self, запись: dict) -> str:
+        деталь = self.деталь(запись["slug"])
+        изо = заглушка_постера(запись, "zt__none", "zt__img")
+        мета = " · ".join(str(ч) for ч in (запись.get("kind"), запись.get("year")) if ч)
+        кп = _число(деталь.get("kinopoisk_rating"))
+        им = _число(деталь.get("imdb_rating"))
+        части = []
+        if кп:
+            части.append(f"<span>КП <b>{кп}</b></span>")
+        if им:
+            части.append(f"<span>IMDb <i>{им}</i></span>")
+        if not части:
+            части.append("<span><em>нет оценки</em></span>")
+        оценка = f'<span class="zt__r">{"".join(части)}</span>'
+        заголовок = запись["title"] or ""
+        return (f'<a class="zt" href="{запись["url"]}" title="{html.escape(заголовок)}">'
+                f'<span class="zt__p">{изо}</span>'
+                f'<span class="zt__b"><span class="zt__t">{html.escape(заголовок)}</span>'
+                f'<span class="zt__m">{html.escape(мета)}</span></span>{оценка}</a>')
+
     # --- то, что обязаны дать наследники -----------------------------
     def оболочка(self, **кв) -> str:
         raise NotImplementedError
@@ -4559,6 +4650,21 @@ class ВидЛордс(Вид):
             except (TypeError, ValueError):
                 return 0.0
 
+        # Лента поступлений идёт ПЕРВОЙ: это первый экран, и записи в ней —
+        # те же кандидаты, что и у полок, поэтому занятые ими слуги
+        # засчитываются в `занято` и ниже не повторятся.
+        # Лента берёт записи из того же пула, что и полки, и занятые ею слуги
+        # ниже не повторяются: один тайтл в двух местах одной страницы — это
+        # повтор, а не два блока. Поэтому она появляется только тогда, когда
+        # материала хватает И на неё, И на полки: иначе она забрала бы ряд у
+        # тех, кому он обещан заголовком раздела.
+        полоса_ленты = ""
+        if len(готовые) >= self.ЛЕНТА_ПОСТУПЛЕНИЙ + РЯД_ПОЛКИ * 2:
+            полоса_ленты = self.лента_поступлений(
+                взять(готовые, self.ЛЕНТА_ПОСТУПЛЕНИЙ))
+            if полоса_ленты:
+                полосы.append(полоса_ленты)
+
         дизайн = ДИЗАЙН_ID
         if дизайн == "lords-series-feed-v2":
             # Series feed: series/updates first. No "ongoing" claim without provenance.
@@ -4788,6 +4894,33 @@ class ВидЛордс(Вид):
             if сколько is not None and len(готово) >= сколько:
                 break
         return готово
+
+    #: Сколько карточек в горизонтальной ленте поступлений.
+    #:
+    #: Кратно и шести, и семи видимым карточкам: 28 — это четыре страницы по
+    #: семь и (почти) пять по шесть. Неполная последняя страница при этом
+    #: нормальна: прокрутка упирается в конец и кнопка гаснет. Прятать хвост
+    #: правилом `:nth-child` здесь нельзя — см. СКРИПТ_ЛЕНТ.
+    ЛЕНТА_ПОСТУПЛЕНИЙ = 28
+
+    def лента_поступлений(self, набор) -> str:
+        """Компактная лента постеров над полками главной.
+
+        Обе доработанные витрины семейства завели её у себя по отдельности, и
+        обе — поверх одного и того же дефекта шага прокрутки. Здесь она одна
+        на семейство и пользуется общей механикой `карусель`.
+        """
+        if len(набор) < 4:
+            # Лента из трёх карточек не прокручивается и выглядит обрубленной
+            # полкой: показывать нечего, и полки ниже скажут то же самое.
+            return ""
+        return (
+            '<section class="sec-rail" data-shelf="intake">'
+            '<div class="sec-rail__h">'
+            '<h2><a href="/new/">Недавние поступления</a></h2>'
+            '<a class="sec-rail__all" href="/new/">Весь раздел</a></div>'
+            + self.карусель("intake", набор[:self.ЛЕНТА_ПОСТУПЛЕНИЙ])
+            + "</section>")
 
     def _полоса_подборок(self) -> str:
         подборки = self._подборки_витрины(6)
@@ -5351,26 +5484,6 @@ class ВидЗона(Вид):
             "</footer>")
 
     # --- составные части ---------------------------------------------
-    def плитка(self, запись: dict) -> str:
-        деталь = self.деталь(запись["slug"])
-        изо = заглушка_постера(запись, "zt__none", "zt__img")
-        мета = " · ".join(str(ч) for ч in (запись.get("kind"), запись.get("year")) if ч)
-        кп = _число(деталь.get("kinopoisk_rating"))
-        им = _число(деталь.get("imdb_rating"))
-        части = []
-        if кп:
-            части.append(f"<span>КП <b>{кп}</b></span>")
-        if им:
-            части.append(f"<span>IMDb <i>{им}</i></span>")
-        if not части:
-            части.append("<span><em>нет оценки</em></span>")
-        оценка = f'<span class="zt__r">{"".join(части)}</span>'
-        заголовок = запись["title"] or ""
-        return (f'<a class="zt" href="{запись["url"]}" title="{html.escape(заголовок)}">'
-                f'<span class="zt__p">{изо}</span>'
-                f'<span class="zt__b"><span class="zt__t">{html.escape(заголовок)}</span>'
-                f'<span class="zt__m">{html.escape(мета)}</span></span>{оценка}</a>')
-
     def строка(self, запись: dict) -> str:
         деталь = self.деталь(запись["slug"])
         изо = заглушка_постера(запись, "zr__none", "zr__img", 184, 276)
@@ -5396,26 +5509,6 @@ class ВидЗона(Вид):
 
     def лента(self, набор) -> str:
         return '<div class="zl">' + "".join(self.строка(з) for з in набор) + "</div>"
-
-    def карусель(self, ключ: str, набор) -> str:
-        """Горизонтальная лента: мышь, клавиатура и свайп.
-
-        Прокрутка нативная, поэтому свайп и колесо работают без единой строки
-        скрипта, а клавиатура — потому что область получает фокус. Кнопки
-        добавляют мышиный способ и ничего не заменяют: при выключенном
-        JavaScript лента остаётся прокручиваемой.
-        """
-        плитки = "".join(self.плитка(з) for з in набор)
-        ид = f"rl-{ключ}"
-        return (f'<div class="zrl">'
-                f'<button class="zrl__btn zrl__btn--p" type="button" data-rl="prev"'
-                f' aria-controls="{ид}" aria-label="Пролистать назад">&#8249;</button>'
-                f'<div class="zrl__vp" id="{ид}" tabindex="0" role="group"'
-                f' data-rl-vp aria-label="Лента произведений">'
-                f'<div class="zrl__track" data-rl-track>{плитки}</div></div>'
-                f'<button class="zrl__btn zrl__btn--n" type="button" data-rl="next"'
-                f' aria-controls="{ид}" aria-label="Пролистать вперёд">&#8250;</button>'
-                f'</div>')
 
     def секция(self, ключ: str, титул: str, ссылка: str, набор, пусто: str) -> str:
         """Секция главной. Пустой набор полностью скрывается.
