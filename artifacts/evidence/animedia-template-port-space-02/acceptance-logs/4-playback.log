@@ -1,0 +1,16 @@
+$ env -u NODE_OPTIONS timeout 400 node playback.mjs /title/panda-zet-robonimaciya/season-1/episode-1/
+ПРЕРОЛЛ: провайдер пустил рекламу перед контентом — adRequest,adTracking,adStart,adStart,adMedia
+СЕТЬ: 200 plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10252&ag | 200 plapi.cdnvideohub.com/api/v1/player/sv/video/16087215463088 | 200 plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10252&ag
+СОБЫТИЯ: init,volumechange,unmute,currentQuality,qualityList,qualityList,qualityList,qualityList,qualityList,qualityList,statechange,vueInited,qualityList,qualityList,currentQuality,qualityList,qualityList,timeupdate,statechange,started,statechange,timeupdate,adRequest,adTracking,adStart,rollState,adStart,rollState,adMedia,adTracking,adImpression,adImpression,adTracking
+
+ОК: 9   ПЛОХО: 0
+  · плеер смонтирован
+  · элемент воспроизведения появился — player.cdnvideohub.com/s2/v2.31.1/frame/ {"readyState":4,"duration":300,"paused":true,"currentTime":0.08}
+  · плейлист получен от провайдера
+  · поток видео получен от провайдера
+  · провайдер объявил воспроизведение — adTracking,adImpression,adImpression,adTracking
+  · currentTime растёт — картинка идёт — {"t0":0.08,"t1":2.77,"шагов":3,"duration":15,"paused":false,"readyState":4}
+  · витрина засчитала просмотр маячком /event/play — запросов 1
+  · переход между сериями открывается — код 200
+  · на соседней серии плеер подключается
+exit=0
