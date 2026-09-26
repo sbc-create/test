@@ -321,10 +321,49 @@ LIVE_COUNTERS = {
     "1lordserials1.online": 112010277,
 }
 
+#: Счётчик есть и собирает данные, но девять целей ещё не заведены. Отдельная
+#: группа, а не исключение внутри LIVE_COUNTERS: у витрины настоящий счётчик
+#: (перенесён из монолитной установки), и объявить её «запланированной» значило
+#: бы разрешить её счётчику потеряться незаметно — ровно то, что уже случилось
+#: при переносе в ячейку.
+COUNTERS_WITHOUT_GOALS = {
+    "zonafilm.space": 112582938,
+}
+
+#: Счётчика ещё нет. Заводить его до активации домена нельзя: получится пустой
+#: счётчик без данных, и он же будет мешать заметить настоящий. Перечислены
+#: явно, чтобы новый домен не мог появиться в реестре молча.
+PLANNED_DOMAINS = (
+    "animedia.space",
+    "lordserials22.info",
+    "lordserials22.site",
+    "lordserials22.space",
+    "yummyani7.info",
+    "yummyani7.site",
+    "zonafilm12.site",
+)
+
+ALL_DOMAINS = sorted({*LIVE_COUNTERS, *COUNTERS_WITHOUT_GOALS, *PLANNED_DOMAINS})
+#: Домены, у которых счётчик существует, — независимо от состояния целей.
+WITH_COUNTER = {**LIVE_COUNTERS, **COUNTERS_WITHOUT_GOALS}
+
 
 def test_registry_holds_exactly_the_known_domains():
-    domains = [p.domain for p in registry.properties()]
-    assert domains == list(LIVE_COUNTERS)
+    assert sorted(p.domain for p in registry.properties()) == ALL_DOMAINS
+
+
+def test_planned_domains_have_no_counter():
+    """Запланированному домену счётчик не назначается.
+
+    Обратная сторона проверки «счётчик не потерялся»: счётчик, приписанный
+    домену, который ещё не запущен, собирал бы пустоту и выглядел бы рабочим.
+    """
+    по_домену = {e.domain: e for e in registry.properties()}
+    for domain in PLANNED_DOMAINS:
+        entry = по_домену[domain]
+        assert entry.counter_id is None, f"{domain}: счётчик назначен до запуска"
+        assert entry.raw["counter_state"] == "planned", domain
+        assert entry.raw["analytics_enabled"] is False, domain
 
 
 def test_each_domain_is_independent():
@@ -333,8 +372,13 @@ def test_each_domain_is_independent():
     hosts = [tuple(e.allowed_hosts) for e in entries]
     assert len(set(hosts)) == len(entries)
     # Счётчик, попавший на два домена, собирал бы чужие визиты в чужой отчёт.
-    counters = [e.counter_id for e in entries]
+    # Отсутствие счётчика (None) дубликатом не является и в сверку не входит:
+    # иначе второй же незапущенный домен «повторял» бы первый.
+    counters = [e.counter_id for e in entries if e.counter_id is not None]
     assert len(set(counters)) == len(counters), f"счётчик повторяется: {counters}"
+    assert len(counters) == len(WITH_COUNTER), (
+        f"счётчиков в реестре {len(counters)}, ожидалось {len(WITH_COUNTER)}"
+    )
     for entry in entries:
         assert entry.allowed_hosts == [entry.domain]
 
@@ -383,10 +427,34 @@ def test_registry_never_stores_a_secret():
     assert findings == [], findings
 
 
+#: Состояние подтверждения в Вебмастере по каждому домену. Задано поимённо, а
+#: не выведено из группы: у animedia.space счётчика нет, но выкладка её уже
+#: удерживается, и это BLOCKED_DEPLOYMENT, а не PLANNED. Список «или то, или
+#: это» пропустил бы подмену состояния в любую сторону.
+WEBMASTER_STATUS = {
+    "1lordserials1.online": BLOCKED_DEPLOYMENT,
+    "animedia.space": BLOCKED_DEPLOYMENT,
+    "lordfilm47.space": BLOCKED_DEPLOYMENT,
+    "lordserial33.biz": BLOCKED_DEPLOYMENT,
+    "lordserials22.info": "PLANNED",
+    "lordserials22.site": "PLANNED",
+    "lordserials22.space": "PLANNED",
+    "yummyani.biz": BLOCKED_DEPLOYMENT,
+    "yummyani.org": BLOCKED_DEPLOYMENT,
+    "yummyani.site": BLOCKED_DEPLOYMENT,
+    "yummyani7.info": "PLANNED",
+    "yummyani7.site": "PLANNED",
+    "zonafilm.space": "PLANNED",
+    "zonafilm12.site": "PLANNED",
+}
+
+
 def test_webmaster_starts_blocked_not_done():
+    """DONE не бывает ни у кого, а остальное сверяется поимённо."""
+    assert sorted(WEBMASTER_STATUS) == ALL_DOMAINS, "список доменов разошёлся"
     for entry in registry.properties():
-        assert entry.webmaster_status == BLOCKED_DEPLOYMENT
-        assert entry.webmaster_status != "DONE"
+        assert entry.webmaster_status == WEBMASTER_STATUS[entry.domain], entry.domain
+        assert entry.webmaster_status != "DONE", entry.domain
 
 
 def test_registry_round_trips_without_losing_fields(tmp_path):
@@ -438,12 +506,14 @@ def test_registry_refuses_data_that_breaks_the_schema(tmp_path):
 #: продакшена: расхождение означает, что счётчик подменили или пересоздали, и
 #: заметить это должен тест, а не отчёт Метрики через месяц.
 def test_registry_records_the_live_counters():
-    for entry in registry.properties():
-        assert entry.counter_id == LIVE_COUNTERS[entry.domain], entry.domain
+    по_домену = {e.domain: e for e in registry.properties()}
+    for domain, counter in WITH_COUNTER.items():
+        entry = по_домену[domain]
+        assert entry.counter_id == counter, domain
         # `created` допустим только для счётчиков, заведённых в этом же цикле;
         # повторный прогон обязан их переиспользовать, а не завести второй.
         assert entry.raw["counter_state"] in ("reused", "created"), (
-            f"{entry.domain}: состояние {entry.raw['counter_state']!r} означает, что "
+            f"{domain}: состояние {entry.raw['counter_state']!r} означает, что "
             "счётчик не подтверждён Метрикой"
         )
 
@@ -453,7 +523,9 @@ def test_every_counter_has_all_nine_goals_with_numeric_ids():
     from factory.analytics import events
 
     total = 0
-    for entry in registry.properties():
+    по_домену = {e.domain: e for e in registry.properties()}
+    for domain in LIVE_COUNTERS:
+        entry = по_домену[domain]
         goals = entry.raw["goals"]
         goal_ids = entry.raw["goal_ids"]
         assert set(goals) == set(events.EVENT_IDS), entry.domain
@@ -469,18 +541,31 @@ def test_every_counter_has_all_nine_goals_with_numeric_ids():
 
 def test_session_recording_is_off_on_every_live_counter():
     """Требование задания, дважды нарушенное по дороге. Теперь оно под тестом."""
+    # Запись сессий выключена ВЕЗДЕ, включая ещё не запущенные домены: включить
+    # её «потом» некому, а по умолчанию она включается сама.
     for entry in registry.properties():
         assert entry.raw["webvisor"] is False, entry.domain
-        assert entry.raw["problems"] == [], (
-            f"{entry.domain}: настройка завершена, а в problems что-то осталось: "
-            f"{entry.raw['problems']}"
+    # Пустой список problems означает «настройка завершена», и требовать его от
+    # домена без счётчика значило бы требовать молчать о незавершённом.
+    по_домену = {e.domain: e for e in registry.properties()}
+    for domain in LIVE_COUNTERS:
+        assert по_домену[domain].raw["problems"] == [], (
+            f"{domain}: настройка завершена, а в problems что-то осталось: "
+            f"{по_домену[domain].raw['problems']}"
+        )
+    for domain in (*COUNTERS_WITHOUT_GOALS, *PLANNED_DOMAINS):
+        assert по_домену[domain].raw["problems"], (
+            f"{domain}: настройка не завершена, а problems пуст — незавершённое "
+            "должно быть названо, иначе о нём забудут"
         )
 
 
 def test_setup_is_complete_but_indexing_and_webmaster_are_not():
     """Готовность аналитики не означает готовности поиска — это разные ворота."""
     assert registry.indexing_enabled() is False
+    по_домену = {e.domain: e for e in registry.properties()}
     for entry in registry.properties():
         assert entry.indexing_enabled is False, entry.domain
-        assert entry.webmaster_status == BLOCKED_DEPLOYMENT, entry.domain
         assert entry.raw["webmaster"]["sitemap_submitted"] is False, entry.domain
+    for domain, status in WEBMASTER_STATUS.items():
+        assert по_домену[domain].webmaster_status == status, domain
