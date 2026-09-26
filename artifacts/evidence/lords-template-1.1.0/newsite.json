@@ -1,0 +1,25 @@
+{
+  "site_id": "lords-90",
+  "domain": "lords90.example",
+  "community": {
+    "storage_env": "LORDS_90_COMMUNITY",
+    "moderator_key_env": "LORDS_90_COMMUNITY_MODERATOR_KEY",
+    "visitor_cookie": "lords_90_v",
+    "moderator_cookie": "lords_90_mod",
+    "note": "Ключ модератора задаёт владелец ВНЕ Git. Пока он не задан, модератора нет: новые сообщения остаются в состоянии «ожидает проверки», автору видны, остальным — нет. Это рабочее состояние, а не поломка."
+  },
+  "profile": "lords-general",
+  "path": "/tmp/claude-1001/-home-claude/9e5d5d7c-1b72-454b-9239-dbb120e73b48/scratchpad/new-lords-90",
+  "template_commit": "b61f084c173e10bf9150655d316236c094bb3141",
+  "design_version": "1.1.0",
+  "runtime_files": [
+    "lords-frontend.py",
+    "collection_contract.py",
+    "seo_layer.py",
+    "lords_sections.py",
+    "community_http.py"
+  ],
+  "delivered_separately": [
+    "community.py"
+  ]
+}
