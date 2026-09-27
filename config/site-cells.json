@@ -304,6 +304,174 @@
       }
     },
     {
+      "site_id": "lords-05",
+      "domain": "lordserials22.info",
+      "aliases": [
+        "www.lordserials22.info"
+      ],
+      "status": "planned",
+      "repo": {
+        "kind": "remote",
+        "path": "var/site-repos/lordserials22-info",
+        "remote": "https://github.com/sbc-create/site-lordserials22-info"
+      },
+      "template": {
+        "template_id": null,
+        "order_id": "launch-lordserials22-info",
+        "family": "lords",
+        "note": "ПРОФИЛЬ ШАБЛОНА НЕ НАЗНАЧЕН — вход владельца. Свободных шаблонов в пуле нет (все четыре закреплены), поэтому нужен либо новый шаблон, либо экземпляр проверенного выпуска: назвать repo@commit витрины-образца. Подставлять похожий профиль соседнего домена нельзя. В пуле есть НЕИСПОЛЬЗОВАННАЯ резервация: шаблон lords-genre закреплён за site_id lords-04, а домен у неё пустой (domain: null). Её можно привязать к одному из трёх доменов lordserials22.* — это одно решение владельца, а не три. Сам привязывать не стал: порядок партии называет первым lordserials22.site, а у него нет записи A."
+      },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
+      "pins": {
+        "template": null,
+        "modules": {},
+        "schemas": {
+          "site_config": "1"
+        }
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id": null,
+        "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте."
+      },
+      "runtime": {
+        "unit": "nova-lordserials22-info.service",
+        "previous_unit": null,
+        "port": 9113,
+        "account": "lordserials22-info",
+        "app_dir": "/srv/lordserials22-info/app",
+        "data_dir": "/srv/lordserials22-info/data",
+        "legacy_root": "<data>/site",
+        "reload": "mtime",
+        "managed_by": "cell",
+        "data_owner": "pipeline",
+        "unit_note": "Новый домен: прежней установки нет, поэтому previous_unit пуст. Порт 9113 и 10113 для кандидата проверены свободными и в реестре, и на хосте."
+      },
+      "release": {
+        "hold": false,
+        "branch": null
+      },
+      "indexing": {
+        "desired_state": "CLOSED",
+        "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
+      }
+    },
+    {
+      "site_id": "lords-06",
+      "domain": "lordserials22.site",
+      "aliases": [
+        "www.lordserials22.site"
+      ],
+      "status": "planned",
+      "repo": {
+        "kind": "remote",
+        "path": "var/site-repos/lordserials22-site",
+        "remote": "https://github.com/sbc-create/site-lordserials22-site"
+      },
+      "template": {
+        "template_id": null,
+        "order_id": "launch-lordserials22-site",
+        "family": "lords",
+        "note": "ПРОФИЛЬ ШАБЛОНА НЕ НАЗНАЧЕН — вход владельца. Свободных шаблонов в пуле нет (все четыре закреплены), поэтому нужен либо новый шаблон, либо экземпляр проверенного выпуска: назвать repo@commit витрины-образца. Подставлять похожий профиль соседнего домена нельзя. В пуле есть НЕИСПОЛЬЗОВАННАЯ резервация: шаблон lords-genre закреплён за site_id lords-04, а домен у неё пустой (domain: null). Её можно привязать к одному из трёх доменов lordserials22.* — это одно решение владельца, а не три. Сам привязывать не стал: порядок партии называет первым lordserials22.site, а у него нет записи A."
+      },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
+      "pins": {
+        "template": null,
+        "modules": {},
+        "schemas": {
+          "site_config": "1"
+        }
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id": null,
+        "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте."
+      },
+      "runtime": {
+        "unit": "nova-lordserials22-site.service",
+        "previous_unit": null,
+        "port": 9116,
+        "account": "lordserials22-site",
+        "app_dir": "/srv/lordserials22-site/app",
+        "data_dir": "/srv/lordserials22-site/data",
+        "legacy_root": "<data>/site",
+        "reload": "mtime",
+        "managed_by": "cell",
+        "data_owner": "pipeline",
+        "unit_note": "Новый домен. Порт 9116 и 10116 для кандидата проверены свободными и в реестре, и на хосте. Записи A у домена нет — это первый невыполненный шаг, размещение объявлено заранее, чтобы после появления записи очередь не ждала настройки."
+      },
+      "release": {
+        "hold": false,
+        "branch": null
+      },
+      "indexing": {
+        "desired_state": "CLOSED",
+        "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
+      }
+    },
+    {
+      "site_id": "lords-07",
+      "domain": "lordserials22.space",
+      "aliases": [
+        "www.lordserials22.space"
+      ],
+      "status": "planned",
+      "repo": {
+        "kind": "remote",
+        "path": "var/site-repos/lordserials22-space",
+        "remote": "https://github.com/sbc-create/site-lordserials22-space"
+      },
+      "template": {
+        "template_id": null,
+        "order_id": "launch-lordserials22-space",
+        "family": "lords",
+        "note": "ПРОФИЛЬ ШАБЛОНА НЕ НАЗНАЧЕН — вход владельца. Свободных шаблонов в пуле нет (все четыре закреплены), поэтому нужен либо новый шаблон, либо экземпляр проверенного выпуска: назвать repo@commit витрины-образца. Подставлять похожий профиль соседнего домена нельзя. В пуле есть НЕИСПОЛЬЗОВАННАЯ резервация: шаблон lords-genre закреплён за site_id lords-04, а домен у неё пустой (domain: null). Её можно привязать к одному из трёх доменов lordserials22.* — это одно решение владельца, а не три. Сам привязывать не стал: порядок партии называет первым lordserials22.site, а у него нет записи A."
+      },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
+      "pins": {
+        "template": null,
+        "modules": {},
+        "schemas": {
+          "site_config": "1"
+        }
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id": null,
+        "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте."
+      },
+      "runtime": {
+        "unit": "nova-lordserials22-space.service",
+        "previous_unit": null,
+        "port": 9117,
+        "account": "lordserials22-space",
+        "app_dir": "/srv/lordserials22-space/app",
+        "data_dir": "/srv/lordserials22-space/data",
+        "legacy_root": "<data>/site",
+        "reload": "mtime",
+        "managed_by": "cell",
+        "data_owner": "pipeline",
+        "unit_note": "Новый домен. Порт 9117 и 10117 для кандидата проверены свободными и в реестре, и на хосте. Записи A у домена нет — это первый невыполненный шаг, размещение объявлено заранее, чтобы после появления записи очередь не ждала настройки."
+      },
+      "release": {
+        "hold": false,
+        "branch": null
+      },
+      "indexing": {
+        "desired_state": "CLOSED",
+        "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
+      }
+    },
+    {
       "site_id": "pilot-local",
       "domain": "pilot.localhost.test",
       "aliases": [],
@@ -466,6 +634,118 @@
       "last_update": null,
       "backup": {},
       "resources": {}
+    },
+    {
+      "site_id": "yummy-07",
+      "domain": "yummyani7.site",
+      "aliases": [
+        "www.yummyani7.site"
+      ],
+      "status": "planned",
+      "repo": {
+        "kind": "remote",
+        "path": "var/site-repos/yummyani7-site",
+        "remote": "https://github.com/sbc-create/site-yummyani7-site"
+      },
+      "template": {
+        "template_id": null,
+        "order_id": "launch-yummyani7-site",
+        "family": "yummy",
+        "note": "ПРОФИЛЬ ШАБЛОНА НЕ НАЗНАЧЕН — вход владельца. Свободных шаблонов в пуле нет (все четыре закреплены), поэтому нужен либо новый шаблон, либо экземпляр проверенного выпуска: назвать repo@commit витрины-образца. Подставлять похожий профиль соседнего домена нельзя."
+      },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
+      "pins": {
+        "template": null,
+        "modules": {},
+        "schemas": {
+          "site_config": "1"
+        }
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id": null,
+        "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте."
+      },
+      "runtime": {
+        "unit": "nova-yummyani7-site.service",
+        "previous_unit": null,
+        "port": 9114,
+        "account": "yummyani7-site",
+        "app_dir": "/srv/yummyani7-site/app",
+        "data_dir": "/srv/yummyani7-site/data",
+        "legacy_root": "<data>/site",
+        "reload": "mtime",
+        "managed_by": "cell",
+        "data_owner": "pipeline",
+        "unit_note": "Новый домен: прежней установки нет, поэтому previous_unit пуст. Порт 9114 и 10114 для кандидата проверены свободными и в реестре, и на хосте."
+      },
+      "release": {
+        "hold": false,
+        "branch": null
+      },
+      "indexing": {
+        "desired_state": "CLOSED",
+        "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
+      }
+    },
+    {
+      "site_id": "yummy-08",
+      "domain": "yummyani7.info",
+      "aliases": [
+        "www.yummyani7.info"
+      ],
+      "status": "planned",
+      "repo": {
+        "kind": "remote",
+        "path": "var/site-repos/yummyani7-info",
+        "remote": "https://github.com/sbc-create/site-yummyani7-info"
+      },
+      "template": {
+        "template_id": null,
+        "order_id": "launch-yummyani7-info",
+        "family": "yummy",
+        "note": "ПРОФИЛЬ ШАБЛОНА НЕ НАЗНАЧЕН — вход владельца. Свободных шаблонов в пуле нет (все четыре закреплены), поэтому нужен либо новый шаблон, либо экземпляр проверенного выпуска: назвать repo@commit витрины-образца. Подставлять похожий профиль соседнего домена нельзя."
+      },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
+      "pins": {
+        "template": null,
+        "modules": {},
+        "schemas": {
+          "site_config": "1"
+        }
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id": null,
+        "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте."
+      },
+      "runtime": {
+        "unit": "nova-yummyani7-info.service",
+        "previous_unit": null,
+        "port": 9115,
+        "account": "yummyani7-info",
+        "app_dir": "/srv/yummyani7-info/app",
+        "data_dir": "/srv/yummyani7-info/data",
+        "legacy_root": "<data>/site",
+        "reload": "mtime",
+        "managed_by": "cell",
+        "data_owner": "pipeline",
+        "unit_note": "Новый домен: прежней установки нет, поэтому previous_unit пуст. Порт 9115 и 10115 для кандидата проверены свободными и в реестре, и на хосте."
+      },
+      "release": {
+        "hold": false,
+        "branch": null
+      },
+      "indexing": {
+        "desired_state": "CLOSED",
+        "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
+      }
     },
     {
       "site_id": "yummy-biz",
@@ -813,174 +1093,6 @@
         "provider": "cdnvideohub",
         "publisher_id": "10261",
         "note": "Назначен владельцем именно этому домену и только ему. В реестре ячеек отсутствовал, хотя в config/site.json репозитория сайта стоит publisher_id_expected=10261 — два источника правды расходились."
-      }
-    },
-    {
-      "site_id": "lords-05",
-      "domain": "lordserials22.info",
-      "aliases": [
-        "www.lordserials22.info"
-      ],
-      "status": "planned",
-      "repo": {
-        "kind": "remote",
-        "path": "var/site-repos/lordserials22-info",
-        "remote": "https://github.com/sbc-create/site-lordserials22-info"
-      },
-      "template": {
-        "template_id": null,
-        "order_id": "launch-lordserials22-info",
-        "family": "lords",
-        "note": "ПРОФИЛЬ ШАБЛОНА НЕ НАЗНАЧЕН — вход владельца. Свободных шаблонов в пуле нет (все четыре закреплены), поэтому нужен либо новый шаблон, либо экземпляр проверенного выпуска: назвать repo@commit витрины-образца. Подставлять похожий профиль соседнего домена нельзя. В пуле есть НЕИСПОЛЬЗОВАННАЯ резервация: шаблон lords-genre закреплён за site_id lords-04, а домен у неё пустой (domain: null). Её можно привязать к одному из трёх доменов lordserials22.* — это одно решение владельца, а не три. Сам привязывать не стал: порядок партии называет первым lordserials22.site, а у него нет записи A."
-      },
-      "deploy_target": {
-        "ref": "claude-control-01",
-        "server": null
-      },
-      "pins": {
-        "template": null,
-        "modules": {},
-        "schemas": {
-          "site_config": "1"
-        }
-      },
-      "publisher": {
-        "provider": "cdnvideohub",
-        "publisher_id": null,
-        "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте."
-      },
-      "runtime": {
-        "unit": "nova-lordserials22-info.service",
-        "previous_unit": null,
-        "port": 9113,
-        "account": "lordserials22-info",
-        "app_dir": "/srv/lordserials22-info/app",
-        "data_dir": "/srv/lordserials22-info/data",
-        "legacy_root": "<data>/site",
-        "reload": "mtime",
-        "managed_by": "cell",
-        "data_owner": "pipeline",
-        "unit_note": "Новый домен: прежней установки нет, поэтому previous_unit пуст. Порт 9113 и 10113 для кандидата проверены свободными и в реестре, и на хосте."
-      },
-      "release": {
-        "hold": false,
-        "branch": null
-      },
-      "indexing": {
-        "desired_state": "CLOSED",
-        "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
-      }
-    },
-    {
-      "site_id": "yummy-07",
-      "domain": "yummyani7.site",
-      "aliases": [
-        "www.yummyani7.site"
-      ],
-      "status": "planned",
-      "repo": {
-        "kind": "remote",
-        "path": "var/site-repos/yummyani7-site",
-        "remote": "https://github.com/sbc-create/site-yummyani7-site"
-      },
-      "template": {
-        "template_id": null,
-        "order_id": "launch-yummyani7-site",
-        "family": "yummy",
-        "note": "ПРОФИЛЬ ШАБЛОНА НЕ НАЗНАЧЕН — вход владельца. Свободных шаблонов в пуле нет (все четыре закреплены), поэтому нужен либо новый шаблон, либо экземпляр проверенного выпуска: назвать repo@commit витрины-образца. Подставлять похожий профиль соседнего домена нельзя."
-      },
-      "deploy_target": {
-        "ref": "claude-control-01",
-        "server": null
-      },
-      "pins": {
-        "template": null,
-        "modules": {},
-        "schemas": {
-          "site_config": "1"
-        }
-      },
-      "publisher": {
-        "provider": "cdnvideohub",
-        "publisher_id": null,
-        "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте."
-      },
-      "runtime": {
-        "unit": "nova-yummyani7-site.service",
-        "previous_unit": null,
-        "port": 9114,
-        "account": "yummyani7-site",
-        "app_dir": "/srv/yummyani7-site/app",
-        "data_dir": "/srv/yummyani7-site/data",
-        "legacy_root": "<data>/site",
-        "reload": "mtime",
-        "managed_by": "cell",
-        "data_owner": "pipeline",
-        "unit_note": "Новый домен: прежней установки нет, поэтому previous_unit пуст. Порт 9114 и 10114 для кандидата проверены свободными и в реестре, и на хосте."
-      },
-      "release": {
-        "hold": false,
-        "branch": null
-      },
-      "indexing": {
-        "desired_state": "CLOSED",
-        "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
-      }
-    },
-    {
-      "site_id": "yummy-08",
-      "domain": "yummyani7.info",
-      "aliases": [
-        "www.yummyani7.info"
-      ],
-      "status": "planned",
-      "repo": {
-        "kind": "remote",
-        "path": "var/site-repos/yummyani7-info",
-        "remote": "https://github.com/sbc-create/site-yummyani7-info"
-      },
-      "template": {
-        "template_id": null,
-        "order_id": "launch-yummyani7-info",
-        "family": "yummy",
-        "note": "ПРОФИЛЬ ШАБЛОНА НЕ НАЗНАЧЕН — вход владельца. Свободных шаблонов в пуле нет (все четыре закреплены), поэтому нужен либо новый шаблон, либо экземпляр проверенного выпуска: назвать repo@commit витрины-образца. Подставлять похожий профиль соседнего домена нельзя."
-      },
-      "deploy_target": {
-        "ref": "claude-control-01",
-        "server": null
-      },
-      "pins": {
-        "template": null,
-        "modules": {},
-        "schemas": {
-          "site_config": "1"
-        }
-      },
-      "publisher": {
-        "provider": "cdnvideohub",
-        "publisher_id": null,
-        "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте."
-      },
-      "runtime": {
-        "unit": "nova-yummyani7-info.service",
-        "previous_unit": null,
-        "port": 9115,
-        "account": "yummyani7-info",
-        "app_dir": "/srv/yummyani7-info/app",
-        "data_dir": "/srv/yummyani7-info/data",
-        "legacy_root": "<data>/site",
-        "reload": "mtime",
-        "managed_by": "cell",
-        "data_owner": "pipeline",
-        "unit_note": "Новый домен: прежней установки нет, поэтому previous_unit пуст. Порт 9115 и 10115 для кандидата проверены свободными и в реестре, и на хосте."
-      },
-      "release": {
-        "hold": false,
-        "branch": null
-      },
-      "indexing": {
-        "desired_state": "CLOSED",
-        "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
       }
     }
   ]
