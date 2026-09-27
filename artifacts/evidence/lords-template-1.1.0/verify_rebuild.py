@@ -22,13 +22,34 @@ from pathlib import Path
 
 S = Path("/tmp/claude-1001/-home-claude/9e5d5d7c-1b72-454b-9239-dbb120e73b48/scratchpad")
 W = Path("/home/claude/wt-lords-template-consolidation-01")
-N, D = S / "prof-lords-general", S / "lords-90-data"
+# Свой каталог проекта, а не профильный из profiles_all.py: тот прогон
+# пересоздаёт свои каталоги под каждый профиль, и опираться на них значило
+# бы падать от порядка запуска проверок.
+N, D = S / "rebuild-lords-90", S / "lords-90-data"
 МОДУЛЬ = Path("/srv/lords/.frontend/releases/20260923T190000Z-community-2-2-12/community.py")
 РЕЕСТР = S / "registry-test.json"
 БАЗА = "http://127.0.0.1:9190"
 КЛЮЧ = "test-moderator-key-9190"
 
 итог, провалы = [], []
+
+
+def каталог_данных_в_реестр(путь: Path) -> None:
+    """Объявить проверочной ячейке её каталог данных.
+
+    `newsite` выводит `runtime.data_dir` из учётной записи — `/srv/<учётка>/data`.
+    Для боевой ячейки это верно, для проверочной такого каталога нет и быть не
+    должно: она живёт в песочнице. Доставка берёт путь ИЗ РЕЕСТРА (это и есть
+    одно из проверяемых здесь исправлений), поэтому реестру он и сообщается.
+    """
+    import json as _json
+    реестр = _json.loads(РЕЕСТР.read_text(encoding="utf-8"))
+    for ячейка in реестр.get("cells", []):
+        if ячейка.get("site_id") == "lords-90":
+            ячейка.setdefault("runtime", {})["data_dir"] = str(путь)
+    РЕЕСТР.write_text(_json.dumps(реестр, ensure_ascii=False, indent=2),
+                      encoding="utf-8")
+
 
 
 def проверка(имя, ок, подр=""):
@@ -84,8 +105,29 @@ def отправить(путь, поля):
         pass
 
 
+
+def собрать_проект(куда: Path) -> None:
+    """Проект сайта из шаблона — штатной командой, из чистого дерева."""
+    import shutil as _shutil
+    _shutil.rmtree(куда, ignore_errors=True)
+    r = subprocess.run([sys.executable, "-m", "factory", "cell", "newsite",
+                        "--site", "lords-90", "--domain", "lords90.example",
+                        "--template", "lords-general", "--port", "9190",
+                        "--site-name", "Проверочная витрина",
+                        "--remote", "https://github.com/sbc-create/site-lords90-example",
+                        "--destination", str(куда), "--registry", str(РЕЕСТР)],
+                       cwd=str(W), capture_output=True, text=True)
+    if r.returncode:
+        raise SystemExit("newsite не собрал проект: " + r.stderr.strip()[-300:])
+    subprocess.run(["install", "-m", "0600",
+                    "/srv/lords/.frontend/player-lords-01.json",
+                    str(куда / "config" / "player.json")], check=True)
+    subprocess.run(["cp", str(МОДУЛЬ), str(куда / "src" / "community.py")], check=True)
+
 # --- запись до пересборки ----------------------------------------------------
 стоп()
+собрать_проект(N)
+каталог_данных_в_реестр(D)
 for f in D.glob("*community*"):
     f.unlink()
 assert старт(), "витрина не поднялась"

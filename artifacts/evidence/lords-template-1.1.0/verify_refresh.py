@@ -32,6 +32,24 @@ N, D = S / "new-lords-90", S / "lords-90-data"
 итог, провалы = [], []
 
 
+def каталог_данных_в_реестр(путь: Path) -> None:
+    """Объявить проверочной ячейке её каталог данных.
+
+    `newsite` выводит `runtime.data_dir` из учётной записи — `/srv/<учётка>/data`.
+    Для боевой ячейки это верно, для проверочной такого каталога нет и быть не
+    должно: она живёт в песочнице. Доставка берёт путь ИЗ РЕЕСТРА (это и есть
+    одно из проверяемых здесь исправлений), поэтому реестру он и сообщается.
+    """
+    import json as _json
+    реестр = _json.loads(РЕЕСТР.read_text(encoding="utf-8"))
+    for ячейка in реестр.get("cells", []):
+        if ячейка.get("site_id") == "lords-90":
+            ячейка.setdefault("runtime", {})["data_dir"] = str(путь)
+    РЕЕСТР.write_text(_json.dumps(реестр, ensure_ascii=False, indent=2),
+                      encoding="utf-8")
+
+
+
 def проверка(имя, ок, подр=""):
     итог.append((имя, "PASS" if ок else "FAIL", подр))
     if not ок:
@@ -117,6 +135,7 @@ def слаги(html):
 }]
 
 ОБЩИЙ.mkdir(parents=True, exist_ok=True)
+каталог_данных_в_реестр(D)
 засеять(D, "rev-1")                       # исходное содержимое ячейки
 for f in D.glob("*community*"):
     f.unlink()
