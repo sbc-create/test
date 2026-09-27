@@ -334,12 +334,17 @@ COUNTERS_WITHOUT_GOALS = {
 #: счётчик без данных, и он же будет мешать заметить настоящий. Перечислены
 #: явно, чтобы новый домен не мог появиться в реестре молча.
 PLANNED_DOMAINS = (
+    # Два домена работают публично, а в реестре аналитики их не было вовсе:
+    # домен без записи не попадает ни в аудит, ни в план, и его отсутствие
+    # ничем не заметно. Добавлены как planned — счётчика у них нет нигде.
+    "animedia.icu",
     "animedia.space",
     "lordserials22.info",
     "lordserials22.site",
     "lordserials22.space",
     "yummyani7.info",
     "yummyani7.site",
+    "zonafilm.cc",
     "zonafilm12.site",
 )
 
@@ -433,6 +438,7 @@ def test_registry_never_stores_a_secret():
 #: это» пропустил бы подмену состояния в любую сторону.
 WEBMASTER_STATUS = {
     "1lordserials1.online": BLOCKED_DEPLOYMENT,
+    "animedia.icu": BLOCKED_DEPLOYMENT,
     "animedia.space": BLOCKED_DEPLOYMENT,
     "lordfilm47.space": BLOCKED_DEPLOYMENT,
     "lordserial33.biz": BLOCKED_DEPLOYMENT,
@@ -444,6 +450,7 @@ WEBMASTER_STATUS = {
     "yummyani.site": BLOCKED_DEPLOYMENT,
     "yummyani7.info": "PLANNED",
     "yummyani7.site": "PLANNED",
+    "zonafilm.cc": BLOCKED_DEPLOYMENT,
     "zonafilm.space": "PLANNED",
     "zonafilm12.site": "PLANNED",
 }

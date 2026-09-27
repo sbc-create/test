@@ -51,6 +51,42 @@
       }
     },
     {
+      "domain": "animedia.icu",
+      "site_id": "animedia-01",
+      "counter_name": "Animedia — animedia.icu",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "animedia.icu"
+      ],
+      "goals": [
+        "comment_submit",
+        "episode_select",
+        "filter_apply",
+        "player_error",
+        "player_ready",
+        "player_start",
+        "search",
+        "season_select",
+        "title_view"
+      ],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "BLOCKED_DEPLOYMENT",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": null,
+      "problems": [
+        "Счётчика нет ни в реестре, ни в drop-in служб, ни в разметке страниц — проверено на живом сайте. Переиспользовать нечего, создание требует OAuth-токена Метрики с правом записи."
+      ]
+    },
+    {
       "domain": "animedia.space",
       "site_id": "animedia-02",
       "counter_name": "Animedia — animedia.space",
@@ -253,7 +289,7 @@
     },
     {
       "domain": "yummyani.biz",
-      "site_id": null,
+      "site_id": "yummy-biz",
       "counter_name": "YummyAnime — yummyani.biz",
       "counter_id": 111881039,
       "counter_state": "reused",
@@ -298,7 +334,7 @@
     },
     {
       "domain": "yummyani.org",
-      "site_id": null,
+      "site_id": "yummy-org",
       "counter_name": "YummyAnime — yummyani.org",
       "counter_id": 111881038,
       "counter_state": "reused",
@@ -343,7 +379,7 @@
     },
     {
       "domain": "yummyani.site",
-      "site_id": null,
+      "site_id": "yummy-site",
       "counter_name": "YummyAnime — yummyani.site",
       "counter_id": 111881037,
       "counter_state": "reused",
@@ -434,6 +470,42 @@
       "seo_indexing_enabled": false,
       "problems": [
         "счётчик не создан: чужой идентификатор не переносится, создание — вход владельца"
+      ]
+    },
+    {
+      "domain": "zonafilm.cc",
+      "site_id": "zona-02",
+      "counter_name": "Zona Cinema — zonafilm.cc",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "zonafilm.cc"
+      ],
+      "goals": [
+        "comment_submit",
+        "episode_select",
+        "filter_apply",
+        "player_error",
+        "player_ready",
+        "player_start",
+        "search",
+        "season_select",
+        "title_view"
+      ],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "BLOCKED_DEPLOYMENT",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": null,
+      "problems": [
+        "Счётчика нет ни в реестре, ни в drop-in служб, ни в разметке страниц — проверено на живом сайте. Переиспользовать нечего, создание требует OAuth-токена Метрики с правом записи."
       ]
     },
     {
