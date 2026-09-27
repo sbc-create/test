@@ -114,10 +114,10 @@ cat <<'TAIL'
 
    Мутаций Topvisor при установке не выполнялось: запущены только check и plan.
 
-   Подключение аналитики домена — отдельными вызовами, по одному на домен:
-
-     sudo systemctl start 'analytics-connect@zonafilm12.site.service'
-     sudo systemctl start topvisor-connect.service
+   Подключение аналитики домена — отдельными вызовами, по одному на домен.
+   Список доменов без счётчика печатается ниже из реестра аналитики: прежде
+   здесь стоял один пример, и какие ещё домены ждут подключения, приходилось
+   выяснять отдельно.
 
    Первый ищет счётчик по домену и переиспользует найденный; при двух
    счётчиках на домен останавливается со статусом ambiguous. Второй создаёт
@@ -125,3 +125,25 @@ cat <<'TAIL'
 
    Отчёты: var/analytics/connect-<домен>.json и var/topvisor/connect-latest.txt
 TAIL
+
+python3 - "$SRC_ROOT" <<'LIST'
+import json, sys
+from pathlib import Path
+путь = Path(sys.argv[1]) / "config" / "analytics.json"
+записи = json.loads(путь.read_text(encoding="utf-8"))["properties"]
+ждут = [з["domain"] for з in записи if not з.get("counter_id")
+        and not str(з["domain"]).endswith((".localhost", ".test", ".local"))]
+for домен in ждут:
+    print(f"     sudo systemctl start 'analytics-connect@{домен}.service'")
+print()
+print(f"   Домены без счётчика: {len(ждут)}. Это ПЕРЕЧЕНЬ, а не порядок действий:")
+print("   счётчик, заведённый до запуска сайта, собирает пустоту, выглядит рабочим")
+print("   и мешает заметить настоящий. Запускать по домену, который выпускается")
+print("   сейчас. Домен, у которого счётчик уже есть, в перечне не появляется, и")
+print("   повторный вызов дубля не создаёт: счётчик ищется по домену.")
+print()
+print("   Проекты Topvisor — одной командой на все домены манифеста")
+print("   (существующие переиспользуются, платные операции не выполняются):")
+print()
+print("     sudo systemctl start topvisor-connect.service")
+LIST

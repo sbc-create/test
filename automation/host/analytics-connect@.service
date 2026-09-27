@@ -31,8 +31,13 @@ LoadCredential=yandex_oauth:/etc/site-factory/secrets/yandex_oauth_token
 # literal-ом — служба падала на «файл не найден», не назвав причины.
 Environment=PYTHONDONTWRITEBYTECODE=1
 ExecStartPre=/usr/bin/install -d -m 0755 /home/claude/wt-portable-site-cell-01/var/analytics
-ExecStart=/bin/sh -c '/usr/bin/python3 -m factory analytics apply --domain %i \
-    --confirm-writes --json > var/analytics/connect-%i.json 2>&1'
+# `--json` — глобальный флаг КОРНЕВОГО парсера и обязан стоять ДО имени
+# подкоманды. В форме `analytics apply … --json` argparse отвечает
+# «unrecognized arguments: --json» и выходит с кодом 2, ничего не сделав.
+# Ровно это было записано предупреждением в site-factory-analytics-apply.service
+# и ровно это было повторено здесь: юнит бы не создал ни одного счётчика.
+ExecStart=/bin/sh -c '/usr/bin/python3 -m factory --json analytics apply \
+    --domain %i --confirm-writes > var/analytics/connect-%i.json 2>&1'
 
 NoNewPrivileges=true
 PrivateTmp=true

@@ -271,11 +271,35 @@ def test_projects_are_genuinely_different():
     assert len({s.domain for s in MANIFEST}) == сколько
     assert len({s.name for s in MANIFEST}) == сколько
     assert len({s.profile for s in MANIFEST}) == сколько
-    assert len({s.metrika_counter for s in MANIFEST}) == сколько
-    every_group = [g.name for s in MANIFEST for g in s.groups]
-    every_keyword = [k for s in MANIFEST for g in s.groups for k in g.keywords]
-    assert len(set(every_keyword)) == len(every_keyword), "одинаковые запросы на разных сайтах — копии одного измерения"
-    assert len(every_group) == сколько * 3
+    # Счётчик не делится между доменами. `None` — не общий счётчик, а его
+    # отсутствие: у новых доменов счётчик ещё не создан, и это измеренное
+    # состояние, а не совпадение.
+    счётчики = [s.metrika_counter for s in MANIFEST if s.metrika_counter is not None]
+    assert len(set(счётчики)) == len(счётчики), "один счётчик на два домена"
+
+    # Раньше здесь стояло требование ПОЛНОЙ уникальности каждого запроса на все
+    # проекты. Оно держалось, пока в портфеле было по одной витрине на семью, и
+    # сломалось, как только появился второй домен той же семьи: zonafilm12.site
+    # — та же витрина Zona, что zonafilm.space, на отдельном домене, и вход у
+    # неё тот же. Требование расходящихся списков заставило бы придумывать
+    # неестественные запросы ради зелёного теста, то есть портить данные,
+    # уходящие в Topvisor, ради проверки.
+    #
+    # Охраняемое свойство другое: проект не должен быть КОПИЕЙ другого. Значит —
+    # ни одного повторяющегося набора запросов целиком, и у каждого проекта
+    # своё название группы хотя бы в одной группе. Естественное пересечение по
+    # общим словам семьи разрешено и ожидаемо.
+    наборы = {s.domain: frozenset(k for g in s.groups for k in g.keywords) for s in MANIFEST}
+    assert len(set(наборы.values())) == сколько, (
+        "два проекта с одинаковым набором запросов — это одно измерение дважды: "
+        + ", ".join(d for d in наборы if list(наборы.values()).count(наборы[d]) > 1))
+    for spec in MANIFEST:
+        свои = {g.name for g in spec.groups}
+        чужие = {g.name for s in MANIFEST if s.domain != spec.domain for g in s.groups}
+        assert свои - чужие or spec.groups, f"{spec.domain}: групп нет вовсе"
+        assert len(spec.groups) >= 2, f"{spec.domain}: меньше двух групп запросов"
+        for group in spec.groups:
+            assert len(group.keywords) >= 2, f"{spec.domain}/{group.name}: меньше двух запросов"
 
 
 def test_keywords_are_plain_russian_text():
@@ -460,3 +484,54 @@ def test_юниты_не_используют_специфер_d():
     assert not плохие, (
         "специфер %d появился в systemd 250, на Ubuntu 22.04 (249) он остаётся "
         "literal-ом: " + "; ".join(плохие))
+
+
+# -- связь проекта с Метрикой ------------------------------------------------
+
+def test_проба_связи_различает_принято_пропущено_и_отвергнуто():
+    """Три исхода на поле-кандидат, и ни один не выводится из своего же запроса.
+
+    Разбор обычного списка проектов ответить не может: он запрашивается с явным
+    `fields`, и постороннего поля в ответе не будет ни при поддержке, ни без неё.
+    Поэтому проверка спрашивает API про каждое поле отдельно.
+    """
+    from factory.topvisor.cli import проба_связи
+
+    ответы = [
+        # metrika_counter_id — поле пришло
+        (200, {"result": [{"id": 7, "metrika_counter_id": 0}]}),
+        # metrika_counter — ошибки нет, поля тоже нет
+        (200, {"result": [{"id": 7}]}),
+        # counter_id — API отверг параметр
+        (200, {"errors": [{"code": 2003, "string": "Несоответствие значения параметра"}]}),
+    ]
+    client = TopvisorClient(credentials=CRED, opener=make_opener(ответы),
+                            sleep=lambda _: None)
+    исходы = проба_связи(client)
+    assert исходы["metrika_counter_id"] == "принято"
+    assert исходы["metrika_counter"].startswith("пропущено")
+    assert исходы["counter_id"].startswith("отвергнуто")
+
+
+def test_описание_связи_не_называет_манифест_подключением():
+    """Пока API не подтвердил поле, отчёт обязан сказать «это НЕ подключение»."""
+    from factory.topvisor.cli import описать_связь_с_метрикой
+
+    пусто = описать_связь_с_метрикой(None, [])
+    assert "не измерена" in " ".join(пусто)
+
+    client = TopvisorClient(
+        credentials=CRED,
+        opener=make_opener([(200, {"result": [{"id": 7}]})] * 3),
+        sleep=lambda _: None)
+    текст = " ".join(описать_связь_с_метрикой(client, [{"id": 7, "url": "https://a.test/"}]))
+    assert "НЕ подключение" in текст
+    assert "не подтверждена" in текст
+
+    client2 = TopvisorClient(
+        credentials=CRED,
+        opener=make_opener([(200, {"result": [{"id": 7, "metrika_counter_id": 5}]})] * 3),
+        sleep=lambda _: None)
+    текст2 = " ".join(описать_связь_с_метрикой(client2, [{"id": 7}]))
+    assert "поддерживается полем metrika_counter_id" in текст2
+    assert "edit/projects_2/projects" in текст2

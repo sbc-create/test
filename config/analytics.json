@@ -218,8 +218,8 @@
     },
     {
       "domain": "lordserials22.info",
-      "site_id": null,
-      "counter_name": "новый домен без счётчика — lordserials22.info",
+      "site_id": "lords-05",
+      "counter_name": "Lords — lordserials22.info",
       "counter_id": null,
       "counter_state": "planned",
       "analytics_enabled": false,
@@ -243,8 +243,8 @@
     },
     {
       "domain": "lordserials22.site",
-      "site_id": null,
-      "counter_name": "новый домен без счётчика — lordserials22.site",
+      "site_id": "lords-06",
+      "counter_name": "Lords — lordserials22.site",
       "counter_id": null,
       "counter_state": "planned",
       "analytics_enabled": false,
@@ -268,8 +268,8 @@
     },
     {
       "domain": "lordserials22.space",
-      "site_id": null,
-      "counter_name": "новый домен без счётчика — lordserials22.space",
+      "site_id": "lords-07",
+      "counter_name": "Lords — lordserials22.space",
       "counter_id": null,
       "counter_state": "planned",
       "analytics_enabled": false,
@@ -428,8 +428,8 @@
     },
     {
       "domain": "yummyani7.info",
-      "site_id": null,
-      "counter_name": "новый домен без счётчика — yummyani7.info",
+      "site_id": "yummy-08",
+      "counter_name": "YummyAnime — yummyani7.info",
       "counter_id": null,
       "counter_state": "planned",
       "analytics_enabled": false,
@@ -453,8 +453,8 @@
     },
     {
       "domain": "yummyani7.site",
-      "site_id": null,
-      "counter_name": "новый домен без счётчика — yummyani7.site",
+      "site_id": "yummy-07",
+      "counter_name": "YummyAnime — yummyani7.site",
       "counter_id": null,
       "counter_state": "planned",
       "analytics_enabled": false,
@@ -543,7 +543,7 @@
     {
       "domain": "zonafilm12.site",
       "site_id": "zona-03",
-      "counter_name": "новый домен без счётчика — zonafilm12.site",
+      "counter_name": "Zona — zonafilm12.site",
       "counter_id": null,
       "counter_state": "planned",
       "analytics_enabled": false,
