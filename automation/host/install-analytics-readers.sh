@@ -6,8 +6,16 @@
 # Что ставится и зачем
 # --------------------
 #
-#   analytics-cabinet.service/.timer   статистика Метрики по ВСЕМ доменам реестра
-#   topvisor-check.service             доступ, проекты и план Topvisor
+#   analytics-cabinet.service/.timer   ЧТЕНИЕ статистики Метрики по всем доменам
+#   topvisor-check.service             ЧТЕНИЕ: доступ, проекты и план Topvisor
+#   analytics-connect@<домен>.service  ЗАПИСЬ: найти или создать счётчик домена
+#   topvisor-connect.service           ЗАПИСЬ: создать недостающие проекты
+#
+# Чтение и запись разведены намеренно. Название «readers» ничего не обещает про
+# право создавать счётчики: в Метрике это разные разрешения токена
+# (metrika:read и metrika:write), и юнит, делающий и то и другое, скрывал бы,
+# какого именно права не хватило. Установка средства чтения готовности
+# подключения не доказывает.
 #
 # Обе службы получают секрет через LoadCredential: значение живёт в
 # /run/credentials/<юнит> только на время прогона, а каталог
@@ -75,7 +83,8 @@ NOSECRET
 fi
 
 log "установка юнитов"
-for unit in analytics-cabinet.service analytics-cabinet.timer topvisor-check.service; do
+for unit in analytics-cabinet.service analytics-cabinet.timer topvisor-check.service \
+            'analytics-connect@.service' topvisor-connect.service; do
   run install -m 0644 "$SRC_ROOT/automation/host/$unit" "$UNIT_DIR/$unit"
 done
 
@@ -103,5 +112,16 @@ cat <<'TAIL'
      var/topvisor/check-latest.txt        профиль, баланс, проекты Topvisor
      var/topvisor/plan-latest.json        план: чего не хватает проектам
 
-   Мутаций Topvisor не выполнялось: только check и plan.
+   Мутаций Topvisor при установке не выполнялось: запущены только check и plan.
+
+   Подключение аналитики домена — отдельными вызовами, по одному на домен:
+
+     sudo systemctl start 'analytics-connect@zonafilm12.site.service'
+     sudo systemctl start topvisor-connect.service
+
+   Первый ищет счётчик по домену и переиспользует найденный; при двух
+   счётчиках на домен останавливается со статусом ambiguous. Второй создаёт
+   недостающие проекты по манифесту; платные операции не выполняет.
+
+   Отчёты: var/analytics/connect-<домен>.json и var/topvisor/connect-latest.txt
 TAIL
