@@ -35,6 +35,10 @@ TOKEN_VALUE = "y0_AgAAAABrepairTESTtoken0123456789"
 #: реестр: подделка, знающая только часть доменов, заставит повторный прогон
 #: «создавать» недостающие — и тест начнёт падать не на регрессии, а на том,
 #: что в проект добавили направление.
+#: Счётчики, которые в аккаунте ДЕЙСТВИТЕЛЬНО есть. Поддельный аккаунт обязан
+#: их содержать: если реестр объявляет счётчик, а подделка о нём не знает,
+#: прогон «не находит» его и создаёт заново — тест ловил бы несуществующий
+#: дефект и прятал бы настоящий.
 LIVE = {
     "yummyani.site": 111881037,
     "yummyani.org": 111881038,
@@ -42,6 +46,8 @@ LIVE = {
     "lordfilm47.space": 112010269,
     "lordserial33.biz": 112010274,
     "1lordserials1.online": 112010277,
+    # Перенесён из монолитной установки вместе с витриной.
+    "zonafilm.space": 112582938,
 }
 
 
@@ -187,7 +193,16 @@ def test_repair_run_records_counter_ids_and_a_goal_id_for_every_event(
 
     data = registry.load()
     total = 0
+    тронуты = set()
     for entry in data["properties"]:
+        if entry["domain"] not in LIVE:
+            # Запланированный домен прогон не трогает вовсе: ни счётчика, ни
+            # целей. Проверяется именно это, а не отсутствие записи в отчёте.
+            assert entry["counter_id"] is None, entry["domain"]
+            assert entry["counter_state"] == "planned", entry["domain"]
+            assert not entry.get("goal_ids"), entry["domain"]
+            continue
+        тронуты.add(entry["domain"])
         assert entry["counter_id"] == LIVE[entry["domain"]]
         assert entry["counter_state"] == "reused"
         assert entry["webvisor"] is False
@@ -195,7 +210,9 @@ def test_repair_run_records_counter_ids_and_a_goal_id_for_every_event(
         assert all(isinstance(v, int) for v in entry["goal_ids"].values())
         assert not any("сесси" in p for p in entry["problems"])
         total += len(entry["goal_ids"])
-    assert total == 9 * len(LIVE), f"ожидалось 27 идентификаторов целей, получено {total}"
+    assert тронуты == set(LIVE), f"прогон пропустил боевые домены: {set(LIVE) - тронуты}"
+    assert total == 9 * len(LIVE), (
+        f"ожидалось {9 * len(LIVE)} идентификаторов целей, получено {total}")
 
 
 def test_a_second_repair_run_writes_nothing(provider, scoped_registry, monkeypatch, capsys):
@@ -217,8 +234,13 @@ def test_dry_run_writes_nothing_at_all(provider, scoped_registry, monkeypatch, c
     analytics_cli.cmd_apply(Args(confirm_writes=False, json=True))
     capsys.readouterr()
     assert provider.writes() == []
-    assert all(entry["counter_id"] == LIVE[entry["domain"]]
-               for entry in registry.load()["properties"])
+    for entry in registry.load()["properties"]:
+        if entry["domain"] in LIVE:
+            assert entry["counter_id"] == LIVE[entry["domain"]], entry["domain"]
+        else:
+            # Запланированный домен обязан остаться БЕЗ счётчика: сплошной
+            # прогон не заводит счётчики доменам, которые ещё не запущены.
+            assert entry["counter_id"] is None, entry["domain"]
 
 
 def test_a_counter_that_does_not_match_the_registry_stops_the_run(

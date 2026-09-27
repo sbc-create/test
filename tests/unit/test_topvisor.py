@@ -257,15 +257,25 @@ def test_spend_ceiling_is_zero():
 
 # -- манифест ----------------------------------------------------------------
 
-def test_six_projects_are_genuinely_different():
-    assert len({s.domain for s in MANIFEST}) == 6
-    assert len({s.name for s in MANIFEST}) == 6
-    assert len({s.profile for s in MANIFEST}) == 6
-    assert len({s.metrika_counter for s in MANIFEST}) == 6
+def test_projects_are_genuinely_different():
+    """Число проектов больше не зашито: витрины добавляются.
+
+    Раньше стояло `== 6`, и добавление zonafilm.space — витрины, которая
+    работает публично и в манифесте отсутствовала, — читалось как поломка.
+    Свойство, которое здесь охраняется, не в количестве: каждый проект должен
+    отличаться от остальных, иначе позиции по одному списку слов на нескольких
+    витринах — это несколько копий одного измерения.
+    """
+    сколько = len(MANIFEST)
+    assert сколько >= 6, f"проектов стало меньше: {сколько}"
+    assert len({s.domain for s in MANIFEST}) == сколько
+    assert len({s.name for s in MANIFEST}) == сколько
+    assert len({s.profile for s in MANIFEST}) == сколько
+    assert len({s.metrika_counter for s in MANIFEST}) == сколько
     every_group = [g.name for s in MANIFEST for g in s.groups]
     every_keyword = [k for s in MANIFEST for g in s.groups for k in g.keywords]
-    assert len(set(every_keyword)) == len(every_keyword), "одинаковые запросы на разных сайтах — шесть копий одного измерения"
-    assert len(every_group) == len(MANIFEST) * 3
+    assert len(set(every_keyword)) == len(every_keyword), "одинаковые запросы на разных сайтах — копии одного измерения"
+    assert len(every_group) == сколько * 3
 
 
 def test_keywords_are_plain_russian_text():
@@ -280,11 +290,24 @@ def test_keywords_are_plain_russian_text():
 
 
 def test_every_manifest_counter_matches_the_domain():
-    expected = {
-        "yummyani.site": 111881037, "yummyani.org": 111881038, "yummyani.biz": 111881039,
-        "lordfilm47.space": 112010269, "lordserial33.biz": 112010274, "1lordserials1.online": 112010277,
-    }
-    assert {s.domain: s.metrika_counter for s in MANIFEST} == expected
+    """Счётчик сверяется с реестром аналитики, а не с третьей копией списка.
+
+    Третий зашитый перечень расходился бы с двумя первыми молча. Сверка двух
+    источников истины между собой ловит опечатку в любом из них, и добавление
+    витрины не требует править ещё и тест.
+    """
+    import json
+    from pathlib import Path as _Path
+
+    корень = _Path(__file__).resolve().parents[2]
+    реестр = json.loads((корень / "config" / "analytics.json").read_text(encoding="utf-8"))
+    из_реестра = {z["domain"]: z.get("counter_id") for z in реестр["properties"]}
+    for spec in MANIFEST:
+        assert spec.domain in из_реестра, (
+            f"{spec.domain} есть в манифесте Topvisor и отсутствует в реестре аналитики")
+        assert из_реестра[spec.domain] == spec.metrika_counter, (
+            f"{spec.domain}: в манифесте {spec.metrika_counter}, "
+            f"в реестре аналитики {из_реестра[spec.domain]}")
 
 
 def test_undefined_method_code_is_terminal_not_retried():

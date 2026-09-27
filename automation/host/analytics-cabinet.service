@@ -1,0 +1,38 @@
+# Чтение статистики из кабинета Метрики. Только чтение, ничего не меняет.
+#
+# Зачем отдельный юнит, когда есть site-factory-analytics-collect.
+# Тот читает реестр из /srv/site-factory/repo, где на 27.09 объявлено ШЕСТЬ
+# доменов, и он не включён (в timers.target.wants его нет, artifacts/analytics
+# не существует — то есть сбор не выполнялся ни разу). Реестр этой ветки
+# описывает шестнадцать доменов, включая zonafilm.space с подтверждённым
+# счётчиком. Прогон по старому реестру дал бы неполную картину и выглядел бы
+# полным.
+#
+# Токен читает служба, а не сессия агента: значение приходит через
+# LoadCredential в /run/credentials/%n и живёт только на время прогона. Каталог
+# /etc/site-factory/secrets закрыт для учётной записи claude, и это правильно —
+# отчёт ей нужен, секрет нет.
+[Unit]
+Description=Статистика Метрики по всем доменам реестра (только чтение)
+After=network-online.target
+ConditionPathExists=/home/claude/wt-portable-site-cell-01/config/analytics.json
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/home/claude/wt-portable-site-cell-01
+LoadCredential=yandex_oauth:/etc/site-factory/secrets/yandex_oauth_token
+Environment=YANDEX_OAUTH_TOKEN_FILE=%d/yandex_oauth
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStartPre=/usr/bin/install -d -m 0755 /home/claude/wt-portable-site-cell-01/var/analytics
+ExecStart=/home/claude/wt-portable-site-cell-01/bin/seo-operator analytics-collect \
+    --json --out /home/claude/wt-portable-site-cell-01/var/analytics/cabinet-latest.json
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/claude/wt-portable-site-cell-01/var
+ProtectKernelTunables=true
+RestrictSUIDSGID=true

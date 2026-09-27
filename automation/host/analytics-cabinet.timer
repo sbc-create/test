@@ -1,0 +1,13 @@
+# Раз в сутки после суточного обновления контента. Persistent — пропущенный
+# запуск догоняется, иначе после простоя хоста отчёт молча устарел бы.
+[Unit]
+Description=Статистика Метрики по всем доменам реестра
+
+[Timer]
+OnCalendar=*-*-* 06:10:00 UTC
+Persistent=true
+RandomizedDelaySec=300
+Unit=analytics-cabinet.service
+
+[Install]
+WantedBy=timers.target

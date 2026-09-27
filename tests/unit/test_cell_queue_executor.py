@@ -624,3 +624,35 @@ def test_правки_чужого_сайта_не_применяются(tmp_pa
 def test_исход_правок_назван_применённым():
     """`edited` обязан значиться применённым — иначе успех запишется отказом."""
     assert "edited" in queue.ПРИМЕНЁННЫЕ_ИСХОДЫ
+
+
+def test_404_на_приватный_репозиторий_называет_токен(monkeypatch, tmp_path):
+    """Отказ обязан отличать «прогона нет» от «токен его не видит».
+
+    Первый выпуск zonafilm12.site отклонён с HTTP 404, хотя прогон CI был
+    успешным: токен исполнителя (/etc/site-factory/gh-token) не видел нового
+    приватного репозитория. Без подсказки такой отказ читается как «CI не
+    прошёл», и причину ищут в CI.
+    """
+    import subprocess as _sp
+
+    from factory.cell import executor as _ex
+
+    class Ответ:
+        returncode = 1
+        stdout = ""
+        stderr = ("failed to get run: HTTP 404: Not Found "
+                  "(https://api.github.com/repos/sbc-create/site-x/actions/runs/1)")
+
+    monkeypatch.setattr(_sp, "run", lambda *a, **k: Ответ())
+    заявка = _ex.queue.Заявка(
+        request_id="r1", operation="activate", site_id="zona-03",
+        commit="a" * 40, digest="sha256:" + "b" * 64, ci_run="1",
+        repo="sbc-create/site-x",
+    )
+    with pytest.raises(_ex.ПроисхождениеНеПодтверждено) as поймано:
+        _ex.проверить_ci(заявка, remote="https://github.com/sbc-create/site-x")
+    текст = str(поймано.value)
+    assert "404" in текст
+    assert "/etc/site-factory/gh-token" in текст, "отказ не называет, какой токен проверить"
+    assert "fine-grained" in текст
