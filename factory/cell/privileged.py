@@ -515,6 +515,14 @@ def promote(site_id: str, *, dry_run: bool = True, предел: int = 600,
                            data=п.data, port=п.port), encoding="utf-8")
     шаги_прежней = погасить_прежнюю(п)
     _systemctl("daemon-reload")
+    # Включение — часть выпуска, а не отдельная обязанность владельца.
+    # Без него сайт работает до первой перезагрузки, а потом не поднимается
+    # вовсе либо возвращается прежняя служба из общего дерева: у lordfilm47.space
+    # и 1lordserials1.online ячейка обслуживала домен, не будучи включённой, и
+    # снаружи это выглядело завершённым выпуском. `enable` идемпотентен, повтор
+    # выпуска ничего не удваивает.
+    включение = _systemctl("enable", п.unit, проверять=False)
+    шаги.append(f"enable {п.unit}: rc={включение.returncode}")
     _systemctl("restart", п.unit)
     состояние = готов(п.port, предел=предел,
                       жив=lambda: _systemctl("is-active", "--quiet", п.unit,
