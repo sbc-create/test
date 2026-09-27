@@ -30,34 +30,60 @@
 
 ## 2. Три домена — три профиля
 
-| Домен | `--template` | `--site` | Раздел во владении |
-| --- | --- | --- | --- |
-| `lordserials22.site` | `lords-dorama` | `lords-05` | `/dorama/` |
-| `lordserials22.space` | `lords-anime` | `lords-06` | `/anime/` |
-| `lordserials22.info` | `lords-animation` | `lords-07` | `/animation/` |
+Соответствие ячеек доменам взято из реестра архитектора, а не предложено
+заново: порты и учётные записи там уже проверены свободными.
 
-Идентификаторы ячеек предложены, а не закреплены: занять можно любые
-свободные, но каждый домен обязан получить СВОЙ профиль из трёх. Все три
-свободны в пуле (`config/template-pool.json`, `status: free`) и
-зарезервируются штатным `factory cell reserve`.
+| Домен | `--site` | Порт | `--template` | Версия | Раздел во владении |
+| --- | --- | --- | --- | --- | --- |
+| `lordserials22.site` | `lords-06` | 9116 | **`lords-dorama`** | 1.1.0 | `/dorama/` |
+| `lordserials22.space` | `lords-07` | 9117 | **`lords-anime`** | 1.1.0 | `/anime/` |
+| `lordserials22.info` | `lords-05` | 9113 | **`lords-animation`** | 1.1.0 | `/animation/` |
 
-`lords-genre` выдавать нельзя: он объявлен неподдержанным и в пуле закреплён
-за `lords-04`. Проверка не даст сделать его свободным, пока он не поддержан.
+Профиль у каждого домена СВОЙ. Один профиль на три домена выдать нельзя: пул
+объявлен исключительным именно затем, чтобы два домена не подали одинаковые
+разделы и заголовки.
+
+**Источник профиля — пул, а не экземпляр выпуска.** Все три опубликованы в
+`config/template-pool.json` со `status: free` и выдаются штатным
+`factory cell reserve`. Указывать `repo@commit` не нужно; коммит шаблона
+попадает в `pins.lock.json` сам, командой из §3.
+
+**`lords-genre` для этих доменов не годится и переиспользовать его
+резервацию нельзя.** Он объявлен неподдержанным в
+`status/lords-template-version.json`: своего оформления в рантайме у него нет
+(витрина отдаёт общий лист `lords-sheet` и внешне неотличима от
+`lords-general`), а фасеты, которыми он владеет, рантайм самостоятельными
+страницами не отдаёт — `/years/` и `/countries/` отвечают 404, `/genres/`
+уводит переходом. Домен получил бы витрину без собственного лица и без того
+содержания, ради которого профиль существует. Проверка этого не допустит:
+профиль из `profiles_unsupported` не может иметь в пуле состояние `free`.
+Свободная резервация `lords-04` остаётся за ним.
+
+### Что именно закреплено этой версией
+
+В `pins` попадают пять файлов рантайма семейства из коммита §1:
+`lords-frontend.py`, `collection_contract.py`, `seo_layer.py`,
+`lords_sections.py`, `community_http.py` — с фактическими суммами, а не
+«последнее». В версию входят все сведённые исправления трёх действующих
+витрин Lords (разделы и классификация, шаг карусели и ряд без дыр, подборки с
+постерами, темы переменными, звёзды и комментарии, сборка и раскладка
+выпуска, две диагностические суммы `/healthz`) — перечень с происхождением
+каждого в `docs/LORDS_TEMPLATE_CHANGELOG.md`.
 
 ## 3. Проверенная команда
 
 Выполнялась на всех трёх профилях; ниже — с подстановкой для первого домена.
 
 ```bash
-python3 -m factory cell reserve --site lords-05 --order <id-заказа> \
+python3 -m factory cell reserve --site lords-06 --order <id-заказа> \
         --domain lordserials22.site
 
 python3 -m factory cell newsite \
-        --site lords-05 --domain lordserials22.site \
-        --template lords-dorama --port <свободный порт> \
+        --site lords-06 --domain lordserials22.site \
+        --template lords-dorama --port 9116 \
         --site-name "<имя витрины>" \
         --remote https://github.com/sbc-create/site-lordserials22-site \
-        --destination var/new-sites/lords-05
+        --destination var/new-sites/lords-06
 ```
 
 ### Обязательные параметры
@@ -78,7 +104,7 @@ python3 -m factory cell newsite \
 | --- | --- | --- |
 | `config/player.json` | Secret Hub, `secret://cdnvideohub/lords/publisher-id` | `run.py` не стартует |
 | `src/community.py` | выпуск `20260923T190000Z-community-2-2-12` | раздел оценок и комментариев выключен с причиной — рабочее состояние |
-| ключ модератора | вне Git, `LORDS_0X_COMMUNITY_MODERATOR_KEY` | сообщения остаются «ожидает проверки» |
+| ключ модератора | вне Git, `LORDS_06_COMMUNITY_MODERATOR_KEY` и т. п. по `site_id` | сообщения остаются «ожидает проверки» |
 | снимок каталога | производитель, через `factory.cell.delivery` | `run.py` отказывает: «нет снимка каталога» |
 
 Имена переменных печатает сам `newsite` (`cell.storage_env`,
