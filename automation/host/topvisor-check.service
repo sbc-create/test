@@ -1,0 +1,34 @@
+# Проверка подключения Topvisor: профиль, баланс, проекты и план.
+#
+# Учётные данные Topvisor лежат в /etc/site-factory/secrets/topvisor и выданы
+# группе ubuntu. Учётная запись claude в эту группу не входит, поэтому CLI из
+# сессии отвечает «процесс не в группе, которой выдан файл». Добавлять сессию в
+# группу-владельца секрета не нужно: тот же результат даёт LoadCredential —
+# файлы появляются в /run/credentials/%n только на время прогона, режим 0400.
+#
+# Ничего не меняет: `check` и `plan` — операции чтения. Мутации выполняет
+# только `apply`, и его здесь нет.
+[Unit]
+Description=Topvisor: доступ, проекты и план (только чтение)
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/home/claude/wt-portable-site-cell-01
+LoadCredential=user-id:/etc/site-factory/secrets/topvisor/user-id
+LoadCredential=api-key:/etc/site-factory/secrets/topvisor/api-key
+Environment=TOPVISOR_SECRET_DIR=%d
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStartPre=/usr/bin/install -d -m 0755 /home/claude/wt-portable-site-cell-01/var/topvisor
+ExecStart=/bin/sh -c '/usr/bin/python3 -m factory.topvisor.cli check > var/topvisor/check-latest.txt 2>&1'
+ExecStart=/bin/sh -c '/usr/bin/python3 -m factory.topvisor.cli plan --json > var/topvisor/plan-latest.json 2>&1'
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/claude/wt-portable-site-cell-01/var
+ProtectKernelTunables=true
+RestrictSUIDSGID=true
