@@ -52,7 +52,7 @@
     },
     {
       "domain": "an1meg0.site",
-      "site_id": null,
+      "site_id": "animego-04",
       "counter_name": "AnimeGo — an1meg0.site",
       "counter_id": null,
       "counter_state": "planned",
@@ -88,7 +88,7 @@
     },
     {
       "domain": "an1mego.site",
-      "site_id": null,
+      "site_id": "animego-02",
       "counter_name": "AnimeGo — an1mego.site",
       "counter_id": 113105751,
       "counter_state": "reused",
@@ -200,7 +200,7 @@
     },
     {
       "domain": "animeg0.site",
-      "site_id": null,
+      "site_id": "animego-03",
       "counter_name": "AnimeGo — animeg0.site",
       "counter_id": 113105753,
       "counter_state": "reused",

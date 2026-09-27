@@ -138,6 +138,73 @@
       }
     },
     {
+      "site_id": "animego-04",
+      "domain": "an1meg0.site",
+      "aliases": [
+        "www.an1meg0.site"
+      ],
+      "status": "planned",
+      "repo": {
+        "kind": "remote",
+        "path": "var/site-repos/an1meg0-site",
+        "remote": "https://github.com/sbc-create/site-an1meg0-site"
+      },
+      "template": {
+        "template_id": "animego",
+        "order_id": "launch-an1meg0-site",
+        "family": "animego",
+        "note": "Экземпляр создан штатным инструментом семейства tools/new_site.py из публично проверенного выпуска an1mego.site (build-id animego-02-7454efd48a1c), шаблон закреплён на site-animego-01@80a0fb5434441fcc3a08f7ee3b0241f3962111ff. В пуле шаблонов семейства animego нет: пул содержит только lords, и это отдельный вход владельца."
+      },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
+      "pins": {
+        "template": "animego",
+        "modules": {},
+        "schemas": {
+          "site_config": "1"
+        }
+      },
+      "runtime": {
+        "unit": "nova-an1meg0-site.service",
+        "previous_unit": null,
+        "port": 9152,
+        "account": "an1meg0-site",
+        "app_dir": "/srv/an1meg0-site/app",
+        "data_dir": "/srv/an1meg0-site/data",
+        "legacy_root": "<data>/site",
+        "reload": "mtime",
+        "managed_by": "cell",
+        "data_owner": "pipeline",
+        "unit_note": "Третий домен AnimeGo. Порт 9152 — следующий свободный за 9150 (an1mego.site) и 9151 (animeg0.site); проверено, что он не слушается. Каталог данных свой: смешение данных трёх площадок отправило бы чужие комментарии и оценки в чужое хранилище."
+      },
+      "release": {
+        "hold": false,
+        "hold_reason": null,
+        "branch": "claude/extract-an1meg0-site"
+      },
+      "indexing": {
+        "desired_state": "CLOSED",
+        "reason": "Тестовая площадка. noindex/nofollow отдаёт рантайм, заготовка nginx дублирует заголовком. Открытие индексации — отдельное решение владельца."
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id": null,
+        "publisher_id_ref": "secret://cdnvideohub/yami/publisher-id",
+        "note": "Идентификатор не хранится в реестре: приходит из Secret Hub по ссылке и попадает в config/player.json при установке. publisher_id_expected шаблона — 10252; подставлять число соседнего домена нельзя."
+      },
+      "analytics": {
+        "metrika_counter_id": null,
+        "metrika_verified_at": null,
+        "metrika_data_seen_at": null,
+        "topvisor_project_id": null,
+        "topvisor_verified_at": null,
+        "topvisor_settings": null,
+        "note": "Счётчик и проект этого домена ещё не созданы. Чужие идентификаторы не подставляются: статистика и позиции ушли бы в чужой кабинет."
+      }
+    },
+    {
       "site_id": "lords-01",
       "domain": "lordfilm47.space",
       "aliases": [],
