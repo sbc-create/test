@@ -55,7 +55,16 @@ from typing import Any
 
 #: Что исполнителю разрешено делать. Список закрытый: «выполнить произвольную
 #: операцию» отсутствует как понятие, а не запрещено проверкой.
-ОПЕРАЦИИ = ("activate", "update", "deliver", "rollback", "editorial")
+#: `access-check` ничего не меняет: исполнитель проверяет СВОЙ доступ к
+#: репозиторию сайта и пишет результат. Нужна потому, что права
+#: интерактивной сессии и права исполнителя — разные, и разошлись они молча:
+#: выпуск нового домена отклонялся HTTP 404, пока та же команда из сессии
+#: читала прогон без ошибок.
+ОПЕРАЦИИ = ("activate", "update", "deliver", "rollback", "editorial",
+            "access-check")
+
+#: Операции, которые ничего не выкладывают: коммит и digest им не нужны.
+ОПЕРАЦИИ_БЕЗ_ВЫПУСКА = ("access-check",)
 
 #: Этапы операции. Расширение уже существующей схемы онбординга, не вторая.
 ЭТАПЫ = ("received", "validated", "artifact_verified", "candidate_ready",
@@ -107,12 +116,20 @@ def разобрать(сырое: dict[str, Any]) -> Заявка:
     операция = (сырое.get("operation") or "").strip()
     if операция not in ОПЕРАЦИИ:
         raise RequestRejected(f"operation={операция!r}; разрешены {list(ОПЕРАЦИИ)}")
+    # Проверке доступа коммит и digest не нужны по смыслу: она ничего не
+    # выкладывает. Требовать их значило бы заставлять подставлять
+    # правдоподобные выдуманные значения, а заявка на этом перестаёт быть
+    # договором. Для всех операций, которые ставят код или данные, оба поля
+    # остаются обязательными.
+    без_выпуска = операция in ОПЕРАЦИИ_БЕЗ_ВЫПУСКА
     заявка = Заявка(
         request_id=_проверить(сырое.get("request_id", ""), ЗАПРОС_ID, "request_id"),
         operation=операция,
         site_id=_проверить(сырое.get("site_id", ""), ИДЕНТ, "site_id"),
-        commit=_проверить(сырое.get("commit", ""), ХЕКС40, "commit"),
-        digest=_проверить(сырое.get("digest", ""), ДАЙДЖЕСТ, "digest"),
+        commit=("" if без_выпуска and not сырое.get("commit")
+                else _проверить(сырое.get("commit", ""), ХЕКС40, "commit")),
+        digest=("" if без_выпуска and not сырое.get("digest")
+                else _проверить(сырое.get("digest", ""), ДАЙДЖЕСТ, "digest")),
         ci_run=str(сырое.get("ci_run") or "").strip(),
         repo=str(сырое.get("repo") or "").strip(),
         submitted_at=str(сырое.get("submitted_at") or ""),
@@ -192,7 +209,8 @@ def записать_атомарно(путь: Path, данные: dict[str, An
 #: «не применено», а заявка считается неповторённой и подаётся снова.
 #: Тот же род ошибки, что и с откатом выше: судить об успехе по перечню, в
 #: который забыли внести исход.
-ПРИМЕНЁННЫЕ_ИСХОДЫ = ("activated", "delivered", "edited", "unchanged", "dry-run")
+ПРИМЕНЁННЫЕ_ИСХОДЫ = ("activated", "delivered", "edited", "unchanged", "dry-run",
+                      "checked")
 
 
 def _применено(итог: dict[str, Any]) -> bool:
@@ -299,13 +317,25 @@ def _сейчас() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+def идентификатор_проверки(site_id: str) -> str:
+    """Идентификатор проверки доступа: один на сайт в сутки.
+
+    Без суток повторная проверка после выдачи прав вернула бы
+    `already-finished` и состояние выглядело бы неизменившимся. С временем до
+    секунды очередь копила бы по заявке на каждый запуск.
+    """
+    сутки = _сейчас()[:10]
+    return f"{site_id}-access-{сутки}"
+
+
 def собрать(site_id: str, commit: str, digest: str, *, operation: str = "activate",
             ci_run: str = "", repo: str = "", note: str = "",
             snapshot: str = "") -> Заявка:
     """Заявка из результата проверенной сборки, а не из рук человека."""
     return разобрать({
-        "request_id": новый_идентификатор(site_id, commit, operation=operation,
-                                          snapshot=snapshot),
+        "request_id": (идентификатор_проверки(site_id) if operation in ОПЕРАЦИИ_БЕЗ_ВЫПУСКА
+                       else новый_идентификатор(site_id, commit, operation=operation,
+                                                snapshot=snapshot)),
         "operation": operation, "site_id": site_id, "commit": commit,
         "digest": digest, "ci_run": ci_run, "repo": repo,
         "submitted_at": _сейчас(),

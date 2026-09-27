@@ -161,6 +161,58 @@ def _окружение_gh() -> dict[str, str]:
     return окружение
 
 
+def проверить_доступ(заявка: queue.Заявка, *, remote: str) -> dict[str, Any]:
+    """Видит ли ТОКЕН ИСПОЛНИТЕЛЯ репозиторий сайта. Ничего не меняет.
+
+    Права интерактивной сессии и права исполнителя — разные, и разошлись они
+    молча: выпуск нового домена отклонялся HTTP 404, пока та же команда из
+    сессии читала прогон без ошибок. Проверять доступ «своей рукой» бесполезно,
+    поэтому спрашивать надо того, кто будет действовать.
+
+    Ответ 404 у приватного репозитория неотличим от «нет такого репозитория»,
+    и это не недостаток проверки, а свойство GitHub: он не раскрывает
+    существование того, к чему нет доступа. Поэтому в результат идёт и то, что
+    видно без токена, — если без токена тоже 404, а с токеном 200, доступ есть.
+    """
+    проект = "/".join(remote.rstrip("/").removesuffix(".git").split("/")[-2:])
+    окружение = _окружение_gh()
+    итог: dict[str, Any] = {
+        "operation": "access-check", "site_id": заявка.site_id, "repo": проект,
+        "token_available": bool(окружение.get("GH_TOKEN")),
+    }
+    готово = subprocess.run(
+        ["gh", "api", f"repos/{проект}", "--jq", ".full_name,.private"],
+        capture_output=True, text=True, env=окружение)
+    итог["repo_read"] = готово.returncode == 0
+    if готово.returncode != 0:
+        итог["repo_error"] = (готово.stderr or "").strip()[:200]
+    прогоны = subprocess.run(
+        ["gh", "run", "list", "-R", проект, "--limit", "1",
+         "--json", "databaseId,conclusion"],
+        capture_output=True, text=True, env=окружение)
+    итог["actions_read"] = прогоны.returncode == 0
+    if прогоны.returncode != 0:
+        итог["actions_error"] = (прогоны.stderr or "").strip()[:200]
+    else:
+        try:
+            строки = json.loads(прогоны.stdout or "[]")
+            итог["latest_run"] = (строки[0].get("databaseId") if строки else None)
+        except ValueError:
+            итог["actions_read"] = False
+            итог["actions_error"] = "ответ нечитаем"
+    # Чтение репозитория без чтения Actions бесполезно: происхождение выпуска
+    # проверяется именно по прогону.
+    итог["status"] = "checked"
+    итог["stage"] = "access_verified" if (итог["repo_read"] and итог["actions_read"]) else "access_missing"
+    итог["ok"] = итог["repo_read"] and итог["actions_read"]
+    if not итог["ok"]:
+        итог["required_input"] = (
+            f"выдать токену в /etc/site-factory/gh-token права на чтение "
+            f"Contents и Actions для {проект}; у fine-grained токена список "
+            "репозиториев не расширяется сам при создании новых")
+    return итог
+
+
 #: Операции, которые ставят на сайт НОВЫЙ исполняемый код. Только им нужна
 #: связка с прогоном CI. Доставка данных и откат её не требуют: доставка не
 #: зовёт install_release вовсе, а откат возвращает выпуск, происхождение
@@ -607,7 +659,11 @@ def выполнить(заявка: queue.Заявка, *, база: Path, dry_
         замок = взять_замок(заявка.site_id, база=база, операция=заявка.operation)
         результат["lock"] = замок.владелец
 
-        if заявка.operation == "activate":
+        if заявка.operation == "access-check":
+            итог = проверить_доступ(заявка, remote=проверено["remote"])
+            результат["outcome"] = итог
+            этап = итог["stage"]
+        elif заявка.operation == "activate":
             итог = активировать(заявка, файл=файл, dry_run=dry_run)
             результат["outcome"] = итог
             этап = итог["stage"]

@@ -754,7 +754,8 @@
       "release": {
         "hold": false,
         "hold_reason": "снято 25.09: основание отпало. DNS zonafilm.cc и www разрешаются в 45.131.182.225 (проверено), сессия zona-02-launch письменно просила провести выпуск штатной очередью, репозиторий выделен (sbc-create/site-zonafilm-cc, ветка claude/extract-zonafilm-cc). Прежняя причина — «нет публичного DNS» — больше не верна.",
-        "branch": null
+        "branch": "claude/extract-zonafilm-cc",
+        "branch_note": "Ветка выпуска названа по факту: рабочая копия var/site-repos/zonafilm-cc стоит на ней, и она проходит registry.ветка_разрешена (шаблон claude/extract-*). Поле было пустым, и запись не говорила, откуда берётся выпуск. Путь repo.path при этом менять НЕ нужно: он разрешается от site_repos_root исполнителя (/home/claude/wt-portable-site-cell-01), где каталог называется zonafilm-cc; имя site-zonafilm-cc — это рабочая копия соседней сессии."
       }
     },
     {

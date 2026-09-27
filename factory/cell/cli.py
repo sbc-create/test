@@ -276,13 +276,17 @@ def cmd_runtime(args) -> int:
 def cmd_submit(args) -> int:
     """Подать заявку на выпуск. SHA и digest приходят из проверенной сборки."""
     from factory.cell import queue as q
-    if not (args.site and args.commit and args.expect_digest):
+    без_выпуска = (args.cell_operation or "") in q.ОПЕРАЦИИ_БЕЗ_ВЫПУСКА
+    if not args.site:
+        print("нужен --site", file=sys.stderr)
+        return 2
+    if not без_выпуска and not (args.commit and args.expect_digest):
         print("нужны --site, --commit и --expect-digest", file=sys.stderr)
         return 2
     try:
-        заявка = q.собрать(args.site, args.commit, args.expect_digest,
+        заявка = q.собрать(args.site, args.commit or "", args.expect_digest or "",
                            operation=args.cell_operation, ci_run=args.ci_run or "",
-                           repo=args.repo or "", note=args.reason)
+                           repo=args.repo or "", note=args.reason or "")
         итог = q.подать(заявка)
     except q.RequestRejected as exc:
         print(f"BLOCKED_INPUT: {exc}", file=sys.stderr)

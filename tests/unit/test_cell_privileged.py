@@ -672,3 +672,26 @@ def test_приёмка_читает_build_id_у_семейства_без_ме�
         assert итог["build_id_source"] == источник, итог
         assert итог["build_matches"] is True, итог
         assert итог["ok"] is True, итог
+
+
+def test_повышение_включает_службу():
+    """Автозапуск — часть выпуска, а не обязанность владельца.
+
+    Без `enable` сайт работает до первой перезагрузки, а потом не поднимается
+    вовсе либо возвращается прежняя служба из общего дерева. Измерено 27.09:
+    ячейки lordfilm47.space и 1lordserials1.online обслуживали домены, не будучи
+    включёнными, и снаружи это выглядело завершённым выпуском.
+    """
+    from pathlib import Path as _Path
+
+    from factory.cell import privileged as pr
+
+    # Полный promote требует настоящей площадки и root. Здесь проверяется
+    # контракт порядка: enable вызывается и вызывается ДО restart. Подделка
+    # systemctl этого не добавила бы — она проверяла бы саму подделку.
+    текст = _Path(pr.__file__).read_text(encoding="utf-8")
+    место_enable = текст.find('_systemctl("enable", п.unit')
+    место_restart = текст.find('_systemctl("restart", п.unit)')
+    assert место_enable != -1, "promote не включает службу"
+    assert место_restart != -1
+    assert место_enable < место_restart, "enable обязан идти до restart"
