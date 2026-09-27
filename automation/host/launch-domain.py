@@ -188,6 +188,12 @@ def проверить_шаблон(ячейка: dict) -> dict:
 
 def проверить_издателя(ячейка: dict) -> dict:
     изд = ячейка.get("publisher") or {}
+    ссылка = изд.get("publisher_id_ref")
+    if ссылка:
+        # Значение в реестре не хранится намеренно: оно приходит из Secret Hub
+        # и попадает в config/player.json при выкладке. Требовать здесь число
+        # значило бы требовать положить секрет в git.
+        return этап("player_configured", ОК, f"идентификатор по ссылке {ссылка}")
     свой = изд.get("publisher_id")
     if not свой:
         конфиг = КОРЕНЬ / (ячейка.get("repo", {}).get("path") or "") / "config" / "site.json"

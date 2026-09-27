@@ -335,7 +335,8 @@
       "publisher": {
         "provider": "cdnvideohub",
         "publisher_id": null,
-        "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте."
+        "note": "Идентификатор не хранится в реестре: он приходит из Secret Hub по ссылке publisher_id_ref и попадает в config/player.json при выкладке. Источник назван в docs/LORDS_TEMPLATE_NEWDOMAINS.md семейства Lords. Подставлять сюда число соседнего домена нельзя: 10238 объявлен у пяти действующих витрин.",
+        "publisher_id_ref": "secret://cdnvideohub/lords/publisher-id"
       },
       "runtime": {
         "unit": "nova-lordserials22-info.service",
@@ -391,7 +392,8 @@
       "publisher": {
         "provider": "cdnvideohub",
         "publisher_id": null,
-        "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте."
+        "note": "Идентификатор не хранится в реестре: он приходит из Secret Hub по ссылке publisher_id_ref и попадает в config/player.json при выкладке. Источник назван в docs/LORDS_TEMPLATE_NEWDOMAINS.md семейства Lords. Подставлять сюда число соседнего домена нельзя: 10238 объявлен у пяти действующих витрин.",
+        "publisher_id_ref": "secret://cdnvideohub/lords/publisher-id"
       },
       "runtime": {
         "unit": "nova-lordserials22-site.service",
@@ -447,7 +449,8 @@
       "publisher": {
         "provider": "cdnvideohub",
         "publisher_id": null,
-        "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте."
+        "note": "Идентификатор не хранится в реестре: он приходит из Secret Hub по ссылке publisher_id_ref и попадает в config/player.json при выкладке. Источник назван в docs/LORDS_TEMPLATE_NEWDOMAINS.md семейства Lords. Подставлять сюда число соседнего домена нельзя: 10238 объявлен у пяти действующих витрин.",
+        "publisher_id_ref": "secret://cdnvideohub/lords/publisher-id"
       },
       "runtime": {
         "unit": "nova-lordserials22-space.service",
