@@ -23,7 +23,12 @@ from pathlib import Path
 
 S = Path("/tmp/claude-1001/-home-claude/9e5d5d7c-1b72-454b-9239-dbb120e73b48/scratchpad")
 W = Path("/home/claude/wt-lords-template-consolidation-01")
-N, D = S / "new-lords-90", S / "lords-90-data"
+# Свой каталог проекта. Прежде проверка опиралась на общий new-lords-90, и
+# когда его пересобирал соседний прогон, запись о репозитории в реестре
+# указывала в удалённый каталог: `что_читает` не находила config/site.json,
+# откатывалась к общему списку из двух артефактов, и проверка «хранилище
+# сообщества доставке не подлежит» падала на пустом site_owned.
+N, D = S / "refresh-lords-90", S / "lords-90-data"
 ОБЩИЙ = S / "producer-shared"           # изолированный «общий каталог» производителя
 РЕЕСТР = S / "registry-test.json"
 БАЗА = "http://127.0.0.1:9190"
@@ -134,7 +139,32 @@ def слаги(html):
     "rating": 9.2,
 }]
 
+
+
+МОДУЛЬ = Path("/srv/lords/.frontend/releases/20260923T190000Z-community-2-2-12/community.py")
+
+
+def собрать_проект(куда: Path) -> None:
+    """Проект сайта из шаблона — штатной командой, из чистого дерева."""
+    import shutil as _shutil
+    _shutil.rmtree(куда, ignore_errors=True)
+    r = subprocess.run([sys.executable, "-m", "factory", "cell", "newsite",
+                        "--site", "lords-90", "--domain", "lords90.example",
+                        "--template", "lords-general", "--port", "9190",
+                        "--site-name", "Проверочная витрина",
+                        "--remote", "https://github.com/sbc-create/site-lords90-example",
+                        "--destination", str(куда), "--registry", str(РЕЕСТР)],
+                       cwd=str(W), capture_output=True, text=True)
+    if r.returncode:
+        raise SystemExit("newsite не собрал проект: " + r.stderr.strip()[-300:])
+    subprocess.run(["install", "-m", "0600",
+                    "/srv/lords/.frontend/player-lords-01.json",
+                    str(куда / "config" / "player.json")], check=True)
+    subprocess.run(["cp", str(МОДУЛЬ), str(куда / "src" / "community.py")], check=True)
+
+
 ОБЩИЙ.mkdir(parents=True, exist_ok=True)
+собрать_проект(N)
 каталог_данных_в_реестр(D)
 засеять(D, "rev-1")                       # исходное содержимое ячейки
 for f in D.glob("*community*"):
