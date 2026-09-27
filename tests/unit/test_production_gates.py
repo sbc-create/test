@@ -149,6 +149,11 @@ def test_site_packages_keep_recovery_enabled():
     assert packages, "пакеты сайтов не найдены — проверка потеряла смысл"
     for path in packages:
         package = yaml.safe_load(path.read_text(encoding="utf-8"))
+        assert isinstance(package, dict), (
+            f"{path}: пакет не разобрался в объект. Пустой файл остаётся "
+            "после убитого прогона тестов: фикстура временного сайта убирает "
+            "за собой в finally, но SIGTERM до него не доходит. Удалите файл."
+        )
         site_id = package.get("site_id", path.parent.name)
 
         backup = package.get("backup_policy") or {}
