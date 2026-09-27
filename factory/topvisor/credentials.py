@@ -43,8 +43,30 @@ ALLOWED_MODES = frozenset({0o400, 0o440, 0o600, 0o640})
 FORBIDDEN_VALUE_ENV = ("TOPVISOR_API_KEY", "TOPVISOR_KEY", "TOPVISOR_TOKEN")
 
 
+#: Каталог, куда systemd кладёт значения LoadCredential. Переменную он
+#: выставляет сам с той же версии, что и сам LoadCredential.
+CREDENTIALS_DIR_ENV = "CREDENTIALS_DIRECTORY"
+
+
 def secret_dir() -> Path:
-    return Path(os.environ.get(SECRET_DIR_ENV) or DEFAULT_SECRET_DIR)
+    """Каталог с учётными данными.
+
+    Порядок: явный ``TOPVISOR_SECRET_DIR`` → каталог credential systemd →
+    значение по умолчанию.
+
+    Ветка с ``CREDENTIALS_DIRECTORY`` нужна затем, чтобы unit не вычислял путь
+    сам. Специфера ``%d`` в systemd 249 (Ubuntu 22.04) нет — он появился в 250,
+    — и строка ``TOPVISOR_SECRET_DIR=%d`` оставалась literal-ом, после чего код
+    молча брал закрытый каталог по умолчанию и отвечал «процесс не в группе».
+    Так и случилось при первом запуске установленной службы.
+    """
+    заданный = os.environ.get(SECRET_DIR_ENV)
+    if заданный and "%" not in заданный:
+        return Path(заданный)
+    каталог = os.environ.get(CREDENTIALS_DIR_ENV)
+    if каталог and (Path(каталог) / USER_ID_FILE).exists():
+        return Path(каталог)
+    return Path(DEFAULT_SECRET_DIR)
 
 
 @dataclass(frozen=True)

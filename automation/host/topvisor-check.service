@@ -19,7 +19,9 @@ Group=claude
 WorkingDirectory=/home/claude/wt-portable-site-cell-01
 LoadCredential=user-id:/etc/site-factory/secrets/topvisor/user-id
 LoadCredential=api-key:/etc/site-factory/secrets/topvisor/api-key
-Environment=TOPVISOR_SECRET_DIR=%d
+# Путь к секрету вычисляет КОД по $CREDENTIALS_DIRECTORY: специфера %d в
+# systemd 249 (Ubuntu 22.04) нет, он появился в 250, и строка оставалась
+# literal-ом — служба падала на «файл не найден», не назвав причины.
 Environment=PYTHONDONTWRITEBYTECODE=1
 ExecStartPre=/usr/bin/install -d -m 0755 /home/claude/wt-portable-site-cell-01/var/topvisor
 ExecStart=/bin/sh -c '/usr/bin/python3 -m factory.topvisor.cli check > var/topvisor/check-latest.txt 2>&1'

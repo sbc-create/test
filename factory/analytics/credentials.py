@@ -185,6 +185,13 @@ def token_path() -> Path:
     путь в коде надёжнее, чем в unit-файле.
     """
     configured = os.environ.get(TOKEN_FILE_ENV)
+    if configured and "%" in configured:
+        # Значение с неразвёрнутым специфером systemd (`%d/yandex_oauth`) файлом
+        # быть не может. Раньше оно принималось как есть, и служба падала на
+        # «файл не найден», не назвав причины. Ровно эта ошибка описана ниже в
+        # docstring и была допущена ПОВТОРНО при написании новых юнитов, поэтому
+        # защита стоит в коде, а не в комментарии к unit-файлу.
+        configured = None
     if configured:
         return Path(configured).expanduser()
     directory = credentials_directory()

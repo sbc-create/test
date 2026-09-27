@@ -26,7 +26,9 @@ User=claude
 Group=claude
 WorkingDirectory=/home/claude/wt-portable-site-cell-01
 LoadCredential=yandex_oauth:/etc/site-factory/secrets/yandex_oauth_token
-Environment=YANDEX_OAUTH_TOKEN_FILE=%d/yandex_oauth
+# Путь к секрету вычисляет КОД по $CREDENTIALS_DIRECTORY: специфера %d в
+# systemd 249 (Ubuntu 22.04) нет, он появился в 250, и строка оставалась
+# literal-ом — служба падала на «файл не найден», не назвав причины.
 Environment=PYTHONDONTWRITEBYTECODE=1
 ExecStartPre=/usr/bin/install -d -m 0755 /home/claude/wt-portable-site-cell-01/var/analytics
 ExecStart=/bin/sh -c '/usr/bin/python3 -m factory analytics apply --domain %i \

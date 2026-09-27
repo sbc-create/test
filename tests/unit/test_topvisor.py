@@ -409,3 +409,54 @@ def test_bank_info_unwraps_the_nested_tariff():
     info = client.bank_info()
     assert info["balance"] == 0
     assert info["name"] == "XS"
+
+
+def test_секрет_берётся_из_каталога_credential_systemd(monkeypatch, tmp_path):
+    """Специфер %d в unit-файле не работает на systemd 249 — путь считает код.
+
+    Повтор задокументированной ошибки: docstring `token_path()` в модуле
+    аналитики прямо предупреждает, что `%d` появился только в systemd 250, а на
+    Ubuntu 22.04 остаётся literal-ом. Новые юниты Topvisor были написаны с `%d`,
+    и первая же установленная служба ответила «процесс не в группе»: код молча
+    взял закрытый каталог по умолчанию.
+    """
+    from factory.topvisor import credentials as уд
+
+    каталог = tmp_path / "credentials"
+    каталог.mkdir()
+    (каталог / уд.USER_ID_FILE).write_text("12345", encoding="utf-8")
+    (каталог / уд.API_KEY_FILE).write_text("k" * 20, encoding="utf-8")
+
+    monkeypatch.setenv(уд.CREDENTIALS_DIR_ENV, str(каталог))
+    monkeypatch.delenv(уд.SECRET_DIR_ENV, raising=False)
+    assert уд.secret_dir() == каталог
+
+    # Неразвёрнутый специфер не должен перебивать рабочий путь.
+    monkeypatch.setenv(уд.SECRET_DIR_ENV, "%d")
+    assert уд.secret_dir() == каталог, "literal %d принят за путь"
+
+    # Явный нормальный путь по-прежнему главнее.
+    свой = tmp_path / "свой"
+    свой.mkdir()
+    monkeypatch.setenv(уд.SECRET_DIR_ENV, str(свой))
+    assert уд.secret_dir() == свой
+
+
+def test_юниты_не_используют_специфер_d():
+    """Ни один наш unit-файл не должен опираться на %d.
+
+    Проверка текстовая намеренно: ошибка живёт именно в unit-файле, и ловить её
+    надо там, где она пишется.
+    """
+    from pathlib import Path as _Path
+
+    корень = _Path(__file__).resolve().parents[2] / "automation" / "host"
+    плохие = []
+    for п in корень.glob("*.service"):
+        текст = п.read_text(encoding="utf-8")
+        for строка in текст.splitlines():
+            if строка.startswith("Environment=") and "%d" in строка:
+                плохие.append(f"{п.name}: {строка.strip()}")
+    assert not плохие, (
+        "специфер %d появился в systemd 250, на Ubuntu 22.04 (249) он остаётся "
+        "literal-ом: " + "; ".join(плохие))
