@@ -80,15 +80,37 @@ def test_статус_зарегистрирован_и_не_ретраится(
     assert "BLOCKED_SITE_EXTRACTED" in json.dumps(схема)
 
 
+#: Куда конвейер пишет, когда задание всё-таки создаётся. Сторожим ровно это.
+#:
+#: Прежде тест снимал ВЕСЬ `var/` целиком — вместе с `install-packages`,
+#: `site-repos`, `stand` и `backups`, к конвейеру не относящимися. Любой
+#: посторонний инструмент, пишущий в `var/` во время прогона, ломал проверку не
+#: по её смыслу: так она и упала от журнала соседнего прогона, положенного в
+#: `var/`. Широкая проверка выглядит строже, а ловит не то.
+СЛЕДЫ_КОНВЕЙЕРА = ("state", "build", "locks", "audit", "log")
+
+
+def _снимок_следов() -> dict:
+    снимок = {}
+    for имя in СЛЕДЫ_КОНВЕЙЕРА:
+        корень = КОРЕНЬ / "var" / имя
+        if not корень.is_dir():
+            continue
+        for п in корень.rglob("*"):
+            if п.is_file():
+                снимок[п] = п.stat().st_mtime_ns
+    return снимок
+
+
 def test_конвейер_отказывает_и_ничего_не_пишет(tmp_path):
     """Отказ обязан наступить раньше, чем появится задание."""
-    до = {p: p.stat().st_mtime_ns for p in (КОРЕНЬ / "var").rglob("*") if p.is_file()}
+    до = _снимок_следов()
     with pytest.raises(SiteExtracted) as ош:
         pipeline.run_job(ВЫДЕЛЕННЫЙ, environment="production")
     assert ош.value.status == "BLOCKED_SITE_EXTRACTED"
     assert ош.value.blocks_stage == "RECEIVED"
-    после = {p: p.stat().st_mtime_ns for p in (КОРЕНЬ / "var").rglob("*") if p.is_file()}
-    assert до == после, "отказ оставил следы в var/"
+    после = _снимок_следов()
+    assert до == после, "отказ оставил следы конвейера в var/"
 
 
 def test_сборка_отказывает():
