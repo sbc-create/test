@@ -67,8 +67,16 @@ from typing import Any
 ОПЕРАЦИИ_БЕЗ_ВЫПУСКА = ("access-check",)
 
 #: Этапы операции. Расширение уже существующей схемы онбординга, не вторая.
+#: Этапы, которыми заявка отмечается по ходу. Перечень закрыт: неизвестный этап
+#: отвергает заявку, и это правильно — иначе в журнале появлялись бы состояния,
+#: которых никто не определял. Поэтому новая операция обязана объявить свои
+#: этапы ЗДЕСЬ. `access-check` этого не сделала, и проверка доступа, отработав
+#: верно и вернув точный required_input, записалась как `rejected`: «неизвестный
+#: этап access_missing». Это тот же класс, что «доставка записана как failed» и
+#: «откат записан как успех» — итог верный, а учёт врёт.
 ЭТАПЫ = ("received", "validated", "artifact_verified", "candidate_ready",
-         "switched", "live_verified", "failed", "rolled_back")
+         "switched", "live_verified", "failed", "rolled_back",
+         "access_verified", "access_missing")
 
 
 class RequestRejected(Exception):

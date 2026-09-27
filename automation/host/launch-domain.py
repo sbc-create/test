@@ -365,6 +365,35 @@ def проверить_хост(ячейка: dict) -> dict:
     return этап("server_staged", ОК, "юнит, nginx и upstream на месте")
 
 
+def _подробности_не_покрывают(фронт: Path, site_id: str) -> str:
+    """Покрывают ли подробности позиции каталога. Пустая строка — покрывают.
+
+    Доля, а не факт наличия файла: снимок из нового каталога со старыми
+    подробностями даёт карточки без описаний, и ни один код ответа этого не
+    показывает.
+    """
+    к = фронт / f"{site_id}-catalog.json"
+    п = фронт / f"{site_id}-details.json"
+    try:
+        каталог = json.loads(к.read_text(encoding="utf-8"))
+        подробности = json.loads(п.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as ош:
+        return f"снимок не читается: {type(ош).__name__}"
+    позиции = каталог.get("items") or []
+    записи = подробности.get("items") or подробности.get("details") or подробности
+    ключи = (set(записи.keys()) if isinstance(записи, dict)
+             else {z.get("id") or z.get("entity_id") or z.get("slug") for z in записи})
+    если_нет = [z for z in позиции
+                if (z.get("id") or z.get("entity_id") or z.get("slug")) not in ключи]
+    if not позиции:
+        return "каталог пуст"
+    доля = 100 * (len(позиции) - len(если_нет)) // len(позиции)
+    if доля < 95:
+        return (f"подробности покрывают {доля}% каталога "
+                f"({len(позиции) - len(если_нет)} из {len(позиции)})")
+    return ""
+
+
 def проверить_снимок(ячейка: dict) -> dict:
     from factory.cell import privileged
 
@@ -376,6 +405,14 @@ def проверить_снимок(ячейка: dict) -> dict:
         for ш in (к.get("delivered") or ())
         if not (фронт / ш.format(site=site_id)).exists()
     ]
+    if not нет:
+        # Наличие двух файлов ещё не значит, что подробности относятся к этому
+        # каталогу. Выпуск с каталогом без подробностей уже был: витрина
+        # показывала карточки без описаний, и снаружи это выглядело рабочим.
+        промах = _подробности_не_покрывают(фронт, site_id)
+        if промах:
+            return этап("data_verified", "НЕ РАБОТАЕТ", промах,
+                        f"перепубликовать: nova-catalog-publish.py --sites {site_id} --apply")
     if нет:
         return этап(
             "data_verified",
