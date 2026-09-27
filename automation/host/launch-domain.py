@@ -422,6 +422,179 @@ def проверить_публично(домен: str, ячейка: dict) -> 
     )
 
 
+def _доступ(служба: str, операция: str, ошибка: str) -> str:
+    """Причина отказа доступа в одной строке: служба, операция, чего нет."""
+    return f"{служба}: операция «{операция}» недоступна — {ошибка}"
+
+
+def проверить_метрику(ячейка: dict, домен: str, *, действовать: bool) -> dict:
+    """Счётчик Метрики: найти существующий или создать. Дубля не заводит.
+
+    Права читаются и записываются РАЗНЫМИ разрешениями, и смешивать их нельзя:
+    `metrika:read` позволяет увидеть счётчик, `metrika:write` — создать. Отчёт
+    об установленном средстве чтения не доказывает готовности подключения.
+    """
+    from factory.analytics import registry as ан_реестр
+
+    записи = {z["domain"]: z for z in ан_реестр.load()["properties"]}
+    з = записи.get(домен)
+    if з is None:
+        return этап(
+            "metrika_counter",
+            НЕТ_ВХОДА,
+            f"{домен} не объявлен в реестре аналитики",
+            "добавить запись домена в config/analytics.json",
+        )
+    счёт = з.get("counter_id")
+    if счёт:
+        # Счётчик обязан относиться к ЭТОМУ домену: чужой собирал бы визиты в
+        # чужой отчёт, и заметно это стало бы только по расхождению чисел.
+        свои = з.get("allowed_hosts") or []
+        if свои != [домен]:
+            return этап(
+                "metrika_counter",
+                НЕ_СДЕЛАНО,
+                f"счётчик {счёт} объявлен с allowed_hosts={свои}, а домен {домен}",
+                "привести allowed_hosts к собственному домену",
+            )
+        подтверждено = (ячейка.get("analytics") or {}).get("metrika_verified_at")
+        return этап(
+            "metrika_counter",
+            ОК,
+            f"счётчик {счёт}"
+            + (
+                f", отправка подтверждена {подтверждено}"
+                if подтверждено
+                else ", отправка ещё не подтверждена"
+            ),
+        )
+    if not действовать:
+        return этап(
+            "metrika_counter",
+            НЕ_СДЕЛАНО,
+            "счётчика нет",
+            f"запустить с --act: найдёт существующий в аккаунте или создаст "
+            f"(python3 -m factory analytics apply --domain {домен} --confirm-writes)",
+        )
+    # Поимённый вызов: сплошной прогон счётчики незапущенным доменам не заводит.
+    import subprocess as _sp
+
+    готово = _sp.run(
+        [
+            sys.executable,
+            "-m",
+            "factory",
+            "analytics",
+            "apply",
+            "--domain",
+            домен,
+            "--confirm-writes",
+            "--json",
+        ],
+        capture_output=True,
+        text=True,
+        cwd=str(КОРЕНЬ),
+    )
+    вывод = (готово.stdout or "") + (готово.stderr or "")
+    if готово.returncode != 0:
+        причина = вывод.strip().splitlines()[0][:160] if вывод.strip() else "нет вывода"
+        return этап(
+            "metrika_counter",
+            НЕТ_ВХОДА,
+            _доступ("Яндекс Метрика", "создание счётчика", причина),
+            "выдать OAuth-токен с правом metrika:write в "
+            "/etc/site-factory/secrets/yandex_oauth_token",
+        )
+    записи = {z["domain"]: z for z in ан_реестр.load()["properties"]}
+    новый = (записи.get(домен) or {}).get("counter_id")
+    if not новый:
+        return этап(
+            "metrika_counter",
+            НЕ_СДЕЛАНО,
+            "прогон завершился, а счётчик в реестре не появился",
+            "прочитать вывод `factory analytics apply` целиком",
+        )
+    return этап("metrika_counter", ОК, f"счётчик {новый} получен")
+
+
+def проверить_topvisor(ячейка: dict, домен: str, *, действовать: bool) -> dict:
+    """Проект Topvisor: найти существующий по домену или создать.
+
+    Строка в манифесте проектом не является, и счётчик Метрики его наличие не
+    подтверждает: это внешняя интеграция, и проверяется она ответом аккаунта.
+    """
+    from factory.topvisor import manifest as тв_манифест
+
+    сохранён = (ячейка.get("analytics") or {}).get("topvisor_project_id")
+    в_манифесте = домен in тв_манифест.domains()
+    if not в_манифесте:
+        return этап(
+            "topvisor_project",
+            НЕТ_ВХОДА,
+            f"{домен} не описан в манифесте проектов Topvisor",
+            "добавить ProjectSpec: домен, профиль, группы запросов, "
+            "счётчик Метрики; поисковики, регион и расписание берутся "
+            "из общих значений манифеста",
+        )
+    if сохранён:
+        подтверждено = (ячейка.get("analytics") or {}).get("topvisor_verified_at")
+        if подтверждено:
+            return этап("topvisor_project", ОК, f"проект {сохранён}, сверен {подтверждено}")
+        return этап(
+            "topvisor_project",
+            НЕ_СДЕЛАНО,
+            f"проект {сохранён} записан, но не сверен с аккаунтом",
+            "сверить домен, поисковики, регионы и расписание ответом аккаунта",
+        )
+    # Ни один шаг не выполняется без учётных данных, и отказ обязан называть
+    # службу и операцию, а не «нет доступа».
+    try:
+        from factory.topvisor.credentials import load as _уд
+
+        _уд()
+    except Exception as ош:  # noqa: BLE001 — важна причина, а не тип
+        причина = str(getattr(ош, "reason", None) or ош)[:150]
+        return этап(
+            "topvisor_project",
+            НЕТ_ВХОДА,
+            _доступ("Topvisor", "чтение проектов и создание проекта", причина),
+            "sudo python3 -m factory.topvisor.enroll — скрытый ввод "
+            "user-id и api-key в /etc/site-factory/secrets/topvisor",
+        )
+    if not действовать:
+        return этап(
+            "topvisor_project",
+            НЕ_СДЕЛАНО,
+            "проекта нет",
+            "запустить с --act: python3 -m factory.topvisor.cli apply",
+        )
+    import subprocess as _sp
+
+    готово = _sp.run(
+        [sys.executable, "-m", "factory.topvisor.cli", "apply"],
+        capture_output=True,
+        text=True,
+        cwd=str(КОРЕНЬ),
+    )
+    вывод = ((готово.stdout or "") + (готово.stderr or "")).strip()
+    if готово.returncode != 0:
+        return этап(
+            "topvisor_project",
+            НЕ_СДЕЛАНО,
+            _доступ(
+                "Topvisor",
+                "создание проекта",
+                вывод.splitlines()[0][:150] if вывод else "нет вывода",
+            ),
+        )
+    return этап(
+        "topvisor_project",
+        НЕ_СДЕЛАНО,
+        "apply выполнен; идентификатор проекта надо прочитать из аккаунта",
+        "python3 -m factory.topvisor.cli check — взять #id проекта домена",
+    )
+
+
 def main() -> int:
     р = argparse.ArgumentParser()
     р.add_argument("--domain", required=True)
@@ -441,6 +614,9 @@ def main() -> int:
         шаги.append(проверить_ci(ячейка))
         шаги.append(проверить_снимок(ячейка))
         шаги.append(проверить_хост(ячейка))
+        # Аналитика — обязательная часть выпуска, а не следующая задача.
+        шаги.append(проверить_метрику(ячейка, а.domain, действовать=а.act))
+        шаги.append(проверить_topvisor(ячейка, а.domain, действовать=а.act))
         шаги.append(проверить_публично(а.domain, ячейка))
 
     первый = next((ш for ш in шаги if ш["state"] not in (ОК, ЗАМЕЧАНИЕ)), None)

@@ -438,6 +438,58 @@
                 "description": "путь к авторитетному реестру, если он есть"
               }
             }
+          },
+          "analytics": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "Подключение аналитики — часть выпуска, а не отдельная задача. Здесь хранятся идентификаторы и ДОКАЗАТЕЛЬСТВА проверки: без них запись «подключено» ничем не отличается от намерения.",
+            "properties": {
+              "metrika_counter_id": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "description": "Идентификатор счётчика. null — счётчика ещё нет."
+              },
+              "metrika_verified_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Когда подтверждена фактическая отправка просмотра браузером."
+              },
+              "metrika_data_seen_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Когда визит подтверждён ЧТЕНИЕМ статистики. Отправка этого не доказывает."
+              },
+              "topvisor_project_id": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "topvisor_verified_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Когда проект сверен с аккаунтом: домен, поисковики, регионы, расписание."
+              },
+              "topvisor_settings": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "additionalProperties": true,
+                "description": "Фактически применённые настройки, прочитанные из аккаунта."
+              },
+              "note": {
+                "type": "string"
+              }
+            }
           }
         }
       }
