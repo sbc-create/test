@@ -16,9 +16,8 @@ from __future__ import annotations
 import argparse
 import json
 import re
-import socket
 import shutil
-import sys
+import socket
 from pathlib import Path
 
 КОРЕНЬ = Path(__file__).resolve().parent.parent.parent
@@ -68,7 +67,8 @@ def main() -> int:
     дерево = пакет / "tree"
     сайт = а.site
 
-    print(f"пакет {опись['package_id']}, коммит {опись['commit'][:12]}, файлов {опись['file_count']}")
+    print(f"пакет {опись['package_id']}, коммит {опись['commit'][:12]}, "
+          f"файлов {опись['file_count']}")
     print(f"проверяю запуск {сайт}\n")
 
     # 1. реестр ячеек внутри ПАКЕТА, а не в рабочей ветке
@@ -188,7 +188,8 @@ def main() -> int:
         ок.append(f"снимок каталога у производителя: {снимок}")
     else:
         издатель = Path("/srv/site-factory/repo/automation/host/nova-catalog-publish.py")
-        если_есть = издатель.is_file() and сайт in издатель.read_text(encoding="utf-8", errors="replace")
+        если_есть = (издатель.is_file()
+                     and сайт in издатель.read_text(encoding="utf-8", errors="replace"))
         потом.append(
             f"снимка {снимок.name} нет, и {сайт} "
             f"{'объявлен' if если_есть else 'НЕ объявлен'} в ВИТРИНЫ издателя "

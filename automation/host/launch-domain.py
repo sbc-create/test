@@ -312,7 +312,8 @@ def проверить_публично(домен: str, ячейка: dict) -> 
 def main() -> int:
     р = argparse.ArgumentParser()
     р.add_argument("--domain", required=True)
-    р.add_argument("--act", action="store_true", help="выполнять выполнимое, а не только показывать")
+    р.add_argument("--act", action="store_true",
+                   help="выполнять выполнимое, а не только показывать")
     р.add_argument("--json", action="store_true")
     а = р.parse_args()
 

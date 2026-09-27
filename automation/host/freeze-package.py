@@ -238,7 +238,10 @@ def последний() -> int:
     if not кандидаты:
         print("зафиксированных пакетов нет", file=sys.stderr)
         return 2
-    кандидаты.sort(key=lambda п: json.loads((п / "manifest.json").read_text(encoding="utf-8"))["frozen_at"])
+    def когда(п: Path) -> str:
+        return json.loads((п / "manifest.json").read_text(encoding="utf-8"))["frozen_at"]
+
+    кандидаты.sort(key=когда)
     print(кандидаты[-1])
     return 0
 

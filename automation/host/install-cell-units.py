@@ -44,7 +44,8 @@ Type=simple
 User={учётка}
 Group={учётка}
 WorkingDirectory=/srv/{учётка}/{каталог}
-ExecStart=/usr/bin/python3 /srv/{учётка}/{каталог}/run.py --port {порт} --data-dir /srv/{учётка}/data
+ExecStart=/usr/bin/python3 /srv/{учётка}/{каталог}/run.py \\
+    --port {порт} --data-dir /srv/{учётка}/data
 Restart=on-failure
 RestartSec=2
 NoNewPrivileges=true

@@ -24,7 +24,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import sys
 from pathlib import Path
 
 КОРЕНЬ = Path(__file__).resolve().parent.parent.parent
@@ -55,7 +54,10 @@ def найти_пакет(явный: str | None, свидетельство: di
     кандидаты = [п for п in ХРАНИЛИЩЕ.glob("pkg-*") if (п / "manifest.json").is_file()]
     if not кандидаты:
         return None, "зафиксированных пакетов нет"
-    кандидаты.sort(key=lambda п: json.loads((п / "manifest.json").read_text(encoding="utf-8"))["frozen_at"])
+    def когда(п: Path) -> str:
+        return json.loads((п / "manifest.json").read_text(encoding="utf-8"))["frozen_at"]
+
+    кандидаты.sort(key=когда)
     return кандидаты[-1], "последний зафиксированный (установка пакет не назвала)"
 
 
@@ -76,7 +78,8 @@ def main() -> int:
         except (OSError, ValueError):
             print("cell-install.json не читается")
     print(f"установлено:      {свидетельство.get('installed_at') or 'время не записано'}")
-    print(f"пакет установки:  {свидетельство.get('package_id') or 'НЕ НАЗВАН (установка старого образца)'}")
+    пакет_ид = свидетельство.get("package_id") or "НЕ НАЗВАН (установка старого образца)"
+    print(f"пакет установки:  {пакет_ид}")
     print(f"коммит пакета:    {(свидетельство.get('package_commit') or 'не записан')[:12]}")
     print(f"корень репозиториев: {свидетельство.get('site_repos_root') or 'не записан'}")
 

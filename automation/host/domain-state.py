@@ -20,7 +20,6 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import re
 import socket
 import ssl
 import subprocess
@@ -124,7 +123,8 @@ def служба(ячейка: dict) -> dict:
         return итог
     файл = Path("/etc/systemd/system") / имя
     итог["unit_file"] = "есть" if файл.is_file() else НЕТ
-    итог["enabled"] = "да" if (Path("/etc/systemd/system/multi-user.target.wants") / имя).exists() else "нет"
+    хочет = Path("/etc/systemd/system/multi-user.target.wants") / имя
+    итог["enabled"] = "да" if хочет.exists() else "нет"
     корень = Path("/srv") / (рв.get("account") or "нет")
     итог["cell_dir"] = "есть" if корень.is_dir() else НЕТ
     ссылка = корень / "current"
@@ -152,10 +152,16 @@ def nginx(site_id: str, домен: str) -> dict:
             "tls_conf": "есть" if tls.is_file() else НЕТ,
             "upstream": НЕТ}
     try:
-        итог["upstream"] = upstream.read_text(encoding="utf-8").strip() if upstream.is_file() else НЕТ
+        итог["upstream"] = (upstream.read_text(encoding="utf-8").strip()
+                            if upstream.is_file() else НЕТ)
     except PermissionError:
         итог["upstream"] = НЕДОСТУП
     return итог
+
+
+def краткий(вердикт: str) -> str:
+    """Вердикт в узкую колонку: «да» либо начало причины."""
+    return "да" if вердикт == "да" else вердикт[:10]
 
 
 def main() -> int:
@@ -188,7 +194,9 @@ def main() -> int:
         живой = сеть.get("build_id")
         установленный = сл.get("installed_build_id")
         if живой and установленный:
-            совпадение = "да" if живой == установленный else f"НЕ РАБОТАЕТ: живой {живой}, установлен {установленный}"
+            совпадение = ("да" if живой == установленный else
+                          f"НЕ РАБОТАЕТ: живой {живой}, "
+                          f"установлен {установленный}")
         elif живой and not установленный:
             совпадение = "нет манифеста выпуска (монолит или доступ)"
         else:
@@ -218,7 +226,7 @@ def main() -> int:
     for о in отчёты:
         print(f"{о['domain']:22} {о['site_id']:12} {str(о['network']['https']):16} "
               f"{str(о['network']['build_id'] or '—'):28} "
-              f"{('да' if о['build_matches_release'] == 'да' else о['build_matches_release'][:10]):10} "
+              f"{краткий(о['build_matches_release']):10} "
               f"{о['github']:18} {str(о['metrika']):11} {о['topvisor_manifest']}")
     лишние = [d for d in ячейки if d and d not in ДОМЕНЫ]
     if лишние:
