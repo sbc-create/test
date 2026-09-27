@@ -1320,7 +1320,10 @@
             "lords-general",
             "lords-new",
             "lords-curated",
-            "lords-genre"
+            "lords-genre",
+            "lords-anime",
+            "lords-dorama",
+            "lords-animation"
           ]
         },
         "theme": {

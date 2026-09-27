@@ -37,6 +37,12 @@ profiles:
   - lords-new
   - lords-curated
   - lords-genre
+  # Три нишевых профиля под три новых домена. Каждый владеет одним разделом
+  # каталога, ранее принадлежавшим lords-general: пул был исчерпан, а второго
+  # владельца у раздела правило не допускает.
+  - lords-anime
+  - lords-dorama
+  - lords-animation
 
 themes:
   - lords_dark
