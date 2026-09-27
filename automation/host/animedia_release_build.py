@@ -85,6 +85,14 @@ def main() -> int:
     р.add_argument("--out-dir", default="/srv/lords/.frontend/releases")
     р.add_argument("--stage", default="ANIMEDIA-ORIGINAL-PARITY-01")
     р.add_argument("--dry-run", action="store_true")
+    # Манифест витрины пишется сборщиком, а не руками. Набранный руками он
+    # отстаёт от пересборки молча: артефакт новый, `build_id` прежний, и
+    # витрина называет себя не тем выпуском, который исполняет. Именно на этом
+    # попался проверочный экземпляр стадии PORT-SPACE-02.
+    р.add_argument("--emit-manifest", metavar="ПУТЬ",
+                   help="записать манифест витрины, выведенный из этой сборки")
+    р.add_argument("--profile", help="профиль витрины для --emit-manifest; "
+                                     "по умолчанию первый выбираемый вариант")
     a = р.parse_args()
 
     грязь = г("git", "status", "--porcelain")
@@ -198,6 +206,34 @@ def main() -> int:
     print("файлы:", ", ".join(sorted(запись["files"])))
     print("CODE_TREE_MATCH:", запись["CODE_TREE_MATCH"],
           "| ARTIFACT_SOURCE_MATCH:", запись["ARTIFACT_SOURCE_MATCH"])
+
+    if a.emit_manifest:
+        профиль = a.profile or выбираемые[0]
+        if профиль not in выбираемые:
+            raise SystemExit(
+                f"профиль {профиль!r} не объявлен выбираемым в {файл_версии}: "
+                f"выбираемые — {выбираемые}")
+        манифест = {
+            "schema_version": 1,
+            "template_family": "animedia",
+            "design_version": оформление,
+            "source_commit": head,
+            "runtime_commit": head,
+            "build_id": build_id,
+            "artifact_sha256": артефакт,
+            "profile": профиль,
+            "built_at": запись["built_at"],
+            "stage": a.stage,
+            "template_id": версия.get("template_id"),
+            "community_module": (версия.get("community_module") or {}).get("version"),
+            "release_dir": str(каталог),
+            "derived_from": "animedia_release_build.py --emit-manifest",
+        }
+        цель = Path(a.emit_manifest)
+        цель.parent.mkdir(parents=True, exist_ok=True)
+        цель.write_text(json.dumps(манифест, ensure_ascii=False, indent=1) + "\n",
+                        encoding="utf-8")
+        print("манифест витрины:", цель, "| профиль:", профиль)
     return 0
 
 

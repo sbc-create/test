@@ -25,6 +25,8 @@ branch:
     - claude/animedia-ux-rebuild-01
     # Перенос принятых исправлений animedia.space в шаблон семейства.
     - claude/animedia-template-fix-01
+    # Перенос принятых исправлений animedia.space (коммит 4973de2) в шаблон.
+    - claude/animedia-template-port-space-02
 
 worktrees:
   allowed:
@@ -32,6 +34,7 @@ worktrees:
     - /home/claude/wt-animedia-finalization-01
     - /home/claude/wt-animedia-ux-rebuild-01
     - /home/claude/wt-animedia-template-fix-01
+    - /home/claude/wt-animedia-template-port-02
   # Запись в чужой worktree запрещена всегда, даже read-only обход не нужен.
   write_outside_allowed_worktrees: forbidden
 
