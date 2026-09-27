@@ -26,6 +26,7 @@ POPULAR_REFRESH_MODE=WEEKLY_SNAPSHOT запрещает считать его н
 Существующие файлы не перезаписываются: у zonafilm.space юниты настроены
 вручную и подгонять их под шаблон ради единообразия нельзя.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -168,9 +169,16 @@ def main() -> int:
         subprocess.run(["systemctl", "daemon-reload"], check=True)
     # Включение здесь, а не отдельным шагом: юнит, который лежит и не включён,
     # выглядит установленным и не работает. Именно так полка была пуста.
-    subprocess.run(["systemctl", "enable", "--now",
-                    f"{учётка}-popular-weekly.timer",
-                    f"{учётка}-popular-weekly.path"], check=True)
+    subprocess.run(
+        [
+            "systemctl",
+            "enable",
+            "--now",
+            f"{учётка}-popular-weekly.timer",
+            f"{учётка}-popular-weekly.path",
+        ],
+        check=True,
+    )
     print(f"\nвключено. Пока в /srv/{учётка}/current нет выпуска, задание будет")
     print("помечаться пропущенным — это условие, а не ошибка. После первого")
     print("выпуска снимок соберётся по изменению каталога, без ожидания суток.")

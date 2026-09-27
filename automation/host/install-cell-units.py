@@ -21,6 +21,7 @@
 её хранилище что-либо положено. И не переписывает уже стоящий файл, если он
 совпадает: повторный прогон обязан быть тихим.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -74,8 +75,15 @@ def ячейки() -> list[dict]:
         # Юнит монолита не создаётся: он принадлежит прежней установке, и файл
         # с таким именем там уже есть. Признак — он же стоит в previous_unit
         # какой-нибудь ячейки, либо ячейка ещё не описана своей службой.
-        итог.append({"site_id": c["site_id"], "domain": c.get("domain") or c["site_id"],
-                     "unit": unit, "account": учётка, "port": int(порт)})
+        итог.append(
+            {
+                "site_id": c["site_id"],
+                "domain": c.get("domain") or c["site_id"],
+                "unit": unit,
+                "account": учётка,
+                "port": int(порт),
+            }
+        )
     return итог
 
 
@@ -105,10 +113,12 @@ def main() -> int:
     for я in ячейки():
         основной = ЮНИТЫ / я["unit"]
         кандидат = ЮНИТЫ / я["unit"].replace(".service", "-candidate.service")
-        тело_о = ШАБЛОН.format(домен=я["domain"], учётка=я["account"],
-                               каталог="current", порт=я["port"])
-        тело_к = ШАБЛОН.format(домен=я["domain"], учётка=я["account"],
-                               каталог="candidate", порт=я["port"] + 1000)
+        тело_о = ШАБЛОН.format(
+            домен=я["domain"], учётка=я["account"], каталог="current", порт=я["port"]
+        )
+        тело_к = ШАБЛОН.format(
+            домен=я["domain"], учётка=я["account"], каталог="candidate", порт=я["port"] + 1000
+        )
         и_о = написать(основной, тело_о, a.dry_run)
         и_к = написать(кандидат, тело_к, a.dry_run)
         изменено += (и_о == "записан") + (и_к == "записан")

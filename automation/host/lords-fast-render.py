@@ -11,6 +11,7 @@
     10 — переписывать нечего, staging не нужен
     2  — быстрым путём воспользоваться нельзя, нужен полный рендер
 """
+
 from __future__ import annotations
 
 import argparse
@@ -53,8 +54,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--current", default=None, help="каталог site текущего релиза")
     parser.add_argument("--cache", default=None)
     parser.add_argument("--var", default=None)
-    parser.add_argument("--record", action="store_true",
-                        help="сохранить снимок произведений (только после приёмки релиза)")
+    parser.add_argument(
+        "--record",
+        action="store_true",
+        help="сохранить снимок произведений (только после приёмки релиза)",
+    )
     args = parser.parse_args(argv)
 
     repo = Path(args.repo)

@@ -15,6 +15,7 @@
 манифестом установленного выпуска. Переключённый `current` при процессе со
 старым кодом активацией не считается, и по одному `current` этого не видно.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -35,10 +36,22 @@ if not (КОРЕНЬ / "factory" / "cell" / "executor.py").is_file():
 #: Домены задачи в заданном порядке. Список закрыт: найденные сверх него
 #: показываются отдельно и молча в объём работы не входят.
 ДОМЕНЫ = (
-    "zonafilm.space", "zonafilm.cc", "lordfilm47.space", "lordserial33.biz",
-    "1lordserials1.online", "animedia.space", "animedia.icu", "yummyani.site",
-    "yummyani.org", "yummyani.biz", "zonafilm12.site", "lordserials22.site",
-    "lordserials22.space", "lordserials22.info", "yummyani7.site", "yummyani7.info",
+    "zonafilm.space",
+    "zonafilm.cc",
+    "lordfilm47.space",
+    "lordserial33.biz",
+    "1lordserials1.online",
+    "animedia.space",
+    "animedia.icu",
+    "yummyani.site",
+    "yummyani.org",
+    "yummyani.biz",
+    "zonafilm12.site",
+    "lordserials22.site",
+    "lordserials22.space",
+    "lordserials22.info",
+    "yummyani7.site",
+    "yummyani7.info",
 )
 
 НЕТ = "НЕТ ОБЪЕКТА"
@@ -65,8 +78,9 @@ def публичный(домен: str) -> dict:
         итог["https"] = "не проверялось: нет записи DNS"
         return итог
     try:
-        r = urllib.request.urlopen(urllib.request.Request(f"https://{домен}/", headers=АГЕНТ),
-                                   timeout=20, context=_ctx())
+        r = urllib.request.urlopen(
+            urllib.request.Request(f"https://{домен}/", headers=АГЕНТ), timeout=20, context=_ctx()
+        )
         тело = r.read()
         итог["https"] = f"{r.status}"
         итог["build_id"] = r.headers.get("X-Site-Factory-Build-Id")
@@ -89,8 +103,7 @@ def репозиторий(ячейка: dict) -> dict:
         return итог
 
     def г(*а: str) -> str:
-        return subprocess.run(("git", *а), cwd=путь, capture_output=True,
-                              text=True).stdout.strip()
+        return subprocess.run(("git", *а), cwd=путь, capture_output=True, text=True).stdout.strip()
 
     итог["branch"] = г("rev-parse", "--abbrev-ref", "HEAD") or НЕ_ПРОВЕРЕНО
     итог["head"] = г("rev-parse", "HEAD")[:12]
@@ -105,8 +118,9 @@ def на_github(remote: str) -> str:
     if not remote or remote == НЕТ:
         return НЕТ
     проект = "/".join(remote.rstrip("/").removesuffix(".git").split("/")[-2:])
-    гот = subprocess.run(["gh", "api", f"repos/{проект}", "--jq", ".private"],
-                         capture_output=True, text=True)
+    гот = subprocess.run(
+        ["gh", "api", f"repos/{проект}", "--jq", ".private"], capture_output=True, text=True
+    )
     if гот.returncode == 0:
         return "есть (приватный)" if гот.stdout.strip() == "true" else "есть (публичный)"
     if "404" in (гот.stderr or ""):
@@ -117,8 +131,12 @@ def на_github(remote: str) -> str:
 def служба(ячейка: dict) -> dict:
     рв = ячейка.get("runtime") or {}
     имя = рв.get("unit")
-    итог = {"unit": имя or НЕТ, "port": рв.get("port"), "account": рв.get("account"),
-            "data_dir": рв.get("data_dir")}
+    итог = {
+        "unit": имя or НЕТ,
+        "port": рв.get("port"),
+        "account": рв.get("account"),
+        "data_dir": рв.get("data_dir"),
+    }
     if not имя:
         return итог
     файл = Path("/etc/systemd/system") / имя
@@ -136,7 +154,7 @@ def служба(ячейка: dict) -> dict:
             итог["installed_commit"] = (м.get("commit") or "")[:12]
             итог["installed_build_id"] = м.get("live_build_id")
         except OSError as ош:
-            итог["installed_commit"] = (НЕДОСТУП if isinstance(ош, PermissionError) else НЕТ)
+            итог["installed_commit"] = НЕДОСТУП if isinstance(ош, PermissionError) else НЕТ
         except ValueError:
             итог["installed_commit"] = "НЕ РАБОТАЕТ: манифест нечитаем"
     else:
@@ -148,12 +166,15 @@ def nginx(site_id: str, домен: str) -> dict:
     conf = Path("/etc/nginx/lords") / f"{site_id}.conf"
     tls = Path("/etc/nginx/lords") / f"{site_id}-tls.conf"
     upstream = Path("/etc/nginx/cells") / f"{site_id}.upstream"
-    итог = {"http_conf": "есть" if conf.is_file() else НЕТ,
-            "tls_conf": "есть" if tls.is_file() else НЕТ,
-            "upstream": НЕТ}
+    итог = {
+        "http_conf": "есть" if conf.is_file() else НЕТ,
+        "tls_conf": "есть" if tls.is_file() else НЕТ,
+        "upstream": НЕТ,
+    }
     try:
-        итог["upstream"] = (upstream.read_text(encoding="utf-8").strip()
-                            if upstream.is_file() else НЕТ)
+        итог["upstream"] = (
+            upstream.read_text(encoding="utf-8").strip() if upstream.is_file() else НЕТ
+        )
     except PermissionError:
         итог["upstream"] = НЕДОСТУП
     return итог
@@ -170,12 +191,21 @@ def main() -> int:
     р.add_argument("--domain")
     а = р.parse_args()
 
-    ячейки = {c.get("domain"): c for c in json.loads(
-        (КОРЕНЬ / "config" / "site-cells.json").read_text(encoding="utf-8"))["cells"]}
-    аналитика = {z["domain"]: z for z in json.loads(
-        (КОРЕНЬ / "config" / "analytics.json").read_text(encoding="utf-8"))["properties"]}
+    ячейки = {
+        c.get("domain"): c
+        for c in json.loads((КОРЕНЬ / "config" / "site-cells.json").read_text(encoding="utf-8"))[
+            "cells"
+        ]
+    }
+    аналитика = {
+        z["domain"]: z
+        for z in json.loads((КОРЕНЬ / "config" / "analytics.json").read_text(encoding="utf-8"))[
+            "properties"
+        ]
+    }
     sys.path.insert(0, str(КОРЕНЬ))
     from factory.topvisor.manifest import MANIFEST as TV
+
     топвизор = {s.domain: s for s in TV}
 
     отчёты = []
@@ -194,40 +224,48 @@ def main() -> int:
         живой = сеть.get("build_id")
         установленный = сл.get("installed_build_id")
         if живой and установленный:
-            совпадение = ("да" if живой == установленный else
-                          f"НЕ РАБОТАЕТ: живой {живой}, "
-                          f"установлен {установленный}")
+            совпадение = (
+                "да"
+                if живой == установленный
+                else f"НЕ РАБОТАЕТ: живой {живой}, " f"установлен {установленный}"
+            )
         elif живой and not установленный:
             совпадение = "нет манифеста выпуска (монолит или доступ)"
         else:
             совпадение = НЕ_ПРОВЕРЕНО
-        отчёты.append({
-            "domain": домен,
-            "site_id": ячейка.get("site_id") or НЕТ,
-            "registry_status": ячейка.get("status") or НЕТ,
-            "network": сеть,
-            "repo": рп,
-            "github": на_github(рп.get("remote", НЕТ)),
-            "service": сл,
-            "nginx": нг,
-            "build_matches_release": совпадение,
-            "metrika": з.get("counter_id") or НЕТ,
-            "metrika_state": з.get("counter_state") or НЕ_ПРОВЕРЕНО,
-            "topvisor_manifest": "да" if домен in топвизор else НЕТ,
-            "indexing": (ячейка.get("indexing") or {}).get("desired_state") or НЕ_ПРОВЕРЕНО,
-        })
+        отчёты.append(
+            {
+                "domain": домен,
+                "site_id": ячейка.get("site_id") or НЕТ,
+                "registry_status": ячейка.get("status") or НЕТ,
+                "network": сеть,
+                "repo": рп,
+                "github": на_github(рп.get("remote", НЕТ)),
+                "service": сл,
+                "nginx": нг,
+                "build_matches_release": совпадение,
+                "metrika": з.get("counter_id") or НЕТ,
+                "metrika_state": з.get("counter_state") or НЕ_ПРОВЕРЕНО,
+                "topvisor_manifest": "да" if домен in топвизор else НЕТ,
+                "indexing": (ячейка.get("indexing") or {}).get("desired_state") or НЕ_ПРОВЕРЕНО,
+            }
+        )
 
     if а.json:
         print(json.dumps({"domains": отчёты}, ensure_ascii=False, indent=2))
         return 0
 
-    print(f"{'домен':22} {'site_id':12} {'HTTPS':16} {'build-id живой':28} {'совпадает':10} "
-          f"{'GitHub':18} {'Метрика':11} TV")
+    print(
+        f"{'домен':22} {'site_id':12} {'HTTPS':16} {'build-id живой':28} {'совпадает':10} "
+        f"{'GitHub':18} {'Метрика':11} TV"
+    )
     for о in отчёты:
-        print(f"{о['domain']:22} {о['site_id']:12} {str(о['network']['https']):16} "
-              f"{str(о['network']['build_id'] or '—'):28} "
-              f"{краткий(о['build_matches_release']):10} "
-              f"{о['github']:18} {str(о['metrika']):11} {о['topvisor_manifest']}")
+        print(
+            f"{о['domain']:22} {о['site_id']:12} {str(о['network']['https']):16} "
+            f"{str(о['network']['build_id'] or '—'):28} "
+            f"{краткий(о['build_matches_release']):10} "
+            f"{о['github']:18} {str(о['metrika']):11} {о['topvisor_manifest']}"
+        )
     лишние = [d for d in ячейки if d and d not in ДОМЕНЫ]
     if лишние:
         print(f"\nдомены реестра вне списка задачи ({len(лишние)}): {', '.join(sorted(лишние))}")

@@ -27,6 +27,7 @@
 Идентификатор пакета выводится из содержимого, поэтому одинаковый состав даёт
 одинаковый идентификатор, а любое изменение — другой.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -57,8 +58,12 @@ def git(*арг: str, cwd: Path | None = None) -> str:
     # core.quotePath=false обязателен: иначе git отдаёт пути с не-ASCII именами
     # в восьмеричных escape-последовательностях, и сверка состава молча ищет
     # файл, которого «нет». Нашлось тестом на файле с русским именем.
-    гот = subprocess.run(("git", "-c", "core.quotePath=false") + арг,
-                         cwd=str(cwd or КОРЕНЬ), capture_output=True, text=True)
+    гот = subprocess.run(
+        ("git", "-c", "core.quotePath=false") + арг,
+        cwd=str(cwd or КОРЕНЬ),
+        capture_output=True,
+        text=True,
+    )
     if гот.returncode != 0:
         raise SystemExit(f"git {' '.join(арг)}: {гот.stderr.strip()}")
     return гот.stdout
@@ -97,8 +102,7 @@ def общий_digest(файлы: dict[str, str]) -> str:
     что ставится. Коммит остаётся в описи как происхождение, но тождество
     пакета — это его файлы.
     """
-    канон = json.dumps({"files": файлы}, ensure_ascii=False,
-                       sort_keys=True, separators=(",", ":"))
+    канон = json.dumps({"files": файлы}, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(канон.encode("utf-8")).hexdigest()
 
 
@@ -108,8 +112,7 @@ def незакоммиченное(коммит: str) -> list[str]:
     изм = имена(git("diff", "--name-only", "-z", коммит, "--", *ПУТИ))
     расхождения += [f"изменён: {и}" for и in изм]
     новые = имена(git("ls-files", "--others", "--exclude-standard", "-z", "--", *ПУТИ))
-    расхождения += [f"не в git: {и}" for и in новые
-                    if "__pycache__" not in и]
+    расхождения += [f"не в git: {и}" for и in новые if "__pycache__" not in и]
     return расхождения
 
 
@@ -138,8 +141,10 @@ def зафиксировать(ссылка: str, принудительно: bo
         print(f"ОТКАЗ: в путях пакета есть изменения вне коммита {коммит[:12]}:")
         for и in расх[:20]:
             print("   ", и)
-        print("\nСначала закоммить их. Смысл отказа: пакет, часть которого"
-              "\nдописана после фиксации, — это ровно та ошибка 26.09.")
+        print(
+            "\nСначала закоммить их. Смысл отказа: пакет, часть которого"
+            "\nдописана после фиксации, — это ровно та ошибка 26.09."
+        )
         return 2
 
     файлы_git = имена(git("ls-tree", "-r", "--name-only", "-z", коммит, "--", *ПУТИ))
@@ -157,8 +162,13 @@ def зафиксировать(ссылка: str, принудительно: bo
 
     архив = черновик / "pkg.tar"
     with архив.open("wb") as ф:
-        гот = subprocess.run(("git", "archive", "--format=tar", коммит, "--", *ПУТИ),
-                             cwd=str(КОРЕНЬ), stdout=ф, stderr=subprocess.PIPE, text=False)
+        гот = subprocess.run(
+            ("git", "archive", "--format=tar", коммит, "--", *ПУТИ),
+            cwd=str(КОРЕНЬ),
+            stdout=ф,
+            stderr=subprocess.PIPE,
+            text=False,
+        )
     if гот.returncode != 0:
         raise SystemExit(f"git archive: {гот.stderr.decode('utf-8', 'replace')}")
     with tarfile.open(архив, "r") as т:
@@ -193,8 +203,8 @@ def зафиксировать(ссылка: str, принудительно: bo
         "files": файлы,
     }
     (черновик / "manifest.json").write_text(
-        json.dumps(опись, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8")
+        json.dumps(опись, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     черновик.rename(готовый)
     снять_запись(готовый)
 
@@ -238,6 +248,7 @@ def последний() -> int:
     if not кандидаты:
         print("зафиксированных пакетов нет", file=sys.stderr)
         return 2
+
     def когда(п: Path) -> str:
         return json.loads((п / "manifest.json").read_text(encoding="utf-8"))["frozen_at"]
 
@@ -251,8 +262,9 @@ def main() -> int:
     р.add_argument("--commit", default="HEAD")
     р.add_argument("--check", metavar="ПАКЕТ")
     р.add_argument("--latest", action="store_true")
-    р.add_argument("--force", action="store_true",
-                   help="зафиксировать несмотря на незакоммиченные изменения")
+    р.add_argument(
+        "--force", action="store_true", help="зафиксировать несмотря на незакоммиченные изменения"
+    )
     а = р.parse_args()
     if а.latest:
         return последний()

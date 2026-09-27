@@ -18,6 +18,7 @@
 отвечают «не надо», останавливают обновление каталога навсегда и незаметно —
 ровно так, как это уже произошло с неактивным таймером.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -92,23 +93,28 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--repo", default="/srv/site-factory/repo")
     parser.add_argument("--cache", default=None)
     parser.add_argument("--state", default=None)
-    parser.add_argument("--record", action="store_true",
-                        help="записать отпечаток как принятый (после удачной сборки)")
+    parser.add_argument(
+        "--record",
+        action="store_true",
+        help="записать отпечаток как принятый (после удачной сборки)",
+    )
     args = parser.parse_args(argv)
 
     repo = Path(args.repo)
-    cache = Path(args.cache or repo / "var" / "lords" / "lords" / "catalog-cache"
-                 / f"{args.site_id}.json")
-    state = Path(args.state or repo / "var" / "lords" / "fingerprints"
-                 / f"{args.site_id}.json")
+    cache = Path(
+        args.cache or repo / "var" / "lords" / "lords" / "catalog-cache" / f"{args.site_id}.json"
+    )
+    state = Path(args.state or repo / "var" / "lords" / "fingerprints" / f"{args.site_id}.json")
 
     try:
         текущий = collect(repo, args.site_id, cache)
     except (OSError, ValueError, KeyError) as error:
         # Не смогли посчитать — значит, не знаем. Не знать и пропустить рендер
         # значит остановить обновление молча.
-        print(f"[render-gate] {args.site_id}: отпечаток не посчитан ({error}); рендер нужен",
-              file=sys.stderr)
+        print(
+            f"[render-gate] {args.site_id}: отпечаток не посчитан ({error}); рендер нужен",
+            file=sys.stderr,
+        )
         return НЕЯСНО
 
     if args.record:
@@ -119,8 +125,10 @@ def main(argv: list[str] | None = None) -> int:
     прежний = load(state)
     разница = compare(прежний, текущий)
     if not разница.any_change:
-        print(f"[render-gate] {args.site_id}: вход не изменился "
-              f"({текущий.fingerprint()[:12]}) — рендер не нужен")
+        print(
+            f"[render-gate] {args.site_id}: вход не изменился "
+            f"({текущий.fingerprint()[:12]}) — рендер не нужен"
+        )
         return НЕ_НУЖЕН
 
     причина = разница.describe()

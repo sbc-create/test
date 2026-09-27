@@ -19,6 +19,7 @@
 только число и объявила расхождением три исправных домена Yummy. Поэтому здесь
 принимаются обе формы, а тест `test_metrika_audit` держит это свойство.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -46,8 +47,19 @@ if not (КОРЕНЬ / "factory" / "cell" / "executor.py").is_file():
 
 
 #: Пути, которые разделом не являются: служебное, правовое и статика.
-НЕ_РАЗДЕЛ = ("/search", "/_next", "/legal", "/about", "/brand", "/icon",
-             "/favicon", "/apple-icon", "/blogger", "/sitemap", "/robots")
+НЕ_РАЗДЕЛ = (
+    "/search",
+    "/_next",
+    "/legal",
+    "/about",
+    "/brand",
+    "/icon",
+    "/favicon",
+    "/apple-icon",
+    "/blogger",
+    "/sitemap",
+    "/robots",
+)
 
 
 def _раздел(путь: str) -> bool:
@@ -83,8 +95,9 @@ def взять(url: str, таймаут: float = 25) -> tuple[int, str, dict]:
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE
-    r = urllib.request.urlopen(urllib.request.Request(url, headers=АГЕНТ),
-                               timeout=таймаут, context=ctx)
+    r = urllib.request.urlopen(
+        urllib.request.Request(url, headers=АГЕНТ), timeout=таймаут, context=ctx
+    )
     тело = r.read()
     return r.status, тело.decode("utf-8", "replace"), dict(r.headers)
 
@@ -116,8 +129,11 @@ def страницы(домен: str, дом: str) -> list[tuple[str, str]]:
         _, карточка, _ = взять(f"https://{домен}{карточки[0]}")
     except (urllib.error.URLError, OSError):
         return итог
-    серии = [п for п in sorted(set(ССЫЛКА.findall(карточка)))
-             if re.search(r"episode|seriya|/series/\d", п, re.I)]
+    серии = [
+        п
+        for п in sorted(set(ССЫЛКА.findall(карточка)))
+        if re.search(r"episode|seriya|/series/\d", п, re.I)
+    ]
     if серии:
         итог.append(("серия", серии[0]))
     return итог
@@ -141,13 +157,16 @@ def проверить_домен(домен: str, ожидаемый: int | Non
             try:
                 код_с, тело, _ = взять(f"https://{домен}{путь}")
             except (urllib.error.HTTPError, urllib.error.URLError, OSError) as ош:
-                отчёт["pages"].append({"kind": имя, "path": путь,
-                                       "error": f"{type(ош).__name__}: {ош}"})
+                отчёт["pages"].append(
+                    {"kind": имя, "path": путь, "error": f"{type(ош).__name__}: {ош}"}
+                )
                 continue
         инициализации = ИНИЦИАЛИЗАЦИЯ.findall(тело)
         пиксели = sorted(set(ПИКСЕЛЬ.findall(тело)))
         строка = {
-            "kind": имя, "path": путь, "status": код_с,
+            "kind": имя,
+            "path": путь,
+            "status": код_с,
             "init_count": len(инициализации),
             "init_ids": sorted(set(инициализации)),
             "tag_scripts": len(ТЕГ.findall(тело)),
@@ -156,8 +175,7 @@ def проверить_домен(домен: str, ожидаемый: int | Non
         if ожидаемый is None:
             строка["verdict"] = "счётчика нет" if not инициализации else "ЛИШНИЙ СЧЁТЧИК"
         elif len(инициализации) == 1 and инициализации[0] == str(ожидаемый):
-            строка["verdict"] = ("ок" if пиксели == [str(ожидаемый)]
-                                 else "ок, но noscript не совпал")
+            строка["verdict"] = "ок" if пиксели == [str(ожидаемый)] else "ок, но noscript не совпал"
         elif len(инициализации) > 1:
             строка["verdict"] = "ДВОЙНОЙ УЧЁТ"
         elif not инициализации:
@@ -195,15 +213,19 @@ def main() -> int:
                 if с.get("error"):
                     print(f"    {с['kind']:9} {с['path'][:44]:46} {с['error']}")
                     continue
-                print(f"    {с['kind']:9} {с['path'][:44]:46} "
-                      f"init={с['init_count']}{с['init_ids']} "
-                      f"tag={с['tag_scripts']} noscript={с['noscript_ids'] or '—'}  "
-                      f"{с['verdict']}")
+                print(
+                    f"    {с['kind']:9} {с['path'][:44]:46} "
+                    f"init={с['init_count']}{с['init_ids']} "
+                    f"tag={с['tag_scripts']} noscript={с['noscript_ids'] or '—'}  "
+                    f"{с['verdict']}"
+                )
                 if с["verdict"] not in ("ок", "счётчика нет"):
                     плохо += 1
         print(f"\nстраниц с замечаниями: {плохо}")
-        print("Разметка проверена. Фактическая отправка просмотра — "
-              "metrika-send-check.js; получение в кабинете — только по OAuth.")
+        print(
+            "Разметка проверена. Фактическая отправка просмотра — "
+            "metrika-send-check.js; получение в кабинете — только по OAuth."
+        )
     return 0
 
 
