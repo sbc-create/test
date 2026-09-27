@@ -57,6 +57,8 @@ LIVE = {
     # Два домена Animego: ячейка вне этого реестра, счётчик проверен публично.
     "an1mego.site": 113105751,
     "animeg0.site": 113105753,
+    # Заведён службой 2026-09-27 22:47 вместе с выпуском zonafilm.cc.
+    "zonafilm.cc": 113110481,
     "lordserials22.info": 113109083,
     "lordserials22.site": 113109084,
     "lordserials22.space": 113109085,

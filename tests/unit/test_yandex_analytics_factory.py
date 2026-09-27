@@ -354,6 +354,9 @@ COUNTERS_VERIFIED_IN_BROWSER = {
 }
 
 COUNTERS_WITHOUT_TRAFFIC = {
+    # Витрина работает публично с августа, счётчик заведён службой 2026-09-27
+    # 22:47 — визитов он ещё не собрал, и разметки на странице пока нет.
+    "zonafilm.cc": 113110481,
     "zonafilm12.site": 113109081,
     "lordserials22.info": 113109083,
     "lordserials22.site": 113109084,
@@ -375,7 +378,6 @@ PLANNED_DOMAINS = (
     # ничем не заметно. Добавлены как planned — счётчика у них нет нигде.
     "animedia.icu",
     "animedia.space",
-    "zonafilm.cc",
 )
 
 ALL_DOMAINS = sorted({*LIVE_COUNTERS, *COUNTERS_WITHOUT_GOALS, *COUNTERS_WITHOUT_TRAFFIC,
