@@ -24,6 +24,21 @@ from factory import validation  # noqa: E402
 from factory.paths import PATHS  # noqa: E402
 
 
+
+@pytest.fixture(scope="session", autouse=True)
+def _убрать_остатки_убитых_прогонов():
+    """Снести sites/tmp-* от прогонов, которые не дожили до своей уборки.
+
+    Такие каталоги создаёт только фикстура временного сайта, они в .gitignore,
+    и после SIGTERM её уборка не выполняется. Оставленный нулевой package.yaml
+    валил три посторонних теста сообщением про NoneType, и найти причину можно
+    было только руками.
+    """
+    остатки = sorted(PATHS.sites.glob("tmp-*"))
+    for путь in остатки:
+        shutil.rmtree(путь, ignore_errors=True)
+    yield
+
 @pytest.fixture(scope="session")
 def repo_root() -> Path:
     return ROOT
