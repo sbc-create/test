@@ -131,16 +131,16 @@ def cmd_apply(args) -> int:
         # рабочим и мешает заметить настоящий — в самом реестре это записано
         # причиной. Поимённый вызов (--domain/--site) остаётся способом
         # завести счётчик осознанно, когда домен действительно запущен.
-        if entry.get("counter_state") == "planned" and not entry.get("counter_id"):
-            if not поимённо:
-                results.append({
-                    "domain": domain,
-                    "status": "skipped",
-                    "reason": "счётчик не заводится до запуска домена: "
-                              "counter_state=planned. Для осознанного создания "
-                              f"вызови с --domain {domain}",
-                })
-                continue
+        if (entry.get("counter_state") == "planned"
+                and not entry.get("counter_id") and not поимённо):
+            results.append({
+                "domain": domain,
+                "status": "skipped",
+                "reason": "счётчик не заводится до запуска домена: "
+                          "counter_state=planned. Для осознанного создания "
+                          f"вызови с --domain {domain}",
+            })
+            continue
 
         try:
             state = provider.ensure_metrica_counter(domain, entry["counter_name"])
