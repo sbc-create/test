@@ -642,3 +642,89 @@ def test_закрытый_каталог_credential_не_даёт_трассир
         assert "не в группе" in ош.value.reason or "Нет доступа" in ош.value.reason
     finally:
         закрытый.chmod(0o700)
+
+
+# -- вторая фаза: семантика ---------------------------------------------------
+
+def test_семантика_создаётся_и_повтор_ничего_не_добавляет():
+    """Проект без групп и запросов — не мониторинг, а пустая запись.
+
+    В плане не было ни одного действия на семантику, и шесть новых проектов
+    существовали с нулём групп при «выполненном» манифесте. Проверяется порядок:
+    группа создаётся, идентификатор берётся ПЕРЕЧИТЫВАНИЕМ, запросы привязываются
+    к нему. Повторный прогон не добавляет ничего — сверка по именам.
+    """
+    from factory.topvisor.cli import наполнить_семантику
+    from factory.topvisor.manifest import by_domain
+
+    spec = by_domain("an1meg0.site")
+    assert spec and len(spec.groups) == 2
+    первая, вторая = spec.groups
+    пусто = (200, {"result": []})
+    ок = (200, {"result": {"id": 1}})
+    ответы = [
+        пусто,                                                  # чтение групп: пусто
+        ок, ок,                                                 # создание двух групп
+        (200, {"result": [{"id": 11, "name": первая.name},
+                          {"id": 12, "name": вторая.name}]}),   # перечитали группы
+        пусто,                                                  # запросов нет
+        ок, ок,                                                 # добавили запросы двух групп
+    ]
+    журнал = []
+    client = TopvisorClient(credentials=CRED, dry_run=False,
+                            opener=make_opener(ответы, журнал), sleep=lambda _: None)
+    итог = наполнить_семантику(client, [{"id": 5, "url": spec.url, "name": spec.name}])
+    assert итог["groups"] == 2, итог
+    assert итог["keywords"] == sum(len(g.keywords) for g in spec.groups), итог
+    assert итог["notes"] == [], итог
+    методы = [з["url"].rsplit("/json/", 1)[-1] for з in журнал]
+    assert методы.count("add/keywords_2/groups") == 2, методы
+    assert методы.count("add/keywords_2/keywords") == 2, методы
+    # Запрос привязан к идентификатору, полученному ПЕРЕЧИТЫВАНИЕМ, а не к
+    # ответу на создание: у методов разная форма ответа.
+    полезная = [з["body"] for з in журнал
+                if з["url"].endswith("add/keywords_2/keywords")]
+    assert {p["group_id"] for p in полезная} == {11, 12}, полезная
+
+    # Повтор: всё уже есть — ни одной мутации.
+    журнал2 = []
+    повтор = TopvisorClient(
+        credentials=CRED, dry_run=False, sleep=lambda _: None,
+        opener=make_opener([
+            (200, {"result": [{"id": 11, "name": первая.name},
+                              {"id": 12, "name": вторая.name}]}),
+            (200, {"result": [{"id": 11, "name": первая.name},
+                              {"id": 12, "name": вторая.name}]}),
+            (200, {"result": [{"id": 99, "name": к}
+                              for g in spec.groups for к in g.keywords]}),
+        ], журнал2))
+    итог2 = наполнить_семантику(повтор, [{"id": 5, "url": spec.url, "name": spec.name}])
+    assert (итог2["groups"], итог2["keywords"]) == (0, 0), итог2
+    assert not [з for з in журнал2 if "/add/" in з["url"]], журнал2
+
+
+def test_отказ_сервиса_на_семантике_попадает_в_отчёт_целиком():
+    """Ошибка Topvisor называет ожидаемый параметр — её и печатаем, а не «не вышло»."""
+    from factory.topvisor.cli import наполнить_семантику
+    from factory.topvisor.manifest import by_domain
+
+    spec = by_domain("an1meg0.site")
+    отказ = (200, {"errors": [{"code": 2003, "string": "Несоответствие значения "
+                                                       "параметра: group_id"}]})
+    client = TopvisorClient(credentials=CRED, dry_run=False, sleep=lambda _: None,
+                            opener=make_opener([(200, {"result": []})] + [отказ] * 6))
+    итог = наполнить_семантику(client, [{"id": 5, "url": spec.url, "name": spec.name}])
+    assert итог["groups"] == 0
+    assert any("group_id" in n for n in итог["notes"]), итог["notes"]
+
+
+def test_чужой_проект_семантикой_не_трогается():
+    """Обрабатываются только домены манифеста."""
+    from factory.topvisor.cli import наполнить_семантику
+
+    журнал = []
+    client = TopvisorClient(credentials=CRED, dry_run=False,
+                            opener=make_opener([], журнал), sleep=lambda _: None)
+    итог = наполнить_семантику(client, [{"id": 1, "url": "https://посторонний.test/"}])
+    assert итог == {"groups": 0, "keywords": 0, "notes": []}
+    assert журнал == []

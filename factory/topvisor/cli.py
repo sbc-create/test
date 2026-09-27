@@ -205,7 +205,89 @@ def cmd_apply(args: argparse.Namespace) -> int:
         except FactoryError as exc:
             print(f"  отказ: {action.method} {action.domain}: {exc.reason}", file=sys.stderr)
     print(f"Выполнено бесплатных действий: {done} из {len(result.free_actions)}")
+    # Проекты созданы — но проект без семантики не мониторинг, а пустая запись.
+    # Поэтому вторая фаза: группы запросов и сами запросы.
+    заполнено = наполнить_семантику(client, client.projects())
+    print(f"Групп создано: {заполнено['groups']}, запросов добавлено: {заполнено['keywords']}")
+    for строка in заполнено["notes"]:
+        print(f"  ! {строка}")
     return 0
+
+
+def наполнить_семантику(client, projects: list[dict]) -> dict:
+    """Группы запросов и запросы по манифесту — второй фазой, после проектов.
+
+    Почему отдельной фазой, а не действием плана. Запрос привязывается к ГРУППЕ
+    по её идентификатору, а идентификатор появляется только после создания
+    группы. Статический план такого порядка выразить не может: он пришлось бы
+    строить на угаданных заранее id.
+
+    Почему это вообще понадобилось. В плане не было ни одного действия на
+    семантику, и шесть новых проектов существовали с нулём групп и нулём
+    запросов — при этом манифест выглядел выполненным, потому что «проект есть».
+    Прогон 2026-09-27 22:46 показал это числами: у старых проектов 5–14 групп и
+    39–82 запроса, у новых по нулю.
+
+    Идемпотентность по ИМЕНИ: существующая группа не создаётся заново, уже
+    добавленный запрос не добавляется повторно. Имя — единственный признак,
+    который есть и в манифесте, и в ответе сервиса (`get` отдаёт `id` и `name`).
+
+    Форма запроса на добавление взята из состава полей, который отдаёт чтение, а
+    не подобрана перебором. Если сервис ожидает другие имена параметров, он
+    ответит ошибкой с их указанием — и она попадёт в отчёт целиком, как это уже
+    произошло с `fields[n].name` и `Call to undefined method`.
+    """
+    from factory.topvisor.manifest import by_domain  # noqa: PLC0415
+    from factory.topvisor.plan import normalize_domain  # noqa: PLC0415
+
+    итог = {"groups": 0, "keywords": 0, "notes": []}
+    for проект in projects:
+        домен = normalize_domain(str(проект.get("url") or проект.get("site") or ""))
+        spec = by_domain(домен) if домен else None
+        if spec is None:
+            continue
+        ид = проект.get("id")
+        try:
+            было = {str(g.get("name") or ""): g.get("id") for g in client.keyword_groups(ид)}
+        except FactoryError as exc:
+            итог["notes"].append(f"{домен}: группы не прочитаны — {exc.reason}")
+            continue
+        for группа in spec.groups:
+            if группа.name in было:
+                continue
+            try:
+                client.call("add/keywords_2/groups",
+                            {"project_id": int(ид), "name": группа.name})
+                итог["groups"] += 1
+            except FactoryError as exc:
+                итог["notes"].append(
+                    f"{домен}: группа «{группа.name}» не создана — {exc.reason}")
+        # Перечитываем: идентификаторы групп нужны для запросов и берутся из
+        # сервиса, а не из ответа на создание — ответы у методов разной формы.
+        try:
+            стало = {str(g.get("name") or ""): g.get("id") for g in client.keyword_groups(ид)}
+            запросы = {str(k.get("name") or "") for k in client.keywords(ид)}
+        except FactoryError as exc:
+            итог["notes"].append(f"{домен}: перечитать не удалось — {exc.reason}")
+            continue
+        for группа in spec.groups:
+            group_id = стало.get(группа.name)
+            if group_id is None:
+                итог["notes"].append(
+                    f"{домен}: группы «{группа.name}» нет после создания — запросы не добавляю")
+                continue
+            новые = [к for к in группа.keywords if к not in запросы]
+            if not новые:
+                continue
+            try:
+                client.call("add/keywords_2/keywords",
+                            {"project_id": int(ид), "group_id": int(group_id),
+                             "keywords": list(новые)})
+                итог["keywords"] += len(новые)
+            except FactoryError as exc:
+                итог["notes"].append(
+                    f"{домен}/«{группа.name}»: запросы не добавлены — {exc.reason}")
+    return итог
 
 
 def cmd_methods(args: argparse.Namespace) -> int:
