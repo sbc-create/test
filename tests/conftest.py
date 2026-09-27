@@ -24,7 +24,6 @@ from factory import validation  # noqa: E402
 from factory.paths import PATHS  # noqa: E402
 
 
-
 @pytest.fixture(scope="session", autouse=True)
 def _убрать_остатки_убитых_прогонов():
     """Снести sites/tmp-* от прогонов, которые не дожили до своей уборки.
