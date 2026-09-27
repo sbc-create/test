@@ -3,7 +3,7 @@
   "provider": "yandex",
   "note": "Реестр аналитики. Здесь хранятся ТОЛЬКО публичные идентификаторы счётчиков и проверяемые статусы; OAuth-токен и client secret сюда не попадают ни при каких условиях. Заполняется командой `python3 -m factory --json analytics apply --confirm-writes`; вручную не редактируется. Три домена YummyAnime — три независимых счётчика, зеркалами их объединять запрещено: у каждого сайта собственная аудитория и собственный отчёт.",
   "seo_indexing_enabled": false,
-  "updated_at": "2026-09-27T20:43:26Z",
+  "updated_at": "2026-09-27T22:47:26Z",
   "properties": [
     {
       "domain": "1lordserials1.online",
@@ -367,7 +367,7 @@
         "season_select": 664258334,
         "title_view": 664258333
       },
-      "last_checked_at": "2026-09-27T20:43:19Z"
+      "last_checked_at": "2026-09-27T22:47:19Z"
     },
     {
       "domain": "lordserials22.site",
@@ -412,7 +412,7 @@
         "season_select": 664258344,
         "title_view": 664258342
       },
-      "last_checked_at": "2026-09-27T20:43:20Z"
+      "last_checked_at": "2026-09-27T22:47:21Z"
     },
     {
       "domain": "lordserials22.space",
@@ -457,7 +457,7 @@
         "season_select": 664258369,
         "title_view": 664258368
       },
-      "last_checked_at": "2026-09-27T20:43:22Z"
+      "last_checked_at": "2026-09-27T22:47:23Z"
     },
     {
       "domain": "yummyani.biz",
@@ -637,7 +637,7 @@
         "season_select": 664258404,
         "title_view": 664258403
       },
-      "last_checked_at": "2026-09-27T20:43:26Z"
+      "last_checked_at": "2026-09-27T22:47:26Z"
     },
     {
       "domain": "yummyani7.site",
@@ -682,14 +682,14 @@
         "season_select": 664258394,
         "title_view": 664258393
       },
-      "last_checked_at": "2026-09-27T20:43:24Z"
+      "last_checked_at": "2026-09-27T22:47:25Z"
     },
     {
       "domain": "zonafilm.cc",
       "site_id": "zona-02",
       "counter_name": "Zona Cinema — zonafilm.cc",
-      "counter_id": null,
-      "counter_state": "planned",
+      "counter_id": 113110481,
+      "counter_state": "created",
       "analytics_enabled": false,
       "webvisor": false,
       "allowed_hosts": [
@@ -715,12 +715,19 @@
         "sitemap_submitted": false
       },
       "seo_indexing_enabled": false,
-      "last_checked_at": null,
-      "problems": [
-        "РАБОТАЕТ БЕЗ СЧЁТЧИКА: сайт отдаёт HTTP 200 (build-id zona-02-0fb857b26f85), посещения не учитываются с первого дня.",
-        "Переиспользовать нечего: счётчика нет ни в реестре, ни в drop-in служб, ни в разметке живых страниц — проверено.",
-        "Создание требует OAuth-токена Метрики с правом записи; каталог секретов закрыт для учётной записи сессии."
-      ]
+      "last_checked_at": "2026-09-27T22:47:15Z",
+      "problems": [],
+      "goal_ids": {
+        "comment_submit": 664270510,
+        "episode_select": 664270506,
+        "filter_apply": 664270503,
+        "player_error": 664270509,
+        "player_ready": 664270508,
+        "player_start": 664270507,
+        "search": 664270502,
+        "season_select": 664270505,
+        "title_view": 664270504
+      }
     },
     {
       "domain": "zonafilm.space",
@@ -791,7 +798,7 @@
         "season_select": 664258324,
         "title_view": 664258323
       },
-      "last_checked_at": "2026-09-27T20:43:17Z"
+      "last_checked_at": "2026-09-27T22:47:17Z"
     }
   ]
 }

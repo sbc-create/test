@@ -78,7 +78,13 @@ ALLOWED: dict[str, Method] = {
     for m in (
         Method("get/bank_2/info", False, Cost.FREE, "тариф, баланс и состояние счёта"),
         Method("get/projects_2/projects", False, Cost.FREE, "список проектов"),
-        Method("get/projects_2/searchers", False, Cost.FREE, "поисковые системы проекта"),
+        # `get/projects_2/searchers` убран: API отвечает «Call to undefined
+        # method» (прогон 2026-09-27 22:46, var/topvisor/check-latest.txt, все
+        # 15 проектов аккаунта). Список разрешённых означает «проверено, что
+        # метод существует»; этот не существует. Настоящее имя метода для
+        # поисковых систем не подтверждено документом — угадывать нельзя.
+        # `add/projects_2/searchers` остаётся в списке, но в план не попадает:
+        # без проверенного чтения нечем подтвердить результат записи.
         Method("get/keywords_2/groups", False, Cost.FREE, "группы запросов"),
         Method("get/keywords_2/keywords", False, Cost.FREE, "запросы"),
         Method("add/projects_2/projects", True, Cost.FREE, "создать проект"),

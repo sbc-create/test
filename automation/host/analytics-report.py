@@ -69,9 +69,8 @@ def _счётчики_по_отчётам() -> list[dict]:
                 "domain": домен,
                 "state": str(своя.get("status") or данные.get("status") or "нет поля status"),
                 "counter_id": своя.get("counter_id"),
-                "site": (своя.get("site2") or {}).get("site")
-                if isinstance(своя.get("site2"), dict)
-                else своя.get("site"),
+                "site": своя.get("api_site"),
+                "site_ok": своя.get("site_matches_domain"),
                 "detail": "; ".join(str(п) for п in (своя.get("problems") or []))[:200]
                 or str(своя.get("reason") or ""),
             }
@@ -101,7 +100,7 @@ def main(argv: list[str] | None = None) -> int:
     for с in строки:
         _печать(
             f"  {с['domain']:24} status={с['state']:12} counter_id={с.get('counter_id')} "
-            f"домен счётчика={с.get('site')}"
+            f"домен счётчика={с.get('site')} совпадает={с.get('site_ok')}"
         )
         if с.get("detail"):
             _печать(f"      {с['detail']}")

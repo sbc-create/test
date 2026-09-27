@@ -577,21 +577,22 @@ def test_настройки_читаются_из_сервиса_а_не_из_м
 
     spec = MANIFEST[0]
     проект = {"id": 42, "url": spec.url, "name": spec.name}
+    # Поисковых систем в проверке нет: `get/projects_2/searchers` API отвергает
+    # как несуществующий метод (прогон 2026-09-27 на всех 15 проектах аккаунта).
     ответы = [
-        (200, {"result": [{"id": 1, "key": "0", "name": "Яндекс", "regions": [213]}]}),
         (200, {"result": [{"id": 7, "name": "Фильмы"}]}),
         (200, {"result": [{"id": 70, "name": "смотреть фильмы онлайн"}]}),
     ]
     client = TopvisorClient(credentials=CRED, opener=make_opener(ответы), sleep=lambda _: None)
     текст = "\n".join(описать_настройки(client, [проект]))
     assert "#42" in текст
-    assert f"поисковики: 1 из {len(spec.searchers)}" in текст
     assert f"группы: 1 из {len(spec.groups)}" in текст
     ожидание = sum(len(g.keywords) for g in spec.groups)
     assert f"запросы: 1 из {ожидание}" in текст
-    # Состав полей поисковика печатается, чтобы форму запроса на добавление
-    # взять из ответа сервиса, а не придумать.
-    assert "поля поисковика: id, key, name, regions" in текст
+    # Состав полей печатается, чтобы форму запроса на ДОБАВЛЕНИЕ взять из
+    # ответа сервиса, а не придумать.
+    assert "поля группы: id, name" in текст
+    assert "поля запроса: id, name" in текст
 
 
 def test_отказ_чтения_настроек_называет_причину():
@@ -602,7 +603,7 @@ def test_отказ_чтения_настроек_называет_причин�
     spec = MANIFEST[0]
     отказ = (200, {"errors": [{"code": 2003, "string": "Несоответствие значения "
                                                        "параметра: project_id"}]})
-    client = TopvisorClient(credentials=CRED, opener=make_opener([отказ] * 3),
+    client = TopvisorClient(credentials=CRED, opener=make_opener([отказ] * 2),
                             sleep=lambda _: None)
     текст = "\n".join(описать_настройки(client, [{"id": 42, "url": spec.url, "name": spec.name}]))
     assert "НЕ ПРОЧИТАНО" in текст
