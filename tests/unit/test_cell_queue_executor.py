@@ -783,7 +783,6 @@ def test_этапы_всех_операций_объявлены_в_очеред
     приходить из значений, которые очередь знает.
     """
     import re
-
     from pathlib import Path as _Path
 
     from factory.cell import queue as q
