@@ -316,17 +316,17 @@
         "remote": "https://github.com/sbc-create/site-lordserials22-info"
       },
       "template": {
-        "template_id": null,
+        "template_id": "lords-animation",
         "order_id": "launch-lordserials22-info",
         "family": "lords",
-        "note": "ПРОФИЛЬ ШАБЛОНА НЕ НАЗНАЧЕН — вход владельца. Свободных шаблонов в пуле нет (все четыре закреплены), поэтому нужен либо новый шаблон, либо экземпляр проверенного выпуска: назвать repo@commit витрины-образца. Подставлять похожий профиль соседнего домена нельзя. В пуле есть НЕИСПОЛЬЗОВАННАЯ резервация: шаблон lords-genre закреплён за site_id lords-04, а домен у неё пустой (domain: null). Её можно привязать к одному из трёх доменов lordserials22.* — это одно решение владельца, а не три. Сам привязывать не стал: порядок партии называет первым lordserials22.site, а у него нет записи A."
+        "note": "Профиль lords-animation версии 1.1.0, раздел во владении /animation/. Назначен сессией шаблона Lords: docs/handoff/LORDS_TO_FACTORY-001.md, ветка claude/lords-template-consolidation-01, коммит fd674db4d6ba. Привязка по домену: предложенные там site_id у меня заняты, и запись называет их предложенными. lords-genre выдавать нельзя — объявлен неподдержанным и закреплён за lords-04."
       },
       "deploy_target": {
         "ref": "claude-control-01",
         "server": null
       },
       "pins": {
-        "template": null,
+        "template": "lords-animation",
         "modules": {},
         "schemas": {
           "site_config": "1"
@@ -372,17 +372,17 @@
         "remote": "https://github.com/sbc-create/site-lordserials22-site"
       },
       "template": {
-        "template_id": null,
+        "template_id": "lords-dorama",
         "order_id": "launch-lordserials22-site",
         "family": "lords",
-        "note": "ПРОФИЛЬ ШАБЛОНА НЕ НАЗНАЧЕН — вход владельца. Свободных шаблонов в пуле нет (все четыре закреплены), поэтому нужен либо новый шаблон, либо экземпляр проверенного выпуска: назвать repo@commit витрины-образца. Подставлять похожий профиль соседнего домена нельзя. В пуле есть НЕИСПОЛЬЗОВАННАЯ резервация: шаблон lords-genre закреплён за site_id lords-04, а домен у неё пустой (domain: null). Её можно привязать к одному из трёх доменов lordserials22.* — это одно решение владельца, а не три. Сам привязывать не стал: порядок партии называет первым lordserials22.site, а у него нет записи A."
+        "note": "Профиль lords-dorama версии 1.1.0, раздел во владении /dorama/. Назначен сессией шаблона Lords: docs/handoff/LORDS_TO_FACTORY-001.md, ветка claude/lords-template-consolidation-01, коммит fd674db4d6ba. Привязка по домену: предложенные там site_id у меня заняты, и запись называет их предложенными. lords-genre выдавать нельзя — объявлен неподдержанным и закреплён за lords-04."
       },
       "deploy_target": {
         "ref": "claude-control-01",
         "server": null
       },
       "pins": {
-        "template": null,
+        "template": "lords-dorama",
         "modules": {},
         "schemas": {
           "site_config": "1"
@@ -428,17 +428,17 @@
         "remote": "https://github.com/sbc-create/site-lordserials22-space"
       },
       "template": {
-        "template_id": null,
+        "template_id": "lords-anime",
         "order_id": "launch-lordserials22-space",
         "family": "lords",
-        "note": "ПРОФИЛЬ ШАБЛОНА НЕ НАЗНАЧЕН — вход владельца. Свободных шаблонов в пуле нет (все четыре закреплены), поэтому нужен либо новый шаблон, либо экземпляр проверенного выпуска: назвать repo@commit витрины-образца. Подставлять похожий профиль соседнего домена нельзя. В пуле есть НЕИСПОЛЬЗОВАННАЯ резервация: шаблон lords-genre закреплён за site_id lords-04, а домен у неё пустой (domain: null). Её можно привязать к одному из трёх доменов lordserials22.* — это одно решение владельца, а не три. Сам привязывать не стал: порядок партии называет первым lordserials22.site, а у него нет записи A."
+        "note": "Профиль lords-anime версии 1.1.0, раздел во владении /anime/. Назначен сессией шаблона Lords: docs/handoff/LORDS_TO_FACTORY-001.md, ветка claude/lords-template-consolidation-01, коммит fd674db4d6ba. Привязка по домену: предложенные там site_id у меня заняты, и запись называет их предложенными. lords-genre выдавать нельзя — объявлен неподдержанным и закреплён за lords-04."
       },
       "deploy_target": {
         "ref": "claude-control-01",
         "server": null
       },
       "pins": {
-        "template": null,
+        "template": "lords-anime",
         "modules": {},
         "schemas": {
           "site_config": "1"

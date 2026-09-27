@@ -1,0 +1,673 @@
+Verification run: 6f464ff on claude/lords-template-consolidation-01
+
+--- JSON parses ---
+PASS: JSON parses
+
+--- Schemas compile ---
+OK: 17 schema(s) compile: analytics-registry, content-backlog, data-source-registry, editorial-calendar, editorial-sources, experiment-registry, job-result, keyword-plan, page-metadata, portfolio-registry, secret-hub, seo-audit, site-cells, site-matrix, site-package, template-manifest, template-pool
+PASS: Schemas compile
+
+--- Fixtures validate ---
+OK: tests/fixtures/analytics-registry.valid.json
+OK: tests/fixtures/content-backlog.valid.json
+OK: tests/fixtures/data-source-registry.valid.json
+OK: tests/fixtures/editorial-calendar.valid.json
+OK: tests/fixtures/editorial-sources.valid.json
+OK: tests/fixtures/experiment-registry.valid.json
+OK: tests/fixtures/keyword-plan.valid.json
+OK: tests/fixtures/page-metadata.valid.json
+OK: tests/fixtures/portfolio-registry.valid.json
+OK: tests/fixtures/secret-hub.valid.json
+OK: tests/fixtures/seo-audit.valid.json
+OK: tests/fixtures/site-cells.valid.json
+OK: tests/fixtures/site-matrix.valid.json
+OK: tests/fixtures/template-manifest.valid.json
+OK: tests/fixtures/template-pool.valid.json
+  invalid fixtures correctly rejected
+PASS: Fixtures validate
+
+--- Registries validate ---
+FAIL: site-cells.json at cells/0/release: Additional properties are not allowed ('observed' was unexpected)
+OK: config/analytics.json -> analytics-registry.schema.json
+OK: config/content-backlog.json -> content-backlog.schema.json
+OK: config/data-sources.json -> data-source-registry.schema.json
+OK: config/editorial-calendar.json -> editorial-calendar.schema.json
+OK: config/editorial-sources.json -> editorial-sources.schema.json
+OK: config/experiments.json -> experiment-registry.schema.json
+OK: config/portfolio.fixture.json -> portfolio-registry.schema.json
+OK: config/portfolio.json -> portfolio-registry.schema.json
+OK: config/secret-hub.json -> secret-hub.schema.json
+OK: config/template-pool.json -> template-pool.schema.json
+OK: config/SITE-MATRIX.json -> site-matrix.schema.json
+FAIL: Registries validate
+
+--- Guardrails hold ---
+........................................................................ [ 68%]
+.................................                                        [100%]
+105 passed in 0.49s
+PASS: Guardrails hold
+
+--- Workflows parse ---
+  ok: .github/workflows/ci.yml
+  ok: .github/workflows/deploy.yml
+PASS: Workflows parse
+
+--- Lint (ruff) ---
+All checks passed!
+29 files already formatted
+PASS: Lint (ruff)
+
+--- Tests (pytest) ---
+........................................................................ [  1%]
+........................................................................ [  3%]
+........................................................................ [  4%]
+........................................................................ [  6%]
+........................................................................ [  8%]
+........................................................................ [  9%]
+........................................................................ [ 11%]
+................................................FFFFF................... [ 13%]
+........................................................................ [ 14%]
+...........F............................................................ [ 16%]
+.................................ssssssss..............sssss............ [ 18%]
+........................................................................ [ 19%]
+........................................................................ [ 21%]
+........................................................................ [ 23%]
+.....................................F.................................. [ 24%]
+........................................................................ [ 26%]
+........................................................................ [ 28%]
+........................................................................ [ 29%]
+........................................................................ [ 31%]
+......................................................................ss [ 33%]
+........................................................................ [ 34%]
+........................................................................ [ 36%]
+........................................................................ [ 38%]
+........................................................................ [ 39%]
+........................................................................ [ 41%]
+........................................................................ [ 43%]
+........................................................................ [ 44%]
+........................................................................ [ 46%]
+........................................................................ [ 48%]
+........................................................................ [ 49%]
+........................................................................ [ 51%]
+........................................................................ [ 53%]
+........................................................................ [ 54%]
+........................................................................ [ 56%]
+........................................................................ [ 57%]
+........................................................................ [ 59%]
+........................................................................ [ 61%]
+........................................................................ [ 62%]
+........................................................................ [ 64%]
+........................................................................ [ 66%]
+........................................................................ [ 67%]
+.....................s.................................................. [ 69%]
+........................................................................ [ 71%]
+........................................................................ [ 72%]
+........................................................................ [ 74%]
+........................................................................ [ 76%]
+........................................................................ [ 77%]
+........................................................................ [ 79%]
+........................................................................ [ 81%]
+........................................................................ [ 82%]
+........................................................................ [ 84%]
+F..F..F.............FFF...F............................................. [ 86%]
+........................................................................ [ 87%]
+........................................................................ [ 89%]
+........................................................................ [ 91%]
+........................................................................ [ 92%]
+........................................................................ [ 94%]
+....................FF.................................................. [ 96%]
+..................................................F.....FFF............. [ 97%]
+........................................................................ [ 99%]
+..........................                                               [100%]
+=================================== FAILURES ===================================
+_________ test_repair_run_disables_the_visor_without_creating_anything _________
+
+provider = <tests.unit.test_analytics_repair_run.Account object at 0x7f0ebd817f10>
+scoped_registry = PosixPath('/tmp/pytest-of-claude/pytest-297/test_repair_run_disables_the_v0/repo')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f0ebd8142e0>
+capsys = <_pytest.capture.CaptureFixture object at 0x7f0ebe7af3a0>
+
+    def test_repair_run_disables_the_visor_without_creating_anything(
+        provider, scoped_registry, monkeypatch, capsys
+    ):
+        from factory.analytics import cli as analytics_cli
+    
+>       exit_code = analytics_cli.cmd_apply(Args(confirm_writes=True, json=True))
+
+tests/unit/test_analytics_repair_run.py:166: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+factory/analytics/cli.py:127: in cmd_apply
+    state = provider.ensure_metrica_counter(domain, entry["counter_name"])
+factory/analytics/yandex.py:428: in ensure_metrica_counter
+    response = self.metrika.post(
+factory/analytics/transport.py:256: in post
+    return self.request("POST", path, **kwargs)
+factory/analytics/transport.py:230: in request
+    response = run_with_retry(attempt, policy=self.retry_policy, sleep=self._sleep)
+factory/retry.py:60: in run_with_retry
+    return fn()
+factory/analytics/transport.py:210: in attempt
+    status, raw = self._opener(request, self.timeout)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.unit.test_analytics_repair_run.Account object at 0x7f0ebd817f10>
+request = <urllib.request.Request object at 0x7f0ebe1f1240>, timeout = 20.0
+
+    def __call__(self, request: urllib.request.Request, timeout: float):
+        method = request.get_method()
+        path = request.full_url.split("?", 1)[0].split(".net", 1)[1]
+        body = json.loads(request.data.decode("utf-8")) if request.data else None
+        self.requests.append((method, path, body))
+    
+        if body and "counter" in body and "webvisor" in body["counter"]:
+            return 400, b'{"message":"path: counter.webvisor.arch_enabled"}'
+        if method == "GET" and path == "/management/v1/counters":
+            return 200, json.dumps({"rows": len(self.counters),
+                                    "counters": self.counters}).encode()
+        if method == "GET" and path.startswith("/management/v1/counter/"):
+            counter = self._by_id(int(path.split("/")[4]))
+            return (200, json.dumps({"counter": counter}).encode()) if counter else (404, b"{}")
+        if method == "PUT" and path.startswith("/management/v1/counter/"):
+            counter = self._by_id(int(path.split("/")[4]))
+            counter["code_options"] = {**counter["code_options"],
+                                       **(body["counter"].get("code_options") or {})}
+            return 200, json.dumps({"counter": counter}).encode()
+        if method == "POST":
+>           raise AssertionError(f"повторный прогон не должен ничего создавать: POST {path}")
+E           AssertionError: повторный прогон не должен ничего создавать: POST /management/v1/counters
+
+tests/unit/test_analytics_repair_run.py:102: AssertionError
+______ test_repair_run_records_counter_ids_and_a_goal_id_for_every_event _______
+
+provider = <tests.unit.test_analytics_repair_run.Account object at 0x7f0ebe8632e0>
+scoped_registry = PosixPath('/tmp/pytest-of-claude/pytest-297/test_repair_run_records_counte0/repo')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f0ebe863850>
+capsys = <_pytest.capture.CaptureFixture object at 0x7f0ebd99abc0>
+
+    def test_repair_run_records_counter_ids_and_a_goal_id_for_every_event(
+        provider, scoped_registry, monkeypatch, capsys
+    ):
+        from factory.analytics import cli as analytics_cli
+    
+>       analytics_cli.cmd_apply(Args(confirm_writes=True, json=True))
+
+tests/unit/test_analytics_repair_run.py:185: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+factory/analytics/cli.py:127: in cmd_apply
+    state = provider.ensure_metrica_counter(domain, entry["counter_name"])
+factory/analytics/yandex.py:428: in ensure_metrica_counter
+    response = self.metrika.post(
+factory/analytics/transport.py:256: in post
+    return self.request("POST", path, **kwargs)
+factory/analytics/transport.py:230: in request
+    response = run_with_retry(attempt, policy=self.retry_policy, sleep=self._sleep)
+factory/retry.py:60: in run_with_retry
+    return fn()
+factory/analytics/transport.py:210: in attempt
+    status, raw = self._opener(request, self.timeout)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.unit.test_analytics_repair_run.Account object at 0x7f0ebe8632e0>
+request = <urllib.request.Request object at 0x7f0ebd96c130>, timeout = 20.0
+
+    def __call__(self, request: urllib.request.Request, timeout: float):
+        method = request.get_method()
+        path = request.full_url.split("?", 1)[0].split(".net", 1)[1]
+        body = json.loads(request.data.decode("utf-8")) if request.data else None
+        self.requests.append((method, path, body))
+    
+        if body and "counter" in body and "webvisor" in body["counter"]:
+            return 400, b'{"message":"path: counter.webvisor.arch_enabled"}'
+        if method == "GET" and path == "/management/v1/counters":
+            return 200, json.dumps({"rows": len(self.counters),
+                                    "counters": self.counters}).encode()
+        if method == "GET" and path.startswith("/management/v1/counter/"):
+            counter = self._by_id(int(path.split("/")[4]))
+            return (200, json.dumps({"counter": counter}).encode()) if counter else (404, b"{}")
+        if method == "PUT" and path.startswith("/management/v1/counter/"):
+            counter = self._by_id(int(path.split("/")[4]))
+            counter["code_options"] = {**counter["code_options"],
+                                       **(body["counter"].get("code_options") or {})}
+            return 200, json.dumps({"counter": counter}).encode()
+        if method == "POST":
+>           raise AssertionError(f"повторный прогон не должен ничего создавать: POST {path}")
+E           AssertionError: повторный прогон не должен ничего создавать: POST /management/v1/counters
+
+tests/unit/test_analytics_repair_run.py:102: AssertionError
+___________________ test_a_second_repair_run_writes_nothing ____________________
+
+provider = <tests.unit.test_analytics_repair_run.Account object at 0x7f0ebd87bee0>
+scoped_registry = PosixPath('/tmp/pytest-of-claude/pytest-297/test_a_second_repair_run_write0/repo')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f0ebd87abc0>
+capsys = <_pytest.capture.CaptureFixture object at 0x7f0ebe1be3b0>
+
+    def test_a_second_repair_run_writes_nothing(provider, scoped_registry, monkeypatch, capsys):
+        from factory.analytics import cli as analytics_cli
+    
+>       analytics_cli.cmd_apply(Args(confirm_writes=True, json=True))
+
+tests/unit/test_analytics_repair_run.py:204: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+factory/analytics/cli.py:127: in cmd_apply
+    state = provider.ensure_metrica_counter(domain, entry["counter_name"])
+factory/analytics/yandex.py:428: in ensure_metrica_counter
+    response = self.metrika.post(
+factory/analytics/transport.py:256: in post
+    return self.request("POST", path, **kwargs)
+factory/analytics/transport.py:230: in request
+    response = run_with_retry(attempt, policy=self.retry_policy, sleep=self._sleep)
+factory/retry.py:60: in run_with_retry
+    return fn()
+factory/analytics/transport.py:210: in attempt
+    status, raw = self._opener(request, self.timeout)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.unit.test_analytics_repair_run.Account object at 0x7f0ebd87bee0>
+request = <urllib.request.Request object at 0x7f0ebc3ad0f0>, timeout = 20.0
+
+    def __call__(self, request: urllib.request.Request, timeout: float):
+        method = request.get_method()
+        path = request.full_url.split("?", 1)[0].split(".net", 1)[1]
+        body = json.loads(request.data.decode("utf-8")) if request.data else None
+        self.requests.append((method, path, body))
+    
+        if body and "counter" in body and "webvisor" in body["counter"]:
+            return 400, b'{"message":"path: counter.webvisor.arch_enabled"}'
+        if method == "GET" and path == "/management/v1/counters":
+            return 200, json.dumps({"rows": len(self.counters),
+                                    "counters": self.counters}).encode()
+        if method == "GET" and path.startswith("/management/v1/counter/"):
+            counter = self._by_id(int(path.split("/")[4]))
+            return (200, json.dumps({"counter": counter}).encode()) if counter else (404, b"{}")
+        if method == "PUT" and path.startswith("/management/v1/counter/"):
+            counter = self._by_id(int(path.split("/")[4]))
+            counter["code_options"] = {**counter["code_options"],
+                                       **(body["counter"].get("code_options") or {})}
+            return 200, json.dumps({"counter": counter}).encode()
+        if method == "POST":
+>           raise AssertionError(f"повторный прогон не должен ничего создавать: POST {path}")
+E           AssertionError: повторный прогон не должен ничего создавать: POST /management/v1/counters
+
+tests/unit/test_analytics_repair_run.py:102: AssertionError
+______________________ test_dry_run_writes_nothing_at_all ______________________
+
+provider = <tests.unit.test_analytics_repair_run.Account object at 0x7f0ebe64eef0>
+scoped_registry = PosixPath('/tmp/pytest-of-claude/pytest-297/test_dry_run_writes_nothing_at0/repo')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f0ebe64feb0>
+capsys = <_pytest.capture.CaptureFixture object at 0x7f0ebd815e40>
+
+    def test_dry_run_writes_nothing_at_all(provider, scoped_registry, monkeypatch, capsys):
+        from factory.analytics import cli as analytics_cli
+    
+        analytics_cli.cmd_apply(Args(confirm_writes=False, json=True))
+        capsys.readouterr()
+        assert provider.writes() == []
+>       assert all(entry["counter_id"] == LIVE[entry["domain"]]
+                   for entry in registry.load()["properties"])
+
+tests/unit/test_analytics_repair_run.py:220: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x7f0ebde2df60>
+
+>   assert all(entry["counter_id"] == LIVE[entry["domain"]]
+               for entry in registry.load()["properties"])
+E   KeyError: 'animedia.space'
+
+tests/unit/test_analytics_repair_run.py:220: KeyError
+________ test_a_counter_that_does_not_match_the_registry_stops_the_run _________
+
+provider = <tests.unit.test_analytics_repair_run.Account object at 0x7f0ebdf3d360>
+scoped_registry = PosixPath('/tmp/pytest-of-claude/pytest-297/test_a_counter_that_does_not_m0/repo')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f0ebdf3cdc0>
+capsys = <_pytest.capture.CaptureFixture object at 0x7f0ebc4a5f60>
+
+    def test_a_counter_that_does_not_match_the_registry_stops_the_run(
+        provider, scoped_registry, monkeypatch, capsys
+    ):
+        """Подмена счётчика — это остановка, а не «принято к сведению»."""
+        from factory.analytics import cli as analytics_cli
+    
+        provider.counters[0]["id"] = 999999999
+>       exit_code = analytics_cli.cmd_apply(Args(confirm_writes=True, json=True))
+
+tests/unit/test_analytics_repair_run.py:231: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+factory/analytics/cli.py:127: in cmd_apply
+    state = provider.ensure_metrica_counter(domain, entry["counter_name"])
+factory/analytics/yandex.py:428: in ensure_metrica_counter
+    response = self.metrika.post(
+factory/analytics/transport.py:256: in post
+    return self.request("POST", path, **kwargs)
+factory/analytics/transport.py:230: in request
+    response = run_with_retry(attempt, policy=self.retry_policy, sleep=self._sleep)
+factory/retry.py:60: in run_with_retry
+    return fn()
+factory/analytics/transport.py:210: in attempt
+    status, raw = self._opener(request, self.timeout)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.unit.test_analytics_repair_run.Account object at 0x7f0ebdf3d360>
+request = <urllib.request.Request object at 0x7f0ebd992560>, timeout = 20.0
+
+    def __call__(self, request: urllib.request.Request, timeout: float):
+        method = request.get_method()
+        path = request.full_url.split("?", 1)[0].split(".net", 1)[1]
+        body = json.loads(request.data.decode("utf-8")) if request.data else None
+        self.requests.append((method, path, body))
+    
+        if body and "counter" in body and "webvisor" in body["counter"]:
+            return 400, b'{"message":"path: counter.webvisor.arch_enabled"}'
+        if method == "GET" and path == "/management/v1/counters":
+            return 200, json.dumps({"rows": len(self.counters),
+                                    "counters": self.counters}).encode()
+        if method == "GET" and path.startswith("/management/v1/counter/"):
+            counter = self._by_id(int(path.split("/")[4]))
+            return (200, json.dumps({"counter": counter}).encode()) if counter else (404, b"{}")
+        if method == "PUT" and path.startswith("/management/v1/counter/"):
+            counter = self._by_id(int(path.split("/")[4]))
+            counter["code_options"] = {**counter["code_options"],
+                                       **(body["counter"].get("code_options") or {})}
+            return 200, json.dumps({"counter": counter}).encode()
+        if method == "POST":
+>           raise AssertionError(f"повторный прогон не должен ничего создавать: POST {path}")
+E           AssertionError: повторный прогон не должен ничего создавать: POST /management/v1/counters
+
+tests/unit/test_analytics_repair_run.py:102: AssertionError
+___________ test_registry_records_the_real_state_including_problems ____________
+
+    def test_registry_records_the_real_state_including_problems():
+        from factory.analytics import registry
+    
+        for entry in registry.properties():
+            raw = entry.raw
+>           assert raw["counter_id"], f"{entry.domain}: боевой counter_id не записан"
+E           AssertionError: animedia.space: боевой counter_id не записан
+E           assert None
+
+tests/unit/test_analytics_webvisor.py:345: AssertionError
+_____________________ test_settings_json_is_valid_and_safe _____________________
+
+    def test_settings_json_is_valid_and_safe():
+        settings = json.loads((CLAUDE / "settings.json").read_text(encoding="utf-8"))
+        permissions = settings["permissions"]
+        assert permissions["defaultMode"] != "bypassPermissions"
+        assert settings.get("disableBypassPermissionsMode") == "disable"
+        deny = " ".join(permissions["deny"])
+        for pattern in ("ssh", "rm -rf", "sudo", "git push --force", "mkfs", "Read(**/.env)"):
+>           assert pattern in deny, f"нет deny-правила для: {pattern}"
+E           AssertionError: нет deny-правила для: sudo
+E           assert 'sudo' in 'Bash(sftp *) Bash(su *) Bash(doas *) Bash(rm -rf *) Bash(rm -fr *) Bash(mkfs*) Bash(dd *) Bash(shred *) Bash(chmod 77...ng=no*) Bash(gh repo delete:*) Bash(aws ec2 terminate-instances:*) Bash(aws route53 delete-hosted-zone:*) Bash(eval:*)'
+
+tests/unit/test_claude_config.py:30: AssertionError
+______________ TestSixLiveProfiles.test_every_live_profile_passes ______________
+
+self = <tests.unit.test_site_engine_gate.TestSixLiveProfiles object at 0x7f0ebdc186d0>
+
+    def test_every_live_profile_passes(self):
+        ok, results, core = gate.run(ROOT)
+        failed = {r.site_id: r.problems for r in results if not r.passed}
+>       assert failed == {}, failed
+E       AssertionError: {'animedia-01': ["профиль не проходит схему: (корень): Additional properties are not allowed ('backup_policy_ref', 'co...rds-02': ["профиль не проходит схему: (корень): Additional properties are not allowed ('player' was unexpected)"], ...}
+E       assert {'animedia-01...ected)'], ...} == {}
+E         
+E         Left contains 6 more items:
+E         {'animedia-01': ['профиль не проходит схему: (корень): Additional properties '
+E                          "are not allowed ('backup_policy_ref', 'content_profile_ref', "
+E                          "'deployment', 'environment', 'family', 'lifecycle_state', "
+E                          "'monitoring_profile_ref', 'player', 'registry_note' were "
+E                          'unexpected)'],...
+E         
+E         ...Full output truncated (17 lines hidden), use '-vv' to show
+
+tests/unit/test_site_engine_gate.py:28: AssertionError
+__________ TestNewSiteType.test_a_site_of_an_unknown_type_is_accepted __________
+
+self = <tests.unit.test_site_engine_gate.TestNewSiteType object at 0x7f0ebdc18cd0>
+
+    def test_a_site_of_an_unknown_type_is_accepted(self):
+        """Движок обязан принять новый род сайта без правки ядра.
+    
+        Если бы ядро знало про аниме и видеовитрины поимённо, каждый следующий
+        проект начинался бы с правки общего кода.
+        """
+        profile = valid_profile()
+        profile["site_id"] = "recipes-demo"
+        profile["site_type"] = "recipe-catalog"
+        profile["domains"] = ["recipes.example"]
+        profile["content_directions"] = ["dessert", "main-course"]
+        profile["content_providers"] = [
+            {"adapter": "example-recipes-v1", "role": "primary", "credentials_ref": "example_api_token"}
+        ]
+>       assert gate.check_profile(profile, ROOT).passed
+E       assert False
+E        +  where False = GateResult(site_id='recipes-demo', problems=["профиль не проходит схему: (корень): Additional properties are not allowed ('player' was unexpected)"]).passed
+E        +    where GateResult(site_id='recipes-demo', problems=["профиль не проходит схему: (корень): Additional properties are not allowed ('player' was unexpected)"]) = <function check_profile at 0x7f0ebda83eb0>({'schema_version': '1.0', 'site_id': 'recipes-demo', 'cms_contract': '1.2.0', 'site_type': 'recipe-catalog', ...}, PosixPath('/home/claude/wt-lords-template-consolidation-01'))
+E        +      where <function check_profile at 0x7f0ebda83eb0> = gate.check_profile
+
+tests/unit/test_site_engine_gate.py:84: AssertionError
+_ TestDeliberatelyBrokenProfiles.test_credentials_ref_is_not_mistaken_for_a_secret _
+
+self = <tests.unit.test_site_engine_gate.TestDeliberatelyBrokenProfiles object at 0x7f0ebdc183a0>
+
+    def test_credentials_ref_is_not_mistaken_for_a_secret(self):
+        """Ссылка на секрет — не секрет. Иначе гейт запретил бы правильное."""
+>       assert gate.check_profile(valid_profile(), ROOT).passed
+E       assert False
+E        +  where False = GateResult(site_id='lords-01', problems=["профиль не проходит схему: (корень): Additional properties are not allowed ('player' was unexpected)"]).passed
+E        +    where GateResult(site_id='lords-01', problems=["профиль не проходит схему: (корень): Additional properties are not allowed ('player' was unexpected)"]) = <function check_profile at 0x7f0ebda83eb0>({'schema_version': '1.0', 'site_id': 'lords-01', 'cms_contract': '1.2.0', 'site_type': 'video-showcase', ...}, PosixPath('/home/claude/wt-lords-template-consolidation-01'))
+E        +      where <function check_profile at 0x7f0ebda83eb0> = gate.check_profile
+E        +      and   {'schema_version': '1.0', 'site_id': 'lords-01', 'cms_contract': '1.2.0', 'site_type': 'video-showcase', ...} = valid_profile()
+
+tests/unit/test_site_engine_gate.py:105: AssertionError
+_ TestNormalizedContentCapability.test_local_ingestion_satisfies_the_requirement _
+
+self = <tests.unit.test_site_engine_gate.TestNormalizedContentCapability object at 0x7f0ebdc18b50>
+
+    def test_local_ingestion_satisfies_the_requirement(self):
+        profile = valid_profile()
+        assert "content-ingestion" in profile["enabled_modules"]
+>       assert gate.check_profile(profile, ROOT).passed
+E       assert False
+E        +  where False = GateResult(site_id='lords-01', problems=["профиль не проходит схему: (корень): Additional properties are not allowed ('player' was unexpected)"]).passed
+E        +    where GateResult(site_id='lords-01', problems=["профиль не проходит схему: (корень): Additional properties are not allowed ('player' was unexpected)"]) = <function check_profile at 0x7f0ebda83eb0>({'schema_version': '1.0', 'site_id': 'lords-01', 'cms_contract': '1.2.0', 'site_type': 'video-showcase', ...}, PosixPath('/home/claude/wt-lords-template-consolidation-01'))
+E        +      where <function check_profile at 0x7f0ebda83eb0> = gate.check_profile
+
+tests/unit/test_site_engine_gate.py:190: AssertionError
+_ TestNormalizedContentCapability.test_shared_engine_api_satisfies_the_requirement _
+
+self = <tests.unit.test_site_engine_gate.TestNormalizedContentCapability object at 0x7f0ebdc1b460>
+
+    def test_shared_engine_api_satisfies_the_requirement(self):
+        """Сайт без собственного загрузчика, берущий контент из общего API."""
+        profile = valid_profile()
+        profile["site_id"] = "shared-consumer"
+        profile["enabled_modules"] = [
+            m for m in profile["enabled_modules"] if m != "content-ingestion"
+        ]
+        profile["normalized_content_source"] = {"kind": "site-engine-api", "ref": "site-engine/v1"}
+        result = gate.check_profile(profile, ROOT)
+>       assert result.passed, result.problems
+E       AssertionError: ["профиль не проходит схему: (корень): Additional properties are not allowed ('player' was unexpected)"]
+E       assert False
+E        +  where False = GateResult(site_id='shared-consumer', problems=["профиль не проходит схему: (корень): Additional properties are not allowed ('player' was unexpected)"]).passed
+
+tests/unit/test_site_engine_gate.py:201: AssertionError
+_ TestNormalizedContentCapability.test_registered_adapter_satisfies_the_requirement _
+
+self = <tests.unit.test_site_engine_gate.TestNormalizedContentCapability object at 0x7f0ebdc812d0>
+
+    def test_registered_adapter_satisfies_the_requirement(self):
+        profile = valid_profile()
+        profile["site_id"] = "adapter-consumer"
+        profile["enabled_modules"] = [
+            m for m in profile["enabled_modules"] if m != "content-ingestion"
+        ]
+        profile["normalized_content_source"] = {"kind": "adapter", "ref": "partner-catalog-v2"}
+        result = gate.check_profile(profile, ROOT)
+>       assert result.passed, result.problems
+E       AssertionError: ["профиль не проходит схему: (корень): Additional properties are not allowed ('player' was unexpected)"]
+E       assert False
+E        +  where False = GateResult(site_id='adapter-consumer', problems=["профиль не проходит схему: (корень): Additional properties are not allowed ('player' was unexpected)"]).passed
+
+tests/unit/test_site_engine_gate.py:211: AssertionError
+_ TestNormalizedContentCapability.test_a_site_without_seo_needs_no_content_source _
+
+self = <tests.unit.test_site_engine_gate.TestNormalizedContentCapability object at 0x7f0ebdc83730>
+
+    def test_a_site_without_seo_needs_no_content_source(self):
+        """Требование идёт от SEO. Витрина без него под него не подпадает."""
+        profile = valid_profile()
+        profile["site_id"] = "no-seo"
+        profile["enabled_modules"] = [
+            m for m in profile["enabled_modules"]
+            if m not in ("seo", "content-ingestion")
+        ]
+        profile["seo_profile"]["enabled"] = False
+>       assert gate.check_profile(profile, ROOT).passed
+E       assert False
+E        +  where False = GateResult(site_id='no-seo', problems=["профиль не проходит схему: (корень): Additional properties are not allowed ('player' was unexpected)"]).passed
+E        +    where GateResult(site_id='no-seo', problems=["профиль не проходит схему: (корень): Additional properties are not allowed ('player' was unexpected)"]) = <function check_profile at 0x7f0ebda83eb0>({'schema_version': '1.0', 'site_id': 'no-seo', 'cms_contract': '1.2.0', 'site_type': 'video-showcase', ...}, PosixPath('/home/claude/wt-lords-template-consolidation-01'))
+E        +      where <function check_profile at 0x7f0ebda83eb0> = gate.check_profile
+
+tests/unit/test_site_engine_gate.py:250: AssertionError
+___________________ test_absent_derived_artifact_is_allowed ____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-297/test_absent_derived_artifact_i0')
+
+    def test_absent_derived_artifact_is_allowed(tmp_path: Path) -> None:
+        """Ветка без генератора не должна валить ежедневную самопроверку."""
+        repo = build_repo(tmp_path)
+        required_registries(repo)
+    
+        result = run(repo)
+    
+>       assert result.returncode == 0, result.stderr
+E       AssertionError: FAIL: site-cells.json at cells/0/release: Additional properties are not allowed ('observed' was unexpected)
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/claude/wt-lords-template-consolidation-01/.venv/bin/python', '/tmp/pytest-of-claude/pyte...stderr="FAIL: site-cells.json at cells/0/release: Additional properties are not allowed ('observed' was unexpected)\n").returncode
+
+tests/unit/test_validate_registries_derived.py:84: AssertionError
+______________ test_present_derived_artifact_must_pass_its_schema ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-297/test_present_derived_artifact_0')
+
+    def test_present_derived_artifact_must_pass_its_schema(tmp_path: Path) -> None:
+        repo = build_repo(tmp_path)
+        required_registries(repo)
+        (repo / "config" / "SITE-MATRIX.json").write_text(
+            json.dumps(valid_matrix(), ensure_ascii=False), encoding="utf-8"
+        )
+    
+        result = run(repo)
+    
+>       assert result.returncode == 0, result.stderr + result.stdout
+E       AssertionError: FAIL: site-cells.json at cells/0/release: Additional properties are not allowed ('observed' was unexpected)
+E         OK: config/analytics.json -> analytics-registry.schema.json
+E         OK: config/content-backlog.json -> content-backlog.schema.json
+E         OK: config/data-sources.json -> data-source-registry.schema.json
+E         OK: config/editorial-calendar.json -> editorial-calendar.schema.json
+E         OK: config/editorial-sources.json -> editorial-sources.schema.json
+E         OK: config/experiments.json -> experiment-registry.schema.json
+E         OK: config/portfolio.fixture.json -> portfolio-registry.schema.json
+E         OK: config/portfolio.json -> portfolio-registry.schema.json
+E         OK: config/secret-hub.json -> secret-hub.schema.json
+E         OK: config/template-pool.json -> template-pool.schema.json
+E         OK: config/SITE-MATRIX.json -> site-matrix.schema.json
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/claude/wt-lords-template-consolidation-01/.venv/bin/python', '/tmp/pytest-of-claude/pyte...stderr="FAIL: site-cells.json at cells/0/release: Additional properties are not allowed ('observed' was unexpected)\n").returncode
+
+tests/unit/test_validate_registries_derived.py:98: AssertionError
+________________ test_registry_holds_exactly_the_known_domains _________________
+
+    def test_registry_holds_exactly_the_known_domains():
+        domains = [p.domain for p in registry.properties()]
+>       assert domains == list(LIVE_COUNTERS)
+E       AssertionError: assert ['yummyani.si....online', ...] == ['yummyani.si...ials1.online']
+E         
+E         Left contains one more item: 'animedia.space'
+E         Use -v to get more diff
+
+tests/unit/test_yandex_analytics_factory.py:327: AssertionError
+___________________ test_registry_records_the_live_counters ____________________
+
+    def test_registry_records_the_live_counters():
+        for entry in registry.properties():
+>           assert entry.counter_id == LIVE_COUNTERS[entry.domain], entry.domain
+E           KeyError: 'animedia.space'
+
+tests/unit/test_yandex_analytics_factory.py:442: KeyError
+____________ test_every_counter_has_all_nine_goals_with_numeric_ids ____________
+
+    def test_every_counter_has_all_nine_goals_with_numeric_ids():
+        """Девять целей и девять числовых идентификаторов — иначе конверсии не измерить."""
+        from factory.analytics import events
+    
+        total = 0
+        for entry in registry.properties():
+            goals = entry.raw["goals"]
+>           goal_ids = entry.raw["goal_ids"]
+E           KeyError: 'goal_ids'
+
+tests/unit/test_yandex_analytics_factory.py:458: KeyError
+_____________ test_session_recording_is_off_on_every_live_counter ______________
+
+    def test_session_recording_is_off_on_every_live_counter():
+        """Требование задания, дважды нарушенное по дороге. Теперь оно под тестом."""
+        for entry in registry.properties():
+            assert entry.raw["webvisor"] is False, entry.domain
+>           assert entry.raw["problems"] == [], (
+                f"{entry.domain}: настройка завершена, а в problems что-то осталось: "
+                f"{entry.raw['problems']}"
+            )
+E           AssertionError: animedia.space: настройка завершена, а в problems что-то осталось: ['Счётчик не заведён: сайт ещё не активирован, создавать счётчик до активации значит завести пустой счётчик без данных.']
+E           assert ['Счётчик не ... без данных.'] == []
+E             
+E             Left contains one more item: 'Счётчик не заведён: сайт ещё не активирован, создавать счётчик до активации значит завести пустой счётчик без данных.'
+E             Use -v to get more diff
+
+tests/unit/test_yandex_analytics_factory.py:474: AssertionError
+=========================== short test summary info ============================
+SKIPPED [1] tests/unit/test_cell_admin_exec.py:67: репозитория выделенного сайта нет в этом рабочем каталоге
+SKIPPED [1] tests/unit/test_cell_admin_exec.py:74: репозитория выделенного сайта нет в этом рабочем каталоге
+SKIPPED [1] tests/unit/test_cell_admin_exec.py:90: репозитория выделенного сайта нет в этом рабочем каталоге
+SKIPPED [1] tests/unit/test_cell_admin_exec.py:104: репозитория выделенного сайта нет в этом рабочем каталоге
+SKIPPED [1] tests/unit/test_cell_admin_exec.py:123: репозитория выделенного сайта нет в этом рабочем каталоге
+SKIPPED [1] tests/unit/test_cell_admin_exec.py:131: репозитория выделенного сайта нет в этом рабочем каталоге
+SKIPPED [1] tests/unit/test_cell_admin_exec.py:144: репозитория выделенного сайта нет в этом рабочем каталоге
+SKIPPED [1] tests/unit/test_cell_admin_exec.py:158: репозитория выделенного сайта нет в этом рабочем каталоге
+SKIPPED [1] tests/unit/test_cell_entrypoint_contract.py:66: нет рабочих копий репозиториев сайтов в /home/claude/wt-lords-template-consolidation-01/var/site-repos: контракт точки входа сверять не у чего
+SKIPPED [1] tests/unit/test_cell_entrypoint_contract.py:86: нет рабочих копий репозиториев сайтов в /home/claude/wt-lords-template-consolidation-01/var/site-repos: контракт точки входа сверять не у чего
+SKIPPED [1] tests/unit/test_cell_entrypoint_contract.py:103: нет рабочих копий репозиториев сайтов в /home/claude/wt-lords-template-consolidation-01/var/site-repos: контракт точки входа сверять не у чего
+SKIPPED [1] tests/unit/test_cell_entrypoint_contract.py:131: нет рабочих копий репозиториев сайтов в /home/claude/wt-lords-template-consolidation-01/var/site-repos: контракт точки входа сверять не у чего
+SKIPPED [1] tests/unit/test_cell_entrypoint_contract.py:164: нет рабочих копий репозиториев сайтов в /home/claude/wt-lords-template-consolidation-01/var/site-repos: контракт точки входа сверять не у чего
+SKIPPED [2] tests/unit/test_lords_apply_python_fragments.py:152: интерпретатор тестов и так 3.10 — сравнивать не с чем
+SKIPPED [1] tests/unit/test_secret_hub_host.py:117: каталог секретов закрыт для этой учётной записи: состояние ключа не измерено (так и задумано)
+FAILED tests/unit/test_analytics_repair_run.py::test_repair_run_disables_the_visor_without_creating_anything
+FAILED tests/unit/test_analytics_repair_run.py::test_repair_run_records_counter_ids_and_a_goal_id_for_every_event
+FAILED tests/unit/test_analytics_repair_run.py::test_a_second_repair_run_writes_nothing
+FAILED tests/unit/test_analytics_repair_run.py::test_dry_run_writes_nothing_at_all
+FAILED tests/unit/test_analytics_repair_run.py::test_a_counter_that_does_not_match_the_registry_stops_the_run
+FAILED tests/unit/test_analytics_webvisor.py::test_registry_records_the_real_state_including_problems
+FAILED tests/unit/test_claude_config.py::test_settings_json_is_valid_and_safe
+FAILED tests/unit/test_site_engine_gate.py::TestSixLiveProfiles::test_every_live_profile_passes
+FAILED tests/unit/test_site_engine_gate.py::TestNewSiteType::test_a_site_of_an_unknown_type_is_accepted
+FAILED tests/unit/test_site_engine_gate.py::TestDeliberatelyBrokenProfiles::test_credentials_ref_is_not_mistaken_for_a_secret
+FAILED tests/unit/test_site_engine_gate.py::TestNormalizedContentCapability::test_local_ingestion_satisfies_the_requirement
+FAILED tests/unit/test_site_engine_gate.py::TestNormalizedContentCapability::test_shared_engine_api_satisfies_the_requirement
+FAILED tests/unit/test_site_engine_gate.py::TestNormalizedContentCapability::test_registered_adapter_satisfies_the_requirement
+FAILED tests/unit/test_site_engine_gate.py::TestNormalizedContentCapability::test_a_site_without_seo_needs_no_content_source
+FAILED tests/unit/test_validate_registries_derived.py::test_absent_derived_artifact_is_allowed
+FAILED tests/unit/test_validate_registries_derived.py::test_present_derived_artifact_must_pass_its_schema
+FAILED tests/unit/test_yandex_analytics_factory.py::test_registry_holds_exactly_the_known_domains
+FAILED tests/unit/test_yandex_analytics_factory.py::test_registry_records_the_live_counters
+FAILED tests/unit/test_yandex_analytics_factory.py::test_every_counter_has_all_nine_goals_with_numeric_ids
+FAILED tests/unit/test_yandex_analytics_factory.py::test_session_recording_is_off_on_every_live_counter
+20 failed, 4310 passed, 16 skipped in 493.26s (0:08:13)
+FAIL: Tests (pytest)
+
+========================================
+Stages passed: 6   failed: 2
+========================================

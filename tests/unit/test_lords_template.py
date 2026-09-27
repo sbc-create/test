@@ -210,13 +210,23 @@ class TestProfiles:
         profiles = plan_mod.load_profiles()
         tokens = {n: theme_mod.tokens_of(p) for n, p in profiles.items()}
         layouts = {n: theme_mod.layout_of(p) for n, p in profiles.items()}
-        assert len({t["accent"] for t in tokens.values()}) == 4
-        # Подложка больше не различает все четыре профиля, и это осознанно:
-        # три продуктовых домена приведены к одному тёмному семейству, потому
-        # что владелец смотрит на них вместе. Проверяется то, ради чего тест
-        # написан, — что профили не превратились в копии друг друга.
-        assert len({layout["density"] for layout in layouts.values()}) == 4
-        assert len({layout["hero"] for layout in layouts.values()}) == 4
+        assert len({t["accent"] for t in tokens.values()}) == len(profiles)
+        # Подложка больше не различает профили, и это осознанно: продуктовые
+        # домены приведены к одному тёмному семейству, потому что владелец
+        # смотрит на них вместе. Проверяется то, ради чего тест написан, — что
+        # профили не превратились в копии друг друга.
+        #
+        # Пересчёт «сколько РАЗНЫХ значений» здесь больше не работает: у
+        # `density` их всего три, у `hero` — четыре, а профилей семь. Требовать
+        # семи значений от перечня из трёх значит требовать невозможного, а
+        # ослабить число до трёх — перестать что-либо проверять. Проверяется
+        # исходное утверждение: НИ ОДНА ПАРА профилей не совпадает целиком.
+        подача = {n: (layouts[n]["density"], layouts[n]["hero"],
+                      tuple(layouts[n]["home_blocks"]))
+                  for n in profiles}
+        совпали = [(a, b) for i, a in enumerate(sorted(подача))
+                   for b in sorted(подача)[i + 1:] if подача[a] == подача[b]]
+        assert not совпали, f"подача профилей совпала целиком: {совпали}"
         # Плотность сетки постеров из этого перечня ушла: она перестала быть
         # стилевой ручкой профиля. Каталог фильмов узнаётся по плотному ряду
         # обложек, и три-четыре карточки шириной в треть экрана читались как
@@ -253,14 +263,19 @@ class TestProfiles:
         """
         profiles = plan_mod.load_profiles()
         layouts = {n: theme_mod.layout_of(p) for n, p in profiles.items()}
-        assert len({tuple(lay["home_blocks"]) for lay in layouts.values()}) == 4
-        assert len({lay["hero"] for lay in layouts.values()}) == 4
-        assert len({lay["density"] for lay in layouts.values()}) == 4
+        assert len({tuple(lay["home_blocks"]) for lay in layouts.values()}) == len(profiles)
+        # `hero` и `density` — перечни из четырёх и трёх значений; требовать по
+        # значению на профиль нельзя. Требуется, чтобы перечни были ЗАДЕЙСТВОВАНЫ
+        # целиком: иначе профили сползаются к одному геройскому блоку.
+        assert {lay["hero"] for lay in layouts.values()} == {
+            "catalog", "timeline", "editorial", "facets"}
+        assert {lay["density"] for lay in layouts.values()} >= {
+            "dense", "airy", "compact"}
 
     def test_stylesheets_differ(self):
         profiles = plan_mod.load_profiles()
         sheets = {n: theme_mod.stylesheet(p) for n, p in profiles.items()}
-        assert len(set(sheets.values())) == 4
+        assert len(set(sheets.values())) == len(profiles)
 
     def test_configuration_of_one_profile_does_not_leak_into_another(self, sites):
         """Настройка соседа не должна встречаться в разметке сайта."""

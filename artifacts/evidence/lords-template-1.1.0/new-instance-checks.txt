@@ -1,0 +1,12 @@
+site-config-json               PASS
+pins-json                      PASS
+entrypoint-present             PASS
+runtime-compiles               PASS
+pins-match-sources             PASS
+no-secrets-in-git              PASS
+shell-ascii-names              PASS
+launcher-refuses               PASS
+shell-syntax                   PASS
+manifest-stamp                 PASS
+artifact-contents              PASS
+activate-scenarios             PASS

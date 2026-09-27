@@ -11,6 +11,20 @@
   },
   "templates": [
     {
+      "template_id": "lords-animation",
+      "family": "lords",
+      "label": "Lords Animation",
+      "source": "blueprints/lords/profiles/lords-animation.yaml",
+      "status": "free"
+    },
+    {
+      "template_id": "lords-anime",
+      "family": "lords",
+      "label": "Lords Anime",
+      "source": "blueprints/lords/profiles/lords-anime.yaml",
+      "status": "free"
+    },
+    {
       "template_id": "lords-curated",
       "family": "lords",
       "label": "Lords Curated",
@@ -24,6 +38,13 @@
         "assigned_at": "legacy",
         "evidence": "sites/lords-03/package.yaml: tenant.seo_profile = lords-curated"
       }
+    },
+    {
+      "template_id": "lords-dorama",
+      "family": "lords",
+      "label": "Lords Dorama",
+      "source": "blueprints/lords/profiles/lords-dorama.yaml",
+      "status": "free"
     },
     {
       "template_id": "lords-general",

@@ -44,6 +44,24 @@ UNIT_DIR = Path("/etc/systemd/system")
 RETIRED_PUBLISHER_IDS = frozenset({"10331", "10332", "10333"})
 
 
+#: Поля манифеста, которые обязана проставить СБОРКА выпуска. В репозитории
+#: они пусты намеренно: заполненное здесь значение пережило бы свой выпуск и
+#: продолжило бы называть его цифры.
+#:
+#: Тот же кортеж повторён в `site_checks/build_release.py`: сборщик уезжает в
+#: репозиторий сайта отдельным файлом и импортировать фабрику не может. Чтобы
+#: копии не разошлись, их совпадение сторожит
+#: `tests/unit/test_cell_manifest_fields.py`.
+ПОЛЯ_ВЫПУСКА = ("build_id", "artifact_sha256", "runtime_commit", "site_repo_commit",
+                "site_repo_dirty", "built_at", "built_from", "release_dir",
+                "bound_release_link", "source_commit", "source_dirty")
+
+#: Происхождение шаблона: неподвижно, сборкой не меняется. Вынесено отдельным
+#: полем, чтобы его нельзя было спутать с версией сайта — их путали, и витрина
+#: объявляла происхождением собственный коммит.
+ПОЛЕ_ПРОИСХОЖДЕНИЯ = "template_origin"
+
+
 class ExtractError(RuntimeError):
     pass
 
@@ -369,10 +387,32 @@ def check_player(config: dict, env: dict) -> list:
 
 
 def check_data(env: dict) -> list:
+    """Снимок каталога есть И читается.
+
+    Проверялось только наличие файла. Битый снимок — доставленный мусор,
+    оборванная запись, пустой файл — проходил проверку и ронял витрину уже на
+    разборе, то есть ПОСЛЕ того, как выпуск объявил себя исправным. Отличить
+    «нечего показывать» от «показывать нечем» снаружи было нельзя.
+    """
     bad = []
     catalog = env.get("LORDS_CATALOG") or env.get("ANIMEDIA_CATALOG")
-    if catalog and not Path(catalog).is_file():
+    if not catalog:
+        return bad
+    path = Path(catalog)
+    if not path.is_file():
         bad.append(f"нет снимка каталога {{catalog}}: витрине нечего показывать")
+        return bad
+    try:
+        with path.open("rb") as fh:
+            snapshot = json.load(fh)
+    except ValueError as err:
+        bad.append(f"снимок каталога {{catalog}} не читается как JSON: {{err}}")
+        return bad
+    except OSError as err:
+        bad.append(f"снимок каталога {{catalog}} не открывается: {{err}}")
+        return bad
+    if not isinstance(snapshot, dict) or not isinstance(snapshot.get("items"), list):
+        bad.append(f"в снимке {{catalog}} нет списка items: это не снимок каталога")
     return bad
 
 
@@ -469,6 +509,7 @@ def build_repo(site_id: str, *, domain: str, destination: Path, repo_root: Path,
         shutil.rmtree(destination)
     destination.mkdir(parents=True)
 
+    site_slug = domain.replace(".", "-")
     names = copy_runtime(live, destination)
     prov = provenance(live, repo_root)
     plc = player_config(live)
@@ -492,6 +533,23 @@ def build_repo(site_id: str, *, domain: str, destination: Path, repo_root: Path,
             "хоть один путь указывает на соседа."),
         "indexing_note": (
             "Режим индексации задан владельцем и этой задачей не меняется."),
+        # Раскладка выпуска объявлена ОДИН раз и здесь. До этого её знали по
+        # отдельности юнит (`app/`), сценарий активации (`app/`) и исполнитель
+        # очереди (`releases/<коммит12>` + ссылка `current`) — три описания
+        # одного сайта, которые расходятся молча и обнаруживаются при аварии.
+        # Сборка берёт отсюда `release_dir` и `bound_release_link` манифеста.
+        "deployment": {
+            "root": f"/srv/{account_for(site_slug)}",
+            "release_parent": f"/srv/{account_for(site_slug)}/releases",
+            "current_link": f"/srv/{account_for(site_slug)}/current",
+            "data_dir": f"/srv/{account_for(site_slug)}/data",
+            "unit": f"nova-{account_for(site_slug)}.service",
+            "account": account_for(site_slug),
+            "port": live.port,
+            "note": ("Выпуски лежат рядом в releases/<12 знаков коммита>, "
+                     "работает тот, на который смотрит ссылка current. Ту же "
+                     "раскладку ставит исполнитель очереди."),
+        },
     }
     (destination / "config").mkdir()
     (destination / "config" / "site.json").write_text(
@@ -504,7 +562,34 @@ def build_repo(site_id: str, *, domain: str, destination: Path, repo_root: Path,
 
     manifest_src = live.environment.get("LORDS_TEMPLATE_MANIFEST")
     if manifest_src and Path(manifest_src).is_file():
-        shutil.copy2(manifest_src, destination / "config" / "template-manifest.json")
+        # Сведения о ВЫПУСКЕ из живого манифеста в репозиторий не переносятся.
+        # Они были написаны один раз при сборке фабрики и переживали свой
+        # выпуск: `release_dir` и `bound_release_link` указывали в дерево ОБЩЕЙ
+        # фабрики `/srv/lords/.frontend/…`, то есть каждая выделенная ячейка
+        # объявляла своей раскладкой чужую. Проставляет их сборка.
+        #
+        # Неподвижным остаётся только происхождение шаблона — оно и вынесено
+        # отдельным полем, чтобы его нельзя было спутать с версией сайта.
+        сырой = json.loads(Path(manifest_src).read_text(encoding="utf-8"))
+        очищенный = dict(сырой)
+        очищенный[ПОЛЕ_ПРОИСХОЖДЕНИЯ] = {
+            "source_commit": live.source_commit or сырой.get("source_commit", ""),
+            "build_id": live.build_id or сырой.get("build_id", ""),
+            "template_family": сырой.get("template_family", ""),
+            "design_version": сырой.get("design_version", ""),
+            "note": "Происхождение закреплённого шаблона. Сборкой не меняется.",
+        }
+        for поле in ПОЛЯ_ВЫПУСКА:
+            if поле in ("source_dirty", "site_repo_dirty"):
+                очищенный[поле] = False
+            else:
+                очищенный[поле] = ""
+        # Рантайм отказывается подниматься без непустого build_id. Значение
+        # называет состояние честно: собран не был.
+        очищенный["build_id"] = "worktree-unbuilt"
+        (destination / "config" / "template-manifest.json").write_text(
+            json.dumps(очищенный, ensure_ascii=False, indent=1) + "\n",
+            encoding="utf-8")
 
     pins = {
         "schema_version": 1,
@@ -561,6 +646,15 @@ def build_repo(site_id: str, *, domain: str, destination: Path, repo_root: Path,
         "5. Данные и секреты не коммитятся.\n"
         "6. Живой код по SSH не правится.\n", encoding="utf-8")
 
+    # Проверки, сборщик, CI и скрипты выкладки — часть проекта, а не
+    # отдельный шаг. Проект без `checks/run.sh` нельзя ни проверить, ни
+    # выпустить, и каждый раз вспоминать про второй вызов — это способ однажды
+    # его забыть.
+    add_tooling(destination, site_id, domain)
+    add_deploy(destination, site_id=site_id, domain=domain,
+               account=account_for(site_slug), old_unit=live.unit,
+               port=live.port, old_root=live.legacy_root or "")
+
     return {"site_id": site_id, "domain": domain, "path": str(destination),
             "port": live.port, "unit": live.unit, "entrypoint": entry,
             "release_dir": str(live.release_dir), "source_commit": live.source_commit,
@@ -571,180 +665,12 @@ def build_repo(site_id: str, *, domain: str, destination: Path, repo_root: Path,
                 for v in prov.values()}}
 
 
-CHECKS_RUN = '''#!/usr/bin/env bash
-# Проверки проекта сайта. Падение любой — причина не выпускать релиз.
-# Имена переменных только ASCII: bash считает именем лишь [A-Za-z_][A-Za-z0-9_]*,
-# и строка вида `СУХОЙ=0` для него не присваивание, а вызов команды. `bash -n`
-# такую строку пропускает.
-set -uo pipefail
-cd "$(dirname "$0")/.."
 
-fail=0
-say() { printf '%-30s %s\\n' "$1" "$2"; }
-check() {
-  local name="$1"; shift
-  if "$@" >/dev/null 2>&1; then say "$name" "PASS"; else say "$name" "FAIL"; fail=1; fi
-}
 
-check "site-config-json"   python3 -c "import json;json.load(open('config/site.json'))"
-check "pins-json"          python3 -c "import json;json.load(open('pins.lock.json'))"
-check "entrypoint-present" python3 checks/entrypoint_present.py
-check "runtime-compiles"   python3 checks/compiles.py
-check "pins-match-sources" python3 checks/verify_pins.py
-check "no-secrets-in-git"  python3 checks/no_secrets.py
-check "shell-ascii-names"  python3 checks/ascii_shell_identifiers.py
-check "launcher-refuses"   python3 checks/fails_closed.py
-check "shell-syntax"       bash -n deploy/activate.sh
-# Сценарии именно выполняются: `bash -n` пропустил ошибку, валившую скрипт на
-# третьей строке, и обнаружилась она только на боевой активации.
-check "activate-scenarios" python3 checks/activate_scenarios.py
 
-exit "$fail"
-'''
 
-CHECK_ENTRYPOINT = '''"""Точка входа существует и названа в конфигурации."""
-import json
-import sys
-from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-cfg = json.loads((ROOT / "config" / "site.json").read_text(encoding="utf-8"))
-entry = ROOT / "src" / cfg["entrypoint"]
-if not entry.is_file():
-    print(f"нет точки входа {entry}", file=sys.stderr)
-    sys.exit(1)
-'''
 
-CHECK_COMPILES = '''"""Весь перенесённый рантайм компилируется.
-
-Артефакт снят с работающего сайта, но это не освобождает от проверки: файл мог
-не доехать целиком.
-"""
-import py_compile
-import sys
-import tempfile
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parent.parent
-bad = []
-# cfile во временный файл: py_compile отказывается писать в /dev/null, а без
-# cfile он засорил бы проект каталогами __pycache__.
-with tempfile.TemporaryDirectory() as tmp:
-    for i, p in enumerate(sorted((ROOT / "src").glob("*.py"))):
-        try:
-            py_compile.compile(str(p), doraise=True, cfile=f"{tmp}/{i}.pyc")
-        except py_compile.PyCompileError as exc:
-            bad.append(f"{p.name}: {exc}")
-if bad:
-    print("не компилируется:", *bad, sep="\\n  ", file=sys.stderr)
-    sys.exit(1)
-'''
-
-CHECK_VERIFY_PINS = '''"""Файлы совпадают с тем, что закреплено в pins.lock.json.
-
-Без этого закрепление — запись о намерении, а не о факте.
-"""
-import hashlib
-import json
-import sys
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parent.parent
-pins = json.loads((ROOT / "pins.lock.json").read_text(encoding="utf-8"))
-bad = []
-for name, meta in pins["files"].items():
-    p = ROOT / "src" / name
-    if not p.is_file():
-        bad.append(f"{name}: файла нет")
-        continue
-    actual = hashlib.sha256(p.read_bytes()).hexdigest()
-    if actual != meta["sha256"]:
-        bad.append(f"{name}: sha256 {actual[:12]} вместо {meta['sha256'][:12]}")
-if bad:
-    print("исходники разошлись с замком:", *bad, sep="\\n  ", file=sys.stderr)
-    sys.exit(1)
-'''
-
-CHECK_NO_SECRETS = '''"""Ни данных, ни секретов среди файлов, которые Git действительно хранит.
-
-Проверяется индекс, а не рабочий каталог: `config/player.json` обязан лежать
-рядом с работающим сайтом и обязан отсутствовать в Git. Отдельно сверяется, что
-git отвечает про ЭТОТ проект, иначе распакованное дерево опросило бы
-объемлющий репозиторий и прошло проверку, ничего не проверив.
-"""
-import fnmatch
-import subprocess
-import sys
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parent.parent
-FORBIDDEN = ("*.sqlite3", "*.db", "*.dump", "*.sql", ".env", "*.pem", "*.key",
-             "player.json", "*-catalog.json", "*-details.json", "*community*.json")
-
-top = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True,
-                     text=True, check=False, cwd=ROOT)
-if top.returncode != 0 or Path(top.stdout.strip()).resolve() != ROOT:
-    print("git отвечает не про этот проект: проверка прошла бы впустую",
-          file=sys.stderr)
-    sys.exit(1)
-
-tracked = subprocess.run(["git", "ls-files"], capture_output=True, text=True,
-                         check=False, cwd=ROOT).stdout.split()
-bad = [p for p in tracked
-       if not p.endswith(".example")
-       and any(fnmatch.fnmatch(p.rsplit("/", 1)[-1], pat) for pat in FORBIDDEN)]
-if bad:
-    print("эти файлы не должны быть в Git:", ", ".join(sorted(bad)), file=sys.stderr)
-    sys.exit(1)
-'''
-
-CHECK_FAILS_CLOSED = '''"""Запуск отказывает, а не подставляет чужое."""
-import json
-import subprocess
-import sys
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parent.parent
-
-r = subprocess.run([sys.executable, str(ROOT / "run.py"), "--check"],
-                   capture_output=True, text=True, cwd=ROOT)
-if r.returncode == 0:
-    print("запуск без --data-dir не отказал", file=sys.stderr)
-    sys.exit(1)
-
-cfg = json.loads((ROOT / "config" / "site.json").read_text(encoding="utf-8"))
-if not cfg.get("neighbour_site_ids"):
-    print("в config/site.json не перечислены соседние site_id", file=sys.stderr)
-    sys.exit(1)
-'''
-
-CHECK_ASCII = '''"""Имена переменных и функций в shell — только ASCII.
-
-Bash считает именем лишь [A-Za-z_][A-Za-z0-9_]*. `СУХОЙ=0` для него не
-присваивание, а вызов команды; падает только при запуске. `bash -n` пропускает.
-"""
-import re
-import sys
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parent.parent
-ASSIGN = re.compile(r"^\\s*(?:export\\s+|local\\s+)?([^\\s=]*[^\\x00-\\x7F][^\\s=]*)=")
-REF = re.compile(r"\\$\\{?([A-Za-z_]*[^\\x00-\\x7F][^\\s}/:\\-]*)")
-FUNC = re.compile(r"^\\s*(?:function\\s+)?([^\\s()]*[^\\x00-\\x7F][^\\s()]*)\\s*\\(\\s*\\)")
-
-bad = []
-for path in sorted(ROOT.rglob("*.sh")):
-    if ".git" in path.parts:
-        continue
-    for n, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
-        code = line.split("#", 1)[0]
-        for rule, what in ((ASSIGN, "присваивание"), (REF, "обращение"), (FUNC, "функция")):
-            for name in rule.findall(code):
-                bad.append(f"{path.relative_to(ROOT)}:{n}: {what} к не-ASCII имени {name!r}")
-if bad:
-    print("не-ASCII имена в shell:", *bad, sep="\\n  ", file=sys.stderr)
-    sys.exit(1)
-'''
 
 CI_WORKFLOW = '''# Выпуск {domain}. Меняет только этот сайт.
 name: release
@@ -797,122 +723,6 @@ jobs:
 '''
 
 
-BUILD_RELEASE = '''#!/usr/bin/env python3
-"""Сборка установочного пакета с воспроизводимым digest.
-
-В архив не попадает ничего переменного: порядок файлов задан, времена обнулены,
-владелец обезличен, режим канонизирован. Git хранит у файла ровно один бит прав;
-остальное берётся из umask сборщика, и без нормализации один коммит давал разный
-digest у разработчика и на раннере CI — digest отвечал бы на вопрос «кто
-собирал», а не «то же ли это самое».
-"""
-from __future__ import annotations
-
-import argparse
-import gzip
-import hashlib
-import io
-import json
-import subprocess
-import tarfile
-from datetime import datetime, timezone
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parent.parent
-SKIP_DIRS = {".git", "__pycache__", "dist", "data", "var"}
-SKIP_FILES = {"config/player.json"}
-
-
-def files() -> list:
-    out = []
-    for p in ROOT.rglob("*"):
-        rel = p.relative_to(ROOT)
-        if any(part in SKIP_DIRS for part in rel.parts):
-            continue
-        if str(rel) in SKIP_FILES:
-            continue
-        if p.is_file():
-            out.append(p)
-    return sorted(out, key=lambda p: str(p.relative_to(ROOT)))
-
-
-def anonymise(info: tarfile.TarInfo) -> tarfile.TarInfo:
-    info.uid = info.gid = 0
-    info.uname = info.gname = ""
-    info.mtime = 0
-    info.mode = 0o755 if info.mode & 0o111 else 0o644
-    return info
-
-
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--output", default="dist")
-    args = parser.parse_args()
-    out = ROOT / args.output
-    out.mkdir(parents=True, exist_ok=True)
-
-    cfg = json.loads((ROOT / "config" / "site.json").read_text(encoding="utf-8"))
-    commit = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "HEAD"],
-                            capture_output=True, text=True, check=True).stdout.strip()
-    dirty = subprocess.run(["git", "-C", str(ROOT), "status", "--porcelain"],
-                           capture_output=True, text=True, check=True).stdout.strip()
-
-    # Манифест штампуется коммитом ЭТОЙ репы: иначе живой сайт объявлял бы
-    # build_id чужой сборки, и связь commit → CI → digest → живой сайт
-    # обрывалась бы на последнем звене. Отметки времени нет намеренно — она
-    # сделала бы digest невоспроизводимым.
-    manifest_path = "config/template-manifest.json"
-    stamped = None
-    if (ROOT / manifest_path).is_file():
-        stamped = json.loads((ROOT / manifest_path).read_text(encoding="utf-8"))
-        stamped["site_repo_commit"] = commit
-        stamped["build_id"] = f"{commit[:12]}-{cfg['site_id']}"
-        stamped_bytes = (json.dumps(stamped, ensure_ascii=False, indent=1) + "\\n").encode()
-
-    raw = io.BytesIO()
-    with tarfile.open(fileobj=raw, mode="w") as tar:
-        for p in files():
-            arc = str(p.relative_to(ROOT))
-            if stamped is not None and arc == manifest_path:
-                info = tarfile.TarInfo(arc)
-                info.size = len(stamped_bytes)
-                info.mode = 0o644
-                tar.addfile(anonymise(info), io.BytesIO(stamped_bytes))
-                continue
-            tar.add(p, arcname=arc, filter=anonymise)
-    artifact = out / f"{cfg['site_id']}-{commit[:12]}.tar.gz"
-    with artifact.open("wb") as fh, gzip.GzipFile(fileobj=fh, mode="wb", mtime=0) as gz:
-        gz.write(raw.getvalue())
-
-    digest = "sha256:" + hashlib.sha256(artifact.read_bytes()).hexdigest()
-    manifest = {
-        "schema_version": 1,
-        "site_id": cfg["site_id"],
-        "domain": cfg["domain"],
-        "artifact": artifact.name,
-        "digest": digest,
-        "size_bytes": artifact.stat().st_size,
-        "source_commit": commit,
-        "source_dirty": bool(dirty),
-        "pins": json.loads((ROOT / "pins.lock.json").read_text(encoding="utf-8"))["pins"],
-        "built_at": datetime.now(timezone.utc).isoformat(),
-        "live_build_id": stamped["build_id"] if stamped else None,
-        "contains": {"code": True, "config": True, "database": False,
-                     "media": False, "secrets": False, "catalog_snapshot": False},
-    }
-    (out / "release-manifest.json").write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
-    print(f"артефакт: {artifact}")
-    print(f"digest:   {digest}")
-    print(f"коммит:   {commit}")
-    if dirty:
-        print("ВНИМАНИЕ: дерево грязное, артефакт не воспроизводим из коммита")
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
-'''
 
 
 def add_tooling(destination: Path, site_id: str, domain: str) -> None:
@@ -920,31 +730,53 @@ def add_tooling(destination: Path, site_id: str, domain: str) -> None:
     checks = destination / "checks"
     checks.mkdir(exist_ok=True)
     run = checks / "run.sh"
-    run.write_text(CHECKS_RUN, encoding="utf-8")
+    run.write_text(_оснастка("run.sh"), encoding="utf-8")
     run.chmod(0o755)
-    # Сценарный тест активации лежит файлом рядом с генератором: встроенный в
-    # строку, он однажды уже приехал в репозиторий сайта с разъехавшимися
-    # escape-последовательностями и не компилировался.
-    сценарии = Path(__file__).resolve().parent / "site_checks" / "activate_scenarios.py"
-    (checks / "activate_scenarios.py").write_text(
-        сценарии.read_text(encoding="utf-8"), encoding="utf-8")
-
-    for имя, текст in (("entrypoint_present.py", CHECK_ENTRYPOINT),
-                       ("compiles.py", CHECK_COMPILES),
-                       ("verify_pins.py", CHECK_VERIFY_PINS),
-                       ("no_secrets.py", CHECK_NO_SECRETS),
-                       ("fails_closed.py", CHECK_FAILS_CLOSED),
-                       ("ascii_shell_identifiers.py", CHECK_ASCII)):
-        (checks / имя).write_text(текст, encoding="utf-8")
+    for имя in ФАЙЛЫ_ПРОВЕРОК:
+        (checks / имя).write_text(_оснастка(имя), encoding="utf-8")
 
     tools = destination / "tools"
     tools.mkdir(exist_ok=True)
-    (tools / "build_release.py").write_text(BUILD_RELEASE, encoding="utf-8")
+    (tools / "build_release.py").write_text(_оснастка("build_release.py"),
+                                            encoding="utf-8")
 
     wf = destination / ".github" / "workflows"
     wf.mkdir(parents=True, exist_ok=True)
     (wf / "release.yml").write_text(
         CI_WORKFLOW.format(domain=domain, site_id=site_id), encoding="utf-8")
+
+
+#: Оснастка проекта сайта лежит ФАЙЛАМИ рядом с генератором, а не строками в
+#: нём.
+#:
+#: Причина не в стиле. Python-исходник, встроенный в строковый литерал, теряет
+#: свои escape-последовательности: `\\n` превращается в перенос строки, `\\0` — в
+#: нулевой байт, и в проект сайта уезжает файл, который не компилируется.
+#: Это случалось трижды: с `activate_scenarios.py`, затем с `manifest_stamp.py`
+#: и `artifact_contents.py`, затем с `build_release.py` и `verify_pins.py`.
+#: Каждый раз отказ обнаруживался только на прогоне проверок в новом проекте.
+#:
+#: Шаблоны, которым НУЖНА подстановка (`LAUNCHER`, `ACTIVATE`, `ROLLBACK`,
+#: `UNIT_TEMPLATE`, `CI_WORKFLOW`), остаются строками: в них есть `{поле}`.
+#: Все они на shell и YAML, и их синтаксис проверяется исполнением.
+ОСНАСТКА = Path(__file__).resolve().parent / "site_checks"
+
+#: Что попадает в `checks/` проекта сайта.
+ФАЙЛЫ_ПРОВЕРОК = (
+    "entrypoint_present.py",
+    "compiles.py",
+    "verify_pins.py",
+    "no_secrets.py",
+    "fails_closed.py",
+    "ascii_shell_identifiers.py",
+    "manifest_stamp.py",
+    "artifact_contents.py",
+    "activate_scenarios.py",
+)
+
+
+def _оснастка(имя: str) -> str:
+    return (ОСНАСТКА / имя).read_text(encoding="utf-8")
 
 
 ACTIVATE = '''#!/usr/bin/env bash
@@ -979,7 +811,14 @@ project="$(cd "$(dirname "$0")/.." && pwd)"
 site_id="{site_id}"
 account="${{SITE_ACCOUNT:-{account}}}"
 root_dir="${{SITE_ROOT:-/srv/{account}}}"
-app_dir="$root_dir/app"
+# Раскладка выпуска повторяет боевую: releases/<12 знаков коммита> и ссылка
+# current. Раньше скрипт ставил в app/, а исполнитель очереди — в
+# releases/…/current, и юнит в репозитории описывал не ту службу, что
+# работает. Два описания одного сайта расходятся молча, и узнают об этом при
+# аварии.
+releases_dir="$root_dir/releases"
+current_link="$root_dir/current"
+previous_file="$root_dir/.previous-release"
 data_dir="$root_dir/data"
 unit="${{SITE_UNIT:-nova-{account}.service}}"
 old_unit="${{SITE_OLD_UNIT:-{old_unit}}}"
@@ -1058,6 +897,23 @@ if [ "$require_root" = 1 ] && [ "$(id -u)" != 0 ]; then
   echo "нужен root" >&2; exit 1
 fi
 
+# Боевую ячейку ставит ОЧЕРЕДЬ, а не этот скрипт.
+#
+# Исполнитель делает две проверки, которых здесь нет и быть не может:
+# происхождение коммита (ветка эксперимента до боевой витрины не доходит) и
+# сверку digest артефакта с заявкой. Обход этого пути уже дал живой сайт,
+# объявлявший artifact_sha256, не совпадавший ни с одним его файлом.
+#
+# Признак боевой ячейки — каталог releases/ или ссылка current: их создаёт
+# исполнитель, и ничто другое их не создаёт.
+if [ "${{SITE_ALLOW_NON_QUEUE:-0}}" != 1 ] \\
+   && {{ [ -d "$releases_dir" ] || [ -L "$current_link" ]; }}; then
+  echo "$root_dir обслуживается исполнителем очереди: этот скрипт здесь не применяется." >&2
+  echo "Штатный выпуск:  factory cell trigger --site $site_id --confirm-activation" >&2
+  echo "Стенд и разбор:  SITE_ALLOW_NON_QUEUE=1 $0 ..." >&2
+  exit 1
+fi
+
 # Рядом работают другие сессии: они перезапускают витрины направления.
 lock_file="$shared_dir/.deploy.lock"
 if [ -e "$lock_file" ]; then
@@ -1113,7 +969,7 @@ fi
 step "учётная запись и каталоги"
 id -u "$account" >/dev/null 2>&1 || run_step "$useradd_cmd" --system --home "$root_dir" --shell /usr/sbin/nologin "$account"
 # shellcheck disable=SC2046
-run_step install -d $(own) -m 0755 "$root_dir" "$app_dir" "$data_dir"
+run_step install -d $(own) -m 0755 "$root_dir" "$releases_dir" "$data_dir"
 # shellcheck disable=SC2046
 run_step install -d $(own) -m 0700 "$data_dir/site-data"
 
@@ -1135,12 +991,22 @@ if [ "$expected" != "$actual" ]; then
   exit 2
 fi
 echo "   digest подтверждён: $actual"
+# Имя каталога выпуска — коммит, а не отметка времени: по нему видно, ЧТО
+# исполняется, и повторная установка того же коммита не плодит каталогов.
+release_commit=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1]))['source_commit'][:12])" "$manifest")
+app_dir="$releases_dir/$release_commit"
 run_step rm -rf "$app_dir.new"
 run_step mkdir -p "$app_dir.new"
 run_step tar -xzf "$artifact" -C "$app_dir.new"
-run_step rm -rf "$app_dir.prev"
-[ -d "$app_dir" ] && run_step mv "$app_dir" "$app_dir.prev"
+run_step rm -rf "$app_dir"
 run_step mv "$app_dir.new" "$app_dir"
+# Прежняя цель ссылки записывается ДО подмены: на неё вернётся rollback.sh.
+previous_now="$(readlink -f "$current_link" 2>/dev/null || true)"
+if [ "$dry_run" = 0 ] && [ -n "$previous_now" ] && [ "$previous_now" != "$app_dir" ]; then
+  printf '%s\\n' "$previous_now" > "$previous_file"
+fi
+run_step ln -sfn "$app_dir" "$current_link.new"
+run_step mv -T "$current_link.new" "$current_link"
 
 step "секрет плеера (вне Git)"
 if [ -r "$shared_dir/player-$site_id.json" ]; then
@@ -1215,36 +1081,79 @@ exit 3
 '''
 
 ROLLBACK = '''#!/usr/bin/env bash
-# Откат {domain} на прежнюю службу. Данные сохраняются.
+# Откат {domain} на ПРЕДЫДУЩИЙ ВЫПУСК. Данные сохраняются.
 #
-# Возвращает КОД и маршрутизацию. Записи, принятые после переключения, остаются
-# на месте: каталог данных не трогается вовсе. Восстановление вчерашней базы
-# откатом не является.
+# Что такое откат в этой раскладке. Выпуски лежат рядом в releases/, работает
+# тот, на который смотрит ссылка current. Откат — вернуть ссылку на прежний
+# выпуск и перезапустить свою службу. Каталог данных не трогается вовсе:
+# записи, принятые после переключения, остаются на месте, и восстановление
+# вчерашней базы откатом не является.
+#
+# Прежний путь — «выключить свою службу и включить общую {old_unit}» — больше
+# не работает и работать не должен: на боевой машине та служба отключена
+# исполнителем и закрыта от ручного запуска (RefuseManualStart). Возврат к ней
+# остаётся, но только по явной просьбе: SITE_OLD_UNIT=<имя>.
 set -euo pipefail
 
 account="${{SITE_ACCOUNT:-{account}}}"
 unit="${{SITE_UNIT:-nova-{account}.service}}"
-old_unit="${{SITE_OLD_UNIT:-{old_unit}}}"
+old_unit="${{SITE_OLD_UNIT:-}}"
 port="${{SITE_PORT:-{port}}}"
 systemctl_cmd="${{SITE_SYSTEMCTL:-systemctl}}"
-data_dir="${{SITE_ROOT:-/srv/{account}}}/data"
+root_dir="${{SITE_ROOT:-/srv/{account}}}"
+data_dir="$root_dir/data"
+current_link="$root_dir/current"
+previous_file="$root_dir/.previous-release"
 
-echo "== остановка новой службы"
-"$systemctl_cmd" disable --now "$unit" || true
+health_wait() {{
+  for _ in $(seq 1 15); do
+    if curl -fsS -o /dev/null "http://127.0.0.1:$port/healthz"; then
+      echo "healthz отвечает; данные в $data_dir не изменялись"
+      return 0
+    fi
+    sleep 2
+  done
+  echo "healthz не ответил за 30 с" >&2
+  return 1
+}}
 
-echo "== возврат прежней службы"
-"$systemctl_cmd" enable --now "$old_unit"
+if [ -n "$old_unit" ]; then
+  echo "== возврат на прежнюю службу $old_unit (по явной просьбе)"
+  "$systemctl_cmd" disable --now "$unit" || true
+  "$systemctl_cmd" enable --now "$old_unit"
+  health_wait
+  exit $?
+fi
 
-echo "== здоровье прежней службы"
-for _ in $(seq 1 15); do
-  if curl -fsS -o /dev/null "http://127.0.0.1:$port/healthz"; then
-    echo "healthz отвечает; данные в $data_dir не изменялись"
-    exit 0
-  fi
-  sleep 2
-done
-echo "healthz не ответил за 30 с" >&2
-exit 1
+echo "== предыдущий выпуск"
+if [ ! -r "$previous_file" ]; then
+  echo "нет $previous_file: предыдущий выпуск неизвестен, откатывать не на что." >&2
+  echo "Каталоги выпусков: $root_dir/releases" >&2
+  exit 1
+fi
+previous="$(cat "$previous_file")"
+if [ ! -d "$previous" ]; then
+  echo "каталог предыдущего выпуска $previous отсутствует" >&2
+  exit 1
+fi
+current_now="$(readlink -f "$current_link" 2>/dev/null || true)"
+if [ "$current_now" = "$previous" ]; then
+  echo "current уже указывает на $previous: откат не требуется" >&2
+  exit 1
+fi
+echo "   $current_now -> $previous"
+
+echo "== переключение ссылки"
+# Прежняя цель записывается ДО подмены, иначе повторный откат вернул бы сюда же.
+printf '%s\\n' "$current_now" > "$previous_file"
+ln -sfn "$previous" "$current_link.rollback"
+mv -T "$current_link.rollback" "$current_link"
+
+echo "== перезапуск службы"
+"$systemctl_cmd" restart "$unit"
+
+echo "== здоровье"
+health_wait
 '''
 
 
@@ -1253,6 +1162,12 @@ UNIT_TEMPLATE = '''# Служба {domain} ({site_id}). Ставится вла�
 # Отличие от прежнего юнита: рабочий каталог и ExecStart указывают на ЭТОТ
 # проект, а не на общий /srv/lords/.frontend. Пути данных задаёт run.py из
 # config/site.json — забыть переменную и уехать на каталог соседа больше нечем.
+#
+# Путь — через ссылку `current`, а не через каталог выпуска: выкладка меняет
+# ссылку, и юнит переживает смену выпуска без правки. Так ячейку ставит
+# исполнитель очереди, и так же её ставит deploy/activate.sh на стенде. Пока
+# юнит описывал `app/`, репозиторий описывал службу, которой на боевой машине
+# нет, — и расхождение обнаруживалось при аварии.
 [Unit]
 Description={domain} ({site_id}), собственное развёртывание
 After=network-online.target
@@ -1261,8 +1176,8 @@ After=network-online.target
 Type=simple
 User={account}
 Group={account}
-WorkingDirectory=/srv/{account}/app
-ExecStart=/usr/bin/python3 /srv/{account}/app/run.py --port {port} --data-dir /srv/{account}/data
+WorkingDirectory=/srv/{account}/current
+ExecStart=/usr/bin/python3 /srv/{account}/current/run.py --port {port} --data-dir /srv/{account}/data
 Restart=on-failure
 RestartSec=2
 

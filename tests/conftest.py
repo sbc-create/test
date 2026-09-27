@@ -19,6 +19,9 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / ".claude" / "hooks"))
+# Оснастка рантайма Lords лежит рядом с проверками, которые её используют:
+# при `--import-mode=importlib` каталог теста в sys.path не попадает сам.
+sys.path.insert(0, str(ROOT / "tests" / "unit"))
 
 from factory import validation  # noqa: E402
 from factory.paths import PATHS  # noqa: E402

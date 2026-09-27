@@ -185,6 +185,46 @@ def test_неизвестный_этап_не_записывается(tmp_path)
         queue.отметить(файл, "почти_готово")
 
 
+def площадка_в_песочнице(monkeypatch, tmp_path, site_id: str = "zona-01"):
+    """Хранилище ячейки и общий каталог производителя — внутри tmp_path.
+
+    Без этого исход теста зависел от МАШИНЫ. `executor.активировать` засевает
+    хранилище (`_засеять_хранилище`) ДО проверки на грязное дерево, и засев
+    смотрит на настоящую площадку сайта: на хосте разработки
+    `/srv/zonafilm-space/data` наполнен, «нехватки» нет, засев возвращается
+    сразу — и тест доходит до своей проверки. На чистом бегунке ни площадки,
+    ни общего каталога нет, засев идёт в `stage_snapshot` и падает раньше:
+
+        PrivilegedRefused: zona-01: в источнике нет файлов снимка
+        ['zona-01-catalog.json', 'zona-01-details.json']
+
+    То есть тест проверял наличие боевых данных на машине, а не то, ради чего
+    написан. Здесь ему выдаются собственные пустые каталоги и собственный
+    снимок, и исход перестаёт зависеть от того, где он запущен.
+    """
+    from factory.cell import delivery, privileged
+
+    корень = tmp_path / "srv" / site_id
+    (корень / "data").mkdir(parents=True, exist_ok=True)
+    общий = tmp_path / "producer"
+    общий.mkdir(parents=True, exist_ok=True)
+    for имя in (f"{site_id}-catalog.json", f"{site_id}-details.json"):
+        (общий / имя).write_text('{"items": []}', encoding="utf-8")
+
+    настоящая = privileged.Площадка.из_реестра
+
+    def песочница(sid, **прочее):
+        ж = настоящая(sid, **прочее)
+        return privileged.Площадка(
+            site_id=ж.site_id, account=ж.account, root=корень,
+            app=корень / "app", data=корень / "data", unit=ж.unit,
+            previous_unit=ж.previous_unit, port=ж.port)
+
+    monkeypatch.setattr(privileged.Площадка, "из_реестра", staticmethod(песочница))
+    monkeypatch.setattr(delivery, "ОБЩИЙ", общий)
+    return корень, общий
+
+
 def test_грязное_дерево_не_выкладывается(monkeypatch, tmp_path):
     """Совпадение digest ничего не доказывает, если дерево правит подающий.
 
@@ -194,6 +234,7 @@ def test_грязное_дерево_не_выкладывается(monkeypatch
     """
     from factory.cell import privileged, registry, runtime
 
+    площадка_в_песочнице(monkeypatch, tmp_path)
     репо = tmp_path / "repo"
     (репо / "tools").mkdir(parents=True)
     (репо / "tools" / "build_release.py").write_text("", encoding="utf-8")
