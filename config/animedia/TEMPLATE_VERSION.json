@@ -1,44 +1,77 @@
 {
-  "schema_version": 1,
-  "note": "Текущая версия шаблона семейства animedia и его выбираемые варианты. Читается сборщиком релиза (automation/host/animedia_release_build.py) и попадает в RELEASE.json. Файл существует затем, чтобы версия нового сайта бралась из репозитория, а не набиралась руками в аргументе выкладки: набранная руками версия расходится с кодом молча, и по манифесту витрины уже нельзя сказать, что она показывает.",
-  "template_family": "animedia",
-  "template_id": "animedia-nova",
-  "design_version": "1.2.11",
-  "design_version_changed_because": "ANIMEDIA-TEMPLATE-PORT-SPACE-02: принятые правки animedia.space (коммит 4973de20ea35, sbc-create/site-animedia-space) перенесены в шаблон. Под 1.2.10 уже выпущено ДРУГОЕ расположение: раздел топа на 48 мест без номеров, страница серии без карточки произведения и подборки «Недавно добавленные»/«Этого года» без ограничения по времени, а карточка подборки существовала в четырёх копиях, две из которых не умели показывать изображения (главная была текстовыми плитками). Оставить прежний номер значило бы, что по манифесту витрины больше нельзя сказать, что она показывает.",
-  "community_module": {
-    "version": "2.1",
-    "path_in_release": "community.py",
-    "repo_path": "factory/animedia/community.py",
-    "source_repo": "sbc-create/test",
-    "source_branch": "claude/community-comments-platform-01",
-    "source_commit": "da20a290c9606c7189c21375fc428650f44fae46",
-    "handoff_file": "docs/community_comments/handoff/community.py.v2.1",
-    "sha256": "f82555e8e8812c9bb3e5d3d980e32438835689d6a9dbb623da885169e8647517",
-    "bytes": 52743,
-    "contract": "docs/community_comments/MODULE_MAIN_SCORE_2_1.md"
+ "schema_version": 1,
+ "note": "Текущая версия шаблона семейства animedia и его выбираемые варианты. Читается сборщиком релиза (automation/host/animedia_release_build.py) и попадает в RELEASE.json. Файл существует затем, чтобы версия нового сайта бралась из репозитория, а не набиралась руками в аргументе выкладки: набранная руками версия расходится с кодом молча, и по манифесту витрины уже нельзя сказать, что она показывает.",
+ "template_family": "animedia",
+ "template_id": "animedia-nova",
+ "design_version": "1.2.11",
+ "design_version_changed_because": "ANIMEDIA-TEMPLATE-PORT-SPACE-02: принятые правки animedia.space (коммит 4973de20ea35, sbc-create/site-animedia-space) перенесены в шаблон. Под 1.2.10 уже выпущено ДРУГОЕ расположение: раздел топа на 48 мест без номеров, страница серии без карточки произведения и подборки «Недавно добавленные»/«Этого года» без ограничения по времени, а карточка подборки существовала в четырёх копиях, две из которых не умели показывать изображения (главная была текстовыми плитками). Оставить прежний номер значило бы, что по манифесту витрины больше нельзя сказать, что она показывает.",
+ "community_module": {
+  "version": "2.1",
+  "path_in_release": "community.py",
+  "repo_path": "factory/animedia/community.py",
+  "source_repo": "sbc-create/test",
+  "source_branch": "claude/community-comments-platform-01",
+  "source_commit": "da20a290c9606c7189c21375fc428650f44fae46",
+  "handoff_file": "docs/community_comments/handoff/community.py.v2.1",
+  "sha256": "f82555e8e8812c9bb3e5d3d980e32438835689d6a9dbb623da885169e8647517",
+  "bytes": 52743,
+  "contract": "docs/community_comments/MODULE_MAIN_SCORE_2_1.md"
+ },
+ "variants": [
+  {
+   "profile": "animedia-space",
+   "selectable": true,
+   "host_key": "animedia.space",
+   "assigned_site": "animedia-02"
   },
-  "variants": [
-    {
-      "profile": "animedia-space",
-      "selectable": true,
-      "host_key": "animedia.space",
-      "assigned_site": "animedia-02"
-    },
-    {
-      "profile": "animedia-icu",
-      "selectable": true,
-      "host_key": "animedia.icu",
-      "assigned_site": "animedia-01"
-    }
+  {
+   "profile": "animedia-icu",
+   "selectable": true,
+   "host_key": "animedia.icu",
+   "assigned_site": "animedia-01"
+  }
+ ],
+ "archived_template_ids": [
+  {
+   "template_id": "animedia-original-parity",
+   "why": "изолированный пакет стадии паритета; рантайм старше выложенного, при новом выпуске не выбирается"
+  },
+  {
+   "template_id": "animedia-ux-rebuild",
+   "why": "изолированный пакет стадии переработки интерфейса; заменён этим переносом, при новом выпуске не выбирается"
+  }
+ ],
+ "canonical": {
+  "note": "Откуда брать шаблон для НОВОГО сайта. Версию выбирает ветка, на которой запущен сборщик: он читает design_version из ЭТОГО файла своего дерева. Поэтому ветка названа здесь явно — иначе «какую версию получит новый сайт» отвечается догадкой.",
+  "repo": "sbc-create/test",
+  "branch": "claude/animedia-template-fix-01",
+  "integrated_commit": "761262d201fae1ee11feaec7298c71a5cffef5a4",
+  "integrated_pr": 90,
+  "design_version": "1.2.11",
+  "verified_at": "2026-09-27",
+  "verified_build_id": "20260927T090812Z-761262d-animedia-parity",
+  "verified_artifact_sha256": "64b5a1d6ab9d15354d338261e319206367d1927f84409b14f3b287dcbc735263",
+  "build_command": [
+   "python3",
+   "automation/host/animedia_release_build.py",
+   "--out-dir",
+   "<КАТАЛОГ_РЕЛИЗОВ>",
+   "--stage",
+   "<СТАДИЯ>",
+   "--profile",
+   "<ПРОФИЛЬ>",
+   "--emit-manifest",
+   "<КАТАЛОГ_ДАННЫХ>/template-manifest-<site_id>.json"
   ],
-  "archived_template_ids": [
-    {
-      "template_id": "animedia-original-parity",
-      "why": "изолированный пакет стадии паритета; рантайм старше выложенного, при новом выпуске не выбирается"
-    },
-    {
-      "template_id": "animedia-ux-rebuild",
-      "why": "изолированный пакет стадии переработки интерфейса; заменён этим переносом, при новом выпуске не выбирается"
-    }
-  ]
+  "build_command_note": "`--emit-manifest` обязателен: манифест витрины, набранный руками, отстаёт от пересборки молча — артефакт новый, build_id прежний, и витрина называет выпуск, которого на диске нет. Сборщик отказывается собирать на грязном дереве, вне ветки claude/animedia-*, без этого файла и если рантайм не объявляет design_version.",
+  "per_site_inputs": {
+   "site_id": "выводится из имени снимка: <site_id>-catalog.json",
+   "profile": "один из selectable variants ниже",
+   "snapshots": "<site_id>-catalog.json, <site_id>-details.json, <site_id>-ratings-top.json — доставляются отдельно, не из Git",
+   "player": "player-<site_id>.json с publisher_id из Secret Hub. Файла нет — плеер молчит; чужой publisher_id умолчанием не становится и подставляться не должен",
+   "community_store": "ANIMEDIA_SITE_DATA_DIR — голоса и комментарии, вне каталога релиза",
+   "port": "свободный порт петли; домен, TLS и nginx — вне шаблона"
+  },
+  "not_wired": "Автоматического выбора шаблона у фабрики на этой линии нет: сайт получает версию через ветку сборки. Передача архитектору — docs/animedia/NEW_SITE.md, раздел «Что требуется подключить»."
+ }
 }

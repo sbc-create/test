@@ -1,0 +1,69 @@
+$ timeout 1200 python3 -m pytest tests/unit -q -k animedia -p no:cacheprovider
+........................................................................ [ 11%]
+........................................................................ [ 23%]
+........................................................................ [ 35%]
+........................................................................ [ 46%]
+........................................................................ [ 58%]
+........................................................................ [ 70%]
+........................................................................ [ 81%]
+.....................................................F.................. [ 93%]
+..............................ss..FF....                                 [100%]
+=================================== FAILURES ===================================
+__________________________ test_cli_разрешает_кодом_0 __________________________
+
+    def test_cli_разрешает_кодом_0():
+        p = subprocess.run(
+            [sys.executable, str(КОРЕНЬ / "automation/host/animedia_tenant_guard.py"),
+             "--stage", "before-write", "--paths", "factory/animedia/view.py"],
+            cwd=str(КОРЕНЬ), capture_output=True, text=True)
+>       assert p.returncode == 0, p.stdout
+E       AssertionError: GUARD=DENY
+E           причина: ветка не объявлена в контракте: claude/animedia-canonical-1211
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/usr/bin/python3', '/home/claude/wt-animedia-template-port-02/automation/host/animedia_tenant_...urncode=1, stdout='GUARD=DENY\n  причина: ветка не объявлена в контракте: claude/animedia-canonical-1211\n', stderr='').returncode
+
+tests/unit/test_animedia_tenant_guard.py:215: AssertionError
+___ TestЧислаСовпадаютСИзмеренным.test_готовность_продукта[animedia-portal] ____
+
+self = <tests.unit.test_owner_status_document.TestЧислаСовпадаютСИзмеренным object at 0x7f2d1afedcc0>
+текст = '# Четыре продукта: что готово и что нужно от вас\n\n> Приёмка идёт на действующих сайтах. Локальные сборки и витрины ...жалась — на их месте видна заглушка с буквой. На боевом домене они\nприходят; это свойство нашей сети, а не витрины.\n'
+рубрика = {'artifact': 'TEMPLATE_PRODUCT_READINESS', 'average_product': 72, 'average_product_measured': ['animedia-portal', 'basis-video', 'zona-cinema'], 'average_integration': 30, ...}
+продукт = 'animedia-portal'
+
+    @pytest.mark.parametrize("продукт", ПРОДУКТЫ)
+    def test_готовность_продукта(self, текст, рубрика, продукт):
+        измерено = рубрика["products"][продукт]["product_readiness"]
+        строка = _строка_продукта(текст, продукт)
+        if измерено is None:
+            assert "не измерено" in строка, f"{продукт}: ноль вместо «не измерено»"
+        else:
+>           assert f"{измерено} %" in строка, f"{продукт}: в документе не {измерено} %"
+E           AssertionError: animedia-portal: в документе не 68 %
+E           assert '68 %' in '| animedia-portal | 88 % | 80 % | ждёт DNS |'
+
+tests/unit/test_owner_status_document.py:77: AssertionError
+__ TestЧислаСовпадаютСИзмеренным.test_готовность_интеграции[animedia-portal] ___
+
+self = <tests.unit.test_owner_status_document.TestЧислаСовпадаютСИзмеренным object at 0x7f2d1afee4a0>
+текст = '# Четыре продукта: что готово и что нужно от вас\n\n> Приёмка идёт на действующих сайтах. Локальные сборки и витрины ...жалась — на их месте видна заглушка с буквой. На боевом домене они\nприходят; это свойство нашей сети, а не витрины.\n'
+рубрика = {'artifact': 'TEMPLATE_PRODUCT_READINESS', 'average_product': 72, 'average_product_measured': ['animedia-portal', 'basis-video', 'zona-cinema'], 'average_integration': 30, ...}
+продукт = 'animedia-portal'
+
+    @pytest.mark.parametrize("продукт", ПРОДУКТЫ)
+    def test_готовность_интеграции(self, текст, рубрика, продукт):
+        измерено = рубрика["products"][продукт]["integration_readiness"]
+>       assert f"{измерено} %" in _строка_продукта(текст, продукт), продукт
+E       AssertionError: animedia-portal
+E       assert '35 %' in '| animedia-portal | 88 % | 80 % | ждёт DNS |'
+E        +  where '| animedia-portal | 88 % | 80 % | ждёт DNS |' = _строка_продукта('# Четыре продукта: что готово и что нужно от вас\n\n> Приёмка идёт на действующих сайтах. Локальные сборки и витрины ...жалась — на их месте видна заглушка с буквой. На боевом домене они\nприходят; это свойство нашей сети, а не витрины.\n', 'animedia-portal')
+
+tests/unit/test_owner_status_document.py:82: AssertionError
+=========================== short test summary info ============================
+SKIPPED [1] tests/unit/test_lords_poster_and_banner_layers.py:118: в этом оформлении нет баннера страницы тайтла
+SKIPPED [1] tests/unit/test_lords_poster_and_banner_layers.py:137: в этом оформлении нет баннера страницы тайтла
+FAILED tests/unit/test_animedia_tenant_guard.py::test_cli_разрешает_кодом_0
+FAILED tests/unit/test_owner_status_document.py::TestЧислаСовпадаютСИзмеренным::test_готовность_продукта[animedia-portal]
+FAILED tests/unit/test_owner_status_document.py::TestЧислаСовпадаютСИзмеренным::test_готовность_интеграции[animedia-portal]
+3 failed, 611 passed, 2 skipped, 5628 deselected in 55.24s
+exit=1

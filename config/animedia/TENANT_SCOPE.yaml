@@ -27,6 +27,8 @@ branch:
     - claude/animedia-template-fix-01
     # Перенос принятых исправлений animedia.space (коммит 4973de2) в шаблон.
     - claude/animedia-template-port-space-02
+    # Указатель канонической ветки и версии для новых сайтов.
+    - claude/animedia-template-version-pointer
 
 worktrees:
   allowed:

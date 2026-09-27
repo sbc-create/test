@@ -1556,3 +1556,90 @@ def test_в_шаблоне_нет_неопределённых_имён(рант
          "concise", str(РАНТАЙМ)],
         capture_output=True, text=True)
     assert готово.returncode == 0, готово.stdout or готово.stderr
+
+
+# ---------------------------------------------------------------------------
+# Выбор версии для нового сайта объявлен и не расходится с делом
+# ---------------------------------------------------------------------------
+
+@pytest.fixture(scope="module")
+def канон() -> dict:
+    версия = json.loads(ВЕРСИЯ_ФАЙЛ.read_text(encoding="utf-8"))
+    assert "canonical" in версия, (
+        "в файле версии не сказано, из какой ветки собирать новый сайт — "
+        "значит ответ на «какую версию он получит» даётся догадкой")
+    return версия
+
+
+def test_каноническая_ветка_и_версия_названы(канон):
+    """Дефект: «соберите из шаблона» без имени ветки.
+
+    Сборщик читает `design_version` из дерева ТОЙ ветки, на которой запущен.
+    Пока ветка не названа, две сборки из разных веток дают разные версии, и обе
+    считаются правильными.
+    """
+    к = канон["canonical"]
+    assert к["repo"] == "sbc-create/test"
+    assert к["branch"].startswith("claude/animedia-"), к["branch"]
+    assert к["design_version"] == канон["design_version"], (
+        "объявленная каноническая версия разошлась с версией файла")
+    assert len(к["integrated_commit"]) == 40, к["integrated_commit"]
+
+
+def test_объявленный_коммит_существует_и_несёт_эту_версию(канон):
+    """Дефект: в документе коммит, которого нет, или с другой версией.
+
+    Ссылка на коммит, которую никто не проверял, — это не ссылка, а надпись.
+    """
+    import subprocess
+    к = канон["canonical"]
+    тип = subprocess.run(["git", "cat-file", "-t", к["integrated_commit"]],
+                         cwd=str(ROOT), capture_output=True, text=True)
+    if тип.returncode != 0:
+        pytest.skip("объект недоступен в этом рабочем каталоге")
+    assert тип.stdout.strip() == "commit", тип.stdout
+    показ = subprocess.run(
+        ["git", "show", f'{к["integrated_commit"]}:config/animedia/TEMPLATE_VERSION.json'],
+        cwd=str(ROOT), capture_output=True, text=True)
+    assert показ.returncode == 0, показ.stderr
+    assert json.loads(показ.stdout)["design_version"] == к["design_version"]
+
+
+def test_команда_сборки_названа_целиком_и_с_манифестом(канон):
+    """Дефект: команда без `--emit-manifest`.
+
+    Манифест витрины, набранный руками, отстаёт от пересборки молча: артефакт
+    новый, `build_id` прежний. Команда, которую скопируют, обязана нести этот
+    ключ, иначе она воспроизводит уже найденную неисправность.
+    """
+    к = канон["canonical"]
+    команда = к["build_command"]
+    assert "automation/host/animedia_release_build.py" in команда
+    for ключ in ("--out-dir", "--profile", "--emit-manifest", "--stage"):
+        assert ключ in команда, ключ
+    сборщик = ROOT / "automation/host/animedia_release_build.py"
+    текст = сборщик.read_text(encoding="utf-8")
+    for ключ in ("--emit-manifest", "--profile"):
+        assert f'"{ключ}"' in текст, f"{ключ} объявлен в документе, но не в сборщике"
+
+
+def test_профили_документа_совпадают_с_выбираемыми(канон):
+    """Дефект: в документе профиль, который сборщик не примет."""
+    выбираемые = {в["profile"] for в in канон["variants"] if в.get("selectable")}
+    док = (ROOT / "docs/animedia/NEW_SITE.md").read_text(encoding="utf-8")
+    for профиль in выбираемые:
+        assert профиль in док, f"профиль {профиль} не назван в NEW_SITE.md"
+    assert канон["canonical"]["branch"] in док
+    assert канон["canonical"]["integrated_commit"][:12] in док
+    assert канон["design_version"] in док
+
+
+def test_подключение_у_архитектора_не_выдано_за_сделанное(канон):
+    """Дефект отчётности: подготовленная передача названа внедрением.
+
+    Выбор версии пока действие человека. Документ обязан говорить это прямо, а
+    файл версии — нести признак, по которому видно, что автоматики нет.
+    """
+    assert "not_wired" in канон["canonical"]
+    док = (ROOT / "docs/animedia/NEW_SITE.md").read_text(encoding="utf-8")
+    assert "фактическое подключение" in док

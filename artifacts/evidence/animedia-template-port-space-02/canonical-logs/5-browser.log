@@ -1,0 +1,4 @@
+$ env -u NODE_OPTIONS timeout 900 node browser.mjs
+
+ОК: 224   ПЛОХО: 0
+exit=0
