@@ -656,3 +656,75 @@ def test_404_на_приватный_репозиторий_называет_т�
     assert "404" in текст
     assert "/etc/site-factory/gh-token" in текст, "отказ не называет, какой токен проверить"
     assert "fine-grained" in текст
+
+
+def test_проверка_доступа_не_требует_коммита_и_digest():
+    """Операции, которая ничего не выкладывает, они не нужны по смыслу.
+
+    Требовать их значило бы заставлять подставлять правдоподобные выдуманные
+    значения — заявка на этом перестаёт быть договором.
+    """
+    from factory.cell import queue as q
+
+    заявка = q.собрать("zona-02", "", "", operation="access-check",
+                       repo="sbc-create/site-zonafilm-cc")
+    assert заявка.operation == "access-check"
+    assert заявка.commit == ""
+    assert заявка.digest == ""
+    assert заявка.request_id.startswith("zona-02-access-")
+
+
+def test_выкладка_без_коммита_по_прежнему_отклоняется():
+    """Послабление касается только операций без выпуска."""
+    from factory.cell import queue as q
+
+    for операция in ("activate", "deliver", "editorial"):
+        with pytest.raises(q.RequestRejected):
+            q.собрать("zona-02", "", "", operation=операция)
+
+
+def test_идентификатор_проверки_один_на_сутки():
+    from factory.cell import queue as q
+
+    первый = q.идентификатор_проверки("zona-03")
+    assert первый == q.идентификатор_проверки("zona-03")
+    assert q.идентификатор_проверки("zona-02") != первый
+
+
+def test_проверка_доступа_отвечает_токеном_исполнителя(monkeypatch):
+    """Спрашивать надо того, кто будет действовать, а не свою руку."""
+    import subprocess as _sp
+
+    from factory.cell import executor as _ex
+
+    вызовы = []
+
+    class Ответ:
+        returncode = 1
+        stdout = ""
+        stderr = "HTTP 404: Not Found"
+
+    def подделка(аргументы, **kwargs):
+        вызовы.append(аргументы)
+        return Ответ()
+
+    monkeypatch.setattr(_sp, "run", подделка)
+    заявка = _ex.queue.Заявка(request_id="zona-03-access-2026-09-27",
+                              operation="access-check", site_id="zona-03",
+                              commit="", digest="", ci_run="", repo="sbc-create/site-x")
+    итог = _ex.проверить_доступ(заявка, remote="https://github.com/sbc-create/site-x")
+    assert итог["status"] == "checked"
+    assert итог["stage"] == "access_missing"
+    assert итог["ok"] is False
+    assert "/etc/site-factory/gh-token" in итог["required_input"]
+    склеено = [" ".join(map(str, в)) for в in вызовы]
+    assert any("repos/" in с for с in склеено), "чтение репозитория не проверялось"
+    assert any("run" in с for с in склеено), "чтение прогонов не проверялось"
+
+
+def test_checked_считается_применённым_исходом():
+    """Иначе успешная проверка попадёт в результат как failed — ровно так
+    однажды записывались успешные доставки."""
+    from factory.cell import queue as q
+
+    assert "checked" in q.ПРИМЕНЁННЫЕ_ИСХОДЫ
