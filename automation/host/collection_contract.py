@@ -146,22 +146,22 @@ class Снимок:
     раз на снимок, а блоки берут готовые срезы.
     """
 
-    def __init__(self, items: list[dict], подробности: dict[str, dict] | None = None,
-                 revision: str = "") -> None:
+    def __init__(
+        self, items: list[dict], подробности: dict[str, dict] | None = None, revision: str = ""
+    ) -> None:
         self.items = items
         self.подробности = подробности or {}
         self.data_revision = revision or self._отпечаток(items)
         # Порядок по дате публикации считается один раз.
-        self._по_дате = sorted(
-            items, key=lambda з: str(з.get("published_at") or ""), reverse=True)
+        self._по_дате = sorted(items, key=lambda з: str(з.get("published_at") or ""), reverse=True)
         self._по_виду: dict[str, list[dict]] = {}
         for з in self._по_дате:
             вид = str(з.get("kind") or "")
             if вид:
                 self._по_виду.setdefault(вид, []).append(з)
         self._по_оценке = sorted(
-            (з for з in items if self._оценка(з) > 0),
-            key=self._оценка, reverse=True)
+            (з for з in items if self._оценка(з) > 0), key=self._оценка, reverse=True
+        )
         годы = [з.get("year") for з in items if isinstance(з.get("year"), int)]
         self.максимальный_год = max(годы) if годы else None
 
@@ -285,8 +285,7 @@ class Снимок:
         return готово
 
     def классика(self, до_года: int = 2005) -> list[dict]:
-        return [з for з in self._по_дате
-                if isinstance(з.get("year"), int) and з["year"] <= до_года]
+        return [з for з in self._по_дате if isinstance(з.get("year"), int) and з["year"] <= до_года]
 
     def года_равно(self, год: int) -> list[dict]:
         return [з for з in self._по_дате if з.get("year") == год]
@@ -296,10 +295,10 @@ class Снимок:
         готово = []
         for з in self._по_дате:
             д = self.подробности.get(str(з.get("slug") or "")) or {}
-            for с in (д.get("seasons") or []):
+            for с in д.get("seasons") or []:
                 if not isinstance(с, dict):
                     continue
-                for эп in (с.get("episodes") or []):
+                for эп in с.get("episodes") or []:
                     if not isinstance(эп, dict):
                         continue
                     if эп.get("published_at") or эп.get("available_at"):
@@ -343,8 +342,7 @@ def _карточка(снимок: Снимок, з: dict) -> Карточка:
     "recent": lambda с, ф: с.по_дате(),
     "recent_of_kind": lambda с, ф: с.по_виду(str(ф.get("kind") or "")),
     "top_rated": lambda с, ф: с.по_оценке(),
-    "current_year": lambda с, ф: (с.года(с.максимальный_год)
-                                  if с.максимальный_год else []),
+    "current_year": lambda с, ф: (с.года(с.максимальный_год) if с.максимальный_год else []),
     "playable": lambda с, ф: с.играющие(),
     "with_episodes": lambda с, ф: с.с_эпизодами(),
     "episode_events": lambda с, ф: с.эпизод_события(),
@@ -357,15 +355,34 @@ def _карточка(снимок: Снимок, з: dict) -> Карточка:
 }
 
 
-def _спец(ключ: str, семейство: str, титул: str, описание: str, источник: str,
-          фильтр: dict, сорт: dict, свежесть: str, путь: str,
-          лимит: int = 12, причина: str = "") -> Спецификация:
+def _спец(
+    ключ: str,
+    семейство: str,
+    титул: str,
+    описание: str,
+    источник: str,
+    фильтр: dict,
+    сорт: dict,
+    свежесть: str,
+    путь: str,
+    лимит: int = 12,
+    причина: str = "",
+) -> Спецификация:
     return Спецификация(
-        collection_key=ключ, family=семейство, section_id=f"sec-{ключ}",
-        title=титул, description=описание, source=источник,
-        filter_spec=фильтр, sort_spec=сорт, freshness_rule=свежесть,
-        card_limit=лимит, view_all_path=путь, canonical_path=путь,
-        empty_policy=СКРЫТЬ, unavailable_reason=причина,
+        collection_key=ключ,
+        family=семейство,
+        section_id=f"sec-{ключ}",
+        title=титул,
+        description=описание,
+        source=источник,
+        filter_spec=фильтр,
+        sort_spec=сорт,
+        freshness_rule=свежесть,
+        card_limit=лимит,
+        view_all_path=путь,
+        canonical_path=путь,
+        empty_policy=СКРЫТЬ,
+        unavailable_reason=причина,
     )
 
 
@@ -413,89 +430,175 @@ def _общие(семейство: str, кино: str, сериал: str) -> li
         ra_desc = "Записи, добавленные в каталог за последние {дней} дней."
         ne_desc = "Серии с подтверждённой датой появления в источнике."
     return [
-        _спец("recently_added", семейство,
-              f"Новое за {ОКНО_НОВИЗНЫ_ДНЕЙ} дней",
-              ra_desc.format(дней=ОКНО_НОВИЗНЫ_ДНЕЙ),
-              "catalog", {"fresh_days": ОКНО_НОВИЗНЫ_ДНЕЙ, "fresh_limit": 240},
-              {"field": "published_at", "order": "desc"},
-              "published_at", "/collection/recently_added/"),
-        _спец("recently_added_movies", семейство,
-              f"Новые фильмы за {ОКНО_НОВИЗНЫ_ФИЛЬМОВ_ДНЕЙ} дней",
-              f"Фильмы, добавленные в каталог за последние "
-              f"{ОКНО_НОВИЗНЫ_ФИЛЬМОВ_ДНЕЙ} дней.",
-              "catalog", {"kind": кино, "fresh_days": ОКНО_НОВИЗНЫ_ФИЛЬМОВ_ДНЕЙ,
-                          "fresh_limit": 240},
-              {"field": "published_at", "order": "desc"},
-              "published_at", "/collection/recently_added_movies/"),
-        _спец("new_episodes", семейство, "Новые эпизоды",
-              ne_desc,
-              "episodes", {"episode_events": True},
-              {"field": "episode_published_at", "order": "desc"},
-              "episode_published_at", "/collection/new_episodes/"),
-        _спец("top_rated", семейство,
-              f"Оценка от {ПОРОГ_ВЫСОКОЙ_ОЦЕНКИ}",
-              f"Записи с подтверждённой оценкой источника не ниже "
-              f"{ПОРОГ_ВЫСОКОЙ_ОЦЕНКИ}, по убыванию.",
-              "ratings", {"has_rating": True, "min_rating": ПОРОГ_ВЫСОКОЙ_ОЦЕНКИ},
-              {"field": "rating", "order": "desc"},
-              "rating", "/collection/top_rated/"),
-        _спец("current_season", семейство, "Лучшее за год",
-              f"Записи самого свежего года каталога с оценкой не ниже "
-              f"{ПОРОГ_ЛУЧШЕГО_ГОДА}, по убыванию оценки. Это не список "
-              f"поступлений: он в «Новом за {ОКНО_НОВИЗНЫ_ДНЕЙ} дней».",
-              "catalog", {"year": "max", "min_rating": ПОРОГ_ЛУЧШЕГО_ГОДА},
-              {"field": "rating", "order": "desc"},
-              "year", "/collection/current_season/"),
+        _спец(
+            "recently_added",
+            семейство,
+            f"Новое за {ОКНО_НОВИЗНЫ_ДНЕЙ} дней",
+            ra_desc.format(дней=ОКНО_НОВИЗНЫ_ДНЕЙ),
+            "catalog",
+            {"fresh_days": ОКНО_НОВИЗНЫ_ДНЕЙ, "fresh_limit": 240},
+            {"field": "published_at", "order": "desc"},
+            "published_at",
+            "/collection/recently_added/",
+        ),
+        _спец(
+            "recently_added_movies",
+            семейство,
+            f"Новые фильмы за {ОКНО_НОВИЗНЫ_ФИЛЬМОВ_ДНЕЙ} дней",
+            f"Фильмы, добавленные в каталог за последние " f"{ОКНО_НОВИЗНЫ_ФИЛЬМОВ_ДНЕЙ} дней.",
+            "catalog",
+            {"kind": кино, "fresh_days": ОКНО_НОВИЗНЫ_ФИЛЬМОВ_ДНЕЙ, "fresh_limit": 240},
+            {"field": "published_at", "order": "desc"},
+            "published_at",
+            "/collection/recently_added_movies/",
+        ),
+        _спец(
+            "new_episodes",
+            семейство,
+            "Новые эпизоды",
+            ne_desc,
+            "episodes",
+            {"episode_events": True},
+            {"field": "episode_published_at", "order": "desc"},
+            "episode_published_at",
+            "/collection/new_episodes/",
+        ),
+        _спец(
+            "top_rated",
+            семейство,
+            f"Оценка от {ПОРОГ_ВЫСОКОЙ_ОЦЕНКИ}",
+            f"Записи с подтверждённой оценкой источника не ниже "
+            f"{ПОРОГ_ВЫСОКОЙ_ОЦЕНКИ}, по убыванию.",
+            "ratings",
+            {"has_rating": True, "min_rating": ПОРОГ_ВЫСОКОЙ_ОЦЕНКИ},
+            {"field": "rating", "order": "desc"},
+            "rating",
+            "/collection/top_rated/",
+        ),
+        _спец(
+            "current_season",
+            семейство,
+            "Лучшее за год",
+            f"Записи самого свежего года каталога с оценкой не ниже "
+            f"{ПОРОГ_ЛУЧШЕГО_ГОДА}, по убыванию оценки. Это не список "
+            f"поступлений: он в «Новом за {ОКНО_НОВИЗНЫ_ДНЕЙ} дней».",
+            "catalog",
+            {"year": "max", "min_rating": ПОРОГ_ЛУЧШЕГО_ГОДА},
+            {"field": "rating", "order": "desc"},
+            "year",
+            "/collection/current_season/",
+        ),
         # Порядок здесь — по ГОДУ ВЫХОДА, и это не косметика. По оценке
         # подборка повторяла «Оценку от 7.5» (первые 14 совпадали на 85 %, а
         # после ввода порога — на 64 %), по дате добавления — «Новое за
         # 14 дней». Год выхода — третья, независимая ось: он не выводится ни
         # из оценки, ни из даты попадания в каталог.
-        _спец("video_available", семейство, "Можно смотреть сейчас",
-              "Тайтлы с подключённой дорожкой, от свежих релизов к старым. "
-              "Это срез доступности, а не оценки и не поступлений.",
-              "catalog", {"playable": True, "max_share": ПРЕДЕЛ_ДОЛИ_ПУЛА},
-              {"field": "year", "order": "desc"},
-              "year", "/collection/video_available/"),
+        _спец(
+            "video_available",
+            семейство,
+            "Можно смотреть сейчас",
+            "Тайтлы с подключённой дорожкой, от свежих релизов к старым. "
+            "Это срез доступности, а не оценки и не поступлений.",
+            "catalog",
+            {"playable": True, "max_share": ПРЕДЕЛ_ДОЛИ_ПУЛА},
+            {"field": "year", "order": "desc"},
+            "year",
+            "/collection/video_available/",
+        ),
     ]
 
 
 def _аниме_подборки(семейство: str = "animedia") -> list[Спецификация]:
     """Независимые пользовательские подборки Animedia — без fallback на catalog[:N]."""
     return [
-        _спец("anime_movies", семейство, "Аниме-фильмы",
-              "Полнометражные аниме-фильмы.",
-              "details", {"type": "movie"}, {"field": "published_at", "order": "desc"},
-              "type", "/collection/anime_movies/"),
-        _спец("donghua", семейство, "Дунхуа",
-              "Произведения с подтверждённой страной Китай.",
-              "details", {"country": "Китай"}, {"field": "published_at", "order": "desc"},
-              "country", "/collection/donghua/"),
-        _спец("short_series", семейство, "Короткие сериалы",
-              "Сериалы до 12 серий включительно.",
-              "details", {"max_eps": 12}, {"field": "published_at", "order": "desc"},
-              "max_eps", "/collection/short_series/"),
-        _спец("classic", семейство, "Классика",
-              "Аниме до 2005 года включительно.",
-              "catalog", {"until_year": 2005}, {"field": "year", "order": "desc"},
-              "year", "/collection/classic/"),
-        _спец("action", семейство, "Экшен",
-              "Тайтлы с жанром «боевик».",
-              "details", {"genre": "боевик"}, {"field": "published_at", "order": "desc"},
-              "genre", "/collection/action/"),
-        _спец("romance", семейство, "Романтика",
-              "Тайтлы с жанром «романтика».",
-              "details", {"genre": "романтика"}, {"field": "published_at", "order": "desc"},
-              "genre", "/collection/romance/"),
-        _спец("family", семейство, "Семейный просмотр",
-              "Тайтлы с жанрами «семейный» или «детский».",
-              "details", {"genre": "семей"}, {"field": "published_at", "order": "desc"},
-              "genre", "/collection/family/"),
-        _спец("series_with_episodes", семейство, "Сериалы с сериями",
-              "Сериалы с доступными сериями для просмотра.",
-              "details", {"with_episodes": True},
-              {"field": "published_at", "order": "desc"},
-              "seasons", "/collection/series_with_episodes/"),
+        _спец(
+            "anime_movies",
+            семейство,
+            "Аниме-фильмы",
+            "Полнометражные аниме-фильмы.",
+            "details",
+            {"type": "movie"},
+            {"field": "published_at", "order": "desc"},
+            "type",
+            "/collection/anime_movies/",
+        ),
+        _спец(
+            "donghua",
+            семейство,
+            "Дунхуа",
+            "Произведения с подтверждённой страной Китай.",
+            "details",
+            {"country": "Китай"},
+            {"field": "published_at", "order": "desc"},
+            "country",
+            "/collection/donghua/",
+        ),
+        _спец(
+            "short_series",
+            семейство,
+            "Короткие сериалы",
+            "Сериалы до 12 серий включительно.",
+            "details",
+            {"max_eps": 12},
+            {"field": "published_at", "order": "desc"},
+            "max_eps",
+            "/collection/short_series/",
+        ),
+        _спец(
+            "classic",
+            семейство,
+            "Классика",
+            "Аниме до 2005 года включительно.",
+            "catalog",
+            {"until_year": 2005},
+            {"field": "year", "order": "desc"},
+            "year",
+            "/collection/classic/",
+        ),
+        _спец(
+            "action",
+            семейство,
+            "Экшен",
+            "Тайтлы с жанром «боевик».",
+            "details",
+            {"genre": "боевик"},
+            {"field": "published_at", "order": "desc"},
+            "genre",
+            "/collection/action/",
+        ),
+        _спец(
+            "romance",
+            семейство,
+            "Романтика",
+            "Тайтлы с жанром «романтика».",
+            "details",
+            {"genre": "романтика"},
+            {"field": "published_at", "order": "desc"},
+            "genre",
+            "/collection/romance/",
+        ),
+        _спец(
+            "family",
+            семейство,
+            "Семейный просмотр",
+            "Тайтлы с жанрами «семейный» или «детский».",
+            "details",
+            {"genre": "семей"},
+            {"field": "published_at", "order": "desc"},
+            "genre",
+            "/collection/family/",
+        ),
+        _спец(
+            "series_with_episodes",
+            семейство,
+            "Сериалы с сериями",
+            "Сериалы с доступными сериями для просмотра.",
+            "details",
+            {"with_episodes": True},
+            {"field": "published_at", "order": "desc"},
+            "seasons",
+            "/collection/series_with_episodes/",
+        ),
     ]
 
 
@@ -516,10 +619,18 @@ def _аниме_подборки(семейство: str = "animedia") -> list[�
 
 def _недоступные(семейство: str, ключи: tuple[str, ...]) -> list[Спецификация]:
     return [
-        _спец(к, семейство, к.replace("_", " ").capitalize(),
-              "Коллекция объявлена контрактом, но у контура нет данных для неё.",
-              "unavailable", {}, {}, "", f"/collection/{к}/",
-              причина=НЕТ_ДАННЫХ[к])
+        _спец(
+            к,
+            семейство,
+            к.replace("_", " ").capitalize(),
+            "Коллекция объявлена контрактом, но у контура нет данных для неё.",
+            "unavailable",
+            {},
+            {},
+            "",
+            f"/collection/{к}/",
+            причина=НЕТ_ДАННЫХ[к],
+        )
         for к in ключи
     ]
 
@@ -547,9 +658,15 @@ def спецификация(семейство: str, ключ: str) -> Спец
     return None
 
 
-def разрешить(ключ: str, снимок: Снимок, семейство: str, *,
-              предел: int | None = None, страница: int = 1,
-              на_странице: int = 60) -> Коллекция | None:
+def разрешить(
+    ключ: str,
+    снимок: Снимок,
+    семейство: str,
+    *,
+    предел: int | None = None,
+    страница: int = 1,
+    на_странице: int = 60,
+) -> Коллекция | None:
     """Единственная точка, которая превращает ключ коллекции в записи.
 
     Лента вызывает её с пределом, полная страница — со страницей. Отсюда и
@@ -562,19 +679,32 @@ def разрешить(ключ: str, снимок: Снимок, семейст
         набор: list[dict] = []
     else:
         имя_выборки = (
-            "episode_events" if спец.filter_spec.get("episode_events") else
-            "with_episodes" if спец.filter_spec.get("with_episodes") else
-            "by_type" if спец.filter_spec.get("type") else
-            "by_country" if спец.filter_spec.get("country") else
-            "by_genre" if спец.filter_spec.get("genre") else
-            "short_series" if спец.filter_spec.get("max_eps") else
-            "classic" if спец.filter_spec.get("until_year") else
-            "exact_year" if isinstance(спец.filter_spec.get("year"), int) else
-            "recent_of_kind" if спец.filter_spec.get("kind") else
-            "top_rated" if спец.filter_spec.get("has_rating") else
-            "current_year" if спец.filter_spec.get("year") == "max" else
-            "playable" if спец.filter_spec.get("playable") else
-            "recent")
+            "episode_events"
+            if спец.filter_spec.get("episode_events")
+            else "with_episodes"
+            if спец.filter_spec.get("with_episodes")
+            else "by_type"
+            if спец.filter_spec.get("type")
+            else "by_country"
+            if спец.filter_spec.get("country")
+            else "by_genre"
+            if спец.filter_spec.get("genre")
+            else "short_series"
+            if спец.filter_spec.get("max_eps")
+            else "classic"
+            if спец.filter_spec.get("until_year")
+            else "exact_year"
+            if isinstance(спец.filter_spec.get("year"), int)
+            else "recent_of_kind"
+            if спец.filter_spec.get("kind")
+            else "top_rated"
+            if спец.filter_spec.get("has_rating")
+            else "current_year"
+            if спец.filter_spec.get("year") == "max"
+            else "playable"
+            if спец.filter_spec.get("playable")
+            else "recent"
+        )
         набор = ВЫБОРКИ[имя_выборки](снимок, спец.filter_spec)
 
     # Порог оценки. Без него «Высокие оценки» — это весь каталог, у которого
@@ -596,12 +726,14 @@ def разрешить(ключ: str, снимок: Снимок, семейст
         if с_датой:
             новейшая = max(str(з["published_at"]) for з in с_датой)[:10]
             try:
-                край = (datetime.fromisoformat(новейшая)
-                        - timedelta(days=int(дней))).date().isoformat()
+                край = (
+                    (datetime.fromisoformat(новейшая) - timedelta(days=int(дней)))
+                    .date()
+                    .isoformat()
+                )
             except ValueError:
                 край = ""
-            набор = ([з for з in с_датой if str(з["published_at"])[:10] >= край]
-                     if край else с_датой)
+            набор = [з for з in с_датой if str(з["published_at"])[:10] >= край] if край else с_датой
         else:
             набор = []
 
@@ -619,25 +751,31 @@ def разрешить(ключ: str, снимок: Снимок, семейст
     поле = (спец.sort_spec or {}).get("field") or ""
     убыв = str((спец.sort_spec or {}).get("order") or "desc") == "desc"
     if поле == "rating":
-        набор = sorted(набор, key=lambda з: (снимок._оценка(з),
-                                             str(з.get("published_at") or ""),
-                                             str(з.get("slug") or "")),
-                       reverse=убыв)
+        набор = sorted(
+            набор,
+            key=lambda з: (
+                снимок._оценка(з),
+                str(з.get("published_at") or ""),
+                str(з.get("slug") or ""),
+            ),
+            reverse=убыв,
+        )
     elif поле == "published_at":
-        набор = sorted(набор, key=lambda з: (str(з.get("published_at") or ""),
-                                             str(з.get("slug") or "")),
-                       reverse=убыв)
+        набор = sorted(
+            набор,
+            key=lambda з: (str(з.get("published_at") or ""), str(з.get("slug") or "")),
+            reverse=убыв,
+        )
     elif поле == "year":
-        набор = sorted(набор, key=lambda з: (int(з.get("year") or 0),
-                                             str(з.get("slug") or "")),
-                       reverse=убыв)
+        набор = sorted(
+            набор, key=lambda з: (int(з.get("year") or 0), str(з.get("slug") or "")), reverse=убыв
+        )
 
     # Выборка, покрывающая почти весь пул, — это каталог под другим названием.
     # Показывать её как подборку значит обещать выбор, которого не было.
     доля = спец.filter_spec.get("max_share")
-    if доля is not None and снимок.items:
-        if len(набор) > len(снимок.items) * float(доля):
-            набор = []
+    if доля is not None and снимок.items and len(набор) > len(снимок.items) * float(доля):
+        набор = []
 
     всего = len(набор)
     if предел is not None:
@@ -645,17 +783,26 @@ def разрешить(ключ: str, снимок: Снимок, семейст
         номер = 1
     else:
         номер = max(1, страница)
-        кусок = набор[(номер - 1) * на_странице: номер * на_странице]
+        кусок = набор[(номер - 1) * на_странице : номер * на_странице]
 
     return Коллекция(
         contract_version=ВЕРСИЯ_КОНТРАКТА,
-        collection_key=спец.collection_key, family=спец.family,
-        section_id=спец.section_id, title=спец.title,
-        description=спец.description, source=спец.source,
-        filter_spec=dict(спец.filter_spec), sort_spec=dict(спец.sort_spec),
-        freshness_rule=спец.freshness_rule, card_limit=спец.card_limit,
-        total=всего, items=[_карточка(снимок, з) for з in кусок],
-        page=номер, view_all_path=спец.view_all_path,
-        canonical_path=спец.canonical_path, generated_at=_сейчас(),
-        data_revision=снимок.data_revision, empty_policy=спец.empty_policy,
+        collection_key=спец.collection_key,
+        family=спец.family,
+        section_id=спец.section_id,
+        title=спец.title,
+        description=спец.description,
+        source=спец.source,
+        filter_spec=dict(спец.filter_spec),
+        sort_spec=dict(спец.sort_spec),
+        freshness_rule=спец.freshness_rule,
+        card_limit=спец.card_limit,
+        total=всего,
+        items=[_карточка(снимок, з) for з in кусок],
+        page=номер,
+        view_all_path=спец.view_all_path,
+        canonical_path=спец.canonical_path,
+        generated_at=_сейчас(),
+        data_revision=снимок.data_revision,
+        empty_policy=спец.empty_policy,
     )
