@@ -15,6 +15,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import shutil
 import signal
 import subprocess
 import sys
@@ -101,6 +102,9 @@ for профиль, ожидаемый in ОЖИДАНИЕ.items():
     проект = S / f"prof-{профиль}"
     данные = S / "lords-90-data"
     стоп()
+    # Каждый прогон собирает проект ЗАНОВО. Прежний --force обходил и это, и
+    # запрет на грязное дерево разом, то есть скрывал, из чего собран экземпляр.
+    shutil.rmtree(проект, ignore_errors=True)
     d = json.loads(РЕЕСТР.read_text(encoding="utf-8"))
     d["cells"] = []
     РЕЕСТР.write_text(json.dumps(d, ensure_ascii=False, indent=2), encoding="utf-8")
