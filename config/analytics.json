@@ -51,6 +51,78 @@
       }
     },
     {
+      "domain": "an1meg0.site",
+      "site_id": null,
+      "counter_name": "AnimeGo — an1meg0.site",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "an1meg0.site"
+      ],
+      "goals": [
+        "comment_submit",
+        "episode_select",
+        "filter_apply",
+        "player_error",
+        "player_ready",
+        "player_start",
+        "search",
+        "season_select",
+        "title_view"
+      ],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "BLOCKED_DEPLOYMENT",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": null,
+      "problems": [
+        "Домен из задания, не запущен: DNS указывает на хост, но server_name нет ни в одной конфигурации nginx, каталога /srv и юнита не существует, проекта Topvisor нет. Счётчик не заводится до запуска сайта: он собирал бы пустоту и мешал заметить настоящий."
+      ]
+    },
+    {
+      "domain": "an1mego.site",
+      "site_id": null,
+      "counter_name": "AnimeGo — an1mego.site",
+      "counter_id": 113105751,
+      "counter_state": "reused",
+      "analytics_enabled": true,
+      "webvisor": false,
+      "allowed_hosts": [
+        "an1mego.site"
+      ],
+      "goals": [
+        "comment_submit",
+        "episode_select",
+        "filter_apply",
+        "player_error",
+        "player_ready",
+        "player_start",
+        "search",
+        "season_select",
+        "title_view"
+      ],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "BLOCKED_DEPLOYMENT",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": null,
+      "problems": [
+        "Счётчик прочитан с ПУБЛИЧНОЙ страницы домена: ym(113105751,\"init\") на главной и в разделе, ровно одна инициализация. Идентификатор публичный. Ячейка и выпуск этого домена ведутся вне этого реестра (юнит nova-an1mego-site.service, каталог /srv/an1mego-site, таймер обновления) — запись нужна затем, чтобы домен не был невидим для аудита аналитики."
+      ]
+    },
+    {
       "domain": "animedia.icu",
       "site_id": "animedia-01",
       "counter_name": "Animedia — animedia.icu",
@@ -124,6 +196,42 @@
         "РАБОТАЕТ БЕЗ СЧЁТЧИКА: сайт отдаёт HTTP 200 (build-id bf7713ff5ce2-animedia-space), посещения не учитываются с первого дня.",
         "Переиспользовать нечего: счётчика нет ни в реестре, ни в drop-in служб, ни в разметке живых страниц — проверено.",
         "Создание требует OAuth-токена Метрики с правом записи; каталог секретов закрыт для учётной записи сессии."
+      ]
+    },
+    {
+      "domain": "animeg0.site",
+      "site_id": null,
+      "counter_name": "AnimeGo — animeg0.site",
+      "counter_id": 113105753,
+      "counter_state": "reused",
+      "analytics_enabled": true,
+      "webvisor": false,
+      "allowed_hosts": [
+        "animeg0.site"
+      ],
+      "goals": [
+        "comment_submit",
+        "episode_select",
+        "filter_apply",
+        "player_error",
+        "player_ready",
+        "player_start",
+        "search",
+        "season_select",
+        "title_view"
+      ],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "BLOCKED_DEPLOYMENT",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": null,
+      "problems": [
+        "Счётчик прочитан с ПУБЛИЧНОЙ страницы домена: ym(113105753,\"init\"), одна инициализация на главной и в разделе. Ячейка ведётся вне этого реестра."
       ]
     },
     {

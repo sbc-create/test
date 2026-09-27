@@ -343,6 +343,16 @@ COUNTERS_WITHOUT_GOALS = {
 #:
 #: Счётчики заведены службой `analytics-connect@<домен>.service` 2026-09-27;
 #: идентификаторы взяты из её отчётов `var/analytics/connect-<домен>.json`.
+#: Домены, чья ячейка ведётся ВНЕ этого реестра (другая сессия), но счётчик
+#: проверен публично: `ym(<id>,"init")` на главной и в разделе, одна
+#: инициализация, отправка подтверждена перехватом запроса браузером. Запись
+#: нужна затем, чтобы домен не был невидим для аудита аналитики — отсутствие
+#: строки в реестре выглядит точно так же, как отсутствие счётчика.
+COUNTERS_VERIFIED_IN_BROWSER = {
+    "an1mego.site": 113105751,
+    "animeg0.site": 113105753,
+}
+
 COUNTERS_WITHOUT_TRAFFIC = {
     "zonafilm12.site": 113109081,
     "lordserials22.info": 113109083,
@@ -356,6 +366,10 @@ COUNTERS_WITHOUT_TRAFFIC = {
 #: счётчик без данных, и он же будет мешать заметить настоящий. Перечислены
 #: явно, чтобы новый домен не мог появиться в реестре молча.
 PLANNED_DOMAINS = (
+    # Домен из ночного задания: DNS ведёт на хост, но server_name нет ни в одной
+    # конфигурации nginx, каталога /srv и юнита не существует. Счётчик до
+    # запуска не заводится.
+    "an1meg0.site",
     # Два домена работают публично, а в реестре аналитики их не было вовсе:
     # домен без записи не попадает ни в аудит, ни в план, и его отсутствие
     # ничем не заметно. Добавлены как planned — счётчика у них нет нигде.
@@ -364,10 +378,11 @@ PLANNED_DOMAINS = (
     "zonafilm.cc",
 )
 
-ALL_DOMAINS = sorted({*LIVE_COUNTERS, *COUNTERS_WITHOUT_GOALS,
-                      *COUNTERS_WITHOUT_TRAFFIC, *PLANNED_DOMAINS})
+ALL_DOMAINS = sorted({*LIVE_COUNTERS, *COUNTERS_WITHOUT_GOALS, *COUNTERS_WITHOUT_TRAFFIC,
+                      *COUNTERS_VERIFIED_IN_BROWSER, *PLANNED_DOMAINS})
 #: Домены, у которых счётчик существует, — независимо от состояния целей.
-WITH_COUNTER = {**LIVE_COUNTERS, **COUNTERS_WITHOUT_GOALS, **COUNTERS_WITHOUT_TRAFFIC}
+WITH_COUNTER = {**LIVE_COUNTERS, **COUNTERS_WITHOUT_GOALS, **COUNTERS_WITHOUT_TRAFFIC,
+                **COUNTERS_VERIFIED_IN_BROWSER}
 
 
 def test_registry_holds_exactly_the_known_domains():
@@ -455,6 +470,9 @@ def test_registry_never_stores_a_secret():
 #: это» пропустил бы подмену состояния в любую сторону.
 WEBMASTER_STATUS = {
     "1lordserials1.online": BLOCKED_DEPLOYMENT,
+    "an1mego.site": BLOCKED_DEPLOYMENT,
+    "an1meg0.site": BLOCKED_DEPLOYMENT,
+    "animeg0.site": BLOCKED_DEPLOYMENT,
     "animedia.icu": BLOCKED_DEPLOYMENT,
     "animedia.space": BLOCKED_DEPLOYMENT,
     "lordfilm47.space": BLOCKED_DEPLOYMENT,

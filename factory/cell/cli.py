@@ -283,6 +283,17 @@ def cmd_submit(args) -> int:
     if not без_выпуска and not (args.commit and args.expect_digest):
         print("нужны --site, --commit и --expect-digest", file=sys.stderr)
         return 2
+    # Репозиторий и коммит проверяются ДО создания заявки. Внутрь `собрать`
+    # проверку ставить нельзя: это чистый конструктор, которым пользуются и
+    # тесты, и другие потоки с синтетическими идентификаторами — там рабочей
+    # копии нет по построению. Граница подачи — правильное место: здесь заявка
+    # действительно отправляется исполнителю.
+    if not без_выпуска:
+        try:
+            q.проверить_рабочую_копию(args.site, args.commit or "")
+        except q.RequestRejected as exc:
+            print(f"BLOCKED_INPUT: {exc}", file=sys.stderr)
+            return 2
     try:
         заявка = q.собрать(args.site, args.commit or "", args.expect_digest or "",
                            operation=args.cell_operation, ci_run=args.ci_run or "",

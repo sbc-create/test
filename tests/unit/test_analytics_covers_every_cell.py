@@ -44,7 +44,6 @@ from factory.topvisor.manifest import by_domain  # noqa: E402
 ИЗВЕСТНЫЙ_ПРОБЕЛ_TOPVISOR = {
     "animedia.icu": "проект не создавался: семья Animedia вне текущего задания",
     "animedia.space": "проект не создавался: семья Animedia вне текущего задания",
-    "zonafilm.cc": "проект не создавался: домен не выпущен, разделы не подтверждены",
 }
 
 

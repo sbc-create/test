@@ -40,7 +40,59 @@ def cmd_check(args: argparse.Namespace) -> int:
         print(f"    #{project.get('id')} {project.get('url')} — {project.get('name')}")
     for строка in описать_связь_с_метрикой(client, projects):
         print(строка)
+    for строка in описать_настройки(client, projects):
+        print(строка)
     return 0
+
+
+def описать_настройки(client, projects: list[dict]) -> list[str]:
+    """Фактические настройки проектов манифеста, прочитанные из сервиса.
+
+    «Проект создан» и «проект настроен» — разные состояния. Создание отвечает
+    только за домен и название; поисковые системы, регион и семантика задаются
+    отдельно, и в плане таких действий до сих пор не было ни одного —
+    проверено: `add/projects_2/searchers` и `add/keywords_2/*` в плане не
+    встречались. Поэтому отчёт обязан показывать не манифест, а то, что в
+    аккаунте действительно есть.
+
+    Ошибку чтения печатаем целиком: у Topvisor она называет параметр, который
+    он ожидал, и это единственный законный способ узнать контракт — в отличие
+    от перебора имён методов.
+    """
+    from factory.topvisor.manifest import by_domain  # noqa: PLC0415
+    from factory.topvisor.plan import normalize_domain  # noqa: PLC0415
+
+    свои = []
+    for проект in projects:
+        домен = normalize_domain(str(проект.get("url") or проект.get("site") or ""))
+        if домен and by_domain(домен):
+            свои.append((домен, проект))
+    if not свои:
+        return ["  настройки проектов        : ни один проект аккаунта не описан манифестом"]
+
+    строки = ["  фактические настройки проектов манифеста:"]
+    for домен, проект in sorted(свои):
+        spec = by_domain(домен)
+        ид = проект.get("id")
+        части = []
+        for имя, читатель, ожидание in (
+            ("поисковики", client.searchers, len(spec.searchers)),
+            ("группы", client.keyword_groups, len(spec.groups)),
+            ("запросы", client.keywords,
+             sum(len(g.keywords) for g in spec.groups)),
+        ):
+            try:
+                факт = читатель(ид)
+            except FactoryError as exc:
+                части.append(f"{имя}: НЕ ПРОЧИТАНО — {exc.reason}")
+                continue
+            части.append(f"{имя}: {len(факт)} из {ожидание} по манифесту")
+            if факт and имя == "поисковики":
+                # Состав полей нужен затем, чтобы форму запроса на ДОБАВЛЕНИЕ
+                # взять из ответа сервиса, а не придумать.
+                части.append("поля поисковика: " + ", ".join(sorted(факт[0])))
+        строки.append(f"    #{ид} {домен}: " + "; ".join(части))
+    return строки
 
 
 #: Поля-кандидаты, которыми у Topvisor могла бы задаваться привязка счётчика.

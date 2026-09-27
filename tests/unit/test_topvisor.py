@@ -560,3 +560,84 @@ def test_описание_связи_не_называет_манифест_по
     # Поле, принятое на ЧТЕНИИ, не даёт имени метода записи:
     # `edit/projects_2/projects` API отвергает, а угадывать замену нельзя.
     assert "подтвердить документом" in текст2
+
+
+# -- фактические настройки проекта -------------------------------------------
+
+def test_настройки_читаются_из_сервиса_а_не_из_манифеста():
+    """«Проект создан» и «проект настроен» — разные состояния.
+
+    Создание отвечает за домен и название. Поисковые системы, регион и
+    семантика задаются отдельно, и в плане таких действий не было ни одного:
+    проекты существовали пустыми, а манифест выглядел выполненным. Отчёт обязан
+    показывать количество из аккаунта, а не из манифеста.
+    """
+    from factory.topvisor.cli import описать_настройки
+    from factory.topvisor.manifest import MANIFEST
+
+    spec = MANIFEST[0]
+    проект = {"id": 42, "url": spec.url, "name": spec.name}
+    ответы = [
+        (200, {"result": [{"id": 1, "key": "0", "name": "Яндекс", "regions": [213]}]}),
+        (200, {"result": [{"id": 7, "name": "Фильмы"}]}),
+        (200, {"result": [{"id": 70, "name": "смотреть фильмы онлайн"}]}),
+    ]
+    client = TopvisorClient(credentials=CRED, opener=make_opener(ответы), sleep=lambda _: None)
+    текст = "\n".join(описать_настройки(client, [проект]))
+    assert "#42" in текст
+    assert f"поисковики: 1 из {len(spec.searchers)}" in текст
+    assert f"группы: 1 из {len(spec.groups)}" in текст
+    ожидание = sum(len(g.keywords) for g in spec.groups)
+    assert f"запросы: 1 из {ожидание}" in текст
+    # Состав полей поисковика печатается, чтобы форму запроса на добавление
+    # взять из ответа сервиса, а не придумать.
+    assert "поля поисковика: id, key, name, regions" in текст
+
+
+def test_отказ_чтения_настроек_называет_причину():
+    """Ошибка Topvisor называет ожидаемый параметр — её и печатаем."""
+    from factory.topvisor.cli import описать_настройки
+    from factory.topvisor.manifest import MANIFEST
+
+    spec = MANIFEST[0]
+    отказ = (200, {"errors": [{"code": 2003, "string": "Несоответствие значения "
+                                                       "параметра: project_id"}]})
+    client = TopvisorClient(credentials=CRED, opener=make_opener([отказ] * 3),
+                            sleep=lambda _: None)
+    текст = "\n".join(описать_настройки(client, [{"id": 42, "url": spec.url, "name": spec.name}]))
+    assert "НЕ ПРОЧИТАНО" in текст
+    assert "project_id" in текст, "причина обязана называть параметр"
+
+
+def test_чужие_проекты_в_отчёт_настроек_не_попадают():
+    """Обрабатываются только домены манифеста: чужой проект не наш предмет."""
+    from factory.topvisor.cli import описать_настройки
+
+    client = TopvisorClient(credentials=CRED, opener=make_opener([]), sleep=lambda _: None)
+    текст = "\n".join(описать_настройки(client, [{"id": 1, "url": "https://посторонний.test/"}]))
+    assert "ни один проект аккаунта не описан манифестом" in текст
+
+
+def test_закрытый_каталог_credential_не_даёт_трассировки(tmp_path, monkeypatch):
+    """Отчёт службы обязан содержать причину, а не стек на двадцать строк.
+
+    Так и вышло на хосте: каталог /run/credentials/<юнит> доступен на время
+    одного вызова Exec*, второй вызов получил имя каталога без права читать его,
+    и `.exists()` выбросил PermissionError наружу. Файлы plan-latest.json и
+    check-after-connect.txt состояли из трассировки целиком.
+    """
+    закрытый = tmp_path / "credentials"
+    закрытый.mkdir()
+    (закрытый / creds.USER_ID_FILE).write_text("1\n", encoding="utf-8")
+    закрытый.chmod(0o000)
+    monkeypatch.delenv(creds.SECRET_DIR_ENV, raising=False)
+    monkeypatch.setenv(creds.CREDENTIALS_DIR_ENV, str(закрытый))
+    try:
+        # Падения быть не должно: путь возвращается, а отказ по правам опишет
+        # чтение файла — блокером с причиной, а не исключением ОС.
+        assert creds.secret_dir() == закрытый
+        with pytest.raises(BlockedSecret) as ош:
+            creds.load()
+        assert "не в группе" in ош.value.reason or "Нет доступа" in ош.value.reason
+    finally:
+        закрытый.chmod(0o700)

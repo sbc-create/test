@@ -301,3 +301,30 @@ class TopvisorClient:
             {"limit": 500, "fields": list(self.PROJECT_FIELDS)},
         )
         return [p for p in (result or []) if isinstance(p, dict)]
+
+    # -- фактические настройки проекта ------------------------------------
+    #
+    # Все три метода — ЧТЕНИЕ и объявлены бесплатными. Нужны они затем, что
+    # «проект создан» и «проект настроен» — разные состояния: поисковые системы,
+    # регион и семантика задаются отдельно, и запись в манифесте их наличия не
+    # доказывает. Требование владельца — проверять результат повторным чтением
+    # из сервиса.
+    #
+    # Про имя параметра. Форма запроса здесь не угадывается «по смыслу»: если
+    # API ожидает другое имя, он отвечает ошибкой с указанием параметра — как
+    # ответил на `fields[n].name` при пробе привязки счётчика, — и этот ответ
+    # попадает в отчёт. Читающий метод ничего не стоит и ничего не меняет,
+    # поэтому один точный запрос с разбором ответа — законный способ узнать
+    # контракт, в отличие от перебора имён методов, который запрещён.
+
+    def searchers(self, project_id: int) -> list[dict]:
+        result = self.call("get/projects_2/searchers", {"project_id": int(project_id)})
+        return [s for s in (result or []) if isinstance(s, dict)]
+
+    def keyword_groups(self, project_id: int) -> list[dict]:
+        result = self.call("get/keywords_2/groups", {"project_id": int(project_id)})
+        return [g for g in (result or []) if isinstance(g, dict)]
+
+    def keywords(self, project_id: int) -> list[dict]:
+        result = self.call("get/keywords_2/keywords", {"project_id": int(project_id)})
+        return [k for k in (result or []) if isinstance(k, dict)]
