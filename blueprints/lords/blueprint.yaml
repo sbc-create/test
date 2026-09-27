@@ -19,7 +19,9 @@ sections:
   dorama_index:      { path: /dorama/,     page_type: category,   requires: dorama }
   collections_index: { path: /collections/, page_type: collection, requires: collections }
   new_index:         { path: /new/,        page_type: category,   requires: any }
-  schedule:          { path: /schedule/,   page_type: category,   requires: series }
+  # Свёрнут в /new/ версией 1.1.0: адрес остаётся и уводит одним переходом,
+  # собственной страницы у раздела нет, владельца — тоже.
+  schedule:          { path: /schedule/,   page_type: category,   requires: series, owner: none }
   genres_index:      { path: /genres/,     page_type: category,   requires: any }
   years_index:       { path: /years/,      page_type: category,   requires: any }
   countries_index:   { path: /countries/,  page_type: category,   requires: any }
