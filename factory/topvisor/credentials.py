@@ -64,8 +64,24 @@ def secret_dir() -> Path:
     if заданный and "%" not in заданный:
         return Path(заданный)
     каталог = os.environ.get(CREDENTIALS_DIR_ENV)
-    if каталог and (Path(каталог) / USER_ID_FILE).exists():
-        return Path(каталог)
+    if каталог:
+        try:
+            если_есть = (Path(каталог) / USER_ID_FILE).exists()
+        except PermissionError:
+            # Каталог credential объявлен, но недоступен этому процессу. Так
+            # выглядит вторая и последующие строки Exec* у одного юнита: systemd
+            # готовит /run/credentials/<юнит> для ПЕРВОГО вызова, а следующему
+            # процессу остаётся имя каталога без права его прочесть. Прежде
+            # `.exists()` выпускал PermissionError наружу, и отчёт службы
+            # состоял из трассировки на 20 строк вместо причины — именно так
+            # выглядели plan-latest.json и check-after-connect.txt.
+            #
+            # Возврат «каталог объявлен, но закрыт» вместо падения: значение по
+            # умолчанию всё равно проверяется ниже, а разобраться, что не так,
+            # помогает сообщение, а не стек.
+            return Path(каталог)
+        if если_есть:
+            return Path(каталог)
     return Path(DEFAULT_SECRET_DIR)
 
 

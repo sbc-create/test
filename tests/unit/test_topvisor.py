@@ -224,11 +224,34 @@ def test_rerun_on_configured_account_is_empty():
 
 
 def test_projects_are_matched_by_domain_not_by_name():
-    """Владелец переименовал проект в интерфейсе — второй создавать нельзя."""
+    """Владелец переименовал проект в интерфейсе — второй создавать нельзя.
+
+    Раньше расхождение названия давало действие `edit/projects_2/projects`.
+    Живой API ответил на него «Call to undefined method», и весь прогон для шести
+    новых доменов свёлся к строке «Выполнено бесплатных действий: 0 из 1» — при
+    том что шесть проектов были созданы предыдущим запуском. Переименование
+    чужого работающего проекта к подключению аналитики новым доменам не
+    относится, поэтому теперь это замечание, а не действие.
+    """
     existing = [{"id": i, "url": s.url, "name": "как-то иначе"} for i, s in enumerate(MANIFEST)]
     result = planning.build(existing)
-    assert all(a.method == "edit/projects_2/projects" for a in result.actions)
-    assert not any(a.method == "add/projects_2/projects" for a in result.actions)
+    assert result.actions == [], "расхождение названия не должно давать действий"
+    assert len(result.notes) == len(MANIFEST), "о расхождении обязано быть сказано"
+    assert all("название" in n for n in result.notes)
+
+
+def test_несуществующий_метод_не_отправляется():
+    """Метод в списке разрешённых означает «проверено, что он существует».
+
+    `edit/projects_2/projects` API отвергает. Пока имя метода записи не
+    подтверждено документом, попытка его вызвать обязана отвергаться клиентом, а
+    не уходить в сеть: у Topvisor платные маршруты выглядят так же, как
+    бесплатные, и перебор имён стоит денег.
+    """
+    assert "edit/projects_2/projects" not in ALLOWED
+    client = TopvisorClient(credentials=CRED, opener=make_opener([]), dry_run=False)
+    with pytest.raises(BlockedInput):
+        client.call("edit/projects_2/projects", {"id": 1, "name": "x"})
 
 
 @pytest.mark.parametrize("stored", [
@@ -534,4 +557,6 @@ def test_описание_связи_не_называет_манифест_по
         sleep=lambda _: None)
     текст2 = " ".join(описать_связь_с_метрикой(client2, [{"id": 7}]))
     assert "поддерживается полем metrika_counter_id" in текст2
-    assert "edit/projects_2/projects" in текст2
+    # Поле, принятое на ЧТЕНИИ, не даёт имени метода записи:
+    # `edit/projects_2/projects` API отвергает, а угадывать замену нельзя.
+    assert "подтвердить документом" in текст2

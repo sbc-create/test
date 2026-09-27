@@ -197,7 +197,16 @@ def token_path() -> Path:
     directory = credentials_directory()
     if directory:
         candidate = directory / CREDENTIAL_NAME
-        if candidate.exists():
+        try:
+            есть = candidate.exists()
+        except PermissionError:
+            # Каталог credential объявлен, но закрыт для этого процесса: так
+            # ведёт себя вторая и последующие строки Exec* у одного юнита.
+            # `.exists()` в этом случае выбрасывает PermissionError, и без этой
+            # ветки отчёт службы состоял бы из трассировки вместо причины —
+            # ровно это случилось у topvisor-check и topvisor-connect.
+            return candidate
+        if есть:
             return candidate
     return Path(DEFAULT_TOKEN_FILE).expanduser()
 

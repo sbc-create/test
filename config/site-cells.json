@@ -191,6 +191,15 @@
         "reload": "mtime",
         "managed_by": "cell",
         "data_owner": "pipeline"
+      },
+      "analytics": {
+        "topvisor_project_id": 32531504,
+        "topvisor_verified_at": "2026-09-27T20:43:15Z",
+        "topvisor_settings": {
+          "name": "lordfilm47 — витрина фильмов и сериалов",
+          "source": "get/projects_2/projects"
+        },
+        "note": "проект 32531504 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -246,6 +255,15 @@
         "reload": "mtime",
         "managed_by": "cell",
         "data_owner": "pipeline"
+      },
+      "analytics": {
+        "topvisor_project_id": 32531521,
+        "topvisor_verified_at": "2026-09-27T20:43:15Z",
+        "topvisor_settings": {
+          "name": "lordserial33 — сериалы, сезоны и эпизоды",
+          "source": "get/projects_2/projects"
+        },
+        "note": "проект 32531521 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -301,6 +319,15 @@
         "reload": "mtime",
         "managed_by": "cell",
         "data_owner": "pipeline"
+      },
+      "analytics": {
+        "topvisor_project_id": 32531542,
+        "topvisor_verified_at": "2026-09-27T20:43:15Z",
+        "topvisor_settings": {
+          "name": "1lordserials1 — подборки и рекомендации",
+          "source": "get/projects_2/projects"
+        },
+        "note": "проект 32531542 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -358,6 +385,18 @@
       "indexing": {
         "desired_state": "CLOSED",
         "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
+      },
+      "analytics": {
+        "metrika_counter_id": 113109083,
+        "metrika_verified_at": null,
+        "metrika_data_seen_at": null,
+        "topvisor_project_id": 33762550,
+        "topvisor_verified_at": "2026-09-27T20:43:15Z",
+        "topvisor_settings": {
+          "name": "lordserials22.info — анимация и мультсериалы",
+          "source": "get/projects_2/projects"
+        },
+        "note": "счётчик 113109083 создан службой, отчёт var/analytics/connect-lordserials22.info.json от 2026-09-27T20:43:19Z; домен счётчика в отчёте отсутствует — перезапустите analytics-connect@<домен>.service после исправления. проект 33762550 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -415,6 +454,18 @@
       "indexing": {
         "desired_state": "CLOSED",
         "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
+      },
+      "analytics": {
+        "metrika_counter_id": 113109084,
+        "metrika_verified_at": null,
+        "metrika_data_seen_at": null,
+        "topvisor_project_id": 33762569,
+        "topvisor_verified_at": "2026-09-27T20:43:15Z",
+        "topvisor_settings": {
+          "name": "lordserials22.site — дорамы и азиатские сериалы",
+          "source": "get/projects_2/projects"
+        },
+        "note": "счётчик 113109084 создан службой, отчёт var/analytics/connect-lordserials22.site.json от 2026-09-27T20:43:20Z; домен счётчика в отчёте отсутствует — перезапустите analytics-connect@<домен>.service после исправления. проект 33762569 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -472,6 +523,18 @@
       "indexing": {
         "desired_state": "CLOSED",
         "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
+      },
+      "analytics": {
+        "metrika_counter_id": 113109085,
+        "metrika_verified_at": null,
+        "metrika_data_seen_at": null,
+        "topvisor_project_id": 33762590,
+        "topvisor_verified_at": "2026-09-27T20:43:15Z",
+        "topvisor_settings": {
+          "name": "lordserials22.space — аниме и онгоинги",
+          "source": "get/projects_2/projects"
+        },
+        "note": "счётчик 113109085 создан службой, отчёт var/analytics/connect-lordserials22.space.json от 2026-09-27T20:43:22Z; домен счётчика в отчёте отсутствует — перезапустите analytics-connect@<домен>.service после исправления. проект 33762590 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -692,6 +755,18 @@
       "indexing": {
         "desired_state": "CLOSED",
         "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
+      },
+      "analytics": {
+        "metrika_counter_id": 113109087,
+        "metrika_verified_at": null,
+        "metrika_data_seen_at": null,
+        "topvisor_project_id": 33762615,
+        "topvisor_verified_at": "2026-09-27T20:43:15Z",
+        "topvisor_settings": {
+          "name": "yummyani7.site — аниме: каталог и новые серии",
+          "source": "get/projects_2/projects"
+        },
+        "note": "счётчик 113109087 создан службой, отчёт var/analytics/connect-yummyani7.site.json от 2026-09-27T20:43:24Z; домен счётчика в отчёте отсутствует — перезапустите analytics-connect@<домен>.service после исправления. проект 33762615 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -748,6 +823,18 @@
       "indexing": {
         "desired_state": "CLOSED",
         "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
+      },
+      "analytics": {
+        "metrika_counter_id": 113109089,
+        "metrika_verified_at": null,
+        "metrika_data_seen_at": null,
+        "topvisor_project_id": 33762646,
+        "topvisor_verified_at": "2026-09-27T20:43:15Z",
+        "topvisor_settings": {
+          "name": "yummyani7.info — аниме: жанры и подборки",
+          "source": "get/projects_2/projects"
+        },
+        "note": "счётчик 113109089 создан службой, отчёт var/analytics/connect-yummyani7.info.json от 2026-09-27T20:43:26Z; домен счётчика в отчёте отсутствует — перезапустите analytics-connect@<домен>.service после исправления. проект 33762646 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -805,6 +892,15 @@
         "managed_by": "monolith",
         "data_owner": "pipeline",
         "unit_note": "unit назван ЯЧЕЙКИН, а не монолитный. Пока здесь стоял nova-yummy-biz.service, повышение перезапускало бы монолитную службу, а её ExecStart ведёт в /srv/lords/.frontend — выпуск прошёл бы успешно, ничего не переключив, и снаружи это неотличимо от настоящего: сайт отвечает 200 и показывает прежний код. Файлы ячейкиных юнитов ставит automation/host/install-yummy-cell-units.sh; managed_by переводится в cell ПОСЛЕ фактического перехода, иначе издатель начнёт возить каталог в хранилище, из которого витрина ещё не читает."
+      },
+      "analytics": {
+        "topvisor_project_id": 32531595,
+        "topvisor_verified_at": "2026-09-27T20:43:15Z",
+        "topvisor_settings": {
+          "name": "yummyani.biz — жанры, каталог и релизы",
+          "source": "get/projects_2/projects"
+        },
+        "note": "проект 32531595 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -862,6 +958,15 @@
         "managed_by": "monolith",
         "data_owner": "pipeline",
         "unit_note": "unit назван ЯЧЕЙКИН, а не монолитный. Пока здесь стоял nova-yummy-org.service, повышение перезапускало бы монолитную службу, а её ExecStart ведёт в /srv/lords/.frontend — выпуск прошёл бы успешно, ничего не переключив, и снаружи это неотличимо от настоящего: сайт отвечает 200 и показывает прежний код. Файлы ячейкиных юнитов ставит automation/host/install-yummy-cell-units.sh; managed_by переводится в cell ПОСЛЕ фактического перехода, иначе издатель начнёт возить каталог в хранилище, из которого витрина ещё не читает."
+      },
+      "analytics": {
+        "topvisor_project_id": 32531569,
+        "topvisor_verified_at": "2026-09-27T20:43:15Z",
+        "topvisor_settings": {
+          "name": "yummyani.org — онгоинги, оценки и обновления",
+          "source": "get/projects_2/projects"
+        },
+        "note": "проект 32531569 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -919,6 +1024,15 @@
         "managed_by": "monolith",
         "data_owner": "pipeline",
         "unit_note": "unit назван ЯЧЕЙКИН, а не монолитный. Пока здесь стоял nova-yummy-site.service, повышение перезапускало бы монолитную службу, а её ExecStart ведёт в /srv/lords/.frontend — выпуск прошёл бы успешно, ничего не переключив, и снаружи это неотличимо от настоящего: сайт отвечает 200 и показывает прежний код. Файлы ячейкиных юнитов ставит automation/host/install-yummy-cell-units.sh; managed_by переводится в cell ПОСЛЕ фактического перехода, иначе издатель начнёт возить каталог в хранилище, из которого витрина ещё не читает."
+      },
+      "analytics": {
+        "topvisor_project_id": 32531550,
+        "topvisor_verified_at": "2026-09-27T20:43:15Z",
+        "topvisor_settings": {
+          "name": "yummyani.site — сезоны и новые серии аниме",
+          "source": "get/projects_2/projects"
+        },
+        "note": "проект 32531550 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -975,6 +1089,15 @@
         "reload": "mtime",
         "managed_by": "cell",
         "data_owner": "pipeline"
+      },
+      "analytics": {
+        "topvisor_project_id": 33238820,
+        "topvisor_verified_at": "2026-09-27T20:43:15Z",
+        "topvisor_settings": {
+          "name": "zonafilm — витрина фильмов и сериалов Zona",
+          "source": "get/projects_2/projects"
+        },
+        "note": "проект 33238820 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -1096,6 +1219,18 @@
         "provider": "cdnvideohub",
         "publisher_id": "10261",
         "note": "Назначен владельцем именно этому домену и только ему. В реестре ячеек отсутствовал, хотя в config/site.json репозитория сайта стоит publisher_id_expected=10261 — два источника правды расходились."
+      },
+      "analytics": {
+        "metrika_counter_id": 113109081,
+        "metrika_verified_at": null,
+        "metrika_data_seen_at": null,
+        "topvisor_project_id": 33762526,
+        "topvisor_verified_at": "2026-09-27T20:43:15Z",
+        "topvisor_settings": {
+          "name": "zonafilm12 — кино, сериалы и подборки",
+          "source": "get/projects_2/projects"
+        },
+        "note": "счётчик 113109081 создан службой, отчёт var/analytics/connect-zonafilm12.site.json от 2026-09-27T20:43:17Z; домен счётчика в отчёте отсутствует — перезапустите analytics-connect@<домен>.service после исправления. проект 33762526 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     }
   ]

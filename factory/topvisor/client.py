@@ -82,7 +82,14 @@ ALLOWED: dict[str, Method] = {
         Method("get/keywords_2/groups", False, Cost.FREE, "группы запросов"),
         Method("get/keywords_2/keywords", False, Cost.FREE, "запросы"),
         Method("add/projects_2/projects", True, Cost.FREE, "создать проект"),
-        Method("edit/projects_2/projects", True, Cost.FREE, "изменить свойства проекта"),
+        # `edit/projects_2/projects` убран: API отвечает на него
+        # «Call to undefined method» (прогон 2026-09-27, отчёт
+        # var/topvisor/connect-latest.txt). Метод в списке разрешённых
+        # означает «проверено, что он существует и бесплатен», а этот не
+        # существует. Заменять его угаданным именем нельзя: замороженной
+        # документации Topvisor нет, а перебор имён у этого API платный.
+        # Пока имя не подтверждено документом, правка свойств проекта
+        # остаётся операцией владельца в интерфейсе.
         Method("add/projects_2/searchers", True, Cost.FREE, "добавить поисковую систему"),
         Method("add/keywords_2/groups", True, Cost.FREE, "создать группу запросов"),
         Method("add/keywords_2/keywords", True, Cost.FREE, "добавить запросы"),

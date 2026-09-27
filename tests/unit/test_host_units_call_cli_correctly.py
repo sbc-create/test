@@ -134,3 +134,40 @@ def test_каталог_артефактов_открыт_если_команд�
     assert "/artifacts" in пути, (
         f"{юнит.name}: команда пишет artifacts/, а путь не открыт на запись — "
         "прогон отказывает и не оставляет отчёта")
+
+
+#: Юниты, которым systemd выдаёт секрет через LoadCredential.
+С_СЕКРЕТОМ = [п for п in ЮНИТЫ if "LoadCredential=" in п.read_text(encoding="utf-8")]
+
+
+def test_есть_что_проверять_по_секретам() -> None:
+    assert С_СЕКРЕТОМ, "ни один юнит не объявляет LoadCredential — проверять нечего"
+
+
+@pytest.mark.parametrize("юнит", С_СЕКРЕТОМ, ids=lambda p: p.name)
+def test_секрет_читается_одним_вызовом_exec(юнит: Path) -> None:
+    """Каталог credential живёт на время ОДНОГО вызова Exec*.
+
+    Измерено на хосте: у `topvisor-check.service` первый `ExecStart` (check)
+    отработал, второй (plan) упал с `PermissionError` на
+    `/run/credentials/<юнит>/user-id`; у `topvisor-connect.service` так же упал
+    `ExecStartPost`. Отчёты служб состояли из трассировки вместо результата, и
+    выглядело это как «проверка не проходит», хотя доступ был подтверждён
+    строкой выше в том же прогоне.
+
+    Отсюда правило: у юнита с `LoadCredential` ровно одна строка, обращающаяся к
+    секрету. Несколько операций объединяются в один вызов оболочки, а не в
+    несколько строк Exec*. Строки, к секрету не обращающиеся (например
+    `install -d`), не считаются — они и не ломались.
+    """
+    текст = юнит.read_text(encoding="utf-8")
+    обращаются = [
+        с for с in текст.splitlines()
+        if с.startswith(("ExecStart=", "ExecStartPost=", "ExecReload="))
+        and ("-m factory" in с or "bin/seo-operator" in с)
+    ]
+    assert len(обращаются) == 1, (
+        f"{юнит.name}: к секрету обращаются {len(обращаются)} строк Exec*. "
+        "Каталог credential разбирается после первого вызова, и следующий "
+        "получит PermissionError. Объедини операции в один вызов оболочки:\n  "
+        + "\n  ".join(обращаются))

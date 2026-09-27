@@ -335,6 +335,23 @@ COUNTERS_WITHOUT_GOALS = {
     "zonafilm.space": 112582938,
 }
 
+#: Счётчик создан и настроен полностью (девять целей, запись сессий выключена),
+#: но сайт ещё не отдаётся — визитов нет и быть не может. Отдельная группа, а не
+#: часть LIVE_COUNTERS: «создано в сервисе» и «работает на сайте» — разные
+#: состояния, и сливать их значило бы считать выпуск завершённым по факту
+#: существования счётчика.
+#:
+#: Счётчики заведены службой `analytics-connect@<домен>.service` 2026-09-27;
+#: идентификаторы взяты из её отчётов `var/analytics/connect-<домен>.json`.
+COUNTERS_WITHOUT_TRAFFIC = {
+    "zonafilm12.site": 113109081,
+    "lordserials22.info": 113109083,
+    "lordserials22.site": 113109084,
+    "lordserials22.space": 113109085,
+    "yummyani7.site": 113109087,
+    "yummyani7.info": 113109089,
+}
+
 #: Счётчика ещё нет. Заводить его до активации домена нельзя: получится пустой
 #: счётчик без данных, и он же будет мешать заметить настоящий. Перечислены
 #: явно, чтобы новый домен не мог появиться в реестре молча.
@@ -344,18 +361,13 @@ PLANNED_DOMAINS = (
     # ничем не заметно. Добавлены как planned — счётчика у них нет нигде.
     "animedia.icu",
     "animedia.space",
-    "lordserials22.info",
-    "lordserials22.site",
-    "lordserials22.space",
-    "yummyani7.info",
-    "yummyani7.site",
     "zonafilm.cc",
-    "zonafilm12.site",
 )
 
-ALL_DOMAINS = sorted({*LIVE_COUNTERS, *COUNTERS_WITHOUT_GOALS, *PLANNED_DOMAINS})
+ALL_DOMAINS = sorted({*LIVE_COUNTERS, *COUNTERS_WITHOUT_GOALS,
+                      *COUNTERS_WITHOUT_TRAFFIC, *PLANNED_DOMAINS})
 #: Домены, у которых счётчик существует, — независимо от состояния целей.
-WITH_COUNTER = {**LIVE_COUNTERS, **COUNTERS_WITHOUT_GOALS}
+WITH_COUNTER = {**LIVE_COUNTERS, **COUNTERS_WITHOUT_GOALS, **COUNTERS_WITHOUT_TRAFFIC}
 
 
 def test_registry_holds_exactly_the_known_domains():
@@ -560,7 +572,7 @@ def test_session_recording_is_off_on_every_live_counter():
     # Пустой список problems означает «настройка завершена», и требовать его от
     # домена без счётчика значило бы требовать молчать о незавершённом.
     по_домену = {e.domain: e for e in registry.properties()}
-    for domain in LIVE_COUNTERS:
+    for domain in (*LIVE_COUNTERS, *COUNTERS_WITHOUT_TRAFFIC):
         assert по_домену[domain].raw["problems"] == [], (
             f"{domain}: настройка завершена, а в problems что-то осталось: "
             f"{по_домену[domain].raw['problems']}"
