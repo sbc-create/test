@@ -196,6 +196,11 @@ def test_real_site_packages_keep_indexing_off():
         import yaml
 
         package = yaml.safe_load(path.read_text(encoding="utf-8"))
+        assert isinstance(package, dict), (
+            f"{path}: пакет не разобрался в объект. Пустой файл остаётся "
+            "после убитого прогона тестов: фикстура временного сайта убирает "
+            "за собой в finally, но SIGTERM до него не доходит. Удалите файл."
+        )
         assert not package.get("seo_indexing_enabled"), path
 
 

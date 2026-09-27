@@ -11,6 +11,7 @@
 Каждая проверка отвечает на вопрос «эта команда сможет выполнить свой шаг?».
 Ни одна не меняет состояние: скрипт работает без root и без записи.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -67,7 +68,10 @@ def main() -> int:
     дерево = пакет / "tree"
     сайт = а.site
 
-    print(f"пакет {опись['package_id']}, коммит {опись['commit'][:12]}, файлов {опись['file_count']}")
+    print(
+        f"пакет {опись['package_id']}, коммит {опись['commit'][:12]}, "
+        f"файлов {опись['file_count']}"
+    )
     print(f"проверяю запуск {сайт}\n")
 
     # 1. реестр ячеек внутри ПАКЕТА, а не в рабочей ветке
@@ -83,8 +87,10 @@ def main() -> int:
     я = ячейки[сайт]
     рв = я.get("runtime") or {}
 
-    проверка(я.get("status") == "planned",
-             f"статус в реестре 'planned' (сейчас {я.get('status')!r}) — иначе --new-site откажет")
+    проверка(
+        я.get("status") == "planned",
+        f"статус в реестре 'planned' (сейчас {я.get('status')!r}) — иначе --new-site откажет",
+    )
     for поле in ("unit", "port", "account"):
         проверка(bool(рв.get(поле)), f"runtime.{поле} заполнен: {рв.get(поле)!r}")
     домен = я.get("domain") or ""
@@ -92,10 +98,16 @@ def main() -> int:
 
     # 2. порт свободен и не пересекается с чужой ячейкой
     порт = int(рв.get("port") or 0)
-    чужие = {int((c.get("runtime") or {}).get("port") or 0): c["site_id"]
-             for c in реестр.get("cells") or [] if c["site_id"] != сайт}
-    проверка(порт not in чужие, f"порт {порт} не занят другой ячейкой"
-             + (f" (занят {чужие.get(порт)})" if порт in чужие else ""))
+    чужие = {
+        int((c.get("runtime") or {}).get("port") or 0): c["site_id"]
+        for c in реестр.get("cells") or []
+        if c["site_id"] != сайт
+    }
+    проверка(
+        порт not in чужие,
+        f"порт {порт} не занят другой ячейкой"
+        + (f" (занят {чужие.get(порт)})" if порт in чужие else ""),
+    )
     проверка(порт + 1000 not in чужие, f"порт кандидата {порт + 1000} не занят другой ячейкой")
     занято = порты_хоста()
     проверка(порт not in занято, f"на хосте никто не слушает {порт}")
@@ -107,26 +119,32 @@ def main() -> int:
     upstream = "cell_" + re.sub(r"[.-]", "_", сайт)
     if проверка(http_п.is_file(), f"заготовка nginx в пакете: {http_п.name}"):
         текст = http_п.read_text(encoding="utf-8")
-        проверка(f"proxy_pass http://{upstream}" in текст,
-                 f"заготовка ходит через upstream {upstream}, а не напрямую в порт")
+        проверка(
+            f"proxy_pass http://{upstream}" in текст,
+            f"заготовка ходит через upstream {upstream}, а не напрямую в порт",
+        )
         проверка(f"server_name {домен}" in текст, f"server_name содержит {домен}")
         проверка("noindex" in текст, "индексация закрыта заголовком в HTTP-блоке")
         проверка("acme-challenge" in текст, "путь ACME объявлен: certbot сможет подтвердить домен")
     if проверка(tls_п.is_file(), f"заготовка HTTPS в пакете: {tls_п.name}"):
         текст = tls_п.read_text(encoding="utf-8")
-        проверка(f"/etc/letsencrypt/live/{домен}/fullchain.pem" in текст,
-                 "путь сертификата соответствует основному домену")
+        проверка(
+            f"/etc/letsencrypt/live/{домен}/fullchain.pem" in текст,
+            "путь сертификата соответствует основному домену",
+        )
         проверка("noindex" in текст, "индексация закрыта и в блоке 443")
         проверка(f"proxy_pass http://{upstream}" in текст, f"блок 443 идёт через {upstream}")
 
     # 4. сценарии, которые команда вызовет
-    for отн in ("automation/host/install-cell-executor.sh",
-                "automation/host/install-cell-units.py",
-                "automation/host/install-publisher-cell-paths.sh",
-                "automation/host/launch-new-site.sh",
-                "automation/host/install-site-nginx.sh",
-                "automation/host/install-site-tls.sh",
-                "automation/host/freeze-package.py"):
+    for отн in (
+        "automation/host/install-cell-executor.sh",
+        "automation/host/install-cell-units.py",
+        "automation/host/install-publisher-cell-paths.sh",
+        "automation/host/launch-new-site.sh",
+        "automation/host/install-site-nginx.sh",
+        "automation/host/install-site-tls.sh",
+        "automation/host/freeze-package.py",
+    ):
         проверка((дерево / отн).is_file(), f"в пакете есть {Path(отн).name}")
 
     # 5. состояние хоста: юнитов и конфигурации ещё нет — это первый запуск
@@ -145,22 +163,29 @@ def main() -> int:
     проверка(корень_репо.is_dir(), f"site_repos_root описи существует: {корень_репо}")
     путь_репо = корень_репо / ((я.get("repo") or {}).get("path") or "")
     проверка(путь_репо.is_dir(), f"репозиторий сайта на месте: {путь_репо}")
-    проверка((путь_репо / "tools" / "build_release.py").is_file(),
-             "в репозитории есть tools/build_release.py (исполнитель ищет именно его)")
+    проверка(
+        (путь_репо / "tools" / "build_release.py").is_file(),
+        "в репозитории есть tools/build_release.py (исполнитель ищет именно его)",
+    )
     конфиг_п = путь_репо / "config" / "site.json"
     if проверка(конфиг_п.is_file(), "в репозитории есть config/site.json"):
         конфиг = json.loads(конфиг_п.read_text(encoding="utf-8"))
         окр = конфиг.get("environment") or {}
-        ожид = ((я.get("publisher") or {}).get("publisher_id")
-                or конфиг.get("publisher_id_expected"))
-        проверка(str(ожид or "") == "10261" or сайт != "zona-03",
-                 f"publisher_id этого сайта: {ожид!r}")
+        ожид = (я.get("publisher") or {}).get("publisher_id") or конфиг.get("publisher_id_expected")
+        проверка(
+            str(ожид or "") == "10261" or сайт != "zona-03", f"publisher_id этого сайта: {ожид!r}"
+        )
         # Чужой идентификатор издателя не должен попасть в новый домен.
-        другие = {str((c.get("publisher") or {}).get("publisher_id"))
-                  for c in реестр.get("cells") or [] if c["site_id"] != сайт}
+        другие = {
+            str((c.get("publisher") or {}).get("publisher_id"))
+            for c in реестр.get("cells") or []
+            if c["site_id"] != сайт
+        }
         проверка(str(ожид) not in другие, f"publisher_id {ожид} не принадлежит другой ячейке")
-        проверка(str(окр.get("SITE_ID") or конфиг.get("site_id") or сайт) == сайт,
-                 "site_id в конфигурации репозитория совпадает с реестром")
+        проверка(
+            str(окр.get("SITE_ID") or конфиг.get("site_id") or сайт) == сайт,
+            "site_id в конфигурации репозитория совпадает с реестром",
+        )
     # Закрытая индексация проверяется по РАНТАЙМУ, а не по наличию файла:
     # robots.txt у этого шаблона не лежит на диске, его отдаёт обработчик.
     # Первая версия проверки искала static/robots.txt и объявила «не готово»
@@ -170,11 +195,12 @@ def main() -> int:
         т = рантайм.read_text(encoding="utf-8")
         проверка('if путь == "/robots.txt"' in т, "рантайм отдаёт /robots.txt сам")
         проверка("Disallow: /" in т, "robots.txt закрывает обход целиком")
-        проверка('name="robots" content="noindex, nofollow"' in т,
-                 "страницы несут meta robots noindex, nofollow")
+        проверка(
+            'name="robots" content="noindex, nofollow"' in т,
+            "страницы несут meta robots noindex, nofollow",
+        )
     состояние = (я.get("indexing") or {}).get("desired_state")
-    проверка(состояние == "CLOSED",
-             f"индексация в реестре закрыта: desired_state={состояние!r}")
+    проверка(состояние == "CLOSED", f"индексация в реестре закрыта: desired_state={состояние!r}")
 
     # 6b. Снимок каталога у производителя. Без него первый выпуск падает на
     # stage_snapshot «в источнике нет файлов снимка» — ровно так отказал первый
@@ -187,13 +213,16 @@ def main() -> int:
         ок.append(f"снимок каталога у производителя: {снимок}")
     else:
         издатель = Path("/srv/site-factory/repo/automation/host/nova-catalog-publish.py")
-        если_есть = издатель.is_file() and сайт in издатель.read_text(encoding="utf-8", errors="replace")
+        если_есть = издатель.is_file() and сайт in издатель.read_text(
+            encoding="utf-8", errors="replace"
+        )
         потом.append(
             f"снимка {снимок.name} нет, и {сайт} "
             f"{'объявлен' if если_есть else 'НЕ объявлен'} в ВИТРИНЫ издателя "
             f"({издатель}). Команде это не мешает: домен ответит 502 до выпуска. "
             "Мешает ВЫПУСКУ — он откажет на stage_snapshot «в источнике нет "
-            "файлов снимка»")
+            "файлов снимка»"
+        )
 
     # 7. DNS: домен и псевдонимы указывают туда же, куда работающая витрина
     образец = "zonafilm.space"
@@ -208,8 +237,10 @@ def main() -> int:
         except OSError as ош:
             плохо.append(f"{имя} не разрешается: {ош}")
             continue
-        проверка(not ожидаемый or адрес == ожидаемый,
-                 f"{имя} -> {адрес}" + ("" if адрес == ожидаемый else f" (ожидался {ожидаемый})"))
+        проверка(
+            not ожидаемый or адрес == ожидаемый,
+            f"{имя} -> {адрес}" + ("" if адрес == ожидаемый else f" (ожидался {ожидаемый})"),
+        )
 
     итог()
     return 1 if плохо else 0

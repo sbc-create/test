@@ -10,6 +10,7 @@
 диске. Повторный прогон почти не трогает сеть. Нагрузочным тестированием это не
 является и являться не должно — витрины живые.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -32,9 +33,12 @@ API = "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist"
 ИДЕНТИФИКАТОР = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
 
 СЕМЕЙСТВО = {
-    "lords-01": ("lords", "lordfilm47.space"), "lords-02": ("lords", "lordserial33.biz"),
-    "lords-03": ("lords", "1lordserials1.online"), "zona-01": ("lords", "zonafilm.space"),
-    "animedia-01": ("yami", "animedia.icu"), "animedia-02": ("yami", "animedia.space"),
+    "lords-01": ("lords", "lordfilm47.space"),
+    "lords-02": ("lords", "lordserial33.biz"),
+    "lords-03": ("lords", "1lordserials1.online"),
+    "zona-01": ("lords", "zonafilm.space"),
+    "animedia-01": ("yami", "animedia.icu"),
+    "animedia-02": ("yami", "animedia.space"),
 }
 СЕКРЕТ = {
     "lords": "/etc/site-factory/secrets/lords/lords-01/cdnvideohub-publisher-id",
@@ -86,45 +90,59 @@ class Ограничитель:
             time.sleep(пауза)
 
 
-def спросить(pub: str, домен: str, аггр: str, ид: str, огр: Ограничитель,
-             попыток: int = 3) -> dict:
+def спросить(pub: str, домен: str, аггр: str, ид: str, огр: Ограничитель, попыток: int = 3) -> dict:
     q = f"{API}?pub={pub}&id={ид}&aggr={аггр}"
-    заг = {"Accept": "application/json", "Origin": f"https://{домен}",
-           "x-origin": f"https://{домен}", "Referer": f"https://{домен}/"}
+    заг = {
+        "Accept": "application/json",
+        "Origin": f"https://{домен}",
+        "x-origin": f"https://{домен}",
+        "Referer": f"https://{домен}/",
+    }
     задержка = 1.0
     for попытка in range(попыток):
         огр.ждать()
         try:
-            with urllib.request.urlopen(urllib.request.Request(q, headers=заг),
-                                        timeout=30) as о:
+            with urllib.request.urlopen(urllib.request.Request(q, headers=заг), timeout=30) as о:
                 тело = о.read().decode("utf-8", "replace")
                 код = о.status
             # 204 у этого API означает «такого контента нет», а не сбой запроса.
             # Пустое тело роняло разбор JSON, и запись попадала в ошибки сети —
             # то есть настоящая непокрытая запись пряталась среди сбоев.
             if код == 204 or not тело.strip():
-                return {"http": 204, "items": 0, "title": None, "stream": False,
-                        "reason": "NO_CONTENT_AT_PROVIDER"}
+                return {
+                    "http": 204,
+                    "items": 0,
+                    "title": None,
+                    "stream": False,
+                    "reason": "NO_CONTENT_AT_PROVIDER",
+                }
             j = json.loads(тело)
             items = j.get("items") or []
-            return {"http": 200, "items": len(items),
-                    "title": j.get("titleName"),
-                    "stream": bool(items and (items[0].get("cvhId") or items[0].get("vkId")))}
+            return {
+                "http": 200,
+                "items": len(items),
+                "title": j.get("titleName"),
+                "stream": bool(items and (items[0].get("cvhId") or items[0].get("vkId"))),
+            }
         except urllib.error.HTTPError as e:
             # 429/5xx — отступаем и пробуем снова; остальное окончательно.
             if e.code in (429, 500, 502, 503, 504) and попытка + 1 < попыток:
-                time.sleep(задержка); задержка *= 2; continue
+                time.sleep(задержка)
+                задержка *= 2
+                continue
             return {"http": e.code, "items": 0, "title": None, "stream": False}
         except Exception as e:
             if попытка + 1 < попыток:
-                time.sleep(задержка); задержка *= 2; continue
-            return {"http": -1, "items": 0, "title": None, "stream": False,
-                    "error": str(e)[:120]}
+                time.sleep(задержка)
+                задержка *= 2
+                continue
+            return {"http": -1, "items": 0, "title": None, "stream": False, "error": str(e)[:120]}
     return {"http": -1, "items": 0, "title": None, "stream": False}
 
 
-def прогон(сайт: str, предел: int | None, rps: float, потоков: int,
-           только: list[str] | None) -> dict:
+def прогон(
+    сайт: str, предел: int | None, rps: float, потоков: int, только: list[str] | None
+) -> dict:
     профиль, домен = СЕМЕЙСТВО[сайт]
     pub = pathlib.Path(СЕКРЕТ[профиль]).read_text(encoding="utf-8").strip()
     детали = json.loads((ЛОГОВО / f"{сайт}-details.json").read_text())["details"]
@@ -149,9 +167,18 @@ def прогон(сайт: str, предел: int | None, rps: float, поток
     очередь: queue.Queue = queue.Queue()
     for пара in записи:
         очередь.put(пара)
-    итог = {"site": сайт, "domain": домен, "profile": профиль,
-            "total": len(записи), "bound": 0, "unbound": [], "no_content": [],
-            "wrong_entity": [], "http_error": [], "by_aggr": {}}
+    итог = {
+        "site": сайт,
+        "domain": домен,
+        "profile": профиль,
+        "total": len(записи),
+        "bound": 0,
+        "unbound": [],
+        "no_content": [],
+        "wrong_entity": [],
+        "http_error": [],
+        "by_aggr": {},
+    }
     замок = threading.Lock()
 
     def работник():
@@ -165,7 +192,8 @@ def прогон(сайт: str, предел: int | None, rps: float, поток
                 if not (аггр and ид):
                     итог["unbound"].append(слаг)
                     итог["by_aggr"]["—"] = итог["by_aggr"].get("—", 0) + 1
-                    очередь.task_done(); continue
+                    очередь.task_done()
+                    continue
                 итог["bound"] += 1
                 итог["by_aggr"][аггр] = итог["by_aggr"].get(аггр, 0) + 1
             ключ = f"{аггр}:{ид}"
@@ -192,11 +220,11 @@ def прогон(сайт: str, предел: int | None, rps: float, поток
                     ориг = свернуть(деталь.get("original_name"))
                     # Совпадением считается вхождение: провайдер отдаёт то же имя,
                     # иногда с уточнением сезона. Полное расхождение — порча данных.
-                    похоже = bool(их) and (их in наше or наше in их
-                                           or (ориг and (их in ориг or ориг in их)))
+                    похоже = bool(их) and (
+                        их in наше or наше in их or (ориг and (их in ориг or ориг in их))
+                    )
                     if not похоже:
-                        итог["wrong_entity"].append([слаг, деталь.get("name"),
-                                                     ответ.get("title")])
+                        итог["wrong_entity"].append([слаг, деталь.get("name"), ответ.get("title")])
             очередь.task_done()
 
     нити = [threading.Thread(target=работник, daemon=True) for _ in range(потоков)]
@@ -233,8 +261,9 @@ def главная() -> int:
     сводка["http_error"] = len(итог["http_error"])
     print(json.dumps(сводка, ensure_ascii=False, indent=1))
     if а.out:
-        pathlib.Path(а.out).write_text(json.dumps(итог, ensure_ascii=False, indent=1),
-                                       encoding="utf-8")
+        pathlib.Path(а.out).write_text(
+            json.dumps(итог, ensure_ascii=False, indent=1), encoding="utf-8"
+        )
     return 0 if not итог["wrong_entity"] else 1
 
 

@@ -104,10 +104,15 @@ class TestPortfolioView:
     def test_every_factory_package_is_visible(self):
         """Оператор обязан видеть все пакеты, а не выборочные."""
         view = portfolio_view(REPO_ROOT)
-        on_disk = {
-            yaml.safe_load(p.read_text(encoding="utf-8"))["site_id"]
-            for p in (REPO_ROOT / "sites").glob("*/package.yaml")
-        }
+        on_disk = set()
+        for p in (REPO_ROOT / "sites").glob("*/package.yaml"):
+            package = yaml.safe_load(p.read_text(encoding="utf-8"))
+            # Пустой файл остаётся после убитого прогона: фикстура временного
+            # сайта убирает за собой, но SIGTERM до уборки не доходит. Без этой
+            # проверки падение выглядело как `NoneType не subscriptable` и о
+            # причине не говорило ничего.
+            assert isinstance(package, dict), f"{p}: пакет пуст или не разобрался"
+            on_disk.add(package["site_id"])
         assert {site["site_id"] for site in view["sites"]} == on_disk
 
     def test_stand_sites_are_not_live_allowed(self):

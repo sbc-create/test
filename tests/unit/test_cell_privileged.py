@@ -662,7 +662,7 @@ def test_приёмка_читает_build_id_у_семейства_без_ме�
                                 data=tmp_path / "data", unit="u.service",
                                 previous_unit=None, port=порт)
         monkeypatch.setattr(privileged.Площадка, "из_реестра",
-                            staticmethod(lambda *a, _п=п, **k: _п))
+                            staticmethod(lambda *a, площадка=п, **k: площадка))
         try:
             итог = privileged.verify("проверка", ожидаемый_build=ожидаемый,
                                      маршруты=("/",))

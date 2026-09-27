@@ -1,0 +1,36 @@
+# Подключение Topvisor: создать недостающие проекты по манифесту.
+#
+#   sudo systemctl start topvisor-connect.service
+#
+# Отличие от topvisor-check: тот только читает (профиль, баланс, список
+# проектов и план). Здесь выполняется `apply`, то есть БЕСПЛАТНЫЕ мутации:
+# создание проекта, добавление поисковой системы, групп и запросов. Платные
+# операции `apply` не выполняет даже с ключом — он их перечисляет, и решение
+# остаётся за владельцем.
+#
+# Дубля не создаёт: план строится из разницы между манифестом и фактическим
+# списком проектов аккаунта, поэтому существующий проект переиспользуется.
+[Unit]
+Description=Topvisor: создать недостающие проекты по манифесту (бесплатные операции)
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/home/claude/wt-portable-site-cell-01
+LoadCredential=user-id:/etc/site-factory/secrets/topvisor/user-id
+LoadCredential=api-key:/etc/site-factory/secrets/topvisor/api-key
+Environment=TOPVISOR_SECRET_DIR=%d
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStartPre=/usr/bin/install -d -m 0755 /home/claude/wt-portable-site-cell-01/var/topvisor
+ExecStart=/bin/sh -c '/usr/bin/python3 -m factory.topvisor.cli apply > var/topvisor/connect-latest.txt 2>&1'
+ExecStartPost=/bin/sh -c '/usr/bin/python3 -m factory.topvisor.cli check > var/topvisor/check-after-connect.txt 2>&1'
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/claude/wt-portable-site-cell-01/var
+ProtectKernelTunables=true
+RestrictSUIDSGID=true

@@ -366,8 +366,8 @@ def _записать_происхождение(выпуск: Path, *, site_id:
     файл = выпуск / имя
     файл.write_text(_json.dumps(запись, ensure_ascii=False, indent=1) + "\n",
                     encoding="utf-8")
-    # Смена владельца необязательна: учётной записи может не быть (стенд), а
-    # прав на chown — не хватать. Файл при этом записан, и это главное.
+    # Владелец файла происхождения — учётная запись витрины, но отсутствие
+    # такой записи или прав переносимо: манифест уже записан, и это главное.
     with contextlib.suppress(LookupError, PermissionError):
         shutil.chown(файл, account, account)
     return {"file": имя, "live_build_id": живой, "entrypoint": точка}

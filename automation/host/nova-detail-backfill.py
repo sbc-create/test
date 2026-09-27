@@ -30,6 +30,7 @@
 не рейтинги, и обещать обратное значило бы объяснять невыполнимый порог
 незавершённой работой.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -80,11 +81,10 @@ def _продолжающиеся(идентификаторы: list[str], кэ�
         if not путь.is_file():
             continue
         try:
-            деталь = (json.loads(путь.read_text(encoding="utf-8")).get("detail")
-                      or {})
+            деталь = json.loads(путь.read_text(encoding="utf-8")).get("detail") or {}
         except (OSError, ValueError):
             continue
-        for сезон in (деталь.get("seasons") or []):
+        for сезон in деталь.get("seasons") or []:
             try:
                 доступно = int(сезон.get("available_episodes_count"))
                 всего = int(сезон.get("episodes_count"))
@@ -102,15 +102,16 @@ def _состав_сезонов(ид: str, кэш: Path) -> dict[int, tuple[int
     if not путь.is_file():
         return {}
     try:
-        деталь = (json.loads(путь.read_text(encoding="utf-8")).get("detail") or {})
+        деталь = json.loads(путь.read_text(encoding="utf-8")).get("detail") or {}
     except (OSError, ValueError):
         return {}
     итог = {}
-    for сезон in (деталь.get("seasons") or []):
+    for сезон in деталь.get("seasons") or []:
         try:
             итог[int(сезон.get("season_number") or сезон.get("number") or 0)] = (
                 int(сезон.get("available_episodes_count")),
-                int(сезон.get("episodes_count")))
+                int(сезон.get("episodes_count")),
+            )
         except (TypeError, ValueError):
             continue
     return итог
@@ -136,10 +137,19 @@ def _прочитать_позицию(файл: Path | None = None) -> str:
 def _записать_позицию(после: str, пройдено: int, файл: Path | None = None) -> None:
     файл = файл if файл is not None else ПОЗИЦИЯ
     файл.parent.mkdir(parents=True, exist_ok=True)
-    файл.write_text(json.dumps(
-        {"after": после, "walked_last_run": пройдено,
-         "at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())},
-        ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    файл.write_text(
+        json.dumps(
+            {
+                "after": после,
+                "walked_last_run": пройдено,
+                "at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
 
 
 def _свежие_сериалы(записи: list[dict], с_года: int) -> list[str]:
@@ -153,14 +163,21 @@ def _свежие_сериалы(записи: list[dict], с_года: int) -> 
     Сериал 2015 года новых серий не получит, и держать его в одном круге с
     текущим сезоном значит тратить на него ту же долю бюджета.
     """
-    return [str(з["external_id"]) for з in записи
-            if з.get("is_series") and з.get("external_id")
-            and (з.get("year") or 0) >= с_года]
+    return [
+        str(з["external_id"])
+        for з in записи
+        if з.get("is_series") and з.get("external_id") and (з.get("year") or 0) >= с_года
+    ]
 
 
-def _круг(идентификаторы: list[str], кэш: Path | None = None, *,
-          кроме: set[str], сколько: int,
-          позиция: Path | None = None) -> list[str]:
+def _круг(
+    идентификаторы: list[str],
+    кэш: Path | None = None,
+    *,
+    кроме: set[str],
+    сколько: int,
+    позиция: Path | None = None,
+) -> list[str]:
     """Следующий отрезок кругового обхода, начиная с сохранённой позиции.
 
     Порядок обязан быть устойчивым, иначе «позиция» ничего не гарантирует:
@@ -176,16 +193,16 @@ def _круг(идентификаторы: list[str], кэш: Path | None = Non
     кольцо = [ид for ид in sorted(основа) if ид not in кроме]
     if not кольцо or сколько == 0:
         return []
-    if сколько < 0:                       # весь круг за один прогон
+    if сколько < 0:  # весь круг за один прогон
         сколько = len(кольцо)
     после = _прочитать_позицию(позиция)
     начало = 0
     if после:
         # bisect не годится: позиция могла исчезнуть из каталога.
         начало = next((i for i, ид in enumerate(кольцо) if ид > после), 0)
-    отрезок = кольцо[начало:начало + сколько]
-    if len(отрезок) < сколько:                       # круг замкнулся
-        отрезок += кольцо[:сколько - len(отрезок)]
+    отрезок = кольцо[начало : начало + сколько]
+    if len(отрезок) < сколько:  # круг замкнулся
+        отрезок += кольцо[: сколько - len(отрезок)]
     return отрезок
 
 
@@ -212,8 +229,7 @@ def _снижения(прежние: dict[str, dict[int, tuple[int, int]]], к�
         стало = _состав_сезонов(ид, кэш)
         for н, (дост, _) in стало.items():
             if н in было_сезонов and дост < было_сезонов[н][0]:
-                снижено.append({"id": ид, "season": н,
-                                "from": было_сезонов[н][0], "to": дост})
+                снижено.append({"id": ид, "season": н, "from": было_сезонов[н][0], "to": дост})
     return {"count": len(снижено), "seasons": снижено[:20]}
 
 
@@ -232,24 +248,33 @@ def покрытие_кэша(идентификаторы: list[str], кэш: P
         if len(текст) >= 40:
             сописанием += 1
     всего = len(идентификаторы) or 1
-    return {"titles": len(идентификаторы), "cached": есть,
-            "cached_pct": round(есть * 100 / всего, 2),
-            "with_description": сописанием,
-            "description_pct": round(сописанием * 100 / всего, 2)}
+    return {
+        "titles": len(идентификаторы),
+        "cached": есть,
+        "cached_pct": round(есть * 100 / всего, 2),
+        "with_description": сописанием,
+        "description_pct": round(сописанием * 100 / всего, 2),
+    }
 
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="добор подробностей каталога")
     ap.add_argument("--snapshot", type=Path, default=СНИМОК)
     ap.add_argument("--cache", type=Path, default=КЭШ)
-    ap.add_argument("--budget", type=int, default=2000,
-                    help="предел сетевых запросов за прогон")
+    ap.add_argument("--budget", type=int, default=2000, help="предел сетевых запросов за прогон")
     ap.add_argument("--report", type=Path, default=ОТЧЁТ)
-    ap.add_argument("--ongoing-ttl", type=int, default=6 * 3600,
-                    help="срок годности записи продолжающегося тайтла, с; "
-                         "0 выключает отдельный проход")
-    ap.add_argument("--ongoing-budget", type=int, default=1000,
-                    help="предел запросов на проход по продолжающимся")
+    ap.add_argument(
+        "--ongoing-ttl",
+        type=int,
+        default=6 * 3600,
+        help="срок годности записи продолжающегося тайтла, с; " "0 выключает отдельный проход",
+    )
+    ap.add_argument(
+        "--ongoing-budget",
+        type=int,
+        default=1000,
+        help="предел запросов на проход по продолжающимся",
+    )
     # Бюджеты подобраны так, чтобы СУТОЧНЫЙ прогон остался ниже уже
     # подтверждённой нагрузки (6000 запросов), а не выше неё. Частый опрос
     # передаёт свои значения явно: см. automation/host/nova-episode-poll.service.
@@ -260,30 +285,50 @@ def main(argv=None) -> int:
     # 6000 запросов в сутки — три с половиной суток; круг по свежим — около
     # пятнадцати часов. Хотите быстрее — нужен больший бюджет, и это решение
     # владельца, а не умолчание инструмента.
-    ap.add_argument("--ring-budget", type=int, default=600,
-                    help="запросов на круг по ВСЕМ сериалам; 0 выключает")
-    ap.add_argument("--hot-budget", type=int, default=600,
-                    help="запросов на круг по сериалам последних лет; 0 выключает")
-    ap.add_argument("--hot-since-year", type=int, default=0,
-                    help="год, с которого сериал считается свежим; "
-                         "0 — прошлый календарный год")
-    ap.add_argument("--ring-ttl", type=int, default=6 * 3600,
-                    help="срок годности записи в круговом обходе, с")
-    ap.add_argument("--order", choices=("uncached-first", "catalog"),
-                    default="uncached-first",
-                    help="кого спрашивать первым")
+    ap.add_argument(
+        "--ring-budget",
+        type=int,
+        default=600,
+        help="запросов на круг по ВСЕМ сериалам; 0 выключает",
+    )
+    ap.add_argument(
+        "--hot-budget",
+        type=int,
+        default=600,
+        help="запросов на круг по сериалам последних лет; 0 выключает",
+    )
+    ap.add_argument(
+        "--hot-since-year",
+        type=int,
+        default=0,
+        help="год, с которого сериал считается свежим; " "0 — прошлый календарный год",
+    )
+    ap.add_argument(
+        "--ring-ttl", type=int, default=6 * 3600, help="срок годности записи в круговом обходе, с"
+    )
+    ap.add_argument(
+        "--order",
+        choices=("uncached-first", "catalog"),
+        default="uncached-first",
+        help="кого спрашивать первым",
+    )
     a = ap.parse_args(argv)
 
     # Один добор за раз. Два процесса, идущих по одному кэшу, тратят бюджет
     # источника на одни и те же записи и мешают друг другу считать покрытие.
     ЗАМОК.parent.mkdir(parents=True, exist_ok=True)
-    замок = open(ЗАМОК, "w")
+    # noqa: SIM115 — замок обязан жить до конца прогона, а не до конца блока:
+    # контекстный менеджер отпустил бы его сразу и два прохода пошли бы разом.
+    замок = open(ЗАМОК, "w")  # noqa: SIM115
     try:
         fcntl.flock(замок, fcntl.LOCK_EX | fcntl.LOCK_NB)
     except OSError:
-        print(json.dumps({"status": "SKIPPED_LOCKED",
-                          "detail": f"другой добор уже идёт ({ЗАМОК})"},
-                         ensure_ascii=False))
+        print(
+            json.dumps(
+                {"status": "SKIPPED_LOCKED", "detail": f"другой добор уже идёт ({ЗАМОК})"},
+                ensure_ascii=False,
+            )
+        )
         return 0
 
     начало = time.time()
@@ -320,18 +365,25 @@ def main(argv=None) -> int:
     # Обход всего каталога чаще не нужен и источнику не полезен.
     продолжающиеся = _продолжающиеся(идентификаторы, a.cache)
     if продолжающиеся and a.ongoing_ttl > 0:
-        print(f"[продолжающиеся] {len(продолжающиеся)} из {len(идентификаторы)},"
-              f" TTL {a.ongoing_ttl} с", file=sys.stderr)
+        print(
+            f"[продолжающиеся] {len(продолжающиеся)} из {len(идентификаторы)},"
+            f" TTL {a.ongoing_ttl} с",
+            file=sys.stderr,
+        )
         быстрый = detail_enrichment.DetailCache(a.cache, ttl=a.ongoing_ttl)
-        идущие_записи = [з for з in записи
-                         if str(з.get("external_id")) in set(продолжающиеся)]
+        идущие_записи = [з for з in записи if str(з.get("external_id")) in set(продолжающиеся)]
         _, отчёт_идущих = detail_enrichment.enrich_items(
-            идущие_записи, fetcher=fetcher, contract=contract, cache=быстрый,
+            идущие_записи,
+            fetcher=fetcher,
+            contract=contract,
+            cache=быстрый,
             budget=min(len(продолжающиеся), a.ongoing_budget),
-            order=продолжающиеся)
+            order=продолжающиеся,
+        )
     else:
-        отчёт_идущих = {"skipped": ("продолжающихся нет" if not продолжающиеся
-                                    else "выключено ongoing-ttl=0")}
+        отчёт_идущих = {
+            "skipped": ("продолжающихся нет" if not продолжающиеся else "выключено ongoing-ttl=0")
+        }
 
     # Круговой обход. Отбор «доступно меньше заявленного» его не заменяет:
     # поставщик поднимает `available_episodes_count` и `episodes_count`
@@ -352,26 +404,34 @@ def main(argv=None) -> int:
         """Один круг: спросить отрезок и сдвинуть позицию на пройденное."""
         if not отрезок:
             return {"walked": 0, "skipped": "пусто"}
-        print(f"[{имя}] {len(отрезок)} начиная после "
-              f"{_прочитать_позицию(позиция_файла) or 'начала'}", file=sys.stderr)
+        print(
+            f"[{имя}] {len(отрезок)} начиная после "
+            f"{_прочитать_позицию(позиция_файла) or 'начала'}",
+            file=sys.stderr,
+        )
         прежние.update({ид: _состав_сезонов(ид, a.cache) for ид in отрезок})
         кольцевой = detail_enrichment.DetailCache(a.cache, ttl=a.ring_ttl)
         свои = [з for з in записи if str(з.get("external_id")) in set(отрезок)]
         _, отчёт_ = detail_enrichment.enrich_items(
-            свои, fetcher=fetcher, contract=contract, cache=кольцевой,
-            budget=len(отрезок), order=отрезок)
+            свои,
+            fetcher=fetcher,
+            contract=contract,
+            cache=кольцевой,
+            budget=len(отрезок),
+            order=отрезок,
+        )
         # Позиция двигается на число ПРОЙДЕННЫХ по этому кругу, а не на размер
         # очереди: иначе срочные незаметно замедляли бы продвижение.
         _записать_позицию(отрезок[-1], len(отрезок), позиция_файла)
-        return {"walked": len(отрезок),
-                "report": {k: v for k, v in vars(отчёт_).items()
-                           if isinstance(v, (int, float, str))}}
+        return {
+            "walked": len(отрезок),
+            "report": {k: v for k, v in vars(отчёт_).items() if isinstance(v, int | float | str)},
+        }
 
     # Круг по свежим идёт ПЕРВЫМ: серии выходят у них, а не у каталога целиком.
     свежие = _свежие_сериалы(записи, с_года)
     спрошено = set(продолжающиеся)
-    отрезок_свежих = _круг(свежие, кроме=спрошено, сколько=a.hot_budget,
-                           позиция=ПОЗИЦИЯ_СВЕЖИХ)
+    отрезок_свежих = _круг(свежие, кроме=спрошено, сколько=a.hot_budget, позиция=ПОЗИЦИЯ_СВЕЖИХ)
     отчёт_свежих = пройти("свежие", отрезок_свежих, ПОЗИЦИЯ_СВЕЖИХ)
     # Пройденное свежим кругом исключается из полного: второй запрос за тот же
     # прогон ничего не добавит, а бюджет потратит.
@@ -379,8 +439,9 @@ def main(argv=None) -> int:
 
     # Полный круг — страховка от самого признака «свежести»: год берётся из
     # списка, и переизданный старый сериал в него не попадёт.
-    отчёт_круга = пройти("круг", _круг(идентификаторы, a.cache, кроме=спрошено,
-                                       сколько=a.ring_budget), ПОЗИЦИЯ)
+    отчёт_круга = пройти(
+        "круг", _круг(идентификаторы, a.cache, кроме=спрошено, сколько=a.ring_budget), ПОЗИЦИЯ
+    )
 
     снижения = _снижения(прежние, a.cache)
 
@@ -390,12 +451,14 @@ def main(argv=None) -> int:
         for ид in идентификаторы:
             (есть_в_кэше if (a.cache / f"{ид}.json").is_file() else нет_в_кэше).append(ид)
         порядок = нет_в_кэше + есть_в_кэше
-        print(f"[порядок] нет в кэше: {len(нет_в_кэше)}, обновление: {len(есть_в_кэше)}",
-              file=sys.stderr)
+        print(
+            f"[порядок] нет в кэше: {len(нет_в_кэше)}, обновление: {len(есть_в_кэше)}",
+            file=sys.stderr,
+        )
 
     _, отчёт = detail_enrichment.enrich_items(
-        записи, fetcher=fetcher, contract=contract, cache=cache,
-        budget=a.budget, order=порядок)
+        записи, fetcher=fetcher, contract=contract, cache=cache, budget=a.budget, order=порядок
+    )
 
     после = покрытие_кэша(идентификаторы, a.cache)
     итог = {
@@ -403,18 +466,24 @@ def main(argv=None) -> int:
         "finished_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "duration_sec": round(time.time() - начало, 1),
         "budget": a.budget,
-        "ongoing": {"count": len(продолжающиеся), "ttl": a.ongoing_ttl,
-                    "report": отчёт_идущих},
-        "hot": {"since_year": с_года, "count": len(свежие),
-                "budget": a.hot_budget, "position_after":
-                _прочитать_позицию(ПОЗИЦИЯ_СВЕЖИХ), **отчёт_свежих},
-        "ring": {"budget": a.ring_budget, "ttl": a.ring_ttl,
-                 "position_after": _прочитать_позицию(ПОЗИЦИЯ), **отчёт_круга},
+        "ongoing": {"count": len(продолжающиеся), "ttl": a.ongoing_ttl, "report": отчёт_идущих},
+        "hot": {
+            "since_year": с_года,
+            "count": len(свежие),
+            "budget": a.hot_budget,
+            "position_after": _прочитать_позицию(ПОЗИЦИЯ_СВЕЖИХ),
+            **отчёт_свежих,
+        },
+        "ring": {
+            "budget": a.ring_budget,
+            "ttl": a.ring_ttl,
+            "position_after": _прочитать_позицию(ПОЗИЦИЯ),
+            **отчёт_круга,
+        },
         "downgrades_accepted": снижения,
         "requests_made": getattr(fetcher, "requests_made", None),
         "retries_made": getattr(fetcher, "retries_made", None),
-        "enrichment": {k: v for k, v in vars(отчёт).items()
-                       if isinstance(v, (int, float, str))},
+        "enrichment": {k: v for k, v in vars(отчёт).items() if isinstance(v, int | float | str)},
         "before": до,
         "after": после,
         "gained_cached": после["cached"] - до["cached"],

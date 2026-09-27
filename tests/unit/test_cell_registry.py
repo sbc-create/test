@@ -130,3 +130,50 @@ def test_update_touches_only_named_fields(reg: Path):
 def test_update_of_missing_cell_is_an_error_not_a_create(reg: Path):
     with pytest.raises(UnknownCell):
         registry.update("ghost", {"status": "live"}, path=reg)
+
+
+def test_порты_ячеек_не_пересекаются():
+    """Порт витрины и порт её кандидата обязаны быть уникальны по всему реестру.
+
+    Кандидат поднимается на порту+1000; совпадение с чужим основным портом
+    означает, что прогрев нового выпуска занимает порт соседнего сайта.
+    """
+    import json as _json
+    from pathlib import Path as _Path
+
+    корень = _Path(__file__).resolve().parents[2]
+    ячейки = _json.loads((корень / "config" / "site-cells.json").read_text(encoding="utf-8"))["cells"]
+    занято: dict[int, str] = {}
+    for c in ячейки:
+        порт = (c.get("runtime") or {}).get("port")
+        if not порт:
+            continue
+        for п, роль in ((int(порт), "основной"), (int(порт) + 1000, "кандидат")):
+            прежний = занято.get(п)
+            assert прежний is None, (
+                f"порт {п} ({роль} у {c['site_id']}) уже занят {прежний}")
+            занято[п] = f"{c['site_id']}/{роль}"
+
+
+def test_незапущенные_домены_называют_недостающие_входы():
+    """Пустое поле обязано быть объяснено, иначе его не отличить от забытого.
+
+    У записи со status=planned и пустым template_id или publisher_id в note
+    должно быть сказано, чего именно не хватает и от кого это вход.
+    """
+    import json as _json
+    from pathlib import Path as _Path
+
+    корень = _Path(__file__).resolve().parents[2]
+    ячейки = _json.loads((корень / "config" / "site-cells.json").read_text(encoding="utf-8"))["cells"]
+    for c in ячейки:
+        if c.get("status") != "planned":
+            continue
+        for блок, поле in (("template", "template_id"), ("publisher", "publisher_id")):
+            раздел = c.get(блок) or {}
+            if раздел.get(поле):
+                continue
+            примечание = (раздел.get("note") or "").lower()
+            assert примечание, f"{c['site_id']}: {блок}.{поле} пусто и не объяснено"
+            assert "вход владельца" in примечание or "владельц" in примечание, (
+                f"{c['site_id']}: {блок}.{поле} пусто, но не сказано, чей это вход")

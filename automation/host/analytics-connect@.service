@@ -1,0 +1,41 @@
+# Подключение аналитики одного домена: найти или создать счётчик Метрики.
+#
+#   sudo systemctl start 'analytics-connect@zonafilm12.site.service'
+#
+# Почему отдельный юнит, а не analytics-cabinet. Тот только ЧИТАЕТ статистику;
+# его имя (readers) ничего не обещает про право создавать счётчики, и смешивать
+# их нельзя: чтение и запись в Метрике — разные разрешения токена
+# (metrika:read и metrika:write). Юнит, который делает и то и другое, скрывал бы,
+# какого именно права не хватило.
+#
+# Дубля не создаёт: `analytics apply --domain` ищет счётчик по домену и
+# переиспользует найденный; при двух счётчиках на один домен прогон
+# останавливается со статусом ambiguous, потому что выбор между ними — решение
+# владельца, а не фабрики.
+#
+# Токен получает служба через LoadCredential и только на время прогона. Сессии
+# агента он не выдаётся: ей достаточно отчёта.
+[Unit]
+Description=Метрика: найти или создать счётчик домена %i
+After=network-online.target
+ConditionPathExists=/home/claude/wt-portable-site-cell-01/config/analytics.json
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/home/claude/wt-portable-site-cell-01
+LoadCredential=yandex_oauth:/etc/site-factory/secrets/yandex_oauth_token
+Environment=YANDEX_OAUTH_TOKEN_FILE=%d/yandex_oauth
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStartPre=/usr/bin/install -d -m 0755 /home/claude/wt-portable-site-cell-01/var/analytics
+ExecStart=/bin/sh -c '/usr/bin/python3 -m factory analytics apply --domain %i \
+    --confirm-writes --json > var/analytics/connect-%i.json 2>&1'
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/claude/wt-portable-site-cell-01/config /home/claude/wt-portable-site-cell-01/var
+ProtectKernelTunables=true
+RestrictSUIDSGID=true

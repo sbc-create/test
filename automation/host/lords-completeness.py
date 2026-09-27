@@ -6,6 +6,7 @@
 на диске делали весь тип «публикуемым», после чего 497 законно отсутствующих
 записей выглядели недостачей.
 """
+
 import collections
 import json
 import os
@@ -26,8 +27,7 @@ from factory.paths import PATHS  # noqa: E402
 for site in САЙТЫ:
     корень = os.path.realpath(f"/srv/lords/{site}/current") + "/site"
     каталог_страниц = f"{корень}/title"
-    кэш = os.environ.get("LORDS_CACHE_DIR",
-                        "/srv/site-factory/repo/var/lords/lords/catalog-cache")
+    кэш = os.environ.get("LORDS_CACHE_DIR", "/srv/site-factory/repo/var/lords/lords/catalog-cache")
     кэш = f"{кэш}/{site}.json"
     if not os.path.isdir(каталог_страниц):
         print(f"  {site}: страниц ещё нет")
