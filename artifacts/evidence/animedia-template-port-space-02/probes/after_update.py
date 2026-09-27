@@ -6,10 +6,15 @@ e7cd4829fadb, витрина перечитала его сама), релиз �
 перезапущена на новом каталоге релиза. Здесь проверяется, что уцелело.
 """
 import json
-import os, re, sys, urllib.request
+import os
+import re
+import sys
+import urllib.request
 from pathlib import Path
+
 САЙТ = os.environ.get("ANIMEDIA_PROBE_SITE", "animedia-verify")
-V = Path(sys.argv[1]); БАЗА = os.environ.get("ANIMEDIA_PROBE_BASE", "http://127.0.0.1:9310")
+V = Path(sys.argv[1])
+БАЗА = os.environ.get("ANIMEDIA_PROBE_BASE", "http://127.0.0.1:9310")
 # Произведение берётся из того, что выбрал шаг с голосом, а не из аргумента:
 # аргумент расходится с данными молча.
 выбор = Path(__file__).with_name("chosen.json")
@@ -37,7 +42,7 @@ d = json.loads(хранилище.read_text(encoding="utf-8"))
 запись = list(т.values())[0]
 def сколько(поле):
     з = запись.get(поле)
-    if isinstance(з, (list, dict)):
+    if isinstance(з, list | dict):
         return len(з)
     try:
         return int(з or 0)
@@ -101,6 +106,8 @@ if лента:
   str(len(реестр.get("events") or [])))
 
 print(f"\nОК: {len(ок)}   ПЛОХО: {len(плохо)}")
-for с in ок: print("  ·", с)
-for с in плохо: print("  ✗", с)
+for с in ок:
+    print("  ·", с)
+for с in плохо:
+    print("  ✗", с)
 sys.exit(1 if плохо else 0)

@@ -5,7 +5,15 @@
 двойной отправки. Никаких прямых записей в хранилище — иначе проверка
 доказывала бы согласие теста с собой.
 """
-import http.cookiejar, json, os, re, sys, urllib.parse, urllib.request
+import http.cookiejar
+import json
+import os
+import pathlib
+import re
+import sys
+import urllib.parse
+import urllib.request
+
 БАЗА = os.environ.get("ANIMEDIA_PROBE_BASE", "http://127.0.0.1:9310")
 куки = http.cookiejar.CookieJar()
 бр = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(куки))
@@ -87,12 +95,13 @@ for а in ссылки:
 # получает его файлом. Прежде он передавался аргументом, и после смены снимка
 # проверка «голос уцелел» смотрела на ДРУГОЕ произведение — то есть честно не
 # находила голос там, где его никогда не ставили.
-import pathlib
 pathlib.Path(__file__).with_name("chosen.json").write_text(
     json.dumps({"slug": slug, "episode": адрес_серии}, ensure_ascii=False),
     encoding="utf-8")
 print(json.dumps({"slug": slug, "episode": адрес_серии}, ensure_ascii=False))
 print(f"\nОК: {len(ок)}   ПЛОХО: {len(плохо)}")
-for с in ок: print("  ·", с)
-for с in плохо: print("  ✗", с)
+for с in ок:
+    print("  ·", с)
+for с in плохо:
+    print("  ✗", с)
 sys.exit(1 if плохо else 0)

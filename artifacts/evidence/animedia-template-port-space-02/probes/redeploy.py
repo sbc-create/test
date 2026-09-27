@@ -9,11 +9,22 @@
 Перезапуск идёт по ПИДУ из файла, а не по `pkill -f`: шаблон командной строки
 совпадал с командной строкой самой проверки, и она убивала себя.
 """
-import copy, hashlib, json, os, signal, subprocess, sys, time
+import contextlib
+import copy
+import hashlib
+import json
+import os
+import re
+import signal
+import subprocess
+import sys
+import time
 import urllib.request
 from pathlib import Path
 
-V = Path(sys.argv[1]); ДАННЫЕ = V / "data"; САЙТ = os.environ.get("ANIMEDIA_PROBE_SITE", "animedia-verify")
+V = Path(sys.argv[1])
+ДАННЫЕ = V / "data"
+САЙТ = os.environ.get("ANIMEDIA_PROBE_SITE", "animedia-verify")
 ШАБЛОН = Path("/home/claude/wt-animedia-template-port-02")
 БАЗА = os.environ.get("ANIMEDIA_PROBE_BASE", "http://127.0.0.1:9310")
 пид_файл = V / "server.pid"
@@ -29,7 +40,7 @@ def жив():
 подр = json.loads((ДАННЫЕ / f"{САЙТ}-details.json").read_text(encoding="utf-8"))
 новый = copy.deepcopy(подр)
 поднято = 0
-for slug, д in новый.get("details", {}).items():
+for _slug, д in новый.get("details", {}).items():
     сез = [с for с in (д.get("seasons") or []) if isinstance(с, dict)]
     if сез and int(сез[0].get("avail") or 0) > 0 and поднято < 25:
         сез[0]["avail"] = int(сез[0]["avail"]) + 1
@@ -80,30 +91,25 @@ if сб.returncode != 0:
 
 # --- 3. перезапуск на новом релизе ------------------------------------------
 if пид_файл.is_file():
-    try:
+    with contextlib.suppress(OSError, ValueError):
         os.kill(int(пид_файл.read_text().strip()), signal.SIGTERM)
-    except (OSError, ValueError):
-        pass
 else:
     # первый перезапуск: ищем по порту, а не по шаблону командной строки
     вывод = subprocess.run(["bash", "-lc",
                             "ss -lptn 'sport = :9310' 2>/dev/null | grep -oE 'pid=[0-9]+'"],
                            capture_output=True, text=True).stdout
     for кусок in set(вывод.split()):
-        try:
+        with contextlib.suppress(OSError, ValueError, IndexError):
             os.kill(int(кусок.split("=")[1]), signal.SIGTERM)
-        except (OSError, ValueError, IndexError):
-            pass
 time.sleep(3)
 запуск = V / "run.sh"
 текст = запуск.read_text(encoding="utf-8")
-import re as _re
-текст = _re.sub(r'exec python3 "[^"]*/animedia-frontend\.py"',
+текст = re.sub(r'exec python3 "[^"]*/animedia-frontend\.py"',
                 f'exec python3 "{новейший}/animedia-frontend.py"', текст)
 запуск.write_text(текст, encoding="utf-8")
-проц = subprocess.Popen(["bash", str(запуск)],
-                        stdout=open(V / "server.log", "ab"),
-                        stderr=subprocess.STDOUT, start_new_session=True)
+with open(V / "server.log", "ab") as журнал:
+    проц = subprocess.Popen(["bash", str(запуск)], stdout=журнал,
+                            stderr=subprocess.STDOUT, start_new_session=True)
 пид_файл.write_text(str(проц.pid), encoding="utf-8")
 время = time.time()
 while time.time() - время < 60:

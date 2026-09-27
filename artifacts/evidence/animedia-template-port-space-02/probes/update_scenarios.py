@@ -4,18 +4,23 @@
 Данные свои: копия боевого снимка в собственном каталоге. Живые файлы витрин
 не читаются на запись и не трогаются вовсе.
 """
-import copy, hashlib, importlib.util, json, sys
+import copy
+import hashlib
+import importlib.util
+import json
+import os
+import sys
 from pathlib import Path
 
 V = Path(sys.argv[1])
 ДАННЫЕ = V / "data"
 РЕЛИЗ = sorted((V / "releases").iterdir())[-1]
-import os as _os
-_БАЗА = _os.environ.get("ANIMEDIA_PROBE_BASE", "http://127.0.0.1:9310")
-САЙТ = _os.environ.get("ANIMEDIA_PROBE_SITE", "animedia-verify")
+_БАЗА = os.environ.get("ANIMEDIA_PROBE_BASE", "http://127.0.0.1:9310")
+САЙТ = os.environ.get("ANIMEDIA_PROBE_SITE", "animedia-verify")
 
 спец = importlib.util.spec_from_file_location("upd", РЕЛИЗ / "animedia-data-update.py")
-upd = importlib.util.module_from_spec(спец); sys.modules["upd"] = спец.name and upd
+upd = importlib.util.module_from_spec(спец)
+sys.modules["upd"] = спец.name and upd
 спец.loader.exec_module(upd)
 upd.САЙТ = САЙТ
 
@@ -47,7 +52,9 @@ def дождаться_снимка(каталог_файл, метка: str, т
     сравнить «перечитала ли» можно только по ревизии каталога — поэтому она и
     меняется вместе с подробностями.
     """
-    import json as _json, time, urllib.request
+    import json as _json
+    import time
+    import urllib.request
     кат = _json.loads(Path(каталог_файл).read_text(encoding="utf-8"))
     кат["revision"] = метка
     Path(каталог_файл).write_text(_json.dumps(кат), encoding="utf-8")
@@ -160,7 +167,7 @@ d2 = прогон(подробности1)
 
 # E. новая озвучка / постер / оценка — не новинка
 подробности2 = copy.deepcopy(подробности1)
-for slug, д in list(подробности2.get("details", {}).items())[:200]:
+for д in list(подробности2.get("details", {}).values())[:200]:
     д["poster"] = "/сменили.webp"
     д["voice"] = "Другая студия"
     д["kinopoisk_rating"] = 9.9
@@ -194,6 +201,8 @@ f = прогон(подробности3)
   дождаться_снимка(ДАННЫЕ / f"{САЙТ}-catalog.json", метка),
   f"ждали ревизию {метка[:20]}")
 print(f"\nОК: {len(ок)}   ПЛОХО: {len(плохо)}")
-for с in ок: print("  ·", с)
-for с in плохо: print("  ✗", с)
+for с in ок:
+    print("  ·", с)
+for с in плохо:
+    print("  ✗", с)
 sys.exit(1 if плохо else 0)

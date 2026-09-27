@@ -4,8 +4,11 @@
 Смотрит на СОБРАННУЮ разметку настоящего рантайма и на настоящий снимок
 каталога (7446 записей, 100 мест топа), а не на строки в исходнике.
 """
-import json
-import os, re, sys, urllib.request
+import os
+import re
+import sys
+import urllib.request
+
 БАЗА = os.environ.get("ANIMEDIA_PROBE_BASE", "http://127.0.0.1:9310")
 ок, плохо = [], []
 
@@ -187,7 +190,7 @@ if лента_блок:
     # ответам: пять ответов с одной и той же разметкой — это не повтор.
     панели = re.findall(r'<div class="aeps" data-eps-panel="(\d+)"(.*?)</div>', т, re.S)
     все = []
-    for номер, тело in панели:
+    for тело in (т_ for _, т_ in панели):
         все += re.findall(r'<a class="aeps__row"[^>]*href="([^"]+)"', тело)
     проверить("8 лента: между страницами карточки не повторяются",
               len(все) == len(set(все)), f"{len(все)} карточек, {len(set(все))} разных")

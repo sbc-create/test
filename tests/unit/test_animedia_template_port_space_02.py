@@ -18,7 +18,7 @@ import json
 import os
 import re
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import pytest
@@ -1298,7 +1298,7 @@ def test_выпуск_называется_по_релизу_а_не_по_ман
                               build_id="20260101T000000Z-старый-animedia-parity",
                               sha=цифра)
     м = _поднять_рантайм("animedia_id_1", манифест, кат, подр, релиз / "RELEASE.json")
-    assert м.СБОРКА == релиз.name, "выпуск назван по отставшему манифесту"
+    assert релиз.name == м.СБОРКА, "выпуск назван по отставшему манифесту"
     assert м.СБОРКА_МАНИФЕСТА == "20260101T000000Z-старый-animedia-parity"
     assert м.ИСТОЧНИК_ВЫПУСКА == "release.json"
 
@@ -1360,7 +1360,7 @@ def _identity(модуль) -> bool:
         and (not релиз.get("artifact_sha256") or релиз["artifact_sha256"] == цифра)
         and (not манифест.get("artifact_sha256") or манифест["artifact_sha256"] == цифра)
         and (not модуль.СБОРКА_МАНИФЕСТА or not релиз.get("build_id")
-             or модуль.СБОРКА_МАНИФЕСТА == релиз["build_id"]))
+             or релиз["build_id"] == модуль.СБОРКА_МАНИФЕСТА))
 
 
 # ---------------------------------------------------------------------------
@@ -1423,7 +1423,7 @@ def test_новый_домен_не_получает_издателя_сосед
         json.dumps({"publisher_id": "99999", "source_mode": "provider-id"}),
         encoding="utf-8")
     monkeypatch.delenv("LORDS_PLAYER_CONFIG", raising=False)
-    м = _поднять_рантайм("animedia_player_default", 
+    м = _поднять_рантайм("animedia_player_default",
                          _манифест_файл(tmp_path / "m-pl.json", build_id="t",
                                         sha=hashlib.sha256(РАНТАЙМ.read_bytes()).hexdigest()),
                          кат, подр, None)
@@ -1532,3 +1532,27 @@ def test_обновление_данных_не_трогает_хранилищ�
     текст = ОБНОВЛЕНИЕ.read_text(encoding="utf-8")
     for запрещено in ("community", "сообществ", "votes", "comments"):
         assert запрещено not in текст.lower(), запрещено
+
+
+def test_в_шаблоне_нет_неопределённых_имён(рантайм):
+    """Дефект: `NameError`, который не видно, пока функцию не позовут.
+
+    `_плитка_catalog_added` спрашивала бюджет срочных постеров по имени
+    `первый_экран`, которого у неё в параметрах не было. Вызовов у функции нет,
+    поэтому ни одна страница на это не падала — и перенос честно скопировал
+    неисправность из animedia.space вместе с полезной правкой.
+
+    Проверяется ВЕСЬ файл, а не эта одна функция: ловить надо класс ошибки, а
+    не её экземпляр. Разбор делает ruff, он же стоит в `requirements.txt` и в
+    стадии Lint конвейера.
+    """
+    import shutil
+    import subprocess
+    ruff = shutil.which("ruff") or str(ROOT / ".venv/bin/ruff")
+    if not Path(ruff).is_file() and not shutil.which("ruff"):
+        pytest.skip("ruff недоступен")
+    готово = subprocess.run(
+        [ruff, "check", "--isolated", "--select", "F821", "--output-format",
+         "concise", str(РАНТАЙМ)],
+        capture_output=True, text=True)
+    assert готово.returncode == 0, готово.stdout or готово.stderr
