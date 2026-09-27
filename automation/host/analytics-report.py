@@ -12,6 +12,7 @@
 чужой инструмент однажды положит значение в отчёт, наружу оно не выйдет. Сам
 отчёт секретов не содержит по построению — там публичные идентификаторы.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -46,31 +47,43 @@ def _печать(строка: str) -> None:
 def _счётчики_по_отчётам() -> list[dict]:
     строки = []
     for файл in sorted(АНАЛИТИКА.glob("connect-*.json")):
-        домен = файл.name[len("connect-"):-len(".json")]
+        домен = файл.name[len("connect-") : -len(".json")]
         текст = файл.read_text(encoding="utf-8", errors="replace")
         try:
             данные = json.loads(текст)
         except ValueError:
-            строки.append({"domain": домен, "state": "отчёт не разобран",
-                           "detail": текст.strip().splitlines()[-1][:160] if текст.strip() else "пусто"})
+            строки.append(
+                {
+                    "domain": домен,
+                    "state": "отчёт не разобран",
+                    "detail": текст.strip().splitlines()[-1][:160] if текст.strip() else "пусто",
+                }
+            )
             continue
         записи = данные.get("results") or данные.get("properties") or []
-        своя = next((з for з in записи if з.get("domain") == домен), None) or (записи[0] if записи else {})
-        строки.append({
-            "domain": домен,
-            "state": str(своя.get("status") or данные.get("status") or "нет поля status"),
-            "counter_id": своя.get("counter_id"),
-            "site": (своя.get("site2") or {}).get("site") if isinstance(своя.get("site2"), dict) else своя.get("site"),
-            "detail": "; ".join(str(п) for п in (своя.get("problems") or []))[:200]
-                      or str(своя.get("reason") or ""),
-        })
+        своя = next((з for з in записи if з.get("domain") == домен), None) or (
+            записи[0] if записи else {}
+        )
+        строки.append(
+            {
+                "domain": домен,
+                "state": str(своя.get("status") or данные.get("status") or "нет поля status"),
+                "counter_id": своя.get("counter_id"),
+                "site": (своя.get("site2") or {}).get("site")
+                if isinstance(своя.get("site2"), dict)
+                else своя.get("site"),
+                "detail": "; ".join(str(п) for п in (своя.get("problems") or []))[:200]
+                or str(своя.get("reason") or ""),
+            }
+        )
     return строки
 
 
 def main(argv: list[str] | None = None) -> int:
     р = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    р.add_argument("--tail", type=int, default=12,
-                   help="сколько последних строк текстового отчёта показать")
+    р.add_argument(
+        "--tail", type=int, default=12, help="сколько последних строк текстового отчёта показать"
+    )
     а = р.parse_args(argv)
 
     _печать("=== Что службы записали ===")
@@ -86,8 +99,10 @@ def main(argv: list[str] | None = None) -> int:
     if not строки:
         _печать("  ни одного файла connect-<домен>.json: analytics-connect@ не запускался")
     for с in строки:
-        _печать(f"  {с['domain']:24} status={с['state']:12} counter_id={с.get('counter_id')} "
-                f"домен счётчика={с.get('site')}")
+        _печать(
+            f"  {с['domain']:24} status={с['state']:12} counter_id={с.get('counter_id')} "
+            f"домен счётчика={с.get('site')}"
+        )
         if с.get("detail"):
             _печать(f"      {с['detail']}")
 
@@ -95,13 +110,17 @@ def main(argv: list[str] | None = None) -> int:
     реестр = json.loads(РЕЕСТР.read_text(encoding="utf-8"))["properties"]
     for з in реестр:
         if з.get("counter_id") or з.get("counter_state") != "planned":
-            _печать(f"  {з['domain']:24} counter_id={з.get('counter_id')} "
-                    f"state={з.get('counter_state')} name={з.get('counter_name')!r}")
+            _печать(
+                f"  {з['domain']:24} counter_id={з.get('counter_id')} "
+                f"state={з.get('counter_state')} name={з.get('counter_name')!r}"
+            )
 
     for имя, путь in ОТЧЁТЫ:
         if путь.suffix == ".txt" and путь.exists() and путь.stat().st_size:
             _печать(f"\n=== {имя}: последние {а.tail} строк ===")
-            for строка in путь.read_text(encoding="utf-8", errors="replace").splitlines()[-а.tail:]:
+            for строка in путь.read_text(encoding="utf-8", errors="replace").splitlines()[
+                -а.tail :
+            ]:
                 _печать("  " + строка)
     return 0
 
