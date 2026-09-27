@@ -399,6 +399,102 @@
           "type": "string"
         }
       }
+    },
+    "family": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Семейство шаблонов витрины: zona, lords, animedia, yummy."
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "production",
+        "staging",
+        "pilot"
+      ],
+      "description": "Окружение витрины. Перечень закрыт: «почти production» не бывает."
+    },
+    "lifecycle_state": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "PLANNED",
+        "HELD",
+        "RETIRED"
+      ],
+      "description": "Состояние витрины в жизненном цикле флота."
+    },
+    "registry_note": {
+      "type": "string",
+      "description": "Почему запись такая и чей следующий шаг."
+    },
+    "backup_policy_ref": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Ссылка на downstream-профиль. null означает «профиль ещё не создан», а не «политики нет»: отсутствие и пустота — разные состояния, и путать их здесь опасно."
+    },
+    "content_profile_ref": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Ссылка на downstream-профиль. null означает «профиль ещё не создан», а не «политики нет»: отсутствие и пустота — разные состояния, и путать их здесь опасно."
+    },
+    "monitoring_profile_ref": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Ссылка на downstream-профиль. null означает «профиль ещё не создан», а не «политики нет»: отсутствие и пустота — разные состояния, и путать их здесь опасно."
+    },
+    "deployment": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Что фактически обслуживает домен. Заполняется по наблюдению (манифест шаблона и realpath(current)), а не по намерению — поле evidence называет источник.",
+      "required": [
+        "template_family",
+        "build_id",
+        "serving_unit"
+      ],
+      "properties": {
+        "template_family": {
+          "type": "string",
+          "minLength": 1
+        },
+        "template_version": {
+          "type": "string"
+        },
+        "template_profile": {
+          "type": "string"
+        },
+        "build_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "source_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{7,40}$"
+        },
+        "built_at": {
+          "type": "string"
+        },
+        "release_id": {
+          "type": "string"
+        },
+        "serving_unit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "string"
+        }
+      }
     }
   },
   "anyOf": [
