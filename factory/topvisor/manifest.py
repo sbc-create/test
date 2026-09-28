@@ -289,7 +289,7 @@ MANIFEST: tuple[ProjectSpec, ...] = (
         name="an1meg0.site — аниме: новинки",
         profile="аниме, вход через новинки",
         focus="новинки как точка входа: то, что вышло недавно",
-        metrika_counter=None,
+        metrika_counter=113121466,
         groups=(
             KeywordGroup("Новинки", ("новинки аниме", "новое аниме смотреть")),
             KeywordGroup("Сезон", ("аниме текущего сезона", "аниме сезона онлайн")),
