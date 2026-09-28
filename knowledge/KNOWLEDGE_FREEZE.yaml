@@ -1,9 +1,9 @@
 # Сгенерировано `python3 -m factory knowledge freeze`. Вручную не редактируется.
 schema_version: 1
-freeze_version: unversioned
-frozen_at: '2026-09-23T06:25:17Z'
+freeze_version: 2026-09-28.1
+frozen_at: '2026-09-28T10:02:25Z'
 file_count: 13
-aggregate_sha256: 8ee1575039c4b784eb08d2a5d98f5edab07b2a76035f8e51e570c065ac223366
+aggregate_sha256: 735658c6acd7b999a0842c56c11d892d32e59fa90dadf6943282ad80dcbd2044
 files:
 - path: knowledge/DECISIONS.md
   sha256: 2b49f8455cf37f6cc22082a60c0a54aa2b94d9893f6e10a7923f1a061e1495f5
@@ -30,8 +30,8 @@ files:
   sha256: c450b41ba251e3ad2fc1c4b0929302f3577f5bac7a8ae3ff64a1e2cb836cc049
   bytes: 3089
 - path: knowledge/UNKNOWNS.md
-  sha256: 21048f13b4413b9592a97b3ec9a184a0c265c08f4c07d0ab452ea6de4325af17
-  bytes: 5331
+  sha256: d2d044f139ee3a1cdb837179bfc7b800d847d75b995a34e7321d323e4bd97a3f
+  bytes: 8588
 - path: knowledge/VK_CONTENT_AND_ADS_CONTRACT.md
   sha256: 36ddb0d5d4fc4f12401b5b30a201c45faca259f80101da373b77ce2c722757a4
   bytes: 6382

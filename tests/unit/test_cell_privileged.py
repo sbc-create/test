@@ -652,9 +652,32 @@ def test_приёмка_читает_build_id_у_семейства_без_ме�
         def log_message(self, *a):
             pass
 
+    class ОбаИсточника(BaseHTTPRequestHandler):
+        """Витрина, у которой заголовок называет ШАБЛОН, а мета-тег — выпуск.
+
+        Так устроена zona-02: `X-Site-Factory-Build-Id` берётся из манифеста
+        закреплённого шаблона и одинаков у всех её выпусков, а метку самого
+        выпуска процесс пишет в разметку. Кандидат из нужного коммита, отвечавший
+        200 на обоих маршрутах, был откачен именно потому, что приёмка
+        спрашивала сначала заголовок.
+        """
+
+        def do_GET(self):  # noqa: N802
+            тело = b'<meta name="site-factory-release-id" content="060149731561-zona-02">'
+            self.send_response(200)
+            self.send_header("X-Site-Factory-Build-Id", "zona-02-0fb857b26f85")
+            self.send_header("Content-Length", str(len(тело)))
+            self.end_headers()
+            self.wfile.write(тело)
+
+        def log_message(self, *a):
+            pass
+
     for обработчик, ожидаемый, источник in (
-            (ТолькоЗаголовок, "9d25994c1762-yummy-biz", "заголовок"),
-            (ТолькоМетаТег, "abc123-zona-01", "мета-тег")):
+            (ТолькоЗаголовок, "9d25994c1762-yummy-biz",
+             "заголовок (ревизия шаблона, не выпуска)"),
+            (ТолькоМетаТег, "abc123-zona-01", "мета-тег"),
+            (ОбаИсточника, "060149731561-zona-02", "мета-тег")):
         сервер = поднять(обработчик)
         порт = сервер.server_address[1]
         п = privileged.Площадка(site_id="проверка", account="nobody",

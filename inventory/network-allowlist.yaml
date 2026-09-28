@@ -56,3 +56,53 @@ hosts:
     methods: [GET]
     token_secret_ref: hub:/var/lib/site-factory-secret-hub/store.sqlite3
     contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- десять витрин задания «довести до работающего публичного состояния» ---
+  # Внесены заданием владельца от 2026-09-27 (десять доменов перечислены в самом
+  # задании поимённо). Разрешён только GET: приёмка публичного результата —
+  # чтение страницы, build-id, счётчика Метрики и метатегов. Ни одна запись не
+  # несёт токена, потому что витрины публичные и авторизации не требуют.
+  #
+  # Три домена Animego различаются символами и являются РАЗНЫМИ сайтами:
+  # an1mego (цифра 1 + буква o), animeg0 (буква i + цифра 0), an1meg0 (обе цифры).
+  # Строки ниже приведены ровно в том написании, что в задании.
+  - ref: site-an1mego
+    host: an1mego.site
+    purpose: "публичная приёмка витрины: HTTPS, build-id, каталог, счётчик"
+    methods: [GET]
+  - ref: site-animeg0
+    host: animeg0.site
+    purpose: "публичная приёмка витрины: HTTPS, build-id, каталог, счётчик"
+    methods: [GET]
+  - ref: site-an1meg0
+    host: an1meg0.site
+    purpose: "публичная приёмка витрины: HTTPS, build-id, каталог, счётчик"
+    methods: [GET]
+  - ref: site-zonafilm-cc
+    host: zonafilm.cc
+    purpose: "публичная приёмка витрины: HTTPS, build-id, каталог, счётчик"
+    methods: [GET]
+  - ref: site-zonafilm12
+    host: zonafilm12.site
+    purpose: "публичная приёмка витрины: HTTPS, build-id, каталог, счётчик"
+    methods: [GET]
+  - ref: site-yummyani7-site
+    host: yummyani7.site
+    purpose: "публичная приёмка витрины: HTTPS, build-id, каталог, счётчик"
+    methods: [GET]
+  - ref: site-yummyani7-info
+    host: yummyani7.info
+    purpose: "публичная приёмка витрины: HTTPS, build-id, каталог, счётчик"
+    methods: [GET]
+  - ref: site-lordserials22-site
+    host: lordserials22.site
+    purpose: "публичная приёмка витрины: HTTPS, build-id, каталог, счётчик"
+    methods: [GET]
+  - ref: site-lordserials22-space
+    host: lordserials22.space
+    purpose: "публичная приёмка витрины: HTTPS, build-id, каталог, счётчик"
+    methods: [GET]
+  - ref: site-lordserials22-info
+    host: lordserials22.info
+    purpose: "публичная приёмка витрины: HTTPS, build-id, каталог, счётчик"
+    methods: [GET]

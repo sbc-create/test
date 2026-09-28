@@ -92,53 +92,13 @@ BLOCKED_ANALYTICS_ACCESS | BLOCKED_SITE_EXTRACTED | QA_FAILED | DEPLOY_FAILED | 
 
 ## Ночные и длительные задания
 
-Постоянное правило, а не совет для одного случая.
-
-**Работать всю согласованную ночь (или весь согласованный срок), пока остаются
-полезные разрешённые действия.** Промежуточный отчёт задание не завершает.
-Блокер одного пункта не останавливает остальные: у десяти доменов девять других
-цепочек, и отказ в правах на один репозиторий не запрещает проверить плеер,
-дописать заготовку, создать площадку или прочитать фактические настройки сервиса.
-
-Что считается завершением: выполнены критерии приёмки — либо исчерпаны доступные
-действия, и по каждому оставшемуся названо ДОКАЗАННОЕ внешнее ограничение
-(отказ в правах с текстом отказа, отсутствие делегирования домена, занятый
-чужой сессией общий ресурс). «Осталось только действие владельца» без такого
-доказательства завершением не является.
-
-Чем НЕ занимать время: повторной проверкой того, что не менялось; переписыванием
-уже написанного отчёта; ожиданием без работы. Если следующий шаг ждёт внешнего
-события (CI, ответ службы, действие владельца) — переключиться на другой домен,
-а к ожидающему вернуться позже.
-
-**Причина, по которой правило записано.** В ночь на 2026-09-28 работа
-остановилась после одного запуска: в журнале сессии два последних сообщения
-имеют `stop_reason=end_turn` — то есть ход завершил я сам, отдав промежуточный
-отчёт. Ни ограничения среды, ни гибели процесса, ни ожидания разрешения не было:
-контекст был израсходован меньше чем на 1%, фоновых задач в работе не оставалось.
-При этом доступными оставались: проверка плеера, разбор доставки каталога,
-создание двух площадок, заполнение семантики Topvisor.
-
-**Про автономное продолжение — проверено, а не предположено.** В наборе
-инструментов есть запланированное задание (`CronCreate`), которое ставит промпт в
-очередь по расписанию. В этой рабочей области оно **запрещено профилем
-разрешений**: попытка создать задание 2026-09-28 вернула
-«неизвестный инструмент 'CronCreate': правило не описано, действует default-deny».
-
-Даже будь оно разрешено, границы у него такие: задание живёт только в текущей
-сессии, на диск не пишется, исчезает вместе с ней, истекает через 7 дней и
-срабатывает, только когда сессия простаивает.
-
-Вывод, который нельзя смягчать: **автономного продолжения после завершения хода
-здесь нет**. Обещать «работу всю ночь» нельзя. Единственное, что в моей власти, —
-не завершать ход, пока остаются доступные полезные действия. Открытый tmux
-механизмом продолжения не является и им не считается.
-
-**Контрольная точка.** Ход длительной работы ведётся в отдельном документе
-(`docs/NIGHT_RUN_TEN_DOMAINS.md` для текущего задания): домен → выполнено →
-доказательство → следующий шаг → внешний блокер. Перед исчерпанием контекста
-запись обновляется, чтобы возобновление начиналось с последнего завершённого
-шага, а не с нового аудита.
+**Работать весь согласованный срок, пока остаются полезные разрешённые действия.**
+Промежуточный отчёт задание не завершает; блокер одного пункта не останавливает
+остальные. Завершение — выполненные критерии приёмки либо исчерпанные действия,
+где по каждому остатку названо ДОКАЗАННОЕ внешнее ограничение. Автономного
+продолжения после завершения хода нет: не завершать ход, пока есть что делать.
+Правило целиком, причина и границы инструментов — `docs/LONG_RUNS.md`;
+контрольная точка текущего задания — `docs/NIGHT_RUN_TEN_DOMAINS.md`.
 
 ## Детальные правила
 
@@ -178,37 +138,21 @@ an **SEO session** operates under. Read this file first; it is the entry point.
 | `docs/verification/` | Committed evidence of verification runs |
 | `.github/workflows/` | CI and deployment automation |
 
-## Environment
+## Environment, commits, data
 
-The SessionStart hook creates `.venv` and installs the pinned dependencies from
-`requirements.txt`. It runs automatically in Claude Code on the web. To
-provision manually:
-
-```bash
-SEO_SESSION_FORCE_SETUP=1 ./.claude/hooks/session-start.sh
-```
-
-## Before you commit
-
-Run the full verification and regenerate the evidence record:
+The SessionStart hook creates `.venv` and installs pinned `requirements.txt`;
+manually: `SEO_SESSION_FORCE_SETUP=1 ./.claude/hooks/session-start.sh`.
 
 ```bash
-./scripts/verify.sh            # all stages, non-zero exit = failures
-./scripts/record-evidence.sh   # refresh docs/verification/latest-run.md
-```
-
-CI runs both. `record-evidence.sh --check` fails the build if the committed
-evidence disagrees with a fresh run, so a stale record blocks the merge.
-
-## Validating data
-
-```bash
+./scripts/verify.sh                                                   # all stages, non-zero exit = failures
+./scripts/record-evidence.sh                                          # refresh docs/verification/latest-run.md
 .venv/bin/python scripts/validate_schemas.py                          # schemas compile
 .venv/bin/python scripts/validate_schemas.py path/to/seo-audit.json   # validate data
 ```
 
-Files are matched to schemas by filename prefix: `seo-audit.*.json` validates
-against `schemas/seo-audit.schema.json`.
+CI runs the first two; `record-evidence.sh --check` fails the build on a stale
+record. Data files match schemas by filename prefix: `seo-audit.*.json` against
+`schemas/seo-audit.schema.json`.
 
 ## SEO operator
 

@@ -438,21 +438,36 @@ class TestProfileProperties:
 
         SSH-хосты и DNS-зоны не переданы и обязаны остаться пустыми: их
         расширение по инициативе агента прямо запрещено. Сетевой allowlist
-        не пуст, потому что владелец разрешил обращения двумя заданиями:
-        автоматизация аналитики Яндекса (API и документация) и центральный
+        не пуст, потому что владелец разрешил обращения тремя заданиями:
+        автоматизация аналитики Яндекса (API и документация); центральный
         Secret Hub — read-only проверка выданного токена CDNVideoHub перед
-        сохранением (D88). Проверяется точный состав: незамеченная лишняя
-        строка здесь — это открытый наружу канал.
+        сохранением (D88); и «довести до работающего публичного состояния»
+        от 2026-09-27, где десять доменов перечислены поимённо самим
+        заданием, а от allowlist требуется только GET по публичной странице.
+        Проверяется точный состав: незамеченная лишняя строка здесь — это
+        открытый наружу канал.
         """
         assert unattended.inventory_hosts() == set()
         assert unattended.inventory_zones() == set()
-        assert unattended.network_hosts() == {
+        интеграции = {
             "api-metrika.yandex.net",
             "api.webmaster.yandex.net",
             "yandex.ru",
             "yandex.com",
             "public-api.cdnvideohub.com",
         }
+        # Написание доменов Animego различается символами и проверяется здесь
+        # буквально: an1mego — цифра 1 и буква o, animeg0 — буква i и цифра 0,
+        # an1meg0 — обе цифры. Это три разных сайта, и опечатка в любой из
+        # строк открыла бы канал не туда, куда велело задание.
+        витрины = {
+            "an1mego.site", "animeg0.site", "an1meg0.site",
+            "zonafilm.cc", "zonafilm12.site",
+            "yummyani7.site", "yummyani7.info",
+            "lordserials22.site", "lordserials22.space", "lordserials22.info",
+        }
+        assert len(витрины) == 10
+        assert unattended.network_hosts() == интеграции | витрины
 
 
 class TestWritePaths:
