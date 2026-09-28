@@ -23,7 +23,12 @@ from pathlib import Path
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
 АНАЛИТИКА = КОРЕНЬ / "config" / "analytics.json"
-ОТЧЁТ_TOPVISOR = КОРЕНЬ / "var" / "topvisor" / "check-latest.txt"
+#: Отчёты Topvisor: берётся самый свежий. `check-latest.txt` пишется ДО
+#: применения плана, `check-after-connect.txt` — после, и только во втором есть
+#: только что созданные проекты. Читая первый, инструмент печатал «нет в списке
+#: аккаунта» у существующего проекта.
+ОТЧЁТЫ_TOPVISOR = (КОРЕНЬ / "var" / "topvisor" / "check-after-connect.txt",
+                   КОРЕНЬ / "var" / "topvisor" / "check-latest.txt")
 NGINX = Path("/etc/nginx")
 ЮНИТЫ = Path("/etc/systemd/system")
 
@@ -43,8 +48,10 @@ def _проекты() -> dict[str, int]:
     import re
 
     итог: dict[str, int] = {}
-    if ОТЧЁТ_TOPVISOR.is_file():
-        for строка in ОТЧЁТ_TOPVISOR.read_text(encoding="utf-8").splitlines():
+    существующие = [п for п in ОТЧЁТЫ_TOPVISOR if п.is_file() and п.stat().st_size]
+    if существующие:
+        свежий = max(существующие, key=lambda п: п.stat().st_mtime)
+        for строка in свежий.read_text(encoding="utf-8").splitlines():
             с = re.match(r"^\s*#(\d+)\s+(\S+)\s+—", строка)
             if с:
                 итог.setdefault(с.group(2), int(с.group(1)))
