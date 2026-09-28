@@ -15,8 +15,15 @@
 # command not found`. Эта ошибка записана в журнале как повторы №9, №10, №11 и
 # №14, и теперь её ловит tests/unit/test_host_scripts_ascii.py.
 #
-# Что сценарий НЕ делает: не создаёт репозиторий на GitHub (отдельное право) и
-# не выкладывает сайт.
+# Репозиторий на GitHub сценарий создаёт САМ, если его ещё нет. Это не новое
+# право: профиль разрешает `gh repo <verb>` для всех глаголов, кроме delete,
+# transfer, archive, rename, fork и unarchive (seo_operator/unattended.py,
+# GH_READ и GH_FORBIDDEN_VERBS). Три площадки простояли лишний круг из-за моего
+# неверного вывода, будто создание запрещено: отказ был получен на `gh auth
+# status` — там не разрешён глагол `auth`, — и распространён на всю команду.
+#
+# Что сценарий НЕ делает: не выкладывает сайт и не меняет видимость, владельца
+# или состав участников репозитория.
 set -euo pipefail
 
 dry_run=0
@@ -80,18 +87,27 @@ if [ -z "$remote" ]; then
   echo "remote в реестре не объявлен — отправлять некуда, это отдельный вход"
   exit 0
 fi
-if [ "$dry_run" = 1 ]; then
-  echo "[сухой прогон] git remote add origin $remote && git push -u origin $branch"
-  exit 0
-fi
 git -C "$tree" remote get-url origin >/dev/null 2>&1 \
   || git -C "$tree" remote add origin "$remote"
 # Отказ «repository not found» означает, что репозитория на GitHub ещё нет: это
 # отдельное право, а не ошибка дерева. Называем причину, а не код возврата.
+slug="$(echo "$remote" | sed -E 's#^https://github.com/##; s#\.git$##')"
+if ! git -C "$tree" ls-remote origin >/dev/null 2>&1; then
+  if [ "$dry_run" = 1 ]; then
+    echo "[сухой прогон] gh repo create $slug --private"
+  else
+    echo "репозитория $slug ещё нет — создаю приватным"
+    gh repo create "$slug" --private \
+      --description "витрина $domain ($site_id), создана механизмом запуска сайта"
+  fi
+fi
+if [ "$dry_run" = 1 ]; then
+  echo "[сухой прогон] git push -u origin $branch"
+  exit 0
+fi
 if git -C "$tree" push -u origin "$branch"; then
   echo "ветка отправлена: $branch -> $remote"
 else
-  echo "push не удался. Если причина «repository not found», репозиторий на GitHub" >&2
-  echo "ещё не создан — это отдельный шаг владельца, а не ошибка дерева." >&2
+  echo "push не удался и после создания репозитория — причина выше." >&2
   exit 3
 fi
