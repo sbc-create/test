@@ -1,0 +1,10 @@
+{
+  "captured_at_utc": "2026-09-05T07:04:00.088Z",
+  "base": "http://127.0.0.1:3310",
+  "snapshotTitles": 20,
+  "snapshotBaseline": false,
+  "badges": [],
+  "cards": 37,
+  "cause": "loadHomepageCatalog возвращает catalogVisualHomepageData() до вызова loadContentEvents",
+  "handoff": "TEMPLATE_TO_CORE-011"
+}

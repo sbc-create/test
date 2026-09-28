@@ -1,0 +1,92 @@
+{
+  "captured_at_utc": "2026-09-05T07:49:55Z",
+  "domains": {
+    "lordfilm47.space": {
+      "home": {
+        "status": 200,
+        "bytes": 33918,
+        "x_robots": "noindex, nofollow",
+        "www_authenticate": null,
+        "sha256": "36fa97a8537d219a",
+        "data_source": "fixture/test",
+        "meta_robots": "noindex, nofollow"
+      },
+      "robots": {
+        "status": 200,
+        "bytes": 152,
+        "x_robots": "noindex, nofollow",
+        "www_authenticate": null,
+        "sha256": "c458e3ebea653613",
+        "data_source": null,
+        "meta_robots": null
+      },
+      "not_found": {
+        "status": 404,
+        "bytes": 4381,
+        "x_robots": "noindex, nofollow",
+        "www_authenticate": null,
+        "sha256": "cd01c2b80f3dd2b5",
+        "data_source": "fixture/test",
+        "meta_robots": "noindex, nofollow"
+      }
+    },
+    "lordserial33.biz": {
+      "home": {
+        "status": 200,
+        "bytes": 31908,
+        "x_robots": "noindex, nofollow",
+        "www_authenticate": null,
+        "sha256": "6366c9fe167f65c1",
+        "data_source": "fixture/test",
+        "meta_robots": "noindex, nofollow"
+      },
+      "robots": {
+        "status": 200,
+        "bytes": 152,
+        "x_robots": "noindex, nofollow",
+        "www_authenticate": null,
+        "sha256": "c458e3ebea653613",
+        "data_source": null,
+        "meta_robots": null
+      },
+      "not_found": {
+        "status": 404,
+        "bytes": 4388,
+        "x_robots": "noindex, nofollow",
+        "www_authenticate": null,
+        "sha256": "2efefa2709114d73",
+        "data_source": "fixture/test",
+        "meta_robots": "noindex, nofollow"
+      }
+    },
+    "1lordserials1.online": {
+      "home": {
+        "status": 200,
+        "bytes": 22928,
+        "x_robots": "noindex, nofollow",
+        "www_authenticate": null,
+        "sha256": "7cd6b7d0c76c62f8",
+        "data_source": "fixture/test",
+        "meta_robots": "noindex, nofollow"
+      },
+      "robots": {
+        "status": 200,
+        "bytes": 152,
+        "x_robots": "noindex, nofollow",
+        "www_authenticate": null,
+        "sha256": "c458e3ebea653613",
+        "data_source": null,
+        "meta_robots": null
+      },
+      "not_found": {
+        "status": 404,
+        "bytes": 4230,
+        "x_robots": "noindex, nofollow",
+        "www_authenticate": null,
+        "sha256": "05cade90b278089b",
+        "data_source": "fixture/test",
+        "meta_robots": "noindex, nofollow"
+      }
+    }
+  }
+}

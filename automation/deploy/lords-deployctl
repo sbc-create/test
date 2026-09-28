@@ -1,0 +1,806 @@
+#!/usr/bin/env python3
+"""Узкий привилегированный помощник выкладки Lords. Только эти глаголы.
+
+Почему он такой маленький
+-------------------------
+
+Три ночи подряд выкладка падала, и каждый раз — не в самой выкладке, а в
+параллельном контуре, построенном рядом с работающим. `lords-canary-apply.sh`
+заново реализовывал то, что обновление каталога делает каждые десять минут без
+единого отказа: раскладку релиза, запись манифеста, переключение ссылки. В
+дубликате и жили дефекты — пустой InvocationID, `git archive` от root в чужом
+дереве, страж noexec не в том файле.
+
+Проверенный путь уже содержит канареечный крюк. `lords-content-refresh.sh`
+принимает `LORDS_CANARY_SITE` и `LORDS_CANARY_REVISION`, отключает ворота
+рендера для этой витрины («решение выложить шаблон принято снаружи и не
+пересматривается оптимизацией»), а `lords-refresh-guard finalize` пишет
+манифест с `--reason canary --template-revision` и переключает `current`
+атомарно, под собственным замком, с проверкой ожидаемого предыдущего релиза.
+
+Поэтому здесь нет ни раскладки, ни переключения, ни записи манифеста. Здесь
+только то, что требует прав и чего нет в проверенном пути: внести готовый
+артефакт в хранилище и запустить проверенный путь в канареечном режиме.
+
+Границы
+-------
+
+* витрина — только из белого списка `lords-01`, `lords-02`, `lords-03`;
+* ревизия — ровно сорок шестнадцатеричных знаков;
+* источник артефакта — только из разрешённых префиксов, обычный файл, и его
+  SHA-256 обязан совпасть с заявленным;
+* пути, службы, корни рантайма заданы здесь и не приходят из запроса;
+* произвольная команда не исполняется никогда: `shell=True` в этом файле нет.
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import pwd
+import re
+import shutil
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+def _загрузить_барьер():
+    """Барьер ищется РЯДОМ с файлом, а не от третьего родителя.
+
+    Установленная копия лежит в `/usr/local/libexec/site-factory/` одна.
+    Прежний импорт `automation.deploy.lords_fence` от `parent.parent.parent`
+    указывал в `/usr/local/automation/deploy/`, которого нет: в production
+    импорт падал всегда, `барьер_мод` был `None`, и каждая проверка барьера
+    молча пропускалась. Барьер работал только в дереве, то есть только в
+    тестах. Соседний каталог покрывает обе раскладки — и установленную, и
+    репозиторий, где `lords_fence.py` лежит здесь же.
+    """
+    import importlib.machinery
+    import importlib.util
+
+    путь = Path(__file__).resolve().parent / "lords_fence.py"
+    if not путь.is_file():
+        return None
+    спец = importlib.util.spec_from_loader(
+        "lords_fence", importlib.machinery.SourceFileLoader("lords_fence", str(путь)))
+    модуль = importlib.util.module_from_spec(спец)
+    # Регистрация до исполнения: `dataclasses` разрешает аннотации через
+    # `sys.modules[cls.__module__]`, и без записи класс `Барьер` не строится.
+    sys.modules.setdefault("lords_fence", модуль)
+    спец.loader.exec_module(модуль)
+    return модуль
+
+
+барьер_мод = _загрузить_барьер()
+
+САЙТЫ = ("lords-01", "lords-02", "lords-03")
+ДОМЕНЫ = {
+    "lords-01": "lordfilm47.space",
+    "lords-02": "lordserial33.biz",
+    "lords-03": "1lordserials1.online",
+}
+RUNTIME_ROOT = Path("/srv/lords")
+ARTIFACT_ROOT = Path("/srv/lords/.artifacts")
+ХРАНИЛИЩЕ = ARTIFACT_ROOT / "templates"
+# Оснастка обязана содержать 146b68f «боевая сборка пишет страницы на диск, а
+# не копит их в памяти». Прежнее закрепление 41031da0 его не содержало, и это
+# измерено, а не предположено: рендер lords-03 из неё 9 сентября упёрся в предел
+# cgroup 2 ГиБ, простоял в состоянии R час с лишним и не записал ни одного файла,
+# заняв юнит обновления и остановив выкладку всем трём витринам.
+#   git merge-base --is-ancestor 146b68f 41031da0  ->  нет
+#   git merge-base --is-ancestor 146b68f 7982913   ->  да
+def _действующая_оснастка() -> Path:
+    """Действующая оснастка берётся из указателя, а не вписывается сюда.
+
+    Закреплённый путь жил вписанным руками в трёх местах: drop-in службы,
+    эта константа и умолчание --repo у публичной проверки. Они расходились
+    независимо, и за ночь на 2026-09-10 это стоило трёх разных отказов —
+    исправление лежало в git и не исполнялось ни разу. Указатель
+    `lords-tooling/current` делает «что сейчас выложено» одним местом.
+    """
+    указатель = Path("/srv/site-factory/lords-tooling/current")
+    if указатель.is_symlink() or указатель.exists():
+        цель = указатель.resolve()
+        if (цель / "automation").is_dir():
+            return цель
+    # Указателя нет — это неисправность установки, а не повод молча взять
+    # что-нибудь: путь наугад выложил бы витрину неизвестной версией.
+    raise SystemExit("нет указателя /srv/site-factory/lords-tooling/current: "
+                     "оснастка не опубликована")
+
+
+ОСНАСТКА = _действующая_оснастка()
+ОБНОВЛЕНИЕ = ОСНАСТКА / "automation" / "host" / "lords-content-refresh.sh"
+# Сторож берётся из закреплённой оснастки, а не из рабочего checkout: именно
+# так его находит обновление каталога (GUARD="${REPO}/automation/host/..."),
+# и в /srv/site-factory/repo его вообще нет — самопроверка это и показала.
+СТОРОЖ = ОСНАСТКА / "automation" / "host" / "lords-refresh-guard.py"
+PYTHON = Path("/srv/site-factory/repo/.venv/bin/python")
+ТАЙМЕР = "lords-content-refresh.timer"
+ОБНОВЛЕНИЕ_СЛУЖБА = "lords-content-refresh.service"
+#: Наш drop-in канарейки. Имя сортируется позже чужого zz-canary-29.conf,
+#: поэтому на время прогона перекрывает его; после прогона удаляется.
+ДРОПИН = Path("/etc/systemd/system/lords-content-refresh.service.d/zz-canary-deploy.conf")
+#: Отдельный юнит на прогон. Общий юнит и был источником беды: второго
+#: экземпляра systemd не заводит, и заявка присоединялась к чужой работе.
+ЮНИТ_ПРОГОНА = "lords-site-render@{instance}.service"
+#: Окружение прогона — неизменяемый файл, создаваемый ДО запуска и
+#: принадлежащий одному прогону. /run годится: это данные, а не программа.
+ОКРУЖЕНИЕ_ПРОГОНОВ = Path("/run/lords-deploy/env")
+#: Рабочий каталог сценария обновления: относительно него живут кэш каталога,
+#: var/ и пакет factory. Значение то же, что в WorkingDirectory штатного юнита.
+СОСТОЯНИЕ_КОРЕНЬ = Path("/srv/site-factory/repo")
+#: Откуда разрешено вносить артефакт. Произвольный путь не принимается: иначе
+#: заявка смогла бы подсунуть в хранилище что угодно.
+ИСТОЧНИКИ = ("/home/claude/wt-release-03/var/artifacts/",
+             "/home/claude/wt-integration-28/var/artifacts/",
+             "/var/lib/lords-deploy/incoming/")
+РЕВИЗИЯ = re.compile(r"^[0-9a-f]{40}$")
+
+
+class Отказ(Exception):
+    """Заявка не принята: причина названа, действий не произведено."""
+
+
+def _сайт(значение: str) -> str:
+    if значение not in САЙТЫ:
+        raise Отказ(f"витрина вне списка: {значение!r}")
+    return значение
+
+
+def _ревизия(значение: str) -> str:
+    if not РЕВИЗИЯ.match(значение or ""):
+        raise Отказ(f"ревизия должна быть полным SHA из сорока знаков: {значение!r}")
+    return значение
+
+
+def отпечаток(путь: Path) -> str:
+    h = hashlib.sha256()
+    with путь.open("rb") as ф:
+        for кусок in iter(lambda: ф.read(1 << 20), b""):
+            h.update(кусок)
+    return h.hexdigest()
+
+
+def _выполнить(argv: list[str], *, окружение: dict | None = None,
+               таймаут: float = 43200.0, как: str | None = None,
+               каталог: str | None = None) -> dict:
+    """Запуск списком аргументов. Оболочки нет и не будет.
+
+    `как` понижает права до названного пользователя: git, отрисовка и сборка
+    выполняются не от root. Понижение — движение прав вниз, и только оно здесь
+    возможно: повышения этот файл не умеет.
+    """
+    подготовка = None
+    if как:
+        запись = pwd.getpwnam(как)
+
+        def подготовка() -> None:  # pragma: no cover — исполняется в потомке
+            os.setgid(запись.pw_gid)
+            os.initgroups(запись.pw_name, запись.pw_gid)
+            os.setuid(запись.pw_uid)
+
+    среда = dict(os.environ)
+    среда.setdefault("PATH", "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin")
+    if окружение:
+        среда.update(окружение)
+    начало = time.time()
+    готово = subprocess.run(argv, capture_output=True, text=True, timeout=таймаут,
+                            env=среда, preexec_fn=подготовка, cwd=каталог)
+    return {
+        "argv": argv,
+        "code": готово.returncode,
+        "stdout": готово.stdout[-20000:],
+        "stderr": готово.stderr[-20000:],
+        "seconds": round(time.time() - начало, 1),
+    }
+
+
+# --------------------------------------------------------------- глаголы --
+
+#: Состояния, в которых юнит занят. `active` среди них не единственное, и это
+#: стоило двух присоединённых прогонов: `systemctl is-active` для работающего
+#: oneshot возвращает `activating`, а проверка сравнивала только с `active` —
+#: занятый юнит считался свободным, и `systemctl start` присоединялся к чужой
+#: работе вместо запуска своей.
+ЗАНЯТЫЕ_СОСТОЯНИЯ = ("active", "activating", "deactivating", "reloading")
+
+
+def _занят(unit: str) -> bool:
+    состояние = _выполнить(["systemctl", "is-active", unit], таймаут=30)["stdout"].strip()
+    return состояние in ЗАНЯТЫЕ_СОСТОЯНИЯ
+
+
+def глагол_inspect(args) -> dict:
+    сайт = _сайт(args.site)
+    рантайм = RUNTIME_ROOT / сайт
+    текущая = рантайм / "current"
+    релиз = текущая.resolve() if текущая.exists() else None
+    манифест = None
+    if релиз is not None:
+        путь = релиз / "release-manifest.json"
+        if путь.is_file():
+            манифест = json.loads(путь.read_text(encoding="utf-8"))
+    служба = _выполнить(["systemctl", "is-active", f"{сайт}.service"], таймаут=30)
+    таймер = _выполнить(["systemctl", "is-active", ТАЙМЕР], таймаут=30)
+    включён = _выполнить(["systemctl", "is-enabled", ТАЙМЕР], таймаут=30)
+    return {
+        "site": сайт,
+        "domain": ДОМЕНЫ[сайт],
+        "release": релиз.name if релиз else None,
+        "release_path": str(релиз) if релиз else None,
+        "manifest": манифест,
+        "rollback_target": (манифест or {}).get("rollback_target"),
+        "service": служба["stdout"].strip(),
+        "timer_active": таймер["stdout"].strip(),
+        "timer_enabled": включён["stdout"].strip(),
+    }
+
+
+def глагол_import_artifact(args) -> dict:
+    """Внести готовый артефакт в хранилище. Собирать его здесь нечем и незачем.
+
+    Сборка требует git в рабочем дереве пользователя, а git от root в чужом
+    дереве — это дефект LORDS-RELEASE-ADOPT-GIT-PRIVILEGED-33, из-за которого
+    выкладка откатилась уже после подмены ссылки. Артефакт собирает владелец
+    дерева, а сюда приходит готовый файл с заявленным отпечатком.
+    """
+    ревизия = _ревизия(args.revision)
+    источник = Path(args.source).resolve()
+    if not any(str(источник).startswith(п) for п in ИСТОЧНИКИ):
+        raise Отказ(f"источник вне разрешённых префиксов: {источник}")
+    if not источник.is_file():
+        raise Отказ(f"источник не обычный файл: {источник}")
+    фактический = отпечаток(источник)
+    if фактический != args.sha256:
+        raise Отказ(f"отпечаток источника {фактический} вместо заявленного {args.sha256}")
+
+    ХРАНИЛИЩЕ.mkdir(parents=True, exist_ok=True)
+    цель = ХРАНИЛИЩЕ / f"{ревизия[:12]}.tar.gz"
+    if цель.is_file():
+        уже = отпечаток(цель)
+        if уже != фактический:
+            raise Отказ(f"в хранилище другой артефакт {ревизия[:12]}: {уже}")
+        return {"artifact": str(цель), "sha256": уже, "imported": False,
+                "note": "артефакт уже в хранилище и совпадает"}
+    временный = цель.with_suffix(".tar.gz.incoming")
+    shutil.copyfile(источник, временный)
+    os.chmod(временный, 0o644)
+    os.chown(временный, 0, 0)
+    if отпечаток(временный) != фактический:
+        временный.unlink(missing_ok=True)
+        raise Отказ("копия артефакта не совпала с источником")
+    os.replace(временный, цель)
+    return {"artifact": str(цель), "sha256": фактический, "imported": True}
+
+
+def глагол_pin(args) -> dict:
+    """Закрепить артефакт витрины: распаковать в рантайм и назвать корень."""
+    сайт = _сайт(args.site)
+    ревизия = _ревизия(args.revision)
+    архив = ХРАНИЛИЩЕ / f"{ревизия[:12]}.tar.gz"
+    if not архив.is_file():
+        raise Отказ(f"артефакт {ревизия[:12]} не внесён: сначала import-artifact")
+    итог = _выполнить([str(PYTHON), str(СТОРОЖ),
+                       "--runtime-root", str(RUNTIME_ROOT),
+                       "--artifact-root", str(ARTIFACT_ROOT),
+                       "pin", сайт, "--revision", ревизия,
+                       "--repo", str(ОСНАСТКА), "--json"], таймаут=1800)
+    if итог["code"] != 0:
+        raise Отказ(f"pin отказал: {итог['stderr'].strip() or итог['stdout'].strip()}")
+    return {"site": сайт, "revision": ревизия, "pin": json.loads(итог["stdout"].strip())}
+
+
+def требовать_барьер(поколение: int) -> None:
+    """Нет барьера — нет выкладки.
+
+    Прежде отсутствие модуля означало «выкладывай без барьера»: проверка
+    стояла за условием `if барьер_мод is not None`, ложным в установленной
+    копии. Отказ обязан быть закрытым, поэтому недоступный барьер — это
+    `Отказ`, а не тихий пропуск.
+    """
+    if барьер_мод is None:
+        raise Отказ("модуль барьера недоступен рядом с установленной копией: "
+                    "выкладка без барьера запрещена")
+    if not isinstance(поколение, int) or isinstance(поколение, bool) or поколение <= 0:
+        raise Отказ(f"поколение обязано быть положительным целым: {поколение!r}")
+
+
+def глагол_canary(args) -> dict:
+    """Канареечная выкладка витрины проверенным путём обновления каталога.
+
+    Ничего не раскладывается и не переключается здесь: сценарий обновления
+    отрисовывает витрину закреплённым шаблоном, а `finalize` пишет манифест и
+    меняет ссылку под собственным замком. Наша работа — назвать витрину и
+    ревизию и не мешать.
+    """
+    сайт = _сайт(args.site)
+    ревизия = _ревизия(args.revision)
+    архив = ХРАНИЛИЩЕ / f"{ревизия[:12]}.tar.gz"
+    if not архив.is_file():
+        raise Отказ(f"артефакт {ревизия[:12]} не внесён")
+    до = глагол_inspect(argparse.Namespace(site=сайт))
+    if not до["release"]:
+        raise Отказ("у витрины нет действующего релиза: откатываться будет некуда")
+
+    # Барьер ревизий: перед отрисовкой и ещё раз после неё.
+    #
+    # Между двумя проверками проходят часы, и заявка, законная в начале, к
+    # концу может оказаться вытесненной более новым поколением. Вторая проверка
+    # и есть та, ради которой барьер заведён: она стоит перед тем, как результат
+    # будет объявлен выложенным.
+    поколение = getattr(args, "generation", 0) or 0
+    отпечаток_артефакта = getattr(args, "artifact_sha256", "") or ""
+    требовать_барьер(поколение)
+
+    def _барьер(этап: str) -> dict:
+        return барьер_мод.проверить(сайт, generation=поколение, revision=ревизия,
+                                    artifact_sha256=отпечаток_артефакта, этап=этап)
+    решение = _барьер("pre-render")
+    if not решение["allowed"]:
+        return {"site": сайт, "verdict": барьер_мод.ВЫТЕСНЕНА, "fence": решение,
+                "release_before": до["release"], "release_after": до["release"],
+                "switched": False,
+                "note": "заявка вытеснена до отрисовки: витрина не тронута"}
+
+    # Канарейка идёт в СВОЁМ юните с неизменяемым окружением.
+    #
+    # Общий изменяемый drop-in дважды подсунул чужие переменные: файл писался
+    # после старта юнита и читался следующим прогоном, а не тем, для которого
+    # писался. Отдельный экземпляр снимает это по устройству — присоединяться
+    # физически не к чему, а окружение создаётся до запуска и принадлежит
+    # ровно одному прогону.
+    прогон = f"{сайт}-{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}"
+    ОКРУЖЕНИЕ_ПРОГОНОВ.mkdir(parents=True, exist_ok=True)
+    файл_окружения = ОКРУЖЕНИЕ_ПРОГОНОВ / f"{прогон}.env"
+    файл_окружения.write_text(
+        f"FACTORY_REPO={ОСНАСТКА}\n"
+        f"FACTORY_PYTHON={PYTHON}\n"
+        f"LORDS_ARTIFACT_ROOT={ARTIFACT_ROOT}\n"
+        "LORDS_PINNED_TEMPLATE=1\n"
+        "LORDS_KEEP_RELEASES=2\n"
+        "CDNVIDEOHUB_API_TOKEN_CREDENTIAL=cdnvideohub_api_token\n"
+        "CDNVIDEOHUB_PUBLISHER_ID_CREDENTIAL=cdnvideohub_publisher_id\n"
+        f"LORDS_CANARY_SITE={сайт}\n"
+        f"LORDS_CANARY_REVISION={ревизия}\n"
+        f"LORDS_CANARY_REPO={ОСНАСТКА}\n",
+        encoding="utf-8")
+    os.chmod(файл_окружения, 0o600)
+    юнит = ЮНИТ_ПРОГОНА.format(instance=прогон)
+
+    # Таймер обновления гасится на время прогона.
+    #
+    # `lords-site-render@.service` объявляет
+    # `Conflicts=lords-content-refresh.service`, поэтому запуск канарейки
+    # останавливает обновление каталога — и тем самым делает
+    # `OnUnitActiveSec=10min` немедленно выполнимым: последняя активация была
+    # часом раньше. Таймер срабатывает через секунду, поднимает обновление, а
+    # `Conflicts` гасит канарейку. Гонка детерминированная: без этой остановки
+    # канарейка не побеждает никогда, и прогон 22:04:53 прожил ровно две
+    # секунды.
+    #
+    # Восстановление — в `finally`: отказ канарейки, оставивший таймер
+    # выключенным, заморозил бы каталог всех витрин навсегда.
+    таймер_был = _выполнить(["systemctl", "is-active", ТАЙМЕР],
+                            таймаут=30)["stdout"].strip()
+    _выполнить(["systemctl", "stop", ТАЙМЕР], таймаут=120)
+    try:
+        _выполнить(["systemctl", "daemon-reload"], таймаут=120)
+        # Свой экземпляр не может быть занят: имя содержит метку времени.
+        до_запуска = _выполнить(["systemctl", "show", "-p", "InvocationID", "--value",
+                                 юнит], таймаут=30)["stdout"].strip()
+        итог = _выполнить(["systemctl", "start", юнит], таймаут=float(args.timeout))
+        после_запуска = _выполнить(["systemctl", "show", "-p", "InvocationID", "--value",
+                                    юнит], таймаут=30)["stdout"].strip()
+        if после_запуска and после_запуска == до_запуска:
+            raise Отказ(f"{юнит} не запускался: InvocationID не изменился")
+    finally:
+        файл_окружения.unlink(missing_ok=True)
+        _выполнить(["systemctl", "reset-failed", юнит], таймаут=60)
+        if таймер_был == "active":
+            _выполнить(["systemctl", "start", ТАЙМЕР], таймаут=120)
+    # Вторая проверка барьера — та, ради которой он заведён. Между ней и
+    # первой прошли часы отрисовки, и объявленное желаемое состояние могло
+    # смениться. Результат, собранный вытесненной заявкой, не принимается.
+    решение = _барьер("pre-switch")
+    после = глагол_inspect(argparse.Namespace(site=сайт))
+    сменился = после["release"] != до["release"]
+    if not решение["allowed"]:
+        return {"site": сайт, "verdict": барьер_мод.ВЫТЕСНЕНА, "fence": решение,
+                "release_before": до["release"], "release_after": после["release"],
+                "switched": сменился,
+                "note": "заявка вытеснена во время отрисовки: результат не принят"}
+    if not решение["allowed"]:
+        # Отрисовка уже произошла, но объявлять её выложенной нельзя: пока она
+        # шла, объявлено другое желаемое состояние.
+        return {"site": сайт, "verdict": барьер_мод.ВЫТЕСНЕНА, "fence": решение,
+                "release_before": до["release"], "release_after": после["release"],
+                "switched": сменился,
+                "note": "заявка вытеснена во время отрисовки: результат не принят"}
+    return {
+        "site": сайт,
+        "revision": ревизия,
+        "release_before": до["release"],
+        "release_after": после["release"],
+        "switched": сменился,
+        "manifest_after": после["manifest"],
+        "refresh": {k: итог[k] for k in ("code", "seconds")},
+        "refresh_tail": итог["stdout"][-6000:],
+        "refresh_errors": итог["stderr"][-6000:],
+    }
+
+
+def глагол_rollback(args) -> dict:
+    сайт = _сайт(args.site)
+    до = глагол_inspect(argparse.Namespace(site=сайт))
+    итог = _выполнить([str(PYTHON), str(СТОРОЖ),
+                       "--runtime-root", str(RUNTIME_ROOT),
+                       "--artifact-root", str(ARTIFACT_ROOT),
+                       "rollback", сайт, "--reason", args.reason[:200],
+                       "--actor", "lords-deployctl"], таймаут=1800)
+    после = глагол_inspect(argparse.Namespace(site=сайт))
+    return {
+        "site": сайт,
+        "release_before": до["release"],
+        "release_after": после["release"],
+        "returned": после["release"] != до["release"],
+        "code": итог["code"],
+        "stdout": итог["stdout"][-4000:],
+        "stderr": итог["stderr"][-4000:],
+        "service": после["service"],
+    }
+
+
+def глагол_timer(args) -> dict:
+    if args.action not in ("start", "stop", "status"):
+        raise Отказ(f"действие таймера вне списка: {args.action!r}")
+    if args.action != "status":
+        _выполнить(["systemctl", args.action, ТАЙМЕР], таймаут=60)
+    активен = _выполнить(["systemctl", "is-active", ТАЙМЕР], таймаут=30)
+    включён = _выполнить(["systemctl", "is-enabled", ТАЙМЕР], таймаут=30)
+    return {"timer": ТАЙМЕР, "action": args.action,
+            "active": активен["stdout"].strip(), "enabled": включён["stdout"].strip()}
+
+
+
+#: Юниты, которые разрешено гасить. Список закрыт: отмена — операция над чужой
+#: работой, и «любой юнит по имени из запроса» здесь означало бы произвольную
+#: власть над хостом.
+ОТМЕНЯЕМЫЕ = (ОБНОВЛЕНИЕ_СЛУЖБА,)
+#: Куда переносится частичная сборка. Удалять её нельзя: это единственное
+#: свидетельство того, чем занимался погибший прогон.
+КАРАНТИН = Path("/srv/lords/.quarantine")
+
+
+def _доказать_застой(unit: str, окно: float = 300.0, шаг: float = 60.0) -> dict:
+    """Пять признаков застоя, измеренных заново. Ни один не принимается на слово.
+
+    Отмена чужой работы требует доказательства, а не впечатления. Признаки те
+    же, что названы в разборе: старая ревизия в манифестах, прогон старше
+    конфигурации кандидата, staging не растёт, память у предела с растущими
+    счётчиками давления, `current` не переключался.
+    """
+    корень = Path("/sys/fs/cgroup/system.slice") / unit
+    def мера() -> tuple[int, int, int]:
+        файлов = байт = 0
+        for сайт in САЙТЫ:
+            staging = RUNTIME_ROOT / сайт / ".staging"
+            if staging.is_dir():
+                for ф in staging.rglob("*"):
+                    if ф.is_file():
+                        файлов += 1
+                        байт += ф.stat().st_size
+        события = 0
+        путь = корень / "memory.events"
+        if путь.is_file():
+            for строка in путь.read_text(encoding="utf-8").splitlines():
+                if строка.startswith("max "):
+                    события = int(строка.split()[1])
+        return файлов, байт, события
+
+    начало = мера()
+    прошло = 0.0
+    while прошло < окно:
+        time.sleep(шаг)
+        прошло += шаг
+    конец = мера()
+    память = 0
+    путь = корень / "memory.current"
+    if путь.is_file():
+        память = int(путь.read_text(encoding="utf-8").strip() or 0)
+    предел = 0
+    путь = корень / "memory.max"
+    if путь.is_file():
+        сырое = путь.read_text(encoding="utf-8").strip()
+        предел = int(сырое) if сырое.isdigit() else 0
+    релизы = {с: глагол_inspect(argparse.Namespace(site=с)) for с in САЙТЫ}
+    return {
+        "window_seconds": окно,
+        "files_growth": конец[0] - начало[0],
+        "bytes_growth": конец[1] - начало[1],
+        "limit_events_growth": конец[2] - начало[2],
+        "memory_current": память,
+        "memory_max": предел,
+        "memory_ratio": round(память / предел, 4) if предел else None,
+        "releases": {с: р["release"] for с, р in релизы.items()},
+        "renderer_revisions": {с: (р["manifest"] or {}).get("renderer_revision", "")[:12]
+                               for с, р in релизы.items()},
+    }
+
+
+def глагол_cancel_stuck(args) -> dict:
+    """Погасить именно этот прогон и ничего больше.
+
+    Отмена адресная: называется юнит из закрытого списка и точная
+    InvocationID. Если текущая InvocationID другая, значит прогон уже сменился
+    и гасить нечего — операция идемпотентна и возвращает `already_gone`.
+
+    Гашение — типизованная операция systemd (`systemctl stop`), а не сигнал по
+    угаданному PID: `kill` мимо цели убивает чужую работу, и восстановить её
+    будет нечем.
+    """
+    unit = args.unit
+    if unit not in ОТМЕНЯЕМЫЕ:
+        raise Отказ(f"юнит вне списка отменяемых: {unit!r}")
+    текущая = _выполнить(["systemctl", "show", "-p", "InvocationID", "--value", unit],
+                         таймаут=30)["stdout"].strip()
+    if текущая != args.invocation:
+        return {"unit": unit, "requested_invocation": args.invocation,
+                "current_invocation": текущая, "verdict": "already_gone",
+                "note": "прогон уже сменился: гасить нечего"}
+
+    до = {с: глагол_inspect(argparse.Namespace(site=с))["release"] for с in САЙТЫ}
+    доказательство = _доказать_застой(unit, окно=float(args.observe))
+    застой = (доказательство["files_growth"] == 0
+              and доказательство["bytes_growth"] == 0
+              and доказательство["limit_events_growth"] > 0
+              and (доказательство["memory_ratio"] or 0) >= 0.9)
+    if not застой and not args.force_proven:
+        return {"unit": unit, "verdict": "not_stale", "evidence": доказательство,
+                "note": "признаки застоя не подтвердились; прогон не тронут"}
+
+    # Новые запуски — в покой, чтобы место не заняли снова.
+    _выполнить(["systemctl", "stop", ТАЙМЕР], таймаут=120)
+    остановка = _выполнить(["systemctl", "stop", unit], таймаут=float(args.stop_timeout))
+
+    ждали = 0.0
+    while ждали < float(args.stop_timeout):
+        pid = _выполнить(["systemctl", "show", "-p", "MainPID", "--value", unit],
+                         таймаут=30)["stdout"].strip()
+        состояние = _выполнить(["systemctl", "is-active", unit], таймаут=30)["stdout"].strip()
+        if pid in ("", "0") and состояние != "active":
+            break
+        time.sleep(5)
+        ждали += 5
+    иначе_pid = _выполнить(["systemctl", "show", "-p", "MainPID", "--value", unit],
+                           таймаут=30)["stdout"].strip()
+
+    # Частичная сборка — в карантин, а не в корзину.
+    КАРАНТИН.mkdir(parents=True, exist_ok=True)
+    метка = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    перенесено = []
+    for сайт in САЙТЫ:
+        staging = RUNTIME_ROOT / сайт / ".staging"
+        if staging.is_dir() and any(staging.iterdir()):
+            цель = КАРАНТИН / f"{сайт}-{метка}"
+            shutil.move(str(staging), str(цель))
+            staging.mkdir(parents=True, exist_ok=True)
+            перенесено.append(str(цель))
+
+    # Снимается только наш собственный drop-in и только если он наш.
+    снят = False
+    if ДРОПИН.is_file() and "LORDS_CANARY_SITE" in ДРОПИН.read_text(encoding="utf-8"):
+        ДРОПИН.unlink()
+        снят = True
+    _выполнить(["systemctl", "daemon-reload"], таймаут=120)
+    окружение = _выполнить(["systemctl", "show", "-p", "Environment", "--value", unit],
+                           таймаут=30)["stdout"]
+    остались = [ч for ч in окружение.split() if ч.startswith("LORDS_CANARY_")]
+
+    после = {с: глагол_inspect(argparse.Namespace(site=с))["release"] for с in САЙТЫ}
+    сменилось = {с: (до[с], после[с]) for с in САЙТЫ if до[с] != после[с]}
+    вердикт = "STALE_RENDER_CANCELLED_NO_CHANGE" if not сменилось else "RELEASES_CHANGED"
+    return {
+        "unit": unit, "invocation": args.invocation, "verdict": вердикт,
+        "evidence": доказательство,
+        "stop_code": остановка["code"], "main_pid_after": иначе_pid,
+        "quarantined": перенесено, "dropin_removed": снят,
+        "canary_env_left": остались,
+        "releases_before": до, "releases_after": после,
+        "timer_state": _выполнить(["systemctl", "is-active", ТАЙМЕР],
+                                  таймаут=30)["stdout"].strip(),
+    }
+
+
+
+#: Каталог drop-in юнита обновления. Только он и только канареечные файлы в нём.
+ДРОПИН_КАТАЛОГ = Path("/etc/systemd/system/lords-content-refresh.service.d")
+#: Что разрешено уносить в карантин. Закреплённая оснастка, срок хранения и
+#: таймаут — не канареечные и не временные: тронуть их значило бы поменять
+#: устройство обновления, а не убрать за собой.
+КАНАРЕЕЧНЫЙ_ПРЕФИКС = "zz-canary-"
+КАРАНТИН_ДРОПИН = КАРАНТИН / "dropins"
+
+
+def глагол_quiesce_dropin(args) -> dict:
+    """Унести в карантин один устаревший канареечный drop-in. Только один.
+
+    Временный файл, который забыли снять, тише всех прочих отказов: он ничего
+    не ломает сразу, а просто заставляет каждый цикл обновления делать полный
+    рендер. Здесь такой файл был оставлен 8 сентября, и с тех пор каждый
+    прогон упирался в предел памяти на часы.
+
+    Три условия, и все обязательны. Имя — точное, без масок: маска однажды
+    заберёт чужое. Отпечаток — заявленный вызывающим: файл, изменившийся между
+    осмотром и переносом, это уже другой файл. Устарелость — доказанная:
+    ревизия, которую везёт канарейка, обязана быть уже выложенной на её
+    витрине, иначе мы уносим чужую незаконченную работу.
+    """
+    имя = args.file
+    if "/" in имя or ".." in имя:
+        raise Отказ(f"имя drop-in должно быть без путей: {имя!r}")
+    # Метасимволы отвергаются отдельно. Маска не совпала бы с настоящим файлом
+    # и вернула бы «уже нет» — то есть тихо соврала бы об успехе там, где на
+    # самом деле ничего не искали. Проверка добавлена после того, как
+    # `zz-canary-*.conf` прошло проверку имени.
+    if any(с in имя for с in "*?[]{}!$`\\ \t"):
+        raise Отказ(f"имя drop-in содержит метасимволы: {имя!r}")
+    if not имя.startswith(КАНАРЕЕЧНЫЙ_ПРЕФИКС) or not имя.endswith(".conf"):
+        raise Отказ(f"в карантин уносятся только {КАНАРЕЕЧНЫЙ_ПРЕФИКС}*.conf: {имя!r}")
+    путь = ДРОПИН_КАТАЛОГ / имя
+    if not путь.is_file():
+        return {"file": имя, "verdict": "already_gone", "note": "файла нет"}
+    фактический = отпечаток(путь)
+    if фактический != args.sha256:
+        raise Отказ(f"отпечаток {имя} — {фактический}, заявлен {args.sha256}")
+
+    текст = путь.read_text(encoding="utf-8")
+    объявлено = {}
+    for строка in текст.splitlines():
+        строка = строка.strip()
+        if строка.startswith("Environment=LORDS_CANARY_"):
+            ключ, _, значение = строка[len("Environment="):].partition("=")
+            объявлено[ключ] = значение
+    сайт = объявлено.get("LORDS_CANARY_SITE", "")
+    ревизия = объявлено.get("LORDS_CANARY_REVISION", "")
+    if not сайт or not ревизия:
+        raise Отказ(f"{имя} не объявляет витрину и ревизию канарейки")
+    _сайт(сайт)
+
+    состояние = глагол_inspect(argparse.Namespace(site=сайт))
+    выложено = (состояние["manifest"] or {}).get("renderer_revision", "")
+    устарел = выложено == ревизия
+    доказательство = {"canary_site": сайт, "canary_revision": ревизия,
+                      "deployed_revision": выложено, "already_deployed": устарел}
+    if not устарел and not args.force_proven:
+        return {"file": имя, "verdict": "not_stale", "evidence": доказательство,
+                "note": "ревизия канарейки ещё не выложена: файл не тронут"}
+
+    КАРАНТИН_ДРОПИН.mkdir(parents=True, exist_ok=True)
+    метка = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    цель = КАРАНТИН_ДРОПИН / f"{имя}.{метка}"
+    shutil.move(str(путь), str(цель))
+    (КАРАНТИН_ДРОПИН / f"{имя}.{метка}.why.json").write_text(
+        json.dumps({"moved_at_utc": метка, "sha256": фактический,
+                    "reason": args.reason[:300], "evidence": доказательство},
+                   ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    _выполнить(["systemctl", "daemon-reload"], таймаут=120)
+    окружение = _выполнить(["systemctl", "show", "-p", "Environment", "--value",
+                            ОБНОВЛЕНИЕ_СЛУЖБА], таймаут=30)["stdout"]
+    остались = [ч for ч in окружение.split() if ч.startswith("LORDS_CANARY_")]
+    return {"file": имя, "verdict": "QUARANTINED" if not остались else "CANARY_ENV_REMAINS",
+            "moved_to": str(цель), "sha256": фактический,
+            "evidence": доказательство, "canary_env_left": остались}
+
+
+def глагол_selftest(_args) -> dict:
+    """Проверка установленной копии: пути, права, окружение. Ничего не меняет."""
+    проверки = []
+
+    def проверить(имя: str, условие: bool, деталь: str = "") -> None:
+        проверки.append({"check": имя, "ok": bool(условие), "detail": деталь})
+
+    проверить("запущен от root", os.geteuid() == 0, f"euid={os.geteuid()}")
+    свой = Path(__file__).resolve()
+    проверить("собственный путь существует", свой.is_file(), str(свой))
+    смонтирован = _выполнить(["findmnt", "-no", "OPTIONS", "-T", str(свой)], таймаут=30)
+    проверить("раздел собственного файла исполняемый",
+              "noexec" not in смонтирован["stdout"], смонтирован["stdout"].strip())
+    for путь in (ОСНАСТКА, ОБНОВЛЕНИЕ, СТОРОЖ, PYTHON, RUNTIME_ROOT, ARTIFACT_ROOT):
+        проверить(f"путь есть: {путь}", Path(путь).exists())
+    for сайт in САЙТЫ:
+        состояние = глагол_inspect(argparse.Namespace(site=сайт))
+        проверить(f"{сайт}: есть релиз и манифест",
+                  bool(состояние["release"]) and bool(состояние["manifest"]),
+                  str(состояние["release"]))
+        проверить(f"{сайт}: служба работает", состояние["service"] == "active",
+                  состояние["service"])
+    состояние = глагол_inspect(argparse.Namespace(site="lords-02"))
+    проверить("таймер обновления включён", состояние["timer_enabled"] == "enabled",
+              состояние["timer_enabled"])
+    проверить("витрина вне списка отвергается", _отвергает(_сайт, "lords-99"))
+    проверить("короткая ревизия отвергается", _отвергает(_ревизия, "119605bbaca2"))
+    отказов = [п for п in проверки if not п["ok"]]
+    return {"checks": проверки, "failed": len(отказов), "verdict":
+            "SELF_TEST=PASS" if not отказов else "SELF_TEST=FAIL"}
+
+
+def _отвергает(функция, значение) -> bool:
+    try:
+        функция(значение)
+    except Отказ:
+        return True
+    return False
+
+
+ГЛАГОЛЫ = {
+    "inspect": глагол_inspect,
+    "import-artifact": глагол_import_artifact,
+    "pin": глагол_pin,
+    "canary": глагол_canary,
+    "rollback": глагол_rollback,
+    "timer": глагол_timer,
+    "cancel-stuck": глагол_cancel_stuck,
+    "quiesce-dropin": глагол_quiesce_dropin,
+    "self-test": глагол_selftest,
+}
+
+
+def main(argv: list[str] | None = None) -> int:
+    р = argparse.ArgumentParser(description="узкий помощник выкладки Lords")
+    под = р.add_subparsers(dest="verb", required=True)
+
+    i = под.add_parser("inspect"); i.add_argument("site")
+    a = под.add_parser("import-artifact")
+    a.add_argument("--revision", required=True)
+    a.add_argument("--source", required=True)
+    a.add_argument("--sha256", required=True)
+    p = под.add_parser("pin"); p.add_argument("site"); p.add_argument("--revision", required=True)
+    c = под.add_parser("canary")
+    c.add_argument("--site", required=True)
+    c.add_argument("--revision", required=True)
+    c.add_argument("--timeout", type=float, default=43200.0)
+    c.add_argument("--generation", type=int, default=0,
+                   help="поколение барьера, которому принадлежит заявка")
+    c.add_argument("--artifact-sha256", default="",
+                   help="отпечаток артефакта для сверки с барьером")
+    c.add_argument("--wait-idle", type=float, default=14400.0,
+                   help="сколько ждать простоя юнита обновления")
+    rb = под.add_parser("rollback")
+    rb.add_argument("--site", required=True)
+    rb.add_argument("--reason", default="deploy-rollback")
+    t = под.add_parser("timer"); t.add_argument("action")
+    cs = под.add_parser("cancel-stuck")
+    cs.add_argument("--unit", required=True)
+    cs.add_argument("--invocation", required=True)
+    cs.add_argument("--observe", type=float, default=300.0)
+    cs.add_argument("--stop-timeout", type=float, default=300.0)
+    cs.add_argument("--force-proven", action="store_true",
+                    help="признаки уже доказаны снаружи и записаны в отчёте")
+    qd = под.add_parser("quiesce-dropin")
+    qd.add_argument("--file", required=True)
+    qd.add_argument("--sha256", required=True)
+    qd.add_argument("--reason", default="stale canary dropin")
+    qd.add_argument("--force-proven", action="store_true")
+    под.add_parser("self-test")
+
+    args = р.parse_args(argv)
+    if os.geteuid() != 0 and args.verb != "self-test":
+        print(json.dumps({"error": "помощник запускает root"}, ensure_ascii=False))
+        return 1
+    try:
+        итог = ГЛАГОЛЫ[args.verb](args)
+    except Отказ as отказ:
+        print(json.dumps({"error": str(отказ)}, ensure_ascii=False, indent=2))
+        return 3
+    print(json.dumps(итог, ensure_ascii=False, indent=2))
+    if args.verb == "self-test" and итог["failed"]:
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

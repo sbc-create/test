@@ -1,0 +1,19 @@
+{
+ "lords-01": {
+  "limit": 400,
+  "sample": 30,
+  "archetypes": "/home/claude/wt-lords-r2/artifacts/templates-lords-zona-canary-004/archetypes-lords-plan.json",
+  "boundary_url": "/title/bezuprechnyy-mir/",
+  "boundary_total": 286,
+  "points": "1,2,99,100,101,209,210"
+ },
+ "zona-01": {
+  "limit": 400,
+  "sample": 30,
+  "archetypes": "/home/claude/wt-lords-r2/artifacts/templates-lords-zona-canary-004/archetypes-zona-plan.json",
+  "boundary_url": "/title/rokovaya-sudba/",
+  "boundary_total": 182,
+  "points": "1,2,99,100,101,181,182",
+  "note": "в снимке zona-01 самый длинный сериал — 182 серии; двухсот десятой у источника нет, и выдумывать её нельзя"
+ }
+}

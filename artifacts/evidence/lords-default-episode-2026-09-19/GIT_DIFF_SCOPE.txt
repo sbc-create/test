@@ -1,0 +1,38 @@
+BASE_HEAD=7dc251d66d65c9b041a1c7cb706e7b3070dbd6e0
+FEATURE_HEAD=ef17a7094ad7f7663ecff29fb5338998d3defe03
+
+Allowed scope for this repair: first-playable selection, exact episode route
+preservation, player state, Lords frontend, canary --no-restart, related tests,
+hookguard Shell alias, DECISIONS D139-D140, companions required by frontend.
+
+name-status:
+A	automation/host/collection_contract.py
+M	automation/host/lords-frontend.py
+M	automation/host/lords-nova-canary.py
+A	automation/host/seo_layer.py
+M	knowledge/DECISIONS.md
+M	seo_operator/hookguard.py
+A	tests/lords/test_default_episode_selection.py
+M	tests/lords/test_nova_frontend_families.py
+M	tests/operator/test_hookguard.py
+
+stat:
+ automation/host/collection_contract.py        |  539 ++++
+ automation/host/lords-frontend.py             | 3963 +++++++++++++++++++++++--
+ automation/host/lords-nova-canary.py          |   24 +
+ automation/host/seo_layer.py                  |  324 ++
+ knowledge/DECISIONS.md                        |    2 +
+ seo_operator/hookguard.py                     |    3 +-
+ tests/lords/test_default_episode_selection.py |  307 ++
+ tests/lords/test_nova_frontend_families.py    |   34 +-
+ tests/operator/test_hookguard.py              |    6 +
+ 9 files changed, 4862 insertions(+), 340 deletions(-)
+
+Notes:
+- lords-frontend.py is the live-lineage frontend (not the smaller BASE stub);
+  selection fix is inside it; companions seo_layer.py and collection_contract.py
+  are import dependencies already present on disk beside the artifact.
+- No Animedia/Zona package, SEO Operator product, ratings pipeline, DNS,
+  indexing, or production DB files were modified for this feature.
+- Archive of FEATURE_HEAD contains pre-existing animedia preview artifacts
+  under artifacts/evidence and sites/animedia-preview; they were not edited.

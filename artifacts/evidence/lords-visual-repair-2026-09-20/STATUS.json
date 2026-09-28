@@ -1,0 +1,37 @@
+{
+  "verdict": "READY_FOR_OWNER_RESTART",
+  "phase": "B14_lords-02_staged",
+  "start_head": "4f8ef5a3b5efabeb461437f9fa472df0d859e173",
+  "final_head_working_tree": "4f8ef5a3b5efabeb461437f9fa472df0d859e173",
+  "source_dirty": true,
+  "build_id": "20260920T223935Z-4f8ef5a-visual",
+  "artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+  "previous_live_artifact_sha256": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+  "sites": {
+    "lords-02": {
+      "domain": "lordserial33.biz",
+      "status": "STAGED_AWAITING_OWNER_RESTART",
+      "rollback": "/srv/lords/.frontend/.rollback/20260920T223958Z-lords-02",
+      "owner_restart_doc": "deploy/lords-02/OWNER_RESTART_LORDS_02.md"
+    },
+    "lords-01": {"domain": "lordfilm47.space", "status": "PENDING_AFTER_LORDS02_STABLE"},
+    "lords-03": {"domain": "1lordserials1.online", "status": "PENDING_AFTER_LORDS01_STABLE"}
+  },
+  "local_gates": {
+    "visual_repair_unit_tests": "35 passed (block01/02/03, compact filter, visual gates, three designs)",
+    "card_registry": "01-registry/CARD_REGISTRY.json",
+    "before_metrics": "before/BEFORE_METRICS.json"
+  },
+  "repairs_in_artifact": [
+    "green primary #3F7D26 for all profiles (no brown/blue/plum CTA)",
+    "removed .sheet margin-top:118px; max-width 1440",
+    "card registry grids: poster 6/5/4/3/2, episode 3/2/1, editorial 4/4/3/2",
+    "episode cards horizontal 112x168 2:3 (no 16:10 overflow trap)",
+    "editorial cards 2:3 (no forced 16:9 poster crop)",
+    "footer without version/SHA; profile-distinct footers",
+    "honest section labels; anime copy sanitizer; genre dedupe",
+    "search one-result compact layout; Мультфильмы label"
+  ],
+  "ready_for_owner_visual_review": "NO",
+  "blocked_on": "owner restart nova-lords-02.service"
+}

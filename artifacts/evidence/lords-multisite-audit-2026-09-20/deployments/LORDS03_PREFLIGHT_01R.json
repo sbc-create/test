@@ -1,0 +1,48 @@
+{
+  "at_utc": "2026-09-20T14:24:55.579919+00:00",
+  "disk_sha": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+  "manifest_build": "20260920T140520Z-24c54b6-nova",
+  "manifest_sha": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+  "manifest_profile": "lords-curated",
+  "unit": {
+    "MainPID": "4000115",
+    "NRestarts": "0",
+    "ExecMainStartTimestamp": "Sun 2026-09-20 14:24:08 UTC",
+    "ExecStart": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9112 ; ignore_errors=no ; start_time=[Sun 2026-09-20 14:24:08 UTC] ; stop_time=[n/a] ; pid=4000115 ; code=(null) ; status=0/0 }",
+    "ActiveState": "active",
+    "SubState": "running",
+    "FragmentPath": "/etc/systemd/system/nova-lords-03.service"
+  },
+  "rollback_exists": true,
+  "rollback_files": [
+    "lords-frontend.py",
+    "point.json",
+    "template-manifest-lords-03.json"
+  ],
+  "home": {
+    "status": 200,
+    "build": "20260920T140520Z-24c54b6-nova",
+    "sha": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+    "robots": "noindex, nofollow",
+    "profile": "lords-curated",
+    "compact": false,
+    "popular": true,
+    "len": 58057
+  },
+  "catalog": {
+    "status": 200,
+    "build": "20260920T140520Z-24c54b6-nova",
+    "sha": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+    "robots": "noindex, nofollow",
+    "profile": "lords-curated",
+    "compact": true,
+    "popular": false,
+    "len": 54700
+  },
+  "EXPECT_BUILD": "20260920T140520Z-24c54b6-nova",
+  "EXPECT_SHA": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+  "DISK_MATCH_STAGED": true,
+  "MANIFEST_MATCH_STAGED": true,
+  "LIVE_MATCH_STAGED": true,
+  "RESTART_NEEDED": false
+}

@@ -1,0 +1,345 @@
+{
+  "site": "lords-03",
+  "domain": "1lordserials1.online",
+  "unit": "nova-lords-03.service",
+  "runs": [
+    {
+      "site": "lords-03",
+      "base": "http://127.0.0.1:9112",
+      "domain": "1lordserials1.online",
+      "checks": {
+        "template_version_200": {
+          "pass": true,
+          "detail": "код 200"
+        },
+        "healthz_200": {
+          "pass": true,
+          "detail": "код 200"
+        },
+        "declared_equals_running": {
+          "pass": true,
+          "detail": "объявлено b32438c91aaa, исполняется b32438c91aaa"
+        },
+        "source_dirty_false": {
+          "pass": true,
+          "detail": "source_dirty=False"
+        },
+        "artifact_matches_expected": {
+          "pass": true,
+          "detail": "ждали b32438c91aaa"
+        },
+        "runs_from_expected_release_dir": {
+          "pass": true,
+          "detail": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean/lords-frontend.py"
+        },
+        "runtime_not_shared_mutable_path": {
+          "pass": true,
+          "detail": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean/lords-frontend.py"
+        },
+        "home_200": {
+          "pass": true,
+          "detail": "код 200"
+        },
+        "data_design_matches": {
+          "pass": true,
+          "detail": "lords-curated-v2"
+        },
+        "indexability_closed": {
+          "pass": true,
+          "detail": "meta=True header=True"
+        },
+        "footer_without_build_markers": {
+          "pass": true,
+          "detail": ""
+        },
+        "canonical_is_exact_domain": {
+          "pass": true,
+          "detail": "https://1lordserials1.online/"
+        },
+        "home_has_cards": {
+          "pass": true,
+          "detail": "36 карточек"
+        },
+        "catalog_200": {
+          "pass": true,
+          "detail": "код 200"
+        },
+        "catalog_has_cards": {
+          "pass": true,
+          "detail": "48 карточек"
+        },
+        "pagination_second_200": {
+          "pass": true,
+          "detail": "код 200"
+        },
+        "pagination_invalid_404": {
+          "pass": true,
+          "detail": "код 404"
+        },
+        "invalid_page_not_soft_404": {
+          "pass": true,
+          "detail": "код 404"
+        },
+        "unknown_route_404": {
+          "pass": true,
+          "detail": "код 404"
+        },
+        "search_nonsense_is_empty": {
+          "pass": true,
+          "detail": "код 200, карточек 0"
+        },
+        "title_200": {
+          "pass": true,
+          "detail": "/title/chya-eto-sobaka/ код 200"
+        },
+        "player_present": {
+          "pass": true,
+          "detail": "хостов 1, iframe 0"
+        },
+        "player_instance_max_1": {
+          "pass": true,
+          "detail": "1 экземпляров"
+        },
+        "player_layout_contract": {
+          "pass": true,
+          "detail": ""
+        },
+        "autoplay_absent": {
+          "pass": true,
+          "detail": "0 совпадений"
+        },
+        "no_timestamp_ellipsis": {
+          "pass": true,
+          "detail": "0 совпадений"
+        },
+        "poster_aspect_ratio_declared": {
+          "pass": true,
+          "detail": "aspect-ratio: 2/3"
+        },
+        "viewport_meta": {
+          "pass": true,
+          "detail": ""
+        },
+        "responsive_breakpoints_declared": {
+          "pass": true,
+          "detail": "5 точек перелома"
+        },
+        "no_broken_internal_links": {
+          "pass": true,
+          "detail": ""
+        },
+        "no_5xx": {
+          "pass": true,
+          "detail": "0 ответов 5xx"
+        }
+      },
+      "metrics": {
+        "declared_build_id": "20260921T114007Z-89003bb-clean",
+        "declared_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+        "declared_source_commit": "89003bb88447b6f36c1f6f6a365e6f8099d55098",
+        "declared_source_dirty": false,
+        "declared_profile": "lords-curated",
+        "running_release_path": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean/lords-frontend.py",
+        "running_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+        "pid": 3191350,
+        "process_start_time": "2026-09-21T13:09:35Z",
+        "data_design": "lords-curated-v2",
+        "indexability": "closed",
+        "canonical": "https://1lordserials1.online/",
+        "home_cards": 36,
+        "catalog_cards": 48,
+        "soft_404_count": 0,
+        "search_nonsense_cards": 0,
+        "title_links_found": 84,
+        "player_instance_max": 1,
+        "player_frames_declared": 1,
+        "autoplay_count": 0,
+        "title_probe": "/title/chya-eto-sobaka/",
+        "timestamp_ellipsis_count": 0,
+        "poster_aspect_ratio_violations": 0,
+        "breakpoints_declared": 5,
+        "internal_links_checked": 25,
+        "broken_internal_links": 0,
+        "http_5xx_count": 0
+      },
+      "failed_checks": [],
+      "verdict": "PASS",
+      "checked_at_utc": "2026-09-21T13:10:14.237055+00:00",
+      "not_measurable_here": [
+        "TLS, редиректы и заголовки nginx: публичный контур недоступен (нет хостов в allowlist)",
+        "обрезание текста и наложения в пикселях: требуется браузер; контракт закрыт набором tests/lords"
+      ],
+      "run": 1
+    },
+    {
+      "site": "lords-03",
+      "base": "http://127.0.0.1:9112",
+      "domain": "1lordserials1.online",
+      "checks": {
+        "template_version_200": {
+          "pass": true,
+          "detail": "код 200"
+        },
+        "healthz_200": {
+          "pass": true,
+          "detail": "код 200"
+        },
+        "declared_equals_running": {
+          "pass": true,
+          "detail": "объявлено b32438c91aaa, исполняется b32438c91aaa"
+        },
+        "source_dirty_false": {
+          "pass": true,
+          "detail": "source_dirty=False"
+        },
+        "artifact_matches_expected": {
+          "pass": true,
+          "detail": "ждали b32438c91aaa"
+        },
+        "runs_from_expected_release_dir": {
+          "pass": true,
+          "detail": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean/lords-frontend.py"
+        },
+        "runtime_not_shared_mutable_path": {
+          "pass": true,
+          "detail": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean/lords-frontend.py"
+        },
+        "home_200": {
+          "pass": true,
+          "detail": "код 200"
+        },
+        "data_design_matches": {
+          "pass": true,
+          "detail": "lords-curated-v2"
+        },
+        "indexability_closed": {
+          "pass": true,
+          "detail": "meta=True header=True"
+        },
+        "footer_without_build_markers": {
+          "pass": true,
+          "detail": ""
+        },
+        "canonical_is_exact_domain": {
+          "pass": true,
+          "detail": "https://1lordserials1.online/"
+        },
+        "home_has_cards": {
+          "pass": true,
+          "detail": "36 карточек"
+        },
+        "catalog_200": {
+          "pass": true,
+          "detail": "код 200"
+        },
+        "catalog_has_cards": {
+          "pass": true,
+          "detail": "48 карточек"
+        },
+        "pagination_second_200": {
+          "pass": true,
+          "detail": "код 200"
+        },
+        "pagination_invalid_404": {
+          "pass": true,
+          "detail": "код 404"
+        },
+        "invalid_page_not_soft_404": {
+          "pass": true,
+          "detail": "код 404"
+        },
+        "unknown_route_404": {
+          "pass": true,
+          "detail": "код 404"
+        },
+        "search_nonsense_is_empty": {
+          "pass": true,
+          "detail": "код 200, карточек 0"
+        },
+        "title_200": {
+          "pass": true,
+          "detail": "/title/chya-eto-sobaka/ код 200"
+        },
+        "player_present": {
+          "pass": true,
+          "detail": "хостов 1, iframe 0"
+        },
+        "player_instance_max_1": {
+          "pass": true,
+          "detail": "1 экземпляров"
+        },
+        "player_layout_contract": {
+          "pass": true,
+          "detail": ""
+        },
+        "autoplay_absent": {
+          "pass": true,
+          "detail": "0 совпадений"
+        },
+        "no_timestamp_ellipsis": {
+          "pass": true,
+          "detail": "0 совпадений"
+        },
+        "poster_aspect_ratio_declared": {
+          "pass": true,
+          "detail": "aspect-ratio: 2/3"
+        },
+        "viewport_meta": {
+          "pass": true,
+          "detail": ""
+        },
+        "responsive_breakpoints_declared": {
+          "pass": true,
+          "detail": "5 точек перелома"
+        },
+        "no_broken_internal_links": {
+          "pass": true,
+          "detail": ""
+        },
+        "no_5xx": {
+          "pass": true,
+          "detail": "0 ответов 5xx"
+        }
+      },
+      "metrics": {
+        "declared_build_id": "20260921T114007Z-89003bb-clean",
+        "declared_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+        "declared_source_commit": "89003bb88447b6f36c1f6f6a365e6f8099d55098",
+        "declared_source_dirty": false,
+        "declared_profile": "lords-curated",
+        "running_release_path": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean/lords-frontend.py",
+        "running_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+        "pid": 3191350,
+        "process_start_time": "2026-09-21T13:09:35Z",
+        "data_design": "lords-curated-v2",
+        "indexability": "closed",
+        "canonical": "https://1lordserials1.online/",
+        "home_cards": 36,
+        "catalog_cards": 48,
+        "soft_404_count": 0,
+        "search_nonsense_cards": 0,
+        "title_links_found": 84,
+        "player_instance_max": 1,
+        "player_frames_declared": 1,
+        "autoplay_count": 0,
+        "title_probe": "/title/chya-eto-sobaka/",
+        "timestamp_ellipsis_count": 0,
+        "poster_aspect_ratio_violations": 0,
+        "breakpoints_declared": 5,
+        "internal_links_checked": 25,
+        "broken_internal_links": 0,
+        "http_5xx_count": 0
+      },
+      "failed_checks": [],
+      "verdict": "PASS",
+      "checked_at_utc": "2026-09-21T13:10:46.695578+00:00",
+      "not_measurable_here": [
+        "TLS, редиректы и заголовки nginx: публичный контур недоступен (нет хостов в allowlist)",
+        "обрезание текста и наложения в пикселях: требуется браузер; контракт закрыт набором tests/lords"
+      ],
+      "run": 2
+    }
+  ],
+  "stable_runs": 2,
+  "verdict": "PASS"
+}

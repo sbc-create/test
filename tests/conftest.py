@@ -4,6 +4,7 @@
 каталоги sites/, которые удаляются после теста.
 """
 from __future__ import annotations
+import warnings
 
 import copy
 import os
@@ -68,8 +69,16 @@ def temp_site(pilot_package):
             target = _build_target(_inventory.target(package["target_ref"]), package)
             if hasattr(target, "stop"):
                 target.stop()
-        except Exception:  # noqa: BLE001 — уборка не должна ронять тест
-            pass
+        except Exception as error:  # noqa: BLE001 — уборка не должна ронять тест
+            # Ронять тест уборка не должна, но и молчать ей нельзя: комментарий
+            # выше называет цену — процессы php копятся и занимают весь
+            # разрешённый диапазон портов до конца сессии. Молчаливая неудача
+            # уборки выглядит как её успех, а обнаруживается через час, когда
+            # порты кончились и падать начинает всё подряд.
+            warnings.warn(
+                f"стенд сайта {site} не остановлен: {type(error).__name__}: {error}. "
+                "Процессы php могут остаться и занять порты до конца сессии",
+                RuntimeWarning, stacklevel=2)
         shutil.rmtree(path, ignore_errors=True)
         # временный сайт не оставляет за собой ни сборок, ни артефактов, ни состояния
         shutil.rmtree(PATHS.builds / site, ignore_errors=True)

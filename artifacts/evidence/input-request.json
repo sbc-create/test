@@ -95,7 +95,103 @@
       "example_without_secret": "allowlist: dle-news.com, developers.google.com, yandex.ru, web.dev",
       "where_to_put": "настройки окружения сессии или knowledge/imported/",
       "blocks_stage": "DISCOVERY (knowledge freeze помечен unverified)"
+    },
+    {
+      "field": "lords-01: content_source.rights_confirmed",
+      "why": "Права на контент не подтверждены.",
+      "format": "см. schemas/site-package.schema.json",
+      "example_without_secret": "-",
+      "where_to_put": "sites/lords-01/",
+      "blocks_stage": "BUILDING → BLOCKED_RIGHTS"
+    },
+    {
+      "field": "lords-01: content_source.rights_confirmed",
+      "why": "Права на публикацию контента не подтверждены в пакете сайта.",
+      "format": "см. schemas/site-package.schema.json",
+      "example_without_secret": "-",
+      "where_to_put": "sites/lords-01/",
+      "blocks_stage": "BUILDING → BLOCKED_CONTENT_RIGHTS"
+    },
+    {
+      "field": "lords-02: content_source.rights_confirmed",
+      "why": "Права на контент не подтверждены.",
+      "format": "см. schemas/site-package.schema.json",
+      "example_without_secret": "-",
+      "where_to_put": "sites/lords-02/",
+      "blocks_stage": "BUILDING → BLOCKED_RIGHTS"
+    },
+    {
+      "field": "lords-02: content_source.rights_confirmed",
+      "why": "Права на публикацию контента не подтверждены в пакете сайта.",
+      "format": "см. schemas/site-package.schema.json",
+      "example_without_secret": "-",
+      "where_to_put": "sites/lords-02/",
+      "blocks_stage": "BUILDING → BLOCKED_CONTENT_RIGHTS"
+    },
+    {
+      "field": "lords-03: content_source.rights_confirmed",
+      "why": "Права на контент не подтверждены.",
+      "format": "см. schemas/site-package.schema.json",
+      "example_without_secret": "-",
+      "where_to_put": "sites/lords-03/",
+      "blocks_stage": "BUILDING → BLOCKED_RIGHTS"
+    },
+    {
+      "field": "lords-03: content_source.rights_confirmed",
+      "why": "Права на публикацию контента не подтверждены в пакете сайта.",
+      "format": "см. schemas/site-package.schema.json",
+      "example_without_secret": "-",
+      "where_to_put": "sites/lords-03/",
+      "blocks_stage": "BUILDING → BLOCKED_CONTENT_RIGHTS"
+    },
+    {
+      "field": "lords-04: target_ref",
+      "why": "target не указан в пакете: значение не передано владельцем.",
+      "format": "см. schemas/site-package.schema.json",
+      "example_without_secret": "-",
+      "where_to_put": "sites/lords-04/",
+      "blocks_stage": "STAGING_DEPLOY → BLOCKED_ACCESS"
+    },
+    {
+      "field": "lords-04: content_source.rights_confirmed",
+      "why": "Права на контент не подтверждены.",
+      "format": "см. schemas/site-package.schema.json",
+      "example_without_secret": "-",
+      "where_to_put": "sites/lords-04/",
+      "blocks_stage": "BUILDING → BLOCKED_RIGHTS"
+    },
+    {
+      "field": "lords-04: content_source.rights_confirmed",
+      "why": "Права на публикацию контента не подтверждены в пакете сайта.",
+      "format": "см. schemas/site-package.schema.json",
+      "example_without_secret": "-",
+      "where_to_put": "sites/lords-04/",
+      "blocks_stage": "BUILDING → BLOCKED_CONTENT_RIGHTS"
+    },
+    {
+      "field": "site-a: runtime.database.password_secret_ref",
+      "why": "secret_ref «file:var/db/anime.password» не резолвится: файл var/db/anime.password.",
+      "format": "см. schemas/site-package.schema.json",
+      "example_without_secret": "-",
+      "where_to_put": "sites/site-a/",
+      "blocks_stage": "STAGING_DEPLOY → BLOCKED_SECRET"
+    },
+    {
+      "field": "site-b: runtime.database.password_secret_ref",
+      "why": "secret_ref «file:var/db/anime.password» не резолвится: файл var/db/anime.password.",
+      "format": "см. schemas/site-package.schema.json",
+      "example_without_secret": "-",
+      "where_to_put": "sites/site-b/",
+      "blocks_stage": "STAGING_DEPLOY → BLOCKED_SECRET"
+    },
+    {
+      "field": "site-c: runtime.database.password_secret_ref",
+      "why": "secret_ref «file:var/db/anime.password» не резолвится: файл var/db/anime.password.",
+      "format": "см. schemas/site-package.schema.json",
+      "example_without_secret": "-",
+      "where_to_put": "sites/site-c/",
+      "blocks_stage": "STAGING_DEPLOY → BLOCKED_SECRET"
     }
   ],
-  "count": 12
+  "count": 24
 }

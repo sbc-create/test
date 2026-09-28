@@ -1,0 +1,29 @@
+{
+  "goal": "LORDS-THREE-DISTINCT-TEMPLATES-02",
+  "as_of": "2026-09-20",
+  "start_head": "fb2adc6c0036c36fa9670e2d256692eac198c7a0",
+  "feature_head": "c26280d",
+  "phase_a": "DONE_SOURCE",
+  "phase_b_partial": "design ids + home IA + tokens + card variants",
+  "blocks": {
+    "00": "done",
+    "01_search": "done",
+    "02_pagination_404": "done",
+    "03_facets": "done",
+    "04_nav": "done",
+    "05_freshness": "done",
+    "06_recs": "done",
+    "07_rating_footer": "done_partial (collapse only)",
+    "08_10_designs": "in_progress — ids/IA/tokens/card variants; deeper title/footer/player still pending",
+    "11_14": "pending",
+    "live_deploy": "not started"
+  },
+  "design_ids": {
+    "lords-general": "lords-cinema-v2",
+    "lords-new": "lords-series-feed-v2",
+    "lords-curated": "lords-curated-v2"
+  },
+  "LORDS_MULTI_SITE_VISUAL_CAN_BE_CLOSED": "NO",
+  "OWNER_VISUAL_REVIEW_READY": "NO",
+  "TECHNICAL_VERDICT": "PHASE_A_SOURCE_PASS_PHASE_B_PARTIAL"
+}

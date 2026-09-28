@@ -1,0 +1,1184 @@
+{
+  "lords-01": {
+    "home_status": 200,
+    "home_ms": 668,
+    "server": "nginx/1.18.0 (Ubuntu)",
+    "links_count": 76,
+    "links_sample": [
+      {
+        "href": "/",
+        "text": "LFLordfilm"
+      },
+      {
+        "href": "/movies/",
+        "text": "Фильмы"
+      },
+      {
+        "href": "/series/",
+        "text": "Сериалы"
+      },
+      {
+        "href": "/new/",
+        "text": "Новинки"
+      },
+      {
+        "href": "/collections/",
+        "text": "Подборки"
+      },
+      {
+        "href": "/animation/",
+        "text": "Мультфильмы"
+      },
+      {
+        "href": "/catalog/",
+        "text": "Каталог"
+      },
+      {
+        "href": "/title/nedetskie-igry-2/",
+        "text": "НФильмНедетские игры2024IMDb4.7"
+      },
+      {
+        "href": "/title/pravda-ili-zagovor/",
+        "text": "ПФильмПравда или заговор2026IMDb7.7"
+      },
+      {
+        "href": "/title/reznya-v-norton-krik/",
+        "text": "РФильмРезня в Нортон-Крик2026IMDb2.4"
+      },
+      {
+        "href": "/title/pervenec-2/",
+        "text": "ПФильмПервенец2025IMDb6.1"
+      },
+      {
+        "href": "/title/princessa-i-drakon/",
+        "text": "ПФильмПринцесса и дракон2026IMDb4.7"
+      },
+      {
+        "href": "/title/chya-eto-sobaka/",
+        "text": "ЧФильмЧья это собака?2026IMDb9.2"
+      },
+      {
+        "href": "/title/do-kraya-sveta/",
+        "text": "ДФильмДо края света2026IMDb4.8"
+      },
+      {
+        "href": "/title/elaydzha-pil/",
+        "text": "ЭФильмЭлайджа Пил2026IMDb7.2"
+      },
+      {
+        "href": "/title/otgoloski-iz-pustoty/",
+        "text": "ОФильмОтголоски из пустоты2026IMDb5.8"
+      },
+      {
+        "href": "/title/bratya-po-oruzhiyu-nasledie/",
+        "text": "БФильмБратья по оружию: Наследие2026IMDb8.4"
+      },
+      {
+        "href": "/title/materinskaya-lihoradka/",
+        "text": "МФильмМатеринская лихорадка2025IMDb5.9"
+      },
+      {
+        "href": "/title/ty-ya-protiv-vsego-mira/",
+        "text": "ТФильмТы + Я — против всего мира2026IMDb4.8"
+      },
+      {
+        "href": "/title/plennica-6/",
+        "text": "П1 сезон, 6 сер.Пленница2026"
+      },
+      {
+        "href": "/title/nash-vcherashniy-pobeg/",
+        "text": "Н1 сезон, 20 сер.Наш вчерашний побег2026"
+      },
+      {
+        "href": "/title/amerikanskaya-amazonka/",
+        "text": "А1 сезон, 2 сер.Американская Амазонка2025"
+      },
+      {
+        "href": "/title/pylnye-utesy/",
+        "text": "П1 сезон, 3 сер.Пыльные утёсы2026"
+      },
+      {
+        "href": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+        "text": "О1 сезон, 12 сер.Охота за браком в 37 - это поле битвы2026IMDb3.5"
+      },
+      {
+        "href": "/title/chti-svoyu-mat/",
+        "text": "Ч1 сезон, 14 сер.Чти свою мать2026"
+      },
+      {
+        "href": "/title/master-lda-i-plameni-2/",
+        "text": "М2 сезон, 104 сер.Мастер льда и пламени 22022"
+      },
+      {
+        "href": "/title/magiya-zatonuvshih-korabley/",
+        "text": "М1 сезон, 10 сер.Магия затонувших кораблей2006IMDb5.8"
+      },
+      {
+        "href": "/title/tihookeanskie-rassledovaniya/",
+        "text": "Т5 сезон, 18 сер.Тихоокеанские расследования2019КП7.605IMDb5.9"
+      },
+      {
+        "href": "/title/sryv/",
+        "text": "С1 сезон, 6 сер.Срыв2025IMDb5.7"
+      },
+      {
+        "href": "/title/skandal-4/",
+        "text": "С1 сезон, 8 сер.Скандал2026IMDb6.2"
+      },
+      {
+        "href": "/title/moy-sekret/",
+        "text": "М1 сезон, 120 сер.Мой секрет2022IMDb6.4"
+      },
+      {
+        "href": "/title/moi-dva-centa/",
+        "text": "М1 сезон, 4 сер.Мои два цента2026IMDb8.3"
+      },
+      {
+        "href": "/title/kurinyy-gorodok/",
+        "text": "К1 сезон, 39 сер.Куриный городок2011IMDb4.7"
+      },
+      {
+        "href": "/title/parshivye-ovcy-2/",
+        "text": "ПФильмПаршивые овцы2025IMDb7.5"
+      },
+      {
+        "href": "/title/posledniy-prokat/",
+        "text": "ПФильмПоследний прокат2026IMDb5.8"
+      },
+      {
+        "href": "/title/umnica-gudi/",
+        "text": "УФильмУмница Гуди2026IMDb4.8"
+      },
+      {
+        "href": "/title/luchshie-iz-luchshih-2/",
+        "text": "ЛФильмЛучшие из лучших2026IMDb6.3"
+      },
+      {
+        "href": "/title/ya-kris-farli/",
+        "text": "ЯФильмЯ Крис Фарли2015IMDb7.4"
+      },
+      {
+        "href": "/title/9-11-ataka-na-pentagon/",
+        "text": "9Фильм9/11 Атака на Пентагон2016IMDb6.1"
+      },
+      {
+        "href": "/title/operaciya-fortitude/",
+        "text": "ОФильмОперация Fortitude"
+      },
+      {
+        "href": "/title/v-poiskah-dzheka-charltona/",
+        "text": "ВФильмВ поисках Джека Чарльтона2020IMDb8"
+      },
+      {
+        "href": "/title/le-man-55-taynaya-katastrofa/",
+        "text": "ЛФильмЛе-Ман '55. Тайная катастрофа2024КП6.772IMDb7.6"
+      },
+      {
+        "href": "/title/lyubov-i-remont/",
+        "text": "ЛФильмЛюбовь и ремонт2024IMDb5.6"
+      },
+      {
+        "href": "/collection/recently_added/",
+        "text": "Недавно добавленныеСвежие поступления в каталог аниме.Открыть подборку →"
+      },
+      {
+        "href": "/collection/recently_added_movies/",
+        "text": "Новые фильмыФильмы в порядке появления в каталоге.Открыть подборку →"
+      },
+      {
+        "href": "/collection/top_rated/",
+        "text": "Высокие оценкиЗаписи с подтверждённой оценкой источника, по убыванию.Открыть под"
+      },
+      {
+        "href": "/collection/current_season/",
+        "text": "Этого годаЗаписи самого свежего года, представленного в каталоге.Открыть подборк"
+      },
+      {
+        "href": "/collection/video_available/",
+        "text": "С видеоТайтлы, которые можно смотреть прямо сейчас.Открыть подборку →"
+      },
+      {
+        "href": "/title/nelyud-chast-2/",
+        "text": "Н2 сезон, 13 сер.Нелюдь. Часть 22016КП7.065IMDb7.5"
+      },
+      {
+        "href": "/title/nelyud-film-2-stolknovenie/",
+        "text": "НМультфильмНелюдь. Фильм 2: Столкновение2016КП7.011IMDb7.8"
+      },
+      {
+        "href": "/title/zolotaya-sekira/",
+        "text": "З1 сезон, 10 сер.Золотая секира2026IMDb7.2"
+      },
+      {
+        "href": "/title/dedushkina-lampa/",
+        "text": "ДМультфильмДедушкина лампа2011IMDb6.7"
+      },
+      {
+        "href": "/title/ovosch-supergeroy-morkkorm/",
+        "text": "ОМультфильмОвощ-супергерой Морккорм2011IMDb5.2"
+      },
+      {
+        "href": "/title/violonchelist-gosyu-1982/",
+        "text": "ВМультфильмВиолончелист Госю (1982)1982КП7.094IMDb7"
+      },
+      {
+        "href": "/title/gorod-dozhdya/",
+        "text": "ГМультфильмГород дождя2011КП7.065IMDb6.9"
+      },
+      {
+        "href": "/title/ryba/",
+        "text": "РМультфильмРыба2011КП6.086IMDb5.5"
+      },
+      {
+        "href": "/title/uchitel-medium/",
+        "text": "У1 сезон, 22 сер.Учитель-медиум2011IMDb2"
+      },
+      {
+        "href": "/title/uzh-ne-zombi-li-eto-sredi-mertvecov-ova/",
+        "text": "УМультфильмУж не зомби ли это? Среди мертвецов OVA2012КП6.396"
+      },
+      {
+        "href": "/title/uzh-ne-zombi-li-eto-ova/",
+        "text": "У1 сезон, 2 сер.Уж не зомби ли это? OVA2011КП6.178"
+      },
+      {
+        "href": "/title/daybaster-dotyanis-do-neba-2/",
+        "text": "Д2 сезон, 6 сер.Дайбастер: Дотянись до неба! 22004КП6.973IMDb6.8"
+      },
+      {
+        "href": "/genre/zapadnyykontent/",
+        "text": "западный контент"
+      },
+      {
+        "href": "/genre/drama/",
+        "text": "драма"
+      },
+      {
+        "href": "/genre/komediya/",
+        "text": "комедия"
+      },
+      {
+        "href": "/genre/triller/",
+        "text": "триллер"
+      },
+      {
+        "href": "/genre/dorama/",
+        "text": "дорама"
+      },
+      {
+        "href": "/genre/melodrama/",
+        "text": "мелодрама"
+      },
+      {
+        "href": "/genre/anime/",
+        "text": "аниме"
+      },
+      {
+        "href": "/genre/boevik/",
+        "text": "боевик"
+      },
+      {
+        "href": "/genre/west_content/",
+        "text": "западный контент"
+      },
+      {
+        "href": "/genre/kriminal/",
+        "text": "криминал"
+      },
+      {
+        "href": "/year/2026/",
+        "text": "2026"
+      },
+      {
+        "href": "/year/2025/",
+        "text": "2025"
+      },
+      {
+        "href": "/year/2024/",
+        "text": "2024"
+      },
+      {
+        "href": "/year/2023/",
+        "text": "2023"
+      },
+      {
+        "href": "/year/2022/",
+        "text": "2022"
+      },
+      {
+        "href": "/year/2021/",
+        "text": "2021"
+      }
+    ],
+    "footer_snip": "<footer class=\"ft\"><div class=\"ft__cols\"><div class=\"ft__col\"><b>Разделы</b><a href=\"/movies/\">Фильмы</a><a href=\"/series/\">Сериалы</a><a href=\"/animation/\">Мультфильмы</a><a href=\"/new/\">Новинки</a><a href=\"/collections/\">Подборки</a></div><div class=\"ft__col\"><b>Жанры</b><a href=\"/genre/zapadnyykontent/\">западный контент</a><a href=\"/genre/drama/\">драма</a><a href=\"/genre/komediya/\">комедия</a><",
+    "revision_match": null,
+    "build_match": "20260919T224500Z-0a5fe648-nova",
+    "title": "Lordfilm — фильмы и сериалы онлайн",
+    "path_prefixes": [
+      "/",
+      "/animation/",
+      "/catalog/",
+      "/collection/current_season/",
+      "/collection/recently_added/",
+      "/collection/recently_added_movies/",
+      "/collection/top_rated/",
+      "/collection/video_available/",
+      "/collections/",
+      "/genre/anime/",
+      "/genre/boevik/",
+      "/genre/dorama/",
+      "/genre/drama/",
+      "/genre/komediya/",
+      "/genre/kriminal/",
+      "/genre/melodrama/",
+      "/genre/triller/",
+      "/genre/west_content/",
+      "/genre/zapadnyykontent/",
+      "/movies/",
+      "/new/",
+      "/series/",
+      "/title/9-11-ataka-na-pentagon/",
+      "/title/amerikanskaya-amazonka/",
+      "/title/bratya-po-oruzhiyu-nasledie/",
+      "/title/chti-svoyu-mat/",
+      "/title/chya-eto-sobaka/",
+      "/title/daybaster-dotyanis-do-neba-2/",
+      "/title/dedushkina-lampa/",
+      "/title/do-kraya-sveta/",
+      "/title/elaydzha-pil/",
+      "/title/gorod-dozhdya/",
+      "/title/kurinyy-gorodok/",
+      "/title/le-man-55-taynaya-katastrofa/",
+      "/title/luchshie-iz-luchshih-2/",
+      "/title/lyubov-i-remont/",
+      "/title/magiya-zatonuvshih-korabley/",
+      "/title/master-lda-i-plameni-2/",
+      "/title/materinskaya-lihoradka/",
+      "/title/moi-dva-centa/",
+      "/title/moy-sekret/",
+      "/title/nash-vcherashniy-pobeg/",
+      "/title/nedetskie-igry-2/",
+      "/title/nelyud-chast-2/",
+      "/title/nelyud-film-2-stolknovenie/",
+      "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+      "/title/operaciya-fortitude/",
+      "/title/otgoloski-iz-pustoty/",
+      "/title/ovosch-supergeroy-morkkorm/",
+      "/title/parshivye-ovcy-2/",
+      "/title/pervenec-2/",
+      "/title/plennica-6/",
+      "/title/posledniy-prokat/",
+      "/title/pravda-ili-zagovor/",
+      "/title/princessa-i-drakon/",
+      "/title/pylnye-utesy/",
+      "/title/reznya-v-norton-krik/",
+      "/title/ryba/",
+      "/title/skandal-4/",
+      "/title/sryv/",
+      "/title/tihookeanskie-rassledovaniya/",
+      "/title/ty-ya-protiv-vsego-mira/",
+      "/title/uchitel-medium/",
+      "/title/umnica-gudi/",
+      "/title/uzh-ne-zombi-li-eto-ova/",
+      "/title/uzh-ne-zombi-li-eto-sredi-mertvecov-ova/",
+      "/title/v-poiskah-dzheka-charltona/",
+      "/title/violonchelist-gosyu-1982/",
+      "/title/ya-kris-farli/",
+      "/title/zolotaya-sekira/",
+      "/year/2021/",
+      "/year/2022/",
+      "/year/2023/",
+      "/year/2024/",
+      "/year/2025/",
+      "/year/2026/"
+    ]
+  },
+  "lords-02": {
+    "home_status": 200,
+    "home_ms": 627,
+    "server": "nginx/1.18.0 (Ubuntu)",
+    "links_count": 76,
+    "links_sample": [
+      {
+        "href": "/",
+        "text": "LFLordserial"
+      },
+      {
+        "href": "/movies/",
+        "text": "Фильмы"
+      },
+      {
+        "href": "/series/",
+        "text": "Сериалы"
+      },
+      {
+        "href": "/new/",
+        "text": "Новинки"
+      },
+      {
+        "href": "/collections/",
+        "text": "Подборки"
+      },
+      {
+        "href": "/animation/",
+        "text": "Мультфильмы"
+      },
+      {
+        "href": "/catalog/",
+        "text": "Каталог"
+      },
+      {
+        "href": "/title/nedetskie-igry-2/",
+        "text": "НФильмНедетские игры2024IMDb4.7"
+      },
+      {
+        "href": "/title/pravda-ili-zagovor/",
+        "text": "ПФильмПравда или заговор2026IMDb7.7"
+      },
+      {
+        "href": "/title/reznya-v-norton-krik/",
+        "text": "РФильмРезня в Нортон-Крик2026IMDb2.4"
+      },
+      {
+        "href": "/title/pervenec-2/",
+        "text": "ПФильмПервенец2025IMDb6.1"
+      },
+      {
+        "href": "/title/princessa-i-drakon/",
+        "text": "ПФильмПринцесса и дракон2026IMDb4.7"
+      },
+      {
+        "href": "/title/chya-eto-sobaka/",
+        "text": "ЧФильмЧья это собака?2026IMDb9.2"
+      },
+      {
+        "href": "/title/do-kraya-sveta/",
+        "text": "ДФильмДо края света2026IMDb4.8"
+      },
+      {
+        "href": "/title/elaydzha-pil/",
+        "text": "ЭФильмЭлайджа Пил2026IMDb7.2"
+      },
+      {
+        "href": "/title/otgoloski-iz-pustoty/",
+        "text": "ОФильмОтголоски из пустоты2026IMDb5.8"
+      },
+      {
+        "href": "/title/bratya-po-oruzhiyu-nasledie/",
+        "text": "БФильмБратья по оружию: Наследие2026IMDb8.4"
+      },
+      {
+        "href": "/title/materinskaya-lihoradka/",
+        "text": "МФильмМатеринская лихорадка2025IMDb5.9"
+      },
+      {
+        "href": "/title/ty-ya-protiv-vsego-mira/",
+        "text": "ТФильмТы + Я — против всего мира2026IMDb4.8"
+      },
+      {
+        "href": "/title/plennica-6/",
+        "text": "П1 сезон, 6 сер.Пленница2026"
+      },
+      {
+        "href": "/title/nash-vcherashniy-pobeg/",
+        "text": "Н1 сезон, 20 сер.Наш вчерашний побег2026"
+      },
+      {
+        "href": "/title/amerikanskaya-amazonka/",
+        "text": "А1 сезон, 2 сер.Американская Амазонка2025"
+      },
+      {
+        "href": "/title/pylnye-utesy/",
+        "text": "П1 сезон, 3 сер.Пыльные утёсы2026"
+      },
+      {
+        "href": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+        "text": "О1 сезон, 12 сер.Охота за браком в 37 - это поле битвы2026IMDb3.5"
+      },
+      {
+        "href": "/title/chti-svoyu-mat/",
+        "text": "Ч1 сезон, 14 сер.Чти свою мать2026"
+      },
+      {
+        "href": "/title/master-lda-i-plameni-2/",
+        "text": "М2 сезон, 104 сер.Мастер льда и пламени 22022"
+      },
+      {
+        "href": "/title/magiya-zatonuvshih-korabley/",
+        "text": "М1 сезон, 10 сер.Магия затонувших кораблей2006IMDb5.8"
+      },
+      {
+        "href": "/title/tihookeanskie-rassledovaniya/",
+        "text": "Т5 сезон, 18 сер.Тихоокеанские расследования2019КП7.605IMDb5.9"
+      },
+      {
+        "href": "/title/sryv/",
+        "text": "С1 сезон, 6 сер.Срыв2025IMDb5.7"
+      },
+      {
+        "href": "/title/skandal-4/",
+        "text": "С1 сезон, 8 сер.Скандал2026IMDb6.2"
+      },
+      {
+        "href": "/title/moy-sekret/",
+        "text": "М1 сезон, 120 сер.Мой секрет2022IMDb6.4"
+      },
+      {
+        "href": "/title/moi-dva-centa/",
+        "text": "М1 сезон, 4 сер.Мои два цента2026IMDb8.3"
+      },
+      {
+        "href": "/title/kurinyy-gorodok/",
+        "text": "К1 сезон, 39 сер.Куриный городок2011IMDb4.7"
+      },
+      {
+        "href": "/title/parshivye-ovcy-2/",
+        "text": "ПФильмПаршивые овцы2025IMDb7.5"
+      },
+      {
+        "href": "/title/posledniy-prokat/",
+        "text": "ПФильмПоследний прокат2026IMDb5.8"
+      },
+      {
+        "href": "/title/umnica-gudi/",
+        "text": "УФильмУмница Гуди2026IMDb4.8"
+      },
+      {
+        "href": "/title/luchshie-iz-luchshih-2/",
+        "text": "ЛФильмЛучшие из лучших2026IMDb6.3"
+      },
+      {
+        "href": "/title/ya-kris-farli/",
+        "text": "ЯФильмЯ Крис Фарли2015IMDb7.4"
+      },
+      {
+        "href": "/title/9-11-ataka-na-pentagon/",
+        "text": "9Фильм9/11 Атака на Пентагон2016IMDb6.1"
+      },
+      {
+        "href": "/title/operaciya-fortitude/",
+        "text": "ОФильмОперация Fortitude"
+      },
+      {
+        "href": "/title/v-poiskah-dzheka-charltona/",
+        "text": "ВФильмВ поисках Джека Чарльтона2020IMDb8"
+      },
+      {
+        "href": "/title/le-man-55-taynaya-katastrofa/",
+        "text": "ЛФильмЛе-Ман '55. Тайная катастрофа2024КП6.772IMDb7.6"
+      },
+      {
+        "href": "/title/lyubov-i-remont/",
+        "text": "ЛФильмЛюбовь и ремонт2024IMDb5.6"
+      },
+      {
+        "href": "/collection/recently_added/",
+        "text": "Недавно добавленныеСвежие поступления в каталог аниме.Открыть подборку →"
+      },
+      {
+        "href": "/collection/recently_added_movies/",
+        "text": "Новые фильмыФильмы в порядке появления в каталоге.Открыть подборку →"
+      },
+      {
+        "href": "/collection/top_rated/",
+        "text": "Высокие оценкиЗаписи с подтверждённой оценкой источника, по убыванию.Открыть под"
+      },
+      {
+        "href": "/collection/current_season/",
+        "text": "Этого годаЗаписи самого свежего года, представленного в каталоге.Открыть подборк"
+      },
+      {
+        "href": "/collection/video_available/",
+        "text": "С видеоТайтлы, которые можно смотреть прямо сейчас.Открыть подборку →"
+      },
+      {
+        "href": "/title/nelyud-chast-2/",
+        "text": "Н2 сезон, 13 сер.Нелюдь. Часть 22016КП7.065IMDb7.5"
+      },
+      {
+        "href": "/title/nelyud-film-2-stolknovenie/",
+        "text": "НМультфильмНелюдь. Фильм 2: Столкновение2016КП7.011IMDb7.8"
+      },
+      {
+        "href": "/title/zolotaya-sekira/",
+        "text": "З1 сезон, 10 сер.Золотая секира2026IMDb7.2"
+      },
+      {
+        "href": "/title/dedushkina-lampa/",
+        "text": "ДМультфильмДедушкина лампа2011IMDb6.7"
+      },
+      {
+        "href": "/title/ovosch-supergeroy-morkkorm/",
+        "text": "ОМультфильмОвощ-супергерой Морккорм2011IMDb5.2"
+      },
+      {
+        "href": "/title/violonchelist-gosyu-1982/",
+        "text": "ВМультфильмВиолончелист Госю (1982)1982КП7.094IMDb7"
+      },
+      {
+        "href": "/title/gorod-dozhdya/",
+        "text": "ГМультфильмГород дождя2011КП7.065IMDb6.9"
+      },
+      {
+        "href": "/title/ryba/",
+        "text": "РМультфильмРыба2011КП6.086IMDb5.5"
+      },
+      {
+        "href": "/title/uchitel-medium/",
+        "text": "У1 сезон, 22 сер.Учитель-медиум2011IMDb2"
+      },
+      {
+        "href": "/title/uzh-ne-zombi-li-eto-sredi-mertvecov-ova/",
+        "text": "УМультфильмУж не зомби ли это? Среди мертвецов OVA2012КП6.396"
+      },
+      {
+        "href": "/title/uzh-ne-zombi-li-eto-ova/",
+        "text": "У1 сезон, 2 сер.Уж не зомби ли это? OVA2011КП6.178"
+      },
+      {
+        "href": "/title/daybaster-dotyanis-do-neba-2/",
+        "text": "Д2 сезон, 6 сер.Дайбастер: Дотянись до неба! 22004КП6.973IMDb6.8"
+      },
+      {
+        "href": "/genre/zapadnyykontent/",
+        "text": "западный контент"
+      },
+      {
+        "href": "/genre/drama/",
+        "text": "драма"
+      },
+      {
+        "href": "/genre/komediya/",
+        "text": "комедия"
+      },
+      {
+        "href": "/genre/triller/",
+        "text": "триллер"
+      },
+      {
+        "href": "/genre/dorama/",
+        "text": "дорама"
+      },
+      {
+        "href": "/genre/boevik/",
+        "text": "боевик"
+      },
+      {
+        "href": "/genre/melodrama/",
+        "text": "мелодрама"
+      },
+      {
+        "href": "/genre/anime/",
+        "text": "аниме"
+      },
+      {
+        "href": "/genre/kriminal/",
+        "text": "криминал"
+      },
+      {
+        "href": "/genre/fentezi/",
+        "text": "фэнтези"
+      },
+      {
+        "href": "/year/2026/",
+        "text": "2026"
+      },
+      {
+        "href": "/year/2025/",
+        "text": "2025"
+      },
+      {
+        "href": "/year/2024/",
+        "text": "2024"
+      },
+      {
+        "href": "/year/2023/",
+        "text": "2023"
+      },
+      {
+        "href": "/year/2022/",
+        "text": "2022"
+      },
+      {
+        "href": "/year/2021/",
+        "text": "2021"
+      }
+    ],
+    "footer_snip": "<footer class=\"ft\"><div class=\"ft__cols\"><div class=\"ft__col\"><b>Разделы</b><a href=\"/movies/\">Фильмы</a><a href=\"/series/\">Сериалы</a><a href=\"/animation/\">Мультфильмы</a><a href=\"/new/\">Новинки</a><a href=\"/collections/\">Подборки</a></div><div class=\"ft__col\"><b>Жанры</b><a href=\"/genre/zapadnyykontent/\">западный контент</a><a href=\"/genre/drama/\">драма</a><a href=\"/genre/komediya/\">комедия</a><",
+    "revision_match": null,
+    "build_match": "20260919T135218Z-5fc22310-nova",
+    "title": "Lordserial — фильмы и сериалы онлайн",
+    "path_prefixes": [
+      "/",
+      "/animation/",
+      "/catalog/",
+      "/collection/current_season/",
+      "/collection/recently_added/",
+      "/collection/recently_added_movies/",
+      "/collection/top_rated/",
+      "/collection/video_available/",
+      "/collections/",
+      "/genre/anime/",
+      "/genre/boevik/",
+      "/genre/dorama/",
+      "/genre/drama/",
+      "/genre/fentezi/",
+      "/genre/komediya/",
+      "/genre/kriminal/",
+      "/genre/melodrama/",
+      "/genre/triller/",
+      "/genre/zapadnyykontent/",
+      "/movies/",
+      "/new/",
+      "/series/",
+      "/title/9-11-ataka-na-pentagon/",
+      "/title/amerikanskaya-amazonka/",
+      "/title/bratya-po-oruzhiyu-nasledie/",
+      "/title/chti-svoyu-mat/",
+      "/title/chya-eto-sobaka/",
+      "/title/daybaster-dotyanis-do-neba-2/",
+      "/title/dedushkina-lampa/",
+      "/title/do-kraya-sveta/",
+      "/title/elaydzha-pil/",
+      "/title/gorod-dozhdya/",
+      "/title/kurinyy-gorodok/",
+      "/title/le-man-55-taynaya-katastrofa/",
+      "/title/luchshie-iz-luchshih-2/",
+      "/title/lyubov-i-remont/",
+      "/title/magiya-zatonuvshih-korabley/",
+      "/title/master-lda-i-plameni-2/",
+      "/title/materinskaya-lihoradka/",
+      "/title/moi-dva-centa/",
+      "/title/moy-sekret/",
+      "/title/nash-vcherashniy-pobeg/",
+      "/title/nedetskie-igry-2/",
+      "/title/nelyud-chast-2/",
+      "/title/nelyud-film-2-stolknovenie/",
+      "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+      "/title/operaciya-fortitude/",
+      "/title/otgoloski-iz-pustoty/",
+      "/title/ovosch-supergeroy-morkkorm/",
+      "/title/parshivye-ovcy-2/",
+      "/title/pervenec-2/",
+      "/title/plennica-6/",
+      "/title/posledniy-prokat/",
+      "/title/pravda-ili-zagovor/",
+      "/title/princessa-i-drakon/",
+      "/title/pylnye-utesy/",
+      "/title/reznya-v-norton-krik/",
+      "/title/ryba/",
+      "/title/skandal-4/",
+      "/title/sryv/",
+      "/title/tihookeanskie-rassledovaniya/",
+      "/title/ty-ya-protiv-vsego-mira/",
+      "/title/uchitel-medium/",
+      "/title/umnica-gudi/",
+      "/title/uzh-ne-zombi-li-eto-ova/",
+      "/title/uzh-ne-zombi-li-eto-sredi-mertvecov-ova/",
+      "/title/v-poiskah-dzheka-charltona/",
+      "/title/violonchelist-gosyu-1982/",
+      "/title/ya-kris-farli/",
+      "/title/zolotaya-sekira/",
+      "/year/2021/",
+      "/year/2022/",
+      "/year/2023/",
+      "/year/2024/",
+      "/year/2025/",
+      "/year/2026/"
+    ]
+  },
+  "lords-03": {
+    "home_status": 200,
+    "home_ms": 721,
+    "server": "nginx/1.18.0 (Ubuntu)",
+    "links_count": 76,
+    "links_sample": [
+      {
+        "href": "/",
+        "text": "LFLordserials"
+      },
+      {
+        "href": "/movies/",
+        "text": "Фильмы"
+      },
+      {
+        "href": "/series/",
+        "text": "Сериалы"
+      },
+      {
+        "href": "/new/",
+        "text": "Новинки"
+      },
+      {
+        "href": "/collections/",
+        "text": "Подборки"
+      },
+      {
+        "href": "/animation/",
+        "text": "Мультфильмы"
+      },
+      {
+        "href": "/catalog/",
+        "text": "Каталог"
+      },
+      {
+        "href": "/title/nedetskie-igry-2/",
+        "text": "НФильмНедетские игры2024IMDb4.7"
+      },
+      {
+        "href": "/title/pravda-ili-zagovor/",
+        "text": "ПФильмПравда или заговор2026IMDb7.7"
+      },
+      {
+        "href": "/title/reznya-v-norton-krik/",
+        "text": "РФильмРезня в Нортон-Крик2026IMDb2.4"
+      },
+      {
+        "href": "/title/pervenec-2/",
+        "text": "ПФильмПервенец2025IMDb6.1"
+      },
+      {
+        "href": "/title/princessa-i-drakon/",
+        "text": "ПФильмПринцесса и дракон2026IMDb4.7"
+      },
+      {
+        "href": "/title/chya-eto-sobaka/",
+        "text": "ЧФильмЧья это собака?2026IMDb9.2"
+      },
+      {
+        "href": "/title/do-kraya-sveta/",
+        "text": "ДФильмДо края света2026IMDb4.8"
+      },
+      {
+        "href": "/title/elaydzha-pil/",
+        "text": "ЭФильмЭлайджа Пил2026IMDb7.2"
+      },
+      {
+        "href": "/title/otgoloski-iz-pustoty/",
+        "text": "ОФильмОтголоски из пустоты2026IMDb5.8"
+      },
+      {
+        "href": "/title/bratya-po-oruzhiyu-nasledie/",
+        "text": "БФильмБратья по оружию: Наследие2026IMDb8.4"
+      },
+      {
+        "href": "/title/materinskaya-lihoradka/",
+        "text": "МФильмМатеринская лихорадка2025IMDb5.9"
+      },
+      {
+        "href": "/title/ty-ya-protiv-vsego-mira/",
+        "text": "ТФильмТы + Я — против всего мира2026IMDb4.8"
+      },
+      {
+        "href": "/title/plennica-6/",
+        "text": "П1 сезон, 6 сер.Пленница2026"
+      },
+      {
+        "href": "/title/nash-vcherashniy-pobeg/",
+        "text": "Н1 сезон, 20 сер.Наш вчерашний побег2026"
+      },
+      {
+        "href": "/title/amerikanskaya-amazonka/",
+        "text": "А1 сезон, 2 сер.Американская Амазонка2025"
+      },
+      {
+        "href": "/title/pylnye-utesy/",
+        "text": "П1 сезон, 3 сер.Пыльные утёсы2026"
+      },
+      {
+        "href": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+        "text": "О1 сезон, 12 сер.Охота за браком в 37 - это поле битвы2026IMDb3.5"
+      },
+      {
+        "href": "/title/chti-svoyu-mat/",
+        "text": "Ч1 сезон, 14 сер.Чти свою мать2026"
+      },
+      {
+        "href": "/title/master-lda-i-plameni-2/",
+        "text": "М2 сезон, 104 сер.Мастер льда и пламени 22022"
+      },
+      {
+        "href": "/title/magiya-zatonuvshih-korabley/",
+        "text": "М1 сезон, 10 сер.Магия затонувших кораблей2006IMDb5.8"
+      },
+      {
+        "href": "/title/tihookeanskie-rassledovaniya/",
+        "text": "Т5 сезон, 18 сер.Тихоокеанские расследования2019КП7.605IMDb5.9"
+      },
+      {
+        "href": "/title/sryv/",
+        "text": "С1 сезон, 6 сер.Срыв2025IMDb5.7"
+      },
+      {
+        "href": "/title/skandal-4/",
+        "text": "С1 сезон, 8 сер.Скандал2026IMDb6.2"
+      },
+      {
+        "href": "/title/moy-sekret/",
+        "text": "М1 сезон, 120 сер.Мой секрет2022IMDb6.4"
+      },
+      {
+        "href": "/title/moi-dva-centa/",
+        "text": "М1 сезон, 4 сер.Мои два цента2026IMDb8.3"
+      },
+      {
+        "href": "/title/kurinyy-gorodok/",
+        "text": "К1 сезон, 39 сер.Куриный городок2011IMDb4.7"
+      },
+      {
+        "href": "/title/parshivye-ovcy-2/",
+        "text": "ПФильмПаршивые овцы2025IMDb7.5"
+      },
+      {
+        "href": "/title/posledniy-prokat/",
+        "text": "ПФильмПоследний прокат2026IMDb5.8"
+      },
+      {
+        "href": "/title/umnica-gudi/",
+        "text": "УФильмУмница Гуди2026IMDb4.8"
+      },
+      {
+        "href": "/title/luchshie-iz-luchshih-2/",
+        "text": "ЛФильмЛучшие из лучших2026IMDb6.3"
+      },
+      {
+        "href": "/title/ya-kris-farli/",
+        "text": "ЯФильмЯ Крис Фарли2015IMDb7.4"
+      },
+      {
+        "href": "/title/9-11-ataka-na-pentagon/",
+        "text": "9Фильм9/11 Атака на Пентагон2016IMDb6.1"
+      },
+      {
+        "href": "/title/operaciya-fortitude/",
+        "text": "ОФильмОперация Fortitude"
+      },
+      {
+        "href": "/title/v-poiskah-dzheka-charltona/",
+        "text": "ВФильмВ поисках Джека Чарльтона2020IMDb8"
+      },
+      {
+        "href": "/title/le-man-55-taynaya-katastrofa/",
+        "text": "ЛФильмЛе-Ман '55. Тайная катастрофа2024КП6.772IMDb7.6"
+      },
+      {
+        "href": "/title/lyubov-i-remont/",
+        "text": "ЛФильмЛюбовь и ремонт2024IMDb5.6"
+      },
+      {
+        "href": "/collection/recently_added/",
+        "text": "Недавно добавленныеСвежие поступления в каталог аниме.Открыть подборку →"
+      },
+      {
+        "href": "/collection/recently_added_movies/",
+        "text": "Новые фильмыФильмы в порядке появления в каталоге.Открыть подборку →"
+      },
+      {
+        "href": "/collection/top_rated/",
+        "text": "Высокие оценкиЗаписи с подтверждённой оценкой источника, по убыванию.Открыть под"
+      },
+      {
+        "href": "/collection/current_season/",
+        "text": "Этого годаЗаписи самого свежего года, представленного в каталоге.Открыть подборк"
+      },
+      {
+        "href": "/collection/video_available/",
+        "text": "С видеоТайтлы, которые можно смотреть прямо сейчас.Открыть подборку →"
+      },
+      {
+        "href": "/title/nelyud-chast-2/",
+        "text": "Н2 сезон, 13 сер.Нелюдь. Часть 22016КП7.065IMDb7.5"
+      },
+      {
+        "href": "/title/nelyud-film-2-stolknovenie/",
+        "text": "НМультфильмНелюдь. Фильм 2: Столкновение2016КП7.011IMDb7.8"
+      },
+      {
+        "href": "/title/zolotaya-sekira/",
+        "text": "З1 сезон, 10 сер.Золотая секира2026IMDb7.2"
+      },
+      {
+        "href": "/title/dedushkina-lampa/",
+        "text": "ДМультфильмДедушкина лампа2011IMDb6.7"
+      },
+      {
+        "href": "/title/ovosch-supergeroy-morkkorm/",
+        "text": "ОМультфильмОвощ-супергерой Морккорм2011IMDb5.2"
+      },
+      {
+        "href": "/title/violonchelist-gosyu-1982/",
+        "text": "ВМультфильмВиолончелист Госю (1982)1982КП7.094IMDb7"
+      },
+      {
+        "href": "/title/gorod-dozhdya/",
+        "text": "ГМультфильмГород дождя2011КП7.065IMDb6.9"
+      },
+      {
+        "href": "/title/ryba/",
+        "text": "РМультфильмРыба2011КП6.086IMDb5.5"
+      },
+      {
+        "href": "/title/uchitel-medium/",
+        "text": "У1 сезон, 22 сер.Учитель-медиум2011IMDb2"
+      },
+      {
+        "href": "/title/uzh-ne-zombi-li-eto-sredi-mertvecov-ova/",
+        "text": "УМультфильмУж не зомби ли это? Среди мертвецов OVA2012КП6.396"
+      },
+      {
+        "href": "/title/uzh-ne-zombi-li-eto-ova/",
+        "text": "У1 сезон, 2 сер.Уж не зомби ли это? OVA2011КП6.178"
+      },
+      {
+        "href": "/title/daybaster-dotyanis-do-neba-2/",
+        "text": "Д2 сезон, 6 сер.Дайбастер: Дотянись до неба! 22004КП6.973IMDb6.8"
+      },
+      {
+        "href": "/genre/zapadnyykontent/",
+        "text": "западный контент"
+      },
+      {
+        "href": "/genre/drama/",
+        "text": "драма"
+      },
+      {
+        "href": "/genre/komediya/",
+        "text": "комедия"
+      },
+      {
+        "href": "/genre/triller/",
+        "text": "триллер"
+      },
+      {
+        "href": "/genre/dorama/",
+        "text": "дорама"
+      },
+      {
+        "href": "/genre/boevik/",
+        "text": "боевик"
+      },
+      {
+        "href": "/genre/melodrama/",
+        "text": "мелодрама"
+      },
+      {
+        "href": "/genre/anime/",
+        "text": "аниме"
+      },
+      {
+        "href": "/genre/kriminal/",
+        "text": "криминал"
+      },
+      {
+        "href": "/genre/fentezi/",
+        "text": "фэнтези"
+      },
+      {
+        "href": "/year/2026/",
+        "text": "2026"
+      },
+      {
+        "href": "/year/2025/",
+        "text": "2025"
+      },
+      {
+        "href": "/year/2024/",
+        "text": "2024"
+      },
+      {
+        "href": "/year/2023/",
+        "text": "2023"
+      },
+      {
+        "href": "/year/2022/",
+        "text": "2022"
+      },
+      {
+        "href": "/year/2021/",
+        "text": "2021"
+      }
+    ],
+    "footer_snip": "<footer class=\"ft\"><div class=\"ft__cols\"><div class=\"ft__col\"><b>Разделы</b><a href=\"/movies/\">Фильмы</a><a href=\"/series/\">Сериалы</a><a href=\"/animation/\">Мультфильмы</a><a href=\"/new/\">Новинки</a><a href=\"/collections/\">Подборки</a></div><div class=\"ft__col\"><b>Жанры</b><a href=\"/genre/zapadnyykontent/\">западный контент</a><a href=\"/genre/drama/\">драма</a><a href=\"/genre/komediya/\">комедия</a><",
+    "revision_match": null,
+    "build_match": "20260910T124530Z-a1691c56-nova",
+    "title": "Lordserials — фильмы и сериалы онлайн",
+    "path_prefixes": [
+      "/",
+      "/animation/",
+      "/catalog/",
+      "/collection/current_season/",
+      "/collection/recently_added/",
+      "/collection/recently_added_movies/",
+      "/collection/top_rated/",
+      "/collection/video_available/",
+      "/collections/",
+      "/genre/anime/",
+      "/genre/boevik/",
+      "/genre/dorama/",
+      "/genre/drama/",
+      "/genre/fentezi/",
+      "/genre/komediya/",
+      "/genre/kriminal/",
+      "/genre/melodrama/",
+      "/genre/triller/",
+      "/genre/zapadnyykontent/",
+      "/movies/",
+      "/new/",
+      "/series/",
+      "/title/9-11-ataka-na-pentagon/",
+      "/title/amerikanskaya-amazonka/",
+      "/title/bratya-po-oruzhiyu-nasledie/",
+      "/title/chti-svoyu-mat/",
+      "/title/chya-eto-sobaka/",
+      "/title/daybaster-dotyanis-do-neba-2/",
+      "/title/dedushkina-lampa/",
+      "/title/do-kraya-sveta/",
+      "/title/elaydzha-pil/",
+      "/title/gorod-dozhdya/",
+      "/title/kurinyy-gorodok/",
+      "/title/le-man-55-taynaya-katastrofa/",
+      "/title/luchshie-iz-luchshih-2/",
+      "/title/lyubov-i-remont/",
+      "/title/magiya-zatonuvshih-korabley/",
+      "/title/master-lda-i-plameni-2/",
+      "/title/materinskaya-lihoradka/",
+      "/title/moi-dva-centa/",
+      "/title/moy-sekret/",
+      "/title/nash-vcherashniy-pobeg/",
+      "/title/nedetskie-igry-2/",
+      "/title/nelyud-chast-2/",
+      "/title/nelyud-film-2-stolknovenie/",
+      "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+      "/title/operaciya-fortitude/",
+      "/title/otgoloski-iz-pustoty/",
+      "/title/ovosch-supergeroy-morkkorm/",
+      "/title/parshivye-ovcy-2/",
+      "/title/pervenec-2/",
+      "/title/plennica-6/",
+      "/title/posledniy-prokat/",
+      "/title/pravda-ili-zagovor/",
+      "/title/princessa-i-drakon/",
+      "/title/pylnye-utesy/",
+      "/title/reznya-v-norton-krik/",
+      "/title/ryba/",
+      "/title/skandal-4/",
+      "/title/sryv/",
+      "/title/tihookeanskie-rassledovaniya/",
+      "/title/ty-ya-protiv-vsego-mira/",
+      "/title/uchitel-medium/",
+      "/title/umnica-gudi/",
+      "/title/uzh-ne-zombi-li-eto-ova/",
+      "/title/uzh-ne-zombi-li-eto-sredi-mertvecov-ova/",
+      "/title/v-poiskah-dzheka-charltona/",
+      "/title/violonchelist-gosyu-1982/",
+      "/title/ya-kris-farli/",
+      "/title/zolotaya-sekira/",
+      "/year/2021/",
+      "/year/2022/",
+      "/year/2023/",
+      "/year/2024/",
+      "/year/2025/",
+      "/year/2026/"
+    ]
+  }
+}

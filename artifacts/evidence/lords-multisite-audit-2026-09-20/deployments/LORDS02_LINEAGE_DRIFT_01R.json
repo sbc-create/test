@@ -1,0 +1,18 @@
+{
+  "at_utc": "2026-09-20T13:58:58.543065+00:00",
+  "issue": "SHARED_ARTIFACT_LINEAGE_DRIFT",
+  "expected_sha": "4990ea9f8ee6451d86bfad8efa5d5e7592f7eb42a0137ce81b3eeb2078fc6023",
+  "expected_build": "20260920T101032Z-f0b253d-nova",
+  "disk_sha_now": "d815755c0f80ceede0b5f56a5bd2b46f55554b0ce2153772a9828c3d281e7ff0",
+  "disk_mtime_utc": "2026-09-20T13:20:16Z",
+  "manifest_still_claims_expected": true,
+  "live_headers_claim_expected": true,
+  "live_html_has_compact_v1": false,
+  "live_html_has_filt": false,
+  "interpretation": "Another deployment overwrote /srv/lords/.frontend/lords-frontend.py without updating lords-02 manifest. Runtime headers read manifest; executed bytes are foreign. Compact/popular features absent from live HTML.",
+  "foreign_sha_found_in_worktrees": false,
+  "our_artifact_preserved_in": "/srv/lords/.frontend/.rollback/pre-closed-update-20260920T102102Z/lords-frontend.py",
+  "remediation": "Re-install authorized worktree artifact via lords-nova-canary install --site lords-02 --no-restart, then one restart. Not a blind overwrite of unknown intent — restore of committed lineage f0b253d/ce3e75b.",
+  "RESTART_SKIPPED_ALREADY_ACTIVE": false,
+  "reason_restart_needed": "Live process executes foreign bytes despite matching headers; need restore+restart for true activation"
+}

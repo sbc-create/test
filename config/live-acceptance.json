@@ -1,0 +1,57 @@
+{
+  "$comment": "Адреса действующих витрин для приёмки. Заполняет владелец; полоса шаблонов адреса не придумывает. Состояние адреса — не готовность продукта: PENDING_DNS означает ожидание разрешения имени, BLOCKED_OWNER_URLS — что адрес не передан, и ни то, ни другое не является отказом витрины. Перед приёмкой каждый адрес проходит проверку личности: доступность домена не означает, что он отдаёт именно эту витрину.",
+  "schema_version": 2,
+  "products": {
+    "zona-cinema": {
+      "base_url": "https://zonafilm.space",
+      "status": "PENDING_DNS",
+      "identity_verified": false,
+      "routes": [
+        "/",
+        "/catalog/",
+        "/search/",
+        "/genres/",
+        "/years/"
+      ],
+      "note": "адрес передан владельцем 2026-09-07; домен зарегистрирован и делегирован Cloudflare, но записи A в зоне нет — ожидание разрешения имени, не отказ витрины"
+    },
+    "animedia-portal": {
+      "base_url": "https://animedia.icu",
+      "status": "PENDING_DNS",
+      "identity_verified": false,
+      "additional_urls": [
+        {
+          "url": "https://animedia.space",
+          "status": "PENDING_DNS",
+          "note": "второй домен той же витрины; до подтверждённого разрешения имени и доступности не считается отказом"
+        }
+      ],
+      "routes": [
+        "/",
+        "/catalog/",
+        "/search/",
+        "/genres/",
+        "/years/"
+      ],
+      "note": "адреса переданы владельцем 2026-09-07; оба домена зарегистрированы и делегированы Cloudflare, записей A в зонах нет — ожидание разрешения имени"
+    },
+    "basis-video": {
+      "base_url": null,
+      "status": "BLOCKED_OWNER_URLS",
+      "identity_verified": false,
+      "routes": [
+        "/",
+        "/catalog/",
+        "/search/"
+      ],
+      "note": "адрес не предоставлен; ожидание входа owner.live_urls"
+    },
+    "yummy": {
+      "base_url": null,
+      "status": "BLOCKED_OWNER_URLS",
+      "identity_verified": false,
+      "routes": [],
+      "note": "маршруты не перечислены намеренно: приложение вне фабрики, и угаданный путь дал бы отказ витрины за дефект продукта. Владелец называет адрес, маршруты читаются с него"
+    }
+  }
+}

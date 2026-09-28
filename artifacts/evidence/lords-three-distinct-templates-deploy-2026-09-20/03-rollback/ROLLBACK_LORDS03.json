@@ -1,0 +1,12 @@
+{
+  "ROLLBACK_LORDS03": "/srv/lords/.frontend/.rollback/20260920T212925Z-lords-03",
+  "ROLLBACK_VERIFIED": true,
+  "restore_command": "python3 automation/host/lords-nova-canary.py rollback --site lords-03 --point /srv/lords/.frontend/.rollback/20260920T212925Z-lords-03",
+  "service": "nova-lords-03.service",
+  "domain": "1lordserials1.online",
+  "post_restore_verification": [
+    "curl __template_version",
+    "data-design check",
+    "confirm lords-01/02 intact"
+  ]
+}

@@ -1,0 +1,369 @@
+{
+  "captured_at_utc": "2026-09-07T16:37:04.336Z",
+  "site": "lords-01",
+  "route": "/catalog/",
+  "viewport": 1440,
+  "order": [
+    {
+      "tag": "a",
+      "cls": "visually-hidden",
+      "id": "",
+      "text": "Перейти к содержимому",
+      "top": 8,
+      "left": 8,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "brand",
+      "id": "",
+      "text": "Llordfilm47.space",
+      "top": 43,
+      "left": 116,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Главная",
+      "top": 85,
+      "left": 116,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Каталог",
+      "top": 85,
+      "left": 202,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Фильмы",
+      "top": 85,
+      "left": 285,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Сериалы",
+      "top": 85,
+      "left": 371,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Мультфильмы",
+      "top": 85,
+      "left": 464,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Подборки",
+      "top": 85,
+      "left": 594,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Новое",
+      "top": 85,
+      "left": 690,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Расписание",
+      "top": 85,
+      "left": 762,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Жанры",
+      "top": 85,
+      "left": 874,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Годы",
+      "top": 85,
+      "left": 953,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Страны",
+      "top": 85,
+      "left": 1016,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Поиск",
+      "top": 85,
+      "left": 1098,
+      "focusVisible": true
+    },
+    {
+      "tag": "input",
+      "cls": "",
+      "id": "q",
+      "text": "",
+      "top": 137,
+      "left": 116,
+      "focusVisible": true
+    },
+    {
+      "tag": "button",
+      "cls": "",
+      "id": "",
+      "text": "Найти",
+      "top": 137,
+      "left": 344,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Главная",
+      "top": 212,
+      "left": 116,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "Фильм",
+      "top": 479,
+      "left": 129,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "Сериал",
+      "top": 479,
+      "left": 200,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "Мультфильм",
+      "top": 529,
+      "left": 129,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "Драма (11)",
+      "top": 610,
+      "left": 129,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "Детектив (9)",
+      "top": 610,
+      "left": 226,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "Приключения (7)",
+      "top": 660,
+      "left": 129,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "Комедия (9)",
+      "top": 710,
+      "left": 129,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "Триллер (11)",
+      "top": 710,
+      "left": 232,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "Фэнтези (9)",
+      "top": 760,
+      "left": 129,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "Фантастика (11)",
+      "top": 760,
+      "left": 229,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "Семейное (8)",
+      "top": 810,
+      "left": 129,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "Историческое (8)",
+      "top": 860,
+      "left": 129,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "Мистика (11)",
+      "top": 910,
+      "left": 129,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "2025 (3)",
+      "top": 991,
+      "left": 129,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "2024 (3)",
+      "top": 991,
+      "left": 208,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "2023 (4)",
+      "top": 1041,
+      "left": 129,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "2022 (4)",
+      "top": 1041,
+      "left": 208,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "2021 (6)",
+      "top": 1091,
+      "left": 129,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "2020 (6)",
+      "top": 1091,
+      "left": 208,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "2019 (6)",
+      "top": 1141,
+      "left": 129,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "2018 (6)",
+      "top": 1141,
+      "left": 208,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "2017 (6)",
+      "top": 1191,
+      "left": 129,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "facet__chip",
+      "id": "",
+      "text": "2016 (6)",
+      "top": 1191,
+      "left": 208,
+      "focusVisible": true
+    }
+  ],
+  "trapped": false
+}

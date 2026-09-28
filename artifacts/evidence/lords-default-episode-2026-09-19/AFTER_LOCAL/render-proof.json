@@ -1,0 +1,154 @@
+{
+  "artifact_sha256": "36ce7eada5691b7ed949c0c301c45e1123dd6ddbf9c667701566ea37e883d1a6",
+  "disk_sha256": "36ce7eada5691b7ed949c0c301c45e1123dd6ddbf9c667701566ea37e883d1a6",
+  "manifest_on_disk": {
+    "schema_version": 1,
+    "template_family": "lords",
+    "design_version": "1.1.0",
+    "source_commit": "7dc251d66d65c9b041a1c7cb706e7b3070dbd6e0",
+    "build_id": "20260919T194500Z-36ce7ead-nova",
+    "artifact_sha256": "36ce7eada5691b7ed949c0c301c45e1123dd6ddbf9c667701566ea37e883d1a6",
+    "profile": "lords-general",
+    "built_at": "2026-09-19T19:49:36Z",
+    "deploy_note": "files written; unit restart BLOCKED_ACCESS (systemctl auth); awaiting owner restart"
+  },
+  "pylnye_utesy_generic": {
+    "state": "resolving",
+    "vp": 1,
+    "choose": false,
+    "awaiting_lit": false,
+    "episode": "1",
+    "season": "1",
+    "aggregator": "cvh",
+    "title_id": "01a0b620-fef9-7b30-8e8a-0d068c6fe870"
+  },
+  "pylnye_utesy_exact": {
+    "state": "resolving",
+    "vp": 1,
+    "choose": false,
+    "awaiting_lit": false,
+    "episode": "1",
+    "season": "1",
+    "aggregator": "cvh",
+    "title_id": "01a0b620-fef9-7b30-8e8a-0d068c6fe870"
+  },
+  "DESCRIPTOR_CONTRACT_MATCH": true,
+  "GENERIC_SERIES_DEFAULT_SELECTED": true,
+  "CHOOSE_EPISODE_PROMPT_COUNT": 0,
+  "canary_series": [
+    {
+      "slug": "pylnye-utesy",
+      "state": "resolving",
+      "vp": 1,
+      "choose": false,
+      "awaiting_lit": false,
+      "episode": "1",
+      "season": "1",
+      "aggregator": "cvh",
+      "title_id": "01a0b620-fef9-7b30-8e8a-0d068c6fe870"
+    },
+    {
+      "slug": "ohota-za-brakom-v-37-eto-pole-bitvy",
+      "state": "resolving",
+      "vp": 1,
+      "choose": false,
+      "awaiting_lit": false,
+      "episode": "1",
+      "season": "1",
+      "aggregator": "mdl",
+      "title_id": "804598"
+    },
+    {
+      "slug": "chti-svoyu-mat",
+      "state": "resolving",
+      "vp": 1,
+      "choose": false,
+      "awaiting_lit": false,
+      "episode": "1",
+      "season": "1",
+      "aggregator": "kp",
+      "title_id": "13701072"
+    },
+    {
+      "slug": "master-lda-i-plameni-2",
+      "state": "resolving",
+      "vp": 1,
+      "choose": false,
+      "awaiting_lit": false,
+      "episode": "1",
+      "season": "2",
+      "aggregator": "mali",
+      "title_id": "53477"
+    },
+    {
+      "slug": "tihookeanskie-rassledovaniya",
+      "state": "resolving",
+      "vp": 1,
+      "choose": false,
+      "awaiting_lit": false,
+      "episode": "1",
+      "season": "1",
+      "aggregator": "kp",
+      "title_id": "1322495"
+    }
+  ],
+  "canary_films": [
+    {
+      "slug": "operaciya-fortitude",
+      "state": "resolving",
+      "vp": 1,
+      "choose": false,
+      "awaiting_lit": false,
+      "episode": null,
+      "season": "1",
+      "aggregator": "kp",
+      "title_id": "9168582"
+    },
+    {
+      "slug": "v-poiskah-dzheka-charltona",
+      "state": "resolving",
+      "vp": 1,
+      "choose": false,
+      "awaiting_lit": false,
+      "episode": null,
+      "season": "1",
+      "aggregator": "kp",
+      "title_id": "4445153"
+    },
+    {
+      "slug": "le-man-55-taynaya-katastrofa",
+      "state": "resolving",
+      "vp": 1,
+      "choose": false,
+      "awaiting_lit": false,
+      "episode": null,
+      "season": "1",
+      "aggregator": "kp",
+      "title_id": "5921531"
+    },
+    {
+      "slug": "lyubov-i-remont",
+      "state": "resolving",
+      "vp": 1,
+      "choose": false,
+      "awaiting_lit": false,
+      "episode": null,
+      "season": "1",
+      "aggregator": "kp",
+      "title_id": "14153213"
+    },
+    {
+      "slug": "obitel-zla-2",
+      "state": "resolving",
+      "vp": 1,
+      "choose": false,
+      "awaiting_lit": false,
+      "episode": null,
+      "season": "1",
+      "aggregator": "kp",
+      "title_id": "7378605"
+    }
+  ],
+  "rollback_point": "/srv/lords/.frontend/.rollback/20260919T194936Z-lords-01-deferred",
+  "unit_restart": "BLOCKED_ACCESS"
+}

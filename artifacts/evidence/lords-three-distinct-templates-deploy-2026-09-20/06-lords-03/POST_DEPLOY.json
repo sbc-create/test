@@ -1,0 +1,20 @@
+{
+  "site": "lords-03",
+  "domain": "1lordserials1.online",
+  "service": "nova-lords-03.service",
+  "expected_design": "lords-curated-v2",
+  "LORDS03_POST_DEPLOY_PASS": true,
+  "smoke_x2_both_pass": true,
+  "stable_same_build": true,
+  "build_after": "20260920T193847Z-3c90aab-nova",
+  "artifact_after": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+  "data_design_after": "lords-curated-v2",
+  "pid_after_restart": 1338277,
+  "indexability_after": "noindex, nofollow",
+  "indexability_mutations": 0,
+  "restart_path": "sudo -n systemctl restart nova-lords-03.service",
+  "restart_exit": 0,
+  "neighbor_lords01_intact": true,
+  "neighbor_lords02_intact": true,
+  "evidence": "06-lords-03/SMOKE_X2.json"
+}

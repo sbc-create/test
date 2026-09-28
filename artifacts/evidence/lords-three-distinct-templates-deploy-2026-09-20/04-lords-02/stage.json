@@ -1,0 +1,54 @@
+{
+ "action": "install",
+ "site": "lords-02",
+ "unit": "nova-lords-02.service",
+ "domain": "lordserial33.biz",
+ "rollback_point": "/srv/lords/.frontend/.rollback/20260920T194006Z-lords-02",
+ "artifact_sha256": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+ "previous_artifact_sha256": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+ "disk_sha_before_write": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+ "manifest": {
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "source_commit": "3c90aab08aee275e2b628d34cf6c719cbc120c21",
+  "build_id": "20260920T193847Z-3c90aab-nova",
+  "artifact_sha256": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+  "profile": "lords-new",
+  "built_at": "2026-09-20T19:40:06Z",
+  "source_dirty": false,
+  "domain": "lordserial33.biz",
+  "player_layout_contract": "full-bleed-v1"
+ },
+ "previous_manifest": {
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "source_commit": "f0b253d48964d2f7c601f37e85aa1afa29229410",
+  "build_id": "20260920T101032Z-f0b253d-nova",
+  "artifact_sha256": "4990ea9f8ee6451d86bfad8efa5d5e7592f7eb42a0137ce81b3eeb2078fc6023",
+  "profile": "lords-new",
+  "built_at": "2026-09-20T13:59:07Z",
+  "source_dirty": false,
+  "domain": "lordserial33.biz",
+  "player_layout_contract": "full-bleed-v1"
+ },
+ "restart_ok": null,
+ "restart_deferred": true,
+ "restart_output": "deferred: --no-restart; owner must restart unit",
+ "health": {
+  "ok": null,
+  "note": "not probed; process still stale until restart"
+ },
+ "proven_chain": {
+  "nginx_config": "/etc/nginx/lords/lords-02.conf",
+  "upstream_port": 9111,
+  "unit": "nova-lords-02.service",
+  "executable": "/srv/lords/.frontend/lords-frontend.py",
+  "manifest_path": "/srv/lords/.frontend/template-manifest-lords-02.json",
+  "verdict": "MISMATCH"
+ },
+ "at_utc": "20260920T194006Z",
+ "verdict": "STAGED_AWAITING_OWNER_RESTART",
+ "player_layout_contract": "full-bleed-v1"
+}

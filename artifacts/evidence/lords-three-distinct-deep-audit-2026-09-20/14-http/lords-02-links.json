@@ -1,0 +1,2242 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/"
+  },
+  {
+    "path": "/catalog/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/catalog/"
+  },
+  {
+    "path": "/new/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/new/"
+  },
+  {
+    "path": "/movies/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/movies/"
+  },
+  {
+    "path": "/series/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/series/"
+  },
+  {
+    "path": "/collections/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/collections/"
+  },
+  {
+    "path": "/search/?q=тест",
+    "status": null,
+    "err": "UnicodeEncodeError:'ascii' codec can't encode characters in position 15-18: ordinal not in range(128)",
+    "soft404": false,
+    "final": null
+  },
+  {
+    "path": "/title/9-11-ataka-na-pentagon/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/9-11-ataka-na-pentagon/"
+  },
+  {
+    "path": "/title/amerikanskaya-amazonka/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/amerikanskaya-amazonka/"
+  },
+  {
+    "path": "/title/amerikanskaya-amazonka/season-1/episode-1/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/amerikanskaya-amazonka/season-1/episode-1/"
+  },
+  {
+    "path": "/genre/anime/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/genre/anime/"
+  },
+  {
+    "path": "/year/2021/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/year/2021/"
+  },
+  {
+    "path": "/country/usa/",
+    "status": 404,
+    "err": "HTTP:404",
+    "soft404": false,
+    "final": "https://lordserial33.biz/country/usa/"
+  },
+  {
+    "path": "/animation/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/animation/"
+  },
+  {
+    "path": "/title/plennica-6/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/plennica-6/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/"
+  },
+  {
+    "path": "/title/pylnye-utesy/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/pylnye-utesy/"
+  },
+  {
+    "path": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ohota-za-brakom-v-37-eto-pole-bitvy/"
+  },
+  {
+    "path": "/title/chti-svoyu-mat/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/chti-svoyu-mat/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/"
+  },
+  {
+    "path": "/title/magiya-zatonuvshih-korabley/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/magiya-zatonuvshih-korabley/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/"
+  },
+  {
+    "path": "/title/sryv/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/sryv/"
+  },
+  {
+    "path": "/title/skandal-4/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/skandal-4/"
+  },
+  {
+    "path": "/title/moy-sekret/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/moy-sekret/"
+  },
+  {
+    "path": "/title/sestry-obschaya-lyubov/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/sestry-obschaya-lyubov/"
+  },
+  {
+    "path": "/title/gorod-zhun/",
+    "status": 200,
+    "err": null,
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/gorod-zhun/"
+  },
+  {
+    "path": "/title/vo-imya-lyubvi-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/vo-imya-lyubvi-2/"
+  },
+  {
+    "path": "/title/poceluy-menya-derzko/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/poceluy-menya-derzko/"
+  },
+  {
+    "path": "/title/ya-vsego-lish-travinka/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ya-vsego-lish-travinka/"
+  },
+  {
+    "path": "/title/chistilschiki-3/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/chistilschiki-3/"
+  },
+  {
+    "path": "/title/ya-tebya-znayu/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ya-tebya-znayu/"
+  },
+  {
+    "path": "/title/plasticheskaya-krasota/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/plasticheskaya-krasota/"
+  },
+  {
+    "path": "/title/epoha-lda/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/epoha-lda/"
+  },
+  {
+    "path": "/title/dobro-pozhalovat-v-platvil/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/dobro-pozhalovat-v-platvil/"
+  },
+  {
+    "path": "/title/sudmedekspert-stavshaya-domohozyaykoy/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/sudmedekspert-stavshaya-domohozyaykoy/"
+  },
+  {
+    "path": "/title/zvezdnaya-zolotaya-moneta/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/zvezdnaya-zolotaya-moneta/"
+  },
+  {
+    "path": "/collection/top_rated/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/collection/top_rated/"
+  },
+  {
+    "path": "/title/bezdna/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/bezdna/"
+  },
+  {
+    "path": "/title/ng-morskie-odissei-otkryvaya-tihiy-okean/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ng-morskie-odissei-otkryvaya-tihiy-okean/"
+  },
+  {
+    "path": "/title/moi-dva-centa/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/moi-dva-centa/"
+  },
+  {
+    "path": "/title/nedetskie-igry-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nedetskie-igry-2/"
+  },
+  {
+    "path": "/title/pravda-ili-zagovor/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/pravda-ili-zagovor/"
+  },
+  {
+    "path": "/title/reznya-v-norton-krik/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/reznya-v-norton-krik/"
+  },
+  {
+    "path": "/title/pervenec-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/pervenec-2/"
+  },
+  {
+    "path": "/title/princessa-i-drakon/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/princessa-i-drakon/"
+  },
+  {
+    "path": "/title/kurinyy-gorodok/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/kurinyy-gorodok/"
+  },
+  {
+    "path": "/title/chya-eto-sobaka/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/chya-eto-sobaka/"
+  },
+  {
+    "path": "/title/do-kraya-sveta/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/do-kraya-sveta/"
+  },
+  {
+    "path": "/title/elaydzha-pil/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/elaydzha-pil/"
+  },
+  {
+    "path": "/title/otgoloski-iz-pustoty/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/otgoloski-iz-pustoty/"
+  },
+  {
+    "path": "/title/bratya-po-oruzhiyu-nasledie/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/bratya-po-oruzhiyu-nasledie/"
+  },
+  {
+    "path": "/title/materinskaya-lihoradka/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/materinskaya-lihoradka/"
+  },
+  {
+    "path": "/title/ty-ya-protiv-vsego-mira/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ty-ya-protiv-vsego-mira/"
+  },
+  {
+    "path": "/title/parshivye-ovcy-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/parshivye-ovcy-2/"
+  },
+  {
+    "path": "/title/posledniy-prokat/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/posledniy-prokat/"
+  },
+  {
+    "path": "/title/umnica-gudi/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/umnica-gudi/"
+  },
+  {
+    "path": "/title/luchshie-iz-luchshih-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/luchshie-iz-luchshih-2/"
+  },
+  {
+    "path": "/title/ya-kris-farli/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ya-kris-farli/"
+  },
+  {
+    "path": "/title/operaciya-fortitude/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/operaciya-fortitude/"
+  },
+  {
+    "path": "/title/v-poiskah-dzheka-charltona/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/v-poiskah-dzheka-charltona/"
+  },
+  {
+    "path": "/title/le-man-55-taynaya-katastrofa/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/le-man-55-taynaya-katastrofa/"
+  },
+  {
+    "path": "/title/lyubov-i-remont/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/lyubov-i-remont/"
+  },
+  {
+    "path": "/title/obitel-zla-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/obitel-zla-2/"
+  },
+  {
+    "path": "/title/udivitelnyy-mir-ieronima-bosha/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/udivitelnyy-mir-ieronima-bosha/"
+  },
+  {
+    "path": "/title/sidni-lyumet-o-sebe/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/sidni-lyumet-o-sebe/"
+  },
+  {
+    "path": "/title/nerazryvnye-uzy/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nerazryvnye-uzy/"
+  },
+  {
+    "path": "/title/isstuplenie-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/isstuplenie-2/"
+  },
+  {
+    "path": "/title/uvyadanie/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/uvyadanie/"
+  },
+  {
+    "path": "/title/troe-papash/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/troe-papash/"
+  },
+  {
+    "path": "/title/ostrov-krasnyh-pauchih-liliy/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ostrov-krasnyh-pauchih-liliy/"
+  },
+  {
+    "path": "/title/lego-city-gorod-bez-granic/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/lego-city-gorod-bez-granic/"
+  },
+  {
+    "path": "/title/chasha-vesny/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/chasha-vesny/"
+  },
+  {
+    "path": "/collection/recently_added/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/collection/recently_added/"
+  },
+  {
+    "path": "/collection/recently_added_movies/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/collection/recently_added_movies/"
+  },
+  {
+    "path": "/collection/current_season/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/collection/current_season/"
+  },
+  {
+    "path": "/collection/video_available/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/collection/video_available/"
+  },
+  {
+    "path": "/genre/zapadnyykontent/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/genre/zapadnyykontent/"
+  },
+  {
+    "path": "/genre/drama/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/genre/drama/"
+  },
+  {
+    "path": "/genre/komediya/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/genre/komediya/"
+  },
+  {
+    "path": "/genre/triller/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/genre/triller/"
+  },
+  {
+    "path": "/genre/dorama/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/genre/dorama/"
+  },
+  {
+    "path": "/genre/boevik/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/genre/boevik/"
+  },
+  {
+    "path": "/genre/melodrama/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/genre/melodrama/"
+  },
+  {
+    "path": "/year/2026/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/year/2026/"
+  },
+  {
+    "path": "/year/2025/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/year/2025/"
+  },
+  {
+    "path": "/year/2024/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/year/2024/"
+  },
+  {
+    "path": "/year/2023/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/year/2023/"
+  },
+  {
+    "path": "/year/2022/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/year/2022/"
+  },
+  {
+    "path": "/catalog/?kind=Фильм",
+    "status": null,
+    "err": "UnicodeEncodeError:'ascii' codec can't encode characters in position 19-23: ordinal not in range(128)",
+    "soft404": false,
+    "final": null
+  },
+  {
+    "path": "/title/abort-zhenschiny-rasskazyvayut/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/abort-zhenschiny-rasskazyvayut/"
+  },
+  {
+    "path": "/title/animirovannaya-zhizn/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/animirovannaya-zhizn/"
+  },
+  {
+    "path": "/title/bal/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/bal/"
+  },
+  {
+    "path": "/title/bez-uma-ot-tiffani/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/bez-uma-ot-tiffani/"
+  },
+  {
+    "path": "/title/chetvertaya-faza/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/chetvertaya-faza/"
+  },
+  {
+    "path": "/title/devid-linch-zhizn-v-iskusstve/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/devid-linch-zhizn-v-iskusstve/"
+  },
+  {
+    "path": "/catalog/?kind=Сериал",
+    "status": null,
+    "err": "UnicodeEncodeError:'ascii' codec can't encode characters in position 19-24: ordinal not in range(128)",
+    "soft404": false,
+    "final": null
+  },
+  {
+    "path": "/title/amerikanskaya-amazonka/season-1/episode-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/amerikanskaya-amazonka/season-1/episode-2/"
+  },
+  {
+    "path": "/title/aleks-protiv-eyroda/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/aleks-protiv-eyroda/"
+  },
+  {
+    "path": "/title/autsaydery/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/autsaydery/"
+  },
+  {
+    "path": "/title/demony-gollivuda/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/demony-gollivuda/"
+  },
+  {
+    "path": "/title/durnoe-vliyanie-kto-stoit-za-detmi-inflyuenserami/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/durnoe-vliyanie-kto-stoit-za-detmi-inflyuenserami/"
+  },
+  {
+    "path": "/title/dzherri-springer-svet-kamera-boy/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/dzherri-springer-svet-kamera-boy/"
+  },
+  {
+    "path": "/title/morskie-pehotincy/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/morskie-pehotincy/"
+  },
+  {
+    "path": "/catalog/?genre=anime",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/catalog/?genre=anime"
+  },
+  {
+    "path": "/movies/?genre=anime",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/movies/?genre=anime"
+  },
+  {
+    "path": "/series/?genre=anime",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/series/?genre=anime"
+  },
+  {
+    "path": "/animation/?genre=anime",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/animation/?genre=anime"
+  },
+  {
+    "path": "/title/nelyud-chast-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nelyud-chast-2/"
+  },
+  {
+    "path": "/title/nelyud-film-2-stolknovenie/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nelyud-film-2-stolknovenie/"
+  },
+  {
+    "path": "/title/vo-vseoruzhii-sila-artefaktov/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/vo-vseoruzhii-sila-artefaktov/"
+  },
+  {
+    "path": "/title/dedushkina-lampa/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/dedushkina-lampa/"
+  },
+  {
+    "path": "/title/ovosch-supergeroy-morkkorm/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ovosch-supergeroy-morkkorm/"
+  },
+  {
+    "path": "/title/violonchelist-gosyu-1982/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/violonchelist-gosyu-1982/"
+  },
+  {
+    "path": "/title/gorod-dozhdya/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/gorod-dozhdya/"
+  },
+  {
+    "path": "/title/ryba/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ryba/"
+  },
+  {
+    "path": "/title/uchitel-medium/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/uchitel-medium/"
+  },
+  {
+    "path": "/title/uzh-ne-zombi-li-eto-sredi-mertvecov-ova/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/uzh-ne-zombi-li-eto-sredi-mertvecov-ova/"
+  },
+  {
+    "path": "/title/uzh-ne-zombi-li-eto-ova/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/uzh-ne-zombi-li-eto-ova/"
+  },
+  {
+    "path": "/title/daybaster-dotyanis-do-neba-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/daybaster-dotyanis-do-neba-2/"
+  },
+  {
+    "path": "/title/daybaster-dotyanis-do-neba/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/daybaster-dotyanis-do-neba/"
+  },
+  {
+    "path": "/title/drakoniy-zhemchug-zet-plan-po-unichtozheniyu-sayyanov-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/drakoniy-zhemchug-zet-plan-po-unichtozheniyu-sayyanov-2/"
+  },
+  {
+    "path": "/title/nelyud-film-1-impuls/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nelyud-film-1-impuls/"
+  },
+  {
+    "path": "/title/ksi-avant/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ksi-avant/"
+  },
+  {
+    "path": "/title/korolevskie-kosmicheskie-sily-krylya-honneamiz/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/korolevskie-kosmicheskie-sily-krylya-honneamiz/"
+  },
+  {
+    "path": "/title/generator-gaul/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/generator-gaul/"
+  },
+  {
+    "path": "/title/kiberegoist-kaydzo/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/kiberegoist-kaydzo/"
+  },
+  {
+    "path": "/title/legenda-boevyh-lentyaev-severnoy-zvezdy/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/legenda-boevyh-lentyaev-severnoy-zvezdy/"
+  },
+  {
+    "path": "/title/toriko-3d-appetitnoe-priklyuchenie/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/toriko-3d-appetitnoe-priklyuchenie/"
+  },
+  {
+    "path": "/title/tenti-lishniy-v-lyubvi/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tenti-lishniy-v-lyubvi/"
+  },
+  {
+    "path": "/title/vpered-anpanman-davayte-pobedim-korabl-s-privideniyami/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/vpered-anpanman-davayte-pobedim-korabl-s-privideniyami/"
+  },
+  {
+    "path": "/title/prishedshiy-iz-drevnosti-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/prishedshiy-iz-drevnosti-2/"
+  },
+  {
+    "path": "/title/dni-sakamoto-chast-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/dni-sakamoto-chast-2/"
+  },
+  {
+    "path": "/title/tikava-tayna-ostrova-rusalok/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tikava-tayna-ostrova-rusalok/"
+  },
+  {
+    "path": "/catalog/?year=2021",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/catalog/?year=2021"
+  },
+  {
+    "path": "/movies/?year=2021",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/movies/?year=2021"
+  },
+  {
+    "path": "/series/?year=2021",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/series/?year=2021"
+  },
+  {
+    "path": "/animation/?year=2021",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/animation/?year=2021"
+  },
+  {
+    "path": "/title/dikie-malenkie-koshki/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/dikie-malenkie-koshki/"
+  },
+  {
+    "path": "/title/albatros/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/albatros/"
+  },
+  {
+    "path": "/title/voshozhdenie/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/voshozhdenie/"
+  },
+  {
+    "path": "/title/chudaki-i-akuly/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/chudaki-i-akuly/"
+  },
+  {
+    "path": "/title/avariya-lyubvi/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/avariya-lyubvi/"
+  },
+  {
+    "path": "/title/priklyucheniya-molodogo-voltera/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/priklyucheniya-molodogo-voltera/"
+  },
+  {
+    "path": "/title/razvedennye-v-rio/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/razvedennye-v-rio/"
+  },
+  {
+    "path": "/title/beneficiar/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/beneficiar/"
+  },
+  {
+    "path": "/title/belye-peski/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/belye-peski/"
+  },
+  {
+    "path": "/title/prah-moey-ploti-slovno-ogromnaya-galaktika/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/prah-moey-ploti-slovno-ogromnaya-galaktika/"
+  },
+  {
+    "path": "/title/slepoy-kop-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/slepoy-kop-2/"
+  },
+  {
+    "path": "/title/klass-yutuberov-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/klass-yutuberov-2/"
+  },
+  {
+    "path": "/title/lyubov-v-pryamom-efire/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/lyubov-v-pryamom-efire/"
+  },
+  {
+    "path": "/title/radiologicheskoe-otdelenie-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/radiologicheskoe-otdelenie-2/"
+  },
+  {
+    "path": "/title/hochu-romantiki/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/hochu-romantiki/"
+  },
+  {
+    "path": "/title/davay-srazhatsya-prizrak/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/davay-srazhatsya-prizrak/"
+  },
+  {
+    "path": "/title/bogachi/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/bogachi/"
+  },
+  {
+    "path": "/title/spasatelnyy-krug-bolshe-chem-druzya-menshe-chem-lyubovniki/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/spasatelnyy-krug-bolshe-chem-druzya-menshe-chem-lyubovniki/"
+  },
+  {
+    "path": "/title/na-pomosch-prizrak/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/na-pomosch-prizrak/"
+  },
+  {
+    "path": "/title/povtor-moment-kogda-vse-nachalos-zanovo/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/povtor-moment-kogda-vse-nachalos-zanovo/"
+  },
+  {
+    "path": "/title/on-vlyublen-v-nee/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/on-vlyublen-v-nee/"
+  },
+  {
+    "path": "/title/po-tu-storonu-detstva/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/po-tu-storonu-detstva/"
+  },
+  {
+    "path": "/title/rozhdestvenskaya-istoriya/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/rozhdestvenskaya-istoriya/"
+  },
+  {
+    "path": "/title/konec-drugoy-storony/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/konec-drugoy-storony/"
+  },
+  {
+    "path": "/title/mudraya-zhizn-v-derevne/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/mudraya-zhizn-v-derevne/"
+  },
+  {
+    "path": "/title/dengi-na-bochku-10/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/dengi-na-bochku-10/"
+  },
+  {
+    "path": "/title/oh-uzh-eti-detki/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/oh-uzh-eti-detki/"
+  },
+  {
+    "path": "/title/zolotaya-sekira/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/zolotaya-sekira/"
+  },
+  {
+    "path": "/title/schenyachiy-patrul-dinofilm/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/schenyachiy-patrul-dinofilm/"
+  },
+  {
+    "path": "/title/vpered/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/vpered/"
+  },
+  {
+    "path": "/title/svyaschennye-zveri/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/svyaschennye-zveri/"
+  },
+  {
+    "path": "/title/multachki-bayki-iz-radiator-springs/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/multachki-bayki-iz-radiator-springs/"
+  },
+  {
+    "path": "/title/plennica-6/season-1/episode-1/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/plennica-6/season-1/episode-1/"
+  },
+  {
+    "path": "/title/plennica-6/season-1/episode-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/plennica-6/season-1/episode-2/"
+  },
+  {
+    "path": "/title/plennica-6/season-1/episode-3/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/plennica-6/season-1/episode-3/"
+  },
+  {
+    "path": "/title/plennica-6/season-1/episode-4/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/plennica-6/season-1/episode-4/"
+  },
+  {
+    "path": "/title/plennica-6/season-1/episode-5/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/plennica-6/season-1/episode-5/"
+  },
+  {
+    "path": "/title/plennica-6/season-1/episode-6/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/plennica-6/season-1/episode-6/"
+  },
+  {
+    "path": "/title/doch-ognya-mest-bastardy/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/doch-ognya-mest-bastardy/"
+  },
+  {
+    "path": "/title/nichego/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nichego/"
+  },
+  {
+    "path": "/title/otsutstvuyuschiy-golos/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/otsutstvuyuschiy-golos/"
+  },
+  {
+    "path": "/title/proklyatiya/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/proklyatiya/"
+  },
+  {
+    "path": "/title/selenkay/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/selenkay/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-1/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/season-1/episode-1/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/season-1/episode-2/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-3/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/season-1/episode-3/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-4/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/season-1/episode-4/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-5/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/season-1/episode-5/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-6/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/season-1/episode-6/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-7/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/season-1/episode-7/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-8/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/season-1/episode-8/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-9/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/season-1/episode-9/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-10/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/season-1/episode-10/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-11/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/season-1/episode-11/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-12/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/season-1/episode-12/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-13/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/season-1/episode-13/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-14/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/season-1/episode-14/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-15/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/season-1/episode-15/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-16/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/season-1/episode-16/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-17/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/season-1/episode-17/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-18/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/season-1/episode-18/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-19/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/season-1/episode-19/"
+  },
+  {
+    "path": "/title/nash-vcherashniy-pobeg/season-1/episode-20/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/season-1/episode-20/"
+  },
+  {
+    "path": "/title/lyublyu-tebya-ochen-silno/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/lyublyu-tebya-ochen-silno/"
+  },
+  {
+    "path": "/title/s-lyubovyu-siargao/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/s-lyubovyu-siargao/"
+  },
+  {
+    "path": "/title/35-eto-slishkom-pozdno-dlya-lyubvi/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/35-eto-slishkom-pozdno-dlya-lyubvi/"
+  },
+  {
+    "path": "/title/ballada-o-parchovyh-odeyaniyah/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ballada-o-parchovyh-odeyaniyah/"
+  },
+  {
+    "path": "/title/bessmertnyy-imperator-v-megapolise/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/bessmertnyy-imperator-v-megapolise/"
+  },
+  {
+    "path": "/title/bezumie-po-sosedstvu/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/bezumie-po-sosedstvu/"
+  },
+  {
+    "path": "/title/pylnye-utesy/season-1/episode-1/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/pylnye-utesy/season-1/episode-1/"
+  },
+  {
+    "path": "/title/pylnye-utesy/season-1/episode-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/pylnye-utesy/season-1/episode-2/"
+  },
+  {
+    "path": "/title/pylnye-utesy/season-1/episode-3/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/pylnye-utesy/season-1/episode-3/"
+  },
+  {
+    "path": "/title/borouz/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/borouz/"
+  },
+  {
+    "path": "/title/buhta-vdov/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/buhta-vdov/"
+  },
+  {
+    "path": "/title/el/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/el/"
+  },
+  {
+    "path": "/title/elis-i-stiv/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/elis-i-stiv/"
+  },
+  {
+    "path": "/title/eto-peredacha-o-sadovodstve/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/eto-peredacha-o-sadovodstve/"
+  },
+  {
+    "path": "/title/maksimalnoe-udovolstvie-garantirovano/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/maksimalnoe-udovolstvie-garantirovano/"
+  },
+  {
+    "path": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-1/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-1/"
+  },
+  {
+    "path": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-2/"
+  },
+  {
+    "path": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-3/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-3/"
+  },
+  {
+    "path": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-4/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-4/"
+  },
+  {
+    "path": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-5/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-5/"
+  },
+  {
+    "path": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-6/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-6/"
+  },
+  {
+    "path": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-7/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-7/"
+  },
+  {
+    "path": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-8/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-8/"
+  },
+  {
+    "path": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-9/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-9/"
+  },
+  {
+    "path": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-10/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-10/"
+  },
+  {
+    "path": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-11/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-11/"
+  },
+  {
+    "path": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-12/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ohota-za-brakom-v-37-eto-pole-bitvy/season-1/episode-12/"
+  },
+  {
+    "path": "/title/davay-vnov-stanem-muzhem-i-zhenoy/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/davay-vnov-stanem-muzhem-i-zhenoy/"
+  },
+  {
+    "path": "/title/falshivaya-devushka-dlya-geniya/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/falshivaya-devushka-dlya-geniya/"
+  },
+  {
+    "path": "/title/kakoy-skandal-2-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/kakoy-skandal-2-2/"
+  },
+  {
+    "path": "/title/klub-lyubvi-k-milomu/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/klub-lyubvi-k-milomu/"
+  },
+  {
+    "path": "/title/moy-holodnyy-kollega-pomeshan-na-mne/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/moy-holodnyy-kollega-pomeshan-na-mne/"
+  },
+  {
+    "path": "/title/mozhet-perestanem-byt-druzyami/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/mozhet-perestanem-byt-druzyami/"
+  },
+  {
+    "path": "/title/chti-svoyu-mat/season-1/episode-1/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/chti-svoyu-mat/season-1/episode-1/"
+  },
+  {
+    "path": "/title/chti-svoyu-mat/season-1/episode-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/chti-svoyu-mat/season-1/episode-2/"
+  },
+  {
+    "path": "/title/chti-svoyu-mat/season-1/episode-3/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/chti-svoyu-mat/season-1/episode-3/"
+  },
+  {
+    "path": "/title/chti-svoyu-mat/season-1/episode-4/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/chti-svoyu-mat/season-1/episode-4/"
+  },
+  {
+    "path": "/title/chti-svoyu-mat/season-1/episode-5/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/chti-svoyu-mat/season-1/episode-5/"
+  },
+  {
+    "path": "/title/chti-svoyu-mat/season-1/episode-6/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/chti-svoyu-mat/season-1/episode-6/"
+  },
+  {
+    "path": "/title/chti-svoyu-mat/season-1/episode-7/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/chti-svoyu-mat/season-1/episode-7/"
+  },
+  {
+    "path": "/title/chti-svoyu-mat/season-1/episode-8/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/chti-svoyu-mat/season-1/episode-8/"
+  },
+  {
+    "path": "/title/chti-svoyu-mat/season-1/episode-9/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/chti-svoyu-mat/season-1/episode-9/"
+  },
+  {
+    "path": "/title/chti-svoyu-mat/season-1/episode-10/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/chti-svoyu-mat/season-1/episode-10/"
+  },
+  {
+    "path": "/title/chti-svoyu-mat/season-1/episode-11/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/chti-svoyu-mat/season-1/episode-11/"
+  },
+  {
+    "path": "/title/chti-svoyu-mat/season-1/episode-12/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/chti-svoyu-mat/season-1/episode-12/"
+  },
+  {
+    "path": "/title/chti-svoyu-mat/season-1/episode-13/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/chti-svoyu-mat/season-1/episode-13/"
+  },
+  {
+    "path": "/title/chti-svoyu-mat/season-1/episode-14/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/chti-svoyu-mat/season-1/episode-14/"
+  },
+  {
+    "path": "/title/delo-dazhe-ne-v-izmene/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/delo-dazhe-ne-v-izmene/"
+  },
+  {
+    "path": "/title/lyubov-po-menyu/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/lyubov-po-menyu/"
+  },
+  {
+    "path": "/title/radostnye-sobytiya-li-i-zhan/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/radostnye-sobytiya-li-i-zhan/"
+  },
+  {
+    "path": "/title/rozhdennye-v-nuzhnoe-vremya/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/rozhdennye-v-nuzhnoe-vremya/"
+  },
+  {
+    "path": "/title/syao-fan-vyhodit-zamuzh/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/syao-fan-vyhodit-zamuzh/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-1/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-1/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-2/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-3/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-3/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-4/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-4/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-5/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-5/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-6/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-6/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-7/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-7/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-8/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-8/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-9/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-9/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-10/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-10/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-11/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-11/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-12/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-12/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-13/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-13/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-14/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-14/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-15/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-15/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-16/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-16/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-17/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-17/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-18/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-18/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-19/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-19/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-20/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-20/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-21/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-21/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-22/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-22/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-23/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-23/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-24/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-24/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-25/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-25/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-26/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-26/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-27/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-27/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-28/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-28/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-29/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-29/"
+  },
+  {
+    "path": "/title/master-lda-i-plameni-2/season-2/episode-30/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/season-2/episode-30/"
+  },
+  {
+    "path": "/title/magiya-zatonuvshih-korabley/season-1/episode-1/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/magiya-zatonuvshih-korabley/season-1/episode-1/"
+  },
+  {
+    "path": "/title/magiya-zatonuvshih-korabley/season-1/episode-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/magiya-zatonuvshih-korabley/season-1/episode-2/"
+  },
+  {
+    "path": "/title/magiya-zatonuvshih-korabley/season-1/episode-3/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/magiya-zatonuvshih-korabley/season-1/episode-3/"
+  },
+  {
+    "path": "/title/magiya-zatonuvshih-korabley/season-1/episode-4/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/magiya-zatonuvshih-korabley/season-1/episode-4/"
+  },
+  {
+    "path": "/title/magiya-zatonuvshih-korabley/season-1/episode-5/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/magiya-zatonuvshih-korabley/season-1/episode-5/"
+  },
+  {
+    "path": "/title/magiya-zatonuvshih-korabley/season-1/episode-6/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/magiya-zatonuvshih-korabley/season-1/episode-6/"
+  },
+  {
+    "path": "/title/magiya-zatonuvshih-korabley/season-1/episode-7/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/magiya-zatonuvshih-korabley/season-1/episode-7/"
+  },
+  {
+    "path": "/title/magiya-zatonuvshih-korabley/season-1/episode-8/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/magiya-zatonuvshih-korabley/season-1/episode-8/"
+  },
+  {
+    "path": "/title/magiya-zatonuvshih-korabley/season-1/episode-9/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/magiya-zatonuvshih-korabley/season-1/episode-9/"
+  },
+  {
+    "path": "/title/magiya-zatonuvshih-korabley/season-1/episode-10/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/magiya-zatonuvshih-korabley/season-1/episode-10/"
+  },
+  {
+    "path": "/title/doktorologiya/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/doktorologiya/"
+  },
+  {
+    "path": "/title/evolyuciya-metala/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/evolyuciya-metala/"
+  },
+  {
+    "path": "/title/ledovyy-put-dalnoboyschikov/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/ledovyy-put-dalnoboyschikov/"
+  },
+  {
+    "path": "/title/rassledovaniya-aviakatastrof-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/rassledovaniya-aviakatastrof-2/"
+  },
+  {
+    "path": "/title/bbc-planeta-zemlya/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/bbc-planeta-zemlya/"
+  },
+  {
+    "path": "/title/bbc-sila-iskusstva/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/bbc-sila-iskusstva/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-1/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-1/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-2/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-2/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-3/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-3/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-4/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-4/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-5/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-5/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-6/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-6/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-7/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-7/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-8/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-8/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-9/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-9/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-10/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-10/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-11/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-11/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-12/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-12/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-13/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-13/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-14/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-14/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-15/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-15/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-16/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-16/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-17/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-17/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-18/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-18/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-19/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-19/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-20/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-20/"
+  },
+  {
+    "path": "/title/tihookeanskie-rassledovaniya/season-1/episode-21/",
+    "status": 502,
+    "err": "HTTP:502",
+    "soft404": false,
+    "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/season-1/episode-21/"
+  }
+]

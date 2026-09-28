@@ -1,0 +1,204 @@
+{
+  "ts": "2026-09-20T22:26:16.476096+00:00",
+  "FINDINGS_TOTAL": 15,
+  "P0_COUNT": 0,
+  "P1_COUNT": 2,
+  "P2_COUNT": 8,
+  "P3_COUNT": 5,
+  "findings": [
+    {
+      "finding_id": "F-P1-01",
+      "severity": "P1",
+      "category": "reliability",
+      "domains": [
+        "lordserial33.biz",
+        "1lordserials1.online"
+      ],
+      "title": "LOAD_INDUCED_502_BURST",
+      "cross_site_impact": "lords-02/03",
+      "data_gap_or_template_bug": "infra/runtime",
+      "owner_dependency": false
+    },
+    {
+      "finding_id": "F-P1-02",
+      "severity": "P1",
+      "category": "distinctness",
+      "domains": [
+        "lordfilm47.space",
+        "lordserial33.biz",
+        "1lordserials1.online"
+      ],
+      "title": "TEMPLATE_DISTINCTNESS_INSUFFICIENT",
+      "cross_site_impact": "all",
+      "data_gap_or_template_bug": "template",
+      "owner_dependency": false
+    },
+    {
+      "finding_id": "F-P2-01",
+      "severity": "P2",
+      "category": "freshness/home",
+      "domains": [
+        "lordfilm47.space"
+      ],
+      "title": "DUPLICATE_SHELF_PREMIERES_VS_NOVINKI",
+      "cross_site_impact": "lords-01",
+      "data_gap_or_template_bug": "template",
+      "owner_dependency": false
+    },
+    {
+      "finding_id": "F-P2-02",
+      "severity": "P2",
+      "category": "copy/collections",
+      "domains": [
+        "lordfilm47.space",
+        "lordserial33.biz",
+        "1lordserials1.online"
+      ],
+      "title": "ANIME_COPY_ON_CINEMA_COLLECTIONS",
+      "cross_site_impact": "all",
+      "data_gap_or_template_bug": "template",
+      "owner_dependency": false
+    },
+    {
+      "finding_id": "F-P2-03",
+      "severity": "P2",
+      "category": "occupancy",
+      "domains": [
+        "lordfilm47.space",
+        "lordserial33.biz",
+        "1lordserials1.online"
+      ],
+      "title": "INCOMPLETE_VISUAL_ROWS_ON_KEY_RAILS",
+      "cross_site_impact": "all",
+      "data_gap_or_template_bug": "template",
+      "owner_dependency": false
+    },
+    {
+      "finding_id": "F-P2-04",
+      "severity": "P2",
+      "category": "cards",
+      "domains": [
+        "lordfilm47.space"
+      ],
+      "title": "BROKEN_POSTERS_ON_CINEMA_SERIES_RAIL",
+      "cross_site_impact": "lords-01",
+      "data_gap_or_template_bug": "mixed",
+      "owner_dependency": false
+    },
+    {
+      "finding_id": "F-P2-05",
+      "severity": "P2",
+      "category": "cards",
+      "domains": [
+        "lordfilm47.space",
+        "lordserial33.biz",
+        "1lordserials1.online"
+      ],
+      "title": "TITLE_OVERFLOW_HIGH",
+      "cross_site_impact": "all",
+      "data_gap_or_template_bug": "template",
+      "owner_dependency": false
+    },
+    {
+      "finding_id": "F-P2-06",
+      "severity": "P2",
+      "category": "collections",
+      "domains": [
+        "lordfilm47.space",
+        "lordserial33.biz",
+        "1lordserials1.online"
+      ],
+      "title": "SHARED_COLLECTION_SET_ACROSS_PROFILES",
+      "cross_site_impact": "all",
+      "data_gap_or_template_bug": "template",
+      "owner_dependency": false
+    },
+    {
+      "finding_id": "F-P2-07",
+      "severity": "P2",
+      "category": "player",
+      "domains": [
+        "lordfilm47.space",
+        "lordserial33.biz",
+        "1lordserials1.online"
+      ],
+      "title": "PLAYER_INSTANCE_NOT_PROVEN_FROM_SSR",
+      "cross_site_impact": "all",
+      "data_gap_or_template_bug": "audit_gap",
+      "owner_dependency": false
+    },
+    {
+      "finding_id": "F-P2-08",
+      "severity": "P2",
+      "category": "cards",
+      "domains": [
+        "lordserial33.biz"
+      ],
+      "title": "SERIES_FILM_RAIL_TRUNCATED_HORIZONTAL_CARDS",
+      "cross_site_impact": "lords-02",
+      "data_gap_or_template_bug": "template",
+      "owner_dependency": false
+    },
+    {
+      "finding_id": "F-P3-01",
+      "severity": "P3",
+      "category": "cards",
+      "domains": [
+        "all"
+      ],
+      "title": "FALLBACK_LETTER_NODE_ALWAYS_IN_DOM",
+      "cross_site_impact": "all",
+      "data_gap_or_template_bug": "template",
+      "owner_dependency": false
+    },
+    {
+      "finding_id": "F-P3-02",
+      "severity": "P3",
+      "category": "coverage",
+      "domains": [
+        "all"
+      ],
+      "title": "ZOOM200_KEYBOARD_MATRIX_NOT_RUN",
+      "cross_site_impact": "all",
+      "data_gap_or_template_bug": "audit_gap",
+      "owner_dependency": false
+    },
+    {
+      "finding_id": "F-P3-03",
+      "severity": "P3",
+      "category": "coverage",
+      "domains": [
+        "all"
+      ],
+      "title": "PERF_LAB_NOT_RUN",
+      "cross_site_impact": "all",
+      "data_gap_or_template_bug": "audit_gap",
+      "owner_dependency": false
+    },
+    {
+      "finding_id": "F-P3-04",
+      "severity": "P3",
+      "category": "coverage",
+      "domains": [
+        "all"
+      ],
+      "title": "A11Y_SURFACE_ONLY",
+      "cross_site_impact": "all",
+      "data_gap_or_template_bug": "audit_gap",
+      "owner_dependency": false
+    },
+    {
+      "finding_id": "F-P3-05",
+      "severity": "P3",
+      "category": "coverage",
+      "domains": [
+        "all"
+      ],
+      "title": "CONTACT_SHEET_MOSAIC_NOT_GENERATED",
+      "cross_site_impact": "all",
+      "data_gap_or_template_bug": "audit_gap",
+      "owner_dependency": false
+    }
+  ],
+  "detail_md": "VISUAL_FINDINGS.md"
+}

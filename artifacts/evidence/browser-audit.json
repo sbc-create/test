@@ -171,391 +171,391 @@
       "viewport": "mobile-360",
       "lcp_ms": 244,
       "cls": 0,
-      "dcl_ms": 224,
+      "dcl_ms": 227,
       "transfer_bytes": 11382
     },
     {
       "url": "/lekcii/",
       "viewport": "mobile-360",
-      "lcp_ms": 212,
+      "lcp_ms": 240,
       "cls": 0,
-      "dcl_ms": 165,
+      "dcl_ms": 194,
       "transfer_bytes": 11382
     },
     {
       "url": "/lekcii/page/2/",
       "viewport": "mobile-360",
-      "lcp_ms": 244,
+      "lcp_ms": 264,
       "cls": 0,
-      "dcl_ms": 201,
+      "dcl_ms": 217,
       "transfer_bytes": 11382
     },
     {
       "url": "/collections/izbrannoe/",
       "viewport": "mobile-360",
-      "lcp_ms": 252,
+      "lcp_ms": 264,
       "cls": 0,
-      "dcl_ms": 200,
+      "dcl_ms": 210,
       "transfer_bytes": 11382
     },
     {
       "url": "/lekcii/material-01/",
       "viewport": "mobile-360",
-      "lcp_ms": 216,
-      "cls": 0,
-      "dcl_ms": 173,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/lekcii/material-04/",
-      "viewport": "mobile-360",
-      "lcp_ms": 244,
-      "cls": 0,
-      "dcl_ms": 188,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/praktikum/serial-fikstura/season-1/",
-      "viewport": "mobile-360",
-      "lcp_ms": 248,
-      "cls": 0,
-      "dcl_ms": 215,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/praktikum/serial-fikstura/season-1/episode-1/",
-      "viewport": "mobile-360",
-      "lcp_ms": 208,
-      "cls": 0,
-      "dcl_ms": 180,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/news/zapis-3/",
-      "viewport": "mobile-360",
-      "lcp_ms": 204,
-      "cls": 0,
-      "dcl_ms": 182,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/news/",
-      "viewport": "mobile-360",
-      "lcp_ms": 192,
-      "cls": 0,
-      "dcl_ms": 166,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/legal/terms/",
-      "viewport": "mobile-360",
-      "lcp_ms": 208,
-      "cls": 0,
-      "dcl_ms": 186,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/search/",
-      "viewport": "mobile-360",
-      "lcp_ms": 244,
-      "cls": 0,
-      "dcl_ms": 194,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/404/",
-      "viewport": "mobile-360",
-      "lcp_ms": 228,
+      "lcp_ms": 212,
       "cls": 0,
       "dcl_ms": 193,
       "transfer_bytes": 10816
     },
     {
-      "url": "/410/",
-      "viewport": "mobile-360",
-      "lcp_ms": 240,
-      "cls": 0,
-      "dcl_ms": 185,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/",
-      "viewport": "mobile-390",
-      "lcp_ms": 212,
-      "cls": 0,
-      "dcl_ms": 179,
-      "transfer_bytes": 11382
-    },
-    {
-      "url": "/lekcii/",
-      "viewport": "mobile-390",
-      "lcp_ms": 216,
-      "cls": 0,
-      "dcl_ms": 197,
-      "transfer_bytes": 11382
-    },
-    {
-      "url": "/lekcii/page/2/",
-      "viewport": "mobile-390",
-      "lcp_ms": 240,
-      "cls": 0,
-      "dcl_ms": 206,
-      "transfer_bytes": 11382
-    },
-    {
-      "url": "/collections/izbrannoe/",
-      "viewport": "mobile-390",
-      "lcp_ms": 228,
-      "cls": 0,
-      "dcl_ms": 173,
-      "transfer_bytes": 11382
-    },
-    {
-      "url": "/lekcii/material-01/",
-      "viewport": "mobile-390",
-      "lcp_ms": 200,
-      "cls": 0,
-      "dcl_ms": 171,
-      "transfer_bytes": 10816
-    },
-    {
       "url": "/lekcii/material-04/",
-      "viewport": "mobile-390",
-      "lcp_ms": 188,
-      "cls": 0,
-      "dcl_ms": 161,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/praktikum/serial-fikstura/season-1/",
-      "viewport": "mobile-390",
-      "lcp_ms": 208,
-      "cls": 0,
-      "dcl_ms": 181,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/praktikum/serial-fikstura/season-1/episode-1/",
-      "viewport": "mobile-390",
-      "lcp_ms": 232,
-      "cls": 0,
-      "dcl_ms": 214,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/news/zapis-3/",
-      "viewport": "mobile-390",
-      "lcp_ms": 192,
-      "cls": 0,
-      "dcl_ms": 164,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/news/",
-      "viewport": "mobile-390",
-      "lcp_ms": 260,
-      "cls": 0,
-      "dcl_ms": 224,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/legal/terms/",
-      "viewport": "mobile-390",
-      "lcp_ms": 220,
-      "cls": 0,
-      "dcl_ms": 183,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/search/",
-      "viewport": "mobile-390",
-      "lcp_ms": 216,
+      "viewport": "mobile-360",
+      "lcp_ms": 180,
       "cls": 0,
       "dcl_ms": 168,
       "transfer_bytes": 10816
     },
     {
-      "url": "/404/",
-      "viewport": "mobile-390",
-      "lcp_ms": 240,
-      "cls": 0,
-      "dcl_ms": 206,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/410/",
-      "viewport": "mobile-390",
-      "lcp_ms": 204,
-      "cls": 0,
-      "dcl_ms": 172,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/",
-      "viewport": "tablet-768",
-      "lcp_ms": 232,
-      "cls": 0,
-      "dcl_ms": 176,
-      "transfer_bytes": 11382
-    },
-    {
-      "url": "/lekcii/",
-      "viewport": "tablet-768",
-      "lcp_ms": 212,
-      "cls": 0,
-      "dcl_ms": 172,
-      "transfer_bytes": 11382
-    },
-    {
-      "url": "/lekcii/page/2/",
-      "viewport": "tablet-768",
-      "lcp_ms": 232,
-      "cls": 0,
-      "dcl_ms": 198,
-      "transfer_bytes": 11382
-    },
-    {
-      "url": "/collections/izbrannoe/",
-      "viewport": "tablet-768",
-      "lcp_ms": 236,
-      "cls": 0,
-      "dcl_ms": 184,
-      "transfer_bytes": 11382
-    },
-    {
-      "url": "/lekcii/material-01/",
-      "viewport": "tablet-768",
-      "lcp_ms": 196,
-      "cls": 0,
-      "dcl_ms": 167,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/lekcii/material-04/",
-      "viewport": "tablet-768",
-      "lcp_ms": 228,
-      "cls": 0,
-      "dcl_ms": 172,
-      "transfer_bytes": 10816
-    },
-    {
       "url": "/praktikum/serial-fikstura/season-1/",
-      "viewport": "tablet-768",
-      "lcp_ms": 248,
+      "viewport": "mobile-360",
+      "lcp_ms": 220,
       "cls": 0,
-      "dcl_ms": 198,
+      "dcl_ms": 207,
       "transfer_bytes": 10816
     },
     {
       "url": "/praktikum/serial-fikstura/season-1/episode-1/",
-      "viewport": "tablet-768",
-      "lcp_ms": 232,
-      "cls": 0,
-      "dcl_ms": 184,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/news/zapis-3/",
-      "viewport": "tablet-768",
-      "lcp_ms": 192,
-      "cls": 0,
-      "dcl_ms": 175,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/news/",
-      "viewport": "tablet-768",
+      "viewport": "mobile-360",
       "lcp_ms": 208,
-      "cls": 0,
-      "dcl_ms": 179,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/legal/terms/",
-      "viewport": "tablet-768",
-      "lcp_ms": 220,
-      "cls": 0,
-      "dcl_ms": 181,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/search/",
-      "viewport": "tablet-768",
-      "lcp_ms": 200,
-      "cls": 0,
-      "dcl_ms": 175,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/404/",
-      "viewport": "tablet-768",
-      "lcp_ms": 204,
       "cls": 0,
       "dcl_ms": 178,
       "transfer_bytes": 10816
     },
     {
-      "url": "/410/",
-      "viewport": "tablet-768",
-      "lcp_ms": 224,
+      "url": "/news/zapis-3/",
+      "viewport": "mobile-360",
+      "lcp_ms": 200,
       "cls": 0,
-      "dcl_ms": 197,
+      "dcl_ms": 190,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/news/",
+      "viewport": "mobile-360",
+      "lcp_ms": 232,
+      "cls": 0,
+      "dcl_ms": 185,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/legal/terms/",
+      "viewport": "mobile-360",
+      "lcp_ms": 208,
+      "cls": 0,
+      "dcl_ms": 167,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/search/",
+      "viewport": "mobile-360",
+      "lcp_ms": 204,
+      "cls": 0,
+      "dcl_ms": 180,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/404/",
+      "viewport": "mobile-360",
+      "lcp_ms": 208,
+      "cls": 0,
+      "dcl_ms": 158,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/410/",
+      "viewport": "mobile-360",
+      "lcp_ms": 192,
+      "cls": 0,
+      "dcl_ms": 168,
       "transfer_bytes": 10816
     },
     {
       "url": "/",
-      "viewport": "laptop-1024",
-      "lcp_ms": 216,
+      "viewport": "mobile-390",
+      "lcp_ms": 208,
       "cls": 0,
-      "dcl_ms": 189,
+      "dcl_ms": 179,
       "transfer_bytes": 11382
     },
     {
       "url": "/lekcii/",
-      "viewport": "laptop-1024",
-      "lcp_ms": 224,
+      "viewport": "mobile-390",
+      "lcp_ms": 240,
       "cls": 0,
-      "dcl_ms": 171,
+      "dcl_ms": 201,
       "transfer_bytes": 11382
     },
     {
       "url": "/lekcii/page/2/",
-      "viewport": "laptop-1024",
-      "lcp_ms": 240,
-      "cls": 0,
-      "dcl_ms": 182,
-      "transfer_bytes": 11382
-    },
-    {
-      "url": "/collections/izbrannoe/",
-      "viewport": "laptop-1024",
-      "lcp_ms": 248,
+      "viewport": "mobile-390",
+      "lcp_ms": 264,
       "cls": 0,
       "dcl_ms": 198,
       "transfer_bytes": 11382
     },
     {
+      "url": "/collections/izbrannoe/",
+      "viewport": "mobile-390",
+      "lcp_ms": 220,
+      "cls": 0,
+      "dcl_ms": 175,
+      "transfer_bytes": 11382
+    },
+    {
       "url": "/lekcii/material-01/",
-      "viewport": "laptop-1024",
+      "viewport": "mobile-390",
+      "lcp_ms": 224,
+      "cls": 0,
+      "dcl_ms": 206,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/lekcii/material-04/",
+      "viewport": "mobile-390",
+      "lcp_ms": 256,
+      "cls": 0,
+      "dcl_ms": 204,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/praktikum/serial-fikstura/season-1/",
+      "viewport": "mobile-390",
+      "lcp_ms": 196,
+      "cls": 0,
+      "dcl_ms": 179,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/praktikum/serial-fikstura/season-1/episode-1/",
+      "viewport": "mobile-390",
+      "lcp_ms": 224,
+      "cls": 0,
+      "dcl_ms": 186,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/news/zapis-3/",
+      "viewport": "mobile-390",
+      "lcp_ms": 224,
+      "cls": 0,
+      "dcl_ms": 175,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/news/",
+      "viewport": "mobile-390",
+      "lcp_ms": 204,
+      "cls": 0,
+      "dcl_ms": 167,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/legal/terms/",
+      "viewport": "mobile-390",
+      "lcp_ms": 204,
+      "cls": 0,
+      "dcl_ms": 174,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/search/",
+      "viewport": "mobile-390",
+      "lcp_ms": 188,
+      "cls": 0,
+      "dcl_ms": 177,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/404/",
+      "viewport": "mobile-390",
+      "lcp_ms": 184,
+      "cls": 0,
+      "dcl_ms": 150,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/410/",
+      "viewport": "mobile-390",
+      "lcp_ms": 200,
+      "cls": 0,
+      "dcl_ms": 174,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/",
+      "viewport": "tablet-768",
+      "lcp_ms": 256,
+      "cls": 0,
+      "dcl_ms": 200,
+      "transfer_bytes": 11382
+    },
+    {
+      "url": "/lekcii/",
+      "viewport": "tablet-768",
+      "lcp_ms": 244,
+      "cls": 0,
+      "dcl_ms": 199,
+      "transfer_bytes": 11382
+    },
+    {
+      "url": "/lekcii/page/2/",
+      "viewport": "tablet-768",
+      "lcp_ms": 232,
+      "cls": 0,
+      "dcl_ms": 177,
+      "transfer_bytes": 11382
+    },
+    {
+      "url": "/collections/izbrannoe/",
+      "viewport": "tablet-768",
+      "lcp_ms": 220,
+      "cls": 0,
+      "dcl_ms": 177,
+      "transfer_bytes": 11382
+    },
+    {
+      "url": "/lekcii/material-01/",
+      "viewport": "tablet-768",
+      "lcp_ms": 224,
+      "cls": 0,
+      "dcl_ms": 186,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/lekcii/material-04/",
+      "viewport": "tablet-768",
+      "lcp_ms": 256,
+      "cls": 0,
+      "dcl_ms": 194,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/praktikum/serial-fikstura/season-1/",
+      "viewport": "tablet-768",
       "lcp_ms": 216,
       "cls": 0,
-      "dcl_ms": 162,
+      "dcl_ms": 189,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/praktikum/serial-fikstura/season-1/episode-1/",
+      "viewport": "tablet-768",
+      "lcp_ms": 188,
+      "cls": 0,
+      "dcl_ms": 172,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/news/zapis-3/",
+      "viewport": "tablet-768",
+      "lcp_ms": 236,
+      "cls": 0,
+      "dcl_ms": 184,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/news/",
+      "viewport": "tablet-768",
+      "lcp_ms": 220,
+      "cls": 0,
+      "dcl_ms": 198,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/legal/terms/",
+      "viewport": "tablet-768",
+      "lcp_ms": 224,
+      "cls": 0,
+      "dcl_ms": 169,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/search/",
+      "viewport": "tablet-768",
+      "lcp_ms": 216,
+      "cls": 0,
+      "dcl_ms": 181,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/404/",
+      "viewport": "tablet-768",
+      "lcp_ms": 192,
+      "cls": 0,
+      "dcl_ms": 159,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/410/",
+      "viewport": "tablet-768",
+      "lcp_ms": 188,
+      "cls": 0,
+      "dcl_ms": 165,
+      "transfer_bytes": 10816
+    },
+    {
+      "url": "/",
+      "viewport": "laptop-1024",
+      "lcp_ms": 224,
+      "cls": 0,
+      "dcl_ms": 178,
+      "transfer_bytes": 11382
+    },
+    {
+      "url": "/lekcii/",
+      "viewport": "laptop-1024",
+      "lcp_ms": 276,
+      "cls": 0,
+      "dcl_ms": 223,
+      "transfer_bytes": 11382
+    },
+    {
+      "url": "/lekcii/page/2/",
+      "viewport": "laptop-1024",
+      "lcp_ms": 232,
+      "cls": 0,
+      "dcl_ms": 177,
+      "transfer_bytes": 11382
+    },
+    {
+      "url": "/collections/izbrannoe/",
+      "viewport": "laptop-1024",
+      "lcp_ms": 212,
+      "cls": 0,
+      "dcl_ms": 194,
+      "transfer_bytes": 11382
+    },
+    {
+      "url": "/lekcii/material-01/",
+      "viewport": "laptop-1024",
+      "lcp_ms": 224,
+      "cls": 0,
+      "dcl_ms": 163,
       "transfer_bytes": 10816
     },
     {
       "url": "/lekcii/material-04/",
       "viewport": "laptop-1024",
-      "lcp_ms": 228,
+      "lcp_ms": 208,
       "cls": 0,
-      "dcl_ms": 208,
+      "dcl_ms": 183,
       "transfer_bytes": 10816
     },
     {
       "url": "/praktikum/serial-fikstura/season-1/",
       "viewport": "laptop-1024",
-      "lcp_ms": 192,
+      "lcp_ms": 208,
       "cls": 0,
-      "dcl_ms": 164,
+      "dcl_ms": 171,
       "transfer_bytes": 10816
     },
     {
@@ -563,93 +563,93 @@
       "viewport": "laptop-1024",
       "lcp_ms": 216,
       "cls": 0,
-      "dcl_ms": 184,
+      "dcl_ms": 203,
       "transfer_bytes": 10816
     },
     {
       "url": "/news/zapis-3/",
       "viewport": "laptop-1024",
-      "lcp_ms": 232,
+      "lcp_ms": 216,
       "cls": 0,
-      "dcl_ms": 196,
+      "dcl_ms": 187,
       "transfer_bytes": 10816
     },
     {
       "url": "/news/",
       "viewport": "laptop-1024",
-      "lcp_ms": 244,
+      "lcp_ms": 236,
       "cls": 0,
-      "dcl_ms": 226,
+      "dcl_ms": 188,
       "transfer_bytes": 10816
     },
     {
       "url": "/legal/terms/",
       "viewport": "laptop-1024",
-      "lcp_ms": 240,
+      "lcp_ms": 224,
       "cls": 0,
-      "dcl_ms": 214,
+      "dcl_ms": 182,
       "transfer_bytes": 10816
     },
     {
       "url": "/search/",
       "viewport": "laptop-1024",
-      "lcp_ms": 228,
+      "lcp_ms": 240,
       "cls": 0,
-      "dcl_ms": 190,
+      "dcl_ms": 198,
       "transfer_bytes": 10816
     },
     {
       "url": "/404/",
       "viewport": "laptop-1024",
-      "lcp_ms": 188,
+      "lcp_ms": 364,
       "cls": 0,
-      "dcl_ms": 161,
+      "dcl_ms": 338,
       "transfer_bytes": 10816
     },
     {
       "url": "/410/",
       "viewport": "laptop-1024",
-      "lcp_ms": 252,
+      "lcp_ms": 216,
       "cls": 0,
-      "dcl_ms": 206,
+      "dcl_ms": 202,
       "transfer_bytes": 10816
     },
     {
       "url": "/",
       "viewport": "desktop-1440",
-      "lcp_ms": 224,
+      "lcp_ms": 236,
       "cls": 0,
-      "dcl_ms": 187,
+      "dcl_ms": 177,
       "transfer_bytes": 11382
     },
     {
       "url": "/lekcii/",
       "viewport": "desktop-1440",
-      "lcp_ms": 248,
+      "lcp_ms": 220,
       "cls": 0,
-      "dcl_ms": 181,
+      "dcl_ms": 164,
       "transfer_bytes": 11382
     },
     {
       "url": "/lekcii/page/2/",
       "viewport": "desktop-1440",
-      "lcp_ms": 228,
+      "lcp_ms": 212,
       "cls": 0,
-      "dcl_ms": 193,
+      "dcl_ms": 192,
       "transfer_bytes": 11382
     },
     {
       "url": "/collections/izbrannoe/",
       "viewport": "desktop-1440",
-      "lcp_ms": 244,
+      "lcp_ms": 240,
       "cls": 0,
-      "dcl_ms": 184,
+      "dcl_ms": 194,
       "transfer_bytes": 11382
     },
     {
       "url": "/lekcii/material-01/",
       "viewport": "desktop-1440",
-      "lcp_ms": 196,
+      "lcp_ms": 232,
       "cls": 0,
       "dcl_ms": 179,
       "transfer_bytes": 10816
@@ -657,73 +657,73 @@
     {
       "url": "/lekcii/material-04/",
       "viewport": "desktop-1440",
-      "lcp_ms": 224,
+      "lcp_ms": 236,
       "cls": 0,
-      "dcl_ms": 168,
+      "dcl_ms": 182,
       "transfer_bytes": 10816
     },
     {
       "url": "/praktikum/serial-fikstura/season-1/",
       "viewport": "desktop-1440",
-      "lcp_ms": 216,
-      "cls": 0,
-      "dcl_ms": 200,
-      "transfer_bytes": 10816
-    },
-    {
-      "url": "/praktikum/serial-fikstura/season-1/episode-1/",
-      "viewport": "desktop-1440",
-      "lcp_ms": 200,
+      "lcp_ms": 220,
       "cls": 0,
       "dcl_ms": 167,
       "transfer_bytes": 10816
     },
     {
+      "url": "/praktikum/serial-fikstura/season-1/episode-1/",
+      "viewport": "desktop-1440",
+      "lcp_ms": 252,
+      "cls": 0,
+      "dcl_ms": 214,
+      "transfer_bytes": 10816
+    },
+    {
       "url": "/news/zapis-3/",
       "viewport": "desktop-1440",
-      "lcp_ms": 236,
+      "lcp_ms": 224,
       "cls": 0,
-      "dcl_ms": 200,
+      "dcl_ms": 181,
       "transfer_bytes": 10816
     },
     {
       "url": "/news/",
       "viewport": "desktop-1440",
-      "lcp_ms": 232,
+      "lcp_ms": 348,
       "cls": 0,
-      "dcl_ms": 218,
+      "dcl_ms": 337,
       "transfer_bytes": 10816
     },
     {
       "url": "/legal/terms/",
       "viewport": "desktop-1440",
-      "lcp_ms": 240,
+      "lcp_ms": 232,
       "cls": 0,
-      "dcl_ms": 189,
+      "dcl_ms": 185,
       "transfer_bytes": 10816
     },
     {
       "url": "/search/",
       "viewport": "desktop-1440",
-      "lcp_ms": 212,
+      "lcp_ms": 236,
       "cls": 0,
-      "dcl_ms": 175,
+      "dcl_ms": 187,
       "transfer_bytes": 10816
     },
     {
       "url": "/404/",
       "viewport": "desktop-1440",
-      "lcp_ms": 224,
+      "lcp_ms": 208,
       "cls": 0,
-      "dcl_ms": 183,
+      "dcl_ms": 167,
       "transfer_bytes": 10816
     },
     {
       "url": "/410/",
       "viewport": "desktop-1440",
-      "lcp_ms": 220,
+      "lcp_ms": 224,
       "cls": 0,
-      "dcl_ms": 204,
+      "dcl_ms": 188,
       "transfer_bytes": 10816
     }
   ],

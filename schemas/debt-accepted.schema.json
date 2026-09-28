@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-factory.local/schemas/debt-accepted.schema.json",
+  "title": "Осознанно принятый технический долг",
+  "description": "Не список исключений. Каждая запись обязана назвать причину и сторожа; принятие без сторожа — молчаливое исключение, только выглядит убедительнее.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "accepted"],
+  "properties": {
+    "$comment": { "type": "string" },
+    "schema_version": { "const": 1 },
+    "accepted": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "path", "reason", "guard"],
+        "properties": {
+          "kind": { "type": "string", "minLength": 3 },
+          "path": { "type": "string", "minLength": 3 },
+          "reason": { "type": "string", "minLength": 60 },
+          "guard": { "type": "string", "pattern": "^tests/.+\\.py" }
+        }
+      }
+    }
+  }
+}

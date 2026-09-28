@@ -1,0 +1,170 @@
+{
+  "site": "lords-02",
+  "catalog_count": 53548,
+  "details_entries": 53548,
+  "series_year_2016_oracle": 553,
+  "genre_komediya_oracle": 14913,
+  "country_uk_cyr_code": "великобритания",
+  "country_uk_latin_would_be": "velikobritaniya",
+  "country_uk_cyr_in_index": true,
+  "country_uk_latin_in_index": false,
+  "country_uk_cyr_count": 4092,
+  "country_uk_latin_count": 0,
+  "top_countries": [
+    [
+      "сша",
+      "США",
+      17789
+    ],
+    [
+      "япония",
+      "Япония",
+      4104
+    ],
+    [
+      "великобритания",
+      "Великобритания",
+      4092
+    ],
+    [
+      "франция",
+      "Франция",
+      3010
+    ],
+    [
+      "канада",
+      "Канада",
+      2922
+    ],
+    [
+      "германия",
+      "Германия",
+      1789
+    ],
+    [
+      "индия",
+      "Индия",
+      1729
+    ],
+    [
+      "южнаякорея",
+      "Южная Корея",
+      1494
+    ],
+    [
+      "испания",
+      "Испания",
+      1060
+    ],
+    [
+      "италия",
+      "Италия",
+      1052
+    ],
+    [
+      "китаи",
+      "Китай",
+      899
+    ],
+    [
+      "австралия",
+      "Австралия",
+      764
+    ],
+    [
+      "бельгия",
+      "Бельгия",
+      758
+    ],
+    [
+      "турция",
+      "Турция",
+      748
+    ],
+    [
+      "мексика",
+      "Мексика",
+      459
+    ]
+  ],
+  "top_genres": [
+    [
+      "zapadnyykontent",
+      "западный контент",
+      36141
+    ],
+    [
+      "drama",
+      "драма",
+      22353
+    ],
+    [
+      "komediya",
+      "комедия",
+      14913
+    ],
+    [
+      "triller",
+      "триллер",
+      10337
+    ],
+    [
+      "dorama",
+      "дорама",
+      9520
+    ],
+    [
+      "boevik",
+      "боевик",
+      9497
+    ],
+    [
+      "melodrama",
+      "мелодрама",
+      8321
+    ],
+    [
+      "anime",
+      "аниме",
+      7314
+    ],
+    [
+      "kriminal",
+      "криминал",
+      6716
+    ],
+    [
+      "fentezi",
+      "фэнтези",
+      6035
+    ],
+    [
+      "uzhasy",
+      "ужасы",
+      5683
+    ],
+    [
+      "priklyucheniya",
+      "приключения",
+      5259
+    ],
+    [
+      "detektiv",
+      "детектив",
+      4789
+    ],
+    [
+      "fantastika",
+      "фантастика",
+      4381
+    ],
+    [
+      "multfilm",
+      "мультфильм",
+      4140
+    ]
+  ],
+  "ROUTE_REGEX_ACCEPTS_CYRILLIC": false,
+  "UI_EMITS_CYRILLIC_COUNTRY_HREF": true,
+  "ROOT_CAUSE": "country facet href uses нормализовать(label)=cyrillic; МАРШРУТ_СТРАНЫ requires [a-z0-9_-] → every country facet link is an INTERNAL_LINK_404"
+}

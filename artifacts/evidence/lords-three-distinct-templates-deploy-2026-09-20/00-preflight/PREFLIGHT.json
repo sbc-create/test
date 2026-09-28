@@ -1,0 +1,78 @@
+{
+  "stage": "LORDS-THREE-DISTINCT-TEMPLATES-DEPLOY-01",
+  "block": "00-preflight",
+  "at_utc": "2026-09-20T19:37:00Z",
+  "branch": "cursor/lords-default-episode-01",
+  "start_head_full": "fb2adc6c0036c36fa9670e2d256692eac198c7a0",
+  "feature_head_full": "3c90aab08aee275e2b628d34cf6c719cbc120c21",
+  "final_code_head": "3c90aab08aee275e2b628d34cf6c719cbc120c21",
+  "feature_is_exact_head": true,
+  "intervening_commits_after_feature": [],
+  "working_tree": "clean",
+  "NEW_TEMPLATES_CURRENTLY_LIVE": false,
+  "registry": {
+    "tool": "automation/host/lords-nova-canary.py",
+    "shared_artifact": "/srv/lords/.frontend/lords-frontend.py",
+    "rollback_dir": "/srv/lords/.frontend/.rollback",
+    "sites": {
+      "lords-01": {
+        "unit": "lords-nova-01.service",
+        "domain": "lordfilm47.space",
+        "manifest": "template-manifest.json",
+        "profile": "lords-general",
+        "expected_design": "lords-cinema-v2",
+        "port": 9110
+      },
+      "lords-02": {
+        "unit": "nova-lords-02.service",
+        "domain": "lordserial33.biz",
+        "manifest": "template-manifest-lords-02.json",
+        "profile": "lords-new",
+        "expected_design": "lords-series-feed-v2",
+        "port": 9111
+      },
+      "lords-03": {
+        "unit": "nova-lords-03.service",
+        "domain": "1lordserials1.online",
+        "manifest": "template-manifest-lords-03.json",
+        "profile": "lords-curated",
+        "expected_design": "lords-curated-v2",
+        "port": 9112
+      }
+    },
+    "profile_binding": "shared artifact + per-site manifest.profile → ДИЗАЙН_ПО_ПРОФИЛЮ → data-design"
+  },
+  "disk_before": {
+    "artifact_sha256": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+    "free_gb": 39.96,
+    "catalogs_present": true
+  },
+  "live_before": {
+    "lords-01": {
+      "build": "20260920T140520Z-24c54b6-nova",
+      "revision": "24c54b6affbdc912d8766ba794f280837f922329",
+      "artifact": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+      "data-design": "lords-sheet",
+      "profile": "lords-general",
+      "indexability": "noindex, nofollow"
+    },
+    "lords-02": {
+      "build": "20260920T101032Z-f0b253d-nova",
+      "revision": "f0b253d48964d2f7c601f37e85aa1afa29229410",
+      "artifact": "4990ea9f8ee6451d86bfad8efa5d5e7592f7eb42a0137ce81b3eeb2078fc6023",
+      "data-design": "lords-sheet",
+      "profile": "lords-new",
+      "indexability": "noindex, nofollow"
+    },
+    "lords-03": {
+      "build": "20260920T140520Z-24c54b6-nova",
+      "revision": "24c54b6affbdc912d8766ba794f280837f922329",
+      "artifact": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+      "data-design": "lords-sheet",
+      "profile": "lords-curated",
+      "indexability": "noindex, nofollow"
+    }
+  },
+  "deploy_lock_note": "inspect .deploy.lock before install",
+  "verdict": "PREFLIGHT_CONTINUE"
+}

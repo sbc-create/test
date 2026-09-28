@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-factory.local/schemas/site-engine/cache-policy.schema.json",
+  "title": "CachePolicy",
+  "description": "Правила кэширования по типам данных. Общий срок для всего сразу не работает: новая серия должна появляться за минуты, а логотип может лежать сутками. Здесь же закреплены запреты, каждый из которых родился из реальной поломки: закэшированная ошибка выглядит как рабочий ответ, а пустой ответ, принятый за успех, стирает каталог.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "layers", "invalidation"],
+  "properties": {
+    "schema_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+$" },
+    "layers": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": ["ttl_seconds"],
+        "additionalProperties": false,
+        "properties": {
+          "ttl_seconds": { "type": "integer", "minimum": 0 },
+          "stale_while_revalidate_seconds": { "type": "integer", "minimum": 0 },
+          "last_known_good": {
+            "description": "Отдавать прежнее значение, если источник отказал. Пустой ответ рабочие данные не заменяет.",
+            "type": "boolean"
+          },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "invalidation": {
+      "type": "object",
+      "required": ["mode"],
+      "properties": {
+        "mode": { "enum": ["event-driven", "ttl-only", "manual"] },
+        "event_map": {
+          "description": "Какое событие какие теги сбрасывает. Новая серия обязана сбрасывать страницу тайтла и затронутую полку, а не пересобирать каталог целиком.",
+          "type": "object",
+          "additionalProperties": { "type": "array", "items": { "type": "string" } }
+        },
+        "dry_run_supported": { "type": "boolean" }
+      }
+    },
+    "keys": {
+      "type": "object",
+      "properties": {
+        "site_scoped": {
+          "description": "Ключ включает сайт. Общий ключ на три витрины однажды показал бы содержимое соседа.",
+          "type": "boolean"
+        },
+        "stampede_protection": { "enum": ["lock", "coalesce", "none"] }
+      }
+    },
+    "forbidden": {
+      "description": "Запреты перечислены явно, чтобы их нельзя было обойти по невнимательности.",
+      "type": "object",
+      "properties": {
+        "cache_errors": { "const": false },
+        "empty_response_as_success": { "const": false },
+        "indefinite_html_cache": { "const": false }
+      }
+    },
+    "observability": {
+      "type": "object",
+      "properties": {
+        "expose_hit_miss_stale": { "type": "boolean" }
+      }
+    }
+  }
+}

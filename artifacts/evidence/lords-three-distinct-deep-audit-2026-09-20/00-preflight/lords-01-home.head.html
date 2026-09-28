@@ -1,0 +1,93 @@
+<!doctype html><html lang="ru" data-template-version="1.1.0" data-template-family="lords" data-build-id="20260920T193847Z-3c90aab-nova" data-design="lords-cinema-v2" data-profile="lords-general">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lordfilm — фильмы и сериалы онлайн</title><meta name="description" content="Lordfilm: смотреть фильмы, сериалы и мультфильмы онлайн. Каталог, новинки и подборки из утверждённого снимка."><link rel="canonical" href="https://lordfilm47.space/">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="website"><meta property="og:title" content="Lordfilm — фильмы и сериалы онлайн"><meta property="og:description" content="Каталог Lordfilm"><meta property="og:url" content="https://lordfilm47.space/"><meta property="og:site_name" content="Lordfilm"><meta property="og:locale" content="ru_RU">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="site-factory-template-revision" content="3c90aab08aee275e2b628d34cf6c719cbc120c21"><meta name="site-factory-design-version" content="1.1.0"><meta name="site-factory-template-family" content="lords"><meta name="site-factory-build-id" content="20260920T193847Z-3c90aab-nova"><meta name="site-factory-artifact-sha256" content="5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc"><meta name="site-factory-template" content="lords-nova"><meta name="site-factory-core" content="site-factory-nova"><meta name="site-factory-profile" content="lords-general"><script data-metrika-counter="112010269">(function(){if(window.__sfMetrikaReady){return;}window.__sfMetrikaReady=1;(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<e.scripts.length;j++){if(e.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym(112010269,"init",{trackLinks:true,accurateTrackBounce:true,webvisor:false});})();</script><noscript><div><img src="https://mc.yandex.ru/watch/112010269" style="position:absolute;left:-9999px" alt=""></div></noscript>
+<style>
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;max-width:100%}
+body{margin:0;min-height:100vh;overflow-x:clip;max-width:100%}
+img,video,iframe,svg{max-width:100%;height:auto;display:block}
+a{text-decoration:none;color:inherit}
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+clip:rect(0 0 0 0);white-space:nowrap;border:0}
+:focus-visible{outline:3px solid #a34b2c;outline-offset:2px;border-radius:3px}
+.skip{position:absolute;left:-9999px;top:0;z-index:200;padding:10px 16px;background:#a34b2c;color:#fff}
+.skip:focus{left:8px;top:8px}
+
+body{background:#0e0f11;color:#1f2329;
+font:14px/1.5 'Open Sans','Segoe UI',system-ui,-apple-system,sans-serif}
+/* Лист. Узкая светлая полоса на тёмной подложке — первое, по чему семейство
+   узнают; ширина взята из измерения эталона на 1440 (контейнер 1100). */
+.sheet{max-width:1100px;margin:0 auto;background:#f3efe8;min-height:100vh;
+box-shadow:0 0 60px #0009}
+@media(min-width:1000px){.sheet{margin-top:118px;min-height:calc(100vh - 118px)}}
+.pad{padding:0 18px}
+.backdrop{position:fixed;inset:0 0 auto 0;height:330px;z-index:-1;
+background:radial-gradient(120% 140% at 50% 0,#243043 0,#0e1013 68%)}
+/* Шапка: drawer до fit-breakpoint (~1024), затем горизонтальный ряд. */
+.hd{background:#ffffff;border-bottom:1px solid #d7dde3;position:relative;z-index:40}
+.hd__in{display:flex;align-items:center;gap:12px;min-height:70px;height:70px;
+padding:0 12px;flex-wrap:nowrap;position:relative}
+@media(min-width:1024px){.hd__in{height:70px;min-height:70px;padding:0 18px;gap:16px}}
+.hd__logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;
+letter-spacing:.5px;text-transform:uppercase;color:#1f2329;flex:0 1 auto;
+max-width:min(42vw,220px);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+@media(min-width:1024px){.hd__logo{font-size:19px;max-width:240px}}
+.hd__mark{width:30px;height:30px;border-radius:5px;background:#a34b2c;color:#fff;
+display:grid;place-items:center;font-size:15px;font-weight:800;flex:0 0 auto}
+.hd__menu{display:inline-flex;align-items:center;justify-content:center;
+width:44px;height:44px;border:1px solid #d7dde3;border-radius:4px;background:#fff;
+color:#1f2329;font-size:20px;cursor:pointer;margin-left:auto;flex:0 0 auto}
+@media(min-width:1024px){.hd__menu{display:none}}
+.hd__nav{display:none;position:absolute;left:0;right:0;top:100%;z-index:50;
+flex-direction:column;gap:4px;padding:8px 12px 12px;border-top:1px solid #d7dde3;
+background:#ffffff;box-shadow:0 12px 28px #0004;max-height:min(70vh,520px);overflow:auto}
+.hd__nav.is-open{display:flex}
+@media(min-width:1024px){.hd__nav{display:flex;position:static;flex-direction:row;flex:1 1 auto;
+flex-wrap:nowrap;padding:0;border:0;gap:2px;min-width:0;overflow:visible;box-shadow:none;
+max-height:none;background:transparent}}
+.hd__nav a{padding:12px 14px;border-radius:4px;font-size:14px;font-weight:700;
+text-transform:uppercase;letter-spacing:.3px;color:#39414a;min-height:44px;
+display:flex;align-items:center;white-space:nowrap}
+@media(min-width:1024px){.hd__nav a{padding:8px 10px;font-size:13px;min-height:44px}}
+.hd__nav a:hover{background:#f3efe8;color:#7a3218}
+.hd__nav a[aria-current]{color:#7a3218;box-shadow:inset 0 -2px 0 #a34b2c}
+.hd__s{display:flex;border:1px solid #d7dde3;border-radius:4px;overflow:hidden;background:#fff;
+flex:1 1 auto;min-width:0;max-width:100%}
+@media(min-width:1024px){.hd__s{flex:0 0 200px;max-width:200px}}
+.hd__s input{border:0;padding:10px 11px;font-size:13px;width:100%;min-width:0;color:#1f2329;background:#fff}
+.hd__s button{border:0;background:#fff;color:#6a737d;padding:0 12px;cursor:pointer;font-size:14px;
+min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+.hd__s button:hover{color:#7a3218}
+.hd__s button svg{width:18px;height:18px;display:block}
+body.nav-lock{overflow:hidden}
+/* Заголовок раздела: настоящий H2 + «Весь раздел». */
+.lead{font-size:20px;font-weight:600;color:#3a4149;margin:16px 0 12px}
+.sec-rail{margin:0 0 18px}
+.sec-rail__h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+margin:0 0 12px;flex-wrap:wrap}
+.sec-rail__h h2{margin:0;font-size:18px;font-weight:700;color:#1f2329}
+.sec-rail__h h2 a{color:inherit;text-decoration:none}
+.sec-rail__h h2 a:hover{color:#7a3218}
+.sec-rail__h .sec-rail__all{font-size:13px;font-weight:700;color:#7a3218;padding:8px 4px;
+min-height:44px;display:inline-flex;align-items:center}
+.tabs{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin:0 0 12px}
+.tabs__pill{display:inline-flex;align-items:center;gap:7px;background:#a34b2c;color:#fff;
+font-weight:700;font-size:15px;padding:10px 18px;border-radius:4px}
+.tabs a{background:#ffffff;border:1px solid #d7dde3;border-radius:4px;padding:9px 15px;
+font-size:13px;color:#4a535d;font-weight:600;min-height:44px;display:inline-flex;align-items:center}
+.tabs a:hover{color:#7a3218;border-color:#a34b2c}
+.tabs a[aria-current]{background:#1a1512;color:#fff;border-color:#1a1512}
+/* Compact catalog filters (shared functional contract; tokens stay profile-scoped). */
+.filt{margin:0 0 14px;max-width:100%;overflow-x:clip}
+.filt__row{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
+.filt__seg{display:inline-flex;flex-wrap:wrap;gap:4px;align-items:center}
+.filt__seg a{background:#ffffff;border:1px solid #d7dde3;border-radius:3px;padding:6px 10px;
+font-size:12px;font-weight:600;color:#4a535d;min-height:36px;display:inline-flex;align-items:center}
+.filt__seg a[aria-current]{background:#1a1512;color:#fff;border-color:#1a1512}
+.filt__form{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;flex:1 1 auto}
+.filt__field{display:flex;flex-direction:column;gap:2px;font-size:11px;font-weight:600;color:#5b6470}
+.fi

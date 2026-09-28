@@ -1,0 +1,8 @@
+scenario,expected,local_result
+Generic series 1 season/3 eps,S1E1 active one resolve no choose prompt,PASS
+Multi-season generic,canonical first playable S1E1,PASS
+Exact S2E2 URL,keeps S2E2,PASS
+Stale/missing default id,deterministic fallback first released,PASS
+episodes>0 selectedEpisode null,MUST FAIL regression,PASS (assert forbids awaiting)
+Movie playable,one player no episode prompt,PASS
+Shell alias Bash,allow routine git,PASS

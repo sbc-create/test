@@ -1,0 +1,13 @@
+{
+  "lords-general": {
+    "desktop_columns": "CSS grid auto-fill (catalog 48/page)",
+    "poster_aspect_ratio": "2/3 (contract from prior block-03)",
+    "notes": "profile lords-general / ВидЛордс"
+  },
+  "lords-new": {
+    "notes": "same family CSS branch via profile tokens; verify live columns in Phase B screenshots"
+  },
+  "lords-curated": {
+    "notes": "same family CSS branch via profile tokens; verify live columns in Phase B screenshots"
+  }
+}

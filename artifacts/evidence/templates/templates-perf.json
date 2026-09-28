@@ -1,0 +1,44 @@
+{
+  "captured_at_utc": "2026-09-05T17:32:30.656Z",
+  "limitation": "локальный стенд без сети: LCP — нижняя граница, не замер продукта",
+  "cls_budget": 0.1,
+  "weight_budget_kb": 150,
+  "measurements": {
+    "animedia-portal": {
+      "cls": 0,
+      "lcp": 164,
+      "document_kb": 20,
+      "url": "http://127.0.0.1:8811/"
+    },
+    "lords-curated": {
+      "cls": 0,
+      "lcp": 136,
+      "document_kb": 45,
+      "url": "http://127.0.0.1:8812/"
+    },
+    "lords-general": {
+      "cls": 0,
+      "lcp": 176,
+      "document_kb": 43,
+      "url": "http://127.0.0.1:8813/"
+    },
+    "lords-genre": {
+      "cls": 0,
+      "lcp": 116,
+      "document_kb": 17,
+      "url": "http://127.0.0.1:8814/"
+    },
+    "lords-new": {
+      "cls": 0,
+      "lcp": 132,
+      "document_kb": 48,
+      "url": "http://127.0.0.1:8815/"
+    },
+    "zona-cinema": {
+      "cls": 0,
+      "lcp": 132,
+      "document_kb": 39,
+      "url": "http://127.0.0.1:8816/"
+    }
+  }
+}

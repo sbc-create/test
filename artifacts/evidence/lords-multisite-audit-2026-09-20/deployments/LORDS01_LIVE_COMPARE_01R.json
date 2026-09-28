@@ -1,0 +1,47 @@
+{
+  "cmp": {
+    "builds_equal": true,
+    "shas_equal": true,
+    "popular_equal": true,
+    "popular_ids_equal": true,
+    "r1_5xx": 0,
+    "r2_5xx": 0,
+    "r1_soft": 0,
+    "r2_soft": 0,
+    "CONSECUTIVE_STABLE": true
+  },
+  "r1_build": "20260920T140520Z-24c54b6-nova",
+  "r2_build": "20260920T140520Z-24c54b6-nova",
+  "p1": {
+    "week": "2026-W38",
+    "digest": "05400b9712dbb632303af1a43e0ebd8d",
+    "ids": [
+      "/title/svinorez/",
+      "/title/kadaknath/",
+      "/title/bezdna/",
+      "/title/sheri-lyubov-moya/",
+      "/title/bez-prava-na-strah/",
+      "/title/plasticheskaya-krasota/",
+      "/title/imperiya-artura/",
+      "/title/delo-ob-ubiystve-lakshmikantana/",
+      "/title/littl-lorreyn/",
+      "/title/ubiyca-vnutri/"
+    ]
+  },
+  "p2_run2": {
+    "week": "2026-W38",
+    "digest": "05400b9712dbb632303af1a43e0ebd8d",
+    "ids": [
+      "/title/svinorez/",
+      "/title/kadaknath/",
+      "/title/bezdna/",
+      "/title/sheri-lyubov-moya/",
+      "/title/bez-prava-na-strah/",
+      "/title/plasticheskaya-krasota/",
+      "/title/imperiya-artura/",
+      "/title/delo-ob-ubiystve-lakshmikantana/",
+      "/title/littl-lorreyn/",
+      "/title/ubiyca-vnutri/"
+    ]
+  }
+}

@@ -1,0 +1,410 @@
+{
+  "artifact": "PREVIEW_INVENTORY",
+  "captured_at_utc": "2026-09-05T18:52:25Z",
+  "base": "http://127.0.0.1:8901",
+  "tunnel": "ssh -N -L 8901:127.0.0.1:8901 claude@<хост>",
+  "artifactDigest": null,
+  "artifactDigestNote": "артефакт шаблона определён только для направления lords; у этих трёх семейств артефакта нет",
+  "contentSnapshot": null,
+  "contentSnapshotNote": "живого источника нет: витрины собраны на фикстуре",
+  "rollback": "остановка стенда предпросмотра; боевого состояния не затрагивает",
+  "families": {
+    "animedia-portal": {
+      "url": "http://127.0.0.1:8901/animedia-portal/",
+      "root": "/home/claude/work-templates/families/artifacts/lords/preview/animedia-preview",
+      "pages_ready": [
+        "catalog/",
+        "home",
+        "movies/",
+        "new/",
+        "schedule/",
+        "search/"
+      ],
+      "pages_thin": [
+        "countries/",
+        "genres/",
+        "years/"
+      ],
+      "pages_brief_by_design": [],
+      "pages_absent": [],
+      "indexing_closed_on_every_response": true,
+      "screenshots": [
+        "animedia-portal-catalog-1440.png",
+        "animedia-portal-catalog-390.png",
+        "animedia-portal-catalog-768.png",
+        "animedia-portal-home-1440.png",
+        "animedia-portal-home-390.png",
+        "animedia-portal-home-768.png",
+        "animedia-portal-search-1440.png",
+        "animedia-portal-search-390.png",
+        "animedia-portal-search-768.png"
+      ],
+      "pages": {
+        "home": {
+          "url": "http://127.0.0.1:8901/animedia-portal/",
+          "status": 200,
+          "bytes": 16186,
+          "h1": "Аниме онлайн",
+          "words_in_main": 337,
+          "cards": 137,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex, nofollow",
+          "ready": true
+        },
+        "catalog/": {
+          "url": "http://127.0.0.1:8901/animedia-portal/catalog/",
+          "status": 200,
+          "bytes": 36072,
+          "h1": "Каталог",
+          "words_in_main": 417,
+          "cards": 177,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex, nofollow",
+          "ready": true
+        },
+        "search/": {
+          "url": "http://127.0.0.1:8901/animedia-portal/search/",
+          "status": 200,
+          "bytes": 21033,
+          "h1": "Поиск",
+          "words_in_main": 78,
+          "cards": 0,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex, nofollow",
+          "ready": true
+        },
+        "genres/": {
+          "url": "http://127.0.0.1:8901/animedia-portal/genres/",
+          "status": 200,
+          "bytes": 4463,
+          "h1": "Жанры",
+          "words_in_main": 28,
+          "cards": 0,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex, nofollow",
+          "ready": false
+        },
+        "years/": {
+          "url": "http://127.0.0.1:8901/animedia-portal/years/",
+          "status": 200,
+          "bytes": 4384,
+          "h1": "Годы",
+          "words_in_main": 29,
+          "cards": 0,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex, nofollow",
+          "ready": false
+        },
+        "countries/": {
+          "url": "http://127.0.0.1:8901/animedia-portal/countries/",
+          "status": 200,
+          "bytes": 4141,
+          "h1": "Страны",
+          "words_in_main": 21,
+          "cards": 0,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex, nofollow",
+          "ready": false
+        },
+        "new/": {
+          "url": "http://127.0.0.1:8901/animedia-portal/new/",
+          "status": 200,
+          "bytes": 36042,
+          "h1": "Новое",
+          "words_in_main": 417,
+          "cards": 177,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex, nofollow",
+          "ready": true
+        },
+        "schedule/": {
+          "url": "http://127.0.0.1:8901/animedia-portal/schedule/",
+          "status": 200,
+          "bytes": 4760,
+          "h1": "Расписание",
+          "words_in_main": 76,
+          "cards": 0,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex, nofollow",
+          "ready": true
+        },
+        "movies/": {
+          "url": "http://127.0.0.1:8901/animedia-portal/movies/",
+          "status": 200,
+          "bytes": 27073,
+          "h1": "Фильмы",
+          "words_in_main": 363,
+          "cards": 168,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex, nofollow",
+          "ready": true
+        }
+      }
+    },
+    "basis-video": {
+      "url": "http://127.0.0.1:8901/basis-video/",
+      "root": "/home/claude/work-templates/families/var/build/pilot-local/dbefbb0eed312308/public",
+      "pages_ready": [
+        "home",
+        "legal/terms/",
+        "lekcii/",
+        "praktikum/"
+      ],
+      "pages_thin": [
+        "collections/izbrannoe/",
+        "news/"
+      ],
+      "pages_brief_by_design": [
+        "404/",
+        "410/",
+        "search/"
+      ],
+      "pages_absent": [],
+      "indexing_closed_on_every_response": true,
+      "screenshots": [
+        "basis-video-home-1440.png",
+        "basis-video-home-390.png",
+        "basis-video-home-768.png",
+        "basis-video-lekcii-1440.png",
+        "basis-video-lekcii-390.png",
+        "basis-video-lekcii-768.png",
+        "basis-video-search-1440.png",
+        "basis-video-search-390.png",
+        "basis-video-search-768.png"
+      ],
+      "pages": {
+        "home": {
+          "url": "http://127.0.0.1:8901/basis-video/",
+          "status": 200,
+          "bytes": 8969,
+          "h1": "Basis Pilot",
+          "words_in_main": 71,
+          "cards": 75,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "index,follow",
+          "ready": true
+        },
+        "lekcii/": {
+          "url": "http://127.0.0.1:8901/basis-video/lekcii/",
+          "status": 200,
+          "bytes": 7495,
+          "h1": "Лекции",
+          "words_in_main": 79,
+          "cards": 64,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "index,follow",
+          "ready": true
+        },
+        "search/": {
+          "url": "http://127.0.0.1:8901/basis-video/search/",
+          "status": 200,
+          "bytes": 2504,
+          "h1": "Поиск по каталогу",
+          "words_in_main": 6,
+          "cards": 0,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex,follow",
+          "ready": false
+        },
+        "news/": {
+          "url": "http://127.0.0.1:8901/basis-video/news/",
+          "status": 200,
+          "bytes": 3465,
+          "h1": "Новости",
+          "words_in_main": 13,
+          "cards": 13,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "index,follow",
+          "ready": false
+        },
+        "collections/izbrannoe/": {
+          "url": "http://127.0.0.1:8901/basis-video/collections/izbrannoe/",
+          "status": 200,
+          "bytes": 5086,
+          "h1": "Избранное",
+          "words_in_main": 37,
+          "cards": 32,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "index,follow",
+          "ready": false
+        },
+        "praktikum/": {
+          "url": "http://127.0.0.1:8901/basis-video/praktikum/",
+          "status": 200,
+          "bytes": 7561,
+          "h1": "Практикум",
+          "words_in_main": 78,
+          "cards": 64,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "index,follow",
+          "ready": true
+        },
+        "legal/terms/": {
+          "url": "http://127.0.0.1:8901/basis-video/legal/terms/",
+          "status": 200,
+          "bytes": 3505,
+          "h1": "Условия использования",
+          "words_in_main": 53,
+          "cards": 0,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "index,follow",
+          "ready": true
+        },
+        "404/": {
+          "url": "http://127.0.0.1:8901/basis-video/404/",
+          "status": 200,
+          "bytes": 2445,
+          "h1": "Страница не найдена",
+          "words_in_main": 13,
+          "cards": 0,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex,follow",
+          "ready": false
+        },
+        "410/": {
+          "url": "http://127.0.0.1:8901/basis-video/410/",
+          "status": 200,
+          "bytes": 2418,
+          "h1": "Материал удалён",
+          "words_in_main": 12,
+          "cards": 0,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex,follow",
+          "ready": false
+        }
+      }
+    },
+    "zona-cinema": {
+      "url": "http://127.0.0.1:8901/zona-cinema/",
+      "root": "/home/claude/work-templates/families/artifacts/lords/preview/zona-cinema-preview",
+      "pages_ready": [
+        "catalog/",
+        "home",
+        "movies/",
+        "new/",
+        "search/",
+        "series/"
+      ],
+      "pages_thin": [
+        "countries/",
+        "genres/",
+        "years/"
+      ],
+      "pages_brief_by_design": [],
+      "pages_absent": [],
+      "indexing_closed_on_every_response": true,
+      "screenshots": [
+        "zona-cinema-catalog-1440.png",
+        "zona-cinema-catalog-390.png",
+        "zona-cinema-catalog-768.png",
+        "zona-cinema-home-1440.png",
+        "zona-cinema-home-390.png",
+        "zona-cinema-home-768.png",
+        "zona-cinema-search-1440.png",
+        "zona-cinema-search-390.png",
+        "zona-cinema-search-768.png"
+      ],
+      "pages": {
+        "home": {
+          "url": "http://127.0.0.1:8901/zona-cinema/",
+          "status": 200,
+          "bytes": 23102,
+          "h1": "Фильмы онлайн",
+          "words_in_main": 471,
+          "cards": 244,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex, nofollow",
+          "ready": true
+        },
+        "catalog/": {
+          "url": "http://127.0.0.1:8901/zona-cinema/catalog/",
+          "status": 200,
+          "bytes": 36070,
+          "h1": "Каталог",
+          "words_in_main": 417,
+          "cards": 177,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex, nofollow",
+          "ready": true
+        },
+        "search/": {
+          "url": "http://127.0.0.1:8901/zona-cinema/search/",
+          "status": 200,
+          "bytes": 21013,
+          "h1": "Поиск",
+          "words_in_main": 78,
+          "cards": 0,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex, nofollow",
+          "ready": true
+        },
+        "genres/": {
+          "url": "http://127.0.0.1:8901/zona-cinema/genres/",
+          "status": 200,
+          "bytes": 4439,
+          "h1": "Жанры",
+          "words_in_main": 28,
+          "cards": 0,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex, nofollow",
+          "ready": false
+        },
+        "years/": {
+          "url": "http://127.0.0.1:8901/zona-cinema/years/",
+          "status": 200,
+          "bytes": 4360,
+          "h1": "Годы",
+          "words_in_main": 29,
+          "cards": 0,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex, nofollow",
+          "ready": false
+        },
+        "countries/": {
+          "url": "http://127.0.0.1:8901/zona-cinema/countries/",
+          "status": 200,
+          "bytes": 4117,
+          "h1": "Страны",
+          "words_in_main": 21,
+          "cards": 0,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex, nofollow",
+          "ready": false
+        },
+        "new/": {
+          "url": "http://127.0.0.1:8901/zona-cinema/new/",
+          "status": 200,
+          "bytes": 36040,
+          "h1": "Новое",
+          "words_in_main": 417,
+          "cards": 177,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex, nofollow",
+          "ready": true
+        },
+        "movies/": {
+          "url": "http://127.0.0.1:8901/zona-cinema/movies/",
+          "status": 200,
+          "bytes": 27071,
+          "h1": "Фильмы",
+          "words_in_main": 363,
+          "cards": 168,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex, nofollow",
+          "ready": true
+        },
+        "series/": {
+          "url": "http://127.0.0.1:8901/zona-cinema/series/",
+          "status": 200,
+          "bytes": 20111,
+          "h1": "Сериалы",
+          "words_in_main": 280,
+          "cards": 128,
+          "robots_header": "noindex, nofollow, noarchive",
+          "robots_meta": "noindex, nofollow",
+          "ready": true
+        }
+      }
+    }
+  }
+}

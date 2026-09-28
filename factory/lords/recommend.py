@@ -26,6 +26,34 @@ HOME_SHELVES = (
 )
 
 
+def _playback_state(title, playback: dict) -> bool | None:
+    """Пригодность записи к показу на полке.
+
+    Правило здесь то же, что и у плеера, и это главное. Прежде они расходились:
+    плеер снимал запись только при подтверждённом отсутствии потока
+    (`playable is False`), а ранжировщик требовал подтверждённого потока и
+    непроверенную запись отвергал.
+
+    На боевом каталоге поле `playable` не заполнено ни у одной записи —
+    проверка потока идёт отдельным процессом и до большинства записей не
+    дошла. Из-за расхождения полка «недавно добавленные» выходила пустой на
+    всех живых витринах, а верхняя карусель, объявленная в профилях, не
+    отрисовывалась ни разу. Заметить это чтением нельзя: оба места по
+    отдельности выглядят правильно.
+
+    Исключает запись подтверждённое отсутствие потока, а не отсутствие
+    проверки. Запись, которую нечем адресовать, тоже не выдаётся за играющую:
+    неизвестность распространяется на проверку, а не на сам факт наличия
+    потока.
+    """
+    declared = getattr(title, "playable", None)
+    if declared is False:
+        return False
+    if declared is True:
+        return True
+    return True if playback.get("aggregator") and playback.get("title_id") else None
+
+
 def features_from_title(title) -> ItemFeatures:
     """Запись каталога → признаки для ранжировщика."""
     playback = getattr(title, "playback", None) or {}
@@ -45,7 +73,7 @@ def features_from_title(title) -> ItemFeatures:
         franchise_id=None,
         poster=getattr(title, "poster_url", None) or getattr(title, "poster_src", None),
         path=getattr(title, "path", None),
-        playback_state=getattr(title, "playable", None),
+        playback_state=_playback_state(title, playback),
         has_title_page=True,
         kp_rating=getattr(title, "kinopoisk_rating", None),
         imdb_rating=getattr(title, "imdb_rating", None),

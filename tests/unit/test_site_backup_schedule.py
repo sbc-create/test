@@ -18,8 +18,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import pytest
-
 REPO = Path(__file__).resolve().parents[2]
 UNITS = REPO / "automation" / "host" / "systemd"
 SERVICE = UNITS / "yummy-site-backup.service"
@@ -43,7 +41,7 @@ def test_timer_exists_and_is_daily() -> None:
 def test_timer_avoids_the_round_minute() -> None:
     """В ноль минут стартует слишком многое сразу, включая host-бэкап в 03:20."""
     text = TIMER.read_text(encoding="utf-8")
-    line = next(l for l in text.splitlines() if l.startswith("OnCalendar="))
+    line = next(ln for ln in text.splitlines() if ln.startswith("OnCalendar="))
     minute = line.split(":")[1]
     assert minute not in {"00", "30"}, f"таймер назначен на круглую минуту: {line}"
 

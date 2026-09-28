@@ -1,0 +1,7 @@
+route,aggregator,title_id,season,episode,state,video_player,choose_prompt
+BEFORE generic pylnye-utesy,(none),(none),-,-,awaiting,0,1
+BEFORE exact s1e1,cvh,01a0b620-fef9-7b30-8e8a-0d068c6fe870,1,1,playable,1,0
+AFTER_LOCAL generic pylnye-utesy,cvh,01a0b620-fef9-7b30-8e8a-0d068c6fe870,1,1,resolving,1,0
+AFTER_LOCAL exact s1e1,cvh,01a0b620-fef9-7b30-8e8a-0d068c6fe870,1,1,resolving,1,0
+AFTER_LIVE generic (stale process),-,-,-,-,awaiting,0,1
+AFTER_LIVE exact (stale process),cvh,01a0b620-fef9-7b30-8e8a-0d068c6fe870,1,1,playable,1,0

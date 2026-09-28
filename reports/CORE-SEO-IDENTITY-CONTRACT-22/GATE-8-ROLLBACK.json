@@ -1,0 +1,20 @@
+{
+ "gate": "8. Откат и повторное применение",
+ "method": "git revert --no-commit 1e22c02^..HEAD во временном дереве от вершины ветки",
+ "afterRollback": {
+  "filesRemoved": [
+   "factory/site_engine/seo_binding.py",
+   "factory/site_engine/adapters/lords_seo_binding.py",
+   "config/external-id-namespaces.yaml",
+   "tests/unit/test_seo_binding_contract.py",
+   "tests/unit/test_seo_consumer_integration.py"
+  ],
+  "tests": "125 passed (gate, boundaries, content_identity)"
+ },
+ "afterReapply": {
+  "worktreeClean": true,
+  "tests": "88 passed (contract, consumer, gate)"
+ },
+ "migrations": "нет: схема базы не менялась",
+ "productionUnchanged": true
+}

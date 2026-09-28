@@ -1,0 +1,16 @@
+# Расписание: суточный снимок измерений.
+#
+# Время указано в часовом поясе Москвы, как просил запрос 019. Persistent=true
+# нужен на случай выключенной машины: пропущенный срок отрабатывается после
+# включения, а идемпотентность по периоду отчёта не даст записать лишнего.
+[Unit]
+Description=Расписание: суточный снимок измерений
+
+[Timer]
+OnCalendar=*-*-* 03:10:00
+Persistent=true
+RandomizedDelaySec=60
+Unit=seo-measurement-snapshot.service
+
+[Install]
+WantedBy=timers.target

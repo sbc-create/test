@@ -34,14 +34,16 @@ EPOCH = 0
 
 RUNTIME = '''#!/usr/bin/env python3
 """Рантайм стенда Lords. Только стандартная библиотека — сеть при старте не нужна."""
+import importlib
 import json
 import os
 import signal
 import socketserver
 import sys
 import threading
+from html import escape
 from pathlib import Path
-from urllib.parse import unquote
+from urllib.parse import parse_qs, unquote
 from wsgiref.simple_server import WSGIRequestHandler, WSGIServer, make_server
 
 # Каталог релиза берётся из окружения и НЕ разрешается заранее.
@@ -67,13 +69,152 @@ from wsgiref.simple_server import WSGIRequestHandler, WSGIServer, make_server
 # каждом обращении, и процесс остаётся привязан к ссылке, а не к её цели.
 BASE = Path(os.environ.get("LORDS_SITE_ROOT") or Path(__file__).parent)
 
+sys.path.insert(0, str(BASE / "lib"))
+
 
 def site_dir():
     """Каталог страниц текущего релиза. Вычисляется на каждый запрос."""
     return BASE / "site"
 
 
+SEARCH_LIMIT = 20
+SEARCH_MAX_LIMIT = 50
+_search_cache = {"stamp": None, "index": None}
+
+
+def search_index():
+    """Указатель поиска текущего релиза или None.
+
+    None означает «источник недоступен», и это не то же самое, что пустая
+    выдача: пустая выдача утверждает, что ничего не найдено, а здесь неизвестно,
+    искали ли вообще. Витрина, отвечающая «ничего не найдено» из-за
+    отсутствующего файла, выглядит исправной и не находит ничего никогда.
+    """
+    path = BASE / "search-index.json"
+    try:
+        stat = path.stat()
+    except OSError:
+        _search_cache["stamp"] = None
+        _search_cache["index"] = None
+        return None
+    stamp = (stat.st_mtime_ns, stat.st_ino, stat.st_size)
+    if _search_cache["stamp"] != stamp:
+        lib = str(BASE / "lib")
+        if lib not in sys.path:
+            sys.path.insert(0, lib)
+        # Кэш импортёра помнит, что каталога не было.
+        #
+        # Служба запускается раньше, чем раскладывается релиз: между стартом и
+        # появлением `lib` проходят секунды, и Python успевает запомнить путь
+        # как отсутствующий. Дальше он туда не заглядывает вовсе — поиск
+        # отвечает «указателя нет» при лежащем рядом указателе. Измерено на
+        # lords-02: библиотека на месте, файл на месте, ответ 503.
+        importlib.invalidate_caches()
+        try:
+            _search_cache["index"] = json.loads(path.read_text(encoding="utf-8"))
+            _search_cache["stamp"] = stamp
+        except (OSError, ValueError):
+            _search_cache["stamp"] = None
+            _search_cache["index"] = None
+            return None
+    return _search_cache["index"]
+
+
+def search(query, limit=SEARCH_LIMIT):
+    """Результаты поиска или None, если указателя нет."""
+    index = search_index()
+    if index is None:
+        return None
+    try:
+        from factory.lords import search_index as si
+    except ImportError:
+        return None
+    try:
+        return si.search(index, index.get("items") or [], query, limit=limit)
+    except ValueError:
+        # Указатель собран на другом наборе страниц: выдача была бы о других
+        # записях. Отказ честнее.
+        return None
+
+
+def _query_of(environ):
+    """Запрос из строки адреса, разобранный как UTF-8.
+
+    WSGI отдаёт QUERY_STRING строкой, полученной побайтовым разбором latin-1:
+    так устроен сам договор, и «матрица» приезжает как «Ð¼Ð°ÑÑÐ¸ÑÐ°». Поиск по
+    такой строке не находит ничего и выглядит сломанным при исправном
+    указателе — измерено на боевой витрине: ответ 200, count 0, в поле query
+    видна испорченная кириллица.
+
+    Обратное перекодирование делается на самой строке запроса, а не на
+    результате разбора: `parse_qs` раскрывает %-последовательности в те же
+    байты, и порядок здесь важен.
+    """
+    raw = environ.get("QUERY_STRING", "")
+    try:
+        raw = raw.encode("latin-1").decode("utf-8")
+    except (UnicodeEncodeError, UnicodeDecodeError):
+        # Строка уже в нормальном виде или содержит непригодные байты: разбираем
+        # как есть. Отказ здесь означал бы, что поиск не работает вовсе.
+        pass
+    values = parse_qs(raw, keep_blank_values=True).get("q", [])
+    return (values[0] if values else "").strip()
+
+
+def _limit_of(environ):
+    raw = parse_qs(environ.get("QUERY_STRING", "")).get("limit", [])
+    try:
+        value = int(raw[0]) if raw else SEARCH_LIMIT
+    except (TypeError, ValueError):
+        return SEARCH_LIMIT
+    return max(1, min(value, SEARCH_MAX_LIMIT))
+
+
+def _card(item):
+    name = escape(str(item.get("name") or ""))
+    url = escape(str(item.get("url") or "/"))
+    year = item.get("year")
+    подпись = f" <span class='year'>{escape(str(year))}</span>" if year else ""
+    return f'<li><a href="{url}">{name}</a>{подпись}</li>'
+
+
+def search_page(body, query, results):
+    """Готовая страница поиска с результатами, вставленными на сервере.
+
+    Вставка идёт по единственному якорю — строке счётчика. Если якоря нет,
+    страница отдаётся как есть: сломанная вставка хуже отсутствующей, а
+    страница обязана открыться в любом случае.
+    """
+    anchor_start = body.find('<p class="count" id="search-count">')
+    if anchor_start < 0:
+        return body
+    anchor_end = body.find("</p>", anchor_start)
+    if anchor_end < 0:
+        return body
+    if results is None:
+        замена = ('<p class="count" id="search-count">Поиск временно недоступен: '
+                  'указатель этого выпуска не собран.</p>')
+        return body[:anchor_start] + замена + body[anchor_end + 4:]
+    if not query:
+        return body
+    if results:
+        строки = "".join(_card(i) for i in results)
+        замена = (f'<p class="count" id="search-count">Найдено: {len(results)} '
+                  f'по запросу «{escape(query)}».</p>'
+                  f'<ul class="cards search-results">{строки}</ul>')
+    else:
+        замена = (f'<p class="count" id="search-count">По запросу «{escape(query)}» '
+                  f'ничего не найдено.</p>')
+    return body[:anchor_start] + замена + body[anchor_end + 4:]
+
+
 _manifest_cache = {"stamp": None, "data": None}
+
+#: Манифесты релиза по убыванию доверия. `release-manifest.json` описывает
+#: релиз целиком — витрину, тему, отпечаток шаблона, ревизию отрисовщика и
+#: снимок каталога. `bundle-manifest.json` — прежняя форма, оставленная для
+#: релизов, выложенных до неё.
+MANIFEST_NAMES = ("release-manifest.json", "bundle-manifest.json")
 
 
 def manifest():
@@ -81,20 +222,57 @@ def manifest():
 
     Держать его в памяти с момента старта нельзя: после переключения релиза
     healthz сообщал бы номер предыдущего.
+
+    Отсутствие файла — это отсутствие манифеста, а не повод отдать прежний.
+    Прежняя редакция при пропаже файла возвращала последнее прочитанное, и
+    после смены имени манифеста healthz полтора часа сообщал номер релиза,
+    которого уже не было в работе. Проверка по такому ответу подтверждает не
+    то, что выложено, а то, что когда-то читалось.
     """
-    path = BASE / "bundle-manifest.json"
-    try:
-        stat = path.stat()
-        stamp = (stat.st_mtime_ns, stat.st_ino, stat.st_size)
-    except OSError:
-        return _manifest_cache["data"] or {}
-    if _manifest_cache["stamp"] != stamp:
+    for name in MANIFEST_NAMES:
+        path = BASE / name
         try:
-            _manifest_cache["data"] = json.loads(path.read_text(encoding="utf-8"))
-            _manifest_cache["stamp"] = stamp
-        except (OSError, ValueError):
-            return _manifest_cache["data"] or {}
-    return _manifest_cache["data"] or {}
+            stat = path.stat()
+        except OSError:
+            continue
+        stamp = (name, stat.st_mtime_ns, stat.st_ino, stat.st_size)
+        if _manifest_cache["stamp"] != stamp:
+            try:
+                _manifest_cache["data"] = json.loads(path.read_text(encoding="utf-8"))
+                _manifest_cache["stamp"] = stamp
+            except (OSError, ValueError):
+                continue
+        return _manifest_cache["data"] or {}
+    _manifest_cache["stamp"] = None
+    _manifest_cache["data"] = None
+    return {}
+
+
+def release_identity():
+    """Чем витрина отвечает на вопрос «что именно сейчас выложено».
+
+    Отдаётся то, по чему выкладку можно сверить: витрина, тема, отпечаток
+    шаблона, ревизия отрисовщика, снимок каталога и цель отката. Пустые
+    значения не подставляются: незаполненное поле честнее правдоподобного.
+    """
+    m = manifest()
+    release = m.get("release")
+    if not release:
+        try:
+            release = Path(os.path.realpath(str(BASE))).name
+        except OSError:
+            release = None
+    return {
+        "site_id": m.get("tenant_id") or m.get("site_id"),
+        "theme": m.get("theme"),
+        "profile": m.get("profile"),
+        "release": release,
+        "template_digest": m.get("template_digest"),
+        "renderer_revision": m.get("renderer_revision"),
+        "content_snapshot_id": m.get("content_snapshot_id"),
+        "content_count": m.get("content_count"),
+        "rollback_target": m.get("rollback_target"),
+    }
 
 TYPES = {
     ".html": "text/html; charset=utf-8",
@@ -159,15 +337,40 @@ def app(environ, start_response):
         ready = (site_dir() / "index.html").is_file()
         body = json.dumps({
             "status": "ok" if (path == "/healthz" or ready) else "not_ready",
-            "site_id": manifest().get("site_id"),
-            "profile": manifest().get("profile"),
-            "release": manifest().get("release"),
+            **release_identity(),
             "indexing": "disabled",
         }, ensure_ascii=False).encode("utf-8")
         status = "200 OK" if (path == "/healthz" or ready) else "503 Service Unavailable"
         start_response(status, [("Content-Type", "application/json; charset=utf-8"),
                                 ("Content-Length", str(len(body)))] + HEADERS)
         return [body]
+
+    if path == "/api/search":
+        query = _query_of(environ)
+        results = search(query, _limit_of(environ)) if query else []
+        if results is None:
+            body = json.dumps({"error": "search_index_unavailable",
+                               "message": "указатель поиска этого выпуска не собран"},
+                              ensure_ascii=False).encode("utf-8")
+            status = "503 Service Unavailable"
+        else:
+            body = json.dumps({"query": query, "count": len(results),
+                               "results": results}, ensure_ascii=False).encode("utf-8")
+            status = "200 OK"
+        start_response(status, [("Content-Type", "application/json; charset=utf-8"),
+                                ("Content-Length", str(len(body)))] + HEADERS)
+        return [body]
+
+    if path in ("/search/", "/search"):
+        query = _query_of(environ)
+        page = site_dir() / "search" / "index.html"
+        if page.is_file():
+            текст = page.read_text(encoding="utf-8", errors="replace")
+            результаты = search(query, SEARCH_LIMIT) if query else []
+            body = search_page(текст, query, результаты).encode("utf-8")
+            start_response("200 OK", [("Content-Type", "text/html; charset=utf-8"),
+                                      ("Content-Length", str(len(body)))] + HEADERS)
+            return [body]
 
     target, redirect = resolve(path)
     if redirect:

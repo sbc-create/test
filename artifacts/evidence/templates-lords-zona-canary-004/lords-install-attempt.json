@@ -1,0 +1,83 @@
+{
+ "action": "install",
+ "site": "lords-01",
+ "unit": "lords-nova-01.service",
+ "domain": "lordfilm47.space",
+ "rollback_point": "/srv/lords/.frontend/.rollback/20260913T210350Z-lords-01",
+ "artifact_sha256": "7faf446c6e25639d15f4cfbeb9475539c969f1aafb4612c91cb390967c136ab9",
+ "previous_artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+ "manifest": {
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "source_commit": "a079a4aaa7db2a34e024d9f39c143af771701ec0",
+  "build_id": "20260913T212000Z-a079a4aa-nova",
+  "artifact_sha256": "7faf446c6e25639d15f4cfbeb9475539c969f1aafb4612c91cb390967c136ab9",
+  "profile": "lords-general",
+  "built_at": "2026-09-13T21:03:50Z"
+ },
+ "previous_manifest": {
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.0.2",
+  "source_commit": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee",
+  "build_id": "20260910T124530Z-a1691c56-nova",
+  "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+  "profile": "lords-general",
+  "built_at": "2026-09-10T12:45:30Z"
+ },
+ "restart_ok": false,
+ "restart_output": "Failed to restart lords-nova-01.service: Interactive authentication required.\nSee system logs and 'systemctl status lords-nova-01.service' for details.",
+ "health": {
+  "ok": false,
+  "checks": [],
+  "domain": "lordfilm47.space"
+ },
+ "proven_chain": {
+  "nginx_config": "/etc/nginx/lords/lords-01.conf",
+  "upstream_port": 9110,
+  "unit": "lords-nova-01.service",
+  "executable": "/srv/lords/.frontend/lords-frontend.py",
+  "manifest_path": "/srv/lords/.frontend/template-manifest.json",
+  "verdict": "PROVEN"
+ },
+ "at_utc": "20260913T210354Z",
+ "auto_rolled_back": true,
+ "rollback_restart_ok": false,
+ "rollback_output": "Failed to restart lords-nova-01.service: Interactive authentication required.\nSee system logs and 'systemctl status lords-nova-01.service' for details.",
+ "health_after_rollback": {
+  "domain": "lordfilm47.space",
+  "checks": [
+   {
+    "path": "/healthz",
+    "status": 200,
+    "bytes": 11,
+    "version": "1.0.2",
+    "artifact": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "ok": true
+   },
+   {
+    "path": "/",
+    "status": 200,
+    "bytes": 22942,
+    "version": "1.0.2",
+    "artifact": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "ok": true
+   },
+   {
+    "path": "/catalog/",
+    "status": 200,
+    "bytes": 29050,
+    "version": "1.0.2",
+    "artifact": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "ok": true
+   }
+  ],
+  "ok": true
+ },
+ "served_artifact_after_rollback": [
+  "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd"
+ ],
+ "baseline_fingerprint_match": true,
+ "verdict": "ROLLED_BACK_NO_CHANGE"
+}

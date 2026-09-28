@@ -1,0 +1,1109 @@
+{
+  "ts": "2026-09-20T21:57:25.260206+00:00",
+  "sites": {
+    "lords-01": {
+      "domain": "lordfilm47.space",
+      "links_tested": 320,
+      "results_sample": [
+        {
+          "path": "/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/"
+        },
+        {
+          "path": "/catalog/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/catalog/"
+        },
+        {
+          "path": "/new/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/new/"
+        },
+        {
+          "path": "/movies/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/movies/"
+        },
+        {
+          "path": "/series/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/series/"
+        },
+        {
+          "path": "/collections/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/collections/"
+        },
+        {
+          "path": "/search/?q=тест",
+          "status": null,
+          "err": "UnicodeEncodeError:'ascii' codec can't encode characters in position 15-18: ordinal not in range(128)",
+          "soft404": false,
+          "final": null
+        },
+        {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/9-11-ataka-na-pentagon/"
+        },
+        {
+          "path": "/title/amerikanskaya-amazonka/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/amerikanskaya-amazonka/"
+        },
+        {
+          "path": "/title/amerikanskaya-amazonka/season-1/episode-1/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/amerikanskaya-amazonka/season-1/episode-1/"
+        },
+        {
+          "path": "/genre/anime/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/genre/anime/"
+        },
+        {
+          "path": "/year/2021/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/year/2021/"
+        },
+        {
+          "path": "/country/usa/",
+          "status": 404,
+          "err": "HTTP:404",
+          "soft404": false,
+          "final": "https://lordfilm47.space/country/usa/"
+        },
+        {
+          "path": "/animation/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/animation/"
+        },
+        {
+          "path": "/title/nedetskie-igry-2/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/nedetskie-igry-2/"
+        },
+        {
+          "path": "/title/pravda-ili-zagovor/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/pravda-ili-zagovor/"
+        },
+        {
+          "path": "/title/reznya-v-norton-krik/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/reznya-v-norton-krik/"
+        },
+        {
+          "path": "/title/pervenec-2/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/pervenec-2/"
+        },
+        {
+          "path": "/title/princessa-i-drakon/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/princessa-i-drakon/"
+        },
+        {
+          "path": "/title/chya-eto-sobaka/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/chya-eto-sobaka/"
+        },
+        {
+          "path": "/title/do-kraya-sveta/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/do-kraya-sveta/"
+        },
+        {
+          "path": "/title/elaydzha-pil/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/elaydzha-pil/"
+        },
+        {
+          "path": "/title/otgoloski-iz-pustoty/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/otgoloski-iz-pustoty/"
+        },
+        {
+          "path": "/title/bratya-po-oruzhiyu-nasledie/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/bratya-po-oruzhiyu-nasledie/"
+        },
+        {
+          "path": "/title/materinskaya-lihoradka/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/materinskaya-lihoradka/"
+        },
+        {
+          "path": "/title/ty-ya-protiv-vsego-mira/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/ty-ya-protiv-vsego-mira/"
+        },
+        {
+          "path": "/title/parshivye-ovcy-2/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/parshivye-ovcy-2/"
+        },
+        {
+          "path": "/title/posledniy-prokat/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/posledniy-prokat/"
+        },
+        {
+          "path": "/title/umnica-gudi/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/umnica-gudi/"
+        },
+        {
+          "path": "/title/luchshie-iz-luchshih-2/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/luchshie-iz-luchshih-2/"
+        },
+        {
+          "path": "/title/ya-kris-farli/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/ya-kris-farli/"
+        },
+        {
+          "path": "/title/operaciya-fortitude/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/operaciya-fortitude/"
+        },
+        {
+          "path": "/title/v-poiskah-dzheka-charltona/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/v-poiskah-dzheka-charltona/"
+        },
+        {
+          "path": "/title/le-man-55-taynaya-katastrofa/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/le-man-55-taynaya-katastrofa/"
+        },
+        {
+          "path": "/title/lyubov-i-remont/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/lyubov-i-remont/"
+        },
+        {
+          "path": "/title/obitel-zla-2/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/obitel-zla-2/"
+        },
+        {
+          "path": "/title/udivitelnyy-mir-ieronima-bosha/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/udivitelnyy-mir-ieronima-bosha/"
+        },
+        {
+          "path": "/title/moi-dva-centa/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/moi-dva-centa/"
+        },
+        {
+          "path": "/title/plennica-6/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/plennica-6/"
+        },
+        {
+          "path": "/title/nash-vcherashniy-pobeg/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/nash-vcherashniy-pobeg/"
+        },
+        {
+          "path": "/title/kurinyy-gorodok/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/kurinyy-gorodok/"
+        },
+        {
+          "path": "/title/pylnye-utesy/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/pylnye-utesy/"
+        },
+        {
+          "path": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/ohota-za-brakom-v-37-eto-pole-bitvy/"
+        },
+        {
+          "path": "/title/chti-svoyu-mat/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/chti-svoyu-mat/"
+        },
+        {
+          "path": "/title/master-lda-i-plameni-2/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/master-lda-i-plameni-2/"
+        },
+        {
+          "path": "/title/magiya-zatonuvshih-korabley/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/magiya-zatonuvshih-korabley/"
+        },
+        {
+          "path": "/title/tihookeanskie-rassledovaniya/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/tihookeanskie-rassledovaniya/"
+        },
+        {
+          "path": "/title/sidni-lyumet-o-sebe/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/sidni-lyumet-o-sebe/"
+        },
+        {
+          "path": "/title/nerazryvnye-uzy/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/nerazryvnye-uzy/"
+        },
+        {
+          "path": "/title/isstuplenie-2/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordfilm47.space/title/isstuplenie-2/"
+        }
+      ],
+      "status_counts": {
+        "200": 316,
+        "None": 3,
+        "404": 1
+      },
+      "HTTP_5XX_COUNT": 0,
+      "HTTP_502_COUNT": 0,
+      "SOFT_404_COUNT": 0,
+      "HTTP_4XX_UNEXPECTED": 0,
+      "CROSS_DOMAIN_HREFS": 0,
+      "all_results_path": "/home/claude/wt-lords-default-episode-01/artifacts/evidence/lords-three-distinct-deep-audit-2026-09-20/14-http/lords-01-links.json"
+    },
+    "lords-02": {
+      "domain": "lordserial33.biz",
+      "links_tested": 320,
+      "results_sample": [
+        {
+          "path": "/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/"
+        },
+        {
+          "path": "/catalog/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/catalog/"
+        },
+        {
+          "path": "/new/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/new/"
+        },
+        {
+          "path": "/movies/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/movies/"
+        },
+        {
+          "path": "/series/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/series/"
+        },
+        {
+          "path": "/collections/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/collections/"
+        },
+        {
+          "path": "/search/?q=тест",
+          "status": null,
+          "err": "UnicodeEncodeError:'ascii' codec can't encode characters in position 15-18: ordinal not in range(128)",
+          "soft404": false,
+          "final": null
+        },
+        {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/9-11-ataka-na-pentagon/"
+        },
+        {
+          "path": "/title/amerikanskaya-amazonka/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/amerikanskaya-amazonka/"
+        },
+        {
+          "path": "/title/amerikanskaya-amazonka/season-1/episode-1/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/amerikanskaya-amazonka/season-1/episode-1/"
+        },
+        {
+          "path": "/genre/anime/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/genre/anime/"
+        },
+        {
+          "path": "/year/2021/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/year/2021/"
+        },
+        {
+          "path": "/country/usa/",
+          "status": 404,
+          "err": "HTTP:404",
+          "soft404": false,
+          "final": "https://lordserial33.biz/country/usa/"
+        },
+        {
+          "path": "/animation/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/animation/"
+        },
+        {
+          "path": "/title/plennica-6/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/plennica-6/"
+        },
+        {
+          "path": "/title/nash-vcherashniy-pobeg/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/nash-vcherashniy-pobeg/"
+        },
+        {
+          "path": "/title/pylnye-utesy/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/pylnye-utesy/"
+        },
+        {
+          "path": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/ohota-za-brakom-v-37-eto-pole-bitvy/"
+        },
+        {
+          "path": "/title/chti-svoyu-mat/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/chti-svoyu-mat/"
+        },
+        {
+          "path": "/title/master-lda-i-plameni-2/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/master-lda-i-plameni-2/"
+        },
+        {
+          "path": "/title/magiya-zatonuvshih-korabley/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/magiya-zatonuvshih-korabley/"
+        },
+        {
+          "path": "/title/tihookeanskie-rassledovaniya/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/"
+        },
+        {
+          "path": "/title/sryv/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/sryv/"
+        },
+        {
+          "path": "/title/skandal-4/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/skandal-4/"
+        },
+        {
+          "path": "/title/moy-sekret/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/moy-sekret/"
+        },
+        {
+          "path": "/title/sestry-obschaya-lyubov/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/sestry-obschaya-lyubov/"
+        },
+        {
+          "path": "/title/gorod-zhun/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/gorod-zhun/"
+        },
+        {
+          "path": "/title/vo-imya-lyubvi-2/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/vo-imya-lyubvi-2/"
+        },
+        {
+          "path": "/title/poceluy-menya-derzko/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/poceluy-menya-derzko/"
+        },
+        {
+          "path": "/title/ya-vsego-lish-travinka/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/ya-vsego-lish-travinka/"
+        },
+        {
+          "path": "/title/chistilschiki-3/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/chistilschiki-3/"
+        },
+        {
+          "path": "/title/ya-tebya-znayu/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/ya-tebya-znayu/"
+        },
+        {
+          "path": "/title/plasticheskaya-krasota/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/plasticheskaya-krasota/"
+        },
+        {
+          "path": "/title/epoha-lda/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/epoha-lda/"
+        },
+        {
+          "path": "/title/dobro-pozhalovat-v-platvil/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/dobro-pozhalovat-v-platvil/"
+        },
+        {
+          "path": "/title/sudmedekspert-stavshaya-domohozyaykoy/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/sudmedekspert-stavshaya-domohozyaykoy/"
+        },
+        {
+          "path": "/title/zvezdnaya-zolotaya-moneta/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/zvezdnaya-zolotaya-moneta/"
+        },
+        {
+          "path": "/collection/top_rated/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/collection/top_rated/"
+        },
+        {
+          "path": "/title/bezdna/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/bezdna/"
+        },
+        {
+          "path": "/title/ng-morskie-odissei-otkryvaya-tihiy-okean/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/ng-morskie-odissei-otkryvaya-tihiy-okean/"
+        },
+        {
+          "path": "/title/moi-dva-centa/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/moi-dva-centa/"
+        },
+        {
+          "path": "/title/nedetskie-igry-2/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/nedetskie-igry-2/"
+        },
+        {
+          "path": "/title/pravda-ili-zagovor/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/pravda-ili-zagovor/"
+        },
+        {
+          "path": "/title/reznya-v-norton-krik/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/reznya-v-norton-krik/"
+        },
+        {
+          "path": "/title/pervenec-2/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/pervenec-2/"
+        },
+        {
+          "path": "/title/princessa-i-drakon/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/princessa-i-drakon/"
+        },
+        {
+          "path": "/title/kurinyy-gorodok/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/kurinyy-gorodok/"
+        },
+        {
+          "path": "/title/chya-eto-sobaka/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/chya-eto-sobaka/"
+        },
+        {
+          "path": "/title/do-kraya-sveta/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/do-kraya-sveta/"
+        },
+        {
+          "path": "/title/elaydzha-pil/",
+          "status": 502,
+          "err": "HTTP:502",
+          "soft404": false,
+          "final": "https://lordserial33.biz/title/elaydzha-pil/"
+        }
+      ],
+      "status_counts": {
+        "200": 25,
+        "None": 3,
+        "404": 1,
+        "502": 291
+      },
+      "HTTP_5XX_COUNT": 291,
+      "HTTP_502_COUNT": 291,
+      "SOFT_404_COUNT": 0,
+      "HTTP_4XX_UNEXPECTED": 0,
+      "CROSS_DOMAIN_HREFS": 0,
+      "all_results_path": "/home/claude/wt-lords-default-episode-01/artifacts/evidence/lords-three-distinct-deep-audit-2026-09-20/14-http/lords-02-links.json"
+    },
+    "lords-03": {
+      "domain": "1lordserials1.online",
+      "links_tested": 320,
+      "results_sample": [
+        {
+          "path": "/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/"
+        },
+        {
+          "path": "/catalog/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/catalog/"
+        },
+        {
+          "path": "/new/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/new/"
+        },
+        {
+          "path": "/movies/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/movies/"
+        },
+        {
+          "path": "/series/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/series/"
+        },
+        {
+          "path": "/collections/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/collections/"
+        },
+        {
+          "path": "/search/?q=тест",
+          "status": null,
+          "err": "UnicodeEncodeError:'ascii' codec can't encode characters in position 15-18: ordinal not in range(128)",
+          "soft404": false,
+          "final": null
+        },
+        {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/9-11-ataka-na-pentagon/"
+        },
+        {
+          "path": "/title/amerikanskaya-amazonka/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/amerikanskaya-amazonka/"
+        },
+        {
+          "path": "/title/amerikanskaya-amazonka/season-1/episode-1/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/amerikanskaya-amazonka/season-1/episode-1/"
+        },
+        {
+          "path": "/genre/anime/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/genre/anime/"
+        },
+        {
+          "path": "/year/2021/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/year/2021/"
+        },
+        {
+          "path": "/country/usa/",
+          "status": 404,
+          "err": "HTTP:404",
+          "soft404": false,
+          "final": "https://1lordserials1.online/country/usa/"
+        },
+        {
+          "path": "/animation/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/animation/"
+        },
+        {
+          "path": "/collection/top_rated/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/collection/top_rated/"
+        },
+        {
+          "path": "/title/chya-eto-sobaka/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/chya-eto-sobaka/"
+        },
+        {
+          "path": "/title/svinorez/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/svinorez/"
+        },
+        {
+          "path": "/title/kadaknath/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/kadaknath/"
+        },
+        {
+          "path": "/title/bezdna/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/bezdna/"
+        },
+        {
+          "path": "/title/sheri-lyubov-moya/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/sheri-lyubov-moya/"
+        },
+        {
+          "path": "/title/bez-prava-na-strah/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/bez-prava-na-strah/"
+        },
+        {
+          "path": "/title/plasticheskaya-krasota/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/plasticheskaya-krasota/"
+        },
+        {
+          "path": "/title/imperiya-artura/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/imperiya-artura/"
+        },
+        {
+          "path": "/title/delo-ob-ubiystve-lakshmikantana/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/delo-ob-ubiystve-lakshmikantana/"
+        },
+        {
+          "path": "/title/littl-lorreyn/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/littl-lorreyn/"
+        },
+        {
+          "path": "/collection/recently_added/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/collection/recently_added/"
+        },
+        {
+          "path": "/collection/recently_added_movies/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/collection/recently_added_movies/"
+        },
+        {
+          "path": "/collection/current_season/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/collection/current_season/"
+        },
+        {
+          "path": "/collection/video_available/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/collection/video_available/"
+        },
+        {
+          "path": "/title/moi-dva-centa/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/moi-dva-centa/"
+        },
+        {
+          "path": "/title/plennica-6/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/plennica-6/"
+        },
+        {
+          "path": "/title/nash-vcherashniy-pobeg/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/nash-vcherashniy-pobeg/"
+        },
+        {
+          "path": "/title/nedetskie-igry-2/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/nedetskie-igry-2/"
+        },
+        {
+          "path": "/title/pravda-ili-zagovor/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/pravda-ili-zagovor/"
+        },
+        {
+          "path": "/title/reznya-v-norton-krik/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/reznya-v-norton-krik/"
+        },
+        {
+          "path": "/title/pervenec-2/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/pervenec-2/"
+        },
+        {
+          "path": "/title/princessa-i-drakon/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/princessa-i-drakon/"
+        },
+        {
+          "path": "/title/kurinyy-gorodok/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/kurinyy-gorodok/"
+        },
+        {
+          "path": "/title/do-kraya-sveta/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/do-kraya-sveta/"
+        },
+        {
+          "path": "/title/elaydzha-pil/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/elaydzha-pil/"
+        },
+        {
+          "path": "/title/otgoloski-iz-pustoty/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/otgoloski-iz-pustoty/"
+        },
+        {
+          "path": "/title/bratya-po-oruzhiyu-nasledie/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/bratya-po-oruzhiyu-nasledie/"
+        },
+        {
+          "path": "/title/materinskaya-lihoradka/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/materinskaya-lihoradka/"
+        },
+        {
+          "path": "/title/ty-ya-protiv-vsego-mira/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/ty-ya-protiv-vsego-mira/"
+        },
+        {
+          "path": "/title/parshivye-ovcy-2/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/parshivye-ovcy-2/"
+        },
+        {
+          "path": "/title/posledniy-prokat/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/posledniy-prokat/"
+        },
+        {
+          "path": "/title/umnica-gudi/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/umnica-gudi/"
+        },
+        {
+          "path": "/title/luchshie-iz-luchshih-2/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/luchshie-iz-luchshih-2/"
+        },
+        {
+          "path": "/title/ya-kris-farli/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/ya-kris-farli/"
+        },
+        {
+          "path": "/title/pylnye-utesy/",
+          "status": 200,
+          "err": null,
+          "soft404": false,
+          "final": "https://1lordserials1.online/title/pylnye-utesy/"
+        }
+      ],
+      "status_counts": {
+        "200": 62,
+        "None": 3,
+        "404": 1,
+        "502": 254
+      },
+      "HTTP_5XX_COUNT": 254,
+      "HTTP_502_COUNT": 254,
+      "SOFT_404_COUNT": 0,
+      "HTTP_4XX_UNEXPECTED": 0,
+      "CROSS_DOMAIN_HREFS": 0,
+      "all_results_path": "/home/claude/wt-lords-default-episode-01/artifacts/evidence/lords-three-distinct-deep-audit-2026-09-20/14-http/lords-03-links.json"
+    }
+  },
+  "totals": {}
+}

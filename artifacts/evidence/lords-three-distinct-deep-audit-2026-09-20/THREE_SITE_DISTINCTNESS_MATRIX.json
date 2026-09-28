@@ -1,0 +1,28 @@
+{
+  "ts": "2026-09-20T22:25:42.628648+00:00",
+  "card_modifiers_observed": {
+    "lords-01": "c--poster",
+    "lords-02": "c--episode (mix of landscape continuing + taller new arrivals)",
+    "lords-03": "c--editorial"
+  },
+  "block_orders_differ": true,
+  "shared_chrome": [
+    "Identical nav label set (Фильмы/Сериалы/Новинки/Подборки/Мультфильмы/Каталог)",
+    "Identical H1 copy: «Фильмы и сериалы онлайн»",
+    "Near-identical intro paragraph",
+    "Shared collection tile set including anime-catalog wording on all profiles"
+  ],
+  "THREE_TEMPLATES_STRUCTURALLY_DISTINCT": true,
+  "THREE_TEMPLATES_VISUALLY_DISTINCT": "PARTIAL",
+  "DISTINCTNESS_FAILURE_REASONS": [
+    "Product chrome (H1/nav/intro) is shared across cinema/series/curated roles.",
+    "Collection tiles and copy are shared, including «каталог аниме» on cinema home.",
+    "Passports still defer true mosaic curated card and stronger episode-horizontal differentiation.",
+    "Title shell remains shared across profiles."
+  ],
+  "finding": "TEMPLATE_DISTINCTNESS_INSUFFICIENT",
+  "visual_evidence": [
+    "screenshots/*__home__atf__1440x900__*",
+    "card class counts from TITLE_MATRIX run stdout / occupancy"
+  ]
+}

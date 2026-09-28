@@ -1,0 +1,787 @@
+{
+  "threshold": 8.0,
+  "meets_threshold": true,
+  "sites": [
+    {
+      "site": "pilot-local",
+      "profile": "",
+      "minimum": 10.0,
+      "average": 10.0,
+      "pages": [
+        {
+          "page": "home",
+          "path": "index.html",
+          "score": 10.0,
+          "passed": 9,
+          "applicable": 9,
+          "checks": [
+            {
+              "criterion": "routes",
+              "status": "pass",
+              "detail": "canonical-state=canonical-link, robots=index,follow"
+            },
+            {
+              "criterion": "document",
+              "status": "pass",
+              "detail": "h1='Basis Pilot', description и lang на месте"
+            },
+            {
+              "criterion": "validity",
+              "status": "pass",
+              "detail": "id уникальны (5), картинок 19"
+            },
+            {
+              "criterion": "accessibility",
+              "status": "pass",
+              "detail": "ориентиры 5, полей с подписью 1"
+            },
+            {
+              "criterion": "adaptivity",
+              "status": "pass",
+              "detail": "viewport='width=device-width, initial-scale=1', меню сворачивается"
+            },
+            {
+              "criterion": "updates",
+              "status": "not_applicable",
+              "detail": "страница не обещает полку обновлений"
+            },
+            {
+              "criterion": "player_shell",
+              "status": "not_applicable",
+              "detail": "у страницы нет плеера"
+            },
+            {
+              "criterion": "ratings",
+              "status": "pass",
+              "detail": "оценок нет ни как поля, ни как разметки — выдумывать нечего"
+            },
+            {
+              "criterion": "speed",
+              "status": "pass",
+              "detail": "16 КБ, картинок 19, стилей 2"
+            },
+            {
+              "criterion": "structured_data",
+              "status": "pass",
+              "detail": "JSON-LD присутствует"
+            },
+            {
+              "criterion": "content_honesty",
+              "status": "pass",
+              "detail": "источник package:content/catalog.json@da3442053b1b"
+            }
+          ]
+        },
+        {
+          "page": "category",
+          "path": "lekcii/index.html",
+          "score": 10.0,
+          "passed": 9,
+          "applicable": 9,
+          "checks": [
+            {
+              "criterion": "routes",
+              "status": "pass",
+              "detail": "canonical-state=canonical-link, robots=index,follow"
+            },
+            {
+              "criterion": "document",
+              "status": "pass",
+              "detail": "h1='Лекции', description и lang на месте"
+            },
+            {
+              "criterion": "validity",
+              "status": "pass",
+              "detail": "id уникальны (3), картинок 13"
+            },
+            {
+              "criterion": "accessibility",
+              "status": "pass",
+              "detail": "ориентиры 5, полей с подписью 1"
+            },
+            {
+              "criterion": "adaptivity",
+              "status": "pass",
+              "detail": "viewport='width=device-width, initial-scale=1', меню сворачивается"
+            },
+            {
+              "criterion": "updates",
+              "status": "not_applicable",
+              "detail": "страница не обещает полку обновлений"
+            },
+            {
+              "criterion": "player_shell",
+              "status": "not_applicable",
+              "detail": "у страницы нет плеера"
+            },
+            {
+              "criterion": "ratings",
+              "status": "pass",
+              "detail": "оценок нет ни как поля, ни как разметки — выдумывать нечего"
+            },
+            {
+              "criterion": "speed",
+              "status": "pass",
+              "detail": "14 КБ, картинок 13, стилей 2"
+            },
+            {
+              "criterion": "structured_data",
+              "status": "pass",
+              "detail": "JSON-LD присутствует"
+            },
+            {
+              "criterion": "content_honesty",
+              "status": "pass",
+              "detail": "источник package:content/catalog.json@da3442053b1b"
+            }
+          ]
+        },
+        {
+          "page": "title",
+          "path": "lekcii/material-01/index.html",
+          "score": 10.0,
+          "passed": 10,
+          "applicable": 10,
+          "checks": [
+            {
+              "criterion": "routes",
+              "status": "pass",
+              "detail": "canonical-state=canonical-link, robots=index,follow"
+            },
+            {
+              "criterion": "document",
+              "status": "pass",
+              "detail": "h1='Фикстура: материал 01', description и lang на месте"
+            },
+            {
+              "criterion": "validity",
+              "status": "pass",
+              "detail": "id уникальны (3), картинок 1"
+            },
+            {
+              "criterion": "accessibility",
+              "status": "pass",
+              "detail": "ориентиры 5, полей с подписью 1"
+            },
+            {
+              "criterion": "adaptivity",
+              "status": "pass",
+              "detail": "viewport='width=device-width, initial-scale=1', меню сворачивается"
+            },
+            {
+              "criterion": "updates",
+              "status": "not_applicable",
+              "detail": "страница не обещает полку обновлений"
+            },
+            {
+              "criterion": "player_shell",
+              "status": "pass",
+              "detail": "кадр зарезервирован, состояние объяснено, служебный код не утёк"
+            },
+            {
+              "criterion": "ratings",
+              "status": "pass",
+              "detail": "оценок нет ни как поля, ни как разметки — выдумывать нечего"
+            },
+            {
+              "criterion": "speed",
+              "status": "pass",
+              "detail": "11 КБ, картинок 1, стилей 2"
+            },
+            {
+              "criterion": "structured_data",
+              "status": "pass",
+              "detail": "JSON-LD присутствует"
+            },
+            {
+              "criterion": "content_honesty",
+              "status": "pass",
+              "detail": "источник package:content/catalog.json@da3442053b1b"
+            }
+          ]
+        },
+        {
+          "page": "season",
+          "path": "praktikum/serial-fikstura/season-1/index.html",
+          "score": 10.0,
+          "passed": 9,
+          "applicable": 9,
+          "checks": [
+            {
+              "criterion": "routes",
+              "status": "pass",
+              "detail": "canonical-state=canonical-link, robots=index,follow"
+            },
+            {
+              "criterion": "document",
+              "status": "pass",
+              "detail": "h1='Сезон 1', description и lang на месте"
+            },
+            {
+              "criterion": "validity",
+              "status": "pass",
+              "detail": "id уникальны (3), картинок 1"
+            },
+            {
+              "criterion": "accessibility",
+              "status": "pass",
+              "detail": "ориентиры 5, полей с подписью 1"
+            },
+            {
+              "criterion": "adaptivity",
+              "status": "pass",
+              "detail": "viewport='width=device-width, initial-scale=1', меню сворачивается"
+            },
+            {
+              "criterion": "updates",
+              "status": "not_applicable",
+              "detail": "страница не обещает полку обновлений"
+            },
+            {
+              "criterion": "player_shell",
+              "status": "not_applicable",
+              "detail": "у страницы нет плеера"
+            },
+            {
+              "criterion": "ratings",
+              "status": "pass",
+              "detail": "оценок нет ни как поля, ни как разметки — выдумывать нечего"
+            },
+            {
+              "criterion": "speed",
+              "status": "pass",
+              "detail": "10 КБ, картинок 1, стилей 2"
+            },
+            {
+              "criterion": "structured_data",
+              "status": "pass",
+              "detail": "JSON-LD присутствует"
+            },
+            {
+              "criterion": "content_honesty",
+              "status": "pass",
+              "detail": "источник package:content/catalog.json@da3442053b1b"
+            }
+          ]
+        },
+        {
+          "page": "episode",
+          "path": "praktikum/serial-fikstura/season-1/episode-1/index.html",
+          "score": 10.0,
+          "passed": 10,
+          "applicable": 10,
+          "checks": [
+            {
+              "criterion": "routes",
+              "status": "pass",
+              "detail": "canonical-state=canonical-link, robots=index,follow"
+            },
+            {
+              "criterion": "document",
+              "status": "pass",
+              "detail": "h1='Эпизод 1', description и lang на месте"
+            },
+            {
+              "criterion": "validity",
+              "status": "pass",
+              "detail": "id уникальны (2), картинок 1"
+            },
+            {
+              "criterion": "accessibility",
+              "status": "pass",
+              "detail": "ориентиры 5, полей с подписью 1"
+            },
+            {
+              "criterion": "adaptivity",
+              "status": "pass",
+              "detail": "viewport='width=device-width, initial-scale=1', меню сворачивается"
+            },
+            {
+              "criterion": "updates",
+              "status": "not_applicable",
+              "detail": "страница не обещает полку обновлений"
+            },
+            {
+              "criterion": "player_shell",
+              "status": "pass",
+              "detail": "кадр зарезервирован, состояние объяснено, служебный код не утёк"
+            },
+            {
+              "criterion": "ratings",
+              "status": "pass",
+              "detail": "оценок нет ни как поля, ни как разметки — выдумывать нечего"
+            },
+            {
+              "criterion": "speed",
+              "status": "pass",
+              "detail": "10 КБ, картинок 1, стилей 2"
+            },
+            {
+              "criterion": "structured_data",
+              "status": "pass",
+              "detail": "JSON-LD присутствует"
+            },
+            {
+              "criterion": "content_honesty",
+              "status": "pass",
+              "detail": "источник package:content/catalog.json@da3442053b1b"
+            }
+          ]
+        },
+        {
+          "page": "collection",
+          "path": "collections/izbrannoe/index.html",
+          "score": 10.0,
+          "passed": 9,
+          "applicable": 9,
+          "checks": [
+            {
+              "criterion": "routes",
+              "status": "pass",
+              "detail": "canonical-state=canonical-link, robots=index,follow"
+            },
+            {
+              "criterion": "document",
+              "status": "pass",
+              "detail": "h1='Избранное', description и lang на месте"
+            },
+            {
+              "criterion": "validity",
+              "status": "pass",
+              "detail": "id уникальны (3), картинок 7"
+            },
+            {
+              "criterion": "accessibility",
+              "status": "pass",
+              "detail": "ориентиры 5, полей с подписью 1"
+            },
+            {
+              "criterion": "adaptivity",
+              "status": "pass",
+              "detail": "viewport='width=device-width, initial-scale=1', меню сворачивается"
+            },
+            {
+              "criterion": "updates",
+              "status": "not_applicable",
+              "detail": "страница не обещает полку обновлений"
+            },
+            {
+              "criterion": "player_shell",
+              "status": "not_applicable",
+              "detail": "у страницы нет плеера"
+            },
+            {
+              "criterion": "ratings",
+              "status": "pass",
+              "detail": "оценок нет ни как поля, ни как разметки — выдумывать нечего"
+            },
+            {
+              "criterion": "speed",
+              "status": "pass",
+              "detail": "11 КБ, картинок 7, стилей 2"
+            },
+            {
+              "criterion": "structured_data",
+              "status": "pass",
+              "detail": "JSON-LD присутствует"
+            },
+            {
+              "criterion": "content_honesty",
+              "status": "pass",
+              "detail": "источник package:content/catalog.json@da3442053b1b"
+            }
+          ]
+        },
+        {
+          "page": "news_index",
+          "path": "news/index.html",
+          "score": 10.0,
+          "passed": 9,
+          "applicable": 9,
+          "checks": [
+            {
+              "criterion": "routes",
+              "status": "pass",
+              "detail": "canonical-state=canonical-link, robots=index,follow"
+            },
+            {
+              "criterion": "document",
+              "status": "pass",
+              "detail": "h1='Новости', description и lang на месте"
+            },
+            {
+              "criterion": "validity",
+              "status": "pass",
+              "detail": "id уникальны (3), картинок 1"
+            },
+            {
+              "criterion": "accessibility",
+              "status": "pass",
+              "detail": "ориентиры 5, полей с подписью 1"
+            },
+            {
+              "criterion": "adaptivity",
+              "status": "pass",
+              "detail": "viewport='width=device-width, initial-scale=1', меню сворачивается"
+            },
+            {
+              "criterion": "updates",
+              "status": "not_applicable",
+              "detail": "страница не обещает полку обновлений"
+            },
+            {
+              "criterion": "player_shell",
+              "status": "not_applicable",
+              "detail": "у страницы нет плеера"
+            },
+            {
+              "criterion": "ratings",
+              "status": "pass",
+              "detail": "оценок нет ни как поля, ни как разметки — выдумывать нечего"
+            },
+            {
+              "criterion": "speed",
+              "status": "pass",
+              "detail": "10 КБ, картинок 1, стилей 2"
+            },
+            {
+              "criterion": "structured_data",
+              "status": "pass",
+              "detail": "JSON-LD присутствует"
+            },
+            {
+              "criterion": "content_honesty",
+              "status": "pass",
+              "detail": "источник package:content/catalog.json@da3442053b1b"
+            }
+          ]
+        },
+        {
+          "page": "article",
+          "path": "news/zapis-3/index.html",
+          "score": 10.0,
+          "passed": 9,
+          "applicable": 9,
+          "checks": [
+            {
+              "criterion": "routes",
+              "status": "pass",
+              "detail": "canonical-state=canonical-link, robots=index,follow"
+            },
+            {
+              "criterion": "document",
+              "status": "pass",
+              "detail": "h1='Заметка стенда 3', description и lang на месте"
+            },
+            {
+              "criterion": "validity",
+              "status": "pass",
+              "detail": "id уникальны (2), картинок 1"
+            },
+            {
+              "criterion": "accessibility",
+              "status": "pass",
+              "detail": "ориентиры 5, полей с подписью 1"
+            },
+            {
+              "criterion": "adaptivity",
+              "status": "pass",
+              "detail": "viewport='width=device-width, initial-scale=1', меню сворачивается"
+            },
+            {
+              "criterion": "updates",
+              "status": "not_applicable",
+              "detail": "страница не обещает полку обновлений"
+            },
+            {
+              "criterion": "player_shell",
+              "status": "not_applicable",
+              "detail": "у страницы нет плеера"
+            },
+            {
+              "criterion": "ratings",
+              "status": "pass",
+              "detail": "оценок нет ни как поля, ни как разметки — выдумывать нечего"
+            },
+            {
+              "criterion": "speed",
+              "status": "pass",
+              "detail": "9 КБ, картинок 1, стилей 2"
+            },
+            {
+              "criterion": "structured_data",
+              "status": "pass",
+              "detail": "JSON-LD присутствует"
+            },
+            {
+              "criterion": "content_honesty",
+              "status": "pass",
+              "detail": "источник package:content/catalog.json@da3442053b1b"
+            }
+          ]
+        },
+        {
+          "page": "search",
+          "path": "search/index.html",
+          "score": 10.0,
+          "passed": 8,
+          "applicable": 8,
+          "checks": [
+            {
+              "criterion": "routes",
+              "status": "pass",
+              "detail": "canonical-state=noindex, robots=noindex,follow"
+            },
+            {
+              "criterion": "document",
+              "status": "pass",
+              "detail": "h1='Поиск по каталогу', description и lang на месте"
+            },
+            {
+              "criterion": "validity",
+              "status": "pass",
+              "detail": "id уникальны (3), картинок 1"
+            },
+            {
+              "criterion": "accessibility",
+              "status": "pass",
+              "detail": "ориентиры 5, полей с подписью 2"
+            },
+            {
+              "criterion": "adaptivity",
+              "status": "pass",
+              "detail": "viewport='width=device-width, initial-scale=1', меню сворачивается"
+            },
+            {
+              "criterion": "updates",
+              "status": "not_applicable",
+              "detail": "страница не обещает полку обновлений"
+            },
+            {
+              "criterion": "player_shell",
+              "status": "not_applicable",
+              "detail": "у страницы нет плеера"
+            },
+            {
+              "criterion": "ratings",
+              "status": "pass",
+              "detail": "оценок нет ни как поля, ни как разметки — выдумывать нечего"
+            },
+            {
+              "criterion": "speed",
+              "status": "pass",
+              "detail": "8 КБ, картинок 1, стилей 2"
+            },
+            {
+              "criterion": "structured_data",
+              "status": "not_applicable",
+              "detail": "служебная страница: разметка для машин не обещана"
+            },
+            {
+              "criterion": "content_honesty",
+              "status": "pass",
+              "detail": "источник package:content/catalog.json@da3442053b1b"
+            }
+          ]
+        },
+        {
+          "page": "content_unavailable",
+          "path": "lekcii/material-04/index.html",
+          "score": 10.0,
+          "passed": 9,
+          "applicable": 9,
+          "checks": [
+            {
+              "criterion": "routes",
+              "status": "pass",
+              "detail": "canonical-state=canonical-link, robots=index,follow"
+            },
+            {
+              "criterion": "document",
+              "status": "pass",
+              "detail": "h1='Фикстура: материал 04', description и lang на месте"
+            },
+            {
+              "criterion": "validity",
+              "status": "pass",
+              "detail": "id уникальны (3), картинок 1"
+            },
+            {
+              "criterion": "accessibility",
+              "status": "pass",
+              "detail": "ориентиры 5, полей с подписью 1"
+            },
+            {
+              "criterion": "adaptivity",
+              "status": "pass",
+              "detail": "viewport='width=device-width, initial-scale=1', меню сворачивается"
+            },
+            {
+              "criterion": "updates",
+              "status": "not_applicable",
+              "detail": "страница не обещает полку обновлений"
+            },
+            {
+              "criterion": "player_shell",
+              "status": "not_applicable",
+              "detail": "у страницы нет плеера"
+            },
+            {
+              "criterion": "ratings",
+              "status": "pass",
+              "detail": "оценок нет ни как поля, ни как разметки — выдумывать нечего"
+            },
+            {
+              "criterion": "speed",
+              "status": "pass",
+              "detail": "11 КБ, картинок 1, стилей 2"
+            },
+            {
+              "criterion": "structured_data",
+              "status": "pass",
+              "detail": "JSON-LD присутствует"
+            },
+            {
+              "criterion": "content_honesty",
+              "status": "pass",
+              "detail": "источник package:content/catalog.json@da3442053b1b"
+            }
+          ]
+        },
+        {
+          "page": "not_found",
+          "path": "404/index.html",
+          "score": 10.0,
+          "passed": 8,
+          "applicable": 8,
+          "checks": [
+            {
+              "criterion": "routes",
+              "status": "pass",
+              "detail": "canonical-state=noindex, robots=noindex,follow"
+            },
+            {
+              "criterion": "document",
+              "status": "pass",
+              "detail": "h1='Страница не найдена', description и lang на месте"
+            },
+            {
+              "criterion": "validity",
+              "status": "pass",
+              "detail": "id уникальны (2), картинок 1"
+            },
+            {
+              "criterion": "accessibility",
+              "status": "pass",
+              "detail": "ориентиры 5, полей с подписью 1"
+            },
+            {
+              "criterion": "adaptivity",
+              "status": "pass",
+              "detail": "viewport='width=device-width, initial-scale=1', меню сворачивается"
+            },
+            {
+              "criterion": "updates",
+              "status": "not_applicable",
+              "detail": "страница не обещает полку обновлений"
+            },
+            {
+              "criterion": "player_shell",
+              "status": "not_applicable",
+              "detail": "у страницы нет плеера"
+            },
+            {
+              "criterion": "ratings",
+              "status": "pass",
+              "detail": "оценок нет ни как поля, ни как разметки — выдумывать нечего"
+            },
+            {
+              "criterion": "speed",
+              "status": "pass",
+              "detail": "8 КБ, картинок 1, стилей 2"
+            },
+            {
+              "criterion": "structured_data",
+              "status": "not_applicable",
+              "detail": "служебная страница: разметка для машин не обещана"
+            },
+            {
+              "criterion": "content_honesty",
+              "status": "pass",
+              "detail": "источник package:content/catalog.json@da3442053b1b"
+            }
+          ]
+        },
+        {
+          "page": "gone",
+          "path": "410/index.html",
+          "score": 10.0,
+          "passed": 8,
+          "applicable": 8,
+          "checks": [
+            {
+              "criterion": "routes",
+              "status": "pass",
+              "detail": "canonical-state=noindex, robots=noindex,follow"
+            },
+            {
+              "criterion": "document",
+              "status": "pass",
+              "detail": "h1='Материал удалён', description и lang на месте"
+            },
+            {
+              "criterion": "validity",
+              "status": "pass",
+              "detail": "id уникальны (2), картинок 1"
+            },
+            {
+              "criterion": "accessibility",
+              "status": "pass",
+              "detail": "ориентиры 5, полей с подписью 1"
+            },
+            {
+              "criterion": "adaptivity",
+              "status": "pass",
+              "detail": "viewport='width=device-width, initial-scale=1', меню сворачивается"
+            },
+            {
+              "criterion": "updates",
+              "status": "not_applicable",
+              "detail": "страница не обещает полку обновлений"
+            },
+            {
+              "criterion": "player_shell",
+              "status": "not_applicable",
+              "detail": "у страницы нет плеера"
+            },
+            {
+              "criterion": "ratings",
+              "status": "pass",
+              "detail": "оценок нет ни как поля, ни как разметки — выдумывать нечего"
+            },
+            {
+              "criterion": "speed",
+              "status": "pass",
+              "detail": "8 КБ, картинок 1, стилей 2"
+            },
+            {
+              "criterion": "structured_data",
+              "status": "not_applicable",
+              "detail": "служебная страница: разметка для машин не обещана"
+            },
+            {
+              "criterion": "content_honesty",
+              "status": "pass",
+              "detail": "источник package:content/catalog.json@da3442053b1b"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "worst": [
+    "pilot-local",
+    "home",
+    10.0
+  ]
+}

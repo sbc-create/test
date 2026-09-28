@@ -1,0 +1,53 @@
+{
+ "action": "install",
+ "site": "lords-01",
+ "unit": "lords-nova-01.service",
+ "domain": "lordfilm47.space",
+ "rollback_point": "/srv/lords/.frontend/.rollback/20260919T225105Z-lords-01",
+ "artifact_sha256": "b9de6b626e6578310b7e35cefd63e08d1715db2ff0664c072064d12e72b146fa",
+ "previous_artifact_sha256": "128c3f6e439b5b4428716d281696ad70835ecc7858444c2790653fb058b88839",
+ "disk_sha_before_write": "128c3f6e439b5b4428716d281696ad70835ecc7858444c2790653fb058b88839",
+ "manifest": {
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "source_commit": "0a5fe648415d30d8f22bed016205c3cd878d7b3f",
+  "build_id": "20260919T224500Z-0a5fe648-nova",
+  "artifact_sha256": "b9de6b626e6578310b7e35cefd63e08d1715db2ff0664c072064d12e72b146fa",
+  "profile": "lords-general",
+  "built_at": "2026-09-19T22:51:05Z",
+  "source_dirty": false,
+  "domain": "lordfilm47.space",
+  "player_layout_contract": "full-bleed-v1"
+ },
+ "previous_manifest": {
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "source_commit": "63216915c75ab75fe579363ef40d318774053350",
+  "build_id": "20260919T201932Z-63216915-nova",
+  "artifact_sha256": "4b541137ff4df012eb189e4ed5ce2125d47af7d205188e5e7554170954abb120",
+  "profile": "lords-general",
+  "built_at": "2026-09-19T22:10:16Z",
+  "source_dirty": false,
+  "domain": "lordfilm47.space"
+ },
+ "restart_ok": null,
+ "restart_deferred": true,
+ "restart_output": "deferred: --no-restart; owner must restart unit",
+ "health": {
+  "ok": null,
+  "note": "not probed; process still stale until restart"
+ },
+ "proven_chain": {
+  "nginx_config": "/etc/nginx/lords/lords-01.conf",
+  "upstream_port": 9110,
+  "unit": "lords-nova-01.service",
+  "executable": "/srv/lords/.frontend/lords-frontend.py",
+  "manifest_path": "/srv/lords/.frontend/template-manifest.json",
+  "verdict": "MISMATCH"
+ },
+ "at_utc": "20260919T225105Z",
+ "verdict": "STAGED_AWAITING_OWNER_RESTART",
+ "player_layout_contract": "full-bleed-v1"
+}

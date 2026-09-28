@@ -1,0 +1,128 @@
+# Очередь работ CORE-FINALIZATION-CYCLIC-21.
+#
+# Рабочий артефакт отчёта, а не источник истины. Каноническое состояние
+# программы — /srv/site-factory/coordination/v1/.
+#
+# Оценка ставится по факту закрытого пользовательского пути с доказательствами,
+# а не по наличию кода.
+
+version: 1
+task: CORE-FINALIZATION-CYCLIC-21
+branch: claude/core-product-8plus-20
+base_head: b3bd6ede308dee2ec527d3e461acfae4857df21f
+
+gates:
+  - id: releaseBaseline
+    score: 8
+    state: closed
+    evidence: coordination/v1/evidence/013-core-review-queue-and-baseline.md
+  - id: contentIdentityReview
+    score: 8
+    state: closed_for_available_catalog
+    gaps: ["Yummyanime без доступа: 9 572 записи NOT_AUDITED_ACCESS_BLOCKED"]
+  - id: playbackCatalog
+    score: 8
+    state: closed
+    gaps: ["полки рекомендаций на витринах не отрисовываются"]
+  - id: workerAutonomy
+    score: 9
+    state: closed
+  - id: operatorIdentity
+    score: 8
+    state: closed
+    note: "не переписывать; использовать как основу экранов Users & Access"
+  - id: publicRegistration
+    score: 8
+    state: closed
+    gaps: ["почтовых реквизитов нет: production-контур выключен"]
+  - id: editorialAdmin
+    score: 8
+    state: closed
+    evidence: reports/CORE-FINALIZATION-CYCLIC-21/cycles/CYCLE-05.md
+    note: >-
+      Одиннадцать разделов из одиннадцати. Полный путь пройден в двух движках
+      на настоящих данных: 42 проверки на движок, роли, отбор на стороне
+      сервера, 390/768/1440 и двукратное увеличение.
+    history:
+      - "цикл 1: Сводка и Каталог, commit c366a81"
+      - "цикл 2: Разбор и рабочий поток, commit 7e3886c"
+      - "цикл 3: Задания и Витрины, commit 118ebf1"
+      - "цикл 4: Люди и доступ, Настройки"
+      - "цикл 5: Выпуски, Происшествия, отбор в журнале"
+  - id: selfServiceSite
+    score: 8
+    state: closed
+    evidence: reports/CORE-FINALIZATION-CYCLIC-21/cycles/CYCLE-07.md
+    gaps: ["публикация в боевой контур требует решения владельца и мастером не выдаётся"]
+    history:
+      - "цикл 6: мастер из восьми шагов и детерминированный сухой прогон"
+      - "цикл 7: подтверждение, канарейка под NOINDEX, проверки и полный откат"
+  - id: observability
+    score: 8
+    state: closed
+    evidence: reports/CORE-FINALIZATION-CYCLIC-21/cycles/CYCLE-08.md
+    note: "сквозной идентификатор, табель по измерению, тревоги с проверенными инструкциями"
+  - id: securityRollback
+    score: 8
+    state: closed
+    evidence: reports/CORE-FINALIZATION-CYCLIC-21/cycles/CYCLE-08.md
+    note: "матрица отказов, опись состояния, копия проверяется разворачиванием"
+  - id: coreTemplatesSeo
+    score: 8
+    state: closed
+    evidence: reports/CORE-FINALIZATION-CYCLIC-21/cycles/CYCLE-09.md
+    note: >-
+      Входящие 023, 025 и 026 закрыты одним измеренным ответом (handoff 028);
+      расписание из 019 подготовлено и сверено с таблицей запроса тестом.
+    owner_actions:
+      - "установить юниты deploy/systemd/seo-* (нужны права на боевой машине)"
+      - "задать SITE_ENGINE_RENDER_STATE_DIR в юните управляющей службы"
+  - id: ratingsProvenance
+    score: 8
+    state: closed
+    evidence: reports/CORE-FINALIZATION-CYCLIC-21/cycles/CYCLE-11.md
+    note: >-
+      Разрешение владельца от 2026-09-06: только оценки из действующего
+      договорного фида поставщика. Скрапинг сторонних сайтов запрещён и
+      проверяется тестом по исходному коду соединителя. Охват 51,0 % — свойство
+      фида, а не пробел реализации.
+    measured:
+      sites: 3
+      records: 53232
+      withRating: 27156
+      coverage: 0.510
+      bothMetrics: 19413
+
+incoming_handoffs:
+  - id: HANDOFF-2026-09-05-019-SEO-TO-CORE
+    type: scheduling_request
+    state: accepted_for_work
+    what: "четыре таймера systemd для цикла SEO"
+    note: "systemd принадлежит CORE; работа исполнима, запланирована отдельным циклом"
+  - id: HANDOFF-2026-09-05-011-SEO-TO-CORE
+    state: partially_addressed
+    note: "два дефекта из четырёх закрыты; synopsis и VideoObject остаются"
+
+external_blockers:
+  - id: YUMMYANI-CATALOG-READ
+    severity: P1
+    owner_action: "доступ на чтение к копии каталога"
+  - id: NO-RATING-SOURCE
+    severity: resolved
+    resolved_at: "2026-09-06"
+    note: >-
+      Снят решением владельца: разрешён действующий договорный фид поставщика.
+      Скрапинг сторонних сайтов остаётся запрещённым.
+  - id: DEPLOY-CLASSIFIER
+    severity: P1
+    note: "команда выкладки отклоняется классификатором среды агента"
+
+cycle_order:
+  1: "Admin Overview и Content"
+  2: "Review Queue и Workflow"
+  3: "Jobs и Sites"
+  4: "Users, Settings и Access"
+  5: "Releases, Incidents и Audit"
+  6: "Self-service: план и сухой прогон"
+  7: "Self-service: provision, canary и откат"
+  8: "Observability, security, contracts и release candidate"

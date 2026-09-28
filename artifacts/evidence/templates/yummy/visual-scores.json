@@ -1,0 +1,596 @@
+{
+  "captured_at_utc": "2026-09-04T16:16:54.594Z",
+  "base": "http://127.0.0.1:3210",
+  "scores": [
+    {
+      "page": "home",
+      "route": "/",
+      "checks": [
+        {
+          "id": "single_h1",
+          "ok": true,
+          "detail": "h1: 1"
+        },
+        {
+          "id": "has_landmarks",
+          "ok": true,
+          "detail": "header/main/footer"
+        },
+        {
+          "id": "no_horizontal_scroll",
+          "ok": true,
+          "detail": "scrollWidth 1440 vs 1440"
+        },
+        {
+          "id": "content_or_explanation",
+          "ok": true,
+          "detail": "содержимое либо объяснение"
+        },
+        {
+          "id": "unique_ids",
+          "ok": true,
+          "detail": "id: 6"
+        },
+        {
+          "id": "images_sized",
+          "ok": true,
+          "detail": "картинок 2"
+        },
+        {
+          "id": "has_title_tag",
+          "ok": true,
+          "detail": "YummyAnime — смотреть аниме онлайн, ката"
+        },
+        {
+          "id": "inputs_named",
+          "ok": true,
+          "detail": "полей 2"
+        },
+        {
+          "id": "skip_link",
+          "ok": true,
+          "detail": "переход к содержимому"
+        },
+        {
+          "id": "ratings_named",
+          "ok": true,
+          "detail": "оценок 0"
+        }
+      ],
+      "passed": 10,
+      "total": 10,
+      "score": 10
+    },
+    {
+      "page": "catalog",
+      "route": "/catalog",
+      "checks": [
+        {
+          "id": "single_h1",
+          "ok": true,
+          "detail": "h1: 1"
+        },
+        {
+          "id": "has_landmarks",
+          "ok": true,
+          "detail": "header/main/footer"
+        },
+        {
+          "id": "no_horizontal_scroll",
+          "ok": true,
+          "detail": "scrollWidth 1440 vs 1440"
+        },
+        {
+          "id": "content_or_explanation",
+          "ok": true,
+          "detail": "содержимое либо объяснение"
+        },
+        {
+          "id": "unique_ids",
+          "ok": true,
+          "detail": "id: 6"
+        },
+        {
+          "id": "images_sized",
+          "ok": true,
+          "detail": "картинок 2"
+        },
+        {
+          "id": "has_title_tag",
+          "ok": true,
+          "detail": "Каталог аниме — YummyAnime"
+        },
+        {
+          "id": "inputs_named",
+          "ok": true,
+          "detail": "полей 2"
+        },
+        {
+          "id": "skip_link",
+          "ok": true,
+          "detail": "переход к содержимому"
+        },
+        {
+          "id": "ratings_named",
+          "ok": true,
+          "detail": "оценок 19"
+        }
+      ],
+      "passed": 10,
+      "total": 10,
+      "score": 10
+    },
+    {
+      "page": "updates",
+      "route": "/catalog/anime-updates",
+      "checks": [
+        {
+          "id": "single_h1",
+          "ok": true,
+          "detail": "h1: 1"
+        },
+        {
+          "id": "has_landmarks",
+          "ok": true,
+          "detail": "header/main/footer"
+        },
+        {
+          "id": "no_horizontal_scroll",
+          "ok": true,
+          "detail": "scrollWidth 1440 vs 1440"
+        },
+        {
+          "id": "content_or_explanation",
+          "ok": true,
+          "detail": "содержимое либо объяснение"
+        },
+        {
+          "id": "unique_ids",
+          "ok": true,
+          "detail": "id: 6"
+        },
+        {
+          "id": "images_sized",
+          "ok": true,
+          "detail": "картинок 2"
+        },
+        {
+          "id": "has_title_tag",
+          "ok": true,
+          "detail": "Что обновилось: новые серии и озвучки — "
+        },
+        {
+          "id": "inputs_named",
+          "ok": true,
+          "detail": "полей 2"
+        },
+        {
+          "id": "skip_link",
+          "ok": true,
+          "detail": "переход к содержимому"
+        },
+        {
+          "id": "ratings_named",
+          "ok": true,
+          "detail": "оценок 0"
+        }
+      ],
+      "passed": 10,
+      "total": 10,
+      "score": 10
+    },
+    {
+      "page": "ongoing",
+      "route": "/catalog/ongoing",
+      "checks": [
+        {
+          "id": "single_h1",
+          "ok": true,
+          "detail": "h1: 1"
+        },
+        {
+          "id": "has_landmarks",
+          "ok": true,
+          "detail": "header/main/footer"
+        },
+        {
+          "id": "no_horizontal_scroll",
+          "ok": true,
+          "detail": "scrollWidth 1440 vs 1440"
+        },
+        {
+          "id": "content_or_explanation",
+          "ok": true,
+          "detail": "содержимое либо объяснение"
+        },
+        {
+          "id": "unique_ids",
+          "ok": true,
+          "detail": "id: 6"
+        },
+        {
+          "id": "images_sized",
+          "ok": true,
+          "detail": "картинок 2"
+        },
+        {
+          "id": "has_title_tag",
+          "ok": true,
+          "detail": "Онгоинги: что выходит и где вы остановил"
+        },
+        {
+          "id": "inputs_named",
+          "ok": true,
+          "detail": "полей 2"
+        },
+        {
+          "id": "skip_link",
+          "ok": true,
+          "detail": "переход к содержимому"
+        },
+        {
+          "id": "ratings_named",
+          "ok": true,
+          "detail": "оценок 0"
+        }
+      ],
+      "passed": 10,
+      "total": 10,
+      "score": 10
+    },
+    {
+      "page": "schedule",
+      "route": "/catalog/schedule",
+      "checks": [
+        {
+          "id": "single_h1",
+          "ok": true,
+          "detail": "h1: 1"
+        },
+        {
+          "id": "has_landmarks",
+          "ok": true,
+          "detail": "header/main/footer"
+        },
+        {
+          "id": "no_horizontal_scroll",
+          "ok": true,
+          "detail": "scrollWidth 1440 vs 1440"
+        },
+        {
+          "id": "content_or_explanation",
+          "ok": true,
+          "detail": "содержимое либо объяснение"
+        },
+        {
+          "id": "unique_ids",
+          "ok": true,
+          "detail": "id: 6"
+        },
+        {
+          "id": "images_sized",
+          "ok": true,
+          "detail": "картинок 2"
+        },
+        {
+          "id": "has_title_tag",
+          "ok": true,
+          "detail": "Расписание: когда выходит следующая сери"
+        },
+        {
+          "id": "inputs_named",
+          "ok": true,
+          "detail": "полей 2"
+        },
+        {
+          "id": "skip_link",
+          "ok": true,
+          "detail": "переход к содержимому"
+        },
+        {
+          "id": "ratings_named",
+          "ok": true,
+          "detail": "оценок 0"
+        }
+      ],
+      "passed": 10,
+      "total": 10,
+      "score": 10
+    },
+    {
+      "page": "top",
+      "route": "/catalog/top",
+      "checks": [
+        {
+          "id": "single_h1",
+          "ok": true,
+          "detail": "h1: 1"
+        },
+        {
+          "id": "has_landmarks",
+          "ok": true,
+          "detail": "header/main/footer"
+        },
+        {
+          "id": "no_horizontal_scroll",
+          "ok": true,
+          "detail": "scrollWidth 1440 vs 1440"
+        },
+        {
+          "id": "content_or_explanation",
+          "ok": true,
+          "detail": "содержимое либо объяснение"
+        },
+        {
+          "id": "unique_ids",
+          "ok": true,
+          "detail": "id: 12"
+        },
+        {
+          "id": "images_sized",
+          "ok": true,
+          "detail": "картинок 2"
+        },
+        {
+          "id": "has_title_tag",
+          "ok": true,
+          "detail": "Высоко оценённые тайтлы каталога — Yummy"
+        },
+        {
+          "id": "inputs_named",
+          "ok": true,
+          "detail": "полей 2"
+        },
+        {
+          "id": "skip_link",
+          "ok": true,
+          "detail": "переход к содержимому"
+        },
+        {
+          "id": "ratings_named",
+          "ok": true,
+          "detail": "оценок 0"
+        }
+      ],
+      "passed": 10,
+      "total": 10,
+      "score": 10
+    },
+    {
+      "page": "search",
+      "route": "/search?q=a",
+      "checks": [
+        {
+          "id": "single_h1",
+          "ok": true,
+          "detail": "h1: 1"
+        },
+        {
+          "id": "has_landmarks",
+          "ok": true,
+          "detail": "header/main/footer"
+        },
+        {
+          "id": "no_horizontal_scroll",
+          "ok": true,
+          "detail": "scrollWidth 1440 vs 1440"
+        },
+        {
+          "id": "content_or_explanation",
+          "ok": true,
+          "detail": "содержимое либо объяснение"
+        },
+        {
+          "id": "unique_ids",
+          "ok": true,
+          "detail": "id: 8"
+        },
+        {
+          "id": "images_sized",
+          "ok": true,
+          "detail": "картинок 2"
+        },
+        {
+          "id": "has_title_tag",
+          "ok": true,
+          "detail": "Поиск: a | YummyAnime"
+        },
+        {
+          "id": "inputs_named",
+          "ok": true,
+          "detail": "полей 2"
+        },
+        {
+          "id": "skip_link",
+          "ok": true,
+          "detail": "переход к содержимому"
+        },
+        {
+          "id": "ratings_named",
+          "ok": true,
+          "detail": "оценок 19"
+        }
+      ],
+      "passed": 10,
+      "total": 10,
+      "score": 10
+    },
+    {
+      "page": "search-empty",
+      "route": "/search?q=zzzzzzzzzz",
+      "checks": [
+        {
+          "id": "single_h1",
+          "ok": true,
+          "detail": "h1: 1"
+        },
+        {
+          "id": "has_landmarks",
+          "ok": true,
+          "detail": "header/main/footer"
+        },
+        {
+          "id": "no_horizontal_scroll",
+          "ok": true,
+          "detail": "scrollWidth 1440 vs 1440"
+        },
+        {
+          "id": "content_or_explanation",
+          "ok": true,
+          "detail": "содержимое либо объяснение"
+        },
+        {
+          "id": "unique_ids",
+          "ok": true,
+          "detail": "id: 8"
+        },
+        {
+          "id": "images_sized",
+          "ok": true,
+          "detail": "картинок 2"
+        },
+        {
+          "id": "has_title_tag",
+          "ok": true,
+          "detail": "Поиск: zzzzzzzzzz | YummyAnime"
+        },
+        {
+          "id": "inputs_named",
+          "ok": true,
+          "detail": "полей 2"
+        },
+        {
+          "id": "skip_link",
+          "ok": true,
+          "detail": "переход к содержимому"
+        },
+        {
+          "id": "ratings_named",
+          "ok": true,
+          "detail": "оценок 0"
+        }
+      ],
+      "passed": 10,
+      "total": 10,
+      "score": 10
+    },
+    {
+      "page": "title",
+      "route": "/anime/catalog-fixture-01",
+      "checks": [
+        {
+          "id": "single_h1",
+          "ok": true,
+          "detail": "h1: 1"
+        },
+        {
+          "id": "has_landmarks",
+          "ok": true,
+          "detail": "header/main/footer"
+        },
+        {
+          "id": "no_horizontal_scroll",
+          "ok": true,
+          "detail": "scrollWidth 1440 vs 1440"
+        },
+        {
+          "id": "content_or_explanation",
+          "ok": true,
+          "detail": "содержимое либо объяснение"
+        },
+        {
+          "id": "unique_ids",
+          "ok": true,
+          "detail": "id: 12"
+        },
+        {
+          "id": "images_sized",
+          "ok": true,
+          "detail": "картинок 2"
+        },
+        {
+          "id": "has_title_tag",
+          "ok": true,
+          "detail": "Карточка каталога 01 — смотреть аниме он"
+        },
+        {
+          "id": "inputs_named",
+          "ok": true,
+          "detail": "полей 8"
+        },
+        {
+          "id": "skip_link",
+          "ok": true,
+          "detail": "переход к содержимому"
+        },
+        {
+          "id": "ratings_named",
+          "ok": true,
+          "detail": "оценок 0"
+        }
+      ],
+      "passed": 10,
+      "total": 10,
+      "score": 10
+    },
+    {
+      "page": "not-found",
+      "route": "/nonexistent-address-xyz",
+      "checks": [
+        {
+          "id": "single_h1",
+          "ok": true,
+          "detail": "h1: 1"
+        },
+        {
+          "id": "has_landmarks",
+          "ok": false,
+          "detail": "header/main/footer"
+        },
+        {
+          "id": "no_horizontal_scroll",
+          "ok": true,
+          "detail": "scrollWidth 1440 vs 1440"
+        },
+        {
+          "id": "content_or_explanation",
+          "ok": true,
+          "detail": "содержимое либо объяснение"
+        },
+        {
+          "id": "unique_ids",
+          "ok": true,
+          "detail": "id: 0"
+        },
+        {
+          "id": "images_sized",
+          "ok": true,
+          "detail": "картинок 0"
+        },
+        {
+          "id": "has_title_tag",
+          "ok": true,
+          "detail": "Страница не найдена | YummyAnime"
+        },
+        {
+          "id": "inputs_named",
+          "ok": true,
+          "detail": "полей 0"
+        },
+        {
+          "id": "skip_link",
+          "ok": false,
+          "detail": "переход к содержимому"
+        },
+        {
+          "id": "ratings_named",
+          "ok": true,
+          "detail": "оценок 0"
+        }
+      ],
+      "passed": 8,
+      "total": 10,
+      "score": 8
+    }
+  ]
+}

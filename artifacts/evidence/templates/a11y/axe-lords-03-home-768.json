@@ -1,0 +1,29 @@
+{
+  "site": "lords-03",
+  "page": "home",
+  "route": "/",
+  "url": "http://127.0.0.1:8803/",
+  "viewport": {
+    "name": "tablet",
+    "width": 768,
+    "height": 1024
+  },
+  "captured_at_utc": "2026-09-07T16:38:07.374Z",
+  "axe_version": "4.13.0",
+  "tags": [
+    "wcag2a",
+    "wcag2aa",
+    "wcag21a",
+    "wcag21aa",
+    "wcag22aa"
+  ],
+  "rules_passed": 30,
+  "rules_inapplicable": 33,
+  "violations": [],
+  "incomplete": [
+    {
+      "id": "color-contrast",
+      "nodes": 14
+    }
+  ]
+}

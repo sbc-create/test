@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "note": "Производный файл. Источники — config/site-profiles/*.json и юниты systemd. Правится источник, а не этот файл.",
+  "shared_runtime_path": "/srv/lords/.frontend/lords-frontend.py",
+  "sites": {
+    "lords-01": {
+      "site_id": "lords-01",
+      "family": "lords",
+      "port": 9110,
+      "unit": "lords-nova-01.service",
+      "unit_path": "/etc/systemd/system/lords-nova-01.service",
+      "exec_path": "/srv/lords/.frontend/lords-frontend.py",
+      "manifest_path": "/srv/lords/.frontend/template-manifest.json",
+      "exact_domain": "lordfilm47.space",
+      "canonical_host": "lordfilm47.space",
+      "indexing_enabled": false,
+      "scope": "exact-domain-registry",
+      "release_link": "/srv/lords/.frontend/sites/lords-01/current"
+    },
+    "lords-02": {
+      "site_id": "lords-02",
+      "family": "lords",
+      "port": 9111,
+      "unit": "nova-lords-02.service",
+      "unit_path": "/etc/systemd/system/nova-lords-02.service",
+      "exec_path": "/srv/lords/.frontend/lords-frontend.py",
+      "manifest_path": "/srv/lords/.frontend/template-manifest-lords-02.json",
+      "exact_domain": "lordserial33.biz",
+      "canonical_host": "lordserial33.biz",
+      "indexing_enabled": false,
+      "scope": "exact-domain-registry",
+      "release_link": "/srv/lords/.frontend/sites/lords-02/current"
+    },
+    "lords-03": {
+      "site_id": "lords-03",
+      "family": "lords",
+      "port": 9112,
+      "unit": "nova-lords-03.service",
+      "unit_path": "/etc/systemd/system/nova-lords-03.service",
+      "exec_path": "/srv/lords/.frontend/lords-frontend.py",
+      "manifest_path": "/srv/lords/.frontend/template-manifest-lords-03.json",
+      "exact_domain": "1lordserials1.online",
+      "canonical_host": "1lordserials1.online",
+      "indexing_enabled": false,
+      "scope": "exact-domain-registry",
+      "release_link": "/srv/lords/.frontend/sites/lords-03/current"
+    },
+    "zona-01": {
+      "site_id": "zona-01",
+      "family": "zona",
+      "port": 9120,
+      "unit": "nova-zona-01.service",
+      "unit_path": "/etc/systemd/system/nova-zona-01.service",
+      "exec_path": "/srv/lords/.frontend/lords-frontend.py",
+      "manifest_path": "/srv/lords/.frontend/template-manifest-zona-01.json",
+      "exact_domain": null,
+      "canonical_host": null,
+      "indexing_enabled": null,
+      "scope": "out-of-registry",
+      "release_link": "/srv/lords/.frontend/sites/zona-01/current"
+    },
+    "animedia-01": {
+      "site_id": "animedia-01",
+      "family": "animedia",
+      "port": 9121,
+      "unit": "nova-animedia-01.service",
+      "unit_path": "/etc/systemd/system/nova-animedia-01.service",
+      "exec_path": "/srv/lords/.frontend/lords-frontend.py",
+      "manifest_path": "/srv/lords/.frontend/template-manifest-animedia-01.json",
+      "exact_domain": null,
+      "canonical_host": null,
+      "indexing_enabled": null,
+      "scope": "out-of-registry",
+      "release_link": "/srv/lords/.frontend/sites/animedia-01/current"
+    },
+    "animedia-02": {
+      "site_id": "animedia-02",
+      "family": "animedia",
+      "port": 9122,
+      "unit": "nova-animedia-02.service",
+      "unit_path": "/etc/systemd/system/nova-animedia-02.service",
+      "exec_path": "/srv/lords/.frontend/lords-frontend.py",
+      "manifest_path": "/srv/lords/.frontend/template-manifest-animedia-02.json",
+      "exact_domain": null,
+      "canonical_host": null,
+      "indexing_enabled": null,
+      "scope": "out-of-registry",
+      "release_link": "/srv/lords/.frontend/sites/animedia-02/current"
+    }
+  },
+  "conflicts": [],
+  "in_registry": [
+    "lords-01",
+    "lords-02",
+    "lords-03"
+  ],
+  "out_of_registry": [
+    "animedia-01",
+    "animedia-02",
+    "zona-01"
+  ]
+}

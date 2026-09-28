@@ -1,0 +1,286 @@
+# Пресет пакета для мастера заведения витрины.
+#
+# Значения, одинаковые для всех новых витрин профиля. Взяты из рабочего
+# пакета, а не выдуманы: пакет из придуманных значений проходит схему и
+# падает на первой же настоящей проверке. Поля со значением null оставлены
+# намеренно — схема требует их присутствия.
+#
+# То, что спрашивает мастер, накладывается поверх: домен, среда, площадка,
+# тема, название, правообладатель, типы содержимого и ссылки на секреты.
+acceptance:
+  accessibility:
+    level: AA
+    viewports:
+    - 360
+    - 390
+    - 768
+    - 1024
+    - 1440
+  max_major_findings: 25
+  performance:
+    field_targets:
+      cls: 0.1
+      inp_ms: 200
+      lcp_ms: 2500
+    lab_cls: 0.1
+    lab_lcp_ms: 2500
+    lab_total_bytes: 800000
+  reference_screenshots: []
+  routes:
+  - expect_indexable: true
+    expected_status: 200
+    page_type: home
+    path: /
+  - expect_indexable: true
+    expected_status: 200
+    page_type: category
+    path: /lekcii/
+  - expect_indexable: true
+    expected_status: 200
+    page_type: paginated_page
+    path: /lekcii/page/2/
+  - expect_indexable: true
+    expected_status: 200
+    page_type: title
+    path: /lekcii/material-01/
+  - expect_indexable: true
+    expected_status: 200
+    page_type: episode
+    path: /praktikum/serial-fikstura/season-1/episode-1/
+  - expect_indexable: true
+    expected_status: 200
+    page_type: content_unavailable
+    path: /praktikum/serial-fikstura/season-1/episode-3/
+  - expect_indexable: true
+    expected_status: 200
+    page_type: news_index
+    path: /news/
+  - expect_indexable: true
+    expected_status: 200
+    page_type: legal
+    path: /legal/terms/
+  - expect_indexable: false
+    expected_status: 200
+    page_type: search
+    path: /search/
+  - expect_indexable: false
+    expected_status: 404
+    page_type: not_found
+    path: /lekcii/page/999/
+  - expect_indexable: false
+    expected_status: 404
+    page_type: not_found
+    path: /arhiv/
+  scenarios:
+  - description: Пользователь открывает каталог, переходит на вторую страницу и открывает
+      материал
+    id: browse-catalog
+    steps:
+    - Открыть /lekcii/
+    - Перейти по ссылке «Следующая»
+    - Открыть первую карточку
+  - description: Недоступный эпизод показывает статус, а не подменяется другим роликом
+    id: unavailable-video
+    steps:
+    - Открыть эпизод 3
+    - Убедиться, что показан блок недоступности
+    - Убедиться, что плеера нет
+  - description: Основные элементы достижимы с клавиатуры и имеют видимый focus
+    id: keyboard-navigation
+    steps:
+    - Tab до skip-link
+    - Активировать skip-link
+    - Tab по основной навигации
+advertising:
+  adapter: disabled
+  enabled: false
+  placements: []
+  policy_refs: []
+  provider: none
+  secret_ref: null
+authorized_at: null
+authorized_by: null
+backup_policy:
+  before_mutation: true
+  restore_test: each_release
+  schedule: null
+  targets:
+  - mutable_data
+brand:
+  colors:
+    background: '#ffffff'
+    muted: '#4a5261'
+    primary: '#1f4fd8'
+    surface: '#f4f6fb'
+    text: '#14181f'
+  favicon_ref: brand/favicon.svg
+  fonts:
+    body: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif
+    self_hosted: true
+  legal_name: DLE Site Factory — пилотный стенд
+  logo_ref: brand/logo.svg
+  name: Basis Pilot
+content_package_ref: content/catalog.json
+content_package_sha256: da3442053b1bb4aea7369a5f051cc9cae830ea6d83597f993939ba5a58d4ab98
+content_source:
+  allowed_fields:
+  - title
+  - description
+  - image
+  - facts
+  catalog_ref: content/catalog.json
+  catalog_sha256: da3442053b1bb4aea7369a5f051cc9cae830ea6d83597f993939ba5a58d4ab98
+  catalog_version: '2026-08-21'
+  kind: fixture
+  provenance: Синтетические записи, созданные внутри репозитория фабрики
+  rights_confirmed: true
+  rights_manifest_ref: content/rights-manifest.yaml
+dle_distribution_ref: null
+dle_distribution_sha256: null
+dle_license_ref: null
+dle_version: '20.0'
+dns_zone_ref: null
+integrations: []
+language: ru
+legal:
+  contacts:
+    address: null
+    email: pilot@localhost.test
+    phone: null
+  documents:
+  - body_ref: legal/terms.md
+    slug: terms
+    summary: Порядок использования пилотного стенда.
+    title: Условия использования
+  - body_ref: legal/privacy.md
+    slug: privacy
+    summary: Что стенд не собирает и что хранит.
+    title: Политика конфиденциальности
+  owner: DLE Site Factory — пилотный стенд
+metadata:
+  canonical_policy:
+    case: lower
+    host_form: non_www
+    scheme: https
+    trailing_slash: true
+  description_templates:
+    category: Материалы раздела {category} на пилотном стенде.
+    home: 'Пилотный стенд фабрики сайтов: проверка конвейера сборки, публикации и
+      контроля качества.'
+    news_index: Технические заметки пилотного стенда.
+    pagination: '{description} Страница {n}.'
+  og:
+    enabled: true
+    site_name: Basis Pilot
+  robots:
+    extra_disallow: []
+    production_policy: allow_indexable_only
+    staging_policy: noindex_all_plus_auth
+  sitemap:
+    enabled: true
+    max_urls_per_file: 50000
+    split_by_type: true
+  structured_data_input:
+    allowed_types:
+    - Organization
+    - WebSite
+    - BreadcrumbList
+    organization:
+      name: DLE Site Factory — пилотный стенд
+      url: https://pilot.localhost.test/
+    website: null
+  title_templates:
+    category: '{category} — {brand}'
+    episode: '{title}. Сезон {season}, эпизод {episode} — {brand}'
+    gone: Материал удалён
+    home: '{brand} — пилотный стенд фабрики'
+    news_index: Новости — {brand}
+    not_found: Страница не найдена
+    pagination: '{title} — страница {n}'
+    search: Поиск по каталогу
+    title: '{title} — {brand}'
+monitoring_policy:
+  alert_ref: null
+  checks:
+  - http_status
+  - canonical_host
+  health_endpoint: /health
+navigation:
+  footer:
+  - label: Главная
+    url: /
+  primary:
+  - label: Лекции
+    url: /lekcii/
+  - label: Практикум
+    url: /praktikum/
+  - label: Новости
+    url: /news/
+network_allowlist:
+- 127.0.0.1
+retention_policy:
+  artifacts_days: 30
+  backups_days: 14
+  logs_days: 14
+rollback_policy:
+  auto_rollback_on_smoke_failure: true
+  database_rollback: not_applicable
+  keep_releases: 3
+runtime:
+  cache: {}
+  cron: []
+  database:
+    engine: none
+    name: null
+    password_secret_ref: null
+    user: null
+    version: null
+  limits: {}
+  mail: {}
+  php:
+    fpm_pool: null
+    max_execution_time: 30
+    memory_limit: 256M
+    version: '8.3'
+schema_version: 1
+seo:
+  hreflang: []
+  indexability_matrix_ref: knowledge/SEO_INDEXABILITY_MATRIX.yaml
+  indexable_facets_allowlist: []
+  internal_link_rules:
+    breadcrumbs: true
+    max_depth: 4
+    related_source: package_relations_only
+  items_per_page: 12
+  non_indexable_parameters:
+  - sort
+  - order
+  - view
+  - per_page
+  - q
+  - utm_source
+  - utm_medium
+  - utm_campaign
+  - utm_term
+  - utm_content
+  - gclid
+  - yclid
+  - fbclid
+  pagination_template: /page/{n}/
+  url_templates:
+    category: /{category_slug}/
+    title: /{category_slug}/{title_slug}/
+  webmaster_verification_refs: {}
+ssh_host_ref: null
+visual_reference: null
+vk_video:
+  adapter: mock
+  contract_ref: content/vk-player-contract.fixture.yaml
+  enabled: true
+  playback_mode: embed_white_player
+  player_configuration: {}
+  video_ids:
+  - fixture-video-001
+  - fixture-ep-1
+  - fixture-ep-2
+  - fixture-ep-3

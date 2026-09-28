@@ -1,0 +1,11 @@
+{
+  "status": "inventory_only",
+  "popular_contract_required": {
+    "POPULAR_REFRESH_MODE": "WEEKLY_SNAPSHOT",
+    "POPULAR_RECOMPUTE_CADENCE": "7d",
+    "POPULAR_REQUEST_TIME_RECOMPUTES": 0,
+    "POPULAR_RANDOM_ROTATION": "NO"
+  },
+  "snapshot_paths_checked": [],
+  "note": "Full snapshot digest verification deferred to Phase B"
+}

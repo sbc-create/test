@@ -1,0 +1,10 @@
+{
+  "ExecStart": "/usr/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9110",
+  "MainPID": 3690779,
+  "OLD_RUNTIME_STARTED_AT": "2026-09-19T03:43:05Z",
+  "OLD_RUNTIME_BUILD": "20260913T2300Z-8ececc6c-nova",
+  "OLD_RUNTIME_ARTIFACT": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+  "live_health": "{\"ok\":true}",
+  "live_html_marker": "awaiting + \u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u0435\u0440\u0438\u044e (stale process)",
+  "NEW_DISK_BUILD": "20260919T201028Z-ef17a709-nova"
+}

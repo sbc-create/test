@@ -19,6 +19,12 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+
+# Инструменты запускаются как сценарии, а не импортируются пакетом.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import stand_env  # noqa: E402
+
 APP = ROOT / "blueprints" / "payload-next-multisite" / "app"
 ARTIFACT = ROOT / "var" / "artifacts" / "admin-smoke.json"
 
@@ -41,13 +47,8 @@ def fetch(url: str, timeout: float = 120.0) -> tuple[int, str]:
 
 
 def wait_for(port: int, deadline: float) -> bool:
-    while time.time() < deadline:
-        try:
-            with socket.create_connection(("127.0.0.1", port), timeout=2):
-                return True
-        except OSError:
-            time.sleep(0.5)
-    return False
+    """Совместимая обёртка: ожидание одно на все инструменты стенда."""
+    return stand_env.wait_for_port(port, timeout=max(0.0, deadline - time.time()))
 
 
 def main() -> int:

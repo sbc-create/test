@@ -1,0 +1,65 @@
+{
+  "diffKind": "SiteReleaseManifestDiff",
+  "generatedAtUtc": "2026-09-05T07:51:34Z",
+  "from": "текущий боевой релиз витрин (b7f99ef6ef84 / 8339417f233c / 150fc25e8b2a)",
+  "to": "LORDS-TEMPLATE-2026-09-05-draft (digest 52b56d557564717a)",
+  "changed": [
+    {
+      "path": "blueprints/lords/profiles/*.yaml",
+      "what": "описания страниц профилей",
+      "why": "тексты meta description расширены; поведение не меняется",
+      "files": 4
+    },
+    {
+      "path": "factory/lords/render.py",
+      "what": "дубликаты id, доступные имена фасетов, пустой meta description, клиентская пагинация по модели года",
+      "why": "исправления доступности и соответствия ADR-0007",
+      "lines": "+89"
+    },
+    {
+      "path": "factory/lords/theme.py",
+      "what": "цели 44 px и поля 16 px на мобильной ширине; снят мёртвый CSS",
+      "why": "WCAG 2.2 SC 2.5.5/2.5.8 и защита от зума iOS",
+      "lines": "+39"
+    },
+    {
+      "path": "factory/templates/{audit,digest,pagemap,rubric}.py",
+      "what": "рубрика качества страниц и её отпечаток",
+      "why": "измерительный слой; на отрисовку витрины не влияет",
+      "lines": "+909"
+    },
+    {
+      "path": "tests/e2e-lords/visual-baseline.json",
+      "what": "визуальный эталон 24 строки",
+      "why": "свидетельство, не исполняемый код",
+      "lines": "+318"
+    }
+  ],
+  "mustRemainUnchanged": {
+    "coreImage": "не входит в артефакт (19 файлов не содержат образа ядра)",
+    "cmsSchema": "не входит",
+    "apiVersion": "не входит",
+    "sdkVersion": "не входит",
+    "playerProvider": "factory/lords/player.py в артефакте, но байт-в-байт не изменён (diff пуст)",
+    "ratingsPipeline": "не входит",
+    "seoPack": "не входит; robots/canonical/indexability KEEP_PREVIOUS",
+    "worker": "не входит",
+    "yummy": "не входит: расширения артефакта только py/yaml/json",
+    "domainConfig": "config/directions/lords.json не входит в артефакт"
+  },
+  "unexpectedChanges": [],
+  "verification": {
+    "artifactDiffCommand": "git diff --stat 76552b9 2f87236 -- <19 путей артефакта>",
+    "artifactDiffResult": "11 файлов, +1348/-37; ни одного файла вне шаблонного слоя",
+    "forbiddenContentScan": {
+      "yummyFiles": 0,
+      "theme01Markers": 0,
+      "collectionsRoutes": "только /collections/ витрины Lords, существует на базе 76552b9",
+      "previewFixtures": 0,
+      "testOnlyFlags": 0,
+      "referencePackAssets": 0,
+      "secrets": 0,
+      "absoluteLocalPaths": 0
+    }
+  }
+}

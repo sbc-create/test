@@ -19,7 +19,6 @@ from __future__ import annotations
 
 import os
 import subprocess
-import sys
 from pathlib import Path
 
 import pytest
@@ -88,7 +87,7 @@ def test_service_is_selectable_without_editing_the_script(fake_docker) -> None:
 def test_unit_does_not_execute_from_a_working_tree(unit: str) -> None:
     """Главное свойство: ExecStart не указывает внутрь git-checkout."""
     text = (UNITS / unit).read_text(encoding="utf-8")
-    exec_lines = [l for l in text.splitlines() if l.startswith("ExecStart=")]
+    exec_lines = [ln for ln in text.splitlines() if ln.startswith("ExecStart=")]
     assert exec_lines, f"{unit}: нет ExecStart"
     for line in exec_lines:
         assert "/srv/sites/yummyani-staging/repo/" not in line, f"{unit}: исполняется из дерева"

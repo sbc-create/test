@@ -1,0 +1,73 @@
+# Прогресс этапа PROGRAM-PRODUCTION-FINISH-25
+version: 1
+checkpoints:
+  - timestamp: "2026-09-06T16:30:00Z"
+    cycle: 16
+    branch: claude/program-production-finish-25
+    head_sha: 5c197df2c0464a01ff040b08eefd1598638409ab
+    core: 100
+    central_admin: 80
+    admin_fleet: PARTIAL
+    families:
+      lords_dark: 85
+      lords_light: 75
+      portal_light: 40
+      pulse: 40
+      editorial: 40
+    seo: 65
+    production: 75
+    global_progress: 70
+    was: 58
+    delta: 12
+    reasoning: >-
+      lords_dark 85 %: канарейка выложена на реальном домене, пережила
+      принудительное обновление и штатный таймер, откат и возврат проверены на
+      боевой витрине. До 100 % не хватает публичного поиска и тем — они собраны,
+      но не выложены, — и снятия staging-запрета на индексацию, которое является
+      решением владельца. lords_light 75 %: тот же механизм работает, канарейка
+      не выкладывалась. Три семейства payload ограничены 40 %: подтверждены
+      только fixtures.
+    production_releases:
+      lords-01: afc65b0c9071
+      lords-02: 096c70bef0eb
+      lords-03: 0c96329cb249
+    template_digests:
+      lords-01: 0c905f9fe50a746b
+      lords-02: 88abcbadc4b93da9
+      lords-03: 0c905f9fe50a746b
+    defects_fixed: 9
+    sites_unchanged: [yummyani.site, yummyani.org, yummyani.biz]
+
+  - timestamp: "2026-09-07T00:05:00Z"
+    cycle: 26
+    branch: claude/program-production-finish-25
+    head_sha: e39c6b6ee3651d8d77098a385fee4d51e5eb44cb
+    core: 100
+    central_admin: 90
+    admin_fleet: PARTIAL
+    unified_control_center: 70
+    families:
+      lords_dark: 85
+      lords_light: 75
+      portal_light: 40
+      pulse: 40
+      editorial: 40
+    seo: 65
+    production: 75
+    global_progress: 79
+    was: 74
+    delta: 5
+    tests: "5101 passed, 3 skipped, 0 failed"
+    reasoning: >-
+      Центр управления поднят до 70 %: единая запись, машинный интерфейс, окно
+      флота, реестр шаблонов, аналитика с честными состояниями и сборщик
+      измерений работают и проверены. До большего не хватает браузерной приёмки
+      ролей на самом экране и подключения внешних источников — последнее
+      требует учётных данных владельца. Центральная админка 90 %: пять зон
+      собраны, роли проверены серверными отказами.
+    defects_fixed_this_cycle:
+      - "поле error в успешном ответе ломало разбор у потребителя"
+      - "стенд приёмки проверял другое рабочее дерево"
+      - "сквозная проверка мастера отстала от входа по учётным записям"
+    production_unchanged: [lordfilm47.space, 1lordserials1.online, yummyani.site]
+

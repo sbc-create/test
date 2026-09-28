@@ -1,0 +1,36 @@
+{
+  "generic.html": {
+    "build": [
+      "20260913T2300Z-8ececc6c-nova"
+    ],
+    "artifact": [
+      "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346"
+    ],
+    "rev": [
+      "7dc251d"
+    ],
+    "state": [
+      "awaiting"
+    ],
+    "vp": 0,
+    "choose": true,
+    "awaiting_lit": true
+  },
+  "episode-s1e1.html": {
+    "build": [
+      "20260913T2300Z-8ececc6c-nova"
+    ],
+    "artifact": [
+      "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346"
+    ],
+    "rev": [
+      "7dc251d"
+    ],
+    "state": [
+      "playable"
+    ],
+    "vp": 1,
+    "choose": false,
+    "awaiting_lit": false
+  }
+}

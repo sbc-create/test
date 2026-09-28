@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "profile": "lords-general",
+  "domain": "lordfilm47.space",
+  "player_layout_contract": "full-bleed-v1",
+  "source_commit": "89003bb88447b6f36c1f6f6a365e6f8099d55098",
+  "source_dirty": false,
+  "build_id": "20260921T114007Z-89003bb-clean",
+  "artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+  "release_dir": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean",
+  "built_at": "2026-09-21T11:40:07.391311+00:00",
+  "built_from": "git object",
+  "bound_release_link": "/srv/lords/.frontend/sites/lords-01/current"
+}

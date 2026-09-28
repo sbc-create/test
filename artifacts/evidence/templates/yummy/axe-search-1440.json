@@ -1,0 +1,27 @@
+{
+  "captured_at_utc": "2026-09-04T16:24:10.277Z",
+  "base": "http://127.0.0.1:3210",
+  "page": "search",
+  "route": "/search?q=a",
+  "url": "http://127.0.0.1:3210/search?q=a",
+  "viewport": {
+    "name": "desktop",
+    "width": 1440,
+    "height": 900
+  },
+  "state": "normal (fixture)",
+  "axe_version": "4.13.0",
+  "rules_passed": 28,
+  "rules_inapplicable": 35,
+  "violations": [],
+  "incomplete": [
+    {
+      "id": "aria-valid-attr-value",
+      "nodes": 2
+    },
+    {
+      "id": "color-contrast",
+      "nodes": 19
+    }
+  ]
+}

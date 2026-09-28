@@ -1,0 +1,7 @@
+section,position,selection_rule,link
+Фильмы,1,kind==Фильм exclude occupied,/movies/
+Сериалы,2,kind==Сериал exclude occupied,/series/
+Новинки,3,playable by published_at exclude occupied,/new/
+Подборки,4,collection_contract specs,/collections/
+Мультфильмы,5,kind==Мультфильм exclude occupied,/animation/
+По жанрам,6,genre index links only,/genre/{code}/

@@ -12,6 +12,8 @@
 from __future__ import annotations
 
 import json
+import shutil
+from pathlib import Path
 from dataclasses import dataclass
 from urllib.parse import unquote
 
@@ -71,9 +73,16 @@ def normalize(path: str) -> str:
 class Application:
     """WSGI-приложение одного сайта стенда."""
 
-    def __init__(self, site: RenderedSite):
+    def __init__(self, site: RenderedSite, redirects: dict | None = None):
         self.site = site
         self.pages = site.pages
+        # Переезды адресов: старый адрес → новый, ровно один переход.
+        #
+        # Возникают, когда адрес меняет владельца: прежде по нему отдавалась
+        # одна сущность, теперь адрес принадлежит другой, а прежняя переехала.
+        # Отдавать 404 читателю, у которого этот адрес в закладках, незачем —
+        # содержимое никуда не делось, оно переехало.
+        self.redirects = dict(redirects or {})
 
     # -- ответы ------------------------------------------------------------
     def _headers(self, page_type: str, length: int, extra=()) -> tuple:
@@ -104,6 +113,12 @@ class Application:
 
         page = self.pages.get(path)
         if page is None:
+            переезд = self.redirects.get(path)
+            # Цель переезда обязана существовать. Переход на несобранную
+            # страницу — это 404 через лишний шаг, а цепочка переходов
+            # начинается ровно с того, что целью назначают ещё один переезд.
+            if переезд and переезд in self.pages and переезд not in self.redirects:
+                return self._text(308, "", extra=(("Location", переезд),))
             miss = self.site.not_found
             body = miss.body if miss else "Страница не найдена"
             payload = body.encode("utf-8")
@@ -143,20 +158,82 @@ class Application:
         return [response.body]
 
 
+#: Имя файла переездов в выгруженном дереве.
+ПЕРЕЕЗДЫ = "redirects.json"
+
+
+def переезды_из_каталога(directory) -> dict:
+    """Карта переездов рядом с выгруженной витриной.
+
+    Отсутствие файла — не ошибка: витрина без переездов их и не объявляет.
+    А вот молчаливое игнорирование существующего файла было бы ошибкой:
+    тринадцать адресов, у которых сменился владелец, стали бы 404 у читателя,
+    и узнали бы об этом не мы.
+    """
+    файл = Path(directory) / ПЕРЕЕЗДЫ
+    try:
+        данные = json.loads(файл.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    переезды = данные.get("moved") or {}
+    return {str(а): str(ц) for а, ц in переезды.items()}
+
+
+def clear_directory(directory) -> None:
+    """Опустошает каталог выгрузки, оставляя сам каталог.
+
+    Выгрузка добавляет файлы и никогда не удаляет: страница, которую сайт
+    перестал отдавать, остаётся лежать и отвечает как ни в чём не бывало. Так и
+    вышло с разделом `/years/0/` — указатель на него ссылаться перестал, а
+    страница со старым заголовком открывалась по прямой ссылке ещё три часа.
+
+    Идиома была скопирована дословно в две точки вызова из четырёх, и в
+    забытых двух ошибка и жила. Поэтому она здесь одна и названа.
+
+    Обход снятым вручную не делается намеренно: он шёл по `rglob` и `is_dir`,
+    а обе функции идут по символическим ссылкам — очистка каталога со ссылкой
+    наружу вычистила бы и то, что снаружи. `rmtree` ссылку удаляет как запись
+    и за неё не заходит.
+    """
+    root = Path(directory)
+    if root.is_dir():
+        shutil.rmtree(root)
+    root.mkdir(parents=True, exist_ok=True)
+
+
+def page_target(root, path: str) -> Path:
+    """Файл, в который ложится страница. Одно правило на выгрузку и на поток.
+
+    Вынесено, потому что правил стало два места: обычная выгрузка и потоковая
+    запись во время отрисовки. Две копии одного правила разошлись бы молча, и
+    каталог, собранный потоком, отличался бы от собранного выгрузкой.
+    """
+    root = Path(root)
+    if path.endswith("/"):
+        return root / path.strip("/") / "index.html"
+    return root / path.lstrip("/")
+
+
+def write_page(root, page) -> str:
+    """Записать одну страницу и вернуть её путь относительно корня."""
+    target = page_target(root, page.path)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(page.payload)
+    return str(target.relative_to(Path(root)))
+
+
 def export(site: RenderedSite, directory) -> dict:
     """Выгружает собранный сайт в каталог. Используется сборкой пакета стенда."""
-    from pathlib import Path
-
     root = Path(directory)
     written = []
     for path, page in sorted(site.pages.items()):
-        target = root / path.lstrip("/")
-        if path.endswith("/"):
-            target = root / path.strip("/") / "index.html"
-        target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_bytes(page.payload)
-        written.append(str(target.relative_to(root)))
+        written.append(write_page(root, page))
     if site.not_found is not None:
-        (root / "404.html").write_text(site.not_found.body, encoding="utf-8")
+        # Байтами, как и все прочие страницы. Текстовый режим здесь делал две
+        # тихие вещи: переводил переносы строк по правилам платформы — то есть
+        # артефакт при тех же входах вышел бы другим на другой системе — и
+        # писал `body` вместо `payload`, а `body` при заданном `raw` является
+        # человекочитаемым описанием, а не содержимым.
+        (root / "404.html").write_bytes(site.not_found.payload)
         written.append("404.html")
     return {"root": str(root), "files": sorted(written)}

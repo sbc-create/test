@@ -1,0 +1,71 @@
+{
+ "action": "install",
+ "site": "lords-01",
+ "unit": "lords-nova-01.service",
+ "domain": "lordfilm47.space",
+ "rollback_point": "/srv/lords/.frontend/.rollback/20260913T185414Z-lords-01",
+ "artifact_sha256": "fda715f865a77c965a8af5761fff60bc9c5dd38d194a47cbdbe8e0316aef46f4",
+ "previous_artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+ "manifest": {
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "source_commit": "6080f93809f02caf98a71fce8e5352b19fe1748c",
+  "build_id": "20260913T185409Z-6080f938-nova",
+  "artifact_sha256": "fda715f865a77c965a8af5761fff60bc9c5dd38d194a47cbdbe8e0316aef46f4",
+  "profile": "lords-general",
+  "built_at": "2026-09-13T18:54:14Z"
+ },
+ "previous_manifest": {
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.0.2",
+  "source_commit": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee",
+  "build_id": "20260910T124530Z-a1691c56-nova",
+  "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+  "profile": "lords-general",
+  "built_at": "2026-09-10T12:45:30Z"
+ },
+ "restart_ok": false,
+ "restart_output": "Failed to restart lords-nova-01.service: Interactive authentication required.\nSee system logs and 'systemctl status lords-nova-01.service' for details.",
+ "health": {
+  "ok": false,
+  "checks": [],
+  "domain": "lordfilm47.space"
+ },
+ "at_utc": "20260913T185418Z",
+ "auto_rolled_back": true,
+ "rollback_restart_ok": false,
+ "rollback_output": "Failed to restart lords-nova-01.service: Interactive authentication required.\nSee system logs and 'systemctl status lords-nova-01.service' for details.",
+ "health_after_rollback": {
+  "domain": "lordfilm47.space",
+  "checks": [
+   {
+    "path": "/healthz",
+    "status": 200,
+    "bytes": 11,
+    "version": "1.0.2",
+    "artifact": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "ok": true
+   },
+   {
+    "path": "/",
+    "status": 200,
+    "bytes": 22942,
+    "version": "1.0.2",
+    "artifact": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "ok": true
+   },
+   {
+    "path": "/catalog/",
+    "status": 200,
+    "bytes": 29050,
+    "version": "1.0.2",
+    "artifact": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "ok": true
+   }
+  ],
+  "ok": true
+ },
+ "verdict": "ROLLED_BACK_NO_CHANGE"
+}

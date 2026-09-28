@@ -1,0 +1,31 @@
+{
+  "at_utc": "2026-09-20T13:49:25.164024+00:00",
+  "disk_build": "20260920T101032Z-f0b253d-nova",
+  "disk_artifact_digest": "d815755c0f80ceede0b5f56a5bd2b46f55554b0ce2153772a9828c3d281e7ff0",
+  "manifest_build": "20260920T101032Z-f0b253d-nova",
+  "manifest_digest": "4990ea9f8ee6451d86bfad8efa5d5e7592f7eb42a0137ce81b3eeb2078fc6023",
+  "live_build": "20260920T101032Z-f0b253d-nova",
+  "live_artifact_digest": "4990ea9f8ee6451d86bfad8efa5d5e7592f7eb42a0137ce81b3eeb2078fc6023",
+  "live_http": {
+    "status": 200,
+    "build": "20260920T101032Z-f0b253d-nova",
+    "sha": "4990ea9f8ee6451d86bfad8efa5d5e7592f7eb42a0137ce81b3eeb2078fc6023",
+    "profile": "lords-new"
+  },
+  "ActiveState": "active",
+  "SubState": "running",
+  "MainPID": "3326446",
+  "ExecMainStartTimestamp": "Sun 2026-09-20 13:48:00 UTC",
+  "NRestarts": "0",
+  "FragmentPath": "/etc/systemd/system/nova-lords-02.service",
+  "ExecStart": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9111 ; ignore_errors=no ; start_time=[Sun 2026-09-20 13:48:00 UTC] ; stop_time=[n/a] ; pid=3326446 ; code=(null) ; status=0/0 }",
+  "rollback_files": [
+    "lords-frontend.py",
+    "point.json",
+    "template-manifest-lords-02.json"
+  ],
+  "rollback_digest": "e1fefd2ce2427e60fbe6252ed464c08ff7004de3f9edba8fc45fb6b6f4b631b8",
+  "EXPECT_MATCH_DISK": false,
+  "EXPECT_MATCH_LIVE": true,
+  "RESTART_SKIPPED_ALREADY_ACTIVE": true
+}

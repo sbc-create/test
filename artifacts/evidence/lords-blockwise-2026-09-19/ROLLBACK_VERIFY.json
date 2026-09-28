@@ -1,0 +1,8 @@
+{
+  "rollback_path": "/srv/lords/.frontend/.rollback/20260919T194936Z-lords-01-deferred",
+  "rollback_digest": "06e991c3e558621c494e1150483b98eca67f2fcdc62ccaf0b165adf3e5b33432",
+  "rollback_digest_match": true,
+  "point_json_complete": false,
+  "restore_procedure": "file-catalog restore of lords-frontend.py + template-manifest.json then systemctl restart (see lords-default-episode ROLLBACK_VERIFICATION.json)",
+  "ROLLBACK_VERIFIED": "YES"
+}

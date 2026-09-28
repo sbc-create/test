@@ -1,13 +1,35 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>{{ page.h1 }}</h1>
-{%- if page.intro %}<p class="intro">{{ page.intro }}</p>{%- endif %}
+{#- Первый экран. Прежде главная начиналась заголовком и сразу карточками:
+    страница выглядела списком, а не витриной, и ничем не отличалась от
+    страницы раздела. Полоса первого экрана даёт витрине лицо и объясняет,
+    что это за собрание материалов, до того как зритель начнёт выбирать. -#}
+<section class="hero" aria-labelledby="hero-title">
+  <h1 id="hero-title">{{ page.h1 }}</h1>
+  {%- if page.intro %}<p class="hero__lead">{{ page.intro }}</p>{%- endif %}
+  {%- if page.sections %}
+  <p class="hero__meta">Разделов: {{ page.sections|length }}</p>
+  {%- endif %}
+</section>
 {%- for section in page.sections %}
 {% set is_first_section = loop.first %}
 <section class="home-section" aria-labelledby="sec-{{ loop.index }}">
-  <h2 id="sec-{{ loop.index }}"><a href="{{ section.url }}">{{ section.title }}</a></h2>
-  {%- if section.description %}<p>{{ section.description }}</p>{%- endif %}
-  <ul class="card-grid">
+  {#- Заголовок раздела — заголовок, а не ссылка. Прежде он целиком был
+      ссылкой и выглядел подчёркнутой строкой посреди страницы: иерархия
+      пропадала, и раздел читался как пункт списка. Переход к разделу вынесен
+      отдельной ссылкой рядом. -#}
+  <div class="home-section__head">
+    <h2 id="sec-{{ loop.index }}">{{ section.title }}</h2>
+    <a class="home-section__all" href="{{ section.url }}">Все материалы</a>
+  </div>
+  {%- if section.description %}<p class="home-section__lead">{{ section.description }}</p>{%- endif %}
+  {#- Ряд, а не сетка. Сетка при шести карточках оставляла на широком экране
+      одну карточку в пустой строке — случайная пустота, которую зритель
+      читает как незаконченную вёрстку. Ряд прокручивается и выглядит
+      законченным при любой ширине. Прокрутка работает колесом, свайпом и
+      клавиатурой; ссылка «Все материалы» рядом ведёт туда же, куда вёл
+      заголовок. -#}
+  <ul class="card-rail" tabindex="0" aria-label="{{ section.title }}">
     {%- for item in section['items'] %}
     <li class="card">
       <a class="card-link" href="{{ item.url }}">
@@ -15,6 +37,7 @@
         <img class="card-image" src="{{ item.image.src }}" alt="{{ item.image.alt }}" width="{{ item.image.width }}" height="{{ item.image.height }}"{% if not (loop.first and is_first_section) %} loading="lazy"{% endif %}>
         {%- endif %}
         <span class="card-title">{{ item.title }}</span>
+        {%- if item.meta %}<span class="card-meta">{{ item.meta }}</span>{%- endif %}
       </a>
     </li>
     {%- endfor %}

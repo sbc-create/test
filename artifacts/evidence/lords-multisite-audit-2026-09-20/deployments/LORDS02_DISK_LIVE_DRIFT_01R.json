@@ -1,0 +1,25 @@
+{
+  "at_utc": "2026-09-20T13:49:46.395666+00:00",
+  "SOURCE_SHA": "4990ea9f8ee6451d86bfad8efa5d5e7592f7eb42a0137ce81b3eeb2078fc6023",
+  "DISK_SHA": "d815755c0f80ceede0b5f56a5bd2b46f55554b0ce2153772a9828c3d281e7ff0",
+  "MANIFEST_SHA": "4990ea9f8ee6451d86bfad8efa5d5e7592f7eb42a0137ce81b3eeb2078fc6023",
+  "SOURCE_EQ_EXPECT": true,
+  "DISK_EQ_EXPECT": false,
+  "DISK_EQ_SOURCE": false,
+  "DISK_EQ_MANIFEST": false,
+  "LIVE_SERVES_EXPECT_HEADERS": true,
+  "RESTART_SKIPPED_ALREADY_ACTIVE": 1,
+  "DISK_LINEAGE_NOTE": "disk bytes differ from staged expect sha; live process started 13:48 still advertises expect build/sha from manifest; do not overwrite unknown disk lineage",
+  "source_markers": {
+    "has_compact": true,
+    "has_weekly": true,
+    "has_fullbleed": true,
+    "size": 317769
+  },
+  "disk_markers": {
+    "has_compact": false,
+    "has_weekly": false,
+    "has_fullbleed": false,
+    "size": 349325
+  }
+}

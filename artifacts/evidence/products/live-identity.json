@@ -1,0 +1,41 @@
+{
+  "zona-cinema": {
+    "primary": {
+      "url": "https://zonafilm.space",
+      "host": "zonafilm.space",
+      "status": null,
+      "verdict": "NAME_NOT_RESOLVED",
+      "note": "имя не разрешается в адрес; разрешение имён в этой полосе работает — проверено на посторонних именах, — значит запись отсутствует или ещё не разошлась",
+      "declared_status": "PENDING_DNS"
+    },
+    "additional": []
+  },
+  "animedia-portal": {
+    "primary": {
+      "url": "https://animedia.icu",
+      "host": "animedia.icu",
+      "status": null,
+      "verdict": "NAME_NOT_RESOLVED",
+      "note": "имя не разрешается в адрес; разрешение имён в этой полосе работает — проверено на посторонних именах, — значит запись отсутствует или ещё не разошлась",
+      "declared_status": "PENDING_DNS"
+    },
+    "additional": [
+      {
+        "url": "https://animedia.space",
+        "host": "animedia.space",
+        "status": null,
+        "verdict": "NAME_NOT_RESOLVED",
+        "note": "имя не разрешается в адрес; разрешение имён в этой полосе работает — проверено на посторонних именах, — значит запись отсутствует или ещё не разошлась",
+        "declared_status": "PENDING_DNS"
+      }
+    ]
+  },
+  "basis-video": {
+    "verdict": "BLOCKED_OWNER_URLS",
+    "note": "адрес не передан владельцем"
+  },
+  "yummy": {
+    "verdict": "BLOCKED_OWNER_URLS",
+    "note": "адрес не передан владельцем"
+  }
+}

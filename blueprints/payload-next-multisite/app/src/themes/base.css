@@ -73,6 +73,21 @@ img { max-width: 100%; height: auto; display: block; }
   padding: 0;
   flex-wrap: wrap;
 }
+/* Цель нажатия не меньше 24 px по высоте — критерий 2.5.8 уровня AA.
+   Ссылки навигации были 17–20 px: попасть в них пальцем или неточным
+   указателем трудно, и промах уводит на соседний раздел. Поймал это не axe —
+   он размер целей не проверяет, — а обход страницы клавишей табуляции с
+   замером каждой остановки.
+   Высота набирается отступами, а не жёстким размером: текст семейства
+   editorial крупнее, и фиксированная высота обрезала бы его. */
+.site-nav a,
+.site-footer a,
+.breadcrumbs a,
+.breadcrumbs li {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+}
 .site-nav a { text-decoration: none; }
 .site-nav a[aria-current='page'] { text-decoration: underline; }
 
@@ -221,4 +236,17 @@ button.button {
 
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* Хлебные крошки. Раньше оформление жило во встроенном стиле компонента, и
+   семейство не могло его изменить: плотность и типографика у трёх семейств
+   разные по замыслу, а крошки выглядели одинаково. */
+.breadcrumbs__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
 }

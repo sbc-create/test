@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "build_id": "20260921T114007Z-89003bb-clean",
+  "source_commit": "89003bb88447b6f36c1f6f6a365e6f8099d55098",
+  "source_dirty": false,
+  "built_from": "git object",
+  "built_at": "2026-09-21T11:40:07.391311+00:00",
+  "release_dir": "/srv/lords/.frontend/releases/20260921T114007Z-89003bb-clean",
+  "artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+  "files": {
+    "lords-frontend.py": {
+      "repo_path": "automation/host/lords-frontend.py",
+      "sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "bytes": 418858
+    },
+    "seo_layer.py": {
+      "repo_path": "automation/host/seo_layer.py",
+      "sha256": "8fb0a0bac3f88dde2c8d44ef352914255ccb7ffbaa4a308d07bf7499ef7c19f0",
+      "bytes": 17637
+    },
+    "collection_contract.py": {
+      "repo_path": "automation/host/collection_contract.py",
+      "sha256": "8758a18513c96d624a37c737d07cf9db8ef4f65cd66ef4c776cdecc6e7b072e7",
+      "bytes": 28204
+    }
+  }
+}

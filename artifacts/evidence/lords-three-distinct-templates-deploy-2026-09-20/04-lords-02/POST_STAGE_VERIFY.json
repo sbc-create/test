@@ -1,0 +1,16 @@
+{
+  "disk_artifact_after": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+  "expected_new_artifact": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+  "disk_match_new": true,
+  "m02_build": "20260920T193847Z-3c90aab-nova",
+  "m02_profile": "lords-new",
+  "m02_artifact": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+  "neighbor_m01_unchanged": true,
+  "neighbor_m03_unchanged": true,
+  "rollback_point": "/srv/lords/.frontend/.rollback/20260920T194006Z-lords-02",
+  "rollback_artifact_sha": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+  "rollback_matches_disk_before": true,
+  "rollback_manifest_build": "20260920T101032Z-f0b253d-nova",
+  "ROLLBACK_VERIFIED_LORDS02": true,
+  "proven_chain_verdict": "MISMATCH"
+}

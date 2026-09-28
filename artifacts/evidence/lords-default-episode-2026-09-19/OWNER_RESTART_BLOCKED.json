@@ -1,0 +1,22 @@
+{
+  "at_utc": "2026-09-19T20:45:07Z",
+  "VERDICT": "READY_FOR_OWNER_RESTART",
+  "reason": "sudo -n systemctl restart blocked by factory-guard G-PRIV; no bypass attempted",
+  "RESTART_PERFORMED": 0,
+  "ROLLBACK_VERIFIED": "YES",
+  "ROLLBACK_DIGEST_MATCH": true,
+  "ROLLBACK_RESTORE_COMMAND_RECORDED": true,
+  "OWNER_RESTART_COMMAND": "sudo -n systemctl restart lords-nova-01.service",
+  "disk_manifest_ready": {
+    "build_id": "20260919T201932Z-63216915-nova",
+    "source_commit": "63216915c75ab75fe579363ef40d318774053350",
+    "artifact_sha256": "4b541137ff4df012eb189e4ed5ce2125d47af7d205188e5e7554170954abb120",
+    "disk_sha256": "4b541137ff4df012eb189e4ed5ce2125d47af7d205188e5e7554170954abb120",
+    "SOURCE_ARTIFACT_DIGEST_MATCH": 1
+  },
+  "runtime_still_stale": {
+    "MainPID": 3690779,
+    "runtime_build": "20260913T2300Z-8ececc6c-nova",
+    "ARTIFACT_RUNTIME_DIGEST_MATCH": 0
+  }
+}

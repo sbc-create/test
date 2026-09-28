@@ -1,0 +1,17 @@
+{
+  "captured_at_utc": "2026-09-05T17:33:07.492Z",
+  "site": "pilot-local",
+  "build": "dbefbb0eed312308",
+  "page_type": "gone",
+  "viewport": 768,
+  "url": "http://127.0.0.1:8821/410/",
+  "rules_passed": 26,
+  "violations": [],
+  "targets_total": 15,
+  "failing_aa": [],
+  "small_inputs": [],
+  "overflow": {
+    "scrollWidth": 768,
+    "clientWidth": 768
+  }
+}

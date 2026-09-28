@@ -1,0 +1,23 @@
+{
+  "captured_at_utc": "2026-09-04T16:22:37.530Z",
+  "base": "http://127.0.0.1:3210",
+  "page": "updates",
+  "route": "/catalog/anime-updates",
+  "url": "http://127.0.0.1:3210/catalog/anime-updates",
+  "viewport": {
+    "name": "mobile",
+    "width": 390,
+    "height": 844
+  },
+  "state": "normal (fixture)",
+  "axe_version": "4.13.0",
+  "rules_passed": 27,
+  "rules_inapplicable": 36,
+  "violations": [],
+  "incomplete": [
+    {
+      "id": "aria-valid-attr-value",
+      "nodes": 2
+    }
+  ]
+}

@@ -1,0 +1,975 @@
+{
+ "taken_at_utc": "2026-09-13T22:22:12Z",
+ "base": "http://127.0.0.1:9310",
+ "counters": {
+  "CHECKED": 40,
+  "ROUTE_FAILURES": 0,
+  "SOFT_404": 0,
+  "WRONG_ENTITY_200": 0,
+  "METADATA_DRIFT": 0,
+  "CANONICAL_HOST_FAILURES": 0,
+  "OK": 40
+ },
+ "rows": [
+  {
+   "slug": "lyubov-tenti-lishniy",
+   "expected_title": "Любовь: Тэнти лишний!",
+   "href": "/title/lyubov-tenti-lishniy/",
+   "problems": [],
+   "status": 200,
+   "h1": "Любовь: Тэнти лишний!",
+   "title_tag": "Любовь: Тэнти лишний! — смотреть онлайн — Lordfilm",
+   "description": "Любовь: Тэнти лишний!: Сериал 2014",
+   "canonical": "https://127.0.0.1/title/lyubov-tenti-lishniy/",
+   "og": {
+    "type": "video.tv_show",
+    "title": "Любовь: Тэнти лишний!",
+    "description": "Любовь: Тэнти лишний!: Сериал 2014",
+    "url": "https://127.0.0.1/title/lyubov-tenti-lishniy/",
+    "image": "https://poster.cdnvideohub.com/01925c2d-6018-7e0d-abf2-75d382dfa40b.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "TVSeries"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "dni-sakamoto-chast-2",
+   "expected_title": "Дни Сакамото. Часть 2",
+   "href": "/title/dni-sakamoto-chast-2/",
+   "problems": [],
+   "status": 200,
+   "h1": "Дни Сакамото. Часть 2",
+   "title_tag": "Дни Сакамото. Часть 2 — смотреть онлайн — Lordfilm",
+   "description": "Дни Сакамото. Часть 2: Сериал 2025",
+   "canonical": "https://127.0.0.1/title/dni-sakamoto-chast-2/",
+   "og": {
+    "type": "video.tv_show",
+    "title": "Дни Сакамото. Часть 2",
+    "description": "Дни Сакамото. Часть 2: Сериал 2025",
+    "url": "https://127.0.0.1/title/dni-sakamoto-chast-2/",
+    "image": "https://poster.cdnvideohub.com/01a09bba-5c8f-7526-a699-69070f6114b6.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "TVSeries"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "sinora-volpe",
+   "expected_title": "Синьора Вольпе",
+   "href": "/title/sinora-volpe/",
+   "problems": [],
+   "status": 200,
+   "h1": "Синьора Вольпе",
+   "title_tag": "Синьора Вольпе — смотреть онлайн — Lordfilm",
+   "description": "Синьора Вольпе: Сериал 2022",
+   "canonical": "https://127.0.0.1/title/sinora-volpe/",
+   "og": {
+    "type": "video.tv_show",
+    "title": "Синьора Вольпе",
+    "description": "Синьора Вольпе: Сериал 2022",
+    "url": "https://127.0.0.1/title/sinora-volpe/",
+    "image": "https://poster.cdnvideohub.com/0191516a-ab94-7521-afa6-0be107bcacd2.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "TVSeries"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "beshvostye",
+   "expected_title": "Бесхвостые",
+   "href": "/title/beshvostye/",
+   "problems": [],
+   "status": 200,
+   "h1": "Бесхвостые",
+   "title_tag": "Бесхвостые — смотреть онлайн — Lordfilm",
+   "description": "Бесхвостые: Сериал",
+   "canonical": "https://127.0.0.1/title/beshvostye/",
+   "og": {
+    "type": "video.tv_show",
+    "title": "Бесхвостые",
+    "description": "Бесхвостые: Сериал",
+    "url": "https://127.0.0.1/title/beshvostye/",
+    "image": "https://poster.cdnvideohub.com/019f0a94-2926-75da-9f80-336f0145fa30.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "TVSeries"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "dopolnitelnoe-vremya",
+   "expected_title": "Дополнительное время",
+   "href": "/title/dopolnitelnoe-vremya/",
+   "problems": [],
+   "status": 200,
+   "h1": "Дополнительное время",
+   "title_tag": "Дополнительное время — смотреть онлайн — Lordfilm",
+   "description": "Дополнительное время: Фильм",
+   "canonical": "https://127.0.0.1/title/dopolnitelnoe-vremya/",
+   "og": {
+    "type": "video.movie",
+    "title": "Дополнительное время",
+    "description": "Дополнительное время: Фильм",
+    "url": "https://127.0.0.1/title/dopolnitelnoe-vremya/",
+    "image": "https://poster.cdnvideohub.com/019d867b-d806-7d55-b806-2818940ec2db.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "vse-chto-ostalos",
+   "expected_title": "Всё, что осталось",
+   "href": "/title/vse-chto-ostalos/",
+   "problems": [],
+   "status": 200,
+   "h1": "Всё, что осталось",
+   "title_tag": "Всё, что осталось — смотреть онлайн — Lordfilm",
+   "description": "Всё, что осталось: Фильм",
+   "canonical": "https://127.0.0.1/title/vse-chto-ostalos/",
+   "og": {
+    "type": "video.movie",
+    "title": "Всё, что осталось",
+    "description": "Всё, что осталось: Фильм",
+    "url": "https://127.0.0.1/title/vse-chto-ostalos/",
+    "image": "https://poster.cdnvideohub.com/019f51a5-4291-7830-9efa-3de0452059ee.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "ukraste-koridory",
+   "expected_title": "Украсьте коридоры",
+   "href": "/title/ukraste-koridory/",
+   "problems": [],
+   "status": 200,
+   "h1": "Украсьте коридоры",
+   "title_tag": "Украсьте коридоры — смотреть онлайн — Lordfilm",
+   "description": "Украсьте коридоры: Фильм 2025",
+   "canonical": "https://127.0.0.1/title/ukraste-koridory/",
+   "og": {
+    "type": "video.movie",
+    "title": "Украсьте коридоры",
+    "description": "Украсьте коридоры: Фильм 2025",
+    "url": "https://127.0.0.1/title/ukraste-koridory/",
+    "image": "https://poster.cdnvideohub.com/019f89d1-e269-7d54-b2ab-259663a7d46c.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "zhdi-i-smotri",
+   "expected_title": "Жди и смотри",
+   "href": "/title/zhdi-i-smotri/",
+   "problems": [],
+   "status": 200,
+   "h1": "Жди и смотри",
+   "title_tag": "Жди и смотри — смотреть онлайн — Lordfilm",
+   "description": "Жди и смотри: Фильм",
+   "canonical": "https://127.0.0.1/title/zhdi-i-smotri/",
+   "og": {
+    "type": "video.movie",
+    "title": "Жди и смотри",
+    "description": "Жди и смотри: Фильм",
+    "url": "https://127.0.0.1/title/zhdi-i-smotri/",
+    "image": "https://poster.cdnvideohub.com/019b0475-8690-7710-8bb0-f752c1768980.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "moya-odinnadcataya-mama",
+   "expected_title": "Моя одиннадцатая мама",
+   "href": "/title/moya-odinnadcataya-mama/",
+   "problems": [],
+   "status": 200,
+   "h1": "Моя одиннадцатая мама",
+   "title_tag": "Моя одиннадцатая мама — смотреть онлайн — Lordfilm",
+   "description": "Моя одиннадцатая мама: Фильм",
+   "canonical": "https://127.0.0.1/title/moya-odinnadcataya-mama/",
+   "og": {
+    "type": "video.movie",
+    "title": "Моя одиннадцатая мама",
+    "description": "Моя одиннадцатая мама: Фильм",
+    "url": "https://127.0.0.1/title/moya-odinnadcataya-mama/",
+    "image": "https://poster.cdnvideohub.com/019a77a3-bb7c-79fd-b95f-d2dfd03396bf.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "dobro-pozhalovat-k-rayli",
+   "expected_title": "Добро пожаловать к Райли",
+   "href": "/title/dobro-pozhalovat-k-rayli/",
+   "problems": [],
+   "status": 200,
+   "h1": "Добро пожаловать к Райли",
+   "title_tag": "Добро пожаловать к Райли — смотреть онлайн — Lordfilm",
+   "description": "Добро пожаловать к Райли: Фильм 2010",
+   "canonical": "https://127.0.0.1/title/dobro-pozhalovat-k-rayli/",
+   "og": {
+    "type": "video.movie",
+    "title": "Добро пожаловать к Райли",
+    "description": "Добро пожаловать к Райли: Фильм 2010",
+    "url": "https://127.0.0.1/title/dobro-pozhalovat-k-rayli/",
+    "image": "https://poster.cdnvideohub.com/019a0662-0e7e-75c2-9f0f-1144277bc782.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "shturm",
+   "expected_title": "Штурм",
+   "href": "/title/shturm/",
+   "problems": [],
+   "status": 200,
+   "h1": "Штурм",
+   "title_tag": "Штурм — смотреть онлайн — Lordfilm",
+   "description": "Штурм: Фильм 2026",
+   "canonical": "https://127.0.0.1/title/shturm/",
+   "og": {
+    "type": "video.movie",
+    "title": "Штурм",
+    "description": "Штурм: Фильм 2026",
+    "url": "https://127.0.0.1/title/shturm/",
+    "image": "https://poster.cdnvideohub.com/019daba7-6790-709f-9241-3f3af02ed7ef.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "amerikanskoe-evangelie",
+   "expected_title": "Американское Евангелие",
+   "href": "/title/amerikanskoe-evangelie/",
+   "problems": [],
+   "status": 200,
+   "h1": "Американское Евангелие",
+   "title_tag": "Американское Евангелие — смотреть онлайн — Lordfilm",
+   "description": "Американское Евангелие: Фильм 2018",
+   "canonical": "https://127.0.0.1/title/amerikanskoe-evangelie/",
+   "og": {
+    "type": "video.movie",
+    "title": "Американское Евангелие",
+    "description": "Американское Евангелие: Фильм 2018",
+    "url": "https://127.0.0.1/title/amerikanskoe-evangelie/",
+    "image": "https://poster.cdnvideohub.com/01995c1c-3298-7811-bac3-d93cdf3b6b86.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "obratnyy-put-k-lyubvi",
+   "expected_title": "Обратный путь к любви",
+   "href": "/title/obratnyy-put-k-lyubvi/",
+   "problems": [],
+   "status": 200,
+   "h1": "Обратный путь к любви",
+   "title_tag": "Обратный путь к любви — смотреть онлайн — Lordfilm",
+   "description": "Обратный путь к любви: Сериал 2020",
+   "canonical": "https://127.0.0.1/title/obratnyy-put-k-lyubvi/",
+   "og": {
+    "type": "video.tv_show",
+    "title": "Обратный путь к любви",
+    "description": "Обратный путь к любви: Сериал 2020",
+    "url": "https://127.0.0.1/title/obratnyy-put-k-lyubvi/",
+    "image": "https://poster.cdnvideohub.com/01990e2e-a441-78a2-ac38-2397091df651.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "TVSeries"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "mastera-uzhasov",
+   "expected_title": "Мастера ужасов",
+   "href": "/title/mastera-uzhasov/",
+   "problems": [],
+   "status": 200,
+   "h1": "Мастера ужасов",
+   "title_tag": "Мастера ужасов — смотреть онлайн — Lordfilm",
+   "description": "Мастера ужасов: Сериал 2005",
+   "canonical": "https://127.0.0.1/title/mastera-uzhasov/",
+   "og": {
+    "type": "video.tv_show",
+    "title": "Мастера ужасов",
+    "description": "Мастера ужасов: Сериал 2005",
+    "url": "https://127.0.0.1/title/mastera-uzhasov/",
+    "image": "https://poster.cdnvideohub.com/0198c7be-40be-7dc1-8a9a-cf9edc6b5493.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "TVSeries"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "horror",
+   "expected_title": "#Хоррор",
+   "href": "/title/horror/",
+   "problems": [],
+   "status": 200,
+   "h1": "#Хоррор",
+   "title_tag": "#Хоррор — смотреть онлайн — Lordfilm",
+   "description": "#Хоррор: Фильм 2015",
+   "canonical": "https://127.0.0.1/title/horror/",
+   "og": {
+    "type": "video.movie",
+    "title": "#Хоррор",
+    "description": "#Хоррор: Фильм 2015",
+    "url": "https://127.0.0.1/title/horror/",
+    "image": "https://poster.cdnvideohub.com/0198896b-2e25-7467-b01a-4f3891c8a51a.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "mister-zombi",
+   "expected_title": "Мистер Зомби",
+   "href": "/title/mister-zombi/",
+   "problems": [],
+   "status": 200,
+   "h1": "Мистер Зомби",
+   "title_tag": "Мистер Зомби — смотреть онлайн — Lordfilm",
+   "description": "Мистер Зомби: Фильм 2021",
+   "canonical": "https://127.0.0.1/title/mister-zombi/",
+   "og": {
+    "type": "video.movie",
+    "title": "Мистер Зомби",
+    "description": "Мистер Зомби: Фильм 2021",
+    "url": "https://127.0.0.1/title/mister-zombi/",
+    "image": "https://poster.cdnvideohub.com/0198581f-57ff-7237-bed1-6e37ca88e8c9.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "probnyy-brak-2",
+   "expected_title": "Пробный брак",
+   "href": "/title/probnyy-brak-2/",
+   "problems": [],
+   "status": 200,
+   "h1": "Пробный брак",
+   "title_tag": "Пробный брак — смотреть онлайн — Lordfilm",
+   "description": "Пробный брак: Сериал 2021",
+   "canonical": "https://127.0.0.1/title/probnyy-brak-2/",
+   "og": {
+    "type": "video.tv_show",
+    "title": "Пробный брак",
+    "description": "Пробный брак: Сериал 2021",
+    "url": "https://127.0.0.1/title/probnyy-brak-2/",
+    "image": "https://poster.cdnvideohub.com/019819b9-5f8f-75d7-b93c-3bdba4234254.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "TVSeries"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "teni-2",
+   "expected_title": "Тени",
+   "href": "/title/teni-2/",
+   "problems": [],
+   "status": 200,
+   "h1": "Тени",
+   "title_tag": "Тени — смотреть онлайн — Lordfilm",
+   "description": "Тени: Сериал 2019",
+   "canonical": "https://127.0.0.1/title/teni-2/",
+   "og": {
+    "type": "video.tv_show",
+    "title": "Тени",
+    "description": "Тени: Сериал 2019",
+    "url": "https://127.0.0.1/title/teni-2/",
+    "image": "https://poster.cdnvideohub.com/01993e13-3e2f-7aaf-ab76-928418e42b90.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "TVSeries"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "okno-naprotiv",
+   "expected_title": "Окно напротив",
+   "href": "/title/okno-naprotiv/",
+   "problems": [],
+   "status": 200,
+   "h1": "Окно напротив",
+   "title_tag": "Окно напротив — смотреть онлайн — Lordfilm",
+   "description": "Джованна день за днём трудится на птицефабрике, воспитывает двоих детей, стряпает и убирает в доме. Однажды её муж Филиппо приводит в дом пожилого мужчину, потерявшего память. Тепе",
+   "canonical": "https://127.0.0.1/title/okno-naprotiv/",
+   "og": {
+    "type": "video.movie",
+    "title": "Окно напротив",
+    "description": "Джованна день за днём трудится на птицефабрике, воспитывает двоих детей, стряпает и убирает в доме. Однажды её муж Филиппо приводит в дом пожилого мужчину, потерявшего память. Тепе",
+    "url": "https://127.0.0.1/title/okno-naprotiv/",
+    "image": "https://poster.cdnvideohub.com/019b2b51-7eaf-7b29-bf0e-4b18417a80bd.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "robert-korol-shotlandii",
+   "expected_title": "Роберт — король Шотландии",
+   "href": "/title/robert-korol-shotlandii/",
+   "problems": [],
+   "status": 200,
+   "h1": "Роберт — король Шотландии",
+   "title_tag": "Роберт — король Шотландии — смотреть онлайн — Lordfilm",
+   "description": "Роберт — король Шотландии: Фильм 2019",
+   "canonical": "https://127.0.0.1/title/robert-korol-shotlandii/",
+   "og": {
+    "type": "video.movie",
+    "title": "Роберт — король Шотландии",
+    "description": "Роберт — король Шотландии: Фильм 2019",
+    "url": "https://127.0.0.1/title/robert-korol-shotlandii/",
+    "image": "https://poster.cdnvideohub.com/019781de-94e5-7e3b-9806-e8d3dd69ce7d.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "posredniki",
+   "expected_title": "Посредники",
+   "href": "/title/posredniki/",
+   "problems": [],
+   "status": 200,
+   "h1": "Посредники",
+   "title_tag": "Посредники — смотреть онлайн — Lordfilm",
+   "description": "Посредники: Фильм 2009",
+   "canonical": "https://127.0.0.1/title/posredniki/",
+   "og": {
+    "type": "video.movie",
+    "title": "Посредники",
+    "description": "Посредники: Фильм 2009",
+    "url": "https://127.0.0.1/title/posredniki/",
+    "image": "https://poster.cdnvideohub.com/019a0b79-c91e-71d4-b579-f6712d2bf00a.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "dzhuletta-i-romeo",
+   "expected_title": "Джульетта и Ромео",
+   "href": "/title/dzhuletta-i-romeo/",
+   "problems": [],
+   "status": 200,
+   "h1": "Джульетта и Ромео",
+   "title_tag": "Джульетта и Ромео — смотреть онлайн — Lordfilm",
+   "description": "Джульетта и Ромео: Фильм 2025",
+   "canonical": "https://127.0.0.1/title/dzhuletta-i-romeo/",
+   "og": {
+    "type": "video.movie",
+    "title": "Джульетта и Ромео",
+    "description": "Джульетта и Ромео: Фильм 2025",
+    "url": "https://127.0.0.1/title/dzhuletta-i-romeo/",
+    "image": "https://poster.cdnvideohub.com/019712dd-ed5c-7be2-bcae-e352860a8b55.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "ansen-i-volshebnyy-planshet-drugaya-spyaschaya-princessa",
+   "expected_title": "Ансьен и волшебный планшет: Другая спящая принцесса",
+   "href": "/title/ansen-i-volshebnyy-planshet-drugaya-spyaschaya-princessa/",
+   "problems": [],
+   "status": 200,
+   "h1": "Ансьен и волшебный планшет: Другая спящая принцесса",
+   "title_tag": "Ансьен и волшебный планшет: Другая спящая принцесса — смотреть онлайн — Lordfilm",
+   "description": "История прицессы Ансьен и её волшебства, приключений с друзьями, рассказанная однажды папой своей маленькой дочке, когда та не хотела спать.",
+   "canonical": "https://127.0.0.1/title/ansen-i-volshebnyy-planshet-drugaya-spyaschaya-princessa/",
+   "og": {
+    "type": "video.movie",
+    "title": "Ансьен и волшебный планшет: Другая спящая принцесса",
+    "description": "История прицессы Ансьен и её волшебства, приключений с друзьями, рассказанная однажды папой своей маленькой дочке, когда та не хотела спать.",
+    "url": "https://127.0.0.1/title/ansen-i-volshebnyy-planshet-drugaya-spyaschaya-princessa/",
+    "image": "https://poster.cdnvideohub.com/0196de74-b26e-7b5f-aad8-c9b4290a398e.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "samomu-sebe-v-1999-godu",
+   "expected_title": "Самому себе в 1999 году",
+   "href": "/title/samomu-sebe-v-1999-godu/",
+   "problems": [],
+   "status": 200,
+   "h1": "Самому себе в 1999 году",
+   "title_tag": "Самому себе в 1999 году — смотреть онлайн — Lordfilm",
+   "description": "Самому себе в 1999 году: Сериал 2025",
+   "canonical": "https://127.0.0.1/title/samomu-sebe-v-1999-godu/",
+   "og": {
+    "type": "video.tv_show",
+    "title": "Самому себе в 1999 году",
+    "description": "Самому себе в 1999 году: Сериал 2025",
+    "url": "https://127.0.0.1/title/samomu-sebe-v-1999-godu/",
+    "image": "https://poster.cdnvideohub.com/01968174-77d6-7708-9018-317551f2159d.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "TVSeries"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "91-den-korotkaya-svecha",
+   "expected_title": "91 день: Короткая свеча",
+   "href": "/title/91-den-korotkaya-svecha/",
+   "problems": [],
+   "status": 200,
+   "h1": "91 день: Короткая свеча",
+   "title_tag": "91 день: Короткая свеча — смотреть онлайн — Lordfilm",
+   "description": "Пересказ первых семи эпизодов аниме-сериала «[91 Days]».",
+   "canonical": "https://127.0.0.1/title/91-den-korotkaya-svecha/",
+   "og": {
+    "type": "video.movie",
+    "title": "91 день: Короткая свеча",
+    "description": "Пересказ первых семи эпизодов аниме-сериала «[91 Days]».",
+    "url": "https://127.0.0.1/title/91-den-korotkaya-svecha/",
+    "image": "https://poster.cdnvideohub.com/01955b60-8add-742b-9b33-4827b7895401.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "kogda-menya-polyubyat",
+   "expected_title": "Когда меня полюбят",
+   "href": "/title/kogda-menya-polyubyat/",
+   "problems": [],
+   "status": 200,
+   "h1": "Когда меня полюбят",
+   "title_tag": "Когда меня полюбят — смотреть онлайн — Lordfilm",
+   "description": "Когда меня полюбят: Фильм 2004",
+   "canonical": "https://127.0.0.1/title/kogda-menya-polyubyat/",
+   "og": {
+    "type": "video.movie",
+    "title": "Когда меня полюбят",
+    "description": "Когда меня полюбят: Фильм 2004",
+    "url": "https://127.0.0.1/title/kogda-menya-polyubyat/",
+    "image": "https://poster.cdnvideohub.com/0193accf-a104-714b-94ae-5e33980118da.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "yablochnoe-zernyshko",
+   "expected_title": "Яблочное зёрнышко",
+   "href": "/title/yablochnoe-zernyshko/",
+   "problems": [],
+   "status": 200,
+   "h1": "Яблочное зёрнышко",
+   "title_tag": "Яблочное зёрнышко — смотреть онлайн — Lordfilm",
+   "description": "Выросший в хаосе всемирной войны, город Утопия населён людьми и биороидами, которые поддерживают баланс, помогая человечеству избегать чрезмерной агрессии и конфликтов. Но даже в т",
+   "canonical": "https://127.0.0.1/title/yablochnoe-zernyshko/",
+   "og": {
+    "type": "video.movie",
+    "title": "Яблочное зёрнышко",
+    "description": "Выросший в хаосе всемирной войны, город Утопия населён людьми и биороидами, которые поддерживают баланс, помогая человечеству избегать чрезмерной агрессии и конфликтов. Но даже в т",
+    "url": "https://127.0.0.1/title/yablochnoe-zernyshko/",
+    "image": "https://poster.cdnvideohub.com/019505f0-a659-791f-8ee3-d6cd3c9c1eb8.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "ubiycy-tozhe-byvayut-romantichnymi",
+   "expected_title": "Убийцы тоже бывают романтичными",
+   "href": "/title/ubiycy-tozhe-byvayut-romantichnymi/",
+   "problems": [],
+   "status": 200,
+   "h1": "Убийцы тоже бывают романтичными",
+   "title_tag": "Убийцы тоже бывают романтичными — смотреть онлайн — Lordfilm",
+   "description": "Убийцы тоже бывают романтичными: Сериал 2022",
+   "canonical": "https://127.0.0.1/title/ubiycy-tozhe-byvayut-romantichnymi/",
+   "og": {
+    "type": "video.tv_show",
+    "title": "Убийцы тоже бывают романтичными",
+    "description": "Убийцы тоже бывают романтичными: Сериал 2022",
+    "url": "https://127.0.0.1/title/ubiycy-tozhe-byvayut-romantichnymi/",
+    "image": "https://poster.cdnvideohub.com/0192fcdb-d85d-7dea-a240-b1c662a9a455.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "TVSeries"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "siyanie-svyaschennogo-rycarya",
+   "expected_title": "Сияние священного рыцаря",
+   "href": "/title/siyanie-svyaschennogo-rycarya/",
+   "problems": [],
+   "status": 200,
+   "h1": "Сияние священного рыцаря",
+   "title_tag": "Сияние священного рыцаря — смотреть онлайн — Lordfilm",
+   "description": "В канун Нового года в курьерское агентство «Пингвин логистик» поступил нестандартный заказ на доставку секретной коробки на остров Родос, обращаться с которой требуется крайне осто",
+   "canonical": "https://127.0.0.1/title/siyanie-svyaschennogo-rycarya/",
+   "og": {
+    "type": "video.movie",
+    "title": "Сияние священного рыцаря",
+    "description": "В канун Нового года в курьерское агентство «Пингвин логистик» поступил нестандартный заказ на доставку секретной коробки на остров Родос, обращаться с которой требуется крайне осто",
+    "url": "https://127.0.0.1/title/siyanie-svyaschennogo-rycarya/",
+    "image": "https://poster.cdnvideohub.com/0192822b-11c5-71d6-993c-2ec9edfcfe23.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "prestupnik-5",
+   "expected_title": "Преступник",
+   "href": "/title/prestupnik-5/",
+   "problems": [],
+   "status": 200,
+   "h1": "Преступник",
+   "title_tag": "Преступник — смотреть онлайн — Lordfilm",
+   "description": "Преступник: Фильм 2008",
+   "canonical": "https://127.0.0.1/title/prestupnik-5/",
+   "og": {
+    "type": "video.movie",
+    "title": "Преступник",
+    "description": "Преступник: Фильм 2008",
+    "url": "https://127.0.0.1/title/prestupnik-5/",
+    "image": "https://poster.cdnvideohub.com/01923554-f44e-74e9-aa7f-45f000f56bf6.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "ona-vstrechaetsya-s-gangsterom",
+   "expected_title": "Она встречается с гангстером",
+   "href": "/title/ona-vstrechaetsya-s-gangsterom/",
+   "problems": [],
+   "status": 200,
+   "h1": "Она встречается с гангстером",
+   "title_tag": "Она встречается с гангстером — смотреть онлайн — Lordfilm",
+   "description": "Она встречается с гангстером: Фильм 2014",
+   "canonical": "https://127.0.0.1/title/ona-vstrechaetsya-s-gangsterom/",
+   "og": {
+    "type": "video.movie",
+    "title": "Она встречается с гангстером",
+    "description": "Она встречается с гангстером: Фильм 2014",
+    "url": "https://127.0.0.1/title/ona-vstrechaetsya-s-gangsterom/",
+    "image": "https://poster.cdnvideohub.com/01920989-ac53-781a-9749-83a7b56fcd1d.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "mobi-dik-i-zagadka-mu",
+   "expected_title": "Моби Дик и загадка Му",
+   "href": "/title/mobi-dik-i-zagadka-mu/",
+   "problems": [],
+   "status": 200,
+   "h1": "Моби Дик и загадка Му",
+   "title_tag": "Моби Дик и загадка Му — смотреть онлайн — Lordfilm",
+   "description": "Моби Дик и загадка Му: Сериал 2005",
+   "canonical": "https://127.0.0.1/title/mobi-dik-i-zagadka-mu/",
+   "og": {
+    "type": "video.tv_show",
+    "title": "Моби Дик и загадка Му",
+    "description": "Моби Дик и загадка Му: Сериал 2005",
+    "url": "https://127.0.0.1/title/mobi-dik-i-zagadka-mu/",
+    "image": "https://poster.cdnvideohub.com/0191fca7-5d08-7805-bd54-ae1dc2c7d0a8.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "TVSeries"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "kot-i-pes-2",
+   "expected_title": "Кот и пёс",
+   "href": "/title/kot-i-pes-2/",
+   "problems": [],
+   "status": 200,
+   "h1": "Кот и пёс",
+   "title_tag": "Кот и пёс — смотреть онлайн — Lordfilm",
+   "description": "Кот и пёс: Фильм 2024",
+   "canonical": "https://127.0.0.1/title/kot-i-pes-2/",
+   "og": {
+    "type": "video.movie",
+    "title": "Кот и пёс",
+    "description": "Кот и пёс: Фильм 2024",
+    "url": "https://127.0.0.1/title/kot-i-pes-2/",
+    "image": "https://poster.cdnvideohub.com/0191af68-60ba-7355-a945-612797a8b3f1.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "zapertaya-komnata-3",
+   "expected_title": "Запертая комната",
+   "href": "/title/zapertaya-komnata-3/",
+   "problems": [],
+   "status": 200,
+   "h1": "Запертая комната",
+   "title_tag": "Запертая комната — смотреть онлайн — Lordfilm",
+   "description": "Запертая комната: Фильм 2014",
+   "canonical": "https://127.0.0.1/title/zapertaya-komnata-3/",
+   "og": {
+    "type": "video.movie",
+    "title": "Запертая комната",
+    "description": "Запертая комната: Фильм 2014",
+    "url": "https://127.0.0.1/title/zapertaya-komnata-3/",
+    "image": "https://poster.cdnvideohub.com/01920ad1-4703-7668-b644-f2806d6800c8.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "gossluzhaschiy-7-go-ranga",
+   "expected_title": "Госслужащий 7-го ранга",
+   "href": "/title/gossluzhaschiy-7-go-ranga/",
+   "problems": [],
+   "status": 200,
+   "h1": "Госслужащий 7-го ранга",
+   "title_tag": "Госслужащий 7-го ранга — смотреть онлайн — Lordfilm",
+   "description": "Госслужащий 7-го ранга: Сериал 2013",
+   "canonical": "https://127.0.0.1/title/gossluzhaschiy-7-go-ranga/",
+   "og": {
+    "type": "video.tv_show",
+    "title": "Госслужащий 7-го ранга",
+    "description": "Госслужащий 7-го ранга: Сериал 2013",
+    "url": "https://127.0.0.1/title/gossluzhaschiy-7-go-ranga/",
+    "image": "https://poster.cdnvideohub.com/01915203-c964-7f5a-834d-31952e70cac5.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "TVSeries"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "brilliant",
+   "expected_title": "Бриллиант",
+   "href": "/title/brilliant/",
+   "problems": [],
+   "status": 200,
+   "h1": "Бриллиант",
+   "title_tag": "Бриллиант — смотреть онлайн — Lordfilm",
+   "description": "Бриллиант: Фильм 2016",
+   "canonical": "https://127.0.0.1/title/brilliant/",
+   "og": {
+    "type": "video.movie",
+    "title": "Бриллиант",
+    "description": "Бриллиант: Фильм 2016",
+    "url": "https://127.0.0.1/title/brilliant/",
+    "image": "https://poster.cdnvideohub.com/019151f1-8c50-7309-9346-6311803e4ecb.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "zateryannaya-grobnica-2",
+   "expected_title": "Затерянная гробница 2",
+   "href": "/title/zateryannaya-grobnica-2/",
+   "problems": [],
+   "status": 200,
+   "h1": "Затерянная гробница 2",
+   "title_tag": "Затерянная гробница 2 — смотреть онлайн — Lordfilm",
+   "description": "Затерянная гробница 2: Сериал 2019",
+   "canonical": "https://127.0.0.1/title/zateryannaya-grobnica-2/",
+   "og": {
+    "type": "video.tv_show",
+    "title": "Затерянная гробница 2",
+    "description": "Затерянная гробница 2: Сериал 2019",
+    "url": "https://127.0.0.1/title/zateryannaya-grobnica-2/",
+    "image": "https://poster.cdnvideohub.com/01916e88-ef8c-7ac8-9ca5-4369da52fbfa.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "TVSeries"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "levit",
+   "expected_title": "Левит",
+   "href": "/title/levit/",
+   "problems": [],
+   "status": 200,
+   "h1": "Левит",
+   "title_tag": "Левит — смотреть онлайн — Lordfilm",
+   "description": "Левит: Фильм",
+   "canonical": "https://127.0.0.1/title/levit/",
+   "og": {
+    "type": "video.movie",
+    "title": "Левит",
+    "description": "Левит: Фильм",
+    "url": "https://127.0.0.1/title/levit/",
+    "image": "https://avatars.mds.yandex.net/get-kinopoisk-image/9784475/cfe74199-00ed-4408-a040-4e4f78c62597/300x450",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "zhanna-d-ark",
+   "expected_title": "Жанна Д&#x27;Арк",
+   "href": "/title/zhanna-d-ark/",
+   "problems": [],
+   "status": 200,
+   "h1": "Жанна Д&#x27;Арк",
+   "title_tag": "Жанна Д&#x27;Арк — смотреть онлайн — Lordfilm",
+   "description": "Жанна Д&#x27;Арк: Сериал",
+   "canonical": "https://127.0.0.1/title/zhanna-d-ark/",
+   "og": {
+    "type": "video.tv_show",
+    "title": "Жанна Д&#x27;Арк",
+    "description": "Жанна Д&#x27;Арк: Сериал",
+    "url": "https://127.0.0.1/title/zhanna-d-ark/",
+    "image": "https://poster.cdnvideohub.com/019ee019-0bd9-7233-9e92-5ddd4468dc28.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "TVSeries"
+   ],
+   "ok": true
+  },
+  {
+   "slug": "strasti-zhanny-d-ark",
+   "expected_title": "Страсти Жанны д&#x27;Арк",
+   "href": "/title/strasti-zhanny-d-ark/",
+   "problems": [],
+   "status": 200,
+   "h1": "Страсти Жанны д&#x27;Арк",
+   "title_tag": "Страсти Жанны д&#x27;Арк — смотреть онлайн — Lordfilm",
+   "description": "1431 год. Жанна д`Арк предстает перед судом по обвинению в ереси.",
+   "canonical": "https://127.0.0.1/title/strasti-zhanny-d-ark/",
+   "og": {
+    "type": "video.movie",
+    "title": "Страсти Жанны д&#x27;Арк",
+    "description": "1431 год. Жанна д`Арк предстает перед судом по обвинению в ереси.",
+    "url": "https://127.0.0.1/title/strasti-zhanny-d-ark/",
+    "image": "https://poster.cdnvideohub.com/019b5405-49f5-792d-829d-5e9ef2709698.webp",
+    "site_name": "Lordfilm",
+    "locale": "ru_RU"
+   },
+   "ld_types": [
+    "Movie"
+   ],
+   "ok": true
+  }
+ ]
+}

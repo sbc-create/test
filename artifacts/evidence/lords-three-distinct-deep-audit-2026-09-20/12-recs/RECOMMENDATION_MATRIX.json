@@ -1,0 +1,1103 @@
+{
+  "ts": "2026-09-20T22:12:56.273867+00:00",
+  "sites": {
+    "lords-01": {
+      "domain": "lordfilm47.space",
+      "rows": [
+        {
+          "path": "/title/amerikanskaya-amazonka/season-1/episode-1/",
+          "rec_count": 2,
+          "rec_unique": 1,
+          "self_in_recs": false,
+          "dup_in_recs": 1,
+          "sample": [
+            "/title/amerikanskaya-amazonka/"
+          ]
+        },
+        {
+          "path": "/title/nedetskie-igry-2/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/pravda-ili-zagovor/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/reznya-v-norton-krik/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/pervenec-2/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/princessa-i-drakon/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/chya-eto-sobaka/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/do-kraya-sveta/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/elaydzha-pil/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/otgoloski-iz-pustoty/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/bratya-po-oruzhiyu-nasledie/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/materinskaya-lihoradka/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/ty-ya-protiv-vsego-mira/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/parshivye-ovcy-2/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/posledniy-prokat/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/umnica-gudi/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/luchshie-iz-luchshih-2/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/ya-kris-farli/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/operaciya-fortitude/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/v-poiskah-dzheka-charltona/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/le-man-55-taynaya-katastrofa/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        }
+      ],
+      "self_in_recs": [],
+      "dups": [
+        {
+          "path": "/title/amerikanskaya-amazonka/season-1/episode-1/",
+          "rec_count": 2,
+          "rec_unique": 1,
+          "self_in_recs": false,
+          "dup_in_recs": 1,
+          "sample": [
+            "/title/amerikanskaya-amazonka/"
+          ]
+        }
+      ],
+      "empty_recs": [
+        {
+          "path": "/title/nedetskie-igry-2/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/pravda-ili-zagovor/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/reznya-v-norton-krik/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/pervenec-2/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/princessa-i-drakon/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/chya-eto-sobaka/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/do-kraya-sveta/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/elaydzha-pil/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/otgoloski-iz-pustoty/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/bratya-po-oruzhiyu-nasledie/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/materinskaya-lihoradka/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/ty-ya-protiv-vsego-mira/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/parshivye-ovcy-2/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/posledniy-prokat/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/umnica-gudi/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/luchshie-iz-luchshih-2/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/ya-kris-farli/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/operaciya-fortitude/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/v-poiskah-dzheka-charltona/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/le-man-55-taynaya-katastrofa/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        }
+      ]
+    },
+    "lords-02": {
+      "domain": "lordserial33.biz",
+      "rows": [
+        {
+          "path": "/title/amerikanskaya-amazonka/season-1/episode-1/",
+          "rec_count": 2,
+          "rec_unique": 1,
+          "self_in_recs": false,
+          "dup_in_recs": 1,
+          "sample": [
+            "/title/amerikanskaya-amazonka/"
+          ]
+        },
+        {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/plennica-6/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/nash-vcherashniy-pobeg/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/amerikanskaya-amazonka/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/pylnye-utesy/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/chti-svoyu-mat/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/master-lda-i-plameni-2/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/magiya-zatonuvshih-korabley/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/tihookeanskie-rassledovaniya/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/sryv/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/skandal-4/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/moy-sekret/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/sestry-obschaya-lyubov/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/gorod-zhun/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/vo-imya-lyubvi-2/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/poceluy-menya-derzko/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/ya-vsego-lish-travinka/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/chistilschiki-3/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/ya-tebya-znayu/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/plasticheskaya-krasota/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        }
+      ],
+      "self_in_recs": [],
+      "dups": [
+        {
+          "path": "/title/amerikanskaya-amazonka/season-1/episode-1/",
+          "rec_count": 2,
+          "rec_unique": 1,
+          "self_in_recs": false,
+          "dup_in_recs": 1,
+          "sample": [
+            "/title/amerikanskaya-amazonka/"
+          ]
+        }
+      ],
+      "empty_recs": [
+        {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/plennica-6/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/nash-vcherashniy-pobeg/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/amerikanskaya-amazonka/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/pylnye-utesy/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/chti-svoyu-mat/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/master-lda-i-plameni-2/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/magiya-zatonuvshih-korabley/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/tihookeanskie-rassledovaniya/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/sryv/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/skandal-4/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/moy-sekret/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/sestry-obschaya-lyubov/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/gorod-zhun/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/vo-imya-lyubvi-2/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/poceluy-menya-derzko/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/ya-vsego-lish-travinka/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/chistilschiki-3/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/ya-tebya-znayu/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/plasticheskaya-krasota/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        }
+      ]
+    },
+    "lords-03": {
+      "domain": "1lordserials1.online",
+      "rows": [
+        {
+          "path": "/title/amerikanskaya-amazonka/season-1/episode-1/",
+          "rec_count": 2,
+          "rec_unique": 1,
+          "self_in_recs": false,
+          "dup_in_recs": 1,
+          "sample": [
+            "/title/amerikanskaya-amazonka/"
+          ]
+        },
+        {
+          "path": "/title/amerikanskaya-amazonka/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/chya-eto-sobaka/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/svinorez/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/kadaknath/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/bezdna/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/sheri-lyubov-moya/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/bez-prava-na-strah/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/plasticheskaya-krasota/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/imperiya-artura/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/delo-ob-ubiystve-lakshmikantana/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/littl-lorreyn/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/moi-dva-centa/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/plennica-6/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/nash-vcherashniy-pobeg/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/nedetskie-igry-2/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/pravda-ili-zagovor/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/reznya-v-norton-krik/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/pervenec-2/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/princessa-i-drakon/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/kurinyy-gorodok/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        }
+      ],
+      "self_in_recs": [],
+      "dups": [
+        {
+          "path": "/title/amerikanskaya-amazonka/season-1/episode-1/",
+          "rec_count": 2,
+          "rec_unique": 1,
+          "self_in_recs": false,
+          "dup_in_recs": 1,
+          "sample": [
+            "/title/amerikanskaya-amazonka/"
+          ]
+        }
+      ],
+      "empty_recs": [
+        {
+          "path": "/title/amerikanskaya-amazonka/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/chya-eto-sobaka/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/svinorez/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/kadaknath/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/bezdna/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/sheri-lyubov-moya/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/bez-prava-na-strah/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/plasticheskaya-krasota/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/imperiya-artura/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/delo-ob-ubiystve-lakshmikantana/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/littl-lorreyn/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/moi-dva-centa/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/plennica-6/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/nash-vcherashniy-pobeg/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/nedetskie-igry-2/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/pravda-ili-zagovor/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/reznya-v-norton-krik/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/pervenec-2/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/princessa-i-drakon/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        },
+        {
+          "path": "/title/kurinyy-gorodok/",
+          "rec_count": 0,
+          "rec_unique": 0,
+          "self_in_recs": false,
+          "dup_in_recs": 0,
+          "sample": []
+        }
+      ]
+    }
+  }
+}

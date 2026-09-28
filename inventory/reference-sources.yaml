@@ -23,3 +23,48 @@ sources:
       page_text: false
       images: false
       identifiers: false
+  - ref: zona-w140
+    url: https://w140.zona.plus/
+    kind: ui_reference
+    provenance: "Задание владельца потоку TEMPLATES от 04.09.2026: «подготовь шаблоны по референсам w140.zona.plus и amd.online»"
+    read_only: true
+    purpose: "измерение информационной архитектуры, плотности карточек и поведения шапки второго референса"
+    allowed_paths:
+      - /
+    viewports: [390, 768, 1024, 1440, 1920]
+    store:
+      measurements: true
+      screenshots: true
+      page_text: false
+      images: false
+      identifiers: false
+  - ref: lordfilm-hit
+    url: https://lordfilm-hit.org/
+    kind: ui_reference
+    provenance: "Задание владельца LORDS-REFERENCE-PACK-COMPLETE-002, этап 4: read-only открытие и снимки"
+    read_only: true
+    purpose: "эталон Lords: геометрия, типографика, сетка, оболочка плеера"
+    allowed_paths:
+      - /
+    viewports: [360, 390, 768, 1024, 1366, 1440, 1920]
+    store:
+      measurements: true
+      screenshots: true
+      page_text: false
+      images: false
+      identifiers: false
+  - ref: lordserials-fan
+    url: https://lordserials.fan/
+    kind: ui_reference
+    provenance: "Задание владельца LORDS-REFERENCE-PACK-COMPLETE-002, этап 4: read-only открытие и снимки"
+    read_only: true
+    purpose: "эталон Lords: сериальная витрина, сетка и карточки"
+    allowed_paths:
+      - /
+    viewports: [360, 390, 768, 1024, 1366, 1440, 1920]
+    store:
+      measurements: true
+      screenshots: true
+      page_text: false
+      images: false
+      identifiers: false

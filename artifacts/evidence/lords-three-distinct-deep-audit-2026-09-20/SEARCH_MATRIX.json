@@ -1,0 +1,1073 @@
+{
+  "ts": "2026-09-20T21:57:25.260142+00:00",
+  "sites": {
+    "lords-01": {
+      "domain": "lordfilm47.space",
+      "rows": [
+        {
+          "kind": "exact_ru",
+          "q": "Недетские игры",
+          "status": 200,
+          "err": null,
+          "result_cards": 2,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/nedetskie-igry/",
+            "/title/nedetskie-igry-2/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "exact_ru",
+          "q": "Правда или заговор",
+          "status": 200,
+          "err": null,
+          "result_cards": 1,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/pravda-ili-zagovor/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "exact_ru",
+          "q": "Американская амазонка",
+          "status": 200,
+          "err": null,
+          "result_cards": 1,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/amerikanskaya-amazonka/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "exact_ru",
+          "q": "Мои два цента",
+          "status": 200,
+          "err": null,
+          "result_cards": 1,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/moi-dva-centa/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "exact_ru",
+          "q": "Пленница",
+          "status": 200,
+          "err": null,
+          "result_cards": 11,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/plennica/",
+            "/title/plennica-2/",
+            "/title/plennica-3/",
+            "/title/plennica-4/",
+            "/title/plennica-5/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "original",
+          "q": "The Batman",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "original",
+          "q": "Inception",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "original",
+          "q": "Friends",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "original",
+          "q": "Breaking Bad",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "original",
+          "q": "Interstellar",
+          "status": 200,
+          "err": null,
+          "result_cards": 1,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/interstellar/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "translit",
+          "q": "nedetskie",
+          "status": 200,
+          "err": null,
+          "result_cards": 3,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/nedetskie-igry/",
+            "/title/nedetskie-igry-2/",
+            "/title/nedetskie-tancy/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "translit",
+          "q": "pravda",
+          "status": 200,
+          "err": null,
+          "result_cards": 18,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/pravda/",
+            "/title/pravda-2/",
+            "/title/pravda-3/",
+            "/title/pravda-4/",
+            "/title/pravda-i-nichego-krome/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "translit",
+          "q": "amazonka",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "translit",
+          "q": "inception",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "translit",
+          "q": "breaking",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "partial",
+          "q": "амазон",
+          "status": 200,
+          "err": null,
+          "result_cards": 17,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/amazoniya/",
+            "/title/amazoniya-2/",
+            "/title/amazoniya-galvez-i-shiku-mendes/",
+            "/title/amazoniya-instrukciya-po-vyzhivaniyu/",
+            "/title/amazonskie-priklyucheniya/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "partial",
+          "q": "игры",
+          "status": 200,
+          "err": null,
+          "result_cards": 108,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/igry-bista/",
+            "/title/igry-bogov/",
+            "/title/igry-dyavola/",
+            "/title/igry-dzhentlmenov/",
+            "/title/igry-gudvina/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "partial",
+          "q": "правд",
+          "status": 200,
+          "err": null,
+          "result_cards": 99,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/pravda/",
+            "/title/pravda-2/",
+            "/title/pravda-3/",
+            "/title/pravda-4/",
+            "/title/pravda-i-nichego-krome/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "partial",
+          "q": "batman",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "partial",
+          "q": "сериал",
+          "status": 200,
+          "err": null,
+          "result_cards": 120,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/1001-noch-serial-2006-2009/",
+            "/title/101-e-predlozhenie-serial-2006/",
+            "/title/12-nochey-serial-2018/",
+            "/title/8-lyubovnyy-istoriy-serial-1999-2000/",
+            "/title/a-cvetochki-vsegda-posle-serial-2018/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "nonsense",
+          "q": "zzzxqwxqwxqw",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "nonsense",
+          "q": "qqqzzz123",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "nonsense",
+          "q": "asdfghjkl",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "nonsense",
+          "q": "!!!@@@",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "nonsense",
+          "q": "неттакогофильмаxyz",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "typo",
+          "q": "Недетсике игры",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "typo",
+          "q": "Правда или заговар",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        }
+      ],
+      "nonsense_nonzero": [],
+      "exact_ru_zero": [],
+      "failures": []
+    },
+    "lords-02": {
+      "domain": "lordserial33.biz",
+      "rows": [
+        {
+          "kind": "exact_ru",
+          "q": "Недетские игры",
+          "status": 200,
+          "err": null,
+          "result_cards": 2,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/nedetskie-igry/",
+            "/title/nedetskie-igry-2/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "exact_ru",
+          "q": "Правда или заговор",
+          "status": 200,
+          "err": null,
+          "result_cards": 1,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/pravda-ili-zagovor/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "exact_ru",
+          "q": "Американская амазонка",
+          "status": 200,
+          "err": null,
+          "result_cards": 1,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/amerikanskaya-amazonka/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "exact_ru",
+          "q": "Мои два цента",
+          "status": 200,
+          "err": null,
+          "result_cards": 1,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/moi-dva-centa/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "exact_ru",
+          "q": "Пленница",
+          "status": 200,
+          "err": null,
+          "result_cards": 11,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/plennica/",
+            "/title/plennica-2/",
+            "/title/plennica-3/",
+            "/title/plennica-4/",
+            "/title/plennica-5/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "original",
+          "q": "The Batman",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "original",
+          "q": "Inception",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "original",
+          "q": "Friends",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "original",
+          "q": "Breaking Bad",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "original",
+          "q": "Interstellar",
+          "status": 200,
+          "err": null,
+          "result_cards": 1,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/interstellar/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "translit",
+          "q": "nedetskie",
+          "status": 200,
+          "err": null,
+          "result_cards": 3,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/nedetskie-igry/",
+            "/title/nedetskie-igry-2/",
+            "/title/nedetskie-tancy/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "translit",
+          "q": "pravda",
+          "status": 200,
+          "err": null,
+          "result_cards": 18,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/pravda/",
+            "/title/pravda-2/",
+            "/title/pravda-3/",
+            "/title/pravda-4/",
+            "/title/pravda-i-nichego-krome/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "translit",
+          "q": "amazonka",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "translit",
+          "q": "inception",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "translit",
+          "q": "breaking",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "partial",
+          "q": "амазон",
+          "status": 200,
+          "err": null,
+          "result_cards": 17,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/amazoniya/",
+            "/title/amazoniya-2/",
+            "/title/amazoniya-galvez-i-shiku-mendes/",
+            "/title/amazoniya-instrukciya-po-vyzhivaniyu/",
+            "/title/amazonskie-priklyucheniya/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "partial",
+          "q": "игры",
+          "status": 200,
+          "err": null,
+          "result_cards": 108,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/igry-bista/",
+            "/title/igry-bogov/",
+            "/title/igry-dyavola/",
+            "/title/igry-dzhentlmenov/",
+            "/title/igry-gudvina/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "partial",
+          "q": "правд",
+          "status": 200,
+          "err": null,
+          "result_cards": 99,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/pravda/",
+            "/title/pravda-2/",
+            "/title/pravda-3/",
+            "/title/pravda-4/",
+            "/title/pravda-i-nichego-krome/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "partial",
+          "q": "batman",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "partial",
+          "q": "сериал",
+          "status": 200,
+          "err": null,
+          "result_cards": 120,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/1001-noch-serial-2006-2009/",
+            "/title/101-e-predlozhenie-serial-2006/",
+            "/title/12-nochey-serial-2018/",
+            "/title/8-lyubovnyy-istoriy-serial-1999-2000/",
+            "/title/a-cvetochki-vsegda-posle-serial-2018/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "nonsense",
+          "q": "zzzxqwxqwxqw",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "nonsense",
+          "q": "qqqzzz123",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "nonsense",
+          "q": "asdfghjkl",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "nonsense",
+          "q": "!!!@@@",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "nonsense",
+          "q": "неттакогофильмаxyz",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "typo",
+          "q": "Недетсике игры",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "typo",
+          "q": "Правда или заговар",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        }
+      ],
+      "nonsense_nonzero": [],
+      "exact_ru_zero": [],
+      "failures": []
+    },
+    "lords-03": {
+      "domain": "1lordserials1.online",
+      "rows": [
+        {
+          "kind": "exact_ru",
+          "q": "Недетские игры",
+          "status": 200,
+          "err": null,
+          "result_cards": 2,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/nedetskie-igry/",
+            "/title/nedetskie-igry-2/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "exact_ru",
+          "q": "Правда или заговор",
+          "status": 200,
+          "err": null,
+          "result_cards": 1,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/pravda-ili-zagovor/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "exact_ru",
+          "q": "Американская амазонка",
+          "status": 200,
+          "err": null,
+          "result_cards": 1,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/amerikanskaya-amazonka/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "exact_ru",
+          "q": "Мои два цента",
+          "status": 200,
+          "err": null,
+          "result_cards": 1,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/moi-dva-centa/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "exact_ru",
+          "q": "Пленница",
+          "status": 200,
+          "err": null,
+          "result_cards": 11,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/plennica/",
+            "/title/plennica-2/",
+            "/title/plennica-3/",
+            "/title/plennica-4/",
+            "/title/plennica-5/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "original",
+          "q": "The Batman",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "original",
+          "q": "Inception",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "original",
+          "q": "Friends",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "original",
+          "q": "Breaking Bad",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "original",
+          "q": "Interstellar",
+          "status": 200,
+          "err": null,
+          "result_cards": 1,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/interstellar/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "translit",
+          "q": "nedetskie",
+          "status": 200,
+          "err": null,
+          "result_cards": 3,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/nedetskie-igry/",
+            "/title/nedetskie-igry-2/",
+            "/title/nedetskie-tancy/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "translit",
+          "q": "pravda",
+          "status": 200,
+          "err": null,
+          "result_cards": 18,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/pravda/",
+            "/title/pravda-2/",
+            "/title/pravda-3/",
+            "/title/pravda-4/",
+            "/title/pravda-i-nichego-krome/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "translit",
+          "q": "amazonka",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "translit",
+          "q": "inception",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "translit",
+          "q": "breaking",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "partial",
+          "q": "амазон",
+          "status": 200,
+          "err": null,
+          "result_cards": 17,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/amazoniya/",
+            "/title/amazoniya-2/",
+            "/title/amazoniya-galvez-i-shiku-mendes/",
+            "/title/amazoniya-instrukciya-po-vyzhivaniyu/",
+            "/title/amazonskie-priklyucheniya/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "partial",
+          "q": "игры",
+          "status": 200,
+          "err": null,
+          "result_cards": 108,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/igry-bista/",
+            "/title/igry-bogov/",
+            "/title/igry-dyavola/",
+            "/title/igry-dzhentlmenov/",
+            "/title/igry-gudvina/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "partial",
+          "q": "правд",
+          "status": 200,
+          "err": null,
+          "result_cards": 99,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/pravda/",
+            "/title/pravda-2/",
+            "/title/pravda-3/",
+            "/title/pravda-4/",
+            "/title/pravda-i-nichego-krome/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "partial",
+          "q": "batman",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "partial",
+          "q": "сериал",
+          "status": 200,
+          "err": null,
+          "result_cards": 120,
+          "empty_state": false,
+          "soft404": false,
+          "top_hrefs": [
+            "/title/1001-noch-serial-2006-2009/",
+            "/title/101-e-predlozhenie-serial-2006/",
+            "/title/12-nochey-serial-2018/",
+            "/title/8-lyubovnyy-istoriy-serial-1999-2000/",
+            "/title/a-cvetochki-vsegda-posle-serial-2018/"
+          ],
+          "query_echo": true
+        },
+        {
+          "kind": "nonsense",
+          "q": "zzzxqwxqwxqw",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "nonsense",
+          "q": "qqqzzz123",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "nonsense",
+          "q": "asdfghjkl",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "nonsense",
+          "q": "!!!@@@",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "nonsense",
+          "q": "неттакогофильмаxyz",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "typo",
+          "q": "Недетсике игры",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        },
+        {
+          "kind": "typo",
+          "q": "Правда или заговар",
+          "status": 200,
+          "err": null,
+          "result_cards": 0,
+          "empty_state": true,
+          "soft404": false,
+          "top_hrefs": [],
+          "query_echo": true
+        }
+      ],
+      "nonsense_nonzero": [],
+      "exact_ru_zero": [],
+      "failures": []
+    }
+  }
+}

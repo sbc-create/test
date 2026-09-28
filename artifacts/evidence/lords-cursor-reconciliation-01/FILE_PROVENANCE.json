@@ -1,0 +1,303 @@
+{
+  "stage": "LORDS-CURSOR-WORK-RECONCILIATION-01",
+  "rule": "A6 — каждый ранее незакоммиченный файл классифицирован и сверен по digest",
+  "rescued_total": 27,
+  "rescued_by_type": {
+    "evidence_artifact_copy": 7,
+    "evidence_record": 10,
+    "evidence_screenshot": 3,
+    "source": 2,
+    "test": 5
+  },
+  "rejected_as_temporary": 0,
+  "rejected_as_secret": 0,
+  "rescued": [
+    {
+      "path": "automation/host/collection_contract.py",
+      "type": "source",
+      "commit": "79632a0",
+      "theme": "source+tests: визуальный ремонт",
+      "bytes": 28204,
+      "sha256": "8758a18513c96d624a37c737d07cf9db8ef4f65cd66ef4c776cdecc6e7b072e7",
+      "decision": "KEEP"
+    },
+    {
+      "path": "automation/host/lords-frontend.py",
+      "type": "source",
+      "commit": "79632a0",
+      "theme": "source+tests: визуальный ремонт",
+      "bytes": 418858,
+      "sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "decision": "KEEP"
+    },
+    {
+      "path": "tests/lords/test_block01_header_shell.py",
+      "type": "test",
+      "commit": "79632a0",
+      "theme": "source+tests: визуальный ремонт",
+      "bytes": 2131,
+      "sha256": "cc08528f7161017656827d80235f63eef5f03156dd2d357e57febbbde63a9327",
+      "decision": "KEEP"
+    },
+    {
+      "path": "tests/lords/test_block02_home_sections.py",
+      "type": "test",
+      "commit": "79632a0",
+      "theme": "source+tests: визуальный ремонт",
+      "bytes": 2882,
+      "sha256": "7f349ea84d3f528ae34b9f778364e4948a3282e58c753bf5d3a03d42edeac5f5",
+      "decision": "KEEP"
+    },
+    {
+      "path": "tests/lords/test_block03_card.py",
+      "type": "test",
+      "commit": "79632a0",
+      "theme": "source+tests: визуальный ремонт",
+      "bytes": 1822,
+      "sha256": "75c555850277d59bd0b4e5b692ed185ef4f1403a5e7acbb164a333c523294e6e",
+      "decision": "KEEP"
+    },
+    {
+      "path": "tests/lords/test_compact_filter_contract.py",
+      "type": "test",
+      "commit": "79632a0",
+      "theme": "source+tests: визуальный ремонт",
+      "bytes": 9480,
+      "sha256": "917f807e6146875b96b3856e2fb898da59d934356067aa861cb234e3ab989586",
+      "decision": "KEEP"
+    },
+    {
+      "path": "tests/lords/test_visual_repair_gates.py",
+      "type": "test",
+      "commit": "79632a0",
+      "theme": "source+tests: визуальный ремонт",
+      "bytes": 6386,
+      "sha256": "6333d1aa3ced7296c15ce726d353e6768b474e5b038e5d5398badab882486032",
+      "decision": "KEEP"
+    },
+    {
+      "path": "artifacts/evidence/lords-visual-repair-2026-09-20/00-preflight/PREFLIGHT.json",
+      "type": "evidence_record",
+      "commit": "1752ac1",
+      "theme": "evidence: обрывок прогона",
+      "bytes": 4348,
+      "sha256": "a9423aab40c251e5e93dd4af5dfe1e1269b86650d7bb2d3bbce9735b689cc3da",
+      "decision": "KEEP"
+    },
+    {
+      "path": "artifacts/evidence/lords-visual-repair-2026-09-20/01-registry/CARD_REGISTRY.json",
+      "type": "evidence_record",
+      "commit": "1752ac1",
+      "theme": "evidence: обрывок прогона",
+      "bytes": 2415,
+      "sha256": "74300a6f819c64753d798366d7c6344f4b5caacd0963ca2cbcbd93ac623f46e9",
+      "decision": "KEEP"
+    },
+    {
+      "path": "artifacts/evidence/lords-visual-repair-2026-09-20/02-build/RELEASE.json",
+      "type": "evidence_record",
+      "commit": "1752ac1",
+      "theme": "evidence: обрывок прогона",
+      "bytes": 1545,
+      "sha256": "b60edcde63d0ffb6bf50c6803af101249f8b4483f5a28c9e0da028fdcf19562b",
+      "decision": "KEEP"
+    },
+    {
+      "path": "artifacts/evidence/lords-visual-repair-2026-09-20/02-build/collection_contract-20260920T223745Z-4f8ef5a-visual.py",
+      "type": "evidence_artifact_copy",
+      "commit": "1752ac1",
+      "theme": "evidence: обрывок прогона",
+      "bytes": 28204,
+      "sha256": "8758a18513c96d624a37c737d07cf9db8ef4f65cd66ef4c776cdecc6e7b072e7",
+      "decision": "KEEP"
+    },
+    {
+      "path": "artifacts/evidence/lords-visual-repair-2026-09-20/02-build/collection_contract-20260920T223922Z-4f8ef5a-visual.py",
+      "type": "evidence_artifact_copy",
+      "commit": "1752ac1",
+      "theme": "evidence: обрывок прогона",
+      "bytes": 28204,
+      "sha256": "8758a18513c96d624a37c737d07cf9db8ef4f65cd66ef4c776cdecc6e7b072e7",
+      "decision": "KEEP"
+    },
+    {
+      "path": "artifacts/evidence/lords-visual-repair-2026-09-20/02-build/collection_contract-20260920T223935Z-4f8ef5a-visual.py",
+      "type": "evidence_artifact_copy",
+      "commit": "1752ac1",
+      "theme": "evidence: обрывок прогона",
+      "bytes": 28204,
+      "sha256": "8758a18513c96d624a37c737d07cf9db8ef4f65cd66ef4c776cdecc6e7b072e7",
+      "decision": "KEEP"
+    },
+    {
+      "path": "artifacts/evidence/lords-visual-repair-2026-09-20/02-build/lords-frontend-20260920T223745Z-4f8ef5a-visual.py",
+      "type": "evidence_artifact_copy",
+      "commit": "1752ac1",
+      "theme": "evidence: обрывок прогона",
+      "bytes": 418858,
+      "sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "decision": "KEEP"
+    },
+    {
+      "path": "artifacts/evidence/lords-visual-repair-2026-09-20/02-build/lords-frontend-20260920T223922Z-4f8ef5a-visual.py",
+      "type": "evidence_artifact_copy",
+      "commit": "1752ac1",
+      "theme": "evidence: обрывок прогона",
+      "bytes": 418858,
+      "sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "decision": "KEEP"
+    },
+    {
+      "path": "artifacts/evidence/lords-visual-repair-2026-09-20/02-build/lords-frontend-20260920T223935Z-4f8ef5a-visual.py",
+      "type": "evidence_artifact_copy",
+      "commit": "1752ac1",
+      "theme": "evidence: обрывок прогона",
+      "bytes": 418858,
+      "sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "decision": "KEEP"
+    },
+    {
+      "path": "artifacts/evidence/lords-visual-repair-2026-09-20/STATUS.json",
+      "type": "evidence_record",
+      "commit": "1752ac1",
+      "theme": "evidence: обрывок прогона",
+      "bytes": 1823,
+      "sha256": "9f60163f8f02c90666aa84f9bf917040669d920de47b7b779baa81a32aacafd1",
+      "decision": "KEEP"
+    },
+    {
+      "path": "artifacts/evidence/lords-visual-repair-2026-09-20/before/BEFORE_METRICS.json",
+      "type": "evidence_record",
+      "commit": "1752ac1",
+      "theme": "evidence: обрывок прогона",
+      "bytes": 3355,
+      "sha256": "99fee0e2894a628a33d874f64b98b60a4e7b775e3b074eb2d86d877676499cb4",
+      "decision": "KEEP"
+    },
+    {
+      "path": "artifacts/evidence/lords-visual-repair-2026-09-20/before/cinema/home-1440x900.png",
+      "type": "evidence_screenshot",
+      "commit": "1752ac1",
+      "theme": "evidence: обрывок прогона",
+      "bytes": 935504,
+      "sha256": "faf854031a87664d9e21ede2ab4f54b18898c49e8bf8f2f69a38d6742f2bacc8",
+      "decision": "KEEP"
+    },
+    {
+      "path": "artifacts/evidence/lords-visual-repair-2026-09-20/before/cinema/home.html",
+      "type": "evidence_record",
+      "commit": "1752ac1",
+      "theme": "evidence: обрывок прогона",
+      "bytes": 63782,
+      "sha256": "5af019164d27c79c5bdbf74b764b5249328df7f62d8ae1d45e1d7bbce8a15824",
+      "decision": "KEEP"
+    },
+    {
+      "path": "artifacts/evidence/lords-visual-repair-2026-09-20/before/curated/home-1440x900.png",
+      "type": "evidence_screenshot",
+      "commit": "1752ac1",
+      "theme": "evidence: обрывок прогона",
+      "bytes": 455667,
+      "sha256": "61b79dce55b8afe47feb6762189187d819babeeaf81a0017d8ce7d7c6eef727a",
+      "decision": "KEEP"
+    },
+    {
+      "path": "artifacts/evidence/lords-visual-repair-2026-09-20/before/curated/home.html",
+      "type": "evidence_record",
+      "commit": "1752ac1",
+      "theme": "evidence: обрывок прогона",
+      "bytes": 48074,
+      "sha256": "3f854536ff5a68121f410297b9ea0d28e022de51a5e2770f1b00581178a4c4c0",
+      "decision": "KEEP"
+    },
+    {
+      "path": "artifacts/evidence/lords-visual-repair-2026-09-20/before/series/home-1440x900.png",
+      "type": "evidence_screenshot",
+      "commit": "1752ac1",
+      "theme": "evidence: обрывок прогона",
+      "bytes": 571934,
+      "sha256": "4afec82ee33bababb9e88c096541f2c89572abb59c606cd8690879aad2da8932",
+      "decision": "KEEP"
+    },
+    {
+      "path": "artifacts/evidence/lords-visual-repair-2026-09-20/before/series/home.html",
+      "type": "evidence_record",
+      "commit": "1752ac1",
+      "theme": "evidence: обрывок прогона",
+      "bytes": 55781,
+      "sha256": "faebce73350d5a5fdc7831597e399766371c35b6d3a83840778324b45fa37316",
+      "decision": "KEEP"
+    },
+    {
+      "path": "artifacts/evidence/lords-visual-repair-2026-09-20/deploy/lords-02/OWNER_RESTART_LORDS_02.md",
+      "type": "evidence_record",
+      "commit": "1752ac1",
+      "theme": "evidence: обрывок прогона",
+      "bytes": 2124,
+      "sha256": "1c9b264745d6c8d12d2f0be8486cc0e78dfb0d8ea12cb35ef9e6fabc62e8774d",
+      "decision": "KEEP"
+    },
+    {
+      "path": "artifacts/evidence/lords-visual-repair-2026-09-20/deploy/lords-02/stage.json",
+      "type": "evidence_record",
+      "commit": "1752ac1",
+      "theme": "evidence: обрывок прогона",
+      "bytes": 2027,
+      "sha256": "05bdf2640151447677b3322f30deab9c69d6cd87349c88c41d30b86c6e839d69",
+      "decision": "KEEP"
+    },
+    {
+      "path": "artifacts/evidence/lords-visual-repair-2026-09-20/stage_lords02.py",
+      "type": "evidence_artifact_copy",
+      "commit": "1752ac1",
+      "theme": "evidence: обрывок прогона",
+      "bytes": 3605,
+      "sha256": "9962d4a55c56885e4bb1d2bb6712c5ecb9e99f6164f29a806425e3b9a10dcdb2",
+      "decision": "KEEP"
+    }
+  ],
+  "preserved_in_place": [
+    {
+      "worktree": "/home/claude/wt-lords-integration-canary-01",
+      "dirty_count": 100,
+      "types": [
+        "evidence_record",
+        "evidence_screenshot",
+        "test",
+        "unknown"
+      ],
+      "decision": "PRESERVED_IN_PLACE",
+      "reason": "принадлежит другому этапу; A1 запрещает удалять, A6 запрещает смешивать"
+    },
+    {
+      "worktree": "/home/claude/wt-release-03",
+      "dirty_count": 13,
+      "types": [
+        "evidence_record",
+        "evidence_screenshot"
+      ],
+      "decision": "PRESERVED_IN_PLACE",
+      "reason": "принадлежит другому этапу; A1 запрещает удалять, A6 запрещает смешивать"
+    },
+    {
+      "worktree": "/home/claude/wt-lords-r2",
+      "dirty_count": 5,
+      "types": [
+        "docs",
+        "evidence",
+        "unknown"
+      ],
+      "decision": "PRESERVED_IN_PLACE",
+      "reason": "принадлежит другому этапу; A1 запрещает удалять, A6 запрещает смешивать"
+    },
+    {
+      "worktree": "/home/claude/wt-cursor-header-sticky-01",
+      "dirty_count": 1,
+      "types": [
+        "unknown"
+      ],
+      "decision": "PRESERVED_IN_PLACE",
+      "reason": "принадлежит другому этапу; A1 запрещает удалять, A6 запрещает смешивать"
+    }
+  ]
+}

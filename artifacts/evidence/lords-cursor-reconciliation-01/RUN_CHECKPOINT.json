@@ -1,0 +1,76 @@
+{
+  "stage": "LORDS-CURSOR-WORK-RECONCILIATION-01",
+  "mode": "RECOVER_VERIFY_FINISH_DO_NOT_RESTART",
+  "branch": "cursor/lords-default-episode-01",
+  "start_head": "4f8ef5a3b5efabeb461437f9fa472df0d859e173",
+  "updated_at_utc": "2026-09-21T11:20:00Z",
+
+  "completed_do_not_redo": [
+    {
+      "step": "read-only discovery",
+      "result": "108 worktree, 21 связанных с Lords, 17 грязных, 73 относящиеся ветки, 7 голов cursor/*",
+      "artifacts": ["DISCOVERY.json", "BRANCH_WORKTREE_MATRIX.json"]
+    },
+    {
+      "step": "восстановление приёмочного контракта",
+      "result": "цепочка из двух прогонов: глубокий аудит ACTIVE_CLOSED, визуальный ремонт ACTIVE_INTERRUPTED; NEXT_REPAIR_PROMPT.md опознан как действующий контракт",
+      "artifacts": ["PREVIOUS_GOALS.md", "BLOCK_MATRIX.json"]
+    },
+    {
+      "step": "спасение незакоммиченной работы",
+      "result": "27 файлов сохранено двумя тематическими коммитами; 0 отброшено как временное; 0 секретов",
+      "commits": ["79632a0", "1752ac1"],
+      "artifacts": ["FILE_PROVENANCE.json"]
+    },
+    {
+      "step": "проверка заявленных гейтов",
+      "result": "tests/lords 280 passed / 17 skipped на спасённом дереве; после добавления сторожа 288 passed / 17 skipped",
+      "note": "заявление прогона о 35 тестах относилось к подмножеству и оказалось занижено, а не завышено"
+    },
+    {
+      "step": "установление живой идентичности",
+      "result": "три витрины исполняют b32438c9; lords-01 и lords-03 объявляют 5dd817fe — вердикт DIVERGED, код 2",
+      "method": "sha256 исполняемого файла, манифесты витрин, времена старта процессов из /proc",
+      "artifacts": ["LIVE_BASELINE.json", "MANIFEST_COHERENCE.json"]
+    },
+    {
+      "step": "закрытие корневой причины",
+      "result": "сторож когерентности и восемь тестов на фикстуре",
+      "commits": ["868dab4"]
+    }
+  ],
+
+  "not_done_and_why": [
+    {
+      "step": "smoke ×2 по трём доменам",
+      "reason": "BLOCKED_ACCESS B-01 — доменов Lords нет в allowlist канонического репозитория"
+    },
+    {
+      "step": "метрики A11 по живым страницам, пересъёмка визуальной матрицы, слепое опознание ATF, гейт 300 GET",
+      "reason": "то же ограничение; значения помечены NOT_MEASURABLE, а не заполнены нулями"
+    },
+    {
+      "step": "переоформление манифестов lords-01 и lords-03 либо откат",
+      "reason": "живая мутация на трёх production-доменах; A12 запрещает переносить прежнее одобрение на новый digest — решение владельца, OA-1"
+    },
+    {
+      "step": "остановка четырёх утёкших тестовых серверов",
+      "reason": "вне профиля UNATTENDED_SAFE; OA-3"
+    }
+  ],
+
+  "mutations_performed": {
+    "LIVE_MUTATIONS": 0,
+    "DEPLOY_PERFORMED": 0,
+    "RESTART_PERFORMED": 0,
+    "INDEXABILITY_MUTATIONS": 0,
+    "DNS_MUTATIONS": 0,
+    "PUSH_PERFORMED": 0,
+    "MERGE_PERFORMED": 0,
+    "FILES_DELETED": 0,
+    "GIT_DESTRUCTIVE_OPS": 0,
+    "STASH_USED": 0
+  },
+
+  "next_safe_step": "Дождаться выбора владельца по OA-1 (принять b32438c9 переоформлением манифестов либо откатить на 5dd817fe). Разработку T001–T050 не начинать без отдельного подтверждения."
+}

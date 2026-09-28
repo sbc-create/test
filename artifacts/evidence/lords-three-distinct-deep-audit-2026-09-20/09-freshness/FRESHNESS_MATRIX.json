@@ -1,0 +1,246 @@
+{
+  "ts": "2026-09-20T21:57:25.260202+00:00",
+  "sites": {
+    "lords-01": {
+      "domain": "lordfilm47.space",
+      "popular_meta_run1": [
+        [
+          "2026-W38",
+          "05400b9712dbb632303af1a43e0ebd8d",
+          "WEEKLY_SNAPSHOT"
+        ]
+      ],
+      "popular_meta_run2": [
+        [
+          "2026-W38",
+          "05400b9712dbb632303af1a43e0ebd8d",
+          "WEEKLY_SNAPSHOT"
+        ]
+      ],
+      "digest_stable_across_requests": true,
+      "order_run1": [
+        "/title/svinorez/",
+        "/title/kadaknath/",
+        "/title/bezdna/",
+        "/title/sheri-lyubov-moya/",
+        "/title/bez-prava-na-strah/",
+        "/title/plasticheskaya-krasota/",
+        "/title/imperiya-artura/",
+        "/title/delo-ob-ubiystve-lakshmikantana/",
+        "/title/littl-lorreyn/",
+        "/title/ubiyca-vnutri/"
+      ],
+      "order_run2": [
+        "/title/svinorez/",
+        "/title/kadaknath/",
+        "/title/bezdna/",
+        "/title/sheri-lyubov-moya/",
+        "/title/bez-prava-na-strah/",
+        "/title/plasticheskaya-krasota/",
+        "/title/imperiya-artura/",
+        "/title/delo-ob-ubiystve-lakshmikantana/",
+        "/title/littl-lorreyn/",
+        "/title/ubiyca-vnutri/"
+      ],
+      "order_stable": true,
+      "novinki": [
+        "/title/nedetskie-igry-2/",
+        "/title/pravda-ili-zagovor/",
+        "/title/reznya-v-norton-krik/",
+        "/title/pervenec-2/",
+        "/title/princessa-i-drakon/",
+        "/title/chya-eto-sobaka/",
+        "/title/do-kraya-sveta/",
+        "/title/elaydzha-pil/",
+        "/title/otgoloski-iz-pustoty/"
+      ],
+      "premieres": [
+        "/title/nedetskie-igry-2/",
+        "/title/pravda-ili-zagovor/",
+        "/title/reznya-v-norton-krik/",
+        "/title/pervenec-2/",
+        "/title/princessa-i-drakon/",
+        "/title/chya-eto-sobaka/",
+        "/title/do-kraya-sveta/",
+        "/title/elaydzha-pil/",
+        "/title/otgoloski-iz-pustoty/",
+        "/title/bratya-po-oruzhiyu-nasledie/"
+      ]
+    },
+    "lords-02": {
+      "domain": "lordserial33.biz",
+      "popular_meta_run1": [
+        [
+          "2026-W38",
+          "58b4ad8eb8463ff029e96cdb332037b0",
+          "WEEKLY_SNAPSHOT"
+        ]
+      ],
+      "popular_meta_run2": [
+        [
+          "2026-W38",
+          "58b4ad8eb8463ff029e96cdb332037b0",
+          "WEEKLY_SNAPSHOT"
+        ]
+      ],
+      "digest_stable_across_requests": true,
+      "order_run1": [
+        "/title/bezdna/",
+        "/title/ng-morskie-odissei-otkryvaya-tihiy-okean/",
+        "/title/nascar-amerika/",
+        "/title/operaciya-beloe-more-missiya-nad-gimalayami/",
+        "/title/rassledovanie-prestupleniy/",
+        "/title/evolyuciya/",
+        "/title/v-chetyre-ruki/",
+        "/title/krutoy-uchitel-onidzuka-7/",
+        "/title/drugaya-lyubov-no-ne-ty/",
+        "/title/slava/",
+        "/title/troe-papash/"
+      ],
+      "order_run2": [
+        "/title/bezdna/",
+        "/title/ng-morskie-odissei-otkryvaya-tihiy-okean/",
+        "/title/nascar-amerika/",
+        "/title/operaciya-beloe-more-missiya-nad-gimalayami/",
+        "/title/rassledovanie-prestupleniy/",
+        "/title/evolyuciya/",
+        "/title/v-chetyre-ruki/",
+        "/title/krutoy-uchitel-onidzuka-7/",
+        "/title/drugaya-lyubov-no-ne-ty/",
+        "/title/slava/",
+        "/title/troe-papash/"
+      ],
+      "order_stable": true,
+      "novinki": [
+        "/title/plennica-6/",
+        "/title/nash-vcherashniy-pobeg/",
+        "/title/amerikanskaya-amazonka/",
+        "/title/pylnye-utesy/",
+        "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+        "/title/chti-svoyu-mat/",
+        "/title/master-lda-i-plameni-2/",
+        "/title/magiya-zatonuvshih-korabley/",
+        "/title/tihookeanskie-rassledovaniya/"
+      ],
+      "premieres": [
+        "/title/plennica-6/",
+        "/title/nash-vcherashniy-pobeg/",
+        "/title/amerikanskaya-amazonka/",
+        "/title/pylnye-utesy/",
+        "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+        "/title/chti-svoyu-mat/",
+        "/title/master-lda-i-plameni-2/",
+        "/title/magiya-zatonuvshih-korabley/",
+        "/title/tihookeanskie-rassledovaniya/",
+        "/title/sryv/"
+      ]
+    },
+    "lords-03": {
+      "domain": "1lordserials1.online",
+      "popular_meta_run1": [],
+      "popular_meta_run2": [],
+      "digest_stable_across_requests": true,
+      "order_run1": [
+        "/title/chya-eto-sobaka/",
+        "/title/svinorez/",
+        "/title/kadaknath/",
+        "/title/bezdna/",
+        "/title/sheri-lyubov-moya/",
+        "/title/bez-prava-na-strah/",
+        "/title/plasticheskaya-krasota/",
+        "/title/imperiya-artura/",
+        "/title/delo-ob-ubiystve-lakshmikantana/",
+        "/title/littl-lorreyn/"
+      ],
+      "order_run2": [
+        "/title/chya-eto-sobaka/",
+        "/title/svinorez/",
+        "/title/kadaknath/",
+        "/title/bezdna/",
+        "/title/sheri-lyubov-moya/",
+        "/title/bez-prava-na-strah/",
+        "/title/plasticheskaya-krasota/",
+        "/title/imperiya-artura/",
+        "/title/delo-ob-ubiystve-lakshmikantana/",
+        "/title/littl-lorreyn/"
+      ],
+      "order_stable": true,
+      "novinki": [
+        "/title/chya-eto-sobaka/",
+        "/title/svinorez/",
+        "/title/kadaknath/",
+        "/title/bezdna/",
+        "/title/sheri-lyubov-moya/",
+        "/title/bez-prava-na-strah/",
+        "/title/plasticheskaya-krasota/",
+        "/title/imperiya-artura/"
+      ],
+      "premieres": [
+        "/title/chya-eto-sobaka/",
+        "/title/svinorez/",
+        "/title/kadaknath/",
+        "/title/bezdna/",
+        "/title/sheri-lyubov-moya/",
+        "/title/bez-prava-na-strah/",
+        "/title/plasticheskaya-krasota/",
+        "/title/imperiya-artura/",
+        "/title/delo-ob-ubiystve-lakshmikantana/",
+        "/title/littl-lorreyn/"
+      ]
+    }
+  },
+  "cross_site": {
+    "digests": {
+      "lords-01": [
+        [
+          "2026-W38",
+          "05400b9712dbb632303af1a43e0ebd8d",
+          "WEEKLY_SNAPSHOT"
+        ]
+      ],
+      "lords-02": [
+        [
+          "2026-W38",
+          "58b4ad8eb8463ff029e96cdb332037b0",
+          "WEEKLY_SNAPSHOT"
+        ]
+      ],
+      "lords-03": [
+        null
+      ]
+    },
+    "same_digest_all": false,
+    "orders": {
+      "lords-01": [
+        "/title/svinorez/",
+        "/title/kadaknath/",
+        "/title/bezdna/",
+        "/title/sheri-lyubov-moya/",
+        "/title/bez-prava-na-strah/",
+        "/title/plasticheskaya-krasota/",
+        "/title/imperiya-artura/",
+        "/title/delo-ob-ubiystve-lakshmikantana/"
+      ],
+      "lords-02": [
+        "/title/bezdna/",
+        "/title/ng-morskie-odissei-otkryvaya-tihiy-okean/",
+        "/title/nascar-amerika/",
+        "/title/operaciya-beloe-more-missiya-nad-gimalayami/",
+        "/title/rassledovanie-prestupleniy/",
+        "/title/evolyuciya/",
+        "/title/v-chetyre-ruki/",
+        "/title/krutoy-uchitel-onidzuka-7/"
+      ],
+      "lords-03": [
+        "/title/chya-eto-sobaka/",
+        "/title/svinorez/",
+        "/title/kadaknath/",
+        "/title/bezdna/",
+        "/title/sheri-lyubov-moya/",
+        "/title/bez-prava-na-strah/",
+        "/title/plasticheskaya-krasota/",
+        "/title/imperiya-artura/"
+      ]
+    }
+  }
+}

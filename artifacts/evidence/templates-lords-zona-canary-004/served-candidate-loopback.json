@@ -1,0 +1,160 @@
+{
+ "label": "candidate-final-loopback",
+ "taken_at_utc": "2026-09-13T21:59:15Z",
+ "pages": [
+  {
+   "url": "http://127.0.0.1:9310/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "http://127.0.0.1:9310/",
+   "bytes": 42478,
+   "html_sha256": "3d4e9f0905cbf61cfcfb13ccfa769be65493cfd0c35ba4a0f020cd1610f3982e",
+   "css_sha256": "41b4872299767afd021b9cb9b2dd7ca475201f013a2960ecd1bec91614db51d7",
+   "css_bytes": 10658,
+   "js_sha256": "dd069317d584a8bfbe113d66bd4df90ef42d4e758dc16fbe2411b10d12270c83",
+   "js_bytes": 138,
+   "declared": {
+    "family": "lords",
+    "design_version": "1.1.0",
+    "build_id": "20260913T2230Z-36f36ad6-nova",
+    "artifact_sha256": "1f54bb4fac5b7d7bee8b8eed99de7ed149700e37e4d641ac1919d2749553e878",
+    "source_commit": "36f36ad6837523d6198a0949969e00cdac810e40",
+    "profile": "lords-general",
+    "template": "lords-nova"
+   },
+   "footer_marker": "lords 1.1.0 · 36f36ad6"
+  },
+  {
+   "url": "http://127.0.0.1:9310/catalog/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "http://127.0.0.1:9310/catalog/",
+   "bytes": 42656,
+   "html_sha256": "cd9c90a18803b78d0e4270627c03825739b49edfc0fc1407e59ce1ff2891b40f",
+   "css_sha256": "41b4872299767afd021b9cb9b2dd7ca475201f013a2960ecd1bec91614db51d7",
+   "css_bytes": 10658,
+   "js_sha256": "dd069317d584a8bfbe113d66bd4df90ef42d4e758dc16fbe2411b10d12270c83",
+   "js_bytes": 138,
+   "declared": {
+    "family": "lords",
+    "design_version": "1.1.0",
+    "build_id": "20260913T2230Z-36f36ad6-nova",
+    "artifact_sha256": "1f54bb4fac5b7d7bee8b8eed99de7ed149700e37e4d641ac1919d2749553e878",
+    "source_commit": "36f36ad6837523d6198a0949969e00cdac810e40",
+    "profile": "lords-general",
+    "template": "lords-nova"
+   },
+   "footer_marker": "lords 1.1.0 · 36f36ad6"
+  },
+  {
+   "url": "http://127.0.0.1:9310/title/bezuprechnyy-mir/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "http://127.0.0.1:9310/title/bezuprechnyy-mir/",
+   "bytes": 44646,
+   "html_sha256": "14069d707a075617526760607afe728b6f6f83c7d0abbb20210b1260e3b7f726",
+   "css_sha256": "41b4872299767afd021b9cb9b2dd7ca475201f013a2960ecd1bec91614db51d7",
+   "css_bytes": 10658,
+   "js_sha256": "3c257bdfb59eea165daee36352500cd2485de82686cb0df469f63270997ebbd3",
+   "js_bytes": 3214,
+   "declared": {
+    "family": "lords",
+    "design_version": "1.1.0",
+    "build_id": "20260913T2230Z-36f36ad6-nova",
+    "artifact_sha256": "1f54bb4fac5b7d7bee8b8eed99de7ed149700e37e4d641ac1919d2749553e878",
+    "source_commit": "36f36ad6837523d6198a0949969e00cdac810e40",
+    "profile": "lords-general",
+    "template": "lords-nova"
+   },
+   "footer_marker": "lords 1.1.0 · 36f36ad6"
+  },
+  {
+   "url": "http://127.0.0.1:9310/title/bezuprechnyy-mir/season-1/episode-210/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "http://127.0.0.1:9310/title/bezuprechnyy-mir/season-1/episode-210/",
+   "bytes": 38413,
+   "html_sha256": "053fb4d79497bb7bc6c0a9f093a7eb16df094bfef3d1338c6f0aee6e34181622",
+   "css_sha256": "41b4872299767afd021b9cb9b2dd7ca475201f013a2960ecd1bec91614db51d7",
+   "css_bytes": 10658,
+   "js_sha256": "ab417b1858609b8261420843736f97b8e68955d6c64528b2d6f30c1ac4209306",
+   "js_bytes": 2755,
+   "declared": {
+    "family": "lords",
+    "design_version": "1.1.0",
+    "build_id": "20260913T2230Z-36f36ad6-nova",
+    "artifact_sha256": "1f54bb4fac5b7d7bee8b8eed99de7ed149700e37e4d641ac1919d2749553e878",
+    "source_commit": "36f36ad6837523d6198a0949969e00cdac810e40",
+    "profile": "lords-general",
+    "template": "lords-nova"
+   },
+   "footer_marker": "lords 1.1.0 · 36f36ad6"
+  },
+  {
+   "url": "http://127.0.0.1:9311/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "http://127.0.0.1:9311/",
+   "bytes": 26485,
+   "html_sha256": "16032d07349e67ea0f190f69016ed822f2ed7c4809c5810cb7933caad514fa1d",
+   "css_sha256": "e62abfc04d889cac14f897e0743c40f79ef9e9e634ca493c9c8394c14476b601",
+   "css_bytes": 12395,
+   "js_sha256": "dd069317d584a8bfbe113d66bd4df90ef42d4e758dc16fbe2411b10d12270c83",
+   "js_bytes": 138,
+   "declared": {
+    "family": "zona",
+    "design_version": "1.1.0",
+    "build_id": "20260913T2230Z-36f36ad6-nova",
+    "artifact_sha256": "1f54bb4fac5b7d7bee8b8eed99de7ed149700e37e4d641ac1919d2749553e878",
+    "source_commit": "36f36ad6837523d6198a0949969e00cdac810e40",
+    "profile": "zona-general",
+    "template": "zona-nova"
+   },
+   "footer_marker": "zona 1.1.0 · 36f36ad6"
+  },
+  {
+   "url": "http://127.0.0.1:9311/catalog/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "http://127.0.0.1:9311/catalog/",
+   "bytes": 37280,
+   "html_sha256": "8dd64703f90b0ad851cad32ae177d85610288ac1867e436da7b74a3a7f9fef4d",
+   "css_sha256": "e62abfc04d889cac14f897e0743c40f79ef9e9e634ca493c9c8394c14476b601",
+   "css_bytes": 12395,
+   "js_sha256": "dd069317d584a8bfbe113d66bd4df90ef42d4e758dc16fbe2411b10d12270c83",
+   "js_bytes": 138,
+   "declared": {
+    "family": "zona",
+    "design_version": "1.1.0",
+    "build_id": "20260913T2230Z-36f36ad6-nova",
+    "artifact_sha256": "1f54bb4fac5b7d7bee8b8eed99de7ed149700e37e4d641ac1919d2749553e878",
+    "source_commit": "36f36ad6837523d6198a0949969e00cdac810e40",
+    "profile": "zona-general",
+    "template": "zona-nova"
+   },
+   "footer_marker": "zona 1.1.0 · 36f36ad6"
+  },
+  {
+   "url": "http://127.0.0.1:9311/title/akuloboroten/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "http://127.0.0.1:9311/title/akuloboroten/",
+   "bytes": 22245,
+   "html_sha256": "456c586900c0e09c93d1b639c903a921cfaca7a5b72a6f9c41b0b9a01faf36e0",
+   "css_sha256": "e62abfc04d889cac14f897e0743c40f79ef9e9e634ca493c9c8394c14476b601",
+   "css_bytes": 12395,
+   "js_sha256": "16119a50e7cfd6e58a6fc247c4300bbc51c93a7432ed213509fc258f6dd6e968",
+   "js_bytes": 373,
+   "declared": {
+    "family": "zona",
+    "design_version": "1.1.0",
+    "build_id": "20260913T2230Z-36f36ad6-nova",
+    "artifact_sha256": "1f54bb4fac5b7d7bee8b8eed99de7ed149700e37e4d641ac1919d2749553e878",
+    "source_commit": "36f36ad6837523d6198a0949969e00cdac810e40",
+    "profile": "zona-general",
+    "template": "zona-nova"
+   },
+   "footer_marker": "zona 1.1.0 · 36f36ad6"
+  }
+ ]
+}

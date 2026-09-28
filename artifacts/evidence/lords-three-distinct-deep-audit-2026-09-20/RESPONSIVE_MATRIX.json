@@ -1,0 +1,29 @@
+{
+  "ts": "2026-09-20T22:25:42.625287+00:00",
+  "viewports_captured": [
+    "1024x768",
+    "1366x768",
+    "1440x900",
+    "1920x1080",
+    "320x800",
+    "390x844",
+    "768x1024"
+  ],
+  "screenshot_count": 94,
+  "home_overflow_1440": {
+    "lords-01": 0,
+    "lords-02": 0,
+    "lords-03": 0
+  },
+  "mobile_menu_shots": [
+    "1lordserials1.online__home__menu-open__390x844__audit__20260920T2148Z.png",
+    "lordfilm47.space__home__menu-open__390x844__audit__20260920T2148Z.png",
+    "lordserial33.biz__home__menu-open__390x844__audit__20260920T2148Z.png"
+  ],
+  "notes": [
+    "Horizontal overflow at 1440 measured 0 for all three homes.",
+    "Mobile 390 captures exist for home/catalog/new/search/title; hamburger present on cinema mobile ATF.",
+    "Full zoom-200%/keyboard matrix not instrumented in this pass — recorded as coverage gap P3."
+  ],
+  "HORIZONTAL_OVERFLOW_COUNT": 0
+}

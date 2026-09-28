@@ -1,0 +1,145 @@
+{
+  "cinema": {
+    "domain": "lordfilm47.space",
+    "sha256": "5af019164d27c79c5bdbf74b764b5249328df7f62d8ae1d45e1d7bbce8a15824",
+    "bytes": 63782,
+    "data_design": "lords-cinema-v2",
+    "acc_mark": "#a34b2c",
+    "margin_118": true,
+    "tech_footer": true,
+    "anime_copy": true,
+    "closed_snapshot": true,
+    "aspect_16_10": true,
+    "aspect_16_9_editorial": true,
+    "card_class_counts": {
+      "episode": 3,
+      "editorial": 2,
+      "poster": 59,
+      "total_c": 58
+    },
+    "shelves": [
+      {
+        "title": "Премьеры недели",
+        "cards": 12
+      },
+      {
+        "title": "Фильмы по жанрам",
+        "cards": 12
+      },
+      {
+        "title": "Новинки",
+        "cards": 12
+      },
+      {
+        "title": "Популярное",
+        "cards": 10
+      },
+      {
+        "title": "Подборки",
+        "cards": 0
+      },
+      {
+        "title": "Сериалы",
+        "cards": 12
+      },
+      {
+        "title": "По жанрам",
+        "cards": 0
+      }
+    ],
+    "has_green_3f7d26": false,
+    "brown_a34b2c": true,
+    "blue_2f6fed": false,
+    "plum_6b3d6e": false
+  },
+  "series": {
+    "domain": "lordserial33.biz",
+    "sha256": "faebce73350d5a5fdc7831597e399766371c35b6d3a83840778324b45fa37316",
+    "bytes": 55781,
+    "data_design": "lords-series-feed-v2",
+    "acc_mark": "#2f6fed",
+    "margin_118": true,
+    "tech_footer": true,
+    "anime_copy": true,
+    "closed_snapshot": true,
+    "aspect_16_10": true,
+    "aspect_16_9_editorial": true,
+    "card_class_counts": {
+      "episode": 46,
+      "editorial": 2,
+      "poster": 1,
+      "total_c": 43
+    },
+    "shelves": [
+      {
+        "title": "Продолжающиеся сериалы",
+        "cards": 12
+      },
+      {
+        "title": "Новые поступления сериалов",
+        "cards": 12
+      },
+      {
+        "title": "Популярное за неделю",
+        "cards": 11
+      },
+      {
+        "title": "Подборки",
+        "cards": 0
+      },
+      {
+        "title": "Фильмы в каталоге",
+        "cards": 8
+      }
+    ],
+    "has_green_3f7d26": false,
+    "brown_a34b2c": false,
+    "blue_2f6fed": true,
+    "plum_6b3d6e": false
+  },
+  "curated": {
+    "domain": "1lordserials1.online",
+    "sha256": "3f854536ff5a68121f410297b9ea0d28e022de51a5e2770f1b00581178a4c4c0",
+    "bytes": 48074,
+    "data_design": "lords-curated-v2",
+    "acc_mark": "#6b3d6e",
+    "margin_118": true,
+    "tech_footer": true,
+    "anime_copy": true,
+    "closed_snapshot": true,
+    "aspect_16_10": true,
+    "aspect_16_9_editorial": true,
+    "card_class_counts": {
+      "episode": 3,
+      "editorial": 32,
+      "poster": 1,
+      "total_c": 30
+    },
+    "shelves": [
+      {
+        "title": "Выбор редакции",
+        "cards": 10
+      },
+      {
+        "title": "Тематические подборки",
+        "cards": 0
+      },
+      {
+        "title": "Что посмотреть",
+        "cards": 12
+      },
+      {
+        "title": "Новые поступления",
+        "cards": 8
+      },
+      {
+        "title": "Страны и эпохи",
+        "cards": 0
+      }
+    ],
+    "has_green_3f7d26": false,
+    "brown_a34b2c": false,
+    "blue_2f6fed": false,
+    "plum_6b3d6e": true
+  }
+}

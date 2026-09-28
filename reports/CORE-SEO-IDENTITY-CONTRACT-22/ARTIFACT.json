@@ -1,0 +1,16 @@
+{
+ "contract": "seo-route-binding/1.0.0",
+ "contractVersion": "1.0.0",
+ "artifactDigest": "6a30bc7f987fffaa30306250792566f7676970a54dcd7b00c20ce4d87bcbf563",
+ "bindingDigest": "0b83dd55a23bae1c0ddb9cb8fb24562442f25b0d879c34a2bdf07273dc3280ec",
+ "files": [
+  "docs/contracts/seo-route-binding/CHANGELOG.md:b86649d11b903e652ff950e751bfcb3e1cb8eb60889efd038dcc6f17092cc3cd",
+  "factory/site_engine/adapters/lords_seo_binding.py:05e5c0fb07daa27a784a08e19c44a40432e109f62075a2feee7d93d4a636f710",
+  "factory/site_engine/seo_binding.py:88ea366eab57389d60bf87d5a3e5822f747b8e774e1722dc8d3b983565f92375",
+  "reports/CORE-SEO-IDENTITY-CONTRACT-22/FIXTURES-BINDINGS.json:6f867773393dda6be923c9b78fdbf79b1d56ef8e623b275f0bcfbe9bd49232d4",
+  "tests/unit/consumer_probe_seo.py:b12adccf86875c8b0742a3101219c2141cffc87e746e24ea2507ca46cf2d8396",
+  "tests/unit/test_seo_binding_contract.py:c3dac725e297d827a3186e3cfb642bbc41e6fef79626d8aa6224651139f31032",
+  "tests/unit/test_seo_consumer_integration.py:aab5277b58e903ef5900c8065d4fac1ba3dfee09cd33e6bfbecbb37f6a9cceba"
+ ],
+ "immutable": true
+}

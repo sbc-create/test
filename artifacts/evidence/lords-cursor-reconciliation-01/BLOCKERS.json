@@ -1,0 +1,74 @@
+{
+  "stage": "LORDS-CURSOR-WORK-RECONCILIATION-01",
+  "rule": "пустое поле — не разрешение подставить значение по умолчанию; неизмеримое помечается, а не додумывается",
+  "blockers": [
+    {
+      "id": "B-01",
+      "severity": "P2",
+      "status": "BLOCKED_ACCESS",
+      "title": "HTTP к трём доменам Lords закрыт guard'ом",
+      "detail": "inventory/network-allowlist.yaml канонического репозитория /srv/site-factory/repo не содержит lordfilm47.space, lordserial33.biz и 1lordserials1.online. guard_rules резолвит инвентарь по расположению своего модуля, а не по текущему каталогу, поэтому запуск из worktree ветки Lords не помогает.",
+      "evidence": "curl отклонён с «хост … не входит в переданные контракты»; seo_operator/unattended.py:_repo_root",
+      "owner_authorized_elsewhere": "да — записи закоммичены в fleet-инвентаре f3cb55a и caa7844 с провенансом из nginx server_name и config/site-profiles",
+      "why_not_self_resolved": "CLOSED_WORLD запрещает расширять список доменов по инициативе агента; канонический репозиторий стоит на чужой ветке claude/players-only-production-009 с чужой незакоммиченной работой, и правка его дерева смешала бы этапы",
+      "blocks": ["R-P1-A", "R-SMOKE2", "R-POSTLIVE-VISUAL", "метрики A11 по живым страницам"],
+      "owner_action": "OA-2"
+    },
+    {
+      "id": "B-02",
+      "severity": "P1",
+      "status": "CONFIRMED_LIVE_DEFECT",
+      "title": "lords-01 и lords-03 исполняют артефакт, которого не объявляют",
+      "detail": "Общий исполняемый файл подменён 2026-09-20T22:39:58Z ради lords-02; манифесты соседей не переоформлены. Суточный refresh перезапустил все три витрины, поэтому соседи исполняют b32438c9, объявляя 5dd817fe и сборку 20260920T193847Z-3c90aab-nova.",
+      "evidence": "artifacts/evidence/lords-cursor-reconciliation-01/MANIFEST_COHERENCE.json, вердикт DIVERGED, код возврата 2; времена старта процессов из /proc",
+      "measured_not_reported": true,
+      "contradicts_checkpoint": "STATUS.json прогона заявляет STAGED_AWAITING_OWNER_RESTART и blocked_on owner restart — рестарт произошёл сам",
+      "mitigation_in_place": "индексация всех трёх доменов закрыта и не менялась; локальные тесты нового артефакта зелены",
+      "root_cause_closed": "automation/host/nova-manifest-coherence.py + tests/lords/test_manifest_coherence.py — расхождение теперь обнаруживается, а не остаётся незаметным",
+      "owner_action": "OA-1"
+    },
+    {
+      "id": "B-03",
+      "severity": "P2",
+      "status": "FIXED_IN_THIS_STAGE",
+      "title": "Пакет владельца называл непроверенный адрес сервера",
+      "detail": "OWNER_RESTART_LORDS_02.md предписывал ssh claude@185.231.154.18. Владелец прямо указал не использовать этот IP для claude-control-01 и не выдавать SSH, когда сессия уже на нём.",
+      "resolution": "исторический пакет сохранён без правок как документ прогона; действующие указания переписаны в OWNER_ACTIONS.md без SSH-строки вообще",
+      "owner_action": "OA-1"
+    },
+    {
+      "id": "B-04",
+      "severity": "P3",
+      "status": "OPEN_NOT_SELF_RESOLVED",
+      "title": "Остаток оборванного прогона: четыре сервера на 19132-19135 и отсутствие предела памяти",
+      "detail": "Тестовые серверы живут с 2026-09-20. MemoryMax не задан ни в одном из трёх юнитов витрин.",
+      "why_not_self_resolved": "остановка процессов вне профиля UNATTENDED_SAFE; поднимать или задавать лимит памяти без измерения причины запрещено правилом A10",
+      "owner_action": "OA-3"
+    },
+    {
+      "id": "B-05",
+      "severity": "P3",
+      "status": "RECORDED",
+      "title": "Артефакт собран из грязного дерева, а манифест объявил source_dirty=false",
+      "detail": "RELEASE.json прогона фиксирует source_dirty=true, установленный template-manifest-lords-02.json объявляет source_dirty=false. Происхождение восстановлено: источник закоммичен в 79632a0 и совпадает с артефактом побайтово.",
+      "residual": "поле source_dirty в манифесте заполняется не из состояния дерева на момент сборки; отдельная правка установщика в эту цель не входит",
+      "owner_action": "нет — зафиксировано для следующего этапа"
+    },
+    {
+      "id": "B-06",
+      "severity": "P3",
+      "status": "RECORDED",
+      "title": "Транскрипт Cursor обрывается раньше работы",
+      "detail": "Последняя запись терминалов — 2026-09-20T22:17:52Z, а прогон работал до 22:40Z. Последние действия, включая установку артефакта, в транскрипт не попали и восстановлены по файловой системе.",
+      "owner_action": "нет"
+    }
+  ],
+  "summary": {
+    "P0_OPEN": 0,
+    "P1_OPEN": 1,
+    "P2_OPEN": 1,
+    "P2_FIXED": 1,
+    "P3_OPEN": 1,
+    "P3_RECORDED": 2
+  }
+}

@@ -1,0 +1,8 @@
+{
+ "claim": "перестановка состава страницы тайтла не изменила разметку плеера",
+ "compared_pages": 24,
+ "player_section_differences": 0,
+ "pages_without_player_section": 0,
+ "old_source": "HEAD:factory/lords/render.py",
+ "new_source": "worktree:factory/lords/render.py"
+}

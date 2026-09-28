@@ -1,0 +1,20 @@
+{
+  "lords-general": {
+    "expected": "lords-cinema-v2",
+    "got": "lords-cinema-v2",
+    "pass": true,
+    "no_lords_sheet": true
+  },
+  "lords-new": {
+    "expected": "lords-series-feed-v2",
+    "got": "lords-series-feed-v2",
+    "pass": true,
+    "no_lords_sheet": true
+  },
+  "lords-curated": {
+    "expected": "lords-curated-v2",
+    "got": "lords-curated-v2",
+    "pass": true,
+    "no_lords_sheet": true
+  }
+}

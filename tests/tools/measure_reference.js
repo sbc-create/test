@@ -11,7 +11,13 @@ const path = require('path');
 const url = process.argv[2];
 const outDir = process.argv[3];
 const viewports = process.argv[4].split(',').map(Number);
-const executablePath = process.env.FACTORY_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
+// Путь к браузеру не фиксируется в коде: ревизия chromium привязана к версии
+// @playwright/test и меняется вместе с ней. Прежнее значение указывало на
+// ревизию 1194 в chrome-linux/, а установлена 1234 в chrome-linux64/ —
+// каталога с прежним именем уже нет, и запуск падал бы ещё до перехода к
+// референсу, маскируя отказ доступа отказом браузера. Playwright находит
+// браузер сам; FACTORY_CHROMIUM остаётся ручным переопределением.
+const executablePath = process.env.FACTORY_CHROMIUM || undefined;
 
 const measureInPage = () => {
   const round = (value) => Math.round(value * 100) / 100;
@@ -123,7 +129,8 @@ const measureInPage = () => {
   const result = { url, measured_at: new Date().toISOString(), viewports: {}, errors: [] };
   let browser;
   try {
-    browser = await chromium.launch({ executablePath });
+    browser = await chromium.launch(
+      executablePath ? { executablePath } : {});
   } catch (error) {
     result.errors.push({ stage: 'launch', message: String(error).slice(0, 400) });
     fs.writeFileSync(path.join(outDir, 'measurements.json'), JSON.stringify(result, null, 2));

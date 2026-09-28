@@ -1,0 +1,95 @@
+{
+  "artifact": "SiteReleaseManifest",
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-06T07:23:43Z",
+  "lane": "ARCHITECT_CORE",
+  "siteId": "lords-02",
+  "domain": "lordserial33.biz",
+  "profile": "lords-new",
+  "domainSource": "config/directions/lords.json, mapping_status: owner_confirmed; независимо подтверждено ответом Control API /api/v1/sites",
+  "template": {
+    "templateId": "lords",
+    "artifactVersion": 3,
+    "digest": "ca3d395ade25fb295735a20ad1477e385c9f149a69976b875d0d9af2f5a5f939",
+    "files": 19,
+    "sha": "5b85d9849be2575cda44acf36b3e3d0a18992c77",
+    "branch": "claude/core-release-live-circuit-03-lords",
+    "pinnedInApplyScript": "ca3d395ade25fb295735a20ad1477e385c9f149a69976b875d0d9af2f5a5f939",
+    "scope": "только направление lords"
+  },
+  "engine": {
+    "engineContract": "1.2.0",
+    "schemaVersion": "1.0",
+    "seoContractVersion": "1.0",
+    "source": "COMPATIBILITY_MATRIX.yaml (снимок GET /api/v1/compatibility) и отпечаток входов рендера"
+  },
+  "registry": {
+    "status": "registered",
+    "site_id": "lords-02",
+    "site_type": "video-showcase",
+    "domains": [
+      "lordserial33.biz"
+    ],
+    "render_mode": "static"
+  },
+  "content": {
+    "status": "present",
+    "catalog": "bd4aefb99d726c9ac7b98af9e9b59fd27a9bc8b8db29f4535c6609ce59534de5",
+    "enrichment": "97f72ad11acfc35804293b603a3d1fea4409923f52aea1c08dc481d6ede1a665",
+    "playability": "64e81fff34e8b43132fcee55221e7188412d1c89cbfc81ad9548e78b6e78ea61",
+    "renderer_version": "1d53c49349999bbb9fce668823cd385d983882b71809c56048336b3163dcc3f6",
+    "template_version": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "site_profile": "ca913f8c6d5c1da13af28e477d2f6a1c9316d699745ece4edce3f427b8847e2d",
+    "shelf_configuration": "9afd91927736355aa1585620ed4843964fee8d22adb8b2b2ae876dcf9379d31c",
+    "route_registry": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "schema_version": "1.0",
+    "seo_contract_version": "1.0",
+    "editorial_overrides": "",
+    "assets": "",
+    "fingerprint": "895ee8b3720b41794061a62bed2e52dbbe3f17534b1a6cd777501bddeda6314f"
+  },
+  "render": {
+    "status": "present",
+    "site_id": "lords-02",
+    "rendered_at_utc": "2026-09-06T07:18:54Z",
+    "rendered_by_uid": 1001,
+    "template_sha": "12ad506a0c35aa1e029ed82fe7a3041cb1f8c044",
+    "template_digest": "ca3d395ade25fb295735a20ad1477e385c9f149a69976b875d0d9af2f5a5f939",
+    "content_snapshot_digest": "547d379fae4acbd4",
+    "content_snapshot_items": 53232,
+    "pages": 61609,
+    "staging": "/home/claude/wt-release-03/var/canary-staging/lords-02"
+  },
+  "runtime": {
+    "current_release": "9b48993181bf",
+    "releases": [
+      "2baf922e8864",
+      "9b48993181bf"
+    ],
+    "rollback_release": "2baf922e8864",
+    "rollback_note": "rollback.json внутри релиза описывает другую сборку (lords-02-e4f8919e53ef, 4316 синтетических записей) и источником отката не является"
+  },
+  "rollback": {
+    "release": "2baf922e8864",
+    "command": "sudo ln -sfn /srv/lords/lords-02/releases/2baf922e8864 /srv/lords/lords-02/current",
+    "note": "откат — возврат символьной ссылки на предыдущий выложенный релиз; каталог предыдущего релиза не удаляется",
+    "verified": false,
+    "verifiedNote": "исполнением не проверялся"
+  },
+  "switchImpact": {
+    "runtimeIdenticalToLive": true,
+    "evidence": "automation/host/emit-runtime.py порождает serve.py, побайтово равный /srv/lords/lords-02/current/serve.py (11411 байт); сценарий сравнивает их через cmp и перезапускает службу только при различии",
+    "serviceRestart": "не требуется",
+    "operation": "переключение — подмена символьной ссылки, атомарная; процесс serve.py читает current при каждом запросе"
+  },
+  "notPerformed": [
+    "переключение production: требует прав root, у учётной записи их нет",
+    "приёмка на боевом домене: невозможна до переключения",
+    "визуальная проверка владельцем: невозможна до переключения"
+  ],
+  "knownDefects": [
+    "episode_duration_false_zero — «0 мин» у серий; не P0, CORE_TO_TEMPLATES-027",
+    "search_exact_match_only — поиск не находит ничего; не P0, CORE_TO_TEMPLATES-027"
+  ],
+  "rolloutPolicy": "массовый rollout на lords-01 и lords-03 запрещён до решения по обоим дефектам и одобрения владельца"
+}

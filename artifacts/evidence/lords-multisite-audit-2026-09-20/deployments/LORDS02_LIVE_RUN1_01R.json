@@ -1,0 +1,506 @@
+{
+  "run": 1,
+  "at_utc": "2026-09-20T14:01:24.994746+00:00",
+  "build": "20260920T101032Z-f0b253d-nova",
+  "sha": "4990ea9f8ee6451d86bfad8efa5d5e7592f7eb42a0137ce81b3eeb2078fc6023",
+  "robots": "noindex, nofollow",
+  "country_rows": [
+    {
+      "path": "/country/velikobritaniya/",
+      "status": 200,
+      "final": "https://lordserial33.biz/country/velikobritaniya/",
+      "redirects": [],
+      "n_redirects": 0,
+      "soft404": true,
+      "title_links": 48,
+      "unique_titles": 48,
+      "shown_count": 4092,
+      "build": "20260920T101032Z-f0b253d-nova",
+      "loop": false,
+      "5xx": false
+    },
+    {
+      "path": "/country/великобритания/",
+      "status": null,
+      "final": null,
+      "redirects": null,
+      "n_redirects": 0,
+      "soft404": false,
+      "title_links": 0,
+      "unique_titles": 0,
+      "shown_count": null,
+      "build": null,
+      "loop": false,
+      "5xx": false
+    }
+  ],
+  "country_fail": 2,
+  "country_pass_like": 0,
+  "filter_rows": [
+    {
+      "path": "/catalog/",
+      "status": 200,
+      "5xx": false,
+      "compact": true,
+      "year_selected": null,
+      "has_reset": true,
+      "chips": 2,
+      "title_links": 48,
+      "shown": "53548"
+    },
+    {
+      "path": "/catalog/?year=2016",
+      "status": 200,
+      "5xx": false,
+      "compact": true,
+      "year_selected": true,
+      "has_reset": true,
+      "chips": 4,
+      "title_links": 48,
+      "shown": "1843"
+    },
+    {
+      "path": "/catalog/?genre=komediya",
+      "status": 200,
+      "5xx": false,
+      "compact": true,
+      "year_selected": null,
+      "has_reset": true,
+      "chips": 4,
+      "title_links": 48,
+      "shown": "14913"
+    },
+    {
+      "path": "/catalog/?country=velikobritaniya",
+      "status": 200,
+      "5xx": false,
+      "compact": true,
+      "year_selected": null,
+      "has_reset": true,
+      "chips": 4,
+      "title_links": 48,
+      "shown": "4092"
+    },
+    {
+      "path": "/catalog/?sort=rating",
+      "status": 200,
+      "5xx": false,
+      "compact": true,
+      "year_selected": null,
+      "has_reset": true,
+      "chips": 4,
+      "title_links": 48,
+      "shown": "53548"
+    },
+    {
+      "path": "/catalog/?year=2016&genre=komediya&sort=rating",
+      "status": 200,
+      "5xx": false,
+      "compact": true,
+      "year_selected": true,
+      "has_reset": true,
+      "chips": 6,
+      "title_links": 48,
+      "shown": "577"
+    },
+    {
+      "path": "/movies/?year=2016",
+      "status": 200,
+      "5xx": false,
+      "compact": true,
+      "year_selected": true,
+      "has_reset": true,
+      "chips": 4,
+      "title_links": 48,
+      "shown": "1057"
+    },
+    {
+      "path": "/series/?year=2016",
+      "status": 200,
+      "5xx": false,
+      "compact": true,
+      "year_selected": true,
+      "has_reset": true,
+      "chips": 4,
+      "title_links": 48,
+      "shown": "553"
+    },
+    {
+      "path": "/series/?kind=%D0%A1%D0%B5%D1%80%D0%B8%D0%B0%D0%BB&year=2016",
+      "status": 200,
+      "5xx": false,
+      "compact": true,
+      "year_selected": true,
+      "has_reset": true,
+      "chips": 4,
+      "title_links": 48,
+      "shown": "553"
+    },
+    {
+      "path": "/animation/",
+      "status": 200,
+      "5xx": false,
+      "compact": true,
+      "year_selected": null,
+      "has_reset": true,
+      "chips": 2,
+      "title_links": 48,
+      "shown": "4140"
+    },
+    {
+      "path": "/catalog/?page=2&year=2016",
+      "status": 200,
+      "5xx": false,
+      "compact": true,
+      "year_selected": true,
+      "has_reset": true,
+      "chips": 4,
+      "title_links": 48,
+      "shown": "1843"
+    }
+  ],
+  "filter_5xx": 0,
+  "filter_compact_all": true,
+  "pagination_keeps_year": true,
+  "cards": {
+    "ids": 48,
+    "unique": 48,
+    "dup": 0,
+    "placeholders": 51,
+    "fake0": 0
+  },
+  "popular_run1": [
+    {
+      "week": "2026-W38",
+      "digest": "05400b9712dbb632303af1a43e0ebd8d",
+      "ids": [
+        "/title/svinorez/",
+        "/title/kadaknath/",
+        "/title/bezdna/",
+        "/title/sheri-lyubov-moya/",
+        "/title/bez-prava-na-strah/",
+        "/title/plasticheskaya-krasota/",
+        "/title/imperiya-artura/",
+        "/title/delo-ob-ubiystve-lakshmikantana/",
+        "/title/littl-lorreyn/",
+        "/title/ubiyca-vnutri/"
+      ]
+    }
+  ],
+  "popular_run2": [
+    {
+      "week": "2026-W38",
+      "digest": "05400b9712dbb632303af1a43e0ebd8d",
+      "ids": [
+        "/title/svinorez/",
+        "/title/kadaknath/",
+        "/title/bezdna/",
+        "/title/sheri-lyubov-moya/",
+        "/title/bez-prava-na-strah/",
+        "/title/plasticheskaya-krasota/",
+        "/title/imperiya-artura/",
+        "/title/delo-ob-ubiystve-lakshmikantana/",
+        "/title/littl-lorreyn/",
+        "/title/ubiyca-vnutri/"
+      ]
+    }
+  ],
+  "popular_digest_stable": true,
+  "routes": [
+    {
+      "path": "/",
+      "status": 200,
+      "final": "https://lordserial33.biz/",
+      "redirects": 0,
+      "loop": false,
+      "timeout": false,
+      "soft404": false,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/catalog/",
+      "status": 200,
+      "final": "https://lordserial33.biz/catalog/",
+      "redirects": 0,
+      "loop": false,
+      "timeout": false,
+      "soft404": false,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/movies/",
+      "status": 200,
+      "final": "https://lordserial33.biz/movies/",
+      "redirects": 0,
+      "loop": false,
+      "timeout": false,
+      "soft404": true,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/series/",
+      "status": 200,
+      "final": "https://lordserial33.biz/series/",
+      "redirects": 0,
+      "loop": false,
+      "timeout": false,
+      "soft404": false,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/animation/",
+      "status": 200,
+      "final": "https://lordserial33.biz/animation/",
+      "redirects": 0,
+      "loop": false,
+      "timeout": false,
+      "soft404": false,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/new/",
+      "status": 200,
+      "final": "https://lordserial33.biz/new/",
+      "redirects": 0,
+      "loop": false,
+      "timeout": false,
+      "soft404": false,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/collections/",
+      "status": 200,
+      "final": "https://lordserial33.biz/collections/",
+      "redirects": 0,
+      "loop": false,
+      "timeout": false,
+      "soft404": false,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/search/?q=матрица",
+      "status": null,
+      "final": null,
+      "redirects": 0,
+      "loop": false,
+      "timeout": false,
+      "soft404": false,
+      "5xx": false,
+      "build": null
+    },
+    {
+      "path": "/genre/komediya/",
+      "status": 200,
+      "final": "https://lordserial33.biz/genre/komediya/",
+      "redirects": 0,
+      "loop": false,
+      "timeout": false,
+      "soft404": false,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/year/2016/",
+      "status": 200,
+      "final": "https://lordserial33.biz/year/2016/",
+      "redirects": 0,
+      "loop": false,
+      "timeout": false,
+      "soft404": false,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/country/velikobritaniya/",
+      "status": 200,
+      "final": "https://lordserial33.biz/country/velikobritaniya/",
+      "redirects": 0,
+      "loop": false,
+      "timeout": false,
+      "soft404": true,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/country/великобритания/",
+      "status": null,
+      "final": null,
+      "redirects": 0,
+      "loop": false,
+      "timeout": false,
+      "soft404": false,
+      "5xx": false,
+      "build": null
+    },
+    {
+      "path": "/title/__no_such_title_zzz__/",
+      "status": 404,
+      "final": "https://lordserial33.biz/title/__no_such_title_zzz__/",
+      "redirects": 0,
+      "loop": false,
+      "timeout": false,
+      "soft404": false,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/films/",
+      "status": 200,
+      "final": "https://lordserial33.biz/movies/",
+      "redirects": 1,
+      "loop": false,
+      "timeout": false,
+      "soft404": true,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/cartoons/",
+      "status": 200,
+      "final": "https://lordserial33.biz/animation/",
+      "redirects": 1,
+      "loop": false,
+      "timeout": false,
+      "soft404": false,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/catalog/?page=9999",
+      "status": 200,
+      "final": "https://lordserial33.biz/catalog/?page=9999",
+      "redirects": 0,
+      "loop": false,
+      "timeout": false,
+      "soft404": false,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/robots.txt",
+      "status": 200,
+      "final": "https://lordserial33.biz/robots.txt",
+      "redirects": 0,
+      "loop": false,
+      "timeout": false,
+      "soft404": false,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    },
+    {
+      "path": "/sitemap.xml",
+      "status": 200,
+      "final": "https://lordserial33.biz/sitemap.xml",
+      "redirects": 0,
+      "loop": false,
+      "timeout": false,
+      "soft404": false,
+      "5xx": false,
+      "build": "20260920T101032Z-f0b253d-nova"
+    }
+  ],
+  "http_5xx": 0,
+  "timeouts": 0,
+  "loops": 0,
+  "soft404": 3,
+  "expected_404_ok": true,
+  "player_rows": [
+    {
+      "path": "/title/moi-dva-centa/",
+      "status": 200,
+      "series_like": true,
+      "has_player": true,
+      "full_bleed": true,
+      "state": "resolving",
+      "player_instances_attr": 21,
+      "small_fixed_dims_suspect": true,
+      "autoplay": false
+    },
+    {
+      "path": "/title/moi-dva-centa/season-1/episode-1/",
+      "status": 200,
+      "series_like": true,
+      "exact_episode": true,
+      "has_player": true,
+      "full_bleed": true,
+      "state": "resolving",
+      "player_instances_attr": 21,
+      "episode_in_canonical": true
+    },
+    {
+      "path": "/title/plennica-6/",
+      "status": 200,
+      "series_like": true,
+      "has_player": true,
+      "full_bleed": true,
+      "state": "resolving",
+      "player_instances_attr": 21,
+      "small_fixed_dims_suspect": true,
+      "autoplay": false
+    },
+    {
+      "path": "/title/nash-vcherashniy-pobeg/",
+      "status": 200,
+      "series_like": true,
+      "has_player": true,
+      "full_bleed": true,
+      "state": "resolving",
+      "player_instances_attr": 21,
+      "small_fixed_dims_suspect": true,
+      "autoplay": false
+    },
+    {
+      "path": "/title/nedetskie-igry-2/",
+      "status": 200,
+      "series_like": true,
+      "has_player": true,
+      "full_bleed": true,
+      "state": "resolving",
+      "player_instances_attr": 21,
+      "small_fixed_dims_suspect": true,
+      "autoplay": false
+    },
+    {
+      "path": "/title/pravda-ili-zagovor/",
+      "status": 200,
+      "series_like": true,
+      "has_player": true,
+      "full_bleed": true,
+      "state": "resolving",
+      "player_instances_attr": 21,
+      "small_fixed_dims_suspect": true,
+      "autoplay": false
+    },
+    {
+      "path": "/title/reznya-v-norton-krik/",
+      "status": 200,
+      "series_like": true,
+      "has_player": true,
+      "full_bleed": true,
+      "state": "resolving",
+      "player_instances_attr": 21,
+      "small_fixed_dims_suspect": true,
+      "autoplay": false
+    }
+  ],
+  "rec": {
+    "current_in_module": 0,
+    "dupes": 0,
+    "broken": 0,
+    "ids": [
+      "/title/kurinyy-gorodok/",
+      "/title/nelyud-chast-2/",
+      "/title/nelyud-film-2-stolknovenie/",
+      "/title/zolotaya-sekira/",
+      "/title/dedushkina-lampa/",
+      "/title/ovosch-supergeroy-morkkorm/"
+    ]
+  }
+}

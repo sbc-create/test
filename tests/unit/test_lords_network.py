@@ -375,7 +375,14 @@ class TestSeoSeparationAndIsolation:
         for profile in profiles.values():
             for section in (profile.get("sections") or {}).values():
                 intros.append(section.get("intro", ""))
-        assert len(intros) == len(set(intros)), "два раздела используют один текст"
+        # Пустое вступление — отсутствие текста, а не общий текст. Раздел,
+        # который вступления не показывает, объявляет это пустой строкой, и
+        # два таких раздела не «используют один текст»: им нечего делить.
+        # Прежде пустые строки попадали в сравнение, и второй профиль без
+        # вступления к поиску падал как дубликат первого.
+        written = [text for text in intros if text.strip()]
+        assert len(written) == len(set(written)), "два раздела используют один текст"
+        assert written, "ни один раздел не имеет вступления — сравнивать нечего"
         for intro in intros:
             assert "{brand}" not in intro, "текст собран подстановкой бренда в общий шаблон"
 

@@ -1,0 +1,122 @@
+{
+ "plan": {
+  "playable": "http://127.0.0.1:9310/title/bezuprechnyy-mir/season-1/episode-210/",
+  "nosource": "http://127.0.0.1:9310/title/pylayuschee-leto/",
+  "noaccess": "http://127.0.0.1:9311/title/rokovaya-sudba/"
+ },
+ "results": [
+  {
+   "state": "available",
+   "url": "http://127.0.0.1:9310/title/bezuprechnyy-mir/season-1/episode-210/",
+   "shell": {
+    "present": true,
+    "state": "ok",
+    "heading": "Провайдер не отдал источник",
+    "text": "Для этой серии у провайдера сейчас нет дорожки. Остальные серии и описание на странице работают.",
+    "explained": false,
+    "hasElement": true,
+    "scriptTag": true,
+    "fakePlay": false,
+    "spinner": false
+   },
+   "frame_difference": 0.9906,
+   "ok": true
+  },
+  {
+   "state": "loading",
+   "url": "http://127.0.0.1:9310/title/bezuprechnyy-mir/season-1/episode-210/",
+   "shell": {
+    "present": true,
+    "state": "loading",
+    "heading": "Провайдер не отдал источник",
+    "text": "Для этой серии у провайдера сейчас нет дорожки. Остальные серии и описание на странице работают.",
+    "explained": false,
+    "hasElement": true,
+    "scriptTag": true,
+    "fakePlay": false,
+    "spinner": false
+   },
+   "ok": true
+  },
+  {
+   "state": "provider",
+   "url": "http://127.0.0.1:9310/title/bezuprechnyy-mir/season-1/episode-210/",
+   "shell": {
+    "present": true,
+    "state": "provider",
+    "heading": "Провайдер не отдал источник",
+    "text": "Для этой серии у провайдера сейчас нет дорожки. Остальные серии и описание на странице работают.",
+    "explained": true,
+    "hasElement": true,
+    "scriptTag": true,
+    "fakePlay": false,
+    "spinner": false
+   },
+   "ok": true
+  },
+  {
+   "state": "provider_error",
+   "url": "http://127.0.0.1:9310/title/bezuprechnyy-mir/season-1/episode-210/",
+   "shell": {
+    "present": true,
+    "state": "error",
+    "heading": "Скрипт плеера не загрузился",
+    "text": "Браузер не смог получить скрипт провайдера: его мог заблокировать расширение или сеть. Страница и список серий продолжают работать.",
+    "explained": true,
+    "hasElement": true,
+    "scriptTag": true,
+    "fakePlay": false,
+    "spinner": false
+   },
+   "ok": true
+  },
+  {
+   "state": "timeout",
+   "url": "http://127.0.0.1:9310/title/bezuprechnyy-mir/season-1/episode-210/",
+   "shell": {
+    "present": true,
+    "state": "slow",
+    "heading": "Плеер не поднялся",
+    "text": "Скрипт провайдера загрузился, но проигрыватель не запустился за пятнадцать секунд. Обновите страницу; описание и серии доступны и сейчас.",
+    "explained": true,
+    "hasElement": true,
+    "scriptTag": true,
+    "fakePlay": false,
+    "spinner": false
+   },
+   "ok": true
+  },
+  {
+   "state": "no_source",
+   "url": "http://127.0.0.1:9310/title/pylayuschee-leto/",
+   "shell": {
+    "present": true,
+    "state": "nosource",
+    "heading": "Источник для этой записи не передан",
+    "text": "У записи нет идентификатора ни одного из разрешённых агрегаторов, поэтому запрашивать у провайдера нечего. Как только источник появится в каталоге, плеер включится здесь сам.",
+    "explained": true,
+    "hasElement": false,
+    "scriptTag": false,
+    "fakePlay": false,
+    "spinner": false
+   },
+   "ok": true
+  },
+  {
+   "state": "unavailable",
+   "url": "http://127.0.0.1:9311/title/rokovaya-sudba/",
+   "shell": {
+    "present": true,
+    "state": "noaccess",
+    "heading": "Просмотр на витрине не подключён",
+    "text": "Витрине не выдан идентификатор издателя, и обращаться к провайдеру ей нечем. Это настройка витрины, а не состояние записи: каталог, описание и список серий на странице доступны полностью.",
+    "explained": true,
+    "hasElement": false,
+    "scriptTag": false,
+    "fakePlay": false,
+    "spinner": false
+   },
+   "ok": true
+  }
+ ]
+}

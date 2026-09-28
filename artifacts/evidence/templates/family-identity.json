@@ -1,0 +1,298 @@
+{
+  "captured_at_utc": "2026-09-07T00:40:32.371Z",
+  "families": {
+    "portal_light@390": {
+      "typography": {
+        "bodySize": 16,
+        "bodyLineHeight": 24.8,
+        "headingSize": 26.4,
+        "ledeSize": 16,
+        "ledeWidth": 358,
+        "fontFamily": "Segoe UI"
+      },
+      "density": {
+        "columns": 2,
+        "gap": 14,
+        "containerWidth": 390
+      },
+      "card": {
+        "ratio": 0.67,
+        "radius": 6,
+        "borderTop": 1,
+        "borderBottom": 1
+      },
+      "navigation": {
+        "links": 5,
+        "headerHeight": 114,
+        "direction": "block"
+      }
+    },
+    "portal_light@1440": {
+      "typography": {
+        "bodySize": 16,
+        "bodyLineHeight": 24.8,
+        "headingSize": 26.4,
+        "ledeSize": 16,
+        "ledeWidth": 1328,
+        "fontFamily": "Segoe UI"
+      },
+      "density": {
+        "columns": 7,
+        "gap": 14,
+        "containerWidth": 1360
+      },
+      "card": {
+        "ratio": 0.67,
+        "radius": 6,
+        "borderTop": 1,
+        "borderBottom": 1
+      },
+      "navigation": {
+        "links": 5,
+        "headerHeight": 65,
+        "direction": "block"
+      }
+    },
+    "pulse@390": {
+      "typography": {
+        "bodySize": 16,
+        "bodyLineHeight": 24.8,
+        "headingSize": 32,
+        "ledeSize": 16,
+        "ledeWidth": 350,
+        "fontFamily": "Inter"
+      },
+      "density": {
+        "columns": 1,
+        "gap": 20,
+        "containerWidth": 390
+      },
+      "card": {
+        "ratio": 1.78,
+        "radius": 12,
+        "borderTop": 1,
+        "borderBottom": 1
+      },
+      "navigation": {
+        "links": 5,
+        "headerHeight": 114,
+        "direction": "block"
+      }
+    },
+    "portal_light@768": {
+      "typography": {
+        "bodySize": 16,
+        "bodyLineHeight": 24.8,
+        "headingSize": 26.4,
+        "ledeSize": 16,
+        "ledeWidth": 736,
+        "fontFamily": "Segoe UI"
+      },
+      "density": {
+        "columns": 4,
+        "gap": 14,
+        "containerWidth": 768
+      },
+      "card": {
+        "ratio": 0.67,
+        "radius": 6,
+        "borderTop": 1,
+        "borderBottom": 1
+      },
+      "navigation": {
+        "links": 5,
+        "headerHeight": 65,
+        "direction": "block"
+      }
+    },
+    "pulse@768": {
+      "typography": {
+        "bodySize": 16,
+        "bodyLineHeight": 24.8,
+        "headingSize": 32,
+        "ledeSize": 16,
+        "ledeWidth": 728,
+        "fontFamily": "Inter"
+      },
+      "density": {
+        "columns": 3,
+        "gap": 20,
+        "containerWidth": 768
+      },
+      "card": {
+        "ratio": 1.78,
+        "radius": 12,
+        "borderTop": 1,
+        "borderBottom": 1
+      },
+      "navigation": {
+        "links": 5,
+        "headerHeight": 73,
+        "direction": "block"
+      }
+    },
+    "pulse@1440": {
+      "typography": {
+        "bodySize": 16,
+        "bodyLineHeight": 24.8,
+        "headingSize": 32,
+        "ledeSize": 16,
+        "ledeWidth": 1200,
+        "fontFamily": "Inter"
+      },
+      "density": {
+        "columns": 5,
+        "gap": 20,
+        "containerWidth": 1240
+      },
+      "card": {
+        "ratio": 1.78,
+        "radius": 12,
+        "borderTop": 1,
+        "borderBottom": 1
+      },
+      "navigation": {
+        "links": 5,
+        "headerHeight": 73,
+        "direction": "block"
+      }
+    },
+    "editorial@390": {
+      "typography": {
+        "bodySize": 17,
+        "bodyLineHeight": 28.9,
+        "headingSize": 33.6,
+        "ledeSize": 17,
+        "ledeWidth": 342,
+        "fontFamily": "Georgia"
+      },
+      "density": {
+        "columns": 1,
+        "gap": 24,
+        "containerWidth": 390
+      },
+      "card": {
+        "ratio": 0.67,
+        "radius": 0,
+        "borderTop": 0,
+        "borderBottom": 1
+      },
+      "navigation": {
+        "links": 5,
+        "headerHeight": 116,
+        "direction": "block"
+      }
+    },
+    "editorial@768": {
+      "typography": {
+        "bodySize": 17,
+        "bodyLineHeight": 28.9,
+        "headingSize": 33.6,
+        "ledeSize": 17,
+        "ledeWidth": 720,
+        "fontFamily": "Georgia"
+      },
+      "density": {
+        "columns": 2,
+        "gap": 24,
+        "containerWidth": 768
+      },
+      "card": {
+        "ratio": 0.67,
+        "radius": 0,
+        "borderTop": 0,
+        "borderBottom": 1
+      },
+      "navigation": {
+        "links": 5,
+        "headerHeight": 81,
+        "direction": "block"
+      }
+    },
+    "editorial@1440": {
+      "typography": {
+        "bodySize": 17,
+        "bodyLineHeight": 28.9,
+        "headingSize": 33.6,
+        "ledeSize": 17,
+        "ledeWidth": 1032,
+        "fontFamily": "Georgia"
+      },
+      "density": {
+        "columns": 4,
+        "gap": 24,
+        "containerWidth": 1080
+      },
+      "card": {
+        "ratio": 0.67,
+        "radius": 0,
+        "borderTop": 0,
+        "borderBottom": 1
+      },
+      "navigation": {
+        "links": 5,
+        "headerHeight": 81,
+        "direction": "block"
+      }
+    }
+  },
+  "distinctness": [
+    {
+      "pair": [
+        "portal_light",
+        "pulse"
+      ],
+      "differing": [
+        "typography.headingSize: 26.4 / 32",
+        "typography.ledeWidth: 1328 / 1200",
+        "density.columns: 7 / 5",
+        "density.gap: 14 / 20",
+        "card.ratio: 0.67 / 1.78",
+        "card.radius: 6 / 12"
+      ],
+      "same": [
+        "typography.bodySize: 16 / 16",
+        "typography.bodyLineHeight: 24.8 / 24.8",
+        "card.borderBottom: 1 / 1"
+      ]
+    },
+    {
+      "pair": [
+        "portal_light",
+        "editorial"
+      ],
+      "differing": [
+        "typography.bodySize: 16 / 17",
+        "typography.bodyLineHeight: 24.8 / 28.9",
+        "typography.headingSize: 26.4 / 33.6",
+        "typography.ledeWidth: 1328 / 1032",
+        "density.columns: 7 / 4",
+        "density.gap: 14 / 24",
+        "card.radius: 6 / 0"
+      ],
+      "same": [
+        "card.ratio: 0.67 / 0.67",
+        "card.borderBottom: 1 / 1"
+      ]
+    },
+    {
+      "pair": [
+        "pulse",
+        "editorial"
+      ],
+      "differing": [
+        "typography.bodySize: 16 / 17",
+        "typography.bodyLineHeight: 24.8 / 28.9",
+        "typography.headingSize: 32 / 33.6",
+        "typography.ledeWidth: 1200 / 1032",
+        "density.columns: 5 / 4",
+        "density.gap: 20 / 24",
+        "card.ratio: 1.78 / 0.67",
+        "card.radius: 12 / 0"
+      ],
+      "same": [
+        "card.borderBottom: 1 / 1"
+      ]
+    }
+  ]
+}

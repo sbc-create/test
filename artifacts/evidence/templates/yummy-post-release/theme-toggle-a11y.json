@@ -1,0 +1,25 @@
+{
+  "captured_at_utc": "2026-09-05T07:03:42.293Z",
+  "base": "http://127.0.0.1:3310",
+  "groupLabel": "Тема оформления",
+  "buttons": [
+    {
+      "text": "Свет",
+      "pressed": "false",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "text": "Тёмн",
+      "pressed": "false",
+      "width": 47,
+      "height": 44
+    },
+    {
+      "text": "Авто",
+      "pressed": "true",
+      "width": 44,
+      "height": 44
+    }
+  ]
+}

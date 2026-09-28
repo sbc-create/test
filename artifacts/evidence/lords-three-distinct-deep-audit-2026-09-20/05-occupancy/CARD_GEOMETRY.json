@@ -1,0 +1,67 @@
+{
+  "ts": "2026-09-20T22:25:42.622773+00:00",
+  "cards_audited": 131,
+  "by_site": {
+    "lords-01": {
+      "n": 58,
+      "width_modes": [
+        [
+          "171",
+          58
+        ]
+      ],
+      "height_modes": [
+        [
+          "352",
+          58
+        ]
+      ],
+      "broken_posters": 6,
+      "title_overflow": 24
+    },
+    "lords-02": {
+      "n": 43,
+      "width_modes": [
+        [
+          "171",
+          43
+        ]
+      ],
+      "height_modes": [
+        [
+          "96",
+          31
+        ],
+        [
+          "139",
+          12
+        ]
+      ],
+      "broken_posters": 0,
+      "title_overflow": 18
+    },
+    "lords-03": {
+      "n": 30,
+      "width_modes": [
+        [
+          "171",
+          30
+        ]
+      ],
+      "height_modes": [
+        [
+          "198",
+          30
+        ]
+      ],
+      "broken_posters": 0,
+      "title_overflow": 8
+    }
+  },
+  "totals": {
+    "BROKEN_POSTERS": 6,
+    "FALLBACK_LETTER_ALWAYS_PRESENT": 131,
+    "TITLE_OVERFLOW_COUNT": 50,
+    "NOTE_FALLBACK": "c__none letter node is present even when imgNaturalW>0; not counted as BROKEN_POSTERS"
+  }
+}

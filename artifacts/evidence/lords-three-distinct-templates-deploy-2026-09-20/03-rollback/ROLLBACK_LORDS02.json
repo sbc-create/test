@@ -1,0 +1,8 @@
+{
+  "ROLLBACK_LORDS02": "/srv/lords/.frontend/.rollback/20260920T194006Z-lords-02",
+  "restore_command": "python3 automation/host/lords-nova-canary.py rollback --site lords-02 --point /srv/lords/.frontend/.rollback/20260920T194006Z-lords-02",
+  "service": "nova-lords-02.service",
+  "verified": true,
+  "previous_disk_artifact": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+  "previous_manifest_build": "20260920T101032Z-f0b253d-nova"
+}

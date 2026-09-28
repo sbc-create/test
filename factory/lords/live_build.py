@@ -113,6 +113,7 @@ def build_live(
     contract: content_live.LiveContract | None = None,
     fetcher_factory=None,
     now_ms: int | None = None,
+    incremental: bool = False,
 ) -> dict:
     """Живой каталог для трёх сайтов и отчёт о нём.
 
@@ -126,6 +127,7 @@ def build_live(
 
     report: dict = {
         "generated_at_ms": stamp,
+        "incremental_requested": bool(incremental),
         "contract_ref": "knowledge/cdnvideohub/content-api.yaml",
         "publisher_id_present": True,
         "api_token_present": True,
@@ -144,6 +146,7 @@ def build_live(
             fetcher=fetcher,
             cache_file=cache_file,
             now_ms=stamp,
+            incremental=incremental,
         )
         sections = content_live.enabled_sections(outcome.items, live_contract)
         enabled = sorted(name for name, spec in sections.items() if spec.get("enabled"))
@@ -169,6 +172,38 @@ def write_report(report: dict, *, output: Path | None = None) -> Path:
     target = Path(output) if output else PATHS.root / "artifacts" / "lords" / "live" / "report.json"
     content_live.write_atomic(target, report)
     return target
+
+
+#: Сколько времени витрина вправе жить на последнем удачном ответе, пока
+#: источник недоступен. Провайдер 3 сентября отвечал 502 несколько минут подряд,
+#: и цикл падал как сломанный — хотя вёл себя ровно так, как задумано: не
+#: публиковал сомнительное и оставлял прежний релиз.
+#:
+#: Отличать внешний отказ от собственной поломки обязательно. Пока кэш моложе
+#: этого срока, отказ источника — не повод считать систему сломанной. Как только
+#: данные действительно стареют, отказ снова становится отказом.
+STALE_TOLERANCE_MS = 60 * 60 * 1000
+
+
+def source_unavailable_but_fresh_enough(report: dict, *, tolerance_ms: int = STALE_TOLERANCE_MS) -> bool:
+    """Все сайты на кэше, и кэш ещё не устарел.
+
+    Возвращает True только когда каждый сайт отдал STALE и возраст кэша известен
+    и меньше срока. Неизвестный возраст — не повод для снисхождения: о том, чего
+    не измерено, нельзя утверждать, что оно свежее.
+    """
+    sites = report.get("sites") or {}
+    if not sites:
+        return False
+    for entry in sites.values():
+        if entry.get("status") != content_live.STALE:
+            return False
+        age = entry.get("cache_age_ms")
+        if not isinstance(age, int) or age >= tolerance_ms:
+            return False
+        if entry.get("item_count", 0) < MIN_ITEMS:
+            return False
+    return True
 
 
 def verify_report(report: dict) -> list[str]:

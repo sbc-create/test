@@ -1,0 +1,29 @@
+{
+  "at_utc": "2026-09-19T20:44:50Z",
+  "branch": "cursor/lords-default-episode-01",
+  "HEAD": "bc09b7aa0214f33f5beac17d3d8f2947bfbf7c0f",
+  "MainPID": 3690779,
+  "ActiveState": "active",
+  "ExecStart": "/usr/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9110",
+  "WorkingDirectory": "/srv/lords/.frontend",
+  "runtime_build": "20260913T2300Z-8ececc6c-nova",
+  "runtime_artifact": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+  "disk_artifact_sha256": "4b541137ff4df012eb189e4ed5ce2125d47af7d205188e5e7554170954abb120",
+  "manifest": {
+    "schema_version": 1,
+    "template_family": "lords",
+    "design_version": "1.1.0",
+    "source_commit": "63216915c75ab75fe579363ef40d318774053350",
+    "build_id": "20260919T201932Z-63216915-nova",
+    "artifact_sha256": "4b541137ff4df012eb189e4ed5ce2125d47af7d205188e5e7554170954abb120",
+    "profile": "lords-general",
+    "built_at": "2026-09-19T20:19:40Z",
+    "source_dirty": false,
+    "domain": "lordfilm47.space"
+  },
+  "SOURCE_ARTIFACT_DIGEST_MATCH": 1,
+  "ARTIFACT_RUNTIME_DIGEST_MATCH": 0,
+  "EXPECTED_OLD_PID": 3690779,
+  "pid_unchanged": true,
+  "ROLLBACK_VERIFIED": "YES"
+}

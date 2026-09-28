@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "source_commit": "94524e6a2a49a27e0d8f0f9a91fad7df4f4d87de",
+  "build_id": "20260913T203000Z-94524e6a-nova",
+  "artifact_sha256": "daed37118a20d693a9cd51e869ed721ed41b16815801f1855145fd1ceb4a9319",
+  "profile": "lords-general",
+  "built_at": "2026-09-13T20:29:10Z"
+}

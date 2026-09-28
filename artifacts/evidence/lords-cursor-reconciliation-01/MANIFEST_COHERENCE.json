@@ -1,0 +1,46 @@
+{
+  "checked_at_utc": "2026-09-21T11:17:32.862332+00:00",
+  "runtime_executable": "/srv/lords/.frontend/lords-frontend.py",
+  "runtime_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+  "runtime_mtime_utc": "2026-09-20T22:39:58.226047+00:00",
+  "sites": {
+    "lords-01": {
+      "domain": "lordfilm47.space",
+      "unit": "lords-nova-01.service",
+      "port": 9110,
+      "manifest_path": "/srv/lords/.frontend/template-manifest.json",
+      "declared_artifact_sha256": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+      "declared_build_id": "20260920T193847Z-3c90aab-nova",
+      "runtime_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "process_started_utc": "2026-09-21T03:36:36.410000+00:00",
+      "verdict": "DIVERGED_RUNTIME_AHEAD_OF_MANIFEST"
+    },
+    "lords-02": {
+      "domain": "lordserial33.biz",
+      "unit": "nova-lords-02.service",
+      "port": 9111,
+      "manifest_path": "/srv/lords/.frontend/template-manifest-lords-02.json",
+      "declared_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "declared_build_id": "20260920T223935Z-4f8ef5a-visual",
+      "runtime_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "process_started_utc": "2026-09-21T11:13:09.160000+00:00",
+      "verdict": "COHERENT"
+    },
+    "lords-03": {
+      "domain": "1lordserials1.online",
+      "unit": "nova-lords-03.service",
+      "port": 9112,
+      "manifest_path": "/srv/lords/.frontend/template-manifest-lords-03.json",
+      "declared_artifact_sha256": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+      "declared_build_id": "20260920T193847Z-3c90aab-nova",
+      "runtime_artifact_sha256": "b32438c91aaa8d3fa0a5297731a8ecfe2445c4f8f8ab7fedbe1998d69ff92988",
+      "process_started_utc": "2026-09-21T11:14:58.350000+00:00",
+      "verdict": "DIVERGED_RUNTIME_AHEAD_OF_MANIFEST"
+    }
+  },
+  "diverged_sites": [
+    "lords-01",
+    "lords-03"
+  ],
+  "verdict": "DIVERGED"
+}

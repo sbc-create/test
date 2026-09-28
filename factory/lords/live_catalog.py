@@ -16,11 +16,14 @@
 
 from __future__ import annotations
 
+import json
 import re
 import unicodedata
+from pathlib import Path
 from dataclasses import dataclass
 
 from factory.lords import fixtures as fx
+from factory.site_engine.catalog_identity import decide as kind_decide
 
 #: Происхождение записей этого каталога. Отличается от `fx.SOURCE` намеренно:
 #: по нему видно, что каталог живой, а не синтетический.
@@ -190,14 +193,25 @@ def seasons_from_detail(raw) -> tuple:
             number = int(str(entry.get("number") or "0").strip() or 0)
         except ValueError:
             continue
-        count = entry.get("episodes_count")
-        count = int(count) if isinstance(count, int) and count > 0 else 0
+        # Источник отдаёт два числа: сколько серий заявлено и сколько доступно.
+        # Рисуются доступные — обещать серии, которых нет, витрина не вправе, —
+        # а заявленное сохраняется рядом, чтобы сказать «7 из 24».
+        declared = entry.get("episodes_count")
+        declared = int(declared) if isinstance(declared, int) and declared > 0 else 0
+        available = entry.get("available_episodes_count")
+        available = int(available) if isinstance(available, int) and available >= 0 else None
+        # Молчание источника о доступности — не повод объявить сезон неполным.
+        count = declared if available is None else available
         episodes = tuple(
-            fx.Episode(number=i, name=f"Серия {i}", runtime_min=0)
+            # Длительность не передаётся: списочный ответ источника её не
+            # содержит, а поэпизодного запроса в контракте нет. Оставляем
+            # неизвестной, а не подставляем ноль.
+            fx.Episode(number=i, name=f"Серия {i}")
             for i in range(1, count + 1)
         )
         if number and episodes:
-            seasons.append(fx.Season(number=number, episodes=episodes))
+            seasons.append(fx.Season(number=number, episodes=episodes,
+                                     declared_episodes=declared or None))
     return tuple(sorted(seasons, key=lambda s: s.number))
 
 
@@ -230,7 +244,30 @@ class LiveTitle:
     poster_url: str | None = None
     kinopoisk_rating: float | None = None
     imdb_rating: float | None = None
+    #: Идентификаторы записи у внешних источников. Не украшение: это ключ
+    #: сопоставления. Без него оценку нельзя ни проверить, ни обновить, ни
+    #: связать с той же записью у другого поставщика, и полоса SEO отдельно
+    #: отказалась выпускать оценку без происхождения. Идентификатор — его
+    #: половина. Аудит цепочки на боевом каталоге показал, что до модели не
+    #: доходил ни один из 46 695 идентификаторов Кинопоиска и 44 943 IMDb.
+    kinopoisk_id: str | None = None
+    imdb_id: str | None = None
+    #: Число голосов. Источник его сегодня не даёт ни на одном слое — измерено
+    #: на всех 53 251 записи. Поле объявлено, чтобы значение прошло насквозь,
+    #: когда источник его отдаст, а не потерялось молча. `None` — «не сказал»;
+    #: ноль голосов означал бы, что оценку не поставил никто, а такого
+    #: утверждения источник не делал.
+    kinopoisk_votes: int | None = None
+    imdb_votes: int | None = None
     licensed: bool | None = None
+    #: Вид произведения по контракту `content-kind`, установленный ядром.
+    #: Отдельно от `content_type`: тот смешивает вид со способом исполнения —
+    #: тег `ona` вытесняет тип поставщика, и сериал становится «аниме».
+    #: Пустая строка означает, что вид не установлен, и разметку выпускать
+    #: нельзя. `None` не используется: поле обязано быть у каждой записи.
+    content_kind: str = ""
+    #: Состояние вида: RESOLVED, CONFLICTED или MISSING.
+    content_kind_state: str = "MISSING"
     #: Пришло из detail. Списочный ответ этого не даёт.
     directors: tuple[str, ...] = ()
     actors: tuple[str, ...] = ()
@@ -269,7 +306,10 @@ class LiveTitle:
     @property
     def poster_src(self) -> str:
         """Картинка источника, если она есть; иначе слот, а не битое изображение."""
-        return self.poster_url or self.poster_path
+        # Через проверку схемы: указатель поиска и разметка каруселей берут
+        # это значение напрямую, и непроверенный адрес поставщика дошёл бы до
+        # `img.src` минуя разметку страницы.
+        return fx.safe_poster_src(self.poster_url) or self.poster_path
 
     def as_dict(self) -> dict:
         return {
@@ -291,6 +331,10 @@ class LiveTitle:
             "external_id": self.external_id,
             "kinopoisk_rating": self.kinopoisk_rating,
             "imdb_rating": self.imdb_rating,
+            "kinopoisk_id": self.kinopoisk_id,
+            "imdb_id": self.imdb_id,
+            "kinopoisk_votes": self.kinopoisk_votes,
+            "imdb_votes": self.imdb_votes,
         }
 
 
@@ -316,6 +360,37 @@ def _rating(value) -> float | None:
     return number if 0.0 <= number <= 10.0 else None
 
 
+def _external_id(raw, *names) -> str | None:
+    """Идентификатор внешнего источника под любым из его написаний.
+
+    Списочный ответ зовёт ключ `kinopoisk`, ответ detail — `kp`. Это одно и то
+    же значение: сверено на боевом кэше по 12 009 парам, расхождений ноль.
+    Понимать одно написание и терять другое значило бы терять данные на
+    половине путей.
+    """
+    if not isinstance(raw, dict):
+        return None
+    for name in names:
+        value = raw.get(name)
+        if value in (None, "", 0):
+            continue
+        text = str(value).strip()
+        if text:
+            return text
+    return None
+
+
+def _votes(value) -> int | None:
+    """Число голосов или ничего. Ноль — это ноль голосов, а не их отсутствие."""
+    if isinstance(value, bool) or value is None:
+        return None
+    try:
+        number = int(value)
+    except (TypeError, ValueError):
+        return None
+    return number if number >= 0 else None
+
+
 def title_from_item(entry: dict) -> LiveTitle | None:
     """Одна запись источника. `None`, если её нельзя адресовать."""
     external_id = str(entry.get("external_id") or "").strip()
@@ -324,6 +399,12 @@ def title_from_item(entry: dict) -> LiveTitle | None:
         return None
 
     slug = slugify(name) or slugify(external_id) or external_id.lower()
+    # Вид произведения устанавливает ядро по типу поставщика и тегам вида, а
+    # не витрина по наличию сезонов. Сезоны приходят обогащением и часто
+    # отсутствуют; «нет сезонов» никогда не означало «фильм».
+    решение_о_виде = kind_decide(provider_type=entry.get("type"),
+                                 tags=entry.get("tags") or (),
+                                 entity_id=external_id)
     # `tags` источника — не список жанров: там вперемешку возрастные отметки,
     # пометки формы и пользовательские дескрипторы. Разбираем, а не показываем.
     age_rating, format_type, tags = classify_tags(entry.get("tags"))
@@ -356,6 +437,12 @@ def title_from_item(entry: dict) -> LiveTitle | None:
         # Пометка формы точнее поля `type`: мультфильмы и аниме приходят как
         # movie/tv и отличаются только тегом.
         content_type=format_type or _content_type(entry.get("type"), entry.get("is_series")),
+        content_kind=("" if решение_о_виде.conflicted
+                      or решение_о_виде.kind.value == "UNKNOWN"
+                      else решение_о_виде.kind.value),
+        content_kind_state=("CONFLICTED" if решение_о_виде.conflicted
+                            else "MISSING" if решение_о_виде.kind.value == "UNKNOWN"
+                            else "RESOLVED"),
         year=int(year) if isinstance(year, int) else 0,
         country_slug=slugify(countries[0]) if countries else "",
         country=", ".join(countries),
@@ -364,7 +451,7 @@ def title_from_item(entry: dict) -> LiveTitle | None:
         genre_slugs=tuple(slugify(g) or "tag" for g in (detail_genres or tags)),
         genres=tuple(detail_genres or tags),
         studio="",
-        runtime_min=int(duration) if isinstance(duration, int) and duration > 0 else 0,
+        runtime_min=int(duration) if isinstance(duration, int) and duration > 0 else None,
         age_rating=age_rating,
         summary=str(entry.get("description") or "").strip(),
         playable=entry.get("playable"),
@@ -373,6 +460,10 @@ def title_from_item(entry: dict) -> LiveTitle | None:
         poster_url=(entry.get("poster_url") or None),
         kinopoisk_rating=_rating(entry.get("kinopoisk_rating")),
         imdb_rating=_rating(entry.get("imdb_rating")),
+        kinopoisk_id=_external_id(entry.get("external_ids"), "kinopoisk", "kp"),
+        imdb_id=_external_id(entry.get("external_ids"), "imdb"),
+        kinopoisk_votes=_votes(entry.get("kinopoisk_votes")),
+        imdb_votes=_votes(entry.get("imdb_votes")),
         licensed=entry.get("licensed") if isinstance(entry.get("licensed"), bool) else None,
         directors=directors,
         actors=actors,
@@ -385,6 +476,32 @@ def title_from_item(entry: dict) -> LiveTitle | None:
     )
 
 
+#: Закреплённые адреса действующей выкладки. Снимаются один раз и хранятся
+#: как данные, а не выводятся алгоритмом: публичный URL, который уже
+#: опубликован и проиндексирован, не должен зависеть от того, в каком порядке
+#: сегодня пришла выгрузка.
+ЗАКРЕПЛЁННЫЕ = Path(__file__).resolve().parents[2] / "data" / "lords" / "route-ledger.json"
+_кэш_закреплённых: dict | None = None
+
+
+def загрузить_закреплённые() -> dict:
+    """Карта `external_id -> slug`. Отсутствие файла — не ошибка.
+
+    Без файла политика назначит адреса своим правилом: это верно для нового
+    каталога и для тестов. Молчаливая подмена опасна только в обратную
+    сторону — если бы отсутствие карты трактовалось как «адреса менять
+    нельзя», сборка бы падала там, где закреплять ещё нечего.
+    """
+    global _кэш_закреплённых
+    if _кэш_закреплённых is None:
+        try:
+            _кэш_закреплённых = json.loads(
+                ЗАКРЕПЛЁННЫЕ.read_text(encoding="utf-8"))["assignments"]
+        except (OSError, KeyError, ValueError):
+            _кэш_закреплённых = {}
+    return _кэш_закреплённых
+
+
 def catalog_from_live(items, collections=()) -> fx.Catalog:
     """Каталог из записей источника.
 
@@ -392,19 +509,41 @@ def catalog_from_live(items, collections=()) -> fx.Catalog:
     без одного тайтла лучше витрины без всех.
     """
     titles: list[LiveTitle] = []
-    seen: dict[str, int] = {}
     for entry in items or []:
         title = title_from_item(entry)
         if title is None:
             continue
-        # Слаг — первичный ключ адреса. Совпадение имён встречается, и второй
-        # тайтл обязан получить собственный адрес, а не затереть первый.
-        count = seen.get(title.slug, 0)
-        seen[title.slug] = count + 1
-        if count:
-            from dataclasses import replace
-            title = replace(title, slug=f"{title.slug}-{count + 1}")
         titles.append(title)
 
-    by_slug = {t.slug: t for t in titles}
+    # Адреса назначает политика маршрутов, а не порядок записей.
+    #
+    # Прежде второе совпадение имени получало суффикс `-2` по позиции в
+    # выгрузке. Это давало два независимых дефекта. Адрес зависел от порядка
+    # строк: перестановка снимка меняла публичный URL произведения. И суффикс
+    # попадал в настоящее название — «Акулы» получали `akuly-2`, уже занятый
+    # фильмом «Акулы 2»; на полном каталоге таких столкновений 206, и словарь
+    # ниже молча оставлял последнюю запись. По адресу сиквела открывалась
+    # чужая карточка: код ответа 200, сущность не та.
+    from dataclasses import replace as _replace
+
+    from factory.lords import urlmap as _um
+
+    записи = [{"external_id": t.external_id, "year": t.year,
+               "type": t.content_type, "created_at": t.created_at,
+               "_natural": t.slug} for t in titles]
+    назначение = _um.назначить(записи, закреплённые=загрузить_закреплённые(),
+                               слаг_из=lambda з: з["_natural"])
+    titles = [_replace(t, slug=назначение.by_id[t.external_id]) for t in titles]
+
+    by_slug: dict[str, LiveTitle] = {}
+    for t in titles:
+        # Fail closed. Прежде здесь стоял dict comprehension, и совпадение
+        # адресов заканчивалось тихой заменой сущности — единственный след
+        # дефекта исчезал ровно в том месте, где его следовало заметить.
+        if t.slug in by_slug:
+            raise _um.UrlMapError(
+                "ROUTE_COLLISION",
+                f"адрес {t.slug} назначен дважды: "
+                f"{by_slug[t.slug].external_id} и {t.external_id}")
+        by_slug[t.slug] = t
     return fx.Catalog(titles=tuple(titles), collections=tuple(collections), _by_slug=by_slug)

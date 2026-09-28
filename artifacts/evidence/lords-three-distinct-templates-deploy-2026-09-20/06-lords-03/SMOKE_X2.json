@@ -1,0 +1,372 @@
+{
+  "site": "lords-03",
+  "domain": "1lordserials1.online",
+  "expected_design": "lords-curated-v2",
+  "expected_build": "20260920T193847Z-3c90aab-nova",
+  "expected_artifact": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+  "restart": {
+    "MainPID": 1338277,
+    "ExecMainStartTimestamp": "Sun 2026-09-20 21:29:44 UTC",
+    "ActiveState": "active",
+    "SubState": "running",
+    "NRestarts": 0,
+    "path": "sudo -n systemctl restart nova-lords-03.service",
+    "exit": 0
+  },
+  "run1_pass": true,
+  "run2_pass": true,
+  "both_pass": true,
+  "stable_same_build": true,
+  "runs": [
+    {
+      "run_id": 1,
+      "ts": "2026-09-20T21:31:01Z",
+      "checks": [
+        {
+          "name": "template_version_http",
+          "ok": true,
+          "status": 200,
+          "error": null
+        },
+        {
+          "name": "build_id",
+          "ok": true,
+          "got": "20260920T193847Z-3c90aab-nova"
+        },
+        {
+          "name": "artifact_sha",
+          "ok": true,
+          "got": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc"
+        },
+        {
+          "name": "source_commit",
+          "ok": true,
+          "got": "3c90aab08aee275e2b628d34cf6c719cbc120c21"
+        },
+        {
+          "name": "profile",
+          "ok": true,
+          "got": "lords-curated"
+        },
+        {
+          "name": "home_200",
+          "ok": true,
+          "status": 200,
+          "error": null
+        },
+        {
+          "name": "data_design",
+          "ok": true,
+          "got": "lords-curated-v2"
+        },
+        {
+          "name": "no_lords_sheet",
+          "ok": true,
+          "got": "lords-curated-v2"
+        },
+        {
+          "name": "indexability_noindex",
+          "ok": true,
+          "meta": "noindex, nofollow",
+          "x_robots": "noindex, nofollow"
+        },
+        {
+          "name": "assets_ok",
+          "ok": true,
+          "issues": [],
+          "checked": []
+        },
+        {
+          "name": "catalog_200",
+          "ok": true,
+          "status": 200,
+          "error": null
+        },
+        {
+          "name": "search_ok",
+          "ok": true,
+          "status": 200,
+          "q": "Найти",
+          "error": null
+        },
+        {
+          "name": "filter_ok",
+          "ok": true,
+          "status": 200,
+          "error": null
+        },
+        {
+          "name": "title_ok",
+          "ok": true,
+          "status": 200,
+          "path": "/title/moi-dva-centa/",
+          "soft_404": false
+        },
+        {
+          "name": "episode_ok",
+          "ok": true,
+          "status": 200,
+          "path": "/title/moi-dva-centa/season-1/episode-1/"
+        },
+        {
+          "name": "invalid_page_404",
+          "ok": true,
+          "status": 404,
+          "error": "HTTPError:404"
+        },
+        {
+          "name": "nonexistent_title_404",
+          "ok": true,
+          "status": 404,
+          "error": "HTTPError:404"
+        },
+        {
+          "name": "player_instance_max",
+          "ok": true,
+          "iframe_players": 0
+        },
+        {
+          "name": "no_cross_tenant_links",
+          "ok": true,
+          "bad": []
+        },
+        {
+          "name": "neighbor_lords01_intact",
+          "ok": true,
+          "design": "lords-cinema-v2",
+          "build": "20260920T193847Z-3c90aab-nova",
+          "artifact": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc"
+        },
+        {
+          "name": "neighbor_lords02_intact",
+          "ok": true,
+          "design": "lords-series-feed-v2",
+          "build": "20260920T193847Z-3c90aab-nova",
+          "artifact": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc"
+        }
+      ],
+      "pass": true,
+      "counts": {
+        "http_5xx": 0,
+        "http_502": 0,
+        "timeout": 0,
+        "redirect_loop": 0,
+        "soft_404": 0
+      },
+      "template_version": {
+        "schema_version": 1,
+        "template_family": "lords",
+        "design_version": "1.1.0",
+        "source_commit": "3c90aab08aee275e2b628d34cf6c719cbc120c21",
+        "build_id": "20260920T193847Z-3c90aab-nova",
+        "artifact_sha256": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+        "profile": "lords-curated",
+        "built_at": "2026-09-20T21:29:25Z",
+        "source_dirty": false,
+        "domain": "1lordserials1.online",
+        "player_layout_contract": "full-bleed-v1",
+        "core_runtime": "site-factory-nova",
+        "family_template": "lords-nova",
+        "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+        "catalog_built_at": "2026-09-20T03:16:30Z",
+        "details_catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+        "details_catalog_built_at": "2026-09-20T03:16:30Z",
+        "details_coverage": 53548,
+        "catalog_details_skew": false
+      },
+      "discovered_title_links": [
+        "/title/moi-dva-centa/",
+        "/title/plennica-6/",
+        "/title/nash-vcherashniy-pobeg/",
+        "/title/nedetskie-igry-2/",
+        "/title/pravda-ili-zagovor/",
+        "/title/reznya-v-norton-krik/",
+        "/title/pervenec-2/",
+        "/title/princessa-i-drakon/",
+        "/title/kurinyy-gorodok/",
+        "/title/chya-eto-sobaka/"
+      ],
+      "discovered_episode_links": [
+        "/title/moi-dva-centa/season-1/episode-1/",
+        "/title/moi-dva-centa/season-1/episode-2/",
+        "/title/moi-dva-centa/season-1/episode-3/",
+        "/title/moi-dva-centa/season-1/episode-4/"
+      ]
+    },
+    {
+      "run_id": 2,
+      "ts": "2026-09-20T21:31:05Z",
+      "checks": [
+        {
+          "name": "template_version_http",
+          "ok": true,
+          "status": 200,
+          "error": null
+        },
+        {
+          "name": "build_id",
+          "ok": true,
+          "got": "20260920T193847Z-3c90aab-nova"
+        },
+        {
+          "name": "artifact_sha",
+          "ok": true,
+          "got": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc"
+        },
+        {
+          "name": "source_commit",
+          "ok": true,
+          "got": "3c90aab08aee275e2b628d34cf6c719cbc120c21"
+        },
+        {
+          "name": "profile",
+          "ok": true,
+          "got": "lords-curated"
+        },
+        {
+          "name": "home_200",
+          "ok": true,
+          "status": 200,
+          "error": null
+        },
+        {
+          "name": "data_design",
+          "ok": true,
+          "got": "lords-curated-v2"
+        },
+        {
+          "name": "no_lords_sheet",
+          "ok": true,
+          "got": "lords-curated-v2"
+        },
+        {
+          "name": "indexability_noindex",
+          "ok": true,
+          "meta": "noindex, nofollow",
+          "x_robots": "noindex, nofollow"
+        },
+        {
+          "name": "assets_ok",
+          "ok": true,
+          "issues": [],
+          "checked": []
+        },
+        {
+          "name": "catalog_200",
+          "ok": true,
+          "status": 200,
+          "error": null
+        },
+        {
+          "name": "search_ok",
+          "ok": true,
+          "status": 200,
+          "q": "Найти",
+          "error": null
+        },
+        {
+          "name": "filter_ok",
+          "ok": true,
+          "status": 200,
+          "error": null
+        },
+        {
+          "name": "title_ok",
+          "ok": true,
+          "status": 200,
+          "path": "/title/moi-dva-centa/",
+          "soft_404": false
+        },
+        {
+          "name": "episode_ok",
+          "ok": true,
+          "status": 200,
+          "path": "/title/moi-dva-centa/season-1/episode-1/"
+        },
+        {
+          "name": "invalid_page_404",
+          "ok": true,
+          "status": 404,
+          "error": "HTTPError:404"
+        },
+        {
+          "name": "nonexistent_title_404",
+          "ok": true,
+          "status": 404,
+          "error": "HTTPError:404"
+        },
+        {
+          "name": "player_instance_max",
+          "ok": true,
+          "iframe_players": 0
+        },
+        {
+          "name": "no_cross_tenant_links",
+          "ok": true,
+          "bad": []
+        },
+        {
+          "name": "neighbor_lords01_intact",
+          "ok": true,
+          "design": "lords-cinema-v2",
+          "build": "20260920T193847Z-3c90aab-nova",
+          "artifact": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc"
+        },
+        {
+          "name": "neighbor_lords02_intact",
+          "ok": true,
+          "design": "lords-series-feed-v2",
+          "build": "20260920T193847Z-3c90aab-nova",
+          "artifact": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc"
+        }
+      ],
+      "pass": true,
+      "counts": {
+        "http_5xx": 0,
+        "http_502": 0,
+        "timeout": 0,
+        "redirect_loop": 0,
+        "soft_404": 0
+      },
+      "template_version": {
+        "schema_version": 1,
+        "template_family": "lords",
+        "design_version": "1.1.0",
+        "source_commit": "3c90aab08aee275e2b628d34cf6c719cbc120c21",
+        "build_id": "20260920T193847Z-3c90aab-nova",
+        "artifact_sha256": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+        "profile": "lords-curated",
+        "built_at": "2026-09-20T21:29:25Z",
+        "source_dirty": false,
+        "domain": "1lordserials1.online",
+        "player_layout_contract": "full-bleed-v1",
+        "core_runtime": "site-factory-nova",
+        "family_template": "lords-nova",
+        "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+        "catalog_built_at": "2026-09-20T03:16:30Z",
+        "details_catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+        "details_catalog_built_at": "2026-09-20T03:16:30Z",
+        "details_coverage": 53548,
+        "catalog_details_skew": false
+      },
+      "discovered_title_links": [
+        "/title/moi-dva-centa/",
+        "/title/plennica-6/",
+        "/title/nash-vcherashniy-pobeg/",
+        "/title/nedetskie-igry-2/",
+        "/title/pravda-ili-zagovor/",
+        "/title/reznya-v-norton-krik/",
+        "/title/pervenec-2/",
+        "/title/princessa-i-drakon/",
+        "/title/kurinyy-gorodok/",
+        "/title/chya-eto-sobaka/"
+      ],
+      "discovered_episode_links": [
+        "/title/moi-dva-centa/season-1/episode-1/",
+        "/title/moi-dva-centa/season-1/episode-2/",
+        "/title/moi-dva-centa/season-1/episode-3/",
+        "/title/moi-dva-centa/season-1/episode-4/"
+      ]
+    }
+  ]
+}

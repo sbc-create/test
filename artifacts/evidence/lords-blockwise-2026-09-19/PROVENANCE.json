@@ -1,0 +1,36 @@
+{
+  "at_utc": "2026-09-19T22:10:54Z",
+  "WORKTREE": "/home/claude/wt-lords-default-episode-01",
+  "BRANCH": "cursor/lords-default-episode-01",
+  "START_HEAD": "45e07287e130079b21af92d5dfa8fbfe4a208f59",
+  "HEAD": "45e07287e130079b21af92d5dfa8fbfe4a208f59",
+  "START_HEAD_MATCH": 1,
+  "FEATURE_HEAD": "63216915c75ab75fe579363ef40d318774053350",
+  "feature_in_ancestry": true,
+  "feature_commits": [
+    "6321691 fix(lords): enforce responsive full-size player viewport",
+    "ef17a70 fix(lords): select first playable episode on generic series routes"
+  ],
+  "report_commits": [
+    "45e0728 docs(qa): verify rollback and record owner restart gate",
+    "bc09b7a docs(qa): align post-restart checklist with viewport FEATURE_HEAD",
+    "1dc5333 docs(qa): record full-size player viewport provenance for owner restart",
+    "6e2d8f7 docs(qa): prepare committed Lords build for owner restart"
+  ],
+  "disk_overwrite_detected": {
+    "found_sha": "dec738733737754afb47afd42c5ebd10be39e7c07408285035d426aef4e611b0",
+    "expected_sha": "4b541137ff4df012eb189e4ed5ce2125d47af7d205188e5e7554170954abb120",
+    "action": "restored via canary install --no-restart from 63216915-clean-stage",
+    "new_rollback_point": "/srv/lords/.frontend/.rollback/20260919T221016Z-lords-01"
+  },
+  "gates": {
+    "WORKTREE_MATCH": 1,
+    "BRANCH_MATCH": 1,
+    "START_HEAD_MATCH": 1,
+    "CURRENT_DISK_MANIFEST_MATCH": 1,
+    "CURRENT_RUNTIME_IDENTIFIED": 1,
+    "ROLLBACK_FILES_PRESENT": 1,
+    "ROLLBACK_DIGEST_MATCH": 1,
+    "ROLLBACK_RESTORE_COMMAND_RECORDED": 1
+  }
+}

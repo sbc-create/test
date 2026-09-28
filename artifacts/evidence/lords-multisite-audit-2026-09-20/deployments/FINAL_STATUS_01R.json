@@ -1,0 +1,44 @@
+{
+  "at_utc": "2026-09-20T14:05:26.192975+00:00",
+  "disk_sha": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+  "sites": {
+    "lords-01": {
+      "build": "20260919T224500Z-0a5fe648-nova",
+      "sha": "b9de6b626e6578310b7e35cefd63e08d1715db2ff0664c072064d12e72b146fa",
+      "robots": "noindex, nofollow",
+      "compact": false,
+      "popular": false,
+      "unit": {
+        "MainPID": "2519731",
+        "ExecMainStartTimestamp": "Sun 2026-09-20 03:35:10 UTC",
+        "ActiveState": "active"
+      }
+    },
+    "lords-02": {
+      "build": "20260920T101032Z-f0b253d-nova",
+      "sha": "4990ea9f8ee6451d86bfad8efa5d5e7592f7eb42a0137ce81b3eeb2078fc6023",
+      "robots": "noindex, nofollow",
+      "compact": false,
+      "popular": false,
+      "unit": {
+        "MainPID": "3552973",
+        "ExecMainStartTimestamp": "Sun 2026-09-20 14:04:18 UTC",
+        "ActiveState": "active"
+      }
+    },
+    "lords-03": {
+      "build": "20260910T124530Z-a1691c56-nova",
+      "sha": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+      "robots": "noindex, nofollow",
+      "compact": false,
+      "popular": false,
+      "unit": {
+        "MainPID": "3502367",
+        "ExecMainStartTimestamp": "Sun 2026-09-20 14:02:06 UTC",
+        "ActiveState": "active"
+      }
+    }
+  },
+  "INDEXABILITY_MUTATIONS": 0,
+  "note": "lords-02 live still on 4990ea9f in-process; disk/manifests for 01/03 point to a98115a9 awaiting owner restart"
+}

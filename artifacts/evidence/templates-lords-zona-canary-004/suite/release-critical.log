@@ -1,0 +1,20 @@
+........................................................................ [ 16%]
+........................................................................ [ 32%]
+........................................................................ [ 48%]
+........................................................................ [ 65%]
+........................................................................ [ 81%]
+........................................................................ [ 97%]
+..........                                                               [100%]
+=============================== warnings summary ===============================
+tests/lords/test_series_episode_binding.py::TestЧестноеСостояниеПросмотра::test_без_источника_нет_обещания_смотреть
+tests/zone/test_suite3_full_catalog_route_policy.py::TestУстойчивостьПубличныхАдресов::test_действующие_адреса_остались_за_своими_сущностями
+tests/zone/test_suite3_full_catalog_route_policy.py::TestКаталогПрименяетПолитику::test_каталог_даёт_столько_же_адресов
+  /srv/site-factory/repo/.venv/lib/python3.10/site-packages/_pytest/fixtures.py:1313: PytestRemovedIn10Warning: Class-scoped fixture defined as instance method is deprecated.
+  Instance attributes set in this fixture will NOT be visible to test methods,
+  as each test gets a new instance while the fixture runs only once per class.
+  Use @classmethod decorator and set attributes on cls instead.
+  See https://docs.pytest.org/en/stable/deprecations.html#class-scoped-fixture-as-instance-method
+    fixturefunc = resolve_fixture_function(fixturedef, request)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+442 passed, 3 warnings in 54.20s

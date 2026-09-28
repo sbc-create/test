@@ -1,0 +1,20 @@
+{
+  "ts": "2026-09-20T22:25:42.629307+00:00",
+  "raw_matrix_bug": "player_markers counted every data-player substring in HTML/CSS/JS (~22). iframes were 0 on SSR HTML.",
+  "corrected_interpretation": "SSR title pages expose 0 iframes; player is client-hydrated. HTML-only max-instance check is inconclusive.",
+  "PLAYER_FAILURES_HTML_ONLY": "INCONCLUSIVE",
+  "browser_screenshots_available": [
+    "1lordserials1.online__title__atf__1440x900__audit__20260920T2148Z.png",
+    "1lordserials1.online__title__atf__390x844__audit__20260920T2148Z.png",
+    "1lordserials1.online__title__full__1440x900__audit__20260920T2148Z.png",
+    "lordfilm47.space__title__atf__1440x900__audit__20260920T2148Z.png",
+    "lordfilm47.space__title__atf__390x844__audit__20260920T2148Z.png",
+    "lordfilm47.space__title__full__1440x900__audit__20260920T2148Z.png",
+    "lordserial33.biz__episode__atf__1440x900__audit__20260920T2148Z.png",
+    "lordserial33.biz__episode__atf__390x844__audit__20260920T2148Z.png",
+    "lordserial33.biz__title__atf__1440x900__audit__20260920T2148Z.png",
+    "lordserial33.biz__title__atf__390x844__audit__20260920T2148Z.png",
+    "lordserial33.biz__title__full__1440x900__audit__20260920T2148Z.png"
+  ],
+  "required_followup": "Browser evaluate document.querySelectorAll(\"iframe,video-player,[data-player]\").length on playing state — next repair/QA stage"
+}

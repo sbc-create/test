@@ -1,0 +1,34 @@
+{
+  "final_code_head": "3c90aab08aee275e2b628d34cf6c719cbc120c21",
+  "source_path": "/home/claude/wt-lords-default-episode-01/automation/host/lords-frontend.py",
+  "release_copy": "/home/claude/wt-lords-default-episode-01/artifacts/evidence/lords-three-distinct-templates-deploy-2026-09-20/02-build/lords-frontend-20260920T193847Z-3c90aab-nova.py",
+  "artifact_sha256": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+  "build_id": "20260920T193847Z-3c90aab-nova",
+  "design_version": "1.1.0",
+  "player_layout_contract": "full-bleed-v1",
+  "sites": {
+    "lords-01": {
+      "domain": "lordfilm47.space",
+      "profile": "lords-general",
+      "design": "lords-cinema-v2",
+      "unit": "lords-nova-01.service",
+      "manifest": "template-manifest.json"
+    },
+    "lords-02": {
+      "domain": "lordserial33.biz",
+      "profile": "lords-new",
+      "design": "lords-series-feed-v2",
+      "unit": "nova-lords-02.service",
+      "manifest": "template-manifest-lords-02.json"
+    },
+    "lords-03": {
+      "domain": "1lordserials1.online",
+      "profile": "lords-curated",
+      "design": "lords-curated-v2",
+      "unit": "nova-lords-03.service",
+      "manifest": "template-manifest-lords-03.json"
+    }
+  },
+  "shared_runtime_note": "One lords-frontend.py; per-site manifest.profile selects ДИЗАЙН_ID",
+  "install_artifact_path": "/home/claude/wt-lords-default-episode-01/automation/host/lords-frontend.py"
+}

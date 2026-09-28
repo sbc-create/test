@@ -1,0 +1,113 @@
+{
+  "ts": "2026-09-20T20:50:26.861626+00:00",
+  "disk": {
+    "artifact": "/srv/lords/.frontend/lords-frontend.py",
+    "artifact_sha256": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+    "manifests": {
+      "template-manifest.json": {
+        "sha256": "ff0850178199b6143b369a54de9714d0545a6292a0df7f105ba5a748bbaed897",
+        "build_id": "20260920T140520Z-24c54b6-nova",
+        "artifact_sha256": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+        "profile": "lords-general",
+        "source_commit": "24c54b6affbdc912d8766ba794f280837f922329"
+      },
+      "template-manifest-lords-02.json": {
+        "sha256": "7ef72c821895a618a66b6fd677748293b7c5a2bdce979fb8342b48a654e7a439",
+        "build_id": "20260920T193847Z-3c90aab-nova",
+        "artifact_sha256": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+        "profile": "lords-new",
+        "source_commit": "3c90aab08aee275e2b628d34cf6c719cbc120c21"
+      },
+      "template-manifest-lords-03.json": {
+        "sha256": "0fab65c541566499581ec9ea890b512a61fbc2af9be75ec52e02f6b467b2951e",
+        "build_id": "20260920T140520Z-24c54b6-nova",
+        "artifact_sha256": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+        "profile": "lords-curated",
+        "source_commit": "24c54b6affbdc912d8766ba794f280837f922329"
+      }
+    }
+  },
+  "live": {
+    "lords-01": {
+      "version": {
+        "schema_version": 1,
+        "template_family": "lords",
+        "design_version": "1.1.0",
+        "source_commit": "24c54b6affbdc912d8766ba794f280837f922329",
+        "build_id": "20260920T140520Z-24c54b6-nova",
+        "artifact_sha256": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+        "profile": "lords-general",
+        "built_at": "2026-09-20T14:05:05Z",
+        "source_dirty": false,
+        "domain": "lordfilm47.space",
+        "player_layout_contract": "full-bleed-v1",
+        "core_runtime": "site-factory-nova",
+        "family_template": "lords-nova",
+        "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+        "catalog_built_at": "2026-09-20T03:16:30Z",
+        "details_catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+        "details_catalog_built_at": "2026-09-20T03:16:30Z",
+        "details_coverage": 53548,
+        "catalog_details_skew": false
+      },
+      "status": 200,
+      "data_design": "lords-sheet",
+      "meta_robots": "noindex, nofollow",
+      "x_robots": "noindex, nofollow"
+    },
+    "lords-02": {
+      "version": {
+        "schema_version": 1,
+        "template_family": "lords",
+        "design_version": "1.1.0",
+        "source_commit": "3c90aab08aee275e2b628d34cf6c719cbc120c21",
+        "build_id": "20260920T193847Z-3c90aab-nova",
+        "artifact_sha256": "5dd817fe6ee12070609e16123cccc5cd3a6eace80fa895993227d2b3b2ad78cc",
+        "profile": "lords-new",
+        "built_at": "2026-09-20T19:40:06Z",
+        "source_dirty": false,
+        "domain": "lordserial33.biz",
+        "player_layout_contract": "full-bleed-v1",
+        "core_runtime": "site-factory-nova",
+        "family_template": "lords-nova",
+        "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+        "catalog_built_at": "2026-09-20T03:16:30Z",
+        "details_catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+        "details_catalog_built_at": "2026-09-20T03:16:30Z",
+        "details_coverage": 53548,
+        "catalog_details_skew": false
+      },
+      "status": 200,
+      "data_design": "lords-series-feed-v2",
+      "meta_robots": "noindex, nofollow",
+      "x_robots": "noindex, nofollow"
+    },
+    "lords-03": {
+      "version": {
+        "schema_version": 1,
+        "template_family": "lords",
+        "design_version": "1.1.0",
+        "source_commit": "24c54b6affbdc912d8766ba794f280837f922329",
+        "build_id": "20260920T140520Z-24c54b6-nova",
+        "artifact_sha256": "a98115a9c6ec2e507e06438b9d98c3542d7c1a7d26ec4e4da96ddf449dc5008f",
+        "profile": "lords-curated",
+        "built_at": "2026-09-20T14:05:07Z",
+        "source_dirty": false,
+        "domain": "1lordserials1.online",
+        "player_layout_contract": "full-bleed-v1",
+        "core_runtime": "site-factory-nova",
+        "family_template": "lords-nova",
+        "catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+        "catalog_built_at": "2026-09-20T03:16:30Z",
+        "details_catalog_revision": "ecc664ad462bab47b51e8a9a151d5ec7",
+        "details_catalog_built_at": "2026-09-20T03:16:30Z",
+        "details_coverage": 53548,
+        "catalog_details_skew": false
+      },
+      "status": 200,
+      "data_design": "lords-curated-v2",
+      "meta_robots": "noindex, nofollow",
+      "x_robots": "noindex, nofollow"
+    }
+  }
+}

@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-factory.local/schemas/reference-pack.schema.json",
+  "title": "Reference pack",
+  "description": "Пакет референса интерфейса. Описывает, что именно у референса измеряется, что о нём известно и откуда, и какие собственные требования из этого следуют для наших шаблонов. Пакет намеренно разделяет три вещи, которые легко смешать: измерение (наш замер), наблюдение (переданное владельцем) и требование (наше решение). Смешение первого со вторым даёт отчёт, утверждающий проверку, которая не запускалась; смешение второго с третьим переносит чужую конфигурацию в наш продукт, что запрещено политикой inventory/reference-sources.yaml.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "ref",
+    "url",
+    "provenance",
+    "access",
+    "measurement_plan",
+    "observations",
+    "requirements"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "ref": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{2,40}$",
+      "description": "Идентификатор источника. Обязан совпадать с записью в inventory/reference-sources.yaml."
+    },
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "provenance": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Откуда взято право открывать этот источник. Список источников не расширяется по инициативе агента."
+    },
+    "access": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "checked_at",
+        "detail"
+      ],
+      "description": "Состояние доступа к референсу на момент сборки пакета.",
+      "properties": {
+        "status": {
+          "enum": [
+            "reachable",
+            "blocked_egress",
+            "blocked_policy",
+            "unknown"
+          ],
+          "description": "blocked_policy — отказ до сети: хост не входит в переданные контракты. blocked_egress — сеть отклонила соединение."
+        },
+        "checked_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "detail": {
+          "type": "string",
+          "minLength": 10
+        }
+      }
+    },
+    "measurement_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "viewports",
+        "metrics",
+        "tool"
+      ],
+      "description": "Что будет измерено, когда доступ откроется. План существует отдельно от результата намеренно: он готов к запуску и не требует правки кода.",
+      "properties": {
+        "tool": {
+          "type": "string",
+          "minLength": 5
+        },
+        "viewports": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "integer",
+            "minimum": 320,
+            "maximum": 3840
+          }
+        },
+        "metrics": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "what",
+              "why"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{2,40}$"
+              },
+              "what": {
+                "type": "string",
+                "minLength": 10
+              },
+              "why": {
+                "type": "string",
+                "minLength": 10
+              }
+            }
+          }
+        }
+      }
+    },
+    "observations": {
+      "type": "array",
+      "description": "Наблюдения о референсе. Каждое несёт происхождение и статус проверки. Наблюдение со статусом unverified не является измерением и не может быть основанием для числа в отчёте.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "parameter",
+          "value",
+          "source",
+          "verified"
+        ],
+        "properties": {
+          "parameter": {
+            "type": "string",
+            "minLength": 3
+          },
+          "value": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source": {
+            "type": "string",
+            "minLength": 5
+          },
+          "verified": {
+            "enum": [
+              "measured_by_factory",
+              "unverified"
+            ],
+            "description": "measured_by_factory ставится только после успешного прогона measurement_plan."
+          }
+        }
+      }
+    },
+    "requirements": {
+      "type": "array",
+      "minItems": 0,
+      "description": "Наши собственные требования к шаблону, выведенные из пользы паттерна, а не из чужих значений. Пиксели, тексты, изображения и идентификаторы референса сюда не переносятся. Пустой список — правильное содержимое пакета для референса, который ещё никто не открывал: вывести требование из неувиденного сайта можно только выдумав его, а ровно от этого пакет и защищает. Список наполняется после первого успешного прогона measurement_plan либо из переданных владельцем наблюдений.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "pattern",
+          "benefit",
+          "our_implementation",
+          "verified_by",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Z]{2,6}-[0-9]{2,3}$"
+          },
+          "pattern": {
+            "type": "string",
+            "minLength": 10,
+            "description": "Паттерн референса своими словами."
+          },
+          "benefit": {
+            "type": "string",
+            "minLength": 10,
+            "description": "Зачем он зрителю. Без ответа паттерн не переносится."
+          },
+          "our_implementation": {
+            "type": "string",
+            "minLength": 10,
+            "description": "Наша оригинальная реализация."
+          },
+          "verified_by": {
+            "type": "string",
+            "minLength": 3,
+            "description": "Тест или артефакт, подтверждающий реализацию."
+          },
+          "status": {
+            "enum": [
+              "implemented",
+              "planned",
+              "backlog",
+              "declined",
+              "blocked"
+            ]
+          },
+          "declined_because": {
+            "type": "string",
+            "minLength": 10
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "declined"
+                }
+              },
+              "required": [
+                "status"
+              ]
+            },
+            "then": {
+              "required": [
+                "declined_because"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

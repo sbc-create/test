@@ -1,0 +1,17 @@
+{
+  "at_utc": "2026-09-20T09:20:04Z",
+  "pwd": "/home/claude/wt-lords-default-episode-01",
+  "branch": "cursor/lords-default-episode-01",
+  "HEAD": "ad54ffc39c2804b97dfb1dcb0f43ab970b58bf09",
+  "EXPECTED_START_HEAD": "ad54ffc39c2804b97dfb1dcb0f43ab970b58bf09",
+  "PLAYER_FIX_HEAD": "0a5fe648415d30d8f22bed016205c3cd878d7b3f",
+  "WORKTREE_CLEAN": true,
+  "PLAYER_FIX_HEAD_IS_ANCESTOR": true,
+  "CONCURRENT_DEPLOYMENT_DETECTED": "NO",
+  "LORDS_SITES_DISCOVERED": 3,
+  "STAGE": "LORDS-MULTISITE-AUDIT-01",
+  "PHASE": "A-audit-only",
+  "deploy_locks": [
+    "/srv/lords/.frontend/.rollback/.lock-lords-01"
+  ]
+}

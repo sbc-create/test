@@ -1,0 +1,1214 @@
+{
+  "ts": "2026-09-20T22:12:56.273862+00:00",
+  "sites": {
+    "lords-01": {
+      "domain": "lordfilm47.space",
+      "rows": [
+        {
+          "path": "/title/amerikanskaya-amazonka/season-1/episode-1/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/nedetskie-igry-2/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/pravda-ili-zagovor/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/reznya-v-norton-krik/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/pervenec-2/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/princessa-i-drakon/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/chya-eto-sobaka/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/do-kraya-sveta/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/elaydzha-pil/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/otgoloski-iz-pustoty/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/bratya-po-oruzhiyu-nasledie/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/materinskaya-lihoradka/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/ty-ya-protiv-vsego-mira/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/parshivye-ovcy-2/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/posledniy-prokat/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/umnica-gudi/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/luchshie-iz-luchshih-2/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/ya-kris-farli/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/operaciya-fortitude/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/v-poiskah-dzheka-charltona/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/le-man-55-taynaya-katastrofa/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        }
+      ],
+      "failures": [
+        {
+          "path": "/title/amerikanskaya-amazonka/season-1/episode-1/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/nedetskie-igry-2/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/pravda-ili-zagovor/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/reznya-v-norton-krik/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/pervenec-2/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/princessa-i-drakon/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/chya-eto-sobaka/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/do-kraya-sveta/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/elaydzha-pil/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/otgoloski-iz-pustoty/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/bratya-po-oruzhiyu-nasledie/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/materinskaya-lihoradka/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/ty-ya-protiv-vsego-mira/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/parshivye-ovcy-2/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/posledniy-prokat/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/umnica-gudi/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/luchshie-iz-luchshih-2/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/ya-kris-farli/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/operaciya-fortitude/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/v-poiskah-dzheka-charltona/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/le-man-55-taynaya-katastrofa/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        }
+      ]
+    },
+    "lords-02": {
+      "domain": "lordserial33.biz",
+      "rows": [
+        {
+          "path": "/title/amerikanskaya-amazonka/season-1/episode-1/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/plennica-6/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/nash-vcherashniy-pobeg/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/amerikanskaya-amazonka/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/pylnye-utesy/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/chti-svoyu-mat/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/master-lda-i-plameni-2/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/magiya-zatonuvshih-korabley/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/tihookeanskie-rassledovaniya/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/sryv/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/skandal-4/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/moy-sekret/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/sestry-obschaya-lyubov/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/gorod-zhun/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/vo-imya-lyubvi-2/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/poceluy-menya-derzko/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/ya-vsego-lish-travinka/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/chistilschiki-3/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/ya-tebya-znayu/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/plasticheskaya-krasota/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        }
+      ],
+      "failures": [
+        {
+          "path": "/title/amerikanskaya-amazonka/season-1/episode-1/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/plennica-6/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/nash-vcherashniy-pobeg/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/amerikanskaya-amazonka/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/pylnye-utesy/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/ohota-za-brakom-v-37-eto-pole-bitvy/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/chti-svoyu-mat/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/master-lda-i-plameni-2/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/magiya-zatonuvshih-korabley/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/tihookeanskie-rassledovaniya/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/sryv/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/skandal-4/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/moy-sekret/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/sestry-obschaya-lyubov/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/gorod-zhun/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/vo-imya-lyubvi-2/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/poceluy-menya-derzko/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/ya-vsego-lish-travinka/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/chistilschiki-3/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/ya-tebya-znayu/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/plasticheskaya-krasota/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        }
+      ]
+    },
+    "lords-03": {
+      "domain": "1lordserials1.online",
+      "rows": [
+        {
+          "path": "/title/amerikanskaya-amazonka/season-1/episode-1/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/amerikanskaya-amazonka/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/chya-eto-sobaka/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/svinorez/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/kadaknath/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/bezdna/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/sheri-lyubov-moya/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/bez-prava-na-strah/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/plasticheskaya-krasota/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/imperiya-artura/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/delo-ob-ubiystve-lakshmikantana/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/littl-lorreyn/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/moi-dva-centa/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/plennica-6/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/nash-vcherashniy-pobeg/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/nedetskie-igry-2/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/pravda-ili-zagovor/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/reznya-v-norton-krik/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/pervenec-2/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/princessa-i-drakon/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/kurinyy-gorodok/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        }
+      ],
+      "failures": [
+        {
+          "path": "/title/amerikanskaya-amazonka/season-1/episode-1/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/amerikanskaya-amazonka/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/9-11-ataka-na-pentagon/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/chya-eto-sobaka/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/svinorez/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/kadaknath/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/bezdna/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/sheri-lyubov-moya/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/bez-prava-na-strah/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/plasticheskaya-krasota/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/imperiya-artura/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/delo-ob-ubiystve-lakshmikantana/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/littl-lorreyn/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/moi-dva-centa/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/plennica-6/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/nash-vcherashniy-pobeg/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/nedetskie-igry-2/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/pravda-ili-zagovor/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/reznya-v-norton-krik/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/pervenec-2/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/princessa-i-drakon/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": false,
+          "has_episode_nav": false,
+          "autoplay_attr": false
+        },
+        {
+          "path": "/title/kurinyy-gorodok/",
+          "iframes": 0,
+          "player_markers": 22,
+          "player_instance_ok": false,
+          "has_season_nav": true,
+          "has_episode_nav": true,
+          "autoplay_attr": false
+        }
+      ]
+    }
+  }
+}

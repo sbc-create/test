@@ -1,0 +1,112 @@
+{
+ "film_no_seasons": {
+  "slug": "chas-rasplaty-2",
+  "url": "/title/chas-rasplaty-2/",
+  "title": "Час расплаты",
+  "kind": "Фильм",
+  "seasons": 0,
+  "episodes": 0,
+  "has_desc": true,
+  "has_poster": true,
+  "kp": true
+ },
+ "no_stream": {
+  "slug": "chay-na-plyazhe",
+  "url": "/title/chay-na-plyazhe/",
+  "title": "Чай на пляже",
+  "kind": "Фильм",
+  "seasons": 0,
+  "episodes": 0,
+  "has_desc": true,
+  "has_poster": true,
+  "kp": false
+ },
+ "series_one_season": {
+  "slug": "pylayuschee-leto",
+  "url": "/title/pylayuschee-leto/",
+  "title": "Пылающее лето",
+  "kind": "Сериал",
+  "seasons": 1,
+  "episodes": 29,
+  "has_desc": true,
+  "has_poster": true,
+  "kp": false
+ },
+ "empty_synopsis": {
+  "slug": "novyy-tenti-lishniy-specvypuski",
+  "url": "/title/novyy-tenti-lishniy-specvypuski/",
+  "title": "Новый Тэнти — лишний! Спецвыпуски",
+  "kind": "Сериал",
+  "seasons": 1,
+  "episodes": 6,
+  "has_desc": false,
+  "has_poster": true,
+  "kp": false
+ },
+ "series_multi_season": {
+  "slug": "pochini-i-proday-klassicheskie-avtomobili",
+  "url": "/title/pochini-i-proday-klassicheskie-avtomobili/",
+  "title": "Почини и продай: Классические автомобили",
+  "kind": "Сериал",
+  "seasons": 4,
+  "episodes": 38,
+  "has_desc": false,
+  "has_poster": true,
+  "kp": true
+ },
+ "eps_210plus": {
+  "slug": "doktor-slamp",
+  "url": "/title/doktor-slamp/",
+  "title": "Доктор Сламп",
+  "kind": "Сериал",
+  "seasons": 1,
+  "episodes": 243,
+  "has_desc": false,
+  "has_poster": true,
+  "kp": false
+ },
+ "no_poster": {
+  "slug": "horoshaya-doch-2",
+  "url": "/title/horoshaya-doch-2/",
+  "title": "Хорошая дочь",
+  "kind": "Сериал",
+  "seasons": 0,
+  "episodes": 0,
+  "has_desc": false,
+  "has_poster": false,
+  "kp": false
+ },
+ "long_title": {
+  "slug": "ya-byl-predan-tovarischami-v-glubine-podzemelya-no-blagodarya-svoemu-navyku-besk",
+  "url": "/title/ya-byl-predan-tovarischami-v-glubine-podzemelya-no-blagodarya-svoemu-navyku-besk/",
+  "title": "Я был предан товарищами в глубине подземелья, но благодаря своему навыку «Бесконечная гача» я обрёл союзников девять тысяч девятьсот девяносто девятого уровня, чтобы отомстить бывшим соратникам и всему миру!",
+  "kind": "Сериал",
+  "seasons": 1,
+  "episodes": 12,
+  "has_desc": false,
+  "has_poster": true,
+  "kp": true
+ },
+ "special_chars": {
+  "slug": "dni-sakamoto-chast-2",
+  "url": "/title/dni-sakamoto-chast-2/",
+  "title": "Дни Сакамото. Часть 2",
+  "kind": "Сериал",
+  "seasons": 0,
+  "episodes": 0,
+  "has_desc": false,
+  "has_poster": true,
+  "kp": false
+ },
+ "cyrillic": {
+  "slug": "dni-sakamoto-chast-2",
+  "url": "/title/dni-sakamoto-chast-2/",
+  "title": "Дни Сакамото. Часть 2",
+  "kind": "Сериал",
+  "seasons": 0,
+  "episodes": 0,
+  "has_desc": false,
+  "has_poster": true,
+  "kp": false
+ }
+}

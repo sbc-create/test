@@ -1,0 +1,37 @@
+{
+  "site": "lords-02",
+  "links": [
+    {
+      "href": "/country/сша/",
+      "status": 404
+    },
+    {
+      "href": "/country/япония/",
+      "status": 404
+    },
+    {
+      "href": "/country/великобритания/",
+      "status": 404
+    },
+    {
+      "href": "/country/франция/",
+      "status": 404
+    },
+    {
+      "href": "/country/канада/",
+      "status": 404
+    },
+    {
+      "href": "/country/германия/",
+      "status": 404
+    },
+    {
+      "href": "/country/индия/",
+      "status": 404
+    },
+    {
+      "href": "/country/южнаякорея/",
+      "status": 404
+    }
+  ]
+}

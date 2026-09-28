@@ -1,0 +1,288 @@
+[
+  {
+    "SITE_KEY": "lords-01",
+    "DOMAIN": "lordfilm47.space",
+    "nginx": {
+      "nginx_config": "/etc/nginx/lords/lords-01.conf",
+      "server_names": [
+        "lordfilm47.space",
+        "www.lordfilm47.space",
+        "www.lordfilm47.space",
+        "lordfilm47.space"
+      ],
+      "proxy_pass_hosts": [
+        "127.0.0.1:9110",
+        "127.0.0.1:9110",
+        "127.0.0.1:9110"
+      ],
+      "upstream_ports": [
+        9110
+      ],
+      "conf_bytes": 4422
+    },
+    "units_probed": [
+      {
+        "unit": "lords-nova-01.service",
+        "active_state": "active",
+        "sub_state": "running",
+        "main_pid": 2519731,
+        "fragment": "/etc/systemd/system/lords-nova-01.service",
+        "exec_start": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9110 ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }",
+        "environment": "LORDS_TEMPLATE_REVISION=1c1636d81a49fc5cfe720e752a6b2456dbe6f5a3 LORDS_CATALOG=/srv/lords/.frontend/lords-01-catalog.json LORDS_LEGACY_ROOT=/srv/lords/lords-01/current/site LORDS_SITE_NAME=Lordfilm PYTHONDONTWRITEBYTECODE=1 LORDS_METRIKA_COUNTER=112010269 LORDS_SITEMAP_DIR=/srv/lords/.frontend/sitemaps/lords-01",
+        "environment_files": null,
+        "active_enter": "Sun 2026-09-20 03:35:10 UTC",
+        "cmdline": "/usr/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9110",
+        "exe": "err:[Errno 13] Permission denied: '/proc/2519731/exe'"
+      },
+      {
+        "unit": "lords-01.service",
+        "active_state": "active",
+        "sub_state": "running",
+        "main_pid": 2158382,
+        "fragment": "/etc/systemd/system/lords-01.service",
+        "exec_start": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /srv/lords/lords-01/current/serve.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }",
+        "environment": "LORDS_HOST=127.0.0.1 LORDS_PORT=9101 LORDS_SITE_ROOT=/srv/lords/lords-01/current PYTHONDONTWRITEBYTECODE=1 CDNVIDEOHUB_API_TOKEN_CREDENTIAL=cdnvideohub_api_token CDNVIDEOHUB_PUBLISHER_ID_CREDENTIAL=cdnvideohub_publisher_id",
+        "environment_files": null,
+        "active_enter": "Tue 2026-09-08 13:18:24 UTC",
+        "cmdline": "/usr/bin/python3 /srv/lords/lords-01/current/serve.py",
+        "exe": "err:[Errno 13] Permission denied: '/proc/2158382/exe'"
+      }
+    ],
+    "SYSTEMD_UNIT": "lords-nova-01.service",
+    "RUNTIME_PID": 2519731,
+    "RUNTIME_STARTED_AT": "Sun 2026-09-20 03:35:10 UTC",
+    "RUNTIME_CMDLINE": "/usr/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9110",
+    "RUNTIME_EXE": "err:[Errno 13] Permission denied: '/proc/2519731/exe'",
+    "NGINX_UPSTREAM": [
+      9110
+    ],
+    "MANIFEST_PATH": "/srv/lords/.frontend/template-manifest.json",
+    "MANIFEST_BUILD": "20260919T224500Z-0a5fe648-nova",
+    "MANIFEST_DIGEST": "b9de6b626e6578310b7e35cefd63e08d1715db2ff0664c072064d12e72b146fa",
+    "SOURCE_HEAD": "0a5fe648415d30d8f22bed016205c3cd878d7b3f",
+    "TEMPLATE_FAMILY": "lords",
+    "DISK_ARTIFACT": "/srv/lords/.frontend/lords-frontend.py",
+    "DISK_ARTIFACT_DIGEST": "b9de6b626e6578310b7e35cefd63e08d1715db2ff0664c072064d12e72b146fa",
+    "DISK_HAS_PLAYER_CONTRACT": true,
+    "CATALOG_SOURCE": "/srv/lords/.frontend/lords-01-catalog.json",
+    "DETAILS_SOURCE": "/srv/lords/.frontend/lords-01-details.json",
+    "PLAYER_PROVIDER_SOURCE": "/srv/lords/.frontend/player-lords-01.json",
+    "PLAYER_SOURCE_MODE": "provider-id",
+    "player_keys": [
+      "note",
+      "provenance",
+      "publisher_id",
+      "source_mode"
+    ],
+    "DEPLOY_PATH": "/srv/lords/.frontend",
+    "ROLLBACK_PATH": "/srv/lords/.frontend/.rollback",
+    "INDEXABILITY": "indexing_enabled=false per site-profile",
+    "manifest_full": {
+      "schema_version": 1,
+      "template_family": "lords",
+      "design_version": "1.1.0",
+      "source_commit": "0a5fe648415d30d8f22bed016205c3cd878d7b3f",
+      "build_id": "20260919T224500Z-0a5fe648-nova",
+      "artifact_sha256": "b9de6b626e6578310b7e35cefd63e08d1715db2ff0664c072064d12e72b146fa",
+      "profile": "lords-general",
+      "built_at": "2026-09-19T22:51:05Z",
+      "source_dirty": false,
+      "domain": "lordfilm47.space",
+      "player_layout_contract": "full-bleed-v1"
+    },
+    "MANIFEST_DISK_DIGEST_MATCH": true,
+    "RUNTIME_BUILD_FROM_HEADER": "20260919T224500Z-0a5fe648-nova",
+    "RUNTIME_DIGEST_FROM_HEADER": "b9de6b626e6578310b7e35cefd63e08d1715db2ff0664c072064d12e72b146fa",
+    "HEADER_VS_DISK_DIGEST_MATCH": true,
+    "PLAYER_CONTRACT_ON_DISK": true
+  },
+  {
+    "SITE_KEY": "lords-02",
+    "DOMAIN": "lordserial33.biz",
+    "nginx": {
+      "nginx_config": "/etc/nginx/lords/lords-02.conf",
+      "server_names": [
+        "lordserial33.biz",
+        "www.lordserial33.biz",
+        "www.lordserial33.biz",
+        "lordserial33.biz"
+      ],
+      "proxy_pass_hosts": [
+        "127.0.0.1:9111",
+        "127.0.0.1:9111",
+        "127.0.0.1:9111"
+      ],
+      "upstream_ports": [
+        9111
+      ],
+      "conf_bytes": 4418
+    },
+    "units_probed": [
+      {
+        "unit": "nova-lords-02.service",
+        "active_state": "active",
+        "sub_state": "running",
+        "main_pid": 1464937,
+        "fragment": "/etc/systemd/system/nova-lords-02.service",
+        "exec_start": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9111 ; ignore_errors=no ; start_time=[Sun 2026-09-20 09:17:50 UTC] ; stop_time=[n/a] ; pid=1464937 ; code=(null) ; status=0/0 }",
+        "environment": "LORDS_TEMPLATE_MANIFEST=/srv/lords/.frontend/template-manifest-lords-02.json LORDS_CATALOG=/srv/lords/.frontend/lords-02-catalog.json LORDS_LEGACY_ROOT=/srv/lords/lords-02/current/site LORDS_SITE_NAME=Lordserial PYTHONDONTWRITEBYTECODE=1 LORDS_METRIKA_COUNTER=112010274 LORDS_SITEMAP_DIR=/srv/lords/.frontend/sitemaps/lords-02",
+        "environment_files": null,
+        "active_enter": "Sun 2026-09-20 09:17:50 UTC",
+        "cmdline": "/usr/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9111",
+        "exe": "err:[Errno 13] Permission denied: '/proc/1464937/exe'"
+      },
+      {
+        "unit": "lords-02.service",
+        "active_state": "active",
+        "sub_state": "running",
+        "main_pid": 2836538,
+        "fragment": "/etc/systemd/system/lords-02.service",
+        "exec_start": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /srv/lords/lords-02/current/serve.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }",
+        "environment": "LORDS_HOST=127.0.0.1 LORDS_PORT=9102 LORDS_SITE_ROOT=/srv/lords/lords-02/current PYTHONDONTWRITEBYTECODE=1 CDNVIDEOHUB_API_TOKEN_CREDENTIAL=cdnvideohub_api_token CDNVIDEOHUB_PUBLISHER_ID_CREDENTIAL=cdnvideohub_publisher_id",
+        "environment_files": null,
+        "active_enter": "Tue 2026-09-08 17:08:01 UTC",
+        "cmdline": "/usr/bin/python3 /srv/lords/lords-02/current/serve.py",
+        "exe": "err:[Errno 13] Permission denied: '/proc/2836538/exe'"
+      }
+    ],
+    "SYSTEMD_UNIT": "nova-lords-02.service",
+    "RUNTIME_PID": 1464937,
+    "RUNTIME_STARTED_AT": "Sun 2026-09-20 09:17:50 UTC",
+    "RUNTIME_CMDLINE": "/usr/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9111",
+    "RUNTIME_EXE": "err:[Errno 13] Permission denied: '/proc/1464937/exe'",
+    "NGINX_UPSTREAM": [
+      9111
+    ],
+    "MANIFEST_PATH": "/srv/lords/.frontend/template-manifest-lords-02.json",
+    "MANIFEST_BUILD": "20260919T135218Z-5fc22310-nova",
+    "MANIFEST_DIGEST": "b08519b2f023329ccf1cde6c0d0b3f758b764ffe0ca47eba3a9587a5f29d5493",
+    "SOURCE_HEAD": "5fc22310fdfb8f0c8748f69e5603e4de3267f27e",
+    "TEMPLATE_FAMILY": "lords",
+    "DISK_ARTIFACT": "/srv/lords/.frontend/lords-frontend.py",
+    "DISK_ARTIFACT_DIGEST": "b9de6b626e6578310b7e35cefd63e08d1715db2ff0664c072064d12e72b146fa",
+    "DISK_HAS_PLAYER_CONTRACT": true,
+    "CATALOG_SOURCE": "/srv/lords/.frontend/lords-02-catalog.json",
+    "DETAILS_SOURCE": "/srv/lords/.frontend/lords-02-details.json",
+    "PLAYER_PROVIDER_SOURCE": "/srv/lords/.frontend/player-lords-02.json",
+    "PLAYER_SOURCE_MODE": "provider-id",
+    "player_keys": [
+      "note",
+      "provenance",
+      "publisher_id",
+      "source_mode"
+    ],
+    "DEPLOY_PATH": "/srv/lords/.frontend",
+    "ROLLBACK_PATH": "/srv/lords/.frontend/.rollback",
+    "INDEXABILITY": "indexing_enabled=false per site-profile",
+    "manifest_full": {
+      "schema_version": 1,
+      "template_family": "lords",
+      "design_version": "1.1.0",
+      "source_commit": "5fc22310fdfb8f0c8748f69e5603e4de3267f27e",
+      "runtime_commit": "5fc22310fdfb8f0c8748f69e5603e4de3267f27e",
+      "build_id": "20260919T135218Z-5fc22310-nova",
+      "artifact_sha256": "b08519b2f023329ccf1cde6c0d0b3f758b764ffe0ca47eba3a9587a5f29d5493",
+      "profile": "lords-new",
+      "built_at": "2026-09-19T13:52:18Z"
+    },
+    "MANIFEST_DISK_DIGEST_MATCH": false,
+    "RUNTIME_BUILD_FROM_HEADER": "20260919T135218Z-5fc22310-nova",
+    "RUNTIME_DIGEST_FROM_HEADER": "b08519b2f023329ccf1cde6c0d0b3f758b764ffe0ca47eba3a9587a5f29d5493",
+    "HEADER_VS_DISK_DIGEST_MATCH": false,
+    "PLAYER_CONTRACT_ON_DISK": true
+  },
+  {
+    "SITE_KEY": "lords-03",
+    "DOMAIN": "1lordserials1.online",
+    "nginx": {
+      "nginx_config": "/etc/nginx/lords/lords-03.conf",
+      "server_names": [
+        "1lordserials1.online",
+        "www.1lordserials1.online",
+        "www.1lordserials1.online",
+        "1lordserials1.online"
+      ],
+      "proxy_pass_hosts": [
+        "127.0.0.1:9112",
+        "127.0.0.1:9112",
+        "127.0.0.1:9112"
+      ],
+      "upstream_ports": [
+        9112
+      ],
+      "conf_bytes": 4470
+    },
+    "units_probed": [
+      {
+        "unit": "nova-lords-03.service",
+        "active_state": "active",
+        "sub_state": "running",
+        "main_pid": 1495924,
+        "fragment": "/etc/systemd/system/nova-lords-03.service",
+        "exec_start": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9112 ; ignore_errors=no ; start_time=[Sun 2026-09-20 09:19:13 UTC] ; stop_time=[n/a] ; pid=1495924 ; code=(null) ; status=0/0 }",
+        "environment": "LORDS_TEMPLATE_MANIFEST=/srv/lords/.frontend/template-manifest-lords-03.json LORDS_CATALOG=/srv/lords/.frontend/lords-03-catalog.json LORDS_LEGACY_ROOT=/srv/lords/lords-03/current/site LORDS_SITE_NAME=Lordserials PYTHONDONTWRITEBYTECODE=1 LORDS_METRIKA_COUNTER=112010277 LORDS_SITEMAP_DIR=/srv/lords/.frontend/sitemaps/lords-03",
+        "environment_files": null,
+        "active_enter": "Sun 2026-09-20 09:19:13 UTC",
+        "cmdline": "/usr/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9112",
+        "exe": "err:[Errno 13] Permission denied: '/proc/1495924/exe'"
+      },
+      {
+        "unit": "lords-03.service",
+        "active_state": "active",
+        "sub_state": "running",
+        "main_pid": 4008592,
+        "fragment": "/etc/systemd/system/lords-03.service",
+        "exec_start": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /srv/lords/lords-03/current/serve.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }",
+        "environment": "LORDS_HOST=127.0.0.1 LORDS_PORT=9103 LORDS_SITE_ROOT=/srv/lords/lords-03/current PYTHONDONTWRITEBYTECODE=1 CDNVIDEOHUB_API_TOKEN_CREDENTIAL=cdnvideohub_api_token CDNVIDEOHUB_PUBLISHER_ID_CREDENTIAL=cdnvideohub_publisher_id",
+        "environment_files": null,
+        "active_enter": "Mon 2026-09-07 02:31:27 UTC",
+        "cmdline": "/usr/bin/python3 /srv/lords/lords-03/current/serve.py",
+        "exe": "err:[Errno 13] Permission denied: '/proc/4008592/exe'"
+      }
+    ],
+    "SYSTEMD_UNIT": "nova-lords-03.service",
+    "RUNTIME_PID": 1495924,
+    "RUNTIME_STARTED_AT": "Sun 2026-09-20 09:19:13 UTC",
+    "RUNTIME_CMDLINE": "/usr/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9112",
+    "RUNTIME_EXE": "err:[Errno 13] Permission denied: '/proc/1495924/exe'",
+    "NGINX_UPSTREAM": [
+      9112
+    ],
+    "MANIFEST_PATH": "/srv/lords/.frontend/template-manifest-lords-03.json",
+    "MANIFEST_BUILD": "20260910T124530Z-a1691c56-nova",
+    "MANIFEST_DIGEST": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "SOURCE_HEAD": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee",
+    "TEMPLATE_FAMILY": "lords",
+    "DISK_ARTIFACT": "/srv/lords/.frontend/lords-frontend.py",
+    "DISK_ARTIFACT_DIGEST": "b9de6b626e6578310b7e35cefd63e08d1715db2ff0664c072064d12e72b146fa",
+    "DISK_HAS_PLAYER_CONTRACT": true,
+    "CATALOG_SOURCE": "/srv/lords/.frontend/lords-03-catalog.json",
+    "DETAILS_SOURCE": "/srv/lords/.frontend/lords-03-details.json",
+    "PLAYER_PROVIDER_SOURCE": "/srv/lords/.frontend/player-lords-03.json",
+    "PLAYER_SOURCE_MODE": "provider-id",
+    "player_keys": [
+      "note",
+      "provenance",
+      "publisher_id",
+      "source_mode"
+    ],
+    "DEPLOY_PATH": "/srv/lords/.frontend",
+    "ROLLBACK_PATH": "/srv/lords/.frontend/.rollback",
+    "INDEXABILITY": "indexing_enabled=false per site-profile",
+    "manifest_full": {
+      "schema_version": 1,
+      "template_family": "lords",
+      "design_version": "1.1.0",
+      "source_commit": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee",
+      "build_id": "20260910T124530Z-a1691c56-nova",
+      "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+      "profile": "lords-curated",
+      "built_at": "2026-09-10T12:45:30Z"
+    },
+    "MANIFEST_DISK_DIGEST_MATCH": false,
+    "RUNTIME_BUILD_FROM_HEADER": "20260910T124530Z-a1691c56-nova",
+    "RUNTIME_DIGEST_FROM_HEADER": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "HEADER_VS_DISK_DIGEST_MATCH": false,
+    "PLAYER_CONTRACT_ON_DISK": true
+  }
+]

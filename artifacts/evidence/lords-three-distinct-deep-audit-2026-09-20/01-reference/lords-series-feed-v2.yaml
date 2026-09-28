@@ -1,0 +1,13 @@
+# Design passport — lordserial33.biz / lords-new
+design_id: lords-series-feed-v2
+audience: series watchers chasing updates
+hero: continuing series shelf
+first_three_blocks:
+  - Продолжающиеся сериалы
+  - Новые поступления сериалов
+  - Популярное за неделю
+primary_card: vertical poster for now; episode-horizontal card in later pass
+palette: graphite + cold blue accent (token fork pending)
+title_page: player-forward + season navigator (later)
+footer: series-oriented section order (later)
+responsive: drawer nav until 1024px

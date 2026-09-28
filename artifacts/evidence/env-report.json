@@ -5,7 +5,7 @@
     "node": true,
     "npm": true,
     "git": true,
-    "ansible-playbook": true,
+    "ansible-playbook": false,
     "nginx": true,
     "mysql": false,
     "docker": true,
@@ -46,6 +46,25 @@
         "database": "postgres",
         "purpose": "стенд трёх аниме-сайтов на общей CMS: сборка, применение тенанта, откат",
         "production_capable": false
+      },
+      {
+        "ref": "lords-staging-control-01",
+        "adapter": "operator_applied",
+        "environments": [
+          "staging"
+        ],
+        "root": "/srv/lords",
+        "bind_host": "127.0.0.1",
+        "port_range": [
+          9101,
+          9109
+        ],
+        "web_server": "nginx",
+        "database": "none",
+        "origin_ipv4": "45.131.182.225",
+        "apply_script": "automation/host/lords-staging-apply.sh",
+        "purpose": "три публичных fixture-staging сайта Lords под Basic Auth и noindex",
+        "production_capable": false
       }
     ],
     "ssh_hosts": [],
@@ -57,5 +76,5 @@
     "available": true,
     "detail": "/opt/pw-browsers/chromium-1234/chrome-linux64/chrome"
   },
-  "knowledge_freeze": "2026-08-23.3"
+  "knowledge_freeze": "2026-09-04-templates-d128"
 }

@@ -1,0 +1,15 @@
+{
+ "schemaVersion": "seo-route-binding/1.0.0",
+ "contractVersion": "1.0.0",
+ "siteId": "lords-01",
+ "snapshotAt": "2026-09-06T04:55:32.948000+00:00",
+ "provenance": "catalog-cache:lords-01.json",
+ "records": 53232,
+ "byBindingState": {
+  "BOUND": 52741,
+  "KIND_UNRESOLVED": 77,
+  "ROUTE_COLLISION": 414
+ },
+ "digest": "0b83dd55a23bae1c0ddb9cb8fb24562442f25b0d879c34a2bdf07273dc3280ec",
+ "gate": "2. Версионированный контракт"
+}
