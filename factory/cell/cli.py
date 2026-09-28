@@ -306,6 +306,28 @@ def cmd_submit(args) -> int:
     return 0
 
 
+def cmd_runs(args) -> int:
+    """Показать последние прогоны CI сайта: ветка, коммит, статус, исход."""
+    from factory.cell import trigger as tr
+
+    cell = registry.resolve(args.site)
+    remote = (cell.repo or {}).get("remote") or ""
+    if not remote:
+        print(f"BLOCKED_INPUT: у {cell.site_id} не объявлен repo.remote", file=sys.stderr)
+        return 2
+    try:
+        список = tr.прогоны(remote)
+    except tr.TriggerError as exc:
+        print(f"BLOCKED_ACCESS: {exc}", file=sys.stderr)
+        return 3
+    _print({"site_id": cell.site_id, "repo": tr.проект(remote), "runs": [
+        {"sha": (п.get("headSha") or "")[:12], "branch": п.get("headBranch"),
+         "status": п.get("status"), "conclusion": п.get("conclusion"),
+         "run": п.get("databaseId"), "at": п.get("createdAt")}
+        for п in список]})
+    return 0
+
+
 def cmd_trigger(args) -> int:
     """Опросить GitHub и подать заявки на невыложенные выпуски."""
     from factory.cell import trigger as tr
@@ -406,6 +428,7 @@ ACTIONS = {
     "content": cmd_content,
     "deliver": cmd_deliver,
     "runtime": cmd_runtime,
+    "runs": cmd_runs,
     "submit": cmd_submit,
     "serve": cmd_serve,
     "trigger": cmd_trigger,

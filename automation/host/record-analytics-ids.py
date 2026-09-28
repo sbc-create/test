@@ -32,7 +32,20 @@ from pathlib import Path
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
 ОТЧЁТЫ_МЕТРИКИ = КОРЕНЬ / "var" / "analytics"
-ОТЧЁТ_TOPVISOR = КОРЕНЬ / "var" / "topvisor" / "check-latest.txt"
+#: Отчёты Topvisor. Берётся САМЫЙ СВЕЖИЙ из двух: `check-latest.txt` пишется до
+#: применения плана, `check-after-connect.txt` — после. Если читать только
+#: первый, только что созданные проекты в реестр не попадут: ровно так два
+#: проекта (#33768290 и #33768310) остались бы незаписанными.
+ОТЧЁТЫ_TOPVISOR = (
+    КОРЕНЬ / "var" / "topvisor" / "check-after-connect.txt",
+    КОРЕНЬ / "var" / "topvisor" / "check-latest.txt",
+)
+
+
+def _свежий_отчёт() -> Path | None:
+    существующие = [п for п in ОТЧЁТЫ_TOPVISOR if п.is_file() and п.stat().st_size]
+    return max(существующие, key=lambda п: п.stat().st_mtime) if существующие else None
+
 
 #: Строка списка проектов: «    #33762526 zonafilm12.site — название».
 СТРОКА_ПРОЕКТА = re.compile(r"^\s*#(\d+)\s+(\S+)\s+—\s+(.*)$")
@@ -61,11 +74,12 @@ def счётчики() -> dict[str, dict]:
 
 def проекты() -> dict[str, dict]:
     """Домен → проект Topvisor из списка, который вернул API."""
-    if not ОТЧЁТ_TOPVISOR.is_file():
+    отчёт = _свежий_отчёт()
+    if отчёт is None:
         return {}
     итог: dict[str, dict] = {}
-    время = _время(ОТЧЁТ_TOPVISOR)
-    for строка in ОТЧЁТ_TOPVISOR.read_text(encoding="utf-8").splitlines():
+    время = _время(отчёт)
+    for строка in отчёт.read_text(encoding="utf-8").splitlines():
         совпало = СТРОКА_ПРОЕКТА.match(строка)
         if совпало:
             ид, домен, название = совпало.groups()
