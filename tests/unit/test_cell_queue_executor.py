@@ -845,3 +845,69 @@ def test_операция_без_выпуска_рабочую_копию_не_�
 
     заявка = q.собрать("yummy-07", "", "", operation="access-check")
     assert заявка.operation == "access-check"
+
+
+# -- доступ исполнителя проверяется ДО сборки и подачи -----------------------
+
+def test_без_проверки_доступа_заявка_не_создаётся(tmp_path, monkeypatch):
+    """Повод: отказ по доступу приходил ЧЕТЫРЕ раза после зелёного CI.
+
+    Заявки на zona-03, lords-05, lords-06 и lords-07 проходили все локальные
+    проверки, дожидались успешного прогона CI и отвергались исполнителем одной
+    причиной — его токен не видел репозиторий. Работа тратилась целиком, а
+    причина называлась последней.
+    """
+    from factory.cell import queue as q
+
+    monkeypatch.setattr(q, "БАЗА", tmp_path)
+    (tmp_path / "results").mkdir()
+    with pytest.raises(q.RequestRejected) as ош:
+        q.проверить_доступ_исполнителя("zona-03")
+    assert "не проверялся" in str(ош.value)
+    assert "access-check" in str(ош.value), "отказ обязан называть команду проверки"
+
+
+def test_отрицательный_доступ_называет_репозиторий(tmp_path, monkeypatch):
+    from factory.cell import queue as q
+
+    monkeypatch.setattr(q, "БАЗА", tmp_path)
+    (tmp_path / "results").mkdir()
+    (tmp_path / "results" / "zona-03-access-2026-09-28.json").write_text(json.dumps({
+        "outcome": {"repo": "sbc-create/site-zonafilm12-site", "repo_read": False,
+                    "actions_read": False, "repo_error": "gh: Not Found (HTTP 404)"},
+    }, ensure_ascii=False), encoding="utf-8")
+    with pytest.raises(q.RequestRejected) as ош:
+        q.проверить_доступ_исполнителя("zona-03")
+    текст = str(ош.value)
+    assert "site-zonafilm12-site" in текст
+    assert "404" in текст
+
+
+def test_устаревшая_проверка_доступа_не_принимается(tmp_path, monkeypatch):
+    """Права меняются мгновенно: вчерашнее «доступ есть» о сегодня не говорит."""
+    import os
+
+    from factory.cell import queue as q
+
+    monkeypatch.setattr(q, "БАЗА", tmp_path)
+    (tmp_path / "results").mkdir()
+    файл = tmp_path / "results" / "zona-03-access-2026-09-01.json"
+    файл.write_text(json.dumps({"outcome": {"repo_read": True, "actions_read": True}},
+                               ensure_ascii=False), encoding="utf-8")
+    старое = файл.stat().st_mtime - (q.СВЕЖЕСТЬ_ДОСТУПА_Ч + 5) * 3600
+    os.utime(файл, (старое, старое))
+    with pytest.raises(q.RequestRejected) as ош:
+        q.проверить_доступ_исполнителя("zona-03")
+    assert "устарело" in str(ош.value)
+
+
+def test_подтверждённый_доступ_пропускает(tmp_path, monkeypatch):
+    from factory.cell import queue as q
+
+    monkeypatch.setattr(q, "БАЗА", tmp_path)
+    (tmp_path / "results").mkdir()
+    (tmp_path / "results" / "zona-03-access-2026-09-28.json").write_text(json.dumps({
+        "outcome": {"repo": "sbc-create/site-zonafilm12-site", "repo_read": True,
+                    "actions_read": True},
+    }, ensure_ascii=False), encoding="utf-8")
+    q.проверить_доступ_исполнителя("zona-03")

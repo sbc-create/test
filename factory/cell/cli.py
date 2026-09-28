@@ -289,11 +289,18 @@ def cmd_submit(args) -> int:
     # копии нет по построению. Граница подачи — правильное место: здесь заявка
     # действительно отправляется исполнителю.
     if not без_выпуска:
-        try:
-            q.проверить_рабочую_копию(args.site, args.commit or "")
-        except q.RequestRejected as exc:
-            print(f"BLOCKED_INPUT: {exc}", file=sys.stderr)
-            return 2
+        # Порядок проверок — от дешёвых к дорогим и от локальных к внешним:
+        # рабочая копия у себя, затем доступ исполнителя. Обе стоят ДО создания
+        # заявки, потому что отказ после сборки и зелёного CI — это потраченная
+        # работа и неверно названная причина.
+        for проверка, аргументы in ((q.проверить_рабочую_копию, (args.site, args.commit or "")),
+                                    (q.проверить_доступ_исполнителя, (args.site,))):
+            try:
+                проверка(*аргументы)
+            except q.RequestRejected as exc:
+                print(f"BLOCKED_ACCESS: {exc}" if проверка is q.проверить_доступ_исполнителя
+                      else f"BLOCKED_INPUT: {exc}", file=sys.stderr)
+                return 2
     try:
         заявка = q.собрать(args.site, args.commit or "", args.expect_digest or "",
                            operation=args.cell_operation, ci_run=args.ci_run or "",
