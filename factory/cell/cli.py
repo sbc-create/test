@@ -176,7 +176,22 @@ def cmd_content(args) -> int:
 
 
 def cmd_freshness(args) -> int:
-    cell = registry.resolve(args.site)
+    """Свежесть доставки одной ячейки. Имя обязательно и спрашивается прямо.
+
+    Без `--site` команда падала трассировкой из `registry.resolve`: «пустой
+    запрос к реестру ячеек» — сообщение верное, но поданное как сбой программы,
+    а не как отказ. Соседняя команда `cell content` умеет обходить все ячейки, и
+    ссылка на неё здесь дешевле, чем догадка пользователя.
+    """
+    if not args.site:
+        print("BLOCKED_INPUT: нужен --site. Свежесть всех ячеек сразу показывает "
+              "`python3 -m factory cell content`", file=sys.stderr)
+        return 2
+    try:
+        cell = registry.resolve(args.site)
+    except registry.RegistryError as отказ:
+        print(f"BLOCKED_INPUT: {отказ}", file=sys.stderr)
+        return 2
     path = _layout(args).data / "sync-checkpoint.json"
     _print(sync.freshness(path, cell.site_id))
     return 0
