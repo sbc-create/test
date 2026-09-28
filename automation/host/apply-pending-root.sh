@@ -3,46 +3,28 @@
 #
 #   sudo bash automation/host/apply-pending-root.sh [--dry-run]
 #
-# Что входит и что это разблокирует
-# ---------------------------------
+# Что УЖЕ сделано и сюда больше не входит (проверено 2026-09-28 12:30):
+# исполнитель обновлён, площадка animego-04 запущена, счётчик an1meg0.site
+# 113121466 заведён с девятью целями, домен выложен и принят публично.
 #
-#   1. обновление исполнителя   Установленная копия пакета лежит под root и
-#                               обновляется только этим шагом. Сейчас в ней нет
-#                               трёх вещей: ячейки animego-04 в реестре (без неё
-#                               выпуск an1meg0.site отвергается как «нет такой
-#                               ячейки»), приёмки по метке выпуска (заголовок
-#                               называет ревизию шаблона, и исправный кандидат
-#                               zona-02 откатывался с build_matches: false) и
-#                               пробы лаунчера перед подачей заявки.
+# Что осталось и что каждый шаг разблокирует:
 #
-#   2. запуск площадки animego-04  Ровно тот же сценарий, что владелец уже
-#                               выполнял для lords-05, yummy-07 и yummy-08:
-#                               юниты ячейки, nginx, сертификат, сборщик
-#                               недельного снимка. Разблокирует an1meg0.site,
-#                               у которого сейчас нет ни /srv/an1meg0-site, ни
-#                               server_name в nginx, а HTTPS отдаёт чужой
-#                               сертификат.
+#   1. семантика Topvisor       Девять новых проектов стоят с нулём групп и
+#                               нулём запросов. Причина найдена и исправлена в
+#                               коде: `topvisor apply` выходил по пустому плану,
+#                               не дойдя до второй фазы. Служба читает ключ через
+#                               LoadCredential; сессии каталог секрета закрыт и
+#                               отвечает ровно это: «Нет доступа к каталогу с
+#                               user-id: процесс не в группе, которой выдан
+#                               файл». Методы add/keywords_2/* бесплатны;
+#                               платные маршруты клиент не выполняет ни при
+#                               каком флаге.
 #
-#   3. семантика Topvisor       Служба topvisor-connect читает ключ через
-#                               systemd LoadCredential; сессия агента к каталогу
-#                               секрета не допущена и получает ровно это:
-#                               «Нет доступа к каталогу с user-id: процесс не в
-#                               группе, которой выдан файл». Запуск разблокирует
-#                               группы и запросы у девяти новых проектов, где
-#                               сейчас по нулю. Методы add/keywords_2/groups и
-#                               add/keywords_2/keywords объявлены БЕСПЛАТНЫМИ;
-#                               платные маршруты (проверка позиций, аудит)
-#                               клиент не выполняет ни при каком флаге.
-#
-#   4. счётчик an1meg0.site     Единственный из десяти доменов, у которого
-#                               счётчика нет вовсе: в реестре аналитики он
-#                               `planned`, counter_id null. Счётчик заводит
-#                               служба analytics-connect@ — токен Метрики она
-#                               читает через LoadCredential, сессии он
-#                               недоступен. Служба сначала ИЩЕТ счётчик этого
-#                               домена и переиспользует найденный, поэтому
-#                               повторный запуск дубля не создаёт. Вместе со
-#                               счётчиком заводятся девять целей.
+#   2. дополнения каталога      Разделы /top/ и /lists/ у an1meg0.site пусты:
+#      an1meg0.site             рантайм читает animego-04-ratings-top.json и
+#                               -popular.json, а доставляет их
+#                               automation/site-update.py, у которого не было
+#                               юнита. Юнит и таймер лежат в репозитории сайта.
 #
 # Каждый шаг проверяется и не трогает соседей при отказе. Шаги независимы:
 # провал одного не отменяет остальных, итог печатается в конце.
@@ -56,7 +38,6 @@ dry_run=0
 [ "${1:-}" = "--dry-run" ] && dry_run=1
 
 SRC_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
-NEW_SITE=animego-04
 
 log()  { printf '\033[1m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[33m[!]\033[0m %s\n' "$*"; }
@@ -68,30 +49,8 @@ declare -a results=()
 step_ok()   { results+=("ok    $1"); }
 step_fail() { results+=("ОТКАЗ $1: $2"); warn "$1: $2"; }
 
-run_step() {
-  local name="$1"; shift
-  log "$name"
-  if [ "$dry_run" = 1 ]; then
-    if "$@" --dry-run; then step_ok "$name (сухой прогон)"; else step_fail "$name" "сухой прогон отказал"; fi
-  elif "$@"; then
-    step_ok "$name"
-  else
-    step_fail "$name" "сценарий вернул ненулевой код"
-  fi
-}
-
 # ---------------------------------------------------------------------------
-# 1. Исполнитель заявок на выпуск
-# ---------------------------------------------------------------------------
-run_step "обновление исполнителя" bash "${SRC_ROOT}/automation/host/install-cell-executor.sh"
-
-# ---------------------------------------------------------------------------
-# 2. Площадка an1meg0.site
-# ---------------------------------------------------------------------------
-run_step "запуск площадки ${NEW_SITE}" bash "${SRC_ROOT}/automation/host/launch-new-site.sh" --site "$NEW_SITE"
-
-# ---------------------------------------------------------------------------
-# 3. Семантика Topvisor
+# 1. Семантика Topvisor
 # ---------------------------------------------------------------------------
 topvisor_step() {
   local name="семантика Topvisor"
@@ -118,28 +77,43 @@ topvisor_step() {
 topvisor_step
 
 # ---------------------------------------------------------------------------
-# 4. Счётчик Метрики для an1meg0.site
+# 2. Дополнения каталога an1meg0.site
 # ---------------------------------------------------------------------------
-metrika_step() {
-  local name="счётчик Метрики an1meg0.site"
-  local unit="analytics-connect@an1meg0.site.service"
+updates_step() {
+  local name="дополнения каталога an1meg0.site"
+  local repo="${SRC_ROOT}/var/site-repos/an1meg0-site"
+  local app=/srv/an1meg0-site/app
   log "$name"
-  if ! systemctl cat "analytics-connect@.service" >/dev/null 2>&1; then
-    step_fail "$name" "шаблона analytics-connect@.service нет"
+  if [ ! -f "${repo}/deploy/an1meg0-site-update.service" ]; then
+    step_fail "$name" "юнита нет в репозитории сайта"
     return 0
   fi
   if [ "$dry_run" = 1 ]; then
-    echo "   [сухой прогон] systemctl start --wait ${unit}"
+    echo "   [сухой прогон] install ${repo}/automation/site-update.py -> ${app}/automation/"
+    echo "   [сухой прогон] install deploy/an1meg0-site-update.{service,timer} -> /etc/systemd/system/"
+    echo "   [сухой прогон] systemctl daemon-reload && systemctl enable --now an1meg0-site-update.timer"
+    echo "   [сухой прогон] systemctl start --wait an1meg0-site-update.service"
     step_ok "$name (сухой прогон)"
     return 0
   fi
-  if systemctl start --wait "$unit"; then
+  install -d -o an1meg0-site -g an1meg0-site -m 0755 "${app}/automation" || {
+    step_fail "$name" "каталог ${app}/automation не создан"; return 0; }
+  install -o an1meg0-site -g an1meg0-site -m 0755 \
+    "${repo}/automation/site-update.py" "${app}/automation/site-update.py" || {
+    step_fail "$name" "обновлятор не установлен"; return 0; }
+  install -m 0644 "${repo}/deploy/an1meg0-site-update.service" \
+    /etc/systemd/system/an1meg0-site-update.service
+  install -m 0644 "${repo}/deploy/an1meg0-site-update.timer" \
+    /etc/systemd/system/an1meg0-site-update.timer
+  systemctl daemon-reload
+  systemctl enable --now an1meg0-site-update.timer
+  if systemctl start --wait an1meg0-site-update.service; then
     step_ok "$name"
   else
-    step_fail "$name" "служба вернула ненулевой код, отчёт: var/analytics/connect-an1meg0.site.json"
+    step_fail "$name" "первый прогон не удался, журнал: journalctl -u an1meg0-site-update"
   fi
 }
-metrika_step
+updates_step
 
 # ---------------------------------------------------------------------------
 # Итог
@@ -152,4 +126,4 @@ if printf '%s\n' "${results[@]}" | grep -q '^ОТКАЗ'; then
   exit 1
 fi
 echo
-log "готово. Дальше без root: python3 -m factory cell trigger --site ${NEW_SITE} --confirm-activation"
+log "готово. Проверить: разделы /top/ и /lists/ на an1meg0.site, семантику — в var/topvisor/check-after-connect.txt"
