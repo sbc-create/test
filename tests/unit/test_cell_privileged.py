@@ -695,3 +695,34 @@ def test_повышение_включает_службу():
     assert место_enable != -1, "promote не включает службу"
     assert место_restart != -1
     assert место_enable < место_restart, "enable обязан идти до restart"
+
+
+def test_плеер_нужен_и_по_ссылке_на_секрет(tmp_path):
+    """Ссылка на секрет — такой же признак «плеер нужен», как ожидаемое значение.
+
+    Пока условие смотрело только на `publisher_id_expected`, витрина с
+    `publisher_id_ref` не получала файла плеера вовсе: исполнитель считал его
+    ненужным, а рантайм витрины отказывался стартовать словами «нет
+    config/player.json». Кандидат lords-05 так и не поднялся, и причина
+    выглядела как поломка выпуска, а не как несогласованность двух условий.
+    """
+    from factory.cell import privileged
+
+    выпуск = tmp_path / "release"
+    (выпуск / "config").mkdir(parents=True)
+    конфиг = выпуск / "config" / "site.json"
+
+    конфиг.write_text(json.dumps({"publisher_id_expected": None,
+                                  "publisher_id_ref": "secret://cdnvideohub/lords/publisher-id"},
+                                 ensure_ascii=False), encoding="utf-8")
+    assert privileged._плеер_обязателен(выпуск) is True
+
+    конфиг.write_text(json.dumps({"publisher_id_expected": "10261"}, ensure_ascii=False),
+                      encoding="utf-8")
+    assert privileged._плеер_обязателен(выпуск) is True
+
+    # У витрин Yummy воспроизведением занимается верхний поток: ни того, ни
+    # другого поля нет, и требовать плеер нельзя.
+    конфиг.write_text(json.dumps({"domain": "yummyani7.site"}, ensure_ascii=False),
+                      encoding="utf-8")
+    assert privileged._плеер_обязателен(выпуск) is False

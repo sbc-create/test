@@ -210,7 +210,15 @@ def _плеер_обязателен(выпуск: Path) -> bool:
         данные = json.loads(конфиг.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return False
-    return bool(str(данные.get("publisher_id_expected") or "").strip())
+    # Ссылка на секрет — такой же признак «плеер нужен», как и ожидаемое
+    # значение, и появилась она позже. Пока условие смотрело только на
+    # `publisher_id_expected`, витрина с `publisher_id_ref` (значение приходит
+    # из Secret Hub и в git не хранится) не получала файла плеера вовсе:
+    # исполнитель считал его ненужным, а рантайм витрины отказывался стартовать
+    # словами «нет config/player.json». Кандидат lords-05 так и не поднялся
+    # 2026-09-28, и причина выглядела как поломка выпуска.
+    return bool(str(данные.get("publisher_id_expected") or "").strip()
+                or str(данные.get("publisher_id_ref") or "").strip())
 
 
 def _перенести_локальную_настройку(выпуск: Path, п: Площадка) -> list[str]:
