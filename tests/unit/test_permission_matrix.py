@@ -21,6 +21,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import sys
 import textwrap
 
@@ -472,7 +473,22 @@ class TestProfileProperties:
             "lordserials22.site", "lordserials22.space", "lordserials22.info",
         }
         assert len(витрины) == 10
-        assert unattended.network_hosts() == интеграции | витрины
+        # Остальные выложенные витрины. Внесены заданием от 2026-09-28
+        # «устранить повторяющуюся ошибку воспроизведения на ВСЕХ выложенных
+        # сайтах»: оно называет lordserial33.biz поимённо и требует взять
+        # перечень из действующего реестра ячеек, а не из головы агента.
+        # Поэтому состав ниже сверяется с config/site-cells.json, а не
+        # переписывается руками: лишний домен здесь означал бы канал наружу,
+        # которого владелец не открывал.
+        прочие = {
+            "lordserial33.biz", "lordfilm47.space", "1lordserials1.online",
+            "zonafilm.space", "animedia.icu", "animedia.space",
+            "yummyani.org", "yummyani.site", "yummyani.biz",
+        }
+        assert прочие <= {c["domain"] for c in
+                          json.loads((PATHS.root / "config" / "site-cells.json")
+                                     .read_text())["cells"]}
+        assert unattended.network_hosts() == интеграции | витрины | прочие
 
 
 class TestWritePaths:

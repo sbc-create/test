@@ -122,3 +122,51 @@ hosts:
     purpose: "плейлист плеера: сверка доступных серий и озвучек с тем, что видит посетитель"
     methods: [GET]
     contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- остальные выложенные витрины: общий дефект воспроизведения -----------
+  # Внесены заданием владельца от 2026-09-28 «устранить повторяющуюся ошибку
+  # воспроизведения на ВСЕХ выложенных сайтах». Задание поимённо называет
+  # lordserial33.biz и прямо требует взять перечень витрин из действующего
+  # реестра (config/site-cells.json) и проверить КАЖДУЮ: «HTTP 200, iframe и
+  # зелёные тесты отдельно не доказывают работу видео».
+  #
+  # Ни одной записи нет вне реестра ячеек: список получен из него, а не собран
+  # агентом. Только GET — приёмка публичного результата и запрос плейлиста с
+  # заголовком Origin витрины, как это делает браузер посетителя. Токенов нет:
+  # витрины публичны, плейлист авторизации не требует.
+  - ref: site-lordserial33-biz
+    host: lordserial33.biz
+    purpose: "публичная приёмка витрины и воспроизведение: страница серии, build-id, плеер"
+    methods: [GET]
+  - ref: site-lordfilm47-space
+    host: lordfilm47.space
+    purpose: "публичная приёмка витрины и воспроизведение: страница серии, build-id, плеер"
+    methods: [GET]
+  - ref: site-1lordserials1-online
+    host: 1lordserials1.online
+    purpose: "публичная приёмка витрины и воспроизведение: страница серии, build-id, плеер"
+    methods: [GET]
+  - ref: site-zonafilm-space
+    host: zonafilm.space
+    purpose: "публичная приёмка витрины и воспроизведение: страница серии, build-id, плеер"
+    methods: [GET]
+  - ref: site-animedia-icu
+    host: animedia.icu
+    purpose: "публичная приёмка витрины и воспроизведение: страница серии, build-id, плеер"
+    methods: [GET]
+  - ref: site-animedia-space
+    host: animedia.space
+    purpose: "публичная приёмка витрины и воспроизведение: страница серии, build-id, плеер"
+    methods: [GET]
+  - ref: site-yummyani-org
+    host: yummyani.org
+    purpose: "публичная приёмка витрины и воспроизведение: страница серии, build-id, плеер"
+    methods: [GET]
+  - ref: site-yummyani-site
+    host: yummyani.site
+    purpose: "публичная приёмка витрины и воспроизведение: страница серии, build-id, плеер"
+    methods: [GET]
+  - ref: site-yummyani-biz
+    host: yummyani.biz
+    purpose: "публичная приёмка витрины и воспроизведение: страница серии, build-id, плеер"
+    methods: [GET]
