@@ -1291,7 +1291,8 @@
       "release": {
         "hold": false,
         "hold_reason": null,
-        "branch": "release/zonafilm12-site"
+        "branch": "claude/extract-zonafilm12-site",
+        "branch_note": "Ветка выпуска приведена к фактической. Объявлена была release/zonafilm12-site, но push в release/* вне профиля разрешений сессии, а ВЕТКИ_ВЫПУСКА включают claude/extract-*. Коммит b65e9e6 отправлен именно туда, и CI на нём зелёный (прогон 36355416955). Реестр обязан описывать ветку, которая существует на GitHub и проверена CI, иначе цепочка запуска вечно докладывает «не запушено» о коммите, который запушен."
       },
       "indexing": {
         "desired_state": "CLOSED",
