@@ -676,7 +676,13 @@ def test_семантика_создаётся_и_повтор_ничего_не
     итог = наполнить_семантику(client, [{"id": 5, "url": spec.url, "name": spec.name}])
     assert итог["groups"] == 2, итог
     assert итог["keywords"] == sum(len(g.keywords) for g in spec.groups), итог
-    assert итог["notes"] == [], итог
+    # Замечания допустимы ровно те, что НАЗЫВАЮТ блокировку: поисковые системы
+    # не настраиваются, пока их нельзя прочитать, и каждый прогон об этом
+    # говорит. Безымянного шума быть не должно — иначе «замечания есть» перестаёт
+    # что-либо значить и проверка превращается в разрешение на любой текст.
+    посторонние = [n for n in итог["notes"] if "поисковые системы не настроены" not in n]
+    assert посторонние == [], посторонние
+    assert итог["searchers"] == 0, "слепое добавление поисковых систем создало бы дубли"
     методы = [з["url"].rsplit("/json/", 1)[-1] for з in журнал]
     assert методы.count("add/keywords_2/groups") == 2, методы
     assert методы.count("add/keywords_2/keywords") == 2, методы
@@ -726,5 +732,5 @@ def test_чужой_проект_семантикой_не_трогается():
     client = TopvisorClient(credentials=CRED, dry_run=False,
                             opener=make_opener([], журнал), sleep=lambda _: None)
     итог = наполнить_семантику(client, [{"id": 1, "url": "https://посторонний.test/"}])
-    assert итог == {"groups": 0, "keywords": 0, "notes": []}
+    assert итог == {"groups": 0, "keywords": 0, "searchers": 0, "notes": []}
     assert журнал == []

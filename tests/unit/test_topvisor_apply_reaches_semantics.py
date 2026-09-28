@@ -36,6 +36,16 @@ class КлиентЗаглушка:
     def keywords(self, ид) -> list[dict]:  # noqa: ARG002
         return []
 
+    def searchers(self, ид):  # noqa: ARG002
+        # Метод чтения поисковых систем API отвергает как несуществующий, и
+        # клиент это воспроизводит: стенд обязан вести себя как настоящий,
+        # иначе проверка зеленеет на поведении, которого нет.
+        from factory.errors import FactoryError
+        raise FactoryError(
+            "Метод get/projects_2/searchers не в списке разрешённых",
+            required_input="имя метода чтения поисковых систем",
+        )
+
     def call(self, method: str, payload: dict):
         self.создано.append((method, payload))
         if method == "add/keywords_2/groups":

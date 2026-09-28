@@ -218,7 +218,9 @@ def cmd_apply(args: argparse.Namespace) -> int:
     # Проекты созданы — но проект без семантики не мониторинг, а пустая запись.
     # Поэтому вторая фаза: группы запросов и сами запросы.
     заполнено = наполнить_семантику(client, current)
-    print(f"Групп создано: {заполнено['groups']}, запросов добавлено: {заполнено['keywords']}")
+    print(f"Групп создано: {заполнено['groups']}, "
+          f"запросов добавлено: {заполнено['keywords']}, "
+          f"поисковых систем добавлено: {заполнено['searchers']}")
     for строка in заполнено["notes"]:
         print(f"  ! {строка}")
     return 0
@@ -250,7 +252,7 @@ def наполнить_семантику(client, projects: list[dict]) -> dict:
     from factory.topvisor.manifest import by_domain  # noqa: PLC0415
     from factory.topvisor.plan import normalize_domain  # noqa: PLC0415
 
-    итог = {"groups": 0, "keywords": 0, "notes": []}
+    итог = {"groups": 0, "keywords": 0, "searchers": 0, "notes": []}
     for проект in projects:
         домен = normalize_domain(str(проект.get("url") or проект.get("site") or ""))
         spec = by_domain(домен) if домен else None
@@ -297,7 +299,48 @@ def наполнить_семантику(client, projects: list[dict]) -> dict:
             except FactoryError as exc:
                 итог["notes"].append(
                     f"{домен}/«{группа.name}»: запросы не добавлены — {exc.reason}")
+        _поисковые_системы(client, ид, домен, spec, итог)
     return итог
+
+
+def _поисковые_системы(client, ид, домен: str, spec, итог: dict) -> None:
+    """Поисковые системы и регион проекта — ЧИТАЕМ и только потом добавляем.
+
+    Почему не «добавить и не думать». Проект без поисковых систем не
+    мониторинг: позиции снимать не по чему. Но слепой `add` без чтения — это
+    ровно тот дубль, который запрещён: у Topvisor нет ни одного способа узнать,
+    что система уже добавлена, кроме чтения, а метод чтения
+    `get/projects_2/searchers` API отвергает как несуществующий (прогон
+    2026-09-27, все 15 проектов аккаунта). Настоящее имя метода документом не
+    подтверждено, и подбирать его запрещено отдельно.
+
+    Поэтому здесь не молчание и не риск, а НАЗВАННАЯ блокировка в отчёте: пока
+    прочитать нельзя, добавлять не будем, и каждый прогон об этом скажет.
+    Молчаливый ноль неотличим от «забыли» и живёт годами; названный — нет.
+    """
+    объявлено = getattr(spec, "searchers", ()) or ()
+    if not объявлено:
+        return
+    try:
+        текущие = client.searchers(ид)
+    except FactoryError as exc:
+        итог["notes"].append(
+            f"{домен}: поисковые системы не настроены — прочитать текущие нечем "
+            f"({exc.reason}). Объявлено {len(объявлено)}; слепое добавление "
+            "создало бы дубли, а имя метода чтения документом не подтверждено "
+            "(U7 в knowledge/UNKNOWNS.md)")
+        return
+    есть = {с.get("id") for с in текущие}
+    for система in объявлено:
+        if система in есть:
+            continue
+        try:
+            client.call("add/projects_2/searchers",
+                        {"project_id": int(ид), "searcher_key": int(система)})
+            итог["searchers"] += 1
+        except FactoryError as exc:
+            итог["notes"].append(
+                f"{домен}: поисковая система {система} не добавлена — {exc.reason}")
 
 
 def cmd_methods(args: argparse.Namespace) -> int:
