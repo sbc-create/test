@@ -113,6 +113,20 @@ async function запустить_элементом(page) {
   return false;
 }
 
+async function открыть_запись(page, slug) {
+  // Порядок: сначала серия (у сериала плеер именно там), потом карточка.
+  // Возвращается тот путь, который ответил 200 и содержит элемент плеера.
+  for (const путь of [`/title/${slug}/season-1/episode-1/`, `/title/${slug}/`]) {
+    let ответ;
+    try {
+      ответ = await page.goto(BASE + путь, { waitUntil: 'load', timeout: 60000 });
+    } catch { continue; }
+    if (!ответ || ответ.status() >= 400) continue;
+    if (await page.locator('video-player, [data-player-host]').count()) return путь;
+  }
+  return '';
+}
+
 async function запустить(page) {
   // Кнопка запуска у шаблонов называется по-разному, поэтому сначала пробуем
   // родной элемент управления видео, затем любой видимый элемент со словом
@@ -133,8 +147,19 @@ async function запустить(page) {
   const page = await browser.newPage();
   for (const slug of SLUGS) {
     console.log(`\n--- ${slug} ---`);
-    const первая = `/title/${slug}/season-1/episode-1/`;
-    await page.goto(BASE + первая, { waitUntil: 'load', timeout: 60000 });
+    // Адрес первой серии есть НЕ у всякой записи: у фильма серий нет, и
+    // `/season-1/episode-1/` отдаёт 404. Прежняя версия шла на него всегда,
+    // получала пустую страницу и печатала «элемент video не появился: нажато:
+    // нечего» — то есть объявляла поломкой воспроизведения собственный
+    // неверный адрес. Пять таких «отказов» на zonafilm.cc я успел приписать
+    // издателю 10238; на деле те же записи, открытые по адресу карточки,
+    // играют. Поэтому адрес теперь выбирается по ответу, а не по догадке.
+    const первая = await открыть_запись(page, slug);
+    if (!первая) {
+      say(false, `${slug}: запись не открылась`,
+          'ни адрес серии, ни адрес карточки не ответили 200');
+      continue;
+    }
     const нажато = await запустить(page);
     await page.waitForTimeout(6000);
     let v = await содержимое(page);
@@ -169,6 +194,13 @@ async function запустить(page) {
                    + `для AnimeGo используйте checks/playback.js его репозитория`);
     const источник1 = v.src;
 
+    // Вторую серию проверяем только там, где серии вообще есть. У фильма её
+    // отсутствие — не отказ витрины, а свойство записи, и записывать это в
+    // FAIL значит портить итог собственным непониманием.
+    if (!первая.includes('/season-')) {
+      console.log(`  (пропуск) ${slug}: у записи нет серий — переключение не проверяется`);
+      continue;
+    }
     const вторая = `/title/${slug}/season-1/episode-2/`;
     const ответ = await page.goto(BASE + вторая, { waitUntil: 'load', timeout: 60000 });
     if (!ответ || ответ.status() >= 400) {
