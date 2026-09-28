@@ -3,7 +3,7 @@
   "provider": "yandex",
   "note": "Реестр аналитики. Здесь хранятся ТОЛЬКО публичные идентификаторы счётчиков и проверяемые статусы; OAuth-токен и client secret сюда не попадают ни при каких условиях. Заполняется командой `python3 -m factory --json analytics apply --confirm-writes`; вручную не редактируется. Три домена YummyAnime — три независимых счётчика, зеркалами их объединять запрещено: у каждого сайта собственная аудитория и собственный отчёт.",
   "seo_indexing_enabled": false,
-  "updated_at": "2026-09-27T22:47:26Z",
+  "updated_at": "2026-09-28T12:04:33Z",
   "properties": [
     {
       "domain": "1lordserials1.online",
@@ -54,8 +54,8 @@
       "domain": "an1meg0.site",
       "site_id": "animego-04",
       "counter_name": "AnimeGo — an1meg0.site",
-      "counter_id": null,
-      "counter_state": "planned",
+      "counter_id": 113121466,
+      "counter_state": "created",
       "analytics_enabled": false,
       "webvisor": false,
       "allowed_hosts": [
@@ -81,10 +81,19 @@
         "sitemap_submitted": false
       },
       "seo_indexing_enabled": false,
-      "last_checked_at": null,
-      "problems": [
-        "Домен из задания, не запущен: DNS указывает на хост, но server_name нет ни в одной конфигурации nginx, каталога /srv и юнита не существует, проекта Topvisor нет. Счётчик не заводится до запуска сайта: он собирал бы пустоту и мешал заметить настоящий."
-      ]
+      "last_checked_at": "2026-09-28T12:04:33Z",
+      "problems": [],
+      "goal_ids": {
+        "comment_submit": 664398581,
+        "episode_select": 664398576,
+        "filter_apply": 664398572,
+        "player_error": 664398579,
+        "player_ready": 664398578,
+        "player_start": 664398577,
+        "search": 664398571,
+        "season_select": 664398575,
+        "title_view": 664398573
+      }
     },
     {
       "domain": "an1mego.site",

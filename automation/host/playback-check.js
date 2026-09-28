@@ -45,11 +45,43 @@ if (!BASE || !SLUGS.length) {
   process.exit(2);
 }
 
-let pass = 0, fail = 0;
+let pass = 0, fail = 0, безДорожки = 0;
 const say = (ok, name, detail) => {
   ok ? pass++ : fail++;
   console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? ': ' + detail : ''}`);
 };
+
+// Состояния, которые витрина выставляет САМА, когда провайдер не дал дорожки.
+// Это ответ записи, а не поломка витрины: страница при этом честно говорит
+// посетителю, что смотреть нечего. Считать такое отказом воспроизведения
+// значит записывать в поломку отсутствие контента у поставщика — и тогда
+// «плеер не работает» перестаёт отличаться от «этой серии у провайдера нет».
+const СОСТОЯНИЯ_БЕЗ_ДОРОЖКИ = new Set(
+  ['nosource', 'unavailable', 'provider', 'error', 'slow', 'noaccess']);
+
+const нет_дорожки = (name, detail) => {
+  безДорожки++;
+  console.log(`НЕТ ДОРОЖКИ  ${name}${detail ? ': ' + detail : ''}`);
+};
+
+async function состояние_витрины(page) {
+  // Читается то, что витрина показывает посетителю после попытки: атрибут
+  // состояния и подпись под ним. Ни того, ни другого нет — значит витрина
+  // молчит, и это уже её дефект.
+  try {
+    return await page.evaluate(() => {
+      const узел = document.querySelector('[data-player][data-state]');
+      const подпись = document.querySelector('[data-player-state]');
+      return {
+        state: узел ? узел.getAttribute('data-state') : '',
+        text: подпись ? (подпись.innerText || '').trim().slice(0, 120) : '',
+        hasPlayer: !!document.querySelector('video-player, [data-player-host]'),
+        publisher: (document.querySelector('video-player') || {})
+          .getAttribute ? document.querySelector('video-player').getAttribute('data-publisher-id') : '',
+      };
+    });
+  } catch { return { state: '', text: '', hasPlayer: false, publisher: '' }; }
+}
 
 async function содержимое(page) {
   // Обходим все кадры: <video> провайдера живёт во вложенном iframe.
@@ -116,15 +148,37 @@ async function запустить_элементом(page) {
 async function открыть_запись(page, slug) {
   // Порядок: сначала серия (у сериала плеер именно там), потом карточка.
   // Возвращается тот путь, который ответил 200 и содержит элемент плеера.
+  //
+  // Причина каждой неудачной попытки СОХРАНЯЕТСЯ. Прежняя версия глотала её
+  // через `catch { continue; }` и печатала «ни адрес серии, ни адрес карточки
+  // не ответили 200» — формулировку, которая была просто неправдой: обе
+  // страницы master-omyur отвечали 200 с плеером в разметке, а падала
+  // навигация по таймауту. Проглоченное исключение — не осторожность, а
+  // отчёт, называющий не то.
+  const причины = [];
+  let запасной = '';
   for (const путь of [`/title/${slug}/season-1/episode-1/`, `/title/${slug}/`]) {
     let ответ;
     try {
-      ответ = await page.goto(BASE + путь, { waitUntil: 'load', timeout: 60000 });
-    } catch { continue; }
-    if (!ответ || ответ.status() >= 400) continue;
+      ответ = await page.goto(BASE + путь, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    } catch (ош) {
+      причины.push(`${путь}: навигация не завершилась (${(ош && ош.message || ош)
+        .toString().split('\n')[0].slice(0, 90)})`);
+      continue;
+    }
+    if (!ответ) { причины.push(`${путь}: ответа нет`); continue; }
+    if (ответ.status() >= 400) { причины.push(`${путь}: HTTP ${ответ.status()}`); continue; }
     if (await page.locator('video-player, [data-player-host]').count()) return путь;
+    // Страница есть, плеера на ней нет. Это НЕ повод бросать запись: витрина
+    // именно так и показывает запись, для которой источник не передан вовсе
+    // (`master-omyur`: sources=0, из внешних идентификаторов только imdb).
+    // Запоминаем первый такой адрес и разбираемся по состоянию витрины —
+    // отличить «источника нет» от «плеер сломан» умеет она сама.
+    if (!запасной) запасной = путь;
+    причины.push(`${путь}: HTTP 200, но элемента плеера в разметке нет`);
   }
-  return '';
+  if (запасной) return запасной;
+  return { ошибка: причины.join('; ') };
 }
 
 async function запустить(page) {
@@ -155,16 +209,36 @@ async function запустить(page) {
     // издателю 10238; на деле те же записи, открытые по адресу карточки,
     // играют. Поэтому адрес теперь выбирается по ответу, а не по догадке.
     const первая = await открыть_запись(page, slug);
-    if (!первая) {
-      say(false, `${slug}: запись не открылась`,
-          'ни адрес серии, ни адрес карточки не ответили 200');
+    if (typeof первая !== 'string') {
+      say(false, `${slug}: запись не открылась`, первая.ошибка);
       continue;
     }
     const нажато = await запустить(page);
     await page.waitForTimeout(6000);
     let v = await содержимое(page);
     if (!v) {
-      say(false, `${slug}: элемент video не появился`, `нажато: ${нажато || 'нечего'}`);
+      // Прежде здесь был безусловный FAIL, и он смешивал две разные вещи:
+      // сломанный плеер и запись, которой у провайдера нет. Теперь спрашиваем
+      // саму витрину — она это различие знает и показывает посетителю.
+      const сост = await состояние_витрины(page);
+      if (!сост.hasPlayer) {
+        if (СОСТОЯНИЯ_БЕЗ_ДОРОЖКИ.has(сост.state)) {
+          нет_дорожки(`${slug}: источник записи не передан`,
+                      `витрина говорит «${сост.text || сост.state}»`);
+        } else {
+          say(false, `${slug}: плеера нет и витрина молчит`,
+              `состояние «${сост.state || 'не объявлено'}» — это её дефект`);
+        }
+      } else if (!сост.publisher) {
+        say(false, `${slug}: у плеера не объявлен publisher_id`,
+            'витрина не подключена к провайдеру — это настройка витрины');
+      } else if (СОСТОЯНИЯ_БЕЗ_ДОРОЖКИ.has(сост.state)) {
+        нет_дорожки(`${slug}: провайдер не дал дорожки`,
+                    `витрина говорит «${сост.text || сост.state}»`);
+      } else {
+        say(false, `${slug}: элемент video не появился`,
+            `состояние «${сост.state || 'не объявлено'}», нажато: ${нажато || 'нечего'}`);
+      }
       continue;
     }
     say(v.readyState >= 2 && v.duration > 0, `${slug}: поток готов`,
@@ -218,6 +292,7 @@ async function запустить(page) {
     }
   }
   await browser.close();
-  console.log(`\nИТОГО: PASS ${pass}  FAIL ${fail}`);
+  console.log(`\nИТОГО: PASS ${pass}  FAIL ${fail}`
+    + (безДорожки ? `  НЕТ ДОРОЖКИ ${безДорожки} (ответ провайдера, не витрины)` : ''));
   process.exit(fail ? 1 : 0);
 })();

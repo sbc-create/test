@@ -188,26 +188,36 @@ def cmd_apply(args: argparse.Namespace) -> int:
     current = client.projects()
     result = planning.build(current)
     if result.empty:
-        print("0 изменений: желаемое состояние уже достигнуто.")
-        return 0
-    if result.paid_actions:
+        # РАННЕГО ВОЗВРАТА ЗДЕСЬ БЫТЬ НЕ ДОЛЖНО. План отвечает только на вопрос
+        # «какие проекты создать»; когда все девять уже созданы, он пуст — и
+        # команда печатала «желаемое состояние уже достигнуто», не дойдя до
+        # второй фазы. Семантика при этом оставалась нулевой у всех девяти
+        # новых проектов, а отчёт выглядел успешным. Пустой проект — не
+        # мониторинг, а запись о намерении.
+        print("Проекты: изменений нет, все объявленные манифестом существуют.")
+    elif result.paid_actions:
         # Платные действия не выполняются даже с --apply: они перечисляются,
         # и решение остаётся за владельцем.
         print("В плане есть платные действия — они не выполняются автоматически:")
         for action in result.paid_actions:
             print(f"  [{action.cost}] {action.method} {action.domain}: {action.summary}")
-    done = 0
-    for action in result.free_actions:
-        try:
-            client.call(action.method, action.payload)
-            done += 1
-            print(f"  выполнено: {action.method} {action.domain} — {action.summary}")
-        except FactoryError as exc:
-            print(f"  отказ: {action.method} {action.domain}: {exc.reason}", file=sys.stderr)
-    print(f"Выполнено бесплатных действий: {done} из {len(result.free_actions)}")
+    if result.free_actions:
+        done = 0
+        for action in result.free_actions:
+            try:
+                client.call(action.method, action.payload)
+                done += 1
+                print(f"  выполнено: {action.method} {action.domain} — {action.summary}")
+            except FactoryError as exc:
+                print(f"  отказ: {action.method} {action.domain}: {exc.reason}",
+                      file=sys.stderr)
+        print(f"Выполнено бесплатных действий: {done} из {len(result.free_actions)}")
+        # Список проектов перечитывается: только что созданные должны попасть
+        # во вторую фазу тем же запуском, а не следующим.
+        current = client.projects()
     # Проекты созданы — но проект без семантики не мониторинг, а пустая запись.
     # Поэтому вторая фаза: группы запросов и сами запросы.
-    заполнено = наполнить_семантику(client, client.projects())
+    заполнено = наполнить_семантику(client, current)
     print(f"Групп создано: {заполнено['groups']}, запросов добавлено: {заполнено['keywords']}")
     for строка in заполнено["notes"]:
         print(f"  ! {строка}")
