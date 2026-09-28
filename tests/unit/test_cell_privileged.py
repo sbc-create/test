@@ -726,3 +726,63 @@ def test_плеер_нужен_и_по_ссылке_на_секрет(tmp_path):
     конфиг.write_text(json.dumps({"domain": "yummyani7.site"}, ensure_ascii=False),
                       encoding="utf-8")
     assert privileged._плеер_обязателен(выпуск) is False
+
+
+def test_приёмка_не_сдаётся_после_первого_таймаута(monkeypatch):
+    """Холодный старт крупной витрины дольше одного предела — это не отказ.
+
+    Повод: выпуск lords-05 объявлен провалившимся, потому что `verify` получил
+    TimeoutError на обоих маршрутах сразу после перезапуска. Сработал откат — и
+    его собственная проверка, дошедшая до сайта на пять минут позже, увидела
+    HTTP 200. Откат по нетерпению выключает работающий сайт.
+    """
+    import urllib.request
+
+    from factory.cell import privileged
+
+    попытки: list[float] = []
+
+    class Ответ:
+        status = 200
+        headers = {"X-Site-Factory-Build-Id": "abc-lords-05"}
+
+        def read(self, _n=None):
+            return b"<html></html>"
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_):
+            return False
+
+    def открыть(url, timeout=None):
+        попытки.append(timeout)
+        # Первые два предела истекают, третий отвечает — как у холодной витрины.
+        if len(попытки) <= 2:
+            raise TimeoutError("cold start")
+        return Ответ()
+
+    monkeypatch.setattr(urllib.request, "urlopen", открыть)
+    итог = privileged.verify("lords-05", порт=9113, маршруты=("/",))
+    assert итог["routes"]["/"]["status"] == 200, итог
+    assert итог["routes"]["/"]["попытка"] == 3
+    assert попытки == [30, 60, 120], попытки
+    assert итог["ok"] is True
+
+
+def test_приёмка_отказывает_после_всех_попыток(monkeypatch):
+    """Исчерпав пределы, проверка называет число попыток и суммарное ожидание."""
+    import urllib.request
+
+    from factory.cell import privileged
+
+    def открыть(url, timeout=None):
+        raise TimeoutError("always cold")
+
+    monkeypatch.setattr(urllib.request, "urlopen", открыть)
+    итог = privileged.verify("lords-05", порт=9113, маршруты=("/",))
+    запись = итог["routes"]["/"]
+    assert запись["error"] == "TimeoutError"
+    assert запись["попыток"] == 3
+    assert запись["суммарное_ожидание_с"] == 210
+    assert итог["ok"] is False
