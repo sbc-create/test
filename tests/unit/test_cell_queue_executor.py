@@ -911,3 +911,91 @@ def test_подтверждённый_доступ_пропускает(tmp_path
                     "actions_read": True},
     }, ensure_ascii=False), encoding="utf-8")
     q.проверить_доступ_исполнителя("zona-03")
+
+
+def test_протухший_снимок_каталога_останавливает_выпуск(tmp_path, monkeypatch):
+    """Выпуск в витрину с устаревшими данными даёт HTTP 200 без содержимого.
+
+    Публичный код ответа этого не показывает: страница есть, каталог старый.
+    Проверка стоит ДО заявки, потому что после установки отличить «данные не
+    те» от «сайт работает» можно только глазами.
+    """
+    import os
+
+    from factory.cell import queue as q
+
+    monkeypatch.setattr(q, "ВЫХОД_ПРОИЗВОДИТЕЛЯ", tmp_path)
+    файл = tmp_path / "zona-03-catalog.json"
+    файл.write_text("x" * 4096, encoding="utf-8")
+    старое = файл.stat().st_mtime - (q.СВЕЖЕСТЬ_СНИМКА_Ч + 10) * 3600
+    os.utime(файл, (старое, старое))
+    with pytest.raises(q.RequestRejected) as ош:
+        q.проверить_комплектность_данных("zona-03")
+    assert "старше" in str(ош.value)
+
+
+def test_пустой_снимок_каталога_останавливает_выпуск(tmp_path, monkeypatch):
+    from factory.cell import queue as q
+
+    monkeypatch.setattr(q, "ВЫХОД_ПРОИЗВОДИТЕЛЯ", tmp_path)
+    (tmp_path / "zona-03-catalog.json").write_text("{}", encoding="utf-8")
+    with pytest.raises(q.RequestRejected) as ош:
+        q.проверить_комплектность_данных("zona-03")
+    assert "пуст" in str(ош.value)
+
+
+def test_отсутствие_своего_снимка_не_отказ(tmp_path, monkeypatch):
+    """У семейств, заимствующих снимок соседа или получающих данные из
+    контейнера, своего файла нет по построению — это не повод отказать."""
+    from factory.cell import queue as q
+
+    monkeypatch.setattr(q, "ВЫХОД_ПРОИЗВОДИТЕЛЯ", tmp_path)
+    q.проверить_комплектность_данных("yummy-07")
+
+
+def test_свежий_снимок_пропускает(tmp_path, monkeypatch):
+    from factory.cell import queue as q
+
+    monkeypatch.setattr(q, "ВЫХОД_ПРОИЗВОДИТЕЛЯ", tmp_path)
+    (tmp_path / "zona-03-catalog.json").write_text("x" * 4096, encoding="utf-8")
+    q.проверить_комплектность_данных("zona-03")
+
+
+def test_без_server_name_заявка_не_создаётся(tmp_path, monkeypatch):
+    """Повод: три заявки подряд отвергнуты исполнителем за отсутствие маршрута.
+
+    Отказ правильный и безопасный, но приходит ПОСЛЕ сборки и проверки
+    происхождения. Проверить наличие server-блока можно заранее и без прав.
+
+    Первая версия проверки смотрела на файл upstream — и молчала, потому что до
+    первого выпуска его не существует: заявка снова уходила в очередь и снова
+    отвергалась. Смотреть надо на то, что должно существовать ДО выпуска.
+    """
+    from factory.cell import queue as q
+
+    monkeypatch.setattr(q, "NGINX", tmp_path)
+    (tmp_path / "чужой.conf").write_text("server { server_name другой.test; }\n",
+                                         encoding="utf-8")
+    with pytest.raises(q.RequestRejected) as ош:
+        q.проверить_маршрут("lords-05")
+    текст = str(ош.value)
+    assert "server_name lordserials22.info" in текст
+    assert "launch-new-site.sh --site lords-05" in текст
+
+
+def test_существующий_server_name_пропускает(tmp_path, monkeypatch):
+    from factory.cell import queue as q
+
+    monkeypatch.setattr(q, "NGINX", tmp_path)
+    (tmp_path / "сайт.conf").write_text(
+        "server {\n  server_name lordserials22.info www.lordserials22.info;\n}\n",
+        encoding="utf-8")
+    q.проверить_маршрут("lords-05")
+
+
+def test_недоступный_каталог_nginx_не_мешает(tmp_path, monkeypatch):
+    """Не можем проверить — не мешаем: «нет прав» не то же, что «нет блока»."""
+    from factory.cell import queue as q
+
+    monkeypatch.setattr(q, "NGINX", tmp_path / "нет-такого")
+    q.проверить_маршрут("lords-05")
