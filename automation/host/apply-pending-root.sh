@@ -5,7 +5,9 @@
 #
 # Что УЖЕ сделано и сюда больше не входит (проверено 2026-09-28 12:30):
 # исполнитель обновлён, площадка animego-04 запущена, счётчик an1meg0.site
-# 113121466 заведён с девятью целями, домен выложен и принят публично.
+# 113121466 заведён с девятью целями, домен выложен и принят публично;
+# дополнения каталога an1meg0.site доставлены штатным исполнителем, root
+# для них не понадобился — /top/ отдаёт 99 карточек, как у соседей.
 #
 # Что осталось и что каждый шаг разблокирует:
 #
@@ -20,11 +22,13 @@
 #                               платные маршруты клиент не выполняет ни при
 #                               каком флаге.
 #
-#   2. дополнения каталога      Разделы /top/ и /lists/ у an1meg0.site пусты:
-#      an1meg0.site             рантайм читает animego-04-ratings-top.json и
-#                               -popular.json, а доставляет их
-#                               automation/site-update.py, у которого не было
-#                               юнита. Юнит и таймер лежат в репозитории сайта.
+#   2. расписание Yummy         Контентный контур Yummy собран и опубликован
+#                               вручную 2026-09-28 (7386 записей, свежайшая
+#                               публикация 27.09). Ничто его не запускает: с
+#                               10.09 импорт не выполнялся, и проекция протухла
+#                               на 424 часа. Таймер ставит это на расписание —
+#                               через двадцать минут после ночного прохода
+#                               поставщика.
 #
 # Каждый шаг проверяется и не трогает соседей при отказе. Шаги независимы:
 # провал одного не отменяет остальных, итог печатается в конце.
@@ -77,43 +81,34 @@ topvisor_step() {
 topvisor_step
 
 # ---------------------------------------------------------------------------
-# 2. Дополнения каталога an1meg0.site
+# 2. Расписание обновления контентного контура Yummy
 # ---------------------------------------------------------------------------
-updates_step() {
-  local name="дополнения каталога an1meg0.site"
-  local repo="${SRC_ROOT}/var/site-repos/an1meg0-site"
-  local app=/srv/an1meg0-site/app
+yummy_step() {
+  local name="расписание обновления каталога Yummy"
+  local src="${SRC_ROOT}/automation/host"
   log "$name"
-  if [ ! -f "${repo}/deploy/an1meg0-site-update.service" ]; then
-    step_fail "$name" "юнита нет в репозитории сайта"
+  if [ ! -f "${src}/yummy-content-refresh.service" ]; then
+    step_fail "$name" "юнита нет в репозитории"
     return 0
   fi
   if [ "$dry_run" = 1 ]; then
-    echo "   [сухой прогон] install ${repo}/automation/site-update.py -> ${app}/automation/"
-    echo "   [сухой прогон] install deploy/an1meg0-site-update.{service,timer} -> /etc/systemd/system/"
-    echo "   [сухой прогон] systemctl daemon-reload && systemctl enable --now an1meg0-site-update.timer"
-    echo "   [сухой прогон] systemctl start --wait an1meg0-site-update.service"
+    echo "   [сухой прогон] install yummy-content-refresh.{service,timer} -> /etc/systemd/system/"
+    echo "   [сухой прогон] systemctl daemon-reload && systemctl enable --now yummy-content-refresh.timer"
     step_ok "$name (сухой прогон)"
     return 0
   fi
-  install -d -o an1meg0-site -g an1meg0-site -m 0755 "${app}/automation" || {
-    step_fail "$name" "каталог ${app}/automation не создан"; return 0; }
-  install -o an1meg0-site -g an1meg0-site -m 0755 \
-    "${repo}/automation/site-update.py" "${app}/automation/site-update.py" || {
-    step_fail "$name" "обновлятор не установлен"; return 0; }
-  install -m 0644 "${repo}/deploy/an1meg0-site-update.service" \
-    /etc/systemd/system/an1meg0-site-update.service
-  install -m 0644 "${repo}/deploy/an1meg0-site-update.timer" \
-    /etc/systemd/system/an1meg0-site-update.timer
+  install -m 0644 "${src}/yummy-content-refresh.service" \
+    /etc/systemd/system/yummy-content-refresh.service
+  install -m 0644 "${src}/yummy-content-refresh.timer" \
+    /etc/systemd/system/yummy-content-refresh.timer
   systemctl daemon-reload
-  systemctl enable --now an1meg0-site-update.timer
-  if systemctl start --wait an1meg0-site-update.service; then
+  if systemctl enable --now yummy-content-refresh.timer; then
     step_ok "$name"
   else
-    step_fail "$name" "первый прогон не удался, журнал: journalctl -u an1meg0-site-update"
+    step_fail "$name" "таймер не включён"
   fi
 }
-updates_step
+yummy_step
 
 # ---------------------------------------------------------------------------
 # Итог
@@ -126,4 +121,4 @@ if printf '%s\n' "${results[@]}" | grep -q '^ОТКАЗ'; then
   exit 1
 fi
 echo
-log "готово. Проверить: разделы /top/ и /lists/ на an1meg0.site, семантику — в var/topvisor/check-after-connect.txt"
+log "готово. Проверить: семантику в var/topvisor/check-after-connect.txt и свежесть /srv/lords/.frontend/yummy-07-catalog.json"

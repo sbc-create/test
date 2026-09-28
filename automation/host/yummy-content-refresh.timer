@@ -1,0 +1,13 @@
+[Unit]
+Description=Расписание обновления контентного контура Yummy
+
+[Timer]
+# Через двадцать минут после ночного прохода поставщика: каталог
+# /srv/site-factory/repo/var/lords/lords/catalog-cache/lords-01.json
+# обновляется около 03:35 UTC, и раньше него импортировать нечего.
+OnCalendar=*-*-* 04:00:00 UTC
+Persistent=true
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target

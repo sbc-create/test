@@ -1,0 +1,21 @@
+[Unit]
+Description=Обновление контентного контура Yummy: импорт источника и проекция
+Documentation=file:///srv/site-factory/yummy-content/build.py
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/srv/site-factory/yummy-content
+# Два шага одной службы: импорт в собственное хранилище контура и публикация
+# проекции. Боевые базы витрин только читаются (таблица маршрутов), каталог
+# поставщика читается файлом.
+#
+# Витрины перечислены ЯВНО. Три действующие сюда не входят: они проксируют свои
+# контейнеры и проекцию не читают, а перезапуск их юнитов ради файла, который
+# никто не открывает, — лишний риск для индексируемого сайта.
+ExecStart=/usr/bin/python3 build.py
+ExecStart=/usr/bin/python3 publish.py --site yummy-07 --site yummy-08
+TimeoutStartSec=900
