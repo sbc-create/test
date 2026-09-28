@@ -121,7 +121,7 @@ def _значения(узел, ключи=КЛЮЧИ_НАСТРОЙКИ, пут
     if isinstance(узел, dict):
         for ключ, значение in узел.items():
             новый = f"{путь}.{ключ}" if путь else ключ
-            if ключ in ключи and not isinstance(значение, (dict, list)):
+            if ключ in ключи and not isinstance(значение, dict | list):
                 yield новый, значение
             yield from _значения(значение, ключи, новый)
     elif isinstance(узел, list):
