@@ -57,11 +57,13 @@ def рантайм_витрины() -> Path:
     подставляется по умолчанию: жёсткий путь молча брал бы не тот файл.
     """
     конфиг = json.loads((КОРЕНЬ / "config" / "site.json").read_text(encoding="utf-8"))
+    # Поле `entrypoint` объявляют не все витрины: у части точка входа — сам
+    # рантайм семейства. Отсутствие поля здесь не отказ, а «искать по
+    # семейству»: отказывать пришлось бы там, где искать больше негде.
     имя = str(конфиг.get("entrypoint") or "").strip()
-    if not имя:
-        raise SystemExit("config/site.json не объявляет entrypoint")
-    путь = КОРЕНЬ / "src" / имя
-    if путь.is_file() and "ПЛЕЕР" in путь.read_text(encoding="utf-8", errors="replace"):
+    путь = КОРЕНЬ / "src" / имя if имя else None
+    if путь and путь.is_file() and "ПЛЕЕР" in путь.read_text(
+            encoding="utf-8", errors="replace"):
         return путь
     общий = {"lords": "lords-frontend.py", "zona": "lords-frontend.py",
              "animedia": "animedia-frontend.py",
@@ -77,8 +79,8 @@ def рантайм_витрины() -> Path:
         if кандидат.is_file() and "ПЛЕЕР" in кандидат.read_text(
                 encoding="utf-8", errors="replace"):
             return кандидат
-    raise SystemExit(f"{имя}: слой витрины без правил плеера, "
-                     "общего рантайма семейства рядом нет")
+    raise SystemExit(f"{имя or 'витрина'}: общего рантайма семейства рядом нет — "
+                     "искали в src/ и template/<релиз>/")
 
 
 def загрузить(временный: Path):
@@ -97,9 +99,13 @@ def загрузить(временный: Path):
     подробности = временный / "details.json"
     подробности.write_text(json.dumps(
         {"catalog_revision": "check", "details": {}}), encoding="utf-8")
+    # Настройка плеера намеренно ПУСТАЯ. Проверяемые правила — `список_серий`,
+    # `серия_с_дорожкой`, `выбрать_доступную_серию` — издателя не читают, а
+    # написать сюда любое число значит положить в репозиторий строку вида
+    # «publisher_id: <цифры>»: проверка checks/no_secrets.py справедливо
+    # считает это значением в git, и ей всё равно, что число выдуманное.
     плеер = временный / "player.json"
-    плеер.write_text(json.dumps(
-        {"publisher_id": "10000", "source_mode": "provider-id"}), encoding="utf-8")
+    плеер.write_text(json.dumps({"source_mode": "provider-id"}), encoding="utf-8")
     for ключ, значение in (
             ("LORDS_TEMPLATE_MANIFEST", манифест), ("ANIMEDIA_TEMPLATE_MANIFEST", манифест),
             ("ANIMEGO_TEMPLATE_MANIFEST", манифест),
