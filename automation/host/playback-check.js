@@ -157,7 +157,12 @@ async function открыть_запись(page, slug) {
   // отчёт, называющий не то.
   const причины = [];
   let запасной = '';
-  for (const путь of [`/title/${slug}/season-1/episode-1/`, `/title/${slug}/`]) {
+  // Адреса карточек различаются по семействам: Lords и Zona держат их под
+  // /title/, витрины Yummy — под /anime/. Перебирается то, что отвечает,
+  // а не одно написание: жёсткий шаблон мерил бы 404 вместо плеера.
+  const пути = [`/title/${slug}/season-1/episode-1/`, `/title/${slug}/`,
+                `/anime/${slug}/season-1/episode-1`, `/anime/${slug}`];
+  for (const путь of пути) {
     let ответ;
     try {
       ответ = await page.goto(BASE + путь, { waitUntil: 'domcontentloaded', timeout: 60000 });
