@@ -931,10 +931,17 @@ class Подробности:
         self.покрытие = 0
         self.catalog_revision = ""
         self.catalog_built_at = ""
+        # Путь и время файла нужны согласованию доступности: оно дописывает в
+        # снимок перечень номеров `nums` и обязано СНАЧАЛА убедиться, что
+        # суточная доставка не привезла новый снимок, пока шёл опрос.
+        self.path = str(путь or "")
+        self.mtime = 0.0
         if not путь:
             return
         try:
-            сырое = json.loads(Path(путь).read_text(encoding="utf-8"))
+            путь_п = Path(путь)
+            self.mtime = путь_п.stat().st_mtime
+            сырое = json.loads(путь_п.read_text(encoding="utf-8"))
         except (OSError, ValueError):
             return
         записи = сырое.get("details")
