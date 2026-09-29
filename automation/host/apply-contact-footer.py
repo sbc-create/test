@@ -66,8 +66,15 @@ def _контакт_подвала(обёртка: str = "span", класс: str
 #: ширины и наследование цвета подвала. Ни одного нового цвета — оформление
 #: витрины не меняется.
 СТИЛЬ = (
+    # Цвет: основной текст темы, а не приглушённый цвет полосы. Замер на
+    # animedia.icu в светлой теме дал 4,26 при норме 4,5 — полоса подвала
+    # там намеренно приглушена, и строка, которую посетителю НАДО
+    # прочитать, не должна быть приглушена вместе с ней. Токены
+    # перечислены с запасными значениями: у каждого семейства своё имя, и
+    # там, где ни одного нет, остаётся `inherit` — то есть прежний вид.
     ".sf-contact{max-width:100%;min-width:0;overflow-wrap:anywhere;"
-    "word-break:break-word;line-height:1.45}"
+    "word-break:break-word;line-height:1.45;"
+    "color:var(--a-ink,var(--z-ink,var(--ag-ink,inherit)))}"
     ".sf-contact a{color:inherit;text-decoration:underline;"
     "text-underline-offset:2px}"
     ".sf-contact a:hover{text-decoration:none}"
