@@ -1136,7 +1136,8 @@
       },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id": "10238"
+        "publisher_id": "10252",
+        "note": "Назначен владельцем именно этому домену 2026-09-29 вместо 10238. 10238 остаётся у lordfilm47.space и zonafilm.cc и здесь не меняется. Значение публичное — оно стоит в разметке страницы атрибутом data-publisher-id; секрет — пара учётных данных, она живёт в Secret Hub по ссылке player.publisher_id_ref профиля витрины."
       },
       "data": {
         "database": null,

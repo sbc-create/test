@@ -809,3 +809,65 @@ def test_приёмка_отказывает_после_всех_попыток(
     assert запись["попыток"] == 3
     assert запись["суммарное_ожидание_с"] == 210
     assert итог["ok"] is False
+
+
+def test_смена_издателя_не_откатывается_переносом(tmp_path, monkeypatch):
+    """Витрина сменила издателя — перенос обязан взять НОВОЕ значение.
+
+    Измерено на zonafilm.space: владелец назначил домену publisher 10252 вместо
+    10238, а исполнитель на каждом выпуске копировал `config/player.json` из
+    ДЕЙСТВУЮЩЕГО выпуска — то есть ровно прежнее значение. Выкладка молча
+    возвращала бы старое назначение каждый раз, и сменить его штатным способом
+    было бы нельзя вовсе.
+
+    Источник, расходящийся с объявлением выпуска, пропускается, и перебор идёт
+    дальше — к каталогу производителя, где значение и меняют.
+    """
+    п = _площадка(tmp_path)
+    (п.app / "config" / "player.json").write_text(
+        json.dumps({"publisher_id": "10238"}), encoding="utf-8")
+    произв = tmp_path / "frontend"
+    произв.mkdir()
+    (произв / "player-zona-01.json").write_text(
+        json.dumps({"publisher_id": "10252"}), encoding="utf-8")
+    monkeypatch.setattr(privileged, "ПЛЕЕР_ПРОИЗВОДИТЕЛЯ", произв)
+    monkeypatch.setattr(privileged.shutil, "chown", lambda *a, **k: None)
+    выпуск = _выпуск(tmp_path, publisher="10252")
+    assert privileged._перенести_локальную_настройку(выпуск, п) == ["config/player.json"]
+    легло = json.loads((выпуск / "config" / "player.json").read_text(encoding="utf-8"))
+    assert легло["publisher_id"] == "10252", "перенос вернул прежнего издателя"
+
+
+def test_смена_издателя_без_нового_значения_это_отказ(tmp_path, monkeypatch):
+    """Ни один источник не знает нового издателя — отказ с названными числами.
+
+    Поставить прежнее значение значило бы выложить выпуск, который тут же
+    провалит собственную проверку готовности: `run.py --check` отвечает
+    «publisher_id X, а сайт объявляет Y» и служба не поднимается. Отказ здесь
+    честнее: он называет, где именно значение не обновили.
+    """
+    п = _площадка(tmp_path)
+    (п.app / "config" / "player.json").write_text(
+        json.dumps({"publisher_id": "10238"}), encoding="utf-8")
+    произв = tmp_path / "frontend"
+    произв.mkdir()
+    (произв / "player-zona-01.json").write_text(
+        json.dumps({"publisher_id": "10238"}), encoding="utf-8")
+    monkeypatch.setattr(privileged, "ПЛЕЕР_ПРОИЗВОДИТЕЛЯ", произв)
+    with pytest.raises(privileged.PrivilegedRefused, match="10252"):
+        privileged._перенести_локальную_настройку(
+            _выпуск(tmp_path, publisher="10252"), п)
+
+
+def test_файл_без_издателя_переносится_как_прежде(tmp_path, monkeypatch):
+    """Пустой или нечитаемый файл плеера не отбраковывается.
+
+    «Сказать нечего» — не то же самое, что «сказано другое»: прежнее поведение
+    для таких источников сохраняется, иначе первый выпуск витрины, у которой
+    боковой файл ещё заготовка, стал бы отказом на ровном месте.
+    """
+    п = _площадка(tmp_path)
+    (п.app / "config" / "player.json").write_text("{}", encoding="utf-8")
+    monkeypatch.setattr(privileged.shutil, "chown", lambda *a, **k: None)
+    assert privileged._перенести_локальную_настройку(
+        _выпуск(tmp_path, publisher="10252"), п) == ["config/player.json"]

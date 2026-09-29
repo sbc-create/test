@@ -70,7 +70,12 @@ class Цель:
         Цель("lords-01", "lordfilm47.space", "lords-nova-01.service", "lords", "lords-01"),
         Цель("lords-02", "lordserial33.biz", "nova-lords-02.service", "lords", "lords-02"),
         Цель("lords-03", "1lordserials1.online", "nova-lords-03.service", "lords", "lords-03"),
-        Цель("zona-01", "zonafilm.space", "nova-zona-01.service", "lords", "lords-01"),
+        # 2026-09-29: владелец назначил домену издателя профиля yami вместо
+        # пары lords-01. Прежняя строка вела к секрету СОСЕДНЕЙ витрины, и
+        # домен показывал чужой идентификатор. Юнит тоже исправлен: витрина
+        # переехала в собственную ячейку, а nova-zona-01.service запускает
+        # общий загрузчик и этот домен больше не обслуживает.
+        Цель("zona-01", "zonafilm.space", "nova-zonafilm-space.service", "yami", ""),
         Цель("animedia-01", "animedia.icu", "nova-animedia-01.service", "yami", ""),
         Цель("animedia-02", "animedia.space", "nova-animedia-02.service", "yami", ""),
     )
