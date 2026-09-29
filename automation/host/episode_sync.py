@@ -670,11 +670,35 @@ def _лаг(собран: str) -> int:
     return max(0, int(time.time() - time.mktime(т) + time.timezone))
 
 
-def _цикл(рантайм, домен: str, снимок: Path, отчёт: Path) -> None:
+def _снимок_витрины(рантайм) -> Path | None:
+    """Путь снимка, который читает витрина. None — пока не готов.
+
+    Спрашивается ЛЕНИВО, а не при запуске потока. Порядок строк в `main`
+    у разных витрин свой: у animedia.space создание сокета перенесено выше
+    загрузки снимка, и запуск, прочитавший путь сразу, не находил его и
+    отказывал — молча. Ленивое чтение снимает зависимость от порядка вовсе.
+    """
+    подробности = getattr(getattr(рантайм, "Обработчик", None), "подробности", None)
+    путь = Path(getattr(подробности, "path", "") or "")
+    return путь if путь.name else None
+
+
+def _цикл(рантайм, домен: str) -> None:
     time.sleep(20)                      # дать витрине подняться и ответить
-    согласование = Согласование(рантайм, домен=домен, снимок=снимок)
+    согласование = None
     прежний = None
     while True:
+        if согласование is None:
+            снимок = _снимок_витрины(рантайм)
+            if снимок is None:
+                print("[nova] согласование ждёт снимок витрины", flush=True)
+                time.sleep(ПАУЗА_С)
+                continue
+            согласование = Согласование(рантайм, домен=домен, снимок=снимок)
+            отчёт = снимок.with_name(
+                f"{снимок.stem.replace('-details', '')}-episode-sync.json")
+            print(f"[nova] согласование доступности серий: снимок {снимок.name}",
+                  flush=True)
         try:
             подробности = getattr(рантайм.Обработчик, "подробности", None)
             if подробности is None:
@@ -709,15 +733,23 @@ def запустить(рантайм) -> bool:
              or os.environ.get("ANIMEDIA_SITE_HOST")
              or os.environ.get("ANIMEGO_SITE_HOST") or "").strip()
     плеер = getattr(рантайм, "ПЛЕЕР", {}) or {}
-    if not домен or not плеер.get("publisher_id"):
+    # Причина отказа НАЗЫВАЕТСЯ. Прежде четыре условия возвращали False
+    # неразличимо, и на соседней витрине поток не заводился совсем: в журнале
+    # не было ни строки, страница работала, функция — нет. Молчаливый отказ
+    # неотличим от «всё в порядке», и это худший из возможных.
+    if not домен:
+        print("[nova] согласование не заведено: не задан канонический домен "
+              "(LORDS_SITE_HOST / ANIMEDIA_SITE_HOST / ANIMEGO_SITE_HOST)",
+              flush=True)
+        return False
+    if not плеер.get("publisher_id"):
+        print("[nova] согласование не заведено: у витрины нет publisher_id — "
+              "спрашивать провайдера нечем", flush=True)
         return False
     if плеер.get("source_mode") != "provider-id":
+        print(f"[nova] согласование не заведено: режим источника "
+              f"{плеер.get('source_mode')!r}, а не provider-id", flush=True)
         return False
-    подробности = getattr(рантайм.Обработчик, "подробности", None)
-    путь = Path(getattr(подробности, "path", "") or "")
-    if not путь.name:
-        return False
-    отчёт = путь.with_name(f"{путь.stem.replace('-details', '')}-episode-sync.json")
-    threading.Thread(target=_цикл, args=(рантайм, домен, путь, отчёт),
+    threading.Thread(target=_цикл, args=(рантайм, домен),
                      name="avail-sync", daemon=True).start()
     return True

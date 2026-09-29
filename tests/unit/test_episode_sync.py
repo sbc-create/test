@@ -503,3 +503,46 @@ def test_протухшая_лента_не_берётся(tmp_path):
 
 def test_нет_ленты_слои_работают_как_раньше(tmp_path):
     assert es.лента_изменений(tmp_path / "s-details.json") == set()
+
+
+# --- отказ запуска обязан себя называть --------------------------------------
+
+def test_запуск_не_зависит_от_порядка_строк_в_main(tmp_path, monkeypatch):
+    """Снимок читается ЛЕНИВО: у витрин разный порядок в `main`.
+
+    У animedia.space создание сокета перенесено выше загрузки снимка, и
+    прежняя версия, читавшая путь при запуске, отказывала молча: поток не
+    заводился, файлов не появлялось, в журнале не было ни строки.
+    """
+    for имя in ("ANIMEDIA_SITE_HOST", "ANIMEGO_SITE_HOST"):
+        monkeypatch.delenv(имя, raising=False)
+    monkeypatch.setenv("LORDS_SITE_HOST", "x.test")
+    п = Подробности(tmp_path / "d.json", {})
+    р = Рантайм(п)
+    р.Обработчик.подробности = None          # снимок ещё не загружен
+    запущено = {}
+    monkeypatch.setattr(es.threading, "Thread",
+                        lambda **к: type("П", (), {"start": lambda s: запущено.setdefault("да", к)})())
+    assert es.запустить(р) is True, "поток обязан завестись и подождать снимок"
+    assert запущено["да"]["args"] == (р, "x.test")
+
+
+@pytest.mark.parametrize("плеер,кусок", [
+    ({"publisher_id": "", "source_mode": "provider-id"}, "publisher_id"),
+    ({"publisher_id": "1", "source_mode": "external-ids"}, "режим источника"),
+])
+def test_отказ_запуска_называет_причину(tmp_path, monkeypatch, capsys, плеер, кусок):
+    for имя in ("ANIMEDIA_SITE_HOST", "ANIMEGO_SITE_HOST"):
+        monkeypatch.delenv(имя, raising=False)
+    monkeypatch.setenv("LORDS_SITE_HOST", "x.test")
+    р = Рантайм(Подробности(tmp_path / "d.json", {}))
+    р.ПЛЕЕР = плеер
+    assert es.запустить(р) is False
+    assert кусок in capsys.readouterr().out
+
+
+def test_отказ_без_домена_тоже_назван(tmp_path, monkeypatch, capsys):
+    for имя in ("LORDS_SITE_HOST", "ANIMEDIA_SITE_HOST", "ANIMEGO_SITE_HOST"):
+        monkeypatch.delenv(имя, raising=False)
+    assert es.запустить(Рантайм(Подробности(tmp_path / "d.json", {}))) is False
+    assert "канонический домен" in capsys.readouterr().out
