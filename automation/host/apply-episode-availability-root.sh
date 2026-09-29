@@ -58,12 +58,22 @@ deploy_one() {
   if [ ! -d "$repo" ]; then
     results+=("ОТКАЗ $name: нет рабочей копии $repo"); return 0
   fi
+  # Сценарий выбирается по СОСТОЯНИЮ витрины, а не по имени файла.
+  #
+  # `activate.sh` — первичное включение: он сам отказывает на уже работающей
+  # службе («уже активна: сайт, похоже, уже переключён»), и повторять его
+  # бессмысленно — так и закончился прогон 10:43 на animedia.icu. Обновление
+  # уже выложенного сайта делает `update.sh`, и порядок здесь такой:
+  # update.sh, потом install.sh, и только для невыложенного — activate.sh.
   local script="" needs_artifact=0
-  for candidate in install.sh activate.sh; do
-    [ -f "$repo/deploy/$candidate" ] && { script="$repo/deploy/$candidate"; break; }
+  for candidate in update.sh install.sh activate.sh; do
+    [ -f "$repo/deploy/$candidate" ] || continue
+    script="$repo/deploy/$candidate"
+    break
   done
   if [ -z "$script" ]; then
-    results+=("ОТКАЗ $name: в $repo/deploy нет ни install.sh, ни activate.sh"); return 0
+    results+=("ОТКАЗ $name: в $repo/deploy нет ни update.sh, ни install.sh, ни activate.sh")
+    return 0
   fi
   grep -q 'не задан --artifact' "$script" && needs_artifact=1
 
@@ -76,6 +86,15 @@ deploy_one() {
   local before after art=""
   before=$(curl -s -m 8 "http://127.0.0.1:$port/" 2>/dev/null \
            | grep -o 'data-build-id="[^"]*"' | head -1 || true)
+  # Уже обновлённую витрину не трогаем: «повторно не выкладывать без
+  # необходимости» — это не пожелание, а способ не сломать работающее.
+  local want
+  want=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1]))['build_id'])" \
+         "$repo/config/template-manifest.json" 2>/dev/null || true)
+  if [ -n "$want" ] && [ "$before" = "data-build-id=\"$want\"" ]; then
+    results+=("пропуск $name: уже на $want")
+    return 0
+  fi
   if [ "$needs_artifact" = 1 ]; then
     art=$(build_artifact "$repo" "/tmp/episode-availability-build/$(basename "$repo")" || true)
     if [ -z "$art" ]; then
