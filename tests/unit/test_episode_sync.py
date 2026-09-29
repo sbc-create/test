@@ -546,3 +546,51 @@ def test_отказ_без_домена_тоже_назван(tmp_path, monkeypa
         monkeypatch.delenv(имя, raising=False)
     assert es.запустить(Рантайм(Подробности(tmp_path / "d.json", {}))) is False
     assert "канонический домен" in capsys.readouterr().out
+
+
+# --- наложение не хранит ошибочное вечно -------------------------------------
+
+def test_запись_исчезнувшая_из_снимка_забывается(tmp_path, monkeypatch):
+    записи = {"жив": {"id": "a", "seasons": [{"n": 1, "eps": 2, "avail": 0}]}}
+    п = Подробности(tmp_path / "d.json", записи)
+    monkeypatch.setattr(es, "_плейлист", lambda *а, **к: {"items": [дорожка(1, 1)]})
+    monkeypatch.setattr(es.time, "sleep", lambda _: None)
+    с = es.Согласование(Рантайм(п), домен="x.test", снимок=tmp_path / "d.json")
+    с.наложение["исчез"] = {"shape": [], "checked_at": "2026-09-29T00:00:00Z",
+                            "seasons": {"1": {"nums": [1], "at": "t"}}}
+    итог = с.проход(п)
+    assert итог["отсеяно_из_наложения"] == 1
+    assert "исчез" not in es.прочитать_наложение(tmp_path / "d.nums.json")
+
+
+def test_давно_неподтверждённая_запись_забывается(tmp_path):
+    """Два круга обхода без подтверждения — это ошибочное соответствие.
+
+    Отсев проверяется отдельно от прохода: проход мог бы сам переспросить
+    запись и обновить отметку, и тогда проверка доказывала бы не отсев.
+    """
+    import time as _t
+    записи = {"древний": {"id": "b", "seasons": [{"n": 1, "eps": 2, "avail": 2}]}}
+    п = Подробности(tmp_path / "d.json", записи)
+    с = es.Согласование(Рантайм(п), домен="x.test", снимок=tmp_path / "d.json")
+    старо = _t.strftime("%Y-%m-%dT%H:%M:%SZ", _t.gmtime(_t.time() - 40 * 86400))
+    с.наложение["древний"] = {"shape": [], "checked_at": старо,
+                              "seasons": {"1": {"nums": [9], "at": старо}}}
+    assert с._отсеять(записи) == 1
+    assert "древний" not in с.наложение
+
+
+def test_свежая_запись_не_забывается(tmp_path, monkeypatch):
+    записи = {"a": {"id": "a", "seasons": [{"n": 1, "eps": 2, "avail": 0}]},
+              "свежая": {"id": "b", "seasons": [{"n": 1, "eps": 2, "avail": 2}]}}
+    п = Подробности(tmp_path / "d.json", записи)
+    monkeypatch.setattr(es, "_плейлист", lambda *а, **к: {"items": [дорожка(1, 1)]})
+    monkeypatch.setattr(es.time, "sleep", lambda _: None)
+    monkeypatch.setattr(es, "ЗА_ПРОХОД", 1)
+    с = es.Согласование(Рантайм(п), домен="x.test", снимок=tmp_path / "d.json")
+    import time as _t
+    недавно = _t.strftime("%Y-%m-%dT%H:%M:%SZ", _t.gmtime(_t.time() - 3600))
+    с.наложение["свежая"] = {"shape": [], "checked_at": недавно,
+                             "seasons": {"1": {"nums": [1], "at": недавно}}}
+    assert с._отсеять(записи) == 0
+    assert "свежая" in с.наложение
