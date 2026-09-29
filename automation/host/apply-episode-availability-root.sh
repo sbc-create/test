@@ -1,35 +1,35 @@
 #!/usr/bin/env bash
-# Выложить исправление доступности серий на ЧЕТЫРЕ витрины, которые не
-# обслуживаются очередью ячеек.
+# Выложить исправление доступности серий на ЧЕТЫРЕ витрины вне очереди ячеек.
 #
 #   sudo bash automation/host/apply-episode-availability-root.sh [--dry-run]
 #
-# Зачем нужен root. Восемь витрин Lords, Zona и AnimeGo получают исправление
-# штатной очередью (`factory cell trigger`) — она и выкладывает, и
-# перезапускает. Эти четыре очередью не обслуживаются: их код лежит в
-# /srv/<учётка>/app, каталог принадлежит учётной записи сайта или root, и
-# сессия в него не пишет (проверено: os.access(..., W_OK) = False у всех).
+# ЧТО ПОКАЗАЛ ПРЕДЫДУЩИЙ ПРОГОН (2026-09-29, 07:03). Установлено сверкой байтов
+# в /srv с байтами репозиториев и временем стартов процессов, а не по словам:
 #
-# Что было в прошлый раз, 2026-09-29 около 07:03. Прогон сделал две витрины из
-# четырёх: an1mego.site и animeg0.site перезапустились и работают на
-# исправлении. animedia.space получил файлы, но остался на прежнем процессе —
-# служба не перезапускалась с 15:54 предыдущего дня, то есть исполняла старый
-# код из памяти. animedia.icu не получил и файлов. Поэтому здесь добавлены
-# явный перезапуск и ПРОВЕРКА результата: молчаливый успех сценария больше не
-# считается выкладкой.
+#   an1mego.site    файлы легли, служба перезапущена в 07:03 — выложено
+#   animeg0.site    то же — выложено
+#   animedia.space  файлы легли (install.sh), но служба НЕ перезапускалась с
+#                   28.09 15:54: процесс исполнял прежний код из памяти
+#   animedia.icu    не легло ничего: её deploy/activate.sh требует --artifact
+#                   («установка из рабочего каталога запрещена») и без него
+#                   выходит с кодом 2
 #
-# Имена юнитов исправлены. Прежняя версия называла nova-animedia-02.service —
-# этот юнит запускает ОБЩИЙ загрузчик /srv/lords/.frontend/lords-frontend.py,
-# а витрину из своего каталога поднимают nova-animedia-icu.service и
-# nova-animedia-space.service. Перезапуск не того юнита выглядел бы успехом.
+# Отсюда три изменения против прошлой версии:
+#   1. где сценарий витрины требует артефакт — он СОБИРАЕТСЯ здесь же
+#      (tools/build_release.py) и передаётся с манифестом; проверка digest у
+#      витрины остаётся на месте и не обходится;
+#   2. перезапуск делается ОТДЕЛЬНО и всегда: разложить файлы мало, рантайм
+#      читает их при старте;
+#   3. итог пишется в файл и сверяется по build-id до и после — «сценарий не
+#      выругался» выкладкой не считается.
 #
-# Что именно выкладывается: доступность серии — множество номеров вместо
-# одного числа `avail`; спецвыпуск с номером 0 достижим; проверенные номера
-# живут в `<снимок>.nums.json` и переживают суточную доставку; потерянные
-# сезоны восстанавливаются из плейлиста там, где нумерация сходится.
+# Юниты названы фактические, снятые из /proc/<pid>/cgroup работающих процессов:
+# nova-an1mego-site, nova-animeg0-site, nova-animedia-icu, nova-animedia-space.
+# Юниты nova-animedia-01/02 запускают ОБЩИЙ загрузчик и эти домены не
+# обслуживают — перезапуск их выглядел бы успехом и не менял бы ничего.
 #
-# Сценарий НЕ меняет: DNS, firewall, sudoers, режим индексации, данные
-# пользователей, каталоги контента и соседние сайты. Шаги независимы.
+# Сценарий НЕ меняет: DNS, firewall, sudoers, индексацию, счётчики, данные
+# пользователей, оценки, комментарии и соседние сайты.
 set -Eeuo pipefail
 
 dry_run=0
@@ -44,71 +44,97 @@ die()  { printf '\033[31m[x]\033[0m %s\n' "$*" >&2; exit 1; }
 REPORT=/var/log/episode-availability-rollout.json
 declare -a results=()
 
-# Имена переменных только ASCII: bash считает именем лишь [A-Za-z_][A-Za-z0-9_]*,
-# и строка вида `имя=...` для него не присваивание, а вызов команды.
+build_artifact() {
+  local repo="$1" out="$2"
+  [ -f "$repo/tools/build_release.py" ] || return 1
+  rm -rf "$out"; mkdir -p "$out"
+  python3 "$repo/tools/build_release.py" --output "$out" >/dev/null 2>&1 || return 1
+  find "$out" -name '*.tar.gz' | head -1
+}
+
 deploy_one() {
   local name="$1" repo="$2" unit="$3" port="$4"
   log "$name"
   if [ ! -d "$repo" ]; then
     results+=("ОТКАЗ $name: нет рабочей копии $repo"); return 0
   fi
-  local script=""
+  local script="" needs_artifact=0
   for candidate in install.sh activate.sh; do
     [ -f "$repo/deploy/$candidate" ] && { script="$repo/deploy/$candidate"; break; }
   done
   if [ -z "$script" ]; then
     results+=("ОТКАЗ $name: в $repo/deploy нет ни install.sh, ни activate.sh"); return 0
   fi
+  grep -q 'не задан --artifact' "$script" && needs_artifact=1
 
   if [ "$dry_run" = 1 ]; then
-    echo "   [сухой прогон] bash $script"
-    echo "   [сухой прогон] systemctl restart $unit"
-    echo "   [сухой прогон] проверка сборки на 127.0.0.1:$port"
+    echo "   [сухой прогон] $script$([ "$needs_artifact" = 1 ] && echo ' --artifact <сборка>')"
+    echo "   [сухой прогон] systemctl restart $unit; проверка сборки на :$port"
     results+=("ok    $name (сухой прогон)"); return 0
   fi
 
-  local before after
+  local before after art=""
   before=$(curl -s -m 8 "http://127.0.0.1:$port/" 2>/dev/null \
            | grep -o 'data-build-id="[^"]*"' | head -1 || true)
-  if ! bash "$script"; then
-    results+=("ОТКАЗ $name: $(basename "$script") вернул ненулевой код"); return 0
+  if [ "$needs_artifact" = 1 ]; then
+    art=$(build_artifact "$repo" "/tmp/episode-availability-build/$(basename "$repo")" || true)
+    if [ -z "$art" ]; then
+      results+=("ОТКАЗ $name: артефакт не собрался (tools/build_release.py)"); return 0
+    fi
+    echo "   артефакт: $art"
+    if ! bash "$script" --artifact "$art"; then
+      results+=("ОТКАЗ $name: $(basename "$script") вернул ненулевой код"); return 0
+    fi
+  else
+    if ! bash "$script"; then
+      results+=("ОТКАЗ $name: $(basename "$script") вернул ненулевой код"); return 0
+    fi
   fi
-  # Перезапуск отдельно и всегда: сценарий выкладки мог только разложить файлы,
-  # а рантайм читает их при старте. Ровно так animedia.space и осталась на
-  # старом коде при новых файлах.
+
   systemctl restart "$unit" || {
     results+=("ОТКАЗ $name: $unit не перезапустился"); return 0; }
-  sleep 6
+  sleep 8
   after=$(curl -s -m 15 "http://127.0.0.1:$port/" 2>/dev/null \
           | grep -o 'data-build-id="[^"]*"' | head -1 || true)
   if [ -z "$after" ]; then
     results+=("ОТКАЗ $name: после перезапуска витрина не ответила на :$port"); return 0
   fi
   if [ "$before" = "$after" ]; then
-    results+=("ВНИМАНИЕ $name: сборка не изменилась ($after) — проверьте, тот ли каталог")
-    return 0
+    results+=("ВНИМАНИЕ $name: сборка не изменилась ($after)"); return 0
   fi
   results+=("ok    $name: $before -> $after")
 }
 
 FACTORY=/home/claude/wt-portable-site-cell-01/var/site-repos
-deploy_one "an1mego.site (animego-02)"   /home/claude/wt-an1mego-site  nova-an1mego-site.service  9150
-deploy_one "animeg0.site (animego-03)"   /home/claude/wt-animeg0-site  nova-animeg0-site.service  9151
-deploy_one "animedia.icu (animedia-01)"  "$FACTORY/animedia-icu"       nova-animedia-icu.service   9121
-deploy_one "animedia.space (animedia-02)" "$FACTORY/animedia-space"    nova-animedia-space.service 9122
+deploy_one "an1mego.site (animego-02)"    /home/claude/wt-an1mego-site  nova-an1mego-site.service   9150
+deploy_one "animeg0.site (animego-03)"    /home/claude/wt-animeg0-site  nova-animeg0-site.service   9151
+deploy_one "animedia.icu (animedia-01)"   "$FACTORY/animedia-icu"       nova-animedia-icu.service   9121
+
+# animedia.space СОЗНАТЕЛЬНО не выкладывается отсюда. Выпуск этой витрины ведёт
+# сессия claude/animedia-space-visual-01, и она ответила по каналу координации:
+# её deploy/update.sh раскладывает собственный артефакт и переключает каталог
+# целиком, то есть сторонние файлы в /srv он всё равно перезапишет, а перезапуск
+# службы поверх незакреплённых файлов оставил бы витрину в состоянии, которого
+# нет ни в одном коммите (`runtime_digest_match: false` в её /healthz).
+#
+# Согласованный порядок: правка передана веткой claude/extract-animedia-space
+# репозитория sbc-create/site-animedia-space, та сессия берёт её обычной
+# правкой, прогоняет свои проверки и выпускает штатно — тогда правка попадает в
+# замок и артефакт и переживает следующий выпуск. Выкладывать её здесь значило
+# бы сделать ровно то, от чего она предостерегла.
 
 log "итог"
 for line in "${results[@]}"; do printf '   %s\n' "$line"; done
 if [ "$dry_run" = 0 ]; then
-  printf '{"at": "%s", "results": [' "$(date -Is)" > "$REPORT"
-  sep=""
-  for line in "${results[@]}"; do
-    printf '%s"%s"' "$sep" "$(printf '%s' "$line" | sed 's/"/\\"/g')" >> "$REPORT"
-    sep=", "
-  done
-  printf ']}\n' >> "$REPORT"
+  python3 - "$REPORT" "${results[@]}" <<'PYEOF'
+import json, sys, time
+путь, строки = sys.argv[1], sys.argv[2:]
+with open(путь, "w", encoding="utf-8") as ф:
+    json.dump({"at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+               "results": строки}, ф, ensure_ascii=False, indent=1)
+PYEOF
   echo
-  log "итог записан в $REPORT — его читает сессия, журнала ей не видно"
+  log "итог записан в $REPORT — сессии журнала не видно, она читает этот файл"
 fi
 if printf '%s\n' "${results[@]}" | grep -q '^ОТКАЗ'; then
   echo

@@ -46,8 +46,8 @@
       "backup": {},
       "resources": {},
       "runtime": {
-        "unit": "nova-animedia-01.service",
-        "previous_unit": null,
+        "unit": "nova-animedia-icu.service",
+        "previous_unit": "nova-animedia-01.service",
         "port": 9121,
         "account": "animedia-icu",
         "app_dir": "/srv/animedia-icu/app",
@@ -57,7 +57,8 @@
         "managed_by": "monolith",
         "data_owner": "pipeline",
         "data_dir_after_relocation": "/srv/animedia-icu/data",
-        "data_dir_note": "Ячейкой витрина ещё НЕ стала: каталогов /srv/animedia-icu нет, исполняется выпуск из общего дерева (/srv/lords/.frontend/releases/20260923T001500Z-community-public-03), снимок читается из общего хранилища. `managed_by: cell` был выставлен до фактического перехода — это прямо запрещено правилом, и цена оказалась не теоретической: несуществующий /srv/animedia-icu/data попадал в ReadWritePaths издателя и вместе с тремя такими же путями Yummy давал 226/NAMESPACE, то есть суточное обновление не запускалось вовсе у ВСЕХ семи витрин. Значение вернётся в data_dir тем же шагом, которым витрина переедет."
+        "data_dir_note": "Ячейкой витрина ещё НЕ стала: каталогов /srv/animedia-icu нет, исполняется выпуск из общего дерева (/srv/lords/.frontend/releases/20260923T001500Z-community-public-03), снимок читается из общего хранилища. `managed_by: cell` был выставлен до фактического перехода — это прямо запрещено правилом, и цена оказалась не теоретической: несуществующий /srv/animedia-icu/data попадал в ReadWritePaths издателя и вместе с тремя такими же путями Yummy давал 226/NAMESPACE, то есть суточное обновление не запускалось вовсе у ВСЕХ семи витрин. Значение вернётся в data_dir тем же шагом, которым витрина переедет.",
+        "unit_note": "Юнит снят с работающего процесса (/proc/<pid>/cgroup), а не взят по имени. Прежнее значение nova-animedia-01.service запускает ОБЩИЙ загрузчик /srv/lords/.frontend/lords-frontend.py и этот домен не обслуживает: активация по нему пошла бы не в ту службу и выглядела бы успехом. Проверено 2026-09-29."
       },
       "release": {
         "hold": true,
