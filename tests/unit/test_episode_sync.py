@@ -472,3 +472,34 @@ def test_опознание_запоминается_выборкой(tmp_path, 
     es.Согласование(Рантайм(п), домен="x.test", снимок=tmp_path / "d.json").проход(п)
     з = es.прочитать_наложение(tmp_path / "d.nums.json")["a"]
     assert len(з["ids"]["1"]) == 8
+
+
+# --- лента изменений источника ----------------------------------------------
+
+def test_лента_ставит_названные_записи_в_голову(tmp_path):
+    """Источник сам сказал, что изменилось, — это раньше суточного снимка."""
+    import time as _t
+    лента = tmp_path / "updates-feed.json"
+    лента.write_text(json.dumps({
+        "schema": "nova.updates-feed/1",
+        "built_at": _t.strftime("%Y-%m-%dT%H:%M:%SZ", _t.gmtime()),
+        "items": [{"id": "x", "slug": "свежий"}]}), encoding="utf-8")
+    названы = es.лента_изменений(tmp_path / "s-details.json")
+    assert названы == {"свежий"}
+    записи = {"свежий": {"year": 2001, "seasons": [{"n": 1, "eps": 9, "avail": 9}]},
+              "тихий": {"year": 2001, "seasons": [{"n": 1, "eps": 9, "avail": 9}]}}
+    р = es.слои(записи, {}, 2025, названы)
+    assert р["изменённые"] == ["свежий"] and р["прочие"] == ["тихий"]
+
+
+def test_протухшая_лента_не_берётся(tmp_path):
+    import time as _t
+    (tmp_path / "updates-feed.json").write_text(json.dumps({
+        "schema": "nova.updates-feed/1",
+        "built_at": _t.strftime("%Y-%m-%dT%H:%M:%SZ", _t.gmtime(_t.time() - 200000)),
+        "items": [{"slug": "старый"}]}), encoding="utf-8")
+    assert es.лента_изменений(tmp_path / "s-details.json") == set()
+
+
+def test_нет_ленты_слои_работают_как_раньше(tmp_path):
+    assert es.лента_изменений(tmp_path / "s-details.json") == set()
