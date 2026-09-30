@@ -85,16 +85,46 @@ markers_present() {
   return 0
 }
 
-healthz_match() {
+#: Разбор /healthz вынесен в отдельный файл рядом. Внутри оболочки он жил
+#: однострочником в одинарных кавычках, `\"` оставалось обратным слешем, и
+#: Python 3.10 запрещает слеш в выражении f-строки: фрагмент падал с
+#: SyntaxError ВСЕГДА, при любом состоянии витрины. Ошибку глотал 2>/dev/null,
+#: а `|| echo` подставлял «нет ответа» — и установщик объявлял несовпадение
+#: кода, которого не измерял. Две исправные витрины получили из-за этого ОТКАЗ
+#: 2026-09-30 07:10. Чужой язык внутри строки оболочки больше не живёт.
+HEALTHZ_PY="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/healthz-digest.py"
+
+#: Один ответ, четыре различимых исхода: ok | mismatch | no-field | bad-json |
+#: no-answer. Вызывающая сторона обязана их РАЗЛИЧАТЬ: «ответа нет» и «код не
+#: тот» — разные утверждения, и второе требует измерения.
+healthz_state() {
   local port="$1"
-  curl -s -m 10 "http://127.0.0.1:$port/healthz" 2>/dev/null \
-    | python3 -c 'import json,sys
-try:
-    d = json.load(sys.stdin)
-except Exception:
-    print("нет ответа"); raise SystemExit
-print("true" if d.get("runtime_digest_match") is True else
-      f"false (build_id={d.get(\"build_id\")})")' 2>/dev/null || echo "нет ответа"
+  if [ ! -f "$HEALTHZ_PY" ]; then
+    echo "no-answer разборщик $HEALTHZ_PY отсутствует"
+    return
+  fi
+  python3 "$HEALTHZ_PY" "$port" 12 2>&1 || true
+}
+
+#: Первое слово ответа — сам исход.
+healthz_verdict() { set -- $1; printf '%s' "${1:-no-answer}"; }
+
+#: Дождаться готовности, а не спросить один раз. Служба после `systemctl
+#: restart` поднимается не мгновенно: у animeg0.site отчёт был записан через
+#: ШЕСТЬ секунд после старта процесса. Один запрос в такой момент честно
+#: получает «нет ответа» — и если не отличать его от «не совпало», получается
+#: отказ на исправной витрине. Ждём до предела и возвращаем ПОСЛЕДНЕЕ
+#: состояние: оно и попадёт в отчёт, каким бы ни было.
+healthz_wait() {
+  local port="$1" limit="${2:-60}" waited=0 state verdict
+  while : ; do
+    state=$(healthz_state "$port")
+    verdict=$(healthz_verdict "$state")
+    { [ "$verdict" = "ok" ] || [ "$verdict" = "mismatch" ]; } && break
+    [ "$waited" -ge "$limit" ] && break
+    sleep 3; waited=$((waited + 3))
+  done
+  printf '%s' "$state"
 }
 
 deploy_one() {
@@ -135,19 +165,22 @@ except Exception:
   [ -f "$live" ] && live_sha=$(sha_of "$live")
   echo "   репозиторий $have_code   на витрине ${live_sha:-нет файла}"
   if [ -n "$live_sha" ] && [ "$live_sha" = "$have_code" ] && markers_present "$live"; then
-    local hm
-    hm=$(healthz_match "$port")
-    if [ "$hm" = "true" ]; then
-      results+=("пропуск $name: на витрине те же байты ($have_code), признаки исправления на месте, /healthz подтверждает")
+    local hm verdict
+    hm=$(healthz_state "$port"); verdict=$(healthz_verdict "$hm")
+    if [ "$verdict" = "ok" ]; then
+      results+=("пропуск $name: на витрине те же байты ($have_code), признаки исправления на месте, /healthz: $hm")
       return 0
     fi
-    echo "   байты совпали, но /healthz отвечает $hm — процесс исполняет не то, что лежит: перезапускаю"
+    if [ "$verdict" = "mismatch" ]; then
+      echo "   байты совпали, а /healthz говорит mismatch — процесс исполняет не то, что лежит: перезапускаю"
+    else
+      echo "   байты совпали, признаки на месте; /healthz не ответил ($hm) — перезапускаю, чтобы спросить ещё раз"
+    fi
     if [ "$dry_run" = 0 ]; then
       systemctl restart "$unit" || { results+=("ОТКАЗ $name: $unit не перезапустился"); return 0; }
-      sleep 8
     fi
-    hm=$(healthz_match "$port")
-    results+=("$([ "$hm" = true ] && echo ok || echo ВНИМАНИЕ) $name: перезапуск без установки, /healthz=$hm")
+    hm=$(healthz_wait "$port"); verdict=$(healthz_verdict "$hm")
+    results+=("$([ "$verdict" = ok ] && echo ok || echo ВНИМАНИЕ) $name: перезапуск без установки, /healthz: $hm")
     return 0
   fi
 
@@ -197,10 +230,9 @@ except Exception:
 
   systemctl restart "$unit" || {
     results+=("ОТКАЗ $name: $unit не перезапустился"); return 0; }
-  sleep 8
 
   # --- 4. три независимых доказательства, а не одно ---------------------------
-  local after_sha hm
+  local after_sha hm verdict
   after_sha=$(sha_of "$live")
   if [ "$after_sha" != "$have_code" ]; then
     results+=("ОТКАЗ $name: после установки на витрине $after_sha, а ожидался $have_code — файлы не легли")
@@ -210,12 +242,21 @@ except Exception:
     results+=("ОТКАЗ $name: байты легли, но признаков исправления в файле нет")
     return 0
   fi
-  hm=$(healthz_match "$port")
-  if [ "$hm" != "true" ]; then
-    results+=("ОТКАЗ $name: файл на месте ($after_sha), но /healthz отвечает runtime_digest_match=$hm — процесс исполняет не его")
+  hm=$(healthz_wait "$port"); verdict=$(healthz_verdict "$hm")
+  if [ "$verdict" = "mismatch" ]; then
+    # ЕДИНСТВЕННЫЙ случай, когда можно утверждать «процесс исполняет не тот
+    # файл»: витрина сама сравнила и сама ответила «не совпало».
+    results+=("ОТКАЗ $name: файл на месте ($after_sha), а витрина отвечает mismatch — процесс исполняет не его. /healthz: $hm")
     return 0
   fi
-  results+=("ok    $name: ${live_sha:-ничего} -> $after_sha, признаки исправления на месте, /healthz подтверждает")
+  if [ "$verdict" != "ok" ]; then
+    # Ответа нет, он не JSON или в нём нет поля. Это НЕ несовпадение кода:
+    # вывод о несовпадении требует измерения, а измерения не было. Байты и
+    # признаки исправления при этом проверены и сошлись — так и пишем.
+    results+=("ВНИМАНИЕ $name: ${live_sha:-ничего} -> $after_sha, признаки исправления на месте, но соответствие кода витриной НЕ ПОДТВЕРЖДЕНО: /healthz: $hm. Это не «код не тот» — это отсутствие ответа")
+    return 0
+  fi
+  results+=("ok    $name: ${live_sha:-ничего} -> $after_sha, признаки исправления на месте, /healthz: $hm")
 }
 
 deploy_one "an1mego.site (animego-02)" /home/claude/wt-an1mego-site \
