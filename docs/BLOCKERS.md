@@ -439,8 +439,20 @@ animedia.space: на :443 заголовков два (nginx и приложен
 
 **Действие владельца — один запуск на сайт:**
 
-    sudo bash automation/host/apply-indexing-nginx-root.sh --site animedia-02 --mode open
-    sudo bash automation/host/apply-indexing-nginx-root.sh --site animedia-01 --mode open
+    sudo bash automation/host/apply-indexing-nginx-root.sh --site animedia-02 --mode open   # ВЫПОЛНЕНО 2026-10-01
+    sudo bash automation/host/apply-indexing-nginx-root.sh --site animedia-01 --mode open   # ещё нет
+
+**Состояние 2026-10-01.** На animedia-02 скрипт выполнен и слой снят:
+заголовок переведён на `$cell_robots_animedia_02`,
+`/etc/nginx/cells/animedia-02.robots` содержит `default ""`, публичных
+заголовков на `/` стало один (от приложения) вместо двух, на `/healthz`
+осталось два — служебный запрет сохранён. На animedia-01 конфигурация ещё
+несёт фиксированную строку.
+
+Побочно вскрылась ошибка операции: она определяла слой nginx по ЛЮБОМУ
+запрещающему `X-Robots-Tag` и после снятия запрета продолжала показывать
+`denying: true`, потому что закрыто было приложение. Исправлено — слой
+определяется по конфигурации; подробности в `docs/QWEN_INDEXING_OPERATION.md`.
 
 Скрипт точечный: один раз переводит эту строку на `map $uri` с
 `include /etc/nginx/cells/<site_id>.robots` — тем же приёмом, каким исполнитель

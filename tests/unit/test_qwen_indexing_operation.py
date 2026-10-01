@@ -454,3 +454,237 @@ def test_код_возврата_различает_подтверждённое
     тело = т.split('if args.операция == "indexing-set"', 1)[1][:600]
     assert 'итог.get("confirmed")' in тело
     assert "return 0 if" in тело and "else 3" in тело
+
+
+# --- 10. Слой nginx определяется по конфигурации, а не по числу заголовков --
+
+ФИКС = 'add_header X-Robots-Tag "noindex, nofollow" always;'
+ПЕРЕМ = "add_header X-Robots-Tag $cell_robots_test_01 always;"
+
+
+def _конфиг(tmp_path, строки: str, *, include: str | None = None) -> pathlib.Path:
+    корень = tmp_path / "nginx"
+    (корень / "lords").mkdir(parents=True)
+    (корень / "cells").mkdir(parents=True)
+    вкл = корень / "cells" / "test-01.robots"
+    if include is not None:
+        вкл.write_text(include, encoding="utf-8")
+    конф = корень / "lords" / "test-01.conf"
+    конф.write_text(строки.replace("@@INCLUDE@@", str(вкл)), encoding="utf-8")
+    return корень
+
+
+@pytest.fixture
+def nginx_корень(monkeypatch):
+    def поставить(корень: pathlib.Path):
+        monkeypatch.setattr(indexing, "КОРЕНЬ_NGINX", корень)
+    return поставить
+
+
+def test_слой_nginx_закрыт_при_фиксированной_строке(tmp_path, nginx_корень):
+    корень = _конфиг(tmp_path, f"server {{\n    {ФИКС}\n}}\n")
+    nginx_корень(корень)
+    сл = indexing.слой_nginx("test-01", "t.example")
+    assert сл["mode"] == "closed" and сл["denying"] is True
+    assert "noindex" in сл["evidence"]
+
+
+def test_слой_nginx_открыт_при_пустом_default(tmp_path, nginx_корень):
+    """Именно этот случай операция и показывала неверно: nginx уже открыт,
+    а `denying` оставался true, потому что считался по любому заголовку.
+    """
+    корень = _конфиг(
+        tmp_path,
+        "map $uri $cell_robots_test_01 {\n    include @@INCLUDE@@;\n}\n"
+        f"server {{\n    {ПЕРЕМ}\n}}\n",
+        include='default "";\n"~^/healthz$" "noindex, nofollow";\n')
+    nginx_корень(корень)
+    сл = indexing.слой_nginx("test-01", "t.example")
+    assert сл["mode"] == "open" and сл["denying"] is False
+    assert "default пуст" in сл["evidence"]
+
+
+def test_слой_nginx_закрыт_при_noindex_в_default(tmp_path, nginx_корень):
+    корень = _конфиг(
+        tmp_path,
+        "map $uri $cell_robots_test_01 {\n    include @@INCLUDE@@;\n}\n"
+        f"server {{\n    {ПЕРЕМ}\n}}\n",
+        include='default "noindex, nofollow";\n')
+    nginx_корень(корень)
+    сл = indexing.слой_nginx("test-01", "t.example")
+    assert сл["mode"] == "closed" and сл["denying"] is True
+    assert "noindex" in сл["evidence"]
+
+
+def test_слой_nginx_открыт_без_add_header(tmp_path, nginx_корень):
+    корень = _конфиг(tmp_path, "server {\n    listen 80;\n}\n")
+    nginx_корень(корень)
+    сл = indexing.слой_nginx("test-01", "t.example")
+    assert сл["mode"] == "open" and сл["denying"] is False
+    assert "add_header X-Robots-Tag нет" in сл["evidence"]
+
+
+def test_слой_nginx_неизвестен_без_конфигурации(tmp_path, nginx_корень):
+    """Неизвестно — это не «открыто». Отсутствие конфигурации не разрешает."""
+    nginx_корень(tmp_path / "пусто")
+    сл = indexing.слой_nginx("test-01", "t.example")
+    assert сл["mode"] == "unknown" and сл["denying"] is None
+    assert "не найдено" in сл["evidence"]
+
+
+def test_слой_nginx_неизвестен_при_нечитаемом_include(tmp_path, nginx_корень):
+    корень = _конфиг(
+        tmp_path,
+        "map $uri $cell_robots_test_01 {\n    include /нет/такого/файла.robots;\n}\n"
+        f"server {{\n    {ПЕРЕМ}\n}}\n")
+    nginx_корень(корень)
+    сл = indexing.слой_nginx("test-01", "t.example")
+    assert сл["denying"] is None, сл
+    assert сл["mode"] == "unknown"
+
+
+def test_один_заголовок_не_приписывается_nginx(tmp_path, nginx_корень):
+    """ПРИЧИНА расхождения, из-за которого передача Qwen была заблокирована.
+
+    Владелец снял запрет в nginx: заголовков в публичном ответе стало один
+    вместо двух, exit 0. А `indexing-state` продолжал показывать
+    `nginx_header.denying: true`, потому что прежнее правило считало слой
+    nginx закрытым при ЛЮБОМ запрещающем `X-Robots-Tag` — и видело заголовок
+    ПРИЛОЖЕНИЯ, закрытого штатно (файла состояния нет, fail-closed).
+    """
+    корень = _конфиг(
+        tmp_path,
+        "map $uri $cell_robots_test_01 {\n    include @@INCLUDE@@;\n}\n"
+        f"server {{\n    {ПЕРЕМ}\n}}\n",
+        include='default "";\n')
+    nginx_корень(корень)
+    сиг = {
+        "x_robots_values": ["noindex, nofollow"],          # один, от приложения
+        "x_robots_count": 1,
+        "x_robots_values_http80": ["noindex, nofollow"],
+        "x_robots_count_service": 2,                        # nginx добавляет служебным
+        "meta_robots_home": "noindex, nofollow",
+        "robots_txt": "User-agent: *\nDisallow: /\n",
+        "robots_txt_http": "200",
+        "sitemap_http": "404",
+    }
+    сл = indexing.слой_nginx("test-01", "t.example", сиг)
+    assert сл["denying"] is False, "слой nginx открыт — запрет не его"
+    assert сл["cross_check"]["agrees_with_config"] is True
+
+    пр = indexing.слой_приложения(сиг)
+    assert пр["denying"] is True, "запреты приложения обязаны остаться видны"
+
+    # И публичный итог остаётся закрытым: приложение запрещает.
+    режим, запрещают = indexing.оценить(сиг)
+    assert режим == indexing.ЗАКРЫТ
+    assert len(запрещают) >= 3, запрещают
+
+
+def test_перекрёстная_сверка_ловит_расхождение(tmp_path, nginx_корень):
+    """Конфигурация говорит «открыт», а ответ не отличает служебный путь —
+    такое расхождение не прячется.
+    """
+    корень = _конфиг(
+        tmp_path,
+        "map $uri $cell_robots_test_01 {\n    include @@INCLUDE@@;\n}\n"
+        f"server {{\n    {ПЕРЕМ}\n}}\n",
+        include='default "";\n')
+    nginx_корень(корень)
+    сиг = {"x_robots_count": 1, "x_robots_count_service": 1,
+           "x_robots_values_http80": [], "meta_robots_home": "index, follow",
+           "robots_txt": "User-agent: *\nAllow: /\n", "robots_txt_http": "200"}
+    сл = indexing.слой_nginx("test-01", "t.example", сиг)
+    assert сл["mode"] == "open"
+    assert сл["cross_check"]["agrees_with_config"] is False
+
+
+def test_прежнее_правило_не_вернулось():
+    """Слой nginx не определяется перебором публичных заголовков."""
+    т = (КОРЕНЬ / "factory" / "qwen" / "indexing.py").read_text("utf-8")
+    assert 'з.startswith("X-Robots-Tag") for з in запрещают' not in т, (
+        "возврат к определению слоя по перечню запрещающих сигналов")
+    тело = т.split("def слой_nginx", 1)[1].split("\ndef ", 1)[0]
+    assert "_конфиг_сайта" in тело, "источник — конфигурация сайта"
+    assert "запрещают" not in тело, (
+        "перечень публичных запретов не должен участвовать в определении слоя")
+
+
+def test_вклад_приложения_измеряется_на_80(tmp_path):
+    """На :80 серверный блок сайта заголовка не добавляет — там виден ровно
+    вклад приложения. Больше одного заголовка там означает, что приписывать
+    его приложению нельзя.
+    """
+    пр = indexing.слой_приложения({"x_robots_values_http80": ["index, follow"],
+                                   "meta_robots_home": "index, follow",
+                                   "robots_txt": "User-agent: *\nAllow: /\n"})
+    assert пр["denying"] is False and "note" not in пр
+    пр2 = indexing.слой_приложения({
+        "x_robots_values_http80": ["index, follow", "noindex, nofollow"],
+        "meta_robots_home": "index, follow",
+        "robots_txt": "User-agent: *\nAllow: /\n"})
+    assert пр2["denying"] is True
+    assert "note" in пр2 and "кто-то ещё" in пр2["note"]
+
+
+def test_состояние_разделяет_слои():
+    """В ответе `indexing-state` слои стоят отдельными полями: иначе «почему
+    закрыт» пришлось бы угадывать.
+    """
+    т = (КОРЕНЬ / "factory" / "qwen" / "indexing.py").read_text("utf-8")
+    тело = т.split("def состояние", 1)[1]
+    assert '"nginx_header": слой_nginx(' in тело
+    assert '"app": слой_приложения(' in тело
+
+
+def test_причина_отказа_называет_слой():
+    т = (КОРЕНЬ / "factory" / "qwen" / "indexing.py").read_text("utf-8")
+    тело = т.split("def подтвердить", 1)[1].split("\ndef ", 1)[0]
+    assert "слой nginx открыт" in тело, (
+        "когда nginx открыт, причина обязана говорить это, а не предлагать "
+        "снимать уже снятый запрет")
+    assert "запрет добавляет nginx" in тело
+    assert "fail-closed" in тело
+
+
+# --- 11. Карта сайта: 404 ожидаем и режимом не меняется -------------------
+
+def test_sitemap_404_не_считается_запретом():
+    сиг = dict(ОТКРЫТЫЕ_СИГНАЛЫ)
+    сиг["sitemap_http"] = "404"
+    режим, запрещают = indexing.оценить(сиг)
+    assert режим == indexing.ОТКРЫТ, запрещают
+
+
+@pytest.mark.parametrize("репо", ["animedia-space", "animedia-icu"])
+def test_карта_сайта_не_обещается_пока_её_нет(репо):
+    """`Sitemap:` в robots.txt появляется только если файл действительно
+    отдаётся. Иначе обходчик запомнил бы обещание, которого витрина не
+    выполняет.
+    """
+    п = КОРЕНЬ / "var" / "site-repos" / репо / "src" / "animedia-frontend.py"
+    if not п.is_file():
+        pytest.skip(f"{репо}: рабочая копия недоступна")
+    т = п.read_text(encoding="utf-8")
+    тело = т.split("def _тело_robots", 1)[1].split("\ndef ", 1)[0]
+    assert "SITEMAP_DIR" in тело
+    assert 'is_file()' in тело, "наличие файла проверяется"
+    # Отдача карты требует того же каталога: без него 404, и это не дефект
+    # режима индексации.
+    assert 'SITEMAP_DIR = os.environ.get("LORDS_SITEMAP_DIR", "").strip()' in т
+
+
+def test_карта_сайта_нигде_не_собирается():
+    """Честная запись факта: функция сборки есть, вызова нет, переменная
+    каталога не задаётся. Значит 404 на /sitemap.xml ожидаем в ОБОИХ режимах,
+    и открытие индексации его не меняет.
+    """
+    вызовы = []
+    for путь in (КОРЕНЬ / "var" / "site-repos").glob("animedia-*/**/*.py"):
+        т = путь.read_text(encoding="utf-8", errors="replace")
+        for строка in т.split("\n"):
+            if "построить_sitemap(" in строка and not строка.lstrip().startswith("def "):
+                вызовы.append(f"{путь.name}: {строка.strip()[:80]}")
+    assert not вызовы, (
+        "сборка карты сайта где-то вызывается — перечитайте вывод и обновите "
+        f"ожидание: {вызовы}")

@@ -228,8 +228,192 @@ def сигналы(домен: str) -> dict:
     итог["robots_txt"] = роботс
     кс, _, _ = _ответ(f"https://{домен}/sitemap.xml")
     итог["sitemap_http"] = кс
+    # Проба служебного пути. Нужна, чтобы отличить вклад nginx от вклада
+    # приложения: в открытом режиме nginx сохраняет запрет на служебных путях,
+    # и заголовков там на один больше, чем на обычной странице. Один заголовок
+    # в ответе источника не называет, и операция однажды на этом ошиблась.
+    ск, служебные, _ = _ответ(f"https://{домен}{ПРОБА_СЛУЖЕБНОГО}")
+    итог["service_path"] = ПРОБА_СЛУЖЕБНОГО
+    итог["service_path_http"] = ск
+    итог["x_robots_values_service"] = служебные
+    итог["x_robots_count_service"] = len(служебные)
     return итог
 
+
+# --------------------------------------------------- слой nginx: кто добавил
+#: Где искать конфигурацию сайта. Порядок тот же, что у root-скрипта: иначе
+#: операция судила бы по одному файлу, а владелец правил другой.
+КОРЕНЬ_NGINX = pathlib.Path(os.environ.get("QWEN_NGINX_ROOT", "/etc/nginx"))
+
+#: Служебный путь, который в ОТКРЫТОМ режиме остаётся закрытым заголовком
+#: nginx. Он и служит пробой: если на нём заголовков на один больше, чем на
+#: обычной странице, значит добавляет именно nginx, и добавляет избирательно.
+ПРОБА_СЛУЖЕБНОГО = "/healthz"
+
+
+def _конфиг_сайта(site_id: str, домен: str) -> pathlib.Path | None:
+    for путь in (КОРЕНЬ_NGINX / "lords" / f"{site_id}.conf",
+                 КОРЕНЬ_NGINX / "sites-available" / f"{домен}.conf",
+                 КОРЕНЬ_NGINX / "sites-enabled" / f"{домен}.conf"):
+        if путь.is_file():
+            return путь
+    return None
+
+
+def _значение_переменной(конфиг: str, имя: str) -> tuple[str | None, str]:
+    """(значение по умолчанию для обычных страниц или None, откуда взято).
+
+    Переменная объявляется блоком `map $uri $имя { include <файл>; }`, и
+    значение для обычных страниц — это строка `default` включаемого файла.
+    Разбирается именно он, а не догадка по ответу: включаемый файл и есть
+    источник, его пишет root-скрипт.
+
+    `None` означает «не определено»: нет объявления, файл не читается, нет
+    строки `default`. Возвращать пустую строку в этих случаях нельзя — пустое
+    значение здесь ОЗНАЧАЕТ открытый режим, и нечитаемый файл стал бы
+    разрешением. Поймано тестом: до правки нечитаемый include давал
+    `denying: False`.
+    """
+    м = re.search(r"map\s+\$uri\s+\$" + re.escape(имя) + r"\s*\{(.*?)\}",
+                  конфиг, re.S)
+    if not м:
+        return None, f"объявления map ${имя} в конфигурации нет"
+    тело = м.group(1)
+    вкл = re.search(r"include\s+([^\s;]+)\s*;", тело)
+    источник = тело
+    откуда = "блок map"
+    if вкл:
+        п = pathlib.Path(вкл.group(1))
+        try:
+            источник = п.read_text(encoding="utf-8")
+            откуда = str(п)
+        except OSError as ош:
+            return None, f"{п} не читается: {type(ош).__name__}"
+    по_умолчанию = re.search(r'(?m)^\s*default\s+"?([^";]*)"?\s*;', источник)
+    if по_умолчанию is None:
+        return None, f"{откуда}: строки default нет"
+    return по_умолчанию.group(1).strip(), откуда
+
+
+def слой_nginx(site_id: str, домен: str, сиг: dict | None = None) -> dict:
+    """Добавляет ли САМ nginx запрет на обычных страницах.
+
+    Почему не по публичному ответу. Один заголовок в ответе источника не
+    называет: его мог поставить и nginx, и приложение. Ровно на этом месте
+    операция однажды и ошиблась — она считала слой nginx закрытым всякий раз,
+    когда запрещал ЛЮБОЙ `X-Robots-Tag`, и после успешного снятия запрета в
+    nginx продолжала показывать `denying: true`, потому что приложение было
+    закрыто (файла состояния нет — fail-closed).
+
+    Поэтому источник определяется по КОНФИГУРАЦИИ, которую пишет root-скрипт:
+
+      * фиксированная строка `add_header X-Robots-Tag "noindex…"` → закрыт;
+      * заголовок на переменной `map $uri` → решает строка `default`
+        включаемого файла: пустая → открыт, с `noindex` → закрыт;
+      * заголовка нет вовсе → nginx своего запрета не добавляет.
+
+    Перекрёстная сверка идёт по ответу и в перечень не подмешивается: на
+    служебном пути nginx в открытом режиме запрет СОХРАНЯЕТ, поэтому
+    заголовков там на один больше, чем на обычной странице. Расхождение
+    конфигурации и ответа не прячется — оно попадает в `cross_check`.
+    """
+    итог: dict = {"site_id": site_id, "managed_by_this_operation": False}
+    конфиг = _конфиг_сайта(site_id, домен)
+    итог["config"] = str(конфиг) if конфиг else ""
+    if конфиг is None:
+        итог.update({"mode": "unknown", "denying": None,
+                     "evidence": f"конфигурации сайта {site_id} не найдено в "
+                                 f"{КОРЕНЬ_NGINX}: слой не определён"})
+        return итог
+    try:
+        текст = конфиг.read_text(encoding="utf-8")
+    except OSError as ош:
+        итог.update({"mode": "unknown", "denying": None,
+                     "evidence": f"{конфиг} не читается: {type(ош).__name__}"})
+        return итог
+
+    строки = [с for с in текст.split("\n")
+              if re.search(r"^\s*add_header\s+X-Robots-Tag\s", с)]
+    итог["add_header_lines"] = [с.strip() for с in строки]
+    if not строки:
+        итог.update({"mode": "open", "denying": False,
+                     "evidence": f"{конфиг}: add_header X-Robots-Tag нет — "
+                                 "своего запрета nginx не добавляет"})
+    else:
+        режимы: list[str] = []
+        пояснения: list[str] = []
+        for с in строки:
+            зн = re.search(r"add_header\s+X-Robots-Tag\s+(\S+)", с.strip())
+            значение = зн.group(1) if зн else ""
+            if значение.startswith("$"):
+                по_умолчанию, откуда = _значение_переменной(текст, значение[1:])
+                if по_умолчанию is None:
+                    режимы.append("unknown")
+                    пояснения.append(f"{значение}: {откуда}")
+                elif "noindex" in по_умолчанию.lower():
+                    режимы.append("closed")
+                    пояснения.append(f"{откуда}: default \"{по_умолчанию}\"")
+                else:
+                    режимы.append("open")
+                    пояснения.append(
+                        f"{откуда}: default пуст — заголовок не добавляется")
+            elif "noindex" in значение.lower():
+                режимы.append("closed")
+                пояснения.append(f"{конфиг}: {с.strip()}")
+            else:
+                режимы.append("open")
+                пояснения.append(f"{конфиг}: {с.strip()}")
+        режим = ("closed" if "closed" in режимы
+                 else "unknown" if "unknown" in режимы else "open")
+        итог.update({"mode": режим,
+                     "denying": None if режим == "unknown" else режим == "closed",
+                     "evidence": "; ".join(пояснения)})
+
+    if сиг:
+        обычная = сиг.get("x_robots_count")
+        служебная = сиг.get("x_robots_count_service")
+        разница = (None if обычная is None or служебная is None
+                   else служебная - обычная)
+        итог["cross_check"] = {
+            "headers_on_home_https": обычная,
+            "headers_on_service_path_https": служебная,
+            "service_path": ПРОБА_СЛУЖЕБНОГО,
+            "nginx_adds_on_service_path": None if разница is None else разница > 0,
+            "agrees_with_config": None,
+        }
+        if разница is not None and итог.get("mode") in ("open", "closed"):
+            # В открытом режиме nginx добавляет заголовок ТОЛЬКО на служебных
+            # путях: разница ровно на один. В закрытом он добавляет и там, и
+            # на обычной странице: разницы нет.
+            ожидается = разница > 0 if итог["mode"] == "open" else разница == 0
+            итог["cross_check"]["agrees_with_config"] = bool(ожидается)
+    return итог
+
+
+def слой_приложения(сиг: dict) -> dict:
+    """Что добавляет само приложение. Измеряется на :80.
+
+    На порту 80 серверный блок сайта заголовка не добавляет — проверено по
+    конфигурации, — поэтому там виден ровно вклад приложения. Если на :80
+    заголовков больше одного, вывод не делается: значит заголовок добавляет
+    кто-то ещё, и приписывать его приложению нельзя.
+    """
+    значения = сиг.get("x_robots_values_http80") or []
+    мета = str(сиг.get("meta_robots_home") or "")
+    запрещает = any("noindex" in з.lower() for з in значения) or \
+        "noindex" in мета.lower()
+    итог = {
+        "x_robots_on_http80": значения,
+        "meta_robots": мета or None,
+        "robots_txt_closed": bool(
+            re.search(r"(?mi)^\s*Disallow:\s*/\s*$", сиг.get("robots_txt") or "")),
+    }
+    итог["denying"] = bool(запрещает or итог["robots_txt_closed"])
+    if len(значения) > 1:
+        итог["note"] = (
+            f"на :80 заголовков {len(значения)} — вклад приложения отдельно не "
+            "выделяется: заголовок добавляет кто-то ещё")
+    return итог
 
 def оценить(сиг: dict) -> tuple[str, list[str]]:
     """(что сайт отдаёт фактически, перечень запрещающих сигналов).
@@ -316,18 +500,22 @@ def проверить(site: str, *, mode: str, expect_release: str = "") -> dic
     итог["public_mode_now"] = фактически
     итог["denying_signals_now"] = запрещают
 
-    # 6. Заголовок nginx. Его операция не меняет и не может: конфигурация
-    #    принадлежит root. Но назвать его обязана — иначе «открыто» в файле
-    #    состояния разошлось бы с закрытым сайтом.
-    nginx_запрещает = [з for з in запрещают if з.startswith("X-Robots-Tag")]
-    итог["nginx_layer"] = {
-        "managed_by_this_operation": False,
-        "denying": bool(nginx_запрещает),
-        "evidence": nginx_запрещает,
-        "owner_command": (
-            f"sudo bash automation/host/apply-indexing-nginx-root.sh "
-            f"--site {s.site_id} --mode {'open' if режим == ОТКРЫТ else 'closed'}"),
-    }
+    # 6. Слои запрета ПООТДЕЛЬНО. Заголовок nginx операция не меняет и не
+    #    может: конфигурация принадлежит root. Но назвать его обязана — иначе
+    #    «открыто» в файле состояния разошлось бы с закрытым сайтом.
+    #
+    #    Источник определяется по КОНФИГУРАЦИИ, а не по числу заголовков в
+    #    ответе. Ровно здесь операция однажды и ошибалась: она объявляла слой
+    #    nginx закрытым всякий раз, когда запрещал ЛЮБОЙ `X-Robots-Tag`, и
+    #    после успешного снятия запрета в nginx продолжала показывать
+    #    `denying: true` — потому что закрыто было ПРИЛОЖЕНИЕ (файла состояния
+    #    нет, fail-closed). Один заголовок в ответе источника не называет.
+    слой_ng = слой_nginx(s.site_id, s.domain, сиг)
+    слой_ng["owner_command"] = (
+        f"sudo bash automation/host/apply-indexing-nginx-root.sh "
+        f"--site {s.site_id} --mode {'open' if режим == ОТКРЫТ else 'closed'}")
+    итог["nginx_layer"] = слой_ng
+    итог["app_layer"] = слой_приложения(сиг)
 
     # 7. Повтор.
     итог["already"] = (итог["current_state_file"].get("desired_state") == режим
@@ -459,13 +647,34 @@ def подтвердить(site: str, *, ожидаемый: str = "", ждат�
         "state_file": текущее(s.domain),
     }
     if ожид == ОТКРЫТ and запрещают:
-        itog_nginx = [з for з in запрещают if з.startswith("X-Robots-Tag")]
-        итог["reason"] = (
-            "сайт отдаёт запрет: " + "; ".join(запрещают)
-            + (". Заголовок nginx этой операцией не управляется — нужен "
-               "однократный запуск владельца "
-               f"automation/host/apply-indexing-nginx-root.sh --site {s.site_id} "
-               "--mode open" if itog_nginx else ""))
+        # Причина обязана называть СЛОЙ, а не просто перечислять заголовки:
+        # иначе «снимите запрет в nginx» звучало бы и тогда, когда nginx уже
+        # открыт, а закрыто приложение.
+        слой_ng = слой_nginx(s.site_id, s.domain, сиг)
+        слой_пр = слой_приложения(сиг)
+        итог["nginx_layer"] = слой_ng
+        итог["app_layer"] = слой_пр
+        части = ["сайт отдаёт запрет: " + "; ".join(запрещают)]
+        if слой_ng.get("denying"):
+            части.append(
+                "запрет добавляет nginx — этой операцией он не управляется, "
+                "нужен однократный запуск владельца "
+                f"automation/host/apply-indexing-nginx-root.sh "
+                f"--site {s.site_id} --mode open. Основание: "
+                + str(слой_ng.get("evidence") or ""))
+        elif слой_ng.get("denying") is None:
+            части.append(
+                "слой nginx не определён: " + str(слой_ng.get("evidence") or ""))
+        else:
+            части.append(
+                "слой nginx открыт (" + str(слой_ng.get("evidence") or "")
+                + "); запрет приходит от приложения")
+        if слой_пр.get("denying") and not текущее(s.domain).get("present"):
+            части.append(
+                "приложение закрыто штатно: файла состояния нет, а без него "
+                "режим вычисляется закрытым (fail-closed). Это и снимает "
+                "indexing-set --mode open")
+        итог["reason"] = ". ".join(части)
     return итог
 
 
@@ -519,9 +728,8 @@ def состояние(site: str) -> dict:
                                     "source": str(registry.РЕЕСТР_ЯЧЕЕК)},
             "release_permission": {"permits_open": разрешено, "source": откуда},
             "state_file": текущее(s.domain),
-            "nginx_header": {"denying": any(
-                з.startswith("X-Robots-Tag") for з in запрещают),
-                "managed_by_this_operation": False},
+            "nginx_header": слой_nginx(s.site_id, s.domain, сиг),
+            "app": слой_приложения(сиг),
         },
         "runtime_reader": str(читатель) if читатель else "",
         "signals": сиг,
