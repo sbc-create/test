@@ -1,5 +1,6 @@
 import type { Payload, Where } from 'payload'
 
+import { freshTitlesWhere } from './newness'
 import { tenantFind, tenantFindOne, type TenantContext } from './tenant-query'
 
 /**
@@ -19,11 +20,24 @@ const publishedOnly: Where = { _status: { equals: 'published' } }
 export const listTenantTitles = async (
   payload: Payload,
   tenant: TenantContext,
-  options: { page?: number; genreId?: string | number; sort?: string; limit?: number } = {},
+  options: {
+    page?: number
+    genreId?: string | number
+    sort?: string
+    limit?: number
+    /** Только новинки: правило из `lib/newness`. Для блоков новинок обязательно. */
+    freshOnly?: boolean
+    freshDays?: number
+    today?: Date
+  } = {},
 ) => {
-  const where: Where = options.genreId
-    ? { and: [publishedOnly, { 'title.genres': { in: [options.genreId] } }] }
-    : publishedOnly
+  const conditions: Where[] = [publishedOnly]
+  if (options.genreId) conditions.push({ 'title.genres': { in: [options.genreId] } })
+  // Отбор новинок идёт В ЗАПРОСЕ — до сортировки, лимита и страницы. Срезав
+  // архив после лимита, блок показал бы лимит неподходящих карточек и ноль
+  // подходящих, а вторая страница добрала бы тем же архивом.
+  if (options.freshOnly) conditions.push(freshTitlesWhere(options.freshDays, options.today))
+  const where: Where = conditions.length === 1 ? conditions[0] : { and: conditions }
 
   return tenantFind(payload, {
     collection: 'tenant-titles',
@@ -31,7 +45,11 @@ export const listTenantTitles = async (
     where,
     page: options.page ?? 1,
     limit: options.limit ?? PAGE_SIZE,
-    sort: options.sort ?? '-updatedAt',
+    // `-updatedAt` здесь больше не умолчание. Это время последней правки
+    // записи в нашей базе: заливка архива, повторный импорт или смена
+    // постера поднимали старый тайтл наверх. Каталог упорядочен по году
+    // выхода, блоки новинок просят порядок явно.
+    sort: options.sort ?? '-title.year',
     depth: 2,
   })
 }
