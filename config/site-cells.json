@@ -31,7 +31,9 @@
       },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id": "10252"
+        "publisher_id": "10332",
+        "publisher_id_ref": "repo://config/site.json#publisher_id_expected",
+        "note": "Назначен владельцем 2026-10-01. Источник истины — репозиторий витрины, config/site.json#publisher_id_expected (D138); значение направления Secret Hub больше этой витрине не подставляется."
       },
       "data": {
         "database": null,
@@ -237,7 +239,9 @@
       },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id": "10238"
+        "publisher_id": "10373",
+        "publisher_id_ref": "repo://config/site.json#publisher_id_expected",
+        "note": "Назначен владельцем 2026-10-01. Источник истины — репозиторий витрины, config/site.json#publisher_id_expected (D138); значение направления Secret Hub больше этой витрине не подставляется."
       },
       "data": {
         "database": null,
@@ -301,7 +305,9 @@
       },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id_ref": null
+        "publisher_id_ref": "repo://config/site.json#publisher_id_expected",
+        "publisher_id": "10378",
+        "note": "Назначен владельцем 2026-10-01. Источник истины — репозиторий витрины, config/site.json#publisher_id_expected (D138); значение направления Secret Hub больше этой витрине не подставляется."
       },
       "data": {
         "database": null,
