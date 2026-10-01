@@ -17,6 +17,8 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+import pytest
+
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 ХОСТ = КОРЕНЬ / "automation" / "host"
 NEXT = КОРЕНЬ / "blueprints" / "payload-next-multisite" / "app" / "src"
@@ -186,3 +188,26 @@ def test_версия_шаблона_опознаётся_рантаймом():
         f"версия шаблона {версия} не объявлена в ОФОРМЛЕНИЕ_ВЕРСИИ ({sorted(значения)}): "
         f"витрина откатится к прежней раскладке целиком, и правило новинок до "
         f"страниц не дойдёт")
+
+def test_правило_next_шаблона_исполняется_а_не_только_читается():
+    """Правило Next-шаблона проверяется ЗАПУСКОМ, если Node под рукой.
+
+    Разбор исходника ловит возврат дефекта, но не ошибку в самом правиле.
+    Поднять приложение в обязательном прогоне нельзя — нужны зависимости Node
+    и база Payload. А вот модуль правила самодостаточен: единственный его
+    импорт из `payload` — ТИП, который при исполнении стирается. Поэтому он
+    запускается `node --experimental-strip-types` без установки чего-либо.
+    """
+    import shutil
+    import subprocess
+
+    node = shutil.which("node")
+    if not node:
+        pytest.skip("node недоступен — правило Next-шаблона проверено разбором исходника")
+    тест = (КОРЕНЬ / "blueprints" / "payload-next-multisite" / "app"
+            / "tests" / "newness.test.mts")
+    assert тест.is_file(), "прогон правила Next-шаблона потерян"
+    r = subprocess.run([node, "--experimental-strip-types", str(тест)],
+                       cwd=тест.parent.parent, capture_output=True, text=True, timeout=120)
+    assert r.returncode == 0, f"правило Next-шаблона не прошло:\n{r.stdout}\n{r.stderr}"
+    assert "провалов 0" in r.stdout, r.stdout

@@ -1,0 +1,16 @@
+# FIXTURE-заглушка вместо contract белого VK-плеера.
+#
+# Настоящий contract НЕ передан. Этот файл существует, чтобы пилотный стенд мог
+# проверить путь «плеер доступен / плеер недоступен», не выдумывая ни одного
+# реального метода, параметра или embed-URL.
+schema_version: 1
+kind: fixture_stub
+status: contract_not_provided
+adapter_allowed: [mock]          # official запрещён: реальной схемы встраивания нет
+environments_allowed: [staging, local-disposable]
+allows_video_object: false        # VideoObject не выпускается: видимого видео нет
+aspect_ratio: "16 / 9"
+notes: >-
+  Как только официальный/внутренний contract будет передан, он кладётся сюда в
+  оригинальном виде, adapter переключается на official, и заново прогоняется
+  site-qa. До этого момента любая разметка VideoObject запрещена правилом HR-6.
