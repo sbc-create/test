@@ -652,9 +652,32 @@ def test_приёмка_читает_build_id_у_семейства_без_ме�
         def log_message(self, *a):
             pass
 
+    class ОбаИсточника(BaseHTTPRequestHandler):
+        """Витрина, у которой заголовок называет ШАБЛОН, а мета-тег — выпуск.
+
+        Так устроена zona-02: `X-Site-Factory-Build-Id` берётся из манифеста
+        закреплённого шаблона и одинаков у всех её выпусков, а метку самого
+        выпуска процесс пишет в разметку. Кандидат из нужного коммита, отвечавший
+        200 на обоих маршрутах, был откачен именно потому, что приёмка
+        спрашивала сначала заголовок.
+        """
+
+        def do_GET(self):  # noqa: N802
+            тело = b'<meta name="site-factory-release-id" content="060149731561-zona-02">'
+            self.send_response(200)
+            self.send_header("X-Site-Factory-Build-Id", "zona-02-0fb857b26f85")
+            self.send_header("Content-Length", str(len(тело)))
+            self.end_headers()
+            self.wfile.write(тело)
+
+        def log_message(self, *a):
+            pass
+
     for обработчик, ожидаемый, источник in (
-            (ТолькоЗаголовок, "9d25994c1762-yummy-biz", "заголовок"),
-            (ТолькоМетаТег, "abc123-zona-01", "мета-тег")):
+            (ТолькоЗаголовок, "9d25994c1762-yummy-biz",
+             "заголовок (ревизия шаблона, не выпуска)"),
+            (ТолькоМетаТег, "abc123-zona-01", "мета-тег"),
+            (ОбаИсточника, "060149731561-zona-02", "мета-тег")):
         сервер = поднять(обработчик)
         порт = сервер.server_address[1]
         п = privileged.Площадка(site_id="проверка", account="nobody",
@@ -695,3 +718,156 @@ def test_повышение_включает_службу():
     assert место_enable != -1, "promote не включает службу"
     assert место_restart != -1
     assert место_enable < место_restart, "enable обязан идти до restart"
+
+
+def test_плеер_нужен_и_по_ссылке_на_секрет(tmp_path):
+    """Ссылка на секрет — такой же признак «плеер нужен», как ожидаемое значение.
+
+    Пока условие смотрело только на `publisher_id_expected`, витрина с
+    `publisher_id_ref` не получала файла плеера вовсе: исполнитель считал его
+    ненужным, а рантайм витрины отказывался стартовать словами «нет
+    config/player.json». Кандидат lords-05 так и не поднялся, и причина
+    выглядела как поломка выпуска, а не как несогласованность двух условий.
+    """
+    from factory.cell import privileged
+
+    выпуск = tmp_path / "release"
+    (выпуск / "config").mkdir(parents=True)
+    конфиг = выпуск / "config" / "site.json"
+
+    конфиг.write_text(json.dumps({"publisher_id_expected": None,
+                                  "publisher_id_ref": "secret://cdnvideohub/lords/publisher-id"},
+                                 ensure_ascii=False), encoding="utf-8")
+    assert privileged._плеер_обязателен(выпуск) is True
+
+    конфиг.write_text(json.dumps({"publisher_id_expected": "10261"}, ensure_ascii=False),
+                      encoding="utf-8")
+    assert privileged._плеер_обязателен(выпуск) is True
+
+    # У витрин Yummy воспроизведением занимается верхний поток: ни того, ни
+    # другого поля нет, и требовать плеер нельзя.
+    конфиг.write_text(json.dumps({"domain": "yummyani7.site"}, ensure_ascii=False),
+                      encoding="utf-8")
+    assert privileged._плеер_обязателен(выпуск) is False
+
+
+def test_приёмка_не_сдаётся_после_первого_таймаута(monkeypatch):
+    """Холодный старт крупной витрины дольше одного предела — это не отказ.
+
+    Повод: выпуск lords-05 объявлен провалившимся, потому что `verify` получил
+    TimeoutError на обоих маршрутах сразу после перезапуска. Сработал откат — и
+    его собственная проверка, дошедшая до сайта на пять минут позже, увидела
+    HTTP 200. Откат по нетерпению выключает работающий сайт.
+    """
+    import urllib.request
+
+    from factory.cell import privileged
+
+    попытки: list[float] = []
+
+    class Ответ:
+        status = 200
+        headers = {"X-Site-Factory-Build-Id": "abc-lords-05"}
+
+        def read(self, _n=None):
+            return b"<html></html>"
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_):
+            return False
+
+    def открыть(url, timeout=None):
+        попытки.append(timeout)
+        # Первые два предела истекают, третий отвечает — как у холодной витрины.
+        if len(попытки) <= 2:
+            raise TimeoutError("cold start")
+        return Ответ()
+
+    monkeypatch.setattr(urllib.request, "urlopen", открыть)
+    итог = privileged.verify("lords-05", порт=9113, маршруты=("/",))
+    assert итог["routes"]["/"]["status"] == 200, итог
+    assert итог["routes"]["/"]["попытка"] == 3
+    assert попытки == [30, 60, 120], попытки
+    assert итог["ok"] is True
+
+
+def test_приёмка_отказывает_после_всех_попыток(monkeypatch):
+    """Исчерпав пределы, проверка называет число попыток и суммарное ожидание."""
+    import urllib.request
+
+    from factory.cell import privileged
+
+    def открыть(url, timeout=None):
+        raise TimeoutError("always cold")
+
+    monkeypatch.setattr(urllib.request, "urlopen", открыть)
+    итог = privileged.verify("lords-05", порт=9113, маршруты=("/",))
+    запись = итог["routes"]["/"]
+    assert запись["error"] == "TimeoutError"
+    assert запись["попыток"] == 3
+    assert запись["суммарное_ожидание_с"] == 210
+    assert итог["ok"] is False
+
+
+def test_смена_издателя_не_откатывается_переносом(tmp_path, monkeypatch):
+    """Витрина сменила издателя — перенос обязан взять НОВОЕ значение.
+
+    Измерено на zonafilm.space: владелец назначил домену publisher 10252 вместо
+    10238, а исполнитель на каждом выпуске копировал `config/player.json` из
+    ДЕЙСТВУЮЩЕГО выпуска — то есть ровно прежнее значение. Выкладка молча
+    возвращала бы старое назначение каждый раз, и сменить его штатным способом
+    было бы нельзя вовсе.
+
+    Источник, расходящийся с объявлением выпуска, пропускается, и перебор идёт
+    дальше — к каталогу производителя, где значение и меняют.
+    """
+    п = _площадка(tmp_path)
+    (п.app / "config" / "player.json").write_text(
+        json.dumps({"publisher_id": "10238"}), encoding="utf-8")
+    произв = tmp_path / "frontend"
+    произв.mkdir()
+    (произв / "player-zona-01.json").write_text(
+        json.dumps({"publisher_id": "10252"}), encoding="utf-8")
+    monkeypatch.setattr(privileged, "ПЛЕЕР_ПРОИЗВОДИТЕЛЯ", произв)
+    monkeypatch.setattr(privileged.shutil, "chown", lambda *a, **k: None)
+    выпуск = _выпуск(tmp_path, publisher="10252")
+    assert privileged._перенести_локальную_настройку(выпуск, п) == ["config/player.json"]
+    легло = json.loads((выпуск / "config" / "player.json").read_text(encoding="utf-8"))
+    assert легло["publisher_id"] == "10252", "перенос вернул прежнего издателя"
+
+
+def test_смена_издателя_без_нового_значения_это_отказ(tmp_path, monkeypatch):
+    """Ни один источник не знает нового издателя — отказ с названными числами.
+
+    Поставить прежнее значение значило бы выложить выпуск, который тут же
+    провалит собственную проверку готовности: `run.py --check` отвечает
+    «publisher_id X, а сайт объявляет Y» и служба не поднимается. Отказ здесь
+    честнее: он называет, где именно значение не обновили.
+    """
+    п = _площадка(tmp_path)
+    (п.app / "config" / "player.json").write_text(
+        json.dumps({"publisher_id": "10238"}), encoding="utf-8")
+    произв = tmp_path / "frontend"
+    произв.mkdir()
+    (произв / "player-zona-01.json").write_text(
+        json.dumps({"publisher_id": "10238"}), encoding="utf-8")
+    monkeypatch.setattr(privileged, "ПЛЕЕР_ПРОИЗВОДИТЕЛЯ", произв)
+    with pytest.raises(privileged.PrivilegedRefused, match="10252"):
+        privileged._перенести_локальную_настройку(
+            _выпуск(tmp_path, publisher="10252"), п)
+
+
+def test_файл_без_издателя_переносится_как_прежде(tmp_path, monkeypatch):
+    """Пустой или нечитаемый файл плеера не отбраковывается.
+
+    «Сказать нечего» — не то же самое, что «сказано другое»: прежнее поведение
+    для таких источников сохраняется, иначе первый выпуск витрины, у которой
+    боковой файл ещё заготовка, стал бы отказом на ровном месте.
+    """
+    п = _площадка(tmp_path)
+    (п.app / "config" / "player.json").write_text("{}", encoding="utf-8")
+    monkeypatch.setattr(privileged.shutil, "chown", lambda *a, **k: None)
+    assert privileged._перенести_локальную_настройку(
+        _выпуск(tmp_path, publisher="10252"), п) == ["config/player.json"]

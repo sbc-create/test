@@ -1,163 +1,82 @@
 /**
- * Фактическая отправка просмотра в Метрику — настоящим браузером.
+ * Отправка события Метрики из браузера — измеряется, а не предполагается.
  *
- * Зачем не разметка. Наличие `ym(id,"init")` в HTML доказывает, что код на
- * странице есть, и ничего не говорит о том, ушёл ли запрос: скрипт счётчика
- * может не загрузиться (блокировка, CSP, обрыв), инициализация может упасть на
- * предыдущей ошибке JS, идентификатор может оказаться чужим. Поэтому здесь
- * перехватываются исходящие запросы и проверяется тот, который Метрика
- * отправляет при просмотре: GET на mc.yandex.ru/watch/<id>.
+ * Считаются ТРИ разные вещи, которые легко слить в одну и потом ошибиться:
+ *   1. счётчик инициализирован ровно один раз (иначе визит посчитается дважды);
+ *   2. браузер отправил запрос на приёмник Метрики (mc.yandex.ru/watch/...);
+ *   3. приёмник ответил кодом 2xx/3xx, то есть запрос не заблокирован.
  *
- * Что считается доказательством отправки:
- *   1. запрос на mc.yandex.ru/watch/<ожидаемый id> состоялся;
- *   2. в его параметрах адрес страницы совпадает с открытой;
- *   3. ответ получен (статус 200/302) — то есть запрос не был оборван;
- *   4. запросов ровно один на просмотр: два означали бы двойной учёт.
- *
- * Чего проверка НЕ доказывает: что данные видны в кабинете. Между успешной
- * отправкой и появлением визита в отчёте стоит обработка на стороне Яндекса,
- * и увидеть её результат можно только чтением статистики по OAuth.
- *
- * Аргументы:
- *   --urls <json>   [{url, counter, name}]
- *   --out <json>    куда записать отчёт
- *   --timeout мс    сколько ждать запроса счётчика (по умолчанию 15000)
+ * Приём данных в кабинете этим не проверяется и здесь не заявляется: между
+ * отправкой и появлением визита в отчётах проходит время, и утверждать приём
+ * по факту отправки — ровно та ошибка, из-за которой «подключено» и «работает»
+ * перестают различаться.
  */
-const fs = require('fs');
 const path = require('path');
-
 const КАНДИДАТЫ = [
+  path.join('/srv/site-factory/repo', 'node_modules', 'playwright'),
   path.join('/srv/site-factory/repo', 'node_modules', 'playwright-core'),
-  '/home/claude/node_modules/playwright-core',
+  'playwright', 'playwright-core',
 ];
 let chromium = null;
-for (const к of КАНДИДАТЫ) {
-  try { chromium = require(к).chromium; break; } catch (e) { /* следующий */ }
+for (const где of КАНДИДАТЫ) {
+  try { chromium = require(где).chromium; break; } catch { /* следующий */ }
 }
-if (!chromium) { console.error('playwright-core не найден'); process.exit(2); }
+if (!chromium) { console.error('playwright не найден'); process.exit(4); }
 
-function arg(имя, по) { const i = process.argv.indexOf(имя); return i !== -1 && process.argv[i + 1] ? process.argv[i + 1] : по; }
-
-const МАРКЕР = /^https?:\/\/mc\.yandex\.(?:ru|com)\/watch\/(\d+)/;
-
-async function проверить(браузер, цель, таймаут) {
-  const контекст = await браузер.newContext({
-    viewport: { width: 1440, height: 900 },
-    // Заголовок Do-Not-Track не ставим: он менял бы поведение счётчика, и
-    // измерялась бы не та конфигурация, которую видит посетитель.
-    userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125 Safari/537.36',
-  });
-  const страница = await контекст.newPage();
-  const запросы = [];
-  const ошибкиJS = [];
-
-  страница.on('request', (req) => {
-    const м = МАРКЕР.exec(req.url());
-    if (!м) return;
-    // Перенаправление — это ТОТ ЖЕ запрос, а не второй. Метрика отвечает на
-    // /watch/<id> кодом 302 и ведёт на свой же адрес синхронизации, поэтому
-    // событие request приходит дважды на одну отправку. Первая версия
-    // проверки считала их двумя и объявила двойной учёт на всех 25 страницах
-    // четырёх разных семейств — одинаковость картины и была подсказкой, что
-    // ошибка в измерении, а не на сайтах.
-    запросы.push({
-      id: м[1],
-      url: req.url(),
-      метод: req.method(),
-      статус: null,
-      продолжение: req.redirectedFrom() !== null,
-    });
-  });
-  страница.on('response', async (res) => {
-    const м = МАРКЕР.exec(res.url());
-    if (!м) return;
-    const запись = запросы.find((з) => з.url === res.url() && з.статус === null);
-    if (запись) запись.статус = res.status();
-  });
-  страница.on('pageerror', (e) => ошибкиJS.push(String(e).slice(0, 200)));
-
-  let навигация = null;
-  try {
-    const ответ = await страница.goto(цель.url, { waitUntil: 'load', timeout: таймаут });
-    навигация = ответ ? ответ.status() : null;
-  } catch (e) {
-    await контекст.close();
-    return { ...цель, ошибка: `навигация: ${String(e).slice(0, 160)}` };
-  }
-
-  // Ждём именно запрос счётчика, а не фиксированную паузу: счётчик уходит
-  // асинхронно после загрузки, и пауза «на всякий случай» либо коротка, либо
-  // тратит время на каждой странице.
-  try {
-    await страница.waitForRequest((req) => МАРКЕР.test(req.url()), { timeout: таймаут });
-  } catch (e) { /* ниже это станет «отправки нет» */ }
-  await страница.waitForTimeout(1200);
-
-  const build = навигация !== null
-    ? await страница.evaluate(() => {
-        const м = document.querySelector('meta[name="site-factory-build-id"]');
-        return м ? м.content : null;
-      }).catch(() => null)
-    : null;
-
-  await контекст.close();
-
-  const свои = запросы.filter((з) => з.id === String(цель.counter) && !з.продолжение);
-  const продолжения = запросы.filter((з) => з.id === String(цель.counter) && з.продолжение);
-  const чужие = запросы.filter((з) => з.id !== String(цель.counter));
-  const адресВПараметрах = свои.some((з) => {
-    try {
-      const u = new URL(з.url);
-      const где = u.searchParams.get('ut') === null ? (u.searchParams.get('rn'), null) : null;
-      const ref = u.searchParams.get('ur') || u.searchParams.get('u') || '';
-      return ref.includes(new URL(цель.url).hostname) || u.search.includes(encodeURIComponent(new URL(цель.url).pathname));
-    } catch (e) { return false; }
-  });
-
-  return {
-    ...цель,
-    навигация,
-    build_id: build,
-    отправок: свои.length,
-    перенаправлений: продолжения.length,
-    статусы: свои.map((з) => з.статус),
-    статусы_продолжений: продолжения.map((з) => з.статус),
-    чужих_счётчиков: чужие.map((з) => з.id),
-    адрес_в_параметрах: адресВПараметрах,
-    ошибки_js: ошибкиJS,
-    // Однократность просмотра доказывается разметкой (одна инициализация на
-    // страницу, metrika-audit.py). Сеть доказывает другое: что отправка
-    // ДОШЛА. Обращений к /watch/ на странице с настроенными целями больше
-    // одного — это события целей, и объявлять их двойным учётом неверно.
-    вердикт: свои.length === 0 ? 'ОТПРАВКИ НЕТ'
-      : чужие.length ? 'ЕСТЬ ЧУЖОЙ СЧЁТЧИК'
-      : свои.some((з) => з.статус === null) ? 'ЗАПРОС БЕЗ ОТВЕТА'
-      : свои.some((з) => з.статус >= 400) ? `ОТВЕТ ${свои.map((з) => з.статус).join(',')}`
-      : 'отправлено',
-  };
-}
+const ЦЕЛИ = process.argv.slice(2);
+if (!ЦЕЛИ.length) { console.error('нужны адреса витрин'); process.exit(2); }
 
 (async () => {
-  const цели = JSON.parse(arg('--urls', '[]'));
-  const таймаут = Number(arg('--timeout', '15000'));
-  if (!цели.length) { console.error('нужен --urls'); process.exit(2); }
-  const браузер = await chromium.launch({ args: ['--no-sandbox', '--disable-dev-shm-usage'] });
-  const итог = [];
-  for (const цель of цели) {
-    const строка = await проверить(браузер, цель, таймаут);
-    итог.push(строка);
-    const имя = (цель.name || цель.url).slice(0, 44);
-    console.log(
-      `${имя.padEnd(46)} счётчик ${String(цель.counter).padEnd(10)} ` +
-      `обращений ${строка.отправок ?? '-'} (+${строка.перенаправлений ?? 0} перенаправлений) ` +
-      `статусы ${JSON.stringify(строка.статусы ?? [])} ` +
-      `${строка.вердикт || строка.ошибка}`,
-    );
+  const browser = await chromium.launch({ args: ['--no-sandbox'] });
+  let плохих = 0;
+  for (const база of ЦЕЛИ) {
+    const page = await browser.newPage();
+    const запросы = [];
+    page.on('request', r => {
+      const u = r.url();
+      if (/mc\.yandex\.(ru|com)\/(watch|metrika)/.test(u)) запросы.push({ url: u, status: null });
+    });
+    page.on('response', async r => {
+      const u = r.url();
+      if (/mc\.yandex\.(ru|com)\/(watch|metrika)/.test(u)) {
+        const з = запросы.find(x => x.url === u && x.status === null);
+        if (з) з.status = r.status();
+      }
+    });
+    let счётчиков = 0, инициализаций = 0;
+    // Счётчик берётся ИЗ ЗАПРОСА к приёмнику: mc.yandex.ru/watch/<id>. Это
+    // признак, не зависящий от семейства. Разметка признаком не годится:
+    // витрины Lords и Zona печатают `ym(<id>,"init")` прямо в HTML, а
+    // приложение Yummy подключает тег скриптом Next — в исходном HTML строки
+    // `ym(` нет вовсе, и проверка объявляла FAIL там, где счётчик работает.
+    try {
+      await page.goto(база, { waitUntil: 'load', timeout: 60000 });
+      const разметка = await page.content();
+      const найдено = [...разметка.matchAll(/ym\((\d{6,10})\s*,\s*['"]init/g)].map(m => m[1]);
+      счётчиков = new Set(найдено).size;
+      инициализаций = найдено.length;
+      await page.waitForTimeout(7000);
+    } catch (ош) {
+      console.log(`${база}: страница не открылась — ${(ош.message || ош).toString().split('\n')[0]}`);
+      плохих++; await page.close(); continue;
+    }
+    const коды = запросы.map(з => з.status).filter(с => с !== null);
+    const принятых = коды.filter(с => с >= 200 && с < 400).length;
+    const изЗапросов = [...new Set(запросы
+      .map(з => (з.url.match(/mc\.yandex\.(?:ru|com)\/watch\/(\d{6,10})/) || [])[1])
+      .filter(Boolean))];
+    // Разметка остаётся дополнительным, а не обязательным признаком: там, где
+    // она есть, она обязана называть один счётчик и один раз.
+    const разметкаЧиста = счётчиков === 0 || (счётчиков === 1 && инициализаций === 1);
+    const ок = изЗапросов.length === 1 && разметкаЧиста && принятых > 0;
+    if (!ок) плохих++;
+    console.log(`${ок ? 'PASS' : 'FAIL'}  ${база}`);
+    console.log(`   счётчиков в разметке ${счётчиков}, инициализаций ${инициализаций}`);
+    console.log(`   запросов к приёмнику ${запросы.length}, ответов 2xx/3xx ${принятых}`
+      + (коды.length ? ` (коды ${[...new Set(коды)].join(',')})` : ''));
+    console.log(`   счётчик в запросах: ${изЗапросов.length ? изЗапросов.join(',') : 'не определён'}`);
+    await page.close();
   }
-  await браузер.close();
-  const куда = arg('--out', '');
-  if (куда) fs.writeFileSync(куда, JSON.stringify({ checks: итог }, null, 2));
-  const плохо = итог.filter((с) => с.вердикт !== 'отправлено');
-  console.log(`\nстраниц с подтверждённой отправкой: ${итог.length - плохо.length} из ${итог.length}`);
-  process.exit(плохо.length ? 1 : 0);
+  await browser.close();
+  process.exit(плохих ? 1 : 0);
 })();

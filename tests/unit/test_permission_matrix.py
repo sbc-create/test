@@ -21,6 +21,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import sys
 import textwrap
 
@@ -438,21 +439,56 @@ class TestProfileProperties:
 
         SSH-хосты и DNS-зоны не переданы и обязаны остаться пустыми: их
         расширение по инициативе агента прямо запрещено. Сетевой allowlist
-        не пуст, потому что владелец разрешил обращения двумя заданиями:
-        автоматизация аналитики Яндекса (API и документация) и центральный
+        не пуст, потому что владелец разрешил обращения четырьмя заданиями:
+        автоматизация аналитики Яндекса (API и документация); центральный
         Secret Hub — read-only проверка выданного токена CDNVideoHub перед
-        сохранением (D88). Проверяется точный состав: незамеченная лишняя
-        строка здесь — это открытый наружу канал.
+        сохранением (D88); и «довести до работающего публичного состояния»
+        от 2026-09-27, где десять доменов перечислены поимённо самим
+        заданием, а от allowlist требуется только GET по публичной странице.
+        Проверяется точный состав: незамеченная лишняя строка здесь — это
+        открытый наружу канал.
         """
         assert unattended.inventory_hosts() == set()
         assert unattended.inventory_zones() == set()
-        assert unattended.network_hosts() == {
+        интеграции = {
             "api-metrika.yandex.net",
             "api.webmaster.yandex.net",
             "yandex.ru",
             "yandex.com",
             "public-api.cdnvideohub.com",
+            # Плейлист плеера. Внесён заданием «восстановить воспроизведение на
+            # zonafilm12.site»: оно прямо требует сверить данные источника с
+            # тем, что получает посетитель, и без этого адреса неисполнимо.
+            # Токена здесь нет и быть не может — publisher витрины публичен.
+            "plapi.cdnvideohub.com",
         }
+        # Написание доменов Animego различается символами и проверяется здесь
+        # буквально: an1mego — цифра 1 и буква o, animeg0 — буква i и цифра 0,
+        # an1meg0 — обе цифры. Это три разных сайта, и опечатка в любой из
+        # строк открыла бы канал не туда, куда велело задание.
+        витрины = {
+            "an1mego.site", "animeg0.site", "an1meg0.site",
+            "zonafilm.cc", "zonafilm12.site",
+            "yummyani7.site", "yummyani7.info",
+            "lordserials22.site", "lordserials22.space", "lordserials22.info",
+        }
+        assert len(витрины) == 10
+        # Остальные выложенные витрины. Внесены заданием от 2026-09-28
+        # «устранить повторяющуюся ошибку воспроизведения на ВСЕХ выложенных
+        # сайтах»: оно называет lordserial33.biz поимённо и требует взять
+        # перечень из действующего реестра ячеек, а не из головы агента.
+        # Поэтому состав ниже сверяется с config/site-cells.json, а не
+        # переписывается руками: лишний домен здесь означал бы канал наружу,
+        # которого владелец не открывал.
+        прочие = {
+            "lordserial33.biz", "lordfilm47.space", "1lordserials1.online",
+            "zonafilm.space", "animedia.icu", "animedia.space",
+            "yummyani.org", "yummyani.site", "yummyani.biz",
+        }
+        assert прочие <= {c["domain"] for c in
+                          json.loads((PATHS.root / "config" / "site-cells.json")
+                                     .read_text())["cells"]}
+        assert unattended.network_hosts() == интеграции | витрины | прочие
 
 
 class TestWritePaths:

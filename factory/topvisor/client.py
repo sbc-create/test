@@ -78,11 +78,24 @@ ALLOWED: dict[str, Method] = {
     for m in (
         Method("get/bank_2/info", False, Cost.FREE, "тариф, баланс и состояние счёта"),
         Method("get/projects_2/projects", False, Cost.FREE, "список проектов"),
-        Method("get/projects_2/searchers", False, Cost.FREE, "поисковые системы проекта"),
+        # `get/projects_2/searchers` убран: API отвечает «Call to undefined
+        # method» (прогон 2026-09-27 22:46, var/topvisor/check-latest.txt, все
+        # 15 проектов аккаунта). Список разрешённых означает «проверено, что
+        # метод существует»; этот не существует. Настоящее имя метода для
+        # поисковых систем не подтверждено документом — угадывать нельзя.
+        # `add/projects_2/searchers` остаётся в списке, но в план не попадает:
+        # без проверенного чтения нечем подтвердить результат записи.
         Method("get/keywords_2/groups", False, Cost.FREE, "группы запросов"),
         Method("get/keywords_2/keywords", False, Cost.FREE, "запросы"),
         Method("add/projects_2/projects", True, Cost.FREE, "создать проект"),
-        Method("edit/projects_2/projects", True, Cost.FREE, "изменить свойства проекта"),
+        # `edit/projects_2/projects` убран: API отвечает на него
+        # «Call to undefined method» (прогон 2026-09-27, отчёт
+        # var/topvisor/connect-latest.txt). Метод в списке разрешённых
+        # означает «проверено, что он существует и бесплатен», а этот не
+        # существует. Заменять его угаданным именем нельзя: замороженной
+        # документации Topvisor нет, а перебор имён у этого API платный.
+        # Пока имя не подтверждено документом, правка свойств проекта
+        # остаётся операцией владельца в интерфейсе.
         Method("add/projects_2/searchers", True, Cost.FREE, "добавить поисковую систему"),
         Method("add/keywords_2/groups", True, Cost.FREE, "создать группу запросов"),
         Method("add/keywords_2/keywords", True, Cost.FREE, "добавить запросы"),
@@ -294,3 +307,30 @@ class TopvisorClient:
             {"limit": 500, "fields": list(self.PROJECT_FIELDS)},
         )
         return [p for p in (result or []) if isinstance(p, dict)]
+
+    # -- фактические настройки проекта ------------------------------------
+    #
+    # Все три метода — ЧТЕНИЕ и объявлены бесплатными. Нужны они затем, что
+    # «проект создан» и «проект настроен» — разные состояния: поисковые системы,
+    # регион и семантика задаются отдельно, и запись в манифесте их наличия не
+    # доказывает. Требование владельца — проверять результат повторным чтением
+    # из сервиса.
+    #
+    # Про имя параметра. Форма запроса здесь не угадывается «по смыслу»: если
+    # API ожидает другое имя, он отвечает ошибкой с указанием параметра — как
+    # ответил на `fields[n].name` при пробе привязки счётчика, — и этот ответ
+    # попадает в отчёт. Читающий метод ничего не стоит и ничего не меняет,
+    # поэтому один точный запрос с разбором ответа — законный способ узнать
+    # контракт, в отличие от перебора имён методов, который запрещён.
+
+    def searchers(self, project_id: int) -> list[dict]:
+        result = self.call("get/projects_2/searchers", {"project_id": int(project_id)})
+        return [s for s in (result or []) if isinstance(s, dict)]
+
+    def keyword_groups(self, project_id: int) -> list[dict]:
+        result = self.call("get/keywords_2/groups", {"project_id": int(project_id)})
+        return [g for g in (result or []) if isinstance(g, dict)]
+
+    def keywords(self, project_id: int) -> list[dict]:
+        result = self.call("get/keywords_2/keywords", {"project_id": int(project_id)})
+        return [k for k in (result or []) if isinstance(k, dict)]

@@ -23,16 +23,29 @@ User=claude
 Group=claude
 WorkingDirectory=/home/claude/wt-portable-site-cell-01
 LoadCredential=yandex_oauth:/etc/site-factory/secrets/yandex_oauth_token
-Environment=YANDEX_OAUTH_TOKEN_FILE=%d/yandex_oauth
+# Путь к секрету вычисляет КОД по $CREDENTIALS_DIRECTORY: специфера %d в
+# systemd 249 (Ubuntu 22.04) нет, он появился в 250, и строка оставалась
+# literal-ом — служба падала на «файл не найден», не назвав причины.
 Environment=PYTHONDONTWRITEBYTECODE=1
 ExecStartPre=/usr/bin/install -d -m 0755 /home/claude/wt-portable-site-cell-01/var/analytics
 ExecStart=/home/claude/wt-portable-site-cell-01/bin/seo-operator analytics-collect \
     --json --out /home/claude/wt-portable-site-cell-01/var/analytics/cabinet-latest.json
 
+# Причина отказа обязана быть видна без journalctl: у сессии агента доступа к
+# журналу нет, и пустой каталог отчётов неотличим от «служба не запускалась».
+StandardOutput=journal
+# Файл лежит в var/, а не в var/analytics/: поток systemd открывает ДО
+# ExecStartPre, и путь в ещё не созданном каталоге уронил бы юнит на самой
+# подготовке — с причиной, которую этот же файл и должен был показать.
+StandardError=append:/home/claude/wt-portable-site-cell-01/var/analytics-cabinet-stderr.log
+
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=read-only
-ReadWritePaths=/home/claude/wt-portable-site-cell-01/var
+# Сборщик пишет ДВА пути: файл из --out и артефакт прогона. Без второго пути
+# ProtectSystem=strict отказывает в записи, и прогон не оставляет ни отчёта,
+# ни причины: ровно так прошёл впустую запуск 18:42.
+ReadWritePaths=/home/claude/wt-portable-site-cell-01/var /home/claude/wt-portable-site-cell-01/artifacts
 ProtectKernelTunables=true
 RestrictSUIDSGID=true

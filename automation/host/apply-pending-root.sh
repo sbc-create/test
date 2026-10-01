@@ -3,30 +3,45 @@
 #
 #   sudo bash automation/host/apply-pending-root.sh [--dry-run]
 #
-# Что входит и зачем
-# ------------------
+# Что УЖЕ сделано и сюда больше не входит (проверено 2026-09-28 12:30):
+# исполнитель обновлён, площадка animego-04 запущена, счётчик an1meg0.site
+# 113121466 заведён с девятью целями, домен выложен и принят публично;
+# дополнения каталога an1meg0.site доставлены штатным исполнителем, root
+# для них не понадобился — /top/ отдаёт 99 карточек, как у соседей.
 #
-#   1. обновление исполнителя  доставка недельного снимка в хранилище витрины
-#                              и запись animedia-01 в реестре (без data_dir
-#                              выпуск ICU отказывает до сборки)
-#   2. nginx для zona-02       конфигурации zonafilm.cc нет ни в одном
-#                              загружаемом каталоге; служба на 9123 отвечает
-#   3. сертификат zonafilm.cc  webroot, как у остальных витрин
-#   4. блок 443                отдельным шагом: со ссылкой на несуществующий
-#                              сертификат nginx не перезагрузится вовсе
+# Что осталось и что каждый шаг разблокирует:
+#
+#   1. семантика Topvisor       Девять новых проектов стоят с нулём групп и
+#                               нулём запросов. Причина найдена и исправлена в
+#                               коде: `topvisor apply` выходил по пустому плану,
+#                               не дойдя до второй фазы. Служба читает ключ через
+#                               LoadCredential; сессии каталог секрета закрыт и
+#                               отвечает ровно это: «Нет доступа к каталогу с
+#                               user-id: процесс не в группе, которой выдан
+#                               файл». Методы add/keywords_2/* бесплатны;
+#                               платные маршруты клиент не выполняет ни при
+#                               каком флаге.
+#
+#   2. расписание Yummy         Контентный контур Yummy собран и опубликован
+#                               вручную 2026-09-28 (7386 записей, свежайшая
+#                               публикация 27.09). Ничто его не запускает: с
+#                               10.09 импорт не выполнялся, и проекция протухла
+#                               на 424 часа. Таймер ставит это на расписание —
+#                               через двадцать минут после ночного прохода
+#                               поставщика.
 #
 # Каждый шаг проверяется и не трогает соседей при отказе. Шаги независимы:
 # провал одного не отменяет остальных, итог печатается в конце.
+#
+# Чего сценарий НЕ делает: не меняет sudoers, firewall, SSH, DNS и индексацию;
+# не трогает чужие витрины; не открывает наружу ни одного порта; не выводит
+# секретов.
 set -Eeuo pipefail
 
 dry_run=0
 [ "${1:-}" = "--dry-run" ] && dry_run=1
 
 SRC_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
-DOMAIN=zonafilm.cc
-TLS_SOURCE="${SRC_ROOT}/automation/host/nginx-site/zona-02-tls.conf"
-SITE_CONF=/etc/nginx/lords/zona-02.conf
-WEBROOT=/var/www/certbot
 
 log()  { printf '\033[1m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[33m[!]\033[0m %s\n' "$*"; }
@@ -38,104 +53,72 @@ declare -a results=()
 step_ok()   { results+=("ok    $1"); }
 step_fail() { results+=("ОТКАЗ $1: $2"); warn "$1: $2"; }
 
-# ---------------------------------------------------------------- 1. исполнитель
-log "шаг 1: обновление исполнителя"
-if [ "$dry_run" = 1 ]; then
-  printf '   [сухой прогон] bash automation/host/install-cell-executor.sh\n'
-elif bash "${SRC_ROOT}/automation/host/install-cell-executor.sh"; then
-  step_ok "исполнитель обновлён"
-else
-  step_fail "исполнитель" "install-cell-executor.sh вернул ненулевой код"
-fi
-
-# ------------------------------------------------------------------ 2. nginx
-log "шаг 2: конфигурация nginx для zona-02"
-if [ "$dry_run" = 1 ]; then
-  printf '   [сухой прогон] bash automation/host/install-site-nginx.sh --site zona-02\n'
-elif [ -f "$SITE_CONF" ]; then
-  step_ok "конфигурация zona-02 уже стоит"
-elif bash "${SRC_ROOT}/automation/host/install-site-nginx.sh" --site zona-02; then
-  step_ok "конфигурация zona-02 подключена"
-else
-  step_fail "nginx zona-02" "см. вывод выше"
-fi
-
-# ------------------------------------------------------------ 3. сертификат
-log "шаг 3: сертификат $DOMAIN"
-if [ "$dry_run" = 1 ]; then
-  printf '   [сухой прогон] certbot certonly --webroot -w %s -d %s -d www.%s\n' \
-      "$WEBROOT" "$DOMAIN" "$DOMAIN"
-elif [ -f "/etc/letsencrypt/live/${DOMAIN}/fullchain.pem" ]; then
-  step_ok "сертификат уже есть"
-elif [ ! -f "$SITE_CONF" ]; then
-  step_fail "сертификат" "нет конфигурации nginx — ACME-проверке некуда прийти"
-elif certbot certonly --webroot -w "$WEBROOT" -d "$DOMAIN" -d "www.${DOMAIN}" \
-       --non-interactive --agree-tos --register-unsafely-without-email \
-       --keep-until-expiring; then
-  step_ok "сертификат выпущен"
-else
-  step_fail "сертификат" "certbot вернул ненулевой код"
-fi
-
-# -------------------------------------------------------------- 4. блок 443
-log "шаг 4: HTTPS для $DOMAIN"
-if [ "$dry_run" = 1 ]; then
-  printf '   [сухой прогон] дописать блок 443 из %s и перезагрузить nginx\n' "$TLS_SOURCE"
-elif [ ! -f "/etc/letsencrypt/live/${DOMAIN}/fullchain.pem" ]; then
-  step_fail "HTTPS" "сертификата нет — блок 443 уронил бы nginx целиком"
-elif grep -qs "listen 443" "$SITE_CONF"; then
-  step_ok "блок 443 уже стоит"
-else
-  cp -p "$SITE_CONF" "${SITE_CONF}.before-tls"
-  cat "$TLS_SOURCE" >> "$SITE_CONF"
-  if nginx -t; then
-    nginx -s reload
-    rm -f "${SITE_CONF}.before-tls"
-    step_ok "HTTPS включён"
-  else
-    mv "${SITE_CONF}.before-tls" "$SITE_CONF"
-    nginx -t >/dev/null 2>&1 && nginx -s reload || true
-    step_fail "HTTPS" "nginx -t не прошёл, конфигурация возвращена"
+# ---------------------------------------------------------------------------
+# 1. Семантика Topvisor
+# ---------------------------------------------------------------------------
+topvisor_step() {
+  local name="семантика Topvisor"
+  log "$name"
+  if [ "$dry_run" = 1 ]; then
+    if systemctl cat topvisor-connect.service >/dev/null 2>&1; then
+      echo "   [сухой прогон] systemctl start --wait topvisor-connect.service"
+      step_ok "$name (сухой прогон)"
+    else
+      step_fail "$name" "юнита topvisor-connect.service нет — сначала install-units.sh"
+    fi
+    return 0
   fi
-fi
+  if ! systemctl cat topvisor-connect.service >/dev/null 2>&1; then
+    step_fail "$name" "юнита topvisor-connect.service нет"
+    return 0
+  fi
+  if systemctl start --wait topvisor-connect.service; then
+    step_ok "$name"
+  else
+    step_fail "$name" "служба вернула ненулевой код, отчёт: var/topvisor/connect-latest.txt"
+  fi
+}
+topvisor_step
 
-# ------------------------------------------- 5. песочница издателя каталога
-log "шаг 5: издателю каталога — право писать в хранилища ячеек"
-if [ "$dry_run" = 1 ]; then
-  printf '   [сухой прогон] bash automation/host/install-publisher-cell-paths.sh\n'
-elif grep -qs '^ReadWritePaths=/srv/zonafilm-space/data' \
-       /etc/systemd/system/nova-daily-refresh.service.d/*.conf 2>/dev/null; then
-  step_ok "пути ячеек уже объявлены издателю (drop-in на месте)"
-elif bash "${SRC_ROOT}/automation/host/install-publisher-cell-paths.sh"; then
-  step_ok "издатель может писать в хранилища ячеек"
-else
-  step_fail "песочница издателя" "см. вывод выше"
-fi
-
-# ----------------------------------------- 6. сборщик недельного снимка Zona
-log "шаг 6: сборщик недельного снимка zona-01"
-WEEKLY_SRC=/srv/zonafilm-space/current/deploy
-if [ "$dry_run" = 1 ]; then
-  printf '   [сухой прогон] поставить zonafilm-space-popular-weekly.{service,timer}\n'
-elif [ -f /etc/systemd/system/zonafilm-space-popular-weekly.timer ]; then
-  step_ok "сборщик недельного снимка уже стоит"
-elif [ ! -f "${WEEKLY_SRC}/zonafilm-space-popular-weekly.service" ]; then
-  step_fail "сборщик снимка" "нет ${WEEKLY_SRC}/zonafilm-space-popular-weekly.service — выпуск с ним ещё не переключён"
-else
-  install -m 0644 "${WEEKLY_SRC}/zonafilm-space-popular-weekly.service" /etc/systemd/system/
-  install -m 0644 "${WEEKLY_SRC}/zonafilm-space-popular-weekly.timer" /etc/systemd/system/
+# ---------------------------------------------------------------------------
+# 2. Расписание обновления контентного контура Yummy
+# ---------------------------------------------------------------------------
+yummy_step() {
+  local name="расписание обновления каталога Yummy"
+  local src="${SRC_ROOT}/automation/host"
+  log "$name"
+  if [ ! -f "${src}/yummy-content-refresh.service" ]; then
+    step_fail "$name" "юнита нет в репозитории"
+    return 0
+  fi
+  if [ "$dry_run" = 1 ]; then
+    echo "   [сухой прогон] install yummy-content-refresh.{service,timer} -> /etc/systemd/system/"
+    echo "   [сухой прогон] systemctl daemon-reload && systemctl enable --now yummy-content-refresh.timer"
+    step_ok "$name (сухой прогон)"
+    return 0
+  fi
+  install -m 0644 "${src}/yummy-content-refresh.service" \
+    /etc/systemd/system/yummy-content-refresh.service
+  install -m 0644 "${src}/yummy-content-refresh.timer" \
+    /etc/systemd/system/yummy-content-refresh.timer
   systemctl daemon-reload
-  systemctl enable --now zonafilm-space-popular-weekly.timer
-  if systemctl start zonafilm-space-popular-weekly.service \
-     && [ -f /srv/zonafilm-space/data/zona-01-popular-weekly.json ]; then
-    step_ok "сборщик снимка поставлен, первый снимок собран"
+  if systemctl enable --now yummy-content-refresh.timer; then
+    step_ok "$name"
   else
-    step_fail "сборщик снимка" "юнит поставлен, но снимок не появился: journalctl -u zonafilm-space-popular-weekly.service -n 30"
+    step_fail "$name" "таймер не включён"
   fi
-fi
+}
+yummy_step
 
-echo
+# ---------------------------------------------------------------------------
+# Итог
+# ---------------------------------------------------------------------------
 log "итог"
-printf '   %s\n' "${results[@]:-нечего делать}"
-printf '%s\n' "${results[@]:-}" | grep -q '^ОТКАЗ' && exit 1
-exit 0
+for line in "${results[@]}"; do printf '   %s\n' "$line"; done
+if printf '%s\n' "${results[@]}" | grep -q '^ОТКАЗ'; then
+  echo
+  warn "часть шагов не выполнена — остальные применены, повтор безопасен"
+  exit 1
+fi
+echo
+log "готово. Проверить: семантику в var/topvisor/check-after-connect.txt и свежесть /srv/lords/.frontend/yummy-07-catalog.json"

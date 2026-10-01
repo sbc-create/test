@@ -176,7 +176,22 @@ def cmd_content(args) -> int:
 
 
 def cmd_freshness(args) -> int:
-    cell = registry.resolve(args.site)
+    """Свежесть доставки одной ячейки. Имя обязательно и спрашивается прямо.
+
+    Без `--site` команда падала трассировкой из `registry.resolve`: «пустой
+    запрос к реестру ячеек» — сообщение верное, но поданное как сбой программы,
+    а не как отказ. Соседняя команда `cell content` умеет обходить все ячейки, и
+    ссылка на неё здесь дешевле, чем догадка пользователя.
+    """
+    if not args.site:
+        print("BLOCKED_INPUT: нужен --site. Свежесть всех ячеек сразу показывает "
+              "`python3 -m factory cell content`", file=sys.stderr)
+        return 2
+    try:
+        cell = registry.resolve(args.site)
+    except registry.RegistryError as отказ:
+        print(f"BLOCKED_INPUT: {отказ}", file=sys.stderr)
+        return 2
     path = _layout(args).data / "sync-checkpoint.json"
     _print(sync.freshness(path, cell.site_id))
     return 0
@@ -283,6 +298,28 @@ def cmd_submit(args) -> int:
     if not без_выпуска and not (args.commit and args.expect_digest):
         print("нужны --site, --commit и --expect-digest", file=sys.stderr)
         return 2
+    # Репозиторий и коммит проверяются ДО создания заявки. Внутрь `собрать`
+    # проверку ставить нельзя: это чистый конструктор, которым пользуются и
+    # тесты, и другие потоки с синтетическими идентификаторами — там рабочей
+    # копии нет по построению. Граница подачи — правильное место: здесь заявка
+    # действительно отправляется исполнителю.
+    if not без_выпуска:
+        # Порядок проверок — от дешёвых к дорогим и от локальных к внешним:
+        # рабочая копия у себя, затем доступ исполнителя. Обе стоят ДО создания
+        # заявки, потому что отказ после сборки и зелёного CI — это потраченная
+        # работа и неверно названная причина.
+        for проверка, аргументы in ((q.проверить_рабочую_копию, (args.site, args.commit or "")),
+                                    (q.проверить_комплектность_данных, (args.site,)),
+                                    (q.проверить_маршрут, (args.site,)),
+                                    (q.проверить_сборщик, (args.site,)),
+                                    (q.проверить_лаунчер, (args.site,)),
+                                    (q.проверить_доступ_исполнителя, (args.site,))):
+            try:
+                проверка(*аргументы)
+            except q.RequestRejected as exc:
+                print(f"BLOCKED_ACCESS: {exc}" if проверка is q.проверить_доступ_исполнителя
+                      else f"BLOCKED_INPUT: {exc}", file=sys.stderr)
+                return 2
     try:
         заявка = q.собрать(args.site, args.commit or "", args.expect_digest or "",
                            operation=args.cell_operation, ci_run=args.ci_run or "",
@@ -292,6 +329,28 @@ def cmd_submit(args) -> int:
         print(f"BLOCKED_INPUT: {exc}", file=sys.stderr)
         return 2
     _print(итог)
+    return 0
+
+
+def cmd_runs(args) -> int:
+    """Показать последние прогоны CI сайта: ветка, коммит, статус, исход."""
+    from factory.cell import trigger as tr
+
+    cell = registry.resolve(args.site)
+    remote = (cell.repo or {}).get("remote") or ""
+    if not remote:
+        print(f"BLOCKED_INPUT: у {cell.site_id} не объявлен repo.remote", file=sys.stderr)
+        return 2
+    try:
+        список = tr.прогоны(remote)
+    except tr.TriggerError as exc:
+        print(f"BLOCKED_ACCESS: {exc}", file=sys.stderr)
+        return 3
+    _print({"site_id": cell.site_id, "repo": tr.проект(remote), "runs": [
+        {"sha": (п.get("headSha") or "")[:12], "branch": п.get("headBranch"),
+         "status": п.get("status"), "conclusion": п.get("conclusion"),
+         "run": п.get("databaseId"), "at": п.get("createdAt")}
+        for п in список]})
     return 0
 
 
@@ -395,6 +454,7 @@ ACTIONS = {
     "content": cmd_content,
     "deliver": cmd_deliver,
     "runtime": cmd_runtime,
+    "runs": cmd_runs,
     "submit": cmd_submit,
     "serve": cmd_serve,
     "trigger": cmd_trigger,

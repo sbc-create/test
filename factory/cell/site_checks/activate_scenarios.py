@@ -42,8 +42,20 @@ def sandbox(tmp: Path, repo: Path, site_id: str, port: int):
         (shared/name).write_text('{}', encoding='utf-8')
     # PUB берётся из конфигурации самого сайта: фиксированное значение
     # заваливало бы проверку у другого семейства, и падал бы тест, а не скрипт.
+    #
+    # Запасного числа здесь нет намеренно. Прежде стояло `or '10238'` — номер
+    # одного конкретного семейства, и у витрины, которая своего не объявила,
+    # сценарий активации проходил бы с ЧУЖИМ издателем, подтверждая настройку,
+    # которой нет. После того как номера стали разными у каждого домена
+    # (D138), такое умолчание — готовый способ проверить не то, что выложено.
+    # Пустое поле — BLOCKED_INPUT, а не повод подставить соседнее значение.
     cfg = json.loads((repo/'config'/'site.json').read_text(encoding='utf-8'))
-    pub = cfg.get('publisher_id_expected') or '10238'
+    pub = str(cfg.get('publisher_id_expected') or '').strip()
+    if not pub:
+        raise SystemExit(
+            f"{site_id}: config/site.json не объявляет publisher_id_expected — "
+            "сценарий активации нечем проверять, и подставить номер соседней "
+            "витрины нельзя")
     (shared/f'player-{site_id}.json').write_text(
         json.dumps({'publisher_id': pub}), encoding='utf-8')
     (old_root/'data'/'animedia-community.json').write_text(

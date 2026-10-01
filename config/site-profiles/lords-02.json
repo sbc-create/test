@@ -204,7 +204,7 @@
     ]
   },
   "legal_profile": {
-    "contact_email": "sbc.claude@yandex.ru",
+    "contact_email": "spam.abusekp@proton.me",
     "owner": null,
     "documents": null
   },
@@ -228,9 +228,9 @@
   "player": {
     "provider": "cdnvideohub",
     "credential_profile": "lords",
-    "publisher_id_ref": "secret://cdnvideohub/lords/lords-02/publisher-id",
+    "publisher_id_ref": "repo://config/site.json#publisher_id_expected",
     "sidecar": "/srv/lords/.frontend/player-lords-02.json",
-    "note": "Привязка витрины к паре учётных данных провайдера. Здесь только ссылка: значение Publisher ID живёт в Secret Hub и в git не попадает. Боковой файл создаёт операция PLAYER_CONFIGURE.",
+    "note": "Привязка витрины к плееру провайдера. Значение Publisher ID живёт в репозитории витрины (config/site.json#publisher_id_expected, D138): оно публичное — стоит в разметке страницы атрибутом data-publisher-id. Секретом остаётся пара учётных данных провайдера, она в Secret Hub и сюда не попадает. Боковой файл создаёт операция PLAYER_CONFIGURE.",
     "source_mode": "provider-id"
   }
 }

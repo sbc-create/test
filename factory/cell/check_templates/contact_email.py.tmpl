@@ -1,0 +1,122 @@
+#!/usr/bin/env python3
+"""Публичная почта обратной связи витрины: есть, та самая, и проведена в рантайм.
+
+Зачем проверка в пути выпуска
+-----------------------------
+
+Опрос сети 2026-10-01 нашёл три разных состояния одновременно: на части витрин
+стоял прежний адрес, на yummyani.org и yummyani.site адреса не было ВОВСЕ, а
+конфигурация при этом везде выглядела заполненной. То есть «значение лежит в
+config/site.json» и «посетитель видит адрес» — разные утверждения, и первое
+проверяется здесь, до выпуска.
+
+Ровно так же однажды вышло с проводкой: `contact_email` стоял, строка подвала
+стояла, а `run.py` переменную не выставлял — подвал вышел бы пустым на каждой
+странице при зелёных проверках. Поэтому проверяется не наличие поля, а ЦЕПОЧКА:
+значение -> переменная окружения -> отсутствие прежнего адреса в репозитории.
+
+Чего проверка НЕ делает
+-----------------------
+
+Не подтверждает доставку писем: правильная ссылка и дошедшее письмо — разные
+утверждения, второе проверяет живой человек. И не заменяет опрос выложенной
+страницы: исходники могут быть верны, а выложен прежний релиз.
+"""
+from __future__ import annotations
+
+import json
+import re
+import sys
+from pathlib import Path
+
+КОРЕНЬ = Path(__file__).resolve().parent.parent
+
+#: Адрес сети. Копия значения из factory/contact.py::ПОЧТА_СЕТИ — репозиторий
+#: витрины отдельный и импортировать фабрику не может. Чтобы копии не
+#: разошлись, их совпадение сторожит
+#: tests/unit/test_contact_email_single_source.py в фабрике.
+ОЖИДАЕТСЯ = "@@АДРЕС@@"
+
+#: Прежний адрес. Назван, чтобы проверка умела сказать, ЧЕГО не должно быть.
+ПРЕЖНИЙ = "sbc.claude@yandex.ru"
+
+#: Файлы, которым разрешено упоминать прежний адрес: сама эта проверка.
+СВОИ = {Path(__file__).resolve()}
+
+
+def беды() -> list[str]:
+    итог: list[str] = []
+
+    конфиг = КОРЕНЬ / "config" / "site.json"
+    if not конфиг.is_file():
+        return [f"нет {конфиг}"]
+    данные = json.loads(конфиг.read_text(encoding="utf-8"))
+    адрес = str(данные.get("contact_email") or "").strip()
+
+    if not адрес:
+        итог.append("config/site.json: contact_email пуст — это BLOCKED_INPUT, "
+                    "а не умолчание: подвал выйдет без строки обратной связи")
+    elif адрес == ПРЕЖНИЙ:
+        итог.append(f"config/site.json: contact_email всё ещё прежний ({ПРЕЖНИЙ}), "
+                    f"ожидается {ОЖИДАЕТСЯ}")
+    elif адрес != ОЖИДАЕТСЯ:
+        итог.append(f"config/site.json: contact_email {адрес!r}, "
+                    f"а у сети {ОЖИДАЕТСЯ!r}. Свой адрес на отдельной витрине — "
+                    "потерянные письма, а не гибкость")
+    if адрес and ("@" not in адрес or " " in адрес or адрес.count("@") != 1):
+        итог.append(f"config/site.json: contact_email {адрес!r} не похож на адрес")
+
+    # Проводка: кто читает переменную, тот должен её и получать.
+    run = КОРЕНЬ / "run.py"
+    рантаймы = list((КОРЕНЬ / "src").glob("*frontend*.py")) if (КОРЕНЬ / "src").is_dir() else []
+    читают = [п for п in рантаймы
+              if "SITE_CONTACT_EMAIL" in п.read_text(encoding="utf-8", errors="replace")]
+    if читают and run.is_file():
+        текст = run.read_text(encoding="utf-8")
+        if "SITE_CONTACT_EMAIL" not in текст:
+            итог.append(f"{читают[0].name} читает SITE_CONTACT_EMAIL, а run.py её не "
+                        "выставляет — строка обратной связи выйдет пустой")
+        elif "contact_email" not in текст:
+            итог.append("run.py выставляет SITE_CONTACT_EMAIL не из config/site.json")
+        else:
+            строки = текст.split("\n")
+            где = next((n for n, s in enumerate(строки) if "SITE_CONTACT_EMAIL" in s), None)
+            проверка = next((n for n, s in enumerate(строки)
+                             if s.strip().startswith("if ") and ".check" in s), None)
+            if где is not None and проверка is not None and где > проверка:
+                итог.append("выставление SITE_CONTACT_EMAIL стоит ПОСЛЕ раннего "
+                            "возврата --check: проверка конфигурации его не исполнит")
+            # Имя, у которого спрашивают contact_email, должно быть присвоено выше.
+            м = re.search(r'(\w+)\.get\(["\']contact_email["\']\)', текст)
+            if м and not re.search(rf'^\s*{re.escape(м.group(1))}\s*(?:=|:\s*\w+\s*=)',
+                                   текст[:м.start()], re.M):
+                итог.append(f"run.py спрашивает {м.group(1)}.get('contact_email'), "
+                            f"а имя {м.group(1)!r} выше не присваивается — NameError "
+                            "при запуске, который py_compile не видит")
+
+    # Прежнего адреса в репозитории не осталось.
+    for путь in КОРЕНЬ.rglob("*"):
+        if not путь.is_file() or путь.resolve() in СВОИ:
+            continue
+        if any(ч in путь.parts for ч in ("__pycache__", ".git", "node_modules")):
+            continue
+        if путь.suffix not in {".py", ".json", ".md", ".html", ".css", ".js", ".sh", ".yaml", ".yml"}:
+            continue
+        try:
+            текст = путь.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        if ПРЕЖНИЙ in текст:
+            итог.append(f"{путь.relative_to(КОРЕНЬ)}: остался прежний адрес {ПРЕЖНИЙ}")
+    return итог
+
+
+def main() -> int:
+    плохо = беды()
+    for б in плохо:
+        print(f"  — {б}", file=sys.stderr)
+    return 1 if плохо else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

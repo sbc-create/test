@@ -8,6 +8,7 @@ from pathlib import Path
 
 import pytest
 
+from factory import contact
 from factory.site_engine import gate
 from factory.site_engine.contracts import ContractError
 from factory.site_engine.profiles import profile_from_dict
@@ -16,7 +17,7 @@ from factory.site_engine.scaffold import BASE_MODULES, scaffold_profile
 ROOT = Path(__file__).resolve().parents[2]
 
 ОБЩЕЕ = {
-    "contact_email": "sbc.claude@yandex.ru",
+    "contact_email": contact.ПОЧТА_СЕТИ,
     "owners": {"seo": "site-factory/seo", "renderer-adapters": "site-factory/platform"},
 }
 

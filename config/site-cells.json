@@ -31,23 +31,25 @@
       },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id": "10252"
+        "publisher_id": "10332",
+        "publisher_id_ref": "repo://config/site.json#publisher_id_expected",
+        "note": "Назначен владельцем 2026-10-01. Источник истины — репозиторий витрины, config/site.json#publisher_id_expected (D138); значение направления Secret Hub больше этой витрине не подставляется."
       },
       "data": {
         "database": null,
         "media": null
       },
       "deployed": {
-        "source_commit": "e775c338015548a23b79ced05b19664a6e1d3e0e",
-        "note": "Выделено, CI зелёный, сценарии активации проверены исполнением. НЕ активировано: нужен root."
+        "source_commit": "f6f8e1e191cbcc15b9c68287751183719b6c8878",
+        "note": "Выложенная основа, из которой собран действующий выпуск. Проверено побайтово по src/ в /srv/animedia-icu/app."
       },
       "content_revision": null,
       "last_update": "2026-09-23T19:27:10.603751+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
-        "unit": "nova-animedia-01.service",
-        "previous_unit": null,
+        "unit": "nova-animedia-icu.service",
+        "previous_unit": "nova-animedia-01.service",
         "port": 9121,
         "account": "animedia-icu",
         "app_dir": "/srv/animedia-icu/app",
@@ -57,13 +59,14 @@
         "managed_by": "monolith",
         "data_owner": "pipeline",
         "data_dir_after_relocation": "/srv/animedia-icu/data",
-        "data_dir_note": "Ячейкой витрина ещё НЕ стала: каталогов /srv/animedia-icu нет, исполняется выпуск из общего дерева (/srv/lords/.frontend/releases/20260923T001500Z-community-public-03), снимок читается из общего хранилища. `managed_by: cell` был выставлен до фактического перехода — это прямо запрещено правилом, и цена оказалась не теоретической: несуществующий /srv/animedia-icu/data попадал в ReadWritePaths издателя и вместе с тремя такими же путями Yummy давал 226/NAMESPACE, то есть суточное обновление не запускалось вовсе у ВСЕХ семи витрин. Значение вернётся в data_dir тем же шагом, которым витрина переедет."
+        "data_dir_note": "Ячейкой витрина ещё НЕ стала: каталогов /srv/animedia-icu нет, исполняется выпуск из общего дерева (/srv/lords/.frontend/releases/20260923T001500Z-community-public-03), снимок читается из общего хранилища. `managed_by: cell` был выставлен до фактического перехода — это прямо запрещено правилом, и цена оказалась не теоретической: несуществующий /srv/animedia-icu/data попадал в ReadWritePaths издателя и вместе с тремя такими же путями Yummy давал 226/NAMESPACE, то есть суточное обновление не запускалось вовсе у ВСЕХ семи витрин. Значение вернётся в data_dir тем же шагом, которым витрина переедет.",
+        "unit_note": "Юнит снят с работающего процесса (/proc/<pid>/cgroup), а не взят по имени. Прежнее значение nova-animedia-01.service запускает ОБЩИЙ загрузчик /srv/lords/.frontend/lords-frontend.py и этот домен не обслуживает: активация по нему пошла бы не в ту службу и выглядела бы успехом. Проверено 2026-09-29."
       },
       "release": {
-        "hold": true,
-        "hold_reason": "пин ячейки 20260923T001500Z-community-public-03 совпадает с исполняемым выпуском (проверено /proc/<pid>/cmdline службы nova-animedia-01), поэтому выпуск сам по себе код не сменит. Удержание нужно по другому: пин предшествует модулям сообщества 2.0.1 и 2.1, на -03 живёт дефект колонки рейтинга (голоса ищутся по адресу вместо content_id: «Посетители ещё не голосовали» при двух настоящих голосах на той же странице), а после перехода на автоматический выпуск авторитетом становится пин — следующий прогон отменит выкладку владельца, если пин не переставлен заранее. Снять после того, как владелец выложит актуальный релиз и пин будет переставлен на него, именно в этом порядке. Пользовательские записи лежат вне каталога выпуска (/srv/lords/animedia-01/data/animedia-community.json) и выпуском не затрагиваются.",
+        "hold": false,
+        "hold_reason": "СНЯТО 2026-09-29. Удержание держалось на одном: репозиторий ячейки описывал состояние СТАРШЕ выложенного, и выпуск из него откатил бы витрину назад — у живого рантайма было двенадцать функций, которых в ячейке нет, у живого community.py переключить_избранное и снять_записи_посетителя. Условие снятия было записано порядком: сперва репозиторий приведён к выложенной основе, затем пин переставлен на неё. Оба шага выполнены и проверены: ветка claude/availability-contact-f6f8e1e отведена от f6f8e1e191cb, и пять файлов src/ этой ветки совпадают побайтово с /srv/animedia-icu/app/src (animedia-frontend.py, community.py, collection_contract.py, chronology.py, seo_layer.py); пин переставлен на f6f8e1e191cb, build_id приведён к тому, который витрина объявляет сама. Откатывать больше нечего: основа та же, сверху ровно две правки — доступность серий и контакт обратной связи. Пользовательские данные не затрагиваются: community.py не тронут ни на байт, схема хранилища не меняется, episode_sync пишет три файла и все вне data/site-data. Слепок до выпуска снят публично: из 400 записей одна несёт данные — master-lda-i-plameni-2, 2 голоса и 1 комментарий.",
         "branch": null,
-        "observed": "витрина ОБЪЯВЛЯЕТ 20260922T143111Z-efdef56-animedia-parity, а ИСПОЛНЯЕТ 20260923T001500Z-community-public-03: манифест приведён к релизу в 22:39:53, процесс прочитал его при старте в 22:31:18 и держит прежнее значение в памяти. Метка догонит при перезапуске. Ни метка страницы, ни /__template_version независимыми источниками тут не являются — это одно значение из памяти процесса, показанное двумя способами. Исполняемый код доказывает только /proc/<pid>/cmdline."
+        "observed": "витрина исполняет /srv/animedia-icu/app/src/animedia-frontend.py (pid снят из /proc, старт 2026-09-27 21:36:40Z), манифест приложения объявляет build_id f6f8e1e191cb-animedia-01, site_repo_commit f6f8e1e191cb, community_module 2.1, design 1.2.11. Метку и runtime_digest_match независимыми источниками считать нельзя — оба берутся из памяти процесса; исполняемый код доказывает только сумма файла."
       }
     },
     {
@@ -138,6 +141,76 @@
       }
     },
     {
+      "site_id": "animego-04",
+      "domain": "an1meg0.site",
+      "aliases": [
+        "www.an1meg0.site"
+      ],
+      "status": "planned",
+      "repo": {
+        "kind": "remote",
+        "path": "var/site-repos/an1meg0-site",
+        "remote": "https://github.com/sbc-create/site-an1meg0-site"
+      },
+      "template": {
+        "template_id": "animego",
+        "order_id": "launch-an1meg0-site",
+        "family": "animego",
+        "note": "Экземпляр создан штатным инструментом семейства tools/new_site.py из публично проверенного выпуска an1mego.site (build-id animego-02-7454efd48a1c), шаблон закреплён на site-animego-01@80a0fb5434441fcc3a08f7ee3b0241f3962111ff. В пуле шаблонов семейства animego нет: пул содержит только lords, и это отдельный вход владельца."
+      },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
+      "pins": {
+        "template": "animego",
+        "modules": {},
+        "schemas": {
+          "site_config": "1"
+        }
+      },
+      "runtime": {
+        "unit": "nova-an1meg0-site.service",
+        "previous_unit": null,
+        "port": 9152,
+        "account": "an1meg0-site",
+        "app_dir": "/srv/an1meg0-site/app",
+        "data_dir": "/srv/an1meg0-site/data",
+        "legacy_root": "<data>/site",
+        "reload": "mtime",
+        "managed_by": "cell",
+        "data_owner": "pipeline",
+        "unit_note": "Третий домен AnimeGo. Порт 9152 — следующий свободный за 9150 (an1mego.site) и 9151 (animeg0.site); проверено, что он не слушается. Каталог данных свой: смешение данных трёх площадок отправило бы чужие комментарии и оценки в чужое хранилище."
+      },
+      "release": {
+        "hold": false,
+        "hold_reason": null,
+        "branch": "claude/extract-an1meg0-site"
+      },
+      "indexing": {
+        "desired_state": "CLOSED",
+        "reason": "Тестовая площадка. noindex/nofollow отдаёт рантайм, заготовка nginx дублирует заголовком. Открытие индексации — отдельное решение владельца."
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id": null,
+        "publisher_id_ref": "secret://cdnvideohub/yami/publisher-id",
+        "note": "Идентификатор не хранится в реестре: приходит из Secret Hub по ссылке и попадает в config/player.json при установке. publisher_id_expected шаблона — 10252; подставлять число соседнего домена нельзя."
+      },
+      "analytics": {
+        "metrika_counter_id": null,
+        "metrika_verified_at": null,
+        "metrika_data_seen_at": null,
+        "topvisor_project_id": 33768290,
+        "topvisor_verified_at": "2026-09-27T23:15:42Z",
+        "topvisor_settings": {
+          "name": "an1meg0.site — аниме: новинки",
+          "source": "get/projects_2/projects"
+        },
+        "note": "проект 33768290 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
+      }
+    },
+    {
       "site_id": "lords-01",
       "domain": "lordfilm47.space",
       "aliases": [],
@@ -166,7 +239,9 @@
       },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id": "10238"
+        "publisher_id": "10373",
+        "publisher_id_ref": "repo://config/site.json#publisher_id_expected",
+        "note": "Назначен владельцем 2026-10-01. Источник истины — репозиторий витрины, config/site.json#publisher_id_expected (D138); значение направления Secret Hub больше этой витрине не подставляется."
       },
       "data": {
         "database": null,
@@ -191,6 +266,15 @@
         "reload": "mtime",
         "managed_by": "cell",
         "data_owner": "pipeline"
+      },
+      "analytics": {
+        "topvisor_project_id": 32531504,
+        "topvisor_verified_at": "2026-09-27T23:15:42Z",
+        "topvisor_settings": {
+          "name": "lordfilm47 — витрина фильмов и сериалов",
+          "source": "get/projects_2/projects"
+        },
+        "note": "проект 32531504 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -221,7 +305,9 @@
       },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id_ref": null
+        "publisher_id_ref": "repo://config/site.json#publisher_id_expected",
+        "publisher_id": "10378",
+        "note": "Назначен владельцем 2026-10-01. Источник истины — репозиторий витрины, config/site.json#publisher_id_expected (D138); значение направления Secret Hub больше этой витрине не подставляется."
       },
       "data": {
         "database": null,
@@ -246,6 +332,15 @@
         "reload": "mtime",
         "managed_by": "cell",
         "data_owner": "pipeline"
+      },
+      "analytics": {
+        "topvisor_project_id": 32531521,
+        "topvisor_verified_at": "2026-09-27T23:15:42Z",
+        "topvisor_settings": {
+          "name": "lordserial33 — сериалы, сезоны и эпизоды",
+          "source": "get/projects_2/projects"
+        },
+        "note": "проект 32531521 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -301,6 +396,15 @@
         "reload": "mtime",
         "managed_by": "cell",
         "data_owner": "pipeline"
+      },
+      "analytics": {
+        "topvisor_project_id": 32531542,
+        "topvisor_verified_at": "2026-09-27T23:15:42Z",
+        "topvisor_settings": {
+          "name": "1lordserials1 — подборки и рекомендации",
+          "source": "get/projects_2/projects"
+        },
+        "note": "проект 32531542 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -316,17 +420,17 @@
         "remote": "https://github.com/sbc-create/site-lordserials22-info"
       },
       "template": {
-        "template_id": null,
+        "template_id": "lords-animation",
         "order_id": "launch-lordserials22-info",
         "family": "lords",
-        "note": "ПРОФИЛЬ ШАБЛОНА НЕ НАЗНАЧЕН — вход владельца. Свободных шаблонов в пуле нет (все четыре закреплены), поэтому нужен либо новый шаблон, либо экземпляр проверенного выпуска: назвать repo@commit витрины-образца. Подставлять похожий профиль соседнего домена нельзя. В пуле есть НЕИСПОЛЬЗОВАННАЯ резервация: шаблон lords-genre закреплён за site_id lords-04, а домен у неё пустой (domain: null). Её можно привязать к одному из трёх доменов lordserials22.* — это одно решение владельца, а не три. Сам привязывать не стал: порядок партии называет первым lordserials22.site, а у него нет записи A."
+        "note": "Профиль lords-animation версии 1.1.0, раздел во владении /animation/. Назначен сессией шаблона Lords: docs/handoff/LORDS_TO_FACTORY-001.md, ветка claude/lords-template-consolidation-01, коммит fd674db4d6ba. Привязка по домену: предложенные там site_id у меня заняты, и запись называет их предложенными. lords-genre выдавать нельзя — объявлен неподдержанным и закреплён за lords-04."
       },
       "deploy_target": {
         "ref": "claude-control-01",
         "server": null
       },
       "pins": {
-        "template": null,
+        "template": "lords-animation",
         "modules": {},
         "schemas": {
           "site_config": "1"
@@ -335,7 +439,8 @@
       "publisher": {
         "provider": "cdnvideohub",
         "publisher_id": null,
-        "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте."
+        "note": "Идентификатор не хранится в реестре: он приходит из Secret Hub по ссылке publisher_id_ref и попадает в config/player.json при выкладке. Источник назван в docs/LORDS_TEMPLATE_NEWDOMAINS.md семейства Lords. Подставлять сюда число соседнего домена нельзя: 10238 объявлен у пяти действующих витрин.",
+        "publisher_id_ref": "secret://cdnvideohub/lords/publisher-id"
       },
       "runtime": {
         "unit": "nova-lordserials22-info.service",
@@ -357,6 +462,18 @@
       "indexing": {
         "desired_state": "CLOSED",
         "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
+      },
+      "analytics": {
+        "metrika_counter_id": 113109083,
+        "metrika_verified_at": null,
+        "metrika_data_seen_at": null,
+        "topvisor_project_id": 33762550,
+        "topvisor_verified_at": "2026-09-27T23:15:42Z",
+        "topvisor_settings": {
+          "name": "lordserials22.info — анимация и мультсериалы",
+          "source": "get/projects_2/projects"
+        },
+        "note": "счётчик 113109083 создан службой, отчёт var/analytics/connect-lordserials22.info.json от 2026-09-27T22:47:19Z; домен счётчика по ответу API — lordserials22.info. проект 33762550 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -372,17 +489,17 @@
         "remote": "https://github.com/sbc-create/site-lordserials22-site"
       },
       "template": {
-        "template_id": null,
+        "template_id": "lords-dorama",
         "order_id": "launch-lordserials22-site",
         "family": "lords",
-        "note": "ПРОФИЛЬ ШАБЛОНА НЕ НАЗНАЧЕН — вход владельца. Свободных шаблонов в пуле нет (все четыре закреплены), поэтому нужен либо новый шаблон, либо экземпляр проверенного выпуска: назвать repo@commit витрины-образца. Подставлять похожий профиль соседнего домена нельзя. В пуле есть НЕИСПОЛЬЗОВАННАЯ резервация: шаблон lords-genre закреплён за site_id lords-04, а домен у неё пустой (domain: null). Её можно привязать к одному из трёх доменов lordserials22.* — это одно решение владельца, а не три. Сам привязывать не стал: порядок партии называет первым lordserials22.site, а у него нет записи A."
+        "note": "Профиль lords-dorama версии 1.1.0, раздел во владении /dorama/. Назначен сессией шаблона Lords: docs/handoff/LORDS_TO_FACTORY-001.md, ветка claude/lords-template-consolidation-01, коммит fd674db4d6ba. Привязка по домену: предложенные там site_id у меня заняты, и запись называет их предложенными. lords-genre выдавать нельзя — объявлен неподдержанным и закреплён за lords-04."
       },
       "deploy_target": {
         "ref": "claude-control-01",
         "server": null
       },
       "pins": {
-        "template": null,
+        "template": "lords-dorama",
         "modules": {},
         "schemas": {
           "site_config": "1"
@@ -391,7 +508,8 @@
       "publisher": {
         "provider": "cdnvideohub",
         "publisher_id": null,
-        "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте."
+        "note": "Идентификатор не хранится в реестре: он приходит из Secret Hub по ссылке publisher_id_ref и попадает в config/player.json при выкладке. Источник назван в docs/LORDS_TEMPLATE_NEWDOMAINS.md семейства Lords. Подставлять сюда число соседнего домена нельзя: 10238 объявлен у пяти действующих витрин.",
+        "publisher_id_ref": "secret://cdnvideohub/lords/publisher-id"
       },
       "runtime": {
         "unit": "nova-lordserials22-site.service",
@@ -413,6 +531,18 @@
       "indexing": {
         "desired_state": "CLOSED",
         "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
+      },
+      "analytics": {
+        "metrika_counter_id": 113109084,
+        "metrika_verified_at": null,
+        "metrika_data_seen_at": null,
+        "topvisor_project_id": 33762569,
+        "topvisor_verified_at": "2026-09-27T23:15:42Z",
+        "topvisor_settings": {
+          "name": "lordserials22.site — дорамы и азиатские сериалы",
+          "source": "get/projects_2/projects"
+        },
+        "note": "счётчик 113109084 создан службой, отчёт var/analytics/connect-lordserials22.site.json от 2026-09-27T22:47:21Z; домен счётчика по ответу API — lordserials22.site. проект 33762569 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -428,17 +558,17 @@
         "remote": "https://github.com/sbc-create/site-lordserials22-space"
       },
       "template": {
-        "template_id": null,
+        "template_id": "lords-anime",
         "order_id": "launch-lordserials22-space",
         "family": "lords",
-        "note": "ПРОФИЛЬ ШАБЛОНА НЕ НАЗНАЧЕН — вход владельца. Свободных шаблонов в пуле нет (все четыре закреплены), поэтому нужен либо новый шаблон, либо экземпляр проверенного выпуска: назвать repo@commit витрины-образца. Подставлять похожий профиль соседнего домена нельзя. В пуле есть НЕИСПОЛЬЗОВАННАЯ резервация: шаблон lords-genre закреплён за site_id lords-04, а домен у неё пустой (domain: null). Её можно привязать к одному из трёх доменов lordserials22.* — это одно решение владельца, а не три. Сам привязывать не стал: порядок партии называет первым lordserials22.site, а у него нет записи A."
+        "note": "Профиль lords-anime версии 1.1.0, раздел во владении /anime/. Назначен сессией шаблона Lords: docs/handoff/LORDS_TO_FACTORY-001.md, ветка claude/lords-template-consolidation-01, коммит fd674db4d6ba. Привязка по домену: предложенные там site_id у меня заняты, и запись называет их предложенными. lords-genre выдавать нельзя — объявлен неподдержанным и закреплён за lords-04."
       },
       "deploy_target": {
         "ref": "claude-control-01",
         "server": null
       },
       "pins": {
-        "template": null,
+        "template": "lords-anime",
         "modules": {},
         "schemas": {
           "site_config": "1"
@@ -447,7 +577,8 @@
       "publisher": {
         "provider": "cdnvideohub",
         "publisher_id": null,
-        "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте."
+        "note": "Идентификатор не хранится в реестре: он приходит из Secret Hub по ссылке publisher_id_ref и попадает в config/player.json при выкладке. Источник назван в docs/LORDS_TEMPLATE_NEWDOMAINS.md семейства Lords. Подставлять сюда число соседнего домена нельзя: 10238 объявлен у пяти действующих витрин.",
+        "publisher_id_ref": "secret://cdnvideohub/lords/publisher-id"
       },
       "runtime": {
         "unit": "nova-lordserials22-space.service",
@@ -469,6 +600,18 @@
       "indexing": {
         "desired_state": "CLOSED",
         "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
+      },
+      "analytics": {
+        "metrika_counter_id": 113109085,
+        "metrika_verified_at": null,
+        "metrika_data_seen_at": null,
+        "topvisor_project_id": 33762590,
+        "topvisor_verified_at": "2026-09-27T23:15:42Z",
+        "topvisor_settings": {
+          "name": "lordserials22.space — аниме и онгоинги",
+          "source": "get/projects_2/projects"
+        },
+        "note": "счётчик 113109085 создан службой, отчёт var/analytics/connect-lordserials22.space.json от 2026-09-27T22:47:23Z; домен счётчика по ответу API — lordserials22.space. проект 33762590 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -689,6 +832,18 @@
       "indexing": {
         "desired_state": "CLOSED",
         "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
+      },
+      "analytics": {
+        "metrika_counter_id": 113109087,
+        "metrika_verified_at": null,
+        "metrika_data_seen_at": null,
+        "topvisor_project_id": 33762615,
+        "topvisor_verified_at": "2026-09-27T23:15:42Z",
+        "topvisor_settings": {
+          "name": "yummyani7.site — аниме: каталог и новые серии",
+          "source": "get/projects_2/projects"
+        },
+        "note": "счётчик 113109087 создан службой, отчёт var/analytics/connect-yummyani7.site.json от 2026-09-27T22:47:25Z; домен счётчика по ответу API — yummyani7.site. проект 33762615 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -745,6 +900,18 @@
       "indexing": {
         "desired_state": "CLOSED",
         "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
+      },
+      "analytics": {
+        "metrika_counter_id": 113109089,
+        "metrika_verified_at": null,
+        "metrika_data_seen_at": null,
+        "topvisor_project_id": 33762646,
+        "topvisor_verified_at": "2026-09-27T23:15:42Z",
+        "topvisor_settings": {
+          "name": "yummyani7.info — аниме: жанры и подборки",
+          "source": "get/projects_2/projects"
+        },
+        "note": "счётчик 113109089 создан службой, отчёт var/analytics/connect-yummyani7.info.json от 2026-09-27T22:47:26Z; домен счётчика по ответу API — yummyani7.info. проект 33762646 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -802,6 +969,15 @@
         "managed_by": "monolith",
         "data_owner": "pipeline",
         "unit_note": "unit назван ЯЧЕЙКИН, а не монолитный. Пока здесь стоял nova-yummy-biz.service, повышение перезапускало бы монолитную службу, а её ExecStart ведёт в /srv/lords/.frontend — выпуск прошёл бы успешно, ничего не переключив, и снаружи это неотличимо от настоящего: сайт отвечает 200 и показывает прежний код. Файлы ячейкиных юнитов ставит automation/host/install-yummy-cell-units.sh; managed_by переводится в cell ПОСЛЕ фактического перехода, иначе издатель начнёт возить каталог в хранилище, из которого витрина ещё не читает."
+      },
+      "analytics": {
+        "topvisor_project_id": 32531595,
+        "topvisor_verified_at": "2026-09-27T23:15:42Z",
+        "topvisor_settings": {
+          "name": "yummyani.biz — жанры, каталог и релизы",
+          "source": "get/projects_2/projects"
+        },
+        "note": "проект 32531595 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -859,6 +1035,15 @@
         "managed_by": "monolith",
         "data_owner": "pipeline",
         "unit_note": "unit назван ЯЧЕЙКИН, а не монолитный. Пока здесь стоял nova-yummy-org.service, повышение перезапускало бы монолитную службу, а её ExecStart ведёт в /srv/lords/.frontend — выпуск прошёл бы успешно, ничего не переключив, и снаружи это неотличимо от настоящего: сайт отвечает 200 и показывает прежний код. Файлы ячейкиных юнитов ставит automation/host/install-yummy-cell-units.sh; managed_by переводится в cell ПОСЛЕ фактического перехода, иначе издатель начнёт возить каталог в хранилище, из которого витрина ещё не читает."
+      },
+      "analytics": {
+        "topvisor_project_id": 32531569,
+        "topvisor_verified_at": "2026-09-27T23:15:42Z",
+        "topvisor_settings": {
+          "name": "yummyani.org — онгоинги, оценки и обновления",
+          "source": "get/projects_2/projects"
+        },
+        "note": "проект 32531569 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -916,6 +1101,15 @@
         "managed_by": "monolith",
         "data_owner": "pipeline",
         "unit_note": "unit назван ЯЧЕЙКИН, а не монолитный. Пока здесь стоял nova-yummy-site.service, повышение перезапускало бы монолитную службу, а её ExecStart ведёт в /srv/lords/.frontend — выпуск прошёл бы успешно, ничего не переключив, и снаружи это неотличимо от настоящего: сайт отвечает 200 и показывает прежний код. Файлы ячейкиных юнитов ставит automation/host/install-yummy-cell-units.sh; managed_by переводится в cell ПОСЛЕ фактического перехода, иначе издатель начнёт возить каталог в хранилище, из которого витрина ещё не читает."
+      },
+      "analytics": {
+        "topvisor_project_id": 32531550,
+        "topvisor_verified_at": "2026-09-27T23:15:42Z",
+        "topvisor_settings": {
+          "name": "yummyani.site — сезоны и новые серии аниме",
+          "source": "get/projects_2/projects"
+        },
+        "note": "проект 32531550 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -947,7 +1141,8 @@
       },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id": "10238"
+        "publisher_id": "10252",
+        "note": "Назначен владельцем именно этому домену 2026-09-29 вместо 10238. 10238 остаётся у lordfilm47.space и zonafilm.cc и здесь не меняется. Значение публичное — оно стоит в разметке страницы атрибутом data-publisher-id; секрет — пара учётных данных, она живёт в Secret Hub по ссылке player.publisher_id_ref профиля витрины."
       },
       "data": {
         "database": null,
@@ -972,6 +1167,15 @@
         "reload": "mtime",
         "managed_by": "cell",
         "data_owner": "pipeline"
+      },
+      "analytics": {
+        "topvisor_project_id": 33238820,
+        "topvisor_verified_at": "2026-09-27T23:15:42Z",
+        "topvisor_settings": {
+          "name": "zonafilm — витрина фильмов и сериалов Zona",
+          "source": "get/projects_2/projects"
+        },
+        "note": "проект 33238820 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -1036,6 +1240,18 @@
         "hold_reason": "снято 25.09: основание отпало. DNS zonafilm.cc и www разрешаются в 45.131.182.225 (проверено), сессия zona-02-launch письменно просила провести выпуск штатной очередью, репозиторий выделен (sbc-create/site-zonafilm-cc, ветка claude/extract-zonafilm-cc). Прежняя причина — «нет публичного DNS» — больше не верна.",
         "branch": "claude/extract-zonafilm-cc",
         "branch_note": "Ветка выпуска названа по факту: рабочая копия var/site-repos/zonafilm-cc стоит на ней, и она проходит registry.ветка_разрешена (шаблон claude/extract-*). Поле было пустым, и запись не говорила, откуда берётся выпуск. Путь repo.path при этом менять НЕ нужно: он разрешается от site_repos_root исполнителя (/home/claude/wt-portable-site-cell-01), где каталог называется zonafilm-cc; имя site-zonafilm-cc — это рабочая копия соседней сессии."
+      },
+      "analytics": {
+        "metrika_counter_id": 113110481,
+        "metrika_verified_at": null,
+        "metrika_data_seen_at": null,
+        "topvisor_project_id": 33768310,
+        "topvisor_verified_at": "2026-09-27T23:15:42Z",
+        "topvisor_settings": {
+          "name": "zonafilm.cc — кино, сериалы и дорамы",
+          "source": "get/projects_2/projects"
+        },
+        "note": "счётчик 113110481 создан службой, отчёт var/analytics/connect-zonafilm.cc.json от 2026-09-27T22:47:16Z; домен счётчика по ответу API — zonafilm.cc. проект 33768310 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     },
     {
@@ -1083,7 +1299,8 @@
       "release": {
         "hold": false,
         "hold_reason": null,
-        "branch": "release/zonafilm12-site"
+        "branch": "claude/extract-zonafilm12-site",
+        "branch_note": "Ветка выпуска приведена к фактической. Объявлена была release/zonafilm12-site, но push в release/* вне профиля разрешений сессии, а ВЕТКИ_ВЫПУСКА включают claude/extract-*. Коммит b65e9e6 отправлен именно туда, и CI на нём зелёный (прогон 36355416955). Реестр обязан описывать ветку, которая существует на GitHub и проверена CI, иначе цепочка запуска вечно докладывает «не запушено» о коммите, который запушен."
       },
       "indexing": {
         "desired_state": "CLOSED",
@@ -1093,6 +1310,18 @@
         "provider": "cdnvideohub",
         "publisher_id": "10261",
         "note": "Назначен владельцем именно этому домену и только ему. В реестре ячеек отсутствовал, хотя в config/site.json репозитория сайта стоит publisher_id_expected=10261 — два источника правды расходились."
+      },
+      "analytics": {
+        "metrika_counter_id": 113109081,
+        "metrika_verified_at": null,
+        "metrika_data_seen_at": null,
+        "topvisor_project_id": 33762526,
+        "topvisor_verified_at": "2026-09-27T23:15:42Z",
+        "topvisor_settings": {
+          "name": "zonafilm12 — кино, сериалы и подборки",
+          "source": "get/projects_2/projects"
+        },
+        "note": "счётчик 113109081 создан службой, отчёт var/analytics/connect-zonafilm12.site.json от 2026-09-27T22:47:17Z; домен счётчика по ответу API — zonafilm12.site. проект 33762526 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       }
     }
   ]

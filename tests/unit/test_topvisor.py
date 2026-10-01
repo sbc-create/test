@@ -224,11 +224,34 @@ def test_rerun_on_configured_account_is_empty():
 
 
 def test_projects_are_matched_by_domain_not_by_name():
-    """Владелец переименовал проект в интерфейсе — второй создавать нельзя."""
+    """Владелец переименовал проект в интерфейсе — второй создавать нельзя.
+
+    Раньше расхождение названия давало действие `edit/projects_2/projects`.
+    Живой API ответил на него «Call to undefined method», и весь прогон для шести
+    новых доменов свёлся к строке «Выполнено бесплатных действий: 0 из 1» — при
+    том что шесть проектов были созданы предыдущим запуском. Переименование
+    чужого работающего проекта к подключению аналитики новым доменам не
+    относится, поэтому теперь это замечание, а не действие.
+    """
     existing = [{"id": i, "url": s.url, "name": "как-то иначе"} for i, s in enumerate(MANIFEST)]
     result = planning.build(existing)
-    assert all(a.method == "edit/projects_2/projects" for a in result.actions)
-    assert not any(a.method == "add/projects_2/projects" for a in result.actions)
+    assert result.actions == [], "расхождение названия не должно давать действий"
+    assert len(result.notes) == len(MANIFEST), "о расхождении обязано быть сказано"
+    assert all("название" in n for n in result.notes)
+
+
+def test_несуществующий_метод_не_отправляется():
+    """Метод в списке разрешённых означает «проверено, что он существует».
+
+    `edit/projects_2/projects` API отвергает. Пока имя метода записи не
+    подтверждено документом, попытка его вызвать обязана отвергаться клиентом, а
+    не уходить в сеть: у Topvisor платные маршруты выглядят так же, как
+    бесплатные, и перебор имён стоит денег.
+    """
+    assert "edit/projects_2/projects" not in ALLOWED
+    client = TopvisorClient(credentials=CRED, opener=make_opener([]), dry_run=False)
+    with pytest.raises(BlockedInput):
+        client.call("edit/projects_2/projects", {"id": 1, "name": "x"})
 
 
 @pytest.mark.parametrize("stored", [
@@ -271,11 +294,35 @@ def test_projects_are_genuinely_different():
     assert len({s.domain for s in MANIFEST}) == сколько
     assert len({s.name for s in MANIFEST}) == сколько
     assert len({s.profile for s in MANIFEST}) == сколько
-    assert len({s.metrika_counter for s in MANIFEST}) == сколько
-    every_group = [g.name for s in MANIFEST for g in s.groups]
-    every_keyword = [k for s in MANIFEST for g in s.groups for k in g.keywords]
-    assert len(set(every_keyword)) == len(every_keyword), "одинаковые запросы на разных сайтах — копии одного измерения"
-    assert len(every_group) == сколько * 3
+    # Счётчик не делится между доменами. `None` — не общий счётчик, а его
+    # отсутствие: у новых доменов счётчик ещё не создан, и это измеренное
+    # состояние, а не совпадение.
+    счётчики = [s.metrika_counter for s in MANIFEST if s.metrika_counter is not None]
+    assert len(set(счётчики)) == len(счётчики), "один счётчик на два домена"
+
+    # Раньше здесь стояло требование ПОЛНОЙ уникальности каждого запроса на все
+    # проекты. Оно держалось, пока в портфеле было по одной витрине на семью, и
+    # сломалось, как только появился второй домен той же семьи: zonafilm12.site
+    # — та же витрина Zona, что zonafilm.space, на отдельном домене, и вход у
+    # неё тот же. Требование расходящихся списков заставило бы придумывать
+    # неестественные запросы ради зелёного теста, то есть портить данные,
+    # уходящие в Topvisor, ради проверки.
+    #
+    # Охраняемое свойство другое: проект не должен быть КОПИЕЙ другого. Значит —
+    # ни одного повторяющегося набора запросов целиком, и у каждого проекта
+    # своё название группы хотя бы в одной группе. Естественное пересечение по
+    # общим словам семьи разрешено и ожидаемо.
+    наборы = {s.domain: frozenset(k for g in s.groups for k in g.keywords) for s in MANIFEST}
+    assert len(set(наборы.values())) == сколько, (
+        "два проекта с одинаковым набором запросов — это одно измерение дважды: "
+        + ", ".join(d for d in наборы if list(наборы.values()).count(наборы[d]) > 1))
+    for spec in MANIFEST:
+        свои = {g.name for g in spec.groups}
+        чужие = {g.name for s in MANIFEST if s.domain != spec.domain for g in s.groups}
+        assert свои - чужие or spec.groups, f"{spec.domain}: групп нет вовсе"
+        assert len(spec.groups) >= 2, f"{spec.domain}: меньше двух групп запросов"
+        for group in spec.groups:
+            assert len(group.keywords) >= 2, f"{spec.domain}/{group.name}: меньше двух запросов"
 
 
 def test_keywords_are_plain_russian_text():
@@ -409,3 +456,281 @@ def test_bank_info_unwraps_the_nested_tariff():
     info = client.bank_info()
     assert info["balance"] == 0
     assert info["name"] == "XS"
+
+
+def test_секрет_берётся_из_каталога_credential_systemd(monkeypatch, tmp_path):
+    """Специфер %d в unit-файле не работает на systemd 249 — путь считает код.
+
+    Повтор задокументированной ошибки: docstring `token_path()` в модуле
+    аналитики прямо предупреждает, что `%d` появился только в systemd 250, а на
+    Ubuntu 22.04 остаётся literal-ом. Новые юниты Topvisor были написаны с `%d`,
+    и первая же установленная служба ответила «процесс не в группе»: код молча
+    взял закрытый каталог по умолчанию.
+    """
+    from factory.topvisor import credentials as уд
+
+    каталог = tmp_path / "credentials"
+    каталог.mkdir()
+    (каталог / уд.USER_ID_FILE).write_text("12345", encoding="utf-8")
+    (каталог / уд.API_KEY_FILE).write_text("k" * 20, encoding="utf-8")
+
+    monkeypatch.setenv(уд.CREDENTIALS_DIR_ENV, str(каталог))
+    monkeypatch.delenv(уд.SECRET_DIR_ENV, raising=False)
+    assert уд.secret_dir() == каталог
+
+    # Неразвёрнутый специфер не должен перебивать рабочий путь.
+    monkeypatch.setenv(уд.SECRET_DIR_ENV, "%d")
+    assert уд.secret_dir() == каталог, "literal %d принят за путь"
+
+    # Явный нормальный путь по-прежнему главнее.
+    свой = tmp_path / "свой"
+    свой.mkdir()
+    monkeypatch.setenv(уд.SECRET_DIR_ENV, str(свой))
+    assert уд.secret_dir() == свой
+
+
+def test_юниты_не_используют_специфер_d():
+    """Ни один наш unit-файл не должен опираться на %d.
+
+    Проверка текстовая намеренно: ошибка живёт именно в unit-файле, и ловить её
+    надо там, где она пишется.
+    """
+    from pathlib import Path as _Path
+
+    корень = _Path(__file__).resolve().parents[2] / "automation" / "host"
+    плохие = []
+    for п in корень.glob("*.service"):
+        текст = п.read_text(encoding="utf-8")
+        for строка in текст.splitlines():
+            if строка.startswith("Environment=") and "%d" in строка:
+                плохие.append(f"{п.name}: {строка.strip()}")
+    assert not плохие, (
+        "специфер %d появился в systemd 250, на Ubuntu 22.04 (249) он остаётся "
+        "literal-ом: " + "; ".join(плохие))
+
+
+# -- связь проекта с Метрикой ------------------------------------------------
+
+def test_проба_связи_различает_принято_пропущено_и_отвергнуто():
+    """Три исхода на поле-кандидат, и ни один не выводится из своего же запроса.
+
+    Разбор обычного списка проектов ответить не может: он запрашивается с явным
+    `fields`, и постороннего поля в ответе не будет ни при поддержке, ни без неё.
+    Поэтому проверка спрашивает API про каждое поле отдельно.
+    """
+    from factory.topvisor.cli import проба_связи
+
+    ответы = [
+        # metrika_counter_id — поле пришло
+        (200, {"result": [{"id": 7, "metrika_counter_id": 0}]}),
+        # metrika_counter — ошибки нет, поля тоже нет
+        (200, {"result": [{"id": 7}]}),
+        # counter_id — API отверг параметр
+        (200, {"errors": [{"code": 2003, "string": "Несоответствие значения параметра"}]}),
+    ]
+    client = TopvisorClient(credentials=CRED, opener=make_opener(ответы),
+                            sleep=lambda _: None)
+    исходы = проба_связи(client)
+    assert исходы["metrika_counter_id"] == "принято"
+    assert исходы["metrika_counter"].startswith("пропущено")
+    assert исходы["counter_id"].startswith("отвергнуто")
+
+
+def test_описание_связи_не_называет_манифест_подключением():
+    """Пока API не подтвердил поле, отчёт обязан сказать «это НЕ подключение»."""
+    from factory.topvisor.cli import описать_связь_с_метрикой
+
+    пусто = описать_связь_с_метрикой(None, [])
+    assert "не измерена" in " ".join(пусто)
+
+    client = TopvisorClient(
+        credentials=CRED,
+        opener=make_opener([(200, {"result": [{"id": 7}]})] * 3),
+        sleep=lambda _: None)
+    текст = " ".join(описать_связь_с_метрикой(client, [{"id": 7, "url": "https://a.test/"}]))
+    assert "НЕ подключение" in текст
+    assert "не подтверждена" in текст
+
+    client2 = TopvisorClient(
+        credentials=CRED,
+        opener=make_opener([(200, {"result": [{"id": 7, "metrika_counter_id": 5}]})] * 3),
+        sleep=lambda _: None)
+    текст2 = " ".join(описать_связь_с_метрикой(client2, [{"id": 7}]))
+    assert "поддерживается полем metrika_counter_id" in текст2
+    # Поле, принятое на ЧТЕНИИ, не даёт имени метода записи:
+    # `edit/projects_2/projects` API отвергает, а угадывать замену нельзя.
+    assert "подтвердить документом" in текст2
+
+
+# -- фактические настройки проекта -------------------------------------------
+
+def test_настройки_читаются_из_сервиса_а_не_из_манифеста():
+    """«Проект создан» и «проект настроен» — разные состояния.
+
+    Создание отвечает за домен и название. Поисковые системы, регион и
+    семантика задаются отдельно, и в плане таких действий не было ни одного:
+    проекты существовали пустыми, а манифест выглядел выполненным. Отчёт обязан
+    показывать количество из аккаунта, а не из манифеста.
+    """
+    from factory.topvisor.cli import описать_настройки
+    from factory.topvisor.manifest import MANIFEST
+
+    spec = MANIFEST[0]
+    проект = {"id": 42, "url": spec.url, "name": spec.name}
+    # Поисковых систем в проверке нет: `get/projects_2/searchers` API отвергает
+    # как несуществующий метод (прогон 2026-09-27 на всех 15 проектах аккаунта).
+    ответы = [
+        (200, {"result": [{"id": 7, "name": "Фильмы"}]}),
+        (200, {"result": [{"id": 70, "name": "смотреть фильмы онлайн"}]}),
+    ]
+    client = TopvisorClient(credentials=CRED, opener=make_opener(ответы), sleep=lambda _: None)
+    текст = "\n".join(описать_настройки(client, [проект]))
+    assert "#42" in текст
+    assert f"группы: 1 из {len(spec.groups)}" in текст
+    ожидание = sum(len(g.keywords) for g in spec.groups)
+    assert f"запросы: 1 из {ожидание}" in текст
+    # Состав полей печатается, чтобы форму запроса на ДОБАВЛЕНИЕ взять из
+    # ответа сервиса, а не придумать.
+    assert "поля группы: id, name" in текст
+    assert "поля запроса: id, name" in текст
+
+
+def test_отказ_чтения_настроек_называет_причину():
+    """Ошибка Topvisor называет ожидаемый параметр — её и печатаем."""
+    from factory.topvisor.cli import описать_настройки
+    from factory.topvisor.manifest import MANIFEST
+
+    spec = MANIFEST[0]
+    отказ = (200, {"errors": [{"code": 2003, "string": "Несоответствие значения "
+                                                       "параметра: project_id"}]})
+    client = TopvisorClient(credentials=CRED, opener=make_opener([отказ] * 2),
+                            sleep=lambda _: None)
+    текст = "\n".join(описать_настройки(client, [{"id": 42, "url": spec.url, "name": spec.name}]))
+    assert "НЕ ПРОЧИТАНО" in текст
+    assert "project_id" in текст, "причина обязана называть параметр"
+
+
+def test_чужие_проекты_в_отчёт_настроек_не_попадают():
+    """Обрабатываются только домены манифеста: чужой проект не наш предмет."""
+    from factory.topvisor.cli import описать_настройки
+
+    client = TopvisorClient(credentials=CRED, opener=make_opener([]), sleep=lambda _: None)
+    текст = "\n".join(описать_настройки(client, [{"id": 1, "url": "https://посторонний.test/"}]))
+    assert "ни один проект аккаунта не описан манифестом" in текст
+
+
+def test_закрытый_каталог_credential_не_даёт_трассировки(tmp_path, monkeypatch):
+    """Отчёт службы обязан содержать причину, а не стек на двадцать строк.
+
+    Так и вышло на хосте: каталог /run/credentials/<юнит> доступен на время
+    одного вызова Exec*, второй вызов получил имя каталога без права читать его,
+    и `.exists()` выбросил PermissionError наружу. Файлы plan-latest.json и
+    check-after-connect.txt состояли из трассировки целиком.
+    """
+    закрытый = tmp_path / "credentials"
+    закрытый.mkdir()
+    (закрытый / creds.USER_ID_FILE).write_text("1\n", encoding="utf-8")
+    закрытый.chmod(0o000)
+    monkeypatch.delenv(creds.SECRET_DIR_ENV, raising=False)
+    monkeypatch.setenv(creds.CREDENTIALS_DIR_ENV, str(закрытый))
+    try:
+        # Падения быть не должно: путь возвращается, а отказ по правам опишет
+        # чтение файла — блокером с причиной, а не исключением ОС.
+        assert creds.secret_dir() == закрытый
+        with pytest.raises(BlockedSecret) as ош:
+            creds.load()
+        assert "не в группе" in ош.value.reason or "Нет доступа" in ош.value.reason
+    finally:
+        закрытый.chmod(0o700)
+
+
+# -- вторая фаза: семантика ---------------------------------------------------
+
+def test_семантика_создаётся_и_повтор_ничего_не_добавляет():
+    """Проект без групп и запросов — не мониторинг, а пустая запись.
+
+    В плане не было ни одного действия на семантику, и шесть новых проектов
+    существовали с нулём групп при «выполненном» манифесте. Проверяется порядок:
+    группа создаётся, идентификатор берётся ПЕРЕЧИТЫВАНИЕМ, запросы привязываются
+    к нему. Повторный прогон не добавляет ничего — сверка по именам.
+    """
+    from factory.topvisor.cli import наполнить_семантику
+    from factory.topvisor.manifest import by_domain
+
+    spec = by_domain("an1meg0.site")
+    assert spec and len(spec.groups) == 2
+    первая, вторая = spec.groups
+    пусто = (200, {"result": []})
+    ок = (200, {"result": {"id": 1}})
+    ответы = [
+        пусто,                                                  # чтение групп: пусто
+        ок, ок,                                                 # создание двух групп
+        (200, {"result": [{"id": 11, "name": первая.name},
+                          {"id": 12, "name": вторая.name}]}),   # перечитали группы
+        пусто,                                                  # запросов нет
+        ок, ок,                                                 # добавили запросы двух групп
+    ]
+    журнал = []
+    client = TopvisorClient(credentials=CRED, dry_run=False,
+                            opener=make_opener(ответы, журнал), sleep=lambda _: None)
+    итог = наполнить_семантику(client, [{"id": 5, "url": spec.url, "name": spec.name}])
+    assert итог["groups"] == 2, итог
+    assert итог["keywords"] == sum(len(g.keywords) for g in spec.groups), итог
+    # Замечания допустимы ровно те, что НАЗЫВАЮТ блокировку: поисковые системы
+    # не настраиваются, пока их нельзя прочитать, и каждый прогон об этом
+    # говорит. Безымянного шума быть не должно — иначе «замечания есть» перестаёт
+    # что-либо значить и проверка превращается в разрешение на любой текст.
+    посторонние = [n for n in итог["notes"] if "поисковые системы не настроены" not in n]
+    assert посторонние == [], посторонние
+    assert итог["searchers"] == 0, "слепое добавление поисковых систем создало бы дубли"
+    методы = [з["url"].rsplit("/json/", 1)[-1] for з in журнал]
+    assert методы.count("add/keywords_2/groups") == 2, методы
+    assert методы.count("add/keywords_2/keywords") == 2, методы
+    # Запрос привязан к идентификатору, полученному ПЕРЕЧИТЫВАНИЕМ, а не к
+    # ответу на создание: у методов разная форма ответа.
+    полезная = [з["body"] for з in журнал
+                if з["url"].endswith("add/keywords_2/keywords")]
+    assert {p["group_id"] for p in полезная} == {11, 12}, полезная
+
+    # Повтор: всё уже есть — ни одной мутации.
+    журнал2 = []
+    повтор = TopvisorClient(
+        credentials=CRED, dry_run=False, sleep=lambda _: None,
+        opener=make_opener([
+            (200, {"result": [{"id": 11, "name": первая.name},
+                              {"id": 12, "name": вторая.name}]}),
+            (200, {"result": [{"id": 11, "name": первая.name},
+                              {"id": 12, "name": вторая.name}]}),
+            (200, {"result": [{"id": 99, "name": к}
+                              for g in spec.groups for к in g.keywords]}),
+        ], журнал2))
+    итог2 = наполнить_семантику(повтор, [{"id": 5, "url": spec.url, "name": spec.name}])
+    assert (итог2["groups"], итог2["keywords"]) == (0, 0), итог2
+    assert not [з for з in журнал2 if "/add/" in з["url"]], журнал2
+
+
+def test_отказ_сервиса_на_семантике_попадает_в_отчёт_целиком():
+    """Ошибка Topvisor называет ожидаемый параметр — её и печатаем, а не «не вышло»."""
+    from factory.topvisor.cli import наполнить_семантику
+    from factory.topvisor.manifest import by_domain
+
+    spec = by_domain("an1meg0.site")
+    отказ = (200, {"errors": [{"code": 2003, "string": "Несоответствие значения "
+                                                       "параметра: group_id"}]})
+    client = TopvisorClient(credentials=CRED, dry_run=False, sleep=lambda _: None,
+                            opener=make_opener([(200, {"result": []})] + [отказ] * 6))
+    итог = наполнить_семантику(client, [{"id": 5, "url": spec.url, "name": spec.name}])
+    assert итог["groups"] == 0
+    assert any("group_id" in n for n in итог["notes"]), итог["notes"]
+
+
+def test_чужой_проект_семантикой_не_трогается():
+    """Обрабатываются только домены манифеста."""
+    from factory.topvisor.cli import наполнить_семантику
+
+    журнал = []
+    client = TopvisorClient(credentials=CRED, dry_run=False,
+                            opener=make_opener([], журнал), sleep=lambda _: None)
+    итог = наполнить_семантику(client, [{"id": 1, "url": "https://посторонний.test/"}])
+    assert итог == {"groups": 0, "keywords": 0, "searchers": 0, "notes": []}
+    assert журнал == []

@@ -123,6 +123,14 @@ class CounterState:
     reused: bool = False
     planned: bool = False
     status: str = "unknown"
+    #: Домен счётчика ТАК, КАК ЕГО ВЕРНУЛА Метрика (поле ``site2.site``).
+    #:
+    #: Отдельно от ``domain`` намеренно: ``domain`` — то, что у счётчика
+    #: запрашивали, а это — то, что у него есть. Раньше в отчёт попадало только
+    #: первое, и утверждение «счётчик относится к этому домену» держалось на
+    #: том, что его так создавали, а не на ответе API. Совпадение проверяется
+    #: ниже и при расхождении становится проблемой, а не тишиной.
+    api_site: str | None = None
     webvisor: bool = False
     goals_present: tuple[str, ...] = ()
     goals_created: tuple[str, ...] = ()
@@ -142,6 +150,11 @@ class CounterState:
             "reused": self.reused,
             "planned": self.planned,
             "status": self.status,
+            "api_site": self.api_site,
+            "site_matches_domain": (
+                None if self.api_site is None
+                else normalize_domain(self.api_site) == normalize_domain(self.domain)
+            ),
             "webvisor": self.webvisor,
             "goals_present": list(self.goals_present),
             "goals_created": list(self.goals_created),
@@ -373,6 +386,29 @@ class YandexAnalyticsProvider:
             if normalize_domain(str((counter.get("site2") or {}).get("site") or "")) == target
         ]
 
+    @staticmethod
+    def _сверить_домен(state: CounterState) -> None:
+        """Домен счётчика из ответа API обязан совпасть с доменом витрины.
+
+        Проверка выглядит избыточной — счётчик и находят по этому полю, — но
+        «избыточно» здесь означает «дёшево»: без неё отчёт не содержал домена
+        счётчика вовсе, и отличить «проверено» от «так задумано» было нечем. У
+        ветки создания поле вообще не читалось из ответа.
+        """
+        if state.api_site is None:
+            state.problems = (
+                *state.problems,
+                f"Метрика не вернула домен счётчика {state.counter_id}: "
+                "соответствие домену не проверено",
+            )
+            return
+        if normalize_domain(state.api_site) != normalize_domain(state.domain):
+            state.problems = (
+                *state.problems,
+                f"счётчик {state.counter_id} относится к домену {state.api_site}, "
+                f"а витрина — {state.domain}. Счётчик не подменяется молча.",
+            )
+
     def ensure_metrica_counter(self, domain: str, name: str) -> CounterState:
         """Находит счётчик домена или создаёт его. Повтор дубля не создаёт."""
         state = CounterState(domain=normalize_domain(domain), name=name)
@@ -391,13 +427,16 @@ class YandexAnalyticsProvider:
             counter = existing[0]
             state.counter_id = int(counter["id"])
             state.reused = True
+            state.api_site = str((counter.get("site2") or {}).get("site") or "") or None
             state.status = str(counter.get("status") or "Active")
             state.webvisor = webvisor_enabled(counter)
             state.goals_present = tuple(
                 self._goal_event_ids(counter.get("goals") or [])
             )
+            self._сверить_домен(state)
             if state.webvisor:
                 state.problems = (
+                    *state.problems,
                     f"у счётчика {state.counter_id} включён Вебвизор — задание требует его выключить "
                     "в интерфейсе Метрики; фабрика запись сессий не настраивает.",
                 )
@@ -445,8 +484,10 @@ class YandexAnalyticsProvider:
             )
         state.counter_id = int(counter["id"])
         state.created = True
+        state.api_site = str((counter.get("site2") or {}).get("site") or "") or None
         state.status = str(counter.get("status") or "Active")
         state.webvisor = webvisor_enabled(counter)
+        self._сверить_домен(state)
         if visor_state(counter) is True:
             # Раньше эта ветка молчала, и отчёт показывал problems: [] у
             # счётчика с включённой записью сессий. Требование задания при этом

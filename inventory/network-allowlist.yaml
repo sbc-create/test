@@ -56,3 +56,117 @@ hosts:
     methods: [GET]
     token_secret_ref: hub:/var/lib/site-factory-secret-hub/store.sqlite3
     contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- десять витрин задания «довести до работающего публичного состояния» ---
+  # Внесены заданием владельца от 2026-09-27 (десять доменов перечислены в самом
+  # задании поимённо). Разрешён только GET: приёмка публичного результата —
+  # чтение страницы, build-id, счётчика Метрики и метатегов. Ни одна запись не
+  # несёт токена, потому что витрины публичные и авторизации не требуют.
+  #
+  # Три домена Animego различаются символами и являются РАЗНЫМИ сайтами:
+  # an1mego (цифра 1 + буква o), animeg0 (буква i + цифра 0), an1meg0 (обе цифры).
+  # Строки ниже приведены ровно в том написании, что в задании.
+  - ref: site-an1mego
+    host: an1mego.site
+    purpose: "публичная приёмка витрины: HTTPS, build-id, каталог, счётчик"
+    methods: [GET]
+  - ref: site-animeg0
+    host: animeg0.site
+    purpose: "публичная приёмка витрины: HTTPS, build-id, каталог, счётчик"
+    methods: [GET]
+  - ref: site-an1meg0
+    host: an1meg0.site
+    purpose: "публичная приёмка витрины: HTTPS, build-id, каталог, счётчик"
+    methods: [GET]
+  - ref: site-zonafilm-cc
+    host: zonafilm.cc
+    purpose: "публичная приёмка витрины: HTTPS, build-id, каталог, счётчик"
+    methods: [GET]
+  - ref: site-zonafilm12
+    host: zonafilm12.site
+    purpose: "публичная приёмка витрины: HTTPS, build-id, каталог, счётчик"
+    methods: [GET]
+  - ref: site-yummyani7-site
+    host: yummyani7.site
+    purpose: "публичная приёмка витрины: HTTPS, build-id, каталог, счётчик"
+    methods: [GET]
+  - ref: site-yummyani7-info
+    host: yummyani7.info
+    purpose: "публичная приёмка витрины: HTTPS, build-id, каталог, счётчик"
+    methods: [GET]
+  - ref: site-lordserials22-site
+    host: lordserials22.site
+    purpose: "публичная приёмка витрины: HTTPS, build-id, каталог, счётчик"
+    methods: [GET]
+  - ref: site-lordserials22-space
+    host: lordserials22.space
+    purpose: "публичная приёмка витрины: HTTPS, build-id, каталог, счётчик"
+    methods: [GET]
+  - ref: site-lordserials22-info
+    host: lordserials22.info
+    purpose: "публичная приёмка витрины: HTTPS, build-id, каталог, счётчик"
+    methods: [GET]
+
+  # --- плейлист плеера CDNVideoHub (только чтение) --------------------------
+  # Внесён заданием «восстановить воспроизведение на zonafilm12.site» от
+  # 2026-09-28: оно прямо требует проследить цепочку «источник → ... →
+  # фактическое воспроизведение» и сравнить данные источника с тем, что
+  # получает посетитель. Без обращения к плейлисту это неисполнимо.
+  #
+  # Это ТОТ ЖЕ адрес, который открывает браузер посетителя, и запрос тот же:
+  # publisher витрины (он публичен — стоит в разметке каждой карточки), номер
+  # записи и агрегатор. Ни токена, ни заголовка авторизации здесь нет и быть не
+  # может, поэтому строка не несёт secret_ref. Только GET.
+  - ref: cdnvideohub-player-playlist
+    host: plapi.cdnvideohub.com
+    purpose: "плейлист плеера: сверка доступных серий и озвучек с тем, что видит посетитель"
+    methods: [GET]
+    contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- остальные выложенные витрины: общий дефект воспроизведения -----------
+  # Внесены заданием владельца от 2026-09-28 «устранить повторяющуюся ошибку
+  # воспроизведения на ВСЕХ выложенных сайтах». Задание поимённо называет
+  # lordserial33.biz и прямо требует взять перечень витрин из действующего
+  # реестра (config/site-cells.json) и проверить КАЖДУЮ: «HTTP 200, iframe и
+  # зелёные тесты отдельно не доказывают работу видео».
+  #
+  # Ни одной записи нет вне реестра ячеек: список получен из него, а не собран
+  # агентом. Только GET — приёмка публичного результата и запрос плейлиста с
+  # заголовком Origin витрины, как это делает браузер посетителя. Токенов нет:
+  # витрины публичны, плейлист авторизации не требует.
+  - ref: site-lordserial33-biz
+    host: lordserial33.biz
+    purpose: "публичная приёмка витрины и воспроизведение: страница серии, build-id, плеер"
+    methods: [GET]
+  - ref: site-lordfilm47-space
+    host: lordfilm47.space
+    purpose: "публичная приёмка витрины и воспроизведение: страница серии, build-id, плеер"
+    methods: [GET]
+  - ref: site-1lordserials1-online
+    host: 1lordserials1.online
+    purpose: "публичная приёмка витрины и воспроизведение: страница серии, build-id, плеер"
+    methods: [GET]
+  - ref: site-zonafilm-space
+    host: zonafilm.space
+    purpose: "публичная приёмка витрины и воспроизведение: страница серии, build-id, плеер"
+    methods: [GET]
+  - ref: site-animedia-icu
+    host: animedia.icu
+    purpose: "публичная приёмка витрины и воспроизведение: страница серии, build-id, плеер"
+    methods: [GET]
+  - ref: site-animedia-space
+    host: animedia.space
+    purpose: "публичная приёмка витрины и воспроизведение: страница серии, build-id, плеер"
+    methods: [GET]
+  - ref: site-yummyani-org
+    host: yummyani.org
+    purpose: "публичная приёмка витрины и воспроизведение: страница серии, build-id, плеер"
+    methods: [GET]
+  - ref: site-yummyani-site
+    host: yummyani.site
+    purpose: "публичная приёмка витрины и воспроизведение: страница серии, build-id, плеер"
+    methods: [GET]
+  - ref: site-yummyani-biz
+    host: yummyani.biz
+    purpose: "публичная приёмка витрины и воспроизведение: страница серии, build-id, плеер"
+    methods: [GET]

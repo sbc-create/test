@@ -87,7 +87,7 @@ def test_re_registering_requires_explicit_replace(reg: Path):
     registry.register(_cell("alpha", "alpha.test"), path=reg, replace=True)
 
 
-@pytest.mark.parametrize("retired", ["10331", "10332", "10333"])
+@pytest.mark.parametrize("retired", ["10331", "10333"])
 def test_retired_publisher_id_is_refused(reg: Path, retired: str):
     with pytest.raises(RetiredPublisherId):
         registry.register(
@@ -96,7 +96,38 @@ def test_retired_publisher_id_is_refused(reg: Path, retired: str):
             path=reg)
 
 
-@pytest.mark.parametrize("allowed", ["10252", "10238"])
+def test_retired_set_shrinks_only_by_a_named_decision():
+    """Набор отозванных сокращается решением владельца, а не ради выпуска.
+
+    Проверка существует потому, что соблазн конкретный: 2026-10-01 владелец
+    назначил animedia.icu идентификатор 10332, который до того состоял в
+    запрете. Короткий путь — удалить проверку или добавить обход; правильный —
+    назвать изменение и зафиксировать его состав.
+
+    Снаружи отличить работающий идентификатор от несуществующего нечем:
+    плейлист провайдера отвечает HTTP 200 и на 10332, и на выдуманный 99999, а
+    список дорожек от издателя не зависит вовсе. Значит единственное основание
+    исключить значение из запрета — указание владельца, и оно обязано быть
+    записанным. Отсюда и форма проверки: не «набор непустой», а «набор ровно
+    такой, и 10332 исключён осознанно».
+    """
+    assert registry.RETIRED_PUBLISHER_IDS == frozenset({"10331", "10333"}), (
+        "состав отозванных изменился без решения: 10331 и 10333 отвергаются, "
+        "10332 исключён решением D120 от 2026-10-01 (animedia.icu). Любое "
+        "другое изменение набора — отдельное решение с записью в DECISIONS.md")
+    assert "10332" not in registry.RETIRED_PUBLISHER_IDS
+
+
+def test_owner_assigned_publisher_id_registers(reg: Path):
+    """10332 регистрируется: домен назначен владельцем, а не подобран."""
+    cell = _cell("alpha", "alpha.test",
+                 publisher={"provider": "cdnvideohub", "publisher_id": "10332"})
+    registry.register(cell, path=reg)
+    assert registry.resolve("alpha", path=reg).publisher["publisher_id"] == "10332"
+
+
+@pytest.mark.parametrize("allowed", ["10252", "10238", "10373", "10375",
+                                     "10377", "10378"])
 def test_named_publisher_ids_pass(reg: Path, allowed: str):
     cell = _cell("alpha", "alpha.test",
                  publisher={"provider": "cdnvideohub", "publisher_id": allowed})
@@ -173,7 +204,25 @@ def test_незапущенные_домены_называют_недостаю
             раздел = c.get(блок) or {}
             if раздел.get(поле):
                 continue
+            # Пустое значение объясняется одним из двух способов, и это разные
+            # состояния, а не одно с разной формулировкой:
+            #
+            #  * рядом стоит ссылка на секрет (`<поле>_ref`) — значение НЕ
+            #    хранится в реестре по построению, вход владельца не нужен, и
+            #    требовать слова «владелец» значило бы требовать неправду;
+            #  * ссылки нет — значение действительно ждут, и от кого, обязано
+            #    быть сказано.
+            #
+            # Первый случай появился, когда семейство Lords перешло на
+            # publisher_id_ref: пять доменов делят один идентификатор в Secret
+            # Hub, и подстановка числа в реестр была бы копией секрета.
+            ссылка = раздел.get(f"{поле}_ref")
             примечание = (раздел.get("note") or "").lower()
+            if ссылка:
+                assert str(ссылка).startswith("secret://"), (
+                    f"{c['site_id']}: {блок}.{поле}_ref не ссылка на секрет: {ссылка!r}")
+                continue
             assert примечание, f"{c['site_id']}: {блок}.{поле} пусто и не объяснено"
             assert "вход владельца" in примечание or "владельц" in примечание, (
-                f"{c['site_id']}: {блок}.{поле} пусто, но не сказано, чей это вход")
+                f"{c['site_id']}: {блок}.{поле} пусто, ссылки на секрет нет, "
+                "и не сказано, чей это вход")

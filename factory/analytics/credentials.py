@@ -185,12 +185,28 @@ def token_path() -> Path:
     путь в коде надёжнее, чем в unit-файле.
     """
     configured = os.environ.get(TOKEN_FILE_ENV)
+    if configured and "%" in configured:
+        # Значение с неразвёрнутым специфером systemd (`%d/yandex_oauth`) файлом
+        # быть не может. Раньше оно принималось как есть, и служба падала на
+        # «файл не найден», не назвав причины. Ровно эта ошибка описана ниже в
+        # docstring и была допущена ПОВТОРНО при написании новых юнитов, поэтому
+        # защита стоит в коде, а не в комментарии к unit-файлу.
+        configured = None
     if configured:
         return Path(configured).expanduser()
     directory = credentials_directory()
     if directory:
         candidate = directory / CREDENTIAL_NAME
-        if candidate.exists():
+        try:
+            есть = candidate.exists()
+        except PermissionError:
+            # Каталог credential объявлен, но закрыт для этого процесса: так
+            # ведёт себя вторая и последующие строки Exec* у одного юнита.
+            # `.exists()` в этом случае выбрасывает PermissionError, и без этой
+            # ветки отчёт службы состоял бы из трассировки вместо причины —
+            # ровно это случилось у topvisor-check и topvisor-connect.
+            return candidate
+        if есть:
             return candidate
     return Path(DEFAULT_TOKEN_FILE).expanduser()
 
@@ -219,8 +235,26 @@ def inspect_token_file(path: Path | None = None) -> TokenFileStatus:
     сказать «секрет на месте и закрыт правильно», ни разу не прикоснувшись к
     содержимому.
     """
-    path = path or token_path()
     problems: list[str] = []
+
+    # Нераскрытый специфер обязан быть ВИДЕН в отчёте, а не молча заменён
+    # значением по умолчанию. Разделение ролей здесь намеренное и проверяется
+    # двумя тестами: `token_path()` откидывает такое значение, чтобы служба
+    # работала, а отчёт называет саму настройку — иначе поломанный unit-файл
+    # остаётся невидимым ровно до следующей переустановки, которая вернёт
+    # сломанную строку. Первая версия правки этого не делала: служба ожила, и
+    # вместе с ней исчезло единственное место, где ошибка была заметна.
+    заданный = os.environ.get(TOKEN_FILE_ENV)
+    if path is None and заданный and "%" in заданный:
+        return TokenFileStatus(
+            заданный, False, False, None, None, False, False,
+            (*problems,
+             f"{TOKEN_FILE_ENV}={заданный}: специфер systemd не раскрыт "
+             "(в systemd 249 нет %d — он появился в 250). Файлом это быть не "
+             f"может; секрет берётся из {CREDENTIALS_DIR_ENV} или пути по "
+             "умолчанию, но unit-файл нужно исправить"))
+
+    path = path or token_path()
 
     if inside_repository(path):
         problems.append("файл секрета лежит внутри репозитория")

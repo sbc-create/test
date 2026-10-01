@@ -36,6 +36,7 @@ from factory.lords import plan as plan_mod
 from factory.lords import player as player_mod
 from factory.lords import recommend as recommend_mod
 from factory.lords import theme as theme_mod
+from factory import contact as _КОНТАКТ
 
 #: Состояния canonical. Пишутся и в разметку, и в отчёт: «canonical нет» и
 #: «canonical ведёт на себя» — разные факты, и путать их нельзя.
@@ -356,7 +357,9 @@ def _header_search(ctx: dict) -> str:
 #: Контактный адрес всех витрин. Подтверждён владельцем.
 #: Используется только как адрес для связи: правообладателем владелец его не
 #: называл, и подставлять его туда нельзя.
-CONTACT_EMAIL = "sbc.claude@yandex.ru"
+#:
+#: Значение не дублируется: единственное место — `factory.contact`.
+CONTACT_EMAIL = _КОНТАКТ.ПОЧТА_СЕТИ
 
 #: Чем каждая витрина отличается от соседних. Текст пишется для читателя, а не
 #: для поисковой системы: одинаковый подвал на шести сайтах не сообщает ничего

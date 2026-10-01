@@ -21,11 +21,31 @@ Group=claude
 WorkingDirectory=/home/claude/wt-portable-site-cell-01
 LoadCredential=user-id:/etc/site-factory/secrets/topvisor/user-id
 LoadCredential=api-key:/etc/site-factory/secrets/topvisor/api-key
-Environment=TOPVISOR_SECRET_DIR=%d
+# Путь к секрету вычисляет КОД по $CREDENTIALS_DIRECTORY: специфера %d в
+# systemd 249 (Ubuntu 22.04) нет, он появился в 250, и строка оставалась
+# literal-ом — служба падала на «файл не найден», не назвав причины.
 Environment=PYTHONDONTWRITEBYTECODE=1
 ExecStartPre=/usr/bin/install -d -m 0755 /home/claude/wt-portable-site-cell-01/var/topvisor
-ExecStart=/bin/sh -c '/usr/bin/python3 -m factory.topvisor.cli apply > var/topvisor/connect-latest.txt 2>&1'
-ExecStartPost=/bin/sh -c '/usr/bin/python3 -m factory.topvisor.cli check > var/topvisor/check-after-connect.txt 2>&1'
+# Обе операции выполняются ОДНИМ вызовом оболочки, а не двумя строками Exec*.
+#
+# Причина измерена на этом хосте, и формулировать её надо точно: каталог
+# /run/credentials/<юнит> доступен на время ОДНОГО вызова Exec*, для которого
+# systemd его подготовил, и разбирается после его завершения. Следующей строке
+# Exec* остаётся имя каталога без права читать его содержимое.
+#
+# Что именно наблюдалось: `ExecStartPre` (install -d) к секрету не обращается и
+# прошёл; первый `ExecStart` (check) отработал и записал отчёт; второй
+# `ExecStart` (plan) упал с `PermissionError: /run/credentials/topvisor-connect.service/user-id`, и
+# то же самое произошло с `ExecStartPost` у topvisor-connect. Снаружи это
+# выглядит как «проверка не проходит», хотя доступ к Topvisor подтверждён этим
+# же юнитом строкой выше.
+#
+# Оба процесса теперь — дети одного вызова оболочки, поэтому живут внутри того
+# самого вызова, которому каталог и выдан.
+#
+# Права секрета при этом не меняются: он остаётся root-owned файлом, который
+# systemd выдаёт только этому юниту и только на время прогона.
+ExecStart=/bin/sh -c '/usr/bin/python3 -m factory.topvisor.cli apply > var/topvisor/connect-latest.txt 2>&1; /usr/bin/python3 -m factory.topvisor.cli check > var/topvisor/check-after-connect.txt 2>&1'
 
 NoNewPrivileges=true
 PrivateTmp=true

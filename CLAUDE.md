@@ -90,6 +90,16 @@ BLOCKED_ANALYTICS_ACCESS | BLOCKED_SITE_EXTRACTED | QA_FAILED | DEPLOY_FAILED | 
 Отчёт содержит команду, фактический exit code и путь к артефакту. Формулировки
 «проверено» без запуска — ошибка отчёта, а не стилистика.
 
+## Ночные и длительные задания
+
+**Работать весь согласованный срок, пока остаются полезные разрешённые действия.**
+Промежуточный отчёт задание не завершает; блокер одного пункта не останавливает
+остальные. Завершение — выполненные критерии приёмки либо исчерпанные действия,
+где по каждому остатку названо ДОКАЗАННОЕ внешнее ограничение. Автономного
+продолжения после завершения хода нет: не завершать ход, пока есть что делать.
+Правило целиком, причина и границы инструментов — `docs/LONG_RUNS.md`;
+контрольная точка текущего задания — `docs/NIGHT_RUN_TEN_DOMAINS.md`.
+
 ## Детальные правила
 
 `.claude/rules/` (подгружаются по путям): `dle-php.md`, `frontend.md`, `content.md`,
@@ -128,37 +138,21 @@ an **SEO session** operates under. Read this file first; it is the entry point.
 | `docs/verification/` | Committed evidence of verification runs |
 | `.github/workflows/` | CI and deployment automation |
 
-## Environment
+## Environment, commits, data
 
-The SessionStart hook creates `.venv` and installs the pinned dependencies from
-`requirements.txt`. It runs automatically in Claude Code on the web. To
-provision manually:
-
-```bash
-SEO_SESSION_FORCE_SETUP=1 ./.claude/hooks/session-start.sh
-```
-
-## Before you commit
-
-Run the full verification and regenerate the evidence record:
+The SessionStart hook creates `.venv` and installs pinned `requirements.txt`;
+manually: `SEO_SESSION_FORCE_SETUP=1 ./.claude/hooks/session-start.sh`.
 
 ```bash
-./scripts/verify.sh            # all stages, non-zero exit = failures
-./scripts/record-evidence.sh   # refresh docs/verification/latest-run.md
-```
-
-CI runs both. `record-evidence.sh --check` fails the build if the committed
-evidence disagrees with a fresh run, so a stale record blocks the merge.
-
-## Validating data
-
-```bash
+./scripts/verify.sh                                                   # all stages, non-zero exit = failures
+./scripts/record-evidence.sh                                          # refresh docs/verification/latest-run.md
 .venv/bin/python scripts/validate_schemas.py                          # schemas compile
 .venv/bin/python scripts/validate_schemas.py path/to/seo-audit.json   # validate data
 ```
 
-Files are matched to schemas by filename prefix: `seo-audit.*.json` validates
-against `schemas/seo-audit.schema.json`.
+CI runs the first two; `record-evidence.sh --check` fails the build on a stale
+record. Data files match schemas by filename prefix: `seo-audit.*.json` against
+`schemas/seo-audit.schema.json`.
 
 ## SEO operator
 

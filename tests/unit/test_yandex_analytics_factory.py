@@ -335,6 +335,47 @@ COUNTERS_WITHOUT_GOALS = {
     "zonafilm.space": 112582938,
 }
 
+#: Счётчик создан и настроен полностью (девять целей, запись сессий выключена),
+#: но сайт ещё не отдаётся — визитов нет и быть не может. Отдельная группа, а не
+#: часть LIVE_COUNTERS: «создано в сервисе» и «работает на сайте» — разные
+#: состояния, и сливать их значило бы считать выпуск завершённым по факту
+#: существования счётчика.
+#:
+#: Счётчики заведены службой `analytics-connect@<домен>.service` 2026-09-27;
+#: идентификаторы взяты из её отчётов `var/analytics/connect-<домен>.json`.
+#: Домены, чья ячейка ведётся ВНЕ этого реестра (другая сессия), но счётчик
+#: проверен публично: `ym(<id>,"init")` на главной и в разделе, одна
+#: инициализация, отправка подтверждена перехватом запроса браузером. Запись
+#: нужна затем, чтобы домен не был невидим для аудита аналитики — отсутствие
+#: строки в реестре выглядит точно так же, как отсутствие счётчика.
+COUNTERS_VERIFIED_IN_BROWSER = {
+    "an1mego.site": 113105751,
+    "animeg0.site": 113105753,
+    # Выложены и проверены 2026-09-28 тем же способом: одна инициализация в
+    # разметке, четыре запроса к приёмнику Метрики, все с кодом 2xx/3xx
+    # (`automation/host/metrika-send-check.js`). Перенесены сюда из
+    # COUNTERS_WITHOUT_TRAFFIC по ИЗМЕРЕНИЮ, а не по симметрии: у остальных
+    # доменов той группы разметки по-прежнему нет.
+    "zonafilm.cc": 113110481,
+    "zonafilm12.site": 113109081,
+    "lordserials22.info": 113109083,
+    # Счётчик заведён службой 2026-09-28 12:04, витрина выложена выпуском
+    # ccac6dd4165b-animego-04 в тот же день и проверена публично.
+    "an1meg0.site": 113121466,
+}
+
+COUNTERS_WITHOUT_TRAFFIC = {
+    # Счётчик заведён службой 2026-09-27, но витрины ещё не отдаются, и
+    # разметки на странице нет: у lordserials22.site и .space домен не
+    # делегирован (NXDOMAIN у регистратуры), у обеих витрин Yummy нет снимка
+    # каталога — производителя проекции не существует. Проверить отправку из
+    # браузера на этих доменах нечем, и записывать их в проверенные нельзя.
+    "lordserials22.site": 113109084,
+    "lordserials22.space": 113109085,
+    "yummyani7.site": 113109087,
+    "yummyani7.info": 113109089,
+}
+
 #: Счётчика ещё нет. Заводить его до активации домена нельзя: получится пустой
 #: счётчик без данных, и он же будет мешать заметить настоящий. Перечислены
 #: явно, чтобы новый домен не мог появиться в реестре молча.
@@ -344,18 +385,13 @@ PLANNED_DOMAINS = (
     # ничем не заметно. Добавлены как planned — счётчика у них нет нигде.
     "animedia.icu",
     "animedia.space",
-    "lordserials22.info",
-    "lordserials22.site",
-    "lordserials22.space",
-    "yummyani7.info",
-    "yummyani7.site",
-    "zonafilm.cc",
-    "zonafilm12.site",
 )
 
-ALL_DOMAINS = sorted({*LIVE_COUNTERS, *COUNTERS_WITHOUT_GOALS, *PLANNED_DOMAINS})
+ALL_DOMAINS = sorted({*LIVE_COUNTERS, *COUNTERS_WITHOUT_GOALS, *COUNTERS_WITHOUT_TRAFFIC,
+                      *COUNTERS_VERIFIED_IN_BROWSER, *PLANNED_DOMAINS})
 #: Домены, у которых счётчик существует, — независимо от состояния целей.
-WITH_COUNTER = {**LIVE_COUNTERS, **COUNTERS_WITHOUT_GOALS}
+WITH_COUNTER = {**LIVE_COUNTERS, **COUNTERS_WITHOUT_GOALS, **COUNTERS_WITHOUT_TRAFFIC,
+                **COUNTERS_VERIFIED_IN_BROWSER}
 
 
 def test_registry_holds_exactly_the_known_domains():
@@ -443,6 +479,9 @@ def test_registry_never_stores_a_secret():
 #: это» пропустил бы подмену состояния в любую сторону.
 WEBMASTER_STATUS = {
     "1lordserials1.online": BLOCKED_DEPLOYMENT,
+    "an1mego.site": BLOCKED_DEPLOYMENT,
+    "an1meg0.site": BLOCKED_DEPLOYMENT,
+    "animeg0.site": BLOCKED_DEPLOYMENT,
     "animedia.icu": BLOCKED_DEPLOYMENT,
     "animedia.space": BLOCKED_DEPLOYMENT,
     "lordfilm47.space": BLOCKED_DEPLOYMENT,
@@ -560,7 +599,7 @@ def test_session_recording_is_off_on_every_live_counter():
     # Пустой список problems означает «настройка завершена», и требовать его от
     # домена без счётчика значило бы требовать молчать о незавершённом.
     по_домену = {e.domain: e for e in registry.properties()}
-    for domain in LIVE_COUNTERS:
+    for domain in (*LIVE_COUNTERS, *COUNTERS_WITHOUT_TRAFFIC):
         assert по_домену[domain].raw["problems"] == [], (
             f"{domain}: настройка завершена, а в problems что-то осталось: "
             f"{по_домену[domain].raw['problems']}"
