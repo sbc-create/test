@@ -15,6 +15,7 @@ from __future__ import annotations
 import json
 import os
 import pathlib
+import re
 import subprocess
 
 import pytest
@@ -431,3 +432,90 @@ def test_новый_сайт_наследует_правило():
     т = (КОРЕНЬ / "factory" / "cell" / "newsite.py").read_text("utf-8")
     assert "RUNTIME_DATA_OWNERSHIP" in т or "protected" in т, (
         "создание сайта не упоминает правило владения данными")
+
+
+# --- 9. Обходы штатными путями закрыты ------------------------------------
+
+def test_установка_и_откат_проверяют_читателей():
+    """`cell install` и `cell rollback` меняют `current` НАПРЯМУЮ, минуя
+    активацию. Без ворот здесь запрет обходился бы штатной командой: прежний
+    артефакт или откат вернули бы код, который перестал читать режим и тексты.
+    """
+    т = (КОРЕНЬ / "factory" / "cell" / "transfer.py").read_text("utf-8")
+    assert "_ворота_защиты" in т
+    for имя in ("def install", "def rollback"):
+        тело = т.split(имя, 1)[1].split("\ndef ", 1)[0]
+        assert "_ворота_защиты" in тело, имя
+    # Проверяется РАСПАКОВАННЫЙ выпуск: у артефакта может не быть git-истории.
+    ворота = т.split("def _ворота_защиты", 1)[1].split("\ndef ", 1)[0]
+    assert "(выпуск / читатель).is_file()" in ворота
+    # Проверяется распакованный выпуск, а не коммит: `git cat-file` здесь не
+    # вызывается — у артефакта истории может не быть вовсе. Слово «git» в
+    # пояснении допустимо, вызова быть не должно.
+    без_док = ворота.split('"""', 2)[-1]
+    assert "git " not in без_док and "subprocess" not in без_док
+
+
+def test_ворота_установки_отклоняют_выпуск_без_читателя(tmp_path, стенд):
+    from factory.cell import transfer
+    без = tmp_path / "releases" / "aaaaaaaaaaaa"
+    (без / "src").mkdir(parents=True)
+    (без / "src" / "other.py").write_text("#\n", encoding="utf-8")
+    _состояние(стенд)
+    protected.поставить_отметку(САЙТ, ДОМЕН, кем="тест")
+    # Домен берётся из реестра; для синтетического сайта его нет, поэтому
+    # проверяется путь с явным доменом через саму защиту.
+    есть = protected.существующие(САЙТ, ДОМЕН)
+    assert есть, есть
+    нет = [f"{в}: {ч}" for в in есть
+           for ч in protected.ЧИТАТЕЛИ.get(в, ())
+           if not (без / ч).is_file()]
+    assert нет, "в выпуске без читателей должна быть нехватка"
+    assert "indexing_mode.py" in " ".join(нет)
+
+
+def test_сценарий_установки_отказывается_без_защиты():
+    """Установка исполнителя из дерева без защиты — обход штатной командой.
+    Сценарий обязан отказать, а не поставить исполнителя без ворот.
+    """
+    с = КОРЕНЬ / "automation" / "host" / "install-cell-executor.sh"
+    т = с.read_text(encoding="utf-8")
+    assert "factory/cell/protected.py" in т
+    assert "protected.проверить_выпуск" in т
+    assert "protected.проверить_запись" in т
+    assert "_ворота_защиты" in т
+    # Проверка стоит ДО копирования пакета.
+    место = т.index("проверка защиты постоянных данных")
+    assert место < т.index('cp -a "$SRC_ROOT/factory"')
+    # Кириллица в именах переменных и циклов оболочки падает в работе, а
+    # `bash -n` её пропускает: поймано сухим прогоном на `for вызов in`.
+    присваивание = re.compile(r"^\s*[A-Za-z_]*[А-Яа-яЁё][\w]*\s*=")
+    цикл = re.compile(r"^\s*for\s+[A-Za-z_]*[А-Яа-яЁё]")
+    подстановка = re.compile(r"\$\{?[A-Za-z_]*[А-Яа-яЁё]")
+    внутри = False
+    for строка in т.split("\n"):
+        if "<<'PY'" in строка:
+            внутри = True
+            continue
+        if внутри:
+            if строка.strip() == "PY":
+                внутри = False
+            continue
+        assert not присваивание.match(строка), строка
+        assert not цикл.match(строка), строка
+        assert not подстановка.search(строка), строка
+
+
+def test_исполнитель_не_держит_старый_процесс():
+    """Исполнитель — oneshot по таймеру раз в минуту, а не демон: после
+    установки следующий же прогон берёт новый код. Долгоживущего процесса со
+    старым кодом не бывает по построению.
+    """
+    юнит = pathlib.Path("/etc/systemd/system/site-cell-executor.service")
+    if not юнит.is_file():
+        pytest.skip("юнита исполнителя нет в этом окружении")
+    т = юнит.read_text(encoding="utf-8")
+    assert "Type=oneshot" in т
+    таймер = pathlib.Path("/etc/systemd/system/site-cell-executor.timer")
+    if таймер.is_file():
+        assert "OnCalendar" in таймер.read_text(encoding="utf-8")

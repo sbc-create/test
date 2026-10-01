@@ -33,6 +33,24 @@ from factory.qwen import editorial, indexing, registry
 #: два отдельных `except` с одинаковым телом расходятся при первой правке.
 ОТКАЗЫ = (editorial.ОперацияОтклонена, indexing.Отказано)
 
+#: Где лежат технические правила и какой они версии.
+#:
+#: Печатается в КАЖДОМ ответе, и это не украшение. Инструкция, которая просто
+#: лежит на диске, подключением не является: новая сессия редактора о ней не
+#: узнаёт, пока ей не скажут путь. А первой командой редактор всё равно
+#: вызывает этот инструмент — значит инструмент и есть место, где путь нельзя
+#: не заметить. Версия рядом с путём затем, чтобы устаревшая локальная копия
+#: обнаруживалась сравнением, а не на последствиях.
+ИНСТРУКЦИЯ = ("/srv/site-factory/qwen-seo-handover-2026-10-01/"
+              "QWEN-CANONICAL.md")
+ВЕРСИЯ_ИНСТРУКЦИИ = "2026-10-02.1"
+
+
+def _со_ссылкой(данные: dict) -> dict:
+    """Добавить к ответу путь к правилам и их версию."""
+    return {**данные, "instruction": ИНСТРУКЦИЯ,
+            "instruction_version": ВЕРСИЯ_ИНСТРУКЦИИ}
+
 
 def _автор(args) -> str:
     return args.author or "qwen"
@@ -61,22 +79,22 @@ def главная(argv: list[str] | None = None) -> int:
 
     def нужен(поле: str):
         if not getattr(args, поле.replace("-", "_")):
-            print(json.dumps({"ok": False,
-                              "reason": f"операции {args.операция} нужен --{поле}"},
+            print(json.dumps(_со_ссылкой({"ok": False,
+                              "reason": f"операции {args.операция} нужен --{поле}"}),
                              ensure_ascii=False))
             raise SystemExit(2)
 
     try:
         if args.операция == "sites":
             сайты = registry.собрать(опрашивать_сеть=not args.no_network)
-            print(json.dumps({"ok": True, "total": len(сайты),
-                              "sites": [s.as_dict() for s in сайты]},
+            print(json.dumps(_со_ссылкой({"ok": True, "total": len(сайты),
+                              "sites": [s.as_dict() for s in сайты]}),
                              ensure_ascii=False, indent=1))
             return 0
 
         нужен("site")
         if args.операция == "facts":
-            print(json.dumps({"ok": True, **editorial.факты(args.site, args.slug)},
+            print(json.dumps(_со_ссылкой({"ok": True, **editorial.факты(args.site, args.slug)}),
                              ensure_ascii=False, indent=1))
             return 0
         if args.операция == "prepare":
@@ -85,7 +103,7 @@ def главная(argv: list[str] | None = None) -> int:
                     else open(args.body_file, encoding="utf-8").read())
             итог = editorial.подготовить(args.site, args.slug, тело,
                                          author=_автор(args))
-            print(json.dumps({"ok": not итог["quality_problems"], **итог},
+            print(json.dumps(_со_ссылкой({"ok": not итог["quality_problems"], **итог}),
                              ensure_ascii=False, indent=1))
             return 0 if not итог["quality_problems"] else 2
         if args.операция == "publish":
@@ -97,46 +115,46 @@ def главная(argv: list[str] | None = None) -> int:
             итог = editorial.публиковать(args.site, args.slug, author=_автор(args),
                                          expected_generation=args.expect_generation,
                                          тело=тело)
-            print(json.dumps({"ok": итог["state"] == "confirmed", **итог},
+            print(json.dumps(_со_ссылкой({"ok": итог["state"] == "confirmed", **итог}),
                              ensure_ascii=False, indent=1))
             return 0 if итог["state"] == "confirmed" else 3
         if args.операция == "confirm":
             нужен("slug")
             итог = editorial.подтвердить(args.site, args.slug)
-            print(json.dumps({"ok": итог["confirmed"], **итог},
+            print(json.dumps(_со_ссылкой({"ok": итог["confirmed"], **итог}),
                              ensure_ascii=False, indent=1))
             return 0 if итог["confirmed"] else 3
         if args.операция == "unpublish":
             нужен("slug")
             итог = editorial.снять(args.site, args.slug, author=_автор(args))
-            print(json.dumps({"ok": итог["state"] == "confirmed", **итог},
+            print(json.dumps(_со_ссылкой({"ok": итог["state"] == "confirmed", **итог}),
                              ensure_ascii=False, indent=1))
             return 0 if итог["state"] == "confirmed" else 3
         if args.операция == "restore":
             нужен("slug")
             итог = editorial.восстановить(args.site, args.slug, author=_автор(args))
-            print(json.dumps({"ok": итог["state"] == "confirmed", **итог},
+            print(json.dumps(_со_ссылкой({"ok": итог["state"] == "confirmed", **итог}),
                              ensure_ascii=False, indent=1))
             return 0 if итог["state"] == "confirmed" else 3
         if args.операция == "rollback":
-            print(json.dumps({"ok": True, **editorial.откатить(args.site, author=_автор(args))},
+            print(json.dumps(_со_ссылкой({"ok": True, **editorial.откатить(args.site, author=_автор(args))}),
                              ensure_ascii=False, indent=1))
             return 0
         if args.операция == "status":
-            print(json.dumps({"ok": True, **editorial.состояние(args.site)},
+            print(json.dumps(_со_ссылкой({"ok": True, **editorial.состояние(args.site)}),
                              ensure_ascii=False, indent=1))
             return 0
         if args.операция.startswith("indexing-"):
             if args.операция == "indexing-state":
                 итог = indexing.состояние(args.site)
-                print(json.dumps({"ok": True, **итог}, ensure_ascii=False, indent=1))
+                print(json.dumps(_со_ссылкой({"ok": True, **итог}), ensure_ascii=False, indent=1))
                 return 0
             if args.операция == "indexing-confirm":
                 итог = indexing.подтвердить(
                     args.site,
                     ожидаемый=(args.mode or "").upper() if args.mode else "")
                 готово = итог["confirmed"] is not False
-                print(json.dumps({"ok": готово, **итог},
+                print(json.dumps(_со_ссылкой({"ok": готово, **итог}),
                                  ensure_ascii=False, indent=1))
                 return 0 if готово else 3
             if args.операция == "indexing-set":
@@ -144,12 +162,12 @@ def главная(argv: list[str] | None = None) -> int:
                 итог = indexing.установить(args.site, mode=args.mode,
                                       author=_автор(args),
                                       expect_release=args.expect_release or "")
-                print(json.dumps({"ok": bool(итог.get("confirmed")), **итог},
+                print(json.dumps(_со_ссылкой({"ok": bool(итог.get("confirmed")), **итог}),
                                  ensure_ascii=False, indent=1))
                 return 0 if итог.get("confirmed") else 3
             if args.операция == "indexing-rollback":
                 итог = indexing.откатить(args.site, author=_автор(args))
-                print(json.dumps({"ok": bool(итог.get("confirmed")), **итог},
+                print(json.dumps(_со_ссылкой({"ok": bool(итог.get("confirmed")), **итог}),
                                  ensure_ascii=False, indent=1))
                 return 0 if итог.get("confirmed") else 3
         if args.операция in ("diagnose", "indexing"):
@@ -157,14 +175,14 @@ def главная(argv: list[str] | None = None) -> int:
             функция = (diagnostics.диагностика if args.операция == "diagnose"
                        else diagnostics.индексация)
             итог = функция(args.site)
-            print(json.dumps({"ok": итог.get("ok", True), **итог},
+            print(json.dumps(_со_ссылкой({"ok": итог.get("ok", True), **итог}),
                              ensure_ascii=False, indent=1))
             return 0 if итог.get("ok", True) else 3
     except ОТКАЗЫ as отказ:
-        print(json.dumps({"ok": False, "reason": str(отказ),
+        print(json.dumps(_со_ссылкой({"ok": False, "reason": str(отказ),
                           "safe_continuation":
                           "причина названа; повторять ту же операцию без "
-                          "устранения причины нельзя"},
+                          "устранения причины нельзя"}),
                          ensure_ascii=False, indent=1))
         return 2
     return 2

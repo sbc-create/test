@@ -241,6 +241,51 @@ def _free_bytes(path: Path) -> int:
     return usage.free
 
 
+def _ворота_защиты(site_id: str, выпуск: Path, *, что: str) -> dict[str, Any]:
+    """Переключать `current` на выпуск без читателей защищённых данных нельзя.
+
+    Эти два пути — `install` и `rollback` — меняют `current` НАПРЯМУЮ, минуя
+    `executor.активировать`, где ворота уже стоят. Без проверки здесь запрет
+    обходился бы штатной командой: `cell install` с прежним артефактом или
+    `cell rollback` вернули бы код, который перестал читать режим индексации и
+    редакционные тексты, — открытый сайт стал бы закрытым, а тексты исчезли бы
+    со страниц.
+
+    Проверяется РАСПАКОВАННЫЙ выпуск, а не коммит: артефакт мог быть собран где
+    угодно, и git-истории у него может не быть вовсе.
+    """
+    from factory.cell import protected
+
+    домен = ""
+    try:
+        from factory.cell import registry as _реестр
+        домен = _реестр.resolve(site_id).domain or ""
+    except Exception:  # noqa: BLE001 — нет в реестре: домена нет
+        домен = ""
+    есть = protected.существующие(site_id, домен)
+    итог = {"checked": True, "present": sorted(есть), "release_dir": str(выпуск)}
+    if not есть:
+        итог["compatible"] = True
+        итог["reason"] = "защищённых данных нет: сверять нечего"
+        return итог
+    нет = []
+    for вид in есть:
+        for читатель in protected.ЧИТАТЕЛИ.get(вид, ()):
+            if not (выпуск / читатель).is_file():
+                нет.append(f"{вид}: {читатель}")
+    итог["missing_readers"] = нет
+    итог["compatible"] = not нет
+    if нет:
+        raise protected.ЗащитаДанных(
+            f"{site_id}: {что} на выпуск {выпуск.name} остановлен — в нём нет "
+            f"читателей защищённых данных {нет}. Такой выпуск перестал бы "
+            "читать уже записанное редактором: открытый сайт стал бы закрытым, "
+            "опубликованные тексты исчезли бы со страниц. Перенесите читателя "
+            "в выпускаемый код и повторите")
+    итог["reason"] = "читатели на месте"
+    return итог
+
+
 def install(*, site_id: str, artifact: Path, manifest: Path | dict[str, Any],
             layout: Layout, dry_run: bool = False,
             expected_digest: str | None = None,
@@ -302,6 +347,9 @@ def install(*, site_id: str, artifact: Path, manifest: Path | dict[str, Any],
             shutil.rmtree(target)
         release_mod.unpack(artifact, target, expected_digest=checked["digest"])
         previous = None
+        # Ворота защищённых данных: до подмены `current`, после распаковки —
+        # проверять надо то, что встанет на место, а не то, что лежит в архиве.
+        protection = _ворота_защиты(site_id, target, что="установка")
         if layout.current.is_symlink():
             previous = os.readlink(layout.current)
         # Переключение через os.replace: окна без ссылки не возникает.
@@ -497,6 +545,10 @@ def rollback(*, site_id: str, layout: Layout, reason: str,
     if dry_run:
         return {"status": "dry-run", **plan}
 
+    # Откат КОДА не откатывает данные редактора: выпуск, который их не читает,
+    # возвращать нельзя. Проверка до замка и до подмены ссылки.
+    plan["protection"] = _ворота_защиты(site_id, Path(previous),
+                                        что="откат")
     with _lock(site_id, "rollback"):
         temporary = layout.current.parent / f".{layout.current.name}.rollback"
         if temporary.exists() or temporary.is_symlink():
