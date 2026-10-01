@@ -2,8 +2,6 @@
 """Фактически отображаемые карточки блоков новинок, а не результат функции."""
 import re
 import sys
-import urllib.error
-import urllib.request
 from datetime import date
 
 БАЗА = sys.argv[1] if len(sys.argv) > 1 else "http://127.0.0.1:9190"
