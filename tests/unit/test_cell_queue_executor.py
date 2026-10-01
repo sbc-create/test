@@ -202,7 +202,21 @@ def площадка_в_песочнице(monkeypatch, tmp_path, site_id: str =
     написан. Здесь ему выдаются собственные пустые каталоги и собственный
     снимок, и исход перестаёт зависеть от того, где он запущен.
     """
-    from factory.cell import delivery, privileged
+    from factory.cell import delivery, privileged, protected
+
+    # Корни ЗАЩИЩЁННЫХ данных тоже уводятся в песочницу. Без этого ворота
+    # защиты в `активировать` читали бы боевые каталоги, и исход теста снова
+    # зависел бы от машины: на хосте у zona-01 есть редакционные материалы, и
+    # ворота отказывали бы раньше проверки, ради которой тест написан.
+    (tmp_path / "indexing" / "_log").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "ownership").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "nginx-cells").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "overlays").mkdir(parents=True, exist_ok=True)
+    monkeypatch.setattr(protected, "КОРЕНЬ_ИНДЕКСАЦИИ", tmp_path / "indexing")
+    monkeypatch.setattr(protected, "КОРЕНЬ_ОТМЕТОК", tmp_path / "ownership")
+    monkeypatch.setattr(protected, "КОРЕНЬ_NGINX_ЯЧЕЕК", tmp_path / "nginx-cells")
+    monkeypatch.setattr(protected, "_корни_наложений",
+                        lambda: {"sandbox": str(tmp_path / "overlays")})
 
     корень = tmp_path / "srv" / site_id
     (корень / "data").mkdir(parents=True, exist_ok=True)

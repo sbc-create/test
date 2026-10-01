@@ -35,7 +35,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from factory.cell import privileged, queue, registry, runtime
+from factory.cell import privileged, protected, queue, registry, runtime
 
 
 class ExecutorError(Exception):
@@ -485,6 +485,17 @@ def активировать(заявка: queue.Заявка, *, файл: Path
     размещение = runtime.размещение(заявка.site_id)
     шаги: dict[str, Any] = {}
 
+    # ВОРОТА ЗАЩИЩЁННЫХ ДАННЫХ. Стоят ПЕРВЫМИ — до подготовки площадки, до
+    # засева хранилища и до сборки. Иначе отказ пришёл бы после того, как
+    # `prepare` и `seed_data` уже что-то создали.
+    #
+    # Проверяется одно: умеет ли ВЫПУСКАЕМЫЙ коммит читать то, что редактору
+    # уже принадлежит. Выпуск без читателя файлы не испортит, но перестанет их
+    # читать — открытый сайт станет закрытым, опубликованные тексты исчезнут
+    # со страниц, и со стороны это неотличимо от потери данных.
+    шаги["protected_data"] = protected.проверить_выпуск(
+        заявка.site_id, размещение.domain or "", repo, заявка.commit)
+
     # Площадка готовится ДО сборки. Сборщик запускается под учётной записью
     # САЙТА, а создаёт её именно `prepare`: при первом выпуске витрины учётной
     # записи ещё нет, и сборка падала на `getpwnam` раньше, чем что-либо
@@ -687,7 +698,7 @@ def выполнить(заявка: queue.Заявка, *, база: Path, dry_
         применено = (итог.get("status") in queue.ПРИМЕНЁННЫЕ_ИСХОДЫ
                      if isinstance(итог, dict) else False)
         результат["status"] = "ok" if применено else "failed"
-    except (ExecutorError, privileged.PrivilegedRefused,
+    except (ExecutorError, privileged.PrivilegedRefused, protected.ЗащитаДанных,
             registry.RegistryError) as exc:
         результат["status"] = "rejected"
         результат["error"] = str(exc)
