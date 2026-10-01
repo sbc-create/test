@@ -13,12 +13,17 @@ import re
 import pytest
 import yaml
 
+from factory import contact
 from factory.lords import fixtures as fx
 from factory.lords import render
 from factory.paths import PATHS
 
 SITES = ("lords-01", "lords-02", "lords-03")
-CONTACT = "sbc.claude@yandex.ru"
+
+#: Адрес берётся из единственного источника, а не повторяется литералом.
+#: Литерал здесь означал бы, что смена адреса сети валит тест, который о смене
+#: ничего не знает, — и соблазн «поправить тест» вместо проверки витрин.
+CONTACT = contact.ПОЧТА_СЕТИ
 
 
 def package(site_id: str) -> dict:

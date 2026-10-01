@@ -57,6 +57,7 @@
 | REQ-CDNVH | CDN Video Hub не интегрируется; создана extension point | §11 | `tests/unit/test_repo_hygiene.py` |
 | REQ-CELL-TEMPLATE | Шаблон выдаётся атомарно free→reserved→assigned; два заказа не получают один, повтор не расходует второй | PORTABLE-SITE-CELL-01 §2 | `tests/unit/test_cell_templates.py` |
 | REQ-CELL-ROUTING | domain/site_id разрешается однозначно; похожее имя не подставляется, неоднозначность останавливает | PORTABLE-SITE-CELL-01 §1 | `tests/unit/test_cell_registry.py` |
+| REQ-CELL-CONTACT | Публичная почта обратной связи одна на сеть (`spam.abusekp@proton.me`), объявлена в `factory/contact.py` и выдаётся каждому новому сайту вместе с проверкой выпуска; прежний адрес нигде не остаётся | владелец, 2026-10-01 | `tests/unit/test_contact_email_single_source.py` |
 | REQ-CELL-PUBID | Отозванные publisher_id 10331/10333 запрещены; пустой — `BLOCKED_INPUT`, не умолчание. 10332 исключён из запрета решением D137: владелец назначил его animedia.icu | PORTABLE-SITE-CELL-01 §3 | `tests/unit/test_cell_registry.py` |
 | REQ-CELL-REPO | Отдельный Git-проект сайта с AGENTS.md, закреплёнными версиями и проверками; без данных и секретов | PORTABLE-SITE-CELL-01 §2 | `tests/unit/test_cell_release.py` |
 | REQ-CELL-RELEASE | Воспроизводимый артефакт: один коммит — один digest; манифест несёт source commit и версии схем | PORTABLE-SITE-CELL-01 §2 | `tests/unit/test_cell_release.py` |
