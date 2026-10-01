@@ -25,7 +25,13 @@ import argparse
 import json
 import sys
 
-from factory.qwen import editorial, registry
+from factory.qwen import editorial, indexing, registry
+
+
+#: Отказы обеих операций — одного рода: названная причина вместо трассы.
+#: Перечислены кортежем, потому что ветвей обработки должно быть ровно одна:
+#: два отдельных `except` с одинаковым телом расходятся при первой правке.
+ОТКАЗЫ = (editorial.ОперацияОтклонена, indexing.Отказано)
 
 
 def _автор(args) -> str:
@@ -36,7 +42,9 @@ def главная(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="factory.qwen", description=__doc__)
     p.add_argument("операция", choices=[
         "sites", "facts", "prepare", "publish", "confirm", "unpublish",
-        "restore", "rollback", "status", "diagnose", "indexing"])
+        "restore", "rollback", "status", "diagnose", "indexing",
+        "indexing-state", "indexing-set", "indexing-confirm",
+        "indexing-rollback"])
     p.add_argument("--site")
     p.add_argument("--slug")
     p.add_argument("--body-file", help="файл с текстом; '-' — стандартный ввод")
@@ -44,6 +52,11 @@ def главная(argv: list[str] | None = None) -> int:
     p.add_argument("--author")
     p.add_argument("--no-network", action="store_true",
                    help="sites: не опрашивать домены")
+    p.add_argument("--mode", choices=["open", "closed"],
+                   help="indexing-set: требуемый режим индексации")
+    p.add_argument("--expect-release",
+                   help="indexing-set: ожидаемый выложенный выпуск; "
+                        "при несовпадении операция останавливается")
     args = p.parse_args(argv)
 
     def нужен(поле: str):
@@ -113,6 +126,32 @@ def главная(argv: list[str] | None = None) -> int:
             print(json.dumps({"ok": True, **editorial.состояние(args.site)},
                              ensure_ascii=False, indent=1))
             return 0
+        if args.операция.startswith("indexing-"):
+            if args.операция == "indexing-state":
+                итог = indexing.состояние(args.site)
+                print(json.dumps({"ok": True, **итог}, ensure_ascii=False, indent=1))
+                return 0
+            if args.операция == "indexing-confirm":
+                итог = indexing.подтвердить(
+                    args.site,
+                    ожидаемый=(args.mode or "").upper() if args.mode else "")
+                готово = итог["confirmed"] is not False
+                print(json.dumps({"ok": готово, **итог},
+                                 ensure_ascii=False, indent=1))
+                return 0 if готово else 3
+            if args.операция == "indexing-set":
+                нужен("mode")
+                итог = indexing.установить(args.site, mode=args.mode,
+                                      author=_автор(args),
+                                      expect_release=args.expect_release or "")
+                print(json.dumps({"ok": bool(итог.get("confirmed")), **итог},
+                                 ensure_ascii=False, indent=1))
+                return 0 if итог.get("confirmed") else 3
+            if args.операция == "indexing-rollback":
+                итог = indexing.откатить(args.site, author=_автор(args))
+                print(json.dumps({"ok": bool(итог.get("confirmed")), **итог},
+                                 ensure_ascii=False, indent=1))
+                return 0 if итог.get("confirmed") else 3
         if args.операция in ("diagnose", "indexing"):
             from factory.qwen import diagnostics
             функция = (diagnostics.диагностика if args.операция == "diagnose"
@@ -121,7 +160,7 @@ def главная(argv: list[str] | None = None) -> int:
             print(json.dumps({"ok": итог.get("ok", True), **итог},
                              ensure_ascii=False, indent=1))
             return 0 if итог.get("ok", True) else 3
-    except editorial.ОперацияОтклонена as отказ:
+    except ОТКАЗЫ as отказ:
         print(json.dumps({"ok": False, "reason": str(отказ),
                           "safe_continuation":
                           "причина названа; повторять ту же операцию без "
