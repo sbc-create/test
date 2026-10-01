@@ -104,6 +104,37 @@ class TestDeliberatelyBrokenProfiles:
         """Ссылка на секрет — не секрет. Иначе гейт запретил бы правильное."""
         assert gate.check_profile(valid_profile(), ROOT).passed
 
+    def test_publisher_id_ref_accepts_both_scopes(self):
+        """Ссылка на издателя допустима из хранилища и из репозитория витрины.
+
+        Область `repo://` появилась вместе с переносом номера в конфигурацию
+        сайта (D138): издатель публичен — он стоит в разметке страницы, — а
+        одно значение на направление Secret Hub не давало назначить соседним
+        доменам разные номера.
+        """
+        for ссылка in ("secret://cdnvideohub/lords/lords-01/publisher-id",
+                       "repo://config/site.json#publisher_id_expected"):
+            profile = valid_profile()
+            profile["player"]["publisher_id_ref"] = ссылка
+            результат = gate.check_profile(profile, ROOT)
+            assert результат.passed, (ссылка, результат.problems)
+
+    def test_publisher_id_ref_still_refuses_a_bare_value(self):
+        """Смысл запрета сохранён: здесь ССЫЛКА, а не само значение.
+
+        Поле расширили с `^secret://` до `^(secret|repo)://`, и соблазн
+        очевидный — вписать число. Тогда профиль в git объявлял бы настройку
+        напрямую, и две копии значения разошлись бы молча: витрина читает
+        `config/site.json`, а человек — профиль. Проверка держит границу.
+        """
+        for негодное in ("10332", "", "cdnvideohub/publisher-id",
+                         "http://example.invalid/pub", "repo:config/site.json"):
+            profile = valid_profile()
+            profile["player"]["publisher_id_ref"] = негодное
+            результат = gate.check_profile(profile, ROOT)
+            assert not результат.passed, f"{негодное!r} прошло, а не должно"
+            assert any("publisher_id_ref" in p for p in результат.problems), результат.problems
+
     def test_missing_cache_policy_is_refused(self):
         profile = valid_profile()
         profile["cache_policy"] = {"schema_version": "1.0", "layers": {}, "invalidation": {"mode": "ttl-only"}}
