@@ -50,7 +50,10 @@ from factory import contact
 #: * automation/host/contact-email-live-check.py — опрашивает выложенные
 #:   витрины и обязан узнавать прежний адрес, иначе не сможет сказать, что он
 #:   остался;
-#: * шаблон проверки для новых проектов — та же причина, что у самой проверки.
+#: * шаблон проверки для новых проектов — та же причина, что у самой проверки;
+#: * automation/host/apply-contact-email-animego-root.sh — сверяет публичную
+#:   страницу после выкладки и обязан узнавать прежний адрес, иначе не отличит
+#:   «адрес заменён» от «страницу отдал кэш».
 #:
 #: Без исключений проверка падала бы на собственном инструментарии, и это был
 #: бы отказ об инструменте, а не о сети.
@@ -59,6 +62,7 @@ from factory import contact
     Path(__file__).resolve(),
     КОРЕНЬ / "automation" / "host" / "contact-email-live-check.py",
     КОРЕНЬ / "factory" / "cell" / "check_templates" / "contact_email.py.tmpl",
+    КОРЕНЬ / "automation" / "host" / "apply-contact-email-animego-root.sh",
 })
 
 #: Где искать. Отчёты, журналы проверок и история переписки не входят: они
@@ -214,17 +218,71 @@ class TestНовыйСайт:
     """
 
     @staticmethod
-    def _собрать(куда):
+    def _профили() -> list[str]:
+        """Все профили, из которых вообще можно создать сайт.
+
+        Проверять один — значит проверить один. Пул семейства `lords` и есть
+        «все используемые семейства» пути создания: у `dle20` и
+        `payload-next-multisite` профилей нет, и генератор их не принимает.
+        """
+        каталог = КОРЕНЬ / "blueprints" / "lords" / "profiles"
+        return sorted(p.stem for p in каталог.glob("*.yaml"))
+
+    @staticmethod
+    def _собрать(куда, профиль: str = "lords-general"):
         from factory.cell import newsite
 
         заказ = newsite.Заказ(
             site_id="probe-contact", domain="probe-contact.test",
-            profile="lords-general", port=9999, family="lords",
+            profile=профиль, port=9999, family="lords",
             site_name="Проба контакта",
             remote="https://example.invalid/probe.git")
         newsite.создать(заказ, корень=КОРЕНЬ, куда=куда,
                         регистрировать=False, допустить_грязное=True)
         return куда
+
+    def test_каждый_профиль_пула_даёт_адрес_сети(self, tmp_path):
+        """Адрес — умолчание для ВСЕХ профилей, а не для того, что проверяли.
+
+        Семь профилей, три из них свободны и будут выданы следующему заказу.
+        Профиль, забытый здесь, обнаружился бы на публичной странице нового
+        сайта.
+        """
+        профили = self._профили()
+        assert профили, "пул профилей пуст — проверять нечего"
+        беды = []
+        for n, профиль in enumerate(профили):
+            проект = self._собрать(tmp_path / f"p{n}", профиль)
+            конфиг = json.loads((проект / "config" / "site.json").read_text(encoding="utf-8"))
+            if конфиг.get("contact_email") != contact.ПОЧТА_СЕТИ:
+                беды.append(f"{профиль}: адрес {конфиг.get('contact_email')!r}")
+            if not (проект / "checks" / "contact_email.py").is_file():
+                беды.append(f"{профиль}: нет checks/contact_email.py")
+            бегунок = (проект / "checks" / "run.sh").read_text(encoding="utf-8")
+            if "checks/contact_email.py" not in бегунок:
+                беды.append(f"{профиль}: проверка не вызывается из run.sh")
+        assert not беды, "; ".join(беды)
+
+    def test_путь_извлечения_тоже_объявляет_адрес(self):
+        """`cell extract` — тоже путь создания проекта, и он адрес не ставил.
+
+        Все семнадцать действующих ячеек созданы извлечением, не генератором.
+        Пока `extract` не объявлял `contact_email`, следующий извлечённый
+        проект уехал бы БЕЗ адреса, и подвал вышел бы без строки обратной
+        связи — при зелёных проверках.
+        """
+        from factory.cell import extract
+
+        assert extract._адрес_сети() == contact.ПОЧТА_СЕТИ
+        тело = extract._проверка_контакта()
+        assert "@@АДРЕС@@" not in тело, "метка шаблона осталась неподставленной"
+        assert f'ОЖИДАЕТСЯ = "{contact.ПОЧТА_СЕТИ}"' in тело
+        # Вызов живёт в шаблоне run.sh, который получают оба пути создания.
+        шаблон = (КОРЕНЬ / "factory" / "cell" / "site_checks" / "run.sh").read_text(
+            encoding="utf-8")
+        assert "checks/contact_email.py" in шаблон, (
+            "в шаблоне checks/run.sh нет вызова проверки — извлечённый проект "
+            "получил бы файл, который никто не исполняет")
 
     def test_адрес_попадает_в_конфигурацию(self, tmp_path):
         проект = self._собрать(tmp_path / "проект")
