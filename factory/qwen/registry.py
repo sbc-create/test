@@ -96,7 +96,12 @@ def корень_хранилища(adapter: str) -> pathlib.Path:
     },
     "yummy": {
         "deliver": "наложение title-overlays.json",
-        "display": "читатель приложения Next.js (проверено на yummyani.site)",
+        # `display` НЕ объявляется семейством: приложение читает наложение
+        # только там, где контейнеру задан TITLE_OVERLAYS_PATH и смонтирован
+        # каталог этого домена. Измерено: так настроены yummyani.site и
+        # yummyani.org, а у yummyani.biz, yummyani7.site и yummyani7.info ни
+        # переменной, ни монтирования нет. Объявить отображение семейством
+        # значило бы пообещать его трём сайтам, где файл никто не читает.
         # факты отсутствуют намеренно: источника нет
     },
     "lords": {
@@ -109,15 +114,200 @@ def корень_хранилища(adapter: str) -> pathlib.Path:
     "zona-serve": {},
 }
 
-#: Операции, которые требуют соответствующей возможности адаптера.
+#: Форма адреса страницы тайтла — У КАЖДОГО СЕМЕЙСТВА СВОЯ, и она проверена
+#: запросом, а не выведена из общего вида.
+#:
+#: Угадывать её нельзя, и это не предосторожность: инструмент уже строил всем
+#: семействам `/title/<slug>/`, а Yummy отвечает на этот адрес 308-м редиректом
+#: на `/anime/<slug>`. Проверка подтверждения получала «страница ответила 308»
+#: и объявляла текст отсутствующим — при том, что текст на странице был
+#: (проверено на /anime/009-1, фрагмент наложения найден в видимом теле).
+ФОРМА_АДРЕСА = {
+    # проверено: https://animedia.space/title/<slug>/ → 200
+    "animedia": "/title/{slug}/",
+    # проверено: https://zonafilm.space/title/<slug>/ → 200, ссылки главной
+    # имеют ту же форму; то же у zonafilm.cc и an1mego.site
+    "lords": "/title/{slug}/",
+    "animego": "/title/{slug}/",
+    "zona-serve": "/title/{slug}/",
+    # проверено: https://yummyani.site/anime/<slug> → 200;
+    # /title/<slug>/ → 308
+    "yummy": "/anime/{slug}",
+}
+
+
+def адрес_тайтла(s: "Сайт", slug: str) -> str:
+    """Публичный адрес страницы тайтла. Форма берётся из проверенной таблицы."""
+    форма = ФОРМА_АДРЕСА.get(s.adapter)
+    if not форма:
+        raise KeyError(
+            f"{s.domain}: форма адреса страницы тайтла для семейства "
+            f"{s.adapter or 'не определено'} не проверена — угадывать её нельзя")
+    return f"https://{s.domain}" + форма.format(slug=slug)
+
+
+#: Семейства, рантайм которых УМЕЕТ нести читателя редакторских правок
+#: (`src/editorial_overlay.py`). Умеет — не значит несёт: модуль есть в
+#: выпущенном рантайме одной витрины из восьми, и проверяется он по ВЫПУСКУ, а
+#: не по рабочей копии. Рабочая копия может содержать читателя, которого на
+#: сайте нет, — тогда записанное на странице не появится.
+СЕМЕЙСТВА_ПРАВОК = ("lords", "animego")
+
+#: Имя файла правок в хранилище витрины. То же имя объявлено `user_writable` в
+#: `config/site.json` подключённых витрин и то же читает `editorial_overlay`.
+ИМЯ_ПРАВОК = "editorial-overrides.json"
+
+
+def читатель_правок(аккаунт: str) -> pathlib.Path | None:
+    """Путь к читателю правок в ВЫПУЩЕННОМ рантайме, иначе None."""
+    if not аккаунт:
+        return None
+    п = pathlib.Path(f"/srv/{аккаунт}/current/src/editorial_overlay.py")
+    if п.is_file():
+        return п
+    п = pathlib.Path(f"/srv/{аккаунт}/app/src/editorial_overlay.py")
+    return п if п.is_file() else None
+
+
+#: Сколько ждать `docker inspect`. Контейнеров пять, опрос дешёвый, но он
+#: внешний, и без предела один зависший вызов остановил бы перечень сайтов.
+ОПРОС_КОНТЕЙНЕРА_С = 20
+
+
+#: Разобранные контейнеры: домен -> путь наложения внутри контейнера.
+#:
+#: Считается ОДИН раз на процесс. Без кэша перечень сайтов опрашивал
+#: `docker inspect` для каждой витрины Yummy по всем запущенным контейнерам —
+#: около сотни внешних вызовов на один `sites`, и операции стали заметно
+#: медленнее. Состав контейнеров за время одной операции не меняется.
+_контейнеры: dict[str, str] | None = None
+
+
+def _разобрать_контейнеры() -> dict[str, str]:
+    """Домен -> путь наложения, по ФАКТИЧЕСКИ запущенным контейнерам.
+
+    Проверяется запущенный контейнер, а не compose-файл: в прочитанном
+    `compose.staging.yaml` у web-org наложений нет вовсе, а в работающем
+    контейнере и переменная, и монтирование есть — файл разошёлся с тем, что
+    работает. Судить по файлу значило бы объявить настроенный сайт
+    ненастроенным.
+
+    Чего это НЕ доказывает: что текст появится на странице. У yummyani.org
+    переменная и монтирование на месте, записей 25, отпечатки сходятся — а
+    текста на странице нет (проверено 2026-10-01). Поэтому настройка даёт
+    только возможность `display`, а публикация всё равно заканчивается
+    проверкой страницы и без текста остаётся в состоянии `written`.
+    """
+    import shutil
+    итог: dict[str, str] = {}
+    if not shutil.which("docker"):
+        return итог
+    try:
+        список = subprocess.run(["docker", "ps", "--format", "{{.Names}}"],
+                                capture_output=True, text=True,
+                                timeout=ОПРОС_КОНТЕЙНЕРА_С)
+    except (OSError, subprocess.SubprocessError):
+        return итог
+    if список.returncode != 0:
+        return итог
+    имена = список.stdout.split()
+    if not имена:
+        return итог
+    try:
+        св = subprocess.run(["docker", "inspect", *имена], capture_output=True,
+                            text=True, timeout=ОПРОС_КОНТЕЙНЕРА_С * 3)
+    except (OSError, subprocess.SubprocessError):
+        return итог
+    if св.returncode != 0:
+        return итог
+    try:
+        все = json.loads(св.stdout)
+    except ValueError:
+        return итог
+    for данные in все:
+        окр = dict(кв.split("=", 1)
+                   for кв in (данные.get("Config") or {}).get("Env") or []
+                   if "=" in кв)
+        адрес = окр.get("SITE_URL") or ""
+        путь = (окр.get("TITLE_OVERLAYS_PATH") or "").strip()
+        if not адрес or not путь:
+            continue
+        домен = адрес.split("//", 1)[-1].strip("/").lower()
+        if not домен:
+            continue
+        # Монтирование должно вести в каталог ИМЕННО этого домена: иначе
+        # контейнер читал бы наложение соседа.
+        свой = any(домен in str(m.get("Source") or "")
+                   for m in данные.get("Mounts") or [])
+        if свой:
+            итог[домен] = путь
+    return итог
+
+
+def наложение_в_контейнере(домен: str) -> str:
+    """Читает ли контейнер этого домена каталог наложений ЭТОГО домена."""
+    global _контейнеры
+    if _контейнеры is None:
+        _контейнеры = _разобрать_контейнеры()
+    return _контейнеры.get(домен.lower(), "")
+
+
+def возможности(s: "Сайт") -> dict[str, str]:
+    """Что умеет ЭТОТ сайт. Возможности семейства — только основа.
+
+    Возможности нельзя объявлять семейством целиком: читатель правок выпущен
+    на zona-01 и не выпущен на остальных шести витринах того же семейства с
+    той же точкой входа. Объявить семейство умеющим доставку значило бы
+    пообещать публикацию шести сайтам, где текст не появится.
+    """
+    умеет = dict(ВОЗМОЖНОСТИ_АДАПТЕРА.get(s.adapter, {}))
+    if s.adapter == "yummy":
+        путь = наложение_в_контейнере(s.domain)
+        if путь:
+            умеет["display"] = (f"контейнер читает {путь} и монтирует каталог "
+                                "этого домена")
+    if s.adapter in СЕМЕЙСТВА_ПРАВОК:
+        читатель = читатель_правок(s.account)
+        if читатель is not None:
+            умеет["deliver"] = ("правки через очередь выпуска, операция "
+                                "editorial (factory.cell.editorial_store)")
+            умеет["display"] = f"читатель в выпущенном рантайме: {читатель}"
+    return умеет
+
+
+def механизм(s: "Сайт") -> str:
+    """Каким путём материал попадает на сайт. Пусто — пути нет."""
+    if s.adapter in ("animedia", "yummy"):
+        return "overlay"
+    if s.adapter in СЕМЕЙСТВА_ПРАВОК and читатель_правок(s.account) is not None:
+        return "editorial-queue"
+    return ""
+
+
+def путь_доставки(s: "Сайт") -> str:
+    """Файл, который читает ВЫПУЩЕННЫЙ рантайм этого сайта."""
+    if механизм(s) == "editorial-queue":
+        return f"/srv/{s.account}/data/{ИМЯ_ПРАВОК}"
+    return str(корень_хранилища(s.adapter) / s.domain / "title-overlays.json")
+
+
+#: Какие возможности нужны операции. ВСЕ перечисленные, а не любая из них.
+#:
+#: Публикация требует и доставки, и отображения. Одной доставки мало: запись в
+#: файл, который никто не читает, — не публикация, и предлагать её значит
+#: обещать результат, которого не будет. Измерено на yummyani.biz,
+#: yummyani7.site и yummyani7.info: каталог наложений существует, а контейнер
+#: его не монтирует и переменной TITLE_OVERLAYS_PATH не имеет.
 ТРЕБУЕТ_ВОЗМОЖНОСТИ = {
-    "facts": "facts",
-    "prepare": "facts",
-    "publish": "deliver",
-    "unpublish": "deliver",
-    "restore": "deliver",
-    "rollback": "deliver",
-    "confirm": "display",
+    "facts": ("facts",),
+    "prepare": ("facts",),
+    "publish": ("deliver", "display"),
+    "unpublish": ("deliver", "display"),
+    "restore": ("deliver", "display"),
+    # Откат тоже требует отображения: откатывать хранилище, которого никто не
+    # читает, незачем — публичного состояния, которое надо вернуть, там нет.
+    "rollback": ("deliver", "display"),
+    "confirm": ("display",),
 }
 
 
@@ -134,6 +324,8 @@ class Сайт:
     template_entrypoint: str = ""
     template_family: str = ""
     adapter: str = ""
+    account: str = ""
+    delivery_backend: str = ""
     delivery: str = ""
     editorial_store: str = ""
     editorial_items: int | None = None
@@ -236,6 +428,7 @@ def собрать(*, опрашивать_сеть: bool = True) -> list[Сай
         # опубликованная версия — ТОЛЬКО с диска и с домена, не из поля реестра
         аккаунт = ((я.get("runtime") or {}).get("account")
                    or домен.replace(".", "-"))
+        s.account = аккаунт
         ссылка = pathlib.Path(f"/srv/{аккаунт}/current")
         if ссылка.exists():
             s.published_release = pathlib.Path(ссылка.resolve()).name
@@ -255,16 +448,22 @@ def собрать(*, опрашивать_сеть: bool = True) -> list[Сай
                         s.published_build_id = json.loads(телоz).get("build_id") or ""
                     except ValueError:
                         s.published_build_id = ""
-        # хранилище редакционных материалов
-        хран = корень_хранилища(s.adapter) / домен / "title-overlays.json"
-        s.editorial_store = str(хран)
+        # Хранилище редакционных материалов — то, что читает ВЫПУЩЕННЫЙ
+        # рантайм этого сайта. Путь зависит от механизма доставки: наложение
+        # лежит у производителя, правки — в хранилище самой витрины.
+        s.delivery_backend = механизм(s)
+        s.editorial_store = путь_доставки(s)
+        хран = pathlib.Path(s.editorial_store)
         if хран.is_file():
+            данные = {}
             try:
-                s.editorial_items = len(
-                    json.loads(хран.read_text(encoding="utf-8")).get("items") or [])
-            except ValueError:
-                s.editorial_items = None
+                данные = json.loads(хран.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
                 s.notes.append("файл хранилища не читается как JSON")
+            if isinstance(данные, dict):
+                пункты = (данные.get("items") if "items" in данные
+                          else данные.get("overrides"))
+                s.editorial_items = len(пункты) if пункты is not None else 0
 
         s.delivery, s.handover_state, s.handover_reason, s.operations = _передача(s)
         итог.append(s)
@@ -283,13 +482,18 @@ def _передача(s: Сайт) -> tuple[str, str, str, list[str]]:
                 f"точка входа {s.template_entrypoint!r} не сопоставлена ни одному "
                 "адаптеру; добавьте её в АДАПТЕРЫ_ПО_РАНТАЙМУ после проверки",
                 list(ОПЕРАЦИИ_ЧТЕНИЯ))
+    мех = механизм(s)
     доставка = {
-        "animedia": "наложение title-overlays.json, читает рантайм витрины",
-        "lords": "наложение title-overlays.json (читатель в рантайме ещё не выпущен)",
-        "animego": "наложение title-overlays.json (читатель в рантайме ещё не выпущен)",
-        "yummy": "наложение title-overlays.json, читает приложение Next.js",
-        "zona-serve": "механизм не установлен",
-    }.get(s.adapter, "неизвестен")
+        "overlay": ("наложение title-overlays.json, читает рантайм витрины"
+                    if s.adapter == "animedia"
+                    else "наложение title-overlays.json, читает приложение Next.js"),
+        "editorial-queue": ("правки editorial-overrides.json: подготовка в "
+                            "управляющем слое, установка операцией editorial, "
+                            "чтение рантаймом по mtime"),
+    }.get(мех, "")
+    if not доставка:
+        доставка = ("механизм не установлен: читателя правок в выпущенном "
+                    f"рантайме нет ({s.adapter or 'адаптер не определён'})")
 
     if not s.public_http:
         # Сеть не опрашивали: утверждать «не выпущен» нельзя — это разные
@@ -303,20 +507,30 @@ def _передача(s: Сайт) -> tuple[str, str, str, list[str]]:
                 f"публичный ответ {s.public_http}, "
                 f"выпуск {s.published_release or 'не найден'}",
                 list(ОПЕРАЦИИ_ЧТЕНИЯ))
-    умеет = ВОЗМОЖНОСТИ_АДАПТЕРА.get(s.adapter, {})
+    умеет = возможности(s)
     операции = ["sites", "status", "diagnose", "indexing-show"]
-    for оп, нужна in ТРЕБУЕТ_ВОЗМОЖНОСТИ.items():
-        if нужна in умеет:
+    for оп, нужны in ТРЕБУЕТ_ВОЗМОЖНОСТИ.items():
+        if all(н in умеет for н in нужны):
             операции.append(оп)
+    # Откат хранилища есть только у наложения: у файла правок нет ни поколений,
+    # ни last-good — его роль играют адресное снятие и восстановление. Оставить
+    # `rollback` в перечне значило бы предложить операцию, которая откажет.
+    if мех == "editorial-queue" and "rollback" in операции:
+        операции.remove("rollback")
     нет = [н for н in ("facts", "deliver", "display") if н not in умеет]
     if "deliver" not in умеет or "display" not in умеет:
+        подсказка = ""
+        if s.adapter in СЕМЕЙСТВА_ПРАВОК:
+            подсказка = (": в выпущенном рантайме нет src/editorial_overlay.py — "
+                         "читатель есть в репозитории zonafilm-space и переносится "
+                         "выпуском, а не правкой хранилища")
         return (доставка, "pending_adapter",
-                f"семейство {s.adapter!r}: не хватает возможностей {нет} — "
-                "записанный материал на странице не появится",
+                f"сайт {s.domain}: не хватает возможностей {нет} — "
+                f"записанный материал на странице не появится{подсказка}",
                 sorted(set(операции)))
     if "facts" not in умеет:
         return (доставка, "managed_no_facts",
-                f"семейство {s.adapter!r}: доставка и отображение работают, но "
+                f"сайт {s.domain} ({s.adapter}): доставка и отображение работают, но "
                 "источника фактов нет — текст должен приходить с уже "
                 "проверенными фактами извне",
                 sorted(set(операции)))
