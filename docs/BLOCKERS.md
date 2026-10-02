@@ -563,6 +563,74 @@ zona-02 прошли только потому, что таких данных �
 рантайма. Это не обход и не ошибка: порядок именно такой — сначала выпуск
 читателя, потом снятие слоя, и только потом операция открытия.
 
+## PROTECTED-GIT-OWNERSHIP — ворота не могут прочитать репозиторий от root
+
+**Симптом (измерен на живом выпуске).** Заявка animedia-02 `f7a91cdab547`
+отклонена:
+
+    выпуск f7a91cdab547 не несёт читателей защищённых данных —
+    ['indexing_state: src/indexing_mode.py', 'editorial: src/seo_overlay.py']
+
+Оба файла в этом коммите ЕСТЬ: `git cat-file -e` под владельцем репозитория
+отвечает 0.
+
+**Причина.** Исполнитель работает от root, рабочая копия принадлежит `claude`,
+и git отвечает `fatal: detected dubious ownership in repository` кодом 128.
+Прежний код считал любой ненулевой код «файла в коммите нет». Воспроизведено
+штатным переключателем git `GIT_TEST_ASSUME_DIFFERENT_OWNER=1`: без
+`safe.directory` — 128, с ключом — 0.
+
+**Исправлено** в рабочем дереве (коммит `e4c1794`): запрос идёт с
+`-c safe.directory=<репозиторий>`, а коды git различаются по смыслу —
+отсутствующий путь (git отвечает про объект) читается как «нет файла», а
+отказ про РЕПОЗИТОРИЙ поднимает `РепозиторийНедоступен` с текстом git. Две
+новые проверки закрепляют оба случая.
+
+**Что осталось.** Установленный пакет (`07:59:55Z`) несёт прежнюю версию, и
+до переустановки выпуск любого сайта с защищёнными данными отклоняется этим
+дефектом — у обоих Animedia такие данные есть. Действие владельца то же, что
+у PROTECTED-SEED-GATE, и одно на оба дефекта:
+
+    sudo bash automation/host/install-cell-executor.sh
+
+Сухой прогон установщика пройден: пакет из текущего дерева проходит его
+собственные ворота (`protected.py`, три вызова на месте).
+
+## ICU-UPDATE-UNIT-APP — служба обновления animedia.icu исполняет `app`
+
+**Что измерено 2026-10-02.** Установленный юнит
+`/etc/systemd/system/animedia-icu-update.service` указывает на
+`/srv/animedia-icu/app`, а шаг сборки карты сайта есть только в выложенном
+коде:
+
+    grep -c шаг_карты /srv/animedia-icu/current/automation/animedia-data-update.py  -> 2
+    grep -c шаг_карты /srv/animedia-icu/app/automation/animedia-data-update.py      -> 0
+
+Поэтому прогон 16:01–16:07 MSK отработал без шага `sitemap` (`problems: 0`,
+в отчёте состояния шага нет вовсе), `/sitemap.xml` отвечает 404 и в
+`robots.txt` нет строки `Sitemap`. У animedia.space тот же юнит владелец уже
+заменил, и там карта собирается: `/sitemap.xml` 200, 7792 адреса.
+
+**Выпуск для этого НЕ нужен.** Выложенный код карту собирает — проверено
+запуском на КОПИИ данных:
+
+    python3 /srv/animedia-icu/current/automation/animedia-data-update.py \
+        --site animedia-01 --domain animedia.icu --data-dir <копия> --only sitemap
+    -> rc=0, sitemapindex + sitemap-1.xml, 7792 адреса, все на animedia.icu,
+       дублей нет, права 0644
+
+**Действие владельца — одно, и его результат проверяется сразу:**
+
+    sudo cp /home/claude/wt-portable-site-cell-01/var/site-repos/animedia-icu/deploy/animedia-icu-update.service \
+            /etc/systemd/system/animedia-icu-update.service
+    sudo systemctl daemon-reload
+    sudo systemctl start animedia-icu-update.service --no-block
+
+Резервная копия прежнего юнита делается тем же способом, что для space
+(`.bak.<время>`). После прогона `/sitemap.xml` обязан отвечать 200, а в
+`robots.txt` появиться строка `Sitemap: https://animedia.icu/sitemap.xml` —
+обе величины видны публичным запросом.
+
 ## Переданные владельцем данные, которых нет
 
 Не блокеры кода, а отсутствующие входные данные. Полный машинный список —
