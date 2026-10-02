@@ -309,6 +309,53 @@ _РАЗДЕЛ_ПО_ВИДУ: dict[str, str] = (
     {v: k for k, v in РАЗДЕЛЫ_МОД.ПРЕЖНИЙ_ВИД.items()} if РАЗДЕЛЫ_МОД else {})
 
 
+# Читатель режима индексации. ОБЯЗАТЕЛЬНАЯ часть шаблона: без него сигналы
+# индексации пришлось бы зашивать в витрину, и режим домена нельзя было бы
+# переключить ни одной операцией — ровно так и было у девяти витрин, прежде
+# чем стало ясно, что дело не в доменах. Отсутствие модуля витрину не роняет,
+# но и не открывает: решение тогда ЗАКРЫТО с названной причиной.
+try:
+    import indexing_mode as ИНДЕКС  # noqa: E402
+except ImportError:
+    ИНДЕКС = None
+
+#: Домен витрины и РАЗРЕШЕНИЕ ВЫПУСКА — окружением из `run.py`. Разрешение
+#: едет с кодом, состояние живёт вне выпуска. Разрешением считается только
+#: строка "true": снисходительность к типу здесь означала бы домен, открытый
+#: значением "0" или "false".
+ИНДЕКС_ДОМЕН = os.environ.get("LORDS_INDEXING_SITE", "").strip()
+ИНДЕКС_РАЗРЕШЕНО_ВЫПУСКОМ = (
+    os.environ.get("LORDS_INDEXING_RELEASE_PERMITS_OPEN", "").strip().lower()
+    == "true")
+
+
+def режим_индексации() -> tuple:
+    """(состояние, причина). Любая беда — ЗАКРЫТО с названной причиной."""
+    if ИНДЕКС is None:
+        return ("CLOSED", "модуль indexing_mode не найден: режим не вычисляется")
+    try:
+        return ИНДЕКС.режим(ИНДЕКС_ДОМЕН,
+                            разрешено_выпуском=ИНДЕКС_РАЗРЕШЕНО_ВЫПУСКОМ)
+    except Exception:  # noqa: BLE001 — беда режима не открывает сайт
+        return ("CLOSED", "ошибка вычисления режима")
+
+
+def мета_роботов() -> str:
+    """Значение `<meta name="robots">` и `X-Robots-Tag` обычных страниц."""
+    состояние, _ = режим_индексации()
+    if ИНДЕКС is None:
+        return "noindex, nofollow"
+    return ИНДЕКС.МЕТА.get(состояние, "noindex, nofollow")
+
+
+def _тело_robots() -> str:
+    """Содержимое `/robots.txt` по текущему режиму."""
+    состояние, _ = режим_индексации()
+    if ИНДЕКС is None:
+        return "User-agent: *\nDisallow: /\n"
+    return ИНДЕКС.robots_txt(состояние)
+
+
 #: Идентификатор ячейки. Имена куки, соли токена и ключа модератора выводятся
 #: из него: забытая правка одного из четырёх имён при заведении следующего
 #: сайта означала бы общую куку на два домена, то есть один голос на две
@@ -911,7 +958,7 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
     return f"""<!doctype html><html lang="ru" data-theme="dark" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(титул)} — {html.escape(ИМЯ_ВИТРИНЫ)}</title>
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="{мета_роботов()}">
 <meta name="site-factory-template-revision" content="{МАНИФЕСТ["source_commit"]}">
 <meta name="site-factory-design-version" content="{ВЕРСИЯ}">
 <meta name="site-factory-template-family" content="{СЕМЕЙСТВО}">
@@ -4649,7 +4696,7 @@ class ВидЛордс(Вид):
         return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="{ДИЗАЙН_ID}" data-profile="{html.escape(ПРОФИЛЬ)}">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(титул)}</title>{описание_мета}{канон}
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="{мета_роботов()}">
 {_открытый_граф(og or {})}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {_мета_версии()}
@@ -5670,7 +5717,7 @@ class ВидЗона(Вид):
             return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="zona-rail">
     <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
     <title>{html.escape(титул)}</title>{описание_мета}{канон}
-    <meta name="robots" content="noindex, nofollow">
+    <meta name="robots" content="{мета_роботов()}">
     {_открытый_граф(og or {})}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     {_мета_версии()}
@@ -5699,7 +5746,7 @@ class ВидЗона(Вид):
         return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="zona-top">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(титул)}</title>{описание_мета}{канон}
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="{мета_роботов()}">
 {_открытый_граф(og or {})}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {_мета_версии()}
@@ -6893,7 +6940,7 @@ class ВидАнимедиа(ВидЗона):
         return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="animedia-portal" data-seo-profile="{профиль_meta}">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(титул)}</title>{описание_мета}{канон}
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="{мета_роботов()}">
 {_открытый_граф(og_данные)}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {_мета_версии().replace(f'content="{ПРОФИЛЬ}"', f'content="{профиль_meta}"', 1)}
@@ -7326,7 +7373,9 @@ class Обработчик(BaseHTTPRequestHandler):
         self.send_response(код)
         self.send_header("Content-Type", тип)
         self.send_header("Content-Length", str(len(тело)))
-        self.send_header("X-Robots-Tag", "noindex, nofollow")
+        # В ОБОИХ режимах и явным значением: по отсутствию заголовка нельзя
+        # отличить открытый сайт от витрины, которая про режим не знает.
+        self.send_header("X-Robots-Tag", мета_роботов())
         self.send_header("X-Site-Factory-Template-Revision", МАНИФЕСТ["source_commit"])
         self.send_header("X-Site-Factory-Template", ШАБЛОН_СЕМЕЙСТВА)
         self.send_header("X-Site-Factory-Core", ЯДРО)
@@ -7556,7 +7605,8 @@ class Обработчик(BaseHTTPRequestHandler):
             self.wfile.write(тело)
             return
         if путь == "/robots.txt":
-            return self._отдать(b"User-agent: *\nDisallow: /\n", "text/plain; charset=utf-8")
+            return self._отдать(_тело_robots().encode("utf-8"),
+                                "text/plain; charset=utf-8")
         if путь in ("/favicon.svg", "/favicon.ico"):
             # Значок рисуется здесь, а не лежит файлом: браузер запрашивает его
             # на каждой витрине, и без ответа в консоли посетителя стоит 404 на

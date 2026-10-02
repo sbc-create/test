@@ -24,8 +24,8 @@ config/site.json» и «посетитель видит адрес» — раз�
 """
 from __future__ import annotations
 
+import ast
 import json
-import re
 import sys
 from pathlib import Path
 
@@ -42,6 +42,123 @@ from pathlib import Path
 
 #: Файлы, которым разрешено упоминать прежний адрес: сама эта проверка.
 СВОИ = {Path(__file__).resolve()}
+
+
+#: Имена, связанные конструкциями Python, а не присваиванием: параметр
+#: функции — такое же связывание, как `=`, и считать его неопределённым
+#: значит падать на верном коде.
+def _связанные(узел) -> set:
+    """Имена, связанные В ЭТОЙ области видимости."""
+    имена: set = set()
+    если_функция = isinstance(узел, (ast.FunctionDef, ast.AsyncFunctionDef))
+    if если_функция:
+        арг = узел.args
+        for список in (арг.posonlyargs, арг.args, арг.kwonlyargs):
+            имена.update(а.arg for а in список)
+        for одиночный in (арг.vararg, арг.kwarg):
+            if одиночный is not None:
+                имена.add(одиночный.arg)
+    for вложенный in ast.walk(узел):
+        if если_функция and вложенный is not узел and isinstance(
+                вложенный, (ast.FunctionDef, ast.AsyncFunctionDef, ast.Lambda)):
+            continue
+        if isinstance(вложенный, ast.Name) and isinstance(вложенный.ctx, ast.Store):
+            имена.add(вложенный.id)
+        elif isinstance(вложенный, (ast.FunctionDef, ast.AsyncFunctionDef,
+                                    ast.ClassDef)):
+            имена.add(вложенный.name)
+        elif isinstance(вложенный, (ast.Import, ast.ImportFrom)):
+            for псевдоним in вложенный.names:
+                имена.add((псевдоним.asname or псевдоним.name).split(".")[0])
+    return имена
+
+
+def _проводка_run(текст: str) -> list:
+    """Две беды, обе наблюдались, и обе невидимы для `py_compile`.
+
+    1. У имени спрашивают `contact_email`, а имя не связано — `NameError` на
+       запуске. Проверяется по дереву, а не регулярным выражением: параметр
+       функции связывает имя не хуже присваивания, и прежняя проверка по
+       тексту объявляла ошибкой верный код.
+    2. Переменная выставляется ПОСЛЕ раннего возврата `--check` — тогда
+       проверка конфигурации этих строк не исполняет. Порядок берётся по
+       порядку ОПЕРАТОРОВ в `main`, а не по номерам строк в файле: вызов
+       функции, определённой ниже, стоит в исполнении выше её определения.
+    """
+    беды: list = []
+    try:
+        дерево = ast.parse(текст)
+    except SyntaxError as ошибка:
+        return [f"run.py не разбирается: {ошибка}"]
+
+    модульные = _связанные(дерево)
+    области = {}  # узел функции -> множество связанных имён
+    родитель = {}
+    for узел in ast.walk(дерево):
+        if isinstance(узел, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            области[узел] = _связанные(узел)
+        for ребёнок in ast.iter_child_nodes(узел):
+            родитель[ребёнок] = узел
+
+    def цепочка(узел) -> list:
+        """Функции, охватывающие узел, от ближней к дальней."""
+        итог = []
+        текущий = родитель.get(узел)
+        while текущий is not None:
+            if isinstance(текущий, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                итог.append(текущий)
+            текущий = родитель.get(текущий)
+        return итог
+
+    for узел in ast.walk(дерево):
+        if not (isinstance(узел, ast.Call)
+                and isinstance(узел.func, ast.Attribute)
+                and узел.func.attr == "get"
+                and узел.args
+                and isinstance(узел.args[0], ast.Constant)
+                and узел.args[0].value == "contact_email"
+                and isinstance(узел.func.value, ast.Name)):
+            continue
+        имя = узел.func.value.id
+        видно = set(модульные)
+        for охват in цепочка(узел):
+            видно |= области.get(охват, set())
+        if имя not in видно:
+            беды.append(f"run.py спрашивает {имя}.get('contact_email'), а имя "
+                        f"{имя!r} не связано — NameError при запуске, который "
+                        "py_compile не видит")
+
+    # Кто вообще выставляет переменную: сама строка или функция, в теле
+    # которой она выставляется.
+    выставляют = set()
+    for узел in дерево.body:
+        if isinstance(узел, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            if "SITE_CONTACT_EMAIL" in (ast.get_source_segment(текст, узел) or ""):
+                выставляют.add(узел.name)
+    главная = next((у for у in дерево.body
+                    if isinstance(у, (ast.FunctionDef, ast.AsyncFunctionDef))
+                    and у.name == "main"), None)
+    if главная is None:
+        return беды
+    где_ставят = где_проверка = None
+    for номер, оператор in enumerate(главная.body):
+        отрывок = ast.get_source_segment(текст, оператор) or ""
+        ставит = "SITE_CONTACT_EMAIL" in отрывок or any(
+            isinstance(в, ast.Name) and в.id in выставляют
+            for в in ast.walk(оператор))
+        if ставит and где_ставят is None:
+            где_ставят = номер
+        if (где_проверка is None and isinstance(оператор, ast.If)
+                and "check" in (ast.get_source_segment(текст, оператор.test) or "")
+                and any(isinstance(в, ast.Return) for в in ast.walk(оператор))):
+            где_проверка = номер
+    if где_ставят is None:
+        беды.append("в main() нет ни строки, ни вызова, выставляющих "
+                    "SITE_CONTACT_EMAIL")
+    elif где_проверка is not None and где_ставят > где_проверка:
+        беды.append("выставление SITE_CONTACT_EMAIL стоит ПОСЛЕ раннего "
+                    "возврата --check: проверка конфигурации его не исполнит")
+    return беды
 
 
 def беды() -> list[str]:
@@ -79,20 +196,7 @@ def беды() -> list[str]:
         elif "contact_email" not in текст:
             итог.append("run.py выставляет SITE_CONTACT_EMAIL не из config/site.json")
         else:
-            строки = текст.split("\n")
-            где = next((n for n, s in enumerate(строки) if "SITE_CONTACT_EMAIL" in s), None)
-            проверка = next((n for n, s in enumerate(строки)
-                             if s.strip().startswith("if ") and ".check" in s), None)
-            if где is not None and проверка is not None and где > проверка:
-                итог.append("выставление SITE_CONTACT_EMAIL стоит ПОСЛЕ раннего "
-                            "возврата --check: проверка конфигурации его не исполнит")
-            # Имя, у которого спрашивают contact_email, должно быть присвоено выше.
-            м = re.search(r'(\w+)\.get\(["\']contact_email["\']\)', текст)
-            if м and not re.search(rf'^\s*{re.escape(м.group(1))}\s*(?:=|:\s*\w+\s*=)',
-                                   текст[:м.start()], re.M):
-                итог.append(f"run.py спрашивает {м.group(1)}.get('contact_email'), "
-                            f"а имя {м.group(1)!r} выше не присваивается — NameError "
-                            "при запуске, который py_compile не видит")
+            итог.extend(_проводка_run(текст))
 
     # Прежнего адреса в репозитории не осталось.
     for путь in КОРЕНЬ.rglob("*"):

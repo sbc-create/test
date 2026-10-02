@@ -311,6 +311,82 @@ def test_выпуск_с_читателями_проходит(стенд, tmp_p
     assert итог["compatible"] is True and итог["missing_readers"] == []
 
 
+def test_читатель_правок_называется_по_семейству(стенд, tmp_path):
+    """У Lords читатель правок — `editorial_overlay.py`, у Animedia —
+    `seo_overlay.py`. Требовать у одного семейства файл другого значило бы
+    блокировать исправный выпуск, а не защищать данные.
+    """
+    _состояние(стенд)
+    _материалы(стенд)
+    protected.поставить_отметку(САЙТ, ДОМЕН, кем="тест")
+    лордс = _репозиторий(tmp_path / "lords", {
+        "src/indexing_mode.py": "# читатель режима\n",
+        "src/editorial_overlay.py": "# читатель правок Lords\n",
+        "src/lords-frontend.py": "# рантайм\n"})
+    коммит = subprocess.run(["git", "rev-parse", "HEAD"], cwd=лордс,
+                            capture_output=True, text=True).stdout.strip()
+    итог = protected.проверить_выпуск(САЙТ, ДОМЕН, лордс, коммит,
+                                      adapter="lords")
+    assert итог["compatible"] is True and итог["missing_readers"] == []
+    # Тот же выпуск без читателя правок — отказ, и названо ИМЯ ЭТОГО семейства.
+    (лордс / "src" / "editorial_overlay.py").unlink()
+    subprocess.run(["git", "add", "-A"], cwd=лордс, check=True)
+    subprocess.run(["git", "commit", "-qm", "без правок"], cwd=лордс, check=True)
+    без = subprocess.run(["git", "rev-parse", "HEAD"], cwd=лордс,
+                         capture_output=True, text=True).stdout.strip()
+    with pytest.raises(protected.ЗащитаДанных) as ош:
+        protected.проверить_выпуск(САЙТ, ДОМЕН, лордс, без, adapter="lords")
+    assert "editorial_overlay.py" in str(ош.value)
+    assert "seo_overlay.py" not in str(ош.value)
+
+
+def test_семейство_определяется_по_выпускаемому_коду(стенд, tmp_path):
+    """Семейство берётся из выпуска, а не из реестра: `adapter` можно не
+    передавать, и ворота всё равно спросят читателя ТОГО рантайма."""
+    _состояние(стенд)
+    _материалы(стенд)
+    protected.поставить_отметку(САЙТ, ДОМЕН, кем="тест")
+    репо = _репозиторий(tmp_path / "по-коду", {
+        "src/indexing_mode.py": "# читатель режима\n",
+        "src/lords-frontend.py": "# рантайм Lords\n",
+        "config/site.json": '{"entrypoint": "lords-frontend.py"}\n'})
+    коммит = subprocess.run(["git", "rev-parse", "HEAD"], cwd=репо,
+                            capture_output=True, text=True).stdout.strip()
+    with pytest.raises(protected.ЗащитаДанных) as ош:
+        protected.проверить_выпуск(САЙТ, ДОМЕН, репо, коммит)
+    assert "editorial_overlay.py" in str(ош.value)
+
+
+def test_режим_yummy_не_требует_файла_в_ячейке(стенд, tmp_path):
+    """У Yummy режимом распоряжается контейнер: читателя в репозитории ячейки
+    нет по устройству семейства, и отказ был бы отказом об устройстве, а не о
+    данных. Материал там тоже читает приложение в контейнере.
+    """
+    _состояние(стенд)
+    _материалы(стенд)
+    protected.поставить_отметку(САЙТ, ДОМЕН, кем="тест")
+    репо = _репозиторий(tmp_path / "yummy", {
+        "src/yummy-frontend.py": "# заглушка витрины\n"})
+    коммит = subprocess.run(["git", "rev-parse", "HEAD"], cwd=репо,
+                            capture_output=True, text=True).stdout.strip()
+    итог = protected.проверить_выпуск(САЙТ, ДОМЕН, репо, коммит, adapter="yummy")
+    assert итог["compatible"] is True and итог["missing_readers"] == []
+
+
+def test_неизвестное_семейство_не_даёт_послабления(стенд, tmp_path):
+    """Опечатка в имени семейства не должна открывать ворота: действует общий
+    перечень читателей, и выпуск без любого из них отклоняется."""
+    _состояние(стенд)
+    _материалы(стенд)
+    protected.поставить_отметку(САЙТ, ДОМЕН, кем="тест")
+    репо = _репозиторий(tmp_path / "ничей", {"src/other.py": "#\n"})
+    коммит = subprocess.run(["git", "rev-parse", "HEAD"], cwd=репо,
+                            capture_output=True, text=True).stdout.strip()
+    for имя in ("lordz", "YUMMY", "animedia-2", "contaner:x"):
+        with pytest.raises(protected.ЗащитаДанных):
+            protected.проверить_выпуск(САЙТ, ДОМЕН, репо, коммит, adapter=имя)
+
+
 def test_новый_сайт_сверять_нечего(стенд, tmp_path):
     репо = _репозиторий(tmp_path, {"src/other.py": "#\n"})
     итог = protected.проверить_выпуск(САЙТ, ДОМЕН, репо, "", adapter="test")

@@ -29,6 +29,7 @@
 """
 from __future__ import annotations
 
+import ast
 import json
 from pathlib import Path
 
@@ -126,6 +127,94 @@ def _репозитории():
     return итог
 
 
+def _связанные_имена(узел) -> set:
+    """Имена, связанные В ЭТОЙ области видимости.
+
+    Параметр функции связывает имя не хуже присваивания. Прежняя проверка
+    искала `имя =` текстом ВЫШЕ строки запроса и потому объявляла ошибкой
+    верный код: набор переменных, вынесенный в функцию `дополнения(config)`,
+    читает конфигурацию через параметр.
+    """
+    имена: set = set()
+    функция = isinstance(узел, (ast.FunctionDef, ast.AsyncFunctionDef))
+    if функция:
+        арг = узел.args
+        for список in (арг.posonlyargs, арг.args, арг.kwonlyargs):
+            имена.update(а.arg for а in список)
+        for одиночный in (арг.vararg, арг.kwarg):
+            if одиночный is not None:
+                имена.add(одиночный.arg)
+    for вложенный in ast.walk(узел):
+        if функция and вложенный is not узел and isinstance(
+                вложенный, (ast.FunctionDef, ast.AsyncFunctionDef, ast.Lambda)):
+            continue
+        if isinstance(вложенный, ast.Name) and isinstance(вложенный.ctx, ast.Store):
+            имена.add(вложенный.id)
+        elif isinstance(вложенный, (ast.FunctionDef, ast.AsyncFunctionDef,
+                                    ast.ClassDef)):
+            имена.add(вложенный.name)
+        elif isinstance(вложенный, (ast.Import, ast.ImportFrom)):
+            for псевдоним in вложенный.names:
+                имена.add((псевдоним.asname or псевдоним.name).split(".")[0])
+    return имена
+
+
+def _запросы_контакта(текст: str) -> list:
+    """Пары «имя, у которого спросили contact_email» → видимые ему имена."""
+    дерево = ast.parse(текст)
+    родитель = {}
+    области = {}
+    for узел in ast.walk(дерево):
+        if isinstance(узел, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            области[узел] = _связанные_имена(узел)
+        for ребёнок in ast.iter_child_nodes(узел):
+            родитель[ребёнок] = узел
+    модульные = _связанные_имена(дерево)
+    итог = []
+    for узел in ast.walk(дерево):
+        if not (isinstance(узел, ast.Call)
+                and isinstance(узел.func, ast.Attribute)
+                and узел.func.attr == "get"
+                and узел.args
+                and isinstance(узел.args[0], ast.Constant)
+                and узел.args[0].value == "contact_email"
+                and isinstance(узел.func.value, ast.Name)):
+            continue
+        видно = set(модульные)
+        текущий = родитель.get(узел)
+        while текущий is not None:
+            видно |= области.get(текущий, set())
+            текущий = родитель.get(текущий)
+        итог.append((узел.func.value.id, видно))
+    return итог
+
+
+def _порядок_в_main(текст: str) -> tuple:
+    """Номера операторов `main`: где выставляется переменная и где `--check`."""
+    дерево = ast.parse(текст)
+    выставляют = {у.name for у in дерево.body
+                  if isinstance(у, (ast.FunctionDef, ast.AsyncFunctionDef))
+                  and "SITE_CONTACT_EMAIL" in (ast.get_source_segment(текст, у) or "")}
+    главная = next((у for у in дерево.body
+                    if isinstance(у, (ast.FunctionDef, ast.AsyncFunctionDef))
+                    and у.name == "main"), None)
+    if главная is None:
+        return (None, None)
+    где_ставят = где_проверка = None
+    for номер, оператор in enumerate(главная.body):
+        отрывок = ast.get_source_segment(текст, оператор) or ""
+        ставит = "SITE_CONTACT_EMAIL" in отрывок or any(
+            isinstance(в, ast.Name) and в.id in выставляют
+            for в in ast.walk(оператор))
+        if ставит and где_ставят is None:
+            где_ставят = номер
+        if (где_проверка is None and isinstance(оператор, ast.If)
+                and "check" in (ast.get_source_segment(текст, оператор.test) or "")
+                and any(isinstance(в, ast.Return) for в in ast.walk(оператор))):
+            где_проверка = номер
+    return (где_ставят, где_проверка)
+
+
 @pytest.mark.parametrize("site_id,run,рантаймы", _репозитории(),
                          ids=lambda з: з if isinstance(з, str) else "")
 def test_кто_читает_переменную_тот_её_и_получает(site_id, run, рантаймы):
@@ -159,15 +248,20 @@ def test_кто_читает_переменную_тот_её_и_получае�
     assert "contact_email" in текст, (
         f"{site_id}: {run} выставляет переменную, но не из config/site.json — "
         "значение обязано приходить из конфигурации, а не из кода")
-    строки = текст.split("\n")
-    где_ставят = next(n for n, s in enumerate(строки) if "SITE_CONTACT_EMAIL" in s)
-    где_проверка = next((n for n, s in enumerate(строки)
-                         if s.strip().startswith("if ") and ".check" in s), None)
+    # Порядок берётся по порядку ОПЕРАТОРОВ в `main`, а не по номерам строк:
+    # набор переменных может быть вынесен в функцию, и тогда её определение
+    # лежит в файле выше, а исполняется из `main` — по номерам строк это
+    # выглядело бы как «выставлено до всего», а при переносе под `--check`
+    # осталось бы незамеченным.
+    где_ставят, где_проверка = _порядок_в_main(текст)
+    assert где_ставят is not None, (
+        f"{site_id}: в main() {run} нет ни строки, ни вызова, выставляющих "
+        "SITE_CONTACT_EMAIL")
     if где_проверка is not None:
         assert где_ставят < где_проверка, (
             f"{site_id}: выставление SITE_CONTACT_EMAIL стоит ПОСЛЕ раннего "
-            f"возврата --check (строки {где_ставят + 1} и {где_проверка + 1}): "
-            "проверка конфигурации эти строки не исполнит")
+            f"возврата --check (операторы {где_ставят + 1} и {где_проверка + 1} "
+            "в main): проверка конфигурации эти строки не исполнит")
 
 
 @pytest.mark.parametrize("site_id,run,рантаймы", _репозитории(),
@@ -184,16 +278,13 @@ def test_имя_конфигурации_в_проводке_существуе�
     Проверка смотрит на связь имён: то имя, у которого спрашивают
     `contact_email`, должно быть присвоено в этом же файле ВЫШЕ строки запроса.
     """
-    import re as _re
-
     текст = run.read_text(encoding="utf-8")
-    м = _re.search(r'(\w+)\.get\(["\']contact_email["\']\)', текст)
-    if м is None:
+    запросы = _запросы_контакта(текст)
+    if not запросы:
         pytest.skip(f"{site_id}: проводки contact_email в run.py нет")
-    имя = м.group(1)
-    выше = текст[:м.start()]
-    присвоено = _re.search(rf'^\s*{_re.escape(имя)}\s*(?:=|:\s*\w+\s*=)', выше, _re.M)
-    assert присвоено, (
-        f"{site_id}: проводка спрашивает {имя}.get('contact_email'), а имя "
-        f"{имя!r} в {run} выше не присваивается — это NameError при запуске, "
-        "который py_compile не видит")
+    for имя, видно in запросы:
+        assert имя in видно, (
+            f"{site_id}: проводка спрашивает {имя}.get('contact_email'), а имя "
+            f"{имя!r} в {run} не связано ни в своей области видимости, ни в "
+            "охватывающих — это NameError при запуске, который py_compile не "
+            "видит")

@@ -100,9 +100,25 @@ from typing import Any
 ЧИТАТЕЛИ = {
     "indexing_state": ("src/indexing_mode.py",),
     "indexing_journal": (),           # журнал читает инструмент, не витрина
-    "editorial": ("src/seo_overlay.py",),
+    # Имя читателя правок у семейств РАЗНОЕ: Animedia читает наложения
+    # `seo_overlay.py`, витрины на общем рантайме Lords — `editorial_overlay.py`,
+    # а у Yummy материал читает приложение в контейнере, и в репозитории ячейки
+    # читателя нет вовсе. Этот перечень — последний рубеж для РАСПОЗНАННОГО
+    # семейства: требовать у Lords файл Animedia значило бы блокировать
+    # исправный выпуск, а не защищать данные.
+    "editorial": ("src/seo_overlay.py", "src/editorial_overlay.py"),
     "nginx_indexing": (),             # слой nginx витрина не читает
     "site_declared": (),              # читает сама витрина, отдельного нет
+}
+
+#: Читатель правок в выпуске — по семейству рантайма. Пустая строка означает,
+#: что читателя в репозитории ячейки нет по устройству семейства.
+ЧИТАТЕЛЬ_ПРАВОК = {
+    "animedia": "src/seo_overlay.py",
+    "lords": "src/editorial_overlay.py",
+    "animego": "src/editorial_overlay.py",
+    "zona-serve": "src/editorial_overlay.py",
+    "yummy": "",
 }
 
 
@@ -401,6 +417,82 @@ def проверить_запись(site_id: str, домен: str, цель: str
         f"через {ПЕРЕМЕННАЯ_ИСКЛЮЧЕНИЯ} с названными файлами")
 
 
+def _адаптер_выпуска(репозиторий: pathlib.Path, коммит: str) -> str:
+    """Семейство рантайма ВЫПУСКАЕМОГО кода.
+
+    Берётся из `config/site.json` того самого коммита, а не из реестра: у
+    выпуска может быть другая точка входа, чем у того, что стоит сейчас, и
+    требовать читателя по старому семейству значило бы сверять не тот файл.
+    """
+    текст = ""
+    if коммит:
+        r = subprocess.run(["git", "show", f"{коммит}:config/site.json"],
+                           cwd=str(репозиторий), capture_output=True, text=True)
+        текст = r.stdout if r.returncode == 0 else ""
+    else:
+        ф = репозиторий / "config" / "site.json"
+        текст = ф.read_text(encoding="utf-8") if ф.is_file() else ""
+    try:
+        точка = (json.loads(текст) or {}).get("entrypoint") or ""
+    except ValueError:
+        точка = ""
+    if not точка:
+        # Часть ячеек точку входа в конфигурации не объявляет — там её
+        # определяет имя файла рантайма. Тем же правилом, что в реестре:
+        # второе правило вывода разошлось бы с первым.
+        точка = _рантайм_в_коммите(репозиторий, коммит)
+    if not точка:
+        return ""
+    from factory.qwen import registry as _р
+    return _р.АДАПТЕРЫ_ПО_РАНТАЙМУ.get(точка, "")
+
+
+def _рантайм_в_коммите(репозиторий: pathlib.Path, коммит: str) -> str:
+    """Имя файла рантайма в выпуске: `src/*frontend*.py`, иначе `serve.py`."""
+    имена: list[str] = []
+    if коммит:
+        r = subprocess.run(["git", "ls-tree", "--name-only", f"{коммит}:src"],
+                           cwd=str(репозиторий), capture_output=True, text=True)
+        имена = [с.strip() for с in r.stdout.split("\n") if с.strip()] \
+            if r.returncode == 0 else []
+    elif (репозиторий / "src").is_dir():
+        имена = sorted(п.name for п in (репозиторий / "src").iterdir()
+                       if п.is_file())
+    витрины = sorted(и for и in имена
+                     if и.endswith(".py") and "frontend" in и)
+    if витрины:
+        return витрины[0]
+    return "serve.py" if "serve.py" in имена else ""
+
+
+def читатели(вид: str, adapter: str = "") -> tuple[str, ...]:
+    """Какие файлы выпуск обязан нести, чтобы читать данные вида `вид`.
+
+    Семейство определяет имя читателя. Нераспознанное семейство — не повод
+    пропустить проверку: тогда годится ЛЮБОЙ из известных читателей этого
+    вида, и выпуск без всякого читателя всё равно отклоняется.
+    """
+    if вид == "indexing_state" and adapter:
+        from factory.qwen.indexing import КОНТРАКТ_РЕЖИМА
+        контракт = КОНТРАКТ_РЕЖИМА.get(adapter)
+        if контракт is None:
+            # Семейство не распознано — послабления не даёт: действует общий
+            # перечень. Иначе опечатка в имени семейства открывала бы ворота.
+            return tuple(ЧИТАТЕЛИ.get(вид, ()))
+        правило = контракт.get("reader") or ""
+        if not правило or правило.startswith("container:"):
+            # Режимом распоряжается не выпуск ячейки: требовать от него файл
+            # нечестно, и отказ был бы отказом об устройстве семейства.
+            return ()
+        return (правило,)
+    if вид == "editorial" and adapter:
+        правило = ЧИТАТЕЛЬ_ПРАВОК.get(adapter, None)
+        if правило is None:
+            return tuple(ЧИТАТЕЛИ.get(вид, ()))
+        return (правило,) if правило else ()
+    return tuple(ЧИТАТЕЛИ.get(вид, ()))
+
+
 def _файл_в_коммите(репозиторий: pathlib.Path, коммит: str, путь: str) -> bool:
     if not коммит:
         return (репозиторий / путь).is_file()
@@ -427,11 +519,17 @@ def проверить_выпуск(site_id: str, домен: str, репози�
         итог["reason"] = "защищённых данных нет: сверять нечего"
         return итог
     репо = pathlib.Path(репозиторий)
+    семейство = adapter or _адаптер_выпуска(репо, коммит)
+    итог["adapter"] = семейство
     нет: list[str] = []
     for вид in есть:
-        for читатель in ЧИТАТЕЛИ.get(вид, ()):
-            if not _файл_в_коммите(репо, коммит, читатель):
-                нет.append(f"{вид}: {читатель}")
+        нужны = читатели(вид, семейство)
+        if not нужны:
+            continue
+        # Любой из названных читателей годится: у нераспознанного семейства их
+        # несколько, и наличие одного означает, что данные читаются.
+        if not any(_файл_в_коммите(репо, коммит, ч) for ч in нужны):
+            нет.append(f"{вид}: {' или '.join(нужны)}")
     итог["missing_readers"] = нет
     итог["compatible"] = not нет
     if нет:

@@ -74,6 +74,54 @@ from factory.qwen import editorial, registry
 #: обещать переключение там, где его не произойдёт.
 ИМЯ_ЧИТАТЕЛЯ = "indexing_mode.py"
 
+#: КОНТРАКТ РЕЖИМА ПО СЕМЕЙСТВАМ. Путь читателя — пример, а не обязанность:
+#: у каждого семейства своё устройство рантайма, и требовать от всех
+#: `src/indexing_mode.py` значило бы требовать переписать работающее.
+#:
+#: `reader` — чем выпуск читает режим; `permit` — где живёт разрешение
+#: ВЫПУСКА; `mode_owner` — кто фактически переключает режим.
+#:
+#: Yummy объявлен отдельно не для удобства. У него режим УЖЕ работает и
+#: работает иначе: `isIndexingEnabled` в `src/lib/seo/config.ts` требует
+#: `SEO_INDEXING_ENABLED`, `APP_ENV=production` и публичного HTTPS-origin, а
+#: значение приходит ПЕРЕМЕННОЙ КОНТЕЙНЕРА по тенанту. Измерено 2026-10-02:
+#: web-site и web-org — `true`, web-biz и оба yummyani7 — `false`, и
+#: yummyani.site с yummyani.org ОТКРЫТЫ. Подкладывать им второй, файловый
+#: читатель значило бы завести второе решение о том же и закрыть два
+#: работающих открытых домена при первом же прогоне fail-closed.
+КОНТРАКТ_РЕЖИМА = {
+    "animedia": {
+        "reader": "src/indexing_mode.py",
+        "permit": "config/site.json: indexing.release_permits_open",
+        "mode_owner": "operation",
+    },
+    "lords": {
+        "reader": "src/indexing_mode.py",
+        "permit": "config/site.json: indexing.release_permits_open",
+        "mode_owner": "operation",
+    },
+    "animego": {
+        "reader": "src/indexing_mode.py",
+        "permit": "config/site.json: indexing.release_permits_open",
+        "mode_owner": "operation",
+    },
+    "zona-serve": {
+        "reader": "src/indexing_mode.py",
+        "permit": "config/site.json: indexing.release_permits_open",
+        "mode_owner": "operation",
+    },
+    "yummy": {
+        "reader": "container:SEO_INDEXING_ENABLED",
+        "permit": "container:SEO_INDEXING_ENABLED + APP_ENV=production",
+        "mode_owner": "compose",
+    },
+}
+
+
+def контракт(adapter: str) -> dict:
+    """Контракт режима для семейства. Неизвестное семейство — не умолчание."""
+    return dict(КОНТРАКТ_РЕЖИМА.get(adapter) or {})
+
 
 class Отказано(RuntimeError):
     """Операция остановлена с названной причиной. Слепой повтор запрещён."""
@@ -83,25 +131,117 @@ def _сейчас() -> str:
     return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
 
-def читатель_режима(аккаунт: str) -> pathlib.Path | None:
-    """Путь к читателю режима в ВЫПУЩЕННОМ рантайме, иначе None."""
+def корни_выпуска(аккаунт: str) -> tuple[str, ...]:
+    """Где лежит ВЫПУЩЕННЫЙ код учётной записи, в порядке доверия.
+
+    Одно определение на весь модуль: решение о режиме принимает тот код,
+    который РАБОТАЕТ. `current` — ссылка на действующий выпуск; `app` —
+    прямая установка у витрин, заведённых до появления выпусков. Рабочая
+    копия репозитория доказательством не является: в ней может лежать
+    что угодно, и к посетителю это не приедет.
+    """
+    return (f"/srv/{аккаунт}/current", f"/srv/{аккаунт}/app")
+
+
+def читатель_режима(аккаунт: str, adapter: str = "") -> pathlib.Path | None:
+    """Чем ВЫПУЩЕННЫЙ рантайм читает режим, или None.
+
+    Файл ищется по контракту СЕМЕЙСТВА, а не по одному зашитому пути: у Yummy
+    читателя-файла нет вовсе — режим решает код приложения по переменной
+    контейнера, и требовать от него файл значило бы объявить работающий
+    механизм отсутствующим.
+    """
     if not аккаунт:
         return None
-    for корень in (f"/srv/{аккаунт}/current/src", f"/srv/{аккаунт}/app/src"):
-        п = pathlib.Path(корень) / ИМЯ_ЧИТАТЕЛЯ
+    к = контракт(adapter)
+    путь = к.get("reader") or f"src/{ИМЯ_ЧИТАТЕЛЯ}"
+    if путь.startswith("container:"):
+        return None          # читатель не файл; проверяется отдельно
+    for корень in корни_выпуска(аккаунт):
+        п = pathlib.Path(корень) / путь
         if п.is_file():
             return п
     return None
 
 
-def разрешение_выпуска(аккаунт: str) -> tuple[bool, str]:
+def читатель_контейнера(домен: str) -> dict:
+    """Решает ли режим КОД ПРИЛОЖЕНИЯ по переменной контейнера.
+
+    Для Yummy это и есть читатель: `isIndexingEnabled` требует
+    `SEO_INDEXING_ENABLED`, `APP_ENV=production` и публичного HTTPS-origin.
+    Значение читается у ФАКТИЧЕСКИ запущенного контейнера: compose-файл уже
+    однажды разошёлся с тем, что работает.
+    """
+    import shutil
+    import subprocess as _sp
+    итог = {"source": "container", "domain": домен, "found": False}
+    if not shutil.which("docker"):
+        итог["reason"] = "docker недоступен: переменную контейнера не прочитать"
+        return итог
+    try:
+        имена = _sp.run(["docker", "ps", "--format", "{{.Names}}"],
+                        capture_output=True, text=True, timeout=20)
+        if имена.returncode != 0:
+            итог["reason"] = "docker ps отказал"
+            return итог
+        for имя in имена.stdout.split():
+            св = _sp.run(["docker", "inspect", имя], capture_output=True,
+                         text=True, timeout=20)
+            if св.returncode != 0:
+                continue
+            данные = json.loads(св.stdout)[0]
+            окр = dict(кв.split("=", 1)
+                       for кв in (данные.get("Config") or {}).get("Env") or []
+                       if "=" in кв)
+            if домен not in (окр.get("SITE_URL") or ""):
+                continue
+            итог.update({
+                "found": True, "container": имя,
+                "SEO_INDEXING_ENABLED": окр.get("SEO_INDEXING_ENABLED"),
+                "APP_ENV": окр.get("APP_ENV"),
+                "SITE_URL": окр.get("SITE_URL"),
+            })
+            итог["permits_open"] = (
+                (окр.get("SEO_INDEXING_ENABLED") or "").lower() == "true"
+                and окр.get("APP_ENV") == "production"
+                and (окр.get("SITE_URL") or "").startswith("https://"))
+            return итог
+    except Exception as ош:  # noqa: BLE001
+        итог["reason"] = f"{type(ош).__name__}: {ош}"
+        return итог
+    итог["reason"] = f"контейнера с SITE_URL для {домен} среди запущенных нет"
+    return итог
+
+
+def разрешение_выпуска(аккаунт: str, adapter: str = "",
+                       домен: str = "") -> tuple[bool, str]:
+    """Разрешение ВЫПУСКА на открытие — по контракту семейства.
+
+    У Yummy разрешение живёт не в файле выпуска, а в переменной контейнера, и
+    спрашивать у него `config/site.json` значило бы объявить «не разрешено»
+    там, где механизм работает и два домена открыты.
+    """
+    к = контракт(adapter)
+    if (к.get("permit") or "").startswith("container:"):
+        св = читатель_контейнера(домен)
+        if not св.get("found"):
+            return False, f"контейнер не опрошен: {св.get('reason')}"
+        разрешено = bool(св.get("permits_open"))
+        return разрешено, (
+            f"{св['container']}: SEO_INDEXING_ENABLED="
+            f"{св.get('SEO_INDEXING_ENABLED')!r}, APP_ENV="
+            f"{св.get('APP_ENV')!r}, SITE_URL={св.get('SITE_URL')!r}")
+    return _разрешение_в_конфиге(аккаунт)
+
+
+def _разрешение_в_конфиге(аккаунт: str) -> tuple[bool, str]:
     """Что о режиме говорит ВЫПУЩЕННЫЙ config/site.json.
 
     Читается выпуск, а не рабочая копия: решение принимает тот код, который
     работает. Строгость та же, что у рантайма — разрешением считается только
     булево `true`.
     """
-    for корень in (f"/srv/{аккаунт}/current", f"/srv/{аккаунт}/app"):
+    for корень in корни_выпуска(аккаунт):
         п = pathlib.Path(корень) / "config" / "site.json"
         if not п.is_file():
             continue
@@ -207,14 +347,40 @@ def _ответ(url: str, таймаут: int = 20) -> tuple[str, list[str], str
         return type(e).__name__, [], ""
 
 
-def сигналы(домен: str) -> dict:
+def порт_приложения(site_id: str) -> int:
+    """Порт витрины из манифеста рантайма, 0 — если неизвестен."""
+    if not site_id:
+        return 0
+    try:
+        from factory.cell import runtime as _р
+        return int(_р.размещение(site_id).port or 0)
+    except Exception:  # noqa: BLE001 — неизвестный порт не ломает диагностику
+        return 0
+
+
+def сигналы(домен: str, *, порт: int = 0) -> dict:
     """Четыре сигнала на живом домене, каждый отдельной величиной.
 
     X-Robots-Tag читается ПЕРЕЧНЕМ значений, а не одной строкой: на :443 его
     добавляют и nginx, и приложение, и слитая строка скрыла бы, что одно из
     двух ещё запрещает обход.
+
+    `порт` — собственный порт витрины. Проба на нём отличает вклад приложения
+    ТОЧНО: до неё вклад приложения выводился из ответа на :80 в расчёте, что
+    серверный блок там заголовка не добавляет. У витрин Lords это неправда —
+    `add_header ... always` стоит в обоих блоках, — и на :80 было видно два
+    заголовка без возможности сказать, чьи они.
     """
     итог: dict = {"domain": домен, "at": _сейчас()}
+    if порт:
+        кп, значения_п, тело_п = _ответ(f"http://127.0.0.1:{порт}/")
+        итог["app_port"] = порт
+        итог["app_port_http"] = кп
+        итог["x_robots_values_app"] = значения_п
+        мп = re.search(r'<meta name="robots" content="([^"]*)"', тело_п)
+        итог["meta_robots_app"] = мп.group(1) if мп else "не объявлен"
+        _, _, роботс_п = _ответ(f"http://127.0.0.1:{порт}/robots.txt")
+        итог["robots_txt_app"] = роботс_п
     for схема, метка in (("https", ""), ("http", "_http80")):
         код, значения, тело = _ответ(f"{схема}://{домен}/")
         итог[f"home_http{метка}"] = код
@@ -398,21 +564,37 @@ def слой_приложения(сиг: dict) -> dict:
     заголовков больше одного, вывод не делается: значит заголовок добавляет
     кто-то ещё, и приписывать его приложению нельзя.
     """
-    значения = сиг.get("x_robots_values_http80") or []
-    мета = str(сиг.get("meta_robots_home") or "")
+    на_порту = "x_robots_values_app" in сиг
+    if на_порту:
+        # Точное измерение: собственный порт витрины, минуя nginx.
+        значения = сиг.get("x_robots_values_app") or []
+        мета = str(сиг.get("meta_robots_app") or "")
+        тело_роботс = сиг.get("robots_txt_app") or ""
+    else:
+        значения = сиг.get("x_robots_values_http80") or []
+        мета = str(сиг.get("meta_robots_home") or "")
+        тело_роботс = сиг.get("robots_txt") or ""
     запрещает = any("noindex" in з.lower() for з in значения) or \
         "noindex" in мета.lower()
     итог = {
-        "x_robots_on_http80": значения,
+        "measured_on": (f"127.0.0.1:{сиг.get('app_port')}" if на_порту
+                        else "http://:80"),
+        "x_robots": значения,
         "meta_robots": мета or None,
         "robots_txt_closed": bool(
-            re.search(r"(?mi)^\s*Disallow:\s*/\s*$", сиг.get("robots_txt") or "")),
+            re.search(r"(?mi)^\s*Disallow:\s*/\s*$", тело_роботс)),
     }
     итог["denying"] = bool(запрещает or итог["robots_txt_closed"])
-    if len(значения) > 1:
+    if not на_порту and len(значения) > 1:
         итог["note"] = (
             f"на :80 заголовков {len(значения)} — вклад приложения отдельно не "
-            "выделяется: заголовок добавляет кто-то ещё")
+            "выделяется: заголовок добавляет кто-то ещё, а порт витрины "
+            "неизвестен")
+    if на_порту and not значения:
+        итог["note"] = (
+            f"витрина на 127.0.0.1:{сиг.get('app_port')} заголовка не "
+            "добавляет: по его отсутствию нельзя отличить открытый режим от "
+            "витрины, которая про режим не знает")
     return итог
 
 def оценить(сиг: dict) -> tuple[str, list[str]]:
@@ -468,16 +650,48 @@ def проверить(site: str, *, mode: str, expect_release: str = "") -> dic
                 "`python3 -m factory.qwen sites` и повторите с верным значением")
         итог["release_matches_expectation"] = True
 
-    # 2. Читатель режима в ВЫПУЩЕННОМ рантайме.
-    читатель = читатель_режима(s.account)
-    итог["runtime_reader"] = str(читатель) if читатель else ""
-    if читатель is None:
+    # 2. Читатель режима — по контракту СЕМЕЙСТВА, а не по одному пути.
+    к = контракт(s.adapter)
+    итог["contract"] = к or {"reason": f"семейство {s.adapter!r} контракта не объявило"}
+    итог["mode_owner"] = к.get("mode_owner") or "unknown"
+    if not к:
         итог["blockers"].append(
-            f"в выпущенном рантайме нет src/{ИМЯ_ЧИТАТЕЛЯ}: витрина режим не "
-            "читает, и запись файла состояния ничего бы не изменила")
+            f"семейство {s.adapter or 'не определено'} не объявило контракт "
+            "режима индексации: ни читателя, ни источника разрешения. "
+            "Операция остановлена — BLOCKED")
+    elif (к.get("reader") or "").startswith("container:"):
+        # Режим решает код приложения по переменной контейнера. Читатель
+        # существует, но файлом не является: требовать файл значило бы
+        # объявить работающий механизм отсутствующим.
+        св = читатель_контейнера(s.domain)
+        итог["runtime_reader"] = (f"{св.get('container')}: "
+                                  f"{к['reader'].split(':',1)[1]}"
+                                  if св.get("found") else "")
+        итог["container"] = св
+        if not св.get("found"):
+            итог["blockers"].append(
+                f"контейнер домена не опрошен: {св.get('reason')}. Чем "
+                "приложение решает режим — не установлено, BLOCKED")
+    else:
+        читатель = читатель_режима(s.account, s.adapter)
+        итог["runtime_reader"] = str(читатель) if читатель else ""
+        if читатель is None:
+            итог["blockers"].append(
+                f"в выпущенном рантайме нет {к['reader']}: витрина режим не "
+                "читает, и запись файла состояния ничего бы не изменила. "
+                "BLOCKED до выпуска читателя")
+
+    # 2б. Режим, которым распоряжается не операция, операцией не меняется.
+    if режим and к.get("mode_owner") == "compose" :
+        итог["blockers"].append(
+            f"режимом этого семейства распоряжается {к['mode_owner']}: "
+            "значение приходит переменной контейнера "
+            "(SEO_INDEXING_ENABLED), и сменить его может только пересборка "
+            "окружения владельцем. Операция не вправе подменять его файлом "
+            "состояния — это завело бы второе решение о том же. BLOCKED")
 
     # 3. Разрешение выпуска.
-    разрешено, откуда = разрешение_выпуска(s.account)
+    разрешено, откуда = разрешение_выпуска(s.account, s.adapter, s.domain)
     итог["release_permits_open"] = разрешено
     итог["release_config"] = откуда
     if режим == ОТКРЫТ and not разрешено:
@@ -494,7 +708,7 @@ def проверить(site: str, *, mode: str, expect_release: str = "") -> dic
 
     # 5. Фактические публичные сигналы и состояние файла.
     итог["current_state_file"] = текущее(s.domain)
-    сиг = сигналы(s.domain)
+    сиг = сигналы(s.domain, порт=порт_приложения(s.site_id))
     итог["public_now"] = сиг
     фактически, запрещают = оценить(сиг)
     итог["public_mode_now"] = фактически
@@ -631,7 +845,7 @@ def подтвердить(site: str, *, ожидаемый: str = "", ждат�
     попыток = 0
     while True:
         попыток += 1
-        сиг = сигналы(s.domain)
+        сиг = сигналы(s.domain, порт=порт_приложения(s.site_id))
         фактически, запрещают = оценить(сиг)
         if not ожид or фактически == ожид or time.time() >= предел:
             break
@@ -712,11 +926,11 @@ def откатить(site: str, *, author: str) -> dict:
 def состояние(site: str) -> dict:
     """Всё, что известно о режиме этого сайта, без единой записи."""
     s = editorial._сайт(site)
-    разрешено, откуда = разрешение_выпуска(s.account)
+    разрешено, откуда = разрешение_выпуска(s.account, s.adapter, s.domain)
     разрешил, объявлен, пояснение = разрешение_владельца(s.site_id)
-    сиг = сигналы(s.domain)
+    сиг = сигналы(s.domain, порт=порт_приложения(s.site_id))
     фактически, запрещают = оценить(сиг)
-    читатель = читатель_режима(s.account)
+    читатель = читатель_режима(s.account, s.adapter)
     return {
         "site": s.domain, "site_id": s.site_id,
         "public_mode": фактически,
