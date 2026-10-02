@@ -387,6 +387,53 @@ def test_неизвестное_семейство_не_даёт_послабл�
             protected.проверить_выпуск(САЙТ, ДОМЕН, репо, коммит, adapter=имя)
 
 
+def test_отказ_чтения_репозитория_не_читается_как_потеря_читателей(
+        стенд, tmp_path, monkeypatch):
+    """Git не ответил — это ДРУГОЙ отказ, чем «выпуск без читателя».
+
+    Измерено на живом выпуске animedia.space: исполнитель работает от root,
+    рабочая копия принадлежит `claude`, и `git cat-file` отвечает
+    `fatal: detected dubious ownership` кодом 128. Прежний код считал любой
+    ненулевой код «файла в коммите нет» и отклонял исправный выпуск
+    сообщением «не несёт читателей защищённых данных» — то есть винил выпуск
+    в том, чего в нём нет, и отправлял искать не там.
+    """
+    _состояние(стенд)
+    _материалы(стенд)
+    protected.поставить_отметку(САЙТ, ДОМЕН, кем="тест")
+    репо = _репозиторий(tmp_path, {
+        "src/indexing_mode.py": "# читатель режима\n",
+        "src/seo_overlay.py": "# читатель материалов\n"})
+    коммит = subprocess.run(["git", "rev-parse", "HEAD"], cwd=репо,
+                            capture_output=True, text=True).stdout.strip()
+    # Файлы на месте — выпуск проходит.
+    assert protected.проверить_выпуск(САЙТ, ДОМЕН, репо, коммит,
+                                      adapter="test")["compatible"] is True
+    # Тот же выпуск, но git отвечает как ЧУЖОМУ владельцу: своим ключом
+    # `safe.directory` ворота это переживают.
+    monkeypatch.setenv("GIT_TEST_ASSUME_DIFFERENT_OWNER", "1")
+    assert protected.проверить_выпуск(САЙТ, ДОМЕН, репо, коммит,
+                                      adapter="test")["compatible"] is True
+    monkeypatch.delenv("GIT_TEST_ASSUME_DIFFERENT_OWNER")
+    # А вот нечитаемый репозиторий — отказ, и названный своим именем.
+    не_репо = tmp_path / "не-репозиторий"
+    не_репо.mkdir()
+    with pytest.raises(protected.РепозиторийНедоступен) as ош:
+        protected.проверить_выпуск(САЙТ, ДОМЕН, не_репо, коммит, adapter="test")
+    текст = str(ош.value)
+    assert "отказ ЧТЕНИЯ" in текст, текст
+    assert "не несёт читателей" not in текст, текст
+
+
+def test_отсутствующий_путь_отличается_от_нечитаемого_репозитория(tmp_path):
+    """Отсутствующий путь git тоже отдаёт кодом 128 — и это «нет файла»."""
+    репо = _репозиторий(tmp_path, {"src/indexing_mode.py": "#\n"})
+    коммит = subprocess.run(["git", "rev-parse", "HEAD"], cwd=репо,
+                            capture_output=True, text=True).stdout.strip()
+    assert protected._файл_в_коммите(репо, коммит, "src/indexing_mode.py") is True
+    assert protected._файл_в_коммите(репо, коммит, "src/нет-такого.py") is False
+
+
 def test_новый_сайт_сверять_нечего(стенд, tmp_path):
     репо = _репозиторий(tmp_path, {"src/other.py": "#\n"})
     итог = protected.проверить_выпуск(САЙТ, ДОМЕН, репо, "", adapter="test")
