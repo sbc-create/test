@@ -45,6 +45,7 @@ import pathlib
 import re
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 
 from factory.qwen import editorial, registry
@@ -331,20 +332,67 @@ def _ответ(url: str, таймаут: int = 20) -> tuple[str, list[str], str
     один «index, follow» и объявил бы открытым сайт, которому nginx всё ещё
     запрещает обход, — то есть ровно то, чего эта операция не должна делать.
     """
-    def всё(сообщение) -> list[str]:
-        if сообщение is None:
-            return []
-        значения = сообщение.get_all("X-Robots-Tag") or []
-        return [str(з).strip() for з in значения]
+    код, значения, тело, _ = _ответ_с_цепочкой(url, таймаут)
+    return код, значения, тело
 
-    try:
-        req = urllib.request.Request(url, headers={"User-Agent": "qwen-indexing"})
-        о = urllib.request.urlopen(req, timeout=таймаут)
-        return str(о.status), всё(о.headers), о.read().decode("utf-8", "replace")
-    except urllib.error.HTTPError as e:
-        return str(e.code), всё(e.headers), ""
-    except Exception as e:  # noqa: BLE001 — сетевая беда тоже ответ
-        return type(e).__name__, [], ""
+
+def всё(сообщение) -> list[str]:
+    """ВСЕ значения `X-Robots-Tag` ответа, в порядке получения.
+
+    Отдельной функцией на уровне модуля: её зовут оба замера, и копия внутри
+    одного из них однажды уже разошлась бы с другим.
+    """
+    if сообщение is None:
+        return []
+    значения = сообщение.get_all("X-Robots-Tag") or []
+    return [str(з).strip() for з in значения]
+
+
+def _ответ_с_цепочкой(url: str, таймаут: int = 20,
+                      прыжков: int = 3) -> tuple[str, list[str], str, list[str]]:
+    """То же, но перенаправления проходятся ЯВНО и называются.
+
+    Зачем. Заголовки ответа-перенаправления — это заголовки ПЕРЕНАПРАВЛЕНИЯ, а
+    не страницы. На `http://yummyani.site/` стоит 308 на https, и у самого 308
+    есть `X-Robots-Tag: noindex, nofollow`; страница по адресу перенаправления
+    при этом отдаёт `index, follow` и разрешающий robots.txt. Прежний замер
+    приписывал заголовок перенаправления странице и объявлял домен закрытым —
+    то есть ровно обратное действительности.
+
+    Почему не хватало `urlopen`. 301/302/303/307 он проходит сам, а 308 в
+    Python 3.10 не проходит: он приходит как `HTTPError`, и в прежней ветке
+    брались именно его заголовки.
+
+    Переход делается только на ТОТ ЖЕ хост: перенаправление на чужой домен —
+    это уже не страница этого сайта, и судить по ней о его индексации нельзя.
+    """
+    цепочка: list[str] = []
+    текущий = url
+    из_хоста = urllib.parse.urlsplit(url).hostname or ""
+    for _ in range(прыжков + 1):
+        try:
+            req = urllib.request.Request(
+                текущий, headers={"User-Agent": "qwen-indexing"})
+            о = urllib.request.urlopen(req, timeout=таймаут)
+            код, заголовки = str(о.status), о.headers
+            тело = о.read().decode("utf-8", "replace")
+        except urllib.error.HTTPError as e:
+            код, заголовки, тело = str(e.code), e.headers, ""
+        except Exception as e:  # noqa: BLE001 — сетевая беда тоже ответ
+            return type(e).__name__, [], "", цепочка
+        куда = (заголовки.get("Location") or "") if заголовки is not None else ""
+        if код.isdigit() and 300 <= int(код) < 400 and куда:
+            цель = urllib.parse.urljoin(текущий, куда)
+            if (urllib.parse.urlsplit(цель).hostname or "") != из_хоста:
+                # Чужой хост: дальше не идём и сигналы оттуда не берём.
+                цепочка.append(f"{код} -> {цель} (чужой хост, не прошли)")
+                return код, всё(заголовки), тело, цепочка
+            цепочка.append(f"{код} -> {цель}")
+            текущий = цель
+            continue
+        return код, всё(заголовки), тело, цепочка
+    цепочка.append("слишком много перенаправлений")
+    return "LoopError", [], "", цепочка
 
 
 def порт_приложения(site_id: str) -> int:
@@ -382,10 +430,12 @@ def сигналы(домен: str, *, порт: int = 0) -> dict:
         _, _, роботс_п = _ответ(f"http://127.0.0.1:{порт}/robots.txt")
         итог["robots_txt_app"] = роботс_п
     for схема, метка in (("https", ""), ("http", "_http80")):
-        код, значения, тело = _ответ(f"{схема}://{домен}/")
+        код, значения, тело, цепочка = _ответ_с_цепочкой(f"{схема}://{домен}/")
         итог[f"home_http{метка}"] = код
         итог[f"x_robots_values{метка}"] = значения
         итог[f"x_robots_count{метка}"] = len(значения)
+        if цепочка:
+            итог[f"redirects{метка}"] = цепочка
         if метка == "":
             м = re.search(r'<meta name="robots" content="([^"]*)"', тело)
             итог["meta_robots_home"] = м.group(1) if м else "не объявлен"
@@ -417,13 +467,67 @@ def сигналы(домен: str, *, порт: int = 0) -> dict:
 ПРОБА_СЛУЖЕБНОГО = "/healthz"
 
 
+#: Где лежат живые конфигурации. Резервные копии исключены отдельно: nginx
+#: грузит `sites-enabled/*` целиком, и файл `.bak.*` там был бы живым, но
+#: судить по нему о режиме нельзя — это слепок прошлого.
+КАТАЛОГИ_NGINX = ("lords", "sites-available", "sites-enabled", "conf.d")
+
+
+def _резервная(путь: pathlib.Path) -> bool:
+    имя = путь.name
+    return (".bak" in имя or имя.endswith("~") or "backup" in имя
+            or "backups" in путь.parts)
+
+
+def конфиги_сайта(site_id: str, домен: str) -> list[pathlib.Path]:
+    """ВСЕ живые файлы, объявляющие серверное имя этого домена.
+
+    Прежде брался первый подошедший по имени, и этого не хватало: у lords-05
+    блок :80 лежит в `lords/lords-05.conf`, а блок :443 — в отдельном
+    `lords/lords-05-tls.conf` (он ставится после выпуска сертификата). То
+    есть операция судила о слое по файлу, которого краулер не видит.
+    """
+    найдено: list[pathlib.Path] = []
+    for каталог in КАТАЛОГИ_NGINX:
+        корень = КОРЕНЬ_NGINX / каталог
+        if not корень.is_dir():
+            continue
+        for путь in sorted(корень.iterdir()):
+            if not путь.is_file() or _резервная(путь) or путь.suffix != ".conf":
+                continue
+            try:
+                текст = путь.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                # Нечитаемая КОНФИГУРАЦИЯ — не «ничего нет»: она попадает в
+                # перечень, и по ней одной слой открытым не объявляется.
+                найдено.append(путь)
+                continue
+            по_имени = (путь.stem == site_id
+                        or путь.stem.startswith(f"{site_id}-")
+                        or путь.stem == домен
+                        or путь.stem == f"www.{домен}")
+            по_содержимому = bool(re.search(
+                rf"(?m)^\s*server_name\s+[^;]*\b{re.escape(домен)}\b", текст))
+            if по_имени or по_содержимому:
+                найдено.append(путь)
+    # Дедупликация по РАЗРЕШЁННОМУ пути: `sites-enabled/x.conf` — обычно
+    # ссылка на `sites-available/x.conf`, и считать их двумя источниками
+    # значило бы удваивать каждую строку заголовка.
+    итог: list[pathlib.Path] = []
+    видено: set = set()
+    for путь in найдено:
+        ключ = str(путь.resolve()) if путь.exists() else str(путь)
+        if ключ in видено:
+            continue
+        видено.add(ключ)
+        итог.append(путь)
+    return итог
+
+
 def _конфиг_сайта(site_id: str, домен: str) -> pathlib.Path | None:
-    for путь in (КОРЕНЬ_NGINX / "lords" / f"{site_id}.conf",
-                 КОРЕНЬ_NGINX / "sites-available" / f"{домен}.conf",
-                 КОРЕНЬ_NGINX / "sites-enabled" / f"{домен}.conf"):
-        if путь.is_file():
-            return путь
-    return None
+    """Первый живой файл домена. Оставлен для совместимости вызовов."""
+    файлы = конфиги_сайта(site_id, домен)
+    return файлы[0] if файлы else None
 
 
 def _значение_переменной(конфиг: str, имя: str) -> tuple[str | None, str]:
@@ -461,57 +565,202 @@ def _значение_переменной(конфиг: str, имя: str) -> tu
     return по_умолчанию.group(1).strip(), откуда
 
 
+def _обработчик_корня(блок: str) -> str:
+    """"serve" | "redirect" | "unknown" — чем блок отвечает на `/`.
+
+    Разбирается именно `location /` (и `location = /`), а не весь блок:
+    `location ^~ /.well-known/...` с `root` есть у каждого домена под ACME и
+    о странице ничего не говорит.
+    """
+    строки = блок.split("\n")
+    i = 0
+    тело_корня = None
+    while i < len(строки):
+        if re.match(r"^\s*location\s+(=\s*)?/\s*\{", строки[i]):
+            глубина = 0
+            собрано = []
+            while i < len(строки):
+                глубина += строки[i].count("{") - строки[i].count("}")
+                собрано.append(строки[i])
+                i += 1
+                if глубина <= 0:
+                    break
+            тело_корня = "\n".join(собрано)
+            break
+        i += 1
+    область = тело_корня if тело_корня is not None else блок
+    if re.search(r"\breturn\s+30\d\b", область):
+        return "redirect"
+    if re.search(r"\b(proxy_pass|fastcgi_pass|uwsgi_pass|grpc_pass|root|alias|"
+                 r"try_files)\b", область):
+        return "serve"
+    # Ни перехода, ни источника: решает серверный уровень.
+    if re.search(r"(?m)^\s*return\s+30\d\b", блок):
+        return "redirect"
+    if re.search(r"(?m)^\s*(root|proxy_pass)\b", блок):
+        return "serve"
+    return "unknown"
+
+
+def серверные_блоки(текст: str) -> list[dict]:
+    """Серверные блоки конфигурации: имена, перенаправление, строки заголовка.
+
+    Считается по фигурным скобкам, а не регулярным выражением: вложенные
+    `location` и `if` ломают любой «от server до }».
+    """
+    блоки: list[dict] = []
+    строки = текст.split("\n")
+    i = 0
+    while i < len(строки):
+        if not re.match(r"^\s*server\s*\{", строки[i]):
+            i += 1
+            continue
+        глубина = 0
+        тело: list[str] = []
+        while i < len(строки):
+            глубина += строки[i].count("{") - строки[i].count("}")
+            тело.append(строки[i])
+            i += 1
+            if глубина <= 0:
+                break
+        текст_блока = "\n".join(тело)
+        имена: list[str] = []
+        for м in re.finditer(r"(?m)^\s*server_name\s+([^;]+);", текст_блока):
+            имена.extend(м.group(1).split())
+        # Отдаёт ли блок страницы — решает обработчик КОРНЕВОГО пути, а не
+        # наличие хоть какого-то `root`. Блок :80 у Yummy имеет `root` в
+        # location для ACME и `return 308` в `location /`: страниц он не
+        # отдаёт, и его заголовок — заголовок перехода.
+        корневой = _обработчик_корня(текст_блока)
+        переход = корневой == "redirect"
+        # Неразобранный блок считается ОТДАЮЩИМ: его заголовок может дойти до
+        # страницы, и пропустить его значило бы объявить домен открытым по
+        # незнанию. Исключается только явное перенаправление.
+        отдаёт = not переход
+        блоки.append({
+            "server_name": имена,
+            "redirect_only": переход and not отдаёт,
+            "add_header_lines": [с.strip() for с in тело
+                                 if re.search(r"^\s*add_header\s+X-Robots-Tag\s", с)],
+            "listen": [м.group(1).strip() for м in
+                       re.finditer(r"(?m)^\s*listen\s+([^;]+);", текст_блока)],
+        })
+    return блоки
+
+
+def блоки_страницы(текст: str, домен: str) -> list[dict]:
+    """Блоки, которые ОТДАЮТ страницы этого домена.
+
+    Блок-перенаправление отбрасывается: его заголовок — заголовок перехода, а
+    не страницы. Так и вышло у Yummy: `add_header X-Robots-Tag "noindex"`
+    стоит в блоке :80 и в блоке `www` — оба только перенаправляют, — а в
+    каноническом блоке его нет, и домен фактически открыт. Операция же
+    называла слой nginx запрещающим, потому что искала строку по всему файлу.
+    """
+    годные = []
+    for б in серверные_блоки(текст):
+        if б["redirect_only"]:
+            continue
+        имена = б["server_name"]
+        # Блок без имён обслуживает всё, что дошло: его учитываем.
+        if имена and домен not in имена and f"www.{домен}" not in имена:
+            continue
+        годные.append(б)
+    return годные
+
+
 def слой_nginx(site_id: str, домен: str, сиг: dict | None = None) -> dict:
-    """Добавляет ли САМ nginx запрет на обычных страницах.
+    """Добавляет ли САМ nginx запрет на страницах этого домена.
 
-    Почему не по публичному ответу. Один заголовок в ответе источника не
-    называет: его мог поставить и nginx, и приложение. Ровно на этом месте
-    операция однажды и ошиблась — она считала слой nginx закрытым всякий раз,
-    когда запрещал ЛЮБОЙ `X-Robots-Tag`, и после успешного снятия запрета в
-    nginx продолжала показывать `denying: true`, потому что приложение было
-    закрыто (файла состояния нет — fail-closed).
+    Почему не по публичному ответу целиком. Один заголовок в ответе источника
+    не называет: его мог поставить и nginx, и приложение. Операция на этом
+    месте уже ошибалась дважды, и оба раза в сторону неправды:
 
-    Поэтому источник определяется по КОНФИГУРАЦИИ, которую пишет root-скрипт:
+      * считала слой закрытым по ЛЮБОМУ запрещающему заголовку — и после
+        снятия запрета в nginx продолжала показывать `denying: true`, потому
+        что закрыто было приложение;
+      * искала строку `add_header` по ВСЕМУ файлу — и называла закрытым
+        домен, у которого эта строка стоит только в блоках-перенаправлениях
+        (так вышло у `yummyani.site`: канонический блок :443 заголовка не
+        несёт, и домен фактически открыт).
 
+    Поэтому источник определяется по КОНФИГУРАЦИИ, и притом:
+
+      * берутся ВСЕ живые файлы, объявляющие серверное имя домена (у lords-05
+        блок :443 лежит отдельным файлом от блока :80);
+      * внутри файлов — только блоки, которые ОТДАЮТ страницы: блок, чей
+        `location /` отвечает `return 30x`, страницу не отдаёт;
       * фиксированная строка `add_header X-Robots-Tag "noindex…"` → закрыт;
-      * заголовок на переменной `map $uri` → решает строка `default`
-        включаемого файла: пустая → открыт, с `noindex` → закрыт;
-      * заголовка нет вовсе → nginx своего запрета не добавляет.
+        заголовок на переменной `map $uri` → решает `default` включаемого
+        файла; строки нет → своего запрета nginx не добавляет.
 
-    Перекрёстная сверка идёт по ответу и в перечень не подмешивается: на
-    служебном пути nginx в открытом режиме запрет СОХРАНЯЕТ, поэтому
-    заголовков там на один больше, чем на обычной странице. Расхождение
-    конфигурации и ответа не прячется — оно попадает в `cross_check`.
+    Нечитаемая конфигурация не читается как «запрета нет»: при ней открытым
+    слой называется ТОЛЬКО если это подтверждает измерение — надбавка nginx к
+    заголовкам приложения равна нулю.
     """
     итог: dict = {"site_id": site_id, "managed_by_this_operation": False}
-    конфиг = _конфиг_сайта(site_id, домен)
-    итог["config"] = str(конфиг) if конфиг else ""
-    if конфиг is None:
+    файлы = конфиги_сайта(site_id, домен)
+    итог["configs"] = [str(ф) for ф in файлы]
+    итог["config"] = str(файлы[0]) if файлы else ""
+    if not файлы:
         итог.update({"mode": "unknown", "denying": None,
-                     "evidence": f"конфигурации сайта {site_id} не найдено в "
-                                 f"{КОРЕНЬ_NGINX}: слой не определён"})
-        return итог
-    try:
-        текст = конфиг.read_text(encoding="utf-8")
-    except OSError as ош:
-        итог.update({"mode": "unknown", "denying": None,
-                     "evidence": f"{конфиг} не читается: {type(ош).__name__}"})
+                     "evidence": f"конфигурации с серверным именем {домен} не "
+                                 f"найдено в {КОРЕНЬ_NGINX}: слой не определён"})
         return итог
 
-    строки = [с for с in текст.split("\n")
-              if re.search(r"^\s*add_header\s+X-Robots-Tag\s", с)]
-    итог["add_header_lines"] = [с.strip() for с in строки]
-    if not строки:
-        итог.update({"mode": "open", "denying": False,
-                     "evidence": f"{конфиг}: add_header X-Robots-Tag нет — "
-                                 "своего запрета nginx не добавляет"})
+    нечитаемые: list[str] = []
+    отдающие: list[tuple[pathlib.Path, dict]] = []
+    в_переходах = 0
+    видено_содержимое: set = set()
+    for ф in файлы:
+        try:
+            текст = ф.read_text(encoding="utf-8")
+        except OSError as ош:
+            нечитаемые.append(f"{ф}: {type(ош).__name__}")
+            continue
+        отпечаток = hashlib.sha256(текст.encode("utf-8")).hexdigest()
+        if отпечаток in видено_содержимое:
+            continue          # копия того же файла (sites-available/enabled)
+        видено_содержимое.add(отпечаток)
+        for б in серверные_блоки(текст):
+            имена = б["server_name"]
+            свой = (not имена) or домен in имена or f"www.{домен}" in имена
+            if not свой:
+                continue
+            if б["redirect_only"]:
+                в_переходах += len(б["add_header_lines"])
+                continue
+            отдающие.append((ф, б))
+    if нечитаемые:
+        итог["unreadable_configs"] = нечитаемые
+    if в_переходах:
+        итог["add_header_in_redirect_blocks"] = в_переходах
+
+    строки = [(ф, с) for ф, б in отдающие for с in б["add_header_lines"]]
+    итог["add_header_lines"] = [с for _, с in строки]
+    if not отдающие:
+        итог.update({"mode": "unknown", "denying": None,
+                     "evidence": f"ни один серверный блок не отдаёт страницы "
+                                 f"{домен}: слой не определён"})
+    elif not строки:
+        пояснение = ("в блоках, отдающих страницы, add_header X-Robots-Tag нет "
+                     "— своего запрета nginx не добавляет")
+        if в_переходах:
+            пояснение += (f"; в блоках-перенаправлениях таких строк "
+                          f"{в_переходах} — это заголовок перехода, а не "
+                          "страницы")
+        итог.update({"mode": "open", "denying": False, "evidence": пояснение})
     else:
         режимы: list[str] = []
         пояснения: list[str] = []
-        for с in строки:
+        for ф, с in строки:
             зн = re.search(r"add_header\s+X-Robots-Tag\s+(\S+)", с.strip())
             значение = зн.group(1) if зн else ""
             if значение.startswith("$"):
+                try:
+                    текст = ф.read_text(encoding="utf-8")
+                except OSError:
+                    текст = ""
                 по_умолчанию, откуда = _значение_переменной(текст, значение[1:])
                 if по_умолчанию is None:
                     режимы.append("unknown")
@@ -523,12 +772,13 @@ def слой_nginx(site_id: str, домен: str, сиг: dict | None = None) ->
                     режимы.append("open")
                     пояснения.append(
                         f"{откуда}: default пуст — заголовок не добавляется")
+                итог["managed_by_this_operation"] = True
             elif "noindex" in значение.lower():
                 режимы.append("closed")
-                пояснения.append(f"{конфиг}: {с.strip()}")
+                пояснения.append(f"{ф}: {с}")
             else:
                 режимы.append("open")
-                пояснения.append(f"{конфиг}: {с.strip()}")
+                пояснения.append(f"{ф}: {с}")
         режим = ("closed" if "closed" in режимы
                  else "unknown" if "unknown" in режимы else "open")
         итог.update({"mode": режим,
@@ -547,12 +797,53 @@ def слой_nginx(site_id: str, домен: str, сиг: dict | None = None) ->
             "nginx_adds_on_service_path": None if разница is None else разница > 0,
             "agrees_with_config": None,
         }
+        # Надбавка nginx: сколько заголовков ответа НЕ от приложения. Считается
+        # только когда вклад приложения измерен на его собственном порту —
+        # вычитать неизмеренное значило бы считать домыслом.
+        свои = сиг.get("x_robots_values_app")
+        if свои is not None and обычная is not None:
+            надбавка = обычная - len(свои)
+            итог["cross_check"]["nginx_extra_headers"] = надбавка
+            итог["cross_check"]["app_headers"] = len(свои)
+        else:
+            надбавка = None
         if разница is not None and итог.get("mode") in ("open", "closed"):
-            # В открытом режиме nginx добавляет заголовок ТОЛЬКО на служебных
-            # путях: разница ровно на один. В закрытом он добавляет и там, и
-            # на обычной странице: разницы нет.
-            ожидается = разница > 0 if итог["mode"] == "open" else разница == 0
-            итог["cross_check"]["agrees_with_config"] = bool(ожидается)
+            # Ожидание «на служебном пути заголовков на один больше» верно
+            # ТОЛЬКО там, где слоем распоряжается эта операция: запрет стоит на
+            # переменной `map $uri`, и служебные пути из него исключены. Если
+            # заголовка в блоке нет вовсе (его убрали целиком, как у
+            # yummyani.site), служебный путь ничем не отличается от обычного —
+            # и объявлять это расхождением было бы ложной тревогой.
+            if итог["mode"] == "open" and not итог["managed_by_this_operation"]:
+                итог["cross_check"]["agrees_with_config"] = None
+                итог["cross_check"]["note"] = (
+                    "слоем распоряжается не эта операция: заголовка нет ни на "
+                    "обычной странице, ни на служебном пути — сверять по "
+                    "разнице нечего")
+            else:
+                ожидается = (разница > 0 if итог["mode"] == "open"
+                             else разница == 0)
+                итог["cross_check"]["agrees_with_config"] = bool(ожидается)
+        # Нечитаемая конфигурация: «открыт» подтверждается измерением или не
+        # объявляется вовсе.
+        if нечитаемые and итог.get("mode") == "open":
+            if надбавка == 0:
+                итог["evidence"] += (
+                    f"; часть конфигураций не читается ({len(нечитаемые)}), но "
+                    "измерение согласуется: надбавки nginx к заголовкам "
+                    "приложения нет")
+            else:
+                итог.update({
+                    "mode": "unknown", "denying": None,
+                    "evidence": итог["evidence"]
+                    + f"; часть конфигураций не читается ({нечитаемые}), а "
+                      "измерение открытости не подтверждает: "
+                      f"надбавка nginx = {надбавка}"})
+    elif нечитаемые and итог.get("mode") == "open":
+        итог.update({"mode": "unknown", "denying": None,
+                     "evidence": итог["evidence"]
+                     + f"; часть конфигураций не читается ({нечитаемые}), а "
+                       "измерения нет: открытым слой не объявляется"})
     return итог
 
 

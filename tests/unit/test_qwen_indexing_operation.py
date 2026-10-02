@@ -134,6 +134,118 @@ def test_корень_состояния_совпадает_с_читателе�
 }
 
 
+class _Стенд:
+    """Крошечный сервер, который отвечает перенаправлением и страницей.
+
+    Нужен настоящий сокет: проверяется именно поведение замера на 308, а
+    подменённый `urlopen` проверял бы подмену.
+    """
+
+    def __init__(self, код: int, запрет_на_переходе: bool,
+                 запрет_на_странице: bool):
+        import http.server
+        import threading
+        стенд = self
+
+        class Рука(http.server.BaseHTTPRequestHandler):
+            def log_message(self, *_):
+                pass
+
+            def do_GET(self):
+                if self.path == "/":
+                    self.send_response(код)
+                    self.send_header("Location", f"http://{стенд.адрес}/page")
+                    if запрет_на_переходе:
+                        self.send_header("X-Robots-Tag", "noindex, nofollow")
+                    self.send_header("Content-Length", "0")
+                    self.end_headers()
+                    return
+                тело = "<html><head></head><body>страница</body></html>".encode("utf-8")
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(тело)))
+                if запрет_на_странице:
+                    self.send_header("X-Robots-Tag", "noindex, nofollow")
+                self.end_headers()
+                self.wfile.write(тело)
+
+        self.сервер = http.server.HTTPServer(("127.0.0.1", 0), Рука)
+        self.адрес = f"127.0.0.1:{self.сервер.server_port}"
+        self.поток = threading.Thread(target=self.сервер.serve_forever,
+                                      daemon=True)
+
+    def __enter__(self):
+        self.поток.start()
+        return self
+
+    def __exit__(self, *_):
+        self.сервер.shutdown()
+        self.сервер.server_close()
+        return False
+
+
+@pytest.mark.parametrize("код", [301, 302, 307, 308])
+def test_заголовок_перенаправления_не_приписывается_странице(код):
+    """Запрет на 3xx — запрет перенаправления, а не страницы.
+
+    Дефект, из-за которого проверка появилась: на `http://yummyani.site/`
+    стоит 308 на https с `X-Robots-Tag: noindex, nofollow`, а страница по
+    адресу перехода отдаёт `index, follow` и разрешающий robots.txt. Замер
+    брал заголовки самого 308 (в Python 3.10 он приходит как `HTTPError`) и
+    объявлял домен ЗАКРЫТЫМ — обратное действительности.
+    """
+    with _Стенд(код, запрет_на_переходе=True, запрет_на_странице=False) as с:
+        итог, значения, тело, цепочка = indexing._ответ_с_цепочкой(
+            f"http://{с.адрес}/", таймаут=10)
+    assert итог == "200", f"переход {код} не пройден: {итог}"
+    assert значения == [], f"заголовок перенаправления приписан странице: {значения}"
+    assert "страница" in тело
+    # Цепочку записывает только НАШ проход: 301/302/307 `urlopen` проходит
+    # сам, и для них она пуста. Важно не это, а что заголовок перехода не
+    # попал в сигналы страницы.
+    if цепочка:
+        assert str(код) in цепочка[0], цепочка
+
+
+@pytest.mark.parametrize("код", [301, 308])
+def test_запрет_самой_страницы_не_теряется_за_перенаправлением(код):
+    """Обратная сторона: после перехода запрет страницы обязан остаться."""
+    with _Стенд(код, запрет_на_переходе=False, запрет_на_странице=True) as с:
+        итог, значения, _, цепочка = indexing._ответ_с_цепочкой(
+            f"http://{с.адрес}/", таймаут=10)
+    assert итог == "200"
+    assert значения == ["noindex, nofollow"], значения
+
+
+def test_перенаправление_на_чужой_хост_не_проходится():
+    """Чужая страница о индексации ЭТОГО домена ничего не говорит."""
+    import http.server
+    import threading
+
+    class Рука(http.server.BaseHTTPRequestHandler):
+        def log_message(self, *_):
+            pass
+
+        def do_GET(self):
+            self.send_response(308)
+            self.send_header("Location", "http://example.invalid/next")
+            self.send_header("X-Robots-Tag", "noindex, nofollow")
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+
+    сервер = http.server.HTTPServer(("127.0.0.1", 0), Рука)
+    поток = threading.Thread(target=сервер.serve_forever, daemon=True)
+    поток.start()
+    try:
+        код, значения, _, цепочка = indexing._ответ_с_цепочкой(
+            f"http://127.0.0.1:{сервер.server_port}/", таймаут=10)
+    finally:
+        сервер.shutdown()
+        сервер.server_close()
+    assert код == "308"
+    assert значения == ["noindex, nofollow"], значения and "чужой хост" in цепочка[0]
+
+
 def test_открытым_считается_только_сайт_без_единого_запрета():
     режим, запрещают = indexing.оценить(dict(ОТКРЫТЫЕ_СИГНАЛЫ))
     assert режим == indexing.ОТКРЫТ, запрещают
@@ -628,15 +740,116 @@ def test_перекрёстная_сверка_ловит_расхождение
     assert сл["cross_check"]["agrees_with_config"] is False
 
 
+def test_запрет_в_блоке_перенаправления_не_закрывает_домен(tmp_path, nginx_корень):
+    """Дефект yummyani.site: `add_header noindex` стоит в блоках :80 и `www`,
+    оба только перенаправляют, а канонический блок :443 заголовка не несёт.
+    Операция искала строку по всему файлу и называла домен ЗАКРЫТЫМ, тогда как
+    публичный ответ открыт.
+    """
+    корень = tmp_path / "nginx"
+    (корень / "sites-available").mkdir(parents=True)
+    (корень / "sites-available" / "t.example.conf").write_text(
+        'server {\n'
+        '    listen 80;\n'
+        '    server_name t.example www.t.example;\n'
+        '    add_header X-Robots-Tag "noindex, nofollow" always;\n'
+        '    location ^~ /.well-known/acme-challenge/ { root /var/www/certbot; }\n'
+        '    location / { return 308 https://t.example$request_uri; }\n'
+        '}\n'
+        'server {\n'
+        '    listen 443 ssl;\n'
+        '    server_name www.t.example;\n'
+        '    add_header X-Robots-Tag "noindex, nofollow" always;\n'
+        '    location / { return 308 https://t.example$request_uri; }\n'
+        '}\n'
+        'server {\n'
+        '    listen 443 ssl;\n'
+        '    server_name t.example;\n'
+        '    location / { proxy_pass http://127.0.0.1:9999; }\n'
+        '}\n', encoding="utf-8")
+    nginx_корень(корень)
+    сл = indexing.слой_nginx("test-01", "t.example")
+    assert сл["mode"] == "open", сл
+    assert сл["denying"] is False
+    assert сл["add_header_lines"] == [], сл["add_header_lines"]
+    # Строки не замолчаны: сказано, что они в блоках-перенаправлениях.
+    assert сл["add_header_in_redirect_blocks"] == 2, сл
+    assert "перехода" in сл["evidence"]
+
+
+def test_блок_443_в_отдельном_файле_учитывается(tmp_path, nginx_корень):
+    """У lords-05 блок :80 лежит в `lords-05.conf`, а блок :443 — отдельным
+    файлом `lords-05-tls.conf`. Судить о слое по одному файлу значит судить по
+    тому, чего краулер не видит.
+    """
+    корень = tmp_path / "nginx"
+    (корень / "lords").mkdir(parents=True)
+    (корень / "lords" / "test-01.conf").write_text(
+        'server {\n    listen 80;\n    server_name t.example;\n'
+        '    location / { proxy_pass http://127.0.0.1:9999; }\n}\n',
+        encoding="utf-8")
+    (корень / "lords" / "test-01-tls.conf").write_text(
+        'server {\n    listen 443 ssl;\n    server_name t.example;\n'
+        '    add_header X-Robots-Tag "noindex, nofollow" always;\n'
+        '    location / { proxy_pass http://127.0.0.1:9999; }\n}\n',
+        encoding="utf-8")
+    nginx_корень(корень)
+    сл = indexing.слой_nginx("test-01", "t.example")
+    assert сл["mode"] == "closed" and сл["denying"] is True, сл
+    assert any("test-01-tls.conf" in ф for ф in сл["configs"]), сл["configs"]
+
+
+def test_нечитаемая_конфигурация_не_объявляет_слой_открытым(tmp_path, nginx_корень):
+    """Нечитаемый файл — не «запрета нет». Открытым слой называется только при
+    согласии измерения: надбавки nginx к заголовкам приложения нет.
+    """
+    import os
+    корень = tmp_path / "nginx"
+    (корень / "lords").mkdir(parents=True)
+    (корень / "lords" / "test-01.conf").write_text(
+        'server {\n    listen 443 ssl;\n    server_name t.example;\n'
+        '    location / { proxy_pass http://127.0.0.1:9999; }\n}\n',
+        encoding="utf-8")
+    закрытый = корень / "lords" / "test-01-extra.conf"
+    закрытый.write_text("server { server_name t.example; }\n", encoding="utf-8")
+    os.chmod(закрытый, 0o000)
+    nginx_корень(корень)
+    try:
+        # Без измерения — не «открыт».
+        сл = indexing.слой_nginx("test-01", "t.example")
+        assert сл["mode"] == "unknown" and сл["denying"] is None, сл
+        assert "не читается" in сл["evidence"]
+        # С измерением, где надбавки нет — открыт, и это сказано.
+        сл = indexing.слой_nginx("test-01", "t.example", {
+            "x_robots_count": 1, "x_robots_count_service": 2,
+            "x_robots_values_app": ["index, follow"],
+            "meta_robots_home": "index, follow"})
+        assert сл["mode"] == "open" and сл["denying"] is False, сл
+        assert сл["cross_check"]["nginx_extra_headers"] == 0
+        # С измерением, где надбавка есть — не «открыт».
+        сл = indexing.слой_nginx("test-01", "t.example", {
+            "x_robots_count": 2, "x_robots_count_service": 2,
+            "x_robots_values_app": ["noindex, nofollow"],
+            "meta_robots_home": "noindex, nofollow"})
+        assert сл["mode"] == "unknown" and сл["denying"] is None, сл
+    finally:
+        os.chmod(закрытый, 0o644)
+
+
 def test_прежнее_правило_не_вернулось():
     """Слой nginx не определяется перебором публичных заголовков."""
     т = (КОРЕНЬ / "factory" / "qwen" / "indexing.py").read_text("utf-8")
     assert 'з.startswith("X-Robots-Tag") for з in запрещают' not in т, (
         "возврат к определению слоя по перечню запрещающих сигналов")
     тело = т.split("def слой_nginx", 1)[1].split("\ndef ", 1)[0]
-    assert "_конфиг_сайта" in тело, "источник — конфигурация сайта"
+    assert "конфиги_сайта" in тело, "источник — конфигурации сайта"
     assert "запрещают" not in тело, (
         "перечень публичных запретов не должен участвовать в определении слоя")
+    # И второе прежнее правило: строка искалась по ВСЕМУ файлу, из-за чего
+    # закрытыми объявлялись домены, у которых она стоит только в
+    # блоке-перенаправлении.
+    assert "серверные_блоки" in тело or "отдающие" in тело, (
+        "строки заголовка обязаны браться из блоков, отдающих страницы")
 
 
 def test_вклад_приложения_измеряется_на_80(tmp_path):
