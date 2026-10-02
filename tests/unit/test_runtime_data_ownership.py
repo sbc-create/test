@@ -445,6 +445,73 @@ def test_засев_закрыт_воротами():
             assert место < без_док.index(запись), запись
 
 
+def test_засев_не_запрещает_выпуск_сайта_с_данными(стенд, tmp_path, monkeypatch):
+    """Файл НА МЕСТЕ — писать нечего, и выпуск не отклоняется.
+
+    Дефект измерен на живом выпуске: активация `an1meg0.site` была отклонена
+    сообщением «операция seed_user_writable пытается изменить защищённые данные
+    ['site_declared']», хотя засев ничего бы не тронул — хранилище сообщества
+    на месте. Ворота стояли ПЕРЕД проверкой существования, и защита запрещала
+    любой выпуск сайта, у которого защищаемые данные ЕСТЬ.
+    """
+    from factory.cell import privileged
+
+    данные = tmp_path / "data"
+    данные.mkdir()
+    (данные / "site-data").mkdir()                    # уже на месте
+    источник = tmp_path / "source"
+    источник.mkdir()
+    (источник / "site-data").mkdir()
+
+    площадка = privileged.Площадка(
+        site_id=САЙТ, account="acct", root=tmp_path, app=tmp_path / "app",
+        data=данные, unit="u.service", previous_unit=None, port=9999)
+
+    monkeypatch.setattr(privileged, "контракт_данных",
+                        lambda *a, **k: {"user_writable": ["site-data"],
+                                         "source": "тест"})
+    monkeypatch.setattr(privileged, "_домен_сайта", lambda _s: ДОМЕН)
+    protected.поставить_отметку(САЙТ, ДОМЕН, кем="тест")
+    итог = privileged.засеять_пользовательское(
+        САЙТ, источник, dry_run=True, площадка=площадка)
+    записи = итог["entries"]
+    assert записи and записи[0].get("skipped") == "уже на месте", записи
+
+
+def test_пропавший_файл_у_переданного_сайта_останавливает_засев(
+        стенд, tmp_path, monkeypatch):
+    """А вот отсутствующий файл шаблонным значением не восстанавливается."""
+    from factory.cell import privileged
+
+    данные = tmp_path / "data2"
+    данные.mkdir()
+    источник = tmp_path / "source2"
+    источник.mkdir()
+    (источник / "site-data").mkdir()                   # в источнике есть
+    площадка = privileged.Площадка(
+        site_id=САЙТ, account="acct", root=tmp_path, app=tmp_path / "app",
+        data=данные, unit="u.service", previous_unit=None, port=9999)
+    monkeypatch.setattr(privileged, "контракт_данных",
+                        lambda *a, **k: {"user_writable": ["site-data"],
+                                         "source": "тест"})
+    monkeypatch.setattr(privileged, "_домен_сайта", lambda _s: ДОМЕН)
+    # Защищаемым объявляется именно синтетический путь: своё устройство путей
+    # проверяет сам `protected`, здесь проверяется ПРОВОДКА — что ворота
+    # спрашивают при записи, которая действительно произошла бы.
+    monkeypatch.setattr(protected, "пути",
+                        lambda *a, **k: {"site_declared": [данные / "site-data"]})
+    _состояние(стенд)          # у сайта есть защищённые данные
+    protected.поставить_отметку(САЙТ, ДОМЕН, кем="тест")
+    with pytest.raises(protected.ЗащитаДанных) as ош:
+        privileged.засеять_пользовательское(
+            САЙТ, источник, dry_run=True, площадка=площадка)
+    # Остановка именно ДИАГНОСТИЧЕСКАЯ: названы отметка первой инициализации и
+    # требование разобраться с причиной, а не «ставлю шаблонное значение».
+    текст = str(ош.value)
+    assert "отметка инициализации есть" in текст, текст
+    assert "верните данные осознанно" in текст, текст
+
+
 def test_защита_не_отключается_переменной():
     """Никаких «обходов» и флагов отключения: единственная переменная —
     поручение владельца с названными файлами.
