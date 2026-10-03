@@ -1,0 +1,57 @@
+[Unit]
+Description=site-factory: MCP-мост инструментов Qwen (HTTP, только петля, только чтение)
+Documentation=file:///home/claude/wt-portable-site-cell-01/docs/QWEN_MCP_BRIDGE.md
+After=network-online.target
+Wants=network-online.target
+
+# Падающая на старте служба не должна крутиться в цикле: пять попыток за пять
+# минут, дальше остановка и запись в журнал — иначе отказ выглядит как работа.
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=claude
+Group=claude
+
+# Код берётся из рабочего дерева фабрики: мост читает ТОТ ЖЕ авторитетный
+# реестр и вызывает те же штатные операции, что и CLI. Отдельной копии кода у
+# него нет намеренно — копия разошлась бы с реестром, а именно расхождение и
+# привело к задаче.
+WorkingDirectory=/home/claude/wt-portable-site-cell-01
+Environment=PYTHONDONTWRITEBYTECODE=1
+
+# ТОЛЬКО ПЕТЛЯ и ТОЛЬКО ЧТЕНИЕ.
+#
+# Петля: управляющая точка фабрики в интернет не публикуется. Доступ снаружи
+# даётся туннелем SSH или сетью контейнеров, и это решение владельца, а не
+# значение по умолчанию. Сам мост привязку вне петли отвергает без ключа
+# --allow-nonlocal.
+#
+# Только чтение: на этапе приёмки подключение Open WebUI объявлено read-only.
+# Пишущий инструмент (set_indexing_mode) в этом режиме не объявляется в
+# tools/list и отказывает при вызове, называя штатную команду на сервере.
+ExecStart=/usr/bin/python3 -m factory.qwen.mcp --http 127.0.0.1:9000 --read-only
+
+Restart=on-failure
+RestartSec=5
+
+# Служба отвечает на запросы и ничего не выкладывает: ей не нужны ни новые
+# привилегии, ни чужой /tmp, ни устройства.
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/home/claude/wt-portable-site-cell-01/var
+
+# Ограничения ресурсов: мост не должен вытеснить с хоста витрины.
+MemoryMax=512M
+CPUQuota=50%
+TasksMax=64
+
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

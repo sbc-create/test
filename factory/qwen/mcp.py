@@ -51,6 +51,7 @@ MCP-сервер. Внешних зависимостей нет намерен�
 from __future__ import annotations
 
 import getpass
+import http.server
 import json
 import os
 import pathlib
@@ -58,11 +59,24 @@ import socket
 import subprocess
 import sys
 import traceback
+import urllib.parse
 from typing import Any, Callable
 
 from factory.qwen import editorial, indexing, registry
 
 ВЕРСИЯ_ПРОТОКОЛА = "2024-11-05"
+
+#: Инструменты, которые МЕНЯЮТ состояние. Перечислены отдельно, потому что
+#: ограничение «только чтение» обязано быть проверяемым свойством сервера, а
+#: не обещанием в описании подключения: на этапе приёмки коннектор объявлен
+#: read-only, и сервер не вправе предлагать ему то, чего тот не должен уметь.
+ПИШУЩИЕ = ("set_indexing_mode",)
+
+#: Только чтение: пишущие инструменты не объявляются в `tools/list` и
+#: отказывают при вызове. Включается ключом `--read-only` или переменной
+#: `QWEN_MCP_READ_ONLY=1`.
+ТОЛЬКО_ЧТЕНИЕ = os.environ.get("QWEN_MCP_READ_ONLY", "").strip().lower() in (
+    "1", "true", "yes")
 ИМЯ_СЕРВЕРА = "site-factory"
 ВЕРСИЯ_ОБОЛОЧКИ = 1
 
@@ -139,7 +153,8 @@ def инструмент_готовности(_: dict) -> dict[str, Any]:
         "ok": прочитаны,
         "registry": {"valid": прочитаны, "sites": len(сайты),
                      "sources": источники},
-        "operations": sorted(ИНСТРУМЕНТЫ),
+        "read_only": ТОЛЬКО_ЧТЕНИЕ,
+        "operations": sorted(доступные()),
     })
     return итог
 
@@ -378,12 +393,27 @@ def инструмент_журнала(аргументы: dict) -> dict[str, A
 }
 
 
+def доступные() -> dict[str, dict[str, Any]]:
+    """Инструменты, объявляемые клиенту с учётом режима только чтения."""
+    if not ТОЛЬКО_ЧТЕНИЕ:
+        return dict(ИНСТРУМЕНТЫ)
+    return {и: св for и, св in ИНСТРУМЕНТЫ.items() if и not in ПИШУЩИЕ}
+
+
 def вызвать(имя: str, аргументы: dict | None = None) -> dict[str, Any]:
     """Вызов инструмента по имени. Неизвестное имя — отказ."""
+    if ТОЛЬКО_ЧТЕНИЕ and имя in ПИШУЩИЕ:
+        raise ОшибкаИнструмента(
+            f"{имя}: сервер запущен в режиме только чтения (--read-only), и "
+            "менять состояние он не вправе. Это ограничение подключения на "
+            "этапе приёмки, а не отказ операции: та же смена режима "
+            "выполняется командой "
+            "`python3 -m factory.qwen indexing-set --site <домен> --mode <режим>` "
+            "на сервере фабрики со всеми её предпроверками")
     запись = ИНСТРУМЕНТЫ.get(имя)
     if запись is None:
         raise ОшибкаИнструмента(
-            f"инструмента {имя!r} нет; есть: {', '.join(sorted(ИНСТРУМЕНТЫ))}")
+            f"инструмента {имя!r} нет; есть: {', '.join(sorted(доступные()))}")
     обработчик: Callable[[dict], dict] = запись["обработчик"]
     return обработчик(аргументы or {})
 
@@ -410,6 +440,7 @@ def обработать(запрос: dict) -> dict | None:
             "capabilities": {"tools": {}},
             "serverInfo": {"name": ИМЯ_СЕРВЕРА,
                            "version": ИНСТРУКЦИЯ_ВЕРСИЯ,
+                           "read_only": ТОЛЬКО_ЧТЕНИЕ,
                            "environment": окружение()},
         })
     if метод in ("notifications/initialized", "initialized"):
@@ -418,7 +449,7 @@ def обработать(запрос: dict) -> dict | None:
         return _ответ(идент, {"tools": [
             {"name": имя, "description": св["описание"],
              "inputSchema": св["схема"]}
-            for имя, св in sorted(ИНСТРУМЕНТЫ.items())]})
+            for имя, св in sorted(доступные().items())]})
     if метод == "tools/call":
         параметры = запрос.get("params") or {}
         имя = параметры.get("name") or ""
@@ -467,6 +498,135 @@ def служить(поток_ввода=None, поток_вывода=None) -> 
     return 0
 
 
+#: Адрес по умолчанию для транспорта HTTP. ТОЛЬКО петля: управляющая точка
+#: фабрики в интернет не публикуется, и адрес вне петли требует явного
+#: разрешения ключом `--allow-nonlocal`. Доступ снаружи даётся туннелем или
+#: сетью контейнеров, а не слушателем на публичном адресе.
+HTTP_АДРЕС_ПО_УМОЛЧАНИЮ = ("127.0.0.1", 9000)
+ПУТЬ_MCP = "/mcp"
+
+
+def _петля(адрес: str) -> bool:
+    try:
+        import ipaddress
+        return ipaddress.ip_address(адрес).is_loopback
+    except ValueError:
+        return адрес in ("localhost",)
+
+
+class _ОбработчикHTTP(http.server.BaseHTTPRequestHandler):
+    """Streamable HTTP: один POST — один ответ JSON-RPC.
+
+    Почему без потока событий. Клиент Open WebUI объявляет транспорт
+    `MCP Streamable HTTP`; в нём поток `text/event-stream` НЕОБЯЗАТЕЛЕН —
+    сервер вправе ответить одиночным JSON, и именно так отвечают все
+    инструменты этого моста: они возвращают готовый результат, а не поток
+    частей. Если клиент просит поток заголовком `Accept`, тот же ответ
+    отдаётся одним событием `data:` — так совместимость сохраняется без
+    второй реализации.
+    """
+
+    protocol_version = "HTTP/1.1"
+    server_version = f"site-factory-mcp/{ИНСТРУКЦИЯ_ВЕРСИЯ}"
+
+    def log_message(self, *_):   # журнал пишет вызывающая сторона
+        pass
+
+    def _отдать(self, код: int, тело: bytes, тип: str,
+                заголовки: dict[str, str] | None = None) -> None:
+        self.send_response(код)
+        self.send_header("Content-Type", тип)
+        self.send_header("Content-Length", str(len(тело)))
+        self.send_header("Cache-Control", "no-store")
+        for имя, значение in (заголовки or {}).items():
+            self.send_header(имя, значение)
+        self.end_headers()
+        self.wfile.write(тело)
+
+    def _json(self, код: int, полезное: Any) -> None:
+        self._отдать(код, json.dumps(полезное, ensure_ascii=False).encode("utf-8"),
+                     "application/json; charset=utf-8")
+
+    def do_GET(self) -> None:  # noqa: N802
+        путь = urllib.parse.urlsplit(self.path).path
+        if путь == "/healthz":
+            self._json(200, {"ready": True, "read_only": ТОЛЬКО_ЧТЕНИЕ,
+                             "server": ИМЯ_СЕРВЕРА,
+                             "instruction_version": ИНСТРУКЦИЯ_ВЕРСИЯ,
+                             "environment": окружение()})
+            return
+        if путь == ПУТЬ_MCP:
+            # Поток, открываемый сервером, здесь не нужен: ответ всегда
+            # приходит на POST. Отказ называет причину, а не молчит 404.
+            self._json(405, {"error": {
+                "code": "stream_not_supported",
+                "message": ("этот сервер отвечает на POST " + ПУТЬ_MCP +
+                            "; поток, открываемый сервером (GET), не нужен: "
+                            "каждый инструмент возвращает готовый результат")}})
+            return
+        self._json(404, {"error": {"code": "not_found",
+                                   "message": f"нет маршрута {путь}"}})
+
+    def do_POST(self) -> None:  # noqa: N802
+        путь = urllib.parse.urlsplit(self.path).path
+        if путь != ПУТЬ_MCP:
+            self._json(404, {"error": {"code": "not_found",
+                                       "message": f"нет маршрута {путь}"}})
+            return
+        длина = int(self.headers.get("Content-Length") or 0)
+        сырое = self.rfile.read(длина) if длина else b""
+        try:
+            запрос = json.loads(сырое.decode("utf-8") or "{}")
+        except (ValueError, UnicodeDecodeError):
+            self._json(400, {"jsonrpc": "2.0", "id": None, "error": {
+                "code": -32700, "message": "тело не разбирается как JSON"}})
+            return
+        пачка = запрос if isinstance(запрос, list) else [запрос]
+        ответы = [о for о in (обработать(з) for з in пачка) if о is not None]
+        if not ответы:
+            # Только уведомления: по протоколу ответа нет вовсе.
+            self.send_response(202)
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+            return
+        полезное = ответы if isinstance(запрос, list) else ответы[0]
+        принимает = (self.headers.get("Accept") or "")
+        if "text/event-stream" in принимает:
+            событие = ("event: message\ndata: "
+                       + json.dumps(полезное, ensure_ascii=False) + "\n\n")
+            self._отдать(200, событие.encode("utf-8"),
+                         "text/event-stream; charset=utf-8")
+            return
+        self._json(200, полезное)
+
+
+def служить_http(адрес: str, порт: int, *, разрешить_не_петлю: bool = False,
+                 сервер_готов=None) -> int:
+    """Транспорт HTTP для существующего коннектора. Петля по умолчанию."""
+    if not _петля(адрес) and not разрешить_не_петлю:
+        raise SystemExit(
+            f"адрес {адрес} вне петли: управляющая точка фабрики в интернет не "
+            "публикуется. Доступ снаружи даётся туннелем или сетью "
+            "контейнеров; если адрес действительно внутренний, повторите с "
+            "--allow-nonlocal и объясните это в журнале подключения")
+    сервер = http.server.ThreadingHTTPServer((адрес, порт), _ОбработчикHTTP)
+    сервер.daemon_threads = True
+    print(json.dumps({
+        "listening": f"http://{адрес}:{порт}{ПУТЬ_MCP}",
+        "health": f"http://{адрес}:{порт}/healthz",
+        "read_only": ТОЛЬКО_ЧТЕНИЕ, "tools": sorted(доступные()),
+        "environment": окружение()}, ensure_ascii=False), flush=True)
+    if сервер_готов is not None:
+        сервер_готов(сервер)
+    try:
+        сервер.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        сервер.server_close()
+    return 0
+
+
 def самопроверка() -> int:
     """Прогон трёх читающих инструментов без клиента. Ничего не меняет."""
     итог: dict[str, Any] = {"environment": окружение(), "checks": {}}
@@ -495,13 +655,32 @@ def самопроверка() -> int:
 
 
 def главная(argv: list[str] | None = None) -> int:
+    global ТОЛЬКО_ЧТЕНИЕ
     арг = list(argv if argv is not None else sys.argv[1:])
+    if "--read-only" in арг:
+        ТОЛЬКО_ЧТЕНИЕ = True
+        арг.remove("--read-only")
+    разрешить = "--allow-nonlocal" in арг
+    if разрешить:
+        арг.remove("--allow-nonlocal")
+    if "--http" in арг:
+        место = арг.index("--http")
+        значение = арг[место + 1] if len(арг) > место + 1 else ""
+        адрес, порт = HTTP_АДРЕС_ПО_УМОЛЧАНИЮ
+        if значение and not значение.startswith("--"):
+            if ":" in значение:
+                адрес, _, хвост = значение.rpartition(":")
+                порт = int(хвост)
+            else:
+                порт = int(значение)
+        return служить_http(адрес or HTTP_АДРЕС_ПО_УМОЛЧАНИЮ[0], порт,
+                            разрешить_не_петлю=разрешить)
     if "--self-check" in арг:
         return самопроверка()
     if "--tools" in арг:
         print(json.dumps([
             {"name": имя, "description": св["описание"]}
-            for имя, св in sorted(ИНСТРУМЕНТЫ.items())],
+            for имя, св in sorted(доступные().items())],
             ensure_ascii=False, indent=1))
         return 0
     return служить()

@@ -128,3 +128,93 @@ Qwen.** Он находится на стороне приложения, и м�
 Выполнено 2026-10-03: `ok: true`, `registry_valid: true`, `sites: 23`,
 `version: 1`, окружение `claude-control-01 / claude /
 home/claude/wt-portable-site-cell-01`, инструкция `2026-10-03.5`.
+
+## 5. Подключение существующего HTTP-коннектора Open WebUI
+
+Фактические настройки коннектора (из интерфейса): Open WebUI v0.11.4 на
+`http://83.237.185.70:8500`, подключение `site-factory` (read-only), транспорт
+MCP Streamable HTTP, URL `http://site-factory-mcp:9000/mcp`, аутентификации
+нет.
+
+### Где что находится — по измерению 2026-10-03
+
+| проверка с `claude-control-01` | результат |
+| --- | --- |
+| принадлежит ли `83.237.185.70` этому хосту | **нет**: `bind()` отвечает `Cannot assign requested address`; публичный адрес фабрики — `45.131.182.225` (A-запись `lordserials22.info`) |
+| разрешается ли имя `site-factory-mcp` | **нет**: `gaierror` — это имя сети контейнеров ДРУГОГО хоста |
+| есть ли здесь контейнер `site-factory-mcp` или `open-webui` | **нет**: из 61 контейнера ни одного подходящего |
+| достижимость хоста Open WebUI | `83.237.185.70:8500` открыт, `:22` открыт, **`:9000` отказывает** соединение |
+| авторизованный доступ к этому хосту у сессии | **нет**: `inventory/ssh-hosts.yaml` содержит `hosts: []`, а `ssh` запрещён профилем сессии. Расширять список хостов по своей инициативе нельзя |
+
+Чего эти факты НЕ доказывают: что сервис `site-factory-mcp` не существует.
+Отказ `:9000` снаружи одинаково выглядит и у остановленного сервиса, и у
+сервиса, который слушает только внутри сети контейнеров (а именно так и
+правильно). Поэтому ниже — одно действие, которое различает эти случаи ИЗ ТОГО
+окружения, где они различимы.
+
+### Топология подключения без публичного порта
+
+    Open WebUI (83.237.185.70, сеть контейнеров)
+      └── контейнер site-factory-mcp  ──ssh -L 9000──▶ claude-control-01
+                 слушает :9000 в сети контейнеров        127.0.0.1:9000
+                 (наружу порт НЕ публикуется)            site-factory-mcp.service
+                                                          --http 127.0.0.1:9000
+                                                          --read-only
+
+Почему так, а не слушателем на публичном адресе: управляющая точка фабрики в
+интернет не публикуется. Мост сам отвергает привязку вне петли без явного
+ключа `--allow-nonlocal` — проверено тестом.
+
+Нового кода на хосте Open WebUI не требуется: контейнер только пробрасывает
+TCP туннелем SSH. Готовый фрагмент —
+`/srv/site-factory/indexing-operator-2026-10-03/open-webui-site-factory-mcp.compose.yaml`
+(без `ports:`, ключи SSH монтируются только на чтение, `healthcheck` опрашивает
+`/healthz` моста). Перед правкой compose — резервная копия, команда указана в
+самом фрагменте.
+
+### Сторона фабрики: служба готова
+
+    sudo install -m 0644 /home/claude/wt-portable-site-cell-01/automation/host/site-factory-mcp.service \
+        /etc/systemd/system/site-factory-mcp.service
+    sudo systemctl daemon-reload && sudo systemctl enable --now site-factory-mcp.service
+
+Служба запускает `python3 -m factory.qwen.mcp --http 127.0.0.1:9000 --read-only`
+от учётной записи `claude` из рабочего дерева фабрики. Порт 9000 на петле
+свободен (проверено). Пока служба не установлена, то же самое поднимается
+вручную той же командой.
+
+### Проверено по HTTP на этой стороне
+
+Транспорт опрошен настоящим сокетом (не обработчик в отрыве):
+
+| вызов | результат |
+| --- | --- |
+| `GET /healthz` | `200`, `ready: true`, `read_only: true`, сервер `site-factory`, правила `2026-10-03.6`, хост `claude-control-01` |
+| `POST /mcp initialize` | `200 application/json`, `serverInfo.name = site-factory`, `version = 2026-10-03.6`, `read_only = true`, `environment.host = claude-control-01` |
+| `POST /mcp tools/list` | `200`, **6** инструментов, `set_indexing_mode` отсутствует (режим только чтения) |
+| `POST /mcp tools/call system_readiness` | `200`, `registry.valid = true`, `sites = 23`, источник `/home/claude/wt-portable-site-cell-01/config/site-cells.json` |
+| `POST /mcp tools/call list_registered_sites` | `200`, `version = 1`, **23** сайта, `lordserials22.info` в списке; при `Accept: text/event-stream` тот же ответ одним событием `data:` |
+| `POST /mcp tools/call set_indexing_mode` | `isError` с названной причиной: сервер только читает, смена режима — командой `factory.qwen indexing-set` на сервере |
+| `GET /mcp` | `405 stream_not_supported` с объяснением, а не молчание |
+| уведомление без `id` | `202` без тела |
+| `--http 0.0.0.0:9000` без ключа | отказ запуска: «управляющая точка фабрики в интернет не публикуется» |
+
+### Одно действие для терминала хоста Open WebUI
+
+    sh /путь/к/diagnose-open-webui-mcp.sh
+
+Скрипт лежит здесь:
+`/srv/site-factory/indexing-operator-2026-10-03/diagnose-open-webui-mcp.sh`
+(скопировать на тот хост любым доступным способом; весь он — три команды и
+подсказка, как читать вывод). Он отвечает сразу на три вопроса:
+
+1. существует ли сервис `site-factory-mcp` и что он сейчас делает
+   (`docker ps -a` + последние строки журнала);
+2. что получает САМ Open WebUI по настроенному адресу
+   (`docker exec open-webui curl -i -X POST http://site-factory-mcp:9000/mcp`
+   с телом `initialize`);
+3. достижима ли фабрика по SSH **из контейнера** — успешный SSH из Agent
+   Workspace (`6265eddb1580`) этого не доказывает: другой контекст, другая
+   сеть, другие ключи.
+
+Как читать результат — напечатано самим скриптом в конце.

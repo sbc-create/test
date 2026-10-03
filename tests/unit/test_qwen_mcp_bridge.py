@@ -185,3 +185,131 @@ def test_протокол_отвечает_на_инициализацию_и_п
     assert mcp.обработать({"jsonrpc": "2.0", "id": 2, "method": "ping"})["result"] == {}
     плохой = mcp.обработать({"jsonrpc": "2.0", "id": 3, "method": "нет/такого"})
     assert плохой["error"]["code"] == -32601
+
+
+# --- транспорт HTTP и режим только чтения --------------------------------
+
+def test_только_чтение_скрывает_и_отклоняет_пишущий_инструмент(monkeypatch):
+    """Ограничение подключения обязано быть свойством сервера.
+
+    На этапе приёмки коннектор объявлен read-only. Сервер, объявляющий
+    пишущий инструмент «потому что в описании сказано только читать»,
+    полагается на дисциплину клиента — а должен не предлагать его вовсе.
+    """
+    monkeypatch.setattr(mcp, "ТОЛЬКО_ЧТЕНИЕ", True)
+    объявлены = {и["name"] for и in
+                 mcp.обработать({"jsonrpc": "2.0", "id": 1,
+                                 "method": "tools/list"})["result"]["tools"]}
+    assert "set_indexing_mode" not in объявлены, объявлены
+    for имя in ИМЕНА_КЛИЕНТА:
+        assert имя in объявлены, f"{имя}: чтение не должно пропадать"
+    with pytest.raises(mcp.ОшибкаИнструмента) as ош:
+        mcp.вызвать("set_indexing_mode", {"site": "lordserials22.info",
+                                          "mode": "closed"})
+    текст = str(ош.value)
+    assert "только чтения" in текст
+    assert "indexing-set" in текст, (
+        "отказ обязан называть, ЧЕМ операция выполняется, а не просто "
+        "запрещать")
+    # Признак режима виден клиенту сразу, без вызова инструментов.
+    сведения = mcp.обработать({"jsonrpc": "2.0", "id": 2,
+                               "method": "initialize"})["result"]["serverInfo"]
+    assert сведения["read_only"] is True
+
+
+def test_адрес_вне_петли_без_разрешения_отклоняется():
+    """Управляющая точка фабрики в интернет не публикуется.
+
+    Привязка к публичному адресу — не настройка, а решение; по умолчанию её
+    нет, и ошибка называет, чем заменить (туннель или сеть контейнеров).
+    """
+    with pytest.raises(SystemExit) as ош:
+        mcp.служить_http("0.0.0.0", 9000)
+    текст = str(ош.value)
+    assert "вне петли" in текст and "туннелем" in текст
+    assert mcp._петля("127.0.0.1") and mcp._петля("localhost")
+    assert not mcp._петля("0.0.0.0") and not mcp._петля("83.237.185.70")
+
+
+def test_транспорт_http_отвечает_тем_же_протоколом(tmp_path):
+    """Тот же JSON-RPC, что по stdio: POST /mcp — один ответ.
+
+    Проверяется НАСТОЯЩИЙ сокет, а не обработчик в отрыве: коннектор Open
+    WebUI ходит по HTTP, и подтверждать надо то, что он получит.
+    """
+    import socket as _socket
+    import threading
+    import urllib.error
+    import urllib.request
+
+    c = _socket.socket()
+    c.bind(("127.0.0.1", 0))
+    порт = c.getsockname()[1]
+    c.close()
+    готов = threading.Event()
+    держатель: dict[str, object] = {}
+
+    def запустить():
+        mcp.служить_http("127.0.0.1", порт,
+                         сервер_готов=lambda с: (держатель.update(сервер=с),
+                                                 готов.set()))
+
+    поток = threading.Thread(target=запустить, daemon=True)
+    поток.start()
+    assert готов.wait(20), "сервер HTTP не поднялся"
+    try:
+        def позвать(полезное, принимает="application/json"):
+            зап = urllib.request.Request(
+                f"http://127.0.0.1:{порт}/mcp",
+                data=json.dumps(полезное, ensure_ascii=False).encode("utf-8"),
+                headers={"Content-Type": "application/json",
+                         "Accept": принимает})
+            о = urllib.request.urlopen(зап, timeout=30)
+            return о.status, о.headers.get("Content-Type", ""), о.read().decode("utf-8")
+
+        код, тип, тело = позвать({"jsonrpc": "2.0", "id": 1,
+                                  "method": "initialize"})
+        assert код == 200 and "application/json" in тип
+        сведения = json.loads(тело)["result"]["serverInfo"]
+        assert сведения["name"] == "site-factory"
+        assert сведения["environment"]["host"], "ответ без идентичности окружения"
+
+        код, _, тело = позвать({"jsonrpc": "2.0", "id": 2, "method": "tools/list"})
+        имена = {и["name"] for и in json.loads(тело)["result"]["tools"]}
+        assert ИМЕНА_КЛИЕНТА[1] in имена
+
+        # Клиент, просящий поток, получает тот же ответ одним событием.
+        код, тип, тело = позвать(
+            {"jsonrpc": "2.0", "id": 3, "method": "tools/call",
+             "params": {"name": "system_readiness", "arguments": {}}},
+            принимает="application/json, text/event-stream")
+        assert "text/event-stream" in тип, тип
+        конверт = json.loads(тело.split("data: ", 1)[1])
+        полезное = json.loads(конверт["result"]["content"][0]["text"])
+        assert полезное["registry"]["valid"] is True
+        assert полезное["registry"]["sources"]["site_cells"]["path"].endswith(
+            "config/site-cells.json")
+
+        # Уведомление без id — 202 и ни байта тела.
+        зап = urllib.request.Request(
+            f"http://127.0.0.1:{порт}/mcp",
+            data=json.dumps({"jsonrpc": "2.0",
+                             "method": "notifications/initialized"}).encode(),
+            headers={"Content-Type": "application/json"})
+        assert urllib.request.urlopen(зап, timeout=20).status == 202
+
+        # Поток, открываемый сервером, не поддержан — и причина названа.
+        with pytest.raises(urllib.error.HTTPError) as ош:
+            urllib.request.urlopen(f"http://127.0.0.1:{порт}/mcp", timeout=20)
+        assert ош.value.code == 405
+        assert json.loads(ош.value.read())["error"]["code"] == "stream_not_supported"
+
+        # Готовность: без неё подключение нечем проверить снаружи.
+        о = urllib.request.urlopen(f"http://127.0.0.1:{порт}/healthz", timeout=20)
+        здоровье = json.loads(о.read())
+        assert здоровье["ready"] is True
+        assert здоровье["instruction_version"] == mcp.ИНСТРУКЦИЯ_ВЕРСИЯ
+    finally:
+        сервер = держатель.get("сервер")
+        if сервер is not None:
+            сервер.shutdown()
