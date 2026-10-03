@@ -3,7 +3,7 @@
   "provider": "yandex",
   "note": "Реестр аналитики. Здесь хранятся ТОЛЬКО публичные идентификаторы счётчиков и проверяемые статусы; OAuth-токен и client secret сюда не попадают ни при каких условиях. Заполняется командой `python3 -m factory --json analytics apply --confirm-writes`; вручную не редактируется. Три домена YummyAnime — три независимых счётчика, зеркалами их объединять запрещено: у каждого сайта собственная аудитория и собственный отчёт.",
   "seo_indexing_enabled": false,
-  "updated_at": "2026-09-28T12:04:33Z",
+  "updated_at": "2026-10-02T07:24:07Z",
   "properties": [
     {
       "domain": "1lordserials1.online",
@@ -135,8 +135,8 @@
       "domain": "animedia.icu",
       "site_id": "animedia-01",
       "counter_name": "Animedia — animedia.icu",
-      "counter_id": null,
-      "counter_state": "planned",
+      "counter_id": 113288667,
+      "counter_state": "reused",
       "analytics_enabled": false,
       "webvisor": false,
       "allowed_hosts": [
@@ -162,19 +162,26 @@
         "sitemap_submitted": false
       },
       "seo_indexing_enabled": false,
-      "last_checked_at": null,
-      "problems": [
-        "РАБОТАЕТ БЕЗ СЧЁТЧИКА: сайт отдаёт HTTP 200 (build-id 20260922T143111Z-efdef56-animedia-parity), посещения не учитываются с первого дня.",
-        "Переиспользовать нечего: счётчика нет ни в реестре, ни в drop-in служб, ни в разметке живых страниц — проверено.",
-        "Создание требует OAuth-токена Метрики с правом записи; каталог секретов закрыт для учётной записи сессии."
-      ]
+      "last_checked_at": "2026-10-02T07:24:07Z",
+      "problems": [],
+      "goal_ids": {
+        "comment_submit": 666920662,
+        "episode_select": 666920501,
+        "filter_apply": 666920498,
+        "player_error": 666920661,
+        "player_ready": 666920504,
+        "player_start": 666920502,
+        "search": 666920497,
+        "season_select": 666920500,
+        "title_view": 666920499
+      }
     },
     {
       "domain": "animedia.space",
       "site_id": "animedia-02",
       "counter_name": "Animedia — animedia.space",
-      "counter_id": null,
-      "counter_state": "planned",
+      "counter_id": 113288760,
+      "counter_state": "created",
       "analytics_enabled": false,
       "webvisor": false,
       "allowed_hosts": [
@@ -200,12 +207,19 @@
         "sitemap_submitted": false
       },
       "seo_indexing_enabled": false,
-      "last_checked_at": null,
-      "problems": [
-        "РАБОТАЕТ БЕЗ СЧЁТЧИКА: сайт отдаёт HTTP 200 (build-id bf7713ff5ce2-animedia-space), посещения не учитываются с первого дня.",
-        "Переиспользовать нечего: счётчика нет ни в реестре, ни в drop-in служб, ни в разметке живых страниц — проверено.",
-        "Создание требует OAuth-токена Метрики с правом записи; каталог секретов закрыт для учётной записи сессии."
-      ]
+      "last_checked_at": "2026-10-02T07:23:49Z",
+      "problems": [],
+      "goal_ids": {
+        "comment_submit": 666920701,
+        "episode_select": 666920695,
+        "filter_apply": 666920692,
+        "player_error": 666920699,
+        "player_ready": 666920698,
+        "player_start": 666920697,
+        "search": 666920691,
+        "season_select": 666920694,
+        "title_view": 666920693
+      }
     },
     {
       "domain": "animeg0.site",
