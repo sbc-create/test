@@ -39,6 +39,7 @@
 from __future__ import annotations
 
 import hashlib
+import sys
 import json
 import os
 import pathlib
@@ -439,6 +440,11 @@ def сигналы(домен: str, *, порт: int = 0) -> dict:
         if метка == "":
             м = re.search(r'<meta name="robots" content="([^"]*)"', тело)
             итог["meta_robots_home"] = м.group(1) if м else "не объявлен"
+            # Канонический адрес главной. Был в прежнем ответе операции
+            # `indexing`, и терять его при переходе на вердикт нельзя:
+            # вердикт обязан быть надмножеством, а не заменой.
+            к = re.search(r'<link[^>]+rel="canonical"[^>]+href="([^"]*)"', тело)
+            итог["canonical_home"] = к.group(1) if к else "не объявлен"
     кр, _, роботс = _ответ(f"https://{домен}/robots.txt")
     итог["robots_txt_http"] = кр
     итог["robots_txt"] = роботс
@@ -457,9 +463,14 @@ def сигналы(домен: str, *, порт: int = 0) -> dict:
 
 
 # --------------------------------------------------- слой nginx: кто добавил
-#: Где искать конфигурацию сайта. Порядок тот же, что у root-скрипта: иначе
-#: операция судила бы по одному файлу, а владелец правил другой.
-КОРЕНЬ_NGINX = pathlib.Path(os.environ.get("QWEN_NGINX_ROOT", "/etc/nginx"))
+
+# Разбор конфигураций nginx живёт в ОДНОМ месте на две стороны: инструмент
+# объявляет, какой слой запрещает обход, а привилегированный исполнитель этот
+# слой переключает. Копия здесь разошлась бы с той, по которой правят файлы.
+from factory.cell.nginx_indexing import (  # noqa: E402
+    КАТАЛОГИ_NGINX, КОРЕНЬ_NGINX, _значение_переменной, _конфиг_сайта,
+    _обработчик_корня, _резервная, блоки_страницы, конфиги_сайта,
+    серверные_блоки)
 
 #: Служебный путь, который в ОТКРЫТОМ режиме остаётся закрытым заголовком
 #: nginx. Он и служит пробой: если на нём заголовков на один больше, чем на
@@ -467,206 +478,20 @@ def сигналы(домен: str, *, порт: int = 0) -> dict:
 ПРОБА_СЛУЖЕБНОГО = "/healthz"
 
 
-#: Где лежат живые конфигурации. Резервные копии исключены отдельно: nginx
-#: грузит `sites-enabled/*` целиком, и файл `.bak.*` там был бы живым, но
-#: судить по нему о режиме нельзя — это слепок прошлого.
-КАТАЛОГИ_NGINX = ("lords", "sites-available", "sites-enabled", "conf.d")
 
 
-def _резервная(путь: pathlib.Path) -> bool:
-    имя = путь.name
-    return (".bak" in имя or имя.endswith("~") or "backup" in имя
-            or "backups" in путь.parts)
 
 
-def конфиги_сайта(site_id: str, домен: str) -> list[pathlib.Path]:
-    """ВСЕ живые файлы, объявляющие серверное имя этого домена.
-
-    Прежде брался первый подошедший по имени, и этого не хватало: у lords-05
-    блок :80 лежит в `lords/lords-05.conf`, а блок :443 — в отдельном
-    `lords/lords-05-tls.conf` (он ставится после выпуска сертификата). То
-    есть операция судила о слое по файлу, которого краулер не видит.
-    """
-    найдено: list[pathlib.Path] = []
-    for каталог in КАТАЛОГИ_NGINX:
-        корень = КОРЕНЬ_NGINX / каталог
-        if not корень.is_dir():
-            continue
-        for путь in sorted(корень.iterdir()):
-            if not путь.is_file() or _резервная(путь) or путь.suffix != ".conf":
-                continue
-            try:
-                текст = путь.read_text(encoding="utf-8", errors="replace")
-            except OSError:
-                # Нечитаемая КОНФИГУРАЦИЯ — не «ничего нет»: она попадает в
-                # перечень, и по ней одной слой открытым не объявляется.
-                найдено.append(путь)
-                continue
-            по_имени = (путь.stem == site_id
-                        or путь.stem.startswith(f"{site_id}-")
-                        or путь.stem == домен
-                        or путь.stem == f"www.{домен}")
-            по_содержимому = bool(re.search(
-                rf"(?m)^\s*server_name\s+[^;]*\b{re.escape(домен)}\b", текст))
-            if по_имени or по_содержимому:
-                найдено.append(путь)
-    # Дедупликация по РАЗРЕШЁННОМУ пути: `sites-enabled/x.conf` — обычно
-    # ссылка на `sites-available/x.conf`, и считать их двумя источниками
-    # значило бы удваивать каждую строку заголовка.
-    итог: list[pathlib.Path] = []
-    видено: set = set()
-    for путь in найдено:
-        ключ = str(путь.resolve()) if путь.exists() else str(путь)
-        if ключ in видено:
-            continue
-        видено.add(ключ)
-        итог.append(путь)
-    return итог
 
 
-def _конфиг_сайта(site_id: str, домен: str) -> pathlib.Path | None:
-    """Первый живой файл домена. Оставлен для совместимости вызовов."""
-    файлы = конфиги_сайта(site_id, домен)
-    return файлы[0] if файлы else None
 
 
-def _значение_переменной(конфиг: str, имя: str) -> tuple[str | None, str]:
-    """(значение по умолчанию для обычных страниц или None, откуда взято).
-
-    Переменная объявляется блоком `map $uri $имя { include <файл>; }`, и
-    значение для обычных страниц — это строка `default` включаемого файла.
-    Разбирается именно он, а не догадка по ответу: включаемый файл и есть
-    источник, его пишет root-скрипт.
-
-    `None` означает «не определено»: нет объявления, файл не читается, нет
-    строки `default`. Возвращать пустую строку в этих случаях нельзя — пустое
-    значение здесь ОЗНАЧАЕТ открытый режим, и нечитаемый файл стал бы
-    разрешением. Поймано тестом: до правки нечитаемый include давал
-    `denying: False`.
-    """
-    м = re.search(r"map\s+\$uri\s+\$" + re.escape(имя) + r"\s*\{(.*?)\}",
-                  конфиг, re.S)
-    if not м:
-        return None, f"объявления map ${имя} в конфигурации нет"
-    тело = м.group(1)
-    вкл = re.search(r"include\s+([^\s;]+)\s*;", тело)
-    источник = тело
-    откуда = "блок map"
-    if вкл:
-        п = pathlib.Path(вкл.group(1))
-        try:
-            источник = п.read_text(encoding="utf-8")
-            откуда = str(п)
-        except OSError as ош:
-            return None, f"{п} не читается: {type(ош).__name__}"
-    по_умолчанию = re.search(r'(?m)^\s*default\s+"?([^";]*)"?\s*;', источник)
-    if по_умолчанию is None:
-        return None, f"{откуда}: строки default нет"
-    return по_умолчанию.group(1).strip(), откуда
 
 
-def _обработчик_корня(блок: str) -> str:
-    """"serve" | "redirect" | "unknown" — чем блок отвечает на `/`.
-
-    Разбирается именно `location /` (и `location = /`), а не весь блок:
-    `location ^~ /.well-known/...` с `root` есть у каждого домена под ACME и
-    о странице ничего не говорит.
-    """
-    строки = блок.split("\n")
-    i = 0
-    тело_корня = None
-    while i < len(строки):
-        if re.match(r"^\s*location\s+(=\s*)?/\s*\{", строки[i]):
-            глубина = 0
-            собрано = []
-            while i < len(строки):
-                глубина += строки[i].count("{") - строки[i].count("}")
-                собрано.append(строки[i])
-                i += 1
-                if глубина <= 0:
-                    break
-            тело_корня = "\n".join(собрано)
-            break
-        i += 1
-    область = тело_корня if тело_корня is not None else блок
-    if re.search(r"\breturn\s+30\d\b", область):
-        return "redirect"
-    if re.search(r"\b(proxy_pass|fastcgi_pass|uwsgi_pass|grpc_pass|root|alias|"
-                 r"try_files)\b", область):
-        return "serve"
-    # Ни перехода, ни источника: решает серверный уровень.
-    if re.search(r"(?m)^\s*return\s+30\d\b", блок):
-        return "redirect"
-    if re.search(r"(?m)^\s*(root|proxy_pass)\b", блок):
-        return "serve"
-    return "unknown"
 
 
-def серверные_блоки(текст: str) -> list[dict]:
-    """Серверные блоки конфигурации: имена, перенаправление, строки заголовка.
-
-    Считается по фигурным скобкам, а не регулярным выражением: вложенные
-    `location` и `if` ломают любой «от server до }».
-    """
-    блоки: list[dict] = []
-    строки = текст.split("\n")
-    i = 0
-    while i < len(строки):
-        if not re.match(r"^\s*server\s*\{", строки[i]):
-            i += 1
-            continue
-        глубина = 0
-        тело: list[str] = []
-        while i < len(строки):
-            глубина += строки[i].count("{") - строки[i].count("}")
-            тело.append(строки[i])
-            i += 1
-            if глубина <= 0:
-                break
-        текст_блока = "\n".join(тело)
-        имена: list[str] = []
-        for м in re.finditer(r"(?m)^\s*server_name\s+([^;]+);", текст_блока):
-            имена.extend(м.group(1).split())
-        # Отдаёт ли блок страницы — решает обработчик КОРНЕВОГО пути, а не
-        # наличие хоть какого-то `root`. Блок :80 у Yummy имеет `root` в
-        # location для ACME и `return 308` в `location /`: страниц он не
-        # отдаёт, и его заголовок — заголовок перехода.
-        корневой = _обработчик_корня(текст_блока)
-        переход = корневой == "redirect"
-        # Неразобранный блок считается ОТДАЮЩИМ: его заголовок может дойти до
-        # страницы, и пропустить его значило бы объявить домен открытым по
-        # незнанию. Исключается только явное перенаправление.
-        отдаёт = not переход
-        блоки.append({
-            "server_name": имена,
-            "redirect_only": переход and not отдаёт,
-            "add_header_lines": [с.strip() for с in тело
-                                 if re.search(r"^\s*add_header\s+X-Robots-Tag\s", с)],
-            "listen": [м.group(1).strip() for м in
-                       re.finditer(r"(?m)^\s*listen\s+([^;]+);", текст_блока)],
-        })
-    return блоки
 
 
-def блоки_страницы(текст: str, домен: str) -> list[dict]:
-    """Блоки, которые ОТДАЮТ страницы этого домена.
-
-    Блок-перенаправление отбрасывается: его заголовок — заголовок перехода, а
-    не страницы. Так и вышло у Yummy: `add_header X-Robots-Tag "noindex"`
-    стоит в блоке :80 и в блоке `www` — оба только перенаправляют, — а в
-    каноническом блоке его нет, и домен фактически открыт. Операция же
-    называла слой nginx запрещающим, потому что искала строку по всему файлу.
-    """
-    годные = []
-    for б in серверные_блоки(текст):
-        if б["redirect_only"]:
-            continue
-        имена = б["server_name"]
-        # Блок без имён обслуживает всё, что дошло: его учитываем.
-        if имена and домен not in имена and f"www.{домен}" not in имена:
-            continue
-        годные.append(б)
-    return годные
 
 
 def слой_nginx(site_id: str, домен: str, сиг: dict | None = None) -> dict:
@@ -915,8 +740,14 @@ def оценить(сиг: dict) -> tuple[str, list[str]]:
 
 
 # ----------------------------------------------------------- предпроверка
-def проверить(site: str, *, mode: str, expect_release: str = "") -> dict:
-    """Всё, что можно проверить ДО единой записи. Ничего не меняет."""
+def проверить(site: str, *, mode: str, expect_release: str = "",
+              корень=None) -> dict:
+    """Всё, что можно проверить ДО единой записи. Ничего не меняет.
+
+    `корень` — тот же корень файлов состояния, в который будет писать
+    операция. Без него предпроверка читала бы боевой каталог, а запись шла в
+    другой: повтор выглядел бы первой сменой режима, а снимок «до» — пустым.
+    """
     режим = (mode or "").strip().upper()
     if режим not in (ОТКРЫТ, ЗАКРЫТ):
         raise Отказано(f"режим {mode!r} неизвестен: open или closed")
@@ -933,6 +764,14 @@ def проверить(site: str, *, mode: str, expect_release: str = "") -> dic
     if expect_release:
         ожид = expect_release.strip().lower()
         факт = (s.published_release or "").strip().lower()
+        # Пустой фактический выпуск совпадением НЕ является: `"".startswith`
+        # давал истину для любого ожидания, и операция шла дальше у сайта, у
+        # которого выложенного выпуска не нашлось вовсе.
+        if not факт:
+            raise Отказано(
+                f"{s.domain}: выложенного выпуска не найдено, а ожидался "
+                f"{ожид}. Сверять нечем — операция остановлена до единой "
+                "записи; проверьте `python3 -m factory.qwen sites`")
         if not (факт.startswith(ожид) or ожид.startswith(факт)):
             raise Отказано(
                 f"{s.domain}: выложен выпуск {факт or 'не найден'}, а ожидался "
@@ -998,7 +837,7 @@ def проверить(site: str, *, mode: str, expect_release: str = "") -> dic
             f"владелец не разрешал открытие {s.domain}: {пояснение}")
 
     # 5. Фактические публичные сигналы и состояние файла.
-    итог["current_state_file"] = текущее(s.domain)
+    итог["current_state_file"] = текущее(s.domain, корень=корень)
     сиг = сигналы(s.domain, порт=порт_приложения(s.site_id))
     итог["public_now"] = сиг
     фактически, запрещают = оценить(сиг)
@@ -1026,6 +865,472 @@ def проверить(site: str, *, mode: str, expect_release: str = "") -> dic
     итог["already"] = (итог["current_state_file"].get("desired_state") == режим
                        and фактически == режим)
     итог["ok"] = not итог["blockers"]
+    return итог
+
+
+# --------------------------------------------------- готовность: один вердикт
+#: Значения `<meta name="robots">`, которые обязан отдавать читатель.
+#: Копия контракта модуля `indexing_mode.МЕТА`: инструмент сверяет
+#: отданное витриной с ожидаемым, а импортировать рантайм выпуска он не
+#: может — у каждого сайта он свой.
+МЕТА_ОЖИДАЕМАЯ = {ОТКРЫТ: "index, follow", ЗАКРЫТ: "noindex, nofollow"}
+
+#: Статусы готовности домена. Закрытый словарь: «что-то не так» статусом не
+#: является, и каждый из них называет РАЗНУЮ причину с разным следующим шагом.
+#:
+#: Зачем он понадобился. Операция `indexing` отвечала четырьмя публичными
+#: сигналами, а полем `ok` — всего лишь «главная ответила 200». Для закрытого
+#: домена без разрешения владельца это давало `ok: true`, и отчёт по тринадцати
+#: доменам получился противоречивым: «ok» рядом с «CLOSED, разрешений нет».
+СТАТУСЫ = (
+    "ENV_UNAVAILABLE",        # реестр или окружение не прочитаны
+    "DOMAIN_UNKNOWN",         # домена нет в прочитанном реестре
+    "MECHANISM_UNSUPPORTED",  # выложенный релиз механизма не несёт
+    "MECHANISM_UNPROVEN",     # механизм есть, использование не подтверждено
+    "AWAITING_OWNER",         # технически готов, ждёт разрешения владельца
+    "CHECKS_FAILED",          # разрешение есть, обязательные проверки не прошли
+    "OPEN_CONFIRMED",         # открыт, и это подтверждено публичным ответом
+)
+
+#: Следующее допустимое действие для каждого статуса. Текст один и тот же в
+#: ответе инструмента и в инструкции: два разных текста разошлись бы.
+ДАЛЬШЕ = {
+    "ENV_UNAVAILABLE": "ничего не менять; показать владельцу путь и ошибку "
+                       "источника из поля registry",
+    "DOMAIN_UNKNOWN": "сверить имя домена по `sites`; если домена там нет — "
+                      "это не вывод о механизме, а отсутствие записи в реестре",
+    "MECHANISM_UNSUPPORTED": "остановиться; открытие невозможно до выпуска "
+                             "читателя, названного контрактом семейства",
+    "MECHANISM_UNPROVEN": "остановиться; сообщить, какое именно доказательство "
+                          "не получено (поле proof)",
+    "AWAITING_OWNER": "ждать команды владельца; выставлять разрешение самому "
+                      "запрещено",
+    "CHECKS_FAILED": "привести причины из blockers; не повторять операцию до "
+                     "их устранения",
+    "OPEN_CONFIRMED": "ничего не делать; домен открыт и подтверждён",
+}
+
+
+def _ссылка_на_читателя(выпуск: pathlib.Path, читатель: str) -> dict:
+    """Чем ВЫЛОЖЕННЫЙ код пользуется читателем. Факты, а не догадка.
+
+    Пустое поле `runtime_reader` не означает «механизма нет»: у семейства
+    `zona-serve` рантайм — закреплённый артефакт, а читателя подключает
+    отдельная правка витрины (`src/indexing.py`). Поэтому ищется ЛЮБАЯ из
+    известных форм подключения, и каждая называется.
+    """
+    итог = {"imports": [], "substitution": None, "entrypoint": None}
+    кф = выпуск / "config" / "site.json"
+    точка = ""
+    if кф.is_file():
+        try:
+            точка = (json.loads(кф.read_text(encoding="utf-8")).get("entrypoint")
+                     or "")
+        except ValueError:
+            точка = ""
+    if not точка:
+        витрины = sorted(п.name for п in (выпуск / "src").glob("*frontend*.py")) \
+            if (выпуск / "src").is_dir() else []
+        точка = витрины[0] if витрины else ("serve.py"
+                                            if (выпуск / "src" / "serve.py").is_file()
+                                            else "")
+    итог["entrypoint"] = точка or None
+    имя_модуля = pathlib.Path(читатель).stem
+    for файл in sorted((выпуск / "src").glob("*.py")) if (выпуск / "src").is_dir() else []:
+        try:
+            текст = файл.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        if файл.name == pathlib.Path(читатель).name:
+            continue
+        if f"import {имя_модуля}" in текст:
+            итог["imports"].append(файл.name)
+            if "установить(" in текст and "send_header" in текст:
+                итог["substitution"] = файл.name
+    return итог
+
+
+def доказательство_чтения(s, *, таймаут: int = 90) -> dict:
+    """Доказать, что ВЫЛОЖЕННЫЙ релиз читает конфигурацию режима.
+
+    Статический признак этого не доказывает: зашитый `noindex` в закрытом
+    режиме выглядит точно так же, как вычисленный. Поэтому выложенный код
+    поднимается в ИЗОЛЯЦИИ — свой порт, свой корень файла состояния, копия
+    данных ссылками — и проверяется, что сигналы меняются ровно вместе с
+    конфигурацией: при разрешении и `OPEN` открываются, без разрешения или
+    при `CLOSED` остаются закрытыми.
+
+    Живого домена это не касается: ни файл состояния, ни его порт не
+    затрагиваются.
+    """
+    import shutil
+    import socket
+    import subprocess as _sp
+    import tempfile
+
+    итог = {"method": "released runtime raised in isolation", "ok": False}
+    выпуск = pathlib.Path(f"/srv/{s.account}/current").resolve()
+    итог["release_dir"] = выпуск.name
+    if not (выпуск / "run.py").is_file():
+        итог["reason"] = f"в выпуске нет run.py: {выпуск / 'run.py'}"
+        return итог
+    данные_живые = pathlib.Path(f"/srv/{s.account}/data")
+    if not данные_живые.is_dir():
+        итог["reason"] = f"каталога данных нет: {данные_живые}"
+        return итог
+
+    def свободный() -> int:
+        с = socket.socket()
+        с.bind(("127.0.0.1", 0))
+        п = с.getsockname()[1]
+        с.close()
+        return п
+
+    with tempfile.TemporaryDirectory() as тмп:
+        корень = pathlib.Path(тмп)
+        # КОПИЯ выпуска, а не сам выпуск: `config/player.json` лежит правами
+        # 0600 под учётной записью сайта, и пускатель под другой учётной
+        # записью отказывает на нём ещё до первого запроса. Подменяется РОВНО
+        # этот файл — код копируется байт в байт, и подмена названа в ответе.
+        копия = корень / "release"
+        try:
+            shutil.copytree(выпуск, копия, symlinks=True,
+                            ignore=shutil.ignore_patterns("player.json"))
+        except OSError as ош:
+            итог["reason"] = f"копия выпуска не сделана: {type(ош).__name__}: {ош}"
+            return итог
+        пускатель = копия / "run.py"
+        ожидаемый_плеер = ""
+        кф = копия / "config" / "site.json"
+        if кф.is_file():
+            try:
+                ожидаемый_плеер = str(json.loads(кф.read_text(encoding="utf-8"))
+                                      .get("publisher_id_expected") or "")
+            except ValueError:
+                ожидаемый_плеер = ""
+        if ожидаемый_плеер:
+            (копия / "config").mkdir(parents=True, exist_ok=True)
+            (копия / "config" / "player.json").write_text(
+                json.dumps({"publisher_id": ожидаемый_плеер}), encoding="utf-8")
+            итог["substituted"] = ["config/player.json (0600 у учётной записи "
+                                   "сайта; подставлен publisher_id из "
+                                   "config/site.json)"]
+        данные = корень / "data"
+        данные.mkdir()
+        for ф in данные_живые.glob("*.json"):
+            try:
+                (данные / ф.name).symlink_to(ф)
+            except OSError:
+                pass
+        (данные / "site-data").mkdir(exist_ok=True)
+        состояние_корень = корень / "indexing"
+        состояние_корень.mkdir()
+        файл_состояния = состояние_корень / f"{s.domain}.json"
+
+        def разрешение_в_копии(значение: bool) -> None:
+            """Поставить разрешение выпуска в КОПИИ конфигурации.
+
+            Переменной окружения тут не обойтись, и это правильно: пускатель
+            выпуска сам выводит разрешение из `config/site.json` и
+            перезаписывает окружение. Значит и доказывать надо чтение
+            КОНФИГУРАЦИИ, а не переменной — меняется ровно одно поле копии, и
+            подмена названа в ответе.
+            """
+            if not кф.is_file():
+                return
+            д = json.loads(кф.read_text(encoding="utf-8"))
+            раздел = dict(д.get("indexing") or {})
+            раздел["release_permits_open"] = значение
+            д["indexing"] = раздел
+            кф.write_text(json.dumps(д, ensure_ascii=False, indent=2) + "\n",
+                          encoding="utf-8")
+
+        def поднять(разрешение: str, режим: str) -> dict:
+            файл_состояния.unlink(missing_ok=True)
+            if режим:
+                файл_состояния.write_text(json.dumps(
+                    {"schema_version": СХЕМА, "site": s.domain,
+                     "desired_state": режим}), encoding="utf-8")
+            разрешение_в_копии(разрешение == "true")
+            порт = свободный()
+            среда = dict(os.environ)
+            # Имена переменных корня состояния у семейств разные, и обе формы
+            # читает один и тот же модуль: передаются обе.
+            среда["LORDS_INDEXING_ROOT"] = str(состояние_корень)
+            среда["ANIMEDIA_INDEXING_ROOT"] = str(состояние_корень)
+            среда["LORDS_INDEXING_TTL"] = "0"
+            среда["ANIMEDIA_INDEXING_TTL"] = "0"
+            пр = _sp.Popen([sys.executable, str(пускатель), "--port", str(порт),
+                            "--data-dir", str(данные)],
+                           cwd=str(копия), env=среда,
+                           stdout=_sp.PIPE, stderr=_sp.STDOUT, text=True)
+            try:
+                предел = time.time() + таймаут
+                while time.time() < предел:
+                    time.sleep(0.5)
+                    if пр.poll() is not None:
+                        вывод = (пр.stdout.read() if пр.stdout else "")[-300:]
+                        return {"error": f"витрина не поднялась: {вывод}"}
+                    код, значения, тело = _ответ(f"http://127.0.0.1:{порт}/", 20)
+                    if код == "200":
+                        _, _, роботс = _ответ(
+                            f"http://127.0.0.1:{порт}/robots.txt", 20)
+                        м = re.search(
+                            r'<meta name="robots" content="([^"]*)"', тело)
+                        return {"x_robots": значения,
+                                "meta": м.group(1) if м else None,
+                                "robots_txt_closed": bool(re.search(
+                                    r"(?mi)^\s*Disallow:\s*/\s*$", роботс))}
+                return {"error": f"витрина не ответила за {таймаут} с"}
+            finally:
+                пр.terminate()
+                try:
+                    пр.wait(timeout=30)
+                except Exception:  # noqa: BLE001
+                    пр.kill()
+
+        итог["note"] = (
+            "разрешение выпуска меняется в КОПИИ config/site.json: пускатель "
+            "выводит его оттуда и перезаписывает окружение")
+        итог["closed_without_permission"] = поднять("false", ОТКРЫТ)
+        итог["open_with_permission"] = поднять("true", ОТКРЫТ)
+        итог["closed_with_permission"] = поднять("true", ЗАКРЫТ)
+
+    беды = [к for к, з in итог.items()
+            if isinstance(з, dict) and з.get("error")]
+    if беды:
+        итог["reason"] = "; ".join(f"{к}: {итог[к]['error']}" for к in беды)
+        return итог
+    без = итог["closed_without_permission"]
+    с_раз = итог["open_with_permission"]
+    закр = итог["closed_with_permission"]
+
+    def открыт(з: dict) -> bool:
+        return (з.get("meta") == МЕТА_ОЖИДАЕМАЯ[ОТКРЫТ]
+                and not з.get("robots_txt_closed")
+                and all("noindex" not in (в or "").lower()
+                        for в in (з.get("x_robots") or [])))
+
+    итог["ok"] = (открыт(с_раз) and not открыт(без) and not открыт(закр))
+    if not итог["ok"]:
+        итог["reason"] = (
+            "выложенный релиз не изменил сигналы вместе с конфигурацией: "
+            f"без разрешения {без}, с разрешением {с_раз}, закрыто {закр}")
+    return итог
+
+
+def готовность(site: str, *, доказать: bool = True) -> dict:
+    """ОДИН вердикт о готовности домена к открытию. Ничего не меняет.
+
+    Статус берётся из закрытого словаря `СТАТУСЫ`, и порядок проверок — от
+    беды окружения к факту о сайте: иначе отказ доступа читался бы как вывод
+    о домене. Поля `registry`, `instruction_version`, `published_release` и
+    `evidence` присутствуют ВСЕГДА: вердикт без источника и версии проверить
+    нельзя.
+    """
+    from factory.qwen import __main__ as точка_входа
+
+    итог: dict = {
+        "site": site,
+        "checked_at": _сейчас(),
+        "instruction_version": точка_входа.ВЕРСИЯ_ИНСТРУКЦИИ,
+        "instruction": точка_входа.ИНСТРУКЦИЯ,
+        "statuses_known": list(СТАТУСЫ),
+    }
+
+    # 1. Окружение и реестры. Пустой успешный ответ здесь запрещён.
+    try:
+        все = registry.собрать(опрашивать_сеть=False)
+    except registry.РеестрНедоступен as ош:
+        итог.update({"status": "ENV_UNAVAILABLE", "ok": False,
+                     "reason": str(ош),
+                     "registry": registry.состояние_источников(),
+                     "next_action": ДАЛЬШЕ["ENV_UNAVAILABLE"]})
+        return итог
+    итог["registry"] = registry.состояние_источников()
+
+    # 2. Домен в прочитанном реестре.
+    s = next((x for x in все if site in (x.domain, x.site_id)), None)
+    if s is None:
+        итог.update({"status": "DOMAIN_UNKNOWN", "ok": False,
+                     "reason": f"домена {site!r} нет в прочитанных реестрах "
+                               f"({итог['registry']['site_cells']['path']}); "
+                               "это отсутствие записи, а не вывод о механизме",
+                     "next_action": ДАЛЬШЕ["DOMAIN_UNKNOWN"]})
+        return итог
+
+    итог.update({"site": s.domain, "site_id": s.site_id, "adapter": s.adapter,
+                 "account": s.account, "published_release": s.published_release})
+    к = контракт(s.adapter)
+    итог["contract"] = к or None
+    итог["mode_owner"] = (к or {}).get("mode_owner") or "unknown"
+    # Может ли ОПЕРАЦИЯ открыть этот домен вообще. У семейства, чьим режимом
+    # распоряжается compose, ответ «нет» при любом разрешении: там решает
+    # переменная окружения контейнера, и подменять её файлом состояния значило
+    # бы завести второе решение о том же. Поле стоит ЗДЕСЬ, а не в конце:
+    # оно нужно в каждом вердикте, включая уже открытый домен.
+    итог["operation_can_open"] = итог["mode_owner"] != "compose"
+    if not итог["operation_can_open"]:
+        итог["owner_action"] = (
+            "смена значения SEO_INDEXING_ENABLED в окружении контейнера "
+            "(compose) и пересборка окружения владельцем; операция "
+            "indexing-set этим режимом не распоряжается")
+    доказательства: dict = {}
+    итог["evidence"] = доказательства
+
+    # 3. Механизм в ВЫЛОЖЕННОМ релизе — по контракту семейства.
+    if not к:
+        итог.update({"status": "MECHANISM_UNSUPPORTED", "ok": False,
+                     "reason": f"семейство {s.adapter or 'не определено'} не "
+                               "объявило контракта режима индексации",
+                     "next_action": ДАЛЬШЕ["MECHANISM_UNSUPPORTED"]})
+        return итог
+    контейнерный = (к.get("reader") or "").startswith("container:")
+    if контейнерный:
+        св = читатель_контейнера(s.domain)
+        доказательства["container"] = св
+        итог["runtime_reader"] = (f"{св.get('container')}: "
+                                  f"{к['reader'].split(':', 1)[1]}"
+                                  if св.get("found") else "")
+        if not св.get("found"):
+            итог.update({"status": "MECHANISM_UNPROVEN", "ok": False,
+                         "reason": "переменную приложения не прочитать: "
+                                   f"{св.get('reason')}. Пустое поле "
+                                   "runtime_reader здесь НЕ означает "
+                                   "отсутствия механизма",
+                         "proof": "не получено: контейнер не опрошен",
+                         "next_action": ДАЛЬШЕ["MECHANISM_UNPROVEN"]})
+            return итог
+        доказательства["delivery"] = (
+            "переменная окружения контейнера; доставляется пересборкой "
+            "окружения владельцем (compose), выпуском ячейки не управляется")
+        доказательства["change_control"] = (
+            "смена значения — действие владельца в compose; операция "
+            "indexing-set режимом этого семейства не распоряжается")
+    else:
+        читатель = читатель_режима(s.account, s.adapter)
+        итог["runtime_reader"] = str(читатель) if читатель else ""
+        if читатель is None:
+            итог.update({"status": "MECHANISM_UNSUPPORTED", "ok": False,
+                         "reason": f"в выложенном релизе {s.published_release} "
+                                   f"нет {к['reader']}",
+                         "next_action": ДАЛЬШЕ["MECHANISM_UNSUPPORTED"]})
+            return итог
+        выпуск = pathlib.Path(f"/srv/{s.account}/current").resolve()
+        доказательства["reader"] = {
+            "path": str(читатель),
+            "bytes": читатель.stat().st_size,
+            "sha256": hashlib.sha256(читатель.read_bytes()).hexdigest()[:16],
+            "release_dir": выпуск.name,
+        }
+        подключение = _ссылка_на_читателя(выпуск, к["reader"])
+        доказательства["wiring"] = подключение
+        if not подключение["imports"]:
+            итог.update({"status": "MECHANISM_UNPROVEN", "ok": False,
+                         "reason": "читатель в релизе есть, но ни один файл "
+                                   "выпуска его не подключает: использование "
+                                   "не подтверждено",
+                         "proof": "не получено: нет подключения в коде выпуска",
+                         "next_action": ДАЛЬШЕ["MECHANISM_UNPROVEN"]})
+            return итог
+
+    # 3б. Фактическое доказательство чтения конфигурации выложенным кодом.
+    if доказать and not контейнерный:
+        док = доказательство_чтения(s)
+        доказательства["read_proof"] = док
+        if not док.get("ok"):
+            итог.update({"status": "MECHANISM_UNPROVEN", "ok": False,
+                         "reason": "выложенный релиз не доказал чтение "
+                                   f"конфигурации: {док.get('reason')}",
+                         "proof": "не получено",
+                         "next_action": ДАЛЬШЕ["MECHANISM_UNPROVEN"]})
+            return итог
+        итог["proof"] = ("получено: выложенный релиз поднят в изоляции и "
+                         "менял сигналы вместе с конфигурацией")
+    elif контейнерный:
+        итог["proof"] = ("получено по переменной ФАКТИЧЕСКИ запущенного "
+                         "контейнера")
+    else:
+        итог["proof"] = "НЕ ПРОВЕРЕНО: доказательство чтения отключено (--no-prove)"
+
+    # 4. Публичное состояние и слои.
+    сиг = сигналы(s.domain, порт=порт_приложения(s.site_id))
+    фактически, запрещают = оценить(сиг)
+    итог["public_mode"] = фактически
+    итог["denying_signals"] = запрещают
+    доказательства["public"] = {
+        "home_https": сиг.get("home_http"),
+        "robots_txt_http": сиг.get("robots_txt_http"),
+        "robots_txt_head": [с for с in (сиг.get("robots_txt") or "").strip()
+                            .split("\n")[:6]],
+        "sitemap_http": сиг.get("sitemap_http"),
+        "meta_robots_home": сиг.get("meta_robots_home"),
+        "canonical_home": сиг.get("canonical_home"),
+        "x_robots_https": сиг.get("x_robots_values"),
+        "redirects_http80": сиг.get("redirects_http80"),
+    }
+    слой_ng = слой_nginx(s.site_id, s.domain, сиг)
+    доказательства["nginx_layer"] = слой_ng
+    доказательства["app_layer"] = слой_приложения(сиг)
+    итог["state_file"] = текущее(s.domain)
+
+    разрешено_выпуском, откуда = разрешение_выпуска(s.account, s.adapter, s.domain)
+    итог["release_permits_open"] = разрешено_выпуском
+    доказательства["release_permission_source"] = откуда
+    разрешил, объявлен, пояснение = разрешение_владельца(s.site_id)
+    итог["owner_authorized_open"] = разрешил
+    итог["owner_declared_state"] = объявлен or None
+    доказательства["owner_note"] = пояснение
+
+    # 5. Открыт и подтверждён — терминальное состояние.
+    if фактически == ОТКРЫТ and not запрещают:
+        итог.update({"status": "OPEN_CONFIRMED", "ok": True,
+                     "reason": "публичный ответ открыт, запрещающих сигналов "
+                               "нет",
+                     "next_action": ДАЛЬШЕ["OPEN_CONFIRMED"]})
+        return итог
+
+    # 6. Разрешение владельца есть, но обязательные проверки не прошли.
+    блокеры: list[str] = []
+    if not разрешено_выпуском:
+        блокеры.append(f"выпуск не разрешает открытие: {откуда}")
+    if слой_ng.get("denying") is not False:
+        блокеры.append(
+            f"слой nginx: {слой_ng.get('mode')} — {слой_ng.get('evidence')}")
+    if итог["mode_owner"] == "compose":
+        блокеры.append(
+            "режимом семейства распоряжается compose: операция indexing-set "
+            "его не меняет")
+    if разрешил:
+        итог["blockers"] = блокеры
+        итог.update({"status": "CHECKS_FAILED", "ok": False,
+                     "reason": "; ".join(блокеры) or
+                               "разрешение владельца есть, но публичный ответ "
+                               "закрыт, а ни один слой запрета не назван — "
+                               "расхождение требует разбора, а не повтора",
+                     "next_action": ДАЛЬШЕ["CHECKS_FAILED"]})
+        return итог
+
+    # 7. Технически готов к ПРОЦЕДУРЕ открытия, ждёт владельца.
+    #
+    # То, что перечислено в `prerequisites_pending`, выполняет сама операция
+    # после команды владельца: разрешение выпуска поднимается выпуском, слой
+    # nginx — привилегированным исполнителем. Это НЕ «готов к немедленному
+    # открытию»: без них открытие не состоится, и прятать их нельзя.
+    итог["prerequisites_pending"] = блокеры
+    начало = ("механизм на месте и подтверждён"
+              if итог["operation_can_open"]
+              else f"механизм на месте, но режимом распоряжается "
+                   f"{итог['mode_owner']}, а не эта операция")
+    итог.update({"status": "AWAITING_OWNER", "ok": False,
+                 "reason": f"{начало}; разрешения владельца нет: {пояснение}"
+                           + (f". До открытия предстоит: {'; '.join(блокеры)}"
+                              if блокеры else ""),
+                 "next_action": (ДАЛЬШЕ["AWAITING_OWNER"]
+                                 if итог["operation_can_open"]
+                                 else "ждать решения владельца; открытие этого "
+                                      "семейства выполняется не этой операцией "
+                                      "(см. owner_action)")})
     return итог
 
 
@@ -1074,11 +1379,85 @@ def _дописать_журнал(запись: dict) -> None:
         fh.write(json.dumps(запись, ensure_ascii=False) + "\n")
 
 
+#: Сколько ждать привилегированного исполнителя. Таймер ходит раз в минуту,
+#: поэтому предел — несколько его оборотов, а не секунды.
+ОЖИДАНИЕ_СЛОЯ_С = 420
+ШАГ_СЛОЯ_С = 10
+
+
+def слой_в_нужном_режиме(слой: dict, режим: str) -> bool:
+    """Соответствует ли слой nginx требуемому режиму. Только чтение."""
+    if режим == ОТКРЫТ:
+        return слой.get("denying") is False
+    return слой.get("denying") is True
+
+
+def переключить_слой(s, *, режим: str, author: str) -> dict:
+    """Переключить слой nginx ШТАТНОЙ ОЧЕРЕДЬЮ, а не руками редактора.
+
+    Конфигурация nginx принадлежит root, и до этой операции редактор не мог
+    довести открытие до конца: приходилось просить человека запустить скрипт.
+    Теперь заявка уходит привилегированному исполнителю, который делает ровно
+    то же самое и отвечает результатом.
+
+    Повтор того же режима очередь отвечает `already-finished` — менять нечего.
+    Неудачная попытка переподаётся тем же идентификатором.
+    """
+    from factory.cell import queue as q
+
+    итог: dict = {"requested_mode": режим}
+    try:
+        заявка = q.собрать(s.site_id, "", "", operation="indexing-nginx",
+                           mode=режим,
+                           note=f"indexing layer -> {режим} by {author}"[:200])
+        подача = q.подать(заявка)
+    except q.RequestRejected as ош:
+        raise Отказано(
+            f"{s.domain}: заявка на слой nginx отвергнута очередью: {ош}") from None
+    except OSError as ош:
+        raise Отказано(
+            f"{s.domain}: очередь недоступна ({type(ош).__name__}): слой "
+            "nginx не переключён, публичное состояние не менялось") from None
+    итог["request_id"] = заявка.request_id
+    итог["submit"] = подача.get("status")
+    if подача.get("status") == "already-finished":
+        итог["note"] = "исполнитель уже применял этот режим: менять нечего"
+        return итог
+
+    предел = time.time() + ОЖИДАНИЕ_СЛОЯ_С
+    последнее: dict = {"status": "unknown"}
+    while time.time() < предел:
+        try:
+            последнее = q.состояние(заявка.request_id)
+        except OSError as ош:
+            # Нечитаемое состояние — не повод подать заявку снова.
+            последнее = {"status": "status-unreadable",
+                         "reason": f"{type(ош).__name__}: {ош}"}
+        if последнее.get("status") == "finished":
+            итог["result"] = последнее.get("result") or последнее
+            исход = ((итог["result"].get("outcome") or {}).get("status")
+                     if isinstance(итог["result"], dict) else None)
+            итог["outcome"] = исход
+            if исход not in ("applied", "nothing-to-do"):
+                raise Отказано(
+                    f"{s.domain}: исполнитель не применил слой nginx "
+                    f"(исход {исход!r}): "
+                    f"{str((итог['result'] or {}).get('error'))[:300]}")
+            return итог
+        time.sleep(ШАГ_СЛОЯ_С)
+    raise Отказано(
+        f"{s.domain}: исполнитель не ответил за {ОЖИДАНИЕ_СЛОЯ_С} с про заявку "
+        f"{заявка.request_id}; последнее состояние {последнее.get('status')!r}. "
+        "Заявка остаётся в очереди — не подавайте её заново, прочтите "
+        "состояние")
+
+
 def установить(site: str, *, mode: str, author: str,
                expect_release: str = "", корень=None) -> dict:
     """Сменить режим одного сайта и проверить результат на его ответе."""
     режим = (mode or "").strip().upper()
-    пред = проверить(site, mode=режим, expect_release=expect_release)
+    пред = проверить(site, mode=режим, expect_release=expect_release,
+                     корень=корень)
     if not пред["ok"]:
         raise Отказано(
             f"{пред['site']}: предпроверка не пройдена — "
@@ -1121,11 +1500,69 @@ def установить(site: str, *, mode: str, author: str,
                       "to": режим, "revision": ревизия, "author": author,
                       "snapshot": str(снимок), "state_file": str(п)})
 
+    # --- слой nginx. Публичное состояние меняется ТОЛЬКО после того, как
+    #     записан файл состояния: иначе открытый слой остался бы при закрытом
+    #     приложении, и запрет исчез бы раньше, чем появилось разрешение.
+    слой = пред["nginx_layer"]
+    итог_слоя: dict = {"needed": not слой_в_нужном_режиме(слой, режим),
+                       "before": {"mode": слой.get("mode"),
+                                  "denying": слой.get("denying")}}
+    if итог_слоя["needed"]:
+        try:
+            итог_слоя.update(переключить_слой(s, режим=режим, author=author))
+        except Отказано:
+            # Частичный отказ: приложение уже переключено, слой — нет.
+            # Возвращаем ИСХОДНОЕ состояние приложения и говорим, почему.
+            _восстановить(s, прежнее, корень=корень, причина="слой nginx не переключён")
+            raise
+        слой_после = слой_nginx(s.site_id, s.domain)
+        итог_слоя["after"] = {"mode": слой_после.get("mode"),
+                              "denying": слой_после.get("denying")}
+        if not слой_в_нужном_режиме(слой_после, режим):
+            _восстановить(s, прежнее, корень=корень,
+                          причина=f"слой nginx остался в режиме "
+                                  f"{слой_после.get('mode')}")
+            raise Отказано(
+                f"{s.domain}: исполнитель отработал, но слой nginx остался "
+                f"{слой_после.get('mode')!r}: {слой_после.get('evidence')}. "
+                "Состояние приложения возвращено к исходному")
+
     итог = подтвердить(site, ожидаемый=режим)
     итог.update({"changed": True, "revision": ревизия, "state_file": str(п),
                  "snapshot": str(снимок),
-                 "nginx_layer": пред["nginx_layer"]})
+                 "nginx_layer": слой_nginx(s.site_id, s.domain),
+                 "nginx_switch": итог_слоя})
+    if итог.get("confirmed") is False:
+        # Публичный ответ не подтвердил режим. Это частичный отказ: возвращаем
+        # исходное состояние, иначе файл состояния утверждал бы одно, а домен
+        # отдавал другое.
+        _восстановить(s, прежнее, корень=корень,
+                      причина="публичный ответ не подтвердил режим")
+        итог["restored"] = True
+        итог["reason"] = (
+            f"{s.domain}: режим записан, но публичный ответ его не подтвердил "
+            f"({итог.get('denying_signals')}). Исходное состояние возвращено")
     return итог
+
+
+def _восстановить(s, прежнее: dict, *, корень=None, причина: str) -> dict:
+    """Вернуть файл состояния к тому, что было ДО операции.
+
+    Частично применённая смена режима — худший исход: файл состояния говорит
+    одно, домен отдаёт другое, и следующий читатель поверит файлу. Поэтому при
+    любом отказе после записи состояние возвращается, а причина называется.
+    """
+    п = _файл(s.domain, корень=корень)
+    было_файла = bool(прежнее.get("desired_state"))
+    if было_файла:
+        _записать(п, {к: з for к, з in прежнее.items() if not к.startswith("_")})
+    else:
+        п.unlink(missing_ok=True)
+    _дописать_журнал({"at": _сейчас(), "op": "restore", "site": s.domain,
+                      "to": прежнее.get("desired_state") or "(нет файла)",
+                      "reason": причина, "state_file": str(п)})
+    return {"restored": True, "to": прежнее.get("desired_state") or None,
+            "reason": причина}
 
 
 def подтвердить(site: str, *, ожидаемый: str = "", ждать: bool = True) -> dict:

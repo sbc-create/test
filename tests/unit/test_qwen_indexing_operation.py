@@ -617,8 +617,17 @@ def _конфиг(tmp_path, строки: str, *, include: str | None = None) ->
 
 @pytest.fixture
 def nginx_корень(monkeypatch):
+    """Подменить корень конфигураций nginx.
+
+    Подменяется ИСТОЧНИК — модуль `factory.cell.nginx_indexing`, где разбор и
+    живёт. Подмена имени, повторно экспортированного инструментом, ничего не
+    меняла бы: функции читают глобальную величину своего модуля.
+    """
+    from factory.cell import nginx_indexing
+
     def поставить(корень: pathlib.Path):
-        monkeypatch.setattr(indexing, "КОРЕНЬ_NGINX", корень)
+        monkeypatch.setattr(nginx_indexing, "КОРЕНЬ_NGINX", корень)
+        monkeypatch.setattr(indexing, "КОРЕНЬ_NGINX", корень, raising=False)
     return поставить
 
 
@@ -1047,3 +1056,103 @@ def test_карта_пишется_правами_для_чтения_витри
         тело = п.read_text(encoding="utf-8").split(
             "def записать_атомарно", 1)[1].split("\ndef ", 1)[0]
         assert "os.chmod(врем, 0o644)" in тело, репо
+
+# --------------------------------------------- вердикт готовности (7 статусов)
+
+def test_статусы_готовности_закрытый_словарь():
+    """Статус — из перечня, и у каждого есть следующее допустимое действие."""
+    assert indexing.СТАТУСЫ == (
+        "ENV_UNAVAILABLE", "DOMAIN_UNKNOWN", "MECHANISM_UNSUPPORTED",
+        "MECHANISM_UNPROVEN", "AWAITING_OWNER", "CHECKS_FAILED",
+        "OPEN_CONFIRMED")
+    assert set(indexing.ДАЛЬШЕ) == set(indexing.СТАТУСЫ), (
+        "у каждого статуса обязано быть названо следующее действие")
+    for статус, действие in indexing.ДАЛЬШЕ.items():
+        assert действие and len(действие) > 20, статус
+
+
+def test_нечитаемый_реестр_не_отвечает_пустым_успехом(monkeypatch, tmp_path):
+    """Беда окружения — ENV_UNAVAILABLE, а не «домена нет» и не пустой успех.
+
+    Прежде нечитаемый сетевой список молча давал пустой перечень, и отказ
+    доступа читался как вывод о сайте.
+    """
+    from factory.qwen import registry as реестр
+
+    monkeypatch.setattr(реестр, "РЕЕСТР_ЯЧЕЕК", tmp_path / "нет.json")
+    итог = indexing.готовность("lordserials22.info", доказать=False)
+    assert итог["status"] == "ENV_UNAVAILABLE", итог["status"]
+    assert итог["ok"] is False
+    assert "не читается" in итог["reason"]
+    # Источник назван: путь и ошибка, а не «пусто».
+    assert итог["registry"]["site_cells"]["ok"] is False
+    assert итог["registry"]["site_cells"]["error"]
+    assert str(tmp_path / "нет.json") == итог["registry"]["site_cells"]["path"]
+
+
+def test_пустой_реестр_это_тоже_беда_окружения(monkeypatch, tmp_path):
+    """Реестр без ячеек — состояние окружения, а не «ни одного сайта»."""
+    from factory.qwen import registry as реестр
+
+    пустой = tmp_path / "пусто.json"
+    пустой.write_text('{"cells": []}', encoding="utf-8")
+    monkeypatch.setattr(реестр, "РЕЕСТР_ЯЧЕЕК", пустой)
+    итог = indexing.готовность("любой.example", доказать=False)
+    assert итог["status"] == "ENV_UNAVAILABLE", итог
+    assert "ни одной ячейки" in итог["reason"]
+
+
+def test_домена_нет_в_реестре_не_вывод_о_механизме():
+    итог = indexing.готовность("нет-такого-домена.example", доказать=False)
+    assert итог["status"] == "DOMAIN_UNKNOWN"
+    assert "не вывод о механизме" in итог["reason"]
+    # Источник назван всегда: по вердикту видно, какой файл читался.
+    assert итог["registry"]["site_cells"]["path"].endswith("site-cells.json")
+
+
+def test_вердикт_всегда_называет_версию_инструкции_и_выпуск():
+    итог = indexing.готовность("lordserials22.info", доказать=False)
+    from factory.qwen import __main__ as точка
+    assert итог["instruction_version"] == точка.ВЕРСИЯ_ИНСТРУКЦИИ
+    assert итог["instruction"] == точка.ИНСТРУКЦИЯ
+    assert итог["published_release"], "выпуск обязан быть назван"
+    assert итог["statuses_known"] == list(indexing.СТАТУСЫ)
+
+
+def test_пустой_читатель_не_означает_отсутствия_механизма():
+    """У zona-serve рантайм — закреплённый артефакт, читателя подключает
+    отдельная правка витрины. Пустое поле `runtime_reader` в этом семействе
+    означало бы неверный вывод, и подключение ищется по ФАКТУ.
+    """
+    итог = indexing.готовность("zonafilm.cc", доказать=False)
+    assert итог["status"] != "MECHANISM_UNSUPPORTED", итог.get("reason")
+    подключение = итог["evidence"]["wiring"]
+    assert подключение["imports"], подключение
+    assert подключение["substitution"] == "indexing.py", подключение
+
+
+def test_семейство_под_compose_не_обещает_открытия_операцией():
+    """`AWAITING_OWNER` у Yummy не значит «операция откроет по команде»."""
+    итог = indexing.готовность("yummyani.biz", доказать=False)
+    assert итог["mode_owner"] == "compose"
+    assert итог["operation_can_open"] is False
+    assert "SEO_INDEXING_ENABLED" in итог["owner_action"]
+    assert итог["evidence"]["delivery"], "как доставляется — обязано быть сказано"
+    assert итог["evidence"]["change_control"], "кто вправе менять — тоже"
+
+
+def test_открытый_домен_терминален():
+    итог = indexing.готовность("animedia.space", доказать=False)
+    assert итог["status"] == "OPEN_CONFIRMED"
+    assert итог["ok"] is True
+    assert итог["denying_signals"] == []
+    assert итог["operation_can_open"] is True
+
+
+def test_вердикт_надмножество_прежнего_ответа():
+    """Прежний `indexing` отдавал четыре сигнала и canonical — всё осталось."""
+    итог = indexing.готовность("lordserials22.info", доказать=False)
+    публично = итог["evidence"]["public"]
+    for поле in ("home_https", "robots_txt_http", "robots_txt_head",
+                 "sitemap_http", "meta_robots_home", "canonical_home"):
+        assert поле in публично, поле

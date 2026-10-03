@@ -35,6 +35,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from factory.cell import nginx_indexing
 from factory.cell import privileged, protected, queue, registry, runtime
 
 
@@ -103,6 +104,39 @@ def взять_замок(site_id: str, *, база: Path, операция: str
 
     queue.записать_атомарно(файл, мой)
     return Замок(путь=файл, владелец=мой)
+
+
+def переключить_слой_индексации(заявка: queue.Заявка, *,
+                                dry_run: bool = True) -> dict[str, Any]:
+    """Слой индексации в nginx — единственная часть режима, требующая root.
+
+    Почему это операция исполнителя, а не скрипт владельца. Пока слой
+    переключался руками, штатной операции открытия домена не существовало:
+    редактор не мог довести её до конца, и «открыто» в файле состояния
+    расходилось с закрытым доменом. Привилегированная сторона делает ровно то,
+    что делал root-скрипт, в том же порядке и с теми же отказами.
+
+    Кода операция не ставит: ни коммита, ни digest ей не нужно. Зато нужен
+    режим, и он проверен формой в самой заявке.
+    """
+    cell = registry.resolve(заявка.site_id)
+    домен = runtime.размещение(заявка.site_id).domain or ""
+    шаги: dict[str, Any] = {}
+    # ВОРОТА ЗАЩИЩЁННЫХ ДАННЫХ. Слой nginx — тоже постоянные данные сайта
+    # (`nginx_indexing` в перечне защищённых путей): переключать его вправе
+    # только названная операция, и только у того сайта, который назван.
+    шаги["protected_data"] = protected.проверить_запись(
+        заявка.site_id, домен,
+        nginx_indexing.путь_включаемого(заявка.site_id),
+        операция="indexing_nginx")
+    шаги["apply"] = privileged.слой_индексации(
+        заявка.site_id, mode=заявка.mode, домен=домен, dry_run=dry_run)
+    применено = bool(шаги["apply"].get("changed")) or dry_run
+    return {"status": "applied" if применено else "nothing-to-do",
+            "stage": "indexing_layer_applied",
+            "site_id": заявка.site_id, "domain": домен, "mode": заявка.mode,
+            "cell_repo": cell.repo_path.name if cell.repo_path else "",
+            "steps": шаги}
 
 
 def проверить_заявку(заявка: queue.Заявка) -> dict[str, Any]:
@@ -684,6 +718,10 @@ def выполнить(заявка: queue.Заявка, *, база: Path, dry_
             этап = итог["stage"]
         elif заявка.operation == "editorial":
             итог = применить_правки(заявка, dry_run=dry_run)
+            результат["outcome"] = итог
+            этап = итог["stage"]
+        elif заявка.operation == "indexing-nginx":
+            итог = переключить_слой_индексации(заявка, dry_run=dry_run)
             результат["outcome"] = итог
             этап = итог["stage"]
         else:

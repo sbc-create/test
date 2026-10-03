@@ -323,7 +323,8 @@ def cmd_submit(args) -> int:
     try:
         заявка = q.собрать(args.site, args.commit or "", args.expect_digest or "",
                            operation=args.cell_operation, ci_run=args.ci_run or "",
-                           repo=args.repo or "", note=args.reason or "")
+                           repo=args.repo or "", note=args.reason or "",
+                           mode=getattr(args, "mode", "") or "")
         итог = q.подать(заявка)
     except q.RequestRejected as exc:
         print(f"BLOCKED_INPUT: {exc}", file=sys.stderr)
@@ -492,7 +493,11 @@ def register(subparsers) -> None:
     parser.add_argument("--commit", help="коммит репозитория сайта для activate")
     parser.add_argument("--ci-run", help="номер прогона CI для submit")
     parser.add_argument("--cell-operation", default="activate",
-                        help="операция заявки: activate|update|deliver|rollback")
+                        help="операция заявки: activate|update|deliver|rollback|"
+                             "editorial|access-check|indexing-nginx")
+    parser.add_argument("--mode",
+                        help="режим индексации для --cell-operation "
+                             "indexing-nginx: open или closed")
     parser.add_argument("--confirm-activation", action="store_true",
                         help="выполнить активацию на самом деле; без него activate только показывает план")
     parser.add_argument("--root", help="корень размещения сайта на этой машине")

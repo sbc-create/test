@@ -43,7 +43,7 @@ from factory.qwen import editorial, indexing, registry
 #: обнаруживалась сравнением, а не на последствиях.
 ИНСТРУКЦИЯ = ("/srv/site-factory/qwen-seo-handover-2026-10-01/"
               "QWEN-CANONICAL.md")
-ВЕРСИЯ_ИНСТРУКЦИИ = "2026-10-02.2"
+ВЕРСИЯ_ИНСТРУКЦИИ = "2026-10-03.1"
 
 
 def _со_ссылкой(данные: dict) -> dict:
@@ -72,6 +72,10 @@ def главная(argv: list[str] | None = None) -> int:
                    help="sites: не опрашивать домены")
     p.add_argument("--mode", choices=["open", "closed"],
                    help="indexing-set: требуемый режим индексации")
+    p.add_argument("--no-prove", action="store_true",
+                   help="indexing: не поднимать выложенный релиз для "
+                        "доказательства чтения конфигурации; статус "
+                        "останется MECHANISM_UNPROVEN")
     p.add_argument("--expect-release",
                    help="indexing-set: ожидаемый выложенный выпуск; "
                         "при несовпадении операция останавливается")
@@ -170,11 +174,18 @@ def главная(argv: list[str] | None = None) -> int:
                 print(json.dumps(_со_ссылкой({"ok": bool(итог.get("confirmed")), **итог}),
                                  ensure_ascii=False, indent=1))
                 return 0 if итог.get("confirmed") else 3
-        if args.операция in ("diagnose", "indexing"):
+        if args.операция == "indexing":
+            # ВЕРДИКТ готовности, а не четыре сигнала. Прежний ответ отвечал
+            # полем `ok` на вопрос «главная ответила 200», и для закрытого
+            # домена без разрешения владельца это давало `ok: true` — отчёт по
+            # сети получался противоречивым. Все прежние величины остались
+            # внутри (`evidence.public`), ответ стал надмножеством.
+            итог = indexing.готовность(args.site, доказать=not args.no_prove)
+            print(json.dumps(_со_ссылкой(итог), ensure_ascii=False, indent=1))
+            return 0 if итог.get("status") == "OPEN_CONFIRMED" else 3
+        if args.операция == "diagnose":
             from factory.qwen import diagnostics
-            функция = (diagnostics.диагностика if args.операция == "diagnose"
-                       else diagnostics.индексация)
-            итог = функция(args.site)
+            итог = diagnostics.диагностика(args.site)
             print(json.dumps(_со_ссылкой({"ok": итог.get("ok", True), **итог}),
                              ensure_ascii=False, indent=1))
             return 0 if итог.get("ok", True) else 3

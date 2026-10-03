@@ -61,10 +61,14 @@ from typing import Any
 #: выпуск нового домена отклонялся HTTP 404, пока та же команда из сессии
 #: читала прогон без ошибок.
 ОПЕРАЦИИ = ("activate", "update", "deliver", "rollback", "editorial",
-            "access-check")
+            "access-check", "indexing-nginx")
 
 #: Операции, которые ничего не выкладывают: коммит и digest им не нужны.
-ОПЕРАЦИИ_БЕЗ_ВЫПУСКА = ("access-check",)
+#:
+#: `indexing-nginx` переключает слой индексации в конфигурации nginx. Кода она
+#: не ставит, поэтому ни коммита, ни digest не требует — но сайт и режим
+#: обязана назвать, и отвечает за них привилегированная сторона.
+ОПЕРАЦИИ_БЕЗ_ВЫПУСКА = ("access-check", "indexing-nginx")
 
 #: Этапы операции. Расширение уже существующей схемы онбординга, не вторая.
 #: Этапы, которыми заявка отмечается по ходу. Перечень закрыт: неизвестный этап
@@ -76,7 +80,7 @@ from typing import Any
 #: «откат записан как успех» — итог верный, а учёт врёт.
 ЭТАПЫ = ("received", "validated", "artifact_verified", "candidate_ready",
          "switched", "live_verified", "failed", "rolled_back",
-         "access_verified", "access_missing")
+         "access_verified", "access_missing", "indexing_layer_applied")
 
 
 class RequestRejected(Exception):
@@ -95,6 +99,10 @@ class Заявка:
     submitted_at: str = ""
     submitted_by: str = ""
     note: str = ""
+    #: Режим индексации для операции `indexing-nginx`. У остальных операций
+    #: пуст: поле со свободным значением превратило бы заявку из договора в
+    #: мешок, поэтому форма проверяется наравне с идентификаторами.
+    mode: str = ""
     stages: list[dict[str, Any]] = field(default_factory=list)
 
     def as_dict(self) -> dict[str, Any]:
@@ -110,6 +118,26 @@ def _проверить(значение: str, правило: re.Pattern, по�
             "внешних программ, и единственный надёжный способ не спорить с "
             "оболочкой — не пропускать ничего, что могло бы ей что-то значить")
     return очищенное
+
+
+def _режим(значение, операция: str) -> str:
+    """Режим индексации: только OPEN или CLOSED, и только там, где он нужен.
+
+    У операции, которая режимом не распоряжается, непустое значение — признак
+    спутанной заявки, и принимать его молча нельзя.
+    """
+    очищенное = str(значение or "").strip().upper()
+    if операция == "indexing-nginx":
+        if очищенное not in ("OPEN", "CLOSED"):
+            raise RequestRejected(
+                f"mode={значение!r}: операции indexing-nginx нужен режим "
+                "OPEN или CLOSED")
+        return очищенное
+    if очищенное:
+        raise RequestRejected(
+            f"mode={значение!r} передан операции {операция!r}, которая режимом "
+            "индексации не распоряжается")
+    return ""
 
 
 def разобрать(сырое: dict[str, Any]) -> Заявка:
@@ -143,6 +171,7 @@ def разобрать(сырое: dict[str, Any]) -> Заявка:
         submitted_at=str(сырое.get("submitted_at") or ""),
         submitted_by=str(сырое.get("submitted_by") or ""),
         note=str(сырое.get("note") or "")[:500],
+        mode=_режим(сырое.get("mode"), операция),
         stages=list(сырое.get("stages") or []),
     )
     if заявка.ci_run and not заявка.ci_run.isdigit():
@@ -167,7 +196,8 @@ def новый_идентификатор(site_id: str, commit: str, *, operatio
     """
     хвост = (snapshot or commit)[:12]
     краткая = {"activate": "code", "update": "code", "deliver": "data",
-               "rollback": "back", "editorial": "edit"}.get(operation, operation[:4])
+               "rollback": "back", "editorial": "edit",
+               "indexing-nginx": "idx"}.get(operation, operation[:4])
     return f"{site_id}-{краткая}-{хвост}"[:64].lower()
 
 
@@ -218,7 +248,7 @@ def записать_атомарно(путь: Path, данные: dict[str, An
 #: Тот же род ошибки, что и с откатом выше: судить об успехе по перечню, в
 #: который забыли внести исход.
 ПРИМЕНЁННЫЕ_ИСХОДЫ = ("activated", "delivered", "edited", "unchanged", "dry-run",
-                      "checked")
+                      "checked", "applied", "nothing-to-do")
 
 
 def _применено(итог: dict[str, Any]) -> bool:
@@ -751,17 +781,27 @@ def проверить_маршрут(site_id: str) -> None:
 
 def собрать(site_id: str, commit: str, digest: str, *, operation: str = "activate",
             ci_run: str = "", repo: str = "", note: str = "",
-            snapshot: str = "") -> Заявка:
+            snapshot: str = "", mode: str = "") -> Заявка:
     """Заявка из результата проверенной сборки, а не из рук человека."""
+    if operation == "indexing-nginx":
+        # Идентификатор называет САЙТ И РЕЖИМ. Повтор того же режима очередь
+        # отвечает `already-finished` — и это верно, менять нечего. Смена
+        # режима даёт другой идентификатор, то есть новую работу. Неудачная
+        # попытка переподаётся тем же идентификатором: очередь отвечает
+        # `requeued-after-failure`.
+        запрос = f"{site_id}-idx-{(mode or '').strip().lower()}"
+    elif operation in ОПЕРАЦИИ_БЕЗ_ВЫПУСКА:
+        запрос = идентификатор_проверки(site_id)
+    else:
+        запрос = новый_идентификатор(site_id, commit, operation=operation,
+                                     snapshot=snapshot)
     return разобрать({
-        "request_id": (идентификатор_проверки(site_id) if operation in ОПЕРАЦИИ_БЕЗ_ВЫПУСКА
-                       else новый_идентификатор(site_id, commit, operation=operation,
-                                                snapshot=snapshot)),
+        "request_id": запрос,
         "operation": operation, "site_id": site_id, "commit": commit,
         "digest": digest, "ci_run": ci_run, "repo": repo,
         "submitted_at": _сейчас(),
         "submitted_by": os.environ.get("GITHUB_WORKFLOW") or "manual",
-        "note": note,
+        "note": note, "mode": (mode or "").strip().upper(),
     })
 
 

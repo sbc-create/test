@@ -1044,6 +1044,163 @@ def switch_route(site_id: str, порт: int, *, dry_run: bool = True,
             "upstream_file": str(файл), "port": порт, "previous": прежний}
 
 
+def слой_индексации(site_id: str, *, mode: str, домен: str = "",
+                    dry_run: bool = True) -> dict[str, Any]:
+    """Переключить слой nginx для ОДНОГО сайта: включаемый файл, -t, reload.
+
+    Зачем здесь, а не отдельным скриптом владельца. Пока это был root-скрипт,
+    редактор не мог открыть домен без ручного действия человека — а значит
+    штатной операции открытия не существовало. Привилегированная сторона
+    делает ровно то, что делал скрипт, и ровно в том же порядке.
+
+    Что делается:
+
+      1. находятся ВСЕ живые конфигурации с серверным именем этого домена.
+         Одного файла не хватает: у `lords-05` блок `:80` лежит в
+         `lords/lords-05.conf`, а блок `:443` — в `lords/lords-05-tls.conf`,
+         и правка одного оставила бы домен закрытым;
+      2. в каждой из них фиксированная строка заголовка один раз переводится
+         на переменную `map $uri` с `include` — тем же приёмом, которым
+         переключается upstream. Перегенерации нет намеренно: в живых файлах
+         есть ограничение соединений, формат журнала и include маркера
+         Вебмастера, которых в заготовке нет;
+      3. пишется включаемый файл режима. Дальше РЕЖИМ меняется только им;
+      4. `nginx -t`; при отказе ВСЕ файлы возвращаются из резервных копий и
+         перезагрузки не происходит;
+      5. `nginx -s reload`.
+
+    Идемпотентность: повторный запуск в том же режиме не меняет ни одного
+    файла конфигурации и сообщает об этом (`changed: false`).
+    """
+    from factory.cell import nginx_indexing as ни
+
+    режим = (mode or "").strip().upper()
+    if режим not in ("OPEN", "CLOSED"):
+        raise PrivilegedRefused(f"режим {mode!r} неизвестен: OPEN или CLOSED")
+    площадка = Площадка.из_реестра(site_id)
+    домен = домен or (runtime.размещение(site_id).domain or "")
+    if not домен:
+        raise PrivilegedRefused(
+            f"{site_id}: домен не объявлен в реестре — какой слой переключать, "
+            "неизвестно")
+    файлы = ни.конфиги_сайта(site_id, домен)
+    итог: dict[str, Any] = {"operation": "indexing_nginx", "site_id": site_id,
+                            "domain": домен, "mode": режим,
+                            "configs": [str(ф) for ф in файлы],
+                            "dry_run": dry_run}
+    if not файлы:
+        raise PrivilegedRefused(
+            f"{site_id} ({домен}): живых конфигураций с этим серверным именем "
+            f"не найдено в {ни.КОРЕНЬ_NGINX}")
+
+    # Что предстоит сделать — считается ДО единой записи.
+    план: list[dict] = []
+    for ф in файлы:
+        try:
+            текст = ф.read_text(encoding="utf-8")
+        except OSError as ош:
+            if not dry_run:
+                # Исполнитель работает от root: нечитаемая конфигурация для
+                # него — настоящая беда, и переключать слой по непрочитанному
+                # файлу нельзя.
+                raise PrivilegedRefused(
+                    f"{ф} не читается: {type(ош).__name__}. Переключать слой "
+                    "по непрочитанной конфигурации нельзя") from None
+            # Сухой прогон может идти под учётной записью без прав на часть
+            # файлов (`/etc/nginx/conf.d/*` бывает 0600). Это ограничение
+            # ПРОГОНА, а не отказ: план остаётся полезным, и неполнота названа.
+            план.append({"path": str(ф), "unreadable": type(ош).__name__,
+                         "serving_blocks": None, "will_convert": 0,
+                         "already_on_variable": None, "new_text": "",
+                         "old_text": ""})
+            итог["dry_run_incomplete"] = True
+            continue
+        отдающие = ни.блоки_страницы(текст, домен)
+        фиксированных = sum(
+            1 for б in отдающие for с in б["add_header_lines"]
+            if ни.ФИКСИРОВАННАЯ in с)
+        новый, переведено = ни.перевести_на_переменную(текст, site_id)
+        план.append({"path": str(ф), "serving_blocks": len(отдающие),
+                     "fixed_lines_in_serving": фиксированных,
+                     "already_on_variable": ни.уже_на_переменной(текст, site_id),
+                     "will_convert": переведено, "new_text": новый,
+                     "old_text": текст})
+    включаемый = ни.путь_включаемого(site_id)
+    тело = ни.тело_включаемого(режим)
+    прежнее_тело = (включаемый.read_text(encoding="utf-8")
+                    if включаемый.is_file() else None)
+    итог["include_file"] = str(включаемый)
+    итог["plan"] = [{к: з for к, з in ш.items()
+                     if к not in ("new_text", "old_text")} for ш in план]
+    итог["include_changes"] = прежнее_тело != тело
+
+    # Ни одна конфигурация не несёт ни фиксированной строки, ни переменной —
+    # переключать нечего, и выдумывать строку в чужом файле нельзя.
+    if not any(ш["will_convert"] or ш["already_on_variable"] for ш in план):
+        raise PrivilegedRefused(
+            f"{site_id} ({домен}): ни в одной из {len(файлы)} конфигураций нет "
+            f"ни строки {ни.ФИКСИРОВАННАЯ!r}, ни заголовка на переменной. "
+            "Править наугад нельзя: в этих файлах живут настройки, которых "
+            "нет в заготовке")
+
+    if dry_run:
+        итог["changed"] = bool(итог["include_changes"]
+                               or any(ш["will_convert"] for ш in план))
+        return итог
+
+    _нужен_root()
+    nginx = os.environ.get("SITE_NGINX", "nginx")
+    копии: list[tuple[Path, str]] = []
+    включаемый.parent.mkdir(parents=True, exist_ok=True)
+    каталог_копий = ни.КОРЕНЬ_NGINX / "backups"
+    каталог_копий.mkdir(parents=True, exist_ok=True)
+    метка = utc_now().replace(":", "").replace("-", "")
+    сделано: list[str] = []
+    try:
+        for ш in план:
+            ф = Path(ш["path"])
+            if ш["will_convert"]:
+                копия = каталог_копий / f"{ф.name}.bak.indexing.{метка}"
+                копия.write_text(ш["old_text"], encoding="utf-8")
+                копии.append((ф, ш["old_text"]))
+                ф.write_text(ш["new_text"], encoding="utf-8")
+                сделано.append(f"{ф}: заголовок переведён на переменную "
+                               f"(копия {копия})")
+        if итог["include_changes"]:
+            врем = включаемый.with_suffix(".robots.new")
+            врем.write_text(тело, encoding="utf-8")
+            os.replace(врем, включаемый)
+            os.chmod(включаемый, 0o644)
+            сделано.append(f"{включаемый}: режим {режим}")
+        проверка = subprocess.run([nginx, "-t"], capture_output=True, text=True)
+        if проверка.returncode != 0:
+            raise PrivilegedRefused(
+                f"nginx -t отказал, слой НЕ переключён: "
+                f"{проверка.stderr.strip()[-300:]}")
+        перезагрузка = subprocess.run([nginx, "-s", "reload"],
+                                      capture_output=True, text=True)
+        if перезагрузка.returncode != 0:
+            raise PrivilegedRefused(
+                f"nginx reload отказал: {перезагрузка.stderr.strip()[-300:]}")
+    except Exception:
+        # Любая беда после первой записи — возврат ВСЕГО к исходному виду.
+        # Частично переведённая конфигурация хуже непереведённой: часть
+        # блоков читала бы переменную, которой нет.
+        for ф, прежний in копии:
+            ф.write_text(прежний, encoding="utf-8")
+        if прежнее_тело is None:
+            включаемый.unlink(missing_ok=True)
+        else:
+            включаемый.write_text(прежнее_тело, encoding="utf-8")
+        subprocess.run([nginx, "-t"], capture_output=True, text=True)
+        итог["restored"] = True
+        raise
+    итог["changed"] = bool(сделано)
+    итог["steps"] = сделано
+    итог["previous_include"] = прежнее_тело
+    return итог
+
+
 #: Файлы согласованного снимка. Каталог и подробности — одно целое: витрина
 #: читает их вместе, и новый каталог со старыми подробностями показал бы
 #: карточки без описаний.
