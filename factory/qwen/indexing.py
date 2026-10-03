@@ -561,6 +561,13 @@ def слой_nginx(site_id: str, домен: str, сиг: dict | None = None) ->
     if в_переходах:
         итог["add_header_in_redirect_blocks"] = в_переходах
 
+    # Тексты всех читаемых конфигураций домена: в них ищется объявление `map`.
+    все_тексты: list[str] = []
+    for ф in файлы:
+        try:
+            все_тексты.append(ф.read_text(encoding="utf-8"))
+        except OSError:
+            continue
     строки = [(ф, с) for ф, б in отдающие for с in б["add_header_lines"]]
     итог["add_header_lines"] = [с for _, с in строки]
     if not отдающие:
@@ -582,11 +589,15 @@ def слой_nginx(site_id: str, домен: str, сиг: dict | None = None) ->
             зн = re.search(r"add_header\s+X-Robots-Tag\s+(\S+)", с.strip())
             значение = зн.group(1) if зн else ""
             if значение.startswith("$"):
-                try:
-                    текст = ф.read_text(encoding="utf-8")
-                except OSError:
-                    текст = ""
-                по_умолчанию, откуда = _значение_переменной(текст, значение[1:])
+                # Объявление `map` ищется по ВСЕМ конфигурациям домена, а не в
+                # том файле, где стоит `add_header`. Объявление одно на домен
+                # (второе — `nginx: [emerg] duplicate variable`), и у lords-05
+                # оно живёт в `-tls.conf`, а заголовок на переменной есть в
+                # обоих файлах. Поиск «в своём файле» объявлял бы второй файл
+                # неразрешимым, и слой целиком становился бы `unknown` — то
+                # есть исправно открытый слой нельзя было бы подтвердить.
+                по_умолчанию, откуда = _значение_переменной(
+                    "\n".join(все_тексты), значение[1:])
                 if по_умолчанию is None:
                     режимы.append("unknown")
                     пояснения.append(f"{значение}: {откуда}")

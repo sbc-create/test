@@ -845,6 +845,40 @@ def test_нечитаемая_конфигурация_не_объявляет_�
         os.chmod(закрытый, 0o644)
 
 
+def test_объявление_map_в_другом_файле_домена_разрешается(tmp_path, nginx_корень):
+    """Объявление `map` живёт в ОДНОМ файле домена, заголовок — в обоих.
+
+    После того как объявление стали ставить ровно в один файл (иначе
+    `nginx: [emerg] duplicate variable`), поиск «в своём файле» объявлял
+    второй файл неразрешимым, и слой целиком становился `unknown` — то есть
+    исправно открытый слой нельзя было бы подтвердить.
+    """
+    корень = tmp_path / "nginx"
+    (корень / "lords").mkdir(parents=True)
+    (корень / "cells").mkdir(parents=True)
+    включаемый = корень / "cells" / "test-01.robots"
+    включаемый.write_text('default "";\n', encoding="utf-8")
+    # Файл с объявлением map И заголовком.
+    (корень / "lords" / "test-01-tls.conf").write_text(
+        f"map $uri $cell_robots_test_01 {{\n    include {включаемый};\n}}\n"
+        "server {\n    listen 443 ssl;\n    server_name t.example;\n"
+        "    add_header X-Robots-Tag $cell_robots_test_01 always;\n"
+        "    location / { proxy_pass http://127.0.0.1:9999; }\n}\n",
+        encoding="utf-8")
+    # Файл ТОЛЬКО с заголовком: объявления здесь нет и быть не должно.
+    (корень / "lords" / "test-01.conf").write_text(
+        "server {\n    listen 80;\n    server_name t.example;\n"
+        "    add_header X-Robots-Tag $cell_robots_test_01 always;\n"
+        "    location / { proxy_pass http://127.0.0.1:9999; }\n}\n",
+        encoding="utf-8")
+    nginx_корень(корень)
+    сл = indexing.слой_nginx("test-01", "t.example")
+    assert сл["mode"] == "open", сл
+    assert сл["denying"] is False, сл
+    assert сл["managed_by_this_operation"] is True
+    assert "объявления map" not in сл["evidence"], сл["evidence"]
+
+
 def test_прежнее_правило_не_вернулось():
     """Слой nginx не определяется перебором публичных заголовков."""
     т = (КОРЕНЬ / "factory" / "qwen" / "indexing.py").read_text("utf-8")
