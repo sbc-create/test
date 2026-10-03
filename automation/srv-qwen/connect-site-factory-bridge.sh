@@ -74,7 +74,9 @@ while [ $# -gt 0 ]; do
     --check) MODE="check"; shift ;;
     --rollback) MODE="rollback"; shift ;;
     --apply) MODE="apply"; shift ;;
-    -h|--help) grep '^#' "$0" | head -45; exit 0 ;;
+    # `sed -n`, а не `grep | head`: под `pipefail` закрытый head даёт SIGPIPE,
+    # и запрос справки завершался кодом 141.
+    -h|--help) sed -n '2,46p' "$0"; exit 0 ;;
     *) printf 'неизвестный аргумент: %s\n' "$1" >&2; exit 2 ;;
   esac
 done
