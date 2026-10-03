@@ -218,3 +218,95 @@ TCP туннелем SSH. Готовый фрагмент —
    сеть, другие ключи.
 
 Как читать результат — напечатано самим скриптом в конце.
+
+## 6. srv-qwen: подключение существующего сервиса к мосту
+
+Полученные факты (от администратора, 2026-10-03): на `srv-qwen` работают
+контейнеры `qwen-open-webui` и `qwen-site-factory-mcp`; из первого адрес
+`http://site-factory-mcp:9000/mcp` отвечает `HTTP 200`; `initialize` даёт
+`serverInfo.name = "Qwen Site Factory"`, `version = ""`; `system_readiness`
+даёт `registry.valid: true`, `site_count: 0`, пустые `errors` и `warnings`;
+образ `qwen-agent-modules:1.0.0`; compose `/opt/qwen/compose.yaml`; примонтированы
+`/opt/qwen/data → /data` и `/opt/qwen/knowledge → /knowledge`.
+
+Это закрывает вопрос о причине: отвечает ДРУГОЙ сервер со своим пустым
+реестром. Его `site_count: 0` при `valid: true` — согласованный ответ о пустом
+источнике, а не поломка фабрики. **Заполнять его реестр руками нельзя**:
+авторитетный реестр один и живёт на `claude-control-01`.
+
+### Состояние моста на фабрике — проверено, НЕ установлен
+
+| проверка | результат |
+| --- | --- |
+| `/etc/systemd/system/site-factory-mcp.service` | **отсутствует** |
+| слушает ли `127.0.0.1:9000` | **нет** (`ConnectionRefusedError`) |
+| процесс `factory.qwen.mcp` | **нет** |
+| юнит подготовлен | да: `automation/host/site-factory-mcp.service` (петля + `--read-only`) |
+
+Установить его из сессии невозможно: `sudo` запрещён её профилем. Это первое
+действие владельца на фабрике:
+
+    sudo install -m 0644 /home/claude/wt-portable-site-cell-01/automation/host/site-factory-mcp.service \
+        /etc/systemd/system/site-factory-mcp.service
+    sudo systemctl daemon-reload && sudo systemctl enable --now site-factory-mcp.service
+    curl -sS http://127.0.0.1:9000/healthz     # ready: true, read_only: true
+
+**НЕ ПРОВЕРЕНО** до установки: что служба поднимается именно этим юнитом на
+этом хосте (сам модуль по HTTP проверен настоящим сокетом, см. раздел 5).
+
+### Как подключается srv-qwen, сохраняя URL коннектора
+
+Имя `site-factory-mcp` в сети контейнеров отдаётся новому сервису-мосту,
+прежний остаётся под именем `site-factory-mcp-legacy`. URL коннектора
+(`http://site-factory-mcp:9000/mcp`) и тип транспорта не меняются.
+
+    qwen-open-webui ──http://site-factory-mcp:9000/mcp──▶ qwen-site-factory-bridge
+                                                            │ ssh -L 9000:127.0.0.1:9000
+                                                            ▼
+                                                   claude-control-01 (45.131.182.225)
+                                                   127.0.0.1:9000  site-factory-mcp.service
+                                                   --read-only, авторитетный реестр
+
+Готовые артефакты в `/srv/site-factory/indexing-operator-2026-10-03/`:
+
+| файл | что это |
+| --- | --- |
+| `srv-qwen-bridge.compose.yaml` | фрагмент для `/opt/qwen/compose.yaml`: мост + переименование алиаса прежнего сервиса, без `ports:`, том канала только на чтение, `healthcheck` по `/healthz` моста |
+| `channel-grant-line.txt` | строка доверенного ключа с ограничениями `restrict,permitopen="127.0.0.1:9000",command="/bin/false"` — добавляет ВЛАДЕЛЕЦ на фабрике; ключей сессия не читает и не пишет (профиль это запрещает) |
+| `acceptance-from-open-webui.sh` | приёмка изнутри `qwen-open-webui`, только чтение; проверена против моста по HTTP (`rc=0`) |
+
+Резервная копия и откат названы в самом фрагменте compose: копия
+`/opt/qwen/compose.yaml.bak.<UTC>` перед правкой; откат — вернуть файл и
+`docker compose up -d`, после чего имя снова указывает на прежний сервис.
+Отзыв доступа — удалить строку ключа; канал исчезает сразу.
+
+### Что требуется от администратора и чего я не выдумываю
+
+Нужны ровно три величины, и ни одна из них не секрет:
+
+1. **открытый ключ** канала (строка `ssh-ed25519 AAAA…`) — её печатает команда
+   ниже; закрытая часть остаётся на `srv-qwen`;
+2. **имя сети контейнеров** Open WebUI (`SF_BRIDGE_NETWORK`);
+3. **каталог канала** на `srv-qwen`, куда положены ключ и `known_hosts`
+   (`SF_BRIDGE_SSH_DIR`) — путь выбирает администратор, я его не придумываю.
+
+**НЕ ПРОВЕРЕНО** (из этой сессии проверить нечем):
+
+* доступность `45.131.182.225:22` с `srv-qwen` — успешный SSH из Agent
+  Workspace (`6265eddb1580`) этого не доказывает: другой контекст и другие ключи;
+* наличие `ssh` в образе `qwen-agent-modules:1.0.0` — поэтому мост сделан
+  отдельным контейнером `alpine:3.20`, который ставит клиента сам, а прежний
+  образ не трогается;
+* имя сети контейнеров и фактические имена томов на `srv-qwen`.
+
+### Приёмка (после подключения)
+
+    sudo docker exec -i qwen-open-webui sh -s < acceptance-from-open-webui.sh
+
+Проверяет: `serverInfo.name = site-factory`, непустую версию правил
+(`2026-10-03.6`), `environment.host = claude-control-01`, `read_only: true`,
+отсутствие пишущего инструмента, `registry.valid`, число сайтов **23**,
+источник `config/site-cells.json` и **отпечаток списка доменов**
+`4511cf3add1b3e88` (sha256 отсортированных доменов — одно значение вместо
+сверки двадцати трёх имён). Прогон против моста на фабрике: все проверки OK,
+`rc=0`.

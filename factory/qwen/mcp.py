@@ -51,6 +51,7 @@ MCP-сервер. Внешних зависимостей нет намерен�
 from __future__ import annotations
 
 import getpass
+import hashlib
 import http.server
 import json
 import os
@@ -124,6 +125,18 @@ def _инструкция() -> tuple[str, str]:
 ИНСТРУКЦИЯ_ПУТЬ, ИНСТРУКЦИЯ_ВЕРСИЯ = _инструкция()
 
 
+def отпечаток_сайтов(сайты) -> str:
+    """sha256 отсортированного списка доменов.
+
+    Нужен приёмке: «совпадает ли список сайтов с фабрикой» проверяется ОДНИМ
+    значением, а не перечислением двадцати трёх имён в чужом терминале. Берутся
+    только домены и только в сортированном порядке: порядок чтения реестра к
+    тождеству списка отношения не имеет.
+    """
+    домены = sorted(с.domain for с in сайты)
+    return hashlib.sha256("\n".join(домены).encode("utf-8")).hexdigest()
+
+
 def _источники() -> dict[str, Any]:
     """Состояние источников реестра: путь, читаемость, число записей, ошибка."""
     return registry.состояние_источников()
@@ -152,6 +165,7 @@ def инструмент_готовности(_: dict) -> dict[str, Any]:
     итог.update({
         "ok": прочитаны,
         "registry": {"valid": прочитаны, "sites": len(сайты),
+                     "sites_digest": отпечаток_сайтов(сайты),
                      "sources": источники},
         "read_only": ТОЛЬКО_ЧТЕНИЕ,
         "operations": sorted(доступные()),
@@ -182,7 +196,9 @@ def инструмент_списка(аргументы: dict) -> dict[str, Any
     return {"version": ВЕРСИЯ_ОБОЛОЧКИ,
             "sites": [с.as_dict() for с in сайты],
             "environment": окружение(),
-            "registry": {"sources": _источники()}}
+            "registry": {"sources": _источники(),
+                         "sites": len(сайты),
+                         "sites_digest": отпечаток_сайтов(сайты)}}
 
 
 def инструмент_сайта(аргументы: dict) -> dict[str, Any]:
@@ -639,7 +655,9 @@ def самопроверка() -> int:
             кратко: dict[str, Any] = {"ok": True}
             if имя == "list_registered_sites":
                 кратко.update({"version": значение["version"],
-                               "sites": len(значение["sites"])})
+                               "sites": len(значение["sites"]),
+                               "sites_digest":
+                                   значение["registry"]["sites_digest"][:16]})
             elif имя == "system_readiness":
                 кратко.update({"registry_valid": значение["registry"]["valid"],
                                "sites": значение["registry"]["sites"]})
