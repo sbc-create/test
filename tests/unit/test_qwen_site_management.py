@@ -736,3 +736,47 @@ def test_версия_правил_в_инструменте_совпадает_
     assert м.group(1) == точка.ВЕРСИЯ_ИНСТРУКЦИИ, (
         f"инструмент называет версию правил {точка.ВЕРСИЯ_ИНСТРУКЦИИ}, а файл "
         f"{файл} — {м.group(1)}: сравнение версий перестало работать")
+
+
+def test_семейство_берётся_из_реестра_когда_рабочей_копии_нет(monkeypatch, tmp_path):
+    """Пустое семейство — беда учёта, и выдавать её за факт о сайте нельзя.
+
+    У витрины может не быть рабочей копии вовсе: часть сайтов заведена вне этой
+    очереди (`animego-02`, `animego-03`). Точку входа тогда взять негде, и
+    прежде `adapter` оставался пустым — а по пустому семейству вердикт отвечал
+    «контракта режима нет», то есть объявлял отсутствующим механизм, о котором
+    ничего не выяснил.
+
+    Второй источник — объявленное семейство реестра, и оно принимается ТОЛЬКО
+    если есть среди адаптеров: произвольная строка семейством не становится.
+    """
+    реестр = tmp_path / "site-cells.json"
+
+    def записать(family):
+        реестр.write_text(json.dumps({"schema_version": 1, "cells": [{
+            "site_id": "stand-09", "domain": "stand09.example", "status": "live",
+            "repo": {"kind": "remote", "path": None, "remote": "https://example/x"},
+            "template": {"template_id": None, "order_id": None, "family": family},
+            "deploy_target": {"ref": "claude-control-01", "server": None},
+            "runtime": {"unit": "nova-stand-09.service", "port": 19998,
+                        "account": "stand-09", "reload": "mtime",
+                        "managed_by": "monolith"},
+        }]}, ensure_ascii=False), encoding="utf-8")
+        monkeypatch.setattr(registry, "РЕЕСТР_ЯЧЕЕК", реестр)
+        сетевой = tmp_path / "network-allowlist.yaml"
+        сетевой.write_text("hosts: []\n", encoding="utf-8")
+        monkeypatch.setattr(registry, "СЕТЕВОЙ_СПИСОК", сетевой)
+        с = [x for x in registry.собрать(опрашивать_сеть=False)
+             if x.domain == "stand09.example"][0]
+        return с
+
+    с = записать("animego")
+    assert с.adapter == "animego", с.adapter
+    assert any("template.family" in з for з in с.notes), с.notes
+    # Контракт режима у такого сайта находится, а не теряется.
+    from factory.qwen import indexing
+    assert indexing.контракт(с.adapter).get("reader"), "контракт не найден"
+
+    # Выдуманное семейство не принимается: лучше пусто, чем неправда.
+    с = записать("невероятное-семейство")
+    assert с.adapter == "", с.adapter

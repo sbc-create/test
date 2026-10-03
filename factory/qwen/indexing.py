@@ -591,7 +591,8 @@ def слой_nginx(site_id: str, домен: str, сиг: dict | None = None) ->
             if значение.startswith("$"):
                 # Объявление `map` ищется по ВСЕМ конфигурациям домена, а не в
                 # том файле, где стоит `add_header`. Объявление одно на домен
-                # (второе — `nginx: [emerg] duplicate variable`), и у lords-05
+                # (второе nginx принимает, но молча пользуется одним из двух —
+                # измерено 2026-10-03), и у lords-05
                 # оно живёт в `-tls.conf`, а заголовок на переменной есть в
                 # обоих файлах. Поиск «в своём файле» объявлял бы второй файл
                 # неразрешимым, и слой целиком становился бы `unknown` — то
@@ -866,9 +867,15 @@ def проверить(site: str, *, mode: str, expect_release: str = "",
     #    `denying: true` — потому что закрыто было ПРИЛОЖЕНИЕ (файла состояния
     #    нет, fail-closed). Один заголовок в ответе источника не называет.
     слой_ng = слой_nginx(s.site_id, s.domain, сиг)
-    слой_ng["owner_command"] = (
-        f"sudo bash automation/host/apply-indexing-nginx-root.sh "
-        f"--site {s.site_id} --mode {'open' if режим == ОТКРЫТ else 'closed'}")
+    # Команды ВЛАДЕЛЬЦА здесь больше нет, и это не упущение. Слой переключает
+    # штатная заявка, которую подаёт сама операция; поле `owner_command` с
+    # root-скриптом осталось от того времени, когда операции не существовало,
+    # и подсказывало Qwen просить человека о действии, которое механизм делает
+    # сам. Названа ОПЕРАЦИЯ, а не скрипт.
+    слой_ng["operation"] = (
+        f"python3 -m factory cell submit --site {s.site_id} "
+        f"--cell-operation indexing-nginx --mode "
+        f"{'open' if режим == ОТКРЫТ else 'closed'}")
     итог["nginx_layer"] = слой_ng
     итог["app_layer"] = слой_приложения(сиг)
 
@@ -1156,6 +1163,38 @@ def доказательство_чтения(s, *, таймаут: int = 90) ->
     return итог
 
 
+def _замерить(s, итог: dict, доказательства: dict):
+    """Публичные сигналы, слой nginx, слой приложения и файл состояния.
+
+    Отдельной функцией, потому что замер нужен не только полному вердикту. У
+    домена, в выпуске которого ещё нет читателя, вердикт останавливался на
+    `reader_missing` и НЕ сообщал ни публичного режима, ни того, управляется ли
+    слой nginx механизмом. Для сети это были самые нужные поля: именно по ним
+    видно, что слой уже переведён, а ждёт домен только выпуска. Вердикт обязан
+    быть надмножеством, а не выбирать, что измерить.
+    """
+    сиг = сигналы(s.domain, порт=порт_приложения(s.site_id))
+    фактически, запрещают = оценить(сиг)
+    итог["public_mode"] = фактически
+    итог["denying_signals"] = запрещают
+    доказательства["public"] = {
+        "home_https": сиг.get("home_http"),
+        "robots_txt_http": сиг.get("robots_txt_http"),
+        "robots_txt_head": [с for с in (сиг.get("robots_txt") or "").strip()
+                            .split("\n")[:6]],
+        "sitemap_http": сиг.get("sitemap_http"),
+        "meta_robots_home": сиг.get("meta_robots_home"),
+        "canonical_home": сиг.get("canonical_home"),
+        "x_robots_https": сиг.get("x_robots_values"),
+        "redirects_http80": сиг.get("redirects_http80"),
+    }
+    слой_ng = слой_nginx(s.site_id, s.domain, сиг)
+    доказательства["nginx_layer"] = слой_ng
+    доказательства["app_layer"] = слой_приложения(сиг)
+    итог["state_file"] = текущее(s.domain)
+    return сиг, фактически, запрещают, слой_ng
+
+
 def готовность(site: str, *, доказать: bool = True) -> dict:
     """ОДИН вердикт о готовности домена к открытию. Ничего не меняет.
 
@@ -1248,6 +1287,11 @@ def готовность(site: str, *, доказать: bool = True) -> dict:
         читатель = читатель_режима(s.account, s.adapter)
         итог["runtime_reader"] = str(читатель) if читатель else ""
         if читатель is None:
+            # Замер ВСЁ РАВНО делается: по нему видно, что слой nginx уже под
+            # управлением механизма и домен ждёт только выпуска. Без этого
+            # вердикт отвечал «читателя нет» и умалчивал о том, что остальное
+            # готово.
+            _замерить(s, итог, доказательства)
             итог.update({"status": "MECHANISM_UNSUPPORTED", "ok": False,
                          "release_gap": "reader_missing",
                          "required_release": ТРЕБУЕТ_ВЫПУСКА["reader_missing"],
@@ -1293,25 +1337,7 @@ def готовность(site: str, *, доказать: bool = True) -> dict:
         итог["proof"] = "НЕ ПРОВЕРЕНО: доказательство чтения отключено (--no-prove)"
 
     # 4. Публичное состояние и слои.
-    сиг = сигналы(s.domain, порт=порт_приложения(s.site_id))
-    фактически, запрещают = оценить(сиг)
-    итог["public_mode"] = фактически
-    итог["denying_signals"] = запрещают
-    доказательства["public"] = {
-        "home_https": сиг.get("home_http"),
-        "robots_txt_http": сиг.get("robots_txt_http"),
-        "robots_txt_head": [с for с in (сиг.get("robots_txt") or "").strip()
-                            .split("\n")[:6]],
-        "sitemap_http": сиг.get("sitemap_http"),
-        "meta_robots_home": сиг.get("meta_robots_home"),
-        "canonical_home": сиг.get("canonical_home"),
-        "x_robots_https": сиг.get("x_robots_values"),
-        "redirects_http80": сиг.get("redirects_http80"),
-    }
-    слой_ng = слой_nginx(s.site_id, s.domain, сиг)
-    доказательства["nginx_layer"] = слой_ng
-    доказательства["app_layer"] = слой_приложения(сиг)
-    итог["state_file"] = текущее(s.domain)
+    сиг, фактически, запрещают, слой_ng = _замерить(s, итог, доказательства)
 
     разрешено_выпуском, откуда = разрешение_выпуска(s.account, s.adapter, s.domain)
     итог["release_permits_open"] = разрешено_выпуском
@@ -1659,10 +1685,12 @@ def подтвердить(site: str, *, ожидаемый: str = "", ждат�
         части = ["сайт отдаёт запрет: " + "; ".join(запрещают)]
         if слой_ng.get("denying"):
             части.append(
-                "запрет добавляет nginx — этой операцией он не управляется, "
-                "нужен однократный запуск владельца "
-                f"automation/host/apply-indexing-nginx-root.sh "
-                f"--site {s.site_id} --mode open. Основание: "
+                "запрет добавляет nginx: заголовок стоит в конфигурации "
+                "фиксированной строкой и этой операцией пока не управляется. "
+                "Перевод под управление — та же штатная заявка в ТЕКУЩЕМ "
+                "режиме домена, действия владельца он не требует: "
+                f"python3 -m factory cell submit --site {s.site_id} "
+                "--cell-operation indexing-nginx --mode closed. Основание: "
                 + str(слой_ng.get("evidence") or ""))
         elif слой_ng.get("denying") is None:
             части.append(
