@@ -59,7 +59,10 @@ def test_операция_меняет_только_состояние_а_не_�
 def test_разрешение_владельца_только_булево_true():
     """Пустое поле здесь не умолчание в пользу открытия."""
     т = (КОРЕНЬ / "factory" / "qwen" / "indexing.py").read_text("utf-8")
-    тело = т.split("def разрешение_владельца", 1)[1].split("\ndef ", 1)[0]
+    # Имя с открывающей скобкой: рядом живёт `разрешение_владельца_ядра`
+    # (авторитетный реестр владельца у Yummy), и разбор по префиксу
+    # брал бы её тело вместо нужного.
+    тело = т.split("def разрешение_владельца(", 1)[1].split("\ndef ", 1)[0]
     assert 'инд.get("open_authorized") is True' in тело, (
         "разрешением считается только булево true")
     assert "open_authorized" in тело and "desired_state" in тело, (
@@ -1240,3 +1243,61 @@ def test_пробел_выпуска_назван_и_различим():
     assert "readernot" not in итог["required_release"]
     assert итог.get("owner_permission_is_not_enough") is None, (
         "у пробела «нет читателя» разговор о разрешении владельца неуместен")
+
+
+# --- реестр владельца у семейства с внешним механизмом --------------------
+
+def test_разрешение_владельца_yummy_читается_из_его_реестра(tmp_path, monkeypatch):
+    """У семейства с авторитетным реестром владельца спрашивается ЕГО реестр.
+
+    В нашем `config/site-cells.json` у `yummy-*` раздела `indexing` нет вовсе, и
+    прежде вердикт отвечал «разрешение владельца не объявлено» — то есть
+    называл неразрешённым открытие, которое владелец разрешил и которое
+    фактически действует на двух доменах семейства. Схема реестра ячеек прямо
+    предписывает обратное: где есть авторитетный реестр владельца, значение
+    обязано совпадать с ним.
+    """
+    from factory.qwen import indexing as и
+
+    реестр = tmp_path / "indexing-core-registry.json"
+    реестр.write_text(json.dumps({"schema": "indexing-core-registry/1.0",
+        "domains": {"t.example": {
+            "exact_domain": "t.example", "tenant_id": "t",
+            "compose_service": "web-t", "desired_state": "OPEN",
+            "policy_revision": 3,
+            "owner_authorization_id": "OWNER-DECISION-1",
+            "reason": "разрешено владельцем"}}}, ensure_ascii=False),
+        encoding="utf-8")
+    monkeypatch.setattr(и, "РЕЕСТР_ЯДРА_YUMMY", реестр)
+
+    св = и.реестр_ядра("t.example")
+    assert св["found"] and св["readable"], св
+    assert св["desired_state"] == "OPEN"
+    assert св["owner_authorization_id"] == "OWNER-DECISION-1"
+    разрешил, объявлен, пояснение = и.разрешение_владельца_ядра("t.example")
+    assert разрешил is True and объявлен == "OPEN"
+    assert "OWNER-DECISION-1" in пояснение and str(реестр) in пояснение
+
+    # Домена в реестре нет — это ОТСУТСТВИЕ РЕШЕНИЯ, а не беда файла.
+    нет = и.реестр_ядра("чужой.example")
+    assert нет["readable"] is True and нет["found"] is False
+    assert "решения владельца" in нет["error"]
+    assert и.разрешение_владельца_ядра("чужой.example")[0] is False
+
+
+def test_нечитаемый_реестр_владельца_не_выдаётся_за_запрет(tmp_path, monkeypatch):
+    """Беда окружения и «владелец не разрешал» — разные ответы.
+
+    Слить их значило бы объявлять домен неразрешённым всякий раз, когда файл
+    недоступен, — то есть судить о решении владельца по правам на каталог.
+    """
+    from factory.qwen import indexing as и
+
+    monkeypatch.setattr(и, "РЕЕСТР_ЯДРА_YUMMY", tmp_path / "нет-такого.json")
+    св = и.реестр_ядра("t.example")
+    assert св["readable"] is False and св["found"] is False
+    assert "не читается" in св["error"], св
+    битый = tmp_path / "битый.json"
+    битый.write_text("{не json", encoding="utf-8")
+    monkeypatch.setattr(и, "РЕЕСТР_ЯДРА_YUMMY", битый)
+    assert и.реестр_ядра("t.example")["error"].startswith("JSONDecodeError")
