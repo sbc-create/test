@@ -11,7 +11,7 @@
 #      чтобы разрешение проброса не доставалось учётной записи claude и её
 #      другим ключам;
 #   3. вносит открытый ключ srv-qwen с ограничениями
-#      `restrict,permitopen="127.0.0.1:9000",command="/bin/false"`;
+#      `restrict,port-forwarding,permitopen="127.0.0.1:9000",command="/bin/false"`;
 #   4. добавляет узкий блок Match в конфигурацию sshd, потому что глобально
 #      проброс ЗАПРЕЩЁН (см. ниже), и проверяет её ДО перезагрузки службы.
 #
@@ -56,7 +56,23 @@ set -Eeuo pipefail
 КЛЮЧ_ТЕЛО="AAAAC3NzaC1lZDI1NTE5AAAAIBdXYS9HsyXBfoYfC1fSpJGYkhQq2ap8y2Zcx+gXZ9AR"
 КЛЮЧ_КОММЕНТ="site-factory-bridge@srv-qwen"
 ОТПЕЧАТОК_ОЖИДАЕМЫЙ="SHA256:AbTvnN9WdSN8elbkKJJG0WXoV/+rVgAL14af8JNCc3g"
-ОГРАНИЧЕНИЯ="restrict,permitopen=\"${ЦЕЛЬ_ТУННЕЛЯ}\",command=\"/bin/false\""
+# ПОРЯДОК И СОСТАВ ЗДЕСЬ СУЩЕСТВЕННЫ.
+#
+# `restrict` выключает ВСЁ, включая проброс портов. `permitopen` проброс НЕ
+# включает — он только ограничивает цель уже разрешённого проброса
+# (sshd(8): «Limit local port forwarding with the ssh -L option such that it
+# may only connect to the specified host and port»). Поэтому между ними
+# обязателен `port-forwarding` — по документации того же sshd(8) «Enable port
+# forwarding previously disabled by the restrict option».
+#
+# Без неё строка ВЫГЛЯДЕЛА разрешающей, а канал не поднялся бы вовсе: ровно
+# это противоречие было в первой редакции скрипта.
+#
+# Что остаётся запрещённым после `restrict,port-forwarding`: оболочка и
+# выполнение команд (плюс `command="/bin/false"`), PTY, переброс агента, X11,
+# `~/.ssh/rc`. Обратные туннели (`-R`) отдельной опцией не включаются и
+# закрыты на сервере директивой `PermitListen none`.
+ОГРАНИЧЕНИЯ="restrict,port-forwarding,permitopen=\"${ЦЕЛЬ_ТУННЕЛЯ}\",command=\"/bin/false\""
 
 лог() { printf '\033[1m==>\033[0m %s\n' "$*"; }
 беда() { printf '\033[31m[x]\033[0m %s\n' "$*" >&2; exit 1; }
@@ -115,6 +131,13 @@ rm -f "$ВРЕМ_СПИСОК"
 [ "$СКОЛЬКО" = 1 ] || беда "ключ встречается $СКОЛЬКО раз — повтор создал дубликат"
 ВСЕГО="$(grep -c . "$СПИСОК")"
 лог "   ключей в списке: $ВСЕГО, нашего ровно один"
+# Сверка СМЫСЛА, а не только наличия строки: без `port-forwarding` она
+# запрещает тот самый проброс, который ей полагается разрешить, и канал не
+# поднимется — отказ наступит раньше разбора `permitopen`.
+grep -F "$КЛЮЧ_ТЕЛО" "$СПИСОК" \
+  | grep -q "restrict,port-forwarding,permitopen=\"${ЦЕЛЬ_ТУННЕЛЯ}\"" \
+  || беда "строка ключа без port-forwarding: restrict запрещает проброс, а permitopen его не включает"
+лог "   ограничения: restrict,port-forwarding,permitopen=\"${ЦЕЛЬ_ТУННЕЛЯ}\",command=\"/bin/false\""
 
 # --- 4. Узкий блок Match в конфигурации sshd --------------------------------
 лог "разрешение проброса ровно этой учётной записи"

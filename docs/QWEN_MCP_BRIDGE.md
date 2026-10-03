@@ -272,7 +272,7 @@ TCP туннелем SSH. Готовый фрагмент —
 | файл | что это |
 | --- | --- |
 | `srv-qwen-bridge.compose.yaml` | фрагмент для `/opt/qwen/compose.yaml`: мост + переименование алиаса прежнего сервиса, без `ports:`, том канала только на чтение, `healthcheck` по `/healthz` моста |
-| `channel-grant-line.txt` | строка доверенного ключа с ограничениями `restrict,permitopen="127.0.0.1:9000",command="/bin/false"` — добавляет ВЛАДЕЛЕЦ на фабрике; ключей сессия не читает и не пишет (профиль это запрещает) |
+| `channel-grant-line.txt` | строка доверенного ключа с ограничениями `restrict,port-forwarding,permitopen="127.0.0.1:9000",command="/bin/false"` — добавляет ВЛАДЕЛЕЦ на фабрике; ключей сессия не читает и не пишет (профиль это запрещает) |
 | `acceptance-from-open-webui.sh` | приёмка изнутри `qwen-open-webui`, только чтение; проверена против моста по HTTP (`rc=0`) |
 
 Резервная копия и откат названы в самом фрагменте compose: копия
@@ -345,7 +345,19 @@ TCP туннелем SSH. Готовый фрагмент —
    `PermitListen none`, `PermitTTY no`, `X11Forwarding no`,
    `AllowAgentForwarding no`, `PermitTunnel no`,
    `AllowStreamLocalForwarding no`;
-3. **ограничения в самом ключе**: `restrict,permitopen="127.0.0.1:9000",command="/bin/false"`.
+3. **ограничения в самом ключе**:
+   `restrict,port-forwarding,permitopen="127.0.0.1:9000",command="/bin/false"`.
+
+   `port-forwarding` здесь ОБЯЗАТЕЛЕН, и это исправление первой редакции:
+   `restrict` выключает проброс портов целиком, а `permitopen` его не
+   включает — он лишь ограничивает цель уже разрешённого проброса.
+   Документация этого же хоста (`sshd(8)`): `restrict` — «disable port, agent
+   and X11 forwarding, as well as disabling PTY allocation and execution of
+   ~/.ssh/rc»; `port-forwarding` — «Enable port forwarding previously disabled
+   by the restrict option»; `permitopen` — «Limit local port forwarding with
+   the ssh -L option such that it may only connect to the specified host and
+   port». Строка без `port-forwarding` выглядела разрешающей, а канал не
+   поднялся бы вовсе.
 
 Что каждое запрещает: `restrict` снимает оболочку, pty, переброс агента, X11 и
 user-rc; `command="/bin/false"` делает выполнение команды невозможным;
@@ -392,6 +404,13 @@ user-rc; `command="/bin/false"` делает выполнение команды
 
 Та же строка печатается командой владельца — сверить значения, а не доверять
 одному источнику.
+
+### Исправление ограничений ключа и разделение проверок
+
+Строка ключа исправлена: `permitopen` сам проброс не включает, после
+`restrict` обязателен `port-forwarding`. Фактическая строка, выполненные
+проверки (включая эффективную конфигурацию `sshd -T` для `sfbridge`) и то, что
+осталось live-приёмкой на srv-qwen — `docs/QWEN_MCP_CHANNEL_CHECKS.md`.
 
 ### Что меняется в compose на srv-qwen
 
