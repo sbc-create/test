@@ -33,13 +33,32 @@ import pytest
     'restrict,port-forwarding,permitopen="127.0.0.1:9000",command="/bin/false" '
     f"ssh-ed25519 {ТЕЛО_КЛЮЧА} site-factory-bridge@srv-qwen"
 )
-#: Ответ подставного curl на system_readiness: источник и непустой реестр.
-ОТВЕТ_РЕЕСТРА = (
-    '{"jsonrpc":"2.0","id":1,"result":{"content":[{"type":"text","text":'
-    '"{\\"registry\\": {\\"valid\\": true, \\"sites\\": 23, '
-    '\\"sites_digest\\": \\"4511cf3add1b3e88\\"}, '
-    '\\"sources\\": {\\"site_cells\\": {\\"path\\": \\"config/site-cells.json\\"}}}"}]}}'
-)
+#: Ответ подставного curl на system_readiness — ФАКТИЧЕСКОЙ формы моста
+#: (снято с работающей службы 2026-10-03): `sources` лежит ВНУТРИ `registry`,
+#: а сразу за числом сайтов идёт `sites_digest`, начинающийся с цифр. Именно на
+#: этом сломалась печать: `sed` с жадным `.*` брал число из отпечатка и
+#: печатал «сайтов=4511».
+ЧИСЛО_САЙТОВ = 23
+ОТПЕЧАТОК = "4511cf3add1b3e88fb4b5a124d19fc5306ef447ee7dbad7ff42cbcc1c6564e0e"
+ВНУТРЕННИЙ_ОТВЕТ = {
+    "environment": {"host": "claude-control-01",
+                    "instruction": {"version": "2026-10-03.6"}},
+    "ok": True,
+    "read_only": True,
+    "registry": {
+        "valid": True,
+        "sites": ЧИСЛО_САЙТОВ,
+        "sites_digest": ОТПЕЧАТОК,
+        "sources": {"site_cells": {
+            "path": "/home/claude/wt-portable-site-cell-01/config/site-cells.json",
+            "ok": True, "count": ЧИСЛО_САЙТОВ, "error": None}},
+    },
+}
+ОТВЕТ_РЕЕСТРА = __import__("json").dumps({
+    "jsonrpc": "2.0", "id": 1,
+    "result": {"content": [{"type": "text",
+                            "text": __import__("json").dumps(ВНУТРЕННИЙ_ОТВЕТ)}]},
+})
 
 ЗАГЛУШКИ = {
     # `id -u` без аргумента — проверка root; с аргументом — существование
@@ -177,6 +196,21 @@ def test_установщик_исполняется_а_не_падает_на_�
                     "not a valid identifier", "command not found"):
         assert признак not in вывод, f"установщик снова ломается: {признак}\n{вывод}"
     assert "готово" in вывод
+
+
+def test_проверка_печатает_число_сайтов_из_json_а_не_цифры_отпечатка(песочница):
+    """Дефект отчёта: `сайтов=4511` — начало `sites_digest`, а не число сайтов.
+
+    Число и отпечаток берутся из РАЗНЫХ полей одного ответа, и путать их нельзя:
+    «4511» выглядит правдоподобным количеством сайтов и прошло бы глазами.
+    """
+    копия, _, окружение = песочница
+    итог = _запуск(копия, окружение)
+    assert итог.returncode == 0, итог.stdout + итог.stderr
+    строка = next(с for с in итог.stdout.splitlines() if "реестр:" in с)
+    assert f"сайтов={ЧИСЛО_САЙТОВ}" in строка, строка
+    assert "сайтов=4511" not in строка, строка
+    assert ОТПЕЧАТОК[:16] in строка, строка
 
 
 def test_первый_проход_создаёт_строку_ключа_с_port_forwarding(песочница):

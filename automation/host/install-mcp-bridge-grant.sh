@@ -207,11 +207,54 @@ printf '%s' "$HEALTH" | grep -q '"read_only": true' \
 REGISTRY_ANSWER="$(curl -sS -m 90 -X POST http://127.0.0.1:9000/mcp \
   -H 'Content-Type: application/json' \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"system_readiness","arguments":{}}}' || true)"
-SITES_COUNT="$(printf '%s' "$REGISTRY_ANSWER" | sed -n 's/.*sites[^0-9]*\([0-9][0-9]*\).*/\1/p' | head -1)"
-SITES_DIGEST="$(printf '%s' "$REGISTRY_ANSWER" | sed -n 's/.*sites_digest[^0-9a-f]*\([0-9a-f]\{16\}\).*/\1/p' | head -1)"
+# Число сайтов и отпечаток лежат в РАЗНЫХ полях одного ответа, и спутать их
+# легко: сразу за `"sites": 23` идёт `"sites_digest": "4511cf…"`. Прежняя
+# версия тянула оба `sed`-ом с жадным `.*` и печатала «сайтов=4511» — начало
+# отпечатка вместо количества. Поэтому разбор JSON, а не вырезание цифр:
+# python же отличает ОТСУТСТВИЕ поля от нуля и падает с внятной причиной.
+if ! SUMMARY_LINE="$(printf '%s' "$REGISTRY_ANSWER" | python3 -c '
+import json, sys
+
+def fail(why):
+    sys.stderr.write(why + "\n")
+    raise SystemExit(1)
+
+try:
+    envelope = json.load(sys.stdin)
+except Exception as err:
+    fail("ответ службы не разбирается как JSON: %s" % err)
+if "error" in envelope:
+    fail("служба вернула ошибку: %s" % json.dumps(envelope["error"], ensure_ascii=False))
+content = (envelope.get("result") or {}).get("content") or []
+if not content or content[0].get("type") != "text":
+    fail("в ответе нет текстового содержимого инструмента")
+try:
+    payload = json.loads(content[0]["text"])
+except Exception as err:
+    fail("содержимое инструмента не JSON: %s" % err)
+registry = payload.get("registry") or {}
+sources = registry.get("sources") or {}
+cells = sources.get("site_cells") or {}
+sites = registry.get("sites")
+digest = registry.get("sites_digest") or ""
+path = cells.get("path") or ""
+host = (payload.get("environment") or {}).get("host") or ""
+version = ((payload.get("environment") or {}).get("instruction") or {}).get("version") or ""
+if not isinstance(sites, int):
+    fail("поле registry.sites отсутствует или не число: %r" % (sites,))
+print("\t".join([str(sites), digest[:16], path, host, version]))
+')"; then
+  die "ответ system_readiness не разобран: см. причину выше"
+fi
+IFS="$(printf '\t')" read -r SITES_COUNT SITES_DIGEST SITES_SOURCE ENV_HOST INSTRUCTION_VERSION \
+  <<< "$SUMMARY_LINE"
 printf '   реестр: сайтов=%s отпечаток=%s\n' "${SITES_COUNT:-?}" "${SITES_DIGEST:-?}"
-printf '%s' "$REGISTRY_ANSWER" | grep -q 'config/site-cells.json' \
-  || die "ответ не называет источник реестра config/site-cells.json"
+printf '   источник=%s\n' "${SITES_SOURCE:-?}"
+printf '   окружение: host=%s версия инструкции=%s\n' "${ENV_HOST:-?}" "${INSTRUCTION_VERSION:-?}"
+case "$SITES_SOURCE" in
+  */config/site-cells.json) ;;
+  *) die "источник реестра не config/site-cells.json, а «${SITES_SOURCE:-пусто}»" ;;
+esac
 [ "${SITES_COUNT:-0}" -gt 0 ] || die "реестр пуст: это не тот источник"
 
 log "открытые ключи сервера для known_hosts на srv-qwen"
