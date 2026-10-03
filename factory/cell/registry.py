@@ -153,6 +153,11 @@ class Cell:
     runtime: dict[str, Any] = field(default_factory=dict)
     #: Правила выпуска: удержание, если сайтом занят кто-то другой.
     release: dict[str, Any] = field(default_factory=dict)
+    #: Режим индексации, объявленный владельцем: `desired_state` — какой режим
+    #: объявлен, `open_authorized` — разрешено ли открытие ВООБЩЕ. Поле читает
+    #: исполнитель: разрешение на снятие запрета спрашивается там, где запрет
+    #: снимается, а не только в вызывающей операции.
+    indexing: dict[str, Any] = field(default_factory=dict)
     status: str = "planned"
 
     @property
@@ -223,6 +228,7 @@ def _cell(raw: dict[str, Any]) -> Cell:
         resources=raw.get("resources") or {},
         runtime=raw.get("runtime") or {},
         release=raw.get("release") or {},
+        indexing=raw.get("indexing") or {},
         status=raw.get("status", "planned"),
     )
 

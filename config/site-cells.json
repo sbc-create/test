@@ -155,6 +155,132 @@
       }
     },
     {
+      "site_id": "animego-02",
+      "domain": "an1mego.site",
+      "aliases": [],
+      "status": "live",
+      "repo": {
+        "kind": "remote",
+        "path": null,
+        "remote": "https://github.com/sbc-create/site-an1mego-site"
+      },
+      "template": {
+        "template_id": null,
+        "order_id": null,
+        "family": "animego",
+        "note": "Витрина заведена вне этой очереди: рабочей копии в var/site-repos нет, выпуск шёл не ячейкой. Семейство определено по точке входа src/animego-frontend.py, которую домен объявляет в /healthz."
+      },
+      "pins": {
+        "common_core": null,
+        "template": null,
+        "modules": {},
+        "schemas": {}
+      },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
+      "publisher": {
+        "provider": null,
+        "publisher_id": null,
+        "publisher_id_ref": null,
+        "note": "Издатель отсюда не назначался и не измерялся: каталог app принадлежит учётной записи витрины, config/site.json сессии недоступен."
+      },
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {
+        "source_commit": null,
+        "note": "build_id animego-02-32f05a208b1e прочитан публично в /healthz 2026-10-03; runtime_path /srv/an1mego-site/app/src/animego-frontend.py. Отсюда не выкладывается."
+      },
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {},
+      "runtime": {
+        "unit": "nova-an1mego-site.service",
+        "previous_unit": null,
+        "port": 9150,
+        "account": "an1mego-site",
+        "app_dir": "/srv/an1mego-site/app",
+        "data_dir": "/srv/an1mego-site/data",
+        "legacy_root": null,
+        "reload": "unknown",
+        "managed_by": "monolith",
+        "data_owner": "site_timer",
+        "unit_note": "Значения измерены на хосте 2026-10-03: ExecStart юнита — `/usr/bin/python3 /srv/an1mego-site/app/run.py --port 9150 --data-dir /srv/an1mego-site/data`, User=an1mego-site.",
+        "data_dir_note": "Снимки пишет СВОЙ таймер сайта (an1mego-site-update.timer), а не общий производитель: в каталоге лежат animego-02-catalog.json и animego-02-details.json. Поэтому managed_by = monolith: доставка содержимого этой записью не управляется, и проверка свежести ячеек её намеренно пропускает (factory/cell/content.py: статус not-a-cell). Регистрация нужна затем, чтобы домен был ВИДЕН проверкам сети, а не затем, чтобы объявить его ячейкой."
+      },
+      "indexing": {
+        "desired_state": "CLOSED",
+        "reason": "Запись учёта по измерению 2026-10-03: публичный ответ отдаёт noindex. Разрешения владельца на открытие нет, и эта запись его не выдаёт."
+      }
+    },
+    {
+      "site_id": "animego-03",
+      "domain": "animeg0.site",
+      "aliases": [],
+      "status": "live",
+      "repo": {
+        "kind": "remote",
+        "path": null,
+        "remote": "https://github.com/sbc-create/site-animeg0-site"
+      },
+      "template": {
+        "template_id": null,
+        "order_id": null,
+        "family": "animego",
+        "note": "То же, что у animego-02: витрина заведена вне этой очереди, семейство определено по точке входа из /healthz."
+      },
+      "pins": {
+        "common_core": null,
+        "template": null,
+        "modules": {},
+        "schemas": {}
+      },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
+      "publisher": {
+        "provider": null,
+        "publisher_id": null,
+        "publisher_id_ref": null,
+        "note": "Издатель отсюда не назначался и не измерялся по той же причине, что у animego-02."
+      },
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {
+        "source_commit": null,
+        "note": "build_id animego-03-9575e2715ff1 прочитан публично в /healthz 2026-10-03; runtime_path /srv/animeg0-site/app/src/animego-frontend.py. Отсюда не выкладывается."
+      },
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {},
+      "runtime": {
+        "unit": "nova-animeg0-site.service",
+        "previous_unit": null,
+        "port": 9151,
+        "account": "animeg0-site",
+        "app_dir": "/srv/animeg0-site/app",
+        "data_dir": "/srv/animeg0-site/data",
+        "legacy_root": null,
+        "reload": "unknown",
+        "managed_by": "monolith",
+        "data_owner": "site_timer",
+        "unit_note": "Измерено на хосте 2026-10-03: ExecStart — `/usr/bin/python3 /srv/animeg0-site/app/run.py --port 9151 --data-dir /srv/animeg0-site/data`, User=animeg0-site.",
+        "data_dir_note": "Снимки пишет свой таймер сайта (animeg0-site-update.timer); каталог содержит animego-03-catalog.json. managed_by = monolith по той же причине, что у animego-02."
+      },
+      "indexing": {
+        "desired_state": "CLOSED",
+        "reason": "Запись учёта по измерению 2026-10-03: публичный ответ отдаёт noindex. Разрешение владельца этой записью не выдаётся."
+      }
+    },
+    {
       "site_id": "animego-04",
       "domain": "an1meg0.site",
       "aliases": [

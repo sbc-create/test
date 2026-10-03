@@ -106,10 +106,15 @@ class Очередь:
     сказали».
     """
 
-    def __init__(self, слой: dict, исход: str = "applied"):
+    def __init__(self, слой: dict, исход: str = "applied", база=None):
         self.заявки: list[dict] = []
         self.исход = исход
         self.слой = слой
+        self.база = база
+        #: НАСТОЯЩЕЕ чтение состояния, снятое до подмены: стенд подменяет
+        #: `q.состояние` собой, и обращение к модулю внутри стенда ушло бы в
+        #: него же. Проверять надо то, что работает в бою.
+        self._читать_состояние = q.состояние
 
     def собрать(self, site_id, commit, digest, **kw):
         return q.собрать(site_id, commit, digest, **kw)
@@ -118,14 +123,27 @@ class Очередь:
         self.заявки.append(заявка.as_dict())
         if self.исход == "applied":
             self.слой["режим"] = заявка.mode
+        # Результат пишется НАСТОЯЩИМ файлом очереди, и читается он настоящей
+        # `queue.состояние`. Прежде стенд отдавал заранее собранный словарь
+        # правильной формы — и ровно поэтому мимо тестов прошёл дефект чтения:
+        # собственный `status` результата перезаписывал внешний, отклонённая
+        # заявка не выглядела завершённой, а ожидание слоя крутилось 420 с.
+        # Подменять чтение состояния нельзя: проверять надо то, что работает.
+        q.записать_атомарно(
+            self.база / "results" / f"{заявка.request_id}.json",
+            {"request_id": заявка.request_id, "site_id": заявка.site_id,
+             # `nothing-to-do` — тоже применённый исход (`ПРИМЕНЁННЫЕ_ИСХОДЫ`):
+             # исполнитель отработал, менять было нечего. Отказ — это другое.
+             "status": ("ok" if self.исход in q.ПРИМЕНЁННЫЕ_ИСХОДЫ else "rejected"),
+             "outcome": ({"status": self.исход,
+                          "stage": "indexing_layer_applied"}
+                         if self.исход in q.ПРИМЕНЁННЫЕ_ИСХОДЫ else None),
+             "error": ("" if self.исход in q.ПРИМЕНЁННЫЕ_ИСХОДЫ
+                       else "nginx -t отказал")})
         return {"status": "queued", "request_id": заявка.request_id}
 
     def состояние(self, request_id):
-        return {"status": "finished",
-                "result": {"status": "ok" if self.исход == "applied" else "rejected",
-                           "outcome": {"status": self.исход},
-                           "error": "" if self.исход == "applied"
-                                    else "nginx -t отказал"}}
+        return self._читать_состояние(request_id, база=self.база)
 
 
 @pytest.fixture
@@ -187,7 +205,10 @@ def площадка(tmp_path, monkeypatch):
                     "managed_by_this_operation": not nginx_запрещает,
                     "evidence": f"песочница: слой {слой['режим']}"}
         monkeypatch.setattr(indexing, "слой_nginx", слой_nginx)
-        очередь = Очередь(слой, исход_очереди)
+        очередь_база = tmp_path / "queue"
+        (очередь_база / "results").mkdir(parents=True, exist_ok=True)
+        (очередь_база / "requests").mkdir(parents=True, exist_ok=True)
+        очередь = Очередь(слой, исход_очереди, база=очередь_база)
         monkeypatch.setattr(q, "подать", очередь.подать)
         monkeypatch.setattr(q, "состояние", очередь.состояние)
         return {"корень_состояния": tmp_path / "indexing", "очередь": очередь,

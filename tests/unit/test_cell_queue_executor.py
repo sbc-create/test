@@ -1013,3 +1013,133 @@ def test_недоступный_каталог_nginx_не_мешает(tmp_path,
 
     monkeypatch.setattr(q, "NGINX", tmp_path / "нет-такого")
     q.проверить_маршрут("lords-05")
+
+
+def test_отклонённая_заявка_читается_как_завершённая(tmp_path):
+    """Внешний `status` называет судьбу заявки, а не исход операции.
+
+    Прежняя запись `{"status": "finished", **данные}` давала собственному
+    `status` результата перезаписать внешний: отклонённая заявка выглядела
+    незавершённой. Измерено на изолированном стенде 2026-10-03 — ожидание слоя
+    индексации ждало такую заявку полные 420 с и затем сообщало «исполнитель не
+    ответил, заявка остаётся в очереди», хотя исполнитель ответил сразу и
+    назвал причину.
+    """
+    з = queue.собрать("net-takogo", КОММИТ, ДАЙДЖЕСТ)
+    queue.подать(з, база=tmp_path)
+    executor.обслужить_очередь(база=tmp_path, dry_run=True)
+
+    сост = queue.состояние(з.request_id, база=tmp_path)
+    assert сост["status"] == "finished", (
+        "отклонённая заявка не читается как завершённая: ожидание будет "
+        f"крутиться впустую (получено {сост['status']!r})")
+    assert сост["result"]["status"] == "rejected", сост["result"]
+    assert "реестре" in сост["result"]["error"]
+    # Совместимость: результат остаётся и в корне ответа.
+    assert сост["error"] == сост["result"]["error"]
+
+
+def test_успешная_заявка_тоже_отдаёт_исход_отдельным_полем(tmp_path):
+    з = queue.собрать("zona-01", КОММИТ, ДАЙДЖЕСТ)
+    queue.записать_атомарно(tmp_path / "results" / f"{з.request_id}.json",
+                            {"request_id": з.request_id, "status": "ok",
+                             "outcome": {"status": "activated"}})
+    сост = queue.состояние(з.request_id, база=tmp_path)
+    assert сост["status"] == "finished"
+    assert сост["result"]["status"] == "ok"
+    assert сост["result"]["outcome"]["status"] == "activated"
+
+
+def test_заявка_в_очереди_не_выдаётся_за_завершённую(tmp_path):
+    з = queue.собрать("zona-01", КОММИТ, ДАЙДЖЕСТ)
+    queue.подать(з, база=tmp_path)
+    сост = queue.состояние(з.request_id, база=tmp_path)
+    assert сост["status"] == "queued"
+    assert "result" not in сост
+    assert queue.состояние("такой-заявки-нет", база=tmp_path)["status"] == "unknown"
+
+
+def test_слою_индексации_собственный_репозиторий_не_нужен(tmp_path, monkeypatch):
+    """Слой nginx не ставит кода — требовать от него repo.remote нельзя.
+
+    Требование защищает ВЫКЛАДКУ: сайт, выложенный из монорепозитория, остаётся
+    без своей истории и без отката. Конфигурация nginx и включаемый файл режима
+    принадлежат хосту, а не репозиторию, и зарегистрированная витрина без
+    своего репозитория оставалась бы с НЕуправляемым слоем — по признаку, к
+    слою не относящемуся. Измерено на стенде: заявка `indexing-nginx`
+    отклонялась словами «не записан собственный репозиторий».
+    """
+    from factory.cell import registry as cell_registry
+
+    реестр = tmp_path / "site-cells.json"
+    реестр.write_text(json.dumps({"schema_version": 1, "cells": [{
+        "site_id": "stand-01", "domain": "stand.local", "status": "staged",
+        "repo": {"kind": "local", "path": "repo", "remote": None},
+        "template": {"template_id": None, "order_id": "stand"},
+        "deploy_target": {"ref": "claude-control-01", "server": None},
+        "runtime": {"unit": "nova-stand-01.service", "previous_unit": None,
+                    "port": 19999, "account": "stand-01",
+                    "reload": "mtime", "managed_by": "cell"},
+    }]}, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setenv("SITE_CELLS_REGISTRY", str(реестр))
+    cell_registry.load.cache_clear() if hasattr(cell_registry.load, "cache_clear") else None
+
+    слой = queue.собрать("stand-01", "", "", operation="indexing-nginx",
+                         mode="CLOSED")
+    проверено = executor.проверить_заявку(слой)
+    assert проверено["remote"] == "", проверено
+    assert проверено["runtime"]["account"] == "stand-01"
+
+    # А выкладка кода без своего репозитория по-прежнему запрещена.
+    выпуск = queue.собрать("stand-01", КОММИТ, ДАЙДЖЕСТ, operation="activate")
+    with pytest.raises(cell_registry.OwnRepositoryMissing):
+        executor.проверить_заявку(выпуск)
+
+
+def _реестр_стенда(tmp_path, *, open_authorized=None, remote=None):
+    реестр = tmp_path / "site-cells.json"
+    ячейка = {
+        "site_id": "stand-01", "domain": "stand.local", "status": "staged",
+        "repo": {"kind": "local", "path": "repo", "remote": remote},
+        "template": {"template_id": None, "order_id": "stand"},
+        "deploy_target": {"ref": "claude-control-01", "server": None},
+        "runtime": {"unit": "nova-stand-01.service", "previous_unit": None,
+                    "port": 19999, "account": "stand-01",
+                    "reload": "mtime", "managed_by": "cell"},
+    }
+    if open_authorized is not None:
+        ячейка["indexing"] = {"open_authorized": open_authorized}
+    реестр.write_text(json.dumps({"schema_version": 1, "cells": [ячейка]},
+                                 ensure_ascii=False), encoding="utf-8")
+    return реестр
+
+
+@pytest.mark.parametrize("разрешение", [None, False, "true", 1])
+def test_слой_не_открывается_без_разрешения_владельца(tmp_path, monkeypatch,
+                                                      разрешение):
+    """Снятие запрета — действие, требующее разрешения ТАМ, где оно снимается.
+
+    Проверка, живущая только в `indexing-set`, обходится подачей заявки прямо
+    в очередь: каталог заявок доступен непривилегированной стороне по
+    построению. Разрешением считается только булево `true` — ни строка "true",
+    ни единица им не являются.
+    """
+    monkeypatch.setenv("SITE_CELLS_REGISTRY",
+                       str(_реестр_стенда(tmp_path, open_authorized=разрешение)))
+    з = queue.собрать("stand-01", "", "", operation="indexing-nginx", mode="OPEN")
+    with pytest.raises(executor.ExecutorError) as ош:
+        executor.переключить_слой_индексации(з, dry_run=True)
+    assert "open_authorized" in str(ош.value)
+
+
+def test_закрытие_слоя_разрешения_не_требует(tmp_path, monkeypatch):
+    """Закрытие добавляет запрет, а не снимает: требовать на него разрешение
+    значило бы запрещать приведение домена в более закрытое состояние."""
+    monkeypatch.setenv("SITE_CELLS_REGISTRY", str(_реестр_стенда(tmp_path)))
+    з = queue.собрать("stand-01", "", "", operation="indexing-nginx", mode="CLOSED")
+    # Дальше операции нужен настоящий nginx и root; проверяется, что отказа по
+    # разрешению НЕ наступило — остановка происходит уже на другом шаге.
+    try:
+        executor.переключить_слой_индексации(з, dry_run=True)
+    except Exception as ош:  # noqa: BLE001
+        assert "open_authorized" not in str(ош), ош
