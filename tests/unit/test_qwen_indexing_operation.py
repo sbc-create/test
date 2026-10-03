@@ -1125,7 +1125,11 @@ def test_пустой_читатель_не_означает_отсутстви�
     означало бы неверный вывод, и подключение ищется по ФАКТУ.
     """
     итог = indexing.готовность("zonafilm.cc", доказать=False)
-    assert итог["status"] != "MECHANISM_UNSUPPORTED", итог.get("reason")
+    # Утверждение — про ЧИТАТЕЛЯ, а не про статус: статус может быть
+    # `MECHANISM_UNSUPPORTED` по другому пробелу выпуска (разрешение), и это
+    # не вывод об отсутствии читателя.
+    assert итог.get("release_gap") != "reader_missing", итог.get("reason")
+    assert итог["runtime_reader"], "читатель найден и назван путём"
     подключение = итог["evidence"]["wiring"]
     assert подключение["imports"], подключение
     assert подключение["substitution"] == "indexing.py", подключение
@@ -1156,3 +1160,39 @@ def test_вердикт_надмножество_прежнего_ответа()
     for поле in ("home_https", "robots_txt_http", "robots_txt_head",
                  "sitemap_http", "meta_robots_home", "canonical_home"):
         assert поле in публично, поле
+
+def test_ожидание_владельца_невозможно_без_разрешения_выпуска():
+    """Инвариант: `AWAITING_OWNER` не выдаётся, пока выпуск запрещает открытие.
+
+    Дефект, из-за которого проверка появилась: вердикт обоих контрольных
+    доменов был `AWAITING_OWNER` с `next_action: ждать команды владельца` при
+    `release_permits_open: false`. Читалось это как «осталось только
+    разрешение владельца», а на самом деле нужен ЕЩЁ И новый выпуск:
+    разрешение владельца живёт в реестре и выпуск не заменяет.
+    """
+    for домен in ("lordserials22.info", "zonafilm.cc"):
+        итог = indexing.готовность(домен, доказать=False)
+        if итог["status"] == "AWAITING_OWNER":
+            assert итог["release_permits_open"] is True, (
+                f"{домен}: AWAITING_OWNER при release_permits_open="
+                f"{итог['release_permits_open']!r} — отчёт утверждал бы, что "
+                "осталось только разрешение владельца")
+        if итог["release_permits_open"] is not True and итог["operation_can_open"]:
+            assert итог["status"] == "MECHANISM_UNSUPPORTED", итог["status"]
+            assert итог["release_gap"] == "permission_false", итог
+            assert итог["owner_permission_is_not_enough"] is True
+            assert "НОВЫЙ выпуск" in итог["reason"], итог["reason"]
+            assert "release_permits_open: true" in итог["required_release"]
+
+
+def test_пробел_выпуска_назван_и_различим():
+    """Два разных пробела выпуска не сливаются в один ответ."""
+    assert set(indexing.ПРОБЕЛ_ВЫПУСКА) == {"reader_missing", "permission_false"}
+    assert set(indexing.ТРЕБУЕТ_ВЫПУСКА) == set(indexing.ПРОБЕЛ_ВЫПУСКА)
+    # У домена без читателя — свой пробел, и он не про разрешение.
+    итог = indexing.готовность("an1meg0.site", доказать=False)
+    assert итог["status"] == "MECHANISM_UNSUPPORTED", итог["status"]
+    assert итог["release_gap"] == "reader_missing", итог
+    assert "readernot" not in итог["required_release"]
+    assert итог.get("owner_permission_is_not_enough") is None, (
+        "у пробела «нет читателя» разговор о разрешении владельца неуместен")
