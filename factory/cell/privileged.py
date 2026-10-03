@@ -1154,7 +1154,8 @@ def слой_индексации(site_id: str, *, mode: str, домен: str = 
     включаемый.parent.mkdir(parents=True, exist_ok=True)
     каталог_копий = ни.КОРЕНЬ_NGINX / "backups"
     каталог_копий.mkdir(parents=True, exist_ok=True)
-    метка = utc_now().replace(":", "").replace("-", "")
+    # Метка копии — время в UTC без знаков, недопустимых в имени файла.
+    метка = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     сделано: list[str] = []
     try:
         for ш in план:
