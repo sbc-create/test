@@ -1,0 +1,187 @@
+"""Мост инструментов Qwen к ФАКТИЧЕСКОЙ фабрике.
+
+Проверяется поведение, из-за которого мост и понадобился: сторонний источник
+отвечал `{"version": 1, "sites": []}` и при этом `registry.valid: true` —
+согласованный пустой успех, по которому нельзя отличить «сайтов нет» от
+«спросили не ту машину». Здесь пустой успех невозможен по построению.
+"""
+from __future__ import annotations
+
+import json
+import pathlib
+import sys
+
+import pytest
+
+КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(КОРЕНЬ))
+
+from factory.qwen import mcp, registry  # noqa: E402
+
+#: Имена, которые УЖЕ есть в сессии Qwen. Совпадение обязательно: иначе
+#: переключение коннектора потребует правок на стороне клиента, а задача
+#: ровно в том, чтобы этого не требовалось.
+ИМЕНА_КЛИЕНТА = ("system_readiness", "list_registered_sites", "get_registered_site")
+
+
+def test_имена_инструментов_совпадают_с_имеющимися_у_qwen():
+    объявлены = {и["name"] for и in
+                 mcp.обработать({"jsonrpc": "2.0", "id": 1,
+                                 "method": "tools/list"})["result"]["tools"]}
+    for имя in ИМЕНА_КЛИЕНТА:
+        assert имя in объявлены, (
+            f"{имя}: имя не совпало с тем, что уже есть у Qwen — переключение "
+            "коннектора потребует правок на стороне клиента")
+    # Операции режима тоже объявлены: без них Qwen видит только чтение.
+    for имя in ("domain_indexing_readiness", "set_indexing_mode",
+                "confirm_indexing", "indexing_journal"):
+        assert имя in объявлены, имя
+
+
+def test_список_сайтов_в_оболочке_клиента_и_непустой():
+    итог = mcp.вызвать("list_registered_sites", {})
+    assert итог["version"] == 1, "оболочка не та, которую разбирает клиент"
+    assert итог["sites"], "авторитетный реестр не бывает пустым"
+    # Источник называется в ответе: без него «пусто» неотличимо от «не тот файл».
+    источники = итог["registry"]["sources"]
+    assert источники["site_cells"]["path"].endswith("config/site-cells.json")
+    assert источники["site_cells"]["count"] == len(
+        [с for с in итог["sites"] if not с["site_id"].startswith("(вне реестра)")])
+    # Идентичность окружения — в каждом ответе.
+    окр = итог["environment"]
+    assert окр["host"] and окр["user"] and окр["cwd"]
+    assert окр["instruction"]["version"] and окр["code"]["commit"]
+
+
+def test_нечитаемый_реестр_это_ошибка_а_не_пустой_список(monkeypatch):
+    """Ровно то, из-за чего задача и возникла.
+
+    Пустой успешный список означает «сайтов нет», а на самом деле означал
+    «источник не тот». Нечитаемый источник обязан быть отказом.
+    """
+    monkeypatch.setattr(registry, "РЕЕСТР_ЯЧЕЕК",
+                        pathlib.Path("/нет/такого/site-cells.json"))
+    for имя, аргументы in (("list_registered_sites", {}),
+                           ("get_registered_site", {"site": "any.example"}),
+                           ("system_readiness", {})):
+        with pytest.raises(mcp.ОшибкаИнструмента) as ош:
+            mcp.вызвать(имя, аргументы)
+        assert "site-cells.json" in str(ош.value), имя
+
+
+def test_прочитанный_но_пустой_реестр_тоже_отказ(monkeypatch, tmp_path):
+    """Пустой список при прочитанном файле — состояние источника, не факт."""
+    пустой = tmp_path / "site-cells.json"
+    пустой.write_text(json.dumps({"schema_version": 1, "cells": []}),
+                      encoding="utf-8")
+    monkeypatch.setattr(registry, "РЕЕСТР_ЯЧЕЕК", пустой)
+    сетевой = tmp_path / "network-allowlist.yaml"
+    сетевой.write_text("hosts: []\n", encoding="utf-8")
+    monkeypatch.setattr(registry, "СЕТЕВОЙ_СПИСОК", сетевой)
+    with pytest.raises(mcp.ОшибкаИнструмента) as ош:
+        mcp.вызвать("list_registered_sites", {})
+    assert "ни одного сайта" in str(ош.value) or "не содержит" in str(ош.value)
+
+
+def test_отказ_уходит_клиенту_признаком_ошибки(monkeypatch):
+    """`tools/call` на отказе обязан вернуть isError, а не правдоподобный JSON."""
+    monkeypatch.setattr(registry, "РЕЕСТР_ЯЧЕЕК",
+                        pathlib.Path("/нет/такого/site-cells.json"))
+    ответ = mcp.обработать({"jsonrpc": "2.0", "id": 7, "method": "tools/call",
+                            "params": {"name": "list_registered_sites",
+                                       "arguments": {}}})
+    результат = ответ["result"]
+    assert результат["isError"] is True
+    полезное = json.loads(результат["content"][0]["text"])
+    assert полезное["error"], полезное
+    assert полезное["environment"]["host"], "окружение обязано быть и в отказе"
+    assert "sites" not in полезное, "в отказе не может быть списка сайтов"
+
+
+def test_неизвестный_сайт_и_неизвестный_инструмент_отказ():
+    with pytest.raises(mcp.ОшибкаИнструмента):
+        mcp.вызвать("get_registered_site", {"site": "нет-такого.example"})
+    with pytest.raises(mcp.ОшибкаИнструмента):
+        mcp.вызвать("такого-инструмента-нет", {})
+
+
+def test_смена_режима_проверяет_значение_и_не_обходит_предпроверки():
+    with pytest.raises(mcp.ОшибкаИнструмента) as ош:
+        mcp.вызвать("set_indexing_mode", {"site": "lordserials22.info",
+                                          "mode": "включить"})
+    assert "open или closed" in str(ош.value)
+    # Открытие домена без разрешений отклоняется ШТАТНОЙ предпроверкой, и
+    # причина приходит от неё, а не от моста.
+    with pytest.raises(mcp.ОшибкаИнструмента) as ош:
+        mcp.вызвать("set_indexing_mode", {"site": "lordserials22.info",
+                                          "mode": "open"})
+    текст = str(ош.value)
+    assert "предпроверка не пройдена" in текст, текст
+    assert "release_permits_open" in текст or "владелец" in текст, текст
+
+
+def test_мост_не_заводит_второй_реестр_и_второй_оркестратор():
+    """Мост обязан ВЫЗЫВАТЬ существующее, а не повторять его.
+
+    Второй реестр разошёлся бы с первым, и именно такое расхождение привело к
+    задаче. Проверяется исходник: ни своего пути к реестру, ни своей логики
+    разрешений, ни произвольной команды оболочки.
+    """
+    import ast
+
+    исходник = (КОРЕНЬ / "factory" / "qwen" / "mcp.py").read_text(encoding="utf-8")
+    дерево = ast.parse(исходник)
+
+    # 1. Ни одного ПУТИ, построенного мостом к реестру. Упоминание имени файла
+    #    в описании инструмента — это документация для Qwen, а не источник;
+    #    проверяются именно вызовы `pathlib.Path(...)`.
+    пути: list[str] = []
+    for узел in ast.walk(дерево):
+        if not isinstance(узел, ast.Call):
+            continue
+        имя = ast.unparse(узел.func)
+        if имя not in ("pathlib.Path", "Path"):
+            continue
+        for арг in узел.args:
+            if isinstance(арг, ast.Constant) and isinstance(арг.value, str):
+                пути.append(арг.value)
+            elif isinstance(арг, ast.JoinedStr):
+                пути.append(ast.unparse(арг))
+    свои = [п for п in пути
+            if "site-cells.json" in п or "network-allowlist" in п
+            or "/var/lib/site-cells" in п or "/srv/sites/indexing" in п]
+    assert not свои, (
+        f"мост строит путь к реестру или очереди сам: {свои} — это второй "
+        "знающий, и он разойдётся с первым при первом же переносе каталога")
+
+    # 2. Делегирование существующему, а не повтор его логики.
+    тело = исходник.split('"""', 2)[2]
+    assert "registry.собрать(" in тело, "список сайтов обязан идти из реестра"
+    assert "indexing.установить(" in тело, "смена режима — штатной операцией"
+    assert "indexing.готовность(" in тело, "вердикт — штатной операцией"
+
+    # 3. Ни произвольной оболочки, ни своей логики разрешений.
+    for запрет in ("os.system", "shell=True", "open_authorized",
+                   "release_permits_open ="):
+        assert запрет not in тело, (
+            f"в мосте есть {запрет!r}: либо произвольная оболочка, либо своя "
+            "логика разрешений")
+    команды = [ast.unparse(у) for у in ast.walk(дерево)
+               if isinstance(у, ast.Call)
+               and ast.unparse(у.func) in ("subprocess.run", "subprocess.Popen")]
+    for вызов in команды:
+        assert '"git"' in вызов or "'git'" in вызов, (
+            f"мост запускает посторонний процесс: {вызов[:80]}")
+
+
+def test_протокол_отвечает_на_инициализацию_и_пинг():
+    ответ = mcp.обработать({"jsonrpc": "2.0", "id": 1, "method": "initialize",
+                            "params": {"protocolVersion": "2024-11-05"}})
+    сведения = ответ["result"]["serverInfo"]
+    assert сведения["name"] == "site-factory"
+    assert сведения["version"] == mcp.ИНСТРУКЦИЯ_ВЕРСИЯ
+    assert сведения["environment"]["host_matches_factory"] in (True, False)
+    assert mcp.обработать({"jsonrpc": "2.0", "method": "notifications/initialized"}) is None
+    assert mcp.обработать({"jsonrpc": "2.0", "id": 2, "method": "ping"})["result"] == {}
+    плохой = mcp.обработать({"jsonrpc": "2.0", "id": 3, "method": "нет/такого"})
+    assert плохой["error"]["code"] == -32601
