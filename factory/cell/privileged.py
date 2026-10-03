@@ -1190,12 +1190,23 @@ def слой_индексации(site_id: str, *, mode: str, домен: str = 
             os.chmod(включаемый, 0o644)
             сделано.append(f"{включаемый}: режим {режим}")
         проверка = subprocess.run([nginx, "-t"], capture_output=True, text=True)
+        # Итог проверки и перезагрузки попадает В ОТВЕТ. Без этого
+        # доказательство приходилось искать по времени запуска рабочих
+        # процессов в /proc: исход `applied` говорил, что отказа не было, но
+        # не говорил, что именно ответил nginx.
+        итог["nginx_test"] = {
+            "rc": проверка.returncode,
+            "output": (проверка.stderr or проверка.stdout).strip()[-300:]}
         if проверка.returncode != 0:
             raise PrivilegedRefused(
                 f"nginx -t отказал, слой НЕ переключён: "
                 f"{проверка.stderr.strip()[-300:]}")
         перезагрузка = subprocess.run([nginx, "-s", "reload"],
                                       capture_output=True, text=True)
+        итог["nginx_reload"] = {
+            "rc": перезагрузка.returncode,
+            "output": (перезагрузка.stderr or перезагрузка.stdout).strip()[-300:],
+            "at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
         if перезагрузка.returncode != 0:
             raise PrivilegedRefused(
                 f"nginx reload отказал: {перезагрузка.stderr.strip()[-300:]}")
