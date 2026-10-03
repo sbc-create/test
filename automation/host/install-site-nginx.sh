@@ -62,6 +62,17 @@ upstream_file="${CELLS}/${site}.upstream"
 grep -q "proxy_pass http://${upstream_name}\b" "$SOURCE" \
   || die "заготовка не ссылается на ${upstream_name}: маршрут окажется непереключаемым"
 
+# Режим индексации обязан приходить ВКЛЮЧАЕМЫМ ФАЙЛОМ, а не фиксированной
+# строкой. Иначе новая витрина рождается со слоем, которым операция не
+# управляет, и первое же открытие домена требует отдельного перевода — того
+# самого ручного шага, ради устранения которого заявка `indexing-nginx` и
+# появилась. Проверяется ЗАГОТОВКА, то есть источник, а не живой файл.
+robots_include="${CELLS}/${site}.robots"
+grep -q "include ${robots_include};" "$SOURCE" \
+  || die "заготовка не включает ${robots_include}: режим индексации окажется зашит в конфигурацию"
+grep -q 'add_header X-Robots-Tag "noindex, nofollow" always;' "$SOURCE" \
+  && die "в заготовке осталась фиксированная строка заголовка: переведите её на переменную режима"
+
 log "витрина $site: порт $port, upstream $upstream_name"
 if [ "$dry_run" = 1 ]; then
   printf '   [сухой прогон] %s <- server 127.0.0.1:%s\n' "$upstream_file" "$port"
@@ -122,6 +133,25 @@ if ! grep -qs "upstream ${upstream_name}" "$UPSTREAMS" 2>/dev/null; then
     printf 'upstream %s {\n    include %s;\n}\n' "$upstream_name" "$upstream_file"
   } >> "$UPSTREAMS"
 fi
+# Включаемый файл режима — ДО установки конфигурации: она на него ссылается, и
+# `nginx -t` без него откажет. Новая витрина рождается ЗАКРЫТОЙ: открытие —
+# отдельное решение владельца и отдельная операция.
+if [ ! -f "$robots_include" ]; then
+  # Корень передаётся АРГУМЕНТОМ: heredoc закрыт кавычками намеренно — иначе
+  # оболочка подставляла бы в текст программы свои значения.
+  "$PY" - "$robots_include" "$SRC_ROOT" <<'PYEOF'
+import pathlib, sys
+sys.path.insert(0, sys.argv[2])
+from factory.cell import nginx_indexing as ни
+pathlib.Path(sys.argv[1]).write_text(ни.тело_включаемого("CLOSED"),
+                                     encoding="utf-8")
+PYEOF
+  chmod 0644 "$robots_include"
+  log "  включаемый файл режима создан закрытым: $robots_include"
+else
+  log "  включаемый файл режима уже есть, не трогаем: $robots_include"
+fi
+
 install -m 0644 "$SOURCE" "${TARGET_DIR}/${site}.conf"
 
 log "проверка конфигурации"

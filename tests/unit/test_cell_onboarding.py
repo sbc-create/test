@@ -179,3 +179,31 @@ def test_progress_survives_a_restart(root: Path):
     reloaded = onboarding.start(_order(), root=root)
     assert reloaded.by_name["domain_validated"].status == "done"
     assert reloaded.next_stage == "site_id_assigned"
+
+
+def test_новый_сайт_получает_управляемый_слой_nginx(tmp_path):
+    """Серверная конфигурация нового сайта рождается с включаемым файлом режима.
+
+    Пока заготовки несли зашитый `add_header X-Robots-Tag "noindex, nofollow"`,
+    каждый новый сайт получал слой, которым операция не управляет, и первое же
+    открытие домена требовало отдельного перевода конфигурации — ручного шага,
+    ради устранения которого заявка `indexing-nginx` и появилась.
+
+    Проверяется ГЕНЕРАТОР, а не живой файл: правка живого файла новых сайтов
+    не касается, и ровно поэтому исправление трижды не доезжало до них.
+    """
+    from factory.cell import newsite
+    from factory.cell import nginx_indexing as ни
+
+    заказ = newsite.Заказ(site_id="probe-nginx-01", domain="probe-nginx.example",
+                          profile="lords-general", port=19912)
+    текст = newsite.заготовка_nginx(заказ)
+    assert ни.ФИКСИРОВАННАЯ not in текст, "зашитый запрет вернулся в генератор"
+    assert ни.уже_на_переменной(текст, заказ.site_id), текст[:400]
+    assert ни.map_объявлен(текст, заказ.site_id), "объявление переменной отсутствует"
+    assert f"include {ни.путь_включаемого(заказ.site_id)};" in текст
+    # Имя upstream — то же правило, что в установщике (`tr '.-' '__'`).
+    assert "proxy_pass http://cell_probe_nginx_01;" in текст
+    assert "listen 80;" in текст and "listen 443" not in текст, (
+        "блок 443 в заготовке нового сайта означал бы ссылку на несуществующий "
+        "сертификат: nginx не перезагрузится вовсе")

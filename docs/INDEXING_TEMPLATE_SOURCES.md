@@ -1,0 +1,105 @@
+# Откуда новые сайты получают механизм индексации
+
+Исправление, внесённое в живую витрину, новых сайтов не касается. Этот файл
+называет ФАКТИЧЕСКИЕ источники создания сайтов каждого семейства — по
+измерению на хосте и в репозитории 2026-10-03 — и говорит, что из механизма
+индексации наследуется, а что нет.
+
+## Общая часть: исполнитель и операция
+
+Живёт в этом репозитории, доставляется владельцем одной установкой
+(`automation/host/install-cell-executor.sh`) в корневую копию
+`/usr/local/lib/site-factory-cell`:
+
+| что | где | доставка |
+| --- | --- | --- |
+| заявка `indexing-nginx`, поле `mode`, идентификатор `<site>-idx-<режим>` | `factory/cell/queue.py` | установкой пакета |
+| переключение слоя, резервные копии, `nginx -t`, `reload`, возврат при отказе | `factory/cell/privileged.py` | то же |
+| ворота защищённых данных и перечень владельцев видов | `factory/cell/protected.py` | то же |
+| разбор и правка конфигураций (один модуль на инструмент и исполнителя) | `factory/cell/nginx_indexing.py` | то же |
+| вердикт готовности, операция `indexing-set`, чтение реестра владельца Yummy | `factory/qwen/indexing.py` | из рабочего дерева (инструмент редактора) |
+
+## Lords — наследует полностью
+
+| источник | роль |
+| --- | --- |
+| `automation/host/lords-frontend.py` | рантайм семейства: `мета_роботов()`, `_тело_robots()`, заголовок в `_отдать` на переменной, служебные пути закрыты буквально |
+| `automation/host/indexing_mode.py` | читатель режима, fail-closed; копируется в проект байт в байт |
+| `blueprints/lords/profiles/*.yaml` | профили витрин (7 штук) |
+| `factory/cell/newsite.py` | генератор проекта: `РАНТАЙМ_LORDS` включает `indexing_mode.py`, `config/site.json` создаётся с `indexing.release_permits_open: false`, `run.py` передаёт `LORDS_INDEXING_SITE` и `LORDS_INDEXING_RELEASE_PERMITS_OPEN` |
+| `newsite.заготовка_nginx` + `deploy/nginx/<site_id>.conf` в проекте | серверная конфигурация СРАЗУ с `map $uri` и включаемым файлом режима |
+| `automation/host/nginx-site/*.conf` | заготовки существующих витрин: 16 файлов переведены на переменную, объявление — в файле `:80` (его установщик ставит первым) |
+| `automation/host/install-site-nginx.sh` | создаёт включаемый файл в режиме CLOSED до `nginx -t`, отказывает при зашитом заголовке в заготовке |
+
+**Проверено на СВЕЖЕМ экземпляре** (`factory cell newsite` -> стенд с настоящим
+nginx и настоящим приложением): читатель байт в байт из шаблона, рантайм на
+`мета_роботов()`, `release_permits_open: false`, `nginx -t` отказывает без
+включаемого файла и проходит с закрытым, домен рождается CLOSED, открытие без
+разрешающего выпуска отклоняется. Отчёт — `scratchpad/probe/отчёт.json`
+прогона и `/srv/site-factory/indexing-operator-2026-10-03/`.
+
+## Zona — наследует частично
+
+Две разные витрины под одним именем семейства:
+
+| витрина | рантайм | источник | наследование |
+| --- | --- | --- | --- |
+| `zona-01`, `zona-03` | `src/lords-frontend.py` | шаблон Lords (своего профиля в `blueprints/` у Zona нет) | да, через Lords |
+| `zona-02` | `src/serve.py` + модули + подмена `src/indexing.py` | ЗАКРЕПЛЁННЫЙ артефакт шаблона `zona-slider-2650fad6` (`template_sha256 2acccd8454d6…`) — в фабрике ОТСУТСТВУЕТ: по хешу не найден ни в `themes/`, ни в `blueprints/`, ни в `automation/host/` | НЕТ |
+
+Чтобы вариант `serve.py` наследовал механизм, артефакт шаблона (или его
+источник) должен жить в фабрике, как `lords-frontend.py`. Пока его нет, новый
+сайт этого вида создаётся только выделением из живого — тем самым копированием,
+из-за которого исправления и не доезжали.
+
+## AnimeGo — не наследует
+
+`animego-frontend.py` (790 215 Б) существует только в репозиториях витрин
+(`var/site-repos/an1meg0-site`, прямые установки `/srv/an1mego-site/app`,
+`/srv/animeg0-site/app`). В фабрике шаблона нет:
+
+    newsite._профиль(корень, "animego", ...) -> NewSiteError: профиля нет; есть: (пусто)
+    blueprints/ -> dle20, lords, payload-next-multisite
+
+Читатель в витрине `animego-04` подключён (`мета_роботов` в рантайме,
+`src/indexing_mode.py` в репозитории) — но это исправление ВИТРИНЫ. Новый сайт
+AnimeGo сегодня создать из шаблона нельзя вовсе.
+
+Что требуется: промоут рантайма семейства в `automation/host/` и профиль в
+`blueprints/animego/profiles/`, после чего `РАНТАЙМ_ANIMEGO` в генераторе — по
+образцу `РАНТАЙМ_LORDS`. Это отдельная работа: рантайм несёт собственные
+области (состояние серий, события), и переносить его без проверки на данных
+семейства нельзя.
+
+## Yummy — свой авторитетный механизм
+
+| источник | роль |
+| --- | --- |
+| `/srv/sites/yummyani-staging/repo` (`origin: sbc-create/yummyani`) | приложение Next.js, `compose.staging.yaml` с `SEO_INDEXING_ENABLED` на сервис |
+| `/srv/sites/yummyani-staging/runtime/indexing-core-registry.json` | АВТОРИТЕТНЫЙ реестр владельца: `desired_state`, `owner_authorization_id`, `policy_revision` |
+| `deploy/staging/indexability_guard.py`, `indexability-preflight.sh` | сторож: выкладка, расходящаяся с реестром, запрещена (`DEPLOY_DENIED_PRESERVE_LIVE`), с блокировкой |
+| `blueprints/payload-next-multisite/app` | более ранняя копия приложения в фабрике; `SEO_INDEXING_ENABLED` в ней не найден |
+
+Механизм у семейства ЕСТЬ и он не наш. Наша часть исправления — читать его
+реестр вместо нашего (сделано: `indexing.реестр_ядра`, поля
+`evidence.core_registry`, `core_registry_matches_live`, `owner_registry`) и
+называть в `owner_action` его штатную операцию, а не «поменяйте переменную».
+
+Вторую реализацию переключения в нашей очереди заводить нельзя: это второе
+решение об одном режиме. Плюс практическое: рабочее дерево площадки принадлежит
+другой сессии и содержит незакоммиченные изменения ровно в этой области
+(`fix(deploy): block OPEN→NOINDEX before any container recreate`).
+
+## Измеренное состояние реестра владельца Yummy на 2026-10-03
+
+| домен | реестр | живой контейнер | совпадает |
+| --- | --- | --- | --- |
+| yummyani.site | OPEN (`SEO-INDEXABILITY-P0-YUMMYANI-01-RECOVERY`) | `SEO_INDEXING_ENABLED=true` | да |
+| yummyani.org | OPEN (`YUMMY-SECOND-INDEXED-SEO-EXPERIMENT-20260920-01`) | `true` | да |
+| yummyani.biz | CLOSED (`BOOTSTRAP-CLOSED`) | `false` | да |
+| yummyani7.site, yummyani7.info | записи НЕТ | `false` | решения владельца нет |
+
+Расхождение есть только в файле `compose.staging.yaml`: у `web-org` переопределения
+`SEO_INDEXING_ENABLED` в нём нет, а живой контейнер и реестр говорят OPEN.
+Файл — не источник истины для режима (источник — реестр ядра), и правит его
+сессия той площадки.

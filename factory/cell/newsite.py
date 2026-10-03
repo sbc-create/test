@@ -34,6 +34,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import shutil
 import subprocess
 from dataclasses import dataclass
@@ -110,6 +111,79 @@ class Заказ:
         нет = [имя for имя in ("site_id", "domain", "profile", "port")
                if not getattr(self, имя)]
         return нет
+
+
+#: Серверная конфигурация новой витрины — СРАЗУ в управляемом виде.
+#:
+#: Заготовки витрин несли фиксированную строку `add_header X-Robots-Tag
+#: "noindex, nofollow" always;`, то есть каждый новый сайт рождался со слоем,
+#: которым операция не управляет: первое же открытие требовало отдельного
+#: перевода конфигурации — ровно того ручного шага, ради устранения которого
+#: заявка `indexing-nginx` и появилась. Поэтому режим приходит ВКЛЮЧАЕМЫМ
+#: файлом с первой секунды, а закрытым сайт остаётся потому, что установщик
+#: создаёт этот файл в режиме CLOSED.
+#:
+#: Только блок `:80`: сертификата без записи DNS не выпустить, а блок `443` со
+#: ссылкой на несуществующий файл не даст nginx перезагрузиться — то есть
+#: уронит и соседние витрины. Порядок тот же, что в установщике: эта
+#: конфигурация -> запись A -> certbot -> блок 443.
+ЗАГОТОВКА_NGINX = """# {домен} — витрина {site_id}.
+#
+# Только HTTP. Блок 443 ставится отдельным файлом ПОСЛЕ выпуска сертификата:
+# ссылка на несуществующий сертификат не даст nginx перезагрузиться вовсе, и
+# ошибка нового домена уронила бы соседние.
+#
+# Порт витрины {порт} (реестр ячеек), upstream {upstream}. Маршрут идёт через
+# upstream, а не прямо на 127.0.0.1:{порт}: это точка, которую переставляет
+# исполнитель при выкладке.
+{объявление}
+server {{
+    listen 80;
+    listen [::]:80;
+    server_name {домен} www.{домен};
+
+    server_tokens off;
+
+    # Режим индексации приходит включаемым файлом: открытие — отдельное
+    # решение владельца и отдельная операция, а не правка этой строки.
+    add_header X-Robots-Tag ${переменная} always;
+
+    location ^~ /.well-known/acme-challenge/ {{
+        root /var/www/certbot;
+        default_type "text/plain";
+    }}
+
+    location / {{
+        proxy_pass http://{upstream};
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 30s;
+    }}
+
+    location = /healthz {{
+        proxy_pass http://{upstream}/healthz;
+        access_log off;
+    }}
+}}
+"""
+
+
+def имя_upstream(site_id: str) -> str:
+    """Имя upstream витрины. То же правило, что в `install-site-nginx.sh`."""
+    return "cell_" + re.sub(r"[.-]", "_", site_id)
+
+
+def заготовка_nginx(заказ: "Заказ") -> str:
+    """Текст серверной конфигурации новой витрины в УПРАВЛЯЕМОМ виде."""
+    from factory.cell import nginx_indexing as ни
+
+    return ЗАГОТОВКА_NGINX.format(
+        домен=заказ.domain, site_id=заказ.site_id, порт=заказ.port,
+        upstream=имя_upstream(заказ.site_id),
+        объявление=ни.объявление_map(заказ.site_id).rstrip(),
+        переменная=ни.имя_переменной(заказ.site_id))
 
 
 def _sha(путь: Path) -> str:
@@ -477,6 +551,14 @@ def создать(заказ: Заказ, *, корень: Path, куда: Path
         "# Данные и секреты сайта в Git не хранятся.\n"
         "config/player.json\ndata/\nvar/\ndist/\n*-catalog.json\n*-details.json\n"
         "*community*.json\n__pycache__/\n*.pyc\n", encoding="utf-8")
+
+    # Серверная конфигурация — ВНУТРИ проекта: ячейка переносима, и её
+    # публичный вход обязан ехать вместе с ней, а не лежать отдельным файлом
+    # в фабрике, который кто-то напишет руками (и забудет перевести режим на
+    # включаемый файл — так и было у всех заготовок до 2026-10-03).
+    (куда / "deploy" / "nginx").mkdir(parents=True, exist_ok=True)
+    (куда / "deploy" / "nginx" / f"{заказ.site_id}.conf").write_text(
+        заготовка_nginx(заказ), encoding="utf-8")
 
     extract.add_tooling(куда, заказ.site_id, заказ.domain)
     extract.add_deploy(куда, site_id=заказ.site_id, domain=заказ.domain,
