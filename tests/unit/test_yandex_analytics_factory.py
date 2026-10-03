@@ -376,22 +376,38 @@ COUNTERS_WITHOUT_TRAFFIC = {
     "yummyani7.info": 113109089,
 }
 
+#: Витрина РАБОТАЕТ публично, счётчик заведён и записан в реестр со всеми
+#: девятью целями, но РАЗМЕТКИ на странице ещё нет: выпуск со вставкой счётчика
+#: не сделан. Измерено 2026-10-03: `https://animedia.icu/` и
+#: `https://animedia.space/` отвечают 200 (312 624 и 248 247 Б) и не содержат ни
+#: одного `mc.yandex.ru` и ни одного вызова `ym(`.
+#:
+#: Отдельная группа, а не часть COUNTERS_WITHOUT_TRAFFIC: там витрины не
+#: отдаются вовсе (NXDOMAIN, нет снимка каталога), и визитов не может быть по
+#: причине отсутствия сайта. Здесь сайт есть и посещается — не собирается
+#: только аналитика. Слить эти состояния значило бы спрятать второе за первым.
+#: И не часть PLANNED_DOMAINS, где счётчика нет нигде: приписать «запланирован»
+#: домену с настроенным счётчиком — это потерять счётчик из аудита.
+COUNTERS_WITHOUT_MARKUP = {
+    "animedia.icu": 113288667,
+    "animedia.space": 113288760,
+}
+
 #: Счётчика ещё нет. Заводить его до активации домена нельзя: получится пустой
 #: счётчик без данных, и он же будет мешать заметить настоящий. Перечислены
 #: явно, чтобы новый домен не мог появиться в реестре молча.
-PLANNED_DOMAINS = (
-    # Два домена работают публично, а в реестре аналитики их не было вовсе:
-    # домен без записи не попадает ни в аудит, ни в план, и его отсутствие
-    # ничем не заметно. Добавлены как planned — счётчика у них нет нигде.
-    "animedia.icu",
-    "animedia.space",
-)
+#:
+#: Сейчас группа ПУСТА: оба домена Animedia, стоявшие здесь, получили счётчики
+#: 2026-10-02 и переехали в COUNTERS_WITHOUT_MARKUP. Кортеж оставлен, потому что
+#: следующий новый домен обязан появиться именно здесь, а не в реестре молча.
+PLANNED_DOMAINS: tuple[str, ...] = ()
 
 ALL_DOMAINS = sorted({*LIVE_COUNTERS, *COUNTERS_WITHOUT_GOALS, *COUNTERS_WITHOUT_TRAFFIC,
-                      *COUNTERS_VERIFIED_IN_BROWSER, *PLANNED_DOMAINS})
+                      *COUNTERS_VERIFIED_IN_BROWSER, *COUNTERS_WITHOUT_MARKUP,
+                      *PLANNED_DOMAINS})
 #: Домены, у которых счётчик существует, — независимо от состояния целей.
 WITH_COUNTER = {**LIVE_COUNTERS, **COUNTERS_WITHOUT_GOALS, **COUNTERS_WITHOUT_TRAFFIC,
-                **COUNTERS_VERIFIED_IN_BROWSER}
+                **COUNTERS_VERIFIED_IN_BROWSER, **COUNTERS_WITHOUT_MARKUP}
 
 
 def test_registry_holds_exactly_the_known_domains():
@@ -410,6 +426,28 @@ def test_planned_domains_have_no_counter():
         assert entry.counter_id is None, f"{domain}: счётчик назначен до запуска"
         assert entry.raw["counter_state"] == "planned", domain
         assert entry.raw["analytics_enabled"] is False, domain
+
+
+def test_counter_without_markup_is_not_called_enabled():
+    """Счётчик в аккаунте — не включённая аналитика на сайте.
+
+    У обоих доменов Animedia счётчик заведён, девять целей записаны и запись
+    сессий выключена, но разметки на публичных страницах нет (измерено
+    2026-10-03, см. комментарий к COUNTERS_WITHOUT_MARKUP). Пока её нет,
+    `analytics_enabled` обязан остаться `false`: иначе реестр утверждал бы
+    работающую аналитику там, где не отправляется ни одного запроса, и аудит
+    перестал бы отличать настроенный счётчик от собирающего данные.
+    """
+    по_домену = {e.domain: e for e in registry.properties()}
+    for domain, counter in COUNTERS_WITHOUT_MARKUP.items():
+        entry = по_домену[domain]
+        assert entry.counter_id == counter, domain
+        assert entry.raw["analytics_enabled"] is False, (
+            f"{domain}: аналитика объявлена включённой, а разметки на странице "
+            "нет — включённой её делает выпуск витрины, а не запись в реестре"
+        )
+        assert len(entry.raw["goal_ids"]) == 9, domain
+        assert entry.raw["webvisor"] is False, domain
 
 
 def test_each_domain_is_independent():
@@ -599,7 +637,7 @@ def test_session_recording_is_off_on_every_live_counter():
     # Пустой список problems означает «настройка завершена», и требовать его от
     # домена без счётчика значило бы требовать молчать о незавершённом.
     по_домену = {e.domain: e for e in registry.properties()}
-    for domain in (*LIVE_COUNTERS, *COUNTERS_WITHOUT_TRAFFIC):
+    for domain in (*LIVE_COUNTERS, *COUNTERS_WITHOUT_TRAFFIC, *COUNTERS_WITHOUT_MARKUP):
         assert по_домену[domain].raw["problems"] == [], (
             f"{domain}: настройка завершена, а в problems что-то осталось: "
             f"{по_домену[domain].raw['problems']}"
