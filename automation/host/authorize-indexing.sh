@@ -156,11 +156,19 @@ for я in данные.get("cells") or []:
     тронуто += 1
 if тронуто != 1:
     sys.exit(f"ожидалась одна запись домена, затронуто {тронуто}")
+# Владелец, группа и режим реестра СОХРАНЯЮТСЯ. Команда работает от root, а
+# файл принадлежит учётной записи инструментов (`rw-------`, claude): запись
+# «по-новому» сделала бы его файлом root, и инструменты потеряли бы доступ к
+# собственному реестру. Это не теория — так ломается всё, что его читает.
+св = реестр.stat()
 with tempfile.NamedTemporaryFile("w", dir=реестр.parent, delete=False,
                                  encoding="utf-8") as врем:
     json.dump(данные, врем, ensure_ascii=False, indent=2)
     врем.write("\n")
     времянка = pathlib.Path(врем.name)
+import os as _os
+_os.chown(времянка, св.st_uid, св.st_gid)
+_os.chmod(времянка, св.st_mode & 0o7777)
 времянка.replace(реестр)
 print("   реестр: open_authorized = False, ссылки на подтверждение убраны")
 PYREG
@@ -230,11 +238,19 @@ if тронуто != 1:
     [я for я in данные.get("cells") if str(я.get("domain","")).lower() == домен][0]["indexing"]))
 if потеряно:
     sys.exit(f"правка потеряла поля {потеряно}: отказ")
+# Владелец, группа и режим реестра СОХРАНЯЮТСЯ. Команда работает от root, а
+# файл принадлежит учётной записи инструментов (`rw-------`, claude): запись
+# «по-новому» сделала бы его файлом root, и инструменты потеряли бы доступ к
+# собственному реестру. Это не теория — так ломается всё, что его читает.
+св = реестр.stat()
 with tempfile.NamedTemporaryFile("w", dir=реестр.parent, delete=False,
                                  encoding="utf-8") as врем:
     json.dump(данные, врем, ensure_ascii=False, indent=2)
     врем.write("\n")
     времянка = pathlib.Path(врем.name)
+import os as _os
+_os.chown(времянка, св.st_uid, св.st_gid)
+_os.chmod(времянка, св.st_mode & 0o7777)
 времянка.replace(реестр)
 print("   open_authorized = True, ref и id записаны, desired_state не тронут")
 PYREG2
