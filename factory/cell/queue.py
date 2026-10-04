@@ -82,7 +82,11 @@ from typing import Any
 #: «откат записан как успех» — итог верный, а учёт врёт.
 ЭТАПЫ = ("received", "validated", "artifact_verified", "candidate_ready",
          "switched", "live_verified", "failed", "rolled_back",
-         "access_verified", "access_missing", "indexing_layer_applied")
+         "access_verified", "access_missing", "indexing_layer_applied",
+         # Согласие владельца, зарегистрированное из чата по его одноразовому
+         # коду: `consent_applied` — код погашен и якорь проверен чтением,
+         # `consent_dry_run` — сухой прогон, код НЕ погашен и якорь не менялся.
+         "consent_applied", "consent_dry_run")
 
 
 class RequestRejected(Exception):
