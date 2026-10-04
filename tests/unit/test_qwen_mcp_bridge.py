@@ -486,6 +486,29 @@ def test_выпуск_не_скрывает_препятствие_за_успе
     assert "заявка не подана" in д["error"] and "устарела" in д["error"]
 
 
+def test_отказ_фабрики_приходит_отказом_инструмента_а_не_трассировкой(monkeypatch):
+    """Найдено настоящим прогоном по семействам.
+
+    У `lordserial33.biz` рабочая копия стояла на другом коммите, расчёт digest
+    отказал `ExecutorRefused`, и инструмент отдал НЕОБРАБОТАННОЕ исключение:
+    клиент увидел трассировку вместо названной причины. Отказ фабрики обязан
+    приходить отказом инструмента.
+    """
+    from factory.cell import admin_exec
+    from factory.cell import trigger as триггер
+
+    def падать(site_id, *, submit=False):
+        raise admin_exec.ExecutorRefused(
+            "HEAD на 473ef6cbac00, а просят 761ae97e8d3f")
+
+    monkeypatch.setattr(триггер, "проверить_сайт", падать)
+    monkeypatch.setattr(mcp, "_site_id", lambda з: "lords-02")
+    ошибка, д = _вызов("release_plan", {"site": "lordserial33.biz"})
+    assert ошибка, д
+    assert "HEAD на 473ef6cbac00" in д["error"], д
+    assert "Traceback" not in json.dumps(д, ensure_ascii=False)
+
+
 def test_измерение_страницы_не_даёт_оценок(monkeypatch):
     """`audit_page_seo` сообщает измеренное, а не «хорошо/плохо»."""
     monkeypatch.setattr(mcp, "_страница_домена", lambda домен, путь="/": {

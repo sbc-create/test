@@ -496,13 +496,20 @@ def _site_id(значение: str) -> str:
 
 
 def _план_выпуска(сайт: str, *, подать: bool) -> dict[str, Any]:
+    from factory.cell import admin_exec
+    from factory.cell import queue as очередь_ячеек
     from factory.cell import registry as реестр_ячеек
     from factory.cell import trigger as триггер
 
     site_id = _site_id(сайт)
     try:
         итог = триггер.проверить_сайт(site_id, submit=подать)
-    except (триггер.TriggerError, реестр_ячеек.RegistryError) as ош:
+    # `ExecutorRefused` в этот список попал по настоящему прогону: рабочая копия
+    # репозитория сайта стояла на другом коммите, и расчёт digest отказал —
+    # инструмент отдал НЕОБРАБОТАННОЕ исключение вместо названной причины.
+    # Отказ фабрики обязан приходить отказом инструмента, а не трассировкой.
+    except (триггер.TriggerError, реестр_ячеек.RegistryError,
+            admin_exec.ExecutorRefused, очередь_ячеек.RequestRejected) as ош:
         raise ОшибкаИнструмента(f"{site_id}: {ош}") from None
     return итог
 
