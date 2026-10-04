@@ -73,7 +73,9 @@
         "reason": "Сейчас закрыто: noindex/nofollow отдают и рантайм, и заголовок nginx, обход запрещён в robots.txt. Запись отражает фактический режим и меняется вместе с ним.",
         "authority": null,
         "open_authorized": true,
-        "open_authorization_note": "Владелец разрешил открытие animedia.space и animedia.icu 2026-10-01 при постановке задачи на штатную операцию открытия. Разрешение — не открытие: фактический режим переключает `python3 -m factory.qwen indexing-set`, и до этого сайт закрыт."
+        "open_authorization_note": "разрешение владельца: claude, 2026-10-04T19:35:59Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/animedia.icu.json; флаг в реестре без него разрешением не считается",
+        "open_authorization_ref": "/var/lib/site-cells/owner-consent/animedia.icu.json",
+        "open_authorization_id": "357885f2-4fdf-40ee-8be4-be06c16a5ab8"
       }
     },
     {
@@ -151,7 +153,9 @@
         "reason": "Сейчас закрыто: noindex/nofollow отдают и рантайм, и заголовок nginx, обход запрещён в robots.txt. Запись отражает фактический режим и меняется вместе с ним.",
         "authority": null,
         "open_authorized": true,
-        "open_authorization_note": "Владелец разрешил открытие animedia.space и animedia.icu 2026-10-01 при постановке задачи на штатную операцию открытия. Разрешение — не открытие: фактический режим переключает `python3 -m factory.qwen indexing-set`, и до этого сайт закрыт."
+        "open_authorization_note": "разрешение владельца: claude, 2026-10-04T19:35:59Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/animedia.space.json; флаг в реестре без него разрешением не считается",
+        "open_authorization_ref": "/var/lib/site-cells/owner-consent/animedia.space.json",
+        "open_authorization_id": "e89c03de-05c0-49d0-9882-9b3ba34525a0"
       }
     },
     {
@@ -329,7 +333,11 @@
       },
       "indexing": {
         "desired_state": "CLOSED",
-        "reason": "Тестовая площадка. noindex/nofollow отдаёт рантайм, заготовка nginx дублирует заголовком. Открытие индексации — отдельное решение владельца."
+        "reason": "Тестовая площадка. noindex/nofollow отдаёт рантайм, заготовка nginx дублирует заголовком. Открытие индексации — отдельное решение владельца.",
+        "open_authorized": true,
+        "open_authorization_ref": "/var/lib/site-cells/owner-consent/an1meg0.site.json",
+        "open_authorization_id": "b259a296-2fa4-4451-802e-94d37ea1a09c",
+        "open_authorization_note": "разрешение владельца: claude, 2026-10-04T19:35:57Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/an1meg0.site.json; флаг в реестре без него разрешением не считается"
       },
       "publisher": {
         "provider": "cdnvideohub",
@@ -415,6 +423,12 @@
           "source": "get/projects_2/projects"
         },
         "note": "проект 32531504 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
+      },
+      "indexing": {
+        "open_authorized": true,
+        "open_authorization_ref": "/var/lib/site-cells/owner-consent/lordfilm47.space.json",
+        "open_authorization_id": "9687ce8f-b127-4bcc-bf31-6717aee06b5c",
+        "open_authorization_note": "разрешение владельца: root, 2026-10-04T18:50:01Z. Объявление перенесено из якоря /var/lib/site-cells/owner-consent/lordfilm47.space.json режимом --sync: нового разрешения не выдавалось"
       }
     },
     {
@@ -545,6 +559,12 @@
           "source": "get/projects_2/projects"
         },
         "note": "проект 32531542 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
+      },
+      "indexing": {
+        "open_authorized": true,
+        "open_authorization_ref": "/var/lib/site-cells/owner-consent/1lordserials1.online.json",
+        "open_authorization_id": "f00e6e26-16a8-476c-bcf9-6a45a2452a78",
+        "open_authorization_note": "разрешение владельца: claude, 2026-10-04T19:35:57Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/1lordserials1.online.json; флаг в реестре без него разрешением не считается"
       }
     },
     {
@@ -1320,6 +1340,12 @@
           "source": "get/projects_2/projects"
         },
         "note": "проект 33238820 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
+      },
+      "indexing": {
+        "open_authorized": true,
+        "open_authorization_ref": "/var/lib/site-cells/owner-consent/zonafilm.space.json",
+        "open_authorization_id": "f0fca3ce-0abc-43e2-b42d-2121d8f3e0cd",
+        "open_authorization_note": "разрешение владельца: claude, 2026-10-04T19:35:58Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/zonafilm.space.json; флаг в реестре без него разрешением не считается"
       }
     },
     {
@@ -1454,7 +1480,11 @@
       },
       "indexing": {
         "desired_state": "CLOSED",
-        "reason": "Тестовый запуск новой партии. noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца."
+        "reason": "Тестовый запуск новой партии. noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца.",
+        "open_authorized": true,
+        "open_authorization_ref": "/var/lib/site-cells/owner-consent/zonafilm12.site.json",
+        "open_authorization_id": "9ce4686d-48b8-4160-8991-b4b1e1e221b7",
+        "open_authorization_note": "разрешение владельца: claude, 2026-10-04T19:35:58Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/zonafilm12.site.json; флаг в реестре без него разрешением не считается"
       },
       "publisher": {
         "provider": "cdnvideohub",

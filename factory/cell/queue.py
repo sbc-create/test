@@ -63,14 +63,25 @@ from typing import Any
 #: выпуск нового домена отклонялся HTTP 404, пока та же команда из сессии
 #: читала прогон без ошибок.
 ОПЕРАЦИИ = ("activate", "update", "deliver", "rollback", "editorial",
-            "access-check", "indexing-nginx", "owner-consent")
+            "access-check", "indexing-nginx", "indexing-core", "owner-consent")
 
 #: Операции, которые ничего не выкладывают: коммит и digest им не нужны.
 #:
 #: `indexing-nginx` переключает слой индексации в конфигурации nginx. Кода она
 #: не ставит, поэтому ни коммита, ни digest не требует — но сайт и режим
 #: обязана назвать, и отвечает за них привилегированная сторона.
-ОПЕРАЦИИ_БЕЗ_ВЫПУСКА = ("access-check", "indexing-nginx", "owner-consent")
+#: `indexing-core` меняет режим в СОБСТВЕННОМ реестре семейства Yummy и
+#: перезапускает юнит, потому что режим там резолвится при импорте точки
+#: входа. Кода она тоже не ставит: правятся запись чужого реестра и состояние
+#: процесса, а не выпуск.
+ОПЕРАЦИИ_БЕЗ_ВЫПУСКА = ("access-check", "indexing-nginx", "indexing-core",
+                        "owner-consent")
+
+#: Операции, которым режим ОБЯЗАТЕЛЕН: они им и распоряжаются. Перечень один,
+#: потому что проверка значения и выдача идентификатора обязаны понимать
+#: «операция про режим» одинаково: разойдясь, они дали бы заявку с
+#: детерминированным именем и пустым режимом.
+ОПЕРАЦИИ_РЕЖИМА = ("indexing-nginx", "indexing-core")
 
 #: Этапы операции. Расширение уже существующей схемы онбординга, не вторая.
 #: Этапы, которыми заявка отмечается по ходу. Перечень закрыт: неизвестный этап
@@ -83,6 +94,7 @@ from typing import Any
 ЭТАПЫ = ("received", "validated", "artifact_verified", "candidate_ready",
          "switched", "live_verified", "failed", "rolled_back",
          "access_verified", "access_missing", "indexing_layer_applied",
+         "indexing_core_applied",
          # Согласие владельца, зарегистрированное из чата по его одноразовому
          # коду: `consent_applied` — код погашен и якорь проверен чтением,
          # `consent_dry_run` — сухой прогон, код НЕ погашен и якорь не менялся.
@@ -200,10 +212,10 @@ def _режим(значение, операция: str) -> str:
     спутанной заявки, и принимать его молча нельзя.
     """
     очищенное = str(значение or "").strip().upper()
-    if операция == "indexing-nginx":
+    if операция in ОПЕРАЦИИ_РЕЖИМА:
         if очищенное not in ("OPEN", "CLOSED"):
             raise RequestRejected(
-                f"mode={значение!r}: операции indexing-nginx нужен режим "
+                f"mode={значение!r}: операции {операция} нужен режим "
                 "OPEN или CLOSED")
         return очищенное
     if очищенное:
@@ -433,20 +445,43 @@ def состояние(request_id: str, *, база: Path | None = None,
     корень = база or БАЗА
     готовый = корень / "results" / f"{request_id}.json"
     если_в_очереди = корень / "requests" / f"{request_id}.json"
+
+    def _заявка() -> dict[str, Any] | None:
+        """Содержимое файла заявки или None с названной причиной.
+
+        ЗАЯВКУ В РАБОТЕ ЧИТАТЬ МОЖНО НЕ ВСЕГДА, и это не беда учёта.
+        Измерено 2026-10-04 на выпуске yummy-biz: исполнитель работает от
+        root и на время работы переписывает файл заявки своими правами
+        (`-rw-------`, владелец root); непривилегированное ожидание получило
+        `PermissionError` и УПАЛО, оставив три применённых выпуска без
+        прочитанного результата. Падение здесь — хуже неизвестности: заявка
+        идёт своим ходом, а вызывающий теряет и ожидание, и отчёт.
+        """
+        if not если_в_очереди.exists():
+            return None
+        try:
+            return json.loads(если_в_очереди.read_text(encoding="utf-8"))
+        except PermissionError:
+            return {"unreadable": "файл заявки занят исполнителем (root): "
+                                  "заявка в работе"}
+        except (OSError, ValueError) as ош:
+            return {"unreadable": f"{type(ош).__name__}: {ош}"}
+
     if готовый.is_file():
         данные = json.loads(готовый.read_text(encoding="utf-8"))
         начало = str(данные.get("started_at") or "")
         if не_раньше and начало and начало < не_раньше:
             ответ: dict[str, Any] = {"status": "queued", "request_id": request_id,
                                      "stale_result": данные}
-            if если_в_очереди.is_file():
-                ответ.update(json.loads(если_в_очереди.read_text(encoding="utf-8")))
+            заявка = _заявка()
+            if заявка is not None:
+                ответ.update(заявка)
                 ответ["status"] = "queued"
                 ответ["stale_result"] = данные
             return ответ
         return {**данные, "status": "finished", "result": данные}
-    if если_в_очереди.is_file():
-        заявка = json.loads(если_в_очереди.read_text(encoding="utf-8"))
+    заявка = _заявка()
+    if заявка is not None:
         return {**заявка, "status": "queued"}
     return {"status": "unknown", "request_id": request_id}
 
@@ -978,13 +1013,14 @@ def собрать(site_id: str, commit: str, digest: str, *, operation: str = "
     успешной заявкой того же режима, очередь ответила бы `already-finished`,
     и слой остался бы в чужом режиме при «успешном» возврате.
     """
-    if operation == "indexing-nginx":
+    if operation in ОПЕРАЦИИ_РЕЖИМА:
         # Идентификатор называет САЙТ И РЕЖИМ. Повтор того же режима очередь
         # отвечает `already-finished` — и это верно, менять нечего. Смена
         # режима даёт другой идентификатор, то есть новую работу. Неудачная
         # попытка переподаётся тем же идентификатором: очередь отвечает
         # `requeued-after-failure`.
-        запрос = f"{site_id}-idx-{(mode or '').strip().lower()}"
+        основа = "idx" if operation == "indexing-nginx" else "core"
+        запрос = f"{site_id}-{основа}-{(mode or '').strip().lower()}"
         if suffix:
             чистый = re.sub(r"[^a-z0-9-]", "", suffix.strip().lower())
             if not чистый:

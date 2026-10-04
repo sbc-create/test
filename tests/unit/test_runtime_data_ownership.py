@@ -78,8 +78,16 @@ def _robots(стенд) -> pathlib.Path:
 
 def test_перечень_видов_закрыт_и_назван(стенд):
     виды = set(protected.пути(САЙТ, ДОМЕН))
-    assert виды == {"indexing_state", "indexing_journal", "editorial",
-                    "nginx_indexing", "site_declared"}, виды
+    # Перечень ЗАКРЫТ: новый вид попадает сюда только объявлением, и вместе с
+    # ним обязаны появиться его законный писатель (`ВЛАДЕЛЬЦЫ_ВИДОВ`) и
+    # читатель выпуска (`ЧИТАТЕЛИ`). `indexing_core` — реестр индексируемости
+    # семейства Yummy: один файл на пять доменов, и каждая запись в нём —
+    # решение владельца об одном из них.
+    assert виды == {"indexing_state", "indexing_journal", "indexing_core",
+                    "editorial", "nginx_indexing", "site_declared"}, виды
+    for вид in виды:
+        assert вид in protected.ЧИТАТЕЛИ, (
+            f"{вид}: не сказано, чем выпуск этот вид читает")
 
 
 def test_корни_совпадают_с_теми_что_читаются():

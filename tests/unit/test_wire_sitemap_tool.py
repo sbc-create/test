@@ -82,6 +82,34 @@ def main() -> int:
     return 0
 '''
 
+#: Лаунчер-АДАПТЕР по образцу живых витрин: загружает общее ядро по пути,
+#: ставит слои и отдаёт управление `ядро.main()`.
+АДАПТЕР_ЛАУНЧЕР = '''"""Адаптер над общим ядром."""
+import importlib.util
+import sys
+from pathlib import Path
+
+КОРЕНЬ = Path(__file__).resolve().parent
+
+
+def загрузить_ядро():
+    спец = importlib.util.spec_from_file_location(
+        "lords_frontend_core", КОРЕНЬ / "lords-frontend.py")
+    модуль = importlib.util.module_from_spec(спец)
+    sys.modules["lords_frontend_core"] = модуль
+    спец.loader.exec_module(модуль)
+    return модуль
+
+
+def main() -> int:
+    ядро = загрузить_ядро()
+    return ядро.main()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+'''
+
 ЛАУНЧЕР_БЕЗ_ДОПОЛНЕНИЙ = '''import json
 from pathlib import Path
 
@@ -108,9 +136,7 @@ def _репозиторий(tmp: pathlib.Path, *, адаптер: bool) -> pathl
     (репо / "src" / "seo_layer.py").write_text(
         '"""Прежний общий модуль без сборщика карты."""\n', encoding="utf-8")
     if адаптер:
-        (репо / "src" / точка).write_text(
-            '"""Адаптер над общим ядром."""\nimport lords_frontend  # noqa\n',
-            encoding="utf-8")
+        (репо / "src" / точка).write_text(АДАПТЕР_ЛАУНЧЕР, encoding="utf-8")
     (репо / "run.py").write_text(ЛАУНЧЕР_БЕЗ_ДОПОЛНЕНИЙ, encoding="utf-8")
     return репо
 
@@ -121,15 +147,71 @@ def _запуск(репо: pathlib.Path, *аргументы: str):
                           capture_output=True, text=True, cwd=str(КОРЕНЬ))
 
 
-def test_адаптер_не_правится_вслепую(tmp_path):
-    """Правка общего ядра в репозитории сайта запрещена его же правилами."""
+def test_адаптер_подключается_не_трогая_ядро(tmp_path):
+    """У витрины на общем ядре карта подключается слоем, а ядро не правится.
+
+    Прежде инструмент отказывал адаптеру ЦЕЛИКОМ. Отказ был слишком широким:
+    ядро уже умеет ОТДАВАТЬ карту (маршрут и `SITEMAP_DIR` в нём есть), а не
+    хватало ровно того, что лежит в файлах САМОГО САЙТА — сборщика, перечня
+    разделов, переменной каталога и ссылки в robots.txt. Измерено 2026-10-04
+    на выложенном lordserial33.biz: `/sitemap.xml` отдавал 404 молча.
+    """
     репо = _репозиторий(tmp_path, адаптер=True)
+    ядро = репо / "src" / "lords-frontend.py"
+    было = ядро.read_bytes()
+    итог = _запуск(репо)
+    assert итог.returncode == 0, итог.stdout + итог.stderr
+    assert "АДАПТЕР над общим ядром" in итог.stdout, итог.stdout
+    # ЯДРО НЕ ТРОНУТО — байт в байт.
+    assert ядро.read_bytes() == было, "правка общего ядра запрещена п. 3 AGENTS.md"
+    # Подключение — в файлах сайта.
+    лаунчер = (репо / "src" / "site01-frontend.py").read_text(encoding="utf-8")
+    assert "lords_sitemap_layer.подключить(ядро, РАЗДЕЛЫ_КАРТЫ)" in лаунчер
+    assert 'РАЗДЕЛЫ_КАРТЫ = ("/", "/movies/",)' in лаунчер
+    # Запуск сборщика — ДО `ядро.main()`: сервер стартует в нём.
+    assert лаунчер.index("lords_sitemap_layer.подключить") < лаунчер.index(
+        "return ядро.main()")
+    слой = репо / "src" / "lords_sitemap_layer.py"
+    assert слой.is_file(), "общий слой семейства обязан быть доставлен"
+    assert слой.read_bytes() == (
+        КОРЕНЬ / "automation" / "host" / "lords_sitemap_layer.py").read_bytes()
+    # И сборщик: прежняя версия общего модуля заменена шаблонной.
+    assert "запустить_карту" in (репо / "src" / "seo_layer.py").read_text(
+        encoding="utf-8")
+
+
+def test_адаптер_без_точки_подключения_отказывает(tmp_path):
+    """Нет `main()` — нет места для слоя, и инструмент не правит вслепую."""
+    репо = _репозиторий(tmp_path, адаптер=True)
+    (репо / "src" / "site01-frontend.py").write_text(
+        '"""Адаптер без main()."""\nimport lords_frontend  # noqa\n',
+        encoding="utf-8")
+    ядро = репо / "src" / "lords-frontend.py"
+    было = ядро.read_bytes()
     итог = _запуск(репо)
     assert итог.returncode == 4, итог.stdout + итог.stderr
-    assert "АДАПТЕР над общим ядром" in итог.stderr, итог.stderr
-    # Ничего не изменено.
-    assert "запустить_карту" not in (репо / "src" / "lords-frontend.py").read_text(
-        encoding="utf-8")
+    assert "нет main()" in итог.stderr, итог.stderr
+    assert ядро.read_bytes() == было
+
+
+def test_копия_общего_модуля_только_для_чтения_не_правится_наполовину(tmp_path):
+    """Отказ на последнем файле не вправе оставить репозиторий в половине правок.
+
+    Измерено 2026-10-04 на lordserial33.biz: копии общих модулей помечены
+    `-r--r--r--`, доставка `seo_layer.py` шла отдельной строкой ПОСЛЕ правок
+    лаунчера, и `PermissionError` на ней оставил витрину звать слой, которого
+    в модуле нет.
+    """
+    репо = _репозиторий(tmp_path, адаптер=True)
+    модуль = репо / "src" / "seo_layer.py"
+    модуль.chmod(0o444)
+    лаунчер = репо / "src" / "site01-frontend.py"
+    было = лаунчер.read_bytes()
+    итог = _запуск(репо)
+    assert итог.returncode == 5, итог.stdout + итог.stderr
+    assert "только для чтения" in итог.stderr, итог.stderr
+    assert "chmod u+w" in итог.stderr, "что делать — обязано быть сказано"
+    assert лаунчер.read_bytes() == было, "ни одной правки не применено"
 
 
 def test_монолит_подключается_целиком(tmp_path):
