@@ -298,6 +298,70 @@ def test_выпуск_без_читателя_отклоняется_до_сбо
     assert "ДО сборки" in текст
 
 
+def test_пустое_хранилище_не_блокирует_выпуск(стенд, tmp_path):
+    """Пустой каталог материалов данными не является: терять нечего.
+
+    Случай не придуман. 2026-10-04 штатный `factory cell trigger` сам создал
+    пустое хранилище `/srv/sites/lords/runtime/overlays/lordserials22.info`
+    (поле `created_now: true`), и ворота защищённых данных после этого
+    отклонили выпуск lords-05: «не несёт читателей защищённых данных —
+    editorial». До того прогона каталога не существовало, и тот же выпуск
+    ворота прошёл бы. Защита от ПОТЕРИ данных сработала там, где данных нет,
+    и заперла выпуск до переноса постороннего читателя.
+
+    Ворота при этом не ослабляются: нечитаемый каталог и каталог с любым
+    файлом по-прежнему требуют читателя — это проверяется ниже.
+    """
+    _состояние(стенд)
+    пустое = стенд["overlays"] / ДОМЕН
+    пустое.mkdir(parents=True, exist_ok=True)
+    protected.поставить_отметку(САЙТ, ДОМЕН, кем="тест")
+    репо = _репозиторий(tmp_path, {"src/indexing_mode.py": "# читатель режима\n"})
+    коммит = subprocess.run(["git", "rev-parse", "HEAD"], cwd=репо,
+                            capture_output=True, text=True).stdout.strip()
+    итог = protected.проверить_выпуск(САЙТ, ДОМЕН, репо, коммит, adapter="test")
+    assert итог["compatible"] is True, итог
+    assert итог["missing_readers"] == [], итог
+    assert "editorial" in str(итог.get("empty_kinds") or []), итог
+
+
+def test_непустое_хранилище_по_прежнему_требует_читателя(стенд, tmp_path):
+    """Один файл в хранилище — и читатель снова обязателен."""
+    _состояние(стенд)
+    _материалы(стенд)
+    protected.поставить_отметку(САЙТ, ДОМЕН, кем="тест")
+    репо = _репозиторий(tmp_path, {"src/indexing_mode.py": "# читатель режима\n"})
+    коммит = subprocess.run(["git", "rev-parse", "HEAD"], cwd=репо,
+                            capture_output=True, text=True).stdout.strip()
+    with pytest.raises(protected.ЗащитаДанных) as ош:
+        protected.проверить_выпуск(САЙТ, ДОМЕН, репо, коммит, adapter="test")
+    assert "editorial" in str(ош.value)
+
+
+def test_нечитаемое_хранилище_считается_присутствующим(стенд, tmp_path):
+    """Отказ в чтении означает «есть и не видно», а не «пусто».
+
+    Иначе каталог сайта с правами 0700 выглядел бы пустым, и выпуск без
+    читателя прошёл бы поверх чужих материалов.
+    """
+    _состояние(стенд)
+    закрытое = стенд["overlays"] / ДОМЕН
+    закрытое.mkdir(parents=True, exist_ok=True)
+    (закрытое / "title-overlays.json").write_text("{}", encoding="utf-8")
+    закрытое.chmod(0o000)
+    protected.поставить_отметку(САЙТ, ДОМЕН, кем="тест")
+    репо = _репозиторий(tmp_path, {"src/indexing_mode.py": "# читатель режима\n"})
+    коммит = subprocess.run(["git", "rev-parse", "HEAD"], cwd=репо,
+                            capture_output=True, text=True).stdout.strip()
+    try:
+        if os.access(закрытое, os.R_OK):
+            pytest.skip("проверка идёт от root: нечитаемого каталога не получить")
+        with pytest.raises(protected.ЗащитаДанных):
+            protected.проверить_выпуск(САЙТ, ДОМЕН, репо, коммит, adapter="test")
+    finally:
+        закрытое.chmod(0o755)
+
+
 def test_выпуск_с_читателями_проходит(стенд, tmp_path):
     _состояние(стенд)
     _материалы(стенд)
