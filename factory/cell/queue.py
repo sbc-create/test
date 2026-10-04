@@ -801,8 +801,15 @@ def проверить_маршрут(site_id: str) -> None:
 
 def собрать(site_id: str, commit: str, digest: str, *, operation: str = "activate",
             ci_run: str = "", repo: str = "", note: str = "",
-            snapshot: str = "", mode: str = "") -> Заявка:
-    """Заявка из результата проверенной сборки, а не из рук человека."""
+            snapshot: str = "", mode: str = "", suffix: str = "") -> Заявка:
+    """Заявка из результата проверенной сборки, а не из рук человека.
+
+    `suffix` — только для `indexing-nginx` и только там, где повтор того же
+    режима является НОВОЙ работой. Такой случай один: возврат слоя после
+    частичного отказа. Идентификатор без суффикса совпал бы с прежней
+    успешной заявкой того же режима, очередь ответила бы `already-finished`,
+    и слой остался бы в чужом режиме при «успешном» возврате.
+    """
     if operation == "indexing-nginx":
         # Идентификатор называет САЙТ И РЕЖИМ. Повтор того же режима очередь
         # отвечает `already-finished` — и это верно, менять нечего. Смена
@@ -810,6 +817,12 @@ def собрать(site_id: str, commit: str, digest: str, *, operation: str = "
         # попытка переподаётся тем же идентификатором: очередь отвечает
         # `requeued-after-failure`.
         запрос = f"{site_id}-idx-{(mode or '').strip().lower()}"
+        if suffix:
+            чистый = re.sub(r"[^a-z0-9-]", "", suffix.strip().lower())
+            if not чистый:
+                raise RequestRejected(
+                    f"suffix={suffix!r}: допустимы строчные буквы, цифры и дефис")
+            запрос = f"{запрос}-{чистый}"[:64]
     elif operation in ОПЕРАЦИИ_БЕЗ_ВЫПУСКА:
         запрос = идентификатор_проверки(site_id)
     else:

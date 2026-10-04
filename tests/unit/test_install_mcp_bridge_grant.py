@@ -42,7 +42,7 @@ import pytest
 ОТПЕЧАТОК = "4511cf3add1b3e88fb4b5a124d19fc5306ef447ee7dbad7ff42cbcc1c6564e0e"
 ВНУТРЕННИЙ_ОТВЕТ = {
     "environment": {"host": "claude-control-01",
-                    "instruction": {"version": "2026-10-03.6"}},
+                    "instruction": {"version": "2026-10-04.1"}},
     "ok": True,
     "read_only": True,
     "registry": {

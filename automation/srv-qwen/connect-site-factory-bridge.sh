@@ -55,7 +55,7 @@ BACKUP_ROOT="/opt/qwen/backups"
 #: приёмкой: совпадение числа, отпечатка и источника отличает фабрику от
 #: любого другого ответчика на том же порту.
 EXPECT_HOST="claude-control-01"
-EXPECT_VERSION="2026-10-03.6"
+EXPECT_VERSION="2026-10-04.1"
 EXPECT_SITES="23"
 EXPECT_DIGEST16="4511cf3add1b3e88"
 EXPECT_SOURCE="config/site-cells.json"

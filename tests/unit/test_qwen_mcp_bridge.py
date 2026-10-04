@@ -356,3 +356,94 @@ def test_приёмка_отличает_мост_от_чужого_сервер
         "ноль сайтов при valid=true — признак не той фабрики")
     assert готовность["registry"]["sources"]["site_cells"]["path"].endswith(
         "config/site-cells.json")
+
+
+# --- аналитика и откат: то, чего у моста не было -----------------------------
+
+def _вызов(имя: str, аргументы: dict) -> tuple[bool, dict]:
+    """Вызов через ПРОТОКОЛ, а не напрямую: проверяется и обёртка ответа."""
+    тело = mcp.обработать({"jsonrpc": "2.0", "id": 1, "method": "tools/call",
+                           "params": {"name": имя, "arguments": аргументы}})["result"]
+    return bool(тело.get("isError")), json.loads(тело["content"][0]["text"])
+
+
+def test_аналитика_отвечает_на_тот_же_вызов_что_падал_у_qwen():
+    """В сессии Qwen инструмент вызывается с `domain`, а не с `site`.
+
+    Отказ «нужен параметр site» на такой вызов был бы отказом из-за имени
+    поля. Проверяется ровно тот вызов, который дал «Error executing tool
+    analytics_readiness»: {"domain": "lordserials22.info"}.
+    """
+    ошибка, д = _вызов("analytics_readiness", {"domain": "lordserials22.info"})
+    assert not ошибка, д
+    assert д["verdict"] in mcp.АНАЛИТИКА_ВЕРДИКТЫ, д
+    assert д["site"] == "lordserials22.info"
+    assert д["source"]["path"].endswith("config/analytics.json"), д["source"]
+    assert д["source"]["entries"] > 0, "пустой источник вердиктом не является"
+    assert д["reason"] and д["next_action"], д
+
+
+def test_аналитика_не_выводит_секретов():
+    """Счётчик секретом не является, а учётные данные в ответ не попадают."""
+    _, д = _вызов("analytics_readiness", {"site": "lordserials22.info"})
+    текст = json.dumps(д, ensure_ascii=False).lower()
+    for запрещено in ("token", "oauth", "secret", "password", "credential_path",
+                      "private"):
+        assert запрещено not in текст, f"в ответе есть {запрещено!r}: {текст[:300]}"
+    assert isinstance(д.get("credentials_configured"), bool), (
+        "признак настроенности обязан быть булевым, а не путём")
+
+
+def test_аналитика_неизвестного_домена_это_явная_ошибка():
+    ошибка, д = _вызов("analytics_readiness", {"domain": "nosuch.example"})
+    assert ошибка, д
+    assert "нет в действующих реестрах" in д["error"], д
+    assert "не вывод об аналитике" in д["error"], (
+        "ошибка обязана отличать отсутствие записи от вывода о счётчике")
+
+
+def test_непредвиденное_исключение_возвращается_диагностическим_ответом():
+    """«Error executing tool <имя>» без причины — не ответ, а обрыв.
+
+    Прежде `tools/call` ловил только свою `ОшибкаИнструмента`, и любое другое
+    исключение уходило наружу: клиент показывал одну строку без причины,
+    домена и источника — ровно так выглядел отказ инструмента аналитики.
+    """
+    запись = mcp.ИНСТРУМЕНТЫ["analytics_readiness"]
+    прежний = запись["обработчик"]
+
+    def падать(_):
+        raise KeyError("site_id")
+
+    запись["обработчик"] = падать
+    try:
+        ошибка, д = _вызов("analytics_readiness", {"domain": "lordserials22.info"})
+    finally:
+        запись["обработчик"] = прежний
+    assert ошибка, д
+    assert д["unexpected"] is True, д
+    assert д["error"].startswith("KeyError"), д["error"]
+    assert ":" in д["where"] and "падать" in д["where"], д["where"]
+    assert д["arguments"] == ["domain"], "в ответе обязаны быть ИМЕНА аргументов"
+    assert "token" not in json.dumps(д).lower()
+
+
+def test_откат_объявлен_пишущим_и_скрыт_при_только_чтении(monkeypatch):
+    """Откат через штатный интерфейс: без него откат требовал человека."""
+    assert "rollback_indexing" in mcp.ИНСТРУМЕНТЫ
+    assert "rollback_indexing" in mcp.ПИШУЩИЕ, (
+        "откат меняет состояние: объявлять его читающим нельзя")
+    monkeypatch.setattr(mcp, "ТОЛЬКО_ЧТЕНИЕ", True)
+    assert "rollback_indexing" not in mcp.доступные()
+    ошибка, д = _вызов("rollback_indexing", {"site": "lordserials22.info"})
+    assert ошибка and "только чтения" in д["error"], д
+
+
+def test_набор_инструментов_покрывает_петлю_операции():
+    """Открыть, подтвердить, откатить и прочесть журнал — одним интерфейсом."""
+    for имя in ("domain_indexing_readiness", "set_indexing_mode",
+                "confirm_indexing", "rollback_indexing", "indexing_journal",
+                "analytics_readiness"):
+        assert имя in mcp.ИНСТРУМЕНТЫ, имя
+        assert mcp.ИНСТРУМЕНТЫ[имя]["описание"].strip(), имя
+        assert mcp.ИНСТРУМЕНТЫ[имя]["схема"]["type"] == "object", имя
