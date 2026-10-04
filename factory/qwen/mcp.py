@@ -350,9 +350,16 @@ def инструмент_согласия(аргументы: dict) -> dict[str,
     примечание = str(аргументы.get("note") or "").strip()[:200]
     if not сайт:
         raise ОшибкаИнструмента("нужен параметр site: домен или site_id")
-    if действие not in ("grant", "revoke"):
-        raise ОшибкаИнструмента("action: grant или revoke")
-    if not код:
+    if действие not in ("grant", "revoke", "sync"):
+        raise ОшибкаИнструмента("action: grant, revoke или sync")
+    # `sync` переносит УЖЕ подтверждённое якорём решение владельца и нового
+    # разрешения не выдаёт, поэтому кода не требует и не принимает. Создать
+    # разрешение этим действием нельзя: нет якоря — нет и переноса.
+    if действие == "sync" and код:
+        raise ОшибкаИнструмента(
+            "действию sync код не нужен: оно переносит решение, уже "
+            "подтверждённое якорём согласия, и нового разрешения не выдаёт")
+    if действие != "sync" and not код:
         raise ОшибкаИнструмента(
             "нужен код владельца (аргумент code). Коды выдаёт одна команда "
             "владельца: sudo bash automation/host/install-owner-consent-codes.sh")
@@ -361,7 +368,7 @@ def инструмент_согласия(аргументы: dict) -> dict[str,
     except Exception as ош:  # noqa: BLE001 — неизвестный сайт назван отказом
         raise ОшибкаИнструмента(f"{сайт}: {ош}") from None
     домен = (s.domain or "").strip().lower()
-    привязка = owner_codes.привязка(код, домен, действие)
+    привязка = owner_codes.привязка(код, домен, действие) if код else ""
     # Дальше кода нет нигде: ни в заявке, ни в ответе.
     del код
     try:
@@ -415,7 +422,7 @@ def инструмент_согласия(аргументы: dict) -> dict[str,
     итог["next_action"] = (
         "открытие домена остаётся отдельной операцией set_indexing_mode: "
         "согласие разрешает открытие, но само не открывает"
-        if действие == "grant" else
+        if действие in ("grant", "sync") else
         "согласие отозвано: открытие домена теперь невозможно до нового согласия")
     return итог
 
@@ -1072,11 +1079,14 @@ def инструмент_области_адреса(аргументы: dict) -
                      "попадает: передаётся привязка sha256(код|домен|действие)."),
         "схема": {"type": "object", "properties": {
             "site": {"type": "string", "description": "домен или site_id"},
-            "action": {"type": "string", "enum": ["grant", "revoke"]},
+            "action": {"type": "string", "enum": ["grant", "revoke", "sync"],
+                       "description": ("grant и revoke требуют кода владельца; "
+                                       "sync переносит уже подтверждённое "
+                                       "якорём решение и кода не принимает")},
             "code": {"type": "string",
                      "description": "одноразовый код владельца (oc-…)"},
             "note": {"type": "string"}},
-            "required": ["site", "code"], "additionalProperties": False},
+            "required": ["site"], "additionalProperties": False},
     },
     "confirm_indexing": {
         "обработчик": инструмент_подтверждения,

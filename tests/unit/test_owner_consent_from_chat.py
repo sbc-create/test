@@ -148,13 +148,22 @@ def test_инструмент_требует_код():
     assert "register_owner_consent" in mcp.ПИШУЩИЕ, (
         "инструмент меняет состояние и обязан быть в перечне пишущих: иначе "
         "режим «только чтение» его не скроет")
+    # Код обязателен ПО ДЕЙСТВИЮ, а не формой схемы: `sync` переносит уже
+    # подтверждённое решение и кода не принимает вовсе. Проверяется поведение —
+    # оно строже объявления.
     схема = mcp.ИНСТРУМЕНТЫ["register_owner_consent"]["схема"]
-    assert "code" in схема["required"], (
-        "без обязательного кода инструмент стал бы правом выдать разрешение "
-        "себе")
+    assert set(схема["properties"]["action"]["enum"]) == {"grant", "revoke", "sync"}
     with pytest.raises(mcp.ОшибкаИнструмента) as ош:
-        mcp.вызвать("register_owner_consent", {"site": ДОМЕН})
-    assert "code" in str(ош.value)
+        mcp.вызвать("register_owner_consent", {"site": ДОМЕН, "action": "grant"})
+    assert "код владельца" in str(ош.value), (
+        "выдача без кода стала бы правом выдать разрешение себе")
+    with pytest.raises(mcp.ОшибкаИнструмента) as ош2:
+        mcp.вызвать("register_owner_consent", {"site": ДОМЕН, "action": "revoke"})
+    assert "код владельца" in str(ош2.value)
+    with pytest.raises(mcp.ОшибкаИнструмента) as ош3:
+        mcp.вызвать("register_owner_consent",
+                    {"site": ДОМЕН, "action": "sync", "code": "oc-X"})
+    assert "кода не нужен" in str(ош3.value) or "код не нужен" in str(ош3.value)
 
 
 def test_исполнитель_зовёт_команду_владельца():
@@ -341,3 +350,127 @@ def test_предусловия_не_требуют_репозитория_и_р
                          operation="activate")
     with pytest.raises(Exception):
         ex.проверить_заявку(выкладка)
+
+
+# --- частичный отказ и перенос объявления из якоря -------------------------
+#
+# Случай измерен 2026-10-04 на заявке `lords-01-consent-grant-20261004-184926`:
+# якорь согласия создан (root:root 0444, идентификатор 9687ce8f), а шаг реестра
+# отказал словами `cp: … Read-only file system` — служба исполнителя не имела
+# права писать в каталог config (`ProtectHome=read-only` без `ReadWritePaths`).
+# Осталось расхождение: подтверждение владельца есть, объявления в реестре нет,
+# а одноразовый код уже погашен — повторить `grant` нечем.
+#
+# Поэтому есть действие `sync`: оно переносит в реестр то, что владелец уже
+# решил и что подтверждено якорём. Кода не требует и не принимает; создать
+# разрешение им нельзя — нет якоря, нет и переноса.
+
+ЗАГЛУШКА_С_ОТКАЗОМ = """#!/usr/bin/env bash
+set -Eeuo pipefail
+domain=""
+mode="grant"
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --domain) domain="$2"; shift 2 ;;
+    --undo) mode="revoke"; shift ;;
+    --sync) mode="sync"; shift ;;
+    *) shift ;;
+  esac
+done
+target="${CONSENT_DIR}/${domain}.json"
+if [ "$mode" = sync ]; then
+  echo "объявление перенесено из якоря"
+  exit 0
+fi
+printf '{"schema_version": 1, "domain": "%s", "site_id": "%s", "authorized": true, "by": "owner", "at": "2026-10-04T00:00:00Z", "id": "stand-0002"}\\n' \\
+  "$domain" "$SITE_ID_FOR_STUB" > "$target"
+echo "cp: cannot create regular file '/home/claude/.../config/site-cells.json.bak': Read-only file system" >&2
+exit 1
+"""
+
+
+def test_частичный_отказ_оставляет_якорь_и_гасит_код(цепочка, monkeypatch):
+    """Так и случилось в бою: якорь создан, реестр не записан, код погашен."""
+    ex = цепочка["ex"]
+    команда = pathlib.Path(ex.КОМАНДА_СОГЛАСИЯ)
+    команда.write_text(ЗАГЛУШКА_С_ОТКАЗОМ, encoding="utf-8")
+    команда.chmod(0o755)
+    with pytest.raises(ex.ExecutorError) as ош:
+        ex.зарегистрировать_согласие(_заявка("grant"), dry_run=False)
+    assert "Read-only file system" in str(ош.value), str(ош.value)
+    # Якорь остался — решение владельца зафиксировано.
+    assert цепочка["консент"].сведения(ДОМЕН)["present"] is True
+    # Код погашен: он проверяется ДО запуска команды, и это факт, а не ошибка.
+    данные = json.loads(pathlib.Path(owner_codes.ХРАНИЛИЩЕ).read_text(encoding="utf-8"))
+    первый = next(к for к in данные["codes"] if к["id"] == "c01")
+    assert первый.get("used_at"), "код не погашен — значит проверка шла после работы"
+
+
+def test_sync_завершает_операцию_без_нового_кода(цепочка):
+    """Перенос из якоря: кода не требует и не расходует."""
+    ex = цепочка["ex"]
+    # Якорь уже есть (его создаёт выдача); имитируем состояние после отказа.
+    (цепочка["согласия"] / f"{ДОМЕН}.json").write_text(json.dumps({
+        "schema_version": 1, "domain": ДОМЕН, "site_id": САЙТ,
+        "authorized": True, "by": "owner", "at": "2026-10-04T18:50:01Z",
+        "id": "9687ce8f-stand"}, ensure_ascii=False), encoding="utf-8")
+    заявка = q.собрать(САЙТ, "", "", operation="owner-consent",
+                       consent_action="sync")
+    assert заявка.consent_proof == "", "переносу доказательство не нужно"
+    итог = ex.зарегистрировать_согласие(заявка, dry_run=False)
+    assert итог["status"] == "applied", итог
+    assert итог["steps"]["code"]["not_required"] is True
+    assert итог["steps"]["code"]["anchor_id"] == "9687ce8f-stand"
+    данные = json.loads(pathlib.Path(owner_codes.ХРАНИЛИЩЕ).read_text(encoding="utf-8"))
+    assert all(not к.get("used_at") for к in данные["codes"]), (
+        "перенос израсходовал код владельца")
+
+
+def test_sync_без_якоря_ничего_не_создаёт(цепочка):
+    """Создать разрешение переносом нельзя: нет якоря — нет и переноса."""
+    ex = цепочка["ex"]
+    заявка = q.собрать(САЙТ, "", "", operation="owner-consent",
+                       consent_action="sync")
+    with pytest.raises(ex.ExecutorError) as ош:
+        ex.зарегистрировать_согласие(заявка, dry_run=False)
+    assert "переносить нечего" in str(ош.value)
+    assert цепочка["консент"].сведения(ДОМЕН)["present"] is False
+
+
+def test_повтор_переноса_безопасен(цепочка):
+    """Повтор не ломает состояние и не требует кода."""
+    ex = цепочка["ex"]
+    (цепочка["согласия"] / f"{ДОМЕН}.json").write_text(json.dumps({
+        "schema_version": 1, "domain": ДОМЕН, "site_id": САЙТ,
+        "authorized": True, "by": "owner", "at": "2026-10-04T18:50:01Z",
+        "id": "9687ce8f-stand"}, ensure_ascii=False), encoding="utf-8")
+    for _ in range(2):
+        итог = ex.зарегистрировать_согласие(
+            q.собрать(САЙТ, "", "", operation="owner-consent",
+                      consent_action="sync"), dry_run=False)
+        assert итог["status"] == "applied", итог
+    assert цепочка["консент"].сведения(ДОМЕН)["present"] is True
+
+
+def test_юнит_исполнителя_разрешает_запись_каталогу_реестра():
+    """Без этого права команда владельца отказывает «Read-only file system».
+
+    Измерено: `ProtectHome=read-only` делает /home доступным только на чтение
+    для службы, и шаг реестра падал при создании резервной копии. Разрешается
+    КАТАЛОГ, а не файл: запись идёт через временный файл и переименование.
+    """
+    юнит = pathlib.Path("automation/host/site-cell-executor.service").read_text(
+        encoding="utf-8")
+    assert "ReadWritePaths=/home/claude/wt-portable-site-cell-01/config" in юнит
+    assert "ProtectHome=read-only" in юнит, (
+        "общая защита службы снята — так закрывать отказ нельзя")
+
+
+def test_команда_владельца_отвергает_ссылку():
+    """Root не пишет и не копирует через подменённую ссылку в каталоге claude."""
+    текст = pathlib.Path("automation/host/authorize-indexing.sh").read_text(
+        encoding="utf-8")
+    assert '[ -L "$REGISTRY" ]' in текст, (
+        "реестр-ссылка позволил бы root скопировать чужой файл в каталог, "
+        "который читает claude")
+    assert "символическая ссылка" in текст

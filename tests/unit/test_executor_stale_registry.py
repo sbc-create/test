@@ -138,7 +138,19 @@ def test_разрешение_доставляется_без_ссылки_на_
     )
     юнит = (корень / "automation" / "host"
             / "site-cell-executor.service").read_text(encoding="utf-8")
-    assert "/home/claude" not in юнит, "юнит ссылается на рабочий каталог сессии"
+    # Запрещён ВХОД из рабочего каталога; запись в `config/` наоборот нужна —
+    # без неё команда владельца отказывает «Read-only file system» (измерено
+    # 2026-10-04 на заявке lords-01-consent-grant-20261004-184926).
+    import re as _re
+    вход = _re.findall(r"^(?:ExecStart|WorkingDirectory|Environment=PYTHONPATH|"
+                       r"Environment=SITE_CELLS_REGISTRY)=(\S+)", юнит, _re.M)
+    assert вход, "в юните не нашлось ни одного входного пути"
+    for п in вход:
+        assert not п.startswith("/home/"), f"юнит берёт вход {п} из /home"
+    разрешено = set(_re.findall(r"^ReadWritePaths=(\S+)", юнит, _re.M))
+    assert разрешено == {
+        "/home/claude/wt-portable-site-cell-01/config",
+        "/usr/local/lib/site-factory-cell/config"}, разрешено
 
     команда = (корень / "automation" / "host"
                / "authorize-indexing.sh").read_text(encoding="utf-8")

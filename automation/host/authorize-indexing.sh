@@ -54,6 +54,7 @@ while [ $# -gt 0 ]; do
     --note) NOTE="$2"; shift 2 ;;
     --undo) MODE="revoke"; shift ;;
     --show) MODE="show"; shift ;;
+    --sync) MODE="sync"; shift ;;
     --registry) REGISTRY="$2"; shift 2 ;;
     --consent-dir) CONSENT_DIR="$2"; shift 2 ;;
     -h|--help) sed -n '2,40p' "$0"; exit 0 ;;
@@ -67,6 +68,18 @@ die() { printf '\033[31m[x]\033[0m %s\n' "$*" >&2; exit 1; }
 
 [ -n "$DOMAIN" ] || die "нужен --domain: разрешение выдаётся ОДНОМУ домену"
 [ -f "$REGISTRY" ] || die "нет реестра ячеек $REGISTRY"
+
+# РЕЕСТР ОБЯЗАН БЫТЬ ОБЫЧНЫМ ФАЙЛОМ, А НЕ ССЫЛКОЙ.
+#
+# Команда работает от root, а файл лежит в каталоге учётной записи
+# инструментов. Став ссылкой, он превратил бы две безобидные операции в
+# привилегированные: `cp -a` скопировал бы ЧУЖОЙ файл (например, доступный
+# только root) в каталог, который читает `claude`, а запись пошла бы не туда,
+# куда адресована. Проверка стоит до первого обращения.
+[ -L "$REGISTRY" ] && die "реестр $REGISTRY — символическая ссылка: команда работает от root и по ссылке не пишет"
+if [ -L "${EXEC_REGISTRY:-/usr/local/lib/site-factory-cell/config/site-cells.json}" ]; then
+  die "копия исполнителя — символическая ссылка: отказ"
+fi
 
 if [ "$MODE" = show ]; then
   log "подтверждение владельца для ${DOMAIN}"
@@ -129,6 +142,172 @@ ok "домен ${DOMAIN} -> ${SITE_ID}"
 
 install -d -m 0755 -o root -g root "$CONSENT_DIR"
 CONSENT_FILE="${CONSENT_DIR}/$(printf '%s' "$DOMAIN" | tr 'A-Z' 'a-z').json"
+
+# ПЕРЕНОС ОБЪЯВЛЕНИЯ ИЗ ЯКОРЯ (--sync). Нового разрешения не выдаётся.
+#
+# Зачем режим. Выдача согласия идёт двумя записями: якорь в каталоге root и
+# объявление в реестре. Измерено 2026-10-04 на заявке
+# `lords-01-consent-grant-20261004-184926`: якорь создан (root:root 0444,
+# идентификатор 9687ce8f), а шаг реестра отказал «Read-only file system» —
+# служба исполнителя не имела права писать в каталог config. Осталось
+# расхождение: подтверждение владельца есть, объявления нет, и одноразовый код
+# уже погашен.
+#
+# Этот режим ничего не РЕШАЕТ: он переносит в реестр то, что владелец уже
+# решил и что подтверждено якорём. Поэтому код ему не нужен и не принимается:
+# нет якоря — нет и переноса. Создать разрешение этим путём невозможно.
+if [ "$MODE" = sync ]; then
+  log "перенос объявления из якоря согласия (нового разрешения не выдаётся)"
+  CONSENT_FILE="${CONSENT_DIR}/${DOMAIN}.json"
+  [ -f "$CONSENT_FILE" ] || die "якоря согласия нет ($CONSENT_FILE): переносить нечего, и выдать разрешение этот режим не может"
+  [ -L "$CONSENT_FILE" ] && die "якорь согласия — символическая ссылка: отказ"
+  SITE_ID="$(python3 - "$REGISTRY" "$DOMAIN" <<'PYSITE2'
+import json
+import sys
+
+реестр, домен = sys.argv[1], sys.argv[2].strip().lower()
+данные = json.loads(open(реестр, encoding="utf-8").read())
+for я in данные.get("cells") or []:
+    if str(я.get("domain", "")).lower() == домен:
+        print(я.get("site_id") or "")
+        break
+PYSITE2
+)"
+  [ -n "$SITE_ID" ] || die "домена ${DOMAIN} нет в реестре ячеек ${REGISTRY}"
+  # Проверка якоря делается ФУНКЦИЕЙ ФАБРИКИ, а не чтением файла: наличие
+  # файла доказательством не считается — проверяются владелец, режим, схема,
+  # домен и site_id.
+  FACTORY_ROOT="${FACTORY_ROOT:-/home/claude/wt-portable-site-cell-01}"
+  SITE_CELLS_OWNER_CONSENT_ROOT="$CONSENT_DIR" PYTHONPATH="$FACTORY_ROOT" \
+    python3 - "$SITE_ID" "$DOMAIN" <<'PYVERIFY'
+import sys
+
+from factory.cell import owner_consent
+
+site_id, домен = sys.argv[1], sys.argv[2]
+ок, почему, запись = owner_consent.проверить(site_id, домен)
+if not ок:
+    raise SystemExit(f"якорь согласия не прошёл проверку фабрики: {почему}")
+print(f"   якорь подтверждён функцией фабрики: {запись.get('id')}")
+PYVERIFY
+  CONSENT_ID="$(python3 -c "import json,sys;print(json.load(open(sys.argv[1],encoding='utf-8')).get('id') or '')" "$CONSENT_FILE")"
+  WHO="$(python3 -c "import json,sys;print(json.load(open(sys.argv[1],encoding='utf-8')).get('by') or 'owner')" "$CONSENT_FILE")"
+  WHEN="$(python3 -c "import json,sys;print(json.load(open(sys.argv[1],encoding='utf-8')).get('at') or '')" "$CONSENT_FILE")"
+  [ -n "$CONSENT_ID" ] || die "в якоре нет идентификатора: переносить нечего"
+  log "1. объявление в авторитетном реестре"
+  cp -a "$REGISTRY" "${REGISTRY}.bak.$(date -u +%Y%m%dT%H%M%SZ)"
+  python3 - "$REGISTRY" "$DOMAIN" "grant" "$CONSENT_FILE" "$CONSENT_ID" "$WHO" "$WHEN" <<'PYREG3'
+import json
+import os
+import pathlib
+import sys
+import tempfile
+
+реестр = pathlib.Path(sys.argv[1])
+домен = sys.argv[2].strip().lower()
+_, ссылка, ид, кем, когда = sys.argv[3:8]
+данные = json.loads(реестр.read_text(encoding="utf-8"))
+тронуто = 0
+for я in данные.get("cells") or []:
+    if str(я.get("domain", "")).lower() != домен:
+        continue
+    инд = я.setdefault("indexing", {})
+    инд["open_authorized"] = True
+    инд["open_authorization_ref"] = ссылка
+    инд["open_authorization_id"] = ид
+    инд["open_authorization_note"] = (
+        f"разрешение владельца: {кем}, {когда}. Объявление перенесено из якоря "
+        f"{ссылка} режимом --sync: нового разрешения не выдавалось")
+    тронуто += 1
+if тронуто != 1:
+    sys.exit(f"ожидалась одна запись домена, затронуто {тронуто}")
+св = реестр.stat()
+with tempfile.NamedTemporaryFile("w", dir=реестр.parent, delete=False,
+                                 encoding="utf-8") as врем:
+    json.dump(данные, врем, ensure_ascii=False, indent=2)
+    врем.write("\n")
+    времянка = pathlib.Path(врем.name)
+os.chown(времянка, св.st_uid, св.st_gid)
+os.chmod(времянка, св.st_mode & 0o7777)
+времянка.replace(реестр)
+print("   реестр: объявление перенесено, desired_state не тронут")
+PYREG3
+  ok "авторитетный реестр согласован с якорем"
+  EXEC_REGISTRY="${EXEC_REGISTRY:-/usr/local/lib/site-factory-cell/config/site-cells.json}"
+  if [ -L "$EXEC_REGISTRY" ]; then
+    die "копия исполнителя — символическая ссылка: отказ"
+  fi
+  if [ -f "$EXEC_REGISTRY" ]; then
+    log "2. копия исполнителя"
+    python3 - "$EXEC_REGISTRY" "$DOMAIN" "$CONSENT_FILE" "$CONSENT_ID" "$WHO" "$WHEN" <<'PYEXEC2'
+import json
+import os
+import pathlib
+import sys
+import tempfile
+
+копия = pathlib.Path(sys.argv[1])
+домен = sys.argv[2].strip().lower()
+ссылка, ид, кем, когда = sys.argv[3:7]
+данные = json.loads(копия.read_text(encoding="utf-8"))
+тронуто = 0
+for я in данные.get("cells") or []:
+    if str(я.get("domain", "")).lower() != домен:
+        continue
+    инд = я.setdefault("indexing", {})
+    инд["open_authorized"] = True
+    инд["open_authorization_ref"] = ссылка
+    инд["open_authorization_id"] = ид
+    инд["open_authorization_note"] = (
+        f"разрешение владельца: {кем}, {когда}. Перенесено режимом --sync")
+    тронуто += 1
+if тронуто != 1:
+    sys.exit(f"в копии исполнителя затронуто {тронуто} записей")
+св = копия.stat()
+with tempfile.NamedTemporaryFile("w", dir=копия.parent, delete=False,
+                                 encoding="utf-8") as врем:
+    json.dump(данные, врем, ensure_ascii=False, indent=2)
+    врем.write("\n")
+    времянка = pathlib.Path(врем.name)
+os.chown(времянка, св.st_uid, св.st_gid)
+os.chmod(времянка, св.st_mode & 0o7777)
+времянка.replace(копия)
+print("   копия исполнителя согласована")
+PYEXEC2
+    ok "копия исполнителя согласована с якорем"
+  else
+    log "2. корневой копии исполнителя нет ($EXEC_REGISTRY): шаг пропущен"
+  fi
+  log "3. журнал подтверждений"
+  printf '%s\n' "$(python3 -c "
+import json
+print(json.dumps({'at': '$WHEN', 'op': 'sync', 'domain': '$DOMAIN',
+                  'site_id': '$SITE_ID', 'by': '$WHO', 'id': '$CONSENT_ID',
+                  'reason': 'объявление перенесено из якоря; нового разрешения не выдавалось'},
+                 ensure_ascii=False))")" >> "${CONSENT_DIR}/journal.jsonl"
+  chmod 0444 "${CONSENT_DIR}/journal.jsonl"
+  ok "запись о переносе добавлена в ${CONSENT_DIR}/journal.jsonl"
+  log "4. проверка фабрикой"
+  SITE_CELLS_REGISTRY="$REGISTRY" SITE_CELLS_OWNER_CONSENT_ROOT="$CONSENT_DIR" \
+    PYTHONPATH="${FACTORY_ROOT:-/home/claude/wt-portable-site-cell-01}" \
+    python3 - "$SITE_ID" "$DOMAIN" <<'PYCHECK2'
+import os
+import sys
+
+sys.path.insert(0, os.environ.get("PYTHONPATH", "").split(os.pathsep)[0])
+from factory.cell import owner_consent
+from factory.qwen import indexing
+
+site_id, домен = sys.argv[1], sys.argv[2]
+ок, почему, _ = owner_consent.проверить(site_id, домен)
+разрешил, объявлен, пояснение = indexing.разрешение_владельца(site_id)
+print(f"   якорь: {'ЕСТЬ' if ок else 'НЕТ'}; разрешение по версии фабрики: {разрешил}")
+if not (ок and разрешил):
+    raise SystemExit(f"согласованность не достигнута: {пояснение[:200]}")
+PYCHECK2
+  ok "якорь, реестр и копия исполнителя согласованы"
+  exit 0
+fi
 
 if [ "$MODE" = revoke ]; then
   log "2. отзыв разрешения"
@@ -272,6 +451,9 @@ ok "реестр обновлён, копия прежнего рядом (.bak.
 # попадают. Нет установленной копии — это не ошибка: исполнитель ещё не
 # установлен, и разрешение попадёт в неё при установке.
 EXEC_REGISTRY="${EXEC_REGISTRY:-/usr/local/lib/site-factory-cell/config/site-cells.json}"
+if [ -L "$EXEC_REGISTRY" ]; then
+  die "копия исполнителя $EXEC_REGISTRY — символическая ссылка: root по ссылке не пишет"
+fi
 if [ -f "$EXEC_REGISTRY" ]; then
   log "3б. доставка полей разрешения в корневую копию исполнителя"
   python3 - "$EXEC_REGISTRY" "$DOMAIN" "$CONSENT_FILE" "$CONSENT_ID" "$WHO" "$WHEN" <<'PYEXEC'

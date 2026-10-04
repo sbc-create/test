@@ -21,6 +21,24 @@ from pathlib import Path
 import pytest
 
 КОРЕНЬ = Path(__file__).resolve().parents[2]
+#: Каталоги, которым юнит ВПРАВЕ разрешить запись. Это другое направление, чем
+#: вход: root пишет туда реестр и его копию, а не берёт оттуда код. Перечень
+#: закрытый — грант не должен тихо расшириться на всё рабочее дерево.
+РАЗРЕШЁННАЯ_ЗАПИСЬ = {
+    "/home/claude/wt-portable-site-cell-01/config",
+    "/usr/local/lib/site-factory-cell/config",
+}
+
+
+def _входные_пути(юнит: str) -> list[str]:
+    """Пути, откуда юнит БЕРЁТ код, рабочий каталог и конфигурацию."""
+    import re as _re
+
+    return _re.findall(
+        r"^(?:ExecStart|ExecStartPre|WorkingDirectory|Environment=PYTHONPATH|"
+        r"Environment=SITE_CELLS_REGISTRY)=(\S+)", юнит, _re.M)
+
+
 sys.path.insert(0, str(КОРЕНЬ))
 
 #: Звенья цепочки, которые исполняются от root после установки.
@@ -106,7 +124,23 @@ def test_установщик_кладёт_корневую_копию_а_не_�
             ).read_text(encoding="utf-8")
     assert "WorkingDirectory=/usr/local/lib/site-factory-cell" in юнит
     assert "PYTHONPATH=/usr/local/lib/site-factory-cell" in юнит
-    assert "/home/claude" not in юнит, "юнит ссылается на рабочий каталог сессии"
+    # Запрещён ВХОД из рабочего каталога, а не всякое его упоминание.
+    #
+    # Разница существенная и измерена 2026-10-04: доставка разрешения
+    # владельца требует, чтобы служба МОГЛА ПИСАТЬ в `config/` рабочего дерева
+    # (`ReadWritePaths`), иначе команда владельца отказывает словами
+    # «Read-only file system». Это обратное направление: root пишет туда
+    # реестр, а не берёт оттуда код. Сторож проверяет именно вход и отдельно —
+    # что грант на запись не расширился дальше двух названных каталогов.
+    вход = _входные_пути(юнит)
+    assert вход, "в юните не нашлось ни одного входного пути"
+    for п in вход:
+        assert not п.startswith("/home/"), (
+            f"юнит берёт вход {п} из домашнего каталога")
+    import re as _re
+    запись = set(_re.findall(r"^ReadWritePaths=(\S+)", юнит, _re.M))
+    лишнее = запись - РАЗРЕШЁННАЯ_ЗАПИСЬ
+    assert not лишнее, f"юнит разрешил запись лишним каталогам: {sorted(лишнее)}"
 
     установщик = (КОРЕНЬ / "automation" / "host" / "install-cell-executor.sh"
                   ).read_text(encoding="utf-8")

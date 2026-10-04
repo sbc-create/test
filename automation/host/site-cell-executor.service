@@ -31,6 +31,24 @@ ExecStart=/usr/bin/python3 -m factory cell serve --confirm-activation
 # остальное урезано — он не должен уметь ничего сверх своей задачи.
 NoNewPrivileges=no
 ProtectHome=read-only
+
+# ЗАПИСЬ РАЗРЕШЕНА РОВНО ДВУМ КАТАЛОГАМ, и оба нужны по делу.
+#
+# Измерено 2026-10-04: заявка `lords-01-consent-grant-20261004-184926` была
+# отвергнута словами `cp: cannot create regular file
+# '…/config/site-cells.json.bak.20261004T185001Z': Read-only file system`.
+# Дело не в правах: каталог `drwxrwxr-x claude claude`, и root записал бы в
+# него свободно. Дело в МОНТИРОВАНИИ — `ProtectHome=read-only` выше делает
+# /home доступным только на чтение для этой службы.
+#
+# Разрешаются КАТАЛОГИ, а не файлы: команда владельца пишет реестр атомарно —
+# временный файл рядом и переименование, — плюс копию прежнего состояния
+# `.bak.<метка>`. Разрешения на один файл для этого недостаточно.
+#
+# Общая защита службы не снимается: `ProtectHome=read-only` остаётся, и всё
+# остальное в /home для неё по-прежнему только для чтения.
+ReadWritePaths=/home/claude/wt-portable-site-cell-01/config
+ReadWritePaths=/usr/local/lib/site-factory-cell/config
 ProtectKernelTunables=yes
 ProtectKernelModules=yes
 RestrictSUIDSGID=yes
