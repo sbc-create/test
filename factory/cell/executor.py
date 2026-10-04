@@ -35,7 +35,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from factory.cell import nginx_indexing
+from factory.cell import nginx_indexing, owner_consent
 from factory.cell import privileged, protected, queue, registry, runtime
 
 
@@ -141,6 +141,19 @@ def переключить_слой_индексации(заявка: queue.З�
                 f"ячеек indexing.open_authorized не равно true. Разрешением "
                 "считается только булево true; закрытие (mode=closed) "
                 "разрешения не требует")
+        # Флага НЕДОСТАТОЧНО, и это не перестраховка. Файл реестра принадлежит
+        # учётной записи, под которой работают инструменты (`rw-------`,
+        # владелец `claude`), писателя у поля в фабрике не было вовсе — значит
+        # флаг не доказывает, что разрешение дал владелец. Доказательство —
+        # файл подтверждения в каталоге root, который может создать только
+        # root (`automation/host/authorize-indexing.sh`). Привилегированная
+        # сторона обязана проверять его сама: проверка, оставленная только
+        # вызывающему, обходится подачей заявки напрямую.
+        подтверждено, почему, _ = owner_consent.проверить(заявка.site_id, домен)
+        if not подтверждено:
+            raise ExecutorError(
+                f"{заявка.site_id}: открытие слоя nginx запрещено — "
+                f"подтверждения владельца нет: {почему}")
     # ВОРОТА ЗАЩИЩЁННЫХ ДАННЫХ. Слой nginx — тоже постоянные данные сайта
     # (`nginx_indexing` в перечне защищённых путей): переключать его вправе
     # только названная операция, и только у того сайта, который назван.
