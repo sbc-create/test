@@ -175,3 +175,63 @@ set_indexing_mode {"site": "lordserials22.info", "mode": "open", "expect_release
 D147 ссылку; он переписан под новый договор, после чего
 `test_executor_stale_registry.py` и `test_executor_no_repo_code.py` — 14
 проверок, exit 0.
+
+## lordserials22.info ОТКРЫТ — запись операции
+
+| Что | Значение |
+| --- | --- |
+| установленный выпуск | `09d6db02828e` (`/srv/lordserials22-info/current`), публичный build-id `09d6db02828e-lords-05` — совпадает с манифестом |
+| операция | `set_indexing_mode {"site":"lordserials22.info","mode":"open","expect_release":"09d6db02828e"}` |
+| заявка слоя | `lords-05-idx-open-rep123904`, исход `applied / indexing_layer_applied`, 12:40:00Z |
+| файл состояния | `/srv/sites/indexing/lordserials22.info.json`, `desired_state: OPEN`, revision 2, 12:38:54Z |
+| публичный режим | **OPEN**, `confirmed: true`, запрещающих сигналов нет |
+| журнал | `/srv/sites/indexing/_log/operations.jsonl` (записи `set` 12:38:54Z) |
+| снимок «до» | `/srv/sites/indexing/_log/lordserials22.info.20261004T123854Z.before.json` |
+
+Публичные проверки (прямым HTTP, не по отчёту операции):
+
+| Страница | HTTP | X-Robots-Tag | meta robots | canonical |
+| --- | --- | --- | --- | --- |
+| `/` | 200, 119 469 симв | `index, follow` | `index, follow` | `https://lordserials22.info/` |
+| `/anime/` (раздел) | 200, 104 987 симв | `index, follow` | `index, follow` | `https://lordserials22.info/anime/` |
+| `/title/100-atletov-meksika/` | 200, 76 068 симв | `index, follow` | `index, follow` | свой адрес карточки |
+| `/robots.txt` | 200 | — | — | `Allow: /` при `Disallow:` на `/poster/`, `/api/`, `/healthz`, `/__` |
+| `/healthz` (служебный) | 200 | `index, follow` + `noindex, nofollow` | — | служебный путь остался закрытым |
+| `/sitemap.xml` | **404** | — | — | карты нет (см. ниже) |
+
+Сравнение со снимком «до» доказывает, что переключился именно слой nginx:
+было два заголовка `noindex, nofollow` (приложение и nginx) и
+`robots.txt: Disallow: /`; стало один `index, follow` — надбавки nginx нет.
+
+Контент и плеер: главная отдаёт 96 ссылок на произведения и 8 разделов,
+карточка — 76 068 символов, свой `data-publisher-id="10238"`, оболочка плеера
+на месте, скрипт провайдера `player.cdnvideohub.com/s2/stable/video-player.umd.js`
+отвечает HTTP 200 (27 290 байт), постеры с `poster.cdnvideohub.com`.
+Это ДОСТУПНОСТЬ кода и ресурсов плеера; само ВОСПРОИЗВЕДЕНИЕ не проверялось —
+НЕ ПРОВЕРЕНО. Выпуск операцией не менялся, поэтому содержимое измениться не
+могло: публичный build-id равен установленному.
+
+### Карта сайта: пробел не этой операции, но названный
+
+Измерено по девяти доменам: `/sitemap.xml` отдаёт 200 ТОЛЬКО animedia.space
+(186 байт, индекс на `sitemap-1.xml`), у остальных восьми — 404 и ссылки
+`Sitemap:` в `robots.txt` нет. У lordserials22.info карта отвечала 404 и ДО
+открытия — это видно в снимке «до» (`sitemap_http: 404`), то есть операция
+здесь ничего не изменила.
+
+Чего не хватает, по частям:
+
+1. генератора не вызывает НИКТО: `seo_layer.построить_sitemap` есть во всех
+   репозиториях семейства и не вызывается ни в одном;
+2. маршрут `/sitemap.xml` в рантайме lords есть, но требует
+   `LORDS_SITEMAP_DIR`; drop-in'ы с этой переменной существуют только для
+   прежних имён юнитов (`nova-lords-03`, `lords-nova-01`, `nova-zona-01`), а у
+   действующих ячеек её нет;
+3. `_тело_robots()` семейства lords зовёт `robots_txt(состояние)` без
+   `sitemap=`. Честная реализация уже написана у animedia и ставит ссылку
+   только если карта действительно отдаётся — её и нужно перенести в шаблон
+   семейства.
+
+Это отдельная работа с новой публичной поверхностью на уже открытом домене и
+решением о свежести карты при обновлении каталога, поэтому она названа, а не
+сделана попутно.
