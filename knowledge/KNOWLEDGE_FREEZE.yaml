@@ -1,13 +1,13 @@
 # Сгенерировано `python3 -m factory knowledge freeze`. Вручную не редактируется.
 schema_version: 1
-freeze_version: 2026-10-04.8
-frozen_at: '2026-10-04T19:26:38Z'
+freeze_version: 2026-10-04.9
+frozen_at: '2026-10-04T19:31:38Z'
 file_count: 13
-aggregate_sha256: 7c546a6025ff12b6cfc44cc28846094b02af5968afe0b2d948f0b42507624aff
+aggregate_sha256: 5f6a98cd481fa76476aa8359a09e4d45268d1763b245efafe4520f4f399a1e21
 files:
 - path: knowledge/DECISIONS.md
-  sha256: 5c5be9e37f83cd2a16959a87bf1c0eead77a1031b60862b4fda1249eafa87d6c
-  bytes: 140448
+  sha256: ad33e675b8ba0cf859c6e898ded0a5a7c70d6bcbeb292b731c233070146cf0d2
+  bytes: 142053
 - path: knowledge/DLE_20_COMPATIBILITY.md
   sha256: 3ae18bd0c3abd391d16378ec296f14c3bc2162cd6ed9d1a2c58855420f816e0f
   bytes: 7042

@@ -4,6 +4,7 @@
 #   sudo bash /home/claude/wt-portable-site-cell-01/automation/host/authorize-indexing.sh \
 #        --domain lordserials22.info
 #
+#   список: … --domain a.example --domain b.example   (каждый отдельно)
 #   отзыв:  … --domain lordserials22.info --undo
 #   показ:  … --domain lordserials22.info --show
 #
@@ -47,10 +48,11 @@ REGISTRY="${ROOT_DIR}/config/site-cells.json"
 DOMAIN=""
 MODE="grant"
 NOTE=""
+DOMAINS=()
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    --domain) DOMAIN="$2"; shift 2 ;;
+    --domain) DOMAINS+=("$2"); DOMAIN="$2"; shift 2 ;;
     --note) NOTE="$2"; shift 2 ;;
     --undo) MODE="revoke"; shift ;;
     --show) MODE="show"; shift ;;
@@ -61,6 +63,43 @@ while [ $# -gt 0 ]; do
     *) printf 'неизвестный аргумент: %s\n' "$1" >&2; exit 2 ;;
   esac
 done
+
+# СПИСОК ДОМЕНОВ В ОДНОМ ВЫЗОВЕ.
+#
+# Разрешение владельца выдаётся ОДНОМУ домену — это свойство решения, и оно не
+# меняется. Меняется только число команд: требовать от владельца по команде на
+# сайт значит перекладывать на человека работу, которую делает цикл. Поэтому
+# `--domain` можно повторить, и каждый домен обрабатывается НЕЗАВИСИМО: отказ
+# на одном не отменяет остальных, а итог перечисляет каждый с его исходом.
+#
+# Обход сделан повторным вызовом этого же сценария по одному домену: логика
+# одного домена остаётся нетронутой, и независимость отказов получается сама.
+if [ "${#DOMAINS[@]}" -gt 1 ]; then
+  printf '\033[1m==>\033[0m домена в этом вызове: %s\n' "${#DOMAINS[@]}"
+  EXTRA=()
+  [ "$MODE" = revoke ] && EXTRA+=(--undo)
+  [ "$MODE" = show ] && EXTRA+=(--show)
+  [ "$MODE" = sync ] && EXTRA+=(--sync)
+  [ -n "$NOTE" ] && EXTRA+=(--note "$NOTE")
+  EXTRA+=(--registry "$REGISTRY" --consent-dir "$CONSENT_DIR")
+  FAILED=()
+  DONE=()
+  for one in "${DOMAINS[@]}"; do
+    printf '\n\033[1m==>\033[0m ============ %s\n' "$one"
+    if bash "$0" --domain "$one" "${EXTRA[@]}"; then
+      DONE+=("$one")
+    else
+      FAILED+=("$one")
+      printf '\033[31m[x]\033[0m %s: отказ, остальные домена продолжаются\n' "$one" >&2
+    fi
+  done
+  printf '\n\033[1m==>\033[0m ИТОГ\n'
+  for one in "${DONE[@]}"; do printf '   \033[32mOK\033[0m   %s\n' "$one"; done
+  for one in "${FAILED[@]}"; do printf '   \033[31m[x]\033[0m %s\n' "$one"; done
+  printf '   выполнено %s, отказов %s\n' "${#DONE[@]}" "${#FAILED[@]}"
+  [ "${#FAILED[@]}" = 0 ] || exit 1
+  exit 0
+fi
 
 log() { printf '\033[1m==>\033[0m %s\n' "$*"; }
 ok()  { printf '   \033[32mOK\033[0m   %s\n' "$*"; }
