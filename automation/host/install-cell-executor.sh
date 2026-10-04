@@ -89,6 +89,31 @@ run cp -a "$SRC_ROOT/schemas" "$DEST.new/schemas"
 run cp -a "$SRC_ROOT/config" "$DEST.new/config"
 run chown -R root:root "$DEST.new"
 run chmod -R go-w "$DEST.new"
+
+# РЕЕСТР ЯЧЕЕК НЕ КОПИРУЕТСЯ: он читается по ссылке на авторитетный файл.
+#
+# Измерено 2026-10-04 и стоило целой операции. Владелец выдал разрешение на
+# открытие домена в 08:32:42 — запись легла в авторитетный реестр
+# `$SRC_ROOT/config/site-cells.json`. Инструмент и предпроверка читали именно
+# его и говорили «разрешено». Исполнитель читал СВОЮ копию, снятую установкой в
+# 07:10:34, и отказывал словами «indexing.open_authorized не равно true». Один
+# и тот же путь внутри пакета указывал на два разных файла, и отказ выглядел
+# отсутствием разрешения, а был устаревшим снимком.
+#
+# Почему ссылка безопасна. Авторитетный реестр доступен на запись учётной
+# записи инструментов, и раньше это было бы дырой. Теперь разрешение владельца
+# требует ВТОРОГО, независимого факта — файла подтверждения в каталоге root
+# (`/var/lib/site-cells/owner-consent/<домен>.json`, root:root, 0444), который
+# инструмент создать не может. Реестр объявляет решение, подтверждение
+# доказывает его происхождение; подделка одного без другого ничего не открывает.
+if [ "$dry_run" = 0 ]; then
+  rm -f "$DEST.new/config/site-cells.json"
+  ln -s "$SRC_ROOT/config/site-cells.json" "$DEST.new/config/site-cells.json"
+  log "   реестр ячеек: ссылка на $SRC_ROOT/config/site-cells.json (копии нет)"
+else
+  printf '   [сухой прогон] %s/config/site-cells.json -> ссылка на %s\n' \
+    "$DEST" "$SRC_ROOT/config/site-cells.json"
+fi
 run rm -rf "$DEST.prev"
 [ -d "$DEST" ] && run mv "$DEST" "$DEST.prev"
 run mv "$DEST.new" "$DEST"
