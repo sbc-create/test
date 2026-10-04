@@ -583,6 +583,55 @@ def test_публикация_отказывает_там_где_витрина_
     assert "publish" in д["error"]
 
 
+def test_каждый_вызов_оставляет_строку_журнала_без_значений(capsys, monkeypatch):
+    """«Найди по журналам» упиралось в отсутствие журнала.
+
+    `log_message` обработчика HTTP подавлен, и на стороне фабрики не
+    оставалось ничего: ни имени инструмента, ни исхода, ни длительности.
+    Теперь каждый вызов пишет строку в stderr (stdout занят протоколом stdio).
+    Значения аргументов в журнал не попадают — только их имена.
+    """
+    monkeypatch.setattr(mcp, "_site_id", lambda з: "lords-05")
+    mcp.обработать({"jsonrpc": "2.0", "id": 1, "method": "tools/call",
+                    "params": {"name": "explain_url_scope",
+                               "arguments": {"url": "https://lordserials22.info/x"}}})
+    журнал = capsys.readouterr().err.strip().splitlines()
+    assert журнал, "вызов не оставил строки журнала"
+    запись = json.loads(журнал[-1])
+    assert запись["tool"] == "explain_url_scope"
+    assert запись["outcome"] == "ok"
+    assert запись["args"] == ["url"], "в журнале обязаны быть ИМЕНА аргументов"
+    assert isinstance(запись["ms"], int)
+    текст = журнал[-1]
+    assert "lordserials22.info" not in текст, (
+        "значение аргумента попало в журнал")
+
+
+def test_отказ_и_непредвиденное_исключение_тоже_в_журнале(capsys):
+    запись_инструмента = mcp.ИНСТРУМЕНТЫ["analytics_readiness"]
+    прежний = запись_инструмента["обработчик"]
+
+    def падать(_):
+        raise KeyError("site_id")
+
+    mcp.обработать({"jsonrpc": "2.0", "id": 1, "method": "tools/call",
+                    "params": {"name": "analytics_readiness",
+                               "arguments": {"domain": "nosuch.example"}}})
+    запись_инструмента["обработчик"] = падать
+    try:
+        mcp.обработать({"jsonrpc": "2.0", "id": 2, "method": "tools/call",
+                        "params": {"name": "analytics_readiness",
+                                   "arguments": {"domain": "nosuch.example"}}})
+    finally:
+        запись_инструмента["обработчик"] = прежний
+    строки = [json.loads(с) for с in capsys.readouterr().err.strip().splitlines() if с]
+    исходы = [з["outcome"] for з in строки]
+    assert "refused" in исходы, исходы
+    assert "unexpected" in исходы, исходы
+    для_отказа = next(з for з in строки if з["outcome"] == "refused")
+    assert для_отказа["reason"], "отказ без причины в журнале"
+
+
 def test_набор_инструментов_покрывает_петлю_операции():
     """Открыть, подтвердить, откатить и прочесть журнал — одним интерфейсом."""
     for имя in ("domain_indexing_readiness", "set_indexing_mode",
