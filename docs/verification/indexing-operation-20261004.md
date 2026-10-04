@@ -160,6 +160,65 @@ SEO после переименования прежнего сервиса НЕ
 srv-qwen отказывала бы на ПРАВИЛЬНОМ мосте). Пакет пересобран:
 SHA-256 `3799ab503070728ec6145433f618624f5ad0d17e5ef9ab9d87ea5e0f507f2a00`.
 
+## 8. Доставка 2026-10-04 (после включения режима записи владельцем)
+
+Исправление прежнего отчёта: **`git push` профилем не запрещён.** Отказы
+вызывали ФОРМЫ команды (`git -C …`, `timeout git …`), а не операция. Проверено
+`git push --dry-run` из каталога репозитория — прошёл.
+
+| шаг | команда | результат |
+| --- | --- | --- |
+| служба после команды владельца | `GET /healthz`, `tools/list` | `ready: true`, `read_only: false`, версия `2026-10-04.1`, 9 инструментов |
+| push lords | `git push origin claude/extract-lordserials22-info-indexing-02` | новая ветка создана (шаблон разрешённых ветвей `claude/extract-*`) |
+| push zona | `git push origin claude/extract-zonafilm-cc-indexing-02` | новая ветка создана |
+| CI lords | `trigger.прогоны` | прогон `37165307203` `completed/success`, коммит `09d6db02828e` |
+| CI zona | то же | прогон `37165313024` `completed/failure` |
+| устаревшая проверка доступа | `factory cell submit --site lords-05 --cell-operation access-check` | исход `checked` (была 38 ч давности) |
+| заявка выпуска lords | `factory cell trigger --site lords-05 --confirm-activation` | подана: `lords-05-code-09d6db02828e`, digest `sha256:4f9f96adcc43…`, ci_run `37165307203` |
+| исполнитель | очередь, таймер раз в минуту | **ОТКЛОНИЛ**: «выпуск 09d6db02828e не несёт читателей защищённых данных — editorial» |
+
+### Почему отклонил, и это оказался дефект ворот
+
+Хранилище материалов `/srv/sites/lords/runtime/overlays/lordserials22.info`
+**пусто** и создано **самим прогоном** `trigger` в 00:37:51 (поле
+`created_now: true`). До него каталога не существовало, и тот же выпуск ворота
+прошёл бы. Защита от ПОТЕРИ данных сработала там, где данных нет.
+
+Исправлено точно, без ослабления (`factory/cell/protected.py::_непусто`): пустой
+каталог данными не считается, нечитаемый по-прежнему считается присутствующим,
+любой файл внутри снова требует читателя. Три проверки в
+`tests/unit/test_runtime_data_ownership.py`, первая падала до исправления:
+
+    python3 -m pytest tests/unit/test_runtime_data_ownership.py \
+        tests/unit/test_cell_extracted_guard.py tests/unit/test_cell_privileged.py -q
+    -> exit 0, 106 passed
+
+**Исполнитель работает из корневой копии** `/usr/local/lib/site-factory-cell`
+(`WorkingDirectory` юнита), где исправления нет: `grep -c _непусто` в её
+`factory/cell/protected.py` даёт `0`. До обновления пакета владельцем заявка
+будет отклоняться по той же причине.
+
+### Отказ CI у zonafilm.cc — конфликт правил, а не дефект
+
+Воспроизведён локально полным прогоном проверок репозитория: падает
+`indexing-mode-rules`:
+
+    FAIL разрешения на открытие нет: разрешение выставлено — это решение
+         владельца, не выпуска
+
+`checks/indexing_mode_rules.py:266` требует `release_permits_open is False`. У
+`lordserials22.info` такой проверки нет — асимметрия подтверждена поиском по
+обоим репозиториям. Проверка принадлежит файлам конкретного сайта, то есть
+первому источнику истины, и ослаблять её молча нельзя. Конфликт записан как
+**D140** в `knowledge/DECISIONS.md`; у zona-02 остаётся `false`.
+
+### Production не затронут
+
+    выложенные релизы: lordserials22-info 4b1340fb2ecf, zonafilm-cc 050649648481
+    индексация: lordserials22.info CLOSED revision 1 changed_at 2026-10-03T18:29:25Z,
+                zonafilm.cc файла состояния нет
+    слой nginx: lords-05 и zona-02 — «режим: CLOSED», default "noindex, nofollow"
+
 ## Блокеры
 
 1. **Доставка выпусков.** `git push` запрещён профилем этой сессии, `gh` —
