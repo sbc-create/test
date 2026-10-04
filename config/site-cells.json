@@ -601,7 +601,11 @@
       },
       "indexing": {
         "desired_state": "CLOSED",
-        "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
+        "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит.",
+        "open_authorized": true,
+        "open_authorization_ref": "/var/lib/site-cells/owner-consent/lordserials22.info.json",
+        "open_authorization_id": "7eb319e0-2a7d-4647-a432-9dfa6d47326a",
+        "open_authorization_note": "разрешение владельца: claude, 2026-10-04T08:32:42Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/lordserials22.info.json; флаг в реестре без него разрешением не считается"
       },
       "analytics": {
         "metrika_counter_id": 113109083,

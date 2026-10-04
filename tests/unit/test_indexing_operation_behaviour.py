@@ -20,7 +20,7 @@ import pathlib
 
 import pytest
 
-from factory.cell import nginx_indexing
+from factory.cell import nginx_indexing, owner_consent
 from factory.cell import queue as q
 from factory.qwen import editorial, indexing, registry
 
@@ -43,6 +43,11 @@ def _репозиторий(tmp: pathlib.Path) -> str:
     return f"var/site-repos/{САЙТ}"
 
 
+#: Идентификатор подтверждения владельца на стенде. Он же кладётся в реестр:
+#: расхождение идентификаторов исполнитель считает устаревшим снимком.
+ПОДТВЕРЖДЕНИЕ = "стенд-0000-0000"
+
+
 def _реестр(tmp: pathlib.Path, *, разрешено: bool) -> pathlib.Path:
     п = tmp / "site-cells.json"
     п.write_text(json.dumps({"cells": [{
@@ -51,11 +56,29 @@ def _реестр(tmp: pathlib.Path, *, разрешено: bool) -> pathlib.Pat
         "runtime": {"account": САЙТ, "port": 9999,
                     "unit": f"nova-{САЙТ}.service"},
         "template": {"template_id": "lords-animation"},
-        "indexing": ({"open_authorized": True, "reason": "тестовый сайт"}
+        "indexing": ({"open_authorized": True, "reason": "тестовый сайт",
+                      "open_authorization_id": ПОДТВЕРЖДЕНИЕ}
                      if разрешено else
                      {"desired_state": "CLOSED", "reason": "разрешения нет"}),
     }]}, ensure_ascii=False), encoding="utf-8")
     return п
+
+
+def _подтверждение_владельца(tmp: pathlib.Path) -> pathlib.Path:
+    """Корневой якорь согласия владельца — вторая половина договора.
+
+    Разрешением считается не флаг в реестре, а файл в каталоге root: реестр
+    доступен на запись той же учётной записи, под которой работают инструменты,
+    и флаг в нём подделывается. На стенде каталог свой, а проверка владельца
+    файла подменяется отдельно — она закреплена в `test_owner_consent`.
+    """
+    каталог = tmp / "owner-consent"
+    каталог.mkdir(exist_ok=True)
+    (каталог / f"{ДОМЕН}.json").write_text(json.dumps({
+        "schema_version": 1, "domain": ДОМЕН, "site_id": САЙТ,
+        "authorized": True, "by": "owner", "at": "2026-10-04T00:00:00Z",
+        "id": ПОДТВЕРЖДЕНИЕ}, ensure_ascii=False), encoding="utf-8")
+    return каталог
 
 
 def _выпуск(tmp: pathlib.Path, *, разрешает: bool) -> pathlib.Path:
@@ -142,8 +165,12 @@ class Очередь:
                        else "nginx -t отказал")})
         return {"status": "queued", "request_id": заявка.request_id}
 
-    def состояние(self, request_id):
-        return self._читать_состояние(request_id, база=self.база)
+    def состояние(self, request_id, *, не_раньше: str = ""):
+        # Сигнатура повторяет настоящую: `не_раньше` отделяет результат ЭТОЙ
+        # попытки от результата прошлой (см. test_queue_stale_result), и стенд
+        # обязан передавать его дальше, а не глотать.
+        return self._читать_состояние(request_id, база=self.база,
+                                      не_раньше=не_раньше)
 
 
 @pytest.fixture
@@ -157,6 +184,13 @@ def площадка(tmp_path, monkeypatch):
         monkeypatch.setattr(registry, "КОРЕНЬ", tmp_path)
         monkeypatch.setattr(registry, "РЕЕСТР_ЯЧЕЕК",
                             _реестр(tmp_path, разрешено=разрешено))
+        # Разрешение владельца — два факта: объявление в реестре и корневой
+        # якорь. Стенд даёт якорь ровно тогда, когда сценарий объявляет
+        # разрешение: иначе проверялось бы не то, что работает в бою.
+        monkeypatch.setattr(owner_consent, "КОРЕНЬ",
+                            _подтверждение_владельца(tmp_path) if разрешено
+                            else tmp_path / "нет-подтверждений")
+        monkeypatch.setattr(owner_consent, "_права", lambda путь: (True, ""))
         # Сетевой список — пустой, но ЧИТАЕМЫЙ: нечитаемый теперь честно
         # отказывает, а здесь проверяется операция, а не доступность файла.
         сетевой = tmp_path / "network-allowlist.yaml"
