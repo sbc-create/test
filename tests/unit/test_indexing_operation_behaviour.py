@@ -28,7 +28,21 @@ from factory.qwen import editorial, indexing, registry
 САЙТ = "test-01"
 
 
-def _репозиторий(tmp: pathlib.Path) -> str:
+#: Точка входа -> семейство (`factory.qwen.registry`). Здесь перечислены
+#: семейства, у которых режимом распоряжается ОПЕРАЦИЯ: именно их штатное
+#: открытие, закрытие и откат проверяются ниже на изолированном экземпляре.
+#: `yummy` сюда не входит и входить не должен: его режимом распоряжается
+#: переменная контейнера (`mode_owner: compose`), и операция ячейки его не
+#: меняет — требовать от неё этого значило бы проверять не тот механизм.
+СЕМЕЙСТВА = {
+    "lords": "lords-frontend.py",
+    "zona-serve": "serve.py",
+    "animego": "animego-frontend.py",
+    "animedia": "animedia-frontend.py",
+}
+
+
+def _репозиторий(tmp: pathlib.Path, точка_входа: str = "lords-frontend.py") -> str:
     """Подставной репозиторий сайта: по его точке входа выводится семейство.
 
     Семейство — не выдумка инструмента: оно берётся из `config/site.json`
@@ -38,7 +52,7 @@ def _репозиторий(tmp: pathlib.Path) -> str:
     репо = tmp / "var" / "site-repos" / САЙТ
     (репо / "config").mkdir(parents=True, exist_ok=True)
     (репо / "config" / "site.json").write_text(json.dumps({
-        "site_id": САЙТ, "domain": ДОМЕН, "entrypoint": "lords-frontend.py",
+        "site_id": САЙТ, "domain": ДОМЕН, "entrypoint": точка_входа,
     }, ensure_ascii=False), encoding="utf-8")
     return f"var/site-repos/{САЙТ}"
 
@@ -48,11 +62,12 @@ def _репозиторий(tmp: pathlib.Path) -> str:
 ПОДТВЕРЖДЕНИЕ = "стенд-0000-0000"
 
 
-def _реестр(tmp: pathlib.Path, *, разрешено: bool) -> pathlib.Path:
+def _реестр(tmp: pathlib.Path, *, разрешено: bool,
+            точка_входа: str = "lords-frontend.py") -> pathlib.Path:
     п = tmp / "site-cells.json"
     п.write_text(json.dumps({"cells": [{
         "site_id": САЙТ, "domain": ДОМЕН,
-        "repo": {"path": _репозиторий(tmp)},
+        "repo": {"path": _репозиторий(tmp, точка_входа)},
         "runtime": {"account": САЙТ, "port": 9999,
                     "unit": f"nova-{САЙТ}.service"},
         "template": {"template_id": "lords-animation"},
@@ -81,7 +96,8 @@ def _подтверждение_владельца(tmp: pathlib.Path) -> pathlib
     return каталог
 
 
-def _выпуск(tmp: pathlib.Path, *, разрешает: bool) -> pathlib.Path:
+def _выпуск(tmp: pathlib.Path, *, разрешает: bool,
+            точка_входа: str = "lords-frontend.py") -> pathlib.Path:
     """Каталог «выложенного» выпуска с читателем и конфигурацией."""
     выпуск = tmp / "srv" / САЙТ / "current"
     (выпуск / "src").mkdir(parents=True)
@@ -89,10 +105,10 @@ def _выпуск(tmp: pathlib.Path, *, разрешает: bool) -> pathlib.Pat
     общий = pathlib.Path(__file__).resolve().parents[2] / "automation" / "host" \
         / "indexing_mode.py"
     (выпуск / "src" / "indexing_mode.py").write_bytes(общий.read_bytes())
-    (выпуск / "src" / "lords-frontend.py").write_text(
+    (выпуск / "src" / точка_входа).write_text(
         "import indexing_mode  # читатель подключён\n", encoding="utf-8")
     (выпуск / "config" / "site.json").write_text(json.dumps({
-        "site_id": САЙТ, "domain": ДОМЕН, "entrypoint": "lords-frontend.py",
+        "site_id": САЙТ, "domain": ДОМЕН, "entrypoint": точка_входа,
         "indexing": {"release_permits_open": разрешает},
     }, ensure_ascii=False), encoding="utf-8")
     return выпуск
@@ -178,12 +194,14 @@ def площадка(tmp_path, monkeypatch):
     """Изолированная площадка. Возвращает функцию настройки сценария."""
     def собрать_площадку(*, разрешено: bool, разрешает_выпуск: bool,
                          nginx_запрещает: bool, публично: str,
-                         исход_очереди: str = "applied") -> dict:
+                         исход_очереди: str = "applied",
+                         точка_входа: str = "lords-frontend.py") -> dict:
         # Корень фабрики — песочница: по нему реестр находит репозиторий сайта,
         # а по его точке входа — семейство и контракт режима.
         monkeypatch.setattr(registry, "КОРЕНЬ", tmp_path)
         monkeypatch.setattr(registry, "РЕЕСТР_ЯЧЕЕК",
-                            _реестр(tmp_path, разрешено=разрешено))
+                            _реестр(tmp_path, разрешено=разрешено,
+                                    точка_входа=точка_входа))
         # Разрешение владельца — два факта: объявление в реестре и корневой
         # якорь. Стенд даёт якорь ровно тогда, когда сценарий объявляет
         # разрешение: иначе проверялось бы не то, что работает в бою.
@@ -199,7 +217,8 @@ def площадка(tmp_path, monkeypatch):
         # Ни одного обращения к сети: страница отвечает канонически.
         monkeypatch.setattr(registry, "_страница",
                             lambda url, таймаут=15: ("200", "<html></html>"))
-        выпуск = _выпуск(tmp_path, разрешает=разрешает_выпуск)
+        выпуск = _выпуск(tmp_path, разрешает=разрешает_выпуск,
+                         точка_входа=точка_входа)
         monkeypatch.setattr(indexing, "корни_выпуска",
                             lambda аккаунт: (str(выпуск),))
         monkeypatch.setattr(nginx_indexing, "КОРЕНЬ_NGINX",
@@ -405,3 +424,57 @@ def test_повтор_в_том_же_режиме_ничего_не_меняет
     assert файл.stat().st_mtime_ns == время, "и не вправе двигать его время"
     assert len(п["очередь"].заявки) == заявок, (
         "повтор не вправе подавать вторую заявку на слой")
+
+
+@pytest.mark.parametrize("семейство,точка_входа", sorted(СЕМЕЙСТВА.items()))
+def test_открытие_закрытие_и_откат_в_каждом_семействе(площадка, семейство,
+                                                      точка_входа):
+    """Штатная операция одинаково работает во ВСЕХ семействах с контрактом.
+
+    Задание владельца требует проверить открытие, закрытие и откат на
+    изолированном экземпляре КАЖДОГО семейства, а не только того, на котором
+    механизм писался. Разница между семействами — ровно одна: по точке входа
+    выводится контракт режима, то есть чем выпуск читает режим. Если контракт
+    какого-то семейства перестанет распознаваться, открытие в нём откажет
+    словами «семейство не определено» — и поймать это обязан прогон, а не
+    боевой домен.
+
+    `yummy` здесь отсутствует намеренно: его режимом распоряжается переменная
+    контейнера (`mode_owner: compose`), операция ячейки его не меняет, и
+    требовать от неё этого значило бы проверять не тот механизм.
+    """
+    assert indexing.контракт(семейство).get("mode_owner") == "operation", (
+        f"{семейство}: контракт режима изменился — проверка проверяет не то")
+    п = площадка(разрешено=True, разрешает_выпуск=True, nginx_запрещает=True,
+                 публично="CLOSED", точка_входа=точка_входа)
+
+    # 1. Открытие.
+    п["сеть"]["режим"] = "OPEN"
+    открыто = indexing.установить(ДОМЕН, mode="open", author="тест",
+                                  корень=п["корень_состояния"])
+    assert открыто["confirmed"] is True, (семейство, открыто)
+    assert открыто["changed"] is True and открыто["revision"] == 1
+    assert п["слой"]["режим"] == "OPEN", семейство
+
+    # 2. Закрытие тем же интерфейсом.
+    п["сеть"]["режим"] = "CLOSED"
+    закрыто = indexing.установить(ДОМЕН, mode="closed", author="тест",
+                                  корень=п["корень_состояния"])
+    assert закрыто["confirmed"] is True, (семейство, закрыто)
+    assert закрыто["revision"] == 2
+    assert п["слой"]["режим"] == "CLOSED", семейство
+    состояние = json.loads(
+        (п["корень_состояния"] / f"{ДОМЕН}.json").read_text("utf-8"))
+    assert состояние["desired_state"] == "CLOSED"
+
+    # 3. Откат: возвращает предыдущее состояние и ревизию вперёд. Откат
+    # последней смены означает снова ОТКРЫТЬ, и публичный ответ сценария
+    # обязан это подтвердить — иначе проверялась бы не способность откатить, а
+    # несогласие сети с журналом.
+    п["сеть"]["режим"] = "OPEN"
+    откат = indexing.откатить(ДОМЕН, author="тест", корень=п["корень_состояния"])
+    assert откат["rolled_back_to"] == "OPEN", откат
+    после = json.loads(
+        (п["корень_состояния"] / f"{ДОМЕН}.json").read_text("utf-8"))
+    assert после["desired_state"] == "OPEN", (семейство, откат, после)
+    assert после["revision"] == 3, "откат — новая ревизия, а не возврат назад"
