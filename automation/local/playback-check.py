@@ -30,6 +30,9 @@ import json, re, sys, time
 from playwright.sync_api import sync_playwright
 ХРОМ = "/home/claude/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome"
 ДОМЕН = sys.argv[1]
+#: Проверенные формы адреса карточки — те же, что в `registry.ФОРМА_АДРЕСА`.
+#: Порядок задаёт приоритет поиска ссылки на главной.
+ПРЕФИКСЫ = ("/title/", "/anime/")
 ОБХОД = """
 () => {
   const найденные = [];
@@ -70,13 +73,53 @@ with sync_playwright() as p:
     стр.on("response", lambda о: медиа.append((о.status, о.url))
            if re.search(r"\.(m3u8|ts|mp4|m4s|mpd)(\?|$)", о.url) else None)
     стр.goto(f"https://{ДОМЕН}/", wait_until="domcontentloaded", timeout=60000)
-    путь = стр.eval_on_selector('a[href^="/title/"]', "э => э.getAttribute('href')")
+    # ФОРМА АДРЕСА КАРТОЧКИ У СЕМЕЙСТВ РАЗНАЯ, и зашитая `/title/` давала
+    # ложный отказ: у Yummy карточка живёт по `/anime/<slug>`, а `/title/<slug>/`
+    # отвечает 308 (проверено 2026-10-04, `registry.ФОРМА_АДРЕСА`). Поэтому
+    # префикс берётся из той же проверенной таблицы, а не угадывается; если
+    # ссылки такой формы на главной нет, проверка так и говорит.
+    путь = None
+    for префикс in ПРЕФИКСЫ:
+        ссылки = стр.query_selector_all(f'a[href^="{префикс}"]')
+        if ссылки:
+            путь = ссылки[0].get_attribute("href")
+            break
+    if not путь:
+        print("на главной нет ссылок ни одной проверенной формы: "
+              + ", ".join(ПРЕФИКСЫ))
+        б.close()
+        raise SystemExit(1)
     стр.goto(f"https://{ДОМЕН}{путь}", wait_until="load", timeout=60000)
     print("АДРЕС:", f"https://{ДОМЕН}{путь}")
     стр.wait_for_timeout(5000)
     кадр = next((ф for ф in стр.frames if "player.cdnvideohub" in ф.url), None)
     if кадр is None:
-        print("кадра плеера нет"); б.close(); raise SystemExit(1)
+        # ПЛЕЕР МОЖЕТ МОНТИРОВАТЬСЯ ПО ЩЕЛЧКУ, и «кадра нет» тогда означает
+        # «ещё не нажали», а не отказ. Измерено 2026-10-04 на yummyani7.info:
+        # карточка ссылается на player.cdnvideohub.com одиннадцать раз, а
+        # iframe при загрузке отсутствует — витрина ставит его на оболочку
+        # плеера после щелчка. Поэтому оболочка ищется по разметке и нажимается
+        # ровно один раз, после чего кадр ищется заново.
+        for селектор in ('[class*="player-shell"]', '[id*="player"]',
+                         '[class*="pl__frame"]', '[class*="player"]'):
+            узел = стр.query_selector(селектор)
+            if узел is None:
+                continue
+            try:
+                узел.click(timeout=5000)
+            except Exception as ош:  # noqa: BLE001
+                print(f"оболочка {селектор}: щелчок не вышел "
+                      f"({type(ош).__name__})")
+                continue
+            print(f"оболочка плеера {селектор}: нажата")
+            стр.wait_for_timeout(6000)
+            кадр = next((ф for ф in стр.frames
+                         if "player.cdnvideohub" in ф.url), None)
+            if кадр is not None:
+                break
+    if кадр is None:
+        print("кадра плеера нет: ни при загрузке, ни после щелчка по оболочке")
+        б.close(); raise SystemExit(1)
     # Щелчок по центру кадра — как делает человек.
     try:
         рамка = стр.query_selector("iframe[src*=cdnvideohub]").bounding_box()
@@ -84,6 +127,31 @@ with sync_playwright() as p:
         print("щелчок по центру плеера: сделан")
     except Exception as e:
         print("щелчок:", type(e).__name__, str(e)[:80])
+    # ЕСЛИ ПОСЛЕ ЩЕЛЧКА `<video>` НЕ ПОЯВИЛСЯ — жмём кнопку ВНУТРИ кадра.
+    #
+    # Измерено 2026-10-04 на yummyani.org (домен ОТКРЫТ и работает): кадр
+    # плеера загружен, в нём `VK-VIDEO-PLAYER` с настоящим источником («Серия
+    # 1, Многоголосый»), но элемента `<video>` нет вовсе — плеер VK создаёт
+    # его при запуске. Щелчок по центру кадра со СТРАНИЦЫ до плеера не
+    # доходит: у него своя кнопка запуска. Щелчок по центру оставлен первым —
+    # у семейства Lords работает именно он.
+    стр.wait_for_timeout(2000)
+    try:
+        есть_видео = кадр.evaluate(ОБХОД)
+    except Exception:  # noqa: BLE001
+        есть_видео = []
+    if not есть_видео:
+        for селектор in ("button[aria-label*=оспроизв]", "button[aria-label*=lay]",
+                         "button"):
+            try:
+                узел = кадр.query_selector(селектор)
+                if узел is None:
+                    continue
+                узел.click(timeout=5000)
+                print(f"кнопка запуска в кадре ({селектор}): нажата")
+                break
+            except Exception as ош:  # noqa: BLE001
+                print(f"кнопка {селектор}: {type(ош).__name__}")
     замеры = []
     for н in range(16):
         стр.wait_for_timeout(2000)
