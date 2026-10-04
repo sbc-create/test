@@ -253,6 +253,18 @@ def площадка(tmp_path, monkeypatch):
 
         def слой_nginx(site_id, домен, сиг=None):
             закрыт = слой["режим"] == "CLOSED"
+            # Стенд ведёт себя как живой хост: без публичного ИЗМЕРЕНИЯ
+            # открытый слой не объявляется открытым. На живом хосте так и
+            # есть — часть конфигураций nginx принадлежит root и
+            # непривилегированной стороне недоступна навсегда
+            # (`/etc/nginx/conf.d/lords.conf`, 0600). Пока стенд отвечал
+            # «открыт» и без сигналов, он скрывал то, что остановило
+            # настоящее открытие lordserials22.info 2026-10-04.
+            if not закрыт and сиг is None:
+                return {"site_id": site_id, "mode": "unknown", "denying": None,
+                        "managed_by_this_operation": not nginx_запрещает,
+                        "evidence": "песочница: конфигурация не читается, "
+                                    "измерения нет"}
             return {"site_id": site_id, "mode": "closed" if закрыт else "open",
                     "denying": закрыт,
                     "managed_by_this_operation": not nginx_запрещает,

@@ -115,3 +115,73 @@ def test_отказ_проверки_доступа_называет_инстр�
     текст = str(ош.value)
     assert "refresh_executor_access" in текст, текст
     assert "factory cell submit" in текст, "второй путь тоже обязан быть назван"
+
+
+def test_уже_выполнено_не_означает_что_слой_в_нужном_режиме(monkeypatch, tmp_path):
+    """«Уже выполнено» — утверждение о ЗАЯВКЕ, а не о состоянии слоя.
+
+    Случай измерен 2026-10-04 на lordserials22.info и стоил второй попытки
+    открытия. Последовательность:
+
+      12:25:00  заявка `lords-05-idx-open` — исполнитель ПРИМЕНИЛ открытие;
+      12:26     операция откатила открытие по своей причине и закрыла слой
+                заявкой с суффиксом (`lords-05-idx-closed-rst122505`);
+      12:31     новая попытка открытия получила от очереди `already-finished`
+                по тому же идентификатору `lords-05-idx-open`, исполнителя не
+                спросила вовсе — и операция сообщила «слой остался closed».
+
+    Очередь права: успешную операцию она не повторяет. Но предмет здесь —
+    РЕЖИМ, и его законно просить снова после того, как его вернули назад.
+    Поэтому `already-finished` обязан проверяться чтением слоя, а не считаться
+    доказательством: не в том режиме — подать заново с суффиксом, ровно тем же
+    приёмом, которым пользуется возврат.
+    """
+    from factory.qwen import indexing
+
+    class Сайт:
+        site_id = "lords-05"
+        domain = "t-idem.example"
+
+    поданные: list[dict] = []
+
+    def собрать(site_id, commit, digest, *, operation, mode, suffix="", note=""):
+        class З:
+            request_id = f"{site_id}-idx-{mode.lower()}" + (f"-{suffix}" if suffix else "")
+            submitted_at = "2026-10-04T12:31:00+00:00"
+        return З()
+
+    def подать(заявка, **kw):
+        поданные.append({"id": заявка.request_id})
+        # Без суффикса очередь отвечает «уже выполнено» (прежний успех),
+        # с суффиксом — принимает заявку. Суффикс и есть всё, что идёт после
+        # базового идентификатора режима.
+        if заявка.request_id == "lords-05-idx-open":
+            return {"status": "already-finished", "request_id": заявка.request_id}
+        return {"status": "queued", "request_id": заявка.request_id}
+
+    слой = {"режим": "CLOSED"}
+
+    def состояние(request_id, *, база=None, не_раньше=""):
+        # Исполнитель применил режим по заявке с суффиксом.
+        слой["режим"] = "OPEN"
+        return {"status": "finished",
+                "result": {"status": "ok", "outcome": {"status": "applied"},
+                           "started_at": "2026-10-04T12:31:30+00:00"}}
+
+    monkeypatch.setattr(q, "собрать", собрать)
+    monkeypatch.setattr(q, "подать", подать)
+    monkeypatch.setattr(q, "состояние", состояние)
+    monkeypatch.setattr(indexing, "слой_nginx", lambda sid, d, сиг=None: {
+        "mode": "closed" if слой["режим"] == "CLOSED" else "open",
+        "denying": слой["режим"] == "CLOSED", "evidence": "стенд"})
+    monkeypatch.setattr(indexing, "сигналы", lambda д, *, порт=0: {"domain": д})
+    monkeypatch.setattr(indexing, "порт_приложения", lambda sid: 0)
+
+    итог = indexing.переключить_слой(Сайт(), режим="OPEN", author="тест")
+    assert слой["режим"] == "OPEN", (
+        f"слой не переключён: {итог}; подано {поданные}")
+    assert len(поданные) == 2, (
+        f"повторная подача с суффиксом не сделана: {поданные}")
+    assert поданные[0]["id"] == "lords-05-idx-open"
+    assert поданные[1]["id"] != поданные[0]["id"], "суффикс не добавлен"
+    assert итог.get("outcome") == "applied", итог
