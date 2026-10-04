@@ -501,10 +501,18 @@ def проверить_доступ_исполнителя(site_id: str) -> None
     каталог = БАЗА / "results"
     файлы = sorted(каталог.glob(f"{site_id}-access-*.json"),
                    key=lambda п: п.stat().st_mtime) if каталог.is_dir() else []
+    #: Как повторить проверку доступа. Названы ОБА штатных пути: читатель
+    #: отказа — не всегда тот, у кого есть оболочка. Оператор через MCP-мост
+    #: получал совет «python3 -m factory cell submit …», которого выполнить не
+    #: может: у него есть инструмент `refresh_executor_access`, и это то же
+    #: самое действие. Совет, недоступный читателю, равен отсутствию совета.
+    как_повторить = (
+        f"инструментом refresh_executor_access (site={site_id}) либо командой "
+        f"python3 -m factory cell submit --site {site_id} "
+        "--cell-operation access-check")
     если_нет = (
         f"{site_id}: доступ исполнителя к репозиторию не проверялся. "
-        f"Сначала: python3 -m factory cell submit --site {site_id} "
-        "--cell-operation access-check — проверку делает сам исполнитель своим "
+        f"Сначала: {как_повторить} — проверку делает сам исполнитель своим "
         "токеном, и её результат отвечает на вопрос «примут ли заявку» ДО сборки")
     if not файлы:
         raise RequestRejected(если_нет)
@@ -514,8 +522,7 @@ def проверить_доступ_исполнителя(site_id: str) -> None
         raise RequestRejected(
             f"{site_id}: последняя проверка доступа исполнителя — "
             f"{возраст:.0f} ч назад, это устарело. Права меняются без "
-            f"предупреждения. Повторить: python3 -m factory cell submit "
-            f"--site {site_id} --cell-operation access-check")
+            f"предупреждения. Повторить: {как_повторить}")
     try:
         итог = (json.loads(свежий.read_text(encoding="utf-8")).get("outcome") or {})
     except (OSError, ValueError) as ош:

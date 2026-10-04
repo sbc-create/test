@@ -99,3 +99,19 @@ def test_ожидание_слоя_передаёт_время_подачи():
     assert "не_раньше=заявка.submitted_at" in текст, (
         "ожидание слоя nginx читает состояние без времени подачи и снова "
         "примет прошлый отказ за итог текущей попытки")
+
+
+def test_отказ_проверки_доступа_называет_инструмент_моста(tmp_path, monkeypatch):
+    """Совет, недоступный читателю отказа, равен отсутствию совета.
+
+    Оператор через MCP-мост получал «Повторить: python3 -m factory cell submit
+    …» — команду, которой у него нет. Действие у него есть, и оно штатное:
+    инструмент `refresh_executor_access`. Отказ обязан называть оба пути.
+    """
+    monkeypatch.setattr(q, "БАЗА", tmp_path)
+    (tmp_path / "results").mkdir()
+    with pytest.raises(q.RequestRejected) as ош:
+        q.проверить_доступ_исполнителя("lords-01")
+    текст = str(ош.value)
+    assert "refresh_executor_access" in текст, текст
+    assert "factory cell submit" in текст, "второй путь тоже обязан быть назван"
