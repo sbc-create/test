@@ -254,3 +254,35 @@ srv-qwen (`audit_page_seo`, `inspect_sitemap`, `analytics_readiness`,
 (значения только у переменных-адресов, секреты скрыты), разрешение имён
 `site-factory-mcp` и `site-factory-mcp-legacy`, кто из них отвечает, полный
 текст ошибки инструмента и след из её журнала.
+
+## Четыре выкладки через интерфейс MCP — итог дня
+
+| # | домен | заявка | релиз | исход | содержимое выпуска |
+| --- | --- | --- | --- | --- | --- |
+| 1 | `zonafilm.space` | `zona-01-code-2a73197f7d74` | `2a73197f7d74` | `activated`/`live_verified` | проверка публичной почты (только `checks/`) |
+| 2 | `zonafilm.space` | `zona-01-code-10a4609f6b53` | `10a4609f6b53` | `activated`/`live_verified` | читатель режима в рантайме + замок версий |
+| 3 | `lordserials22.info` | `lords-05-code-09d6db02828e` | `09d6db02828e` | `activated`/`live_verified` | разрешение выпуска + исправление проверки live-switch |
+| 4 | `zonafilm.cc` | `zona-02-code-b834f2525aa5` | `b834f2525aa5` | `activated`/`live_verified` | исправленный контракт разрешений (D141) |
+
+Выкладка 4, подтверждения:
+
+    план через службу: коммит b834f2525aa5, CI 37185780209, live 050649648481
+    ворота данных В ПЛАНЕ: present ["nginx_indexing"], empty_kinds [],
+                           missing_readers [], compatible true
+    digest sha256:82a38e01b29438d2…, build b834f2525aa5-zona-02
+    журнал /var/lib/site-cells/results/zona-02-code-b834f2525aa5.json
+    current -> b834f2525aa5
+    confirm_indexing -> CLOSED, подтверждено ответом домена
+    вердикт -> AWAITING_OWNER, release_permits_open true, owner_authorized_open FALSE
+    installed_release называет источники: /srv/zonafilm-cc/current и
+                           /srv/zonafilm-cc/current/config/site.json
+    страница: 200, «Zona — фильмы и сериалы онлайн», meta robots noindex,
+              canonical https://zonafilm.cc/
+    контент и плеер: главная 127635 символов, 87 ссылок на произведения,
+              /title/ad-dzheffri/ 200 (82860 символов), издатель 10238,
+              15 постеров poster.cdnvideohub.com, плеер player.cdnvideohub.com
+    защищённые данные: файла состояния нет (закрыт отсутствием),
+              слой nginx «режим: CLOSED», default "noindex, nofollow"
+
+Воспроизведение НЕ ПРОВЕРЕНО: проверено наличие источника плеера и
+идентификатора издателя.
