@@ -291,3 +291,53 @@ def test_отсутствие_команды_владельца_названо(�
     with pytest.raises(цепочка["ex"].ExecutorError) as ош:
         цепочка["ex"].зарегистрировать_согласие(_заявка("grant"), dry_run=False)
     assert "команды владельца" in str(ош.value)
+
+
+def test_сведения_о_кодах_не_падают_без_прав(tmp_path, monkeypatch):
+    """Диагностика обязана ОТВЕЧАТЬ, а не падать.
+
+    Измерено 2026-10-04 сразу после установки: хранилище кодов лежит в каталоге
+    root с режимом 0700, и `exists()` на пути внутри него сам поднимает
+    PermissionError. Вызов `сведения()` из непривилегированной учётной записи
+    рушился вместо честного «не читается» — а это единственный способ для
+    диагностики сказать «состояние видит только root».
+    """
+    недоступно = pathlib.Path("/etc/site-factory/owner-consent-codes.json")
+    monkeypatch.setattr(owner_codes, "ХРАНИЛИЩЕ", недоступно)
+    св = owner_codes.сведения()
+    assert св["readable"] is False
+    assert "root" in св["reason"] or "недоступно" in св["reason"], св
+    assert св["store"].endswith("owner-consent-codes.json")
+
+
+def test_предусловия_не_требуют_репозитория_и_размещения(monkeypatch):
+    """Согласию не нужны ни свой репозиторий, ни блок runtime.
+
+    Измерено 2026-10-04 на изолированной ячейке `site-a` сразу после установки:
+    заявка доходила до исполнителя и отвергалась сначала словами «не записан
+    собственный репозиторий», затем «в реестре нет блока runtime» — оба
+    признака к согласию не относятся, а приёмку на изолированном сайте делали
+    невозможной. Причина системная: перечни операций жили в двух местах, и
+    поправлен был только один.
+    """
+    from factory.cell import executor as ex
+
+    class Ячейка:
+        site_id = "site-a"
+        domain = "site-a.localhost"
+        repo: dict = {}
+        indexing: dict = {}
+
+    monkeypatch.setattr(ex.registry, "resolve", lambda _: Ячейка())
+    заявка = q.собрать("site-a", "", "", operation="owner-consent",
+                       consent_action="grant", consent_proof="0" * 64)
+    итог = ex.проверить_заявку(заявка)
+    assert итог["runtime"] is None, итог
+    assert "не нужно" in итог["note"], итог
+    assert "owner-consent" in ex.ОПЕРАЦИИ_БЕЗ_РЕПОЗИТОРИЯ
+    assert "owner-consent" in ex.ОПЕРАЦИИ_БЕЗ_РАЗМЕЩЕНИЯ
+    # А выкладке размещение по-прежнему обязательно.
+    выкладка = q.собрать("site-a", "a" * 40, "sha256:" + "b" * 64,
+                         operation="activate")
+    with pytest.raises(Exception):
+        ex.проверить_заявку(выкладка)
