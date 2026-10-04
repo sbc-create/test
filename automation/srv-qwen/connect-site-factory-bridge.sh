@@ -55,7 +55,12 @@ BACKUP_ROOT="/opt/qwen/backups"
 #: приёмкой: совпадение числа, отпечатка и источника отличает фабрику от
 #: любого другого ответчика на том же порту.
 EXPECT_HOST="claude-control-01"
-EXPECT_VERSION="2026-10-04.1"
+# Версия правил сверяется ПРЕФИКСОМ, а не целиком. Её задача здесь одна —
+# отличить мост фабрики от прежнего сервера, у которого `serverInfo.version`
+# ПУСТ. Точное значение меняется при каждой правке канонической инструкции, и
+# пакет, повторяющий его строкой, начинал отказывать на ПРАВИЛЬНОМ мосте —
+# отказ по устаревшему ожиданию, а не по существу.
+EXPECT_VERSION_PREFIX="2026-"
 EXPECT_SITES="23"
 EXPECT_DIGEST16="4511cf3add1b3e88"
 EXPECT_SOURCE="config/site-cells.json"
@@ -666,14 +671,14 @@ call_in_webui "{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/call\",\"params\
   > "${ANSWERS}/get_registered_site.json" || restore "get_registered_site не ответил"
 cp -a "${ANSWERS}"/*.json "$BACKUP_DIR"/ 2>/dev/null || true
 
-if ! python3 - "$ANSWERS" "$EXPECT_HOST" "$EXPECT_VERSION" "$EXPECT_SITES" \
+if ! python3 - "$ANSWERS" "$EXPECT_HOST" "$EXPECT_VERSION_PREFIX" "$EXPECT_SITES" \
        "$EXPECT_DIGEST16" "$EXPECT_SOURCE" "$CONTROL_DOMAIN" <<'PYACCEPT'
 import json
 import pathlib
 import sys
 
 каталог = pathlib.Path(sys.argv[1])
-host, version, sites, digest16, source, domain = sys.argv[2:8]
+host, version_prefix, sites, digest16, source, domain = sys.argv[2:8]
 плохо = []
 
 
@@ -702,9 +707,12 @@ def payload(имя):
 источник = ((реестр.get("sources") or {}).get("site_cells") or {}).get("path") or ""
 if окружение.get("host") != host:
     плохо.append("host=%r, ожидался %r — отвечает не фабрика" % (окружение.get("host"), host))
-if ((окружение.get("instruction") or {}).get("version")) != version:
-    плохо.append("версия инструкции=%r, ожидалась %r"
-                 % ((окружение.get("instruction") or {}).get("version"), version))
+версия = str((окружение.get("instruction") or {}).get("version") or "")
+if not версия:
+    плохо.append("версия инструкции ПУСТА — так отвечает прежний сервер, не мост")
+elif not версия.startswith(version_prefix):
+    плохо.append("версия инструкции=%r не начинается на %r"
+                 % (версия, version_prefix))
 if реестр.get("sites") != int(sites):
     плохо.append("сайтов=%r, ожидалось %s" % (реестр.get("sites"), sites))
 if not str(реестр.get("sites_digest", "")).startswith(digest16):
@@ -732,7 +740,7 @@ if плохо:
     sys.stderr.write("ПРИЁМКА НЕ ПРОЙДЕНА:\n  " + "\n  ".join(плохо) + "\n")
     raise SystemExit(6)
 print("   приёмка: host=%s версия=%s сайтов=%s отпечаток=%s… источник=%s домен %s на месте"
-      % (host, version, sites, digest16, source, domain))
+      % (host, версия, sites, digest16, source, domain))
 PYACCEPT
 then
   restore "приёмка не пройдена — состояние возвращено"
