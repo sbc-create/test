@@ -35,6 +35,7 @@ import json
 import os
 import re
 import tempfile
+import time
 import uuid
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
@@ -49,6 +50,7 @@ from typing import Any
 СОСТОЯНИЕ = БАЗА / "state"
 
 ХЕКС40 = re.compile(r"^[0-9a-f]{40}$")
+ХЕКС64 = re.compile(r"^[0-9a-f]{64}$")
 ДАЙДЖЕСТ = re.compile(r"^sha256:[0-9a-f]{64}$")
 ИДЕНТ = re.compile(r"^[a-z][a-z0-9-]{2,63}$")
 ЗАПРОС_ID = re.compile(r"^[a-z0-9][a-z0-9-]{7,63}$")
@@ -61,14 +63,14 @@ from typing import Any
 #: выпуск нового домена отклонялся HTTP 404, пока та же команда из сессии
 #: читала прогон без ошибок.
 ОПЕРАЦИИ = ("activate", "update", "deliver", "rollback", "editorial",
-            "access-check", "indexing-nginx")
+            "access-check", "indexing-nginx", "owner-consent")
 
 #: Операции, которые ничего не выкладывают: коммит и digest им не нужны.
 #:
 #: `indexing-nginx` переключает слой индексации в конфигурации nginx. Кода она
 #: не ставит, поэтому ни коммита, ни digest не требует — но сайт и режим
 #: обязана назвать, и отвечает за них привилегированная сторона.
-ОПЕРАЦИИ_БЕЗ_ВЫПУСКА = ("access-check", "indexing-nginx")
+ОПЕРАЦИИ_БЕЗ_ВЫПУСКА = ("access-check", "indexing-nginx", "owner-consent")
 
 #: Этапы операции. Расширение уже существующей схемы онбординга, не вторая.
 #: Этапы, которыми заявка отмечается по ходу. Перечень закрыт: неизвестный этап
@@ -103,6 +105,17 @@ class Заявка:
     #: пуст: поле со свободным значением превратило бы заявку из договора в
     #: мешок, поэтому форма проверяется наравне с идентификаторами.
     mode: str = ""
+    #: Что делать с согласием владельца для операции `owner-consent`:
+    #: `grant` или `revoke`. У остальных операций пусто.
+    consent_action: str = ""
+    #: ДОКАЗАТЕЛЬСТВО согласия владельца: `sha256(код|домен|действие)`.
+    #:
+    #: В заявку кладётся отпечаток, а НЕ код: каталог заявок доступен на
+    #: запись учётной записи инструментов, и код, записанный туда, можно было
+    #: бы снять и применить второй раз. Домен и действие входят в отпечаток,
+    #: поэтому снятая заявка не годится ни для другого домена, ни для отзыва
+    #: вместо выдачи. Сам код проверяет root по своему хранилищу отпечатков.
+    consent_proof: str = ""
     stages: list[dict[str, Any]] = field(default_factory=list)
 
     def as_dict(self) -> dict[str, Any]:
@@ -118,6 +131,45 @@ def _проверить(значение: str, правило: re.Pattern, по�
             "внешних программ, и единственный надёжный способ не спорить с "
             "оболочкой — не пропускать ничего, что могло бы ей что-то значить")
     return очищенное
+
+
+ДЕЙСТВИЯ_СОГЛАСИЯ = ("grant", "revoke")
+
+
+def _действие_согласия(значение, операция: str) -> str:
+    """`grant` или `revoke` — и только у операции `owner-consent`."""
+    очищенное = str(значение or "").strip().lower()
+    if операция == "owner-consent":
+        if очищенное not in ДЕЙСТВИЯ_СОГЛАСИЯ:
+            raise RequestRejected(
+                f"consent_action={значение!r}: операции owner-consent нужно "
+                f"{list(ДЕЙСТВИЯ_СОГЛАСИЯ)}")
+        return очищенное
+    if очищенное:
+        raise RequestRejected(
+            f"consent_action={значение!r} передан операции {операция!r}, "
+            "которая согласием владельца не распоряжается")
+    return ""
+
+
+def _доказательство(значение, операция: str) -> str:
+    """Отпечаток привязки кода к домену и действию. Только у `owner-consent`.
+
+    Проверяется ФОРМА: шестьдесят четыре шестнадцатеричных знака. Сам код
+    здесь не появляется ни разу — ни в заявке, ни в отказе.
+    """
+    очищенное = str(значение or "").strip().lower()
+    if операция == "owner-consent":
+        if not ХЕКС64.match(очищенное):
+            raise RequestRejected(
+                "consent_proof не проходит форму sha256: операции "
+                "owner-consent нужна привязка кода к домену и действию")
+        return очищенное
+    if очищенное:
+        raise RequestRejected(
+            f"consent_proof передан операции {операция!r}, которая согласием "
+            "владельца не распоряжается")
+    return ""
 
 
 def _режим(значение, операция: str) -> str:
@@ -172,6 +224,8 @@ def разобрать(сырое: dict[str, Any]) -> Заявка:
         submitted_by=str(сырое.get("submitted_by") or ""),
         note=str(сырое.get("note") or "")[:500],
         mode=_режим(сырое.get("mode"), операция),
+        consent_action=_действие_согласия(сырое.get("consent_action"), операция),
+        consent_proof=_доказательство(сырое.get("consent_proof"), операция),
         stages=list(сырое.get("stages") or []),
     )
     if заявка.ci_run and not заявка.ci_run.isdigit():
@@ -373,6 +427,46 @@ def состояние(request_id: str, *, база: Path | None = None,
         заявка = json.loads(если_в_очереди.read_text(encoding="utf-8"))
         return {**заявка, "status": "queued"}
     return {"status": "unknown", "request_id": request_id}
+
+
+def последняя_заявка(основа: str, *, база: Path | None = None
+                     ) -> tuple[str, list[str]]:
+    """ПОСЛЕДНЯЯ заявка с этой основой и перечень всех, включая суффиксы.
+
+    Повторная подача того же режима различается суффиксом (`-rep…`, `-rst…`):
+    без него очередь ответила бы «уже выполнено» — ровно то, из-за чего суффикс
+    и появился. Поэтому спрашивать только детерминированное имя значит
+    показывать НЕ ТУ заявку: измерено 2026-10-04, `indexing_journal` называл
+    `lords-05-idx-open`, тогда как слой применила
+    `lords-05-idx-open-rep123904`. Операция, связанная не с той заявкой, не
+    проверяема — по ней читают исход чужой попытки.
+
+    Порядок — по времени начала работы исполнителя (`started_at`), при его
+    отсутствии — по времени файла. Результатов нет — возвращается сама основа:
+    это ответ «заявка такая была бы вот такой», а не выдумка.
+    """
+    корень = база or БАЗА
+    каталог = корень / "results"
+    if not каталог.is_dir():
+        return основа, []
+    свои: list[tuple[str, str, float]] = []
+    for п_ in sorted(каталог.glob(f"{основа}*.json")):
+        имя = п_.name[: -len(".json")]
+        # Только сама основа и её суффиксы: `…-idx-open` не вправе подобрать
+        # `…-idx-opened` или чужой режим.
+        if имя != основа and not имя.startswith(f"{основа}-"):
+            continue
+        начало = ""
+        try:
+            начало = str(json.loads(п_.read_text(encoding="utf-8")
+                                    ).get("started_at") or "")
+        except (OSError, ValueError):
+            начало = ""
+        свои.append((имя, начало, п_.stat().st_mtime))
+    if not свои:
+        return основа, []
+    свои.sort(key=lambda з: (з[1] or "", з[2]))
+    return свои[-1][0], sorted(и for и, _, _ in свои)
 
 
 def отметить(заявка_путь: Path, этап: str, детали: dict[str, Any] | None = None) -> None:
@@ -852,7 +946,8 @@ def проверить_маршрут(site_id: str) -> None:
 
 def собрать(site_id: str, commit: str, digest: str, *, operation: str = "activate",
             ci_run: str = "", repo: str = "", note: str = "",
-            snapshot: str = "", mode: str = "", suffix: str = "") -> Заявка:
+            snapshot: str = "", mode: str = "", suffix: str = "",
+            consent_action: str = "", consent_proof: str = "") -> Заявка:
     """Заявка из результата проверенной сборки, а не из рук человека.
 
     `suffix` — только для `indexing-nginx` и только там, где повтор того же
@@ -874,6 +969,13 @@ def собрать(site_id: str, commit: str, digest: str, *, operation: str = "
                 raise RequestRejected(
                     f"suffix={suffix!r}: допустимы строчные буквы, цифры и дефис")
             запрос = f"{запрос}-{чистый}"[:64]
+    elif operation == "owner-consent":
+        # Идентификатор называет САЙТ, ДЕЙСТВИЕ и момент: согласие выдают и
+        # отзывают многократно, и повтор — это НОВАЯ работа, а не та же.
+        # Общий идентификатор проверки доступа здесь не годится: очередь
+        # ответила бы «уже выполнено» на вторую выдачу того же дня.
+        метка = time.strftime("%Y%m%d-%H%M%S", time.gmtime())
+        запрос = f"{site_id}-consent-{(consent_action or '').strip().lower()}-{метка}"[:64]
     elif operation in ОПЕРАЦИИ_БЕЗ_ВЫПУСКА:
         запрос = идентификатор_проверки(site_id)
     else:
@@ -886,6 +988,8 @@ def собрать(site_id: str, commit: str, digest: str, *, operation: str = "
         "submitted_at": _сейчас(),
         "submitted_by": os.environ.get("GITHUB_WORKFLOW") or "manual",
         "note": note, "mode": (mode or "").strip().upper(),
+        "consent_action": (consent_action or "").strip().lower(),
+        "consent_proof": (consent_proof or "").strip().lower(),
     })
 
 

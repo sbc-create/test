@@ -185,3 +185,47 @@ def test_уже_выполнено_не_означает_что_слой_в_ну
     assert поданные[0]["id"] == "lords-05-idx-open"
     assert поданные[1]["id"] != поданные[0]["id"], "суффикс не добавлен"
     assert итог.get("outcome") == "applied", итог
+
+
+def test_последняя_заявка_находится_вместе_с_суффиксом(база):
+    """Повторная подача различается суффиксом — и показывать надо ЕЁ.
+
+    Расхождение измерено 2026-10-04: `indexing_journal` называл
+    `lords-05-idx-open`, тогда как слой фактически применила
+    `lords-05-idx-open-rep123904`. Инструмент спрашивал только
+    детерминированное имя, а повторная заявка его не носит — иначе очередь
+    ответила бы «уже выполнено» (ровно то, из-за чего суффикс и появился).
+    Операция, связанная не с той заявкой, не проверяема: по ней читают исход
+    чужой попытки.
+    """
+    (база / "results" / "lords-05-idx-open.json").write_text(json.dumps({
+        "request_id": "lords-05-idx-open", "status": "ok",
+        "outcome": {"status": "applied"},
+        "started_at": "2026-10-04T12:25:00+00:00"}), encoding="utf-8")
+    (база / "results" / "lords-05-idx-open-rep123904.json").write_text(json.dumps({
+        "request_id": "lords-05-idx-open-rep123904", "status": "ok",
+        "outcome": {"status": "applied"},
+        "started_at": "2026-10-04T12:40:00+00:00"}), encoding="utf-8")
+    # Соседний режим не должен попадать в ответ по основе «open».
+    (база / "results" / "lords-05-idx-closed-rst122505.json").write_text(json.dumps({
+        "request_id": "lords-05-idx-closed-rst122505", "status": "ok",
+        "outcome": {"status": "applied"},
+        "started_at": "2026-10-04T12:26:00+00:00"}), encoding="utf-8")
+
+    последняя, все = q.последняя_заявка("lords-05-idx-open", база=база)
+    assert последняя == "lords-05-idx-open-rep123904", последняя
+    assert все == ["lords-05-idx-open", "lords-05-idx-open-rep123904"], все
+
+
+def test_последняя_заявка_без_результатов_отдаёт_основу(база):
+    последняя, все = q.последняя_заявка("lords-05-idx-open", база=база)
+    assert последняя == "lords-05-idx-open"
+    assert все == []
+
+
+def test_инструмент_журнала_показывает_исполнившую_заявку():
+    """Исправление бесполезно, если инструмент о нём не знает."""
+    текст = pathlib.Path("factory/qwen/mcp.py").read_text(encoding="utf-8")
+    assert "последняя_заявка" in текст, (
+        "indexing_journal снова называет детерминированное имя и покажет не ту "
+        "заявку")

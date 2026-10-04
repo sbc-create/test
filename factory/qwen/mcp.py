@@ -74,7 +74,7 @@ from factory.qwen import editorial, indexing, registry
 #: read-only, и сервер не вправе предлагать ему то, чего тот не должен уметь.
 ПИШУЩИЕ = ("set_indexing_mode", "rollback_indexing", "release_site",
            "rollback_site", "refresh_executor_access", "prepare_material",
-           "publish_material", "unpublish_material")
+           "publish_material", "unpublish_material", "register_owner_consent")
 
 #: Только чтение: пишущие инструменты не объявляются в `tools/list` и
 #: отказывают при вызове. Включается ключом `--read-only` или переменной
@@ -261,6 +261,104 @@ def инструмент_смены_режима(аргументы: dict) -> di
             "environment": окружение()}
 
 
+def инструмент_согласия(аргументы: dict) -> dict[str, Any]:
+    """Регистрация согласия владельца ИЗ ЧАТА по его одноразовому коду.
+
+    Почему инструмент не создаёт согласие сам. Мост работает от `claude`;
+    инструмент, создающий корневой якорь согласия без доказательства, означал
+    бы право модели выдавать разрешения себе — и якорь, из-за которого флаг в
+    реестре разрешением не считается, стал бы украшением.
+
+    Поэтому инструмент только ПЕРЕДАЁТ доказательство владельца
+    привилегированной стороне: в заявку кладётся не код, а привязка
+    `sha256(код|домен|действие)`. Снятая с диска заявка не годится ни для
+    другого домена, ни для отзыва вместо выдачи; сам код сверяет root по
+    своему хранилищу и гасит его — код одноразовый.
+
+    Код НЕ попадает ни в заявку, ни в ответ, ни в журнал вызовов: в ответе
+    остаётся только отпечаток погашенного кода, который возвращает
+    привилегированная сторона.
+    """
+    from factory.cell import owner_codes
+    from factory.cell import queue as очередь_ячеек
+    from factory.qwen import editorial as ред
+
+    сайт = str(аргументы.get("site") or "").strip()
+    действие = str(аргументы.get("action") or "grant").strip().lower()
+    код = str(аргументы.get("code") or "").strip()
+    примечание = str(аргументы.get("note") or "").strip()[:200]
+    if not сайт:
+        raise ОшибкаИнструмента("нужен параметр site: домен или site_id")
+    if действие not in ("grant", "revoke"):
+        raise ОшибкаИнструмента("action: grant или revoke")
+    if not код:
+        raise ОшибкаИнструмента(
+            "нужен код владельца (аргумент code). Коды выдаёт одна команда "
+            "владельца: sudo bash automation/host/install-owner-consent-codes.sh")
+    try:
+        s = ред._сайт(сайт)
+    except Exception as ош:  # noqa: BLE001 — неизвестный сайт назван отказом
+        raise ОшибкаИнструмента(f"{сайт}: {ош}") from None
+    домен = (s.domain or "").strip().lower()
+    привязка = owner_codes.привязка(код, домен, действие)
+    # Дальше кода нет нигде: ни в заявке, ни в ответе.
+    del код
+    try:
+        заявка = очередь_ячеек.собрать(
+            s.site_id, "", "", operation="owner-consent",
+            consent_action=действие, consent_proof=привязка,
+            note=(примечание or f"owner consent {действие} {домен}")[:200])
+        подача = очередь_ячеек.подать(заявка)
+    except очередь_ячеек.RequestRejected as ош:
+        raise ОшибкаИнструмента(f"{домен}: заявка отвергнута очередью: {ош}") from None
+    except OSError as ош:
+        raise ОшибкаИнструмента(
+            f"{домен}: очередь недоступна ({type(ош).__name__}): согласие не "
+            "менялось") from None
+    итог: dict[str, Any] = {
+        "version": ВЕРСИЯ_ОБОЛОЧКИ, "site": домен, "site_id": s.site_id,
+        "action": действие, "request_id": заявка.request_id,
+        "submission": подача.get("status"),
+        "environment": окружение(),
+    }
+    import time as _время
+
+    предел = _время.time() + 420
+    последнее: dict[str, Any] = {"status": "unknown"}
+    while _время.time() < предел:
+        try:
+            последнее = очередь_ячеек.состояние(
+                заявка.request_id, не_раньше=заявка.submitted_at)
+        except OSError as ош:
+            последнее = {"status": "status-unreadable",
+                         "reason": f"{type(ош).__name__}: {ош}"}
+        if последнее.get("status") == "finished":
+            результат = последнее.get("result") or {}
+            исход = (результат.get("outcome") or {})
+            итог["outcome"] = исход.get("status")
+            итог["stage"] = исход.get("stage")
+            итог["error"] = результат.get("error")
+            итог["code_fingerprint"] = ((исход.get("steps") or {})
+                                        .get("code", {}).get("code_fingerprint"))
+            break
+        _время.sleep(5)
+    else:
+        итог["outcome"] = None
+        итог["note"] = ("исполнитель не ответил за отведённое время; заявка "
+                        "остаётся в очереди — прочтите operation_result, не "
+                        "подавайте её заново")
+    # Итог называется СОСТОЯНИЕМ ЯКОРЯ, а не словами заявки.
+    from factory.cell import owner_consent as як
+
+    итог["consent"] = як.сведения(домен)
+    итог["next_action"] = (
+        "открытие домена остаётся отдельной операцией set_indexing_mode: "
+        "согласие разрешает открытие, но само не открывает"
+        if действие == "grant" else
+        "согласие отозвано: открытие домена теперь невозможно до нового согласия")
+    return итог
+
+
 def инструмент_подтверждения(аргументы: dict) -> dict[str, Any]:
     """Что домен отдаёт СЕЙЧАС: подтверждение режима публичным ответом."""
     сайт = str(аргументы.get("site") or "").strip()
@@ -311,11 +409,16 @@ def инструмент_журнала(аргументы: dict) -> dict[str, A
 
     из_очереди: dict[str, Any] = {}
     for режим in ("closed", "open"):
-        идентификатор = f"{с.site_id}-idx-{режим}"
+        основа = f"{с.site_id}-idx-{режим}"
+        # Показывается заявка, КОТОРАЯ ОТРАБОТАЛА, а не детерминированное имя:
+        # повторная подача носит суффикс, и без этого запроса журнал называл
+        # чужую попытку (измерено 2026-10-04).
+        идентификатор, все_заявки = очередь.последняя_заявка(основа)
         try:
             состояние = очередь.состояние(идентификатор)
         except (OSError, ValueError) as ош:
             из_очереди[режим] = {"request_id": идентификатор,
+                                 "request_id_base": основа,
                                  "error": f"{type(ош).__name__}: {ош}"}
             continue
         if состояние.get("status") == "unknown":
@@ -325,6 +428,8 @@ def инструмент_журнала(аргументы: dict) -> dict[str, A
         применение = (исход.get("steps") or {}).get("apply") or {}
         из_очереди[режим] = {
             "request_id": идентификатор,
+            "request_id_base": основа,
+            "all_requests": все_заявки,
             "queue_status": состояние.get("status"),
             "status": результат.get("status"),
             "outcome": исход.get("status"), "stage": исход.get("stage"),
@@ -891,6 +996,23 @@ def инструмент_области_адреса(аргументы: dict) -
                                "description": "ожидаемый выложенный выпуск"},
             "author": {"type": "string"}},
             "required": ["site", "mode"], "additionalProperties": False},
+    },
+    "register_owner_consent": {
+        "обработчик": инструмент_согласия,
+        "описание": ("Зарегистрировать или отозвать СОГЛАСИЕ ВЛАДЕЛЬЦА на "
+                     "открытие домена по его одноразовому коду. Само открытие "
+                     "не выполняет: согласие разрешает открытие, открывает "
+                     "set_indexing_mode. Код обязателен — без него согласие не "
+                     "регистрируется, и этим инструмент отличается от права "
+                     "выдать разрешение себе. Код в заявку и в ответ не "
+                     "попадает: передаётся привязка sha256(код|домен|действие)."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string", "description": "домен или site_id"},
+            "action": {"type": "string", "enum": ["grant", "revoke"]},
+            "code": {"type": "string",
+                     "description": "одноразовый код владельца (oc-…)"},
+            "note": {"type": "string"}},
+            "required": ["site", "code"], "additionalProperties": False},
     },
     "confirm_indexing": {
         "обработчик": инструмент_подтверждения,

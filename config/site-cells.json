@@ -1396,6 +1396,12 @@
           "source": "get/projects_2/projects"
         },
         "note": "счётчик 113110481 создан службой, отчёт var/analytics/connect-zonafilm.cc.json от 2026-09-27T22:47:16Z; домен счётчика по ответу API — zonafilm.cc. проект 33768310 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
+      },
+      "indexing": {
+        "open_authorized": true,
+        "open_authorization_ref": "/var/lib/site-cells/owner-consent/zonafilm.cc.json",
+        "open_authorization_id": "e93ced92-a653-4153-b91d-2dc20f49079e",
+        "open_authorization_note": "разрешение владельца: claude, 2026-10-04T13:31:45Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/zonafilm.cc.json; флаг в реестре без него разрешением не считается"
       }
     },
     {
