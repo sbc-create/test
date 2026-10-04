@@ -34,7 +34,13 @@ from dataclasses import dataclass, field, asdict
 from typing import Any
 
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
-РЕЕСТР_ЯЧЕЕК = КОРЕНЬ / "config" / "site-cells.json"
+#: Реестр ячеек. Переменная `SITE_CELLS_REGISTRY` — та же, что у
+#: `factory.cell.registry.registry_path()`: изолированному стенду нужен свой
+#: реестр, и подменять боевой файл ради проверки нельзя. Два слоя обязаны
+#: искать реестр ОДИНАКОВО — расхождение путей уже стоило операции, когда один
+#: и тот же путь внутри пакета указывал на два разных файла.
+РЕЕСТР_ЯЧЕЕК = pathlib.Path(
+    os.environ.get("SITE_CELLS_REGISTRY") or КОРЕНЬ / "config" / "site-cells.json")
 СЕТЕВОЙ_СПИСОК = КОРЕНЬ / "inventory" / "network-allowlist.yaml"
 
 #: Корень хранилищ редакционных материалов — СВОЙ У КАЖДОГО СЕМЕЙСТВА.

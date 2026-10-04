@@ -256,6 +256,67 @@ print("   open_authorized = True, ref и id записаны, desired_state не
 PYREG2
 ok "реестр обновлён, копия прежнего рядом (.bak.<метка>)"
 
+# ДОСТАВКА РАЗРЕШЕНИЯ В КОРНЕВУЮ КОПИЮ ИСПОЛНИТЕЛЯ (решение D147).
+#
+# Исполнитель читает СВОЮ копию реестра (`/usr/local/lib/site-factory-cell/
+# config/site-cells.json`, root:root): ссылаться оттуда на рабочий каталог
+# нельзя — реестр задаёт учётную запись, порт, имя юнита и пути установки, и
+# право записи в него равнялось бы праву решать, что поставит root.
+#
+# Отсюда следовала цена, измеренная 2026-10-04: разрешение, легшее в
+# авторитетный реестр в 08:32:42, не дошло до копии от 07:10:34, и исполнитель
+# отказал словами «indexing.open_authorized не равно true». Разрешение владельца
+# доставляет эта команда — она уже работает от root и переносит ТОЛЬКО поля
+# разрешения названного домена. Остальные поля копии не трогаются вовсе: ни
+# порт, ни юнит, ни пути из рабочего каталога в привилегированную копию не
+# попадают. Нет установленной копии — это не ошибка: исполнитель ещё не
+# установлен, и разрешение попадёт в неё при установке.
+EXEC_REGISTRY="${EXEC_REGISTRY:-/usr/local/lib/site-factory-cell/config/site-cells.json}"
+if [ -f "$EXEC_REGISTRY" ]; then
+  log "3б. доставка полей разрешения в корневую копию исполнителя"
+  python3 - "$EXEC_REGISTRY" "$DOMAIN" "$CONSENT_FILE" "$CONSENT_ID" "$WHO" "$WHEN" <<'PYEXEC'
+import json
+import os
+import pathlib
+import sys
+import tempfile
+
+копия = pathlib.Path(sys.argv[1])
+домен = sys.argv[2].strip().lower()
+ссылка, ид, кем, когда = sys.argv[3:7]
+данные = json.loads(копия.read_text(encoding="utf-8"))
+тронуто = 0
+for я in данные.get("cells") or []:
+    if str(я.get("domain", "")).lower() != домен:
+        continue
+    инд = я.setdefault("indexing", {})
+    # Ровно те же четыре поля, что и в авторитетном реестре. Ничего больше:
+    # всё остальное в этой копии принадлежит установке.
+    инд["open_authorized"] = True
+    инд["open_authorization_ref"] = ссылка
+    инд["open_authorization_id"] = ид
+    инд["open_authorization_note"] = (
+        f"разрешение владельца: {кем}, {когда}. Доставлено authorize-indexing.sh "
+        "в корневую копию исполнителя")
+    тронуто += 1
+if тронуто != 1:
+    sys.exit(f"в копии исполнителя ожидалась одна запись домена, затронуто {тронуто}")
+св = копия.stat()
+with tempfile.NamedTemporaryFile("w", dir=копия.parent, delete=False,
+                                 encoding="utf-8") as врем:
+    json.dump(данные, врем, ensure_ascii=False, indent=2)
+    врем.write("\n")
+    времянка = pathlib.Path(врем.name)
+os.chown(времянка, св.st_uid, св.st_gid)
+os.chmod(времянка, св.st_mode & 0o7777)
+времянка.replace(копия)
+print(f"   {копия}: open_authorized = True (только поля разрешения)")
+PYEXEC
+  ok "корневая копия исполнителя знает разрешение — переустановка не нужна"
+else
+  log "3б. корневой копии исполнителя нет ($EXEC_REGISTRY): шаг пропущен"
+fi
+
 log "4. журнал подтверждений (каталог root)"
 printf '%s\n' "$(python3 -c "
 import json, sys
@@ -266,10 +327,18 @@ chmod 0444 "${CONSENT_DIR}/journal.jsonl"
 ok "запись добавлена в ${CONSENT_DIR}/journal.jsonl"
 
 log "5. проверка фабрикой (её собственной функцией)"
-sudo -u claude env PYTHONPATH="$ROOT_DIR" python3 - "$SITE_ID" "$DOMAIN" <<'PYCHECK'
+# Проверяются ИМЕННО те файлы, которые написала эта команда. Прежде проверка
+# шла по путям по умолчанию: с `--registry`/`--consent-dir` она отвечала про
+# постороннее состояние — то есть про чужие файлы, а выглядела как приёмка.
+sudo -u claude env PYTHONPATH="$ROOT_DIR" \
+  SITE_CELLS_REGISTRY="$REGISTRY" \
+  SITE_CELLS_OWNER_CONSENT_ROOT="$CONSENT_DIR" \
+  python3 - "$SITE_ID" "$DOMAIN" <<'PYCHECK'
+import os
 import sys
 
-sys.path.insert(0, "/home/claude/wt-portable-site-cell-01")
+sys.path.insert(0, os.environ.get("PYTHONPATH", "").split(os.pathsep)[0]
+                or "/home/claude/wt-portable-site-cell-01")
 from factory.cell import owner_consent
 from factory.qwen import indexing
 

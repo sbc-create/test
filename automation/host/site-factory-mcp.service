@@ -50,8 +50,20 @@ MemoryMax=512M
 CPUQuota=50%
 TasksMax=64
 
-StandardOutput=journal
-StandardError=journal
+# ВЫВОД ЧИТАЕТСЯ БЕЗ ROOT.
+#
+# Журнал systemd обычной учётной записи виден не весь: системные сообщения —
+# в том числе «процесс убит по памяти» — требуют группы adm или
+# systemd-journal. Измерено 2026-10-04: служба умирала от предела памяти,
+# вызов получал обрыв соединения, и в доступной части журнала не было НИ ОДНОЙ
+# строки об этом. Отказ, причину которого нельзя прочитать, неотличим от
+# «служба не запускалась».
+#
+# Поэтому оба потока уходят в файлы под `var/`, который и так открыт на запись
+# этой службе (ReadWritePaths ниже). Диагностические строки каждого вызова
+# мост пишет именно в stderr.
+StandardOutput=append:/home/claude/wt-portable-site-cell-01/var/log/site-factory-mcp.out
+StandardError=append:/home/claude/wt-portable-site-cell-01/var/log/site-factory-mcp.err
 
 [Install]
 WantedBy=multi-user.target
