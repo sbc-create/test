@@ -439,11 +439,98 @@ def test_откат_объявлен_пишущим_и_скрыт_при_тол�
     assert ошибка and "только чтения" in д["error"], д
 
 
+def test_выпуск_подключён_штатными_операциями_а_не_своей_логикой():
+    """Инструменты выпуска обязаны вызывать существующие операции фабрики.
+
+    Второй оркестратор здесь — главный риск: соблазн «подать заявку самому»
+    обходит предполётные проверки `trigger` и происхождение из CI. Проверяется
+    по исходному тексту: обработчики зовут `trigger.проверить_сайт` и
+    `queue.состояние`, и ни один не запускает оболочку.
+    """
+    исходник = pathlib.Path(mcp.__file__).read_text(encoding="utf-8")
+    начало = исходник.index("def _план_выпуска")
+    конец = исходник.index("def инструмент_проверки_доступа")
+    участок = исходник[начало:конец]
+    assert "триггер.проверить_сайт" in участок, "план выпуска не зовёт trigger"
+    assert "очередь.состояние" in участок, "результат читается не очередью"
+    for запрещено in ("subprocess", "os.system", "shell=True"):
+        assert запрещено not in участок, f"в выпуске есть {запрещено}"
+
+
+def test_план_выпуска_ничего_не_меняет_и_называет_препятствие(monkeypatch):
+    """`release_plan` — чтение: `submit` обязан быть False."""
+    видели = {}
+
+    def подделка(site_id, *, submit=False):
+        видели["submit"] = submit
+        return {"site_id": site_id, "action": "подал бы заявку",
+                "commit": "a" * 40, "ci_run": "1", "live_commit": "b" * 12}
+
+    from factory.cell import trigger as триггер
+    monkeypatch.setattr(триггер, "проверить_сайт", подделка)
+    monkeypatch.setattr(mcp, "_site_id", lambda з: "zona-01")
+    итог = mcp.вызвать("release_plan", {"site": "zonafilm.space"})
+    assert видели["submit"] is False, "план выпуска подал заявку"
+    assert итог["plan"]["action"] == "подал бы заявку"
+
+
+def test_выпуск_не_скрывает_препятствие_за_успехом(monkeypatch):
+    """Заявка не подана — это ОШИБКА инструмента, а не успех с полем."""
+    from factory.cell import trigger as триггер
+    monkeypatch.setattr(триггер, "проверить_сайт", lambda site_id, *, submit=False: {
+        "site_id": site_id, "action": "заявка не подана",
+        "blocked": "проверка доступа исполнителя устарела"})
+    monkeypatch.setattr(mcp, "_site_id", lambda з: "zona-01")
+    ошибка, д = _вызов("release_site", {"site": "zonafilm.space"})
+    assert ошибка, д
+    assert "заявка не подана" in д["error"] and "устарела" in д["error"]
+
+
+def test_измерение_страницы_не_даёт_оценок(monkeypatch):
+    """`audit_page_seo` сообщает измеренное, а не «хорошо/плохо»."""
+    monkeypatch.setattr(mcp, "_страница_домена", lambda домен, путь="/": {
+        "http": "200", "chain": [],
+        "body": ('<html><head><title>Т</title>'
+                 '<meta name="robots" content="noindex, nofollow">'
+                 '<link rel="canonical" href="https://x/"></head>'
+                 '<body><h1>Заголовок</h1></body></html>')})
+    monkeypatch.setattr(mcp.indexing, "сигналы", lambda домен, *, порт=0: {
+        "x_robots_values": ["noindex, nofollow"], "robots_txt_http": "200",
+        "sitemap_http": "404", "meta_robots_home": "noindex, nofollow",
+        "robots_txt": "User-agent: *\nDisallow: /\n", "x_robots_count": 1,
+        "x_robots_values_http80": [], "home_http": "200"})
+    д = mcp.вызвать("audit_page_seo", {"site": "lordserials22.info"})
+    assert д["title"] == "Т" and д["h1"] == "Заголовок"
+    assert д["meta_robots"] == "noindex, nofollow"
+    assert д["canonical"] == "https://x/"
+    assert д["public_mode"] in ("OPEN", "CLOSED")
+    assert "ИЗМЕРЕНИЕ" in д["note"]
+    текст = json.dumps(д, ensure_ascii=False).lower()
+    for оценка in ("хорошо", "плохо", "рекомендуем", "позиции вырастут"):
+        assert оценка not in текст, f"инструмент даёт оценку: {оценка}"
+
+
+def test_область_адреса_отличает_чужой_домен_от_служебного_пути():
+    чужой = mcp.вызвать("explain_url_scope", {"url": "https://example.com/x"})
+    assert чужой["in_registry"] is False
+    assert "нет в авторитетном реестре" in чужой["reason"]
+    служебный = mcp.вызвать("explain_url_scope",
+                            {"url": "https://lordserials22.info/api/catalog"})
+    assert служебный["in_registry"] is True
+    assert служебный["service_path"] is True
+    обычный = mcp.вызвать("explain_url_scope",
+                          {"url": "https://lordserials22.info/title/skotty/"})
+    assert обычный["service_path"] is False
+    assert обычный["site_id"] == "lords-05"
+
+
 def test_набор_инструментов_покрывает_петлю_операции():
     """Открыть, подтвердить, откатить и прочесть журнал — одним интерфейсом."""
     for имя in ("domain_indexing_readiness", "set_indexing_mode",
                 "confirm_indexing", "rollback_indexing", "indexing_journal",
-                "analytics_readiness"):
+                "analytics_readiness", "release_plan", "release_site",
+                "operation_result", "rollback_site", "refresh_executor_access",
+                "audit_page_seo", "inspect_sitemap", "explain_url_scope"):
         assert имя in mcp.ИНСТРУМЕНТЫ, имя
         assert mcp.ИНСТРУМЕНТЫ[имя]["описание"].strip(), имя
         assert mcp.ИНСТРУМЕНТЫ[имя]["схема"]["type"] == "object", имя

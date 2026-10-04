@@ -71,7 +71,8 @@ from factory.qwen import editorial, indexing, registry
 #: ограничение «только чтение» обязано быть проверяемым свойством сервера, а
 #: не обещанием в описании подключения: на этапе приёмки коннектор объявлен
 #: read-only, и сервер не вправе предлагать ему то, чего тот не должен уметь.
-ПИШУЩИЕ = ("set_indexing_mode", "rollback_indexing")
+ПИШУЩИЕ = ("set_indexing_mode", "rollback_indexing", "release_site",
+           "rollback_site", "refresh_executor_access")
 
 #: Только чтение: пишущие инструменты не объявляются в `tools/list` и
 #: отказывают при вызове. Включается ключом `--read-only` или переменной
@@ -472,6 +473,273 @@ def инструмент_аналитики(аргументы: dict) -> dict[st
     return итог
 
 
+# ------------------------------------------------- выпуск сайта: штатные операции
+#
+# Операции выпуска в фабрике УЖЕ есть: план и подачу заявки делает
+# `factory.cell.trigger`, применяет привилегированный исполнитель по таймеру,
+# результат лежит в очереди. У Qwen их не было — поэтому «исправить индексацию»
+# он мог, а «выпустить сайт» нет. Здесь они подключаются как есть: второго
+# исполнителя не появляется, произвольной команды оболочки нет, все проверки
+# (происхождение из CI, доступ исполнителя, ворота защищённых данных) остаются
+# на своих местах — они живут в очереди и в исполнителе, а не здесь.
+
+
+def _site_id(значение: str) -> str:
+    """Принять домен или site_id и вернуть site_id реестра."""
+    сайт = str(значение or "").strip()
+    if not сайт:
+        raise ОшибкаИнструмента("нужен параметр site (домен или site_id)")
+    try:
+        return editorial._сайт(сайт).site_id
+    except editorial.ОперацияОтклонена as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+
+
+def _план_выпуска(сайт: str, *, подать: bool) -> dict[str, Any]:
+    from factory.cell import registry as реестр_ячеек
+    from factory.cell import trigger as триггер
+
+    site_id = _site_id(сайт)
+    try:
+        итог = триггер.проверить_сайт(site_id, submit=подать)
+    except (триггер.TriggerError, реестр_ячеек.RegistryError) as ош:
+        raise ОшибкаИнструмента(f"{site_id}: {ош}") from None
+    return итог
+
+
+def инструмент_плана_выпуска(аргументы: dict) -> dict[str, Any]:
+    """Что было бы выпущено: коммит, прогон CI, digest, препятствия. Без мутаций."""
+    итог = _план_выпуска(str(аргументы.get("site") or ""), подать=False)
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "plan": итог,
+            "blocked": итог.get("blocked"),
+            "environment": окружение()}
+
+
+def инструмент_выпуска(аргументы: dict) -> dict[str, Any]:
+    """Подать заявку на выпуск последнего успешного прогона CI.
+
+    Ничего не выкладывает сама: заявка уходит привилегированному исполнителю,
+    который проверяет происхождение (прогон CI, ветка, коммит), digest
+    артефакта и защищённые данные, применяет выпуск кандидатом, прогревает его
+    и переключает трафик только после проверки ответом. При неуспехе кандидата
+    возвращает трафик сам.
+    """
+    итог = _план_выпуска(str(аргументы.get("site") or ""), подать=True)
+    заявка = итог.get("request_id")
+    if итог.get("blocked"):
+        raise ОшибкаИнструмента(
+            f"{итог.get('site_id')}: заявка не подана — {итог['blocked']}")
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "submitted": bool(заявка),
+            "request_id": заявка, "release": итог,
+            "next_action": ("исполнитель разбирает очередь раз в минуту; "
+                            "результат — инструментом operation_result по "
+                            "request_id. Повторная подача того же коммита "
+                            "второго выпуска не делает"),
+            "environment": окружение()}
+
+
+def инструмент_результата(аргументы: dict) -> dict[str, Any]:
+    """Результат заявки: судьба в очереди, исход операции и её журнал."""
+    from factory.cell import queue as очередь
+
+    идент = str(аргументы.get("request_id") or "").strip()
+    if not идент:
+        raise ОшибкаИнструмента("нужен параметр request_id")
+    try:
+        состояние = очередь.состояние(идент)
+    except (OSError, ValueError) as ош:
+        raise ОшибкаИнструмента(
+            f"состояние заявки {идент} не прочитано: {type(ош).__name__}: {ош}") from None
+    результат = состояние.get("result") or {}
+    исход = результат.get("outcome") or {}
+    return {
+        "version": ВЕРСИЯ_ОБОЛОЧКИ, "request_id": идент,
+        "queue_status": состояние.get("status"),
+        "status": результат.get("status"),
+        "outcome": исход.get("status"), "stage": исход.get("stage"),
+        "build_id": исход.get("build_id"),
+        "error": результат.get("error"),
+        # Журнал операции: этапы, которые исполнитель прошёл фактически.
+        "steps": sorted((исход.get("steps") or {})),
+        "stages": (состояние.get("request") or {}).get("stages"),
+        "result_path": str(очередь.БАЗА / "results" / f"{идент}.json"),
+        "environment": окружение(),
+    }
+
+
+def инструмент_откката_сайта(аргументы: dict) -> dict[str, Any]:
+    """Вернуть трафик действующей версии штатной заявкой `rollback`."""
+    from factory.cell import queue as очередь
+
+    site_id = _site_id(str(аргументы.get("site") or ""))
+    коммит = str(аргументы.get("commit") or "").strip()
+    if not коммит:
+        raise ОшибкаИнструмента(
+            "нужен параметр commit: заявка откката называет выпуск, от "
+            "которого откатываются — его видно в release_plan (live_commit)")
+    try:
+        заявка = очередь.собрать(site_id, коммит, "", operation="rollback",
+                                 note=str(аргументы.get("note") or "")[:200])
+        подача = очередь.подать(заявка)
+    except очередь.RequestRejected as ош:
+        raise ОшибкаИнструмента(f"{site_id}: заявка откката отвергнута: {ош}") from None
+    except OSError as ош:
+        raise ОшибкаИнструмента(
+            f"{site_id}: очередь недоступна ({type(ош).__name__})") from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "request_id": заявка.request_id,
+            "submission": подача.get("status"), "environment": окружение()}
+
+
+def инструмент_проверки_доступа(аргументы: dict) -> dict[str, Any]:
+    """Обновить проверку доступа исполнителя — названное условие выпуска.
+
+    Проверка устаревает (сутки), и просроченная останавливает выпуск с точным
+    текстом. Это отдельная штатная операция очереди, а не произвольная
+    команда: `access-check` ничего не выкладывает.
+    """
+    from factory.cell import queue as очередь
+
+    site_id = _site_id(str(аргументы.get("site") or ""))
+    try:
+        заявка = очередь.собрать(site_id, "", "", operation="access-check")
+        подача = очередь.подать(заявка)
+    except очередь.RequestRejected as ош:
+        raise ОшибкаИнструмента(f"{site_id}: {ош}") from None
+    except OSError as ош:
+        raise ОшибкаИнструмента(
+            f"{site_id}: очередь недоступна ({type(ош).__name__})") from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "request_id": заявка.request_id,
+            "submission": подача.get("status"),
+            "next_action": "результат — operation_result по этому request_id",
+            "environment": окружение()}
+
+
+# --------------------------------------------- SEO страницы: измерение, не оценка
+#
+# Три инструмента сессии Qwen (`audit_page_seo`, `inspect_sitemap`,
+# `explain_url_scope`) обслуживает сторонняя служба, и они отказывали. Здесь
+# они закрываются ИЗМЕРЕНИЕМ живого домена теми же помощниками, которыми
+# пользуется вердикт индексации (`indexing.сигналы`, `_ответ_с_цепочкой`), без
+# прогнозов позиций и без оценок «хорошо/плохо»: инструмент сообщает факты и
+# называет контракт семейства, а вывод делает человек.
+#
+# Инструменты фабрики `factory/seo/*` сюда НЕ подключены сознательно: они
+# работают по каталогу СБОРКИ пакета DLE, а у переносимых ячеек такого каталога
+# нет. Подключить их к домену ячейки значило бы выдать чужой инструмент за
+# подходящий.
+
+
+def _страница_домена(домен: str, путь: str = "/") -> dict[str, Any]:
+    # Помощник возвращает ЧЕТЫРЕ величины: код, заголовки, тело и пройденную
+    # цепочку перенаправлений. Цепочка нужна в ответе: заголовки
+    # перенаправления — не заголовки страницы, и путать их уже доводилось.
+    код, заголовки, тело, цепочка = indexing._ответ_с_цепочкой(
+        f"https://{домен}{путь}")
+    return {"http": код, "headers": заголовки, "body": тело, "chain": цепочка}
+
+
+def инструмент_seo_страницы(аргументы: dict) -> dict[str, Any]:
+    """Измеренные SEO-признаки одной страницы живого домена. Только чтение."""
+    сайт = str(аргументы.get("site") or аргументы.get("domain") or "").strip()
+    путь = str(аргументы.get("path") or "/")
+    if not путь.startswith("/"):
+        путь = "/" + путь
+    try:
+        с = editorial._сайт(сайт)
+    except editorial.ОперацияОтклонена as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    сиг = indexing.сигналы(с.domain, порт=indexing.порт_приложения(с.site_id))
+    стр = _страница_домена(с.domain, путь)
+    тело = стр.get("body") or ""
+    import re as _re
+
+    def первое(шаблон: str) -> str:
+        m = _re.search(шаблон, тело, _re.I | _re.S)
+        return (m.group(1).strip()[:300] if m else "")
+
+    режим, запреты = indexing.оценить(сиг)
+    итог = {
+        "version": ВЕРСИЯ_ОБОЛОЧКИ, "site": с.domain, "site_id": с.site_id,
+        "path": путь, "adapter": с.adapter or None,
+        "http": стр.get("http"), "redirect_chain": стр.get("chain"),
+        "title": первое(r"<title[^>]*>(.*?)</title>"),
+        "meta_description": первое(r'<meta[^>]+name=["\']description["\'][^>]+content=["\'](.*?)["\']'),
+        "meta_robots": первое(r'<meta[^>]+name=["\']robots["\'][^>]+content=["\'](.*?)["\']'),
+        "canonical": первое(r'<link[^>]+rel=["\']canonical["\'][^>]+href=["\'](.*?)["\']'),
+        "h1": первое(r"<h1[^>]*>(.*?)</h1>"),
+        "x_robots_tag": сиг.get("x_robots_values"),
+        "robots_txt_http": сиг.get("robots_txt_http"),
+        "sitemap_http": сиг.get("sitemap_http"),
+        "public_mode": режим, "denying_signals": запреты,
+        "contract": indexing.контракт(с.adapter) or None,
+        "note": ("это ИЗМЕРЕНИЕ, а не оценка: прогнозов позиций и трафика "
+                 "инструмент не делает"),
+        "environment": окружение(),
+    }
+    return итог
+
+
+def инструмент_карты_сайта(аргументы: dict) -> dict[str, Any]:
+    """Карта сайта домена: код ответа, число адресов, хост и первые записи."""
+    сайт = str(аргументы.get("site") or аргументы.get("domain") or "").strip()
+    try:
+        с = editorial._сайт(сайт)
+    except editorial.ОперацияОтклонена as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    стр = _страница_домена(с.domain, str(аргументы.get("path") or "/sitemap.xml"))
+    тело = стр.get("body") or ""
+    import re as _re
+
+    адреса = _re.findall(r"<loc>\s*([^<\s]+)\s*</loc>", тело, _re.I)
+    чужие = sorted({а for а in адреса
+                    if с.domain not in а.split("//", 1)[-1].split("/", 1)[0]})
+    return {
+        "version": ВЕРСИЯ_ОБОЛОЧКИ, "site": с.domain, "site_id": с.site_id,
+        "http": стр.get("http"), "urls": len(адреса),
+        "first_urls": адреса[:10],
+        "foreign_hosts": чужие[:10],
+        "is_index": "<sitemapindex" in тело.lower(),
+        "bytes": len(тело),
+        "reason": ("" if адреса else
+                   "адресов не найдено: либо карта пуста, либо ответ не XML — "
+                   "код ответа и размер названы рядом"),
+        "environment": окружение(),
+    }
+
+
+def инструмент_области_адреса(аргументы: dict) -> dict[str, Any]:
+    """Чей это адрес и что о нём говорят реестр и слой nginx."""
+    адрес = str(аргументы.get("url") or аргументы.get("site") or "").strip()
+    if not адрес:
+        raise ОшибкаИнструмента("нужен параметр url")
+    без_схемы = адрес.split("//", 1)[-1]
+    хост = без_схемы.split("/", 1)[0]
+    путь = "/" + без_схемы.split("/", 1)[1] if "/" in без_схемы else "/"
+    сайты = editorial._реестр(опрашивать_сеть=False)
+    свой = next((s for s in сайты if s.domain == хост), None)
+    if свой is None:
+        return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "url": адрес, "host": хост,
+                "in_registry": False,
+                "reason": (f"домена {хост} нет в авторитетном реестре фабрики "
+                           f"({len(сайты)} записей): адрес вне её области"),
+                "environment": окружение()}
+    слой = indexing.слой_nginx(свой.site_id, свой.domain)
+    служебный = any(путь.startswith(п) for п in
+                    ("/poster/", "/api/", "/healthz", "/__", "/.well-known/"))
+    return {
+        "version": ВЕРСИЯ_ОБОЛОЧКИ, "url": адрес, "host": хост, "path": путь,
+        "in_registry": True, "site_id": свой.site_id,
+        "adapter": свой.adapter or None, "account": свой.account,
+        "published_release": свой.published_release or None,
+        "service_path": служебный,
+        "nginx_layer": {"mode": слой.get("mode"), "denying": слой.get("denying")},
+        "note": ("служебные пути закрыты для обхода независимо от режима "
+                 "индексации домена" if служебный else
+                 "обычный путь витрины: режим определяется слоями индексации"),
+        "environment": окружение(),
+    }
+
+
 #: Имена СОВПАДАЮТ с теми, что уже есть в сессии Qwen: переключение коннектора
 #: не должно требовать правок на его стороне.
 ИНСТРУМЕНТЫ: dict[str, dict[str, Any]] = {
@@ -534,6 +802,55 @@ def инструмент_аналитики(аргументы: dict) -> dict[st
             "expected": {"type": "string", "enum": ["OPEN", "CLOSED", ""]}},
             "required": ["site"], "additionalProperties": False},
     },
+    "release_plan": {
+        "обработчик": инструмент_плана_выпуска,
+        "описание": ("Что было бы выпущено: ветка, коммит последнего успешного "
+                     "прогона CI, его номер, digest артефакта, живой коммит и "
+                     "препятствия предполётных проверок. Ничего не меняет."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string", "description": "домен или site_id"}},
+            "required": ["site"], "additionalProperties": False},
+    },
+    "release_site": {
+        "обработчик": инструмент_выпуска,
+        "описание": ("Подать заявку на выпуск последнего успешного прогона CI. "
+                     "Выкладывает привилегированный исполнитель: он проверяет "
+                     "происхождение из CI, digest артефакта и защищённые "
+                     "данные, ставит кандидата, прогревает его и переключает "
+                     "трафик только после проверки ответом, а при неуспехе "
+                     "возвращает трафик сам."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string", "description": "домен или site_id"}},
+            "required": ["site"], "additionalProperties": False},
+    },
+    "operation_result": {
+        "обработчик": инструмент_результата,
+        "описание": ("Результат заявки по request_id: судьба в очереди, исход "
+                     "операции, этап, build_id, ошибка, пройденные этапы и "
+                     "путь к журналу результата."),
+        "схема": {"type": "object", "properties": {
+            "request_id": {"type": "string"}},
+            "required": ["request_id"], "additionalProperties": False},
+    },
+    "rollback_site": {
+        "обработчик": инструмент_откката_сайта,
+        "описание": ("Вернуть трафик действующей версии штатной заявкой "
+                     "rollback. Нужен commit выпуска, от которого откат."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"},
+            "commit": {"type": "string"},
+            "note": {"type": "string"}},
+            "required": ["site", "commit"], "additionalProperties": False},
+    },
+    "refresh_executor_access": {
+        "обработчик": инструмент_проверки_доступа,
+        "описание": ("Обновить проверку доступа исполнителя (операция "
+                     "access-check). Просроченная проверка останавливает "
+                     "выпуск; ничего не выкладывает."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"}},
+            "required": ["site"], "additionalProperties": False},
+    },
     "rollback_indexing": {
         "обработчик": инструмент_отката,
         "описание": ("Откат последней смены режима: журнал называет предыдущее "
@@ -543,6 +860,36 @@ def инструмент_аналитики(аргументы: dict) -> dict[st
             "site": {"type": "string"},
             "author": {"type": "string"}},
             "required": ["site"], "additionalProperties": False},
+    },
+    "audit_page_seo": {
+        "обработчик": инструмент_seo_страницы,
+        "описание": ("ИЗМЕРЕННЫЕ признаки одной страницы живого домена: код "
+                     "ответа, title, description, canonical, meta robots, H1, "
+                     "X-Robots-Tag, код robots.txt и карты сайта, публичный "
+                     "режим и контракт семейства. Оценок и прогнозов не даёт."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string", "description": "домен или site_id"},
+            "domain": {"type": "string"},
+            "path": {"type": "string", "description": "путь страницы, по умолчанию /"}},
+            "additionalProperties": False},
+    },
+    "inspect_sitemap": {
+        "обработчик": инструмент_карты_сайта,
+        "описание": ("Карта сайта домена: код ответа, число адресов, признак "
+                     "индекса карт, первые адреса и ЧУЖИЕ хосты в них."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"}, "domain": {"type": "string"},
+            "path": {"type": "string", "description": "по умолчанию /sitemap.xml"}},
+            "additionalProperties": False},
+    },
+    "explain_url_scope": {
+        "обработчик": инструмент_области_адреса,
+        "описание": ("Чей это адрес: есть ли хост в авторитетном реестре "
+                     "фабрики, какой это сайт и семейство, выложенный выпуск, "
+                     "служебный ли путь и режим слоя nginx."),
+        "схема": {"type": "object", "properties": {
+            "url": {"type": "string"}, "site": {"type": "string"}},
+            "additionalProperties": False},
     },
     "analytics_readiness": {
         "обработчик": инструмент_аналитики,
