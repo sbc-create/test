@@ -54,3 +54,62 @@ sudo bash /home/claude/wt-portable-site-cell-01/automation/host/install-cell-exe
 ```json
 set_indexing_mode {"site": "lordserials22.info", "mode": "open", "expect_release": "09d6db02828e"}
 ```
+
+## Выпуски этого прогона (все — штатной операцией через MCP-мост)
+
+Девять выкладок, каждая `ok / activated / live_verified`, индексация после
+каждой подтверждена ЗАКРЫТОЙ (`confirm_indexing expected=CLOSED`):
+
+| Сайт | Домен | Выпуск | Что доставлено |
+| --- | --- | --- | --- |
+| animego-04 | an1meg0.site | `3577704905c4` → `4c9cc7b60813` | читатель режима, затем разрешение выпуска + исправленные проверки |
+| lords-01 | lordfilm47.space | `81fa2bfba01d` → `4d5e6e221cef` | замок версий, затем разрешение выпуска |
+| lords-03 | 1lordserials1.online | `d1974d6ce4f9` → `325d199acdc3` | замок версий + договор выкладки, затем разрешение выпуска |
+| zona-01 | zonafilm.space | `53a3fdb77b6d` | разрешение выпуска |
+| zona-03 | zonafilm12.site | `7739910536d3` → `caf10a8aec10` | замок версий, затем разрешение выпуска |
+
+Живая проверка после выкладки (прямым HTTP, не по отчёту):
+
+| Домен | Главная | Страница произведения | Издатель | Плеер | Индексация |
+| --- | --- | --- | --- | --- | --- |
+| lordfilm47.space | 200, 75 314 симв, 60 ссылок | 54 122 симв | 10373 | есть | `noindex, nofollow` (заголовок и meta) |
+| 1lordserials1.online | 200, 149 180 симв, 146 ссылок | 80 046 симв | 10238 | есть | `noindex, nofollow` |
+| zonafilm.space | 200, 124 938 симв, 64 ссылки | 85 126 симв | 10252 | есть | `noindex, nofollow` |
+| zonafilm12.site | 200, 120 711 симв, 64 ссылки | 80 740 симв | 10261 | есть | `noindex, nofollow` |
+| an1meg0.site | 200, 73 592 симв | 70 472 симв | 10252 | есть | `noindex, nofollow` |
+
+Канонический адрес на каждой странице — свой домен; чужих издателей и чужих
+canonical нет. Само ВОСПРОИЗВЕДЕНИЕ видео не проверялось — НЕ ПРОВЕРЕНО.
+
+## Таблица сети: 23 сайта
+
+Технически готовы (остаётся только разрешение владельца) — **9**:
+
+| Домен | Семейство | Установленный выпуск | Разрешение владельца |
+| --- | --- | --- | --- |
+| lordserials22.info | lords | `09d6db02828e` | **есть** (подтверждение 7eb319e0) — открыть одной командой |
+| lordfilm47.space | lords | `4d5e6e221cef` | нет |
+| 1lordserials1.online | lords | `325d199acdc3` | нет |
+| zonafilm.space | lords | `53a3fdb77b6d` | нет |
+| zonafilm12.site | lords | `caf10a8aec10` | нет |
+| zonafilm.cc | zona-serve | `b834f2525aa5` | нет |
+| an1meg0.site | animego | `4c9cc7b60813` | нет |
+| animedia.icu | animedia | `8525242743c7` | флаг в реестре БЕЗ корневого подтверждения |
+| animedia.space | animedia | `ff20fc5cabad` | флаг в реестре БЕЗ корневого подтверждения |
+
+Про animedia отдельно: в реестре у обоих `open_authorized: true`, но файла
+подтверждения в каталоге root нет, поэтому `owner_authorized_open: false`. Это
+не регресс и ничего не закрывает: открытие требует явной операции, и ни одна не
+выполняется сама. Чтобы разрешение стало действующим, владелец выполняет
+`sudo bash automation/host/authorize-indexing.sh --domain animedia.icu` (и
+аналогично для animedia.space). Разрешение с контрольного домена не копируется.
+
+Остаются с конкретными техническими препятствиями — **14**:
+
+| Домены | Препятствие (измерено) |
+| --- | --- |
+| lordserial33.biz | выпуск `ee6c511cca92` готов и CI зелёный, но УСТАНОВЛЕННЫЙ исполнитель отклоняет его старой копией `protected.py`. Снимается той же переустановкой исполнителя. Отдельно: `checks/lords02_taxonomy.py` на живом снимке каталога сообщает 17 неразобранных рассогласований разделов — это решение о контенте со ссылкой на источник (схема `config/classification-overrides.json` требует внешнего идентификатора), и выдумать его нельзя: `BLOCKED_INPUT` |
+| lordserials22.site, lordserials22.space | домены не делегированы вовсе (DNS: `gaierror`), выпуск ни разу не активирован (`releases/` есть, `current` нет), читателя режима в репозитории нет. Первая активация и DNS — решения владельца |
+| an1mego.site, animeg0.site | рабочей копии репозитория нет, выпусков нет |
+| yummyani.biz, yummyani.org, yummyani.site, yummyani7.site, yummyani7.info | режимом распоряжается переменная контейнера (`container:SEO_INDEXING_ENABLED`, `mode_owner: compose`), а не операция ячейки. Операция открытия для этого семейства не реализована намеренно: владение режимом принадлежит compose |
+| pilot.localhost.test, site-a.localhost, site-b.localhost, site-c.localhost | изолированные ячейки реестра: ни репозитория, ни выпуска. Не production |
