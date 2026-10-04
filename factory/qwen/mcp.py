@@ -72,7 +72,8 @@ from factory.qwen import editorial, indexing, registry
 #: не обещанием в описании подключения: на этапе приёмки коннектор объявлен
 #: read-only, и сервер не вправе предлагать ему то, чего тот не должен уметь.
 ПИШУЩИЕ = ("set_indexing_mode", "rollback_indexing", "release_site",
-           "rollback_site", "refresh_executor_access")
+           "rollback_site", "refresh_executor_access", "prepare_material",
+           "publish_material", "unpublish_material")
 
 #: Только чтение: пишущие инструменты не объявляются в `tools/list` и
 #: отказывают при вызове. Включается ключом `--read-only` или переменной
@@ -621,6 +622,95 @@ def инструмент_проверки_доступа(аргументы: dic
             "environment": окружение()}
 
 
+# ------------------------------- публикация материала: существующие операции
+#
+# Операции публикации в фабрике УЖЕ есть: `editorial.подготовить`,
+# `публиковать`, `подтвердить`, `снять`, `восстановить` — с проверкой
+# материала, доставкой через очередь и подтверждением на ответе витрины. У Qwen
+# их не было, поэтому «опубликуй материал» он выполнить не мог. Здесь они
+# подключаются как есть; ни одной своей проверки качества или прав тут нет.
+#
+# Право писать выводится из ВОЗМОЖНОСТЕЙ сайта (`deliver`, `display`): у витрины
+# без читателя правок записанный текст на странице не появится, и операция
+# отказывает — это её собственное решение, а не ограничение моста.
+
+
+def инструмент_факты(аргументы: dict) -> dict[str, Any]:
+    """Факты каталога по произведению — источник для текста, не выдумка."""
+    сайт = str(аргументы.get("site") or "").strip()
+    слаг = str(аргументы.get("slug") or "").strip() or None
+    if not сайт:
+        raise ОшибкаИнструмента("нужен параметр site")
+    try:
+        итог = editorial.факты(сайт, слаг)
+    except (editorial.ОперацияОтклонена, indexing.Отказано) as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "facts": итог, "environment": окружение()}
+
+
+def инструмент_состояния_материалов(аргументы: dict) -> dict[str, Any]:
+    """Что подготовлено и опубликовано у сайта: состояния и отпечатки."""
+    сайт = str(аргументы.get("site") or "").strip()
+    if not сайт:
+        raise ОшибкаИнструмента("нужен параметр site")
+    try:
+        итог = editorial.состояние(сайт)
+    except (editorial.ОперацияОтклонена, indexing.Отказано) as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "editorial": итог,
+            "environment": окружение()}
+
+
+def инструмент_подготовки(аргументы: dict) -> dict[str, Any]:
+    """Подготовить материал: проверка качества и фактов ДО публикации."""
+    сайт = str(аргументы.get("site") or "").strip()
+    слаг = str(аргументы.get("slug") or "").strip()
+    тело = str(аргументы.get("body") or "")
+    if not (сайт and слаг and тело):
+        raise ОшибкаИнструмента("нужны параметры site, slug и body")
+    try:
+        итог = editorial.подготовить(сайт, слаг, тело,
+                                     author=str(аргументы.get("author") or "qwen"))
+    except (editorial.ОперацияОтклонена, indexing.Отказано) as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "prepared": итог,
+            "ok": not итог.get("quality_problems"),
+            "environment": окружение()}
+
+
+def инструмент_публикации(аргументы: dict) -> dict[str, Any]:
+    """Опубликовать ПОДГОТОВЛЕННЫЙ материал штатной операцией."""
+    сайт = str(аргументы.get("site") or "").strip()
+    слаг = str(аргументы.get("slug") or "").strip()
+    if not (сайт and слаг):
+        raise ОшибкаИнструмента("нужны параметры site и slug")
+    try:
+        итог = editorial.публиковать(
+            сайт, слаг, author=str(аргументы.get("author") or "qwen"),
+            expected_generation=str(аргументы.get("expect_generation") or "") or None)
+    except (editorial.ОперацияОтклонена, indexing.Отказано) as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "result": итог,
+            "confirmed": итог.get("state") == "confirmed",
+            "environment": окружение()}
+
+
+def инструмент_снятия(аргументы: dict) -> dict[str, Any]:
+    """Снять опубликованный материал — откат публикации той же операцией."""
+    сайт = str(аргументы.get("site") or "").strip()
+    слаг = str(аргументы.get("slug") or "").strip()
+    if not (сайт and слаг):
+        raise ОшибкаИнструмента("нужны параметры site и slug")
+    try:
+        итог = editorial.снять(сайт, слаг,
+                               author=str(аргументы.get("author") or "qwen"))
+    except (editorial.ОперацияОтклонена, indexing.Отказано) as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "result": итог,
+            "confirmed": итог.get("state") == "confirmed",
+            "environment": окружение()}
+
+
 # --------------------------------------------- SEO страницы: измерение, не оценка
 #
 # Три инструмента сессии Qwen (`audit_page_seo`, `inspect_sitemap`,
@@ -867,6 +957,50 @@ def инструмент_области_адреса(аргументы: dict) -
             "site": {"type": "string"},
             "author": {"type": "string"}},
             "required": ["site"], "additionalProperties": False},
+    },
+    "editorial_facts": {
+        "обработчик": инструмент_факты,
+        "описание": ("Факты каталога по произведению: источник для текста. "
+                     "Сведений, которых здесь нет, в материале быть не может."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"}, "slug": {"type": "string"}},
+            "required": ["site"], "additionalProperties": False},
+    },
+    "editorial_status": {
+        "обработчик": инструмент_состояния_материалов,
+        "описание": ("Что подготовлено и опубликовано у сайта: состояния, "
+                     "отпечатки, доступные операции витрины."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"}},
+            "required": ["site"], "additionalProperties": False},
+    },
+    "prepare_material": {
+        "обработчик": инструмент_подготовки,
+        "описание": ("Подготовить материал: проверки качества и фактов идут ДО "
+                     "публикации и возвращаются списком. Ничего не публикует."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"}, "slug": {"type": "string"},
+            "body": {"type": "string"}, "author": {"type": "string"}},
+            "required": ["site", "slug", "body"], "additionalProperties": False},
+    },
+    "publish_material": {
+        "обработчик": инструмент_публикации,
+        "описание": ("Опубликовать подготовленный материал штатной операцией: "
+                     "доставка очередью, подтверждение ответом витрины. У "
+                     "витрины без читателя правок операция отказывает."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"}, "slug": {"type": "string"},
+            "expect_generation": {"type": "string"},
+            "author": {"type": "string"}},
+            "required": ["site", "slug"], "additionalProperties": False},
+    },
+    "unpublish_material": {
+        "обработчик": инструмент_снятия,
+        "описание": "Снять опубликованный материал — откат публикации.",
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"}, "slug": {"type": "string"},
+            "author": {"type": "string"}},
+            "required": ["site", "slug"], "additionalProperties": False},
     },
     "audit_page_seo": {
         "обработчик": инструмент_seo_страницы,

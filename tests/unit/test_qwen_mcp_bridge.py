@@ -16,7 +16,7 @@ import pytest
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(КОРЕНЬ))
 
-from factory.qwen import mcp, registry  # noqa: E402
+from factory.qwen import editorial, mcp, registry  # noqa: E402
 
 #: Имена, которые УЖЕ есть в сессии Qwen. Совпадение обязательно: иначе
 #: переключение коннектора потребует правок на стороне клиента, а задача
@@ -547,13 +547,51 @@ def test_область_адреса_отличает_чужой_домен_от
     assert обычный["site_id"] == "lords-05"
 
 
+def test_публикация_подключена_существующими_операциями():
+    """Публикация вызывает `editorial.*`, а не свою логику качества и прав."""
+    исходник = pathlib.Path(mcp.__file__).read_text(encoding="utf-8")
+    начало = исходник.index("def инструмент_факты")
+    конец = исходник.index("# --------------------------------------------- SEO страницы")
+    участок = исходник[начало:конец]
+    for вызов_операции in ("editorial.факты", "editorial.состояние",
+                           "editorial.подготовить", "editorial.публиковать",
+                           "editorial.снять"):
+        assert вызов_операции in участок, f"публикация не зовёт {вызов_операции}"
+    for запрещено in ("subprocess", "os.system", "shell=True"):
+        assert запрещено not in участок, f"в публикации есть {запрещено}"
+    for имя in ("prepare_material", "publish_material", "unpublish_material"):
+        assert имя in mcp.ПИШУЩИЕ, f"{имя} обязан быть пишущим"
+
+
+def test_публикация_отказывает_там_где_витрина_её_не_покажет(monkeypatch):
+    """Витрина без читателя правок: записанный текст на странице не появится.
+
+    Отказ приходит от операции (её `_требует`), а не от моста: мост своих
+    разрешений не выдаёт. Проверено на живом сайте `lordserials22.info`, где
+    в выпущенном рантайме нет `src/editorial_overlay.py`.
+    """
+    def падать(site, slug, *, author, expected_generation=None, тело=None):
+        raise editorial.ОперацияОтклонена(
+            "lordserials22.info: сайту не хватает возможностей "
+            "['deliver', 'display'] — операция 'publish' недоступна")
+
+    monkeypatch.setattr(editorial, "публиковать", падать)
+    ошибка, д = _вызов("publish_material", {"site": "lordserials22.info",
+                                            "slug": "любой"})
+    assert ошибка, д
+    assert "не хватает возможностей" in д["error"], д
+    assert "publish" in д["error"]
+
+
 def test_набор_инструментов_покрывает_петлю_операции():
     """Открыть, подтвердить, откатить и прочесть журнал — одним интерфейсом."""
     for имя in ("domain_indexing_readiness", "set_indexing_mode",
                 "confirm_indexing", "rollback_indexing", "indexing_journal",
                 "analytics_readiness", "release_plan", "release_site",
                 "operation_result", "rollback_site", "refresh_executor_access",
-                "audit_page_seo", "inspect_sitemap", "explain_url_scope"):
+                "audit_page_seo", "inspect_sitemap", "explain_url_scope",
+                "editorial_facts", "editorial_status", "prepare_material",
+                "publish_material", "unpublish_material"):
         assert имя in mcp.ИНСТРУМЕНТЫ, имя
         assert mcp.ИНСТРУМЕНТЫ[имя]["описание"].strip(), имя
         assert mcp.ИНСТРУМЕНТЫ[имя]["схема"]["type"] == "object", имя
