@@ -112,7 +112,26 @@ def _ключ_кэша(опрашивать_сеть: bool) -> tuple:
             приметы.append((str(п), с.st_mtime_ns, с.st_size))
         except OSError:
             приметы.append((str(п), 0, 0))
-    return (опрашивать_сеть, str(registry.КОРЕНЬ), tuple(приметы))
+    # Ссылки `current` — тоже часть ответа: из них берётся `published_release`.
+    #
+    # Без них кэш давал ПРОТИВОРЕЧИВЫЙ ответ, и это измерено. 2026-10-04 в
+    # 07:15:22 выпуск lords-05 переключил `current` на 09d6db02828e, а вердикт
+    # ещё до тридцати секунд называл `published_release 4b1340fb2ecf` — при
+    # том что `release_permits_open` читается прямо из выложенного
+    # `config/site.json` и уже отвечал `true`. Один ответ смешивал прежний
+    # установленный выпуск с параметрами нового: ровно то, чего готовность
+    # допускать не вправе.
+    ссылки = []
+    try:
+        for п in sorted(pathlib.Path("/srv").glob("*/current")):
+            try:
+                ссылки.append((п.parent.name, str(п.resolve())))
+            except OSError:
+                ссылки.append((п.parent.name, "?"))
+    except OSError:
+        pass
+    return (опрашивать_сеть, str(registry.КОРЕНЬ), tuple(приметы),
+            tuple(ссылки))
 
 
 def _реестр(*, опрашивать_сеть: bool) -> list[registry.Сайт]:

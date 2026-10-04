@@ -362,6 +362,47 @@ def test_нечитаемое_хранилище_считается_присут
         закрытое.chmod(0o755)
 
 
+def test_известный_блокер_виден_ДО_подачи_заявки(monkeypatch):
+    """Ворота защищённых данных входят в предполётные проверки `trigger`.
+
+    Прежде блокер становился известен ПОСЛЕ заявки: редактор подавал её,
+    исполнитель отвергал, и причину приходилось искать в журнале. Измерено
+    2026-10-04 на lords-05 — цикл «подал, отвергли» повторялся. Проверка
+    читающая, прав не требует и прав не даёт; исполнитель её не отменяет, а
+    повторяет непосредственно перед изменениями.
+    """
+    from factory.cell import protected as пр
+    from factory.cell import queue as оч
+    from factory.cell import trigger as тр
+
+    подано: list = []
+
+    def отказать(site_id, домен, репозиторий, коммит="", *, adapter=""):
+        raise пр.ЗащитаДанных(
+            f"{site_id}: выпуск {коммит[:12]} не несёт читателей защищённых "
+            "данных — ['editorial: src/editorial_overlay.py']")
+
+    monkeypatch.setattr(тр, "последний_успешный", lambda remote: {
+        "headSha": "c" * 40, "headBranch": "claude/extract-x", "databaseId": 1})
+    monkeypatch.setattr(тр, "живой_коммит", lambda cell: "b" * 12)
+    monkeypatch.setattr(тр, "уже_выложен", lambda *a, **k: False)
+    monkeypatch.setattr(тр, "не_откат", lambda *a, **k: None)
+    for имя in ("проверить_комплектность_данных", "проверить_маршрут",
+                "проверить_сборщик", "проверить_лаунчер",
+                "проверить_доступ_исполнителя"):
+        monkeypatch.setattr(оч, имя, lambda site_id: None)
+    monkeypatch.setattr(оч, "подать", lambda заявка, **kw: подано.append(заявка))
+    monkeypatch.setattr(пр, "проверить_выпуск", отказать)
+    monkeypatch.setattr(тр, "digest_коммита",
+                        lambda site_id, commit: pytest.fail(
+                            "digest считается ДО проверки защищённых данных"))
+
+    итог = тр.проверить_сайт("lords-05", submit=True)
+    assert итог["action"] == "заявка не подана", итог
+    assert "не несёт читателей защищённых данных" in итог["blocked"], итог
+    assert not подано, "заявка подана, несмотря на известный блокер"
+
+
 def test_выпуск_с_читателями_проходит(стенд, tmp_path):
     _состояние(стенд)
     _материалы(стенд)
