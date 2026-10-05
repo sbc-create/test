@@ -220,10 +220,19 @@ def главная(argv: list[str] | None = None) -> int:
             if args.операция == "posts-publish":
                 итог = posts.опубликовать(args.site, args.slug,
                                           author=_автор(args))
-                готово = итог["status"] in ("created", "updated", "nothing-to-do")
-                print(json.dumps(_со_ссылкой({"ok": готово, **итог}),
+                # Код 3 — ровно тот случай, под который он и объявлен в
+                # заголовке файла: ЗАПИСАНО, но на странице НЕ подтверждено.
+                # Прежде код считался по `status`, и запись при 404 на
+                # публичном адресе давала 0 (измерено 2026-10-05).
+                записано = итог["status"] in ("created", "updated",
+                                              "nothing-to-do")
+                подтверждено = bool(итог.get("public_confirmed"))
+                print(json.dumps(_со_ссылкой({"ok": записано and подтверждено,
+                                              "written": записано, **итог}),
                                  ensure_ascii=False, indent=1))
-                return 0 if готово else 3
+                if not записано:
+                    return 2
+                return 0 if подтверждено else 3
             if args.операция == "posts-unpublish":
                 итог = posts.снять(args.site, args.slug, author=_автор(args))
                 готово = итог["status"] in ("unpublished", "nothing-to-do")
