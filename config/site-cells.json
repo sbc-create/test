@@ -804,6 +804,45 @@
       }
     },
     {
+      "site_id": "lords-08",
+      "domain": "lordserial101.site",
+      "aliases": [],
+      "status": "planned",
+      "repo": {
+        "kind": "local",
+        "path": "/home/claude/wt-portable-site-cell-01/var/site-repos/lordserial101-site"
+      },
+      "template": {
+        "template_id": "lords-serials",
+        "family": "lords"
+      },
+      "pins": {},
+      "deploy_target": {},
+      "publisher": {},
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {},
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {},
+      "runtime": {
+        "unit": "nova-lordserial101-site.service",
+        "previous_unit": null,
+        "port": 9118,
+        "account": "lordserial101-site",
+        "app_dir": "/srv/lordserial101-site/current",
+        "data_dir": "/srv/lordserial101-site/data",
+        "legacy_root": "<data>/site",
+        "reload": "restart",
+        "managed_by": "cell",
+        "data_owner": "pipeline"
+      },
+      "release": {}
+    },
+    {
       "site_id": "pilot-local",
       "domain": "pilot.localhost.test",
       "aliases": [],
