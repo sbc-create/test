@@ -70,7 +70,15 @@ def _автор(args) -> str:
 
 
 def главная(argv: list[str] | None = None) -> int:
-    p = argparse.ArgumentParser(prog="factory.qwen", description=__doc__)
+    # Описание печатается КАК НАПИСАНО. Это не украшение: `--help` и есть та
+    # поверхность, на которой сессия без инструментов узнаёт, какая операция
+    # какой материал пишет. Форматировщик по умолчанию склеивал перечень
+    # команд и таблицу материалов в один абзац, и различие новости и карточки
+    # в нём терялось — ровно то различие, из-за которого новость попала в
+    # накладку описания карточки.
+    p = argparse.ArgumentParser(
+        prog="factory.qwen", description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("операция", choices=[
         "sites", "facts", "prepare", "publish", "confirm", "unpublish",
         "restore", "rollback", "status", "diagnose", "indexing",
