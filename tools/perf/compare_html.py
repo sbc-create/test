@@ -12,7 +12,7 @@ host, до, после, файл = sys.argv[1], sys.argv[2], sys.argv[3], sys.ar
 ШУМ = [re.compile(p) for p in (
     r'content="[^"]*-(?:lords|zona)-\d\d"', r'data-build-id="[^"]*"', r'[\w.-]+-(?:lords|zona)-\d\d\b',
     r'site-factory-template-revision" content="[^"]*"', r'site-factory-build-id" (?:content="[^"]*"|~)',
-    r'site-factory-artifact-sha256" content="[^"]*"',r'"generated_at":\s*"[^"]*"', r'data-generated-at="[^"]*"',
+    r'site-factory-artifact-sha256" content="[^"]*"', r'name="csrf" value="[0-9a-f]*"', r'"generated_at":\s*"[^"]*"', r'data-generated-at="[^"]*"',
     r'live_build_id[^,}]*', r'\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ')]
 
 
