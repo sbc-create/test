@@ -193,6 +193,32 @@ def корни_выпуска(аккаунт: str) -> tuple[str, ...]:
     return (f"/srv/{аккаунт}/current", f"/srv/{аккаунт}/app")
 
 
+def корень_выпуска(аккаунт: str, adapter: str = "") -> pathlib.Path | None:
+    """В каком из корней лежит РАБОТАЮЩИЙ код, а не где он лежал бы.
+
+    У витрин прямой установки `current` и `releases/` нет вовсе: рабочая копия
+    живёт в `/srv/<учётная запись>/app`, и доставляет её собственный
+    `deploy/install.sh` (D179). Зашитый `current` превращал это в ЛОЖНЫЙ
+    блокер: читатель находился (его ищут по обоим корням), а подключение
+    читателя искалось в несуществующем каталоге — и вердикт отвечал «ни один
+    файл выпуска его не подключает» о витрине, точка входа которой этот модуль
+    импортирует. Измерено 2026-10-05 на an1mego.site.
+
+    Корень определяется по тому, где НАЙДЕН читатель: это единственный
+    измеримый признак работающего кода, и он же использован при его поиске.
+    """
+    if not аккаунт:
+        return None
+    к = контракт(adapter, аккаунт=аккаунт)
+    путь = к.get("reader") or f"src/{ИМЯ_ЧИТАТЕЛЯ}"
+    if путь.startswith("container:"):
+        return None          # читатель не файл; корня выпуска у него нет
+    for корень in корни_выпуска(аккаунт):
+        if (pathlib.Path(корень) / путь).is_file():
+            return pathlib.Path(корень).resolve()
+    return None
+
+
 def читатель_режима(аккаунт: str, adapter: str = "") -> pathlib.Path | None:
     """Чем ВЫПУЩЕННЫЙ рантайм читает режим, или None.
 
@@ -1254,7 +1280,8 @@ def доказательство_чтения(s, *, таймаут: int = 90) ->
     import tempfile
 
     итог = {"method": "released runtime raised in isolation", "ok": False}
-    выпуск = pathlib.Path(f"/srv/{s.account}/current").resolve()
+    выпуск = (корень_выпуска(s.account, s.adapter)
+              or pathlib.Path(f"/srv/{s.account}/current").resolve())
     итог["release_dir"] = выпуск.name
     if not (выпуск / "run.py").is_file():
         итог["reason"] = f"в выпуске нет run.py: {выпуск / 'run.py'}"
@@ -1558,7 +1585,8 @@ def готовность(site: str, *, доказать: bool = True) -> dict:
                                    f"нет {к['reader']}",
                          "next_action": ДАЛЬШЕ["MECHANISM_UNSUPPORTED"]})
             return итог
-        выпуск = pathlib.Path(f"/srv/{s.account}/current").resolve()
+        выпуск = (корень_выпуска(s.account, s.adapter)
+                  or pathlib.Path(f"/srv/{s.account}/current").resolve())
         доказательства["reader"] = {
             "path": str(читатель),
             "bytes": читатель.stat().st_size,
@@ -1647,7 +1675,8 @@ def готовность(site: str, *, доказать: bool = True) -> dict:
     # Теперь готовность прямо говорит, ЧТО она прочитала.
     итог["installed_release"] = {
         "release": s.published_release or None,
-        "source": f"/srv/{s.account}/current",
+        "source": str(корень_выпуска(s.account, s.adapter)
+                      or f"/srv/{s.account}/current"),
         "release_permits_open": разрешено_выпуском,
         "release_permission_source": откуда,
         "note": ("готовность открытия определяется ФАКТИЧЕСКИ УСТАНОВЛЕННЫМ "

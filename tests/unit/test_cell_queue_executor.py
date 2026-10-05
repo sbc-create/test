@@ -1096,11 +1096,12 @@ def test_слою_индексации_собственный_репозитор
         executor.проверить_заявку(выпуск)
 
 
-def _реестр_стенда(tmp_path, *, open_authorized=None, remote=None):
+def _реестр_стенда(tmp_path, *, open_authorized=None, remote=None,
+                   путь_репозитория="repo"):
     реестр = tmp_path / "site-cells.json"
     ячейка = {
         "site_id": "stand-01", "domain": "stand.local", "status": "staged",
-        "repo": {"kind": "local", "path": "repo", "remote": remote},
+        "repo": {"kind": "local", "path": путь_репозитория, "remote": remote},
         "template": {"template_id": None, "order_id": "stand"},
         "deploy_target": {"ref": "claude-control-01", "server": None},
         "runtime": {"unit": "nova-stand-01.service", "previous_unit": None,
@@ -1130,6 +1131,35 @@ def test_слой_не_открывается_без_разрешения_вла
     with pytest.raises(executor.ExecutorError) as ош:
         executor.переключить_слой_индексации(з, dry_run=True)
     assert "open_authorized" in str(ош.value)
+
+
+def test_отсутствие_пути_репозитория_не_отменяет_слой(tmp_path, monkeypatch):
+    """Украшение отчёта не вправе отменить уже применённую операцию.
+
+    `repo_path` — свойство, возбуждающее `RegistryError`, и вычислялось оно
+    ПОСЛЕ применения слоя. Измерено 2026-10-05 на `an1mego.site`: слой nginx
+    переключён, заявка отвергнута словами «у ячейки не записан путь
+    репозитория», ОТКАТ отвергнут тем же самым, домен объявлен в режиме слоя
+    `UNKNOWN` с требованием немедленного разбора. Слою nginx репозиторий не
+    нужен вовсе — операция названа в `ОПЕРАЦИИ_БЕЗ_РЕПОЗИТОРИЯ`.
+    """
+    from factory.cell import registry as cell_registry
+
+    monkeypatch.setenv("SITE_CELLS_REGISTRY",
+                       str(_реестр_стенда(tmp_path, путь_репозитория=None)))
+    cell = cell_registry.resolve("stand-01")
+    with pytest.raises(cell_registry.RegistryError):
+        _ = cell.repo_path          # свойство действительно возбуждает отказ
+    assert executor._имя_репозитория_для_отчёта(cell) == "", (
+        "имя репозитория для отчёта обязано быть пустым, а не отказом")
+
+    # И сама операция не останавливается по этому признаку.
+    з = queue.собрать("stand-01", "", "", operation="indexing-nginx",
+                      mode="CLOSED")
+    try:
+        executor.переключить_слой_индексации(з, dry_run=True)
+    except Exception as ош:  # noqa: BLE001
+        assert "путь репозитория" not in str(ош), ош
 
 
 def test_закрытие_слоя_разрешения_не_требует(tmp_path, monkeypatch):
