@@ -165,7 +165,7 @@
       "status": "live",
       "repo": {
         "kind": "remote",
-        "path": "var/site-repos/an1mego-site",
+        "path": null,
         "remote": "https://github.com/sbc-create/site-an1mego-site"
       },
       "template": {
@@ -218,7 +218,7 @@
       },
       "indexing": {
         "desired_state": "CLOSED",
-        "reason": "Прямая установка: рабочая копия в /srv/<учётная запись>/app, доставка её собственным deploy/install.sh. Не тестовая площадка — домен разрешается в адрес площадки и отдаёт 200. Режим читает src/indexing_mode.py (подключён 2026-10-05), переключает штатная операция через файл состояния и слой nginx."
+        "reason": "Запись учёта по измерению 2026-10-03: публичный ответ отдаёт noindex. Разрешения владельца на открытие нет, и эта запись его не выдаёт."
       }
     },
     {
@@ -228,7 +228,7 @@
       "status": "live",
       "repo": {
         "kind": "remote",
-        "path": "var/site-repos/animeg0-site",
+        "path": null,
         "remote": "https://github.com/sbc-create/site-animeg0-site"
       },
       "template": {
@@ -281,7 +281,7 @@
       },
       "indexing": {
         "desired_state": "CLOSED",
-        "reason": "Прямая установка: рабочая копия в /srv/<учётная запись>/app, доставка её собственным deploy/install.sh. Не тестовая площадка — домен разрешается в адрес площадки и отдаёт 200. Режим читает src/indexing_mode.py (подключён 2026-10-05), переключает штатная операция через файл состояния и слой nginx."
+        "reason": "Запись учёта по измерению 2026-10-03: публичный ответ отдаёт noindex. Разрешение владельца этой записью не выдаётся."
       }
     },
     {
@@ -495,12 +495,6 @@
           "source": "get/projects_2/projects"
         },
         "note": "проект 32531521 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
-      },
-      "indexing": {
-        "open_authorized": true,
-        "open_authorization_ref": "/var/lib/site-cells/owner-consent/lordserial33.biz.json",
-        "open_authorization_id": "0dbcbc3c-bf38-4432-8547-4b258948ef92",
-        "open_authorization_note": "разрешение владельца: claude, 2026-10-05T04:58:30Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/lordserial33.biz.json; флаг в реестре без него разрешением не считается"
       }
     },
     {
@@ -1001,11 +995,7 @@
       },
       "indexing": {
         "desired_state": "CLOSED",
-        "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит.",
-        "open_authorized": true,
-        "open_authorization_ref": "/var/lib/site-cells/owner-consent/yummyani7.site.json",
-        "open_authorization_id": "6f18e2e8-9ff2-476b-8327-9325d3dd6664",
-        "open_authorization_note": "разрешение владельца: claude, 2026-10-05T04:58:31Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/yummyani7.site.json; флаг в реестре без него разрешением не считается"
+        "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
       },
       "analytics": {
         "metrika_counter_id": 113109087,
@@ -1073,11 +1063,7 @@
       },
       "indexing": {
         "desired_state": "CLOSED",
-        "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит.",
-        "open_authorized": true,
-        "open_authorization_ref": "/var/lib/site-cells/owner-consent/yummyani7.info.json",
-        "open_authorization_id": "c8a5ba0a-5884-404a-9e97-ad09c7a81837",
-        "open_authorization_note": "разрешение владельца: claude, 2026-10-05T04:58:31Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/yummyani7.info.json; флаг в реестре без него разрешением не считается"
+        "reason": "Новый домен партии: noindex/nofollow отдаёт рантайм, обход запрещён в robots.txt. Открытие индексации — отдельное решение владельца и в запуск не входит."
       },
       "analytics": {
         "metrika_counter_id": 113109089,
@@ -1156,12 +1142,6 @@
           "source": "get/projects_2/projects"
         },
         "note": "проект 32531595 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
-      },
-      "indexing": {
-        "open_authorized": true,
-        "open_authorization_ref": "/var/lib/site-cells/owner-consent/yummyani.biz.json",
-        "open_authorization_id": "52799b26-3ca6-42f1-912b-63ac2bcfa9cc",
-        "open_authorization_note": "разрешение владельца: claude, 2026-10-05T04:58:30Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/yummyani.biz.json; флаг в реестре без него разрешением не считается"
       }
     },
     {
@@ -1397,8 +1377,7 @@
       },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id": "10374",
-        "note": "выдан владельцем для zonafilm.cc 2026-10-05; прежнее значение 10238 принадлежало паре витрины lords-01"
+        "publisher_id": "10238"
       },
       "data": {
         "database": null,

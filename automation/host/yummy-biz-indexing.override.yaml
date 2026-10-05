@@ -1,0 +1,41 @@
+# Второй владелец режима индексации yummyani.biz: переменная контейнера.
+#
+#   docker compose -p yummyani-staging \
+#     --project-directory /home/claude/wt-yummy-mail-biz \
+#     -f /home/claude/wt-yummy-mail-biz/compose.staging.yaml \
+#     -f /home/claude/wt-portable-site-cell-01/automation/host/yummy-biz-indexing.override.yaml \
+#     --env-file /srv/sites/yummyani-staging/runtime/compose.vars \
+#     up -d --no-deps web-biz
+#
+# Почему это нужно
+# ----------------
+#
+# У режима индексации семейства Yummy ДВА владельца (D169): заголовок
+# `X-Robots-Tag` и `robots.txt` решает витрина-ячейка по реестру ядра, а тег
+# `<meta name="robots">` в ТЕЛЕ страницы — контейнер Next.js, в который
+# витрина проксирует, по своему `SEO_INDEXING_ENABLED`.
+#
+# Измерено 2026-10-05: контейнер `yummyani-staging-web-biz-1` работает с
+# `"false"` и отдаёт в теле `noindex, follow`; контейнер `web-org` с `"true"` —
+# `index, follow`. Поэтому при открытии ячейки домен получался полуоткрытым:
+# заголовка запрета нет, а тело говорит `noindex`. Собственная проверка
+# операции справедливо отказывалась считать режим применённым.
+#
+# Почему наложением, а не правкой чужого compose
+# ----------------------------------------------
+#
+# Базовый файл принадлежит проекту приложения (`/home/claude/wt-yummy-mail-biz`)
+# и держит `SEO_INDEXING_ENABLED: "false"` в ОБЩЕМ якоре `&web-env` — то есть
+# правка там задела бы и соседние тенанты. Сам же базовый файл показывает
+# законный способ: `yummyani.site` переопределяет переменную ПО-СЕРВИСНО. Это
+# наложение делает ровно то же и лежит в репозитории фабрики: видно, что
+# именно фабрика добавляет к чужому проекту, и чужой файл не меняется.
+#
+# Переменная НЕ является разрешением. Разрешение владельца — якорь согласия в
+# каталоге root (`/var/lib/site-cells/owner-consent/yummyani.biz.json`,
+# root:root 0444), и без записи `desired_state: OPEN` в реестре ядра витрина
+# по-прежнему отдаёт запрет заголовком.
+services:
+  web-biz:
+    environment:
+      SEO_INDEXING_ENABLED: "true"
