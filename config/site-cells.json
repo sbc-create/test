@@ -60,7 +60,8 @@
         "data_owner": "pipeline",
         "data_dir_after_relocation": "/srv/animedia-icu/data",
         "data_dir_note": "Ячейкой витрина ещё НЕ стала: каталогов /srv/animedia-icu нет, исполняется выпуск из общего дерева (/srv/lords/.frontend/releases/20260923T001500Z-community-public-03), снимок читается из общего хранилища. `managed_by: cell` был выставлен до фактического перехода — это прямо запрещено правилом, и цена оказалась не теоретической: несуществующий /srv/animedia-icu/data попадал в ReadWritePaths издателя и вместе с тремя такими же путями Yummy давал 226/NAMESPACE, то есть суточное обновление не запускалось вовсе у ВСЕХ семи витрин. Значение вернётся в data_dir тем же шагом, которым витрина переедет.",
-        "unit_note": "Юнит снят с работающего процесса (/proc/<pid>/cgroup), а не взят по имени. Прежнее значение nova-animedia-01.service запускает ОБЩИЙ загрузчик /srv/lords/.frontend/lords-frontend.py и этот домен не обслуживает: активация по нему пошла бы не в ту службу и выглядела бы успехом. Проверено 2026-09-29."
+        "unit_note": "Юнит снят с работающего процесса (/proc/<pid>/cgroup), а не взят по имени. Прежнее значение nova-animedia-01.service запускает ОБЩИЙ загрузчик /srv/lords/.frontend/lords-frontend.py и этот домен не обслуживает: активация по нему пошла бы не в ту службу и выглядела бы успехом. Проверено 2026-09-29.",
+        "delivery": "release-queue"
       },
       "release": {
         "hold": false,
@@ -141,7 +142,8 @@
         "legacy_root": null,
         "reload": "unknown",
         "managed_by": "cell",
-        "data_owner": "site_timer"
+        "data_owner": "site_timer",
+        "delivery": "release-queue"
       },
       "release": {
         "hold": true,
@@ -214,7 +216,8 @@
         "managed_by": "monolith",
         "data_owner": "site_timer",
         "unit_note": "Значения измерены на хосте 2026-10-03: ExecStart юнита — `/usr/bin/python3 /srv/an1mego-site/app/run.py --port 9150 --data-dir /srv/an1mego-site/data`, User=an1mego-site.",
-        "data_dir_note": "Снимки пишет СВОЙ таймер сайта (an1mego-site-update.timer), а не общий производитель: в каталоге лежат animego-02-catalog.json и animego-02-details.json. Поэтому managed_by = monolith: доставка содержимого этой записью не управляется, и проверка свежести ячеек её намеренно пропускает (factory/cell/content.py: статус not-a-cell). Регистрация нужна затем, чтобы домен был ВИДЕН проверкам сети, а не затем, чтобы объявить его ячейкой."
+        "data_dir_note": "Снимки пишет СВОЙ таймер сайта (an1mego-site-update.timer), а не общий производитель: в каталоге лежат animego-02-catalog.json и animego-02-details.json. Поэтому managed_by = monolith: доставка содержимого этой записью не управляется, и проверка свежести ячеек её намеренно пропускает (factory/cell/content.py: статус not-a-cell). Регистрация нужна затем, чтобы домен был ВИДЕН проверкам сети, а не затем, чтобы объявить его ячейкой.",
+        "delivery": "own-installer"
       },
       "indexing": {
         "desired_state": "CLOSED",
@@ -281,7 +284,8 @@
         "managed_by": "monolith",
         "data_owner": "site_timer",
         "unit_note": "Измерено на хосте 2026-10-03: ExecStart — `/usr/bin/python3 /srv/animeg0-site/app/run.py --port 9151 --data-dir /srv/animeg0-site/data`, User=animeg0-site.",
-        "data_dir_note": "Снимки пишет свой таймер сайта (animeg0-site-update.timer); каталог содержит animego-03-catalog.json. managed_by = monolith по той же причине, что у animego-02."
+        "data_dir_note": "Снимки пишет свой таймер сайта (animeg0-site-update.timer); каталог содержит animego-03-catalog.json. managed_by = monolith по той же причине, что у animego-02.",
+        "delivery": "own-installer"
       },
       "indexing": {
         "desired_state": "CLOSED",
@@ -332,7 +336,8 @@
         "reload": "mtime",
         "managed_by": "cell",
         "data_owner": "pipeline",
-        "unit_note": "Третий домен AnimeGo. Порт 9152 — следующий свободный за 9150 (an1mego.site) и 9151 (animeg0.site); проверено, что он не слушается. Каталог данных свой: смешение данных трёх площадок отправило бы чужие комментарии и оценки в чужое хранилище."
+        "unit_note": "Третий домен AnimeGo. Порт 9152 — следующий свободный за 9150 (an1mego.site) и 9151 (animeg0.site); проверено, что он не слушается. Каталог данных свой: смешение данных трёх площадок отправило бы чужие комментарии и оценки в чужое хранилище.",
+        "delivery": "release-queue"
       },
       "release": {
         "hold": false,
@@ -421,7 +426,8 @@
         "legacy_root": "<data>/site",
         "reload": "mtime",
         "managed_by": "cell",
-        "data_owner": "pipeline"
+        "data_owner": "pipeline",
+        "delivery": "release-queue"
       },
       "analytics": {
         "topvisor_project_id": 32531504,
@@ -493,7 +499,8 @@
         "legacy_root": "<data>/site",
         "reload": "mtime",
         "managed_by": "cell",
-        "data_owner": "pipeline"
+        "data_owner": "pipeline",
+        "delivery": "release-queue"
       },
       "analytics": {
         "topvisor_project_id": 32531521,
@@ -563,7 +570,8 @@
         "legacy_root": "<data>/site",
         "reload": "mtime",
         "managed_by": "cell",
-        "data_owner": "pipeline"
+        "data_owner": "pipeline",
+        "delivery": "release-queue"
       },
       "analytics": {
         "topvisor_project_id": 32531542,
@@ -627,7 +635,8 @@
         "reload": "mtime",
         "managed_by": "cell",
         "data_owner": "pipeline",
-        "unit_note": "Новый домен: прежней установки нет, поэтому previous_unit пуст. Порт 9113 и 10113 для кандидата проверены свободными и в реестре, и на хосте."
+        "unit_note": "Новый домен: прежней установки нет, поэтому previous_unit пуст. Порт 9113 и 10113 для кандидата проверены свободными и в реестре, и на хосте.",
+        "delivery": "release-queue"
       },
       "release": {
         "hold": false,
@@ -700,7 +709,8 @@
         "reload": "mtime",
         "managed_by": "cell",
         "data_owner": "pipeline",
-        "unit_note": "Новый домен. Порт 9116 и 10116 для кандидата проверены свободными и в реестре, и на хосте. Записи A у домена нет — это первый невыполненный шаг, размещение объявлено заранее, чтобы после появления записи очередь не ждала настройки."
+        "unit_note": "Новый домен. Порт 9116 и 10116 для кандидата проверены свободными и в реестре, и на хосте. Записи A у домена нет — это первый невыполненный шаг, размещение объявлено заранее, чтобы после появления записи очередь не ждала настройки.",
+        "delivery": "release-queue"
       },
       "release": {
         "hold": false,
@@ -769,7 +779,8 @@
         "reload": "mtime",
         "managed_by": "cell",
         "data_owner": "pipeline",
-        "unit_note": "Новый домен. Порт 9117 и 10117 для кандидата проверены свободными и в реестре, и на хосте. Записи A у домена нет — это первый невыполненный шаг, размещение объявлено заранее, чтобы после появления записи очередь не ждала настройки."
+        "unit_note": "Новый домен. Порт 9117 и 10117 для кандидата проверены свободными и в реестре, и на хосте. Записи A у домена нет — это первый невыполненный шаг, размещение объявлено заранее, чтобы после появления записи очередь не ждала настройки.",
+        "delivery": "release-queue"
       },
       "release": {
         "hold": false,
@@ -1001,7 +1012,8 @@
         "reload": "mtime",
         "managed_by": "cell",
         "data_owner": "pipeline",
-        "unit_note": "Новый домен: прежней установки нет, поэтому previous_unit пуст. Порт 9114 и 10114 для кандидата проверены свободными и в реестре, и на хосте."
+        "unit_note": "Новый домен: прежней установки нет, поэтому previous_unit пуст. Порт 9114 и 10114 для кандидата проверены свободными и в реестре, и на хосте.",
+        "delivery": "release-queue"
       },
       "release": {
         "hold": false,
@@ -1073,7 +1085,8 @@
         "reload": "mtime",
         "managed_by": "cell",
         "data_owner": "pipeline",
-        "unit_note": "Новый домен: прежней установки нет, поэтому previous_unit пуст. Порт 9115 и 10115 для кандидата проверены свободными и в реестре, и на хосте."
+        "unit_note": "Новый домен: прежней установки нет, поэтому previous_unit пуст. Порт 9115 и 10115 для кандидата проверены свободными и в реестре, и на хосте.",
+        "delivery": "release-queue"
       },
       "release": {
         "hold": false,
@@ -1154,7 +1167,8 @@
         "reload": "restart",
         "managed_by": "monolith",
         "data_owner": "pipeline",
-        "unit_note": "unit назван ЯЧЕЙКИН, а не монолитный. Пока здесь стоял nova-yummy-biz.service, повышение перезапускало бы монолитную службу, а её ExecStart ведёт в /srv/lords/.frontend — выпуск прошёл бы успешно, ничего не переключив, и снаружи это неотличимо от настоящего: сайт отвечает 200 и показывает прежний код. Файлы ячейкиных юнитов ставит automation/host/install-yummy-cell-units.sh; managed_by переводится в cell ПОСЛЕ фактического перехода, иначе издатель начнёт возить каталог в хранилище, из которого витрина ещё не читает."
+        "unit_note": "unit назван ЯЧЕЙКИН, а не монолитный. Пока здесь стоял nova-yummy-biz.service, повышение перезапускало бы монолитную службу, а её ExecStart ведёт в /srv/lords/.frontend — выпуск прошёл бы успешно, ничего не переключив, и снаружи это неотличимо от настоящего: сайт отвечает 200 и показывает прежний код. Файлы ячейкиных юнитов ставит automation/host/install-yummy-cell-units.sh; managed_by переводится в cell ПОСЛЕ фактического перехода, иначе издатель начнёт возить каталог в хранилище, из которого витрина ещё не читает.",
+        "delivery": "release-queue"
       },
       "analytics": {
         "topvisor_project_id": 32531595,
@@ -1226,7 +1240,8 @@
         "reload": "restart",
         "managed_by": "monolith",
         "data_owner": "pipeline",
-        "unit_note": "unit назван ЯЧЕЙКИН, а не монолитный. Пока здесь стоял nova-yummy-org.service, повышение перезапускало бы монолитную службу, а её ExecStart ведёт в /srv/lords/.frontend — выпуск прошёл бы успешно, ничего не переключив, и снаружи это неотличимо от настоящего: сайт отвечает 200 и показывает прежний код. Файлы ячейкиных юнитов ставит automation/host/install-yummy-cell-units.sh; managed_by переводится в cell ПОСЛЕ фактического перехода, иначе издатель начнёт возить каталог в хранилище, из которого витрина ещё не читает."
+        "unit_note": "unit назван ЯЧЕЙКИН, а не монолитный. Пока здесь стоял nova-yummy-org.service, повышение перезапускало бы монолитную службу, а её ExecStart ведёт в /srv/lords/.frontend — выпуск прошёл бы успешно, ничего не переключив, и снаружи это неотличимо от настоящего: сайт отвечает 200 и показывает прежний код. Файлы ячейкиных юнитов ставит automation/host/install-yummy-cell-units.sh; managed_by переводится в cell ПОСЛЕ фактического перехода, иначе издатель начнёт возить каталог в хранилище, из которого витрина ещё не читает.",
+        "delivery": "release-queue"
       },
       "analytics": {
         "topvisor_project_id": 32531569,
@@ -1292,7 +1307,8 @@
         "reload": "restart",
         "managed_by": "monolith",
         "data_owner": "pipeline",
-        "unit_note": "unit назван ЯЧЕЙКИН, а не монолитный. Пока здесь стоял nova-yummy-site.service, повышение перезапускало бы монолитную службу, а её ExecStart ведёт в /srv/lords/.frontend — выпуск прошёл бы успешно, ничего не переключив, и снаружи это неотличимо от настоящего: сайт отвечает 200 и показывает прежний код. Файлы ячейкиных юнитов ставит automation/host/install-yummy-cell-units.sh; managed_by переводится в cell ПОСЛЕ фактического перехода, иначе издатель начнёт возить каталог в хранилище, из которого витрина ещё не читает."
+        "unit_note": "unit назван ЯЧЕЙКИН, а не монолитный. Пока здесь стоял nova-yummy-site.service, повышение перезапускало бы монолитную службу, а её ExecStart ведёт в /srv/lords/.frontend — выпуск прошёл бы успешно, ничего не переключив, и снаружи это неотличимо от настоящего: сайт отвечает 200 и показывает прежний код. Файлы ячейкиных юнитов ставит automation/host/install-yummy-cell-units.sh; managed_by переводится в cell ПОСЛЕ фактического перехода, иначе издатель начнёт возить каталог в хранилище, из которого витрина ещё не читает.",
+        "delivery": "release-queue"
       },
       "analytics": {
         "topvisor_project_id": 32531550,
@@ -1358,7 +1374,8 @@
         "legacy_root": "<data>/site",
         "reload": "mtime",
         "managed_by": "cell",
-        "data_owner": "pipeline"
+        "data_owner": "pipeline",
+        "delivery": "release-queue"
       },
       "analytics": {
         "topvisor_project_id": 33238820,
@@ -1432,7 +1449,8 @@
         "managed_by": "cell",
         "data_owner": "pipeline",
         "data_dir_after_relocation": "/srv/zonafilm-cc/data",
-        "data_dir_note": "Каталог данных назван ТЕКУЩИЙ, а не будущий. Витрина читает /srv/lords/.frontend/sites/zona-02/data — это видно по её юниту (SITE_ROOT=/srv/lords/.frontend/sites/zona-02) и по файлу, который она объявляет ревизией. Пока здесь стоял /srv/zonafilm-cc/data, издатель докладывал «каталога данных не существует» и пропускал витрину: сайт четвёртые сутки показывал снимок от 22.09 при источнике от 25.09, и ошибки при этом не возникало ни у кого. Реестр обязан описывать, где сайт живёт СЕЙЧАС, иначе производитель кладёт снимок мимо живого сайта. Значение меняется на data_dir_after_relocation в том же шаге, в котором витрина переезжает в /srv/zonafilm-cc."
+        "data_dir_note": "Каталог данных назван ТЕКУЩИЙ, а не будущий. Витрина читает /srv/lords/.frontend/sites/zona-02/data — это видно по её юниту (SITE_ROOT=/srv/lords/.frontend/sites/zona-02) и по файлу, который она объявляет ревизией. Пока здесь стоял /srv/zonafilm-cc/data, издатель докладывал «каталога данных не существует» и пропускал витрину: сайт четвёртые сутки показывал снимок от 22.09 при источнике от 25.09, и ошибки при этом не возникало ни у кого. Реестр обязан описывать, где сайт живёт СЕЙЧАС, иначе производитель кладёт снимок мимо живого сайта. Значение меняется на data_dir_after_relocation в том же шаге, в котором витрина переезжает в /srv/zonafilm-cc.",
+        "delivery": "release-queue"
       },
       "release": {
         "hold": false,
@@ -1499,7 +1517,8 @@
         "reload": "mtime",
         "managed_by": "cell",
         "data_owner": "pipeline",
-        "unit_note": "Новый домен: прежней установки нет, поэтому previous_unit пуст и гасить при повышении нечего. managed_by сразу cell — монолита у этого сайта не существовало ни дня, и выбирать между двумя значениями enum не приходится: витрина принадлежит ячейке по построению. Состояние запуска живёт в status: planned до первого выпуска."
+        "unit_note": "Новый домен: прежней установки нет, поэтому previous_unit пуст и гасить при повышении нечего. managed_by сразу cell — монолита у этого сайта не существовало ни дня, и выбирать между двумя значениями enum не приходится: витрина принадлежит ячейке по построению. Состояние запуска живёт в status: planned до первого выпуска.",
+        "delivery": "release-queue"
       },
       "release": {
         "hold": false,
