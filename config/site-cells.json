@@ -218,7 +218,11 @@
       },
       "indexing": {
         "desired_state": "CLOSED",
-        "reason": "Прямая установка: рабочая копия в /srv/<учётная запись>/app, доставка её собственным deploy/install.sh. Не тестовая площадка — домен разрешается в адрес площадки и отдаёт 200. Режим читает src/indexing_mode.py (подключён 2026-10-05), переключает штатная операция через файл состояния и слой nginx."
+        "reason": "Прямая установка: рабочая копия в /srv/<учётная запись>/app, доставка её собственным deploy/install.sh. Не тестовая площадка — домен разрешается в адрес площадки и отдаёт 200. Режим читает src/indexing_mode.py (подключён 2026-10-05), переключает штатная операция через файл состояния и слой nginx.",
+        "open_authorized": true,
+        "open_authorization_ref": "/var/lib/site-cells/owner-consent/an1mego.site.json",
+        "open_authorization_id": "3f340bb0-f436-467d-a4d4-94f898665752",
+        "open_authorization_note": "разрешение владельца: claude, 2026-10-05T13:41:38Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/an1mego.site.json; флаг в реестре без него разрешением не считается"
       }
     },
     {
@@ -281,7 +285,11 @@
       },
       "indexing": {
         "desired_state": "CLOSED",
-        "reason": "Прямая установка: рабочая копия в /srv/<учётная запись>/app, доставка её собственным deploy/install.sh. Не тестовая площадка — домен разрешается в адрес площадки и отдаёт 200. Режим читает src/indexing_mode.py (подключён 2026-10-05), переключает штатная операция через файл состояния и слой nginx."
+        "reason": "Прямая установка: рабочая копия в /srv/<учётная запись>/app, доставка её собственным deploy/install.sh. Не тестовая площадка — домен разрешается в адрес площадки и отдаёт 200. Режим читает src/indexing_mode.py (подключён 2026-10-05), переключает штатная операция через файл состояния и слой nginx.",
+        "open_authorized": true,
+        "open_authorization_ref": "/var/lib/site-cells/owner-consent/animeg0.site.json",
+        "open_authorization_id": "9ac3246f-8473-4e5a-ae5c-3787816dbef3",
+        "open_authorization_note": "разрешение владельца: claude, 2026-10-05T13:41:38Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/animeg0.site.json; флаг в реестре без него разрешением не считается"
       }
     },
     {
