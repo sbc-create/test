@@ -843,6 +843,45 @@
       "release": {}
     },
     {
+      "site_id": "lords-09",
+      "domain": "lordfilm077.site",
+      "aliases": [],
+      "status": "planned",
+      "repo": {
+        "kind": "local",
+        "path": "/home/claude/wt-portable-site-cell-01/var/site-repos/lordfilm077-site"
+      },
+      "template": {
+        "template_id": "lords-films",
+        "family": "lords"
+      },
+      "pins": {},
+      "deploy_target": {},
+      "publisher": {},
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {},
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {},
+      "runtime": {
+        "unit": "nova-lordfilm077-site.service",
+        "previous_unit": null,
+        "port": 9119,
+        "account": "lordfilm077-site",
+        "app_dir": "/srv/lordfilm077-site/current",
+        "data_dir": "/srv/lordfilm077-site/data",
+        "legacy_root": "<data>/site",
+        "reload": "restart",
+        "managed_by": "cell",
+        "data_owner": "pipeline"
+      },
+      "release": {}
+    },
+    {
       "site_id": "pilot-local",
       "domain": "pilot.localhost.test",
       "aliases": [],
