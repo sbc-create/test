@@ -256,3 +256,84 @@ def test_подмена_сохраняет_владельца_и_права(пл
     стало = площадка["реестр"].stat()
     assert стало.st_mode & 0o7777 == было.st_mode & 0o7777
     assert (стало.st_uid, стало.st_gid) == (было.st_uid, было.st_gid)
+
+
+def test_запрет_в_теле_ищется_тегом_а_не_подстрокой():
+    """`"noindex":false` во встроенном JSON — не запрет индексации.
+
+    Проверка исполнителя искала слово `noindex` подстрокой по первым 4 КБ
+    тела. У приложения Yummy во встроенном JSON есть ключи вида
+    `"noindex":false`, и такой поиск объявил бы запрет там, где его нет —
+    то есть отказал бы открытию по признаку, к режиму не относящемуся.
+
+    Проверяется ПОВЕДЕНИЕ: функция вызывается против настоящего HTTP-ответа.
+    """
+    import http.server
+    import threading
+
+    from factory.cell import executor
+
+    тела = {
+        "/ложный": b'<html><head><script>{"seo":{"noindex":false}}</script>'
+                   b'</head><body>ok</body></html>',
+        "/настоящий": b'<html><head><meta name="robots" content="noindex, follow">'
+                      b'</head><body>ok</body></html>',
+        "/открытый": b'<html><head><meta name="robots" content="index, follow">'
+                     b'</head><body>ok</body></html>',
+    }
+
+    class Обработчик(http.server.BaseHTTPRequestHandler):
+        путь_тела = "/ложный"
+
+        def do_GET(self):
+            тело = тела[Обработчик.путь_тела]
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(тело)))
+            self.end_headers()
+            self.wfile.write(тело)
+
+        def log_message(self, *а):
+            pass
+
+    сервер = http.server.HTTPServer(("127.0.0.1", 0), Обработчик)
+    поток = threading.Thread(target=сервер.serve_forever, daemon=True)
+    поток.start()
+    try:
+        порт = сервер.server_address[1]
+        Обработчик.путь_тела = "/ложный"
+        ответ = executor._заголовок_робота(порт)
+        assert ответ["read"] is True, ответ
+        assert ответ["noindex"] is False, (
+            f"ключ JSON принят за запрет индексации: {ответ}")
+        assert ответ["meta"] is None, ответ
+
+        Обработчик.путь_тела = "/настоящий"
+        ответ = executor._заголовок_робота(порт)
+        assert ответ["noindex"] is True, ответ
+        assert ответ["meta"] == "noindex, follow", ответ
+
+        Обработчик.путь_тела = "/открытый"
+        ответ = executor._заголовок_робота(порт)
+        assert ответ["noindex"] is False, ответ
+        assert ответ["meta"] == "index, follow", ответ
+    finally:
+        сервер.shutdown()
+        сервер.server_close()
+
+
+def test_незагружаемые_конфигурации_не_считаются_живыми():
+    """`sites-available` nginx не включает, и объявление map туда ставить нельзя.
+
+    Измерено 2026-10-05 на yummyani.biz: объявление переменной попадало в
+    `sites-available/yummyani.biz.conf`, использование — в загружаемый
+    `sites-enabled`, и nginx отказал: `unknown "cell_robots_yummy_biz"
+    variable`. Слой не переключился, домен остался полуоткрытым.
+    """
+    from factory.cell import nginx_indexing as ни
+    assert "sites-available" not in ни.КАТАЛОГИ_NGINX, (
+        "незагружаемый каталог снова считается живым")
+    assert "sites-enabled" in ни.КАТАЛОГИ_NGINX
+    assert "sites-available" in ни.КАТАЛОГИ_ВНЕ_ЗАГРУЗКИ
+    # И расхождение двойника обязано называться, а не умалчиваться.
+    assert callable(ни.копии_вне_загрузки)

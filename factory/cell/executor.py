@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import contextlib
 import json
+import re
 import os
 import subprocess
 import tempfile
@@ -393,8 +394,17 @@ def _заголовок_робота(порт: int) -> dict[str, Any]:
             тело = о.read(4096).decode("utf-8", "replace")
     except (urllib.error.URLError, OSError, TimeoutError) as ош:
         return {"read": False, "reason": f"{type(ош).__name__}: {ош}"}
-    в_мете = "noindex" in тело.lower()
+    # МЕТА-ТЕГ ИЩЕТСЯ ТЕГОМ, А НЕ ПОДСТРОКОЙ. Слово `noindex` встречается в
+    # теле страницы и безобидно: во встроенном JSON приложения есть ключи
+    # вида `"noindex":false`, и поиск подстрокой объявил бы запрет там, где
+    # его нет. Решение о режиме домена по такому признаку принимать нельзя.
+    мета = re.search(
+        r'<meta[^>]+name=["\']robots["\'][^>]*content=["\']([^"\']*)["\']',
+        тело, re.IGNORECASE)
+    значение_меты = (мета.group(1) if мета else "")
+    в_мете = "noindex" in значение_меты.lower()
     return {"read": True, "value": значение,
+            "meta": значение_меты or None,
             "meta_noindex": в_мете,
             "noindex": bool(значение and "noindex" in значение.lower()) or в_мете}
 

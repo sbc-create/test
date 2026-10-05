@@ -54,10 +54,29 @@ def путь_включаемого(site_id: str) -> pathlib.Path:
     return КАТАЛОГ_ВКЛЮЧАЕМЫХ / f"{site_id}.robots"
 
 
-#: Где лежат живые конфигурации. Резервные копии исключены отдельно: nginx
-#: грузит `sites-enabled/*` целиком, и файл `.bak.*` там был бы живым, но
-#: судить по нему о режиме нельзя — это слепок прошлого.
-КАТАЛОГИ_NGINX = ("lords", "sites-available", "sites-enabled", "conf.d")
+#: Каталоги, которые nginx ФАКТИЧЕСКИ ЗАГРУЖАЕТ. Резервные копии исключены
+#: отдельно: nginx грузит `sites-enabled/*` целиком, и файл `.bak.*` там был
+#: бы живым, но судить по нему о режиме нельзя — это слепок прошлого.
+#:
+#: `sites-available` здесь НЕТ, и это не упущение. Цена его присутствия
+#: измерена 2026-10-05 на yummyani.biz: объявление переменной `map` ставится
+#: РОВНО В ОДИН файл — первый, в котором есть что переводить, — и попадало в
+#: `sites-available/yummyani.biz.conf`. Этот файл nginx не включает
+#: (`nginx.conf` включает только `sites-enabled/*` и `conf.d/*.conf`), а
+#: использование переменной подставлялось в загружаемый `sites-enabled`.
+#: Итог: `nginx: [emerg] unknown "cell_robots_yummy_biz" variable`, слой не
+#: переключён, домен остался полуоткрытым.
+#:
+#: Симлинки при этом не теряются: `sites-enabled/x.conf -> ../sites-available/x.conf`
+#: встречается при обходе `sites-enabled`, читается и правится по ссылке.
+#: Теряются только НЕЗАГРУЖАЕМЫЕ двойники — у трёх витрин Yummy они есть и
+#: уже разошлись с рабочими файлами; их называет `копии_вне_загрузки`.
+КАТАЛОГИ_NGINX = ("lords", "sites-enabled", "conf.d")
+
+#: Каталоги, которые nginx НЕ включает. Нужны не для правок, а для отчёта:
+#: расхождение незагружаемого двойника с рабочим файлом — дефект учёта, и
+#: молчать о нём нельзя.
+КАТАЛОГИ_ВНЕ_ЗАГРУЗКИ = ("sites-available",)
 
 
 def _резервная(путь: pathlib.Path) -> bool:
@@ -108,6 +127,47 @@ def конфиги_сайта(site_id: str, домен: str) -> list[pathlib.Pat
             continue
         видено.add(ключ)
         итог.append(путь)
+    return итог
+
+
+def копии_вне_загрузки(site_id: str, домен: str) -> list[dict]:
+    """Незагружаемые двойники конфигураций домена и их расхождение с рабочими.
+
+    Отчёт, а не правка: файл в `sites-available`, не связанный симлинком с
+    `sites-enabled`, nginx не читает вовсе. Переключать слой по нему нельзя
+    (проверено отказом nginx), но и молчать о нём нельзя: он выглядит
+    конфигурацией сайта и однажды может быть включён — уже с прежним режимом.
+    """
+    загружаемые = {str(п.resolve()) for п in конфиги_сайта(site_id, домен)
+                   if п.exists()}
+    итог: list[dict] = []
+    for каталог in КАТАЛОГИ_ВНЕ_ЗАГРУЗКИ:
+        корень = КОРЕНЬ_NGINX / каталог
+        if not корень.is_dir():
+            continue
+        for путь in sorted(корень.iterdir()):
+            if not путь.is_file() or _резервная(путь) or путь.suffix != ".conf":
+                continue
+            try:
+                текст = путь.read_text(encoding="utf-8", errors="replace")
+            except OSError as ош:
+                итог.append({"path": str(путь), "unreadable": type(ош).__name__})
+                continue
+            if not re.search(
+                    rf"(?m)^\s*server_name\s+[^;]*\b{re.escape(домен)}\b", текст):
+                continue
+            if str(путь.resolve()) in загружаемые:
+                continue          # связан симлинком: это тот же файл
+            близнец = КОРЕНЬ_NGINX / "sites-enabled" / путь.name
+            расходится = None
+            if близнец.is_file():
+                try:
+                    расходится = близнец.read_bytes() != путь.read_bytes()
+                except OSError:
+                    расходится = None
+            итог.append({"path": str(путь), "loaded": False,
+                         "enabled_twin": str(близнец) if близнец.is_file() else "",
+                         "diverges": расходится})
     return итог
 
 
