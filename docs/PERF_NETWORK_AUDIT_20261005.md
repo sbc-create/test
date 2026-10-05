@@ -149,7 +149,7 @@ yummyani.org главная 1532/2924. Сетевой профиль не огр
 | до | `current → releases/58c89230b14a` |
 | после | `current → releases/1906c944a4da` с 20:08:45 UTC; `/proc`: `serve.py` из `1906c944a4da --port 9123`; build-id `1906c944a4da-zona-02` |
 | заявка | `zona-02-code-1906c944a4da`, подана 20:07:21 через `factory cell trigger --confirm-activation`, CI 37360536832, digest `sha256:ae8fe937…`; исполнитель: status ok, outcome activated, stage live_verified (перепроверено окном Архитектора) |
-| исполнитель | я; согласовано с Архитектором; оба окна zona предупреждены до смены HEAD общей копии (возражений нет) |
+| исполнитель | я; согласовано с Архитектором. **С окном «ЗОНА» согласование НЕ состоялось:** сообщения `wt-zona-02-launch-01-c4` и `wt-zona-real-slider-01-40` ждали одобрения пользователя тех сессий и истекли недоставленными (это выяснилось после выката; ранее я ошибочно записал «предупреждены, возражений нет»). Затирания проверено фактами: на origin новее 58c8923 только мои ветки; общая копия была чистой; в worktree окна zona-02 226 незакоммиченных файлов — только `artifacts/evidence/*`, кода сайта нет (последний коммит 28.09); worktree `zona-real-slider-01` чистый (коммит 22.09) |
 | общая копия | `/home/claude/wt-portable-site-cell-01/var/site-repos/zonafilm-cc` → `claude/extract-zonafilm-cc-player-01` @ 1906c94, дерево чистое; `-indexing-03` = 58c8923 не тронута |
 | откат | `releases/58c89230b14a` на месте; штатный rollback не понадобился |
 | сохранено | publisher 10374 (разметка и 53 запроса к провайдеру); Метрика 113110481; индексация `OPEN_CONFIRMED`, nginx `open`, meta `index, follow` (`X-Robots-Tag: index, follow` отдаёт само приложение, слой nginx при OPEN его не добавляет); реклама идёт; `perf_memo` в выпуск не попал |
