@@ -75,10 +75,38 @@ fi
 bash "$REPO/automation/host/install-site-nginx.sh" --site "$site" $new_site $dry_run
 
 log "домен, шаг 3: HTTPS"
-if [ -f "$REPO/automation/host/nginx-site/$site-tls.conf" ]; then
-  bash "$REPO/automation/host/install-site-tls.sh" --site "$site" $dry_run
-else
+# ПРЕДУСЛОВИЕ, А НЕ ГЛУШЕНИЕ ОШИБКИ. certbot подтверждает владение доменом
+# запросом по HTTP на его собственное имя: пока имя не разрешается в адрес,
+# шаг не может пройти ПО ПОСТРОЕНИЮ. Раньше он вызывался всегда, и у домена
+# без записи DNS запуск обрывался здесь (`set -Eeuo pipefail`) — не доходя до
+# шага 4 и выдавая ненастоящий отказ за отказ установки. Измерено 2026-10-05
+# на lordserials22.site и lordserials22.space: оба отвечают NXDOMAIN от
+# авторитетного сервера зоны TLD.
+#
+# Отказ certbot при СУЩЕСТВУЮЩЕЙ записи по-прежнему останавливает запуск: это
+# настоящая неудача, и прятать её нельзя.
+site_domain="$(python3 - "$REPO" "$site" <<'PYDOMAIN'
+import json, sys
+from pathlib import Path
+д = json.loads((Path(sys.argv[1]) / "config" / "site-cells.json").read_text(encoding="utf-8"))
+for c in д.get("cells") or []:
+    if c["site_id"] == sys.argv[2]:
+        print(c.get("domain") or "")
+        break
+PYDOMAIN
+)"
+domain_resolves=0
+if [ -n "$site_domain" ] && python3 -c "import socket,sys; socket.gethostbyname(sys.argv[1])" "$site_domain" 2>/dev/null; then
+  domain_resolves=1
+fi
+if [ ! -f "$REPO/automation/host/nginx-site/$site-tls.conf" ]; then
   echo "   заготовки $site-tls.conf нет: домен останется на HTTP"
+elif [ "$domain_resolves" = 0 ]; then
+  bad "$site_domain не разрешается в адрес: certbot подтвердить владение не сможет"
+  echo "   шаг пропущен НЕ из-за ошибки: сначала запись DNS, затем отдельной командой"
+  echo "     sudo bash $REPO/automation/host/install-site-tls.sh --site $site"
+else
+  bash "$REPO/automation/host/install-site-tls.sh" --site "$site" $dry_run
 fi
 
 log "домен, шаг 4: штатный сборщик недельного снимка"
