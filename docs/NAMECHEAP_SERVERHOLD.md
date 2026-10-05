@@ -22,6 +22,37 @@ Domain Status: clientTransferProhibited
 записи в Cloudflare, ни смена NS на результат не влияют. NS назначены верно и
 совпадают с рабочими доменами того же аккаунта — **менять их не нужно**.
 
+## Перепроверка 2026-10-06 — ограничение НЕ снято
+
+Повторный запрос к тем же реестрам (порт 43, прямой сокет), выполнен в ночь
+на 6 октября:
+
+```
+Domain Name: lordserials22.site        Domain Name: lordserials22.space
+Creation Date: 2026-09-22T06:57:03Z    Creation Date: 2026-09-22T06:57:03Z
+Updated Date:  2026-09-27T06:58:05Z    Updated Date:  2026-09-27T06:58:05Z
+Registry Expiry: 2027-09-22            Registry Expiry: 2027-09-22
+Registrar: NameCheap, Inc.             Registrar: NameCheap, Inc.
+Name Server: paris.ns.cloudflare.com   Name Server: paris.ns.cloudflare.com
+Name Server: piers.ns.cloudflare.com   Name Server: piers.ns.cloudflare.com
+Domain Status: serverHold              Domain Status: serverHold
+Domain Status: clientTransferProhibited Domain Status: clientTransferProhibited
+```
+
+Что из этого следует и чего НЕ следует:
+
+* домены **зарегистрированы**, срок до 2027-09-22, NS назначены верно и
+  совпадают с рабочими доменами того же аккаунта;
+* `serverHold` на месте, `Updated Date` не менялся с 27 сентября — то есть за
+  девять дней ограничение не снималось и не переназначалось;
+* `NXDOMAIN` у резолверов — СЛЕДСТВИЕ этого статуса, а не самостоятельный
+  факт. Сам по себе NXDOMAIN доказывает только отсутствие доступного
+  разрешения имени на момент проверки и статуса регистрации не устанавливает:
+  регистрацию подтверждает WHOIS реестра, и он её подтверждает.
+
+Причину `serverHold` реестр не раскрывает — её обязан назвать регистратор.
+Обращение ниже готово к отправке; отправка остаётся за владельцем.
+
 ## Текст обращения
 
 > Subject: serverHold on lordserials22.site and lordserials22.space

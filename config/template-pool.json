@@ -47,6 +47,13 @@
       "status": "free"
     },
     {
+      "template_id": "lords-films",
+      "family": "lords",
+      "label": "Lords Films",
+      "source": "blueprints/lords/profiles/lords-films.yaml",
+      "status": "free"
+    },
+    {
       "template_id": "lords-general",
       "family": "lords",
       "label": "Lords General",
@@ -90,6 +97,13 @@
         "assigned_at": "legacy",
         "evidence": "sites/lords-02/package.yaml: tenant.seo_profile = lords-new"
       }
+    },
+    {
+      "template_id": "lords-serials",
+      "family": "lords",
+      "label": "Lords Serials",
+      "source": "blueprints/lords/profiles/lords-serials.yaml",
+      "status": "free"
     }
   ]
 }
