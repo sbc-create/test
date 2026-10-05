@@ -12,9 +12,21 @@
     python3 -m factory.qwen diagnose  --site <домен>
     python3 -m factory.qwen indexing  --site <домен>
 
-Тело материала передаётся ФАЙЛОМ (`--body-file`) или стандартным вводом, а не
-аргументом командной строки: текст пользователя в исполняемую строку не
-попадает ни при каких условиях.
+НОВОСТИ раздела `/posts` — отдельные операции над отдельным материалом:
+
+    python3 -m factory.qwen posts-status    --site <домен>
+    python3 -m factory.qwen posts-prepare   --site <домен> --slug <слаг> --post-file <файл>
+    python3 -m factory.qwen posts-publish   --site <домен> --slug <слаг>
+    python3 -m factory.qwen posts-unpublish --site <домен> --slug <слаг>
+
+Новость и карточка аниме — РАЗНЫЕ материалы с разными адресами. `prepare`/
+`publish` пишут накладку описания карточки (`/anime/<slug>`), `posts-*` —
+новость (`/posts/<slug>`). Подмена одного другим даёт запись, которой не
+соответствует ни одна страница: 404 на обоих адресах.
+
+Тело материала передаётся ФАЙЛОМ (`--body-file`, для новости — `--post-file`)
+или стандартным вводом, а не аргументом командной строки: текст пользователя
+в исполняемую строку не попадает ни при каких условиях.
 
 Вывод — JSON на стандартный вывод. Код возврата: 0 — операция подтверждена,
 2 — отказ с названной причиной, 3 — записано, но НЕ подтверждено на странице.
@@ -25,13 +37,14 @@ import argparse
 import json
 import sys
 
-from factory.qwen import editorial, indexing, registry
+from factory.qwen import editorial, indexing, posts, registry
 
 
-#: Отказы обеих операций — одного рода: названная причина вместо трассы.
+#: Отказы всех операций — одного рода: названная причина вместо трассы.
 #: Перечислены кортежем, потому что ветвей обработки должно быть ровно одна:
 #: два отдельных `except` с одинаковым телом расходятся при первой правке.
-ОТКАЗЫ = (editorial.ОперацияОтклонена, indexing.Отказано)
+ОТКАЗЫ = (editorial.ОперацияОтклонена, indexing.Отказано,
+          posts.ОперацияОтклонена)
 
 #: Где лежат технические правила и какой они версии.
 #:
@@ -43,7 +56,7 @@ from factory.qwen import editorial, indexing, registry
 #: обнаруживалась сравнением, а не на последствиях.
 ИНСТРУКЦИЯ = ("/srv/site-factory/qwen-seo-handover-2026-10-01/"
               "QWEN-CANONICAL.md")
-ВЕРСИЯ_ИНСТРУКЦИИ = "2026-10-04.7"
+ВЕРСИЯ_ИНСТРУКЦИИ = "2026-10-05.1"
 
 
 def _со_ссылкой(данные: dict) -> dict:
@@ -62,10 +75,15 @@ def главная(argv: list[str] | None = None) -> int:
         "sites", "facts", "prepare", "publish", "confirm", "unpublish",
         "restore", "rollback", "status", "diagnose", "indexing",
         "indexing-state", "indexing-set", "indexing-confirm",
-        "indexing-rollback"])
+        "indexing-rollback",
+        "posts-status", "posts-prepare", "posts-publish", "posts-unpublish"])
     p.add_argument("--site")
     p.add_argument("--slug")
     p.add_argument("--body-file", help="файл с текстом; '-' — стандартный ввод")
+    p.add_argument("--post-file",
+                   help="posts-prepare: файл JSON с полями новости "
+                        "(title, excerpt, body, type, channel_name, "
+                        "external_url, thumbnail_url); '-' — стандартный ввод")
     p.add_argument("--expect-generation")
     p.add_argument("--author")
     p.add_argument("--no-network", action="store_true",
@@ -148,6 +166,62 @@ def главная(argv: list[str] | None = None) -> int:
             print(json.dumps(_со_ссылкой({"ok": True, **editorial.состояние(args.site)}),
                              ensure_ascii=False, indent=1))
             return 0
+        if args.операция.startswith("posts-"):
+            # НОВОСТИ. Отдельные команды, а не режим `prepare`: материал
+            # другой, файл другой, адрес другой. Единая команда с флагом
+            # привела бы к ровно той ошибке, ради которой эти четыре
+            # появились, — новость, записанная в накладку карточки.
+            if args.операция == "posts-status":
+                итог = posts.состояние(args.site)
+                print(json.dumps(_со_ссылкой({"ok": not итог["problems"], **итог}),
+                                 ensure_ascii=False, indent=1))
+                return 0 if not итог["problems"] else 3
+            нужен("slug")
+            if args.операция == "posts-prepare":
+                нужен("post-file")
+                сырое = (sys.stdin.read() if args.post_file == "-"
+                         else open(args.post_file, encoding="utf-8").read())
+                try:
+                    поля = json.loads(сырое)
+                except ValueError as ош:
+                    raise posts.ОперацияОтклонена(
+                        f"--post-file не читается как JSON: {ош}") from None
+                if not isinstance(поля, dict):
+                    raise posts.ОперацияОтклонена(
+                        "--post-file: ожидается объект JSON с полями новости")
+                абзацы = поля.get("body")
+                if not isinstance(абзацы, list) or not абзацы:
+                    raise posts.ОперацияОтклонена(
+                        "body: список абзацев (строк). Пустой текст новостью "
+                        "не является")
+                итог = posts.подготовить(
+                    args.site, args.slug,
+                    title=str(поля.get("title") or ""),
+                    excerpt=str(поля.get("excerpt") or ""),
+                    body=[str(а) for а in абзацы],
+                    author=(str(поля.get("author") or "").strip()
+                            or args.author or "Редакция"),
+                    тип=str(поля.get("type") or "news"),
+                    channel=поля.get("channel_name") or None,
+                    external_url=поля.get("external_url") or None,
+                    thumbnail_url=поля.get("thumbnail_url") or None)
+                print(json.dumps(_со_ссылкой({"ok": not итог["quality_problems"],
+                                              **итог}),
+                                 ensure_ascii=False, indent=1))
+                return 0 if not итог["quality_problems"] else 2
+            if args.операция == "posts-publish":
+                итог = posts.опубликовать(args.site, args.slug,
+                                          author=_автор(args))
+                готово = итог["status"] in ("created", "updated", "nothing-to-do")
+                print(json.dumps(_со_ссылкой({"ok": готово, **итог}),
+                                 ensure_ascii=False, indent=1))
+                return 0 if готово else 3
+            if args.операция == "posts-unpublish":
+                итог = posts.снять(args.site, args.slug, author=_автор(args))
+                готово = итог["status"] in ("unpublished", "nothing-to-do")
+                print(json.dumps(_со_ссылкой({"ok": готово, **итог}),
+                                 ensure_ascii=False, indent=1))
+                return 0 if готово else 3
         if args.операция.startswith("indexing-"):
             if args.операция == "indexing-state":
                 итог = indexing.состояние(args.site)
