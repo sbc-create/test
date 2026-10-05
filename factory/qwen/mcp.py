@@ -74,6 +74,7 @@ from factory.qwen import editorial, indexing, registry
 #: read-only, и сервер не вправе предлагать ему то, чего тот не должен уметь.
 ПИШУЩИЕ = ("set_indexing_mode", "rollback_indexing", "release_site",
            "rollback_site", "refresh_executor_access", "prepare_material",
+           "prepare_post", "publish_post", "unpublish_post",
            "publish_material", "unpublish_material", "register_owner_consent")
 
 #: Только чтение: пишущие инструменты не объявляются в `tools/list` и
@@ -835,6 +836,103 @@ def инструмент_состояния_материалов(аргумен�
             "environment": окружение()}
 
 
+def инструмент_подготовки_новости(аргументы: dict) -> dict[str, Any]:
+    """Черновик НОВОСТИ. Публичного ничего не меняется.
+
+    Черновик лежит в хранилище фабрики; приложение витрины черновиков не
+    показывает вовсе, поэтому это и есть предварительный просмотр: запись
+    проверена схемой приложения, а на сайте её нет.
+    """
+    from factory.qwen import posts as новости
+
+    сайт = str(аргументы.get("site") or "").strip()
+    слаг = str(аргументы.get("slug") or "").strip()
+    заголовок = str(аргументы.get("title") or "").strip()
+    абзацы = аргументы.get("body")
+    if not (сайт and слаг and заголовок):
+        raise ОшибкаИнструмента("нужны параметры site, slug и title")
+    if not isinstance(абзацы, list) or not абзацы:
+        raise ОшибкаИнструмента(
+            "body: список абзацев (строк). Пустой текст новостью не является")
+    try:
+        итог = новости.подготовить(
+            сайт, слаг, title=заголовок,
+            excerpt=str(аргументы.get("excerpt") or ""),
+            body=[str(а) for а in абзацы],
+            author=str(аргументы.get("author") or "").strip() or "Редакция",
+            тип=str(аргументы.get("type") or "news"),
+            channel=аргументы.get("channel_name") or None,
+            external_url=аргументы.get("external_url") or None,
+            thumbnail_url=аргументы.get("thumbnail_url") or None)
+    except (новости.ОперацияОтклонена, editorial.ОперацияОтклонена) as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "prepared": итог,
+            "ok": not итог.get("quality_problems"),
+            "environment": окружение()}
+
+
+def инструмент_публикации_новости(аргументы: dict) -> dict[str, Any]:
+    """Опубликовать подготовленную новость доставкой файла витрине.
+
+    Повтор дубля не создаёт: совпадающее содержание отвечает
+    `nothing-to-do`. Прежние записи сохраняются — файл доставки засевается
+    содержимым работающего контейнера и только дополняется.
+    """
+    from factory.qwen import posts as новости
+
+    сайт = str(аргументы.get("site") or "").strip()
+    слаг = str(аргументы.get("slug") or "").strip()
+    if not (сайт and слаг):
+        raise ОшибкаИнструмента("нужны параметры site и slug")
+    try:
+        итог = новости.опубликовать(
+            сайт, слаг,
+            author=str(аргументы.get("author") or "").strip() or "Редакция")
+    except (новости.ОперацияОтклонена, editorial.ОперацияОтклонена) as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "published": итог,
+            "ok": итог.get("status") in ("created", "updated", "nothing-to-do"),
+            "environment": окружение()}
+
+
+def инструмент_снятия_новости(аргументы: dict) -> dict[str, Any]:
+    """Снять КОНКРЕТНУЮ публикацию: запись переводится в `draft`.
+
+    Удаления нет: приложение черновиков не показывает, публичного следа не
+    остаётся, а запись и история сохраняются. Снятие обратимо.
+    """
+    from factory.qwen import posts as новости
+
+    сайт = str(аргументы.get("site") or "").strip()
+    слаг = str(аргументы.get("slug") or "").strip()
+    if not (сайт and слаг):
+        raise ОшибкаИнструмента("нужны параметры site и slug")
+    try:
+        итог = новости.снять(
+            сайт, слаг,
+            author=str(аргументы.get("author") or "").strip() or "Редакция")
+    except (новости.ОперацияОтклонена, editorial.ОперацияОтклонена) as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "unpublished": итог,
+            "ok": итог.get("status") in ("unpublished", "nothing-to-do"),
+            "environment": окружение()}
+
+
+def инструмент_состояния_новостей(аргументы: dict) -> dict[str, Any]:
+    """Что опубликовано, что в черновиках и чем доставляется. Только чтение."""
+    from factory.qwen import posts as новости
+
+    сайт = str(аргументы.get("site") or "").strip()
+    if not сайт:
+        raise ОшибкаИнструмента("нужен параметр site")
+    try:
+        итог = новости.состояние(сайт)
+    except (новости.ОперацияОтклонена, editorial.ОперацияОтклонена) as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "posts": итог,
+            "ok": not итог.get("problems"), "environment": окружение()}
+
+
 def инструмент_подготовки(аргументы: dict) -> dict[str, Any]:
     """Подготовить материал: проверка качества и фактов ДО публикации."""
     сайт = str(аргументы.get("site") or "").strip()
@@ -1167,6 +1265,52 @@ def инструмент_области_адреса(аргументы: dict) -
         "обработчик": инструмент_состояния_материалов,
         "описание": ("Что подготовлено и опубликовано у сайта: состояния, "
                      "отпечатки, доступные операции витрины."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"}},
+            "required": ["site"], "additionalProperties": False},
+    },
+    "prepare_post": {
+        "обработчик": инструмент_подготовки_новости,
+        "описание": ("Черновик НОВОСТИ раздела /posts. Проверяется схемой "
+                     "приложения витрины; публичного ничего не меняется — "
+                     "приложение никогда не показывает status=draft."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"}, "slug": {"type": "string"},
+            "title": {"type": "string"}, "excerpt": {"type": "string"},
+            "body": {"type": "array", "items": {"type": "string"}},
+            "author": {"type": "string"},
+            "type": {"type": "string",
+                     "enum": ["news", "review", "videoblog", "announcement"]},
+            "channel_name": {"type": ["string", "null"]},
+            "external_url": {"type": ["string", "null"]},
+            "thumbnail_url": {"type": ["string", "null"]}},
+            "required": ["site", "slug", "title", "body"],
+            "additionalProperties": False},
+    },
+    "publish_post": {
+        "обработчик": инструмент_публикации_новости,
+        "описание": ("Опубликовать подготовленную новость: доставка файла, "
+                     "который читает приложение витрины. Повтор дубля не "
+                     "создаёт; прежние записи сохраняются."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"}, "slug": {"type": "string"},
+            "author": {"type": "string"}},
+            "required": ["site", "slug"], "additionalProperties": False},
+    },
+    "unpublish_post": {
+        "обработчик": инструмент_снятия_новости,
+        "описание": ("Снять конкретную публикацию: запись переводится в draft "
+                     "и перестаёт показываться. Запись и история сохраняются, "
+                     "снятие обратимо."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"}, "slug": {"type": "string"},
+            "author": {"type": "string"}},
+            "required": ["site", "slug"], "additionalProperties": False},
+    },
+    "posts_status": {
+        "обработчик": инструмент_состояния_новостей,
+        "описание": ("Что опубликовано, что в черновиках, чем доставляется и "
+                     "видит ли контейнер файл доставки. Только чтение."),
         "схема": {"type": "object", "properties": {
             "site": {"type": "string"}},
             "required": ["site"], "additionalProperties": False},
