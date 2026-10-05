@@ -333,6 +333,28 @@ def cmd_submit(args) -> int:
     return 0
 
 
+def cmd_updater_check(args) -> int:
+    """Исполняет ли обработчик обновлений выложенный код. Только чтение.
+
+    Без --site — все сайты, у которых реестр объявляет обработчик. Код
+    возврата 1, если хоть один не согласован: проверку можно ставить в
+    мониторинг, а не читать глазами.
+    """
+    from factory.cell import privileged
+    сайты = [args.site] if args.site else [
+        c.site_id for c in registry.all_cells() if (c.runtime or {}).get("updater")]
+    итоги = []
+    for сайт in сайты:
+        try:
+            итоги.append(privileged.сверить_обработчик(сайт))
+        except Exception as exc:  # noqa: BLE001 — один сайт не роняет сверку
+            итоги.append({"site_id": сайт, "error": f"{type(exc).__name__}: {exc}"})
+    _print({"sites": итоги})
+    плохие = [и for и in итоги if и.get("declared") is not False
+              and not и.get("согласован")]
+    return 1 if плохие else 0
+
+
 def cmd_runs(args) -> int:
     """Показать последние прогоны CI сайта: ветка, коммит, статус, исход."""
     from factory.cell import trigger as tr
@@ -456,6 +478,7 @@ ACTIONS = {
     "deliver": cmd_deliver,
     "runtime": cmd_runtime,
     "runs": cmd_runs,
+    "updater-check": cmd_updater_check,
     "submit": cmd_submit,
     "serve": cmd_serve,
     "trigger": cmd_trigger,
