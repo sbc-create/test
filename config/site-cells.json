@@ -818,7 +818,12 @@
       },
       "pins": {},
       "deploy_target": {},
-      "publisher": {},
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id": null,
+        "publisher_id_ref": "secret://cdnvideohub/lords/publisher-id",
+        "note": "Идентификатор издателя этому домену НЕ НАЗНАЧЕН. Поэтому в выпуске publisher_id_expected = null и переменная LORDS_PLAYER_CONFIG не задана: иначе витрина не стартует (измерено 2026-10-06). Следствие тоже измерено: состояние плеера у всех записей noaccess, полки главной требуют playable-источник и поэтому пусты, а каталог, описания и список серий доступны полностью. Чужой publisher_id не заимствуется."
+      },
       "data": {
         "database": null,
         "media": null
@@ -838,9 +843,14 @@
         "legacy_root": "<data>/site",
         "reload": "restart",
         "managed_by": "cell",
-        "data_owner": "pipeline"
+        "data_owner": "pipeline",
+        "delivery": "release-queue"
       },
-      "release": {}
+      "release": {},
+      "indexing": {
+        "desired_state": "CLOSED",
+        "reason": "Новый сайт. Рождён закрытым: в config/site.json выпуска indexing.release_permits_open = false, рантайм читает режим src/indexing_mode.py по файлу состояния /srv/sites/indexing/lordserial101.site.json. Открытие — штатной операцией после публичной приёмки и при разрешении владельца; якоря согласия на этот домен ещё нет."
+      }
     },
     {
       "site_id": "lords-09",
@@ -857,7 +867,12 @@
       },
       "pins": {},
       "deploy_target": {},
-      "publisher": {},
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id": null,
+        "publisher_id_ref": "secret://cdnvideohub/lords/publisher-id",
+        "note": "Идентификатор издателя этому домену НЕ НАЗНАЧЕН. Поэтому в выпуске publisher_id_expected = null и переменная LORDS_PLAYER_CONFIG не задана: иначе витрина не стартует (измерено 2026-10-06). Следствие тоже измерено: состояние плеера у всех записей noaccess, полки главной требуют playable-источник и поэтому пусты, а каталог, описания и список серий доступны полностью. Чужой publisher_id не заимствуется."
+      },
       "data": {
         "database": null,
         "media": null
@@ -877,9 +892,14 @@
         "legacy_root": "<data>/site",
         "reload": "restart",
         "managed_by": "cell",
-        "data_owner": "pipeline"
+        "data_owner": "pipeline",
+        "delivery": "release-queue"
       },
-      "release": {}
+      "release": {},
+      "indexing": {
+        "desired_state": "CLOSED",
+        "reason": "Новый сайт. Рождён закрытым: в config/site.json выпуска indexing.release_permits_open = false, рантайм читает режим src/indexing_mode.py по файлу состояния /srv/sites/indexing/lordfilm077.site.json. Открытие — штатной операцией после публичной приёмки и при разрешении владельца; якоря согласия на этот домен ещё нет."
+      }
     },
     {
       "site_id": "pilot-local",
