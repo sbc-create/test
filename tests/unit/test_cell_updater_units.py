@@ -181,3 +181,17 @@ def test_объявление_реестра_обеих_animedia():
         объявл = uu.Объявление.из_блока(registry.resolve(site).runtime.get("updater"))
         assert объявл.service == f"{account}-update.service"
         assert объявл.timer == f"{account}-update.timer"
+
+
+def test_реестр_с_обработчиком_валиден_по_схеме():
+    # У `runtime` в схеме additionalProperties: false. Поле, не объявленное в
+    # схеме, делает реестр невалидным целиком — так и было в первой версии
+    # этой правки (нашла соседняя сессия до установки).
+    import json
+
+    import jsonschema
+    корень = Path(__file__).resolve().parents[2]
+    реестр = json.loads((корень / "config" / "site-cells.json").read_text(encoding="utf-8"))
+    схема = json.loads((корень / "schemas" / "site-cells.schema.json").read_text(encoding="utf-8"))
+    jsonschema.validate(реестр, схема)
+    assert any((c.get("runtime") or {}).get("updater") for c in реестр["cells"])
