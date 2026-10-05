@@ -3670,6 +3670,7 @@ def разметка_плеера(вид, запись: dict, деталь: dict
  try{ cands=JSON.parse(host.getAttribute('data-src-candidates')||'[]')||[]; }catch(e){ cands=[]; }
  var generation=0, attempt=0, idx=0, playing=false, отказ=false, seen, timers=[];
  var maxFallback=3, baseAttrs={}, lastPos=0, readyAt=0, activeSource=null;
+ var requested=false, adActive=false, playTimers=[];
  var MSG='Видео временно недоступно. Попробуйте другую озвучку или вернитесь позже.';
  var LABELS={idle:'',loading:'Подключаем видео',resolving:'Подключаем видео',
   ready:'Видео готово',playing:'Воспроизведение',try_next:'Подключаем видео',
@@ -3679,7 +3680,19 @@ def разметка_плеера(вид, запись: dict, деталь: dict
   noaccess:'Видео временно недоступно'};
  var ORIGIN='https://player.cdnvideohub.com';
  function el(){ return host.querySelector('video-player'); }
- function clearTimers(){ timers.forEach(clearTimeout); timers=[]; if(seen){clearInterval(seen);seen=null;} }
+ function clearPlayTimers(){ playTimers.forEach(clearTimeout); playTimers=[]; }
+ function clearTimers(){ timers.forEach(clearTimeout); timers=[]; clearPlayTimers(); if(seen){clearInterval(seen);seen=null;} }
+ function armPlayTimers(myGen, myAttempt){
+  clearPlayTimers();
+  playTimers.push(setTimeout(function(){
+   if(myGen!==generation || myAttempt!==attempt || playing || adActive) return;
+   nextOrFail('timeout-no-playing');
+  },25000));
+  playTimers.push(setTimeout(function(){
+   if(myGen!==generation || myAttempt!==attempt || playing || adActive) return;
+   if(!отказ) state('provider', MSG, '');
+  },35000));
+ }
  function hideOverlay(){
   if(!st) return;
   st.hidden=true;
@@ -3749,7 +3762,7 @@ def разметка_плеера(вид, запись: dict, деталь: dict
   var prev=el();
   if(prev) snapshot(prev);
   destroy();
-  playing=false; отказ=false; lastPos=0; readyAt=0;
+  playing=false; отказ=false; lastPos=0; readyAt=0; requested=false; adActive=false;
   generation += 1;
   attempt = generation;
   var myGen=generation, myAttempt=attempt;
@@ -3792,6 +3805,20 @@ def разметка_плеера(вид, запись: dict, деталь: dict
    data=payload && payload.data;
   }catch(e){ return; }
   if(!type) return;
+  if(type==='requestPlay'){
+   requested=true;
+   if(!playing && !adActive) armPlayTimers(myGen, myAttempt);
+   return;
+  }
+  if(type==='adStart' || (type==='rollState' && data && data.state==='start')){
+   adActive=true; clearPlayTimers();
+   return;
+  }
+  if(type==='adComplete' || type==='adClosed' || type==='adSkipped' || type==='adError'
+     || (type==='rollState' && data && data.state && data.state!=='start')){
+   if(adActive){ adActive=false; if(requested && !playing) armPlayTimers(myGen, myAttempt); }
+   return;
+  }
   if(type==='statechange' && data==='ready'){
    if(!playing && !отказ){ readyAt=Date.now(); state('ready'); }
    return;
@@ -3844,14 +3871,8 @@ def разметка_плеера(вид, запись: dict, деталь: dict
    if(myGen!==generation || myAttempt!==attempt || playing || readyAt) return;
    nextOrFail('timeout-no-ready');
   },10000));
-  timers.push(setTimeout(function(){
-   if(myGen!==generation || myAttempt!==attempt || playing) return;
-   nextOrFail('timeout-no-playing');
-  },25000));
-  timers.push(setTimeout(function(){
-   if(myGen!==generation || myAttempt!==attempt || playing) return;
-   if(!отказ) state('provider', MSG, '');
-  },35000));
+  // Таймеры «нет воспроизведения» взводятся по requestPlay (armPlayTimers),
+  // а не при монтировании: см. src/player_watchdog.py витрины.
  }
  var first=el();
  if(first){
