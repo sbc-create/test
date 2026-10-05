@@ -3,7 +3,7 @@
 const { chromium } = require('/home/claude/node_modules/playwright-core');
 (async () => {
   const [url, png, сек] = process.argv.slice(2);
-  const b = await chromium.launch({ args: ['--no-sandbox', '--mute-audio'] });
+  const b = await chromium.launch({ args: ['--no-sandbox', '--mute-audio', ...((process.argv.find((a) => a.startsWith('--resolve=')) ? [`--host-resolver-rules=MAP ${process.argv.find((a) => a.startsWith('--resolve=')).slice(10).replace('=', ' ')}`] : []))] });
   const p = await (await b.newContext({ viewport: { width: 1366, height: 900 } })).newPage();
   await p.goto(url, { waitUntil: 'load', timeout: 60000 });
   await p.waitForTimeout((+сек || 10) * 1000);

@@ -249,21 +249,32 @@ async function нажатьPlay(page, profile) {
   return t;
 }
 
-// Ждать, пока в фрейме появится видео (плеер готов принять Play).
-async function ждатьГотовностьПлеера(page, предел) {
+// Ждать готовности плеера принять Play. Два исхода, оба настоящие:
+//  * провайдер подгрузил видео заранее — в фрейме есть <video> (так на lords);
+//  * провайдер ждёт нажатия — <video> нет, но API ролика ответил и фрейм
+//    загружен (так на Yummy). Тогда готовность = ответ API ролика, а
+//    признак preload=false пишется в запись: Play там начинает загрузку с нуля.
+async function ждатьГотовностьПлеера(page, предел, ж, сНачала, старый) {
   const конец = Date.now() + предел;
   while (Date.now() < конец) {
     const f = фреймПлеера(page);
+    // После перехода на серию прежний фрейм годится, только если провайдер
+    // уже спросил новый ролик: мягкая навигация (Next.js у Yummy) оставляет
+    // старый iframe на месте, и его <video> — это прошлая серия.
+    const новыйРолик = ж && ж.req.some((r) => r.t1 >= (сНачала || 0) && /plapi\.cdnvideohub\.com\/api\/v1\/player\/sv\/video\//.test(r.url));
+    if (f && старый && f === старый && !новыйРолик) { await сон(50); continue; }
     if (f) {
       const ok = await f.evaluate(НАБЛЮДАТЕЛЬ_ФРЕЙМА).catch(() => false);
       if (ok) {
         const n = await f.evaluate('window.__pv ? window.__pv.vids.length : 0').catch(() => 0);
-        if (n > 0) return { frame: f, t: Date.now() };
+        if (n > 0) return { frame: f, t: Date.now(), preload: true };
+        const api = ж && ж.req.filter((r) => r.t1 >= (сНачала || 0) && /plapi\.cdnvideohub\.com\/api\/v1\/player\/sv\/video\//.test(r.url))[0];
+        if (api && Date.now() - api.t1 > 2000) return { frame: f, t: api.t1, preload: false };
       }
     }
     await сон(50);
   }
-  return { frame: фреймПлеера(page), t: null };
+  return { frame: фреймПлеера(page), t: null, preload: null };
 }
 
 async function смотреть(page, frameRef, tClick, cfg) {
@@ -302,8 +313,9 @@ async function визит(ctx, сценарий, cfg, метка) {
     const origin = out.page.timeOrigin;
     out.has_player = !!(await page.$('video-player'));
     if (out.has_player && сценарий.play) {
-      const гот = await ждатьГотовностьПлеера(page, 45000);
+      const гот = await ждатьГотовностьПлеера(page, 45000, ж, 0);
       out.player_ready = гот.t ? Math.round(гот.t - origin) : null;
+      out.player_preload = гот.preload;
       out.chain = цепочка(ж, origin);
       if (гот.t) {
         await сон(1000); // пользователь видит плеер и нажимает
@@ -322,13 +334,18 @@ async function визит(ctx, сценарий, cfg, метка) {
             if (a) await a.click(); else await page.goto(сценарий.next_episode, { waitUntil: 'commit' });
             out.switch = { via: a ? 'link-click' : 'goto' };
             await page.waitForLoadState('domcontentloaded', { timeout: 60000 }).catch(() => {});
-            const г2 = await ждатьГотовностьПлеера(page, 45000);
+            const г2 = await ждатьГотовностьПлеера(page, 45000, ж, tSw, гот.frame);
+            out.switch.preload = г2.preload;
             out.switch.player_ready_after_click = г2.t ? г2.t - tSw : null;
             if (г2.t) {
               const t2 = await нажатьPlay(page, cfg.profile);
               const r2 = await смотреть(page, г2.frame, t2, { ...cfg, watchMs: 5000 });
               out.switch.play = r2;
               out.switch.click_to_content_first_frame = r2.play_to_content_first_frame !== null ? (t2 - tSw) + r2.play_to_content_first_frame : null;
+              // Ожидание самого стенда между готовностью и нажатием вычитается:
+              // это не время сайта и не время провайдера.
+              out.switch.harness_wait = t2 - г2.t;
+              out.switch.ready_plus_play_to_content = r2.play_to_content_first_frame !== null ? (г2.t - tSw) + r2.play_to_content_first_frame : null;
               out.switch.url = page.url();
             }
           }
@@ -399,7 +416,11 @@ async function площадка(browser, сайт, cfg, писать) {
     const p = r.play || {};
     console.log(`${r.started.slice(11, 19)} ${r.domain} ${r.scenario} ${r.mode}${r.rep} ${r.result} ttfb=${r.page && Math.round(r.page.ttfb)} lcp=${r.page && Math.round(r.page.lcp)} ready=${r.page && Math.round(r.page.ready)} shell=${r.page && Math.round(r.page.shell)} player=${r.player_ready} ad=${p.play_to_ad_first_frame} content=${p.play_to_content_first_frame} stalls=${p.stall_count} switch=${r.switch && r.switch.click_to_content_first_frame} ${r.error || ''}`);
   };
-  const browser = await chromium.launch({ args: ['--no-sandbox', '--mute-audio'] });
+  // --resolve "домен=127.0.0.1:порт": A/B копии витрины под настоящим именем
+  // домена (обычный HTTP, без TLS). Только для сравнения копий между собой.
+  const подмена = arg('--resolve');
+  const доп = подмена ? [`--host-resolver-rules=MAP ${подмена.split('=')[0]} ${подмена.split('=')[1]}`] : [];
+  const browser = await chromium.launch({ args: ['--no-sandbox', '--mute-audio', ...доп] });
   console.log(`chromium ${browser.version()} profile=${cfg.profile}`);
   let k = 0;
   const workers = Math.max(1, +arg('--workers', 2));
