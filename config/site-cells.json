@@ -1397,7 +1397,8 @@
       },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id": "10238"
+        "publisher_id": "10374",
+        "note": "выдан владельцем для zonafilm.cc 2026-10-05; прежнее значение 10238 принадлежало паре витрины lords-01"
       },
       "data": {
         "database": null,
