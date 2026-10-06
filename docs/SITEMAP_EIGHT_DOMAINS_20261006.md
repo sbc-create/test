@@ -173,6 +173,11 @@ zonafilm12.site 10261, lordserials22.info 10238) на месте и никуда
 `zonafilm.cc/title/ad-dzheffri/` и `1lordserials1.online/title/velikiy-musa/` —
 пересозданий плеера 0, отказа посетитель не видит.
 
+Полная приёмка витрины (`automation/local/public-acceptance.py`) по всем шести
+доменам: `доменов проверено: 6, с расхождениями: 0`, exit 0. Та самая проверка,
+которая 2026-10-06 утром называла расхождение «карта сайта» на восьми доменах,
+теперь на каждом из шести печатает `карта /sitemap.xml код 200`.
+
 ## 5а. an1meg0.site: ветка взята от головы, и это следствие измерения
 
 Сначала карта была выложена ветвью от ПРИНЯТОГО выпуска `4c9cc7b60813`, чтобы не
@@ -324,3 +329,26 @@ animeg0-site такой проверки нет вовсе, и там ранта
 Карта сайта теперь есть на **десяти** доменах сети из двенадцати не-Yummy: к
 четырём прежним (lordserial33.biz, lordserials22.info, animedia.icu,
 animedia.space) добавились шесть.
+
+## 10. Что осталось в репозиториях сверх выложенного
+
+Последний коммит в каждом из восьми репозиториев трогает только `checks/`:
+живой ярус проверки перестал считать провалом запуск витрины, недоступный по
+правам (`config/player.json` принадлежит пользователю ячейки). Поведение витрины
+он не меняет и на шести выложенных доменах вступит в силу при следующем выпуске —
+выкладывать его отдельно незачем.
+
+| репозиторий | ветка | выложенный выпуск | HEAD |
+| --- | --- | --- | --- |
+| site-1lordserials1-online | `claude/extract-1lordserials1-online-perf-01` | `18cd156facdd` | `aa85c7b` |
+| site-lordfilm47-space | `claude/extract-lordfilm47-space-perf-01` | `fc4cbcf275f5` | `8d6e06d` |
+| site-zonafilm-space | `claude/extract-zonafilm-space-player-01` | `9c3dd375d47d` | `3466225` |
+| site-zonafilm12-site | `claude/extract-zonafilm12-site-player-01` | `5ee9cdb5156a` | `5f72dd1` |
+| site-zonafilm-cc | `claude/extract-zonafilm-cc-perf-02` | `aec42bc0ae3f` | `47a7ccf` |
+| site-an1meg0-site | `claude/extract-an1meg0-site-sitemap-02` | `0723b744afe7` | `c7351ef` |
+| site-an1mego-site | `claude/an1mego-panels-01` | — (выкладка за владельцем) | `322d8aa` |
+| site-animeg0-site | `claude/animeg0-launch` | — (то же) | `886657e` |
+
+Ветка `claude/an1meg0-site-indexing-01` осталась как была: мои две правки
+an1meg0.site лежат на `claude/extract-an1meg0-site-sitemap-02`, и история чужой
+ветки не переписывалась.
