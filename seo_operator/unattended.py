@@ -635,18 +635,49 @@ def _remote_hosts(tokens: list) -> list:
     ]
 
 
+#: Глобальные опции git, у которых ЕСТЬ значение отдельным словом. Их значение
+#: нельзя принимать за глагол: `git -C var/site-repos/<сайт> log` разбирался как
+#: глагол «var/site-repos/<сайт>», в перечнях такого нет, и профиль отказывал —
+#: при том что ровно эта форма записана штатной процедурой выпуска в
+#: `docs/PORTABLE_SITE_CELL.md`. Запреты это не меняет: `cd <репо> && git log`
+#: разрешался и прежде, то есть поверхность та же, а расхождение между
+#: документированной процедурой и профилем закрыто.
+GIT_OPTIONS_WITH_VALUE = {"-C", "-c", "--git-dir", "--work-tree", "--namespace",
+                          "--exec-path", "--config-env"}
+
+
+def _git_verb(tokens: list) -> str:
+    """Глагол git: первое слово, не являющееся опцией или её значением."""
+    пропустить = False
+    for token in tokens[1:]:
+        if пропустить:
+            пропустить = False
+            continue
+        if token in GIT_OPTIONS_WITH_VALUE:
+            пропустить = True
+            continue
+        if token.startswith("-"):
+            # Форма с «=» несёт значение в том же слове и глагол не сдвигает.
+            continue
+        return token
+    return ""
+
+
 def _git_ok(tokens: list) -> bool:
-    args = [t for t in tokens[1:] if not t.startswith("-")]
-    if not args:
+    verb = _git_verb(tokens)
+    if not verb:
         return True  # `git --version`, `git --help`
-    verb = args[0]
     if verb in GIT_READ or verb in GIT_WRITE:
         return True
     if verb == "push":
         # Обычный push разрешён только в собственную ветку `claude/*`.
         # Форма `git push` без аргументов не разрешается: цель определяет
         # upstream, а не команда, и профиль не может её проверить.
-        return bool(PUSH_BRANCH_RE.search(" ".join(tokens[2:])))
+        #
+        # Ветка ищется ПОСЛЕ глагола, а не с третьего слова: иначе путь из
+        # `git -C /что-то/claude/x push origin main` сошёл бы за имя ветки.
+        после = tokens[tokens.index(verb) + 1:] if verb in tokens else []
+        return bool(PUSH_BRANCH_RE.search(" ".join(после)))
     return False
 
 

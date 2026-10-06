@@ -163,6 +163,17 @@ AUTONOMOUS = [
     # Проверка remote SHA.
     "git ls-remote origin refs/heads/main",
     "git rev-parse origin/main",
+    # Форма `-C <путь>`: ровно ею записана штатная процедура выпуска ячейки в
+    # docs/PORTABLE_SITE_CELL.md. Значение опции принималось за глагол, глагола
+    # «var/site-repos/<сайт>» ни в одном перечне нет, и профиль отказывал на
+    # собственной документированной процедуре.
+    "git -C var/site-repos/zonafilm-space status --porcelain",
+    "git -C var/site-repos/zonafilm-space log --oneline -4",
+    "git -C var/site-repos/zonafilm-space checkout -b claude/extract-zona-01-sitemap",
+    "git -C var/site-repos/zonafilm-space add -A",
+    "git -C var/site-repos/zonafilm-space commit -m 'карта сайта'",
+    "git -C var/site-repos/zonafilm-space push origin claude/extract-zona-01-sitemap",
+    "git --git-dir=var/site-repos/zonafilm-space/.git log -1",
     # Составная команда с обёрткой, перенаправлением и pipe.
     "git status --short; timeout 300 git push origin claude/example-branch 2>&1 | tail -3",
     # Создание сайтов: анализ референса, сборка, SEO-структура, тесты, скриншоты.
@@ -241,6 +252,13 @@ BLOCKED = [
     "git clean -fdx",
     "git filter-branch --tree-filter true HEAD",
     "git commit --no-verify -m x",
+    # Форма `-C <путь>` РАЗРЕШАЕТ глагол, но не отменяет ни одного запрета, и
+    # путь, похожий на имя ветки, за разрешение ветки не сходит.
+    "git -C var/site-repos/zonafilm-space push origin main",
+    "git -C var/site-repos/zonafilm-space push --force origin claude/x",
+    "git -C var/site-repos/zonafilm-space reset --hard HEAD~1",
+    "git -C var/site-repos/zonafilm-space clean -fdx",
+    "git -C /srv/claude/example push origin main",
     # Инфраструктура и данные.
     "rm -rf /var/www",
     "rm -rf sites/site-d-series",
