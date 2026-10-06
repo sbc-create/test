@@ -87,6 +87,26 @@ Environment=SEO_OPERATOR_ROOT=$operator_root
 EOF
 chmod 0644 "$DROPIN"
 echo "   $DROPIN"
+
+# Тот же выбор — ещё и файлом, потому что каналов два.
+#
+# Переменная окружения достаётся только юниту. Путь командной строки, на
+# который инструкция ссылается словами «нет инструмента, сделай командой», её не
+# видит и отказывает «в дереве оператора нет модуля очереди». Измерено
+# 2026-10-06 на `queue-release`. Файл читают оба канала, а переменная остаётся
+# главнее файла.
+#
+# Владелец файла — claude, а не root: дерево принадлежит ему, и root-овладение
+# одним файлом в чужой рабочей копии уже давало отказ Git «dubious ownership»
+# в воротах данных. `var/state/` не отслеживается git — это состояние хоста.
+state_dir="$REPO/var/state"
+install -d -o claude -g claude -m 0755 "$state_dir"
+printf '%s\n' "$operator_root" > "$state_dir/seo-operator-root.new"
+install -o claude -g claude -m 0644 "$state_dir/seo-operator-root.new" \
+  "$state_dir/seo-operator-root"
+rm -f "$state_dir/seo-operator-root.new"
+echo "   $state_dir/seo-operator-root -> $operator_root"
+
 systemctl daemon-reload
 systemctl restart "$UNIT"
 
