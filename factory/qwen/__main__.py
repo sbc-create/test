@@ -56,7 +56,7 @@ from factory.qwen import editorial, indexing, posts, registry
 #: обнаруживалась сравнением, а не на последствиях.
 ИНСТРУКЦИЯ = ("/srv/site-factory/qwen-seo-handover-2026-10-01/"
               "QWEN-CANONICAL.md")
-ВЕРСИЯ_ИНСТРУКЦИИ = "2026-10-06.3"
+ВЕРСИЯ_ИНСТРУКЦИИ = "2026-10-06.4"
 
 
 def _со_ссылкой(данные: dict) -> dict:
@@ -111,7 +111,10 @@ def главная(argv: list[str] | None = None) -> int:
     p.add_argument("--task-id", help="queue-result/queue-release: идентификатор задания")
     p.add_argument("--outcome", help="queue-result: исход (TEXT_WRITTEN, "
                                      "IDENTITY_UNCLEAR, SOURCE_UNAVAILABLE, "
-                                     "SOURCES_MISSING, PAGE_ABSENT, IDENTITY_REJECTED)")
+                                     "SOURCES_MISSING, PAGE_ABSENT, "
+                                     "IDENTITY_REJECTED, NO_CHANGE_NEEDED). "
+                                     "NO_CHANGE_NEEDED требует --detail: "
+                                     "«правка не нужна» обосновывается измерением")
     p.add_argument("--source-url", action="append",
                    help="queue-result: адрес источника; можно повторять")
     p.add_argument("--source-published-at", help="queue-result: дата источника")
