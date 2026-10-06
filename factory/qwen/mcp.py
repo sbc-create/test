@@ -72,10 +72,16 @@ from factory.qwen import editorial, indexing, registry
 #: ограничение «только чтение» обязано быть проверяемым свойством сервера, а
 #: не обещанием в описании подключения: на этапе приёмки коннектор объявлен
 #: read-only, и сервер не вправе предлагать ему то, чего тот не должен уметь.
+#: `editorial_queue_next` числится пишущим не по недосмотру: взятие задания
+#: ЗАПИСЫВАЕТ аренду, иначе два запуска возьмут одну карточку. Инструмент,
+#: который «только читает очередь», аренду оставить не может, а без аренды
+#: очередь не защищает ни от чего. `editorial_queue_status` читает и остаётся
+#: доступным в режиме только чтения — отчёт о состоянии нужен всегда.
 ПИШУЩИЕ = ("set_indexing_mode", "rollback_indexing", "release_site",
            "rollback_site", "refresh_executor_access", "prepare_material",
            "prepare_post", "publish_post", "unpublish_post",
-           "publish_material", "unpublish_material", "register_owner_consent")
+           "publish_material", "unpublish_material", "register_owner_consent",
+           "editorial_queue_next", "editorial_queue_result")
 
 #: Только чтение: пишущие инструменты не объявляются в `tools/list` и
 #: отказывают при вызове. Включается ключом `--read-only` или переменной
@@ -879,6 +885,82 @@ def инструмент_состояния_материалов(аргумен�
             "environment": окружение()}
 
 
+def инструмент_очереди_взять(аргументы: dict) -> dict[str, Any]:
+    """Взять задания из КАНОНИЧЕСКОЙ очереди и закрепить их за исполнителем.
+
+    До появления этого инструмента очереди в канале не было вовсе: список работ
+    приходилось выводить заново каждый запуск, прежние вердикты были не видны,
+    и отвергнутые соответствия предлагались снова. Вторая очередь в чужих
+    файлах — следствие именно этого.
+    """
+    from factory.qwen import queue_bridge
+
+    сайт = str(аргументы.get("site") or "").strip()
+    владелец = str(аргументы.get("owner") or "").strip()
+    if not сайт:
+        raise ОшибкаИнструмента("нужен параметр site")
+    if not владелец:
+        raise ОшибкаИнструмента(
+            "нужен параметр owner: без владельца аренда не аренда, и два "
+            "запуска возьмут одну карточку")
+    предел = int(аргументы.get("limit") or 1)
+    виды = tuple(аргументы.get("content_types") or ())
+    try:
+        итог = queue_bridge.взять(site=сайт, owner=владелец, limit=предел,
+                                  content_types=виды)
+    except queue_bridge.ОчередьОтклонила as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "queue": итог, "environment": окружение()}
+
+
+def инструмент_очереди_результат(аргументы: dict) -> dict[str, Any]:
+    """Записать результат задания. Статус выводит очередь, а не вызывающий.
+
+    Поле `label` принимается и ИГНОРИРУЕТСЯ: название файла или версии
+    («ready», «fixed», «updated») статуса не повышает. Повышение идёт через те
+    же ворота качества, что у суточного цикла, и требует происхождения —
+    адреса источника, даты и перечня фактов.
+    """
+    from factory.qwen import queue_bridge
+
+    task_id = str(аргументы.get("task_id") or "").strip()
+    владелец = str(аргументы.get("owner") or "").strip()
+    исход = str(аргументы.get("outcome") or "").strip()
+    if not task_id or not владелец or not исход:
+        raise ОшибкаИнструмента("нужны параметры task_id, owner и outcome")
+    поля = {
+        "body": str(аргументы.get("body") or ""),
+        "source_urls": list(аргументы.get("source_urls") or ()),
+        "source_published_at": str(аргументы.get("source_published_at") or ""),
+        "facts": list(аргументы.get("facts") or ()),
+        "source_id": str(аргументы.get("source_id") or ""),
+        "canonical_url": str(аргументы.get("canonical_url") or ""),
+        "detail": str(аргументы.get("detail") or ""),
+        "label": str(аргументы.get("label") or ""),
+    }
+    try:
+        итог = queue_bridge.записать(task_id=task_id, owner=владелец,
+                                     outcome=исход, **поля)
+    except queue_bridge.ОчередьОтклонила as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "result": итог, "environment": окружение()}
+
+
+def инструмент_очереди_состояние(аргументы: dict) -> dict[str, Any]:
+    """Счёт по данным очереди: произведения, версии, проверенные тексты — отдельно."""
+    from factory.qwen import queue_bridge
+
+    сайт = str(аргументы.get("site") or "").strip()
+    if not сайт:
+        raise ОшибкаИнструмента("нужен параметр site")
+    try:
+        итог = queue_bridge.состояние(site=сайт)
+    except queue_bridge.ОчередьОтклонила as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "queue_status": итог,
+            "environment": окружение()}
+
+
 def инструмент_подготовки_новости(аргументы: dict) -> dict[str, Any]:
     """Черновик НОВОСТИ. Публичного ничего не меняется.
 
@@ -1323,6 +1405,58 @@ def инструмент_области_адреса(аргументы: dict) -
         "обработчик": инструмент_состояния_материалов,
         "описание": ("Что подготовлено и опубликовано у сайта: состояния, "
                      "отпечатки, доступные операции витрины."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"}},
+            "required": ["site"], "additionalProperties": False},
+    },
+    "editorial_queue_next": {
+        "обработчик": инструмент_очереди_взять,
+        "описание": ("Взять задания из канонической очереди и закрепить за "
+                     "исполнителем. Один исполнитель — одно задание: второй "
+                     "запуск получит другое. Задания с назначенным сроком "
+                     "повторной проверки не выдаются до срока. Отвергнутые "
+                     "соответствия не предлагаются никогда."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"},
+            "owner": {"type": "string",
+                      "description": "кто берёт задание: имя запуска"},
+            "limit": {"type": "integer", "minimum": 1, "maximum": 10},
+            "content_types": {"type": "array", "items": {"type": "string"}}},
+            "required": ["site", "owner"], "additionalProperties": False},
+    },
+    "editorial_queue_result": {
+        "обработчик": инструмент_очереди_результат,
+        "описание": ("Записать результат задания. Статус выводит очередь из "
+                     "доказательств: название файла или версии его не "
+                     "повышает, а «проверено» требует адреса источника, даты "
+                     "и перечня фактов. Исходы: TEXT_WRITTEN, "
+                     "IDENTITY_UNCLEAR, SOURCE_UNAVAILABLE, SOURCES_MISSING, "
+                     "PAGE_ABSENT, IDENTITY_REJECTED."),
+        "схема": {"type": "object", "properties": {
+            "task_id": {"type": "string"},
+            "owner": {"type": "string"},
+            "outcome": {"type": "string", "enum": [
+                "TEXT_WRITTEN", "IDENTITY_UNCLEAR", "SOURCE_UNAVAILABLE",
+                "SOURCES_MISSING", "PAGE_ABSENT", "IDENTITY_REJECTED"]},
+            "body": {"type": "string"},
+            "source_urls": {"type": "array", "items": {"type": "string"}},
+            "source_published_at": {"type": "string"},
+            "facts": {"type": "array", "items": {"type": "string"}},
+            "source_id": {"type": "string"},
+            "canonical_url": {"type": "string",
+                              "description": "сверяется с реестром; адрес, "
+                                             "собранный из названия, отклоняется"},
+            "detail": {"type": "string"},
+            "label": {"type": "string",
+                      "description": "принимается и игнорируется: статуса не повышает"}},
+            "required": ["task_id", "owner", "outcome"],
+            "additionalProperties": False},
+    },
+    "editorial_queue_status": {
+        "обработчик": инструмент_очереди_состояние,
+        "описание": ("Счёт по данным очереди: произведения, лишние версии, "
+                     "написанные тексты, прошедшие через очередь и проверенные "
+                     "— отдельными величинами, не одним числом."),
         "схема": {"type": "object", "properties": {
             "site": {"type": "string"}},
             "required": ["site"], "additionalProperties": False},
