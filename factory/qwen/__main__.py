@@ -84,7 +84,16 @@ def главная(argv: list[str] | None = None) -> int:
         "restore", "rollback", "status", "diagnose", "indexing",
         "indexing-state", "indexing-set", "indexing-confirm",
         "indexing-rollback",
-        "posts-status", "posts-prepare", "posts-publish", "posts-unpublish"])
+        "posts-status", "posts-prepare", "posts-publish", "posts-unpublish",
+        # ОЧЕРЕДЬ В КОМАНДНОЙ СТРОКЕ, а не только инструментами моста.
+        #
+        # Урок D182 повторять нельзя: операции новостей существовали ТОЛЬКО
+        # инструментами, сессия без инструментов неизбежно взяла одноимённые
+        # глаголы карточек, и новость уехала в накладку аниме. Инструкция прямо
+        # говорит «нет инструмента — сделай то же командной строкой», и для
+        # очереди этот путь обязан существовать, иначе правило отсылает в
+        # пустоту.
+        "queue-next", "queue-result", "queue-status", "queue-release"])
     p.add_argument("--site")
     p.add_argument("--slug")
     p.add_argument("--body-file", help="файл с текстом; '-' — стандартный ввод")
@@ -94,6 +103,21 @@ def главная(argv: list[str] | None = None) -> int:
                         "external_url, thumbnail_url); '-' — стандартный ввод")
     p.add_argument("--expect-generation")
     p.add_argument("--author")
+    # Очередь. Имена совпадают с полями инструментов моста: одно и то же
+    # действие не должно называться двумя способами.
+    p.add_argument("--owner", help="queue-*: имя запуска, за которым закрепляется задание")
+    p.add_argument("--limit", type=int, help="queue-next: сколько заданий взять")
+    p.add_argument("--task-id", help="queue-result/queue-release: идентификатор задания")
+    p.add_argument("--outcome", help="queue-result: исход (TEXT_WRITTEN, "
+                                     "IDENTITY_UNCLEAR, SOURCE_UNAVAILABLE, "
+                                     "SOURCES_MISSING, PAGE_ABSENT, IDENTITY_REJECTED)")
+    p.add_argument("--source-url", action="append",
+                   help="queue-result: адрес источника; можно повторять")
+    p.add_argument("--source-published-at", help="queue-result: дата источника")
+    p.add_argument("--fact", action="append",
+                   help="queue-result: факт вида поле=значение; можно повторять")
+    p.add_argument("--source-id", help="queue-result: чем назван источник")
+    p.add_argument("--detail", help="queue-result: причина или пояснение")
     p.add_argument("--no-network", action="store_true",
                    help="sites: не опрашивать домены")
     p.add_argument("--mode", choices=["open", "closed"],
@@ -174,6 +198,52 @@ def главная(argv: list[str] | None = None) -> int:
             print(json.dumps(_со_ссылкой({"ok": True, **editorial.состояние(args.site)}),
                              ensure_ascii=False, indent=1))
             return 0
+        if args.операция.startswith("queue-"):
+            from factory.qwen import queue_bridge
+            try:
+                if args.операция == "queue-status":
+                    итог = queue_bridge.состояние(site=args.site)
+                    print(json.dumps(_со_ссылкой({"ok": True, **итог}),
+                                     ensure_ascii=False, indent=1))
+                    return 0
+                нужен("owner")
+                if args.операция == "queue-next":
+                    итог = queue_bridge.взять(
+                        site=args.site, owner=args.owner,
+                        limit=int(args.limit or 1))
+                    print(json.dumps(_со_ссылкой({"ok": True, **итог}),
+                                     ensure_ascii=False, indent=1))
+                    # Пустая выдача — НЕ ошибка: свободных заданий нет. Код 3
+                    # отличает её от выданной работы, чтобы «ноль заданий» не
+                    # выглядел успехом обработки.
+                    return 0 if итог["claimed"] else 3
+                нужен("task-id")
+                if args.операция == "queue-release":
+                    итог = queue_bridge.отпустить(task_id=args.task_id,
+                                                  owner=args.owner)
+                    print(json.dumps(_со_ссылкой({"ok": итог["released"], **итог}),
+                                     ensure_ascii=False, indent=1))
+                    return 0 if итог["released"] else 3
+                нужен("outcome")
+                тело = ""
+                if args.body_file:
+                    тело = (sys.stdin.read() if args.body_file == "-"
+                            else open(args.body_file, encoding="utf-8").read())
+                итог = queue_bridge.записать(
+                    task_id=args.task_id, owner=args.owner,
+                    outcome=args.outcome, body=тело,
+                    source_urls=list(args.source_url or ()),
+                    source_published_at=args.source_published_at or "",
+                    facts=list(args.fact or ()),
+                    source_id=args.source_id or "",
+                    detail=args.detail or "")
+                print(json.dumps(_со_ссылкой({"ok": True, **итог}),
+                                 ensure_ascii=False, indent=1))
+                return 0
+            except queue_bridge.ОчередьОтклонила as ош:
+                print(json.dumps(_со_ссылкой({"ok": False, "error": str(ош)}),
+                                 ensure_ascii=False, indent=1))
+                return 2
         if args.операция.startswith("posts-"):
             # НОВОСТИ. Отдельные команды, а не режим `prepare`: материал
             # другой, файл другой, адрес другой. Единая команда с флагом
