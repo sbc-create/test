@@ -70,3 +70,41 @@ def test_нечитаемый_репозиторий_называется_а_н�
     monkeypatch.setattr(protected.subprocess, "run", run)
     with pytest.raises(protected.РепозиторийНедоступен):
         protected._адаптер_выпуска(репо, коммит)
+
+
+def test_неизвестный_отказ_git_не_становится_пустым_семейством(tmp_path, monkeypatch):
+    """Перечислять виды поломок Git нельзя — их больше, чем мы знаем.
+
+    Первая версия исправления называла причины НЕДОСТУПНОСТИ (dubious
+    ownership, not a git repository, Permission denied) и оставляла ту же дыру
+    классом ниже: битый объект, ошибка ввода-вывода или обрезанный pack снова
+    проваливались в «семейство пустое». Перечень закрыт у «нет пути», а не у
+    «git не ответил».
+    """
+    import subprocess as _sp
+
+    from factory.cell import protected
+
+    class Ответ:
+        returncode = 128
+        stdout = ""
+        stderr = "fatal: unable to read tree 0123456789abcdef: broken pack"
+
+    monkeypatch.setattr(protected.subprocess, "run", lambda *а, **к: Ответ())
+    with pytest.raises(protected.РепозиторийНедоступен, match="не смог прочитать"):
+        protected._git_выпуска(tmp_path, "show", "HEAD:config/site.json")
+
+
+def test_отсутствие_пути_остаётся_законным_ответом(tmp_path, monkeypatch):
+    """«Такого файла в коммите нет» — законный ответ, а не недоступность."""
+    from factory.cell import protected
+
+    class Ответ:
+        returncode = 128
+        stdout = ""
+        stderr = ("fatal: path 'config/site.json' does not exist in "
+                  "'0123456789abcdef'")
+
+    monkeypatch.setattr(protected.subprocess, "run", lambda *а, **к: Ответ())
+    r = protected._git_выпуска(tmp_path, "show", "HEAD:config/site.json")
+    assert r.returncode == 128
