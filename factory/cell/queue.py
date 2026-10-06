@@ -95,6 +95,10 @@ from typing import Any
          "switched", "live_verified", "failed", "rolled_back",
          "access_verified", "access_missing", "indexing_layer_applied",
          "indexing_core_applied",
+         # Витрина выложена и проверена, но юнит обработчика обновлений не
+         # встал на выложенный код (`updater_units`). Не live_verified: сайт с
+         # обработчиком на чужом коде выпуском не считается.
+         "updater_failed",
          # Согласие владельца, зарегистрированное из чата по его одноразовому
          # коду: `consent_applied` — код погашен и якорь проверен чтением,
          # `consent_dry_run` — сухой прогон, код НЕ погашен и якорь не менялся.

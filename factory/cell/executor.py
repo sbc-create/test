@@ -939,6 +939,18 @@ def активировать(заявка: queue.Заявка, *, файл: Path
         шаги["install_release"] = privileged.install_release(
             заявка.site_id, артефакт, заявка.digest,
             commit=заявка.commit, dry_run=dry_run)
+        # Предпроверка обработчика ДО прогрева: выпуск, после которого
+        # обработчик обновлений исполнял бы не выложенный код, не выпускается
+        # вовсе, а не обнаруживается неделей позже по отсутствующей карте сайта.
+        выпуск = (шаги["install_release"] or {}).get("release")
+        if выпуск:
+            шаги["updater_units"] = privileged.сверить_обработчик(
+                заявка.site_id, выпуск=Path(выпуск))
+            план = (шаги["updater_units"].get("plan") or {})
+            if план.get("действие") == "отказ":
+                raise ExecutorError(
+                    f"{заявка.site_id}: обработчик обновлений не будет исполнять "
+                    f"выложенный код — {план.get('причина')}")
 
     шаги["warm_up"] = privileged.warm_up(
         заявка.site_id, dry_run=dry_run, ожидаемый_build=build_id)
@@ -971,6 +983,14 @@ def активировать(заявка: queue.Заявка, *, файл: Path
         шаги["rollback"] = privileged.rollback(заявка.site_id, dry_run=False)
         return {"status": "rolled-back", "stage": "rolled_back", "steps": шаги,
                 "build_id": build_id}
+    обработчик = (шаги["promote"] or {}).get("updater") or {}
+    if not dry_run and обработчик.get("declared") and not обработчик.get("ok"):
+        # Витрина уже на новом выпуске и исправна, откатывать её незачем. Но
+        # «выложено» без обработчика на том же коде — неправда, и итог
+        # называет это прямо, а не live_verified.
+        return {"status": "activated", "stage": "updater_failed", "steps": шаги,
+                "build_id": build_id,
+                "error": f"обработчик обновлений не установлен: {обработчик.get('error')}"}
     return {"status": "dry-run" if dry_run else "activated",
             "stage": "validated" if dry_run else "live_verified",
             "steps": шаги, "digest": заявка.digest, "build_id": build_id}

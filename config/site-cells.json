@@ -61,7 +61,15 @@
         "data_dir_after_relocation": "/srv/animedia-icu/data",
         "data_dir_note": "Ячейкой витрина ещё НЕ стала: каталогов /srv/animedia-icu нет, исполняется выпуск из общего дерева (/srv/lords/.frontend/releases/20260923T001500Z-community-public-03), снимок читается из общего хранилища. `managed_by: cell` был выставлен до фактического перехода — это прямо запрещено правилом, и цена оказалась не теоретической: несуществующий /srv/animedia-icu/data попадал в ReadWritePaths издателя и вместе с тремя такими же путями Yummy давал 226/NAMESPACE, то есть суточное обновление не запускалось вовсе у ВСЕХ семи витрин. Значение вернётся в data_dir тем же шагом, которым витрина переедет.",
         "unit_note": "Юнит снят с работающего процесса (/proc/<pid>/cgroup), а не взят по имени. Прежнее значение nova-animedia-01.service запускает ОБЩИЙ загрузчик /srv/lords/.frontend/lords-frontend.py и этот домен не обслуживает: активация по нему пошла бы не в ту службу и выглядела бы успехом. Проверено 2026-09-29.",
-        "delivery": "release-queue"
+        "delivery": "release-queue",
+        "updater": {
+          "service": "animedia-icu-update.service",
+          "timer": "animedia-icu-update.timer",
+          "credentials": [
+            "cdnvideohub_api_token:/etc/site-factory/secrets/lords/lords-01/cdnvideohub-api-token"
+          ],
+          "note": "Юнит и таймер обработчика обновлений ставит исполнитель при каждом promote из current/deploy/ выпуска (factory/cell/updater_units.py). Ручная установка не нужна и не поддерживается: она и оставила animedia.icu на коде app от 27.09."
+        }
       },
       "release": {
         "hold": false,
@@ -143,7 +151,15 @@
         "reload": "unknown",
         "managed_by": "cell",
         "data_owner": "site_timer",
-        "delivery": "release-queue"
+        "delivery": "release-queue",
+        "updater": {
+          "service": "animedia-space-update.service",
+          "timer": "animedia-space-update.timer",
+          "credentials": [
+            "cdnvideohub_api_token:/etc/site-factory/secrets/lords/lords-01/cdnvideohub-api-token"
+          ],
+          "note": "Юнит и таймер обработчика обновлений ставит исполнитель при каждом promote из current/deploy/ выпуска (factory/cell/updater_units.py). Ручная установка не нужна и не поддерживается: она и оставила animedia.icu на коде app от 27.09."
+        }
       },
       "release": {
         "hold": true,

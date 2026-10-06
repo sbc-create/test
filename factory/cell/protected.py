@@ -511,6 +511,31 @@ def проверить_запись(site_id: str, домен: str, цель: str
         f"через {ПЕРЕМЕННАЯ_ИСКЛЮЧЕНИЯ} с названными файлами")
 
 
+def _git_выпуска(репозиторий: pathlib.Path, *аргументы: str) -> subprocess.CompletedProcess:
+    """Git над рабочей копией выпуска — так же, как `_файл_в_коммите`.
+
+    Исполнитель работает от root, рабочая копия принадлежит `claude`, и без
+    `safe.directory` Git отвечает `dubious ownership` кодом 128. Прежде это
+    молча превращалось в пустое семейство: измерено 2026-10-06 на yummy-site
+    (2dd6b3faf4f7) — от claude семейство `yummy` и «читатели на месте», от root
+    отказ «не несёт читателей ... src/seo_overlay.py или src/editorial_overlay.py»,
+    то есть требование файла Animedia/Lords у Yummy, где читателя по устройству
+    нет. Отказ Git ЧИТАТЬ репозиторий называется своей причиной, а не
+    выдаётся за свойство выпуска.
+    """
+    r = subprocess.run(["git", "-c", f"safe.directory={репозиторий}", *аргументы],
+                       cwd=str(репозиторий), capture_output=True, text=True)
+    ошибка = (r.stderr or "").strip()
+    if r.returncode != 0 and ("dubious ownership" in ошибка
+                              or "not a git repository" in ошибка
+                              or "Permission denied" in ошибка):
+        raise РепозиторийНедоступен(
+            f"{репозиторий}: git {' '.join(аргументы[:2])} не смог прочитать "
+            f"репозиторий (код {r.returncode}): {ошибка[:200]}. Семейство "
+            "выпуска по неответившему Git не определяется")
+    return r
+
+
 def _адаптер_выпуска(репозиторий: pathlib.Path, коммит: str) -> str:
     """Семейство рантайма ВЫПУСКАЕМОГО кода.
 
@@ -520,8 +545,7 @@ def _адаптер_выпуска(репозиторий: pathlib.Path, ком�
     """
     текст = ""
     if коммит:
-        r = subprocess.run(["git", "show", f"{коммит}:config/site.json"],
-                           cwd=str(репозиторий), capture_output=True, text=True)
+        r = _git_выпуска(репозиторий, "show", f"{коммит}:config/site.json")
         текст = r.stdout if r.returncode == 0 else ""
     else:
         ф = репозиторий / "config" / "site.json"
@@ -545,8 +569,7 @@ def _рантайм_в_коммите(репозиторий: pathlib.Path, ко
     """Имя файла рантайма в выпуске: `src/*frontend*.py`, иначе `serve.py`."""
     имена: list[str] = []
     if коммит:
-        r = subprocess.run(["git", "ls-tree", "--name-only", f"{коммит}:src"],
-                           cwd=str(репозиторий), capture_output=True, text=True)
+        r = _git_выпуска(репозиторий, "ls-tree", "--name-only", f"{коммит}:src")
         имена = [с.strip() for с in r.stdout.split("\n") if с.strip()] \
             if r.returncode == 0 else []
     elif (репозиторий / "src").is_dir():

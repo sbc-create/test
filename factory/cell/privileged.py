@@ -37,6 +37,7 @@ from pathlib import Path
 from typing import Any
 
 from factory.cell import runtime
+from factory.cell import updater_units
 
 #: Закрытый набор. Расширяется только правкой этого файла и переустановкой.
 ОПЕРАЦИИ = ("prepare", "install_release", "stage_snapshot", "warm_up",
@@ -516,6 +517,51 @@ def _каталог_юнитов() -> Path:
     return Path(os.environ.get("SITE_UNIT_DIR", "/etc/systemd/system"))
 
 
+def _объявление_обработчика(site_id: str, path: Path | None = None):
+    """Обработчик обновлений сайта, как его объявляет реестр, или None."""
+    from factory.cell import registry
+    cell = registry.resolve(site_id, path) if path else registry.resolve(site_id)
+    return updater_units.Объявление.из_блока((cell.runtime or {}).get("updater"))
+
+
+def сверить_обработчик(site_id: str, *, выпуск: Path | None = None,
+                       path: Path | None = None) -> dict[str, Any]:
+    """Сверка юнитов обработчика с выпуском. Ничего не меняет, root не нужен.
+
+    `выпуск` — каталог выпуска, чьи `deploy/` сверяются; по умолчанию тот, на
+    который смотрит `current`.
+    """
+    п = Площадка.из_реестра(site_id, path=path)
+    объявление = _объявление_обработчика(site_id, path)
+    if объявление is None:
+        return {"operation": "updater_check", "site_id": site_id, "declared": False}
+    сверка = updater_units.сверить(
+        объявление, выпуск=(выпуск or п.current.resolve()), account=п.account,
+        current=п.current, data=п.data, каталог=_каталог_юнитов())
+    сверка.update(operation="updater_check", site_id=site_id, declared=True,
+                  plan=updater_units.план_установки(сверка))
+    return сверка
+
+
+def установить_обработчик(site_id: str, *, path: Path | None = None) -> dict[str, Any]:
+    """Поставить юнит и таймер обработчика из выложенного выпуска."""
+    п = Площадка.из_реестра(site_id, path=path)
+    объявление = _объявление_обработчика(site_id, path)
+    if объявление is None:
+        return {"operation": "install_updater_units", "declared": False, "ok": True}
+    _нужен_root()
+    try:
+        итог = updater_units.установить(
+            объявление, выпуск=п.current.resolve(), account=п.account,
+            current=п.current, data=п.data, каталог=_каталог_юнитов(),
+            systemctl=_systemctl)
+    except updater_units.UpdaterUnitRefused as ош:
+        return {"operation": "install_updater_units", "declared": True,
+                "ok": False, "error": str(ош)}
+    итог["declared"] = True
+    return итог
+
+
 def _дропин_прежнего(п: Площадка) -> Path:
     return _каталог_юнитов() / f"{п.previous_unit}.d" / "cell-port-owner.conf"
 
@@ -618,12 +664,19 @@ def promote(site_id: str, *, dry_run: bool = True, предел: int = 600,
     # выпуска ничего не удваивает.
     включение = _systemctl("enable", п.unit, проверять=False)
     шаги.append(f"enable {п.unit}: rc={включение.returncode}")
+    # Обработчик обновлений — вторая половина сайта. Его юнит ставится ЗДЕСЬ
+    # же, из выпуска, на который только что переведена `current`: первичная
+    # установка, обновление и возврат прежнего коммита проходят этот путь
+    # одинаково. Прежде юнит ставился руками один раз и навсегда оставался на
+    # том коде, на который смотрел тогда (animedia.icu исполнял `app` от 27.09).
+    обработчик = установить_обработчик(site_id, path=path)
     _systemctl("restart", п.unit)
     состояние = готов(п.port, предел=предел,
                       жив=lambda: _systemctl("is-active", "--quiet", п.unit,
                                              проверять=False).returncode == 0)
     итог = {"operation": "promote", "site_id": site_id, "dry_run": False,
-            "steps": шаги + шаги_прежней, "ready": состояние, "release": str(цель)}
+            "steps": шаги + шаги_прежней, "ready": состояние, "release": str(цель),
+            "updater": обработчик}
     if not состояние.get("ready"):
         return итог
     итог["verify"] = verify(site_id, ожидаемый_build=ожидаемый_build,
