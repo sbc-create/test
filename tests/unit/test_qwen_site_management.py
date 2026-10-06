@@ -439,6 +439,80 @@ def test_подтверждение_ждёт_а_не_стреляет_один_�
     assert "ждать_появления=False" in снят, "снятие ждёт исчезновения текста"
 
 
+def test_повторная_публикация_обязана_назвать_заменяемую_версию(monkeypatch):
+    """`limit=1` и ключ по слагу — не защита от повторной публикации.
+
+    Хранилище ключуется слагом, поэтому второй вызов дубля не создаёт: он
+    ЗАМЕНЯЕТ запись. Пока `expect_generation` был необязателен, замена проходила
+    вслепую — два запуска рядом писали каждый своё, побеждал последний, без
+    отказа и без следа в ответе.
+
+    Проверяется ПОВЕДЕНИЕ, а не наличие строки в исходнике: первая публикация
+    слага проходит без версии, повторная без версии отклоняется, а с верной
+    версией проходит.
+    """
+    from factory.qwen import editorial
+
+    записано: list = []
+    хранилище = {"items": [], "generation_id": None}
+
+    monkeypatch.setattr(editorial, "_сайт", lambda site, опрашивать_сеть=False: _Сайт())
+    monkeypatch.setattr(editorial, "_требует", lambda s, оп: None)
+    monkeypatch.setattr(editorial, "_требовать_карточку", lambda s, slug: None)
+    monkeypatch.setattr(editorial, "_каталог", lambda s: КОРЕНЬ / "var" / "tmp")
+    monkeypatch.setattr(editorial, "_текущее", lambda s: dict(хранилище))
+    monkeypatch.setattr(editorial, "проверить_материал", lambda тело, ф: [])
+    monkeypatch.setattr(editorial.registry, "возможности",
+                        lambda s: {"facts": "да", "publish": "да"})
+    monkeypatch.setattr(editorial, "факты",
+                        lambda site, slug: {"title_id": "t", "facts": {},
+                                            "source": "стенд"})
+    monkeypatch.setattr(editorial, "_дописать_историю", lambda к, з: None)
+    monkeypatch.setattr(editorial, "_сверить_отпечаток", lambda s, slug, тело: "")
+    monkeypatch.setattr(editorial, "подтвердить_с_ожиданием",
+                        lambda site, slug, тело=None, ждать_появления=True: {
+                            "confirmed": True})
+
+    def доставить(s, записи, все, *, поколение, author, reason):
+        записано.append(поколение)
+        хранилище["items"] = список_без(все, None)
+        хранилище["generation_id"] = поколение
+        return {"entries": len(все), "store": "стенд"}
+
+    monkeypatch.setattr(editorial, "_доставить", доставить)
+
+    # Первая публикация слага: заменять нечего, версия не требуется.
+    editorial.публиковать("t.example", "slug-1", author="A", тело="текст один")
+    assert len(записано) == 1, "первая публикация не прошла"
+    первая_версия = хранилище["generation_id"]
+
+    # Повторная БЕЗ версии — отказ с названной причиной.
+    with pytest.raises(editorial.ОперацияОтклонена, match="expect_generation"):
+        editorial.публиковать("t.example", "slug-1", author="A", тело="текст два")
+    assert len(записано) == 1, "слепая замена всё-таки прошла"
+
+    # Повторная С ЧУЖОЙ версией — тоже отказ.
+    with pytest.raises(editorial.ОперацияОтклонена, match="ожидалась"):
+        editorial.публиковать("t.example", "slug-1", author="A", тело="текст три",
+                              expected_generation="не-та-версия")
+    assert len(записано) == 1
+
+    # Повторная с ВЕРНОЙ версией — проходит.
+    editorial.публиковать("t.example", "slug-1", author="A", тело="текст четыре",
+                          expected_generation=первая_версия)
+    assert len(записано) == 2, "замена с названной версией не прошла"
+
+
+def список_без(все, _):
+    return list(все)
+
+
+class _Сайт:
+    domain = "t.example"
+    handover_state = "released"
+    handover_reason = ""
+
+
 def test_ошибка_статуса_не_приводит_к_повтору_операции():
     """Задание: «Ошибка получения статуса процесса не должна приводить к
     слепому повтору операции». Повторная запись защищена поколением.

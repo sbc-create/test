@@ -56,7 +56,7 @@ from factory.qwen import editorial, indexing, posts, registry
 #: обнаруживалась сравнением, а не на последствиях.
 ИНСТРУКЦИЯ = ("/srv/site-factory/qwen-seo-handover-2026-10-01/"
               "QWEN-CANONICAL.md")
-ВЕРСИЯ_ИНСТРУКЦИИ = "2026-10-06.4"
+ВЕРСИЯ_ИНСТРУКЦИИ = "2026-10-06.5"
 
 
 def _со_ссылкой(данные: dict) -> dict:
@@ -94,7 +94,7 @@ def главная(argv: list[str] | None = None) -> int:
         # очереди этот путь обязан существовать, иначе правило отсылает в
         # пустоту.
         "queue-next", "queue-result", "queue-status", "queue-release",
-        "queue-find", "queue-register", "queue-reopen"])
+        "queue-find", "queue-register", "queue-reopen", "queue-annul"])
     p.add_argument("--site")
     p.add_argument("--slug")
     p.add_argument("--body-file", help="файл с текстом; '-' — стандартный ввод")
@@ -109,6 +109,9 @@ def главная(argv: list[str] | None = None) -> int:
     p.add_argument("--owner", help="queue-*: имя запуска, за которым закрепляется задание")
     p.add_argument("--limit", type=int, help="queue-next: сколько заданий взять")
     p.add_argument("--task-id", help="queue-result/queue-release: идентификатор задания")
+    p.add_argument("--entry-at",
+                   help="queue-annul: время отменяемой записи истории, ровно "
+                        "как оно записано (…Z)")
     p.add_argument("--outcome", help="queue-result: исход (TEXT_WRITTEN, "
                                      "IDENTITY_UNCLEAR, SOURCE_UNAVAILABLE, "
                                      "SOURCES_MISSING, PAGE_ABSENT, "
@@ -243,6 +246,17 @@ def главная(argv: list[str] | None = None) -> int:
                     итог = queue_bridge.возобновить(
                         task_id=args.task_id, reason=args.detail,
                         status=args.status or "NEEDS_UPDATE")
+                    print(json.dumps(_со_ссылкой({"ok": True, **итог}),
+                                     ensure_ascii=False, indent=1))
+                    return 0
+                if args.операция == "queue-annul":
+                    нужен("task-id")
+                    нужен("entry-at")
+                    нужен("outcome")
+                    нужен("detail")
+                    итог = queue_bridge.отменить(
+                        task_id=args.task_id, entry_at=args.entry_at,
+                        expect_outcome=args.outcome, reason=args.detail)
                     print(json.dumps(_со_ссылкой({"ok": True, **итог}),
                                      ensure_ascii=False, indent=1))
                     return 0

@@ -149,6 +149,10 @@ try:
     elif op == "reopen":
         итог = очередь.reopen(task_id=з["task_id"], reason=з["reason"],
                               status=з.get("status") or "NEEDS_UPDATE")
+    elif op == "annul":
+        итог = очередь.annul(task_id=з["task_id"], entry_at=з["entry_at"],
+                             expect_outcome=з["expect_outcome"],
+                             reason=з["reason"])
     elif op == "release":
         итог = очередь.release(task_id=з["task_id"], owner=з["owner"])
     else:
@@ -285,9 +289,26 @@ def возобновить(*, task_id: str, reason: str,
     return итог
 
 
+def отменить(*, task_id: str, entry_at: str, expect_outcome: str,
+             reason: str) -> dict[str, Any]:
+    """Отменить ПОСЛЕДНИЙ записанный результат одного задания.
+
+    Нужна, когда результат записан ошибочно: следы исхода снимаются, счётчик
+    попыток и статус возвращаются к значениям до него, а история СОХРАНЯЕТСЯ и
+    получает отметку об отмене. Записанный текст отмене не подлежит.
+    """
+    итог = _вызвать({"op": "annul", "task_id": task_id, "entry_at": entry_at,
+                     "expect_outcome": expect_outcome, "reason": reason})
+    итог["next_action"] = (
+        "следы исхода сняты, история помечена; задание снова выдаётся через "
+        "editorial_queue_next")
+    return итог
+
+
 def отпустить(*, task_id: str, owner: str) -> dict[str, Any]:
     return _вызвать({"op": "release", "task_id": task_id, "owner": owner})
 
 
 __all__ = ["ОчередьОтклонила", "КОРЕНЬ_ОПЕРАТОРА", "взять", "записать",
-           "состояние", "отпустить", "найти", "завести", "возобновить"]
+           "состояние", "отпустить", "найти", "завести", "возобновить",
+           "отменить"]

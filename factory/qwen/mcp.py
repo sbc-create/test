@@ -82,7 +82,8 @@ from factory.qwen import editorial, indexing, registry
            "prepare_post", "publish_post", "unpublish_post",
            "publish_material", "unpublish_material", "register_owner_consent",
            "editorial_queue_next", "editorial_queue_result",
-           "editorial_queue_register", "editorial_queue_reopen")
+           "editorial_queue_register", "editorial_queue_reopen",
+           "editorial_queue_annul")
 
 #: Только чтение: пишущие инструменты не объявляются в `tools/list` и
 #: отказывают при вызове. Включается ключом `--read-only` или переменной
@@ -944,7 +945,54 @@ def инструмент_очереди_взять(аргументы: dict) -> 
                                   content_types=виды)
     except queue_bridge.ОчередьОтклонила as ош:
         raise ОшибкаИнструмента(str(ош)) from None
+    _дописать_источник_фактов(сайт, итог)
     return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "queue": итог, "environment": окружение()}
+
+
+def _дописать_источник_фактов(сайт: str, итог: dict) -> None:
+    """Сказать ВМЕСТЕ С ЗАДАНИЕМ, есть ли у витрины источник фактов.
+
+    Измерено 2026-10-06 на запуске 18:00:34Z (владелец `editor-automation`): он
+    взял задание `b74982172ba225a2` по `yummyani.org`, через 30 секунд вызвал
+    `editorial_facts` и получил отказ —
+
+        yummyani.org: сайту не хватает возможностей ['facts'] — операция 'facts'
+        недоступна. Есть: ['deliver', 'display', 'posts']
+
+    — после чего к заданию не вернулся: результата нет, аренда истекла, задание
+    ушло обратно в очередь. Тупик повторяется на каждом запуске, потому что
+    задание не говорит, что `editorial_facts` здесь откажет: у семейства Yummy
+    источника фактов нет по устройству, и текст приходит с уже проверенными
+    фактами ИЗВНЕ.
+
+    Очередь об этом знать не может и не должна: возможности витрин — знание
+    реестра фабрики, а не оператора содержания. Поэтому ответ дополняется здесь.
+    """
+    задания = (итог or {}).get("tasks")
+    if not isinstance(задания, list) or not задания:
+        return
+    try:
+        с = editorial._сайт(сайт, опрашивать_сеть=False)
+        возможности = set(registry.возможности(с))
+    except Exception:  # noqa: BLE001 — незнание возможностей не ломает выдачу
+        return
+    есть = "facts" in возможности
+    для_всех = {
+        "available": есть,
+        "capabilities": sorted(возможности),
+        "note": ("источник фактов у витрины есть: `editorial_facts` отвечает "
+                 "по слагу задания"
+                 if есть else
+                 "У ЭТОЙ ВИТРИНЫ ИСТОЧНИКА ФАКТОВ НЕТ. `editorial_facts` и "
+                 "`prepare_material` здесь откажут — это устройство семейства, "
+                 "а не сбой. Факты приносишь со своим источником и передаёшь "
+                 "их в `editorial_queue_result` полями `source_urls`, "
+                 "`source_published_at` и `facts`; тело — полем `body`. "
+                 "Публикация описания идёт `publish_material` с `body`."),
+    }
+    for з in задания:
+        if isinstance(з, dict):
+            з["facts_source"] = dict(для_всех)
 
 
 def инструмент_очереди_результат(аргументы: dict) -> dict[str, Any]:
@@ -1055,6 +1103,41 @@ def инструмент_очереди_возобновление(аргуме�
         итог = queue_bridge.возобновить(
             task_id=task_id, reason=причина,
             status=str(аргументы.get("status") or "NEEDS_UPDATE"))
+    except queue_bridge.ОчередьОтклонила as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "result": итог, "environment": окружение()}
+
+
+def инструмент_очереди_отмена(аргументы: dict) -> dict[str, Any]:
+    """Отменить ПОСЛЕДНИЙ записанный результат одного задания.
+
+    Нужна, когда результат записан ошибочно — например проверкой чужой сессии.
+    Возобновление здесь не подходит: оно снимает срок, но оставляет последствия
+    исхода. Измерено 2026-10-06 на задании `a3c2d5c3440ba678`: исход
+    `SOURCE_UNAVAILABLE`, записанный через 23 секунды после аренды, оставил в
+    записи утверждение `last_source_failure_at` о непроверенной недоступности
+    источника и израсходовал одну попытку из трёх.
+
+    Что сохраняется: история. Отменённая запись остаётся и получает отметку
+    `annulled` с причиной, а в историю дописывается `RESULT_ANNULLED`.
+    Записанный текст (`TEXT_WRITTEN`) отмене не подлежит.
+    """
+    from factory.qwen import queue_bridge
+
+    task_id = str(аргументы.get("task_id") or "").strip()
+    когда = str(аргументы.get("entry_at") or "").strip()
+    исход = str(аргументы.get("expect_outcome") or "").strip()
+    причина = str(аргументы.get("reason") or "").strip()
+    если_нет = [имя for имя, з in (("task_id", task_id), ("entry_at", когда),
+                                   ("expect_outcome", исход), ("reason", причина))
+                if not з]
+    if если_нет:
+        raise ОшибкаИнструмента(
+            f"нужны параметры {', '.join(если_нет)}: отменяют ИЗВЕСТНУЮ запись "
+            "— её время и исход называются явно, иначе отмена попадёт не туда")
+    try:
+        итог = queue_bridge.отменить(task_id=task_id, entry_at=когда,
+                                     expect_outcome=исход, reason=причина)
     except queue_bridge.ОчередьОтклонила as ош:
         raise ОшибкаИнструмента(str(ош)) from None
     return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "result": итог, "environment": окружение()}
@@ -1625,6 +1708,29 @@ def инструмент_области_адреса(аргументы: dict) -
                        "description": "статус после возобновления; по "
                                       "умолчанию NEEDS_UPDATE («нужен текст»)"}},
             "required": ["task_id", "reason"], "additionalProperties": False},
+    },
+    "editorial_queue_annul": {
+        "обработчик": инструмент_очереди_отмена,
+        "описание": ("Отменить ПОСЛЕДНИЙ записанный результат одного задания, "
+                     "когда он записан ошибочно. Снимает следы исхода, "
+                     "возвращает счётчик попыток и статус к значениям до него. "
+                     "История СОХРАНЯЕТСЯ: отменённая запись помечается, в "
+                     "историю дописывается RESULT_ANNULLED. Записанный текст "
+                     "(TEXT_WRITTEN) отмене не подлежит, действующую аренду "
+                     "другого исполнителя не трогает, остальных заданий не "
+                     "касается."),
+        "схема": {"type": "object", "properties": {
+            "task_id": {"type": "string"},
+            "entry_at": {"type": "string",
+                         "description": "время отменяемой записи истории, "
+                                        "ровно как оно записано (…Z)"},
+            "expect_outcome": {"type": "string",
+                               "description": "исход этой записи; несовпадение "
+                                              "— отказ"},
+            "reason": {"type": "string",
+                       "description": "почему результат неверен"}},
+            "required": ["task_id", "entry_at", "expect_outcome", "reason"],
+            "additionalProperties": False},
     },
     "editorial_queue_status": {
         "обработчик": инструмент_очереди_состояние,
