@@ -2,15 +2,26 @@
 
 Окно «ANIMEDIA — состав каталога». Обновлён 2026-10-05.
 
-## Ветки и коммиты
+## Ветки, коммиты и что выложено (2026-10-06)
 
-| Репозиторий | Ветка | Коммит | Состояние |
+| Что | Ветка / пакет | Коммит | Выложено |
 | --- | --- | --- | --- |
-| site-animedia-space | `claude/extract-animedia-space-catalog-scope-01` | `34a1c65` | выложен 16:04 UTC (`animedia-02-code-34a1c656bf9a`) |
-| site-animedia-icu | `claude/extract-animedia-icu-catalog-scope-01` | `2bb2091` | выложен 16:20 UTC (`animedia-01-code-2bb209132004`) |
-| site-animedia-space | `claude/extract-animedia-space-updater-guard-01` | `f650a57` | CI 37342821705 success; к выпуску |
-| site-animedia-icu | `claude/extract-animedia-icu-updater-guard-01` | `d1079bd` | CI 37343042700 success; к выпуску |
-| фабрика | `claude/animedia-updater-units-01` | `171a868` (над `05265af`) | к установке исполнителя владельцем |
+| исполнитель ячеек | `claude/animedia-updater-units-01`, пакет `pkg-d0bd0d25a702` | `fcadbbb` | 07:38:06 UTC узкой установкой (`automation/host/install-executor-narrow.sh`, `1d2d96b`) |
+| animedia.space: допуск каталога | `claude/extract-animedia-space-catalog-scope-01` | `34a1c65` | 2026-10-05 16:04 |
+| animedia.icu: допуск каталога | `claude/extract-animedia-icu-catalog-scope-01` | `2bb2091` | 2026-10-05 16:20 |
+| animedia.space: обработчик | `claude/extract-animedia-space-updater-guard-01` | `b7cbd95` | 07:41 (`animedia-02-code-b7cbd958d5b1`) |
+| animedia.icu: обработчик | `claude/extract-animedia-icu-updater-guard-01` | `d1079bd` | 07:58 (`animedia-01-code-d1079bd4b4b5`) |
+| animedia.icu: скорость (окно СКОРОСТЬ) | `claude/extract-animedia-icu-perf-01` | `d6622bc` | 08:15 (`animedia-01-code-d6622bc3adae`) |
+| animedia.space: скорость (окно СКОРОСТЬ) | `claude/extract-animedia-space-perf-01` | `857cf8c` | 08:38 (`animedia-02-code-857cf8c44700`) |
+
+Установка исполнителя: check-installed 274/0/0, `site_repos_root` =
+`/home/claude/wt-portable-site-cell-01`, поля indexing/owner_consent/release
+корневого реестра сверены с пакетом (0 расхождений). Резервная копия и откат:
+`/var/backups/site-factory-cell/20261006T073805Z/{before.tgz,ROLLBACK.txt}`.
+
+Юниты обработчиков поставил исполнитель при выпусках (не руками):
+`animedia-space-update.service.bak.20261006T074110Z`,
+`animedia-icu-update.service.bak.20261006T075816Z` — прежние файлы.
 
 ## Доказанная причина
 
@@ -82,11 +93,41 @@ refresh` имеет право записи в `/srv/animedia-space/data` (drop-
   updater-check`. Реестр: `runtime.updater` у animedia-01/02.
 * Новый сайт: `docs/NEW_ANIMEDIA_SITE.md`.
 
+## Результаты проверки
+
+* Первый прогон обработчика на новом коде: space 07:50–07:56, icu 08:03–08:10 —
+  `result: ok`, `required_steps` admission/sitemap `ok`, `matches_current: true`,
+  admit 7738 / review 89 / exclude 238. icu: карта сайта впервые 200 (7743 адреса),
+  строка Sitemap в robots.txt, файл допуска. Повторные прогоны (space 08:00,
+  icu 08:03, 08:23) — то же, дублей событий нет (147/147, 2690/2690), событий
+  вне допуска нет. За окно наблюдения поставщик серий не догружал: случай
+  «серии выросли у постороннего» на живых данных НЕ ВСТРЕТИЛСЯ, держится
+  проверкой `checks/updater_conformity.py`.
+* `/healthz` различает прогон старым кодом: сразу после выпуска
+  `result: legacy` / `same_release: false`, после первого прогона — `consistent: true`.
+* Публичная приёмка (главная, лента, каталог, поиск, карточки, «похожее»,
+  редакционные тексты, индексация, карта, Метрика, healthz): space 20/20 на
+  b7cbd95; icu 19/19 на d1079bd и на d6622bc. Плеер (браузер, REAL_PLAYBACK):
+  3/3 на каждом выпуске.
+* Скорость space, медиана из 5: главная 0.31 → 0.25 с, подборки 0.49 → 0.10,
+  карточка 0.23 → 0.12, серия 0.17 → 0.10; приёмка 20/20, плеер 3/3 на 857cf8c.
+* Скорость icu, медиана из 5 через домен: главная 1.63 → 0.91 с, каталог 1.58 →
+  0.31, подборки 1.53 → 0.30, карточка 2.59 → 0.19, серия 1.06 → 0.13.
+
 ## Осталось / открыто
 
-* Установка исполнителя из `claude/animedia-updater-units-01` — действие
-  владельца (root).
-* Выпуск `f650a57` (space) и `d1079bd` (icu) очередью после установки.
+* Корневой реестр исполнителя не знает lords-08/09 (заведены ночью после
+  fcadbbb); следующий пакет собирать из коммита, где они есть.
+* `freeze-package.py` пишет в опись ветку общего дерева, а не ветку коммита
+  (`branch: claude/indexing-operation-02` при коммите из другой ветки).
+* `tools/relock.py --write` (icu) стирает verified_against/repo_path/origin/note.
+* `factory cell updater-check` установленной копии 2026-10-06 08:5x: обе
+  Animedia согласованы, код 0.
+* Ветка фабрики `claude/animedia-updater-units-01` не влита в общую линию:
+  следующая переустановка исполнителя из общего дерева без неё снимет
+  установку обработчиков. Влить — решение Архитектора/фабричной сессии.
+* animedia.space: release-manifest объявляет `…-animedia-02`, рантайм отдаёт
+  `…-animedia-space` в build-id; приёмка исполнителя проходит.
 * `nova_publish.это_аниме` (общий производитель) не менялся: удаление
   admission+origin на источнике убрало бы 230 записей из каталогов и дало
   массовые 404; сайты применяют правило сами. Решение — за Архитектором.
