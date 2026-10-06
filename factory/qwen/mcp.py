@@ -81,7 +81,8 @@ from factory.qwen import editorial, indexing, registry
            "rollback_site", "refresh_executor_access", "prepare_material",
            "prepare_post", "publish_post", "unpublish_post",
            "publish_material", "unpublish_material", "register_owner_consent",
-           "editorial_queue_next", "editorial_queue_result")
+           "editorial_queue_next", "editorial_queue_result",
+           "editorial_queue_register")
 
 #: Только чтение: пишущие инструменты не объявляются в `tools/list` и
 #: отказывают при вызове. Включается ключом `--read-only` или переменной
@@ -946,6 +947,59 @@ def инструмент_очереди_результат(аргументы: d
     return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "result": итог, "environment": окружение()}
 
 
+def инструмент_очереди_поиск(аргументы: dict) -> dict[str, Any]:
+    """Есть ли задание по адресу. ЧИТАЮЩАЯ операция: аренды не создаёт.
+
+    Без неё единственным способом «посмотреть» было взятие задания, а взятие
+    закрепляет карточку за исполнителем на сорок пять минут. Редактор, которому
+    нечем проверить наличие работы, заводит свой список — именно это и
+    произошло.
+    """
+    from factory.qwen import queue_bridge
+
+    сайт = str(аргументы.get("site") or "").strip()
+    адрес = str(аргументы.get("canonical_url") or "").strip()
+    if not сайт or not адрес:
+        raise ОшибкаИнструмента("нужны параметры site и canonical_url")
+    try:
+        итог = queue_bridge.найти(
+            site=сайт, canonical_url=адрес,
+            content_type=str(аргументы.get("content_type") or "TITLE_DESCRIPTION"))
+    except queue_bridge.ОчередьОтклонила as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "task": итог, "environment": окружение()}
+
+
+def инструмент_очереди_регистрация(аргументы: dict) -> dict[str, Any]:
+    """Завести задание по адресу. ИДЕМПОТЕНТНО: дубля не создаёт.
+
+    Повторный вызов возвращает ТО ЖЕ задание и не сбрасывает работу редактора:
+    статус, текст и происхождение существующей записи не трогаются.
+    """
+    from factory.qwen import queue_bridge
+
+    сайт = str(аргументы.get("site") or "").strip()
+    адрес = str(аргументы.get("canonical_url") or "").strip()
+    название = str(аргументы.get("headline") or "").strip()
+    if not сайт or not адрес or not название:
+        raise ОшибкаИнструмента(
+            "нужны параметры site, canonical_url и headline")
+    поля = {}
+    for имя in ("content_type", "work_id", "search_intent", "priority_band",
+                "status"):
+        значение = аргументы.get(имя)
+        if значение:
+            поля[имя] = значение
+    if isinstance(аргументы.get("brief"), dict) and аргументы["brief"]:
+        поля["brief"] = аргументы["brief"]
+    try:
+        итог = queue_bridge.завести(site=сайт, canonical_url=адрес,
+                                    headline=название, **поля)
+    except queue_bridge.ОчередьОтклонила as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "task": итог, "environment": окружение()}
+
+
 def инструмент_очереди_состояние(аргументы: dict) -> dict[str, Any]:
     """Счёт по данным очереди: произведения, версии, проверенные тексты — отдельно."""
     from factory.qwen import queue_bridge
@@ -1450,6 +1504,46 @@ def инструмент_области_адреса(аргументы: dict) -
             "label": {"type": "string",
                       "description": "принимается и игнорируется: статуса не повышает"}},
             "required": ["task_id", "owner", "outcome"],
+            "additionalProperties": False},
+    },
+    "editorial_queue_find": {
+        "обработчик": инструмент_очереди_поиск,
+        "описание": ("Есть ли задание очереди по адресу карточки. ЧИТАЕТ: "
+                     "аренды не создаёт, статусов не меняет. Отсутствие "
+                     "задания возвращается явно, вместе с тем "
+                     "идентификатором, который задание получило бы при "
+                     "регистрации."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string", "description": "домен витрины"},
+            "canonical_url": {"type": "string",
+                              "description": "адрес карточки; косая черта в "
+                                             "конце значения не имеет"},
+            "content_type": {"type": "string"}},
+            "required": ["site", "canonical_url"],
+            "additionalProperties": False},
+    },
+    "editorial_queue_register": {
+        "обработчик": инструмент_очереди_регистрация,
+        "описание": ("Завести задание очереди по адресу карточки. "
+                     "ИДЕМПОТЕНТНО: повторный вызов возвращает то же задание, "
+                     "дубля не создаёт и работу редактора не сбрасывает. "
+                     "Аренду не создаёт."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"},
+            "canonical_url": {"type": "string"},
+            "headline": {"type": "string", "description": "название карточки"},
+            "content_type": {"type": "string"},
+            "work_id": {"type": "string",
+                        "description": "идентификатор произведения, если известен"},
+            "search_intent": {"type": "string"},
+            "priority_band": {"type": "string", "enum": ["P1","P2","P3","P4","P5"]},
+            "status": {"type": "string",
+                       "description": "начальный статус записи; по умолчанию "
+                                      "NEEDS_UPDATE («нужен текст»)"},
+            "brief": {"type": "object",
+                      "description": "задание редактору: наблюдение, условия, "
+                                     "основание приоритета"}},
+            "required": ["site", "canonical_url", "headline"],
             "additionalProperties": False},
     },
     "editorial_queue_status": {

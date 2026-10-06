@@ -130,6 +130,20 @@ try:
             canonical_url=з.get("canonical_url") or "",
             detail=з.get("detail") or "",
             label=з.get("label") or "")
+    elif op == "find":
+        итог = очередь.find(site=з["site"], canonical_url=з["canonical_url"],
+                            content_type=з.get("content_type")
+                            or "TITLE_DESCRIPTION")
+    elif op == "register":
+        итог = очередь.register(
+            site=з["site"], canonical_url=з["canonical_url"],
+            headline=з["headline"],
+            content_type=з.get("content_type") or "TITLE_DESCRIPTION",
+            work_id=з.get("work_id") or "",
+            search_intent=з.get("search_intent") or "",
+            priority_band=з.get("priority_band") or "P3",
+            status=з.get("status") or "NEEDS_UPDATE",
+            brief=з.get("brief") or None)
     elif op == "status":
         итог = очередь.status(site=з["site"])
     elif op == "release":
@@ -222,6 +236,37 @@ def записать(*, task_id: str, owner: str, outcome: str, **поля: Any)
     return итог
 
 
+def найти(*, site: str, canonical_url: str,
+          content_type: str = "TITLE_DESCRIPTION") -> dict[str, Any]:
+    """Есть ли задание по адресу. Аренды НЕ создаёт."""
+    итог = _вызвать({"op": "find", "site": site, "canonical_url": canonical_url,
+                     "content_type": content_type})
+    итог["next_action"] = (
+        "задание есть: работать по нему через editorial_queue_next (оно придёт "
+        "в выдаче, когда подойдёт очередь) или записать результат по task_id"
+        if итог.get("found") else
+        "задания нет: завести его через editorial_queue_register с названием "
+        "карточки; повторная регистрация вернёт то же задание")
+    return итог
+
+
+def завести(*, site: str, canonical_url: str, headline: str,
+            **поля: Any) -> dict[str, Any]:
+    """Завести задание по адресу. Идемпотентно: дубля не будет."""
+    задание = {"op": "register", "site": site, "canonical_url": canonical_url,
+               "headline": headline}
+    for имя in ("content_type", "work_id", "search_intent", "priority_band",
+                "status", "brief"):
+        if имя in поля and поля[имя] not in (None, "", {}):
+            задание[имя] = поля[имя]
+    итог = _вызвать(задание)
+    итог["next_action"] = (
+        "задание заведено" if итог.get("created") else
+        "задание уже существовало и возвращено как есть: статус, текст и "
+        "происхождение не изменены")
+    return итог
+
+
 def состояние(*, site: str) -> dict[str, Any]:
     return _вызвать({"op": "status", "site": site})
 
@@ -231,4 +276,4 @@ def отпустить(*, task_id: str, owner: str) -> dict[str, Any]:
 
 
 __all__ = ["ОчередьОтклонила", "КОРЕНЬ_ОПЕРАТОРА", "взять", "записать",
-           "состояние", "отпустить"]
+           "состояние", "отпустить", "найти", "завести"]

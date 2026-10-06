@@ -184,3 +184,49 @@ def test_cli_и_инструменты_называют_исходы_одина�
     for исход in схема["properties"]["outcome"]["enum"]:
         assert исход in источник, (
             f"исход {исход} объявлен инструментом, но не назван в подсказке CLI")
+
+
+# --------------------------------- поиск и регистрация в интерфейсе Qwen
+def test_поиск_и_регистрация_объявлены() -> None:
+    """Qwen должен уметь ПОСМОТРЕТЬ и ЗАВЕСТИ задание, а не только взять.
+
+    Пока инструментов поиска не было, редактор SEO не мог ни проверить наличие
+    задания по адресу, ни зарегистрировать его: единственным способом
+    «посмотреть» было взятие, а оно ставит аренду. Отсюда и появлялся свой
+    список работ рядом с канонической очередью.
+    """
+    for имя in ("editorial_queue_find", "editorial_queue_register"):
+        assert имя in mcp.ИНСТРУМЕНТЫ, f"{имя} не объявлен"
+        с = mcp.ИНСТРУМЕНТЫ[имя]["схема"]
+        assert с["additionalProperties"] is False
+        assert "canonical_url" in с["properties"]
+
+
+def test_поиск_читает_а_регистрация_пишет() -> None:
+    """Ограничение «только чтение» обязано быть проверяемым свойством."""
+    assert "editorial_queue_find" not in mcp.ПИШУЩИЕ, (
+        "поиск не создаёт аренды и не меняет состояния — он читающий")
+    assert "editorial_queue_register" in mcp.ПИШУЩИЕ, (
+        "регистрация заводит запись в реестре — это запись")
+
+
+def test_регистрация_требует_названия_в_интерфейсе() -> None:
+    with pytest.raises(mcp.ОшибкаИнструмента, match="headline"):
+        mcp.ИНСТРУМЕНТЫ["editorial_queue_register"]["обработчик"](
+            {"site": "yummyani.org", "canonical_url": "https://yummyani.org/anime/x"})
+
+
+def test_поиск_требует_адреса() -> None:
+    with pytest.raises(mcp.ОшибкаИнструмента, match="canonical_url"):
+        mcp.ИНСТРУМЕНТЫ["editorial_queue_find"]["обработчик"](
+            {"site": "yummyani.org"})
+
+
+def test_команды_поиска_и_регистрации_есть_в_cli() -> None:
+    from factory.qwen import __main__ as cli
+
+    источник = pathlib.Path(cli.__file__).read_text(encoding="utf-8")
+    for имя in ("queue-find", "queue-register"):
+        assert f'"{имя}"' in источник, f"операции {имя} нет в командной строке"
+    for ключ in ("--canonical-url", "--headline"):
+        assert ключ in источник, f"ключа {ключ} нет в командной строке"

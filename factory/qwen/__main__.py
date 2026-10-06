@@ -56,7 +56,7 @@ from factory.qwen import editorial, indexing, posts, registry
 #: обнаруживалась сравнением, а не на последствиях.
 ИНСТРУКЦИЯ = ("/srv/site-factory/qwen-seo-handover-2026-10-01/"
               "QWEN-CANONICAL.md")
-ВЕРСИЯ_ИНСТРУКЦИИ = "2026-10-06.1"
+ВЕРСИЯ_ИНСТРУКЦИИ = "2026-10-06.2"
 
 
 def _со_ссылкой(данные: dict) -> dict:
@@ -93,7 +93,8 @@ def главная(argv: list[str] | None = None) -> int:
         # говорит «нет инструмента — сделай то же командной строкой», и для
         # очереди этот путь обязан существовать, иначе правило отсылает в
         # пустоту.
-        "queue-next", "queue-result", "queue-status", "queue-release"])
+        "queue-next", "queue-result", "queue-status", "queue-release",
+        "queue-find", "queue-register"])
     p.add_argument("--site")
     p.add_argument("--slug")
     p.add_argument("--body-file", help="файл с текстом; '-' — стандартный ввод")
@@ -118,6 +119,12 @@ def главная(argv: list[str] | None = None) -> int:
                    help="queue-result: факт вида поле=значение; можно повторять")
     p.add_argument("--source-id", help="queue-result: чем назван источник")
     p.add_argument("--detail", help="queue-result: причина или пояснение")
+    p.add_argument("--canonical-url", help="queue-find/queue-register: адрес карточки")
+    p.add_argument("--headline", help="queue-register: название карточки")
+    p.add_argument("--content-type", help="queue-find/queue-register: вид материала")
+    p.add_argument("--work-id", help="queue-register: идентификатор произведения")
+    p.add_argument("--priority-band", help="queue-register: полоса приоритета P1..P5")
+    p.add_argument("--status", help="queue-register: начальный статус записи")
     p.add_argument("--no-network", action="store_true",
                    help="sites: не опрашивать домены")
     p.add_argument("--mode", choices=["open", "closed"],
@@ -201,6 +208,32 @@ def главная(argv: list[str] | None = None) -> int:
         if args.операция.startswith("queue-"):
             from factory.qwen import queue_bridge
             try:
+                if args.операция == "queue-find":
+                    нужен("canonical-url")
+                    итог = queue_bridge.найти(
+                        site=args.site, canonical_url=args.canonical_url,
+                        content_type=args.content_type or "TITLE_DESCRIPTION")
+                    print(json.dumps(_со_ссылкой({"ok": True, **итог}),
+                                     ensure_ascii=False, indent=1))
+                    # Код отличает «нашлось» от «нет такого задания»: пустой
+                    # ответ не должен выглядеть успехом поиска работы.
+                    return 0 if итог.get("found") else 3
+                if args.операция == "queue-register":
+                    нужен("canonical-url")
+                    нужен("headline")
+                    поля = {}
+                    for имя, значение in (("content_type", args.content_type),
+                                          ("work_id", args.work_id),
+                                          ("priority_band", args.priority_band),
+                                          ("status", args.status)):
+                        if значение:
+                            поля[имя] = значение
+                    итог = queue_bridge.завести(
+                        site=args.site, canonical_url=args.canonical_url,
+                        headline=args.headline, **поля)
+                    print(json.dumps(_со_ссылкой({"ok": True, **итог}),
+                                     ensure_ascii=False, indent=1))
+                    return 0
                 if args.операция == "queue-status":
                     итог = queue_bridge.состояние(site=args.site)
                     print(json.dumps(_со_ссылкой({"ok": True, **итог}),
