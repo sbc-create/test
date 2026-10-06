@@ -3,7 +3,7 @@
   "provider": "yandex",
   "note": "Реестр аналитики. Здесь хранятся ТОЛЬКО публичные идентификаторы счётчиков и проверяемые статусы; OAuth-токен и client secret сюда не попадают ни при каких условиях. Заполняется командой `python3 -m factory --json analytics apply --confirm-writes`; вручную не редактируется. Три домена YummyAnime — три независимых счётчика, зеркалами их объединять запрещено: у каждого сайта собственная аудитория и собственный отчёт.",
   "seo_indexing_enabled": false,
-  "updated_at": "2026-10-02T07:24:07Z",
+  "updated_at": "2026-10-05T23:44:54Z",
   "properties": [
     {
       "domain": "1lordserials1.online",
@@ -822,6 +822,62 @@
         "title_view": 664258323
       },
       "last_checked_at": "2026-09-27T22:47:17Z"
+    },
+    {
+      "domain": "lordserial101.site",
+      "site_id": "lords-08",
+      "counter_name": "Lords — lordserial101.site",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordserial101.site"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "problems": [
+        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+        "девять целей не заведены: цели создаются вместе со счётчиком",
+        "разметки счётчика на странице нет и быть не может: витрина не подключена к nginx и выпуска не имеет (CI красный, см. publisher_id)"
+      ],
+      "last_checked_at": null
+    },
+    {
+      "domain": "lordfilm077.site",
+      "site_id": "lords-09",
+      "counter_name": "Lords — lordfilm077.site",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordfilm077.site"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "problems": [
+        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+        "девять целей не заведены: цели создаются вместе со счётчиком",
+        "разметки счётчика на странице нет и быть не может: витрина не подключена к nginx и выпуска не имеет (CI красный, см. publisher_id)"
+      ],
+      "last_checked_at": null
     }
   ]
 }

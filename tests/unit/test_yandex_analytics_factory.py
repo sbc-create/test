@@ -397,10 +397,16 @@ COUNTERS_WITHOUT_MARKUP = {
 #: счётчик без данных, и он же будет мешать заметить настоящий. Перечислены
 #: явно, чтобы новый домен не мог появиться в реестре молча.
 #:
-#: Сейчас группа ПУСТА: оба домена Animedia, стоявшие здесь, получили счётчики
-#: 2026-10-02 и переехали в COUNTERS_WITHOUT_MARKUP. Кортеж оставлен, потому что
-#: следующий новый домен обязан появиться именно здесь, а не в реестре молча.
-PLANNED_DOMAINS: tuple[str, ...] = ()
+#: Оба домена Animedia, стоявшие здесь, получили счётчики 2026-10-02 и
+#: переехали в COUNTERS_WITHOUT_MARKUP. Две новых витрины Lords заведены
+#: 2026-10-06 и стоят здесь ровно по правилу выше: счётчика нет нигде —
+#: ни в кабинете, ни в реестре (`counter_state: planned`, `counter_id: null`).
+#: Создать его нечем: это команда `analytics apply --confirm-writes`, а ей нужен
+#: OAuth-токен из credential службы, который сессии не читает. Объявить домен в
+#: реестре и создать ему счётчик — разные состояния, и смешивать их нельзя:
+#: пустой счётчик на незапущенном домене собирал бы пустоту и мешал заметить
+#: настоящий.
+PLANNED_DOMAINS: tuple[str, ...] = ("lordserial101.site", "lordfilm077.site")
 
 ALL_DOMAINS = sorted({*LIVE_COUNTERS, *COUNTERS_WITHOUT_GOALS, *COUNTERS_WITHOUT_TRAFFIC,
                       *COUNTERS_VERIFIED_IN_BROWSER, *COUNTERS_WITHOUT_MARKUP,
@@ -523,6 +529,13 @@ WEBMASTER_STATUS = {
     "animedia.icu": BLOCKED_DEPLOYMENT,
     "animedia.space": BLOCKED_DEPLOYMENT,
     "lordfilm47.space": BLOCKED_DEPLOYMENT,
+    # Две новых витрины: домен делегирован и разрешается в адрес этого хоста,
+    # но витрина ещё не подключена к nginx и выпуска не имеет — подтверждать
+    # права на то, что не отвечает, нечем. Поэтому PLANNED, а не
+    # BLOCKED_DEPLOYMENT: там домен отдаётся, и подтверждение упирается в
+    # другое. Состояние сменится само, когда появится выпуск.
+    "lordfilm077.site": "PLANNED",
+    "lordserial101.site": "PLANNED",
     "lordserial33.biz": BLOCKED_DEPLOYMENT,
     "lordserials22.info": "PLANNED",
     "lordserials22.site": "PLANNED",

@@ -485,10 +485,24 @@ class TestProfileProperties:
             "zonafilm.space", "animedia.icu", "animedia.space",
             "yummyani.org", "yummyani.site", "yummyani.biz",
         }
-        assert прочие <= {c["domain"] for c in
-                          json.loads((PATHS.root / "config" / "site-cells.json")
-                                     .read_text())["cells"]}
-        assert unattended.network_hosts() == интеграции | витрины | прочие
+        # Два новых домена, заведённые 2026-10-06. Отдельной группой, а не
+        # дописаны к «прочим»: те ВЫЛОЖЕНЫ и отвечают, а эти ещё нет — витрина
+        # не подключена к nginx, выпуска нет, по HTTP приходит 421 от общего
+        # сервера. Группа названа своим состоянием, иначе через неделю никто не
+        # отличит «работает» от «внесён заранее».
+        #
+        # Основание внесения: владелец назвал оба домена поимённо в задании
+        # («запустить lordserial101.site и lordfilm077.site»), и DNS каждого
+        # проверен ДО внесения авторитетным запросом — A обоих ведёт на
+        # 45.131.182.225, адрес этого хоста. Список SSH-хостов, DNS-зон и
+        # доменов по своей инициативе не расширяется; здесь инициативы нет.
+        новые = {"lordserial101.site", "lordfilm077.site"}
+        реестр = {c["domain"] for c in
+                  json.loads((PATHS.root / "config" / "site-cells.json")
+                             .read_text())["cells"]}
+        assert прочие <= реестр
+        assert новые <= реестр, "домен в сетевом списке обязан быть в реестре ячеек"
+        assert unattended.network_hosts() == интеграции | витрины | прочие | новые
 
 
 class TestWritePaths:

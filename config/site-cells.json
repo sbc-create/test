@@ -806,11 +806,12 @@
     {
       "site_id": "lords-08",
       "domain": "lordserial101.site",
-      "aliases": [],
+      "aliases": ["www.lordserial101.site"],
       "status": "planned",
       "repo": {
-        "kind": "local",
-        "path": "/home/claude/wt-portable-site-cell-01/var/site-repos/lordserial101-site"
+        "kind": "remote",
+        "path": "var/site-repos/lordserial101-site",
+        "remote": "https://github.com/sbc-create/site-lordserial101-site"
       },
       "template": {
         "template_id": "lords-serials",
@@ -858,8 +859,9 @@
       "aliases": [],
       "status": "planned",
       "repo": {
-        "kind": "local",
-        "path": "/home/claude/wt-portable-site-cell-01/var/site-repos/lordfilm077-site"
+        "kind": "remote",
+        "path": "var/site-repos/lordfilm077-site",
+        "remote": "https://github.com/sbc-create/site-lordfilm077-site"
       },
       "template": {
         "template_id": "lords-films",
