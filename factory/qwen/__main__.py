@@ -56,7 +56,7 @@ from factory.qwen import editorial, indexing, posts, registry
 #: обнаруживалась сравнением, а не на последствиях.
 ИНСТРУКЦИЯ = ("/srv/site-factory/qwen-seo-handover-2026-10-01/"
               "QWEN-CANONICAL.md")
-ВЕРСИЯ_ИНСТРУКЦИИ = "2026-10-05.1"
+ВЕРСИЯ_ИНСТРУКЦИИ = "2026-10-06.1"
 
 
 def _со_ссылкой(данные: dict) -> dict:
