@@ -82,7 +82,7 @@ lordfilm077.site     Updated 2026-10-05T23:29:37Z   serverHold, clientTransferPr
 | главная, каталог, поиск | отвечают на всех; карточки присутствуют (от 24 до 98 ссылок на главной) |
 | соответствие карточки произведению | по 4 карточки на 7 домена: `h1` есть, `canonical` содержит свой слаг, постер отдаётся |
 | чужой контент | ссылок на чужие домены в разметке карточек — **0** |
-| плеер без нажатия, 95 с | семь доменов: lordfilm47.space, 1lordserials1.online, zonafilm.space, zonafilm12.site, zonafilm.cc (две РАЗНЫЕ карточки), lordserials22.info (две разные карточки) — пересозданий **0**, отказа посетитель не видит; lordserial33.biz в прогоне на момент записи |
+| плеер без нажатия, 95 с | **восемь доменов, все пройдены**: lordfilm47.space (`ne-s-tem-svyazalis`), lordserial33.biz (`velikiy-musa`), 1lordserials1.online (`velikiy-musa`), lordserials22.info (`vampir-ponevole` и `narod-krotov-solnechnyy-dnevnik`), zonafilm.space (`edinstvennyy`), zonafilm.cc (`ad-dzheffri` и `yastreb`), zonafilm12.site — пересозданий **0** на каждом, отказа посетитель не видит ни на одном |
 | переходы по сериям | `/season-1/episode-1,2,10/` отвечают 200 на lordserials22.info и zonafilm12.site |
 | publisher ID | подтверждённые владельцем совпали точно: zonafilm.cc **10374**, zonafilm12.site **10261**, lordserials22.info **10238**; остальные — из своей конфигурации |
 | режим индексации | 12 не-Yummy: `X-Robots-Tag: index, follow`; 5 Yummy: `meta robots: index, follow` (режимом распоряжается контейнер) |
