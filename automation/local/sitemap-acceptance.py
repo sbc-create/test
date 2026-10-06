@@ -54,7 +54,23 @@ def достать(url: str, таймаут: int = 60) -> tuple[str, str, dict[s
     return код, тело, заг
 
 
-def установленный_релиз(домен: str) -> str:
+def установленный_релиз(домен: str) -> tuple[str, str]:
+    """Что ОБЪЯВЛЯЕТ установленное дерево: `(значение, вид раскладки)`.
+
+    Раскладок у сети две, и обе действующие:
+
+    * `releases/<build>` + симлинк `current` — тогда объявленное лежит в
+      `current/release-manifest.json: release`, и публичный заголовок с него
+      НАЧИНАЕТСЯ (к нему приписан site_id);
+    * дерево `app/` без выпусков — так живут две ячейки AnimeGo. Объявленное
+      лежит в `app/config/template-manifest.json: build_id`, и публичный
+      заголовок равен ему ЦЕЛИКОМ.
+
+    Прежде проверка знала только первую и на ячейках `app/` отвечала «при релизе
+    —», то есть объявляла расхождением собственную неосведомлённость. Измерено
+    2026-10-06 на an1mego.site и animeg0.site: заголовок совпадал с манифестом
+    выложенного дерева, а приёмка называла это отклонением.
+    """
     for к in sorted(УЧЁТКИ.glob("*/current")):
         конфиг = к / "config" / "site.json"
         try:
@@ -66,9 +82,23 @@ def установленный_релиз(домен: str) -> str:
         try:
             м = json.loads((к / "release-manifest.json").read_text(encoding="utf-8"))
         except (OSError, ValueError):
-            return ""
-        return str(м.get("release") or "")
-    return ""
+            return "", "releases"
+        return str(м.get("release") or ""), "releases"
+    for к in sorted(УЧЁТКИ.glob("*/app")):
+        конфиг = к / "config" / "site.json"
+        try:
+            если = json.loads(конфиг.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if если.get("domain") != домен:
+            continue
+        try:
+            м = json.loads((к / "config" / "template-manifest.json").read_text(
+                encoding="utf-8"))
+        except (OSError, ValueError):
+            return "", "app"
+        return str(м.get("build_id") or ""), "app"
+    return "", ""
 
 
 def проверить(домен: str) -> list[str]:
@@ -85,9 +115,13 @@ def проверить(домен: str) -> list[str]:
     if код != "200":
         return беды
     билд = заг.get("x-site-factory-build-id", "")
-    релиз = установленный_релиз(домен)
-    шаг("build-id совпадает с установленным выпуском",
-        bool(релиз) and билд.startswith(релиз), f"{билд or '—'} при релизе {релиз or '—'}")
+    объявлено, вид = установленный_релиз(домен)
+    совпало = bool(объявлено) and (билд == объявлено if вид == "app"
+                                   else билд.startswith(объявлено))
+    шаг("build-id совпадает с установленным",
+        совпало,
+        f"{билд or '—'} при объявленном {объявлено or '—'} "
+        f"(раскладка {вид or 'не определена'})")
     try:
         корень = ET.fromstring(тело.encode("utf-8"))
     except ET.ParseError as ош:

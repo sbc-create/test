@@ -68,27 +68,48 @@ def достать(url: str, таймаут: int = 45) -> tuple[str, str, dict[s
     return код, тело, заг
 
 
-def установленный_релиз(домен: str) -> str:
-    """Релиз из /srv по символической ссылке — без догадок об имени учётки."""
+def установленный_релиз(домен: str) -> tuple[str, str]:
+    """Что ОБЪЯВЛЯЕТ установленное дерево: `(значение, вид раскладки)`.
+
+    Раскладок две, и обе действующие: `releases/<build>` + симлинк `current`
+    (объявленное — `release` из `release-manifest.json`, публичный заголовок с
+    него начинается) и дерево `app/` без выпусков — так живут две ячейки AnimeGo
+    (объявленное — `build_id` из `config/template-manifest.json`, заголовок равен
+    ему целиком).
+
+    Прежде функция знала только первую и на ячейках `app/` возвращала пустоту,
+    то есть приёмка объявляла расхождением собственную неосведомлённость.
+    Измерено 2026-10-06 на an1mego.site и animeg0.site.
+
+    Домен сопоставляется по конфигурации ячейки, а не по имени каталога.
+    """
     for к in sorted(УЧЁТКИ.glob("*/current")):
-        м = к.parent / "releases"
-        if not м.is_dir():
+        if not (к.parent / "releases").is_dir():
             continue
         try:
             манифест = json.loads((к / "release-manifest.json").read_text(encoding="utf-8"))
         except (OSError, ValueError):
             continue
-        if манифест.get("live_build_id", "").startswith(манифест.get("release", "")):
-            pass
-        # Сопоставляем по домену в конфигурации ячейки, а не по имени каталога.
-        конфиг = к / "config" / "site.json"
         try:
-            д = json.loads(конфиг.read_text(encoding="utf-8"))
+            д = json.loads((к / "config" / "site.json").read_text(encoding="utf-8"))
         except (OSError, ValueError):
             д = {}
         if д.get("domain") == домен:
-            return str(манифест.get("release") or "")
-    return ""
+            return str(манифест.get("release") or ""), "releases"
+    for к in sorted(УЧЁТКИ.glob("*/app")):
+        try:
+            д = json.loads((к / "config" / "site.json").read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if д.get("domain") != домен:
+            continue
+        try:
+            м = json.loads((к / "config" / "template-manifest.json").read_text(
+                encoding="utf-8"))
+        except (OSError, ValueError):
+            return "", "app"
+        return str(м.get("build_id") or ""), "app"
+    return "", ""
 
 
 def карточки(тело: str, домен: str, предел: int = 4) -> list[str]:
@@ -113,10 +134,12 @@ def проверить(домен: str) -> dict:
     код, тело, заг = достать(f"https://{домен}/")
     шаг("HTTPS и главная", код == "200", f"код {код}, {len(тело)} Б")
     билд = заг.get("x-site-factory-build-id", "")
-    релиз = установленный_релиз(домен)
-    шаг("build ID против выпуска",
-        bool(релиз) and билд.startswith(релиз),
-        f"заголовок {билд or '—'}, установлен релиз {релиз or '—'}")
+    объявлено, вид = установленный_релиз(домен)
+    шаг("build ID против установленного",
+        bool(объявлено) and (билд == объявлено if вид == "app"
+                             else билд.startswith(объявлено)),
+        f"заголовок {билд or '—'}, объявлено {объявлено or '—'} "
+        f"(раскладка {вид or 'не определена'})")
     роботы = заг.get("x-robots-tag", "")
     мета = (re.search(r'<meta[^>]+name="robots"[^>]+content="([^"]+)"', тело) or [None, ""])[1]
     шаг("режим индексации", bool(роботы or мета),
