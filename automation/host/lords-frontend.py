@@ -8164,6 +8164,18 @@ def main() -> int:
         print("[nova] память на снимок не поставлена: модуля lords_perf_memo нет", flush=True)
     else:
         print(f"[nova] {_память.установить(sys.modules[__name__])}", flush=True)
+    # Перечитывание снимка на месте (lords_snapshot_reload, файл семейства
+    # рядом с ядром). Без него новый снимок доходил до посетителя только
+    # перезапуском процесса: отказы соединений на время подъёма (замер
+    # 2026-10-06). Нет модуля — витрина работает как раньше.
+    try:
+        import lords_snapshot_reload as _перечитывание
+    except ImportError:
+        _перечитывание = None
+    if _перечитывание is None:
+        print("[nova] перечитывание снимка не заведено: модуля lords_snapshot_reload нет", flush=True)
+    else:
+        print(f"[nova] {_перечитывание.установить(sys.modules[__name__])}", flush=True)
     сервер = ThreadingHTTPServer((args.host, args.port), Обработчик)
     # Согласование доступности серий идёт ФОНОМ и никогда не в пути запроса
     # страницы: синхронный вызов провайдера при отрисовке означал бы, что
