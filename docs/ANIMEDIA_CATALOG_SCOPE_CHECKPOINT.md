@@ -12,7 +12,7 @@
 | animedia.space: обработчик | `claude/extract-animedia-space-updater-guard-01` | `b7cbd95` | 07:41 (`animedia-02-code-b7cbd958d5b1`) |
 | animedia.icu: обработчик | `claude/extract-animedia-icu-updater-guard-01` | `d1079bd` | 07:58 (`animedia-01-code-d1079bd4b4b5`) |
 | animedia.icu: скорость (окно СКОРОСТЬ) | `claude/extract-animedia-icu-perf-01` | `d6622bc` | 08:15 (`animedia-01-code-d6622bc3adae`) |
-| animedia.space: скорость (окно СКОРОСТЬ) | `claude/extract-animedia-space-perf-01` | `857cf8c` | см. ниже |
+| animedia.space: скорость (окно СКОРОСТЬ) | `claude/extract-animedia-space-perf-01` | `857cf8c` | 08:38 (`animedia-02-code-857cf8c44700`) |
 
 Установка исполнителя: check-installed 274/0/0, `site_repos_root` =
 `/home/claude/wt-portable-site-cell-01`, поля indexing/owner_consent/release
@@ -109,6 +109,8 @@ refresh` имеет право записи в `/srv/animedia-space/data` (drop-
   редакционные тексты, индексация, карта, Метрика, healthz): space 20/20 на
   b7cbd95; icu 19/19 на d1079bd и на d6622bc. Плеер (браузер, REAL_PLAYBACK):
   3/3 на каждом выпуске.
+* Скорость space, медиана из 5: главная 0.31 → 0.25 с, подборки 0.49 → 0.10,
+  карточка 0.23 → 0.12, серия 0.17 → 0.10; приёмка 20/20, плеер 3/3 на 857cf8c.
 * Скорость icu, медиана из 5 через домен: главная 1.63 → 0.91 с, каталог 1.58 →
   0.31, подборки 1.53 → 0.30, карточка 2.59 → 0.19, серия 1.06 → 0.13.
 
@@ -119,6 +121,8 @@ refresh` имеет право записи в `/srv/animedia-space/data` (drop-
 * `freeze-package.py` пишет в опись ветку общего дерева, а не ветку коммита
   (`branch: claude/indexing-operation-02` при коммите из другой ветки).
 * `tools/relock.py --write` (icu) стирает verified_against/repo_path/origin/note.
+* `factory cell updater-check` установленной копии 2026-10-06 08:5x: обе
+  Animedia согласованы, код 0.
 * Ветка фабрики `claude/animedia-updater-units-01` не влита в общую линию:
   следующая переустановка исполнителя из общего дерева без неё снимет
   установку обработчиков. Влить — решение Архитектора/фабричной сессии.
