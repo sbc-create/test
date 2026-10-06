@@ -146,6 +146,9 @@ try:
             brief=з.get("brief") or None)
     elif op == "status":
         итог = очередь.status(site=з["site"])
+    elif op == "reopen":
+        итог = очередь.reopen(task_id=з["task_id"], reason=з["reason"],
+                              status=з.get("status") or "NEEDS_UPDATE")
     elif op == "release":
         итог = очередь.release(task_id=з["task_id"], owner=з["owner"])
     else:
@@ -271,9 +274,20 @@ def состояние(*, site: str) -> dict[str, Any]:
     return _вызвать({"op": "status", "site": site})
 
 
+def возобновить(*, task_id: str, reason: str,
+                status: str = "NEEDS_UPDATE") -> dict[str, Any]:
+    """Вернуть ОДНО задание в работу раньше срока. Аренды не создаёт."""
+    итог = _вызвать({"op": "reopen", "task_id": task_id, "reason": reason,
+                     "status": status})
+    итог["next_action"] = (
+        "задание снова выдаётся: взять его через editorial_queue_next и "
+        "записать результат по task_id")
+    return итог
+
+
 def отпустить(*, task_id: str, owner: str) -> dict[str, Any]:
     return _вызвать({"op": "release", "task_id": task_id, "owner": owner})
 
 
 __all__ = ["ОчередьОтклонила", "КОРЕНЬ_ОПЕРАТОРА", "взять", "записать",
-           "состояние", "отпустить", "найти", "завести"]
+           "состояние", "отпустить", "найти", "завести", "возобновить"]

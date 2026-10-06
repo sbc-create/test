@@ -56,7 +56,7 @@ from factory.qwen import editorial, indexing, posts, registry
 #: обнаруживалась сравнением, а не на последствиях.
 ИНСТРУКЦИЯ = ("/srv/site-factory/qwen-seo-handover-2026-10-01/"
               "QWEN-CANONICAL.md")
-ВЕРСИЯ_ИНСТРУКЦИИ = "2026-10-06.2"
+ВЕРСИЯ_ИНСТРУКЦИИ = "2026-10-06.3"
 
 
 def _со_ссылкой(данные: dict) -> dict:
@@ -94,7 +94,7 @@ def главная(argv: list[str] | None = None) -> int:
         # очереди этот путь обязан существовать, иначе правило отсылает в
         # пустоту.
         "queue-next", "queue-result", "queue-status", "queue-release",
-        "queue-find", "queue-register"])
+        "queue-find", "queue-register", "queue-reopen"])
     p.add_argument("--site")
     p.add_argument("--slug")
     p.add_argument("--body-file", help="файл с текстом; '-' — стандартный ввод")
@@ -231,6 +231,15 @@ def главная(argv: list[str] | None = None) -> int:
                     итог = queue_bridge.завести(
                         site=args.site, canonical_url=args.canonical_url,
                         headline=args.headline, **поля)
+                    print(json.dumps(_со_ссылкой({"ok": True, **итог}),
+                                     ensure_ascii=False, indent=1))
+                    return 0
+                if args.операция == "queue-reopen":
+                    нужен("task-id")
+                    нужен("detail")
+                    итог = queue_bridge.возобновить(
+                        task_id=args.task_id, reason=args.detail,
+                        status=args.status or "NEEDS_UPDATE")
                     print(json.dumps(_со_ссылкой({"ok": True, **итог}),
                                      ensure_ascii=False, indent=1))
                     return 0
