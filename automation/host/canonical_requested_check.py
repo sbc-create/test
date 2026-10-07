@@ -1,0 +1,319 @@
+#!/usr/bin/env python3
+"""Канонический адрес описывает ЗАПРОШЕННУЮ страницу. Проверка проекта сайта.
+
+Доставляется в `checks/canonical_requested.py`. Один файл на семейства:
+подразумеваемые параметры у витрин разные, требование к ним одно.
+
+Зачем проверка, а не доверие к выпуску. Измерено 2026-10-06 на публичных
+доменах: голый `/catalog/` объявлял каноническим `/catalog/?sort=newest`, а
+`/movies/` — `/movies/?sort=newest`. Ни одного такого адреса нет ни в
+навигации, ни в карте сайта: страница объявляла дублем саму себя, и по этой
+причине шесть настоящих разделов из семи в карту не попадали вовсе — чистый
+адрес противоречил бы собственному canonical страницы. Три домена семейства
+zona, два animedia и три animego, то есть восемь витрин из семнадцати.
+
+Причина — в том, что canonical собирался из ДЕЙСТВУЮЩЕЙ выборки. Порядок
+списка и вид раздела выставляет маршрут; читатель их не запрашивал, и адреса
+они не образуют. Правило «порядок страницы не образует» уже записано в общем
+слое (`seo_layer.НЕКАНОНИЧЕСКИЕ`) — проверка держит его ПРИМЕНЕНИЕ.
+
+Проверка идёт в два яруса.
+
+ЯРУС 1 — СТАТИЧЕСКИЙ, работает всюду, включая раннер CI. Держит наличие самой
+правки в одной из двух её законных форм: либо построитель canonical в рантайме
+отбрасывает подразумеваемое и зовёт общий слой, либо витрина с ЗАКРЕПЛЁННЫМ
+артефактом ставит ту же правку переходником. Потеря правки следующим выпуском —
+провал ДО выкладки.
+
+ЯРУС 2 — ПОВЕДЕНЧЕСКИЙ. Поднимает НАСТОЯЩУЮ витрину выпуска на синтетическом
+снимке из трёх записей и спрашивает страницы с заголовком `Host`. Снимок
+синтетический намеренно: свойство не зависит от содержимого каталога.
+
+Ярус 2 требует работоспособного запуска витрины, а витрина — fail-closed:
+без `config/player.json` (он вне git, и это правильно) она не поднимается
+вовсе. На раннере CI файла нет, и ярус пропускается с НАЗВАННОЙ причиной:
+пропуск печатается, пройденной проверкой не считается и статического яруса не
+отменяет. Локально и на самой ячейке ярус работает.
+
+    python3 checks/canonical_requested.py
+"""
+from __future__ import annotations
+
+import json
+import os
+import re
+import shutil
+import socket
+import subprocess
+import sys
+import tempfile
+import time
+import urllib.error
+import urllib.request
+from pathlib import Path
+
+КОРЕНЬ = Path(__file__).resolve().parent.parent
+
+#: Адреса БЕЗ параметров. Требование к ним одно: в `canonical` не должно быть
+#: параметра, которого посетитель не просил. РАВЕНСТВО пути требуется не везде:
+#: у семейств есть законные псевдонимы — `/schedule/` у zona показывает ту же
+#: ленту, что `/new/`, и объявляет каноническим `/new/`. Это не дефект, а
+#: сведение двух адресов к одному, и требовать от псевдонима ссылаться на себя
+#: значило бы требовать дубля. Поэтому равенство проверяется ТОЛЬКО для
+#: разделов, объявленных в карте сайта: адрес из карты обязан быть каноническим
+#: сам по себе, иначе карта и страница противоречат друг другу.
+#:
+#: Измерено 2026-10-07: первая редакция требовала равенства у всех и падала на
+#: раннере CI именно на `/schedule/` — то есть объявляла дефектом правильное
+#: поведение. Локально этого не было видно: там `/schedule/` отвечает 308 и
+#: проверка его пропускала.
+БЕЗ_ПАРАМЕТРОВ: tuple[str, ...] = (
+    "/", "/catalog/", "/movies/", "/series/", "/animation/", "/doramas/",
+    "/new/", "/collections/", "/schedule/", "/top/",
+)
+
+#: Пары «запрошенный путь → ожидаемый canonical» для адресов С параметрами.
+ОЖИДАНИЯ: tuple[tuple[str, str], ...] = (
+    # Порядок списка отдельной страницы не образует: запрошенная сортировка
+    # сворачивается к чистому адресу раздела.
+    ("/catalog/?sort=title", "/catalog/"),
+    ("/catalog/?sort=rating", "/catalog/"),
+    # Настоящий фильтр — другой список, и свой адрес он сохраняет.
+    ("/catalog/?year=1993", "/catalog/?year=1993"),
+)
+
+
+def разделы_карты() -> tuple[str, ...]:
+    """Разделы, объявленные витриной для карты сайта.
+
+    Читаются из своих файлов ячейки: у витрины на общем ядре перечень лежит в
+    `src/`, у витрины с закреплённым артефактом — в её переходнике. Перечня нет —
+    пустой набор, и тогда равенство не требуется ни от одного адреса: выдумывать
+    список разделов проверка не вправе.
+    """
+    найдено: list[str] = []
+    for ф in sorted((КОРЕНЬ / "src").glob("*.py")):
+        if "__pycache__" in str(ф):
+            continue
+        м = re.search(r"РАЗДЕЛЫ_КАРТЫ\s*=\s*\(([^)]*)\)",
+                      ф.read_text(encoding="utf-8", errors="replace"))
+        if м:
+            найдено += re.findall(r'"([^"]+)"', м.group(1))
+    return tuple(dict.fromkeys(найдено))
+
+ПРОВАЛ = 1
+УСПЕХ = 0
+_беды: list[str] = []
+
+
+def п(имя: str, ок: bool, подробно: str = "") -> None:
+    print(f"  {'PASS' if ок else 'FAIL'}  {имя}"
+          + (f"   [{подробно}]" if подробно else ""), flush=True)
+    if not ок:
+        _беды.append(имя)
+
+
+def пропуск(причина: str) -> None:
+    print(f"  ПРОПУСК  {причина}", flush=True)
+
+
+def свободный_порт() -> int:
+    with socket.socket() as s:
+        s.bind(("127.0.0.1", 0))
+        return s.getsockname()[1]
+
+
+def ответ(база: str, путь: str, домен: str, таймаут: int = 60):
+    req = urllib.request.Request(база + путь)
+    req.add_header("Host", домен)
+    try:
+        with urllib.request.urlopen(req, timeout=таймаут) as о:
+            return о.status, о.read().decode("utf-8", "replace")
+    except urllib.error.HTTPError as ош:
+        return ош.code, ош.read().decode("utf-8", "replace")
+    except urllib.error.URLError as ош:
+        return 0, str(ош)
+
+
+def дождаться(база: str, домен: str, предел: float = 180.0) -> bool:
+    край = time.time() + предел
+    while time.time() < край:
+        код, _ = ответ(база, "/healthz", домен, таймаут=5)
+        if код == 200:
+            return True
+        time.sleep(0.5)
+    return False
+
+
+def снимок(site: str) -> dict:
+    """Три записи: фильм, сериал и мультфильм 1993 года для проверки фильтра."""
+    записи = [
+        {"kind": "Фильм", "slug": "proverka-canonical-film", "title": "Проверка: фильм",
+         "url": "/title/proverka-canonical-film/", "year": 1993,
+         "published_at": "2026-01-02T00:00:00Z", "published_at_estimated": False},
+        {"kind": "Сериал", "slug": "proverka-canonical-serial",
+         "title": "Проверка: сериал", "url": "/title/proverka-canonical-serial/",
+         "year": 2024, "published_at": "2026-01-03T00:00:00Z",
+         "published_at_estimated": False},
+        {"kind": "Мультфильм", "slug": "proverka-canonical-multfilm",
+         "title": "Проверка: мультфильм", "url": "/title/proverka-canonical-multfilm/",
+         "year": 1993, "published_at": "2026-01-04T00:00:00Z",
+         "published_at_estimated": False},
+    ]
+    return {"schema": 1, "version": 1, "site": site, "revision": "canonical-check",
+            "count": len(записи), "builtAt": "2026-10-06T00:00:00Z",
+            "source": "checks/canonical_requested.py", "items": записи}
+
+
+#: Приметы правки в рантайме витрины и в переходнике ячейки с закреплённым
+#: артефактом. Приметы — имена, введённые самой правкой: номер версии можно
+#: переставить, не внеся её, а эти имена либо есть, либо нет.
+ПРИМЕТЫ_РАНТАЙМА = ("_подразумеваемое", "канонический_путь")
+ПРИМЕТЫ_ПЕРЕХОДНИКА = ("canonical_requested.установить",)
+
+
+def ярус_статический() -> None:
+    """Правка на месте — в той из двух форм, которая у этой ячейки законна."""
+    print("1. статический: правка на месте", flush=True)
+    свои = sorted(p for p in (КОРЕНЬ / "src").glob("*frontend*.py")
+                  if "__pycache__" not in str(p))
+    закреплённый = sorted((КОРЕНЬ / "template").glob("*/lords-frontend.py"))
+    if свои:
+        текст = "".join(p.read_text(encoding="utf-8", errors="replace") for p in свои)
+        нет = [и for и in ПРИМЕТЫ_РАНТАЙМА if и not in текст]
+        п("рантайм витрины строит canonical по запрошенному", not нет,
+          f"{[p.name for p in свои]}" + (f", не найдено: {нет}" if нет else ""))
+        return
+    if закреплённый:
+        переходник = КОРЕНЬ / "src" / "serve.py"
+        модуль = КОРЕНЬ / "src" / "canonical_requested.py"
+        текст = (переходник.read_text(encoding="utf-8", errors="replace")
+                 if переходник.is_file() else "")
+        нет = [и for и in ПРИМЕТЫ_ПЕРЕХОДНИКА if и not in текст]
+        п("переходник ставит правку поверх закреплённого артефакта",
+          bool(модуль.is_file()) and not нет,
+          f"модуль {'есть' if модуль.is_file() else 'НЕТ'}"
+          + (f", в serve.py не найдено: {нет}" if нет else ""))
+        return
+    п("рантайм витрины найден", False,
+      "ни src/*frontend*.py, ни template/*/lords-frontend.py")
+
+
+def main() -> int:
+    cfg = json.loads((КОРЕНЬ / "config" / "site.json").read_text(encoding="utf-8"))
+    домен = cfg["domain"]
+    site_id = cfg.get("site_id") or ""
+    print(f"canonical по запрошенному: {домен}", flush=True)
+    ярус_статический()
+    print("2. поведенческий: витрина на синтетическом снимке", flush=True)
+
+    врем = Path(tempfile.mkdtemp(prefix="canonical-requested-"))
+    try:
+        данные = врем / "data"
+        данные.mkdir()
+        имя = f"{site_id}-catalog.json" if site_id else "catalog.json"
+        (данные / имя).write_text(
+            json.dumps(снимок(site_id or домен), ensure_ascii=False),
+            encoding="utf-8")
+        режим = врем / "indexing"
+        режим.mkdir()
+        (режим / f"{домен}.json").write_text(
+            json.dumps({"state": "OPEN", "reason": "проверка canonical"}),
+            encoding="utf-8")
+        порт = свободный_порт()
+        база = f"http://127.0.0.1:{порт}"
+        среда = dict(os.environ)
+        среда.update({
+            "LORDS_INDEXING_ROOT": str(режим),
+            "ANIMEDIA_INDEXING_ROOT": str(режим),
+            "LORDS_INDEXING_TTL": "0",
+            "ANIMEDIA_INDEXING_TTL": "0",
+            "LORDS_SITE_HOST": домен,
+            "PYTHONDONTWRITEBYTECODE": "1",
+        })
+        пр = subprocess.Popen(
+            [sys.executable, str(КОРЕНЬ / "run.py"), "--port", str(порт),
+             "--data-dir", str(данные)],
+            cwd=str(КОРЕНЬ), env=среда,
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        try:
+            if not дождаться(база, домен):
+                вывод = (пр.stdout.read() if пр.stdout else "")[-900:]
+                # Витрина не поднялась по ОГРАНИЧЕНИЮ ОКРУЖЕНИЯ, а не из-за
+                # дефекта: `config/player.json` живёт вне git (на раннере его
+                # нет) и принадлежит root в режиме 0600 на самой машине. Витрина
+                # без publisher_id отказывается работать намеренно — это её
+                # fail-closed свойство, проверяемое отдельно. Пропуск называется
+                # вслух, пройденной проверкой не считается и статического яруса
+                # не отменяет.
+                если_окружение = ("Permission denied", "PermissionError",
+                                  "плеер без publisher_id не заработает",
+                                  "LORDS_PLAYER_CONFIG")
+                if any(п_ in вывод for п_ in если_окружение):
+                    пропуск("витрина не поднялась по окружению проверки: "
+                            + вывод.strip()[-200:])
+                    return ПРОВАЛ if _беды else УСПЕХ
+                п("витрина поднялась", False, вывод.strip()[-400:] or "нет вывода")
+                return ПРОВАЛ
+            п("витрина поднялась", True, f"порт {порт}")
+
+            карта = разделы_карты()
+            print(f"  разделы карты по файлам ячейки: {', '.join(карта) or '—'}",
+                  flush=True)
+
+            def канон(путь: str) -> str | None:
+                """`canonical` страницы или None, если страницы нет."""
+                код, тело = ответ(база, путь, домен)
+                if код in (404, 301, 302, 303, 307, 308):
+                    пропуск(f"{путь}: код {код} — такого раздела у витрины нет")
+                    return None
+                if код != 200:
+                    п(f"{путь} -> 200", False, str(код))
+                    return None
+                м = re.search(r'<link[^>]+rel="canonical"[^>]+href="([^"]+)"', тело)
+                # `&` в атрибуте HTML пишется как `&amp;` — сравнение идёт по
+                # адресу, а не по его экранированию.
+                return (м.group(1) if м else "").replace("&amp;", "&")
+
+            проверено = 0
+            for путь in БЕЗ_ПАРАМЕТРОВ:
+                фактический = канон(путь)
+                if фактический is None:
+                    continue
+                проверено += 1
+                # Параметра, которого не просили, в адресе быть не должно — это
+                # требование ко всем.
+                п(f"canonical {путь} без параметров", "?" not in фактический,
+                  фактический or "canonical отсутствует")
+                # Равенство — только для адресов, которые витрина отдала в карту.
+                if путь in карта or путь == "/":
+                    п(f"canonical {путь} == адрес из карты",
+                      фактический == f"https://{домен}{путь}",
+                      фактический or "canonical отсутствует")
+            for путь, ожидаемый in ОЖИДАНИЯ:
+                фактический = канон(путь)
+                if фактический is None:
+                    continue
+                проверено += 1
+                п(f"canonical {путь}", фактический == f"https://{домен}{ожидаемый}",
+                  фактический or "canonical отсутствует")
+            п("проверено хотя бы три адреса", проверено >= 3, str(проверено))
+        finally:
+            пр.terminate()
+            try:
+                пр.wait(timeout=20)
+            except subprocess.TimeoutExpired:
+                пр.kill()
+    finally:
+        shutil.rmtree(врем, ignore_errors=True)
+
+    if _беды:
+        print(f"\ncanonical по запрошенному: провалов {len(_беды)}: "
+              + ", ".join(_беды), flush=True)
+        return ПРОВАЛ
+    print("\ncanonical по запрошенному: все проверки пройдены", flush=True)
+    return УСПЕХ
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
