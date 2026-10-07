@@ -94,7 +94,8 @@ def главная(argv: list[str] | None = None) -> int:
         # очереди этот путь обязан существовать, иначе правило отсылает в
         # пустоту.
         "queue-next", "queue-result", "queue-status", "queue-release",
-        "queue-find", "queue-register", "queue-reopen", "queue-annul"])
+        "queue-owns", "queue-find", "queue-register", "queue-reopen",
+        "queue-annul"])
     p.add_argument("--site")
     p.add_argument("--slug")
     p.add_argument("--body-file", help="файл с текстом; '-' — стандартный ввод")
@@ -115,9 +116,15 @@ def главная(argv: list[str] | None = None) -> int:
     p.add_argument("--outcome", help="queue-result: исход (TEXT_WRITTEN, "
                                      "IDENTITY_UNCLEAR, SOURCE_UNAVAILABLE, "
                                      "SOURCES_MISSING, PAGE_ABSENT, "
-                                     "IDENTITY_REJECTED, NO_CHANGE_NEEDED). "
-                                     "NO_CHANGE_NEEDED требует --detail: "
-                                     "«правка не нужна» обосновывается измерением")
+                                     "IDENTITY_REJECTED, NO_CHANGE_NEEDED, "
+                                     "DELIVERY_UNSUPPORTED). NO_CHANGE_NEEDED "
+                                     "требует --detail и НЕ закрывает задание, "
+                                     "заблокированное по соответствию: старый "
+                                     "текст страницы там не основание. "
+                                     "DELIVERY_UNSUPPORTED — для материала, "
+                                     "которому у площадки нет пути доставки "
+                                     "(например текст ГЛАВНОЙ: он лежит в "
+                                     "сборке приложения витрины, а не в очереди)")
     p.add_argument("--source-url", action="append",
                    help="queue-result: адрес источника; можно повторять")
     p.add_argument("--source-published-at", help="queue-result: дата источника")
@@ -156,6 +163,18 @@ def главная(argv: list[str] | None = None) -> int:
             сайты = registry.собрать(опрашивать_сеть=not args.no_network)
             print(json.dumps(_со_ссылкой({"ok": True, "total": len(сайты),
                               "sites": [s.as_dict() for s in сайты]}),
+                             ensure_ascii=False, indent=1))
+            return 0
+
+        # ВЛАДЕНИЕ ПРОВЕРЯЕТСЯ ПО ЗАДАНИЮ, а не по сайту: исполнитель
+        # спрашивает «моё ли это задание», и имя сайта к ответу не относится.
+        # Требовать здесь --site значило бы заставлять угадывать лишнее поле
+        # ради вопроса, у которого один аргумент — task_id.
+        if args.операция == "queue-owns":
+            нужен("task-id"); нужен("owner")
+            from factory.qwen import queue_bridge as _мост_очереди
+            итог = _мост_очереди.моё_ли(task_id=args.task_id, owner=args.owner)
+            print(json.dumps(_со_ссылкой({"ok": True, **итог}),
                              ensure_ascii=False, indent=1))
             return 0
 
