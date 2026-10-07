@@ -36,11 +36,11 @@ sudo bash /home/claude/wt-portable-site-cell-01/var/site-repos/animeg0-site/depl
 | --- | --- | --- |
 | site_id | animego-02 | animego-03 |
 | ветка | `claude/an1mego-panels-01` | `claude/animeg0-launch` |
-| build_id ПОСЛЕ установки | `__BUILD_02__` | `__BUILD_03__` |
+| build_id ПОСЛЕ установки | `animego-02-901394ae72e9` | `animego-03-1c121da37c09` |
 | build_id сейчас на сайте | `animego-02-2bad793aafb4` | `animego-03-017d8f6aea20` |
 | порт витрины | 9150 | 9151 |
 | служба | `nova-an1mego-site.service` | `nova-animeg0-site.service` |
-| прогон CI на этом коммите | `__CI_02__` | `__CI_03__` |
+| прогон CI на этом коммите | `зелёный, прогон 37572368839 на коммите db90c350f0dd` | `зелёный, прогон 37571462039 на коммите f20c96723789` |
 
 Содержимое правки — две вещи, обе про то, что видит посетитель и обход:
 
