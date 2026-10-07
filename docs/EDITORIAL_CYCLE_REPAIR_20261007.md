@@ -372,3 +372,27 @@ HTTP 200, видимый блок описания — «Второй сезон
 
 **Действия владельца не требуются ни по одному исправлению из разделов 1–4 и
 8:** все они выполнены штатными операциями и обратимы.
+
+## 11. Прогоны тестов и один собственный недосмотр
+
+| Команда | Фактический результат |
+| --- | --- |
+| `python3 -m pytest tests/unit -q` (фабрика) | **5801 passed**, 64 skipped, 12 xfailed, 693 s |
+| `python3 -m pytest tests/unit/test_mcp_tool_schema_contract.py -q` | 39 passed |
+| `python3 -m pytest tests/content_operator -q` (оператор) | **337 passed** |
+| `python3 -m factory knowledge verify` | `freeze: 2026-10-07.1 | целостность: OK` |
+
+Первый полный прогон дал **8 падений**, и все восемь — одной причины и моей:
+запись D196 дописана в `knowledge/DECISIONS.md` без обновления заморозки базы
+знаний. Падали `test_knowledge_freeze` (2), `test_production_gates` (5) и
+`test_authorization` (1) — одни и те же ворота целостности внутри конвейера.
+После `python3 -m factory knowledge freeze --version 2026-10-07.1` прогон
+зелёный целиком. Падение названо здесь потому, что отчёт без него утверждал бы
+проверку, которой не было.
+
+Ветки отправлены: `claude/indexing-operation-02` (фабрика) и
+`claude/editorial-queue-repair-01` (оператор). Pull request для оператора
+создать не удалось: GitHub отвечает «No commits between main and
+claude/editorial-queue-repair-01», а ветка по умолчанию в том репозитории —
+другая рабочая линия, опережаемая этой на 168 коммитов. Работа лежит на
+отправленной ветке.
