@@ -237,7 +237,7 @@
       "zone": "shared",
       "priority": "P2",
       "state": "proposed",
-      "example": "animedia.icu/title/beybleyd-vzryv-dinamitnaya-bitva/: страница показывает сезоны 1–10 и получает визиты на /season-4/, /season-5/, /season-9/; editorial_facts (animedia-01-details.json) отдаёт только сезон 6, 32 серии.",
+      "example": "animedia.icu/title/beybleyd-vzryv-dinamitnaya-bitva/: страница показывает сезоны 1–10 и получает визиты на /season-4/, /season-5/, /season-9/; editorial_facts (animedia-01-details.json) отдаёт только сезон 6, 32 серии. Статус: animedia.space/title/hitkliff/ (мультсериал 1984 года) показывает «Онгоинг» — статус выводится из доли доступных серий (33 из 65 и 10 из 21), а не из факта выхода.",
       "wrong_decision": "Описание по такому снимку утверждало бы один сезон из 32 серий — неверно для страницы с десятью сезонами. Страница исключена из партии.",
       "change": "Производитель снимка подробностей: сезоны карточки должны совпадать с отображаемыми.",
       "acceptance": "editorial_facts для beybleyd-vzryv-dinamitnaya-bitva перечисляет те же сезоны, что страница.",
