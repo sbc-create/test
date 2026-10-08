@@ -149,14 +149,14 @@
     },
     {
       "id": "MOD-13",
-      "title": "Отчёт 09:00 описывает один сайт из 21 и владельцу не доставляется",
-      "zone": "owner",
+      "title": "Отчёт 09:00 описывал один сайт из 21 и владельцу не показывался",
+      "zone": "seo",
       "priority": "P1",
-      "state": "proposed",
+      "state": "implemented",
       "example": "/var/lib/seo-content-operator/reports/daily/2026-10-08: Site yummyani.site; outbox qwen_delivery = BLOCKED_NO_AUTHORING_CONFIG.",
       "wrong_decision": "Владелец не получает отчёта о сети; состояние двадцати доменов не видно.",
-      "change": "Отчёт сети — var/seo-regular/reports/daily/<дата>.md (seo-regular-daily, 05:40 UTC). Канал доставки владельцу в проекте не настроен — нужен выбор владельца (BLOCKED_INPUT).",
-      "acceptance": "Отчёт сети формируется штатно и доставляется по каналу, названному владельцем.",
+      "change": "Отчёт сети — var/seo-regular/reports/daily/<дата>.md и LATEST.md (seo-regular-daily, 05:40 UTC). Внешний канал не нужен (решение владельца 2026-10-08, Telegram отменён): показ в 10:00 МСК во вкладке «SEO — ОТЧЁТ» (automation/local/seo-report-view.sh) и в рабочем окне сессии, пока она активна.",
+      "acceptance": "Вкладка «SEO — ОТЧЁТ» показывает отчёт дня в 10:00 МСК; старые отчёты повторно не выводятся.",
       "evidence": "cat /var/lib/seo-content-operator/outbox/daily/2026-10-08/OUTBOX_34fdb38d6d2b.json"
     },
     {

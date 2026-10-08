@@ -1138,19 +1138,59 @@ def test_skipped_slot_is_visible_in_history(env):
 def test_daily_report_lists_editor_publications_with_sources_actually_read(tmp_path):
     runs = tmp_path / "editor-runs"
     runs.mkdir()
-    (runs / "runs.jsonl").write_text(json.dumps({
-        "run_id": "R1", "trigger": "systemd-timer", "verdict": "COMPLETE",
-        "started_at": "2026-10-08T03:00:00Z", "finished_at": "2026-10-08T03:05:00Z"}) + "\n"
-        + json.dumps({"run_id": "R2", "trigger": "systemd-timer", "verdict": "NO_PUBLICATION",
-                      "started_at": "2026-10-08T04:00:00Z", "finished_at": "2026-10-08T04:02:00Z",
-                      "self_report": {"note": "нет синопсиса"}}) + "\n", encoding="utf-8")
-    (runs / "R1.verify.json").write_text(json.dumps({"publications": [
-        {"url": "https://a.example/title/x/"}]}), encoding="utf-8")
-    (runs / "sources.jsonl").write_text("\n".join(json.dumps(r) for r in [
-        {"at": "2026-10-08T03:01:00Z", "url": "https://shikimori.io/api/animes/1", "status": 200},
-        {"at": "2026-10-08T05:00:00Z", "url": "https://other.example", "status": 200}]), encoding="utf-8")
+    (runs / "runs.jsonl").write_text(
+        json.dumps(
+            {
+                "run_id": "R1",
+                "trigger": "systemd-timer",
+                "verdict": "COMPLETE",
+                "started_at": "2026-10-08T03:00:00Z",
+                "finished_at": "2026-10-08T03:05:00Z",
+            }
+        )
+        + "\n"
+        + json.dumps(
+            {
+                "run_id": "R2",
+                "trigger": "systemd-timer",
+                "verdict": "NO_PUBLICATION",
+                "started_at": "2026-10-08T04:00:00Z",
+                "finished_at": "2026-10-08T04:02:00Z",
+                "self_report": {"note": "нет синопсиса"},
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (runs / "R1.verify.json").write_text(
+        json.dumps(
+            {
+                "publications": [
+                    {"url": "https://a.example/title/x/", "at": "2026-10-08T03:02:00Z"},
+                    {"url": "https://a.example/title/y/", "at": "2026-10-08T03:04:00Z"},
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    (runs / "sources.jsonl").write_text(
+        "\n".join(
+            json.dumps(r)
+            for r in [
+                {
+                    "at": "2026-10-08T03:01:00Z",
+                    "url": "https://shikimori.io/api/animes/1",
+                    "status": 200,
+                },
+                {"at": "2026-10-08T05:00:00Z", "url": "https://other.example", "status": 200},
+            ]
+        ),
+        encoding="utf-8",
+    )
     day = regular.editor_day(runs, NOW - dt.timedelta(days=1))
     assert day["published"][0]["sources"] == ["https://shikimori.io/api/animes/1"]
+    # источник первой публикации не приписывается второй (окно 03:02–03:04 пусто)
+    assert day["published"][1]["sources"] == ["только каталог сети (внешних обращений нет)"]
     assert day["problems"][0]["note"] == "нет синопсиса"
     assert day["verdicts"] == {"COMPLETE": 1, "NO_PUBLICATION": 1}
 
@@ -1159,5 +1199,7 @@ def test_daily_writes_the_single_latest_report(env):
     http = FakeHttp({"https://a.example/": HOME_OPEN, "https://a.example/robots.txt": ROBOTS_OK})
     regular.run("daily", root=env["root"], now=NOW, sources=env["sources"], http=http)
     latest = (env["root"] / "reports" / "LATEST.md").read_text(encoding="utf-8")
-    assert latest == (env["root"] / "reports" / "daily" / "2026-10-08.md").read_text(encoding="utf-8")
+    assert latest == (env["root"] / "reports" / "daily" / "2026-10-08.md").read_text(
+        encoding="utf-8"
+    )
     assert "не выполняется — канал доставки отменён владельцем" in latest

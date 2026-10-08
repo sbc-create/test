@@ -1489,22 +1489,30 @@ def editor_day(state_dir: Path, since: dt.datetime) -> dict:
             v = json.loads((state_dir / f"{r['run_id']}.verify.json").read_text(encoding="utf-8"))
         except (OSError, ValueError):
             v = {"publications": []}
-        read = sorted(
-            {
-                s.get("url")
-                for s in sources
-                if r["started_at"] <= s.get("at", "") <= r["finished_at"] and s.get("status") == 200
-            }
-        )
-        for pub in v.get("publications") or []:
+        # Источник засчитывается публикации, только если прочитан в ЕЁ окне:
+        # от предыдущей публикации этого запуска (или его начала) до неё.
+        # Окно всего запуска приписывало одной странице источники другой.
+        pubs = sorted(v.get("publications") or [], key=lambda x: x.get("at", ""))
+        window_start = r["started_at"]
+        for pub in pubs:
+            read = sorted(
+                {
+                    src.get("url")
+                    for src in sources
+                    if window_start <= src.get("at", "") <= pub.get("at", r["finished_at"])
+                    and src.get("status") == 200
+                }
+            )
             published.append(
                 {
                     "url": pub["url"],
+                    "at": pub.get("at"),
                     "run_id": r["run_id"],
                     "trigger": r.get("trigger"),
                     "sources": read or ["только каталог сети (внешних обращений нет)"],
                 }
             )
+            window_start = pub.get("at", window_start)
         if r.get("verdict") != "COMPLETE":
             note = (r.get("self_report") or {}).get("note") or ""
             problems.append(
@@ -1514,6 +1522,42 @@ def editor_day(state_dir: Path, since: dt.datetime) -> dict:
     for r in runs:
         verdicts[r.get("verdict", "?")] = verdicts.get(r.get("verdict", "?"), 0) + 1
     return {"runs": len(runs), "verdicts": verdicts, "published": published, "problems": problems}
+
+
+def published_since(since: dt.datetime, roots: dict | None = None) -> list[dict]:
+    """Что фактически опубликовано на сайтах за период — по истории хранилищ."""
+    out = []
+    for _family, (root, form) in (roots if roots is not None else OVERLAY_ROOTS).items():
+        if not root.is_dir():
+            continue
+        for site_dir in sorted(root.iterdir()):
+            history = site_dir / "history.jsonl"
+            if not history.is_file():
+                continue
+            for line in history.read_text(encoding="utf-8").splitlines():
+                try:
+                    rec = json.loads(line)
+                except ValueError:
+                    continue
+                at = parse_iso(rec.get("at"))
+                if rec.get("op") == "publish" and at and at >= since:
+                    url = f"https://{site_dir.name}" + form.format(slug=rec["slug"])
+                    out.append({"url": url, "at": rec["at"], "author": rec.get("author")})
+    # Одна страница — одна строка: последняя публикация за период.
+    last: dict[str, dict] = {}
+    for row in sorted(out, key=lambda r: r["at"]):
+        last[row["url"]] = row
+    return sorted(last.values(), key=lambda r: r["at"])
+
+
+def owner_needs(defects_path: Path) -> list[str]:
+    """Что требуется от владельца: открытые пункты зоны владельца."""
+    items = _read_json(defects_path, {}).get("defects") or []
+    return [
+        f"{i['id']}: {i['title']}"
+        for i in items
+        if i.get("zone") == "owner" and i.get("state") not in ("verified",)
+    ]
 
 
 def delivery_status(saved_as: str) -> dict:
@@ -1571,6 +1615,75 @@ def render_daily(report: dict) -> str:
     lines: list[str] = []
     add = lines.append
     add(f"# SEO-сеть: отчёт владельцу — {report['date_msk']}")
+    add("")
+    add("## Кратко")
+    pubs = report.get("published_24h") or []
+    # Источники — только у той же публикации (URL и время совпадают); правки из
+    # сессии редактора описаны в журнале изменений config/seo-changes.json.
+    src = {
+        (p["url"], p.get("at")): p["sources"]
+        for p in (report.get("editor") or {}).get("published") or []
+    }
+    add(f"**Опубликовано за сутки: {len(pubs)}**")
+    for pub in pubs:
+        key = (pub["url"], pub["at"])
+        if key in src:
+            where = "; источники: " + ", ".join(src[key])
+        elif str(pub.get("author", "")).startswith("editor/claude-indexing"):
+            where = "; источники и основание — config/seo-changes.json"
+        else:
+            where = ""
+        add(f"- {pub['url']} ({pub['at']}, {pub['author']}{where})")
+    ch = report.get("changes") or {}
+    fixes = [
+        r
+        for r in (ch.get("optimized") or [])
+        if (parse_iso(r.get("published_at")) or dt.datetime.min.replace(tzinfo=UTC))
+        >= parse_iso(report["generated_at"]) - dt.timedelta(days=1)
+    ]
+    resolved = (report.get("issues") or {}).get("resolved") or []
+    add(f"**Исправлено на сайтах: {len(fixes)} правок текста, устранено проблем: {len(resolved)}**")
+    for r in fixes[:15]:
+        add(f"- {r['url']} ({r['element']})")
+    for it in resolved[:10]:
+        add(f"- устранено: `{it['domain']}` {it['code']}")
+    issues = report.get("issues") or {}
+    open_now = (issues.get("new") or []) + (issues.get("persisting") or [])
+    probs = (report.get("editor") or {}).get("problems") or []
+    add(
+        f"**Ошибки и нерешённые вопросы: проблем сайтов {len(open_now)}, "
+        f"циклов редактора без публикации {len(probs)}**"
+    )
+    for it in open_now[:10]:
+        add(f"- `{it['domain']}` {it['code']} [{it.get('severity', '—')}]")
+    wow = report.get("week_over_week") or {}
+    if wow.get("status") == "MEASURED":
+        cp = (wow.get("current_period") or {}).get("resolved") or {}
+        bp = (wow.get("base_period") or {}).get("resolved") or {}
+        tv = sum(
+            (r["visits"].get("now") or 0) for r in wow["domains"].values() if "now" in r["visits"]
+        )
+        bv = sum(
+            (r["visits"].get("before") or 0)
+            for r in wow["domains"].values()
+            if "now" in r["visits"]
+        )
+        add(
+            f"**Трафик сети: визиты {bv:g} → {tv:g} "
+            f"({bp.get('from')}…{bp.get('to')} → {cp.get('from')}…{cp.get('to')})**; "
+            "по доменам и источникам — ниже"
+        )
+    else:
+        add(f"**Трафик: не измерено** — {wow.get('reason')}")
+    left = (report.get("editor") or {}).get("candidates_left", 0)
+    add(
+        f"**Следующие действия:** редактор продолжает круглосуточно (кандидатов в списке {left}); "
+        "проверка сети каждые 6 часов; оценка правок +7/+14 дней по журналу изменений."
+    )
+    needs = report.get("owner_needs") or []
+    add(f"**Требуется от владельца: {len(needs) or 'ничего'}**")
+    for n in needs:
+        add(f"- {n}")
     add("")
     add(f"- Запуск: `{report['run_id']}`, сформирован {report['generated_at']}")
     check = report.get("check") or {}
@@ -2304,6 +2417,8 @@ def step_daily_report(ctx: Context) -> Any:
         ),
     }
     report["editor"] = editor_day(REPO_ROOT / "var" / "editor-runs", ctx.now - dt.timedelta(days=1))
+    report["published_24h"] = published_since(ctx.now - dt.timedelta(days=1))
+    report["owner_needs"] = owner_needs(ctx.sources["defects"])
     try:
         cands = _read_json(ctx.root / "editor-candidates.json", {}).get("candidates") or []
     except AttributeError:
