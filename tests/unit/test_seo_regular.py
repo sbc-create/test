@@ -526,7 +526,7 @@ def test_daily_reuses_a_recent_check_and_writes_one_report(env):
     assert "повторно не выполнялась: да" in text
     assert "2026-09-24…2026-09-30 → 2026-10-01…2026-10-07" in text
     assert "Учтён снимок аналитики от 2026-10-08" in text
-    assert "Доставка владельцу: **не выполнена**" in text  # сохранённый файл — не доставка
+    assert "Доставка владельцу: **не выполняется" in text  # сохранённый файл — не доставка
 
 
 def test_weekly_result_enters_the_next_daily_report_once(env):
@@ -1116,7 +1116,7 @@ def test_hourly_summary_makes_no_requests_and_says_delivery_is_not_done(env):
     r = regular.run("hourly", root=env["root"], now=NOW, sources=env["sources"], http=http)
     assert r["state"] == "DONE" and http.calls == []
     text = (env["root"] / "hourly" / "2026-10-08T05.md").read_text(encoding="utf-8")
-    assert "почасовые сводки в Telegram не отправляются" in text
+    assert "канал отменён владельцем" in text
 
 
 def test_skipped_slot_is_visible_in_history(env):
@@ -1135,17 +1135,29 @@ def test_skipped_slot_is_visible_in_history(env):
     assert state["runs"][-1]["trigger"] == "systemd-timer"
 
 
-def test_delivery_is_connected_only_after_telegram_accepted_a_message(tmp_path):
-    log = tmp_path / "deliveries.jsonl"
-    assert regular.delivery_status("f.md", log)["state"] == "не выполнена"
-    log.write_text(
-        json.dumps({"at": "2026-10-09T05:00:00Z", "kind": "test", "ok": False}) + "\n",
-        encoding="utf-8",
-    )
-    assert regular.delivery_status("f.md", log)["state"] == "не выполнена"
-    with log.open("a", encoding="utf-8") as fh:
-        fh.write(
-            json.dumps({"at": "2026-10-09T05:01:00Z", "kind": "test", "ok": True, "message_id": 5})
-            + "\n"
-        )
-    assert regular.delivery_status("f.md", log)["state"] == "канал Telegram подключён"
+def test_daily_report_lists_editor_publications_with_sources_actually_read(tmp_path):
+    runs = tmp_path / "editor-runs"
+    runs.mkdir()
+    (runs / "runs.jsonl").write_text(json.dumps({
+        "run_id": "R1", "trigger": "systemd-timer", "verdict": "COMPLETE",
+        "started_at": "2026-10-08T03:00:00Z", "finished_at": "2026-10-08T03:05:00Z"}) + "\n"
+        + json.dumps({"run_id": "R2", "trigger": "systemd-timer", "verdict": "NO_PUBLICATION",
+                      "started_at": "2026-10-08T04:00:00Z", "finished_at": "2026-10-08T04:02:00Z",
+                      "self_report": {"note": "нет синопсиса"}}) + "\n", encoding="utf-8")
+    (runs / "R1.verify.json").write_text(json.dumps({"publications": [
+        {"url": "https://a.example/title/x/"}]}), encoding="utf-8")
+    (runs / "sources.jsonl").write_text("\n".join(json.dumps(r) for r in [
+        {"at": "2026-10-08T03:01:00Z", "url": "https://shikimori.io/api/animes/1", "status": 200},
+        {"at": "2026-10-08T05:00:00Z", "url": "https://other.example", "status": 200}]), encoding="utf-8")
+    day = regular.editor_day(runs, NOW - dt.timedelta(days=1))
+    assert day["published"][0]["sources"] == ["https://shikimori.io/api/animes/1"]
+    assert day["problems"][0]["note"] == "нет синопсиса"
+    assert day["verdicts"] == {"COMPLETE": 1, "NO_PUBLICATION": 1}
+
+
+def test_daily_writes_the_single_latest_report(env):
+    http = FakeHttp({"https://a.example/": HOME_OPEN, "https://a.example/robots.txt": ROBOTS_OK})
+    regular.run("daily", root=env["root"], now=NOW, sources=env["sources"], http=http)
+    latest = (env["root"] / "reports" / "LATEST.md").read_text(encoding="utf-8")
+    assert latest == (env["root"] / "reports" / "daily" / "2026-10-08.md").read_text(encoding="utf-8")
+    assert "не выполняется — канал доставки отменён владельцем" in latest

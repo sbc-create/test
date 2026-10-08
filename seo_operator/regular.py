@@ -1457,35 +1457,74 @@ def _fmt_metric(row: dict) -> str:
     return f"{now:g} (было {before:g}, {delta:+g})"
 
 
-def delivery_status(saved_as: str, log: Path | None = None) -> dict:
-    """Состояние доставки — по ответам Telegram, а не по наличию файлов.
+#: Единый файл последнего суточного отчёта — перезаписывается каждым прогоном.
+LATEST_MD = "var/seo-regular/reports/LATEST.md"
 
-    Сохранённый файл доставкой не считается. Канал считается подключённым,
-    только если последнее тестовое или плановое сообщение Telegram принял
-    (`ok: true`). Сам отчёт уходит в 09:00 МСК службой notify@daily — факт
-    его доставки виден в том же журнале, а не в этом отчёте.
+
+def editor_day(state_dir: Path, since: dt.datetime) -> dict:
+    """Работа фонового редактора за сутки: публикации с источниками, ошибки.
+
+    Источники берутся из журнала обращений source_fetch.py в окне запуска —
+    то, что действительно прочитано, а не то, что заявлено в ответе модели.
     """
-    log = log or REPO_ROOT / "var" / "notify" / "deliveries.jsonl"
-    last_ok = None
+    runs, sources = [], []
     try:
-        for line in log.read_text(encoding="utf-8").splitlines():
-            rec = json.loads(line)
-            if rec.get("kind") in ("test", "daily", "alert") and rec.get("ok"):
-                last_ok = rec
+        for line in (state_dir / "runs.jsonl").read_text(encoding="utf-8").splitlines():
+            r = json.loads(line)
+            if (parse_iso(r.get("finished_at")) or since) >= since:
+                runs.append(r)
     except (OSError, ValueError):
         pass
-    if last_ok:
-        return {
-            "state": "канал Telegram подключён",
-            "detail": f"последняя подтверждённая доставка {last_ok['at']} ({last_ok['kind']}); "
-            f"этот отчёт уйдёт в 09:00 МСК, факт — var/notify/deliveries.jsonl; файл: {saved_as}",
-        }
+    try:
+        sources = [
+            json.loads(x)
+            for x in (state_dir / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+            if x
+        ]
+    except (OSError, ValueError):
+        sources = []
+    published, problems = [], []
+    for r in runs:
+        try:
+            v = json.loads((state_dir / f"{r['run_id']}.verify.json").read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            v = {"publications": []}
+        read = sorted(
+            {
+                s.get("url")
+                for s in sources
+                if r["started_at"] <= s.get("at", "") <= r["finished_at"] and s.get("status") == 200
+            }
+        )
+        for pub in v.get("publications") or []:
+            published.append(
+                {
+                    "url": pub["url"],
+                    "run_id": r["run_id"],
+                    "trigger": r.get("trigger"),
+                    "sources": read or ["только каталог сети (внешних обращений нет)"],
+                }
+            )
+        if r.get("verdict") != "COMPLETE":
+            note = (r.get("self_report") or {}).get("note") or ""
+            problems.append(
+                {"run_id": r["run_id"], "verdict": r.get("verdict"), "note": note[:300]}
+            )
+    verdicts: dict[str, int] = {}
+    for r in runs:
+        verdicts[r.get("verdict", "?")] = verdicts.get(r.get("verdict", "?"), 0) + 1
+    return {"runs": len(runs), "verdicts": verdicts, "published": published, "problems": problems}
+
+
+def delivery_status(saved_as: str) -> dict:
+    """Доставки владельцу нет: канал Telegram отменён владельцем 2026-10-08.
+
+    Сохранённый файл доставкой не считается — отчёт лежит для чтения по
+    запросу, и строка отчёта говорит именно это.
+    """
     return {
-        "state": "не выполнена",
-        "detail": (
-            "канал Telegram не подключён (install-notify.sh не "
-            f"завершён); отчёт только сохранён в файл {saved_as}"
-        ),
+        "state": "не выполняется — канал доставки отменён владельцем",
+        "detail": f"отчёт сохранён для чтения по запросу: {saved_as} (последний — {LATEST_MD})",
     }
 
 
@@ -1701,6 +1740,22 @@ def render_daily(report: dict) -> str:
                 f"→ {_plain(ev['after'].get('domain_visits'))}"
                 + (f" ({ev.get('reason')})" if ev.get("reason") else "")
             )
+        add("")
+
+    ed = report.get("editor") or {}
+    if ed:
+        add("## Фоновый редактор за сутки")
+        add(
+            f"Запусков: {ed.get('runs', 0)}, по итогам: {ed.get('verdicts') or 'нет'}; "
+            f"кандидатов в списке: {ed.get('candidates_left', 0)}"
+        )
+        for pub in ed.get("published") or []:
+            add(
+                f"- {pub['url']} — источники: {', '.join(pub['sources'])} "
+                f"({pub['run_id']}, {pub['trigger']})"
+            )
+        for prob in ed.get("problems") or []:
+            add(f"- без публикации {prob['run_id']}: {prob['verdict']} — {prob['note']}")
         add("")
 
     cand = report.get("candidates") or {}
@@ -2248,9 +2303,21 @@ def step_daily_report(ctx: Context) -> Any:
             f"var/seo-regular/reports/daily/{ctx.now.astimezone(MSK):%Y-%m-%d}.md"
         ),
     }
+    report["editor"] = editor_day(REPO_ROOT / "var" / "editor-runs", ctx.now - dt.timedelta(days=1))
+    try:
+        cands = _read_json(ctx.root / "editor-candidates.json", {}).get("candidates") or []
+    except AttributeError:
+        cands = []
+    report["editor"]["candidates_left"] = len(cands)
     out_dir = ctx.root / "reports" / "daily"
     _write_json(out_dir / f"{report['date_msk']}.json", report)
-    (out_dir / f"{report['date_msk']}.md").write_text(render_daily(report), encoding="utf-8")
+    text = render_daily(report)
+    (out_dir / f"{report['date_msk']}.md").write_text(text, encoding="utf-8")
+    # Единый «последний отчёт»: тот же текст, перезаписывается атомарно.
+    latest = ctx.root / "reports" / "LATEST.md"
+    tmp = latest.with_name("LATEST.md.tmp")
+    tmp.write_text(text, encoding="utf-8")
+    tmp.replace(latest)
     ctx.state["open_issues_daily"] = current
     if weekly is not None:
         ctx.state["last_weekly"]["reported_in"] = ctx.run_id
@@ -2405,8 +2472,8 @@ def step_hourly(ctx: Context) -> Any:
         f"- запуски фонового редактора: {len(runs)}",
         *[f"  - {x}" for x in runs],
         f"- открытых критических проблем сайтов (последняя проверка): {len(open_issues)}",
-        f"- доставка владельцу: почасовые сводки в Telegram не отправляются (только журнал); "
-        f"канал: {delivery_status(str(out_path_hint))['state']}",
+        "- доставка владельцу: не выполняется (канал отменён владельцем); "
+        f"сводка только в журнале {out_path_hint}",
     ]
     out = ctx.root / "hourly" / f"{ctx.now.astimezone(UTC):%Y-%m-%dT%H}.md"
     out.parent.mkdir(parents=True, exist_ok=True)
