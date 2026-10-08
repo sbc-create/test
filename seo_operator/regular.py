@@ -495,6 +495,23 @@ def _visible(html_bytes: bytes) -> str:
     return re.sub(r"\s+", " ", html.unescape(text))
 
 
+def _publish_times(history: Path) -> dict[str, str]:
+    """Время последней публикации каждого slug по журналу хранилища."""
+    out: dict[str, str] = {}
+    try:
+        lines = history.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return out
+    for line in lines:
+        try:
+            rec = json.loads(line)
+        except ValueError:
+            continue
+        if rec.get("op") == "publish" and rec.get("slug") and rec.get("at"):
+            out[rec["slug"]] = rec["at"]
+    return out
+
+
 def published_items(roots: dict[str, tuple[Path, str]] | None = None) -> list[dict]:
     """Опубликованные материалы из хранилищ доставки. Только чтение.
 
@@ -507,6 +524,7 @@ def published_items(roots: dict[str, tuple[Path, str]] | None = None) -> list[di
             continue
         for site_dir in sorted(p for p in root.iterdir() if p.is_dir()):
             domain = site_dir.name
+            published = _publish_times(site_dir / "history.jsonl")
             overlays = _read_json(site_dir / "title-overlays.json", {})
             for entry in overlays.get("items") or []:
                 slug, body = entry.get("slug"), entry.get("body") or ""
@@ -517,7 +535,9 @@ def published_items(roots: dict[str, tuple[Path, str]] | None = None) -> list[di
                     "slug": slug, "url": f"https://{domain}" + form.format(slug=slug),
                     "fragment": _text_fragment(body),
                     "digest": hashlib.sha256(body.encode()).hexdigest()[:16],
-                    "published_at": overlays.get("generated_at"),
+                    # Время ЭТОГО материала — из журнала публикаций. generated_at
+                    # хранилища сдвигается при любой правке соседнего текста.
+                    "published_at": published.get(slug),
                 })
             posts = _read_json(site_dir / "editorial-posts.json", {})
             entries = posts.get("items") if isinstance(posts, dict) else posts
@@ -970,8 +990,14 @@ def render_daily(report: dict) -> str:
     add(f"- Проверка доступности: `{check.get('run_id', 'нет')}` от {check.get('finished_at', '—')}"
         f" (повторно не выполнялась: {'да' if report.get('check_reused') else 'нет'})")
     fresh = report.get("analytics") or {}
-    add(f"- Снимок аналитики: `{fresh.get('snapshot', 'нет')}`, собран {fresh.get('collected_at', '—')}, "
-        f"возраст {fresh.get('age_hours', '—')} ч — **{fresh.get('status', 'нет')}**")
+    snap_day = str(fresh.get("snapshot") or "")[10:20] or "нет"
+    add(f"- **Учтён снимок аналитики от {snap_day}** (`{fresh.get('snapshot', 'нет')}`, собран "
+        f"{fresh.get('collected_at', '—')}, возраст {fresh.get('age_hours', '—')} ч — {fresh.get('status', 'нет')}). "
+        "Данные, поступившие позже формирования отчёта, в нём не учтены.")
+    if snap_day != report["date_msk"]:
+        add(f"- Снимка за {report['date_msk']} на момент отчёта нет: все показатели ниже — по снимку от {snap_day}.")
+    delivery = report.get("delivery") or {}
+    add(f"- Доставка владельцу: **{delivery.get('state', 'не выполнена')}** — {delivery.get('detail', '')}")
     obs = [d for d, v in (fresh.get("domains") or {}).items() if v["observation"] == "NEW_OBSERVATION"]
     same = [d for d, v in (fresh.get("domains") or {}).items() if v["observation"] == "SAME_SNAPSHOT_REREAD"]
     add(f"- Новых наблюдений аналитики: {len(obs)}; повторное чтение того же снимка "
@@ -1130,7 +1156,8 @@ def step_publications(ctx: Context, *, limit: int = 25) -> Any:
         fresh = prior.get("verdict") == "VISIBLE" and prior.get("digest") == item["digest"]
         if fresh:
             unchanged += 1
-            if (changes.get(item["url"]) or {}).get("digest") != item["digest"]:
+            known = changes.get(item["url"]) or {}
+            if known.get("digest") != item["digest"] or known.get("published_at") != item.get("published_at"):
                 untracked.append({**prior, "url": item["url"], "published_at": item.get("published_at")})
             continue
         if len(checked) >= limit:
@@ -1155,6 +1182,44 @@ def step_sitemaps(ctx: Context) -> Any:
         ctx.journal.write("sitemap", domain=domain, **{k: v for k, v in snap.items() if k != "reason"},
                           reason=snap.get("reason"))
     return {"date": today, "domains": out}
+
+
+def visited_paths(snapshot: Path, *, per_domain: int = 5) -> dict[str, list[str]]:
+    """Самые посещаемые адреса домена по снимку (входы + просмотры)."""
+    out: dict[str, list[str]] = {}
+    for entry in _read_json(snapshot, {}).get("domains") or []:
+        weight: dict[str, float] = {}
+        for key in ("landing_pages", "popular_pages"):
+            ok, value, _ = _metric(entry, key)
+            for name, metric in (_rows(value) if ok else {}).items():
+                if name.startswith("/"):
+                    weight[name] = weight.get(name, 0.0) + metric
+        out[entry["domain"]] = [p for p, _ in sorted(weight.items(), key=lambda kv: -kv[1])][:per_domain]
+    return out
+
+
+def step_visited(ctx: Context) -> Any:
+    """Посещаемый адрес, отвечающий не 200, — посетители и робот видят ошибку.
+
+    animedia.icu/title/pozhiratel-zvezd/season-1/episode-244/: 404 при трёх
+    просмотрах в снимке 2026-10-08.
+    """
+    snaps = sorted(ctx.sources["analytics_snapshots"].glob("analytics-????-??-??.json"))
+    if not snaps:
+        return {"snapshot": None, "checked": []}
+    live = {c["domain"] for c in ((ctx.result("check") or {}).get("availability") or [])
+            if c.get("home_status") == 200}
+    checked = []
+    for domain, paths in visited_paths(snaps[-1]).items():
+        if domain not in live:
+            continue
+        for path in paths:
+            resp = ctx.http.get(f"https://{domain}{path}")
+            checked.append({"domain": domain, "url": f"https://{domain}{path}", "status": resp.status})
+            if resp.status not in (200, 301, 308):
+                ctx.journal.write("visited_url_error", domain=domain, url=f"https://{domain}{path}",
+                                  status=resp.status, error=resp.error)
+    return {"snapshot": snaps[-1].name, "checked": checked}
 
 
 def step_queue(ctx: Context) -> Any:
@@ -1248,8 +1313,13 @@ def step_daily_report(ctx: Context) -> Any:
             stalled.append({"domain": domain, **found})
         for finding in sitemap_findings(snap, ctx.now):
             stalled.append({"domain": domain, **finding})
+    visited_errors = [
+        {"domain": v["domain"], "severity": "warning",
+         "code": f"VISITED_URL_{v['status'] or 'ERROR'}:{urllib.parse.urlsplit(v['url']).path}",
+         "detail": f"{v['url']} — посещаемый адрес (снимок {(ctx.result('visited') or {}).get('snapshot')}) отвечает {v['status']}"}
+        for v in (ctx.result("visited") or {}).get("checked") or [] if v["status"] not in (200, 301, 308)]
     current = _issue_set(reuse.get("availability") or [],
-                         stalled + _publication_issues(ctx.result("publications")))
+                         stalled + visited_errors + _publication_issues(ctx.result("publications")))
     previous = ctx.state.get("open_issues_daily") or {}
     issues = _diff(previous, current)
     queue = ctx.result("queue") or {}
@@ -1277,6 +1347,12 @@ def step_daily_report(ctx: Context) -> Any:
         "task_targets": queue.get("targets"),
         "weekly": weekly,
         "module": module_section(ctx.sources["defects"]),
+        # Файл сохранён — это НЕ доставка. Канала доставки владельцу в проекте
+        # нет (docs/SEO_REGULAR_RUN.md §4); пока он не выбран, отчёт честно
+        # говорит, что не доставлен.
+        "delivery": {"state": "не выполнена",
+                     "detail": "канал доставки не настроен; отчёт только сохранён в файл "
+                               f"var/seo-regular/reports/daily/{ctx.now.astimezone(MSK):%Y-%m-%d}.md"},
     }
     out_dir = ctx.root / "reports" / "daily"
     _write_json(out_dir / f"{report['date_msk']}.json", report)
@@ -1338,7 +1414,7 @@ PLANS: dict[str, list[tuple[str, Callable[[Context], Any]]]] = {
               ("diff", step_diff)],
     "daily": [("discover", step_discover), ("check", step_reuse_check),
               ("analytics", step_analytics), ("publications", step_publications),
-              ("sitemaps", step_sitemaps), ("queue", step_queue),
+              ("sitemaps", step_sitemaps), ("visited", step_visited), ("queue", step_queue),
               ("report", step_daily_report)],
     "weekly": [("discover", step_discover), ("evaluate", step_evaluate),
                ("priorities", step_weekly_priorities)],
@@ -1365,14 +1441,16 @@ def _commit_state(ctx: Context, step: str, result: Any) -> None:
                                  "checked_at": res["checked_at"], "status": res["status"]}
         for res in (result.get("checked") or []) + (result.get("untracked") or []):
             known = changes.get(res["url"]) or {}
-            if res.get("verdict") == "VISIBLE" and known.get("digest") != res["digest"]:
+            stale = known.get("digest") != res["digest"] or known.get("published_at") != res.get("published_at")
+            if res.get("verdict") == "VISIBLE" and stale:
                 domain = urllib.parse.urlsplit(res["url"]).hostname or ""
                 changes[res["url"]] = {
                     "domain": domain, "digest": res["digest"],
                     "published_at": res.get("published_at"),
                     "first_visible_at": res.get("checked_at"),
-                    "baseline": _baseline(snaps, domain, res["url"],
-                                          res.get("published_at") or res.get("checked_at")),
+                    # Время проверки исходной точкой не служит: текст мог висеть
+                    # неделями, и «исходный» снимок оказался бы снимком «после».
+                    "baseline": _baseline(snaps, domain, res["url"], res.get("published_at")),
                 }
     if step == "evaluate" and isinstance(result, list):
         changes = ctx.state.setdefault("changes", {})

@@ -380,6 +380,8 @@ def test_daily_reuses_a_recent_check_and_writes_one_report(env):
     assert "SEO-модуль: найдено → исправлено → проверено → осталось" in text
     assert "повторно не выполнялась: да" in text
     assert "2026-09-24…2026-09-30 → 2026-10-01…2026-10-07" in text
+    assert "Учтён снимок аналитики от 2026-10-08" in text
+    assert "Доставка владельцу: **не выполнена**" in text  # сохранённый файл — не доставка
 
 
 def test_weekly_result_enters_the_next_daily_report_once(env):
@@ -486,6 +488,8 @@ def test_publication_gets_a_baseline_and_a_later_evaluation(env, tmp_path, monke
         "generated_at": "2026-10-08T09:00:00Z", "items": [
             {"slug": "x", "body": "Текст описания карточки, который виден на странице."}]}),
         encoding="utf-8")
+    (root / "a.example" / "history.jsonl").write_text(json.dumps(
+        {"at": "2026-10-08T09:00:00Z", "op": "publish", "slug": "x"}), encoding="utf-8")
     monkeypatch.setattr(regular, "OVERLAY_ROOTS", {"animedia": (root, "/title/{slug}/")})
     page = (200, {}, "<p>Текст описания карточки, который виден на странице.</p>".encode())
     http = FakeHttp({"https://a.example/": HOME_OPEN, "https://a.example/robots.txt": ROBOTS_OK,
@@ -553,3 +557,55 @@ def test_drop_is_decomposed_by_traffic_source(env):
     assert top == {"source": "Cached page traffic", "before": 447, "now": 0.0, "delta": -447}
     notable = regular.notable_changes(wow)
     assert notable[0]["main_source"]["source"] == "Cached page traffic"
+
+
+def test_report_names_an_older_snapshot_when_todays_has_not_arrived(env):
+    (env["sources"]["analytics_snapshots"] / "analytics-2026-10-08.json").unlink()
+    http = FakeHttp({"https://a.example/": HOME_OPEN, "https://a.example/robots.txt": ROBOTS_OK})
+    regular.run("daily", root=env["root"], now=NOW, sources=env["sources"], http=http)
+    text = (env["root"] / "reports" / "daily" / "2026-10-08.md").read_text(encoding="utf-8")
+    assert "Учтён снимок аналитики от 2026-10-07" in text
+    assert "Снимка за 2026-10-08 на момент отчёта нет" in text
+
+
+def test_publication_time_comes_from_the_history_not_the_store(tmp_path, monkeypatch):
+    """animedia.icu 2026-10-08: generated_at хранилища сдвинулся правкой соседа."""
+    site = tmp_path / "overlays" / "a.example"
+    site.mkdir(parents=True)
+    (site / "title-overlays.json").write_text(json.dumps({
+        "generated_at": "2026-10-08T12:03:59Z",
+        "items": [{"slug": "old", "body": "Старый текст карточки, опубликованный первого октября."},
+                  {"slug": "new", "body": "Новый текст карточки, опубликованный восьмого октября."}]}),
+        encoding="utf-8")
+    (site / "history.jsonl").write_text("\n".join(json.dumps(r) for r in [
+        {"at": "2026-10-01T18:31:58Z", "op": "publish", "slug": "old"},
+        {"at": "2026-10-08T12:03:59Z", "op": "publish", "slug": "new"}]), encoding="utf-8")
+    items = {i["slug"]: i for i in regular.published_items({"animedia": (tmp_path / "overlays", "/title/{slug}/")})}
+    assert items["old"]["published_at"] == "2026-10-01T18:31:58Z"
+    assert items["new"]["published_at"] == "2026-10-08T12:03:59Z"
+
+
+def test_unknown_publication_time_gives_no_baseline(env, tmp_path, monkeypatch):
+    root = tmp_path / "overlays"
+    (root / "a.example").mkdir(parents=True)
+    (root / "a.example" / "title-overlays.json").write_text(json.dumps({"items": [
+        {"slug": "x", "body": "Текст без записи в журнале публикаций, виден на странице."}]}), encoding="utf-8")
+    monkeypatch.setattr(regular, "OVERLAY_ROOTS", {"animedia": (root, "/title/{slug}/")})
+    page = (200, {}, "<p>Текст без записи в журнале публикаций, виден на странице.</p>".encode())
+    http = FakeHttp({"https://a.example/": HOME_OPEN, "https://a.example/robots.txt": ROBOTS_OK,
+                     "https://a.example/title/x/": page})
+    regular.run("check", root=env["root"], now=NOW, sources=env["sources"], http=http)
+    state = json.loads((env["root"] / "state.json").read_text(encoding="utf-8"))
+    assert state["changes"]["https://a.example/title/x/"]["baseline"] == {"not_measured": "время публикации неизвестно"}
+
+
+def test_visited_url_with_404_becomes_an_issue(env):
+    snaps = env["sources"]["analytics_snapshots"]
+    data = _snapshot("2026-10-08", 140, 60)
+    data["domains"][0]["measurements"].append({"key": "popular_pages", "measured": True, "top_n": 20,
+        "value": [{"dimensions": [{"name": "/title/x/season-1/episode-244/"}], "metrics": [3.0]}]})
+    (snaps / "analytics-2026-10-08.json").write_text(json.dumps(data), encoding="utf-8")
+    http = FakeHttp({"https://a.example/": HOME_OPEN, "https://a.example/robots.txt": ROBOTS_OK})
+    regular.run("daily", root=env["root"], now=NOW, sources=env["sources"], http=http)
+    text = (env["root"] / "reports" / "daily" / "2026-10-08.md").read_text(encoding="utf-8")
+    assert "VISITED_URL_404:/title/x/season-1/episode-244/" in text

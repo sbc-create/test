@@ -196,6 +196,11 @@ def main(argv=None) -> int:
     p.add_argument("--json", action="store_true", help="машиночитаемый вывод")
     p.add_argument("--out", help="записать отчёт в файл")
 
+    sub.add_parser(
+        "webmaster-inventory",
+        help="read-only: почему у доменов нет данных Вебмастера (нет в аккаунте / не подтверждён / сопоставление)",
+    )
+
     p = sub.add_parser(
         "regular",
         help="регулярный прогон по сети: check (6 ч), daily (09:00 МСК), weekly",
@@ -206,6 +211,10 @@ def main(argv=None) -> int:
 
     args = parser.parse_args(argv)
 
+    if args.command == "webmaster-inventory":
+        from seo_operator import webmaster_inventory
+
+        return webmaster_inventory.main()
     if args.command == "regular":
         from seo_operator import regular
 

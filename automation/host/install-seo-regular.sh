@@ -10,6 +10,7 @@
 #   seo-regular-daily.timer    05:40 UTC (08:40 МСК) — анализ и ОДИН отчёт владельцу
 #   seo-regular-weekly.timer   понедельник 05:32 UTC — пересмотр приоритетов
 #   analytics-cabinet.timer    перенос сбора аналитики 06:10 -> 05:00 UTC
+#   webmaster-inventory.service  однократное чтение Вебмастера (только GET)
 #
 # Почему нужна эта команда. Таймеры живут в /etc/systemd/system, а у сессии
 # агента нет root: ставить их сама она не может и не должна.
@@ -35,7 +36,8 @@ DEST=/etc/systemd/system
 STATE="$REPO_ROOT/var/seo-regular"
 UNITS=(seo-regular-check.service seo-regular-check.timer
        seo-regular-daily.service seo-regular-daily.timer
-       seo-regular-weekly.service seo-regular-weekly.timer)
+       seo-regular-weekly.service seo-regular-weekly.timer
+       webmaster-inventory.service)
 TIMERS=(seo-regular-check.timer seo-regular-daily.timer seo-regular-weekly.timer)
 
 for unit in "${UNITS[@]}"; do
@@ -73,9 +75,12 @@ run install -m 0644 "$HERE/analytics-cabinet.timer" "$DEST/analytics-cabinet.tim
 run systemctl daemon-reload
 run systemctl restart analytics-cabinet.timer
 run systemctl enable --now "${TIMERS[@]}"
+# Однократное ЧТЕНИЕ Вебмастера: почему у доменов нет данных. Наружу ничего не пишет.
+run systemctl start webmaster-inventory.service
 run systemctl list-timers --no-pager analytics-cabinet.timer "${TIMERS[@]}"
 
 echo
 echo "Проверка без root (сессия агента):"
 echo "  ls -l --time-style=full-iso /var/lib/systemd/timers/stamp-seo-regular-*"
 echo "  python3 -m seo_operator.cli regular status"
+echo "  cat $REPO_ROOT/var/analytics/webmaster-inventory.json"

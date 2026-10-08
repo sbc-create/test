@@ -1,0 +1,29 @@
+# Инвентаризация Яндекс.Вебмастера: ТОЛЬКО ЧТЕНИЕ.
+#
+# Отвечает по каждому домену реестра, почему нет данных Вебмастера:
+# NOT_IN_ACCOUNT, IN_ACCOUNT_UNVERIFIED, MAPPING_MISMATCH или VERIFIED_MAPPED.
+# Запросы — только GET /v4/user, /hosts и /verification. Сайты не добавляет,
+# права не подтверждает, реестр не меняет. Итог — var/analytics/webmaster-inventory.json.
+#
+# Токен — тем же способом, что у analytics-cabinet: LoadCredential, сессии
+# агента он не выдаётся.
+[Unit]
+Description=Инвентаризация Яндекс.Вебмастера (только чтение)
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/home/claude/wt-portable-site-cell-01
+LoadCredential=yandex_oauth:/etc/site-factory/secrets/yandex_oauth_token
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/usr/bin/python3 -m seo_operator.cli webmaster-inventory
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/claude/wt-portable-site-cell-01/var/analytics
+ProtectKernelTunables=true
+RestrictSUIDSGID=true
+TimeoutStartSec=300
