@@ -203,9 +203,7 @@ hosts:
     purpose: "Shikimori API: идентичность тайтла, факты завязки, официальные ссылки (external_links)"
     methods: [GET]
     contract_ref: config/editorial-sources.json#src-shikimori
-  - ref: jikan-api
-    host: api.jikan.moe
-    purpose: "Jikan (открытое API данных MyAnimeList): вторая сверка по MAL ID"
-    methods: [GET]
-    contract_ref: config/editorial-sources.json#src-myanimelist
+  # Jikan (api.jikan.moe) и MyAnimeList сюда НЕ внесены: Jikan с этого хоста
+  # недоступен (таймаут соединения 2026-10-08), а robots.txt MAL запрещает
+  # ИИ-агентам весь сайт (D199). Неиспользуемый канал не открывается.
 

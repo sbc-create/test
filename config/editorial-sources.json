@@ -40,16 +40,6 @@
       "terms": "свой User-Agent с названием проекта; не больше 5 запросов в секунду и 90 в минуту; описание не копируется — только факты своими словами"
     },
     {
-      "source_id": "src-myanimelist",
-      "name": "MyAnimeList — данные через открытое API Jikan",
-      "url": "https://api.jikan.moe/v4/anime/",
-      "trust": "reference_catalog",
-      "rights_confirmed": true,
-      "scope": "вторая сверка идентичности и фактов по MAL ID из каталога (external_ids.mal); ссылка в задании — на страницу MAL https://myanimelist.net/anime/<id>",
-      "access": "api",
-      "terms": "не больше 3 запросов в секунду и 60 в минуту; синопсис не копируется и не переводится дословно"
-    },
-    {
       "source_id": "src-official-site",
       "name": "Официальный сайт произведения",
       "url": "https://shikimori.one/api/animes/",
