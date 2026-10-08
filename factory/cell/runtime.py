@@ -134,3 +134,135 @@ def прочитать_реестр_файлом(путь: str | Path) -> dict[s
             "restart_required": режим != "mtime",
         }
     return итог
+
+
+#: Где systemd держит ссылки включённых юнитов. Факт включения читается здесь,
+#: а не у `systemctl`: операция обязана работать и там, где обращаться к шине
+#: нечем, а ссылка в каталоге — то же самое утверждение в файловом виде.
+ВКЛЮЧЁННЫЕ = Path("/etc/systemd/system/multi-user.target.wants")
+ЮНИТЫ = Path("/etc/systemd/system")
+
+
+def каталог_данных_юнита(unit: str, *, корень: Path | None = None) -> str | None:
+    """`--data-dir` из ExecStart юнита. None — в команде его нет.
+
+    Читается именно ExecStart, потому что это единственное место, где путь
+    назван той строкой, которую systemd передаёт процессу. Переменные
+    окружения витрины сюда не годятся: у zona-02 рядом лежит `ZONA02_DATA`
+    выключенного юнита предыдущего размещения, и поверить ему значило бы
+    принять намерение за факт.
+    """
+    файл = (корень or ЮНИТЫ) / unit
+    if not файл.is_file():
+        return None
+    for строка in файл.read_text(encoding="utf-8", errors="replace").splitlines():
+        if not строка.strip().startswith("ExecStart"):
+            continue
+        части = строка.split()
+        for н, кусок in enumerate(части):
+            if кусок == "--data-dir" and н + 1 < len(части):
+                return части[н + 1]
+            if кусок.startswith("--data-dir="):
+                return кусок.split("=", 1)[1]
+    return None
+
+
+def завершить_переезд(site_id: str, *, dry_run: bool = True,
+                      path: Path | None = None,
+                      корень_юнитов: Path | None = None,
+                      корень_включённых: Path | None = None) -> dict[str, Any]:
+    """Перенести `data_dir_after_relocation` в `data_dir` — ПО ИЗМЕРЕНИЮ.
+
+    Зачем отдельная операция. Переезд витрины в свою ячейку состоит из двух
+    шагов: включить новый юнит и сказать об этом реестру. Второй шаг
+    пропускается незаметно, и тогда реестр описывает НАМЕРЕНИЕ: производитель
+    кладёт снимок по `data_dir`, а витрина читает другой каталог. Снаружи это
+    выглядит как сайт, который перестал пополняться, и ошибки нет нигде.
+
+    Измерено 2026-10-08 на zona-02 (zonafilm.cc): издатель кладёт свежий
+    каталог в `/srv/lords/.frontend/sites/zona-02/data` (60 699 позиций,
+    04:01), а включённый юнит `nova-zonafilm-cc.service` запускает витрину с
+    `--data-dir /srv/zonafilm-cc/data`, где лежал снимок от 2026-09-28 на
+    53 908 позиций. Разница — 6 791 произведение, и `sitemap-1.xml` показывал
+    самый свежий `lastmod` 2026-09-27 при 2026-10-08 у соседей.
+
+    Почему именно по измерению. Запись в реестр здесь делается ТОЛЬКО если
+    включённый юнит действительно запускает витрину с объявленным каталогом:
+    реестр описывает факт, а не намерение (`docs/PORTABLE_SITE_CELL.md`).
+    Иначе операция отказывает и называет оба пути — тот, что в юните, и тот,
+    что собирались записать. Иначе эта операция стала бы вторым способом
+    соврать о размещении, только автоматическим.
+    """
+    cell = registry.resolve(site_id, path)
+    # Блок размещения берётся СЫРЫМ из реестра, а не из разобранной записи:
+    # `Размещение` отдаёт только нужные производителю поля, а перенести надо
+    # весь блок целиком, не потеряв ни заметок, ни служебных отметок.
+    сырой = next((c for c in registry.load(path).get("cells") or []
+                  if c.get("site_id") == cell.site_id), {})
+    блок = dict(сырой.get("runtime") or {})
+    if not блок:
+        raise RuntimeUnknown(
+            f"{cell.site_id}: размещение в реестре не объявлено — переносить нечего")
+
+    цель = (блок.get("data_dir_after_relocation") or "").strip()
+    текущий = (блок.get("data_dir") or "").strip()
+    unit = (блок.get("unit") or "").strip()
+    итог: dict[str, Any] = {
+        "operation": "relocate_data", "site_id": cell.site_id,
+        "domain": cell.domain, "unit": unit,
+        "data_dir_now": текущий or None, "data_dir_target": цель or None,
+        "dry_run": bool(dry_run),
+    }
+    if not цель:
+        итог.update(status="nothing-to-do",
+                    reason="в размещении нет data_dir_after_relocation: "
+                           "переезд не объявлен")
+        return итог
+    if цель == текущий:
+        итог.update(status="nothing-to-do",
+                    reason="data_dir уже равен объявленному после переезда")
+        return итог
+    if not unit:
+        итог.update(status="refused", reason="в размещении не назван юнит: "
+                                             "измерять нечего")
+        return итог
+
+    ссылка = (корень_включённых or ВКЛЮЧЁННЫЕ) / unit
+    итог["unit_enabled"] = ссылка.exists()
+    измерен = каталог_данных_юнита(unit, корень=корень_юнитов)
+    итог["data_dir_in_unit"] = измерен
+    if not итог["unit_enabled"]:
+        итог.update(status="refused",
+                    reason=f"юнит {unit} не включён ({ссылка}): переезд не "
+                           "состоялся, и записывать его в реестр нельзя")
+        return итог
+    if измерен is None:
+        итог.update(status="refused",
+                    reason=f"в ExecStart юнита {unit} нет --data-dir: "
+                           "каталог данных витрины не назван командой запуска")
+        return итог
+    if измерен.rstrip("/") != цель.rstrip("/"):
+        итог.update(status="refused",
+                    reason=f"юнит {unit} запускает витрину с --data-dir "
+                           f"{измерен}, а в реестр собирались записать {цель}: "
+                           "реестр описывает факт, а не намерение")
+        return итог
+
+    итог["measured"] = (f"ExecStart юнита {unit} передаёт --data-dir {измерен}; "
+                        f"юнит включён ссылкой {ссылка}")
+    if dry_run:
+        итог.update(status="dry-run", reason="записал бы data_dir из измерения")
+        return итог
+
+    новый = dict(блок)
+    новый["data_dir"] = цель
+    новый["data_dir_before_relocation"] = текущий or None
+    новый.pop("data_dir_after_relocation", None)
+    новый["data_dir_note"] = (
+        "Каталог назван ПО ИЗМЕРЕНИЮ включённого юнита: " + итог["measured"]
+        + ". Перенос выполнен операцией factory cell relocate-data.")
+    registry.update(cell.site_id, {"runtime": новый}, path=path)
+    итог.update(status="relocated",
+                reason="data_dir приведён к тому, что читает витрина")
+    return итог
+

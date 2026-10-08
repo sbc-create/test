@@ -458,8 +458,24 @@ def cmd_newsite(args) -> int:
     return 0
 
 
+def cmd_relocate_data(args) -> int:
+    """Завершить переезд каталога данных: записать в реестр то, что измерено."""
+    from factory.cell import runtime as rt
+    if not args.site:
+        print("BLOCKED_INPUT: операции relocate-data нужен --site", file=sys.stderr)
+        return 2
+    try:
+        итог = rt.завершить_переезд(args.site, dry_run=bool(args.dry_run))
+    except (rt.RuntimeUnknown, registry.RegistryError) as exc:
+        print(f"BLOCKED_INPUT: {exc}", file=sys.stderr)
+        return 2
+    _print(итог)
+    return 0 if итог.get("status") in ("relocated", "nothing-to-do", "dry-run") else 2
+
+
 ACTIONS = {
     "newsite": cmd_newsite,
+    "relocate-data": cmd_relocate_data,
     "registry": cmd_registry,
     "templates": cmd_templates,
     "reserve": cmd_reserve,

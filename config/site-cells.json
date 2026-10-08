@@ -822,7 +822,9 @@
     {
       "site_id": "lords-08",
       "domain": "lordserial101.site",
-      "aliases": ["www.lordserial101.site"],
+      "aliases": [
+        "www.lordserial101.site"
+      ],
       "status": "planned",
       "repo": {
         "kind": "remote",
@@ -1550,7 +1552,7 @@
         "note": "Владелец выкладки — терминал ZONA-02 (ветка claude/bootstrap-zona-02). Наблюдён процесс на порту 9123 и релиз zona-02-1015c650d8be. Публичной конфигурации nginx нет. Отсюда не выкладывается."
       },
       "content_revision": null,
-      "last_update": "2026-09-25T21:54:29.825297+00:00",
+      "last_update": "2026-10-08T23:21:14.714459+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -1559,14 +1561,14 @@
         "port": 9123,
         "account": "zonafilm-cc",
         "app_dir": "/srv/zonafilm-cc/app",
-        "data_dir": "/srv/lords/.frontend/sites/zona-02/data",
+        "data_dir": "/srv/zonafilm-cc/data",
         "legacy_root": "<data>/site",
         "reload": "mtime",
         "managed_by": "cell",
         "data_owner": "pipeline",
-        "data_dir_after_relocation": "/srv/zonafilm-cc/data",
-        "data_dir_note": "Каталог данных назван ТЕКУЩИЙ, а не будущий. Витрина читает /srv/lords/.frontend/sites/zona-02/data — это видно по её юниту (SITE_ROOT=/srv/lords/.frontend/sites/zona-02) и по файлу, который она объявляет ревизией. Пока здесь стоял /srv/zonafilm-cc/data, издатель докладывал «каталога данных не существует» и пропускал витрину: сайт четвёртые сутки показывал снимок от 22.09 при источнике от 25.09, и ошибки при этом не возникало ни у кого. Реестр обязан описывать, где сайт живёт СЕЙЧАС, иначе производитель кладёт снимок мимо живого сайта. Значение меняется на data_dir_after_relocation в том же шаге, в котором витрина переезжает в /srv/zonafilm-cc.",
-        "delivery": "release-queue"
+        "data_dir_note": "Каталог назван ПО ИЗМЕРЕНИЮ включённого юнита: ExecStart юнита nova-zonafilm-cc.service передаёт --data-dir /srv/zonafilm-cc/data; юнит включён ссылкой /etc/systemd/system/multi-user.target.wants/nova-zonafilm-cc.service. Перенос выполнен операцией factory cell relocate-data.",
+        "delivery": "release-queue",
+        "data_dir_before_relocation": "/srv/lords/.frontend/sites/zona-02/data"
       },
       "release": {
         "hold": false,
