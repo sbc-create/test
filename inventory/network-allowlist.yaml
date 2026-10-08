@@ -191,3 +191,21 @@ hosts:
     host: lordfilm077.site
     purpose: "публичная приёмка новой витрины и воспроизведение: главная, каталог, карточка, плеер"
     methods: [GET]
+
+  # --- редакционные источники фактов (решение владельца 2026-10-08, D199) ---
+  # Только чтение и только по ID, уже сопоставленному в каталоге сети; описания
+  # не копируются. Официальные сайты произведений сюда НЕ вносятся списком:
+  # адрес берётся из external_links Shikimori для того же ID, и его читает
+  # automation/local/source_fetch.py, проверяя это происхождение.
+  - ref: shikimori-api
+    # shikimori.one отвечает 301 на shikimori.io (проверено 2026-10-08); API живёт там.
+    host: shikimori.io
+    purpose: "Shikimori API: идентичность тайтла, факты завязки, официальные ссылки (external_links)"
+    methods: [GET]
+    contract_ref: config/editorial-sources.json#src-shikimori
+  - ref: jikan-api
+    host: api.jikan.moe
+    purpose: "Jikan (открытое API данных MyAnimeList): вторая сверка по MAL ID"
+    methods: [GET]
+    contract_ref: config/editorial-sources.json#src-myanimelist
+

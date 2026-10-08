@@ -267,6 +267,48 @@
       "rollback": "unpublish_material site=animedia.space slug=sonik-x",
       "decision": "pending",
       "control_url": "https://animedia.icu/title/sonik-x/"
+    },
+    {
+      "id": "CHG-20261008-20",
+      "url": "https://animedia.icu/title/taynaya-bitva-za-prestol-silneyshego-princa-duraleya/",
+      "published_at": "2026-10-08T14:45:07Z",
+      "path": "источники: https://shikimori.io/animes/56736, https://degarashiouji.com; мост MCP: prepare_material → publish_material",
+      "rollback": "unpublish_material site=animedia.icu slug=taynaya-bitva-za-prestol-silneyshego-princa-duraleya",
+      "decision": "pending",
+      "task_id": "beddf8fb49cd1754",
+      "kind": "optimized",
+      "element": "content_update",
+      "problem": "текст пересказывал поля карточки без завязки (замечание владельца 2026-10-08)",
+      "evidence": "Shikimori: https://shikimori.io/animes/56736; прежний текст — в history.jsonl",
+      "hypothesis": "конкретная завязка отвечает на вопрос посетителя «о чём это» и даёт содержательный сниппет; ожидается рост входов на карточку сверх изменения домена"
+    },
+    {
+      "id": "CHG-20261008-21",
+      "url": "https://animedia.space/title/bespodobnyy-boevoy-duh/",
+      "published_at": "2026-10-08T14:46:00Z",
+      "path": "источники: https://shikimori.io/animes/43626; мост MCP: prepare_material → publish_material",
+      "rollback": "unpublish_material site=animedia.space slug=bespodobnyy-boevoy-duh",
+      "decision": "pending",
+      "task_id": "7f71eb2b8c41f82c",
+      "kind": "optimized",
+      "element": "content_update",
+      "problem": "текст пересказывал поля карточки без завязки (замечание владельца 2026-10-08)",
+      "evidence": "Shikimori: https://shikimori.io/animes/43626; прежний текст — в history.jsonl",
+      "hypothesis": "конкретная завязка отвечает на вопрос посетителя «о чём это» и даёт содержательный сниппет; ожидается рост входов на карточку сверх изменения домена"
+    },
+    {
+      "id": "CHG-20261008-22",
+      "url": "https://animedia.space/title/ohotnik-h-ohotnik-2011/",
+      "published_at": "2026-10-08T14:47:06Z",
+      "path": "источники: https://shikimori.io/animes/11061, https://www.ntv.co.jp/hunterhunter/; мост MCP: prepare_material → publish_material",
+      "rollback": "unpublish_material site=animedia.space slug=ohotnik-h-ohotnik-2011",
+      "decision": "pending",
+      "task_id": "3b8069fcd166c866",
+      "kind": "written",
+      "element": "description",
+      "problem": "на странице заглушка «Описание пока не передано источником»; в каталоге синопсиса нет",
+      "evidence": "analytics-2026-10-08.json: входы 1, просмотры 1 у серии 1 (окно 2026-10-01…07); data-b07-desc=gap",
+      "hypothesis": "описание с завязкой по внешнему источнику заменяет заглушку; ожидается рост входов на карточку сверх изменения домена"
     }
   ]
 }

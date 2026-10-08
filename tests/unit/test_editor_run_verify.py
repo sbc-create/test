@@ -53,3 +53,47 @@ def test_no_publication_record_is_incomplete_whatever_the_result_says(tmp_path):
     r = editor_run.verify(RUN, "2026-10-08T15:00:00Z", "2026-10-08T15:10:00Z", events_path=events,
                           roots=roots, bridge_calls=calls, fetch=lambda u: (200, BODY))
     assert r["steps"]["published"] is False and r["complete"] is False
+
+
+# ------------------------------------------------------------------ шлюз
+import datetime as dt
+
+NOW = dt.datetime(2026, 10, 8, 15, 0, tzinfo=dt.timezone.utc)
+
+
+def _gate_files(tmp_path, *, last_start=None, task_leased=False, candidate_done=False):
+    state = tmp_path / "runs"
+    state.mkdir()
+    if last_start:
+        (state / "runs.jsonl").write_text(json.dumps({"started_at": last_start, "model_started": True}),
+                                          encoding="utf-8")
+    registry = tmp_path / "registry.json"
+    registry.write_text(json.dumps({"items": [
+        {"content_id": "request-t1", "target_site": "animedia.space", "status": "NEEDS_UPDATE"},
+        {"content_id": "request-y1", "target_site": "yummyani.site", "status": "NEEDS_UPDATE"}]}), encoding="utf-8")
+    leases = tmp_path / "leases.json"
+    leases.write_text(json.dumps({"leases": [{"task_id": "t1", "expires_at": "2026-10-08T15:30:00Z"}]
+                                  if task_leased else []}), encoding="utf-8")
+    events = tmp_path / "events.jsonl"
+    rows = [{"event": "task_registered", "task_id": "c1", "canonical_url": "https://animedia.space/title/x"}]
+    if candidate_done:
+        rows.append({"event": "task_result", "task_id": "c1", "outcome": "SOURCES_MISSING"})
+    events.write_text("\n".join(json.dumps(r) for r in rows), encoding="utf-8")
+    cands = tmp_path / "cands.json"
+    cands.write_text(json.dumps({"candidates": [{"url": "https://animedia.space/title/x/"}]}), encoding="utf-8")
+    return dict(registry=registry, leases=leases, events=events, candidates=cands, state=state)
+
+
+def test_gate_runs_the_model_at_most_hourly(tmp_path):
+    f = _gate_files(tmp_path, last_start="2026-10-08T14:20:00Z")
+    assert editor_run.gate(NOW, **f)["run"] is False  # 40 минут назад
+
+
+def test_gate_finds_a_free_animedia_task(tmp_path):
+    assert editor_run.gate(NOW, **_gate_files(tmp_path))["run"] is True
+
+
+def test_gate_ignores_leased_tasks_and_finished_candidates(tmp_path):
+    f = _gate_files(tmp_path, task_leased=True, candidate_done=True)
+    decision = editor_run.gate(NOW, **f)
+    assert decision["run"] is False, decision  # чужая аренда и Yummy не в счёт

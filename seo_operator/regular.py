@@ -1543,9 +1543,15 @@ def editor_candidates(snapshot: Path, facts_dir: Path, published: set[tuple[str,
             reason = "DUPLICATE"
         else:
             continue
+        shiki = ((mine.get("ratings_by_source") or {}).get("shikimori") or {})
         out.append({"site": domain, "slug": slug, "url": f"https://{domain}/title/{slug}/",
                     "weight": weight, "reason": reason, "has_synopsis": bool(desc),
-                    "headline": mine.get("name")})
+                    "headline": mine.get("name"),
+                    # ID для source_fetch.py: сначала проверенное сопоставление Shikimori,
+                    # затем MAL ID каталога (у Shikimori те же номера) — идентичность
+                    # сверяется по названию в ответе.
+                    "shikimori_id": shiki.get("external_id") or (mine.get("external_ids") or {}).get("mal"),
+                    "shikimori_match": shiki.get("match_state")})
     return out[:limit]
 
 

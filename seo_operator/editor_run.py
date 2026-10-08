@@ -168,6 +168,85 @@ def status(state: Path = Path(__file__).resolve().parents[1] / "var" / "editor-r
             "confirmed": bool(complete)}
 
 
+REGISTRY = Path("/var/lib/seo-content-operator/registry.json")
+LEASES = Path("/var/lib/seo-content-operator/editorial_leases.json")
+STATE = Path(__file__).resolve().parents[1] / "var" / "editor-runs"
+CANDIDATES = Path(__file__).resolve().parents[1] / "var" / "seo-regular" / "editor-candidates.json"
+ANIMEDIA = ("animedia.icu", "animedia.space")
+#: Модель запускается не чаще раза в этот интервал (почасовой цикл).
+MIN_INTERVAL_S = 55 * 60
+
+
+def _key(url: str) -> str:
+    return url.rstrip("/").lower()
+
+
+def gate(now: dt.datetime | None = None, *, registry: Path = REGISTRY, leases: Path = LEASES,
+         events: Path = QUEUE_EVENTS, candidates: Path = CANDIDATES, state: Path = STATE) -> dict:
+    """Нужен ли запуск модели. Только чтение файлов: ни модели, ни сети.
+
+    Запуск нужен, если (1) с начала прошлого запуска модели прошло не меньше
+    55 минут и (2) есть работа: свободное задание Animedia на текст в очереди
+    или кандидат, по адресу которого ещё не было результата.
+    """
+    now = now or dt.datetime.now(dt.timezone.utc)
+    last = None
+    log = state / "runs.jsonl"
+    if log.is_file():
+        for line in log.read_text(encoding="utf-8").splitlines():
+            try:
+                r = json.loads(line)
+            except ValueError:
+                continue
+            if r.get("model_started"):
+                last = r.get("started_at")
+    if last:
+        started = dt.datetime.fromisoformat(last.replace("Z", "+00:00"))
+        wait = MIN_INTERVAL_S - (now - started).total_seconds()
+        if wait > 0:
+            return {"run": False, "reason": f"почасовой цикл: до следующего запуска {int(wait // 60)} мин"}
+    leased: set[str] = set()
+    try:
+        raw = json.loads(leases.read_text(encoding="utf-8"))
+        rows = raw.get("leases") if isinstance(raw, dict) else raw
+        if isinstance(rows, dict):
+            rows = [{"task_id": k, **v} for k, v in rows.items()]
+        for row in rows or []:
+            exp = row.get("expires_at") or row.get("lease_until") or ""
+            if exp and dt.datetime.fromisoformat(exp.replace("Z", "+00:00")) > now:
+                leased.add(str(row.get("task_id")))
+    except (OSError, ValueError):
+        pass
+    try:
+        items = json.loads(registry.read_text(encoding="utf-8")).get("items") or []
+    except (OSError, ValueError):
+        items = []
+    open_tasks = [i for i in items if i.get("target_site") in ANIMEDIA and i.get("status") == "NEEDS_UPDATE"
+                  and str(i.get("content_id", "")).replace("request-", "") not in leased]
+    if open_tasks:
+        return {"run": True, "reason": f"свободных заданий Animedia на текст: {len(open_tasks)}"}
+    done: set[str] = set()
+    task_url: dict[str, str] = {}
+    if events.is_file():
+        for line in events.read_text(encoding="utf-8").splitlines():
+            try:
+                e = json.loads(line)
+            except ValueError:
+                continue
+            if e.get("canonical_url") and e.get("task_id"):
+                task_url[e["task_id"]] = _key(e["canonical_url"])
+            if e.get("event") == "task_result" and e.get("task_id") in task_url:
+                done.add(task_url[e["task_id"]])
+    try:
+        cands = json.loads(candidates.read_text(encoding="utf-8")).get("candidates") or []
+    except (OSError, ValueError):
+        cands = []
+    fresh = [c for c in cands if _key(c.get("url", "")) not in done]
+    if fresh:
+        return {"run": True, "reason": f"кандидатов без результата: {len(fresh)} (первый {fresh[0]['url']})"}
+    return {"run": False, "reason": "работы нет: свободных заданий и новых кандидатов нет"}
+
+
 def main(argv: list[str] | None = None) -> int:
     import argparse
 

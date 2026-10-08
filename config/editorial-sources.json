@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "note": "Реестр разрешённых редакционных источников. Утверждение может быть опубликовано только со ссылкой на источник из этого файла, у которого trust входит в official/licensed_feed/press_confirmed И rights_confirmed=true. Реальные источники не заведены: правообладатели и лицензии не переданы. Записи с synthetic=true используются только в демонстрациях.",
+  "note": "Реестр разрешённых редакционных источников. Утверждение публикуется только со ссылкой на источник из этого файла с trust из official/licensed_feed/press_confirmed/reference_catalog И rights_confirmed=true. rights_confirmed у справочных каталогов означает: используются ФАКТЫ (идентичность, завязка), текст источника не копируется. Записи synthetic=true — только для демонстраций. Решение владельца — D199.",
   "sources": [
     {
       "source_id": "src-studio",
@@ -28,6 +28,36 @@
       "rights_confirmed": false,
       "scope": "Слухи. Заведён как отрицательный пример: утверждения на его основе отклоняются.",
       "synthetic": true
+    },
+    {
+      "source_id": "src-shikimori",
+      "name": "Shikimori — API каталога аниме",
+      "url": "https://shikimori.one/api/animes/",
+      "trust": "reference_catalog",
+      "rights_confirmed": true,
+      "scope": "идентичность тайтла по уже сопоставленному в каталоге ID (ratings_by_source.shikimori.external_id), факты завязки, официальные ссылки (external_links)",
+      "access": "api",
+      "terms": "свой User-Agent с названием проекта; не больше 5 запросов в секунду и 90 в минуту; описание не копируется — только факты своими словами"
+    },
+    {
+      "source_id": "src-myanimelist",
+      "name": "MyAnimeList — данные через открытое API Jikan",
+      "url": "https://api.jikan.moe/v4/anime/",
+      "trust": "reference_catalog",
+      "rights_confirmed": true,
+      "scope": "вторая сверка идентичности и фактов по MAL ID из каталога (external_ids.mal); ссылка в задании — на страницу MAL https://myanimelist.net/anime/<id>",
+      "access": "api",
+      "terms": "не больше 3 запросов в секунду и 60 в минуту; синопсис не копируется и не переводится дословно"
+    },
+    {
+      "source_id": "src-official-site",
+      "name": "Официальный сайт произведения",
+      "url": "https://shikimori.one/api/animes/",
+      "trust": "official",
+      "rights_confirmed": true,
+      "scope": "факты о произведении с официального сайта; адрес берётся ТОЛЬКО из external_links Shikimori (kind official_site) для того же ID — не из поиска",
+      "access": "official_link_from_reference",
+      "terms": "соблюдать robots.txt; одна страница на тайтл; текст не копируется"
     }
   ]
 }

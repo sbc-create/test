@@ -4,7 +4,7 @@
 #   editor-run.sh            — штатно (из editor-run.service)
 #   CLAUDE_BIN=/path editor-run.sh  — подмена исполнителя для проверки обёртки
 #
-# Порядок: блокировка → запуск модели с заданием docs/editor/EDITOR_RUN_PROMPT.md
+# Порядок: блокировка → лёгкая проверка (editor-gate) → запуск модели с заданием docs/editor/EDITOR_RUN_PROMPT.md
 # → проверка ПО СЛЕДАМ (seo_operator.editor_run: очередь, история публикаций,
 # публичная страница) → запись run.json. Код выхода — по проверке, а не по
 # самоотчёту модели: 0 — полный запуск или честное «задач нет», 2 — неполный,
@@ -24,6 +24,17 @@ exec 9>"$STATE/run.lock"
 if ! flock -n 9; then
   echo "editor-run: идёт другой запуск" >&2
   exit 75
+fi
+
+# Лёгкая проверка без модели: работа есть и почасовой интервал выдержан?
+# Таймер зовёт обёртку каждые 5 минут, модель запускается только по «да».
+if [ "${EDITOR_FORCE:-0}" != "1" ]; then
+  GATE="$(python3 -m seo_operator.cli editor-gate)"
+  GATE_RC=$?
+  printf '{"at": "%s", "trigger": "%s", "gate": %s}\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$TRIGGER" "${GATE:-null}" >> "$STATE/gate.jsonl"
+  if [ "$GATE_RC" -ne 10 ]; then
+    exit 0
+  fi
 fi
 
 RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)"
@@ -58,7 +69,7 @@ state, run_id, trigger, started, finished, model_rc, verify_rc, self_report = sy
 verify = json.loads(pathlib.Path(state, f"{run_id}.verify.json").read_text(encoding="utf-8"))
 self_report = json.loads(self_report)
 no_task = self_report.get("outcome") in ("NO_TASK", "SOURCES_MISSING") and not verify["steps"]["published"]
-record = {"run_id": run_id, "trigger": trigger, "started_at": started, "finished_at": finished,
+record = {"run_id": run_id, "trigger": trigger, "started_at": started, "finished_at": finished, "model_started": True,
           "model_exit": int(model_rc), "verified_complete": verify["complete"], "steps": verify["steps"],
           "self_report": self_report, "honest_no_publication": no_task,
           "verdict": "COMPLETE" if verify["complete"] else ("NO_PUBLICATION" if no_task else "INCOMPLETE")}

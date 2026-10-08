@@ -196,6 +196,7 @@ def main(argv=None) -> int:
     p.add_argument("--json", action="store_true", help="машиночитаемый вывод")
     p.add_argument("--out", help="записать отчёт в файл")
 
+    sub.add_parser("editor-gate", help="лёгкая проверка: нужен ли запуск модели (без модели и сети)")
     sub.add_parser("editor-run-status", help="запуски фонового редактора: по расписанию и ручные")
     p = sub.add_parser("editor-run-verify", help="проверить запуск фонового редактора по следам")
     p.add_argument("--run-id", required=True)
@@ -218,6 +219,12 @@ def main(argv=None) -> int:
 
     args = parser.parse_args(argv)
 
+    if args.command == "editor-gate":
+        from seo_operator import editor_run
+
+        decision = editor_run.gate()
+        print(json.dumps(decision, ensure_ascii=False))
+        return 10 if decision["run"] else 0
     if args.command == "editor-run-status":
         from seo_operator import editor_run
 

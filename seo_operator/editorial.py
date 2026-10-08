@@ -20,10 +20,15 @@ class SourceTrust(str, Enum):
     LICENSED_FEED = "licensed_feed"  # лицензированный каталог/фид
     PRESS_CONFIRMED = "press_confirmed"  # подтверждено профильным изданием
     UNCONFIRMED = "unconfirmed"  # слух, утечка, форум — публикации не подлежит
+    # Справочный каталог (Shikimori, MyAnimeList через Jikan): идентичность
+    # тайтла и факты завязки. Разрешён владельцем 2026-10-08 (D199); текст
+    # каталога не копируется — пересказ своими словами.
+    REFERENCE_CATALOG = "reference_catalog"
 
 
 PUBLISHABLE_TRUST = frozenset(
-    {SourceTrust.OFFICIAL, SourceTrust.LICENSED_FEED, SourceTrust.PRESS_CONFIRMED}
+    {SourceTrust.OFFICIAL, SourceTrust.LICENSED_FEED, SourceTrust.PRESS_CONFIRMED,
+     SourceTrust.REFERENCE_CATALOG}
 )
 
 

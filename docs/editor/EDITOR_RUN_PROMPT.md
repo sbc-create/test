@@ -15,20 +15,34 @@
    «Кандидаты для редактора» файла var/seo-regular/editor-candidates.json, проверь
    editorial_queue_find, зарегистрируй editorial_queue_register (если задания нет)
    и снова вызови editorial_queue_next. Кандидатов нет — закончи с итогом NO_TASK.
-2. Источник: editorial_facts {"site", "slug"}. Сюжет пиши ТОЛЬКО если у тайтла
-   есть синопсис в снимке (поле description). Внешние сайты не открывай.
+2. Источники (D199, config/editorial-sources.json):
+   * editorial_facts {"site", "slug"} — каталог сети;
+   * python3 automation/local/source_fetch.py shikimori <shikimori_id> — ID бери из
+     кандидата (shikimori_id) или из снимка (ratings_by_source.shikimori.external_id,
+     иначе external_ids.mal). Поле russian ответа обязано совпасть с названием
+     карточки, иначе итог IDENTITY_UNCLEAR и текст не пишется;
+   * python3 automation/local/source_fetch.py official <shikimori_id> — одна страница
+     официального сайта по ссылке Shikimori; отказ robots.txt — не обходить.
+   MyAnimeList не читать (robots.txt запрещает ИИ-агентам). Других сайтов не открывать.
+   Завязку пиши из синопсиса каталога, описания Shikimori или официального сайта —
+   своими словами, без копирования фраз и без рекламных оборотов источника.
 3. Открой публичную страницу (curl) и сверь: название, число серий, статус
    («Вышел»/«Онгоинг»). Утверждай только то, что совпало.
-4. Напиши текст по правилам. Если пользы сверх полей карточки нет и синопсиса
-   нет — НЕ пиши «пересказ полей»: заверши задание editorial_queue_result с
-   исходом SOURCES_MISSING и detail «нет синопсиса; нужен внешний источник».
+4. Напиши текст по правилам. Если завязки нет ни в одном разрешённом источнике —
+   НЕ пиши «пересказ полей»: заверши задание editorial_queue_result с исходом
+   SOURCES_MISSING и detail с перечнем проверенных источников и причиной.
+   Обязательной нормы нет: ноль публикаций лучше слабого текста.
+   Ворота сверяют годы только со снимком: годы выхода из Shikimori пиши словами
+   («сериал завершён»), а не числами, если в снимке их нет.
 5. prepare_material; при замечаниях исправь и повтори (не больше двух раз).
 6. publish_material с body и author = владелец. Если отвечено «нужен
    expect_generation» — прочитай последнюю запись history.jsonl хранилища; если её
    автор не ты, НЕ перезаписывай: заверши задание без публикации.
 7. editorial_queue_result TEXT_WRITTEN: canonical_url — ровно как в задании,
-   source_urls — адрес карточки, source_published_at — время изменения файла
-   снимка, facts — перечень использованных фактов, source_id — имя снимка.
+   source_urls — адреса использованных источников (Shikimori, официальный сайт)
+   или адрес карточки, если факты только из каталога; source_published_at — время
+   обращения к источнику; facts — перечень фактов с указанием источника каждого;
+   source_id — src-shikimori:<id> или имя снимка.
 8. Проверь страницу: 200, текст в видимом блоке, meta description начинается с него.
 9. Допиши строку в var/editor-runs/ledger.jsonl (JSON): id "CHG-<YYYYMMDD>-R{{RUN_ID}}-<n>",
    url, kind ("written" для заглушки, "optimized" для замены дубля), element
@@ -36,8 +50,8 @@
    artifacts/analytics/analytics-<последняя дата>.json), hypothesis, task_id,
    published_at (время записи publish в history.jsonl), path, rollback, decision "pending".
 
-Чего не делать никогда: не трогать Yummy, Lords, AnimeGo, Zona; не менять чужие
-тексты; не открывать внешние сайты; не писать числа серий у выходящих тайтлов;
+Чего не делать никогда: не трогать Yummy, Lords, AnimeGo, Zona; не брать задания
+с чужой активной арендой; не открывать сайты вне перечисленных источников; не писать числа серий у выходящих тайтлов;
 не коммитить в git; не менять код и конфигурацию.
 
 Последней строкой ответа выведи JSON: {"run_id": "{{RUN_ID}}", "outcome":

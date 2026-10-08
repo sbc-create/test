@@ -378,24 +378,46 @@ sources:
       - "Частичное обновление поддерживается: передаются только изменяемые поля."
       - "WebvisorOptions: urls, arch_enabled, arch_type, load_player_type, wv_version, wv_forms."
   - id: SRC-EDITORIAL-SYNOPSIS-SHIKIMORI
-    kind: editorial_source_candidate
+    kind: editorial_source
     owner: Shikimori
-    url: https://shikimori.one/
-    status: not_provided
+    url: https://shikimori.io/api/animes/
+    status: approved
     received_at: "2026-10-08"
-    purpose: "факты завязки для описаний карточек без синопсиса в каталоге"
+    retrieved_at: "2026-10-08T14:20:00Z"
+    purpose: "идентичность тайтла и факты завязки по ID, сопоставленному в каталоге сети; официальные ссылки"
     note: >-
-      Кандидат, а не одобренный источник. Каталог сети уже хранит сопоставленные
-      идентификаторы (ratings_by_source.shikimori, match_state external_id_exact+title_verified),
-      то есть тайтл адресуется по ID без поиска по названию. Не открывался: хоста нет в
-      inventory/network-allowlist.yaml, а CLAUDE.md (CLOSED_WORLD) запрещает искать контент
-      в интернете. Нужен явный выбор владельца (D198).
+      Разрешён владельцем 2026-10-08 (D199). shikimori.one отвечает 301 на shikimori.io.
+      robots.txt закрывает /api/* для обходчиков сайта; используется документированное API
+      для приложений: свой User-Agent, ≤4 запросов в секунду, только чтение по ID.
+      Проверено: /api/animes/55809, 56736, 43626, 11061 — HTTP 200.
   - id: SRC-EDITORIAL-SYNOPSIS-MAL
     kind: editorial_source_candidate
     owner: MyAnimeList
     url: https://myanimelist.net/
-    status: not_provided
+    status: rejected
     received_at: "2026-10-08"
-    purpose: "вторая сверка фактов завязки"
+    purpose: "вторая сверка фактов"
     note: >-
-      Кандидат; external_ids.mal есть в каталоге. Не открывался по тем же причинам (D198).
+      Владелец разрешил, но условия источника запрещают: robots.txt myanimelist.net
+      (прочитан 2026-10-08) содержит группу для anthropic-ai, ClaudeBot, Claude-Web и др.
+      с «Disallow: /». Официальный API требует client id — не передан.
+  - id: SRC-EDITORIAL-JIKAN
+    kind: editorial_source_candidate
+    owner: Jikan (unofficial MyAnimeList API)
+    url: https://api.jikan.moe/v4/
+    status: unavailable_blocked
+    received_at: "2026-10-08"
+    note: >-
+      С claude-control-01 соединение не устанавливается: IPv6 2a01:4f9:c010:b863::1 —
+      connect timeout 10 с; curl -4 — таймаут 15 с (2026-10-08 ~14:10Z).
+  - id: SRC-EDITORIAL-OFFICIAL-SITE
+    kind: editorial_source
+    owner: правообладатель произведения
+    url: "external_links Shikimori, kind official_site"
+    status: approved
+    received_at: "2026-10-08"
+    purpose: "факты о произведении с официального сайта"
+    note: >-
+      Адрес — только из external_links Shikimori того же ID; перед чтением robots.txt
+      проверяется для нашего User-Agent и ИИ-агентов. Проверено: degarashiouji.com и
+      ntv.co.jp/hunterhunter — разрешают; v.qq.com — запрещает ClaudeBot, не читается.

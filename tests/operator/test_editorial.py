@@ -143,3 +143,12 @@ def test_distinct_titles_across_sites_are_fine():
         BacklogItem("site-b", "Материал Б", "Подборки", "informational"),
     ]
     assert detect_cross_site_duplication(items) == []
+
+
+def test_reference_catalog_is_publishable_only_with_rights_flag():
+    """D199: справочный каталог (Shikimori, MAL) разрешён владельцем для фактов."""
+    ok = EditorialSource("src-shikimori", "Shikimori", "https://shikimori.one/api/animes/",
+                         SourceTrust.REFERENCE_CATALOG, rights_confirmed=True)
+    assert ok.publishable
+    no = EditorialSource("src-x", "X", "https://x.example", SourceTrust.REFERENCE_CATALOG, rights_confirmed=False)
+    assert not no.publishable
