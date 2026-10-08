@@ -146,11 +146,24 @@ def parse_iso(text: str | None) -> dt.datetime | None:
     return moment
 
 
+#: Расписание проверки — automation/host/seo-regular/seo-regular-check.timer.
+CHECK_ANCHOR_HOUR = 5
+CHECK_ANCHOR_MINUTE = 25
+
+
 def slot_id(mode: str, moment: dt.datetime) -> str:
     """Идентификатор слота: один запуск на слот, прерванный — продолжается."""
     if mode == "check":
+        # Слот начинается в момент расписания (05:25, 11:25, 17:25, 23:25 UTC), а
+        # не на шестичасовой отметке от полуночи. Измерено 2026-10-08: при
+        # границах 00/06/12/18 плановая проверка 17:25 попала в слот 12:00–18:00,
+        # уже закрытый ручным запуском в 12:06, и ничего не проверила.
         utc = moment.astimezone(UTC)
-        return f"check-{utc:%Y-%m-%d}T{(utc.hour // 6) * 6:02d}"
+        start = utc.replace(minute=CHECK_ANCHOR_MINUTE, second=0, microsecond=0)
+        start -= dt.timedelta(hours=(utc.hour - CHECK_ANCHOR_HOUR) % 6)
+        if start > utc:
+            start -= dt.timedelta(hours=6)
+        return f"check-{start:%Y-%m-%dT%H%M}"
     if mode == "daily":
         return f"daily-{moment.astimezone(MSK):%Y-%m-%d}"
     if mode == "hourly":
@@ -1974,6 +1987,14 @@ def _run_locked(mode, root, run_id, now, journal, budget, sources, http, trigger
         # Слот уже отработан: повторный вызов ничего не делает и не выдаёт
         # себя за новую проверку.
         journal.write("run_finished", state="ALREADY_DONE", exit_code=0)
+        # Пропуск виден в истории: иначе срабатывание таймера, не сделавшее
+        # работы, неотличимо от несработавшего таймера.
+        history = state.setdefault("runs", [])
+        history.append({"run_id": run_id, "mode": mode, "trigger": trigger,
+                        "started_at": run_record["started_at"], "finished_at": iso(utcnow()),
+                        "state": "ALREADY_DONE"})
+        del history[:-200]
+        _write_json(state_path, state)
         return {**run_record, "state": "ALREADY_DONE", "exit_code": 0, "error": ""}
     run_record.update({"finished_at": iso(utcnow()), "state": final, "error": error,
                        "requests_used": budget.used_requests})

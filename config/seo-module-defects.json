@@ -302,6 +302,18 @@
       "change": "Решение владельца о роли двух доменов. До него: заглушки закрываются уникальным текстом на каждом домене; пилот на 2 посещаемых дублях animedia.space (CHG-20261008-05/06) с контролем на icu покажет, есть ли измеримый эффект.",
       "acceptance": "Решение записано; пилот оценён на +14 (2026-10-23).",
       "evidence": "сравнение description в двух снимках (команда в docs/CONTENT_BATCH_20261008.md)"
+    },
+    {
+      "id": "MOD-26",
+      "title": "Плановая проверка 17:25 попала в слот, закрытый ручным запуском, и ничего не проверила",
+      "zone": "seo",
+      "priority": "P1",
+      "state": "implemented",
+      "example": "2026-10-08: seo-regular-check.timer сработал в 17:25:04Z (отметка /var/lib/systemd/timers/stamp-seo-regular-check.timer), запуск получил run_id check-2026-10-08T12 — тот же, что у ручной проверки 12:06Z — и завершился ALREADY_DONE без единого запроса; в истории state.runs записи не осталось.",
+      "wrong_decision": "Срабатывание таймера выглядело как несработавший таймер; проверка сети за 17:25 не выполнена.",
+      "change": "слот проверки начинается в момент расписания (05:25/11:25/17:25/23:25 UTC); пропуск ALREADY_DONE пишется в историю с триггером.",
+      "acceptance": "Плановая проверка 23:25 UTC 2026-10-08 — run_id check-2026-10-08T2325, состояние DONE, trigger systemd-timer.",
+      "evidence": "tests/unit/test_seo_regular.py::test_slot_ids_are_stable_within_a_slot, ::test_skipped_slot_is_visible_in_history; var/seo-regular/journal/2026-10-08.jsonl 17:25:05Z"
     }
   ]
 }

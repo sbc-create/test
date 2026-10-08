@@ -108,8 +108,12 @@ def _journal(root: Path) -> list[dict]:
 
 
 def test_slot_ids_are_stable_within_a_slot():
-    assert regular.slot_id("check", NOW) == "check-2026-10-08T00"
-    assert regular.slot_id("check", NOW.replace(hour=11, minute=59)) == "check-2026-10-08T06"
+    # слот начинается в момент расписания: 05:25, 11:25, 17:25, 23:25 UTC
+    assert regular.slot_id("check", NOW) == "check-2026-10-08T0525"
+    assert regular.slot_id("check", NOW.replace(hour=5, minute=20)) == "check-2026-10-07T2325"
+    # ручной запуск в 12:06 и плановый в 17:25 — разные слоты (случай 2026-10-08)
+    assert regular.slot_id("check", NOW.replace(hour=12, minute=6)) == "check-2026-10-08T1125"
+    assert regular.slot_id("check", NOW.replace(hour=17, minute=25, second=4)) == "check-2026-10-08T1725"
     # 23:30 UTC 7 октября — это уже 8 октября по Москве
     late = dt.datetime(2026, 10, 7, 23, 30, tzinfo=dt.timezone.utc)
     assert regular.slot_id("daily", late) == "daily-2026-10-08"
@@ -143,7 +147,7 @@ def test_check_run_records_each_action_and_finishes(env):
     # тестовые имена в обход не попадают
     assert all("localhost" not in url for url in http.calls)
     state = json.loads((env["root"] / "state.json").read_text(encoding="utf-8"))
-    assert state["last_check"]["run_id"] == "check-2026-10-08T00"
+    assert state["last_check"]["run_id"] == "check-2026-10-08T0525"
     assert state["runs"][-1]["trigger"] == "systemd-timer"
 
 
@@ -723,3 +727,12 @@ def test_hourly_summary_makes_no_requests_and_says_delivery_is_not_done(env):
     assert r["state"] == "DONE" and http.calls == []
     text = (env["root"] / "hourly" / "2026-10-08T05.md").read_text(encoding="utf-8")
     assert "доставка владельцу: не выполнена" in text
+
+
+def test_skipped_slot_is_visible_in_history(env):
+    http = FakeHttp({"https://a.example/": HOME_OPEN, "https://a.example/robots.txt": ROBOTS_OK})
+    regular.run("check", root=env["root"], now=NOW, sources=env["sources"], http=http)
+    regular.run("check", root=env["root"], now=NOW, sources=env["sources"], http=http, trigger="systemd-timer")
+    state = json.loads((env["root"] / "state.json").read_text(encoding="utf-8"))
+    assert state["runs"][-1]["state"] == "ALREADY_DONE"
+    assert state["runs"][-1]["trigger"] == "systemd-timer"
