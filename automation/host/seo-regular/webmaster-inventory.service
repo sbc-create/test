@@ -23,7 +23,10 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=read-only
-ReadWritePaths=/home/claude/wt-portable-site-cell-01/var/analytics
+# Транспорт аналитики пишет журнал аудита в var/audit (factory/audit.py). Без
+# этого пути 2026-10-08 12:36:01Z запрос к API прошёл, а запись аудита упала
+# «Read-only file system», и итог не сохранился. Те же пути, что у analytics-cabinet.
+ReadWritePaths=/home/claude/wt-portable-site-cell-01/var /home/claude/wt-portable-site-cell-01/artifacts
 ProtectKernelTunables=true
 RestrictSUIDSGID=true
 TimeoutStartSec=300
