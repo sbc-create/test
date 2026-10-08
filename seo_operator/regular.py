@@ -91,7 +91,15 @@ SOURCES = {
     "content_operator_state": Path("/var/lib/seo-content-operator/state.json"),
     "defects": REPO_ROOT / "config" / "seo-module-defects.json",
     "changes_ledger": REPO_ROOT / "config" / "seo-changes.json",
+    # Строки журнала изменений, которые дописывает фоновый редактор (в git не
+    # коммитит — в репозиторий их переносит сессия).
+    "changes_ledger_runs": REPO_ROOT / "var" / "editor-runs" / "ledger.jsonl",
+    "facts_snapshots": Path("/srv/lords/.frontend"),
 }
+
+#: Домены Animedia и их снимки фактов: только у этого семейства есть факты,
+#: доставка и отображение описаний.
+ANIMEDIA = {"animedia.icu": "animedia-01", "animedia.space": "animedia-02"}
 
 #: Хранилища опубликованных материалов по семействам и форма их адресов.
 #: Пути — те же, что у factory.qwen.registry.КОРНИ_ХРАНИЛИЩ; форма адреса —
@@ -108,7 +116,7 @@ OVERLAY_ROOTS = {
 #: ответственности — ничего не блокирует.
 SEO_OWNER_PATTERN = re.compile(r"seo|analy|audit", re.IGNORECASE)
 
-MODES = ("check", "daily", "weekly")
+MODES = ("check", "daily", "weekly", "hourly")
 
 
 # --------------------------------------------------------------------- время
@@ -145,6 +153,8 @@ def slot_id(mode: str, moment: dt.datetime) -> str:
         return f"check-{utc:%Y-%m-%d}T{(utc.hour // 6) * 6:02d}"
     if mode == "daily":
         return f"daily-{moment.astimezone(MSK):%Y-%m-%d}"
+    if mode == "hourly":
+        return f"hourly-{moment.astimezone(UTC):%Y-%m-%dT%H}"
     year, week, _ = moment.astimezone(MSK).isocalendar()
     return f"weekly-{year}-W{week:02d}"
 
@@ -1088,10 +1098,19 @@ def optimization_candidates(visited: dict, *, limit: int = 15) -> dict:
             "duplicate_titles": visited.get("duplicate_titles") or []}
 
 
-def changes_section(ledger_path: Path, state: dict, today: dt.date) -> dict:
+def changes_section(ledger_path: Path, state: dict, today: dt.date, extra: Path | None = None) -> dict:
     """Пять разделов: написано, оптимизировано, опубликовано и проверено,
     эффект пока не установлен, результат измерен."""
-    ledger = _read_json(ledger_path, {}).get("changes") or []
+    ledger = list(_read_json(ledger_path, {}).get("changes") or [])
+    runs = ledger_path.parent.parent / "var" / "editor-runs" / "ledger.jsonl" if extra is None else extra
+    if runs.is_file():
+        for line in runs.read_text(encoding="utf-8").splitlines():
+            try:
+                row = json.loads(line)
+            except ValueError:
+                continue
+            if row.get("url") and row.get("kind") in ("written", "optimized"):
+                ledger.append({"element": "description", "published_at": "", **row})
     measured_state = state.get("changes") or {}
     publications = state.get("publications") or {}
     out: dict[str, list] = {"written": [], "optimized": [], "verified": [],
@@ -1487,6 +1506,61 @@ def step_visited(ctx: Context) -> Any:
             "duplicate_titles": page_audit.duplicate_titles(audits)}
 
 
+def editor_candidates(snapshot: Path, facts_dir: Path, published: set[tuple[str, str]],
+                      *, limit: int = 20) -> list[dict]:
+    """Что редактору брать, когда очередь пуста: по трафику, с причиной.
+
+    * GAP — описания нет вовсе (заглушка на странице);
+    * DUPLICATE — синопсис есть и дословно совпадает на icu и space; меняется
+      только на space, icu — контроль пилота (MOD-25).
+    Визиты на серии засчитываются тайтлу: интерес к тайтлу — это они.
+    """
+    weights: dict[tuple[str, str], float] = {}
+    for entry in _read_json(snapshot, {}).get("domains") or []:
+        domain = entry.get("domain")
+        if domain not in ANIMEDIA:
+            continue
+        for key in ("landing_pages", "popular_pages"):
+            ok, value, _ = _metric(entry, key)
+            for path, metric in (_rows(value) if ok else {}).items():
+                m = re.match(r"^/title/([^/]+)/", path)
+                if m:
+                    weights[(domain, m.group(1))] = weights.get((domain, m.group(1)), 0.0) + metric
+    details = {d: (_read_json(facts_dir / f"{sid}-details.json", {}).get("details") or {})
+               for d, sid in ANIMEDIA.items()}
+    out = []
+    for (domain, slug), weight in sorted(weights.items(), key=lambda kv: -kv[1]):
+        if (domain, slug) in published:
+            continue
+        mine = (details.get(domain) or {}).get(slug)
+        if not mine:
+            continue
+        desc = (mine.get("description") or "").strip()
+        other = (details.get("animedia.icu") or {}).get(slug) or {}
+        if not desc:
+            reason = "GAP"
+        elif domain == "animedia.space" and desc == (other.get("description") or "").strip():
+            reason = "DUPLICATE"
+        else:
+            continue
+        out.append({"site": domain, "slug": slug, "url": f"https://{domain}/title/{slug}/",
+                    "weight": weight, "reason": reason, "has_synopsis": bool(desc),
+                    "headline": mine.get("name")})
+    return out[:limit]
+
+
+def step_candidates(ctx: Context) -> Any:
+    snaps = sorted(ctx.sources["analytics_snapshots"].glob("analytics-????-??-??.json"))
+    if not snaps:
+        return {"snapshot": None, "candidates": []}
+    published = {(i["domain"], i["slug"]) for i in published_items()}
+    found = editor_candidates(snaps[-1], ctx.sources["facts_snapshots"], published)
+    out = {"snapshot": snaps[-1].name, "generated_at": iso(utcnow()), "candidates": found}
+    _write_json(ctx.root / "editor-candidates.json", out)
+    ctx.journal.write("editor_candidates", count=len(found))
+    return out
+
+
 def step_queue(ctx: Context) -> Any:
     hygiene = queue_hygiene(ctx.sources["queue_registry"], ctx.sources["queue_events"],
                             since=ctx.now - dt.timedelta(days=1))
@@ -1617,7 +1691,8 @@ def step_daily_report(ctx: Context) -> Any:
         "weekly": weekly,
         "candidates": optimization_candidates(ctx.result("visited") or {}),
         "module": module_section(ctx.sources["defects"]),
-        "changes": changes_section(ctx.sources["changes_ledger"], ctx.state, ctx.now.astimezone(MSK).date()),
+        "changes": changes_section(ctx.sources["changes_ledger"], ctx.state, ctx.now.astimezone(MSK).date(),
+                                   ctx.sources.get("changes_ledger_runs")),
         # Файл сохранён — это НЕ доставка. Канала доставки владельцу в проекте
         # нет (docs/SEO_REGULAR_RUN.md §4); пока он не выбран, отчёт честно
         # говорит, что не доставлен.
@@ -1688,14 +1763,78 @@ def step_weekly_priorities(ctx: Context) -> Any:
     return result
 
 
+def step_hourly(ctx: Context) -> Any:
+    """Короткая сводка за час. Ни одного сетевого запроса — только журналы."""
+    since = ctx.now - dt.timedelta(hours=1)
+    pubs = []
+    for family, (root, form) in OVERLAY_ROOTS.items():
+        if not root.is_dir():
+            continue
+        for site_dir in root.iterdir():
+            history = site_dir / "history.jsonl"
+            if not history.is_file():
+                continue
+            for line in history.read_text(encoding="utf-8").splitlines()[-200:]:
+                try:
+                    r = json.loads(line)
+                except ValueError:
+                    continue
+                at = parse_iso(r.get("at"))
+                if r.get("op") in ("publish", "unpublish") and at and at >= since:
+                    pubs.append(f"{r['op']} https://{site_dir.name}{form.format(slug=r['slug'])} ({r.get('author')})")
+    claims = results = 0
+    outcomes: dict[str, int] = {}
+    events = ctx.sources["queue_events"]
+    if events.is_file():
+        for line in events.read_text(encoding="utf-8").splitlines()[-3000:]:
+            try:
+                e = json.loads(line)
+            except ValueError:
+                continue
+            at = parse_iso(e.get("at"))
+            if not at or at < since:
+                continue
+            if e.get("event") == "task_claimed":
+                claims += 1
+            elif e.get("event") == "task_result":
+                results += 1
+                outcomes[e.get("outcome")] = outcomes.get(e.get("outcome"), 0) + 1
+    runs = []
+    log = REPO_ROOT / "var" / "editor-runs" / "runs.jsonl"
+    if log.is_file():
+        for line in log.read_text(encoding="utf-8").splitlines():
+            try:
+                r = json.loads(line)
+            except ValueError:
+                continue
+            at = parse_iso(r.get("finished_at"))
+            if at and at >= since:
+                runs.append(f"{r['run_id']} {r.get('trigger')} → {r.get('verdict')}")
+    open_issues = [i for i in (ctx.state.get("open_issues_check") or {}).values()
+                   if i.get("severity") == "critical"]
+    lines = [f"# Сводка за час до {iso(ctx.now)}", "",
+             f"- публикаций: {len(pubs)}", *[f"  - {x}" for x in pubs[:10]],
+             f"- очередь: выдач {claims}, результатов {results} {outcomes or ''}",
+             f"- запуски фонового редактора: {len(runs)}", *[f"  - {x}" for x in runs],
+             f"- открытых критических проблем сайтов (последняя проверка): {len(open_issues)}",
+             "- доставка владельцу: не выполнена — канал не настроен; сводка только сохранена в файл"]
+    out = ctx.root / "hourly" / f"{ctx.now.astimezone(UTC):%Y-%m-%dT%H}.md"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return {"path": str(out), "publications": len(pubs), "claims": claims, "results": results,
+            "editor_runs": len(runs)}
+
+
 PLANS: dict[str, list[tuple[str, Callable[[Context], Any]]]] = {
     "check": [("discover", step_discover), ("availability", step_availability),
               ("analytics", step_analytics), ("publications", step_publications),
               ("diff", step_diff)],
     "daily": [("discover", step_discover), ("check", step_reuse_check),
               ("analytics", step_analytics), ("publications", step_publications),
-              ("sitemaps", step_sitemaps), ("visited", step_visited), ("queue", step_queue),
+              ("sitemaps", step_sitemaps), ("visited", step_visited), ("candidates", step_candidates),
+              ("queue", step_queue),
               ("report", step_daily_report)],
+    "hourly": [("summary", step_hourly)],
     "weekly": [("discover", step_discover), ("evaluate", step_evaluate),
                ("priorities", step_weekly_priorities)],
 }
@@ -1705,6 +1844,7 @@ LIMITS = {
     "check": (420, 120),
     "daily": (840, 400),
     "weekly": (300, 20),
+    "hourly": (60, 0),
 }
 
 

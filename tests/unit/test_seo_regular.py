@@ -91,6 +91,8 @@ def env(tmp_path, monkeypatch):
         "content_operator_state": tmp_path / "state.json",
         "defects": tmp_path / "defects.json",
         "changes_ledger": tmp_path / "seo-changes.json",
+        "changes_ledger_runs": tmp_path / "editor-ledger.jsonl",
+        "facts_snapshots": tmp_path / "facts",
     }
     return {"root": tmp_path / "state", "sources": sources, "tmp": tmp_path}
 
@@ -691,3 +693,33 @@ def test_control_page_cancels_a_title_wide_rise():
     assert regular.judge(base, after, same_rise)["verdict"] == "NO_CLEAR_CHANGE"
     flat_control = (_m(10, 100), _m(10, 100))
     assert regular.judge(base, after, flat_control)["verdict"] == "GAIN_OBSERVED"
+
+
+def test_editor_candidates_rank_gaps_and_space_duplicates_by_title_traffic(tmp_path):
+    snap = tmp_path / "analytics-2026-10-08.json"
+    snap.write_text(json.dumps({"domains": [
+        {"domain": "animedia.space", "measurements": [{"key": "popular_pages", "measured": True, "value": [
+            {"dimensions": [{"name": "/title/gap/season-1/episode-1/"}], "metrics": [9.0]},
+            {"dimensions": [{"name": "/title/dup/"}], "metrics": [4.0]},
+            {"dimensions": [{"name": "/title/done/"}], "metrics": [20.0]}]}]},
+        {"domain": "animedia.icu", "measurements": [{"key": "popular_pages", "measured": True, "value": [
+            {"dimensions": [{"name": "/title/dup/"}], "metrics": [5.0]}]}]}]}), encoding="utf-8")
+    facts = tmp_path / "facts"
+    facts.mkdir()
+    same = {"name": "Дубль", "description": "Один и тот же синопсис."}
+    for sid in ("animedia-01", "animedia-02"):
+        (facts / f"{sid}-details.json").write_text(json.dumps({"details": {
+            "gap": {"name": "Без описания", "description": None}, "dup": same, "done": same}}), encoding="utf-8")
+    found = regular.editor_candidates(snap, facts, {("animedia.space", "done")})
+    assert [(c["site"], c["slug"], c["reason"]) for c in found] == [
+        ("animedia.space", "gap", "GAP"), ("animedia.space", "dup", "DUPLICATE")]
+    # на icu дубль не трогается: там контроль пилота
+    assert all(c["site"] != "animedia.icu" or c["reason"] == "GAP" for c in found)
+
+
+def test_hourly_summary_makes_no_requests_and_says_delivery_is_not_done(env):
+    http = FakeHttp()
+    r = regular.run("hourly", root=env["root"], now=NOW, sources=env["sources"], http=http)
+    assert r["state"] == "DONE" and http.calls == []
+    text = (env["root"] / "hourly" / "2026-10-08T05.md").read_text(encoding="utf-8")
+    assert "доставка владельцу: не выполнена" in text

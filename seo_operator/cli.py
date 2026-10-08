@@ -196,6 +196,13 @@ def main(argv=None) -> int:
     p.add_argument("--json", action="store_true", help="машиночитаемый вывод")
     p.add_argument("--out", help="записать отчёт в файл")
 
+    sub.add_parser("editor-run-status", help="запуски фонового редактора: по расписанию и ручные")
+    p = sub.add_parser("editor-run-verify", help="проверить запуск фонового редактора по следам")
+    p.add_argument("--run-id", required=True)
+    p.add_argument("--started-at", required=True)
+    p.add_argument("--finished-at", required=True)
+    p.add_argument("--out")
+
     sub.add_parser(
         "webmaster-inventory",
         help="read-only: почему у доменов нет данных Вебмастера (нет в аккаунте / не подтверждён / сопоставление)",
@@ -205,12 +212,24 @@ def main(argv=None) -> int:
         "regular",
         help="регулярный прогон по сети: check (6 ч), daily (09:00 МСК), weekly",
     )
-    p.add_argument("mode", choices=("check", "daily", "weekly", "status"))
+    p.add_argument("mode", choices=("check", "daily", "weekly", "hourly", "status"))
     p.add_argument("--trigger", default=None, help="systemd-timer или manual")
     p.add_argument("--root", default=None, help="каталог состояния")
 
     args = parser.parse_args(argv)
 
+    if args.command == "editor-run-status":
+        from seo_operator import editor_run
+
+        print(json.dumps(editor_run.status(), ensure_ascii=False, indent=2))
+        return 0
+    if args.command == "editor-run-verify":
+        from seo_operator import editor_run
+
+        extra = ["--run-id", args.run_id, "--started-at", args.started_at, "--finished-at", args.finished_at]
+        if args.out:
+            extra += ["--out", args.out]
+        return editor_run.main(extra)
     if args.command == "webmaster-inventory":
         from seo_operator import webmaster_inventory
 

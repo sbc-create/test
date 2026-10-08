@@ -1,0 +1,40 @@
+# Один запуск фонового редактора. Подробно — docs/editor/BACKGROUND_EDITOR.md.
+#
+# Исполнитель — Claude Code без интерфейса (учётные данные claude в ~/.claude),
+# ход задаёт docs/editor/EDITOR_RUN_PROMPT.md, правила текста —
+# docs/editor/EDITORIAL_RULES.md. Публикует только через мост MCP; права на
+# запись в хранилища у службы нет. Итог решает проверка по следам
+# (seo_operator.editor_run), а не ответ модели.
+#
+# Коды: 0 — полный запуск или честное «задач нет»; 2 — неполный (юнит падает —
+# это уведомление); 75 — занято другим запуском.
+[Unit]
+Description=Фоновый редактор сети: один запуск
+After=network-online.target site-factory-mcp.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/home/claude/wt-portable-site-cell-01
+Environment=HOME=/home/claude
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=EDITOR_RUN_TRIGGER=systemd-timer
+ExecStart=/usr/bin/bash /home/claude/wt-portable-site-cell-01/automation/host/editor/editor-run.sh
+SuccessExitStatus=0 75
+TimeoutStartSec=1800
+Nice=10
+CPUQuota=50%
+MemoryMax=2G
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+# Claude Code пишет сессии и настройки в домашний каталог; публикация идёт
+# через мост, поэтому /srv и /var/lib для службы только на чтение.
+ReadWritePaths=/home/claude
+ProtectKernelTunables=yes
+RestrictSUIDSGID=yes
+
+[Install]
+WantedBy=multi-user.target

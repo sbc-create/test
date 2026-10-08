@@ -1,0 +1,42 @@
+# Короткая проверка сети каждые 6 часов: доступность, индексация, свежесть данных, результат публикаций.
+#
+# Только чтение сайтов, снимков аналитики и редакционной очереди. Пишет одно:
+# собственное состояние в var/seo-regular (журнал, контрольные точки, отчёт).
+# Секретов не получает: аналитику читает из снимков analytics-cabinet.
+#
+# Коды выхода: 0 — готово; 75 — блокировка занята или исчерпан бюджет (слот
+# продолжит следующий вызов, сбоем не считается); 3 — НОВАЯ критическая
+# проблема сайта (юнит падает — это уведомление, повторного по той же
+# проблеме не будет); 1 — шаг не выполнен после повтора.
+[Unit]
+Description=SEO regular: hourly summary
+Documentation=file:///home/claude/wt-portable-site-cell-01/docs/SEO_REGULAR_RUN.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/home/claude/wt-portable-site-cell-01
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=SEO_REGULAR_TRIGGER=systemd-timer
+ExecStart=/usr/bin/python3 -m seo_operator.cli regular hourly --trigger systemd-timer
+SuccessExitStatus=0 75
+# Свой предел у кода (бюджет цикла); systemd — страховка сверху.
+TimeoutStartSec=120
+Nice=10
+CPUQuota=50%
+MemoryMax=512M
+TasksMax=32
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/claude/wt-portable-site-cell-01/var/seo-regular
+ProtectKernelTunables=yes
+RestrictSUIDSGID=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,15 @@
+# Фоновый редактор: 4 запуска в сутки, до двух материалов за запуск.
+# 03:15, 09:15, 15:15, 21:15 UTC (06:15, 12:15, 18:15, 00:15 МСК) — не пересекается
+# с проверками SEO (05/11/17/23:25) и суточным анализом (05:40).
+[Unit]
+Description=Фоновый редактор сети (Claude Code, проверка по следам)
+
+[Timer]
+OnCalendar=*-*-* 03,09,15,21:15:00 UTC
+Persistent=true
+RandomizedDelaySec=120
+AccuracySec=30s
+Unit=editor-run.service
+
+[Install]
+WantedBy=timers.target
