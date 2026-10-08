@@ -157,6 +157,13 @@ try:
         итог = очередь.release(task_id=з["task_id"], owner=з["owner"])
     elif op == "owns":
         итог = очередь.lease_check(task_id=з["task_id"], owner=з["owner"])
+    elif op == "published":
+        итог = очередь.note_publication(
+            task_id=з["task_id"],
+            canonical_url=з.get("canonical_url") or "",
+            generation_id=з.get("generation_id") or "",
+            content_digest=з.get("content_digest") or "",
+            author=з.get("author") or "")
     else:
         raise QueueError(f"неизвестная операция {op!r}")
 except QueueError as ош:
@@ -440,6 +447,23 @@ def отпустить(*, task_id: str, owner: str) -> dict[str, Any]:
     return _вызвать({"op": "release", "task_id": task_id, "owner": owner})
 
 
+def отметить_публикацию(*, task_id: str, canonical_url: str = "",
+                        generation_id: str = "", content_digest: str = "",
+                        author: str = "") -> dict[str, Any]:
+    """След в журнале очереди о том, что текст задания опубликован.
+
+    Статуса не меняет и публичной видимости не утверждает: подтверждение
+    делает тот, кто читает страницу. Нужна, потому что публикация идёт другим
+    инструментом, и до этого связи между заданием и его публичным результатом
+    не было ни в одну сторону (измерено 2026-10-08 на
+    animedia.space/title/detektivnoe-agentstvo-li/).
+    """
+    return _вызвать({"op": "published", "task_id": task_id,
+                     "canonical_url": canonical_url,
+                     "generation_id": generation_id,
+                     "content_digest": content_digest, "author": author})
+
+
 def моё_ли(*, task_id: str, owner: str) -> dict[str, Any]:
     """Моё ли это задание. Отвечает да/нет и ЧУЖОГО ИМЕНИ НЕ НАЗЫВАЕТ.
 
@@ -452,5 +476,6 @@ def моё_ли(*, task_id: str, owner: str) -> dict[str, Any]:
 
 
 __all__ = ["ОчередьОтклонила", "КОРЕНЬ_ОПЕРАТОРА", "взять", "записать",
+           "отметить_публикацию",
            "состояние", "отпустить", "моё_ли", "найти", "завести",
            "возобновить", "отменить"]

@@ -1287,6 +1287,38 @@ def инструмент_подготовки(аргументы: dict) -> dict[
             "environment": окружение()}
 
 
+def _отметить_в_очереди(task_id: Any, итог: dict[str, Any], *,
+                        author: str) -> dict[str, Any] | None:
+    """След публикации в журнале очереди, если вызывающий назвал задание.
+
+    Связи между заданием и его публичным результатом не было ни в одну
+    сторону: публикация идёт этим инструментом, а очередь о ней не узнаёт.
+    Измерено 2026-10-08 — описание
+    `animedia.space/title/detektivnoe-agentstvo-li/` опубликовано
+    2026-10-07T09:32:13Z по журналу хранилища, задание зарегистрировано
+    минутой раньше, а `published_at` в реестре очереди относился к 2026-09-21.
+
+    Поле необязательное, и отказ отметки НЕ отменяет публикацию: текст на
+    странице уже стоит, и превращать запись в журнал в условие успеха значило
+    бы терять сделанную работу из-за журнала.
+    """
+    ид = str(task_id or "").strip()
+    if not ид:
+        return None
+    try:
+        from factory.qwen import queue_bridge as мост
+        return мост.отметить_публикацию(
+            task_id=ид,
+            canonical_url=str(итог.get("canonical_url") or ""),
+            generation_id=str(итог.get("generation_id") or ""),
+            content_digest=str(итог.get("content_digest") or ""),
+            author=author)
+    except Exception as ош:  # noqa: BLE001 — журнал не отменяет публикацию
+        return {"task_id": ид, "noted": False, "error": str(ош),
+                "note": "публикация выполнена; отметка в журнале очереди не "
+                        "удалась и успех публикации от неё не зависит"}
+
+
 def инструмент_публикации(аргументы: dict) -> dict[str, Any]:
     """Опубликовать материал: из черновика ИЛИ переданным телом.
 
@@ -1316,9 +1348,15 @@ def инструмент_публикации(аргументы: dict) -> dict[
             тело=тело)
     except (editorial.ОперацияОтклонена, indexing.Отказано) as ош:
         raise ОшибкаИнструмента(str(ош)) from None
-    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "result": итог,
-            "confirmed": итог.get("state") == "confirmed",
-            "environment": окружение()}
+    отметка = _отметить_в_очереди(
+        аргументы.get("task_id"), итог,
+        author=str(аргументы.get("author") or "qwen"))
+    ответ = {"version": ВЕРСИЯ_ОБОЛОЧКИ, "result": итог,
+             "confirmed": итог.get("state") == "confirmed",
+             "environment": окружение()}
+    if отметка is not None:
+        ответ["queue_note"] = отметка
+    return ответ
 
 
 def инструмент_снятия(аргументы: dict) -> dict[str, Any]:
@@ -1844,7 +1882,12 @@ def инструмент_области_адреса(аргументы: dict) -
                                   "description": "поколение хранилища, которое "
                                                  "вы видели: защита от слепой "
                                                  "перезаписи чужой правки"},
-            "author": {"type": "string"}},
+            "author": {"type": "string"},
+            "task_id": {"type": "string",
+                        "description": "задание очереди, по которому идёт "
+                                       "публикация: в журнал очереди попадёт "
+                                       "событие task_published. Необязательно; "
+                                       "статус задания от этого не меняется"}},
             "required": ["site", "slug"], "additionalProperties": False},
     },
     "unpublish_material": {
