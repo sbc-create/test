@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "changes": [
+    {
+      "id": "CHG-20261008-01",
+      "url": "https://animedia.icu/title/protivostoyanie-svyatogo/",
+      "kind": "rewritten",
+      "element": "description",
+      "problem": "вместо описания заглушка «Описание пока не передано источником»; meta description — «Название: Аниме год»",
+      "evidence": "data-b07-desc=gap при проверке 2026-10-08 ~11:50Z; analytics-2026-10-08.json (окно 2026-10-01…07): входы 3, просмотры 4; серия 1 — 8/16",
+      "task_id": "b9a97301b10daa6a",
+      "published_at": "2026-10-08T12:01:56Z",
+      "path": "editorial_queue_register → editorial_queue_next → prepare_material → publish_material → editorial_queue_result (мост MCP)",
+      "rollback": "unpublish_material site=animedia.icu slug=protivostoyanie-svyatogo",
+      "decision": "pending"
+    }
+  ]
+}

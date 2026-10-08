@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-factory.local/schemas/seo-changes.schema.json",
+  "title": "SEO page changes ledger",
+  "description": "Журнал изменений страниц. У каждого изменения — проблема, доказательство, гипотеза и даты; исходные показатели и оценки через 7 и 14 дней вычисляет SEO-модуль из снимков (var/seo-regular/state.json, ключ changes) и сюда их не переписывают: число, введённое руками, не проверить. kind различает новый текст (written) и улучшение существующего элемента (optimized).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "changes"
+  ],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "note": {
+      "type": "string"
+    },
+    "changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "url",
+          "kind",
+          "element",
+          "problem",
+          "evidence",
+          "hypothesis",
+          "published_at",
+          "path"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^CHG-[0-9]{8}-[0-9]{2,}$"
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https://"
+          },
+          "kind": {
+            "enum": [
+              "written",
+              "optimized"
+            ]
+          },
+          "element": {
+            "enum": [
+              "description",
+              "meta_description",
+              "title",
+              "h1",
+              "internal_links",
+              "canonical",
+              "content_update"
+            ]
+          },
+          "problem": {
+            "type": "string",
+            "minLength": 10
+          },
+          "evidence": {
+            "type": "string",
+            "minLength": 10
+          },
+          "hypothesis": {
+            "type": "string",
+            "minLength": 10
+          },
+          "task_id": {
+            "type": "string"
+          },
+          "published_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "path": {
+            "type": "string",
+            "description": "чем опубликовано (штатный путь)"
+          },
+          "rollback": {
+            "type": "string"
+          },
+          "decision": {
+            "enum": [
+              "pending",
+              "keep",
+              "rollback",
+              "revise"
+            ]
+          },
+          "control_url": {
+            "type": "string",
+            "pattern": "^https://",
+            "description": "страница-контроль без правки: эффект засчитывается, только если правленая страница отличается и от домена, и от контроля"
+          }
+        }
+      }
+    }
+  }
+}

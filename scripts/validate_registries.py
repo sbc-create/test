@@ -35,6 +35,8 @@ MAPPING = {
     "site-cells.json": "site-cells.schema.json",
     # Недостатки SEO-модуля: пункт без примера и критерия приёмки — гипотеза.
     "seo-module-defects.json": "seo-module-defects.schema.json",
+    # Журнал изменений страниц: без проблемы, доказательства и гипотезы правка не учитывается.
+    "seo-changes.json": "seo-changes.schema.json",
 }
 
 # Производные артефакты: файл порождается из другого источника и в некоторых

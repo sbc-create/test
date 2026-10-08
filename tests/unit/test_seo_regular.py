@@ -90,6 +90,7 @@ def env(tmp_path, monkeypatch):
         "queue_events": tmp_path / "queue_events.jsonl",
         "content_operator_state": tmp_path / "state.json",
         "defects": tmp_path / "defects.json",
+        "changes_ledger": tmp_path / "seo-changes.json",
     }
     return {"root": tmp_path / "state", "sources": sources, "tmp": tmp_path}
 
@@ -499,15 +500,19 @@ def test_publication_gets_a_baseline_and_a_later_evaluation(env, tmp_path, monke
     baseline = state["changes"]["https://a.example/title/x/"]["baseline"]
     assert baseline["snapshot"] == "analytics-2026-10-08.json"
     assert baseline["landing_pages"] == {"outside_top_n": 20}  # не ноль
-    later = dict(data, collected_at="2026-10-15T06:15:00Z")
+    later = json.loads(json.dumps(data))
+    later["collected_at"] = "2026-10-16T06:15:00Z"
     later["domains"][0]["measurements"][-1]["value"] = [
         {"dimensions": [{"name": "/title/x"}], "metrics": [7.0]}]
-    (snaps / "analytics-2026-10-15.json").write_text(json.dumps(later), encoding="utf-8")
-    weekly = regular.run("weekly", root=env["root"], now=NOW + dt.timedelta(days=7),
+    (snaps / "analytics-2026-10-16.json").write_text(json.dumps(later), encoding="utf-8")
+    weekly = regular.run("weekly", root=env["root"], now=NOW + dt.timedelta(days=8),
                          sources=env["sources"], http=http)
     assert weekly["state"] == "DONE", weekly
     evaluated = json.loads((env["root"] / "runs" / weekly["run_id"] / "evaluate.json").read_text(encoding="utf-8"))
+    assert evaluated[0]["horizon"] == 7
     assert evaluated[0]["after"]["landing_pages"] == {"value": 7.0}
+    # до правки страница была вне первых 20 — сравнивать не с чем, вердикта нет
+    assert evaluated[0]["verdict"] == "NOT_MEASURABLE"
 
 
 def test_baseline_is_never_taken_from_a_snapshot_after_publication(env):
@@ -609,3 +614,80 @@ def test_visited_url_with_404_becomes_an_issue(env):
     regular.run("daily", root=env["root"], now=NOW, sources=env["sources"], http=http)
     text = (env["root"] / "reports" / "daily" / "2026-10-08.md").read_text(encoding="utf-8")
     assert "VISITED_URL_404:/title/x/season-1/episode-244/" in text
+
+
+def test_editor_process_finds_loops_and_dead_end_tasks(env):
+    events = env["sources"]["queue_events"]
+    rows = [{"at": f"2026-10-08T0{i % 5}:00:00Z", "event": "task_claimed", "task_id": "92436c43",
+             "site": "yummyani.site", "owner": f"editor-{i}"} for i in range(6)]
+    rows.append({"at": "2026-10-08T04:30:00Z", "event": "task_result", "task_id": "92436c43",
+                 "site": "yummyani.site", "outcome": "SOURCE_UNAVAILABLE", "gate": {}})
+    events.write_text("\n".join(json.dumps(r) for r in rows), encoding="utf-8")
+    env["sources"]["queue_registry"].write_text(json.dumps({"items": [
+        {"content_id": "request-2b08", "target_site": "an1mego.site", "status": "NEEDS_UPDATE",
+         "content_type": "TITLE_DESCRIPTION"},
+        {"content_id": "request-b9a9", "target_site": "animedia.icu", "status": "NEEDS_UPDATE",
+         "content_type": "TITLE_DESCRIPTION"}]}), encoding="utf-8")
+    cells = {"yummyani.site": "yummy-site", "an1mego.site": "animego-02", "animedia.icu": "animedia-01"}
+    out = regular.editor_process(events, env["sources"]["queue_registry"], cells,
+                                 since=NOW - dt.timedelta(days=1))
+    assert out["claims"] == 6 and out["results"] == 1
+    assert out["looping"][0]["task_id"] == "92436c43"
+    assert out["outcomes"] == {"yummy:SOURCE_UNAVAILABLE": 1}
+    assert [t["content_id"] for t in out["dead_end_tasks"]] == ["request-2b08"]
+
+
+def _m(page, domain):
+    return {"landing_pages": {"value": page} if page is not None else {"outside_top_n": 20},
+            "domain_visits": domain}
+
+
+def test_judge_corrects_for_the_domain_and_needs_volume():
+    # страница +50%, домен +50% — правка ни при чём
+    assert regular.judge(_m(20, 100), _m(30, 150))["verdict"] == "NO_CLEAR_CHANGE"
+    # страница +100% при ровном домене
+    assert regular.judge(_m(20, 100), _m(40, 100))["verdict"] == "GAIN_OBSERVED"
+    # страница -60% при ровном домене — подозрение на регрессию
+    assert regular.judge(_m(20, 100), _m(8, 100))["verdict"] == "REGRESSION_SUSPECTED"
+    # 3 → 6 входов: «рост вдвое» на таком объёме не вывод
+    assert regular.judge(_m(3, 100), _m(6, 100))["verdict"] == "INSUFFICIENT_VOLUME"
+    assert regular.judge(_m(None, 100), _m(6, 100))["verdict"] == "NOT_MEASURABLE"
+
+
+def test_evaluation_waits_for_windows_after_publication(env):
+    snaps = env["sources"]["analytics_snapshots"]
+    changes = {"https://a.example/title/x/": {
+        "domain": "a.example", "published_at": "2026-10-08T12:00:00Z",
+        "baseline": {"snapshot": "analytics-2026-10-08.json", **_m(20, 140)}}}
+    assert regular.evaluate_changes(changes, snaps) == []  # +7 ждёт снимка 2026-10-16
+    data = _snapshot("2026-10-16", 140, 60)
+    data["domains"][0]["measurements"].append({"key": "landing_pages", "measured": True, "top_n": 20,
+        "value": [{"dimensions": [{"name": "/title/x"}], "metrics": [40.0]}]})
+    (snaps / "analytics-2026-10-16.json").write_text(json.dumps(data), encoding="utf-8")
+    found = regular.evaluate_changes(changes, snaps)
+    assert [(e["horizon"], e["verdict"]) for e in found] == [(7, "GAIN_OBSERVED")]
+
+
+def test_report_shows_the_five_change_categories(env):
+    env["sources"]["changes_ledger"].write_text(json.dumps({"version": 1, "changes": [{
+        "id": "CHG-20261008-01", "url": "https://a.example/title/x/", "kind": "written",
+        "element": "description", "problem": "заглушка вместо описания",
+        "evidence": "data-b07-desc=gap", "hypothesis": "описание даёт содержательный сниппет",
+        "published_at": "2026-10-08T12:00:00Z", "path": "мост"}]}), encoding="utf-8")
+    http = FakeHttp({"https://a.example/": HOME_OPEN, "https://a.example/robots.txt": ROBOTS_OK})
+    regular.run("daily", root=env["root"], now=NOW, sources=env["sources"], http=http)
+    text = (env["root"] / "reports" / "daily" / "2026-10-08.md").read_text(encoding="utf-8")
+    for title in ("Написано: 1", "Оптимизировано: 0", "Опубликовано и проверено на сайте: 0",
+                  "Эффект пока не установлен: 1", "Результат измерен: 0"):
+        assert f"**{title}**" in text, title
+    assert "2026-10-16, 2026-10-23" in text  # даты проверок +7 и +14
+
+
+def test_control_page_cancels_a_title_wide_rise():
+    """Пилот animedia.space против той же карточки на icu: рост у обоих — не эффект правки."""
+    base, after = _m(10, 100), _m(25, 100)
+    assert regular.judge(base, after)["verdict"] == "GAIN_OBSERVED"
+    same_rise = (_m(10, 100), _m(24, 100))
+    assert regular.judge(base, after, same_rise)["verdict"] == "NO_CLEAR_CHANGE"
+    flat_control = (_m(10, 100), _m(10, 100))
+    assert regular.judge(base, after, flat_control)["verdict"] == "GAIN_OBSERVED"

@@ -63,6 +63,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable
 
+from seo_operator import page_audit
 from seo_operator.scheduler import Checkpoint, FileLock, LockBusy
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -89,6 +90,7 @@ SOURCES = {
     "queue_events": Path("/var/lib/seo-content-operator/queue_events.jsonl"),
     "content_operator_state": Path("/var/lib/seo-content-operator/state.json"),
     "defects": REPO_ROOT / "config" / "seo-module-defects.json",
+    "changes_ledger": REPO_ROOT / "config" / "seo-changes.json",
 }
 
 #: Хранилища опубликованных материалов по семействам и форма их адресов.
@@ -764,6 +766,80 @@ def _url_key(url: str) -> str:
     return url.rstrip("/").lower()
 
 
+#: Что умеет семейство витрин (factory.qwen.registry.ВОЗМОЖНОСТИ_АДАПТЕРА):
+#: без доставки описание карточки опубликовать нельзя, без фактов — не из чего
+#: писать. Семейство определяется по префиксу site_id реестра ячеек.
+FAMILY_CAN = {
+    "animedia": {"facts", "deliver", "display"},
+    "yummy": {"deliver"},
+    "lords": {"facts"},
+    "animego": {"facts"},
+    "zona": set(),
+}
+
+
+def family_of(site: str, cells: dict[str, str]) -> str:
+    site_id = cells.get(site, "")
+    for family in FAMILY_CAN:
+        if site_id.startswith(family):
+            return family
+    return "?"
+
+
+def editor_process(events_path: Path, registry_path: Path, cells: dict[str, str], *,
+                   since: dt.datetime) -> dict:
+    """Где теряется работа редактора: выдачи без результата, повторы, тупиковые задания."""
+    claims: dict[str, int] = {}
+    results: dict[str, int] = {}
+    outcomes: dict[str, int] = {}
+    site_of: dict[str, str] = {}
+    gate: dict[str, int] = {}
+    if events_path.is_file():
+        for line in events_path.read_text(encoding="utf-8").splitlines():
+            try:
+                e = json.loads(line)
+            except ValueError:
+                continue
+            if e.get("task_id") and e.get("site"):
+                site_of[e["task_id"]] = e["site"]
+            moment = parse_iso(e.get("at"))
+            if not moment or moment < since:
+                continue
+            if e.get("event") == "task_claimed":
+                claims[e["task_id"]] = claims.get(e["task_id"], 0) + 1
+            elif e.get("event") == "task_result":
+                results[e["task_id"]] = results.get(e["task_id"], 0) + 1
+                fam = family_of(site_of.get(e["task_id"], ""), cells)
+                key = f"{fam}:{e.get('outcome')}"
+                outcomes[key] = outcomes.get(key, 0) + 1
+                status = (e.get("gate") or {}).get("status")
+                if e.get("outcome") == "TEXT_WRITTEN" and status:
+                    gate[status] = gate.get(status, 0) + 1
+    registry = _read_json(registry_path, {})
+    items = registry.get("items") or []
+    if isinstance(items, dict):
+        items = list(items.values())
+    finished = {"PUBLISHED", "ALREADY_LIVE", "DUPLICATE", "SUPPRESSED_NEAR_DUPLICATE",
+                "NEAR_DUPLICATE", "READY_VERIFIED"}
+    dead_end = []
+    for item in items:
+        site = item.get("target_site") or ""
+        fam = family_of(site, cells)
+        if item.get("status") in finished or fam == "?":
+            continue
+        if item.get("content_type") in (None, "TITLE_DESCRIPTION") and "deliver" not in FAMILY_CAN[fam]:
+            dead_end.append({"content_id": item.get("content_id"), "site": site,
+                             "family": fam, "status": item.get("status")})
+    looping = sorted(((t, n, results.get(t, 0), site_of.get(t)) for t, n in claims.items()
+                      if n >= 5 and results.get(t, 0) * 3 < n), key=lambda x: -x[1])
+    total_claims, total_results = sum(claims.values()), sum(results.values())
+    return {"since": iso(since), "claims": total_claims, "results": total_results,
+            "claims_without_result": total_claims - total_results,
+            "outcomes": dict(sorted(outcomes.items())), "text_gate": gate,
+            "looping": [{"task_id": t, "claims": n, "results": r, "site": s} for t, n, r, s in looping[:10]],
+            "dead_end_tasks": dead_end}
+
+
 def queue_hygiene(registry_path: Path, events_path: Path, *, since: dt.datetime) -> dict:
     """Дубли и неверные адреса заданий, пересечение ролей. Только чтение.
 
@@ -898,29 +974,151 @@ def _baseline(snaps: list[Path], domain: str, url: str, published_at: str | None
     return page_metrics(before[-1], domain, url)
 
 
-def evaluate_changes(changes: dict, snapshots_dir: Path, *, min_days: int = 7) -> list[dict]:
-    """Оценка изменения по снимку, окно которого НЕ перекрывается с исходным.
+#: Проверки эффекта: через 7 и 14 дней после публикации.
+HORIZONS = (7, 14)
+#: Меньше этого числа входов на страницу в обоих окнах — данных мало, вывод не делается.
+MIN_VOLUME = 10
+#: Расхождение страницы с доменом, после которого изменение называется.
+CLEAR_SHIFT = 0.3
 
-    Это наблюдение, а не доказательство причины: на трафик действует всё сразу,
-    и отчёт обязан это говорить.
+
+def _page_value(metrics: dict) -> tuple[float | None, str]:
+    cell = (metrics or {}).get("landing_pages") or {}
+    if "value" in cell:
+        return float(cell["value"]), ""
+    if "outside_top_n" in cell:
+        return None, f"страница вне первых {cell['outside_top_n']} входных"
+    return None, cell.get("not_measured") or (metrics or {}).get("not_measured") or "не измерено"
+
+
+def judge(baseline: dict, after: dict, control: tuple[dict, dict] | None = None) -> dict:
+    """Вердикт по двум сопоставимым 7-дневным окнам с поправкой на домен.
+
+    Поправка на спрос и прочие изменения сайта — грубая, но честная: изменение
+    страницы сравнивается с изменением всего домена за те же окна. Вердикт —
+    наблюдение; причину правки он не доказывает.
     """
-    files = {f.name: f for f in snapshots_dir.glob("analytics-????-??-??.json")}
+    before_v, why_b = _page_value(baseline)
+    after_v, why_a = _page_value(after)
+    if before_v is None or after_v is None:
+        return {"verdict": "NOT_MEASURABLE", "reason": why_b or why_a}
+    if max(before_v, after_v) < MIN_VOLUME:
+        return {"verdict": "INSUFFICIENT_VOLUME", "before": before_v, "after": after_v,
+                "reason": f"входов меньше {MIN_VOLUME} в обоих окнах — проверить позже"}
+    dom_b, dom_a = baseline.get("domain_visits"), after.get("domain_visits")
+    page_change = (after_v - before_v) / before_v if before_v else None
+    dom_change = ((dom_a - dom_b) / dom_b) if isinstance(dom_a, (int, float)) and isinstance(dom_b, (int, float)) and dom_b else None
+    out = {"before": before_v, "after": after_v, "page_change": page_change, "domain_change": dom_change}
+    if page_change is None or dom_change is None:
+        out.update(verdict="NOT_MEASURABLE", reason="нет исходного значения страницы или домена")
+        return out
+    excess = page_change - dom_change
+    out["excess_over_domain"] = round(excess, 3)
+    if control is not None:
+        cb, _ = _page_value(control[0])
+        ca, _ = _page_value(control[1])
+        if cb and ca is not None:
+            out["control_change"] = (ca - cb) / cb
+            # Сдвиг засчитывается, только если он есть и относительно домена, и
+            # относительно контроля: иначе это спрос на тайтл, а не правка.
+            excess = min(excess, page_change - out["control_change"], key=abs)
+            out["excess_over_control"] = round(page_change - out["control_change"], 3)
+        else:
+            out["control_note"] = "контроль не измерен — вывод только относительно домена"
+    out["verdict"] = ("REGRESSION_SUSPECTED" if excess <= -CLEAR_SHIFT
+                      else "GAIN_OBSERVED" if excess >= CLEAR_SHIFT else "NO_CLEAR_CHANGE")
+    return out
+
+
+def evaluate_changes(changes: dict, snapshots_dir: Path,
+                     controls: dict[str, str] | None = None) -> list[dict]:
+    """Проверки через 7 и 14 дней по окнам, которые не задевают день публикации.
+
+    Исходное окно кончается не позже дня до публикации (снимок дня D покрывает
+    D-7…D-1). Окно «+h» — снимок дня публикации + h + 1, то есть дни
+    публикация + h - 6 … публикация + h. Нет такого снимка — проверка ждёт.
+    """
+    files = {f.name[10:20]: f for f in snapshots_dir.glob("analytics-????-??-??.json")}
     out = []
     for url, change in sorted(changes.items()):
-        base_name = (change.get("baseline") or {}).get("snapshot")  # нет — исходных нет
-        if not base_name or change.get("evaluation"):
+        published = parse_iso(change.get("published_at"))
+        if not published or not (change.get("baseline") or {}).get("snapshot"):
             continue
-        base_day = dt.date.fromisoformat(base_name[10:20])
-        later = sorted(n for n in files if dt.date.fromisoformat(n[10:20]) >= base_day + dt.timedelta(days=min_days))
-        if not later:
-            continue
-        after = page_metrics(files[later[0]], change["domain"], url)
-        out.append({"url": url, "baseline": change["baseline"], "after": after,
-                    "note": "наблюдение по непересекающимся окнам; причину не доказывает"})
+        day = published.astimezone(MSK).date()
+        for h in HORIZONS:
+            if change.get(f"evaluation_{h}"):
+                continue
+            target = day + dt.timedelta(days=h + 1)
+            ready = sorted(d for d in files if dt.date.fromisoformat(d) >= target)
+            if not ready:
+                continue
+            after = page_metrics(files[ready[0]], change["domain"], url)
+            control = None
+            control_url = (controls or {}).get(url)
+            if control_url:
+                host = urllib.parse.urlsplit(control_url).hostname or ""
+                control = (page_metrics(files[change["baseline"]["snapshot"][10:20]], host, control_url)
+                           if change["baseline"]["snapshot"][10:20] in files else {},
+                           page_metrics(files[ready[0]], host, control_url))
+            out.append({"url": url, "horizon": h, "baseline": change["baseline"], "after": after,
+                        **judge(change["baseline"], after, control), "control_url": control_url,
+                        "note": "наблюдение по сопоставимым окнам с поправкой на домен; причину не доказывает"})
     return out
 
 
 # ---------------------------------------------------------------- отчёт
+
+
+def optimization_candidates(visited: dict, *, limit: int = 15) -> dict:
+    """Посещаемые страницы с находками аудита, самые посещаемые первыми.
+
+    Находки уровня info (длинный title, нет описания) идут после warning:
+    их правка возможна, но основание слабее.
+    """
+    rows = []
+    for v in visited.get("checked") or []:
+        audit = v.get("audit") or {}
+        found = [f for f in audit.get("findings") or [] if f["severity"] != "info"]
+        info = [f for f in audit.get("findings") or [] if f["severity"] == "info"]
+        if found or info:
+            rows.append({"url": v["url"], "weight": v.get("weight") or 0,
+                         "findings": found + info, "strong": bool(found)})
+    rows.sort(key=lambda r: (not r["strong"], -r["weight"]))
+    return {"pages": rows[:limit], "total": len(rows),
+            "duplicate_titles": visited.get("duplicate_titles") or []}
+
+
+def changes_section(ledger_path: Path, state: dict, today: dt.date) -> dict:
+    """Пять разделов: написано, оптимизировано, опубликовано и проверено,
+    эффект пока не установлен, результат измерен."""
+    ledger = _read_json(ledger_path, {}).get("changes") or []
+    measured_state = state.get("changes") or {}
+    publications = state.get("publications") or {}
+    out: dict[str, list] = {"written": [], "optimized": [], "verified": [],
+                            "effect_pending": [], "measured": []}
+    for c in ledger:
+        row = {"id": c["id"], "url": c["url"], "element": c["element"],
+               "published_at": c["published_at"], "decision": c.get("decision", "pending")}
+        out["written" if c["kind"] == "written" else "optimized"].append(row)
+        pub = publications.get(c["url"]) or {}
+        if pub.get("verdict") == "VISIBLE":
+            out["verified"].append({**row, "checked_at": pub.get("checked_at")})
+        st = measured_state.get(c["url"]) or {}
+        evals = {h: st.get(f"evaluation_{h}") for h in HORIZONS if st.get(f"evaluation_{h}")}
+        done = {h: e for h, e in evals.items()
+                if e.get("verdict") in ("GAIN_OBSERVED", "NO_CLEAR_CHANGE", "REGRESSION_SUSPECTED")}
+        if done:
+            out["measured"].append({**row, "evaluations": done})
+        else:
+            published = parse_iso(c["published_at"])
+            due = [str((published.astimezone(MSK).date() + dt.timedelta(days=h + 1)))
+                   for h in HORIZONS] if published else []
+            reason = "; ".join(f"+{h}: {e.get('verdict')} ({e.get('reason', '')})" for h, e in evals.items()) \
+                or f"данных ещё нет: снимки для проверки +7/+14 — {', '.join(due)}"
+            out["effect_pending"].append({**row, "reason": reason,
+                                          "baseline": (st.get("baseline") or {}).get("snapshot")})
+    out["without_ledger"] = sorted(set(measured_state) - {c["url"] for c in ledger})
+    return out
 
 
 def module_section(defects_path: Path) -> dict:
@@ -1070,6 +1268,21 @@ def render_daily(report: dict) -> str:
         f"{hyg.get('urls_claimed_by_several_owners', 0)} из {hyg.get('urls_claimed', 0)}")
     add(f"- заданий, взятых SEO-владельцами (должен брать редактор): {len(hyg.get('seo_side_claims') or [])}")
     add("")
+    ed = hyg.get("editor") or {}
+    if ed:
+        add("## Процесс редактора (за сутки)")
+        add(f"- выдач заданий: {ed['claims']}, результатов: {ed['results']}, "
+            f"выдач без результата (аренда истекла или снята): {ed['claims_without_result']}")
+        add(f"- исходы по семействам: {ed['outcomes']}")
+        add(f"- написанные тексты по решению ворот: {ed['text_gate']}")
+        for t in ed["looping"]:
+            add(f"- задание {t['task_id']} ({t['site']}) выдано {t['claims']} раз, результатов {t['results']} — "
+                "повторная выдача без нового условия ничего не даст")
+        dead = ed["dead_end_tasks"]
+        add(f"- живых заданий на описание у семейств без доставки (выполнить нельзя): {len(dead)}")
+        for t in dead[:10]:
+            add(f"  - {t['content_id']} {t['site']} ({t['family']}, {t['status']})")
+        add("")
 
     weekly = report.get("weekly")
     if weekly:
@@ -1079,9 +1292,49 @@ def render_daily(report: dict) -> str:
         evaluations = weekly.get("evaluations") or []
         add(f"Оценка изменений (окна не перекрываются; причину не доказывает): {len(evaluations)}")
         for ev in evaluations[:20]:
-            add(f"- {ev['url']}: вход {_page_cell(ev['baseline'], 'landing_pages')} → "
-                f"{_page_cell(ev['after'], 'landing_pages')}; домен из поиска "
-                f"{_plain(ev['baseline'].get('domain_search_visits'))} → {_plain(ev['after'].get('domain_search_visits'))}")
+            add(f"- +{ev.get('horizon')} дн. {ev['url']}: {ev.get('verdict')}; вход "
+                f"{_page_cell(ev['baseline'], 'landing_pages')} → {_page_cell(ev['after'], 'landing_pages')}; "
+                f"визиты домена {_plain(ev['baseline'].get('domain_visits'))} → {_plain(ev['after'].get('domain_visits'))}"
+                + (f" ({ev.get('reason')})" if ev.get("reason") else ""))
+        add("")
+
+    cand = report.get("candidates") or {}
+    if cand.get("pages"):
+        add(f"## Кандидаты на оптимизацию (посещаемые страницы с находками: {cand['total']})")
+        for r in cand["pages"]:
+            add(f"- {r['url']} (входы+просмотры {r['weight']:g}): " +
+                "; ".join(f"{f['code']} — {f['detail']}" for f in r["findings"]))
+        for d in cand.get("duplicate_titles") or []:
+            add(f"- одинаковый title «{d['title']}» у {len(d['urls'])} адресов {d['domain']}")
+        add("Правка — только при конкретном основании; шаблонные находки (meta разделов и серий) "
+            "чинятся в шаблоне семейства, а не по одной странице.")
+        add("")
+
+    ch = report.get("changes") or {}
+    if ch:
+        add("## Изменения страниц")
+        titles = (("written", "Написано"), ("optimized", "Оптимизировано"),
+                  ("verified", "Опубликовано и проверено на сайте"),
+                  ("effect_pending", "Эффект пока не установлен"), ("measured", "Результат измерен"))
+        for key, title in titles:
+            rows = ch.get(key) or []
+            add(f"**{title}: {len(rows)}**")
+            for r in rows[:20]:
+                extra = ""
+                if key == "effect_pending":
+                    extra = f" — {r['reason']}; исходный снимок {r.get('baseline') or 'нет'}"
+                elif key == "measured":
+                    extra = " — " + "; ".join(
+                        f"+{h} дн.: {e['verdict']}, входы {e.get('before'):g} → {e.get('after'):g}, "
+                        f"страница {e.get('page_change'):+.0%} при домене {e.get('domain_change'):+.0%}"
+                        for h, e in r["evaluations"].items())
+                elif key == "verified":
+                    extra = f" — проверено {r.get('checked_at')}"
+                add(f"- {r['id']} {r['url']} ({r['element']}, опубликовано {r['published_at']}){extra}")
+        if ch.get("without_ledger"):
+            add(f"Публикаций без записи в журнале изменений (нет проблемы и гипотезы): "
+                f"{len(ch['without_ledger'])}")
+        add("Эффект — наблюдение по сопоставимым окнам с поправкой на домен; причину правки он не доказывает.")
         add("")
 
     mod = report.get("module") or {}
@@ -1195,7 +1448,12 @@ def visited_paths(snapshot: Path, *, per_domain: int = 5) -> dict[str, list[str]
                 if name.startswith("/"):
                     weight[name] = weight.get(name, 0.0) + metric
         out[entry["domain"]] = [p for p, _ in sorted(weight.items(), key=lambda kv: -kv[1])][:per_domain]
+        _WEIGHTS[entry["domain"]] = weight
     return out
+
+
+#: Вес адреса (входы + просмотры) из последнего разобранного снимка.
+_WEIGHTS: dict[str, dict[str, float]] = {}
 
 
 def step_visited(ctx: Context) -> Any:
@@ -1215,16 +1473,27 @@ def step_visited(ctx: Context) -> Any:
             continue
         for path in paths:
             resp = ctx.http.get(f"https://{domain}{path}")
-            checked.append({"domain": domain, "url": f"https://{domain}{path}", "status": resp.status})
+            row = {"domain": domain, "url": f"https://{domain}{path}", "status": resp.status,
+                   "weight": _WEIGHTS.get(domain, {}).get(path)}
+            if resp.status == 200:
+                # Страница уже скачана — аудит без второго запроса.
+                row["audit"] = page_audit.audit(resp.body.decode("utf-8", "replace"), row["url"])
+            checked.append(row)
             if resp.status not in (200, 301, 308):
                 ctx.journal.write("visited_url_error", domain=domain, url=f"https://{domain}{path}",
                                   status=resp.status, error=resp.error)
-    return {"snapshot": snaps[-1].name, "checked": checked}
+    audits = [c["audit"] for c in checked if c.get("audit")]
+    return {"snapshot": snaps[-1].name, "checked": checked,
+            "duplicate_titles": page_audit.duplicate_titles(audits)}
 
 
 def step_queue(ctx: Context) -> Any:
     hygiene = queue_hygiene(ctx.sources["queue_registry"], ctx.sources["queue_events"],
                             since=ctx.now - dt.timedelta(days=1))
+    cells = {c.get("domain"): c.get("site_id") or ""
+             for c in _read_json(ctx.sources["cells"], {}).get("cells") or []}
+    hygiene["editor"] = editor_process(ctx.sources["queue_events"], ctx.sources["queue_registry"],
+                                       cells, since=ctx.now - dt.timedelta(days=1))
     targets = verify_task_targets(ctx.http, hygiene)
     for t in targets:
         if t["status"] != 200:
@@ -1346,7 +1615,9 @@ def step_daily_report(ctx: Context) -> Any:
         "queue": queue.get("hygiene"),
         "task_targets": queue.get("targets"),
         "weekly": weekly,
+        "candidates": optimization_candidates(ctx.result("visited") or {}),
         "module": module_section(ctx.sources["defects"]),
+        "changes": changes_section(ctx.sources["changes_ledger"], ctx.state, ctx.now.astimezone(MSK).date()),
         # Файл сохранён — это НЕ доставка. Канала доставки владельцу в проекте
         # нет (docs/SEO_REGULAR_RUN.md §4); пока он не выбран, отчёт честно
         # говорит, что не доставлен.
@@ -1366,7 +1637,9 @@ def step_daily_report(ctx: Context) -> Any:
 
 
 def step_evaluate(ctx: Context) -> Any:
-    found = evaluate_changes(ctx.state.get("changes") or {}, ctx.sources["analytics_snapshots"])
+    controls = {c["url"]: c["control_url"] for c in
+                _read_json(ctx.sources["changes_ledger"], {}).get("changes") or [] if c.get("control_url")}
+    found = evaluate_changes(ctx.state.get("changes") or {}, ctx.sources["analytics_snapshots"], controls)
     ctx.journal.write("changes_evaluated", count=len(found))
     return found
 
@@ -1400,6 +1673,13 @@ def step_weekly_priorities(ctx: Context) -> Any:
                 for n in drops[domain]) + " — причину установить"))
         elif warn:
             priorities.append((2, domain, "предупреждения: " + ", ".join(i["code"] for i in warn)))
+    # Подозрение на регрессию после правки — разобрать и при подтверждении
+    # откатить адресно (rollback в журнале изменений), не трогая остальное.
+    for ev in ctx.result("evaluate") or []:
+        if ev.get("verdict") == "REGRESSION_SUSPECTED":
+            priorities.append((0, ev["url"], f"после правки +{ev['horizon']} дн.: входы {ev['before']:g} → "
+                               f"{ev['after']:g} при домене {ev['domain_change']:+.0%} — разобрать, при "
+                               "подтверждении откатить адресно"))
     priorities.sort()
     result = {"week_over_week": wow,
               "priorities": [{"domain": d, "reason": r, "rank": p} for p, d, r in priorities]}
@@ -1456,7 +1736,10 @@ def _commit_state(ctx: Context, step: str, result: Any) -> None:
         changes = ctx.state.setdefault("changes", {})
         for ev in result:
             if ev["url"] in changes:
-                changes[ev["url"]]["evaluation"] = ev["after"]
+                changes[ev["url"]][f"evaluation_{ev['horizon']}"] = {
+                    k: ev.get(k) for k in ("verdict", "before", "after", "page_change", "domain_change",
+                                           "excess_over_domain", "control_change", "excess_over_control",
+                                           "reason")} | {"snapshot": ev["after"].get("snapshot")}
     if step in ("availability", "check") and isinstance(result, (list, dict)):
         rows = result if isinstance(result, list) else (result.get("availability") or [])
         for row in rows:

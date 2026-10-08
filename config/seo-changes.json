@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "note": "Журнал изменений страниц. Исходные показатели и оценки +7/+14 — в var/seo-regular/state.json (changes), считаются модулем.",
+  "changes": [
+    {
+      "id": "CHG-20261008-01",
+      "url": "https://animedia.icu/title/protivostoyanie-svyatogo/",
+      "kind": "written",
+      "element": "description",
+      "problem": "вместо описания заглушка «Описание пока не передано источником»; meta description — «Название: Аниме год»",
+      "evidence": "data-b07-desc=gap при проверке 2026-10-08 ~11:50Z; analytics-2026-10-08.json (окно 2026-10-01…07): входы 3, просмотры 4; серия 1 — 8/16",
+      "hypothesis": "описание по фактам каталога отвечает на навигационный запрос по названию и даёт содержательный сниппет; ожидается рост входов на карточку сверх изменения домена",
+      "task_id": "b9a97301b10daa6a",
+      "published_at": "2026-10-08T12:01:56Z",
+      "path": "editorial_queue_register → editorial_queue_next → prepare_material → publish_material → editorial_queue_result (мост MCP)",
+      "rollback": "unpublish_material site=animedia.icu slug=protivostoyanie-svyatogo",
+      "decision": "pending"
+    },
+    {
+      "id": "CHG-20261008-02",
+      "url": "https://animedia.space/title/protivostoyanie-svyatogo/",
+      "kind": "written",
+      "element": "description",
+      "problem": "вместо описания заглушка «Описание пока не передано источником»; meta description — «Название: Аниме год»",
+      "evidence": "data-b07-desc=gap при проверке 2026-10-08 ~11:50Z; analytics-2026-10-08.json (окно 2026-10-01…07): входы 2, просмотры 3; серия 1 — 9/18",
+      "hypothesis": "описание по фактам каталога отвечает на навигационный запрос по названию и даёт содержательный сниппет; ожидается рост входов на карточку сверх изменения домена",
+      "task_id": "a69f0bdf52a561db",
+      "published_at": "2026-10-08T12:03:12Z",
+      "path": "editorial_queue_register → editorial_queue_next → prepare_material → publish_material → editorial_queue_result (мост MCP)",
+      "rollback": "unpublish_material site=animedia.space slug=protivostoyanie-svyatogo",
+      "decision": "pending"
+    },
+    {
+      "id": "CHG-20261008-03",
+      "url": "https://animedia.icu/title/taynaya-bitva-za-prestol-silneyshego-princa-duraleya/",
+      "kind": "written",
+      "element": "description",
+      "problem": "вместо описания заглушка «Описание пока не передано источником»; meta description — «Название: Аниме год»",
+      "evidence": "data-b07-desc=gap при проверке 2026-10-08 ~11:50Z; analytics-2026-10-08.json (окно 2026-10-01…07): входы 2",
+      "hypothesis": "описание по фактам каталога отвечает на навигационный запрос по названию и даёт содержательный сниппет; ожидается рост входов на карточку сверх изменения домена",
+      "task_id": "beddf8fb49cd1754",
+      "published_at": "2026-10-08T12:03:59Z",
+      "path": "editorial_queue_register → editorial_queue_next → prepare_material → publish_material → editorial_queue_result (мост MCP)",
+      "rollback": "unpublish_material site=animedia.icu slug=taynaya-bitva-za-prestol-silneyshego-princa-duraleya",
+      "decision": "pending"
+    },
+    {
+      "id": "CHG-20261008-04",
+      "url": "https://animedia.space/title/bespodobnyy-boevoy-duh/",
+      "kind": "written",
+      "element": "description",
+      "problem": "вместо описания заглушка «Описание пока не передано источником»; meta description — «Название: Аниме год»",
+      "evidence": "data-b07-desc=gap при проверке 2026-10-08 ~11:50Z; analytics-2026-10-08.json (окно 2026-10-01…07): входы 1, просмотры 1",
+      "hypothesis": "описание по фактам каталога отвечает на навигационный запрос по названию и даёт содержательный сниппет; ожидается рост входов на карточку сверх изменения домена",
+      "task_id": "7f71eb2b8c41f82c",
+      "published_at": "2026-10-08T12:05:18Z",
+      "path": "editorial_queue_register → editorial_queue_next → prepare_material → publish_material → editorial_queue_result (мост MCP)",
+      "rollback": "unpublish_material site=animedia.space slug=bespodobnyy-boevoy-duh",
+      "decision": "pending"
+    },
+    {
+      "id": "CHG-20261008-05",
+      "url": "https://animedia.space/title/master-musi-sleduyuschaya-glava-kapli-kolokolchikov/",
+      "kind": "optimized",
+      "element": "description",
+      "problem": "описание дословно совпадает с animedia.icu (как и у 5 965 из 8 265 карточек сети Animedia) — два домена сети конкурируют одним текстом",
+      "evidence": "сверка снимков animedia-01/02-details.json 2026-10-08: description идентичны у 5965 тайтлов; карточка — 3 входа и 6 просмотров на space в окне 2026-10-01…07; meta до правки: «На горе Гинко натыкается на девушку, из тела которой растут ветви с листьями. Вскоре он поймёт, что она является храните…»",
+      "hypothesis": "собственный пересказ по тем же фактам снимает дубль с animedia.icu и даёт содержательный сниппет; контроль — та же карточка на animedia.icu без изменений: эффект считается, только если space отличается и от своего домена, и от icu",
+      "task_id": "fbe7140e9310cdf0",
+      "published_at": "2026-10-08T12:53:15Z",
+      "path": "editorial_queue_register → editorial_queue_next → prepare_material → publish_material → editorial_queue_result (мост MCP)",
+      "rollback": "unpublish_material site=animedia.space slug=master-musi-sleduyuschaya-glava-kapli-kolokolchikov — вернёт исходный синопсис снимка",
+      "decision": "pending",
+      "control_url": "https://animedia.icu/title/master-musi-sleduyuschaya-glava-kapli-kolokolchikov/"
+    },
+    {
+      "id": "CHG-20261008-06",
+      "url": "https://animedia.space/title/drevniy-bog/",
+      "kind": "optimized",
+      "element": "description",
+      "problem": "описание дословно совпадает с animedia.icu; сам текст — пространный рекламный синопсис (≈230 слов, «головокружительное приключение», «монументальная эпопея») с минимумом конкретики, а meta description начинается с «В необъятных просторах, где реальности переплетаются…»",
+      "evidence": "сверка снимков animedia-01/02-details.json 2026-10-08 (идентичны); карточка — 4 входа и 4 просмотра на space в окне 2026-10-01…07; meta до правки: «В необъятных просторах, где реальности переплетаются, словно узоры на небесном гобелене, рождаются сказания, достойные у…»",
+      "hypothesis": "собственный пересказ по тем же фактам снимает дубль с animedia.icu и даёт содержательный сниппет; контроль — та же карточка на animedia.icu без изменений: эффект считается, только если space отличается и от своего домена, и от icu",
+      "task_id": "4a5119daa3e92942",
+      "published_at": "2026-10-08T12:54:13Z",
+      "path": "editorial_queue_register → editorial_queue_next → prepare_material → publish_material → editorial_queue_result (мост MCP)",
+      "rollback": "unpublish_material site=animedia.space slug=drevniy-bog — вернёт исходный синопсис снимка",
+      "decision": "pending",
+      "control_url": "https://animedia.icu/title/drevniy-bog/"
+    }
+  ]
+}
