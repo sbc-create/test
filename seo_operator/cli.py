@@ -204,6 +204,10 @@ def main(argv=None) -> int:
     p.add_argument("--finished-at", required=True)
     p.add_argument("--out")
 
+    p = sub.add_parser("webmaster-apply-mapping",
+                       help="перенести подтверждённые Вебмастером host_id в реестр (только локально)")
+    p.add_argument("--apply", action="store_true", help="записать; без флага — только показать")
+
     sub.add_parser(
         "webmaster-inventory",
         help="read-only: почему у доменов нет данных Вебмастера (нет в аккаунте / не подтверждён / сопоставление)",
@@ -237,6 +241,12 @@ def main(argv=None) -> int:
         if args.out:
             extra += ["--out", args.out]
         return editor_run.main(extra)
+    if args.command == "webmaster-apply-mapping":
+        from seo_operator import webmaster_inventory
+
+        result = webmaster_inventory.apply_mapping(dry_run=not args.apply)
+        print(json.dumps(result, ensure_ascii=False, indent=1))
+        return 0
     if args.command == "webmaster-inventory":
         from seo_operator import webmaster_inventory
 

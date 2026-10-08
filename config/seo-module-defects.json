@@ -17,15 +17,15 @@
     },
     {
       "id": "MOD-02",
-      "title": "Ни один домен не привязан к Яндекс.Вебмастеру",
-      "zone": "owner",
+      "title": "Привязка Вебмастера: 16 доменов подтверждены в аккаунте, реестр фабрики их не знал",
+      "zone": "seo",
       "priority": "P0",
-      "state": "proposed",
-      "example": "config/analytics.json: у 21 домена webmaster.host_id = null, verification_status = BLOCKED_DEPLOYMENT, последняя сверка 2026-08-27; снимок 2026-10-08 — 84 из 84 показателей Вебмастера не измерены. Перепроверено 2026-10-08 ~12:00Z без токена: ни на одной из 17 отвечающих главных нет маркера yandex-verification, verification_marker в реестре пуст у всех, статусы BLOCKED_DEPLOYMENT/PLANNED выставлены при создании записей и не пересчитывались (cmd_webmaster запускается только с --deployment-ready). Что лежит в аккаунте — неизвестно: токен читает только служба.",
-      "wrong_decision": "Невозможно принять ни одно решение об индексации по данным поисковика: страницы в поиске, причины исключения, ошибки обхода, внешние ссылки неизвестны. Причины выпадения страниц угадываются.",
-      "change": "1) read-only инвентаризация seo_operator/webmaster_inventory.py (юнит webmaster-inventory.service, LoadCredential) различает NOT_IN_ACCOUNT / IN_ACCOUNT_UNVERIFIED / MAPPING_MISMATCH / VERIFIED_MAPPED — реализовано, ставится той же командой владельца; 2) по её итогу: для MAPPING_MISMATCH — исправить реестр; для NOT_IN_ACCOUNT и IN_ACCOUNT_UNVERIFIED — разрешение владельца на запись в Вебмастер (добавление https-сайта и запуск подтверждения META_TAG) для названных доменов, т.к. inventory разрешает записи только для трёх счётчиков YummyAnime; маркер на страницы выносит выпуск сайта.",
-      "acceptance": "host_id не пуст и pages_in_search измерен хотя бы у одного домена в штатном снимке.",
-      "evidence": "python3 -c \"import json;print([p['domain'] for p in json.load(open('config/analytics.json'))['properties'] if not (p.get('webmaster') or {}).get('host_id')])\""
+      "state": "installed",
+      "example": "webmaster-inventory.service 2026-10-08T16:08:23Z (GET, токен через LoadCredential): в аккаунте 17 хостов; 16 доменов VERIFIED с точным https-хостом, а host_id в config/analytics.json был пуст — MAPPING_MISMATCH (ошибка локального сопоставления, не отсутствие сайтов); animedia.space — VERIFICATION_FAILED; lordserials22.site, lordserials22.space, lordserial101.site, lordfilm077.site — NOT_IN_ACCOUNT (все под serverHold).",
+      "wrong_decision": "Отсутствие данных Вебмастера объяснялось «не развёрнут» / «нужна регистрация», хотя данные были доступны: сборщик просто не знал host_id.",
+      "change": "seo-operator webmaster-apply-mapping --apply: host_id и статус из инвентаризации перенесены в реестр (17 доменов) — локально, в Яндекс ничего не писалось. Осталось: animedia.space — повторить подтверждение (VERIFICATION_FAILED), 4 serverHold-домена — после снятия serverHold.",
+      "acceptance": "Снимок analytics-<дата>.json после ближайшего штатного сбора (05:00 UTC) содержит измеренные pages_in_search/excluded_pages у 16 доменов.",
+      "evidence": "var/analytics/webmaster-inventory.json; копия реестра до переноса — var/analytics/analytics.json.before-mapping-20261008"
     },
     {
       "id": "MOD-03",

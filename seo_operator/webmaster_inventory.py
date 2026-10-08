@@ -105,6 +105,40 @@ def inventory(provider: YandexAnalyticsProvider | None = None,
             "note": "отсутствие привязки к Вебмастеру не означает отсутствия индексации"}
 
 
+def apply_mapping(inventory_path: Path = OUT, *, dry_run: bool = True, max_age_h: float = 24.0,
+                  root: Path | None = None) -> dict:
+    """Перенести в реестр фабрики то, что Вебмастер УЖЕ подтвердил. Только локально.
+
+    Источник — снятая службой инвентаризация (GET к API). В Яндекс ничего не
+    пишется. Переносится host_id только при точном https-хосте в аккаунте;
+    статус — тот, что вернул Вебмастер (VERIFIED или VERIFICATION_FAILED).
+    """
+    from factory.analytics import registry as reg
+
+    data = json.loads(Path(inventory_path).read_text(encoding="utf-8"))
+    if data.get("status") != "MEASURED":
+        return {"applied": [], "reason": f"инвентаризация не измерена: {data.get('reason')}"}
+    taken = dt.datetime.fromisoformat(data["collected_at"].replace("Z", "+00:00"))
+    age = (dt.datetime.now(dt.timezone.utc) - taken).total_seconds() / 3600
+    if age > max_age_h:
+        return {"applied": [], "reason": f"инвентаризация старше {max_age_h} ч ({age:.1f} ч) — снять заново"}
+    applied, skipped = [], []
+    for row in data.get("domains") or []:
+        want = row["expected_host_id"]
+        state = row.get("verification_state")
+        if want not in (row.get("account_host_ids") or []) or state not in ("VERIFIED", "VERIFICATION_FAILED"):
+            skipped.append({"domain": row["domain"], "state": row["state"]})
+            continue
+        if row.get("registry_host_id") == want:
+            continue
+        entry = {"domain": row["domain"], "last_checked_at": data["collected_at"],
+                 "webmaster": {"host_id": want, "verification_status": state}}
+        applied.append(entry)
+        if not dry_run:
+            reg.upsert(entry, root)
+    return {"applied": applied, "skipped": skipped, "dry_run": dry_run, "inventory": data["collected_at"]}
+
+
 def main(out: Path = OUT) -> int:
     report = inventory()
     out.parent.mkdir(parents=True, exist_ok=True)
