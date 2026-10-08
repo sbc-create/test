@@ -227,7 +227,15 @@ def main(argv=None) -> int:
         from seo_operator import editor_run
 
         decision = editor_run.gate()
-        print(json.dumps(decision, ensure_ascii=False))
+        if decision["run"]:
+            # Редактор идёт по этому списку, а не по сырому файлу кандидатов:
+            # 2026-10-08 17:05 он взял первый кандидат, уже закрытый им же, и
+            # остановился, хотя три других были свободны.
+            out = editor_run.STATE / "next.json"
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_text(json.dumps({"reason": decision["reason"], "candidates": decision.get("next", [])},
+                                      ensure_ascii=False, indent=1), encoding="utf-8")
+        print(json.dumps({k: v for k, v in decision.items() if k != "next"}, ensure_ascii=False))
         return 10 if decision["run"] else 0
     if args.command == "editor-run-status":
         from seo_operator import editor_run

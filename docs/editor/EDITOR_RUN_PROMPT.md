@@ -11,10 +11,12 @@
 
 1. Возьми задание: editorial_queue_next {"site": "<домен>", "owner": "<владелец>",
    "limit": 1, "content_types": ["TITLE_DESCRIPTION"]} — сначала animedia.space,
-   затем animedia.icu. Если очередь пуста — возьми первый адрес из раздела
-   «Кандидаты для редактора» файла var/seo-regular/editor-candidates.json, проверь
-   editorial_queue_find, зарегистрируй editorial_queue_register (если задания нет)
-   и снова вызови editorial_queue_next. Кандидатов нет — закончи с итогом NO_TASK.
+   затем animedia.icu. Если очередь пуста — иди ПО ПОРЯДКУ по списку
+   var/editor-runs/next.json (его пишет шлюз перед запуском: только адреса, по
+   которым ещё нет результата). Для каждого: editorial_queue_find; задание с
+   результатом или чужой арендой — пропусти и возьми следующий адрес; иначе
+   editorial_queue_register (если задания нет) и editorial_queue_next. Список
+   пуст или кончился — закончи с итогом NO_TASK.
 2. Источники (D199, config/editorial-sources.json):
    * editorial_facts {"site", "slug"} — каталог сети;
    * python3 automation/local/source_fetch.py shikimori <shikimori_id> — ID бери из

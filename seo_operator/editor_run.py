@@ -243,7 +243,8 @@ def gate(now: dt.datetime | None = None, *, registry: Path = REGISTRY, leases: P
         cands = []
     fresh = [c for c in cands if _key(c.get("url", "")) not in done]
     if fresh:
-        return {"run": True, "reason": f"кандидатов без результата: {len(fresh)} (первый {fresh[0]['url']})"}
+        return {"run": True, "reason": f"кандидатов без результата: {len(fresh)} (первый {fresh[0]['url']})",
+                "next": fresh}
     return {"run": False, "reason": "работы нет: свободных заданий и новых кандидатов нет"}
 
 
