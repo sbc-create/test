@@ -226,7 +226,7 @@ def main(argv=None) -> int:
     if args.command == "editor-gate":
         from seo_operator import editor_run
 
-        decision = editor_run.gate()
+        decision = editor_run.gate(refresh=True)
         if decision["run"]:
             # Редактор идёт по этому списку, а не по сырому файлу кандидатов:
             # 2026-10-08 17:05 он взял первый кандидат, уже закрытый им же, и

@@ -182,7 +182,8 @@ def _key(url: str) -> str:
 
 
 def gate(now: dt.datetime | None = None, *, registry: Path = REGISTRY, leases: Path = LEASES,
-         events: Path = QUEUE_EVENTS, candidates: Path = CANDIDATES, state: Path = STATE) -> dict:
+         events: Path = QUEUE_EVENTS, candidates: Path = CANDIDATES, state: Path = STATE,
+         refresh: bool = False) -> dict:
     """Нужен ли запуск модели. Только чтение файлов: ни модели, ни сети.
 
     Запуск нужен, если (1) с начала прошлого запуска модели прошло не меньше
@@ -245,7 +246,30 @@ def gate(now: dt.datetime | None = None, *, registry: Path = REGISTRY, leases: P
     if fresh:
         return {"run": True, "reason": f"кандидатов без результата: {len(fresh)} (первый {fresh[0]['url']})",
                 "next": fresh}
+    if refresh and _refresh_candidates(candidates, now):
+        return gate(now, registry=registry, leases=leases, events=events, candidates=candidates,
+                    state=state, refresh=False)
     return {"run": False, "reason": "работы нет: свободных заданий и новых кандидатов нет"}
+
+
+def _refresh_candidates(path: Path, now: dt.datetime, *, min_age_s: int = 3600) -> bool:
+    """Пересчитать кандидатов, если список исчерпан и старше часа. Без сети."""
+    try:
+        age = now.timestamp() - path.stat().st_mtime
+    except OSError:
+        age = min_age_s + 1
+    if age < min_age_s:
+        return False
+    from seo_operator import regular
+
+    snaps = sorted(regular.SOURCES["analytics_snapshots"].glob("analytics-????-??-??.json"))
+    if not snaps:
+        return False
+    published = {(i["domain"], i["slug"]) for i in regular.published_items()}
+    found = regular.editor_candidates(snaps[-1], regular.SOURCES["facts_snapshots"], published)
+    regular._write_json(path, {"snapshot": snaps[-1].name, "generated_at": regular.iso(now),
+                               "refreshed_by": "editor-gate", "candidates": found})
+    return True
 
 
 def main(argv: list[str] | None = None) -> int:

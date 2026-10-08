@@ -1565,7 +1565,29 @@ def editor_candidates(snapshot: Path, facts_dir: Path, published: set[tuple[str,
                     # сверяется по названию в ответе.
                     "shikimori_id": shiki.get("external_id") or (mine.get("external_ids") or {}).get("mal"),
                     "shikimori_match": shiki.get("match_state")})
-    return out[:limit]
+    out = out[:limit]
+    # Запас: когда посещаемые страницы закрыты, редактор не простаивает.
+    # Берутся заглушки Animedia с ПРОВЕРЕННЫМ сопоставлением Shikimori (идентичность
+    # уже подтверждена каталогом), по оценке Shikimori и свежести. Трафика у них
+    # в снимке нет — это помечено, а не скрыто.
+    if len(out) < limit:
+        seen = {(c["site"], c["slug"]) for c in out} | set(published)
+        pool = []
+        for domain, items in details.items():
+            for slug, mine in items.items():
+                if (domain, slug) in seen or (mine.get("description") or "").strip():
+                    continue
+                shiki = (mine.get("ratings_by_source") or {}).get("shikimori") or {}
+                if shiki.get("match_state") != "external_id_exact+title_verified" or not mine.get("playable", True):
+                    continue
+                pool.append((-(shiki.get("value") or 0), -(mine.get("year") or 0), domain, slug, mine, shiki))
+        for _, _, domain, slug, mine, shiki in sorted(pool)[: limit - len(out)]:
+            out.append({"site": domain, "slug": slug, "url": f"https://{domain}/title/{slug}/",
+                        "weight": 0.0, "reason": "GAP_BACKFILL", "has_synopsis": False,
+                        "headline": mine.get("name"), "shikimori_id": shiki.get("external_id"),
+                        "shikimori_match": shiki.get("match_state"),
+                        "note": "трафика в снимке нет; приоритет — оценка Shikimori и год"})
+    return out
 
 
 def step_candidates(ctx: Context) -> Any:
