@@ -196,6 +196,9 @@ def main(argv=None) -> int:
     p.add_argument("--json", action="store_true", help="машиночитаемый вывод")
     p.add_argument("--out", help="записать отчёт в файл")
 
+    p = sub.add_parser("notify", help="доставка отчётов в Telegram (только из службы с LoadCredential)")
+    p.add_argument("action", choices=("discover", "test", "daily", "alerts"))
+
     sub.add_parser("editor-gate", help="лёгкая проверка: нужен ли запуск модели (без модели и сети)")
     sub.add_parser("editor-run-status", help="запуски фонового редактора: по расписанию и ручные")
     p = sub.add_parser("editor-run-verify", help="проверить запуск фонового редактора по следам")
@@ -223,6 +226,10 @@ def main(argv=None) -> int:
 
     args = parser.parse_args(argv)
 
+    if args.command == "notify":
+        from seo_operator import notify
+
+        return notify.main([args.action])
     if args.command == "editor-gate":
         from seo_operator import editor_run
 

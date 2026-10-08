@@ -1179,6 +1179,31 @@ def _fmt_metric(row: dict) -> str:
     return f"{now:g} (было {before:g}, {delta:+g})"
 
 
+def delivery_status(saved_as: str, log: Path | None = None) -> dict:
+    """Состояние доставки — по ответам Telegram, а не по наличию файлов.
+
+    Сохранённый файл доставкой не считается. Канал считается подключённым,
+    только если последнее тестовое или плановое сообщение Telegram принял
+    (`ok: true`). Сам отчёт уходит в 09:00 МСК службой notify@daily — факт
+    его доставки виден в том же журнале, а не в этом отчёте.
+    """
+    log = log or REPO_ROOT / "var" / "notify" / "deliveries.jsonl"
+    last_ok = None
+    try:
+        for line in log.read_text(encoding="utf-8").splitlines():
+            rec = json.loads(line)
+            if rec.get("kind") in ("test", "daily", "alert") and rec.get("ok"):
+                last_ok = rec
+    except (OSError, ValueError):
+        pass
+    if last_ok:
+        return {"state": "канал Telegram подключён",
+                "detail": f"последняя подтверждённая доставка {last_ok['at']} ({last_ok['kind']}); "
+                          f"этот отчёт уйдёт в 09:00 МСК, факт — var/notify/deliveries.jsonl; файл: {saved_as}"}
+    return {"state": "не выполнена",
+            "detail": f"канал Telegram не подключён (install-notify.sh не завершён); отчёт только сохранён в файл {saved_as}"}
+
+
 def notable_changes(wow: dict, *, share: float = 0.3, minimum: float = 20) -> list[dict]:
     out = []
     for domain, row in (wow.get("domains") or {}).items():
@@ -1737,9 +1762,7 @@ def step_daily_report(ctx: Context) -> Any:
         # Файл сохранён — это НЕ доставка. Канала доставки владельцу в проекте
         # нет (docs/SEO_REGULAR_RUN.md §4); пока он не выбран, отчёт честно
         # говорит, что не доставлен.
-        "delivery": {"state": "не выполнена",
-                     "detail": "канал доставки не настроен; отчёт только сохранён в файл "
-                               f"var/seo-regular/reports/daily/{ctx.now.astimezone(MSK):%Y-%m-%d}.md"},
+        "delivery": delivery_status(f"var/seo-regular/reports/daily/{ctx.now.astimezone(MSK):%Y-%m-%d}.md"),
     }
     out_dir = ctx.root / "reports" / "daily"
     _write_json(out_dir / f"{report['date_msk']}.json", report)
@@ -1853,12 +1876,14 @@ def step_hourly(ctx: Context) -> Any:
                 runs.append(f"{r['run_id']} {r.get('trigger')} → {r.get('verdict')}")
     open_issues = [i for i in (ctx.state.get("open_issues_check") or {}).values()
                    if i.get("severity") == "critical"]
+    out_path_hint = f"var/seo-regular/hourly/{ctx.now.astimezone(UTC):%Y-%m-%dT%H}.md"
     lines = [f"# Сводка за час до {iso(ctx.now)}", "",
              f"- публикаций: {len(pubs)}", *[f"  - {x}" for x in pubs[:10]],
              f"- очередь: выдач {claims}, результатов {results} {outcomes or ''}",
              f"- запуски фонового редактора: {len(runs)}", *[f"  - {x}" for x in runs],
              f"- открытых критических проблем сайтов (последняя проверка): {len(open_issues)}",
-             "- доставка владельцу: не выполнена — канал не настроен; сводка только сохранена в файл"]
+             f"- доставка владельцу: почасовые сводки в Telegram не отправляются (только журнал); "
+             f"канал: {delivery_status(str(out_path_hint))['state']}"]
     out = ctx.root / "hourly" / f"{ctx.now.astimezone(UTC):%Y-%m-%dT%H}.md"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text("\n".join(lines) + "\n", encoding="utf-8")

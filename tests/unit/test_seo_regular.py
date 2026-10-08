@@ -726,7 +726,7 @@ def test_hourly_summary_makes_no_requests_and_says_delivery_is_not_done(env):
     r = regular.run("hourly", root=env["root"], now=NOW, sources=env["sources"], http=http)
     assert r["state"] == "DONE" and http.calls == []
     text = (env["root"] / "hourly" / "2026-10-08T05.md").read_text(encoding="utf-8")
-    assert "доставка владельцу: не выполнена" in text
+    assert "почасовые сводки в Telegram не отправляются" in text
 
 
 def test_skipped_slot_is_visible_in_history(env):
@@ -736,3 +736,13 @@ def test_skipped_slot_is_visible_in_history(env):
     state = json.loads((env["root"] / "state.json").read_text(encoding="utf-8"))
     assert state["runs"][-1]["state"] == "ALREADY_DONE"
     assert state["runs"][-1]["trigger"] == "systemd-timer"
+
+
+def test_delivery_is_connected_only_after_telegram_accepted_a_message(tmp_path):
+    log = tmp_path / "deliveries.jsonl"
+    assert regular.delivery_status("f.md", log)["state"] == "не выполнена"
+    log.write_text(json.dumps({"at": "2026-10-09T05:00:00Z", "kind": "test", "ok": False}) + "\n", encoding="utf-8")
+    assert regular.delivery_status("f.md", log)["state"] == "не выполнена"
+    with log.open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps({"at": "2026-10-09T05:01:00Z", "kind": "test", "ok": True, "message_id": 5}) + "\n")
+    assert regular.delivery_status("f.md", log)["state"] == "канал Telegram подключён"

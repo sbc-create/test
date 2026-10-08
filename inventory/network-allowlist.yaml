@@ -207,3 +207,14 @@ hosts:
   # недоступен (таймаут соединения 2026-10-08), а robots.txt MAL запрещает
   # ИИ-агентам весь сайт (D199). Неиспользуемый канал не открывается.
 
+  # --- доставка отчётов владельцу (поручение владельца 2026-10-08) ----------
+  # Только Bot API: getUpdates (поиск чата владельца), sendMessage,
+  # sendDocument. Токен — файл root:0600 вне репозитория, в службу приходит
+  # через LoadCredential; сессии агента он не выдаётся и в журналы не пишется.
+  - ref: telegram-bot-api
+    host: api.telegram.org
+    purpose: "доставка SEO-отчётов и срочных ошибок владельцу в Telegram"
+    methods: [GET, POST]
+    token_secret_ref: file:/etc/site-factory/secrets/telegram/bot_token
+    contract_ref: docs/REPORT_DELIVERY.md
+

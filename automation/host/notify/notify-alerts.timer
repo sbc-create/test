@@ -1,0 +1,14 @@
+# Ошибки, требующие вмешательства: проверка каждые 10 минут, круглосуточно.
+# Одна и та же ошибка повторно не отправляется (var/notify/sent-alerts.json),
+# почасовые сводки в Telegram не уходят.
+[Unit]
+Description=Срочные ошибки SEO-сети в Telegram
+
+[Timer]
+OnCalendar=*:0/10
+Persistent=false
+AccuracySec=30s
+Unit=notify@alerts.service
+
+[Install]
+WantedBy=timers.target
