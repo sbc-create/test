@@ -5,6 +5,7 @@
 новым наблюдением, неделя сравнивается с непересекающейся неделей, о
 сохраняющейся проблеме не уведомляют второй раз.
 """
+
 from __future__ import annotations
 
 import datetime as dt
@@ -35,8 +36,11 @@ class FakeHttp:
         return Response(url, status, headers, body, 0.05)
 
 
-HOME_OPEN = (200, {"x-robots-tag": "index, follow"},
-             b'<html><head><link rel="canonical" href="https://a.example/"></head><body>ok</body></html>')
+HOME_OPEN = (
+    200,
+    {"x-robots-tag": "index, follow"},
+    b'<html><head><link rel="canonical" href="https://a.example/"></head><body>ok</body></html>',
+)
 ROBOTS_OK = (200, {}, b"User-agent: *\nDisallow: /api/\nSitemap: https://a.example/sitemap.xml\n")
 
 
@@ -44,42 +48,74 @@ def _snapshot(day: str, visits: float, search: float, *, domain: str = "a.exampl
     return {
         "collected_at": f"{day}T06:15:00Z",
         "period": {"date1": "7daysAgo", "date2": "yesterday"},
-        "domains": [{
-            "domain": domain,
-            "measurements": [
-                {"key": "visits", "measured": True, "value": visits},
-                {"key": "visitors", "measured": True, "value": visits - 1},
-                {"key": "search_engines", "measured": True,
-                 "value": [{"dimensions": [{"name": "Yandex"}], "metrics": [search]}]},
-                {"key": "pages_in_search", "measured": False, "value": "не измерено",
-                 "reason": "сайт не привязан к Вебмастеру"},
-            ],
-        }],
+        "domains": [
+            {
+                "domain": domain,
+                "measurements": [
+                    {"key": "visits", "measured": True, "value": visits},
+                    {"key": "visitors", "measured": True, "value": visits - 1},
+                    {
+                        "key": "search_engines",
+                        "measured": True,
+                        "value": [{"dimensions": [{"name": "Yandex"}], "metrics": [search]}],
+                    },
+                    {
+                        "key": "pages_in_search",
+                        "measured": False,
+                        "value": "не измерено",
+                        "reason": "сайт не привязан к Вебмастеру",
+                    },
+                ],
+            }
+        ],
     }
 
 
 @pytest.fixture
 def env(tmp_path, monkeypatch):
     cells = tmp_path / "site-cells.json"
-    cells.write_text(json.dumps({"cells": [
-        {"domain": "a.example", "site_id": "a-01", "indexing": {"open_authorized": True}},
-        {"domain": "site-a.localhost", "site_id": "site-a"},
-    ]}), encoding="utf-8")
+    cells.write_text(
+        json.dumps(
+            {
+                "cells": [
+                    {
+                        "domain": "a.example",
+                        "site_id": "a-01",
+                        "indexing": {"open_authorized": True},
+                    },
+                    {"domain": "site-a.localhost", "site_id": "site-a"},
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
     analytics = tmp_path / "analytics.json"
-    analytics.write_text(json.dumps({"properties": [
-        {"domain": "a.example", "counter_id": 1, "webmaster": {"host_id": None}}]}),
-        encoding="utf-8")
+    analytics.write_text(
+        json.dumps(
+            {
+                "properties": [
+                    {"domain": "a.example", "counter_id": 1, "webmaster": {"host_id": None}}
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
     indexing = tmp_path / "indexing"
     indexing.mkdir()
-    (indexing / "a.example.json").write_text(json.dumps({"desired_state": "OPEN"}), encoding="utf-8")
+    (indexing / "a.example.json").write_text(
+        json.dumps({"desired_state": "OPEN"}), encoding="utf-8"
+    )
     snaps = tmp_path / "snapshots"
     snaps.mkdir()
     (snaps / "analytics-2026-10-01.json").write_text(
-        json.dumps(_snapshot("2026-10-01", 100, 40)), encoding="utf-8")
+        json.dumps(_snapshot("2026-10-01", 100, 40)), encoding="utf-8"
+    )
     (snaps / "analytics-2026-10-07.json").write_text(
-        json.dumps(_snapshot("2026-10-07", 130, 55)), encoding="utf-8")
+        json.dumps(_snapshot("2026-10-07", 130, 55)), encoding="utf-8"
+    )
     (snaps / "analytics-2026-10-08.json").write_text(
-        json.dumps(_snapshot("2026-10-08", 140, 60)), encoding="utf-8")
+        json.dumps(_snapshot("2026-10-08", 140, 60)), encoding="utf-8"
+    )
     monkeypatch.setattr(regular, "OVERLAY_ROOTS", {})
     sources = {
         "cells": cells,
@@ -113,7 +149,10 @@ def test_slot_ids_are_stable_within_a_slot():
     assert regular.slot_id("check", NOW.replace(hour=5, minute=20)) == "check-2026-10-07T2325"
     # ручной запуск в 12:06 и плановый в 17:25 — разные слоты (случай 2026-10-08)
     assert regular.slot_id("check", NOW.replace(hour=12, minute=6)) == "check-2026-10-08T1125"
-    assert regular.slot_id("check", NOW.replace(hour=17, minute=25, second=4)) == "check-2026-10-08T1725"
+    assert (
+        regular.slot_id("check", NOW.replace(hour=17, minute=25, second=4))
+        == "check-2026-10-08T1725"
+    )
     # 23:30 UTC 7 октября — это уже 8 октября по Москве
     late = dt.datetime(2026, 10, 7, 23, 30, tzinfo=dt.timezone.utc)
     assert regular.slot_id("daily", late) == "daily-2026-10-08"
@@ -137,8 +176,14 @@ def test_second_concurrent_run_exits_without_work(env):
 
 def test_check_run_records_each_action_and_finishes(env):
     http = FakeHttp({"https://a.example/": HOME_OPEN, "https://a.example/robots.txt": ROBOTS_OK})
-    result = regular.run("check", root=env["root"], now=NOW, sources=env["sources"], http=http,
-                         trigger="systemd-timer")
+    result = regular.run(
+        "check",
+        root=env["root"],
+        now=NOW,
+        sources=env["sources"],
+        http=http,
+        trigger="systemd-timer",
+    )
     assert result["state"] == "DONE", result
     assert result["exit_code"] == 0
     events = [e["event"] for e in _journal(env["root"])]
@@ -169,7 +214,9 @@ def test_interrupted_slot_resumes_from_first_unfinished_step(env, monkeypatch):
         calls["n"] += 1
         raise RuntimeError("процесс прерван посреди шага")
 
-    plan = [(name, broken if name == "analytics" else func) for name, func in regular.PLANS["check"]]
+    plan = [
+        (name, broken if name == "analytics" else func) for name, func in regular.PLANS["check"]
+    ]
     monkeypatch.setitem(regular.PLANS, "check", plan)
     monkeypatch.setattr(regular.time, "sleep", lambda _s: None)
     first = regular.run("check", root=env["root"], now=NOW, sources=env["sources"], http=http)
@@ -222,11 +269,13 @@ def test_transient_errors_are_retried_with_growing_delay():
         code = next(answers)
         if code != 200:
             import urllib.error
+
             raise urllib.error.HTTPError("https://a.example/", code, "busy", {}, None)
         return Resp(code)
 
-    http = regular.Http(Budget(60, 10), opener=opener, sleep=sleeps.append,
-                        backoff=2.0, min_interval=0)
+    http = regular.Http(
+        Budget(60, 10), opener=opener, sleep=sleeps.append, backoff=2.0, min_interval=0
+    )
     resp = http.get("https://a.example/")
     assert resp.status == 200
     assert resp.attempts == 3
@@ -247,7 +296,10 @@ def test_rereading_the_same_snapshot_is_not_a_new_observation(env):
 
 def test_stale_snapshot_is_named_stale(env):
     later = NOW + dt.timedelta(hours=40)
-    assert regular.analytics_freshness(env["sources"]["analytics_snapshots"], {}, later)["status"] == "STALE"
+    assert (
+        regular.analytics_freshness(env["sources"]["analytics_snapshots"], {}, later)["status"]
+        == "STALE"
+    )
 
 
 def test_week_over_week_compares_non_overlapping_windows(env):
@@ -272,27 +324,33 @@ def test_week_over_week_without_base_week_is_not_measured_not_zero(env):
 
 
 def test_open_state_with_noindex_answer_is_an_indexing_mismatch():
-    http = FakeHttp({
-        "https://a.example/": (200, {"x-robots-tag": "noindex, nofollow"}, b"<html></html>"),
-        "https://a.example/robots.txt": ROBOTS_OK,
-    })
+    http = FakeHttp(
+        {
+            "https://a.example/": (200, {"x-robots-tag": "noindex, nofollow"}, b"<html></html>"),
+            "https://a.example/robots.txt": ROBOTS_OK,
+        }
+    )
     res = regular.check_domain(http, {"domain": "a.example", "indexing_desired": "OPEN"})
     assert res["observed_indexing"] == "CLOSED"
     assert [i["code"] for i in res["issues"]] == ["INDEXING_MISMATCH"]
 
 
 def test_foreign_canonical_on_home_is_critical():
-    http = FakeHttp({
-        "https://a.example/": (200, {}, b'<link rel="canonical" href="https://b.example/">'),
-        "https://a.example/robots.txt": ROBOTS_OK,
-    })
+    http = FakeHttp(
+        {
+            "https://a.example/": (200, {}, b'<link rel="canonical" href="https://b.example/">'),
+            "https://a.example/robots.txt": ROBOTS_OK,
+        }
+    )
     res = regular.check_domain(http, {"domain": "a.example", "indexing_desired": "OPEN"})
     assert "CANONICAL_FOREIGN_HOST" in [i["code"] for i in res["issues"]]
 
 
 def test_robots_disallow_all_only_for_the_wildcard_group():
     assert regular.robots_disallows_all("User-agent: *\nDisallow: /\n")
-    assert not regular.robots_disallows_all("User-agent: BadBot\nDisallow: /\n\nUser-agent: *\nDisallow: /api/\n")
+    assert not regular.robots_disallows_all(
+        "User-agent: BadBot\nDisallow: /\n\nUser-agent: *\nDisallow: /api/\n"
+    )
 
 
 def test_new_critical_issue_notifies_once(env):
@@ -304,7 +362,9 @@ def test_new_critical_issue_notifies_once(env):
     second = regular.run("check", root=env["root"], now=later, sources=env["sources"], http=down)
     assert second["state"] == "DONE"
     assert second["exit_code"] == 0  # та же проблема — без второго уведомления
-    diff = json.loads((env["root"] / "runs" / second["run_id"] / "diff.json").read_text(encoding="utf-8"))
+    diff = json.loads(
+        (env["root"] / "runs" / second["run_id"] / "diff.json").read_text(encoding="utf-8")
+    )
     assert diff["new"] == [] and len(diff["persisting"]) == 1
 
 
@@ -322,25 +382,62 @@ def test_stalled_updates_need_four_equal_days():
 def test_queue_hygiene_finds_relative_and_absolute_twins(env):
     """Воспроизводит yummyani.org/anime/ledyanaya-stena-2: два живых задания."""
     registry = env["sources"]["queue_registry"]
-    registry.write_text(json.dumps({"items": [
-        {"content_id": "request-fa19", "target_site": "yummyani.org",
-         "canonical_url": "https://yummyani.org/anime/ledyanaya-stena-2",
-         "status": "BLOCKED_INSUFFICIENT_FACTS"},
-        {"content_id": "request-b749", "target_site": "yummyani.org",
-         "canonical_url": "/anime/ledyanaya-stena-2", "status": "READY_VERIFIED"},
-        {"content_id": "request-done", "target_site": "yummyani.org",
-         "canonical_url": "https://yummyani.org/anime/x", "status": "PUBLISHED"},
-    ]}), encoding="utf-8")
+    registry.write_text(
+        json.dumps(
+            {
+                "items": [
+                    {
+                        "content_id": "request-fa19",
+                        "target_site": "yummyani.org",
+                        "canonical_url": "https://yummyani.org/anime/ledyanaya-stena-2",
+                        "status": "BLOCKED_INSUFFICIENT_FACTS",
+                    },
+                    {
+                        "content_id": "request-b749",
+                        "target_site": "yummyani.org",
+                        "canonical_url": "/anime/ledyanaya-stena-2",
+                        "status": "READY_VERIFIED",
+                    },
+                    {
+                        "content_id": "request-done",
+                        "target_site": "yummyani.org",
+                        "canonical_url": "https://yummyani.org/anime/x",
+                        "status": "PUBLISHED",
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
     events = env["sources"]["queue_events"]
-    events.write_text("\n".join(json.dumps(e) for e in [
-        {"at": "2026-10-08T01:00:00Z", "event": "task_claimed", "owner": "seo-analysis-2026-10-08",
-         "task_id": "b749", "canonical_url": "https://yummyani.org/anime/ledyanaya-stena-2"},
-        {"at": "2026-10-08T02:00:00Z", "event": "task_claimed", "owner": "editor-01",
-         "task_id": "b749", "canonical_url": "https://yummyani.org/anime/ledyanaya-stena-2"},
-    ]), encoding="utf-8")
+    events.write_text(
+        "\n".join(
+            json.dumps(e)
+            for e in [
+                {
+                    "at": "2026-10-08T01:00:00Z",
+                    "event": "task_claimed",
+                    "owner": "seo-analysis-2026-10-08",
+                    "task_id": "b749",
+                    "canonical_url": "https://yummyani.org/anime/ledyanaya-stena-2",
+                },
+                {
+                    "at": "2026-10-08T02:00:00Z",
+                    "event": "task_claimed",
+                    "owner": "editor-01",
+                    "task_id": "b749",
+                    "canonical_url": "https://yummyani.org/anime/ledyanaya-stena-2",
+                },
+            ]
+        ),
+        encoding="utf-8",
+    )
     res = regular.queue_hygiene(registry, events, since=NOW - dt.timedelta(days=1))
     assert len(res["live_duplicates"]) == 1
-    assert {t["content_id"] for t in res["live_duplicates"][0]["tasks"]} == {"request-fa19", "request-b749"}
+    assert {t["content_id"] for t in res["live_duplicates"][0]["tasks"]} == {
+        "request-fa19",
+        "request-b749",
+    }
     assert [t["content_id"] for t in res["relative_urls"]] == ["request-b749"]
     assert [c["owner"] for c in res["seo_side_claims"]] == ["seo-analysis-2026-10-08"]
     assert res["urls_claimed_by_several_owners"] == 1
@@ -350,26 +447,62 @@ def test_publication_is_rechecked_only_after_its_text_changed(env, tmp_path, mon
     root = tmp_path / "overlays"
     (root / "a.example").mkdir(parents=True)
     store = root / "a.example" / "title-overlays.json"
-    store.write_text(json.dumps({"generated_at": "2026-10-07T09:00:00Z", "items": [
-        {"slug": "x", "body": "Текст описания карточки для проверки видимости на странице."}]}),
-        encoding="utf-8")
+    store.write_text(
+        json.dumps(
+            {
+                "generated_at": "2026-10-07T09:00:00Z",
+                "items": [
+                    {
+                        "slug": "x",
+                        "body": "Текст описания карточки для проверки видимости на странице.",
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
     monkeypatch.setattr(regular, "OVERLAY_ROOTS", {"animedia": (root, "/title/{slug}/")})
-    page = (200, {}, "<html><body><p>Текст описания карточки для проверки видимости на странице."
-                     "</p></body></html>".encode())
-    http = FakeHttp({"https://a.example/": HOME_OPEN, "https://a.example/robots.txt": ROBOTS_OK,
-                     "https://a.example/title/x/": page})
+    page = (
+        200,
+        {},
+        "<html><body><p>Текст описания карточки для проверки видимости на странице."
+        "</p></body></html>".encode(),
+    )
+    http = FakeHttp(
+        {
+            "https://a.example/": HOME_OPEN,
+            "https://a.example/robots.txt": ROBOTS_OK,
+            "https://a.example/title/x/": page,
+        }
+    )
     regular.run("check", root=env["root"], now=NOW, sources=env["sources"], http=http)
     assert http.calls.count("https://a.example/title/x/") == 1
     later = NOW + dt.timedelta(hours=6)
     regular.run("check", root=env["root"], now=later, sources=env["sources"], http=http)
     assert http.calls.count("https://a.example/title/x/") == 1  # текст тот же — не перепроверяется
-    store.write_text(json.dumps({"generated_at": "2026-10-08T09:00:00Z", "items": [
-        {"slug": "x", "body": "Новый текст, которого на странице ещё нет."}]}), encoding="utf-8")
-    third = regular.run("check", root=env["root"], now=later + dt.timedelta(hours=6),
-                        sources=env["sources"], http=http)
-    pubs = json.loads((env["root"] / "runs" / third["run_id"] / "publications.json").read_text(encoding="utf-8"))
+    store.write_text(
+        json.dumps(
+            {
+                "generated_at": "2026-10-08T09:00:00Z",
+                "items": [{"slug": "x", "body": "Новый текст, которого на странице ещё нет."}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    third = regular.run(
+        "check",
+        root=env["root"],
+        now=later + dt.timedelta(hours=6),
+        sources=env["sources"],
+        http=http,
+    )
+    pubs = json.loads(
+        (env["root"] / "runs" / third["run_id"] / "publications.json").read_text(encoding="utf-8")
+    )
     assert pubs["checked"][0]["verdict"] == "TEXT_NOT_VISIBLE"
-    diff = json.loads((env["root"] / "runs" / third["run_id"] / "diff.json").read_text(encoding="utf-8"))
+    diff = json.loads(
+        (env["root"] / "runs" / third["run_id"] / "diff.json").read_text(encoding="utf-8")
+    )
     assert [i["code"] for i in diff["new"]] == ["PUBLICATION_TEXT_NOT_VISIBLE:/title/x/"]
 
 
@@ -377,8 +510,13 @@ def test_daily_reuses_a_recent_check_and_writes_one_report(env):
     http = FakeHttp({"https://a.example/": HOME_OPEN, "https://a.example/robots.txt": ROBOTS_OK})
     regular.run("check", root=env["root"], now=NOW, sources=env["sources"], http=http)
     home_calls = http.calls.count("https://a.example/")
-    daily = regular.run("daily", root=env["root"], now=NOW + dt.timedelta(minutes=10),
-                        sources=env["sources"], http=http)
+    daily = regular.run(
+        "daily",
+        root=env["root"],
+        now=NOW + dt.timedelta(minutes=10),
+        sources=env["sources"],
+        http=http,
+    )
     assert daily["state"] == "DONE", daily
     assert http.calls.count("https://a.example/") == home_calls  # проверка не повторялась
     reports = list((env["root"] / "reports" / "daily").glob("*.md"))
@@ -398,7 +536,9 @@ def test_weekly_result_enters_the_next_daily_report_once(env):
     regular.run("daily", root=env["root"], now=NOW, sources=env["sources"], http=http)
     first = (env["root"] / "reports" / "daily" / "2026-10-08.md").read_text(encoding="utf-8")
     assert "## Неделя `weekly-2026-W41`" in first
-    regular.run("daily", root=env["root"], now=NOW + dt.timedelta(days=1), sources=env["sources"], http=http)
+    regular.run(
+        "daily", root=env["root"], now=NOW + dt.timedelta(days=1), sources=env["sources"], http=http
+    )
     second = (env["root"] / "reports" / "daily" / "2026-10-09.md").read_text(encoding="utf-8")
     assert "## Неделя `weekly" not in second
 
@@ -413,13 +553,21 @@ def test_status_separates_scheduled_from_manual_runs(env, tmp_path):
         timer.write_text("[Timer]\nOnCalendar=*-*-* 05:25:00 UTC\n", encoding="utf-8")
         (systemd / "timers.target.wants" / timer.name).symlink_to(timer)
     http = FakeHttp({"https://a.example/": HOME_OPEN, "https://a.example/robots.txt": ROBOTS_OK})
-    regular.run("check", root=env["root"], now=NOW, sources=env["sources"], http=http, trigger="manual")
+    regular.run(
+        "check", root=env["root"], now=NOW, sources=env["sources"], http=http, trigger="manual"
+    )
     before = regular.status(env["root"], systemd_dir=systemd, stamps=stamps)
     assert before["modes"]["check"]["scheduled_runs_done"] == 0
     assert before["modes"]["check"]["last_manual_run"]["trigger"] == "manual"
     assert before["confirmed"] is False  # ручной запуск расписание не подтверждает
-    regular.run("check", root=env["root"], now=NOW + dt.timedelta(hours=6), sources=env["sources"],
-                http=http, trigger="systemd-timer")
+    regular.run(
+        "check",
+        root=env["root"],
+        now=NOW + dt.timedelta(hours=6),
+        sources=env["sources"],
+        http=http,
+        trigger="systemd-timer",
+    )
     after = regular.status(env["root"], systemd_dir=systemd, stamps=stamps)
     assert after["modes"]["check"]["scheduled_runs_done"] == 1
     assert after["modes"]["check"]["on_calendar"] == ["*-*-* 05:25:00 UTC"]
@@ -428,11 +576,13 @@ def test_status_separates_scheduled_from_manual_runs(env, tmp_path):
 
 def test_never_resolved_name_is_blocked_not_critical():
     """lordserials22.site под serverHold: известное внешнее состояние."""
+
     class DnsFail(FakeHttp):
         def get(self, url, *, timeout=None):
             self.calls.append(url)
-            return Response(url, None, {}, b"", 0.01,
-                            error="URLError: [Errno -2] Name or service not known")
+            return Response(
+                url, None, {}, b"", 0.01, error="URLError: [Errno -2] Name or service not known"
+            )
 
     res = regular.check_domain(DnsFail(), {"domain": "lordserials22.site"})
     assert [(i["code"], i["severity"]) for i in res["issues"]] == [("DNS_UNRESOLVED", "blocked")]
@@ -442,8 +592,13 @@ def test_never_resolved_name_is_blocked_not_critical():
 
 def test_old_lastmod_and_slow_sitemap_are_findings():
     """zonafilm.cc 2026-10-08: самый свежий lastmod 2026-09-27."""
-    snap = {"status": "MEASURED", "urls": 53916, "max_lastmod": "2026-09-27T00:00:00Z",
-            "slowest_url": "https://zonafilm.cc/sitemap-1.xml", "slowest_seconds": 0.4}
+    snap = {
+        "status": "MEASURED",
+        "urls": 53916,
+        "max_lastmod": "2026-09-27T00:00:00Z",
+        "slowest_url": "https://zonafilm.cc/sitemap-1.xml",
+        "slowest_seconds": 0.4,
+    }
     codes = [f["code"] for f in regular.sitemap_findings(snap, NOW)]
     assert codes == ["SITEMAP_LASTMOD_OLD"]
     snap.update(max_lastmod="2026-10-08T00:00:00Z", slowest_seconds=48.0)
@@ -452,28 +607,52 @@ def test_old_lastmod_and_slow_sitemap_are_findings():
 
 def test_revision_chain_is_not_a_duplicate(env):
     registry = env["sources"]["queue_registry"]
-    registry.write_text(json.dumps({"items": [
-        {"content_id": "batch10-17-3x3-glaza", "target_site": "yummyani.site",
-         "canonical_url": "https://yummyani.site/anime/3x3-glaza", "status": "DRAFT_REPAIR"},
-        {"content_id": "buffer-batch10-17-3x3-glaza-rev1", "target_site": "yummyani.site",
-         "canonical_url": "https://yummyani.site/anime/3x3-glaza", "status": "BLOCKED_QUALITY"},
-    ]}), encoding="utf-8")
+    registry.write_text(
+        json.dumps(
+            {
+                "items": [
+                    {
+                        "content_id": "batch10-17-3x3-glaza",
+                        "target_site": "yummyani.site",
+                        "canonical_url": "https://yummyani.site/anime/3x3-glaza",
+                        "status": "DRAFT_REPAIR",
+                    },
+                    {
+                        "content_id": "buffer-batch10-17-3x3-glaza-rev1",
+                        "target_site": "yummyani.site",
+                        "canonical_url": "https://yummyani.site/anime/3x3-glaza",
+                        "status": "BLOCKED_QUALITY",
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
     res = regular.queue_hygiene(registry, env["sources"]["queue_events"], since=NOW)
     assert res["live_duplicates"] == []
 
 
 def test_notable_changes_need_both_share_and_volume():
-    wow = {"domains": {
-        "animeg0.site": {"visits": {"now": 60, "before": 640}, "search_visits": {"now": 0, "before": 0}},
-        "lordserial33.biz": {"visits": {"now": 39, "before": 40}, "search_visits": {}},
-        "small.example": {"visits": {"now": 2, "before": 10}, "search_visits": {}},
-    }}
+    wow = {
+        "domains": {
+            "animeg0.site": {
+                "visits": {"now": 60, "before": 640},
+                "search_visits": {"now": 0, "before": 0},
+            },
+            "lordserial33.biz": {"visits": {"now": 39, "before": 40}, "search_visits": {}},
+            "small.example": {"visits": {"now": 2, "before": 10}, "search_visits": {}},
+        }
+    }
     found = regular.notable_changes(wow)
     assert [(n["domain"], n["metric"]) for n in found] == [("animeg0.site", "visits")]
 
 
 def test_counter_on_page_must_match_the_registry():
-    page = (200, {}, b'<script>ym(111881038, "init")</script><img src="https://mc.yandex.ru/watch/111881038">')
+    page = (
+        200,
+        {},
+        b'<script>ym(111881038, "init")</script><img src="https://mc.yandex.ru/watch/111881038">',
+    )
     http = FakeHttp({"https://a.example/": page, "https://a.example/robots.txt": ROBOTS_OK})
     ok = regular.check_domain(http, {"domain": "a.example", "counter_id": 111881038})
     assert ok["counters_on_page"] == [111881038]
@@ -486,21 +665,39 @@ def test_publication_gets_a_baseline_and_a_later_evaluation(env, tmp_path, monke
     snaps = env["sources"]["analytics_snapshots"]
     data = _snapshot("2026-10-08", 140, 60)
     data["domains"][0]["measurements"].append(
-        {"key": "landing_pages", "measured": True, "top_n": 20,
-         "value": [{"dimensions": [{"name": "/"}], "metrics": [26.0]}]})
+        {
+            "key": "landing_pages",
+            "measured": True,
+            "top_n": 20,
+            "value": [{"dimensions": [{"name": "/"}], "metrics": [26.0]}],
+        }
+    )
     (snaps / "analytics-2026-10-08.json").write_text(json.dumps(data), encoding="utf-8")
     root = tmp_path / "overlays"
     (root / "a.example").mkdir(parents=True)
-    (root / "a.example" / "title-overlays.json").write_text(json.dumps({
-        "generated_at": "2026-10-08T09:00:00Z", "items": [
-            {"slug": "x", "body": "Текст описания карточки, который виден на странице."}]}),
-        encoding="utf-8")
-    (root / "a.example" / "history.jsonl").write_text(json.dumps(
-        {"at": "2026-10-08T09:00:00Z", "op": "publish", "slug": "x"}), encoding="utf-8")
+    (root / "a.example" / "title-overlays.json").write_text(
+        json.dumps(
+            {
+                "generated_at": "2026-10-08T09:00:00Z",
+                "items": [
+                    {"slug": "x", "body": "Текст описания карточки, который виден на странице."}
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (root / "a.example" / "history.jsonl").write_text(
+        json.dumps({"at": "2026-10-08T09:00:00Z", "op": "publish", "slug": "x"}), encoding="utf-8"
+    )
     monkeypatch.setattr(regular, "OVERLAY_ROOTS", {"animedia": (root, "/title/{slug}/")})
     page = (200, {}, "<p>Текст описания карточки, который виден на странице.</p>".encode())
-    http = FakeHttp({"https://a.example/": HOME_OPEN, "https://a.example/robots.txt": ROBOTS_OK,
-                     "https://a.example/title/x/": page})
+    http = FakeHttp(
+        {
+            "https://a.example/": HOME_OPEN,
+            "https://a.example/robots.txt": ROBOTS_OK,
+            "https://a.example/title/x/": page,
+        }
+    )
     regular.run("check", root=env["root"], now=NOW, sources=env["sources"], http=http)
     state = json.loads((env["root"] / "state.json").read_text(encoding="utf-8"))
     baseline = state["changes"]["https://a.example/title/x/"]["baseline"]
@@ -509,12 +706,20 @@ def test_publication_gets_a_baseline_and_a_later_evaluation(env, tmp_path, monke
     later = json.loads(json.dumps(data))
     later["collected_at"] = "2026-10-16T06:15:00Z"
     later["domains"][0]["measurements"][-1]["value"] = [
-        {"dimensions": [{"name": "/title/x"}], "metrics": [7.0]}]
+        {"dimensions": [{"name": "/title/x"}], "metrics": [7.0]}
+    ]
     (snaps / "analytics-2026-10-16.json").write_text(json.dumps(later), encoding="utf-8")
-    weekly = regular.run("weekly", root=env["root"], now=NOW + dt.timedelta(days=8),
-                         sources=env["sources"], http=http)
+    weekly = regular.run(
+        "weekly",
+        root=env["root"],
+        now=NOW + dt.timedelta(days=8),
+        sources=env["sources"],
+        http=http,
+    )
     assert weekly["state"] == "DONE", weekly
-    evaluated = json.loads((env["root"] / "runs" / weekly["run_id"] / "evaluate.json").read_text(encoding="utf-8"))
+    evaluated = json.loads(
+        (env["root"] / "runs" / weekly["run_id"] / "evaluate.json").read_text(encoding="utf-8")
+    )
     assert evaluated[0]["horizon"] == 7
     assert evaluated[0]["after"]["landing_pages"] == {"value": 7.0}
     # до правки страница была вне первых 20 — сравнивать не с чем, вердикта нет
@@ -523,9 +728,13 @@ def test_publication_gets_a_baseline_and_a_later_evaluation(env, tmp_path, monke
 
 def test_baseline_is_never_taken_from_a_snapshot_after_publication(env):
     snaps = sorted(env["sources"]["analytics_snapshots"].glob("analytics-*.json"))
-    early = regular._baseline(snaps, "a.example", "https://a.example/title/x/", "2026-09-20T10:00:00Z")
+    early = regular._baseline(
+        snaps, "a.example", "https://a.example/title/x/", "2026-09-20T10:00:00Z"
+    )
     assert early == {"not_measured": "снимка аналитики на 2026-09-20 или раньше нет"}
-    mid = regular._baseline(snaps, "a.example", "https://a.example/title/x/", "2026-10-05T10:00:00Z")
+    mid = regular._baseline(
+        snaps, "a.example", "https://a.example/title/x/", "2026-10-05T10:00:00Z"
+    )
     assert mid["snapshot"] == "analytics-2026-10-01.json"
 
 
@@ -541,7 +750,9 @@ def test_weekly_priorities_ignore_noise_and_keep_real_drops(env):
     (snaps / "analytics-2026-10-08.json").write_text(json.dumps(new), encoding="utf-8")
     http = FakeHttp()
     regular.run("weekly", root=env["root"], now=NOW, sources=env["sources"], http=http)
-    pri = json.loads((env["root"] / "runs" / "weekly-2026-W41" / "priorities.json").read_text(encoding="utf-8"))
+    pri = json.loads(
+        (env["root"] / "runs" / "weekly-2026-W41" / "priorities.json").read_text(encoding="utf-8")
+    )
     assert [p["domain"] for p in pri["priorities"]] == ["a.example"]
     assert "640 → 60" in pri["priorities"][0]["reason"]
 
@@ -552,17 +763,34 @@ def test_drop_is_decomposed_by_traffic_source(env):
 
     def with_sources(day, visits, rows):
         data = _snapshot(day, visits, 0)
-        data["domains"][0]["measurements"].append({
-            "key": "traffic_sources", "measured": True, "top_n": 20,
-            "value": [{"dimensions": [{"name": k}], "metrics": [v]} for k, v in rows.items()]})
+        data["domains"][0]["measurements"].append(
+            {
+                "key": "traffic_sources",
+                "measured": True,
+                "top_n": 20,
+                "value": [{"dimensions": [{"name": k}], "metrics": [v]} for k, v in rows.items()],
+            }
+        )
         return data
 
-    (snaps / "analytics-2026-10-01.json").write_text(json.dumps(with_sources(
-        "2026-10-01", 640, {"Cached page traffic": 447, "Direct traffic": 186, "Internal traffic": 7})),
-        encoding="utf-8")
-    (snaps / "analytics-2026-10-08.json").write_text(json.dumps(with_sources(
-        "2026-10-08", 60, {"Direct traffic": 57, "Link traffic": 2, "Internal traffic": 1})),
-        encoding="utf-8")
+    (snaps / "analytics-2026-10-01.json").write_text(
+        json.dumps(
+            with_sources(
+                "2026-10-01",
+                640,
+                {"Cached page traffic": 447, "Direct traffic": 186, "Internal traffic": 7},
+            )
+        ),
+        encoding="utf-8",
+    )
+    (snaps / "analytics-2026-10-08.json").write_text(
+        json.dumps(
+            with_sources(
+                "2026-10-08", 60, {"Direct traffic": 57, "Link traffic": 2, "Internal traffic": 1}
+            )
+        ),
+        encoding="utf-8",
+    )
     wow = regular.week_over_week(snaps, dt.date(2026, 10, 8))
     top = wow["domains"]["a.example"]["sources"][0]
     assert top == {"source": "Cached page traffic", "before": 447, "now": 0.0, "delta": -447}
@@ -583,15 +811,38 @@ def test_publication_time_comes_from_the_history_not_the_store(tmp_path, monkeyp
     """animedia.icu 2026-10-08: generated_at хранилища сдвинулся правкой соседа."""
     site = tmp_path / "overlays" / "a.example"
     site.mkdir(parents=True)
-    (site / "title-overlays.json").write_text(json.dumps({
-        "generated_at": "2026-10-08T12:03:59Z",
-        "items": [{"slug": "old", "body": "Старый текст карточки, опубликованный первого октября."},
-                  {"slug": "new", "body": "Новый текст карточки, опубликованный восьмого октября."}]}),
-        encoding="utf-8")
-    (site / "history.jsonl").write_text("\n".join(json.dumps(r) for r in [
-        {"at": "2026-10-01T18:31:58Z", "op": "publish", "slug": "old"},
-        {"at": "2026-10-08T12:03:59Z", "op": "publish", "slug": "new"}]), encoding="utf-8")
-    items = {i["slug"]: i for i in regular.published_items({"animedia": (tmp_path / "overlays", "/title/{slug}/")})}
+    (site / "title-overlays.json").write_text(
+        json.dumps(
+            {
+                "generated_at": "2026-10-08T12:03:59Z",
+                "items": [
+                    {
+                        "slug": "old",
+                        "body": "Старый текст карточки, опубликованный первого октября.",
+                    },
+                    {
+                        "slug": "new",
+                        "body": "Новый текст карточки, опубликованный восьмого октября.",
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (site / "history.jsonl").write_text(
+        "\n".join(
+            json.dumps(r)
+            for r in [
+                {"at": "2026-10-01T18:31:58Z", "op": "publish", "slug": "old"},
+                {"at": "2026-10-08T12:03:59Z", "op": "publish", "slug": "new"},
+            ]
+        ),
+        encoding="utf-8",
+    )
+    items = {
+        i["slug"]: i
+        for i in regular.published_items({"animedia": (tmp_path / "overlays", "/title/{slug}/")})
+    }
     assert items["old"]["published_at"] == "2026-10-01T18:31:58Z"
     assert items["new"]["published_at"] == "2026-10-08T12:03:59Z"
 
@@ -599,22 +850,48 @@ def test_publication_time_comes_from_the_history_not_the_store(tmp_path, monkeyp
 def test_unknown_publication_time_gives_no_baseline(env, tmp_path, monkeypatch):
     root = tmp_path / "overlays"
     (root / "a.example").mkdir(parents=True)
-    (root / "a.example" / "title-overlays.json").write_text(json.dumps({"items": [
-        {"slug": "x", "body": "Текст без записи в журнале публикаций, виден на странице."}]}), encoding="utf-8")
+    (root / "a.example" / "title-overlays.json").write_text(
+        json.dumps(
+            {
+                "items": [
+                    {
+                        "slug": "x",
+                        "body": "Текст без записи в журнале публикаций, виден на странице.",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
     monkeypatch.setattr(regular, "OVERLAY_ROOTS", {"animedia": (root, "/title/{slug}/")})
     page = (200, {}, "<p>Текст без записи в журнале публикаций, виден на странице.</p>".encode())
-    http = FakeHttp({"https://a.example/": HOME_OPEN, "https://a.example/robots.txt": ROBOTS_OK,
-                     "https://a.example/title/x/": page})
+    http = FakeHttp(
+        {
+            "https://a.example/": HOME_OPEN,
+            "https://a.example/robots.txt": ROBOTS_OK,
+            "https://a.example/title/x/": page,
+        }
+    )
     regular.run("check", root=env["root"], now=NOW, sources=env["sources"], http=http)
     state = json.loads((env["root"] / "state.json").read_text(encoding="utf-8"))
-    assert state["changes"]["https://a.example/title/x/"]["baseline"] == {"not_measured": "время публикации неизвестно"}
+    assert state["changes"]["https://a.example/title/x/"]["baseline"] == {
+        "not_measured": "время публикации неизвестно"
+    }
 
 
 def test_visited_url_with_404_becomes_an_issue(env):
     snaps = env["sources"]["analytics_snapshots"]
     data = _snapshot("2026-10-08", 140, 60)
-    data["domains"][0]["measurements"].append({"key": "popular_pages", "measured": True, "top_n": 20,
-        "value": [{"dimensions": [{"name": "/title/x/season-1/episode-244/"}], "metrics": [3.0]}]})
+    data["domains"][0]["measurements"].append(
+        {
+            "key": "popular_pages",
+            "measured": True,
+            "top_n": 20,
+            "value": [
+                {"dimensions": [{"name": "/title/x/season-1/episode-244/"}], "metrics": [3.0]}
+            ],
+        }
+    )
     (snaps / "analytics-2026-10-08.json").write_text(json.dumps(data), encoding="utf-8")
     http = FakeHttp({"https://a.example/": HOME_OPEN, "https://a.example/robots.txt": ROBOTS_OK})
     regular.run("daily", root=env["root"], now=NOW, sources=env["sources"], http=http)
@@ -624,19 +901,56 @@ def test_visited_url_with_404_becomes_an_issue(env):
 
 def test_editor_process_finds_loops_and_dead_end_tasks(env):
     events = env["sources"]["queue_events"]
-    rows = [{"at": f"2026-10-08T0{i % 5}:00:00Z", "event": "task_claimed", "task_id": "92436c43",
-             "site": "yummyani.site", "owner": f"editor-{i}"} for i in range(6)]
-    rows.append({"at": "2026-10-08T04:30:00Z", "event": "task_result", "task_id": "92436c43",
-                 "site": "yummyani.site", "outcome": "SOURCE_UNAVAILABLE", "gate": {}})
+    rows = [
+        {
+            "at": f"2026-10-08T0{i % 5}:00:00Z",
+            "event": "task_claimed",
+            "task_id": "92436c43",
+            "site": "yummyani.site",
+            "owner": f"editor-{i}",
+        }
+        for i in range(6)
+    ]
+    rows.append(
+        {
+            "at": "2026-10-08T04:30:00Z",
+            "event": "task_result",
+            "task_id": "92436c43",
+            "site": "yummyani.site",
+            "outcome": "SOURCE_UNAVAILABLE",
+            "gate": {},
+        }
+    )
     events.write_text("\n".join(json.dumps(r) for r in rows), encoding="utf-8")
-    env["sources"]["queue_registry"].write_text(json.dumps({"items": [
-        {"content_id": "request-2b08", "target_site": "an1mego.site", "status": "NEEDS_UPDATE",
-         "content_type": "TITLE_DESCRIPTION"},
-        {"content_id": "request-b9a9", "target_site": "animedia.icu", "status": "NEEDS_UPDATE",
-         "content_type": "TITLE_DESCRIPTION"}]}), encoding="utf-8")
-    cells = {"yummyani.site": "yummy-site", "an1mego.site": "animego-02", "animedia.icu": "animedia-01"}
-    out = regular.editor_process(events, env["sources"]["queue_registry"], cells,
-                                 since=NOW - dt.timedelta(days=1))
+    env["sources"]["queue_registry"].write_text(
+        json.dumps(
+            {
+                "items": [
+                    {
+                        "content_id": "request-2b08",
+                        "target_site": "an1mego.site",
+                        "status": "NEEDS_UPDATE",
+                        "content_type": "TITLE_DESCRIPTION",
+                    },
+                    {
+                        "content_id": "request-b9a9",
+                        "target_site": "animedia.icu",
+                        "status": "NEEDS_UPDATE",
+                        "content_type": "TITLE_DESCRIPTION",
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    cells = {
+        "yummyani.site": "yummy-site",
+        "an1mego.site": "animego-02",
+        "animedia.icu": "animedia-01",
+    }
+    out = regular.editor_process(
+        events, env["sources"]["queue_registry"], cells, since=NOW - dt.timedelta(days=1)
+    )
     assert out["claims"] == 6 and out["results"] == 1
     assert out["looping"][0]["task_id"] == "92436c43"
     assert out["outcomes"] == {"yummy:SOURCE_UNAVAILABLE": 1}
@@ -644,8 +958,10 @@ def test_editor_process_finds_loops_and_dead_end_tasks(env):
 
 
 def _m(page, domain):
-    return {"landing_pages": {"value": page} if page is not None else {"outside_top_n": 20},
-            "domain_visits": domain}
+    return {
+        "landing_pages": {"value": page} if page is not None else {"outside_top_n": 20},
+        "domain_visits": domain,
+    }
 
 
 def test_judge_corrects_for_the_domain_and_needs_volume():
@@ -662,29 +978,60 @@ def test_judge_corrects_for_the_domain_and_needs_volume():
 
 def test_evaluation_waits_for_windows_after_publication(env):
     snaps = env["sources"]["analytics_snapshots"]
-    changes = {"https://a.example/title/x/": {
-        "domain": "a.example", "published_at": "2026-10-08T12:00:00Z",
-        "baseline": {"snapshot": "analytics-2026-10-08.json", **_m(20, 140)}}}
+    changes = {
+        "https://a.example/title/x/": {
+            "domain": "a.example",
+            "published_at": "2026-10-08T12:00:00Z",
+            "baseline": {"snapshot": "analytics-2026-10-08.json", **_m(20, 140)},
+        }
+    }
     assert regular.evaluate_changes(changes, snaps) == []  # +7 ждёт снимка 2026-10-16
     data = _snapshot("2026-10-16", 140, 60)
-    data["domains"][0]["measurements"].append({"key": "landing_pages", "measured": True, "top_n": 20,
-        "value": [{"dimensions": [{"name": "/title/x"}], "metrics": [40.0]}]})
+    data["domains"][0]["measurements"].append(
+        {
+            "key": "landing_pages",
+            "measured": True,
+            "top_n": 20,
+            "value": [{"dimensions": [{"name": "/title/x"}], "metrics": [40.0]}],
+        }
+    )
     (snaps / "analytics-2026-10-16.json").write_text(json.dumps(data), encoding="utf-8")
     found = regular.evaluate_changes(changes, snaps)
     assert [(e["horizon"], e["verdict"]) for e in found] == [(7, "GAIN_OBSERVED")]
 
 
 def test_report_shows_the_five_change_categories(env):
-    env["sources"]["changes_ledger"].write_text(json.dumps({"version": 1, "changes": [{
-        "id": "CHG-20261008-01", "url": "https://a.example/title/x/", "kind": "written",
-        "element": "description", "problem": "заглушка вместо описания",
-        "evidence": "data-b07-desc=gap", "hypothesis": "описание даёт содержательный сниппет",
-        "published_at": "2026-10-08T12:00:00Z", "path": "мост"}]}), encoding="utf-8")
+    env["sources"]["changes_ledger"].write_text(
+        json.dumps(
+            {
+                "version": 1,
+                "changes": [
+                    {
+                        "id": "CHG-20261008-01",
+                        "url": "https://a.example/title/x/",
+                        "kind": "written",
+                        "element": "description",
+                        "problem": "заглушка вместо описания",
+                        "evidence": "data-b07-desc=gap",
+                        "hypothesis": "описание даёт содержательный сниппет",
+                        "published_at": "2026-10-08T12:00:00Z",
+                        "path": "мост",
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
     http = FakeHttp({"https://a.example/": HOME_OPEN, "https://a.example/robots.txt": ROBOTS_OK})
     regular.run("daily", root=env["root"], now=NOW, sources=env["sources"], http=http)
     text = (env["root"] / "reports" / "daily" / "2026-10-08.md").read_text(encoding="utf-8")
-    for title in ("Написано: 1", "Оптимизировано: 0", "Опубликовано и проверено на сайте: 0",
-                  "Эффект пока не установлен: 1", "Результат измерен: 0"):
+    for title in (
+        "Написано: 1",
+        "Оптимизировано: 0",
+        "Опубликовано и проверено на сайте: 0",
+        "Эффект пока не установлен: 1",
+        "Результат измерен: 0",
+    ):
         assert f"**{title}**" in text, title
     assert "2026-10-16, 2026-10-23" in text  # даты проверок +7 и +14
 
@@ -701,22 +1048,65 @@ def test_control_page_cancels_a_title_wide_rise():
 
 def test_editor_candidates_rank_gaps_and_space_duplicates_by_title_traffic(tmp_path):
     snap = tmp_path / "analytics-2026-10-08.json"
-    snap.write_text(json.dumps({"domains": [
-        {"domain": "animedia.space", "measurements": [{"key": "popular_pages", "measured": True, "value": [
-            {"dimensions": [{"name": "/title/gap/season-1/episode-1/"}], "metrics": [9.0]},
-            {"dimensions": [{"name": "/title/dup/"}], "metrics": [4.0]},
-            {"dimensions": [{"name": "/title/done/"}], "metrics": [20.0]}]}]},
-        {"domain": "animedia.icu", "measurements": [{"key": "popular_pages", "measured": True, "value": [
-            {"dimensions": [{"name": "/title/dup/"}], "metrics": [5.0]}]}]}]}), encoding="utf-8")
+    snap.write_text(
+        json.dumps(
+            {
+                "domains": [
+                    {
+                        "domain": "animedia.space",
+                        "measurements": [
+                            {
+                                "key": "popular_pages",
+                                "measured": True,
+                                "value": [
+                                    {
+                                        "dimensions": [{"name": "/title/gap/season-1/episode-1/"}],
+                                        "metrics": [9.0],
+                                    },
+                                    {"dimensions": [{"name": "/title/dup/"}], "metrics": [4.0]},
+                                    {"dimensions": [{"name": "/title/done/"}], "metrics": [20.0]},
+                                ],
+                            }
+                        ],
+                    },
+                    {
+                        "domain": "animedia.icu",
+                        "measurements": [
+                            {
+                                "key": "popular_pages",
+                                "measured": True,
+                                "value": [
+                                    {"dimensions": [{"name": "/title/dup/"}], "metrics": [5.0]}
+                                ],
+                            }
+                        ],
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
     facts = tmp_path / "facts"
     facts.mkdir()
     same = {"name": "Дубль", "description": "Один и тот же синопсис."}
     for sid in ("animedia-01", "animedia-02"):
-        (facts / f"{sid}-details.json").write_text(json.dumps({"details": {
-            "gap": {"name": "Без описания", "description": None}, "dup": same, "done": same}}), encoding="utf-8")
+        (facts / f"{sid}-details.json").write_text(
+            json.dumps(
+                {
+                    "details": {
+                        "gap": {"name": "Без описания", "description": None},
+                        "dup": same,
+                        "done": same,
+                    }
+                }
+            ),
+            encoding="utf-8",
+        )
     found = regular.editor_candidates(snap, facts, {("animedia.space", "done")})
     assert [(c["site"], c["slug"], c["reason"]) for c in found] == [
-        ("animedia.space", "gap", "GAP"), ("animedia.space", "dup", "DUPLICATE")]
+        ("animedia.space", "gap", "GAP"),
+        ("animedia.space", "dup", "DUPLICATE"),
+    ]
     # на icu дубль не трогается: там контроль пилота
     assert all(c["site"] != "animedia.icu" or c["reason"] == "GAP" for c in found)
 
@@ -732,7 +1122,14 @@ def test_hourly_summary_makes_no_requests_and_says_delivery_is_not_done(env):
 def test_skipped_slot_is_visible_in_history(env):
     http = FakeHttp({"https://a.example/": HOME_OPEN, "https://a.example/robots.txt": ROBOTS_OK})
     regular.run("check", root=env["root"], now=NOW, sources=env["sources"], http=http)
-    regular.run("check", root=env["root"], now=NOW, sources=env["sources"], http=http, trigger="systemd-timer")
+    regular.run(
+        "check",
+        root=env["root"],
+        now=NOW,
+        sources=env["sources"],
+        http=http,
+        trigger="systemd-timer",
+    )
     state = json.loads((env["root"] / "state.json").read_text(encoding="utf-8"))
     assert state["runs"][-1]["state"] == "ALREADY_DONE"
     assert state["runs"][-1]["trigger"] == "systemd-timer"
@@ -741,8 +1138,14 @@ def test_skipped_slot_is_visible_in_history(env):
 def test_delivery_is_connected_only_after_telegram_accepted_a_message(tmp_path):
     log = tmp_path / "deliveries.jsonl"
     assert regular.delivery_status("f.md", log)["state"] == "не выполнена"
-    log.write_text(json.dumps({"at": "2026-10-09T05:00:00Z", "kind": "test", "ok": False}) + "\n", encoding="utf-8")
+    log.write_text(
+        json.dumps({"at": "2026-10-09T05:00:00Z", "kind": "test", "ok": False}) + "\n",
+        encoding="utf-8",
+    )
     assert regular.delivery_status("f.md", log)["state"] == "не выполнена"
     with log.open("a", encoding="utf-8") as fh:
-        fh.write(json.dumps({"at": "2026-10-09T05:01:00Z", "kind": "test", "ok": True, "message_id": 5}) + "\n")
+        fh.write(
+            json.dumps({"at": "2026-10-09T05:01:00Z", "kind": "test", "ok": True, "message_id": 5})
+            + "\n"
+        )
     assert regular.delivery_status("f.md", log)["state"] == "канал Telegram подключён"

@@ -3,11 +3,12 @@
 «host_id пуст» объясняется отсутствием сайта в аккаунте, неподтверждёнными
 правами или ошибкой сопоставления; это разные действия, и смешивать их нельзя.
 """
+
 from __future__ import annotations
 
-from factory.errors import BlockedAnalyticsAccess
 import json
 
+from factory.errors import BlockedAnalyticsAccess
 from seo_operator import webmaster_inventory as wi
 
 
@@ -43,18 +44,27 @@ def test_four_states_are_told_apart():
             {"host_id": "https:c.example:443", "ascii_host_url": "https://c.example/"},
             {"host_id": "https:d.example:443", "ascii_host_url": "https://d.example/"},
         ],
-        states={"https:a.example:443": "NONE", "https:c.example:443": "VERIFIED",
-                "https:d.example:443": "VERIFIED"},
+        states={
+            "https:a.example:443": "NONE",
+            "https:c.example:443": "VERIFIED",
+            "https:d.example:443": "VERIFIED",
+        },
     )
-    rows = wi.inventory(provider, [
-        _entry("a.example"), _entry("b.example"), _entry("c.example"),
-        _entry("d.example", "https:d.example:443"), _entry("e.example"),
-    ])["domains"]
+    rows = wi.inventory(
+        provider,
+        [
+            _entry("a.example"),
+            _entry("b.example"),
+            _entry("c.example"),
+            _entry("d.example", "https:d.example:443"),
+            _entry("e.example"),
+        ],
+    )["domains"]
     states = {r["domain"]: r["state"] for r in rows}
     assert states == {
         "a.example": "IN_ACCOUNT_UNVERIFIED",
-        "b.example": "MAPPING_MISMATCH",       # только http-хост
-        "c.example": "MAPPING_MISMATCH",       # подтверждён, реестр не знает
+        "b.example": "MAPPING_MISMATCH",  # только http-хост
+        "c.example": "MAPPING_MISMATCH",  # подтверждён, реестр не знает
         "d.example": "VERIFIED_MAPPED",
         "e.example": "NOT_IN_ACCOUNT",
     }
@@ -62,27 +72,60 @@ def test_four_states_are_told_apart():
 
 
 def test_no_token_is_blocked_access_not_empty_account():
-    report = wi.inventory(Provider(fail=BlockedAnalyticsAccess("файл токена не найден")),
-                          [_entry("a.example")])
+    report = wi.inventory(
+        Provider(fail=BlockedAnalyticsAccess("файл токена не найден")), [_entry("a.example")]
+    )
     assert report["status"] == "BLOCKED_ACCESS"
     assert report["domains"] == []
 
 
 def test_apply_mapping_moves_only_exact_confirmed_hosts(tmp_path, monkeypatch):
     import datetime as dt
+
     inv = tmp_path / "inv.json"
     now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    inv.write_text(json.dumps({"status": "MEASURED", "collected_at": now, "domains": [
-        {"domain": "a.example", "state": "MAPPING_MISMATCH", "verification_state": "VERIFIED",
-         "expected_host_id": "https:a.example:443", "account_host_ids": ["https:a.example:443"], "registry_host_id": None},
-        {"domain": "b.example", "state": "MAPPING_MISMATCH", "verification_state": None,
-         "expected_host_id": "https:b.example:443", "account_host_ids": ["http:b.example:80"], "registry_host_id": None},
-        {"domain": "c.example", "state": "NOT_IN_ACCOUNT", "expected_host_id": "https:c.example:443",
-         "account_host_ids": [], "registry_host_id": None}]}), encoding="utf-8")
+    inv.write_text(
+        json.dumps(
+            {
+                "status": "MEASURED",
+                "collected_at": now,
+                "domains": [
+                    {
+                        "domain": "a.example",
+                        "state": "MAPPING_MISMATCH",
+                        "verification_state": "VERIFIED",
+                        "expected_host_id": "https:a.example:443",
+                        "account_host_ids": ["https:a.example:443"],
+                        "registry_host_id": None,
+                    },
+                    {
+                        "domain": "b.example",
+                        "state": "MAPPING_MISMATCH",
+                        "verification_state": None,
+                        "expected_host_id": "https:b.example:443",
+                        "account_host_ids": ["http:b.example:80"],
+                        "registry_host_id": None,
+                    },
+                    {
+                        "domain": "c.example",
+                        "state": "NOT_IN_ACCOUNT",
+                        "expected_host_id": "https:c.example:443",
+                        "account_host_ids": [],
+                        "registry_host_id": None,
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
     written = []
     import factory.analytics.registry as reg
+
     monkeypatch.setattr(reg, "upsert", lambda entry, root=None: written.append(entry))
     plan = wi.apply_mapping(inv, dry_run=True)
     assert [e["domain"] for e in plan["applied"]] == ["a.example"] and written == []
     wi.apply_mapping(inv, dry_run=False)
-    assert written[0]["webmaster"] == {"host_id": "https:a.example:443", "verification_status": "VERIFIED"}
+    assert written[0]["webmaster"] == {
+        "host_id": "https:a.example:443",
+        "verification_status": "VERIFIED",
+    }

@@ -48,20 +48,32 @@ def classify(entry: dict, hosts: list[dict], verification: dict[str, str]) -> di
     """Состояние одного домена реестра по списку хостов аккаунта."""
     domain = normalize_domain(entry["domain"])
     local = (entry.get("webmaster") or {}).get("host_id")
-    candidates = [h for h in hosts
-                  if normalize_domain(str(h.get("ascii_host_url") or h.get("unicode_host_url") or "")) == domain]
+    candidates = [
+        h
+        for h in hosts
+        if normalize_domain(str(h.get("ascii_host_url") or h.get("unicode_host_url") or ""))
+        == domain
+    ]
     ids = [str(h.get("host_id")) for h in candidates]
     want = exact_host_id(domain)
-    row: dict[str, Any] = {"domain": domain, "registry_host_id": local, "account_host_ids": ids,
-                           "expected_host_id": want}
+    row: dict[str, Any] = {
+        "domain": domain,
+        "registry_host_id": local,
+        "account_host_ids": ids,
+        "expected_host_id": want,
+    }
     if not candidates:
         row["state"] = "NOT_IN_ACCOUNT"
-        row["action"] = "добавить https-сайт в Вебмастер и подтвердить права (запись, нужно разрешение)"
+        row["action"] = (
+            "добавить https-сайт в Вебмастер и подтвердить права (запись, нужно разрешение)"
+        )
         return row
     if want not in ids:
         row["state"] = "MAPPING_MISMATCH"
-        row["action"] = (f"в аккаунте домен есть только как {ids}; https-хоста {want} нет. "
-                         "Сайт не добавлять вслепую: сначала решить, какой хост главный")
+        row["action"] = (
+            f"в аккаунте домен есть только как {ids}; https-хоста {want} нет. "
+            "Сайт не добавлять вслепую: сначала решить, какой хост главный"
+        )
         return row
     state = verification.get(want, "UNKNOWN")
     row["verification_state"] = state
@@ -77,36 +89,55 @@ def classify(entry: dict, hosts: list[dict], verification: dict[str, str]) -> di
     return row
 
 
-def inventory(provider: YandexAnalyticsProvider | None = None,
-              entries: list[dict] | None = None) -> dict:
+def inventory(
+    provider: YandexAnalyticsProvider | None = None, entries: list[dict] | None = None
+) -> dict:
     provider = provider or YandexAnalyticsProvider(dry_run=True)
     entries = entries if entries is not None else registry.load()["properties"]
     now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     try:
         hosts = provider.list_hosts()
     except FactoryError as exc:
-        return {"collected_at": now, "status": "BLOCKED_ACCESS", "reason": exc.reason,
-                "domains": [], "read_only": True}
+        return {
+            "collected_at": now,
+            "status": "BLOCKED_ACCESS",
+            "reason": exc.reason,
+            "domains": [],
+            "read_only": True,
+        }
     verification: dict[str, str] = {}
     wanted = {exact_host_id(e["domain"]) for e in entries}
     for host in hosts:
         host_id = str(host.get("host_id") or "")
         if host_id in wanted:
             try:
-                verification[host_id] = provider.get_verification_marker(host_id)["verification_state"]
+                verification[host_id] = provider.get_verification_marker(host_id)[
+                    "verification_state"
+                ]
             except FactoryError as exc:
                 verification[host_id] = f"NOT_READ: {exc.reason}"
     rows = [classify(e, hosts, verification) for e in entries]
     summary: dict[str, int] = {}
     for row in rows:
         summary[row["state"]] = summary.get(row["state"], 0) + 1
-    return {"collected_at": now, "status": "MEASURED", "account_hosts": len(hosts),
-            "summary": summary, "domains": rows, "read_only": True,
-            "note": "отсутствие привязки к Вебмастеру не означает отсутствия индексации"}
+    return {
+        "collected_at": now,
+        "status": "MEASURED",
+        "account_hosts": len(hosts),
+        "summary": summary,
+        "domains": rows,
+        "read_only": True,
+        "note": "отсутствие привязки к Вебмастеру не означает отсутствия индексации",
+    }
 
 
-def apply_mapping(inventory_path: Path = OUT, *, dry_run: bool = True, max_age_h: float = 24.0,
-                  root: Path | None = None) -> dict:
+def apply_mapping(
+    inventory_path: Path = OUT,
+    *,
+    dry_run: bool = True,
+    max_age_h: float = 24.0,
+    root: Path | None = None,
+) -> dict:
     """Перенести в реестр фабрики то, что Вебмастер УЖЕ подтвердил. Только локально.
 
     Источник — снятая службой инвентаризация (GET к API). В Яндекс ничего не
@@ -121,28 +152,46 @@ def apply_mapping(inventory_path: Path = OUT, *, dry_run: bool = True, max_age_h
     taken = dt.datetime.fromisoformat(data["collected_at"].replace("Z", "+00:00"))
     age = (dt.datetime.now(dt.timezone.utc) - taken).total_seconds() / 3600
     if age > max_age_h:
-        return {"applied": [], "reason": f"инвентаризация старше {max_age_h} ч ({age:.1f} ч) — снять заново"}
+        return {
+            "applied": [],
+            "reason": f"инвентаризация старше {max_age_h} ч ({age:.1f} ч) — снять заново",
+        }
     applied, skipped = [], []
     for row in data.get("domains") or []:
         want = row["expected_host_id"]
         state = row.get("verification_state")
-        if want not in (row.get("account_host_ids") or []) or state not in ("VERIFIED", "VERIFICATION_FAILED"):
+        if want not in (row.get("account_host_ids") or []) or state not in (
+            "VERIFIED",
+            "VERIFICATION_FAILED",
+        ):
             skipped.append({"domain": row["domain"], "state": row["state"]})
             continue
         if row.get("registry_host_id") == want:
             continue
-        entry = {"domain": row["domain"], "last_checked_at": data["collected_at"],
-                 "webmaster": {"host_id": want, "verification_status": state}}
+        entry = {
+            "domain": row["domain"],
+            "last_checked_at": data["collected_at"],
+            "webmaster": {"host_id": want, "verification_status": state},
+        }
         applied.append(entry)
         if not dry_run:
             reg.upsert(entry, root)
-    return {"applied": applied, "skipped": skipped, "dry_run": dry_run, "inventory": data["collected_at"]}
+    return {
+        "applied": applied,
+        "skipped": skipped,
+        "dry_run": dry_run,
+        "inventory": data["collected_at"],
+    }
 
 
 def main(out: Path = OUT) -> int:
     report = inventory()
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(json.dumps({k: report.get(k) for k in ("status", "reason", "account_hosts", "summary")},
-                     ensure_ascii=False))
+    print(
+        json.dumps(
+            {k: report.get(k) for k in ("status", "reason", "account_hosts", "summary")},
+            ensure_ascii=False,
+        )
+    )
     return 0 if report["status"] == "MEASURED" else 69

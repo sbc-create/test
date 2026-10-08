@@ -16,6 +16,7 @@
 Каждое обращение пишется в var/editor-runs/sources.jsonl. Вывод — JSON с
 фактами и адресом; тексты источников редактор пересказывает, а не копирует.
 """
+
 from __future__ import annotations
 
 import html
@@ -39,8 +40,13 @@ _last = [0.0]
 def _log(**fields) -> None:
     LOG.parent.mkdir(parents=True, exist_ok=True)
     with LOG.open("a", encoding="utf-8") as fh:
-        fh.write(json.dumps({"at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), **fields},
-                            ensure_ascii=False) + "\n")
+        fh.write(
+            json.dumps(
+                {"at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), **fields},
+                ensure_ascii=False,
+            )
+            + "\n"
+        )
 
 
 def _get(url: str, timeout: int = 20) -> tuple[int | None, bytes]:
@@ -48,7 +54,9 @@ def _get(url: str, timeout: int = 20) -> tuple[int | None, bytes]:
     if pause > 0:
         time.sleep(pause)
     _last[0] = time.monotonic()
-    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "application/json, text/html"})
+    req = urllib.request.Request(
+        url, headers={"User-Agent": USER_AGENT, "Accept": "application/json, text/html"}
+    )
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             return resp.status, resp.read(3_000_000)
@@ -69,12 +77,21 @@ def shikimori(anime_id: int) -> dict:
     _log(source="src-shikimori", url=f"{SHIKIMORI}/api/animes/{anime_id}/external_links", status=s2)
     links = json.loads(raw2) if s2 == 200 else []
     desc = re.sub(r"\[[^\]]+\]", "", d.get("description") or "").strip()
-    return {"ok": True, "source_id": "src-shikimori", "url": f"{SHIKIMORI}/animes/{anime_id}",
-            "russian": d.get("russian"), "name": d.get("name"), "kind": d.get("kind"),
-            "status": d.get("status"), "episodes": d.get("episodes"),
-            "episodes_aired": d.get("episodes_aired"), "aired_on": d.get("aired_on"),
-            "released_on": d.get("released_on"), "description": desc or None,
-            "official_links": [x.get("url") for x in links if x.get("kind") == "official_site"]}
+    return {
+        "ok": True,
+        "source_id": "src-shikimori",
+        "url": f"{SHIKIMORI}/animes/{anime_id}",
+        "russian": d.get("russian"),
+        "name": d.get("name"),
+        "kind": d.get("kind"),
+        "status": d.get("status"),
+        "episodes": d.get("episodes"),
+        "episodes_aired": d.get("episodes_aired"),
+        "aired_on": d.get("aired_on"),
+        "released_on": d.get("released_on"),
+        "description": desc or None,
+        "official_links": [x.get("url") for x in links if x.get("kind") == "official_site"],
+    }
 
 
 def _robots_allows(url: str) -> tuple[bool, str]:
@@ -106,11 +123,20 @@ def official(anime_id: int) -> dict:
     status, raw = _get(url)
     _log(source="src-official-site", url=url, status=status)
     text = raw.decode("utf-8", "replace")
-    meta = re.findall(r'<meta[^>]+(?:name|property)=["\'](?:description|og:description)["\'][^>]*content=["\']([^"\']+)', text)
+    meta = re.findall(
+        r'<meta[^>]+(?:name|property)=["\'](?:description|og:description)["\'][^>]*content=["\']([^"\']+)',
+        text,
+    )
     title = re.search(r"<title[^>]*>(.*?)</title>", text, re.S)
-    return {"ok": status == 200, "source_id": "src-official-site", "url": url, "status": status,
-            "title": html.unescape(title.group(1)).strip() if title else None,
-            "descriptions": [html.unescape(m) for m in meta][:3], "robots": why}
+    return {
+        "ok": status == 200,
+        "source_id": "src-official-site",
+        "url": url,
+        "status": status,
+        "title": html.unescape(title.group(1)).strip() if title else None,
+        "descriptions": [html.unescape(m) for m in meta][:3],
+        "robots": why,
+    }
 
 
 def main(argv: list[str]) -> int:

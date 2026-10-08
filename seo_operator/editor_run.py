@@ -23,8 +23,9 @@ import json
 import re
 import subprocess
 import urllib.request
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 QUEUE_EVENTS = Path("/var/lib/seo-content-operator/queue_events.jsonl")
 OVERLAY_ROOTS = {
@@ -54,7 +55,7 @@ def _events(path: Path, owner: str) -> list[dict]:
 
 def _publications(roots: dict, owner: str) -> list[dict]:
     out = []
-    for family, (root, form) in roots.items():
+    for _family, (root, form) in roots.items():
         if not root.is_dir():
             continue
         for site_dir in root.iterdir():
@@ -67,21 +68,49 @@ def _publications(roots: dict, owner: str) -> list[dict]:
                 except ValueError:
                     continue
                 if r.get("op") == "publish" and r.get("author") == owner:
-                    store = json.loads((site_dir / "title-overlays.json").read_text(encoding="utf-8"))
-                    body = next((i.get("body") for i in store.get("items") or []
-                                 if i.get("slug") == r["slug"]), None)
-                    out.append({"site": site_dir.name, "slug": r["slug"], "at": r["at"],
-                                "url": f"https://{site_dir.name}" + form.format(slug=r["slug"]),
-                                "body": body})
+                    store = json.loads(
+                        (site_dir / "title-overlays.json").read_text(encoding="utf-8")
+                    )
+                    body = next(
+                        (
+                            i.get("body")
+                            for i in store.get("items") or []
+                            if i.get("slug") == r["slug"]
+                        ),
+                        None,
+                    )
+                    out.append(
+                        {
+                            "site": site_dir.name,
+                            "slug": r["slug"],
+                            "at": r["at"],
+                            "url": f"https://{site_dir.name}" + form.format(slug=r["slug"]),
+                            "body": body,
+                        }
+                    )
     return out
 
 
 def _bridge_calls(since: str, until: str) -> list[dict]:
     """Вызовы моста в окне запуска. Нет доступа к журналу — пусто, это видно в отчёте."""
     try:
-        res = subprocess.run(["journalctl", "-u", BRIDGE_UNIT, "--since", since.replace("T", " ").rstrip("Z"),
-                              "--until", until.replace("T", " ").rstrip("Z"), "--no-pager", "-o", "cat"],
-                             capture_output=True, text=True, timeout=60)
+        res = subprocess.run(
+            [
+                "journalctl",
+                "-u",
+                BRIDGE_UNIT,
+                "--since",
+                since.replace("T", " ").rstrip("Z"),
+                "--until",
+                until.replace("T", " ").rstrip("Z"),
+                "--no-pager",
+                "-o",
+                "cat",
+            ],
+            capture_output=True,
+            text=True,
+            timeout=60,
+        )
     except (OSError, subprocess.TimeoutExpired):
         return []
     calls = []
@@ -98,14 +127,23 @@ def _bridge_calls(since: str, until: str) -> list[dict]:
 
 def _page_has(url: str, body: str, fetch: Callable[[str], tuple[int | None, str]]) -> dict:
     status, raw = fetch(url)
-    visible = re.sub(r"\s+", " ", html.unescape(re.sub(r"(?s)<[^>]+>", " ",
-                     re.sub(r"(?is)<(script|style)[^>]*>.*?</\1>", " ", raw or ""))))
+    visible = re.sub(
+        r"\s+",
+        " ",
+        html.unescape(
+            re.sub(
+                r"(?s)<[^>]+>", " ", re.sub(r"(?is)<(script|style)[^>]*>.*?</\1>", " ", raw or "")
+            )
+        ),
+    )
     fragment = re.sub(r"\s+", " ", body or "").strip()[:80]
     return {"url": url, "status": status, "text_visible": bool(fragment) and fragment in visible}
 
 
 def _fetch(url: str) -> tuple[int | None, str]:
-    req = urllib.request.Request(url, headers={"User-Agent": "editor-run-verify/1", "Cache-Control": "no-cache"})
+    req = urllib.request.Request(
+        url, headers={"User-Agent": "editor-run-verify/1", "Cache-Control": "no-cache"}
+    )
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
             return resp.status, resp.read(2_000_000).decode("utf-8", "replace")
@@ -115,31 +153,51 @@ def _fetch(url: str) -> tuple[int | None, str]:
         return None, ""
 
 
-def verify(run_id: str, started_at: str, finished_at: str, *,
-           events_path: Path = QUEUE_EVENTS, roots: dict | None = None,
-           bridge_calls: Callable[[str, str], list[dict]] = _bridge_calls,
-           fetch: Callable[[str], tuple[int | None, str]] = _fetch) -> dict[str, Any]:
+def verify(
+    run_id: str,
+    started_at: str,
+    finished_at: str,
+    *,
+    events_path: Path = QUEUE_EVENTS,
+    roots: dict | None = None,
+    bridge_calls: Callable[[str, str], list[dict]] = _bridge_calls,
+    fetch: Callable[[str], tuple[int | None, str]] = _fetch,
+) -> dict[str, Any]:
     owner = owner_for(run_id)
     events = _events(events_path, owner)
     claimed = [e for e in events if e.get("event") == "task_claimed"]
-    written = [e for e in events if e.get("event") == "task_result" and e.get("outcome") == "TEXT_WRITTEN"]
+    written = [
+        e for e in events if e.get("event") == "task_result" and e.get("outcome") == "TEXT_WRITTEN"
+    ]
     pubs = _publications(roots if roots is not None else OVERLAY_ROOTS, owner)
     calls = bridge_calls(started_at, finished_at)
-    read_source = any(c.get("tool") == "editorial_facts" and c.get("outcome") == "ok" for c in calls)
+    read_source = any(
+        c.get("tool") == "editorial_facts" and c.get("outcome") == "ok" for c in calls
+    )
     pages = [_page_has(p["url"], p["body"], fetch) for p in pubs]
     steps = {
         "claimed": bool(claimed),
         "source_read": read_source,
         "written": bool(written),
         "published": bool(pubs),
-        "public_page_verified": bool(pages) and all(p["status"] == 200 and p["text_visible"] for p in pages),
+        "public_page_verified": bool(pages)
+        and all(p["status"] == 200 and p["text_visible"] for p in pages),
     }
     return {
-        "run_id": run_id, "owner": owner, "window": [started_at, finished_at],
-        "steps": steps, "complete": all(steps.values()),
+        "run_id": run_id,
+        "owner": owner,
+        "window": [started_at, finished_at],
+        "steps": steps,
+        "complete": all(steps.values()),
         "tasks": sorted({e.get("task_id") for e in claimed}),
-        "results": [{"task_id": e.get("task_id"), "outcome": e.get("outcome"),
-                     "gate": (e.get("gate") or {}).get("status")} for e in written],
+        "results": [
+            {
+                "task_id": e.get("task_id"),
+                "outcome": e.get("outcome"),
+                "gate": (e.get("gate") or {}).get("status"),
+            }
+            for e in written
+        ],
         "publications": [{k: p[k] for k in ("site", "slug", "at", "url")} for p in pubs],
         "pages": pages,
         "bridge_calls_seen": len(calls),
@@ -147,8 +205,9 @@ def verify(run_id: str, started_at: str, finished_at: str, *,
     }
 
 
-def status(state: Path = Path(__file__).resolve().parents[1] / "var" / "editor-runs") -> dict:
+def status(state: Path | None = None) -> dict:
     """Запуски по расписанию и ручные — раздельно; подтверждает только полный по расписанию."""
+    state = state or STATE
     runs = []
     log = state / "runs.jsonl"
     if log.is_file():
@@ -160,12 +219,19 @@ def status(state: Path = Path(__file__).resolve().parents[1] / "var" / "editor-r
     scheduled = [r for r in runs if r.get("trigger") == "systemd-timer"]
     complete = [r for r in scheduled if r.get("verdict") == "COMPLETE"]
     timer = Path("/etc/systemd/system/editor-run.timer")
-    return {"timer_installed": timer.is_file(),
-            "enabled": Path("/etc/systemd/system/timers.target.wants/editor-run.timer").exists(),
-            "scheduled_runs": len(scheduled), "scheduled_complete": len(complete),
-            "last_scheduled": scheduled[-1] if scheduled else None,
-            "manual_runs": [r.get("run_id") + ":" + str(r.get("trigger")) for r in runs if r.get("trigger") != "systemd-timer"],
-            "confirmed": bool(complete)}
+    return {
+        "timer_installed": timer.is_file(),
+        "enabled": Path("/etc/systemd/system/timers.target.wants/editor-run.timer").exists(),
+        "scheduled_runs": len(scheduled),
+        "scheduled_complete": len(complete),
+        "last_scheduled": scheduled[-1] if scheduled else None,
+        "manual_runs": [
+            r.get("run_id") + ":" + str(r.get("trigger"))
+            for r in runs
+            if r.get("trigger") != "systemd-timer"
+        ],
+        "confirmed": bool(complete),
+    }
 
 
 REGISTRY = Path("/var/lib/seo-content-operator/registry.json")
@@ -181,9 +247,16 @@ def _key(url: str) -> str:
     return url.rstrip("/").lower()
 
 
-def gate(now: dt.datetime | None = None, *, registry: Path = REGISTRY, leases: Path = LEASES,
-         events: Path = QUEUE_EVENTS, candidates: Path = CANDIDATES, state: Path = STATE,
-         refresh: bool = False) -> dict:
+def gate(
+    now: dt.datetime | None = None,
+    *,
+    registry: Path = REGISTRY,
+    leases: Path = LEASES,
+    events: Path = QUEUE_EVENTS,
+    candidates: Path = CANDIDATES,
+    state: Path = STATE,
+    refresh: bool = False,
+) -> dict:
     """Нужен ли запуск модели. Только чтение файлов: ни модели, ни сети.
 
     Запуск нужен, если (1) с начала прошлого запуска модели прошло не меньше
@@ -205,7 +278,10 @@ def gate(now: dt.datetime | None = None, *, registry: Path = REGISTRY, leases: P
         started = dt.datetime.fromisoformat(last.replace("Z", "+00:00"))
         wait = MIN_INTERVAL_S - (now - started).total_seconds()
         if wait > 0:
-            return {"run": False, "reason": f"почасовой цикл: до следующего запуска {int(wait // 60)} мин"}
+            return {
+                "run": False,
+                "reason": f"почасовой цикл: до следующего запуска {int(wait // 60)} мин",
+            }
     leased: set[str] = set()
     try:
         raw = json.loads(leases.read_text(encoding="utf-8"))
@@ -222,8 +298,13 @@ def gate(now: dt.datetime | None = None, *, registry: Path = REGISTRY, leases: P
         items = json.loads(registry.read_text(encoding="utf-8")).get("items") or []
     except (OSError, ValueError):
         items = []
-    open_tasks = [i for i in items if i.get("target_site") in ANIMEDIA and i.get("status") == "NEEDS_UPDATE"
-                  and str(i.get("content_id", "")).replace("request-", "") not in leased]
+    open_tasks = [
+        i
+        for i in items
+        if i.get("target_site") in ANIMEDIA
+        and i.get("status") == "NEEDS_UPDATE"
+        and str(i.get("content_id", "")).replace("request-", "") not in leased
+    ]
     if open_tasks:
         return {"run": True, "reason": f"свободных заданий Animedia на текст: {len(open_tasks)}"}
     done: set[str] = set()
@@ -244,11 +325,21 @@ def gate(now: dt.datetime | None = None, *, registry: Path = REGISTRY, leases: P
         cands = []
     fresh = [c for c in cands if _key(c.get("url", "")) not in done]
     if fresh:
-        return {"run": True, "reason": f"кандидатов без результата: {len(fresh)} (первый {fresh[0]['url']})",
-                "next": fresh}
+        return {
+            "run": True,
+            "reason": f"кандидатов без результата: {len(fresh)} (первый {fresh[0]['url']})",
+            "next": fresh,
+        }
     if refresh and _refresh_candidates(candidates, now):
-        return gate(now, registry=registry, leases=leases, events=events, candidates=candidates,
-                    state=state, refresh=False)
+        return gate(
+            now,
+            registry=registry,
+            leases=leases,
+            events=events,
+            candidates=candidates,
+            state=state,
+            refresh=False,
+        )
     return {"run": False, "reason": "работы нет: свободных заданий и новых кандидатов нет"}
 
 
@@ -267,8 +358,15 @@ def _refresh_candidates(path: Path, now: dt.datetime, *, min_age_s: int = 3600) 
         return False
     published = {(i["domain"], i["slug"]) for i in regular.published_items()}
     found = regular.editor_candidates(snaps[-1], regular.SOURCES["facts_snapshots"], published)
-    regular._write_json(path, {"snapshot": snaps[-1].name, "generated_at": regular.iso(now),
-                               "refreshed_by": "editor-gate", "candidates": found})
+    regular._write_json(
+        path,
+        {
+            "snapshot": snaps[-1].name,
+            "generated_at": regular.iso(now),
+            "refreshed_by": "editor-gate",
+            "candidates": found,
+        },
+    )
     return True
 
 

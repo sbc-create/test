@@ -1,4 +1,5 @@
 """REQ-SEO-REGULAR: доставка отчётов в Telegram — без утечки токена и без повторов."""
+
 from __future__ import annotations
 
 import io
@@ -41,8 +42,16 @@ def test_token_never_reaches_state_files(tmp_path):
 
 
 def test_discover_lists_chats_and_sends_nothing(tmp_path):
-    api = FakeApi(updates=[{"message": {"chat": {"id": 777, "type": "private", "first_name": "Владелец"},
-                                        "text": "/start"}}])
+    api = FakeApi(
+        updates=[
+            {
+                "message": {
+                    "chat": {"id": 777, "type": "private", "first_name": "Владелец"},
+                    "text": "/start",
+                }
+            }
+        ]
+    )
     out = notify.discover(notify.Bot(TOKEN, opener=api), state=tmp_path)
     assert out["chats"][0]["chat_id"] == "777"
     assert [r.full_url.rsplit("/", 1)[-1] for r in api.requests] == ["getUpdates"]
@@ -69,11 +78,18 @@ def test_failed_delivery_is_retried_next_time(tmp_path):
 
 def test_missing_daily_report_is_reported_not_silent(tmp_path):
     api = FakeApi()
-    res = notify.daily(notify.Bot(TOKEN, opener=api), "42", today="2026-10-09", state=tmp_path,
-                       reports=tmp_path / "none")
+    res = notify.daily(
+        notify.Bot(TOKEN, opener=api),
+        "42",
+        today="2026-10-09",
+        state=tmp_path,
+        reports=tmp_path / "none",
+    )
     assert res["ok"] is True
     body = api.requests[0].data.decode()
-    assert "%D0%BD%D0%B5+%D1%81%D1%84%D0%BE%D1%80%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD" in body  # «не сформирован»
+    assert (
+        "%D0%BD%D0%B5+%D1%81%D1%84%D0%BE%D1%80%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD" in body
+    )  # «не сформирован»
 
 
 def test_without_credentials_directory_it_is_not_configured(monkeypatch):

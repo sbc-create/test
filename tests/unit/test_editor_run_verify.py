@@ -1,4 +1,5 @@
 """REQ-SEO-REGULAR: полный запуск фонового редактора доказывается следами, а не самоотчётом."""
+
 from __future__ import annotations
 
 import json
@@ -12,16 +13,31 @@ BODY = "«Некромант: Я катастрофа» — китайский �
 
 def _setup(tmp_path, *, publish=True, write=True):
     events = tmp_path / "queue_events.jsonl"
-    rows = [{"at": "2026-10-08T15:00:10Z", "event": "task_claimed", "task_id": "t1", "owner": OWNER}]
+    rows = [
+        {"at": "2026-10-08T15:00:10Z", "event": "task_claimed", "task_id": "t1", "owner": OWNER}
+    ]
     if write:
-        rows.append({"at": "2026-10-08T15:03:00Z", "event": "task_result", "task_id": "t1", "owner": OWNER,
-                     "outcome": "TEXT_WRITTEN", "gate": {"status": "READY_VERIFIED"}})
+        rows.append(
+            {
+                "at": "2026-10-08T15:03:00Z",
+                "event": "task_result",
+                "task_id": "t1",
+                "owner": OWNER,
+                "outcome": "TEXT_WRITTEN",
+                "gate": {"status": "READY_VERIFIED"},
+            }
+        )
     events.write_text("\n".join(json.dumps(r) for r in rows), encoding="utf-8")
     site = tmp_path / "overlays" / "animedia.space"
     site.mkdir(parents=True)
-    (site / "title-overlays.json").write_text(json.dumps({"items": [{"slug": "nekromant", "body": BODY}]}),
-                                              encoding="utf-8")
-    hist = [{"at": "2026-10-08T15:02:00Z", "op": "publish", "slug": "nekromant", "author": OWNER}] if publish else []
+    (site / "title-overlays.json").write_text(
+        json.dumps({"items": [{"slug": "nekromant", "body": BODY}]}), encoding="utf-8"
+    )
+    hist = (
+        [{"at": "2026-10-08T15:02:00Z", "op": "publish", "slug": "nekromant", "author": OWNER}]
+        if publish
+        else []
+    )
     (site / "history.jsonl").write_text("\n".join(json.dumps(r) for r in hist), encoding="utf-8")
     return events, {"animedia": (tmp_path / "overlays", "/title/{slug}/")}
 
@@ -33,25 +49,49 @@ def calls(_s, _u):
 def test_all_five_traces_make_a_complete_run(tmp_path):
     events, roots = _setup(tmp_path)
     page = lambda url: (200, f"<html><body><p>{BODY}</p></body></html>")
-    r = editor_run.verify(RUN, "2026-10-08T15:00:00Z", "2026-10-08T15:10:00Z", events_path=events,
-                          roots=roots, bridge_calls=calls, fetch=page)
+    r = editor_run.verify(
+        RUN,
+        "2026-10-08T15:00:00Z",
+        "2026-10-08T15:10:00Z",
+        events_path=events,
+        roots=roots,
+        bridge_calls=calls,
+        fetch=page,
+    )
     assert r["complete"] is True
     assert r["publications"][0]["url"] == "https://animedia.space/title/nekromant/"
 
 
 def test_claimed_and_reported_but_not_on_the_page_is_incomplete(tmp_path):
     events, roots = _setup(tmp_path)
-    stale = lambda url: (200, "<html><body><p>Описание пока не передано источником</p></body></html>")
-    r = editor_run.verify(RUN, "2026-10-08T15:00:00Z", "2026-10-08T15:10:00Z", events_path=events,
-                          roots=roots, bridge_calls=calls, fetch=stale)
+    stale = lambda url: (
+        200,
+        "<html><body><p>Описание пока не передано источником</p></body></html>",
+    )
+    r = editor_run.verify(
+        RUN,
+        "2026-10-08T15:00:00Z",
+        "2026-10-08T15:10:00Z",
+        events_path=events,
+        roots=roots,
+        bridge_calls=calls,
+        fetch=stale,
+    )
     assert r["steps"]["public_page_verified"] is False
     assert r["complete"] is False
 
 
 def test_no_publication_record_is_incomplete_whatever_the_result_says(tmp_path):
     events, roots = _setup(tmp_path, publish=False)
-    r = editor_run.verify(RUN, "2026-10-08T15:00:00Z", "2026-10-08T15:10:00Z", events_path=events,
-                          roots=roots, bridge_calls=calls, fetch=lambda u: (200, BODY))
+    r = editor_run.verify(
+        RUN,
+        "2026-10-08T15:00:00Z",
+        "2026-10-08T15:10:00Z",
+        events_path=events,
+        roots=roots,
+        bridge_calls=calls,
+        fetch=lambda u: (200, BODY),
+    )
     assert r["steps"]["published"] is False and r["complete"] is False
 
 
@@ -65,22 +105,55 @@ def _gate_files(tmp_path, *, last_start=None, task_leased=False, candidate_done=
     state = tmp_path / "runs"
     state.mkdir()
     if last_start:
-        (state / "runs.jsonl").write_text(json.dumps({"started_at": last_start, "model_started": True}),
-                                          encoding="utf-8")
+        (state / "runs.jsonl").write_text(
+            json.dumps({"started_at": last_start, "model_started": True}), encoding="utf-8"
+        )
     registry = tmp_path / "registry.json"
-    registry.write_text(json.dumps({"items": [
-        {"content_id": "request-t1", "target_site": "animedia.space", "status": "NEEDS_UPDATE"},
-        {"content_id": "request-y1", "target_site": "yummyani.site", "status": "NEEDS_UPDATE"}]}), encoding="utf-8")
+    registry.write_text(
+        json.dumps(
+            {
+                "items": [
+                    {
+                        "content_id": "request-t1",
+                        "target_site": "animedia.space",
+                        "status": "NEEDS_UPDATE",
+                    },
+                    {
+                        "content_id": "request-y1",
+                        "target_site": "yummyani.site",
+                        "status": "NEEDS_UPDATE",
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
     leases = tmp_path / "leases.json"
-    leases.write_text(json.dumps({"leases": [{"task_id": "t1", "expires_at": "2026-10-08T15:30:00Z"}]
-                                  if task_leased else []}), encoding="utf-8")
+    leases.write_text(
+        json.dumps(
+            {
+                "leases": [{"task_id": "t1", "expires_at": "2026-10-08T15:30:00Z"}]
+                if task_leased
+                else []
+            }
+        ),
+        encoding="utf-8",
+    )
     events = tmp_path / "events.jsonl"
-    rows = [{"event": "task_registered", "task_id": "c1", "canonical_url": "https://animedia.space/title/x"}]
+    rows = [
+        {
+            "event": "task_registered",
+            "task_id": "c1",
+            "canonical_url": "https://animedia.space/title/x",
+        }
+    ]
     if candidate_done:
         rows.append({"event": "task_result", "task_id": "c1", "outcome": "SOURCES_MISSING"})
     events.write_text("\n".join(json.dumps(r) for r in rows), encoding="utf-8")
     cands = tmp_path / "cands.json"
-    cands.write_text(json.dumps({"candidates": [{"url": "https://animedia.space/title/x/"}]}), encoding="utf-8")
+    cands.write_text(
+        json.dumps({"candidates": [{"url": "https://animedia.space/title/x/"}]}), encoding="utf-8"
+    )
     return dict(registry=registry, leases=leases, events=events, candidates=cands, state=state)
 
 

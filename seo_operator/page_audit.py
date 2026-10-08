@@ -50,7 +50,9 @@ def audit(html_text: str, url: str) -> dict:
     host = urlsplit(url).netloc.lower()
     title = _first(r"<title[^>]*>(.*?)</title>", html_text)
     h1s = [_visible(h) for h in re.findall(r"(?is)<h1[^>]*>(.*?)</h1>", html_text)]
-    meta = _first(r'<meta[^>]+name=["\']description["\'][^>]*content=["\']([^"\']*)["\']', html_text)
+    meta = _first(
+        r'<meta[^>]+name=["\']description["\'][^>]*content=["\']([^"\']*)["\']', html_text
+    )
     robots = _first(r'<meta[^>]+name=["\']robots["\'][^>]*content=["\']([^"\']*)["\']', html_text)
     canonical = _first(r'<link[^>]+rel=["\']canonical["\'][^>]*href=["\']([^"\']+)["\']', html_text)
     main = _first(r"(?is)<main[^>]*>(.*?)</main>", html_text)
@@ -65,8 +67,12 @@ def audit(html_text: str, url: str) -> dict:
         if urlsplit(absolute).netloc.lower() == host and absolute.rstrip("/") != url.rstrip("/"):
             links.add(_norm(absolute))
     out = {
-        "url": url, "title": title, "h1": h1s, "meta_description": meta,
-        "meta_robots": robots, "canonical": canonical,
+        "url": url,
+        "title": title,
+        "h1": h1s,
+        "meta_description": meta,
+        "meta_robots": robots,
+        "canonical": canonical,
         "words_main": len(re.findall(r"\w+", visible)),
         "internal_links": len(links),
         "main_streamed": streamed,
@@ -101,7 +107,11 @@ def audit(html_text: str, url: str) -> dict:
             add("PLACEHOLDER_TEXT", f"в основном блоке заглушка «{marker}»")
             break
     if not any(word in low for word in ("описание", "сюжет")) and out["words_main"] < 120:
-        add("NO_DESCRIPTION", f"описания на странице нет, видимого текста {out['words_main']} слов", "info")
+        add(
+            "NO_DESCRIPTION",
+            f"описания на странице нет, видимого текста {out['words_main']} слов",
+            "info",
+        )
     if len(links) < INTERNAL_LINKS_MIN:
         add("FEW_INTERNAL_LINKS", f"внутренних ссылок {len(links)} (< {INTERNAL_LINKS_MIN})")
     return out

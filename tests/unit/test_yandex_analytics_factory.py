@@ -4,16 +4,17 @@
 страницы, реестр публичных идентификаторов и — отдельно — что индексация
 остаётся выключенной, пока не выполнены все условия разом.
 """
+
 from __future__ import annotations
 
 import copy
 import json
+import re
 
 import pytest
 
 from factory import validation
 from factory.analytics import gate, registry, snippet
-from factory.analytics.yandex import BLOCKED_DEPLOYMENT
 from factory.paths import PATHS
 
 
@@ -98,9 +99,12 @@ def test_the_gate_can_only_report_its_declared_statuses(monkeypatch):
     from factory import pipeline
 
     monkeypatch.setenv(gate.LIVE_CHECK_ENV, "0")
-    produced = {b["status"] for b in gate.check(_package(analytics={"counter_id": None,
-                                                                    "webvisor": True}),
-                                                "production")}
+    produced = {
+        b["status"]
+        for b in gate.check(
+            _package(analytics={"counter_id": None, "webvisor": True}), "production"
+        )
+    }
     assert produced <= set(pipeline.ANALYTICS_GATE_STATUSES)
 
 
@@ -111,19 +115,23 @@ def test_indexing_stays_off_by_default():
     assert "seo_indexing_enabled" in reason
 
 
-@pytest.mark.parametrize("override,fragment", [
-    ({"environment": "staging"}, "production"),
-    ({"production_authorized": False}, "production_authorized"),
-    ({"fixture": True}, "fixture"),
-    ({"webmaster": {"enabled": False}}, "webmaster.enabled"),
-    ({"webmaster": {"verification_status": "PLANNED"}}, "не подтверждены"),
-    ({"webmaster": {"verification_status": "IN_PROGRESS"}}, "не подтверждены"),
-])
+@pytest.mark.parametrize(
+    "override,fragment",
+    [
+        ({"environment": "staging"}, "production"),
+        ({"production_authorized": False}, "production_authorized"),
+        ({"fixture": True}, "fixture"),
+        ({"webmaster": {"enabled": False}}, "webmaster.enabled"),
+        ({"webmaster": {"verification_status": "PLANNED"}}, "не подтверждены"),
+        ({"webmaster": {"verification_status": "IN_PROGRESS"}}, "не подтверждены"),
+    ],
+)
 def test_every_indexing_condition_is_required(override, fragment, monkeypatch):
     """Одно «почти выполнено» — это «нельзя»: индексация откатывается месяцами."""
     monkeypatch.setattr(registry, "indexing_enabled", lambda root=None: True)
-    package = _package(seo_indexing_enabled=True,
-                       webmaster={"enabled": True, "verification_status": "VERIFIED"})
+    package = _package(
+        seo_indexing_enabled=True, webmaster={"enabled": True, "verification_status": "VERIFIED"}
+    )
     for key, value in override.items():
         if isinstance(value, dict):
             package[key] = {**package[key], **value}
@@ -137,8 +145,9 @@ def test_every_indexing_condition_is_required(override, fragment, monkeypatch):
 
 def test_indexing_is_allowed_only_when_everything_holds(monkeypatch):
     monkeypatch.setattr(registry, "indexing_enabled", lambda root=None: True)
-    package = _package(seo_indexing_enabled=True,
-                       webmaster={"enabled": True, "verification_status": "VERIFIED"})
+    package = _package(
+        seo_indexing_enabled=True, webmaster={"enabled": True, "verification_status": "VERIFIED"}
+    )
     allowed, reason = gate.indexing_allowed(package, "production")
     assert allowed is True, reason
 
@@ -160,15 +169,19 @@ def _validate(package: dict) -> list:
 
 def test_verified_status_on_an_undeployed_domain_is_rejected():
     """Статус красивее реальности — самый опасный класс ошибки в этом слое."""
-    blockers = _validate(_package(domain="yummyani.localhost",
-                                  webmaster={"verification_status": "VERIFIED",
-                                             "verification_marker": "abcdef123456"}))
+    blockers = _validate(
+        _package(
+            domain="yummyani.localhost",
+            webmaster={"verification_status": "VERIFIED", "verification_marker": "abcdef123456"},
+        )
+    )
     assert any("домен тестовый" in b.reason for b in blockers)
 
 
 def test_verified_without_a_stored_marker_is_rejected():
-    blockers = _validate(_package(webmaster={"verification_status": "VERIFIED",
-                                             "verification_marker": None}))
+    blockers = _validate(
+        _package(webmaster={"verification_status": "VERIFIED", "verification_marker": None})
+    )
     assert any("маркер не сохранён" in b.reason for b in blockers)
 
 
@@ -178,8 +191,7 @@ def test_test_hostname_in_allowed_hosts_is_rejected():
 
 
 def test_counter_bound_to_a_test_domain_is_rejected():
-    blockers = _validate(_package(domain="pilot.localhost.test",
-                                  analytics={"allowed_hosts": []}))
+    blockers = _validate(_package(domain="pilot.localhost.test", analytics={"allowed_hosts": []}))
     assert any(b.field == "analytics.counter_id" for b in blockers)
 
 
@@ -206,21 +218,27 @@ def test_real_site_packages_keep_indexing_off():
 
 # ---------------------------------------------------------------- разметка
 def test_tag_is_absent_without_a_counter():
-    assert snippet.analytics_script_tag(
-        counter_id=None, allowed_hosts=["yummyani.site"],
-        environment="production", enabled=True) == ""
+    assert (
+        snippet.analytics_script_tag(
+            counter_id=None, allowed_hosts=["yummyani.site"], environment="production", enabled=True
+        )
+        == ""
+    )
 
 
 def test_tag_is_absent_on_staging():
-    assert snippet.analytics_script_tag(
-        counter_id=1, allowed_hosts=["yummyani.site"],
-        environment="staging", enabled=True) == ""
+    assert (
+        snippet.analytics_script_tag(
+            counter_id=1, allowed_hosts=["yummyani.site"], environment="staging", enabled=True
+        )
+        == ""
+    )
 
 
 def test_tag_carries_the_counter_and_the_hosts():
     tag = snippet.analytics_script_tag(
-        counter_id=90000001, allowed_hosts=["yummyani.site"],
-        environment="production", enabled=True)
+        counter_id=90000001, allowed_hosts=["yummyani.site"], environment="production", enabled=True
+    )
     assert 'data-counter-id="90000001"' in tag
     assert 'data-allowed-hosts="yummyani.site"' in tag
     # Инлайнового кода нет: CSP не должна выбирать между аналитикой и плеером.
@@ -229,15 +247,24 @@ def test_tag_carries_the_counter_and_the_hosts():
 
 def test_marker_markup_matches_the_documented_format():
     assert snippet.verification_meta("abcdef0123456789") == (
-        '<meta name="yandex-verification" content="abcdef0123456789" />')
+        '<meta name="yandex-verification" content="abcdef0123456789" />'
+    )
     name, body = snippet.verification_html_file("abcdef0123456789")
     assert name == "yandex_abcdef0123456789.html"
     assert "Verification: abcdef0123456789" in body
 
 
-@pytest.mark.parametrize("marker", [
-    None, "", "<script>alert(1)</script>", "код с пробелами", "x", "../../etc/passwd",
-])
+@pytest.mark.parametrize(
+    "marker",
+    [
+        None,
+        "",
+        "<script>alert(1)</script>",
+        "код с пробелами",
+        "x",
+        "../../etc/passwd",
+    ],
+)
 def test_a_marker_that_is_not_a_code_never_reaches_the_page(marker):
     assert snippet.verification_meta(marker) == ""
     assert snippet.verification_html_file(marker) is None
@@ -261,17 +288,25 @@ def _render(pilot_package, tmp_path, *, environment: str, **overrides) -> str:
 
 
 ANALYTICS_ON = {
-    "provider": "yandex_metrika", "enabled": True, "counter_id": 90000123,
-    "allowed_hosts": ["pilot.localhost.test"], "webvisor": False,
+    "provider": "yandex_metrika",
+    "enabled": True,
+    "counter_id": 90000123,
+    "allowed_hosts": ["pilot.localhost.test"],
+    "webvisor": False,
 }
 
 
 def test_rendered_page_carries_the_tag_and_the_marker(pilot_package, tmp_path):
     html = _render(
-        pilot_package, tmp_path, environment="production",
+        pilot_package,
+        tmp_path,
+        environment="production",
         analytics=ANALYTICS_ON,
-        webmaster={"enabled": True, "verification_status": "VERIFIED",
-                   "verification_marker": "abcdef0123456789"},
+        webmaster={
+            "enabled": True,
+            "verification_status": "VERIFIED",
+            "verification_marker": "abcdef0123456789",
+        },
     )
     assert 'data-counter-id="90000123"' in html
     assert 'data-allowed-hosts="pilot.localhost.test"' in html
@@ -296,12 +331,25 @@ def test_page_without_analytics_is_unchanged(pilot_package, tmp_path):
 
 def test_marker_survives_a_rebuild(pilot_package, tmp_path):
     """Релиз, потерявший мета-тег, теряет и подтверждение прав."""
-    webmaster = {"enabled": True, "verification_status": "VERIFIED",
-                 "verification_marker": "abcdef0123456789"}
-    first = _render(pilot_package, tmp_path / "a", environment="production",
-                    analytics=ANALYTICS_ON, webmaster=webmaster)
-    second = _render(pilot_package, tmp_path / "b", environment="production",
-                     analytics=ANALYTICS_ON, webmaster=webmaster)
+    webmaster = {
+        "enabled": True,
+        "verification_status": "VERIFIED",
+        "verification_marker": "abcdef0123456789",
+    }
+    first = _render(
+        pilot_package,
+        tmp_path / "a",
+        environment="production",
+        analytics=ANALYTICS_ON,
+        webmaster=webmaster,
+    )
+    second = _render(
+        pilot_package,
+        tmp_path / "b",
+        environment="production",
+        analytics=ANALYTICS_ON,
+        webmaster=webmaster,
+    )
     assert 'content="abcdef0123456789"' in first
     assert 'content="abcdef0123456789"' in second
 
@@ -408,12 +456,24 @@ COUNTERS_WITHOUT_MARKUP = {
 #: настоящий.
 PLANNED_DOMAINS: tuple[str, ...] = ("lordserial101.site", "lordfilm077.site")
 
-ALL_DOMAINS = sorted({*LIVE_COUNTERS, *COUNTERS_WITHOUT_GOALS, *COUNTERS_WITHOUT_TRAFFIC,
-                      *COUNTERS_VERIFIED_IN_BROWSER, *COUNTERS_WITHOUT_MARKUP,
-                      *PLANNED_DOMAINS})
+ALL_DOMAINS = sorted(
+    {
+        *LIVE_COUNTERS,
+        *COUNTERS_WITHOUT_GOALS,
+        *COUNTERS_WITHOUT_TRAFFIC,
+        *COUNTERS_VERIFIED_IN_BROWSER,
+        *COUNTERS_WITHOUT_MARKUP,
+        *PLANNED_DOMAINS,
+    }
+)
 #: Домены, у которых счётчик существует, — независимо от состояния целей.
-WITH_COUNTER = {**LIVE_COUNTERS, **COUNTERS_WITHOUT_GOALS, **COUNTERS_WITHOUT_TRAFFIC,
-                **COUNTERS_VERIFIED_IN_BROWSER, **COUNTERS_WITHOUT_MARKUP}
+WITH_COUNTER = {
+    **LIVE_COUNTERS,
+    **COUNTERS_WITHOUT_GOALS,
+    **COUNTERS_WITHOUT_TRAFFIC,
+    **COUNTERS_VERIFIED_IN_BROWSER,
+    **COUNTERS_WITHOUT_MARKUP,
+}
 
 
 def test_registry_holds_exactly_the_known_domains():
@@ -466,9 +526,9 @@ def test_each_domain_is_independent():
     # иначе второй же незапущенный домен «повторял» бы первый.
     counters = [e.counter_id for e in entries if e.counter_id is not None]
     assert len(set(counters)) == len(counters), f"счётчик повторяется: {counters}"
-    assert len(counters) == len(WITH_COUNTER), (
-        f"счётчиков в реестре {len(counters)}, ожидалось {len(WITH_COUNTER)}"
-    )
+    assert len(counters) == len(
+        WITH_COUNTER
+    ), f"счётчиков в реестре {len(counters)}, ожидалось {len(WITH_COUNTER)}"
     for entry in entries:
         assert entry.allowed_hosts == [entry.domain]
 
@@ -499,6 +559,14 @@ def test_registry_never_stores_a_secret():
 
     data = json.loads((PATHS.root / registry.REGISTRY_PATH).read_text(encoding="utf-8"))
     findings: list[str] = []
+    domains = [p["domain"] for p in data.get("properties", [])]
+
+    def _is_webmaster_host_id(path: str, value: str) -> bool:
+        """host_id Вебмастера — публичный идентификатор вида https:<домен>:443
+        (контракт API). Исключение ТОЧНОЕ: только поле webmaster/host_id и только
+        домен этой же записи; любая иная строка проверяется как прежде."""
+        m = re.fullmatch(r"/properties\[(\d+)\]/webmaster/host_id", path)
+        return bool(m) and value == f"https:{domains[int(m.group(1))]}:443"
 
     def walk(node, path="") -> None:
         if isinstance(node, dict):
@@ -509,45 +577,50 @@ def test_registry_never_stores_a_secret():
         elif isinstance(node, list):
             for index, item in enumerate(node):
                 walk(item, f"{path}[{index}]")
-        elif (isinstance(node, str) and path.rsplit("/", 1)[-1] != "note"
-              and not _is_timestamp(node) and _looks_like_secret(node)):
+        elif (
+            isinstance(node, str)
+            and path.rsplit("/", 1)[-1] != "note"
+            and not _is_timestamp(node)
+            and not _is_webmaster_host_id(path, node)
+            and _looks_like_secret(node)
+        ):
             findings.append(f"{path}: значение выглядит секретом")
 
     walk(data)
     assert findings == [], findings
 
 
-#: Состояние подтверждения в Вебмастере по каждому домену. Задано поимённо, а
-#: не выведено из группы: у animedia.space счётчика нет, но выкладка её уже
-#: удерживается, и это BLOCKED_DEPLOYMENT, а не PLANNED. Список «или то, или
-#: это» пропустил бы подмену состояния в любую сторону.
+#: Состояние подтверждения в Вебмастере по каждому домену — ИЗМЕРЕННОЕ.
+#: Источник: webmaster-inventory.service 2026-10-08T16:08:23Z (GET /hosts и
+#: /verification по токену через LoadCredential), перенесено в реестр командой
+#: webmaster-apply-mapping. До этого здесь стояли BLOCKED_DEPLOYMENT/PLANNED,
+#: выставленные фабрикой 2026-08-27 и ни разу не сверенные с Вебмастером, где
+#: 16 доменов давно были подтверждены. Задано поимённо: подмена состояния в
+#: любую сторону ловится.
 WEBMASTER_STATUS = {
-    "1lordserials1.online": BLOCKED_DEPLOYMENT,
-    "an1mego.site": BLOCKED_DEPLOYMENT,
-    "an1meg0.site": BLOCKED_DEPLOYMENT,
-    "animeg0.site": BLOCKED_DEPLOYMENT,
-    "animedia.icu": BLOCKED_DEPLOYMENT,
-    "animedia.space": BLOCKED_DEPLOYMENT,
-    "lordfilm47.space": BLOCKED_DEPLOYMENT,
-    # Две новых витрины: домен делегирован и разрешается в адрес этого хоста,
-    # но витрина ещё не подключена к nginx и выпуска не имеет — подтверждать
-    # права на то, что не отвечает, нечем. Поэтому PLANNED, а не
-    # BLOCKED_DEPLOYMENT: там домен отдаётся, и подтверждение упирается в
-    # другое. Состояние сменится само, когда появится выпуск.
+    "1lordserials1.online": "VERIFIED",
+    "an1mego.site": "VERIFIED",
+    "an1meg0.site": "VERIFIED",
+    "animeg0.site": "VERIFIED",
+    "animedia.icu": "VERIFIED",
+    # Хост в аккаунте есть, подтверждение не прошло — так ответил Вебмастер.
+    "animedia.space": "VERIFICATION_FAILED",
+    "lordfilm47.space": "VERIFIED",
+    # Под serverHold (docs/NAMECHEAP_SERVERHOLD.md): в аккаунте Вебмастера их нет.
     "lordfilm077.site": "PLANNED",
     "lordserial101.site": "PLANNED",
-    "lordserial33.biz": BLOCKED_DEPLOYMENT,
-    "lordserials22.info": "PLANNED",
+    "lordserial33.biz": "VERIFIED",
+    "lordserials22.info": "VERIFIED",
     "lordserials22.site": "PLANNED",
     "lordserials22.space": "PLANNED",
-    "yummyani.biz": BLOCKED_DEPLOYMENT,
-    "yummyani.org": BLOCKED_DEPLOYMENT,
-    "yummyani.site": BLOCKED_DEPLOYMENT,
-    "yummyani7.info": "PLANNED",
-    "yummyani7.site": "PLANNED",
-    "zonafilm.cc": BLOCKED_DEPLOYMENT,
-    "zonafilm.space": "PLANNED",
-    "zonafilm12.site": "PLANNED",
+    "yummyani.biz": "VERIFIED",
+    "yummyani.org": "VERIFIED",
+    "yummyani.site": "VERIFIED",
+    "yummyani7.info": "VERIFIED",
+    "yummyani7.site": "VERIFIED",
+    "zonafilm.cc": "VERIFIED",
+    "zonafilm.space": "VERIFIED",
+    "zonafilm12.site": "VERIFIED",
 }
 
 
@@ -570,15 +643,17 @@ def test_registry_round_trips_without_losing_fields(tmp_path):
     shutil.copy(PATHS.root / registry.SCHEMA_PATH, root / registry.SCHEMA_PATH)
 
     before = registry.load(root)
-    registry.upsert({"domain": "yummyani.org", "counter_id": 90000002,
-                     "counter_state": "created"}, root)
+    registry.upsert(
+        {"domain": "yummyani.org", "counter_id": 90000002, "counter_state": "created"}, root
+    )
     after = registry.load(root)
 
     changed = next(p for p in after["properties"] if p["domain"] == "yummyani.org")
     assert changed["counter_id"] == 90000002
     assert changed["counter_name"] == "YummyAnime — yummyani.org"
     assert changed["allowed_hosts"] == ["yummyani.org"]
-    assert changed["webmaster"]["verification_status"] == BLOCKED_DEPLOYMENT
+    was = next(p for p in before["properties"] if p["domain"] == "yummyani.org")
+    assert changed["webmaster"] == was["webmaster"]  # запись счётчика Вебмастер не трогает
     untouched = [p for p in after["properties"] if p["domain"] != "yummyani.org"]
     assert untouched == [p for p in before["properties"] if p["domain"] != "yummyani.org"]
 
