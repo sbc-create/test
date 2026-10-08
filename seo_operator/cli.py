@@ -196,8 +196,27 @@ def main(argv=None) -> int:
     p.add_argument("--json", action="store_true", help="машиночитаемый вывод")
     p.add_argument("--out", help="записать отчёт в файл")
 
+    p = sub.add_parser(
+        "regular",
+        help="регулярный прогон по сети: check (6 ч), daily (09:00 МСК), weekly",
+    )
+    p.add_argument("mode", choices=("check", "daily", "weekly", "status"))
+    p.add_argument("--trigger", default=None, help="systemd-timer или manual")
+    p.add_argument("--root", default=None, help="каталог состояния")
+
     args = parser.parse_args(argv)
 
+    if args.command == "regular":
+        from seo_operator import regular
+
+        extra = [args.mode]
+        if args.mode == "status":
+            return regular.main(extra)
+        if args.trigger:
+            extra += ["--trigger", args.trigger]
+        if args.root:
+            extra += ["--root", args.root]
+        return regular.main(extra)
     if args.command == "analytics-collect":
         return cmd_analytics_collect(args)
     if args.command == "probe":

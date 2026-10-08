@@ -239,3 +239,37 @@ def test_collect_unit_cannot_write():
         assert "--confirm-writes" not in line
         assert "--verify" not in line
         assert "analytics-collect" in line
+
+
+# ------------------------------------------------ причина и границы показателя
+def test_unbound_webmaster_reason_names_the_registry_status_not_a_deploy_guess():
+    """MOD-01: у 19 развёрнутых доменов (yummyani.org отвечает 200) причина
+    гласила «домен ещё не развёрнут». Причина обязана называть то, что записано
+    в реестре: пустой host_id и статус подтверждения с датой сверки."""
+    entry = {
+        "domain": "yummyani.org",
+        "counter_id": 111881038,
+        "goals": [],
+        "last_checked_at": "2026-08-27T14:09:14Z",
+        "webmaster": {"enabled": True, "host_id": None,
+                      "verification_status": "BLOCKED_DEPLOYMENT"},
+    }
+    payload = analytics_collect.collect_domain(
+        StubProvider(), entry, date1="a", date2="b").as_dict()
+    webmaster = [m for m in payload["measurements"] if m["key"] == "pages_in_search"][0]
+    assert webmaster["measured"] is False
+    assert "не развёрнут" not in webmaster["reason"]
+    assert "host_id" in webmaster["reason"]
+    assert "BLOCKED_DEPLOYMENT" in webmaster["reason"]
+    assert "2026-08-27" in webmaster["reason"]
+
+
+def test_page_level_breakdowns_declare_their_top_n():
+    """MOD-05: входные и популярные страницы — первые 20 строк, а не все
+    страницы. Страница вне списка — «вне первых 20», а не ноль."""
+    payload = analytics_collect.collect_domain(
+        StubProvider(), LIVE_ENTRY, date1="a", date2="b").as_dict()
+    by_key = {m["key"]: m for m in payload["measurements"]}
+    for key in ("landing_pages", "popular_pages", "traffic_sources", "search_engines"):
+        assert by_key[key]["top_n"] == 20, key
+    assert "top_n" not in by_key["visits"]

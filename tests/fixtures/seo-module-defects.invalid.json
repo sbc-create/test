@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "updated_at": "2026-10-08T11:30:00Z",
+  "defects": [
+    {
+      "id": "MOD-01",
+      "title": "Причина неизмеренного Вебмастера «домен ещё не развёрнут» у работающих доменов",
+      "zone": "seo",
+      "priority": "P1",
+      "state": "done",
+      "wrong_decision": "Отсутствие данных Вебмастера списывается на «ждём выкладки», хотя выкладка давно прошла и нужна привязка сайта в Вебмастере.",
+      "change": "Причина берётся из реестра: пустой host_id, verification_status и дата last_checked_at (seo_operator/analytics_collect.py::_webmaster_unbound_reason).",
+      "acceptance": "В снимке analytics-<дата>.json после штатного запуска analytics-cabinet нет текста «не развёрнут»; причина содержит host_id и статус подтверждения.",
+      "evidence": "tests/unit/test_yandex_analytics_operator.py::test_unbound_webmaster_reason_names_the_registry_status_not_a_deploy_guess"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+# Суточный SEO-анализ сети и один отчёт владельцу к 09:00 МСК.
+# 08:40 МСК: бюджет цикла 840 с, отчёт готов до 09:00 МСК.
+#
+# Persistent=true: пропущенный из-за простоя запуск выполняется после старта,
+# а слот (одна проверка на 6 часов, один отчёт в сутки) не даёт ему
+# выполниться дважды.
+[Unit]
+Description=SEO regular: daily
+
+[Timer]
+OnCalendar=*-*-* 05:40:00 UTC
+Persistent=true
+RandomizedDelaySec=60
+AccuracySec=30s
+Unit=seo-regular-daily.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-factory.local/schemas/seo-module-defects.schema.json",
+  "title": "SEO module defects",
+  "description": "Единый список недостатков SEO-модуля. Пункт без воспроизводимого примера, ошибочного решения, изменения и критерия приёмки — гипотеза, а не недостаток, поэтому эти поля обязательны. Состояние растёт только по фактам: implemented — код и тесты в ветке, installed — работает в штатном запуске, verified — подтверждено на данных штатного запуска.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "updated_at", "defects"],
+  "properties": {
+    "version": {"const": 1},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "note": {"type": "string"},
+    "defects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "zone", "priority", "state", "example",
+                     "wrong_decision", "change", "acceptance", "evidence"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^MOD-[0-9]{2,}$"},
+          "title": {"type": "string", "minLength": 5},
+          "zone": {"enum": ["seo", "shared", "owner"]},
+          "priority": {"enum": ["P0", "P1", "P2", "P3"]},
+          "state": {"enum": ["proposed", "implemented", "installed", "verified"]},
+          "example": {"type": "string", "minLength": 20},
+          "wrong_decision": {"type": "string", "minLength": 10},
+          "change": {"type": "string", "minLength": 10},
+          "acceptance": {"type": "string", "minLength": 10},
+          "evidence": {"type": "string", "minLength": 5}
+        }
+      }
+    }
+  }
+}

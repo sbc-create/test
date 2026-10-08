@@ -1,0 +1,19 @@
+# Еженедельный пересмотр приоритетов SEO и оценка изменений.
+# Понедельник 08:32 МСК, до суточного прогона: итог недели входит в
+# ближайший суточный отчёт, отдельного уведомления нет.
+#
+# Persistent=true: пропущенный из-за простоя запуск выполняется после старта,
+# а слот (одна проверка на 6 часов, один отчёт в сутки) не даёт ему
+# выполниться дважды.
+[Unit]
+Description=SEO regular: weekly
+
+[Timer]
+OnCalendar=Mon *-*-* 05:32:00 UTC
+Persistent=true
+RandomizedDelaySec=60
+AccuracySec=30s
+Unit=seo-regular-weekly.service
+
+[Install]
+WantedBy=timers.target

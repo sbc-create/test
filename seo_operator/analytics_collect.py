@@ -36,6 +36,9 @@ class Measurement:
     source: str = ""
     sampled: bool | None = None
     sample_share: float | None = None
+    #: Сколько строк разбивки запрошено. Страница вне списка — «вне первых N»,
+    #: а не ноль: без этого числа отсутствие строки читается как нулевой трафик.
+    top_n: int | None = None
 
     def as_dict(self) -> dict:
         out = {
@@ -49,6 +52,8 @@ class Measurement:
             if self.sampled is not None:
                 out["sampled"] = self.sampled
                 out["sample_share"] = self.sample_share
+            if self.top_n is not None:
+                out["top_n"] = self.top_n
         else:
             out["value"] = NOT_MEASURED
             out["reason"] = self.reason
@@ -92,6 +97,28 @@ WEBMASTER_RESOURCES = (
     ("external_links", "Внешние ссылки", "external_links"),
     ("technical_issues", "Технические проблемы", "diagnostics"),
 )
+
+
+#: Сколько строк просит каждая разбивка (источники, поисковики, страницы).
+BREAKDOWN_LIMIT = 20
+
+
+def _webmaster_unbound_reason(entry: dict) -> str:
+    """Почему Вебмастер не читается — словами реестра, а не догадкой.
+
+    Прежний текст «домен ещё не развёрнут» стоял у всех доменов без host_id,
+    включая работающие: решение «ждать выкладки» принималось там, где ждать
+    нечего, а нужна привязка сайта в Вебмастере.
+    """
+    webmaster = entry.get("webmaster") or {}
+    if webmaster.get("enabled") is False:
+        return "Вебмастер для домена выключен в реестре аналитики"
+    status = webmaster.get("verification_status") or "не записан"
+    checked = entry.get("last_checked_at") or "ни разу"
+    return (
+        "сайт не привязан к Вебмастеру: host_id в реестре аналитики пуст, "
+        f"статус подтверждения {status} (последняя сверка реестра: {checked})"
+    )
 
 
 def _unmeasured(key: str, title: str, reason: str, source: str) -> Measurement:
@@ -159,7 +186,7 @@ def collect_domain(
                     date2=date2,
                     metrics=["ym:s:visits"],
                     dimensions=[dimension],
-                    limit=20,
+                    limit=BREAKDOWN_LIMIT,
                 )
                 out.measurements.append(
                     Measurement(
@@ -170,6 +197,7 @@ def collect_domain(
                         source=dimension,
                         sampled=report.get("sampled"),
                         sample_share=report.get("sample_share"),
+                        top_n=BREAKDOWN_LIMIT,
                     )
                 )
             except FactoryError as exc:
@@ -184,7 +212,7 @@ def collect_domain(
                 date2=date2,
                 metrics=["ym:pv:pageviews"],
                 dimensions=["ym:pv:URLPath"],
-                limit=20,
+                limit=BREAKDOWN_LIMIT,
             )
             out.measurements.append(
                 Measurement(
@@ -195,6 +223,7 @@ def collect_domain(
                     source="ym:pv:pageviews",
                     sampled=report.get("sampled"),
                     sample_share=report.get("sample_share"),
+                    top_n=BREAKDOWN_LIMIT,
                 )
             )
         except FactoryError as exc:
@@ -206,7 +235,7 @@ def collect_domain(
 
     # -------------------------------------------------------- Вебмастер
     if not host_id:
-        reason = "сайт не зарегистрирован в Вебмастере: домен ещё не развёрнут"
+        reason = _webmaster_unbound_reason(entry)
         for key, title, resource in WEBMASTER_RESOURCES:
             out.measurements.append(_unmeasured(key, title, reason, resource))
     else:

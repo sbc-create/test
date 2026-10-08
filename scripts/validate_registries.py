@@ -33,6 +33,8 @@ MAPPING = {
     # без держателя, свободный с держателем, отозванный publisher_id.
     "template-pool.json": "template-pool.schema.json",
     "site-cells.json": "site-cells.schema.json",
+    # Недостатки SEO-модуля: пункт без примера и критерия приёмки — гипотеза.
+    "seo-module-defects.json": "seo-module-defects.schema.json",
 }
 
 # Производные артефакты: файл порождается из другого источника и в некоторых
