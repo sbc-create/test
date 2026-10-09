@@ -1,0 +1,84 @@
+# Показ редакционных накладок в контейнерах проекта yummyani-staging.
+#
+#   docker compose -p yummyani-staging \
+#     --project-directory /home/claude/wt-yummy-mail-biz \
+#     -f /home/claude/wt-yummy-mail-biz/compose.staging.yaml \
+#     -f /home/claude/wt-portable-site-cell-01/automation/host/yummy-biz-indexing.override.yaml \
+#     -f /home/claude/wt-portable-site-cell-01/automation/host/yummy-overlays.override.yaml \
+#     --env-file /srv/sites/yummyani-staging/runtime/compose.vars \
+#     up -d --no-deps web-biz
+#
+# Пересоздание контейнера на несколько секунд снимает витрину с линии, поэтому
+# команду выполняет владелец. Образ при этом НЕ меняется: он закреплён тегом
+# выпуска в базовом файле, а это наложение добавляет только переменные и
+# монтирование на чтение.
+#
+# Что измерено
+# ------------
+#
+# 2026-10-09, `docker inspect` работающих контейнеров:
+#
+#   web-org  (yummyani.org)   TITLE_OVERLAYS_PATH есть, каталог примонтирован -> текст виден
+#   web-site (yummyani.site)  то же
+#   web-biz  (yummyani.biz)   ни переменной, ни монтирования -> записанный текст не появится
+#
+# Приложение читает путь из `TITLE_OVERLAYS_PATH`, иначе берёт
+# `content/title-overlays.json` внутри образа (src/modules/editorial/title-overlay.ts:58)
+# — то есть без монтирования оно читает пустышку из сборки, а не наш файл. При
+# неудаче разбора оно МОЛЧА переходит на `last-good`, поэтому второй путь
+# объявляется тоже: иначе один сбой разбора вернул бы файл из образа.
+#
+# Приложение само сверяет домен: `expectedSite()` берёт хост из SITE_URL и
+# сравнивает с полем `site` файла. Поэтому монтируется каталог ИМЕННО этого
+# домена — чужой файл был бы отвергнут целиком, а не показан не на том сайте.
+#
+# Почему базовый файл не правится
+# -------------------------------
+#
+# Он принадлежит проекту приложения (`/home/claude/wt-yummy-mail-biz`) и держит
+# окружение web-сервисов в общем якоре `&web-env`: правка там задела бы
+# соседние тенанты, а монтирование у каждого тенанта своё по определению.
+# Наложение лежит в репозитории фабрики — видно, что именно фабрика добавляет.
+#
+# web-site и web-org описаны здесь же, хотя работают с этой настройкой уже
+# сейчас: в базовом файле её нет ни у одного сервиса (проверено), то есть на
+# работающих контейнерах она появилась вне файла. Пересоздание такого сервиса
+# по файлу СНЯЛО БЫ показ. Описание возвращает настройку в файлы и делает
+# пересоздание безопасным; на работающие контейнеры это наложение само по себе
+# не влияет — только на те, что пересоздают командой выше.
+services:
+  web-site:
+    environment:
+      TITLE_OVERLAYS_PATH: /app/content/overlays/title-overlays.json
+      TITLE_OVERLAYS_LAST_GOOD_PATH: /app/content/overlays/title-overlays.last-good.json
+    volumes:
+      - type: bind
+        source: /srv/sites/yummyani-staging/runtime/overlays/yummyani.site
+        target: /app/content/overlays
+        read_only: true
+
+  web-org:
+    environment:
+      TITLE_OVERLAYS_PATH: /app/content/overlays/title-overlays.json
+      TITLE_OVERLAYS_LAST_GOOD_PATH: /app/content/overlays/title-overlays.last-good.json
+    volumes:
+      - type: bind
+        source: /srv/sites/yummyani-staging/runtime/overlays/yummyani.org
+        target: /app/content/overlays
+        read_only: true
+      # Новости раздела /posts у этого домена доставляются отдельным файлом —
+      # он примонтирован в работающем контейнере и по той же причине описан здесь.
+      - type: bind
+        source: /srv/sites/yummyani-staging/runtime/overlays/yummyani.org/editorial-posts.json
+        target: /app/content/editorial-posts.json
+        read_only: true
+
+  web-biz:
+    environment:
+      TITLE_OVERLAYS_PATH: /app/content/overlays/title-overlays.json
+      TITLE_OVERLAYS_LAST_GOOD_PATH: /app/content/overlays/title-overlays.last-good.json
+    volumes:
+      - type: bind
+        source: /srv/sites/yummyani-staging/runtime/overlays/yummyani.biz
+        target: /app/content/overlays
+        read_only: true
