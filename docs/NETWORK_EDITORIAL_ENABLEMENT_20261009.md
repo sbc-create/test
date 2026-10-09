@@ -93,11 +93,44 @@
 
 **Подключены материалом** (публикации редакции, подтверждены на страницах):
 
-| домен | адрес проверки |
-| --- | --- |
-| lordfilm47.space | `https://lordfilm47.space/title/puteshestvie-kino-prekrasnyy-mir/` |
-| lordserial33.biz | `https://lordserial33.biz/title/doktor-stoun-nauchnoe-buduschee-chast-3/` |
-| zonafilm.space | `https://zonafilm.space/title/ledyanaya-stena/` |
+| домен | адрес проверки | канал чей |
+| --- | --- | --- |
+| lordfilm47.space | `https://lordfilm47.space/title/puteshestvie-kino-prekrasnyy-mir/` | SEO-сессия |
+| lordserial33.biz | `https://lordserial33.biz/title/doktor-stoun-nauchnoe-buduschee-chast-3/` | SEO-сессия |
+| zonafilm.space | `https://zonafilm.space/title/ledyanaya-stena/` | выложено ранее |
+| 1lordserials1.online | `https://1lordserials1.online/title/priklyucheniya-digimonov-poslednyaya-evolyuciya/` | канал этой сессии, материал редакции (Shikimori 38088) |
+| lordserials22.info | `https://lordserials22.info/title/temnyy-dvoreckiy-zelenaya-vedma/` | то же (Shikimori 59228) |
+| zonafilm12.site | `https://zonafilm12.site/title/dlya-tebya-bessmertnyy-2/` | то же (Shikimori 49709) |
+| an1meg0.site | канал проверен, материал за редакцией | канал этой сессии |
+
+Итого к 10:50Z фоновый редактор работает на восьми доменах; три из них
+(1lordserials1.online, lordserials22.info, zonafilm12.site) подключены этой
+сессией сегодня, материал на них дала редакция.
+
+### Yummy: операция подготовки открыта
+
+У семейства не было операции `prepare` — и это была не настройка, а следствие:
+снимка подробностей фабрика для Yummy не производит, приложение держит каталог
+в своей базе. Источником стала разметка СВОЕЙ ЖЕ страницы тайтла
+(`application/ld+json`, `@type: TVSeries`): проверено на
+`https://yummyani.org/anime/009-1` — name, alternateName, datePublished,
+description, genre, countryOfOrigin. Теперь `yummyani.org` и `yummyani.site`
+показывают `facts`, `prepare`, `publish`, `unpublish` (коммит `d07e818`, восемь
+новых проверок; два прежних теста приведены к новому контракту с объяснением).
+
+Для `yummyani.biz`, `yummyani7.site` и `yummyani7.info` остаётся отображение:
+их контейнеры не монтируют каталог накладок и не имеют `TITLE_OVERLAYS_PATH`
+(проверено `docker inspect`). Нужное изменение названо точно — добавить
+`web-biz` и двум семёркам тот же блок `environment` и `volumes`, что у
+`web-site`, и применить через их же сторожевой путь
+`deploy/staging/compose-mutate.sh`. Сам не применяю, и это не осторожность:
+в `compose.staging.yaml` у `web-org` вообще НЕТ ни монтирования накладок, ни
+монтирования `editorial-posts.json`, а работающий контейнер их имеет и собран
+из образа с тегом `rel-*`, а не `:staging`, который объявлен в файле.
+Пересоздание из этого файла откатило бы версию приложения на трёх живых
+витринах. Это задача того, кто ведёт стек Yummy, и её стоит сделать до того,
+как контейнеры будут пересозданы по другой причине: иначе опубликованные
+тексты и новости `yummyani.org` исчезнут со страниц молча.
 
 Переживание доставки: у семейств lords и zona файл правок объявлен
 `data_contract.user_writable` — доставка каталога его не копирует, а
