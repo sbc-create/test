@@ -18,7 +18,9 @@ from __future__ import annotations
 
 import pytest
 
+from factory.qwen import editorial as ред
 from factory.qwen import queue_bridge as qb
+from factory.qwen import registry as реестр
 
 
 def test_критерий_взят_из_реестра_а_не_переписан():
@@ -106,11 +108,38 @@ def test_памятка_не_путает_площадки(monkeypatch):
     реестр ячеек и сетевой список целиком), а исполнитель обходит площадки в
     цикле. Общий на всех ответ был бы хуже, чем отсутствие памятки.
     """
+    # Площадки берутся ПОДСТАВНЫЕ: прежняя редакция теста закрепляла, что
+    # an1mego.site доставку не умеет, и сломалась в тот день, когда владелец
+    # установил туда читатель правок. Проверять здесь надо раздельность
+    # памятки, а не сегодняшние возможности витрины.
+    class Площадка:
+        def __init__(self, домен, умеет):
+            self.domain = домен
+            self.site_id = домен.split(".")[0]
+            self.adapter = "yummy"
+            self.account = self.site_id
+            self.умеет = умеет
+
+    площадки = {"умеет.test": Площадка("умеет.test", True),
+                "не-умеет.test": Площадка("не-умеет.test", False)}
+    спрошено: list[str] = []
+
+    def сайт(домен, **кв):
+        спрошено.append(домен)
+        return площадки[домен]
+
+    monkeypatch.setattr(ред, "_сайт", сайт)
+    monkeypatch.setattr(реестр, "доступные_операции",
+                        lambda s, **кв: ["publish"] if s.умеет else ["status"])
+    monkeypatch.setattr(реестр, "возможности", lambda s: {} if not s.умеет else
+                        {"deliver": "есть", "display": "есть"})
     qb._ПАМЯТКА.clear()
-    assert qb.доставка_описаний("an1mego.site")[0] is False
-    assert qb.доставка_описаний("animedia.icu")[0] is True
-    assert qb.доставка_описаний("an1mego.site")[0] is False
-    assert {"an1mego.site", "animedia.icu"} <= set(qb._ПАМЯТКА)
+    assert qb.доставка_описаний("не-умеет.test")[0] is False
+    assert qb.доставка_описаний("умеет.test")[0] is True
+    assert qb.доставка_описаний("не-умеет.test")[0] is False
+    assert {"умеет.test", "не-умеет.test"} <= set(qb._ПАМЯТКА)
+    assert спрошено == ["не-умеет.test", "умеет.test"], (
+        f"второй вопрос о том же домене обязан прийти из памятки: {спрошено}")
 
 
 def test_памятка_живёт_недолго(monkeypatch):
