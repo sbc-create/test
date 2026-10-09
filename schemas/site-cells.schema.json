@@ -385,16 +385,30 @@
               "updater": {
                 "type": "object",
                 "additionalProperties": false,
-                "required": ["service", "timer"],
+                "required": [
+                  "service",
+                  "timer"
+                ],
                 "properties": {
-                  "service": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*\\.service$"},
-                  "timer": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*\\.timer$"},
+                  "service": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]*\\.service$"
+                  },
+                  "timer": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]*\\.timer$"
+                  },
                   "credentials": {
                     "type": "array",
-                    "items": {"type": "string", "pattern": "^[a-z0-9_]+:/etc/site-factory/secrets/[^ ]+$"},
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9_]+:/etc/site-factory/secrets/[^ ]+$"
+                    },
                     "uniqueItems": true
                   },
-                  "note": {"type": "string"}
+                  "note": {
+                    "type": "string"
+                  }
                 },
                 "description": "Обработчик обновлений данных витрины. Его юнит и таймер исполнитель ставит при каждом promote из current/deploy/ выпуска (factory/cell/updater_units.py), проверив закрытым белым списком; credentials — единственные LoadCredential, которые юниту разрешены. Без этого поля юнит обработчика не входит в выпуск: так animedia.icu неделю обновлялся кодом app от 27.09."
               },
@@ -440,6 +454,41 @@
                   "null"
                 ],
                 "description": "Что ИЗМЕРЕНО на живом сайте в момент записи удержания, в отличие от hold_reason — намерения. Поле появилось потому, что причина удержания уже однажды описывала не то состояние, в котором сайт находился: витрина объявляла один выпуск и исполняла другой, и решение принималось по объявленному. Здесь место для доказательства (например, пути из /proc/<pid>/cmdline), а не для планов."
+              },
+              "hold_history": {
+                "type": "array",
+                "description": "Снятые удержания: по записи на каждое. Нужно потому, что снятие удержания — решение, которое принимают по доказательствам, а затирание `hold_reason` эти доказательства теряло: в реестре оставалось `hold: false` без следа того, кто и на каком основании его снял. Поле только дописывается; `additionalProperties` объекта release остаётся false — объявлено одно поле, ни одно другое не ослаблено.",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "reason",
+                    "lifted_at",
+                    "lifted_by",
+                    "evidence"
+                  ],
+                  "properties": {
+                    "reason": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "Прежняя причина удержания, дословно"
+                    },
+                    "lifted_at": {
+                      "type": "string",
+                      "description": "Дата снятия, YYYY-MM-DD"
+                    },
+                    "lifted_by": {
+                      "type": "string",
+                      "description": "Кто снял: имя сессии или владелец"
+                    },
+                    "evidence": {
+                      "type": "string",
+                      "description": "Чем проверено, что держать больше нечего: измерения и ответы тех, чья работа могла пострадать"
+                    }
+                  }
+                }
               }
             }
           },
