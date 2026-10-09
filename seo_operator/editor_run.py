@@ -256,6 +256,7 @@ def gate(
     candidates: Path = CANDIDATES,
     state: Path = STATE,
     refresh: bool = False,
+    recent: dict[str, int] | None = None,
 ) -> dict:
     """Нужен ли запуск модели. Только чтение файлов: ни модели, ни сети.
 
@@ -325,6 +326,8 @@ def gate(
         cands = []
     fresh = [c for c in cands if _key(c.get("url", "")) not in done]
     if fresh:
+        fresh = rotate(fresh, recent_publications(now) if recent is None else recent)
+    if fresh:
         return {
             "run": True,
             "reason": f"кандидатов без результата: {len(fresh)} (первый {fresh[0]['url']})",
@@ -339,8 +342,38 @@ def gate(
             candidates=candidates,
             state=state,
             refresh=False,
+            recent=recent,
         )
     return {"run": False, "reason": "работы нет: свободных заданий и новых кандидатов нет"}
+
+
+def recent_publications(now: dt.datetime, *, hours: int = 24) -> dict[str, int]:
+    """Сколько адресов получили публикацию за последние сутки — по доменам (файлы)."""
+    from seo_operator import regular
+
+    out: dict[str, int] = {}
+    for row in regular.published_since(now - dt.timedelta(hours=hours)):
+        domain = row["url"].split("/")[2]
+        out[domain] = out.get(domain, 0) + 1
+    return out
+
+
+def rotate(cands: list[dict], recent: dict[str, int]) -> list[dict]:
+    """Чередовать домены, начиная с того, где за сутки опубликовано меньше всего.
+
+    Внутри домена порядок прежний (по трафику). Без ротации первым всегда шёл
+    домен с большим трафиком, и один домен забирал весь цикл.
+    """
+    by_domain: dict[str, list[dict]] = {}
+    for c in cands:
+        by_domain.setdefault(c.get("domain") or c.get("url", "").split("/")[2], []).append(c)
+    order = sorted(by_domain, key=lambda d: (recent.get(d, 0), list(by_domain).index(d)))
+    out: list[dict] = []
+    while any(by_domain.values()):
+        for d in order:
+            if by_domain[d]:
+                out.append(by_domain[d].pop(0))
+    return out
 
 
 def _refresh_candidates(path: Path, now: dt.datetime, *, min_age_s: int = 3600) -> bool:

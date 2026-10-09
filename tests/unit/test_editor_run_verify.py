@@ -154,7 +154,9 @@ def _gate_files(tmp_path, *, last_start=None, task_leased=False, candidate_done=
     cands.write_text(
         json.dumps({"candidates": [{"url": "https://animedia.space/title/x/"}]}), encoding="utf-8"
     )
-    return dict(registry=registry, leases=leases, events=events, candidates=cands, state=state)
+    return dict(
+        registry=registry, leases=leases, events=events, candidates=cands, state=state, recent={}
+    )
 
 
 def test_gate_runs_the_model_at_most_hourly(tmp_path):
@@ -170,3 +172,37 @@ def test_gate_ignores_leased_tasks_and_finished_candidates(tmp_path):
     f = _gate_files(tmp_path, task_leased=True, candidate_done=True)
     decision = editor_run.gate(NOW, **f)
     assert decision["run"] is False, decision  # чужая аренда и Yummy не в счёт
+
+
+def test_rotation_starts_with_the_least_published_domain_and_alternates():
+    cands = [
+        {"domain": "animedia.icu", "url": "https://animedia.icu/title/a/"},
+        {"domain": "animedia.icu", "url": "https://animedia.icu/title/b/"},
+        {"domain": "animedia.icu", "url": "https://animedia.icu/title/c/"},
+        {"domain": "animedia.space", "url": "https://animedia.space/title/d/"},
+        {"domain": "lordfilm47.space", "url": "https://lordfilm47.space/title/e/"},
+    ]
+    got = editor_run.rotate(cands, {"animedia.icu": 10, "animedia.space": 3})
+    assert [c["url"].split("/")[-2] for c in got] == ["e", "d", "a", "b", "c"]
+
+
+def test_gate_puts_the_rotated_order_into_next(tmp_path):
+    f = _gate_files(tmp_path, task_leased=True)
+    f["candidates"].write_text(
+        json.dumps(
+            {
+                "candidates": [
+                    {"domain": "animedia.icu", "url": "https://animedia.icu/title/a/"},
+                    {"domain": "animedia.icu", "url": "https://animedia.icu/title/b/"},
+                    {"domain": "animedia.space", "url": "https://animedia.space/title/c/"},
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    f["recent"] = {"animedia.icu": 5}
+    decision = editor_run.gate(NOW, **f)
+    assert [c["url"] for c in decision["next"]][:2] == [
+        "https://animedia.space/title/c/",
+        "https://animedia.icu/title/a/",
+    ]
