@@ -753,3 +753,39 @@ def test_набор_инструментов_покрывает_петлю_оп�
         assert имя in mcp.ИНСТРУМЕНТЫ, имя
         assert mcp.ИНСТРУМЕНТЫ[имя]["описание"].strip(), имя
         assert mcp.ИНСТРУМЕНТЫ[имя]["схема"]["type"] == "object", имя
+
+def test_подготовка_передаёт_источники_в_провенанс(monkeypatch):
+    """Источники доказательств обязаны доезжать до записи через мост.
+
+    Измерено 2026-10-09: у трёх опубликованных описаний AnimeGo
+    `provenance.facts` пуст, а `facts_source` называл снимок каталога, в
+    котором утверждений текста нет. Передать источники редактор не мог: у
+    инструмента не было такого поля, и доказательство оставалось только в
+    журнале запуска — то есть терялось вместе с ним.
+    """
+    принято = {}
+
+    def запомнить(site, slug, тело, *, author, источники=None):
+        принято.update(site=site, slug=slug, author=author, источники=источники)
+        return {"site": site, "slug": slug, "state": "verified",
+                "quality_problems": []}
+
+    monkeypatch.setattr(editorial, "подготовить", запомнить)
+    ошибка, д = _вызов("prepare_material", {
+        "site": "yummyani.org", "slug": "кот", "body": "Текст о произведении.",
+        "author": "editor/claude-auto/run-1",
+        "sources": ["https://shikimori.io/animes/59741"]})
+    assert not ошибка, д
+    assert принято["источники"] == ["https://shikimori.io/animes/59741"], принято
+    # Поле объявлено схемой: иначе клиент не узнает, что его можно передать.
+    свойства = mcp.ИНСТРУМЕНТЫ["prepare_material"]["схема"]["properties"]
+    assert свойства["sources"]["type"] == "array"
+    assert "provenance" in свойства["sources"]["description"]
+
+
+def test_источники_не_строкой(monkeypatch):
+    """Одна строка вместо списка — это один адрес или перечень? Отказ."""
+    ошибка, д = _вызов("prepare_material", {
+        "site": "yummyani.org", "slug": "кот", "body": "Текст.",
+        "sources": "https://shikimori.io/animes/59741"})
+    assert ошибка and "список адресов" in д["error"], д

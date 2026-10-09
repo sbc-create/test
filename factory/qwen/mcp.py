@@ -1299,9 +1299,14 @@ def инструмент_подготовки(аргументы: dict) -> dict[
     тело = str(аргументы.get("body") or "")
     if not (сайт and слаг and тело):
         raise ОшибкаИнструмента("нужны параметры site, slug и body")
+    источники = аргументы.get("sources")
+    if источники is not None and not isinstance(источники, list):
+        raise ОшибкаИнструмента("sources: список адресов, по которым проверены факты")
     try:
-        итог = editorial.подготовить(сайт, слаг, тело,
-                                     author=str(аргументы.get("author") or "qwen"))
+        итог = editorial.подготовить(
+            сайт, слаг, тело,
+            author=str(аргументы.get("author") or "qwen"),
+            источники=[str(и) for и in (источники or [])])
     except (editorial.ОперацияОтклонена, indexing.Отказано) as ош:
         raise ОшибкаИнструмента(str(ош)) from None
     return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "prepared": итог,
@@ -1897,7 +1902,14 @@ def инструмент_области_адреса(аргументы: dict) -
                      "публикации и возвращаются списком. Ничего не публикует."),
         "схема": {"type": "object", "properties": {
             "site": {"type": "string"}, "slug": {"type": "string"},
-            "body": {"type": "string"}, "author": {"type": "string"}},
+            "body": {"type": "string"}, "author": {"type": "string"},
+            "sources": {"type": "array", "items": {"type": "string"},
+                        "description": ("адреса, по которым проверены факты "
+                                        "текста (shikimori.io/animes/<id> и "
+                                        "прочие разрешённые). Попадают в "
+                                        "provenance опубликованной записи — "
+                                        "доказательство живёт рядом с текстом, "
+                                        "а не только в журнале запуска")}},
             "required": ["site", "slug", "body"], "additionalProperties": False},
     },
     "publish_material": {
