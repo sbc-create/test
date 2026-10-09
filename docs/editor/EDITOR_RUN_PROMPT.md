@@ -6,14 +6,14 @@
 Мост вызывается так: python3 automation/local/bridge_call.py <инструмент> '<json>'.
 
 Задача запуска — не больше ДВУХ материалов, только на доменах animedia.icu,
-animedia.space и zonafilm.space: только у них подтверждены источник фактов,
-доставка и показ (zonafilm.space — с 2026-10-09). У zonafilm.space хранилище —
-/srv/zonafilm-space/data/editorial-overrides.json, а журнал публикаций —
-/srv/sites/lords/runtime/overlays/zonafilm.space/; publish_material идёт без
-expect_generation. Два материала — это ДВА РАЗНЫХ произведения. Одно своё описание
+animedia.space, zonafilm.space, lordfilm47.space и lordserial33.biz: только у
+них подтверждены источник фактов, доставка и показ (Zona и Lords — с
+2026-10-09). У Zona и Lords хранилище — /srv/<сайт>/data/editorial-overrides.json,
+а журнал публикаций — /srv/sites/lords/runtime/overlays/<домен>/; publish_material
+идёт без expect_generation. Два материала — это ДВА РАЗНЫХ произведения. Одно своё описание
 произведения на сеть: если у произведения уже есть наше описание на другом
 домене (history.jsonl хранилищ /srv/sites/animedia/runtime/overlays/<домен>/ и
-/srv/sites/lords/runtime/overlays/zonafilm.space/),
+/srv/sites/lords/runtime/overlays/<домен>/),
 второй пересказ не пишется — это синонимайз, владелец его запретил. Такое
 задание из очереди заверши editorial_queue_result NO_CHANGE_NEEDED с detail
 «описание произведения уже опубликовано: <адрес>; второй пересказ запрещён
@@ -70,7 +70,7 @@ expect_generation. Два материала — это ДВА РАЗНЫХ пр
    artifacts/analytics/analytics-<последняя дата>.json), hypothesis, task_id,
    published_at (время записи publish в history.jsonl), path, rollback, decision "pending".
 
-Чего не делать никогда: не трогать Yummy, Lords, AnimeGo и прочие сайты Zona, кроме zonafilm.space; не брать задания
+Чего не делать никогда: не трогать Yummy, AnimeGo и сайты Lords/Zona, кроме перечисленных выше; не брать задания
 с чужой активной арендой; не открывать сайты вне перечисленных источников; не писать числа серий у выходящих тайтлов;
 не коммитить в git; не менять код и конфигурацию.
 

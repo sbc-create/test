@@ -106,9 +106,13 @@ ANIMEDIA = {"animedia.icu": "animedia-01", "animedia.space": "animedia-02"}
 
 #: Домены, где редактор публикует описания с подтверждённым показом. Zona —
 #: с 2026-10-09: первая видимая публикация zonafilm.space/title/ledyanaya-stena/.
-#: lordfilm47.space и lordserial33.biz сюда не входят, пока их контракт не
-#: объявляет editorial-overrides.json пользовательским (handoff §12).
-EDITOR_SITES = {**ANIMEDIA, "zonafilm.space": "zona-01"}
+EDITOR_SITES = {
+    **ANIMEDIA,
+    "zonafilm.space": "zona-01",
+    # С 2026-10-09: контракт и читатель правок выпущены (f17b9f7/c387529, a1b5d71/4714e0a).
+    "lordfilm47.space": "lords-01",
+    "lordserial33.biz": "lords-02",
+}
 
 #: Снимки крупнее этого читаются по записи: полный json.loads снимка Zona
 #: (82 МБ) не помещается в MemoryMax=512M суточной службы.
@@ -1656,6 +1660,9 @@ def publication_metrics(
     return out
 
 
+#: Через сколько видимый и неизменный текст перепроверяется на странице.
+RECHECK_VISIBLE_AFTER = dt.timedelta(hours=20)
+
 AUDIENCE_TARGET = 1000
 _ROBOT_YES = {"yes", "1", "true", "роботы", "robots"}
 _ROBOT_NO = {"no", "0", "false", "люди", "people", "humans"}
@@ -2252,7 +2259,14 @@ def step_publications(ctx: Context, *, limit: int = 25) -> Any:
     checked, unchanged, untracked = [], 0, []
     for item in published_items():
         prior = verified.get(item["url"]) or {}
-        fresh = prior.get("verdict") == "VISIBLE" and prior.get("digest") == item["digest"]
+        last_check = parse_iso(prior.get("checked_at"))
+        # Видимый текст перепроверяется раз в сутки, даже если не менялся: после
+        # обновления данных витрины (доставка каталога ночью) правка обязана
+        # остаться, и без перепроверки её пропажа не была бы замечена.
+        recent = last_check is not None and ctx.now - last_check < RECHECK_VISIBLE_AFTER
+        fresh = (
+            prior.get("verdict") == "VISIBLE" and prior.get("digest") == item["digest"] and recent
+        )
         if fresh:
             unchanged += 1
             known = changes.get(item["url"]) or {}

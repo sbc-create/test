@@ -1468,3 +1468,39 @@ def test_editor_candidates_skip_gaps_without_any_source(tmp_path):
     assert [c["slug"] for c in found] == ["with-id"]
     # карточка без источника не исключена, а учтена для поиска источника
     assert [(n["slug"], n["source_plan"]) for n in needs] == [("no-id", regular.SOURCE_PLAN[None])]
+
+
+def test_visible_publication_is_rechecked_daily_to_catch_loss_after_data_update(
+    env, tmp_path, monkeypatch
+):
+    root = tmp_path / "overlays"
+    (root / "a.example").mkdir(parents=True)
+    (root / "a.example" / "title-overlays.json").write_text(
+        json.dumps({"items": [{"slug": "x", "body": "Текст описания карточки для проверки."}]}),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(regular, "OVERLAY_ROOTS", {"animedia": (root, "/title/{slug}/")})
+    page = (
+        200,
+        {},
+        "<html><body><p>Текст описания карточки для проверки.</p></body></html>".encode(),
+    )
+    http = FakeHttp(
+        {
+            "https://a.example/": HOME_OPEN,
+            "https://a.example/robots.txt": ROBOTS_OK,
+            "https://a.example/title/x/": page,
+        }
+    )
+    regular.run("check", root=env["root"], now=NOW, sources=env["sources"], http=http)
+    state = json.loads((env["root"] / "state.json").read_text(encoding="utf-8"))
+    state["publications"]["https://a.example/title/x/"]["checked_at"] = "2026-10-06T00:00:00Z"
+    (env["root"] / "state.json").write_text(json.dumps(state), encoding="utf-8")
+    regular.run(
+        "check",
+        root=env["root"],
+        now=NOW + dt.timedelta(hours=6),
+        sources=env["sources"],
+        http=http,
+    )
+    assert http.calls.count("https://a.example/title/x/") == 2  # проверка старше суток
