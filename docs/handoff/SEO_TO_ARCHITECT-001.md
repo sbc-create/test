@@ -152,6 +152,83 @@
 **Проверка.** Раздел «Процесс редактора» суточного отчёта: зацикленных заданий 0,
 тупиковых 0, доля выдач без результата ниже половины.
 
+## 7. СРОЧНО: мост пишет описания Yummy не в схеме приложения — ни одна публикация не видна
+
+**Доказательство (2026-10-09 07:13:53Z).** `publish_material` на yummyani.site,
+слаг `neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar`, автор
+`editor/claude-indexing-operation-02`, `expect_generation 0424547f4c48a5c9`.
+Ответ моста `state: written`, `occurrences_in_main_block: 0`. На странице через 6
+минут — прежний текст (от 2026-09-30).
+
+**Причина — в формате записи.** Читатель приложения
+(`/srv/sites/yummyani-staging/repo/src/modules/editorial/title-overlay.ts`, zod
+`itemSchema`) требует у каждой записи `title_id` (непустая строка),
+`canonical_path`, `content_id`, `content_type`, `published_at`,
+`methodology_version`, `content_digest`. Мост (`factory/qwen/editorial.py::публиковать`)
+пишет запись в формате Animedia: `slug, title_id: null, body, provenance,
+content_digest`. Одна такая запись делает невалидным весь файл, и приложение
+молча берёт `title-overlays.last-good.json` (`loadMap → parseFile → last-good-fallback`).
+
+| файл | generation | записи |
+| --- | --- | --- |
+| `title-overlays.json` (рабочий, невалиден с 07:13:53Z) | `qwen-neveroyatnoe-…-1791530032` | 3 записи в схеме Yummy + 1 в формате Animedia |
+| `title-overlays.last-good.json` (показывается) | `0424547f4c48a5c9` | 4 записи в схеме Yummy — то же, что до правки |
+
+Посетитель потерь не видит: показывается прежнее содержимое. Но любая
+публикация на Yummy через мост невидима; на yummyani.org из 1 публикации и 26
+снятий моста видимых записей нет.
+
+**Нужно.** `публиковать` для адаптера `yummy` — писать запись в схеме приложения
+(`title_id` из каталога Yummy, `canonical_path`, `content_id`, `content_type`
+`TITLE_DESCRIPTION`, `published_at`, `methodology_version`), до записи проверять
+файл той же схемой и отказывать, а не писать невалидный; подтверждение —
+появлением текста на странице. После исправления — переписать текущий рабочий
+файл штатно (запись ДжоДжо повторно), я повторю приёмку.
+
+**Проверка.** Новый текст ДжоДжо (начинается «…седьмая часть истории
+„Невероятные приключения ДжоДжо“, аниме выходит с марта 2026 года») виден на
+https://yummyani.site/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar
+и стоит в meta description. До исправления редактор на Yummy не публикует.
+
+## 8. AnimeGo: описание записано, посетителю не видно
+
+**Доказательство.** `/srv/sites/animego/runtime/overlays/an1meg0.site/history.jsonl`:
+`prepare` 2026-10-09T00:44:54Z автор `editor/architect-night-20261009/run-1`,
+`publish` 00:45:43Z автор `claude-indexing-operation-02`, generation
+`qwen-arknayts-moroznaya-pogibel-1791506743`. Страница
+https://an1meg0.site/title/arknayts-moroznaya-pogibel/ отвечает 200, текста
+записи («Аркнайтс: Морозная погибель» (Arknights: Perish in Frost) — аниме-сериал
+2023 г…) на ней нет; регулярная проверка 2026-10-09: `PUBLICATION_TEXT_NOT_VISIBLE`.
+Реестр: у an1mego/animeg0/an1meg0 нет операции `publish`, доставка — «механизм не
+установлен: читателя правок в выпущенном рантайме нет (animego)».
+
+**Нужно.** Читатель накладок в рантайме AnimeGo (как у Animedia) — или запрет
+записи в хранилище AnimeGo до его появления. Публикация мимо возможностей
+реестра — это запись, которую никто не прочтёт.
+
+**Проверка.** Текст виден на странице; регулярная проверка снимает
+`PUBLICATION_TEXT_NOT_VISIBLE`.
+
+## 9. yummyani.biz/anime/psayren — посещаемая страница отвечает 404
+
+https://yummyani.biz/anime/psayren — 404 (так же на yummyani.site и .org), при этом в
+снимке Метрики 2026-10-08 у неё 6 входов и 12 просмотров за неделю. Карточка
+исчезла из каталога Yummy, а ссылки и поисковые входы остались.
+
+**Нужно.** Выяснить причину исчезновения карточки; если тайтл снят намеренно —
+301 на ближайшую релевантную страницу, а не 404.
+
+## 10. Пересечение исполнителей очереди (факты, ничего не отменялось)
+
+Сутки до 2026-10-09T07:30Z: задания брали 13 владельцев; 13 адресов из 60 брали
+двое и больше. Ряды Qwen после отключения трёх автоматизаций описаний продолжают
+брать задания Yummy: `editor-bot-20261008` (13), `seo-analysis-2026-10-08` (8),
+`editor-claude-01` (5), `seo-analyzer-2026-10-08` (3), `editor_news_reviewer` (2),
+`editor_script` (2), `test_check` (3). Активных аренд в момент проверки нет.
+Публикации на AnimeGo (§8) записаны владельцем `claude-indexing-operation-02` из
+сессии `architect-night` — имя совпадает с веткой SEO; фоновый редактор работает
+под `editor/claude-auto/run-<id>`, сессия SEO — под `editor/claude-indexing-operation-02`.
+
 ## Чего я не делал
 
 Не менял очередь, мост, реестры, журналы и данные сайтов; не снимал аренды;
