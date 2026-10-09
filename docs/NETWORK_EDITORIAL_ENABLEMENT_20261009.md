@@ -69,22 +69,35 @@
 Чужие аренды не забираю, проверки выпуска не обхожу: все выпуски идут штатным
 исполнителем через `factory cell trigger`.
 
-## 3.1. Подключено по критерию владельца: URL и результат
+## 3.1. Канал проверен — и чем это отличается от «подключено»
 
-Критерий — реальный полезный текст опубликован штатной операцией, виден в
-основном содержимом страницы и переживает штатное обновление данных. Тестовых
-текстов на публичных страницах нет: каждый текст говорит о своём произведении
-и назван фактами снимка (ворота качества отказали первой редакции одного из
-них за оборот «доступны», обещающий то, чего снимок не подтверждает).
+Критерий владельца состоит из двух частей, и их нельзя путать: канал
+(доставка + отображение) и МАТЕРИАЛ (реальный полезный текст по правилам
+редакции). Ниже честно разделено.
+
+**Канал проверен публикацией и снятием** (три домена, механизм этой сессии):
 
 | домен | адрес проверки | что проверено |
 | --- | --- | --- |
-| an1meg0.site | `https://an1meg0.site/title/rassekaya-nebosvod/` | публикация через `publish` (механизм overlay), подтверждение операции `occurrences_in_main_block: 1`, независимая проверка: текст в `<main>` через 10 секунд, **без перезапуска витрины** |
-| 1lordserials1.online | `https://1lordserials1.online/title/007-doroga-k-millionu/` | публикация через очередь выпуска (`lords-03-edit-32282e67dc4c`), текст в `<main>` |
-| lordserials22.info | `https://lordserials22.info/title/1-11-vremya-dlya-vstrechi-s-toboy/` | публикация через очередь выпуска (`lords-05-edit-341ce807087f`), текст в `<main>` |
-| lordfilm47.space | `https://lordfilm47.space/title/puteshestvie-kino-prekrasnyy-mir/` | публикация SEO-сессии, подтверждена ею на странице |
-| lordserial33.biz | `https://lordserial33.biz/title/doktor-stoun-nauchnoe-buduschee-chast-3/` | то же |
-| zonafilm.space | `https://zonafilm.space/title/ledyanaya-stena/` | публикация подтверждена ранее |
+| an1meg0.site | `https://an1meg0.site/title/rassekaya-nebosvod/` | `publish` (overlay) → текст в `<main>` через 10 секунд, **без перезапуска витрины**; затем `unpublish` → текста нет |
+| 1lordserials1.online | `https://1lordserials1.online/title/007-doroga-k-millionu/` | очередь выпуска (`lords-03-edit-32282e67dc4c`) → текст в `<main>`; затем `unpublish` → текста нет |
+| lordserials22.info | `https://lordserials22.info/title/1-11-vremya-dlya-vstrechi-s-toboy/` | очередь выпуска (`lords-05-edit-341ce807087f`) → текст в `<main>`; `unpublish` подтверждён операцией |
+
+**Материал: мои три текста сняты, и правильно.** Главный редактор (SEO-сессия)
+назвал нарушения, я проверил `docs/editor/EDITORIAL_RULES.md` — они названы в
+правилах прямо: запрещены внутренние слова («каталог витрины», «снимок»,
+«заявлено»), запрещены рейтинги в тексте, пересказ полей каталога материалом
+не считается. Поэтому эти три домена в таблице подключения НЕ стоят:
+канал у них готов, материал ожидается от редакции. Ноль публикаций лучше
+слабого текста — это правило владельца, а не вкус.
+
+**Подключены материалом** (публикации редакции, подтверждены на страницах):
+
+| домен | адрес проверки |
+| --- | --- |
+| lordfilm47.space | `https://lordfilm47.space/title/puteshestvie-kino-prekrasnyy-mir/` |
+| lordserial33.biz | `https://lordserial33.biz/title/doktor-stoun-nauchnoe-buduschee-chast-3/` |
+| zonafilm.space | `https://zonafilm.space/title/ledyanaya-stena/` |
 
 Переживание доставки: у семейств lords и zona файл правок объявлен
 `data_contract.user_writable` — доставка каталога его не копирует, а
