@@ -252,6 +252,17 @@ https://yummyani.biz/anime/psayren — 404 (так же на yummyani.site и .o
   взято в аренду `editor/claude-indexing-operation-02` до 08:15Z; публикация не
   состоялась, черновик не записан.
 
+### §11 — состояние на 08:15 UTC
+
+Мост перезапущен в 08:12:34/08:12:43 и загрузил исправление: `prepare_material`
+для lordfilm47.space прошёл (08:14), мост не упал (healthz 200). Следующий отказ —
+`publish_material`: «подготовительный каталог /var/lib/site-cells/editorial
+недоступен (PermissionError)». Каталог создаёт владелец:
+`sudo bash automation/host/apply-editorial-staging-root.sh` (только mkdir,
+claude:root 0730, проверка записи; служб и сайтов не трогает). Задание
+`2b20fc0c58ef1902` («Путешествие Кино», lordfilm47.space) в аренде до 08:57Z,
+черновик в `/srv/sites/lords/runtime/overlays/lordfilm47.space/drafts.json`.
+
 ## Чего я не делал
 
 Не менял очередь, реестры, журналы и данные сайтов; не снимал аренды. В мосте

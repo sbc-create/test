@@ -2,18 +2,18 @@
   "note": "Блокеры редактора, которые из собранных данных не выводятся. Запись без evidence игнорируется (seo_operator/coverage.py). Снимается, когда блокер устранён и проверен.",
   "blockers": {
     "lordfilm47.space": {
-      "blocker": "мост падает по памяти на чтении фактов Lords (json 112 МБ при MemoryMax=512M); исправлено в коде c171507, нужен перезапуск моста",
-      "evidence": "docs/handoff/SEO_TO_ARCHITECT-001.md §11",
+      "blocker": "нет подготовительного каталога /var/lib/site-cells/editorial (PermissionError): каталог создаёт владелец — automation/host/apply-editorial-staging-root.sh; мост после перезапуска 08:12 работает (§11 устранён)",
+      "evidence": "publish_material lordfilm47.space 2026-10-09T08:14Z; docs/editor/EDITORIAL_LOG_20261009.md",
       "since": "2026-10-09"
     },
     "lordserial33.biz": {
-      "blocker": "мост падает по памяти на чтении фактов Lords (json 80 МБ при MemoryMax=512M); исправлено в коде c171507, нужен перезапуск моста",
-      "evidence": "docs/handoff/SEO_TO_ARCHITECT-001.md §11",
+      "blocker": "нет подготовительного каталога /var/lib/site-cells/editorial (PermissionError): каталог создаёт владелец — automation/host/apply-editorial-staging-root.sh; мост после перезапуска 08:12 работает (§11 устранён)",
+      "evidence": "publish_material lordfilm47.space 2026-10-09T08:14Z; docs/editor/EDITORIAL_LOG_20261009.md",
       "since": "2026-10-09"
     },
     "zonafilm.space": {
-      "blocker": "мост падает по памяти на чтении фактов (json 82 МБ при MemoryMax=512M); исправлено в коде c171507, нужен перезапуск моста",
-      "evidence": "docs/handoff/SEO_TO_ARCHITECT-001.md §11",
+      "blocker": "нет подготовительного каталога /var/lib/site-cells/editorial (PermissionError): каталог создаёт владелец — automation/host/apply-editorial-staging-root.sh; мост после перезапуска 08:12 работает (§11 устранён)",
+      "evidence": "publish_material lordfilm47.space 2026-10-09T08:14Z; docs/editor/EDITORIAL_LOG_20261009.md",
       "since": "2026-10-09"
     },
     "yummyani.site": {
