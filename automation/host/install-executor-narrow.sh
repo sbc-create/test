@@ -11,7 +11,12 @@
 #      подающая учётная запись источник изменить не может;
 #   3. проверяет, что установка не потеряет поля разрешений, записанные в
 #      корневую копию реестра командами владельца (indexing, owner_consent,
-#      release): при расхождении — отказ ДО изменений;
+#      release): при расхождении — отказ ДО изменений. Отказ печатает ОБА
+#      значения и готовый ключ согласия
+#      `--accept-registry-change <ячейка>.<поле>=<цифра было>-><цифра пакета>`:
+#      согласие привязано к измеренной паре значений, поэтому вчерашняя команда
+#      не примет сегодняшнее другое расхождение, а для `release` принимается
+#      только снятие удержания с записанным основанием (hold_history.evidence);
 #   4. снимает резервную копию того, что меняет: /usr/local/lib/site-factory-cell
 #      целиком (в tar) — и больше ничего не меняет;
 #   5. заменяет корневую копию factory/, schemas/, config/ и пишет
@@ -33,11 +38,16 @@
 # журнал); прежняя копия также остаётся рядом как /usr/local/lib/site-factory-cell.prev.
 set -Eeuo pipefail
 
-package=""; expect=""
+package=""; expect=""; accept=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --package) package="${2:-}"; shift ;;
     --expect-digest) expect="${2:-}"; shift ;;
+    # Согласие владельца на ОДНО названное расхождение реестра: ячейка, поле и
+    # ОБА значения. Общего «принять расхождения» здесь нет сознательно: такой
+    # ключ нельзя прочитать как решение, а молча принятое разрешение — это
+    # потерянное разрешение. Можно повторять для нескольких полей.
+    --accept-registry-change) accept="${accept}${accept:+ }${2:-}"; shift ;;
     *) echo "неизвестный аргумент: $1" >&2; exit 2 ;;
   esac
   shift
@@ -98,25 +108,79 @@ cmp -s "$SRC/automation/host/site-cell-executor.service" "$UNIT_DIR/site-cell-ex
 
 log "4. поля разрешений корневого реестра не теряются"
 if [ -f "$DEST/config/site-cells.json" ]; then
-  "$PY" - "$DEST/config/site-cells.json" "$SRC/config/site-cells.json" <<'PYKEEP' || die "установка потеряла бы разрешения корневого реестра"
-import json, sys
+  "$PY" - "$DEST/config/site-cells.json" "$SRC/config/site-cells.json" "$accept" \
+      > "$JOURNAL/registry-change.txt" 2>&1 <<'PYKEEP' && rc_r=0 || rc_r=$?
+import hashlib, json, sys
+
 было = {c["site_id"]: c for c in json.load(open(sys.argv[1], encoding="utf-8"))["cells"]}
 стало = {c["site_id"]: c for c in json.load(open(sys.argv[2], encoding="utf-8"))["cells"]}
+согласие = set(sys.argv[3].split()) if len(sys.argv) > 3 and sys.argv[3].strip() else set()
 ПОЛЯ = ("indexing", "owner_consent", "release")
-беды = []
+
+
+def цифра(значение) -> str:
+    """Короткий отпечаток значения: им согласие привязывается к ИЗМЕРЕННОЙ паре."""
+    сырое = json.dumps(значение, ensure_ascii=False, sort_keys=True)
+    return hashlib.sha256(сырое.encode("utf-8")).hexdigest()[:12]
+
+
+def основание(поле, старое, новое) -> str:
+    """Чем расхождение обосновано в самом пакете. Пусто — значит ничем.
+
+    Для `release` основание — запись `hold_history` с непустым `evidence`:
+    снятие удержания без записанного основания принимать нельзя даже с
+    согласием, иначе причина снятия исчезает вместе с прежним значением.
+    """
+    if поле != "release":
+        return "основание в этом поле не требуется"
+    снимается = bool((старое or {}).get("hold")) and not (новое or {}).get("hold")
+    if not снимается:
+        return "основание в этом поле не требуется"
+    журнал = [з for з in ((новое or {}).get("hold_history") or [])
+              if isinstance(з, dict) and str(з.get("evidence") or "").strip()]
+    if not журнал:
+        return ""
+    п = журнал[-1]
+    return (f"hold_history[-1]: снято {п.get('lifted_at')} "
+            f"{п.get('lifted_by')} — {str(п.get('evidence'))[:400]}")
+
+
+беды, принято = [], []
 for site, c in было.items():
     if site not in стало:
         беды.append(f"{site}: ячейки нет в пакете")
         continue
     for поле in ПОЛЯ:
-        if c.get(поле) != стало[site].get(поле):
-            беды.append(f"{site}.{поле}: установлено {json.dumps(c.get(поле), ensure_ascii=False)[:200]} "
-                        f"!= пакет {json.dumps(стало[site].get(поле), ensure_ascii=False)[:200]}")
+        старое, новое = c.get(поле), стало[site].get(поле)
+        if старое == новое:
+            continue
+        токен = f"{site}.{поле}={цифра(старое)}->{цифра(новое)}"
+        описание = (f"{site}.{поле}: установлено "
+                    f"{json.dumps(старое, ensure_ascii=False)[:300]} != пакет "
+                    f"{json.dumps(новое, ensure_ascii=False)[:300]}")
+        if токен not in согласие:
+            беды.append(описание + f"\n        согласие владельца: "
+                        f"--accept-registry-change {токен}")
+            continue
+        чем = основание(поле, старое, новое)
+        if not чем:
+            беды.append(описание + "\n        согласие названо, но в пакете нет "
+                        "записанного основания (release.hold_history с evidence): "
+                        "снятие удержания без основания не принимается")
+            continue
+        принято.append(описание + f"\n        принято владельцем ({токен})\n"
+                       f"        основание: {чем}")
+
 for б in беды:
-    print("   ", б)
-print(f"   ячеек сверено: {len(было)}, расхождений в разрешениях: {len(беды)}")
+    print("   [отказ]", б)
+for п in принято:
+    print("   [принято]", п)
+print(f"   ячеек сверено: {len(было)}, расхождений: {len(беды) + len(принято)}, "
+      f"из них принято владельцем: {len(принято)}")
 sys.exit(1 if беды else 0)
 PYKEEP
+  cat "$JOURNAL/registry-change.txt"
+  [ "$rc_r" -eq 0 ] || die "установка потеряла бы разрешения корневого реестра (см. выше)"
 fi
 
 log "5. резервная копия"
