@@ -273,6 +273,13 @@ EDITOR_DOMAINS = (
     # (izgnannyy-reinkarnirovannyy-..., текст в видимой разметке и в meta);
     # идентификатор первой записи домена даёт поиск самого приложения.
     "yummyani.org",
+    # Ночь 9→10 октября: контейнеры трёх витрин пересозданы с монтированием
+    # каталога накладок, показ подтверждён публикацией на каждой —
+    # yummyani7.site/anime/ya-vedma-..., yummyani7.info/anime/ya-perevoplotilsya-...,
+    # yummyani.biz/anime/silneyshaya-vedma-... (HTTP 200, текст в основном блоке).
+    "yummyani7.site",
+    "yummyani7.info",
+    "yummyani.biz",
 )
 #: Модель запускается не чаще раза в этот интервал (почасовой цикл).
 MIN_INTERVAL_S = 55 * 60

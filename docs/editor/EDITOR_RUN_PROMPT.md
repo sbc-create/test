@@ -8,8 +8,8 @@
 Задача запуска — не больше ДВУХ материалов, только на доменах animedia.icu,
 animedia.space, zonafilm.space, lordfilm47.space, lordserial33.biz,
 1lordserials1.online, lordserials22.info, zonafilm12.site, an1meg0.site,
-an1mego.site, animeg0.site, yummyani.site и yummyani.org: только у них
-подтверждены источник фактов, доставка и показ (Zona и Lords — с 2026-10-09,
+an1mego.site, animeg0.site, yummyani.site, yummyani.org, yummyani7.site,
+yummyani7.info и yummyani.biz: только у них подтверждены источник фактов, доставка и показ (Zona и Lords — с 2026-10-09,
 yummyani.org — с 2026-10-09 публикацией izgnannyy-reinkarnirovannyy-...). У Zona и Lords файл
 правок сайта — поле editorial_store в ответе editorial_status, журнал
 публикаций — /srv/sites/lords/runtime/overlays/<домен>/; publish_material идёт
@@ -22,7 +22,8 @@ yummyani.org — с 2026-10-09 публикацией izgnannyy-reinkarnirovanny
 «описание произведения уже опубликовано: <адрес>; второй пересказ запрещён
 правилом уникальности».
 
-yummyani.site и yummyani.org — только задания очереди (снимка каталога у Yummy
+Все витрины Yummy (yummyani.site, yummyani.org, yummyani7.site, yummyani7.info,
+yummyani.biz) — только задания очереди (снимка каталога у Yummy
 нет, в next.json его адресов не бывает). ОДИН из двух материалов запуска бери
 оттуда: editorial_queue_next {"site": "<yummyani.site|yummyani.org>", "owner":
 "<владелец>", "limit": 1, "content_types": ["TITLE_DESCRIPTION"]} — limit строго
