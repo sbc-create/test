@@ -1551,6 +1551,87 @@ def published_since(since: dt.datetime, roots: dict | None = None) -> list[dict]
     return sorted(last.values(), key=lambda r: r["at"])
 
 
+def publication_metrics(
+    since: dt.datetime,
+    verdicts: dict[str, dict],
+    roots: dict | None = None,
+) -> dict[str, dict]:
+    """Итоги публикаций за период по доменам — четыре разных числа, не одно.
+
+    * new_texts — страницы, получившие текст ВПЕРВЫЕ (раньше периода публикаций
+      этого слага на домене не было), с текстом, которого нет больше нигде в сети;
+    * urls — разные адреса, где за период был publish;
+    * edits — повторные publish: правка уже опубликованного или второй за период;
+    * visible — адреса, где ТЕКУЩИЙ текст подтверждён на странице (VISIBLE с тем же
+      отпечатком); not_visible — проверено и не видно; unchecked — ещё не проверялось.
+      Переклассификация ошибки исправлением не считается: только вердикт страницы.
+    """
+    events: list[dict] = []
+    digests_all: dict[str, set[str]] = {}
+    for _family, (root, form) in (roots if roots is not None else OVERLAY_ROOTS).items():
+        if not root.is_dir():
+            continue
+        for site_dir in sorted(root.iterdir()):
+            history = site_dir / "history.jsonl"
+            if not history.is_file():
+                continue
+            for line in history.read_text(encoding="utf-8").splitlines():
+                try:
+                    rec = json.loads(line)
+                except ValueError:
+                    continue
+                if rec.get("op") != "publish" or not rec.get("slug"):
+                    continue
+                url = f"https://{site_dir.name}" + form.format(slug=rec["slug"])
+                digest = str(rec.get("body_digest") or "")[:16]
+                if digest:
+                    digests_all.setdefault(digest, set()).add(url)
+                events.append(
+                    {
+                        "domain": site_dir.name,
+                        "url": url,
+                        "at": parse_iso(rec.get("at")),
+                        "digest": digest,
+                    }
+                )
+    out: dict[str, dict] = {}
+    seen_before = {(e["domain"], e["url"]) for e in events if e["at"] and e["at"] < since}
+    window = sorted((e for e in events if e["at"] and e["at"] >= since), key=lambda e: e["at"])
+    last_digest: dict[str, str] = {}
+    for e in window:
+        row = out.setdefault(
+            e["domain"],
+            {
+                "new_texts": [],
+                "urls": [],
+                "edits": 0,
+                "visible": [],
+                "not_visible": [],
+                "unchecked": [],
+            },
+        )
+        first_here = (e["domain"], e["url"]) not in seen_before and e["url"] not in row["urls"]
+        if first_here:
+            row["urls"].append(e["url"])
+            if len(digests_all.get(e["digest"], set())) <= 1:
+                row["new_texts"].append(e["url"])
+        else:
+            if e["url"] not in row["urls"]:
+                row["urls"].append(e["url"])
+            row["edits"] += 1
+        last_digest[e["url"]] = e["digest"]
+    for row in out.values():
+        for url in row["urls"]:
+            v = verdicts.get(url) or {}
+            if not last_digest.get(url) or v.get("digest") != last_digest[url]:
+                row["unchecked"].append(url)
+            elif v.get("verdict") == "VISIBLE":
+                row["visible"].append(url)
+            else:
+                row["not_visible"].append(url)
+    return out
+
+
 def owner_needs(defects_path: Path) -> list[str]:
     """Что требуется от владельца: открытые пункты зоны владельца."""
     items = _read_json(defects_path, {}).get("defects") or []
@@ -1625,7 +1706,17 @@ def render_daily(report: dict) -> str:
         (p["url"], p.get("at")): p["sources"]
         for p in (report.get("editor") or {}).get("published") or []
     }
-    add(f"**Опубликовано за сутки: {len(pubs)}**")
+    pm = report.get("publication_metrics") or {}
+
+    def total(key: str) -> int:
+        return sum(len(r[key]) if isinstance(r[key], list) else r[key] for r in pm.values())
+
+    add(
+        f"**Публикации за сутки: новых уникальных текстов {total('new_texts')}, "
+        f"адресов {total('urls')}, повторных правок {total('edits')}; видимость "
+        f"подтверждена {total('visible')}, не видно {total('not_visible')}, "
+        f"не проверено {total('unchecked')}**"
+    )
     for pub in pubs:
         key = (pub["url"], pub["at"])
         if key in src:
@@ -1786,6 +1877,24 @@ def render_daily(report: dict) -> str:
     for p in (pubs.get("checked") or [])[:30]:
         add(f"- {p['verdict']} {p['status']} {p['url']}")
     add("")
+
+    if pm:
+        add("## Публикации за сутки по доменам")
+        add(
+            "| домен | новых уникальных текстов | адресов | повторных правок | "
+            "видимость подтверждена | не видно | не проверено |"
+        )
+        add("| --- | --- | --- | --- | --- | --- | --- |")
+        for domain, r in sorted(pm.items()):
+            add(
+                f"| {domain} | {len(r['new_texts'])} | {len(r['urls'])} | {r['edits']} | "
+                f"{len(r['visible'])} | {len(r['not_visible'])} | {len(r['unchecked'])} |"
+            )
+        for _domain, r in sorted(pm.items()):
+            for url in r["not_visible"]:
+                add(f"- не видно на странице: {url}")
+        add("Успехом считается только «видимость подтверждена» для текущего текста.")
+        add("")
 
     if report.get("coverage"):
         from seo_operator import coverage
@@ -2434,6 +2543,9 @@ def step_daily_report(ctx: Context) -> Any:
         ),
         "publications": ctx.result("publications"),
         "coverage": ctx.result("coverage"),
+        "publication_metrics": publication_metrics(
+            ctx.now - dt.timedelta(days=1), ctx.state.get("publications") or {}
+        ),
         "stalled": stalled,
         "sitemap_not_measured": not_measured,
         "queue": queue.get("hygiene"),

@@ -1218,3 +1218,44 @@ def test_daily_writes_the_single_latest_report(env):
     assert "## Покрытие редактора по доменам" in latest
     assert "| a.example | нет подходящих заданий |" in latest
     assert "Редактор работает на 0 из" in latest
+
+
+def test_publication_metrics_separates_new_texts_edits_and_visibility(tmp_path):
+    root = tmp_path / "ov"
+    a, b = root / "a.example", root / "b.example"
+    a.mkdir(parents=True)
+    b.mkdir(parents=True)
+
+    def rec(at, slug, digest):
+        return json.dumps({"at": at, "op": "publish", "slug": slug, "body_digest": digest * 64})
+
+    a.joinpath("history.jsonl").write_text(
+        "\n".join(
+            [
+                rec("2026-10-07T10:00:00Z", "old", "0"),  # до периода
+                rec("2026-10-08T09:00:00Z", "old", "1"),  # правка уже опубликованного
+                rec("2026-10-08T10:00:00Z", "new", "2"),  # новый текст
+                rec("2026-10-08T11:00:00Z", "new", "3"),  # его вторая версия — правка
+                rec("2026-10-08T12:00:00Z", "copy", "4"),  # тот же текст, что на b
+            ]
+        ),
+        encoding="utf-8",
+    )
+    b.joinpath("history.jsonl").write_text(rec("2026-10-08T12:30:00Z", "copy", "4"), "utf-8")
+    verdicts = {
+        "https://a.example/t/new/": {"verdict": "VISIBLE", "digest": "3" * 16},
+        "https://a.example/t/old/": {"verdict": "VISIBLE", "digest": "0" * 16},  # старый текст
+        "https://a.example/t/copy/": {"verdict": "TEXT_NOT_VISIBLE", "digest": "4" * 16},
+    }
+    pm = regular.publication_metrics(
+        dt.datetime(2026, 10, 8, 8, 0, tzinfo=dt.timezone.utc),
+        verdicts,
+        roots={"x": (root, "/t/{slug}/")},
+    )
+    ra = pm["a.example"]
+    assert ra["new_texts"] == ["https://a.example/t/new/"]  # copy повторяет текст b
+    assert len(ra["urls"]) == 3 and ra["edits"] == 2
+    assert ra["visible"] == ["https://a.example/t/new/"]
+    assert ra["not_visible"] == ["https://a.example/t/copy/"]
+    assert ra["unchecked"] == ["https://a.example/t/old/"]  # вердикт был у прежнего текста
+    assert pm["b.example"]["new_texts"] == [] and pm["b.example"]["unchecked"]
