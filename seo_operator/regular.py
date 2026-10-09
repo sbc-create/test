@@ -116,6 +116,7 @@ EDITOR_SITES = {
     # (lords-03 e0b6d49, lords-05 a6de937), показ подтверждён на странице.
     "1lordserials1.online": "lords-03",
     "lordserials22.info": "lords-05",
+    "zonafilm12.site": "zona-03",
 }
 
 #: Снимки крупнее этого читаются по записи: полный json.loads снимка Zona
