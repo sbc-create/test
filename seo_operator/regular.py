@@ -97,6 +97,7 @@ SOURCES = {
     # коммитит — в репозиторий их переносит сессия).
     "changes_ledger_runs": REPO_ROOT / "var" / "editor-runs" / "ledger.jsonl",
     "facts_snapshots": Path("/srv/lords/.frontend"),
+    "coverage_blockers": REPO_ROOT / "config" / "editor-coverage-blockers.json",
 }
 
 #: Домены Animedia и их снимки фактов: только у этого семейства есть факты,
@@ -1786,6 +1787,13 @@ def render_daily(report: dict) -> str:
         add(f"- {p['verdict']} {p['status']} {p['url']}")
     add("")
 
+    if report.get("coverage"):
+        from seo_operator import coverage
+
+        add("## Покрытие редактора по доменам")
+        lines.extend(coverage.render(report["coverage"]))
+        add("")
+
     add("## Остановившиеся обновления (sitemap)")
     stalls = report.get("stalled") or []
     add("не обнаружено" if not stalls else "")
@@ -2337,6 +2345,35 @@ def step_diff(ctx: Context) -> Any:
     return diff
 
 
+def step_coverage(ctx: Context) -> Any:
+    """Где редактор работает, а где сайт только наблюдается (seo_operator/coverage.py)."""
+    from seo_operator import coverage
+
+    reuse = ctx.result("check") or {}
+    # Список сайтов — реестр фабрики; в тестах — файл из sources.
+    sites_file = ctx.sources.get("coverage_sites")
+    rows = coverage.build(
+        _read_json(sites_file, []) if sites_file else coverage.load_sites(),
+        availability=reuse.get("availability") or [],
+        published=published_items(),
+        verdicts=ctx.state.get("publications") or {},
+        queue_items=_read_json(ctx.sources["queue_registry"], {}).get("items") or [],
+        candidates=(ctx.result("candidates") or {}).get("candidates") or [],
+        analytics_props=_read_json(ctx.sources["analytics_registry"], {}).get("properties") or [],
+        blockers=coverage.load_blockers(
+            ctx.sources.get("coverage_blockers") or SOURCES["coverage_blockers"]
+        ),
+        cells={
+            c.get("domain"): c.get("status") or ""
+            for c in _read_json(ctx.sources["cells"], {}).get("cells") or []
+        },
+        now=ctx.now,
+    )
+    _write_json(ctx.root / "coverage.json", {"generated_at": iso(utcnow()), "rows": rows})
+    ctx.journal.write("editor_coverage", **coverage.summary(rows))
+    return rows
+
+
 def step_daily_report(ctx: Context) -> Any:
     reuse = ctx.result("check") or {}
     sitemaps = ctx.result("sitemaps") or {"domains": {}}
@@ -2396,6 +2433,7 @@ def step_daily_report(ctx: Context) -> Any:
             ctx.sources["analytics_snapshots"], ctx.now.astimezone(MSK).date()
         ),
         "publications": ctx.result("publications"),
+        "coverage": ctx.result("coverage"),
         "stalled": stalled,
         "sitemap_not_measured": not_measured,
         "queue": queue.get("hygiene"),
@@ -2619,6 +2657,7 @@ PLANS: dict[str, list[tuple[str, Callable[[Context], Any]]]] = {
         ("visited", step_visited),
         ("candidates", step_candidates),
         ("queue", step_queue),
+        ("coverage", step_coverage),
         ("report", step_daily_report),
     ],
     "hourly": [("summary", step_hourly)],

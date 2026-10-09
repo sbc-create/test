@@ -1,0 +1,35 @@
+{
+  "note": "Блокеры редактора, которые из собранных данных не выводятся. Запись без evidence игнорируется (seo_operator/coverage.py). Снимается, когда блокер устранён и проверен.",
+  "blockers": {
+    "lordfilm47.space": {
+      "blocker": "мост падает по памяти на чтении фактов Lords (json 112 МБ при MemoryMax=512M); исправлено в коде c171507, нужен перезапуск моста",
+      "evidence": "docs/handoff/SEO_TO_ARCHITECT-001.md §11",
+      "since": "2026-10-09"
+    },
+    "lordserial33.biz": {
+      "blocker": "мост падает по памяти на чтении фактов Lords (json 80 МБ при MemoryMax=512M); исправлено в коде c171507, нужен перезапуск моста",
+      "evidence": "docs/handoff/SEO_TO_ARCHITECT-001.md §11",
+      "since": "2026-10-09"
+    },
+    "zonafilm.space": {
+      "blocker": "мост падает по памяти на чтении фактов (json 82 МБ при MemoryMax=512M); исправлено в коде c171507, нужен перезапуск моста",
+      "evidence": "docs/handoff/SEO_TO_ARCHITECT-001.md §11",
+      "since": "2026-10-09"
+    },
+    "yummyani.site": {
+      "blocker": "мост пишет описания Yummy не в схеме приложения: хранилище отвергается, посетитель видит last-good",
+      "evidence": "docs/handoff/SEO_TO_ARCHITECT-001.md §7",
+      "since": "2026-10-08"
+    },
+    "yummyani.org": {
+      "blocker": "тот же путь записи, что у yummyani.site: описания Yummy не в схеме приложения",
+      "evidence": "docs/handoff/SEO_TO_ARCHITECT-001.md §7",
+      "since": "2026-10-08"
+    },
+    "an1meg0.site": {
+      "blocker": "описание записано в хранилище, на странице не отображается",
+      "evidence": "docs/handoff/SEO_TO_ARCHITECT-001.md §8",
+      "since": "2026-10-09"
+    }
+  }
+}

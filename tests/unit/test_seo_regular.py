@@ -129,7 +129,18 @@ def env(tmp_path, monkeypatch):
         "changes_ledger": tmp_path / "seo-changes.json",
         "changes_ledger_runs": tmp_path / "editor-ledger.jsonl",
         "facts_snapshots": tmp_path / "facts",
+        "coverage_sites": tmp_path / "coverage-sites.json",
+        "coverage_blockers": tmp_path / "coverage-blockers.json",
     }
+    sources["coverage_sites"].write_text(
+        json.dumps(
+            [
+                {"domain": c["domain"], "site_id": c["site_id"], "operations": ["publish"]}
+                for c in json.loads(cells.read_text(encoding="utf-8"))["cells"]
+            ]
+        ),
+        encoding="utf-8",
+    )
     return {"root": tmp_path / "state", "sources": sources, "tmp": tmp_path}
 
 
@@ -1203,3 +1214,7 @@ def test_daily_writes_the_single_latest_report(env):
         encoding="utf-8"
     )
     assert "не выполняется — канал доставки отменён владельцем" in latest
+    # Покрытие редактора: опубликованного текста нет — сайт не «работает».
+    assert "## Покрытие редактора по доменам" in latest
+    assert "| a.example | нет подходящих заданий |" in latest
+    assert "Редактор работает на 0 из" in latest
