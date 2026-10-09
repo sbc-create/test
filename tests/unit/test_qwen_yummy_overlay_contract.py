@@ -81,6 +81,9 @@ def test_без_известного_идентификатора_операци
     # Поиск приложения — третий источник; здесь он ничего не знает. В сеть
     # тест не выходит: опрос подменён.
     monkeypatch.setattr(editorial, "_title_id_из_поиска", lambda s, slug: "")
+    # Четвёртый источник — сама карточка; на стенде её тоже нет. Без этой
+    # заглушки тест ушёл бы в сеть за страницей живой витрины.
+    monkeypatch.setattr(editorial, "_title_id_со_страницы", lambda s, slug: "")
     with pytest.raises(editorial.ОперацияОтклонена, match="title_id"):
         editorial._дополнить_под_приложение(СайтYummy(), _запись(slug="новый-слаг"),
                                             {"items": []})
@@ -223,3 +226,62 @@ def test_состав_полей_взят_из_схемы_приложения()
     assert set(editorial.ПОЛЯ_ПРИЛОЖЕНИЯ_YUMMY) == {
         "title_id", "slug", "canonical_path", "content_id", "content_type",
         "body", "content_digest", "published_at", "methodology_version"}
+
+def test_идентификатор_читается_с_самой_карточки(monkeypatch):
+    """Поток страницы печатает пару `slug`/`publicSlug` — это и есть ответ.
+
+    Измерено 2026-10-09 на `yummyani.site/anime/holst`: в разметке ответа
+    стоит `{"slug":"01a11d26-…","publicSlug":"holst"}`, и это тот самый
+    идентификатор, по которому карточка запрашивает свой тред комментариев.
+    Прежнее измерение «страница идентификатор не печатает» касалось JSON-LD и
+    мета-тегов и для них остаётся верным.
+
+    Почему источник стоит ПЕРЕД поиском: пара напечатана рядом с нашим
+    публичным слагом, поэтому ошибиться произведением нельзя. Поиск отвечает
+    по названию, и совпадение приходится сверять ссылкой.
+    """
+    class СайтSite(СайтYummy):
+        domain = "yummyani.site"
+
+    страницы = {
+        # Порядок полей встречается оба; выражение принимает любой.
+        "holst": '["$","$L21",null,{"title":{"slug":"01a11d26-8d48-7890-850f-bca5f4926e42","publicSlug":"holst","name":"Холст"}}]',
+        "obratno": '{"publicSlug":"obratno","slug":"01a11d26-8d48-7890-850f-bca5f49200aa"}',
+        # Чужая пара в потоке (блок рекомендаций) не должна приниматься за свою.
+        "nash": '{"slug":"01a11d26-0000-0000-0000-000000000001","publicSlug":"chuzhoy"}',
+    }
+
+    def подставной(адрес):
+        слаг = адрес.rsplit("/", 1)[-1]
+        тело = страницы[слаг].encode("utf-8")
+
+        class Ответ:
+            def read(self): return тело
+            def __enter__(self): return self
+            def __exit__(self, *_): return False
+        return Ответ()
+
+    monkeypatch.setattr(registry, "адрес_тайтла",
+                        lambda s, slug: f"https://{s.domain}/anime/{slug}")
+    monkeypatch.setattr(editorial.urllib.request, "urlopen",
+                        lambda запрос, **кв: подставной(запрос.full_url))
+    assert (editorial._title_id_со_страницы(СайтSite(), "holst")
+            == "01a11d26-8d48-7890-850f-bca5f4926e42")
+    assert (editorial._title_id_со_страницы(СайтSite(), "obratno")
+            == "01a11d26-8d48-7890-850f-bca5f49200aa")
+    assert editorial._title_id_со_страницы(СайтSite(), "nash") == "", (
+        "пара чужого слага принята за свою — так приписывают текст другому "
+        "произведению")
+
+
+def test_страница_опрашивается_раньше_поиска(monkeypatch, tmp_path):
+    """Порядок источников закреплён: карточка, потом поиск."""
+    monkeypatch.setattr(registry, "путь_доставки",
+                        lambda s: str(tmp_path / "title-overlays.json"))
+    звонки = []
+    monkeypatch.setattr(editorial, "_title_id_со_страницы",
+                        lambda s, slug: звонки.append("страница") or "со-страницы")
+    monkeypatch.setattr(editorial, "_title_id_из_поиска",
+                        lambda s, slug: звонки.append("поиск") or "из-поиска")
+    assert editorial._известный_title_id(СайтYummy(), "слаг", {"items": []}) == "со-страницы"
+    assert звонки == ["страница"], "поиск вызван, хотя страница уже ответила"
