@@ -88,7 +88,9 @@ from factory.qwen import editorial, indexing, registry
            "publish_material", "unpublish_material", "register_owner_consent",
            "editorial_queue_next", "editorial_queue_result",
            "editorial_queue_register", "editorial_queue_reopen",
-           "editorial_queue_annul")
+           "editorial_queue_annul",
+           # Комментарии под произведением — отдельная сущность от новостей.
+           "prepare_comment", "publish_comment", "unpublish_comment")
 
 #: Только чтение: пишущие инструменты не объявляются в `tools/list` и
 #: отказывают при вызове. Включается ключом `--read-only` или переменной
@@ -1644,6 +1646,86 @@ def инструмент_области_адреса(аргументы: dict) -
 
 #: Имена СОВПАДАЮТ с теми, что уже есть в сессии Qwen: переключение коннектора
 #: не должно требовать правок на его стороне.
+
+# ----------------------------------------------- комментарии под произведением
+
+def инструмент_состояния_комментариев(аргументы: dict) -> dict[str, Any]:
+    """Что уже опубликовано под произведением. Только чтение."""
+    from factory.qwen import comments as комм
+
+    сайт = str(аргументы.get("site") or "").strip()
+    слаг = str(аргументы.get("slug") or "").strip()
+    if not (сайт and слаг):
+        raise ОшибкаИнструмента("нужны параметры site и slug")
+    try:
+        итог = комм.состояние(сайт, слаг)
+    except комм.ОперацияОтклонена as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "comments": итог,
+            "next_action": ("повтор того же текста не записывается; перед "
+                            "подготовкой сверьте, нет ли уже вашего наблюдения")}
+
+
+def инструмент_подготовки_комментария(аргументы: dict) -> dict[str, Any]:
+    """Черновик комментария. Публичного ничего не меняется."""
+    from factory.qwen import comments as комм
+
+    сайт = str(аргументы.get("site") or "").strip()
+    слаг = str(аргументы.get("slug") or "").strip()
+    тело = str(аргументы.get("body") or "")
+    if not (сайт and слаг and тело):
+        raise ОшибкаИнструмента("нужны параметры site, slug и body")
+    try:
+        итог = комм.подготовить(сайт, слаг, тело,
+                                author=str(аргументы.get("author") or "qwen"))
+    except комм.ОперацияОтклонена as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "prepared": итог,
+            "next_action": "публикует publish_comment; подпись задаёт сеть"}
+
+
+def инструмент_публикации_комментария(аргументы: dict) -> dict[str, Any]:
+    """Опубликовать комментарий ПОД ПРОИЗВЕДЕНИЕМ и подтвердить его видимость.
+
+    Не новость: для раздела /posts есть publish_post, и подменять одно другим
+    запрещено решением владельца.
+    """
+    from factory.qwen import comments as комм
+
+    сайт = str(аргументы.get("site") or "").strip()
+    слаг = str(аргументы.get("slug") or "").strip()
+    if not (сайт and слаг):
+        raise ОшибкаИнструмента("нужны параметры site и slug")
+    try:
+        итог = комм.опубликовать(сайт, слаг,
+                                 author=str(аргументы.get("author") or "qwen"),
+                                 тело=аргументы.get("body") or None)
+    except комм.ОперацияОтклонена as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "published": итог,
+            "next_action": ("проверьте страницу произведения: блок "
+                            "комментариев рисуется в браузере, поэтому в HTML "
+                            "ответа текста не будет")}
+
+
+def инструмент_снятия_комментария(аргументы: dict) -> dict[str, Any]:
+    """Снять ОДИН комментарий по идентификатору. Остальные не затрагиваются."""
+    from factory.qwen import comments as комм
+
+    сайт = str(аргументы.get("site") or "").strip()
+    ид = str(аргументы.get("comment_id") or "").strip()
+    if not (сайт and ид):
+        raise ОшибкаИнструмента("нужны параметры site и comment_id")
+    try:
+        итог = комм.снять(сайт, ид,
+                          author=str(аргументы.get("author") or "qwen"),
+                          действие=str(аргументы.get("action") or "delete"))
+    except комм.ОперацияОтклонена as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "unpublished": итог,
+            "next_action": "снятие подтверждено чтением треда записи"}
+
+
 ИНСТРУМЕНТЫ: dict[str, dict[str, Any]] = {
     "system_readiness": {
         "обработчик": инструмент_готовности,
@@ -2002,6 +2084,48 @@ def инструмент_области_адреса(аргументы: dict) -
             "author": {"type": "string"}},
             "required": ["site", "slug"], "additionalProperties": False},
     },
+    "comments_status": {
+        "обработчик": инструмент_состояния_комментариев,
+        "описание": ("Комментарии под произведением: кто и что опубликовал. "
+                     "Только чтение; этим же проверяется дубль до записи."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"}, "slug": {"type": "string"}},
+            "required": ["site", "slug"], "additionalProperties": False},
+    },
+    "prepare_comment": {
+        "обработчик": инструмент_подготовки_комментария,
+        "описание": ("Черновик комментария ПОД ПРОИЗВЕДЕНИЕМ. Подпись задаёт "
+                     "сеть («Редакция»), выдуманных зрителей не бывает. "
+                     "Публичного следствия нет."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"}, "slug": {"type": "string"},
+            "body": {"type": "string"}, "author": {"type": "string"}},
+            "required": ["site", "slug", "body"], "additionalProperties": False},
+    },
+    "publish_comment": {
+        "обработчик": инструмент_публикации_комментария,
+        "описание": ("Опубликовать комментарий под произведением: повтор "
+                     "проверяется ДО записи, видимость — чтением списка. Это "
+                     "НЕ новость раздела /posts: подменять одно другим "
+                     "запрещено."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"}, "slug": {"type": "string"},
+            "body": {"type": "string",
+                     "description": "текст; без него берётся черновик"},
+            "author": {"type": "string"}},
+            "required": ["site", "slug"], "additionalProperties": False},
+    },
+    "unpublish_comment": {
+        "обработчик": инструмент_снятия_комментария,
+        "описание": ("Снять ОДИН комментарий по идентификатору через маршрут "
+                     "модерации приложения. Сообщения посетителей не "
+                     "затрагиваются: операция принимает один id."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"}, "comment_id": {"type": "string"},
+            "action": {"type": "string", "enum": ["delete", "reject", "spam", "approve"]},
+            "author": {"type": "string"}},
+            "required": ["site", "comment_id"], "additionalProperties": False},
+    },
     "posts_status": {
         "обработчик": инструмент_состояния_новостей,
         "описание": ("Что опубликовано, что в черновиках, чем доставляется и "
@@ -2191,6 +2315,9 @@ def место_исключения(ош: BaseException) -> str:
     "rollback_site": "rollback",
     "register_owner_consent": "owner-consent",
     "refresh_executor_access": "executor-access",
+    "prepare_comment": "comment-prepare",
+    "publish_comment": "comment-publish",
+    "unpublish_comment": "comment-unpublish",
 }
 
 #: Поля, которыми инструмент называет исполнителя. Порядок — приоритет.
