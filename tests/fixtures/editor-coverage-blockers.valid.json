@@ -1,0 +1,10 @@
+{
+  "note": "fixture",
+  "blockers": {
+    "example.site": {
+      "blocker": "публикация записана, на странице не видна",
+      "evidence": "docs/handoff/SEO_TO_ARCHITECT-001.md §8",
+      "since": "2026-10-09"
+    }
+  }
+}

@@ -37,6 +37,8 @@ MAPPING = {
     "seo-module-defects.json": "seo-module-defects.schema.json",
     # Журнал изменений страниц: без проблемы, доказательства и гипотезы правка не учитывается.
     "seo-changes.json": "seo-changes.schema.json",
+    # Блокеры редактора, не выводимые из данных: без доказательства не принимаются.
+    "editor-coverage-blockers.json": "editor-coverage-blockers.schema.json",
 }
 
 # Производные артефакты: файл порождается из другого источника и в некоторых

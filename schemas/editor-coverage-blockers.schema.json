@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sbc-create/test/schemas/editor-coverage-blockers.schema.json",
+  "title": "Editor Coverage Blockers",
+  "description": "Blockers of the editor on a domain that cannot be derived from collected data. A blocker without evidence is not a blocker.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["blockers"],
+  "properties": {
+    "note": {"type": "string"},
+    "blockers": {
+      "type": "object",
+      "propertyNames": {"pattern": "^[a-z0-9.-]+\\.[a-z]{2,}$"},
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["blocker", "evidence", "since"],
+        "properties": {
+          "blocker": {"type": "string", "minLength": 10},
+          "evidence": {"type": "string", "minLength": 3},
+          "since": {"type": "string", "format": "date"}
+        }
+      }
+    }
+  }
+}
