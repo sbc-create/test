@@ -306,14 +306,14 @@ description, genre, countryOfOrigin. Теперь `yummyani.org` и `yummyani.si
 
 ```
 sudo bash /home/claude/wt-portable-site-cell-01/automation/host/install-executor-narrow.sh \
-  --package /home/claude/wt-portable-site-cell-01/var/install-packages/pkg-3a818a99bd66 \
-  --expect-digest 3a818a99bd6697d71b31abdd26a1984d6914c78c828d7d7ce9946e8290f9ba2e \
+  --package /home/claude/wt-portable-site-cell-01/var/install-packages/pkg-74d66091a63c \
+  --expect-digest 74d66091a63c9844e9f9c525fce9097cca54f300bf5e28ac1e1d521e884a22f6 \
   --accept-registry-change 'animedia-02.release=a1bb833bb0d2->9b52b304df3f'
 ```
 
 Что она меняет: корневую копию `/usr/local/lib/site-factory-cell`
-(`factory/`, `schemas/`, `config/`) на содержимое пакета `pkg-3a818a99bd66`
-(коммит `b0c8818862c4`) и файл `cell-install.json`. Единственное изменение
+(`factory/`, `schemas/`, `config/`) на содержимое пакета `pkg-74d66091a63c`
+(коммит `0b8557024ed8`) и файл `cell-install.json`. Единственное изменение
 разрешений — `animedia-02.release`: `hold: true` → `hold: false` с переносом
 прежней причины в `hold_history` (основание — выше в этом разделе). Ключ
 согласия привязан к ОБОИМ значениям: если состояние изменилось, команда
@@ -363,3 +363,22 @@ git, журнал и отчёт не попадает). Решение влад�
 Qwen на `yummyani.org` — это ВОПРОСЫ редакции («Какой источник подтверждает…»),
 а не комментарии к произведениям, и они лежат в механизме новостей. Подменять
 комментарий новостью запрещено владельцем, поэтому ни один из них не публикуется.
+
+### Запуск редактора 20261009T154501Z: что он показал
+
+Опубликованы и видимы два материала:
+`animeg0.site/title/klevatess-2-korol-demonicheskih-zverey-i-legenda-o-lozhnom-geroe/`
+и `an1meg0.site/title/beybleyd-x/` (200, текст в видимой разметке).
+
+Публикация на `yummyani.org` отказала по `title_id`, хотя карточка находится
+поиском, и редактор записал «причина не установлена». Причина: процесс моста
+запущен 14:46:34Z, а поиск идентификатора добавлен в 15:14 — модули читаются
+один раз при старте. Ответ моста называл коммит рабочего дерева (`a1c76a9`),
+который правку уже содержит, поэтому изнутри вопрос был неразрешим. Исправлено:
+`environment.code` теперь несёт `process_started_at` и пояснение, а промпт
+редактора сравнивает время запуска, а не коммит. У обоих новых материалов
+`provenance.sources` пуст по той же причине — поле появилось в 15:39.
+
+Это и есть содержание перезапуска `site-factory-mcp.service`: он включает поиск
+идентификатора для первых записей доменов Yummy, запись источников рядом с
+текстом, мягкую классификацию отказа по правам и время запуска в ответе.
