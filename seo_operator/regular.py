@@ -128,7 +128,7 @@ EDITOR_SITES = {
 
 #: Снимки крупнее этого читаются по записи: полный json.loads снимка Zona
 #: (82 МБ) не помещается в MemoryMax=512M суточной службы.
-STREAM_DETAILS_BYTES = 40_000_000
+STREAM_DETAILS_BYTES = 5_000_000
 
 #: Сколько пробелов-фильмов/сериалов (без Shikimori, с IMDb ID) держать на сайт
 #: из крупного снимка: лучшие по рейтингу каталога и году. Рейтинг служит только
@@ -2440,12 +2440,14 @@ def _details_for_editor(path: Path, wanted: set[str] | None = None) -> dict:
         return out
 
     def take(slug: str, rec: dict) -> bool:
+        if wanted is not None and slug in wanted:
+            # Посещаемые — с описанием: по нему ищутся дубли синопсиса icu/space.
+            keep[slug] = light(rec)
+            return False
         if str(rec.get("description") or "").strip():
             return False
         shiki = (rec.get("ratings_by_source") or {}).get("shikimori") or {}
-        if (wanted is not None and slug in wanted) or (
-            shiki.get("match_state") == "external_id_exact+title_verified"
-        ):
+        if shiki.get("match_state") == "external_id_exact+title_verified":
             keep[slug] = light(rec)
         elif (rec.get("external_ids") or {}).get("imdb") and rec.get("playable", True):
             ключ = (float(rec.get("imdb_rating") or 0), int(rec.get("year") or 0), slug)
