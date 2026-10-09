@@ -306,13 +306,13 @@ description, genre, countryOfOrigin. Теперь `yummyani.org` и `yummyani.si
 
 ```
 sudo bash /home/claude/wt-portable-site-cell-01/automation/host/install-executor-narrow.sh \
-  --package /home/claude/wt-portable-site-cell-01/var/install-packages/pkg-47847614a160 \
-  --expect-digest 47847614a1608411fd0859efd2fe6b7d1a89baf790a170c7429d0ededce4a87a \
+  --package /home/claude/wt-portable-site-cell-01/var/install-packages/pkg-ca85c7b2813b \
+  --expect-digest ca85c7b2813b5f594c9005eeeb361f0771938ead970589ca0084a5d3067c802e \
   --accept-registry-change 'animedia-02.release=a1bb833bb0d2->9b52b304df3f'
 ```
 
 Что она меняет: корневую копию `/usr/local/lib/site-factory-cell`
-(`factory/`, `schemas/`, `config/`) на содержимое пакета `pkg-47847614a160`
+(`factory/`, `schemas/`, `config/`) на содержимое пакета `pkg-ca85c7b2813b`
 (коммит `0b8557024ed8`) и файл `cell-install.json`. Единственное изменение
 разрешений — `animedia-02.release`: `hold: true` → `hold: false` с переносом
 прежней причины в `hold_history` (основание — выше в этом разделе). Ключ
@@ -550,7 +550,7 @@ sudo systemctl restart site-factory-mcp.service
 затронута (сверено по provenance).
 
 Полный прогон на неизменяемом дереве: 6383 passed, 64 skipped, 12 xfailed, ноль
-падений. Пакет установки пересобран (pkg-47847614a160, коммит fe01abd4ebce) и
+падений. Пакет установки пересобран (pkg-ca85c7b2813b, коммит fe01abd4ebce) и
 повторно проверен репетицией целиком.
 
 ## 9. [КОММЕНТАРИИ И РЕЦЕНЗИИ] 2026-10-09, 18:40–19:20 UTC
@@ -613,7 +613,7 @@ sudo systemctl restart site-factory-mcp.service
 ### Прогон и пакет на конец цикла (19:20 UTC)
 
 Полный `tests/unit` на неизменяемом дереве: 6442 passed, 64 skipped, 12 xfailed,
-ноль падений. Пакет установки пересобран (pkg-47847614a160, коммит
+ноль падений. Пакет установки пересобран (pkg-ca85c7b2813b, коммит
 3bbf8109c653) и заново проверен репетицией целиком: семь шагов,
 check-installed «полностью совпадает», updater-check код 0.
 
