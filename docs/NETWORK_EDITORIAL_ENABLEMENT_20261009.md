@@ -306,13 +306,13 @@ description, genre, countryOfOrigin. Теперь `yummyani.org` и `yummyani.si
 
 ```
 sudo bash /home/claude/wt-portable-site-cell-01/automation/host/install-executor-narrow.sh \
-  --package /home/claude/wt-portable-site-cell-01/var/install-packages/pkg-0a14b167c8d4 \
-  --expect-digest 0a14b167c8d4fe570f3d3a17de92a7438b74dd181f3e7f6840d0fa1f8624e6be \
+  --package /home/claude/wt-portable-site-cell-01/var/install-packages/pkg-47847614a160 \
+  --expect-digest 47847614a1608411fd0859efd2fe6b7d1a89baf790a170c7429d0ededce4a87a \
   --accept-registry-change 'animedia-02.release=a1bb833bb0d2->9b52b304df3f'
 ```
 
 Что она меняет: корневую копию `/usr/local/lib/site-factory-cell`
-(`factory/`, `schemas/`, `config/`) на содержимое пакета `pkg-0a14b167c8d4`
+(`factory/`, `schemas/`, `config/`) на содержимое пакета `pkg-47847614a160`
 (коммит `0b8557024ed8`) и файл `cell-install.json`. Единственное изменение
 разрешений — `animedia-02.release`: `hold: true` → `hold: false` с переносом
 прежней причины в `hold_history` (основание — выше в этом разделе). Ключ
@@ -550,7 +550,7 @@ sudo systemctl restart site-factory-mcp.service
 затронута (сверено по provenance).
 
 Полный прогон на неизменяемом дереве: 6383 passed, 64 skipped, 12 xfailed, ноль
-падений. Пакет установки пересобран (pkg-0a14b167c8d4, коммит fe01abd4ebce) и
+падений. Пакет установки пересобран (pkg-47847614a160, коммит fe01abd4ebce) и
 повторно проверен репетицией целиком.
 
 ## 9. [КОММЕНТАРИИ И РЕЦЕНЗИИ] 2026-10-09, 18:40–19:20 UTC
@@ -609,3 +609,22 @@ sudo systemctl restart site-factory-mcp.service
 запущен 18:43:33Z, объявление сделано позже — до перезапуска часовой запуск
 комментарии публиковать не сможет, и это названо в промпте как блокер
 перезапуска, а не повод идти через `/posts`.
+
+### Прогон и пакет на конец цикла (19:20 UTC)
+
+Полный `tests/unit` на неизменяемом дереве: 6442 passed, 64 skipped, 12 xfailed,
+ноль падений. Пакет установки пересобран (pkg-47847614a160, коммит
+3bbf8109c653) и заново проверен репетицией целиком: семь шагов,
+check-installed «полностью совпадает», updater-check код 0.
+
+### Сбой и его причина (записано как своя ошибка)
+
+Пересоздание `web-org` по моей команде ввело контейнер в цикл перезапуска, и
+`yummyani.org` отвечал 503 около двух минут. Причина: compose-секрет
+монтируется с правами ИСХОДНОГО файла (0600 у `claude`), а приложение работает
+пользователем `node` — `grep` в обёртке точки входа получал
+`Permission denied`, и защита честно отказывала в старте. Исправлено правами
+файла (0644 при каталоге 0750: обход каталога закрыт, а внутри контейнера файл
+читается). Вывод, который стоит помнить: в неswarm-режиме compose НЕ
+перекладывает секрет в root:root 0444 — он биндит файл как есть, и права
+источника и есть права внутри.
