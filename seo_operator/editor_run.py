@@ -358,6 +358,20 @@ def gate(
     except (OSError, ValueError):
         cands = []
     fresh = [c for c in cands if _key(c.get("url", "")) not in done]
+    if not fresh and refresh and _refresh_candidates(candidates, now):
+        # Пересчёт и при открытых заданиях очереди: 2026-10-09 после 17:35 в
+        # очереди Yummy было 245 заданий, и исчерпанный список кандидатов не
+        # обновлялся — запуски шли с пустым next.json по остальным доменам.
+        return gate(
+            now,
+            registry=registry,
+            leases=leases,
+            events=events,
+            candidates=candidates,
+            state=state,
+            refresh=False,
+            recent=recent,
+        )
     if fresh:
         fresh = rotate(fresh, recent_publications(now) if recent is None else recent)
     if open_tasks:
