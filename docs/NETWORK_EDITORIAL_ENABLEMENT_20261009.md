@@ -81,7 +81,7 @@
 | --- | --- | --- |
 | an1meg0.site | `https://an1meg0.site/title/rassekaya-nebosvod/` | `publish` (overlay) → текст в `<main>` через 10 секунд, **без перезапуска витрины**; затем `unpublish` → текста нет |
 | 1lordserials1.online | `https://1lordserials1.online/title/007-doroga-k-millionu/` | очередь выпуска (`lords-03-edit-32282e67dc4c`) → текст в `<main>`; затем `unpublish` → текста нет |
-| lordserials22.info | `https://lordserials22.info/title/1-11-vremya-dlya-vstrechi-s-toboy/` | очередь выпуска (`lords-05-edit-341ce807087f`) → текст в `<main>`; `unpublish` подтверждён операцией |
+| lordserials22.info | `https://lordserials22.info/title/1-11-vremya-dlya-vstrechi-s-toboy/` | очередь выпуска (`lords-05-edit-341ce807087f`) → текст в `<main>`; затем `unpublish` → текста нет (первая проверка снятия у меня показала «текст на месте» по МОЕЙ ошибке: меткой я взял оригинальное название `Time to Be Together 1:11`, а оно есть в снимке само по себе и печатается в карточке; проверка по уникальной фразе текста — чисто) |
 
 **Материал: мои три текста сняты, и правильно.** Главный редактор (SEO-сессия)
 назвал нарушения, я проверил `docs/editor/EDITORIAL_RULES.md` — они названы в
