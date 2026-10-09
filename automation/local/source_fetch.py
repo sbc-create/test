@@ -1,6 +1,7 @@
 """Чтение редакционных источников фактов — только разрешённым путём (D199).
 
     python3 automation/local/source_fetch.py shikimori <shikimori_id>
+    python3 automation/local/source_fetch.py credits <shikimori_id>
     python3 automation/local/source_fetch.py official <shikimori_id>
 
 * `shikimori` — карточка и официальные ссылки через API Shikimori (shikimori.io,
@@ -90,8 +91,54 @@ def shikimori(anime_id: int) -> dict:
         "aired_on": d.get("aired_on"),
         "released_on": d.get("released_on"),
         "description": desc or None,
+        "english": d.get("english"),
+        "japanese": d.get("japanese"),
+        "synonyms": d.get("synonyms"),
+        "license_name_ru": d.get("license_name_ru"),
+        "studios": [x.get("name") for x in d.get("studios") or []],
         "official_links": [x.get("url") for x in links if x.get("kind") == "official_site"],
     }
+
+
+def _api(path: str):
+    status, raw = _get(f"{SHIKIMORI}/api/{path}")
+    _log(source="src-shikimori", url=f"{SHIKIMORI}/api/{path}", status=status)
+    return json.loads(raw) if status == 200 else None
+
+
+def credits(anime_id: int) -> dict:
+    """Кто автор оригинала и где он выходил: роли и связанная манга того же ID."""
+    info = shikimori(anime_id)
+    if not info.get("ok"):
+        return info
+    roles = _api(f"animes/{anime_id}/roles") or []
+    creators = [
+        {
+            "person": (r.get("person") or {}).get("name"),
+            "person_ru": (r.get("person") or {}).get("russian"),
+            "roles": r.get("roles"),
+        }
+        for r in roles
+        if r.get("person") and any("Original" in x for x in r.get("roles") or [])
+    ]
+    sources = []
+    for rel in _api(f"animes/{anime_id}/related") or []:
+        manga = rel.get("manga")
+        if not manga or rel.get("relation_russian") != "Адаптация":
+            continue
+        m = _api(f"mangas/{manga['id']}") or {}
+        sources.append(
+            {
+                "manga_id": manga["id"],
+                "kind": manga.get("kind"),
+                "russian": manga.get("russian"),
+                "name": manga.get("name"),
+                "status": m.get("status"),
+                "publishers": [p.get("name") for p in m.get("publishers") or []],
+                "url": f"{SHIKIMORI}/mangas/{manga['id']}",
+            }
+        )
+    return {**info, "original_creators": creators, "adapted_from": sources}
 
 
 def _robots_allows(url: str) -> tuple[bool, str]:
@@ -140,10 +187,11 @@ def official(anime_id: int) -> dict:
 
 
 def main(argv: list[str]) -> int:
-    if len(argv) != 2 or argv[0] not in ("shikimori", "official"):
+    commands = {"shikimori": shikimori, "credits": credits, "official": official}
+    if len(argv) != 2 or argv[0] not in commands:
         print(__doc__)
         return 64
-    result = (shikimori if argv[0] == "shikimori" else official)(int(argv[1]))
+    result = commands[argv[0]](int(argv[1]))
     print(json.dumps(result, ensure_ascii=False, indent=1))
     return 0 if result.get("ok") else 3
 

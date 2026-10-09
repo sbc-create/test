@@ -23,6 +23,10 @@
      кандидата (shikimori_id) или из снимка (ratings_by_source.shikimori.external_id,
      иначе external_ids.mal). Поле russian ответа обязано совпасть с названием
      карточки, иначе итог IDENTITY_UNCLEAR и текст не пишется;
+   * python3 automation/local/source_fetch.py credits <shikimori_id> — то же плюс
+     студия, автор оригинала, первоисточник с его статусом и журналом. Студию,
+     автора, журнал и «манга выходит/выходила» пиши только по этому ответу;
+     издательства, которого в ответе нет, не называй;
    * python3 automation/local/source_fetch.py official <shikimori_id> — одна страница
      официального сайта по ссылке Shikimori; отказ robots.txt — не обходить.
    MyAnimeList не читать (robots.txt запрещает ИИ-агентам). Других сайтов не открывать.
