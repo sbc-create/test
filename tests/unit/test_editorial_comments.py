@@ -90,6 +90,10 @@ def test_подтверждение_берётся_из_списка(витри�
         raise AssertionError("должен вызываться подменённый _запрос")
 
     def подставной(адрес, *, тело=None, домен):
+        # Публикация сперва спрашивает маршрут модерации: 401 означает, что
+        # снятие возможно, и держать публикацию не за что.
+        if "/api/admin/comments/" in адрес:
+            return 401, json.dumps({"code": "unauthorized"})
         if тело is None:
             return 200, json.dumps({"total": len(записи), "comments": записи})
         записи.append({"id": "c7", "authorName": "Редакция",
@@ -110,6 +114,8 @@ def test_подтверждение_берётся_из_списка(витри�
 def test_невидимый_комментарий_это_отказ(витрина, monkeypatch):
     """Записали, но список не отдаёт — отказ, а не «опубликовано»."""
     def подставной(адрес, *, тело=None, домен):
+        if "/api/admin/comments/" in адрес:
+            return 401, json.dumps({"code": "unauthorized"})
         if тело is None:
             return 200, json.dumps({"total": 0, "comments": []})
         return 201, json.dumps({"id": "c9"})
@@ -138,3 +144,67 @@ def test_права_qwen_на_комментарии(витрина):
     with pytest.raises(actors.ОперацияНеРазрешена):
         comments.опубликовать("yummyani.org", "кошка",
                               author="qwen/editor-automation/run-3")
+
+def test_без_пути_снятия_публикации_нет(витрина, monkeypatch):
+    """У изменения обязан быть откат, а у этого его нет — измерено.
+
+    Приложение публикует комментарий сразу (`status: published`), а снимает
+    только маршрут модерации при настроенном ADMIN_MODERATION_SECRET. 2026-10-09
+    переменная не задана ни у web-org, ни у web-site: опубликованное сообщение
+    снять было бы нечем. Отказ называет и чем измерено, и чем закрывается.
+    """
+    def подставной(адрес, *, тело=None, домен):
+        if "/api/admin/comments/" in адрес:
+            return 503, '{"code": "not_configured"}'
+        return 200, json.dumps({"total": 0, "comments": []})
+
+    monkeypatch.setattr(comments, "_запрос", подставной)
+    monkeypatch.delenv(comments.СОГЛАСИЕ_НА_НЕОБРАТИМОСТЬ, raising=False)
+    with pytest.raises(comments.ОперацияОтклонена) as ош:
+        comments.опубликовать("yummyani.org", "кошка",
+                              author="editor/claude/run-1", тело="Текст о героях.")
+    текст = str(ош.value)
+    assert "снять комментарий нечем" in текст and "not_configured" in текст
+    assert "ADMIN_MODERATION_SECRET" in текст and "secret_ref" in текст
+
+
+def test_владелец_может_разрешить_необратимую_публикацию(витрина, monkeypatch):
+    """Решение владельца — явное и по домену, а не молчаливое исключение."""
+    записи: list[dict] = []
+
+    def подставной(адрес, *, тело=None, домен):
+        if "/api/admin/comments/" in адрес:
+            return 503, '{"code": "not_configured"}'
+        if тело is None:
+            return 200, json.dumps({"total": len(записи), "comments": записи})
+        записи.append({"id": "c3", "authorName": "Редакция",
+                       "createdAt": "2026-10-09T15:00:00Z", "body": тело["body"]})
+        return 201, json.dumps({"id": "c3"})
+
+    monkeypatch.setattr(comments, "_запрос", подставной)
+    monkeypatch.setattr(comments.time, "sleep", lambda _с: None)
+    monkeypatch.setenv(comments.СОГЛАСИЕ_НА_НЕОБРАТИМОСТЬ, "yummyani.org")
+    итог = comments.опубликовать("yummyani.org", "кошка",
+                                 author="editor/claude/run-1", тело="Текст о героях.")
+    assert итог["state"] == "published" and итог["comment_id"] == "c3"
+
+
+def test_настроенная_модерация_публикацию_не_держит(витрина, monkeypatch):
+    """401 — модерация есть, снятие возможно: держать публикацию не за что."""
+    записи: list[dict] = []
+
+    def подставной(адрес, *, тело=None, домен):
+        if "/api/admin/comments/" in адрес:
+            return 401, '{"code": "unauthorized"}'
+        if тело is None:
+            return 200, json.dumps({"total": len(записи), "comments": записи})
+        записи.append({"id": "c4", "authorName": "Редакция",
+                       "createdAt": "2026-10-09T15:00:00Z", "body": тело["body"]})
+        return 201, json.dumps({"id": "c4"})
+
+    monkeypatch.setattr(comments, "_запрос", подставной)
+    monkeypatch.setattr(comments.time, "sleep", lambda _с: None)
+    monkeypatch.delenv(comments.СОГЛАСИЕ_НА_НЕОБРАТИМОСТЬ, raising=False)
+    итог = comments.опубликовать("yummyani.org", "кошка",
+                                 author="editor/claude/run-1", тело="Текст о героях.")
+    assert итог["state"] == "published" and итог["comment_id"] == "c4"
