@@ -112,6 +112,10 @@ EDITOR_SITES = {
     # С 2026-10-09: контракт и читатель правок выпущены (f17b9f7/c387529, a1b5d71/4714e0a).
     "lordfilm47.space": "lords-01",
     "lordserial33.biz": "lords-02",
+    # С 2026-10-09: тот же читатель выпущен сессией wt-portable-site-cell-01-97
+    # (lords-03 e0b6d49, lords-05 a6de937), показ подтверждён на странице.
+    "1lordserials1.online": "lords-03",
+    "lordserials22.info": "lords-05",
 }
 
 #: Снимки крупнее этого читаются по записи: полный json.loads снимка Zona
@@ -2376,8 +2380,14 @@ def step_visited(ctx: Context) -> Any:
     }
 
 
-def _details_for_editor(path: Path) -> dict:
-    """Подробности снимка. Крупный снимок — по записи и только записи без описания."""
+def _details_for_editor(path: Path, wanted: set[str] | None = None) -> dict:
+    """Подробности снимка. Крупный снимок — по записи и только нужные пробелы.
+
+    Из крупного снимка сохраняются записи без описания, которые редактор может
+    взять: посещаемые (`wanted`) или с проверенным сопоставлением Shikimori.
+    Остальные ~14 тыс. пробелов на сайт держать в памяти незачем: при пяти
+    сайтах Lords/Zona пик доходил до 308 МБ при MemoryMax=512M.
+    """
     try:
         size = path.stat().st_size
     except OSError:
@@ -2389,7 +2399,11 @@ def _details_for_editor(path: Path) -> dict:
     keep: dict = {}
 
     def take(slug: str, rec: dict) -> bool:
-        if not str(rec.get("description") or "").strip():
+        shiki = (rec.get("ratings_by_source") or {}).get("shikimori") or {}
+        useful = (wanted is not None and slug in wanted) or (
+            shiki.get("match_state") == "external_id_exact+title_verified"
+        )
+        if useful and not str(rec.get("description") or "").strip():
             keep[slug] = {
                 k: rec.get(k)
                 for k in (
@@ -2444,7 +2458,10 @@ def editor_candidates(
                 if m:
                     weights[(domain, m.group(1))] = weights.get((domain, m.group(1)), 0.0) + metric
     details = {
-        d: _details_for_editor(facts_dir / f"{sid}-details.json") for d, sid in sites.items()
+        d: _details_for_editor(
+            facts_dir / f"{sid}-details.json", {slug for dom, slug in weights if dom == d}
+        )
+        for d, sid in sites.items()
     }
     out = []
     # Одно своё описание произведения на сеть. Второй домен с тем же тайтлом

@@ -6,11 +6,12 @@
 Мост вызывается так: python3 automation/local/bridge_call.py <инструмент> '<json>'.
 
 Задача запуска — не больше ДВУХ материалов, только на доменах animedia.icu,
-animedia.space, zonafilm.space, lordfilm47.space и lordserial33.biz: только у
-них подтверждены источник фактов, доставка и показ (Zona и Lords — с
-2026-10-09). У Zona и Lords хранилище — /srv/<сайт>/data/editorial-overrides.json,
-а журнал публикаций — /srv/sites/lords/runtime/overlays/<домен>/; publish_material
-идёт без expect_generation. Два материала — это ДВА РАЗНЫХ произведения. Одно своё описание
+animedia.space, zonafilm.space, lordfilm47.space, lordserial33.biz,
+1lordserials1.online и lordserials22.info: только у них подтверждены источник
+фактов, доставка и показ (Zona и Lords — с 2026-10-09). У Zona и Lords файл
+правок сайта — поле editorial_store в ответе editorial_status, журнал
+публикаций — /srv/sites/lords/runtime/overlays/<домен>/; publish_material идёт
+без expect_generation. Два материала — это ДВА РАЗНЫХ произведения. Одно своё описание
 произведения на сеть: если у произведения уже есть наше описание на другом
 домене (history.jsonl хранилищ /srv/sites/animedia/runtime/overlays/<домен>/ и
 /srv/sites/lords/runtime/overlays/<домен>/),

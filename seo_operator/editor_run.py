@@ -240,7 +240,14 @@ STATE = Path(__file__).resolve().parents[1] / "var" / "editor-runs"
 CANDIDATES = Path(__file__).resolve().parents[1] / "var" / "seo-regular" / "editor-candidates.json"
 ANIMEDIA = ("animedia.icu", "animedia.space")
 #: Где редактор публикует с подтверждённым показом (regular.EDITOR_SITES).
-EDITOR_DOMAINS = (*ANIMEDIA, "zonafilm.space", "lordfilm47.space", "lordserial33.biz")
+EDITOR_DOMAINS = (
+    *ANIMEDIA,
+    "zonafilm.space",
+    "lordfilm47.space",
+    "lordserial33.biz",
+    "1lordserials1.online",
+    "lordserials22.info",
+)
 #: Модель запускается не чаще раза в этот интервал (почасовой цикл).
 MIN_INTERVAL_S = 55 * 60
 
