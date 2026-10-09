@@ -1015,3 +1015,99 @@ lords-01 и zona-02 поле пусто, и это верно: модуля в �
 владельца — в разделе про установку пакета; публикации на семи ячейках
 начнутся после неё, а пять витрин Yummy работают прежним путём и сейчас.
 
+## 14. Два выпуска доведены до production и проверены публично (22:00–22:20 UTC)
+
+Владелец выполнил подготовленную команду подключения upstream: копии
+конфигураций сняты скриптом в 21:26:16 и 21:26:17 UTC
+(`/var/backups/site-cells-nginx/20261009T212616Z`,
+`…212617Z`), и после этого оба выпуска, отклонённые в 20:33 и 20:37,
+прошли с первой попытки.
+
+| ячейка | домен | заявка | исход | время |
+| --- | --- | --- | --- | --- |
+| animego-02 | an1mego.site | `animego-02-code-3d4a23595014` | `activated` / `live_verified` | 22:05:24Z |
+| animego-03 | animeg0.site | `animego-03-code-f2dff4743e86` | `activated` / `live_verified` | 22:17:27Z |
+
+Публичная проверка после выпуска — не кодом ответа, а функциями:
+
+* `public-acceptance.py` — по 15 проверок на домен, расхождений 0; заголовок
+  живой сборки совпал с выложенным коммитом (`f2dff4743e86-animego-03`,
+  «раскладка releases»), то есть работает ИМЕННО новая раскладка
+  `releases/current`;
+* `episode-nav-check.py` — карточка, первая, средняя и последняя серии,
+  плеер смонтирован на странице серии, номер в заголовке совпадает с адресом;
+  расписание отвечает (даты на неделю от 10 октября);
+* `playback-check.py` — реальное декодирование на обоих доменах: `currentTime`
+  растёт, `readyState` 4, разрешение меняется 1280×720 → 1920×1080, то есть
+  адаптивный поток работает;
+* редакционные тексты, опубликованные до выпуска, остались видны: по накладке
+  у an1mego.site одна запись, у animeg0.site четыре, и все проверены чтением
+  живых страниц. Выпуск данные не затронул — это и требовалось доказать.
+
+Провенанс после выпуска (`factory cell provenance`): у обеих ячеек
+`by_executor: true`, `releases_installed: 1`, `outside_queue: []` — то есть
+выложено заявкой, а не мимо очереди.
+
+## 15. Комментарии: ещё 16 публикаций, и три измеренных ограничения
+
+### Что опубликовано
+
+Две партии, написанные по прочитанным фактам (идентификатор тайтла со страницы
+витрины → карточка Shikimori по этому идентификатору → официальные ссылки из
+неё). Каждый текст объясняет одно: формат выпуска или то, что теряется в
+русском названии. Все подтверждены браузером (`comment-visible-check.py`,
+код 0).
+
+| домен | карточка | id записи |
+| --- | --- | --- |
+| yummyani.site | vo-vseoruzhii-sila-artefaktov | cmv1jj0wi000bo501ddxx1roq |
+| yummyani.site | ne-slishkom-li-ty-sladkaya-bog-soli-sato | cmv1jj4as000do5015y46h7no |
+| yummyani.site | vechnaya-volya-4 | cmv1jj8vv000fo501pso149o4 |
+| yummyani.site | prizrak-v-dospehah-sindrom-odinochki-dni-tatikom | cmv1judiw000jo501zrnkjqrr |
+| yummyani.site | koy-ken-kruzhok-v-poiskah-nastoyaschey-lyubvi | cmv1k2sdi000lo5016qz9t78b |
+| yummyani.org | protivostoyanie-svyatogo-voyna-za-istreblenie-nebozhiteley | cmv1jjxu8000pqc01z48kddot |
+| yummyani7.site | ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele | cmv1jjnl40007p40172rl3cho |
+| yummyani7.site | kod-gias-vosstavshiy-lelush-2-rekviem-zero | cmv1jjr490009p401xwvla36o |
+| yummyani7.site | kogda-plachut-tsikady-razgadki-spetsvypuski | cmv1k51xn000bp401ep4vmlbw |
+| yummyani7.site | dazhe-u-studsoveta-est-kosyaki | cmv1k7asw000dp401w7ewg9np |
+| yummyani7.info | ya-perevoplotilsya-v-goblina-voprosy-est | cmv1jjusr0005ur01idz3ggdy |
+| yummyani7.info | vrata-shteyna-nayti-nedostayuschee-zveno-delenie-na-nol | cmv1k9isx0007ur0185q7c3yi |
+| yummyani7.info | zimnie-dni | cmv1kbrpg0009ur01mup9n4ev |
+| yummyani.biz | silneyshaya-vedma-v-mire-startovala | cmv1ju36r0003oh018zl81vz4 |
+| yummyani.biz | nesmotrya-na-to-chto-ya-ochen-robkaya-blagorodnaya-devushka… | cmv1ju7650005oh01yvbnnubw |
+
+### Ограничение 1: приложение держит частоту
+
+На девятой публикации за полчаса витрина ответила HTTP 429
+`rate_limited` — «Слишком много комментариев. Попробуйте позже». Это не отказ
+записи и не повод повторять слепо: ограничение временное и названо самим
+приложением. Заход переведён на темп с паузами и ожиданием при 429, и после
+этого отказов по частоте не было. Для цели «до ста комментариев в сутки» это
+измеренный потолок темпа, а не препятствие: ограничение на частоту, а не на
+число.
+
+### Ограничение 2: тред требует идентификатора тайтла
+
+`yummyani.org/stalnoy-alhimik-bratstvo` — отказ: «не установлен идентификатор
+тайтла, а блок комментариев карточки запрашивает тред ИМЕННО по нему».
+Публикация с публичным слагом создала бы тред, которого карточка не
+показывает (измерено на себе 9 октября). Карточка остаётся без комментария, и
+это правильный отказ, а не потеря.
+
+### Ограничение 3 — моя же ошибка: два комментария под одной карточкой
+
+Под `yummyani.org/anime/mir-otome-igr-eto-tyazhelyy-mir-dlya-mobov-2` в 22:32
+и 22:37 оказались ДВА комментария «Редакции»: один написал ночной заход
+вручную, второй — часовой запуск редактора. Тексты разные и оба
+содержательные, но два наших комментария под одной карточкой за пять минут —
+это объём, а не польза, и правило владельца это прямо запрещает. Проверка
+повтора ловила только дословное совпадение.
+
+Сделано: лишний снят (`unpublish_comment`, id `cmv1jjd95000nqc01pz3wdndy`,
+снятие подтверждено чтением треда — `remaining_in_thread: 1`), а запрет
+выражен проверкой: `publish_comment` теперь отказывает, если под карточкой уже
+есть комментарий «Редакции», и называет, чем отказ снимается — переменная
+`FACTORY_COMMENT_SECOND_REASON=<причина>`. Второй комментарий остаётся
+возможным, но становится названным решением. Проверка работает на обоих путях
+публикации, включая новый путь ячеек.
+
