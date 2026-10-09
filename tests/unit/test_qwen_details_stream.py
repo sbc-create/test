@@ -94,3 +94,27 @@ def test_факты_по_слагу_и_сводка(tmp_path, monkeypatch):
     assert сводка["titles_total"] == 400
     assert сводка["without_description_playable"] == len(без)
     assert сводка["sample"] == без[:10] and сводка["catalog_revision"] == "rev1"
+
+
+def test_ожидание_исполнителя_не_принимает_прошлый_результат_той_же_заявки(tmp_path, monkeypatch):
+    """lords-01 2026-10-09: отказ 08:19 вернулся за новую подачу 09:16."""
+    from factory.cell import queue as q
+
+    база = tmp_path / "q"
+    (база / "results").mkdir(parents=True)
+    (база / "results" / "lords-01-edit-c43f.json").write_text(
+        json.dumps({"status": "finished", "started_at": "2026-10-09T08:19:00+00:00",
+                    "outcome": {"status": "rejected"}}), encoding="utf-8")
+    настоящее = q.состояние
+    monkeypatch.setattr(q, "состояние",
+                        lambda rid, **кв: настоящее(rid, база=база, **кв))
+    monkeypatch.setattr(editorial, "ОЖИДАНИЕ_ИСПОЛНИТЕЛЯ_С", 0.3)
+    monkeypatch.setattr(editorial, "ШАГ_ИСПОЛНИТЕЛЯ_С", 0.1)
+    with pytest.raises(editorial.ОперацияОтклонена):
+        editorial._дождаться_исполнителя(
+            "lords-01-edit-c43f", {"status": "requeued-after-failure"},
+            не_раньше="2026-10-09T09:16:00+00:00")
+    # без времени подачи прошлый результат принимается — так было до исправления
+    итог = editorial._дождаться_исполнителя(
+        "lords-01-edit-c43f", {"status": "requeued-after-failure"})
+    assert итог["result"]["status"] == "finished"
