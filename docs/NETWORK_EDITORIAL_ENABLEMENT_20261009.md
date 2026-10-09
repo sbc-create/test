@@ -628,3 +628,36 @@ check-installed «полностью совпадает», updater-check код 
 читается). Вывод, который стоит помнить: в неswarm-режиме compose НЕ
 перекладывает секрет в root:root 0444 — он биндит файл как есть, и права
 источника и есть права внутри.
+
+### Что нужно от владельца, чтобы цикл работал сам (19:30 UTC)
+
+1. **Перезапуск моста** — без него часовой запуск редактора не может
+   публиковать комментарии: инструменты `comments_status`, `prepare_comment`,
+   `publish_comment`, `unpublish_comment` объявлены после старта процесса
+   (18:43:33Z). Обходить через `/posts` запрещено, поэтому до перезапуска
+   комментарии публикую я сам.
+
+   ```
+   sudo systemctl restart site-factory-mcp.service
+   ```
+
+2. **Пересоздание `web-site`** — открывает комментарии на самом посещаемом
+   домене сети (10 208 посетителей за 7 дней против 191 у `.org`). Настройка
+   та же, что у `web-org`, и ошибка, которая вызвала простой `.org`, здесь уже
+   исключена: файл секрета `yummyani.site` имеет права 0644, контейнерный
+   пользователь его прочитает. Образ остаётся работающим
+   (`rel-054c6170519d`), монтирование накладок сохраняется.
+
+   ```
+   docker compose -p yummyani-staging \
+     --project-directory /home/claude/wt-yummy-mail-biz \
+     -f /home/claude/wt-yummy-mail-biz/compose.staging.yaml \
+     -f /home/claude/wt-portable-site-cell-01/automation/host/yummy-biz-indexing.override.yaml \
+     -f /home/claude/wt-portable-site-cell-01/automation/host/yummy-overlays.override.yaml \
+     --env-file /srv/sites/yummyani-staging/runtime/compose.vars \
+     up -d --no-deps web-site
+   ```
+
+   Пересоздание на несколько секунд снимает витрину с линии. После него я
+   проверяю маршрут снятия (ожидается 401 вместо 503) и публикую первую партию
+   на `.site`.
