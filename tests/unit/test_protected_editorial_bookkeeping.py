@@ -46,6 +46,10 @@ def стенд(tmp_path, monkeypatch):
     # Прочие виды защищённых данных на стенде отсутствуют: предмет здесь —
     # только каталог правок.
     monkeypatch.setattr(protected, "_контрактные", lambda _: [])
+    # Хранилище сообщества — тоже отдельный вид, и у lords-02 на живой машине
+    # оно есть. Без этой заглушки стенд требовал бы от рабочей копии ещё и
+    # читателя сообщений, то есть проверял бы не то, о чём он.
+    monkeypatch.setattr(protected, "_хранилище_сообщества", lambda _: [])
     monkeypatch.setattr(protected, "КОРЕНЬ_ИНДЕКСАЦИИ", tmp_path / "нет-индексации")
     monkeypatch.setattr(protected, "КОРЕНЬ_NGINX_ЯЧЕЕК", tmp_path / "нет-nginx")
 

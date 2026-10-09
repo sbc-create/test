@@ -583,7 +583,11 @@ def test_каждый_успешный_исход_исполнителя_наз�
             return значения(узел.body) + значения(узел.orelse)
         return []
 
-    ОПЕРАЦИИ = {"активировать", "обновить_данные"}
+    # Операция редакционного комментария сюда добавлена вместе с собой: её
+    # успешный исход (`commented`) живёт на своём этапе `comment_published`, и
+    # без этого правила проверка объявила бы применённый исход лишним.
+    ОПЕРАЦИИ = {"активировать", "обновить_данные", "опубликовать_комментарий"}
+    УСПЕШНЫЕ_ЭТАПЫ = {"live_verified", "validated", "comment_published"}
     успешные: dict[str, str] = {}
     неуспешные: dict[str, str] = {}
     найдено = set()
@@ -601,8 +605,7 @@ def test_каждый_успешный_исход_исполнителя_наз�
             статусы, этапы = поля.get("status", []), поля.get("stage", [])
             if not статусы or not этапы:
                 continue
-            куда = (успешные if set(этапы) <= {"live_verified", "validated"}
-                    else неуспешные)
+            куда = успешные if set(этапы) <= УСПЕШНЫЕ_ЭТАПЫ else неуспешные
             for с in статусы:
                 куда[с] = узел.name
 
@@ -679,6 +682,71 @@ def test_правки_чужого_сайта_не_применяются(tmp_pa
 def test_исход_правок_назван_применённым():
     """`edited` обязан значиться применённым — иначе успех запишется отказом."""
     assert "edited" in queue.ПРИМЕНЁННЫЕ_ИСХОДЫ
+
+
+def test_комментарий_публикуется_только_подготовленный(tmp_path, monkeypatch):
+    """Та же защита, что у правок: заявка доказывает СОДЕРЖИМОЕ записи.
+
+    Разница с правками в цене ошибки. Правки — наш файл, и подмена
+    подготовленного испортила бы наш текст. Комментарий ложится в хранилище
+    сообщений посетителей, и подмена между подачей и исполнением означала бы
+    чужой текст, опубликованный под подписью «Редакция».
+    """
+    from factory.cell import comment_store, privileged
+
+    monkeypatch.setattr(comment_store, "БАЗА", tmp_path / "staging")
+    готово = comment_store.подготовить(
+        "animego-02", slug="kartochka",
+        текст_комментария="В титрах названа студия, и это объясняет смену темпа.",
+        actor="claude", reason="редакционный комментарий")
+
+    записано = {}
+    monkeypatch.setattr(
+        privileged, "опубликовать_комментарий",
+        lambda site_id, содержимое, **k: записано.update(
+            {"site": site_id, "slug": содержимое["slug"],
+             "action": содержимое["action"]})
+        or {"operation": "comment-publish", "dry_run": k.get("dry_run")})
+
+    з = queue.собрать("animego-02", КОММИТ, готово["digest"],
+                      operation="comment-publish")
+    итог = executor.опубликовать_комментарий(з, dry_run=True)
+    assert итог["status"] == "dry-run" and итог["stage"] == "validated"
+    assert записано == {"site": "animego-02", "slug": "kartochka",
+                        "action": "publish"}
+
+    # Подмена подготовленного после подачи заявки: digest перестаёт сходиться.
+    comment_store.подготовить(
+        "animego-02", slug="kartochka", текст_комментария="ПОДМЕНА",
+        actor="chuzhoy", reason="подмена")
+    with pytest.raises(executor.ExecutorError) as ош:
+        executor.опубликовать_комментарий(з, dry_run=True)
+    assert "не совпал" in str(ош.value)
+
+
+def test_комментарий_без_подготовленного_не_публикуется(tmp_path, monkeypatch):
+    from factory.cell import comment_store
+
+    monkeypatch.setattr(comment_store, "БАЗА", tmp_path / "staging")
+    з = queue.собрать("animego-03", КОММИТ, "sha256:" + "0" * 64,
+                      operation="comment-publish")
+    with pytest.raises(executor.ExecutorError) as ош:
+        executor.опубликовать_комментарий(з, dry_run=True)
+    assert "подготовленного комментария" in str(ош.value)
+
+
+def test_комментарий_требует_коммита_выпуска():
+    """Операция меняет данные работающей витрины — выпуск обязан быть назван."""
+    from factory.cell import queue as q
+
+    with pytest.raises(q.RequestRejected):
+        q.собрать("animego-02", "", "", operation="comment-publish")
+    assert "comment-publish" not in q.ОПЕРАЦИИ_БЕЗ_ВЫПУСКА
+
+
+def test_исход_комментария_назван_применённым():
+    assert "commented" in queue.ПРИМЕНЁННЫЕ_ИСХОДЫ
+    assert "comment_published" in queue.ЭТАПЫ
 
 
 def test_404_на_приватный_репозиторий_называет_токен(monkeypatch, tmp_path):

@@ -62,8 +62,14 @@ from typing import Any
 #: интерактивной сессии и права исполнителя — разные, и разошлись они молча:
 #: выпуск нового домена отклонялся HTTP 404, пока та же команда из сессии
 #: читала прогон без ошибок.
+#: `comment-publish` добавляет ОДНУ редакционную запись в хранилище сообщества
+#: ячейки модулем самой ячейки. Кода она не ставит, но и к операциям «без
+#: выпуска» не относится: содержимое записи обязано быть подготовлено заранее
+#: и названо digest'ом, иначе заявка позволяла бы опубликовать произвольный
+#: текст от имени «Редакции».
 ОПЕРАЦИИ = ("activate", "update", "deliver", "rollback", "editorial",
-            "access-check", "indexing-nginx", "indexing-core", "owner-consent")
+            "comment-publish", "access-check", "indexing-nginx",
+            "indexing-core", "owner-consent")
 
 #: Операции, которые ничего не выкладывают: коммит и digest им не нужны.
 #:
@@ -99,6 +105,9 @@ from typing import Any
          # встал на выложенный код (`updater_units`). Не live_verified: сайт с
          # обработчиком на чужом коде выпуском не считается.
          "updater_failed",
+         # Редакционный комментарий добавлен модулем ячейки и виден: статус
+         # записи `approved`, состав чужих сообщений не изменился.
+         "comment_published",
          # Согласие владельца, зарегистрированное из чата по его одноразовому
          # коду: `consent_applied` — код погашен и якорь проверен чтением,
          # `consent_dry_run` — сухой прогон, код НЕ погашен и якорь не менялся.
@@ -289,6 +298,7 @@ def новый_идентификатор(site_id: str, commit: str, *, operatio
     хвост = (snapshot or commit)[:12]
     краткая = {"activate": "code", "update": "code", "deliver": "data",
                "rollback": "back", "editorial": "edit",
+               "comment-publish": "note",
                "indexing-nginx": "idx"}.get(operation, operation[:4])
     return f"{site_id}-{краткая}-{хвост}"[:64].lower()
 
@@ -340,7 +350,7 @@ def записать_атомарно(путь: Path, данные: dict[str, An
 #: Тот же род ошибки, что и с откатом выше: судить об успехе по перечню, в
 #: который забыли внести исход.
 ПРИМЕНЁННЫЕ_ИСХОДЫ = ("activated", "delivered", "edited", "unchanged", "dry-run",
-                      "checked", "applied", "nothing-to-do")
+                      "checked", "applied", "nothing-to-do", "commented")
 
 
 def _применено(итог: dict[str, Any]) -> bool:

@@ -1078,6 +1078,37 @@ def применить_правки(заявка: queue.Заявка, *, dry_run
             "steps": {"apply_overrides": шаг}}
 
 
+def опубликовать_комментарий(заявка: queue.Заявка, *,
+                             dry_run: bool = True) -> dict[str, Any]:
+    """Редакционный комментарий: подготовлен управляющим слоем, пишет ячейка.
+
+    Устроено как правки редактора и по той же причине: заявка не несёт ни
+    путей, ни текста, путь подготовленного выводится из `site_id` обеими
+    сторонами по одному правилу, а `digest` доказывает, что опубликовано
+    ИМЕННО подготовленное. Расхождение — отказ до записи.
+
+    Отличие от правок одно и существенное: файл, в который ложится запись,
+    принадлежит не нам. Там лежат сообщения посетителей, поэтому запись
+    делает модуль самой ячейки, а исполнитель сверяет состав до и после.
+    """
+    from factory.cell import comment_store
+
+    try:
+        содержимое = comment_store.прочитать_подготовленное(заявка.site_id)
+    except comment_store.StoreRejected as ош:
+        raise ExecutorError(f"{заявка.site_id}: {ош}") from None
+    факт = comment_store.отпечаток(содержимое)
+    if факт != заявка.digest:
+        raise ExecutorError(
+            f"{заявка.site_id}: digest подготовленного комментария {факт} не "
+            f"совпал с заявленным {заявка.digest}; опубликовано не будет")
+    шаг = privileged.опубликовать_комментарий(заявка.site_id, содержимое,
+                                              dry_run=dry_run)
+    return {"status": "dry-run" if dry_run else "commented",
+            "stage": "validated" if dry_run else "comment_published",
+            "steps": {"publish_comment": шаг}}
+
+
 def выполнить(заявка: queue.Заявка, *, база: Path, dry_run: bool = True) -> dict[str, Any]:
     """Одна операция целиком, с журналом переходов."""
     файл = база / "requests" / f"{заявка.request_id}.json"
@@ -1114,6 +1145,10 @@ def выполнить(заявка: queue.Заявка, *, база: Path, dry_
             этап = итог["stage"]
         elif заявка.operation == "editorial":
             итог = применить_правки(заявка, dry_run=dry_run)
+            результат["outcome"] = итог
+            этап = итог["stage"]
+        elif заявка.operation == "comment-publish":
+            итог = опубликовать_комментарий(заявка, dry_run=dry_run)
             результат["outcome"] = итог
             этап = итог["stage"]
         elif заявка.operation == "indexing-nginx":

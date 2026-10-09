@@ -62,13 +62,38 @@ def test_черновик_лежит_отдельно_от_постов(витр
     assert запись["prepared_by"] == "editor/claude/run-1"
 
 
-def test_семейство_без_поддержки_отказывает_и_называет_блокер(monkeypatch):
+def test_площадка_без_места_для_комментария_отказывает(monkeypatch):
+    """Нет ни приложения с комментариями, ни модуля сообщества в выпуске.
+
+    Отказ обязан называть, ЧЕГО не хватает, и запрещать подмену новостью:
+    инцидент 2026-10-09 начался именно с публикации комментария в /posts.
+    """
     monkeypatch.setattr(comments, "_сайт", lambda site: СайтAnimeGo())
+    monkeypatch.setattr(comments, "_модуль_ячейки", lambda s: None)
     with pytest.raises(comments.ОперацияОтклонена) as ош:
         comments.состояние("an1meg0.site", "любой")
     текст = str(ош.value)
-    assert "community.py" in текст and "RUNTIME_DATA_OWNERSHIP" in текст
+    assert "community.py" in текст
     assert "/posts" in текст, "отказ обязан запрещать подмену новостью"
+
+
+def test_ячейка_с_модулем_сообщества_публикует_своим_путём(monkeypatch, tmp_path):
+    """У семейств с нашим рантаймом путь второй: заявка исполнителю.
+
+    До 2026-10-10 операция отказывала всем, кроме Yummy: писать в хранилище
+    сообщений посетителей было нечем. Теперь есть узкая операция исполнителя,
+    и признак поддержки — МОДУЛЬ В ВЫПУСКЕ, а не название семейства: у lords
+    он есть не у всех ячеек.
+    """
+    модуль = tmp_path / "community.py"
+    модуль.write_text("# модуль сообщества\n", encoding="utf-8")
+    monkeypatch.setattr(comments, "_сайт", lambda site: СайтAnimeGo())
+    monkeypatch.setattr(comments, "_модуль_ячейки", lambda s: модуль)
+    assert comments.способ(СайтAnimeGo()) == "cell"
+    # Обратимость у этого пути есть по построению: снятие делает та же заявка
+    # действием `retract`. Публикация без пути снятия запрещена правилом сети.
+    снимается, чем = comments.путь_снятия(СайтAnimeGo())
+    assert снимается is True and "retract" in чем
 
 
 def test_повтор_не_записывается(витрина, monkeypatch):
