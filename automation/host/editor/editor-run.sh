@@ -41,7 +41,18 @@ RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)"
 STARTED="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 PROMPT="$(sed "s/{{RUN_ID}}/$RUN_ID/g" docs/editor/EDITOR_RUN_PROMPT.md)"
 
-timeout "$LIMIT_S" "$CLAUDE_BIN" -p "$PROMPT" --output-format json --max-turns 80 \
+# ПРЕДЕЛ ХОДОВ ИЗМЕРЕН, а не выбран. При восьмидесяти запуск 20261009T232501Z
+# упёрся в него (`terminal_reason: max_turns`, `num_turns: 81`), успев
+# опубликовать два описания и ни одного комментария, и остался без
+# самоотчёта — ответ модели оборвался раньше последней строки. Задание с тех
+# пор выросло: до шести комментариев и заметки в придачу к описаниям, и каждая
+# публикация стоит отдельных ходов на подготовку, проверку текста, запись и
+# браузерную проверку видимости.
+#
+# Предел остаётся: без него оборвавшийся запуск тянулся бы до таймаута
+# `LIMIT_S` и занимал замок.
+timeout "$LIMIT_S" "$CLAUDE_BIN" -p "$PROMPT" --output-format json \
+  --max-turns "${EDITOR_RUN_MAX_TURNS:-180}" \
   > "$STATE/$RUN_ID.claude.json" 2> "$STATE/$RUN_ID.stderr"
 MODEL_RC=$?
 FINISHED="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
@@ -56,10 +67,22 @@ import json, sys
 try:
     data = json.load(open(sys.argv[1], encoding="utf-8"))
     text = data.get("result") or ""
-    line = [l for l in text.strip().splitlines() if l.strip().startswith("{")][-1]
-    print(json.dumps(json.loads(line), ensure_ascii=False))
+    строки = [l for l in text.strip().splitlines() if l.strip().startswith("{")]
+    if not строки:
+        # ОТСУТСТВИЕ САМООТЧЁТА И ОШИБКА РАЗБОРА — РАЗНЫЕ СЛУЧАИ. Пока оба
+        # писались как «UNPARSED: IndexError», причину приходилось искать в
+        # claude.json руками: запуск 20261009T232501Z упёрся в предел ходов и
+        # оборвался до последней строки. Теперь исход сам называет причину.
+        причина = (data.get("errors") or [data.get("subtype") or "ответ без строки JSON"])[0]
+        print(json.dumps({"outcome": "NO_SELF_REPORT",
+                          "note": str(причина)[:200],
+                          "turns": data.get("num_turns"),
+                          "terminal_reason": data.get("terminal_reason"),
+                          "result_tail": text.strip()[-200:]}, ensure_ascii=False))
+    else:
+        print(json.dumps(json.loads(строки[-1]), ensure_ascii=False))
 except Exception as exc:  # noqa: BLE001
-    print(json.dumps({"outcome": "UNPARSED", "note": f"{type(exc).__name__}"}))
+    print(json.dumps({"outcome": "UNPARSED", "note": f"{type(exc).__name__}: {exc}"[:200]}))
 PY
 )"
 

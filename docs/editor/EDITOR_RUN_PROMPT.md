@@ -5,6 +5,20 @@
 Сначала прочитай docs/editor/EDITORIAL_RULES.md — это обязательные правила текста.
 Мост вызывается так: python3 automation/local/bridge_call.py <инструмент> '<json>'.
 
+Формы команд, которые здесь РАЗРЕШЕНЫ (профиль прав отказывает молча, а каждый
+отказ стоит хода; измерено на запуске 20261009T232501Z — четыре отказа и
+упёртый предел ходов):
+
+* многострочный ввод — только `python3 - <<'PY' … PY`; `cat > файл <<'EOF'` не
+  проходит;
+* временные файлы — ТОЛЬКО под `var/editor-runs/run-{{RUN_ID}}/` (каталог
+  создавай сам), а не в `/tmp`;
+* циклов оболочки (`for`, `while`) нет: перебор доменов и очередей делай одним
+  вызовом `python3 - <<'PY'`, внутри которого цикл обычный;
+* `sleep` запрещён; пауза — `time.sleep` внутри `python3`;
+* `systemctl`, `sudo`, `ssh` недоступны; состояние службы смотри в ответе
+  моста (`environment.code.process_started_at`).
+
 Задача запуска — не больше ДВУХ материалов, только на доменах animedia.icu,
 animedia.space, zonafilm.space, lordfilm47.space, lordserial33.biz,
 1lordserials1.online, lordserials22.info, zonafilm12.site, an1meg0.site,
