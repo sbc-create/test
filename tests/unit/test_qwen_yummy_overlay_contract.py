@@ -78,9 +78,82 @@ def test_без_известного_идентификатора_операци
                         lambda s, slug: f"https://{s.domain}/anime/{slug}")
     monkeypatch.setattr(registry, "путь_доставки",
                         lambda s: str(tmp_path / "title-overlays.json"))
+    # Поиск приложения — третий источник; здесь он ничего не знает. В сеть
+    # тест не выходит: опрос подменён.
+    monkeypatch.setattr(editorial, "_title_id_из_поиска", lambda s, slug: "")
     with pytest.raises(editorial.ОперацияОтклонена, match="title_id"):
         editorial._дополнить_под_приложение(СайтYummy(), _запись(slug="новый-слаг"),
                                             {"items": []})
+
+
+def test_идентификатор_первой_записи_берётся_из_поиска_приложения(monkeypatch):
+    """Первой записи сайта в хранилище нет по определению — и это не отказ.
+
+    Измерено 2026-10-09 на yummyani.org (ни одного материала): приложение
+    отдаёт идентификатор поставщика своим же поиском, страница тайтла его не
+    печатает. Тождество проверяется ссылкой: совпадения по названию
+    недостаточно, названия в сети повторяются.
+    """
+    страницы = {"https://yummyani.org/anime/ры": '<meta property="og:title" content="Рыцарь | YummyAnime">'}
+    поиски = {"Рыцарь": {"items": [
+        {"slug": "019ef9d9-822b-7eda-a819-5f46d5a28050", "href": "/anime/ры"},
+        {"slug": "00000000-0000-0000-0000-000000000000", "href": "/anime/другой"}]}}
+
+    class СайтOrg(СайтYummy):
+        domain = "yummyani.org"
+
+    def подставной(адрес, *_а, **_к):
+        import json as _json
+        import urllib.parse as _p
+        части = _p.urlsplit(адрес)
+        if части.path.startswith("/api/search"):
+            запрос = _p.parse_qs(части.query)["q"][0]
+            тело = _json.dumps(поиски.get(запрос, {"items": []})).encode()
+        else:
+            тело = страницы[f"https://{части.netloc}{части.path}"].encode()
+
+        class Ответ:
+            def read(self): return тело
+            def __enter__(self): return self
+            def __exit__(self, *_): return False
+        return Ответ()
+
+    monkeypatch.setattr(registry, "адрес_тайтла",
+                        lambda s, slug: f"https://{s.domain}/anime/{slug}")
+    monkeypatch.setattr(editorial.urllib.request, "urlopen",
+                        lambda запрос, **кв: подставной(запрос.full_url))
+    assert (editorial._title_id_из_поиска(СайтOrg(), "ры")
+            == "019ef9d9-822b-7eda-a819-5f46d5a28050")
+
+
+def test_поиск_не_принимает_совпадение_с_чужим_адресом(monkeypatch):
+    """Приписать текст другому произведению хуже, чем не опубликовать."""
+    class СайтOrg(СайтYummy):
+        domain = "yummyani.org"
+
+    def подставной(адрес):
+        import json as _json
+        import urllib.parse as _p
+        части = _p.urlsplit(адрес)
+        if части.path.startswith("/api/search"):
+            тело = _json.dumps({"items": [
+                {"slug": "019f0000-0000-0000-0000-000000000001",
+                 "href": "/anime/sovsem-drugoe"}]}).encode()
+        else:
+            тело = ('<meta property="og:title" content="Название | YummyAnime">'
+                    .encode("utf-8"))
+
+        class Ответ:
+            def read(self): return тело
+            def __enter__(self): return self
+            def __exit__(self, *_): return False
+        return Ответ()
+
+    monkeypatch.setattr(registry, "адрес_тайтла",
+                        lambda s, slug: f"https://{s.domain}/anime/{slug}")
+    monkeypatch.setattr(editorial.urllib.request, "urlopen",
+                        lambda запрос, **кв: подставной(запрос.full_url))
+    assert editorial._title_id_из_поиска(СайтOrg(), "наш-слаг") == ""
 
 
 def test_идентификатор_берётся_и_из_last_good(monkeypatch, tmp_path):
