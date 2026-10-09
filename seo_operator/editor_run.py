@@ -263,6 +263,11 @@ EDITOR_DOMAINS = (
     "1lordserials1.online",
     "lordserials22.info",
     "zonafilm12.site",
+    # Ночь 9→10 октября: читатель правок выпущен (bf63a60c60bd, исполнитель
+    # ответил live_verified), публикация подтверждена на странице —
+    # zonafilm.cc/title/ad-dzheffri/. До этого витрина не умела показывать
+    # опубликованный текст вовсе.
+    "zonafilm.cc",
     "an1meg0.site",
     "an1mego.site",
     "animeg0.site",
