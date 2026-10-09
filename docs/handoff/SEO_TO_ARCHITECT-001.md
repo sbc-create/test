@@ -284,6 +284,36 @@ claude:root 0730, проверка записи; служб и сайтов не
   (задание 2b20fc0c58ef1902, черновик подготовлен), lordserial33.biz «Доктор
   Стоун: Научное будущее. Часть 3» — `var/editor-runs/pending-lords-20261009.json`.
 
+### §12 — проверка контракта, читателя и обновления каталога (08:45 UTC)
+
+Одного `data_contract` недостаточно: приложения Lords читают правки не там,
+куда их кладёт исполнитель.
+
+| сайт | что читает приложение | куда пишет исполнитель |
+| --- | --- | --- |
+| zona-01 (работает) | `ZONA_EDITORIAL_OVERRIDES=<data>/editorial-overrides.json`, `/__editorial_status` → «прочитано», 1 запись | `/srv/zonafilm-space/data/editorial-overrides.json` |
+| lords-02 | `config/site.json: environment.LORDS_EDITORIAL_OVERRIDES=/srv/sites/lords/runtime/overlays/lordserial33.biz/title-overlays.json` (файла нет), подключение `lords02_editorial.подключить` есть; проверка `checks/editorial_wired.py` требует путь, оканчивающийся на `/title-overlays.json` | `/srv/lordserial33-biz/data/editorial-overrides.json` |
+| lords-01 | ни переменной, ни подключения: `src/editorial_overlay.py` — другой, старый модуль (читает `/srv/sites/lords/runtime/overlays/<domain>.json`), точкой входа не вызывается | `/srv/lordfilm47-space/data/editorial-overrides.json` |
+
+Сохранность при обновлении каталога (по коду `factory/cell/privileged.py`):
+`stage_snapshot` подключает ссылкой всё из `data_contract.user_writable`, засев
+идёт один раз и не перезаписывает существующий файл. При отсутствии
+`data_contract` действует умолчание: delivered = `{site}-catalog.json`,
+`{site}-details.json`; user_writable = `site-data`.
+
+Нужно для разблокировки (выпуск кода сайтов, а не правка данных):
+1. lords-01 и lords-02: `data_contract` = delivered как в умолчании +
+   user_writable `["site-data", "editorial-overrides.json"]`;
+2. путь читателя — `<data>/editorial-overrides.json`, как у zona-01 (у lords-02
+   поменять `LORDS_EDITORIAL_OVERRIDES` и `checks/editorial_wired.py`; у lords-01
+   подключить читатель той же формы, что у lords-02/zona-01);
+3. выпуск штатной заявкой; в обеих рабочих ветках уже лежит невыпущенный
+   коммит 08:30 UTC (lordfilm47 782a605, lordserial33 b0475e7 «плеер…») —
+   выпуск с вершины ветки увезёт и его.
+
+SEO не выпускает код сайтов параллельно с сессией, которая сейчас работает в
+этих репозиториях; запрос на согласование отправлен ей 08:40 UTC.
+
 ## Чего я не делал
 
 Не менял очередь, реестры, журналы и данные сайтов; не снимал аренды. В мосте
