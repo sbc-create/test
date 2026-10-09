@@ -306,3 +306,42 @@ def test_апстрим_читается_из_выпуска(tmp_path, monkeypat
     assert "LORDS_LEGACY_UPSTREAM" in тело_функции
     assert "/current" in тело_функции and "/app" in тело_функции
     assert исходная is not None
+
+
+def test_адрес_подтверждения_зависит_от_типа_записи():
+    """Обзор приложение отдаёт по /reviews, а /posts — только news и announcement.
+
+    Измерено 2026-10-09: две заметки типа `review` легли в файл доставки,
+    контейнер читал тот же файл (отпечатки совпали), страницы отвечали 200 — а
+    операция сообщила «ПУБЛИЧНО НЕ ПОДТВЕРЖДЕНА», потому что проверяла
+    `/posts/<slug>`. Ложное «не подтверждена» подталкивает повторять публикацию,
+    то есть хуже молчания.
+    """
+    assert posts.раздел_типа("review") == "reviews"
+    assert posts.раздел_типа("news") == "posts"
+    assert posts.раздел_типа("announcement") == "posts"
+    # Неизвестный тип не придумывает себе раздел.
+    assert posts.раздел_типа("небывалый") == "posts"
+
+
+def test_подтверждение_обзора_смотрит_в_reviews(monkeypatch):
+    спрошено: list[str] = []
+
+    def страница(адрес, таймаут=25):
+        спрошено.append(адрес)
+        if адрес.endswith("/reviews/заметка"):
+            return "200", "<html>текст заметки</html>"
+        if адрес.endswith("/reviews"):
+            return "200", '<a href="/reviews/заметка">заметка</a>'
+        return "404", ""
+
+    monkeypatch.setattr(posts.registry, "_страница", страница)
+
+    class Сайт:
+        domain = "yummyani.org"
+
+    итог = posts.подтвердить_публично(Сайт(), "заметка", попыток=1, тип="review")
+    assert итог["confirmed"] is True, итог
+    assert all("/posts/" not in а for а in спрошено), спрошено
+    assert итог["url"] == "https://yummyani.org/reviews/заметка"
+
