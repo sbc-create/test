@@ -93,7 +93,7 @@ lordfilm47.space, lordserial33.biz), кандидаты по 4 на домен.
 | --- | --- | --- | --- |
 | 1lordserials1.online | Приключения Дигимонов: Последняя эволюция | 38088 | 200, `<main>` и meta; задание 33e9adc098e9b364 VERIFIED |
 | lordserials22.info | Тёмный дворецкий: Зелёная ведьма | 59228 | 200, `<main>` и meta; задание e1b30232ed47d0bb VERIFIED |
-| zonafilm12.site | Для тебя, Бессмертный 2 | 49709 | ждёт выпуска zona-03 |
+| zonafilm12.site | Для тебя, Бессмертный 2 | 49709 | после выпуска zona-03 (f9cb934): 200, `<main>` и meta; задание e415c1fea22891a4 VERIFIED |
 
 Порог очереди (quality_policy_v2): текст короче 180 слов требует не меньше 4
 фактов, иначе BLOCKED_INSUFFICIENT_FACTS при видимой публикации. Факты

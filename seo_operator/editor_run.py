@@ -247,6 +247,7 @@ EDITOR_DOMAINS = (
     "lordserial33.biz",
     "1lordserials1.online",
     "lordserials22.info",
+    "zonafilm12.site",
 )
 #: Модель запускается не чаще раза в этот интервал (почасовой цикл).
 MIN_INTERVAL_S = 55 * 60
