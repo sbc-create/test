@@ -16,7 +16,7 @@ import pytest
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(КОРЕНЬ))
 
-from factory.qwen import editorial, mcp, registry  # noqa: E402
+from factory.qwen import actors, editorial, mcp, registry  # noqa: E402
 
 #: Имена, которые УЖЕ есть в сессии Qwen. Совпадение обязательно: иначе
 #: переключение коннектора потребует правок на стороне клиента, а задача
@@ -508,6 +508,33 @@ def test_непредвиденное_исключение_возвращает�
     assert ":" in д["where"] and "падать" in д["where"], д["where"]
     assert д["arguments"] == ["domain"], "в ответе обязаны быть ИМЕНА аргументов"
     assert "token" not in json.dumps(д).lower()
+
+
+def test_отказ_по_правам_это_отказ_операции_а_не_дефект():
+    """Законный запрет нельзя подавать исполнителю как поломку службы.
+
+    Измерено 2026-10-09 на живом мосте: застава прав сработала
+    (`editorial_queue_register` от роли qwen отказан в `actors.py`), но ответ
+    сказал «это дефект инструмента, а не отказ операции» и предложил сообщить
+    место в коде. Для исполнителя это читается как «служба сломалась, попробуй
+    иначе» — то есть как приглашение обойти запрет.
+    """
+    запись = mcp.ИНСТРУМЕНТЫ["analytics_readiness"]
+    прежний = запись["обработчик"]
+
+    def отказать(_):
+        actors.проверить("qwen/editor-automation/run-7", "publish")
+
+    запись["обработчик"] = отказать
+    try:
+        ошибка, д = _вызов("analytics_readiness", {"domain": "lordserials22.info"})
+    finally:
+        запись["обработчик"] = прежний
+    assert ошибка, д
+    assert "unexpected" not in д, д
+    assert "where" not in д, "место в коде к отказу по правам не относится"
+    assert "не меняет production" in д["error"], д["error"]
+    assert "Разрешено: prepare" in д["error"], "отказ обязан называть, что МОЖНО"
 
 
 def test_откат_объявлен_пишущим_и_скрыт_при_только_чтении(monkeypatch):
