@@ -2,18 +2,13 @@
   "note": "Блокеры редактора, которые из собранных данных не выводятся. Запись без evidence игнорируется (seo_operator/coverage.py). Снимается, когда блокер устранён и проверен.",
   "blockers": {
     "lordfilm47.space": {
-      "blocker": "нет подготовительного каталога /var/lib/site-cells/editorial (PermissionError): каталог создаёт владелец — automation/host/apply-editorial-staging-root.sh; мост после перезапуска 08:12 работает (§11 устранён)",
-      "evidence": "publish_material lordfilm47.space 2026-10-09T08:14Z; docs/editor/EDITORIAL_LOG_20261009.md",
+      "blocker": "контракт сайта lords-01 не объявляет editorial-overrides.json в data_contract.user_writable — исполнитель отказывает в применении правки (защита постоянных данных); нужен выпуск контракта сайта",
+      "evidence": "docs/handoff/SEO_TO_ARCHITECT-001.md §12",
       "since": "2026-10-09"
     },
     "lordserial33.biz": {
-      "blocker": "нет подготовительного каталога /var/lib/site-cells/editorial (PermissionError): каталог создаёт владелец — automation/host/apply-editorial-staging-root.sh; мост после перезапуска 08:12 работает (§11 устранён)",
-      "evidence": "publish_material lordfilm47.space 2026-10-09T08:14Z; docs/editor/EDITORIAL_LOG_20261009.md",
-      "since": "2026-10-09"
-    },
-    "zonafilm.space": {
-      "blocker": "нет подготовительного каталога /var/lib/site-cells/editorial (PermissionError): каталог создаёт владелец — automation/host/apply-editorial-staging-root.sh; мост после перезапуска 08:12 работает (§11 устранён)",
-      "evidence": "publish_material lordfilm47.space 2026-10-09T08:14Z; docs/editor/EDITORIAL_LOG_20261009.md",
+      "blocker": "контракт сайта lords-02 не объявляет editorial-overrides.json в data_contract.user_writable — исполнитель отказывает в применении правки (защита постоянных данных); нужен выпуск контракта сайта",
+      "evidence": "docs/handoff/SEO_TO_ARCHITECT-001.md §12",
       "since": "2026-10-09"
     },
     "yummyani.site": {

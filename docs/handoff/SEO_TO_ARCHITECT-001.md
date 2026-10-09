@@ -263,6 +263,27 @@ claude:root 0730, проверка записи; служб и сайтов не
 `2b20fc0c58ef1902` («Путешествие Кино», lordfilm47.space) в аренде до 08:57Z,
 черновик в `/srv/sites/lords/runtime/overlays/lordfilm47.space/drafts.json`.
 
+## 12. Lords: правка описания отвергается контрактом сайта (lords-01, lords-02)
+
+* 2026-10-09 08:19 UTC, после создания `/var/lib/site-cells/editorial` владельцем:
+  `publish_material` lordfilm47.space → «исполнитель не применил правку: статус
+  'finished', причина lords-01: editorial-overrides.json не объявлен
+  `user_writable` в контракте сайта — доставка каталога затирала бы правки».
+* Сверено: `config/site.json: data_contract.user_writable` — у lords-01 и lords-02
+  поля нет ни в рабочей копии (`var/site-repos/lordfilm47-space`,
+  `…/lordserial33-biz`), ни в выпущенном коде (`/srv/<сайт>/current`). У zona-01
+  объявлено `['site-data', 'community', 'editorial-overrides.json']` — там та же
+  операция прошла: https://zonafilm.space/title/ledyanaya-stena/ подтверждена
+  (08:25Z, текст в `<main>` и meta).
+* Частичной записи нет: `/srv/lordfilm47-space/data/editorial-overrides.json`
+  не создан.
+* Нужно: объявить `editorial-overrides.json` в `data_contract.user_writable`
+  сайтов lords-01 и lords-02 и выпустить контракт штатным путём. Защиту я не
+  обхожу и контракт не правлю: это выпуск сайта.
+* Готовые тексты: lordfilm47.space «Путешествие Кино: Прекрасный мир»
+  (задание 2b20fc0c58ef1902, черновик подготовлен), lordserial33.biz «Доктор
+  Стоун: Научное будущее. Часть 3» — `var/editor-runs/pending-lords-20261009.json`.
+
 ## Чего я не делал
 
 Не менял очередь, реестры, журналы и данные сайтов; не снимал аренды. В мосте
