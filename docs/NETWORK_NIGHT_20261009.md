@@ -424,7 +424,7 @@ cd /srv/site-factory/repo && git fetch origin claude/indexing-operation-02 \
 примета перезагрузки уже исправлена коммитом `6623b32` и ждёт обновления копии
 исполнителя.
 
-## 10. Что нужно от владельца — четыре действия
+## 10. Что нужно от владельца — пять действий
 
 | № | команда | что закрывает |
 | --- | --- | --- |
@@ -432,6 +432,17 @@ cd /srv/site-factory/repo && git fetch origin claude/indexing-operation-02 \
 | 2 | `sudo bash /home/claude/wt-portable-site-cell-01/automation/host/install-publisher-cell-paths.sh` | право издателя писать в `/srv/zonafilm-cc/data` (раздел 2) |
 | 3 | `sudo bash /home/claude/wt-portable-site-cell-01/automation/host/install-cell-executor.sh` | вторая выкладка an1meg0 и две формы читателя в заставе (раздел 3) |
 | 4 | `sudo systemctl restart site-factory-mcp.service` | четыре заставы очереди на канале MCP (раздел 4) |
+| 5 | `sudo bash /home/claude/wt-portable-site-cell-01/var/site-repos/an1mego-site/deploy/install.sh` | плеер фильмов на an1mego.site — 2 421 карточка из 8 265 (раздел 11) |
+
+Пятое — установка одной правки: доставка этой витрины объявлена
+`own-installer`, очередью выпусков она не обслуживается. Рабочая копия уже
+стоит на ветке `claude/film-player-02` (`501181b`), ожидаемая сборка —
+`animego-02-d3f6fb093c80`. Установщик сам снимает копию прежнего кода в
+`/srv/an1mego-site/app.prev`, сверяет сборку на порту с манифестом и при
+расхождении или молчащем `healthz` возвращает прежний код. Каталог данных
+`/srv/an1mego-site/data` и настройка плеера не трогаются. Ветку в рабочей
+копии до установки переключать не нужно: установщик раскладывает ровно то, что
+в ней лежит.
 
 Первое — самое важное: без него завтрашний прогон в 03:30Z упадёт так же, и
 сеть снова останется без свежих данных. Второе и третье уже проверены сухими
