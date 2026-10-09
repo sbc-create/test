@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-08T12:20:00Z",
+  "updated_at": "2026-10-09T05:20:00Z",
   "note": "Единый список недостатков SEO-модуля. Состояния: proposed → implemented → installed → verified. implemented — код и тесты в ветке; installed — работает в штатном запуске; verified — результат подтверждён на реальных данных штатного запуска. Зона: seo — правит SEO-модуль; shared — общий контракт (очередь, мост, доставка), только через Архитектора; owner — решение или действие владельца. Описание: docs/seo-operator/MODULE_DEFECTS.md.",
   "defects": [
     {
@@ -8,24 +8,24 @@
       "title": "Причина неизмеренного Вебмастера «домен ещё не развёрнут» у работающих доменов",
       "zone": "seo",
       "priority": "P1",
-      "state": "implemented",
+      "state": "verified",
       "example": "artifacts/analytics/analytics-2026-10-08.json: у всех 21 домена pages_in_search/excluded_pages/external_links/technical_issues = «сайт не зарегистрирован в Вебмастере: домен ещё не развёрнут», при этом https://yummyani.org/ отвечает 200 (проверка check-2026-10-08T06).",
       "wrong_decision": "Отсутствие данных Вебмастера списывается на «ждём выкладки», хотя выкладка давно прошла и нужна привязка сайта в Вебмастере.",
       "change": "Причина берётся из реестра: пустой host_id, verification_status и дата last_checked_at (seo_operator/analytics_collect.py::_webmaster_unbound_reason).",
       "acceptance": "В снимке analytics-<дата>.json после штатного запуска analytics-cabinet нет текста «не развёрнут»; причина содержит host_id и статус подтверждения.",
-      "evidence": "tests/unit/test_yandex_analytics_operator.py::test_unbound_webmaster_reason_names_the_registry_status_not_a_deploy_guess"
+      "evidence": "tests/unit/test_yandex_analytics_operator.py::test_unbound_webmaster_reason_names_the_registry_status_not_a_deploy_guess | Штатный сбор analytics-cabinet 2026-10-09T05:07:44Z: показатели Вебмастера измерены у 16 доменов, текста «не развёрнут» нет, top_n у разбивок есть."
     },
     {
       "id": "MOD-02",
       "title": "Привязка Вебмастера: 16 доменов подтверждены в аккаунте, реестр фабрики их не знал",
       "zone": "seo",
       "priority": "P0",
-      "state": "installed",
+      "state": "verified",
       "example": "webmaster-inventory.service 2026-10-08T16:08:23Z (GET, токен через LoadCredential): в аккаунте 17 хостов; 16 доменов VERIFIED с точным https-хостом, а host_id в config/analytics.json был пуст — MAPPING_MISMATCH (ошибка локального сопоставления, не отсутствие сайтов); animedia.space — VERIFICATION_FAILED; lordserials22.site, lordserials22.space, lordserial101.site, lordfilm077.site — NOT_IN_ACCOUNT (все под serverHold).",
       "wrong_decision": "Отсутствие данных Вебмастера объяснялось «не развёрнут» / «нужна регистрация», хотя данные были доступны: сборщик просто не знал host_id.",
       "change": "seo-operator webmaster-apply-mapping --apply: host_id и статус из инвентаризации перенесены в реестр (17 доменов) — локально, в Яндекс ничего не писалось. Осталось: animedia.space — повторить подтверждение (VERIFICATION_FAILED), 4 serverHold-домена — после снятия serverHold.",
       "acceptance": "Снимок analytics-<дата>.json после ближайшего штатного сбора (05:00 UTC) содержит измеренные pages_in_search/excluded_pages у 16 доменов.",
-      "evidence": "var/analytics/webmaster-inventory.json; копия реестра до переноса — var/analytics/analytics.json.before-mapping-20261008"
+      "evidence": "var/analytics/webmaster-inventory.json; копия реестра до переноса — var/analytics/analytics.json.before-mapping-20261008 | Штатный сбор analytics-cabinet 2026-10-09T05:07:44Z: показатели Вебмастера измерены у 16 доменов, текста «не развёрнут» нет, top_n у разбивок есть."
     },
     {
       "id": "MOD-03",
@@ -44,24 +44,24 @@
       "title": "Отчёт 09:00 МСК формировался раньше сбора аналитики",
       "zone": "seo",
       "priority": "P1",
-      "state": "implemented",
+      "state": "verified",
       "example": "2026-10-08: отчёт seo-content-operator-report 06:00:26Z, снимок аналитики 06:19:44Z (analytics-cabinet.timer 06:10 UTC). Утренний отчёт ежедневно видел вчерашний снимок.",
       "wrong_decision": "Отчёт о «сегодняшнем» состоянии опирается на данные на сутки старше; изменение замечается на день позже.",
       "change": "analytics-cabinet.timer 06:10 → 05:00 UTC; проверка 05:25, суточный анализ 05:40 UTC, отчёт готов до 09:00 МСК. Ставится командой владельца automation/host/install-seo-regular.sh.",
       "acceptance": "В отчёте var/seo-regular/reports/daily/<дата>.md штатного запуска возраст снимка меньше часа.",
-      "evidence": "ls -l --time-style=full-iso /var/lib/seo-content-operator/reports/daily/LATEST_MANIFEST.json var/analytics/cabinet-latest.json"
+      "evidence": "ls -l --time-style=full-iso /var/lib/seo-content-operator/reports/daily/LATEST_MANIFEST.json var/analytics/cabinet-latest.json | Сбор 2026-10-09 прошёл в 05:07 UTC по перенесённому таймеру — до суточного анализа 05:40."
     },
     {
       "id": "MOD-05",
       "title": "Метрики страниц — первые 20 строк, а читались как полные",
       "zone": "seo",
       "priority": "P2",
-      "state": "implemented",
+      "state": "verified",
       "example": "analytics-2026-10-08.json, yummyani.org: landing_pages и popular_pages по 20 строк, а предел в снимке не записан (limit=20 есть только в коде сборщика). Страница вне первых 20 в снимке не встречается вовсе, и прочесть это можно было только как отсутствие трафика.",
       "wrong_decision": "Отсутствие строки трактуется как ноль; оценка публикации по странице выдаёт «эффекта нет» там, где он не измерен.",
       "change": "У разбивок поле top_n=20; оценка страницы пишет «вне первых 20», а не 0 (seo_operator/regular.py::page_metrics). Точное значение по странице — фильтр Метрики по адресу (следующий шаг).",
       "acceptance": "Штатный снимок содержит top_n у четырёх разбивок; в оценке изменений нет нулей для страниц вне списка.",
-      "evidence": "tests/unit/test_yandex_analytics_operator.py::test_page_level_breakdowns_declare_their_top_n; tests/unit/test_seo_regular.py::test_publication_gets_a_baseline_and_a_later_evaluation"
+      "evidence": "tests/unit/test_yandex_analytics_operator.py::test_page_level_breakdowns_declare_their_top_n; tests/unit/test_seo_regular.py::test_publication_gets_a_baseline_and_a_later_evaluation | Штатный сбор analytics-cabinet 2026-10-09T05:07:44Z: показатели Вебмастера измерены у 16 доменов, текста «не развёрнут» нет, top_n у разбивок есть."
     },
     {
       "id": "MOD-06",
