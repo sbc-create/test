@@ -290,3 +290,37 @@ def test_search_landing_pages_keep_only_organic_rows():
     payload = analytics_collect.collect_domain(P(), LIVE_ENTRY, date1="a", date2="b").as_dict()
     rows = [m for m in payload["measurements"] if m["key"] == "search_landing_pages"][0]["value"]
     assert [r["dimensions"][1]["name"] for r in rows] == ["/a"] and rows[0]["metrics"][0] == 5
+
+def test_лента_событий_страниц_размечена_по_типу():
+    """`count` ленты — это события, а не исключённые страницы.
+
+    Измерено 2026-10-09 по четырём доменам: у всех пятидесяти образцов
+    `event` равен `APPEARED_IN_SEARCH`, а `excluded_url_status` пуст. Прежний
+    заголовок измерения («Исключённые страницы и причины») приглашал прочитать
+    1507 появлений как 1507 исключений — вывод, противоположный истине.
+    Поэтому измерение само несёт разбор по типу события и оговорку о том, что
+    разбор считан по образцам.
+    """
+    from seo_operator import analytics_collect as сбор
+
+    размеченное = сбор._разметить_события("search_urls_events", {
+        "count": 1507,
+        "samples": [{"event": "APPEARED_IN_SEARCH"}, {"event": "APPEARED_IN_SEARCH"},
+                    {"event": "EXCLUDED_FROM_SEARCH", "excluded_url_status": "NOT_CANONICAL"}],
+    })
+    assert размеченное["samples_total"] == 3
+    assert размеченное["samples_by_event"] == {"APPEARED_IN_SEARCH": 2,
+                                              "EXCLUDED_FROM_SEARCH": 1}
+    assert "событий" in размеченное["count_note"].lower()
+    assert размеченное["count"] == 1507, "исходные поля не теряются"
+
+    # Другие ресурсы не размечаются: разбор по событиям к ним не относится.
+    assert сбор._разметить_события("diagnostics", {"problems": {}}) == {"problems": {}}
+
+
+def test_заголовок_ленты_событий_не_называет_её_исключениями():
+    from seo_operator import analytics_collect as сбор
+
+    заголовки = {к: т for к, т, _ in сбор.WEBMASTER_RESOURCES}
+    assert "Исключённые страницы и причины" not in заголовки.values()
+    assert "События страниц в поиске" in заголовки["excluded_pages"]

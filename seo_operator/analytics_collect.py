@@ -93,7 +93,15 @@ METRIKA_BREAKDOWNS = (
 )
 WEBMASTER_RESOURCES = (
     ("pages_in_search", "Страницы в поиске", "search_urls_in_search"),
-    ("excluded_pages", "Исключённые страницы и причины", "search_urls_events"),
+    # Заголовок исправлен 2026-10-10. Ресурс `search_urls_events` отдаёт ЛЕНТУ
+    # СОБЫТИЙ страниц, а не перечень исключённых: у всех пятидесяти образцов по
+    # четырём доменам (animeg0.site, animedia.icu, yummyani7.site,
+    # lordserial33.biz) поле `event` равно `APPEARED_IN_SEARCH`, то есть
+    # «страница ПОЯВИЛАСЬ в поиске», и `excluded_url_status` пуст. Прежний
+    # заголовок приглашал прочитать 1507 появлений как 1507 исключений — а это
+    # противоположный вывод о том, индексируется ли сайт.
+    ("excluded_pages", "События страниц в поиске: появления и исключения",
+     "search_urls_events"),
     ("external_links", "Внешние ссылки", "external_links"),
     ("technical_issues", "Технические проблемы", "diagnostics"),
 )
@@ -119,6 +127,36 @@ def _webmaster_unbound_reason(entry: dict) -> str:
         "сайт не привязан к Вебмастеру: host_id в реестре аналитики пуст, "
         f"статус подтверждения {status} (последняя сверка реестра: {checked})"
     )
+
+
+def _разметить_события(resource: str, payload):
+    """Разбор ленты событий страниц по типу — внутри самого измерения.
+
+    Зачем. Лента `search_urls_events` несёт и появления страниц в поиске, и
+    исключения, а наружу отдавался только общий `count`. Прочитать его как
+    «исключено N страниц» — ровно та ошибка, в которую приглашал прежний
+    заголовок: 1507 событий у animeg0.site оказались 1507 ПОЯВЛЕНИЯМИ.
+
+    Разбор считается по `samples`, а не по всей ленте, и называется именно так
+    (`samples_by_event`, `samples_total`): API отдаёт образцы, а не весь список,
+    и выдавать долю образцов за долю ленты нельзя.
+    """
+    if resource != "search_urls_events" or not isinstance(payload, dict):
+        return payload
+    образцы = payload.get("samples")
+    if not isinstance(образцы, list):
+        return payload
+    по_событию: dict[str, int] = {}
+    for с in образцы:
+        если = str((с or {}).get("event") or "UNKNOWN")
+        по_событию[если] = по_событию.get(если, 0) + 1
+    размеченное = dict(payload)
+    размеченное["samples_total"] = len(образцы)
+    размеченное["samples_by_event"] = dict(sorted(по_событию.items()))
+    размеченное["count_note"] = (
+        "count — число СОБЫТИЙ в ленте (появления и исключения вместе), а не "
+        "число исключённых страниц; разбор по типу считан по образцам")
+    return размеченное
 
 
 def _unmeasured(key: str, title: str, reason: str, source: str) -> Measurement:
@@ -253,7 +291,7 @@ def collect_domain(
                         key=key,
                         title=title,
                         measured=True,
-                        value=payload.get("payload"),
+                        value=_разметить_события(resource, payload.get("payload")),
                         source=resource,
                     )
                 )
