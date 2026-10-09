@@ -390,6 +390,49 @@ sources:
       robots.txt закрывает /api/* для обходчиков сайта; используется документированное API
       для приложений: свой User-Agent, ≤4 запросов в секунду, только чтение по ID.
       Проверено: /api/animes/55809, 56736, 43626, 11061 — HTTP 200.
+  - id: SRC-EDITORIAL-FILM-WIKIDATA
+    kind: editorial_source
+    owner: Wikimedia Foundation (Wikidata)
+    url: https://www.wikidata.org/wiki/
+    status: approved
+    received_at: "2026-10-09"
+    retrieved_at: "2026-10-09T12:40:00Z"
+    purpose: "идентификация фильма/сериала: официальный сайт (P856), IMDb (P345), Кинопоиск (P2603)"
+    note: >-
+      Решение владельца 2026-10-09 (D200). robots.txt закрывает /w/ (API), /wiki/Special:
+      и query.wikidata.org/sparql для всех агентов — не используются; читаются только
+      страницы /wiki/Q…. Проверено: Q136089690 — HTTP 200, P856 starz.com. Данные CC0.
+  - id: SRC-EDITORIAL-FILM-WIKIPEDIA
+    kind: editorial_source
+    owner: Wikimedia Foundation (Wikipedia ru, en)
+    url: https://ru.wikipedia.org/wiki/
+    status: approved
+    received_at: "2026-10-09"
+    retrieved_at: "2026-10-09T12:40:00Z"
+    purpose: "дополнительный источник: идентичность по IMDb ID в статье, сюжет как дополнение"
+    note: >-
+      Решение владельца 2026-10-09 (D200). API и поиск закрыты robots.txt — статья
+      берётся по детерминированному названию из каталога и принимается только при
+      совпадении IMDb ID. CC BY-SA: пересказ, без копирования. Проверено:
+      en.wikipedia.org/wiki/S.W.A.T._Exiles — HTTP 200, tt36984433.
+  - id: SRC-EDITORIAL-FILM-KINOPOISK
+    kind: editorial_source_candidate
+    owner: Кинопоиск
+    url: https://www.kinopoisk.ru/
+    status: rejected
+    received_at: "2026-10-09"
+    purpose: "сверка сюжета фильмов и сериалов"
+    note: >-
+      robots.txt разрешает /film/ (проверено 2026-10-09), но пользовательское соглашение
+      ограничивает автоматический сбор; до проверки условий не используется.
+  - id: SRC-EDITORIAL-FILM-IMDB
+    kind: editorial_source_candidate
+    owner: IMDb
+    url: https://www.imdb.com/
+    status: rejected
+    received_at: "2026-10-09"
+    purpose: "сверка сюжета"
+    note: "robots.txt запрещает /title/ для ClaudeBot и anthropic-ai (проверено 2026-10-09)."
   - id: SRC-EDITORIAL-SYNOPSIS-MAL
     kind: editorial_source_candidate
     owner: MyAnimeList

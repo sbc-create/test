@@ -3,6 +3,9 @@
     python3 automation/local/source_fetch.py shikimori <shikimori_id>
     python3 automation/local/source_fetch.py credits <shikimori_id>
     python3 automation/local/source_fetch.py official <shikimori_id>
+    python3 automation/local/source_fetch.py film <imdb_id> <название> <оригинальное> <год> <movie|tv>
+    python3 automation/local/source_fetch.py wikidata <QID>
+    python3 automation/local/source_fetch.py page <url>
 
 * `shikimori` — карточка и официальные ссылки через API Shikimori (shikimori.io,
   своё имя приложения в User-Agent, не чаще 4 запросов в секунду). ID берётся
@@ -11,6 +14,15 @@
   `external_links` Shikimori того же ID с kind `official_site`; перед чтением
   проверяется robots.txt этого сайта для нашего User-Agent и для ИИ-агентов
   (`ClaudeBot`, `anthropic-ai`). Запрет — отказ, а не обход.
+* `film` — фильмы и сериалы (решение владельца 2026-10-09, D200): статья
+  Википедии ru/en по детерминированным вариантам названия из каталога, без
+  поиска (API и поиск Википедии закрыты robots.txt для всех агентов, открыты
+  только страницы `/wiki/<название>`). Идентичность — совпадение IMDb ID статьи
+  с каталогом; иначе статья не принимается. Википедия — дополнительный источник.
+* `wikidata` — HTML-страница элемента `www.wikidata.org/wiki/Q…` (API и SPARQL
+  закрыты robots.txt): официальный сайт (P856), IMDb (P345), Кинопоиск (P2603).
+* `page` — одна страница официального сайта или правообладателя с проверкой
+  robots.txt; сюжет фильма/сериала сверяется по ней.
 * MyAnimeList не читается: его robots.txt запрещает ИИ-агентам весь сайт
   (проверено 2026-10-08), а API требует client id, которого нет.
 
@@ -29,7 +41,7 @@ import urllib.error
 import urllib.request
 import urllib.robotparser
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import quote, urlsplit
 
 USER_AGENT = "site-factory-editor/1 (editorial fact check)"
 SHIKIMORI = "https://shikimori.io"
@@ -186,12 +198,155 @@ def official(anime_id: int) -> dict:
     }
 
 
+def _text(fragment: str) -> str:
+    t = re.sub(r"<(script|style|sup)[^>]*>.*?</\1>", " ", fragment, flags=re.S)
+    t = re.sub(r"<[^>]+>", " ", t)
+    return re.sub(r"\s+", " ", html.unescape(t)).strip()
+
+
+def _allowed_get(url: str, source_id: str) -> tuple[int | None, str, str]:
+    allowed, why = _robots_allows(url)
+    if not allowed:
+        _log(source=source_id, url=url, robots=why)
+        return None, "", why
+    status, raw = _get(url)
+    _log(source=source_id, url=url, status=status)
+    return status, raw.decode("utf-8", "replace"), why
+
+
+def _wiki_article(lang: str, title: str) -> tuple[int | None, str, str]:
+    url = f"https://{lang}.wikipedia.org/wiki/" + quote(title.replace(" ", "_"), safe="():,_")
+    status, text, why = _allowed_get(url, "src-wikipedia")
+    return status, text, url
+
+
+def _section(page: str, names: tuple[str, ...]) -> str:
+    """Текст раздела статьи (до следующего заголовка того же уровня)."""
+    for name in names:
+        m = re.search(
+            r'<h2[^>]*id="'
+            + re.escape(name)
+            + r'"[^>]*>.*?</h2>(.*?)(?=<div class="mw-heading mw-heading2|<h2)',
+            page,
+            re.S,
+        )
+        if m:
+            return _text(m.group(1))[:4000]
+    return ""
+
+
+def film(imdb: str, name: str, original: str, year: str, kind: str) -> dict:
+    """Статья о фильме/сериале с подтверждённой идентичностью по IMDb ID."""
+    imdb = imdb.removeprefix("tt")
+    ru_suffix = (
+        ["", " (телесериал)", " (сериал)", f" (телесериал, {year})"]
+        if kind == "tv"
+        else ["", " (фильм)", f" (фильм, {year})"]
+    )
+    en_suffix = (
+        ["", " (TV series)", f" ({year} TV series)"]
+        if kind == "tv"
+        else ["", " (film)", f" ({year} film)"]
+    )
+    tried = []
+    for lang, base, suffixes in (("ru", name, ru_suffix), ("en", original, en_suffix)):
+        if not base:
+            continue
+        for suf in suffixes:
+            status, page, where = _wiki_article(lang, base + suf)
+            tried.append({"url": where, "status": status})
+            if status != 200:
+                continue
+            if f"tt{imdb}" not in page and f"/title/tt{imdb}" not in page:
+                continue
+            qid = re.search(r"wikidata\.org/wiki/(?:Special:EntityPage/)?(Q\d+)", page)
+            lead = re.search(
+                r'<div class="mw-content-ltr mw-parser-output"[^>]*>.*?<p>(.*?)</p>', page, re.S
+            )
+            plot = _section(page, ("Сюжет", "Синопсис", "Plot", "Premise", "Synopsis"))
+            return {
+                "ok": True,
+                "source_id": "src-wikipedia",
+                "url": where,
+                "identity": f"IMDb tt{imdb} найден в статье",
+                "wikidata": qid.group(1) if qid else None,
+                "lead": _text(lead.group(1))[:1500] if lead else None,
+                "plot": plot or None,
+                "tried": tried,
+            }
+    return {"ok": False, "reason": f"статьи с IMDb tt{imdb} среди вариантов нет", "tried": tried}
+
+
+def wikidata(qid: str) -> dict:
+    url = f"https://www.wikidata.org/wiki/{qid}"
+    status, page, why = _allowed_get(url, "src-wikidata")
+    if status != 200:
+        return {"ok": False, "url": url, "status": status, "reason": why}
+
+    def prop(pid: str) -> list[str]:
+        m = re.search(
+            r'id="' + pid + r'".*?(?=<div class="wikibase-statementgroupview |$)', page, re.S
+        )
+        if not m:
+            return []
+        block = m.group(0)
+        links = re.findall(r'class="external free"[^>]*href="([^"]+)"', block)
+        if links:
+            return list(dict.fromkeys(links))
+        return list(
+            dict.fromkeys(
+                _text(x)
+                for x in re.findall(
+                    r'<div class="wikibase-snakview-value[^"]*"[^>]*>(.*?)</div>', block, re.S
+                )
+                if _text(x)
+            )
+        )
+
+    return {
+        "ok": True,
+        "source_id": "src-wikidata",
+        "url": url,
+        "official_site": prop("P856"),
+        "imdb": prop("P345")[:1],
+        "kinopoisk": prop("P2603")[:1],
+    }
+
+
+def page(url: str) -> dict:
+    status, text, why = _allowed_get(url, "src-official-site")
+    if status != 200:
+        return {"ok": False, "url": url, "status": status, "reason": why}
+    meta = re.findall(
+        r'<meta[^>]+(?:name|property)=["\'](?:description|og:description)["\'][^>]*content=["\']([^"\']+)',
+        text,
+    )
+    title = re.search(r"<title[^>]*>(.*?)</title>", text, re.S)
+    main = re.search(r"<main.*?</main>", text, re.S)
+    return {
+        "ok": True,
+        "source_id": "src-official-site",
+        "url": url,
+        "robots": why,
+        "title": html.unescape(title.group(1)).strip() if title else None,
+        "descriptions": [html.unescape(m) for m in meta][:3],
+        "text": _text(main.group(0) if main else text)[:4000],
+    }
+
+
 def main(argv: list[str]) -> int:
     commands = {"shikimori": shikimori, "credits": credits, "official": official}
-    if len(argv) != 2 or argv[0] not in commands:
+    if argv and argv[0] == "film" and len(argv) == 6:
+        result = film(*argv[1:])
+    elif argv and argv[0] == "wikidata" and len(argv) == 2:
+        result = wikidata(argv[1])
+    elif argv and argv[0] == "page" and len(argv) == 2:
+        result = page(argv[1])
+    elif len(argv) == 2 and argv[0] in commands:
+        result = commands[argv[0]](int(argv[1]))
+    else:
         print(__doc__)
         return 64
-    result = commands[argv[0]](int(argv[1]))
     print(json.dumps(result, ensure_ascii=False, indent=1))
     return 0 if result.get("ok") else 3
 

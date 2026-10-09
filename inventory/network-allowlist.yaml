@@ -203,6 +203,26 @@ hosts:
     purpose: "Shikimori API: идентичность тайтла, факты завязки, официальные ссылки (external_links)"
     methods: [GET]
     contract_ref: config/editorial-sources.json#src-shikimori
+  # --- фильмы и сериалы (решение владельца 2026-10-09, D200) ---
+  # Читаются ТОЛЬКО страницы /wiki/<название> и /wiki/Q…: API, поиск и SPARQL
+  # Википедии и Wikidata закрыты robots.txt для всех агентов (проверено
+  # 2026-10-09), и source_fetch.py туда не ходит. Идентичность — совпадение
+  # IMDb ID статьи с каталогом; официальный сайт — P856 элемента Wikidata.
+  - ref: wikipedia-ru
+    host: ru.wikipedia.org
+    purpose: "статья о фильме/сериале: идентичность по IMDb ID, дополнительный источник сюжета"
+    methods: [GET]
+    contract_ref: config/editorial-sources.json#src-wikipedia
+  - ref: wikipedia-en
+    host: en.wikipedia.org
+    purpose: "статья о фильме/сериале: идентичность по IMDb ID, дополнительный источник сюжета"
+    methods: [GET]
+    contract_ref: config/editorial-sources.json#src-wikipedia
+  - ref: wikidata
+    host: www.wikidata.org
+    purpose: "страница элемента: официальный сайт (P856), IMDb (P345), Кинопоиск (P2603)"
+    methods: [GET]
+    contract_ref: config/editorial-sources.json#src-wikidata
   # Jikan (api.jikan.moe) и MyAnimeList сюда НЕ внесены: Jikan с этого хоста
   # недоступен (таймаут соединения 2026-10-08), а robots.txt MAL запрещает
   # ИИ-агентам весь сайт (D199). Неиспользуемый канал не открывается.

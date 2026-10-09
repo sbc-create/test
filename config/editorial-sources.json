@@ -45,9 +45,29 @@
       "url": "https://shikimori.one/api/animes/",
       "trust": "official",
       "rights_confirmed": true,
-      "scope": "факты о произведении с официального сайта; адрес берётся ТОЛЬКО из external_links Shikimori (kind official_site) для того же ID — не из поиска",
+      "scope": "факты и сюжет произведения с официального сайта или сайта правообладателя; адрес берётся ТОЛЬКО из external_links Shikimori (kind official_site) того же ID или из свойства P856 элемента Wikidata, найденного по статье с совпадающим IMDb ID — не из поиска",
       "access": "official_link_from_reference",
       "terms": "соблюдать robots.txt; одна страница на тайтл; текст не копируется"
+    },
+    {
+      "source_id": "src-wikidata",
+      "name": "Wikidata — страница элемента",
+      "url": "https://www.wikidata.org/wiki/",
+      "trust": "reference_catalog",
+      "rights_confirmed": true,
+      "scope": "идентификация фильма/сериала: официальный сайт (P856), IMDb (P345), Кинопоиск (P2603); элемент берётся по ссылке из статьи Википедии с совпадающим IMDb ID",
+      "access": "page",
+      "terms": "robots.txt: API и SPARQL закрыты для всех агентов — не используются; читаются только /wiki/Q…; данные CC0"
+    },
+    {
+      "source_id": "src-wikipedia",
+      "name": "Википедия (ru, en) — статья о фильме/сериале",
+      "url": "https://ru.wikipedia.org/wiki/",
+      "trust": "press_confirmed",
+      "rights_confirmed": true,
+      "scope": "дополнительный источник: идентичность по IMDb ID в статье; сюжет только как дополнение к официальному сайту/правообладателю",
+      "access": "page",
+      "terms": "robots.txt: API и поиск закрыты — не используются; статья по детерминированному названию из каталога; CC BY-SA — только пересказ, без копирования фраз"
     }
   ]
 }

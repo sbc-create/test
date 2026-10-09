@@ -483,6 +483,12 @@ class TestProfileProperties:
             # только API по ID из каталога сети. MyAnimeList и Jikan сознательно
             # не внесены: robots.txt MAL запрещает ИИ-агентам, Jikan недоступен.
             "shikimori.io",
+            # Фильмы и сериалы: решение владельца 2026-10-09 (D200) — Wikidata
+            # для идентификации, Википедия как дополнительный источник. Только
+            # страницы /wiki/…: API, поиск и SPARQL закрыты robots.txt.
+            "ru.wikipedia.org",
+            "en.wikipedia.org",
+            "www.wikidata.org",
         }
         # Написание доменов Animego различается символами и проверяется здесь
         # буквально: an1mego — цифра 1 и буква o, animeg0 — буква i и цифра 0,

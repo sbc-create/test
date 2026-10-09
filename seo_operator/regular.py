@@ -123,13 +123,29 @@ EDITOR_SITES = {
 #: (82 МБ) не помещается в MemoryMax=512M суточной службы.
 STREAM_DETAILS_BYTES = 40_000_000
 
+#: Сколько пробелов-фильмов/сериалов (без Shikimori, с IMDb ID) держать на сайт
+#: из крупного снимка: лучшие по рейтингу каталога и году. Рейтинг служит только
+#: порядку работы, в текст он не попадает (EDITORIAL_RULES).
+FILM_GAPS_KEPT = 150
+_EDITOR_FIELDS = (
+    "name",
+    "original_name",
+    "description",
+    "playable",
+    "year",
+    "external_ids",
+    "type",
+    "countries",
+    "imdb_rating",
+)
+
 #: Источник фактов по типу произведения. Одобрен только путь аниме (D199). Для
 #: фильмов и сериалов источник не одобрен: предложение —
 #: docs/editor/SOURCES_BY_TYPE.md; до решения владельца карточки копятся в учёте
 #: «нужен источник», а не исключаются.
 SOURCE_PLAN = {
-    "movie": "фильм: идентичность по IMDb/Кинопоиску; источник фактов не одобрен",
-    "tv": "сериал: идентичность по IMDb/Кинопоиску; источник фактов не одобрен",
+    "movie": "фильм: нет IMDb ID — идентичность не установить (D200 требует совпадения IMDb)",
+    "tv": "сериал: нет IMDb ID — идентичность не установить (D200 требует совпадения IMDb)",
     None: "тип не указан: сначала установить идентичность по ID каталога",
 }
 
@@ -2400,38 +2416,66 @@ def _details_for_editor(path: Path, wanted: set[str] | None = None) -> dict:
         return {}
     if size <= STREAM_DETAILS_BYTES:
         return _read_json(path, {}).get("details") or {}
+    import heapq
+
     from factory.qwen import editorial
 
     keep: dict = {}
+    films: list[tuple] = []  # куча лучших пробелов-фильмов: (оценка, год, slug, запись)
+
+    def light(rec: dict) -> dict:
+        out = {k: rec.get(k) for k in _EDITOR_FIELDS}
+        out["ratings_by_source"] = {
+            "shikimori": (rec.get("ratings_by_source") or {}).get("shikimori") or {}
+        }
+        return out
 
     def take(slug: str, rec: dict) -> bool:
+        if str(rec.get("description") or "").strip():
+            return False
         shiki = (rec.get("ratings_by_source") or {}).get("shikimori") or {}
-        useful = (wanted is not None and slug in wanted) or (
+        if (wanted is not None and slug in wanted) or (
             shiki.get("match_state") == "external_id_exact+title_verified"
-        )
-        if useful and not str(rec.get("description") or "").strip():
-            keep[slug] = {
-                k: rec.get(k)
-                for k in (
-                    "name",
-                    "description",
-                    "playable",
-                    "year",
-                    "external_ids",
-                    "type",
-                    "countries",
-                )
-            }
-            keep[slug]["ratings_by_source"] = {
-                "shikimori": (rec.get("ratings_by_source") or {}).get("shikimori") or {}
-            }
+        ):
+            keep[slug] = light(rec)
+        elif (rec.get("external_ids") or {}).get("imdb") and rec.get("playable", True):
+            ключ = (float(rec.get("imdb_rating") or 0), int(rec.get("year") or 0), slug)
+            if len(films) < FILM_GAPS_KEPT:
+                heapq.heappush(films, (*ключ, light(rec)))
+            elif ключ > films[0][:3]:
+                heapq.heapreplace(films, (*ключ, light(rec)))
         return False
 
     try:
         editorial._обойти_снимок(path, take)
     except (OSError, ValueError):
         return {}
+    for *_, slug, rec in films:
+        keep.setdefault(slug, rec)
     return keep
+
+
+def _film_candidate(domain: str, slug: str, mine: dict, weight: float, reason: str) -> dict:
+    """Кандидат-фильм/сериал: путь источника D200 (Википедия по IMDb → Wikidata → сайт)."""
+    ids = mine.get("external_ids") or {}
+    return {
+        "site": domain,
+        "slug": slug,
+        "url": f"https://{domain}/title/{slug}/",
+        "weight": weight,
+        "reason": reason,
+        "has_synopsis": False,
+        "headline": mine.get("name"),
+        "source_kind": "film",
+        "film_args": [
+            ids.get("imdb"),
+            mine.get("name") or "",
+            mine.get("original_name") or "",
+            str(mine.get("year") or ""),
+            "tv" if mine.get("type") == "tv" else "movie",
+        ],
+        "note": "фильм/сериал: source_fetch.py film <film_args> → wikidata <QID> → page <P856>",
+    }
 
 
 def editor_candidates(
@@ -2491,6 +2535,11 @@ def editor_candidates(
             continue
         shiki = (mine.get("ratings_by_source") or {}).get("shikimori") or {}
         source_id = shiki.get("external_id") or (mine.get("external_ids") or {}).get("mal")
+        imdb = (mine.get("external_ids") or {}).get("imdb")
+        if reason == "GAP" and not source_id and imdb:
+            taken.add(slug)
+            out.append(_film_candidate(domain, slug, mine, weight, "GAP"))
+            continue
         if reason == "GAP" and not source_id:
             # Ни синопсиса, ни ID одобренного источника: редактору писать не из
             # чего (запуск закончился бы SOURCES_MISSING). Карточка не исключается,
@@ -2550,49 +2599,57 @@ def editor_candidates(
                 ):
                     continue
                 shiki = (mine.get("ratings_by_source") or {}).get("shikimori") or {}
-                if shiki.get("match_state") != "external_id_exact+title_verified" or not mine.get(
-                    "playable", True
-                ):
+                if not mine.get("playable", True):
                     continue
-                pool.append(
-                    (
-                        -(shiki.get("value") or 0),
-                        -(mine.get("year") or 0),
-                        domain,
-                        slug,
-                        mine,
-                        shiki,
-                    )
-                )
+                if shiki.get("match_state") == "external_id_exact+title_verified":
+                    оценка = shiki.get("value") or 0
+                elif (mine.get("external_ids") or {}).get("imdb") and not shiki:
+                    оценка = float(mine.get("imdb_rating") or 0)
+                else:
+                    continue
+                pool.append((-оценка, -(mine.get("year") or 0), domain, slug, mine, shiki))
         per_domain: dict[str, int] = {}
         for c in out:
             per_domain[c["site"]] = per_domain.get(c["site"], 0) + 1
         by_slug: dict[str, list[tuple]] = {}
         for entry in sorted(pool):
             by_slug.setdefault(entry[3], []).append(entry)
-        for slug, entries in by_slug.items():
-            if len(out) >= limit:
-                break
-            if slug in taken:
-                continue
-            # Тайтл, свободный на нескольких доменах, — тому, у кого кандидатов меньше.
-            _, _, domain, slug, mine, shiki = min(entries, key=lambda e: per_domain.get(e[2], 0))
-            per_domain[domain] = per_domain.get(domain, 0) + 1
-            taken.add(slug)
-            out.append(
-                {
-                    "site": domain,
-                    "slug": slug,
-                    "url": f"https://{domain}/title/{slug}/",
-                    "weight": 0.0,
-                    "reason": "GAP_BACKFILL",
-                    "has_synopsis": False,
-                    "headline": mine.get("name"),
-                    "shikimori_id": shiki.get("external_id"),
-                    "shikimori_match": shiki.get("match_state"),
-                    "note": "трафика в снимке нет; приоритет — оценка Shikimori и год",
-                }
-            )
+        # Потолок на домен: без него фильмы с рейтингом каталога вытесняли аниме
+        # Animedia из запаса целиком (оценки шкал несравнимы). Два прохода: сначала
+        # всем поровну по нижней границе, затем добор до верхней.
+        доменов = max(1, len({e[2] for e in pool}))
+        for потолок in (max(1, limit // доменов), -(-limit // доменов)):
+            for slug, entries in by_slug.items():
+                if len(out) >= limit:
+                    break
+                if slug in taken:
+                    continue
+                entries = [e for e in entries if per_domain.get(e[2], 0) < потолок]
+                if not entries:
+                    continue
+                # Тайтл, свободный на нескольких доменах, — тому, у кого кандидатов меньше.
+                _, _, domain, slug, mine, shiki = min(
+                    entries, key=lambda e: per_domain.get(e[2], 0)
+                )
+                per_domain[domain] = per_domain.get(domain, 0) + 1
+                taken.add(slug)
+                if not shiki:
+                    out.append(_film_candidate(domain, slug, mine, 0.0, "GAP_BACKFILL"))
+                    continue
+                out.append(
+                    {
+                        "site": domain,
+                        "slug": slug,
+                        "url": f"https://{domain}/title/{slug}/",
+                        "weight": 0.0,
+                        "reason": "GAP_BACKFILL",
+                        "has_synopsis": False,
+                        "headline": mine.get("name"),
+                        "shikimori_id": shiki.get("external_id"),
+                        "shikimori_match": shiki.get("match_state"),
+                        "note": "трафика в снимке нет; приоритет — оценка Shikimori и год",
+                    }
+                )
     return out
 
 

@@ -1504,3 +1504,92 @@ def test_visible_publication_is_rechecked_daily_to_catch_loss_after_data_update(
         http=http,
     )
     assert http.calls.count("https://a.example/title/x/") == 2  # проверка старше суток
+
+
+def test_film_gap_with_imdb_is_a_candidate_with_d200_source_path(tmp_path):
+    snap = tmp_path / "analytics-2026-10-09.json"
+    snap.write_text(
+        json.dumps(
+            {
+                "domains": [
+                    {
+                        "domain": "lordfilm47.space",
+                        "measurements": [
+                            {
+                                "key": "popular_pages",
+                                "measured": True,
+                                "value": [
+                                    {"dimensions": [{"name": "/title/swat/"}], "metrics": [7.0]}
+                                ],
+                            }
+                        ],
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    facts = tmp_path / "facts"
+    facts.mkdir()
+    (facts / "lords-01-details.json").write_text(
+        json.dumps(
+            {
+                "details": {
+                    "swat": {
+                        "name": "Спецназ: Новобранцы",
+                        "original_name": "S.W.A.T. Exiles",
+                        "year": 2026,
+                        "type": "tv",
+                        "description": None,
+                        "external_ids": {"imdb": "36984433"},
+                    },
+                    "no-ids": {"name": "Без ID", "description": None, "type": "movie"},
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    needs: list[dict] = []
+    found = regular.editor_candidates(
+        snap, facts, set(), sites={"lordfilm47.space": "lords-01"}, needs_source=needs
+    )
+    film = next(c for c in found if c["slug"] == "swat")
+    assert film["source_kind"] == "film" and film["reason"] == "GAP"
+    assert film["film_args"] == ["36984433", "Спецназ: Новобранцы", "S.W.A.T. Exiles", "2026", "tv"]
+    assert all(c["slug"] != "no-ids" for c in found)
+
+
+def test_backfill_is_shared_between_domains_not_taken_by_higher_rated_films(tmp_path):
+    snap = tmp_path / "analytics-2026-10-09.json"
+    snap.write_text(json.dumps({"domains": []}), encoding="utf-8")
+    facts = tmp_path / "facts"
+    facts.mkdir()
+    verified = {"shikimori": {"match_state": "external_id_exact+title_verified", "value": 7}}
+    (facts / "a-details.json").write_text(
+        json.dumps(
+            {
+                "details": {
+                    f"anime-{i}": {"description": None, "ratings_by_source": verified}
+                    for i in range(5)
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    (facts / "b-details.json").write_text(
+        json.dumps(
+            {
+                "details": {
+                    f"film-{i}": {
+                        "description": None,
+                        "imdb_rating": 9.5,
+                        "external_ids": {"imdb": str(i)},
+                    }
+                    for i in range(10)
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    found = regular.editor_candidates(snap, facts, set(), limit=4, sites={"a.ru": "a", "b.ru": "b"})
+    assert sorted(c["site"] for c in found) == ["a.ru", "a.ru", "b.ru", "b.ru"]

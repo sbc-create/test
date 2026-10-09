@@ -39,6 +39,10 @@ animedia.space, zonafilm.space, lordfilm47.space, lordserial33.biz,
      студия, автор оригинала, первоисточник с его статусом и журналом. Студию,
      автора, журнал и «манга выходит/выходила» пиши только по этому ответу;
      издательства, которого в ответе нет, не называй;
+   * фильм/сериал (у кандидата source_kind = "film"): по разделу «Фильмы и
+     сериалы» правил — source_fetch.py film <film_args…> (идентичность по IMDb),
+     затем wikidata <QID> (официальный сайт) и page <url> (сюжет со страницы
+     правообладателя). Без официальной страницы — SOURCES_MISSING;
    * python3 automation/local/source_fetch.py official <shikimori_id> — одна страница
      официального сайта по ссылке Shikimori; отказ robots.txt — не обходить.
    MyAnimeList не читать (robots.txt запрещает ИИ-агентам). Других сайтов не открывать.
