@@ -1632,6 +1632,80 @@ def publication_metrics(
     return out
 
 
+AUDIENCE_TARGET = 1000
+_ROBOT_YES = {"yes", "1", "true", "роботы", "robots"}
+_ROBOT_NO = {"no", "0", "false", "люди", "people", "humans"}
+
+
+def _robot_flag(dim: dict) -> bool | None:
+    for raw in (dim.get("id"), dim.get("name")):
+        val = str(raw).strip().lower() if raw is not None else ""
+        if val in _ROBOT_YES:
+            return True
+        if val in _ROBOT_NO:
+            return False
+    return None
+
+
+def audience_goal(snapshot: Path | None) -> dict:
+    """Пользователи в день против цели 1000 — по последнему снимку аналитики.
+
+    Есть `daily_users` (дата × признак робота) — считаются только люди: последний
+    полный день и среднее по дням окна. Нет — строгие границы среднего:
+    не меньше users₇/7 и не больше visits₇/7 (роботы при этом не исключены).
+    Значение признака робота, которое не распознано, не угадывается.
+    """
+    if snapshot is None:
+        return {}
+    data = _read_json(snapshot, {})
+    out: dict[str, dict] = {"_snapshot": {"name": snapshot.name, "period": data.get("period")}}
+    for entry in data.get("domains") or []:
+        domain = entry.get("domain")
+        m = {x.get("key"): x for x in entry.get("measurements") or []}
+        daily = m.get("daily_users") or {}
+        if daily.get("measured") and isinstance(daily.get("value"), list):
+            humans: dict[str, float] = {}
+            unknown = set()
+            for row in daily["value"]:
+                dims = row.get("dimensions") or [{}, {}]
+                day = str((dims[0] or {}).get("name") or "")
+                flag = _robot_flag(dims[1] if len(dims) > 1 else {})
+                if flag is None:
+                    unknown.add(str((dims[1] if len(dims) > 1 else {}).get("name")))
+                    continue
+                if not flag:
+                    humans[day] = humans.get(day, 0.0) + float((row.get("metrics") or [0])[0])
+            if unknown and not humans:
+                out[domain] = {"not_measured": f"признак робота не распознан: {sorted(unknown)}"}
+                continue
+            if humans:
+                last_day = max(humans)
+                last = humans[last_day]
+                avg = sum(humans.values()) / len(humans)
+                out[domain] = {
+                    "kind": "daily",
+                    "last_day": last_day,
+                    "last": last,
+                    "avg": avg,
+                    "days": len(humans),
+                    "gap": max(0.0, AUDIENCE_TARGET - last),
+                }
+                continue
+        users, visits = m.get("visitors") or {}, m.get("visits") or {}
+        if users.get("measured") and visits.get("measured"):
+            lo, hi = float(users["value"]) / 7, float(visits["value"]) / 7
+            out[domain] = {
+                "kind": "bounds",
+                "low": lo,
+                "high": hi,
+                "gap_low": max(0.0, AUDIENCE_TARGET - hi),
+                "gap_high": max(0.0, AUDIENCE_TARGET - lo),
+            }
+        else:
+            out[domain] = {"not_measured": users.get("reason") or "нет данных"}
+    return out
+
+
 def owner_needs(defects_path: Path) -> list[str]:
     """Что требуется от владельца: открытые пункты зоны владельца."""
     items = _read_json(defects_path, {}).get("defects") or []
@@ -1877,6 +1951,31 @@ def render_daily(report: dict) -> str:
     for p in (pubs.get("checked") or [])[:30]:
         add(f"- {p['verdict']} {p['status']} {p['url']}")
     add("")
+
+    aud = dict(report.get("audience") or {})
+    meta = aud.pop("_snapshot", None)
+    if aud:
+        add(f"## Аудитория: цель {AUDIENCE_TARGET} пользователей в день")
+        add(
+            f"Снимок `{meta['name']}`, окно {meta['period']}. База зафиксирована "
+            "в docs/seo-operator/AUDIENCE_GOAL_20261012.md."
+        )
+        add("| домен | последний полный день (люди) | среднее в день | до цели |")
+        add("| --- | --- | --- | --- |")
+        for domain, a in sorted(aud.items()):
+            if "not_measured" in a:
+                add(f"| {domain} | не измерено: {a['not_measured']} | | |")
+            elif a["kind"] == "daily":
+                add(
+                    f"| {domain} | {a['last']:.0f} ({a['last_day']}) | {a['avg']:.0f} "
+                    f"за {a['days']} дн. | {a['gap']:.0f} |"
+                )
+            else:
+                add(
+                    f"| {domain} | по дням не собрано | {a['low']:.0f}–{a['high']:.0f} "
+                    f"(границы, роботы не исключены) | {a['gap_low']:.0f}–{a['gap_high']:.0f} |"
+                )
+        add("")
 
     if pm:
         add("## Публикации за сутки по доменам")
@@ -2567,6 +2666,12 @@ def step_daily_report(ctx: Context) -> Any:
         ),
         "publications": ctx.result("publications"),
         "coverage": ctx.result("coverage"),
+        "audience": audience_goal(
+            (
+                sorted(ctx.sources["analytics_snapshots"].glob("analytics-????-??-??.json"))
+                or [None]
+            )[-1]
+        ),
         "publication_metrics": publication_metrics(
             ctx.now - dt.timedelta(days=1), ctx.state.get("publications") or {}
         ),

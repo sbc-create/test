@@ -1299,3 +1299,67 @@ def test_publication_metrics_separates_new_texts_edits_and_visibility(tmp_path):
     assert ra["not_visible"] == ["https://a.example/t/copy/"]
     assert ra["unchecked"] == ["https://a.example/t/old/"]  # вердикт был у прежнего текста
     assert pm["b.example"]["new_texts"] == [] and pm["b.example"]["unchecked"]
+
+
+def test_audience_goal_counts_people_only_and_falls_back_to_strict_bounds(tmp_path):
+    def row(day, robot, users):
+        return {"dimensions": [{"name": day}, {"id": robot, "name": robot}], "metrics": [users, 0]}
+
+    snap = tmp_path / "analytics-2026-10-10.json"
+    snap.write_text(
+        json.dumps(
+            {
+                "period": {"date1": "7daysAgo", "date2": "yesterday"},
+                "domains": [
+                    {
+                        "domain": "daily.example",
+                        "measurements": [
+                            {
+                                "key": "daily_users",
+                                "measured": True,
+                                "value": [
+                                    row("2026-10-08", "no", 800),
+                                    row("2026-10-08", "yes", 300),
+                                    row("2026-10-09", "no", 900),
+                                ],
+                            }
+                        ],
+                    },
+                    {
+                        "domain": "bounds.example",
+                        "measurements": [
+                            {"key": "visitors", "measured": True, "value": 70},
+                            {"key": "visits", "measured": True, "value": 140},
+                        ],
+                    },
+                    {
+                        "domain": "odd.example",
+                        "measurements": [
+                            {
+                                "key": "daily_users",
+                                "measured": True,
+                                "value": [row("2026-10-09", "maybe", 5)],
+                            }
+                        ],
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    got = regular.audience_goal(snap)
+    d = got["daily.example"]
+    assert (d["last_day"], d["last"], d["avg"], d["gap"]) == ("2026-10-09", 900, 850, 100)
+    b = got["bounds.example"]
+    assert (b["low"], b["high"], b["gap_low"], b["gap_high"]) == (10, 20, 980, 990)
+    assert "не распознан" in got["odd.example"]["not_measured"]
+    text = regular.render_daily(
+        {
+            "run_id": "daily-2026-10-10",
+            "date_msk": "2026-10-10",
+            "generated_at": "2026-10-10T05:45:00Z",
+            "audience": got,
+        }
+    )
+    assert "| daily.example | 900 (2026-10-09) | 850 за 2 дн. | 100 |" in text
+    assert "| bounds.example | по дням не собрано | 10–20" in text
