@@ -1105,7 +1105,11 @@ def test_editor_candidates_rank_gaps_and_space_duplicates_by_title_traffic(tmp_p
             json.dumps(
                 {
                     "details": {
-                        "gap": {"name": "Без описания", "description": None},
+                        "gap": {
+                            "name": "Без описания",
+                            "description": None,
+                            "external_ids": {"mal": "7"},
+                        },
                         "dup": same,
                         "done": same,
                     }
@@ -1147,7 +1151,11 @@ def test_editor_candidates_give_one_own_description_per_work_in_the_network(tmp_
             json.dumps(
                 {
                     "details": {
-                        "gap": {"name": "Без описания", "description": None},
+                        "gap": {
+                            "name": "Без описания",
+                            "description": None,
+                            "external_ids": {"mal": "7"},
+                        },
                         "done-elsewhere": {"description": None, "ratings_by_source": shiki},
                         "free": {"description": None, "ratings_by_source": shiki},
                     }
@@ -1414,3 +1422,44 @@ def test_published_items_read_queue_delivery_copy(tmp_path):
     )
     items = regular.published_items({"lords": (tmp_path / "lords", "/title/{slug}/")})
     assert [i["url"] for i in items] == ["https://zonafilm.space/title/ledyanaya-stena/"]
+
+
+def test_editor_candidates_skip_gaps_without_any_source(tmp_path):
+    snap = tmp_path / "analytics-2026-10-09.json"
+    snap.write_text(
+        json.dumps(
+            {
+                "domains": [
+                    {
+                        "domain": "zonafilm.space",
+                        "measurements": [
+                            {
+                                "key": "popular_pages",
+                                "measured": True,
+                                "value": [
+                                    {"dimensions": [{"name": "/title/no-id/"}], "metrics": [9.0]},
+                                    {"dimensions": [{"name": "/title/with-id/"}], "metrics": [1.0]},
+                                ],
+                            }
+                        ],
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    facts = tmp_path / "facts"
+    facts.mkdir()
+    (facts / "zona-01-details.json").write_text(
+        json.dumps(
+            {
+                "details": {
+                    "no-id": {"name": "Без источника", "description": None},
+                    "with-id": {"name": "С ID", "description": None, "external_ids": {"mal": "1"}},
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    found = regular.editor_candidates(snap, facts, set(), sites={"zonafilm.space": "zona-01"})
+    assert [c["slug"] for c in found] == ["with-id"]

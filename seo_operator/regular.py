@@ -2433,6 +2433,11 @@ def editor_candidates(
         else:
             continue
         shiki = (mine.get("ratings_by_source") or {}).get("shikimori") or {}
+        source_id = shiki.get("external_id") or (mine.get("external_ids") or {}).get("mal")
+        if reason == "GAP" and not source_id:
+            # Ни синопсиса, ни ID внешнего источника: писать не из чего, запуск
+            # закончился бы SOURCES_MISSING (zonafilm.space/title/dig-that-zeebo-newton).
+            continue
         taken.add(slug)
         out.append(
             {
