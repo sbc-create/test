@@ -306,14 +306,14 @@ description, genre, countryOfOrigin. Теперь `yummyani.org` и `yummyani.si
 
 ```
 sudo bash /home/claude/wt-portable-site-cell-01/automation/host/install-executor-narrow.sh \
-  --package /home/claude/wt-portable-site-cell-01/var/install-packages/pkg-a781438a0007 \
-  --expect-digest a781438a000709b4aead9787105c09271a9466ad36bd7d0cb385225061aa74b9 \
+  --package /home/claude/wt-portable-site-cell-01/var/install-packages/pkg-3a818a99bd66 \
+  --expect-digest 3a818a99bd6697d71b31abdd26a1984d6914c78c828d7d7ce9946e8290f9ba2e \
   --accept-registry-change 'animedia-02.release=a1bb833bb0d2->9b52b304df3f'
 ```
 
 Что она меняет: корневую копию `/usr/local/lib/site-factory-cell`
-(`factory/`, `schemas/`, `config/`) на содержимое пакета `pkg-a781438a0007`
-(коммит `b065d49e676d`) и файл `cell-install.json`. Единственное изменение
+(`factory/`, `schemas/`, `config/`) на содержимое пакета `pkg-3a818a99bd66`
+(коммит `b0c8818862c4`) и файл `cell-install.json`. Единственное изменение
 разрешений — `animedia-02.release`: `hold: true` → `hold: false` с переносом
 прежней причины в `hold_history` (основание — выше в этом разделе). Ключ
 согласия привязан к ОБОИМ значениям: если состояние изменилось, команда
