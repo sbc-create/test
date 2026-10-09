@@ -258,3 +258,89 @@ def test_без_идентификатора_тайтла_комментарий
     with pytest.raises(comments.ОперацияОтклонена, match="идентификатор тайтла"):
         comments.состояние("yummyani.org", "кошка")
 
+
+# --------------------------------------------------------- снятие комментария
+
+def test_снятие_идёт_по_одному_идентификатору(витрина, monkeypatch):
+    """Маршрут приложения принимает ОДИН id — сообщения посетителей целы."""
+    обращения: list[tuple[str, dict | None]] = []
+
+    def подставной(адрес, *, тело=None, домен, добавить=None):
+        обращения.append((адрес, тело))
+        if "/api/admin/comments/" in адрес:
+            return 200, json.dumps({"id": "cmv-мой", "status": "deleted",
+                                    "titleSlug": "019d83b9"})
+        if "?titleSlug=" in адрес:
+            return 200, json.dumps({"total": 1, "comments": [
+                {"id": "cmv-гость", "authorName": "Гость", "body": "привет"}]})
+        return 200, "{}"
+
+    def сессия(адрес, *, тело=None, домен, добавить=None, вернуть_заголовки=False):
+        return 200, "{}", {"Set-Cookie": "yami_moderation=подпись; Path=/"}
+
+    monkeypatch.setattr(comments, "_запрос", подставной)
+    monkeypatch.setattr(comments, "_послать", сессия)
+    monkeypatch.setattr(comments, "_секрет_модерации", lambda s: "секрет-не-короче-16")
+    итог = comments.снять("yummyani.org", "cmv-мой",
+                          author="cell/wt-portable-site-cell-01")
+    assert итог["state"] == "unpublished" and итог["status"] == "deleted"
+    # Снимается ровно один адрес, и он содержит наш id.
+    пишущие = [а for а, т in обращения if т is not None]
+    assert пишущие == ["https://yummyani.org/api/admin/comments/cmv-мой"], пишущие
+    # Подтверждение читает тред ИЗ ОТВЕТА, а не из догадки.
+    чтения = [а for а, т in обращения if т is None]
+    assert any("titleSlug=019d83b9" in а for а in чтения), чтения
+    # Комментарий гостя остался в списке и операцией не затронут.
+    assert итог["remaining_in_thread"] == 1
+
+
+def test_без_секрета_снятия_нет(витрина, monkeypatch):
+    monkeypatch.setattr(comments, "_секрет_модерации", lambda s: "")
+    with pytest.raises(comments.ОперацияОтклонена, match="секрет модерации не прочитан"):
+        comments.снять("yummyani.org", "cmv-мой", author="editor/claude/run-1")
+
+
+def test_без_cookie_сессии_снятия_нет(витрина, monkeypatch):
+    """Успех открытия сессии без cookie — не разрешение: снимать нечем."""
+    monkeypatch.setattr(comments, "_секрет_модерации", lambda s: "секрет-не-короче-16")
+    monkeypatch.setattr(comments, "_послать",
+                        lambda адрес, **кв: (200, "{}", {"Content-Type": "application/json"}))
+    with pytest.raises(comments.ОперацияОтклонена, match="cookie"):
+        comments.снять("yummyani.org", "cmv-мой", author="editor/claude/run-1")
+
+
+def test_успех_приложения_без_исчезновения_из_списка_это_отказ(витрина, monkeypatch):
+    """«Сняли» обязано значить «не отдаётся», а не «ответило 200»."""
+    def подставной(адрес, *, тело=None, домен, добавить=None):
+        if адрес.endswith("/api/admin/comments/cmv-мой"):
+            return 200, json.dumps({"id": "cmv-мой", "status": "deleted",
+                                    "titleSlug": "019d83b9"})
+        return 200, json.dumps({"total": 1, "comments": [{"id": "cmv-мой"}]})
+
+    monkeypatch.setattr(comments, "_запрос", подставной)
+    monkeypatch.setattr(comments, "_послать",
+                        lambda адрес, **кв: (200, "{}", {"Set-Cookie": "yami_moderation=п"}))
+    monkeypatch.setattr(comments, "_секрет_модерации", lambda s: "секрет-не-короче-16")
+    with pytest.raises(comments.ОперацияОтклонена, match="всё ещё в списке"):
+        comments.снять("yummyani.org", "cmv-мой", author="editor/claude/run-1")
+
+
+def test_qwen_не_снимает(витрина, monkeypatch):
+    monkeypatch.setattr(comments, "_секрет_модерации", lambda s: "секрет-не-короче-16")
+    with pytest.raises(actors.ОперацияНеРазрешена):
+        comments.снять("yummyani.org", "cmv-мой", author="qwen/editor-automation/run-3")
+
+
+def test_секрет_не_попадает_в_журнал(витрина, monkeypatch):
+    СЕКРЕТ = "секрет-не-короче-16-знаков"
+    monkeypatch.setattr(comments, "_секрет_модерации", lambda s: СЕКРЕТ)
+    monkeypatch.setattr(comments, "_послать",
+                        lambda адрес, **кв: (200, "{}", {"Set-Cookie": "yami_moderation=п"}))
+    monkeypatch.setattr(comments, "_запрос", lambda адрес, **кв: (
+        (200, json.dumps({"id": "cmv-мой", "status": "deleted", "titleSlug": "т"}))
+        if "admin" in адрес else (200, json.dumps({"total": 0, "comments": []}))))
+    comments.снять("yummyani.org", "cmv-мой", author="editor/claude/run-1")
+    журнал = (витрина / "history.jsonl").read_text(encoding="utf-8")
+    assert "unpublish-comment" in журнал and "cmv-мой" in журнал
+    assert СЕКРЕТ not in журнал, "значение секрета в журнале — утечка"
+

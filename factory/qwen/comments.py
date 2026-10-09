@@ -143,7 +143,9 @@ def _ключ_треда(s: registry.Сайт, slug: str) -> str:
 _ПЕРЕХВАТ = "Unsupported method"
 
 
-def _послать(адрес: str, *, тело: dict | None, домен: str) -> tuple[int, str]:
+def _послать(адрес: str, *, тело: dict | None, домен: str,
+             добавить: dict[str, str] | None = None,
+             вернуть_заголовки: bool = False):
     данные = None if тело is None else json.dumps(тело, ensure_ascii=False).encode()
     заголовки = {
         "User-Agent": "site-factory-editorial/1.0",
@@ -156,18 +158,23 @@ def _послать(адрес: str, *, тело: dict | None, домен: str) 
     }
     if данные is not None:
         заголовки["Content-Type"] = "application/json"
+    заголовки.update(добавить or {})
     запрос = urllib.request.Request(адрес, data=данные, headers=заголовки,
                                     method="POST" if данные else "GET")
     try:
         with urllib.request.urlopen(запрос, timeout=45) as о:
-            return о.status, о.read().decode("utf-8", "replace")
+            итог = (о.status, о.read().decode("utf-8", "replace"))
+            входящие = dict(о.headers.items())
     except urllib.error.HTTPError as ош:
-        return ош.code, ош.read().decode("utf-8", "replace")
+        итог = (ош.code, ош.read().decode("utf-8", "replace"))
+        входящие = dict(ош.headers.items()) if ош.headers else {}
     except Exception as ош:  # noqa: BLE001 — недоступность приложения не падение
-        return 0, f"{type(ош).__name__}: {ош}"
+        итог, входящие = (0, f"{type(ош).__name__}: {ош}"), {}
+    return (*итог, входящие) if вернуть_заголовки else итог
 
 
-def _запрос(адрес: str, *, тело: dict | None = None, домен: str) -> tuple[int, str]:
+def _запрос(адрес: str, *, тело: dict | None = None, домен: str,
+            добавить: dict[str, str] | None = None) -> tuple[int, str]:
     """Запрос к приложению витрины, публичным адресом или по петле.
 
     Порядок именно такой: сперва публичный адрес — он и есть то, чем пользуется
@@ -176,7 +183,7 @@ def _запрос(адрес: str, *, тело: dict | None = None, домен: 
     обход проверок приложения: Origin и Host остаются домена, приложение
     проверяет их само, и база у контейнера та же.
     """
-    код, ответ = _послать(адрес, тело=тело, домен=домен)
+    код, ответ = _послать(адрес, тело=тело, домен=домен, добавить=добавить)
     if _ПЕРЕХВАТ not in ответ:
         return код, ответ
     петля = registry.приложение_в_петле(домен)
@@ -184,7 +191,8 @@ def _запрос(адрес: str, *, тело: dict | None = None, домен: 
         return код, (ответ + f" | публичный POST перехвачен, а контейнер домена "
                               f"{домен} среди работающих не найден: писать некуда")
     хвост = адрес.split(домен, 1)[1] if домен in адрес else адрес
-    return _послать(петля.rstrip("/") + хвост, тело=тело, домен=домен)
+    return _послать(петля.rstrip("/") + хвост, тело=тело, домен=домен,
+                    добавить=добавить)
 
 
 #: Разрешение владельца опубликовать комментарий там, где снять его нечем.
@@ -217,6 +225,112 @@ def путь_снятия(s: registry.Сайт) -> tuple[bool, str]:
     # прочитала как «маршрут отвечает» и разрешила бы необратимую публикацию.
     return False, (f"HTTP {код}: ответ не подтверждает, что снятие возможно "
                    f"({тело[:120].strip()})")
+
+
+#: Где лежит секрет модерации. Файл ВНЕ репозитория, по домену, в форме
+#: `ADMIN_MODERATION_SECRET=<значение>` — тот же файл, что подкладывается
+#: контейнеру compose-секретом. Значение не печатается ни в ответ, ни в журнал.
+ФАЙЛ_СЕКРЕТА = ("/srv/sites/yummyani-staging/runtime/moderation/{домен}/env")
+
+#: Имя cookie сессии модерации в приложении (src/modules/admin/session.ts).
+COOKIE_МОДЕРАЦИИ = "yami_moderation"
+
+
+def _секрет_модерации(s: registry.Сайт) -> str:
+    путь = os.environ.get("FACTORY_MODERATION_SECRET_FILE", "").strip() or \
+        ФАЙЛ_СЕКРЕТА.format(домен=s.domain)
+    try:
+        текст = pathlib.Path(путь).read_text(encoding="utf-8")
+    except OSError:
+        return ""
+    for строка in текст.splitlines():
+        ключ, _, значение = строка.partition("=")
+        if ключ.strip() == "ADMIN_MODERATION_SECRET":
+            return значение.strip()
+    return ""
+
+
+def снять(site: str, comment_id: str, *, author: str,
+          действие: str = "delete") -> dict[str, Any]:
+    """Снять ОДИН комментарий по идентификатору. Остальные не затрагиваются.
+
+    Это откат публикации, которого у операции не было: приложение публикует
+    комментарий сразу, а снимает только маршрут модерации
+    `POST /api/admin/comments/<id>` при настроенном секрете. Операция работает
+    с ОДНИМ идентификатором, потому что так устроен и сам маршрут
+    (`moderateComment({id, action})`), — сообщения посетителей она не трогает
+    по построению, а не по обещанию.
+
+    Подтверждение — чтением треда, в котором запись жила. Тред берётся из
+    ОТВЕТА маршрута (`titleSlug`), а не из догадки: 2026-10-09 ошибочная запись
+    оказалась в треде публичного слага, которого карточка не показывает, и
+    проверка «не той» ветки ничего бы не доказала.
+    """
+    actors.проверить(author, "comment-unpublish")
+    s = _сайт(site)
+    _требует_семейство(s)
+    if действие not in ("delete", "reject", "spam", "approve"):
+        raise ОперацияОтклонена(
+            f"действие {действие!r} приложению неизвестно: delete, reject, spam, approve")
+    секрет = _секрет_модерации(s)
+    if not секрет:
+        raise ОперацияОтклонена(
+            f"{s.domain}: секрет модерации не прочитан "
+            f"({ФАЙЛ_СЕКРЕТА.format(домен=s.domain)}). Снятие без него невозможно")
+    код, тело, заголовки = _послать(
+        f"https://{s.domain}/api/admin/moderation/session",
+        тело={"secret": секрет}, домен=s.domain, вернуть_заголовки=True)
+    if код == 501 or "Unsupported method" in тело:
+        петля = registry.приложение_в_петле(s.domain)
+        if not петля:
+            raise ОперацияОтклонена(
+                f"{s.domain}: публичный POST перехвачен, контейнер домена не найден")
+        код, тело, заголовки = _послать(
+            петля.rstrip("/") + "/api/admin/moderation/session",
+            тело={"secret": секрет}, домен=s.domain, вернуть_заголовки=True)
+    if код not in (200, 204):
+        raise ОперацияОтклонена(
+            f"{s.domain}: сессия модерации не открыта (HTTP {код}): {тело[:200]}")
+    печенье = ""
+    for имя, значение in заголовки.items():
+        if имя.lower() == "set-cookie" and COOKIE_МОДЕРАЦИИ in значение:
+            печенье = значение.split(";", 1)[0]
+    if not печенье:
+        raise ОперацияОтклонена(
+            f"{s.domain}: ответ сессии модерации не содержит cookie "
+            f"{COOKIE_МОДЕРАЦИИ}: снимать нечем")
+    код2, ответ = _запрос(f"https://{s.domain}/api/admin/comments/{comment_id}",
+                          тело={"action": действие}, домен=s.domain,
+                          добавить={"Cookie": печенье})
+    if код2 not in (200, 204):
+        raise ОперацияОтклонена(
+            f"{s.domain}: приложение не сняло комментарий {comment_id} "
+            f"(HTTP {код2}): {ответ[:300]}")
+    данные = json.loads(ответ) if ответ.strip().startswith("{") else {}
+    запись = данные.get("comment") or данные
+    тред = str(запись.get("titleSlug") or "")
+    осталось, было_видно = None, None
+    if тред:
+        к3, т3 = _запрос(f"https://{s.domain}/api/comments?titleSlug={тред}",
+                         домен=s.domain)
+        если = json.loads(т3) if к3 == 200 else {}
+        записи = если.get("comments") or []
+        осталось = если.get("total")
+        было_видно = any(з.get("id") == comment_id for з in записи)
+    editorial._дописать_историю(_каталог(s), {
+        "at": editorial._сейчас(), "op": "unpublish-comment",
+        "comment_id": comment_id, "action": действие, "prepared_by": author,
+        "thread": тред or None, "still_listed": было_видно,
+        "remaining_in_thread": осталось,
+    })
+    if было_видно:
+        raise ОперацияОтклонена(
+            f"{s.domain}: приложение ответило успехом, но комментарий "
+            f"{comment_id} всё ещё в списке треда {тред!r}")
+    return {"site": s.domain, "comment_id": comment_id, "action": действие,
+            "state": "unpublished", "thread": тред or None,
+            "status": запись.get("status"),
+            "remaining_in_thread": осталось}
 
 
 def состояние(site: str, slug: str) -> dict[str, Any]:
