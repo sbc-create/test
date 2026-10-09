@@ -22,6 +22,8 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import os
+import pathlib
 import subprocess
 import sys
 
@@ -32,13 +34,37 @@ class Отказ(RuntimeError):
     pass
 
 
+def токен_доверия() -> str:
+    """Токен канала: им наша сторона отличается от клиента моста.
+
+    Поле `owner`/`author` называет сам вызывающий, поэтому правами оно быть не
+    может. Без токена мост даёт права роли `qwen` — только подготовку
+    черновиков, и этот инструмент (он берёт задание и пишет результат) получил
+    бы законный отказ.
+    """
+    из_среды = os.environ.get("FACTORY_BRIDGE_TRUSTED_TOKEN", "").strip()
+    if из_среды:
+        return из_среды
+    путь = os.environ.get("FACTORY_BRIDGE_TRUSTED_TOKEN_FILE", "").strip()
+    файл = (pathlib.Path(путь) if путь
+            else pathlib.Path(__file__).resolve().parents[2] / "var"
+            / "bridge-trusted-token")
+    try:
+        return файл.read_text(encoding="utf-8").strip()
+    except OSError:
+        return ""
+
+
 def вызов(имя: str, аргументы: dict) -> dict:
     запрос = {"jsonrpc": "2.0", "id": 1, "method": "tools/call",
               "params": {"name": имя, "arguments": аргументы}}
-    r = subprocess.run(
-        ["curl", "-sS", "--max-time", "120", "-X", "POST",
-         "-H", "Content-Type: application/json", "-d", json.dumps(запрос), МОСТ],
-        capture_output=True, text=True)
+    команда = ["curl", "-sS", "--max-time", "120", "-X", "POST",
+               "-H", "Content-Type: application/json"]
+    значение = токен_доверия()
+    if значение:
+        команда += ["-H", f"X-Factory-Trusted: {значение}"]
+    r = subprocess.run(команда + ["-d", json.dumps(запрос), МОСТ],
+                       capture_output=True, text=True)
     if r.returncode != 0:
         raise Отказ(f"{имя}: мост не ответил ({r.stderr.strip()[:200]})")
     try:
