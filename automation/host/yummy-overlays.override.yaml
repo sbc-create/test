@@ -46,8 +46,39 @@
 # по файлу СНЯЛО БЫ показ. Описание возвращает настройку в файлы и делает
 # пересоздание безопасным; на работающие контейнеры это наложение само по себе
 # не влияет — только на те, что пересоздают командой выше.
+# Секрет модерации комментариев приходит ФАЙЛОМ, а не переменной compose.
+#
+# Так устроен сам образ: его entrypoint читает токены провайдера из
+# /run/cdnvideohub и прямо объясняет, почему — «значение, объявленное в compose
+# `environment:`, видно в `docker inspect`, в `docker compose config` и в любом
+# дампе окружения контейнера». К секрету модерации это относится ровно так же.
+#
+# Приложение читает `process.env.ADMIN_MODERATION_SECRET`
+# (src/modules/admin/session.ts) и требует не меньше 16 знаков. Образ
+# пересобирать не нужно: обёртка точки входа читает файл и передаёт значение
+# процессу, после чего запускает штатный entrypoint без изменений. Пустой файл —
+# отказ запуска (exit 64), а не тихий старт без модерации: иначе снятие
+# комментария осталось бы невозможным, а выглядело бы настроенным.
+#
+# Файлы лежат вне репозитория: /srv/sites/yummyani-staging/runtime/moderation/<домен>/secret
+# (0600, каталог 0700), у каждого тенанта свой. В git не попадают, в ответах и
+# журналах не печатаются.
 services:
   web-site:
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        grep -q '^ADMIN_MODERATION_SECRET=.\{16,\}' /run/secrets/moderation_site || {
+          echo "[entrypoint] FATAL: moderation secret missing or shorter than 16" >&2
+          exit 64
+        }
+        set -a
+        . /run/secrets/moderation_site
+        set +a
+        exec ./scripts/docker-entrypoint.staging.sh
+    secrets:
+      - moderation_site
     environment:
       TITLE_OVERLAYS_PATH: /app/content/overlays/title-overlays.json
       TITLE_OVERLAYS_LAST_GOOD_PATH: /app/content/overlays/title-overlays.last-good.json
@@ -58,6 +89,20 @@ services:
         read_only: true
 
   web-org:
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        grep -q '^ADMIN_MODERATION_SECRET=.\{16,\}' /run/secrets/moderation_org || {
+          echo "[entrypoint] FATAL: moderation secret missing or shorter than 16" >&2
+          exit 64
+        }
+        set -a
+        . /run/secrets/moderation_org
+        set +a
+        exec ./scripts/docker-entrypoint.staging.sh
+    secrets:
+      - moderation_org
     environment:
       TITLE_OVERLAYS_PATH: /app/content/overlays/title-overlays.json
       TITLE_OVERLAYS_LAST_GOOD_PATH: /app/content/overlays/title-overlays.last-good.json
@@ -82,3 +127,14 @@ services:
         source: /srv/sites/yummyani-staging/runtime/overlays/yummyani.biz
         target: /app/content/overlays
         read_only: true
+
+# Секреты объявляются compose-секретами, а не монтированием файла: Docker
+# читает источник правами демона и подкладывает его в /run/secrets root:root
+# 0444, то есть контейнерному пользователю `node` он читаем, а на хосте файл
+# остаётся 0600 у claude. Монтирование файла 0600 от другого uid контейнер
+# прочитать не смог бы, а ослаблять права на хосте ради этого нельзя.
+secrets:
+  moderation_site:
+    file: /srv/sites/yummyani-staging/runtime/moderation/yummyani.site/env
+  moderation_org:
+    file: /srv/sites/yummyani-staging/runtime/moderation/yummyani.org/env
