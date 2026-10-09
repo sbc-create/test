@@ -296,6 +296,53 @@ def _разобрать_контейнеры() -> dict[str, str]:
     return итог
 
 
+def приложение_в_петле(домен: str) -> str:
+    """`http://127.0.0.1:<порт>` контейнера ЭТОГО домена, измеренный docker.
+
+    Зачем это нужно. Записи в приложение витрины (например, редакционный
+    комментарий) идут его же публичным интерфейсом, но POST на публичный адрес
+    из этой сессии не доходит: прослойка сети отвечает 501 «Unsupported method
+    ('POST')» — это Python http.server на пути, а не приложение. GET при этом
+    проходит, поэтому чтение и проверка видимости остаются публичными.
+
+    Петля ведёт в ТОТ ЖЕ контейнер и ту же базу, и приложение само проверяет
+    `Origin` против своего APP_URL, поэтому запрос обязан нести заголовки
+    домена. Порт берётся у работающего контейнера, а не назначается: угаданный
+    порт означал бы запись в соседнего тенанта.
+    """
+    import shutil
+    if not shutil.which("docker"):
+        return ""
+    try:
+        список = subprocess.run(["docker", "ps", "--format", "{{.Names}}"],
+                                capture_output=True, text=True,
+                                timeout=ОПРОС_КОНТЕЙНЕРА_С)
+        имена = список.stdout.split() if список.returncode == 0 else []
+        if not имена:
+            return ""
+        св = subprocess.run(["docker", "inspect", *имена], capture_output=True,
+                            text=True, timeout=ОПРОС_КОНТЕЙНЕРА_С * 3)
+        все = json.loads(св.stdout) if св.returncode == 0 else []
+    except (OSError, subprocess.SubprocessError, ValueError):
+        return ""
+    цель = домен.strip().lower()
+    for данные in все:
+        окр = dict(кв.split("=", 1)
+                   for кв in (данные.get("Config") or {}).get("Env") or []
+                   if "=" in кв)
+        адрес = (окр.get("SITE_URL") or "").split("//", 1)[-1].strip("/").lower()
+        if адрес != цель:
+            continue
+        порты = ((данные.get("NetworkSettings") or {}).get("Ports") or {})
+        for привязки in порты.values():
+            for п in привязки or []:
+                хост = п.get("HostIp") or ""
+                порт = п.get("HostPort") or ""
+                if порт and хост in ("127.0.0.1", "0.0.0.0", ""):
+                    return f"http://127.0.0.1:{порт}"
+    return ""
+
+
 def наложение_в_контейнере(домен: str) -> str:
     """Читает ли контейнер этого домена каталог наложений ЭТОГО домена."""
     global _контейнеры

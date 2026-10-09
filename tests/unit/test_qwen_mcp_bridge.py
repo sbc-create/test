@@ -442,6 +442,18 @@ def test_приёмка_отличает_мост_от_чужого_сервер
 
 # --- аналитика и откат: то, чего у моста не было -----------------------------
 
+@pytest.fixture(autouse=True)
+def доверенный_канал(monkeypatch):
+    """Канал доверен по умолчанию: эти проверки про ОПЕРАЦИИ, не про канал.
+
+    Опознание клиента добавлено 2026-10-09 и по построению недоверчиво: без
+    локального токена права — роли `qwen`. Если бы проверки операций шли через
+    недоверенный канал, они проверяли бы заставу канала, а не то, зачем
+    написаны. Проверки самого канала доверие объявляют явно.
+    """
+    monkeypatch.setattr(mcp, "канал_доверен", lambda: True)
+
+
 def _вызов(имя: str, аргументы: dict) -> tuple[bool, dict]:
     """Вызов через ПРОТОКОЛ, а не напрямую: проверяется и обёртка ответа."""
     тело = mcp.обработать({"jsonrpc": "2.0", "id": 1, "method": "tools/call",
@@ -806,4 +818,111 @@ def test_ответ_называет_время_запуска_процесса(
     assert "перезапуска" in код["loaded_note"]
     # Коммит остаётся: он отвечает на другой вопрос — что лежит в дереве.
     assert "commit" in код and "worktree" in код
+
+
+# ------------------------------------------------- опознание клиента канала
+
+def test_недоверенный_канал_не_меняет_production(monkeypatch):
+    """Поле author называет сам клиент — правами оно быть не может.
+
+    Измерено 2026-10-09 на живом мосте: застава прав стояла в операциях и
+    читала ЗАЯВЛЕННОЕ имя. Qwen, прислав `author: "editor/claude-auto/run-1"`,
+    получил бы права проверяющей стороны, а инструменты без поля личности
+    (release_site, rollback_site, set_indexing_mode, register_owner_consent,
+    refresh_executor_access) не проверялись вовсе.
+    """
+    monkeypatch.setattr(mcp, "канал_доверен", lambda: False)
+    # Домены изолированные: отказ наступает ДО обработчика, но литерал
+    # production-домена в тесте запрещён отдельной заставой репозитория —
+    # и правильно: однажды он сработает не в том порядке.
+    for имя, аргументы in (
+            ("publish_material", {"site": "nosuch.invalid", "slug": "к",
+                                  "author": "editor/claude-auto/run-1"}),
+            ("release_site", {"site": "nosuch.invalid"}),
+            ("rollback_site", {"site": "nosuch.invalid"}),
+            ("set_indexing_mode", {"site": "nosuch.invalid", "mode": "open"}),
+            ("register_owner_consent", {"site": "nosuch.invalid"}),
+            ("refresh_executor_access", {"site": "nosuch.invalid"})):
+        ошибка, д = _вызов(имя, аргументы)
+        assert ошибка, (имя, д)
+        assert "не меняет production" in д["error"], (имя, д["error"])
+        assert "непроверенный-канал" in д["error"], (
+            f"{имя}: отказ обязан называть причину — канал, а не имя")
+
+
+def test_подготовка_черновиков_в_недоверенном_канале_остаётся(monkeypatch):
+    """Ограничение касается изменений production, а не работы Qwen вообще."""
+    monkeypatch.setattr(mcp, "канал_доверен", lambda: False)
+    следы = {}
+    monkeypatch.setattr(editorial, "подготовить",
+                        lambda site, slug, тело, *, author, источники=None:
+                        следы.update(author=author) or {"state": "verified",
+                                                        "quality_problems": []})
+    ошибка, д = _вызов("prepare_material", {"site": "nosuch.invalid", "slug": "к",
+                                            "body": "Текст о произведении.",
+                                            "author": "qwen/auto/run-1"})
+    assert not ошибка, д
+    assert следы["author"].startswith("qwen/непроверенный-канал/"), следы
+
+
+def test_доверенный_канал_работает_как_прежде(monkeypatch):
+    """Иначе закрытие пробела остановило бы редактора Claude."""
+    monkeypatch.setattr(mcp, "канал_доверен", lambda: True)
+    поймано = {}
+
+    def перехват(site, slug, *, author, expected_generation=None, тело=None,
+                 task_id=None):
+        поймано.update(author=author)
+        return {"state": "confirmed"}
+
+    monkeypatch.setattr(editorial, "публиковать",
+                        lambda site, slug, **кв: перехват(site, slug, **кв))
+    ошибка, д = _вызов("publish_material", {
+        "site": "nosuch.invalid", "slug": "к", "body": "Текст.",
+        "author": "editor/claude-auto/run-1"})
+    assert not ошибка, д
+    assert поймано["author"] == "editor/claude-auto/run-1", поймано
+
+
+def test_доверие_не_зависит_от_тела_запроса(monkeypatch):
+    """Токен — заголовок канала; поле в аргументах доверия не даёт."""
+    monkeypatch.undo()   # автофикстура подменяет канал_доверен — здесь он нужен настоящий
+    monkeypatch.setattr(mcp, "токен_доверия", lambda создать=False: "секрет")
+    mcp.пометить_доверие(None)
+    assert mcp.канал_доверен() is False
+    mcp.пометить_доверие("не тот")
+    assert mcp.канал_доверен() is False
+    mcp.пометить_доверие("секрет")
+    assert mcp.канал_доверен() is True
+    # Пустой токен на сервере — не разрешение: доверять нечему.
+    monkeypatch.setattr(mcp, "токен_доверия", lambda создать=False: "")
+    mcp.пометить_доверие("что угодно")
+    assert mcp.канал_доверен() is False
+    mcp.пометить_доверие(None)
+
+
+def test_у_каждого_пишущего_инструмента_есть_операция():
+    """Новый пишущий инструмент не должен оказаться вне ограничений молча."""
+    без_операции = sorted(и for и in mcp.ПИШУЩИЕ
+                          if и not in mcp.ОПЕРАЦИЯ_ИНСТРУМЕНТА)
+    assert не_осталось(без_операции), без_операции
+    # И каждая названная операция известна правам.
+    неизвестные = sorted(о for о in mcp.ОПЕРАЦИЯ_ИНСТРУМЕНТА.values()
+                         if о not in actors.ОПЕРАЦИИ)
+    assert not неизвестные, неизвестные
+
+
+def не_осталось(перечень) -> bool:
+    return not перечень
+
+
+def test_значение_токена_не_появляется_в_ответе(monkeypatch):
+    monkeypatch.setattr(mcp, "токен_доверия", lambda создать=False: "ОЧЕНЬ-СЕКРЕТНО")
+    mcp.пометить_доверие("ОЧЕНЬ-СЕКРЕТНО")
+    try:
+        свод = json.dumps(mcp.окружение(), ensure_ascii=False)
+        assert "ОЧЕНЬ-СЕКРЕТНО" not in свод
+        assert json.loads(свод)["client"]["trusted"] is True
+    finally:
+        mcp.пометить_доверие(None)
 

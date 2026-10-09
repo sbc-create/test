@@ -63,10 +63,25 @@ sys.stdout.write(текст[:предел])' "$1"
 systemctl list-unit-files "$UNIT" >/dev/null 2>&1 \
   || die "юнита $UNIT нет: сначала установка моста (install-mcp-bridge-grant.sh)"
 
+# Токен доверия канала: им наша сторона отличается от клиента моста. Поле
+# `author` называет сам вызывающий, поэтому правами оно быть не может. Без
+# токена мост даёт права роли `qwen` — только подготовку черновиков, и проверка
+# ниже доказывала бы не предпроверку разрешения владельца, а этот запрет.
+TOKEN_FILE="${FACTORY_BRIDGE_TRUSTED_TOKEN_FILE:-/home/claude/wt-portable-site-cell-01/var/bridge-trusted-token}"
+TRUSTED=""
+[ -r "$TOKEN_FILE" ] && TRUSTED="$(tr -d ' \t\r\n' < "$TOKEN_FILE")"
+
 ask() {   # ask <инструмент> <аргументы JSON>
-  curl -sS -m 300 -X POST http://127.0.0.1:9000/mcp \
-    -H 'Content-Type: application/json' \
-    -d "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"name\":\"$1\",\"arguments\":$2}}"
+  if [ -n "$TRUSTED" ]; then
+    curl -sS -m 300 -X POST http://127.0.0.1:9000/mcp \
+      -H 'Content-Type: application/json' \
+      -H "X-Factory-Trusted: $TRUSTED" \
+      -d "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"name\":\"$1\",\"arguments\":$2}}"
+  else
+    curl -sS -m 300 -X POST http://127.0.0.1:9000/mcp \
+      -H 'Content-Type: application/json' \
+      -d "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"name\":\"$1\",\"arguments\":$2}}"
+  fi
 }
 
 if [ "$MODE" = undo ]; then

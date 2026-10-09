@@ -33,11 +33,18 @@ class СайтAnimeGo:
     account = "an1meg0-site"
 
 
+#: Идентификатор тайтла в приложении: блок комментариев карточки запрашивает
+#: тред ИМЕННО по нему, а не по публичному слагу (измерено 2026-10-09).
+ИД_ТАЙТЛА = "019d83b9-311a-7b38-b7af-9ac9c10fc9af"
+
+
 @pytest.fixture()
 def витрина(monkeypatch, tmp_path):
     monkeypatch.setattr(comments, "_сайт", lambda site: СайтYummy())
     monkeypatch.setattr(comments, "_каталог", lambda s: tmp_path)
     monkeypatch.setattr(editorial, "_каталог", lambda s: tmp_path)
+    monkeypatch.setattr(editorial, "_известный_title_id",
+                        lambda s, slug, текущее: ИД_ТАЙТЛА)
     monkeypatch.setattr(comments.registry, "адрес_тайтла",
                         lambda s, slug: f"https://{s.domain}/anime/{slug}")
     return tmp_path
@@ -208,3 +215,46 @@ def test_настроенная_модерация_публикацию_не_д�
     итог = comments.опубликовать("yummyani.org", "кошка",
                                  author="editor/claude/run-1", тело="Текст о героях.")
     assert итог["state"] == "published" and итог["comment_id"] == "c4"
+
+
+def test_тред_называется_идентификатором_приложения(витрина, monkeypatch):
+    """Публичный слаг создаёт тред, которого карточка не показывает.
+
+    Измерено на себе 2026-10-09: комментарий, записанный с
+    `titleSlug=chernaya-koshka-i-klass-vedm`, создался (id
+    cmv17r4ap00i5p50145hr2oc7) и читался запросом по тому же слагу, но
+    отрисовка карточки показала «Опубликованных комментариев пока нет»: блок
+    запрашивает `titleSlug=019d83b9-311a-7b38-b7af-9ac9c10fc9af`. Операция при
+    этом ответила «опубликовано» — то есть подтверждение чтением списка не
+    спасает, если список запрашивается не тем ключом, что страница.
+    """
+    запросы: list[tuple[str, dict | None]] = []
+
+    def подставной(адрес, *, тело=None, домен):
+        запросы.append((адрес, тело))
+        if "/api/admin/comments/" in адрес:
+            return 401, json.dumps({"code": "unauthorized"})
+        if тело is None:
+            return 200, json.dumps({"total": 0, "comments": []})
+        return 201, json.dumps({"id": "c11"})
+
+    monkeypatch.setattr(comments, "_запрос", подставной)
+    monkeypatch.setattr(comments.time, "sleep", lambda _с: None)
+    with pytest.raises(comments.ОперацияОтклонена, match="не появился"):
+        comments.опубликовать("yummyani.org", "публичный-слаг",
+                              author="editor/claude/run-1", тело="Текст о героях.")
+    чтения = [а for а, т in запросы if т is None and "admin" not in а]
+    записи = [т for а, т in запросы if т and "admin" not in а]
+    assert чтения and all(f"titleSlug={ИД_ТАЙТЛА}" in а for а in чтения), чтения
+    assert записи and all(з["titleSlug"] == ИД_ТАЙТЛА for з in записи), записи
+    assert all("публичный-слаг" not in str(з) for з in записи), (
+        "в приложение уходит идентификатор, а публичный слаг — только в адрес")
+
+
+def test_без_идентификатора_тайтла_комментарий_не_пишется(витрина, monkeypatch):
+    """Ни накладка, ни last-good, ни поиск не ответили — это отказ, не догадка."""
+    monkeypatch.setattr(editorial, "_известный_title_id",
+                        lambda s, slug, текущее: "")
+    with pytest.raises(comments.ОперацияОтклонена, match="идентификатор тайтла"):
+        comments.состояние("yummyani.org", "кошка")
+
