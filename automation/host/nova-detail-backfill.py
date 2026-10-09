@@ -466,7 +466,20 @@ def main(argv=None) -> int:
         "finished_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "duration_sec": round(time.time() - начало, 1),
         "budget": a.budget,
-        "ongoing": {"count": len(продолжающиеся), "ttl": a.ongoing_ttl, "report": отчёт_идущих},
+        # Отчёт обогащения кладётся РАЗОБРАННЫМ, а не объектом.
+        #
+        # Здесь стояло `"report": отчёт_идущих`, то есть сам
+        # `EnrichmentReport`, и запись отчёта падала на нём:
+        # `TypeError: Object of type EnrichmentReport is not JSON
+        # serializable`. Измерено на живом прогоне 2026-10-09T03:57:43Z —
+        # суточное обновление каталога остановилось на этом шаге, снимки не
+        # пересобрались ни у одной витрины сети, и внешне это выглядело как
+        # «данные просто не пришли».
+        #
+        # У класса есть `as_dict`, и он единственный источник формы: ручное
+        # перечисление полей разошлось бы с ним при первом же новом поле.
+        "ongoing": {"count": len(продолжающиеся), "ttl": a.ongoing_ttl,
+                    "report": отчёт_идущих.as_dict()},
         "hot": {
             "since_year": с_года,
             "count": len(свежие),
