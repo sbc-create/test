@@ -31,6 +31,10 @@ QUEUE_EVENTS = Path("/var/lib/seo-content-operator/queue_events.jsonl")
 OVERLAY_ROOTS = {
     "animedia": (Path("/srv/sites/animedia/runtime/overlays"), "/title/{slug}/"),
     "yummy": (Path("/srv/sites/yummyani-staging/runtime/overlays"), "/anime/{slug}"),
+    # Lords/Zona (доставка очередью): журнал и копия опубликованного — здесь,
+    # файл правок сайта — в его каталоге данных. Без этого корня запуски с
+    # публикацией на этих доменах считались неполными (2026-10-09, 10:55 и 11:50).
+    "lords": (Path("/srv/sites/lords/runtime/overlays"), "/title/{slug}/"),
 }
 BRIDGE_UNIT = "site-factory-mcp.service"
 
@@ -53,6 +57,18 @@ def _events(path: Path, owner: str) -> list[dict]:
     return out
 
 
+def _store(site_dir: Path) -> dict:
+    """Опубликованное хранилище: наложение или копия доставки очередью."""
+    for name in ("title-overlays.json", "published.json"):
+        try:
+            data = json.loads((site_dir / name).read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if data.get("items"):
+            return data
+    return {}
+
+
 def _publications(roots: dict, owner: str) -> list[dict]:
     out = []
     for _family, (root, form) in roots.items():
@@ -68,9 +84,7 @@ def _publications(roots: dict, owner: str) -> list[dict]:
                 except ValueError:
                     continue
                 if r.get("op") == "publish" and r.get("author") == owner:
-                    store = json.loads(
-                        (site_dir / "title-overlays.json").read_text(encoding="utf-8")
-                    )
+                    store = _store(site_dir)
                     body = next(
                         (
                             i.get("body")

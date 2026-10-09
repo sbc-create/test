@@ -206,3 +206,28 @@ def test_gate_puts_the_rotated_order_into_next(tmp_path):
         "https://animedia.space/title/c/",
         "https://animedia.icu/title/a/",
     ]
+
+
+def test_queue_delivered_publication_counts_as_published(tmp_path):
+    """Lords/Zona: копия опубликованного — published.json, наложения нет (2026-10-09)."""
+    events, _ = _setup(tmp_path, publish=False)
+    site = tmp_path / "lords" / "lordfilm47.space"
+    site.mkdir(parents=True)
+    (site / "published.json").write_text(
+        json.dumps({"items": [{"slug": "nekromant", "body": BODY}]}), encoding="utf-8"
+    )
+    (site / "history.jsonl").write_text(
+        json.dumps({"at": "2026-10-08T15:02:00Z", "op": "publish", "slug": "nekromant",
+                    "author": OWNER}),
+        encoding="utf-8",
+    )
+    r = editor_run.verify(
+        RUN,
+        "2026-10-08T15:00:00Z",
+        "2026-10-08T15:10:00Z",
+        events_path=events,
+        roots={"lords": (tmp_path / "lords", "/title/{slug}/")},
+        bridge_calls=calls,
+        fetch=lambda url: (200, f"<html><body><main><p>{BODY}</p></main></body></html>"),
+    )
+    assert r["steps"]["published"] and r["steps"]["public_page_verified"], r

@@ -1547,6 +1547,11 @@ def editor_day(state_dir: Path, since: dt.datetime) -> dict:
                 }
             )
             window_start = pub.get("at", window_start)
+        # Вердикт — по файлу проверки, если он перепроверен позже запуска: проверка
+        # 2026-10-09 не видела доставку очередью (Lords/Zona) и записала полные
+        # запуски неполными; пересчёт штатной командой исправляет файл проверки.
+        if v.get("complete") is True:
+            r["verdict"] = "COMPLETE"
         if r.get("verdict") != "COMPLETE":
             note = (r.get("self_report") or {}).get("note") or ""
             problems.append(
