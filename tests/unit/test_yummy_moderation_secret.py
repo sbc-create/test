@@ -37,7 +37,7 @@ except ImportError:  # pragma: no cover — окружение без PyYAML
 
 НАЛОЖЕНИЕ = (pathlib.Path(__file__).resolve().parents[2]
              / "automation" / "host" / "yummy-overlays.override.yaml")
-СЕРВИСЫ_С_МОДЕРАЦИЕЙ = ("web-org", "web-site")
+СЕРВИСЫ_С_МОДЕРАЦИЕЙ = ("web-org", "web-site", "web-biz")
 
 
 @pytest.fixture(scope="module")
@@ -49,7 +49,10 @@ def состав() -> dict:
 
 def test_секрет_объявлен_compose_секретом(состав):
     объявленные = состав.get("secrets") or {}
-    assert set(объявленные) == {"moderation_org", "moderation_site"}, объявленные
+    # Третий тенант добавлен в ночь 9→10 октября: у web-biz публикация
+    # комментариев была бы необратимой, пока маршрут снятия отвечает 503.
+    assert set(объявленные) == {"moderation_org", "moderation_site",
+                                "moderation_biz"}, объявленные
     for имя, запись in объявленные.items():
         путь = pathlib.Path(запись["file"])
         assert путь.is_absolute() and "runtime/moderation" in str(путь), запись
@@ -58,15 +61,20 @@ def test_секрет_объявлен_compose_секретом(состав):
         assert not str(путь).startswith(str(НАЛОЖЕНИЕ.parents[2])), путь
 
 
+#: Какой секрет принадлежит какому сервису. Тенанты значение не делят: один
+#: секрет на всех означал бы, что модератор одной витрины снимает комментарии
+#: на соседней.
+СЕКРЕТ_СЕРВИСА = {"web-org": "moderation_org", "web-site": "moderation_site",
+                  "web-biz": "moderation_biz"}
+
+
 def test_сервисы_получают_свой_секрет(состав):
     for имя in СЕРВИСЫ_С_МОДЕРАЦИЕЙ:
         сервис = состав["services"][имя]
         секреты = сервис.get("secrets") or []
-        ожидаемый = "moderation_org" if имя == "web-org" else "moderation_site"
-        assert секреты == [ожидаемый], (имя, секреты)
-        # Чужой секрет сервису не достаётся: тенанты не делят значение.
-        чужой = "moderation_site" if имя == "web-org" else "moderation_org"
-        assert чужой not in секреты
+        assert секреты == [СЕКРЕТ_СЕРВИСА[имя]], (имя, секреты)
+        чужие = [с for с in СЕКРЕТ_СЕРВИСА.values() if с != СЕКРЕТ_СЕРВИСА[имя]]
+        assert not set(секреты) & set(чужие), (имя, секреты)
 
 
 def test_в_переменных_окружения_секрета_нет(состав):
@@ -96,7 +104,7 @@ def test_точка_входа_без_подстановок(состав):
 
 def test_показ_накладок_не_потерян(состав):
     """Наложение отвечает и за показ текстов: одно не должно вытеснить другое."""
-    for имя in СЕРВИСЫ_С_МОДЕРАЦИЕЙ + ("web-biz",):
+    for имя in СЕРВИСЫ_С_МОДЕРАЦИЕЙ:
         сервис = состав["services"][имя]
         окружение = сервис.get("environment") or {}
         assert окружение.get("TITLE_OVERLAYS_PATH") == (

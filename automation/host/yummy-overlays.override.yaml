@@ -119,6 +119,20 @@ services:
         read_only: true
 
   web-biz:
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        grep -q '^ADMIN_MODERATION_SECRET=.\{16,\}' /run/secrets/moderation_biz || {
+          echo "[entrypoint] FATAL: moderation secret missing or shorter than 16" >&2
+          exit 64
+        }
+        set -a
+        . /run/secrets/moderation_biz
+        set +a
+        exec ./scripts/docker-entrypoint.staging.sh
+    secrets:
+      - moderation_biz
     environment:
       TITLE_OVERLAYS_PATH: /app/content/overlays/title-overlays.json
       TITLE_OVERLAYS_LAST_GOOD_PATH: /app/content/overlays/title-overlays.last-good.json
@@ -134,6 +148,8 @@ services:
 # остаётся 0600 у claude. Монтирование файла 0600 от другого uid контейнер
 # прочитать не смог бы, а ослаблять права на хосте ради этого нельзя.
 secrets:
+  moderation_biz:
+    file: /srv/sites/yummyani-staging/runtime/moderation/yummyani.biz/env
   moderation_site:
     file: /srv/sites/yummyani-staging/runtime/moderation/yummyani.site/env
   moderation_org:
