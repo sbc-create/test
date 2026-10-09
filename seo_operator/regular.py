@@ -114,6 +114,16 @@ EDITOR_SITES = {**ANIMEDIA, "zonafilm.space": "zona-01"}
 #: (82 МБ) не помещается в MemoryMax=512M суточной службы.
 STREAM_DETAILS_BYTES = 40_000_000
 
+#: Источник фактов по типу произведения. Одобрен только путь аниме (D199). Для
+#: фильмов и сериалов источник не одобрен: предложение —
+#: docs/editor/SOURCES_BY_TYPE.md; до решения владельца карточки копятся в учёте
+#: «нужен источник», а не исключаются.
+SOURCE_PLAN = {
+    "movie": "фильм: идентичность по IMDb/Кинопоиску; источник фактов не одобрен",
+    "tv": "сериал: идентичность по IMDb/Кинопоиску; источник фактов не одобрен",
+    None: "тип не указан: сначала установить идентичность по ID каталога",
+}
+
 #: Хранилища опубликованных материалов по семействам и форма их адресов.
 #: Пути — те же, что у factory.qwen.registry.КОРНИ_ХРАНИЛИЩ; форма адреса —
 #: factory.qwen.registry.ФОРМА_АДРЕСА (проверена запросами там).
@@ -2367,7 +2377,16 @@ def _details_for_editor(path: Path) -> dict:
     def take(slug: str, rec: dict) -> bool:
         if not str(rec.get("description") or "").strip():
             keep[slug] = {
-                k: rec.get(k) for k in ("name", "description", "playable", "year", "external_ids")
+                k: rec.get(k)
+                for k in (
+                    "name",
+                    "description",
+                    "playable",
+                    "year",
+                    "external_ids",
+                    "type",
+                    "countries",
+                )
             }
             keep[slug]["ratings_by_source"] = {
                 "shikimori": (rec.get("ratings_by_source") or {}).get("shikimori") or {}
@@ -2388,6 +2407,7 @@ def editor_candidates(
     *,
     limit: int = 20,
     sites: dict[str, str] | None = None,
+    needs_source: list[dict] | None = None,
 ) -> list[dict]:
     """Что редактору брать, когда очередь пуста: по трафику, с причиной.
 
@@ -2435,8 +2455,28 @@ def editor_candidates(
         shiki = (mine.get("ratings_by_source") or {}).get("shikimori") or {}
         source_id = shiki.get("external_id") or (mine.get("external_ids") or {}).get("mal")
         if reason == "GAP" and not source_id:
-            # Ни синопсиса, ни ID внешнего источника: писать не из чего, запуск
-            # закончился бы SOURCES_MISSING (zonafilm.space/title/dig-that-zeebo-newton).
+            # Ни синопсиса, ни ID одобренного источника: редактору писать не из
+            # чего (запуск закончился бы SOURCES_MISSING). Карточка не исключается,
+            # а уходит в учёт «нужен источник» с данными для проверки идентичности
+            # (владелец 2026-10-09: Shikimori ID не обязателен для фильмов и сериалов).
+            if needs_source is not None:
+                ids = mine.get("external_ids") or {}
+                needs_source.append(
+                    {
+                        "site": domain,
+                        "slug": slug,
+                        "url": f"https://{domain}/title/{slug}/",
+                        "weight": weight,
+                        "headline": mine.get("name"),
+                        "type": mine.get("type"),
+                        "year": mine.get("year"),
+                        "countries": mine.get("countries"),
+                        "identity": {
+                            k: ids[k] for k in ("imdb", "kinopoisk", "tmdb", "mdl") if ids.get(k)
+                        },
+                        "source_plan": SOURCE_PLAN.get(mine.get("type"), SOURCE_PLAN[None]),
+                    }
+                )
             continue
         taken.add(slug)
         out.append(
@@ -2524,8 +2564,16 @@ def step_candidates(ctx: Context) -> Any:
     if not snaps:
         return {"snapshot": None, "candidates": []}
     published = {(i["domain"], i["slug"]) for i in published_items()}
-    found = editor_candidates(snaps[-1], ctx.sources["facts_snapshots"], published)
-    out = {"snapshot": snaps[-1].name, "generated_at": iso(utcnow()), "candidates": found}
+    needs: list[dict] = []
+    found = editor_candidates(
+        snaps[-1], ctx.sources["facts_snapshots"], published, needs_source=needs
+    )
+    out = {
+        "snapshot": snaps[-1].name,
+        "generated_at": iso(utcnow()),
+        "candidates": found,
+        "needs_source": needs,
+    }
     _write_json(ctx.root / "editor-candidates.json", out)
     ctx.journal.write("editor_candidates", count=len(found))
     return out

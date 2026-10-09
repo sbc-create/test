@@ -1461,5 +1461,10 @@ def test_editor_candidates_skip_gaps_without_any_source(tmp_path):
         ),
         encoding="utf-8",
     )
-    found = regular.editor_candidates(snap, facts, set(), sites={"zonafilm.space": "zona-01"})
+    needs: list[dict] = []
+    found = regular.editor_candidates(
+        snap, facts, set(), sites={"zonafilm.space": "zona-01"}, needs_source=needs
+    )
     assert [c["slug"] for c in found] == ["with-id"]
+    # карточка без источника не исключена, а учтена для поиска источника
+    assert [(n["slug"], n["source_plan"]) for n in needs] == [("no-id", regular.SOURCE_PLAN[None])]
