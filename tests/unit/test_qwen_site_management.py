@@ -906,3 +906,41 @@ def test_семейство_берётся_из_реестра_когда_раб
     # Выдуманное семейство не принимается: лучше пусто, чем неправда.
     с = записать("невероятное-семейство")
     assert с.adapter == "", с.adapter
+
+
+def test_zonafilm_cc_умеет_факты_и_ждёт_выпущенного_читателя(monkeypatch):
+    """Своя точка входа — не причина отнимать подготовку текста.
+
+    У zonafilm.cc рантайм собственный (`src/serve.py` поверх закреплённого
+    ядра), поэтому адаптер отдельный — `zona-serve`. Его объявление было
+    пустым, и операция `facts` считалась недоступной, хотя снимок подробностей
+    лежал там же, где у семейства (измерено 2026-10-09:
+    `/srv/lords/.frontend/zona-02-details.json`, 79 МБ).
+
+    Доставка и показ при этом остаются выведенными из ВЫПУЩЕННОГО файла
+    читателя, а не из членства в списке семейств: иначе реестр пообещал бы
+    публикацию витрине, где текст не появится.
+    """
+    умеет = registry.ВОЗМОЖНОСТИ_АДАПТЕРА["zona-serve"]
+    assert "facts" in умеет and "details.json" in умеет["facts"]
+    assert "zona-serve" in registry.СЕМЕЙСТВА_ПРАВОК
+
+    class Сайт:
+        domain = "zonafilm.cc"
+        site_id = "zona-02"
+        adapter = "zona-serve"
+        account = "zonafilm-cc"
+
+    monkeypatch.setattr(registry, "читатель_правок", lambda аккаунт: None)
+    monkeypatch.setattr(registry, "читатель_накладок", lambda аккаунт: None)
+    без = registry.возможности(Сайт())
+    assert "facts" in без and "deliver" not in без and "display" not in без
+
+    import pathlib as _pathlib
+    monkeypatch.setattr(registry, "читатель_правок",
+                        lambda аккаунт: _pathlib.Path(
+                            f"/srv/{аккаунт}/current/src/editorial_overlay.py"))
+    с_читателем = registry.возможности(Сайт())
+    assert с_читателем["deliver"].startswith("правки через очередь выпуска")
+    assert "editorial_overlay.py" in с_читателем["display"]
+
