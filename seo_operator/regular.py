@@ -2457,6 +2457,22 @@ def _details_for_editor(path: Path, wanted: set[str] | None = None) -> dict:
     return keep
 
 
+def _details_path(facts_dir: Path, sid: str) -> Path:
+    """Снимок подробностей: общий каталог, иначе каталог данных ячейки (AnimeGo)."""
+    общий = facts_dir / f"{sid}-details.json"
+    # Каталог данных ячейки — только для рабочего каталога фабрики: каталог,
+    # переданный явно (тесты, разбор чужого снимка), не подменяется данными хоста.
+    if общий.is_file() or facts_dir != SOURCES["facts_snapshots"]:
+        return общий
+    try:
+        from factory.cell import privileged
+
+        свой = privileged.Площадка.из_реестра(sid).data / f"{sid}-details.json"
+    except Exception:  # noqa: BLE001 — ячейки нет в реестре
+        return общий
+    return свой if свой.is_file() else общий
+
+
 def _film_candidate(domain: str, slug: str, mine: dict, weight: float, reason: str) -> dict:
     """Кандидат-фильм/сериал: путь источника D200 (Википедия по IMDb → Wikidata → сайт)."""
     ids = mine.get("external_ids") or {}
@@ -2511,7 +2527,7 @@ def editor_candidates(
                     weights[(domain, m.group(1))] = weights.get((domain, m.group(1)), 0.0) + metric
     details = {
         d: _details_for_editor(
-            facts_dir / f"{sid}-details.json", {slug for dom, slug in weights if dom == d}
+            _details_path(facts_dir, sid), {slug for dom, slug in weights if dom == d}
         )
         for d, sid in sites.items()
     }

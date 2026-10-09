@@ -28,6 +28,7 @@
 Повтор того же задания не создаёт дубликата — ключом служит `slug`, как у
 пишущей стороны.
 """
+
 from __future__ import annotations
 
 import codecs
@@ -59,8 +60,7 @@ def _сейчас() -> str:
 
 
 def отпечаток(текст: str) -> str:
-    return hashlib.sha256(
-        unicodedata.normalize("NFKC", текст).encode("utf-8")).hexdigest()
+    return hashlib.sha256(unicodedata.normalize("NFKC", текст).encode("utf-8")).hexdigest()
 
 
 def _норм(s: str) -> str:
@@ -131,8 +131,7 @@ def _ключ_кэша(опрашивать_сеть: bool) -> tuple:
                 ссылки.append((п.parent.name, "?"))
     except OSError:
         pass
-    return (опрашивать_сеть, str(registry.КОРЕНЬ), tuple(приметы),
-            tuple(ссылки))
+    return (опрашивать_сеть, str(registry.КОРЕНЬ), tuple(приметы), tuple(ссылки))
 
 
 def _реестр(*, опрашивать_сеть: bool) -> list[registry.Сайт]:
@@ -173,8 +172,8 @@ def _сайт(site: str, *, опрашивать_сеть: bool = False) -> regi
     s = по_домену.get(site) or по_ид.get(site)
     if s is None:
         raise ОперацияОтклонена(
-            f"сайта {site!r} нет в действующих реестрах. Список: "
-            "python3 -m factory.qwen sites")
+            f"сайта {site!r} нет в действующих реестрах. Список: " "python3 -m factory.qwen sites"
+        )
     return s
 
 
@@ -189,8 +188,8 @@ def _требует(s: registry.Сайт, операция: str) -> None:
         raise ОперацияОтклонена(
             f"{s.domain}: сайту не хватает возможностей {нет} — операция "
             f"{операция!r} недоступна. Есть: {sorted(умеет) or 'ничего'}. "
-            + (s.handover_reason or "Это недостающая возможность адаптера, "
-                                    "а не отказ по данным"))
+            + (s.handover_reason or "Это недостающая возможность адаптера, " "а не отказ по данным")
+        )
 
 
 def _каталог(s: registry.Сайт) -> pathlib.Path:
@@ -198,8 +197,7 @@ def _каталог(s: registry.Сайт) -> pathlib.Path:
     корень = registry.корень_хранилища(s.adapter)
     к = корень / s.domain
     if к.resolve().parent != корень.resolve():
-        raise ОперацияОтклонена(
-            f"каталог {к} вне корня хранилища {корень} — запись отклонена")
+        raise ОперацияОтклонена(f"каталог {к} вне корня хранилища {корень} — запись отклонена")
     return к
 
 
@@ -219,8 +217,7 @@ def _прочитать(п: pathlib.Path, умолчание):
 def _записать_атомарно(п: pathlib.Path, данные) -> None:
     п.parent.mkdir(parents=True, exist_ok=True)
     врем = п.with_name(п.name + f".tmp.{os.getpid()}")
-    врем.write_text(json.dumps(данные, ensure_ascii=False, indent=1) + "\n",
-                    encoding="utf-8")
+    врем.write_text(json.dumps(данные, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     json.loads(врем.read_text(encoding="utf-8"))  # не переносим битое
     os.replace(врем, п)
 
@@ -241,7 +238,7 @@ class _ПотокJSON:
             return False
         кусок = self.f.read(self.размер)
         self.конец = not кусок
-        self.s = self.s[self.i:] + self.декодер.decode(кусок, final=self.конец)
+        self.s = self.s[self.i :] + self.декодер.decode(кусок, final=self.конец)
         self.i = 0
         return True
 
@@ -327,8 +324,8 @@ def _разметка_страницы(тело: str) -> dict:
     вызывающий получает отказ, а не пустую заготовку.
     """
     for кусок in re.findall(
-            r'<script[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
-            тело, re.S):
+        r'<script[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>', тело, re.S
+    ):
         try:
             данные = json.loads(кусок)
         except ValueError:
@@ -355,27 +352,27 @@ def _факты_со_страницы(s: registry.Сайт, slug: str | None) ->
     if slug is None:
         raise ОперацияОтклонена(
             f"{s.domain}: обзор каталога этим путём недоступен — факты читаются "
-            "со страницы одного тайтла. Назовите слаг")
+            "со страницы одного тайтла. Назовите слаг"
+        )
     адрес = registry.адрес_тайтла(s, slug)
     код, тело = registry._страница(адрес, таймаут=25)
     if код != "200" or not тело:
-        raise ОперацияОтклонена(
-            f"{адрес}: страница ответила {код} — факты читать нечем")
+        raise ОперацияОтклонена(f"{адрес}: страница ответила {код} — факты читать нечем")
     разметка = _разметка_страницы(тело)
     if not разметка:
         raise ОперацияОтклонена(
             f"{адрес}: на странице нет разметки schema.org о произведении "
-            f"(ищутся типы {', '.join(ТИПЫ_РАЗМЕТКИ)}). Выдумывать факты нельзя")
+            f"(ищутся типы {', '.join(ТИПЫ_РАЗМЕТКИ)}). Выдумывать факты нельзя"
+        )
     страны = []
     для_стран = разметка.get("countryOfOrigin")
-    for запись in (для_стран if isinstance(для_стран, list) else [для_стран]):
+    for запись in для_стран if isinstance(для_стран, list) else [для_стран]:
         if isinstance(запись, dict) and запись.get("name"):
             страны.append(str(запись["name"]))
         elif isinstance(запись, str) and запись.strip():
             страны.append(запись.strip())
     жанры = разметка.get("genre")
-    жанры = ([str(ж) for ж in жанры] if isinstance(жанры, list)
-             else [str(жанры)] if жанры else [])
+    жанры = [str(ж) for ж in жанры] if isinstance(жанры, list) else [str(жанры)] if жанры else []
     дата = str(разметка.get("datePublished") or разметка.get("startDate") or "")
     год = int(дата[:4]) if дата[:4].isdigit() else None
     тип = разметка.get("@type")
@@ -383,7 +380,9 @@ def _факты_со_страницы(s: registry.Сайт, slug: str | None) ->
     вид = {"TVSeries": "tv", "Movie": "movie", "TVSeason": "tv"}.get(str(тип), "")
     описание = str(разметка.get("description") or "").strip()
     return {
-        "site": s.domain, "site_id": s.site_id, "slug": slug,
+        "site": s.domain,
+        "site_id": s.site_id,
+        "slug": slug,
         "title_id": None,
         "facts": {
             "id": None,
@@ -405,6 +404,26 @@ def _факты_со_страницы(s: registry.Сайт, slug: str | None) ->
     }
 
 
+def _снимок_подробностей(sid: str) -> pathlib.Path:
+    """Снимок подробностей сайта: общий каталог фронтендов, иначе каталог данных ячейки.
+
+    У AnimeGo (animego-02/03) снимок есть только в каталоге данных сайта
+    (`/srv/an1mego-site/data/animego-02-details.json`), и мост, искавший лишь в
+    `/srv/lords/.frontend`, отказывал в фактах и подготовке при объявленных
+    операциях (измерено 2026-10-09).
+    """
+    общий = pathlib.Path(f"/srv/lords/.frontend/{sid}-details.json")
+    if общий.is_file():
+        return общий
+    try:
+        from factory.cell import privileged
+
+        свой = privileged.Площадка.из_реестра(sid).data / f"{sid}-details.json"
+    except Exception:  # noqa: BLE001 — нет ячейки в реестре: остаётся общий путь
+        return общий
+    return свой if свой.is_file() else общий
+
+
 def факты(site: str, slug: str | None = None) -> dict:
     """Факты о тайтле из снимка подробностей. Источник один и назван."""
     s = _сайт(site)
@@ -418,11 +437,12 @@ def факты(site: str, slug: str | None = None) -> dict:
     if getattr(s, "adapter", "") == "yummy":
         return _факты_со_страницы(s, slug)
     sid = s.site_id
-    снимок = pathlib.Path(f"/srv/lords/.frontend/{sid}-details.json")
+    снимок = _снимок_подробностей(sid)
     if not снимок.is_file():
         raise ОперацияОтклонена(
             f"снимка подробностей нет: {снимок}. Для этого сайта факты "
-            "недоступны этим путём — сообщите, и адаптер будет доработан")
+            "недоступны этим путём — сообщите, и адаптер будет доработан"
+        )
     найдено: dict = {}
     всего = 0
     без_описания: list[str] = []
@@ -444,24 +464,43 @@ def факты(site: str, slug: str | None = None) -> dict:
     except (OSError, ValueError) as ош:
         raise ОперацияОтклонена(f"снимок {снимок.name} не прочитан: {ош}") from None
     if slug is None:
-        return {"site": s.domain, "site_id": sid,
-                "catalog_revision": данные.get("catalog_revision"),
-                "titles_total": всего,
-                "without_description_playable": len(без_описания),
-                "sample": без_описания[:10],
-                "source": str(снимок)}
+        return {
+            "site": s.domain,
+            "site_id": sid,
+            "catalog_revision": данные.get("catalog_revision"),
+            "titles_total": всего,
+            "without_description_playable": len(без_описания),
+            "sample": без_описания[:10],
+            "source": str(снимок),
+        }
     r = найдено.get("r")
     if r is None:
         raise ОперацияОтклонена(
-            f"тайтла {slug!r} нет в снимке {снимок.name}. Выдумывать слаг нельзя")
-    поля = ("id", "name", "original_name", "year", "type", "genres",
-            "countries", "seasons", "imdb_rating", "playable",
-            "description", "description_source")
-    return {"site": s.domain, "site_id": sid, "slug": slug,
-            "title_id": r.get("id"),
-            "facts": {k: r.get(k) for k in поля},
-            "source": str(снимок),
-            "canonical_url": registry.адрес_тайтла(s, slug)}
+            f"тайтла {slug!r} нет в снимке {снимок.name}. Выдумывать слаг нельзя"
+        )
+    поля = (
+        "id",
+        "name",
+        "original_name",
+        "year",
+        "type",
+        "genres",
+        "countries",
+        "seasons",
+        "imdb_rating",
+        "playable",
+        "description",
+        "description_source",
+    )
+    return {
+        "site": s.domain,
+        "site_id": sid,
+        "slug": slug,
+        "title_id": r.get("id"),
+        "facts": {k: r.get(k) for k in поля},
+        "source": str(снимок),
+        "canonical_url": registry.адрес_тайтла(s, slug),
+    }
 
 
 # ------------------------------------------------- подготовка и проверки
@@ -469,8 +508,14 @@ def факты(site: str, slug: str | None = None) -> dict:
 #: «Сериал доступен для просмотра на платформе» прошла бы проверку, из-за
 #: которой проверка и появилась. Поэтому корень «доступ».
 ЗАПРЕЩЁННЫЕ_ОБОРОТЫ = (
-    "доступ", "смотреть все", "все серии", "озвучк", "субтитр",
-    "в хорошем качестве", "бесплатно", "без регистрации",
+    "доступ",
+    "смотреть все",
+    "все серии",
+    "озвучк",
+    "субтитр",
+    "в хорошем качестве",
+    "бесплатно",
+    "без регистрации",
 )
 
 
@@ -497,7 +542,8 @@ def проверить_материал(тело: str, факты_тайтла: 
             беды.append(
                 f"оборот {оборот!r} обещает то, чего снимок не подтверждает; "
                 "доступность серий, озвучки и субтитры проверяются только на "
-                "самой странице")
+                "самой странице"
+            )
     ф = факты_тайтла.get("facts") or {}
     # Название сверяется по ОСНОВНОЙ части, без скобочного уточнения.
     #
@@ -514,8 +560,9 @@ def проверить_материал(тело: str, факты_тайтла: 
         беды.append(f"в тексте нет года {год} — он есть в снимке и его стоит назвать")
     годы = {int(m.group(0)) for m in re.finditer(r"\b(?:19|20)\d{2}\b", т)}
     if год and годы - {int(год)}:
-        беды.append(f"в тексте годы {sorted(годы)}, а в снимке только {год}: "
-                    "лишние даты не подтверждены")
+        беды.append(
+            f"в тексте годы {sorted(годы)}, а в снимке только {год}: " "лишние даты не подтверждены"
+        )
     return беды
 
 
@@ -531,21 +578,36 @@ def подготовить(site: str, slug: str, тело: str, *, author: str) 
     к = _каталог(s)
     черновики = _прочитать(к / ЧЕРНОВИКИ, {"site": s.domain, "items": {}})
     черновики.setdefault("items", {})[slug] = {
-        "slug": slug, "title_id": ф["title_id"], "body": тело,
-        "body_digest": отпечаток(тело), "author": author,
+        "slug": slug,
+        "title_id": ф["title_id"],
+        "body": тело,
+        "body_digest": отпечаток(тело),
+        "author": author,
         "prepared_at": _сейчас(),
         "state": "verified" if not беды else "prepared",
         "quality_problems": беды,
     }
     черновики["site"] = s.domain
     _записать_атомарно(к / ЧЕРНОВИКИ, черновики)
-    _дописать_историю(к, {"at": _сейчас(), "op": "prepare", "slug": slug,
-                          "author": author, "state": черновики["items"][slug]["state"],
-                          "problems": беды})
-    return {"site": s.domain, "slug": slug, "title_id": ф["title_id"],
+    _дописать_историю(
+        к,
+        {
+            "at": _сейчас(),
+            "op": "prepare",
+            "slug": slug,
+            "author": author,
             "state": черновики["items"][slug]["state"],
-            "quality_problems": беды,
-            "draft_store": str(к / ЧЕРНОВИКИ)}
+            "problems": беды,
+        },
+    )
+    return {
+        "site": s.domain,
+        "slug": slug,
+        "title_id": ф["title_id"],
+        "state": черновики["items"][slug]["state"],
+        "quality_problems": беды,
+        "draft_store": str(к / ЧЕРНОВИКИ),
+    }
 
 
 # ------------------------------------------------------------- публикация
@@ -583,31 +645,36 @@ def _вызвать_store(s: registry.Сайт, задание: dict) -> dict:
     """
     import subprocess
     import tempfile
+
     if not ИНТЕРПРЕТАТОР.is_file():
-        raise ОперацияОтклонена(
-            f"нет интерпретатора оператора {ИНТЕРПРЕТАТОР}: записывать нечем")
+        raise ОперацияОтклонена(f"нет интерпретатора оператора {ИНТЕРПРЕТАТОР}: записывать нечем")
     задание = {**задание, "directory": str(_каталог(s)), "site": s.domain}
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", suffix=".json",
-                                     delete=False) as fh:
+    with tempfile.NamedTemporaryFile("w", encoding="utf-8", suffix=".json", delete=False) as fh:
         json.dump(задание, fh, ensure_ascii=False)
         файл = fh.name
     try:
-        r = subprocess.run([str(ИНТЕРПРЕТАТОР), "-c", _ЗАПИСЬ, файл],
-                           cwd=str(ОПЕРАТОР), capture_output=True, text=True,
-                           timeout=120,
-                           env={"PYTHONPATH": str(ОПЕРАТОР), "PATH": "/usr/bin:/bin",
-                                "HOME": os.environ.get("HOME", "/home/claude")})
+        r = subprocess.run(
+            [str(ИНТЕРПРЕТАТОР), "-c", _ЗАПИСЬ, файл],
+            cwd=str(ОПЕРАТОР),
+            capture_output=True,
+            text=True,
+            timeout=120,
+            env={
+                "PYTHONPATH": str(ОПЕРАТОР),
+                "PATH": "/usr/bin:/bin",
+                "HOME": os.environ.get("HOME", "/home/claude"),
+            },
+        )
     finally:
         os.unlink(файл)
     if r.returncode != 0:
         raise ОперацияОтклонена(
-            f"хранилище отказало (код {r.returncode}): "
-            f"{(r.stderr or r.stdout).strip()[-300:]}")
+            f"хранилище отказало (код {r.returncode}): " f"{(r.stderr or r.stdout).strip()[-300:]}"
+        )
     try:
         return json.loads(r.stdout)
     except ValueError as e:
-        raise ОперацияОтклонена(
-            f"хранилище ответило неразборчиво: {r.stdout[:200]!r}") from e
+        raise ОперацияОтклонена(f"хранилище ответило неразборчиво: {r.stdout[:200]!r}") from e
 
 
 # --------------------------------------------------- доставка: два механизма
@@ -654,22 +721,29 @@ def _чужая_правка(s: registry.Сайт) -> str:
     наше = _прочитать(_каталог(s) / ДОСТАВЛЕНО, {})
     было = наше.get("file_digest") or ""
     if если_нет:
-        return "" if not было else (
-            f"файл правок {живой} исчез, хотя мы доставляли {было[:19]}…: "
-            "кто-то его убрал")
+        return (
+            ""
+            if not было
+            else (
+                f"файл правок {живой} исчез, хотя мы доставляли {было[:19]}…: " "кто-то его убрал"
+            )
+        )
     факт = _цифра_файла(живой)
     if not было:
-        return (f"в хранилище витрины уже есть файл правок ({факт[:19]}…), "
-                "которого мы не доставляли: это чужая правка, и затирать её "
-                "слепо нельзя")
+        return (
+            f"в хранилище витрины уже есть файл правок ({факт[:19]}…), "
+            "которого мы не доставляли: это чужая правка, и затирать её "
+            "слепо нельзя"
+        )
     if факт != было:
-        return (f"файл правок на сайте {факт[:19]}…, а мы доставляли "
-                f"{было[:19]}…: кто-то записал новее")
+        return (
+            f"файл правок на сайте {факт[:19]}…, а мы доставляли "
+            f"{было[:19]}…: кто-то записал новее"
+        )
     return ""
 
 
-def _подать_правки(s: registry.Сайт, правки: dict, *, author: str,
-                   reason: str) -> dict:
+def _подать_правки(s: registry.Сайт, правки: dict, *, author: str, reason: str) -> dict:
     """Штатный путь: подготовка в управляющем слое → заявка → исполнитель.
 
     Управляющий слой в хранилище витрины НЕ ПИШЕТ — и не может: каталог
@@ -680,50 +754,65 @@ def _подать_правки(s: registry.Сайт, правки: dict, *, auth
     from factory.cell import editorial_store, queue as q
 
     try:
-        подготовлено = editorial_store.подготовить(
-            s.site_id, правки, actor=author, reason=reason)
+        подготовлено = editorial_store.подготовить(s.site_id, правки, actor=author, reason=reason)
     except OSError as ош:
         raise ОперацияОтклонена(
             f"подготовительный каталог {editorial_store.БАЗА} недоступен "
             f"({type(ош).__name__}): правка не подготовлена. Каталог создаётся "
             "один раз владельцем — automation/host/"
-            "apply-editorial-staging-root.sh") from None
+            "apply-editorial-staging-root.sh"
+        ) from None
     except editorial_store.StoreRejected as ош:
         raise ОперацияОтклонена(f"подготовка отклонена: {ош}") from None
 
     цифра = подготовлено["digest"]
     коммит = _коммит_выпуска(s)
     try:
-        заявка = q.собрать(s.site_id, коммит, цифра, operation="editorial",
-                           snapshot=цифра.split(":", 1)[1],
-                           note=f"editorial: {reason}"[:200])
+        заявка = q.собрать(
+            s.site_id,
+            коммит,
+            цифра,
+            operation="editorial",
+            snapshot=цифра.split(":", 1)[1],
+            note=f"editorial: {reason}"[:200],
+        )
         подача = q.подать(заявка)
     except q.RequestRejected as ош:
         raise ОперацияОтклонена(f"заявка отклонена: {ош}") from None
 
-    итог = _дождаться_исполнителя(заявка.request_id, подача,
-                                  не_раньше=заявка.submitted_at)
+    итог = _дождаться_исполнителя(заявка.request_id, подача, не_раньше=заявка.submitted_at)
     исход = (итог.get("result") or итог).get("outcome") or {}
     статус = исход.get("status") or (итог.get("result") or итог).get("status")
     if статус not in ("edited",):
         raise ОперацияОтклонена(
             f"исполнитель не применил правку: статус {статус!r}, "
             f"причина {((итог.get('result') or итог).get('error') or 'не названа')}. "
-            "Повторять слепо нельзя — причина названа выше")
+            "Повторять слепо нельзя — причина названа выше"
+        )
     живой = pathlib.Path(registry.путь_доставки(s))
-    _записать_атомарно(_каталог(s) / ДОСТАВЛЕНО,
-                       {"site": s.domain, "at": _сейчас(),
-                        "request_id": заявка.request_id,
-                        "content_digest": цифра,
-                        "file_digest": _цифра_файла(живой),
-                        "entries": подготовлено["entries"]})
-    return {"backend": "editorial-queue", "request_id": заявка.request_id,
-            "content_digest": цифра, "entries": подготовлено["entries"],
-            "store": str(живой)}
+    _записать_атомарно(
+        _каталог(s) / ДОСТАВЛЕНО,
+        {
+            "site": s.domain,
+            "at": _сейчас(),
+            "request_id": заявка.request_id,
+            "content_digest": цифра,
+            "file_digest": _цифра_файла(живой),
+            "entries": подготовлено["entries"],
+        },
+    )
+    return {
+        "backend": "editorial-queue",
+        "request_id": заявка.request_id,
+        "content_digest": цифра,
+        "entries": подготовлено["entries"],
+        "store": str(живой),
+    }
 
 
-def _снять_доставку(s: registry.Сайт, остальные: list[dict], *,
-                    поколение: str, author: str, reason: str) -> dict:
+def _снять_доставку(
+    s: registry.Сайт, остальные: list[dict], *, поколение: str, author: str, reason: str
+) -> dict:
     """Убрать одну запись, сохранив остальные. Один путь на оба механизма.
 
     Снятие — это доставка СОСТАВА БЕЗ записи, а не удаление файла: соседние
@@ -732,24 +821,28 @@ def _снять_доставку(s: registry.Сайт, остальные: list[
     """
     мех = registry.механизм(s)
     if мех == "overlay":
-        итог = _вызвать_store(s, {"op": "publish", "generation_id": поколение,
-                                  "items": остальные, "replace": True})
+        итог = _вызвать_store(
+            s, {"op": "publish", "generation_id": поколение, "items": остальные, "replace": True}
+        )
         return {"backend": "overlay", "entries": len(итог["items"])}
     if мех == "editorial-queue":
         беда = _чужая_правка(s)
         if беда:
             raise ОперацияОтклонена(f"{s.domain}: {беда}. Снятие отклонено")
-        правки = {str(i.get("title_id") or i.get("slug")): {
-                      "fields": {"description": str(i.get("body") or "")}}
-                  for i in остальные if (i.get("title_id") or i.get("slug"))
-                  and str(i.get("body") or "").strip()}
+        правки = {
+            str(i.get("title_id") or i.get("slug")): {
+                "fields": {"description": str(i.get("body") or "")}
+            }
+            for i in остальные
+            if (i.get("title_id") or i.get("slug")) and str(i.get("body") or "").strip()
+        }
         итог = _подать_правки(s, правки, author=author, reason=reason)
-        _записать_атомарно(_каталог(s) / ОПУБЛИКОВАНО,
-                           {"site": s.domain, "generation_id": поколение,
-                            "at": _сейчас(), "items": остальные})
+        _записать_атомарно(
+            _каталог(s) / ОПУБЛИКОВАНО,
+            {"site": s.domain, "generation_id": поколение, "at": _сейчас(), "items": остальные},
+        )
         return итог
-    raise ОперацияОтклонена(
-        f"{s.domain}: механизма доставки нет — {s.handover_reason}")
+    raise ОперацияОтклонена(f"{s.domain}: механизма доставки нет — {s.handover_reason}")
 
 
 def _коммит_выпуска(s: registry.Сайт) -> str:
@@ -763,19 +856,20 @@ def _коммит_выпуска(s: registry.Сайт) -> str:
     if not re.fullmatch(r"[0-9a-f]{7,40}", кратко):
         raise ОперацияОтклонена(
             f"{s.domain}: опубликованный выпуск {кратко!r} не выглядит коммитом — "
-            "заявку не на что опереть")
+            "заявку не на что опереть"
+        )
     if not s.repo_path:
         raise ОперацияОтклонена(f"{s.domain}: рабочей копии нет, SHA не раскрыть")
     полный = registry._git(pathlib.Path(s.repo_path), "rev-parse", кратко)
     if not re.fullmatch(r"[0-9a-f]{40}", полный or ""):
         raise ОперацияОтклонена(
             f"{s.domain}: коммит {кратко} в рабочей копии не найден — "
-            "опубликован код, которого в репозитории нет")
+            "опубликован код, которого в репозитории нет"
+        )
     return полный
 
 
-def _дождаться_исполнителя(request_id: str, подача: dict, *,
-                           не_раньше: str = "") -> dict:
+def _дождаться_исполнителя(request_id: str, подача: dict, *, не_раньше: str = "") -> dict:
     """Ждать результата заявки, не повторяя её.
 
     `не_раньше` — время ЭТОЙ подачи. Идентификатор заявки правок выводится из
@@ -800,15 +894,19 @@ def _дождаться_исполнителя(request_id: str, подача: di
             последнее = q.состояние(request_id, не_раньше=не_раньше)
         except OSError as ош:
             # Состояние не прочиталось. Это НЕ повод повторить операцию.
-            последнее = {"status": "status-unreadable", "request_id": request_id,
-                         "reason": f"{type(ош).__name__}: {ош}"}
+            последнее = {
+                "status": "status-unreadable",
+                "request_id": request_id,
+                "reason": f"{type(ош).__name__}: {ош}",
+            }
         if последнее.get("status") == "finished":
             return {"result": последнее}
         time.sleep(ШАГ_ИСПОЛНИТЕЛЯ_С)
     raise ОперацияОтклонена(
         f"исполнитель не ответил за {ОЖИДАНИЕ_ИСПОЛНИТЕЛЯ_С} с; последнее "
         f"состояние {последнее.get('status')!r}. Заявка {request_id} остаётся в "
-        "очереди — проверьте её состояние, но не подавайте заново")
+        "очереди — проверьте её состояние, но не подавайте заново"
+    )
 
 
 #: Зеркало доставленного для механизма правок. Файл правок витрины хранит
@@ -822,17 +920,22 @@ def _дождаться_исполнителя(request_id: str, подача: di
 def _текущее(s: registry.Сайт) -> dict:
     """Что мы доставили последним, в едином виде для обоих механизмов."""
     if registry.механизм(s) == "editorial-queue":
-        зеркало = _прочитать(_каталог(s) / ОПУБЛИКОВАНО,
-                             {"items": [], "generation_id": None})
+        зеркало = _прочитать(_каталог(s) / ОПУБЛИКОВАНО, {"items": [], "generation_id": None})
         # Расхождение с живым файлом не скрывается: оно меняет решение.
         зеркало["foreign_change"] = _чужая_правка(s)
         return зеркало
-    return _прочитать(_каталог(s) / "title-overlays.json",
-                      {"items": [], "generation_id": None})
+    return _прочитать(_каталог(s) / "title-overlays.json", {"items": [], "generation_id": None})
 
 
-def _доставить(s: registry.Сайт, новые: list[dict], все: list[dict], *,
-               поколение: str, author: str, reason: str) -> dict:
+def _доставить(
+    s: registry.Сайт,
+    новые: list[dict],
+    все: list[dict],
+    *,
+    поколение: str,
+    author: str,
+    reason: str,
+) -> dict:
     """Положить материал туда, откуда его читает ВЫПУЩЕННЫЙ рантайм сайта.
 
     Два механизма, одна последовательность. Наложение принимает только новое
@@ -842,16 +945,19 @@ def _доставить(s: registry.Сайт, новые: list[dict], все: li
     """
     мех = registry.механизм(s)
     if мех == "overlay":
-        итог = _вызвать_store(s, {"op": "publish", "generation_id": поколение,
-                                  "items": новые})
-        return {"backend": "overlay", "entries": len(итог["items"]),
-                "store": registry.путь_доставки(s)}
+        итог = _вызвать_store(s, {"op": "publish", "generation_id": поколение, "items": новые})
+        return {
+            "backend": "overlay",
+            "entries": len(итог["items"]),
+            "store": registry.путь_доставки(s),
+        }
     if мех == "editorial-queue":
         беда = _чужая_правка(s)
         if беда:
             raise ОперацияОтклонена(
                 f"{s.domain}: {беда}. Перечитайте состояние и решите, что "
-                "делать — слепая перезапись запрещена")
+                "делать — слепая перезапись запрещена"
+            )
         правки: dict[str, dict] = {}
         for i in все:
             ключ = str(i.get("title_id") or i.get("slug") or "").strip()
@@ -860,12 +966,12 @@ def _доставить(s: registry.Сайт, новые: list[dict], все: li
                 continue
             правки[ключ] = {"fields": {"description": тело_}}
         итог = _подать_правки(s, правки, author=author, reason=reason)
-        _записать_атомарно(_каталог(s) / ОПУБЛИКОВАНО,
-                           {"site": s.domain, "generation_id": поколение,
-                            "at": _сейчас(), "items": все})
+        _записать_атомарно(
+            _каталог(s) / ОПУБЛИКОВАНО,
+            {"site": s.domain, "generation_id": поколение, "at": _сейчас(), "items": все},
+        )
         return итог
-    raise ОперацияОтклонена(
-        f"{s.domain}: механизма доставки нет — {s.handover_reason}")
+    raise ОперацияОтклонена(f"{s.domain}: механизма доставки нет — {s.handover_reason}")
 
 
 def _требовать_карточку(s: registry.Сайт, slug: str) -> None:
@@ -898,46 +1004,60 @@ def _требовать_карточку(s: registry.Сайт, slug: str) -> Non
         f"{адрес} ответил {код}: карточки {slug!r} в каталоге нет, а накладка "
         "накладывается на существующую карточку. Если это НОВОСТЬ — её пишут "
         "операции новостей (posts-prepare/posts-publish), и её адрес "
-        f"https://{s.domain}/posts/{slug}")
+        f"https://{s.domain}/posts/{slug}"
+    )
 
 
-def публиковать(site: str, slug: str, *, author: str,
-                expected_generation: str | None = None,
-                тело: str | None = None) -> dict:
+def публиковать(
+    site: str,
+    slug: str,
+    *,
+    author: str,
+    expected_generation: str | None = None,
+    тело: str | None = None,
+) -> dict:
     """Записать материал в хранилище доставки и ПОДТВЕРДИТЬ на странице."""
     s = _сайт(site, опрашивать_сеть=True)
     _требует(s, "publish")
     if s.handover_state == "not_released":
         raise ОперацияОтклонена(
             f"{s.domain}: {s.handover_reason}. Запись отклонена, чтобы не "
-            "выдать её за публикацию")
+            "выдать её за публикацию"
+        )
     _требовать_карточку(s, slug)
     к = _каталог(s)
     # Факты нужны для проверок качества. Семейство без источника фактов
     # (Yummy) проверяется мягче — и это сказано прямо, а не умолчано.
     умеет_факты = "facts" in registry.возможности(s)
-    ф = факты(site, slug) if умеет_факты else {
-        "title_id": None, "facts": {}, "source": "источника фактов у семейства нет"}
+    ф = (
+        факты(site, slug)
+        if умеет_факты
+        else {"title_id": None, "facts": {}, "source": "источника фактов у семейства нет"}
+    )
 
     if тело is None:
         черновик = (_прочитать(к / ЧЕРНОВИКИ, {}).get("items") or {}).get(slug)
         if not черновик:
             raise ОперацияОтклонена(
-                f"черновика для {slug!r} нет: сначала prepare, либо передайте тело")
+                f"черновика для {slug!r} нет: сначала prepare, либо передайте тело"
+            )
         тело = черновик["body"]
     тело = обрезать(тело)
     беды = проверить_материал(тело, ф)
     if беды:
-        raise ОперацияОтклонена(
-            "материал не прошёл проверки: " + "; ".join(беды))
-    предупреждения = ([] if умеет_факты else
-                      ["факты не сверялись: у семейства нет источника фактов, "
-                       "за достоверность отвечает автор материала"])
+        raise ОперацияОтклонена("материал не прошёл проверки: " + "; ".join(беды))
+    предупреждения = (
+        []
+        if умеет_факты
+        else [
+            "факты не сверялись: у семейства нет источника фактов, "
+            "за достоверность отвечает автор материала"
+        ]
+    )
 
     текущее = _текущее(s)
     факт_ген = текущее.get("generation_id")
-    уже_есть = next((i for i in (текущее.get("items") or [])
-                     if i.get("slug") == slug), None)
+    уже_есть = next((i for i in (текущее.get("items") or []) if i.get("slug") == slug), None)
     # ПОВТОРНАЯ ПУБЛИКАЦИЯ ТОГО ЖЕ СЛАГА требует назвать заменяемую версию.
     #
     # Хранилище ключуется слагом, поэтому второй вызов дубля не создаёт — он
@@ -951,40 +1071,64 @@ def публиковать(site: str, slug: str, *, author: str,
             f"{slug!r} в хранилище уже есть (версия {факт_ген!r}): повторная "
             "публикация обязана назвать заменяемую версию параметром "
             "expect_generation. Прочитайте текущую через editorial_status и "
-            "передайте её значение — слепая замена чужого текста запрещена")
+            "передайте её значение — слепая замена чужого текста запрещена"
+        )
     if expected_generation is not None and факт_ген != expected_generation:
         raise ОперацияОтклонена(
             f"в хранилище версия {факт_ген!r}, а ожидалась {expected_generation!r}: "
             "кто-то записал новее. Перечитайте состояние и решите, что делать — "
-            "слепая перезапись запрещена")
+            "слепая перезапись запрещена"
+        )
 
     поколение = f"qwen-{slug}-{int(time.time())}"
-    запись = {"slug": slug, "title_id": ф.get("title_id"), "body": тело,
-              "provenance": {"author": author, "prepared_by": author,
-                             "facts_source": ф["source"],
-                             "written_at": _сейчас()}}
+    запись = {
+        "slug": slug,
+        "title_id": ф.get("title_id"),
+        "body": тело,
+        "provenance": {
+            "author": author,
+            "prepared_by": author,
+            "facts_source": ф["source"],
+            "written_at": _сейчас(),
+        },
+    }
     # Полный состав нужен механизму правок: его файл заменяется целиком, и
     # передать одну запись значило бы стереть соседние.
     все = [i for i in текущее.get("items") or [] if i.get("slug") != slug]
     все.append(запись)
-    итог = _доставить(s, [запись], все, поколение=поколение, author=author,
-                      reason=f"SEO-описание тайтла {slug}")
-    _дописать_историю(к, {"at": _сейчас(), "op": "publish", "slug": slug,
-                          "author": author, "generation_id": поколение,
-                          "previous_generation": факт_ген,
-                          "body_digest": отпечаток(тело)})
+    итог = _доставить(
+        s, [запись], все, поколение=поколение, author=author, reason=f"SEO-описание тайтла {slug}"
+    )
+    _дописать_историю(
+        к,
+        {
+            "at": _сейчас(),
+            "op": "publish",
+            "slug": slug,
+            "author": author,
+            "generation_id": поколение,
+            "previous_generation": факт_ген,
+            "body_digest": отпечаток(тело),
+        },
+    )
     расхождение = _сверить_отпечаток(s, slug, тело)
-    подтверждение = подтвердить_с_ожиданием(site, slug, тело=тело,
-                                            ждать_появления=True)
+    подтверждение = подтвердить_с_ожиданием(site, slug, тело=тело, ждать_появления=True)
     if расхождение:
         подтверждение.setdefault("digest_mismatch", расхождение)
     состояние = "confirmed" if подтверждение["confirmed"] else "written"
-    return {"site": s.domain, "slug": slug, "title_id": ф["title_id"],
-            "generation_id": поколение, "items_in_store": итог["entries"],
-            "digest_mismatch": расхождение,
-            "delivery": итог, "state": состояние,
-            "confirmation": подтверждение, "warnings": предупреждения,
-            "store": итог["store"]}
+    return {
+        "site": s.domain,
+        "slug": slug,
+        "title_id": ф["title_id"],
+        "generation_id": поколение,
+        "items_in_store": итог["entries"],
+        "digest_mismatch": расхождение,
+        "delivery": итог,
+        "state": состояние,
+        "confirmation": подтверждение,
+        "warnings": предупреждения,
+        "store": итог["store"],
+    }
 
 
 #: Сколько ждать появления текста на странице. Витрина перечитывает наложение
@@ -1009,24 +1153,28 @@ def _сверить_отпечаток(s: registry.Сайт, slug: str, тело
         return ""
     файл = pathlib.Path(registry.путь_доставки(s))
     данные = _прочитать(файл, {})
-    запись = next((i for i in (данные.get("items") or [])
-                   if i.get("slug") == slug), None)
+    запись = next((i for i in (данные.get("items") or []) if i.get("slug") == slug), None)
     if запись is None:
         return f"записи {slug!r} в {файл} после записи нет"
     записан = str(запись.get("content_digest") or "")
     по_читателю = отпечаток(str(запись.get("body") or "").strip())
     if записан and записан != по_читателю:
-        return (f"content_digest {записан[:16]}… не равен отпечатку "
-                f"обрезанного тела {по_читателю[:16]}…: читатель витрины "
-                "пропустит запись молча")
+        return (
+            f"content_digest {записан[:16]}… не равен отпечатку "
+            f"обрезанного тела {по_читателю[:16]}…: читатель витрины "
+            "пропустит запись молча"
+        )
     if отпечаток(тело) != по_читателю:
-        return ("записанное тело отличается от переданного: "
-                f"{отпечаток(тело)[:16]}… против {по_читателю[:16]}…")
+        return (
+            "записанное тело отличается от переданного: "
+            f"{отпечаток(тело)[:16]}… против {по_читателю[:16]}…"
+        )
     return ""
 
 
-def подтвердить_с_ожиданием(site: str, slug: str, *, тело: str | None = None,
-                            ждать_появления: bool = True) -> dict:
+def подтвердить_с_ожиданием(
+    site: str, slug: str, *, тело: str | None = None, ждать_появления: bool = True
+) -> dict:
     """Опрашивать страницу до предела, пока результат не станет ожидаемым.
 
     `ждать_появления=True` — ждём, пока текст ПОЯВИТСЯ (публикация);
@@ -1057,11 +1205,9 @@ def подтвердить(site: str, slug: str, *, тело: str | None = None)
     s = _сайт(site)
     к = _каталог(s)
     if тело is None:
-        запись = next((i for i in _текущее(s).get("items") or []
-                       if i.get("slug") == slug), None)
+        запись = next((i for i in _текущее(s).get("items") or [] if i.get("slug") == slug), None)
         if запись is None:
-            return {"confirmed": False,
-                    "reason": f"в хранилище нет записи для {slug!r}"}
+            return {"confirmed": False, "reason": f"в хранилище нет записи для {slug!r}"}
         тело = запись.get("body") or ""
     try:
         url = registry.адрес_тайтла(s, slug)
@@ -1069,23 +1215,26 @@ def подтвердить(site: str, slug: str, *, тело: str | None = None)
         return {"confirmed": False, "reason": str(ош)}
     код, страница = registry._страница(url, таймаут=25)
     if код != "200":
-        return {"confirmed": False, "url": url, "http": код,
-                "reason": f"страница ответила {код}"}
+        return {"confirmed": False, "url": url, "http": код, "reason": f"страница ответила {код}"}
     import html as _html
+
     без_головы = re.sub(r"(?is)<head.*?</head>", "", страница)
-    без_скриптов = re.sub(r"(?is)<(script|style|template)[^>]*>.*?</\1>", "",
-                          без_головы)
+    без_скриптов = re.sub(r"(?is)<(script|style|template)[^>]*>.*?</\1>", "", без_головы)
     видимый = _норм(_html.unescape(re.sub(r"(?s)<[^>]+>", " ", без_скриптов)))
-    мета = [_норм(_html.unescape(m))
-            for m in re.findall(r'<meta[^>]+content="([^"]*)"', страница)]
+    мета = [_норм(_html.unescape(m)) for m in re.findall(r'<meta[^>]+content="([^"]*)"', страница)]
     цель = _норм(тело)
     в_блоке = видимый.count(цель)
-    return {"confirmed": в_блоке > 0, "url": url, "http": код,
-            "occurrences_in_main_block": в_блоке,
-            "occurrences_in_meta": sum(1 for m in мета if цель in m),
-            "reason": "" if в_блоке else
-                      "полного текста в основном блоке страницы нет; запись в "
-                      "файл публикацией не считается"}
+    return {
+        "confirmed": в_блоке > 0,
+        "url": url,
+        "http": код,
+        "occurrences_in_main_block": в_блоке,
+        "occurrences_in_meta": sum(1 for m in мета if цель in m),
+        "reason": ""
+        if в_блоке
+        else "полного текста в основном блоке страницы нет; запись в "
+        "файл публикацией не считается",
+    }
 
 
 def снять(site: str, slug: str, *, author: str) -> dict:
@@ -1093,34 +1242,51 @@ def снять(site: str, slug: str, *, author: str) -> dict:
     s = _сайт(site, опрашивать_сеть=True)
     к = _каталог(s)
     текущее = _текущее(s)
-    запись = next((i for i in текущее.get("items") or []
-                   if i.get("slug") == slug), None)
+    запись = next((i for i in текущее.get("items") or [] if i.get("slug") == slug), None)
     if запись is None:
-        raise ОперацияОтклонена(
-            f"в хранилище {s.domain} нет записи {slug!r}: снимать нечего")
+        raise ОперацияОтклонена(f"в хранилище {s.domain} нет записи {slug!r}: снимать нечего")
     снятые = _прочитать(к / СНЯТЫЕ, {"site": s.domain, "items": {}})
     снятые.setdefault("items", {})[slug] = {
-        **запись, "unpublished_at": _сейчас(), "unpublished_by": author}
+        **запись,
+        "unpublished_at": _сейчас(),
+        "unpublished_by": author,
+    }
     снятые["site"] = s.domain
     _записать_атомарно(к / СНЯТЫЕ, снятые)
 
     остальные = [i for i in текущее.get("items") or [] if i.get("slug") != slug]
     поколение = f"unpublish-{slug}-{int(time.time())}"
-    _снять_доставку(s, остальные, поколение=поколение, author=author,
-                    reason=f"снятие SEO-описания тайтла {slug}")
-    _дописать_историю(к, {"at": _сейчас(), "op": "unpublish", "slug": slug,
-                          "author": author, "generation_id": поколение,
-                          "kept_in": str(к / СНЯТЫЕ)})
+    _снять_доставку(
+        s,
+        остальные,
+        поколение=поколение,
+        author=author,
+        reason=f"снятие SEO-описания тайтла {slug}",
+    )
+    _дописать_историю(
+        к,
+        {
+            "at": _сейчас(),
+            "op": "unpublish",
+            "slug": slug,
+            "author": author,
+            "generation_id": поколение,
+            "kept_in": str(к / СНЯТЫЕ),
+        },
+    )
     # предусмотренное поведение: страница жива, но текста наложения на ней нет
-    пров = подтвердить_с_ожиданием(site, slug,
-                                   тело=запись.get("body") or "",
-                                   ждать_появления=False)
-    return {"site": s.domain, "slug": slug, "generation_id": поколение,
-            "kept_items": len(остальные), "material_kept_at": str(к / СНЯТЫЕ),
-            "page_http": пров.get("http"),
-            "text_gone_from_page": not пров.get("confirmed"),
-            "state": "confirmed" if not пров.get("confirmed") else "written",
-            "note": "материал сохранён и восстановим: restore"}
+    пров = подтвердить_с_ожиданием(site, slug, тело=запись.get("body") or "", ждать_появления=False)
+    return {
+        "site": s.domain,
+        "slug": slug,
+        "generation_id": поколение,
+        "kept_items": len(остальные),
+        "material_kept_at": str(к / СНЯТЫЕ),
+        "page_http": пров.get("http"),
+        "text_gone_from_page": not пров.get("confirmed"),
+        "state": "confirmed" if not пров.get("confirmed") else "written",
+        "note": "материал сохранён и восстановим: restore",
+    }
 
 
 def восстановить(site: str, slug: str, *, author: str) -> dict:
@@ -1131,7 +1297,8 @@ def восстановить(site: str, slug: str, *, author: str) -> dict:
     запись = (снятые.get("items") or {}).get(slug)
     if запись is None:
         raise ОперацияОтклонена(
-            f"снятого материала {slug!r} для {s.domain} нет: восстанавливать нечего")
+            f"снятого материала {slug!r} для {s.domain} нет: восстанавливать нечего"
+        )
     return публиковать(site, slug, author=author, тело=запись["body"])
 
 
@@ -1144,15 +1311,26 @@ def откатить(site: str, *, author: str) -> dict:
         raise ОперацияОтклонена(
             f"{s.domain}: у механизма правок отката хранилища нет — его роль "
             "играет адресное снятие (unpublish) и восстановление (restore). "
-            "Прежние версии материала лежат в " + str(к / ИСТОРИЯ))
+            "Прежние версии материала лежат в " + str(к / ИСТОРИЯ)
+        )
     было = _текущее(s).get("generation_id")
     данные = _вызвать_store(s, {"op": "rollback"})
-    _дописать_историю(к, {"at": _сейчас(), "op": "rollback", "author": author,
-                          "from_generation": было,
-                          "to_generation": данные.get("generation_id")})
-    return {"site": s.domain, "from_generation": было,
+    _дописать_историю(
+        к,
+        {
+            "at": _сейчас(),
+            "op": "rollback",
+            "author": author,
+            "from_generation": было,
             "to_generation": данные.get("generation_id"),
-            "items": len(данные.get("items") or [])}
+        },
+    )
+    return {
+        "site": s.domain,
+        "from_generation": было,
+        "to_generation": данные.get("generation_id"),
+        "items": len(данные.get("items") or []),
+    }
 
 
 def состояние(site: str) -> dict:
@@ -1165,12 +1343,21 @@ def состояние(site: str) -> dict:
     записи = []
     for i in текущее.get("items") or []:
         пров = подтвердить(site, i.get("slug") or "", тело=i.get("body") or "")
-        записи.append({"slug": i.get("slug"), "title_id": i.get("title_id"),
-                       "state": "confirmed" if пров["confirmed"] else "written",
-                       "occurrences_in_main_block": пров.get("occurrences_in_main_block"),
-                       "author": (i.get("provenance") or {}).get("author")})
-    return {"site": s.domain, "handover_state": s.handover_state,
-            "generation_id": текущее.get("generation_id"),
-            "published": записи, "drafts": sorted(черновики),
-            "unpublished_kept": sorted(снятые),
-            "history": str(к / ИСТОРИЯ)}
+        записи.append(
+            {
+                "slug": i.get("slug"),
+                "title_id": i.get("title_id"),
+                "state": "confirmed" if пров["confirmed"] else "written",
+                "occurrences_in_main_block": пров.get("occurrences_in_main_block"),
+                "author": (i.get("provenance") or {}).get("author"),
+            }
+        )
+    return {
+        "site": s.domain,
+        "handover_state": s.handover_state,
+        "generation_id": текущее.get("generation_id"),
+        "published": записи,
+        "drafts": sorted(черновики),
+        "unpublished_kept": sorted(снятые),
+        "history": str(к / ИСТОРИЯ),
+    }
