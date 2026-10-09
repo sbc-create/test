@@ -231,3 +231,10 @@ def test_queue_delivered_publication_counts_as_published(tmp_path):
         fetch=lambda url: (200, f"<html><body><main><p>{BODY}</p></main></body></html>"),
     )
     assert r["steps"]["published"] and r["steps"]["public_page_verified"], r
+
+
+def test_gate_gives_candidates_even_when_a_queue_task_is_free(tmp_path):
+    f = _gate_files(tmp_path)  # свободное задание Animedia + кандидат без результата
+    decision = editor_run.gate(NOW, **f)
+    assert decision["run"] is True
+    assert [c["url"] for c in decision["next"]] == ["https://animedia.space/title/x/"]

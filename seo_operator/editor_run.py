@@ -331,8 +331,6 @@ def gate(
         and i.get("status") == "NEEDS_UPDATE"
         and str(i.get("content_id", "")).replace("request-", "") not in leased
     ]
-    if open_tasks:
-        return {"run": True, "reason": f"свободных заданий на текст: {len(open_tasks)}"}
     done: set[str] = set()
     task_url: dict[str, str] = {}
     if events.is_file():
@@ -352,6 +350,15 @@ def gate(
     fresh = [c for c in cands if _key(c.get("url", "")) not in done]
     if fresh:
         fresh = rotate(fresh, recent_publications(now) if recent is None else recent)
+    if open_tasks:
+        # Список кандидатов отдаётся и при свободном задании очереди: запуск
+        # 2026-10-09 12:50 закрыл единственное задание и встал (next.json пуст),
+        # хотя кандидатов было двадцать — второго материала не было.
+        return {
+            "run": True,
+            "reason": f"свободных заданий на текст: {len(open_tasks)}; кандидатов: {len(fresh)}",
+            "next": fresh,
+        }
     if fresh:
         return {
             "run": True,
