@@ -315,10 +315,108 @@ def _обойти_снимок(снимок: pathlib.Path, на_запись, *,
     return шапка
 
 
+#: Типы schema.org, в которых витрина Yummy описывает произведение.
+ТИПЫ_РАЗМЕТКИ = ("TVSeries", "Movie", "TVSeason", "TVEpisode", "CreativeWork")
+
+
+def _разметка_страницы(тело: str) -> dict:
+    """Блок JSON-LD о произведении со страницы. Пусто — значит пусто.
+
+    Берётся первый блок подходящего `@type`; `BreadcrumbList` и прочая
+    навигация пропускается. Ничего не достраивается: нет блока — нет фактов, и
+    вызывающий получает отказ, а не пустую заготовку.
+    """
+    for кусок in re.findall(
+            r'<script[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
+            тело, re.S):
+        try:
+            данные = json.loads(кусок)
+        except ValueError:
+            continue
+        для_проверки = данные if isinstance(данные, list) else [данные]
+        for запись in для_проверки:
+            if not isinstance(запись, dict):
+                continue
+            тип = запись.get("@type")
+            типы = тип if isinstance(тип, list) else [тип]
+            if any(т in ТИПЫ_РАЗМЕТКИ for т in типы if isinstance(т, str)):
+                return запись
+    return {}
+
+
+def _факты_со_страницы(s: registry.Сайт, slug: str | None) -> dict:
+    """Факты для семейства, у которого снимка подробностей нет (Yummy).
+
+    Источник — СВОЯ страница тайтла: приложение держит каталог в своей базе,
+    и единственное её проверяемое изложение, доступное фабрике, — разметка
+    schema.org на этой же странице. Адрес назван в `source`, поэтому каждое
+    утверждение текста можно сверить ровно там, где его увидит посетитель.
+    """
+    if slug is None:
+        raise ОперацияОтклонена(
+            f"{s.domain}: обзор каталога этим путём недоступен — факты читаются "
+            "со страницы одного тайтла. Назовите слаг")
+    адрес = registry.адрес_тайтла(s, slug)
+    код, тело = registry._страница(адрес, таймаут=25)
+    if код != "200" or not тело:
+        raise ОперацияОтклонена(
+            f"{адрес}: страница ответила {код} — факты читать нечем")
+    разметка = _разметка_страницы(тело)
+    if not разметка:
+        raise ОперацияОтклонена(
+            f"{адрес}: на странице нет разметки schema.org о произведении "
+            f"(ищутся типы {', '.join(ТИПЫ_РАЗМЕТКИ)}). Выдумывать факты нельзя")
+    страны = []
+    для_стран = разметка.get("countryOfOrigin")
+    for запись in (для_стран if isinstance(для_стран, list) else [для_стран]):
+        if isinstance(запись, dict) and запись.get("name"):
+            страны.append(str(запись["name"]))
+        elif isinstance(запись, str) and запись.strip():
+            страны.append(запись.strip())
+    жанры = разметка.get("genre")
+    жанры = ([str(ж) for ж in жанры] if isinstance(жанры, list)
+             else [str(жанры)] if жанры else [])
+    дата = str(разметка.get("datePublished") or разметка.get("startDate") or "")
+    год = int(дата[:4]) if дата[:4].isdigit() else None
+    тип = разметка.get("@type")
+    тип = тип[0] if isinstance(тип, list) and тип else тип
+    вид = {"TVSeries": "tv", "Movie": "movie", "TVSeason": "tv"}.get(str(тип), "")
+    описание = str(разметка.get("description") or "").strip()
+    return {
+        "site": s.domain, "site_id": s.site_id, "slug": slug,
+        "title_id": None,
+        "facts": {
+            "id": None,
+            "name": str(разметка.get("name") or "").strip(),
+            "original_name": str(разметка.get("alternateName") or "").strip() or None,
+            "year": год,
+            "type": вид,
+            "genres": жанры,
+            "countries": страны or None,
+            "seasons": None,
+            "imdb_rating": None,
+            "playable": None,
+            "description": описание or None,
+            "description_source": адрес if описание else None,
+        },
+        "source": адрес,
+        "source_kind": "page-schema-org",
+        "canonical_url": адрес,
+    }
+
+
 def факты(site: str, slug: str | None = None) -> dict:
     """Факты о тайтле из снимка подробностей. Источник один и назван."""
     s = _сайт(site)
     _требует(s, "facts")
+    # `getattr`, а не `s.adapter`: запись реестра адаптер всегда несёт, но
+    # двойники в проверках — не всегда, и падение здесь стоило дорого. Прогон
+    # tests/unit 2026-10-09 рухнул целиком: AttributeError поднялся внутри
+    # теста, который на время подменяет `pathlib.Path`, и форматирование отчёта
+    # об отказе упало уже на подменённом Path (INTERNALERROR, ни одного
+    # названного провала). Семейство без адаптера идёт прежним путём снимка.
+    if getattr(s, "adapter", "") == "yummy":
+        return _факты_со_страницы(s, slug)
     sid = s.site_id
     снимок = pathlib.Path(f"/srv/lords/.frontend/{sid}-details.json")
     if not снимок.is_file():

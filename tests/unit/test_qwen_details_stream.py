@@ -75,7 +75,9 @@ def test_факты_по_слагу_и_сводка(tmp_path, monkeypatch):
     реальный_path = editorial.pathlib.Path
 
     class Сайт:
-        domain, site_id = "example.test", "x"
+        # Адаптер назван: по нему `факты` выбирают путь (снимок или страница),
+        # и двойник без него прятал бы ошибку выбора за AttributeError.
+        domain, site_id, adapter = "example.test", "x", "lords"
 
     monkeypatch.setattr(editorial, "_сайт", lambda site, **kw: Сайт)
     monkeypatch.setattr(editorial, "_требует", lambda s, op: None)
