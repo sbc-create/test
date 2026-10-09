@@ -2334,11 +2334,20 @@ def editor_candidates(
                         shiki,
                     )
                 )
-        for _, _, domain, slug, mine, shiki in sorted(pool):
+        per_domain: dict[str, int] = {}
+        for c in out:
+            per_domain[c["site"]] = per_domain.get(c["site"], 0) + 1
+        by_slug: dict[str, list[tuple]] = {}
+        for entry in sorted(pool):
+            by_slug.setdefault(entry[3], []).append(entry)
+        for slug, entries in by_slug.items():
             if len(out) >= limit:
                 break
             if slug in taken:
                 continue
+            # Тайтл, свободный на нескольких доменах, — тому, у кого кандидатов меньше.
+            _, _, domain, slug, mine, shiki = min(entries, key=lambda e: per_domain.get(e[2], 0))
+            per_domain[domain] = per_domain.get(domain, 0) + 1
             taken.add(slug)
             out.append(
                 {
