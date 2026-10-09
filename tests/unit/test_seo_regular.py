@@ -1122,6 +1122,46 @@ def test_editor_candidates_rank_gaps_and_space_duplicates_by_title_traffic(tmp_p
     assert all(c["site"] != "animedia.icu" or c["reason"] == "GAP" for c in found)
 
 
+def test_editor_candidates_give_one_own_description_per_work_in_the_network(tmp_path):
+    snap = tmp_path / "analytics-2026-10-09.json"
+    rows = [{"dimensions": [{"name": "/title/gap/"}], "metrics": [5.0]}]
+    snap.write_text(
+        json.dumps(
+            {
+                "domains": [
+                    {
+                        "domain": d,
+                        "measurements": [{"key": "popular_pages", "measured": True, "value": rows}],
+                    }
+                    for d in ("animedia.icu", "animedia.space")
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    facts = tmp_path / "facts"
+    facts.mkdir()
+    shiki = {"shikimori": {"match_state": "external_id_exact+title_verified", "value": 8}}
+    for sid in ("animedia-01", "animedia-02"):
+        (facts / f"{sid}-details.json").write_text(
+            json.dumps(
+                {
+                    "details": {
+                        "gap": {"name": "Без описания", "description": None},
+                        "done-elsewhere": {"description": None, "ratings_by_source": shiki},
+                        "free": {"description": None, "ratings_by_source": shiki},
+                    }
+                }
+            ),
+            encoding="utf-8",
+        )
+    found = regular.editor_candidates(snap, facts, {("animedia.icu", "done-elsewhere")})
+    slugs = [c["slug"] for c in found]
+    # пробел есть на обоих доменах — кандидат один; уже написанное на icu на space не идёт
+    assert slugs.count("gap") == 1 and slugs.count("free") == 1
+    assert "done-elsewhere" not in slugs
+
+
 def test_hourly_summary_makes_no_requests_and_says_delivery_is_not_done(env):
     http = FakeHttp()
     r = regular.run("hourly", root=env["root"], now=NOW, sources=env["sources"], http=http)

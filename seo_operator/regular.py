@@ -2265,8 +2265,13 @@ def editor_candidates(
         for d, sid in ANIMEDIA.items()
     }
     out = []
+    # Одно своё описание произведения на сеть. Второй домен с тем же тайтлом
+    # получал бы пересказ уже написанного текста по тому же источнику —
+    # синонимайз, который владелец запретил 2026-10-09 (за ночь 08→09.10 таких
+    # пар icu/space было 9). Другому домену — другая тема или другой формат.
+    taken = {slug for _, slug in published}
     for (domain, slug), weight in sorted(weights.items(), key=lambda kv: -kv[1]):
-        if (domain, slug) in published:
+        if (domain, slug) in published or slug in taken:
             continue
         mine = (details.get(domain) or {}).get(slug)
         if not mine:
@@ -2280,6 +2285,7 @@ def editor_candidates(
         else:
             continue
         shiki = (mine.get("ratings_by_source") or {}).get("shikimori") or {}
+        taken.add(slug)
         out.append(
             {
                 "site": domain,
@@ -2307,7 +2313,11 @@ def editor_candidates(
         pool = []
         for domain, items in details.items():
             for slug, mine in items.items():
-                if (domain, slug) in seen or (mine.get("description") or "").strip():
+                if (
+                    (domain, slug) in seen
+                    or slug in taken
+                    or (mine.get("description") or "").strip()
+                ):
                     continue
                 shiki = (mine.get("ratings_by_source") or {}).get("shikimori") or {}
                 if shiki.get("match_state") != "external_id_exact+title_verified" or not mine.get(
@@ -2324,7 +2334,12 @@ def editor_candidates(
                         shiki,
                     )
                 )
-        for _, _, domain, slug, mine, shiki in sorted(pool)[: limit - len(out)]:
+        for _, _, domain, slug, mine, shiki in sorted(pool):
+            if len(out) >= limit:
+                break
+            if slug in taken:
+                continue
+            taken.add(slug)
             out.append(
                 {
                     "site": domain,
