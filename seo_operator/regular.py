@@ -1686,8 +1686,10 @@ def publication_metrics(
     return out
 
 
-#: Через сколько видимый и неизменный текст перепроверяется на странице.
-RECHECK_VISIBLE_AFTER = dt.timedelta(hours=20)
+#: Через сколько видимый и неизменный текст перепроверяется на странице. Меньше
+#: интервала проверок (6 ч): каждая проверка сети перепроверяет все видимые
+#: тексты, и утренняя (05:25) видит итог ночной доставки каталога (03:30).
+RECHECK_VISIBLE_AFTER = dt.timedelta(hours=5)
 
 AUDIENCE_TARGET = 1000
 _ROBOT_YES = {"yes", "1", "true", "роботы", "robots"}
@@ -2279,7 +2281,7 @@ def step_analytics(ctx: Context) -> Any:
     return res
 
 
-def step_publications(ctx: Context, *, limit: int = 25) -> Any:
+def step_publications(ctx: Context, *, limit: int = 150) -> Any:
     verified = ctx.state.setdefault("publications", {})
     changes = ctx.state.get("changes") or {}
     checked, unchanged, untracked = [], 0, []
@@ -3107,7 +3109,9 @@ PLANS: dict[str, list[tuple[str, Callable[[Context], Any]]]] = {
 
 LIMITS = {
     # предел времени цикла, предел запросов
-    "check": (420, 120),
+    # 250 запросов: каждая проверка перепроверяет все видимые тексты (60 на 09.10).
+    # Время не поднимается: юнит обрывает запуск на 540 с (TimeoutStartSec).
+    "check": (420, 250),
     "daily": (840, 400),
     "weekly": (300, 20),
     "hourly": (60, 0),
