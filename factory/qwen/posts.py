@@ -55,6 +55,7 @@ import re
 import subprocess
 from typing import Any
 
+from factory.qwen import actors
 from factory.qwen import editorial, registry
 
 #: Версия файла. Приложение требует ровно её (`z.literal(1)`).
@@ -449,6 +450,7 @@ def подготовить(site: str, slug: str, *, title: str, excerpt: str,
     есть предварительный просмотр механизма: запись проверена схемой
     приложения, а на сайте её нет.
     """
+    actors.проверить(author, 'posts-prepare')
     s = _сайт(site)
     # СЛАГ — ЛИЧНОСТЬ ЗАПИСИ, а не качество текста, и проверяется ДО записи.
     #
@@ -632,6 +634,7 @@ def опубликовать(site: str, slug: str, *, author: str) -> dict:
     это ПРАВКА: запись обновляется, `publishedAt` сохраняется, `updatedAt`
     сдвигается.
     """
+    actors.проверить(author, 'posts-publish')
     s = _сайт(site)
     к = _каталог_черновиков(s)
     черновики = editorial._прочитать(к / ЧЕРНОВИКИ, {"site": s.domain, "items": {}})
@@ -719,6 +722,7 @@ def снять(site: str, slug: str, *, author: str) -> dict:
     публичного следа не остаётся, а запись и её история сохраняются. Снятие
     обратимо повторной публикацией.
     """
+    actors.проверить(author, 'posts-unpublish')
     s = _сайт(site)
     файл = доставленное(s)
     if файл is None:

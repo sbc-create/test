@@ -42,6 +42,7 @@ import time
 import unicodedata
 from typing import Any
 
+from factory.qwen import actors
 from factory.qwen import registry
 
 #: Черновики и история — рядом с хранилищем доставки, но отдельными файлами:
@@ -568,6 +569,7 @@ def проверить_материал(тело: str, факты_тайтла: 
 
 def подготовить(site: str, slug: str, тело: str, *, author: str) -> dict:
     """Сохранить черновик. Публичного ничего не меняется."""
+    actors.проверить(author, 'prepare')
     тело = обрезать(тело)
     s = _сайт(site, опрашивать_сеть=True)
     # Проверка до вызова фактов: иначе отказ назвал бы операцию `facts`, о
@@ -1169,6 +1171,7 @@ def публиковать(
     тело: str | None = None,
 ) -> dict:
     """Записать материал в хранилище доставки и ПОДТВЕРДИТЬ на странице."""
+    actors.проверить(author, 'publish')
     s = _сайт(site, опрашивать_сеть=True)
     _требует(s, "publish")
     if s.handover_state == "not_released":
@@ -1395,6 +1398,7 @@ def подтвердить(site: str, slug: str, *, тело: str | None = None)
 
 def снять(site: str, slug: str, *, author: str) -> dict:
     """Снять материал с публикации ОБРАТИМО: текст и история сохраняются."""
+    actors.проверить(author, 'unpublish')
     s = _сайт(site, опрашивать_сеть=True)
     к = _каталог(s)
     текущее = _текущее(s)
@@ -1447,6 +1451,7 @@ def снять(site: str, slug: str, *, author: str) -> dict:
 
 def восстановить(site: str, slug: str, *, author: str) -> dict:
     """Вернуть ранее снятый материал из сохранённого, без переписывания текста."""
+    actors.проверить(author, 'restore')
     s = _сайт(site, опрашивать_сеть=True)
     к = _каталог(s)
     снятые = _прочитать(к / СНЯТЫЕ, {"items": {}})

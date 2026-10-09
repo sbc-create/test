@@ -38,6 +38,8 @@ Qwen действительно располагает — инструмент�
 from __future__ import annotations
 
 import json
+
+from factory.qwen import actors
 import os
 import pathlib
 import subprocess
@@ -385,6 +387,7 @@ def взять(*, site: str, owner: str, limit: int = 1,
     Задания на описание у площадки без доставки не выдаются вовсе: выдать их
     значит потратить работу исполнителя на заведомый отказ.
     """
+    actors.проверить(owner, 'queue-next')
     вправе, отказ = брать_задания_вправе(owner)
     if not вправе:
         return {"site": site, "owner": owner, "claimed": 0, "tasks": [],
@@ -427,6 +430,7 @@ def взять(*, site: str, owner: str, limit: int = 1,
 
 def записать(*, task_id: str, owner: str, outcome: str, **поля: Any) -> dict[str, Any]:
     """Записать результат задания. Статус выводит очередь, а не вызывающий."""
+    actors.проверить(owner, 'queue-result')
     задание = {"op": "result", "task_id": task_id, "owner": owner,
                "outcome": outcome}
     for имя in ("body", "source_urls", "source_published_at", "facts",
