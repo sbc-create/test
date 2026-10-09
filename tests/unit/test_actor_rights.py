@@ -114,6 +114,7 @@ def test_qwen_не_опубликует_описание_даже_с_готов�
 
 def test_состояние_ограничений_читается_машинно():
     св = actors.сведения()
-    assert св["roles"]["qwen"] == ["prepare", "posts-prepare"]
+    # Подготовка — всех трёх видов материала: описание, пост, комментарий.
+    assert св["roles"]["qwen"] == ["prepare", "posts-prepare", "comment-prepare"]
     assert "publish" in св["operations"] and "queue-annul" in св["operations"]
     assert св["override_env"] == "FACTORY_ACTOR_ALLOW"

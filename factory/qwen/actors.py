@@ -50,7 +50,10 @@ import os
 #: которым операцию вызвали.
 ОПЕРАЦИИ = ("prepare", "publish", "unpublish", "restore",
             "queue-register", "queue-next", "queue-result", "queue-reopen",
-            "queue-annul", "posts-prepare", "posts-publish", "posts-unpublish")
+            "queue-annul", "posts-prepare", "posts-publish", "posts-unpublish",
+            # Комментарии под карточкой — отдельная сущность от постов, и
+            # права у них свои: подготовку Qwen оставляем, публикацию нет.
+            "comment-prepare", "comment-publish")
 
 #: Что разрешено роли. Роль, которой здесь нет, не ограничивается.
 #:
@@ -59,7 +62,7 @@ import os
 #: восстановление материалов и изменение очередей ему сейчас не нужны».
 #: Чтение не перечисляется: ограничение касается только изменений.
 РАЗРЕШЕНО_РОЛИ: dict[str, tuple[str, ...]] = {
-    "qwen": ("prepare", "posts-prepare"),
+    "qwen": ("prepare", "posts-prepare", "comment-prepare"),
 }
 
 #: Переменная для владельца: снять ограничение роли на одну смену, не правя
