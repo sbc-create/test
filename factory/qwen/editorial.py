@@ -30,6 +30,7 @@
 """
 from __future__ import annotations
 
+import codecs
 import datetime
 import hashlib
 import json
@@ -225,6 +226,95 @@ def _записать_атомарно(п: pathlib.Path, данные) -> None:
 
 
 # --------------------------------------------------------------- факты
+class _ПотокJSON:
+    """Буфер для чтения большого JSON по значениям, а не целиком."""
+
+    _РАЗБОР = json.JSONDecoder()
+
+    def __init__(self, f, размер: int) -> None:
+        self.f, self.размер = f, размер
+        self.декодер = codecs.getincrementaldecoder("utf-8")()
+        self.s, self.i, self.конец = "", 0, False
+
+    def _дочитать(self) -> bool:
+        if self.конец:
+            return False
+        кусок = self.f.read(self.размер)
+        self.конец = not кусок
+        self.s = self.s[self.i:] + self.декодер.decode(кусок, final=self.конец)
+        self.i = 0
+        return True
+
+    def символ(self) -> str:
+        """Следующий значимый символ (без продвижения); "" — конец файла."""
+        while True:
+            while self.i < len(self.s) and self.s[self.i] in " \t\r\n":
+                self.i += 1
+            if self.i < len(self.s):
+                return self.s[self.i]
+            if not self._дочитать():
+                return ""
+
+    def значение(self):
+        self.символ()
+        while True:
+            try:
+                v, конец = self._РАЗБОР.raw_decode(self.s, self.i)
+            except json.JSONDecodeError:
+                if self._дочитать():
+                    continue
+                raise
+            # Число у края буфера могло оборваться: дочитываем и разбираем заново.
+            if конец == len(self.s) and self._дочитать():
+                continue
+            self.i = конец
+            return v
+
+    def ждать(self, знак: str) -> None:
+        if self.символ() != знак:
+            raise ValueError(f"снимок: ожидалось {знак!r} в позиции {self.i}")
+        self.i += 1
+
+
+def _обойти_снимок(снимок: pathlib.Path, на_запись, *, размер: int = 1 << 22) -> dict:
+    """Пройти `details` снимка по одной записи; вернуть остальные поля верхнего уровня.
+
+    `на_запись(slug, запись)` → True останавливает обход. Снимки Lords/Zona
+    весят 80–112 МБ; `json.loads` целиком даёт пик 574 МБ (измерено
+    2026-10-09 на lords-01), а у моста MemoryMax=512M: три вызова
+    prepare_material для lordfilm47.space в 07:22–07:30 UTC убили процесс
+    моста для всех исполнителей. Здесь в памяти — буфер и одна запись.
+    """
+    шапка: dict = {}
+    with снимок.open("rb") as f:
+        п = _ПотокJSON(f, размер)
+        п.ждать("{")
+        while (c := п.символ()) != "}":
+            if c == ",":
+                п.i += 1
+                continue
+            if not c:
+                raise ValueError("снимок оборван")
+            ключ = п.значение()
+            п.ждать(":")
+            if ключ != "details":
+                шапка[ключ] = п.значение()
+                continue
+            п.ждать("{")
+            while (c := п.символ()) != "}":
+                if c == ",":
+                    п.i += 1
+                    continue
+                if not c:
+                    raise ValueError("снимок оборван")
+                слаг = п.значение()
+                п.ждать(":")
+                if на_запись(слаг, п.значение()):
+                    return шапка
+            п.i += 1
+    return шапка
+
+
 def факты(site: str, slug: str | None = None) -> dict:
     """Факты о тайтле из снимка подробностей. Источник один и назван."""
     s = _сайт(site)
@@ -235,19 +325,34 @@ def факты(site: str, slug: str | None = None) -> dict:
         raise ОперацияОтклонена(
             f"снимка подробностей нет: {снимок}. Для этого сайта факты "
             "недоступны этим путём — сообщите, и адаптер будет доработан")
-    данные = _прочитать(снимок, {})
-    записи = данные.get("details") or {}
+    найдено: dict = {}
+    всего = 0
+    без_описания: list[str] = []
+
+    def на_запись(k: str, v: dict) -> bool:
+        nonlocal всего
+        if slug is not None:
+            if k == slug:
+                найдено["r"] = v
+                return True
+            return False
+        всего += 1
+        if not str(v.get("description") or "").strip() and v.get("playable"):
+            без_описания.append(k)
+        return False
+
+    try:
+        данные = _обойти_снимок(снимок, на_запись)
+    except (OSError, ValueError) as ош:
+        raise ОперацияОтклонена(f"снимок {снимок.name} не прочитан: {ош}") from None
     if slug is None:
-        без_описания = [k for k, v in записи.items()
-                        if not str(v.get("description") or "").strip()
-                        and v.get("playable")]
         return {"site": s.domain, "site_id": sid,
                 "catalog_revision": данные.get("catalog_revision"),
-                "titles_total": len(записи),
+                "titles_total": всего,
                 "without_description_playable": len(без_описания),
                 "sample": без_описания[:10],
                 "source": str(снимок)}
-    r = записи.get(slug)
+    r = найдено.get("r")
     if r is None:
         raise ОперацияОтклонена(
             f"тайтла {slug!r} нет в снимке {снимок.name}. Выдумывать слаг нельзя")
