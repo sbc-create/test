@@ -3,7 +3,7 @@
     python3 automation/local/source_fetch.py shikimori <shikimori_id>
     python3 automation/local/source_fetch.py credits <shikimori_id>
     python3 automation/local/source_fetch.py official <shikimori_id>
-    python3 automation/local/source_fetch.py film <imdb_id> <название> <оригинальное> <год> <movie|tv>
+    python3 automation/local/source_fetch.py film <imdb> <название> <оригинальное> <год> <movie|tv>
     python3 automation/local/source_fetch.py wikidata <QID>
     python3 automation/local/source_fetch.py page <url>
 
