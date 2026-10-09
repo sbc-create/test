@@ -35,6 +35,7 @@ OVERLAY_ROOTS = {
     # файл правок сайта — в его каталоге данных. Без этого корня запуски с
     # публикацией на этих доменах считались неполными (2026-10-09, 10:55 и 11:50).
     "lords": (Path("/srv/sites/lords/runtime/overlays"), "/title/{slug}/"),
+    "animego": (Path("/srv/sites/animego/runtime/overlays"), "/title/{slug}/"),
 }
 BRIDGE_UNIT = "site-factory-mcp.service"
 
@@ -263,6 +264,11 @@ EDITOR_DOMAINS = (
     "lordserials22.info",
     "zonafilm12.site",
     "an1meg0.site",
+    "an1mego.site",
+    "animeg0.site",
+    # Yummy — только задания очереди: снимка каталога у семейства нет, кандидаты
+    # не строятся. Показ подтверждён 2026-10-09 (накладка по схеме, afd5b65).
+    "yummyani.site",
 )
 #: Модель запускается не чаще раза в этот интервал (почасовой цикл).
 MIN_INTERVAL_S = 55 * 60

@@ -7,7 +7,8 @@
 
 Задача запуска — не больше ДВУХ материалов, только на доменах animedia.icu,
 animedia.space, zonafilm.space, lordfilm47.space, lordserial33.biz,
-1lordserials1.online, lordserials22.info, zonafilm12.site и an1meg0.site: только у них подтверждены источник
+1lordserials1.online, lordserials22.info, zonafilm12.site, an1meg0.site,
+an1mego.site, animeg0.site и yummyani.site: только у них подтверждены источник
 фактов, доставка и показ (Zona и Lords — с 2026-10-09). У Zona и Lords файл
 правок сайта — поле editorial_store в ответе editorial_status, журнал
 публикаций — /srv/sites/lords/runtime/overlays/<домен>/; publish_material идёт
@@ -18,7 +19,23 @@ animedia.space, zonafilm.space, lordfilm47.space, lordserial33.biz,
 второй пересказ не пишется — это синонимайз, владелец его запретил. Такое
 задание из очереди заверши editorial_queue_result NO_CHANGE_NEEDED с detail
 «описание произведения уже опубликовано: <адрес>; второй пересказ запрещён
-правилом уникальности». Порядок:
+правилом уникальности».
+
+yummyani.site — только задания очереди (снимка каталога у Yummy нет, в
+next.json его адресов не бывает). ОДИН из двух материалов запуска бери оттуда:
+editorial_queue_next {"site": "yummyani.site", "owner": "<владелец>", "limit": 1,
+"content_types": ["TITLE_DESCRIPTION"]} — limit строго 1 (больший limit берёт в
+аренду чужие задания). Адрес карточки — https://yummyani.site/anime/<slug> БЕЗ
+косой черты в конце. Страница отвечает 404 — исход PAGE_ABSENT с адресом и кодом.
+ID Shikimori — из данных страницы (externalIds.myAnimeList); russian ответа
+Shikimori обязан совпасть с названием. Название тайтла в тексте — ТОЧНО как
+facts.name (кавычки внутри названия — «ёлочки»). publish_material — с body и
+expect_generation = generation_id из
+/srv/sites/yummyani-staging/runtime/overlays/yummyani.site/title-overlays.json.
+Блок <main> у Yummy при ответе сервера пустой — видимость подтверждает ответ
+publish_material (occurrences_in_main_block) и наличие текста на странице вне скриптов.
+
+Порядок:
 
 1. Возьми задание: editorial_queue_next {"site": "<домен>", "owner": "<владелец>",
    "limit": 1, "content_types": ["TITLE_DESCRIPTION"]} — сначала домен первого

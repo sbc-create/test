@@ -120,7 +120,8 @@ def _gate_files(tmp_path, *, last_start=None, task_leased=False, candidate_done=
                     },
                     {
                         "content_id": "request-y1",
-                        "target_site": "yummyani.site",
+                        # домен вне цикла редактора (yummyani.site в цикле с 2026-10-09)
+                        "target_site": "yummyani.biz",
                         "status": "NEEDS_UPDATE",
                     },
                 ]
