@@ -194,3 +194,110 @@ description, genre, countryOfOrigin. Теперь `yummyani.org` и `yummyani.si
 
 Пока операции нет, Qwen готовит черновики — одиннадцать уже лежат, и они не
 теряются.
+
+## 6. Срез после перезапуска моста (15:00–15:35 UTC): механизм и публикации — отдельно
+
+Таблица измерена `registry.собрать()`; «материалов» — записи в хранилище правок
+домена, то есть ФАКТИЧЕСКИЕ публикации, а не готовность канала. Четыре стендовых
+адреса (`*.localhost`, `pilot.localhost.test`) опущены.
+
+| домен | семейство | механизм (доставка+показ) | материалов | http | остаток |
+| --- | --- | --- | --- | --- | --- |
+| animedia.icu | animedia | да | 18 | 200 | — |
+| animedia.space | animedia | да | 26 | 200 | — |
+| an1meg0.site | animego | да | 1 | 200 | — |
+| an1mego.site | animego | да | 1 | 200 | — |
+| animeg0.site | animego | да | 2 | 200 | — |
+| 1lordserials1.online | lords | да | 1 | 200 | — |
+| lordfilm47.space | lords | да | 3 | 200 | — |
+| lordserial33.biz | lords | да | 3 | 200 | — |
+| lordserials22.info | lords | да | 1 | 200 | — |
+| zonafilm.space | lords | да | 2 | 200 | — |
+| zonafilm12.site | lords | да | 2 | 200 | — |
+| yummyani.org | yummy | да | 1 | 200 | подключён этим циклом |
+| yummyani.site | yummy | да | 4 | 200 | — |
+| yummyani.biz | yummy | нет | — | 200 | настройка показа описана, пересоздание за владельцем |
+| yummyani7.site | yummy | нет | — | 200 | то же |
+| yummyani7.info | yummy | нет | — | 200 | то же |
+| zonafilm.cc | zona-serve | нет | — | 200 | нет своего `src/`: нужен `install-publisher-cell-paths.sh` |
+| lordfilm077.site | lords | нет | — | URLError | выпуск не найден (вне линии) |
+| lordserial101.site | lords | нет | — | URLError | выпуск не найден (вне линии) |
+| lordserials22.site | lords | нет | — | URLError | прямая установка без `releases/` |
+| lordserials22.space | lords | нет | — | URLError | прямая установка без `releases/` |
+
+### Что подтверждено публикацией (а не словом «managed»)
+
+* `an1mego.site/title/kletka-duha-2/` и `animeg0.site/title/pesn-nochnyh-sov-2/`
+  — текст в `<main>` и в `meta`; операции `prepare`+`publish` 14:17–14:20 UTC
+  лежат в журнале хранилища, автор `editor/claude-indexing-operation-02`.
+  Утверждения текстов сверены с Shikimori 60570 и 58390: студии (YHKT
+  Entertainment, LIDENFILMS), годы и завязка совпадают; обращения к источнику
+  записаны в `var/editor-runs/sources.jsonl` 14:16 UTC, то есть ДО публикации.
+* `yummyani.site/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar`
+  — новый текст отдаётся 11 раз (1 раз в видимой разметке, 3 в `meta`, 1 в
+  JSON-LD, 6 в потоке страницы), прежний last-good — 0 раз; файл накладки
+  принимается схемой приложения. Факты сверены с Shikimori 61469 (David
+  Production, показ с 2026-03-19, Стивен Стил, шесть тысяч километров,
+  пятьдесят миллионов, Джонни Джостар) — своя JSON-LD внешним подтверждением не
+  считается и для этой сверки не использовалась.
+* `yummyani.org/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah`
+  — первый материал домена, опубликован этой сессией: HTTP 200, текст в
+  видимой разметке и в `meta description`, задание очереди `65abc49db18a75ef`
+  закрыто `TEXT_WRITTEN` → `VERIFIED`, ворота качества PASS (153 слова, 10
+  фактов). Идентификатор записи `019ef9d9-822b-7eda-a819-5f46d5a28050` получен
+  поиском самого приложения по `href` карточки, а не придуман.
+
+### Источники перестали теряться
+
+У трёх описаний AnimeGo `provenance.facts` пуст, а `facts_source` называл снимок
+каталога, в котором утверждений текста нет (проверено: в снимке только `name`,
+`year`, `genres`, `seasons`, `sources`). Источники пришлось восстанавливать по
+`var/editor-runs/sources.jsonl` по времени запуска — так можно, пока журнал
+рядом и время совпадает. Поэтому `prepare` принимает `источники`, а публикация
+переносит их в `provenance.sources` записи, но только если публикуется ИМЕННО
+текст черновика (сверка по `body_digest`).
+
+### Остаток по трём витринам Yummy: измерено, чем именно он закрывается
+
+`docker inspect` работающих контейнеров: у `web-org` и `web-site` есть
+`TITLE_OVERLAYS_PATH` и монтирование каталога своего домена — текст виден; у
+`web-biz`, `yummyani7-site-web-1` и `yummyani7-info-web-1` нет ни переменной, ни
+монтирования. Код приложения менять не нужно: модуль накладок есть во всех трёх
+образах. Настройка описана файлами (`automation/host/yummy-overlays.override.yaml`
+и `deploy/compose.yaml` обеих витрин yummyani7) и сверена чтением
+`docker compose config`: образ у каждого сервиса остаётся работающим, монтируется
+каталог ИМЕННО своего домена на чтение. Возможность `display` объявляется по
+РАБОТАЮЩЕМУ контейнеру, поэтому до пересоздания остаётся закрытой — команды
+напечатаны в заголовках файлов, выполняет владелец (пересоздание на несколько
+секунд снимает витрину с линии).
+
+### Учёт установленного исполнителя
+
+Корневая копия установлена 2026-10-09 08:10:10Z из этого репозитория
+(`cell-install.json`: `package_id: null` — установка старого образца, пакет не
+назван). `check-installed.py` против последнего пакета: 268 совпадает, 5
+отличается (`config/editor-coverage-blockers.json`, `config/editorial-sources.json`,
+`factory/qwen/editorial.py`, `factory/qwen/registry.py`,
+`schemas/site-cells.schema.json`), 9 не удалось проверить (`config/site-cells.json`
+и его копии: root 0600 — это не различие).
+
+Единственное расхождение полей разрешений — `animedia-02.release`:
+
+| | значение |
+| --- | --- |
+| установлено (08:10, коммит файла `052a8de`) | `{"hold": true, "hold_reason": "отдельная визуальная задача (ветка claude/animedia-space-visual-01); выпуск ведёт другой терминал, автоматический триггер её не касается", "branch": null}` |
+| в пакете (коммит `c937178`) | `{"hold": false, "hold_reason": null, "branch": null, "hold_history": [{…}]}` |
+
+Основание снятия записано в самом реестре (`hold_history[-1].evidence`): ветка
+`claude/animedia-space-visual-01` стоит на `541981e` — ПОЗАДИ живого выпуска
+`857cf8c44700`; сессия `animedia-space-56` подтвердила отсутствие незаконченной
+работы и сверила предков коммита `aef87ec`; сессия
+`wt-animedia-space-visual-01-f9` простаивает 16 суток и сообщений не принимает.
+
+Узкая установка отказывалась на шаге 4 без выхода. Добавлен ключ
+`--accept-registry-change <ячейка>.<поле>=<цифра было>-><цифра пакета>`: согласие
+называет ячейку, поле и ОБА значения, общего «принять расхождения» нет, а для
+`release` принимается только снятие удержания с записанным основанием. Отказ сам
+печатает готовый ключ. Репетиция на стенде прошла оба пути — отказ без ключа и
+все семь шагов с ключом (итог «установленное полностью совпадает с
+зафиксированным пакетом», `updater-check` код 0).
