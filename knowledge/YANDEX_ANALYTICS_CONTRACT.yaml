@@ -160,6 +160,12 @@ metrika:
       traffic_source: "ym:s:lastsignTrafficSource"
       search_engine: "ym:s:lastsignSearchEngine"
       landing_page: "ym:s:startURLPath"
+      # Добавлено 2026-10-09 (SRC-YA-METRIKA-DIM-ALL): суточная разбивка
+      # пользователей и отделение роботов — для исходного значения «пользователей
+      # в сутки» по каждому домену. Значения ym:s:isRobot читаются из ответа, не
+      # предполагаются.
+      date: "ym:s:date"
+      is_robot: "ym:s:isRobot"
       page_url: "ym:pv:URLPath"
     pageview_metrics_used:
       pageviews: "ym:pv:pageviews"

@@ -148,6 +148,8 @@ def collect_domain(
         out.measurements.append(
             _unmeasured("goal_reaches", "Достижение целей", reason, "ym:s:goal<id>reaches")
         )
+        for key, title, source in EXTRA_METRIKA:
+            out.measurements.append(_unmeasured(key, title, reason, source))
     else:
         metrics = [source for _, _, source in METRIKA_TOTALS]
         try:
@@ -232,12 +234,16 @@ def collect_domain(
             )
 
         out.measurements.append(_goal_reaches(provider, entry, counter_id, date1, date2))
+        out.measurements.extend(_metrika_daily_and_search(provider, counter_id, date1, date2))
 
     # -------------------------------------------------------- Вебмастер
     if not host_id:
         reason = _webmaster_unbound_reason(entry)
         for key, title, resource in WEBMASTER_RESOURCES:
             out.measurements.append(_unmeasured(key, title, reason, resource))
+        out.measurements.append(
+            _unmeasured("popular_queries", "Популярные запросы", reason, "popular_queries")
+        )
     else:
         for key, title, resource in WEBMASTER_RESOURCES:
             try:
@@ -253,8 +259,111 @@ def collect_domain(
                 )
             except FactoryError as exc:
                 out.measurements.append(_unmeasured(key, title, exc.reason, resource))
+        out.measurements.append(_popular_queries(provider, host_id))
 
     return out
+
+
+#: Добавлено 2026-10-09 для цели «пользователей в сутки» и разбора поисковых
+#: входов: суточная разбивка с признаком робота и поисковые входы по страницам.
+EXTRA_METRIKA = (
+    (
+        "daily_users",
+        "Пользователи по дням (с признаком робота)",
+        "ym:s:users × ym:s:date × ym:s:isRobot",
+    ),
+    (
+        "search_landing_pages",
+        "Поисковые входы по страницам",
+        "ym:s:visits × lastsignTrafficSource × startURLPath",
+    ),
+)
+
+
+def _metrika_daily_and_search(
+    provider, counter_id: int, date1: str, date2: str
+) -> list[Measurement]:
+    """Суточные пользователи и поисковые входы по страницам. Только чтение.
+
+    Роботы не отфильтрованы запросом: строки разбиты по ym:s:isRobot, и людей
+    считает читатель отчёта по значению признака из ответа. Поисковые входы —
+    строки с источником organic из разбивки «источник × страница» (первые 200).
+    """
+    out: list[Measurement] = []
+    try:
+        report = provider.get_metrica_report(
+            counter_id,
+            date1=date1,
+            date2=date2,
+            metrics=["ym:s:users", "ym:s:visits"],
+            dimensions=["ym:s:date", "ym:s:isRobot"],
+            limit=100,
+        )
+        out.append(
+            Measurement(
+                key="daily_users",
+                title=EXTRA_METRIKA[0][1],
+                measured=True,
+                value=report.get("data"),
+                source=EXTRA_METRIKA[0][2],
+                sampled=report.get("sampled"),
+                sample_share=report.get("sample_share"),
+            )
+        )
+    except FactoryError as exc:
+        out.append(_unmeasured("daily_users", EXTRA_METRIKA[0][1], exc.reason, EXTRA_METRIKA[0][2]))
+    try:
+        report = provider.get_metrica_report(
+            counter_id,
+            date1=date1,
+            date2=date2,
+            metrics=["ym:s:visits", "ym:s:users"],
+            dimensions=["ym:s:lastsignTrafficSource", "ym:s:startURLPath"],
+            limit=200,
+        )
+        rows = [
+            r
+            for r in report.get("data") or []
+            if ((r.get("dimensions") or [{}])[0].get("id") == "organic")
+        ]
+        out.append(
+            Measurement(
+                key="search_landing_pages",
+                title=EXTRA_METRIKA[1][1],
+                measured=True,
+                value=rows,
+                source=EXTRA_METRIKA[1][2],
+                sampled=report.get("sampled"),
+                sample_share=report.get("sample_share"),
+                top_n=200,
+            )
+        )
+    except FactoryError as exc:
+        out.append(
+            _unmeasured(
+                "search_landing_pages", EXTRA_METRIKA[1][1], exc.reason, EXTRA_METRIKA[1][2]
+            )
+        )
+    return out
+
+
+def _popular_queries(provider, host_id: str) -> Measurement:
+    """Популярные запросы Вебмастера (показы, клики, позиция). Только чтение."""
+    try:
+        payload = provider.get_webmaster_report(
+            host_id,
+            "popular_queries",
+            {"order_by": "TOTAL_SHOWS", "query_indicator": "TOTAL_SHOWS"},
+        )
+        return Measurement(
+            key="popular_queries",
+            title="Популярные запросы",
+            measured=True,
+            value=payload.get("payload"),
+            source="popular_queries",
+        )
+    except FactoryError as exc:
+        return _unmeasured("popular_queries", "Популярные запросы", exc.reason, "popular_queries")
 
 
 def _goal_reaches(provider, entry: dict, counter_id: int, date1: str, date2: str) -> Measurement:

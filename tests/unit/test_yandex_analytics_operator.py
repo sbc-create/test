@@ -75,6 +75,8 @@ def test_all_thirteen_groups_of_the_brief_are_present():
         "traffic_sources", "search_engines", "landing_pages", "popular_pages",
         "goal_reaches", "pages_in_search", "excluded_pages", "external_links",
         "technical_issues",
+        # 2026-10-09: суточные пользователи, поисковые входы по страницам, запросы
+        "daily_users", "search_landing_pages", "popular_queries",
     }
 
 
@@ -273,3 +275,18 @@ def test_page_level_breakdowns_declare_their_top_n():
     for key in ("landing_pages", "popular_pages", "traffic_sources", "search_engines"):
         assert by_key[key]["top_n"] == 20, key
     assert "top_n" not in by_key["visits"]
+
+
+def test_search_landing_pages_keep_only_organic_rows():
+    class P(StubProvider):
+        def get_metrica_report(self, counter_id, **kwargs):
+            if kwargs.get("dimensions") == ["ym:s:lastsignTrafficSource", "ym:s:startURLPath"]:
+                return {"data": [
+                    {"dimensions": [{"id": "organic", "name": "Search engine traffic"}, {"name": "/a"}], "metrics": [5, 4]},
+                    {"dimensions": [{"id": "direct", "name": "Direct traffic"}, {"name": "/a"}], "metrics": [3, 3]}],
+                    "sampled": False, "sample_share": 1.0}
+            return super().get_metrica_report(counter_id, **kwargs)
+
+    payload = analytics_collect.collect_domain(P(), LIVE_ENTRY, date1="a", date2="b").as_dict()
+    rows = [m for m in payload["measurements"] if m["key"] == "search_landing_pages"][0]["value"]
+    assert [r["dimensions"][1]["name"] for r in rows] == ["/a"] and rows[0]["metrics"][0] == 5

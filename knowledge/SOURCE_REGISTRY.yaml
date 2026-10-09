@@ -421,3 +421,13 @@ sources:
       Адрес — только из external_links Shikimori того же ID; перед чтением robots.txt
       проверяется для нашего User-Agent и ИИ-агентов. Проверено: degarashiouji.com и
       ntv.co.jp/hunterhunter — разрешают; v.qq.com — запрещает ClaudeBot, не читается.
+  - id: SRC-YA-METRIKA-DIM-ALL
+    kind: official_documentation
+    owner: Yandex
+    url: https://yandex.ru/dev/metrika/ru/stat/attrandmetr/dim_all
+    retrieved_at: "2026-10-09T07:40:00Z"
+    sha256: ce8cb7a286d185eba8c70ee09307d79b88b79992d6826415416f1efd8d8db653
+    purpose: "измерения ym:s:date и ym:s:isRobot для суточных пользователей без роботов"
+    status: approved
+    conclusions:
+      - "ym:s:date и ym:s:isRobot перечислены в справочнике группировок визитов."
