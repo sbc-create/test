@@ -10,11 +10,6 @@
       "blocker": "тот же путь записи, что у yummyani.site: описания Yummy не в схеме приложения",
       "evidence": "docs/handoff/SEO_TO_ARCHITECT-001.md §7",
       "since": "2026-10-08"
-    },
-    "an1meg0.site": {
-      "blocker": "описание записано в хранилище, на странице не отображается",
-      "evidence": "docs/handoff/SEO_TO_ARCHITECT-001.md §8",
-      "since": "2026-10-09"
     }
   }
 }

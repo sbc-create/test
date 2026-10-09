@@ -117,6 +117,9 @@ EDITOR_SITES = {
     "1lordserials1.online": "lords-03",
     "lordserials22.info": "lords-05",
     "zonafilm12.site": "zona-03",
+    # С 2026-10-09: накладка AnimeGo перечитывается без перезапуска (71974e5),
+    # показ подтверждён публикацией an1meg0.site/title/medalistka-2/.
+    "an1meg0.site": "animego-04",
 }
 
 #: Снимки крупнее этого читаются по записи: полный json.loads снимка Zona
