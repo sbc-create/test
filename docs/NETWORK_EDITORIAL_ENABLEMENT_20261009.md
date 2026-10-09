@@ -301,3 +301,42 @@ description, genre, countryOfOrigin. Теперь `yummyani.org` и `yummyani.si
 печатает готовый ключ. Репетиция на стенде прошла оба пути — отказ без ключа и
 все семь шагов с ключом (итог «установленное полностью совпадает с
 зафиксированным пакетом», `updater-check` код 0).
+
+### Команда владельца: одна, проверенная на стенде
+
+```
+sudo bash /home/claude/wt-portable-site-cell-01/automation/host/install-executor-narrow.sh \
+  --package /home/claude/wt-portable-site-cell-01/var/install-packages/pkg-7381d2d9044b \
+  --expect-digest 7381d2d9044be1f866c56693c143bf94295f23da3b856bc9053200485de3b3a9 \
+  --accept-registry-change 'animedia-02.release=a1bb833bb0d2->9b52b304df3f'
+```
+
+Что она меняет: корневую копию `/usr/local/lib/site-factory-cell`
+(`factory/`, `schemas/`, `config/`) на содержимое пакета `pkg-7381d2d9044b`
+(коммит `a4a24b04eb85`) и файл `cell-install.json`. Единственное изменение
+разрешений — `animedia-02.release`: `hold: true` → `hold: false` с переносом
+прежней причины в `hold_history` (основание — выше в этом разделе). Ключ
+согласия привязан к ОБОИМ значениям: если состояние изменилось, команда
+откажет и напечатает новый ключ, а не применит старое решение.
+
+Чего она НЕ делает: не трогает юниты (юнит исполнителя в пакете и установленный
+совпадают — проверено `diff`), nginx, данные сайтов и теневые конфигурации.
+Перед заменой снимает `before.tgz` всей корневой копии и пишет `ROLLBACK.txt`;
+если проверка результата не прошла, сама возвращает прежнюю копию и выходит
+кодом 4.
+
+Репетиция: `CELL_NARROW_SANDBOX=1` с копией установленного реестра — все семь
+шагов, `check-installed` «полностью совпадает», `updater-check` код 0.
+
+### Остальное за владельцем (не одной командой)
+
+1. Перезапуск `site-factory-mcp.service`: живой мост запущен 14:46:34Z, застава
+   прав Qwen в нём уже действует (проверено отказом `editorial_queue_register`
+   от роли `qwen`), а поиск идентификатора для ПЕРВОЙ записи домена Yummy
+   (268e86d, 15:14) и мягкая классификация отказа по правам (44064e8) — ещё нет.
+2. Пересоздание трёх контейнеров Yummy (команды — в заголовках
+   `automation/host/yummy-overlays.override.yaml` и `deploy/compose.yaml`
+   витрин yummyani7): до него `display` у `yummyani.biz`, `yummyani7.site` и
+   `yummyani7.info` остаётся закрытым.
+3. `install-publisher-cell-paths.sh` для `zonafilm.cc` — у домена нет своего
+   `src/`, поэтому ни фактов, ни доставки.
