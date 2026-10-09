@@ -239,6 +239,8 @@ LEASES = Path("/var/lib/seo-content-operator/editorial_leases.json")
 STATE = Path(__file__).resolve().parents[1] / "var" / "editor-runs"
 CANDIDATES = Path(__file__).resolve().parents[1] / "var" / "seo-regular" / "editor-candidates.json"
 ANIMEDIA = ("animedia.icu", "animedia.space")
+#: Где редактор публикует с подтверждённым показом (regular.EDITOR_SITES).
+EDITOR_DOMAINS = (*ANIMEDIA, "zonafilm.space")
 #: Модель запускается не чаще раза в этот интервал (почасовой цикл).
 MIN_INTERVAL_S = 55 * 60
 
@@ -302,12 +304,12 @@ def gate(
     open_tasks = [
         i
         for i in items
-        if i.get("target_site") in ANIMEDIA
+        if i.get("target_site") in EDITOR_DOMAINS
         and i.get("status") == "NEEDS_UPDATE"
         and str(i.get("content_id", "")).replace("request-", "") not in leased
     ]
     if open_tasks:
-        return {"run": True, "reason": f"свободных заданий Animedia на текст: {len(open_tasks)}"}
+        return {"run": True, "reason": f"свободных заданий на текст: {len(open_tasks)}"}
     done: set[str] = set()
     task_url: dict[str, str] = {}
     if events.is_file():

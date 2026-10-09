@@ -104,6 +104,16 @@ SOURCES = {
 #: доставка и отображение описаний.
 ANIMEDIA = {"animedia.icu": "animedia-01", "animedia.space": "animedia-02"}
 
+#: Домены, где редактор публикует описания с подтверждённым показом. Zona —
+#: с 2026-10-09: первая видимая публикация zonafilm.space/title/ledyanaya-stena/.
+#: lordfilm47.space и lordserial33.biz сюда не входят, пока их контракт не
+#: объявляет editorial-overrides.json пользовательским (handoff §12).
+EDITOR_SITES = {**ANIMEDIA, "zonafilm.space": "zona-01"}
+
+#: Снимки крупнее этого читаются по записи: полный json.loads снимка Zona
+#: (82 МБ) не помещается в MemoryMax=512M суточной службы.
+STREAM_DETAILS_BYTES = 40_000_000
+
 #: Хранилища опубликованных материалов по семействам и форма их адресов.
 #: Пути — те же, что у factory.qwen.registry.КОРНИ_ХРАНИЛИЩ; форма адреса —
 #: factory.qwen.registry.ФОРМА_АДРЕСА (проверена запросами там).
@@ -632,6 +642,10 @@ def published_items(roots: dict[str, tuple[Path, str]] | None = None) -> list[di
             domain = site_dir.name
             published = _publish_times(site_dir / "history.jsonl")
             overlays = _read_json(site_dir / "title-overlays.json", {})
+            if not overlays.get("items"):
+                # Доставка очередью (Lords/Zona): витрина читает editorial-overrides.json
+                # сайта, а копия опубликованного в той же форме — published.json.
+                overlays = _read_json(site_dir / "published.json", {})
             for entry in overlays.get("items") or []:
                 slug, body = entry.get("slug"), entry.get("body") or ""
                 if not slug or not body:
@@ -2338,8 +2352,42 @@ def step_visited(ctx: Context) -> Any:
     }
 
 
+def _details_for_editor(path: Path) -> dict:
+    """Подробности снимка. Крупный снимок — по записи и только записи без описания."""
+    try:
+        size = path.stat().st_size
+    except OSError:
+        return {}
+    if size <= STREAM_DETAILS_BYTES:
+        return _read_json(path, {}).get("details") or {}
+    from factory.qwen import editorial
+
+    keep: dict = {}
+
+    def take(slug: str, rec: dict) -> bool:
+        if not str(rec.get("description") or "").strip():
+            keep[slug] = {
+                k: rec.get(k) for k in ("name", "description", "playable", "year", "external_ids")
+            }
+            keep[slug]["ratings_by_source"] = {
+                "shikimori": (rec.get("ratings_by_source") or {}).get("shikimori") or {}
+            }
+        return False
+
+    try:
+        editorial._обойти_снимок(path, take)
+    except (OSError, ValueError):
+        return {}
+    return keep
+
+
 def editor_candidates(
-    snapshot: Path, facts_dir: Path, published: set[tuple[str, str]], *, limit: int = 20
+    snapshot: Path,
+    facts_dir: Path,
+    published: set[tuple[str, str]],
+    *,
+    limit: int = 20,
+    sites: dict[str, str] | None = None,
 ) -> list[dict]:
     """Что редактору брать, когда очередь пуста: по трафику, с причиной.
 
@@ -2347,11 +2395,13 @@ def editor_candidates(
     * DUPLICATE — синопсис есть и дословно совпадает на icu и space; меняется
       только на space, icu — контроль пилота (MOD-25).
     Визиты на серии засчитываются тайтлу: интерес к тайтлу — это они.
+    `sites` — домены и их снимки; по умолчанию EDITOR_SITES.
     """
+    sites = EDITOR_SITES if sites is None else sites
     weights: dict[tuple[str, str], float] = {}
     for entry in _read_json(snapshot, {}).get("domains") or []:
         domain = entry.get("domain")
-        if domain not in ANIMEDIA:
+        if domain not in sites:
             continue
         for key in ("landing_pages", "popular_pages"):
             ok, value, _ = _metric(entry, key)
@@ -2360,8 +2410,7 @@ def editor_candidates(
                 if m:
                     weights[(domain, m.group(1))] = weights.get((domain, m.group(1)), 0.0) + metric
     details = {
-        d: (_read_json(facts_dir / f"{sid}-details.json", {}).get("details") or {})
-        for d, sid in ANIMEDIA.items()
+        d: _details_for_editor(facts_dir / f"{sid}-details.json") for d, sid in sites.items()
     }
     out = []
     # Одно своё описание произведения на сеть. Второй домен с тем же тайтлом

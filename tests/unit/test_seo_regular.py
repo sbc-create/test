@@ -1363,3 +1363,54 @@ def test_audience_goal_counts_people_only_and_falls_back_to_strict_bounds(tmp_pa
     )
     assert "| daily.example | 900 (2026-10-09) | 850 за 2 дн. | 100 |" in text
     assert "| bounds.example | по дням не собрано | 10–20" in text
+
+
+def test_editor_candidates_stream_large_snapshot_and_keep_only_gaps(tmp_path, monkeypatch):
+    monkeypatch.setattr(regular, "STREAM_DETAILS_BYTES", 10)  # любой снимок — «крупный»
+    snap = tmp_path / "analytics-2026-10-09.json"
+    snap.write_text(json.dumps({"domains": []}), encoding="utf-8")
+    facts = tmp_path / "facts"
+    facts.mkdir()
+    shiki = {
+        "shikimori": {
+            "match_state": "external_id_exact+title_verified",
+            "value": 8,
+            "external_id": "60852",
+        }
+    }
+    (facts / "zona-01-details.json").write_text(
+        json.dumps(
+            {
+                "catalog_revision": "r",
+                "details": {
+                    "ledyanaya-stena": {
+                        "name": "Ледяная стена",
+                        "description": None,
+                        "playable": True,
+                        "ratings_by_source": shiki,
+                    },
+                    "film-s-opisaniem": {
+                        "name": "Фильм",
+                        "description": "Есть.",
+                        "playable": True,
+                        "ratings_by_source": shiki,
+                    },
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    found = regular.editor_candidates(snap, facts, set(), sites={"zonafilm.space": "zona-01"})
+    assert [(c["site"], c["slug"], c["shikimori_id"]) for c in found] == [
+        ("zonafilm.space", "ledyanaya-stena", "60852")
+    ]
+
+
+def test_published_items_read_queue_delivery_copy(tmp_path):
+    site = tmp_path / "lords" / "zonafilm.space"
+    site.mkdir(parents=True)
+    (site / "published.json").write_text(
+        json.dumps({"items": [{"slug": "ledyanaya-stena", "body": "Текст."}]}), encoding="utf-8"
+    )
+    items = regular.published_items({"lords": (tmp_path / "lords", "/title/{slug}/")})
+    assert [i["url"] for i in items] == ["https://zonafilm.space/title/ledyanaya-stena/"]

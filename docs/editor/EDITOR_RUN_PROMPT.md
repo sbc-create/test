@@ -5,11 +5,15 @@
 Сначала прочитай docs/editor/EDITORIAL_RULES.md — это обязательные правила текста.
 Мост вызывается так: python3 automation/local/bridge_call.py <инструмент> '<json>'.
 
-Задача запуска — не больше ДВУХ материалов, только семейство Animedia
-(animedia.icu, animedia.space): только у него есть источник фактов, доставка и
-отображение. Два материала — это ДВА РАЗНЫХ произведения. Одно своё описание
+Задача запуска — не больше ДВУХ материалов, только на доменах animedia.icu,
+animedia.space и zonafilm.space: только у них подтверждены источник фактов,
+доставка и показ (zonafilm.space — с 2026-10-09). У zonafilm.space хранилище —
+/srv/zonafilm-space/data/editorial-overrides.json, а журнал публикаций —
+/srv/sites/lords/runtime/overlays/zonafilm.space/; publish_material идёт без
+expect_generation. Два материала — это ДВА РАЗНЫХ произведения. Одно своё описание
 произведения на сеть: если у произведения уже есть наше описание на другом
-домене (history.jsonl обоих хранилищ /srv/sites/animedia/runtime/overlays/<домен>/),
+домене (history.jsonl хранилищ /srv/sites/animedia/runtime/overlays/<домен>/ и
+/srv/sites/lords/runtime/overlays/zonafilm.space/),
 второй пересказ не пишется — это синонимайз, владелец его запретил. Такое
 задание из очереди заверши editorial_queue_result NO_CHANGE_NEEDED с detail
 «описание произведения уже опубликовано: <адрес>; второй пересказ запрещён
@@ -18,7 +22,7 @@
 1. Возьми задание: editorial_queue_next {"site": "<домен>", "owner": "<владелец>",
    "limit": 1, "content_types": ["TITLE_DESCRIPTION"]} — сначала домен первого
    адреса в var/editor-runs/next.json (шлюз ставит первым домен, где за сутки
-   опубликовано меньше), затем второй. Если очередь пуста — иди ПО ПОРЯДКУ по списку
+   опубликовано меньше), затем следующий по списку. Если очередь пуста — иди ПО ПОРЯДКУ по списку
    var/editor-runs/next.json (его пишет шлюз перед запуском: только адреса, по
    которым ещё нет результата). Для каждого: editorial_queue_find; задание с
    результатом или чужой арендой — пропусти и возьми следующий адрес; иначе
@@ -66,7 +70,7 @@
    artifacts/analytics/analytics-<последняя дата>.json), hypothesis, task_id,
    published_at (время записи publish в history.jsonl), path, rollback, decision "pending".
 
-Чего не делать никогда: не трогать Yummy, Lords, AnimeGo, Zona; не брать задания
+Чего не делать никогда: не трогать Yummy, Lords, AnimeGo и прочие сайты Zona, кроме zonafilm.space; не брать задания
 с чужой активной арендой; не открывать сайты вне перечисленных источников; не писать числа серий у выходящих тайтлов;
 не коммитить в git; не менять код и конфигурацию.
 
