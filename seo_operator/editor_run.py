@@ -561,7 +561,13 @@ def _work(
     except (OSError, ValueError):
         cands = []
     fresh = [c for c in cands if _key(c.get("url", "")) not in done]
-    if not fresh and refresh and _refresh_candidates(candidates, now):
+    # Пересчёт и тогда, когда кандидаты кончились лишь у части каталожных
+    # доменов: 2026-10-10 у сайтов Lords/Zona было по 2 кандидата, их закрыли
+    # к утру, а список не обновлялся, пока оставались кандидаты Yummy, — за
+    # день 52 из 56 публикаций пришлись на Yummy, на Lords ни одной.
+    # Пересчёт не чаще раза в час (_refresh_candidates).
+    starving = set(regular.EDITOR_SITES) - {_key(c["url"]).split("/")[2] for c in fresh}
+    if (not fresh or starving) and refresh and _refresh_candidates(candidates, now):
         # Пересчёт и при открытых заданиях очереди: 2026-10-09 после 17:35 в
         # очереди Yummy было 245 заданий, и исчерпанный список кандидатов не
         # обновлялся — запуски шли с пустым next.json по остальным доменам.

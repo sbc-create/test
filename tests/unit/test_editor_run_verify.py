@@ -403,3 +403,38 @@ def test_allowed_domains_cover_gate_and_candidate_sites():
 
     got = editor_run.allowed_domains()
     assert set(regular.EDITOR_SITES) <= set(got) and set(editor_run.EDITOR_DOMAINS) <= set(got)
+
+
+def test_gate_refreshes_when_a_catalog_domain_ran_out(tmp_path, monkeypatch):
+    """2026-10-10: кандидаты Lords закрыты, Yummy остались — список всё равно пересчитывается."""
+    f = _gate_files(tmp_path, candidate_done=True)  # animedia.space/title/x закрыт
+    f["candidates"].write_text(json.dumps({"candidates": [
+        {"url": "https://animedia.space/title/x/"},
+        {"url": "https://yummyani.site/anime/y"},
+    ]}), encoding="utf-8")
+    called = []
+
+    def fake_refresh(path, now):
+        called.append(path)
+        path.write_text(json.dumps({"candidates": [
+            {"url": "https://yummyani.site/anime/y"},
+            {"url": "https://lordfilm47.space/title/z/"},
+        ]}), encoding="utf-8")
+        return True
+
+    monkeypatch.setattr(editor_run, "_refresh_candidates", fake_refresh)
+    d = editor_run.gate(NOW, refresh=True, **f)
+    assert called, "каталожные домены без кандидатов — пересчёт обязателен"
+    assert "https://lordfilm47.space/title/z/" in [c["url"] for c in d["next"]]
+
+
+def test_gate_does_not_refresh_while_every_catalog_domain_has_work(tmp_path, monkeypatch):
+    from seo_operator import regular
+
+    f = _gate_files(tmp_path)
+    f["candidates"].write_text(json.dumps({"candidates": [
+        {"url": f"https://{d}/title/a{i}/"} for i, d in enumerate(regular.EDITOR_SITES)
+    ]}), encoding="utf-8")
+    monkeypatch.setattr(editor_run, "_refresh_candidates",
+                        lambda *a, **k: (_ for _ in ()).throw(AssertionError("лишний пересчёт")))
+    assert editor_run.gate(NOW, refresh=True, **f)["run"] is True
