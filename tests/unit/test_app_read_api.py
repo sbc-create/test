@@ -253,6 +253,49 @@ def test_без_ссылок_провайдера_причина_та_же(сл�
     assert тело["embed"]["providerRefs"] == []
 
 
+def test_перечень_для_главной_по_дате_добавления(служба):
+    """Форма запрошена клиентом (уточнение 002): страница с курсором и жанром."""
+    _, база = служба
+    код, тело, _ = гет(база, "/api/app/v1/titles?sort=added&limit=1")
+    assert код == 200, тело
+    assert тело["total"] == 2
+    assert тело["nextCursor"] == "1"
+    assert "added" in тело["rule"], "правило ряда обязано быть названо"
+    # Порядок — по дате добавления: сериал добавлен позже фильма.
+    assert тело["items"][0]["contentId"] == СЕРИАЛ
+
+
+def test_перечень_сужается_жанром(служба):
+    _, база = служба
+    код, тело, _ = гет(база, "/api/app/v1/titles?genre="
+                       + urllib.parse.quote("драма"))
+    assert код == 200
+    assert [и["contentId"] for и in тело["items"]] == [СЕРИАЛ]
+    assert тело["genre"] == "драма"
+
+
+def test_непонятный_порядок_отвергается(служба):
+    """Порядков, которых у снимка нет, служба не изображает."""
+    _, база = служба
+    код, тело, _ = гет(база, "/api/app/v1/titles?sort=popular")
+    assert код == 400 and тело["error"]["code"] == "bad_request"
+
+
+def test_источники_фильма_в_форме_клиента(служба):
+    """`episodes/movie/sources?contentId=…` — форма из задания клиента."""
+    _, база = служба
+    код, тело, _ = гет(база, f"/api/app/v1/episodes/movie/sources?contentId={ФИЛЬМ}")
+    assert код == 200, тело
+    assert тело["sources"] == []
+    assert тело["reason"] == "NO_SOURCE_CONTRACT_RELEASED"
+
+
+def test_источники_фильма_без_contentId_отказ(служба):
+    _, база = служба
+    код, тело, _ = гет(база, "/api/app/v1/episodes/movie/sources")
+    assert код == 400 and "contentId" in тело["error"]["message"]
+
+
 def test_неизвестный_маршрут_404(служба):
     _, база = служба
     код, тело, _ = гет(база, "/api/app/v1/nothing")
