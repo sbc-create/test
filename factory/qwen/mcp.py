@@ -90,7 +90,13 @@ from factory.qwen import editorial, indexing, registry
            "editorial_queue_register", "editorial_queue_reopen",
            "editorial_queue_annul",
            # Комментарии под произведением — отдельная сущность от новостей.
-           "prepare_comment", "publish_comment", "unpublish_comment")
+           # `submit_comment` числится пишущим: он меняет состояние черновика
+           # («передан на проверку»), и в режиме только чтения его быть не
+           # должно. `review_comment` — решение проверяющей стороны, тоже
+           # запись. Чтение черновика и перечень переданных остаются
+           # доступными всегда: отчёт о состоянии нужен и в read-only.
+           "prepare_comment", "submit_comment", "review_comment",
+           "publish_comment", "unpublish_comment")
 
 #: Только чтение: пишущие инструменты не объявляются в `tools/list` и
 #: отказывают при вызове. Включается ключом `--read-only` или переменной
@@ -1684,6 +1690,78 @@ def инструмент_подготовки_комментария(аргум�
             "next_action": "публикует publish_comment; подпись задаёт сеть"}
 
 
+def инструмент_черновика_комментария(аргументы: dict) -> dict[str, Any]:
+    """Прочитать СВОЙ сохранённый черновик: тело, отпечаток, состояние передачи.
+
+    Только чтение. Без этого готовящая сторона не могла проверить, что
+    записалось именно то, что она отправляла: подготовка возвращала длину и
+    адрес, а тела не отдавал никто.
+    """
+    from factory.qwen import comments as комм
+
+    сайт = str(аргументы.get("site") or "").strip()
+    слаг = str(аргументы.get("slug") or "").strip()
+    ид = str(аргументы.get("draft_id") or "").strip()
+    if not сайт or not (слаг or ид):
+        raise ОшибкаИнструмента("нужны site и slug (или draft_id)")
+    try:
+        итог = комм.черновик(сайт, slug=слаг, draft_id=ид)
+    except комм.ОперацияОтклонена as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "draft": итог,
+            "next_action": ("передать на проверку — submit_comment; состояние "
+                            "решения появится полем handoff.state")}
+
+
+def инструмент_передачи_комментария(аргументы: dict) -> dict[str, Any]:
+    """Передать черновик действующему редактору. Прав публикации не добавляет."""
+    from factory.qwen import comments as комм
+
+    сайт = str(аргументы.get("site") or "").strip()
+    слаг = str(аргументы.get("slug") or "").strip()
+    if not (сайт and слаг):
+        raise ОшибкаИнструмента("нужны параметры site и slug")
+    try:
+        итог = комм.передать(сайт, слаг,
+                             author=str(аргументы.get("author") or "qwen"),
+                             note=str(аргументы.get("note") or ""))
+    except комм.ОперацияОтклонена as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "submitted": итог,
+            "next_action": ("редактор увидит черновик в comment_drafts_pending; "
+                            "решение читается comment_draft")}
+
+
+def инструмент_переданных_черновиков(аргументы: dict) -> dict[str, Any]:
+    """Черновики, ожидающие проверки. Для проверяющей стороны, только чтение."""
+    from factory.qwen import comments as комм
+
+    try:
+        итог = комм.ожидают_проверки(site=str(аргументы.get("site") or "").strip())
+    except комм.ОперацияОтклонена as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, **итог}
+
+
+def инструмент_решения_по_черновику(аргументы: dict) -> dict[str, Any]:
+    """Решение проверяющей стороны: принято или отклонено. Публикации здесь нет."""
+    from factory.qwen import comments as комм
+
+    сайт = str(аргументы.get("site") or "").strip()
+    слаг = str(аргументы.get("slug") or "").strip()
+    решение = str(аргументы.get("verdict") or "").strip()
+    if not (сайт and слаг and решение):
+        raise ОшибкаИнструмента("нужны параметры site, slug и verdict")
+    try:
+        итог = комм.решение(сайт, слаг,
+                            author=str(аргументы.get("author") or ""),
+                            verdict=решение,
+                            note=str(аргументы.get("note") or ""))
+    except комм.ОперацияОтклонена as ош:
+        raise ОшибкаИнструмента(str(ош)) from None
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "review": итог}
+
+
 def инструмент_публикации_комментария(аргументы: dict) -> dict[str, Any]:
     """Опубликовать комментарий ПОД ПРОИЗВЕДЕНИЕМ и подтвердить его видимость.
 
@@ -2102,6 +2180,45 @@ def инструмент_снятия_комментария(аргументы:
             "body": {"type": "string"}, "author": {"type": "string"}},
             "required": ["site", "slug", "body"], "additionalProperties": False},
     },
+    "comment_draft": {
+        "обработчик": инструмент_черновика_комментария,
+        "описание": ("СВОЙ сохранённый черновик комментария: тело, отпечаток, "
+                     "замечания качества и состояние передачи. Только чтение."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"}, "slug": {"type": "string"},
+            "draft_id": {"type": "string",
+                         "description": "вместо slug: устойчивый идентификатор"}},
+            "required": ["site"], "additionalProperties": False},
+    },
+    "submit_comment": {
+        "обработчик": инструмент_передачи_комментария,
+        "описание": ("Передать черновик действующему редактору на проверку. "
+                     "Публичного следствия нет, прав публикации не добавляет. "
+                     "Повтор не создаёт второй передачи."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"}, "slug": {"type": "string"},
+            "note": {"type": "string", "description": "что проверить"},
+            "author": {"type": "string"}},
+            "required": ["site", "slug"], "additionalProperties": False},
+    },
+    "comment_drafts_pending": {
+        "обработчик": инструмент_переданных_черновиков,
+        "описание": ("Черновики, переданные на проверку: кто, когда и под какой "
+                     "карточкой. Только чтение; это очередь проверяющего."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string", "description": "без него — по всей сети"}},
+            "required": [], "additionalProperties": False},
+    },
+    "review_comment": {
+        "обработчик": инструмент_решения_по_черновику,
+        "описание": ("Решение по переданному черновику: accepted или rejected. "
+                     "Операция ПРОВЕРЯЮЩЕЙ стороны; публикации не делает."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"}, "slug": {"type": "string"},
+            "verdict": {"type": "string", "enum": ["accepted", "rejected"]},
+            "note": {"type": "string"}, "author": {"type": "string"}},
+            "required": ["site", "slug", "verdict"], "additionalProperties": False},
+    },
     "publish_comment": {
         "обработчик": инструмент_публикации_комментария,
         "описание": ("Опубликовать комментарий под произведением: повтор "
@@ -2316,6 +2433,8 @@ def место_исключения(ош: BaseException) -> str:
     "register_owner_consent": "owner-consent",
     "refresh_executor_access": "executor-access",
     "prepare_comment": "comment-prepare",
+    "submit_comment": "comment-submit",
+    "review_comment": "comment-review",
     "publish_comment": "comment-publish",
     "unpublish_comment": "comment-unpublish",
 }

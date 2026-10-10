@@ -114,7 +114,23 @@ def test_qwen_не_опубликует_описание_даже_с_готов�
 
 def test_состояние_ограничений_читается_машинно():
     св = actors.сведения()
-    # Подготовка — всех трёх видов материала: описание, пост, комментарий.
-    assert св["roles"]["qwen"] == ["prepare", "posts-prepare", "comment-prepare"]
+    # Подготовка — всех трёх видов материала: описание, пост, комментарий, —
+    # и ПЕРЕДАЧА черновика комментария на проверку.
+    #
+    # `comment-submit` добавлена 2026-10-10 по решению владельца «Qwen готовит
+    # и передаёт, уполномоченный редактор проверяет и публикует». Публичного
+    # следствия у передачи нет: она помечает черновик законченным. Без неё
+    # готовящая сторона могла записать черновик и не могла сообщить о нём
+    # никому — каноническая очередь этой роли закрыта, и работа лежала в файле,
+    # о котором редактор не знал.
+    assert св["roles"]["qwen"] == ["prepare", "posts-prepare", "comment-prepare",
+                                   "comment-submit"]
+    # Перечень закреплён ЦЕЛИКОМ, поэтому важно сказать и обратное: решение по
+    # черновику и публикация в него не входят и входить не должны.
+    for запрещено in ("comment-review", "comment-publish", "comment-unpublish",
+                      "publish", "queue-register"):
+        assert запрещено not in св["roles"]["qwen"], запрещено
     assert "publish" in св["operations"] and "queue-annul" in св["operations"]
+    assert "comment-submit" in св["operations"]
+    assert "comment-review" in св["operations"]
     assert св["override_env"] == "FACTORY_ACTOR_ALLOW"

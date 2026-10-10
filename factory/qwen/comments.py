@@ -475,6 +475,52 @@ def _черновики(s: registry.Сайт) -> dict:
                                 {"site": s.domain, "items": {}})
 
 
+def ид_черновика(site: str, slug: str) -> str:
+    """Устойчивый идентификатор черновика: один и тот же для одной карточки.
+
+    Зачем он нужен. Черновик лежит в хранилище по слагу, и подготовка
+    возвращала только `site`, `slug`, `state`, `chars`, `url`. Для готовящей
+    стороны это означало: у работы нет имени, которым на неё можно сослаться,
+    нельзя отличить «создан» от «уже был», и нечего передать проверяющему.
+    Отчёт Qwen 10 октября называл ровно это.
+
+    Идентификатор ВЫЧИСЛЯЕТСЯ из домена и слага, а не выдаётся счётчиком:
+    повторная подготовка той же карточки обязана дать то же имя, иначе
+    «защита от повторного создания» зависела бы от того, сохранился ли
+    счётчик.
+    """
+    import hashlib
+
+    s = _сайт(site) if isinstance(site, str) else site
+    домен = getattr(s, "domain", str(site))
+    отпечаток = hashlib.sha256(f"{домен}/{slug}".encode("utf-8")).hexdigest()
+    return f"cd-{отпечаток[:12]}"
+
+
+def _пустая_передача() -> dict[str, Any]:
+    return {"state": "drafted"}
+
+
+def _имя_записи(s: registry.Сайт, slug: str, запись: dict) -> str:
+    """Имя черновика у записи, созданной ЛЮБОЙ версией кода.
+
+    Черновики, записанные до появления имени, лежат в хранилище без поля
+    `draft_id` — их там несколько десятков, и это нормальное состояние, а не
+    повреждение. Имя вычисляется из домена и слага, поэтому достраивается
+    однозначно; достроенное сразу записывается, чтобы следующий читатель брал
+    готовое.
+
+    Поймано на живом проходе: передача черновика «Ван-Пис», подготовленного
+    прежним кодом, вернула `draft_id: null` — то есть ровно ту безымянность,
+    ради устранения которой механизм и делался.
+    """
+    имя = str(запись.get("draft_id") or "")
+    if not имя:
+        имя = ид_черновика(s, slug)
+        запись["draft_id"] = имя
+    return имя
+
+
 def подготовить(site: str, slug: str, тело: str, *, author: str) -> dict[str, Any]:
     """Записать черновик комментария. Публичного следствия нет."""
     actors.проверить(author, "comment-prepare")
@@ -494,17 +540,203 @@ def подготовить(site: str, slug: str, тело: str, *, author: str) 
     к = _каталог(s)
     к.mkdir(parents=True, exist_ok=True)
     черновики = _черновики(s)
-    черновики.setdefault("items", {})[slug] = {
+    было = (черновики.get("items") or {}).get(slug) or {}
+    отпечаток = editorial.отпечаток(текст)
+    тот_же = bool(было) and было.get("body_digest") == отпечаток
+    # Повторная подготовка той же карточки ТЕМ ЖЕ текстом не создаёт второй
+    # черновик и не трогает уже отданную передачу: иначе каждый повтор
+    # прогона Qwen отменял бы проверку, которую редактор уже начал.
+    передача = было.get("handoff") if тот_же else None
+    if передача is None:
+        передача = _пустая_передача()
+    запись = {
+        "draft_id": ид_черновика(s, slug),
         "slug": slug, "body": текст, "author": ПОДПИСЬ,
-        "prepared_by": author, "prepared_at": editorial._сейчас(),
-        "body_digest": editorial.отпечаток(текст),
+        "prepared_by": author,
+        "prepared_at": было.get("prepared_at") if тот_же else editorial._сейчас(),
+        "updated_at": editorial._сейчас(),
+        "body_digest": отпечаток,
         "quality_problems": беды,
+        "handoff": передача,
     }
+    черновики.setdefault("items", {})[slug] = запись
     editorial._записать_атомарно(к / ЧЕРНОВИКИ, черновики)
     return {"site": s.domain, "slug": slug,
+            "draft_id": запись["draft_id"],
+            "created": not было,
+            "unchanged": тот_же,
+            "handoff_state": передача.get("state"),
+            "body_digest": отпечаток,
             "state": "drafted" if not беды else "needs-fix",
             "quality_problems": беды,
-            "chars": len(текст), "url": _адрес_карточки(s, slug)}
+            "chars": len(текст), "url": _адрес_карточки(s, slug),
+            "next_action": ("черновик готов: прочитать его можно comment_draft, "
+                            "передать на проверку — submit_comment")}
+
+
+def черновик(site: str, *, slug: str = "", draft_id: str = "") -> dict[str, Any]:
+    """Прочитать СВОЙ сохранённый черновик: тело, отпечаток, состояние.
+
+    Только чтение. Появилось потому, что готовящая сторона не могла прочитать
+    то, что сама записала: подготовка возвращала длину и адрес, а тела в
+    хранилище не отдавал никто. Проверить «записалось ли именно это» было
+    нечем, и единственным способом убедиться оставалась публикация.
+
+    Искать можно по слагу или по устойчивому идентификатору — тому же, который
+    вернула подготовка.
+    """
+    s = _сайт(site)
+    items = (_черновики(s).get("items") or {})
+    запись = None
+    if slug:
+        запись = items.get(slug)
+    elif draft_id:
+        запись = next((з for з in items.values()
+                       if з.get("draft_id") == draft_id), None)
+    else:
+        raise ОперацияОтклонена("нужен slug или draft_id")
+    if not запись:
+        raise ОперацияОтклонена(
+            f"{s.domain}: черновика {slug or draft_id!r} нет в хранилище "
+            f"{_каталог(s) / ЧЕРНОВИКИ}")
+    слаг = str(запись.get("slug") or slug)
+    передача = запись.get("handoff") or _пустая_передача()
+    return {"site": s.domain, "slug": слаг,
+            "draft_id": запись.get("draft_id") or ид_черновика(s, слаг),
+            "body": запись.get("body") or "",
+            "chars": len(запись.get("body") or ""),
+            "body_digest": запись.get("body_digest") or "",
+            "author": запись.get("author") or ПОДПИСЬ,
+            "prepared_by": запись.get("prepared_by") or "",
+            "prepared_at": запись.get("prepared_at") or "",
+            "updated_at": запись.get("updated_at") or "",
+            "quality_problems": запись.get("quality_problems") or [],
+            "handoff": передача,
+            "url": _адрес_карточки(s, слаг)}
+
+
+def передать(site: str, slug: str, *, author: str, note: str = "") -> dict[str, Any]:
+    """Передать черновик на проверку действующему редактору.
+
+    Публичного следствия нет и прав публикации не добавляет: операция только
+    помечает черновик законченным и просит посмотреть. Проверяющая сторона
+    видит такие черновики через `ожидают_проверки`.
+
+    Повтор не создаёт второй передачи: уже переданный черновик возвращается
+    как есть. Иначе каждый прогон готовящей стороны заново «просил проверить»
+    одно и то же, и очередь проверки состояла бы из повторов.
+    """
+    actors.проверить(author, "comment-submit")
+    s = _сайт(site)
+    к = _каталог(s)
+    черновики = _черновики(s)
+    запись = (черновики.get("items") or {}).get(slug)
+    if not запись:
+        raise ОперацияОтклонена(
+            f"{s.domain}: черновика под {slug!r} нет — передавать нечего")
+    беды = запись.get("quality_problems") or []
+    if беды:
+        raise ОперацияОтклонена(
+            f"{s.domain}/{slug}: черновик не передаётся с замечаниями "
+            f"качества {беды}: исправьте текст подготовкой заново")
+    имя = _имя_записи(s, slug, запись)
+    передача = запись.get("handoff") or _пустая_передача()
+    if передача.get("state") in ("submitted", "accepted", "published"):
+        return {"site": s.domain, "slug": slug,
+                "draft_id": имя,
+                "handoff": передача, "already": True,
+                "next_action": "передача уже была; состояние возвращено как есть"}
+    передача = {"state": "submitted",
+                "submitted_at": editorial._сейчас(),
+                "submitted_by": author,
+                "note": str(note or "")[:400],
+                "body_digest": запись.get("body_digest") or ""}
+    запись["handoff"] = передача
+    editorial._записать_атомарно(к / ЧЕРНОВИКИ, черновики)
+    editorial._дописать_историю(к, {
+        "at": editorial._сейчас(), "op": "submit-comment", "slug": slug,
+        "draft_id": имя, "prepared_by": author,
+        "body_digest": запись.get("body_digest") or ""})
+    return {"site": s.domain, "slug": slug,
+            "draft_id": имя,
+            "handoff": передача, "already": False,
+            "url": _адрес_карточки(s, slug),
+            "next_action": ("черновик передан: решение редактора появится в "
+                            "comment_draft полем handoff.state")}
+
+
+def ожидают_проверки(*, site: str = "") -> dict[str, Any]:
+    """Черновики, переданные на проверку. Для проверяющей стороны, только чтение.
+
+    Без этого перечня «передано редактору» означало бы «лежит в файле, о
+    котором редактор не знает»: подтверждения приёма не было бы ни у одной
+    стороны.
+    """
+    # Сеть не опрашивается: перечень нужен для чтения своих же файлов, а
+    # опрос витрин сделал бы чтение черновиков зависимым от их доступности.
+    сайты = [_сайт(site)] if site else list(
+        registry.собрать(опрашивать_сеть=False))
+    итог = []
+    for s in сайты:
+        for слаг, запись in sorted((_черновики(s).get("items") or {}).items()):
+            передача = запись.get("handoff") or {}
+            if передача.get("state") != "submitted":
+                continue
+            итог.append({
+                "site": s.domain, "slug": слаг,
+                "draft_id": запись.get("draft_id") or ид_черновика(s, слаг),
+                "chars": len(запись.get("body") or ""),
+                "body_digest": запись.get("body_digest") or "",
+                "submitted_at": передача.get("submitted_at") or "",
+                "submitted_by": передача.get("submitted_by") or "",
+                "note": передача.get("note") or "",
+                "url": _адрес_карточки(s, слаг)})
+    return {"pending": итог, "count": len(итог),
+            "next_action": ("читать тело — comment_draft; решение — "
+                            "review_comment; публикация — publish_comment")}
+
+
+def решение(site: str, slug: str, *, author: str, verdict: str,
+            note: str = "") -> dict[str, Any]:
+    """Решение проверяющей стороны по переданному черновику.
+
+    Право своё: роль, которой нельзя публиковать, не ставит и «принято».
+    Публикации здесь нет — публикует `опубликовать`, и она же отметит
+    черновик опубликованным. Так приём и публикация остаются отдельными
+    событиями, и видно, что именно произошло.
+    """
+    actors.проверить(author, "comment-review")
+    исходы = ("accepted", "rejected")
+    if verdict not in исходы:
+        raise ОперацияОтклонена(f"решение {verdict!r}: допустимо {исходы}")
+    s = _сайт(site)
+    к = _каталог(s)
+    черновики = _черновики(s)
+    запись = (черновики.get("items") or {}).get(slug)
+    if not запись:
+        raise ОперацияОтклонена(
+            f"{s.domain}: черновика под {slug!r} нет — решать нечего")
+    имя = _имя_записи(s, slug, запись)
+    передача = запись.get("handoff") or _пустая_передача()
+    if передача.get("state") == "drafted":
+        raise ОперацияОтклонена(
+            f"{s.domain}/{slug}: черновик не передавался на проверку; "
+            "решение по непереданному черновику не записывается")
+    передача = {**передача, "state": verdict,
+                "reviewed_at": editorial._сейчас(),
+                "reviewed_by": author,
+                "review_note": str(note or "")[:400]}
+    запись["handoff"] = передача
+    editorial._записать_атомарно(к / ЧЕРНОВИКИ, черновики)
+    editorial._дописать_историю(к, {
+        "at": editorial._сейчас(), "op": "review-comment", "slug": slug,
+        "draft_id": имя, "prepared_by": author,
+        "verdict": verdict})
+    return {"site": s.domain, "slug": slug,
+            "draft_id": имя,
+            "handoff": передача,
+            "next_action": ("публикует publish_comment" if verdict == "accepted"
+                            else "черновик отклонён: публикация не делается")}
 
 
 def _коммит_выпуска(s: registry.Сайт) -> str:
@@ -682,6 +914,9 @@ def _опубликовать_в_ячейке(s: registry.Сайт, slug: str, *
             "появилась. Повторять нельзя: вторая попытка создаст второй "
             f"комментарий. Снятие — unpublish_comment по id "
             f"{запись.get('comment_id')}")
+    отметить_опубликованным(s, slug,
+                            comment_id=str(запись.get("comment_id") or ""),
+                            author=author)
     return {"site": s.domain, "slug": slug, "state": "published",
             "backend": "cell", "comment_id": запись.get("comment_id"),
             "author": ПОДПИСЬ, "request_id": запись.get("request_id"),
@@ -776,8 +1011,34 @@ def опубликовать(site: str, slug: str, *, author: str,
             f"комментарий записан (id {ид or 'не назван'}), но в списке "
             f"карточки не появился за 12 секунд. Проверьте {_адрес_карточки(s, slug)} "
             "прежде чем повторять: повтор создаст второй комментарий")
+    отметить_опубликованным(s, slug, comment_id=str(ид or запись.get("id") or ""),
+                            author=author)
     return {"site": s.domain, "slug": slug, "state": "published",
             "comment_id": ид or запись.get("id"),
             "author": запись.get("author") or ПОДПИСЬ,
             "created_at": запись.get("created_at"),
             "url": _адрес_карточки(s, slug), "visible_in_list": True}
+
+
+def отметить_опубликованным(s: registry.Сайт, slug: str, *, comment_id: str,
+                            author: str) -> None:
+    """Закрыть черновик публикацией: иначе он остался бы «на проверке».
+
+    Черновик и публикация — два разных места, и рассогласование между ними
+    выглядит как незакрытая работа: передающая сторона видела бы `submitted` у
+    того, что уже под карточкой, и передавала бы снова. Отметка не обязательна
+    для публикации (её могли сделать по переданному телу, без черновика),
+    поэтому отсутствие черновика ошибкой не является.
+    """
+    к = _каталог(s)
+    черновики = _черновики(s)
+    запись = (черновики.get("items") or {}).get(slug)
+    if not запись:
+        return
+    _имя_записи(s, slug, запись)
+    передача = запись.get("handoff") or _пустая_передача()
+    запись["handoff"] = {**передача, "state": "published",
+                         "published_at": editorial._сейчас(),
+                         "published_by": author,
+                         "comment_id": comment_id or None}
+    editorial._записать_атомарно(к / ЧЕРНОВИКИ, черновики)
