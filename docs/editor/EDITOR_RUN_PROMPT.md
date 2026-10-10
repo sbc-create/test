@@ -19,12 +19,10 @@
 * `systemctl`, `sudo`, `ssh` недоступны; состояние службы смотри в ответе
   моста (`environment.code.process_started_at`).
 
-Задача запуска — не больше ДВУХ материалов, только на доменах animedia.icu,
-animedia.space, zonafilm.space, lordfilm47.space, lordserial33.biz,
-1lordserials1.online, lordserials22.info, zonafilm12.site, an1meg0.site,
-an1mego.site, animeg0.site, yummyani.site, yummyani.org, yummyani7.site,
-yummyani7.info и yummyani.biz: только у них подтверждены источник фактов, доставка и показ (Zona и Lords — с 2026-10-09,
-yummyani.org — с 2026-10-09 публикацией izgnannyy-reinkarnirovannyy-...). У Zona и Lords файл
+Задача запуска — не больше ДВУХ материалов, только на доменах из поля
+"domains" файла var/editor-runs/next.json: его пишет шлюз из того же списка, по
+которому выбирает работу, и только у этих сайтов подтверждены источник фактов,
+доставка и показ. Домена нет в "domains" — не публикуй на нём. У Zona и Lords файл
 правок сайта — поле editorial_store в ответе editorial_status, журнал
 публикаций — /srv/sites/lords/runtime/overlays/<домен>/; publish_material идёт
 без expect_generation. Два материала — это ДВА РАЗНЫХ произведения. Одно своё описание

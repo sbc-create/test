@@ -246,3 +246,10 @@ def test_gate_gives_candidates_even_when_a_queue_task_is_free(tmp_path):
     decision = editor_run.gate(NOW, **f)
     assert decision["run"] is True
     assert [c["url"] for c in decision["next"]] == ["https://animedia.space/title/x/"]
+
+
+def test_allowed_domains_cover_gate_and_candidate_sites():
+    from seo_operator import regular
+
+    got = editor_run.allowed_domains()
+    assert set(regular.EDITOR_SITES) <= set(got) and set(editor_run.EDITOR_DOMAINS) <= set(got)

@@ -240,7 +240,12 @@ def main(argv=None) -> int:
             # остановился, хотя три других были свободны.
             out = editor_run.STATE / "next.json"
             out.parent.mkdir(parents=True, exist_ok=True)
-            out.write_text(json.dumps({"reason": decision["reason"], "candidates": decision.get("next", [])},
+            # Разрешённые домены — из того же списка, по которому шлюз считает
+            # работу: промпт раньше перечислял их вручную, и сайт, добавленный в
+            # цикл (zonafilm.cc, 2026-10-10), модель отвергала как неразрешённый.
+            out.write_text(json.dumps({"reason": decision["reason"],
+                                       "domains": editor_run.allowed_domains(),
+                                       "candidates": decision.get("next", [])},
                                       ensure_ascii=False, indent=1), encoding="utf-8")
         print(json.dumps({k: v for k, v in decision.items() if k != "next"}, ensure_ascii=False))
         return 10 if decision["run"] else 0

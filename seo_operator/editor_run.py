@@ -408,6 +408,14 @@ def gate(
     return {"run": False, "reason": "работы нет: свободных заданий и новых кандидатов нет"}
 
 
+def allowed_domains() -> list[str]:
+    """Домены, на которых редактор публикует: шлюз (EDITOR_DOMAINS) и кандидаты
+    (regular.EDITOR_SITES). Единственный источник для промпта модели."""
+    from seo_operator import regular
+
+    return sorted(set(EDITOR_DOMAINS) | set(regular.EDITOR_SITES))
+
+
 def recent_publications(now: dt.datetime, *, hours: int = 24) -> dict[str, int]:
     """Сколько адресов получили публикацию за последние сутки — по доменам (файлы)."""
     from seo_operator import regular
