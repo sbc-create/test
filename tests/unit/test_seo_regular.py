@@ -1593,3 +1593,33 @@ def test_backfill_is_shared_between_domains_not_taken_by_higher_rated_films(tmp_
     )
     found = regular.editor_candidates(snap, facts, set(), limit=4, sites={"a.ru": "a", "b.ru": "b"})
     assert sorted(c["site"] for c in found) == ["a.ru", "a.ru", "b.ru", "b.ru"]
+
+
+def test_blocked_slugs_cover_the_whole_network_for_two_weeks(tmp_path):
+    ev = tmp_path / "events.jsonl"
+    rows = [
+        {"event": "task_registered", "task_id": "a", "canonical_url": "https://x.ru/title/film-1"},
+        {
+            "event": "task_result",
+            "task_id": "a",
+            "outcome": "IDENTITY_UNCLEAR",
+            "at": "2026-10-09T19:35:00Z",
+        },
+        {"event": "task_registered", "task_id": "b", "canonical_url": "https://y.ru/title/ok"},
+        {
+            "event": "task_result",
+            "task_id": "b",
+            "outcome": "TEXT_WRITTEN",
+            "at": "2026-10-09T19:36:00Z",
+        },
+        {"event": "task_registered", "task_id": "c", "canonical_url": "https://y.ru/title/old/"},
+        {
+            "event": "task_result",
+            "task_id": "c",
+            "outcome": "SOURCES_MISSING",
+            "at": "2026-09-01T00:00:00Z",
+        },
+    ]
+    ev.write_text("\n".join(json.dumps(r) for r in rows), encoding="utf-8")
+    got = regular.blocked_slugs(ev, dt.datetime(2026, 10, 10, 8, 0, tzinfo=dt.timezone.utc))
+    assert got == {"film-1"}

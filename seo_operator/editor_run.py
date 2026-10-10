@@ -458,7 +458,12 @@ def _refresh_candidates(path: Path, now: dt.datetime, *, min_age_s: int = 3600) 
     if not snaps:
         return False
     published = {(i["domain"], i["slug"]) for i in regular.published_items()}
-    found = regular.editor_candidates(snaps[-1], regular.SOURCES["facts_snapshots"], published)
+    found = regular.editor_candidates(
+        snaps[-1],
+        regular.SOURCES["facts_snapshots"],
+        published,
+        blocked=regular.blocked_slugs(regular.SOURCES["queue_events"], now),
+    )
     regular._write_json(
         path,
         {

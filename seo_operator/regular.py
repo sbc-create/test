@@ -2469,6 +2469,39 @@ def _details_for_editor(path: Path, wanted: set[str] | None = None) -> dict:
     return keep
 
 
+#: Исходы, после которых тайтл не предлагается редактору снова на ЛЮБОМ домене
+#: сети в течение BLOCKED_DAYS: источник у произведения один и тот же, и повтор
+#: на соседнем домене даёт тот же отказ (2026-10-09 22:30 МСК: 7 из 8 кандидатов
+#: запуска — заведомо без источника или без подтверждённой идентичности).
+BLOCKED_OUTCOMES = ("SOURCES_MISSING", "IDENTITY_UNCLEAR", "IDENTITY_REJECTED")
+BLOCKED_DAYS = 14
+
+
+def blocked_slugs(events_path: Path, now: dt.datetime) -> set[str]:
+    """Слаги с недавним отказом по источнику или идентичности — на всю сеть."""
+    url_of: dict[str, str] = {}
+    out: set[str] = set()
+    since = now - dt.timedelta(days=BLOCKED_DAYS)
+    try:
+        lines = events_path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return out
+    for line in lines:
+        try:
+            e = json.loads(line)
+        except ValueError:
+            continue
+        if e.get("task_id") and e.get("canonical_url"):
+            url_of[e["task_id"]] = e["canonical_url"]
+        if e.get("event") != "task_result" or e.get("outcome") not in BLOCKED_OUTCOMES:
+            continue
+        at = parse_iso(e.get("at"))
+        url = url_of.get(e.get("task_id")) or e.get("canonical_url") or ""
+        if at and at >= since and url:
+            out.add(url.rstrip("/").rsplit("/", 1)[-1])
+    return out
+
+
 def _details_path(facts_dir: Path, sid: str) -> Path:
     """Снимок подробностей: общий каталог, иначе каталог данных ячейки (AnimeGo)."""
     общий = facts_dir / f"{sid}-details.json"
@@ -2516,6 +2549,7 @@ def editor_candidates(
     limit: int = 20,
     sites: dict[str, str] | None = None,
     needs_source: list[dict] | None = None,
+    blocked: set[str] | None = None,
 ) -> list[dict]:
     """Что редактору брать, когда очередь пуста: по трафику, с причиной.
 
@@ -2548,7 +2582,7 @@ def editor_candidates(
     # получал бы пересказ уже написанного текста по тому же источнику —
     # синонимайз, который владелец запретил 2026-10-09 (за ночь 08→09.10 таких
     # пар icu/space было 9). Другому домену — другая тема или другой формат.
-    taken = {slug for _, slug in published}
+    taken = {slug for _, slug in published} | set(blocked or ())
     for (domain, slug), weight in sorted(weights.items(), key=lambda kv: -kv[1]):
         if (domain, slug) in published or slug in taken:
             continue
@@ -2690,7 +2724,11 @@ def step_candidates(ctx: Context) -> Any:
     published = {(i["domain"], i["slug"]) for i in published_items()}
     needs: list[dict] = []
     found = editor_candidates(
-        snaps[-1], ctx.sources["facts_snapshots"], published, needs_source=needs
+        snaps[-1],
+        ctx.sources["facts_snapshots"],
+        published,
+        needs_source=needs,
+        blocked=blocked_slugs(ctx.sources["queue_events"], ctx.now),
     )
     out = {
         "snapshot": snaps[-1].name,
