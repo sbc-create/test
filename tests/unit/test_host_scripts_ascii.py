@@ -38,6 +38,7 @@ substitution`, в `export ИМЯ=` — `not a valid identifier`, а `$ИМЯ` б
 """
 from __future__ import annotations
 
+import os
 import re
 from pathlib import Path
 
@@ -46,7 +47,36 @@ import pytest
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 #: Каталоги, которых проверка не касается: чужой код и кэши.
 ПРОПУСК = {".git", ".venv", "node_modules", "__pycache__"}
-СЦЕНАРИИ = sorted(п for п in КОРЕНЬ.rglob("*.sh") if ПРОПУСК.isdisjoint(п.parts))
+
+
+def _сценарии() -> list[Path]:
+    """Все сценарии дерева, включая каталоги, подключённые ссылкой.
+
+    Обход ведётся `os.walk(followlinks=True)`, а не `rglob("*.sh")`: образец
+    `**` по ссылкам на каталоги НЕ ходит. Это выглядело как «проверка стала
+    мягче»: во втором рабочем дереве, где `var/site-repos` подключён ссылкой на
+    единственную каноническую копию, охват падал с 952 сценариев до 63 — и
+    падал МОЛЧА, потому что уменьшение числа параметров ничем не отличается от
+    зелёного прогона. Ровно тот род потери измерения, который эта проверка и
+    сторожит у себя в докстринге.
+
+    Пути приводятся к разрешённым и дедуплицируются: одна и та же копия,
+    видимая и напрямую, и через ссылку, не должна давать два параметра.
+    """
+    найдено: dict[Path, Path] = {}
+    for корень, каталоги, файлы in os.walk(КОРЕНЬ, followlinks=True):
+        каталоги[:] = [д for д in каталоги if д not in ПРОПУСК]
+        for имя in файлы:
+            if not имя.endswith(".sh"):
+                continue
+            путь = Path(корень) / имя
+            if not ПРОПУСК.isdisjoint(путь.parts):
+                continue
+            найдено.setdefault(путь.resolve(), путь)
+    return sorted(найдено.values())
+
+
+СЦЕНАРИИ = _сценарии()
 
 #: Присваивание в начале строки: `name=`, `local name=`, `export name=`,
 #: `readonly name=`, а также `for name in` и `read -r name`.
