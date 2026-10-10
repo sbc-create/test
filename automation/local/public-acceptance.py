@@ -46,12 +46,20 @@ def достать(url: str, таймаут: int = 45) -> tuple[str, str, dict[s
     # отвечали 200, а приёмка называла их провалом.
     import tempfile
 
-    with tempfile.NamedTemporaryFile(prefix="curl-head-", suffix=".txt") as ф:
+    # Тело идёт в файл, а в поток вывода — только ИТОГОВЫЙ адрес после всех
+    # переходов. Он нужен для сравнения canonical: витрина Yummy отвечает 308 с
+    # адреса со UUID-хвостом слага на короткий, и сравнение canonical с
+    # ЗАПРОШЕННЫМ адресом объявляло исправную карточку расхождением (ночная
+    # регрессия 10.10, восемь ложных расхождений на двух доменах).
+    with tempfile.NamedTemporaryFile(prefix="curl-head-", suffix=".txt") as ф, \
+            tempfile.NamedTemporaryFile(prefix="curl-body-", suffix=".bin") as б:
         г = subprocess.run(
-            ["curl", "-sS", "-L", "--max-time", str(таймаут), "-D", ф.name, url],
+            ["curl", "-sS", "-L", "--max-time", str(таймаут), "-D", ф.name,
+             "-o", б.name, "-w", "%{url_effective}", url],
             capture_output=True, text=True)
         голова_всё = pathlib.Path(ф.name).read_text(encoding="utf-8", errors="replace")
-    тело = г.stdout or ""
+        тело = pathlib.Path(б.name).read_text(encoding="utf-8", errors="replace")
+    итоговый = (г.stdout or "").strip()
     # С переходами блоков заголовков несколько: берётся ПОСЛЕДНИЙ — он описывает
     # тот ответ, тело которого пришло.
     блоки = re.split(r"(?m)^(?=HTTP/)", голова_всё)
@@ -65,6 +73,8 @@ def достать(url: str, таймаут: int = 45) -> tuple[str, str, dict[s
         elif ":" in с:
             к, _, з = с.partition(":")
             заг[к.strip().lower()] = з.strip()
+    # Ключ не из HTTP, поэтому с собственным именем: его ставим мы, не сервер.
+    заг["итоговый-адрес"] = итоговый or url
     return код, тело, заг
 
 
@@ -177,10 +187,13 @@ def проверить(домен: str) -> dict:
     постеров = названий = 0
     серий_всего = 0
     for адрес in адреса:
-        к4, т4, _ = достать(адрес)
+        к4, т4, з4 = достать(адрес)
         h1 = (re.search(r"<h1[^>]*>(.*?)</h1>", т4, re.S) or [None, ""])[1]
         h1 = re.sub(r"<[^>]+>", "", h1).strip()
-        слаг = адрес.rstrip("/").rsplit("/", 1)[-1]
+        # Слаг берётся из ИТОГОВОГО адреса: переход 308 на короткую форму —
+        # правильное поведение витрины, и canonical обязан совпадать с тем, где
+        # страница в итоге оказалась, а не с тем, что было запрошено.
+        слаг = з4.get("итоговый-адрес", адрес).rstrip("/").rsplit("/", 1)[-1]
         постер = "poster.cdnvideohub.com" in т4
         серий = len(set(re.findall(rf'href="/(?:title|anime)/{слаг}/[^"]*episode[^"]*"', т4)))
         серий_всего += серий
