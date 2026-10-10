@@ -320,11 +320,30 @@ def cmd_submit(args) -> int:
                 print(f"BLOCKED_ACCESS: {exc}" if проверка is q.проверить_доступ_исполнителя
                       else f"BLOCKED_INPUT: {exc}", file=sys.stderr)
                 return 2
+    # Доставка данных отличается от предыдущей ПОКОЛЕНИЕМ снимка, а не
+    # коммитом кода. Пока идентификатор брался из коммита, вторая доставка на
+    # неизменный выпуск получала имя первой, очередь отвечала
+    # `already-finished`, и новое поколение не доезжало. Поколение читается из
+    # самого снимка производителя — измерение, а не значение из рук человека.
+    снимок = ""
+    if (args.cell_operation or "") == "deliver":
+        from factory.cell import content as _content
+        try:
+            site_id = registry.resolve(args.site).site_id
+        except registry.RegistryError:
+            site_id = args.site
+        снимок = _content.ревизия_источника(site_id)
+        if not снимок:
+            print(f"BLOCKED_INPUT: ревизию снимка {site_id} прочитать нечем "
+                  f"({_content.ОБЩИЙ}/{site_id}-catalog.json): заявку на "
+                  "доставку нельзя назвать коммитом — она совпала бы с прежней",
+                  file=sys.stderr)
+            return 2
     try:
         заявка = q.собрать(args.site, args.commit or "", args.expect_digest or "",
                            operation=args.cell_operation, ci_run=args.ci_run or "",
                            repo=args.repo or "", note=args.reason or "",
-                           mode=getattr(args, "mode", "") or "")
+                           snapshot=снимок, mode=getattr(args, "mode", "") or "")
         итог = q.подать(заявка)
     except q.RequestRejected as exc:
         print(f"BLOCKED_INPUT: {exc}", file=sys.stderr)
