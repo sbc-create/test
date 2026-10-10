@@ -125,12 +125,28 @@ root:claude) и печатает его значение ОДИН раз. Доб
 ### `GET /api/app/v1/episodes/{episodeId}/sources`
 
 ```json
-{"sources":[],"reason":"NO_SOURCE",
+{"sources":[],"reason":"NO_SOURCE_CONTRACT_RELEASED",
  "embed":{"kind":"provider-web-component","provider":"cdnvideohub",
           "note":"прямой поток фабрикой не выдаётся…",
           "providerRefs":[{"provider":"mali","sourceId":"7902",
                            "availability":"available"}]}}
 ```
+
+### `GET /api/app/v1/episodes/movie/sources?contentId={contentId}`
+
+Форма адреса ДЛЯ ФИЛЬМА, то есть для записи без сезонов: у фильма нет
+`episodeId`, и тайтл называется параметром. Это форма из задания клиента,
+поэтому поддержана как есть. Ответ — тот же объект, что выше:
+
+```json
+{"sources":[],"reason":"NO_SOURCE_CONTRACT_RELEASED","embed":{…}}
+```
+
+Проверено на живых данных 2026-10-10 (служба на петле, снимок 8 547 тайтлов):
+фильм «10 жизней (2024)» — 200 и `NO_SOURCE_CONTRACT_RELEASED`; та же форма с
+идентификатором сериала тоже отвечает 200 — различать фильм и сериал обязан
+клиент, служба здесь не возражает. Без `contentId` — 400
+(`для фильма нужен contentId в запросе`).
 
 `reason` всегда **`NO_SOURCE_CONTRACT_RELEASED`** — постоянное ограничение, а
 не временная пустота: прямых ссылок, разрешённых договором для приложения, у
