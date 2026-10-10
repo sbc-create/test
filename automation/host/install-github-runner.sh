@@ -4,7 +4,15 @@
 #   bash automation/host/install-github-runner.sh \
 #       --repo <owner/name> --labels site-factory-builder \
 #       --token-file /etc/site-factory/secrets/github_runner_token \
-#       [--account runner] [--version 2.321.0] [--dry-run]
+#       [--account runner] [--version 2.321.0] [--dry-run] [--confined]
+#
+# --confined — единственный разрешённый способ поставить runner на сам
+# claude-control-01: в своём cgroup с жёсткими пределами (память, доля ЦП,
+# приоритет ввода-вывода) и с запасом памяти, который резервируется для витрин
+# и фонового редактора. Он существует потому, что отдельной машины нет, а
+# выпуск кода без зелёного CI не принимается и приниматься не должен. Тяжёлые
+# Android-сборки и эмуляция под ним невозможны: они не умещаются в предел и
+# будут убиты внутри своего cgroup, не затронув витрины.
 #
 # Зачем он есть. GitHub-hosted runner'ы платные, способа оплаты сейчас нет, а
 # выпуск КОДА ячейки без зелёного прогона CI исполнитель не принимает и
@@ -30,6 +38,14 @@ REPO=""
 LABELS=""
 TOKEN_FILE=""
 dry_run=0
+confined=0
+# Пределы ограниченного режима. 1200 МиБ — измеренный прогон tests/unit (около
+# гигабайта) плюс запас; RESERVE_MIB — то, что обязано остаться витринам и
+# редактору (его порог 2048 МиБ снижать нельзя).
+CONFINED_MEM_MAX="1200M"
+CONFINED_MEM_HIGH="900M"
+CONFINED_CPU="50%"
+RESERVE_MIB=2048
 
 die() { printf '\033[31m[x]\033[0m %s\n' "$*" >&2; exit 2; }
 log() { printf '\033[1m==>\033[0m %s\n' "$*"; }
@@ -44,6 +60,7 @@ while [ $# -gt 0 ]; do
     --account)    ACCOUNT="${2:-}"; shift 2 ;;
     --version)    VERSION="${2:-}"; shift 2 ;;
     --dry-run)    dry_run=1; shift ;;
+    --confined)   confined=1; shift ;;
     *) die "неизвестный аргумент $1" ;;
   esac
 done
@@ -55,12 +72,18 @@ done
 # ssh-сессии проще всего.
 log "проверка машины"
 THIS_HOST="$(hostname)"
-if [ "$THIS_HOST" = "$FORBIDDEN_HOST" ]; then
+if [ "$THIS_HOST" = "$FORBIDDEN_HOST" ] && [ "$confined" != 1 ]; then
   die "это $FORBIDDEN_HOST — production-хост сети. Под сборки он не
    отдаётся решением владельца, и память здесь уже заканчивалась (OOM 10.10).
-   Запускайте на отдельной машине."
+   Запускайте на отдельной машине — либо, если её нет, осознанно с --confined:
+   тогда runner живёт в своём cgroup с пределом $CONFINED_MEM_MAX и долей ЦП
+   $CONFINED_CPU, а витринам резервируется ${RESERVE_MIB} МиБ."
 fi
-ok "машина $THIS_HOST — не production-хост сети"
+if [ "$confined" = 1 ]; then
+  ok "ограниченный режим: предел $CONFINED_MEM_MAX, ЦП $CONFINED_CPU, резерв ${RESERVE_MIB} МиБ"
+else
+  ok "машина $THIS_HOST — не production-хост сети"
+fi
 
 # --- 2. Входы, которые нельзя угадывать -------------------------------------
 [ -n "$REPO" ]   || die "нужен --repo <owner/name>: угадывать репозиторий нельзя"
@@ -90,11 +113,19 @@ fi
 ok "python3 $(python3 -c 'import sys; print("%d.%d" % sys.version_info[:2])')"
 
 FREE_MIB="$(awk '/MemAvailable/ {print int($2/1024)}' /proc/meminfo)"
-if [ "${FREE_MIB:-0}" -lt 2048 ]; then
-  die "доступно ${FREE_MIB} МиБ памяти: прогон тестов требует около гигабайта,
-   и ставить runner на машину без запаса значит получить падения вместо проверок"
+NEED_MIB=2048
+if [ "$confined" = 1 ]; then
+  # В ограниченном режиме нужно не только место под прогон, но и резерв,
+  # который прогон не имеет права занять: порог редактора 2048 МиБ.
+  NEED_MIB=$((RESERVE_MIB + 1200))
 fi
-ok "памяти доступно ${FREE_MIB} МиБ"
+if [ "${FREE_MIB:-0}" -lt "$NEED_MIB" ]; then
+  die "доступно ${FREE_MIB} МиБ памяти, нужно ${NEED_MIB}: прогон тестов требует
+   около гигабайта, и ставить runner без запаса значит получить падения вместо
+   проверок, а в ограниченном режиме — отнять память у витрин и редактора.
+   Сначала обслуживание памяти: docs/MEMORY_MAINTENANCE_ORDER.md"
+fi
+ok "памяти доступно ${FREE_MIB} МиБ, требуется ${NEED_MIB}"
 
 # --- 4. Учётная запись под runner -------------------------------------------
 #
@@ -142,8 +173,59 @@ unset TOKEN
 # --- 7. Служба --------------------------------------------------------------
 log "служба runner'а"
 run bash -c "cd '$RUNNER_DIR' && ./svc.sh install '$ACCOUNT'"
+
+# --- 7a. Пределы ограниченного режима ---------------------------------------
+#
+# Ставятся ДО первого запуска: иначе первое же задание пойдёт без предела.
+# Задание исполняется дочерним процессом службы, то есть в её cgroup, — предел
+# накрывает и задание. Нехватка памяти в задании убивает задание, а не витрину:
+# это и есть смысл режима.
+if [ "$confined" = 1 ]; then
+  log "пределы ограниченного режима"
+  UNIT_FILE="$(ls /etc/systemd/system/actions.runner.*.service 2>/dev/null | head -1 || true)"
+  if [ -z "$UNIT_FILE" ] && [ "$dry_run" = 1 ]; then
+    UNIT_FILE="/etc/systemd/system/actions.runner.EXAMPLE.service"
+  fi
+  [ -n "$UNIT_FILE" ] || die "юнит службы runner'а не найден в /etc/systemd/system"
+  DROPIN_DIR="${UNIT_FILE}.d"
+  run install -d -m 0755 "$DROPIN_DIR"
+  DROPIN="$DROPIN_DIR/10-confined.conf"
+  if [ "$dry_run" = 1 ]; then
+    printf '   [dry_run прогон] запись %s\n' "$DROPIN"
+  else
+    cat > "$DROPIN" <<CONF
+# Поставлено install-github-runner.sh --confined.
+# Сборки идут на том же хосте, что витрины, поэтому предел — не пожелание:
+# без него задание отнимает память у витрин и фонового редактора.
+[Service]
+MemoryHigh=$CONFINED_MEM_HIGH
+MemoryMax=$CONFINED_MEM_MAX
+MemorySwapMax=0
+CPUQuota=$CONFINED_CPU
+CPUWeight=20
+IOWeight=20
+Nice=19
+TasksMax=512
+# Задание исполняет код из репозитория: ему нечего делать в системных путях.
+ProtectSystem=strict
+ProtectHome=tmpfs
+ReadWritePaths=$HOME_DIR
+PrivateTmp=yes
+NoNewPrivileges=yes
+CONF
+    ok "пределы записаны: $DROPIN"
+  fi
+  run systemctl daemon-reload
+fi
+
 run bash -c "cd '$RUNNER_DIR' && ./svc.sh start"
 ok "служба поставлена и запущена"
+if [ "$confined" = 1 ]; then
+  log "проверить предел, а не поверить ему"
+  printf '   systemctl show %s -p MemoryMax -p CPUQuotaPerSecUSec\n' \
+    "$(basename "${UNIT_FILE:-actions.runner.service}")"
+  printf '   ожидается MemoryMax=%s и доля ЦП %s\n' "$CONFINED_MEM_MAX" "$CONFINED_CPU"
+fi
 
 # --- 8. Что проверить дальше ------------------------------------------------
 log "готово; проверить вручную, не предполагая"

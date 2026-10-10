@@ -112,7 +112,95 @@
 `python3 -m pytest tests/unit -q -x -k "не трогает сеть"`. Пока он не зелёный на
 новой машине, метки в боевых workflow не меняются.
 
-## 6. Пока runner'а нет
+## 6. Один конкретный вариант среды сборок — ограниченный runner на этом же хосте
+
+Отдельной машины нет: ноутбук владельца недоступен, в `inventory/ssh-hosts.yaml`
+`hosts: []`, установленного runner'а на хосте нет (измерено, §2). Платных
+ресурсов не создаю, бесплатных учётных записей у чужих облаков не открываю,
+Android-сборки и эмуляцию на сервер сайтов не несу. Остаётся ровно один
+досягаемый вариант, и предлагается именно он — **не вместо отдельной машины, а
+до неё**.
+
+**Что это.** Self-hosted runner на `claude-control-01`, но в своём cgroup с
+жёсткими пределами, под собственной учётной записью, только для проверок
+Python. Ставится единственным осознанным флагом `--confined`; без флага застава
+по имени машины остаётся и отказывает (проверено:
+`tests/unit/test_github_runner_installer.py`).
+
+**Ресурсы, которые он получает:**
+
+| ресурс | предел | почему столько |
+| --- | --- | --- |
+| память | `MemoryMax=1200M`, `MemoryHigh=900M` | прогон `tests/unit` измерен в ~1 ГиБ; выше предела задание убивается внутри своего cgroup и витрин не касается |
+| своп | `MemorySwapMax=0` | иначе задание уводит хост в своп и тормозит витрины вместо честного падения |
+| ЦП | `CPUQuota=50%`, `CPUWeight=20`, `Nice=19` | витрины и издатель обслуживаются первыми |
+| ввод-вывод | `IOWeight=20` | публикация каталогов читает и пишет сотни МиБ |
+| задачи | `TasksMax=512` | эмуляцию и параллельные сборки в это не уместить |
+| файловая система | `ProtectSystem=strict`, `ProtectHome=tmpfs`, `ReadWritePaths=/home/runner`, `PrivateTmp=yes`, `NoNewPrivileges=yes` | код из репозитория не имеет прав ни на витрины, ни на очередь |
+
+Резерв проверяется ДО установки: если `MemAvailable` меньше
+2048 + 1200 = 3248 МиБ, установщик отказывается и отсылает к
+`docs/MEMORY_MAINTENANCE_ORDER.md`. 2048 — порог фонового редактора, и прогон
+сборки не имеет права его занять.
+
+**Доступ, который нужен:**
+
+1. учётная запись `runner` на хосте — создаёт сам установщик, не root, прав на
+   `/srv` и очередь у неё нет;
+2. токен регистрации runner'а из GitHub (Settings → Actions → Runners → New
+   self-hosted runner), положенный в файл с правами 600 вне репозитория;
+   установщик читает его из файла и не печатает;
+3. исходящий доступ к `github.com` и `pkg.actions.githubusercontent.com`.
+   Входящие порты не нужны, firewall не меняется.
+
+**Команды установки** (по очереди, на `claude-control-01`, от root):
+
+```bash
+install -d -m 0700 /etc/site-factory/secrets
+install -m 0600 /dev/null /etc/site-factory/secrets/github_runner_token
+# вписать токен в этот файл редактором; в git и отчёты он не попадает
+
+bash automation/host/install-github-runner.sh \
+    --repo <owner>/<repo-витрины> --labels site-factory-builder \
+    --token-file /etc/site-factory/secrets/github_runner_token \
+    --confined --dry-run        # сначала прогон: ничего не меняет
+
+bash automation/host/install-github-runner.sh \
+    --repo <owner>/<repo-витрины> --labels site-factory-builder \
+    --token-file /etc/site-factory/secrets/github_runner_token \
+    --confined                  # установка
+```
+
+**Как проверить, а не поверить:**
+
+```bash
+systemctl show actions.runner.*.service -p MemoryMax -p CPUQuotaPerSecUSec
+#   ожидается MemoryMax=1258291200 и CPUQuotaPerSecUSec=500ms
+python3 automation/local/showcase-memory-report.py
+#   ожидается: MemAvailable не ниже 2048 МиБ, иначе задания сборок остановить
+```
+
+**Откат — две команды, следов не остаётся:**
+
+```bash
+bash -c "cd /home/runner/actions-runner && ./svc.sh uninstall && ./config.sh remove --token <токен удаления>"
+rm -rf /etc/systemd/system/actions.runner.*.service.d && systemctl daemon-reload
+```
+
+**Что в этом варианте хуже отдельной машины — честно.** Сборки идут на том же
+хосте, что production: даже в пределах cgroup они занимают 1,2 ГиБ памяти и
+половину ядра, то есть сокращают запас, которого хосту уже не хватало (OOM
+10 октября, `oom_kill` 27). Поэтому порядок такой: сначала обслуживание памяти
+по `docs/MEMORY_MAINTENANCE_ORDER.md`, потом установка, и задания сборок не
+запускаются во время ночной публикации каталогов (03:30 UTC). Как только
+отдельная машина появится, тот же установщик без `--confined` ставит runner на
+неё, а этот снимается откатом выше.
+
+**Чего вариант НЕ делает:** не отключает обязательный CI, не подменяет статусы
+прогонов, не ослабляет сверку репозитория, ветки и коммита в исполнителе
+выпуска, не меняет метки `runs-on` до зелёного пробного задания (§5).
+
+## 7. Пока runner'а нет
 
 * выпуск КОДА ячеек не подаётся — заявка всё равно была бы отвергнута
   исполнителем, и это правильно;
