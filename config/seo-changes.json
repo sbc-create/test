@@ -351,6 +351,34 @@
    "problem": "описание — одна фраза (46 знаков)",
    "evidence": "analytics-2026-10-10.json (утро): поисковые входы 18 (yummyani7.site) и 7 (yummyani7.info) за 7 дней",
    "hypothesis": "содержательное описание поднимает позиции карточки по названию"
+  },
+  {
+   "id": "CHG-20261010-04",
+   "url": "https://yummyani.site/anime/proschay-lara",
+   "published_at": "2026-10-10T11:42:54Z",
+   "path": "источник: https://shikimori.io/animes/58878; python3 -m factory.qwen publish",
+   "rollback": "unpublish_material site=yummyani.site slug=proschay-lara",
+   "decision": "pending",
+   "task_id": "",
+   "kind": "written",
+   "element": "description",
+   "problem": "описания на карточке нет",
+   "evidence": "analytics-2026-10-10.json (11:09Z): search_landing_pages — 38 поисковых входов за 7 дней",
+   "hypothesis": "описание по источнику удерживает и добавляет поисковые входы на карточку"
+  },
+  {
+   "id": "CHG-20261010-05",
+   "url": "https://yummyani.site/anime/nevesta-demona",
+   "published_at": "2026-10-10T11:44:10Z",
+   "path": "источник: https://shikimori.io/animes/61814; python3 -m factory.qwen publish",
+   "rollback": "unpublish_material site=yummyani.site slug=nevesta-demona",
+   "decision": "pending",
+   "task_id": "",
+   "kind": "written",
+   "element": "description",
+   "problem": "описания на карточке нет",
+   "evidence": "analytics-2026-10-10.json (11:09Z): search_landing_pages — 11 поисковых входов за 7 дней",
+   "hypothesis": "описание по источнику удерживает и добавляет поисковые входы на карточку"
   }
  ]
 }

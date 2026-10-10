@@ -2625,9 +2625,9 @@ def editor_candidates(
     # получал бы пересказ уже написанного текста по тому же источнику —
     # синонимайз, который владелец запретил 2026-10-09 (за ночь 08→09.10 таких
     # пар icu/space было 9). Другому домену — другая тема или другой формат.
-    taken = {slug for _, slug in published} | set(blocked or ())
+    taken = {work_key(x) for _, x in published} | {work_key(x) for x in blocked or ()}
     for (domain, slug), weight in sorted(weights.items(), key=lambda kv: -kv[1]):
-        if (domain, slug) in published or slug in taken:
+        if (domain, slug) in published or work_key(slug) in taken:
             continue
         mine = (details.get(domain) or {}).get(slug)
         if not mine:
@@ -2644,7 +2644,7 @@ def editor_candidates(
         source_id = shiki.get("external_id") or (mine.get("external_ids") or {}).get("mal")
         imdb = (mine.get("external_ids") or {}).get("imdb")
         if reason == "GAP" and not source_id and imdb:
-            taken.add(slug)
+            taken.add(work_key(slug))
             out.append(_film_candidate(domain, slug, mine, weight, "GAP"))
             continue
         if reason == "GAP" and not source_id:
@@ -2671,7 +2671,7 @@ def editor_candidates(
                     }
                 )
             continue
-        taken.add(slug)
+        taken.add(work_key(slug))
         out.append(
             {
                 "site": domain,
@@ -2701,7 +2701,7 @@ def editor_candidates(
             for slug, mine in items.items():
                 if (
                     (domain, slug) in seen
-                    or slug in taken
+                    or work_key(slug) in taken
                     or (mine.get("description") or "").strip()
                 ):
                     continue
@@ -2729,7 +2729,7 @@ def editor_candidates(
             for slug, entries in by_slug.items():
                 if len(out) >= limit:
                     break
-                if slug in taken:
+                if work_key(slug) in taken:
                     continue
                 entries = [e for e in entries if per_domain.get(e[2], 0) < потолок]
                 if not entries:
@@ -2739,7 +2739,7 @@ def editor_candidates(
                     entries, key=lambda e: per_domain.get(e[2], 0)
                 )
                 per_domain[domain] = per_domain.get(domain, 0) + 1
-                taken.add(slug)
+                taken.add(work_key(slug))
                 if not shiki:
                     out.append(_film_candidate(domain, slug, mine, 0.0, "GAP_BACKFILL"))
                     continue
@@ -2758,6 +2758,19 @@ def editor_candidates(
                     }
                 )
     return out
+
+
+def work_key(slug: str) -> str:
+    """Ключ произведения по слагу без различий транслитерации между семействами.
+
+    `taynaya-bitva-za-prestol-silneyshego-princa-duraleya` (Animedia) и
+    `…-printsa-duraleya` (Yummy) — одно произведение; сверка по слагу их не
+    сводила, и второе описание того же произведения прошло бы в кандидаты.
+    """
+    k = slug.lower()
+    for a, b in (("ts", "c"), ("kh", "h"), ("yo", "e"), ("ye", "e"), ("iy", "y"), ("yy", "y")):
+        k = k.replace(a, b)
+    return k
 
 
 #: Домены Yummy, у которых кандидаты строятся по спросу: снимка каталога у
@@ -2798,7 +2811,7 @@ def yummy_demand_candidates(
                 return None
             return str((f.get("facts") or {}).get("description") or "")
 
-    taken = {slug for _, slug in published} | set(blocked or ())
+    taken = {work_key(slug) for _, slug in published} | {work_key(x) for x in blocked or ()}
     held = {u.rstrip("/").lower() for u in (held_urls or ())}
     out: list[dict] = []
     for entry in _read_json(snapshot, {}).get("domains") or []:
@@ -2820,12 +2833,12 @@ def yummy_demand_candidates(
             if взято >= per_domain:
                 break
             url = f"https://{domain}/anime/{slug}"
-            if slug in taken or url.lower() in held:
+            if work_key(slug) in taken or url.lower() in held:
                 continue
             text = describe(domain, slug)
             if text is None or len(text.strip()) >= THIN_DESCRIPTION:
                 continue
-            taken.add(slug)
+            taken.add(work_key(slug))
             взято += 1
             out.append(
                 {

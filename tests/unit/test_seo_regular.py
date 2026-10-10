@@ -1672,3 +1672,10 @@ def test_yummy_demand_candidates_pick_thin_or_empty_cards_with_search_entries(tm
         ("empty", "GAP_DEMAND", 127.0),
         ("thin", "THIN_DEMAND", 18.0),
     ]
+
+
+def test_work_key_joins_transliteration_variants_across_families():
+    assert regular.work_key("taynaya-bitva-za-prestol-silneyshego-princa-duraleya") == (
+        regular.work_key("taynaya-bitva-za-prestol-silneyshego-printsa-duraleya")
+    )
+    assert regular.work_key("proschay-lara") != regular.work_key("nevesta-demona")
