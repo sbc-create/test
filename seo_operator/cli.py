@@ -252,8 +252,12 @@ def main(argv=None) -> int:
             # Разрешённые домены — из того же списка, по которому шлюз считает
             # работу: промпт раньше перечислял их вручную, и сайт, добавленный в
             # цикл (zonafilm.cc, 2026-10-10), модель отвергала как неразрешённый.
+            # Переданные черновики — отдельное поле, а не «ещё кандидаты»:
+            # у них уже есть текст и автор, и разбирать их надо иначе, чем
+            # искать, о чём писать. Промпт велит начинать с них.
             out.write_text(json.dumps({"reason": decision["reason"],
                                        "domains": editor_run.allowed_domains(),
+                                       "handoffs": decision.get("handoffs", []),
                                        "candidates": decision.get("next", [])},
                                       ensure_ascii=False, indent=1), encoding="utf-8")
         print(json.dumps({k: v for k, v in decision.items() if k != "next"}, ensure_ascii=False))
