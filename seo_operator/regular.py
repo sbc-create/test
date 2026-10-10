@@ -2469,23 +2469,45 @@ def _details_for_editor(path: Path, wanted: set[str] | None = None) -> dict:
     return keep
 
 
-#: Исходы, после которых тайтл не предлагается редактору снова на ЛЮБОМ домене
-#: сети в течение BLOCKED_DAYS: источник у произведения один и тот же, и повтор
-#: на соседнем домене даёт тот же отказ (2026-10-09 22:30 МСК: 7 из 8 кандидатов
-#: запуска — заведомо без источника или без подтверждённой идентичности).
-BLOCKED_OUTCOMES = ("SOURCES_MISSING", "IDENTITY_UNCLEAR", "IDENTITY_REJECTED")
-BLOCKED_DAYS = 14
+#: Как долго исход задания закрывает адрес (и, где сказано, произведение во всей
+#: сети). Причины разделены (владелец 2026-10-10): ошибка сопоставления одной
+#: карточки не блокирует карточку другого сайта; временная недоступность
+#: источника — не отказ на две недели; новые источники открывают пересмотр.
+RESULT_HOLD = {
+    "TEXT_WRITTEN": None,  # навсегда, пока задание не переоткрыто
+    "NO_CHANGE_NEEDED": None,
+    "SOURCE_UNAVAILABLE": dt.timedelta(days=1),
+    "PAGE_ABSENT": dt.timedelta(days=7),
+    "DELIVERY_UNSUPPORTED": dt.timedelta(days=7),
+    "IDENTITY_UNCLEAR": dt.timedelta(days=14),
+    "IDENTITY_REJECTED": dt.timedelta(days=14),
+    "SOURCES_MISSING": dt.timedelta(days=14),
+}
+#: Исходы, которые снимаются изменением реестра источников (новый путь фактов).
+REVIEW_ON_NEW_SOURCES = ("SOURCES_MISSING", "IDENTITY_UNCLEAR")
+#: Исход, который закрывает ПРОИЗВЕДЕНИЕ во всей сети: источник фактов —
+#: свойство произведения, а не карточки. Идентичность — свойство карточки.
+NETWORK_WIDE = ("SOURCES_MISSING",)
+SOURCE_POLICY = REPO_ROOT / "config" / "editorial-sources.json"
 
 
-def blocked_slugs(events_path: Path, now: dt.datetime) -> set[str]:
-    """Слаги с недавним отказом по источнику или идентичности — на всю сеть."""
+def _source_policy_changed_at(path: Path = SOURCE_POLICY) -> dt.datetime | None:
+    try:
+        return dt.datetime.fromtimestamp(path.stat().st_mtime, dt.timezone.utc)
+    except OSError:
+        return None
+
+
+def result_holds(
+    events_path: Path, now: dt.datetime, *, policy_changed_at: dt.datetime | None = None
+) -> tuple[set[str], set[str]]:
+    """(закрытые адреса, закрытые во всей сети слаги) по последнему исходу адреса."""
     url_of: dict[str, str] = {}
-    out: set[str] = set()
-    since = now - dt.timedelta(days=BLOCKED_DAYS)
+    last: dict[str, tuple[dt.datetime | None, str]] = {}
     try:
         lines = events_path.read_text(encoding="utf-8").splitlines()
     except OSError:
-        return out
+        return set(), set()
     for line in lines:
         try:
             e = json.loads(line)
@@ -2493,13 +2515,34 @@ def blocked_slugs(events_path: Path, now: dt.datetime) -> set[str]:
             continue
         if e.get("task_id") and e.get("canonical_url"):
             url_of[e["task_id"]] = e["canonical_url"]
-        if e.get("event") != "task_result" or e.get("outcome") not in BLOCKED_OUTCOMES:
+        if e.get("event") == "task_reopened" and e.get("task_id") in url_of:
+            last.pop(url_of[e["task_id"]].rstrip("/").lower(), None)
+        if e.get("event") != "task_result":
             continue
-        at = parse_iso(e.get("at"))
-        url = url_of.get(e.get("task_id")) or e.get("canonical_url") or ""
-        if at and at >= since and url:
-            out.add(url.rstrip("/").rsplit("/", 1)[-1])
-    return out
+        url = (url_of.get(e.get("task_id")) or e.get("canonical_url") or "").rstrip("/").lower()
+        if url:
+            last[url] = (parse_iso(e.get("at")), str(e.get("outcome") or ""))
+    policy = policy_changed_at if policy_changed_at is not None else _source_policy_changed_at()
+    urls: set[str] = set()
+    slugs: set[str] = set()
+    for url, (at, outcome) in last.items():
+        if outcome not in RESULT_HOLD:
+            continue
+        hold = RESULT_HOLD[outcome]
+        # Исход без времени держит адрес: истёкшим его считать не на чем.
+        if hold is not None and at is not None and now - at > hold:
+            continue
+        if outcome in REVIEW_ON_NEW_SOURCES and policy and at and at < policy:
+            continue
+        urls.add(url)
+        if outcome in NETWORK_WIDE:
+            slugs.add(url.rsplit("/", 1)[-1])
+    return urls, slugs
+
+
+def blocked_slugs(events_path: Path, now: dt.datetime) -> set[str]:
+    """Слаги, закрытые во всей сети (только «нет источника» у произведения)."""
+    return result_holds(events_path, now)[1]
 
 
 def _details_path(facts_dir: Path, sid: str) -> Path:

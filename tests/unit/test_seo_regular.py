@@ -1595,31 +1595,36 @@ def test_backfill_is_shared_between_domains_not_taken_by_higher_rated_films(tmp_
     assert sorted(c["site"] for c in found) == ["a.ru", "a.ru", "b.ru", "b.ru"]
 
 
-def test_blocked_slugs_cover_the_whole_network_for_two_weeks(tmp_path):
+def test_result_holds_separate_reasons(tmp_path):
+    """Причины разделены: источник — на произведение, идентичность — на карточку."""
     ev = tmp_path / "events.jsonl"
-    rows = [
-        {"event": "task_registered", "task_id": "a", "canonical_url": "https://x.ru/title/film-1"},
-        {
-            "event": "task_result",
-            "task_id": "a",
-            "outcome": "IDENTITY_UNCLEAR",
-            "at": "2026-10-09T19:35:00Z",
-        },
-        {"event": "task_registered", "task_id": "b", "canonical_url": "https://y.ru/title/ok"},
-        {
-            "event": "task_result",
-            "task_id": "b",
-            "outcome": "TEXT_WRITTEN",
-            "at": "2026-10-09T19:36:00Z",
-        },
-        {"event": "task_registered", "task_id": "c", "canonical_url": "https://y.ru/title/old/"},
-        {
-            "event": "task_result",
-            "task_id": "c",
-            "outcome": "SOURCES_MISSING",
-            "at": "2026-09-01T00:00:00Z",
-        },
-    ]
+    now = dt.datetime(2026, 10, 10, 9, 0, tzinfo=dt.timezone.utc)
+
+    def res(task, url, outcome, at):
+        return [
+            {"event": "task_registered", "task_id": task, "canonical_url": url},
+            {"event": "task_result", "task_id": task, "outcome": outcome, "at": at},
+        ]
+
+    rows = (
+        res("a", "https://x.ru/title/film-1", "IDENTITY_UNCLEAR", "2026-10-09T19:35:00Z")
+        + res("b", "https://x.ru/title/no-src", "SOURCES_MISSING", "2026-10-09T19:36:00Z")
+        + res("c", "https://y.ru/title/flaky/", "SOURCE_UNAVAILABLE", "2026-10-08T00:00:00Z")
+        + res("d", "https://y.ru/title/done", "TEXT_WRITTEN", "2026-09-01T00:00:00Z")
+        + res("e", "https://y.ru/title/old-src", "SOURCES_MISSING", "2026-09-01T00:00:00Z")
+    )
     ev.write_text("\n".join(json.dumps(r) for r in rows), encoding="utf-8")
-    got = regular.blocked_slugs(ev, dt.datetime(2026, 10, 10, 8, 0, tzinfo=dt.timezone.utc))
-    assert got == {"film-1"}
+    policy = dt.datetime(2026, 10, 1, tzinfo=dt.timezone.utc)
+    urls, slugs = regular.result_holds(ev, now, policy_changed_at=policy)
+    # идентичность закрывает только свою карточку, а не произведение в сети
+    assert "https://x.ru/title/film-1" in urls and "film-1" not in slugs
+    # нет источника — произведение во всей сети
+    assert slugs == {"no-src"}
+    # временная недоступность источника держит сутки, не две недели
+    assert "https://y.ru/title/flaky" not in urls
+    # написанный текст — навсегда; старый отказ по источнику истёк
+    assert "https://y.ru/title/done" in urls and "https://y.ru/title/old-src" not in urls
+    # новые источники (реестр изменён после отказа) открывают пересмотр
+    later = dt.datetime(2026, 10, 10, 8, 0, tzinfo=dt.timezone.utc)
+    urls2, slugs2 = regular.result_holds(ev, now, policy_changed_at=later)
+    assert slugs2 == set() and "https://x.ru/title/film-1" not in urls2

@@ -353,18 +353,11 @@ def gate(
         and i.get("status") == "NEEDS_UPDATE"
         and str(i.get("content_id", "")).replace("request-", "") not in leased
     ]
-    done: set[str] = set()
-    task_url: dict[str, str] = {}
-    if events.is_file():
-        for line in events.read_text(encoding="utf-8").splitlines():
-            try:
-                e = json.loads(line)
-            except ValueError:
-                continue
-            if e.get("canonical_url") and e.get("task_id"):
-                task_url[e["task_id"]] = _key(e["canonical_url"])
-            if e.get("event") == "task_result" and e.get("task_id") in task_url:
-                done.add(task_url[e["task_id"]])
+    from seo_operator import regular
+
+    # Закрытые адреса — по последнему исходу и его сроку (regular.RESULT_HOLD):
+    # «источник временно недоступен» больше не закрывает адрес навсегда.
+    done = {_key(u) for u in regular.result_holds(events, now)[0]}
     try:
         cands = json.loads(candidates.read_text(encoding="utf-8")).get("candidates") or []
     except (OSError, ValueError):
