@@ -181,6 +181,26 @@ from factory.lords.nova_publish import (  # noqa: E402
 МИНИМУМ_КАТАЛОГА = 52000
 
 
+def пиковая_память() -> dict:
+    """Пик своей памяти и памяти детей — в отчёт прогона.
+
+    Почему это поле появилось. 9 и 10 октября шаг публикации убивал OOM killer,
+    и на вопрос «сколько он съел» ответить было НЕЧЕМ: cgroup исчезает вместе с
+    завершением юнита, а журнал ядра доступен только root. Пик приходилось
+    измерять отдельными прогонами на стенде и переносить вывод на боевой — то
+    есть доказывать измерением не того прогона, о котором отчёт.
+
+    `ru_maxrss` ядро ведёт само за весь срок жизни процесса, так что это именно
+    пик, а не мгновенное значение, и стоит он один системный вызов.
+    """
+    import resource
+
+    сам = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024
+    дети = resource.getrusage(resource.RUSAGE_CHILDREN).ru_maxrss * 1024
+    return {"self_bytes": сам, "children_bytes": дети,
+            "self_gib": round(сам / 2**30, 3), "children_gib": round(дети / 2**30, 3)}
+
+
 @dataclass
 class Цели:
     каталог: Path
@@ -549,6 +569,7 @@ def _выполнить(*, снимок_путь: Path = СНИМОК, дета�
 
     if not применить:
         отчёт["note"] = ("без --apply production не изменяется")
+        отчёт["peak_rss"] = пиковая_память()
         отчёт["duration_sec"] = round(time.time() - начало, 2)
         отчёт["finished_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         return отчёт
@@ -606,6 +627,7 @@ def _выполнить(*, снимок_путь: Path = СНИМОК, дета�
         отчёт["production_mutations"] = len(записано)
         fcntl.flock(ф, fcntl.LOCK_UN)
 
+    отчёт["peak_rss"] = пиковая_память()
     отчёт["duration_sec"] = round(time.time() - начало, 2)
     отчёт["finished_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     return отчёт
