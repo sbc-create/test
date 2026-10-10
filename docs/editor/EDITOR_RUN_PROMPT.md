@@ -129,6 +129,11 @@ publish_material (occurrences_in_main_block) и наличие текста на
 4. при `accepted` — `publish_comment`. Публикация закрывает черновик:
    `handoff.state` становится `published` и несёт `comment_id`.
 
+Если `comment_drafts_pending` в `tools/list` нет — шаг пропускается молча и
+работа идёт как прежде: значит служба моста старше этой правки, и это блокер
+перезапуска, а не ошибка запуска. Проверять по `environment.code.process_started_at`
+и по `tools.count`/`fingerprint`, а не по памяти.
+
 Решение ставит ТОЛЬКО проверяющая сторона: роли `qwen` разрешены подготовка и
 передача, а `review_comment` и `publish_comment` ей отвергаются самой
 операцией. Подменять решение публикацией без него не нужно — порядок стоит
