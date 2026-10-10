@@ -103,9 +103,134 @@ def test_ключ_показывается_один_раз_и_только_пр�
         "значение печатается вне ветки создания ключа: повторный запуск "
         "показал бы его снова")
     assert "показывается один раз" in текст
-    assert "<значение>" in текст, "в подсказке местозаполнитель, а не ключ"
     assert "logger" not in текст and "tee" not in текст, "ключ не идёт в журнал"
+    # Подсказки после установки ссылаются на ФАЙЛ ключа, а не на значение:
+    # приёмка читает его сама, поэтому примеру с подставленным ключом там
+    # делать нечего.
+    подсказки = текст[текст.index('log "готово; проверить снаружи"'):]
+    assert "--key-file ${KEY_FILE}" in подсказки
+    assert "$(cat" not in подсказки, "значение ключа в подсказках не появляется"
 
 
 def test_сухой_прогон_ключ_не_печатает(сухой):
     assert "ЗНАЧЕНИЕ КЛЮЧА" not in сухой
+
+
+# --- разбор аргументов и поворот ключа --------------------------------------
+#
+# Поймано пробой 2026-10-10: разбор читал только `$1`, поэтому
+# `--dry-run --rotate-key` исполнялся как один `--dry-run` — поворот ключа
+# «проходил», ничего не сделав, а опечатка во втором аргументе не вызывала
+# отказа. Ключ уезжает в APK, то есть рано или поздно становится известен,
+# значит поворот обязан работать и быть отдельной операцией.
+
+
+def test_все_аргументы_разбираются_а_не_только_первый():
+    текст = СЦЕНАРИЙ.read_text(encoding="utf-8")
+    assert "while [ $# -gt 0 ]" in текст, (
+        "разбор по $1 молча отбрасывает остальные аргументы")
+
+
+def test_неизвестный_аргумент_отвергается():
+    р = subprocess.run(["bash", str(СЦЕНАРИЙ), "--dry-run", "--нет-такого"],
+                       capture_output=True, text=True, timeout=300)
+    assert р.returncode == 2, р.stdout + р.stderr
+    assert "неизвестный аргумент" in (р.stdout + р.stderr)
+
+
+def test_откат_и_поворот_вместе_не_принимаются():
+    р = subprocess.run(["bash", str(СЦЕНАРИЙ), "--rollback", "--rotate-key"],
+                       capture_output=True, text=True, timeout=300)
+    assert р.returncode == 2, р.stdout + р.stderr
+    assert "не имеют смысла" in (р.stdout + р.stderr)
+
+
+def test_поворот_сохраняет_прежний_ключ_перед_заменой():
+    текст = СЦЕНАРИЙ.read_text(encoding="utf-8")
+    ветка = текст[текст.index('"$rotate_key" = 1'):]
+    сохранение = ветка.index("before-rotate")
+    замена = текст.index("secrets.token_urlsafe")
+    assert текст.index("before-rotate") < замена, (
+        "прежний ключ обязан быть сохранён до замены: пока новая сборка "
+        "приложения не вышла, доступ возвращают старым значением")
+    assert сохранение >= 0
+
+
+def test_поворот_перезапускает_службу():
+    """Ключ читается при старте: без перезапуска поворот ничего не меняет."""
+    текст = СЦЕНАРИЙ.read_text(encoding="utf-8")
+    enable = текст.index('systemctl enable --now "$UNIT"')
+    restart = текст.index('systemctl restart "$UNIT"')
+    assert enable < restart, "перезапуск идёт после enable --now"
+    assert "новый ключ прочитан" in текст
+
+
+def test_поворот_предупреждает_о_прежних_сборках():
+    текст = СЦЕНАРИЙ.read_text(encoding="utf-8")
+    assert "прежний ключ больше не принимается" in текст
+
+
+# --- что установка делает с конфигурацией витрины ---------------------------
+
+
+КОНФИГ_ВИТРИНЫ = """upstream cell_animedia_01 { server 127.0.0.1:9121; }
+
+server {
+    listen 80;
+    server_name animedia.icu www.animedia.icu;
+
+    location ^~ /.well-known/acme-challenge/ { root /var/www/html; }
+    location / { proxy_pass http://cell_animedia_01; }
+    location = /healthz { proxy_pass http://cell_animedia_01/healthz; }
+}
+
+server {
+    listen 443 ssl;
+    server_name animedia.icu;
+
+    add_header X-Robots-Tag $cell_robots_animedia_01 always;
+    include /etc/nginx/snippets/webmaster-verification.conf;
+
+    location / { proxy_pass http://cell_animedia_01; }
+    location = /healthz { proxy_pass http://cell_animedia_01/healthz; }
+}
+"""
+
+
+def _вставить(текст: str, сниппет: str) -> str:
+    """Тот же код, что в блоке PYINS установщика."""
+    начало = текст.rfind("server {")
+    конец = текст.rindex("}")
+    блок = текст[начало:конец]
+    return текст[:начало] + блок + f"\n    include {сниппет};\n" + текст[конец:]
+
+
+def test_вставка_не_трогает_существующие_маршруты():
+    """Главный вопрос установки: витрина и её плеер обязаны работать как были.
+
+    Проверяется на копии той же раскладки, что у боевой конфигурации: ни одна
+    прежняя строка не исчезает, число location не меняется, скобки остаются
+    сбалансированы, добавляется РОВНО одна строка include.
+    """
+    стало = _вставить(КОНФИГ_ВИТРИНЫ, "/etc/nginx/snippets/app-read-api-animedia-01.conf")
+    было_строк = КОНФИГ_ВИТРИНЫ.splitlines()
+    assert all(с in стало.splitlines() for с in было_строк), "строка исчезла"
+    assert стало.count("location ") == КОНФИГ_ВИТРИНЫ.count("location ")
+    assert стало.count("{") == стало.count("}")
+    assert стало.count("app-read-api-animedia-01.conf") == 1
+
+
+def test_вставка_попадает_в_блок_HTTPS_а_не_в_HTTP():
+    """В HTTP-блоке API открывать нельзя: ключ ушёл бы по открытому каналу."""
+    стало = _вставить(КОНФИГ_ВИТРИНЫ, "/snip.conf")
+    assert стало.rindex("include /snip.conf") > стало.rindex("listen 443 ssl")
+    http_блок = стало[:стало.index("listen 443 ssl")]
+    assert "/snip.conf" not in http_блок
+
+
+def test_внешний_адрес_состояния_описан_в_контракте():
+    """Разработчик спрашивал /api/app/v1/healthz и получал 404 от витрины."""
+    текст = (КОРЕНЬ / "docs" / "APP_READ_API.md").read_text(encoding="utf-8")
+    assert "/api/app/v1/healthz" in текст
+    assert "location = /healthz" in текст, (
+        "в контракте должно быть сказано, почему корневой /healthz не наш")

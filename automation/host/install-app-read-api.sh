@@ -3,6 +3,7 @@
 #
 #   sudo bash automation/host/install-app-read-api.sh            # установить
 #   sudo bash automation/host/install-app-read-api.sh --rollback  # откатить
+#   sudo bash automation/host/install-app-read-api.sh --rotate-key # сменить ключ
 #        bash automation/host/install-app-read-api.sh --dry-run    # показать
 #
 # Что ставится
@@ -45,12 +46,23 @@ MARK="app-read-api-${SITE_ID}"
 
 dry_run=0
 rollback=0
-case "${1:-}" in
-  --dry-run) dry_run=1 ;;
-  --rollback) rollback=1 ;;
-  "") : ;;
-  *) printf 'неизвестный аргумент %s\n' "$1" >&2; exit 2 ;;
-esac
+rotate_key=0
+# Разбираются ВСЕ аргументы, а не только первый. Прежняя форма читала `$1` и
+# молча отбрасывала остальное: `--dry-run --rotate-key` выполнялся как один
+# `--dry-run`, то есть поворот ключа «проходил» ничего не сделав, а опечатка во
+# втором аргументе не вызывала отказа. Поймано пробой ветки поворота.
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --dry-run) dry_run=1; shift ;;
+    --rollback) rollback=1; shift ;;
+    --rotate-key) rotate_key=1; shift ;;
+    *) printf 'неизвестный аргумент %s\n' "$1" >&2; exit 2 ;;
+  esac
+done
+if [ "$rollback" = 1 ] && [ "$rotate_key" = 1 ]; then
+  printf '%s\n' "--rollback и --rotate-key вместе не имеют смысла: откат снимает службу" >&2
+  exit 2
+fi
 
 die() { printf '\033[31m[x]\033[0m %s\n' "$*" >&2; exit 2; }
 log() { printf '\033[1m==>\033[0m %s\n' "$*"; }
@@ -131,7 +143,18 @@ fi
 # печатается ОДИН раз и только при создании — в отчёты и журналы оно не идёт.
 log "ключ клиента"
 run install -d -m 0750 -o root -g "$RUN_USER" "$(dirname "$KEY_FILE")"
-if [ -s "$KEY_FILE" ]; then
+if [ -s "$KEY_FILE" ] && [ "$rotate_key" = 1 ]; then
+  # Поворот ключа — не роскошь, а следствие его природы: ключ уезжает в APK,
+  # то есть рано или поздно становится известен. Значит менять его надо уметь
+  # быстро и отдельно, а не переустановкой службы. Прежнее значение
+  # сохраняется рядом с отметкой времени: пока новая сборка приложения не
+  # вышла, старый ключ понадобится, чтобы вернуть доступ.
+  OLD_KEY="${KEY_FILE}.before-rotate.$(date -u +%Y%m%dT%H%M%SZ)"
+  run cp -p "$KEY_FILE" "$OLD_KEY"
+  run chmod 0640 "$OLD_KEY"
+  ok "прежний ключ сохранён: $OLD_KEY"
+fi
+if [ -s "$KEY_FILE" ] && [ "$rotate_key" != 1 ]; then
   ok "ключ уже существует: не перезаписываю"
 else
   if [ "$dry_run" = 1 ]; then
@@ -218,6 +241,16 @@ fi
 rm -f "$TMP_UNIT"
 run systemctl daemon-reload
 run systemctl enable --now "$UNIT"
+# `enable --now` уже запущенную службу не перезапускает, а ключ читается при
+# старте: без перезапуска поворот ключа ничего бы не изменил, и это выглядело
+# бы успехом.
+if [ "$rotate_key" = 1 ]; then
+  run systemctl restart "$UNIT"
+  ok "служба перезапущена: новый ключ прочитан"
+  printf '   ВНИМАНИЕ: прежний ключ больше не принимается. Сборка приложения с\n'
+  printf '   прежним ключом перестанет получать данные — обновите значение в\n'
+  printf '   секрете CI приложения и выпустите новую сборку.\n'
+fi
 
 if [ "$dry_run" = 0 ]; then
   for _ in 1 2 3 4 5 6 7 8 9 10 11 12; do
@@ -306,12 +339,23 @@ ok "nginx проверен и перезагружен"
 
 log "готово; проверить снаружи"
 cat <<HINT
-   1. состояние:   curl -s https://${DOMAIN}/api/app/v1/../../healthz   (служебный путь закрыт — см. п.2)
-   2. без ключа:   curl -s -o /dev/null -w '%{http_code}\\n' https://${DOMAIN}/api/app/v1/titles/01915145-2c16-7ba4-8353-42b73d657fdc
+   1. ВСЯ приёмка одной командой (состояние, отказы, список, поиск, карточка,
+      обложки, сезоны, серии, честное отсутствие прямого потока). Ключ она
+      читает из файла и нигде не печатает:
+        sudo python3 ${SRC_ROOT}/automation/local/app-api-acceptance.py \\
+            --base https://${DOMAIN} --key-file ${KEY_FILE}
+      ожидается «расхождений: 0» и код выхода 0
+   2. состояние вручную (ключ не нужен):
+        curl -s https://${DOMAIN}/api/app/v1/healthz
+      ожидается 200 и {"ready":true,…}. Если пришёл 308 на тот же путь со
+      слешем, а за ним 404 — маршрута нет, то есть установка не состоялась:
+      это перенаправление самой витрины, а не ответ службы
+   3. без ключа:   curl -s -o /dev/null -w '%{http_code}\\n' https://${DOMAIN}/api/app/v1/titles/01915145-2c16-7ba4-8353-42b73d657fdc
                    ожидается 401
-   3. с ключом:    curl -s -H "X-App-Key: <значение>" https://${DOMAIN}/api/app/v1/titles/01915145-2c16-7ba4-8353-42b73d657fdc
-                   ожидается 200 и JSON карточки
    4. страницы витрины обязаны отвечать как прежде:
                    curl -s -o /dev/null -w '%{http_code}\\n' https://${DOMAIN}/
+                   ожидается 200
+   Смена ключа клиента (он лежит в APK и секретом не является):
+     sudo bash $0 --rotate-key
    Откат только этих изменений: sudo bash $0 --rollback
 HINT
