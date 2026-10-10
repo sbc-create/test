@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sbc-create/test/schemas/editor-run.schema.json",
+  "title": "Editor Run Cadence",
+  "description": "Cadence of the background editor: pause after a finished batch, back-off after consecutive failed batches, resource thresholds checked before a model run.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "pause_after_batch_s",
+    "error_backoff",
+    "resources"
+  ],
+  "properties": {
+    "note": {
+      "type": "string"
+    },
+    "pause_after_batch_s": {
+      "type": "integer",
+      "minimum": 600,
+      "maximum": 86400
+    },
+    "error_backoff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "factor",
+        "max_s"
+      ],
+      "properties": {
+        "factor": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "max_s": {
+          "type": "integer",
+          "minimum": 600,
+          "maximum": 86400
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mem_available_min_mib",
+        "memory_full_avg60_max_pct",
+        "load1_per_cpu_max"
+      ],
+      "properties": {
+        "mem_available_min_mib": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "memory_full_avg60_max_pct": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "load1_per_cpu_max": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    }
+  }
+}

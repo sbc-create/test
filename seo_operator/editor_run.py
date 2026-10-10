@@ -18,8 +18,10 @@
 from __future__ import annotations
 
 import datetime as dt
+import fcntl
 import html
 import json
+import os
 import re
 import subprocess
 import urllib.request
@@ -246,7 +248,61 @@ def status(state: Path | None = None) -> dict:
             if r.get("trigger") != "systemd-timer"
         ],
         "confirmed": bool(complete),
+        "now": current_state(state),
     }
+
+
+MSK = dt.timezone(dt.timedelta(hours=3))
+
+
+def _lock_held(lock: Path) -> bool:
+    """Держит ли кто-то замок партии (flock в editor-run.sh). Только проба."""
+    try:
+        fh = open(lock, "a")  # noqa: SIM115 — замок проверяется и тут же отпускается
+    except OSError:
+        return False
+    try:
+        fcntl.flock(fh.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except OSError:
+        fh.close()
+        return True
+    fcntl.flock(fh.fileno(), fcntl.LOCK_UN)
+    fh.close()
+    return False
+
+
+def current_state(state: Path | None = None, now: dt.datetime | None = None) -> dict:
+    """Почему редактор сейчас работает или ждёт — для editor-run-status.
+
+    Без пересчёта кандидатов и без сети: идёт партия (замок занят) — или
+    последнее решение шлюза из журнала и ближайшее допустимое время запуска.
+    """
+    state = state or STATE
+    now = now or dt.datetime.now(dt.timezone.utc)
+    conf = cadence()
+    next_at, pause, why = _pause_after(_runs(state), conf)
+    last_gate = None
+    try:
+        lines = (state / "gate.jsonl").read_text(encoding="utf-8").splitlines()
+        last_gate = json.loads(lines[-1]) if lines else None
+    except (OSError, ValueError):
+        pass
+    out = {
+        "batch_running": _lock_held(state / "run.lock"),
+        "pause_after_batch_min": conf["pause_after_batch_s"] // 60,
+        "pause_rule": why or "партий ещё не было",
+        "earliest_next_msk": (
+            next_at.astimezone(MSK).strftime("%Y-%m-%d %H:%M") if next_at else None
+        ),
+        "last_gate": last_gate,
+    }
+    if out["batch_running"]:
+        out["state"] = "running"
+    elif next_at and now < next_at:
+        out["state"] = "backoff" if why.startswith("сбоев") else "paused"
+    else:
+        out["state"] = (last_gate or {}).get("gate", {}).get("state") or "unknown"
+    return out
 
 
 REGISTRY = Path("/var/lib/seo-content-operator/registry.json")
@@ -286,8 +342,120 @@ EDITOR_DOMAINS = (
     "yummyani7.info",
     "yummyani.biz",
 )
-#: Модель запускается не чаще раза в этот интервал (почасовой цикл).
-MIN_INTERVAL_S = 55 * 60
+#: Режим запусков (config/editor-run.json). Владелец 2026-10-10: круглосуточно,
+#: пауза 20 минут ПОСЛЕ ЗАВЕРШЕНИЯ партии вместо почасового цикла; таймер,
+#: flock и единственный исполнитель прежние. Значения по умолчанию — те же,
+#: что в файле: без файла режим не меняется молча.
+CADENCE_FILE = Path(__file__).resolve().parents[1] / "config" / "editor-run.json"
+CADENCE_DEFAULTS = {
+    "pause_after_batch_s": 1200,
+    # Повторяющиеся сбои: пауза растёт base·factor^(n-1), не больше max.
+    "error_backoff": {"factor": 2, "max_s": 14400},
+    # Обоснование порогов — docs/editor/BACKGROUND_EDITOR.md («Режим запусков»):
+    # служба редактора ограничена MemoryMax=2G; партия не начинается, если
+    # столько памяти нет, если ядро уже стоит в ожидании памяти (PSI full) или
+    # процессор перегружен.
+    "resources": {
+        "mem_available_min_mib": 2048,
+        "memory_full_avg60_max_pct": 5.0,
+        "load1_per_cpu_max": 1.0,
+    },
+}
+#: Исходы партии, которые считаются сбоем для нарастающей паузы. Честное «задач
+#: нет» и полный запуск сбоем не являются.
+ERROR_VERDICTS = ("INCOMPLETE",)
+
+
+def cadence(path: Path | None = None) -> dict:
+    try:
+        raw = json.loads((path or CADENCE_FILE).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        raw = {}
+    out = json.loads(json.dumps(CADENCE_DEFAULTS))
+    for key, value in raw.items():
+        if isinstance(value, dict) and isinstance(out.get(key), dict):
+            out[key].update(value)
+        elif key in out:
+            out[key] = value
+    return out
+
+
+def _proc(path: str) -> str:
+    try:
+        return Path(path).read_text(encoding="utf-8")
+    except OSError:
+        return ""
+
+
+def resources(limits: dict, *, reader=_proc) -> dict:
+    """Хватает ли ресурсов на партию. Чтение /proc, без внешних команд.
+
+    Недоступный показатель не блокирует запуск (его нет — нечего сравнивать), но
+    называется в ответе.
+    """
+    out: dict = {"ok": True, "problems": [], "measured": {}}
+    mem = re.search(r"^MemAvailable:\s+(\d+)\s+kB", reader("/proc/meminfo"), re.M)
+    if mem:
+        mib = int(mem.group(1)) // 1024
+        out["measured"]["mem_available_mib"] = mib
+        if mib < limits["mem_available_min_mib"]:
+            out["problems"].append(
+                f"памяти доступно {mib} МиБ < {limits['mem_available_min_mib']} МиБ"
+            )
+    psi = re.search(r"^full avg10=[\d.]+ avg60=([\d.]+)", reader("/proc/pressure/memory"), re.M)
+    if psi:
+        full = float(psi.group(1))
+        out["measured"]["memory_full_avg60_pct"] = full
+        if full > limits["memory_full_avg60_max_pct"]:
+            out["problems"].append(
+                f"давление памяти full avg60 {full}% > {limits['memory_full_avg60_max_pct']}%"
+            )
+    load = reader("/proc/loadavg").split()
+    if load:
+        per_cpu = float(load[0]) / max(1, os.cpu_count() or 1)
+        out["measured"]["load1_per_cpu"] = round(per_cpu, 2)
+        if per_cpu > limits["load1_per_cpu_max"]:
+            out["problems"].append(
+                f"загрузка {per_cpu:.2f} на ядро > {limits['load1_per_cpu_max']}"
+            )
+    out["ok"] = not out["problems"]
+    return out
+
+
+def _runs(state: Path) -> list[dict]:
+    out = []
+    log = state / "runs.jsonl"
+    if log.is_file():
+        for line in log.read_text(encoding="utf-8").splitlines():
+            try:
+                out.append(json.loads(line))
+            except ValueError:
+                continue
+    return out
+
+
+def _pause_after(runs: list[dict], conf: dict) -> tuple[dt.datetime | None, int, str]:
+    """(время, раньше которого не запускать; длина паузы, с; причина)."""
+    started = [r for r in runs if r.get("model_started")]
+    if not started:
+        return None, 0, ""
+    last = started[-1]
+    finished = last.get("finished_at") or last.get("started_at")
+    end = dt.datetime.fromisoformat(str(finished).replace("Z", "+00:00"))
+    ошибок = 0
+    for r in reversed(started):
+        if r.get("verdict") in ERROR_VERDICTS:
+            ошибок += 1
+        else:
+            break
+    base = int(conf["pause_after_batch_s"])
+    if ошибок:
+        eb = conf["error_backoff"]
+        pause = min(int(base * eb["factor"] ** (ошибок - 1)), int(eb["max_s"]))
+        why = f"сбоев подряд: {ошибок}, пауза увеличена до {pause // 60} мин"
+    else:
+        pause, why = base, f"пауза {base // 60} мин после завершения партии"
+    return end + dt.timedelta(seconds=pause), pause, why
 
 
 def _key(url: str) -> str:
@@ -304,32 +472,62 @@ def gate(
     state: Path = STATE,
     refresh: bool = False,
     recent: dict[str, int] | None = None,
+    conf: dict | None = None,
+    resources_fn=None,
 ) -> dict:
-    """Нужен ли запуск модели. Только чтение файлов: ни модели, ни сети.
+    """Нужен ли запуск модели. Файлы и /proc: ни модели, ни внешних команд.
 
-    Запуск нужен, если (1) с начала прошлого запуска модели прошло не меньше
-    55 минут и (2) есть работа: свободное задание Animedia на текст в очереди
-    или кандидат, по адресу которого ещё не было результата.
+    Порядок: (1) пауза после завершения прошлой партии (20 мин; при сбоях
+    подряд — нарастающая); (2) ресурсы; (3) работа: свободное задание очереди
+    на домене цикла или кандидат без результата. Пропущенные за время простоя
+    партии не догоняются: следующая начинается одна, по этому же правилу.
+    Каждый ответ несёт `state`: paused | backoff | resources | no_work | run.
     """
     now = now or dt.datetime.now(dt.timezone.utc)
-    last = None
-    log = state / "runs.jsonl"
-    if log.is_file():
-        for line in log.read_text(encoding="utf-8").splitlines():
-            try:
-                r = json.loads(line)
-            except ValueError:
-                continue
-            if r.get("model_started"):
-                last = r.get("started_at")
-    if last:
-        started = dt.datetime.fromisoformat(last.replace("Z", "+00:00"))
-        wait = MIN_INTERVAL_S - (now - started).total_seconds()
-        if wait > 0:
-            return {
-                "run": False,
-                "reason": f"почасовой цикл: до следующего запуска {int(wait // 60)} мин",
-            }
+    conf = conf or cadence()
+    next_at, _pause, why = _pause_after(_runs(state), conf)
+    if next_at and now < next_at:
+        return {
+            "run": False,
+            "state": "backoff" if why.startswith("сбоев") else "paused",
+            "reason": f"{why}: до {next_at.strftime('%Y-%m-%dT%H:%M:%SZ')}",
+            "next_at": next_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        }
+    res = (resources_fn or (lambda: resources(conf["resources"])))()
+    if not res["ok"]:
+        return {
+            "run": False,
+            "state": "resources",
+            "reason": "недостаточно ресурсов: " + "; ".join(res["problems"]),
+            "resources": res["measured"],
+        }
+    решение = _work(
+        now,
+        registry=registry,
+        leases=leases,
+        events=events,
+        candidates=candidates,
+        state=state,
+        refresh=refresh,
+        recent=recent,
+    )
+    решение["state"] = "run" if решение["run"] else "no_work"
+    решение["resources"] = res["measured"]
+    return решение
+
+
+def _work(
+    now: dt.datetime,
+    *,
+    registry: Path,
+    leases: Path,
+    events: Path,
+    candidates: Path,
+    state: Path,
+    refresh: bool,
+    recent: dict[str, int] | None,
+) -> dict:
+    """Есть ли работа: свободные задания очереди и кандидаты без результата."""
     leased: set[str] = set()
     try:
         raw = json.loads(leases.read_text(encoding="utf-8"))
@@ -367,7 +565,7 @@ def gate(
         # Пересчёт и при открытых заданиях очереди: 2026-10-09 после 17:35 в
         # очереди Yummy было 245 заданий, и исчерпанный список кандидатов не
         # обновлялся — запуски шли с пустым next.json по остальным доменам.
-        return gate(
+        return _work(
             now,
             registry=registry,
             leases=leases,
@@ -395,7 +593,7 @@ def gate(
             "next": fresh,
         }
     if refresh and _refresh_candidates(candidates, now):
-        return gate(
+        return _work(
             now,
             registry=registry,
             leases=leases,

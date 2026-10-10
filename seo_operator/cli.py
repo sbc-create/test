@@ -233,7 +233,16 @@ def main(argv=None) -> int:
     if args.command == "editor-gate":
         from seo_operator import editor_run
 
-        decision = editor_run.gate(refresh=True)
+        # Коды: 10 — запускать, 0 — штатный отказ (пауза, ресурсы, нет работы),
+        # 3 — НЕИСПРАВНОСТЬ шлюза. Прежде исключение давало 1, и editor-run.sh
+        # превращал его в штатный выход 0 — поломка была неотличима от паузы.
+        try:
+            decision = editor_run.gate(refresh=True)
+        except Exception as exc:  # noqa: BLE001 — любая поломка шлюза называется
+            print(json.dumps({"run": False, "state": "error",
+                              "reason": f"шлюз неисправен: {type(exc).__name__}: {exc}"[:400]},
+                             ensure_ascii=False))
+            return 3
         if decision["run"]:
             # Редактор идёт по этому списку, а не по сырому файлу кандидатов:
             # 2026-10-08 17:05 он взял первый кандидат, уже закрытый им же, и

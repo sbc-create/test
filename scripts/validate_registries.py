@@ -39,6 +39,7 @@ MAPPING = {
     "seo-changes.json": "seo-changes.schema.json",
     # Блокеры редактора, не выводимые из данных: без доказательства не принимаются.
     "editor-coverage-blockers.json": "editor-coverage-blockers.schema.json",
+    "editor-run.json": "editor-run.schema.json",
 }
 
 # Производные артефакты: файл порождается из другого источника и в некоторых

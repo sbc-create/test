@@ -8,7 +8,7 @@
 # → проверка ПО СЛЕДАМ (seo_operator.editor_run: очередь, история публикаций,
 # публичная страница) → запись run.json. Код выхода — по проверке, а не по
 # самоотчёту модели: 0 — полный запуск или честное «задач нет», 2 — неполный,
-# 75 — занято другим запуском.
+# 75 — занято другим запуском, 70 — шлюз editor-gate неисправен (не штатный отказ).
 set -uo pipefail
 
 REPO=/home/claude/wt-portable-site-cell-01
@@ -26,15 +26,24 @@ if ! flock -n 9; then
   exit 75
 fi
 
-# Лёгкая проверка без модели: работа есть и почасовой интервал выдержан?
-# Таймер зовёт обёртку каждые 5 минут, модель запускается только по «да».
+# Лёгкая проверка без модели: пауза после прошлой партии выдержана (20 мин,
+# config/editor-run.json), ресурсов хватает, работа есть? Таймер зовёт обёртку
+# каждые 5 минут, модель запускается только по «да» (код 10). Код 0 — штатный
+# отказ, причина в gate.jsonl; любой другой код — неисправность шлюза: она
+# пишется в журнал с state=error и завершает юнит кодом 70, а не тихим 0.
 if [ "${EDITOR_FORCE:-0}" != "1" ]; then
   GATE="$(python3 -m seo_operator.cli editor-gate)"
   GATE_RC=$?
-  printf '{"at": "%s", "trigger": "%s", "gate": %s}\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$TRIGGER" "${GATE:-null}" >> "$STATE/gate.jsonl"
-  if [ "$GATE_RC" -ne 10 ]; then
-    exit 0
-  fi
+  case "$GATE" in
+    \{*) ;;
+    *) GATE="{\"run\": false, \"state\": \"error\", \"reason\": \"шлюз не ответил JSON, код $GATE_RC\"}" ;;
+  esac
+  printf '{"at": "%s", "trigger": "%s", "gate_rc": %s, "gate": %s}\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$TRIGGER" "$GATE_RC" "$GATE" >> "$STATE/gate.jsonl"
+  case "$GATE_RC" in
+    10) ;;
+    0) exit 0 ;;
+    *) echo "editor-run: шлюз неисправен (код $GATE_RC)" >&2; exit 70 ;;
+  esac
 fi
 
 RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)"

@@ -163,13 +163,163 @@ def _gate_files(tmp_path, *, last_start=None, task_leased=False, candidate_done=
         json.dumps({"candidates": [{"url": "https://animedia.space/title/x/"}]}), encoding="utf-8"
     )
     return dict(
-        registry=registry, leases=leases, events=events, candidates=cands, state=state, recent={}
+        registry=registry,
+        leases=leases,
+        events=events,
+        candidates=cands,
+        state=state,
+        recent={},
+        # Шлюз читает /proc; в тесте ресурсы заданы, чтобы итог не зависел от
+        # нагрузки машины, на которой идёт прогон.
+        conf=editor_run.cadence(tmp_path / "нет-файла.json"),
+        resources_fn=lambda: {"ok": True, "problems": [], "measured": {}},
     )
 
 
-def test_gate_runs_the_model_at_most_hourly(tmp_path):
-    f = _gate_files(tmp_path, last_start="2026-10-08T14:20:00Z")
-    assert editor_run.gate(NOW, **f)["run"] is False  # 40 минут назад
+def _runs_log(f, *rows):
+    (f["state"] / "runs.jsonl").write_text(
+        "\n".join(json.dumps({"model_started": True, **r}) for r in rows), encoding="utf-8"
+    )
+
+
+def test_gate_waits_twenty_minutes_after_the_batch_finished(tmp_path):
+    """Владелец 2026-10-10: пауза отсчитывается от ЗАВЕРШЕНИЯ партии, не от начала."""
+    f = _gate_files(tmp_path)
+    _runs_log(f, {"started_at": "2026-10-08T14:20:00Z", "finished_at": "2026-10-08T14:45:00Z",
+                  "verdict": "COMPLETE"})
+    decision = editor_run.gate(NOW, **f)  # 15 минут после завершения
+    assert decision["run"] is False and decision["state"] == "paused", decision
+    assert decision["next_at"] == "2026-10-08T15:05:00Z"
+    later = editor_run.gate(NOW + dt.timedelta(minutes=5), **f)
+    assert later["run"] is True and later["state"] == "run", later
+
+
+def test_gate_without_finished_at_counts_from_start(tmp_path):
+    f = _gate_files(tmp_path, last_start="2026-10-08T14:50:00Z")
+    assert editor_run.gate(NOW, **f)["state"] == "paused"
+
+
+def test_missed_batches_are_not_caught_up(tmp_path):
+    """После долгого простоя — одна партия по общему правилу, не очередь пропущенных."""
+    f = _gate_files(tmp_path)
+    _runs_log(f, {"started_at": "2026-10-08T03:00:00Z", "finished_at": "2026-10-08T03:15:00Z",
+                  "verdict": "COMPLETE"})
+    assert editor_run.gate(NOW, **f)["run"] is True
+    _runs_log(f, {"started_at": "2026-10-08T03:00:00Z", "finished_at": "2026-10-08T03:15:00Z",
+                  "verdict": "COMPLETE"},
+              {"started_at": "2026-10-08T15:00:00Z", "finished_at": "2026-10-08T15:12:00Z",
+               "verdict": "COMPLETE"})
+    nxt = editor_run.gate(NOW + dt.timedelta(minutes=13), **f)
+    assert nxt["state"] == "paused" and nxt["next_at"] == "2026-10-08T15:32:00Z"
+
+
+def test_consecutive_failures_grow_the_pause_up_to_the_cap(tmp_path):
+    f = _gate_files(tmp_path)
+    end = "2026-10-08T14:30:00Z"
+    fail = {"started_at": "2026-10-08T14:10:00Z", "finished_at": end, "verdict": "INCOMPLETE"}
+    ok = {"started_at": "2026-10-08T13:00:00Z", "finished_at": "2026-10-08T13:20:00Z",
+          "verdict": "NO_PUBLICATION"}
+    _runs_log(f, ok, fail)  # один сбой — обычные 20 минут
+    assert editor_run.gate(NOW, **f)["run"] is True
+    _runs_log(f, ok, fail, fail)  # два подряд — 40 минут
+    d = editor_run.gate(NOW, **f)
+    assert d["state"] == "backoff" and d["next_at"] == "2026-10-08T15:10:00Z", d
+    _runs_log(f, *([fail] * 10))  # потолок 4 часа
+    assert editor_run.gate(NOW, **f)["next_at"] == "2026-10-08T18:30:00Z"
+    _runs_log(f, *([fail] * 10), {**ok, "started_at": "2026-10-08T14:20:00Z",
+                                  "finished_at": "2026-10-08T14:30:00Z"})
+    assert editor_run.gate(NOW, **f)["run"] is True  # успех сбрасывает счёт
+
+
+def test_gate_defers_on_resources_and_names_the_reason(tmp_path):
+    f = _gate_files(tmp_path)
+    f["resources_fn"] = lambda: editor_run.resources(
+        editor_run.CADENCE_DEFAULTS["resources"],
+        reader={
+            "/proc/meminfo": "MemTotal: 31000000 kB\nMemAvailable:  1048576 kB\n",
+            "/proc/pressure/memory": "some avg10=1 avg60=2 avg300=1 total=1\n"
+            "full avg10=0.5 avg60=7.25 avg300=1 total=1\n",
+            "/proc/loadavg": "0.5 0.5 0.5 1/100 1\n",
+        }.get,
+    )
+    d = editor_run.gate(NOW, **f)
+    assert d["run"] is False and d["state"] == "resources", d
+    assert "1024 МиБ" in d["reason"] and "7.25" in d["reason"], d
+    assert d["resources"]["mem_available_mib"] == 1024
+
+
+def test_resources_pass_when_measurements_are_within_limits():
+    r = editor_run.resources(
+        editor_run.CADENCE_DEFAULTS["resources"],
+        reader={"/proc/meminfo": "MemAvailable:  4194304 kB\n",
+                "/proc/pressure/memory": "full avg10=0.1 avg60=0.15 avg300=0.1 total=1\n",
+                "/proc/loadavg": "0.1 0.1 0.1 1/1 1\n"}.get,
+    )
+    assert r["ok"] and r["measured"]["mem_available_mib"] == 4096, r
+
+
+def test_cadence_file_overrides_defaults(tmp_path):
+    p = tmp_path / "editor-run.json"
+    p.write_text(json.dumps({"pause_after_batch_s": 1800, "resources": {"load1_per_cpu_max": 2}}))
+    c = editor_run.cadence(p)
+    assert c["pause_after_batch_s"] == 1800 and c["resources"]["load1_per_cpu_max"] == 2
+    assert c["resources"]["mem_available_min_mib"] == 2048
+
+
+def test_committed_cadence_is_twenty_minutes():
+    assert editor_run.cadence()["pause_after_batch_s"] == 1200
+
+
+def test_current_state_reports_pause_and_next_time_in_msk(tmp_path):
+    state = tmp_path / "runs"
+    state.mkdir()
+    (state / "runs.jsonl").write_text(json.dumps(
+        {"model_started": True, "started_at": "2026-10-08T14:20:00Z",
+         "finished_at": "2026-10-08T14:45:00Z", "verdict": "COMPLETE"}), encoding="utf-8")
+    (state / "gate.jsonl").write_text(json.dumps(
+        {"at": "2026-10-08T14:55:00Z", "gate_rc": 0,
+         "gate": {"run": False, "state": "paused", "reason": "пауза"}}), encoding="utf-8")
+    s = editor_run.current_state(state, NOW)
+    assert s["state"] == "paused" and s["batch_running"] is False
+    assert s["earliest_next_msk"] == "2026-10-08 18:05"
+    assert s["last_gate"]["gate"]["state"] == "paused"
+
+
+def test_current_state_sees_a_running_batch(tmp_path):
+    import fcntl
+
+    state = tmp_path / "runs"
+    state.mkdir()
+    with open(state / "run.lock", "w") as fh:
+        fcntl.flock(fh.fileno(), fcntl.LOCK_EX)
+        assert editor_run.current_state(state, NOW)["state"] == "running"
+    assert editor_run.current_state(state, NOW)["state"] != "running"
+
+
+def test_gate_failure_is_not_a_regular_refusal(monkeypatch, capsys):
+    """Поломка шлюза — код 3 и state=error; штатный отказ — 0, запуск — 10."""
+    from seo_operator import cli
+
+    def broken(**_kw):
+        raise ValueError("registry.json: Expecting value")
+
+    monkeypatch.setattr(editor_run, "gate", broken)
+    assert cli.main(["editor-gate"]) == 3
+    out = json.loads(capsys.readouterr().out)
+    assert out["state"] == "error" and "ValueError" in out["reason"]
+    monkeypatch.setattr(editor_run, "gate", lambda **_kw: {"run": False, "state": "paused",
+                                                          "reason": "пауза"})
+    assert cli.main(["editor-gate"]) == 0
+
+
+def test_wrapper_maps_gate_codes():
+    """editor-run.sh: 10 — запуск, 0 — штатный выход, иное — exit 70, не тихий 0."""
+    import pathlib
+
+    sh = (pathlib.Path(editor_run.__file__).resolve().parents[1]
+          / "automation" / "host" / "editor" / "editor-run.sh").read_text(encoding="utf-8")
+    assert "10) ;;" in sh and "0) exit 0 ;;" in sh and "exit 70" in sh
+    assert '-ne 10 ]; then\n    exit 0' not in sh
 
 
 def test_gate_finds_a_free_animedia_task(tmp_path):
