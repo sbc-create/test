@@ -1185,3 +1185,118 @@ sudo systemctl restart site-factory-mcp.service && systemctl is-active site-fact
 правка станет ненужной. Проверка сегодняшнего прогона (03:30 UTC) записана
 отдельным пунктом ночи.
 
+## 18. [КОММЕНТАРИИ И РЕЦЕНЗИИ] ночь 9→10 октября: итог по фактам
+
+Считано по НАШИМ журналам публикаций и сверено с витринами
+(`automation/local/comment-audit.py`, 67 карточек прочитано):
+
+| домен | живых комментариев | из них за эту ночь |
+| --- | --- | --- |
+| yummyani.site | 18 | 18 |
+| yummyani.org | 16 | 12 |
+| yummyani7.site | 14 | 14 |
+| yummyani7.info | 11 | 11 |
+| yummyani.biz | 8 | 8 |
+| **всего** | **67** | **63** |
+
+Публикаций за всё время — 70, снято 3 (первая ошибочная запись о Спике и два
+вторых комментария под одной карточкой). Карточек с двумя и более нашими
+комментариями — НОЛЬ: сверка это проверяет чтением самих витрин, а не
+журналов.
+
+Рецензий — ноль, и это осознанно: рецензия требует просмотра, изображать
+просмотр запрещено, а пересказ синопсиса рецензией не является. Вместо них —
+две ознакомительные заметки, обе опубликованы типом `review` и отдаются по
+`/reviews/<slug>` (проверено: `/reviews/zametka-rashititel-grobnits` и
+`/reviews/zametka-vo-vseoruzhii-sila-artefaktov` отвечают 200, а `/posts/…` —
+404, то есть раздел выбран по типу, а не угадан).
+
+### Все публикации этой ночи
+
+| домен | карточка | id записи | время UTC |
+| --- | --- | --- | --- |
+| yummyani.biz | geroy-merzavets | `cmv1luyh20009oh01bhmyp1wn` | 23:37:27 |
+| yummyani.biz | istinnye-chudotvornye-rytsari | `cmv1mydcb000doh01w8haujxz` | 00:08:06 |
+| yummyani.biz | nesmotrya-na-to-chto-ya-ochen-robkaya-blagorodnaya-devushka-ya-prinyala-pari-ot | `cmv1ju7650005oh01yvbnnubw` | 22:40:53 |
+| yummyani.biz | silneyshaya-vedma-v-mire-startovala | `cmv1ju36r0003oh018zl81vz4` | 22:40:47 |
+| yummyani.biz | silneyshiy-predok-kultivatsii-tela-v-istorii | `cmv1n1x0b000foh01hz2qrt4q` | 00:10:51 |
+| yummyani.biz | sudba-strannaya-poddelka | `cmv1lre400007oh01yzs09n6q` | 23:34:41 |
+| yummyani.biz | ya-vstrechayus-s-temnym-prizyvatelem | `cmv1h431g0001oh01wx3pdlie` | 21:24:35 |
+| yummyani.biz | yami-shibai-yaponskie-rasskazy-o-privideniyah-16 | `cmv1lyj6w000boh016aloo5sl` | 23:40:14 |
+| yummyani.org | anime-1990 | `cmv1db35t0009qc01ycsmfmv8` | 19:38:03 |
+| yummyani.org | blich-tysyacheletnyaya-krovavaya-voyna-bedstvie | `cmv1khyg0000zqc013dokcqne` | 22:59:21 |
+| yummyani.org | krasavitsa-voin-seylor-mun-super-es-pervaya-lyubov-ami | `cmv1l8jux0013qc01zi7gmik4` | 23:20:02 |
+| yummyani.org | magicheskiy-issledovatel | `cmv1jox7x000rqc016tbzmt7y` | 22:36:56 |
+| yummyani.org | mir-otome-igr-eto-tyazhelyy-mir-dlya-mobov-2 | `cmv1jq1pl000tqc01ah7y3pof` | 22:37:39 |
+| yummyani.org | protivostoyanie-svyatogo-bitva-prishestviya-bogov | `cmv1dcxa0000fqc014jn5oc3a` | 19:39:29 |
+| yummyani.org | protivostoyanie-svyatogo-voyna-za-istreblenie-nebozhiteley | `cmv1jjxu8000pqc01z48kddot` | 22:32:54 |
+| yummyani.org | rashititel-grobnits | `cmv1hi10v000lqc011et4p07c` | 21:35:26 |
+| yummyani.org | sosed-po-kvartire | `cmv1h3w24000hqc01980n5pwt` | 21:24:26 |
+| yummyani.org | syunmao-li | `cmv1h3yza000jqc01dkkp5avs` | 21:24:30 |
+| yummyani.org | tabakoshka | `cmv1kkvvx0011qc010do9timb` | 23:01:38 |
+| yummyani.org | vo-vseoruzhii-sila-artefaktov | `cmv1jqqho000vqc01n0host9l` | 22:38:11 |
+| yummyani.site | armiya-printsessy-svadebnaya-bitva | `cmv1lj9h6000vo50113jex3yu` | 23:28:22 |
+| yummyani.site | dara-iz-reyvy | `cmv1jrj2c000ho501au6aiyic` | 22:38:48 |
+| yummyani.site | horoshenkoe-lekarstvo-zvezdnyy-detektiv | `cmv1mc6n1000zo501lp2hoing` | 23:50:51 |
+| yummyani.site | izgnannyy-chiter-charodey-naslazhdaetsya-bezzabotnoy-vtoroy-zhiznyu-ya-mogu | `cmv1gnaaf0003o501vcdu6bho` | 21:11:31 |
+| yummyani.site | kapriznyy-robot | `cmv1lfp40000to5015q95gk1i` | 23:25:36 |
+| yummyani.site | koy-ken-kruzhok-v-poiskah-nastoyaschey-lyubvi | `cmv1k2sdi000lo5016qz9t78b` | 22:47:34 |
+| yummyani.site | ne-slishkom-li-ty-sladkaya-bog-soli-sato | `cmv1jj4as000do5015y46h7no` | 22:32:16 |
+| yummyani.site | neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar | `cmv1gn7gh0001o501y0h7voko` | 21:11:27 |
+| yummyani.site | po-tu-storonu-beskraynego-kosmosa | `cmv1mft4h0011o5012qittlie` | 23:53:40 |
+| yummyani.site | prizrak-v-dospehah-sindrom-odinochki-dni-tatikom | `cmv1judiw000jo501zrnkjqrr` | 22:41:01 |
+| yummyani.site | put-vybora-2026 | `cmv1mjdyx0013o501z7gi2eq3` | 23:56:28 |
+| yummyani.site | taynaya-bitva-za-prestol-silneyshego-printsa-duraleya | `cmv1h2r480009o5014h6dpw56` | 21:23:33 |
+| yummyani.site | tokiyskaya-universitetskaya-istoriya | `cmv1kwhx2000no501vqpoolzm` | 23:10:39 |
+| yummyani.site | v-gorah-u-santy-elfiyskiy-les | `cmv1lmsaa000xo501poakoelh` | 23:31:06 |
+| yummyani.site | vechnaya-volya-4 | `cmv1jj8vv000fo501pso149o4` | 22:32:22 |
+| yummyani.site | vernyy-gindziro | `cmv1lc3r3000ro5016e9lg4jq` | 23:22:49 |
+| yummyani.site | vo-vseoruzhii-sila-artefaktov | `cmv1jj0wi000bo501ddxx1roq` | 22:32:11 |
+| yummyani.site | ya-ochnulsya-buduchi-pilotom-silneyshego-kosmicheskogo-korablya-a-potomu-reshil | `cmv1h2jit0005o501ntvab8ct` | 21:23:23 |
+| yummyani7.info | bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnitsy | `cmv1h3ppl0001ur01275owldd` | 21:24:17 |
+| yummyani7.info | dlya-tebya-vo-vsem-tsvetu | `cmv1m2381000hur010ctoj8ce` | 23:43:00 |
+| yummyani7.info | kakoy-skandal-2 | `cmv1m9ae2000lur01fpdhvjqv` | 23:48:36 |
+| yummyani7.info | novyy-prints-tennisa-yunosheskiy-chempionat-mira-finalnyy-match-po-otboru | `cmv1ltof2000fur01dtyjxotm` | 23:36:28 |
+| yummyani7.info | o-moem-pererozhdenii-v-mech-2 | `cmv1ktln2000bur01nebormpp` | 23:08:24 |
+| yummyani7.info | proekt-vospitaniya-devochek-volshebnits-perezagruzka | `cmv1h3sp70003ur01b0el6pd6` | 21:24:21 |
+| yummyani7.info | ty-i-ya-polnye-protivopolozhnosti | `cmv1m5q5n000jur01v1saskkq` | 23:45:49 |
+| yummyani7.info | voennaya-hronika-milenkoy-devochki-2-ona | `cmv1lsqgt000dur014bxx43el` | 23:35:43 |
+| yummyani7.info | vrata-shteyna-nayti-nedostayuschee-zveno-delenie-na-nol | `cmv1k9isx0007ur0185q7c3yi` | 22:52:47 |
+| yummyani7.info | ya-perevoplotilsya-v-goblina-voprosy-est | `cmv1jjusr0005ur01idz3ggdy` | 22:32:50 |
+| yummyani7.info | zimnie-dni | `cmv1kbrpg0009ur01mup9n4ev` | 22:54:32 |
+| yummyani7.site | bagrovye-oskolki-ova | `cmv1ko0k2000fp401hv19bv6i` | 23:04:04 |
+| yummyani7.site | bessmertnyy-kultivator-protiv-supersposobnostey | `cmv1nc94s000rp401oy260jkq` | 00:18:54 |
+| yummyani7.site | dazhe-u-studsoveta-est-kosyaki | `cmv1k7asw000dp401w7ewg9np` | 22:51:04 |
+| yummyani7.site | drakon-devyati-nebes | `cmv1mqi1y000lp4015zd5uogg` | 00:01:59 |
+| yummyani7.site | kod-gias-vosstavshiy-lelush-2-rekviem-zero | `cmv1jjr490009p401xwvla36o` | 22:32:45 |
+| yummyani7.site | kogda-plachut-tsikady-razgadki-spetsvypuski | `cmv1k51xn000bp401ep4vmlbw` | 22:49:19 |
+| yummyani7.site | magiya-vernuvshegosya-dolzhna-byt-osobennoy-2 | `cmv1kze7q000hp401a8cdgbkx` | 23:12:54 |
+| yummyani7.site | mificheskie-zveri-5 | `cmv1mu34l000np40183e3a29f` | 00:04:46 |
+| yummyani7.site | pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya | `cmv1gndol0001p401ctbavdv9` | 21:11:35 |
+| yummyani7.site | tokiyskie-mstiteli-bitva-treh-nebozhiteley | `cmv1h2xo60005p40108p5x5qm` | 21:23:41 |
+| yummyani7.site | velikiy-pravitel-2023-2 | `cmv1mmz4k000jp401hnzicrfh` | 23:59:14 |
+| yummyani7.site | voinstvennyy-bog-asura-2 | `cmv1n8qli000pp401w81asxxy` | 00:16:10 |
+| yummyani7.site | ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele | `cmv1jjnl40007p40172rl3cho` | 22:32:40 |
+| yummyani7.site | ya-vlyubilsya-v-tebya-kogda-ty-bezhala-v-lunnoy-nochi | `cmv1h2umj0003p401d6pdyn6g` | 21:23:37 |
+
+Каждая проверена браузером при публикации (`comment-visible-check.py`, код 0):
+подпись «Редакция» и текст видны посетителю на АДРЕСЕ ПРОИЗВЕДЕНИЯ.
+
+### Три измеренных ограничения темпа и охвата
+
+1. **Частота приложения.** HTTP 429 `rate_limited` на девятой публикации за
+   полчаса. Темп с паузами 90–150 с проходит без отказов; это ограничение на
+   ЧАСТОТУ, а не на число за сутки.
+2. **Идентификатор треда.** Пять карточек за ночь отказались принимать
+   комментарий: `stalnoy-alhimik-bratstvo`, `holst`, `monstr-2004`,
+   `odin-iz-otvergnutyh-izgoy-6` и ранее `nekromant-ya-katastrofa` (у
+   последней не совпало тождество). Причина у первых четырёх одна: тред
+   карточки запрашивается по идентификатору тайтла, а ни накладка, ни
+   last-good, ни поиск приложения его не знали. Исправлено в коде — теперь
+   идентификатор читается с самой карточки, — но правка начнёт действовать
+   после перезапуска моста.
+3. **Одна карточка — один комментарий.** Правило нарушалось дважды за ночь
+   (ночной заход и часовой запуск выбрали одну карточку независимо). Лишние
+   сняты, запрет выражен проверкой в операции публикации, а до перезапуска
+   моста его держит сверка `comment-audit.py`.
+
