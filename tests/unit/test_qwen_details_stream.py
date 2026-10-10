@@ -160,3 +160,19 @@ def test_снимок_подробностей_берётся_из_катало�
 
     monkeypatch.setattr(privileged.Площадка, "из_реестра", staticmethod(lambda sid: Площадка))
     assert editorial._снимок_подробностей("nosuch-77") == данные / "nosuch-77-details.json"
+
+
+def test_снимок_контейнеров_устаревает(monkeypatch):
+    """Контейнер пересоздан после старта моста — мост обязан это увидеть."""
+    from factory.qwen import registry
+
+    ответы = iter([{}, {"yummyani7.site": "/app/content/overlays/title-overlays.json"}])
+    monkeypatch.setattr(registry, "_разобрать_контейнеры", lambda: next(ответы))
+    monkeypatch.setattr(registry, "_контейнеры", None)
+    поздно = 1000.0 + registry.КОНТЕЙНЕРЫ_ЖИВУТ_С + 1
+    # первый вызов: снимок пуст — часы читаются только при записи; второй:
+    # проверка срока и запись нового снимка
+    часы = iter([1000.0, поздно, поздно])
+    monkeypatch.setattr(registry.time, "monotonic", lambda: next(часы))
+    assert registry.наложение_в_контейнере("yummyani7.site") == ""
+    assert registry.наложение_в_контейнере("yummyani7.site").endswith("title-overlays.json")
