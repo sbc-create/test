@@ -216,6 +216,35 @@ def test_публикация_закрывает_черновик(стенд):
     assert видит["handoff"]["comment_id"] == "cmv-1"
 
 
+def test_решение_без_имени_проверяющего_не_записывается(стенд):
+    """«Принято неизвестно кем» записью о решении не является.
+
+    Поймано на живом проходе 10 октября: редактор отклонил черновик
+    `cd-cc880b98d158` с подробной причиной, а `reviewed_by` остался пустым —
+    застава роли пустое имя пропускает намеренно (роль без объявленных
+    ограничений не трогается), и спросить о решении было бы некого.
+    """
+    comments.подготовить("yummyani.org", "van-pis", ТЕКСТ, author="qwen/к/run-1")
+    comments.передать("yummyani.org", "van-pis", author="qwen/к/run-1")
+    for пусто in ("", "   ", None):
+        with pytest.raises(comments.ОперацияОтклонена) as ош:
+            comments.решение("yummyani.org", "van-pis", author=пусто,
+                             verdict="accepted")
+        assert "именем проверяющего" in str(ош.value)
+    # Состояние не изменилось: отказ наступил до записи.
+    assert comments.черновик("yummyani.org", slug="van-pis")["handoff"]["state"] \
+        == "submitted"
+
+
+def test_передача_без_имени_не_записывается(стенд):
+    comments.подготовить("yummyani.org", "van-pis", ТЕКСТ, author="qwen/к/run-1")
+    with pytest.raises(comments.ОперацияОтклонена) as ош:
+        comments.передать("yummyani.org", "van-pis", author="")
+    assert "только с именем" in str(ош.value)
+    assert comments.черновик("yummyani.org", slug="van-pis")["handoff"]["state"] \
+        == "drafted"
+
+
 def test_черновик_прежнего_кода_получает_имя(стенд):
     """Записи без `draft_id` в хранилище есть, и они обязаны получить имя.
 
