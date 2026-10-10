@@ -2760,6 +2760,91 @@ def editor_candidates(
     return out
 
 
+#: Домены Yummy, у которых кандидаты строятся по спросу: снимка каталога у
+#: семейства нет, и отбор из каталога (editor_candidates) их не видит.
+YUMMY_DOMAINS = (
+    "yummyani.site",
+    "yummyani.org",
+    "yummyani.biz",
+    "yummyani7.site",
+    "yummyani7.info",
+)
+#: Описание короче этого — недостаток при спросе (одна фраза, «Продолжение …»).
+THIN_DESCRIPTION = 200
+
+
+def yummy_demand_candidates(
+    snapshot: Path,
+    published: set[tuple[str, str]],
+    *,
+    blocked: set[str] | None = None,
+    held_urls: set[str] | None = None,
+    describe=None,
+    per_domain: int = 6,
+) -> list[dict]:
+    """Карточки Yummy с поисковыми входами и пустым или коротким описанием.
+
+    Спрос — `search_landing_pages` снимка (входы на серии засчитываются
+    карточке); описание — со страницы (`describe(domain, slug)` → текст или
+    None). Одно описание произведения на сеть: уже описанное где-либо не берётся.
+    """
+    if describe is None:
+        from factory.qwen import editorial
+
+        def describe(domain: str, slug: str) -> str | None:
+            try:
+                f = editorial.факты(domain, slug)
+            except Exception:  # noqa: BLE001 — страница не прочиталась: не кандидат
+                return None
+            return str((f.get("facts") or {}).get("description") or "")
+
+    taken = {slug for _, slug in published} | set(blocked or ())
+    held = {u.rstrip("/").lower() for u in (held_urls or ())}
+    out: list[dict] = []
+    for entry in _read_json(snapshot, {}).get("domains") or []:
+        domain = entry.get("domain")
+        if domain not in YUMMY_DOMAINS:
+            continue
+        m = {x.get("key"): x for x in entry.get("measurements") or [] if isinstance(x, dict)}
+        rows = (m.get("search_landing_pages") or {}).get("value") or []
+        входы: dict[str, float] = {}
+        for r in rows if isinstance(rows, list) else []:
+            path = str(((r.get("dimensions") or [{}, {}])[1] or {}).get("name") or "")
+            hit = re.match(r"^/anime/([^/]+)", path)
+            if hit:
+                входы[hit.group(1)] = входы.get(hit.group(1), 0.0) + float(
+                    (r.get("metrics") or [0])[0]
+                )
+        взято = 0
+        for slug, weight in sorted(входы.items(), key=lambda kv: -kv[1]):
+            if взято >= per_domain:
+                break
+            url = f"https://{domain}/anime/{slug}"
+            if slug in taken or url.lower() in held:
+                continue
+            text = describe(domain, slug)
+            if text is None or len(text.strip()) >= THIN_DESCRIPTION:
+                continue
+            taken.add(slug)
+            взято += 1
+            out.append(
+                {
+                    "site": domain,
+                    "slug": slug,
+                    "url": url,
+                    "weight": weight,
+                    "reason": "GAP_DEMAND" if not text.strip() else "THIN_DEMAND",
+                    "has_synopsis": bool(text.strip()),
+                    "current_chars": len(text.strip()),
+                    "note": (
+                        "поисковые входы за 7 дней; ID Shikimori — из данных страницы "
+                        "(первый externalIds.myAnimeList), название обязано совпасть"
+                    ),
+                }
+            )
+    return out
+
+
 def step_candidates(ctx: Context) -> Any:
     snaps = sorted(ctx.sources["analytics_snapshots"].glob("analytics-????-??-??.json"))
     if not snaps:
@@ -2773,9 +2858,14 @@ def step_candidates(ctx: Context) -> Any:
         needs_source=needs,
         blocked=blocked_slugs(ctx.sources["queue_events"], ctx.now),
     )
+    held, net_blocked = result_holds(ctx.sources["queue_events"], ctx.now)
+    found = (
+        yummy_demand_candidates(snaps[-1], published, blocked=net_blocked, held_urls=held) + found
+    )
     out = {
         "snapshot": snaps[-1].name,
         "generated_at": iso(utcnow()),
+        "yummy_demand_at": iso(utcnow()),
         "candidates": found,
         "needs_source": needs,
     }

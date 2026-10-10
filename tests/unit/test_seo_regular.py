@@ -1628,3 +1628,47 @@ def test_result_holds_separate_reasons(tmp_path):
     later = dt.datetime(2026, 10, 10, 8, 0, tzinfo=dt.timezone.utc)
     urls2, slugs2 = regular.result_holds(ev, now, policy_changed_at=later)
     assert slugs2 == set() and "https://x.ru/title/film-1" not in urls2
+
+
+def test_yummy_demand_candidates_pick_thin_or_empty_cards_with_search_entries(tmp_path):
+    snap = tmp_path / "analytics-2026-10-10.json"
+
+    def row(path, n):
+        return {"dimensions": [{"id": "organic"}, {"name": path}], "metrics": [n, n]}
+
+    snap.write_text(
+        json.dumps(
+            {
+                "domains": [
+                    {
+                        "domain": "yummyani7.site",
+                        "measurements": [
+                            {
+                                "key": "search_landing_pages",
+                                "measured": True,
+                                "value": [
+                                    row("/anime/empty", 100),
+                                    row("/anime/empty/season/1/episode/2", 27),
+                                    row("/anime/thin", 18),
+                                    row("/anime/good", 300),
+                                    row("/anime/elsewhere", 50),
+                                    row("/catalog", 99),
+                                ],
+                            }
+                        ],
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    texts = {"empty": "", "thin": "Продолжение «Мстителей».", "good": "х" * 500, "elsewhere": ""}
+    got = regular.yummy_demand_candidates(
+        snap,
+        {("yummyani.org", "elsewhere")},  # уже описано на другом домене сети
+        describe=lambda domain, slug: texts.get(slug),
+    )
+    assert [(c["slug"], c["reason"], c["weight"]) for c in got] == [
+        ("empty", "GAP_DEMAND", 127.0),
+        ("thin", "THIN_DEMAND", 18.0),
+    ]

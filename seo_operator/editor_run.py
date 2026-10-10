@@ -446,7 +446,11 @@ def rotate(cands: list[dict], recent: dict[str, int]) -> list[dict]:
 
 
 def _refresh_candidates(path: Path, now: dt.datetime, *, min_age_s: int = 3600) -> bool:
-    """Пересчитать кандидатов, если список исчерпан и старше часа. Без сети."""
+    """Пересчитать кандидатов, если список исчерпан и старше часа.
+
+    Сеть — только чтение карточек Yummy с поисковым спросом (до 6 на домен):
+    у семейства нет снимка каталога, и длину описания видно лишь на странице.
+    """
     try:
         age = now.timestamp() - path.stat().st_mtime
     except OSError:
@@ -465,12 +469,42 @@ def _refresh_candidates(path: Path, now: dt.datetime, *, min_age_s: int = 3600) 
         published,
         blocked=regular.blocked_slugs(regular.SOURCES["queue_events"], now),
     )
+    held, net_blocked = regular.result_holds(regular.SOURCES["queue_events"], now)
+    # Кандидаты Yummy по спросу дорогие (чтение карточек ~1 мин): переиспользуются
+    # из прежнего файла сутки, если адрес всё ещё не закрыт и не опубликован;
+    # заново читаются, только когда таких не осталось.
+    held_keys = {u.rstrip("/").lower() for u in held}
+    taken = {slug for _, slug in published} | net_blocked
+    прежние = []
+    try:
+        старый = json.loads(path.read_text(encoding="utf-8"))
+        возраст = now - (
+            regular.parse_iso(старый.get("yummy_demand_at")) or now - dt.timedelta(days=2)
+        )
+        if возраст < dt.timedelta(days=1):
+            прежние = [
+                c
+                for c in старый.get("candidates") or []
+                if str(c.get("reason", "")).endswith("_DEMAND")
+                and c["url"].rstrip("/").lower() not in held_keys
+                and c["slug"] not in taken
+            ]
+            yummy_at = старый.get("yummy_demand_at")
+    except (OSError, ValueError):
+        pass
+    if not прежние:
+        прежние = regular.yummy_demand_candidates(
+            snaps[-1], published, blocked=net_blocked, held_urls=held
+        )
+        yummy_at = regular.iso(now)
+    found = прежние + [c for c in found if c["slug"] not in {p["slug"] for p in прежние}]
     regular._write_json(
         path,
         {
             "snapshot": snaps[-1].name,
             "generated_at": regular.iso(now),
             "refreshed_by": "editor-gate",
+            "yummy_demand_at": yummy_at,
             "candidates": found,
         },
     )
