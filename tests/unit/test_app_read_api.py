@@ -95,7 +95,9 @@ def снимок(tmp_path):
 def служба(снимок):
     м = _модуль()
     м.Обработчик.каталог = м.Каталог("proba-01", снимок)
-    м.Обработчик.ключ = ""
+    # Ключ задан: без него служба теперь не отдаёт данные вовсе, и проверки
+    # контракта шли бы на 401. Отсутствие ключа проверяется отдельно.
+    м.Обработчик.ключ = "app-key-probe-1"
     м.Обработчик.счётчик = {}
     гнездо = socket.socket()
     гнездо.bind(("127.0.0.1", 0))
@@ -111,8 +113,14 @@ def служба(снимок):
         сервер.server_close()
 
 
+КЛЮЧ = "app-key-probe-1"
+
+
 def гет(база: str, путь: str, заголовки: dict | None = None):
-    запрос = urllib.request.Request(база + путь, headers=заголовки or {})
+    """Запрос с ключом по умолчанию: без него служба отвечает 401 на всё."""
+    заг = {"X-App-Key": КЛЮЧ}
+    заг.update(заголовки or {})
+    запрос = urllib.request.Request(база + путь, headers=заг)
     try:
         with urllib.request.urlopen(запрос, timeout=20) as о:
             return о.status, json.loads(о.read()), dict(о.headers)
@@ -128,6 +136,7 @@ def test_состояние_называет_поколение(служба):
     _, база = служба
     код, тело, _ = гет(база, "/healthz")
     assert код == 200
+    assert тело["ready"] is True and тело["keyConfigured"] is True
     assert тело["titles"] == 2
     assert тело["catalogRevision"] == "r-1"
     assert тело["catalogBuiltAt"] == "2026-10-10T11:46:13Z"
@@ -230,15 +239,18 @@ def test_источник_видео_пуст_и_причина_названа(�
     код, тело, _ = гет(база, f"/api/app/v1/episodes/{СЕРИАЛ}:s1:e1/sources")
     assert код == 200
     assert тело["sources"] == []
-    assert тело["reason"] == "NO_SOURCE"
+    assert тело["reason"] == "NO_SOURCE_CONTRACT_RELEASED"
     assert тело["embed"]["kind"] == "provider-web-component"
     assert тело["embed"]["providerRefs"][0]["sourceId"] == "555"
 
 
-def test_без_источников_причина_другая(служба):
+def test_без_ссылок_провайдера_причина_та_же(служба):
+    """Код причины один и явный: дело не в «не вышло», а в отсутствии договора."""
     _, база = служба
     _, тело, _ = гет(база, f"/api/app/v1/episodes/{ФИЛЬМ}:movie/sources")
-    assert тело["sources"] == [] and тело["reason"] == "NOT_RELEASED"
+    assert тело["sources"] == []
+    assert тело["reason"] == "NO_SOURCE_CONTRACT_RELEASED"
+    assert тело["embed"]["providerRefs"] == []
 
 
 def test_неизвестный_маршрут_404(служба):
@@ -247,17 +259,40 @@ def test_неизвестный_маршрут_404(служба):
     assert код == 404 and тело["error"]["code"] == "not_found"
 
 
-def test_ключ_клиента_когда_задан_обязателен(служба):
+def test_без_заголовка_ключа_данные_не_отдаются(служба):
+    """Ключ обязателен всегда: доступ без него — не «удобство», а дыра."""
+    _, база = служба
+    код, тело, _ = гет(база, f"/api/app/v1/titles/{СЕРИАЛ}", {"X-App-Key": ""})
+    assert код == 401 and тело["error"]["code"] == "unauthorized"
+
+
+def test_неверный_ключ_отвергается(служба):
+    _, база = служба
+    код, тело, _ = гет(база, f"/api/app/v1/titles/{СЕРИАЛ}",
+                       {"X-App-Key": "app-key-probe-2"})
+    assert код == 401 and тело["error"]["code"] == "unauthorized"
+
+
+def test_ненастроенный_ключ_закрывает_данные_и_виден_в_готовности(служба):
+    """Отсутствие настройки — это НЕ разрешение.
+
+    Прежняя версия при пустом ключе отвечала всем, и служба, выложенная
+    наружу до появления файла ключа, отдавала бы каталог кому угодно, причём
+    выглядело бы это исправной работой.
+    """
     м, база = служба
-    м.Обработчик.ключ = "app-key-probe-1"
+    м.Обработчик.ключ = ""
     try:
+        код, тело, _ = гет(база, "/healthz")
+        assert код == 503, тело
+        assert тело["ok"] is False and тело["ready"] is False
+        assert тело["keyConfigured"] is False
+        assert "не задан" in тело["reason"]
         код, тело, _ = гет(база, f"/api/app/v1/titles/{СЕРИАЛ}")
-        assert код == 401 and тело["error"]["code"] == "unauthorized"
-        код, тело, _ = гет(база, f"/api/app/v1/titles/{СЕРИАЛ}",
-                           {"X-App-Key": "app-key-probe-1"})
-        assert код == 200 and тело["contentId"] == СЕРИАЛ
+        assert код == 401, тело
+        assert "не настроен" in тело["error"]["message"]
     finally:
-        м.Обработчик.ключ = ""
+        м.Обработчик.ключ = КЛЮЧ
 
 
 def test_предел_частоты_отвечает_429_с_retry_after(служба):
