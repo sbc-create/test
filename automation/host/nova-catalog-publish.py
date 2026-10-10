@@ -510,6 +510,12 @@ def _выполнить(*, снимок_путь: Path = СНИМОК, дета�
             "missing_rating_reasons": причины_отсутствия(подробности["details"], снимок),
             "rejections": ст["отказы"],
             "without_poster": ст["без_постера"],
+            # Сколько подтверждённых значений пришлось сохранить вместо
+            # обедневшего ответа источника (передача 113). Ноль означает
+            # «источник отдал всё»; ненулевое — что защита сработала, и это
+            # должно быть видно в отчёте, а не только в коде.
+            "kept_previous_poster": ст.get("kept_previous_poster", 0),
+            "kept_previous_title": ст.get("kept_previous_title", 0),
             "anime_only": bool(ВИТРИНЫ[site_id].get("только_аниме")),
             "anime_by_signal": ст.get("аниме_по_признаку") or {},
             "production_blocked": ВИТРИНЫ[site_id].get("production_заблокирована"),
