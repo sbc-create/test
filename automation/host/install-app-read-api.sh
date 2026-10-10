@@ -36,6 +36,11 @@ SNIPPET="/etc/nginx/snippets/app-read-api-${SITE_ID}.conf"
 SITE_CONF="/etc/nginx/lords/${SITE_ID}.conf"
 SRC_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
 SERVICE_SCRIPT="${SRC_ROOT}/automation/host/app-read-api.py"
+# Служба обязана жить НЕ в рабочем дереве сессии: дерево может быть снято
+# (`git worktree remove`), и тогда юнит остался бы без ExecStart. Код
+# копируется в ту же раскладку, где уже живут хостовые сценарии фабрики.
+INSTALL_DIR="/usr/local/lib/site-factory"
+INSTALLED_SCRIPT="${INSTALL_DIR}/app-read-api-${SITE_ID}.py"
 MARK="app-read-api-${SITE_ID}"
 
 dry_run=0
@@ -75,6 +80,7 @@ if [ "$rollback" = 1 ]; then
   run systemctl reload nginx
   run systemctl disable --now "$UNIT"
   run rm -f "$UNIT_PATH"
+  run rm -f "$INSTALLED_SCRIPT" "${INSTALL_DIR}/app-read-api-${SITE_ID}.doc.md"
   run systemctl daemon-reload
   ok "служба остановлена и отключена; ключ клиента оставлен на месте"
   exit 0
@@ -148,13 +154,22 @@ if [ "$dry_run" = 0 ]; then
   ok "ключ читается учётной записью ${RUN_USER}"
 fi
 
+# --- код службы в стабильное место ------------------------------------------
+log "код службы ${INSTALLED_SCRIPT}"
+run install -d -m 0755 -o root -g root "$INSTALL_DIR"
+run install -m 0644 -o root -g root "$SERVICE_SCRIPT" "$INSTALLED_SCRIPT"
+# Контракт рядом с кодом: иначе Documentation юнита указывал бы в снятое дерево.
+run install -m 0644 -o root -g root "${SRC_ROOT}/docs/APP_READ_API.md" \
+    "${INSTALL_DIR}/app-read-api-${SITE_ID}.doc.md"
+ok "код службы и контракт не зависят от рабочего дерева сессии"
+
 # --- служба -----------------------------------------------------------------
 log "служба ${UNIT}"
 TMP_UNIT="$(mktemp)"
 cat > "$TMP_UNIT" <<UNITFILE
 [Unit]
 Description=Читающее API каталога ${DOMAIN} для мобильного/TV-клиента
-Documentation=file://${SRC_ROOT}/docs/APP_READ_API.md
+Documentation=file://${INSTALL_DIR}/app-read-api-${SITE_ID}.doc.md
 After=network-online.target
 Wants=network-online.target
 
@@ -162,8 +177,8 @@ Wants=network-online.target
 Type=simple
 User=${RUN_USER}
 Group=${RUN_USER}
-WorkingDirectory=${SRC_ROOT}
-ExecStart=/usr/bin/python3 ${SERVICE_SCRIPT} --site ${SITE_ID} \\
+WorkingDirectory=${INSTALL_DIR}
+ExecStart=/usr/bin/python3 ${INSTALLED_SCRIPT} --site ${SITE_ID} \\
     --data-dir ${DATA_DIR} --bind ${BIND} --port ${PORT} --key-file ${KEY_FILE}
 Restart=on-failure
 RestartSec=3
@@ -182,7 +197,7 @@ ProtectControlGroups=yes
 RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
 LockPersonality=yes
 MemoryDenyWriteExecute=yes
-ReadOnlyPaths=${DATA_DIR} ${SRC_ROOT}
+ReadOnlyPaths=${DATA_DIR} ${INSTALL_DIR}
 # Измерено на снимке 8547 тайтлов: 108 МиБ. Предел с запасом, чтобы утечка
 # добирала память не у витрин и не у редактора.
 MemoryMax=512M
