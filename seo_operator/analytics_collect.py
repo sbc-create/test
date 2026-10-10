@@ -12,6 +12,7 @@ sitemap. Он собирает тринадцать групп показате�
 
 from __future__ import annotations
 
+import datetime as _dt
 import json
 import time
 from dataclasses import dataclass, field
@@ -186,7 +187,7 @@ def collect_domain(
         out.measurements.append(
             _unmeasured("goal_reaches", "Достижение целей", reason, "ym:s:goal<id>reaches")
         )
-        for key, title, source in EXTRA_METRIKA:
+        for key, title, source in (*EXTRA_METRIKA, *COUNTER_EXTRAS):
             out.measurements.append(_unmeasured(key, title, reason, source))
     else:
         metrics = [source for _, _, source in METRIKA_TOTALS]
@@ -273,6 +274,8 @@ def collect_domain(
 
         out.measurements.append(_goal_reaches(provider, entry, counter_id, date1, date2))
         out.measurements.extend(_metrika_daily_and_search(provider, counter_id, date1, date2))
+        out.measurements.append(_counter_passport(provider, counter_id))
+        out.measurements.extend(_metrika_today(provider, counter_id))
 
     # -------------------------------------------------------- Вебмастер
     if not host_id:
@@ -313,6 +316,18 @@ QUERY_INDICATORS = ["TOTAL_SHOWS", "TOTAL_CLICKS", "AVG_SHOW_POSITION", "AVG_CLI
 
 #: Добавлено 2026-10-09 для цели «пользователей в сутки» и разбора поисковых
 #: входов: суточная разбивка с признаком робота и поисковые входы по страницам.
+#: Паспорт счётчика и неполные текущие сутки (2026-10-10) — для «не измерено»
+#: у доменов без счётчика.
+COUNTER_EXTRAS = (
+    ("counter_passport", "Паспорт счётчика", "GET /management/v1/counter/{counterId}"),
+    ("today_users", "Сегодня (неполные сутки): пользователи", "ym:s:date × ym:s:isRobot"),
+    (
+        "today_search",
+        "Сегодня (неполные сутки): поисковые визиты",
+        "ym:s:date × ym:s:lastsignTrafficSource × ym:s:lastsignSearchEngineRoot",
+    ),
+)
+
 EXTRA_METRIKA = (
     (
         "daily_users",
@@ -429,6 +444,82 @@ def _metrika_daily_and_search(
         out.append(
             _unmeasured("daily_search", EXTRA_METRIKA[2][1], exc.reason, EXTRA_METRIKA[2][2])
         )
+    return out
+
+
+def _counter_passport(provider, counter_id: int) -> Measurement:
+    """Часовой пояс и сайт счётчика (SRC-YA-METRIKA-COUNTER-GET). Только чтение.
+
+    ym:s:date считается в часовом поясе счётчика; без паспорта «сутки по Москве»
+    — допущение, а не факт.
+    """
+    getter = getattr(provider, "get_counter", None)
+    if getter is None:
+        return _unmeasured(
+            "counter_passport",
+            "Паспорт счётчика",
+            "провайдер не читает паспорт счётчика",
+            "GET /management/v1/counter/{counterId}",
+        )
+    try:
+        counter = getter(counter_id)
+        return Measurement(
+            key="counter_passport",
+            title="Паспорт счётчика",
+            measured=True,
+            value={
+                k: counter.get(k)
+                for k in ("id", "site", "status", "time_zone_name", "time_zone_offset")
+            },
+            source="GET /management/v1/counter/{counterId}",
+        )
+    except FactoryError as exc:
+        return _unmeasured(
+            "counter_passport",
+            "Паспорт счётчика",
+            exc.reason,
+            "GET /management/v1/counter/{counterId}",
+        )
+
+
+def _metrika_today(provider, counter_id: int) -> list[Measurement]:
+    """Неполные текущие сутки: люди/роботы и поисковые визиты по системам.
+
+    Отдельный показатель с временем отсечения: смешивать неполный день с полными
+    нельзя.
+    """
+    отсечка = _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    out: list[Measurement] = []
+    for key, title, dims in (
+        ("today_users", "Сегодня (неполные сутки): пользователи", ["ym:s:date", "ym:s:isRobot"]),
+        (
+            "today_search",
+            "Сегодня (неполные сутки): поисковые визиты",
+            ["ym:s:date", "ym:s:lastsignTrafficSource", "ym:s:lastsignSearchEngineRoot"],
+        ),
+    ):
+        try:
+            report = provider.get_metrica_report(
+                counter_id,
+                date1="today",
+                date2="today",
+                metrics=["ym:s:users", "ym:s:visits"],
+                dimensions=dims,
+                limit=200,
+            )
+            out.append(
+                Measurement(
+                    key=key,
+                    title=f"{title}, отсечка {отсечка}",
+                    measured=True,
+                    value=report.get("data"),
+                    source=" × ".join(dims),
+                    sampled=report.get("sampled"),
+                    sample_share=report.get("sample_share"),
+                )
+            )
+        except FactoryError as exc:
+            out.append(_unmeasured(key, title, exc.reason, " × ".join(dims)))
     return out
 
 

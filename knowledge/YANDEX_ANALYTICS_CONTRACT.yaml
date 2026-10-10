@@ -43,6 +43,7 @@ metrika:
       method: GET
       path: "/management/v1/counter/{counterId}"
       query: [field]
+      read_fields: [time_zone_name, time_zone_offset, site, status]   # SRC-YA-METRIKA-COUNTER-GET
     edit_counter:
       # Прочитано после того, как первый боевой запуск создал три счётчика с
       # включённым по умолчанию Вебвизором: выключать его нечем, если не знать

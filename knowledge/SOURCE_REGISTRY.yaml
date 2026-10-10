@@ -475,6 +475,16 @@ sources:
     conclusions:
       - "query_indicator принимает TOTAL_SHOWS, TOTAL_CLICKS, AVG_SHOW_POSITION, AVG_CLICK_POSITION (ApiQueryIndicator); параметр повторяемый."
       - "Без TOTAL_CLICKS клики в ответе не приходят: кликабельность по снимкам до 2026-10-10 не измерена, а не равна нулю."
+  - id: SRC-YA-METRIKA-COUNTER-GET
+    kind: official_documentation
+    owner: Yandex
+    url: https://yandex.ru/dev/metrika/ru/management/openapi/counter/counter
+    retrieved_at: "2026-10-10T08:52:36Z"
+    sha256: f6a0c30fcdc36f8028159c9d3597068c5e4b85937d348355cb635e6c649782d9
+    purpose: "паспорт счётчика: часовой пояс (time_zone_name, time_zone_offset) и сайт"
+    status: approved
+    conclusions:
+      - "GET /management/v1/counter/{counterId} возвращает counter.time_zone_name и counter.time_zone_offset — по ним ym:s:date сверяется с московскими сутками."
   - id: SRC-YA-METRIKA-DIM-ALL
     kind: official_documentation
     owner: Yandex

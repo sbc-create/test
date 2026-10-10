@@ -79,6 +79,8 @@ def test_all_thirteen_groups_of_the_brief_are_present():
         "daily_users", "search_landing_pages", "popular_queries",
         # 2026-10-10: поисковые визиты по дням и поисковым системам
         "daily_search",
+        # 2026-10-10: паспорт счётчика (часовой пояс) и неполные текущие сутки
+        "counter_passport", "today_users", "today_search",
     }
 
 

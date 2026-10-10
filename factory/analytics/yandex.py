@@ -14,6 +14,7 @@
 * **запись только по явному разрешению.** По умолчанию провайдер в режиме плана
   и в сеть с POST не ходит вовсе.
 """
+
 from __future__ import annotations
 
 import re
@@ -152,7 +153,8 @@ class CounterState:
             "status": self.status,
             "api_site": self.api_site,
             "site_matches_domain": (
-                None if self.api_site is None
+                None
+                if self.api_site is None
                 else normalize_domain(self.api_site) == normalize_domain(self.domain)
             ),
             "webvisor": self.webvisor,
@@ -359,7 +361,12 @@ class YandexAnalyticsProvider:
         while True:
             response = self.metrika.get(
                 "/management/v1/counters",
-                params={"per_page": per_page, "offset": offset, "field": "goals", "status": "Active"},
+                params={
+                    "per_page": per_page,
+                    "offset": offset,
+                    "field": "goals",
+                    "status": "Active",
+                },
             )
             payload = response.payload or {}
             page = payload.get("counters") or []
@@ -430,9 +437,7 @@ class YandexAnalyticsProvider:
             state.api_site = str((counter.get("site2") or {}).get("site") or "") or None
             state.status = str(counter.get("status") or "Active")
             state.webvisor = webvisor_enabled(counter)
-            state.goals_present = tuple(
-                self._goal_event_ids(counter.get("goals") or [])
-            )
+            state.goals_present = tuple(self._goal_event_ids(counter.get("goals") or []))
             self._сверить_домен(state)
             if state.webvisor:
                 state.problems = (
@@ -528,11 +533,20 @@ class YandexAnalyticsProvider:
         counter = (response.payload or {}).get("counter") or {}
         before = visor_state(counter)
         if before is False:
-            return {"counter_id": counter_id, "visor": False, "changed": False,
-                    "reason": "запись сессий уже выключена"}
+            return {
+                "counter_id": counter_id,
+                "visor": False,
+                "changed": False,
+                "reason": "запись сессий уже выключена",
+            }
         if self.dry_run:
-            return {"counter_id": counter_id, "visor": before, "changed": False,
-                    "planned": True, "reason": "режим плана"}
+            return {
+                "counter_id": counter_id,
+                "visor": before,
+                "changed": False,
+                "planned": True,
+                "reason": "режим плана",
+            }
 
         # Существующие настройки сохраняются: меняется ровно один ключ.
         options = dict(counter.get("code_options") or {})
@@ -554,8 +568,17 @@ class YandexAnalyticsProvider:
                 required_input="Выключить запись сессий в интерфейсе Метрики",
                 blocks_stage="BUILDING",
             )
-        return {"counter_id": counter_id, "visor": False, "changed": True,
-                "reason": "запись сессий выключена"}
+        return {
+            "counter_id": counter_id,
+            "visor": False,
+            "changed": True,
+            "reason": "запись сессий выключена",
+        }
+
+    def get_counter(self, counter_id: int) -> dict:
+        """Паспорт счётчика (SRC-YA-METRIKA-COUNTER-GET). Только чтение."""
+        response = self.metrika.get(f"/management/v1/counter/{counter_id}")
+        return (response.payload or {}).get("counter") or {}
 
     def list_goal_ids(self, counter_id: int) -> dict[str, int]:
         """`{идентификатор события: числовой goal_id}` для существующих целей.
@@ -565,7 +588,8 @@ class YandexAnalyticsProvider:
         хранит идентификаторы событий, а не goal_id, поэтому связка живёт здесь.
         """
         response = self.metrika.get(
-            f"/management/v1/counter/{counter_id}", params={"field": "goals"})
+            f"/management/v1/counter/{counter_id}", params={"field": "goals"}
+        )
         counter = (response.payload or {}).get("counter") or {}
         mapping: dict[str, int] = {}
         for goal in counter.get("goals") or []:
@@ -577,10 +601,14 @@ class YandexAnalyticsProvider:
                     mapping[event_id] = int(goal["id"])
         return mapping
 
-    def ensure_metrica_goals(self, counter_id: int, state: CounterState | None = None) -> CounterState:
+    def ensure_metrica_goals(
+        self, counter_id: int, state: CounterState | None = None
+    ) -> CounterState:
         """Доводит набор целей до девяти. Существующие цели не трогает и не удаляет."""
         state = state or CounterState(domain="", name="", counter_id=counter_id)
-        response = self.metrika.get(f"/management/v1/counter/{counter_id}", params={"field": "goals"})
+        response = self.metrika.get(
+            f"/management/v1/counter/{counter_id}", params={"field": "goals"}
+        )
         counter = (response.payload or {}).get("counter") or {}
         present = self._goal_event_ids(counter.get("goals") or [])
         state.goals_present = tuple(present)
@@ -625,7 +653,9 @@ class YandexAnalyticsProvider:
         payload = response.payload or {}
         return payload.get("hosts") or []
 
-    def ensure_webmaster_host(self, domain: str, *, deployment_ready: bool = False) -> WebmasterState:
+    def ensure_webmaster_host(
+        self, domain: str, *, deployment_ready: bool = False
+    ) -> WebmasterState:
         """Регистрирует HTTPS-хост. Неразвёрнутый домен не регистрируется.
 
         ``deployment_ready`` приходит из ворот развёртывания, а не из желания
@@ -643,7 +673,12 @@ class YandexAnalyticsProvider:
             return state
 
         for host in self.list_hosts():
-            if normalize_domain(str(host.get("ascii_host_url") or host.get("unicode_host_url") or "")) == state.domain:
+            if (
+                normalize_domain(
+                    str(host.get("ascii_host_url") or host.get("unicode_host_url") or "")
+                )
+                == state.domain
+            ):
                 state.host_id = str(host.get("host_id") or "")
                 state.reused = True
                 return state
@@ -720,9 +755,16 @@ class YandexAnalyticsProvider:
         }
 
     # ---------------------------------------------------- 4. отчёты
-    def get_metrica_report(self, counter_id: int, *, date1: str, date2: str,
-                           metrics: list[str], dimensions: list[str] | None = None,
-                           limit: int = 100) -> dict:
+    def get_metrica_report(
+        self,
+        counter_id: int,
+        *,
+        date1: str,
+        date2: str,
+        metrics: list[str],
+        dimensions: list[str] | None = None,
+        limit: int = 100,
+    ) -> dict:
         """Табличный отчёт Метрики. Только чтение, только агрегаты."""
         params = {
             "ids": counter_id,
